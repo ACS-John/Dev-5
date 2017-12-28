@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\ubprtbl1_thayer
 10200 ! pr bills for Village of Thayer  (new 4 per page 10/24/06)
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_line
+10600   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_line
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
@@ -35,30 +35,30 @@
 16800 ! ______________________________________________________________________
 17000 SCREEN1: ! 
 17200   a$="" : prtbkno=0
-17400   fntos(sn$="UBPrtBl1-1T")
+17400   fnTos(sn$="UBPrtBl1-1T")
 17600   pf=32 : ll=30
 17800   respc=0
-18000   fnlbl(2,1,"Penalty Due Date:",ll,1)
-18200   fntxt(2,pf,8,8,1,"1",0,tt$)
+18000   fnLbl(2,1,"Penalty Due Date:",ll,1)
+18200   fnTxt(2,pf,8,8,1,"1",0,tt$)
 18400   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-18600   fnlbl(4,1,"Message on Bill:",ll,1)
-18800   fntxt(4,pf,30,30)
+18600   fnLbl(4,1,"Message on Bill:",ll,1)
+18800   fnTxt(4,pf,30,30)
 19000   resp$(respc+=1)=mg$(1)
-19200   fntxt(5,pf,30,30)
+19200   fnTxt(5,pf,30,30)
 19400   resp$(respc+=1)=mg$(2)
-19600   fntxt(6,pf,30,30)
+19600   fnTxt(6,pf,30,30)
 19800   resp$(respc+=1)=mg$(3)
-20000   fnlbl(8,1,"Date of Billing:",ll,1)
-20200   fntxt(8,pf,8,8,1,"1")
+20000   fnLbl(8,1,"Date of Billing:",ll,1)
+20200   fnTxt(8,pf,8,8,1,"1")
 20400   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-20600   fnlbl(10,1,"Prior Reading Date Override:",ll,1)
-20800   fntxt(10,pf,8,8,1,"1")
+20600   fnLbl(10,1,"Prior Reading Date Override:",ll,1)
+20800   fnTxt(10,pf,8,8,1,"1")
 21000   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_prior_s1)
-21200   fnlbl(11,1,"Current Reading Date Override:",ll,1)
-21400   fntxt(11,pf,8,8,1,"1")
+21200   fnLbl(11,1,"Current Reading Date Override:",ll,1)
+21400   fnTxt(11,pf,8,8,1,"1")
 21600   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur_s1)
-21800   fncmdset(3)
-22000   fnacs(sn$,0,mat resp$,ck)
+21800   fnCmdSet(3)
+22000   fnAcs(sn$,0,mat resp$,ck)
 22200   if ck=5 then goto ENDSCR
 22400   d4=val(resp$(1))
 22600   mg$(1)=resp$(2)
@@ -140,20 +140,20 @@
 38000 ! ______________________________________________________________________
 38200 SCREEN3: ! 
 38400   sn$="UBPrtBl1-2"
-38600   fntos(sn$)
+38600   fnTos(sn$)
 38800   txt$="Account (blank to stop)"
-39000   fnlbl(1,1,txt$,31,1)
+39000   fnLbl(1,1,txt$,31,1)
 39200 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 39400   if trim$(z$)<>"" then 
 39600     txt$="Last Account entered was "&z$
-39800     fnlbl(3,1,txt$,44,1)
+39800     fnLbl(3,1,txt$,44,1)
 40000   else 
 40200     txt$=""
-40400     fnlbl(3,1,txt$,44,1)
+40400     fnLbl(3,1,txt$,44,1)
 40600   end if 
 40800   fncmbact(1,17) ! 
 41000   resp$(1)=a$
-41200   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
+41200   fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
 41400   a$=lpad$(trim$(resp$(1)(1:10)),10)
 41600   if trim$(a$)="" then goto RELEASE_PRINT
 41800   if ck=5 then goto RELEASE_PRINT
@@ -195,23 +195,23 @@
 49000 ! ______________________________________________________________________
 49200 ENDSCR: ! pr totals screen
 49400   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-49600   fntos(sn$="Bills-Total")
+49600   fnTos(sn$="Bills-Total")
 49800   mylen=23 : mypos=mylen+2
 50000   respc=0
-50200   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-50400   fntxt(1,mypos,8,0,1,"",1)
+50200   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+50400   fnTxt(1,mypos,8,0,1,"",1)
 50600   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-51200 ! fnLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
-51400 ! fnTXT(2,MYPOS,8,0,1,"",1)
+51200 ! fnLbl(2,1,"Total  Bills  Coded:",MYLEN,1)
+51400 ! fnTxt(2,MYPOS,8,0,1,"",1)
 51600 ! .   ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-51800 ! fnLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
-52000 ! fnTXT(3,MYPOS,8,0,1,"",1)
+51800 ! fnLbl(3,1,"Total Bills Not Coded:",MYLEN,1)
+52000 ! fnTxt(3,MYPOS,8,0,1,"",1)
 52200 ! .   ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-52400 ! fnLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
-52600 ! fnTXT(4,MYPOS,8,0,1,"",1)
+52400 ! fnLbl(4,1,"Percent of Bills Coded:",MYLEN,1)
+52600 ! fnTxt(4,MYPOS,8,0,1,"",1)
 52800 ! .   ! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
-53000   fncmdset(52)
-53200   fnacs(sn$,0,mat resp$,ck)
+53000   fnCmdSet(52)
+53200   fnAcs(sn$,0,mat resp$,ck)
 53400 XIT: fnxit
 53600 ! ______________________________________________________________________
 53800 ERTN: fnerror(program$,err,line,act$,"xit")

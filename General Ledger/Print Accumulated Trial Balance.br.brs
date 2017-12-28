@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\AcGLAcTB
 00020 ! pr Accumulated Trial Balance
 12000 ! r: setup library, on error, dims, and constants
-12020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fntos,fnfra,fnopt,fnlbl,fnqgl,fncmdset,fnacs,fnagl$,fnchk,fntxt,fngethandle,fncreg_read,fncreg_write
+12020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnTos,fnFra,fnOpt,fnLbl,fnqgl,fnCmdSet,fnAcs,fnagl$,fnChk,fnTxt,fngethandle,fncreg_read,fncreg_write
 12040   on error goto ERTN
 12060 ! ______________________________________________________________________
 12080   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3,cap$*128
@@ -36,43 +36,43 @@
 14300   if fnprocess=1 then s1=1 : goto mainLoopInit
 14320 goto SCREEN1
 16000 SCREEN1: ! r:
-16020   fntos(sn$="Acglactb")
+16020   fnTos(sn$="Acglactb")
 16040   mylen=53: mypos=mylen+3 : rc=0 : right=1
-16060   fnlbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
+16060   fnLbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
 16080   fnqgl(1,mypos,0,2)
 16100   resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
-16120   fnchk(2,mypos,"Print Ending Balance on First Line:",1,0)
+16120   fnChk(2,mypos,"Print Ending Balance on First Line:",1,0)
 16140   resp$(respc_prBalFirst:=rc+=1)=petro_opt$
-16160   fnlbl(3,1,"Period Code to pr (blank for all):",mylen,right)
-16180   fntxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
+16160   fnLbl(3,1,"Period Code to pr (blank for all):",mylen,right)
+16180   fnTxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
 16200   resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
-16220   fnfra(5,1,5,90,"Selection Type"," ",0) : frameno=1
-16240   fnopt(1,3,"Print All GL Accounts",0,frameno)
+16220   fnFra(5,1,5,90,"Selection Type"," ",0) : frameno=1
+16240   fnOpt(1,3,"Print All GL Accounts",0,frameno)
 16260   resp$(respc_printAll:=rc+=1)="True"
-16280   fnopt(2,3,"Print Selected GL Accounts",0,frameno)
+16280   fnOpt(2,3,"Print Selected GL Accounts",0,frameno)
 16300   resp$(respc_printSelected:=rc+=1)="False"
-16320   fnopt(3,3,"Print a Range of Accounts",0,frameno)
+16320   fnOpt(3,3,"Print a Range of Accounts",0,frameno)
 16340   resp$(respc_printRange:=rc+=1)="False"
 16380   mylen=6 : mypos=mylen+2
-16400   fnlbl(4,1+10,'First:',mylen,right,0,frameno)
+16400   fnLbl(4,1+10,'First:',mylen,right,0,frameno)
 16420   fnqgl(4,mypos+10,frameno,2)
 16440   resp$(respc_rangeStart:=rc+=1)=""
-16460   fnlbl(5,1+10,'Last:',mylen,right,0,frameno)
+16460   fnLbl(5,1+10,'Last:',mylen,right,0,frameno)
 16480   fnqgl(5,mypos+10,frameno,2)
 16500   resp$(respc_rangeEnd:=rc+=1)=""
-16520   fnfra(12,1,4,90,"Filters"," ",0) : frameno=2
+16520   fnFra(12,1,4,90,"Filters"," ",0) : frameno=2
 16540   mylen=14 : mypos=mylen+2
-16560   fnlbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-16580   fntxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+16560   fnLbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
+16580   fnTxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
 16600   resp$(resp_dateStart:=rc+=1)=date$(startday,'ccyymmdd')
-16620   fnlbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-16640   fntxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+16620   fnLbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
+16640   fnTxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
 16660   resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
-16680   fnlbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
-16700   fntxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
+16680   fnLbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
+16700   fnTxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
 16720   resp$(resp_costCenter:=rc+=1)=""
-16740   fncmdset(2)
-16760   fnacs(sn$,0,mat resp$,ckey)
+16740   fnCmdSet(2)
+16760   fnAcs(sn$,0,mat resp$,ckey)
 22000   if ckey=5 then goto XIT
 22020   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
 22060   petro_opt$=resp$(respc_prBalFirst)
@@ -234,13 +234,13 @@
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 58000 SELECT_ACCOUNT: ! r:
-58020   fntos(sn$="Acglactb3")
+58020   fnTos(sn$="Acglactb3")
 58040   mylen=38: mypos=mylen+3 : right=1
-58060   fnlbl(1,1,'General ledger # to print:',mylen,right,0,0)
+58060   fnLbl(1,1,'General ledger # to print:',mylen,right,0,0)
 58080   fnqgl(1,mypos,0,2)
 58100   resp$(1)=""
-58120   fncmdset(2)
-58140   fnacs(sn$,0,mat resp$,ckey)
+58120   fnCmdSet(2)
+58140   fnAcs(sn$,0,mat resp$,ckey)
 58160   if ckey=5 then goto TOTALS
 58180   n$=fnagl$(resp$(1))
 58200   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT

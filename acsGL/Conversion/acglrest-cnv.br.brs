@@ -8,9 +8,9 @@
 00090   dim ln1$*78,ln$(10)*78,shd$*60,fli$(20),cnam$*40,dat$*20
 00100   execute "Copy "&env$('Q')&"\GLmstr\AcGLStmt.h"&env$('cno')&" x -D"
 00110   execute "copy x "&env$('Q')&"\GLmstr\AcGLStmt.h"&env$('cno')
-00120   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&env$('cno')&",Shr",internal,outin,relative 
+00120   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&env$('cno')&",Shr",internal,outIn,relative 
 00130   open #2: "Name=test,size=0,RecL=128,replace",display,output 
-00140 L140: read #1,using L150: mat ln$ eof L180 norec L180
+00140 L140: read #1,using L150: mat ln$ eof L180 noRec L180
 00150 L150: form pos 1,10*c 78
 00160   pr #2,using L150: mat ln$
 00170   goto L140

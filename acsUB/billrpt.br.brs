@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\Bill-Rpt
 00020 ! pr utility billing reports based on bills
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fnchk,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnLastBillingDate,fncmdset,fntop
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnChk,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnLastBillingDate,fnCmdSet,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,cnam$*40,dat$*20
@@ -13,17 +13,17 @@
 00120   fndat(dat$,1)
 00130 ! ______________________________________________________________________
 00140 SCR1: ! 
-00150   fntos(sn$="Bill-Rpt")
-00160   fnlbl(1,1,"Billing Date:",15,1)
-00170   fntxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") !:
+00150   fnTos(sn$="Bill-Rpt")
+00160   fnLbl(1,1,"Billing Date:",15,1)
+00170   fnTxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") !:
         resp$(1)=str$(d1)
-00180   fnlbl(2,1,"Route Number:",15,1)
+00180   fnLbl(2,1,"Route Number:",15,1)
 00190   fncmbrt2(2,17,0) !:
         resp$(2)= "[All]"
-00200   fnchk(4,2,"Outstanding Balances Only") !:
+00200   fnChk(4,2,"Outstanding Balances Only") !:
         resp$(3)="False"
-00210   fncmdset(3)
-00220   fnacs(sn$,0,mat resp$,ck)
+00210   fnCmdSet(3)
+00220   fnAcs(sn$,0,mat resp$,ck)
 00230   if ck=5 then goto XIT
 00240   d1= val(resp$(1)) conv SCR1 !:
         if uprc$(resp$(2))=uprc$("[All]") then route=0 else !:

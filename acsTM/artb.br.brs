@@ -1,18 +1,18 @@
 00020   on fkey 5 goto L970 ! 9/5/86
 00030   on error goto L1570
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole,fndat
 00050   fntop(program$,cap$="Trial Balance")
 00060   fncno(cno,cnam$)
 00070   fndat(dat$)
 00080   fnconsole(1)
-00090   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
+00090   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outIn,relative 
 00100   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 00110   dim z$*5,e$(4)*30,e(5),s(5),c(5),cnam$*40,u$*20,flo$(3),fli$(2),dat$*20
 00120   dim cap$*128
 00130   dim scr$(3)*50,ta(2),o(2),cnv$*6,q$*30,age(4),mo(12),iv$*12
 00140   data 0,31,59,90,120,151,181,212,243,273,304,334
 00150   read mat mo
-00160   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,outin ioerr L1570
+00160   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,outIn ioerr L1570
 00170   read #1,using L180: mat age ioerr L1570
 00180 L180: form pos 170,4*pd 2,pos 226,c 20
 00185   close #1: 
@@ -36,7 +36,7 @@
 00340   fnopenprn
 00350   pr f "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
 00360   pr f "23,2,C 30,N": "Press F5 to stop"
-00370   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1570
+00370   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1570
 00380   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,input,relative ioerr L1570
 00390   gosub L550
 00400 L400: read #1,using L420: z$,e$(1),am6,am16,mat ta eof L700 ioerr L1570

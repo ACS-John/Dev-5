@@ -17,8 +17,8 @@
 00170     fndate_mmddyy_to_ccyymmdd=x2
 00180   fnend 
 00190 ! ______________________________________________________________________
-00210   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&env$('cno'),internal,outin,relative 
-00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00210   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&env$('cno'),internal,outIn,relative 
+00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00230 L230: ! 
 00240 L240: read #6,using L280: x$,m,n,mat o,adrnxt,rcpt$,mat alloc eof L440
 00250   for j=1 to udim(alloc)

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprFedUC
 00020 ! Annual Federal U/C Worksheet
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fntos,fnlbl,fntxt,fncmdset,fnacs,fnfra,fnopt,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_font,fnpa_fontsize,fnpa_pic,fnpa_txt,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnFra,fnOpt,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_font,fnpa_fontsize,fnpa_pic,fnpa_txt,fnDedNames
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(3)*40,b$(2)*12
@@ -22,42 +22,42 @@
 00250 ! ______________________________________________________________________
 00260 ! If FNPROCESS=1 Then Goto 230
 00270 ! MENU1: !
-00280   fntos(sn$="prfeduc") !:
+00280   fnTos(sn$="prfeduc") !:
         respc=0
-00290   fnlbl(1,43," ",1,1)
-00300   fnlbl(1,1,"Beginning Date of Tax Year:",29,1)
-00310   fntxt(1,30,12,0,0,"3",0,"If filing annually, this would be the first day of the year.") !:
+00290   fnLbl(1,43," ",1,1)
+00300   fnLbl(1,1,"Beginning Date of Tax Year:",29,1)
+00310   fnTxt(1,30,12,0,0,"3",0,"If filing annually, this would be the first day of the year.") !:
         resp$(respc+=1)=str$(beg_date)
-00320   fnlbl(2,1,"Ending Date of Tax Year:",29,1)
-00330   fntxt(2,30,12,0,0,"3",0,"If filing annually, this would be the last day of the year.") !:
+00320   fnLbl(2,1,"Ending Date of Tax Year:",29,1)
+00330   fnTxt(2,30,12,0,0,"3",0,"If filing annually, this would be the last day of the year.") !:
         resp$(respc+=1)=str$(end_date)
-00340   fnlbl(3,1,"Deposits Made:",29,1)
-00350   fntxt(3,30,12,0,0,"10",0,"Total deposits made for this time frame.") !:
+00340   fnLbl(3,1,"Deposits Made:",29,1)
+00350   fnTxt(3,30,12,0,0,"10",0,"Total deposits made for this time frame.") !:
         resp$(respc+=1)=str$(deposits)
-00360   fnlbl(4,1,"Top Margin:",29,1)
-00370   fntxt(4,30,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.") !:
+00360   fnLbl(4,1,"Top Margin:",29,1)
+00370   fnTxt(4,30,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.") !:
         resp$(respc+=1)=str$(5)
-00380   fnlbl(5,1,"Left Margin:",29,1)
-00390   fntxt(5,30,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.") !:
+00380   fnLbl(5,1,"Left Margin:",29,1)
+00390   fnTxt(5,30,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.") !:
         resp$(respc+=1)=str$(5)
-00400   fnlbl(7,1,"FUTA Tax Liability 1st Qtr:",29,1)
-00410   fntxt(7,30,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.") !:
+00400   fnLbl(7,1,"FUTA Tax Liability 1st Qtr:",29,1)
+00410   fnTxt(7,30,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.") !:
         resp$(respc+=1)=str$(futaqtr1)
-00420   fnlbl(8,1,"FUTA Tax Liability 2nd Qtr:",29,1)
-00430   fntxt(8,30,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.") !:
+00420   fnLbl(8,1,"FUTA Tax Liability 2nd Qtr:",29,1)
+00430   fnTxt(8,30,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.") !:
         resp$(respc+=1)=str$(futaqtr2)
-00440   fnlbl(9,1,"FUTA Tax Liability 3rd Qtr:",29,1)
-00450   fntxt(9,30,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.") !:
+00440   fnLbl(9,1,"FUTA Tax Liability 3rd Qtr:",29,1)
+00450   fnTxt(9,30,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.") !:
         resp$(respc+=1)=str$(futaqtr3)
-00460   fnlbl(10,1,"FUTA Tax Liability 4th Qtr:",29,1)
-00470   fntxt(10,30,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.") !:
+00460   fnLbl(10,1,"FUTA Tax Liability 4th Qtr:",29,1)
+00470   fnTxt(10,30,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.") !:
         resp$(respc+=1)=str$(futaqtr4)
-00480   fnfra(12,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
-00490   fnopt(1,2,"Print complete form",0,1) !:
+00480   fnFra(12,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
+00490   fnOpt(1,2,"Print complete form",0,1) !:
         resp$(respc+=1)="True"
-00500   fnopt(2,2,"Fill in the blanks",0,1) !:
+00500   fnOpt(2,2,"Fill in the blanks",0,1) !:
         resp$(respc+=1)="False"
-00510   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00510   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00520   if ck=5 then goto XIT
 00530   beg_date=val(resp$(1)) ! beginning of year
 00540   end_date=val(resp$(2)) ! ending day of year
@@ -75,8 +75,8 @@
 00670   on pageoflow goto PGOF
 00680   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00690   gosub HDR
-00700   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
-00710   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00700   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00710   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00720 L720: read #2,using L730: eno,mat em$,ss$,em5,em6 eof EOF2
 00730 L730: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
 00740   m2=dedytdfeduc=0

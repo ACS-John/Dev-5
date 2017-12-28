@@ -1,6 +1,6 @@
 20000 ! Replace S:\acsUB\UBZEROYT
 20020 ! ______________________________________________________________________
-20040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fncno,fnxit,fnerror,fncmdset,fntop
+20040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnxit,fnerror,fnCmdSet,fntop
 20060   on error goto ERTN
 20080 ! ______________________________________________________________________
 20100   dim z$*10,cap$*128
@@ -9,15 +9,15 @@
 20160   fntop(program$,cap$="Zero Year to Date Usage")
 20180 ! ______________________________________________________________________
 20200 SCREEN1: ! 
-20220   fntos(sn$:="ubZeroYt")
-20240   fnlbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
-20260   fntxt(1,50,5)
+20220   fnTos(sn$:="ubZeroYt")
+20240   fnLbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
+20260   fnTxt(1,50,5)
 20280   resp$(1)=""
-20300   fncmdset(2)
-20320   fnacs(sn$,0,mat resp$,ck)
+20300   fnCmdSet(2)
+20320   fnAcs(sn$,0,mat resp$,ck)
 20340   if ck=5 then goto XIT
 20360   if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
-20380   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+20380   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20400 READ_CUSTOMER: ! 
 20420   read #1,using "Form POS 1,C 10": z$ eof DONE
 20440   rewrite #1,using "Form POS 232,PD 5,POS 252,PD 5,POS 272,PD 5": 0,0,0

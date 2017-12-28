@@ -47,13 +47,13 @@
 00603   ! Read #h_department,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
 00670   L670: ! 
 00672   read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L960
-00674   if debug then let fnstatus('department read employee '&str$(eno)&' department '&str$(tdn))
+00674   if debug then let fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
 00680   if teno<>oldeno then goto L960
 00690   if d1><tdt(4) then goto L670
 00700   holdtdn=tdn
 00710   olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
 00720   read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey L670
-00722   if debug then let fnstatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
+00722   if debug then let fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
 00740   dst3=0
 00750   for j=1 to 20
 00760     if dedst(j)>0 then dst3=dst3+tcp(j+4)
@@ -293,7 +293,7 @@
 02004   f3=sswh+mcwh : oldsswg+=sswg
 02010 CALC_NO_GROSS: tfy+=f3
 02020 FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
-02021   if debug then let fnstatus('federal  withholding for department calculating')
+02021   if debug then let fnStatus('federal  withholding for department calculating')
 02022   f4=round(tf4_a*pog,2)
 02030   stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
 02040   if em(7)=0 then goto CURRENT_PERIOD else g2=tgp
@@ -364,9 +364,9 @@
 02396 ! tdc(6) is Workman's Comp Wages
 02397 ! if env$('client')="West Accounting" then ! perhaps everyone should be doing it this way -prd 01/06/2016
 02398 !   tcp(14)=tdc(1)*inp(19)*.01 ! base on regular hours times w/c rate
-02400 !   fnstatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * inp(19)('&str$(inp(19))&') * .01')
+02400 !   fnStatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * inp(19)('&str$(inp(19))&') * .01')
 02401 !   inp(19)=0   ! <-- nice idea but it does not make a difference
-02402 !   fnstatus_pause
+02402 !   fnStatusPause
 02404 ! end if  ! else 
 02406   trp=tcp(26)+tcp(27) ! base on wages
 02408 ! end if
@@ -380,8 +380,8 @@
 02440   rewrite #h_department,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
 02460   tcp(4)=0
 02462   write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
-02463 ! fnstatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
-02464 ! fnstatus_pause
+02463 ! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
+02464 ! fnStatusPause
 02470   twy+=gpd : cafy+=ficat3 : eicytd+=ytdtotal(25)
 02480   if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 02490   goto ReadRpWork
@@ -491,22 +491,22 @@
 03350 return  ! /r
 03360 ! ______________________________________________________________________
 03370 ASKSKIPWH: ! r:
-03380   fntos(sn$="Skipdeductions")
+03380   fnTos(sn$="Skipdeductions")
 03382   rc=cf=0: mylen=42: mypos=45
-03390   fnchk(1,46,"Skip Federal Withholdings:",1)
+03390   fnChk(1,46,"Skip Federal Withholdings:",1)
 03392   resp$(rc+=1)="False"
-03400   fnchk(2,46,"Skip State Withholdings:",1)
+03400   fnChk(2,46,"Skip State Withholdings:",1)
 03402   resp$(rc+=1)="False"
-03410   fnchk(3,46,"Skip Fica Withholdings:",1)
+03410   fnChk(3,46,"Skip Fica Withholdings:",1)
 03412   resp$(rc+=1)="False"
-03420   fnchk(4,46,"Skip Standard Withholdings:",1)
+03420   fnChk(4,46,"Skip Standard Withholdings:",1)
 03422   resp$(rc+=1)="False"
-03430   fnlbl(6,1,"Standard Federal % Override:",mylen,1,0)
-03440   fntxt(6,mypos,4,0,1,"32",0,"Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.")
+03430   fnLbl(6,1,"Standard Federal % Override:",mylen,1,0)
+03440   fnTxt(6,mypos,4,0,1,"32",0,"Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.")
 03442   resp$(rc+=1)=""
-03450   fncmdkey("Next",1,1,0,"Proceed with calculations.")
-03460   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-03470   fnacs(sn$,0,mat resp$,ckey) ! skip deductions & std %
+03450   fnCmdKey("Next",1,1,0,"Proceed with calculations.")
+03460   fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
+03470   fnAcs(sn$,0,mat resp$,ckey) ! skip deductions & std %
 03480   if ckey<>5 then 
 03490     if resp$(1)(1:1)="T" then in2$(1)="Y" else in2$(1)="N"
 03500     if resp$(2)(1:1)="T" then in2$(2)="Y" else in2$(2)="N"
@@ -672,35 +672,35 @@
 13680   if s3<.1 then s3=0
 13700 return  ! /r
 14000 ASKDATES: ! r:
-14020   open #h_dates:=11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76,shr",internal,outin,relative 
-14040   read #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1,release: beg_date,end_date,d1,d1$ norec ASKDATES_WRITE_DATE
+14020   open #h_dates:=11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76,shr",internal,outIn,relative 
+14040   read #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1,release: beg_date,end_date,d1,d1$ noRec ASKDATES_WRITE_DATE
 14060   goto ASKDATES_SCREEN
 14080   ASKDATES_WRITE_DATE: ! 
 14100   write #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14120   ASKDATES_SCREEN: ! 
-14140   fntos(sn$="Calculation-1")
+14140   fnTos(sn$="Calculation-1")
 14160   rc=cf=0: mylen=42: mypos=45: frameno=1
 14180   gosub GET_ALPHA_DATE ! get alpha date
-14200   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
-14220   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
-14240   fntxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno)
+14200   fnFra(1,1,4,66,"Payroll Date","Enter the payroll date.")
+14220   fnLbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
+14240   fnTxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno)
 14260   resp$(rc+=1)=str$(d1)
-14280   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
-14300   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno)
+14280   fnLbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
+14300   fnTxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno)
 14320   resp$(rc+=1)= d1$
-14340   fnchk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
+14340   fnChk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
 14360   resp$(rc+=1)="False"
-14380   fnfra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
+14380   fnFra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
 14400   frameno=2 : mylen=26 : mypos=mylen+2
-14420   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
-14440   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
+14420   fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
+14440   fnTxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
 14460   resp$(rc+=1)=str$(beg_date)
-14480   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-14500   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
+14480   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+14500   fnTxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
 14520   resp$(rc+=1)=str$(end_date)
-14540   fncmdkey("Next",1,1,0,"Proceed with calculations.")
-14560   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-14580   fnacs(sn$,0,mat resp$,ckey)
+14540   fnCmdKey("Next",1,1,0,"Proceed with calculations.")
+14560   fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
+14580   fnAcs(sn$,0,mat resp$,ckey)
 14600   if ckey<>5 then 
 14620     prd=d1=val(resp$(1))
 14640     d1$=resp$(2)
@@ -734,7 +734,7 @@
 15420   dePrCkNokey:!
 15440 return  ! /r
 16000 def fn_setup
-16020   library 'S:\Core\Library': fntop, fnerror, fnxit,fntos,fnfra,fnchk,fnlbl,fntxt,fncmdkey,fnacs,fncd,fnpayroll_client_state$,fnmsgbox,fnstatus,fngethandle,fnstatus_pause,fnDedNames,fnAutomatedSavePoint
+16020   library 'S:\Core\Library': fntop, fnerror, fnxit,fnTos,fnFra,fnChk,fnLbl,fnTxt,fnCmdKey,fnAcs,fncd,fnpayroll_client_state$,fnmsgbox,fnStatus,fngethandle,fnStatusPause,fnDedNames,fnAutomatedSavePoint
 16022   library 'S:\Core\Library': fnFree
 16040   on error goto ERTN
 16060   debug=0 ! if env$('ACSDeveloper')<>'' then debug=1 else debug=0
@@ -749,60 +749,61 @@
 16280   dim newdedcode(20),newcalcode(20),newdedfed(20),newdedcode(20)
 16300   dim dedfica(20),dedst(20),deduc(20)
 16320   dim ml$(1)*256
-16380   ! 
-16400   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
-16420   ! 
+16380   fn_setupFederalTables(mat ft,fed_annual_wh_allowance)
 16460   mtc=0 ! motab counter
 16480   motab(mtc+=1)=0   : motab(mtc+=1)=31  : motab(mtc+=1)=59
 16500   motab(mtc+=1)=90  : motab(mtc+=1)=120 : motab(mtc+=1)=151
 16520   motab(mtc+=1)=181 : motab(mtc+=1)=212 : motab(mtc+=1)=243
 16540   motab(mtc+=1)=273 : motab(mtc+=1)=304 : motab(mtc+=1)=334
-17040   dim ft(8,6)
-17060   ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
-17080   ! r: Federal - SINGLE person (including head of household)
-17100    ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
-17120    ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1  
-17140    ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15 
-17160    ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25 
-17180    ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28 
-17200    ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33 
-17220    ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35 
-17240    ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
-17260   ! /r
-17280   ! r: Federal - MARRIED person
-17300    ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
-17320    ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
-17340    ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
-17360    ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
-17380    ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
-17400    ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
-17420    ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
-17440    ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
-17460   ! /r
-17480   ! close #h_tables: 
-18000   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
-18020   read #20,using 'Form POS 145,PD 5.2,POS 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,POS 618,30*N 1,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
-18040   close #20: 
-18060   ficamax=ficamax*10
-18080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-18100   ssmax=ficamax : mcmax=ficamx2 : ficar1=ficarate*.01
-18120   ficar2=ficar2*.01 : ficarate=ficar1+ficar2
-18140   ficamxr=ficamax*ficarate : ficamx2=(ficamx2-ficamax)*ficar2
-19100   ! 
-19120   ! if env$('client')="West Accounting" then 
-19140   !   saif(1)=173.33
-19160   !   saif(2)=86.66
-19180   !   saif(3)=80
-19200   !   saif(4)=40
-19220   ! end if 
-19240 fnend 
+17000   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+17020   read #20,using 'Form POS 145,PD 5.2,POS 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,POS 618,30*N 1,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
+17040   close #20: 
+17060   ficamax=ficamax*10
+17080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+17100   ssmax=ficamax : mcmax=ficamx2 : ficar1=ficarate*.01
+17120   ficar2=ficar2*.01 : ficarate=ficar1+ficar2
+17140   ficamxr=ficamax*ficarate : ficamx2=(ficamx2-ficamax)*ficar2
+17160   ! 
+17180   ! if env$('client')="West Accounting" then 
+17200   !   saif(1)=173.33
+17220   !   saif(2)=86.66
+17240   !   saif(3)=80
+17260   !   saif(4)=40
+17280   ! end if 
+17300 fnend 
+18000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
+18020   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
+18040   dim ft(8,6)
+18060   ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+18080   ! r: Federal - SINGLE person (including head of household)
+18100    ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
+18120    ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1  
+18140    ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15 
+18160    ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25 
+18180    ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28 
+18200    ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33 
+18220    ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35 
+18240    ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
+18260   ! /r
+18280   ! r: Federal - MARRIED person
+18300    ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+18320    ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
+18340    ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
+18360    ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
+18380    ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
+18400    ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
+18420    ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
+18440    ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
+18460   ! /r
+18480   ! close #h_tables: 
+18500 fnend
 30000 def fn_setupOpenFiles
-30020   open #breakdown=fngethandle: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outin,keyed ioerr ignore ! formerly file #31
-30040   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno'),internal,outin,keyed  ! formerly file #1
-30060   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
-30080   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr,Use,RecL=224,KPs=1,KLn=17",internal,outin,keyed 
-30100   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outin,keyed 
-30120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outin,keyed 
+30020   open #breakdown=fngethandle: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
+30040   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno'),internal,outIn,keyed  ! formerly file #1
+30060   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+30080   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+30100   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
+30120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
 30140   F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 30160 fnend
 32000 GET_ALPHA_DATE: ! r:
@@ -877,15 +878,15 @@
 37720   end if 
 37740   ST1_XIT: ! 
 37760 return  ! /r
-37780 ST02: s3=0 : return 
-37800 ST03: s3=0 : return 
-37820 ST04: s3=0 : return 
-37840 ST05: s3=0 : return 
-37860 ST06: s3=0 : return 
-37880 ST07: s3=0 : return 
-37900 ST08: s3=0 : return 
-37920 ST09: s3=0 : return 
-37940 ST10: s3=0 : return 
+37780 ST02: s3=0 : return
+37800 ST03: s3=0 : return
+37820 ST04: s3=0 : return
+37840 ST05: s3=0 : return
+37860 ST06: s3=0 : return
+37880 ST07: s3=0 : return
+37900 ST08: s3=0 : return
+37920 ST09: s3=0 : return
+37940 ST10: s3=0 : return
 38000 LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
 38020   h1=0
 38040   h2=0
@@ -981,7 +982,7 @@
 41540     ! 
 41560   wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
 41580     ! 
-41600   wor_phase_out=fn_or_phase_out(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
+41600   wor_phase_out=fn_oregonPhaseOut(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
 41620     ! 
 41640     ! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
 41660   wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
@@ -997,42 +998,42 @@
 41860     wor_tax_rate=or1(wor_table_line,3)
 41880     wor_remove_prev=or1(wor_table_line,1)
 41900   end if 
-42000   if debug then let fnstatus('-------------------------------------------')
+42000   if debug then let fnStatus('-------------------------------------------')
 42020   if wor_they_are_single then 
-42040     if debug then let fnstatus('  Single with '&str$(wor_allowances_effective)&' allowances')
+42040     if debug then let fnStatus('  Single with '&str$(wor_allowances_effective)&' allowances')
 42060   else if wor_they_are_married then 
-42080     if debug then let fnstatus('  Married with '&str$(wor_allowances_effective)&' allowances')
+42080     if debug then let fnStatus('  Married with '&str$(wor_allowances_effective)&' allowances')
 42100   else 
-42120     if debug then let fnstatus('  Maridal Status is undetermined!!!  ')
+42120     if debug then let fnStatus('  Maridal Status is undetermined!!!  ')
 42140   end if 
-42160   if debug then let fnstatus('    Current Wage (Gross)    = '&str$(wor_wages_taxable_current))
-42180   if debug then let fnstatus('    Pay Periods Per Year    = '&str$(wor_pay_periods_per_year))
-42200   if debug then let fnstatus('    Annual wage (estimate)  = '&str$(wor_wages_annual_estimate))
-42220   if debug then let fnstatus('    standard deduction     = '&str$(wor_standard_deduction))
-42240   if debug then let fnstatus('    table '&str$(wor_table)&' line '&str$(wor_table_line))
-42260   if debug then let fnstatus('    phase out              = '&str$(wor_phase_out))
-42280   if debug then let fnstatus('    fed_wh_annual_estimate = '&str$(wor_fed_wh_annual_estimate))
-42300   if debug then let fnstatus('.')
-42320   if debug then let fnstatus('    BASE = '&str$(wor_wages_annual_estimate)&' (an..wages) - '&str$(wor_phase_out)&' (phase out/fed wh) - '&str$(wor_standard_deduction)&' (std ded)')
-42340   if debug then let fnstatus('    base                   = '&str$(wor_base))
+42160   if debug then let fnStatus('    Current Wage (Gross)    = '&str$(wor_wages_taxable_current))
+42180   if debug then let fnStatus('    Pay Periods Per Year    = '&str$(wor_pay_periods_per_year))
+42200   if debug then let fnStatus('    Annual wage (estimate)  = '&str$(wor_wages_annual_estimate))
+42220   if debug then let fnStatus('    standard deduction     = '&str$(wor_standard_deduction))
+42240   if debug then let fnStatus('    table '&str$(wor_table)&' line '&str$(wor_table_line))
+42260   if debug then let fnStatus('    phase out              = '&str$(wor_phase_out))
+42280   if debug then let fnStatus('    fed_wh_annual_estimate = '&str$(wor_fed_wh_annual_estimate))
+42300   if debug then let fnStatus('.')
+42320   if debug then let fnStatus('    BASE = '&str$(wor_wages_annual_estimate)&' (an..wages) - '&str$(wor_phase_out)&' (phase out/fed wh) - '&str$(wor_standard_deduction)&' (std ded)')
+42340   if debug then let fnStatus('    base                   = '&str$(wor_base))
 42360     ! fn  status('    pre_base               = '&str$(wor_pre_base))
 42380     ! fn  status('    tax rate               = '&str$(wor_tax_rate))
 42400     ! fn  status('    remove_prev            = '&str$(wor_remove_prev))
-42420   if debug then let fnstatus('.')
-42440   if debug then let fnstatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
+42420   if debug then let fnStatus('.')
+42440   if debug then let fnStatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
 42460     ! 
 42480     ! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
 42500     ! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
 42520   wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
-42540   fnstatus('withholding before dividing by pay periods = '&str$(wor_return))
+42540   fnStatus('withholding before dividing by pay periods = '&str$(wor_return))
 42560   wor_return=wor_return/wor_pay_periods_per_year
 42580   wor_return=round(wor_return,2)
 42600   if wor_return<.1 then wor_return=0
-42620   fnstatus('calculated withholding ='&str$(wor_return))
-42640   if debug then let fnstatus_pause ! pause
+42620   fnStatus('calculated withholding ='&str$(wor_return))
+42640   if debug then let fnStatusPause ! pause
 42660   fn_wh_oregon=wor_return
 42680 fnend 
-44000 def fn_or_phase_out(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
+44000 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
 44020   if opo_wages<50000 then 
 44040     opo_return=min(opo_fed_wh,6500)
 44060   else if opo_table=1 then 
@@ -1060,7 +1061,7 @@
 44500     end if 
 44520   end if 
 44540   OPO_XIT: ! 
-44560   fn_or_phase_out=opo_return
+44560   fn_oregonPhaseOut=opo_return
 44580 fnend 
 46000 def fn_wh_kentuky(wky_wages_taxable_current,g_pay_periods_per_year,wky_allowances)
 46020   ! KYWH: ! REPLACE kentucky.wh/acswrk,source ! kentucky:  rec=20  ky(6,3) ! revised 12/31/2005
@@ -1226,15 +1227,15 @@
 66460   if env$('ACSdeveloper')<>'' then pause 
 66480 fnend 
 68000 def fn_report_stuff
-68020   ! fnstatus('check completely calcualated for eno '&str$(eno))
-68040   ! fnstatus('tcp(1)='&str$(tcp(1)))
-68060   ! fnstatus('tcp(2)='&str$(tcp(2)))
-68080   ! fnstatus('tcp(3)='&str$(tcp(3)))
-68100   ! fnstatus('tcp(4)='&str$(tcp(4)))
-68120   ! fnstatus('tcp(13)='&str$(tcp(13)))
-68140   ! fnstatus('tcp(14)='&str$(tcp(14)))
-68160   ! fnstatus('tcp(32)='&str$(tcp(32)))
-68180   ! fnstatus_pause
+68020   ! fnStatus('check completely calcualated for eno '&str$(eno))
+68040   ! fnStatus('tcp(1)='&str$(tcp(1)))
+68060   ! fnStatus('tcp(2)='&str$(tcp(2)))
+68080   ! fnStatus('tcp(3)='&str$(tcp(3)))
+68100   ! fnStatus('tcp(4)='&str$(tcp(4)))
+68120   ! fnStatus('tcp(13)='&str$(tcp(13)))
+68140   ! fnStatus('tcp(14)='&str$(tcp(14)))
+68160   ! fnStatus('tcp(32)='&str$(tcp(32)))
+68180   ! fnStatusPause
 68200 fnend 
 69000 WEST_ACC_WORKMANSCOMP: ! r:
 69001   ! inp(6) Other Compensation
@@ -1248,7 +1249,7 @@
 69009   !   hours = regular hours + overtime hours
 69010   ! end if
 69020   tmphrs=inp(1)+inp(2) ! if inp(6)>0 then tmphrs=saif(em(5)) else tmphrs=inp(1)+inp(2)
-69040   !     fnstatus('inp(17) changed to '&str$(round(tmphrs*inp(17)*.01,2))&' round('&str$(tmphrs)&' * inp(17)('&str$(inp(17))&' * .01)',2)
-69060   !     fnstatus_pause
+69040   !     fnStatus('inp(17) changed to '&str$(round(tmphrs*inp(17)*.01,2))&' round('&str$(tmphrs)&' * inp(17)('&str$(inp(17))&' * .01)',2)
+69060   !     fnStatusPause
 69080   inp(17)=round(tmphrs*inp(17)*.01,2) ! inp(17)=round(tmphrs*inp(17)*.01,2)
 69100 return  ! /r

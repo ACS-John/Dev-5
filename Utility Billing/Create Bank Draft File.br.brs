@@ -1,6 +1,6 @@
 14000 ! formerly S:\acsUB\BkDraft
 14020 ! r: setup
-14040   library 'S:\Core\Library': fntop,fnxit, fnLastBillingDate,fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fnmsgbox,fncmdset,fnchk,fndate_mmddyy_to_ccyymmdd,fnureg_write,fnureg_read,fnget_services
+14040   library 'S:\Core\Library': fntop,fnxit, fnLastBillingDate,fnAcs,fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnCmdSet,fnChk,fndate_mmddyy_to_ccyymmdd,fnureg_write,fnureg_read,fnget_services
 14060   on error goto ERTN
 14080 ! r: dims
 14100   dim pth$*128
@@ -15,27 +15,27 @@
 18140     if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 18160   next j
 18180   fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
-18200   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outin,relative 
-18220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+18200   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outIn,relative 
+18220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 18240   close #22: ioerr ignore
 18260 goto SCREEN1 ! /r
 22000 SCREEN1: ! r:
-22020   fntos(sn$="BKDraft")
+22020   fnTos(sn$="BKDraft")
 22040   mylen=13 
 22060   mypos=mylen+2
 22080   respc=0
-22100   fnlbl(1,1,"Billing Date:",mylen,1)
-22120   fntxt(1,mypos,8,0,1,"1")
+22100   fnLbl(1,1,"Billing Date:",mylen,1)
+22120   fnTxt(1,mypos,8,0,1,"1")
 22140   resp$(respc+=1)=str$(d1)
-22160   fnlbl(2,1,"Payment Date:",mylen,1)
-22180   fntxt(2,mypos,8,0,1,"1")
+22160   fnLbl(2,1,"Payment Date:",mylen,1)
+22180   fnTxt(2,mypos,8,0,1,"1")
 22200   resp$(respc+=1)=""
-22220   fnlbl(3,1,"File:",mylen,1)
-22240   fntxt(3,mypos,30,128,0,"70",0,"Destination and file name.",0)
+22220   fnLbl(3,1,"File:",mylen,1)
+22240   fnTxt(3,mypos,30,128,0,"70",0,"Destination and file name.",0)
 22260   resp$(respc_bankDraftFile:=respc+=1)=pth$
-22280   fnchk(4,mypos,"Post Collections:",1)
-22300   fncmdset(2)
-22320   fnacs(sn$,0,mat resp$,ck)
+22280   fnChk(4,mypos,"Post Collections:",1)
+22300   fnCmdSet(2)
+22320   fnAcs(sn$,0,mat resp$,ck)
 22340   if ck=5 then goto XIT
 22360   d1=val(resp$(1))
 22380   d2=val(resp$(2))
@@ -46,9 +46,9 @@
 26000 initialization: ! r: initialization
 26020   open #22: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
 26040   if postub=1 then 
-26060     open #6: "Name="&env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')&",RecL=91,Replace", internal,outin,relative 
+26060     open #6: "Name="&env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')&",RecL=91,Replace", internal,outIn,relative 
 26080   end if 
-26100   open #7: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+26100   open #7: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 26120   fnopenprn
 26140   gosub HDRP1
 26160   gosub HDR1
@@ -244,7 +244,7 @@
 68060     L1860: !
 68080     r6+=1
 68100     if r6>lrec(6) then goto L2120 ! prevent stopping to deleted record and quit when finished
-68120     read #6,using L1890,rec=r6: z$,m,n,mat o,rcpt$,mat alloc,mat bd2 norec L1860
+68120     read #6,using L1890,rec=r6: z$,m,n,mat o,rcpt$,mat alloc,mat bd2 noRec L1860
 68140     L1890: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,sz1*pd 4.2,5*pd 3,pd 4.2
 68160     if p$(1:2)="  " and m=0 then goto L1860
 68180     read #1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb nokey L1860

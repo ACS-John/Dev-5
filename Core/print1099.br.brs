@@ -21,7 +21,7 @@
 00170     library 'S:\Core\Library': fngethandle,fnpause
 00180 ! ___________________________
 00181     if einfo$(1)='' then let fnpause
-00190     open #dave=fngethandle: 'Name=1099-'&session$&'.dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outin,keyed 
+00190     open #dave=fngethandle: 'Name=1099-'&session$&'.dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outIn,keyed 
 00200     read #dave,using 'Form Pos 481,22*N 15.2',key=rpad$(einfo$(1),40),reserve: mat oldbox nokey DAVENOKEY
 00210     mat box=box+oldbox
 00220     rewrite #dave,using 'Form Pos 481,22*N 15.2',same: mat box
@@ -57,7 +57,7 @@
 00470     if lz1$='' then lz1$='D'
 00480 ! fnwait !:
           on fkey 5 goto EODAVE
-00490     open #dave=fngethandle: 'Name=1099-'&session$&'.dat',internal,outin ioerr XIT
+00490     open #dave=fngethandle: 'Name=1099-'&session$&'.dat',internal,outIn ioerr XIT
 00500     if lz1$='E' then !:
             open #exportfile=fngethandle: 'Name=\1099Etc.Wrk\W2Data\1099Dat.Prn,Replace',display,output else !:
             fnopenprn

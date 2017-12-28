@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlNote
 00020 ! -- Foot Notes
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fntos,fncomboa,fncmdkey,fnacs,fnget_wordprocessor_exe
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fnTos,fncomboa,fnCmdKey,fnAcs,fnget_wordprocessor_exe
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,fl2$(2),sc2$(2)*46,ln$*8000,cnam$*40,dat$*20,cap$*128
@@ -32,14 +32,14 @@
 00180   tb$="("&trim$(tb$)&")"
 00190   if fnprocess=1 then t=2 : goto L290
 00200 MENU1: pr newpage
-00210   fntos(sn$="acglnote") !:
+00210   fnTos(sn$="acglnote") !:
         mylen=20: mypos=mylen+3 : right=1
 00220   option$(1)="1 = Edit Notes to Financial Statements" !:
         option$(2)="2 = pr Notes"
 00230   fncomboa("NoteOption",1,mypos,mat option$,"You can edit or pr notes to the financial statements ",40)
-00240   fncmdkey("&Next",1,1,0,"Allows you to enter information.")
-00250   fncmdkey("&Cancel",5,0,1,"Return to menu.")
-00260   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdKey("&Next",1,1,0,"Allows you to enter information.")
+00250   fnCmdKey("&Cancel",5,0,1,"Return to menu.")
+00260   fnAcs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   if resp$(1)=option$(1) then t=1 else t=2
 00290 L290: on t goto L300,L320 none MENU1

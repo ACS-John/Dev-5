@@ -1,5 +1,5 @@
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnLastBillingDate,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
+00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnOpt,fnmsgbox,fncomboa,fnButton,fnpic,fnFra,fnChk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnLastBillingDate,fnCmdSet,fnCmdKey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 00040   library 'S:\Core\Library': fnLastBillingDate
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -17,19 +17,19 @@
 38020   fnLastBillingDate(bdate)
 38040   fntop("S:\acsUB\Consumptionlist",cap$="Consumption List")
 44000 MAIN: ! 
-44020   fntos(sn$:="UBAnalyze")
+44020   fnTos(sn$:="UBAnalyze")
 44040   mylen=20
 44060   mypos=mylen+2
-44080   fnlbl(1,1,"Billing Date:",mylen,1)
-44100   fntxt(1,mypos,8,8,0,"1")
+44080   fnLbl(1,1,"Billing Date:",mylen,1)
+44100   fnTxt(1,mypos,8,8,0,"1")
 44120   resp$(1)=str$(bdate)
-44140   fnlbl(2,1,"Type of Service:",mylen,1)
+44140   fnLbl(2,1,"Type of Service:",mylen,1)
 44160   fncomboa("Service",2,mylen+3,mat code$,"",16)
-44180   fnlbl(3,1,"Rate Code",mylen,1)
-44200   fntxt(3,mypos,3,3,0,"1030")
+44180   fnLbl(3,1,"Rate Code",mylen,1)
+44200   fnTxt(3,mypos,3,3,0,"1030")
 44220   resp$(3)=""
-44240   fncmdset(3)
-44260   fnacs(sn$,0,mat resp$,ck)
+44240   fnCmdSet(3)
+44260   fnAcs(sn$,0,mat resp$,ck)
 48000   if ck=5 then goto XIT
 48020   bdate= val(resp$(1))
 48040   if resp$(2)="Water" then 

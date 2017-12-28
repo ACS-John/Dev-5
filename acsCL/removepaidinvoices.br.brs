@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\RemovePaidInvoices
 00020 ! Remove Paid Invoices
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fnacs,fncmdset,fnfree,fnrename
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fnfree,fnrename
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
@@ -11,21 +11,21 @@
         left=0
 00110   fncno(cno)
 00120 ! ______________________________________________________________________
-00130   fntos(sn$='RmvPdInv') !:
+00130   fnTos(sn$='RmvPdInv') !:
         lc=0 : mylen=13 : mypos=mylen+2 !:
         mywidth=42
-00140   fnlbl (lc+=1,1,"Removal Date:",mylen,right)
-00150   fntxt(lc,mypos,10,0,left,'1003') !:
+00140   fnLbl (lc+=1,1,"Removal Date:",mylen,right)
+00150   fnTxt(lc,mypos,10,0,left,'1003') !:
         resp$(1)=""
 00160   lc+=1
-00170   fnlbl(lc+=1,1,"All transactions with a date equal to",mywidth,center)
-00180   fnlbl(lc+=1,1,"or older than this date will be removed.",mywidth,center)
-00190   fncmdset(2)
-00200   fnacs(sn$,0,mat resp$,ckey)
+00170   fnLbl(lc+=1,1,"All transactions with a date equal to",mywidth,center)
+00180   fnLbl(lc+=1,1,"or older than this date will be removed.",mywidth,center)
+00190   fnCmdSet(2)
+00200   fnAcs(sn$,0,mat resp$,ckey)
 00210   if ckey=5 or ckey=cancel then goto XIT else !:
           rd1=val(resp$(1))
 00220 ! fnwait
-00230   open #ivpaid=1: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
+00230   open #ivpaid=1: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00240   open #work=2: "Name="&env$('Q')&"\CLmstr\Work."&session$&",Size=0,RecL=34,Replace",internal,output 
 00250 READ_IVPAID: ! 
 00260   read #ivpaid,using 'Form POS 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn eof EO_IVPAID

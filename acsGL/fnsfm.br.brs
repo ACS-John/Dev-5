@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\fnsfm
 00020 ! General Ledger Financial Statement Layout - Hamster
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster,fntos,fnfra,fnopt,fncmdkey,fnacs,fncno
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fncno
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(21)*38,tln(21),p$(21)*160,fltyp$(21),sln(21),mask(21),sp(21),c$(21,8)*40
@@ -23,24 +23,24 @@
         fil$(6)="ACGLFNSG.H"&env$('cno'): idx$(6)="FNSGINDX.H"&env$('cno')
 00180   gosub BUILD_LAYOUT
 00190 MAIN: ! 
-00200   fntos(sn$="FsDesign") !:
+00200   fnTos(sn$="FsDesign") !:
         mylen=20: mypos=mylen+3 : right=1
-00210   fnfra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
-00220   fnopt(1,2,id$(1),0,1) !:
+00210   fnFra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
+00220   fnOpt(1,2,id$(1),0,1) !:
         resp$(1)="True"
-00230   fnopt(2,2,id$(2) ,0,1) !:
+00230   fnOpt(2,2,id$(2) ,0,1) !:
         resp$(2)="False"
-00240   fnopt(3,2,id$(3),0,1) !:
+00240   fnOpt(3,2,id$(3),0,1) !:
         resp$(3)="False"
-00250   fnopt(4,2,id$(4),0,1) !:
+00250   fnOpt(4,2,id$(4),0,1) !:
         resp$(4)="False"
-00260   fnopt(5,2,id$(5),0,1) !:
+00260   fnOpt(5,2,id$(5),0,1) !:
         resp$(5)="False"
-00270   fnopt(6,2,id$(6),0,1) !:
+00270   fnOpt(6,2,id$(6),0,1) !:
         resp$(6)="False"
-00280   fncmdkey("&Next",1,1,0,"Access the chosen financial statement design..")
-00290   fncmdkey("&Cancel",5,1,0,"Return to main menu.")
-00300   fnacs(sn$,0,mat resp$,ckey)
+00280   fnCmdKey("&Next",1,1,0,"Access the chosen financial statement design..")
+00290   fnCmdKey("&Cancel",5,1,0,"Return to main menu.")
+00300   fnAcs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   if resp$(1)="True" then selection=1
 00330   if resp$(2)="True" then selection=2
@@ -56,7 +56,7 @@
 00400 ! ______________________________________________________________________
 00410 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00420   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\"&fil$(selection)&",KFName="&env$('Q')&"\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outin,keyed 
+00420   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\"&fil$(selection)&",KFName="&env$('Q')&"\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00430   return 
 00440 ! ______________________________________________________________________
 00450 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -214,7 +214,7 @@
 00950   return 
 00960 ! ______________________________________________________________________
 00970 HAMSTER: ! 
-00980   fnhamster("Acglfnsb",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00980   fnHamster("Acglfnsb",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00990   return 
 01000 ! ______________________________________________________________________
 01010 XIT: fnxit

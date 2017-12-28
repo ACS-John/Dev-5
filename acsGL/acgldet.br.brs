@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlDet
 00020 ! -- Modified Cash Flow Statement (Detailed Transactions, Not Balances)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnglfs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnglfs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,in3$(4)
@@ -21,7 +21,7 @@
 00151   fscode=fnfscode !:
         priorcd=fnpriorcd
 00160   on fkey 5 goto L1870
-00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
+00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  !:
         read #20,using 'form pos 384,n 2': nap : close #20: 
 00180   pors=1
 00190   fnopenprn
@@ -35,17 +35,17 @@
 00260   nametab=int(44-len(rtrm$(cnam$))/2)
 00270   open #1: fl1$,internal,input,keyed 
 00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Shr",internal,input,relative 
-00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
+00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
 00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
-00320   fntos(sn$="GLInput") !:
+00320   fnTos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
-00330   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00340   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00330   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00340   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00350   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00360   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00370   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00380   fnacs(sn$,0,mat resp$,ckey)
+00350   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00360   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00370   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00380   fnAcs(sn$,0,mat resp$,ckey)
 00390   if ckey=5 then goto XIT
 00400   costcntr=val(resp$(1))
 00410 L410: read #1,using L450: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1870

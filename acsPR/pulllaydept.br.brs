@@ -8,7 +8,7 @@
 00080 ! you will have to create your folders as described above; this routine will not create the folders
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
-00110   dim fullname$(20)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
+00110   dim fullname$(20)*20,serviceCode$(10)*2,textfile$*87,abbrev$*30
 00120   fnsetmonth(mat mo$)
 00130   fncno(cno)
 00140 ! 
@@ -21,7 +21,7 @@
 00230   ev$="S:\acsPR\Layouts\department.LAY"
 00240   goto L340 ! for utility billing automatically from menu
 00250   close #101: ioerr L260
-00260 L260: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
+00260 L260: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outIn 
 00270   pr #101: newpage
 00280   pr f "10,2,Cr 32": "File name to create (no ext):"
 00290   pr f "12,2,Cr 32": "Layout file name (with exts):"
@@ -30,7 +30,7 @@
 00320   ev$=trim$(trim$(ev$,chr$(0)))
 00330   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00340 L340: open #2: "Name="&ev$,display,input 
-00350   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
+00350   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed 
 00360 L360: linput #2: ln$ eof L890
 00370   fnremove(chr$(9),ln$)
 00380   if uprc$(ln$(7:10))<>"DATA" then goto L360
@@ -97,7 +97,7 @@
 00940 ! ______________________________________________________________________
 00950 MOVEITTOTEXT: ! 
 00960   open #10: "Name="&outputfile$&",RecL=87,Replace",display,output 
-00970   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
+00970   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
 00980 L980: read #15,using L990: textfile$ eof L1020
 00990 L990: form pos 1,c 87
 01000   pr #10,using L990: textfile$

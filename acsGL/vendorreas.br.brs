@@ -44,12 +44,12 @@
 00430   se$(7)="1099 Type:"
 00440   se$(8)="Federal ID or SS #:"
 00450   gosub L3200
-00460   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4750
-00470   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4090
-00480 L480: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outin,relative ioerr L500
+00460   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4750
+00470   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4090
+00480 L480: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outIn,relative ioerr L500
 00490   goto L530
 00500 L500: close #2: ioerr L510
-00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outin,relative 
+00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outIn,relative 
 00520   write #2,using L850,rec=1: "",0,0,"","",1
 00530 L530: pr newpage
 00540   if fnprocess=1 then ti=4 else goto MENU1
@@ -61,7 +61,7 @@
 00600 L600: goto L3330
 00610   pr newpage
 00620   close #102: ioerr L630
-00630 L630: open #102: "SROW=4,SCOL=20,EROW=12,ECOL=59,Border=Sr,Caption=<"&cap$,display,outin 
+00630 L630: open #102: "SROW=4,SCOL=20,EROW=12,ECOL=59,Border=Sr,Caption=<"&cap$,display,outIn 
 00640   pr #102: newpage
 00650   pr #102,fields "1,1,Cc 41,R,N": cnam$
 00660   pr #102,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
@@ -75,13 +75,13 @@
 00740   if pas$><"ERASE" then goto L720
 00750   close #1: ioerr L760
 00760 L760: close #11: ioerr L770
-00770 L770: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed ioerr L790
+00770 L770: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outIn,keyed ioerr L790
 00780   close #1,free: ioerr L790
-00790 L790: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",RecL=127,Replace",internal,outin,relative ioerr L820
+00790 L790: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",RecL=127,Replace",internal,outIn,relative ioerr L820
 00800   close #2: ioerr L810
-00810 L810: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno'),internal,outin,relative ioerr L830
+00810 L810: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno'),internal,outIn,relative ioerr L830
 00820 L820: close #2,free: ioerr L830
-00830 L830: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outin,relative ioerr L840
+00830 L830: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outIn,relative ioerr L840
 00840 L840: write #2,using L850,rec=1: "",0,0,"","",1
 00850 L850: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 00860   new1=1
@@ -90,7 +90,7 @@
 00890   new1=1
 00900 L900: pr newpage
 00910   close #101: ioerr L920
-00920 L920: open #101: "SROW=3,SCOL=8,EROW=15,ECOL=66,BORDER=SR,Caption=<"&cap$,display,outin 
+00920 L920: open #101: "SROW=3,SCOL=8,EROW=15,ECOL=66,BORDER=SR,Caption=<"&cap$,display,outIn 
 00930   pr f "3,8,Cc 59,R,N": "Enter Vendor Number as blank when completed"
 00940   pr f mat sd$: mat se$
 00950   pr f "16,25,C 09,B,1": "Next (F1)"
@@ -201,7 +201,7 @@
 02000 ASKDAT: ! 
 02010   pr newpage
 02020   close #102: ioerr L2030
-02030 L2030: open #102: "SRow=11,SCol=18,ERow=13,ECol=61,Border=Sr,Caption=<"&cap$,display,outin 
+02030 L2030: open #102: "SRow=11,SCol=18,ERow=13,ECol=61,Border=Sr,Caption=<"&cap$,display,outIn 
 02040   pr #102: newpage
 02050   pr #102,fields "2,2,C 20,N": "Report Heading Date:"
 02060   pr f "14,34,C 11,B,5": "Cancel (F5)"
@@ -213,7 +213,7 @@
 02120 L2120: ! ______________________________________________________________________
 02130 L2130: pr newpage
 02140   close #101: ioerr L2150
-02150 L2150: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,Border=SR,Caption=<"&cap$,display,outin 
+02150 L2150: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn 
 02160   pr #101: newpage
 02170   pr f "08,18,Cc 41,R,N": cnam$
 02180   pr f "09,18,Cc 41,R,N": "Company Number "&env$('cno')
@@ -278,7 +278,7 @@
 02770   scid$="Vendor #: "&ltrm$(vn$)&"   Balance: "&str$(ytdp)&"   Transactions: "&str$(tt)
 02780   pr newpage
 02790   close #101: ioerr L2800
-02800 L2800: open #101: "SROW=5,SCOL=8,EROW=13,ECOL=62,Border=SR,Caption=<"&cap$,display,outin 
+02800 L2800: open #101: "SROW=5,SCOL=8,EROW=13,ECOL=62,Border=SR,Caption=<"&cap$,display,outIn 
 02810   pr f mat desc$: mat scrt$
 02820   pr f "14,30,C 09,B,1": "Next (F1)"
 02830   pr f "14,41,C 09,B,5": "Stop (F5)"
@@ -341,7 +341,7 @@
 03400 L3400: lr2=lrec(2)
 03410   rewrite #2,using L3510,rec=1: lr2
 03420   for j=1 to lr2
-03430     read #2,using L3440,rec=j: vn$,nta norec L3520
+03430     read #2,using L3440,rec=j: vn$,nta noRec L3520
 03440 L3440: form pos 1,c 8,pos 62,pd 3
 03450     read #1,using L3370,key=vn$: mat adr nokey L3520
 03460     if adr(1)=0 then adr(1)=j
@@ -355,7 +355,7 @@
 03540   gosub ASKDAT
 03550   pr newpage
 03560   close #101: ioerr L3570
-03570 L3570: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=SR,CAPTION=<"&cap$,display,outin 
+03570 L3570: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 03580   pr #101: newpage
 03590   pr #101,fields "1,1,Cc 41,R,N": cnam$
 03600   pr #101,fields "2,1,Cc 41,R,N": "Company Number "&env$('cno')
@@ -371,7 +371,7 @@
 03700   tot=0
 03710   if adr(1)=0 and ytdp=0 then goto L3660
 03720   nta=adr(1)
-03730 L3730: read #2,using L3740,rec=nta,release: dt,am,rn$,de$,nta norec L3660
+03730 L3730: read #2,using L3740,rec=nta,release: dt,am,rn$,de$,nta noRec L3660
 03740 L3740: form pos 9,n 6,pd 5.2,c 12,c 30,pd 3
 03750   tot=tot+am
 03760   if nta=0 then goto L3770 else goto L3780
@@ -399,7 +399,7 @@
 03980   ce1=pos(uprc$(sc$(ce)),"U",1)
 03990   ce2=ce1+1
 04000   sc$(ce)(ce1:ce2)="UC"
-04010   read #10,using L4020,rec=ce: mat hlp$ norec L4080
+04010   read #10,using L4020,rec=ce: mat hlp$ noRec L4080
 04020 L4020: form pos 1,20*c 78
 04030   pr f mat flh$: mat hlp$,se$(ce),"Enter 0 to Continue or 1 to Update Help Screen:"
 04040 L4040: input fields "24,69,N 1,EUT,N": j2 conv L4040
@@ -410,13 +410,13 @@
 04090 L4090: close #1: ioerr L4100
 04100 L4100: close #11: ioerr L4110
 04110 L4110: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&' '&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&" 9 25 Replace DupKeys -n"
-04120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed 
-04130   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
+04120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+04130   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 04140   goto L480
 04150 ! SEARCH  VENDOR FILE
 04160   pr newpage
 04170   close #101: ioerr L4180
-04180 L4180: open #101: "SROW=10,SCOL=27,EROW=13,ECOL=52,BORDER=SR,CAPTION=<"&cap$,display,outin 
+04180 L4180: open #101: "SROW=10,SCOL=27,EROW=13,ECOL=52,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 04190   pr #101: newpage
 04200   pr #101,fields "2,2,C,N": "Search by: "
 04210   pr f "14,35,C 09,B,5": "Stop (F5)"
@@ -425,7 +425,7 @@
 04240   if cmdkey=5 then close #101: : goto MENU1
 04250 L4250: on ti2 goto L4260,L4370 none L4220
 04260 L4260: close #101: ioerr L4270
-04270 L4270: open #101: "SROW=10,SCOL=10,EROW=12,ECOL=69,BORDER=SR,CAPTION=<"&cap$,display,outin 
+04270 L4270: open #101: "SROW=10,SCOL=10,EROW=12,ECOL=69,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 04280   pr #101,fields "2,2,C 32,N": "Search Criteria (blank for all):"
 04290   pr f "13,35,C 09,B,5": "Stop (F5)"
 04300 L4300: input #101,fields "2,35,C 25,UE,N": id1$
@@ -436,7 +436,7 @@
 04350   restore #s1,search>=id1$,release: nokey L4300
 04360   goto L4480
 04370 L4370: close #101: ioerr L4380
-04380 L4380: open #101: "SROW=10,SCOL=15,EROW=12,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outin 
+04380 L4380: open #101: "SROW=10,SCOL=15,EROW=12,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 04390   pr #101: newpage
 04400   pr #101,fields "2,2,C 40": "Beginning Vendor Number (blank for all):"
 04410   pr f "13,35,C 09,B,5": "Stop (F5)"
@@ -447,7 +447,7 @@
 04460   s1=1
 04470   l1=0
 04480 L4480: close #101: ioerr L4490
-04490 L4490: open #101: "SROW=2,SCOL=2,EROW=23,ECOL=79,BORDER=SR,CAPTION=<"&cap$,display,outin 
+04490 L4490: open #101: "SROW=2,SCOL=2,EROW=23,ECOL=79,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 04500   ln=0
 04510   pr #101: newpage
 04520   pr f "2,3,C 8,R,N": "Vendor #"

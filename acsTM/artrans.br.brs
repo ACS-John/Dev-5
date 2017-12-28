@@ -1,6 +1,6 @@
 00100 ! ______________________________________________________________________
-00200 ! library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
-00220   library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
+00200 ! library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
+00220   library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
 
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
@@ -8,14 +8,14 @@
 00700   fntop(program$)
 00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-01100   ! fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-01110   fnhamster_2("ARTrans")
+01100   ! fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01110   fnHamster2("ARTrans")
 01200   gosub CLOSE_FILE
 01300   goto XIT
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Version=0,Use,RecL=60,Shr",internal,outin,relative 
+01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Version=0,Use,RecL=60,Shr",internal,outIn,relative 
 01800   return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -41,17 +41,17 @@
 35420     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 35440     textlen_mmddyy=8 : textlen_ccyymmdd=10
 35460     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-35480     fnhamster_field_reset
-35500     fnhamster_field_add("Client ID",5)
-35520     fnhamster_field_add("Invoice Number",12)
-35540     fnhamster_field_add("Date",6,'N',0,mask_date) ! 30 (mask_number) =no decimals, no commas
-35560     fnhamster_field_add("Origional Amount",10,'PD',5.2,mask_pointtwo)
-35580     fnhamster_field_add("Amount",10,'PD',5.2,mask_pointtwo)
-35600     fnhamster_field_add("Salesman Number",3,'PD',2,mask_pointtwo)
-35620     itemTCode=fnhamster_field_add("Trans Code",1,'N',0,mask_number)
-35630 !   fnhamster_add_combof(fnhamster_field_add("Trans Code",1,'N',0,mask_number),'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
-35640     fnhamster_field_add("Posting Code",1,'N',0,mask_number)
-35660     fnhamster_field_add("Invoice Description",20,'C')
-35680     fnhamster_field_add("Next Trans Addr",5,'PD',3)
-35700     fnhamster_add_combof(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
+35480     fnH2Init
+35500     fnH2AddText("Client ID",5)
+35520     fnH2AddText("Invoice Number",12)
+35540     fnH2AddText("Date",6,'N',0,mask_date) ! 30 (mask_number) =no decimals, no commas
+35560     fnH2AddText("Origional Amount",10,'PD',5.2,mask_pointtwo)
+35580     fnH2AddText("Amount",10,'PD',5.2,mask_pointtwo)
+35600     fnH2AddText("Salesman Number",3,'PD',2,mask_pointtwo)
+35620     itemTCode=fnH2AddText("Trans Code",1,'N',0,mask_number)
+35630 !   fnH2AddComboF(fnH2AddText("Trans Code",1,'N',0,mask_number),'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
+35640     fnH2AddText("Posting Code",1,'N',0,mask_number)
+35660     fnH2AddText("Invoice Description",20,'C')
+35680     fnH2AddText("Next Trans Addr",5,'PD',3)
+35700     fnH2AddComboF(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 35720   fnend  ! fn_setup_hamster

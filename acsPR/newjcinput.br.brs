@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newJCInput
 00020 ! Enter (Job Cost) Time
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox, fnopenprn,fncloseprn,fnerror,fnchain,fnmsgbox,fntos,fnlbl,fntxt,fncmdkey,fnacs,fncmbemp,fncomboa,fncombof,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1,fncmbcategory,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox, fnopenprn,fncloseprn,fnerror,fnchain,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncmbemp,fncomboa,fncombof,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1,fncmbcategory,fnDedNames
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
@@ -22,16 +22,16 @@
 00240   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00250   open #5: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,input,keyed 
 00260   open #7: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&",Shr",internal,input,keyed 
-00270   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
+00270   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
 00280   if exists("jcWork."&session$) >0 then goto L280 else goto L300
 00285 L280: mat ml$(2) !:
         ml$(1)="An unposted file appears to exist! " !:
         ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00290   if resp$="Yes" then goto L320 else goto L300
-00300 L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
+00300 L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
 00310   goto L330
-00320 L320: open #3: "Name=jcWork."&session$,internal,outin,relative 
+00320 L320: open #3: "Name=jcWork."&session$,internal,outIn,relative 
 00330 L330: open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00340   open #14: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,input,keyed 
 00350   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -41,61 +41,61 @@
 00390 ! ______________________________________________________________________
 00400 TRANSACTION_ENTRY: ! 
 00410   if addone=1 then ji1(5)=ji1(6)=ji2(3)=0: ji1(2)=2
-00420 L420: fntos(sn$="jobinput") !:
+00420 L420: fnTos(sn$="jobinput") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
-00430   fnlbl(1,1,"Employee #:",mylen,1)
+00430   fnLbl(1,1,"Employee #:",mylen,1)
 00440   fncmbemp(1,mypos) !:
         resp$(respc+=1)=str$(ji1(1))
-00450   fnlbl(2,1,"Method of Payment:",mylen,1)
+00450   fnLbl(2,1,"Method of Payment:",mylen,1)
 00460   opt$(1)="1 = Salary" : opt$(2)= "2 = Hourly" !:
         opt$(3)= "3 = Both" !:
         fncomboa("Methods",2,mypos,mat opt$,empty$,13)
 00470   if ji1(2)=1 then resp$(respc+=1)=opt$(1)
 00480   if ji1(2)=2 then resp$(respc+=1)=opt$(2)
 00490   if ji1(2)=3 then resp$(respc+=1)=opt$(3)
-00500   fnlbl(3,1,"Date:",mylen,1)
-00510   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
+00500   fnLbl(3,1,"Date:",mylen,1)
+00510   fnTxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
         resp$(respc+=1)=str$(ji1(3))
-00520   fnlbl(4,1,"Payroll Department:",mylen,1)
+00520   fnLbl(4,1,"Payroll Department:",mylen,1)
 00530   fncombof("Deptname",4,mypos,25,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),0,0, " ",0,0) !:
         resp$(respc+=1)=str$(ji1(4))
-00540   fnlbl(5,1,"Regular Hours:",mylen,1)
-00550   fntxt(5,mypos,8,8,0,"32",0,"") !:
+00540   fnLbl(5,1,"Regular Hours:",mylen,1)
+00550   fnTxt(5,mypos,8,8,0,"32",0,"") !:
         resp$(respc+=1)=str$(ji1(5))
-00560   fnlbl(6,1,"Overtime Hours:",mylen,1)
-00570   fntxt(6,mypos,8,8,0,"32",0,"") !:
+00560   fnLbl(6,1,"Overtime Hours:",mylen,1)
+00570   fnTxt(6,mypos,8,8,0,"32",0,"") !:
         resp$(respc+=1)=str$(ji1(6))
-00580   fnlbl(7,1,"Job Number:",mylen,1)
+00580   fnLbl(7,1,"Job Number:",mylen,1)
 00590   fncmbjob(7,mypos) !:
         resp$(respc+=1)=jn$
-00600   fnlbl(8,1,"Category:",mylen,1)
+00600   fnLbl(8,1,"Category:",mylen,1)
 00610   fncmbcategory(8,mypos) !:
         resp$(respc+=1)=str$(ji2(1))
-00620   fnlbl(9,1,"Sub-Category:",mylen,1)
+00620   fnLbl(9,1,"Sub-Category:",mylen,1)
 00630   fncmbsubcat(9,mypos) !:
         resp$(respc+=1)=str$(ji2(2))
-00640   fnlbl(10,1,"Amount:",mylen,1)
-00650   fntxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.") !:
+00640   fnLbl(10,1,"Amount:",mylen,1)
+00650   fnTxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.") !:
         resp$(respc+=1)=str$(ji2(3))
-00660   fnlbl(11,1,"Deduction/Addition Code:",mylen,1)
+00660   fnLbl(11,1,"Deduction/Addition Code:",mylen,1)
 00670   fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
 00680   if ji2(4)=0 then resp$(respc+=1)=comboname$(1): goto L700
 00690   if ji2(4)>0 and ji2(4)<=20 then resp$(respc+=1)=comboname$(ji2(4)) else resp$(respc+=1)=""
-00700 L700: fnlbl(12,1,"Units:",mylen,1)
-00710   fntxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.") !:
+00700 L700: fnLbl(12,1,"Units:",mylen,1)
+00710   fnTxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.") !:
         resp$(respc+=1)=str$(ji2(5))
-00720   fnlbl(13,1,"Personnel Burden:",mylen,1)
-00730   fntxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.") !:
+00720   fnLbl(13,1,"Personnel Burden:",mylen,1)
+00730   fnTxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.") !:
         resp$(respc+=1)=str$(pt)
 00740   picture=0
-00750   fncmdkey("&Save",1,1,0,"Saves all changes.")
-00760   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
-00770   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
-00780   fncmdkey("De&lete",4,0,0,"Deletes this job.")
-00790   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-00800   fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
-00810   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+00750   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+00760   fnCmdKey("Co&rrection",7,0,0,"Make a correction to any entry.")
+00770   fnCmdKey("&LIsting",9,0,0,"Print a listing of all entries.")
+00780   fnCmdKey("De&lete",4,0,0,"Deletes this job.")
+00790   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+00800   fnCmdKey("&Post",8,0,1,"Post these entries to the job files.")
+00810   fnAcs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00820   if ckey=5 then goto L830 else goto L850
 00830 L830: mat ml$(2) !:
         ml$(1)="You have chosen to cancel without postng these entries!  " !:
@@ -142,7 +142,7 @@
 01120 L1120: write #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal
 01130   goto L1160
 01140 L1140: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
-01150 L1150: rewrite #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal norec CORRECTIONS
+01150 L1150: rewrite #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal noRec CORRECTIONS
 01160 L1160: if addone=1 then goto TRANSACTION_ENTRY else goto CORRECTIONS
 01170 ! ______________________________________________________________________
 01180 PRINTPROOFLIST: ! 
@@ -216,7 +216,7 @@
 02030 ! ______________________________________________________________________
 02040 CORRECTIONS: ! 
 02050   addone=0: editone=0
-02060   fntos(sn$="EntryCorrection")
+02060   fnTos(sn$="EntryCorrection")
 02070   ch2$(1)="Rec #": ch2$(2)="Employee #": ch2$(3)="MOP" !:
         ch2$(4)="Date" !:
         ch2$(5)="Dept #": ch2$(6)="RegHrs": ch2$(7)="OTHrs" !:
@@ -242,12 +242,12 @@
         item2$(13)=str$(ji2(5)): item2$(14)=str$(pt)
 02140   fnflexadd1(mat item2$)
 02150   goto READ_FILE
-02160 L2160: fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
-        fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
-        fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
-        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-02170   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+02160 L2160: fnCmdKey("&Add",1,0,0,"Add a new transaction." ) !:
+        fnCmdKey("E&dit",2,1,0,"Edit the highlited record") !:
+        fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
+02170   fnAcs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 02180   if ckey=5 then goto TRANSACTION_ENTRY
 02190   editrec=val(resp$(1))
 02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): jn$="": goto TRANSACTION_ENTRY

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Unpost
 00020 ! Remove Transactions (for a date range)
 00030 ! r: setup library and dims
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd, fntos,fnlbl,fncmdset,fntxt,fnacs,fnchk,fngethandle,fnstatus,fnstatus_pause,fnindex_it
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs,fnChk,fngethandle,fnStatus,fnStatusPause,fnindex_it
 00050   on error goto ERTN
 00060 ! 
 00070   dim k(10,8),p$*30,ta(2),cap$*128,t$*12
@@ -10,22 +10,22 @@
 00100   fntop(program$,cap$="Remove Entries")
 00120   fncno(cno,cnam$)
 18000 MENU1: ! r:
-18020   fntos(sn$='UnPost')
+18020   fnTos(sn$='UnPost')
 18040   lc=0 : mylen=47 : mypos=mylen+2
-18060   fnlbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
-18080   fntxt(lc,mypos,0,0,0,'ccyymmdd')
+18060   fnLbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
+18080   fnTxt(lc,mypos,0,0,0,'ccyymmdd')
 18100   resp$(1)="" ! STR$(fndate_mmddyy_to_ccyymmdd(BEGDAT))
-18120   fnlbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
-18140   fntxt(lc,mypos,0,0,0,'ccyymmdd')
+18120   fnLbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
+18140   fnTxt(lc,mypos,0,0,0,'ccyymmdd')
 18160   resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
 18170   lc+=1
-18180   fnchk(lc+=1,50,'Process History instead of Current Transactions',1)
+18180   fnChk(lc+=1,50,'Process History instead of Current Transactions',1)
 18200   resp$(3)="False"
 18210   lc+=1
-18220   fnchk(lc+=1,50,'Remove Duplicates Only',1)
+18220   fnChk(lc+=1,50,'Remove Duplicates Only',1)
 18240   resp$(4)='False'
-18260   fncmdset(2)
-18280   fnacs(sn$,0,mat resp$,ckey)
+18260   fnCmdSet(2)
+18280   fnAcs(sn$,0,mat resp$,ckey)
 18300   if ckey=5 then goto XIT
 18320   begdat=val(resp$(1))
 18340   enddat=val(resp$(2))
@@ -34,24 +34,24 @@
 18400   if enddat<begdat or (enddat=0 and begdat=0) then pr bell; : goto MENU1
 18420 ! /r
 18440 ! r: get ready to run
-24000   fnstatus('date range: '&str$(begdat)&' - '&str$(enddat))
-24020   if del_dupe_only then let fnstatus('only deleting duplicate entries')
-24040   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+24000   fnStatus('date range: '&str$(begdat)&' - '&str$(enddat))
+24020   if del_dupe_only then let fnStatus('only deleting duplicate entries')
+24040   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 24060   if uprc$(code$)="H" then 
-24080     fnstatus('Processing history instead of current transactions')
+24080     fnStatus('Processing history instead of current transactions')
 24100     if del_dupe_only then 
 24120       fnindex_it(env$('Q')&"\GLmstr\AcTrans.h"&env$('cno'),env$('Q')&"\GLmstr\tmp70.h"&env$('cno'),"1,70")
 24140     end if  ! del_dupe_only
-24160     open #h_trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outin,keyed  ! 3
+24160     open #h_trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outIn,keyed  ! 3
 24180     if del_dupe_only then 
 24200       open #h_trans_dupe:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\tmp70.h"&env$('cno')&",Shr",internal,input,keyed 
 24220     end if  ! del_dupe_only
 24240   else 
-24260     fnstatus('Processing current transactions only')
+24260     fnStatus('Processing current transactions only')
 24280     if del_dupe_only then 
 24300       fnindex_it(env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),env$('Q')&"\GLmstr\tmp70.h"&env$('cno'),"1,70")
 24320     end if  ! del_dupe_only
-24340     open #h_trans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative  ! 2
+24340     open #h_trans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative  ! 2
 24360     if del_dupe_only then 
 24380       open #h_trans_dupe:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\tmp70.h"&env$('cno')&",Shr",internal,input,keyed 
 24400     end if  ! del_dupe_only
@@ -72,13 +72,13 @@
 28240 ! rec_to_delete=rec(h_trans)
 28260 ! if trim$(l$)='4905' and t$='  6   507  1' then pause
 28280   if ~del_dupe_only or fn_has_dupe(h_trans_dupe,rec(h_trans),'Form pos 1,C 70') then 
-28300     fnstatus('deleting transaction: '&hd_key_one$)
+28300     fnStatus('deleting transaction: '&hd_key_one$)
 28320     delete #h_trans: ioerr ignore
 28340   end if  ! ~del_dupe_only or fn_has_dupe
 28360   goto READ_H_TRANS
 28380 ! _____________________________________________________________________
 32000 EO_H_TRANS: ! /r
-32020   fnstatus('Reassigning Transaction Addresses...') ! r:
+32020   fnStatus('Reassigning Transaction Addresses...') ! r:
 32040   restore #1,key>="            ": eof ignore
 32060   do 
 32080     read #1,using 'Form POS 333,2*PD 3': mat ta eof L470
@@ -88,7 +88,7 @@
 32160   lr2=lrec(2)
 32180   if uprc$(code$)<>"H" then rewrite #h_trans,using 'Form POS 71,PD 3',rec=1: lr2
 32200   for j=1 to lr2
-32220     read #h_trans,using 'Form POS 1,C 12,POS 71,PD 3',rec=j: k$,nta norec L580
+32220     read #h_trans,using 'Form POS 1,C 12,POS 71,PD 3',rec=j: k$,nta noRec L580
 32240     if k$="  0     0  0" then goto L580
 32260     read #1,using 'Form POS 333,2*PD 3',key=k$: mat ta nokey L580
 32280     if ta(1)=0 then ta(1)=j
@@ -101,7 +101,7 @@
 32420 L580: ! 
 32440   next j
 32450 ! /r
-32460   fnstatus_pause
+32460   fnStatusPause
 32480   goto XIT
 34000 XIT: fnxit
 36000 ! <Updateable Region: ERTN>
@@ -120,8 +120,8 @@
 40100     hd_key_two$=''
 40120 ! restore #h_trans_dupe:
 40140 ! release #h_trans:
-40160 ! read #h_trans_dupe,using hd_form$,rec=hd_rec,release: hd_key_one$ norec HD_XIT
-40180     read #h_trans_dupe,using hd_form$,key=hd_key_one$: hd_key_one$ norec HD_XIT
+40160 ! read #h_trans_dupe,using hd_form$,rec=hd_rec,release: hd_key_one$ noRec HD_XIT
+40180     read #h_trans_dupe,using hd_form$,key=hd_key_one$: hd_key_one$ noRec HD_XIT
 40200     read #h_trans_dupe,using hd_form$: hd_key_two$ eof HD_EOF
 40220 HD_EOF: ! 
 40240     if hd_key_one$=hd_key_two$ then hd_return=1

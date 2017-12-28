@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\ubPdNot
 00020 ! Past Due Notices
 00030 ! _______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnLastBillingDate,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnOpt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnFra,fncmbrt2,fncmbact,fnChk,fnCmdKey,fndat,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
 00050 ! _______________________________________________________________________
 00060   on error goto ERTN
 00080 ! r: dims
@@ -40,38 +40,38 @@
 00382   F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00390 goto MENU1 ! /r
 00400 MENU1: ! r:
-00410   fntos(sn$="UBPdNot1")
+00410   fnTos(sn$="UBPdNot1")
 00420   respc=0
-00430   fnlbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
-00440   fntxt(2,40,8,0,1,"1")
+00430   fnLbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
+00440   fnTxt(2,40,8,0,1,"1")
 00450   resp$(respc+=1)=str$(d1)
-00460   fnlbl(3,1,"@D2= Payment Due Date (mmddyy):",38,1)
-00470   fntxt(3,40,8,0,1,"1")
+00460   fnLbl(3,1,"@D2= Payment Due Date (mmddyy):",38,1)
+00470   fnTxt(3,40,8,0,1,"1")
 00480   resp$(respc+=1)=str$(d2)
-00490   fnlbl(4,1,"@D3=    Shut Off Date (mmddyy):",38,1)
-00500   fntxt(4,40,8,0,1,"1")
+00490   fnLbl(4,1,"@D3=    Shut Off Date (mmddyy):",38,1)
+00500   fnTxt(4,40,8,0,1,"1")
 00510   resp$(respc+=1)=str$(d3)
-00520   fnlbl(5,1,"@D4=            Date of Notice:",38,1)
-00530   fntxt(5,40,20,20)
+00520   fnLbl(5,1,"@D4=            Date of Notice:",38,1)
+00530   fnTxt(5,40,20,20)
 00540   resp$(respc+=1)=d$(4)
-00550   fnlbl(6,1,"Minimum balance required:",38,1)
-00560   fntxt(6,40,10,10,0,"10")
+00550   fnLbl(6,1,"Minimum balance required:",38,1)
+00560   fnTxt(6,40,10,10,0,"10")
 00570   resp$(respc+=1)=""
-00580   fnfra(8,5,6,50,"Print all customers who:")
-00590   fnopt(1,1,"Have not paid their current bill",0,1)
+00580   fnFra(8,5,6,50,"Print all customers who:")
+00590   fnOpt(1,1,"Have not paid their current bill",0,1)
 00600   if deltype<=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00610   fnopt(2,1,"Have not paid their prior month's bill",0,1)
+00610   fnOpt(2,1,"Have not paid their prior month's bill",0,1)
 00620   if deltype=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00630   fnopt(3,1,"Are Active",0,1)
+00630   fnOpt(3,1,"Are Active",0,1)
 00640   if deltype=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00650   fnopt(4,1,"Are Final Billed Customers and have not paid",0,1)
+00650   fnOpt(4,1,"Are Final Billed Customers and have not paid",0,1)
 00660   if deltype=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00670   fnopt(5,1,"Have a balance",0,1)
+00670   fnOpt(5,1,"Have a balance",0,1)
 00680   if deltype=5 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00690   fnopt(6,1,"Who Were Billed This Month",0,1)
+00690   fnOpt(6,1,"Who Were Billed This Month",0,1)
 00700   if deltype=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00710   fncmdset(2)
-00720   fnacs(sn$,0,mat resp$,ckey)
+00710   fnCmdSet(2)
+00720   fnAcs(sn$,0,mat resp$,ckey)
 00730   if ckey=5 then goto XIT
 00740   d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
 00750   d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
@@ -151,7 +151,7 @@
 18100     r=0
 18120 P1_NEXT_LN: ! 
 18140     ln$=""
-18160 P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 norec P1_END1
+18160 P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
 18180     if ln3$=chr$(13) then goto P1_L2310
 18200     ln$=ln$&ln3$
 18220     if len(rtrm$(ln$))>3900 then pr #h_prnt1: ln$ : goto P1_NEXT_LN
@@ -525,12 +525,12 @@
 39200 ! /r  fnend
 40000 SELECT_SCREEN: ! r:
 40020   fn_report_close
-40040   fntos(sn$="Select_and_Book")
+40040   fnTos(sn$="Select_and_Book")
 40060   mat resp$=("")
 40080   respc=0
-40100   fnlbl(1,1,"File Name:",28,1)
+40100   fnLbl(1,1,"File Name:",28,1)
 40120   if hard_coded then 
-40140     fntxt(1,30,10,0,0,'',1,'',0)
+40140     fnTxt(1,30,10,0,0,'',1,'',0)
 40160     resp$(respc+=1)='hard coded'
 40180   else 
 40200     fncomboa("PDNOTRTF",1,30,mat file_rtf$)
@@ -545,21 +545,21 @@
 40340       if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then resp$(respc)=file_rtf$(1)
 40360     end if 
 40380   end if 
-40400   fnlbl(3,1,"Route Number:",28,1)
+40400   fnLbl(3,1,"Route Number:",28,1)
 40420   fncmbrt2(3,30)
 40440   resp$(respc+=1)="[All]"
-40460   fnlbl(4,1,"Beginning Account:",28,1)
+40460   fnLbl(4,1,"Beginning Account:",28,1)
 40480   fncmbact(4,30,1)
 40500   resp$(respc+=1)="[All]"
-40520   fnchk(6,30,"Print only Selected Accounts")
-40540 ! fncmdset(102)
-40560   fncmdkey("&Print",1,1)
-40580   if ~hard_coded then let fncmdkey("E&dit",3)
-40600   if ~hard_coded then let fncmdkey("&Add",4)
-40620   if ~hard_coded then let fncmdkey("&Delete",7)
-40640   if ~hard_coded then let fncmdkey("&Refresh",6)
-40660   fncmdkey("&Cancel",5,0,1)
-40680   fnacs(sn$,0,mat resp$,ckey)
+40520   fnChk(6,30,"Print only Selected Accounts")
+40540 ! fnCmdSet(102)
+40560   fnCmdKey("&Print",1,1)
+40580   if ~hard_coded then let fnCmdKey("E&dit",3)
+40600   if ~hard_coded then let fnCmdKey("&Add",4)
+40620   if ~hard_coded then let fnCmdKey("&Delete",7)
+40640   if ~hard_coded then let fnCmdKey("&Refresh",6)
+40660   fnCmdKey("&Cancel",5,0,1)
+40680   fnAcs(sn$,0,mat resp$,ckey)
 40700   do_print_std_form=0
 40720   dim flname$*256
 40740   flname$=rtrm$(resp$(1))
@@ -605,13 +605,13 @@
 41160   else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then 
 41180     goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
 41200   else if ckey=4 then ! r: Add
-41220     fntos(sn$="Select_Name")
+41220     fnTos(sn$="Select_Name")
 41240     respc=0
-41260     fnlbl(1,1,"File Name:",15,1)
-41280     fntxt(1,17,40,64,1,"")
+41260     fnLbl(1,1,"File Name:",15,1)
+41280     fnTxt(1,17,40,64,1,"")
 41300     resp$(respc+=1)=""
-41320     fncmdset(2)
-41340     fnacs(sn$,0,mat resp$,ckey)
+41320     fnCmdSet(2)
+41340     fnAcs(sn$,0,mat resp$,ckey)
 41360     if ckey=5 then goto MENU1
 41380     dim newname$*256
 41400     newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
@@ -652,13 +652,13 @@
 44520     goto PRINT_NEXT
 44540   end if  ! /r
 44560 ASK_NEXT_ACT: ! r:
-44580   fntos(sn$="UBPdNot-5")
+44580   fnTos(sn$="UBPdNot-5")
 44600   respc=0
-44620   fnlbl(1,1,"Next Account:",18,1)
+44620   fnLbl(1,1,"Next Account:",18,1)
 44640   fncmbact(1,20,1)
 44660   resp$(respc+=1)=""
-44680   fncmdset(19)
-44700   fnacs(sn$,0,mat resp$,ckey)
+44680   fnCmdSet(19)
+44700   fnAcs(sn$,0,mat resp$,ckey)
 44720   if ckey=5 then 
 44740     goto XIT
 44760   else if ckey=2 then 

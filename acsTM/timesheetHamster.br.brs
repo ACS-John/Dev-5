@@ -1,18 +1,18 @@
 00100 ! ______________________________________________________________________
-00200 ! library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
-00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
+00200 ! library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
+00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
 00700   fntop(program$)
 00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-01110   fnhamster_2(env$('Program_Caption'))
+01110   fnHamster2(env$('Program_Caption'))
 01200   gosub CLOSE_FILE
 01300   goto XIT
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno')&",Version=0,Use,RecL=86,Shr",internal,outin,relative 
+01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno')&",Version=0,Use,RecL=86,Shr",internal,outIn,relative 
 01800 return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -38,20 +38,20 @@
 35180   mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 35200   textlen_mmddyy=8 : textlen_ccyymmdd=10
 35220   storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-35240   fnhamster_field_reset
-35260   fnhamster_field_add("Client ID",5)
-35280   fnhamster_field_add("?? (N 9)",9)
-35300   fnhamster_field_add("Hours",5.2,'PD',3.2,mask_pointtwo)
-35320   fnhamster_field_add("Rate",5.2,'PD',3.2,mask_pointtwo)
-35340   fnhamster_field_add("Amount",7.2,'PD',4.2,mask_pointtwo)
-35360   fnhamster_field_add("Date",textlen_mmddyy,'N',storage_len_mmddyy,mask_mmddyy)
-35380   fnhamster_field_add("Category",2,'N',2,mask_number)
-35400   fnhamster_field_add("(??) PD 2",3,'PD',2,mask_number)
-35420   fnhamster_field_add("(??) PD 3",3,'PD',1,mask_number)
-35440   fnhamster_field_add("System Code",2,'N',0,mask_number)
-35460   fnhamster_field_add("(??) N 4",4,'N',0,mask_number)
-35480   fnhamster_field_add("(??) X 12",12,'C',0,mask_number)
-35500   fnhamster_field_add("(??) PD 3",5,'PD',3,mask_number)
-35520   fnhamster_field_add("(??) C 30",30,'C',0,mask_number)
-35540   !   fnhamster_add_combof(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
+35240   fnH2Init
+35260   fnH2AddText("Client ID",5)
+35280   fnH2AddText("?? (N 9)",9)
+35300   fnH2AddText("Hours",5.2,'PD',3.2,mask_pointtwo)
+35320   fnH2AddText("Rate",5.2,'PD',3.2,mask_pointtwo)
+35340   fnH2AddText("Amount",7.2,'PD',4.2,mask_pointtwo)
+35360   fnH2AddText("Date",textlen_mmddyy,'N',storage_len_mmddyy,mask_mmddyy)
+35380   fnH2AddText("Category",2,'N',2,mask_number)
+35400   fnH2AddText("(??) PD 2",3,'PD',2,mask_number)
+35420   fnH2AddText("(??) PD 3",3,'PD',1,mask_number)
+35440   fnH2AddText("System Code",2,'N',0,mask_number)
+35460   fnH2AddText("(??) N 4",4,'N',0,mask_number)
+35480   fnH2AddText("(??) X 12",12,'C',0,mask_number)
+35500   fnH2AddText("(??) PD 3",5,'PD',3,mask_number)
+35520   fnH2AddText("(??) C 30",30,'C',0,mask_number)
+35540   !   fnH2AddComboF(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 35560 fnend  ! fn_setup_hamster

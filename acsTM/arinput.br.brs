@@ -1,4 +1,4 @@
-00020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnsearch
+00020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnsearch
 00030   fntop(program$,cap$="Collections")
 00040   fncno(cno,cnam$)
 00060   dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25
@@ -46,9 +46,9 @@
 00480   goto L510
 00490 L490: ! NO GL TO BE ENTERED
 00500   sz=6
-00510 L510: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outin ioerr L530
+00510 L510: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn ioerr L530
 00520   close #h_addr,free: 
-00530 L530: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outin,relative ioerr L2290
+00530 L530: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr L2290
 00540   open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr L2290
 00550   read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr L2290
 00560 L560: form pos 1,c 255,142*c 18
@@ -199,7 +199,7 @@
 01940   pr #255: "REF #  CL #  INVOICE #";
 01950   pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 01960 L1960: r=r+1
-01970   read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,norec L2040 ioerr L2290
+01970   read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr L2290
 01980   if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 01990   name$=""
 02000   read #9,using L1000,key=p$,release: name$ nokey L2010
@@ -212,7 +212,7 @@
 02070   pr f "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
 02080 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
 02090   if r1=0 then goto L2220
-02100   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl norec L2060 ioerr L2290
+02100   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl noRec L2060 ioerr L2290
 02110 L2110: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 02120   if ltrm$(p$)="0" or ltrm$(p$)="" then goto L2060
 02130   tr5=tr(5)

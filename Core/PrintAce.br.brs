@@ -5,7 +5,7 @@
 12080     !
 12100     debug_pdf=0  ! turn on to pause everytime a unhandled pdf call occurs
 12120     !
-12140     library 'S:\Core\Library': fnerror,fnstatus,fnstatus_close,fnstatus_pause,fnprint_file_name$,fnreg_read
+12140     library 'S:\Core\Library': fnerror,fnStatus,fnStatusClose,fnStatusPause,fnprint_file_name$,fnreg_read
 12160     library 'S:\Core\PrintPdf': fnpdf_open
 12180     library 'S:\Core\PrintPdf': fnpdf_Close
 12200     library 'S:\Core\PrintPdf': fnpdf_Newpage
@@ -42,8 +42,8 @@
 18060     fnpa_finis=fnpdf_Close
 18080   else
 18100     fnpa_finis=fn_pa_finis( h_printace,1)
-18120     !   fnstatus_pause
-18140     !   fnstatus_close
+18120     !   fnStatusPause
+18140     !   fnStatusClose
 18160   end if
 18180   if formsFormatForce$<>'' then
 18200     formsFormatForce$=''
@@ -52,13 +52,13 @@
 18260   end if
 18280 fnend 
 22000 def fn_pa_finis(; h_printace, pf_final_batch)
-22010   !   fnstatus('pf_final_batch='&str$(pf_final_batch))
-22020   fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
-22030   fnstatus('When the message box (labeled Print) says "Sending to Printer" click "Okay" to continue.')
+22010   !   fnStatus('pf_final_batch='&str$(pf_final_batch))
+22020   fnStatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
+22030   fnStatus('When the message box (labeled Print) says "Sending to Printer" click "Okay" to continue.')
 22060   if h_printace=0 then h_printace=20
 22080   pr #h_printace: "Print.EndDoc" ioerr ignore
 22100   if g_pa_filename$='' then g_pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.
-22120    !   fnstatus('            g_pa_filename$='&g_pa_filename$)
+22120    !   fnStatus('            g_pa_filename$='&g_pa_filename$)
 22140   close #h_printace: ioerr ignore
 22150   if g_pa_filename$<>'' then 
 22152     if g_finial_filename$='' the
@@ -67,10 +67,10 @@
 22158       fnCopy(g_pa_filename$,env$('at')&g_finial_filename$)
 22160     end if
 22180     if pf_final_batch then 
-22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(env$('at')&g_finial_filename$)
-22210       fnstatus_close
+22200       execute 'System -W -C "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&g_finial_filename$)
+22210       fnStatusClose
 22220     else 
-22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(env$('at')&g_finial_filename$)
+22240       execute 'System -W "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&g_finial_filename$)
 22260     end if 
 22280   end if 
 22300   g_pa_filename$=g_finial_filename$=''
@@ -84,7 +84,7 @@
 24120   if formsFormat$="PDF" then 
 24140     fnpa_open=fnpdf_open( pa_orientation$,pa_sendto_base_name_addition$)
 24160   else
-24180     ! fnstatus('fnpa_open')
+24180     ! fnStatus('fnpa_open')
 24200     g_pa_batch=0
 24220     fnpa_open=fn_pa_open( pa_orientation$,pa_sendto_base_name_addition$)
 24240   end if
@@ -92,8 +92,8 @@
 24260 fnend 
 26000 def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
 26040   g_pa_batch+=1
-26060   fnstatus('Iniating a PrintAce Batch '&str$(g_pa_batch))
-26070   if g_pa_max_pages then let fnstatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
+26060   fnStatus('Initiating a PrintAce Batch '&str$(g_pa_batch))
+26070   if g_pa_max_pages then let fnStatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
 26080   h_printace=20
 26100   if file(h_printace)=-1 then 
 26120     dim g_pa_filename$*1024
@@ -102,7 +102,7 @@
 26162     g_pa_filename$=env$('Q')&'\tmp_'&session$&'.prn' ! fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
 26170     dim g_finial_filename$*256
 26172     g_finial_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
-26174     fnstatus('  Report Cache Name: '&g_pa_filename$)
+26174     fnStatus('  Report Cache Name: '&g_pa_filename$)
 26180     ! else 
 26200     !   g_pa_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     ! end if 
@@ -125,7 +125,7 @@
 27140   end if
 27160 fnend
 28000 def library fnpa_newpage(;h_printace)
-28010   ! fnstatus('fnpa_newpage    g_pa_pagecount='&str$(g_pa_pagecount))
+28010   ! fnStatus('fnpa_newpage    g_pa_pagecount='&str$(g_pa_pagecount))
 28020   fn_pa_setup
 28022   if formsFormat$="PDF" then
 28024     fnpa_newpage=fnpdf_Newpage
@@ -136,7 +136,7 @@
 28100     else ! if g_pa_max_pages<>0 then
 28120       g_pa_pagecount+=1
 28140       if g_pa_pagecount>g_pa_max_pages then 
-28150         fnstatus('Maximum number of pages ('&str$(g_pa_max_pages)&') reached.')
+28150         fnStatus('Maximum number of pages ('&str$(g_pa_max_pages)&') reached.')
 28180         fn_pa_finis( h_printace,0)
 28200         fn_pa_open( g_pa_handle, g_pa_orientation$, '') ! do not pass g_pa_filename$ or it will not set it again and the new batch number will not append
 28220       else 

@@ -1,7 +1,7 @@
 00010 ! 
 00020 ! 
 00030 ! 
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnacs,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnwait,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnAcs,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnwait,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
@@ -31,7 +31,7 @@
 00310   ivnum+=1 ! Unique Number for each Invoice
 00320   restore #unpdaloc,key>=vn$&"            ": 
 00330 READ_UNPDALOC: ! 
-00340   read #unpdaloc,using 'Form pos 1,c 8,c 12,N 3,N 6,N 3,PD 5.2,C 30': alvn$,aliv$,mat gl,amt,ade$ norec READ_PAYTRANS eof READ_PAYTRANS
+00340   read #unpdaloc,using 'Form pos 1,c 8,c 12,N 3,N 6,N 3,PD 5.2,C 30': alvn$,aliv$,mat gl,amt,ade$ noRec READ_PAYTRANS eof READ_PAYTRANS
 00350   if alvn$<>vn$ then goto READ_PAYTRANS
 00360   if trim$(aliv$)<>trim$(iv$) then goto READ_UNPDALOC
 00370   if fund=2 then de$=ade$(1:18)
@@ -50,16 +50,16 @@
 00490   execute "Free "&env$('temp')&"\Addr -n" ioerr ignore
 00500   execute "Sort "&env$('temp')&"\Control -n"
 00510   open #addr:=9: "Name="&env$('temp')&"\Addr",internal,input 
-00520   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00520   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00530   open #rpmstr:=23: "Name="&env$('Q')&"\PRmstr\rpMstr.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L550
 00540   prcode=1
 00550 L550: open #clwork:=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&env$('cno')&",Shr",internal,input,relative 
-00560   open #glmstr:=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
+00560   open #glmstr:=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00570   open #work:=6: "Name="&env$('temp')&"\Work,Size=0,RecL=22,Replace",internal,output 
 00580   close #work: 
 00590   execute "Free "&env$('temp')&"\Indx -n" ioerr ignore
 00600   execute "Index "&env$('temp')&"\Work,"&env$('temp')&"\Indx,1,12,Replace,DupKeys -n"
-00610   open #work=6: "Name="&env$('temp')&"\Work,KFName="&env$('temp')&"\Indx",internal,outin,keyed 
+00610   open #work=6: "Name="&env$('temp')&"\Work,KFName="&env$('temp')&"\Indx",internal,outIn,keyed 
 00620   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 00630   notused=1: open #11: "Name="&env$('Q')&"\CLmstr\dptmSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.H"&env$('cno'),internal,input,keyed ioerr L640 : notused=0
 00640 L640: fnopenprn
@@ -165,7 +165,7 @@
 01720   return  ! /r
 01730 ! ______________________________________________________________________
 01740 ASK_PP1: ! 
-01750   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&env$('cno')&", Size=0, RecL=93, Replace", internal,outin 
+01750   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&env$('cno')&", Size=0, RecL=93, Replace", internal,outIn 
 01760   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 01770   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno')&",Shr",internal,input,keyed 
 01880   if pp1yn$="N" then goto END8
@@ -218,44 +218,44 @@
 02440   return 
 02450 ! ______________________________________________________________________
 02460 ASK_TI1: ! r:
-02470   fntos(sn$="claims") !:
+02470   fnTos(sn$="claims") !:
         respc=0
-02480   fnlbl(1,1,"Cutoff Date:",38,1)
-02490   fntxt(1,40,8,0,1,"1",0,"No invoices past this date will be listed!") !:
+02480   fnLbl(1,1,"Cutoff Date:",38,1)
+02490   fnTxt(1,40,8,0,1,"1",0,"No invoices past this date will be listed!") !:
         resp$(respc+=1)=""
-02500   fnlbl(2,1,"Type of Report:",38,1)
+02500   fnLbl(2,1,"Type of Report:",38,1)
 02510   item1$(1)="Claims" !:
         item1$(2)="Purchases"
 02520   fncomboa("claims-srt",2,40,mat item1$,tt$) !:
         resp$(respc+=1)=item1$(1)
-02530   fnchk(3,41,"Include previously paid Invoices:",1) !:
+02530   fnChk(3,41,"Include previously paid Invoices:",1) !:
         resp$(respc+=1)="False"
-02540   fnlbl(5,1,"Starting Date:",38,1)
-02550   fntxt(5,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
+02540   fnLbl(5,1,"Starting Date:",38,1)
+02550   fnTxt(5,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
         resp$(respc+=1)=""
-02560   fnlbl(6,1,"Ending Date:",38,1)
-02570   fntxt(6,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
+02560   fnLbl(6,1,"Ending Date:",38,1)
+02570   fnTxt(6,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
         resp$(respc+=1)=""
-02580   fnlbl(8,1,"Sort by:",38,1)
+02580   fnLbl(8,1,"Sort by:",38,1)
 02590   item2$(1)="Fund Number" !:
         item2$(2)="Vendor Number"
 02600   fncomboa("claims-act",8,40,mat item2$) !:
         resp$(respc+=1)=item2$(1)
-02610   fnlbl(10,1,"Show Invoices:",38,1)
+02610   fnLbl(10,1,"Show Invoices:",38,1)
 02620   item2$(1)="All Invoices" !:
         item2$(2)="Coded for Payment"
 02630   fncomboa("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment") !:
         resp$(respc+=1)=item2$(1)
-02640   fnchk(11,41,"Include payroll checks:",1) !:
+02640   fnChk(11,41,"Include payroll checks:",1) !:
         resp$(respc+=1)="False"
-02650   fnlbl(13,1,"Beginning Position of Department Number:",43,1)
-02660   fntxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number") !:
+02650   fnLbl(13,1,"Beginning Position of Department Number:",43,1)
+02660   fnTxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number") !:
         resp$(respc+=1)=" "
-02670   fnlbl(14,1,"Ending Position of Department Number:",43,1)
-02680   fntxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.") !:
+02670   fnLbl(14,1,"Ending Position of Department Number:",43,1)
+02680   fnTxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.") !:
         resp$(respc+=1)=" "
-02690   fncmdset(2)
-02692   fnacs(sn$,0,mat resp$,ck)
+02690   fnCmdSet(2)
+02692   fnAcs(sn$,0,mat resp$,ck)
 02700   if ck=5 then goto XIT
 02710   d2=val(resp$(1)) ! cutoff date
 02720   ti1$=resp$(2)(1:1)

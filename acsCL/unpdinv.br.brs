@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\UnPdInv
 00020 ! Unpaid Invoice Listing (Current)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnwait,fnfree
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fnTos,fnLbl,fncomboa,fnCmdSet,fnAcs,fnwait,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
@@ -10,23 +10,23 @@
 00110   fntop(program$,cap$="Unpaid Invoice Listing")
 00130   cancel=99
 00140   fndat (dat$)
-00150   fntos(sn$="unpdinv")
+00150   fnTos(sn$="unpdinv")
 00152   respc=0
-00160   fnlbl(1,40,"",1,1)
-00170   fnlbl(1,1,"Order for Printing:",20,1)
-00180   item1$(1)="Payee" !:
-        item1$(2)="Fund Number" !:
-        fncomboa("unpdinv",1,22,mat item1$,tt$) !:
-        resp$(respc+=1)=item1$(1)
-00190   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ck)
+00160   fnLbl(1,40,"",1,1)
+00170   fnLbl(1,1,"Order for Printing:",20,1)
+00181   item1$(1)="Payee"
+00182   item1$(2)="Fund Number"
+00183   fncomboa("unpdinv",1,22,mat item1$,tt$)
+00184   resp$(respc+=1)=item1$(1)
+00190   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00200   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then fund=1 else !:
             fund=2
 00210 ! FNWAIT
 00220   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 00230   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.h"&env$('cno')&",Shr",internal,input,keyed 
-00240   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&env$('cno')&", Size=0, RecL=97, Replace",internal,outin 
+00240   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&env$('cno')&", Size=0, RecL=97, Replace",internal,outIn 
 00250 READ_PAYTRANS: ! 
 00260   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,pos 107,n 8': vn$,iv$,ivd,dd,po$,de$,upa,cde,ddate eof L350
 00270   ivnum+=1 ! UNIQUE Number FOR EACH INVOICE
@@ -56,7 +56,7 @@
 00490   close #work: 
 00500   fnFree("INDX."&wsid$)
 00510 L510: execute "INDEX "&env$('temp')&'\'&"WORK,"&env$('temp')&'\'&"INDX,1,12,Replace"
-00520   open #work=6: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"INDX",internal,outin,keyed 
+00520   open #work=6: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"INDX",internal,outIn,keyed 
 00530   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00540   fnopenprn
 00550   vn$="": iv$=""

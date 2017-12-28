@@ -2,7 +2,7 @@
 ! [Q]\[cursys]mstr\DepIdx.h[cno]   ,  customer
 recl=73
 ===================================================
-customer$      ,Account No        ,  C  10   , ! fnhamster_add_combof(1,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),1)
+customer$      ,Account No        ,  C  10   , ! combof(1,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
 dt1            ,Date              ,  C  8    , ! ccyymmdd
 desc$          ,desc              ,  C  32   , ! 
 odp            ,amount before     ,  N  10.2 , ! 

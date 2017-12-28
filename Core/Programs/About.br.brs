@@ -1,4 +1,4 @@
-10040   library 'S:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnSystemName$,fnmsgbox,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncno,fncmdset,fnchk,fncd,fnactpd,fnstatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
+10040   library 'S:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
 10060   on error goto ERTN
 10100   dim txt$(1)*256
 10140   fntop(program$, cap$="About ACS")

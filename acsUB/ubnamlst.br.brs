@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\ubNamLst
 00020 ! r: setup library, dims, constants, fntop, etc
-22000   library 'S:\Core\Library': fnacs, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fnchk,fntos,fncomboa,fnxit,fncmdset,fntop,fnget_services
+22000   library 'S:\Core\Library': fnAcs, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnChk,fnTos,fncomboa,fnxit,fnCmdSet,fntop,fnget_services
 22020   on error goto ERTN
 22040 ! ______________________________________________________________________
 22060   dim z$*10,e$(4)*30,cnam$*40,dat$*20,idx$(5)*40,resp$(10)*80
@@ -32,33 +32,33 @@
 24420   item2$(5)="Only Alternate Addresses"
 24440   item2$(6)="Active, But Not Being Billed"
 24450 ! 
-24460   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+24460   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 24480 ! /r
 34000 ! MENU1: ! r:
-34020   fntos("ubnamlst")
+34020   fnTos("ubnamlst")
 34040   respc=0
-34060   fnlbl(1,1,"Sequence:",23,1)
+34060   fnLbl(1,1,"Sequence:",23,1)
 34080   fncomboa("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")
 34100   resp$(respc+=1)=item1$(1)
-34120   fnlbl(2,1,"Report Heading Date:",23,1)
-34140   fntxt(2,25,20)
+34120   fnLbl(2,1,"Report Heading Date:",23,1)
+34140   fnTxt(2,25,20)
 34160   resp$(respc+=1)=dat$
-34180   fnlbl(3,1,"Limit by:",23,1)
+34180   fnLbl(3,1,"Limit by:",23,1)
 34200   fncomboa("ubnamlst-act",3,25,mat item2$)
 34220   resp$(respc+=1)=item2$(3)
-34240   fnchk(5,29,"Print Rate Codes")
+34240   fnChk(5,29,"Print Rate Codes")
 34260   resp$(respc+=1)="False"
-34280   fnchk(6,29,"Print Address")
+34280   fnChk(6,29,"Print Address")
 34300   resp$(respc+=1)="False"
-34320   fnchk(8,29,"Print Balance")
-34340   fnlbl(8,45,"(Route Sequence never prints Balance)",23,1)
+34320   fnChk(8,29,"Print Balance")
+34340   fnLbl(8,45,"(Route Sequence never prints Balance)",23,1)
 34360   resp$(resp_print_balance:=respc+=1)="True"
-34380   fnchk(9,29,"Print Phone")
+34380   fnChk(9,29,"Print Phone")
 34400   resp$(resp_print_phone:=respc+=1)="False"
-34420   fnchk(10,29,"Print Cell")
+34420   fnChk(10,29,"Print Cell")
 34440   resp$(resp_print_cell:=respc+=1)="False"
-34460   fncmdset(2)
-34480   fnacs(sn$,0,mat resp$,ck)
+34460   fnCmdSet(2)
+34480   fnAcs(sn$,0,mat resp$,ck)
 38000   if ck=5 then goto XIT
 38020   q0=2 ! default to name sequence
 38040   if resp$(1)=item1$(1) then 
@@ -119,7 +119,7 @@
 42400   else 
 42420     goto L570
 42440   end if 
-42460   read #6,using 'form pos 1,c 10',rec=addr: z$ norec LOOP_TOP
+42460   read #6,using 'form pos 1,c 10',rec=addr: z$ noRec LOOP_TOP
 42480 L520: ! 
 42500   read #1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,bal,route,sequence,extra$(1),extra$(2),extra$(8) eof DONE nokey LOOP_TOP
 42520   if ti2=2 and final=0 then goto L490 ! skip active
@@ -209,8 +209,8 @@
 54100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 54120 ! /region
 56000 GET_AU: ! r:
-56010   dim servicename$(10)*20,service$(10)*2
-56020   fnget_services(mat servicename$,mat service$)
+56010   dim serviceName$(10)*20,service$(10)*2
+56020   fnget_services(mat serviceName$,mat service$)
 56100   for j=1 to 10
 56120     if trim$(service$(j))<>"" then 
 56140       hd1$=hd1$&lpad$(service$(j)(1:2),3)
@@ -232,11 +232,11 @@
 58220 ! tEXT$="all Adams Streets together rather than all 101s together."
 58240 ! tEXT$="together."
 58260 ! fnPRF(PFX,8,1,50,0,TEXT$)
-58280 ! fnACS(WIN,3,MAT resp$,CK)
+58280 ! fnAcs(WIN,3,MAT resp$,CK)
 58300 ! If resp$(1)="True" Then tURN$="Y" Else tURN$="N"
 58320 ! If CK=5 Then Goto XIT
 60020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&idx$(q0)&",Shr",internal,input,keyed 
-60040   open #10: "Name="&env$('Temp')&"\Temp."&session$&",RecL=40,Replace",internal,outin 
+60040   open #10: "Name="&env$('Temp')&"\Temp."&session$&",RecL=40,Replace",internal,outIn 
 60060   do 
 60080     read #1,using 'form pos 1,c 10,c 30': z$,e$(1) eof SORT1
 60100     x=y=0
@@ -260,13 +260,13 @@
 64000 OPEN_GRID: ! r: select customers from grid
 64020   sn$="ublabel-7"
 64040   cap$="Reading from grid"
-64060   fntos(sn$)
+64060   fnTos(sn$)
 64080   text$="Grid name (including folders):"
-64100   fnlbl(1,1,text$,70,0)
-64120   fntxt(1,30,70,0,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
+64100   fnLbl(1,1,text$,70,0)
+64120   fnTxt(1,30,70,0,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
 64140   resp$(1)=""
-64160   fncmdset(3)
-64180   fnacs(sn$,0,mat resp$,ckey) ! Select starting customer #
+64160   fnCmdSet(3)
+64180   fnAcs(sn$,0,mat resp$,ckey) ! Select starting customer #
 64200   if ckey=5 then goto XIT
 64220   open #6: "Name="&trim$(resp$(1)),display,input ioerr OPEN_GRID
 64240   return  ! /r

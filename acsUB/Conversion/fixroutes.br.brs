@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\conversion\fixroutes
 00020 ! -- Custom written for Monticello to change route and sequence numbers from a text file
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fntos,fncno,fnxit,fnerror,fncmdset,fntop,fnopenprn,fncloseprn
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnxit,fnerror,fnCmdSet,fntop,fnopenprn,fncloseprn
 00050   on errror goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim text$*40,cap$*128,ln$*128
@@ -11,7 +11,7 @@
 00110   fntop("S:\acsUB\TotalBal",cap$="Change Route and Sequence Numbers")
 00120   fnopenprn
 00130 ! ______________________________________________________________________
-00140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00150   open #2: "Name=newroute2.txt",display,input 
 00160 READ_CUSTOMER: ! 
 00170 L170: linput #2: ln$ eof XIT

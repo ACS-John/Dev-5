@@ -10,15 +10,15 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno)
 00120 ! 
-00130   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00140   open #3: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
-00150   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #5: "Name="&env$('Temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",RecL=30,KPS=1,KLN=12,Replace",internal,outin,keyed 
+00130   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00140   open #3: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
+00150   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #5: "Name="&env$('Temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",RecL=30,KPS=1,KLN=12,Replace",internal,outIn,keyed 
 00170   io5$(1)="11,55,N 6,U,N"
 00180   io5$(2)="12,55,N 6,U,N"
 00190   pr newpage
 00200   close #101: ioerr L210
-00210 L210: open #101: "SROW=10,SCOL=16,EROW=13,ECOL=62,BORDER=DR,CAPTION=CREATE GL ENTRIEX",display,outin 
+00210 L210: open #101: "SROW=10,SCOL=16,EROW=13,ECOL=62,BORDER=DR,CAPTION=CREATE GL ENTRIEX",display,outIn 
 00220   pr f "11,18,C 40": "ENTER LOWEST  DATE OR BLANK FOR ALL:"
 00230   pr f "12,18,C 40": "ENTER HIGHEST DATE OR BLANK FOR ALL:"
 00240   pr f "14,22,C 34,R,N": "Press F1 to continue or F5 to stop"

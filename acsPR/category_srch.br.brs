@@ -2,7 +2,7 @@
 00020 ! search for a Category record
 00030 ! ______________________________________________________________________
 00040   def library fncategory_srch(&cn$;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle,fncmdkey
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*30,resp$(30)*80
@@ -12,7 +12,7 @@
 00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Category.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\Categoryidx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
-00150     fntos(sn$="CategorySrch")
+00150     fnTos(sn$="CategorySrch")
 00160     ch$(1)="Category" : ch$(2)="Name" 
 00162     mat ch$(2) : mat cm$(2) : cm$(1)="30"
 00180     fnflexinit1('CategorySrch',1,1,10,70,mat ch$,mat cm$,1,usefile)
@@ -30,9 +30,9 @@
 00286   goto READ_FILE ! /r
 00300   L300: ! r:
 00302     if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00304     fncmdkey("&Next",2,1,0,"Allows you to select the highlighted record.")
-00305     fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-00310     fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
+00304     fnCmdKey("&Next",2,1,0,"Allows you to select the highlighted record.")
+00305     fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
+00310     fnAcs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
 00320     cn$=lpad$(resp$(1)(1:5),5)
 00330     if ckey=5 then cn$="     " ! no one selected
 00340   goto XIT ! /r

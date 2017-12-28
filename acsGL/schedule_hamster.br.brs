@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\schedule_hamster
 00020 ! general ledger breakdowns for each schedule
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),sp(1),c$(1,8)*40
@@ -17,9 +17,9 @@
         open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\Schedule"&str$(schedule)&".h"&env$('cno'))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\schedule"&str$(schedule)&"-idx.h"&env$('cno'))=0 then gosub INDEX
-00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&"-idx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
+00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&"-idx.H"&env$('cno')&",Version=1,Shr",internal,outIn,keyed 
 00180   goto L220
-00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outin 
+00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outIn 
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
@@ -86,7 +86,7 @@
 00570   return 
 00580 ! ______________________________________________________________________
 00590 HAMSTER: ! 
-00600   fnhamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00600   fnHamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00610   return 
 00620 ! ______________________________________________________________________
 00630 XIT: fnxit

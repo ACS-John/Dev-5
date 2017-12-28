@@ -1,7 +1,7 @@
 12000 ! formerly S:\acsGL\AcGLBalC
 12020 ! Comparative Balance Sheet
 14000 ! r: setup library, on error, dims, fntop
-14020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnpedat$,fnps,fnpriorcd,fnfscode,fnUseDeptNo,fnactpd,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd$
+14020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnpedat$,fnps,fnpriorcd,fnfscode,fnUseDeptNo,fnactpd,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
 14040   on error goto ERTN
 14060 ! 
 14080   dim fl1$*256,cogl$(3)*12,accum(9,2),bp(13),by(13)
@@ -37,15 +37,15 @@
 14680   ! /r
 20000   ! r: ask cost center
 20020   if fnprocess=1 or fnUseDeptNo=0 then goto L320
-20040   fntos(sn$="Acglbalc") 
+20040   fnTos(sn$="Acglbalc") 
 20060   mylen=30: mypos=mylen+3 : right=1
-20080   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-20100   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
+20080   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+20100   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
 20120   resp$(1)=""
-20140   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-20160   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-20180   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-20200   fnacs(sn$,0,mat resp$,ckey)
+20140   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+20160   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+20180   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+20200   fnAcs(sn$,0,mat resp$,ckey)
 20220   if ckey=5 then goto XIT
 20240   L320: !
 20260   costcntr=val(resp$(1))

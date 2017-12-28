@@ -1,6 +1,6 @@
 12000 ! formerly S:\acsUB\hhfro
 12020 ! -- Transfer Data From Hand Held to Computer
-12040 library program$: fnretrieve_hand_held_file
+12040 library program$: fnRetrieveHandHeldFile
 12060 fn_setup
 12080   if ~fnregistered_for_hh then
 12100     mat ml$(2)
@@ -9,13 +9,13 @@
 12160     fnmsgbox(mat ml$, response$, cap$,64)
 12180     goto XIT
 12200   end if  ! ~fnregistered_for_hh
-12220 fnretrieve_hand_held_file
+12220 fnRetrieveHandHeldFile
 12240 fnxit
 16000 def fn_setup
 16020   library 'S:\Core\Library': fnxit,fnureg_read
 16040   library 'S:\Core\Library': fntop,fnerror,fngethandle
 16060   library 'S:\Core\Library': fnregistered_for_hh,fnhand_held_Device$,fnHandHeldList
-16080   library 'S:\Core\Library': fntos,fnlbl,fnacs,fntxt,fncmdset,fnchk,fncomboa
+16080   library 'S:\Core\Library': fnTos,fnLbl,fnAcs,fnTxt,fnCmdSet,fnChk,fncomboa
 16100   library 'S:\Core\Library': fnmsgbox
 16120   library 'S:\Core\Library': fnureg_write
 16140   library 'S:\Core\Library': fnCopy,fnRename
@@ -52,39 +52,39 @@
 16640     fnHandHeldList(mat deviceOption$)
 16660   end if
 16680 fnend
-24000 def library fnretrieve_hand_held_file
+24000 def library fnRetrieveHandHeldFile
 24020   if ~setup then let fn_setup
 24040   fntop(program$)
 25000   SCREEN1: ! r:
 25020     respc=0 : lc=0
-25040     fntos(sn$="hh_fro")
+25040     fnTos(sn$="hh_fro")
 25060     lc+=1
-25080     fnlbl(lc+=1,1,"Book Number to store readings:",30,1)
-25100     fntxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
+25080     fnLbl(lc+=1,1,"Book Number to store readings:",30,1)
+25100     fnTxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
 25120     resp$(rc_book:=respc+=1)=''
 25140     lc+=1
-25160     fnchk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
-25180     fnlbl(lc,35,'(only supported by some devices)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
+25160     fnChk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
+25180     fnLbl(lc,35,'(only supported by some devices)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
 25200     resp$(rc_merge:=respc+=1)='False'
 25220     lc+=1
-25240     fnlbl(lc+=1,1,"Hand Held model:",30,1)
+25240     fnLbl(lc+=1,1,"Hand Held model:",30,1)
 25260     if lwrc$(devicePreference$)='[ask]' then
 25280       fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
 25300       resp$(rc_Device:=respc+=1)=deviceSelected$
 25320     else
-25340       fnlbl(lc,32,deviceSelected$)
+25340       fnLbl(lc,32,deviceSelected$)
 25360     end if
 25380       lc+=1
 25400     if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 25420       lc+=1
-25440       fnlbl(lc+=1,1,"Source File:",30,1)
-25460       fntxt(lc,32,20,256,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
+25440       fnLbl(lc+=1,1,"Source File:",30,1)
+25460       fnTxt(lc,32,20,256,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
 25480       rc_path:=respc+=1 : if resp$(rc_path)="" then resp$(rc_path)=askPath$
 25500     else
-25520       fnlbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
+25520       fnLbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
 25540     end if
-25560     fncmdset(2)
-26000     fnacs(sn$,0,mat resp$,ckey)
+25560     fnCmdSet(2)
+26000     fnAcs(sn$,0,mat resp$,ckey)
 26020     if ckey<>5 then
 26040       bk$=resp$(rc_book)
 26060       if lwrc$(devicePreference$)='[ask]' then
@@ -493,13 +493,13 @@
 74000 def fn_laptop(bookFile$*512)
 74030   route=val(bk$)
 74060   L1420: !
-74090   fntos(sn$="Retrieve")
+74090   fnTos(sn$="Retrieve")
 74120   mat resp$=("")
-74150   fnlbl(1,1,"Source Drive:",20,1)
-74210   fntxt(1,23,20,100,0,"",0,"Source drive should be drive designation for the usb drive, including a : and a \ ")
+74150   fnLbl(1,1,"Source Drive:",20,1)
+74210   fnTxt(1,23,20,100,0,"",0,"Source drive should be drive designation for the usb drive, including a : and a \ ")
 74240   if resp$(1)="" then resp$(1)="F:\"
-74270   fncmdset(2)
-74300   fnacs(sn$,0,mat resp$,ckey) !
+74270   fnCmdSet(2)
+74300   fnAcs(sn$,0,mat resp$,ckey) !
 74330   if ckey=5 then goto XIT
 74360   source$=resp$(1)
 74390   if len(source$)=0 then goto L1420
@@ -594,7 +594,7 @@
 88040   z$=reading$=""
 88060   str2mat(a$,mat ilprwItem$, chr$(9))
 88080   ! ilprwItem$(1)=account number
-88100   ! ilprwItem$(2)=meter serial number (from meter information file)
+88100   ! ilprwItem$(2)=meter serial number (from 'U4 Meter Location' table     formerly from meter information file)
 88110   ! ilprwItem$(3)=water reading
 88120   ! ilprwItem$(4)=reading date
 88140   z$=lpad$(ilprwItem$(1),10)

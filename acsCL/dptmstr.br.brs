@@ -23,7 +23,7 @@
 00210   scr$(3)="Department Name:"
 00220 ! 
 00230   for j=1 to 22 : ins$(j)=str$(j+1)&",2,C 42,H,N" : next j
-00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1800
+00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1800
 00250   hd$(1)="     **ENTER FUND & DEPT # AS 0 OR BLANK TO STOP**"
 00260   hd$(2)="     **ENTER FUND & DEPT  # AS 0 OR BLANK TO DELETE**"
 00270   for j=1 to 6
@@ -35,7 +35,7 @@
 00330   if process=1 then ti=4 : goto L450
 00340   cnam$=rtrm$(cnam$)
 00350   close #101: ioerr L360
-00360 L360: open #101: "SROW=5,SCOL=10,EROW=12,ECOL=48,BORDER=DR,CAPTION=Department File",display,outin 
+00360 L360: open #101: "SROW=5,SCOL=10,EROW=12,ECOL=48,BORDER=DR,CAPTION=Department File",display,outIn 
 00370   pr f "2,9,Cc 41,R,N": cnam$
 00380   pr f "3,9,Cc 41,R,N": "Company Number "&env$('cno')
 00390   sm1$(1)="1.  Initial File Preparation" !:
@@ -52,7 +52,7 @@
 00450 L450: on ti goto L460,L790,L800,L1530,L1810,L2070 none L410
 00460 L460: pr newpage
 00470   close #101: ioerr L480
-00480 L480: open #101: "SROW=5,SCOL=13,EROW=16,ECOL=64,BORDER=DR,CAPTION=INITIAL FILE PREPARATION",display,outin 
+00480 L480: open #101: "SROW=5,SCOL=13,EROW=16,ECOL=64,BORDER=DR,CAPTION=INITIAL FILE PREPARATION",display,outIn 
 00490   pr f "5,18,Cc 41,R,N": cnam$
 00500   pr f "6,18,C 41,R,N": "            COMPANY NUMBER "&env$('cno')
 00510   pr f "8,13,C 52,R,N": " ******************   WARNING   ******************"
@@ -105,7 +105,7 @@
 00980 L980: if ti=2 then goto L1050 else goto L830
 00990 L990: pr newpage
 01000   close #101: ioerr L1010
-01010 L1010: open #101: "SROW=7,SCOL=07,EROW=12,ECOL=70,BORDER=DR,CAPTION=GL MASTER FILE",display,outin 
+01010 L1010: open #101: "SROW=7,SCOL=07,EROW=12,ECOL=70,BORDER=DR,CAPTION=GL MASTER FILE",display,outIn 
 01020   pr f mat flo$: hd$(1),mat scr$
 01030   pr f flo$(1): hd$(2)
 01040   pr f mat fli$: fun,dpt,d$
@@ -160,7 +160,7 @@
 01530 L1530: restore #1,search>="": eof L1540
 01540 L1540: pr newpage
 01550   close #101: ioerr ignore
-01560   open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION=GL PROOF LIST",display,outin 
+01560   open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION=GL PROOF LIST",display,outIn 
 01570   pr f "08,18,Cc 41,H,N": cnam$
 01580   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&env$('cno')
 01590   pr f "11,18,C 41,R,N": "              IN PROCESS"

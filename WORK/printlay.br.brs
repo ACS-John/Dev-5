@@ -13,7 +13,7 @@
 00090   io1$(2)="12,65,C 14,UT,N"
 00100   pr newpage
 00110   close #101: ioerr L120
-00120 L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outin 
+00120 L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn 
 00130   pr #101: newpage
 00140   pr f "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
 00150   pr f "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
@@ -29,7 +29,7 @@
 00240   ex$=ev$(1:p1-1)
 00250   goto L360
 00260 L260: close #101: ioerr L270
-00270 L270: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outin 
+00270 L270: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn 
 00280   pr #101: newpage
 00290   if f1>0 then pr f "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
 00300   pr f "4,5,C 60": "Enter File Name/VolId to pr or Blank to stop"

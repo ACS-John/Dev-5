@@ -11,17 +11,17 @@
 00100   dim cnam$*40
 00110 ! ______________________________________________________________________
 00120   fncno(cno,cnam$)
-00130   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
+00130   open #20: "Name=CNo.H"&wsid$,internal,outIn,relative  !:
         read #20,using 'form POS 43,C 20,POS 137,N 2,POS 141,N 1',rec=1: prg$,systype,process !:
         close #20: 
 00140 ! 
-00150   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-00170   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outin 
+00150   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+00170   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outIn 
 00180   pr newpage
 00190   x=lrec(2)
 00200   for j=1 to x
-00210 L210: read #2,using L220,rec=j: t$,s,k,mat n,l$,p$,ven$ eof L420 norec L410
+00210 L210: read #2,using L220,rec=j: t$,s,k,mat n,l$,p$,ven$ eof L420 noRec L410
 00220 L220: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8
 00230     if s=yourdate and n(1)=3 and rtrm$(ltrm$(tr$))="yourref#" then goto L240 else goto L410
 00240 L240: k=-k

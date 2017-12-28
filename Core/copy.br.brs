@@ -2,7 +2,7 @@
 38000 def fn_setup
 38020   if ~setup then
 38040     setup=1
-38060     library 'S:\Core\Library': fnerror,fnstatus,fnMakeSurePathExists,fngetdir2,fngetpp
+38060     library 'S:\Core\Library': fnerror,fnStatus,fnMakeSurePathExists,fngetdir2,fnGetPp
 38080     on error goto ERTN
 38100   end if
 38120 fnend
@@ -29,8 +29,8 @@
 52180   if pos(lwrc$(options$),'recursive ') then copyRecursive=1
 52200     fnMakeSurePathExists(to$)
 58020     if copyRecursive then
-58040       fngetpp(from$,fromPath$,fromFile$,fromExt$)
-58060       fngetpp(to$,toPath$,toFile$,toExt$)
+58040       fnGetPp(from$,fromPath$,fromFile$,fromExt$)
+58060       fnGetPp(to$,toPath$,toFile$,toExt$)
 58080       dim fromPath$*256,fromFile$*256,fromExt$*256
 58100       dim toPath$*256,toFile$*256,toExt$*256
 58240       dim copyFromFolder$(0)*256

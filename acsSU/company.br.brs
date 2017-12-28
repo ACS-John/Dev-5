@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsSU\Company
 00020 ! maintain company information file for checkbook management
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fntos,fnlbl,fnacs,fncmdset,fntxt,fncombof,fnchk,fnbutton,fnfra
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fnTos,fnLbl,fnAcs,fnCmdSet,fnTxt,fncombof,fnChk,fnButton,fnFra
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,actrcde$*1
@@ -19,7 +19,7 @@
         ccyymmdd$='3' : mmddyy$='1' : on=1 : off=0 !:
         cancel=5 : save=1 : limit_to_list=1 : pointtwo$='32' !:
         pointthree$='33'
-00190   open #company=1: "Name="&env$('Q')&"\"&fncursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,outin,relative ioerr BUILD_COMPANY
+00190   open #company=1: "Name="&env$('Q')&"\"&fncursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr BUILD_COMPANY
 00200   goto READ_COMPANY
 00210 ! ______________________________________________________________________
 00220 READ_COMPANY: ! 
@@ -40,12 +40,12 @@
                     ! to do it the old way change this whole line to read  GoTo Screen1
 00280 ! ______________________________________________________________________
 00290 NEWSCREEN: ! 
-00300   fntos(sn$='Company-Pg'&str$(page)) !:
+00300   fnTos(sn$='Company-Pg'&str$(page)) !:
         lc=0
 00310   page1=6 : page2=07 : page3=08 : page4=09
 00320   page=1 : gosub PAGE1
-00330   fncmdset(4) ! Save and Cancel
-00340   fnacs(sn$,0,mat resp$,ckey)
+00330   fnCmdSet(4) ! Save and Cancel
+00340   fnAcs(sn$,0,mat resp$,ckey)
 00350   if page=1 then 
 00360     a$(1)=resp$(1) !:
           a$(2)=resp$(2) !:
@@ -63,31 +63,31 @@
 00410   goto NEWSCREEN
 00420 PAGE1: ! _____________________________________________________________ !:
         lc=3 : mylen=40 : mypos=mylen+2
-00430   fnlbl(lc+=1,1,'Company Name:',mylen,right)
-00440   fntxt(lc,mypos,40,0,left) !:
+00430   fnLbl(lc+=1,1,'Company Name:',mylen,right)
+00440   fnTxt(lc,mypos,40,0,left) !:
         resp$(1)=a$(1)
-00450   fnlbl(lc+=1,1,'Address:',mylen,right)
-00460   fntxt(lc,mypos,40,0,left) !:
+00450   fnLbl(lc+=1,1,'Address:',mylen,right)
+00460   fnTxt(lc,mypos,40,0,left) !:
         resp$(2)=a$(2)
-00470   fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
-00480   fntxt(lc,mypos,40,0,left) !:
+00470   fnLbl(lc+=1,1,'City State and Zip Code:',mylen,right)
+00480   fnTxt(lc,mypos,40,0,left) !:
         resp$(3)=a$(3)
-00490   fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
-00500   fntxt(lc,mypos,12,0,left) !:
+00490   fnLbl(lc+=1,1,'Federal Identification Number:',mylen,right)
+00500   fnTxt(lc,mypos,12,0,left) !:
         resp$(4)=b$(1)
-00510   fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
-00520   fntxt(lc,mypos,12,0,left) !:
+00510   fnLbl(lc+=1,1,'State Identification Number:',mylen,right)
+00520   fnTxt(lc,mypos,12,0,left) !:
         resp$(5)=b$(2)
-00530   fnlbl(lc+=1,1,'Type of Business:',mylen,right)
-00540   fntxt(lc,mypos,30,0,left) !:
+00530   fnLbl(lc+=1,1,'Type of Business:',mylen,right)
+00540   fnTxt(lc,mypos,30,0,left) !:
         resp$(6)=tb$
-00550   fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
-00560   fntxt(lc,mypos,30,0,left,number$) !:
+00550   fnLbl(lc+=1,1,'Number of Periods:',mylen,right)
+00560   fnTxt(lc,mypos,30,0,left,number$) !:
         resp$(7)=str$(nap)
 00570   return 
 00580 ! ______________________________________________________________________
 00590 BUILD_COMPANY: ! 
-00600   open #company=1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Size=0,RecL=882,Replace",internal,outin,relative 
+00600   open #company=1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Size=0,RecL=882,Replace",internal,outIn,relative 
 00610   write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 00620   goto READ_COMPANY
 00630 ! ______________________________________________________________________

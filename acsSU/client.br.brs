@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsSU\Client
 00020 ! Client File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(9)*38,tln(9),p$(9)*160,fltyp$(9),mask(9)
@@ -16,7 +16,7 @@
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Client.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\TMmstr\Client-Idx.h"&env$('cno')&",Use,RecL=406,KPs=1,KLn=6,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Client.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\TMmstr\Client-Idx.h"&env$('cno')&",Use,RecL=406,KPs=1,KLn=6,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -74,7 +74,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00390   fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: fnxit

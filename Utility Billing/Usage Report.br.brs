@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\UBUsage
 20000 ! r: setup library, on err, dims, constants, etc
-20020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fncmdset,fntop,fngethandle,fnopt,fnget_services
+20020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fnOpt,fnget_services
 20040   on error goto ERTN
 20060   fntop(program$)
 20080 ! ______________________________________________________________________
@@ -18,21 +18,21 @@
 24000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 24020 ! /r
 30000 SCREEN1: ! r:
-30020   fntos(sn$="UBUsage")
+30020   fnTos(sn$="UBUsage")
 30040   respc=0
-30120   fnlbl(2,1,"Billing Date:",32,1)
-30140   fntxt(2,34,8,0,1,"1")
+30120   fnLbl(2,1,"Billing Date:",32,1)
+30140   fnTxt(2,34,8,0,1,"1")
 30160   resp$(resp_billingDate:=respc+=1)=str$(filterBillingDate)
-30180   fnlbl(3,1,"Route Number:",32,1)
+30180   fnLbl(3,1,"Route Number:",32,1)
 30200   fncmbrt2(3,34)
 30220   resp$(respc_routeFilter:=respc+=1)="[All]"
-30240   fnlbl(5,1,"Sequence:",32,1)
-30260   fnopt(5,34,'Route/Sequence  (includes totals by route)')
+30240   fnLbl(5,1,"Sequence:",32,1)
+30260   fnOpt(5,34,'Route/Sequence  (includes totals by route)')
 30280   resp$(respc_sequenceRoute:=respc+=1)='True'
-30300   fnopt(6,34,'Account')
+30300   fnOpt(6,34,'Account')
 30320   resp$(respc_sequenceAccount:=respc+=1)='False'
-30340   fncmdset(3)
-30360   fnacs(sn$,0,mat resp$,ck)
+30340   fnCmdSet(3)
+30360   fnAcs(sn$,0,mat resp$,ck)
 30380   if ck=5 then goto XIT
 30420   filterBillingDate=val(resp$(resp_billingDate))
 30440   if trim$(resp$(respc_routeFilter))="[All]" then 

@@ -2,7 +2,7 @@
 00011 ! Replace S:\Core\PrtFlex\PrtFlex2
 00013 ! ______________________________________________________________________
 00019 ! ______________________________________________________________________
-00020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fnflexadd1,fnflexinit1,fnbutton,fncombof,fnmsgbox,fnchain,fnxit,fncmdset,fntop,fnfra,fnopt,fncmbact,fncmdkey
+00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnflexadd1,fnflexinit1,fnButton,fncombof,fnmsgbox,fnchain,fnxit,fnCmdSet,fntop,fnFra,fnOpt,fncmbact,fnCmdKey
 00021   on error goto ERTN
 00022 ! r: dims
 00023   dim programfolder$*60,datafolder$*256,gridname$*40
@@ -42,8 +42,8 @@
 04004   mat colhdr$=("")
 04005   mat colmask$(columns)
 04006   mat colmask$=("")
-04010   fntos(sn$="mstrflex")
-04018   fnlbl(1,1,uprc$(gridname$),20,2,3)
+04010   fnTos(sn$="mstrflex")
+04018   fnLbl(1,1,uprc$(gridname$),20,2,3)
 04075   gosub GRIDHEADING ! reads the headings that were created above
 04090   fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
 04095 ! Restore #1:
@@ -57,8 +57,8 @@
 04120   fnflexadd1(mat item$)
 04130   goto READ_NEXT
 04140 EOFONREAD: ! Complete the grid once all data has been read
-04144 ! fnLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   fncmdset(52): fnacs(sn$,win,mat response$,ckey) ! CALL items selected
+04144 ! fnLbl(15,1,"Export the grid to a fixed width file, for later use.")
+04145   fnCmdSet(52): fnAcs(sn$,win,mat response$,ckey) ! CALL items selected
 04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "S:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
 04170 ! fnXIT(CURSYS$)
@@ -66,7 +66,7 @@
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! r: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 08001 !             remove the old reads in case they dont match
-08010   open #1: "name="&datafolder$&"\ubtransvb.h"&env$('cno')&",kfname="&datafolder$&"\ubtrindx.h"&env$('cno')&",Use,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
+08010   open #1: "name="&datafolder$&"\ubtransvb.h"&env$('cno')&",kfname="&datafolder$&"\ubtrindx.h"&env$('cno')&",Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 08100   return  ! /r
 08999 ! __________________ this is 8999 next is 9000 _________________________
 09000 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info
@@ -98,57 +98,57 @@
 12012   transtype$(3)="Collection"
 12013   transtype$(4)="Credit Memo"
 12014   transtype$(5)="Debit Memo"
-12030   fntos(sn$="Gridtrans-1")
+12030   fnTos(sn$="Gridtrans-1")
 12032   rc=cf=0
-12040   fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
+12040   fnFra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 12042   cf+=1 : fratype=cf
-12050   fnopt(1,3,"[All]",0,fratype)
+12050   fnOpt(1,3,"[All]",0,fratype)
 12051   if sel_code=1 or sel_code=0 then 
 12052     resp$(rc+=1)="True"
 12053   else 
 12054     resp$(rc+=1)="False"
 12055   end if 
-12060   fnopt(2,3,"Charges",0,fratype)
+12060   fnOpt(2,3,"Charges",0,fratype)
 12061   if sel_code=2 then 
 12062     resp$(rc+=1)="True"
 12063   else 
 12064     resp$(rc+=1)="False"
 12065   end if 
-12070   fnopt(3,3,"Penalties",0,fratype)
+12070   fnOpt(3,3,"Penalties",0,fratype)
 12071   if sel_code=3 then 
 12072     resp$(rc+=1)="True"
 12073   else 
 12074     resp$(rc+=1)="False"
 12075   end if 
-12080   fnopt(4,3,"Collections",0,fratype)
+12080   fnOpt(4,3,"Collections",0,fratype)
 12081   if sel_code=4 then 
 12082     resp$(rc+=1)="True"
 12083   else 
 12084     resp$(rc+=1)="False"
 12085   end if 
-12090   fnopt(5,3,"Credit Memos",0,fratype)
+12090   fnOpt(5,3,"Credit Memos",0,fratype)
 12091   if sel_code=5 then 
 12092     resp$(rc+=1)="True"
 12093   else 
 12094     resp$(rc+=1)="False"
 12095   end if 
-12100   fnopt(6,3,"Debit Memos",0,fratype)
+12100   fnOpt(6,3,"Debit Memos",0,fratype)
 12101   if sel_code=6 then 
 12102     resp$(rc+=1)="True"
 12103   else 
 12104     resp$(rc+=1)="False"
 12105   end if 
-12110   fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
+12110   fnFra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 12112   cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-12120   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-12130   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+12120   fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
+12130   fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 12132   resp$(rc+=1)=str$(beg_date)
-12140   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-12150   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+12140   fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
+12150   fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 12152   resp$(rc+=1)=str$(end_date)
-12160   fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
+12160   fnFra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
 12162   cf+=1 : fraaccount=cf
-12170   fnlbl(1,1,"Account:",8,1,0,fraaccount)
+12170   fnLbl(1,1,"Account:",8,1,0,fraaccount)
 12180   fncmbact(1,10,1,fraaccount)
 12182   rc+=1
 12183   if trim$(hact$)<>"" then 
@@ -156,9 +156,9 @@
 12185   else if resp$(rc)="" then 
 12186     resp$(rc)="[All]"
 12187   end if 
-12190   fncmdkey("&Display",1,1,0,"Displays a list of transactions on the screen")
-12210   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-12220   fnacs(sn$,0,mat resp$,ckey)
+12190   fnCmdKey("&Display",1,1,0,"Displays a list of transactions on the screen")
+12210   fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
+12220   fnAcs(sn$,0,mat resp$,ckey)
 12222   if ckey=cancel then goto XIT_ASKTRANSET
 12224   if resp$(1)="True" then 
 12225     sel_code=1

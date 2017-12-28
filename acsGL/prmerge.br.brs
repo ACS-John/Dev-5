@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\PRMerge
 00020 ! ACCOUNTANTS P/R MERGE (Posts payroll checks entered directly from G/L to the after-the-fact payroll records in G/L)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnprocess,fncno,fnerror,fntos,fnlbl,fnopt,fncmdkey,fnacs,fncmdset,fntxt,fncombof
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnprocess,fncno,fnerror,fnTos,fnLbl,fnOpt,fnCmdKey,fnAcs,fnCmdSet,fnTxt,fncombof
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim k$(3)*25,ss$*11,d(22),m(36),adr(2),n(2),fb$(4),en$*4,cap$*128,tr(7)
@@ -10,10 +10,10 @@
 00100   fntop(program$,cap$="Post Payroll Checks")
 00110   fncno(cno)
 00120   if exists(env$('Q')&"\glmstr\PRmstr.h"&env$('cno'))=0 then goto XIT
-00130   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00140   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outin,relative 
+00130   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00140   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outIn,relative 
 00150   if lrec(2)=0 then goto XIT
-00160   open #3: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
+00160   open #3: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
 00170 READ_ENTRIES: ! 
 00175 L160: read #2,using L180: t$,tr(4),tr(5),tr(6),tr(7),tr$,td$,ven$,mat jv$,key$ eof L500
 00180   rec2=rec(2)
@@ -96,40 +96,40 @@
 00840   mat k$=(" ")
 00850   ss$=" "
 00860   goto L730
-00870 L870: fntos(sn$="prmerge") !:
+00870 L870: fnTos(sn$="prmerge") !:
         mylen=40: mypos=mylen+3 : right=1
-00880   fnlbl(1,10,"  Employee Number: "&ven$,mylen,left)
-00890   fnlbl(2,10,"   Check Number: "&tr$,mylen,left)
-00900   fnlbl(3,10, "           Date: "&cnvrt$("pic(zz/zz/zz)",tr(4)),mylen,left)
-00910   fnlbl(4,10, "  Gross Pay: "&cnvrt$("pic(-------.zz)",tr(5)) ,mylen,left)
-00920   fnlbl(7,5, "This employee number does not exist!" ,60,0)
-00930   fnopt(8,10,"Add this Employee",0,0) !:
+00880   fnLbl(1,10,"  Employee Number: "&ven$,mylen,left)
+00890   fnLbl(2,10,"   Check Number: "&tr$,mylen,left)
+00900   fnLbl(3,10, "           Date: "&cnvrt$("pic(zz/zz/zz)",tr(4)),mylen,left)
+00910   fnLbl(4,10, "  Gross Pay: "&cnvrt$("pic(-------.zz)",tr(5)) ,mylen,left)
+00920   fnLbl(7,5, "This employee number does not exist!" ,60,0)
+00930   fnOpt(8,10,"Add this Employee",0,0) !:
         resp$(1)="True"
-00940   fnopt(9,10,"Change Employee Number",0,0) !:
+00940   fnOpt(9,10,"Change Employee Number",0,0) !:
         resp$(2)="False"
-00950   fncmdkey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
-00960   fnacs(sn$,0,mat resp$,ckey)
+00950   fnCmdKey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
+00960   fnAcs(sn$,0,mat resp$,ckey)
 00970   if resp$(1)="True" then gosub ADD : goto L220
 00980   if resp$(2)="True" then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
 00990   goto L80
 01000 ! ______________________________________________________________________
 01010 ADD: ! 
-01020   fntos(sn$="prmerge3") !:
+01020   fnTos(sn$="prmerge3") !:
         mylen=15: mypos=mylen+3 : right=1: rc=0
-01030   fnlbl(1,1,"Name:",mylen,right)
-01040   fntxt(1,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
+01030   fnLbl(1,1,"Name:",mylen,right)
+01040   fnTxt(1,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
         resp$(rc+=1)=k$(1)
-01050   fnlbl(2,1,"Address:",mylen,right)
-01060   fntxt(2,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
+01050   fnLbl(2,1,"Address:",mylen,right)
+01060   fnTxt(2,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
         resp$(rc+=1)=k$(2)
-01070   fnlbl(3,1,"City, St Zip:",mylen,right)
-01080   fntxt(3,mypos,30,0,left,"",0,"",0 ) !:
+01070   fnLbl(3,1,"City, St Zip:",mylen,right)
+01080   fnTxt(3,mypos,30,0,left,"",0,"",0 ) !:
         resp$(rc+=1)=k$(3)
-01090   fnlbl(4,1,"SS Number:",mylen,right)
-01100   fntxt(4,mypos,11,0,left,"",0,"Enter the employee social security number.",0 ) !:
+01090   fnLbl(4,1,"SS Number:",mylen,right)
+01100   fnTxt(4,mypos,11,0,left,"",0,"Enter the employee social security number.",0 ) !:
         resp$(rc+=1)=ss$
-01110   fncmdset(2)
-01120   fnacs(sn$,0,mat resp$,ckey)
+01110   fnCmdSet(2)
+01120   fnAcs(sn$,0,mat resp$,ckey)
 01130   if ckey=5 then goto L220
 01140   k$(1)=resp$(1) !:
         k$(2)=resp$(2) !:
@@ -142,13 +142,13 @@
 01190   return 
 01200 ! 
 01210 CHANGE_EMPLOYEE_NUMBER: ! 
-01220   fntos(sn$="Prmerge4") !:
+01220   fnTos(sn$="Prmerge4") !:
         mylen=18: mypos=mylen+3 : right=1: rc=0
-01230   fnlbl(1,1,"Employee Number:",mylen,right)
+01230   fnLbl(1,1,"Employee Number:",mylen,right)
 01240   fncombof("PRmstr",1,mypos,27,env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),1,4,5,30,'',0,pas, "Choose from the list of employees.",0) !:
         resp$(1)=""
-01250   fncmdset(2)
-01260   fnacs(sn$,0,mat resp$,ckey)
+01250   fnCmdSet(2)
+01260   fnAcs(sn$,0,mat resp$,ckey)
 01270   if ckey=5 then goto L220
 01280   en$=lpad$(rtrm$(resp$(1)(1:4)),4)
 01290   goto L220

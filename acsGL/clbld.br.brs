@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\CLBld
 00020 ! Create Checkbook System Files
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntos,fnlbl,fntxt,fncomboa,fnacs,fncmdkey,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnAcs,fnCmdKey,fngethandle
 00050   fntop(program$,cap$="Create Checkbook System Files")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -12,18 +12,18 @@
 00150 ! ______________________________________________________________________
 00160   dv$="A"
 00170 MENU1: ! 
-00180   fntos(sn$="ClBld") !:
+00180   fnTos(sn$="ClBld") !:
         mylen=50: mypos=mylen+3 : right=1
-00190   fnlbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
-00200   fntxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
+00190   fnLbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
+00200   fnTxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
         resp$(1)= dv$
 00210   option$(1)="Build G/L Master File" !:
         option$(2)="Build Payee File"
 00220   fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
 00230   resp$(2)=str$(sel)
-00240   fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
-00250   fncmdkey("&Cancel",5,0,1,"Returns to menu without transferring files.")
-00260   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
+00250   fnCmdKey("&Cancel",5,0,1,"Returns to menu without transferring files.")
+00260   fnAcs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   dv$=resp$(1)
 00290   if trim$(resp$(2))="Build G/L Master File" then ti1=1 else ti1=2
@@ -40,7 +40,7 @@
 00400 END1: close #1: ioerr L410
 00410 L410: close #2: ioerr L420
 00420 L420: open #2: "Name="&dv$&"PAYMSTR.h"&env$('cno')&",SIZE=0,RecL=276,Replace",internal,output 
-00430   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
+00430   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 00440   open #1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",Shr",internal,input,keyed  ! Ioerr 580
 00450 READ_GL1099: ! 
 00460   read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EOF_GL1099

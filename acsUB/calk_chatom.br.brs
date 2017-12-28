@@ -3,13 +3,13 @@
 10500     if ~setup_calk then ! r:
 10600       setup_calk=1
 10700       library 'S:\Core\Library': fnget_services,fnpause
-10800       dim x$*10,gb(10),da(2),c(4),dp$*60,servicename$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
+10800       dim x$*10,gb(10),da(2),c(4),dp$*60,serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 11000       dim san(3)
 11100       san(1)=8 : san(2)=15 : san(3)=20
 11400 FORM_RATEMSTR: form pos 55,32*g 10
-11500       fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
-11800       for j=1 to udim(servicename$)
-11900         servicename$(j)=trim$(servicename$(j))
+11500       fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+11800       for j=1 to udim(serviceName$)
+11900         serviceName$(j)=trim$(serviceName$(j))
 12000       next j
 12100     end if  ! /r ~setup_calk then
 12200     gosub WATER

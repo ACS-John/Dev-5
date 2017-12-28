@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprYTDQTD
 00020 ! Year-To-Date Quarter-To-Date Register
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fntos,fnlbl,fntxt,fnacs,fncmdkey,fnfra,fnprocess,fnGetPayrollDates,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fnAcs,fnCmdKey,fnFra,fnprocess,fnGetPayrollDates,fnDedNames
 00050   on error goto ERTN
 00060 ! gosub CHECK_PASSWORD
 00070 ! ______________________________________________________________________
@@ -141,50 +141,50 @@
 01410 ! CHECK_PASSWORD: ! 
 01420 !   return ! if env$('client')="Washington Parrish" then goto L1430 else return 
 01430 ! L1430: if wsid$="09" or wsid$="99" then return 
-01440 !   fntos(sn$="WpTrap") !:
+01440 !   fnTos(sn$="WpTrap") !:
       !   respc=0 : mylen=25 : mypos=mylen+2
-01450 !   fnlbl(1,1,"         Quit!      ",mylen,2)
-01460 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
-01470 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
-01480 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
+01450 !   fnLbl(1,1,"         Quit!      ",mylen,2)
+01460 !   fnLbl(2,1,"Stay out of Payroll!",mylen,2)
+01470 !   fnLbl(3,1,"Call Brenda for Password",mylen,2)
+01480 !   fnTxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
       !   resp$(respc+=1)=""
-01490 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
-01500 !   fnacs(sn$,0,mat resp$,ckey)
+01490 !   fnCmdKey("E&xit",5,1,1,"Returns to menu")
+01500 !   fnAcs(sn$,0,mat resp$,ckey)
 01510 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1430
 01520 ASK_DATES: ! 
 01530   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
-01580   fntos(sn$="YtdQtdReg-1") !:
+01580   fnTos(sn$="YtdQtdReg-1") !:
         rc=cf=0: mylen=42: mypos=45: frameno=1
-01590   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
-01600   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
-01610   fntxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
+01590   fnFra(1,1,4,66,"Payroll Date","Enter the payroll date.")
+01600   fnLbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
+01610   fnTxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
         resp$(rc+=1)=str$(d1)
-01620   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
-01630   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
+01620   fnLbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
+01630   fnTxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
         resp$(rc+=1)= dat$
-01640   fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
+01640   fnFra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
         frameno=2 : mylen=26 : mypos=mylen+2
-01650   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
-01660   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
+01650   fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
+01660   fnTxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
         resp$(rc+=1)=str$(beg_date)
-01670   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-01680   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno) !:
+01670   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+01680   fnTxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno) !:
         resp$(rc+=1)=str$(end_date)
-01690   fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,frameno)
-01700   fntxt(3,mypos,10,0,1,"3",0,"Enter the first day of the first quarter. Could be something other than January 1st if your last payroll of the previous year should be included in this year",frameno) !:
+01690   fnLbl(3,1,"1st Day of 1st quarter:",mylen,1,0,frameno)
+01700   fnTxt(3,mypos,10,0,1,"3",0,"Enter the first day of the first quarter. Could be something other than January 1st if your last payroll of the previous year should be included in this year",frameno) !:
         resp$(rc+=1)=str$(qtr1)
-01710   fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,frameno)
-01720   fntxt(4,mypos,10,0,1,"3",0,"Normally would be April 1st, but could be different if your payroll dates and check dates are not the same.",frameno) !:
+01710   fnLbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,frameno)
+01720   fnTxt(4,mypos,10,0,1,"3",0,"Normally would be April 1st, but could be different if your payroll dates and check dates are not the same.",frameno) !:
         resp$(rc+=1)=str$(qtr2)
-01730   fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,frameno)
-01740   fntxt(5,mypos,10,0,1,"3",0,"Normally would be July 1st",frameno) !:
+01730   fnLbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,frameno)
+01740   fnTxt(5,mypos,10,0,1,"3",0,"Normally would be July 1st",frameno) !:
         resp$(rc+=1)=str$(qtr3)
-01750   fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,frameno)
-01760   fntxt(6,mypos,10,0,1,"3",0,"Normally would be October 1st.",frameno) !:
+01750   fnLbl(6,1,"1st Day of 4th quarter:",mylen,1,0,frameno)
+01760   fnTxt(6,mypos,10,0,1,"3",0,"Normally would be October 1st.",frameno) !:
         resp$(rc+=1)=str$(qtr4)
-01770   fncmdkey("Next",1,1,0,"Proceed with calculations.")
-01780   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-01790   fnacs(sn$,0,mat resp$,ckey)
+01770   fnCmdKey("Next",1,1,0,"Proceed with calculations.")
+01780   fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
+01790   fnAcs(sn$,0,mat resp$,ckey)
 01800   if ckey=5 then goto XIT
 01810   dat=prdate=d1=val(resp$(1))
 01820   dat$=resp$(2)
@@ -197,7 +197,7 @@
 01840   qtr5=val(resp$(9)(1:4))*10000+1231
 01850   begin_year=val(resp$(9)(1:4))*10000+0101
 01860   end_year=val(resp$(9)(1:4))*10000+1231
-01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outin,relative 
+01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outIn,relative 
 01880 ! Rewrite #11,Using "form pos 1,6*n 8,n 8,c 20",Rec=1: BEG_DATE,END_DATE,QTR1,QTR2,QTR3,QTR4,D1,DAT$
 01890   close #11: 
 01900   return 

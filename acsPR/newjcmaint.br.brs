@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newJCMaint
 00020 ! Job Cost Master File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnprocess,fntos,fnlbl,fncmbemp,fncmdkey,fnacs,fntxt,fnmsgbox,fncombof,fnjob_srch,fncmbjob ,fncategory_srch,fncat_srch2,fncategory_srch,fncmbcat,fnflexinit1,fnflexadd1,fncmbcategory
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnprocess,fnTos,fnLbl,fncmbemp,fnCmdKey,fnAcs,fnTxt,fnmsgbox,fncombof,fnjob_srch,fncmbjob ,fncategory_srch,fncat_srch2,fncategory_srch,fncmbcat,fnflexinit1,fnflexadd1,fncmbcategory
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$(9),sc1$(9)*20,io1$(9),hd$(2)*78,msgline$(2)*60,response$(5)*1
@@ -18,32 +18,32 @@
         fndat(dat$)
 00180 ! 
 00190 ! ______________________________________________________________________
-00200   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4890
-00210   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L220
-00220 L220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L230
-00230 L230: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative ioerr L240
-00240 L240: open #16: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L250
+00200   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4890
+00210   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L220
+00220 L220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L230
+00230 L230: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L240
+00240 L240: open #16: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L250
 00250 L250: ! ______________________________________________________________________
 00260 MENU1: ! 
 00270   ndep=0
 00280 ASKJOB: ! 
 00290   addjob=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding an job record.
-00300   fntos(sn$="job-ask") !:
+00300   fnTos(sn$="job-ask") !:
         respc=0
-00310   fnlbl(1,1,"Job #:",7,right)
+00310   fnLbl(1,1,"Job #:",7,right)
 00320   fncmbjob(1,9)
 00330   if hact$="" then !:
           resp$(respc+=1)="" else !:
           resp$(respc+=1)=hact$
-00340   fncmdkey("&Add",1,0,0,"Add a new job" ) !:
-        fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
-        fncmdkey("&Next Record",3,0,0,"Access next record injob # order") !:
-        fncmdkey("&Search",8,0,0,"Search forjob record") !:
-        fncmdkey("&Proof",11,0,0,"Prints proof listing of all joub information.") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
-        fncmdkey("E&xit",6,0,1,"Returns to menu")
-00350   fnacs(sn$,0,mat resp$,ckey) ! ask job #
+00340   fnCmdKey("&Add",1,0,0,"Add a new job" ) !:
+        fnCmdKey("E&dit",2,1,0,"Access the highlited record") !:
+        fnCmdKey("&Next Record",3,0,0,"Access next record injob # order") !:
+        fnCmdKey("&Search",8,0,0,"Search forjob record") !:
+        fnCmdKey("&Proof",11,0,0,"Prints proof listing of all joub information.") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
+        fnCmdKey("E&xit",6,0,1,"Returns to menu")
+00350   fnAcs(sn$,0,mat resp$,ckey) ! ask job #
 00360   hact$=lpad$(rtrm$(resp$(1)(1:6)),6) !:
         jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 00370 ! 
@@ -60,15 +60,15 @@
 00430 ADDREC: ! 
 00440   addjob=1: mat ta=(0): dup=0: jn$="": n$="": mat a$=(''): mat b=(0) !:
         contact$="": ph$="": email$=""
-00450   fntos(sn$="jobfm") !:
+00450   fnTos(sn$="jobfm") !:
         respc=0 : frac=0 !:
         mylen=25 : mypos=mylen+2
-00460   fnlbl(1,1,"Job Number:",mylen,1)
-00470   fntxt(1,mylen+3,6,6,1,"",0,"Enter the job number to be assigned to this new job.") !:
+00460   fnLbl(1,1,"Job Number:",mylen,1)
+00470   fnTxt(1,mylen+3,6,6,1,"",0,"Enter the job number to be assigned to this new job.") !:
         resp$(respc+=1)=""
-00480   fncmdkey("&Next",1,1,0,"Enter job information.")
-00490   fncmdkey("&Cancel",5,0,1,"Returns to main screen.")
-00500   fnacs(sn$,0,mat resp$,ckey) ! ASK NEW JOB #
+00480   fnCmdKey("&Next",1,1,0,"Enter job information.")
+00490   fnCmdKey("&Cancel",5,0,1,"Returns to main screen.")
+00500   fnAcs(sn$,0,mat resp$,ckey) ! ASK NEW JOB #
 00510 ! 
 00520   if ckey=5 then goto ASKJOB
 00530   addjob=1
@@ -93,52 +93,52 @@
         ml$(2)="Select a differentjob number." !:
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ASKJOB
-00670 L670: fntos(sn$="jobedit") !:
+00670 L670: fnTos(sn$="jobedit") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
-00680   fnlbl(1,1,"Job Number:",mylen,1)
-00690 L690: fntxt(1,mylen+3,6,6,1,"",0,"") !:
+00680   fnLbl(1,1,"Job Number:",mylen,1)
+00690 L690: fnTxt(1,mylen+3,6,6,1,"",0,"") !:
         resp$(respc+=1)=jn$
-00700   fnlbl(2,1,"Job Name:",mylen,1)
-00710   fntxt(2,mylen+3,40,40,0,"",0,"Any name to identify the job.") !:
+00700   fnLbl(2,1,"Job Name:",mylen,1)
+00710   fnTxt(2,mylen+3,40,40,0,"",0,"Any name to identify the job.") !:
         resp$(respc+=1)=n$
-00720   fnlbl(3,1,"Job Address:",mylen,1)
-00730   fntxt(3,mylen+3,30,30,0,"",0,"") !:
+00720   fnLbl(3,1,"Job Address:",mylen,1)
+00730   fnTxt(3,mylen+3,30,30,0,"",0,"") !:
         resp$(respc+=1)=a$(1)
-00740   fnlbl(4,1,"Job Address:",mylen,1)
-00750   fntxt(4,mylen+3,30,30,0,"",0,"") !:
+00740   fnLbl(4,1,"Job Address:",mylen,1)
+00750   fnTxt(4,mylen+3,30,30,0,"",0,"") !:
         resp$(respc+=1)=a$(2)
-00760   fnlbl(5,1,"City, State Zip:",mylen,1)
-00770   fntxt(5,mylen+3,30,30,0,"",0,"") !:
+00760   fnLbl(5,1,"City, State Zip:",mylen,1)
+00770   fnTxt(5,mylen+3,30,30,0,"",0,"") !:
         resp$(respc+=1)=a$(3)
-00780   fnlbl(6,1,"Est Completion Date:",mylen,1)
-00790   fntxt(6,mylen+3,10,10,0,"1",0,"The estimated completion date is only used on some reports and is optional.") !:
+00780   fnLbl(6,1,"Est Completion Date:",mylen,1)
+00790   fnTxt(6,mylen+3,10,10,0,"1",0,"The estimated completion date is only used on some reports and is optional.") !:
         resp$(respc+=1)=str$(b(1))
-00800   fnlbl(7,1,"Contract Amount:",mylen,1)
-00810   fntxt(7,mylen+3,12,12,0,"10",0,"") !:
+00800   fnLbl(7,1,"Contract Amount:",mylen,1)
+00810   fnTxt(7,mylen+3,12,12,0,"10",0,"") !:
         resp$(respc+=1)=str$(b(2))
-00820   fnlbl(8,1,"Billings to Date:",mylen,1)
-00830   fntxt(8,mylen+3,12,12,0,"10",0,"The billings to date field will be updated each time an invoice is processed.") !:
+00820   fnLbl(8,1,"Billings to Date:",mylen,1)
+00830   fnTxt(8,mylen+3,12,12,0,"10",0,"The billings to date field will be updated each time an invoice is processed.") !:
         resp$(respc+=1)=str$(b(3))
-00840   fnlbl(9,1,"Billing Status:",mylen,1)
-00850   fntxt(9,mylen+3,2,2,0,"30",0,"The status code should be ????.") !:
+00840   fnLbl(9,1,"Billing Status:",mylen,1)
+00850   fnTxt(9,mylen+3,2,2,0,"30",0,"The status code should be ????.") !:
         resp$(respc+=1)=str$(b(4))
-00860   fnlbl(10,1,"Contact Name:",mylen,1)
-00870   fntxt(10,mylen+3,30,30,0,"",0,"") !:
+00860   fnLbl(10,1,"Contact Name:",mylen,1)
+00870   fnTxt(10,mylen+3,30,30,0,"",0,"") !:
         resp$(respc+=1)=contact$
-00880   fnlbl(11,1,"Phone Number:",mylen,1)
-00890   fntxt(11,mylen+3,12,12,0,"",0,"") !:
+00880   fnLbl(11,1,"Phone Number:",mylen,1)
+00890   fnTxt(11,mylen+3,12,12,0,"",0,"") !:
         resp$(respc+=1)=ph$
-00900   fnlbl(12,1,"E-mail Address:",mylen,1)
-00910   fntxt(12,mylen+3,60,60,0,"",0,"") !:
+00900   fnLbl(12,1,"E-mail Address:",mylen,1)
+00910   fnTxt(12,mylen+3,60,60,0,"",0,"") !:
         resp$(respc+=1)=email$
 00920   picture=0
-00930   fncmdkey("&Save",1,1,0,"Saves all changes.")
-00940   fncmdkey("&Review Category Records",10,0,0,"Review category records assigned to this job.")
+00930   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+00940   fnCmdKey("&Review Category Records",10,0,0,"Review category records assigned to this job.")
 00950   if addjob=0 then !:
-          fncmdkey("De&lete",4,0,0,"Deletes this job.")
-00960   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-00970   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+          fnCmdKey("De&lete",4,0,0,"Deletes this job.")
+00960   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+00970   fnAcs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00980   if ckey=5 then goto ASKJOB
 00990   jn$=lpad$(trim$(resp$(1)(1:6)),6)
 01000   if ckey=4 then goto DELETE_ENTIRE_JOB
@@ -197,7 +197,7 @@
 01500   gosub L1510: goto L1460
 01510 L1510: adr=ta(1)
 01520 L1520: if adr=0 then goto L1580
-01530   read #3,using L1390,rec=adr: nta norec L1580
+01530   read #3,using L1390,rec=adr: nta noRec L1580
 01540   delete #3, rec=adr: 
 01550   form pos 13,c 6
 01560   adr=nta
@@ -294,18 +294,18 @@
 02480   pr #255: 
 02490 L2490: return 
 02500 ! ______________________________________________________________________
-02510 L2510: fntos(sn$="startprint") !:
+02510 L2510: fnTos(sn$="startprint") !:
         respc=0
-02520   fnlbl(1,1,"Job # to Start:",16,right)
+02520   fnLbl(1,1,"Job # to Start:",16,right)
 02530   fncmbjob(1,19,1)
 02540   if hact$="" then !:
           resp$(respc+=1)="" else !:
           resp$(respc+=1)=hact$
-02550   fncmdkey("&Next",1,1,0,"Duplicate this job") !:
-        fncmdkey("&Search",8,0,0,"Search forjob record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
-        fncmdkey("&Cancel",5,0,1,"Returns to previous screen")
-02560   fnacs(sn$,0,mat resp$,ckey) ! ask job # to start printing
+02550   fnCmdKey("&Next",1,1,0,"Duplicate this job") !:
+        fnCmdKey("&Search",8,0,0,"Search forjob record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
+        fnCmdKey("&Cancel",5,0,1,"Returns to previous screen")
+02560   fnAcs(sn$,0,mat resp$,ckey) ! ask job # to start printing
 02570   if ckey=5 then goto ASKJOB
 02580   jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 02590   restore #1,key>=jn$: nokey L2510
@@ -332,7 +332,7 @@
 02800 L2800: lr3=lrec(3)
 02810   rewrite #3,using L1390,rec=1: lr3
 02820   for j=2 to lr3
-02830     read #3,using L2840,rec=j: cn$,nta norec L2910
+02830     read #3,using L2840,rec=j: cn$,nta noRec L2910
 02840 L2840: form pos 13,c 11,pos 86,pd 3
 02850     read #2,using L1360,key=cn$: mat ta nokey L2910
 02860     if ta(1)=0 then ta(1)=j
@@ -344,18 +344,18 @@
 02920   goto MENU1
 02930 ! ______________________________________________________________________
 02940 DUPLICATE_CATEGORIES: ! 
-02950   fntos(sn$="duplicate") !:
+02950   fnTos(sn$="duplicate") !:
         respc=0
-02960   fnlbl(1,1,"Job # to Duplicate:",20,right)
+02960   fnLbl(1,1,"Job # to Duplicate:",20,right)
 02970   fncmbjob(1,23)
 02980   if hact$="" then !:
           resp$(respc+=1)="" else !:
           resp$(respc+=1)=hact$
-02990   fncmdkey("&Next",1,1,0,"Duplicate this job") !:
-        fncmdkey("&Search",8,0,0,"Search forjob record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
-        fncmdkey("&Cancel",5,0,1,"Returns to previous screen")
-03000   fnacs(sn$,0,mat resp$,ckey) ! ask job # to duplicate
+02990   fnCmdKey("&Next",1,1,0,"Duplicate this job") !:
+        fnCmdKey("&Search",8,0,0,"Search forjob record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information") !:
+        fnCmdKey("&Cancel",5,0,1,"Returns to previous screen")
+03000   fnAcs(sn$,0,mat resp$,ckey) ! ask job # to duplicate
 03010   if ckey=5 then goto ASKJOB
 03020   djn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 03030   dup$=lpad$(rtrm$(djn$),6)&"     "
@@ -372,18 +372,18 @@
 03140 EDITCAT: ! 
 03150   addcat=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a category record.
-03160   fntos(sn$="Cat-ask") !:
+03160   fnTos(sn$="Cat-ask") !:
         respc=0
-03170   fnlbl(1,1,"Category #:",10,right)
+03170   fnLbl(1,1,"Category #:",10,right)
 03180   fncmbcat(1,12)
 03190   resp$(respc+=1)=cn$
-03200   fncmdkey("&Add",1,0,0,"Add a new category record." ) !:
-        fncmdkey("E&dit",2,1,0,"Access this record") !:
-        fncmdkey("&Next Record",3,0,0,"Access next record in category file.") !:
-        fncmdkey("&Search",8,0,0,"Search for category record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
-        fncmdkey("&Complete",6,0,1,"Returns to job screen.")
-03210   fnacs(sn$,0,mat resp$,ckey) ! ask category #
+03200   fnCmdKey("&Add",1,0,0,"Add a new category record." ) !:
+        fnCmdKey("E&dit",2,1,0,"Access this record") !:
+        fnCmdKey("&Next Record",3,0,0,"Access next record in category file.") !:
+        fnCmdKey("&Search",8,0,0,"Search for category record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
+        fnCmdKey("&Complete",6,0,1,"Returns to job screen.")
+03210   fnAcs(sn$,0,mat resp$,ckey) ! ask category #
 03220   hcat$=lpad$(rtrm$(resp$(1)(1:11)),11) !:
         cn$=lpad$(rtrm$(resp$(1)(1:11)),11)
 03230   if ckey=1 then goto ADDCAT else !:
@@ -395,15 +395,15 @@
               goto EDITCAT
 03250 ADDCAT: ! 
 03260   addcat=1
-03270   fntos(sn$="add-cat") !:
+03270   fnTos(sn$="add-cat") !:
         respc=0
-03280   fnlbl(1,1,"Category # to Add:",17,right)
+03280   fnLbl(1,1,"Category # to Add:",17,right)
 03290   fncmbcategory(1,20)
-03300 !  fnTXT(1,20,5,5,1,"30",0,"Category number must be numeric between 1 and 99999.") !:
+03300 !  fnTxt(1,20,5,5,1,"30",0,"Category number must be numeric between 1 and 99999.") !:
         resp$(respc+=1)=""
-03310   fncmdkey("&Next",1,1,0,"Adds the new category record." ) !:
-        fncmdkey("&Cancel",5,0,1,"Stops without adding this category record and returns to category listing.")
-03320   fnacs(sn$,0,mat resp$,ckey) ! ask new category #
+03310   fnCmdKey("&Next",1,1,0,"Adds the new category record." ) !:
+        fnCmdKey("&Cancel",5,0,1,"Stops without adding this category record and returns to category listing.")
+03320   fnAcs(sn$,0,mat resp$,ckey) ! ask new category #
 03330   if ckey=5 then goto GET_CATEGORY_LISTING
 03340   cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 03350   k$=resp$(1)(7:36)
@@ -421,58 +421,58 @@
 03430   tcn$=cn$ : hcn$=""
 03440   cnkey$=cn$
 03450   read #2,using L1370,key=cnkey$: cn$,k$,mat l,mat ta eof EDITCAT nokey EDITCAT
-03460   fntos(sn$="catedit") !:
+03460   fnTos(sn$="catedit") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
 03470   holdcn$=cn$
-03480   fnlbl(1,1,"Category Number:",mylen,1)
-03490   fntxt(1,mylen+3,5,5,1,"",0,"") !:
+03480   fnLbl(1,1,"Category Number:",mylen,1)
+03490   fnTxt(1,mylen+3,5,5,1,"",0,"") !:
         resp$(respc+=1)=cn$(7:11)
-03500   fnlbl(2,1,"Description:",mylen,1)
-03510   fntxt(2,mylen+3,25,25,0,"",0,"Any name to identify the category.") !:
+03500   fnLbl(2,1,"Description:",mylen,1)
+03510   fnTxt(2,mylen+3,25,25,0,"",0,"Any name to identify the category.") !:
         resp$(respc+=1)=k$
-03520   fnlbl(3,1,"Labor Estimate:",mylen,1)
-03530   fntxt(3,mylen+3,14,14,0,"10",0,"Labor estimate for this job category.") !:
+03520   fnLbl(3,1,"Labor Estimate:",mylen,1)
+03530   fnTxt(3,mylen+3,14,14,0,"10",0,"Labor estimate for this job category.") !:
         resp$(respc+=1)=str$(l(1))
-03540   fnlbl(4,1,"Hours Estimate:",mylen,1)
-03550   fntxt(4,mylen+3,14,14,0,"10",0,"Hours estimate for this job category.") !:
+03540   fnLbl(4,1,"Hours Estimate:",mylen,1)
+03550   fnTxt(4,mylen+3,14,14,0,"10",0,"Hours estimate for this job category.") !:
         resp$(respc+=1)=str$(l(2))
-03560   fnlbl(5,1,"Other Estimate:",mylen,1)
-03570   fntxt(5,mylen+3,14,14,0,"10",0,"Other estimate for this job category.") !:
+03560   fnLbl(5,1,"Other Estimate:",mylen,1)
+03570   fnTxt(5,mylen+3,14,14,0,"10",0,"Other estimate for this job category.") !:
         resp$(respc+=1)=str$(l(3))
-03580   fnlbl(6,1,"Labor to Date:",mylen,1)
-03590   fntxt(6,mylen+3,14,14,0,"10",0,"Labor to Date for this job category.") !:
+03580   fnLbl(6,1,"Labor to Date:",mylen,1)
+03590   fnTxt(6,mylen+3,14,14,0,"10",0,"Labor to Date for this job category.") !:
         resp$(respc+=1)=str$(l(4))
-03600   fnlbl(7,1,"Hours to Date:",mylen,1)
-03610   fntxt(7,mylen+3,14,14,0,"10",0,"Hours to Date for this job category.") !:
+03600   fnLbl(7,1,"Hours to Date:",mylen,1)
+03610   fnTxt(7,mylen+3,14,14,0,"10",0,"Hours to Date for this job category.") !:
         resp$(respc+=1)=str$(l(5))
-03620   fnlbl(8,1,"Other to Date:",mylen,1)
-03630   fntxt(8,mylen+3,14,14,0,"10",0,"Other to Date for this job category.") !:
+03620   fnLbl(8,1,"Other to Date:",mylen,1)
+03630   fnTxt(8,mylen+3,14,14,0,"10",0,"Other to Date for this job category.") !:
         resp$(respc+=1)=str$(l(6))
-03640   fnlbl(9,1,"Labor Current Period:",mylen,1)
-03650   fntxt(9,mylen+3,14,14,0,"10",0,"Labor Current Period for this job category.") !:
+03640   fnLbl(9,1,"Labor Current Period:",mylen,1)
+03650   fnTxt(9,mylen+3,14,14,0,"10",0,"Labor Current Period for this job category.") !:
         resp$(respc+=1)=str$(l(7))
-03660   fnlbl(10,1,"Hours Current Period:",mylen,1)
-03670   fntxt(10,mylen+3,14,14,0,"10",0,"Hours Current Period for this job category.") !:
+03660   fnLbl(10,1,"Hours Current Period:",mylen,1)
+03670   fnTxt(10,mylen+3,14,14,0,"10",0,"Hours Current Period for this job category.") !:
         resp$(respc+=1)=str$(l(8))
-03680   fnlbl(11,1,"Other Current Period:",mylen,1)
-03690   fntxt(11,mylen+3,14,14,0,"10",0,"Other Current Period for this job category.") !:
+03680   fnLbl(11,1,"Other Current Period:",mylen,1)
+03690   fnTxt(11,mylen+3,14,14,0,"10",0,"Other Current Period for this job category.") !:
         resp$(respc+=1)=str$(l(9))
-03700   fnlbl(12,1,"Units Used or Completed:",mylen,1)
-03710   fntxt(12,mylen+3,14,14,0,"10",0,"Units required for this job category.") !:
+03700   fnLbl(12,1,"Units Used or Completed:",mylen,1)
+03710   fnTxt(12,mylen+3,14,14,0,"10",0,"Units required for this job category.") !:
         resp$(respc+=1)=str$(l(10))
-03720   fnlbl(13,1,"Estimated Units:",mylen,1)
-03730   fntxt(13,mylen+3,14,14,0,"30",0,"Estimated units used so far.") !:
+03720   fnLbl(13,1,"Estimated Units:",mylen,1)
+03730   fnTxt(13,mylen+3,14,14,0,"30",0,"Estimated units used so far.") !:
         resp$(respc+=1)=str$(l(11))
-03740   fnlbl(14,1,"Labor Percent Complete:",mylen,1)
-03750   fntxt(14,mylen+3,5,5,0,"10",0,"% complete for labor.") !:
+03740   fnLbl(14,1,"Labor Percent Complete:",mylen,1)
+03750   fnTxt(14,mylen+3,5,5,0,"10",0,"% complete for labor.") !:
         resp$(respc+=1)=str$(l(12))
-03760   fnlbl(15,1,"Other Percent Complete:",mylen,1)
-03770   fntxt(15,mylen+3,5,5,0,"10",0,"% complete for other.") !:
+03760   fnLbl(15,1,"Other Percent Complete:",mylen,1)
+03770   fnTxt(15,mylen+3,5,5,0,"10",0,"% complete for other.") !:
         resp$(respc+=1)=str$(l(13))
-03780   fncmdkey("&Save",1,1,0,"Saves all changes.")
-03790   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-03800   fnacs(sn$,0,mat resp$,ckey) ! full edit on category  edit_category
+03780   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+03790   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+03800   fnAcs(sn$,0,mat resp$,ckey) ! full edit on category  edit_category
 03810   if ckey=5 then goto GET_CATEGORY_LISTING
 03820   cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 03830   k$=resp$(2) ! name
@@ -502,7 +502,7 @@
 04040   goto ASKJOB
 04050 ! ______________________________________________________________________
 04060 REVIEW_DETAILS: ! 
-04070   fntos(sn$="DetailSrch")
+04070   fnTos(sn$="DetailSrch")
 04080   ch2$(1)="Rec #": ch2$(2)="Reference #": ch2$(3)="Job #" !:
         ch2$(4)="Cat #" !:
         ch2$(5)="Sub #": ch2$(6)="P/R Dept": ch2$(7)="Date" !:
@@ -539,11 +539,11 @@
 04210   fnflexadd1(mat item2$)
 04220   goto L4180
 04230 ! ______________________________________________________________________
-04240 L4240: fncmdkey("&Add",1,0,0,"Add a new category record." ) !:
-        fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
-        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-04250   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+04240 L4240: fnCmdKey("&Add",1,0,0,"Add a new category record." ) !:
+        fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
+04250   fnAcs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 04260   if ckey=5 then goto GET_CATEGORY_LISTING
 04270   detaileditrec=val(resp$(1))
 04280   if ckey=1 then adddetails=1: mat tr=(0): eno$="": jno$=jn$: goto EDIT_DETAILS
@@ -554,50 +554,50 @@
           goto GET_CATEGORY_LISTING
 04310   goto GET_CATEGORY_LISTING
 04320 EDIT_DETAILS: ! 
-04330   fntos(sn$="detailedit") !:
+04330   fnTos(sn$="detailedit") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
 04340   holdcn$=cn$
-04350   fnlbl(1,1,"Ref/Employee #:",mylen,1)
-04360   fntxt(1,mylen+3,12,12,1,"",0,"Can contain a check number, an employee number, or some other reference number.") !:
+04350   fnLbl(1,1,"Ref/Employee #:",mylen,1)
+04360   fnTxt(1,mylen+3,12,12,1,"",0,"Can contain a check number, an employee number, or some other reference number.") !:
         resp$(respc+=1)=eno$
-04370   fnlbl(2,1,"Job #:",mylen,1)
-04380   fntxt(2,mylen+3,6,6,0,"",0,"Job # to which this charge or cost was posted.") !:
+04370   fnLbl(2,1,"Job #:",mylen,1)
+04380   fnTxt(2,mylen+3,6,6,0,"",0,"Job # to which this charge or cost was posted.") !:
         resp$(respc+=1)=jno$
-04390   fnlbl(3,1,"Category #:",mylen,1)
-04400   fntxt(3,mylen+3,6,6,0,"",0,"Labor estimate for this job category.") !:
+04390   fnLbl(3,1,"Category #:",mylen,1)
+04400   fnTxt(3,mylen+3,6,6,0,"",0,"Labor estimate for this job category.") !:
         resp$(respc+=1)=str$(tr(1))
-04410   fnlbl(4,1,"Sub-Category:",mylen,1)
-04420   fntxt(4,mylen+3,2,2,0,"10",0,"Sub category to which it should be classified") !:
+04410   fnLbl(4,1,"Sub-Category:",mylen,1)
+04420   fnTxt(4,mylen+3,2,2,0,"10",0,"Sub category to which it should be classified") !:
         resp$(respc+=1)=str$(tr(2))
-04430   fnlbl(5,1,"P/R Dept:",mylen,1)
-04440   fntxt(5,mylen+3,3,3,0,"30",0,"Other estimate for this job category.") !:
+04430   fnLbl(5,1,"P/R Dept:",mylen,1)
+04440   fnTxt(5,mylen+3,3,3,0,"30",0,"Other estimate for this job category.") !:
         resp$(respc+=1)=str$(tr(3))
-04450   fnlbl(6,1,"Date:",mylen,1)
-04460   fntxt(6,mylen+3,8,8,0,"1",0,"Labor to Date for this job category.") !:
+04450   fnLbl(6,1,"Date:",mylen,1)
+04460   fnTxt(6,mylen+3,8,8,0,"1",0,"Labor to Date for this job category.") !:
         resp$(respc+=1)=str$(tr(4))
-04470   fnlbl(7,1,"Reg Hrs:",mylen,1)
-04480   fntxt(7,mylen+3,10,10,0,"32",0,"Regular hours associated with this cost.") !:
+04470   fnLbl(7,1,"Reg Hrs:",mylen,1)
+04480   fnTxt(7,mylen+3,10,10,0,"32",0,"Regular hours associated with this cost.") !:
         resp$(respc+=1)=str$(tr(5))
-04490   fnlbl(8,1,"O/T Hrs:",mylen,1)
-04500   fntxt(8,mylen+3,10,10,0,"32",0,"Overtime hours associated with is cost.") !:
+04490   fnLbl(8,1,"O/T Hrs:",mylen,1)
+04500   fnTxt(8,mylen+3,10,10,0,"32",0,"Overtime hours associated with is cost.") !:
         resp$(respc+=1)=str$(tr(6))
-04510   fnlbl(9,1,"Units:",mylen,1)
-04520   fntxt(9,mylen+3,10,10,0,"30",0,"Only applicable if units are being tracked.") !:
+04510   fnLbl(9,1,"Units:",mylen,1)
+04520   fnTxt(9,mylen+3,10,10,0,"30",0,"Only applicable if units are being tracked.") !:
         resp$(respc+=1)=str$(tr(7))
 04530 ! 
-04540   fnlbl(10,1,"Payroll Tax:",mylen,1)
-04550   fntxt(10,mylen+3,14,14,0,"10",0,"If this cost is for earnings, the associated payroll tax expense should be entered here.") !:
+04540   fnLbl(10,1,"Payroll Tax:",mylen,1)
+04550   fnTxt(10,mylen+3,14,14,0,"10",0,"If this cost is for earnings, the associated payroll tax expense should be entered here.") !:
         resp$(respc+=1)=str$(tr(8))
-04560   fnlbl(11,1,"Amount:",mylen,1)
-04570   fntxt(11,mylen+3,14,14,0,"10",0,"Amount of cost being charged to the job.") !:
+04560   fnLbl(11,1,"Amount:",mylen,1)
+04570   fnTxt(11,mylen+3,14,14,0,"10",0,"Amount of cost being charged to the job.") !:
         resp$(respc+=1)=str$(tr(9))
-04580   fnlbl(12,1,"Description:",mylen,1)
-04590   fntxt(12,mylen+3,30,30,0,"",0,"Brief description of cost.") !:
+04580   fnLbl(12,1,"Description:",mylen,1)
+04590   fnTxt(12,mylen+3,30,30,0,"",0,"Brief description of cost.") !:
         resp$(respc+=1)=pd$
-04600   fncmdkey("&Save",1,1,0,"Saves all changes.")
-04610   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-04620   fnacs(sn$,0,mat resp$,ckey) ! full edit details
+04600   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+04610   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+04620   fnAcs(sn$,0,mat resp$,ckey) ! full edit details
 04630   if ckey=5 then goto REVIEW_DETAILS
 04640   eno$=resp$(1) ! employee #/ ref #
 04650   jno$=resp$(2) ! job number
@@ -651,8 +651,8 @@
         fncombof("CJobALL.h"&env$('cno'),lyne,mypos,43,df$,1,6,7,25,if$,2)
 05120   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -N" ioerr L5130
 05130 L5130: execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",7,25,Replace,DupKeys -N" ioerr L5140
-05140 L5140: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
-05150   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
+05140 L5140: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr XIT
+05150   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr XIT
 05160   return 
 05170 RECREATE_CAT_GRID: ! 
 05180   close #2: ioerr L5190
@@ -661,7 +661,7 @@
         fncombof("CCat.h"&env$('cno'),lyne,mypos,43,df$,1,11,12,25,if$,1) !:
         fncombof("CCatALL.h"&env$('cno'),lyne,mypos,43,df$,1,11,12,25,if$,2)
 05210   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys -N" ioerr L5220
-05220 L5220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
+05220 L5220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr XIT
 05230   return 
 05240 DELETE_CATEGORY: ! 
 05250   read #2,using L1360,key=cn$: mat ta nokey L5360
@@ -675,7 +675,7 @@
 05300   if sum(ta)>0 then goto L5310 else goto L5360
 05310 L5310: nta=ta(1)
 05320 L5320: if nta>0 then holdnta=nta: goto L5330 else goto L5360
-05330 L5330: read #3,using L2840,rec=nta: cn$,nta norec L5360
+05330 L5330: read #3,using L2840,rec=nta: cn$,nta noRec L5360
 05340   delete #3,rec=holdnta: ioerr L5350
 05350 L5350: goto L5320
 05360 L5360: return 

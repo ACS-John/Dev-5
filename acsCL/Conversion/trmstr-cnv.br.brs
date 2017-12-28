@@ -6,9 +6,9 @@
 00060 ! L60: input fields "10,30,N 2,UE,N": cno conv L60
 00070 ! 
 00080 !  fnCopy(env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),92)
-00110   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outin,relative 
+00110   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outIn,relative 
 00120   for j=1 to lrec(1)
-00130     read #trmstr,using L140,rec=j: d1 norec NEXT_J
+00130     read #trmstr,using L140,rec=j: d1 noRec NEXT_J
 00140 L140: form pos 12,n 6
 00150     d1=fncd(d1)
 00160     rewrite #trmstr,using 'Form POS 85,N 2,N 6',rec=j: 19,d1

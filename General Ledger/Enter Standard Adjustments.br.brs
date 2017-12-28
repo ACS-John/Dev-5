@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\bldstdaJ
 00020 ! Standard Adjustments - Hamster (will need a conversion pgm. now only one adjustment per entry - was 10!)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4),sp(4),c$(4,8)*40
@@ -16,9 +16,9 @@
 00142   open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\GLSTdad.H"&env$('cno'))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&env$('cno'))=0 then gosub INDEX
-00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glstdidx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
+00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glstdidx.H"&env$('cno')&",Version=1,Shr",internal,outIn,keyed 
 00180   goto L220
-00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.h"&env$('cno')&",Version=1,Replace,RecL=59",internal,outin 
+00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.h"&env$('cno')&",Version=1,Replace,RecL=59",internal,outIn 
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
@@ -98,7 +98,7 @@
 00670 return 
 00680 ! ______________________________________________________________________
 00690 HAMSTER: ! 
-00700   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00700   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00710   return 
 00720 ! ______________________________________________________________________
 00730 XIT: fnxit

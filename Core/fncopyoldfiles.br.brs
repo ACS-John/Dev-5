@@ -3,7 +3,7 @@
         ! should be used right before conversion !:
         goto CALL_SELF
 00030   def library fnCopyoldfiles
-00040     library 'S:\Core\Library': fnerror,fncursys$,fngetcd ,fntos,fnacs,fncmdset,fnlbl,fntxt, fncno, fnmsgbox,fnxit
+00040     library 'S:\Core\Library': fnerror,fncursys$,fngetcd ,fnTos,fnAcs,fnCmdSet,fnLbl,fnTxt, fncno, fnmsgbox,fnxit
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim mcd$*256 ! My Current Directory
@@ -14,26 +14,26 @@
 00110     right=1 : left=0 : center=2
 00120     fngetcd(mcd$) : fncno(cno)
 00130 ASK_PATHS: ! 
-00140     fntos(sn$="CopyOldFiles") !:
+00140     fnTos(sn$="CopyOldFiles") !:
           mylen=40 : mypos=mylen+2 : lc=0
-00150     fnlbl(lc+=1,1,"Old Program Path and Executable:",mylen,right)
-00160     fntxt(lc,mypos,50,250,left,'70') !:
+00150     fnLbl(lc+=1,1,"Old Program Path and Executable:",mylen,right)
+00160     fnTxt(lc,mypos,50,250,left,'70') !:
           if exists(":C:\Vol002\wb.exe") then !:
             resp$(1)="C:\Vol002\wb.exe" else !:
             resp$(1)="C:\"
-00170     fnlbl(lc+=1,1,"Old Company Number:",mylen,right)
-00180     fntxt(lc,mypos,2,5,left,'number') !:
+00170     fnLbl(lc+=1,1,"Old Company Number:",mylen,right)
+00180     fnTxt(lc,mypos,2,5,left,'number') !:
           resp$(2)="1"
 00190     lc+=1
-00200     fnlbl(lc+=1,1,"New Program Path and Executable:",mylen,right)
-00210     fntxt(lc,mypos,50,250,left,'70') !:
+00200     fnLbl(lc+=1,1,"New Program Path and Executable:",mylen,right)
+00210     fnTxt(lc,mypos,50,250,left,'70') !:
           resp$(3)=mcd$&"acsMenu.exe"
-00220     fnlbl(lc+=1,1,"New Company Number:",mylen,right)
-00230     fntxt(lc,mypos,5,5,left,'number') !:
+00220     fnLbl(lc+=1,1,"New Company Number:",mylen,right)
+00230     fnTxt(lc,mypos,5,5,left,'number') !:
           resp$(4)="1"
-00240     fnlbl(lc+=1,100,":)")
-00250     fncmdset(2)
-00260     fnacs(sn$,0,mat resp$,ckey)
+00240     fnLbl(lc+=1,100,":)")
+00250     fnCmdSet(2)
+00260     fnAcs(sn$,0,mat resp$,ckey)
 00270     if ckey=5 then let fnCopyoldfiles=5 : goto XIT !:
           else let fnCopyoldfiles=0
 00280     path_source$=resp$(1)(1:pos(resp$(1),"\",-1)-1) !:

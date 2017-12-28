@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\Programs\PrintTest
 00020 ! ___________
-00030   library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fntos,fnlbl,fntxt,fnerror,fnacs,fncmdset,fnxit,fnwait
+00030   library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnerror,fnAcs,fnCmdSet,fnxit,fnwait
 00040   on error goto ERTN
 00050 ! __________________
 00051   dim prg$*256,cap$*128,ln$*900
@@ -8,16 +8,16 @@
 00060   cancel=5
 00070   fntop(prg$='S:\Core\Programs\PrintTest',cap$='Print Test')
 00080 ! ___________________
-00090   fntos(sn$='PrintTest') !:
+00090   fnTos(sn$='PrintTest') !:
         rc=0
-00100   fnlbl(1,1,'Characters Per Line:',40,2)
-00110   fntxt(1,42,3,0,0,'30') !:
+00100   fnLbl(1,1,'Characters Per Line:',40,2)
+00110   fnTxt(1,42,3,0,0,'30') !:
         resp$(rc+=1)='80'
-00120   fnlbl(2,1,'Lines to print:',40,2)
-00130   fntxt(2,42,3,0,0,'30') !:
+00120   fnLbl(2,1,'Lines to print:',40,2)
+00130   fnTxt(2,42,3,0,0,'30') !:
         resp$(rc+=1)='54'
-00140   fncmdset(2)
-00150   fnacs(sn$,0,mat resp$,ck)
+00140   fnCmdSet(2)
+00150   fnAcs(sn$,0,mat resp$,ck)
 00160   if ck=cancel then goto XIT
 00162 ! _
 00165 ! add fnWAIT here when it been rewritten

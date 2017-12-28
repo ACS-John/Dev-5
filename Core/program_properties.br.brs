@@ -1,6 +1,6 @@
 08000 def fn_setup
 08020   setup_library=1
-08030   ! library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncomboa,fnfra,fntab,fncmdkey,fntos
+08030   ! library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncomboa,fnFra,fntab,fnCmdKey,fnTos
 08032   library 'S:\Core\Library': fnfm
 08040   library 'S:\Core\Library': fnerror,fnBackgroundDisable
 08100 fnend 

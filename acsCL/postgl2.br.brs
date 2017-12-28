@@ -7,7 +7,7 @@
 00080   fnpostgl2(1)
 00090   fnxit
 10000   def library fnpostgl2(glt)
-10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox,fnfree
+10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnmsgbox,fnfree
 10040     on error goto ERTN
 10060 ! ______________________________________________________________________
 10080 ! GLT: 1=Post  2=Print Only
@@ -41,30 +41,30 @@
 12340 L230: ! 
 12360     goto READ_FUNDMSTR
 12380 EO_FUNDMSTR: ! /r
-12400     fntos(sn$="postgl2")
-12440     fnlbl(1,60,"",0,1)
-12460     fnlbl(1,1,"Starting Date:",44,1)
-12480     fntxt(1,46,10,0,1,"3",0,"Normally this would be the first day of the month.  If you post more often than once a month, it would be the first day of the period you are posting.")
+12400     fnTos(sn$="postgl2")
+12440     fnLbl(1,60,"",0,1)
+12460     fnLbl(1,1,"Starting Date:",44,1)
+12480     fnTxt(1,46,10,0,1,"3",0,"Normally this would be the first day of the month.  If you post more often than once a month, it would be the first day of the period you are posting.")
 12500     resp$(1)=""
-12520     fnlbl(2,1,"Ending Date:",44,1)
-12540     fntxt(2,46,10,0,1,"3",0,"Normally this would be the last day of the month, unless you post more often than once a month!")
+12520     fnLbl(2,1,"Ending Date:",44,1)
+12540     fnTxt(2,46,10,0,1,"3",0,"Normally this would be the last day of the month, unless you post more often than once a month!")
 12560     resp$(2)=date$('ccyymmdd') ! ""
-12580     fnchk(4,47,"Include previously posted transactions:",1)
+12580     fnChk(4,47,"Include previously posted transactions:",1)
 12600     resp$(3)="False"
-12620     fnlbl(5,1,"Basis for Accounting:",44,1)
+12620     fnLbl(5,1,"Basis for Accounting:",44,1)
 12680     fncomboa("opt_cash_or_accrual",5,46,mat opt_cash_or_accrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
 12700     resp$(4)=opt_cash_or_accrual$(1)
-12720     fnchk(6,47,"Combine Payroll Entries:",1)
+12720     fnChk(6,47,"Combine Payroll Entries:",1)
 12740     resp$(5)="True"
-12760     fnchk(7,47,"Print General Ledger Distribution Listing:",1)
+12760     fnChk(7,47,"Print General Ledger Distribution Listing:",1)
 12780     resp$(6)="True"
-12800     fnchk(8,47,"Update After the Fact Payroll records:",1)
+12800     fnChk(8,47,"Update After the Fact Payroll records:",1)
 12820     resp$(7)="False"
-12840     fnlbl(10,1,"Post to General Ledger Company Number:",44,1)
-12860     fntxt(10,46,5,0,1,"30",0,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
+12840     fnLbl(10,1,"Post to General Ledger Company Number:",44,1)
+12860     fnTxt(10,46,5,0,1,"30",0,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
 12880     resp$(8)=env$('cno')
-12900     fncmdset(2)
-12920     fnacs(sn$,0,mat resp$,ck)
+12900     fnCmdSet(2)
+12920     fnAcs(sn$,0,mat resp$,ck)
 14000     if ck=5 then goto XIT
 14020     dt1=val(resp$(1)) ! beginning date
 14040     dt2=val(resp$(2)) ! ending date
@@ -82,9 +82,9 @@
 16060 !   pr f "13,34,C 12,B,99": "Cancel (Esc)"
 16080 !   on fkey 99 goto XIT
 16100     fnopenprn
-16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-16140     open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outin,keyed 
-16160     open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+16140     open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+16160     open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 16180     open #work=5: "Name="&env$('Temp')&"\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 16200     if ~fn_check_breakdowns_add_up then goto XIT ! gosub CHECK_BREAKDOWNS
 16220     gosub GLBUCKET_STUFF
@@ -173,7 +173,7 @@
 19600     pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NEWPGE
 19620 L1240: ! 
 19630     read #1,using 'Form POS 1,PD 3': r5 eof ENDALL
-19640     read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd norec L1240
+19640     read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
 19660     if amt=0 then goto L1240
 19680     if gl$(1:3)="  0" then gl$(1:3)="   "
 19700     if gl$(10:12)="  0" then gl$(10:12)="   "
@@ -313,7 +313,7 @@
 26960 L2300: ! 
 26980     if glt=glt_print_only then goto XIT
 27000     close #20: ioerr ignore
-27020     open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&env$('cno')&",Replace,RecL=12",internal,outin,relative 
+27020     open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&env$('cno')&",Replace,RecL=12",internal,outIn,relative 
 27040     write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
 27060     close #20: 
 27080     if glb=2 then 
@@ -326,8 +326,8 @@
 29000 END1: ! r:
 29010     if scd=4 and pa1+pa2<>0 then gosub COMBINEPR
 29020     if up1$="C" then goto END2
-29040     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-29060     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+29040     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+29060     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
 29080     open #paymstr=8: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 29100 READ_PAYTRANS: ! 
 29120     read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
@@ -380,7 +380,7 @@
 33020     if glt=glt_print_only then goto L2840
 33040     d2$=cnvrt$("PIC(######)",d2)
 33060     open #glbucket=20: "Name="&env$('Q')&"\GLmstr\GLBucket.H"&str$(gl2),internal,input,relative ioerr L2830
-33080     read #glbucket,using 'Form POS 1,N 1',rec=1: glb norec ignore
+33080     read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 33100     close #glbucket: 
 33120 L2830: ! 
 33140     if glb=2 then 
@@ -577,8 +577,8 @@
 48020     cb_cu_return=1
 48040     restore #trmstr: 
 48060     open #paymstr=8: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
-48080     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
-48100     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+48080     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+48100     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 48120 CB_CU_READ: ! 
 48140     read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
 48160     invalloc=0

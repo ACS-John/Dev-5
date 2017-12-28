@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\transcodes
 00020 ! Special transactions type file - Hamster
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2),mask(2),sp(2),c$(2,8)*40
@@ -16,9 +16,9 @@
         open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\transcodes.h"&env$('cno'))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\transcodes-idx.h"&env$('cno'))=0 then gosub INDEX
-00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\transcodes.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\transcodes-idx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
+00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\transcodes.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\transcodes-idx.H"&env$('cno')&",Version=1,Shr",internal,outIn,keyed 
 00180   goto L220
-00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\transcodes.h"&env$('cno')&",Version=1,Replace,RecL=90",internal,outin 
+00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\transcodes.h"&env$('cno')&",Version=1,Replace,RecL=90",internal,outIn 
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
@@ -74,7 +74,7 @@
 00490   return 
 00500 ! ______________________________________________________________________
 00510 HAMSTER: ! 
-00520   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00520   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00530   return 
 00540 ! ______________________________________________________________________
 00550 XIT: fnxit

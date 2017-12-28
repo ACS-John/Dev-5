@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\conversion\assign_sequence
 00020 ! used to assign new sequence numbers if not enough room between numbers on standard conversion
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fncno,fnxit,fnerror,fncmdset,fntop
+00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnxit,fnerror,fnCmdSet,fntop
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim z$*10,text$*45,cap$*128
@@ -11,17 +11,17 @@
 00100 ! ______________________________________________________________________
 00110 SCREEN1: ! 
 00120   sn$ = "sequence" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=25 : mypos=mylen+2
 00130   text$='Increment by what number:' !:
-        fnlbl(1,1,text$,mylen,1)
-00140   fntxt(1,mypos,3,0,1,"30") !:
+        fnLbl(1,1,text$,mylen,1)
+00140   fnTxt(1,mypos,3,0,1,"30") !:
         resp$(1)=""
-00150   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00150   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00160   if ck=5 then goto XIT
 00170   incr=val(resp$(1))
 00180   on fkey 5 goto DONE
-00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00200 READ_CUSTOMER: ! !:
         read #1,using "Form POS 1743,n 7": oldseq eof DONE
 00210   newseq=newseq+max(incr,10)

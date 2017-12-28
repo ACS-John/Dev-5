@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\PullLay   ! only use for utility billing  (need to send out S:\acsUB\Layouts\UBmstr-vb.lay to any one trying to use this
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnerror,fnsetmonth,fncno,fnxit,fnremove,fnrights_test,fntop,fnbooktitle$
+00030   library 'S:\Core\Library': fnerror,fnsetmonth,fnget_services,fnxit,fnremove,fnrights_test,fntop,fnbooktitle$
 00032 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 00033   fntop(program$,cap$="Main menu")
 00034   if ~fnrights_test('',"Try Run As Administrator.",'Program','This program must write data into the working (program) directory.') then goto XIT
@@ -11,20 +11,17 @@
 00080 ! you will have to create your folders as described above; this routine will not create the folders
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50,cap$*128
-00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
+00110   dim serviceName$(10)*20,serviceCode$(10)*2,textfile$*87,abbrev$*30
 00120   fnsetmonth(mat mo$)
-00130   fncno(cno)
 00160   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
-00180   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative ioerr L190
-00182   read #20,using "Form POS 1,10*C 20,10*c 2",rec=1: mat servicename$,mat srv$
-00184   close #20: 
+00180   fnget_services(mat serviceName$,mat srv$)
 00190 L190: io1$(1)="10,34,c 45,UT,N"
 00192   io1$(2)="12,34,C 45,UT,N"
 00200   outputfile$="S:\acsUB\grid\Customer\Customer.fil"
 00210   ev$="S:\acsUB\Layouts\UBmstr-vb.LAY"
 00220 !  goto L320 ! for utility billing automatically from menu
 00230 !   close #101: ioerr ignore
-00240 !   open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin
+00240 !   open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outIn
 00250 !   pr #101: newpage
 00260 !   pr f "10,2,Cr 32": "File name to create (no ext):"
 00270 !   pr f "12,2,Cr 32": "Layout file name (with exts):"
@@ -34,7 +31,7 @@
 00310 !   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00320 ! L320:
 00322   open #2: "Name="&ev$,display,input 
-00330   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
+00330   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed 
 00333 F_TEMP: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
 00340   do 
 00342 READ_TEMP: ! 
@@ -85,21 +82,21 @@
 00730 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAMEON EACH SERVICE IN UTILITY BILLING
 00740     if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L850
 00750     x=val(a$(j3,1)(9:10)) conv L850
-00760     if trim$(servicename$(x))="" then goto READ_TEMP ! SERVICE NOT USED
+00760     if trim$(serviceName$(x))="" then goto READ_TEMP ! SERVICE NOT USED
 00770     a$(j3,1)(1:9)=""
-00780     if x=3 and trim$(servicename$(x))<>"Electric" and srv$(3)="EL" then goto L840
-00790     if x=4 and trim$(servicename$(x))<>"Gas" and srv$(4)="GA" then goto L840 ! gas or electric used for some some reading other that gas or electric (code must be GA or EL for this to work
-00800     if x=3 and trim$(servicename$(x))<>"Electric" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
-00810     if x=3 and trim$(servicename$(x))<>"Electric" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Prior") then goto READ_TEMP
-00820     if x=4 and trim$(servicename$(x))<>"Gas" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Meter") then goto READ_TEMP
-00830     if x=4 and trim$(servicename$(x))<>"Gas" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
+00780     if x=3 and trim$(serviceName$(x))<>"Electric" and srv$(3)="EL" then goto L840
+00790     if x=4 and trim$(serviceName$(x))<>"Gas" and srv$(4)="GA" then goto L840 ! gas or electric used for some some reading other that gas or electric (code must be GA or EL for this to work
+00800     if x=3 and trim$(serviceName$(x))<>"Electric" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
+00810     if x=3 and trim$(serviceName$(x))<>"Electric" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Prior") then goto READ_TEMP
+00820     if x=4 and trim$(serviceName$(x))<>"Gas" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Meter") then goto READ_TEMP
+00830     if x=4 and trim$(serviceName$(x))<>"Gas" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
 00840 L840: ! 
-00842     a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
+00842     a$(j3,1)=trim$(serviceName$(x))&" "&trim$(a$(j3,1))
 00850 L850: ! 
 00852     if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L890
 00860     x=val(abbrev$(9:10)) conv L890
 00870     abbrev$(1:9)=""
-00880     abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
+00880     abbrev$=trim$(serviceName$(x))&" "&trim$(abbrev$)
 00890 L890: ! 
 00892     if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(2:6)='EXTRA' or trim$(abbrev$)="" then goto READ_TEMP
 00900 ! store as description,variable name,field length,# of deciaml points, format
@@ -121,7 +118,7 @@
 20120 ! /region
 22000 MOVEITTOTEXT: ! r:
 22020   open #10: "Name="&outputfile$&",RecL=87,Replace",display,output 
-22040   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
+22040   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
 22060   do 
 22080     read #h_temp,using 'form pos 1,c 87': textfile$ eof L1080
 22100     pr #10,using 'form pos 1,c 87': textfile$

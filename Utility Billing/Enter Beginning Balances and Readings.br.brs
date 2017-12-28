@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\ubCorAmt
 00020 ! -- Enter Beginning Balances and Readings
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit, fnerror,fnlbl,fntos,fntxt, fnacs,fncmbact,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fncmdkey,fnget_services
+00040   library 'S:\Core\Library': fnxit, fnerror,fnLbl,fnTos,fnTxt, fnAcs,fncmbact,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnCmdKey,fnget_services
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,d(15),adr(2),p$*10,txt$*80,resp$(20)*80,txt$(6)*80
 00080   dim o(2),srv$(10)*20,in1(19),gb(10),e$*30,tg(11),g(12)
 00090 ! ______________________________________________________________________
-00110   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outin,keyed 
-00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,USE,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
+00110   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outIn,keyed 
+00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 00130   fnget_services(mat srv$)
 00140   for j=1 to udim(srv$)
 00150     srv$(j)=trim$(srv$(j)) !:
@@ -18,20 +18,20 @@
 00190   goto MENU1
 00200 ! ______________________________________________________________________
 00210 MENU1: ! 
-00220   fntos(sn$:="ubCorAmt-1") !:
+00220   fnTos(sn$:="ubCorAmt-1") !:
         mylen=48 !:
         mypos=mylen+2
-00230   fnlbl(1,1,"Starting Account ([All] for first run):",mylen,1)
+00230   fnLbl(1,1,"Starting Account ([All] for first run):",mylen,1)
 00240   fncmbact(1,mypos,1) !:
         resp$(1)="[All]"
-00250   fnlbl(2,1,"Summary Transaction Date (mmddyy):",mylen,1)
-00260   fntxt(2,mypos,8,0,0,"1") !:
+00250   fnLbl(2,1,"Summary Transaction Date (mmddyy):",mylen,1)
+00260   fnTxt(2,mypos,8,0,0,"1") !:
         resp$(2)=str$(n)
-00270   fnlbl(4,1,"This program requires exclusive use of the Customer File.",90,2) !:
-        fnlbl(5,1,"Please make sure no one else is in Utility Billing",90,2) !:
-        fnlbl(6,1,"while you use this program.",90,2)
-00280   fncmdset(2)
-00290   fnacs(sn$,0,mat resp$,ckey)
+00270   fnLbl(4,1,"This program requires exclusive use of the Customer File.",90,2) !:
+        fnLbl(5,1,"Please make sure no one else is in Utility Billing",90,2) !:
+        fnLbl(6,1,"while you use this program.",90,2)
+00280   fnCmdSet(2)
+00290   fnAcs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   n=val(resp$(2))
 00320   hz$=z$=lpad$(trim$(resp$(1)(1:10)),10)
@@ -49,7 +49,7 @@
 00410 ! ______________________________________________________________________
 00420 SCREEN2: ! 
 00430   sn$="ubCorAmt-2" !:
-        fntos(sn$)
+        fnTos(sn$)
 00440   mylen=15 !:
         for j=1 to 10 ! UDIM(SRV$) !:
           mylen=max(len(trim$(srv$(j))),mylen) !:
@@ -57,40 +57,40 @@
         mypos=mylen+2 !:
         mypos2=mypos+12 ! kj
 00450   txt$="Account:" !:
-        fnlbl(1,1,txt$,mylen,1)
-00460   fntxt(1,mypos,10,0,1,"",1) !:
+        fnLbl(1,1,txt$,mylen,1)
+00460   fnTxt(1,mypos,10,0,1,"",1) !:
         resp$(1)=z$
 00470   txt$="Balance:" !:
-        fnlbl(2,1,txt$,mylen,1)
-00480   fntxt(2,mypos,9,0,1,"10") !:
+        fnLbl(2,1,txt$,mylen,1)
+00480   fnTxt(2,mypos,9,0,1,"10") !:
         resp$(2)=str$(bal)
-00490   txt$="Balance" : fnlbl(4,mypos,txt$,10,2,1) !:
-        txt$="Reading" : fnlbl(4,mypos2,txt$,10,2,1)
+00490   txt$="Balance" : fnLbl(4,mypos,txt$,10,2,1) !:
+        txt$="Reading" : fnLbl(4,mypos2,txt$,10,2,1)
 00500   respc=2 !:
         resp_line=4 !:
         for j=1 to 10 ! UDIM(SRV$) kj
 00510     if trim$(srv$(j))<>"" then !:
             respc+=1 !:
             resp_line+=1 !:
-            fnlbl(resp_line,1,srv$(j),mylen,1) !:
-            fntxt(resp_line,mypos,9,0,1,"10") !:
+            fnLbl(resp_line,1,srv$(j),mylen,1) !:
+            fnTxt(resp_line,mypos,9,0,1,"10") !:
             resp$(respc)=str$(gb(j))
 00520     if trim$(srv$(j))<>"" and (j=1) then !:
-            fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fnTxt(resp_line,mypos2,11,0,1,"20") !:
             respc+=1 : resp$(respc)=str$(d(1))
 00530     if (trim$(srv$(j))="Electric:" or trim$(srv$(j))="Lawn Meter:") and (j=3) then !:
-            fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fnTxt(resp_line,mypos2,11,0,1,"20") !:
             respc+=1 : resp$(respc)=str$(d(5))
 00540     if trim$(srv$(j))="Gas:" and (j=4) then !:
-            fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fnTxt(resp_line,mypos2,11,0,1,"20") !:
             respc+=1 : resp$(respc)=str$(d(9))
 00550   next j
 00560   respc+=1 : resp$(respc)=e$ !:
-        fntxt(1,40,30,0,0,"",1)
-00570   fncmdkey("&Next",1,1,0,"Save and display next account in account order." ) !:
-        fncmdkey("&Select Account",2,0,0,"Select another account." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00580   fnacs(sn$,0,mat resp$,ckey)
+        fnTxt(1,40,30,0,0,"",1)
+00570   fnCmdKey("&Next",1,1,0,"Save and display next account in account order." ) !:
+        fnCmdKey("&Select Account",2,0,0,"Select another account." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00580   fnAcs(sn$,0,mat resp$,ckey)
 00590   if ckey=5 then goto XIT
 00600   bal=val(resp$(2))
 00610   respc=2 !:

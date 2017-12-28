@@ -4,7 +4,7 @@
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   close #101: ioerr L70
-00070 L70: open #101: "SRow=2,SCol=5,ERow=22,ECol=37,Border=ss,Caption=KeyStat",display,outin 
+00070 L70: open #101: "SRow=2,SCol=5,ERow=22,ECol=37,Border=ss,Caption=KeyStat",display,outIn 
 00080   pr #101: newpage
 00090   pr #101: "Press any key to see it's keystat"
 00100   pr #101: "      unhex and hex values."

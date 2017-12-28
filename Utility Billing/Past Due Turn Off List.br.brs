@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\ubPDTnOf
 00020 ! r: initial stuff
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fnLastBillingDate,fncmdset,fntop,fnchk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
+00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnxit,fncomboa,fnFra,fnLastBillingDate,fnCmdSet,fntop,fnChk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
 00040   on error goto ERTN
 00050 ! 
 00060   dim resp$(20)*80
@@ -27,41 +27,41 @@
 27040   fnget_services(mat srvnam$,mat srv$)
 27100 ! /r
 32000 ! r: SCREEN1
-32020   fntos(sn$="UBPdTnOf")
+32020   fnTos(sn$="UBPdTnOf")
 32040   mylen=21 : mypos=mylen+2
-32060   fnfra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
+32060   fnFra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
 32080 ! 
-32100   fnlbl(1,1,"Current Month:",mylen,1,0,1)
-32120   fntxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
+32100   fnLbl(1,1,"Current Month:",mylen,1,0,1)
+32120   fnTxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
 32140   resp$(1)=""
-32160   fnlbl(2,1,"Last Month:",mylen,1,0,1)
-32180   fntxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
+32160   fnLbl(2,1,"Last Month:",mylen,1,0,1)
+32180   fnTxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
 32200   resp$(2)=""
-32220   fnlbl(3,1,"Month Before That:",mylen,1,0,1)
-32240   fntxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
+32220   fnLbl(3,1,"Month Before That:",mylen,1,0,1)
+32240   fnTxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
 32260   resp$(3)=""
-32280   fnlbl(6,1,"Billing Date:",mylen,1)
-32300   fntxt(6,mypos,8,8,1,"1")
+32280   fnLbl(6,1,"Billing Date:",mylen,1)
+32300   fnTxt(6,mypos,8,8,1,"1")
 32320   resp$(4)=str$(lbill)
-32340   fnlbl(7,1,"Final Billing Code:" ,mylen,1)
+32340   fnLbl(7,1,"Final Billing Code:" ,mylen,1)
 32360   fncomboa("aai",7,mypos,mat opt_aai$)
 32380   resp$(5)=aai$
-32400   fnchk(9,40,"Print Meter Address:",1)
+32400   fnChk(9,40,"Print Meter Address:",1)
 32420   resp$(6)=printadr$
-32440   fnchk(10,40,"Exclude Current Month:",1)
+32440   fnChk(10,40,"Exclude Current Month:",1)
 32460   resp$(7)=excludecurrent$
-32480   fnchk(11,40,"Exclude Last Month:",1)
+32480   fnChk(11,40,"Exclude Last Month:",1)
 32500   resp$(8)=excludelast$
-32520   fnchk(12,40,"Print Past Due Balance:",1)
+32520   fnChk(12,40,"Print Past Due Balance:",1)
 32540   resp$(9)=pastduebalance$
-32542   fnchk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
+32542   fnChk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
 32544   resp$(10)=pr_s4_meter_number$
-32546   fnchk(15,40,"Print blank lines for notes:",1)
+32546   fnChk(15,40,"Print blank lines for notes:",1)
 32548   resp$(11)=pr_blank_lines_for_notes$
-32550   fnchk(17,40,"Account Sequence",1)
+32550   fnChk(17,40,"Account Sequence",1)
 32552   resp$(rc_accountSequence:=12)=accountSequence$
-32560   fncmdset(3)
-32580   fnacs(sn$,0,mat resp$,ck)
+32560   fnCmdSet(3)
+32580   fnAcs(sn$,0,mat resp$,ck)
 32600   if ck=5 then goto XIT
 32620   for j=1 to 3
 32640 L400: x=pos(resp$(j),"/",1)
@@ -222,8 +222,8 @@
 60000 IGNORE: continue 
 62000 BUD1: ! r:
 62020   bud1=0
-62040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1390
-62060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+62040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1390
+62060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 62080   bud1=1
 62100 L1390: return  ! /r
 64000 BUD2: ! r:
@@ -235,7 +235,7 @@
 64120 L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 64140   ta1=badr(1)
 64160 L1490: if ta1=0 then goto L1580
-64180   read #82,using L1510,rec=ta1: z$,mat bt1,nba norec L1580
+64180   read #82,using L1510,rec=ta1: z$,mat bt1,nba noRec L1580
 64200 L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 64220   if bt1(14,1)>0 then goto L1570
 64240   bd1=bd1+1

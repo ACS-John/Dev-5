@@ -1,7 +1,7 @@
 00010 ! Replace  S:\acsPR\burden
 00020 ! Service Code File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnwait,fncno,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fntos,fnlbl,fncmbcode,fncmdkey,fnacs,fntxt,fncmdset,fncombof,fnrgl$,fnqgl,fnagl$,fnchk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnwait,fncno,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
 00050   fntop("S:\acsPR\burden",cap$="Personnel Burden")
 00060   on error goto ERTN
 00070   dim cnam$*40,dat$*20,gl(3),sf1$*28,sn$*30,cap$*128,search$(22),resp$(10)*60
@@ -15,27 +15,27 @@
 00150   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00160 ! 
 00170   if exists(env$('Q')&"\PRmstr\Burden.H"&env$('cno'))=0 then goto SETUP_FILES
-00180 L180: open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&",Shr",internal,outin,keyed 
+00180 L180: open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00190 L190: form pos 1,n 8,c 30,3*n 6.3
 00200 ASKEMPLOYEE: ! 
 00205   mat resp$=("")
 00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
-00220   fntos(sn$="Pr-askemployee") !:
+00220   fnTos(sn$="Pr-askemployee") !:
         respc=0
-00230   fnlbl(1,1,"Employee Number:",20,right)
+00230   fnLbl(1,1,"Employee Number:",20,right)
 00240   fncmbburden(1,23)
 00250   if hact$="" then !:
           resp$(respc+=1)="" else !:
           resp$(respc+=1)=hact$
-00260   fncmdkey("&Add",1,0,0,"Add a new employee burden record." ) !:
-        fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
-        fncmdkey("&Next",3,0,0,"Access next record in employee burden order") !:
-        fncmdkey("&Search",6,0,0,"Search for employee burden record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information") !:
-        fncmdkey("&Proof List",8,0,0,"Returns to menu") !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00270   fnacs(sn$,0,mat resp$,ckey)
+00260   fnCmdKey("&Add",1,0,0,"Add a new employee burden record." ) !:
+        fnCmdKey("E&dit",2,1,0,"Access the highlited record") !:
+        fnCmdKey("&Next",3,0,0,"Access next record in employee burden order") !:
+        fnCmdKey("&Search",6,0,0,"Search for employee burden record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information") !:
+        fnCmdKey("&Proof List",8,0,0,"Returns to menu") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00270   fnAcs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   if ckey=8 then gosub PRINT_PROOF: goto ASKEMPLOYEE
 00300   if ckey=1 then goto ADD_RECORD
@@ -48,28 +48,28 @@
 00361   if trim$(eno$)="" then goto ASKEMPLOYEE else read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKEMPLOYEE
 00380 SCREEN_1: ! maintain personnel burdern screen
-00390   fntos(sn$="Pr-burden") !:
+00390   fnTos(sn$="Pr-burden") !:
         respc=0
 00400   mylen=12: mypos=mylen+3 : right=1
-00410   fnlbl(1,1,"Employee #:",mylen,right)
-00420   fntxt(1,mypos,6,0,0,"") !:
+00410   fnLbl(1,1,"Employee #:",mylen,right)
+00420   fnTxt(1,mypos,6,0,0,"") !:
         resp$(1)=eno$
-00430   fnlbl(2,1,"Name:",mylen,right)
-00440   fntxt(2,mypos,30,0,0,"",0,"The name should be pulled from payroll and automatically displayed.") !:
+00430   fnLbl(2,1,"Name:",mylen,right)
+00440   fnTxt(2,mypos,30,0,0,"",0,"The name should be pulled from payroll and automatically displayed.") !:
         resp$(2)=name$
-00460   fnlbl(3,1,"Burden %:",mylen,right)
-00470   fntxt(3,mypos,6,0,0,"33",0,"Enter the % of wage that you wish to use on this employee to calculate the personnel burden charged to jobs.") !:
+00460   fnLbl(3,1,"Burden %:",mylen,right)
+00470   fnTxt(3,mypos,6,0,0,"33",0,"Enter the % of wage that you wish to use on this employee to calculate the personnel burden charged to jobs.") !:
         resp$(3)=str$(burden)
-00480   fnlbl(4,1,"Unused:",mylen,right)
-00490   fntxt(4,mypos,6,0,0,"33",0,"Unused field at this time.") !:
+00480   fnLbl(4,1,"Unused:",mylen,right)
+00490   fnTxt(4,mypos,6,0,0,"33",0,"Unused field at this time.") !:
         resp$(4)=""
-00500   fnlbl(5,1,"Unused:",mylen,right)
-00510   fntxt(5,mypos,6,0,0,"33",0,"Unused field at this time.") !:
+00500   fnLbl(5,1,"Unused:",mylen,right)
+00510   fnTxt(5,mypos,6,0,0,"33",0,"Unused field at this time.") !:
         resp$(5)=""
-00520   fncmdkey("&Save",1,1,0,"Saves any changes and returns to main screen.")
-00530   fncmdkey("&Delete",4,0,0,"Deletes this record from the personnel burden file.")
-00540   fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
-00550   fnacs(sn$,0,mat resp$,ckey)
+00520   fnCmdKey("&Save",1,1,0,"Saves any changes and returns to main screen.")
+00530   fnCmdKey("&Delete",4,0,0,"Deletes this record from the personnel burden file.")
+00540   fnCmdKey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
+00550   fnAcs(sn$,0,mat resp$,ckey)
 00560   if ckey=5 then goto ASKEMPLOYEE
 00562   eno=val(resp$(1)(1:8)) : eno$=lpad$(trim$(resp$(1)),8)
 00563   name$=resp$(2)
@@ -94,13 +94,13 @@
 00710   return 
 00720 ADD_RECORD: ! 
 00730   if reindex>3 then goto ERTN
-00740   fntos(sn$="Burden2")
-00750   fnlbl(1,5,"New Personnel Burden Information",45,1)
-00760   fnlbl(3,1,"Employee Number:",15,0)
+00740   fnTos(sn$="Burden2")
+00750   fnLbl(1,5,"New Personnel Burden Information",45,1)
+00760   fnLbl(3,1,"Employee Number:",15,0)
 00770   fncmbemp(3,18)
 00780   resp$(1)=""
-00790   fncmdset(11)
-00800   fnacs(sn$,0,mat resp$,ckey)
+00790   fnCmdSet(11)
+00800   fnAcs(sn$,0,mat resp$,ckey)
 00810   if ckey=5 then goto ASKEMPLOYEE
 00820   eno=val(resp$(1)(1:8)) !:
         eno$=lpad$(trim$(resp$(1)(1:8)),8)
@@ -118,7 +118,7 @@
 00900   gosub RECREATE_GRID
 00910   goto SCREEN_1
 00920 SETUP_FILES: ! 
-00930   open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",RecL=128,replace",internal,outin 
+00930   open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",RecL=128,replace",internal,outIn 
 00940   close #1: 
 00950   goto REINDEX
 00960 REINDEX: ! indexes if needed

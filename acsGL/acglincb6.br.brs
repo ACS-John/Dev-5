@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncB6
 00020 ! -- INCOME STATEMENT WITH BUDGET (six columns)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fntos,fnprocess,fnlbl,fntxt,fncmdkey,fnacs,fnps
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
@@ -35,15 +35,15 @@
 00340   nametab=int(44-len(rtrm$(cnam$))/2)
 00350   open #1: fl1$,internal,input,keyed 
 00360   if fnprocess=1 or fnUseDeptNo=0 then goto L450
-00370   fntos(sn$="ACglincb") !:
+00370   fnTos(sn$="ACglincb") !:
         mylen=30: mypos=mylen+3 : right=1
-00380   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00390   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00380   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00390   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00400   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00410   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00420   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00430   fnacs(sn$,0,mat resp$,ckey)
+00400   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00410   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00420   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00430   fnAcs(sn$,0,mat resp$,ckey)
 00440   if ckey=5 then goto XIT
 00450 L450: costcntr=val(resp$(1))
 00460   cnam$=rtrm$(cnam$)

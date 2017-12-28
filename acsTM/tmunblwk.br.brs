@@ -13,7 +13,7 @@
 00170   read #1,using L180,rec=1: mat cat$ ioerr L2780
 00180 L180: form pos 1,30*c 30
 00190   close #1: 
-00200   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
+00200   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outIn,relative 
 00210   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 00220   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
 00230   open #2: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,input,relative ioerr L2780

@@ -12,8 +12,8 @@
 11060     library 'S:\Core\Library': fntop
 11080     library 'S:\Core\Library': fnSystemName$
 11100     library 'S:\Core\Library': fncompany_name
-11120     library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnacs,fncmdkey,fnbutton,fnlbl,fntos
-11140     library 'S:\Core\Library': fnfra
+11120     library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnCmdKey,fnButton,fnLbl,fnTos
+11140     library 'S:\Core\Library': fnFra
 11160     library 'S:\Core\Library': fnbutton_or_disabled
 11180     library 'S:\Core\Library': fnmsgbox
 11200     library 'S:\Core\Library': fncursys$
@@ -193,49 +193,49 @@
 19520   dim program_selection$*256,menu_option$*128
 19540   do
 19580     if env$('ExitNow')<>'yes' then
-19640       fntos(screen_name$:='Menu') : frameCount=0
+19640       fnTos(screen_name$:='Menu') : frameCount=0
 19680       fnflexinit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
 19700   !
 19720       fn_caption_update
 19740       fn_update_program_grid
 19760       fn_display_buttons
 19770       if ~enableFavorites then
-19780         fnlbl(program_grid_line,1,'Filter:',info_col_width,1)
+19780         fnLbl(program_grid_line,1,'Filter:',info_col_width,1)
 19790       end if
 19820       fnreg_read('Last Save Date',last_save_date$)
 19830       fnreg_read('Last Save File',last_save$)
 19840       dim tmp_tooltip$*2048
 19850       tmp_tooltip$='Last succesful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
-19860       fnlbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-19870       fnlbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-19880       fnlbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
+19860       fnLbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+19870       fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+19880       fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
 19890       fnbutton_or_disabled(env$('enableClientSelection')=='Yes',program_grid_line+5,1,env$('client')(1:info_col_width),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_col_width)
 19930       ! end if
 19940       if env$('Decimal_Assumed')<>'Decimal Required' then
-19960         fnlbl(program_grid_line+6,1,env$('Decimal_Assumed'),info_col_width,2)
+19960         fnLbl(program_grid_line+6,1,env$('Decimal_Assumed'),info_col_width,2)
 19980       end if
 20000       if env$('ACSDeveloper')<>'' then
-20020         fnlbl(program_grid_line+8,1,"ACS Developer"(1:info_col_width),info_col_width,2)
-20040         fnlbl(program_grid_line+9,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
+20020         fnLbl(program_grid_line+8,1,"ACS Developer"(1:info_col_width),info_col_width,2)
+20040         fnLbl(program_grid_line+9,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
 20060       end if
 20080       if env$('BR_MODEL')='CLIENT/SERVER' then
-20100         fnlbl(program_grid_line+11,1,'Client'(1:info_col_width),info_col_width,2)
+20100         fnLbl(program_grid_line+11,1,'Client'(1:info_col_width),info_col_width,2)
 20120       end if
 20130       if env$('BR_XP_Mode')='True' then
-20132         fnlbl(program_grid_line+13,1,'XP Compatability'(1:info_col_width),info_col_width,2)
+20132         fnLbl(program_grid_line+13,1,'XP Compatability'(1:info_col_width),info_col_width,2)
 20134       end if
 20140   !
 20160       tmp_tooltip$="ACS was last updated on "&last_update$&'\n to version '&version_current$&'.'
-20180       fnlbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_col_width,2,0,0,0,tmp_tooltip$)
-20200       fnlbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-20202       fnlbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
+20180       fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_col_width,2,0,0,0,tmp_tooltip$)
+20200       fnLbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+20202       fnLbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
 20220       fn_dashboard_draw
 20230       if enableFavorites then let fn_favoritesDraw
 20240       fn_display_menu
 20260   !
 20300       setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 20310       fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
-20320       fnacs(screen_name$,0,mat resp$,fkey_value,0,0,0)
+20320       fnAcs(screen_name$,0,mat resp$,fkey_value,0,0,0)
 20340       setenv('tmp_acs_back_arrow','')
 20360       program_selection$=resp$(1)
 20380       program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
@@ -275,13 +275,13 @@
 21000       else if menu_option$(1:6)='FileIO' or menu_option$(1:8)='ScreenIO' then
 21120         if menu_option$(1:8)='ScreenIO' then
 21140           execute 'cd S:'
-21150           library 'S:\Core\ScreenIO\screenio.br': fndesignscreen
-21152           fndesignscreen
+21150           library 'S:\Core\ScreenIO\screenio.br': fnDesignScreen
+21152           fnDesignScreen
 21154           chain 's:\core\start'
 21160           ! fn_chain('S:\Core\ScreenIO\screenio.br')
 21180         else if menu_option$(1:6)='FileIO' then
 21190           if menu_option$='FileIO (update and launch)' then
-21191             msgbox( 'obsolueted by local administrative execution of cmd:   mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\FileIO\Layout" "C:\ACS\Dev-5\Core\FileIO\Layout" ')
+21191             msgbox( 'obsoleted by local administrative execution of cmd:   mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\FileIO\Layout" "C:\ACS\Dev-5\Core\FileIO\Layout" ')
 21192             ! fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
 21194             ! fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 21196           end if
@@ -530,35 +530,35 @@
 27000 def fn_ddAddButton(buttonText$,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
 27010   if buttonLine=0 then buttonLine=1
 27020   if btnItem=1 then
-27040     fnbutton(buttonLine,dashboard_width-tmp_btn_width,buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
+27040     fnButton(buttonLine,dashboard_width-tmp_btn_width,buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
 27060   else if btnItem>1 then
-27080     fnbutton(buttonLine,dashboard_width-(tmp_btn_width*btnItem+(btnItem-1)),buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
+27080     fnButton(buttonLine,dashboard_width-(tmp_btn_width*btnItem+(btnItem-1)),buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
 27100   else
 27120     pr 'btnItem=';btnItem;' and it is currently required by fn_ddAddButton'
 27140   end if
 27160 fnend
 28000 def fn_favoritesDraw
 28020   if env$('FavoritesOpen')='True' then
-28040     ! fnfra(program_grid_line,favorite_left,grid_height-1,favorite_width,'Favorites')
-28060     fnfra(dashboard_height+3,favorite_left,favorite_height,favorite_width,'Favorites') :  : frameCount+=1 : fraFavorites=frameCount
+28040     ! fnFra(program_grid_line,favorite_left,grid_height-1,favorite_width,'Favorites')
+28060     fnFra(dashboard_height+3,favorite_left,favorite_height,favorite_width,'Favorites') :  : frameCount+=1 : fraFavorites=frameCount
 28080     dim favorite$(0)*128
 28100     fnFavoriteList(mat favorite$) 
-28120     fnbutton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
+28120     fnButton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
 28140     fnbutton_or_disabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
 28160     fnbutton_or_disabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
 28180     if favoriteDeleteMode$='True' then
-28200       fnlbl(2,1,'Select Favorite to Delete',favorite_width,2,0,fraFavorites)
+28200       fnLbl(2,1,'Select Favorite to Delete',favorite_width,2,0,fraFavorites)
 28220     end if
 28240     for favItem=1 to min(udim(mat favorite$),favorite_height-2)
 28250       fkey_favorite_program_base:=1460
-28260       fnbutton(favItem+2,1,favorite$(favItem),fkey_favorite_program_base+favItem,'',1,favorite_width-1,fraFavorites)
+28260       fnButton(favItem+2,1,favorite$(favItem),fkey_favorite_program_base+favItem,'',1,favorite_width-1,fraFavorites)
 28280     nex favItem
 28300   end if
 28320 fnend
 29000 def fn_dashboard_draw
 29010   if dashboard_height>0 then
 29020     dashboard_width=screen_width-4
-29030     fnfra(1,1,dashboard_height,dashboard_width,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
+29030     fnFra(1,1,dashboard_height,dashboard_width,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
 29032     if enableFavorites then
 29034       fnbutton_or_disabled(env$('FavoritesOpen')<>'True',2,favorite_left,'Favorites',fkey_favorite_open:=1451,'',20,fraDashboard)
 29036     end if
@@ -568,8 +568,8 @@
 29070       fn_ddAddButton('Payee',fkey_cl_payee:=5003,tmpBtnItem+=1,tmp_btn_width)
 29080       fn_ddAddButton('Print Checks',fkey_cl_print_checks:=5002,tmpBtnItem+=1,tmp_btn_width)
 29090     else if env$('cursys')="PR" then
-29100       fnlbl(1,1,'Payroll State:',15,1,0,fraDashboard)
-29110       fnlbl(1,17,fnpayroll_client_state$,4,0,0,fraDashboard)
+29100       fnLbl(1,1,'Payroll State:',15,1,0,fraDashboard)
+29110       fnLbl(1,17,fnpayroll_client_state$,4,0,0,fraDashboard)
 29120       tmp_btn_width=10 : tmpBtnItem=0
 29130       fn_ddAddButton('Checks',fkey_pr_print_checks:=5004,tmpBtnItem+=1,tmp_btn_width)
 29140       fn_ddAddButton('Registers',fkey_pr_payroll_registers:=5003,tmpBtnItem+=1,tmp_btn_width)
@@ -577,16 +577,16 @@
 29160       fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 29170     else if env$('cursys')="GL" then
 29180       library 'S:\Core\Library': fnpedat$
-29190       open #h_tmp:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative ioerr DD_GL_XIT
+29190       open #h_tmp:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr DD_GL_XIT
 29200       read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
 29210       close #h_tmp:
-29220       fnlbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
-29230       fnlbl(1,21,str$(lmu),4,0,0,fraDashboard)
-29240       fnlbl(1,26,'Pay Ending Date:',16,1,0,fraDashboard)
+29220       fnLbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
+29230       fnLbl(1,21,str$(lmu),4,0,0,fraDashboard)
+29240       fnLbl(1,26,'Pay Ending Date:',16,1,0,fraDashboard)
 29250       dim pedat$*20
 29260       pedat$=fnpedat$
 29270       if pedat$='' then pedat$='(not set)'
-29380       fnbutton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnlbl(1,47,fnpedat$,4,0,0,1)
+29380       fnButton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnLbl(1,47,fnpedat$,4,0,0,1)
 29400     DD_GL_XIT: !
 29420       tmp_btn_width=10 : tmpBtnItem=0
 29440       fn_ddAddButton('Accounts',fkey_gl_accounts:=5001,tmpBtnItem+=1,tmp_btn_width,1,'General Ledger Master')
@@ -597,38 +597,38 @@
 29540       end if
 30000     else if env$('cursys')="UB" then
 30010       fnLastBillingDate(d1) : d1$=date$(days(d1,'mmddyy'),'mm/dd/ccyy')
-30020     !           fnlbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon)
-30030       fnlbl(1,1,'Last Billing Date:',18,1,0,1)
-30040       fnlbl(1,20,d1$,4,0,0,1)
+30020     !           fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon)
+30030       fnLbl(1,1,'Last Billing Date:',18,1,0,1)
+30040       fnLbl(1,20,d1$,4,0,0,1)
 30050       if env$("ACSDeveloper")<>"" then
 30060         fkey_change_billing_date=5001
-30070         fnbutton(1,32,'Change',fkey_change_billing_date,'Select a new current Billing Date',1,6,fraDashboard)
+30070         fnButton(1,32,'Change',fkey_change_billing_date,'Select a new current Billing Date',1,6,fraDashboard)
 30080       end if
 30090       tmp_btn_width=11 : tmpBtnItem=0
 30100       fn_ddAddButton('Collections',fkey_ub_collection:=5002,tmpBtnItem+=1,tmp_btn_width)
 30110       fn_ddAddButton('Customer',fkey_ub_customer:=5003,tmpBtnItem+=1,tmp_btn_width)
 30120       if ub_total_ar_on_dashboard$='True' then
-30130         fnlbl(1,40,'Total Accounts Receivable:',26,1,0,1)
-30140         fnlbl(1,68,str$(fntotal_ar),4,0,0,1)
+30130         fnLbl(1,40,'Total Accounts Receivable:',26,1,0,1)
+30140         fnLbl(1,68,str$(fntotal_ar),4,0,0,1)
 30150       end if
 30500     else if env$('cursys')="TM" then
 30510       tmp_btn_width=11 : tmpBtnItem=0
 30520       fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width)
-30530       fnlbl(1,1,'Time Management is for Advanced Computer Services LLC only.',0,0,0,fraDashboard)
+30530       fnLbl(1,1,'Time Management is for Advanced Computer Services LLC only.',0,0,0,fraDashboard)
 30540     end if
 30550     if env$('acsDeveloper')<>'' then
-30560       fnlbl(3,1,'---Developer---',0,0,0,fraDashboard)
-30570       fnlbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
-30571       fnlbl(4,int(dashboard_width/2)+1,'env$(Q): "'&env$('Q')&'"',int(dashboard_width/2)-1,0,0,fraDashboard)
-30572       fnlbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
+30560       fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)
+30570       fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
+30571       fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "'&env$('Q')&'"',int(dashboard_width/2)-1,0,0,fraDashboard)
+30572       fnLbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
 30580     end if
 30590   end if
 30600 fnend
 32000 def fn_display_buttons
-32040   fncmdkey('OK' ,4,1,0,'Press "OK" to launch the selected program')
-32050   fncmdkey('Help' ,1,0,0,'Press "Help" to launch the help page about this program')
-32060   fncmdkey('Properties',3,0,0,'Press "Properties" to view the properties this program')
-32070   fncmdkey('Exit',99,0,1,'Press "Exit" to quit')
+32040   fnCmdKey('OK' ,4,1,0,'Press "OK" to launch the selected program')
+32050   fnCmdKey('Help' ,1,0,0,'Press "Help" to launch the help page about this program')
+32060   fnCmdKey('Properties',3,0,0,'Press "Properties" to view the properties this program')
+32070   fnCmdKey('Exit',99,0,1,'Press "Exit" to quit')
 32080 fnend  ! fn_display_buttons
 34000 def fn_session_reg_read(ls_field_name$*128,&ls_field_value$)
 34020   fn_session_reg_read=fnreg_read(session$&'.'&ls_field_name$,ls_field_value$)

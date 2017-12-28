@@ -1,22 +1,20 @@
 00010 ! (foundone is special for montincello. Take out refereence to foundone on any others,, they have 3 cycles.
-00020   library 'S:\Core\Library': fntop,fnxit, fnacs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fnxit,fncmdset,fntop
+00020   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fnCmdSet,fnget_services
 00030   form pos 1,c 9,skip 0
 00040   fntop("S:\acsUB\balbrkfix",cap$="Fix Balance Breakdown")
 00050   dim dat$*20,ln$*132,sde$*30,cb(13),a$(61)*30,u(61),gb(10),a(7)
 00070 ! :  !
 00080   dim o(2),alloc(10),g(10),answer(10,3)
 00090   dim adr(2),gb(10),tgb(10),a$(61)*30,u(61)
-00100   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
+00100   dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 00110   dim t1$(11)*25,ta(2),t2$(4)*25,io1$(3),dt1(31),dt2(31),cap$*128,txt$*80
 00180   fnopenprn
 00190   gosub SCR1
-00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00210   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00220   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative  !:
-        read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2,pos 261,10*n 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply !:
-        close #20: 
+00220   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply)
 00230   for j=1 to 10
-00240     servicename$(j)=lpad$(rtrm$(servicename$(j)(1:8)),8)
+00240     serviceName$(j)=lpad$(rtrm$(serviceName$(j)(1:8)),8)
 00250   next j
 00260   gosub NWPGE
 00270 L270: read #1,using L280: z$,mat a,bal,mat g,mat gb eof DONE
@@ -77,7 +75,7 @@
 00810 L810: form pos 1,c 10,x 1,12*n 9.2
 00820 L820: goto L270
 00830 NWPGE: ! pr #255: NEWPAGE
-00840   pr #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
+00840   pr #255: "Account    Balance   TotBrk   "&serviceName$(1)(1:8)&" "&serviceName$(2)(1:8)&" "&serviceName$(3)(1:8)&" "&serviceName$(4)(1:8)&" "&serviceName$(5)(1:8)&" "&serviceName$(6)(1:8)&" "&serviceName$(7)(1:8)&" "&serviceName$(8)(1:8)&" "&serviceName$(9)(1:8)&" "&serviceName$(10)(1:8)&" "
 00850   pr #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
 00860   return 
 00870 DONE: fncloseprn
@@ -89,21 +87,21 @@
 00930   goto L800
 00940 SCR1: ! 
 00950   sn$="balbrkfix" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=62 : mypos=50
 00960   txt$="Billing Dates for last three months:" !:
-        fnlbl(1,1,txt$,mylen,1)
+        fnLbl(1,1,txt$,mylen,1)
 00970   for j=1 to 3 !:
-          fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.") !:
+          fnTxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.") !:
           resp$(j)="" !:
         next j
 00980   txt$="Penalty Dates for last three months:" !:
-        fnlbl(5,1,txt$,mylen,1)
+        fnLbl(5,1,txt$,mylen,1)
 00990   for j=1 to 3 !:
-          fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.") !:
+          fnTxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.") !:
           resp$(j+3)="" !:
         next j
-01000   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+01000   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 01010   if ckey=5 then goto XIT
 01020   for j=1 to 6
 01030 L1030: x=pos(resp$(j),"/",1)

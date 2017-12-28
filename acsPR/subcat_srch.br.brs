@@ -2,7 +2,7 @@
 00020 ! search for an valid sub-caterories for this job
 00030 ! ______________________________________________________________________
 00040   def library fnsubcat_srch(&cde$,&ckey;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle,fncmdkey
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*40,resp$(30)*80
@@ -12,7 +12,7 @@
 00120     subcat=1 ! # of subcatergory file in calling program
 00130 ! ______________________________________________________________________
 00140     restore #subcat: 
-00150     fntos(sn$="SubCatSrch")
+00150     fnTos(sn$="SubCatSrch")
 00160     ch$(1)="Sub-Category #" : !:
           ch$(2)="Description" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
@@ -29,12 +29,12 @@
           read #subcat,release: !:
           goto READ_FILE
 00270 ! ______________________________________________________________________
-00280 L280: fncmdkey("&Add",97,0,0,"Add a new sub-category record." ) !:
-          fncmdkey("E&dit",98,1,0,"Access the highlited record") !:
-          fncmdkey("&Delete",96,0,0,"Deletes the highlited record") !:
-          fncmdkey("&Listing",94,0,0,"Print a list of sub-category records") !:
-          fncmdkey("E&xit",5,0,1,"Returns to main menu.")
-00290     fnacs(sn$,0,mat resp$,ckey) !:
+00280 L280: fnCmdKey("&Add",97,0,0,"Add a new sub-category record." ) !:
+          fnCmdKey("E&dit",98,1,0,"Access the highlited record") !:
+          fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") !:
+          fnCmdKey("&Listing",94,0,0,"Print a list of sub-category records") !:
+          fnCmdKey("E&xit",5,0,1,"Returns to main menu.")
+00290     fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     x$=cde$=lpad$(resp$(1),3)
 00310     if ckey=5 then cde$="   " ! no one selected

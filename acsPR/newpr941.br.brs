@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newPR941  ! fix the count (box 1; needs logic to look thru history and count the active employees on a certain date)
 00020 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fntos,fnlbl,fnGetPayrollDates,fnerror,fnopenprn,fncloseprn,fntxt,fnchk,fncmdset,fnacs,fncomboa,fnfra,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fncreg_read,fnpa_txt,fnpa_pic,fnpa_fontsize,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnGetPayrollDates,fnerror,fnopenprn,fncloseprn,fnTxt,fnChk,fnCmdSet,fnAcs,fncomboa,fnFra,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fncreg_read,fnpa_txt,fnpa_pic,fnpa_fontsize,fnDedNames
 00050   fntop(program$,cap$="941 Summary")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -27,61 +27,61 @@
 00320   close #20: 
 00330 ! ______________________________________________________________________
 00340 MENU1: ! 
-00350   fntos(sn$="pr941")
+00350   fnTos(sn$="pr941")
 00352   respc=0
 00360   if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
-00370   fnlbl(1,1,"Tax Year:",26,1)
-00380   fntxt(1,30,4,0,0,"30",0,"")
+00370   fnLbl(1,1,"Tax Year:",26,1)
+00380   fnTxt(1,30,4,0,0,"30",0,"")
 00382   resp$(respc+=1)=str$(taxyear)
 00390   option1$(1)="March 31"
 00400   option1$(2)="June 30"
 00410   option1$(3)="September 30"
 00420   option1$(4)="December 31"
-00430   fnlbl(2,1,"Quarter Ending Date:",26,1)
+00430   fnLbl(2,1,"Quarter Ending Date:",26,1)
 00440   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00450   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then resp$(respc+=1)=option1$(1) ! march filing
 00460   if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 00470   if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 00480   if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-00490   fnchk(3,30,"Print Worksheet:",1) 
+00490   fnChk(3,30,"Print Worksheet:",1) 
 00492   resp$(respc+=1)="True"
-00500   fnfra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
-00510   fnlbl(1,1,"Month 1:",10,1,0,1)
-00520   fntxt(1,13,12,0,1,"10",0,"",1) 
+00500   fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
+00510   fnLbl(1,1,"Month 1:",10,1,0,1)
+00520   fnTxt(1,13,12,0,1,"10",0,"",1) 
 00522   resp$(respc+=1)=""
-00530   fnlbl(2,1,"Month 2:",10,1,0,1)
-00540   fntxt(2,13,12,0,1,"10",0,"",1) !:
+00530   fnLbl(2,1,"Month 2:",10,1,0,1)
+00540   fnTxt(2,13,12,0,1,"10",0,"",1) !:
         resp$(respc+=1)=""
-00550   fnlbl(3,1,"Month 3:",10,1,0,1)
-00560   fntxt(3,13,12,0,1,"10",0,"",1) !:
+00550   fnLbl(3,1,"Month 3:",10,1,0,1)
+00560   fnTxt(3,13,12,0,1,"10",0,"",1) !:
         resp$(respc+=1)=""
-00570   fnfra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
+00570   fnFra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 00580   mylen=52
-00590   fnlbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-00600   fntxt(1,mylen+3,12,0,1,"10",0,"",2) !:
+00590   fnLbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
+00600   fnTxt(1,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00610   fnlbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-00620   fntxt(2,mylen+3,12,0,1,"10",0,"",2) !:
+00610   fnLbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
+00620   fnTxt(2,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00630   fnlbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-00640   fntxt(3,mylen+3,12,0,1,"10",0,"",2) !:
+00630   fnLbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
+00640   fnTxt(3,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00650   fnlbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-00660   fntxt(4,mylen+3,12,0,1,"10",0,"",2) !:
+00650   fnLbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
+00660   fnTxt(4,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00670   fnlbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-00680   fntxt(5,mylen+3,12,0,1,"10",0,"",2) !:
+00670   fnLbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
+00680   fnTxt(5,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00690   fnlbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-00700   fntxt(6,mylen+3,12,0,1,"10",0,"",2) !:
+00690   fnLbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
+00700   fnTxt(6,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00710   fnlbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-00720   fntxt(7,mylen+3,12,0,1,"10",0,"",2) !:
+00710   fnLbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
+00720   fnTxt(7,mylen+3,12,0,1,"10",0,"",2) !:
         resp$(respc+=1)=""
-00730   fnlbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
-00740   fntxt(20,mylen+4,12,0,1,"10",0,"",0) !:
+00730   fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
+00740   fnTxt(20,mylen+4,12,0,1,"10",0,"",0) !:
         resp$(respc+=1)=""
-00750   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00750   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00760   if ck=5 then goto XIT
 00770   taxyear=val(resp$(1)) ! tax year
 00780   if taxyear<2000 then goto L810
@@ -121,8 +121,8 @@
 10000 def fn_start_print
 10020   on pageoflow goto PGOF
 10040   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-10060   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
-10080   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+10060   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+10080   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10100   if frm=2 then gosub WK_HEADER
 10120   L1140: read #2,using L1150: eno,mat em$,ss$,em5,em6 eof WK_END
 10140   L1150: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2

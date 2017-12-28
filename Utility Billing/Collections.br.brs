@@ -1,15 +1,15 @@
 06000 ! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
 06020   fn_setup ! r:
 06040   fntop(program$) ! for now use the settings from Enter Collections for page formatting of reports
-06060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-06080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-06100   open #4: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+06060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+06080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+06100   open #4: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 06120   bud1=0
-06140   open #h_budmstr:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L630
-06160   open #h_budTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+06140   open #h_budmstr:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L630
+06160   open #h_budTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 06180   bud1=1
 06200 L630: ! 
-06220   open #h_ubcolinp:=6: "Name="&collections_filename$,internal,outin,relative ioerr L700
+06220   open #h_ubcolinp:=6: "Name="&collections_filename$,internal,outIn,relative ioerr L700
 06240   if lrec(h_ubcolinp)<1 then 
 06260     mat x=(0)
 06280     transType=postingCodeUnused=0
@@ -19,18 +19,18 @@
 06360   end if 
 06380   goto MENU1B
 06400 L700: ! 
-06420   open #h_ubcolinp:=fngethandle: "Name="&collections_filename$&",RecL=91,Replace", internal,outin,relative 
+06420   open #h_ubcolinp:=fngethandle: "Name="&collections_filename$&",RecL=91,Replace", internal,outIn,relative 
 06440   mat x=(0) : transType=postingCodeUnused=0
 06460   goto MENU1B
 06480 ! /r
 10000 MENU1B: ! r:
 10010   do 
-10020     fntos(sn$="Collections-menu1") : rc=0
+10020     fnTos(sn$="Collections-menu1") : rc=0
 10220     fnflexinit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
 10240     restore #h_ubcolinp: 
 10260     totalacct=0 : totalCollections=totalDebitMemos=totalCreditMemos=0
 10280     do  ! for j=1 to lrec(h_ubcolinp)
-10300       read #h_ubcolinp,using F_ubColInp: x$,transAmount,transDate, transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow eof L1080 norec L1070
+10300       read #h_ubcolinp,using F_ubColInp: x$,transAmount,transDate, transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow eof L1080 noRec L1070
 10320       totalacct+=val(x$) conv ignore
 10360       m1_item$(1)=str$(rec(h_ubcolinp)) ! record
 10380       m1_item$(2)=x$                     ! account
@@ -57,34 +57,34 @@
 10700     loop  ! next j
 10720     L1080: ! /r
 10721     resp_selectedRecordNumber=rc+=1 ! resp$(1) returns the record number of the selected entry
-10722     fnlbl(1,1,"Total Collections:",22,1)
-10724     fnlbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1) 
-10725     ! fntxt(1,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCollections)
-10726     fnlbl(2,1,"Total Credit Memos:",22,1)
-10727     fnlbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1) 
-10728     ! fntxt(2,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCreditMemos)
-10730     fnlbl(3,1,"Total Debit Memos:",22,1)
-10731     fnlbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1) 
-10732     ! fntxt(3,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalDebitMemos)
-10740     fnlbl(4,1,"Total Account Numbers:",22,1)
-10750     fnlbl(4,24,str$(totalacct),15,1) 
-10760     ! fntxt(4,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalacct)
+10722     fnLbl(1,1,"Total Collections:",22,1)
+10724     fnLbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1) 
+10725     ! fnTxt(1,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCollections)
+10726     fnLbl(2,1,"Total Credit Memos:",22,1)
+10727     fnLbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1) 
+10728     ! fnTxt(2,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCreditMemos)
+10730     fnLbl(3,1,"Total Debit Memos:",22,1)
+10731     fnLbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1) 
+10732     ! fnTxt(3,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalDebitMemos)
+10740     fnLbl(4,1,"Total Account Numbers:",22,1)
+10750     fnLbl(4,24,str$(totalacct),15,1) 
+10760     ! fnTxt(4,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalacct)
 10780     if lrec(h_ubcolinp)<1 then 
-10800       fncmdkey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
-10820       fncmdkey("&Close",5,0,1,"Returns to menu.")
+10800       fnCmdKey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
+10820       fnCmdKey("&Close",5,0,1,"Returns to menu.")
 10840     else 
-10860       fncmdkey("&Add",2)
-10880       fncmdkey("E&dit",1,1)
-10890       fncmdkey("Delete",4)
-10900       fncmdkey("&Print",3)
-10940       fncmdkey("&Close",5,0,1,'Return to main menu.\nEntries will not be lost nor will they be posted to accounts.')
-10960       fncmdkey("&Post",10,0,0,'Apply collections to customer records.')
-10980       fncmdkey("Open Drawer",12,0,0,'Open an attached cash drawer')
+10860       fnCmdKey("&Add",2)
+10880       fnCmdKey("E&dit",1,1)
+10890       fnCmdKey("Delete",4)
+10900       fnCmdKey("&Print",3)
+10940       fnCmdKey("&Close",5,0,1,'Return to main menu.\nEntries will not be lost nor will they be posted to accounts.')
+10960       fnCmdKey("&Post",10,0,0,'Apply collections to customer records.')
+10980       fnCmdKey("Open Drawer",12,0,0,'Open an attached cash drawer')
 11000     end if 
 11002 !   if fnclient_has('U5') then
-11004     fncmdkey("Import CSV",14,0,0,'Import Collections CSV')
+11004     fnCmdKey("Import CSV",14,0,0,'Import Collections CSV')
 11008 !   end if
-11020     fnacs(sn$,0,mat resp$,ck1)
+11020     fnAcs(sn$,0,mat resp$,ck1)
 11030     if ck1=5 then 
 11040       goto XIT
 11060     else 
@@ -137,22 +137,22 @@
 16040   if x(3)=0 then x(3)=date('mmddyy') ! date should default to today
 16060   x(2)=0 ! amount collected should default to zero
 16080 ! 
-16100   fntos(sn$="ipcollAddv2")
+16100   fnTos(sn$="ipcollAddv2")
 16120   respc=0
 16140 ! 
-16160   fnlbl(3,1,"Amount:",25,1)
-16180   fntxt(3,27,8,0,0,"32")
+16160   fnLbl(3,1,"Amount:",25,1)
+16180   fnTxt(3,27,8,0,0,"32")
 16200   if ~do_not_blank_rcpt then resp$(respc:=1)=cnvrt$("N 10.2",max(0,bal)) ! str$(x(2))
 16220 ! 
-16240   fnlbl(4,1,"Date (mmddyy):",25,1)
-16260   fntxt(4,27,8,0,0,"1001")
+16240   fnLbl(4,1,"Date (mmddyy):",25,1)
+16260   fnTxt(4,27,8,0,0,"1001")
 16280   if ~do_not_blank_rcpt then resp$(respc:=2)=str$(x(3))
 16300 ! 
-16320   fnlbl(5,1,"Receipt Number (CA=Cash):",25,1)
-16340   fnbutton(5,40,"Cash",7,"(F7) Set Receipt Number to CA (for Cash)")
-16360   fntxt(5,27,9)
+16320   fnLbl(5,1,"Receipt Number (CA=Cash):",25,1)
+16340   fnButton(5,40,"Cash",7,"(F7) Set Receipt Number to CA (for Cash)")
+16360   fnTxt(5,27,9)
 16380 ! 
-16400   fnlbl(1,1,"Entry Type:",25,1)
+16400   fnLbl(1,1,"Entry Type:",25,1)
 16420   if ~do_not_blank_rcpt then resp$(respc:=3)=""
 16440   fncomboa("coll_type_rdc",1,27,mat coll_type_option$)
 16460   if ~do_not_blank_rcpt then 
@@ -162,35 +162,35 @@
 16540     if verify=0 then resp$(respc:=4)=coll_type_option$(1)
 16560   end if 
 16580 ! 
-16600   fnlbl(2,1,"Account:",25,1)
-16620   fntxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
+16600   fnLbl(2,1,"Account:",25,1)
+16620   fnTxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
 16640   if ~do_not_blank_rcpt then resp$(respc:=5)=z$
 16660 ! 
 16680   col3_pos=50 : col4_pos=76
 16700 ! 
-16720   fnlbl(1,col3_pos,"Name:",25,1)
-16740   fntxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
+16720   fnLbl(1,col3_pos,"Name:",25,1)
+16740   fnTxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
 16760   if ~do_not_blank_rcpt then resp$(respc:=6)=trim$(nam$)
 16780 ! 
-16800   fnlbl(2,col3_pos,"Balance:",25,1)
-16820   fntxt(2,col4_pos,10,10,1,"",1,"Account Balance (Press Cancel to Re-Select)")
+16800   fnLbl(2,col3_pos,"Balance:",25,1)
+16820   fnTxt(2,col4_pos,10,10,1,"",1,"Account Balance (Press Cancel to Re-Select)")
 16840   if ~do_not_blank_rcpt then resp$(respc:=7)=cnvrt$("N 10.2",bal)
 16860 ! 
-16880   fnlbl(3,col3_pos,"Billed:",25,1)
-16900   fntxt(3,col4_pos,8,8,1,"1",1)
+16880   fnLbl(3,col3_pos,"Billed:",25,1)
+16900   fnTxt(3,col4_pos,8,8,1,"1",1)
 16920   resp$(respc:=8)=str$(db1)
 16940 ! 
 16960   if uprc$(escrow$)="Y" then 
-16980     fnlbl(4,col3_pos,"Escrow Balance:",25,1)
-17000     fntxt(4,col4_pos,10,10,1,"10",1)
+16980     fnLbl(4,col3_pos,"Escrow Balance:",25,1)
+17000     fnTxt(4,col4_pos,10,10,1,"10",1)
 17020     if ~do_not_blank_rcpt then resp$(respc:=9)=str$(escrowbal)
 17040   end if 
-17060   fncmdkey("&Next",1,1,0,"Complete with this entry.  Move to next record.")
-17080   fncmdkey("&Review Customer Record",8,0,0,"Allows you to review any customer record.")
-17100   fncmdkey("&Notes",3,0,0,"Customer Notes")
-17120   fncmdkey("&Back",2,0,0,"Back up one screen. Select a different customer.")
-17140   fncmdkey("&Cancel",5,0,1,"Return to proof total screen.")
-17160   fnacs(sn$,0,mat resp$,ckey,1)
+17060   fnCmdKey("&Next",1,1,0,"Complete with this entry.  Move to next record.")
+17080   fnCmdKey("&Review Customer Record",8,0,0,"Allows you to review any customer record.")
+17100   fnCmdKey("&Notes",3,0,0,"Customer Notes")
+17120   fnCmdKey("&Back",2,0,0,"Back up one screen. Select a different customer.")
+17140   fnCmdKey("&Cancel",5,0,1,"Return to proof total screen.")
+17160   fnAcs(sn$,0,mat resp$,ckey,1)
 17180 ! 
 17200   do_not_blank_rcpt=0
 17220 ! 
@@ -337,13 +337,13 @@
 22160   if uprc$(trim$(resp$))=uprc$("YES") then let fn_print_listings
 22180   goto MERGE ! /r
 24000 EDIT_REC: ! r:
-24040   read #h_ubcolinp,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow norec MENU1B
+24040   read #h_ubcolinp,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec MENU1B
 24080   nam$=""
 24100   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x$,release: nam$,bal,db1,mat gb,escrowbal nokey ignore
-24120   fntos("Collections-edit")
+24120   fnTos("Collections-edit")
 24140   respc=0
 24160 ! 
-24180   fnlbl(1,1,"Entry Type:",25,1)
+24180   fnLbl(1,1,"Entry Type:",25,1)
 24200   fncomboa("rdc",1,27,mat coll_type_option$)
 24210   resp$(resp_CollType:=respc+=1)=fn_collType$(transType)
 24220   ! if transType=3 then 
@@ -354,38 +354,38 @@
 24320   !   resp$(resp_CollType:=respc+=1)=coll_type_option$(3)
 24340   ! end if 
 24360 ! 
-24380   fnlbl(2,1,"Account:",25,1)
+24380   fnLbl(2,1,"Account:",25,1)
 24400 ! read #h_customer,using "Form POS 41,C 28",key=x$,release: nam$ nokey IGNORE ! <--  it's already read at the top of the screen
 24420   fncmbact(2,27)
 24440   resp$(resp_account:=respc+=1)=x$&"  "&nam$
 24460 ! 
 24480   if uprc$(escrow$)="Y" then transAmount=transAmount+escrow: escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
 24500 ! 
-24520   fnlbl(3,1,"Amount:",25,1)
-24540   fntxt(3,27,8,0,0,"10")
+24520   fnLbl(3,1,"Amount:",25,1)
+24540   fnTxt(3,27,8,0,0,"10")
 24560   resp$(resp_amount:=respc+=1)=str$(transAmount)
 24580 ! 
-24600   fnlbl(4,1,"Date (mmddyy):",25,1)
-24620   fntxt(4,27,8,0,0,"1")
+24600   fnLbl(4,1,"Date (mmddyy):",25,1)
+24620   fnTxt(4,27,8,0,0,"1")
 24640   resp$(resp_transDate:=respc+=1)=str$(transDate)
 24660 ! 
-24680   fnlbl(5,1,"Receipt # (CA=Cash):",25,1)
-24700   fntxt(5,27,9)
+24680   fnLbl(5,1,"Receipt # (CA=Cash):",25,1)
+24700   fnTxt(5,27,9)
 24720   resp$(resp_receiptNumber:=respc+=1)=rcpt$
 24740 ! 
-24760   fnlbl(3,40,"Balance:",25,1)
-24780   fntxt(3,66,12,12,1,"10",1,"Account Balance (Press Cancel to Re-Select)")
+24760   fnLbl(3,40,"Balance:",25,1)
+24780   fnTxt(3,66,12,12,1,"10",1,"Account Balance (Press Cancel to Re-Select)")
 24800   resp$(respc+=1)=cnvrt$("N 12.2",bal)
 24820 ! 
-24840   fnlbl(4,40,"Billed:",25,1)
-24860   fntxt(4,66,8,8,1,"1",1)
+24840   fnLbl(4,40,"Billed:",25,1)
+24860   fnTxt(4,66,8,8,1,"1",1)
 24880   resp$(respc+=1)=str$(db1) 
 24900 ! 
-24920   fncmdkey("&Save",1,1,0,"Saves any changes")
-24940   fncmdkey("&Edit",2,0,0,"Allows you to change the breakdown")
-24960   fncmdkey("&Delete",4,0,0,"Deletes this collection record")
-24980   fncmdkey("&Cancel",5,0,1,"Returns to main collection screen")
-25000   fnacs(sn$,0,mat resp$,ckey)
+24920   fnCmdKey("&Save",1,1,0,"Saves any changes")
+24940   fnCmdKey("&Edit",2,0,0,"Allows you to change the breakdown")
+24960   fnCmdKey("&Delete",4,0,0,"Deletes this collection record")
+24980   fnCmdKey("&Cancel",5,0,1,"Returns to main collection screen")
+25000   fnAcs(sn$,0,mat resp$,ckey)
 25020 ! 
 25040   if ckey=5 then goto L2590
 25060 ! If CKEY=2 Then Goto X
@@ -424,7 +424,7 @@
 26020   r6=0
 26040 MERGE_LOOP_TOP: r6+=1
 26060   if r6>lrec(h_ubcolinp) then goto MERGE_FINIS ! prevent stopping to deleted record and quit when finished
-26080   read #h_ubcolinp,using F_ubColInp,rec=r6: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow norec MERGE_LOOP_TOP
+26080   read #h_ubcolinp,using F_ubColInp,rec=r6: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec MERGE_LOOP_TOP
 26100   if p$(1:2)="  " and transAmount=0 and escrow=0 then goto MERGE_LOOP_TOP
 26120   read #h_customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal nokey MERGE_LOOP_TOP
 26140 ! eSCROW=0   ken 52505
@@ -468,7 +468,7 @@
 28080   read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey L5080
 28100   ta1=badr(1)
 28120 L4820: if ta1=0 then goto L4900
-28140   read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=ta1: z$,mat bt1,nba norec L4900
+28140   read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=ta1: z$,mat bt1,nba noRec L4900
 28160   if bt1(14,1)>0 and bt1(14,1)<>transDate then goto L4890
 28180   if bt1(14,1)=transDate then bt1(14,1)=bt1(14,2)=0 : rewrite #h_budTrans,using "Form POS 11,2*PD 4,24*PD 5.2,2*PD 4",rec=ta1: mat bt1
 28200   bd1+=1 ! 7/06/05  KJ
@@ -479,14 +479,14 @@
 28300   if bd1(1)>0 and bd1(2)=0 then bd3(1)=bd1(1): goto L5030
 28320   mat bd1(bd1)
 28340 ! MATCH_BUDGET_BILLING: !
-28360   fntos(sn$="Collections-budget")
-28380   fnlbl(2,1,"Check the bills to be paid:",30,0)
+28360   fnTos(sn$="Collections-budget")
+28380   fnLbl(2,1,"Check the bills to be paid:",30,0)
 28400   for j=1 to udim(bd1)
 28420     if bd1(j)=0 then goto L4990
-28440     fnchk(j+2,10,cnvrt$("pic(zz/zz/zz)",bd1(j)),0)
+28440     fnChk(j+2,10,cnvrt$("pic(zz/zz/zz)",bd1(j)),0)
 28460 L4990: next j
-28480   fncmdset(2)
-28500   fnacs(sn$,0,mat resp$,ck1)
+28480   fnCmdSet(2)
+28500   fnAcs(sn$,0,mat resp$,ck1)
 28520   if ck1=5 then goto L5080 ! 7/06/05  KJ
 28540 L5030: for j=1 to 5
 28560     if uprc$(resp$(j))=uprc$("True") then bd3(j)=1
@@ -551,23 +551,23 @@
 34300 return  ! /r
 36000 def fn_print_listings
 36020   x$=cnvrt$("pic(######)",transDate)
-36060   ! fntos(sn$="Collections-print2")
+36060   ! fnTos(sn$="Collections-print2")
 36080   ! respc=0
-36100   ! fnfra(1,2,3,37,"Report Type")
-36120   ! fnopt(1,1,"Receipt Listing",0,1)
+36100   ! fnFra(1,2,3,37,"Report Type")
+36120   ! fnOpt(1,1,"Receipt Listing",0,1)
 36140   ! resp$(1)="False"
-36160   ! fnopt(2,1,"Deposit Listing",0,1)
+36160   ! fnOpt(2,1,"Deposit Listing",0,1)
 36180   ! resp$(2)="False"
-36182   ! fnopt(3,1,"Both Receipt and Deposit Listing",0,1)
+36182   ! fnOpt(3,1,"Both Receipt and Deposit Listing",0,1)
 36184   ! resp$(3)="True"
-36186    ! fnlbl(6,1,"Sort Order:",20,1)
+36186    ! fnLbl(6,1,"Sort Order:",20,1)
 36190   ! opt2$(1)="Entry Order"
 36300   ! opt2$(2)="Account"
 36320   ! mat opt2$(2)
 36340   ! fncomboa("Collections_report_so",6,22,mat opt2$)
 36360   ! resp$(4)=opt2$(1)
-36380   ! fncmdset(3)
-36400   ! fnacs(sn$,0,mat resp$,ck1)
+36380   ! fnCmdSet(3)
+36400   ! fnAcs(sn$,0,mat resp$,ck1)
 36420   ! if ck1=5 then goto MENU1B
 36440   if ub_collDisableDepositList$='True' then  ! if uprc$(resp$(1))=uprc$("True") then
 36460    ti1=1
@@ -599,8 +599,8 @@
 40120     write #h_control,using 'Form POS 1,C 128': "Mask 1,11,C,A"
 40140     close #h_control: 
 40160     execute "SORT "&env$('temp')&"\acs\collections_sort_control_s"&session$&".int -n"
-40180     open #h_ubcolinp:=fngethandle: "Name="&collections_filename$,internal,outin,relative 
-40200     open #h_addr:=fngethandle: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outin 
+40180     open #h_ubcolinp:=fngethandle: "Name="&collections_filename$,internal,outIn,relative 
+40200     open #h_addr:=fngethandle: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outIn 
 40220     ! /r
 40240   end if 
 41000   for ti1=ti1_start to ti1_end
@@ -618,7 +618,7 @@
 42160         r5+=1
 42180       end if 
 42200       if r5>lrec(h_ubcolinp) then goto PS_TOTALS
-42220       read #h_ubcolinp,using F_ubColInp,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow conv PS_TOTALS norec PS_LOOP_TOP
+42220       read #h_ubcolinp,using F_ubColInp,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow conv PS_TOTALS noRec PS_LOOP_TOP
 42240       nam$=""
 42260       read #h_customer,using "Form POS 41,C 28,pos 143,pd 2",key=x$,release: nam$,wcode nokey ignore
 42280       if trim$(x$)="" or (transAmount=0 and escrow=0) then goto PS_LOOP_TOP
@@ -718,11 +718,11 @@
 60040     setup=1
 60060  ! ______________________________________________________________________
 60080     library 'S:\Core\Library': fnopenprn,fncloseprn,fnmsgbox,fnflexinit1,fnflexadd1,fndat,fncomboa
-60100     library 'S:\Core\Library': fnremove,fncmbact,fndate_mmddyy_to_ccyymmdd,fnchk,fnCustomerNotes
-60120     library 'S:\Core\Library': fncmdkey,fntop,fncustomer,fngethandle,fnbutton,fnget_services
+60100     library 'S:\Core\Library': fnremove,fncmbact,fndate_mmddyy_to_ccyymmdd,fnChk,fnCustomerNotes
+60120     library 'S:\Core\Library': fnCmdKey,fntop,fncustomer,fngethandle,fnButton,fnget_services
 60140     library 'S:\Core\Library': fnopen_receipt_printer,fnclose_receipt_printer,fnask_account
 60160     library 'S:\Core\Library': fnxit, fnureg_read,fnureg_write,fnsafe_filename$,fnreport_cache_folder_current$
-60180     library 'S:\Core\Library': fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnclient_has,fnCopy,fnreg_read
+60180     library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnCmdSet,fnclient_has,fnCopy,fnreg_read
 60200     on error goto ERTN
 60220   ! ______________________________________________________________________
 60240     dim alloc(10),serviceLabel$(11)*30,order(10),m1_item$(20)*80,srvname$(10)*20
@@ -836,20 +836,20 @@
 68200   dim bd_real(11)
 68220   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2,pos 143,7*pd 2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal,mat a nokey BD_TOS
 68240 BD_TOS: ! 
-68260   fntos(sn$="breakdown")
+68260   fnTos(sn$="breakdown")
 68280   reco=0
-68300   fnlbl(1,1,"Account:",30,1)
-68320   fntxt(1,32,10,0,1,"",1)
+68300   fnLbl(1,1,"Account:",30,1)
+68320   fnTxt(1,32,10,0,1,"",1)
 68340   resp$(reco+=1)=x1$
-68360   fnlbl(2,1,"Customer Name:",30,1)
-68380   fntxt(2,32,30,0,0,"",1)
+68360   fnLbl(2,1,"Customer Name:",30,1)
+68380   fnTxt(2,32,30,0,0,"",1)
 68400   resp$(reco+=1)=trim$(nam$)
-68420   fnlbl(3,1,"Transaction Amount:",30,1)
-68440   fntxt(3,32,10,12,1,"10",1)
+68420   fnLbl(3,1,"Transaction Amount:",30,1)
+68440   fnTxt(3,32,10,12,1,"10",1)
 68460   resp$(reco+=1)=str$(x(2))
-68480   fnlbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
-68500   fnlbl(6,31,"Allocation",10,2)
-68520   fnlbl(6,44,"Balance",10,2)
+68480   fnLbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
+68500   fnLbl(6,31,"Allocation",10,2)
+68520   fnLbl(6,44,"Balance",10,2)
 68540   if bd_re_editmode=1 then 
 68560     bd_re_editmode=0
 68580   else 
@@ -859,29 +859,29 @@
 68660   for j=1 to 10
 68680     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then 
 68700       bd_line_add+=1
-68720       fnlbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
+68720       fnLbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
 68740       resp$(reco+=1)=str$(tgb(bd_line_add))
-68760       fntxt(bd_line_add+6,44,12,0,1,"10",1)
+68760       fnTxt(bd_line_add+6,44,12,0,1,"10",1)
 68780       resp$(reco+=1)=str$(alloc(bd_line_add))
-68800       fntxt(bd_line_add+6,32,12,0,1,"10")
+68800       fnTxt(bd_line_add+6,32,12,0,1,"10")
 68820       bd_real(bd_line_add)=reco
 68840     end if 
 68860   next j
 68880   if uprc$(escrow$)="Y" then 
 68900     bd_line_add=bd_line_add+1
-68920     fnlbl(bd_line_add+6,1,"Escrow:",29,1)
+68920     fnLbl(bd_line_add+6,1,"Escrow:",29,1)
 68940     resp$(reco+=1)=str$(oldescrowbal)
-68960     fntxt(bd_line_add+6,44,12,0,1,"10",1)
+68960     fnTxt(bd_line_add+6,44,12,0,1,"10",1)
 68980     resp$(reco+=1)=str$(escrow)
-69000     fntxt(bd_line_add+6,32,12,0,1,"10")
+69000     fnTxt(bd_line_add+6,32,12,0,1,"10")
 69020     bd_real(bd_line_add)=reco
 69040   end if 
 69060   if csv_import_in_process then 
-69080     fncmdkey("&Save",1,1) : fncmdkey("&Skip",5,0,1)
+69080     fnCmdKey("&Save",1,1) : fnCmdKey("&Skip",5,0,1)
 69100   else 
-69120     fncmdset(6) ! fncmdkey("&Next",1,1) : fncmdkey("&Back",2) : fncmdkey("&Cancel",5,0,1)
+69120     fnCmdSet(6) ! fnCmdKey("&Next",1,1) : fnCmdKey("&Back",2) : fnCmdKey("&Cancel",5,0,1)
 69140   end if 
-69160   fnacs(sn$,0,mat resp$,ckey)
+69160   fnAcs(sn$,0,mat resp$,ckey)
 69180 ! 
 69200   for j=1 to udim(alloc)
 69220     if bd_real(j)<>0 then alloc(j)=val(resp$(bd_real(j))) else alloc(j)=0
@@ -1020,13 +1020,13 @@
 76020   fnureg_read('Collections CSV Import Filename',ecp_filename$)
 76040   ! if ecp_filename$='' then ecp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 76060   EI_SCREEN1: ! 
-76080   fntos(sn$="coll_csv_imp")
-76100   fnlbl(1,1,"Import CSV Path and File Name:",33,1)
-76120   fntxt(1,35,40,256,0,"71")
+76080   fnTos(sn$="coll_csv_imp")
+76100   fnLbl(1,1,"Import CSV Path and File Name:",33,1)
+76120   fnTxt(1,35,40,256,0,"71")
 76140   resp$(1)=ecp_filename$
-76160   ! fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-76180   fncmdset(2)
-76200   fnacs(sn$,0,mat resp$,ckey)
+76160   ! fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
+76180   fnCmdSet(2)
+76200   fnAcs(sn$,0,mat resp$,ckey)
 76220   if ckey=5 then goto EI_XIT
 76240   ecp_filename$=resp$(1)
 76260   ! 
@@ -1315,7 +1315,7 @@
 89000 ! READD: ! r: RE-ADD PROOF TOTALS
 89020 !   for j=1 to lrec(h_ubcolinp)
 89040 !     r5=j
-89060 !     read #h_ubcolinp,using F_ubColInp,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow norec L4690 eof L4700
+89060 !     read #h_ubcolinp,using F_ubColInp,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec L4690 eof L4700
 89080 !     fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 89100 ! L4690: next j
 89120 ! L4700: return  ! /r

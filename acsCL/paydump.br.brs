@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\PayDump
 00020 ! Remove Payee Records
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd,fngethandle
+00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
@@ -14,17 +14,17 @@
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
         close #20: 
 00140   open #trmstr2=22: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&",Shr",internal,input,keyed 
-00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
-00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   fntos(sn$="PayDump") !:
+00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   fnTos(sn$="PayDump") !:
         respc=0 : mylen=21 : mypos=mylen+2
-00190   fnlbl(1,1,"Oldest retained Date:",mylen,right)
-00200   fntxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
+00190   fnLbl(1,1,"Oldest retained Date:",mylen,right)
+00200   fnTxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
         resp$(respc+=1)=str$(date('ccyymmdd')-50000)
-00210   fnlbl(1,46,"",1,1)
-00220   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ckey)
+00210   fnLbl(1,46,"",1,1)
+00220   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT else !:
           olddate=val(resp$(1))
 00240   fnopenprn

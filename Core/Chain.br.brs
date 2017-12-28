@@ -1,13 +1,13 @@
 00010 ! replace S:\Core\chain.br
 00020 ! ______________________________________________________________________
 00030   def library fnchain(prg$*255; no_fnprg_setting,noLog)
-00040     library 'S:\Core\Library': fngetpp,fnlog,fnprg,fnerror,fnmsgbox,fnxit
+00040     library 'S:\Core\Library': fnGetPp,fnlog,fnprg,fnerror,fnmsgbox,fnxit
 00050     on error goto ERTN
 00060 ! 
 00070     dim cap$*128,mss$(4)*128
 00080     dim path$*256,prog$*256
 00090 ! 
-00100     fngetpp(prg$,path$,prog$,ext$)
+00100     fnGetPp(prg$,path$,prog$,ext$)
 00110     if ext$="" then ext$=".br"
 00120 ! display menu : "","",""
 00130 ! pr 'fnChain to '&PATH$&PROG$

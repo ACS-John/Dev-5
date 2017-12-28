@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprOPDReg
 00020 ! Other Pay and Deductions Register
 00030 ! r: setup library, on error, dims, open files, etc
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnprocess,fnDedNames,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnDedNames,fnGetPayrollDates
 00050   on error goto ERTN
 00060 ! 
 00070   dim em$*30,tdc(10),tcp(32),rptemp(25),rptot(25),cap$*128,message$*40
@@ -12,7 +12,7 @@
 00130   fntop(program$,cap$="Other Pay and Deductions Register")
 00140   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 00170   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
-00200   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00200   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00201 ! r: setup mat name$, mat dedname$, numberded1, numberded2
 00202   name$(1)="O/T"
 00203   name$(2)="Other"
@@ -34,15 +34,15 @@
 00219   if fnprocess=1 then goto START_REPORT
 00220 ! /r
 00230 ASK_PAYROLL_DATE: ! r:
-00240   fntos(sn$="OtherPayded") !:
+00240   fnTos(sn$="OtherPayded") !:
         respc=0
-00250   fnlbl(1,1,"",34,1) ! bigger screen
-00260   fnlbl(2,1,"Payroll Date:",20,1)
-00270   fntxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
+00250   fnLbl(1,1,"",34,1) ! bigger screen
+00260   fnLbl(2,1,"Payroll Date:",20,1)
+00270   fnTxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
 00280   resp$(respc+=1)=str$(d1)
-00290   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00300   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00290   fnCmdKey("&Next",1,1,0,"Proceed with importing time." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00300   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 00310   if ckey=5 then goto XIT
 00320   ppd=val(resp$(1))
 00330 ! /r
@@ -51,7 +51,7 @@
 00490   on fkey 5 goto DONE
 00500   fnopenprn
 00510   gosub HDR
-00520   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00520   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00530 L530: read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS
 00535   if fndate_mmddyy_to_ccyymmdd(lastpaydate)<>ppd then goto L530
 00540   mat rptemp=(0): mat tcp=(0)

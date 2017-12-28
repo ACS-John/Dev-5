@@ -2,7 +2,7 @@
 00015 ! Payroll Register
 00020 ! ______________________________________________________________________
 00025 ! r: general setup: libraries, dims, fntop,fncno,read defaults, open files, etc
-00030   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnpayroll_register_2,fncreg_read,fncreg_write,fnchk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
+00030   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnpayroll_register_2,fncreg_read,fncreg_write,fnChk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
 00035   on error goto ERTN
 00040 ! ______________________________________________________________________
 00045   dim em$*30,cp(32),tcp(32),tdc(10),ttdc(10),d$*20
@@ -38,26 +38,26 @@
 00280 ! /r
 00340   if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
 46000 ASK_CHECK_NO: ! r:
-46020   fntos(sn$="Payrollreg1")
+46020   fnTos(sn$="Payrollreg1")
 46040   respc=0
-46060   fnlbl(1,1,"Beginning Check Number:",20,1)
-46080   fntxt(1,23,8,0,1,"30",0," ")
+46060   fnLbl(1,1,"Beginning Check Number:",20,1)
+46080   fnTxt(1,23,8,0,1,"30",0," ")
 46100   resp$(respc+=1)=str$(ckno)
-46120   fnlbl(1,1,"",34,1) ! bigger screen
-46140   fnlbl(2,1,"Payroll Date:",20,1)
-46160   fntxt(2,23,10,0,1,"1",0,"For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.")
+46120   fnLbl(1,1,"",34,1) ! bigger screen
+46140   fnLbl(2,1,"Payroll Date:",20,1)
+46160   fnTxt(2,23,10,0,1,"1",0,"For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.")
 46180   resp$(respc+=1)=str$(ppd)
-46190   fnchk(4,2,'Combine both registers into one multi-page report',50)
+46190   fnChk(4,2,'Combine both registers into one multi-page report',50)
 46192   resp$(resp_append_reg1:=respc+=1)=append_reg1$
 46200   if env$('ACSDeveloper')<>'' then ! option under development for West Accounting... held until they decide if they actually want/nedd this - currently causes mismatch (in their cno 18) in other_wh in 1st and 2nd PR Registers
-46202     fnchk(6,2,'Include Tips in Other Withholdings',50)
+46202     fnChk(6,2,'Include Tips in Other Withholdings',50)
 46204     resp$(resp_include_tips_in_other_wh:=respc+=1)=include_tips_in_other_wh$
 46206   else 
 46208     resp$(resp_include_tips_in_other_wh:=respc+=1)='False'
 46210   end if 
-46240   fncmdkey("&Next",1,1,0,"Proceed with pr the payroll register." )
-46260   fncmdkey("E&xit",5,0,1,"Returns to menu")
-48000   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+46240   fnCmdKey("&Next",1,1,0,"Proceed with pr the payroll register." )
+46260   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+48000   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 48020   if ckey=5 then goto XIT
 48040   ckno=val(resp$(1))
 48060   ppd=val(resp$(2))

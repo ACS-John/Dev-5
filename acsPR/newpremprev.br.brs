@@ -2,7 +2,7 @@
 00020 ! Employee Review Register
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror
-00042   library 'S:\Core\Library': fntos,fnlbl,fntxt,fncmdset,fnacs,fnGetPayrollDates
+00042   library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates
 00050   on error goto ERTN
 00060 ! gosub CHECK_PASSWORD
 00070 ! ______________________________________________________________________
@@ -15,16 +15,16 @@
 00150   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 00180 ! ______________________________________________________________________
 00190 MENU1: ! 
-00200   fntos(sn$="premprev")
+00200   fnTos(sn$="premprev")
 00202   respc=0
-00210   fnlbl(1,47," ",1,1)
-00220   fnlbl(1,1,"Beginning Date of Tax Year:",30,1)
-00230   fntxt(1,34,12,0,0,"3",0,"") 
+00210   fnLbl(1,47," ",1,1)
+00220   fnLbl(1,1,"Beginning Date of Tax Year:",30,1)
+00230   fnTxt(1,34,12,0,0,"3",0,"") 
 00232   resp$(respc+=1)=str$(beg_date)
-00240   fnlbl(2,1,"Last Payroll Date to Analyze:",30,1)
-00250   fntxt(2,34,12,0,0,"3",0,"") 
+00240   fnLbl(2,1,"Last Payroll Date to Analyze:",30,1)
+00250   fnTxt(2,34,12,0,0,"3",0,"") 
 00252   resp$(respc+=1)=str$(end_date)
-00260   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00260   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   beg_date=val(resp$(1)) ! beginning of year
 00300   end_date=val(resp$(2)) ! ending day of year
@@ -34,8 +34,8 @@
 00340 ! ______________________________________________________________________
 00350   gosub HDR
 00360   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00370   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
-00380   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00370   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
+00380   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00390 L390: read #1,using L430: eno,em$,em4,mat em eof DONE
 00400   a=pos (rtrm$(em$)," ",1)
 00410   b=pos (rtrm$(em$)," ",a+1)
@@ -106,16 +106,16 @@
 01080 XIT: fnxit
 01090 ! ______________________________________________________________________
 01100 ! CHECK_PASSWORD: ! 
-01110 !   library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fncmdkey,fncmdset
+01110 !   library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnCmdKey,fnCmdSet
 01120 !   return ! if env$('client')="Washington Parrish" then goto L1130 else return 
 01130 ! L1130: if wsid$="09" or wsid$="99" then return 
-01140 ! L1140: fntos(sn$="WpTrap") !:
+01140 ! L1140: fnTos(sn$="WpTrap") !:
       !   respc=0 : mylen=25 : mypos=mylen+2
-01150 !   fnlbl(1,1,"         Quit!      ",mylen,2)
-01160 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
-01170 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
-01180 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
+01150 !   fnLbl(1,1,"         Quit!      ",mylen,2)
+01160 !   fnLbl(2,1,"Stay out of Payroll!",mylen,2)
+01170 !   fnLbl(3,1,"Call Brenda for Password",mylen,2)
+01180 !   fnTxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
       !   resp$(respc+=1)=""
-01190 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
-01200 !   fnacs(sn$,0,mat resp$,ckey)
+01190 !   fnCmdKey("E&xit",5,1,1,"Returns to menu")
+01200 !   fnAcs(sn$,0,mat resp$,ckey)
 01210 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1140

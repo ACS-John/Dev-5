@@ -1,6 +1,6 @@
 10000 ! replace S:\acsUB\sewerstats.br
 10010 ! Calculates average customers billed and average sewer charges over a given time period
-10020   library "S:\Core\Library": fncno,fntop,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnxit,fngethandle
+10020   library "S:\Core\Library": fncno,fntop,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnxit,fngethandle
 10030   dim cnam$*40,resp$(2)*40,z$*10,a$*10,transkey$*19,dt(1),chg(1),ccnt(1),cycle(1,1),cyclecnt(1),avg(2,1),txt$*23
 10040   fn_main
 10050   def fn_main
@@ -12,17 +12,17 @@
 10110     fn_closefiles
 10120   fnend 
 10130   def fn_getrange
-10140     fntos("sewerstats-1")
-10150     fnfra(1,1,3,40,"Date Range for Statistics","Enter the range of dates for which you want to calculate sewer charge statistics")
-10160     fnlbl(1,1,"Beginning Date:",22,1,0,1)
-10170     fntxt(1,25,12,0,1,"3",0,"Enter the date of the first billing cycle to be included. ",1)
+10140     fnTos("sewerstats-1")
+10150     fnFra(1,1,3,40,"Date Range for Statistics","Enter the range of dates for which you want to calculate sewer charge statistics")
+10160     fnLbl(1,1,"Beginning Date:",22,1,0,1)
+10170     fnTxt(1,25,12,0,1,"3",0,"Enter the date of the first billing cycle to be included. ",1)
 10180     resp$(1)=str$(date("mmddyy")-3)
-10190     fnlbl(2,1,"Ending Date:",22,1,0,1)
-10200     fntxt(2,25,12,0,1,"3",0,"Enter the date of the last billing cycle to be included. ",1)
+10190     fnLbl(2,1,"Ending Date:",22,1,0,1)
+10200     fnTxt(2,25,12,0,1,"3",0,"Enter the date of the last billing cycle to be included. ",1)
 10210     resp$(2)=str$(date("mmddyy"))
-10220     fncmdkey("Next",1,1,0,"Calculate sewer statistics.")
-10230     fncmdkey("Cancel",5,0,1,"Returns to menu.")
-10240     fnacs("sewerstats-1",0,mat resp$,ckey)
+10220     fnCmdKey("Next",1,1,0,"Calculate sewer statistics.")
+10230     fnCmdKey("Cancel",5,0,1,"Returns to menu.")
+10240     fnAcs("sewerstats-1",0,mat resp$,ckey)
 10250     if ckey=5 then let fnxit
 10260     d1=val(resp$(1)) : d2=val(resp$(2)) : yrend=d1+10000 : yrcnt=1
 10270     do while yrend<d2
@@ -71,10 +71,10 @@
 10700   def fn_showresults
 10710     lncnt=2+yrcnt
 10720     fntop("S:\acsUB\sewerstats2","Sewer Statistics")
-10730     fntos("sewerstats-2")
-10740     fnlbl(1,1,"Date Range:",19)
-10750     fnlbl(1,22,"Avg. Bills Per Cycle:",23)
-10760     fnlbl(1,47,"Avg. Bill:",12)
+10730     fnTos("sewerstats-2")
+10740     fnLbl(1,1,"Date Range:",19)
+10750     fnLbl(1,22,"Avg. Bills Per Cycle:",23)
+10760     fnLbl(1,47,"Avg. Bill:",12)
 10770     open #(h_prn:=fngethandle): "Name="&env$('Q')&"\UBmstr\Sewerstats"&wsid$&".txt,Replace,RecL=5000",display,output 
 10780     pr #h_prn: 'Call Print.MyOrientation("Portrait")'
 10790     pr #h_prn: 'Call Print.MyFontSize(14)'
@@ -88,16 +88,16 @@
 10870     for j = 1 to udim(avg,2)
 10880       if j=1 then dtstart=d1 else dtstart=dt(j-1)+1
 10890       if j=udim(avg,2) then txt$="Total Avg" else txt$=str$(dtstart)&"-"&str$(dt(j))
-10900       fnlbl(j+1,1,txt$,19)
-10910       fnlbl(j+1,22,str$(avg(1,j)),23)
-10920       fnlbl(j+1,47,str$(avg(2,j)),12)
+10900       fnLbl(j+1,1,txt$,19)
+10910       fnLbl(j+1,22,str$(avg(1,j)),23)
+10920       fnLbl(j+1,47,str$(avg(2,j)),12)
 10930       pr #h_prn: 'Call Print.AddText("'&txt$&'",10,'&str$(20+j*7)&')'
 10940       pr #h_prn: 'Call Print.AddText("'&str$(avg(1,j))&'",50,'&str$(20+j*7)&')'
 10950       pr #h_prn: 'Call Print.AddText("$'&trim$(cnvrt$("NZ 10.2",avg(2,j)))&'",120,'&str$(20+j*7)&')'
 10960     next j
-10970     fncmdkey("Print",2,0,0,"Print these statistics.")
-10980     fncmdkey("Done",1,1,0,"Return to menu.")
-10990     fnacs("sewerstats-1",0,mat resp$,ckey)
+10970     fnCmdKey("Print",2,0,0,"Print these statistics.")
+10980     fnCmdKey("Done",1,1,0,"Return to menu.")
+10990     fnAcs("sewerstats-1",0,mat resp$,ckey)
 11000     pr #h_prn: 'Call Print.EndDoc'
 11010     if ckey=2 then execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$('UBmstr\Sewerstats"&wsid$&".txt"') ! "sy -W -C S:\Core\PrAce UBmstr\Sewerstats"&wsid$&".txt"
 11020   fnend 

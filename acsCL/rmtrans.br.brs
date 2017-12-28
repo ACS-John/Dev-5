@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\RmTrans
 00020 ! Remove Transactions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
@@ -13,23 +13,23 @@
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outin,keyed 
-00140   open #work1:=2: "Name="&env$('Q')&"\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outin,relative 
+00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outIn,keyed 
+00140   open #work1:=2: "Name="&env$('Q')&"\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative 
 00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&env$('cno'),internal,input,keyed 
-00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
-00170   fntos(sn$='RmTrans-'&str$(rcn)) !:
+00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative 
+00170   fnTos(sn$='RmTrans-'&str$(rcn)) !:
         mylen=21 : mypos=mylen+2 : lc=0
-00180   fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
-00190   fntxt(lc,mypos,10,0,0,'1003') !:
+00180   fnLbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
+00190   fnTxt(lc,mypos,10,0,0,'1003') !:
         resp$(1)=str$(date('ccyymmdd')-50000)
 00200   lc+=1
 00210   if rcn=1 then !:
-          fnlbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
+          fnLbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
 00220   if rcn><1 then !:
-          fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
-00230   fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
-00240   fncmdset(2)
-00250   fnacs(sn$,0,mat resp$,ckey)
+          fnLbl(lc+=1,1,"All transactions with a",mylen*2,center)
+00230   fnLbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
+00240   fnCmdSet(2)
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
           rd1=val(resp$(1))
 00270 ! fnwait

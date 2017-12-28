@@ -35,7 +35,7 @@
 10460     acshelp$="Help\co\error\br\"
 10480     acshelp$=acshelp$&"Err"&cnvrt$("Pic(####)",errornumber)&".html"
 12000 MENU1: ! 
-12020     open #win:=fngethandle: "SRow=4,SCol=4,Rows=17,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...   
+12020     open #win:=fngethandle: "SRow=4,SCol=4,Rows=17,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outIn  ! ,border=Sr   ...   
 12040     if errornumber=61 then 
 12060       pr #win,fields "1,1,Cc 69,N": "A record is needed but is locked by another user."
 12080       pr #win,fields "2,1,Cc 69,N": "Please ask other users to return to the Menu and"

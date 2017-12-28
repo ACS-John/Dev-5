@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   fntop(program$,"Fix Reference Numbers")
 00110   fncno(cno)
-00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00130   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00140   fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
 00150   fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
@@ -20,7 +20,7 @@
 00200   on fkey 5 goto XIT
 00210   pr newpage
 00220   close #2: ioerr L230
-00230 L230: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(6)&"&.h1,KFName="&env$('Q')&"\GLmstr\"&idx$(6)&".h1",internal,outin,keyed 
+00230 L230: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(6)&"&.h1,KFName="&env$('Q')&"\GLmstr\"&idx$(6)&".h1",internal,outIn,keyed 
 00240 L240: read #1,using L250: dno,ano,sno,d$,mat rf eof L350
 00250 L250: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
 00260   restore #2: 

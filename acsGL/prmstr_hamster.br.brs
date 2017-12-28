@@ -1,7 +1,7 @@
 10000 ! "Replace "&program$
 10200 ! another Hamster
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+10600   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim cap$*128
@@ -12,13 +12,13 @@
 12200   fn_build_layout
 12400   fn_open_file : fn_close_file : fn_open_file
 12600   if sum(mat sp)=0 then mat sp(0)
-12800   fnhamster("PRmstr",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+12800   fnHamster("PRmstr",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 13000   fn_close_file
 13200   goto XIT
 13400 ! ______________________________________________________________________
 13600   def fn_open_file
 13800     open_file_count=0 ! this value is used in the close_file sub routine
-14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 14200   fnend 
 14400   def fn_close_file
 14600     for j=1 to open_file_count : close #j: : next j

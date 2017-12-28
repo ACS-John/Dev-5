@@ -2,7 +2,7 @@
 00020 ! search for an job numbers
 00030 ! ______________________________________________________________________
 00040   def library fnjob_srch(&jn$;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(4)*40,resp$(30)*80
@@ -13,7 +13,7 @@
 00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jcmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\jcIndx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
-00130     fntos(sn$="JobSrch")
+00130     fnTos(sn$="JobSrch")
 00140     ch$(1)="Job #" : ch$(2)="Job Name" : ch$(3)="Address" !:
           ch$(4)="City, ST Zip" !:
           mat ch$(4) : mat cm$(4) : mat cm$=("4")
@@ -35,7 +35,7 @@
           goto READ_FILE
 00270 ! ______________________________________________________________________
 00280 L280: if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING job files
-00290     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
+00290     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     jn$=lpad$(resp$(1),6)
 00310     if ckey=5 then jn$="      " ! no one selected

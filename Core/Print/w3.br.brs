@@ -12,7 +12,7 @@
 20000 def fn_setup
 20020   if ~setup then
 20040     setup=1
-20060     library 'S:\Core\Library': fntop,fnxit,fnchain,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnopt,fnmsgbox,fnchk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnbutton,fncmdset,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
+20060     library 'S:\Core\Library': fntop,fnxit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
 20080     fnreg_read('W-3 Enable background'              ,enableBackground$   ,'True' )
 20160   end if
 20180 fnend

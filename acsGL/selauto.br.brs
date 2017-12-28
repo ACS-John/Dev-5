@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\SelAuto
 00020 ! Select Automatic Processing Programs
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntos,fnflexinit1,fnflexadd1,fncmdkey,fnacs,fntxt,fnlbl,fnclient_has,fnfree
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnTos,fnflexinit1,fnflexadd1,fnCmdKey,fnAcs,fnTxt,fnLbl,fnclient_has,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
@@ -14,25 +14,25 @@
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Select Programs")
 00160   fncno(cno)
-00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative ioerr L190
+00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outIn,relative ioerr L190
 00180   goto L210
 00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')) >0 then let fnFree(env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno'))
-00200   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative ioerr MAIN
+00200   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outIn,relative ioerr MAIN
 00210 L210: if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
 00220   for j=1 to lrec(1)
-00230     read #1,using L1690: nxtpgm$(j),nxtdesc$(j),pn(j),cp(j),prim(j),srq(j) norec L240
+00230     read #1,using L1690: nxtpgm$(j),nxtdesc$(j),pn(j),cp(j),prim(j),srq(j) noRec L240
 00240 L240: next j
 00250   form pos 1,c 20,c 35,n 3,3*n 1
 00260   close #1: 
 00270 MAIN: ! 
-00280 L280: fntos(sn$="GLInput") !:
+00280 L280: fnTos(sn$="GLInput") !:
         mylen=20: mypos=mylen+3 : right=1
 00290   item=0: resp=0
-00300   fnlbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
+00300   fnLbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
 00310   for j=1 to 20
-00320     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
+00320     fnTxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
           resp$(resp+=1)=nxtdesc$(j)
-00330     fntxt(j+1,39,1,0,right,"",0,"Should the primary or secondary format be used?",0 )
+00330     fnTxt(j+1,39,1,0,right,"",0,"Should the primary or secondary format be used?",0 )
 00340     if prim(j)=0 then prim(j)=1
 00350     resp$(resp+=1)=str$(prim(j))
 00360   next j
@@ -77,12 +77,12 @@
         item$(2)=desc$ !:
         fnflexadd1(mat item$)
 00680   goto L560
-00690 L690: fnlbl(22,1," ")
-00700 L700: fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
-00710   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
-00720   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
-00730   fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
-00740   fnacs(sn$,0,mat resp$,ckey)
+00690 L690: fnLbl(22,1," ")
+00700 L700: fnCmdKey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
+00710   fnCmdKey("&Save",2,0,0,"Saves the selections and returns to menu.")
+00720   fnCmdKey("&Delete All",4,0,0,"Deletes all selections.")
+00730   fnCmdKey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
+00740   fnAcs(sn$,0,mat resp$,ckey)
 00750   if ckey=5 then goto XIT
 00760   if ckey=2 then goto L860
 00770   if ckey=4 then mat nxtdesc$=(""): !:
@@ -177,7 +177,7 @@
 01630   form pos 1,c 20,c 35,n 3,3*n 1
 01640 L1640: execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')
 01650   close #1: ioerr ignore
-01660   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative 
+01660   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outIn,relative 
 01670   for j1=1 to 20 !:
           if j1>lrec(3) then write #1,using L1690: nxtpgm$(j1),nxtdesc$(j1),pn(j1),cp(j1),prim(j1),srq(j1)
 01680   next j1

@@ -2,7 +2,7 @@
 00020 ! Attorney file !:
         ! with dynamic editor 1.0
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   fntop(program$,cap$="Race")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -12,8 +12,8 @@
 00110   lbl$(1)="Race"
 00120   fln(1)=18
 00130   mask(1)=2000
-00140   open #1: "Name=S:\Core\Data\Race.dat,RecL=18,Use,Shr",internal,outin,relative 
-00150   fnhamster("Race",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00140   open #1: "Name=S:\Core\Data\Race.dat,RecL=18,Use,Shr",internal,outIn,relative 
+00150   fnHamster("Race",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160 XIT: fnxit
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

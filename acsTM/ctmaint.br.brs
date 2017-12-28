@@ -1,14 +1,14 @@
 00020 ! 
 00030   on error goto L410
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00050   fntop(program$,cap$="Category")
 00060   fncno(cno,cnam$)
 00070   dim a$(30)*30,fli$(30),flo$(32),hd$(2)*40,b$(30)*2
 00080   pr newpage
 00090   pr f "10,20,c 30,h,n": "CHANGE CATEGORIES IN PROCESS"
-00100   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,outin,relative ioerr L120
+00100   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L120
 00110   goto L140
-00120 L120: open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Replace,RecL=900",internal,outin,relative ioerr L410
+00120 L120: open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Replace,RecL=900",internal,outIn,relative ioerr L410
 00130   write #1,using L370,rec=1: mat a$
 00140 L140: read #1,using L370,rec=1: mat a$ ioerr L410
 00150   for j=1 to 10

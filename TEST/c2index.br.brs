@@ -1,8 +1,8 @@
 00010 ! Replace Test\C2Index
 00020   dim c$*40,keyform$*80,blank$(10)
-00030   open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
+00030   open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
 00040   close #fin: 
-00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
+00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
 00060   write #fin,using keyform$="Form Pos 1,C 2,Pos 3,C 2": mat blank$
 00070 ! Read #FIN,Key=KEY$: !:
         editrec=rec(fin)
@@ -12,7 +12,7 @@
 00110 ! Release #FIN:
 00120   close #fin: 
 00121 ! Execute 'Index Temp.dat Temp.idx 1/3 2/2 Replace,DupKeys'
-00130   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outin,keyed 
+00130   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outIn,keyed 
 00140   key$=rpad$(str$(8),2)&rpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,C 2,C 2,C 40',key=key$,reserve: a$,b$,c$ !:
         ! br 4.03jy gives and error 4272 on this line !:

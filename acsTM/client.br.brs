@@ -1,7 +1,7 @@
 20000 ! Replace S:\acsTM\Client
 20100 ! TM Client - Hamster
 20200 ! ______________________________________________________________________
-20300   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
+20300   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
 20400   on error goto ERTN
 20500 ! ______________________________________________________________________
 20600   dim cap$*128
@@ -17,8 +17,8 @@
 21800 ! ______________________________________________________________________
 21900   def fn_open_file
 22000     open_file_count=0 ! this value is used in the close_file sub routine
-22100     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outin,keyed 
-22200     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outin,keyed 
+22100     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+22200     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
 22300   fnend 
 22400   def fn_close_file
 22500     for cf_h_item=1 to open_file_count
@@ -72,7 +72,7 @@
 27300   fnend 
 27400 ! ______________________________________________________________________
 27500 HAMSTER: ! 
-27600   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+27600   fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 27700   return 
 27800 ! ______________________________________________________________________
 27900 XIT: fnxit

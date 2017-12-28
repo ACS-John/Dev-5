@@ -6,8 +6,8 @@
 00060 L60: input fields "10,55,N 2,UE,N": cno conv L60
 00070   if cno=0 then stop 
 00080 ! 
-00090   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outin 
-00100   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outin,relative 
+00090   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outIn 
+00100   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outIn,relative 
 00110 L110: read #trmstr,using 'Form POS 1,N 2,N 1,C 8,POS 79,2*PD 3': bank_code,tcde,ck$,mat tr eof END1
 00120 ! IF Bank_Code><4 THEN GOTO 120
 00130 ! IF TCDE><1 THEN GOTO 120

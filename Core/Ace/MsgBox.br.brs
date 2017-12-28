@@ -1,5 +1,5 @@
 10000   def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
-10020     library 'S:\Core\Library': fnerror,fntos,fnlbl,fncmdkey,fnacs
+10020     library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnCmdKey,fnAcs
 10040     on error goto ERTN
 10060     if env$('exitnow')='yes' then let setenv('exitnow','cancelled by fnmsgbox')
 10080     if cap$='' then cap$=env$('Program_Caption')
@@ -88,9 +88,9 @@
 32520   fnend 
 60000   def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 60020     mat_mg_len=0 : for j=1 to udim(mat mg$) : mat_mg_len+=len(mg$(j)) : next j
-60040     fntos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
+60040     fnTos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
 60060     for mg_item=1 to udim(mat mg$)
-60080       fnlbl(mg_item,1,mg$(mg_item))
+60080       fnLbl(mg_item,1,mg$(mg_item))
 60100     next mg_item
 60120     mat btn_default=(0)
 60140     if mt=>768 then mt-=768 : btn_default(4)=1
@@ -102,26 +102,26 @@
 60260     if mt=>032 then mt-=032 ! 
 60280     if mt=>016 then mt-=016 ! (X) Critical
 60300     if mt=5 then ! retry/cancel
-60320       fncmdkey("&Retry",4)
-60340       fncmdkey("&Cancel",99,btn_default(2),1)
+60320       fnCmdKey("&Retry",4)
+60340       fnCmdKey("&Cancel",99,btn_default(2),1)
 60360     else if mt=4 then ! yes/no
-60380       fncmdkey("&Yes",6)
-60400       fncmdkey("&No",7,btn_default(2))
+60380       fnCmdKey("&Yes",6)
+60400       fnCmdKey("&No",7,btn_default(2))
 60420     else if mt=3 then ! yes/no/cancel
-60440       fncmdkey("&Yes",6)
-60460       fncmdkey("&No",7,btn_default(2))
-60480       fncmdkey("&Cancel",99,btn_default(3),1)
+60440       fnCmdKey("&Yes",6)
+60460       fnCmdKey("&No",7,btn_default(2))
+60480       fnCmdKey("&Cancel",99,btn_default(3),1)
 60500     else if mt=2 then ! abort/retry/ignore
-60520       fncmdkey("&Abort",3)
-60540       fncmdkey("&Retry",4,btn_default(2))
-60560       fncmdkey("&Ignore",5,btn_default(3))
+60520       fnCmdKey("&Abort",3)
+60540       fnCmdKey("&Retry",4,btn_default(2))
+60560       fnCmdKey("&Ignore",5,btn_default(3))
 60580     else if mt=1 then ! ok/cancel
-60600       fncmdkey("&Ok",1)
-60620       fncmdkey("&Cancel",99,btn_default(2),1)
+60600       fnCmdKey("&Ok",1)
+60620       fnCmdKey("&Cancel",99,btn_default(2),1)
 60640     else if mt=0 then ! ok
-60660       fncmdkey("&Ok",1,1,1)
+60660       fnCmdKey("&Ok",1,1,1)
 60680     end if 
-60700     fnacs(sn$,0,mat resp$,ckey,0,0,1,1)
+60700     fnAcs(sn$,0,mat resp$,ckey,0,0,1,1)
 60720     if ckey=1 then response$="OK"
 60740     if ckey=99 then response$="Cancel"
 60760     if ckey=3 then response$="Abort"

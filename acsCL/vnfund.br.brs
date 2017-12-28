@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\VnFund
 00020 ! pr Vendor Fund Listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,p$(20)*50
@@ -11,27 +11,27 @@
 00110   fntop(program$, cap$="Payee Fund Listing")
 00120   cancel=99
 00130 ! ______________________________________________________________________
-00140   fntos(sn$="vnfund") !:
+00140   fnTos(sn$="vnfund") !:
         respc=0
-00150   fnlbl(1,40,"",1,1)
-00160   fnlbl(1,1,"Starting Date:",25,1)
-00170   fntxt(1,27,8,0,1,"1") !:
+00150   fnLbl(1,40,"",1,1)
+00160   fnLbl(1,1,"Starting Date:",25,1)
+00170   fnTxt(1,27,8,0,1,"1") !:
         resp$(respc+=1)=""
-00180   fnlbl(2,1,"Ending Date:",25,1)
-00190   fntxt(2,27,8,0,1,"1") !:
+00180   fnLbl(2,1,"Ending Date:",25,1)
+00190   fnTxt(2,27,8,0,1,"1") !:
         resp$(respc+=1)=""
-00200   fnlbl(3,1,"Minimum Amount to Print:",25,1)
-00210   fntxt(3,27,10,0,1,"10") !:
+00200   fnLbl(3,1,"Minimum Amount to Print:",25,1)
+00210   fnTxt(3,27,10,0,1,"10") !:
         resp$(respc+=1)=""
-00220   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00220   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   in1(1)=val(resp$(1))
 00250   in1(2)=val(resp$(2))
 00260   in1(3)=val(resp$(3))
-00270   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-00280   open #trmstr1=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-00290   open #trmstr2=2: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
-00300   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00270   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00280   open #trmstr1=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00290   open #trmstr2=2: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00300   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00310   fnopenprn
 00320   gosub HDR
 00330 READ_TRMSTR2: ! 

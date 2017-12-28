@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\BudWksh
 00020 ! pr Budget Worksheet
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnqgl,fnchk,fncmdset,fnacs,fnagl$,fnrgl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnqgl,fnChk,fnCmdSet,fnAcs,fnagl$,fnrgl$,fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
@@ -14,36 +14,36 @@
 00140   gosub DETERMINE_DATE
 00150   on fkey 5 goto L760
 00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00170   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
+00170   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
 00180   if fnprocess=1 then goto L440
 00190 ! defaults !:
         pba$='False' : bud$="False"
 00200 SCREEN1: ! 
-00210   fntos(sn$='BudgetWksht') !:
+00210   fnTos(sn$='BudgetWksht') !:
         lc=0 : mylen=40 : mypos=mylen+2
-00220   fnlbl(lc+=1,1,'Fund:',mylen,right)
-00230   fntxt(lc,mypos,40) !:
+00220   fnLbl(lc+=1,1,'Fund:',mylen,right)
+00230   fnTxt(lc,mypos,40) !:
         resp$(1)=name$
-00240   fnlbl(lc+=1,1,'Starting Account:',mylen,right)
+00240   fnLbl(lc+=1,1,'Starting Account:',mylen,right)
 00250   fnqgl(lc,mypos) !:
         resp$(2)=fnrgl$(gln1$)
-00260   fnlbl(lc+=1,1,'Ending Account:',mylen,right)
+00260   fnLbl(lc+=1,1,'Ending Account:',mylen,right)
 00270   fnqgl(lc,mypos) !:
         resp$(3)=fnrgl$(gln2$)
-00280   fnchk(lc+=1,mypos,'Enter proposed budget amounts',right) !:
+00280   fnChk(lc+=1,mypos,'Enter proposed budget amounts',right) !:
         resp$(4)=pba$
-00290   fnchk(lc+=1,mypos,'Revised Budget instead of Origional',right) !:
+00290   fnChk(lc+=1,mypos,'Revised Budget instead of Origional',right) !:
         resp$(5)=bud$
-00300   fnlbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
-00310   fntxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") !:
+00300   fnLbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
+00310   fnTxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") !:
         resp$(6)=str$(priordate) ! previous year end
-00320   fnlbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
-00330   fntxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") !:
+00320   fnLbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
+00330   fnTxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") !:
         resp$(7)=str$(priorpriordate) ! two years ago
-00340   fnchk(lc+=1,mypos,"Year Already Closed:",right)
+00340   fnChk(lc+=1,mypos,"Year Already Closed:",right)
 00350   resp$(8)="False"
-00360   fncmdset(3)
-00370   fnacs(sn$,0,mat resp$,ckey)
+00360   fnCmdSet(3)
+00370   fnAcs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   name$=resp$(1) !:
         gln1$=fnagl$(resp$(2)) !:
@@ -136,16 +136,16 @@
 01210 ! ______________________________________________________________________
 01220 PRINT_MASTER_RECORD: ! 
 01230   if pba$="True" then 
-01240     fntos(sn$='Budwksh-add-ba') !:
+01240     fnTos(sn$='Budwksh-add-ba') !:
           lc=0 : mylen=50 : mypos=mylen+2
-01250     fnlbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
+01250     fnLbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
 01260     lc+=1
-01270     fnlbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
-01280     fntxt(lc,mypos,12,0,0,'currency') !:
+01270     fnLbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
+01280     fnTxt(lc,mypos,12,0,0,'currency') !:
           resp$=''
-01290     fnlbl(lc+=1,1,d$,mylen,right)
-01300     fncmdset(3)
-01310     fnacs(sn$,0,mat resp$,ckey)
+01290     fnLbl(lc+=1,1,d$,mylen,right)
+01300     fnCmdSet(3)
+01310     fnAcs(sn$,0,mat resp$,ckey)
 01320     if ckey=5 then goto XIT
 01330     bud=val(resp$(1)) : tbud+=bud
 01340   end if 

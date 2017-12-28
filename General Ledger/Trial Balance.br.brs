@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\acglTB
 00020 ! pr Trial Balance
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
@@ -21,23 +21,23 @@
 00180   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,input,relative 
 00190   if fnprocess=1 then goto START_REPORT
 00200 SCREEN1: ! 
-00210   fntos(sn$="GLTB") 
+00210   fnTos(sn$="GLTB") 
 00220   lc=0 : mylen=25 : mypos=mylen+2
-00230   fnchk(lc+=1,mypos,"List All Details",right) 
+00230   fnChk(lc+=1,mypos,"List All Details",right) 
 00240   resp$(1)="True"
-00250   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
-00260   fntxt(lc,mypos,5,0,0,'number') 
+00250   fnLbl(lc+=1,1,"Cost Center:",mylen,right)
+00260   fnTxt(lc,mypos,5,0,0,'number') 
 00270   resp$(2)=""
-00280   fnchk(lc+=1,mypos,"Subtotal after each fund",right) 
+00280   fnChk(lc+=1,mypos,"Subtotal after each fund",right) 
 00290   resp$(3)="True"
-00300   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
+00300   fnLbl(lc+=1,1,"Starting Account:",mylen,right)
 00310   fnqgl(lc,mypos,0,1) 
 00320   resp$(4)="[All]"
-00330   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
+00330   fnLbl(lc+=1,1,"Ending Account:",mylen,right)
 00340   fnqgl(lc,mypos,0,1) 
 00350   resp$(5)="[All]"
-00360   fncmdset(3)
-00370   fnacs(sn$,0,mat resp$,ckey)
+00360   fnCmdSet(3)
+00370   fnAcs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   if resp$(1)="True" then pt=0 else pt=1
 00400   costcent=val(resp$(2)) 

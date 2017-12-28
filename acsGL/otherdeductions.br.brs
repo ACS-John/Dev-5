@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\OtherDeductioins
 00020 ! -- Other deductions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fntos,fnfra,fntxt,fncmdkey,fnacs,fndate_mmddyy_to_ccyymmdd,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnTos,fnFra,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,totalded(10)
@@ -12,29 +12,29 @@
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
 00130 ! ______________________________________________________________________
-00140   fntos(sn$="OtherDed") !:
+00140   fnTos(sn$="OtherDed") !:
         rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
-00150   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
-00160   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
+00150   fnFra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
+00160   fnLbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+00170   fnTxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
         resp$(rc+=1)=str$(beg_date)
-00180   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-00190   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno) !:
+00180   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+00190   fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno) !:
         resp$(rc+=1)=str$(end_date)
-00200   fncmdkey("Next",1,1,0,"Print report.")
-00210   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-00220   fnacs(sn$,0,mat resp$,ckey)
+00200   fnCmdKey("Next",1,1,0,"Print report.")
+00210   fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
+00220   fnAcs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   beg_date=val(resp$(1)) !:
         end_date=val(resp$(2))
-00250   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
+00250   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00260   for j=1 to 10
 00270     miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
 00280   next j
 00290   nametab=66-int(len(rtrm$(cnam$))/2)
-00300   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00310   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
+00300   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00310   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
 00320   report$="Other Deductions Register"
 00330   fnopenprn
 00340   gosub L620

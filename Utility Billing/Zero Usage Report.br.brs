@@ -1,28 +1,28 @@
 00010 ! formerly S:\acsUB\ubNoUsage
 00020 ! ______________________________________________________________________
-16000   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fncmdset,fntop,fnchk,fnget_services
+16000   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fnCmdSet,fntop,fnChk,fnget_services
 16020   on error goto ERTN
 16040 ! ______________________________________________________________________
 16060   dim z$*10,e$(4)*30,resp$(10)*40,d(15)
-16080   dim servicename$(10)*20,a(7)
+16080   dim serviceName$(10)*20,a(7)
 16100 ! ______________________________________________________________________
 16120   fntop(program$)
 16140   fnLastBillingDate(d1)
-16160   fnget_services(mat servicename$)
+16160   fnget_services(mat serviceName$)
 24000 MAIN: ! 
-24040   fntos(sn$:="UBNOUsage")
+24040   fnTos(sn$:="UBNOUsage")
 24060   mylen=20
 24080   mypos=mylen+2
-24120   fnlbl(2,1,"Billing Date:",mylen,1)
-24140   fntxt(2,mypos,8,8,0,"1")
+24120   fnLbl(2,1,"Billing Date:",mylen,1)
+24140   fnTxt(2,mypos,8,8,0,"1")
 24160   resp$(1)=str$(d1)
-24200   fnlbl(3,1,"Route Number:",mylen,1)
+24200   fnLbl(3,1,"Route Number:",mylen,1)
 24220   fncmbrt2(3,mypos)
 24240   resp$(2)="[All]"
-24260   fnchk(4,23,"Print Meter Address:",1)
+24260   fnChk(4,23,"Print Meter Address:",1)
 24280   resp$(3)="True"
-24300   fncmdset(3)
-24320   fnacs(sn$,0,mat resp$,ck)
+24300   fnCmdSet(3)
+24320   fnAcs(sn$,0,mat resp$,ck)
 28000   if ck=5 then goto XIT
 28020   d1 = val(resp$(1))
 28040   if resp$(2)="[All]" then 
@@ -45,13 +45,13 @@
 42020   read #1,using L450: z$,mat e$,final,bal,f,route,mat d,mat a eof TOTALS
 42040   L450: form pos 1,c 10,4*c 30,pos 1821,n 1,pos 292,pd 4.2,pd 4,pos 1741,n 2,pos 217,15*pd 5,pos 143,7*pd 2
 42060   if f<>d1 then goto READ_CUSTOMER
-42080   if a(1)>0 and trim$(servicename$(1))="Water" and d(3)=0 then ! if have water and zero usage then list
+42080   if a(1)>0 and trim$(serviceName$(1))="Water" and d(3)=0 then ! if have water and zero usage then list
 42100     currentread=d(1)
 42120     priorread=d(2)
-42140   else if a(3)>0 and trim$(servicename$(3))="Electric" and d(7)=0 then  ! if have electric and zero usage then list
+42140   else if a(3)>0 and trim$(serviceName$(3))="Electric" and d(7)=0 then  ! if have electric and zero usage then list
 42160     currentread=d(5)
 42180     priorread=d(6)
-42200   else if a(4)>0 and trim$(servicename$(4))="Gas" and d(11)=0 then ! if have gas and zero usage then list
+42200   else if a(4)>0 and trim$(serviceName$(4))="Gas" and d(11)=0 then ! if have gas and zero usage then list
 42220     currentread=d(9)
 42240     priorread=d(10)
 42260   else

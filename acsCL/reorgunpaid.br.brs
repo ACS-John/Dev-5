@@ -8,9 +8,9 @@
 00090   dim cap$*128
 00130   dim gldesc$*30
 00140 ! ______________________________________________________________________
-00150   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
-00170   open #newunpdaloc=6: "Name="&env$('Q')&"\CLmstr\NewUnPdAloc.H"&env$('cno')&",RecL=67,replace",internal,outin 
+00150   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #newunpdaloc=6: "Name="&env$('Q')&"\CLmstr\NewUnPdAloc.H"&env$('cno')&",RecL=67,replace",internal,outIn 
 00180 READ_UNPAID_INVOICES: ! read unpaid invoice file
 00190   read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L260
 00200   restore #unpdaloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey READ_UNPAID_INVOICES

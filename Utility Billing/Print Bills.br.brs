@@ -13,7 +13,7 @@
 01240 ! /r
 06000 ! PrintBill_Basic - dynamic pr bill program that works for multiple clients
 08000 def fn_setup
-08020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnerror,fnopt,fntos,fncmbact,fnLastBillingDate,fnxit,fncmdset,fnopenprn,fncloseprn,fncreg_read,fncreg_write,fngethandle,fncustomer_address
+08020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fnopenprn,fncloseprn,fncreg_read,fncreg_write,fngethandle,fncustomer_address
 08040   library 'S:\Core\Library': fnformnumb$,fntrans_total_as_of,fnget_services
 08060   library 'S:\Core\Library': fnpa_open,fnpa_finis,fnpa_barcode,fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line,fnpa_fontitalic,fnpa_pic,fnpa_elipse
 08070   library 'S:\Core\Library': fntop,fnchain,fnub_printbill_program$
@@ -32,12 +32,12 @@
 08210   dim gb(10)
 08220   dim pe$(4)*30
 08240   dim at$(3)*40 ! (1)=company name, (2)=company addr, (3)=company address   ** POPULATED BY: fn_get_mat_at(mat at$)
-08250   dim servicename$(10)*20
-08260   dim servicecode$(10)*2
+08250   dim serviceName$(10)*20
+08260   dim serviceCode$(10)*2
 08270   dim tax_code$(10)*1
 08280   dim penalty$(10)*1
 08320 ! ______________________________________________________________________
-08350   fnget_services(mat servicename$, mat servicecode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
+08350   fnget_services(mat serviceName$, mat serviceCode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
 08360 fnend
 17000 PrintBill_Basic: !
 18000 ! r: set prefrences for clients
@@ -174,83 +174,83 @@
 22310   ! if env$('acsDeveloper')<>'' then pause
 22320   if enable_bulksort then gosub BULKSORT
 22340   if enable_cass_sort then gosub SORT1
-22360   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed  ! open in account order
+22360   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed  ! open in account order
 22380   open #h_customer_2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence
 22400 ! /r
 24000 SCREEN1: ! r:
 24020   starting_key$="" : route_filter=0 : respc=0
-24040   fntos(sn$="UBPrtBl1-1")
+24040   fnTos(sn$="UBPrtBl1-1")
 24060   pf=27 : lc=0
-24080   fnlbl(lc+=1,1,"Penalty Due Date:",25,1)
-24100   fntxt(lc,pf,8,8,1,"1",0,tt$)
+24080   fnLbl(lc+=1,1,"Penalty Due Date:",25,1)
+24100   fnTxt(lc,pf,8,8,1,"1",0,tt$)
 24120   resp$(respc_penalty_due_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-24140   fnlbl(lc+=1,1,"Date of Billing:",25,1)
-24160   fntxt(lc,pf,8,8,1,"1")
+24140   fnLbl(lc+=1,1,"Date of Billing:",25,1)
+24160   fnTxt(lc,pf,8,8,1,"1")
 24180   resp$(respc_billing_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 24200   if enable_service_from or enable_service_to then 
 24220     lc+=1
 24240     if enable_service_from then 
-24260       fnlbl(lc+=1,1,"Service From:",25,1)
-24280       fntxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Prior Reading Date in the customer's record")
-24290       fnlbl(lc,pf+8+4,"(only use to Prior Reading Dates from individual customer records)")
+24260       fnLbl(lc+=1,1,"Service From:",25,1)
+24280       fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Prior Reading Date in the customer's record")
+24290       fnLbl(lc,pf+8+4,"(only use to Prior Reading Dates from individual customer records)")
 24300       resp$(respc_service_from:=respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 24320     end if 
 24340     if enable_service_to then 
-24360       fnlbl(lc+=1,1,"Service To:",25,1)
-24380       fntxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Current Reading Date in the customer's record")
-24390       fnlbl(lc,pf+8+4,"(only use to Current Reading Dates from individual customer records)")
+24360       fnLbl(lc+=1,1,"Service To:",25,1)
+24380       fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Current Reading Date in the customer's record")
+24390       fnLbl(lc,pf+8+4,"(only use to Current Reading Dates from individual customer records)")
 24400       resp$(respc_service_to:=respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 24420     end if 
 24440   end if 
 24460   lc+=1
-24480   fnlbl(lc+=1,1,"Starting Route/Sequence:",25,1)
+24480   fnLbl(lc+=1,1,"Starting Route/Sequence:",25,1)
 24500   fncombof("ubm-act-nam",lc,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 24520   resp$(respc_start_place:=respc+=1)="[All]"
 24540   lc+=1
-24560   fnlbl(lc+=1,1,"Route Number:",25,1)
+24560   fnLbl(lc+=1,1,"Route Number:",25,1)
 24580   fncmbrt2(lc,pf)
 24600   resp$(respc_route:=respc+=1)="[All]"
 24620   lc+=1
-24640   fnlbl(lc+=1,1,"Filter:",25,1)
-24660   fnopt(lc,pf,"All")
+24640   fnLbl(lc+=1,1,"Filter:",25,1)
+24660   fnOpt(lc,pf,"All")
 24680   resp$(respc_filter_none:=respc+=1)="True"
-24700   fnopt(lc+=1,pf,"Select Individuals")
+24700   fnOpt(lc+=1,pf,"Select Individuals")
 24720   resp$(respc_filter_individuals:=respc+=1)="False"
-24740   fnopt(lc+=1,pf,"Past Due Only")
+24740   fnOpt(lc+=1,pf,"Past Due Only")
 24760   resp$(respc_filter_past_due:=respc+=1)="False"
-24780   fnopt(lc+=1,pf,"All Except Past Due")
+24780   fnOpt(lc+=1,pf,"All Except Past Due")
 24782   resp$(respc_filter_not_past_due:=respc+=1)="False"
 24790 ! 
 24800   if message1_line_count then 
 24810     lc+=1
 24820     if message2_line_count then 
-24830       fnlbl(lc+=1,1,"Message 1:",25,1)
+24830       fnLbl(lc+=1,1,"Message 1:",25,1)
 24840     else 
-24850       fnlbl(lc+=1,1,"Message:",25,1)
+24850       fnLbl(lc+=1,1,"Message:",25,1)
 24860     end if 
 24880   end if 
 24900   lc-=1
 24910   if message1_line_count>0 and message1_max_len=0 then message1_max_len=30
 24920   for mg1_item=1 to message1_line_count
-24940     fntxt(lc+=1,pf,max(30,int(message1_max_len*.75)),message1_max_len,message_onscreen_alignment)
+24940     fnTxt(lc+=1,pf,max(30,int(message1_max_len*.75)),message1_max_len,message_onscreen_alignment)
 24960     respc_mg1(mg1_item)=respc+=1
 24980     fncreg_read('bill message '&str$(mg1_item),resp$(respc_mg1(mg1_item))) 
 25000     resp$(respc_mg1(mg1_item))=resp$(respc_mg1(mg1_item))(1:message1_max_len)
 25020   next mg1_item
 25060   if message2_line_count then 
 25080     lc+=1
-25100     fnlbl(lc+=1,1,"Message 2:",25,1)
+25100     fnLbl(lc+=1,1,"Message 2:",25,1)
 25120   end if 
 25140   lc-=1
 25160   for mg2_item=1 to message2_line_count
-25180     fntxt(lc+=1,pf,min(message2_max_len,30),message2_max_len,message_onscreen_alignment)
+25180     fnTxt(lc+=1,pf,min(message2_max_len,30),message2_max_len,message_onscreen_alignment)
 25200     respc_mg2(mg2_item)=respc+=1
 25220     fncreg_read('bill message2 '&str$(mg2_item),resp$(respc_mg2(mg2_item)))
 25240     resp$(respc_mg2(mg2_item))=resp$(respc_mg2(mg2_item))(1:message2_max_len)
 25260   next mg2_item
 25280 ! 
-25300   fncmdset(3)
-25320   fnacs(sn$,0,mat resp$,ck)
+25300   fnCmdSet(3)
+25320   fnAcs(sn$,0,mat resp$,ck)
 25340   if ck=5 then goto XIT
 25360   d1=val(resp$(respc_billing_date))
 25380   d4=val(resp$(respc_penalty_due_date))
@@ -312,11 +312,11 @@
 30040   if enable_bulksort then 
 30060     ! READ_BULKSORT: ! 
 30080     read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-30100     read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est norec NEXT_ACCOUNT ! READ_BULKSORT
+30100     read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est noRec NEXT_ACCOUNT ! READ_BULKSORT
 30120   else if enable_cass_sort then 
 30140     ! READ_CASSSORT: ! 
 30160     read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-30180     read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ norec NEXT_ACCOUNT ! READ_CASSSORT
+30180     read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec NEXT_ACCOUNT ! READ_CASSSORT
 30200     read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
 30220   else 
 30240     read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof RELEASE_PRINT
@@ -403,19 +403,19 @@
 36160   goto ENDSCR
 36180 ! /r
 38000 SCR_ASK_ACCOUNT: ! r: account selection screen
-38020   fntos(sn$:="UBPrtBl1-FS3")
-38060   fnlbl(1,1,"Account (blank to stop)",31,1)
+38020   fnTos(sn$:="UBPrtBl1-FS3")
+38060   fnLbl(1,1,"Account (blank to stop)",31,1)
 38080   if trim$(starting_key$)="" then 
 38100     if z$<>"" then 
-38140       fnlbl(3,1,"Last Account entered was "&z$,44,1)
+38140       fnLbl(3,1,"Last Account entered was "&z$,44,1)
 38160     else 
-38200       fnlbl(3,1,'',44,1)
+38200       fnLbl(3,1,'',44,1)
 38220     end if 
 38240   end if 
 38250   fncmbact(1,17)
 38260   resp$(1)=starting_key$
-38280   fncmdset(11)
-38290   fnacs(sn$,0,mat resp$,ck)
+38280   fnCmdSet(11)
+38290   fnAcs(sn$,0,mat resp$,ck)
 38300   if ck=5 then goto RELEASE_PRINT
 38320   starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 38340   if trim$(starting_key$)="" then goto RELEASE_PRINT
@@ -424,14 +424,14 @@
 38400 ! /r
 40000 ENDSCR: ! r: pr totals screen
 40200   if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
-40400   fntos(sn$="Bills-Total")
+40400   fnTos(sn$="Bills-Total")
 40600   mylen=23 : mypos=mylen+2
 40800   respc=0
-41000   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-41200   fntxt(1,mypos,8,0,1,"",1)
+41000   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+41200   fnTxt(1,mypos,8,0,1,"",1)
 41400   resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
-42000   fncmdset(52)
-42200   fnacs(sn$,0,mat resp$,ck)
+42000   fnCmdSet(52)
+42200   fnAcs(sn$,0,mat resp$,ck)
 42210   close #hAddr: ioerr ignore
 42290   goto XIT ! /r
 42400 XIT: fnxit
@@ -462,7 +462,7 @@
 53240   if totba=0 then havebudget=0: goto EO_BUD2
 53250   ta1=badr(1)
 53260 L3260: if ta1=0 then goto EO_BUD2
-53270   read #82,using L3280,rec=ta1: z$,mat bt1,nba norec EO_BUD2
+53270   read #82,using L3280,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 53280 L3280: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 53290   if bt1(14,1)>0 then goto L3340
 53300 ! IF BT1(1,2)=F THEN GOTO 3350 ! ignore current budget billing record
@@ -1209,7 +1209,7 @@
 87420   ! g(6)
 87430   ! 
 87440   if g(7)<>0 then 
-87450     fnpa_txt(servicename$(7),26,lyne+=adder)
+87450     fnpa_txt(serviceName$(7),26,lyne+=adder)
 87460     fnpa_txt(cnvrt$("pic($$$$$$$$.##)",g(7)),160,lyne)
 87470   end if 
 87480   ! 
@@ -1667,50 +1667,50 @@
 95450   meter=14
 95460   fnpa_fontsize(8)
 95470   if g(1)<>0 then 
-95480     fnpa_txt(servicecode$(1),xmargin+1,lyne*(meter+=1)+ymargin)
+95480     fnpa_txt(serviceCode$(1),xmargin+1,lyne*(meter+=1)+ymargin)
 95490     fnpa_txt(fnformnumb$(d(1),0,9),xmargin+6 ,lyne*meter+ymargin)
 95500     fnpa_txt(fnformnumb$(d(3),0,9),xmargin+25,lyne*meter+ymargin)
 95510     fnpa_txt(fnformnumb$(g(1),2,9),xmargin+45,lyne*meter+ymargin)
 95520   end if 
 95530   if g(2)<>0 then 
-95540     fnpa_txt(servicecode$(2),xmargin+1,lyne*(meter+=1)+ymargin)
+95540     fnpa_txt(serviceCode$(2),xmargin+1,lyne*(meter+=1)+ymargin)
 95550     fnpa_txt(fnformnumb$(g(2),2,9),xmargin+45,lyne*meter+ymargin)
 95560   end if 
 95570   if g(3)<>0 or d(7)<>0 then 
 95580     if d(5)=0 and d(7)=0 then ! there are no readings nor usage - pr the name instead of the code
-95590       fnpa_txt(servicename$(3),xmargin+1,lyne*(meter+=1)+ymargin)
+95590       fnpa_txt(serviceName$(3),xmargin+1,lyne*(meter+=1)+ymargin)
 95600     else
-95610       fnpa_txt(servicecode$(3),xmargin+1,lyne*(meter+=1)+ymargin)
+95610       fnpa_txt(serviceCode$(3),xmargin+1,lyne*(meter+=1)+ymargin)
 95620       fnpa_txt(fnformnumb$(d(5),0,9),xmargin+6,lyne*meter+ymargin)
 95630       fnpa_txt(fnformnumb$(d(7),0,9),xmargin+25,lyne*meter+ymargin)
 95640     end if
 95650     fnpa_txt(fnformnumb$(g(3),2,9),xmargin+45,lyne*meter+ymargin)
 95660   end if  ! g(3)<>0 or d(7)<>0
 95670   if g(4)<>0 then 
-95680     fnpa_txt(servicecode$(4),xmargin+1,lyne*(meter+=1)+ymargin)
+95680     fnpa_txt(serviceCode$(4),xmargin+1,lyne*(meter+=1)+ymargin)
 95690     fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 95700     fnpa_txt(fnformnumb$(d(11),0,9),xmargin+25,lyne*meter+ymargin)
 95710     fnpa_txt(fnformnumb$(g(4),2,9),xmargin+45,lyne*meter+ymargin)
 95720   end if 
 95730   if g(5)<>0 then 
-95740     fnpa_txt(servicename$(5),xmargin+1,lyne*(meter+=1)+ymargin)
+95740     fnpa_txt(serviceName$(5),xmargin+1,lyne*(meter+=1)+ymargin)
 95750     fnpa_txt(fnformnumb$(g(5),2,9),xmargin+45,lyne*meter+ymargin)
 95760     ! fnpa_txt(fnformnumb$(g(5),2,9),xmargin+91+8,lyne*meter+ymargin)
 95770   end if  ! g(5)<>0
 95780   if g(6)<>0 then 
-95790     fnpa_txt(servicename$(6),xmargin+1,lyne*(meter+=1)+ymargin)
+95790     fnpa_txt(serviceName$(6),xmargin+1,lyne*(meter+=1)+ymargin)
 95800     fnpa_txt(fnformnumb$(g(6),2,9),xmargin+43,lyne*meter+ymargin)
 95810   end if  ! g(6)<>0
 95820   if g(7)<>0 then 
-95830     fnpa_txt(servicename$(7),xmargin+1,lyne*(meter+=1)+ymargin)
+95830     fnpa_txt(serviceName$(7),xmargin+1,lyne*(meter+=1)+ymargin)
 95840     fnpa_txt(fnformnumb$(g(7),2,9),xmargin+43,lyne*meter+ymargin)
 95850   end if  ! g(7)=0
 95860   if g(8)<>0 then 
-95870     fnpa_txt(servicename$(8),xmargin+1,lyne*(meter+=1)+ymargin)
+95870     fnpa_txt(serviceName$(8),xmargin+1,lyne*(meter+=1)+ymargin)
 95880     fnpa_txt(fnformnumb$(g(8),2,9),xmargin+45,lyne*meter+ymargin)
 95890   end if 
 95900   if g(9)<>0 then 
-95910     fnpa_txt(servicename$(9),xmargin+1,lyne*(meter+=1)+ymargin)
+95910     fnpa_txt(serviceName$(9),xmargin+1,lyne*(meter+=1)+ymargin)
 95920     fnpa_txt(fnformnumb$(g(9),2,9),xmargin+45,lyne*meter+ymargin)
 95930   end if 
 95940   if pb><0 then 

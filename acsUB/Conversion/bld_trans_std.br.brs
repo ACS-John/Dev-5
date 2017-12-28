@@ -11,7 +11,7 @@
         ! Service 7 is Merchandise !:
         ! Service 8 is Other
 00040 ! ______________________________________________________________________
-00050   library 'S:\Core\Library': fnerror,fncno,fntop,fntos,fnacs,fncmdset,fncmbcno,fnlbl,fndate_mmddyy_to_ccyymmdd,fnchk,fnxit,fnindex_it
+00050   library 'S:\Core\Library': fnerror,fncno,fntop,fnTos,fnAcs,fnCmdSet,fncmbcno,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnindex_it
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
@@ -36,14 +36,14 @@
 00240 XIT: chain "S:\acsUB\conversion\UBmstr-vb"
 00250 ! ______________________________________________________________________
 00260 MENU1: ! 
-00270   fntos(sn$="bldtrans")
-00280   fnlbl(1,1,"Convert Transactions")
-00290   fnchk(4,1,"Delete existing transaction file before conversion") !:
+00270   fnTos(sn$="bldtrans")
+00280   fnLbl(1,1,"Convert Transactions")
+00290   fnChk(4,1,"Delete existing transaction file before conversion") !:
         resp$(1)="True"
-00300   fnchk(5,1,"Remove Transactions with Bad Dates") !:
+00300   fnChk(5,1,"Remove Transactions with Bad Dates") !:
         resp$(2)="False"
-00310   fncmdset(2)
-00320   fnacs(sn$,0,mat resp$,ck)
+00310   fnCmdSet(2)
+00320   fnAcs(sn$,0,mat resp$,ck)
 00330   delubtransvb$=resp$(1) !:
         removebaddates$=resp$(2)
 00340   if ck=5 then cno=0
@@ -56,13 +56,13 @@
 00410 ! 
 00420   if uprc$(delubtransvb$)=uprc$("True") and exists(env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')) then execute "Free "&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')
 00430 ! 
-00440   open #master=3: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00440   open #master=3: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00450 ! 
 00460 ! open NEW files
-00470   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
+00470   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 00480 PHASE1: ! 
 00490   pr 'moving trans from ubAccTrn to ubTranVB'
-00500   open #acctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubAcTIx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00500   open #acctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubAcTIx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00510   if rln(acctrn)=64 or rln(acctrn)=72 then !:
           acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' !:
         else !:
@@ -156,7 +156,7 @@
 01200   continue 
 01210 ! ______________________________________________________________________
 01220 REMOVEBADDATES: ! 
-01230   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
+01230   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 01240 L1240: read #transvb,using "Form Pos 11,N 8": tdate eof L1270
 01250   tdate$=str$(tdate) !:
         if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then !:

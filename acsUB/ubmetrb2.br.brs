@@ -1,17 +1,14 @@
 00010 ! Replace S:\acsUB\ubMetRB2
 00020 ! pr Complete Route Sheets
 00030 ! ______________________________________________________________________
-00040   library "S:\Core\Library": fnacs,fnlbl,fnwait,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fncno,fncmdset,fntop,fncomboa,fnpause,fnfra,fnopt,fnchk,fncmbact,fncmdkey,fnchain,fnpa_finis,fnpa_newpage,fnpa_open
+00040   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnFra,fnOpt,fnChk,fncmbact,fnCmdKey,fnchain,fnpa_finis,fnpa_newpage,fnpa_open
 00050   on error goto ERTN
-00065 ! if env$('client')="Eldorado" then let fnchain('S:\acsUB\ubmetrb2_eldorado')
 00070 ! ______________________________________________________________________
-00080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cnam$*40,cap$*128,dat$*20
+00080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20
 00090   dim z2$*10,e2$(4)*30,f12$*12,f32$(12),f22$(12),a(7),a2(7)
 00100   dim snm$(10)*20,a(7),option$(5),extra(13),service$(3)*26,ms$(13)*3
 00110   dim txt$*50,resp$(9)*50
 00120 ! ______________________________________________________________________
-00130   fncno(cno,cnam$) !:
-        ! 
 00140   fntop("S:\acsUB\ubMetrB2",cap$="Route Book Pages")
 00150   fndat(dat$,1)
 00160   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -32,9 +29,7 @@
 00300   ms$(11)="FEB"
 00310   ms$(12)="JAN"
 00320   ms$(13)="DEC"
-00330   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative  !:
-        read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat snm$,mat srv$ !:
-        close #20: 
+00330   fnget_services(mat snm$,mat srv$)
 00340   x=0
 00350   for j=1 to 4
 00360     if j=1 and trim$(snm$(j))="Water" then option$(x+=1)=srv$(j) !:
@@ -52,34 +47,34 @@
 00440   service =udim(service$)
 00450 ! ______________________________________________________________________
 00460 MENU1: ! 
-00470   fntos(sn$="ubMetrRt") !:
+00470   fnTos(sn$="ubMetrRt") !:
         mylen=35 : mypos=mylen+3 : respc=lc=0
-00480   fnlbl(lc+=1,1,"Route Number:",mylen,1)
+00480   fnLbl(lc+=1,1,"Route Number:",mylen,1)
 00490   fncmbrt2(lc,mypos) !:
         resp$(1)="1"
-00500   fnlbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
+00500   fnLbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
 00510   fncomboa("ubrate3",lc,mypos,mat option$) !:
         resp$(2)=option$(1)
-00520   fnlbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
+00520   fnLbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
 00530   fncomboa("ubrate3",lc,mypos,mat option$) !:
         resp$(3)=option$(1)
-00540   fnfra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
-00550   fnopt(1,2,"Singe Wide",0,1) !:
+00540   fnFra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
+00550   fnOpt(1,2,"Singe Wide",0,1) !:
         resp$(4)="True"
-00560   fnopt(2,2,"Double Wide - Different customers",0,1) !:
+00560   fnOpt(2,2,"Double Wide - Different customers",0,1) !:
         resp$(5)="False"
-00570   fnopt(3,2,"Double Wide - Different services",0,1) !:
+00570   fnOpt(3,2,"Double Wide - Different services",0,1) !:
         resp$(6)="False"
 00580   if env$('client')="Franklinton" or env$('client')="Divernon" then resp$(4)="False": resp$(6)="True"
-00590   fnchk(11,28,"Select Accounts to Print:",1) !:
+00590   fnChk(11,28,"Select Accounts to Print:",1) !:
         resp$(7)="False"
-00600   fnfra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
-00610   fnopt(1,2,"Print complete form",0,2) !:
+00600   fnFra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
+00610   fnOpt(1,2,"Print complete form",0,2) !:
         resp$(8)="True"
-00620   fnopt(2,2,"Fill in the blanks",0,2)
+00620   fnOpt(2,2,"Fill in the blanks",0,2)
 00625   if env$('client')="Carrizo" then resp$(9)="True" else resp$(9)="False"
-00630   fncmdset(3) !:
-        fnacs(sn$,0,mat resp$,ck)
+00630   fnCmdSet(3) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00640   if ck=5 then goto XIT
 00650   if uprc$(resp$(1))=uprc$("[All]") then route=0 else !:
           route=val(resp$(1))
@@ -127,8 +122,8 @@
 01070   if formoption=2 then gosub BLANKS : goto L1700
 01080   if width=2 or width=3 then for j=1 to 2: pr #255,using L1320: "|": next j
 01090   if width=1 then for j=1 to 2: pr #255,using L1320: "|": next j
-01100   if width=1 then pr #255,using L1160: cnam$(1:37),"|"
-01110   if width=2 or width=3 then pr #255,using L1160: cnam$(1:37),"|",cnam$(1:37)
+01100   if width=1 then pr #255,using L1160: env$('cnam')(1:37),"|"
+01110   if width=2 or width=3 then pr #255,using L1160: env$('cnam')(1:37),"|",env$('cnam')(1:37)
 01120   if width=1 then pr #255,using L1160: service$
 01130   if width=2 then pr #255,using L1160: service$,"|",service$
 01140   if width=3 then pr #255,using L1160: service$,"|",service2$
@@ -192,20 +187,20 @@
 01720 ! ______________________________________________________________________
 01730 SELECTONE: ! 
 01740   sn$ = "Selectone" !:
-        fntos(sn$)
+        fnTos(sn$)
 01750   txt$="Account:" !:
-        fnlbl(1,1,txt$,16,1)
+        fnLbl(1,1,txt$,16,1)
 01760 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040
 01770   if trim$(z$)<>"" then !:
           txt$="Last Account entered was "&z$ !:
-          fnlbl(3,1,txt$,44,1) else !:
+          fnLbl(3,1,txt$,44,1) else !:
           txt$="" !:
-          fnlbl(3,1,txt$,44,1)
+          fnLbl(3,1,txt$,44,1)
 01780   fncmbact(1,18) ! !:
         resp$(1)=a$
-01790   fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
-        fncmdkey("&Complete",5,0,1,"Print all selected records")
-01800   fnacs(sn$,0,mat resp$,ck)
+01790   fnCmdKey("&Next",1,1,0,"Accept this record for printing") !:
+        fnCmdKey("&Complete",5,0,1,"Print all selected records")
+01800   fnAcs(sn$,0,mat resp$,ck)
 01810   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto DONE
 01820   if ck=5 then goto DONE

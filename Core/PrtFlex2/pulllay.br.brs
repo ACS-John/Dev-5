@@ -8,12 +8,12 @@
 00080 ! you will have to create your folders as described above; this routine will not create the folders
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
-00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
+00110   dim serviceName$(10)*20,serviceCode$(10)*2,textfile$*87,abbrev$*30
 00120   fnsetmonth(mat mo$)
 00140 ! 
 00150   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00170   open #20: "Name=UBData\Service.h"&env$('cno')&",Shr",internal,input,relative ioerr L180 !:
-        read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
+        read #20,using "Form POS 1,10*C 20",rec=1: mat serviceName$ !:
         close #20: 
 00180 L180: io1$(1)="10,34,c 45,UT,N" !:
         io1$(2)="12,34,C 45,UT,N"
@@ -21,7 +21,7 @@
 00200   ev$="ACSpb\Layouts\pbMSTR-VB.LAY"
 00210   pr newpage
 00220   close #101: ioerr L230
-00230 L230: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
+00230 L230: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outIn 
 00240   pr #101: newpage
 00250   pr f "10,2,Cr 32": "File name to create (no ext):"
 00260   pr f "12,2,Cr 32": "Layout file name (with exts):"
@@ -30,7 +30,7 @@
 00290   ev$=trim$(trim$(ev$,chr$(0)))
 00300   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00310   open #2: "Name="&ev$,display,input 
-00320   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
+00320   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed 
 00330 L330: linput #2: ln$ eof L830
 00340   if uprc$(ln$(7:10))<>"DATA" then goto L330
 00350 DATALN: j3=1
@@ -71,13 +71,13 @@
         ! ON EACH SERVICE IN UTILITY BILLING
 00680   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L730
 00690   x=val(a$(j3,1)(9:10)) conv L730
-00700   if trim$(servicename$(x))="" then goto L810 ! SERVICE NOT USED
+00700   if trim$(serviceName$(x))="" then goto L810 ! SERVICE NOT USED
 00710   a$(j3,1)(1:9)=""
-00720   a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
+00720   a$(j3,1)=trim$(serviceName$(x))&" "&trim$(a$(j3,1))
 00730 L730: if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L770
 00740   x=val(abbrev$(9:10)) conv L770
 00750   abbrev$(1:9)=""
-00760   abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
+00760   abbrev$=trim$(serviceName$(x))&" "&trim$(abbrev$)
 00770 L770: if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(1:5)='EXTRA' or trim$(abbrev$)="" then goto L810
 00780 ! store as description,variable name,field length,# of deciaml points, format
 00790   write #15,using L800: trim$(a$(j3,1)(1:30)),a$(j3,2),a(j3,2),a(j3,3),a$(j3,3),abbrev$(1:20)
@@ -92,7 +92,7 @@
 00880 ! ______________________________________________________________________
 00890 MOVEITTOTEXT: ! 
 00900   open #10: "Name="&outputfile$&",RecL=87,Replace",display,output 
-00910   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
+00910   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
 00920 L920: read #15,using L930: textfile$ eof L960
 00930 L930: form pos 1,c 87
 00940   pr #10,using L930: textfile$

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newLabel
 00020 ! Payroll Labels
 00030 ! r: setup
-00040   library 'S:\Core\Library': fntop,fnxit,fnwait,fnerror,fnaddlabel,fnlabel,fncomboa,fntos,fnlbl,fnchk,fncombof,fncmdset,fnacs,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdkey,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit,fnwait,fnerror,fnaddlabel,fnlabel,fncomboa,fnTos,fnLbl,fnChk,fncombof,fnCmdSet,fnAcs,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdKey,fnGetPayrollDates
 00050   on error goto ERTN
 00060   ! ______________________________________________________________________
 00070   dim in1(9),io1$(8),lb$(6,6)*40,ln$*260,msgline$(2)*60,response$(5)*1
@@ -22,7 +22,7 @@
 00250 OPEN_KEYED: ! r:
 00260   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00270   L270: form pos 1,n 8,3*c 30,c 11,pos 110,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6
-00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00290 return ! /r
 00310 GET_STARTED: ! r:
 00330   lb1=0
@@ -73,22 +73,22 @@
 00770 XIT: fnxit
 00790 ASK_EMP: ! r: 
 00800   respc=0
-00810   fntos(sn$="prlabel-2")
-00820   fnlbl(1,1,"Employee Number to Print:",25,1)
+00810   fnTos(sn$="prlabel-2")
+00820   fnLbl(1,1,"Employee Number to Print:",25,1)
 00830   fncombof("Employee",1,28,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select any employee number you wish printed") !:
         resp$(respc+=1)=""
-00840   fncmdkey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
-00850   fncmdkey("&Complete",2,0,0,"Print selected labels.")
-00860   fnacs(sn$,0,mat resp$,ck) !:
+00840   fnCmdKey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
+00850   fnCmdKey("&Complete",2,0,0,"Print selected labels.")
+00860   fnAcs(sn$,0,mat resp$,ck) !:
         if ck=2 then goto FINIS
 00870   eno=val(resp$(1)(1:8))
 00880   if eno=0 then goto FINIS
 00890   read #1,using L270,key=lpad$(str$(eno),8): eno,mat em$,ss$,mat rs,mat em nokey ASK_EMP
 00900   return ! /r
 00920 SCR1: ! r:
-00940   fntos(sn$="prlabel-1")
+00940   fnTos(sn$="prlabel-1")
 00950   respc=0 : mylen=50 : mypos=mylen+3 : right=1
-00960   fnlbl(1,1,"Print Labels For:",mylen,right)
+00960   fnLbl(1,1,"Print Labels For:",mylen,right)
 00970   fi$="cllabels" !:
         item1$(print_all=1)="[All]" : all=1 !:
         item1$(2)="Employees from last payroll only": last_payroll=2 !:
@@ -96,26 +96,26 @@
         item1$(4)="Select employment status to print": emp_status=4 !:
         fncomboa(fi$,1,mypos,mat item1$,"Print labels based on certain employment status code. (Eg. all full time).") !:
         resp$(respc+=1)=item1$(1)
-00980   fnchk(5,mypos+2,'Print Employee Number on Label:',right) !:
+00980   fnChk(5,mypos+2,'Print Employee Number on Label:',right) !:
         resp$(respc+=1)='False'
-00990   fnchk(6,mypos+2,'Print Social Security Number on Label:',right) !:
+00990   fnChk(6,mypos+2,'Print Social Security Number on Label:',right) !:
         resp$(respc+=1)='False'
-01000   fnchk(7,mypos+2,'Print Employee Address on Label:',right) !:
+01000   fnChk(7,mypos+2,'Print Employee Address on Label:',right) !:
         resp$(respc+=1)='True'
-01010   fnlbl(9,1,"Payroll Date to Use (if applicable):",mylen,1)
-01020   fntxt(9,mypos,12,0,1,"3",0,'You can pr labels for any payroll period. Only applicable if printing labels for those employees who got paid."') ! !:
+01010   fnLbl(9,1,"Payroll Date to Use (if applicable):",mylen,1)
+01020   fnTxt(9,mypos,12,0,1,"3",0,'You can pr labels for any payroll period. Only applicable if printing labels for those employees who got paid."') ! !:
         resp$(respc+=1)=""
-01030   fnlbl(10,1,"Payroll Date to pr on Label:",mylen,1)
-01040   fntxt(10,mypos,12,0,1,"1",0,'Used for placing a date on the label. Leave blank if not applilcable."') ! !:
+01030   fnLbl(10,1,"Payroll Date to pr on Label:",mylen,1)
+01040   fnTxt(10,mypos,12,0,1,"1",0,'Used for placing a date on the label. Leave blank if not applilcable."') ! !:
         resp$(respc+=1)=""
-01050   fnlbl(11,1,"Employment Status to pr (if applicable):",mylen,1)
-01060   fntxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! !:
+01050   fnLbl(11,1,"Employment Status to pr (if applicable):",mylen,1)
+01060   fnTxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! !:
         resp$(respc+=1)=""
-01070   fnlbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
+01070   fnLbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
 01080   fncombof("Employee",13,mypos,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") !:
         resp$(respc+=1)=""
-01090   fncmdset(2)
-01100   fnacs(sn$,0,mat resp$,ck) !:
+01090   fnCmdSet(2)
+01100   fnAcs(sn$,0,mat resp$,ck) !:
         if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then prtall=all else !:
             if resp$(1)=item1$(2) then prtall=last_payroll else !:

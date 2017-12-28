@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\ACGLPOST
 00020 ! Post Entries from Holding File
 00030 ! ______________________________________________________________________,
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnlbl,fntos,fntxt,fncmdkey,fnacs,fnflexadd1,fnflexinit1,fnhamster,fnmsgbox,fncmdset,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2,fnFree
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnLbl,fnTos,fnTxt,fnCmdKey,fnAcs,fnflexadd1,fnflexinit1,fnHamster,fnmsgbox,fnCmdSet,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ta(2)
@@ -17,29 +17,29 @@
 00108   cmask$(3)=''
 00118 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Post Entries from Holding File")
-00140   open #4: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",Shr,KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outin,keyed 
-00150   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
+00140   open #4: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",Shr,KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
 00160   gosub BUILD_LAYOUT
 00170 MAIN: ! r:
-00180   fntos(sn$="AcglPost") 
+00180   fnTos(sn$="AcglPost") 
 00182   mylen=10: mypos=mylen+3 : right=1
-00190   fnlbl(1,8,"Date Range to Post")
-00200   fnlbl(2,1,"From:",mylen,right)
-00210   fntxt(2,mypos,8,0,right,"1001",0,"'From' date must always be answered and will be the first date you wish to review for posting..",0 ) 
+00190   fnLbl(1,8,"Date Range to Post")
+00200   fnLbl(2,1,"From:",mylen,right)
+00210   fnTxt(2,mypos,8,0,right,"1001",0,"'From' date must always be answered and will be the first date you wish to review for posting..",0 ) 
 00212   resp$(1)=str$(from)
-00220   fnlbl(3,1,"To:",mylen,right)
-00230   fntxt(3,mypos,8,0,right,"1001",0,"'To' date must always be answered and will be the last day of the month or the last day of the period being processed..",0 ) 
+00220   fnLbl(3,1,"To:",mylen,right)
+00230   fnTxt(3,mypos,8,0,right,"1001",0,"'To' date must always be answered and will be the last day of the month or the last day of the period being processed..",0 ) 
 00232   resp$(2)=str$(to)
-00240   fnlbl(4,37,"")
-00250   fncmdkey("&Next",1,1,0,"Allows you to select files to be posted.")
-00260   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00270   fnacs(sn$,0,mat resp$,ckey)
+00240   fnLbl(4,37,"")
+00250   fnCmdKey("&Next",1,1,0,"Allows you to select files to be posted.")
+00260   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00270   fnAcs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   from =val(resp$(1))
 00300   to =val(resp$(2))
 00310   from$=cnvrt$("PIC(######)",from): to$=cnvrt$("PIC(######)",to)
 00320 ! DATE_LIST: !
-00330   fntos(sn$="AcglPost1") 
+00330   fnTos(sn$="AcglPost1") 
 00332   mylen=10: mypos=mylen+3 : right=1
 00350   fnflexinit1('acglpost2',lc=1,1,15,30,mat chdr$,mat cmask$,1)
 00372   fngetdir2(env$('Q')&'\GLmstr\',mat filename$,'','GL*.H'&env$('cno'),mat filedate$,mat filetime$)
@@ -56,12 +56,12 @@
 00486     end if
 00488     L420: !
 00490   nex filenameItem
-00500   fnlbl(17,30,"")
-00510   fncmdkey("&Post",1,1,0,"Post entries from the holding files that are displayed.")
-00520   fncmdkey("&Review",2,0,0,"Review entries before posting.")
-00530   fncmdkey("&Print",3,0,0,"Prints list of entries.")
-00540   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00550   fnacs(sn$,0,mat resp$,ckey)
+00500   fnLbl(17,30,"")
+00510   fnCmdKey("&Post",1,1,0,"Post entries from the holding files that are displayed.")
+00520   fnCmdKey("&Review",2,0,0,"Review entries before posting.")
+00530   fnCmdKey("&Print",3,0,0,"Prints list of entries.")
+00540   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00550   fnAcs(sn$,0,mat resp$,ckey)
 00560   if ckey=1 then listing$='N' : goto PRINT_POST
 00570   if ckey=2 then goto REVIEW
 00580   if ckey=3 then listing$="Y" : goto PRINT_POST
@@ -73,7 +73,7 @@
 00620   for j3=1 to dircount
 00630     if dir(j3)<>0 then 
 00632       close #3: ioerr ignore
-00640       open #3: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H"&env$('cno')&",RecL=104,USE",internal,outin,relative 
+00640       open #3: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H"&env$('cno')&",RecL=104,USE",internal,outIn,relative 
 00650       if listing=1 then 
 00660         pr #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
 00664       end if
@@ -155,15 +155,15 @@
 01310   continue 
 01350 ! ______________________________________________________________________
 01360 REVIEW: ! 
-01370   fntos(sn$="AcglPost2") !:
+01370   fnTos(sn$="AcglPost2") !:
         mylen=20: mypos=mylen+3 : right=1
-01380   fnlbl(1,1,"Date to Review:",mylen,right)
-01390   fntxt(1,mypos,8,0,right,"1001",0,"Enter the file date to be reviewed.",0 ) !:
+01380   fnLbl(1,1,"Date to Review:",mylen,right)
+01390   fnTxt(1,mypos,8,0,right,"1001",0,"Enter the file date to be reviewed.",0 ) !:
         resp$(1)=""
-01400   fnlbl(2,40,"")
-01410   fncmdkey("&Next",1,1,0,"Review the entries for the date entered.")
-01420   fncmdkey("&Cancel",5,0,1,"Returns to listing of dates.")
-01430   fnacs(sn$,0,mat resp$,ckey)
+01400   fnLbl(2,40,"")
+01410   fnCmdKey("&Next",1,1,0,"Review the entries for the date entered.")
+01420   fnCmdKey("&Cancel",5,0,1,"Returns to listing of dates.")
+01430   fnAcs(sn$,0,mat resp$,ckey)
 01440   if ckey=5 then goto MAIN
 01450   review=val(resp$(1))
 01460   goto L1480 ! use hamster to review entries
@@ -174,13 +174,13 @@
 01510 ! ______________________________________________________________________
 01520   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
-01530 ! Open #3: "Name="&env$('Q')&"\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H"&env$('cno')&",RecL=104,USE",Internal,Outin,Relative
+01530 ! Open #3: "Name="&env$('Q')&"\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H"&env$('cno')&",RecL=104,USE",Internal,outIn,Relative
 01540   goto MAIN
 01550 ! ______________________________________________________________________
 01560 OPEN_FILE: ! r:
 01562   open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
 01570   if exists(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno'))=0 then gosub INDEX
-01580   open #open_file_count: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H"&env$('cno')&",RecL=104,kps=1,kln=12,USE",internal,outin,keyed 
+01580   open #open_file_count: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H"&env$('cno')&",RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
 01590   return  ! /r
 01600 ! ______________________________________________________________________
 01610 CLOSE_FILE: ! r:
@@ -195,29 +195,29 @@
 01700 ! ______________________________________________________________________
 01930 ! ______________________________________________________________________
 01940 HAMSTER: ! r:
-01950   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01950   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01960   return  ! /r
 02000 ADD: ! r:
-02010   fntos(sn$="acglpost4") 
+02010   fnTos(sn$="acglpost4") 
 02012   mylen=23: mypos=mylen+3 : right=1: rc=0
-02020   if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
-02030   if use_sub =1 then let fnlbl(1,40,"Sub #",6,2)
-02040   fnlbl(2,1,"General Ledger Number:",mylen,right)
+02020   if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
+02030   if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
+02040   fnLbl(2,1,"General Ledger Number:",mylen,right)
 02050   if use_dept=1 then 
-02052     fntxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) 
+02052     fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) 
 02054     resp$(rc+=1)=str$(dno)
 02056   end if
-02060   fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) 
+02060   fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) 
 02062   resp$(rc+=1)=str$(ano)
 02070   if use_sub=1 then 
-02072     fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+02072     fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 02074     resp$(rc+=1)=str$(sno)
 02076   end if
-02080   fnlbl(3,1,"Description:",mylen,right)
-02090   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+02080   fnLbl(3,1,"Description:",mylen,right)
+02090   fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 02092   resp$(rc+=1)=""
-02100   fncmdset(2)
-02110   fnacs(sn$,0,mat resp$,ckey)
+02100   fnCmdSet(2)
+02110   fnAcs(sn$,0,mat resp$,ckey)
 02120   pas=0
 02130   if ckey=5 then goto MAIN
 02150   dno=ano=sno=0
@@ -243,13 +243,13 @@
 02310 L2310: return  ! /r
 02320 ! 
 16000 CHANGE_ACCOUNT: ! r:
-16020   fntos(sn$="acglpost3") 
+16020   fnTos(sn$="acglpost3") 
 16040   mylen=23: mypos=mylen+3
-16060   fnlbl(1,1,"Bank Account #:",mylen,right)
+16060   fnLbl(1,1,"Bank Account #:",mylen,right)
 16080   fnqgl(1,mypos,0,2,pas) 
 16100   resp$(1)=fnrgl$(bankgl$)
-16120   fncmdkey("&Next",1,1,0,"Continue posting.")
-16140   fnacs(sn$,0,mat resp$,ckey)
+16120   fnCmdKey("&Next",1,1,0,"Continue posting.")
+16140   fnAcs(sn$,0,mat resp$,ckey)
 16160   key$=bankgl$=fnagl$(resp$(1)) ! gl number
 16180   return  ! /r
 18410 ! <updateable region: ertn>

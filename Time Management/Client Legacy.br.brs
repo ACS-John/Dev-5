@@ -3,7 +3,7 @@
 00030 ! 
 00040   library "S:\Core\search.br": fnsearch
 00050   library "S:\Core\Library.br": fnerror,fnwait,fnmsgbox,fnwin3b
-00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00070   fntop(program$)
 00100 ! 
 00110 ! 
@@ -25,13 +25,13 @@
 00270   scrt$(5)=scrt$(6)=""
 00280   for j=22 to 31: scr1$(j)=rtrm$(scr1$(j)): next j
 00290   gosub L4300
-00300   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",Shr,KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4160
-00310   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",Shr,KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4160
-00320   open #2: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00300   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",Shr,KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4160
+00310   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",Shr,KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4160
+00320   open #2: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 00330   open #3: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,input,relative 
-00340   open #4: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-00350   open #5: "Name=S:\acsTM\CLMst.Hlp,Shr",internal,outin,relative ioerr L4170
-00360   open #6: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,outin,relative ioerr L380
+00340   open #4: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+00350   open #5: "Name=S:\acsTM\CLMst.Hlp,Shr",internal,outIn,relative ioerr L4170
+00360   open #6: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L380
 00370   goto L390
 00380 L380: chain "S:\acsTM\CTMAINT"
 00390 L390: read #6,using L400,rec=1: mat cat$ ioerr L4170
@@ -151,11 +151,11 @@
 01400   if x1=ano then goto L1610
 01410   for j=1 to 10
 01420     if ca(j)=0 then goto L1540
-01430     read #3,using L1750,rec=ca(j): mat ta norec L1540
+01430     read #3,using L1750,rec=ca(j): mat ta noRec L1540
 01440     for j1=1 to 25
 01450       rec2=ta(j1,1)
 01460 L1460: if rec2=0 then goto L1530
-01470       read #2,using L1480,rec=rec2: nta norec L1530
+01470       read #2,using L1480,rec=rec2: nta noRec L1530
 01480 L1480: form pos 54,pd 3
 01490       rewrite #2,using L1500,rec=rec2: z$
 01500 L1500: form pos 1,c 5
@@ -182,7 +182,7 @@
 01710   if det=0 then goto L3320
 01720   if det<1 or det>10 then goto L1700
 01730   if ca(det)=0 then goto L1680
-01740   read #3,using L1750,rec=ca(det): mat ta,mat fb norec L1680 ioerr L4170
+01740   read #3,using L1750,rec=ca(det): mat ta,mat fb noRec L1680 ioerr L4170
 01750 L1750: form pos 1,50*pd 3,25*n 1
 01760 L1760: pr newpage
 01770   pr f "10,10,c 52": "Enter Sub-Category; Enter 99 when completed"
@@ -296,7 +296,7 @@
 02830 L2830: lr4=lrec(4)
 02840   rewrite #4,using L2950,rec=1: lr4
 02850   for j=1 to lr4
-02860     read #4,using L2870,rec=j: z$,nta norec L2960 ioerr L4170
+02860     read #4,using L2870,rec=j: z$,nta noRec L2960 ioerr L4170
 02870 L2870: form pos 1,c 5,pos 58,pd 3
 02880     read #1,using L2930,key=z$: mat arta nokey L2960 ioerr L4170
 02890     if arta(1)=0 then arta(1)=j
@@ -418,7 +418,7 @@
 04050   flit$(cv)(cv1:cv1)="UC"
 04060   hhd$=scrt$(cv)
 04070   hr=cv+24
-04080 L4080: read #5,using L4090,rec=hr: mat hlp$ norec L4150 ioerr L4170
+04080 L4080: read #5,using L4090,rec=hr: mat hlp$ noRec L4150 ioerr L4170
 04090 L4090: form pos 1,20*c 78
 04100   pr f mat flh$: mat hlp$,hhd$,"ENTER 0 TO CONTINUE OR 1 TO UPDATE HELP SCREEN:"
 04110 L4110: input fields "24,69,N 1,EU,N": j2 conv L4110

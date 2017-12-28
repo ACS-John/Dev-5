@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsCL\Bank
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00040   on error goto ERTN
 00050   fntop(program$,cap$="Bank")
 00060 ! ______________________________________________________________________
@@ -23,10 +23,10 @@
         c$(cl,3)='1' : c$(cl,4)='12' !:
         c$(cl,5)='13' : c$(cl,6)='50' !:
         c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno') : c$(cl,8)='1'
-00170   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
+00170   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 00180   close #1: 
-00190   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
-00200   fnhamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00190   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+00200   fnHamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00210   close #1: 
 00220   execute "Index "&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&" 1 2 DupKeys Replace Shr -n" ioerr XIT
 00230   gosub FIX_GL_NUMBERS
@@ -41,7 +41,7 @@
 00320 ! /region
 00330 ! ______________________________________________________________________
 00340 FIX_GL_NUMBERS: ! 
-00350   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00350   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00360 L360: read #1,using "form pos 33,c 12": gl$ eof L410
 00370   gl$=lpad$(rtrm$(gl$),12)
 00380   gl$(1:3)=lpad$(rtrm$(gl$(1:3)),3)

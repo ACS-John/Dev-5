@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Conversion\APmstr-Cnv
 00020 ! Pull stuff from old Accounts Payable into new Checkbook company
 00030 def library fnApMstrConversion
-00040   library 'S:\Core\Library': fntop,fnxit, fnchain,fnerror,fncno,fntos,fncmdset,fnlbl,fntxt,fnacs,fnindex_it,fnCopy,fngethandle,fnFree
+00040   library 'S:\Core\Library': fntop,fnxit, fnchain,fnerror,fncno,fnTos,fnCmdSet,fnLbl,fnTxt,fnAcs,fnindex_it,fnCopy,fngethandle,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,ph$*12,a(9),dt(5),cd(4)
@@ -11,20 +11,20 @@
 00110 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Import from old AP")
 44000 SCR1: ! 
-44020   fntos(sn$='AP-Import')
+44020   fnTos(sn$='AP-Import')
 44040   lc=0
 44060   mylen=40
 44080   mypos=mylen+2
-44100   fnlbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
-44120   fntxt(lc,mypos,40,58,0,'70',0,"Pick any file in the directory, it doesn't matter which one - Only the directory name matters")
+44100   fnLbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
+44120   fnTxt(lc,mypos,40,58,0,'70',0,"Pick any file in the directory, it doesn't matter which one - Only the directory name matters")
 44140   resp$(1)='C:\vol002\APmstr'
-44160   fnlbl(lc+=1,1,'Old Accounts Payable Company Number:',mylen,1)
-44180   fnlbl(2,90,'') ! work around to make the little button show up
-44200   fnlbl(3,80,'') ! work around to make the little button show up
-44220   fntxt(lc,mypos,2,0,1,'30')
+44160   fnLbl(lc+=1,1,'Old Accounts Payable Company Number:',mylen,1)
+44180   fnLbl(2,90,'') ! work around to make the little button show up
+44200   fnLbl(3,80,'') ! work around to make the little button show up
+44220   fnTxt(lc,mypos,2,0,1,'30')
 44240   resp$(2)='1'
-44260   fncmdset(5)
-44280   fnacs(sn$,0,mat resp$,ckey)
+44260   fnCmdSet(5)
+44280   fnAcs(sn$,0,mat resp$,ckey)
 46000   if ckey=5 then goto XIT
 46020   apcno=val(resp$(2))
 46040   if ~exists(env$('Q')&'\tmpAP') then 
@@ -35,11 +35,11 @@
 48000   fnCopy(resp$(1)&'\*.h'&str$(apcno),env$('Q')&'\tmpAP\*.*')
 48040   if exists(env$('Q')&"\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
 50000   open #apmstr=fngethandle: "Name="&env$('Q')&"\tmpAP\APmstr.h"&str$(apcno),internal,input  ! &",KFName="&env$('Q')&"\tmpAP\apIndex.h"&str$(apcno) ,keyed
-50020   open #aptrans=10: "Name="&env$('Q')&"\tmpAP\apTrans.H"&str$(apcno),internal,outin,relative 
-50040   open #paymstr=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",Version=1,size=0,RecL=276,Replace",internal,outin,relative 
-50080   open #payalloc=fngethandle: "Name="&env$('Q')&"\CLmstr\PayAlloc.H"&env$('cno')&",Size=0,RecL=56,Replace",internal,outin,relative 
-50100   open #paytrans=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",Version=2,Size=0,RecL=114,Replace",internal,outin,relative 
-50120   open #unpdaloc=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",SIZE=0,RecL=70,Replace",internal,outin,relative 
+50020   open #aptrans=10: "Name="&env$('Q')&"\tmpAP\apTrans.H"&str$(apcno),internal,outIn,relative 
+50040   open #paymstr=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",Version=1,size=0,RecL=276,Replace",internal,outIn,relative 
+50080   open #payalloc=fngethandle: "Name="&env$('Q')&"\CLmstr\PayAlloc.H"&env$('cno')&",Size=0,RecL=56,Replace",internal,outIn,relative 
+50100   open #paytrans=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",Version=2,Size=0,RecL=114,Replace",internal,outIn,relative 
+50120   open #unpdaloc=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",SIZE=0,RecL=70,Replace",internal,outIn,relative 
 52000   do 
 52020     read #apmstr,using 'Form POS 1,C 8,4*C 30,POS 159,C 12,POS 176,PD 5.2,POS 219,N 2,C 11,POS 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
 52040     gosub UNPDMSTR
@@ -72,7 +72,7 @@
 60020   adr=ta(1)
 60040   READ_APTRANS: ! 
 60060   if adr=0 then goto EO_UNPDMSTR
-60080   read #aptrans,using 'Form POS 1,C 8,C 12,C 20,8*PD 5.2,6*PD 4,3*N 1,N 2,6*C 12,5*C 20,5*PD 5.2,PD 3',rec=adr,reserve: v$,iv$,id$,mat a,mat dt,mat cd,dgl$,mat gl$,mat gld$,mat gla,nta norec EO_UNPDMSTR
+60080   read #aptrans,using 'Form POS 1,C 8,C 12,C 20,8*PD 5.2,6*PD 4,3*N 1,N 2,6*C 12,5*C 20,5*PD 5.2,PD 3',rec=adr,reserve: v$,iv$,id$,mat a,mat dt,mat cd,dgl$,mat gl$,mat gld$,mat gla,nta noRec EO_UNPDMSTR
 60100   if dt(4)>0 then adr=nta: goto READ_APTRANS ! only unpaids
 60120   if a(2)=0 then goto UNPDMSTR_ATZ
 60140   mat aa=(0)

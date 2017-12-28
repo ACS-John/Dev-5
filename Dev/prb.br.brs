@@ -3,7 +3,7 @@
 20800   dim inv_item$(10)*55,client_addr$(3)*30,ct(10),sc(10),gl$(10)*12,cap$*128
 21000   dim in1$(3)
 21200   dim inp(7),wo_desc$*30
-21400   open #h_tmsht:=6: "Name=TMSHT"&wsid$&",KFName=TMSHT-IDX"&wsid$,internal,outin,keyed 
+21400   open #h_tmsht:=6: "Name=TMSHT"&wsid$&",KFName=TMSHT-IDX"&wsid$,internal,outIn,keyed 
 21600   fnopenprn(cp,42,220,process)
 21800   do 
 22000     read #h_tmsht,using FM_TIME: mat inp,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2

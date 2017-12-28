@@ -1,6 +1,6 @@
 10000 ! S:\acsGL\adjustaccounts
 10010 ! ______________________________________________________________________
-10020   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fncursys$,fntos,fnlbl,fntxt,fncmdset,fnacs,fnagl$,fnqglbig,fnrglbig$,fngethandle,fnmsgbox,fncmdkey
+10020   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fncursys$,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnagl$,fnqglbig,fnrglbig$,fngethandle,fnmsgbox,fnCmdKey
 10030   on error goto ERTN
 10040 ! ______________________________________________________________________
 10050   dim cap$*128,resp$(3)*255,ymbal(13),priorym(13)
@@ -8,7 +8,7 @@
 10070   fn_adjustaccounts
 10080   def fn_adjustaccounts
 10090     fncno(cno)
-10100     open #(h_glmstr:=fngethandle): "Name="&env$('Q')&"\GLmstr\glmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,outin,keyed 
+10100     open #(h_glmstr:=fngethandle): "Name="&env$('Q')&"\GLmstr\glmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10110 GLMSTR: form n 3,n 6,n 3,pos 81,28*pd 6.2
 10120     open #(h_actrans:=fngethandle): "Name="&env$('Q')&"\GLmstr\actrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.h"&env$('cno')&",Shr",internal,input,keyed 
 10130 ACTRANS: form n 3,n 6,n 3,n 6,pd 6.2,pos 71,n 2
@@ -52,16 +52,16 @@
 10510   fnend 
 10520   def fn_getadjustment
 10530     mat resp$(3)
-10540     fntos("accountadjust")
+10540     fnTos("accountadjust")
 10550     mylen=23: mypos=mylen+3 : right=1
-10560     fnlbl(1,1,"General Ledger Number:",mylen,right)
+10560     fnLbl(1,1,"General Ledger Number:",mylen,right)
 10570     fnqglbig(1,mypos,0,2) : resp$(1)=fnrglbig$(gl$)
-10580     fnlbl(2,1,"Date of Balance:",mylen,right)
-10590     fntxt(2,mypos,8,8,1,"1",0) : resp$(2)=cnvrt$("pic(zzzzzz)",adjustdate)
-10600     fnlbl(3,1,"Balance on Date:",mylen,right)
-10610     fntxt(3,mypos,14,0,right,"10",0) : resp$(3)=''
-10620     fncmdset(11)
-10630     fnacs("accountadjust",0,mat resp$,ckey)
+10580     fnLbl(2,1,"Date of Balance:",mylen,right)
+10590     fnTxt(2,mypos,8,8,1,"1",0) : resp$(2)=cnvrt$("pic(zzzzzz)",adjustdate)
+10600     fnLbl(3,1,"Balance on Date:",mylen,right)
+10610     fnTxt(3,mypos,14,0,right,"10",0) : resp$(3)=''
+10620     fnCmdSet(11)
+10630     fnAcs("accountadjust",0,mat resp$,ckey)
 10640     if ckey=1 then 
 10650       gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
 10660     else 
@@ -70,23 +70,23 @@
 10690   fnend 
 10700   def fn_confirmadjustment
 10710     mat resp$(27)
-10720     fntos("adjustconfirm")
+10720     fnTos("adjustconfirm")
 10730     mylen=23 : mypos=mylen+3 : right=1
-10740     fnlbl(1,1,"Account "&gl$,mylen)
-10750     fnlbl(2,1,"Current Balance:",mylen,right)
-10760     fntxt(2,mypos,14,0,right,"10",0) : resp$(1)=str$(balance)
+10740     fnLbl(1,1,"Account "&gl$,mylen)
+10750     fnLbl(2,1,"Current Balance:",mylen,right)
+10760     fnTxt(2,mypos,14,0,right,"10",0) : resp$(1)=str$(balance)
 10770     for period=1 to 13
-10780       fnlbl(3+period,1,"Period "&str$(period)&":",mylen,right)
-10790       fntxt(3+period,mypos,14,0,right,"10",0) : resp$(period+1)=str$(ymbal(period))
+10780       fnLbl(3+period,1,"Period "&str$(period)&":",mylen,right)
+10790       fnTxt(3+period,mypos,14,0,right,"10",0) : resp$(period+1)=str$(ymbal(period))
 10800     next period
 10810     for period=1 to 13
-10820       fnlbl(3+period,mypos+20,"Prior:",mylen,right)
-10830       fntxt(3+period,mypos*2+20,14,0,right,"10",0) : resp$(period+14)=str$(priorym(period))
+10820       fnLbl(3+period,mypos+20,"Prior:",mylen,right)
+10830       fnTxt(3+period,mypos*2+20,14,0,right,"10",0) : resp$(period+14)=str$(priorym(period))
 10840     next period
-10850     fncmdkey("&Save",1,1)
-10860     fncmdkey("Clear &Periods",2,0)
-10870     fncmdkey("&Cancel",5,0,1)
-10880     fnacs("adjustconfirm",0,mat resp$,ckey)
+10850     fnCmdKey("&Save",1,1)
+10860     fnCmdKey("Clear &Periods",2,0)
+10870     fnCmdKey("&Cancel",5,0,1)
+10880     fnAcs("adjustconfirm",0,mat resp$,ckey)
 10890     if ckey=1 then 
 10900       balance=val(resp$(1))
 10910       for period=1 to 13 : ymbal(period)=val(resp$(period+1)) : priorym(period)=val(resp$(period+14)) : next period

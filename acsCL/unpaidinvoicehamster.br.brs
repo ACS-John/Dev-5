@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\UnpaidInvoiceHamster
 00020 ! Checkbook UnpaidInvoice File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070 ! Dimension Ony the Arrays you need (this is important for Hamster) !:
@@ -17,8 +17,8 @@
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00180   open #first_file=open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outin,keyed 
-00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outin,keyed 
+00180   open #first_file=open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outIn,keyed 
+00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outIn,keyed 
 00200   return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
@@ -147,7 +147,7 @@
           close #j: !:
         next j
 00540   gosub OPEN_FILE
-00550   fnhamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00550   fnHamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00560   return 
 00570 ! ______________________________________________________________________
 00580 XIT: fnxit

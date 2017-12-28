@@ -2,7 +2,7 @@
 00020 ! Statement of Change in Financial Position with Comparison !:
         ! for Letter size paper
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnwait,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnwait,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20
@@ -38,15 +38,15 @@
 00350 L350: close #1: 
 00360   open #1: fl1$,internal,input,keyed 
 00370   if fnprocess=1 or fnUseDeptNo=0 then goto BEGIN_PRINTING
-00380   fntos(sn$="GLInput") !:
+00380   fnTos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
-00390   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00400   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00390   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00400   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00410   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00420   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00430   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00440   fnacs(sn$,0,mat resp$,ckey)
+00410   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00420   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00430   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00440   fnAcs(sn$,0,mat resp$,ckey)
 00450   if ckey=5 then goto XIT
 00460   costcntr=val(resp$(1))
 00470 BEGIN_PRINTING: ! 
@@ -79,7 +79,7 @@
 00720   if fr=val(r$) and val(r$)><0 then goto L810
 00730   if fr>val(r$) then goto L810
 00740 L740: ! read amounts form gl maste file
-00750 L750: read #3,using L770: fr,bb,cb,mat by,mat bp,pbp norec L740 eof L870
+00750 L750: read #3,using L770: fr,bb,cb,mat by,mat bp,pbp noRec L740 eof L870
 00760   if fr=0 then goto L750
 00770 L770: form pos mp1,pd 3,pos 81,28*pd 6.2,pos 327,pd 6.2
 00780   if fscode=0 then goto L810

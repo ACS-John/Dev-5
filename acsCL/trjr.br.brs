@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\TrJr
 00020 ! pr Transaction Journals
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
@@ -22,30 +22,30 @@
         close #20: 
 00190 ! ______________________________________________________________________
 00200 MAIN: ! 
-00210   fntos(sn$="Trjr") !:
+00210   fnTos(sn$="Trjr") !:
         respc=0
-00220   fnlbl(1,1,"Beginning Date:",38,1)
-00230   fntxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") !:
+00220   fnLbl(1,1,"Beginning Date:",38,1)
+00230   fnTxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") !:
         resp$(respc+=1)=""
-00240   fnlbl(2,1,"Ending Date:",38,1)
-00250   fntxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") !:
+00240   fnLbl(2,1,"Ending Date:",38,1)
+00250   fnTxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") !:
         resp$(respc+=1)=""
-00260   fnlbl(4,1,"Information to Print:",38,1)
+00260   fnLbl(4,1,"Information to Print:",38,1)
 00270   item2$(1)="Details" !:
         item2$(2)="Totals Only"
 00280   fncomboa("claims-act",4,40,mat item2$) !:
         resp$(respc+=1)=item2$(1)
-00290   fnchk(7,40,"Print Disbursments Journal:",1) !:
+00290   fnChk(7,40,"Print Disbursments Journal:",1) !:
         resp$(respc+=1)="True"
-00300   fnchk(8,40,"Print Receipts Journal:",1) !:
+00300   fnChk(8,40,"Print Receipts Journal:",1) !:
         resp$(respc+=1)="True"
-00310   fnchk(9,40,"Print Adjustments Journal:",1) !:
+00310   fnChk(9,40,"Print Adjustments Journal:",1) !:
         resp$(respc+=1)="False"
-00320   fnlbl(11,1,"Bank Account:",38,1)
+00320   fnLbl(11,1,"Bank Account:",38,1)
 00330   fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing") !:
         resp$(respc+=1)=str$(wbc)
-00340   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ck)
+00340   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00350   if ck=5 then goto XIT
 00360   dt1=val(resp$(1)) ! beginning date !:
         dt2=val(resp$(2)) ! ending date !:
@@ -61,9 +61,9 @@
 00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
 00440   open #glmstr=4: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00450   open #work=3: "Name="&udf$&"WORK,KFName="&udf$&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outin,keyed  !:
+00450   open #work=3: "Name="&udf$&"WORK,KFName="&udf$&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outIn,keyed  !:
         ! this file is used to total Amounts by General Ledger Number
-00460   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00460   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00470   read #bankmstr,using 'Form POS 3,C 30,C 12,PD 6.2',key=cnvrt$("N 2",wbc),release: bn$ nokey MAIN
 00480   close #bankmstr: 
 00490   bn$=rtrm$(bn$)

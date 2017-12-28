@@ -88,8 +88,8 @@
 42100   if get_or_put=1 then 
 42120     fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 42140     if valuePassedIn=0 then
-42160       open #tmp:=fngethandle: "Name="&legacyFilename$,internal,outin,relative ioerr LegacyOpenFail
-42180       read #tmp,using legacyForm$,rec=1: valuePassedIn norec ignore
+42160       open #tmp:=fngethandle: "Name="&legacyFilename$,internal,outIn,relative ioerr LegacyOpenFail
+42180       read #tmp,using legacyForm$,rec=1: valuePassedIn noRec ignore
 42200       close #tmp: ioerr ignore
 42220       fncreg_write(registryKey$,str$(valuePassedIn))
 42240       LegacyOpenFail: !
@@ -115,8 +115,8 @@
 44260       else
 44280         goto xLegacyOpenFail
 44300       end if
-44320       open #tmp:=fngethandle: "Name="&pedatLegacyFile$,internal,outin,relative ioerr xLegacyOpenFail
-44340       read #tmp,using "Form POS 1,C 20",rec=1: pedat$ norec ignore
+44320       open #tmp:=fngethandle: "Name="&pedatLegacyFile$,internal,outIn,relative ioerr xLegacyOpenFail
+44340       read #tmp,using "Form POS 1,C 20",rec=1: pedat$ noRec ignore
 44360       close #tmp: ioerr ignore
 44380       fncreg_write('Pay Period Ending Date',pedat$)
 44400       xLegacyOpenFail: !
@@ -156,12 +156,12 @@
 48040     useDeptNosetup=1
 48080     if env$('cursys')="GL" then ! read directly from gl if in gl system
 48100       open #company:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
-48120       read #company ,using "Form POS 150, n 1",rec=1: gld1 norec ignore
+48120       read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 48140       close #company: 
 48160     else 
 48180       pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-48200       ! open #tmp:=fngethandle: "Name="&env$('temp')&"\gld1-"&session$&".dat,Use,RecL=9",internal,outin,relative 
-48220       ! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 norec ignore
+48200       ! open #tmp:=fngethandle: "Name="&env$('temp')&"\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
+48220       ! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 48240       ! close #tmp: 
 48260     end if
 48280   end if ! /r

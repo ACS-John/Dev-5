@@ -1,6 +1,6 @@
 00020   on fkey 5 goto L770
 00030   on error goto L1950
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fndat
 00050   fntop(program$,cap$="YTD Billing Summary")
 00060   fncno(cno,cnam$)
 00070   fndat(dat$)

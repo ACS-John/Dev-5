@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\Analyze
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fntos,fnget_services,fncombof,fnlbl,fntxt,fnfra,fnacs,fnLastBillingDate,fncmdset
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fnTos,fnget_services,fncombof,fnLbl,fnTxt,fnFra,fnAcs,fnLastBillingDate,fnCmdSet
 00040 ! Goto XIT
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -13,17 +13,17 @@
 00140   fnget_services(mat srvnam$,mat srv$)
 09000 goto SCR1
 20000 SCR1: ! r:
-20010   fntos(sn$="Anlyze-1") 
+20010   fnTos(sn$="Anlyze-1") 
 20020   rc=0 : mylen=20 : mypos=mylen+2
-20030   fnlbl(1,1,"Last Billing Date:",mylen,1)
-20040   fntxt(1,mypos,8,0,0,"1") 
+20030   fnLbl(1,1,"Last Billing Date:",mylen,1)
+20040   fnTxt(1,mypos,8,0,0,"1") 
 20050   resp$(rc+=1)=str$(bdate)
-20060   fnlbl(2,1,"Rate for Analysis:",mylen,1)
+20060   fnLbl(2,1,"Rate for Analysis:",mylen,1)
 20070   fncombof("nerd",2,mypos,55,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) 
 20080   usa+=1 
 20090   resp$(rc+=1)="" ! just default to the first one
-20100   fncmdset(2)
-20110   fnacs(sn$,0,mat resp$,ckey)
+20100   fnCmdSet(2)
+20110   fnAcs(sn$,0,mat resp$,ckey)
 20120   if ckey=5 then goto XIT 
 20130   bdate=val(resp$(1)) 
 20140   bla3$=trim$(resp$(2)) 
@@ -37,35 +37,35 @@
 20220   close #20: 
 20900 goto SCR2 ! /r
 24000 SCR2: ! r:
-24010   fntos(sn$:="Anlyze-2b") 
+24010   fnTos(sn$:="Anlyze-2b") 
 24020   rc=rtc=0 : mylen=20 : mypos=mylen+2
-24030   fnlbl(1,1,"Analysis Based On:",mylen,1)
-24040   fntxt(1,mypos,55,0,0,"",1) 
+24030   fnLbl(1,1,"Analysis Based On:",mylen,1)
+24040   fnTxt(1,mypos,55,0,0,"",1) 
 24050   resp$(rc+=1)=bla3$
-24060   fnlbl(2,1,"Minimum Charge:",mylen,1)
-24070   fntxt(2,mypos,9,0,1,"10") 
+24060   fnLbl(2,1,"Minimum Charge:",mylen,1)
+24070   fnTxt(2,mypos,9,0,1,"10") 
 24080   resp$(rc+=1)=rt$(rtc+=1)
-24090   fnlbl(3,1,"Minimum Usage:",mylen,1)
-24100   fntxt(3,mypos,9,0,1,"30") 
+24090   fnLbl(3,1,"Minimum Usage:",mylen,1)
+24100   fnTxt(3,mypos,9,0,1,"30") 
 24110   resp$(rc+=1)=rt$(rtc+=1)
-24120   fnfra(4,1,12,45,"Rate Breakdown")
-24130   fnlbl(1,5,"Usage",10,2,0,1) 
-24140   fnlbl(1,17,"Usage",10,2,0,1) 
-24150   fnlbl(1,32,"Charge",15,2,0,1)
-24160   fnlbl(2,5,"From",10,2,0,1) 
-24170   fnlbl(2,17,"To",10,2,0,1) 
-24180   fnlbl(2,32,"Per Unit",15,2,0,1)
+24120   fnFra(4,1,12,45,"Rate Breakdown")
+24130   fnLbl(1,5,"Usage",10,2,0,1) 
+24140   fnLbl(1,17,"Usage",10,2,0,1) 
+24150   fnLbl(1,32,"Charge",15,2,0,1)
+24160   fnLbl(2,5,"From",10,2,0,1) 
+24170   fnLbl(2,17,"To",10,2,0,1) 
+24180   fnLbl(2,32,"Per Unit",15,2,0,1)
 24190   for j=1 to 10
-24200     txt$=str$(j)&"." : fnlbl(j+2,1,txt$,3,1,0,1)
-24210     fntxt(j+2,05,10,0,1,"30",0,mt$,1) 
+24200     txt$=str$(j)&"." : fnLbl(j+2,1,txt$,3,1,0,1)
+24210     fnTxt(j+2,05,10,0,1,"30",0,mt$,1) 
 24220     resp$(rc+=1)=rt$(rtc+=1)
-24230     fntxt(j+2,17,10,0,1,"30",0,mt$,1) 
+24230     fnTxt(j+2,17,10,0,1,"30",0,mt$,1) 
 24240     resp$(rc+=1)=rt$(rtc+=1)
-24250     fntxt(j+2,34,10,0,1,"46",0,mt$,1) 
+24250     fnTxt(j+2,34,10,0,1,"46",0,mt$,1) 
 24260     resp$(rc+=1)=rt$(rtc+=1)
 24270   next j
-24280   fncmdset(8)
-24290   fnacs(sn$,0,mat resp$,ckey)
+24280   fnCmdSet(8)
+24290   fnAcs(sn$,0,mat resp$,ckey)
 24300   if ckey=2 then 
 24310     goto SCR1 
 24320   else if ckey=5 then 

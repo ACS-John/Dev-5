@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newEmpList
 00020 ! pr Employee List
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnxit,fntop,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdkey,fnacs,fncomboa,fncombof,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnxit,fntop,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncomboa,fncombof,fnGetPayrollDates
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$*40,em$(1)*30,ta(2),cp(22),tcp(22),hc(5),thc(5),dat$*20,whc(10)
@@ -33,7 +33,7 @@
 00350   gosub HDR
 00360   close #5: 
 00370   execute "INDEX "&env$('Temp')&"\Temp1."&session$&" "&env$('Temp')&"\TempIdx."&session$&" 9 50 Replace DupKeys"
-00380   open #5: "Name="&env$('Temp')&"\Temp1."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,outin,keyed 
+00380   open #5: "Name="&env$('Temp')&"\Temp1."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,outIn,keyed 
 00390 L390: read #5,using L320: eno,last$,first$,mid$,lpd,em4 eof DONE
 00400   pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PGOF
 00410 L410: form pos 1,n 8,x 3,c 30,x 3,pic(zz/zz/zz),x 9,n 2,skip 1
@@ -90,19 +90,19 @@
 00910 L910: ! pr FIRST$,MID$,LAST$
 00920   return 
 00930 ASKFORMAT: ! 
-00940   fntos(sn$="Emplist") !:
+00940   fnTos(sn$="Emplist") !:
         respc=0
-00950   fnlbl(1,1,"Order for Printing Name:",28,1)
+00950   fnLbl(1,1,"Order for Printing Name:",28,1)
 00960   fi$="Emplist1" !:
         item1$(1)="First Name First" !:
         item1$(2)="Last Name First": fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).") !:
         resp$(respc+=1)=item1$(1)
-00970   fnlbl(2,1,"Status Code:",28,1)
+00970   fnLbl(2,1,"Status Code:",28,1)
 00980   fncombof("EmpStatus",2,30,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0) !:
         resp$(respc+=1)=str$(status)
-00990   fncmdkey("&Next",1,1,0,"Proceed with printing." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-01000   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00990   fnCmdKey("&Next",1,1,0,"Proceed with printing." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+01000   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 01010   if ckey=5 then goto XIT
 01020   namcde$=resp$(1)(1:1)
 01030   status=val(resp$(2)(1:2))

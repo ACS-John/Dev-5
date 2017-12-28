@@ -10,7 +10,7 @@
 00090 ! ** phase 1 **
 00100   pr " *** Phase 1 ***" !:
         pr "convert "&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&" to version 1"
-00110   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outin,keyed 
+00110   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outIn,keyed 
 00120   if version(note1)=>1 then !:
           close #note1: !:
           pr env$('Q')&"\UBmstr\Note1.h"&env$('cno')&" is already at least version 1" !:
@@ -29,7 +29,7 @@
 00240   execute "Copy "&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&" X -73 -n"
 00250   execute "Copy X "&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&" -n"
 00260   execute "Free X -n"
-00270   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outin,keyed 
+00270   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outIn,keyed 
 00280   version(note1,1)
 00290   close #note1: 
 00300   pr env$('Q')&"\UBmstr\Note1.h"&env$('cno')&" converted successfully to version 1."
@@ -38,8 +38,8 @@
 00330 EOPHASE1: ! 
 00340   pr " *** Phase 2 ***" !:
         pr "convert "&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&" to version 1"
-00350   open #note1=3: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outin,keyed 
-00360   open #note2=4: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno'),internal,outin,relative 
+00350   open #note1=3: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outIn,keyed 
+00360   open #note2=4: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno'),internal,outIn,relative 
 00370   if version(note2)=>1 then close #note2: !:
           pr env$('Q')&"\UBmstr\Note2.h"&env$('cno')&" is already at least version 1" !:
           goto EOPHASE2
@@ -65,9 +65,9 @@
 00580 EOPHASE2: ! 
 00590 ! ** Phase 3 **
 50020 ! Note conversion program
-50070   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outin,keyed 
-50080   open #3: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outin,keyed 
-50090   open #4: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno'),internal,outin,relative 
+50070   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outIn,keyed 
+50080   open #3: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),internal,outIn,keyed 
+50090   open #4: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno'),internal,outIn,relative 
 50100 L50100: read #1,using 'Form POS 1,C 10': z$ eof EO4
 50120   if z$(8:10)=".00" then goto L50100 ! skip base records
 50130   x$=z$(1:7)&".00"

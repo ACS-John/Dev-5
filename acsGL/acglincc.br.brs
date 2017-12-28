@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncC
 00020 ! -- ! COMPARATIVE INCOME STATEMENT FOR 14 7/8*11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   fntop(program$,cap$="Comparative Income Statement")
 00060 ! ______________________________________________________________________
 00070   on error goto ERTN
@@ -32,7 +32,7 @@
 00280 L280: form pos mp1,pd 3,pos 81,41*pd 6.2
 00290   form c 7,skip 0
 00300   nametab=int(44-len(rtrm$(cnam$))/2)
-00310   pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('temp')&"\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
+00310   pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('temp')&"\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed 
 00320   if actpd>0 and actpd<14 then goto L380
 00330   pr newpage
 00340   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
@@ -42,15 +42,15 @@
 00380 L380: open #1: fl1$,internal,input,keyed 
 00390   if fnprocess=1 or fnUseDeptNo=0 then goto L510
 00400   if percent=1 then goto L510
-00410   fntos(sn$="Acglincc") !:
+00410   fnTos(sn$="Acglincc") !:
         mylen=30: mypos=mylen+3 : right=1
-00420   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00430   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00420   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00430   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00440   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00450   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00460   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00470   fnacs(sn$,0,mat resp$,ckey)
+00440   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00450   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00460   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00470   fnAcs(sn$,0,mat resp$,ckey)
 00480   if ckey=5 then goto XIT
 00490   costcntr=val(resp$(1))
 00500   cnam$=rtrm$(cnam$)

@@ -1,7 +1,8 @@
 Utility Billing Programmer ^ ACS Utility Billing
 Programmer
+>Customer Hamster                          ^ HamsterFio:Customer
 >WorkOrder Hamster                         ^ acsUB\workorderHamster
->Type Of Service                           ^ acsUB\TypeOfService
+>Type Of Service                           ^ Utility Billing\Type Of Service
 >Type of Services (All Companies)          ^ acsUB\TypeOfServices
 >Customer Hamster                          ^ acsUB\Customer_Hamster
 >Deposit1 HamsterFio                       ^ HamsterFio:Deposit1

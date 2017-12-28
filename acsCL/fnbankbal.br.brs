@@ -3,11 +3,11 @@
 00030   def library fnbankbal(bank_code)
 00040     library 'S:\Core\Library': fncno,fngethandle
 00050     fncno(cno)
-00060     open #bankmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00060     open #bankmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00070     if bank_code=0 then 
 00080       bankbal=0
 00090       for j=1 to lrec(bankmstr)
-00100         read #bankmstr,using 'Form Pos 45,PD 6.2',rec=j: bal norec L120
+00100         read #bankmstr,using 'Form Pos 45,PD 6.2',rec=j: bal noRec L120
 00110         bankbal+=bal
 00120 L120: next j
 00130     else 

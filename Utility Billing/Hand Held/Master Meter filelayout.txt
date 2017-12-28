@@ -8,8 +8,8 @@ Length   Name
 30       Meter Address
 3        Route          
 7        Sequence                 
-8        Meter Information - Meter Number      
-20       Meter Information - Transmitter Number
+8        Meter Location - Meter Number      
+20       Meter Location - Transmitter Number
 9        Previous Reading
 17       Longitude
 17       Latitude

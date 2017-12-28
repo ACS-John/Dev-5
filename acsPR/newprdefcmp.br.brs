@@ -1,6 +1,6 @@
 00020   on fkey 5 goto END1
 00030   on error goto ERTN
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fntos,fnfra,fnopt,fnlbl,fntxt,fncmbact,fncmdkey,fnacs,fnchk,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fncmbact,fnCmdKey,fnAcs,fnChk,fnDedNames
 00050   fntop(program$,cap$="Deferred Compensation Report")
 00070 ! 
 00080   def fndate_mmddyy_to_ccyymmdd(x)
@@ -15,7 +15,7 @@
 00170   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00190   gosub L710
 00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",Shr",internal,input,relative 
-00210   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00210   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00220   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
 00230   fnopenprn
 00240   gosub HDR
@@ -67,31 +67,31 @@
 00680   next j
 00690   reg_earnings+=cp(31) ! REGULAR EARNINGS
 00700   goto L600
-00710 L710: fntos(sn$="Deferred-1") !:
+00710 L710: fnTos(sn$="Deferred-1") !:
         rc=cf=0
-00720   fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
+00720   fnFra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
         cf+=1 : fratype=cf
 00730   for j=1 to 20
-00740     fnchk(j,3,fullname$(j),0,fratype) !:
+00740     fnChk(j,3,fullname$(j),0,fratype) !:
           resp$(rc+=1)="False"
 00750   next j
-00760   fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
+00760   fnFra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
         cf+=1 : fratype=cf
 00770   for j=1 to 20
-00780     fnopt(j,3,fullname$(j),0,fratype) !:
+00780     fnOpt(j,3,fullname$(j),0,fratype) !:
           resp$(rc+=1)="False"
 00790   next j
-00800   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
+00800   fnFra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
         cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-00810   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-00820   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
+00810   fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
+00820   fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
         resp$(rc+=1)=str$(beg_date)
-00830   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-00840   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
+00830   fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
+00840   fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
         resp$(rc+=1)=str$(end_date)
-00850   fncmdkey("Next",1,1,0,"Prints the report")
-00860   fncmdkey("Cancel",5,0,1,"Returns to menu")
-00870   fnacs(sn$,0,mat resp$,ckey) !:
+00850   fnCmdKey("Next",1,1,0,"Prints the report")
+00860   fnCmdKey("Cancel",5,0,1,"Returns to menu")
+00870   fnAcs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00880   for j=1 to 20
 00890     if resp$(j)="True" then sel_ded(j)=1

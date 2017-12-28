@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newDD
 00020 ! Direct Deposit file creator
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnchk,fncmdset,fnmsgbox,fnGetPayrollDates,fnfree
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnChk,fnCmdSet,fnmsgbox,fnGetPayrollDates,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,ml$(3)*80,tcp(32),cp(32),tdc(10)
@@ -23,9 +23,9 @@
 00240   cancel=5
 00250   crlf$=chr$(13)&chr$(10)
 00260   open #mstr=1: "Name="&env$('Q')&"\PRmstr\RPmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00270   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
-00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
-00290   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outin,relative 
+00270   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
+00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00290   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outIn,relative 
 00300   if lrec(31)=0 then write #31,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1,release: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00310   read #31,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00320   close #ddinfo: 
@@ -45,37 +45,37 @@
 00460 SCREEN1: ! 
 00470   mypos=55
 00480 ASK_INFO: ! 
-00490   fntos(sn$="DD") !:
+00490   fnTos(sn$="DD") !:
         respc=0
-00500   fnlbl(1,90,"",1,1) ! bigger screen
-00510   fnlbl(2,1,"Payroll Date:",mypos,1)
-00520   fntxt(2,mypos+3,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can transfer older payrolls by using a previous payroll date.")
+00500   fnLbl(1,90,"",1,1) ! bigger screen
+00510   fnLbl(2,1,"Payroll Date:",mypos,1)
+00520   fnTxt(2,mypos+3,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can transfer older payrolls by using a previous payroll date.")
 00530   resp$(respc+=1)=str$(d1)
-00540   fnlbl(3,1,"Path to Save File to:",mypos,1) !:
-        fntxt(3,mypos+3,30,0,0,"70",0,"The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'") !:
+00540   fnLbl(3,1,"Path to Save File to:",mypos,1) !:
+        fnTxt(3,mypos+3,30,0,0,"70",0,"The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'") !:
         resp$(respc+=1)=path$
-00550   fnlbl(5,1,"Your Bank Account #:",mypos,1) !:
-        fntxt(5,mypos+3,12,0,0,"",0,"The right hand set of numbers at the bottom of your checks.") !:
+00550   fnLbl(5,1,"Your Bank Account #:",mypos,1) !:
+        fnTxt(5,mypos+3,12,0,0,"",0,"The right hand set of numbers at the bottom of your checks.") !:
         resp$(respc+=1)=bankaccount$
-00560   fnlbl(6,1,"Routing Number of your Bank:",mypos,1) !:
-        fntxt(6,mypos+3,12,0,0,"",0,"The middle set of numbers at the bottom of your checks.") !:
+00560   fnLbl(6,1,"Routing Number of your Bank:",mypos,1) !:
+        fnTxt(6,mypos+3,12,0,0,"",0,"The middle set of numbers at the bottom of your checks.") !:
         resp$(respc+=1)=bankrouting$
-00570   fnlbl(7,1,"Routing Number of Federal Reserve Used by Your BAnk:",mypos,1) !:
-        fntxt(7,mypos+3,10,0,0,"",0,"You will have to call your bank for this.  Some times it is build into their software and is not needed.") !:
+00570   fnLbl(7,1,"Routing Number of Federal Reserve Used by Your BAnk:",mypos,1) !:
+        fnTxt(7,mypos+3,10,0,0,"",0,"You will have to call your bank for this.  Some times it is build into their software and is not needed.") !:
         resp$(respc+=1)=federalrouting$
-00580   fnlbl(8,1,"Your Bank Name:",mypos,1) !:
-        fntxt(8,mypos+3,23,0,0,"",0,"") !:
+00580   fnLbl(8,1,"Your Bank Name:",mypos,1) !:
+        fnTxt(8,mypos+3,23,0,0,"",0,"") !:
         resp$(respc+=1)=bankname$
-00590   fnlbl(9,1,"Federal ID Number:",mypos,1) !:
-        fntxt(9,mypos+3,12,0,0,"",0,"The Federal ID number can be found on any payroll report.") !:
+00590   fnLbl(9,1,"Federal ID Number:",mypos,1) !:
+        fnTxt(9,mypos+3,12,0,0,"",0,"The Federal ID number can be found on any payroll report.") !:
         resp$(respc+=1)=fedid$
-00610   fnchk(11,mypos,"Print a Report:",1) !:
+00610   fnChk(11,mypos,"Print a Report:",1) !:
         resp$(respc+=1)="True"
-00615   fnchk(13,mypos,"Is this a test file?",1) !:
+00615   fnChk(13,mypos,"Is this a test file?",1) !:
         resp$(respc+=1)="False"
-00620   fncmdkey("&Next",1,1,0,"Creadt the direct deposit files." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00630   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00620   fnCmdKey("&Next",1,1,0,"Creadt the direct deposit files." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00630   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 00640   if ckey=5 then goto XIT
 00650   ppd=val(resp$(1))
 00660   path$=resp$(2)
@@ -87,7 +87,7 @@
 00720   fedid$=cid$=resp$(7) : cid$="1"&cid$
 00740   if resp$(8)="True" then report$="Y" else report$="N"
 00745   if resp$(9)="True" then testfile=1 else testfile=0
-00750   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outin,relative 
+00750   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outIn,relative 
 00760   rewrite #ddinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1,release: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00770   close #ddinfo: 
 00780   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 

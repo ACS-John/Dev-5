@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Year
 00020 ! GL - Year File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2),mask(2)
@@ -14,7 +14,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\Year.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Year-Idx.h"&env$('cno')&",Use,RecL=8,KPs=1,KLn=1,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\Year.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Year-Idx.h"&env$('cno')&",Use,RecL=8,KPs=1,KLn=1,Shr",internal,outIn,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -49,7 +49,7 @@
 00320   return 
 00330 ! ______________________________________________________________________
 00340 HAMSTER: ! 
-00350   fnhamster("Year",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00350   fnHamster("Year",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00360   return 
 00370 ! ______________________________________________________________________
 00380 XIT: fnxit

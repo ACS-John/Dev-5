@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\fnglMerge
 00020 ! GL Merge program, chained to from other systems, like Checkbook-post to GL
 00030   def library fnglmerge
-00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fntos,fnacs,fncmdset,fncmbcno,fncursys$,fnlbl,fntxt,fncmdkey,fncombof,fnindex_it,fnfree
+00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fnTos,fnAcs,fnCmdSet,fncmbcno,fncursys$,fnLbl,fnTxt,fnCmdKey,fncombof,fnindex_it,fnfree
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim adr(2),ta(2),prg$*20,k(10,8),gl$(5)*12,gl1(5)
@@ -19,11 +19,11 @@
 00170     if fnstyp=99 then goto L200
 00180     if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 00190     fnprg(prg$,2)
-00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed ioerr GLMSTR_OPEN_ERR
-00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,outin,relative 
-00220     open #glwk1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outin 
-00230     open #gl1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gl109idx.H"&env$('cno')&",Shr",internal,outin,keyed 
-00240     open #gltr1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outin,relative 
+00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr GLMSTR_OPEN_ERR
+00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,outIn,relative 
+00220     open #glwk1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outIn 
+00230     open #gl1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gl109idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00240     open #gltr1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outIn,relative 
 00250 ! fnwait
 00260 READ_GLWK1: ! 
 00270     read #glwk1,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8': t$,s,k,mat n,l$,p$,ven$ eof EO_GLWK1
@@ -61,53 +61,53 @@
 00550     goto READ_GLWK1
 00560 ! ______________________________________________________________________
 00570 REJECT_GL: ! 
-00580     fntos(sn$='GLMerge-Reject_GL') !:
+00580     fnTos(sn$='GLMerge-Reject_GL') !:
           lc=0 : mylen=20 : mypos=mylen+2
-00590     fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00600     fnlbl(lc+=1,1,'Account Number:',mylen,right)
-00610     fntxt(lc,mypos,12,0,right,'',disable) !:
+00590     fnLbl(lc+=1,1,'GL Account Reject',80,center)
+00600     fnLbl(lc+=1,1,'Account Number:',mylen,right)
+00610     fnTxt(lc,mypos,12,0,right,'',disable) !:
           resp$(1)=t$
-00620     fnlbl(lc+=1,1,'Date:',mylen,right)
-00630     fntxt(lc,mypos,0,0,right,mmddyy$,disable) !:
+00620     fnLbl(lc+=1,1,'Date:',mylen,right)
+00630     fnTxt(lc,mypos,0,0,right,mmddyy$,disable) !:
           resp$(2)=str$(s)
-00640     fnlbl(lc+=1,1,'Amount:',mylen,right)
-00650     fntxt(lc,mypos,11,0,right,pointtwo$,disable) !:
+00640     fnLbl(lc+=1,1,'Amount:',mylen,right)
+00650     fnTxt(lc,mypos,11,0,right,pointtwo$,disable) !:
           resp$(3)=str$(k)
-00660     fnlbl(lc+=1,1,'Reference Number:',mylen,right)
-00670     fntxt(lc,mypos,8,0,right,'',disable) !:
+00660     fnLbl(lc+=1,1,'Reference Number:',mylen,right)
+00670     fnTxt(lc,mypos,8,0,right,'',disable) !:
           resp$(4)=l$
-00680     fnlbl(lc+=1,1,'Description:',mylen,right)
-00690     fntxt(lc,mypos,30,0,right,'',disable) !:
+00680     fnLbl(lc+=1,1,'Description:',mylen,right)
+00690     fnTxt(lc,mypos,30,0,right,'',disable) !:
           resp$(5)=p$
-00700     fnlbl(lc+=1,1,"Account Number "&trim$(t$)&" is not in the GL Master File",80,center) !:
-          fnlbl(lc+=1,1,'Do you wish to add this account now?',80,center)
-00710     fncmdkey('&Yes',1,1,0) !:
-          fncmdkey('&No',5,0,1)
-00720     fnacs(sn$,0,mat resp$,ckey) !:
+00700     fnLbl(lc+=1,1,"Account Number "&trim$(t$)&" is not in the GL Master File",80,center) !:
+          fnLbl(lc+=1,1,'Do you wish to add this account now?',80,center)
+00710     fnCmdKey('&Yes',1,1,0) !:
+          fnCmdKey('&No',5,0,1)
+00720     fnAcs(sn$,0,mat resp$,ckey) !:
           if ckey=1 then in1$='Yes' else if ckey=5 then in1$='No'
 00730   if in1$="Yes" then goto ADD_GL else goto CORRECT_GL
 00740 ! ______________________________________________________________________
 00750 CORRECT_GL: ! 
-00760   fntos(sn$='GLMerge-Correct_GL') !:
+00760   fnTos(sn$='GLMerge-Correct_GL') !:
         lc=0 : mylen=31 : mypos=mylen+2
-00770   fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00780   fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
+00770   fnLbl(lc+=1,1,'GL Account Reject',80,center)
+00780   fnLbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
 00790   fncombof("gla-"&env$('cno'),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&env$('cno'),limit_to_list) !:
         resp$(1)=''
-00800   fncmdkey('&Okay',1,1,1)
-00810   fnacs(sn$,0,mat resp$,ckey)
+00800   fnCmdKey('&Okay',1,1,1)
+00810   fnAcs(sn$,0,mat resp$,ckey)
 00820   t$=resp$(1)(22:33)
 00830   goto HERE_A
 00840 ! ______________________________________________________________________
 00850 ADD_GL: ! 
-00860   fntos(sn$='GLMerge-Add_GL') !:
+00860   fnTos(sn$='GLMerge-Add_GL') !:
         lc=0 : mylen=32 : mypos=mylen+2
-00870   fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00880   fnlbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
-00890   fntxt(lc,mypos,30) !:
+00870   fnLbl(lc+=1,1,'GL Account Reject',80,center)
+00880   fnLbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
+00890   fnTxt(lc,mypos,30) !:
         resp$(1)=''
-00900   fncmdkey('&Okay',1,1,1)
-00910   fnacs(sn$,0,mat resp$,ckey)
+00900   fnCmdKey('&Okay',1,1,1)
+00910   fnAcs(sn$,0,mat resp$,ckey)
 00920   d$=resp$(1)
 00930   mat ta=(0) : cb=0
 00940   write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
@@ -116,7 +116,7 @@
 00970 ! ______________________________________________________________________
 00980 EO_GLWK1: ! 
 00990   if fnstyp><92 then goto DONE
-01000   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
+01000   open #20: "Name=CNo.H"&wsid$,internal,outIn,relative  !:
         read #20,using "Form POS 239,5*C 12,5*N 10.2",rec=1: mat gl$,mat gl1 conv DONE !:
         close #20: 
 01010   ckgl=0
@@ -224,12 +224,12 @@
 01780 ! /region
 01790 ! ______________________________________________________________________
 01800 ASK_GLCNO: ! 
-01810   fntos(sn$='GLMerge_ask_glcno') !:
+01810   fnTos(sn$='GLMerge_ask_glcno') !:
         lc=0
-01820   fnlbl(lc+=1,1,'Select the General Ledger Company to Post to')
+01820   fnLbl(lc+=1,1,'Select the General Ledger Company to Post to')
 01830   fncmbcno(lc+=1,5,'GL')
-01840   fncmdkey('&Okay',1,1,1)
-01850   fnacs(sn$,0,mat resp$,ckey)
+01840   fnCmdKey('&Okay',1,1,1)
+01850   fnAcs(sn$,0,mat resp$,ckey)
 01860   cno=val(resp$(1)(43:47))
 01870 ! 
 01880   return 

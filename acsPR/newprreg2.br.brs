@@ -7,7 +7,7 @@
 10000   def fn_setup
 10020     if ~setup then 
 10040       setup=1
-10060       library 'S:\Core\Library': fntop,fnxit,fnGetPayrollDates,fnDedNames,fnerror,fnopenprn,fncloseprn,fnprocess,fndate_mmddyy_to_ccyymmdd,fnss_employee,fnss_employer,fnindex_it,fnstatus_close,fngethandle
+10060       library 'S:\Core\Library': fntop,fnxit,fnGetPayrollDates,fnDedNames,fnerror,fnopenprn,fncloseprn,fnprocess,fndate_mmddyy_to_ccyymmdd,fnss_employee,fnss_employer,fnindex_it,fnStatusClose,fngethandle
 10080       on error goto ERTN
 10100     end if 
 10120   fnend 
@@ -55,7 +55,7 @@
 18460     ! execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&","&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno')&" 9/12/1 3/6/8,replace,DupKeys -n"
 18480     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),internal,input,keyed 
 18500     open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-18520     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
+18520     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
 18540     ! Read #2,Using 370,Rec=ADR: ENO, DEP1,LPD,TCD(1),MAT TDET,MAT HC,MCWH,MAT CP
 22000     READ_CHECKS: ! 
 22010     read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof L1990
@@ -303,10 +303,10 @@
 36020     close #1: ioerr ignore
 36040     close #2: ioerr ignore
 36060     close #h_payrollchecks: ioerr ignore
-36070 ! fnstatus_close
+36070 ! fnStatusClose
 36080     fncloseprn
 36100     fnindex_it(env$('Q')&"\PRmstr\prTot.h"&env$('cno'),env$('Q')&"\PRmstr\PRTotIdx.h"&env$('cno'),"1 9")
-36110 ! fnstatus_close
+36110 ! fnStatusClose
 36120   fnend 
 38000 IGNORE: continue 
 40000 ! <Updateable Region: ERTN>

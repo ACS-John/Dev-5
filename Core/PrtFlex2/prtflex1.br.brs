@@ -1,6 +1,6 @@
 00010 ! Replace Core\PrtFlex\prtflex1
 00020 ! ______________________________________________________________________
-00030   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop,fnfree
+00030   library 'Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fnCmdSet,fnCmdKey,fntop,fnfree
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim programfolder$*60,datafolder$*60
@@ -35,13 +35,13 @@
         ! database folders must be created by the programmer before !:
         ! you can run this program !:
         ! database folders must be under the grid folder.
-00300   fntos(sn$="dataselect")
-00310   fnlbl(1,1,"Data Base Name:",16,1)
-00320   fnlbl(2,1,"Current System: "&fncursys$)
+00300   fnTos(sn$="dataselect")
+00310   fnLbl(1,1,"Data Base Name:",16,1)
+00320   fnLbl(2,1,"Current System: "&fncursys$)
 00330   fncomboa("OTHER",1,18,mat options$,empty$,20) !:
         resp$(1)=options$(1)
-00340   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ckey)
+00340   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
 00360   database$=resp$(1)
 00370 ! ______________________________________________________________________
@@ -54,7 +54,7 @@
 00400   mat options$=("") !:
         mat resp$=("")
 00410 ! sN$ = "flexselect" !:
-        ! fntos(SN$)
+        ! fnTos(SN$)
 00420   j=0
 00430 ! 
 00440   txt$=programfolder$&"\grid\"&database$ !:
@@ -64,7 +64,7 @@
         filter$="*.FIL" !:
         fngetdir(txt$,optionfile$,empty$,filter$)
 00460 ! Execute "Dir "&PROGRAMFOLDER$&"\grid\"&DATABASE$&"\*.* >flexwork."&WSID$ Ioerr 540
-00470 ! Open #12: "Name="&env$('temp')&"\flexwork2.tmp,RecL=30,Replace",Internal,Outin
+00470 ! Open #12: "Name="&env$('temp')&"\flexwork2.tmp,RecL=30,Replace",Internal,outIn
 00480 ! Open #13: "Name=FlexWork.tmp",Display,Input Ioerr 540
 00490 ! Linput #13: LN$ Eof 540
 00500 ! lN$=TRIM$(UPRC$(LN$)) !:
@@ -87,8 +87,8 @@
 00640   mat options$(max(1,j-1))
 00650 ! Close #12: Ioerr 570
 00660 ! __
-00670   fntos(sn$="flexselect")
-00680   fnlbl(1,1,"Flexgrid name:",16,1)
+00670   fnTos(sn$="flexselect")
+00680   fnLbl(1,1,"Flexgrid name:",16,1)
 00690   tt$="Choose a grid or click add to add a new grid" !:
         fncomboa("GridNames",1,18,mat options$,tt$,20) !:
         resp$(1)=options$(1)
@@ -101,12 +101,12 @@
 00710 ! For J=1 To UDIM(OPTIONS$) !:
         ! rESP$(J)=OPTIONS$(J)(1:20) !:
         ! Next J
-00720   fncmdkey("&Next",1,1) !:
-        fncmdkey("&Back",2) !:
-        fncmdkey("&Add Grid",3) !:
-        fncmdkey("&Delete Grid",4) !:
-        fncmdkey("&Cancel",5,0,1)
-00730   fnacs(sn$,0,mat resp$,ckey)
+00720   fnCmdKey("&Next",1,1) !:
+        fnCmdKey("&Back",2) !:
+        fnCmdKey("&Add Grid",3) !:
+        fnCmdKey("&Delete Grid",4) !:
+        fnCmdKey("&Cancel",5,0,1)
+00730   fnAcs(sn$,0,mat resp$,ckey)
 00740   resp$(1)=trim$(resp$(1)(1:20))
 00750   if ckey=5 then goto XIT
 00760   if ckey=3 then goto ADDGRIDNAME
@@ -126,11 +126,11 @@
 00890 GRIDCOLUMNS: !  Displays all vaiables in the data base and allows you to                        choose the ones you want in your grid
 00900   mat item$(2)
 00910   close #15: ioerr L920
-00920 L920: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
+00920 L920: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outIn,keyed ioerr SELECTDATABASE
 00930   sn$="mstrflex" !:
-        fntos(sn$)
+        fnTos(sn$)
 00940   txt$=uprc$(gridname$) !:
-        fnlbl(1,1,txt$,20,2,3)
+        fnLbl(1,1,txt$,20,2,3)
 00950   mat colhdr$(2) !:
         colhdr$(1)="Column #" !:
         colhdr$(2)="Description"
@@ -146,13 +146,13 @@
 01020 L1020: form pos 1,n 3,c 30,c 20,n 4,c 3,c 20
 01030   fnflexadd1(mat item$)
 01040   goto L1000
-01050 L1050: fnlbl(12,1," ")
-01052   fncmdkey("&Add Column",1,1) !:
-        fncmdkey("&Delete Column",2) !:
-        fncmdkey("Display &Grid",3) !:
-        fncmdkey("&Back",4) !:
-        fncmdkey("&Cancel",5,0,1)
-01060   fnacs(sn$,0,mat resp$,ckey) ! CALL items selected
+01050 L1050: fnLbl(12,1," ")
+01052   fnCmdKey("&Add Column",1,1) !:
+        fnCmdKey("&Delete Column",2) !:
+        fnCmdKey("Display &Grid",3) !:
+        fnCmdKey("&Back",4) !:
+        fnCmdKey("&Cancel",5,0,1)
+01060   fnAcs(sn$,0,mat resp$,ckey) ! CALL items selected
 01070   if ckey=5 then goto XIT
 01080   if ckey=1 then goto DISPLAYOPTIONS
 01090   if ckey=3 then goto PRINTGRID
@@ -172,19 +172,19 @@
 01220   restore #15: ! determine next available column number
 01230 L1230: read #15,using L1020: lastcolumn eof L1250
 01240   goto L1230
-01250 L1250: fntos(sn$="options") !:
+01250 L1250: fnTos(sn$="options") !:
         respc=0
-01260   fnlbl(1,1,"Data Base File:",20,1)
-01270   fntxt(1,22,20,20,0,"",1) !:
+01260   fnLbl(1,1,"Data Base File:",20,1)
+01270   fnTxt(1,22,20,20,0,"",1) !:
         gridinfo$(respc+=1)=database$
-01280   fnlbl(2,1,"Grid Name:",20,1)
-01290   fntxt(2,22,20,20,0,"",1) !:
+01280   fnLbl(2,1,"Grid Name:",20,1)
+01290   fnTxt(2,22,20,20,0,"",1) !:
         gridinfo$(respc+=1)=gridname$
-01300   fnlbl(3,1,"Column Number:",20,1)
+01300   fnLbl(3,1,"Column Number:",20,1)
 01310   tt$="Change column # if default not acceptable" !:
-        fntxt(3,22,2,2,0,"30",0,tt$) !:
+        fnTxt(3,22,2,2,0,"30",0,tt$) !:
         gridinfo$(respc+=1)=str$(lastcolumn+1)
-01320   fnlbl(5,1,"Grid Options:",14,1)
+01320   fnLbl(5,1,"Grid Options:",14,1)
 01330   x=0
 01340   mat options$(300)
 01350   mat options$=("")
@@ -199,9 +199,9 @@
 01440 L1440: tt$="Highlite any column heading you wish to add to your grid" !:
         fncomboa("Grrr",5,16,mat options$,tt$,80) !:
         gridinfo$(respc+=1)=options$(1)
-01450   fncmdkey("&Add Column",1,1) !:
-        fncmdkey("&Finish",5,0,1)
-01460   fnacs(sn$,0,mat gridinfo$,ckey) ! data options available
+01450   fnCmdKey("&Add Column",1,1) !:
+        fnCmdKey("&Finish",5,0,1)
+01460   fnAcs(sn$,0,mat gridinfo$,ckey) ! data options available
 01470   if ckey=1 then goto ADDTOGRID
 01480   if ckey=5 then goto GRIDCOLUMNS
 01490   goto GRIDCOLUMNS
@@ -272,7 +272,7 @@
 01970 ! ____________________________________________________________________
 01980 ! This section generates the program lines needed to create the column            headings and column masks
 01990   close #15: ioerr L2000
-02000 L2000: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
+02000 L2000: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outIn,keyed ioerr SELECTDATABASE
 02010   open #10: "Name="&env$('temp')&"\GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
 02020   pr #10,using L2090: "procerr return" !:
         ! skip next line if no lines exist
@@ -317,13 +317,13 @@
 02370 ADDGRIDNAME: !  Allows you to add columns to your grid
 02380   mat resp$=("")
 02390   sn$="addgrid" !:
-        fntos(sn$)
+        fnTos(sn$)
 02400   txt$="Grid Name:" !:
-        fnlbl(1,1,txt$,20,1)
+        fnLbl(1,1,txt$,20,1)
 02410   gridinfo$(2)=gridname$ !:
         tt$="Limited to 11 characters!" !:
-        fntxt(1,22,11,11,0,"",0,tt$)
-02420   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+        fnTxt(1,22,11,11,0,"",0,tt$)
+02420   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 02430   if ckey=5 then goto GRIDSELECTION
 02440   resp$(1)=trim$(resp$(1))
 02450   resp$(1)=trim$(resp$(1))(1:20)

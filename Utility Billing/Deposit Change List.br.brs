@@ -1,23 +1,23 @@
 00010 ! formerly S:\acsUB\ubDepChg
 00020 ! -- Customer Deposit Change Listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fnopenprn,fncloseprn,fnerror,fnxit,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fngethandle
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fnopenprn,fncloseprn,fnerror,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fngethandle
 00050   on error goto ERTN
 00060   fntop(program$)
 00070   dim resp$(2)*20
 00080   dim dp$*70
 00130 ! ______________________________________________________________________
 24000 MENU1: ! r:
-24040   fntos(sn$:="ubDepChg")
-24060   fnlbl(1,28," ",1,1)
-24100   fnlbl(1,1,"Starting Date:",16,1)
-24140   fntxt(1,18,8,0,0,"1",0,"Use mmddyy format for the oldest date to be listed.")
+24040   fnTos(sn$:="ubDepChg")
+24060   fnLbl(1,28," ",1,1)
+24100   fnLbl(1,1,"Starting Date:",16,1)
+24140   fnTxt(1,18,8,0,0,"1",0,"Use mmddyy format for the oldest date to be listed.")
 24160   resp$(1)=str$(bd1)
-24200   fnlbl(2,1,"Ending Date:",16,1)
-24240   fntxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
+24200   fnLbl(2,1,"Ending Date:",16,1)
+24240   fnTxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
 24260   resp$(2)=str$(ed1)
-24280   fncmdset(3)
-24300   fnacs(sn$,0,mat resp$,ckey)
+24280   fnCmdSet(3)
+24300   fnAcs(sn$,0,mat resp$,ckey)
 26000   if ckey=5 then goto XIT
 26020   bd1=val(resp$(1)) 
 26040   bd1=fndate_mmddyy_to_ccyymmdd(bd1) 
@@ -27,7 +27,7 @@
 31000 Report: ! r: start report
 32000   if bd1=20000000 then bd1=0
 32020   if ed1=20000000 then ed1=0
-32060   open #hDeposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr",internal,outin,relative 
+32060   open #hDeposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr",internal,outIn,relative 
 32080   fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
 32120   fnopenprn
 32140   gosub HDR 

@@ -38,14 +38,14 @@
 2560       read #hdednames,using fDedNames,rec=1: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 2580       fDedNames: Form POS 1,20*C 20,20*C 8,120*N 1,20*C 12
 2600     else
-2620       open #hdednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outin,relative 
+2620       open #hdednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outIn,relative 
 2640       write #hdednames,using fDedNames: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 2660     end if 
 2680     close #hdednames:
 2700   end if
 2720   !
 2740   if doWrite then
-2760     open #hdednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outin,relative
+2760     open #hdednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outIn,relative
 2780     rewrite #hdednames,using fDedNames,rec=1: mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$
 2800     close #hdednames:
 2810     doWrite=0

@@ -9,14 +9,14 @@
 02080     library 'S:\Core\Library': fnmsgbox,fnchain,fnLastBillingDate,fnxit,fntop
 02100     library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncomboa
 02120     library 'S:\Core\Library': fncustomer,fnhand_held_device$
-02140     library 'S:\Core\Library': fngethandle,fnbutton,fnregistered_for_hh
-02160     library 'S:\Core\Library': fnretrieve_hand_held_file,fnask_account
-02180     library 'S:\Core\Library': fnlbl,fntxt,fnacs,fntos
-02200     library 'S:\Core\Library': fnopt,fnchk,fnflexinit1,fnflexadd1
-02220     library 'S:\Core\Library': fncmbact,fncmbrt2,fnfra,fncmdset,fncmdkey
+02140     library 'S:\Core\Library': fngethandle,fnButton,fnregistered_for_hh
+02160     library 'S:\Core\Library': fnRetrieveHandHeldFile,fnask_account
+02180     library 'S:\Core\Library': fnLbl,fnTxt,fnAcs,fnTos
+02200     library 'S:\Core\Library': fnOpt,fnChk,fnflexinit1,fnflexadd1
+02220     library 'S:\Core\Library': fncmbact,fncmbrt2,fnFra,fnCmdSet,fnCmdKey
 02240     library 'S:\Core\Library': fncreg_read,fncreg_write,fngetdir2,fnfree
 02260     library 'S:\Core\Library': fnapply_default_rates,fnget_services
-02280     library 'S:\Core\Library': fnstatus_close,fnindex_it
+02280     library 'S:\Core\Library': fnStatusClose,fnindex_it
 02300     library 'S:\Core\Library': fnAccountFromLocationId$
 02320     library 'S:\Core\Library': fnAddOneC
 03000     on error goto ERTN
@@ -48,7 +48,7 @@
 04220     close #1:
 04240     if pcent=0 then
 04260       pcent=100
-04280       open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,outin
+04280       open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,outIn
 04300       rewrite #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 04320       close #1:
 04340     end if
@@ -66,15 +66,15 @@
 04580   ! ______________________________________________________________________
 05000   ! Open_Stuff: !
 05020     fn_setup_service(mat service_enabled)
-05040     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outin,keyed
-05060     open #hCustomer1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed  ! was file #1, but it was getting closed incorrectly
+05040     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+05060     open #hCustomer1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
 05080   F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
 05100   ! fn_CHECK_FOR_CALCULATION  ! checking to see if file is uncalculated - never could get it work correctly - need to know current billing date asked first and also need work file opened before this screen displayed (shows all records entered for file maintenance)
-05120     open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outin,keyed
-05140     open #hCustomer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed
-05160     open #hCustomer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outin,keyed
-05180     open #hCustomer4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outin,keyed
-05200     open #hCustomer5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outin,keyed
+05120     open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+05140     open #hCustomer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed
+05160     open #hCustomer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed
+05180     open #hCustomer4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed
+05200     open #hCustomer5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed
 05220     fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
 05240   end if
 05260 fnend
@@ -203,12 +203,12 @@
 12180 fnend
 12600 AUTO_REC: ! r:
 12610   done_with_readings=0
-12620   fntos(sn$="ubipchg-3")
-12630   fnlbl(1,1,"Starting Account:" ,24,1)
+12620   fnTos(sn$="ubipchg-3")
+12630   fnLbl(1,1,"Starting Account:" ,24,1)
 12640   fncmbact(1,26,1)
 12650   resp$(1)="[All]"
-12660   fncmdset(2)
-12670   fnacs(sn$,0,mat resp$,ck)
+12660   fnCmdSet(2)
+12670   fnAcs(sn$,0,mat resp$,ck)
 12680   if ck=cancel then
 12690     done_with_readings=1
 12700     goto MENU1
@@ -384,13 +384,13 @@
 17920   if editmode=1 then return
 17930   goto MENU1 ! /r MAKE_CORRECTIONS
 17950 CHANGE_ACT_NUM: ! r:
-17960   fntos(sn$="new_act_num")
+17960   fnTos(sn$="new_act_num")
 17970   mylen=19 : mypos=mylen+2
-17980   fnlbl(1,1,"New Account:",mylen)
-17990   fntxt(1,mypos,10)
+17980   fnLbl(1,1,"New Account:",mylen)
+17990   fnTxt(1,mypos,10)
 18000   resp$(1)=""
-18010   fncmdset(1)
-18020   fnacs(sn$,0,mat resp$,ck)
+18010   fnCmdSet(1)
+18020   fnAcs(sn$,0,mat resp$,ck)
 18030   x$=trim$(resp$(1))
 18040   read #hCustomer1,using "Form POS 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
 18050   goto REWRITE_WORK ! /r
@@ -556,7 +556,7 @@
 19830   HH_W_READ: !
 19840   ln$="" : mat x=(0)
 19850   for j=j1 to j2
-19860     read #h_readings,using "Form POS 1,C 1",rec=j: c$ norec HH_W_END
+19860     read #h_readings,using "Form POS 1,C 1",rec=j: c$ noRec HH_W_END
 19870     ln$=ln$&c$
 19880   next j
 19890   x$=lpad$(trim$(ln$(1:10)),10) : x(1)=val(ln$(11:19))
@@ -644,17 +644,17 @@
 20770   return ! if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 20780   ! goto HH_CONTINUE ! /r
 20790   HH_OTHER: ! r:
-20800   if env$('client')="Oakland" then goto HH_OTHER_TYPE1
-20810   if env$('client')="Lovington" then goto HH_OTHER_TYPE1
-20820   ! if env$('client')="Gilbertown" then goto HH_OTHER_TYPE1 ! Green Tree
-20830   !   if env$('client')="Albany" then goto HH_OTHER_TYPE1 ! AMR
-20840   if env$('client')="GreenCo" then goto HH_OTHER_TYPE1 ! Hersey   or Ezreader
-20850   if env$('client')="Brier Lake" then goto HH_OTHER_TYPE1
-20852   if device$='READy Water' then goto HH_OTHER_TYPE1
-20854   if device$='Master Meter' then goto HH_OTHER_TYPE1
-20860   fn_hh_other_type2(listonly)
-20870   goto HH_W_END
-20880   HH_OTHER_TYPE1: !
+20800   ! if env$('client')="Gilbertown" then goto HH_OTHER_TYPE1 ! Green Tree
+20810   if device$='AMR' then goto HH_OTHER_TYPE1
+20820   if device$='EZReader' then goto HH_OTHER_TYPE1
+20830   if device$='Green Tree' then goto HH_OTHER_TYPE1
+20840   if device$='Hersey' then goto HH_OTHER_TYPE1
+20850   if device$='Master Meter' then goto HH_OTHER_TYPE1
+20860   if device$='READy Water' then goto HH_OTHER_TYPE1
+20870   if device$='Sensus' then goto HH_OTHER_TYPE1
+20880   fn_hh_other_type2(listonly)
+20890   goto HH_W_END ! /r
+20880   HH_OTHER_TYPE1: ! r:
 20900   if listonly=1 then let fnopenprn
 20910   close #h_readings: ioerr ignore
 20930   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=30",display,input
@@ -714,32 +714,32 @@
 22320 EST1: ! r: ESTIMATEING ROUTINE
 22330   close #hWork:
 22340   execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
-22360   open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$,internal,outin,keyed
+22360   open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 22370   ASK_EST: !
-22380   fntos(sn$="ubipchg-ask_est")
+22380   fnTos(sn$="ubipchg-ask_est")
 22390   ! services=0
 22400   if srvnam$(1)="Water" then srvest$(1)=srvnam$(1) else srvest$(1)="Unused"
 22410   if service_enabled(3) then srvest$(2)=srvnam$(3) else srvest$(2)="Unused"
 22420   if service_enabled(4) then srvest$(3)=srvnam$(4) else srvest$(3)="Unused"
 22430   mylen=0
 22440   for j=1 to 3 : mylen=max(mylen,len(srvest$(j))) : next j
-22450   fnfra(1,1,8,mylen+50,"Select and Configure Services to Estimate")
-22460   fnlbl(2,mylen+12,"% of Average",15,0,0,1)
+22450   fnFra(1,1,8,mylen+50,"Select and Configure Services to Estimate")
+22460   fnLbl(2,mylen+12,"% of Average",15,0,0,1)
 22470   for j=1 to 3
 22480     resp$(j*2-1)="False" : resp$(j*2)=""
 22490     if srvest$(j)="" or srvest$(j)="Unused" then disable=1 else disable=0
-22500     fnchk(j+2,mylen,srvest$(j),0,1) ! add disable here
-22510     ! fnTXT(J+2,MYLEN+4,2,0,0,"30",DISABLE,EMPTY$,1)
-22520     fntxt(j+2,mylen+14,3,0,0,"30",disable,empty$,1)
+22500     fnChk(j+2,mylen,srvest$(j),0,1) ! add disable here
+22510     ! fnTxt(J+2,MYLEN+4,2,0,0,"30",DISABLE,EMPTY$,1)
+22520     fnTxt(j+2,mylen+14,3,0,0,"30",disable,empty$,1)
 22530   next j
-22540   fnlbl(7,1,"% of average would normally be from 75 to 125 %",52,2,0,1)
-22550   fnfra(11,1,3,50,"Account Selection Method")
-22560   fnopt(1,1,"Individual Accounts",0,2)
+22540   fnLbl(7,1,"% of average would normally be from 75 to 125 %",52,2,0,1)
+22550   fnFra(11,1,3,50,"Account Selection Method")
+22560   fnOpt(1,1,"Individual Accounts",0,2)
 22570   resp$(7)="False"
-22580   fnopt(2,1,"Route",0,2)
+22580   fnOpt(2,1,"Route",0,2)
 22590   resp$(8)="True"
-22600   fncmdset(2)
-22610   fnacs(sn$,0,mat resp$,ck)
+22600   fnCmdSet(2)
+22610   fnAcs(sn$,0,mat resp$,ck)
 22620   if ck=cancel then goto MENU1
 22630   for j=1 to 3
 22640     if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
@@ -769,18 +769,18 @@
 22880   if est1=2 then goto ASK_ROUTE
 22890 goto ASK_EST ! /r
 22910 EST3: ! r:
-22920   fntos(sn$="ubipchg-est3")
+22920   fnTos(sn$="ubipchg-est3")
 22930   mylen=27 : mypos=mylen+2
-22940   fnlbl(1,1,"Account to Estimate:",mylen,1)
+22940   fnLbl(1,1,"Account to Estimate:",mylen,1)
 22950   fncmbact(1,mypos)
 22960   resp$(1)=""
 22970   if ex$<>"" then
-22980     fnlbl(3,1,"Last Account entered:",mylen,1)
-22990     fntxt(3,mypos,10,0,0,empty$,1)
+22980     fnLbl(3,1,"Last Account entered:",mylen,1)
+22990     fnTxt(3,mypos,10,0,0,empty$,1)
 23000     resp$(2)=ex$
 23010   end if
-23020   fncmdset(11)
-23030   fnacs(sn$,0,mat resp$,ck)
+23020   fnCmdSet(11)
+23030   fnAcs(sn$,0,mat resp$,ck)
 23040   x$=lpad$(trim$(resp$(1)(1:10)),10)
 23050   if ck=cancel or trim$(x$)="" then goto MENU1
 23060   x$=lpad$(trim$(x$),10) conv EST3
@@ -791,18 +791,18 @@
 23100   ex$=x$
 23110   goto EST3 ! /r
 23130 ASK_ROUTE: ! r:
-23140   fntos(sn$="ubipchg-ask_Route")
+23140   fnTos(sn$="ubipchg-ask_Route")
 23150   mylen=21 : mypos=mylen+2 : respc=0
-23160   fnlbl(1,1,"Route to Estimate:",mylen,1)
+23160   fnLbl(1,1,"Route to Estimate:",mylen,1)
 23170   fncmbrt2(1,mypos,0)
 23180   resp$(respc+=1)="1"
 23190   if eb2>0 then
-23200     fnlbl(3,1,"Last Route estimated:")
-23210     fntxt(3,mypos,4)
+23200     fnLbl(3,1,"Last Route estimated:")
+23210     fnTxt(3,mypos,4)
 23220     resp$(respc+=1)=str$(eb2)
 23230   end if
-23240   fncmdset(11)
-23250   fnacs(sn$,0,mat resp$,ck)
+23240   fnCmdSet(11)
+23250   fnAcs(sn$,0,mat resp$,ck)
 23260   if resp$(1)="[All]" then eb1=0 : goto L6890
 23270   eb1=val(resp$(1))
 23280 L6890: !
@@ -910,16 +910,16 @@
 35180 ! /region
 35200 def fn_est_dates
 35220   EST_DATES: !
-35240   fntos(sn$="estimate-1")
+35240   fnTos(sn$="estimate-1")
 35260   mylen=51 : mypos=mylen+2
-35280   fnlbl(2,70,"",0,1)
-35300   fnlbl(1,1,"Billing Dates of Months to be Averaged:",mylen,1)
+35280   fnLbl(2,70,"",0,1)
+35300   fnLbl(1,1,"Billing Dates of Months to be Averaged:",mylen,1)
 35320   for j=1 to 8
-35340     fntxt(j,mypos,10,0,0,"3")
+35340     fnTxt(j,mypos,10,0,0,"3")
 35360     resp$(j)=""
 35380   next j
-35400   fncmdset(2)
-35420   fnacs(sn$,0,mat resp$,ckey)
+35400   fnCmdSet(2)
+35420   fnAcs(sn$,0,mat resp$,ckey)
 35440   if ckey=cancel then goto XIT
 35460   for j=1 to 8
 35480     cd1(j)=val(resp$(j)) conv EST_DATES
@@ -1039,33 +1039,33 @@
 42000 MENU1: ! r:
 42020   editmode=0
 42060   addmethod=0
-42080   fntos(sn$="readings-1b")
+42080   fnTos(sn$="readings-1b")
 42100   mylen=28 : mypos=mylen+3
 42120   frame_bd_witdh=42
-42140   fnfra(1,1,5,frame_bd_witdh,"Batch Data")
+42140   fnFra(1,1,5,frame_bd_witdh,"Batch Data")
 42160   disable=0 ! If LREC(hWork)>1 Then dISABLE=1 Else dISABLE=0
-42180   fnlbl(2,2,"Billing Date (mmddyy):",mylen,1,0,1)
-42200   fntxt(2,mypos,8,0,0,"1001",disable,empty$,1)
+42180   fnLbl(2,2,"Billing Date (mmddyy):",mylen,1,0,1)
+42200   fnTxt(2,mypos,8,0,0,"1001",disable,empty$,1)
 42220   resp$(1)=str$(d1)
-42240   fnlbl(4,2,"Meter Reading Date (mmddyy):",mylen,1,0,1)
-42260   fntxt(4,mypos,8,0,0,"1",disable,empty$,1)
+42240   fnLbl(4,2,"Meter Reading Date (mmddyy):",mylen,1,0,1)
+42260   fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
 42280   resp$(2)=str$(d2)
 42300 !
 42640   moe_button_width=frame_bd_witdh-1
-42660   fnfra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
-42680   fnlbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
-42700   fnbutton(frame_line+=1,1,"Display customers in route sequence",2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
-42720   fnbutton(frame_line+=1,1,"Ask Account, then enter Reading",2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
+42660   fnFra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
+42680   fnLbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
+42700   fnButton(frame_line+=1,1,"Display customers in route sequence",2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
+42720   fnButton(frame_line+=1,1,"Ask Account, then enter Reading",2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
 42740 !
-42760   fnlbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
-42780   fnbutton(frame_line+=1,1,"Load Holding File",2003,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
-42800   fnbutton(frame_line+=1,1,"Estimate Readings",2004,'',0,moe_button_width,frame_current)
-42820   fnbutton(frame_line+=1,1,"Import from Tab Delimited Text File",2006,'',0,moe_button_width,frame_current)
+42760   fnLbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
+42780   fnButton(frame_line+=1,1,"Load Holding File",2003,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
+42800   fnButton(frame_line+=1,1,"Estimate Readings",2004,'',0,moe_button_width,frame_current)
+42820   fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",2006,'',0,moe_button_width,frame_current)
 42840 !
 42860   if fnregistered_for_hh then
-42880     fnlbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
-42900     fnbutton(frame_line+=1,1,"Import from Hand Held to Book",2007,'Retrieve Hand Held File',0,moe_button_width,frame_current)
-42920     fnbutton(frame_line+=1,1,"Load Hand Held Book",2005,'Generally for use after "Retreive (Import) from Hand Held to Book"',0,moe_button_width,frame_current)
+42880     fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
+42900     fnButton(frame_line+=1,1,"Import from Hand Held to Book",2007,'Retrieve Hand Held File',0,moe_button_width,frame_current)
+42920     fnButton(frame_line+=1,1,"Load Hand Held Book",2005,'Generally for use after "Retreive (Import) from Hand Held to Book"',0,moe_button_width,frame_current)
 42940   end if  ! fnregistered_for_hh
 44000 ! r: add the grid
 44010 !
@@ -1244,21 +1244,21 @@
 46240     fnflexadd1(mat item$) ! pr mat item$ : pause
 46250   loop
 47580 MENU1READWORKEOF: ! /r
-47590   fnlbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
+47590   fnLbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
 47600   if lrec(hWork)>0 then
-47620 !   fncmdkey("&Add",1)
-47640     fncmdkey("E&dit",2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
-47660     fncmdkey("&Print",4,0,0,'Print a proof listing of the entered records.')
-47680     fncmdkey("Save to &Holding File",6,0,0,'Save entered readings to a Holding File for later calculation.')
-47700     fncmdkey("&Delete",8)
-47720     fncmdkey("&Close",5,0,1)
-47740     fncmdkey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
-47760     fncmdkey("&Finish and Calculate",10,0,0,'Calculate entered readings')
+47620 !   fnCmdKey("&Add",1)
+47640     fnCmdKey("E&dit",2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
+47660     fnCmdKey("&Print",4,0,0,'Print a proof listing of the entered records.')
+47680     fnCmdKey("Save to &Holding File",6,0,0,'Save entered readings to a Holding File for later calculation.')
+47700     fnCmdKey("&Delete",8)
+47720     fnCmdKey("&Close",5,0,1)
+47740     fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
+47760     fnCmdKey("&Finish and Calculate",10,0,0,'Calculate entered readings')
 47780   else
-47800     fncmdkey("&Close",5,0,1)
-47801     ! fncmdset(1)
+47800     fnCmdKey("&Close",5,0,1)
+47801     ! fnCmdSet(1)
 47820   end if
-47840   fnacs(sn$,0,mat resp$,ck)
+47840   fnAcs(sn$,0,mat resp$,ck)
 47860   if ck=cancel then
 47920     goto XIT
 47940   end if
@@ -1299,7 +1299,7 @@
 49540     addmethod=6
 49560     goto INPUT_TEXT
 49580   else if ck=2007 then
-49600     fnretrieve_hand_held_file
+49600     fnRetrieveHandHeldFile
 49610     fntop(program$)
 49620   end if
 49640   goto MENU1
@@ -1321,19 +1321,19 @@
 56000 def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 56020   holdingFileSaveReturn=0
 56040   HoldingFileSave: !
-56060   fntos(sn$="holding")
+56060   fnTos(sn$="holding")
 56080   mylen=19 : mypos=mylen+2
-56100   fnlbl(1,1,"Holding File Number:",mylen)
-56120   fntxt(1,mypos,3,0,0,"30")
+56100   fnLbl(1,1,"Holding File Number:",mylen)
+56120   fnTxt(1,mypos,3,0,0,"30")
 56140   resp$(1)=""
-56160   fnfra(4,1,3,94,"Create new file or append to existing file","If you have a different file for each route, you will always take the option to create a new file.  If you only use one file, clean it on the first batch of readings and append the rest.")
-56180   fnopt(1,1,"Create new file (deletes all previous readings in holding file)",0,1)
+56160   fnFra(4,1,3,94,"Create new file or append to existing file","If you have a different file for each route, you will always take the option to create a new file.  If you only use one file, clean it on the first batch of readings and append the rest.")
+56180   fnOpt(1,1,"Create new file (deletes all previous readings in holding file)",0,1)
 56200   resp$(respc_CreateNew:=2)="False"
-56220   fnopt(2,1,"Append to existing file (retain previous readings, merge new ones in, overwrites duplicates)",0,1)
+56220   fnOpt(2,1,"Append to existing file (retain previous readings, merge new ones in, overwrites duplicates)",0,1)
 56240   resp$(3)="True"
-56260   fncmdkey("&Save",1,1)
-56280   fncmdkey("&Cancel",5,0,1)
-56300   fnacs(sn$,0,mat resp$,ck)
+56260   fnCmdKey("&Save",1,1)
+56280   fnCmdKey("&Cancel",5,0,1)
+56300   fnAcs(sn$,0,mat resp$,ck)
 56320   if ck<>cancel then
 56340     holdingFileSaveReturn=1
 56360     bk1=val(resp$(1)) conv HoldingFileSave
@@ -1347,7 +1347,7 @@
 56520     holdingFile$=env$('Q')&"\UBmstr\IpHold"&str$(bk1)&".h"&env$('cno')
 56540     holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h"&env$('cno')
 56560     fnindex_it(holdingFile$,holdingFileIndex$,'1 10')
-56580     open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outin,keyed
+56580     open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 56600     restore #hWork: ! ,search>="": nokey AppendFinis
 56620     do
 56640       read #hWork,using F_WORK: x$,mat x eof AppendFinis
@@ -1355,7 +1355,7 @@
 56680     loop
 56700     AppendFinis: !
 56720     close #hld8:
-56740     fnstatus_close
+56740     fnStatusClose
 56760     close #hWork:
 56780     fnFree(workFile$)
 56800     fnFree(workFileIndex$)
@@ -1375,10 +1375,10 @@
 58200     pr bell;'addmethod not recognized by INPUT_HAND routine.' : goto IH_XIT
 58220   end if
 58240   INPUT_HAND: !
-58260   fntos(sn$="ubipchg-inh")
+58260   fnTos(sn$="ubipchg-inh")
 58280   txt$="Select "&book_or_holding_file$&" for Input:"
 58300   mylen=len(txt$)+1 : mypos=mylen+2
-58320   fnlbl(1,1,txt$,mylen,1)
+58320   fnLbl(1,1,txt$,mylen,1)
 58340   ! r: book or holding file grid
 58360   colhdr$(1)=book_or_holding_file$ ! "Book"
 58380   colhdr$(2)="Size"
@@ -1411,12 +1411,12 @@
 58920   next ihFileItem
 60000   ! IH_FILE_DIR_EOF: !
 60020   ! close #ih_file_dir: ioerr IH_XIT ! /r
-60040   fnlbl(11,1," ",15,1)
-60060   fncmdkey("&Next",1,1)
-60080   fncmdkey("&Delete",4)
-60100   fncmdkey("&Print",6)
-60120   fncmdkey("&Cancel",5,0,1)
-60140   fnacs(sn$,0,mat resp$,ck)
+60040   fnLbl(11,1," ",15,1)
+60060   fnCmdKey("&Next",1,1)
+60080   fnCmdKey("&Delete",4)
+60100   fnCmdKey("&Print",6)
+60120   fnCmdKey("&Cancel",5,0,1)
+60140   fnAcs(sn$,0,mat resp$,ck)
 60160   holdingFile$=""
 60180   ip1$=resp$(1)
 60300   ! listonly=0
@@ -1425,7 +1425,7 @@
 60360     goto IH_XIT
 60380   else if ck=6 then
 60400     if book_or_holding_file$='Holding File' then
-60404       open #hpHoldingFile:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpHold"&ip1$&".h"&env$('cno'),internal,outin,relative
+60404       open #hpHoldingFile:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpHold"&ip1$&".h"&env$('cno'),internal,outIn,relative
 60406       fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 60408       close #hpHoldingFile:
 60420       ! fn_holdingFilePrint(ip1$) ! pr for Holding Files
@@ -1457,31 +1457,31 @@
 70020   ENTER_READING2: !
 70030   fn_us1
 70040   ENTER_READING3: !
-70050   fntos(sn$="enter_reading")
+70050   fnTos(sn$="enter_reading")
 70060   rc=0 : frac=0
 70070   !
-70080   fnfra(1,1,3,39,"Account Data")
+70080   fnFra(1,1,3,39,"Account Data")
 70090   mylen=15 : mypos=mylen+2 : fraad=frac+=1
-70100   fnlbl(1,1,"Account:",mylen,1,0,fraad)
-70110   fntxt(1,mypos,10,0,0,empty$,1,empty$,1)
+70100   fnLbl(1,1,"Account:",mylen,1,0,fraad)
+70110   fnTxt(1,mypos,10,0,0,empty$,1,empty$,1)
 70120   resp$(rc+=1)=x$
-70130   fnlbl(2,1,"Name:",mylen,1,0,fraad)
-70140   fntxt(2,mypos,30,30,0,empty$,1,empty$,fraad)
+70130   fnLbl(2,1,"Name:",mylen,1,0,fraad)
+70140   fnTxt(2,mypos,30,30,0,empty$,1,empty$,fraad)
 70150   resp$(rc+=1)=aname$
-70160   fnlbl(3,1,"Meter Address:",mylen,1,0,fraad)
-70170   fntxt(3,mypos,10,0,0,empty$,1,empty$,fraad)
+70160   fnLbl(3,1,"Meter Address:",mylen,1,0,fraad)
+70170   fnTxt(3,mypos,10,0,0,empty$,1,empty$,fraad)
 70180   resp$(rc+=1)=e2$
 70190   !
-70200   fnfra(7,1,12,60,"Readings & Overrides")
+70200   fnFra(7,1,12,60,"Readings & Overrides")
 70210   mylen=0 : for j=1 to 8 : mylen=max(mylen,len(srvnam$(j))) : next j
 70220   mypos1=mylen+2 : mypos2=mypos1+12
 70230   mypos3=mypos2+12 : mypos4=mypos3+12 : mypos5=mypos4+12+4
 70240   lc=0 : fraro=frac+=1
-70250   fnlbl(lc+=1,mypos1,"Reading",10,2,0,fraro)
-70260   fnlbl(lc,mypos2,"Charge",10,2,0,fraro)
-70270   fnlbl(lc,mypos3,"Usage",10,2,0,fraro)
+70250   fnLbl(lc+=1,mypos1,"Reading",10,2,0,fraro)
+70260   fnLbl(lc,mypos2,"Charge",10,2,0,fraro)
+70270   fnLbl(lc,mypos3,"Usage",10,2,0,fraro)
 70280   if srvnam$(3)="Electric" then
-70290     fnlbl(lc,mypos4,"Demand",10,2,0,fraro)
+70290     fnLbl(lc,mypos4,"Demand",10,2,0,fraro)
 70300   end if
 70310   ! r: Service 1
 70312   tmpService=1
@@ -1491,10 +1491,10 @@
 70340   ! water
 70350   if service_enabled(tmpService) then
 70360     lc+=1
-70370     fnlbl(lc,1,srvnamc$(1),mylen,1,0,2)
-70380     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
-70390     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
-70400     fntxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+70370     fnLbl(lc,1,srvnamc$(1),mylen,1,0,2)
+70380     fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+70390     fnTxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
+70400     fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
 70410     if editmode=1 then
 70420       resp$(rc+=1)=str$(x(tmpService)) ! water reading
 70430       resp$(rc+=1)=str$(x(09)) ! water charge
@@ -1510,8 +1510,8 @@
 70520   if a(tmpService)=0 then disa=1 else disa=0 ! sewer rate code
 70522   if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 70540   if service_enabled(tmpService) then
-70550     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-70560     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
+70550     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
+70560     fnTxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
 70570     if editmode=1 then
 70580       resp$(rc+=1)=str$(x(05)) ! sewer charge
 70590     else
@@ -1524,11 +1524,11 @@
 70642   if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 70650   !
 70660   if service_type(tmpService)=3 then
-70670     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-70680     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
-70690     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
-70700     fntxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
-70710     fntxt(lc,mypos4,10,11,1,"20",disa,empty$,fraro) ! demand
+70670     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
+70680     fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+70690     fnTxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
+70700     fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+70710     fnTxt(lc,mypos4,10,11,1,"20",disa,empty$,fraro) ! demand
 70720     if editmode=1 then
 70730       resp$(rc+=1)=str$(x(tmpService)) ! electric reading
 70740       resp$(rc+=1)=str$(x(10)) ! electric charge
@@ -1541,10 +1541,10 @@
 70810       resp$(rc+=1)=""
 70820     end if
 70830   else if service_type(tmpService)=3.1 then
-70840     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-70850     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
-70860     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
-70870     fntxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+70840     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
+70850     fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+70860     fnTxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
+70870     fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
 70880     if editmode=1 then
 70890       resp$(rc+=1)=str$(x(03)) ! electric reading
 70900       resp$(rc+=1)=str$(x(10)) ! electric charge
@@ -1557,8 +1557,8 @@
 70970   else if service_type(tmpService)=3.2 then
 70980     if a(1)=0 and a(2)=0 then disa=1 else disa=0 ! water rate code
 70982     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
-70990     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-71000     fntxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+70990     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
+71000     fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
 71010     if editmode=1 then
 71020       resp$(rc+=1)=str$(x(13)) ! Reduction Usage
 71030     else
@@ -1572,10 +1572,10 @@
 71100     if a(tmpService)=0 then disa=1 else disa=0 ! gas rate code
 71102     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 71110     lc+=1
-71120     fnlbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
-71130     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
-71140     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
-71150     fntxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+71120     fnLbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
+71130     fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+71140     fnTxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
+71150     fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
 71160     if editmode=1 then
 71170       resp$(rc+=1)=str$(x(02))
 71180       resp$(rc+=1)=str$(x(11))
@@ -1593,8 +1593,8 @@
 71290     if a(tmpService)=0 then disa=1 else disa=0 ! service 5 rate code
 71292     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 71300     if trim$(srvnam$(tmpService))="Reconnect Fee" then disa=0
-71310     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,fraro)
-71320     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro)
+71310     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,fraro)
+71320     fnTxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro)
 71330     if editmode=1 then
 71340       resp$(rc+=1)=str$(x(tmpService)) ! Service 5 charge
 71350     else
@@ -1612,8 +1612,8 @@
 71460     else
 71470       disa=0
 71480     end if
-71490     fnlbl(lc+=1,1,srvnamc$(6),mylen,1,0,fraro)
-71500     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
+71490     fnLbl(lc+=1,1,srvnamc$(6),mylen,1,0,fraro)
+71500     fnTxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
 71510     if editmode=1 then ! Service 6 charge
 71520       resp$(rc+=1)=str$(x(tmpService))
 71530     else
@@ -1632,8 +1632,8 @@
 71650       disa=0 ! service 7 rate code
 71660     end if
 71662     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
-71670     fnlbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-71690     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,2) ! charge
+71670     fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
+71690     fnTxt(lc,mypos2,10,0,1,"10",disa,empty$,2) ! charge
 71700     if editmode=1 then ! Service 7 charge
 71710       resp$(rc+=1)=str$(x(tmpService))
 71720     else
@@ -1653,8 +1653,8 @@
 71850     end if
 71852     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 71860     lc+=1
-71870     fnlbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
-71880     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
+71870     fnLbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
+71880     fnTxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
 71890     if editmode=1 then
 71900       resp$(rc+=1)=str$(x(tmpService)) ! Service 8 charge
 71910     else
@@ -1664,7 +1664,7 @@
 71950   ! /r
 71960   !
 71970   lc=lc+2
-71980   fnlbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
+71980   fnLbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
 71990   fncomboa("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
 72000   resp_fianl_billing_code=(rc+=1)
 72010   if editmode=1 then
@@ -1676,10 +1676,10 @@
 74060   if editmode=1 and x(15)=2 then resp$(resp_fianl_billing_code)=opt_final_billing$(3)
 74080   begdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
 74100   fn_flexRead(1,mypos5+2,hTrans,x$,begdate,0,fraro) ! beginning date=billing date less one year
-74120   fncmdkey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
-74140   fncmdkey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
-74180   if addmethod=1 or addmethod=from_hh_file then let fncmdset(17) else let fncmdset(11) ! kj   3/24/06
-74200   fnacs(sn$,0,mat resp$,ck)
+74120   fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
+74140   fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
+74180   if addmethod=1 or addmethod=from_hh_file then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
+74200   fnAcs(sn$,0,mat resp$,ck)
 74220   if ck=8 then
 74240     fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 74242     fnapply_default_rates(mat extra, mat a)
@@ -1796,9 +1796,9 @@
 80000 def fn_setupFlexRead
 80020   if ~setupFlexRead then
 80040     setupFlexRead=1
-80080     dim colmask$(30),frColHdr$(30)*20,servicename$(10)*20,item$(25)*70
+80080     dim colmask$(30),frColHdr$(30)*20,serviceName$(10)*20,item$(25)*70
 80100     dim tg(11),a(7)
-80120     fnget_services(mat servicename$)
+80120     fnget_services(mat serviceName$)
 80140     tcode$(1)="Charge"
 80160     tcode$(2)="Penalty"
 80180     tcode$(3)="Collect"
@@ -1817,19 +1817,19 @@
 82160   end if
 82180   mat frColHdr$(30) : mat colmask$(30)
 82200   frColHdr$(headers=1)="Date" : colmask$(headers)="3"
-82220   if trim$(servicename$(1))<>"" and (z$<>'' and a(1)>0) then
+82220   if trim$(serviceName$(1))<>"" and (z$<>'' and a(1)>0) then
 82240     frColHdr$(headers+=1)="Water Reading" : colmask$(headers)="20"
 82260     frColHdr$(headers+=1)="Water Usage" : colmask$(headers)="20"
 82280   end if
-82300   if trim$(servicename$(3))="Electric" and (z$<>'' and a(3)>0) then
+82300   if trim$(serviceName$(3))="Electric" and (z$<>'' and a(3)>0) then
 82320     frColHdr$(headers+=1)="Electric Reading" : colmask$(headers)="20"
 82340     frColHdr$(headers+=1)="Electric Usage" : colmask$(headers)="20"
 82360   end if
-82380   if trim$(servicename$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
+82380   if trim$(serviceName$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
 82400     frColHdr$(headers+=1)="Lawn Meter Reading" : colmask$(headers)="20"
 82420     frColHdr$(headers+=1)="Lawn Meter Usage" : colmask$(headers)="20"
 82440   end if
-82460   if trim$(servicename$(4))="Gas" and (z$<>'' and a(4)>0) then
+82460   if trim$(serviceName$(4))="Gas" and (z$<>'' and a(4)>0) then
 82480     frColHdr$(headers+=1)="Gas Reading" : colmask$(headers)="20"
 82500     frColHdr$(headers+=1)="Gas Usage" : colmask$(headers)="20"
 82520   end if
@@ -1847,19 +1847,19 @@
 82760     if tcode=0 then tcode=1 ! temporary to prevent bad transaction codes
 82780     item$(1)=str$(tdate)
 82800     items=1
-82820     if trim$(servicename$(1))<>"" and (z$<>'' and a(1)>0) then
+82820     if trim$(serviceName$(1))<>"" and (z$<>'' and a(1)>0) then
 82840       item$(items+=1)=str$(wr)
 82860       item$(items+=1)=str$(wu)
 82880     end if
-82900     if trim$(servicename$(3))="Electric" and (z$<>'' and a(3)>0) then
+82900     if trim$(serviceName$(3))="Electric" and (z$<>'' and a(3)>0) then
 82920       item$(items+=1)=str$(er)
 82940       item$(items+=1)=str$(eu)
 82960     end if
-82980     if trim$(servicename$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
+82980     if trim$(serviceName$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
 83000       item$(items+=1)=str$(er)
 83020       item$(items+=1)=str$(eu)
 83040     end if
-83060     if trim$(servicename$(4))<>"" and (z$<>'' and a(4)>0) then
+83060     if trim$(serviceName$(4))<>"" and (z$<>'' and a(4)>0) then
 83080       item$(items+=1)=str$(gr)
 83100       item$(items+=1)=str$(gu)
 83120     end if
@@ -1889,21 +1889,21 @@
 88000 def fn_meter_change_out
 88020   mco_return=0
 88040   do
-88060     fntos(sn$="Method")
+88060     fnTos(sn$="Method")
 88080     rc=0 : lc=0
-88100     fnfra(1,1,2,49,"Method of Change Out")
-88120     fnopt(1,1,"Current customer only",0,1)
+88100     fnFra(1,1,2,49,"Method of Change Out")
+88120     fnOpt(1,1,"Current customer only",0,1)
 88140     resp$(1)="True"
-88160     fnopt(2,1,"All Customers",0,1)
+88160     fnOpt(2,1,"All Customers",0,1)
 88180     resp$(2)="False"
-88200     fnlbl(5,1,"Service Type:",18,1)
+88200     fnLbl(5,1,"Service Type:",18,1)
 88220     fncomboa("ServiceType",5,20,mat serviceoption$)
 88240     resp$(3)=serviceoption$(1)
-88260     fnlbl(6,1,"Beginning Customer:",18,1)
+88260     fnLbl(6,1,"Beginning Customer:",18,1)
 88280     fncmbact(6,20,1)
 88300     resp$(4)="[All]"
-88320     fncmdkey("&Next",1,1,0): fncmdkey("&Cancel",5,0,1)
-88340     fnacs(sn$,0,mat resp$,ckey)
+88320     fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
+88340     fnAcs(sn$,0,mat resp$,ckey)
 88360     if ckey=5 then goto Mco_Xit
 88380     servicetype$=resp$(3)(1:2)
 88400     begx$=resp$(4)(1:10)
@@ -1911,49 +1911,49 @@
 88440     if resp$(1)="True" then method$="Customer" : goto MCO_RECORD_READINGS
 88460   loop
 88480   MCO_RECORD_READINGS: !
-88500   fntos(sn$="Meter_Change")
+88500   fnTos(sn$="Meter_Change")
 88520   rc=0 : lc=0: resprc=0
-88540   fnlbl(lc+=1,1,x$&"  "&aname$,50,0)
-88560   fnlbl(lc+=2,32,"Old Meter",10,2)
-88580   fnlbl(lc,55,"New Meter",10,2)
-88600   fnlbl(lc+=1,25,"Prior",10,2)
-88620   fnlbl(lc,37,"Current",10,2)
-88640   fnlbl(lc,49,"Prior",10,2)
-88660   fnlbl(lc,61,"Current",10,2)
+88540   fnLbl(lc+=1,1,x$&"  "&aname$,50,0)
+88560   fnLbl(lc+=2,32,"Old Meter",10,2)
+88580   fnLbl(lc,55,"New Meter",10,2)
+88600   fnLbl(lc+=1,25,"Prior",10,2)
+88620   fnLbl(lc,37,"Current",10,2)
+88640   fnLbl(lc,49,"Prior",10,2)
+88660   fnLbl(lc,61,"Current",10,2)
 88680   if trim$(servicetype$)="WA" then
-88700     fnlbl(lc+=1,1,srvnamc$(1),20,1)
-88720     fntxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
+88700     fnLbl(lc+=1,1,srvnamc$(1),20,1)
+88720     fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
 88740     resp$(resprc+=1)=str$(d(1))
-88760     fntxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
+88760     fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 88780     resp$(resprc+=1)=""
-88800     fntxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
+88800     fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
 88820     resp$(resprc+=1)=""
-88840     fntxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
+88840     fnTxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
 88860     resp$(resprc+=1)=str$(x(1))
 88880   else if trim$(servicetype$)="EL" then
-88900     fnlbl(lc+=1,1,srvnamc$(3),20,1)
-88920     fntxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
+88900     fnLbl(lc+=1,1,srvnamc$(3),20,1)
+88920     fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
 88940     resp$(resprc+=1)=str$(d(5))
-88960     fntxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
+88960     fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 88980     resp$(resprc+=1)=""
-89000     fntxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
+89000     fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
 89020     resp$(resprc+=1)=""
-89040     fntxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
+89040     fnTxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
 89060     resp$(resprc+=1)=str$(x(3))
 89080   else if trim$(servicetype$)="GA" then
-89100     fnlbl(lc+=1,1,srvnamc$(4),20,1)
-89120     fntxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
+89100     fnLbl(lc+=1,1,srvnamc$(4),20,1)
+89120     fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
 89140     resp$(resprc+=1)=str$(d(9))
-89160     fntxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
+89160     fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 89180     resp$(resprc+=1)=""
-89200     fntxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
+89200     fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
 89220     resp$(resprc+=1)=""
-89240     fntxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
+89240     fnTxt(lc,61,10,11,1,"30",0,"Enter the ending reading on new meter")
 89260     resp$(resprc+=1)=str$(x(2))
 89280   end if
-89300   fncmdkey("&Next",1,1,0): fncmdkey("&Cancel",5,0,1)
-89320   fncmdkey("&Finish",10)
-89340   fnacs(sn$,0,mat resp$,ckey)
+89300   fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
+89320   fnCmdKey("&Finish",10)
+89340   fnAcs(sn$,0,mat resp$,ckey)
 89360   if ckey=5 then goto Mco_Xit
 89380   if ckey=10 then goto Mco_Xit
 89400   oldmeterprior=val(resp$(1))
@@ -1977,7 +1977,7 @@
 89760   ! goto somewhere
 89780   MCO_UPDATE_FULL_FILE: ! meter change over - update full file
 89800   close #hWork: ioerr ignore
-89820   open #hWork: "Name="&workFile$,internal,outin,relative
+89820   open #hWork: "Name="&workFile$,internal,outIn,relative
 89840   if lrec(hWork)=0 then goto MCO_L9290
 89860   MCO_WORK_READ: !
 89880   read #hWork,using F_WORK: x$,mat x eof MCO_L9350
@@ -1991,7 +1991,7 @@
 90040   goto MCO_RECORD_READINGS
 90060   MCO_L9350: !
 90080   close #hWork: ioerr ignore
-90100   open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,internal,outin,keyed
+90100   open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 90120   goto Mco_Xit
 90140   mco_ENTER_READING3: !
 90160   mco_return=3
@@ -2190,7 +2190,7 @@
 97170     hwwAccount$=rpad$(trim$(hwwAccount$),10)
 97180     if hotDataImportEnabled then ! r: import the data
 97190       if ~hMeter then
-97200         open #hMeter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outin,keyed
+97200         open #hMeter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outIn,keyed
 97210       end if
 97220       for hotIdX=1 to udim(mat hotImportDataField$)
 97230         if hotImportDataField$(hotIdX)='meter.transmitter.water' then
@@ -2313,11 +2313,11 @@
 98780   end if
 98790   fn_customerData$=customerDataReturn$
 98800 fnend
-99000 def fn_HwwMeterMakeRecIfNone(hMeter,Account$*10,ServiceCode$*2)
-99020   read #hMeter,using 'form pos 59,C 20',key=hwwAccount$&ServiceCode$,release:  nokey HmmrinWaterMeter
+99000 def fn_HwwMeterMakeRecIfNone(hMeter,Account$*10,serviceCode$*2)
+99020   read #hMeter,using 'form pos 59,C 20',key=hwwAccount$&serviceCode$,release:  nokey HmmrinWaterMeter
 99040   goto HmmrinFinis
 99060   HmmrinWaterMeter: ! r:
-99080     write #hMeter,using 'form pos 1,c 10,c 2':hwwAccount$,ServiceCode$
+99080     write #hMeter,using 'form pos 1,c 10,c 2':hwwAccount$,serviceCode$
 99100     pr 'added a '&hwwAccount$&' WA record to Meter Information file.'
 99120   goto HmmrinFinis ! /r
 99140   HmmrinFinis: !

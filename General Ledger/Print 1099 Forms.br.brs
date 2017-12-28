@@ -1,12 +1,12 @@
 00010 ! (formerly) S:\acsGL\glPrt109
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdset,fnacs,fndat,fncombof,fnfra,fnopt,fnask_1099_info,fn1099print_close,fn1099print
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndat,fncombof,fnFra,fnOpt,fnask_1099_info,fn1099print_close,fn1099print
 00050   fntop(program$,cap$="Print 1099 Forms")
 00060   on error goto ERTN
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
 00090   dim cap$*128
 00200   if ~fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then goto XIT
-00460   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00470   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00460   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00470   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 32000   do
 32020     read #payee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
 32040     ytdp=fn_YearToDapPay(trans,vn$, beg_date,end_date)

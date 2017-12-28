@@ -1,6 +1,6 @@
 00020 ! G/L BALANCE SHEET -  STANDARD FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd$,fnactpd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim sc1$(2)*20,bigul$*140,heading$*140,cch$*20,by(13),bp(13)
@@ -34,7 +34,7 @@
 00230   if fnprocess=1 or fnUseDeptNo=0 then goto L320
 00240   goto L350 ! pr NEWPAGE
 00250   close #101: ioerr L260
-00260 L260: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outin 
+00260 L260: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outIn 
 00270   pr f "13,32,C 16,B,5": "Cancel (F5)"
 00280   pr f "10,5,c 70,n": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
 00290 L290: pr f "11,5,c 65,n": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
@@ -223,21 +223,21 @@
 02030     io1$(j*2-1)=str$(j+4)&",22,NZ 3,UT,n" !:
           io1$(j*2)=str$(j+4)&",28,C 20,UT,N"
 02040   next j
-02050   open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outin,relative 
+02050   open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outIn,relative 
 02060   read #5,using L2070: mat fundnum,mat funddesc$ ioerr L2080
 02070 L2070: form pos 1,10*n 3,10*c 20
-02080 L2080: fntos(sn$="ACglcasf3") !:
+02080 L2080: fnTos(sn$="ACglcasf3") !:
         mylen=1: mypos=mylen+3
-02090   fnlbl(1,4,"Fund                 Description ")
+02090   fnLbl(1,4,"Fund                 Description ")
 02100   for j=1 to 10
-02110     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
+02110     fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
           resp$(j*2-1)=str$(fundnum(j))
-02120     fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
+02120     fnTxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
           resp$(j*2)=funddesc$(j)
 02130   next j
-02140   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
-02150   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02160   fnacs(sn$,0,mat resp$,ckey)
+02140   fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
+02150   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02160   fnAcs(sn$,0,mat resp$,ckey)
 02170   if ckey=5 then goto XIT
 02180   for j=1 to 10
 02190     fundnum(j)=val(resp$(j*2-1))

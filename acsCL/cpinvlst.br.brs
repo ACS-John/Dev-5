@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\CpInvLst
 00020 ! checkbook Accounts Payable Listing (Any Time)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd,fnFree
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
@@ -9,28 +9,28 @@
 00090   fncno(cno,cnam$)
 00100   fntop(program$,cap$="Payables Listing (Any Time)")
 00120   cancel=99
-00130   fntos("cpinvlst") !:
+00130   fnTos("cpinvlst") !:
         respc=0
-00140   fnlbl(1,1,"Period Ending Date:",23,1)
-00150   fntxt(1,25,10,0,1,"3") !:
+00140   fnLbl(1,1,"Period Ending Date:",23,1)
+00150   fnTxt(1,25,10,0,1,"3") !:
         resp$(respc+=1)=str$(ped)
-00160   fnlbl(2,1,"Print Order:",23,1)
+00160   fnLbl(2,1,"Print Order:",23,1)
 00170   item1$(1)="General Ledger" !:
         item1$(2)="Vendor"
 00180   fncomboa("ubnamlst-srt",2,25,mat item1$,tt$) !:
         resp$(respc+=1)=item1$(1)
-00190   fnlbl(3,1,"Fund Number to Print:",23,1)
-00200   fntxt(3,25,3,0,1,"30") !:
+00190   fnLbl(3,1,"Fund Number to Print:",23,1)
+00200   fnTxt(3,25,3,0,1,"30") !:
         resp$(respc+=1)=str$(fund)
-00210   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00210   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
 00230   ped=val(resp$(1))
 00240   sq1$=resp$(2)(1:1)
 00250   fund=val(resp$(3))
 00260 ! ___________________________
 00270 ! ___________________________
-00280   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-00290   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00280   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00290   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00300   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
 00310   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00320   open #unpdaloc=6: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -43,7 +43,7 @@
 00390 RESTORE_UNPDALOC: ! 
 00400   restore #unpdaloc,key>=vn$&iv$: 
 00410 READ_UNPDALOC: ! 
-00420   read #unpdaloc,using 'Form pos 1,c 8,c 12,C 12,PD 5.2': alocvn$,alociv$,gl$,upa norec READ_PAYTRANS eof READ_PAYTRANS
+00420   read #unpdaloc,using 'Form pos 1,c 8,c 12,C 12,PD 5.2': alocvn$,alociv$,gl$,upa noRec READ_PAYTRANS eof READ_PAYTRANS
 00430   if alocvn$<>vn$ or alociv$<>iv$ then goto READ_PAYTRANS
 00440   if fund>0 and fund<>val(gl$(1:3)) then goto READ_UNPDALOC
 00450   if upa=0 then goto L470 ! don't pr 0 breakdowns
@@ -87,7 +87,7 @@
 00790   gosub HDR
 00800 READ_ADDR: ! 
 00810   read #addr,using 'Form POS 1,PD 3': r5 eof ENDALL
-00820   read #work,using 'Form POS 1,C 12,N 6,C 8,C 30,N 10.2',rec=r5: gl$,ivd,vn$,de$,amt norec READ_ADDR
+00820   read #work,using 'Form POS 1,C 12,N 6,C 8,C 30,N 10.2',rec=r5: gl$,ivd,vn$,de$,amt noRec READ_ADDR
 00830   if t1=0 then goto PRINT_LINE
 00840   if sq1$="G" then goto L890
 00850   if vn$=hvn$ then goto PRINT_LINE

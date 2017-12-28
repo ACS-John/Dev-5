@@ -1,52 +1,52 @@
 00010 ! Replace S:\acsUB\UBdelinq
 00020 ! Past Due Balance Breakdown
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fnopenprn,fncloseprn,fnerror,fnwait,fnchk,fnxit,fncno,fnLastBillingDate,fncmdset,fntop,fncreg_read,fnget_services
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fnopenprn,fncloseprn,fnerror,fnwait,fnChk,fnxit,fncno,fnLastBillingDate,fnCmdSet,fntop,fncreg_read,fnget_services
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$*30,g(12),cap$*128,resp$(10)*60
-00080   dim servicename$(10)*20,hdr$*230,detail(11),t(11),gb(10),a$*20
+00080   dim serviceName$(10)*20,hdr$*230,detail(11),t(11),gb(10),a$*20
 00090   dim service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 00095   dim srv$(10)*2
 00100 ! ______________________________________________________________________
 00120   fnLastBillingDate(lbill)
 00130   fntop(program$,cap$="Past Due Balance Breakdown")
 00140 ! need to build headings from this information
-00150   fnget_services(mat servicename$, mat srv$, mat tax_code$,mat penalty$)
+00150   fnget_services(mat serviceName$, mat srv$, mat tax_code$,mat penalty$)
 00152   fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$)
 00154   fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
-00155   if trim$(servicename$(3))<>"Electric" and trim$(srv$(3))="EL" then needelecused=1
-00156   if trim$(servicename$(4))<>"Gas" and trim$(srv$(4))="GA" then needgasused=1
+00155   if trim$(serviceName$(3))<>"Electric" and trim$(srv$(3))="EL" then needelecused=1
+00156   if trim$(serviceName$(4))<>"Gas" and trim$(srv$(4))="GA" then needgasused=1
 00160   x=0
 00170   hdr$="{\ul Account No}  {\ul Customer Name }       "
 00180   for j=1 to 10
 00181     if j=3 and needelecused=1 then goto L200
 00182     if j=4 and needgasused=1 then goto L200
-00190     if trim$(servicename$(j))<>"" then !:
-            hdr$=hdr$&" {\ul "&lpad$((trim$(servicename$(j)(1:9))),9)&"}" !:
+00190     if trim$(serviceName$(j))<>"" then !:
+            hdr$=hdr$&" {\ul "&lpad$((trim$(serviceName$(j)(1:9))),9)&"}" !:
             services+=1
 00200 L200: next j
 00210   mat detail(services+1)
 00220   mat t(services+1)
 00230 ! ______________________________________________________________________
 00240 MENU1: ! 
-00250   fntos(sn$="ubdelinq")
-00260   fnlbl(1,1,"As of Date:",19,1)
-00270   fntxt(1,21,8,8,0,"1001") !:
+00250   fnTos(sn$="ubdelinq")
+00260   fnLbl(1,1,"As of Date:",19,1)
+00270   fnTxt(1,21,8,8,0,"1001") !:
         if d1<>0 then resp$(1)=str$(d1) else resp$(1)=date$("mmddyy")
-00280   fnlbl(2,1,"Last Billing Date:",19,1)
-00290   fntxt(2,21,8,0,0,"1001") !:
+00280   fnLbl(2,1,"Last Billing Date:",19,1)
+00290   fnTxt(2,21,8,0,0,"1001") !:
         resp$(2)=str$(lbill)
-00300   fnchk(3,1,"Skip customers who only owe current bill") !:
+00300   fnChk(3,1,"Skip customers who only owe current bill") !:
         resp$(3)="False"
-00310   fnchk(4,1,"Skip customers with credit balance") !:
+00310   fnChk(4,1,"Skip customers with credit balance") !:
         resp$(4)="False"
-00320   fnchk(5,1,"Only show past due amounts (not current month)") !:
+00320   fnChk(5,1,"Only show past due amounts (not current month)") !:
         resp$(5)="True"
-00330   fnchk(6,1,"Skip accounts with Zero balances") !:
+00330   fnChk(6,1,"Skip accounts with Zero balances") !:
         resp$(6)="True"
-00340   fncmdset(3)
-00350 L350: fnacs(sn$,0,mat resp$,ckey)
+00340   fnCmdSet(3)
+00350 L350: fnAcs(sn$,0,mat resp$,ckey)
 00360   if ckey=5 then goto XIT
 00370   d1=val(resp$(1)) !:
         lbill=val(resp$(2))
@@ -88,7 +88,7 @@
 00710   for j=1 to 10
 00714     if j=3 and needelecused=1 then goto L730
 00715     if j=4 and needgasused=1 then goto L730
-00720     if trim$(servicename$(j))<>"" then detail(x+=1)=gb(j)
+00720     if trim$(serviceName$(j))<>"" then detail(x+=1)=gb(j)
 00730 L730: next j
 00740   detail(x+1)=sum(gb)
 00750   pr #255,using L760: z$,e$(1:20),mat detail pageoflow L990

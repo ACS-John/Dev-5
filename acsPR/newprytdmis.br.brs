@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprYTDMis
 00020 ! Miscellaneous Deductions Register - YTD
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncmdset,fnacs,fnGetPayrollDates,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates,fnDedNames
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim em$*30,em(6),cap$*128,message$*40
@@ -17,16 +17,16 @@
 00180   fnGetPayrollDates(beg_date,end_date)
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
-00210   fntos(sn$="prytdmis")
+00210   fnTos(sn$="prytdmis")
 00212   respc=0
-00220   fnlbl(1,43," ",1,1)
-00230   fnlbl(1,1,"Beginning Date of Tax Year:",26,1)
-00240   fntxt(1,30,12,0,0,"3",0,"") 
+00220   fnLbl(1,43," ",1,1)
+00230   fnLbl(1,1,"Beginning Date of Tax Year:",26,1)
+00240   fnTxt(1,30,12,0,0,"3",0,"") 
 00242   resp$(respc+=1)=str$(beg_date)
-00250   fnlbl(2,1,"Ending Date of Tax Year:",26,1)
-00260   fntxt(2,30,12,0,0,"3",0,"") 
+00250   fnLbl(2,1,"Ending Date of Tax Year:",26,1)
+00260   fnTxt(2,30,12,0,0,"3",0,"") 
 00262   resp$(respc+=1)=str$(end_date)
-00270   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00270   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00280   if ck=5 then goto XIT
 00290   beg_date=val(resp$(1)) ! beginning of year
 00310   end_date=val(resp$(2)) ! ending day of year
@@ -38,9 +38,9 @@
 00360 L360: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 00370   close #20: 
 00380   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00390   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00390   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00400 ! 
-00410   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00410   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00420 ! 
 00430 ! 
 00440   for j=1 to 20: abbrevname$(j)=lpad$(rtrm$(abbrevname$(j)),6) : next j

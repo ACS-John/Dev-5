@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcStWkSh
 00020 ! pr Job Status Worksheet
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fntos,fnlbl,fntxt,fnchk,fncmdset,fnacs,fncmbjob,fnmsgbox,fncmdkey
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fncmbjob,fnmsgbox,fnCmdKey
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,resp$(3)*40,cnam$*40
@@ -18,17 +18,17 @@
 00170 ! ______________________________________________________________________
 00180   if fnprocess=1 then goto ASKJOB
 00190 MAIN_SCREEN: ! 
-00200   fntos(sn$="namlst1") !:
+00200   fnTos(sn$="namlst1") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
-00210   fnlbl(1,1,"Report Heading Date:",23,left)
-00220   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00210   fnLbl(1,1,"Report Heading Date:",23,left)
+00220   fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         resp$(resp+=1)=dat$
-00230   fnchk(2,mypos,"Print All Jobs:",left) !:
+00230   fnChk(2,mypos,"Print All Jobs:",left) !:
         resp$(resp+=1)="False"
-00240   fnchk(3,mypos,"Print One Job Per Page:",left) !:
+00240   fnChk(3,mypos,"Print One Job Per Page:",left) !:
         resp$(resp+=1)="False"
-00250   fncmdset(2)
-00260   fnacs(sn$,0,mat resp$,ck)
+00250   fnCmdSet(2)
+00260   fnAcs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   dat$=resp$(1) ! heading date
 00290   if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
@@ -45,15 +45,15 @@
 00380   goto L510
 00390 ASKJOB: ! 
 00400   for j=1 to 100
-00410     fntos(sn$="prtdet2") !:
+00410     fnTos(sn$="prtdet2") !:
           mylen=12 : mypos=mylen+3: resp=0: left=1 !:
-          fnlbl(1,1,"Job Number:",mylen,1) !:
+          fnLbl(1,1,"Job Number:",mylen,1) !:
           fncmbjob(1,mypos) !:
           resp$(respc+=1)=jn$
 00420     prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
-00430     fncmdkey("&Next",1,1,0,"Print this job." ) !:
-          fncmdkey("&Complete",5,0,1,"No more jobs. Release the print.")
-00440     fnacs(sn$,0,mat resp$,ck)
+00430     fnCmdKey("&Next",1,1,0,"Print this job." ) !:
+          fnCmdKey("&Complete",5,0,1,"No more jobs. Release the print.")
+00440     fnAcs(sn$,0,mat resp$,ck)
 00450     if ck=5 then goto L490
 00460     prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
 00470   next j

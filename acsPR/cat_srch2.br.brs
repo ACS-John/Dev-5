@@ -2,7 +2,7 @@
 00020 ! search for an valid caterories for this job
 00030 ! ______________________________________________________________________
 00040   def library fncat_srch2(&cn$,&ckey;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle,fncmdkey
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*40,resp$(30)*80
@@ -11,7 +11,7 @@
 00110     fncno(cno)
 00120     category=16 ! category file in jcmaint
 00130 ! ______________________________________________________________________
-00140     fntos(sn$="CatSrch")
+00140     fnTos(sn$="CatSrch")
 00150     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
 00160     fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
@@ -29,14 +29,14 @@
           goto READ_FILE
 00260 ! ______________________________________________________________________
 00270 L270: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00280     fncmdkey("&Add",97,0,0,"Add a new category record." ) !:
-          fncmdkey("&Edit",98,0,0,"Review or change category breakdown record." ) !:
-          fncmdkey("Re&view Details",95,1,0,"Review detail transactions") !:
-          fncmdkey("&Delete",96,0,0,"Deletes the highlited record") !:
-          fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
-          fncmdkey("D&uplicate",12,0,1,"Duplicates all Caterories from anouther existing job.") !:
-          fncmdkey("E&xit",6,0,1,"Returns to main screen.")
-00290     fnacs(sn$,0,mat resp$,ckey) !:
+00280     fnCmdKey("&Add",97,0,0,"Add a new category record." ) !:
+          fnCmdKey("&Edit",98,0,0,"Review or change category breakdown record." ) !:
+          fnCmdKey("Re&view Details",95,1,0,"Review detail transactions") !:
+          fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") !:
+          fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
+          fnCmdKey("D&uplicate",12,0,1,"Duplicates all Caterories from anouther existing job.") !:
+          fnCmdKey("E&xit",6,0,1,"Returns to main screen.")
+00290     fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     cn$=lpad$(resp$(1),11)
 00310     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected

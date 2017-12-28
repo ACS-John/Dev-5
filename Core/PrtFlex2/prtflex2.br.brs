@@ -3,7 +3,7 @@
 00011 ! Replace Core\PrtFlex\PrtFlex2
 00013 ! ______________________________________________________________________
 00019 ! ______________________________________________________________________
-00020   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fnflexadd1,fnflexinit1,fnbutton,fncombof,fnmsgbox,fncursys$,fnchain,fnxit,fncmdset,fntop
+00020   library 'Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnflexadd1,fnflexinit1,fnButton,fncombof,fnmsgbox,fncursys$,fnchain,fnxit,fnCmdSet,fntop
 00021   on error goto ERTN
 00022 ! ______________________________________________________________________
 00023   dim programfolder$*256,datafolder$*256,gridname$*40
@@ -42,8 +42,8 @@
 04004   mat colhdr$=("")
 04005   mat colmask$(columns)
 04006   mat colmask$=("")
-04010   fntos(sn$="mstrflex")
-04018   fnlbl(1,1,uprc$(gridname$),20,2,3)
+04010   fnTos(sn$="mstrflex")
+04018   fnLbl(1,1,uprc$(gridname$),20,2,3)
 04075   gosub GRIDHEADING ! reads the headings that were created above
 04090   fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
 04095 ! Restore #1:
@@ -53,8 +53,8 @@
 04120   fnflexadd1(mat item$)
 04130   goto L4096
 04140 EOFONREAD: ! Complete the grid once all data has been read
-04144 ! fnLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   fncmdset(52): fnacs(sn$,win,mat response$,ckey) !:
+04144 ! fnLbl(15,1,"Export the grid to a fixed width file, for later use.")
+04145   fnCmdSet(52): fnAcs(sn$,win,mat response$,ckey) !:
         ! CALL items selected
 04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "Core\prtflex\PRTFLEX1",programfolder$,datafolder$

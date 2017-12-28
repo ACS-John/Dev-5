@@ -2,7 +2,7 @@
 20020 ! -- Creates Address Certification File:
 20040 ! ______________________________________________________________________
 20060 ! ______________________________________________________________________
-20080   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnxit,fntos,fnacs,fnlbl,fnwait,fncsz,fncmdset,fntop,fngethandle
+20080   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnxit,fnTos,fnAcs,fnLbl,fnwait,fncsz,fnCmdSet,fntop,fngethandle
 20100   on error goto ERTN
 20120 ! ______________________________________________________________________
 20140   dim z$,nam$*30,sta$*30,sta2$*30,csz$*30,opt1$(7),txt$*80,cap$*128
@@ -11,9 +11,9 @@
 20200   fncno(cno)
 20220 ! ______________________________________________________________________
 20240 ! r: a screen
-20260 ! fntos(sn$:="ubCass1")
+20260 ! fnTos(sn$:="ubCass1")
 20280 ! respc=0
-20300 ! fnlbl(1,1,"Destination Path for Cass file:",33,1)
+20300 ! fnLbl(1,1,"Destination Path for Cass file:",33,1)
 20320 ! opt1$(1)="A:\"
 20340 ! opt1$(2)="B:\"
 20360 ! opt1$(3)="C:\"
@@ -23,8 +23,8 @@
 20440 ! opt1$(7)="H:\"
 20460 ! fncomboa("AB",1,35,mat opt1$)
 20480 ! resp$(respc+=1)=opt1$(1)
-20500 ! fncmdset(2)
-20520 ! L170: fnacs(sn$,0,mat resp$,ckey)
+20500 ! fnCmdSet(2)
+20520 ! L170: fnAcs(sn$,0,mat resp$,ckey)
 20540 ! if ckey=5 then goto XIT
 20560 ! dv$=resp$(1)
 25000 ! /r
@@ -35,7 +35,7 @@
 25100 ! 
 25120 ! open #h_out:=2: "Name="&dv$&"ubCass1.dat,RecL=112,EOL=None,Replace",external,output ! ioerr l170
 25140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-25160   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+25160   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 28000 ! r:  main loop
 28020   do 
 28040     read #1,using L250: z$,nam$,sta$,csz$,fb1,lbd,altcode eof XIT

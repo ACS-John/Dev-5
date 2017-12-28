@@ -5,10 +5,10 @@
 12080   if ~setup then
 12100     setup=1
 12120     library 'S:\Core\Library': fnerror,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_FontSize
-12122     library 'S:\Core\Library': fnFormCopyAwithBackgroundWarn,fnbutton,fncombof
-12123     library 'S:\Core\Library': fnacs,fncmdkey,fncmdset,fncomboa
-12125     library 'S:\Core\Library': fncreg_read,fncreg_write,fnlbl,fndednames,fnmsgbox
-12126     library 'S:\Core\Library': fnpa_background,fnreg_read,fnreg_write,fnureg_read,fnureg_write,fnopt,fntxt,fntos,fngethandle,fnchk
+12122     library 'S:\Core\Library': fnFormCopyAwithBackgroundWarn,fnButton,fncombof
+12123     library 'S:\Core\Library': fnAcs,fnCmdKey,fnCmdSet,fncomboa
+12125     library 'S:\Core\Library': fncreg_read,fncreg_write,fnLbl,fndednames,fnmsgbox
+12126     library 'S:\Core\Library': fnpa_background,fnreg_read,fnreg_write,fnureg_read,fnureg_write,fnOpt,fnTxt,fnTos,fngethandle,fnChk
 12140     on error goto ERTN
 12160     ! r: constants
 12170     dim ml$(0)*128
@@ -195,16 +195,16 @@
 36040   fnreg_read('1099 - Form 1 Y',amResp$(1),'5' )
 36060   fnreg_read('1099 - Form 2 Y',amResp$(2),'144')
 36080   fnreg_read('1099 - X'       ,amResp$(3),'5' )
-36100   fntos(sn$='1099_ask_margins')
+36100   fnTos(sn$='1099_ask_margins')
 36120   lc=0 : mylen=30 : mypos=mylen+2 
-36140   fnlbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
-36160   fntxt(lc,mypos,3,0,1,'30')
-36180   fnlbl(lc+=1,1,"Form 2 Distance from Top (mm):",mylen,1)
-36200   fntxt(lc,mypos,3,0,1,'30')
-36220   fnlbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
-36240   fntxt(lc,mypos,3,0,1,'30')
-36260   fncmdset(4)
-36280   fnacs(sn$,0,mat amResp$,ckey)
+36140   fnLbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
+36160   fnTxt(lc,mypos,3,0,1,'30')
+36180   fnLbl(lc+=1,1,"Form 2 Distance from Top (mm):",mylen,1)
+36200   fnTxt(lc,mypos,3,0,1,'30')
+36220   fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
+36240   fnTxt(lc,mypos,3,0,1,'30')
+36260   fnCmdSet(4)
+36280   fnAcs(sn$,0,mat amResp$,ckey)
 36300   if ckey<>5 then
 36320     fnreg_write('1099 - Form 1 Y' ,amResp$(1))
 36340     fnreg_write('1099 - Form 2 Y' ,amResp$(2))
@@ -253,60 +253,60 @@
 42480   end if ! /r
 43000   awiReturn=0 
 44000   ASK_INFO: !
-44020   fntos(sn$="pr1099-1")
+44020   fnTos(sn$="pr1099-1")
 44040   rc=lc=0 : mylen=40 : mypos=mylen+3
-44060   fnlbl(lc+=1,1,"Tax Year:",mylen,1)
-44080   fntxt(lc,mypos,4,0,1,"",1,"Year to pr 1099s for")
+44060   fnLbl(lc+=1,1,"Tax Year:",mylen,1)
+44080   fnTxt(lc,mypos,4,0,1,"",1,"Year to pr 1099s for")
 44100   resp$(resc_taxYear:=rc+=1)=taxYear$
 44120   if env$('cursys')='PR' then
 44140     lc+=1
-44160     fnlbl(lc+=1,1,"Miscellaneous Deduction to Print:",mylen,1)
+44160     fnLbl(lc+=1,1,"Miscellaneous Deduction to Print:",mylen,1)
 44180     fncomboa("deductions",lc,mypos,mat deductionOption$,"Select the deduction you want printed.") 
 44200     resp$(respc_deduction:=rc+=1)=seltp$
-44220     fnlbl(lc+=1,1,"1099 Type to Print:",mylen,1)
+44220     fnLbl(lc+=1,1,"1099 Type to Print:",mylen,1)
 44260     fncomboa('type',lc,mypos,mat typeOption$,"Select the code for the 1099 vendor type.") 
 44280     resp$(respc_type:=rc+=1)=""
 44300   else if env$('cursys')='GL' then
-44310     fnlbl(lc+=1,1,"Payee Type to Print:",mylen,1)
+44310     fnLbl(lc+=1,1,"Payee Type to Print:",mylen,1)
 44320     fncombof("PayeeType",lc,mypos,27,env$('Q')&"\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.") 
 44340     resp$(respc_deduction:=rc+=1)=seltp$
 44342   else if env$('cursys')='CL' then
-44344     fnlbl(lc+=1,1,"Payee Type to Print:",mylen,1)
+44344     fnLbl(lc+=1,1,"Payee Type to Print:",mylen,1)
 44346     fncombof("Payeetype",lc,mypos,27,env$('Q')&"\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.")
 44348     resp$(respc_deduction:=rc+=1)=seltp$
 44360 !
 44380   end if
 44400   lc+=1
-44420   fnlbl(lc+=1,1,"Minimum Amount to Print:",mylen,1)
-44440   fntxt(lc,mypos,12,0,1,"10",0,'Enter the minimum amount that should be printed."') 
+44420   fnLbl(lc+=1,1,"Minimum Amount to Print:",mylen,1)
+44440   fnTxt(lc,mypos,12,0,1,"10",0,'Enter the minimum amount that should be printed."') 
 44460   resp$(respc_min1:=rc+=1)=str$(min1)
-44480   fnlbl(lc+=1,1,"Your Telephone Number:",mylen,1)
-44500   fntxt(lc,mypos,12,0,1,"",0,'You can use dashes, etc."') 
+44480   fnLbl(lc+=1,1,"Your Telephone Number:",mylen,1)
+44500   fnTxt(lc,mypos,12,0,1,"",0,'You can use dashes, etc."') 
 44520   resp$(respc_phone:=rc+=1)=ph$
 44540   lc+=1
-44560   fnopt(lc+=1,3,"Print 1099")
+44560   fnOpt(lc+=1,3,"Print 1099")
 44580   resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
-44600   fnlbl(lc+=1,5,"Copy:",12,1,0)
+44600   fnLbl(lc+=1,5,"Copy:",12,1,0)
 44620   fncomboa('Copy',lc,19,mat optCopy$, '',20)
 44640   resp$(respc_copyCurrent:=rc+=1)=copyCurrent$
-44660   fnlbl(lc+=1,20,"(2 per page is not yet available with Backgrounds)",50,0)
-44680   fnchk(lc+=1,20,'Enable Background',1)
+44660   fnLbl(lc+=1,20,"(2 per page is not yet available with Backgrounds)",50,0)
+44680   fnChk(lc+=1,20,'Enable Background',1)
 44700   resp$(respc_enableBackground:=rc+=1)=enableBackground$
-44720   fnchk(lc+=1,20,'2 Per Page',1)
+44720   fnChk(lc+=1,20,'2 Per Page',1)
 44740   resp$(respc_twoPerPage:=rc+=1)=twoPerPage$
 44760   lc+=1
-44780   fnopt(lc+=1,3,"Export for Advanced Micro Solutions")
+44780   fnOpt(lc+=1,3,"Export for Advanced Micro Solutions")
 44800   resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
-44820   fnlbl(lc+=1,5,"Export File:",12,1,0,franum)
-44840   fntxt(lc,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
+44820   fnLbl(lc+=1,5,"Export File:",12,1,0,franum)
+44840   fnTxt(lc,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
 44860   resp$(resp_export_file:=rc+=1)=output_filename$
-44880   fnbutton(lc,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
-44900   fnlbl(lc+=1,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
+44880   fnButton(lc,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
+44900   fnLbl(lc+=1,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
 44920   !
-44940   fncmdkey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
-44960   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-44980   fncmdkey("&Cancel",5,0,1,"Returns to menu")
-46000   fnacs(sn$,0,mat resp$,ckey)
+44940   fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
+44960   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+44980   fnCmdKey("&Cancel",5,0,1,"Returns to menu")
+46000   fnAcs(sn$,0,mat resp$,ckey)
 46020   if ckey<>5 then 
 46040     ! r: gather local variables from mat resp$
 46060     if env$('cursys')='PR' then

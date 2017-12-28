@@ -2,7 +2,7 @@
 00020 ! search for an valid caterories for this job
 00030 ! ______________________________________________________________________
 00040   def library fncat_srch(&cn$;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(4)*40,resp$(30)*80
@@ -12,7 +12,7 @@
 00120     open #category:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jccat.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\catindx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #category: 
-00150     fntos(sn$="CatSrch")
+00150     fnTos(sn$="CatSrch")
 00160     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
 00170     if fixgrid=99 then usefile=0 else usefile=1 !:
@@ -35,7 +35,7 @@
           goto READ_FILE
 00300 ! ______________________________________________________________________
 00310 L310: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00320     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
+00320     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00330     cn$=lpad$(resp$(1),11)
 00340     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected

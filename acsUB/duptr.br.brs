@@ -5,7 +5,7 @@
 00070   dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
 00090   fntop(program$,cap$="Duplicate Transaction Report")
 00100   ! ______________________________________________________________________
-00110   open #fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00110   open #fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00120   open #h_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,input,relative 
 00130   open #h_trans2:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00140   trans1_lrec=lrec(h_trans1)
@@ -13,20 +13,20 @@
 00160   ! 
 00170   del_dupe=1
 00180   ! 
-00190   fntos(sn$='DupTr3') : respc=lc=0
+00190   fnTos(sn$='DupTr3') : respc=lc=0
 00200   fn_filter_add_chk('Account','True')
 00210   fn_filter_add_chk('Transaction Date','False')
 00220   fn_filter_add_chk('Amount','True')
 00230   fn_filter_add_chk('Transaction Code','True')
 00240   lc+=1
-00250   fnlbl(lc+=1,1,"Starting Record:",16,1)
-00260   fntxt(lc,18,10,0,0,'30')
+00250   fnLbl(lc+=1,1,"Starting Record:",16,1)
+00260   fnTxt(lc,18,10,0,0,'30')
 00270   resp$(respc+=1)=str$(max(1,trans1_lrec-1000))
-00280   fnlbl(lc+=1,1,"Ending Record:",16,1)
-00290   fntxt(lc,18,10,0,0,'30')
+00280   fnLbl(lc+=1,1,"Ending Record:",16,1)
+00290   fnTxt(lc,18,10,0,0,'30')
 00300   resp$(respc+=1)=str$(trans1_lrec)
-00310   fncmdset(2)
-00320   fnacs(sn$,0,mat resp$,ckey)
+00310   fnCmdSet(2)
+00320   fnAcs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   respc=0
 00350   dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
@@ -37,13 +37,13 @@
 00400   rec_end=val(resp$(respc+=1))
 00410   fnopenprn
 00420   fn_header
-00430   ! restore #h_trans1,rec=rec_start: norec NEXT_REC
+00430   ! restore #h_trans1,rec=rec_start: noRec NEXT_REC
 00440   trans1_rec=rec_start-1
 00450   do 
 00460     NEXT_REC: ! 
 00470     trans1_rec+=1
 00480     if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
-00490     read #h_trans1,using F_TRANS,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode norec NEXT_REC
+00490     read #h_trans1,using F_TRANS,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
 00500     pr trans1_rec
 00520     if fn_has_dupe then 
 00530       pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
@@ -62,7 +62,7 @@
 00660   fn_header
 00670 continue ! /r
 00680 def fn_setup_library
-00690   library 'S:\Core\Library': fnxit,fnacs,fnlbl,fnwait,fntos,fntxt,fnerror,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fncmbact,fngethandle,fncloseprn,fnopenprn,fnchk,fnreg_read,fnreg_write,fnmsgbox
+00690   library 'S:\Core\Library': fnxit,fnAcs,fnLbl,fnwait,fnTos,fnTxt,fnerror,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fncmbact,fngethandle,fncloseprn,fnopenprn,fnChk,fnreg_read,fnreg_write,fnmsgbox
 00700 fnend  ! fn_setup_library
 00710 def fn_has_dupe
 00720   hd_return=0
@@ -112,13 +112,13 @@
 01160 def fn_trans_delete(td_rec)
 01170   if ~td_setup then 
 01180     td_setup=1
-01190     open #h_td_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outin,relative 
-01200     open #h_td_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+01190     open #h_td_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outIn,relative 
+01200     open #h_td_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 01210     dim td_msg$(1)*90
 01220     dim tdt_tg(11)
 01230     dim tdc_tg(11)
 01240   end if 
-01250   read #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode norec TD_XIT
+01250   read #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode noRec TD_XIT
 01260   if td_pcode<>0 then 
 01270     mat td_msg$(4)
 01280     td_msg$(1)='This transaction has already been posted (Posting Code='&str$(td_pcode)&') to General Ledger'
@@ -177,7 +177,7 @@
 01810   pr #255: "\ql {\ul   Record} {\ul Account   }  {\ul     Date} {\ul       Amount} {\ul}"
 01820 fnend 
 01830 def fn_filter_add_chk(txt$*80,default_answer$; protected)
-01840   fnchk(lc+=1,1,txt$)
+01840   fnChk(lc+=1,1,txt$)
 01850   fnreg_read(sn$&'.'&txt$,resp$(respc+=1))
 01860   if resp$(respc)='' then resp$(respc)=default_answer$
 01870 fnend 

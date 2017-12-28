@@ -11,10 +11,10 @@
 00108   open #h_tmwk1:=3: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",NoShr",internal,input 
 00109 F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2
 00112   dim cde$(30)*6,id$(30)*55,inv_amt(30),tmwk1_sc(30),ct(30)
-00120   open #h_artrans:=12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-00130   open #h_tmtrans:=2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
-00140   open #h_clmstr:=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00150   open #h_tmtraddr:=4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outin,relative 
+00120   open #h_artrans:=12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+00130   open #h_tmtrans:=2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
+00140   open #h_clmstr:=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #h_tmtraddr:=4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outIn,relative 
 00202   do  ! r: main loop
 00204 READ_TMWK1: ! 
 00210     read #h_tmwk1,using F_TMWK1: k$,b(7),b(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk1_sc eof FINIS
@@ -44,7 +44,7 @@
 00460       p2=150+b8
 00470 !     if ta2<0 then ta2=0
 00471 !     if ta1<0 then ta1=0
-00472       read #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),reserve: ta1,ta2,fb1 norec NEXT_ONE
+00472       read #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),reserve: ta1,ta2,fb1 noRec NEXT_ONE
 00480 F_TMTRADDR: form pos p1,2*pd 3,pos p2,n 1
 00490       if ta2><0 then rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=ta2: lta else ta1=lta
 00500       if fb1<2 then fb1=abs(b(7))

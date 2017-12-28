@@ -12,23 +12,23 @@
 14140 ! /r
 16000 fncno(cno)
 20000 MENU1: ! r:
-20020   fntos(sn$:=env$('cursys')&"Companies")
+20020   fnTos(sn$:=env$('cursys')&"Companies")
 21000   ! r: add the system buttons to the screen
 21010   fnbutton_or_disabled(env$('enableClientSelection')=='Yes',2,2,env$('client')(1:37),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',37)
-21020   fnfra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
+21020   fnFra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
 21040   ch_line=1
 21060   for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 21080     if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' then 
 21100       ch_line+=1
 21110       fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 21120       ! if env$('cursys')=client_has$(ch_item) then 
-21140       !   fnlbl(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),37,2,0,1)
+21140       !   fnLbl(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),37,2,0,1)
 21160       ! else 
-21180       !   fnbutton(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item,'',1,37,1)
+21180       !   fnButton(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item,'',1,37,1)
 21200       ! end if 
 21220     end if 
 26000   next ch_item
-26020   ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+26020   ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 26040   ! /r
 28030   !  r: add that company grid to the screen
 28160   fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
@@ -50,23 +50,23 @@
 34300   ACNO_CONV: ! 
 34320   next filename_item
 34340   ! /r
-35000   fnlbl(1,42,"Company:",9,0)
-36000   fnbutton(2,52,"Con&figure",14,'Select highlighted company and go to configure it.  Returns here upon exit.',1,9) ! ,0,0,1)  ! fncmdkey("&Select",1,1)
-36010   fnbutton(2,62,"&Select",10,'',1,9) ! ,0,0,1)  ! fncmdkey("&Select",1,1)
-36020   fnbutton(2,72,"&Add",2,'',1,9) ! fncmdkey("&Add",2)
-36040   fnbutton(2,82,"Co&py",3,'',1,9)
+35000   fnLbl(1,42,"Company:",9,0)
+36000   fnButton(2,52,"Con&figure",14,'Select highlighted company and go to configure it.  Returns here upon exit.',1,9) ! ,0,0,1)  ! fnCmdKey("&Select",1,1)
+36010   fnButton(2,62,"&Select",10,'',1,9) ! ,0,0,1)  ! fnCmdKey("&Select",1,1)
+36020   fnButton(2,72,"&Add",2,'',1,9) ! fnCmdKey("&Add",2)
+36040   fnButton(2,82,"Co&py",3,'',1,9)
 36060   if company_count=>2 then ! Delete only allowed if there are 2 or more companies on the list
-36080     fnbutton(2,92,"&Delete",4,'',1,9)
+36080     fnButton(2,92,"&Delete",4,'',1,9)
 36100   end if 
-36110   fnbutton(1,102,"Open...",17,'',1,9)
+36110   fnButton(1,102,"Open...",17,'',1,9)
 36120   if (fnclient_is_converting or company_count=0) then 
-36140     fnbutton(2,102,"I&mport",13,'',1,9)
+36140     fnButton(2,102,"I&mport",13,'',1,9)
 36160   end if 
-37000   fncmdkey("&Save",15,1,0)
+37000   fnCmdKey("&Save",15,1,0)
 37020   if exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel only allowed if they have not deleted their current company
-37040     fncmdkey("&Cancel",5,0,1)
+37040     fnCmdKey("&Cancel",5,0,1)
 37060   end if 
-37080   fnacs(sn$,win,mat resp$,ck)
+37080   fnAcs(sn$,win,mat resp$,ck)
 38000   ! 
 38020   if ck=5 and exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel
 38040     goto XIT
@@ -116,14 +116,14 @@
 42080 return  ! /r
 43000 ! ______________________________________________________________________
 44000 COMPANY_ADD: ! r:
-44020   fntos(sn$='selcno-'&env$('cursys')&'-2')
+44020   fnTos(sn$='selcno-'&env$('cursys')&'-2')
 44040   mylen=25 : mypos=mylen+2
 44060   respc=0
-44080   fnlbl(1,1,"Company Number to add:",mylen,1)
-44100   fntxt(1,mypos,5,0,0,"30")
+44080   fnLbl(1,1,"Company Number to add:",mylen,1)
+44100   fnTxt(1,mypos,5,0,0,"30")
 44120   resp$(respc+=1)="0"
-44140   fncmdset(2)
-44160   fnacs(sn$,0,mat resp$,ck)
+44140   fnCmdSet(2)
+44160   fnAcs(sn$,0,mat resp$,ck)
 44180   if ck=5 then goto MENU1
 44200   cno_selected=val(resp$(1))
 44220   if fn_company_already_exists(cno_selected)=1 then goto MENU1
@@ -193,16 +193,16 @@
 52160 fnend 
 62000 def fn_company_delete(cno)
 62010   companyDeleteReturn=0
-62020   fntos(sn$="company_delete")
-62040   fnlbl(1,1,"**** WARNING ****",40,1,5)
-62060   fnlbl(3,1,"You have chosen to completely delete company:",60,2)
-62080   fnlbl(4,1,str$(cno)&". "&fn_cname_of_cno$(cno),60,2)
-62100   fnlbl(6,1,"The only way to get it back will be to restore a backup.",60,2)
-62140   fnlbl(9,11,"Enter ERASE to continue:",24,1)
-62160   fntxt(9,36,5)
+62020   fnTos(sn$="company_delete")
+62040   fnLbl(1,1,"**** WARNING ****",40,1,5)
+62060   fnLbl(3,1,"You have chosen to completely delete company:",60,2)
+62080   fnLbl(4,1,str$(cno)&". "&fn_cname_of_cno$(cno),60,2)
+62100   fnLbl(6,1,"The only way to get it back will be to restore a backup.",60,2)
+62140   fnLbl(9,11,"Enter ERASE to continue:",24,1)
+62160   fnTxt(9,36,5)
 62180   resp$(1)=""
-62200   fncmdset(2)
-62220   fnacs(sn$,0,mat resp$,ckey)
+62200   fnCmdSet(2)
+62220   fnAcs(sn$,0,mat resp$,ckey)
 62240   e$=uprc$(trim$(resp$(1)))
 62260   if ckey<>5 then 
 62280     if e$="ERASE" then 
@@ -225,26 +225,26 @@
 72040   dcno=0
 72050   dcnam$=fn_cname_of_cno$(scno)
 72060   CC_SCREEN1: ! 
-72080   fntos(sn$='CopyCNo3')
+72080   fnTos(sn$='CopyCNo3')
 72100   lc=0
 72120   mylen=29 : mypos=mylen+2
-72140   fnlbl(lc+=1,1,"Source Company:",mylen,1)
-72160   fnlbl(lc,mypos,str$(scno)&'. '&fn_cname_of_cno$(scno),50)
+72140   fnLbl(lc+=1,1,"Source Company:",mylen,1)
+72160   fnLbl(lc,mypos,str$(scno)&'. '&fn_cname_of_cno$(scno),50)
 72180   lc+=1
-72200   fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
-72220   fntxt(lc,mypos,5,0,0,'30')
+72200   fnLbl(lc+=1,1,"&Destination Company Number:",mylen,1)
+72220   fnTxt(lc,mypos,5,0,0,'30')
 72240   resp$(1)=str$(dcno)
-72260   fnlbl(lc+=1,1,"Destination Company Name:",mylen,1)
-72280   fntxt(lc,mypos,40,40)
+72260   fnLbl(lc+=1,1,"Destination Company Name:",mylen,1)
+72280   fnTxt(lc,mypos,40,40)
 72300   resp$(2)=dcnam$
 72320   lc+=1
-72340   fnlbl(lc+=1,1,"Warning",80,2,1)
-72360   fnlbl(lc+=1,1,"Please make sure no one else is",80,2)
-72380   fnlbl(lc+=1,1,"using either company number.",80,2)
-72400   fnlbl(lc+=1,1,"If the destination company exists",80,2)
-72420   fnlbl(lc+=1,1,"it will be overwritten!",80,2)
-72440   fncmdset(2)
-72460   fnacs(sn$,0,mat resp$,ck)
+72340   fnLbl(lc+=1,1,"Warning",80,2,1)
+72360   fnLbl(lc+=1,1,"Please make sure no one else is",80,2)
+72380   fnLbl(lc+=1,1,"using either company number.",80,2)
+72400   fnLbl(lc+=1,1,"If the destination company exists",80,2)
+72420   fnLbl(lc+=1,1,"it will be overwritten!",80,2)
+72440   fnCmdSet(2)
+72460   fnAcs(sn$,0,mat resp$,ck)
 72480   if ck<>5 then 
 72500     dcno=val(resp$(1))
 72520     dcnam$=resp$(2)
@@ -260,7 +260,7 @@
 74000 def fn_update_company_name(cno,cnam$*40)
 74020   cnam$=rtrm$(cnam$)
 74040   if cnam$<>'' then 
-74060     open #h_company:=fngethandle: 'Name='&env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&str$(cno),internal,outin,relative 
+74060     open #h_company:=fngethandle: 'Name='&env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&str$(cno),internal,outIn,relative 
 74080     rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
 74100     close #h_company: 
 74120   end if 
@@ -268,11 +268,11 @@
 76000 def fn_setup
 76020   if setup<>1 then 
 76040     setup=1
-76060     library 'S:\Core\Library': fnacs,fnerror,fncno,fntos,fnchain,fnxit,fnputcno,fngetdir2
-76080     library 'S:\Core\Library': fncursys$,fnlbl,fncmdset,fntop,fntxt,fncmdkey,fncheckfileversion
+76060     library 'S:\Core\Library': fnAcs,fnerror,fncno,fnTos,fnchain,fnxit,fnputcno,fngetdir2
+76080     library 'S:\Core\Library': fncursys$,fnLbl,fnCmdSet,fntop,fnTxt,fnCmdKey,fncheckfileversion
 76100     library 'S:\Core\Library': fnmsgbox,fnflexadd1,fnflexinit1,fngethandle,fnclient_is_converting
 76120     library 'S:\Core\Library': fnclient_has_mat,fnreg_read,fnreg_write
-76140     library 'S:\Core\Library': fnbutton,fnfra,fnSystemName$
+76140     library 'S:\Core\Library': fnButton,fnFra,fnSystemName$
 76160     library 'S:\Core\Library': fnApMstrConversion
 76180     library 'S:\Core\Library': fnbutton_or_disabled
 76190     library 'S:\Core\Library': fnClientSelect

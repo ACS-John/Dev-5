@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\conversion\remove_blank_altadr
 00020 ! remove blank alternate billing addresses (still get key= after conversion and causes blank addresses  ( on old system the addresses were just set to blank when deleted, but not the customer #
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnCmdKey
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   fncno(cno)
 00080 ! 
 00090   dim ba$(4)*30
 00100   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in account order
-00110   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00110   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00120   form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1859,pd 5.2,pos 1750,2*n 6
 00130 L130: ! read alternate billing address
 00140   read #3,using L180: z$,mat ba$ eof XIT

@@ -1,13 +1,13 @@
 00020   on fkey 5 goto L690 ! 9/5/86
 00030   on error goto L730
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole,fndat
 00050   fntop("S:\acsTM\arpostgl",cap$="Post General Ledger")
 00060   fncno(cno,cnam$)
 00070   fndat(dat$)
 00080   dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
 00090   td$="AR SUMMARY"
 00100   tr6=5
-00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
+00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outIn,relative 
 00120   if lrec(8)=0 then write #8,using "form pos 1,n 6": dat else read #8,using "form pos 1,n 6",rec=1,release: dat
 00130   pr newpage
 00140   pr f "10,15,c 60": "POSITION PAPER FOR G/L DISTRIBUTION REPORT"

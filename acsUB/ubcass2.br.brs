@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubCass2
 00020 ! -- Place Certified File Back on PC
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fnwait,fnlbl,fntos,fncomboa,fnacs,fncmdset,fntop
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fnwait,fnLbl,fnTos,fncomboa,fnAcs,fnCmdSet,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
@@ -12,27 +12,27 @@
 00100   fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
 00110 ! ______________________________________________________________________
 00120   sn$="ubCass2" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         respc = 0
-00130   fnlbl(1,1,"Path to Returned Postal Diskette:",33,1)
+00130   fnLbl(1,1,"Path to Returned Postal Diskette:",33,1)
 00140   opt1$(1)="A:\" !:
         opt1$(2)="C:\" !:
         opt1$(3)="E:\" !:
         opt1$(4)="F:\" !:
         fncomboa("AB",1,35,mat opt1$) !:
         resp$(respc+=1)=opt1$(1)
-00150   fnlbl(3,1,"This program prints:")
-00160   fnlbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
-00170   fncmdset(2)
-00180 L180: fnacs(sn$,0,mat resp$,ckey)
+00150   fnLbl(3,1,"This program prints:")
+00160   fnLbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
+00170   fnCmdSet(2)
+00180 L180: fnAcs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   dv$=resp$(1)
 00210 ! ______________________________________________________________________
 00220 ! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
 00221   open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
 00230   open #2: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",RecL=112,Replace",internal,output 
-00240   open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00250   open #4: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outin,relative 
+00240   open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00250   open #4: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outIn,relative 
 00260   fnopenprn(cp,0,0,process)
 00270   pr #255: "\qc {\b "&cap$ !:
         pr #255: "Listing of Customer Addresses that could not be certified" !:
@@ -80,7 +80,7 @@
 00585   goto L640 ! don't update any addresses
 00590   read #3,using "Form POS 385,PD 3",key=z$: aba nokey L640
 00600   if aba=0 then goto L630
-00610   rewrite #4,using "Form POS 41,2*C 30",rec=aba: sta$,csz$ norec L630
+00610   rewrite #4,using "Form POS 41,2*C 30",rec=aba: sta$,csz$ noRec L630
 00620   goto L640
 00630 L630: rewrite #3,using "Form POS 71,2*C 30",key=z$: sta$,csz$
 00640 L640: return 

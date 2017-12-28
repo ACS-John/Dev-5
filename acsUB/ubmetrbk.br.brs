@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubMetrBk
 00020 ! pr Meter Reading Routes
 02000 ! ______________________________________________________________________
-02020   library "S:\Core\Library": fnacs,fnlbl,fnwait,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fnxit,fndat,fncmdset,fntop,fncomboa,fnpause,fnchk,fntxt,fnfra,fnopt,fnreg_write,fnreg_read,fnpa_finis,fnget_services,fngethandle
+02020   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnChk,fnTxt,fnFra,fnOpt,fnreg_write,fnreg_read,fnpa_finis,fnget_services,fngethandle
 02040   on error goto ERTN
 02060 ! ______________________________________________________________________
 02080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20,service$(1)*2,bulksort$*12
@@ -40,39 +40,39 @@
 02820 ! /r
 02900   if env$('client')='Campbell' then let fn_campbell_meter_book : goto XIT
 08000 MENU1: ! r:
-08020   fntos(sn$="ubMetrRt")
+08020   fnTos(sn$="ubMetrRt")
 08040   mylen=22 : mypos=mylen+2 : respc=lc=0
-08060   fnlbl(lc+=1,1,"Route Number:",mylen,1)
+08060   fnLbl(lc+=1,1,"Route Number:",mylen,1)
 08080   fncmbrt2(lc,mypos)
 08100   resp$(1)=fn_reg_try$(sn$&'.route',"1")
-08120   fnlbl(lc+=1,1,"Service Type:",mylen,1)
+08120   fnLbl(lc+=1,1,"Service Type:",mylen,1)
 08140   fncomboa("ubrate3",lc,mypos,mat option$)
 08160   resp$(2)=fn_reg_try$(sn$&'.service type',option$(1))
 08170   lc+=1
-08180   fnchk(lc+=1,mylen+2,"Print Footnotes:",1)
+08180   fnChk(lc+=1,mylen+2,"Print Footnotes:",1)
 08200   resp$(3)=fn_reg_try$(sn$&'.print footnotes',"False")
-08220   fnchk(lc+=1,mylen+2,"Double Space:",1)
+08220   fnChk(lc+=1,mylen+2,"Double Space:",1)
 08240   resp$(4)=fn_reg_try$(sn$&'.double space',"False")
-08260   fnchk(lc+=1,mylen+2,"Blank Used Column:",1)
+08260   fnChk(lc+=1,mylen+2,"Blank Used Column:",1)
 08280   resp$(5)=fn_reg_try$(sn$&'.blank used column',"False")
-08300   fnchk(lc+=1,mylen+2,"Show Disconnects:",1)
+08300   fnChk(lc+=1,mylen+2,"Show Disconnects:",1)
 08320   resp$(6)=fn_reg_try$(sn$&'.show disconnects',"False")
-08340   fnchk(lc+=1,mylen+2,"Print Prior Usage:",1)
+08340   fnChk(lc+=1,mylen+2,"Print Prior Usage:",1)
 08360   resp$(7)=fn_reg_try$(sn$&'.print prior usage',"False")
-08380   fnchk(lc+=1,mylen+2,"Skip Meter Number:",1)
+08380   fnChk(lc+=1,mylen+2,"Skip Meter Number:",1)
 08400   resp$(8)=fn_reg_try$(sn$&'.skip meter number',"False")
 08410   lc+=1
-08420   fnlbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
-08440   fntxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
+08420   fnLbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
+08440   fnTxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
 08460   resp$(9)=fn_reg_try$(sn$&'.# of blank lines',str$(extralines))
 08470   lc+=1
-08480   fnfra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
-08500   fnopt(1,2,"Route Number Sequence",0,1)
+08480   fnFra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
+08500   fnOpt(1,2,"Route Number Sequence",0,1)
 08520   resp$(10)=fn_reg_try$(sn$&'.route number sequence',"True")
-08540   fnopt(2,2,"Account Sequence",0,1)
+08540   fnOpt(2,2,"Account Sequence",0,1)
 08560   resp$(11)=fn_reg_try$(sn$&'.account sequence',"False")
-08580   fncmdset(3)
-08600   fnacs(sn$,0,mat resp$,ck)
+08580   fnCmdSet(3)
+08600   fnAcs(sn$,0,mat resp$,ck)
 10000   if ck=5 then goto XIT
 10020   if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 10040   svt$=resp$(2)
@@ -285,17 +285,17 @@
 36000 def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one customer per page)
 36020 dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,message$*40,cap$*40,g(12),d(15)
 36040 cap$="Print Meter Reading Books"
-36060 fntos(sn$='umbc')
+36060 fnTos(sn$='umbc')
 36080 mylen=22 : mypos=mylen+2 : respc=lc=0
-36100 fnlbl(lc+=1,1,"Route Number:",mylen,1)
+36100 fnLbl(lc+=1,1,"Route Number:",mylen,1)
 36120 fncmbrt2(lc,mypos)
 36140   resp$(1)=fn_reg_try$(sn$&'.route',"[All]")
-36160 ! fnlbl(lc+=1,1,"Service Type:",mylen,1)
-36180 ! fntxt(lc,mypos,2, 0,0,'',1)
+36160 ! fnLbl(lc+=1,1,"Service Type:",mylen,1)
+36180 ! fnTxt(lc,mypos,2, 0,0,'',1)
 36200 ! resp$(2)='WA'
 36220 ! fncomboa("ubrate3",lc,mypos,mat option$)
-36240 fncmdset(3)
-36260 fnacs(sn$,0,mat resp$,ck)
+36240 fnCmdSet(3)
+36260 fnAcs(sn$,0,mat resp$,ck)
 36280 if ck=5 then goto CAMPBELL_XIT
 36300 if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 36320 service$="W"

@@ -1,6 +1,6 @@
 00010 ! modifies customer records depending upon how the program is configured, routes services, etc
 00030 ! r: setup library, dims, on err, fntop, etc
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fntos,fncno,fnxit,fnerror,fncmdset,fntop,fnopenprn,fncloseprn,fnub_index_customer,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnxit,fnerror,fnCmdSet,fntop,fnopenprn,fncloseprn,fnub_index_customer,fngethandle
 00050   on errror goto ERTN
 00110   fntop(program$)
 00120  ! /r
@@ -9,7 +9,7 @@
 12020   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7,gb(10),extra$(11)*30
 12040   dim extra(23)
 12042   dim df$*1
-12060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,outin,relative 
+12060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,outIn,relative 
 12080     F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 12100   ! /r
 14000   do ! r: primary loop
@@ -36,7 +36,7 @@
 28160 ! /region
 32000 OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text file
 32020   dim ln$*128
-32040   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+32040   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 32060   open #2: "Name=chg\newrouteseq.txt",display,input 
 32080   fnopenprn
 32100   READ_CUSTOMER: ! 

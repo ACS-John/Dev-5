@@ -1,6 +1,6 @@
 00010 ! Replace acsPR\newprRpt_S1.brs,Source
 00011 ! ______________________________________________________________________
-00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnlbl,fntxt,fncmdkey,fnacs,fnprocess,fntos,fnconsole,fnstatus,fnstatus_pause
+00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
 00014   on error goto ERTN
 00020 ! ______________________________________________________________________
 00030   dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tdt(4),tcd(3),tdet(20),tdy(6)
@@ -24,8 +24,8 @@
 00220   close #1: 
 00221 ! ______________________________________________________________________
 00300   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00301   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Use,RecL=224,KPs=1,KLn=17",internal,outin,keyed 
-00302   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outin,keyed 
+00301   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+00302   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outIn,keyed 
 00320   gosub HDR
 00330   goto PRTRPT
 00331 ! ______________________________________________________________________
@@ -51,7 +51,7 @@
 00469 XIT: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
-19801 read #1,using "Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,2*PD 3,C 12,N 6": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EOF1 ! fnstatus(str$(eno))
+19801 read #1,using "Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,2*PD 3,C 12,N 6": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EOF1 ! fnStatus(str$(eno))
 19802   ipsw=0
 19803   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey PRTRPT
 19804   mat tcp=(0): mat tdc=(0)
@@ -90,20 +90,20 @@
 60070   goto L60020
 60080 L60080: return ! /r
 61000 ASK_DATES: ! r:
-61005   fntos(sn$="UserRpt-1")
+61005   fnTos(sn$="UserRpt-1")
 61006   mylen=30: mypos=mylen+3
-61020   fnlbl(1,1,"Starting Date (ccyymmdd):",mylen,1,0,fradate)
-61030   fntxt(1,mypos,10,0,1,"3",0,"The report can be run for any date range.  Enter the first date to be used.",0) 
+61020   fnLbl(1,1,"Starting Date (ccyymmdd):",mylen,1,0,fradate)
+61030   fnTxt(1,mypos,10,0,1,"3",0,"The report can be run for any date range.  Enter the first date to be used.",0) 
 61032   resp$(1)=str$(beg_date)
-61040   fnlbl(2,1,"Ending Date (ccyymmdd):",mylen,1,0,0)
-61050   fntxt(2,mypos,10,0,1,"3",0,"Enter the last date to be used.  For a single payroll, use the same beginning and ending dates.",0) 
+61040   fnLbl(2,1,"Ending Date (ccyymmdd):",mylen,1,0,0)
+61050   fnTxt(2,mypos,10,0,1,"3",0,"Enter the last date to be used.  For a single payroll, use the same beginning and ending dates.",0) 
 61051   resp$(2)=str$(end_date)
-61052   fnlbl(3,1,"Report Heading Date:",mylen,1,0,0)
-61054   fntxt(3,mypos,20,0,0,"",0,"Enter the date you want shown on the reports.",0)
+61052   fnLbl(3,1,"Report Heading Date:",mylen,1,0,0)
+61054   fnTxt(3,mypos,20,0,0,"",0,"Enter the date you want shown on the reports.",0)
 61056   resp$(3)=d1$
-61060   fncmdkey("Next",1,1,0,"Prints the report")
-61070   fncmdkey("Cancel",5,0,1,"Returns to menu")
-61080   fnacs(sn$,0,mat resp$,ckey) 
+61060   fnCmdKey("Next",1,1,0,"Prints the report")
+61070   fnCmdKey("Cancel",5,0,1,"Returns to menu")
+61080   fnAcs(sn$,0,mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
 61090   beg_date=val(resp$(1))
 61100   end_date=val(resp$(2))

@@ -2,13 +2,13 @@
 00030   dim gl(3),ta(2)
 00040 L40: pr newpage
 00042   close #101: ioerr L44
-00044 L44: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE MASTER FILE",display,outin 
+00044 L44: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE MASTER FILE",display,outIn 
 00050   pr f "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
 00060   input fields "10,51,N 2,UE,N": cno
 00070   if cno=0 then stop  ! CHAIN "RABLDSCR/CCRA1"
 00080 ! 
-00090   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outin,keyed 
-00100   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outin,relative 
+00090   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outIn,keyed 
+00100   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outIn,relative 
 00110 L110: read #1,using L120: p$,mat gl eof L220
 00120 L120: form pos 1,c 8,pos 147,n 3,n 6,n 3
 00130   mat ta=(0)

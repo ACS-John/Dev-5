@@ -1,6 +1,6 @@
 10000 ! Replace S:\acsGL\actrans_change_glnumber
 10200 ! ______________________________________________________________________
-10400   library 'S:\Core\Library': fntop,fnxit,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncno,fnmsgbox,fncmdset,fnchk,fncd,fnactpd,fnopenprn,fncloseprn
+10400   library 'S:\Core\Library': fntop,fnxit,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnmsgbox,fnCmdSet,fnChk,fncd,fnactpd,fnopenprn,fncloseprn
 10600   on error goto ERTN
 10800 ! ______________________________________________________________________
 11000   dim cnam$*40,cap$*128,resp$(100)*60
@@ -15,7 +15,7 @@
 14000   fn_report(cap$)
 14200   fn_report(date$('mm/dd/ccyy'))
 14400   fn_report('')
-14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outin,keyed 
+14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 14800 F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 15000   restore #h_actrans,key>=rpad$(gln_from$,kln(h_actrans)): 
 15200   do 
@@ -32,18 +32,18 @@
 17400 XIT: fnxit
 17600 ! ______________________________________________________________________
 17800   def fn_screen_1(&gln_from$,&gln_to$)
-18000     fntos(sn$="FixGLN")
+18000     fnTos(sn$="FixGLN")
 18200     mylen=22
 18400     mypos=mylen+2
 18600     respc=0 : myline=0
-18800     fnlbl(myline+=1,1,"Change GL Number From:",mylen,1)
-19000     fntxt(myline,mypos,12,0,1)
+18800     fnLbl(myline+=1,1,"Change GL Number From:",mylen,1)
+19000     fnTxt(myline,mypos,12,0,1)
 19200     resp$(respc+=1)=gln_from$
-19400     fnlbl(myline+=1,1,"To:",mylen,1)
-19600     fntxt(myline,mypos,12,0,1)
+19400     fnLbl(myline+=1,1,"To:",mylen,1)
+19600     fnTxt(myline,mypos,12,0,1)
 19800     resp$(respc+=1)=gln_to$
-20200     fncmdset(2)
-20400     fnacs(sn$,0,mat resp$,ck)
+20200     fnCmdSet(2)
+20400     fnAcs(sn$,0,mat resp$,ck)
 20600     if ck<>5 then 
 20800       gln_from$=lpad$(resp$(1),12)
 21000       gln_to$=lpad$(resp$(2),12)

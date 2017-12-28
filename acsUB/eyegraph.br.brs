@@ -1,6 +1,6 @@
 00020 ! pr bar graph of eye improvement
 00030 ! ______________________________________________________________________Designated SPEC file does not exist.
-00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fncno, fntos,fnlbl,fncmdset,fnacs,fntxt, fnqgl,fnagl$,fnopt,fnfra,fncomboa,fndat,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
+00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fncno, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnqgl,fnagl$,fnOpt,fnFra,fncomboa,fndat,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
@@ -10,7 +10,7 @@
 00110   fncno(cno,cnam$)
 00120   dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
 00130   dim n2(24),n3(24,13),cap$*128,cnam$*40,resp$(27),txt$*80
-00140   dim servicename$(10)*20,dat$*20,msgline$(2)*40,tg(11),opt$(3)*20
+00140   dim serviceName$(10)*20,dat$*20,msgline$(2)*40,tg(11),opt$(3)*20
 00150   dim srv$(10)*2,dollars(24)
 00160 ! ______________________________________________________________________
 00170   fncno(cno,cnam$)
@@ -20,7 +20,7 @@
 00220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
 00235   goto SCREEN1
 00240   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00260 L260: read #1,using L1050,release: z$,e$,bildat eof SCREEN1
 00270   if bildat<>d1 then goto L260 ! current customer
 00280   restore #2,key>=z$&"         ": nokey L260
@@ -46,69 +46,69 @@
 00436   resp$(6)="20110207"
 00437   resp$(7)="20110209"
 00438   resp$(8)="20110215"
-00450   fntos(sn$="ubbargraph") !:
+00450   fnTos(sn$="ubbargraph") !:
         rc=0
-00460   fnlbl(1,1,"Billing dates to be used:",35,1)
-00470   fntxt(2,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00460   fnLbl(1,1,"Billing dates to be used:",35,1)
+00470   fnTxt(2,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00480   fntxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00480   fnTxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00490   fntxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00490   fnTxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00500   fntxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00500   fnTxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00510   fntxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00510   fnTxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00520   fntxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00520   fnTxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00530   fntxt(4,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00530   fnTxt(4,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00540   fntxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00540   fnTxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00550   fntxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00550   fnTxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00560   fntxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00560   fnTxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00570   fntxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00570   fnTxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00580   fntxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00580   fnTxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00590   fntxt(6,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00590   fnTxt(6,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00600   fntxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00600   fnTxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00610   fntxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00610   fnTxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00620   fntxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00620   fnTxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00630   fntxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00630   fnTxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00640   fntxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00640   fnTxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00650   fntxt(8,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00650   fnTxt(8,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00660   fntxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00660   fnTxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00670   fntxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00670   fnTxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00680   fntxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00680   fnTxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00690   fntxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00690   fnTxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00700   fntxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00700   fnTxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         rc+=1 : resp$(rc)=resp$(rc)
-00710   fnlbl(10,1,"Service to Analyze:",24,1,0)
+00710   fnLbl(10,1,"Service to Analyze:",24,1,0)
 00720   opt$(1)="Water"
-00730   if srv$(3)="EL" then opt$(2)= servicename$(3)
-00740   if srv$(4)="GA" then opt$(3)= servicename$(4)
+00730   if srv$(3)="EL" then opt$(2)= serviceName$(3)
+00740   if srv$(4)="GA" then opt$(3)= serviceName$(4)
 00750   fncomboa("ubbargraph",10,26,mat opt$,"",13) !:
         rc+=1 : resp$(rc)=opt$(1)
-00760   fnfra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0) !:
-        fnopt(1,2,"Use Usage",0,1) !:
+00760   fnFra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0) !:
+        fnOpt(1,2,"Use Usage",0,1) !:
         resp$(rc+=1)="True" !:
-        fnopt(2,2,"Use Dollars",0,1)
-00770   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ckey)
+        fnOpt(2,2,"Use Dollars",0,1)
+00770   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ckey)
 00780   if ckey=5 then goto XIT
 00790   for j=1 to 24
 00800 L800: x=pos(resp$(j),"/",1) !:

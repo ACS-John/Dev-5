@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\bargraph
 00020 ! pr bar graph of earnings by month for current year of prior year.
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fnUseDeptNo, fntos,fnlbl,fncmdset,fnacs,fntxt, fnqgl,fnagl$,fnopt,fnfra,fnpa_finis
+00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fnUseDeptNo, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnqgl,fnagl$,fnOpt,fnFra,fnpa_finis
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
@@ -10,36 +10,36 @@
 00100 ! ______________________________________________________________________
 00110   right=1 : center=2
 00120   fntop(program$,cap$="Print Bar Graph of Earnings")
-00140   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
+00140   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  !:
         read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
 00150 ! ______________________________________________________________________
-00160   open #1: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outin,keyed 
-00170 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 norec L210
+00160   open #1: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+00170 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 00180   if month<1 or month>13 then goto L170
 00190   month(month)=month !:
         month$(month)=month$
 00200   goto L170
 00210 L210: close #1: 
 00220 ! ______________________________________________________________________
-00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00240   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00250   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
+00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00240   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00250   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
 00260 SCR1: ! 
 00270   t5=0
-00280   fntos(sn$='CloseYear3') !:
+00280   fnTos(sn$='CloseYear3') !:
         lc=0 : mylen=20 : mypos=mylen+2 : width=50
-00290   fnlbl(lc+=1,1,"Year to Print:",18,1)
-00300   fntxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
+00290   fnLbl(lc+=1,1,"Year to Print:",18,1)
+00300   fnTxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
         resp$(1)=""
-00310   fnfra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) !:
-        fnopt(1,2,"Pull from Current",0,1) !:
-        fnopt(2,2,"Pull from Prior Year",0,1)
-00320   fnlbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
-00330   fnlbl(lc+=1,1,"or Equity Account:",width,0)
+00310   fnFra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) !:
+        fnOpt(1,2,"Pull from Current",0,1) !:
+        fnOpt(2,2,"Pull from Prior Year",0,1)
+00320   fnLbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
+00330   fnLbl(lc+=1,1,"or Equity Account:",width,0)
 00340   fnqgl(lc,mypos) !:
         resp$(2)=""
-00350   fncmdset(2)
-00360   fnacs(sn$,0,mat resp$,ckey)
+00350   fnCmdSet(2)
+00360   fnAcs(sn$,0,mat resp$,ckey)
 00370   if ckey=5 then goto XIT
 00380   year=val(resp$(1))
 00390   if resp$(2)="True" then pullfrom$="Current"

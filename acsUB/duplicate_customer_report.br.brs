@@ -1,6 +1,6 @@
 20000 ! Replace S:\acsUB\duplicate_customer_report
 20200 ! ______________________________________________________________________
-20400   library 'S:\Core\Library': fnacs,fnwait, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fnchk,fntos,fnxit,fncmdset,fntop
+20400   library 'S:\Core\Library': fnAcs,fnwait, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnChk,fnTos,fnxit,fnCmdSet,fntop
 20600   on error goto ERTN
 20800 ! ______________________________________________________________________
 21000   dim z$*10,e$(4)*30,cnam$*40,dat$*20,idx$(5)*40

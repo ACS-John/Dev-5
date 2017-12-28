@@ -8,7 +8,7 @@
 24140   service_to=10
 24160   fncno(cno)
 30000   ! r: customer file
-30020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",SHR",internal,outin,keyed 
+30020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",SHR",internal,outIn,keyed 
 30040     dim z$*10,charge(10)
 30060     F_CUSTOMER: form pos 1,c 10,pos 300,10*pd 4.2,pos 388,10*pd 5.2
 30080     customer_change_count=0
@@ -35,7 +35,7 @@
 30460     pr 'customer_change_count=';customer_change_count
 30480   ! /r
 40000   ! r: trans file
-40020     open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",SHR",internal,outin,keyed 
+40020     open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",SHR",internal,outIn,keyed 
 40040     dim a$*10,tg(10)
 40060     TRANSFORM: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
 40080     trans_change_count=0

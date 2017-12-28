@@ -1,9 +1,9 @@
 20000 ! Replace S:\acsUB\conversion\Note-cnv
 20020 ! this program converts the footnotes to new format
 20040   def library fnub_cnv_note
-20060     library 'S:\Core\Library': fnerror,fncno,fnstatus,fnCopy,fnub_cnv_note_phase_1,fngethandle,fnindex_it
+20060     library 'S:\Core\Library': fnerror,fncno,fnStatus,fnCopy,fnub_cnv_note_phase_1,fngethandle,fnindex_it
 20080     fnub_cnv_note_phase_1 ! this needs to be done first in case they are on version 1 on note1 and note2 
-20100     fnstatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
+20100     fnStatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
 20120     dim nam$*30,rm$*60,ra(2),z$*10
 20140 ! ______________________________________________________________________
 20160     fncno(cno)
@@ -13,11 +13,11 @@
 20240       open #h_note1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 20260 !   fnCopy(env$('Q')&"\UBmstr\Note2.h"&env$('cno'),env$('Q')&"\UBmstr\Note2.h"&env$('cno'),73)  ! BAD IDEA - THIS PROGRAM DOES NOT HANDLE THAT FORMAT OF NOTE2.hxx file - I think S:\acsUB\Conversion\note-cnv-c7.br will convert it to the format necessary for this to continue though
 20280     
-20300     open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr",internal,outin,relative
+20300     open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr",internal,outIn,relative
 20320     if kln(h_note2)<73 then
 20340       close #h_note2:
 20360       fnCopy(env$('Q')&"\UBmstr\Note2.h"&env$('cno'),env$('Q')&"\UBmstr\Note2.h"&env$('cno'), 73)
-20380       open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outin,relative 
+20380       open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative 
 20400     end if
 20420
 20440 READ_NOTE1: ! 
@@ -29,12 +29,12 @@
 20560     adr=ra(1)
 20580     do 
 20600       if adr=0 then goto READ_NOTE1
-20620       read #h_note2,using 'form pos 1,c 10,c 60,pd 3',rec=adr: k32$,rm$,adr norec READ_NOTE1
+20620       read #h_note2,using 'form pos 1,c 10,c 60,pd 3',rec=adr: k32$,rm$,adr noRec READ_NOTE1
 20640       pr #33: rm$
 20660     loop
 20680     ! 
 20700     DONE: ! 
-20720     fnstatus('Note Conversion of company number '&env$('cno')&" completed successfully")
+20720     fnStatus('Note Conversion of company number '&env$('cno')&" completed successfully")
 20740   end if
 20760 ! Goto 110
 20780 XIT: fnend  ! chain "S:\acsUB\conversion\ubadrbil-cnv"

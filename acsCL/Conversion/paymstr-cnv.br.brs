@@ -8,17 +8,17 @@
 00080   fncno(cno)
 00090   pr newpage
 00100   close #101: ioerr L110
-00110 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outin 
+00110 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outIn 
 00120   pr f "12,22,C 40": "ENTER COMPANY NUMBER TO BE CHANGE:"
 00130   pr f "14,32,C 16,B,5": "PRESS F5 TO STOP"
 00140 L140: rinput fields "12,57,N 2,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
-00170   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno'),internal,outin,relative 
-00190   open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno'),internal,outin,keyed 
-00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),INTERNAL,OUTIN,RELATIVE
-00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&env$('cno')&"",internal,outin,keyed 
+00170   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno'),internal,outIn,relative 
+00190   open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno'),internal,outIn,keyed 
+00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),INTERNAL,outIn,RELATIVE
+00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&env$('cno')&"",internal,outIn,keyed 
 00220   pr f "14,32,C 16,RB,N": "  IN PROCESS"
 00230   nk=10
 00240 L240: read #1,using L250: k1$,ad1 eof END1

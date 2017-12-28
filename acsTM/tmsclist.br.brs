@@ -1,7 +1,7 @@
 00020   on fkey 5 goto L510
 00030   on error goto L550
 00040 ! (C) COPYRIGHT - 1986 - ADVANCED COMPUTER SERVICES, INC.
-00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00060   fntop(program$,cap$="Service Code")
 00070   fncno(cno,cnam$)
 00090   dim sc$*4,ds$*30

@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsUB\ubPenCa2
 00020 ! Additional Penalty Calculation ( calculates a standard dollar amount of penalty of each penalty charge in their system
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fncno,fndat,fnLastBillingDate,fncmdset,fntop,fnchk,fncreg_read,fncreg_write,fnget_services
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fncno,fndat,fnLastBillingDate,fnCmdSet,fntop,fnChk,fncreg_read,fncreg_write,fnget_services
 00050   on error goto ERTN
 14000 ! ______________________________________________________________________
 14020   dim resp$(9)*40,msgline$(1)*80,oldtg(11)
 14040   dim z$*10,g(12),dat$*20,e$(4)*30,cnam$*40,cap$*128,transkey$*19
 14060   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),tg(11),route(99)
-14080   dim servicename$(10)*20,tax_code$(10)*1,pencolumn(10)
+14080   dim serviceName$(10)*20,tax_code$(10)*1,pencolumn(10)
 14100   dim penalty$(10)*1,subjectto(10),gb(10),extra(23),a(7)
 14120   dim columnhead$(10)*13,tmp$*220,coltot(10)
 14140 ! ______________________________________________________________________
@@ -16,12 +16,12 @@
 18040   fnLastBillingDate(bildat)
 18060   fndat(dat$)
 18080 ! 
-18100   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+18100   fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 18120   for j=1 to 10
 18140     if uprc$(penalty$(j))="Y" then 
 18160       pencount=pencount+1 ! count number of penalty columns needed
 18180       column(pencount)=j
-18200       columnhead$(pencount)=lpad$(rtrm$(servicename$(j)(1:10)),10)
+18200       columnhead$(pencount)=lpad$(rtrm$(serviceName$(j)(1:10)),10)
 18220     end if 
 18240   next j
 18260   if pencount<1 then pencount=1
@@ -33,37 +33,37 @@
 18380   fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
 18400   fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 18420   if minimumbal=0 then 
-18440     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Shr",internal,outin,relative ioerr ignore
+18440     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Shr",internal,outIn,relative ioerr ignore
 18460     read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 18480     close #minbal: ioerr ignore
 18500   end if 
 18520 ! 
 28000 SCREEN1: ! 
-28020   fntos(sn$="ubPenCa2")
+28020   fnTos(sn$="ubPenCa2")
 28040   mylen=29 : mypos=mylen+2
-28060   fnlbl(1,1,"Penalty Date:",mylen,1)
-28080   fntxt(1,mypos,10,0,1,"1003")
+28060   fnLbl(1,1,"Penalty Date:",mylen,1)
+28080   fnTxt(1,mypos,10,0,1,"1003")
 28100   resp$(1)=str$(pendat)
-28120   fnlbl(2,1,"Last Billing Date:",mylen,1)
-28140   fntxt(2,mypos,10,0,1,"1003")
+28120   fnLbl(2,1,"Last Billing Date:",mylen,1)
+28140   fnTxt(2,mypos,10,0,1,"1003")
 28160   resp$(2)=str$(bildat)
-28180   fnlbl(3,1,"Report Heading Date:",mylen,1)
-28200   fntxt(3,mypos,20)
+28180   fnLbl(3,1,"Report Heading Date:",mylen,1)
+28200   fnTxt(3,mypos,20)
 28220   resp$(3)=dat$
-28240   fnchk(4,31,"Print Meter Address:",1)
+28240   fnChk(4,31,"Print Meter Address:",1)
 28260   resp$(4)="False"
-28280   fnchk(5,31,"Print Mailing Address:",1)
+28280   fnChk(5,31,"Print Mailing Address:",1)
 28300   resp$(5)="False"
-28320   fnlbl(6,1,"Minimum Balance:",mylen,1)
-28340   fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
+28320   fnLbl(6,1,"Minimum Balance:",mylen,1)
+28340   fnTxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 28360   resp$(6)=str$(minimumbal)
-28380   fnlbl(7,1,"Penalty Amount:",mylen,1)
-28400   fntxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
+28380   fnLbl(7,1,"Penalty Amount:",mylen,1)
+28400   fnTxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
 28420   resp$(7)=str$(penaltyamt)
-28440   fnchk(9,31,"Skip Customers with a "&trim$(servicename$(10))&" Rate Code of 9",1)
+28440   fnChk(9,31,"Skip Customers with a "&trim$(serviceName$(10))&" Rate Code of 9",1)
 28460   resp$(8)=skip_s10r9$
-28480   fncmdset(2)
-28500   fnacs(sn$,0,mat resp$,ck)
+28480   fnCmdSet(2)
+28500   fnAcs(sn$,0,mat resp$,ck)
 32000   if ck=5 then goto XIT
 32020   pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 32040   bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
@@ -92,8 +92,8 @@
 36040   fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
 36060   fndat(dat$,2)
 36080 ! 
-38100   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-38120   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outin,keyed 
+38100   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+38120   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 38140   gosub BUD1
 38160   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 38180   fnopenprn
@@ -211,8 +211,8 @@
 56000 XIT: fnxit
 58000 BUD1: ! r:
 58020   bud1=0
-58040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr EO_BUD1
-58060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+58040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr EO_BUD1
+58060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 58080   bud1=1
 58100 EO_BUD1: ! 
 58120   return  ! /r
@@ -225,7 +225,7 @@
 60120 L1520: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 60140   ta1=badr(1)
 60160 L1540: if ta1=0 then goto EO_BUD2
-60180   read #82,using L1560,rec=ta1: z$,mat bt1,nba norec EO_BUD2
+60180   read #82,using L1560,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 60200 L1560: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 60220   if bt1(14,1)>0 then goto L1610
 60240   if bt1(12,1)=0 then goto L1600 ! don't allow blank records to go thru routine
@@ -242,15 +242,15 @@
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
 64000 ! r: Sangamon's second screen
-64020   fntos(sn$="ubPenCal22")
-64040   fnlbl(1,1,"First Route #:",27,1)
-64060   fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
+64020   fnTos(sn$="ubPenCal22")
+64040   fnLbl(1,1,"First Route #:",27,1)
+64060   fnTxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
 64080   resp$(1)=str$(prtbkno1)
-64100   fnlbl(2,1,"Last Route #:",27,1)
-64120   fntxt(2,29,2,0,1,"30")
+64100   fnLbl(2,1,"Last Route #:",27,1)
+64120   fnTxt(2,29,2,0,1,"30")
 64140   resp$(2)=str$(prtbkno2)
-64160   fncmdset(2)
-64180   fnacs(sn$,0,mat resp$,ck)
+64160   fnCmdSet(2)
+64180   fnAcs(sn$,0,mat resp$,ck)
 64200   if ck=5 then goto XIT
 64220   prtbkno1=val(resp$(1))
 64240   prtbkno2=val(resp$(2))

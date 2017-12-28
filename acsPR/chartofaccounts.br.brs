@@ -2,7 +2,7 @@
 00020 ! Temporary Chart of Accounts for Payroll when no GL or CB - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
@@ -22,7 +22,7 @@
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\GLMstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\PRmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\GLMstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\PRmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -69,7 +69,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   fnhamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00390   fnHamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: fnxit

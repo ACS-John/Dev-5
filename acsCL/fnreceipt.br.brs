@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\fnReceipt
 00020 ! Standard Receipt file
 00030   def library fnaddreceipt
-00040     library 'S:\Core\Library': fncno,fndat,fnerror,fntos,fnlbl,fntxt,fncmdset,fnacs,fnmsgbox,fnwait,fnfra,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
+00040     library 'S:\Core\Library': fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnwait,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim rec$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,vcode$*8
@@ -15,14 +15,14 @@
 00150     fncno(cno)
 00155     execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\Recidx1.h"&env$('cno')&" 1 8 Replace DupKeys,Shr" ioerr ignore
 00160     left=0: right=1
-00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00180     if exists(env$('Q')&"\CLmstr\RECmstr.H"&env$('cno'))=0 then gosub CREATERECEIPTFILE
-00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-00200     open #receiptgl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Receiptglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
-00210     open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outin,keyed 
+00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00200     open #receiptgl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Receiptglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+00210     open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 00220 ! 
 00230 MENU1: ! 
-00240     fntos(sn$="Receipt1") !:
+00240     fnTos(sn$="Receipt1") !:
           respc=0
 00250     mat chdr$(3) : mat cmask$(3) : mat item$(3) !:
           chdr$(1)='Rec' !:
@@ -39,11 +39,11 @@
           fnflexadd1(mat item$)
 00310     goto READ_RECEIPT_1
 00320 EO_FLEX1: ! 
-00330     fncmdkey("&Add",1,0,0,"Add new receipt records") !:
-          fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing receipt record.") !:
-          fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") !:
-          fncmdkey("E&xit",5,0,1,"Exit to menu")
-00340     fnacs(sn$,0,mat resp$,ck)
+00330     fnCmdKey("&Add",1,0,0,"Add new receipt records") !:
+          fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing receipt record.") !:
+          fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") !:
+          fnCmdKey("E&xit",5,0,1,"Exit to menu")
+00340     fnAcs(sn$,0,mat resp$,ck)
 00350     add=edit=0
 00360     if ck=5 then goto XIT !:
           else if ck=1 then add=1: goto ADD_NEW_RECEIPT
@@ -57,7 +57,7 @@
 00430 DELETE_RECEIPT: ! 
 00440 ! check for Linked Unpaid Invoices !:
         ! if there are any - than tell them, and don't delete.
-00450   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00450   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00460   restore #paytrans,key>=rec$&rpt$(chr$(0),12): nokey L490
 00470   read #paytrans,using 'Form Pos 1,C 8': x$
 00480   if x$=rec$ then !:
@@ -76,7 +76,7 @@
           goto DELETE_RECEIPTGL_LOOP
 00550 EO_DELETE_RECEIPT: ! 
 00560 ! 
-00570   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00570   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00580   restore #trans, key>=holdrec$&rpt$(chr$(0),kln(trans)-len(holdrec$)): nokey EO_DEL_KEY_ON_TRANS
 00590 L590: read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
 00600   if x$=rec$ then !:
@@ -92,17 +92,17 @@
 00680 ! ______________________________________________________________________
 46000 EDIT_RECEIPT: ! 
 46020   holdrec$=rec$
-46040   fntos(sn$="Receipt2")
+46040   fnTos(sn$="Receipt2")
 46060   respc=0
 46080   mylen=28 : mypos=mylen+2
-46100   fnfra(1,1,12,70,"Receipt Information"," ")
-46120   fnlbl(1,1,"Receipt Type:",mylen,1,0,1)
-46140   fntxt(1,mypos,8,0,1,"",0,"If a deposit ticket normally contains the same general breakdowns, you can create a receipt record for quickly displaying the breakdowns.  Assign each type of deposit a receipt type code.",1)
+46100   fnFra(1,1,12,70,"Receipt Information"," ")
+46120   fnLbl(1,1,"Receipt Type:",mylen,1,0,1)
+46140   fnTxt(1,mypos,8,0,1,"",0,"If a deposit ticket normally contains the same general breakdowns, you can create a receipt record for quickly displaying the breakdowns.  Assign each type of deposit a receipt type code.",1)
 46160   resp$(respc+=1)=rec$
-46180   fnlbl(2,1,"Description:",mylen,1,0,1)
-46200   fntxt(2,mypos,30,0,0,"",0,"",1)
+46180   fnLbl(2,1,"Description:",mylen,1,0,1)
+46200   fnTxt(2,mypos,30,0,0,"",0,"",1)
 46220   resp$(respc+=1)=nam$
-46240   fnlbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
+46240   fnLbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
 46260 ! General Ledger Breakdown GridPE)
 46280   mat chdr$(5)
 46300   chdr$(1)='Refenence'
@@ -127,12 +127,12 @@
 48140   goto READ_RECEIPT_GL
 50000 EO_FLEX3: ! 
 50020   pas=1 ! don't redo combo boxes on gl
-50040   fnlbl(16,1,"",1,0,0,0) ! add space before buttons
-50060   fnbutton(16,61,"Add",2,"Add a standard general ledger breakdown",0,4)
-50080   fnbutton(16,67,"Edit",7,"Edit or Delete a standard general ledger breakdown")
-50100   fncmdkey("Save",1,1,0,"Saves and returns to Receipt selection")
-50120   fncmdkey("&Cancel",5,0,1,"Return to Receipt selection")
-50140   fnacs(sn$,0,mat resp$,ck)
+50040   fnLbl(16,1,"",1,0,0,0) ! add space before buttons
+50060   fnButton(16,61,"Add",2,"Add a standard general ledger breakdown",0,4)
+50080   fnButton(16,67,"Edit",7,"Edit or Delete a standard general ledger breakdown")
+50100   fnCmdKey("Save",1,1,0,"Saves and returns to Receipt selection")
+50120   fnCmdKey("&Cancel",5,0,1,"Return to Receipt selection")
+50140   fnAcs(sn$,0,mat resp$,ck)
 50160   if ck=5 then goto MENU1
 50180   rec$=lpad$(trim$(resp$(1)(1:8)),8)
 50200   nam$=resp$(2) ! name
@@ -174,7 +174,7 @@
 58000 KEY_CHANGE: !  don't do on receipts
 58020   goto L1500 ! don't change any other files
 58040 ! change the references to this file in the Transaction file
-58060   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+58060   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 58080   restore #trans,key>=holdrec$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 58100 L1230: ! 
 58120   read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -195,7 +195,7 @@
 58420 EO_CHANGE_KEY_ON_RECEIPTGL: ! 
 58440 ! 
 58460 ! Change references to this file in the linked file PayTrans
-58480   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+58480   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 58500   restore #paytrans,key>=holdrec$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 58520 L1370: read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
 58540   if x$=holdrec$ then 
@@ -206,7 +206,7 @@
 58640   close #paytrans: 
 58660 ! 
 58680 ! Change references to this file in the linked file UnPdAloc
-58700   open #unpdaloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+58700   open #unpdaloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 58720   restore #unpdaloc,key>=holdrec$&rpt$(chr$(0),kln(unpdaloc)-len(holdrec$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 58740   read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 58760   if x$=holdrec$ then 
@@ -234,20 +234,20 @@
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
 64000 GL_BREAKDOWNS: ! r:
-64020   fntos(sn$='receipt_gl_dist')
+64020   fnTos(sn$='receipt_gl_dist')
 64040   respc=0 : mylen=28 : mypos=mylen+2
-64060   fnlbl(1,25,"Breakdown for "&nam$(1:20),40)
-64080   fnlbl(3,1,"General Ledger Number:",mylen,right)
+64060   fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
+64080   fnLbl(3,1,"General Ledger Number:",mylen,right)
 64100   fnqgl(3,mypos)
 64120   resp$(respc+=1)=fnrgl$(receiptgl$) ! think maybe here kj
-64140   fnlbl(4,1,'Percent:',mylen,right)
-64160   fntxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
+64140   fnLbl(4,1,'Percent:',mylen,right)
+64160   fnTxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
 64180   resp$(respc+=1)=str$(percent)
-64200   fnlbl(5,1,"Description:",mylen,right)
-64220   fntxt(5,mypos,30)
+64200   fnLbl(5,1,"Description:",mylen,right)
+64220   fnTxt(5,mypos,30)
 64240   resp$(respc+=1)=gldesc$
-64260   fncmdset(7)
-64280   fnacs(sn$,0,mat resp$,ck)
+64260   fnCmdSet(7)
+64280   fnAcs(sn$,0,mat resp$,ck)
 64300   if ck=5 then goto EDIT_RECEIPT
 64320   receiptkey$=rec$
 64340   receiptgl$=fnagl$(resp$(1))
@@ -270,7 +270,7 @@
 66100 fnend 
 66120 IGNORE: continue 
 68000 CREATERECEIPTFILE: ! r:
-68020 open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",REPLACE,RecL=38,KPS=1,KLN=8",internal,outin,keyed 
+68020 open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",REPLACE,RecL=38,KPS=1,KLN=8",internal,outIn,keyed 
 68040 close #receipt: 
 68060 execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\Recidx1.h"&env$('cno')&" 1 8 Replace DupKeys,Shr"
 68080 execute "Index "&env$('Q')&"\CLmstr\Receiptglbreakdown.h"&env$('cno')&' '&env$('Q')&"\CLmstr\receiptglbkdidx.h"&env$('cno')&" 1 8 Replace DupKeys,Shr"

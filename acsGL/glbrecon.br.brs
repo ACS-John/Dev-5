@@ -43,11 +43,11 @@
 00430   se$(6)="Amount:"
 00440   se$(7)="Cleared Bank (1=YES)"
 00450 OPEN_FILES: ! 
-00460   open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2660
+00460   open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2660
 00470   goto L2390
 00480 L480: pr newpage
 00490   close #101: ioerr L500
-00500 L500: open #101: "SROW=3,SCOL=20,EROW=13,ECOL=59,BORDER=DR,CAPTION=<Bank Reconciliation File",display,outin 
+00500 L500: open #101: "SROW=3,SCOL=20,EROW=13,ECOL=59,BORDER=DR,CAPTION=<Bank Reconciliation File",display,outIn 
 00510   pr #101,fields "1,1,Cc 40,R,N": cnam$
 00520   pr #101,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 00530   pr f "14,35,C 09,B,5": "Exit (F5)"
@@ -58,7 +58,7 @@
 00580 ! ______________________________________________________________________
 00590 L590: pr newpage
 00600   close #101: ioerr L610
-00610 L610: open #101: "SROW=5,SCOL=20,EROW=15,ECOL=59,BORDeR=SR,CAPTION=Initial File Preparation",display,outin 
+00610 L610: open #101: "SROW=5,SCOL=20,EROW=15,ECOL=59,BORDeR=SR,CAPTION=Initial File Preparation",display,outIn 
 00620   pr #101,fields "1,1,Cc 40,R,N": cnam$
 00630   pr #101,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 00640   pr #101,fields "4,1,Cc 40,R,N": "* * *   WARNING   * * *"
@@ -71,7 +71,7 @@
 00710   if pas$><"ERASE" then goto L690
 00720   new1=1
 00730   close #1: ioerr L740
-00740 L740: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",Size=0,RecL=68,Replace",internal,outin,relative 
+00740 L740: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",Size=0,RecL=68,Replace",internal,outIn,relative 
 00750   goto L2620
 00760 L760: form pos 1,n 3,n 6,n 3,c 12,c 30,c 2,n 6,pd 5.2,n 1
 00770 L770: new1=1
@@ -84,7 +84,7 @@
 00840   sf$(4)="11,30,C 12,CUE,N"
 00850   pr newpage
 00860   close #101: ioerr L870
-00870 L870: open #101: "SROW=9,SCOL=8,EROW=12,ECOL=43,BORDER=SR,CAPTION=<Maintain Bank Records",display,outin 
+00870 L870: open #101: "SROW=9,SCOL=8,EROW=12,ECOL=43,BORDER=SR,CAPTION=<Maintain Bank Records",display,outIn 
 00880   pr #101: newpage
 00890   pr f mat sf$: val(currgl$(1:3)),val(currgl$(4:9)),val(currgl$(10:12)),""
 00900   pr f "10,10,C 14,R,N": "Bank GL Number"
@@ -99,7 +99,7 @@
 00990   holdgc$=gl$&c$
 01000 L1000: pr newpage
 01010   close #101: ioerr L1020
-01020 L1020: open #101: "SROW=2,SCOL=8,EROW=12,ECOL=49,Border=Sr,Caption=<Maintain Bank Reconciliation Records",display,outin 
+01020 L1020: open #101: "SROW=2,SCOL=8,EROW=12,ECOL=49,Border=Sr,Caption=<Maintain Bank Reconciliation Records",display,outIn 
 01030   pr #101: newpage
 01040   pr f "3,10,Cc 38,R,N": "Enter Check Number as 0 to Delete"
 01050   pr f mat sd$: mat se$
@@ -147,7 +147,7 @@
 01470   sa$(2)="12,43,N 12.2,UT,N"
 01480 L1480: pr newpage
 01490   close #101: ioerr L1500
-01500 L1500: open #101: "SROW=8,SCOL=24,EROW=13,ECOL=55,BORDER=DR,CAPTION=<Enter Cleared Checks",display,outin 
+01500 L1500: open #101: "SROW=8,SCOL=24,EROW=13,ECOL=55,BORDER=DR,CAPTION=<Enter Cleared Checks",display,outIn 
 01510   pr f "8,24,C 32,R,N": "      Bank #: "&currgl$
 01520   pr f "10,25,C 25": "  Check Number:"
 01530   pr f "12,25,C 25": "Amount to Verify:"
@@ -179,7 +179,7 @@
 01790   sb$(2)="3,37,Nz 6,UT,N"
 01800   sb$(3)="4,37,Nz 6,UT,N"
 01810   close #101: ioerr L1820
-01820 L1820: open #101: "SROW=9,SCOL=9,EROW=15,ECOL=71,BORDER=DR,CAPTION=<Print Listing of Checks written for Bank # "&ltrm$(currgl$),display,outin 
+01820 L1820: open #101: "SROW=9,SCOL=9,EROW=15,ECOL=71,BORDER=DR,CAPTION=<Print Listing of Checks written for Bank # "&ltrm$(currgl$),display,outIn 
 01830   pr #101: newpage
 01840   pr #101,fields "2,2,C 20,N": "Report Heading Date:"
 01850   pr #101,fields "3,2,Cr 34,N": "Starting Date to appear on report:"
@@ -201,7 +201,7 @@
 02010   dattab=66-int(len(rtrm$(dat$))/2)
 02020   pr newpage
 02030   close #101: ioerr L2040
-02040 L2040: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print Listing of Checks",display,outin 
+02040 L2040: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print Listing of Checks",display,outIn 
 02050   pr #101: newpage
 02060   pr #101,fields "1,1,Cc 41,R,N": cnam$
 02070   pr #101,fields "2,1,Cc 41,R,N": "Company Number "&env$('cno')
@@ -241,7 +241,7 @@
 02410   sb$(2)="2,35,N 6,UT,N"
 02420   sb$(3)="2,42,N 3,UT,N"
 02430   close #101: ioerr L2440
-02440 L2440: open #101: "SROW=9,SCOL=18,EROW=11,ECOL=62,BORDER=DR,CAPTION=<Working Bank Account Number",display,outin 
+02440 L2440: open #101: "SROW=9,SCOL=18,EROW=11,ECOL=62,BORDER=DR,CAPTION=<Working Bank Account Number",display,outIn 
 02450   pr #101: newpage
 02460   pr f "12,30,C 09,B,1": "Next (F1)"
 02470   pr f "12,41,C 09,B,5": "Exit (F5)"

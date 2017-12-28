@@ -6,10 +6,10 @@
 00045 def fn_setup
 00046   if ~setup then
 00047     setup=1
-00050     library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnacs,fntos
-00052     library 'S:\Core\Library': fnlbl,fntxt,fnmsgbox,fncomboa,fnbutton,fnfra
+00050     library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs,fnTos
+00052     library 'S:\Core\Library': fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 00054     library 'S:\Core\Library': fncmbact
-00056     library 'S:\Core\Library': fncmdset,fngethandle
+00056     library 'S:\Core\Library': fnCmdSet,fngethandle
 00060     library 'S:\Core\Library': fncreg_read,fncreg_write
 00065     library 'S:\Core\Library': fnureg_write,fnureg_read
 00070     on error goto ERTN
@@ -28,26 +28,26 @@
 76120 ! /r
 80000 def library fnWorkOrderList(; z$*10)
 80010   if ~setup then let fn_setup
-80020   fntos(sn$="workorder")
+80020   fnTos(sn$="workorder")
 80040   respc=0
-80060   fnlbl(1,43," ",1,1)
-80080   fnlbl(1,1,"Beginning Date to Review:",32,1)
-80100   fntxt(1,35,12,0,0,"3",0,"")
+80060   fnLbl(1,43," ",1,1)
+80080   fnLbl(1,1,"Beginning Date to Review:",32,1)
+80100   fnTxt(1,35,12,0,0,"3",0,"")
 80120   resp$(respc+=1)=str$(beg_date)
-80140   fnlbl(2,1,"Ending Date to Review:",32,1)
-80160   fntxt(2,35,12,0,0,"3",0,"")
+80140   fnLbl(2,1,"Ending Date to Review:",32,1)
+80160   fnTxt(2,35,12,0,0,"3",0,"")
 80180   resp$(respc+=1)=str$(end_date)
-80200   fnlbl(3,1,"Customer to Print:",32,1)
+80200   fnLbl(3,1,"Customer to Print:",32,1)
 80220   fncmbact(3,35,1)
 80240   resp$(respc+=1)=z$
-80260   fncmdset(2)
-80270   fnacs(sn$,0,mat resp$,ck)
+80260   fnCmdSet(2)
+80270   fnAcs(sn$,0,mat resp$,ck)
 80280   if ck=5 then goto PWL_XIT
 80300   beg_date=val(resp$(1)) ! beginning of year
 80320   end_date=val(resp$(2)) ! ending day of year
 80340   askz$=lpad$(trim$(resp$(3)(1:10)),10)
 80360   fnopenprn
-80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed
+80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
 80380   gosub PWL_HDR
 80400   if trim$(askz$)="[All]" or trim$(askz$)="" then 
 80420     restore #h_workorder: 

@@ -1,6 +1,6 @@
 00100 fn_acsSystemInitialize
 00200 fn_setup
-00800 fnchain('S:\Core\Menu.br', 0,1)
+00800 fnChain('S:\Core\Menu.br', 0,1)
 01000 def library fnAcsSystemInitialize(; isScreenIOtest)
 01012    if ~setup then let fn_setup
 01020    fnAcsSystemInitialize=fn_acsSystemInitialize( isScreenIOtest)
@@ -9,8 +9,8 @@
 02020   if ~isScreenIOtest or env$('acsVersion')='' then
 02040     startStatusLine=0 : pr newpage
 02050     fn_startStatus("Loading ACS System..." )
-02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
-03000     ! r: set envirnoment variables based on login_name$ and/or BR_MODEL
+02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
+03000     ! r: set environment variables based on login_name$ and/or BR_MODEL
 03020     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
 03040     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
 03060       setenv('enableClientSelection','Yes')
@@ -24,7 +24,7 @@
 03240     ! /r
 04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 04020     if ~setup then let fn_setup
-04040     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
+04040     fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 04060     fn_env_data_default
 04080     !
 04100     if env$('Q')='' then
@@ -94,6 +94,14 @@
 11380     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
 11400     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
 11420     fn_spoolPath$(1)
+11501     ! r: set to last client selected (if appropriate)
+11502       if env$('enableClientSelection')='Yes' and env$('clientSelected')='' then
+11503         library 'S:\Core\Library': fnSetClient,fnmcreg_read
+11504         dim tmpClientSelected$*128
+11505         fnmcreg_read('clientSelected',tmpClientSelected$)
+11506         fnSetClient(tmpClientSelected$)
+11507       end if
+11508     ! /r
 12000     if env$('acsProduct')='ACS Online' then
 12010       setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 12020     else
@@ -276,7 +284,7 @@
 29040   rt_folder$=trim$(rt_folder$)
 29060   if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then rt_folder$=rt_folder$&'\'
 29080   ! 
-29100   open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outin,relative ioerr RT_FAIL
+29100   open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outIn,relative ioerr RT_FAIL
 29120   close #h_test: 
 29140   execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
 29160   goto RT_PASS

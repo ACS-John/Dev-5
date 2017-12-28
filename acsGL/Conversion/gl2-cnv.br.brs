@@ -5,7 +5,7 @@
 00060   dim k$(3)*25,ss$*11,m(18)
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,procdat$*20
 00080   dim dat$*20,ch$*20,prgl(21),co(7),acctmo$*6,vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,adr(2),revb(13)
-00090   open #1: "Name=CNO.H"&wsid$,internal,outin,relative 
+00090   open #1: "Name=CNO.H"&wsid$,internal,outIn,relative 
 00100   pr newpage
 00110   pr f "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
 00120   pr f "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
@@ -17,7 +17,7 @@
 00180   rewrite #1,using L190,rec=1: cno
 00190 L190: form pos 1,n 2
 00200   close #1: 
-00210   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outin,keyed 
+00210   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed 
 00220   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",REPLACE,RecL=338",internal,output 
 00230 L230: read #2,using L240: dno,ano,sno,d$,rf(1),rf(3),rf(5),bb,cb,mat bc,mat bp,mat bm,pbp,rf(2),rf(4),rf(6) eof L280
 00240 L240: form n 3,n 6,n 3,c 50,3*pd 3,39*pd 6.2,3*pd 3
@@ -26,35 +26,35 @@
 00270   goto L230
 00280 L280: close #1: : close #2,free: 
 00290   open #2: "Name="&env$('Q')&"\GLmstr\ACGLTRAN.h"&env$('cno'),internal,input,relative 
-00300   open #1: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",REPLACE,RecL=73",internal,outin,relative 
+00300   open #1: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",REPLACE,RecL=73",internal,outIn,relative 
 00310   write #1,using L320,rec=1: 0,0,0,0,0,0,0," "," ",lrec(2)
 00320 L320: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 00330   for j=1 to lrec(2)
-00340     read #2,using L320,rec=j: mat tr,tr$,td$ norec L360,conv L360
+00340     read #2,using L320,rec=j: mat tr,tr$,td$ noRec L360,conv L360
 00350     write #1,using L320: mat tr,tr$,td$,0
 00360 L360: next j
 00370   close #1: : close #2,free: 
-00380   open #1: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&env$('cno')&",REPLACE,RecL=58",internal,outin,relative 
+00380   open #1: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&env$('cno')&",REPLACE,RecL=58",internal,outIn,relative 
 00390   for j=1 to 20
 00400     write #1,using L410,rec=j: "","",0,0,0
 00410 L410: form pos 1,c 20,c 35,3*n 1
 00420   next j
 00430   close #1: 
-00440   open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&"",internal,outin,relative ioerr L530
+00440   open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&"",internal,outIn,relative ioerr L530
 00450   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",REPLACE,RecL=190",internal,output 
 00460   for j=1 to lrec(2)
-00470     read #2,using L480,rec=j: eno,mat k$,ss$,mat m,mat ta eof L520,conv L510,norec L510
+00470     read #2,using L480,rec=j: eno,mat k$,ss$,mat m,mat ta eof L520,conv L510,noRec L510
 00480 L480: form pos 1,n 4,3*c 25,c 11,18*pd 5.2,2*n 5
 00490     if eno=0 then goto L510
 00500     write #1,using L480: eno,mat k$,ss$,mat m,0,0
 00510 L510: next j
 00520 L520: close #2,free: 
 00530 L530: if lrec(1)=0 then close #1,free: else close #1: 
-00540   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,outin,relative 
+00540   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,outIn,relative 
 00550   read #1,using L560,rec=1: mat a$,mat b$,c$,mat d,mat e$,lastact$,ucm,tb$
 00560 L560: form pos 1,3*c 40,2*c 12,c 5,2*n 1,3*c 12,pd 7.2,c 30
 00570   close #1,free: 
-00580   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",SIZE=0,RecL=512",internal,outin,relative 
+00580   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",SIZE=0,RecL=512",internal,outIn,relative 
 00590   open #2: "Name="&env$('Q')&"\GLmstr\PRGLNUMB.h"&env$('cno'),internal,input ioerr L630
 00600   read #2,using L610: mat prgl
 00610 L610: form pos 1,21*pd 4
@@ -76,7 +76,7 @@
 00770   close #1: 
 00780   open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",NoShr",internal,input ioerr L800
 00790   close #1,free: 
-00800 L800: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",size=0,RecL=68,Shru",internal,outin,relative 
+00800 L800: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",size=0,RecL=68,Shru",internal,outIn,relative 
 00810   close #1: 
 00820   gosub L890 ! CONVERT VENDOR FILES
 00830   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&" 1 12 REPLACE DupKeys"
@@ -85,14 +85,14 @@
 00860   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&" 1 4 REPLACE DupKeys" ioerr L870
 00870 L870: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&' '&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&" 1 8 REPLACE DupKeys"
 00880   goto L1130
-00890 L890: open #3: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed 
-00900   open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno'),internal,outin,relative ioerr L920
+00890 L890: open #3: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outIn,keyed 
+00900   open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno'),internal,outIn,relative ioerr L920
 00910   close #2,free: 
-00920 L920: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",SIZE=0,RecL=64,NoShr",internal,outin,relative 
+00920 L920: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",SIZE=0,RecL=64,NoShr",internal,outIn,relative 
 00930   write #2,using L970,rec=1: "",0,0,"","",1
-00940   open #1: "Name="&env$('Q')&"\GLmstr\GL1099N.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed ioerr L960
+00940   open #1: "Name="&env$('Q')&"\GLmstr\GL1099N.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outIn,keyed ioerr L960
 00950   close #1,free: 
-00960 L960: open #1: "Name="&env$('Q')&"\GLmstr\GL1099N.H"&env$('cno')&",size=0,RecL=127,NoShr",internal,outin,relative 
+00960 L960: open #1: "Name="&env$('Q')&"\GLmstr\GL1099N.H"&env$('cno')&",size=0,RecL=127,NoShr",internal,outIn,relative 
 00970 L970: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 00980 L980: form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11,2*pd 3
 00990 L990: read #3,using L980: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$ eof L1070
@@ -110,15 +110,15 @@
 01110   fnFree(env$('Q')&"\GLmstr\GL1099N.H"&env$('cno'))
 01120   return 
 01130 L1130: ! REASS.CNV
-01140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outin,keyed 
-01150   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,outin,relative 
+01140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed 
+01150   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,outIn,relative 
 01160   pr newpage
 01170   pr f "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
 01180 L1180: form pos 333,2*pd 3
 01190   lr2=lrec(2)
 01200   rewrite #2,using L1300,rec=1: lr2
 01210   for j=1 to lr2
-01220     read #2,using L1230,rec=j: k$,nta norec L1310
+01220     read #2,using L1230,rec=j: k$,nta noRec L1310
 01230 L1230: form pos 1,c 12,pos 71,pd 3
 01240     read #1,using L1180,key=k$: mat ta nokey L1310
 01250     if ta(1)=0 then ta(1)=j
@@ -130,15 +130,15 @@
 01310 L1310: next j
 01320   close #1: 
 01330   close #2: 
-01340   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outin,keyed ioerr L1540
-01350   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno'),internal,outin,relative ioerr L1540
+01340   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outIn,keyed ioerr L1540
+01350   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno'),internal,outIn,relative ioerr L1540
 01360   pr newpage
 01370   pr f "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
 01380 L1380: form pos 181,2*n 5
 01390   lr2=lrec(2)
 01400   rewrite #2,using L1500,rec=1: lr2
 01410   for j=1 to lr2
-01420     read #2,using L1430,rec=j: en$,nta norec L1510,conv L1510
+01420     read #2,using L1430,rec=j: en$,nta noRec L1510,conv L1510
 01430 L1430: form pos 1,c 4,pos 68,pd 3
 01440     read #1,using L1380,key=en$: mat ta nokey L1510,conv L1510
 01450     if ta(1)=0 then ta(1)=j
@@ -167,7 +167,7 @@
 01680   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4 REPLACE DupKeys"
 01690 L1690: ! S:\acsGL\PRmstr.CNV
 01700   dim pr1$*90,pr1(18),pr2(36)
-01710   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outin,keyed ioerr L1910
+01710   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outIn,keyed ioerr L1910
 01720   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,REPLACE",internal,output 
 01730 L1730: read #1,using L1740: pr1$,mat pr1 eof END1
 01740 L1740: form pos 1,c 90,18*pd 5.2,2*n 5
@@ -181,13 +181,13 @@
 01820   close #2: 
 01830   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&""
 01840   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&","&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",1,4,REPLACE,DupKeys"
-01850   open #1: "Name=CNO.H"&wsid$,internal,outin,relative 
+01850   open #1: "Name=CNO.H"&wsid$,internal,outIn,relative 
 01860   rewrite #1,using L1870,rec=1: cno
 01870 L1870: form pos 1,n 2
 01880   close #1: 
 01890   open #1: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",RecL=110,REPLACE",internal,output 
 01900   close #1: 
-01910 L1910: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,outin,relative ioerr L1960
+01910 L1910: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,outIn,relative ioerr L1960
 01920   read #1,using L1930,rec=1: gl1$,gl2$
 01930 L1930: form pos 298,2*c 12
 01940   rewrite #1,using L1930,rec=1: gl2$,gl1$
@@ -204,7 +204,7 @@
 02050     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L2300
 02060     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')
 02070     if j=2 or j=5 then goto L2080 else goto L2300
-02080 L2080: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno'),internal,outin,keyed 
+02080 L2080: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno'),internal,outIn,keyed 
 02090     end1=st1=st2=rno=rnp=0
 02100 L2100: gosub FIND1
 02110     restore #1,key>=lpad$(str$(st1),5): nokey END2

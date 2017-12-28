@@ -12,7 +12,7 @@
 00110   fncno(cno,cnam$)
 00115   fnconsole(1)
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1220
+00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1220
 00140 MENU1: ! 
 00150   pr newpage
 00160   fnopenwin(win=101,08,19,15,60,cap$)

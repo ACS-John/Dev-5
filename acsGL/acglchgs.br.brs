@@ -2,7 +2,7 @@
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION WITH COMPARRISON !:
         ! FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cogl$(3)*12,cap$*128,udf$*256
@@ -37,15 +37,15 @@
 00360 L360: close #1: 
 00370   open #1: fl1$,internal,input,keyed 
 00380   if fnprocess=1 or fnUseDeptNo=0 then goto L480
-00390   fntos(sn$="ACglchgs") !:
+00390   fnTos(sn$="ACglchgs") !:
         mylen=30: mypos=mylen+3 : right=1
-00400   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00410   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00400   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00410   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00420   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00430   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00440   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00450   fnacs(sn$,0,mat resp$,ckey)
+00420   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00430   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00440   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00450   fnAcs(sn$,0,mat resp$,ckey)
 00460   if ckey=5 then goto XIT
 00470   costcntr=val(resp$(1))
 00480 L480: on fkey 5 goto L1970 !:
@@ -88,17 +88,17 @@
 00830 L830: if fr<val(r$) then goto L730
 00840   if fr>val(r$) then goto L860
 00850 L850: notrans=1
-00860 L860: fntos(sn$="ACglchgs2") !:
+00860 L860: fnTos(sn$="ACglchgs2") !:
         mylen=30: mypos=mylen+3 : right=1
-00870   fnlbl(1,1,"Description:",mylen,right)
-00880   fntxt(1,mypos,50,0,right,"",0,"Enter the description if not accurate.",0 ) !:
+00870   fnLbl(1,1,"Description:",mylen,right)
+00880   fnTxt(1,mypos,50,0,right,"",0,"Enter the description if not accurate.",0 ) !:
         resp$(1)=d$
-00890   fnlbl(2,1,"Total Year to Date:",mylen,right)
-00900   fntxt(2,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
+00890   fnLbl(2,1,"Total Year to Date:",mylen,right)
+00900   fnTxt(2,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
         resp$(2)=str$(total)
-00910   fncmdkey("&Next",1,1,0,"Accept the answer.")
-00920   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00930   fnacs(sn$,0,mat resp$,ckey)
+00910   fnCmdKey("&Next",1,1,0,"Accept the answer.")
+00920   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00930   fnAcs(sn$,0,mat resp$,ckey)
 00940   if ckey=5 then goto XIT
 00950   d$=resp$(1)
 00960   total=val(resp$(2))

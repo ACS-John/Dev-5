@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\YearendTB
 00020 ! reprint trial balance for last year end
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
@@ -21,23 +21,23 @@
 00170   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
 00180   goto START_REPORT
 00190 SCREEN1: ! 
-00200   fntos(sn$="GLTB") !:
+00200   fnTos(sn$="GLTB") !:
         lc=0 : mylen=25 : mypos=mylen+2
-00210   fnchk(lc+=1,mypos,"List All Details",right) !:
+00210   fnChk(lc+=1,mypos,"List All Details",right) !:
         resp$(1)="True"
-00220   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
-00230   fntxt(lc,mypos,5,0,0,'number') !:
+00220   fnLbl(lc+=1,1,"Cost Center:",mylen,right)
+00230   fnTxt(lc,mypos,5,0,0,'number') !:
         resp$(2)=""
-00240   fnchk(lc+=1,mypos,"Subtotal after each fund",right) !:
+00240   fnChk(lc+=1,mypos,"Subtotal after each fund",right) !:
         resp$(3)="True"
-00250   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
+00250   fnLbl(lc+=1,1,"Starting Account:",mylen,right)
 00260   fnqgl(lc,mypos,0,1) !:
         resp$(4)="[All]"
-00270   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
+00270   fnLbl(lc+=1,1,"Ending Account:",mylen,right)
 00280   fnqgl(lc,mypos,0,1) !:
         resp$(5)="[All]"
-00290   fncmdset(3)
-00300   fnacs(sn$,0,mat resp$,ckey)
+00290   fnCmdSet(3)
+00300   fnAcs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   if resp$(1)="True" then pt=0 else pt=1
 00330   costcent=val(resp$(2)) !:

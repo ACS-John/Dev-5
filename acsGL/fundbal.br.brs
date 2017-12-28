@@ -39,7 +39,7 @@
 00370   endb(acct)=cb
 00380   nta=ta(1)
 00390 L390: if nta=0 then goto L310
-00400   read #2,using L410,rec=nta: mat tr,tr$,td$,nta norec L310
+00400   read #2,using L410,rec=nta: mat tr,tr$,td$,nta noRec L310
 00410 L410: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00420   if tr(5)>0 then bankdr(acct)=bankdr(acct)+tr(5)
 00430   if tr(5)<0 then bankcr(acct)=bankcr(acct)+tr(5)
@@ -105,7 +105,7 @@
 01010 ! ______________________________________________________________________
 01020 L1020: pr newpage
 01030   close #101: ioerr L1040
-01040 L1040: open #101: "SROW=4,SCOL=18,EROW=17,ECOL=64,BORDER=DR,CAPTION=ENTER FUND BALANCES",display,outin 
+01040 L1040: open #101: "SROW=4,SCOL=18,EROW=17,ECOL=64,BORDER=DR,CAPTION=ENTER FUND BALANCES",display,outIn 
 01050   pr f "18,25,C 32,R,N": "Press F1 to continue; F5 to stop"
 01060   pr f "5,20,c 45,n": "ENTER THE FUND BALANCE AT BEGINNING OF MONTH"
 01070   for j=1 to 10

@@ -36,7 +36,7 @@
 00360 XIT: fnxit
 00370 ! ________________________________________________________________
 00380 WIN: close #101: ioerr L390
-00390 L390: open #101: "SRow=10,SCol=18,ERow=12,ECol=61,Border=DR,Caption=PayMstr Record Length Conversion",display,outin 
+00390 L390: open #101: "SRow=10,SCol=18,ERow=12,ECol=61,Border=DR,Caption=PayMstr Record Length Conversion",display,outIn 
 00400   pr #101: newpage
 00410   return 
 00420 ! ________________________________________________________________

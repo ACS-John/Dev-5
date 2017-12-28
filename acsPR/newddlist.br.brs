@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newDDLIST
 00020 ! Direct Deposit listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnchk,fncmdset,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnChk,fnCmdSet,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,d1$*20,ml$(3)*80,tcp(32),cp(32),tdc(10)
@@ -17,7 +17,7 @@
 00160 ! ______________________________________________________________________
 00170   fntop(program$,cap$="Direct Deposit List")
 00200   open #mstr=1: "Name="&env$('Q')&"\PRmstr\RPmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
+00210   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
 00220   goto SCREEN1
 00230 ! ______________________________________________________________________
 00240 XIT: fnxit
@@ -32,14 +32,14 @@
 00320 SCREEN1: ! 
 00330   mypos=20
 00340 ASK_INFO: ! 
-00350   fntos(sn$="DD")
-00360   fnlbl(1,35,"",1,1) ! bigger screen
-00370   fnlbl(2,1,"As of Date:",mypos,1)
-00380   fntxt(2,mypos+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
+00350   fnTos(sn$="DD")
+00360   fnLbl(1,35,"",1,1) ! bigger screen
+00370   fnLbl(2,1,"As of Date:",mypos,1)
+00380   fnTxt(2,mypos+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
 00390   resp$(1)=str$(d1)
-00400   fncmdkey("&Print",1,1,0,"Print the direct deposit listing." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00410   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00400   fnCmdKey("&Print",1,1,0,"Print the direct deposit listing." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00410   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 00420   if ckey=5 then goto XIT
 00430   ppd=val(resp$(1))
 00440   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 

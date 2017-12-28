@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsCL\unpaidinvoice
 02000 ! r: SETUP: fntop, dims, open files, etc
-02020   library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fntos,fnfra,fnlbl,fntxt,fncombof,fncomboa,fnbutton,fncmdkey,fnacs,fnmsgbox,fnflexadd1,fnflexinit1,fnchk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
-02040   library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fncmdset,fnrglbig$,fnqglbig
+02020   library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fnTos,fnFra,fnLbl,fnTxt,fncombof,fncomboa,fnButton,fnCmdKey,fnAcs,fnmsgbox,fnflexadd1,fnflexinit1,fnChk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
+02040   library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fnCmdSet,fnrglbig$,fnqglbig
 02060   fntop(program$,cap$="Unpaid Invoice")
 02080   on error goto ERTN
 02120 ! ______________________________________________________________________
@@ -20,8 +20,8 @@
 02380 ! ______________________________________________________________________
 02400   right=1
 02420   fncno(cno)
-02440   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.h"&env$('cno')&",Shr,Use,RecL=12",internal,outin,relative 
-02460   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L690
+02440   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.h"&env$('cno')&",Shr,Use,RecL=12",internal,outIn,relative 
+02460   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 noRec L690
 02480   goto L700
 02500 L690: ! 
 02520   write #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2
@@ -45,12 +45,12 @@
 02880   open #bankmstr=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal, outin, keyed 
 02900   read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 02920   close #bankmstr:
-02940   open #glmstr=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
-02960   open #paymstr1=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-02980   open #paymstr2=14: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
-03000   open #payeegl=17: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
-03020   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
-03040   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+02940   open #glmstr=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+02960   open #paymstr1=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+02980   open #paymstr2=14: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+03000   open #payeegl=17: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+03020   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+03040   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
 03060   t1(1)=bal : upi=t1(5) : t1(3)=t1(1)-t1(2)
 03080   if fnregistered_for_job_cost_pr then havejc=1 : gosub JCBLD
 03100 goto MENU1 ! /r
@@ -72,13 +72,13 @@
 06300   cmask$(13)='30': cmask$(14)='3'
 06320   cmask$(15)='30': cmask$(16)='1'
 06340 DISPLAY_INVOICE_GRID: ! 
-06360   fntos(sn$="unpaid1")
+06360   fnTos(sn$="unpaid1")
 06380   respc=0
 06400   frame=0
 06420   fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 06440   restore #paytrans: 
 06460 READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
-06480   read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID norec L970
+06480   read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID noRec L970
 06500   item$(1)=str$(rec(paytrans))
 06520   item$(2)=vn$: item$(3)=iv$: item$(4)=up$(1)
 06540   item$(5)=up$(2) : item$(6)=up$(3) : item$(7)=up$(4)
@@ -92,14 +92,14 @@
 06700   goto READ_INVOICE_GRID
 06720 EO_INVOICE_GRID: ! /r
 06740   if havejc=1 then 
-06760     fncmdkey("&Review Job Cost Entries",9,0,0,"Allows you to review and/or post any job cost allocations you have made.")
+06760     fnCmdKey("&Review Job Cost Entries",9,0,0,"Allows you to review and/or post any job cost allocations you have made.")
 06780   end if
-06800   fncmdkey("&Add",1,0,0,"Allows you to add new unpaid invoice records.")
-06820   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing unpaid invoice record.")
-06840   fncmdkey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
-06860   fncmdkey("&Listing",3,0,0,"Prints listings from unpaid file")
-06880   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-06900   fnacs(sn$,0,mat resp$,ck)
+06800   fnCmdKey("&Add",1,0,0,"Allows you to add new unpaid invoice records.")
+06820   fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing unpaid invoice record.")
+06840   fnCmdKey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
+06860   fnCmdKey("&Listing",3,0,0,"Prints listings from unpaid file")
+06880   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+06900   fnAcs(sn$,0,mat resp$,ck)
 06920   displayalljobs=0
 06940   if ck=5 then goto FINIS
 06960   ! screen=0
@@ -125,7 +125,7 @@
 08120   gosub HDR
 08140   t1=0
 08160   for j=rf2 to lrec(4)
-08180     read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,G 2,G 8,G 6,N 1',rec=j,release: mat in1$,ckn,dp,gde norec NEXTRECORD
+08180     read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,G 2,G 8,G 6,N 1',rec=j,release: mat in1$,ckn,dp,gde noRec NEXTRECORD
 08200     if rtrm$(in1$(1))="" then goto NEXTRECORD
 08220     t0=val(in1$(7)) conv L1440
 08240     t1=t1+t0
@@ -185,12 +185,12 @@
 16060   chdr3$(5)='Amount'
 16070   chdr3$(6)='Description'
 16080   cmask3$(5)='10' : cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
-16090   open #41: "Name="&env$('Q')&"\PRmstr\JCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.H"&env$('cno')&",Shr",internal,outin,keyed ioerr JCBLD_FINIS
-16100   open #category:=2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&", KFName="&env$('Q')&"\PRmstr\CATIndx.H"&env$('cno')&",Shr", internal,outin,keyed 
-16110   open #43: "Name="&env$('Q')&"\PRmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
-16120   open #45: "Name="&env$('Q')&"\PRmstr\JCTrans.H"&env$('cno')&",Shr",internal,outin,relative 
+16090   open #41: "Name="&env$('Q')&"\PRmstr\JCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr JCBLD_FINIS
+16100   open #category:=2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&", KFName="&env$('Q')&"\PRmstr\CATIndx.H"&env$('cno')&",Shr", internal,outIn,keyed 
+16110   open #43: "Name="&env$('Q')&"\PRmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+16120   open #45: "Name="&env$('Q')&"\PRmstr\JCTrans.H"&env$('cno')&",Shr",internal,outIn,relative 
 16130   if not exists(env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')) then gosub MAKE_JCB
-16140   open #jcbreakdown=46: "Name="&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\JcBrkidx"&wsid$&".h"&env$('cno')&",Version=1,Shr",internal,outin,keyed ioerr MAKE_JCB
+16140   open #jcbreakdown=46: "Name="&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\JcBrkidx"&wsid$&".h"&env$('cno')&",Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
 16150 JCBLD_FINIS: ! 
 16160   return  ! /r
 18000 ! <Updateable Region: ERTN>
@@ -206,7 +206,7 @@
 21010   lastrec=nextrec=total=0
 21020   displayattop$="True"
 21030   close #clearing: ioerr ignore
-21040   open #clearing=fngethandle: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outin,relative  ! kj wrong recl
+21040   open #clearing=fngethandle: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
 21050   if displayunpaid=1 then 
 21060     type$="Coded for Payment"
 21070   else if displayunpaid=0 then 
@@ -215,7 +215,7 @@
 21100     type$="Not Approved for Payment"
 21110   end if 
 21120   close #paytrans: ioerr ignore
-21130   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+21130   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 21140 L4700: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
 21150   if displayunpaid=1 and pcde=1 then goto L4760 ! if only choose selected, don't allow others to list
 21160   if displayall=1 then goto L4760
@@ -243,36 +243,36 @@
 21380   cmask$(11)='3' : cmask$(12)='30' : cmask$(13)='30'
 21390   cmask$(14)='1' : cmask$(15)='30' : cmask$(16)="1"
 21400 RE_DISPLAY_GRID: ! save a little time
-21410   fntos(sn$="paidinv")
+21410   fnTos(sn$="paidinv")
 21420   respc=0 : mat resp$=('')
-21430 fnfra(2,1,13,23,"Approval Options"," ")
-21440 fnbutton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
-21450 fnbutton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)
-21460 fnlbl(4,4,"From:",5,1,0,1)
-21470 fntxt(4,11,5,0,1,"30",0,"Select the first reference # to be approved",1)
+21430 fnFra(2,1,13,23,"Approval Options"," ")
+21440 fnButton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
+21450 fnButton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)
+21460 fnLbl(4,4,"From:",5,1,0,1)
+21470 fnTxt(4,11,5,0,1,"30",0,"Select the first reference # to be approved",1)
 21480 resp$(respc_rangefrom:=respc+=1)=""
-21490 fnlbl(5,4,"To:",5,1,0,1)
-21500 fntxt(5,11,5,0,1,"30",0,"Select the last reference # to be approved",1)
+21490 fnLbl(5,4,"To:",5,1,0,1)
+21500 fnTxt(5,11,5,0,1,"30",0,"Select the last reference # to be approved",1)
 21510 resp$(respc_rangeto:=respc+=1)=""
-21520 fnbutton(7,2,"&Approve by Due Date",64,"Approve all invoices due by a certain date.",1,18,1)
-21530 fnlbl(8,2,"Date:",5,1,0,1)
-21540 fntxt(8,8,8,0,1,"1",0,"All invoices with a due by date equal to or less than this date will be approved",1)
+21520 fnButton(7,2,"&Approve by Due Date",64,"Approve all invoices due by a certain date.",1,18,1)
+21530 fnLbl(8,2,"Date:",5,1,0,1)
+21540 fnTxt(8,8,8,0,1,"1",0,"All invoices with a due by date equal to or less than this date will be approved",1)
 21550 resp$(respc_duedate:=respc+=1)=""
-21570 fnbutton(10,2,"Approve By Payee",66,"Approves all invoices with this payee number in invoice record.",1,18,1)
-21580 fnlbl(11,2,"Payee #:",8,1,0,1)
-21590 fntxt(11,11,8,0,1,"",0,"Enter payee # to approve all invoices on that payee",1)
+21570 fnButton(10,2,"Approve By Payee",66,"Approves all invoices with this payee number in invoice record.",1,18,1)
+21580 fnLbl(11,2,"Payee #:",8,1,0,1)
+21590 fnTxt(11,11,8,0,1,"",0,"Enter payee # to approve all invoices on that payee",1)
 21600 resp$(respc_payee:=respc+=1)=""
 21610 if displayunpaid=1 or displayunpaid=0 then 
 21612   wording$="Total Selected:" 
 21614 else 
 21616   wording$= "Total Unapproved:"
 21618 end if
-21620 fnlbl(2,28,wording$,18,1)
-21630 fntxt(2,49,12,0,1,"10",0," ")
+21620 fnLbl(2,28,wording$,18,1)
+21630 fnTxt(2,49,12,0,1,"10",0," ")
 21640 resp$(respc_total:=respc+=1)=str$(total)
-21650 fnchk(3,47,"Display at Top:",1)
+21650 fnChk(3,47,"Display at Top:",1)
 21660 resp$(respc+=1)=displayattop$
-21670   fnlbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
+21670   fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
 21680   fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 21682   respc_selectedrec=respc+=1
 21690   restore #clearing: 
@@ -311,12 +311,12 @@
 22020 if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 22030 fnflexadd1(mat flxitm$) : goto L5030
 22040 L5070: !
-22050 fncmdkey("&Approve Highlighted",1,1,0,"Approves or cancels the invoice that is highlighted.")
-22060 fncmdkey("&Display All",9,0,0,"Displays all remaining records in the unpaid file.")
-22070 fncmdkey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
-22080 fncmdkey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
-22090 fncmdkey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
-22100 fnacs(sn$,0,mat resp$,ck)
+22050 fnCmdKey("&Approve Highlighted",1,1,0,"Approves or cancels the invoice that is highlighted.")
+22060 fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file.")
+22070 fnCmdKey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
+22080 fnCmdKey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
+22090 fnCmdKey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
+22100 fnAcs(sn$,0,mat resp$,ck)
 22110 displayunpaid=total=displayall=0
 22120 if ck=5 or ck=99 then goto MENU1
 22130 selectedrec=val(resp$(respc_selectedrec)) ! selected record from grid
@@ -379,7 +379,7 @@
 26110 goto CODE_FOR_PAYMENT ! /r
 27000 APPROVE_BY_RANGE: ! r: clear by reference # range
 27010 for j=rangefrom to rangeto
-27020   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5860 norec L5860
+27020   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5860 noRec L5860
 27030   if pcde>0 then goto L5850 ! already coded
 27040   if pcde=0 then pcde=1
 27050   if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
@@ -391,7 +391,7 @@
 27110 goto CODE_FOR_PAYMENT ! /r
 28000 CLEAR_BY_DUEDATE: ! r: clear any invoices with due date less than or equal the one entered
 28010 for j=1 to lrec(clearing)
-28020   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5970 norec L5970
+28020   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5970 noRec L5970
 28030   if val(up$(2))<=duedate then goto L5910 else goto L5960
 28040 L5910: ! 
 28050   if pcde>0 then goto L5960 ! already coded
@@ -415,25 +415,25 @@
 30000 JOBCOST: ! r:
 30010 dim jn$*6
 30020 ENTRY_SCREEN: ! 
-30030 fntos(sn$="Jobcost")
+30030 fnTos(sn$="Jobcost")
 30040 respc=0 : mat resp$=(''): lc=0: mylen=20: mypos=mylen+3
-30050 fnlbl(lc+=1,1,"Payee # "&trim$(vn$)&" Invoice # "&trim$(iv$),50,0)
-30060 fnlbl(lc+=2,1,"Job #:",mylen,1)
-30070 ! fnTXT(LC,MYPOS,6,0,1,"",0,"Choose from the sub-category list.")
+30050 fnLbl(lc+=1,1,"Payee # "&trim$(vn$)&" Invoice # "&trim$(iv$),50,0)
+30060 fnLbl(lc+=2,1,"Job #:",mylen,1)
+30070 ! fnTxt(LC,MYPOS,6,0,1,"",0,"Choose from the sub-category list.")
 30080 ! .  !  rESP$(RESPC+=1)=JN$
 30090 fncmbjob(lc,mypos)
 30100 resp$(respc+=1)=jn$
-30110 fnlbl(lc+=2,1,"Category #:",mylen,1)
+30110 fnLbl(lc+=2,1,"Category #:",mylen,1)
 30120 fncmbcategory(lc,mypos)
 30130 resp$(respc+=1)=str$(cat)
-30140 fnlbl(lc+=2,1,"Sub-category #:",mylen,1)
+30140 fnLbl(lc+=2,1,"Sub-category #:",mylen,1)
 30150 fncmbsubcat(lc,mypos)
 30160 resp$(respc+=1)=str$(subcat)
-30170 fnlbl(lc+=1,1,"Amount:",mylen,1)
-30180 fntxt(lc,mypos,12,0,1,"10",0,"Enter the amount allocated to this category.")
+30170 fnLbl(lc+=1,1,"Amount:",mylen,1)
+30180 fnTxt(lc,mypos,12,0,1,"10",0,"Enter the amount allocated to this category.")
 30190 resp$(respc+=1)=str$(amt)
-30200 fnlbl(lc+=1,1,"Description:",mylen,1)
-30210 fntxt(lc,mypos,25,0,0,"",0,"Enter the descritpion for the allocation.")
+30200 fnLbl(lc+=1,1,"Description:",mylen,1)
+30210 fnTxt(lc,mypos,25,0,0,"",0,"Enter the descritpion for the allocation.")
 30220 resp$(respc+=1)=jobdesc$
 30230 ! Job Cost Invoice Breakdown Grid
 30240 fnflexinit1('JobAlloc',11,1,6,60,mat chdr3$,mat cmask3$,1,0,0)
@@ -452,17 +452,17 @@
 30370 fnflexadd1(mat jobitem$)
 30380 goto READ_JOB_ALLOCATIONS
 30390 EO_FLEX1: ! 
-30400 fnbutton(3,70,"&Search",68,"Will search for job numbers",1,9)
-30410 fnbutton(5,70,"&Search",69,"Will search for available category codes",1,9)
-30420 fnlbl(18,18,"Total: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",totalcost)),22,right,0)
-30430 if displayalljobs=0 then let fnlbl(19,18,"Invoice: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",upa)),22,right,0)
-30440 fnbutton(18,53,"&Edit",65,"Will allow you to change an allocation",1,5)
-30450 fnbutton(3,70,"&Search",63,"Will search for available category codes",1,9)
-30460 fncmdkey("&Next",1,1,0,"Accept this transaction)")
-30470 fncmdkey("&Listing",4,0,0,"Print listing of all job cost entries.")
-30480 fncmdkey("&Post To Jobs",3,0,0,"Post this batch ofjob cost entries to job cost records. Normally done once complete with batch.")
-30490 fncmdkey("&Cancel",5,0,1,"Cancels without posting to jub cost)")
-30500 fnacs(sn$,0,mat resp$,ck)
+30400 fnButton(3,70,"&Search",68,"Will search for job numbers",1,9)
+30410 fnButton(5,70,"&Search",69,"Will search for available category codes",1,9)
+30420 fnLbl(18,18,"Total: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",totalcost)),22,right,0)
+30430 if displayalljobs=0 then let fnLbl(19,18,"Invoice: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",upa)),22,right,0)
+30440 fnButton(18,53,"&Edit",65,"Will allow you to change an allocation",1,5)
+30450 fnButton(3,70,"&Search",63,"Will search for available category codes",1,9)
+30460 fnCmdKey("&Next",1,1,0,"Accept this transaction)")
+30470 fnCmdKey("&Listing",4,0,0,"Print listing of all job cost entries.")
+30480 fnCmdKey("&Post To Jobs",3,0,0,"Post this batch ofjob cost entries to job cost records. Normally done once complete with batch.")
+30490 fnCmdKey("&Cancel",5,0,1,"Cancels without posting to jub cost)")
+30500 fnAcs(sn$,0,mat resp$,ck)
 30510 if ck=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
 30520 if val(resp$(4))=0 and ck<>65 then ck=5 ! exit if no amount on next
 30530 if ck=5 then amt=0: totalcost=0 : goto L6930 ! sCREEN=0: Goto MENU1
@@ -471,7 +471,7 @@
 30560 L6520: ! 
 30570 editrec=val(resp$(6))
 30580 read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12",rec=editrec: jn$,cat,subcat,amt,jobdesc$,vn$,iv$
-30590 delete #jcbreakdown,rec=editrec: norec ENTRY_SCREEN
+30590 delete #jcbreakdown,rec=editrec: noRec ENTRY_SCREEN
 30600 goto ENTRY_SCREEN
 30610 L6530: if ck=68 then goto L6540 else goto L6550
 30620 L6540: jn$="": fnjob_srch(jn$,1) : goto ENTRY_SCREEN
@@ -523,7 +523,7 @@
 31080 L6930: !
 31090 return  ! /r
 31500 MAKE_JCB: ! r: create "&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')
-31520  open #jcbreakdown=46: "Name="&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",Version=1,replace,RecL=79",internal,outin,relative 
+31520  open #jcbreakdown=46: "Name="&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",Version=1,replace,RecL=79",internal,outIn,relative 
 31540 close #jcbreakdown: 
 31560 execute "Index "&env$('Q')&"\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&","&env$('Q')&"\CLmstr\jcbrkidx"&wsid$&".H"&env$('cno')&",48,20,Replace,DupKeys -n"
 31580 return ! /r
@@ -563,14 +563,14 @@
 35120 ! TEST1: ! 
 35140 ! pass goes to test2 - fail goes to test_key_fail_on_iv
 35160   close #ivpaid: ioerr ignore
-35180   open #ivpaid:=fngethandle: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IvIndex.h"&env$('cno'),internal,outin,keyed 
+35180   open #ivpaid:=fngethandle: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IvIndex.h"&env$('cno'),internal,outIn,keyed 
 35200   unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 35220   read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 35240   goto TEST_KEY_FAIL_ON_IV
 35260 ! ___________
 35280 TEST2: ! 
 35300 ! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-35320   open #testpaytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",SHR",internal,outin,keyed 
+35320   open #testpaytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",SHR",internal,outIn,keyed 
 35340   read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 35360   goto TEST_KEY_FAIL_ON_PAYTRANS
 35380 ! ____________
@@ -642,41 +642,41 @@
 42100   end if
 42120   !
 46000 ai_ADD_UNPAID_INVOICES_TOS: ! r:
-46020   fntos(sn$="ai_unpaid-2")
+46020   fnTos(sn$="ai_unpaid-2")
 46040   respc=0 : mat resp$=("") : frame_width=90
 46060   lc=0
-46080   fnfra(1,1,11,frame_width,"Unpaid Invoice")
+46080   fnFra(1,1,11,frame_width,"Unpaid Invoice")
 46100   lc=0 : mylen=18 : mypos=mylen+2
 46120   frame=1
-46160   fnlbl(lc+=1,1,"Payee:",mylen,right,0,frame)
+46160   fnLbl(lc+=1,1,"Payee:",mylen,right,0,frame)
 46180   fncombof("Paymstr",lc,mypos,0,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
 46200   resp$(1)=vn$
-46220   fnlbl(lc+=1,1,"Invoice Number:",mylen,right,0,frame)
-46240   fntxt(lc,mypos,12,0,0,"",0,"",frame)
+46220   fnLbl(lc+=1,1,"Invoice Number:",mylen,right,0,frame)
+46240   fnTxt(lc,mypos,12,0,0,"",0,"",frame)
 46260   resp$(2)=iv$
 46280 ! had a required answer here; temporarly changed to a message box
-46300   fnlbl(lc+=1,1,"Invoice Date:",mylen,right,0,frame)
-46320   fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
+46300   fnLbl(lc+=1,1,"Invoice Date:",mylen,right,0,frame)
+46320   fnTxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
 46340   resp$(3)=up$(1)
-46360   fnlbl(lc+=1,1,"Due Date:",mylen,right,0,frame)
-46380   fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
+46360   fnLbl(lc+=1,1,"Due Date:",mylen,right,0,frame)
+46380   fnTxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
 46400   resp$(4)=up$(2)
-46420   fnlbl(lc+=1,1,"P O Number:",mylen,right,0,frame)
-46440   fntxt(lc,mypos,12,0,0,"",0,"",frame)
+46420   fnLbl(lc+=1,1,"P O Number:",mylen,right,0,frame)
+46440   fnTxt(lc,mypos,12,0,0,"",0,"",frame)
 46460   resp$(5)=up$(3)
-46480   fnlbl(lc+=1,1,"Description:",mylen,right,0,frame)
-46500   fntxt(lc,mypos,18,0,0,"",0,"",frame)
+46480   fnLbl(lc+=1,1,"Description:",mylen,right,0,frame)
+46500   fnTxt(lc,mypos,18,0,0,"",0,"",frame)
 46520   resp$(6)=up$(4)(1:18)
-46540   fnlbl(lc+=1,1,"Amount:",mylen,right,0,frame)
-46560   fntxt(lc,mypos,12,0,1,"10",0,"Enter the total invoice amount.",frame)
+46540   fnLbl(lc+=1,1,"Amount:",mylen,right,0,frame)
+46560   fnTxt(lc,mypos,12,0,1,"10",0,"Enter the total invoice amount.",frame)
 46580   resp$(7)=str$(upa)
-46600   fnlbl(lc+=1,1,"Discount Amount:",mylen,right,0,frame)
-46620   fntxt(lc,mypos,12,0,1,"10",0,"Enter any discount allowed.",frame)
+46600   fnLbl(lc+=1,1,"Discount Amount:",mylen,right,0,frame)
+46620   fnTxt(lc,mypos,12,0,1,"10",0,"Enter any discount allowed.",frame)
 46640   resp$(8)=str$(disamt)
-46660   fnlbl(lc+=1,1,"Discount Date:",mylen,right,0,frame)
-46680   fntxt(lc,mypos,10,0,1,"ccyymmdd",0,"",frame)
+46660   fnLbl(lc+=1,1,"Discount Date:",mylen,right,0,frame)
+46680   fnTxt(lc,mypos,10,0,1,"ccyymmdd",0,"",frame)
 46700   resp$(9)=str$(ddate)
-46720   fnlbl(lc+=1,1,"Payment Code:",mylen,right,0,frame)
+46720   fnLbl(lc+=1,1,"Payment Code:",mylen,right,0,frame)
 46740   item1$(1)="Pay Later"
 46760   item1$(2)="Pay Now"
 46780   item1$(3)="Paid"
@@ -684,17 +684,17 @@
 46810   if pcde=0 then resp$(10)=item1$(1) ! Pay Later
 46820   if pcde=1 then resp$(10)=item1$(2) ! Pay Now
 46840   if pcde=2 then resp$(10)=item1$(3) ! Paid
-46900   fnlbl(lc+=1,1,"Bank Code:",mylen,right,0,frame)
+46900   fnLbl(lc+=1,1,"Bank Code:",mylen,right,0,frame)
 46920   fncombof("bankmstr",lc,mypos,23,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,20,env$('Q')&"\CLmstr\bankidx1.h"&env$('cno'),0,0, "",frame)
 46940   resp$(11)=str$(bcde) ! RESP$(RESPC)
-46960   fnbutton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
-47000   fnlbl(lc=15,3,"Breakdown Information",mylen,center) 
+46960   fnButton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
+47000   fnLbl(lc=15,3,"Breakdown Information",mylen,center) 
 47020   !
-47040   fnlbl(lc+=1,35,"Allocation(s):",20,right)
-47060   fnbutton(lc,56,"Auto by Payee [F2]",2,"Reset allocations to Payee's defaults")
-47080   fnbutton(lc,76,"Add",52,"Add a new allocation")
-47100   fnbutton(lc,81,"Edit",53,"Modify an existing allocation")
-47120   fnbutton(lc,87,"Delete",54,"Remove selected allocation")
+47040   fnLbl(lc+=1,35,"Allocation(s):",20,right)
+47060   fnButton(lc,56,"Auto by Payee [F2]",2,"Reset allocations to Payee's defaults")
+47080   fnButton(lc,76,"Add",52,"Add a new allocation")
+47100   fnButton(lc,81,"Edit",53,"Modify an existing allocation")
+47120   fnButton(lc,87,"Delete",54,"Remove selected allocation")
 48000   fnflexinit1('unpdaloc',lc+=1,2,10,88,mat aiUaColHead$, mat aiUaColMask$,1)
 48020   dim alloc2d$(0,3)*30
 48040   dim alloc2d_setup$*20
@@ -712,11 +712,11 @@
 48280     tmpItem$(3)=alloc2d$(aiAllocItem,3)
 48300     fnflexadd1(mat tmpItem$)
 48320   nex aiAllocItem
-49000   fncmdkey("Save",1,1)
-49020 ! fncmdkey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
-49040   fncmdkey("&Delete",3,0,0,"Delete the invoice highlighted above")
-49060   fncmdkey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
-49080   fnacs(sn$,0,mat resp$,ck)
+49000   fnCmdKey("Save",1,1)
+49020 ! fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
+49040   fnCmdKey("&Delete",3,0,0,"Delete the invoice highlighted above")
+49060   fnCmdKey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
+49080   fnAcs(sn$,0,mat resp$,ck)
 52000   if ck=5 then 
 52020     alloc2d_setup$=''
 52040     mat alloc2d$=('')
@@ -887,28 +887,28 @@
 84420 ! else ! adding an allocation
 84440 !   iaf_edit=0
 84460   end if
-84480   fntos(sn$='InvoiceAllocationFM')
+84480   fnTos(sn$='InvoiceAllocationFM')
 84500   respc=0 
 84520   mylen=32 : mypos=mylen+2
 84540   lc=0
-84560   fnlbl(lc+=1,1,"Payee:",mylen,right)
-84580   fntxt(lc,mypos,20, 0,0,'',1)
+84560   fnLbl(lc+=1,1,"Payee:",mylen,right)
+84580   fnTxt(lc,mypos,20, 0,0,'',1)
 84600   resp$(respc+=1)=vn$
-84620   fnlbl(lc+=1,1,"Invoice Number:",mylen,right)
-84640   fntxt(lc,mypos,12,0,0,"",1)
+84620   fnLbl(lc+=1,1,"Invoice Number:",mylen,right)
+84640   fnTxt(lc,mypos,12,0,0,"",1)
 84660   resp$(respc+=1)=iv$
 84680   lc+=1
-84700   fnlbl(lc+=1,1,"General Ledger:",mylen,right)
+84700   fnLbl(lc+=1,1,"General Ledger:",mylen,right)
 84720   fnqglbig(lc,mypos,0,2)
 84740   resp$(iaf_respc_gl:=respc+=1)=fnrglbig$(iaf_gl$)
-84760   fnlbl(lc+=1,1,"Amount:",mylen,right)
-84780   fntxt(lc,mypos,12,0,1,"10")
+84760   fnLbl(lc+=1,1,"Amount:",mylen,right)
+84780   fnTxt(lc,mypos,12,0,1,"10")
 84800   resp$(iaf_respc_amt:=respc+=1)=str$(iaf_amt)
-84820   fnlbl(lc+=1,1,"Description:",mylen,right)
-84840   fntxt(lc,mypos,18)
+84820   fnLbl(lc+=1,1,"Description:",mylen,right)
+84840   fnTxt(lc,mypos,18)
 84860   resp$(iaf_respc_desc:=respc+=1)=iaf_desc$
-84880   fncmdset(4)
-84900   fnacs(sn$,0,mat resp$,ckey)
+84880   fnCmdSet(4)
+84900   fnAcs(sn$,0,mat resp$,ckey)
 84920   if ckey<>5 then 
 84940     iaf_amt=val(resp$(iaf_respc_amt))
 84960     iaf_gl$=fnagl$(resp$(iaf_respc_gl))

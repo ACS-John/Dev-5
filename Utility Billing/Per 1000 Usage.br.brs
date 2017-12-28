@@ -1,23 +1,23 @@
 00010 ! formerly S:\acsUB\Per1000
 00020 ! -- Per 1000 Usage Report
 12000 ! ______________________________________________________________________
-12020   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fntos,fnerror,fnopenprn,fncloseprn,fnLastBillingDate,fncomboa,fncmdset,fnget_services,fncreg_read,fncreg_write
+12020   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnopenprn,fncloseprn,fnLastBillingDate,fncomboa,fnCmdSet,fnget_services,fncreg_read,fncreg_write
 12040   on error goto ERTN
 12060 ! ______________________________________________________________________
 12080   dim z$*10,e$(4)*30,g(12)
 12100   dim a(7),d(15)
 12120   dim range(16),excess(2999,2),cust(16),over(160)
 12140   dim resp$(20)*40,text$*40
-12160   dim servicename$(10)*20
+12160   dim serviceName$(10)*20
 12180 ! ______________________________________________________________________
 14000   fntop(program$)
 14020   fnLastBillingDate(d1)
 14040 ! 
-16000   fnget_services(mat servicename$)
+16000   fnget_services(mat serviceName$)
 16060   mat opt$(3)
 16080   opt$(1)="Water"
 16100   opt$(2)="Gas"
-16120   if trim$(servicename$(3))="Lawn Meter" then 
+16120   if trim$(serviceName$(3))="Lawn Meter" then 
 16140     stfn$="wgl"
 16160     opt$(3)="Lawn Meter"
 16180   else 
@@ -85,37 +85,37 @@
 34260   end if
 34280 ! /r
 42000 MENU1: ! r:
-42020   fntos(sn$:="Per1000")
+42020   fnTos(sn$:="Per1000")
 42040   mylen=22
 42060   mypos=mylen+2
 42080   respc=0
-42100   fnlbl(2,1,"Billing Date:" ,mylen,1) : fnlbl(2,36,"(most recent billing date only)") ! ,31,0)
-42120   fntxt(2,mypos,8,0,1,"1")
+42100   fnLbl(2,1,"Billing Date:" ,mylen,1) : fnLbl(2,36,"(most recent billing date only)") ! ,31,0)
+42120   fnTxt(2,mypos,8,0,1,"1")
 42140   resp$(respc+=1)=str$(d1)
 42160   text$="Service for Analysis:"
-42180   fnlbl(3,1,text$,mylen,1)
+42180   fnLbl(3,1,text$,mylen,1)
 42200   fncomboa(stfn$,3,mypos,mat opt$)
 42220   resp$(respc+=1)=opt$(1)
-42260   fnlbl(4,1,"Rate Code:",mylen,1)
-42280   fntxt(4,mypos,2,0,1,"30")
+42260   fnLbl(4,1,"Rate Code:",mylen,1)
+42280   fnTxt(4,mypos,2,0,1,"30")
 42300   resp$(respc+=1)="0"
 42320   text$="Usage Break Points:"
-42340   fnlbl(6,1,text$,mylen,1)
+42340   fnLbl(6,1,text$,mylen,1)
 42360   for a = 1 to 16
 42380     resp$(respc+=1) = str$(range(a))
 42400   next a
 42420   mypos(1)=mylen+2 : mypos(2)=mypos(1)+9
 42440   mypos(3)=mypos(2)+9 : mypos(4)=mypos(3)+9
-42460   fntxt(6,mypos(1),7) : fntxt(6,mypos(2),7)
-42480   fntxt(6,mypos(3),7) : fntxt(6,mypos(4),7)
-42500   fntxt(7,mypos(1),7) : fntxt(7,mypos(2),7)
-42520   fntxt(7,mypos(3),7) : fntxt(7,mypos(4),7)
-42540   fntxt(8,mypos(1),7) : fntxt(8,mypos(2),7)
-42560   fntxt(8,mypos(3),7) : fntxt(8,mypos(4),7)
-42580   fntxt(9,mypos(1),7) : fntxt(9,mypos(2),7)
-42600   fntxt(9,mypos(3),7) : fntxt(9,mypos(4),7)
-42620   fncmdset(3)
-42640   fnacs(sn$,win,mat resp$,ck)
+42460   fnTxt(6,mypos(1),7) : fnTxt(6,mypos(2),7)
+42480   fnTxt(6,mypos(3),7) : fnTxt(6,mypos(4),7)
+42500   fnTxt(7,mypos(1),7) : fnTxt(7,mypos(2),7)
+42520   fnTxt(7,mypos(3),7) : fnTxt(7,mypos(4),7)
+42540   fnTxt(8,mypos(1),7) : fnTxt(8,mypos(2),7)
+42560   fnTxt(8,mypos(3),7) : fnTxt(8,mypos(4),7)
+42580   fnTxt(9,mypos(1),7) : fnTxt(9,mypos(2),7)
+42600   fnTxt(9,mypos(3),7) : fnTxt(9,mypos(4),7)
+42620   fnCmdSet(3)
+42640   fnAcs(sn$,win,mat resp$,ck)
 44000   if ck=5 then goto XIT
 44020   d1=val(resp$(1))
 44040   weg$=resp$(2)(1:1)

@@ -2,7 +2,7 @@
 00020 ! -- Remove Cash Receipt Records
 00030 ! ----------------------------------------------------------------------
 00040 ! if the collections ever exceed 100,000 then sort wont work for the monthly receipts journal  ( one clue is the address is -2020202 instead of a real address
-00050   library 'S:\Core\Library': fntop,fnxit, fnacs,fntop,fnlbl,fntxt,fnwait,fnopenprn,fncloseprn,fnwait,fntos,fnerror,fncno,fnxit,fnerror,fncmdset
+00050   library 'S:\Core\Library': fntop,fnxit, fnAcs,fntop,fnLbl,fnTxt,fnwait,fnopenprn,fncloseprn,fnwait,fnTos,fnerror,fncno,fnxit,fnerror,fnCmdSet
 00060   on error goto ERTN
 00070 ! ----------------------------------------------------------------------
 00080   dim alloc(10),o(2),cnam$*40,txt$*40,cap$*128
@@ -29,15 +29,15 @@
 00260 ! ______________________________________________________________________
 00270 ASKDATE: ! 
 00280   sn$="ubcoldel" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=37 !:
         mypos=mylen+2 !:
         respc=0
-00290   fnlbl(1,1,"Lowest Date to Retained (mm\dd\ccyy):",mylen,1)
-00300   fntxt(1,mypos,10,10,0,"2") !:
+00290   fnLbl(1,1,"Lowest Date to Retained (mm\dd\ccyy):",mylen,1)
+00300   fnTxt(1,mypos,10,10,0,"2") !:
         resp$(respc+=1)=""
-00310   fncmdset(2)
-00320   fnacs(sn$,win,mat resp$,ckey)
+00310   fnCmdSet(2)
+00320   fnAcs(sn$,win,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   ld1=val(resp$(1)) conv ASKDATE !:
         ld1=fncd2(ld1) !:

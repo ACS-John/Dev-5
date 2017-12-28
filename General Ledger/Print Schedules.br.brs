@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\glSchPrt
 00020 ! pr schedules
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnglfs,fntos,fnchk,fnacs,fncmdkey,fnlbl,fnpglen,fnactpd,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnglfs,fnTos,fnChk,fnAcs,fnCmdKey,fnLbl,fnpglen,fnactpd,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dollar$*1,k$*3,by(13),bp(13),byt(13)
@@ -37,7 +37,7 @@
 24350       ! pr 'SN=';sn : pause
 24360       if dp=1 then dollar$="$" else dollar$=" "
 24380       gosub PrintHeadings
-24400       open #hSchedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".H"&env$('cno')&",Shr",internal,outin,keyed 
+24400       open #hSchedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".H"&env$('cno')&",Shr",internal,outIn,keyed 
 26000       do 
 26020         read #hSchedule,using "form pos 1,c 12": gl$ eof EoSchedule
 26040         ! pr '"'&gl$&'"' : pause
@@ -191,13 +191,13 @@
 58020   selectSchedulesReturn=0
 58040   restore #hAcGlSchs1,key>="   ": nokey SelectSchedulesXit
 58060   ln=1 : totallisted=0
-58080   fntos(sn$="GLschprt") 
-58100   fnlbl(1,15,"Select Schedules to Be Printed")
+58080   fnTos(sn$="GLschprt") 
+58100   fnLbl(1,15,"Select Schedules to Be Printed")
 58120   do
 58140     read #hAcGlSchs1,using L270: sn,sn$,ft$,dp,rs,cm eof L1720
 58160     ln=ln+1
 58180     text$=cnvrt$("pic(zzz)",sn)&"  "&sn$(1:40)
-58200     fnchk(ln,1,text$,0)
+58200     fnChk(ln,1,text$,0)
 58220     totallisted+=1
 58240     scheduleno(totallisted)=val(text$(1:3))
 58260     ! if ln>21 and 1>1 then goto L1720 ! quit if more than two columns
@@ -205,10 +205,10 @@
 58300   loop
 58320   L1720: !
 58340   if totallisted then
-58360     fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
+58360     fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 58380   end if
-58400   fncmdkey("&Cancel",5,0,1,"Returns to menu without printing.")
-58420   fnacs(sn$,0,mat resp$,ckey)
+58400   fnCmdKey("&Cancel",5,0,1,"Returns to menu without printing.")
+58420   fnAcs(sn$,0,mat resp$,ckey)
 58440   if ckey<>5 then 
 58460     mat prtsch(totallisted)
 58480     for j=1 to totallisted

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\RmBudget
 00020 ! -- Remove Old Budget Transactions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnxit,fnerror,fntos,fnacs,fntxt,fnlbl,fndate_mmddyy_to_ccyymmdd,fnwait,fncmdset,fntop
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnxit,fnerror,fnTos,fnAcs,fnTxt,fnLbl,fndate_mmddyy_to_ccyymmdd,fnwait,fnCmdSet,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ba(13),bt1(14,2)
@@ -15,26 +15,26 @@
 00140   if bud1=0 then goto XIT
 00150 ! ______________________________________________________________________
 00160   sn$="RmBudget" !:
-        fntos(sn$)
+        fnTos(sn$)
 00170   txt$="All paid budget records with a date prior" !:
-        fnlbl(1,1,txt$,44,2)
+        fnLbl(1,1,txt$,44,2)
 00180   txt$="to this date will be removed." !:
-        fnlbl(2,1,txt$,44,2)
+        fnLbl(2,1,txt$,44,2)
 00190   txt$="Oldest Date to Retain (MMDDYY):" !:
-        fnlbl(4,1,txt$,33,1)
-00200   fntxt(4,35,8,0,0,"1") !:
+        fnLbl(4,1,txt$,33,1)
+00200   fnTxt(4,35,8,0,0,"1") !:
         resp$(1)=""
-00210   fncmdset(2)
-00220   fnacs(sn$,0,mat resp$,ckey)
+00210   fnCmdSet(2)
+00220   fnAcs(sn$,0,mat resp$,ckey)
 00230   rd1=val(resp$(1))
 00240   if ckey=5 then goto XIT
-00250   open #2: "Name="&udf$&"Work1.dat,Size=0,RecL=149,Replace",internal,outin,relative 
+00250   open #2: "Name="&udf$&"Work1.dat,Size=0,RecL=149,Replace",internal,outIn,relative 
 00260 L260: read #81,using L270: z$,mat ba,mat tr eof END1
 00270 L270: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 00280   adr=tr(1)
 00290   mat tr=(0)
 00300 L300: if adr=0 then goto L450
-00310   read #82,using L370,rec=adr,release: z$,mat bt1,nba norec L450
+00310   read #82,using L370,rec=adr,release: z$,mat bt1,nba noRec L450
 00320   d1=bt1(1,1) ! transaction date
 00330   d2=rd1 ! cutoff date
 00340   if sum(bt1)=0 then goto L440
@@ -65,8 +65,8 @@
 00570 XIT: fnxit
 00580 ! ______________________________________________________________________
 00590 BUD1: bud1=0
-00600   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L630
-00610   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00600   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L630
+00610   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 00620   bud1=1
 00630 L630: return 
 00640 ! ______________________________________________________________________

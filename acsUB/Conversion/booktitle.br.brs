@@ -41,12 +41,12 @@
 00300   io1$(1)="10,40,N 2,UT,N"
 00310 L310: rinput fields mat io1$: cno conv L310
 00320   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
-00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00340   for j=1 to lrec(1)
-00350     read #1,using "Form Pos 71,c 30",rec=j: nam$ norec L390
+00350     read #1,using "Form Pos 71,c 30",rec=j: nam$ noRec L390
 00360     nam$=fnbooktitle$(nam$)
 00370     pr nam$
-00380     rewrite #1,using "Form Pos 71,c 30",rec=j: nam$ norec L390
+00380     rewrite #1,using "Form Pos 71,c 30",rec=j: nam$ noRec L390
 00390 L390: next j
 00400   goto DONE
 00410 ! ______________________________________________________________________

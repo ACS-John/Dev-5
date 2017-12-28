@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\PayList
 00020 ! payee listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnchk,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fncomboa,fnTxt,fnCmdSet,fnAcs,fnChk,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
@@ -12,33 +12,33 @@
 00120   fntop(program$,cap$="Payee Listing")
 00130   fndat(dat$)
 00140   fncno(cno,cnam$)
-00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00190   pr newpage
-00200   fntos("ubnamlst") !:
+00200   fnTos("ubnamlst") !:
         respc=0
 00210   text$="Report Heading Date:" !:
-        fnlbl(1,1,text$,25,1)
-00220   fntxt(1,27,20) !:
+        fnLbl(1,1,text$,25,1)
+00220   fnTxt(1,27,20) !:
         resp$(respc+=1)=dat$
-00230   fnlbl(2,1,"Print Order:",25,1)
+00230   fnLbl(2,1,"Print Order:",25,1)
 00240   item1$(1)="Payee Number" !:
         item1$(2)="Alphabetic by Name"
 00250   fncomboa("paylist-srt",2,27,mat item1$,tt$) !:
         resp$(respc+=1)=item1$(1)
-00260   fnchk(4,29,"Print G/L Breakdowns:",1) !:
+00260   fnChk(4,29,"Print G/L Breakdowns:",1) !:
         resp$(respc+=1)="False"
-00270   fnchk(6,29,"Print Total Payments:",1) !:
+00270   fnChk(6,29,"Print Total Payments:",1) !:
         resp$(respc+=1)="False"
-00280   fnlbl(8,1,"Transaction Starting Date:",25,1)
-00290   fntxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
+00280   fnLbl(8,1,"Transaction Starting Date:",25,1)
+00290   fnTxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
         resp$(respc+=1)=" "
-00300   fnlbl(9,1,"Transaction Ending Date:",25,1)
-00310   fntxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
+00300   fnLbl(9,1,"Transaction Ending Date:",25,1)
+00310   fnTxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
         resp$(respc+=1)=""
-00320   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00320   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   dat$=resp$(1)
 00350   seq$=resp$(2)(1:1)

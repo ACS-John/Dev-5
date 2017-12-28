@@ -9,7 +9,7 @@
 00170 L170: input fields "10,55,N 2,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
 00190 ! 
-00200   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outin 
+00200   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outIn 
 00210 L210: read #4,using L220: d1 eof L310,conv L280
 00220 L220: form pos 9,n 6
 00230   d1=fndate_mmddyy_to_ccyymmdd(d1) ! d1=19000000+FNCD(D1)

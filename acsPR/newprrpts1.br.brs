@@ -10,14 +10,14 @@
 01260   goto MENU1
 01270 ! ______________________________________________________________________
 01280 MENU1: ! 
-01290   fntos(sn$="PrintReport-ask")
+01290   fnTos(sn$="PrintReport-ask")
 01292   respc=0
-01300   fnlbl(1,1,"Report:",11,1)
+01300   fnLbl(1,1,"Report:",11,1)
 01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
 01312   resp$(respc+=1)=""
-01320   fncmdkey("&Next",1,1,0,"Prints the highlighted report." )
-01322   fncmdkey("&Complete",5,0,1,"Returns to menu")
-01330   fnacs(sn$,0,mat resp$,ckey) ! ask report #
+01320   fnCmdKey("&Next",1,1,0,"Prints the highlighted report." )
+01322   fnCmdKey("&Complete",5,0,1,"Returns to menu")
+01330   fnAcs(sn$,0,mat resp$,ckey) ! ask report #
 01332   if ckey=5 then goto XIT
 01334   rn=val(resp$(1)(1:2))
 01336   fn_print_designed_report(rn,3)
@@ -166,7 +166,7 @@
 02516   fnmsgbox(mat ml$,resp$,cap$,48)
 02520   fnchain("S:\acsPR\newprRpt3") ! /r
 22000   def fn_setup
-22020     library 'S:\Core\Library': fntop,fnxit, fnerror,fnchain,fncno,fntos,fnlbl,fncombof,fncmdkey,fnacs,fnmsgbox,fngethandle,fnCopy
+22020     library 'S:\Core\Library': fntop,fnxit, fnerror,fnchain,fncno,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnmsgbox,fngethandle,fnCopy
 22040     on error goto ERTN
 22060 ! ______________________________________________________________________
 22080     dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),ty$(104,5)*20,a$*255

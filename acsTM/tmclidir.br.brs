@@ -2,7 +2,7 @@
 00030   on fkey 5 goto L830
 00040   on error goto L860
 00050 ! 
-00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00070   fntop(program$,cap$="Client Directory")
 00080   fncno(cno,cnam$)
 00090   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr L860

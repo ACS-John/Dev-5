@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\BalanceSheetTest
 00020 ! Balance Sheet - Standard 8.5x11
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00080   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
@@ -19,15 +19,15 @@
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
 00190 Screen1: ! r:
-00192   fntos(sn$="GLInput") !:
+00192   fnTos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
-00200   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00210   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00200   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00210   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00220   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00230   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00250   fnacs(sn$,0,mat resp$,ckey)
+00220   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00230   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00240   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   costcntr=val(resp$(1)) 
 00282 goto GetStarted ! /r

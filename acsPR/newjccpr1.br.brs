@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newJCCPR1
 00020 ! Certified Payroll Register
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fncno,fndate_mmddyy_to_ccyymmdd,fnchain,fntos,fnlbl,fntxt,fncmdset,fnacs,fncmbjob,fnmsgbox,fncmdkey
+00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fncno,fndate_mmddyy_to_ccyymmdd,fnchain,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fncmbjob,fnmsgbox,fnCmdKey
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,cn$*11,ta(2),tr(9),io1$(2),n$*40,tn$*6,dr(7),en$*12
@@ -16,16 +16,16 @@
 00160   open #4: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output 
 00170 ! ______________________________________________________________________
 00180 MENU1: ! 
-00190   fntos(sn$="jccpr1") !:
+00190   fnTos(sn$="jccpr1") !:
         respc=0
-00200   fnlbl(1,47," ",1,1)
-00210   fnlbl(1,1,"Beginning Date:",20,1)
-00220   fntxt(1,23,8,0,0,"1",0,"First day of week being printed.") !:
+00200   fnLbl(1,47," ",1,1)
+00210   fnLbl(1,1,"Beginning Date:",20,1)
+00220   fnTxt(1,23,8,0,0,"1",0,"First day of week being printed.") !:
         resp$(respc+=1)=str$(df)
-00230   fnlbl(2,1,"Ending Date:",20,1)
-00240   fntxt(2,23,8,0,0,"1",0,"Week ending date.") !:
+00230   fnLbl(2,1,"Ending Date:",20,1)
+00240   fnTxt(2,23,8,0,0,"1",0,"Week ending date.") !:
         resp$(respc+=1)=str$(dt)
-00250   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00250   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00255   if ck=5 then goto XIT
 00260   df=val(resp$(1)) ! beginning date
 00270   dt=val(resp$(2)) ! ending date
@@ -52,15 +52,15 @@
 00480   goto ASKJOB
 00490 ! ______________________________________________________________________
 00500 ASKJOB: ! 
-00510   fntos(sn$="jccpr1J") !:
+00510   fnTos(sn$="jccpr1J") !:
         respc=0
-00520   fnlbl(1,1,"Job #:",8,1)
+00520   fnLbl(1,1,"Job #:",8,1)
 00530   fncmbjob(1,11) !:
         resp$(respc+=1)=jn$
-00540   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
-00550   fncmdkey("&Next",1,1,0,"Process the job" ) !:
-        fncmdkey("&Complete",2,0,0,"Start printing")
-00560   fnacs(sn$,0,mat resp$,ck)
+00540   if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
+00550   fnCmdKey("&Next",1,1,0,"Process the job" ) !:
+        fnCmdKey("&Complete",2,0,0,"Start printing")
+00560   fnAcs(sn$,0,mat resp$,ck)
 00570   if ck=2 then goto PRINT_REPORT
 00580   jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00590   rw=0

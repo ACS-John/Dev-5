@@ -21,7 +21,7 @@
 00180   mcmax=9999999
 00190   for j=1 to 3: a$(j)=a$(j)(1:30): next j
 00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
+00210   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
 00220 L220: read #1,using L230: eno,mat em$,ss$,em6,ta eof XIT
 00230 L230: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 00240 L240: read #2,using L250,rec=ta: teno,tcd,mat ty,ta

@@ -1,20 +1,20 @@
 00010 ! formerly S:\acsGL\StdAdj
 00020 ! Post Standard Adjusting Entries
 00030 ! r: setup library, dims, fntop, on error
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnchain,fntos,fnlbl,fntxt,fncmdset,fnacs,fnmsgbox,fnqgl,fnrgl$,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnqgl,fnrgl$,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ref$*12,des$*30,glan$(10)*12,glam(10),ml$(3)*80
 24000   fntop(program$)
 24020   dat=date("mmddyy")
 00080 ! /r
-24080   fntos("poststdadj") 
-24120   fnlbl(1,1,"Date to be used on Standard Adjusting Entries:",45,1)
-24140   fntxt(1,48,8,0,0,"1",0,"Enter the date to be used on the standard adjusting entries.") 
+24080   fnTos("poststdadj") 
+24120   fnLbl(1,1,"Date to be used on Standard Adjusting Entries:",45,1)
+24140   fnTxt(1,48,8,0,0,"1",0,"Enter the date to be used on the standard adjusting entries.") 
 24160   resp$(1)=str$(dat)
-24180   fnlbl(1,60,"",1,1) ! space it over
-24200   fncmdset(2)
-24210   fnacs(sn$,0,mat resp$,ckey)
+24180   fnLbl(1,60,"",1,1) ! space it over
+24200   fnCmdSet(2)
+24210   fnAcs(sn$,0,mat resp$,ckey)
 24220   if ckey=5 then goto XIT
 24240   dat=val(resp$(1))
 24260 ! ______________________________________________________________________

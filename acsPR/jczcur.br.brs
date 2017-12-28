@@ -34,7 +34,7 @@
 00330 L330: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00340   close #1: 
 00350 ! ______________________________________________________________________
-00360 L360: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outin,keyed 
+00360 L360: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outIn,keyed 
 00370   if kt=0 then goto L430
 00380 L380: read #2,using L400: a1,a2,a3 eof DONE
 00390   rewrite #2,using L400: 0,0,0

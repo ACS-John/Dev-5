@@ -5,7 +5,7 @@
 00048   fntop(program$,"CHANGE_ME")
 00050   close #101: ioerr L60
 00051   pause 
-00060 L60: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=CONVERT ACCUMULATED TRANSACTIONS FILE",display,outin 
+00060 L60: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=CONVERT ACCUMULATED TRANSACTIONS FILE",display,outIn 
 00070   pr f "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
 00080   pr f "12,32,C 16,R,N": "PRESS F5 TO STOP"
 00090 L90: input fields "10,57,N 2,UE,N",attr "R": cno conv L90
@@ -25,8 +25,8 @@
 00220 L220: close #1,free: 
 00230   close #2: 
 00240   execute "RENAME "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')
-00250   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outin,keyed 
-00260   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,outin,relative 
+00250   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed 
+00260   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,outIn,relative 
 00270   pr newpage
 00280   pr f "10,15,c 60,h,n": "REASSIGN TRANSACTION ADDRESSES IN PROCESS"
 00290   restore #1,key>="            ": eof L300
@@ -37,7 +37,7 @@
 00340 L340: lr2=lrec(2)
 00350   rewrite #2,using L450,rec=1: lr2
 00360   for j=1 to lr2
-00370     read #2,using L380,rec=j: k$,nta norec L460
+00370     read #2,using L380,rec=j: k$,nta noRec L460
 00380 L380: form pos 1,c 12,pos 71,pd 3
 00390     read #1,using L310,key=k$: mat ta nokey L460
 00400     if ta(1)=0 then ta(1)=j

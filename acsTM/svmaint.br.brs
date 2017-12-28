@@ -1,6 +1,6 @@
 00020 ! (C) COPYRIGHT - 1986 - ADVANCED COMPUTER SERVICES, INC.
 00030   on error goto L2010
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole
 00050   library 'S:\Core\Library': fnopenprn,fncloseprn
 00060   fntop(program$,cap$="Service Code")
 00070   fncno(cno,cnam$)
@@ -20,7 +20,7 @@
 00210   se$(3)="TOTAL HOURS - YTD"
 00220   se$(4)="STANDARD FEES - YTD"
 00230   gosub L1780
-00240   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L2000
+00240   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2000
 00250   goto L260
 00260 L260: pr newpage
 00270   pr f "3,9,c 55,N": "SERVICE CODE MASTER FILE"
@@ -49,9 +49,9 @@
 00500   if uprc$(a$)="THINK" then goto L510 else goto L260
 00510 L510: i2=1
 00520   close #1: ioerr L530
-00530 L530: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno'),internal,outin,keyed ioerr L550
+00530 L530: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno'),internal,outIn,keyed ioerr L550
 00540   close #1,free: ioerr L550
-00550 L550: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",SIZE=0,RecL=43,NoShr",internal,outin,relative ioerr L2010
+00550 L550: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",SIZE=0,RecL=43,NoShr",internal,outIn,relative ioerr L2010
 00560   goto L1700
 00570 L570: form pos 1,c 4,c 30,pd 4.2,pd 5.2
 00580 L580: new1=1
@@ -175,7 +175,7 @@
 01760   chain "S:\acsTM\SVMAINT"
 01770 L1770: goto XIT
 01780 L1780: dim hlp$(20)*78,flh$(22)*18,a$*5
-01790   open #10: "Name=S:\acsTM\SC.HLP,Shr",internal,outin,relative ioerr L2010
+01790   open #10: "Name=S:\acsTM\SC.HLP,Shr",internal,outIn,relative ioerr L2010
 01800   for j=1 to 20
 01810     flh$(j)=str$(j+2)&",2,C 78,U,N"
 01820   next j
@@ -188,7 +188,7 @@
 01890   cp1=pos(uprc$(sb$(convc)),"U",1)
 01900   cp2=cp1+2
 01910   sb$(convc)(cp1:cp2)="UC "
-01920   read #10,using L1930,rec=convc: mat hlp$ norec L1990 ioerr L2010
+01920   read #10,using L1930,rec=convc: mat hlp$ noRec L1990 ioerr L2010
 01930 L1930: form pos 1,20*c 78
 01940   pr f mat flh$: mat hlp$,se$(convc),"ENTER 0 TO CONTINUE OR 1 TO UPDATE HELP SCREEN:"
 01950 L1950: input fields "24,69,N 1,EU,N": j2 conv L1950

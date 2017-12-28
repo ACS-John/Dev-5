@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\RENUMCK
 00020 ! ReNUMBER A SERIES OF CHECKS
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
@@ -13,24 +13,24 @@
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outin,keyed 
-00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&env$('cno'),internal,outin,keyed 
-00150 L150: fntos(sn$='RmTrans-'&str$(rcn)) !:
+00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outIn,keyed 
+00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&env$('cno'),internal,outIn,keyed 
+00150 L150: fnTos(sn$='RmTrans-'&str$(rcn)) !:
         mylen=30 : mypos=mylen+3 : lc=0
-00160   fnlbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
-00170   fntxt(lc,mypos,10,0,0,'30') !:
+00160   fnLbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
+00170   fnTxt(lc,mypos,10,0,0,'30') !:
         resp$(1)=""
-00180   fnlbl(lc+=1,1,"Last Check Number to Renumber:",mylen,right)
-00190   fntxt(lc,mypos,10,0,0,'30') !:
+00180   fnLbl(lc+=1,1,"Last Check Number to Renumber:",mylen,right)
+00190   fnTxt(lc,mypos,10,0,0,'30') !:
         resp$(2)=""
-00200   fnlbl(lc+=1,1,"First New Check Number to Use:",mylen,right)
-00210   fntxt(lc,mypos,10,0,0,'30') !:
+00200   fnLbl(lc+=1,1,"First New Check Number to Use:",mylen,right)
+00210   fnTxt(lc,mypos,10,0,0,'30') !:
         resp$(3)=""
-00220   fnlbl(lc+=1,1,"Bank Account Number:",mylen,right)
-00230   fntxt(lc,mypos,2,0,0,'30') !:
+00220   fnLbl(lc+=1,1,"Bank Account Number:",mylen,right)
+00230   fnTxt(lc,mypos,2,0,0,'30') !:
         resp$(4)=""
-00240   fncmdset(2)
-00250   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdSet(2)
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
           firstold=val(resp$(1)) !:
           lastold=val(resp$(2)) !:

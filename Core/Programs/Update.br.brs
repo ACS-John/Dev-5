@@ -293,9 +293,9 @@
 62180     fnmsgbox(mat mg$,response$, cap$,48+0)
 62200 MMF_XIT: !
 62220   fnend
-79000   def library fnstatus(text$*512)
+79000   def library fnStatus(text$*512)
 79010     if ~setup then let fn_setup
-79020     fnstatus=fn_status(text$)
+79020     fnStatus=fn_status(text$)
 79040   fnend
 80000   def fn_status(text$*512)
 80020     if ~status_initialized or file$(h_status_win)='' then
@@ -318,9 +318,9 @@
 80360     curfld(1,grid_rows+1)
 80380 !
 80400   fnend
-81000   def library fnstatus_pause
+81000   def library fnStatusPause
 81010     if ~setup then let fn_setup
-81020     fnstatus_pause=fn_status_pause
+81020     fnStatusPause=fn_status_pause
 81040   fnend
 82000   def fn_status_pause
 82020     fn_status('Press any key to continue.')
@@ -339,9 +339,9 @@
 86160       execute 'sy '&flags$&' '&exe_what$
 86180     end if
 86200   fnend
-87000   def library fnstatus_close
+87000   def library fnStatusClose
 87020     if ~setup then let fn_setup
-87040     fnstatus_close=fn_status_close
+87040     fnStatusClose=fn_status_close
 87060   fnend
 87080   def fn_status_close
 87100     close #h_status_win: ioerr ignore

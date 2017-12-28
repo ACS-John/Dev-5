@@ -1,7 +1,7 @@
 10000 ! similar to S:\Utility Billing\Create Hand Held File
 10020 ! -- Tranfer Data From Computer to Hand Held
 10040 ! r: setup
-10060   library 'S:\Core\Library': fnerror,fntos,fnlbl,fnacs,fnxit,fncno,fncmdset,fntop,fnmsgbox,fntxt,fngethandle,fnclient_has,fnureg_read,fnureg_write,fnget_services
+10060   library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnAcs,fnxit,fncno,fnCmdSet,fntop,fnmsgbox,fnTxt,fngethandle,fnclient_has,fnureg_read,fnureg_write,fnget_services
 10080   on error goto ERTN
 11000 ! ______________________________________________________________________
 11020   dim gb(10),ab$(3)*30
@@ -11,7 +11,7 @@
 11200   dim delim$*1
 11220   dim resp$(3)*256
 11240   dim cap$*128
-11280   dim servicename$(10)*20
+11280   dim serviceName$(10)*20
 11300   dim extra(23),extra$(11)*30
 11320   dim exp_filename$*256
 11340 ! ______________________________________________________________________
@@ -26,7 +26,7 @@
 14100     goto XIT
 14120   end if 
 14140 ! 
-14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
+14160   fnget_services(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 14180   delim$=chr$(9)
 14200 ! 
 16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -36,13 +36,13 @@
 16080   if exp_filename$='' then exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 16100 ! /r
 20000 MENU1: ! 
-20020   fntos(sn$="ecp_export")
-20040   fnlbl(1,1,"Destination Path and File Name:",34,1)
-20060   fntxt(1,36,40,256,0,"71")
+20020   fnTos(sn$="ecp_export")
+20040   fnLbl(1,1,"Destination Path and File Name:",34,1)
+20060   fnTxt(1,36,40,256,0,"71")
 20080   resp$(1)=exp_filename$
-20100   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-20120   fncmdset(2)
-20140   fnacs(sn$,0,mat resp$,ckey)
+20100   fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
+20120   fnCmdSet(2)
+20140   fnAcs(sn$,0,mat resp$,ckey)
 20160   if ckey=5 then goto XIT
 20180   exp_filename$=resp$(1)
 20200 ! 
@@ -143,72 +143,72 @@
 32060   pr #h_ecp: 'Address 1 - Primary'&delim$;
 32080   pr #h_ecp: 'Address 2 - Primary'&delim$;
 32100   pr #h_ecp: 'CSZ - Primary'&delim$;
-32120   pr #h_ecp: servicename$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
-32140   pr #h_ecp: servicename$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
-32160   pr #h_ecp: servicename$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
-32180   pr #h_ecp: servicename$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
-32200   pr #h_ecp: servicename$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
-32220   pr #h_ecp: servicename$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
-32240   pr #h_ecp: servicename$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
-32260   pr #h_ecp: servicename$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
+32120   pr #h_ecp: serviceName$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
+32140   pr #h_ecp: serviceName$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
+32160   pr #h_ecp: serviceName$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
+32180   pr #h_ecp: serviceName$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
+32200   pr #h_ecp: serviceName$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
+32220   pr #h_ecp: serviceName$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
+32240   pr #h_ecp: serviceName$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
+32260   pr #h_ecp: serviceName$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
 32280   pr #h_ecp: ''&delim$; ! str$(b(1))&delim$;
 32300   pr #h_ecp: ''&delim$; ! str$(b(2))&delim$;
 32320   pr #h_ecp: ''&delim$; ! str$(b(3))&delim$;
-32340   pr #h_ecp: servicename$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
+32340   pr #h_ecp: serviceName$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
 32360   pr #h_ecp: ''&delim$; ! str$(b(5))&delim$;
 32380   pr #h_ecp: ''&delim$; ! str$(b(6))&delim$;
 32400   pr #h_ecp: ''&delim$; ! str$(b(7))&delim$;
-32420   pr #h_ecp: servicename$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
-32440   pr #h_ecp: servicename$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
-32460   pr #h_ecp: servicename$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
-32480   pr #h_ecp: servicename$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
-32500   pr #h_ecp: servicename$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
-32520   pr #h_ecp: servicename$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
-32540   pr #h_ecp: servicename$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
-32560   pr #h_ecp: servicename$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
-32580   pr #h_ecp: servicename$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
-32600   pr #h_ecp: servicename$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
-32620   pr #h_ecp: servicename$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
-32640   pr #h_ecp: servicename$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
-32660   pr #h_ecp: servicename$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
-32680   pr #h_ecp: servicename$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
-32700   pr #h_ecp: servicename$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
-32720   pr #h_ecp: servicename$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
-32740   pr #h_ecp: servicename$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
-32760   pr #h_ecp: servicename$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
-32780   pr #h_ecp: servicename$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
-32800   pr #h_ecp: servicename$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
+32420   pr #h_ecp: serviceName$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
+32440   pr #h_ecp: serviceName$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
+32460   pr #h_ecp: serviceName$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
+32480   pr #h_ecp: serviceName$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
+32500   pr #h_ecp: serviceName$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
+32520   pr #h_ecp: serviceName$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
+32540   pr #h_ecp: serviceName$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
+32560   pr #h_ecp: serviceName$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
+32580   pr #h_ecp: serviceName$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
+32600   pr #h_ecp: serviceName$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
+32620   pr #h_ecp: serviceName$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
+32640   pr #h_ecp: serviceName$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
+32660   pr #h_ecp: serviceName$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
+32680   pr #h_ecp: serviceName$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
+32700   pr #h_ecp: serviceName$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
+32720   pr #h_ecp: serviceName$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
+32740   pr #h_ecp: serviceName$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
+32760   pr #h_ecp: serviceName$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
+32780   pr #h_ecp: serviceName$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
+32800   pr #h_ecp: serviceName$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
 32820   pr #h_ecp: 'Units Per Meter'&delim$; ! str$(d(13))&delim$;
 32840   pr #h_ecp: 'Demand Multiplier'&delim$; ! str$(d(14))&delim$;
 32860   pr #h_ecp: 'Demand Reading'&delim$; ! str$(d(15))&delim$;
 32880   pr #h_ecp: 'Current Balance'&delim$; ! str$(bal)&delim$;
 32900   pr #h_ecp: 'Date of Charge'&delim$; ! str$(f)&delim$;
-32920   pr #h_ecp: servicename$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
-32940   pr #h_ecp: servicename$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
-32960   pr #h_ecp: servicename$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
-32980   pr #h_ecp: servicename$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
-33000   pr #h_ecp: servicename$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
-33020   pr #h_ecp: servicename$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
-33040   pr #h_ecp: servicename$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
-33060   pr #h_ecp: servicename$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
-33080   pr #h_ecp: servicename$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
+32920   pr #h_ecp: serviceName$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
+32940   pr #h_ecp: serviceName$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
+32960   pr #h_ecp: serviceName$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
+32980   pr #h_ecp: serviceName$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
+33000   pr #h_ecp: serviceName$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
+33020   pr #h_ecp: serviceName$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
+33040   pr #h_ecp: serviceName$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
+33060   pr #h_ecp: serviceName$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
+33080   pr #h_ecp: serviceName$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
 33100   pr #h_ecp: 'Net Bill'&delim$; ! str$(g(10))&delim$;
 33120   pr #h_ecp: 'Gross Bill'&delim$; ! str$(g(11))&delim$;
 33140   pr #h_ecp: ''&delim$; ! str$(g(12))&delim$;
 33160   pr #h_ecp: 'Alpha Sort Field'&delim$; ! alp$&delim$;
-33180   pr #h_ecp: servicename$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
-33200   pr #h_ecp: servicename$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
+33180   pr #h_ecp: serviceName$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
+33200   pr #h_ecp: serviceName$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
 33220   pr #h_ecp: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
-33240   pr #h_ecp: servicename$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
-33260   pr #h_ecp: servicename$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
-33280   pr #h_ecp: servicename$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
-33300   pr #h_ecp: servicename$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
-33320   pr #h_ecp: servicename$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
-33340   pr #h_ecp: servicename$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
-33360   pr #h_ecp: servicename$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
-33380   pr #h_ecp: servicename$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
-33400   pr #h_ecp: servicename$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
-33420   pr #h_ecp: servicename$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
+33240   pr #h_ecp: serviceName$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
+33260   pr #h_ecp: serviceName$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
+33280   pr #h_ecp: serviceName$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
+33300   pr #h_ecp: serviceName$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
+33320   pr #h_ecp: serviceName$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
+33340   pr #h_ecp: serviceName$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
+33360   pr #h_ecp: serviceName$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
+33380   pr #h_ecp: serviceName$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
+33400   pr #h_ecp: serviceName$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
+33420   pr #h_ecp: serviceName$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
 33440   pr #h_ecp: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
 33460   pr #h_ecp: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
 33480   pr #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)

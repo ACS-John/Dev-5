@@ -1,12 +1,12 @@
 00010 ! Replace Test\ComboF
 00020 ! -----------------------------------------------------------------------
-00030   library 'S:\Core\Library': fncombof,fnacs,fntos,fncmdset,fncmbrt2,fntop,fnpause,fnxit,fncmbrt2,fncno
+00030   library 'S:\Core\Library': fncombof,fnAcs,fnTos,fnCmdSet,fncmbrt2,fntop,fnpause,fnxit,fncmbrt2,fncno
 00040   dim response$(5)*80
 00050   cno=440 ! fncno(cno)
 00052 ! 
-00060 ! open #1: 'Name=Test\Temp'&session$&'.dat,KFName=Temp'&session$&'.idx,Size=0,RecL=80,KPs=1,KLn=8,Replace',internal,outin,keyed
+00060 ! open #1: 'Name=Test\Temp'&session$&'.dat,KFName=Temp'&session$&'.idx,Size=0,RecL=80,KPs=1,KLn=8,Replace',internal,outIn,keyed
 00070 ! close #1:
-00080 ! open #1: 'Name=Test\Temp'&session$&'.dat',internal,outin,relative
+00080 ! open #1: 'Name=Test\Temp'&session$&'.dat',internal,outIn,relative
 00090 ! pr 'start building your big file at '&time$
 00100 ! for j=1 to 50
 00110 !   write #1,using 'Form Pos 1,N 8,C 72': j,rpt$('X',72)
@@ -17,7 +17,7 @@
 00260 ! pr 'done indexing file at '&time$
 00280 ! pr 'starting TOS call at '&time$
 00300   fntop("Test\ComboF","Test Combobox from File")
-00320   fntos(sn$="ComboF")
+00320   fnTos(sn$="ComboF")
 00340 ! fncmbrt2(1,36,1)
 00360 ! fncombof("F",2,1,82,'Test\Temp'&session$&'.dat',1,8,9,72,'Test\Temp'&session$&'.idx',0,0)
 00380 ! fncombof("F",3,1,82,'Test\Temp'&session$&'.dat',1,8,9,72,'Test\Temp'&session$&'.idx',1,0)
@@ -33,8 +33,8 @@
 50028     f1Col4=f1Col3+f1Col3len+6 : f1Col4Len=38
 50030   fncombof("fs-bal2",1,2,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",0)
 50040   response$(1)=str$(10)
-60000   fncmdset(2)
-60020   fnacs(sn$,0,mat response$,ckey)
+60000   fnCmdSet(2)
+60020   fnAcs(sn$,0,mat response$,ckey)
 60040   pr mat response$
 60060 ! fnpause
 60080 ! end  ! fnxit

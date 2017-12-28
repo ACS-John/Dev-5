@@ -1,27 +1,27 @@
 00010 ! Replace S:\acsCL\InitGLCoA
 00020 ! Import General Ledger Chart of Accounts
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fnmsgbox,fnFree
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$="Import GL Chart of Accounts")
 00100   cancel=99 : right=1 : left=0 : center=2 : number$='30'
-00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outin,keyed 
+00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00130 MENU1: ! 
-00140   fntos(sn$="InitGLCoA") !:
+00140   fnTos(sn$="InitGLCoA") !:
         mylen=38 : mypos=mylen+2 : lc=0
-00150   fnlbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
+00150   fnLbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
 00160   item1$(1)="ACS G/L system" !:
         item1$(2)="Accountant's Diskette"
 00170   fncomboa("claims-srt",lc,mypos,mat item1$,tt$) !:
         resp$(1)=item1$(1)
-00180   fnlbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
-00190   fntxt(lc,mypos,5,0,left,number$) !:
+00180   fnLbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
+00190   fnTxt(lc,mypos,5,0,left,number$) !:
         resp$(2)=env$('cno')
-00200   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ck)
+00200   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00210   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then pas$="BUILD" else !:
             if resp$(1)=item1$(2) then pas$="COPY"

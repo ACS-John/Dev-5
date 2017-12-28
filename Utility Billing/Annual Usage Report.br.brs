@@ -1,6 +1,6 @@
 10000 ! Formerly S:\acsUB\ubUsage2
 10040 ! ______________________________________________________________________
-10060   library 'S:\Core\Library': fnacs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnlbl,fntxt,fntos,fnxit,fncomboa,fncmdset,fntop,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnreg_read,fnreg_write,fngethandle,fnget_services
+10060   library 'S:\Core\Library': fnAcs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnLbl,fnTxt,fnTos,fnxit,fncomboa,fnCmdSet,fntop,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnreg_read,fnreg_write,fngethandle,fnget_services
 10080   on error goto ERTN
 12000   fntop(program$)
 12020 ! r: set constants, dims, etc
@@ -21,14 +21,14 @@
 14200   fnLastBillingDate(d1)
 14220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
 14240 ! 
-14260   dim servicename$(10)*20
+14260   dim serviceName$(10)*20
 14280   dim srv$(10)*2
-14300   fnget_services(mat servicename$,mat srv$)
+14300   fnget_services(mat serviceName$,mat srv$)
 14360 ! 
 14380   dim opt_service_to_analyze$(3)*20,opt_accum_type$(2)
 14400   opt_service_to_analyze$(1)="Water"
-14420   if srv$(3)="EL" then opt_service_to_analyze$(2)=servicename$(3)
-14440   if srv$(4)="GA" then opt_service_to_analyze$(3)=servicename$(4)
+14420   if srv$(3)="EL" then opt_service_to_analyze$(2)=serviceName$(3)
+14440   if srv$(4)="GA" then opt_service_to_analyze$(3)=serviceName$(4)
 14460 ! 
 14480   dim opt_accum_type$(2)*60
 14500   opt_accum_type$(accum_type_total:=1)='Total'
@@ -67,43 +67,43 @@
 25480 ! /r
 28000 SCREEN1: ! r:
 28020   restore #h_customer: 
-28040   fntos(sn$="ubusage2")
+28040   fnTos(sn$="ubusage2")
 28060   rc=0
-28080   fnlbl(1,1,"Billing dates to be printed:",35,1)
-28100   fntxt(2,1,10,10,0,"3")
+28080   fnLbl(1,1,"Billing dates to be printed:",35,1)
+28100   fnTxt(2,1,10,10,0,"3")
 28120   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28140   fntxt(2,15,10,10,0,"3")
+28140   fnTxt(2,15,10,10,0,"3")
 28160   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28180   fntxt(2,29,10,10,0,"3")
+28180   fnTxt(2,29,10,10,0,"3")
 28200   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28220   fntxt(2,43,10,10,0,"3")
+28220   fnTxt(2,43,10,10,0,"3")
 28240   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28260   fntxt(2,57,10,10,0,"3")
+28260   fnTxt(2,57,10,10,0,"3")
 28280   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28300   fntxt(2,71,10,10,0,"3")
+28300   fnTxt(2,71,10,10,0,"3")
 28320   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28340   fntxt(4,1,10,10,0,"3")
+28340   fnTxt(4,1,10,10,0,"3")
 28360   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28380   fntxt(4,15,10,10,0,"3")
+28380   fnTxt(4,15,10,10,0,"3")
 28400   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28420   fntxt(4,29,10,10,0,"3")
+28420   fnTxt(4,29,10,10,0,"3")
 28440   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28460   fntxt(4,43,10,10,0,"3")
+28460   fnTxt(4,43,10,10,0,"3")
 28480   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28500   fntxt(4,57,10,10,0,"3")
+28500   fnTxt(4,57,10,10,0,"3")
 28520   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28540   fntxt(4,71,10,10,0,"3")
+28540   fnTxt(4,71,10,10,0,"3")
 28560   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
-28580   fnlbl(6,1,"Service to Analyze:",24,1,0)
+28580   fnLbl(6,1,"Service to Analyze:",24,1,0)
 28600   fncomboa("ubusage21",6,26,mat opt_service_to_analyze$,"",13)
 28620   rc+=1
 28640   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_service_to_analyze$(1)
-28660   fnlbl(8,1,"Accumulation Type:",24,1,0)
+28660   fnLbl(8,1,"Accumulation Type:",24,1,0)
 28680   fncomboa("ubusage21",8,26,mat opt_accum_type$)
 28700   rc+=1
 28720   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_accum_type$(1)
-28740   fncmdset(2)
-28760   fnacs(sn$,0,mat scr1_resp$,ckey)
+28740   fnCmdSet(2)
+28760   fnAcs(sn$,0,mat scr1_resp$,ckey)
 30000   if ckey=5 then goto XIT
 30020   for j=1 to 12
 30040 L560: ! 

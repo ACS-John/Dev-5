@@ -13,8 +13,8 @@
 00130   loop 
 00140 CSV_EOF: ! 
 00150   close #1: 
-00160 ! open #2: 'Name=z:\acs\acs.402\ubmstr\iphold9.h440',internal,outin
-00170   open #2: 'Name=C:\Users\John\Desktop\iphold9.h1',internal,outin 
+00160 ! open #2: 'Name=z:\acs\acs.402\ubmstr\iphold9.h440',internal,outIn
+00170   open #2: 'Name=C:\Users\John\Desktop\iphold9.h1',internal,outIn 
 00180   do 
 00190     read #2,using 'form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1': x$,mat x eof IPHHOLD_EOF
 00200     which=srch(mat acct$,trim$(x$))

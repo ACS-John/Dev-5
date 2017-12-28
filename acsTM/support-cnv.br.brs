@@ -1,6 +1,6 @@
 20000 ! Replace S:\acsTM\Support-CNV
 20200   dim c$(4)*50
-20400   open #1: "Name="&env$('Q')&"\TMmstr\Support.h50420,Version=1,KFName="&env$('Q')&"\TMmstr\Support-Idx.h50420,Use,RecL=246,KPs=11/17,KLn=6/2,Shr",internal,outin,keyed 
+20400   open #1: "Name="&env$('Q')&"\TMmstr\Support.h50420,Version=1,KFName="&env$('Q')&"\TMmstr\Support-Idx.h50420,Use,RecL=246,KPs=11/17,KLn=6/2,Shr",internal,outIn,keyed 
 20600   open #2: "Name="&env$('Q')&"\TMmstr\Support.h420,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Replace,Version=2,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,output,keyed 
 20800   do 
 21000     read #1,using FORM_1: id_a,id_b,client,id$,sd,tf$,_ed,c1,mat c$ eof END1

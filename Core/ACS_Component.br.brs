@@ -3,7 +3,7 @@
 08060     setup_library=1
 08080     library 'S:\Core\Library': fnprg,fnerror
 08100     library 'S:\Core\Library': fnmsgbox,fnpause
-08120     library 'S:\Core\Library': fngethandle,fncmdkey
+08120     library 'S:\Core\Library': fngethandle,fnCmdKey
 08140     library 'S:\Core\Library': fndate_picker$
 08150     library 'S:\Core\Library': fnlistprint
 08160     library 'S:\Core\Library': fnCopy
@@ -42,7 +42,7 @@
 09440     end if
 09450   end if
 09460 fnend 
-10000 def library fntos(sn$*100)
+10000 def library fnTos(sn$*100)
 10020   ! screen ace top of screen function
 10040   if ~setup then let fn_setup
 10060   sn$=trim$(sn$&session$)
@@ -51,12 +51,12 @@
 10120   combokeycurrent$=combokeyprior$=''
 10140   if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto XIT
 10160   ! close #119: ioerr ignore
-10180   ! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outin,relative  ! recl was 500
+10180   ! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outIn,relative  ! recl was 500
 10200   fn_clear_env
 10220   if env$('GUIMode')='OFF' then execute 'config GUI On'
 10240 fnend 
-11000 def library fnlbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
-11020   ! add a label to a screen ace form   ! fnlbl(l,p,t$*200; mylen,myalign,fm,c,tc)
+11000 def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
+11020   ! add a label to a screen ace form   ! fnLbl(l,p,t$*200; mylen,myalign,fm,c,tc)
 11040   ! myline   vertical (that's up and down) Position of the Label.
 11060   ! mypos    horizontal (left and right) position of the label.
 11080   ! txt$     visible text/caption of the label.
@@ -73,7 +73,7 @@
 12040   if ~setup then let fn_setup
 12060   setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
 12080 fnend 
-12160 def library fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+12160 def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 12162   if ~setup then let fn_setup
 12180   ! screen ace text box
 12200   if lwrc$(mask$)='mmddyy' then 
@@ -109,7 +109,7 @@
 12800   lyne=ps=height=width=contain=tabcon=0
 12820   tooltip$=""
 12840 fnend 
-12860 def library fnopt(lyne,ps, txt$*196; align,contain,tabcon)
+12860 def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 12880   ! lyne      vertical (that's up and down) Position of the Option.
 12900   ! ps        horizontal (left and right) position of the option.
 12920   ! txt$      visible text/caption
@@ -119,7 +119,7 @@
 13000   if align=1 then ps=ps-len(trim$(txt$))
 13020   setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 13040 fnend 
-13060 def library fnchk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
+13060 def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 13080   ! add a screen ace check box
 13100   if ~setup then let fn_setup
 13120   if align=1 then ps=ps-len(trim$(txt$))-2
@@ -352,7 +352,7 @@
 17400   pr #flexhandle,using "Form pos 1,C "&str$(len(all_item$)): all_item$ ioerr ignore
 17410   FLEXADD1_COMPLETE: ! 
 17420 fnend 
-17440 def library fnfra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
+17440 def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 17460   ! add a frame to a screen ace form
 17480   if ~setup then let fn_setup
 17500   setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
@@ -374,90 +374,90 @@
 17820   close #tf1: 
 17840   setenv('control'&str$(fn_control_count),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
 17860 fnend 
-17880 def library fncmdkey(caption$*200,returnkey; default,cancel,tt$*200)
+17880 def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 17900   ! add a button to a screen ace form
 17920   if ~setup then let fn_setup
 17940   setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
 17960 fnend 
-17980 def library fncmdset(bon)
+17980 def library fnCmdSet(bon)
 18000   if ~setup then let fn_setup
 18020   if bon=1 then 
-18040     fncmdkey("&Cancel",5,1,1)
+18040     fnCmdKey("&Cancel",5,1,1)
 18060   else if bon=2 then 
-18080     fncmdkey("&Next",1,1)
-18100     fncmdkey("&Cancel",5,0,1)
+18080     fnCmdKey("&Next",1,1)
+18100     fnCmdKey("&Cancel",5,0,1)
 18120   else if bon=3 then 
-18140     fncmdkey("&Print",1,1)
-18160     fncmdkey("&Cancel",5,0,1)
+18140     fnCmdKey("&Print",1,1)
+18160     fnCmdKey("&Cancel",5,0,1)
 18180   else if bon=4 then 
-18200     fncmdkey("&Save",1,1)
-18220     fncmdkey("&Cancel",5,0,1)
+18200     fnCmdKey("&Save",1,1)
+18220     fnCmdKey("&Cancel",5,0,1)
 18240   else if bon=5 then 
-18260     fncmdkey("&Next",1,1)
-18280     fncmdkey("&Cancel",5,0,1)
-18300     fncmdkey("&Search",6)
+18260     fnCmdKey("&Next",1,1)
+18280     fnCmdKey("&Cancel",5,0,1)
+18300     fnCmdKey("&Search",6)
 18320   else if bon=6 then 
-18340     fncmdkey("&Next",1,1)
-18360     fncmdkey("&Back",2)
-18380     fncmdkey("&Cancel",5,0,1)
+18340     fnCmdKey("&Next",1,1)
+18360     fnCmdKey("&Back",2)
+18380     fnCmdKey("&Cancel",5,0,1)
 18400   else if bon=7 then 
-18420     fncmdkey("&Save",1,1)
-18440     fncmdkey("&Delete",4)
-18460     fncmdkey("&Cancel",5,0,1)
+18420     fnCmdKey("&Save",1,1)
+18440     fnCmdKey("&Delete",4)
+18460     fnCmdKey("&Cancel",5,0,1)
 18480   else if bon=8 then 
-18500     fncmdkey("&Print",1,1)
-18520     fncmdkey("&Back", 2)
-18540     fncmdkey("&Cancel",5,0,1)
+18500     fnCmdKey("&Print",1,1)
+18520     fnCmdKey("&Back", 2)
+18540     fnCmdKey("&Cancel",5,0,1)
 18560   else if bon=11 then 
-18580     fncmdkey("&Next",1,1)
-18600     fncmdkey("&Finish",5,0,1)
+18580     fnCmdKey("&Next",1,1)
+18600     fnCmdKey("&Finish",5,0,1)
 18620   else if bon=13 then 
-18640     fncmdkey("&Next",1,1)
-18660     fncmdkey("&Add",2)
-18680     fncmdkey("&Cancel",5,0,1)
+18640     fnCmdKey("&Next",1,1)
+18660     fnCmdKey("&Add",2)
+18680     fnCmdKey("&Cancel",5,0,1)
 18700   else if bon=14 then 
-18720     fncmdkey("&Add",1)
-18740     fncmdkey("E&dit",2,1)
-18760     fncmdkey("&Print",4)
-18780     fncmdkey("&Cancel",5,0,1)
+18720     fnCmdKey("&Add",1)
+18740     fnCmdKey("E&dit",2,1)
+18760     fnCmdKey("&Print",4)
+18780     fnCmdKey("&Cancel",5,0,1)
 18820   else if bon=15 then 
-18840     fncmdkey("&Add",1,1)
-18860     fncmdkey("&Cancel",5,0,1)
+18840     fnCmdKey("&Add",1,1)
+18860     fnCmdKey("&Cancel",5,0,1)
 18880   else if bon=17 then 
-18900     fncmdkey("&Next",1,1)
-18920     fncmdkey("&Skip",2,0,1)
-18940     fncmdkey("&Finish",3)
+18900     fnCmdKey("&Next",1,1)
+18920     fnCmdKey("&Skip",2,0,1)
+18940     fnCmdKey("&Finish",3)
 18960   else if bon=19 then 
-18980     fncmdkey("&Next",1,1)
-19000     fncmdkey("&Finish",2)
-19020     fncmdkey("&Cancel",5,0,1)
+18980     fnCmdKey("&Next",1,1)
+19000     fnCmdKey("&Finish",2)
+19020     fnCmdKey("&Cancel",5,0,1)
 19040   else if bon=21 then 
-19060     fncmdkey("&Print",1,1)
-19080     fncmdkey("&Search", 2)
-19100     fncmdkey("&Cancel",5,0,1)
+19060     fnCmdKey("&Print",1,1)
+19080     fnCmdKey("&Search", 2)
+19100     fnCmdKey("&Cancel",5,0,1)
 19120   else if bon=22 then 
-19140     fncmdkey("&Next",1,1)
-19160     fncmdkey("&Back",2)
-19180     fncmdkey("&Cancel",5,0,1)
+19140     fnCmdKey("&Next",1,1)
+19160     fnCmdKey("&Back",2)
+19180     fnCmdKey("&Cancel",5,0,1)
 19200   else if bon=23 then 
-19220     fncmdkey("&Add",1,1)
-19240     fncmdkey("&Search",2)
-19260     fncmdkey("&Finish",4)
-19280     fncmdkey("&Cancel",5,0,1)
+19220     fnCmdKey("&Add",1,1)
+19240     fnCmdKey("&Search",2)
+19260     fnCmdKey("&Finish",4)
+19280     fnCmdKey("&Cancel",5,0,1)
 19300   else if bon=41 then 
-19320     fncmdkey("&Ok",1,1,1)
+19320     fnCmdKey("&Ok",1,1,1)
 19340   else if bon=52 then 
-19360     fncmdkey("&Finish",5,1,1)
+19360     fnCmdKey("&Finish",5,1,1)
 19380   else if bon=102 then 
-19400     fncmdkey("&Print",1,1)
-19420     fncmdkey("E&dit",3)
-19440     fncmdkey("&Add",4)
-19460     fncmdkey("&Delete",7)
-19480     fncmdkey("&Refresh",6)
-19500     fncmdkey("&Cancel",5,0,1)
+19400     fnCmdKey("&Print",1,1)
+19420     fnCmdKey("E&dit",3)
+19440     fnCmdKey("&Add",4)
+19460     fnCmdKey("&Delete",7)
+19480     fnCmdKey("&Refresh",6)
+19500     fnCmdKey("&Cancel",5,0,1)
 19520   end if 
 19540 fnend 
-19560 def library fnbutton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
+19560 def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
 19580   ! adds a screen ace button
 19600   ! mylen    button.width
 19620   ! txt$     button.caption
@@ -491,7 +491,7 @@
 20080   mat _m$(0): mat _p$(0): mat _s$(0)
 20100   display menu: mat _m$,mat _p$,mat _s$
 20120 fnend 
-20140 def library fnacs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+20140 def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
 20160   if ~setup then let fn_setup
 20180   dim txt$*201,path1$*300,tt$*400,tabline$*8019
 20200   ! dim mycd$*256
@@ -545,7 +545,7 @@
 21120     ! 
 21130   acs_win_cols=max(acs_win_cols,ace_column_max+4) : setenv('acs_win_cols',str$(acs_win_cols)) ! in case 115 columns is not enough
 21140   if acs_win_rows>35 or acs_win_cols>115 then 
-21150     open #0: 'SRow=1,SCol=2,Rows='&str$(acs_win_rows)&",Cols="&str$(acs_win_cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen]',display,outin 
+21150     open #0: 'SRow=1,SCol=2,Rows='&str$(acs_win_rows)&",Cols="&str$(acs_win_cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen]',display,outIn 
 21160   end if 
 21170   dim borderText$*256
 21172   if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
@@ -578,11 +578,11 @@
 21420     !     if disabled_background then open #disable_win=fngethandle: "srow=2,scol=2,rows="&str$(acs_win_rows-2)&",cols="&str$(acs_win_cols-2)&",picture=S:\Core\disable.png:TILE",display,output
 21430     !     if disabled_background then open #disable_win=fngethandle: "srow=1,scol=1,rows="&str$(acs_win_rows+2)&",cols="&str$(acs_win_cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
 21440     if disabled_background then let fn_backgrounddisable(1)
-21450     open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outin 
-21460     open #button_win:=fngethandle: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outin 
+21450     open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn 
+21460     open #button_win:=fngethandle: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn 
 21470   else 
-21480     open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outin 
-21490     open #button_win:=fngethandle: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outin 
+21480     open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn 
+21490     open #button_win:=fngethandle: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn 
 21500   end if 
 21510   ace_cmdkey_ps=cols-button_win_width-1
 21520 fnend 
@@ -1139,12 +1139,12 @@
 32220   height=val(control$(4))
 32240   width=val(control$(5))
 32260   path1$=control$(6) & control$(7)
-32280   open #tab_file:=fngethandle: "Name="&path1$,internal,outin 
+32280   open #tab_file:=fngethandle: "Name="&path1$,internal,outIn 
 32300   tabline$=""
 32320   for j=1 to min(lrec(tab_file),99)
 32340     read #tab_file,using "Form Pos 1,C 80": txt$
 32360     tabline$=tabline$&trim$(txt$)&tab$
-32380     open #tab:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outin 
+32380     open #tab:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn 
 32400     mat tabs(udim(tabs)+1,3)
 32420     tabs(udim(tabs),1)=tab
 32440     tabs(udim(tabs),2)=lyne+1
@@ -1166,10 +1166,10 @@
 32760   ! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 32780   mat frames(udim(frames)+1,4)
 32800   if tabcon then 
-32820     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outin 
+32820     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn 
 32840     frames(udim(frames),4)=tabs(tabcon,1)
 32860   else 
-32880     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outin 
+32880     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn 
 32900   end if 
 32920   frames(udim(frames),1)=frame
 32940   frames(udim(frames),2)=lyne+1
@@ -1186,7 +1186,7 @@
 33180   hdr_count=val(control$(10))
 33200   container=val(control$(11))
 33220   tabcon=val(control$(12))
-33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*1000,_forms$(1)*1000,filterspec$*255,gridspec$*255,loading_spec$*50
+33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*2100,_forms$(1)*1000,filterspec$*255,gridspec$*255,loading_spec$*50
 33250   ! pr env$('temp')&'\acs\'&trim$(path1$)&'.hdr' : pause
 33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input 
 33280   linput #grid_headers: _line$
@@ -1232,8 +1232,8 @@
 34080   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
 34100   clearflag$="="
 34120   ! 
-34140   dim long_row$(1)*1024
-34160   rows=2000
+34140   dim long_row$(1)*2100    ! dim long_row$(1)*1024
+34160   rows=1000                ! rows=2000
 34180   mat long_row$(rows * udim(_headings$))
 34200   row_count=1 : record_count=1
 34220   printed=0
@@ -1258,16 +1258,7 @@
 34620       mat _chunks$(udim(_headings$)-1 )
 34640     end if 
 34660     ! 
-34680     ! if env$('ACSDeveloper')<>'' then
 34700     mat2str(mat _chunks$,_line$," ")
-34720     ! else 
-34740     !   _line$=''
-34760     !   for index_=1 to udim(mat _chunks$)
-34780     !     if val(_mask$(index_)) < 1000 then
-34800     !       _line$(inf:inf)=_chunks$(index_)&' '
-34820     !     end if
-34840     !   next index_
-34860     ! end if
 34880     ! 
 34900     for index_=1 to udim(mat alpha_mask_indices)
 34920       cell_value=val(_chunks$(alpha_mask_indices(index_))) conv BAD_NUMERIC_CELL
@@ -2071,7 +2062,7 @@
 54680       open #glmstr:=fngethandle: "Name="&env$('Q')&"\"&qgl_cursys$&"mstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\"&qgl_cursys$&"mstr\glIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr QGL_ERROR
 54690     end if 
 54700     do 
-54710       read #glmstr,using glmstr_form$: qglopt$,desc$ norec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
+54710       read #glmstr,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
 54720 ! reformat the options for typing
 54730       if use_dept<>0 and use_sub<>0 then 
 54740         qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))&"-"&trim$(qglopt$(10:12))

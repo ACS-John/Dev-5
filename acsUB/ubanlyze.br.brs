@@ -1,5 +1,5 @@
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
+00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnOpt,fnmsgbox,fncomboa,fnButton,fnpic,fnFra,fnChk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnCmdSet,fnCmdKey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 00040   library 'S:\Core\Library': fndat
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -13,25 +13,25 @@
 00140   fntop("S:\acsUB\ubanlyze",cap$="Analyze Charges")
 00150 MAIN: ! 
 00160   sn$ = "UBAnalyze" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=20 !:
         mypos=mylen+2
 00170   text$="Billing Date:" !:
-        fnlbl(1,1,text$,mylen,1)
-00180   fntxt(1,mypos,8,8,0,"1") !:
+        fnLbl(1,1,text$,mylen,1)
+00180   fnTxt(1,mypos,8,8,0,"1") !:
         resp$(1)=str$(bdate)
 00190   text$="Type of Service:" !:
-        fnlbl(2,1,text$,mylen,1)
+        fnLbl(2,1,text$,mylen,1)
 00200   code$(1)="Water" !:
         code$(2)="Sewer" !:
         code$(3)="Electric" !:
         code$(4)="Gas" !:
         fncomboa("Service",2,mylen+3,mat code$,"",16)
 00204   text$="Rate Code" !:
-        fnlbl(2,1,text$,mylen,1)
-00205   fntxt(3,mypos,3,3,0,"30") !:
+        fnLbl(2,1,text$,mylen,1)
+00205   fnTxt(3,mypos,3,3,0,"30") !:
         resp$(3)=""
-00210   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
+00210   fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
 00220   if ck=5 then goto XIT
 00230   bdate= val(resp$(1))
 00240   if resp$(2)="Water" then !:
@@ -57,7 +57,7 @@
 00630     if cde(k9)=0 then goto L930
 00640 L640: if cde(k9)<1 or cde(k9)>20 then goto L510
 00650     close #105: ioerr L660
-00660 L660: open #105: "SROW=2,SCOL=42,EROW=23,ECOL=77,BORDER=SR,CAPTION=<Print Analysis Report",display,outin 
+00660 L660: open #105: "SROW=2,SCOL=42,EROW=23,ECOL=77,BORDER=SR,CAPTION=<Print Analysis Report",display,outIn 
 00670     pr #105: newpage
 00680     pr f "3,47,C 27,H,N": "  Beginning Usage   Rate"
 00690     for j=1 to 18

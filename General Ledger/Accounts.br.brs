@@ -1,7 +1,7 @@
 00010 ! Formerly S:\acsGL\glMaint
 00020 ! General Ledger Master File editor
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fntos,fnopt,fnlbl,fncmdset,fnacs,fnagl$,fnfra,fntxt,fncombof,fncmdkey,fnmsgbox,fnaccount_search,fnflexinit1,fnflexadd1,fnqglbig,fnrglbig$,fnbutton,fngethandle
+00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnTos,fnOpt,fnLbl,fnCmdSet,fnAcs,fnagl$,fnFra,fnTxt,fncombof,fnCmdKey,fnmsgbox,fnaccount_search,fnflexinit1,fnflexadd1,fnqglbig,fnrglbig$,fnButton,fngethandle
 00050 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -19,11 +19,11 @@
 00260   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00270   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00280   close #company: 
-00290   open #8: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L310
+00290   open #8: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L310
 00300   cl1=1
 00310 L310: ! 
-00320   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
-00330   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outin,keyed ! ioerr L350
+00320   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00330   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed ! ioerr L350
 00340 ! goto L400
 00350 ! should be done in checkfileversion, not here ! L350: close #1: ioerr ignore
 00360 ! should be done in checkfileversion, not here !   close #11: ioerr ignore
@@ -31,90 +31,90 @@
 00380 ! should be done in checkfileversion, not here !   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.H"&env$('cno'),"1 12")
 00390 ! should be done in checkfileversion, not here !   goto L310
 00400 ! L400: 
-00402   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
-00410   ! open #hAcTrans:=3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr MAIN
-00412   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outin,keyed 
+00402   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
+00410   ! open #hAcTrans:=3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr MAIN
+00412   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
 00420 MAIN: ! 
-00430   fntos(sn$="GLProb2-"&str$(edit_mode))
+00430   fnTos(sn$="GLProb2-"&str$(edit_mode))
 00432   mylen=23: mypos=mylen+3 : right=1
-00440   fnlbl(1,1,"General Ledger Number:",mylen,right)
+00440   fnLbl(1,1,"General Ledger Number:",mylen,right)
 00450   if edit_mode=1 then ! attempt to put disabled text box for acct #
-00452     fntxt(1,mypos,60,0,0,"",1,"",0)
+00452     fnTxt(1,mypos,60,0,0,"",1,"",0)
 00454     resp$(1)=fnrglbig$(gl$) ! lpad$(gl$,12)
-00456 !   fnlbl(1,40,de$)
+00456 !   fnLbl(1,40,de$)
 00458   else 
 00460     fnqglbig(1,mypos,0,2)
 00462     resp$(1)=fnrglbig$(gl$)
 00464   end if 
 00470   holdgl$=gl$
 00472   if edit_mode=1 then 
-00480     fnlbl(2,1,"Beginning Balance:",mylen,right)
-00490     fntxt(2,mypos,14,0,right,"10",0,"The beginning balance will always be the account balance at the beginning of the period. It gets updated when you close the month.",0 )
+00480     fnLbl(2,1,"Beginning Balance:",mylen,right)
+00490     fnTxt(2,mypos,14,0,right,"10",0,"The beginning balance will always be the account balance at the beginning of the period. It gets updated when you close the month.",0 )
 00492     resp$(2)=str$(bb)
-00500     fnlbl(2,40,"Current Balance:",mylen,right)
-00510     fntxt(2,66,14,0,right,"10",0,"The current balance will be updated any time a transaction is posted. The beginning and current balances should both be the same when you begin.",0 )
+00500     fnLbl(2,40,"Current Balance:",mylen,right)
+00510     fnTxt(2,66,14,0,right,"10",0,"The current balance will be updated any time a transaction is posted. The beginning and current balances should both be the same when you begin.",0 )
 00512     resp$(3)=str$(cb)
 00522     f1Col1Len=21 
 00524     f1Col2=1+f1Col1Len+2 : f1Col2Len=36
 00526     f1Col3=f1Col2+f1Col2Len+2 : f1Col3len=21
 00528     f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
-00529     fnfra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
-00530     fnlbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
+00529     fnFra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
+00530     fnLbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
 00540     fncombof("fs-bal",1,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
 00542     resp$(4)=str$(rf(1)) ! balance sheet ref #
-00550     fnlbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
+00550     fnLbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
 00560     fncombof("fs-bal2",1,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
 00562     resp$(5)=str$(rf(2)) ! balance sheet ref #
-00570     fnlbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
+00570     fnLbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
 00580     fncombof("fs-inc",2,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
 00582     resp$(6)=str$(rf(3)) ! income statement ref #
-00590     fnlbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
+00590     fnLbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
 00600     fncombof("fs-inc2",2,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
 00602     resp$(7)=str$(rf(4)) ! 2nd income statement
-00610     fnlbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
+00610     fnLbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
 00620     fncombof("fs-cash",3,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00622     resp$(8)=str$(rf(5)) ! income statement ref #
-00630     fnlbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
+00630     fnLbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
 00640     fncombof("fs-cash2",3,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00642     resp$(9)=str$(rf(6)) ! 2nd cash flow
 
-00650     fnlbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
-00660     fntxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
+00650     fnLbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
+00660     fnTxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
 00662     resp$(10)=str$(pbp)
-00670     fnfra(12,1,14,105,"History and Budget Information"," ",0)
+00670     fnFra(12,1,14,105,"History and Budget Information"," ",0)
 00680     x=11
-00690     fnlbl(1,14,"Balance This Yr",15,0,0,2)
-00691     fnlbl(1,34,"Balance Last Yr",15,0,0,2)
-00692     fnlbl(1,54,"Original Budget",15,0,0,2)
-00693     fnlbl(1,74,"Revised Budget ",15,0,0,2)
+00690     fnLbl(1,14,"Balance This Yr",15,0,0,2)
+00691     fnLbl(1,34,"Balance Last Yr",15,0,0,2)
+00692     fnLbl(1,54,"Original Budget",15,0,0,2)
+00693     fnLbl(1,74,"Revised Budget ",15,0,0,2)
 00700     for j=1 to 13
-00710       fnlbl(j+1,1,"Period "&str$(j),90,0,0,2)
-00712       fntxt(j+1,14,14,0,right,"10",0,"",2 )
+00710       fnLbl(j+1,1,"Period "&str$(j),90,0,0,2)
+00712       fnTxt(j+1,14,14,0,right,"10",0,"",2 )
 00714       resp$(x)=str$(bc(j))
 00716       x=x+1
-00718       fntxt(j+1,34,14,0,right,"10",0,"",2 )
+00718       fnTxt(j+1,34,14,0,right,"10",0,"",2 )
 00720       resp$(x)=str$(bp(j))
 00722       x=x+1
-00724       fntxt(j+1,54,14,0,right,"10",0,"",2 )
+00724       fnTxt(j+1,54,14,0,right,"10",0,"",2 )
 00726       resp$(x)=str$(bm(j))
 00728       x=x+1
-00730       fntxt(j+1,74,14,0,right,"10",0,"",2 )
+00730       fnTxt(j+1,74,14,0,right,"10",0,"",2 )
 00732       resp$(x)=str$(revb(j))
 00734       x=x+1
 00736     next j
 00740   end if 
 00770   if edit_mode=1 then 
-00772     fncmdkey("&Save",6,1,0,"")
-00774     fncmdkey("Review &Transactions",3,0,0,"")
-00776     fncmdkey("&Delete",7,0,0,"")
-00778     fnbutton(1,mypos+60+2,"C&hange",9,"Change the Account Number and/or the Description of this General Ledger Account") ! fncmdkey("C&hange Acct-Desc",9,0,0,"")
+00772     fnCmdKey("&Save",6,1,0,"")
+00774     fnCmdKey("Review &Transactions",3,0,0,"")
+00776     fnCmdKey("&Delete",7,0,0,"")
+00778     fnButton(1,mypos+60+2,"C&hange",9,"Change the Account Number and/or the Description of this General Ledger Account") ! fnCmdKey("C&hange Acct-Desc",9,0,0,"")
 00780   else 
-00782     fncmdkey("&Edit",1,1,0,"") ! if edit_mode=1 then let fncmdkey("&Edit",1,0,0,"") else let fncmdkey("&Edit",1,1,0,"")
-00784     fncmdkey("&Add",2,0,0,"")
-00786     fncmdkey("Sea&rch",8,0,0,"")
+00782     fnCmdKey("&Edit",1,1,0,"") ! if edit_mode=1 then let fnCmdKey("&Edit",1,0,0,"") else let fnCmdKey("&Edit",1,1,0,"")
+00784     fnCmdKey("&Add",2,0,0,"")
+00786     fnCmdKey("Sea&rch",8,0,0,"")
 00788   end if 
-00790   fncmdkey("&Cancel",5,0,1,"")
-00850   fnacs(sn$,0,mat resp$,ckey)
+00790   fnCmdKey("&Cancel",5,0,1,"")
+00850   fnAcs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
 00880 ! If edit_mode=1 Then kEY$=GL$=LPAD$(RESP$(1)(1:12),12): Goto 885
 00890   gl$=fnagl$(resp$(1)) : key$=gl$
@@ -150,22 +150,22 @@
 01210 XIT: fnxit
 01220 ! ______________________________________________________________________
 01230 ADD: ! 
-01240   fntos(sn$="GLAdd")
+01240   fnTos(sn$="GLAdd")
 01242   mylen=23: mypos=mylen+3 : right=1: rc=0
-01250   if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
-01260   if use_sub =1 then let fnlbl(1,40,"Sub #",6,2)
-01270   fnlbl(2,1,"General Ledger Number:",mylen,right)
-01280   if use_dept=1 then let fntxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+01250   if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
+01260   if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
+01270   fnLbl(2,1,"General Ledger Number:",mylen,right)
+01280   if use_dept=1 then let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
 01282   resp$(rc+=1)=str$(dno)
-01290   fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+01290   fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
 01292   resp$(rc+=1)=str$(ano)
-01300   if use_sub=1 then let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
+01300   if use_sub=1 then let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
 01302   resp$(rc+=1)=str$(sno)
-01310   fnlbl(3,1,"Description:",mylen,right)
-01320   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+01310   fnLbl(3,1,"Description:",mylen,right)
+01320   fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 01322   resp$(rc+=1)=""
-01330   fncmdset(2)
-01340   fnacs(sn$,0,mat resp$,ckey)
+01330   fnCmdSet(2)
+01340   fnAcs(sn$,0,mat resp$,ckey)
 01360   if ckey=5 then goto MAIN
 01370   fixgrid=99
 01380   dno=ano=sno=0
@@ -319,15 +319,15 @@
 02480 ! ! /r
 02550 IGNORE: continue 
 02560 REVIEW_TRANS: ! r:
-02570   fntos(sn$="review_trans")
+02570   fnTos(sn$="review_trans")
 02572   mylen=23: mypos=mylen+3 : right=1: rc=0
-02580   fnfra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
-02590   fnopt(1,1,"Current transactions",0,1)
+02580   fnFra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
+02590   fnOpt(1,1,"Current transactions",0,1)
 02600   resp$(1)="True"
-02610   fnopt(2,1,"History transactions",0,1)
+02610   fnOpt(2,1,"History transactions",0,1)
 02620   resp$(2)="False"
-02630   fncmdset(2)
-02640   fnacs(sn$,0,mat resp$,ckey)
+02630   fnCmdSet(2)
+02640   fnAcs(sn$,0,mat resp$,ckey)
 02650   if ckey=5 then goto MAIN
 02660   if resp$(1)="True" then rv=1
 02670   if resp$(2)="True" then rv=2
@@ -343,7 +343,7 @@
 02702   cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' !:
         cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' !:
         cmask$(8)='' : cmask$(9)='30'
-02710   fntos(sn$="gltrans")
+02710   fnTos(sn$="gltrans")
 02720   fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 02730   adr=ta(1): pc2=0
 02740 !  read current or history files
@@ -372,9 +372,9 @@
         fnflexadd1(mat item$)
 02940   if rv=1 then goto L2780 else goto L2870 ! read from current or history
 02950 EO_TRANS_GRID: ! 
-02960   if rv=1 then let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
-02970   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-02980   fnacs(sn$,0,mat resp$,ck)
+02960   if rv=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
+02970   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+02980   fnAcs(sn$,0,mat resp$,ck)
 02990   if ck=5 then goto MAIN
 03000   if ck=2 then edit_mode=1 else edit_mode=0
 03010   recordnum=val(resp$(1))
@@ -388,35 +388,35 @@
 03042   resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7)) !:
         resp$(7)=tr$: resp$(8)=td$ !:
         resp$(9)=str$(pc2)
-03050   fntos(sn$="Tredit")
+03050   fnTos(sn$="Tredit")
 03052   mylen=23: mypos=mylen+3 : right=1
-03060   fnlbl(1,1,"General Ledger Number:",mylen,right)
+03060   fnLbl(1,1,"General Ledger Number:",mylen,right)
 03070   fnqglbig(1,mypos,0,2)
 03072   resp$(1)=fnrglbig$(trgl$)
 03080   holdgl$=gl$
-03090   fnlbl(2,1,"Date:",mylen,right)
-03100   fntxt(2,mypos,10,0,right,"1",0,"",0)
+03090   fnLbl(2,1,"Date:",mylen,right)
+03100   fnTxt(2,mypos,10,0,right,"1",0,"",0)
 03102   resp$(2)=str$(tr(4))
-03110   fnlbl(3,1,"Amount:",mylen,right)
-03120   fntxt(3,mypos,10,0,right,"10",0,"",0)
+03110   fnLbl(3,1,"Amount:",mylen,right)
+03120   fnTxt(3,mypos,10,0,right,"10",0,"",0)
 03122   resp$(3)=str$(tr(5))
-03130   fnlbl(4,1,"Trans Code:",mylen,right)
-03140   fntxt(4,mypos,2,0,right,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)
+03130   fnLbl(4,1,"Trans Code:",mylen,right)
+03140   fnTxt(4,mypos,2,0,right,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)
 03142   resp$(4)=str$(tr(6))
-03150   fnlbl(5,1,"Post Code:",mylen,right)
-03160   fntxt(5,mypos,2,0,right,"30",0,"",0)
+03150   fnLbl(5,1,"Post Code:",mylen,right)
+03160   fnTxt(5,mypos,2,0,right,"30",0,"",0)
 03162   resp$(5)=str$(tr(7))
-03170   fnlbl(6,1,"Ck/Ref:",mylen,right)
-03180   fntxt(6,mypos,12,0,right,"",0,"",0)
+03170   fnLbl(6,1,"Ck/Ref:",mylen,right)
+03180   fnTxt(6,mypos,12,0,right,"",0,"",0)
 03182   resp$(6)=tr$
-03190   fnlbl(7,1,"Description:",mylen,right)
-03200   fntxt(7,mypos,30,0,0,"",0,"",0)
+03190   fnLbl(7,1,"Description:",mylen,right)
+03200   fnTxt(7,mypos,30,0,0,"",0,"",0)
 03202   resp$(7)=td$
-03210   fnlbl(8,1,"Period:",mylen,right)
-03220   fntxt(8,mypos,2,0,0,"30",0,"",0)
+03210   fnLbl(8,1,"Period:",mylen,right)
+03220   fnTxt(8,mypos,2,0,0,"30",0,"",0)
 03222   resp$(8)=str$(pc2)
-03230   fncmdset(2)
-03240   fnacs(sn$,0,mat resp$,ckey)
+03230   fnCmdSet(2)
+03240   fnAcs(sn$,0,mat resp$,ckey)
 03250   if ckey=5 then goto MAIN
 03260   trgl$=fnagl$(resp$(1)) ! transaction gl #
 03270   tr(4)=val(resp$(2)) ! date
@@ -464,26 +464,26 @@
 03870 CHANGE_ACCT_NUM: ! r:
 03880   dno=val(gl$(1:3)): ano=val(gl$(4:9)): sno=val(gl$(10:12))
 03890   mat resp$=("")
-03900   fntos(sn$="GLchange")
+03900   fnTos(sn$="GLchange")
 03902   mylen=28: mypos=mylen+3 : right=1: rc=0
-03910   if use_dept =1 then let fnlbl(1,31,"Fund #",6,2)
-03920   if use_sub =1 then let fnlbl(1,45,"Sub #",6,2)
-03930   fnlbl(2,1,"New General Ledger Number:",mylen,right)
+03910   if use_dept =1 then let fnLbl(1,31,"Fund #",6,2)
+03920   if use_sub =1 then let fnLbl(1,45,"Sub #",6,2)
+03930   fnLbl(2,1,"New General Ledger Number:",mylen,right)
 03940   if use_dept=1 then 
-03941     fntxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+03941     fnTxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
 03942     resp$(rc+=1)=str$(dno)
 03946   end if
-03950   fntxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+03950   fnTxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
 03952   resp$(rc+=1)=str$(ano)
 03960   if use_sub=1 then 
-03962     fntxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+03962     fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 03964     resp$(rc+=1)=str$(sno)
 03966   end if
-03970   fnlbl(3,1,"Description:",mylen,right)
-03980   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+03970   fnLbl(3,1,"Description:",mylen,right)
+03980   fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 03982   resp$(rc+=1)=d$
-03990   fncmdset(2)
-04000   fnacs(sn$,0,mat resp$,ckey)
+03990   fnCmdSet(2)
+04000   fnAcs(sn$,0,mat resp$,ckey)
 04020   if ckey=5 then goto MAIN
 04030   fixgrid=99
 04040   dno=ano=sno=0

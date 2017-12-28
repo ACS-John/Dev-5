@@ -1,3 +1,4 @@
+dim dirlist$(1)*30
  ! Fileio - Copyright February 2006 By Gabriel Bakker #Autonumber# 10,10
  !    Distributed Open Source As A Christmas Gift To the BR Community
  ! This Library Houses All File Maintenance Operations
@@ -216,7 +217,7 @@
     
     fnReadScreenS(ScreenRows,ScreenCols)
 
-    open #(Dc_Window:=Fngetfilenumber): "srow=2,scol="&str$(int((ScreenCols-39)/2))&",rows="&str$(ScreenRows-2)&",cols=39,Caption= Select File ... ENTER - View / F5 - Edit ,Border=S",display,outin
+    open #(Dc_Window:=Fngetfilenumber): "srow=2,scol="&str$(int((ScreenCols-39)/2))&",rows="&str$(ScreenRows-2)&",cols=39,Caption= Select File ... ENTER - View / F5 - Edit ,Border=S",display,outIn
 
     if Udim(Mat Lvdir_Listing$)>15 then lvdir_Widths(1)-=2 ! Make Room For Scrollbar
 
@@ -894,7 +895,7 @@
 
           fnPrepareWindow(sRow,sCol,Rows,Cols,Edit,mat Includebuttons$,Caption$,GridSpec$,mat Inputspec$,mat OutputSpec$,mat Inputdata$,mat OutputData$,o_Position,mat FilterFields$,mat FilterForm$,mat FilterCompare$,mat FilterCaption$,mat FilterDefaults$,mat FilterSubs,mat FilterValSubs,mat ColumnNames$,mat FilterKey,SearchSub)
 
-          open #(Window:=Fngetfilenumber) : "sRow="&str$(srow)&",sCol="&str$(scol)&",Rows="&str$(rows)&",Cols="&str$(cols)&",Caption="&Caption$,display,outin
+          open #(Window:=Fngetfilenumber) : "sRow="&str$(srow)&",sCol="&str$(scol)&",Rows="&str$(rows)&",Cols="&str$(cols)&",Caption="&Caption$,display,outIn
 
           pr #Window, fields mat OutputSpec$ : mat OutputData$
 
@@ -965,7 +966,7 @@
                 restore #datafile, search>=Trim$(Key$): nokey ClearKey
              end if
              if RecordNum then
-                restore #datafile, rec=RecordNum: norec ClearRec
+                restore #datafile, rec=RecordNum: noRec ClearRec
              end if
 
              somethingFound=fnPopulateGrid(Window,GridSpec$,FileLay$,KeyMatch$,SearchMatch$,mat Records,mat IncludeColumns$,mat ColumnNames$,RecordSize,Datafile,mat Dc_Data$,mat Dc_Data,mat dc_forms$,SearchNow$,mat Dc_Records,mat dc_DeleteRow,KeyNumber,LastRec$,DisplaySub,DisplayFieldConvert$,mat FilterCompare$,mat FilterSubs,mat FilterValSubs,mat FilterKey,mat InputData$,IncludeRecordNumbers)
@@ -1232,7 +1233,7 @@
        sRow=Int((ScreenRows-Rows) / 2) + 1
        sCol=Int((ScreenCols-Cols) / 2) + 1
         
-       open #(ColSel_Window:=Fngetfilenumber): "SROW="&Str$(SRow)&", SCOL="&Str$(SCol)&", ROWS="&str$(rows)&", COLS="&str$(cols),display,outin
+       open #(ColSel_Window:=Fngetfilenumber): "SROW="&Str$(SRow)&", SCOL="&Str$(SCol)&", ROWS="&str$(rows)&", COLS="&str$(cols),display,outIn
        pr #ColSel_Window, fields str$(rows)&","&str$(cols-22)&",CC 10,/W:W,B55" : "OK"
        pr #ColSel_Window, fields str$(rows)&","&str$(cols-10)&",CC 10,/W:W,B54" : "Cancel"
        pr #ColSel_Window, fields str$(rows)&","&str$(cols-34)&",CC 10,/W:W,B56" : "Select All"
@@ -1254,7 +1255,7 @@
              thisTab+=1
              mat ColSel_Tabs(ThisTab)
              if UDim(mat Input_Spec$) > ItemsPerpage then TabAttr$=", TAB=Page "&Str$(ThisTab) else TabAttr$=", BORDER=S, CAPTION=Column List"
-             open #(ColSel_Tabs(ThisTab):=Fngetfilenumber): "SROW=2, SCOL=2, ROWS="&str$(rows-3)&", COLS="&str$(cols-2)&TabAttr$&", PARENT="&Str$(ColSel_Window),display,outin
+             open #(ColSel_Tabs(ThisTab):=Fngetfilenumber): "SROW=2, SCOL=2, ROWS="&str$(rows-3)&", COLS="&str$(cols-2)&TabAttr$&", PARENT="&Str$(ColSel_Window),display,outIn
           End If
         
           input_Spec$(Index)=Str$(Row)&","&Str$(Col)&",18/check 1000,,"&str$(1500+Index)
@@ -1415,7 +1416,7 @@
              restore #datafile, search>=Trim$(Key$): nokey ClearKey
           end if
           if RecordNum then
-             restore #datafile, rec=RecordNum: norec ClearRec
+             restore #datafile, rec=RecordNum: noRec ClearRec
           end if
 
           bRecNum=(~fnIsEmpty(mat Records))
@@ -1483,7 +1484,7 @@
      dim Keys$(1)*80,KeyDesc$(1)*80,SrcFieldNames$(1)*80
      fnReadScreenS(Rows,Cols)
 
-     OPEN #(Dialog:=fnGetFileNumber) : "SROW="&STR$(INT((Rows - 7) / 2))&",SCOL="&STR$(INT((Cols - 30) / 2))&",ROWS=7,COLS=30,CAPTION=Export to CSV,BORDER=S",display,outin
+     OPEN #(Dialog:=fnGetFileNumber) : "SROW="&STR$(INT((Rows - 7) / 2))&",SCOL="&STR$(INT((Cols - 30) / 2))&",ROWS=7,COLS=30,CAPTION=Export to CSV,BORDER=S",display,outIn
      pr #Dialog, fields "1,1,C 20;2,22,CC 8,/W:W,B62" : "CSV Data File","Browse"
      pr #Dialog, fields "7,12,CC 8,/W:W,B61" : "Export!"
      pr #Dialog, fields "7,22,CC 8,/W:W,B60" : "Cancel"
@@ -1623,7 +1624,7 @@
      dim Keys$(1)*80,KeyDesc$(1)*80,KeyOptions$(1)*160,SrcFieldNames$(1)*80
      fnReadScreenS(Rows,Cols)
 
-     OPEN #(Dialog:=fnGetFileNumber) : "SROW="&STR$(INT((Rows - 7) / 2))&",SCOL="&STR$(INT((Cols - 30) / 2))&",ROWS=7,COLS=30,CAPTION=Import from CSV,BORDER=S",display,outin
+     OPEN #(Dialog:=fnGetFileNumber) : "SROW="&STR$(INT((Rows - 7) / 2))&",SCOL="&STR$(INT((Cols - 30) / 2))&",ROWS=7,COLS=30,CAPTION=Import from CSV,BORDER=S",display,outIn
      pr #Dialog, fields "1,1,C 20;2,22,CC 8,/W:W,B62" : "CSV Data File","Browse"
      pr #Dialog, fields "7,22,CC 8,/W:W,B60" : "Cancel"
 
@@ -2155,7 +2156,7 @@
        sCol=int((ScreenCols-20)/2)+1
 
        ! Open child window
-       open #(Window:=Fngetfilenumber): "SROW="&str$(srow)&", SCOL="&str$(scol)&", ROWS=3, COLS=20, Border=S, Caption="&Caption$,display,outin
+       open #(Window:=Fngetfilenumber): "SROW="&str$(srow)&", SCOL="&str$(scol)&", ROWS=3, COLS=20, Border=S, Caption="&Caption$,display,outIn
 
        choice$=Default$
 
@@ -2245,7 +2246,7 @@
        fnBuildSrchHelp(1)
 
        ! Open Screen
-       open #(Window:=Fngetfilenumber): "SROW="&str$(srow)&", SCOL="&str$(scol)&", ROWS=22, COLS=60, Border=S, Caption=File Layout Wizard",display,outin
+       open #(Window:=Fngetfilenumber): "SROW="&str$(srow)&", SCOL="&str$(scol)&", ROWS=22, COLS=60, Border=S, Caption=File Layout Wizard",display,outIn
 
        pr #Window, fields mat lw_Output_Spec$ : mat lw_Output_Data$
        pr #Window, fields Layoutwizard_LV1_Spec$ : (mat Layoutwizard_LV1_Captions$, mat Layoutwizard_LV1_Widths, mat Layoutwizard_LV1_Specs$)
@@ -3295,7 +3296,7 @@
  !
  ! #Autonumber# 20000,5
  OPENFILE: ! This Function Opens The Requested File And Returns Filenum
-       def library Fnopenfile(&Filename$, Mat F$, Mat F, Mat Form$;Inputonly,Keynum,Dont_Sort_Subs,&Path$,Mat Description$,Mat Fieldwidths,Mat FileIOSubs$,SupressPrompt,IgnoreErrors,CallingProgram$*255,SuppressLog,___,Filenumber,Stringsize,Numbersize,Dummy,Index,Ver,Promptoncreate,Oktocreate,Createlogfile,Form$*2000,StartFileNumber,CountFileNumber,FileLay$*255,CheckIndex,LogLayout$,TempCheckIndex)
+       def library fnOpenFile(&Filename$, Mat F$, Mat F, Mat Form$;Inputonly,Keynum,Dont_Sort_Subs,&Path$,Mat Description$,Mat Fieldwidths,Mat FileIOSubs$,SupressPrompt,IgnoreErrors,CallingProgram$*255,SuppressLog,___,Filenumber,Stringsize,Numbersize,Dummy,Index,Ver,Promptoncreate,Oktocreate,Createlogfile,Form$*2000,StartFileNumber,CountFileNumber,FileLay$*255,CheckIndex,LogLayout$,TempCheckIndex)
           dim Keyname$(1)*255,Kpos$(1)*80,Klen$(1)*80
           dim Fm$*8000,Message$*60
           dim LayoutPath$*255
@@ -3381,7 +3382,7 @@
                 form$(Filenumber)=Form$
                 mat F$(Stringsize)
                 mat F(Numbersize)
-                fnopenfile=Filenumber
+                fnOpenFile=Filenumber
                 logLayout$=fnSettings$("loglayout")
                 if Createlogfile and lwrc$(FileLay$)<>lwrc$(LogLayout$) then let Fnlog("Open "&Filename$&" file.",CallingProgram$)
              else
@@ -3683,11 +3684,11 @@
              fileLayoutExtension$=fnSettings$("layoutextension")
 
              on error goto FILEINUSE ! Call Rollback Processing For No Changes Made
-             ! open #(Window:=fnGetFileNumber): "SRow=11,SCol=2,Rows=1,Cols=78,Caption=,Border=S",display,outin
+             ! open #(Window:=fnGetFileNumber): "SRow=11,SCol=2,Rows=1,Cols=78,Caption=,Border=S",display,outIn
  !
              dim Fm$(1)*1024,Nf$(1)*1024,Nf(1),Of$(1)*1024,Of(1),Nssubs$(1)*80,Ossubs$(1)*80,Nnsubs$(1)*80,Onsubs$(1)*80,Okeys$(1)*80
  !
-             library : Fnopenfile, Fnclosefile, Fnreadsubs
+             library : fnOpenFile, Fnclosefile, Fnreadsubs
  !
              oldfilelay$="version\"&Filelay$&"."&Str$(Oldver)
  !
@@ -4790,7 +4791,7 @@
        def fnReadrelativeDes$*255(Fl,Subscript,RecordNumber,mat f$,mat f,mat fm$)
           mat F$=("") !:
           mat F=(0)
-          read #Fl, using Fm$(Fl), rec=RecordNumber, release : Mat F$, Mat F norec IGNORE
+          read #Fl, using Fm$(Fl), rec=RecordNumber, release : Mat F$, Mat F noRec IGNORE
           fnReadrelativeDes$=F$(Subscript)
        fnend
        ! ***** This function returns a string field from a record and file
@@ -4810,7 +4811,7 @@
        def fnReadRelativeNum(Fl,Subscript,RecordNumber,Mat F$,Mat F,Mat Fm$)
           mat F$=("") !:
           mat F=(0)
-          read #Fl, using Fm$(Fl), rec=RecordNumber : Mat F$, Mat F norec IGNORE
+          read #Fl, using Fm$(Fl), rec=RecordNumber : Mat F$, Mat F noRec IGNORE
           fnreadrelativenum=F(Subscript)
        fnend
 
@@ -5191,7 +5192,7 @@
  ! #Autonumber# 42000,10
  NOTINFILE: ! ***** Search A Given Spot In A File For A Given String, Return True If Not Found
     def library Fnnotinfile(String$*100,Filename$,Sub;Path$,Filenumber)
-       library : Fnopenfile,Fnreadallkeys
+       library : fnOpenFile,Fnreadallkeys
        dim F$(1)*255,F(1),Fmmm$(1)*2000,Filelist$(1)*255
        filenumber=Fnopen(Filename$,Mat F$,Mat F,Mat Fmmm$,1,0,0,Path$)
        fnreadallkeys(Filenumber,Mat F$,Mat F,Mat Fmmm$,Sub,Mat Filelist$)
@@ -5381,7 +5382,7 @@
        library : fnGetFileNumber
        toExt$=fnSettings$("layoutextension")
        fromExt$="."
-       open #(Window:=fnGetFileNumber): "srow=10,scol=30,rows=3,cols=25,border=s,caption=Change Extension",display,outin
+       open #(Window:=fnGetFileNumber): "srow=10,scol=30,rows=3,cols=25,border=s,caption=Change Extension",display,outIn
        pr #Window, fields "1,1,CR 10;2,1,CR 10" : "From Ext: ", "To Ext: "
        pr #Window, fields "3,1,CC 25" : "Press Enter to Continue"
        do
@@ -5425,7 +5426,7 @@
     def Fnmessagebox(Message$*60;Title$*20,_Window,_Choice,_Kp$)
        library : Fngetfilenumber
        if Trim$(Env$("guimode"))="" then ! Old Gui Version
-          open #(_Window:=Fngetfilenumber): "SROW=10,SCOL=10,EROW=14,ECOL=69,Border=S,Caption="&Title$,display,outin
+          open #(_Window:=Fngetfilenumber): "SROW=10,SCOL=10,EROW=14,ECOL=69,Border=S,Caption="&Title$,display,outIn
           pr #_Window: Newpage
           pr #_Window, fields "2,1,CC 60" : Message$
           pr #_Window, fields "4,1,CR 29" : "Answer (Y/N):"
@@ -5593,7 +5594,7 @@
                             Mat Records(udim(Mat Records)+1)
                             records(udim(Mat Records))=rec(NewFile)
 
-                            read #OldFile, using Compareform$(OldFile), rec=rec(NewFile) : mat OldF$,mat OldF norec Ignore
+                            read #OldFile, using Compareform$(OldFile), rec=rec(NewFile) : mat OldF$,mat OldF noRec Ignore
 
                             if File(OldFile) then
                                ! Log a Record is Added message
@@ -5747,7 +5748,7 @@
 
        if ~exists(BackupFolder$) then execute "mkdir "&BackupFolder$
 
-       open #(status:=fnGetFileNumber): "srow=5,scol=10,rows=15,cols=60, border=s, caption=Progress",display,outin
+       open #(status:=fnGetFileNumber): "srow=5,scol=10,rows=15,cols=60, border=s, caption=Progress",display,outIn
 
        statHeadings$(1)="File"
        statWidth(1)=58
@@ -5879,7 +5880,7 @@
              messageRows=1 : pb_OpenedMessageRows=0
              if len(MessageRow$) then messageRows+=1 : pb_OpenedMessageRows=1
 
-             open #(pb_Window:=fnGetFileNumber): "SRow="&str$(SRow)&",SCol="&str$(SCol)&",Rows="&str$(MessageRows)&",Cols="&str$(pb_Size)&Caption$&",Border=S",display,outin
+             open #(pb_Window:=fnGetFileNumber): "SRow="&str$(SRow)&",SCol="&str$(SCol)&",Rows="&str$(MessageRows)&",Cols="&str$(pb_Size)&Caption$&",Border=S",display,outIn
 
              ! Initialize Window, Detect Gui Mode, Configure dot positions.
              if env$("guimode")="ON" then
@@ -5945,7 +5946,7 @@
 
     def library fnShowMessage(Message$*54;___,WinNumber)
        library : fnGetFileNumber
-       open #(WinNumber:=fnGetFileNumber): "SROW=10,SCOL=12,ROWS=3,COLS=56,BORDER=S",display,outin
+       open #(WinNumber:=fnGetFileNumber): "SROW=10,SCOL=12,ROWS=3,COLS=56,BORDER=S",display,outIn
        pr #WinNumber, fields "2,2,CC 54" : Message$
        fnShowMessage=WinNumber
     fnend
@@ -6087,7 +6088,7 @@
        if fnDoesLayoutExist("emailcfg") then
           if exists("sendemail.exe") then
              emailConf=fnOpen("emailcfg",mat EmailConf$,mat EmailConf,mat Form$,1,0,0,"",d$,D,0,0,1)
-             read #EmailConf, using form$(EmailConf),rec=1 : mat EmailConf$,mat EmailConf norec Ignore
+             read #EmailConf, using form$(EmailConf),rec=1 : mat EmailConf$,mat EmailConf noRec Ignore
              if file(EmailConf)=0 then
                 if Exists("EmailLog.[WSID]") then execute "*free EmailLog.[WSID]"
                 if EmailMessage$="" then emailMessage$=" "
@@ -6197,7 +6198,7 @@
  OPEN: ! ***** Function To Call Library Openfile And Proc Subs
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,Suppress_Log,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80
-          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$,Suppress_Log)
+          fnopen=fnOpenFile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$,Suppress_Log)
           if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
  !

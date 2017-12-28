@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\TrToCPA
 00020 ! Transfer to Accountant
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnprg,fnstyp,fntos,fnlbl,fntxt,fnchk,fncmdset,fnacs,fnwait,fncomboa,fnmsgbox,fnchain
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnprg,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fnwait,fncomboa,fnmsgbox,fnchain
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,de$*35,ta(2),td$*30,prd(23),srgln$(17)*12,sra(17)
@@ -17,23 +17,23 @@
         ty$(3)=" Adjustment Number: "
 00160 ! ______________________________________________________________________
 00170 MAIN: ! 
-00180   fntos(sn$="Tr2cpa") !:
+00180   fnTos(sn$="Tr2cpa") !:
         mylen=40 : mypos=mylen+2 : lc=0
-00190   fnlbl(lc+=1,1,"Starting Date:",mylen,right)
-00200   fntxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
+00190   fnLbl(lc+=1,1,"Starting Date:",mylen,right)
+00200   fnTxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
         ! rESP$(1)=""
-00210   fnlbl(lc+=1,1,"Ending Date:",mylen,right)
-00220   fntxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
+00210   fnLbl(lc+=1,1,"Ending Date:",mylen,right)
+00220   fnTxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
         ! rESP$(2)=""
 00230   lc+=1
-00240   fnchk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
+00240   fnChk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
         if resp$(3)="" then resp$(3)="False"
 00250   lc+=1
-00260   fnlbl(lc+=1,1,"Destination Path:",mylen,right)
-00270   fntxt(lc,mypos,66) !:
+00260   fnLbl(lc+=1,1,"Destination Path:",mylen,right)
+00270   fnTxt(lc,mypos,66) !:
         if resp$(4)="" then resp$(4)="A:\"
-00280   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ck)
+00280   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00290   if ck=5 then goto XIT
 00300   d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date !:
         d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
@@ -43,16 +43,16 @@
 00330   gosub GETPRC
 00340 ! ______________________________________________________________________
 00350   fnwait
-00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
+00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  !:
         read #20,using 'Form POS 618,10*N 1': mat dedcode !:
         close #20: 
 00370   d2$=cnvrt$("PIC(######)",d2)
 00380   open #20: "Name="&env$('Q')&"\GLmstr\glBucket.H"&env$('cno')&",Shr",internal,input,relative ioerr L400 !:
-        read #20,using 'Form POS 1,N 1',rec=1: glb norec L390
+        read #20,using 'Form POS 1,N 1',rec=1: glb noRec L390
 00390 L390: close #20: 
 00400 L400: if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&env$('cno')
 00410   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
-00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
 00440   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&env$('cno')&",Size=0,RecL=104,Replace",internal,output 
 00450   open #glwk201=4: "Name="&env$('Q')&"\CLmstr\GLWK201.H"&env$('cno')&",Size=0,RecL=110,Replace",internal,output 
@@ -168,7 +168,7 @@
 01500   execute "Copy "&env$('Q')&"\CLmstr\GLWK101.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".H"&env$('cno')&" -n"
 01510   execute "Copy "&env$('Q')&"\CLmstr\GLWK201.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GLWK2"&wsid$&".H"&env$('cno')&" -n"
 01520   if lr4=0 then goto L1550
-01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1550
+01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1550
 01540   fnprg("S:\acsGL\PRMerge",2) !:
         fnstyp(99)
 01550 L1550: fnchain("S:\acsGL\acglMrge")
@@ -196,7 +196,7 @@
 01730   pri1=1
 01740   pr newpage
 01750   close #103: ioerr L1760
-01760 L1760: open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&cap$,display,outin 
+01760 L1760: open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&cap$,display,outIn 
 01770   mat ml$(4) : mat ml$=("")
 01780   ml$(1)="This program can combine all like General Ledger Numbers for"
 01790   ml$(2)="Payroll Withholding Accounts as they are transferred to GL."
@@ -240,7 +240,7 @@
 02130 L2130: read #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$, tr4,tr5,tr6,tr7, tr$,td$,ven$,j$,j$,j$,bgl$ eof L2160
 02140   write #9,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,tr7,tr$,td$,ven$,j$,j$,j$,bgl$
 02150   goto L2130
-02160 L2160: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
+02160 L2160: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr XIT
 02170   fnchain("S:\acsGL\PRMerge")
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>

@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsPR\newprRevCal
 00020 ! Reverse Calculation
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdkey,fnacs,fncombof,fnmsgbox,fnchain,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnmsgbox,fnchain,fnDedNames
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim x$*8,tdc(6)
@@ -22,60 +22,60 @@
 00214   close #1: 
 00220   if gli=1 then 
 00222     gosub POSTGL0
-00224     open #14: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L250
+00224     open #14: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L250
 00226     goto L260
 00228 L250: ! 
 00230     gli=0
 00260 L260: ! 
 00262   end if 
-00264   open #6: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L330
-00270   open #7: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno')&",Shr",internal,outin,keyed 
+00264   open #6: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L330
+00270   open #7: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00280   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then 
-00282     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00282     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00284   else 
-00286     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outin,relative 
+00286     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outIn,relative 
 00288   end if 
-00290   open #9: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00290   open #9: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00300   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative ioerr L330
 00310   read #20,using 'Form POS 152,N 2',rec=1: bcde
 00312   close #20: 
 00320   cli=1
 00330 L330: ! 
-00340   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00350   open #hDepartment:=5: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
-00370   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00340   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00350   open #hDepartment:=5: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00370   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00380 ! ______________________________________________________________________
 00390   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Shr",internal,input,relative 
-00400   read #11,using "form pos 1,x 16,x 32,n 8",rec=1: d1 norec ignore
+00400   read #11,using "form pos 1,x 16,x 32,n 8",rec=1: d1 noRec ignore
 00410   close #11: 
 00420   dat$=cnvrt$("pic(########)",d1)
 00430   dat=val(dat$(5:6))*10000 +val(dat$(7:8))*100 +val(dat$(3:4)) ! set payroll date back to mmddyy format for some files
 00440 ! ______________________________________________________________________
 00450 ASK_EMPLOYEE_NO: ! 
 00460   if reverse_all=1 then goto L730
-00470   fntos(sn$="Prrevcal")
+00470   fnTos(sn$="Prrevcal")
 00472   respc=0
-00480   fnlbl(1,1,"Employee to Reverse:",25,1)
+00480   fnLbl(1,1,"Employee to Reverse:",25,1)
 00490   fncombof("Employee",1,28,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,0, "Select the employee to reverse.")
 00492   resp$(respc+=1)="[All]"
-00500   fnlbl(2,1,"Payroll Date:",25,1)
-00510   fntxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
+00500   fnLbl(2,1,"Payroll Date:",25,1)
+00510   fnTxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
 00520   resp$(respc+=1)=str$(d1)
-00530   fnlbl(3,1,"Check Number:",25,1)
-00540   fntxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
+00530   fnLbl(3,1,"Check Number:",25,1)
+00540   fnTxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
 00550   resp$(respc+=1)= ""
 00560   if exists(env$('Q')&'\CLmstr\BankMstr.h'&env$('cno')) then 
-00570     fnlbl(4,1,"Bank Code for Checkbook:",25,1)
+00570     fnLbl(4,1,"Bank Code for Checkbook:",25,1)
 00580     fncombof('Bank',4,28,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
 00582     resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
 00584   end if 
 00590   if success=1 then 
-00592     fnlbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
+00592     fnLbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
 00594   end if 
-00600   fncmdkey("&Next",1,1,0,"Proceed with reversing of payroll." )
-00602   fncmdkey("E&xit",5,0,1,"Returns to menu")
+00600   fnCmdKey("&Next",1,1,0,"Proceed with reversing of payroll." )
+00602   fnCmdKey("E&xit",5,0,1,"Returns to menu")
 00610 ! 
-00620   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00620   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 00630   if ckey=5 then goto XIT
 00640   success=0
 00650   if resp$(1)="[All]" then reverse_all=1 : goto L670
@@ -177,7 +177,7 @@
 01440   rewrite #6,using L1320,key=k$: bcde,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd
 01450   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then goto DELETE4_02ALLOC
 01460 L1460: if adr=0 then goto L1510
-01470   read #8,using 'form pos 65,pd 3',rec=adr: nta norec L1510
+01470   read #8,using 'form pos 65,pd 3',rec=adr: nta noRec L1510
 01480   delete #8,rec=adr: 
 01490   adr=nta: goto L1460
 01510 L1510: return ! /r
@@ -203,17 +203,17 @@
 01670   fli2$(2)="11,68,n 6,u"
 01680   fli2$(3)="11,75,n 3,u"
 01690   open #1: "Name="&env$('Q')&"\GLmstr\GLBUCKET.H"&env$('cno')&",Shr",internal,input,relative ioerr L1740
-01700   read #1,using 'form pos 1,n 1',rec=1: glb norec ignore
+01700   read #1,using 'form pos 1,n 1',rec=1: glb noRec ignore
 01720   close #1: 
 01730   if glb=2 then gosub L3690
 01740   L1740: !
-01780   fntos(sn$="Prrevcal2")
+01780   fnTos(sn$="Prrevcal2")
 01782   respc=0
-01790   fnlbl(1,1,"General Ledger Posting Date:",25,1)
-01800   fntxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
-01810   fncmdkey("&Next",1,1,0,"Proceed with reversing entry." )
-01812   fncmdkey("E&xit",5,0,1,"Don't Post")
-01820   fnacs(sn$,0,mat resp$,ckey) ! posting date
+01790   fnLbl(1,1,"General Ledger Posting Date:",25,1)
+01800   fnTxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
+01810   fnCmdKey("&Next",1,1,0,"Proceed with reversing entry." )
+01812   fnCmdKey("E&xit",5,0,1,"Don't Post")
+01820   fnAcs(sn$,0,mat resp$,ckey) ! posting date
 01830   if ckey<>5 then 
 01840     dat1=val(resp$(1))
 01850     if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
@@ -375,7 +375,7 @@
 03330   L3330: mastercd=1
 03340   L3340: if glinstal=0 then goto L3490
 03380   diskin=1
-03390   open #3: "Name="&glwk$,internal,outin ioerr L3450
+03390   open #3: "Name="&glwk$,internal,outIn ioerr L3450
 03400   read #3,using L3410: dat2,trcode eof L3410
 03410   L3410: form pos 13,n 6,pos 25,n 2
 03420   if dat2=dat and trcode=5 then goto L3490
@@ -413,23 +413,23 @@
 03730   accrue$=resp$(1)(1:1)
 03740   return  ! /r
 03760 ! ACCRUAL: ! r:
-03770 !   fntos(sn$="Prrevcal3") 
+03770 !   fnTos(sn$="Prrevcal3") 
 03772   !   respc=0: mypos=50
-03780 !   fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
-03790 !   fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
+03780 !   fnLbl(1,1,"Number of Days in this Pay Period:",mypos,1)
+03790 !   fnTxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
 03792   !   resp$(1)=str$(day)
-03800 !   fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
-03810 !   fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
+03800 !   fnLbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
+03810 !   fnTxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
 03812   !   resp$(2)=str$(dayslm)
-03820 !   fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+03820 !   fnLbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 03830 !   fnqgl(3,mypos+3,0,2,pas) 
 03832   !   resp$(3)=fnrgl$(bankgl$)
-03840 !   fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
-03850 !   fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.") 
+03840 !   fnLbl(4,1,"Last Day of Previous Month:",mypos,1)
+03850 !   fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.") 
 03852   !   resp$(4)=str$(d2)
-03860 !   fncmdkey("&Next",1,1,0,"Continue posting." ) 
-03862   !   fncmdkey("E&xit",5,0,1,"Returns to menu")
-03870 !   fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
+03860 !   fnCmdKey("&Next",1,1,0,"Continue posting." ) 
+03862   !   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+03870 !   fnAcs(sn$,0,mat resp$,ckey) ! ask accrual info
 03880 !   if ckey=5 then goto XIT
 03890 !   day=val(resp$(1)) ! days in pay period
 03900 !   dayslm=val(resp$(2)) ! days last month
@@ -442,7 +442,7 @@
 03970 ! L3970: !
 03980 ! return ! /r
 03985 CREATE_LIST: ! r:
-03990   open #13: "Name="&env$('temp')&"\prreverse"&session$&",size=0,RecL=128,replace",internal,outin 
+03990   open #13: "Name="&env$('temp')&"\prreverse"&session$&",size=0,RecL=128,replace",internal,outIn 
 04000 L4000: read #1,using "FORM pos 1,n 8,pos 132,2*PD 4.2",release: eno,em10,em11 eof L4100
 04020   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 04030   restore #4,key>=checkkey$: nokey L4000

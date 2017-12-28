@@ -13,7 +13,7 @@
     record=1
     
     ! Make sure Record 1 Exists
-    restore #Datafile, rec=Record : norec Ignore
+    restore #Datafile, rec=Record : noRec Ignore
     
     ! If it doesn't, create it.
     if file(DataFile) then

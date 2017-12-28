@@ -2,7 +2,7 @@
 10020 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 10040 ! and Purchases Journals a.k.a. Transaction Journals
 10060 ! ______________________________________________________________________
-10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnps,fnpedat$,fnopt,fntos,fncmdset,fnacs,fnfra,fnchk,fnlbl,fntxt,fnconsole
+10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnps,fnpedat$,fnOpt,fnTos,fnCmdSet,fnAcs,fnFra,fnChk,fnLbl,fnTxt,fnconsole
 10100   on error goto ERTN
 10120 ! ______________________________________________________________________
 10140   dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
@@ -198,35 +198,35 @@
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
-40040   fntos(sn$="TRJR")
+40040   fnTos(sn$="TRJR")
 40060   respc=0
-40080   fnfra(1,1,2,50,"Print from current month files or history"," ")
-40100   fnopt(1,3,"Current Period Transactions",0,1)
+40080   fnFra(1,1,2,50,"Print from current month files or history"," ")
+40100   fnOpt(1,3,"Current Period Transactions",0,1)
 40120   resp$(respc+=1)="True"
-40140   fnopt(2,3,"Prior Period Transactions",0,1)
+40140   fnOpt(2,3,"Prior Period Transactions",0,1)
 40160   resp$(respc+=1)="False"
-40180   fnfra(5,1,8,50,"Select Journals to Print"," ")
-40200   fnchk(1,3,"Disbursements Journal",0,2)
+40180   fnFra(5,1,8,50,"Select Journals to Print"," ")
+40200   fnChk(1,3,"Disbursements Journal",0,2)
 40220   resp$(respc+=1)="True"
-40240   fnchk(2,3,"Receipts Journal",0,2)
+40240   fnChk(2,3,"Receipts Journal",0,2)
 40260   resp$(respc+=1)="True"
-40280   fnchk(3,3,"General Journal (Adj)",0,2)
+40280   fnChk(3,3,"General Journal (Adj)",0,2)
 40300   resp$(respc+=1)="True"
-40320   fnchk(4,3,"General Journal (A/P)",0,2)
+40320   fnChk(4,3,"General Journal (A/P)",0,2)
 40340   resp$(respc+=1)="False"
-40360   fnchk(5,3,"General Journal (Payroll)",0,2)
+40360   fnChk(5,3,"General Journal (Payroll)",0,2)
 40380   resp$(respc+=1)="False"
-40400   fnchk(6,3,"General Journal (A/R)",0,2)
+40400   fnChk(6,3,"General Journal (A/R)",0,2)
 40420   resp$(respc+=1)="False"
-40440   fnchk(7,3,"Sales Journal",0,2)
+40440   fnChk(7,3,"Sales Journal",0,2)
 40460   resp$(respc+=1)="False"
-40480   fnchk(8,3,"Purchases Journal",0,2)
+40480   fnChk(8,3,"Purchases Journal",0,2)
 40500   resp$(respc+=1)="False"
-40520   fnlbl(16,1,"Prior period code (blank for all):",35,0)
-40540   fntxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
+40520   fnLbl(16,1,"Prior period code (blank for all):",35,0)
+40540   fnTxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 40560   resp$(respc+=1)=" "
-40580   fncmdset(2)
-40590   fnacs(sn$,0,mat resp$,ck)
+40580   fnCmdSet(2)
+40590   fnAcs(sn$,0,mat resp$,ck)
 40600   if ck=5 then goto XIT
 40620   if resp$(1)="True" then cur_prior=1 else cur_prior=2
 40640   mat journal_to_print=(0)

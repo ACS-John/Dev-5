@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\DumpPayeeTrans
 00020 ! Vendor(Payee)  Dump old Transactions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,holdvn$*8,vcode$*8
@@ -13,22 +13,22 @@
 00130   fntop("S:\acsGL\VendorTransList",cap$="Dump Old Payee Transactions")
 00140   fncno(cno,cnam$) !:
         fndat(dat$)
-00150   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00170   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00180   namtab=66-int(len(rtrm$(cnam$))/2)
 00190   dattab=66-int(len(rtrm$(dat$))/2)
 00200 ! _________________________
 00210 MENU1: ! 
 00220 ASKDAT: ! 
-00230   fntos(sn$="DumpVendorTrans") !:
+00230   fnTos(sn$="DumpVendorTrans") !:
         mylen=35 : mypos=mylen+2
-00240   fnlbl(1,1,"Oldest Transaction Date to Retain:",mylen,right)
-00250   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you enter here will be removed.') !:
+00240   fnLbl(1,1,"Oldest Transaction Date to Retain:",mylen,right)
+00250   fnTxt(1,mypos,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you enter here will be removed.') !:
         resp$(1)=str$(oldestdate)
-00255   fnlbl(1,50,"")
-00260   fncmdset(2)
-00270   fnacs(sn$,0,mat resp$,ckey)
+00255   fnLbl(1,50,"")
+00260   fnCmdSet(2)
+00270   fnAcs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   oldestdate=val(resp$(1))
 00300 L300: read #trans,using L320: trvn$,dt,am,rn$,de$ eof XIT

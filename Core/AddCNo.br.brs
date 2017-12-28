@@ -1,7 +1,7 @@
 10000 ! Replace S:\Core\AddCNo
 10020 ! add a new company program for [cursys] (copies it from 99999) then it chains to Company Information
 10040 ! ______________________________________________________________________
-10060   library 'S:\Core\Library': fnchain,fntos,fnlbl,fnmsgbox,fnacs,fntxt,fncmdkey,fntop,fncmbcno,fncmdset,fnCopy,fnindex_sys,fnerror,fncreg_write,fnSystemName$
+10060   library 'S:\Core\Library': fnchain,fnTos,fnLbl,fnmsgbox,fnAcs,fnTxt,fnCmdKey,fntop,fncmbcno,fnCmdSet,fnCopy,fnindex_sys,fnerror,fncreg_write,fnSystemName$
 10080   on error goto ERTN
 10100   dim ml$(10)*80,resp$(40)*128,cap$*128
 10120 ! ______________________________________________________________________
@@ -21,13 +21,13 @@
 18120     if resp$='Yes' then let fnchain("S:\acsCL\Conversion\APmstr-Cnv")
 18140 ! /r
 20000   else if env$('cursys')='UB' then ! r:
-20020     fntos(sn$="ub_add_cno")
+20020     fnTos(sn$="ub_add_cno")
 20040     mylen=32 : mypos=mylen+2 : lc=0
-20180     fnlbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
+20180     fnLbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
 20200     fncmbcno(lc,mypos)
 20220     resp$(1)=''
-20240     fncmdkey("&Next",1,1,1)
-20280     fnacs(sn$,0,mat resp$,ckey)
+20240     fnCmdKey("&Next",1,1,1)
+20280     fnAcs(sn$,0,mat resp$,ckey)
 20300     if ck=5 then goto XIT
 20360     copytoscno=val(resp$(1)(43:47))
 20622     if copytoscno=0 then
@@ -35,26 +35,26 @@
 20626     else
 20628       fnCopy(env$('Q')&"\UBmstr\UBData\*.h"&str$(copytoscno),env$('Q')&"\UBmstr\UBData\*.h"&env$('cno'))
 20630     end if
-20660     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",RecL=129,Replace,Shr",internal,outin,relative 
+20660     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",RecL=129,Replace,Shr",internal,outIn,relative 
 20680     write #1,using "Form POS 1,C 40",rec=1: empty$
 20700     close #1: 
 20720     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",Size=0,RecL=2067,Replace",internal,output 
 20740     close #1: 
-20760     open #2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Replace,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
+20760     open #2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Replace,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 20780     close #2: 
-20800     open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Use,RecL=130,KPs=1,KLn=10",internal,outin,keyed 
+20800     open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed 
 20820     close #3: 
 20840     open #1: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",RecL=111,Replace",internal,output 
 20860     close #1: 
-20880     ! open #1: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Replace,RecL=16,KPs=1,KLn=10",internal,outin,keyed 
+20880     ! open #1: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Replace,RecL=16,KPs=1,KLn=10",internal,outIn,keyed 
 20900     ! close #1: 
-20920     open #1: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Replace,RecL=73",internal,outin,relative 
+20920     open #1: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Replace,RecL=73",internal,outIn,relative 
 20940     close #1: 
-20960     open #1: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Replace,RecL=80,KPs=1,KLn=10",internal,outin,keyed 
+20960     open #1: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Replace,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
 20980     close #1: 
-21000     open #1: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Replace,RecL=149",internal,outin,relative 
+21000     open #1: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Replace,RecL=149",internal,outIn,relative 
 21020     close #1: 
-21120     open #1: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Replace,RecL=130,KPs=1,KLn=10",internal,outin,keyed 
+21120     open #1: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Replace,RecL=130,KPs=1,KLn=10",internal,outIn,keyed 
 21140     close #1: 
 21160     fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 21180     fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
@@ -64,12 +64,12 @@
 22000   else if env$('cursys')='GL' then ! r:
 22020     dim zer(57)
 22040 MENU1: ! 
-22060     fntos(sn$="GLAddCNo")
+22060     fnTos(sn$="GLAddCNo")
 22080     mylen=37 : mypos=mylen+2
-22100     fnlbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
+22100     fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
 22120     fncmbcno(1,mypos)
-22140     fncmdset(2)
-22160     fnacs(sn$,0,mat resp$,ckey)
+22140     fnCmdSet(2)
+22160     fnAcs(sn$,0,mat resp$,ckey)
 22180     if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
 22200     fro_cno=val(resp$(1)(43:47))
 22220     if fro_cno=0 then fro_cno=99999
@@ -77,7 +77,7 @@
 22260     if cno<1 or cno=fro_cno then goto MENU1
 22280 ! ___________________________
 22300     execute "Copy "&env$('Q')&"\GLmstr\*.h"&str$(fro_cno)&' '&env$('Q')&"\GLmstr\*.h"&env$('cno')&" -n"
-22320     open #20: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",NoShr",internal,outin,keyed 
+22320     open #20: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",NoShr",internal,outIn,keyed 
 22330     do 
 22340       read #20,using 'Form POS 87,PD 6.2': cb eof EO_GLMSTR
 22360       rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer

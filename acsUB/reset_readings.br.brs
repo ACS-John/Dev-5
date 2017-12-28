@@ -1,38 +1,35 @@
 10000 ! Replace S:\acsUB\reset_readings
 10200 ! -- reset current or prior reading to what it was on a given transaction date.
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncno,fnxit,fnerror,fntos,fnlbl,fnacs,fntxt,fnwait,fncmdset,fntop,fnpause,fnopt,fngethandle,fnchk
+10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnget_services,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnwait,fnCmdSet,fntop,fnpause,fnOpt,fngethandle,fnChk
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
 11400   dim a(7),b(11),c(4),d(15),g(12),rw(22,13),d$*6,dat$*20,bt1(14,2)
 11600   dim p$*10,o(2),bt2(14,2),badr(2),dp$*60,tg(11),transkey$*19,meteradr$*30,custname$*30
 11800   dim watuse(12),watdat(12),elecuse(12),elecdat(12),gasuse(12),gasdat(12)
-12000   dim servicename$(10)*20,servicecode$(10)*2,tax_code$(10)*1,work$*80
+12000   dim serviceName$(10)*20,serviceCode$(10)*2,tax_code$(10)*1,work$*80
 12200   dim penatly$(10)*1,subjectto(10)
 12400   dim extra(23),extra$(11)*30,client$*30
 12600   dim cap$*128,work$*80,work_addr$*80
 12800 ! ______________________________________________________________________
-13000   fncno(cno) : !  :  !
 13200   fntop("S:\acsUB\reset_readings",cap$="Reset Readings")
 13400   dim srvnam$(10)*20,srv$(10)*2
-13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
-13800   read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat srvnam$,mat srv$
-14000   close #20: 
+13600   fnget_services(mat srvnam$,mat srv$)
 14200 ! ______________________________________________________________________
 14400 SCREEN1: ! 
-14600   fntos(sn$='resetreadings3')
+14600   fnTos(sn$='resetreadings3')
 14800   mylen=22 : mypos=mylen+2
-15000   fnlbl(1,1,"Transaction Date (mmddyy):",mylen,1)
-15200   fntxt(1,mypos,8,0,1,"1001") : resp$(1)='' ! '070611'
-15400   fnlbl(3,1,"Reading to Reset:",mylen,1)
-15600   fnopt(3,mypos,"Current") : resp$(2)='True'
-15800   fnopt(4,mypos,"Prior") : resp$(3)='False'
-16000   fnchk(6,mypos,srvnam$(1),1) : resp$(4)='True'
-16200   fnchk(7,mypos,srvnam$(4),1) : resp$(5)='True'
-16400   fnchk(9,mypos,"Update Usages",1) : resp$(6)='False'
-16600   fncmdset(2)
-16800   fnacs(sn$,0,mat resp$,ck)
+15000   fnLbl(1,1,"Transaction Date (mmddyy):",mylen,1)
+15200   fnTxt(1,mypos,8,0,1,"1001") : resp$(1)='' ! '070611'
+15400   fnLbl(3,1,"Reading to Reset:",mylen,1)
+15600   fnOpt(3,mypos,"Current") : resp$(2)='True'
+15800   fnOpt(4,mypos,"Prior") : resp$(3)='False'
+16000   fnChk(6,mypos,srvnam$(1),1) : resp$(4)='True'
+16200   fnChk(7,mypos,srvnam$(4),1) : resp$(5)='True'
+16400   fnChk(9,mypos,"Update Usages",1) : resp$(6)='False'
+16600   fnCmdSet(2)
+16800   fnAcs(sn$,0,mat resp$,ck)
 17000   if ck=5 then goto XIT
 17200   d1=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 17400   if resp$(2)='True' then do_current=1 else do_current=0
@@ -41,7 +38,7 @@
 18000   if resp$(6)='True' then do_usages=1 else do_usages=0
 18200   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UTV_Date.h"&env$('cno')&" 11 8 Replace DupKeys -n"
 18400   open #h_trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UTV_Date.h"&env$('cno')&",Shr",internal,input,keyed 
-18600   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+18600   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 18800 F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 19000 ! ______________________________________________________________________
 19200   restore #h_trans,key=str$(d1): nokey SCREEN1

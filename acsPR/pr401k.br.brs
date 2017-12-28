@@ -20,7 +20,7 @@
 00200   open #3: "Name="&env$('Q')&"\PRmstr\praddr1.h"&env$('cno'),internal,input 
 00210   open #4: "Name="&env$('Q')&"\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 
 00220 L220: read #3,using 'Form POS 1,PD 3': address eof END1
-00230   read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd norec L220
+00230   read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd noRec L220
 00240 L240: form pos 1,n 8,3*c 30,c 11,pos 156,2*n 6,pos 173,2*pd 3,pos 191,n 6
 00250   if lpd><ppd then goto L220
 00260   a=pos (rtrm$(em$(1))," ",1)

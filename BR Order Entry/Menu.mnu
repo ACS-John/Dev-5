@@ -3,5 +3,4 @@ Dealer         ^ HamsterFio:Dealer
 Contact        ^ HamsterFio:Contact
 Invoice        ^ HamsterFio:Invoice
 Invoice Item   ^ HamsterFio:Invoice Item
-Invoice Item   ^ HamsterFio:State
 State          ^ Core\Programs\State

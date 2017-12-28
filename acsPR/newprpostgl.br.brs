@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprPostGL
 00020 ! Payroll Post to General Ledger
 12000 ! r: setup library, on err, dims, fntop, etc
-12020   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox,fnwin3,fnerror,fnopenprn,fncloseprn,fnchain,fntos,fnlbl,fntxt,fncmdkey,fnacs,fndate_mmddyy_to_ccyymmdd,fnmsgbox,fnqgl,fnrgl$,fnagl$,fnchk,fnGetPayrollDates,fnDedNames,fnclient_has,fnIndex_it,fnstatus_close
+12020   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox,fnwin3,fnerror,fnopenprn,fncloseprn,fnchain,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fnmsgbox,fnqgl,fnrgl$,fnagl$,fnChk,fnGetPayrollDates,fnDedNames,fnclient_has,fnIndex_it,fnStatusClose
 12040   on error goto ERTN
 12060   ! ______________________________________________________________________
 12080   dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3),oldtgl(3)
@@ -13,11 +13,11 @@
 12200   ! ______________________________________________________________________
 16000   fntop(program$,cap$="Post to General Ledger")
 16040   fnIndex_it(env$('Q')&'\PRmstr\Department.h'&env$('cno'),env$('Q')&'\PRmstr\DeptId4.h'&env$('cno'),'12/1/9 12/8/3') ! sort department file in general ledger sequence
-16050   fnstatus_close
+16050   fnStatusClose
 16060   fnopenprn
 16080   ! ______________________________________________________________________
 16100   open #20: "Name="&env$('Q')&"\GLmstr\GLBucket.h"&env$('cno')&",Shr",internal,input,relative ioerr L260
-16120   read #20,using 'Form POS 1,N 1',rec=1: glb norec ignore
+16120   read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 16140   close #20: 
 16160   if glb=2 then let fn_askaccrue
 16200   L260: ! 
@@ -35,20 +35,20 @@
 18200   end if
 18220 goto ASK_DATE ! /r
 22000 ASK_DATE: ! 
-22020   fntos(sn$="PostGl")
+22020   fnTos(sn$="PostGl")
 22040   respc=0
-22060   fnlbl(1,40,"",1,1) ! bigger screen
-22080   fnlbl(1,1,"Beginning Payroll Date:",25,1)
-22100   fntxt(1,28,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can post or re-post older payrolls by using the older payroll date.")
+22060   fnLbl(1,40,"",1,1) ! bigger screen
+22080   fnLbl(1,1,"Beginning Payroll Date:",25,1)
+22100   fnTxt(1,28,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can post or re-post older payrolls by using the older payroll date.")
 22120   resp$(respc+=1)=str$(d1)
-22140   fnlbl(2,1,"Ending Payroll Date:",25,1)
-22160   fntxt(2,28,10,0,1,"3",0,"You can post a ranges of payrolls by entering a beginning and ending date.  Use the same date for a single payroll.")
+22140   fnLbl(2,1,"Ending Payroll Date:",25,1)
+22160   fnTxt(2,28,10,0,1,"3",0,"You can post a ranges of payrolls by entering a beginning and ending date.  Use the same date for a single payroll.")
 22180   resp$(respc+=1)=str$(d1)
-22200   fnchk(3,28,"Print Report Only:",1)
+22200   fnChk(3,28,"Print Report Only:",1)
 22220   resp$(respc+=1)="False"
-22240   fncmdkey("&Next",1,1,0,"Proceed with posting." )
-22260   fncmdkey("E&xit",5,0,1,"Returns to menu")
-22280   fnacs(sn$,0,mat resp$,ckey) ! ask payroll date
+22240   fnCmdKey("&Next",1,1,0,"Proceed with posting." )
+22260   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+22280   fnAcs(sn$,0,mat resp$,ckey) ! ask payroll date
 24000   if ckey=5 then goto XIT
 24020   dat1=d1=val(resp$(1))
 24040   dat2=d2=val(resp$(2))
@@ -86,7 +86,7 @@
 26480   nametab=36-len(rtrm$(a$))/2
 26500   close #1: 
 26520   open #2: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-26540   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptId4.h"&env$('cno')&",Shr",internal,outin,keyed 
+26540   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptId4.h"&env$('cno')&",Shr",internal,outIn,keyed 
 26560   fn_pr_hdr
 28000   do
 28020     DEPT_READ: ! 
@@ -222,14 +222,14 @@
 44260   if multigl=2 then goto L2080
 44280   ! CREATE DUE TO PAYROLL FUND ENTRIES
 44300   if mastercd=0 then goto L2050 ! FIRST TIME THRU ROUTINE
-44320   fntos(sn$="PostGl3")
+44320   fnTos(sn$="PostGl3")
 44340   respc=0: mypos=45
-44360   fnlbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
+44360   fnLbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
 44380   fnqgl(1,mypos+3,0,2,pas)
 44400   resp$(1)=fnrgl$(bankgl$)
-44420   fncmdkey("&Next",1,1,0,"Continue posting." )
-44440   fncmdkey("E&xit",5,0,1,"Returns to menu")
-44460   fnacs(sn$,0,mat resp$,ckey) ! ask clearing
+44420   fnCmdKey("&Next",1,1,0,"Continue posting." )
+44440   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+44460   fnAcs(sn$,0,mat resp$,ckey) ! ask clearing
 44480   if ckey=5 then goto XIT
 44500   key$=k$=bankgl$=fnagl$(resp$(1))
 44520   ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
@@ -251,7 +251,7 @@
 46000 def fn_L2090
 46020   if glinstal=0 then goto L2210
 46040   diskin=1
-46060   open #14: "Name="&glwk$,internal,outin ioerr L2170
+46060   open #14: "Name="&glwk$,internal,outIn ioerr L2170
 46080   read #14,using L2130: dat3,trcode eof L2130
 46100   L2130: form pos 13,n 6,pos 25,n 2
 46120   if dat3=dat and trcode=5 then goto L2210
@@ -267,14 +267,14 @@
 46320 fnend 
 48000 def fn_finalscrctrlbookmulitfunds
 48020   ! FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)
-48040   fntos(sn$="PostGl4")
+48040   fnTos(sn$="PostGl4")
 48060   respc=0: mypos=45
-48080   fnlbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+48080   fnLbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 48100   fnqgl(1,mypos+3,0,2,pas)
 48120   resp$(1)=fnrgl$(bankgl$)
-48140   fncmdkey("&Next",1,1,0,"Continue posting." )
-48160   fncmdkey("E&xit",5,0,1,"Returns to menu")
-48180   fnacs(sn$,0,mat resp$,ckey) ! ask clearing
+48140   fnCmdKey("&Next",1,1,0,"Continue posting." )
+48160   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+48180   fnAcs(sn$,0,mat resp$,ckey) ! ask clearing
 48200   if ckey=5 then goto XIT
 48220   key$=fnagl$(resp$(1))
 48240   ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
@@ -302,23 +302,23 @@
 56160   if accrue$<>"Yes" then goto ASKACCRUE_XIT
 56180   ! ______________________________________________________________________
 56200   ACCRUAL: ! r:
-56220   fntos(sn$="PostGl5")
+56220   fnTos(sn$="PostGl5")
 56240   respc=0: mypos=50
-56260   fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
-56280   fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+56260   fnLbl(1,1,"Number of Days in this Pay Period:",mypos,1)
+56280   fnTxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
 56300   resp$(1)=str$(day)
-56320   fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
-56340   fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+56320   fnLbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
+56340   fnTxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
 56360   resp$(2)=str$(dayslm)
-56380   fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+56380   fnLbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 56400   fnqgl(3,mypos+3,0,2,pas)
 56420   resp$(3)=fnrgl$(bankgl$)
-56440   fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
-56460   fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
+56440   fnLbl(4,1,"Last Day of Previous Month:",mypos,1)
+56460   fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
 56480   resp$(4)=str$(d2)
-56500   fncmdkey("&Next",1,1,0,"Continue posting." )
-56520   fncmdkey("E&xit",5,0,1,"Returns to menu")
-56540   fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
+56500   fnCmdKey("&Next",1,1,0,"Continue posting." )
+56520   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+56540   fnAcs(sn$,0,mat resp$,ckey) ! ask accrual info
 56560   if ckey=5 then goto XIT
 56580   day=val(resp$(1)) ! days in pay period
 56600   dayslm=val(resp$(2)) ! days last month

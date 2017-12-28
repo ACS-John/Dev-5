@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\Programs\Amortiz
 00020 ! Amortization Program
-00030   library 'S:\Core\Library': fnerror,fnxit,fnopenprn,fncloseprn,fntos,fnlbl,fntxt,fnacs,fncmdset
+00030   library 'S:\Core\Library': fnerror,fnxit,fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim eX(50,2),io2$(6),io3$(2),io4$(2),wd4$(2),pfm$*200
@@ -21,23 +21,23 @@
 00210   pfm2$=pfm2$&"skip 1"
 00220 ! ______________________________________________________________________
 00230 MENU1: close #101: ioerr L230
-00235 L230: fntos("Amort1")
+00235 L230: fnTos("Amort1")
 00240   lc=0: rc=0
-00245   fnlbl(lc+=1,1,"Loan Amount:",18,1)
-00250   fntxt(lc,20,20,0,0,"10"): response$(rc+=1)=str$(la)
-00255   fnlbl(lc+=1,1,"Interest Rate (ie: .15):",18,1)
-00260   fntxt(lc,20,20,0,0,"43") : response$(rc+=1)=str$(ir)
-00265   fnlbl(lc+=1,1,"Years Loan is for:",18,1)
-00270   fntxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(n)
-00275   fnlbl(lc+=1,1,"Payments Per Year:",18,1)
-00280   fntxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(y)
-00285   fnlbl(lc+=2,1,"Note: An Interest Rate of 15% should be entered as 0.15",57,2)
+00245   fnLbl(lc+=1,1,"Loan Amount:",18,1)
+00250   fnTxt(lc,20,20,0,0,"10"): response$(rc+=1)=str$(la)
+00255   fnLbl(lc+=1,1,"Interest Rate (ie: .15):",18,1)
+00260   fnTxt(lc,20,20,0,0,"43") : response$(rc+=1)=str$(ir)
+00265   fnLbl(lc+=1,1,"Years Loan is for:",18,1)
+00270   fnTxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(n)
+00275   fnLbl(lc+=1,1,"Payments Per Year:",18,1)
+00280   fnTxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(y)
+00285   fnLbl(lc+=2,1,"Note: An Interest Rate of 15% should be entered as 0.15",57,2)
 00290 ! tEXT$="Payment:"
 00295 ! fnPRF(PFX,6,1,22,1,TEXT$)
 00300 ! tEXT$=STR$(P)
 00305 ! fnPRF(PFX,6,30,20,0,TEXT$)
-00310   fncmdset(2)
-00315   fnacs("Amort1",0,mat response$,ckey)
+00310   fnCmdSet(2)
+00315   fnAcs("Amort1",0,mat response$,ckey)
 00320   rc=0
 00325   s=la=val(response$(rc+=1))
 00330   ir=val(response$(rc+=1))
@@ -55,7 +55,7 @@
 00363   pr f "11,47,NZ 8.2,N": p
 00365   if ckey=4 then goto L440 else goto L330
 00440 L440: close #101: ioerr L450
-00450 L450: open #101: "SRow=03,SCol=14,ERow=12,ECol=65,Border=SR,Caption=<Print Amortization Schedule",display,outin 
+00450 L450: open #101: "SRow=03,SCol=14,ERow=12,ECol=65,Border=SR,Caption=<Print Amortization Schedule",display,outIn 
 00460   pr #101: newpage
 00470   i2=p2=0
 00480   on fkey 5 goto L1830
@@ -78,7 +78,7 @@
 00660   d2=val(d$(3:4))
 00670   d3=val(d$(5:8))
 00680   d5=d3*10000+d2+d1*100
-00685 L680: open #101: "SRow=8,SCol=21,ERow=14,ECol=58,Border=SR,Caption=<Amortization Payments",display,outin 
+00685 L680: open #101: "SRow=8,SCol=21,ERow=14,ECol=58,Border=SR,Caption=<Amortization Payments",display,outIn 
 00690   pr #101: newpage
 00695   pr f "09,22,C 36,N": "Enter any extra payments made toward"
 00700   pr f "10,22,C 36,N": "  principal (blank when completed)"
@@ -93,7 +93,7 @@
 00745   j6=j6+1
 00750   goto L680
 00820 L820: close #101: ioerr L830
-00830 L830: open #101: "SROW=11,SCOL=30,EROW=14,ECOL=50,BORDER=SR,CAPTION=<Select pr Type",display,outin 
+00830 L830: open #101: "SROW=11,SCOL=30,EROW=14,ECOL=50,BORDER=SR,CAPTION=<Select pr Type",display,outIn 
 00840   pr #101: newpage
 00850   pr f mat io4$: mat wd4$
 00860   pr f "15,34,Cc 11,B,5": "Cancel (F5)"
@@ -101,7 +101,7 @@
 00880   typ=curfld
 00890   if cmdkey=5 then goto MENU1
 00900   close #101: ioerr L910
-00910 L910: open #101: "SROW=9,SCOL=9,EROW=13,ECOL=71,BORDER=SR,CAPTION=<Print Amortization Schedule",display,outin 
+00910 L910: open #101: "SROW=9,SCOL=9,EROW=13,ECOL=71,BORDER=SR,CAPTION=<Print Amortization Schedule",display,outIn 
 00920   pr #101: newpage
 00930   pr f "10,27,C 26,H,N": " Printing: Please wait..."
 00940   pr f "12,30,C 15,N": "Printing Page: "

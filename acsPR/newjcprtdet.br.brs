@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcPrtDET
 00020 ! pr Job Cost Report
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncno,fnerror,fnopenprn,fncloseprn,fnprocess,fntos,fnlbl,fntxt,fnchk,fnfra,fnopt,fncmdset,fnacs,fncmbjob
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncno,fnerror,fnopenprn,fncloseprn,fnprocess,fnTos,fnLbl,fnTxt,fnChk,fnFra,fnOpt,fnCmdSet,fnAcs,fncmbjob
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,holdjn$*6,n$*40,a$(3)*30,b(4),totall(7)
@@ -33,24 +33,24 @@
 00300   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00310   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,input,relative 
 00320 ! ______________________________________________________________________
-00330 L330: fntos(sn$="prtdet") !:
+00330 L330: fnTos(sn$="prtdet") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
-00340   fnlbl(1,37,"",1)
-00350   fnlbl(1,1,"Date of LIsting:",23,left)
-00360   fntxt(1,mypos,8,0,1,"1") !:
+00340   fnLbl(1,37,"",1)
+00350   fnLbl(1,1,"Date of LIsting:",23,left)
+00360   fnTxt(1,mypos,8,0,1,"1") !:
         resp$(resp+=1)=str$(dat1)
-00370   fnchk(2,mypos,"Print all Jobs:",left) !:
+00370   fnChk(2,mypos,"Print all Jobs:",left) !:
         resp$(resp+=1)="False"
-00380   fnchk(3,mypos,"Print Details:",left) !:
+00380   fnChk(3,mypos,"Print Details:",left) !:
         resp$(resp+=1)="False"
-00390   fnchk(4,mypos,"Summarize by Category:",left) !:
+00390   fnChk(4,mypos,"Summarize by Category:",left) !:
         resp$(resp+=1)="False"
-00400   fnchk(5,mypos,"Summarize by Job:",left) !:
+00400   fnChk(5,mypos,"Summarize by Job:",left) !:
         resp$(resp+=1)="False"
-00410   fnchk(6,mypos,"Start Jobs On a New Page:",left) !:
+00410   fnChk(6,mypos,"Start Jobs On a New Page:",left) !:
         resp$(resp+=1)="False"
-00420   fncmdset(2)
-00430   fnacs(sn$,0,mat resp$,ck)
+00420   fnCmdSet(2)
+00430   fnAcs(sn$,0,mat resp$,ck)
 00440   if ck=5 then goto XIT
 00450   dat1=val(resp$(1)) ! date
 00460   if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
@@ -63,15 +63,15 @@
 00530 ! ______________________________________________________________________
 00540 ASK_JOB: ! 
 00550   for k=1 to 100
-00560     fntos(sn$="prtdet2") !:
+00560     fnTos(sn$="prtdet2") !:
           mylen=12 : mypos=mylen+3: resp=0: left=1
-00570     fnlbl(1,1,"Job Number:",mylen,1) !:
+00570     fnLbl(1,1,"Job Number:",mylen,1) !:
           fncmbjob(1,mypos) !:
           resp$(respc+=1)=jn$
 00580     if k=1 then goto L600
-00590     if k>1 then let fnlbl(3,1,"Last Job Number entered was "&prtj$(k-1),50,1)
-00600 L600: fncmdset(2)
-00610     fnacs(sn$,0,mat resp$,ck)
+00590     if k>1 then let fnLbl(3,1,"Last Job Number entered was "&prtj$(k-1),50,1)
+00600 L600: fnCmdSet(2)
+00610     fnAcs(sn$,0,mat resp$,ck)
 00620     if ck=5 then goto L690
 00630     prtj$(k)=lpad$(trim$(resp$(1)(1:6)),6)
 00640     if rtrm$(prtj$(k))="" or ltrm$(rtrm$(prtj$(k)))="0" then goto L330

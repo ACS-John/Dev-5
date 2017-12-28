@@ -4,10 +4,10 @@
 10060 ! if stopable=1 will display "Cancel (F5)" button
 10080 ! win = window number
 10100 ! ______________________________________________________________________
-10120     library 'S:\Core\Library': fnstatus,fnerror ! ,fncno
+10120     library 'S:\Core\Library': fnStatus,fnerror ! ,fncno
 10140     on error goto ERTN
 10160     if trim$(message$)="" then message$="Please wait..."
-10300     fnstatus(message$)
+10300     fnStatus(message$)
 10320 ! if stopable=1 then
 10340 !   "Cancel (F5)"
 10360 ! else 

@@ -1,22 +1,21 @@
 00010 ! Replace S:\acsUB\ubprt3prace_granby
 00020 ! pr bills for Carrizo Springs   3 per page prace
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage,fnget_services
 00030 ! ______________________________________________________________________
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
-00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
-00100   dim servicename$(10)*20,service$(10)*2
+00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
+00100   dim serviceName$(10)*20,service$(10)*2
 00110   dim dueby$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
 00120 ! ______________________________________________________________________
-00130   fncno(cno,cnam$)
 00140   fnLastBillingDate(d1)
 00150   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00170   close #21: 
 00180   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00190   at$(1)=cnam$
+00190   at$(1)=env$('cnam')
 00200   z=23
 00210   at$(1)=trim$(at$(1))(1:z)
 00220   x=len(at$(1)) : y=z-x
@@ -32,38 +31,36 @@
 00320   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
 00340   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
-00350   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
-00360   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
-00370   read #20,using 'Form POS 1,10*C 20,10*C 2',rec=1: mat servicename$,mat service$
-00380   close #20: 
+00350   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00360   fnget_services(mat serviceName$,mat service$)
 00390 ! default message
 00400   mg$(1)="If you smell gas call"
 00410   mg$(2)="472-6556 or 472-3535."
 00420 SCREEN1: ! 
 00430   a$="" : prtbkno=0
-00440   fntos(sn$="UBPrtBl1-1")
+00440   fnTos(sn$="UBPrtBl1-1")
 00450   pf=26 : ll=24
 00460   respc=0
-00470   fnlbl(1,1,"Current Reading Date:",ll,1)
-00480   fntxt(1,pf,8,8,1,"1",0,tt$)
+00470   fnLbl(1,1,"Current Reading Date:",ll,1)
+00480   fnTxt(1,pf,8,8,1,"1",0,tt$)
 00490   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur)
-00500   fnlbl(2,1,"Previous Reading Date:",ll,1)
-00510   fntxt(2,pf,8,8,1,"1",0,tt$)
+00500   fnLbl(2,1,"Previous Reading Date:",ll,1)
+00510   fnTxt(2,pf,8,8,1,"1",0,tt$)
 00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_prior_s1)
-00530   fnlbl(3,1,"Penalty Due Date:",ll,1)
-00540   fntxt(3,pf,8,8,1,"1",0,tt$)
+00530   fnLbl(3,1,"Penalty Due Date:",ll,1)
+00540   fnTxt(3,pf,8,8,1,"1",0,tt$)
 00550   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00560   fnlbl(4,1,"Message on Bill:",ll,1)
-00570   fntxt(4,pf,30,30)
+00560   fnLbl(4,1,"Message on Bill:",ll,1)
+00570   fnTxt(4,pf,30,30)
 00580   resp$(respc+=1)=mg$(1)
-00590   fntxt(5,pf,30,30)
+00590   fnTxt(5,pf,30,30)
 00600   resp$(respc+=1)=mg$(2)
-00610   fntxt(6,pf,30,30)
+00610   fnTxt(6,pf,30,30)
 00620   resp$(respc+=1)=mg$(3)
-00630   fnlbl(7,1,"Date of Billing:",ll,1)
-00640   fntxt(7,pf,8,8,1,"1")
+00630   fnLbl(7,1,"Date of Billing:",ll,1)
+00640   fnTxt(7,pf,8,8,1,"1")
 00650   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00660   fnlbl(8,1,"Starting Account:",ll,1)
+00660   fnLbl(8,1,"Starting Account:",ll,1)
 00670 ! fe$="ubm-act-nam"
 00680 ! datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno')
 00690 ! indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno')
@@ -71,13 +68,13 @@
 00710 ! fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 00712   fncmbact(8,pf, 1) ! ,container,indexfile$*200)
 00720   resp$(respc+=1)="[All]"
-00730   fnlbl(9,1,"Route Number:",ll,1)
+00730   fnLbl(9,1,"Route Number:",ll,1)
 00740   fncmbrt2(9,pf)
 00750   resp$(respc+=1)="[All]"
-00760   fnchk(10,pf,"Select Accounts to Print",1)
+00760   fnChk(10,pf,"Select Accounts to Print",1)
 00770   resp$(respc+=1)="False"
-00780   fncmdset(3)
-00790   fnacs(sn$,0,mat resp$,ck)
+00780   fnCmdSet(3)
+00790   fnAcs(sn$,0,mat resp$,ck)
 00800   if ck=5 then goto ENDSCR
 00810   reading_date_cur_s1=val(resp$(1))
 00820   reading_date_prior_s1=val(resp$(2))
@@ -175,19 +172,19 @@
 01202   goto L650
 01204 ! ______________________________________________________________________
 01206 SCREEN3: ! r:
-01208   fntos(sn$:="UBPrtBl1-2")
+01208   fnTos(sn$:="UBPrtBl1-2")
 01210   txt$="Account (blank to stop)"
-01212   fnlbl(1,1,txt$,31,1)
+01212   fnLbl(1,1,txt$,31,1)
 01214   if trim$(z$)<>"" then 
 01216     txt$="Last Account entered was "&z$
-01218     fnlbl(3,1,txt$,44,1)
+01218     fnLbl(3,1,txt$,44,1)
 01220   else 
 01222     txt$=""
-01224     fnlbl(3,1,txt$,44,1)
+01224     fnLbl(3,1,txt$,44,1)
 01226   end if 
 01228   fncmbact(1,17)
 01230   resp$(1)=a$
-01232   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
+01232   fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
 01234   a$=lpad$(trim$(resp$(1)(1:10)),10)
 01236   if trim$(a$)="" then goto RELEASE_PRINT
 01238   if ck=5 then goto RELEASE_PRINT
@@ -207,14 +204,14 @@
 01800 ! ______________________________________________________________________
 01810   def fn_screen_totals
 01820     if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-01830     fntos(sn$="Bills-Total")
+01830     fnTos(sn$="Bills-Total")
 01840     mylen=23 : mypos=mylen+2
 01850     respc=0
-01860     fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01870     fntxt(1,mypos,8,0,1,"",1)
+01860     fnLbl(1,1,"Total Bills Printed:",mylen,1)
+01870     fnTxt(1,mypos,8,0,1,"",1)
 01880     resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-02000     fncmdset(52)
-02010     fnacs(sn$,0,mat resp$,ck)
+02000     fnCmdSet(52)
+02010     fnAcs(sn$,0,mat resp$,ck)
 02020   fnend 
 02030   def fn_sort1 ! SELECT & SORT
 02040     open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -297,7 +294,7 @@
 03420     pr #20: 'Call Print.MyFontSize(9)'
 03430     fnpa_txt("Please return this",pos_column_column+8,factor+line_height*1)
 03440     fnpa_txt("side with payment to:",pos_column_column+8,factor+line_height*2)
-03450     fnpa_txt(trim$(cnam$),pos_column_column+8,factor+line_height*3)
+03450     fnpa_txt(trim$(env$('cnam')),pos_column_column+8,factor+line_height*3)
 03460     fnpa_txt(e$(2),pos_right_column+8,factor+line_height*7)
 03470     fnpa_txt('Billing Date:'&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_right_column+5,factor+line_height*8)
 03480     fnpa_txt(trim$(z$),pos_right_column+54,factor+line_height*8)
@@ -393,15 +390,15 @@
 04122   def fn_print_serivce_metered(service_number; service_reading_prior,service_reading_current,service_usage)
 04124     dim psm_txt$*512
 04126     if g(service_number)>0 and service_reading_current=0 and service_reading_prior=0 then 
-04128       psm_txt$=rpad$(servicename$(service_number)(1:23),23)
+04128       psm_txt$=rpad$(serviceName$(service_number)(1:23),23)
 04130     else if g(service_number)>0 and service_reading_current=0 then 
-04132       psm_txt$=rpad$(servicename$(service_number)(1:14),14)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)
+04132       psm_txt$=rpad$(serviceName$(service_number)(1:14),14)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)
 04134     else if g(service_number)>0 then 
-04136       psm_txt$=rpad$(servicename$(service_number)(1:5),5)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)&cnvrt$("pic(zzzzzzzzz)",service_reading_current)
+04136       psm_txt$=rpad$(serviceName$(service_number)(1:5),5)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)&cnvrt$("pic(zzzzzzzzz)",service_reading_current)
 04138     else 
 04140       psm_txt$='  '
 04142     end if 
 04143 ! if service_reading_prior>service_reading_current then psm_temp=service_reading_current : service_reading_current=service_reading_prior : service_reading_prior=psm_temp
 04144     fnpa_txt(psm_txt$&cnvrt$("pic(zzzzzzzz)",service_usage)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_right_column,factor+line_height+=3.5)
-04146     fnpa_txt(servicename$(service_number)(1:5)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_column_column+55,factor+line_height)
+04146     fnpa_txt(serviceName$(service_number)(1:5)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_column_column+55,factor+line_height)
 04148   fnend  ! fn_print_serivce_metered

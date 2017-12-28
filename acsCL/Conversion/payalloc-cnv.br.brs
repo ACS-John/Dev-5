@@ -9,9 +9,9 @@
 00080   dim rn$*12,de$*30,ta(2),tvn$*8,tr$(5)*35,tr(2),de$*30
 00090   io1$(1)="10,51,N 2,U,N"
 00100   fncno(cno)
-00110   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outin,keyed 
-00120   open #2: "Name="&env$('Q')&"\CLmstr\X.H"&env$('cno')&",RecL=164,Replace",internal,outin,relative 
-00130   open #3: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outin,relative 
+00110   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outIn,keyed 
+00120   open #2: "Name="&env$('Q')&"\CLmstr\X.H"&env$('cno')&",RecL=164,Replace",internal,outIn,relative 
+00130   open #3: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outIn,relative 
 00140 L140: read #1,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,N 3,N 6,N 3': vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat gl eof L190
 00150   mat ta=(lrec(3)+1)
 00160   write #3,using 'Form POS 1,C 8,N 3,N 6,N 3,PD 3.2,C 30,PD 3': vn$,mat gl,100,de$,0

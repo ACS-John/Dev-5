@@ -47,7 +47,7 @@
 00460   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00470   open #5: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,input,keyed 
 00480   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
-00490   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
+00490   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
 00500   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00510   open #14: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,input,keyed 
 00520   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -286,7 +286,7 @@
 02780 ! ______________________________________________________________________
 02790 L2790: pr newpage
 02800   close #101: ioerr L2810
-02810 L2810: open #101: "SROW=6,SCOL=8,EROW=08,ECOL=75,BORDER=DR,CAPTION=ALPHA NAME SEARCH",display,outin 
+02810 L2810: open #101: "SROW=6,SCOL=8,EROW=08,ECOL=75,BORDER=DR,CAPTION=ALPHA NAME SEARCH",display,outIn 
 02820   prtall=0
 02830   pr f "7,9,C 45,H,N": "Employee Name (blank for all):"
 02840   pr f "9,34,C 11,B,5": "Cancel (F5)"
@@ -298,7 +298,7 @@
 02900 L2900: form pos 1,c 8,c 30
 02910 L2910: pr newpage
 02920   close #101: ioerr L2930
-02930 L2930: open #101: "SROW=2,SCOL=8,EROW=23,ECOL=60,BORDER=DR",display,outin 
+02930 L2930: open #101: "SROW=2,SCOL=8,EROW=23,ECOL=60,BORDER=DR",display,outIn 
 02940   pr f "1,10,C 40,R,N": "  Number  Name                       "
 02950   cde=0
 02960   mat sc$(20)
@@ -402,7 +402,7 @@
 03920   seq=2 : fil=14: goto L4020
 03930   for j=1 to udim(ios$): ios$(j)=str$(j+12)&",25,C 30,N": next j
 03940   close #101: ioerr L3950
-03950 L3950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outin 
+03950 L3950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outIn 
 03960   pr #101: newpage
 03970   pr f mat ios$: mat wrds$
 03980   pr f str$(udim(ios$)+14)&",32,C 16,R,N": "PRESS F5 TO STOP"
@@ -411,7 +411,7 @@
 04010   if cmdkey=5 then goto SRCHEND
 04020 L4020: pr newpage
 04030   close #101: ioerr L4040
-04040 L4040: open #101: "SROW=6,SCOL=10,EROW=10,ECOL=69,BORDER=DR,CAPTION="&wrds$(seq),display,outin 
+04040 L4040: open #101: "SROW=6,SCOL=10,EROW=10,ECOL=69,BORDER=DR,CAPTION="&wrds$(seq),display,outIn 
 04050   prtall=0
 04060   pr f "7,11,C 22,N": "Beginning Search Data:"
 04070   pr f "9,11,C 58,H,N": "NOTE: Enter Beginning Search Data as blank for all records"

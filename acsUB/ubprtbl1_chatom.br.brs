@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtbl1_chatom ! based on ubprtbl1_mow
 00020 ! pr bills for Chatom
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
@@ -34,36 +34,36 @@
 00340 ! ______________________________________________________________________
 00350 SCREEN1: ! 
 00360   a$="" : prtbkno=0
-00370   fntos(sn$="UBPrtBl1-1")
+00370   fnTos(sn$="UBPrtBl1-1")
 00380   pf=26 : ll=24
 00390   respc=0
-00400   fnlbl(3,1,"Penalty Due Date:",ll,1)
-00410   fntxt(3,pf,8,8,1,"1",0,tt$)
+00400   fnLbl(3,1,"Penalty Due Date:",ll,1)
+00410   fnTxt(3,pf,8,8,1,"1",0,tt$)
 00420   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00430   fnlbl(4,1,"Message on Bill:",ll,1)
-00440   fntxt(4,pf,30,30)
+00430   fnLbl(4,1,"Message on Bill:",ll,1)
+00440   fnTxt(4,pf,30,30)
 00450   resp$(respc+=1)=mg$(1)
-00460   fntxt(5,pf,30,30)
+00460   fnTxt(5,pf,30,30)
 00470   resp$(respc+=1)=mg$(2)
-00480   fntxt(6,pf,30,30)
+00480   fnTxt(6,pf,30,30)
 00490   resp$(respc+=1)=mg$(3)
-00500   fnlbl(7,1,"Date of Billing:",ll,1)
-00510   fntxt(7,pf,8,8,1,"1")
+00500   fnLbl(7,1,"Date of Billing:",ll,1)
+00510   fnTxt(7,pf,8,8,1,"1")
 00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00530   fnlbl(8,1,"Starting Account:",ll,1)
+00530   fnLbl(8,1,"Starting Account:",ll,1)
 00540   fe$="ubm-act-nam"
 00550   datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno')
 00560   indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno')
 00570   kp=1741: kl=9 : dp=41 : dl=30
 00580   fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 00590   resp$(respc+=1)="[All]"
-00600   fnlbl(9,1,"Route Number:",ll,1)
+00600   fnLbl(9,1,"Route Number:",ll,1)
 00610   fncmbrt2(9,pf)
 00620   resp$(respc+=1)="[All]"
-00630   fnchk(10,pf,"Select Accounts to Print",1)
+00630   fnChk(10,pf,"Select Accounts to Print",1)
 00640   resp$(respc+=1)="False"
-00650   fncmdset(3)
-00660   fnacs(sn$,0,mat resp$,ck)
+00650   fnCmdSet(3)
+00660   fnAcs(sn$,0,mat resp$,ck)
 00670   if ck=5 then goto ENDSCR
 00680   d1=val(resp$(5))
 00690   d4=val(resp$(1))
@@ -134,20 +134,20 @@
 00944 ! ______________________________________________________________________
 00946 SCREEN3: ! 
 00948   sn$="UBPrtBl1-2"
-00950   fntos(sn$)
+00950   fnTos(sn$)
 00952   txt$="Account (blank to stop)"
-00954   fnlbl(1,1,txt$,31,1)
+00954   fnLbl(1,1,txt$,31,1)
 00956 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 00958   if trim$(z$)<>"" then 
 00960     txt$="Last Account entered was "&z$
-00962     fnlbl(3,1,txt$,44,1)
+00962     fnLbl(3,1,txt$,44,1)
 00964   else 
 00966     txt$=""
-00968     fnlbl(3,1,txt$,44,1)
+00968     fnLbl(3,1,txt$,44,1)
 00970   end if 
 00972   fncmbact(1,17) ! 
 00974   resp$(1)=a$
-00976   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
+00976   fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
 00978   a$=lpad$(trim$(resp$(1)(1:10)),10)
 00980   if trim$(a$)="" then goto RELEASE_PRINT
 00982   if ck=5 then goto RELEASE_PRINT
@@ -184,23 +184,23 @@
 01380 ! ______________________________________________________________________
 01390 ENDSCR: ! pr totals screen
 01400   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-01410   fntos(sn$="Bills-Total")
+01410   fnTos(sn$="Bills-Total")
 01420   mylen=23 : mypos=mylen+2
 01430   respc=0
-01440   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01450   fntxt(1,mypos,8,0,1,"",1)
+01440   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+01450   fnTxt(1,mypos,8,0,1,"",1)
 01460   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-01490 ! fnLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
-01500 ! fnTXT(2,MYPOS,8,0,1,"",1)
+01490 ! fnLbl(2,1,"Total  Bills  Coded:",MYLEN,1)
+01500 ! fnTxt(2,MYPOS,8,0,1,"",1)
 01510 ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-01520 ! fnLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
-01530 ! fnTXT(3,MYPOS,8,0,1,"",1)
+01520 ! fnLbl(3,1,"Total Bills Not Coded:",MYLEN,1)
+01530 ! fnTxt(3,MYPOS,8,0,1,"",1)
 01540 ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-01550 ! fnLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
-01560 ! fnTXT(4,MYPOS,8,0,1,"",1)
+01550 ! fnLbl(4,1,"Percent of Bills Coded:",MYLEN,1)
+01560 ! fnTxt(4,MYPOS,8,0,1,"",1)
 01570 ! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
-01580   fncmdset(52)
-01590   fnacs(sn$,0,mat resp$,ck)
+01580   fnCmdSet(52)
+01590   fnAcs(sn$,0,mat resp$,ck)
 01600 XIT: fnxit
 01610 ! ______________________________________________________________________
 01620 ERTN: fnerror(program$,err,line,act$,"xit")

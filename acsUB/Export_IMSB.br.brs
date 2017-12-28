@@ -2,7 +2,7 @@
 20020 ! -- Creates Address Certification File:
 20040 ! ______________________________________________________________________
 20060 ! ______________________________________________________________________
-20080   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnxit,fntos,fnacs,fnlbl,fnwait,fncsz,fncmdset,fntop,fngethandle
+20080   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnxit,fnTos,fnAcs,fnLbl,fnwait,fncsz,fnCmdSet,fntop,fngethandle
 20100   on error goto ERTN
 20120 ! ______________________________________________________________________
 20140   dim z$,nam$*30,sta$*30,sta2$*30,csz$*30,opt1$(7),txt$*80,cap$*128
@@ -21,7 +21,7 @@
 25120 ! open #h_out:=2: "Name="&dv$&"ubCass1.dat,RecL=112,EOL=None,Replace",external,output ! ioerr l170
 25140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 25150 F_CUSTOMER: form pos 1,c 10,pos 41,3*c 30,pos 213,pd 4,pos 296,pd 4,pos 385,pd 3,pos 1854,pd 5.2
-25160   open #h_adrbil:=3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+25160   open #h_adrbil:=3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 25180 F_ADRBIL: form pos 11,4*c 30
 26000   pr #h_out,using F_OUT_FIXED: 'Account','Name','Street Address','City','State','Zip Code'
 28000 ! r:  main loop

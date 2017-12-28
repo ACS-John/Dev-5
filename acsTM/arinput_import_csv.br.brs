@@ -1,7 +1,7 @@
 10000 ! REPLACE S:\acsTM\arinput_import_csv.br
-10100   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnsearch
-10200   library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnmsgbox,fnbutton,fnfra
-10300   library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fncmdset,fncmdkey,fntop,fngethandle
+10100   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnsearch
+10200   library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnmsgbox,fnButton,fnFra
+10300   library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fnCmdSet,fnCmdKey,fntop,fngethandle
 10400   library 'S:\Core\Library': fntransfile
 10500   fntop(program$,cap$="Import Transactions from Mint CSV to CL")
 10600   dim cr$*1,lf$*1,crlf$*2,line$*2048,item$(1)*1024
@@ -14,7 +14,7 @@
 11500   fn_get_old_setup
 11600   open #h_clmstr:=9: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
 11700   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
-11800   open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",RecL=239,Replace",internal,outin,relative ioerr ERR_FILE
+11800   open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
 11900 SCREEN_1: ! r:
 12000 ! exec 'config dimonly'
 12100   dim file_import$*256,filter_date(2)
@@ -25,19 +25,19 @@
 12600   filter_date(1)=20120101
 12700   filter_date(2)=20121231
 12800   file_import$=env$('userprofile')&'\Downloads\transactions.csv'
-12900   fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
+12900   fnTos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
 13000   respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
-13100   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
-13200   fntxt(ad_line,col2_pos,8,0,1,"3")
+13100   fnLbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
+13200   fnTxt(ad_line,col2_pos,8,0,1,"3")
 13300   resp$(respc+=1)=str$(filter_date(ad_line))
-13400   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
-13500   fntxt(ad_line,col2_pos,8,0,1,"3")
+13400   fnLbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
+13500   fnTxt(ad_line,col2_pos,8,0,1,"3")
 13600   resp$(respc+=1)=str$(filter_date(ad_line))
-13700   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
-13800   fntxt(ad_line,col2_pos,40,256,1,"70")
+13700   fnLbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
+13800   fnTxt(ad_line,col2_pos,40,256,1,"70")
 13900   resp$(respc+=1)=file_import$
-14000   fncmdset(3)
-14100   fnacs(sn$,0,mat resp$,ckey)
+14000   fnCmdSet(3)
+14100   fnAcs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then 
 14300     fkey(99)
 14400   else 
@@ -212,7 +212,7 @@
 31300     pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 31400 L1960: ! 
 31500     r=r+1
-31600     read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,norec L2040 ioerr ERR_FILE
+31600     read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr ERR_FILE
 31700 L2110: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 31800     if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 31900     name$=""
@@ -230,7 +230,7 @@
 33100   pr f "10,10,c 60": "Ref Number To Correct; (0 when Completed)"
 33200 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
 33300   if r1=0 then goto SCREEN_ASK_ADD_MORE
-33400   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl norec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
+33400   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl noRec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
 33500   if ltrm$(p$)="0" or ltrm$(p$)="" then goto SCREEN_ASK_REF_TO_FIX
 33600   transaction_type=tr(5)
 33700   if p><-1 then pt(1)=pt(1)-val(p$) conv L2150

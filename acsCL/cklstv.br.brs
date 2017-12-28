@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\ckLstV
 00020 ! Check Listing by Vendor (Transaction List: sort by Vendor)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ________Dim(s) by file________________________________________________
 00070   dim cnam$*40,dat$*20 ! CNO
@@ -12,20 +12,20 @@
 00120   fncno(cno,cnam$)
 00130   fntop(program$, cap$="Check Listing by Payee")
 00140   right=1
-00150   open #trmstr=22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00160   open #paymstr:=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #trmstr=22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #paymstr:=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00170 ! ______________________________________________________________________
-00180   fntos(sn$="cklstv") !:
+00180   fnTos(sn$="cklstv") !:
         respc=0 : mylen=25 : mypos=mylen+2
-00190   fnlbl(1,40,"",1,1)
-00200   fnlbl(1,1,"Beginning Date:",mylen,right)
-00210   fntxt(1,mypos,8,0,1,"ccyymmdd") !:
+00190   fnLbl(1,40,"",1,1)
+00200   fnLbl(1,1,"Beginning Date:",mylen,right)
+00210   fnTxt(1,mypos,8,0,1,"ccyymmdd") !:
         resp$(respc+=1)=""
-00220   fnlbl(2,1,"Ending Date:",mylen,right)
-00230   fntxt(2,mypos,8,0,1,"ccyymmdd") !:
+00220   fnLbl(2,1,"Ending Date:",mylen,right)
+00230   fnTxt(2,mypos,8,0,1,"ccyymmdd") !:
         resp$(respc+=1)=""
-00240   fncmdset(3)
-00250   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdSet(3)
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   date1=val(resp$(1)) !:
         date2=val(resp$(2))

@@ -16,15 +16,16 @@
 08180     library 'S:\Core\Library': fnCopy,fnFree,fnRename
 08200     library 'S:\Core\Library': fnclient_has
 08220     library 'S:\Core\Library': fngetdir2
-08240     library 'S:\Core\Library': fngetpp
+08240     library 'S:\Core\Library': fnGetPp
 08260     library 'S:\Core\Library': fncreg_write
 08280     library 'S:\Core\Library': fnprogram_ini_filename$
 08300     library 'S:\Core\Library': fnAddOneC
 08320     library 'S:\Core\Library': fnkey_change
 08340     library 'S:\Core\Library': fnSystemName$
 08360     library 'S:\Core\Library': fnIniToReg
-08380     library 'S:\Core\Library': fnopenfile,fnCloseFile
-08400     library 'S:\Core\Library': fnstatus,fnstatus_pause
+08380     library 'S:\Core\Library': fnOpenFile,fnCloseFile
+08400     library 'S:\Core\Library': fnStatus,fnStatusPause
+08402     library 'S:\Core\Library': fnInitialializeMeterLocation
 08420     on error goto ERTN
 08440     dim form$(0)*512
 08460   end if
@@ -40,7 +41,7 @@
 10420   dim tmpfile$*512,tmpkps(10),tmpkln(10),name$*512,kfname$*512
 10430   dim kfnames$(1)*512
 10440   ! ____________
-10480   fnstatus('Running fnCheckFileVersion for '&env$('cursys')&' and Company Number '&env$('cno')) ! XXX
+10480   fnStatus('Running fnCheckFileVersion for '&env$('cursys')&' and Company Number '&env$('cno')) ! XXX
 10490   fn_cfv_add_missing_files
 10500   ! 
 10520   if env$('cursys')='GL' then 
@@ -57,14 +58,14 @@
 10850   else if env$('cursys')='TM' then 
 10852     fn_cfv_time_management
 10860   end if 
-10880   fnstatus('CheckFileVersion Completed')
+10880   fnStatus('CheckFileVersion Completed')
 19990 fnend 
 24000 def fn_cfv_add_missing_files
 24020   dim camf_filename$(0)*256
 24040   dim camf_path$*256,camf_prog$*256,camf_ext$*128
 24060   fngetdir2('S:\'&fnSystemName$&'\mstr\',mat camf_filename$, '','*.h99999')
 24080   for camf_item=1 to udim(mat camf_filename$)
-24100     fngetpp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
+24100     fnGetPp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
 24102     ! if lwrc$(camf_filename$(camf_item))='department' then pause
 24120     if ~exists(env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno')) then 
 24140       fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno'))
@@ -86,8 +87,8 @@
 28220 fnend 
 30000 def fn_make_data_file_exist(name$*512,myrln,version_proper)
 30040   if exists(name$)=0 then 
-30050     fnstatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper))
-30060     open #tmp:=fngethandle: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper),internal,outin 
+30050     fnStatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper))
+30060     open #tmp:=fngethandle: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper),internal,outIn 
 30080     close #tmp: 
 30100   end if 
 30120   ! 
@@ -102,20 +103,20 @@
 31120     ! 
 31140     for x=1 to udim(mat ci_kps$)
 31160       if kps(h_ci_tmp,x)<>val(ci_kps$(x)) then 
-31180         fnstatus('Key Position mismatch!') ! should these use fnstatus ??
-31200         fnstatus(' Data File: '&name$)
-31220         fnstatus('Index File: '&kfnames$(ci_item))
-31240         fnstatus('Key Part: '&str$(x))
-31260         fnstatus('Key Position should be '&ci_kps$(x)&' but it is '&str$(kps(h_ci_tmp,x)))
+31180         fnStatus('Key Position mismatch!') ! should these use fnStatus ??
+31200         fnStatus(' Data File: '&name$)
+31220         fnStatus('Index File: '&kfnames$(ci_item))
+31240         fnStatus('Key Part: '&str$(x))
+31260         fnStatus('Key Position should be '&ci_kps$(x)&' but it is '&str$(kps(h_ci_tmp,x)))
 31280         ci_return=0
 31300       end if 
 31320       ! 
 31340       if kln(h_ci_tmp,x)<>val(ci_kln$(x)) then 
-31360         fnstatus('Key Length mismatch!')
-31380         fnstatus(' Data File: '&name$)
-31400         fnstatus('Index File: '&kfnames$(ci_item))
-31420         fnstatus('Key Part: '&str$(x))
-31440         fnstatus('Key Length should be '&ci_kln$(x)&' but it is '&str$(kln(h_ci_tmp,x)))
+31360         fnStatus('Key Length mismatch!')
+31380         fnStatus(' Data File: '&name$)
+31400         fnStatus('Index File: '&kfnames$(ci_item))
+31420         fnStatus('Key Part: '&str$(x))
+31440         fnStatus('Key Length should be '&ci_kln$(x)&' but it is '&str$(kln(h_ci_tmp,x)))
 31460         ci_return=0
 31480       end if 
 31500       ! 
@@ -124,13 +125,13 @@
 31560   next ci_item
 31580   goto CI_XIT
 31600   CI_OPEN_ERR: ! 
-31620   fnstatus('error '&str$(err)&' opening Name='&name$&',KFName='&kfnames$(ci_item))
+31620   fnStatus('error '&str$(err)&' opening Name='&name$&',KFName='&kfnames$(ci_item))
 31640   if err=607 or err=632 then 
-31660     fnstatus('indexing to fix it')
+31660     fnStatus('indexing to fix it')
 31680     fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 31690     goto CI_OPEN_IT
 31700   else 
-31720     fnstatus('error unhandled')
+31720     fnStatus('error unhandled')
 31740   end if 
 31760   CI_XIT: ! 
 31780   fn_check_indexes=ci_return
@@ -154,9 +155,9 @@
 34000 def fn_check_version(cv_version_current,cv_version_proper,cv_file$*256)
 34020   cv_return=1 ! function should return 1 if version tested matches or 0 if versions are different
 34040   if cv_version_current<>cv_version_proper then 
-34060     fnstatus('Version Error of file:'&cv_file$ )
-34080     fnstatus('     Version Current: '&str$(cv_version_current))
-34100     fnstatus('     Version  Proper: '&str$(cv_version_proper))
+34060     fnStatus('Version Error of file:'&cv_file$ )
+34080     fnStatus('     Version Current: '&str$(cv_version_current))
+34100     fnStatus('     Version  Proper: '&str$(cv_version_proper))
 34120     cv_return=0
 34140   end if 
 34160   fn_check_version=cv_return
@@ -188,8 +189,8 @@
 43080   fn_reg_rename(env$('cursys'))
 43090   ! r: move ubBkNo.h into CReg and delete ubBkNo.h
 43100   if exists(env$('Q')&'\UBmstr\ubBkNo.h'&env$('cno')) then 
-43110     open #h_ubbkno:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubBkNo.h"&env$('cno'),internal,outin,relative 
-43120     read #h_ubbkno,using "Form POS 1,2*N 3",rec=1: bkno1,bkno2  norec CFVUB_RPDATE_NOREC
+43110     open #h_ubbkno:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubBkNo.h"&env$('cno'),internal,outIn,relative 
+43120     read #h_ubbkno,using "Form POS 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
 43130     fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 43140     fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 43150     CFVUB_RPDATE_NOREC: ! 
@@ -205,13 +206,13 @@
 43250   kfname$=''
 43260   myrln=133
 43270   version_proper=0
-43280   open #tmp:=fngethandle: 'Name='&name$&',Shr',internal,outin,relative ioerr SKIP_UB_COMPANY
+43280   open #tmp:=fngethandle: 'Name='&name$&',Shr',internal,outIn,relative ioerr SKIP_UB_COMPANY
 43290   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 43300   fn_check_version(tmpversion,version_proper,tmpfile$)
 43310   if tmprln<>myrln then 
-43320     fnstatus('Record Length Error in File: '&tmpfile$)
-43330     fnstatus('         RLn: '&str$(tmprln))
-43340     fnstatus('Fixing the Record Length of Company')
+43320     fnStatus('Record Length Error in File: '&tmpfile$)
+43330     fnStatus('         RLn: '&str$(tmprln))
+43340     fnStatus('Fixing the Record Length of Company')
 43350     fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133)
 43360   end if 
 43370   SKIP_UB_COMPANY: ! 
@@ -237,12 +238,14 @@
 43570   fn_file_setup_data(env$('Q')&"\UBmstr\MeterType.h"&env$('cno'),128,1)
 43580   fn_file_setup_index(env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno'),'1','5')
 43590   ! 
-43600   fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
-43610   fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
-43620   ! 
+43600   ! no need now that we have U4 Meter Location    !   fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
+43610   ! no need now that we have U4 Meter Location    !   fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
+43612   !
+43614   if ~exists(env$('Q')&"\UBmstr\MeterLocation.h"&env$('cno')) then let fnInitialializeMeterLocation
+43620   !
 43630   if exists(env$('Q')&'\UBmstr\CityStZip.dat') then
-43640     fnstatus('Migrating UB City State Zip records into Core City State Zip table...')
-43650     open #hUbCsz:=fngethandle: "Name="&env$('Q')&"\UBmstr\CityStZip.dat,KFName="&env$('Q')&"\UBmstr\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outin,keyed 
+43640     fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
+43650     open #hUbCsz:=fngethandle: "Name="&env$('Q')&"\UBmstr\CityStZip.dat,KFName="&env$('Q')&"\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 43660     dim cszData$(0)*128,cszDataN(0),csz$*30
 43670     hCoCsz:=fn_open('CO City State Zip',mat cszData$,mat cszDataN,mat form$)
 43680     do
@@ -268,7 +271,7 @@
 43880   end if
 43890   !
 43900   if exists(env$('Q')&'\UBmstr\IpChg01.h'&env$('cno')) then
-43910     open #hupipchg:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpChg01.h"&env$('cno')&",RecL=80,Use",internal,outin ioerr ubipchgOpenErr
+43910     open #hupipchg:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpChg01.h"&env$('cno')&",RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
 43920     read #hupipchg,using "Form pos 1,N 6": d2 ioerr ignore
 43930     close #hupipchg,free: 
 43940     for wsidItem=1 to 99
@@ -279,7 +282,7 @@
 43990   end if
 44000   if exists(env$('Q')&"\UBmstr\per1000.h"&env$('cno')) then
 44010     dim range(16)
-44020     open #hPer1000:=fngethandle: "Name="&env$('Q')&"\UBmstr\per1000.h"&env$('cno')&",Shr",internal,outin,relative 
+44020     open #hPer1000:=fngethandle: "Name="&env$('Q')&"\UBmstr\per1000.h"&env$('cno')&",Shr",internal,outIn,relative 
 44030     read #hPer1000,using "Form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
 44040     fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 44050     fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
@@ -312,7 +315,7 @@
 52100   CL_TRMSTR1: ! Primary Non-Split Index
 52120   fn_file_setup_data(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),78,2)
 52140   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno'),'1','11')
-52180   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
+52180   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 52200   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 52220   if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then 
 52240     if tmpversion=0 or tmpversion=-1 then 
@@ -340,7 +343,7 @@
 54040   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 54060     fnindex_it(name$,kfname$,'1 11')
 54080   end if 
-54100   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+54100   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 54120   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 54140   fn_check_version(tmpversion,version_proper,tmpfile$)
 54160   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
@@ -373,7 +376,7 @@
 54700   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 54720     fnindex_it(name$,kfname$,'9 12')
 54740   end if 
-54760   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+54760   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 54780   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 54800   fn_check_version(tmpversion,version_proper,tmpfile$)
 54820   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
@@ -402,7 +405,7 @@
 55280   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 55300     fnindex_it(name$,kfname$,'1 20')
 55320   end if 
-55340   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+55340   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 55360   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 55380   x=1 : if tmpkps(x)<>1 then 
 55400     pr 'Key Position ('&str$(x)&') Error in '&kfname$
@@ -422,7 +425,7 @@
 55680   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 55700     fnindex_it(name$,kfname$,'1 20')
 55720   end if 
-55740   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+55740   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 55760   fn_check_version(tmpversion,version_proper,tmpfile$)
 55780   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
 55800     fnpaytrans_v1_to_v2 : goto CL_PAYTRANS1
@@ -450,7 +453,7 @@
 56240   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 56260     fnindex_it(name$,kfname$,'31/27/1 2/4/26')
 56280   end if 
-56300   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+56300   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 56320   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 56340   x=1 : if tmpkps(x)<>31 then 
 56360     pr 'Key Position ('&str$(x)&') Error in '&kfname$
@@ -486,7 +489,7 @@
 56960   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 56980     fnindex_it(name$,kfname$,'1 8')
 57000   end if 
-57020   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+57020   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 57040   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 57060   fn_check_version(tmpversion,version_proper,tmpfile$)
 57080   if tmpversion=0 or tmpversion=-1 then 
@@ -513,7 +516,7 @@
 57500   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 57520     fnindex_it(name$,kfname$,'1 8')
 57540   end if 
-57560   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+57560   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 57580   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 57600   fn_check_version(tmpversion,version_proper,tmpfile$)
 57620   if tmpversion=0 or tmpversion=-1 then 
@@ -539,7 +542,7 @@
 58020   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 58040     fnindex_it(name$,kfname$,'9 30')
 58060   end if 
-58080   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+58080   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 58100   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 58120   x=1 : if tmpkps(x)<>9 then 
 58140     pr 'Key Position ('&str$(x)&') Error in '&kfname$
@@ -561,7 +564,7 @@
 58380   !   end if
 58390   fn_file_setup_data(env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),62,1)
 58400   fn_file_setup_index(env$('Q')&"\CLmstr\GLIndex.h"&env$('cno'),'1','12')
-58410   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
+58410   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 58420   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 58430   fn_check_version(tmpversion,version_proper,tmpfile$)
 58440   !   if tmprln<>myrln then
@@ -584,7 +587,7 @@
 59000   ! CL_GLCONTROL: ! Primary Non-Split Index
 59020   fn_file_setup_data(env$('Q')&"\CLmstr\fundmstr.h"&env$('cno'),75,0)
 59040   fn_file_setup_index(env$('Q')&"\CLmstr\fundidx1.h"&env$('cno'),'1','3')
-59060   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
+59060   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 59080   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 59100   fn_check_version(tmpversion,version_proper,tmpfile$)
 59120   if tmprln=63 then let fnglcontrol
@@ -593,13 +596,13 @@
 59180   fn_file_setup_index(env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),'1','2')
 59200   !
 59220   if ~exists(env$('Q')&'\CLmstr\TransactionType.dat') then
-59240     open #hTransactionType:=fngethandle: "Name="&env$('Q')&"\CLmstr\TransactionType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed
+59240     open #hTransactionType:=fngethandle: "Name="&env$('Q')&"\CLmstr\TransactionType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed
 59260     write #hTransactionType,using 'form pos 1,n 1,C 25': 1,'Check (Disbursment)'
 59280     write #hTransactionType,using 'form pos 1,n 1,C 25': 2,'Deposit   (Receipt)'
 59300     close #hTransactionType:
 59320   end if
 59340   if ~exists(env$('Q')&'\CLmstr\PayeeType.dat') then
-59360     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outin,keyed
+59360     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 59380     write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 59400     write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 59420     close #hPayeeType:
@@ -613,8 +616,8 @@
 62028   fn_reg_rename(env$('cursys'))
 62040   ! r: move CheckInfo.h into CReg and delete checkinfo.h
 62060   if exists(env$('Q')&'\PRmstr\Checkinfo.h'&env$('cno')) then 
-62080     open #h_pr_checkinfo:=fngethandle: "Name="&env$('Q')&"\PRmstr\Checkinfo.h"&env$('cno')&",USE,RecL=128",internal,outin,relative 
-62100     read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ norec CFVPR_CHECKINFO_NOREC
+62080     open #h_pr_checkinfo:=fngethandle: "Name="&env$('Q')&"\PRmstr\Checkinfo.h"&env$('cno')&",USE,RecL=128",internal,outIn,relative 
+62100     read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
 62120     fncreg_write('Prenumbered Checks',pre$)
 62140     fncreg_write('Post to CL',acsclcv$)
 62160     fncreg_write('Post Employer Portion of FiCA',ficam1$)
@@ -628,9 +631,9 @@
 62320   ! /r
 63000   ! r: move rpDate.h into CReg and delete rpDate.h
 63020   if exists(env$('Q')&'\PRmstr\rpDate.h'&env$('cno')) then 
-63040     open #h_pr_rpdate:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpDate.h"&env$('cno'),internal,outin,relative 
+63040     open #h_pr_rpdate:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpDate.h"&env$('cno'),internal,outIn,relative 
 63060     dim cfvpr_rpdate_d$*20
-63080     read #h_pr_rpdate,using 'Form POS 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  norec CFVPR_RPDATE_NOREC
+63080     read #h_pr_rpdate,using 'Form POS 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
 63100     fncreg_write('calculation date',str$(cfvpr_rpdate_ppd)) ! quarter ending date, i think - definately NOT the payroll calculation date!
 63120     fncreg_write('calculation date text',cfvpr_rpdate_d$) ! quarter ending date
 63140   CFVPR_RPDATE_NOREC: ! 
@@ -647,8 +650,8 @@
 64140   fn_file_setup_index(env$('Q')&"\PRmstr\HourBreakdown-idx.h"&env$('cno'),'1/9/14','8/5/8')
 64160   ! r: Dates.h
 64180   fn_file_setup_data(env$('Q')&"\PRmstr\Dates.h"&env$('cno'),76,0)
-64200   open #tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Use,RecL=76,Shr",internal,outin,relative 
-64220   read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 norec PR_WRITE_BLANK_DATE_REC
+64200   open #tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Use,RecL=76,Shr",internal,outIn,relative 
+64220   read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec PR_WRITE_BLANK_DATE_REC
 64240   goto PR_CLOSE_DATE
 64260   PR_WRITE_BLANK_DATE_REC: ! 
 64280   write #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4
@@ -671,7 +674,7 @@
 65160   dim pr_dednames_dedst(20)
 65180   dim pr_dednames_deduc(20)
 65200   dim pr_dednames_gl$(20)*12
-65220   open #h_dednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outin,relative 
+65220   open #h_dednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outIn,relative 
 65240   if lrec(h_dednames)=0 then 
 65260     write #h_dednames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
 65280   end if 
@@ -679,11 +682,11 @@
 65320   ! end if
 65340   ! /r
 66100   PrGlindex: !
-66110   open #h_tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\GLMstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\PRmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed ioerr Check4124OnPrGlindex
+66110   open #h_tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\GLMstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\PRmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
 66120   close #h_tmp: 
 66140   ! 
 66160   if ~exists(env$('Q')&'\PRmstr\EmpStatus.dat') then 
-66180     open #h_pr_emp_status:=fngethandle: "Name="&env$('Q')&"\PRmstr\EmpStatus.dat,KFName="&env$('Q')&"\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outin,keyed 
+66180     open #h_pr_emp_status:=fngethandle: "Name="&env$('Q')&"\PRmstr\EmpStatus.dat,KFName="&env$('Q')&"\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 66200     write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 66220   end if 
 66900 fnend 
@@ -692,11 +695,11 @@
 67040    fnindex_it(env$('Q')&'\PRmstr\GLMstr.h'&env$('cno'),env$('Q')&'\PRmstr\GLIndex.h'&env$('cno'),'1 12')
 67060    goto PrGlindex
 67080  else
-67100     fnstatus('Failure.')
-67120     fnstatus('* Data File: PRmstr\GLMstr.h'&env$('cno'))
-67140     fnstatus('* Index: PRmstr\GLIndex.h'&env$('cno'))
-67160     fnstatus('* reindex completed however error 4124 persist.')
-67180     fnstatus_pause
+67100     fnStatus('Failure.')
+67120     fnStatus('* Data File: PRmstr\GLMstr.h'&env$('cno'))
+67140     fnStatus('* Index: PRmstr\GLIndex.h'&env$('cno'))
+67160     fnStatus('* reindex completed however error 4124 persist.')
+67180     fnStatusPause
 67200  end if
 67220  goto ERTN ! /r
 68000 def fn_cfv_job_cost_payroll
@@ -725,7 +728,7 @@
 74144   fn_reg_rename(env$('cursys'))
 74160   !
 74180   if ~exists(env$('Q')&'\GLmstr\PayeeType.dat') then
-74200     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outin,keyed
+74200     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 74220     write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 74240     write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 74260     close #hPayeeType:
@@ -749,20 +752,20 @@
 74620   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 74640     fnindex_it(name$,kfname$,'1 12')
 74660   end if 
-74680   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+74680   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 74700   fn_check_version(tmpversion,version_proper,tmpfile$)
 74720   if tmprln<>myrln then 
-74740     fnstatus('Record Length Error in File: '&tmpfile$)
-74760     fnstatus('         RLn: '&str$(tmprln))
+74740     fnStatus('Record Length Error in File: '&tmpfile$)
+74760     fnStatus('         RLn: '&str$(tmprln))
 74780   end if 
 74800   if tmprln=338 then let fnglmstr_338_416
 74820   x=1 : if tmpkps(x)<>1 then 
-74840     fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
-74860     fnstatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
+74840     fnStatus('Key Position ('&str$(x)&') Error in '&kfname$)
+74860     fnStatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
 74880   end if 
 74900   x=1 : if tmpkln(x)<>12 then 
-74920     fnstatus('Key Length ('&str$(x)&') Error in '&kfname$)
-74940     fnstatus('      KLn('&str$(x)&'): '&str$(tmpkln(x)))
+74920     fnStatus('Key Length ('&str$(x)&') Error in '&kfname$)
+74940     fnStatus('      KLn('&str$(x)&'): '&str$(tmpkln(x)))
 74960   end if 
 74980   ! 
 75000   ! GL_GLMSTR2: ! Secondary, Non-Split Index
@@ -771,7 +774,7 @@
 75060   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 75080     fnindex_it(name$,kfname$,'13 30')
 75100   end if 
-75120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+75120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 75140   x=1 : if tmpkps(x)<>13 then 
 75160     pr 'Key Position ('&str$(x)&') Error in '&kfname$
 75180     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
@@ -802,7 +805,7 @@
 75520   ! if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 75530   !   fnindex_it(name$,kfname$,'1 5')
 75540   ! end if 
-75550   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+75550   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 75560   fn_check_version(tmpversion,version_proper,tmpfile$)
 75570   if tmpversion=0 then let fnfinstmt_v0_to_v1
 75580   if tmprln<>myrln then 
@@ -866,7 +869,7 @@
 76560   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 76580     fnindex_it(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
 76600   end if 
-76620   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+76620   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 76640   fn_check_version(tmpversion,version_proper,tmpfile$)
 76660   if tmprln<>myrln then 
 76680     pr 'Record Length Error in File: '&tmpfile$
@@ -891,7 +894,7 @@
 77060   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 77080     fnindex_it(name$,kfname$,'1 8')
 77100   end if 
-77120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+77120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 77140   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 77160   fn_check_version(tmpversion,version_proper,tmpfile$)
 77180   if tmprln<>myrln then 
@@ -915,7 +918,7 @@
 77550   GlBrecIndex: ! 
 77560     fnindex_it(name$,kfname$,'1 24')
 77570   end if 
-77580   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed error GlBrecOpenErr
+77580   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed error GlBrecOpenErr
 77590   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 77600   fn_check_version(tmpversion,version_proper,tmpfile$)
 77610   if tmprln<>myrln then 
@@ -923,9 +926,9 @@
 77630     pr '         RLn: '&str$(tmprln)
 77640   end if 
 77650   x=1 : if tmpkps(x)<>1 then 
-77660     fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
-77670     fnstatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
-77680     fnstatus('fixing it')
+77660     fnStatus('Key Position ('&str$(x)&') Error in '&kfname$)
+77670     fnStatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
+77680     fnStatus('fixing it')
 77690     goto GlBrecIndex
 77700   end if 
 77710   goto GlBrecFinis
@@ -945,7 +948,7 @@
 77980   version_proper=1
 78000   fn_make_data_file_exist(name$,myrln,version_proper)
 78020   L3870: fnindex_it(name$,kfname$,'1 3')
-78040   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+78040   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 78060   fn_check_version(tmpversion,version_proper,tmpfile$)
 78080   if tmprln<>myrln then 
 78100     pr 'Record Length Error in File: '&tmpfile$
@@ -953,15 +956,15 @@
 78140   else 
 78160     goto L4050
 78180   end if 
-78200   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
+78200   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed 
 78210   L3920: read #tmp, using "Form POS 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 78220   if sn=0 then goto L3920
 78230   rewrite #tmp, using "Form POS 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
-78240   if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))=0 then open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',replace,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: version(schedule,1): close #schedule: 
+78240   if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))=0 then open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule: 
 78250   if exists(env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'))=0 then 
 78260     fnindex_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'),env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'),"1 12")
 78270   end if 
-78280   open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',use,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: version(schedule,1) ! open to update gl breakdowns
+78280   open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
 78290   for j=1 to 80
 78300     if val(gl$(j))=0 then goto L4010
 78310     write #schedule,using "form pos 1,c 12": gl$(j)
@@ -991,7 +994,7 @@
 78550   ! /r
 78560   ! 
 78570   if ~exists(env$('Q')&'\GLmstr\Period.h'&env$('cno')) then
-78580     open #hGlPeriod:=fngethandle: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outin,keyed 
+78580     open #hGlPeriod:=fngethandle: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 78590     for periodRecord=1 to 12
 78600       write #hGlPeriod,using 'form pos 1,N 2,C 30': periodRecord,date$(days(cnvrt$('pic(##)',periodRecord)&'0117','mmddyy'),'month')
 78610     nex periodRecord

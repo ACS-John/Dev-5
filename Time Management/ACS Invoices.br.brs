@@ -36,7 +36,7 @@
 20710   pr newpage
 20720   pr f "10,10,Cc 60": "Printing Invoices..."
 22000 ! r: process env$('Q')&"\TMmstr\TMWK1"&wsid$&".h"&env$('cno')
-22020   open #h_tmwk1:=fngethandle: 'Name='&env$('Q')&'\TMmstr\TMWK1.h'&env$('cno')&',Replace,RecL=2484,Shr',internal,outin 
+22020   open #h_tmwk1:=fngethandle: 'Name='&env$('Q')&'\TMmstr\TMWK1.h'&env$('cno')&',Replace,RecL=2484,Shr',internal,outIn 
 22040   F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 22060   dim cde$(30)*6
 22080   dim inv_item$(30)*55
@@ -93,7 +93,7 @@
 24000 EOJ: ! r:
 24020   fn_summary_print
 24040   fncloseprn
-24060   open #h_ivnum:=fngethandle: "Name="&env$('Q')&"\TMmstr\IVNUM.h"&env$('cno')&",Use,RecL=8,Shr",internal,outin,relative 
+24060   open #h_ivnum:=fngethandle: "Name="&env$('Q')&"\TMmstr\IVNUM.h"&env$('cno')&",Use,RecL=8,Shr",internal,outIn,relative 
 24080   rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 24100   close #h_ivnum: 
 24120   close #h_clmstr: 
@@ -200,7 +200,7 @@
 36000 def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256)
 36020   dim tce_to_inp(7)
 36040   open #tce_h_from:=fngethandle: 'Name='&file_from$,internal,input 
-36060   open #tce_h_to:=fngethandle: 'Name='&file_to$&',KFName='&env$('Temp')&'\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outin,keyed 
+36060   open #tce_h_to:=fngethandle: 'Name='&file_to$&',KFName='&env$('Temp')&'\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed 
 36080   do 
 36100     read #tce_h_from,using F_TIME: mat inp,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 36120     if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
@@ -225,7 +225,7 @@
 36500   ! pr '  wr_count=';wr_count
 36520   ! pause
 36540   execute 'index '&file_to$&' '&file_to_index$&' 1,5,replace,DupKeys,Shr'
-36560   open #h_tmsht:=6: "Name="&file_to$&",KFName="&file_to_index$,internal,outin,keyed 
+36560   open #h_tmsht:=6: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed 
 36580 fnend  ! fn_thsht_combine_entries
 38000 def fn_summary_add
 38020   open #22: "Name=skip_prn,RecL=80,replace",display,output ioerr SI_ADD

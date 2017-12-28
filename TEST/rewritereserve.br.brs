@@ -1,8 +1,8 @@
 00010 ! Replace Test\RewriteReserve
 00020   dim b$*40,keyform$*80,blank$(10)
-00030   open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
+00030   open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
 00040   close #fin: 
-00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
+00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
 00060   keyform$='Form ' : key$=''
 00070   do while kps(fin,j+=1)>0
 00080     keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
@@ -19,7 +19,7 @@
 00190   rewrite #fin,using 'Form Pos 5,C 40',same,reserve: 'eight - nine'
 00200   release #fin: 
 00210   close #fin: 
-00220   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outin,keyed 
+00220   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outIn,keyed 
 00230   key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
 00231   rewrite #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$

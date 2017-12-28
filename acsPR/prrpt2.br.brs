@@ -18,11 +18,11 @@
 00180     io2$((z-1)*3+2)=c$&",38,Nz 3,UT,N"
 00190     io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 00200   next z
-00210   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00210   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00220 ! ______________________________________________________________________
 00230 SCR1: pr newpage
 00240   close #101: ioerr L250
-00250 L250: open #101: "SRow=4,SCol=6,ERow=22,ECol=74,Border=Dr,Caption=<"&cap$,display,outin 
+00250 L250: open #101: "SRow=4,SCol=6,ERow=22,ECol=74,Border=Dr,Caption=<"&cap$,display,outIn 
 00260   pr #101,fields "02,2,Cr 14,N": "Report Number:"
 00270   pr #101,fields "03,2,Cr 14,N": "Report Title:"
 00280   pr #101,fields "05,2,Cc 66,R,N": "Column Headings"
@@ -92,7 +92,7 @@
 00920   next w
 00930 L930: pr newpage
 00940   close #102: ioerr L950
-00950 L950: open #102: "SRow=2,SCol=9,ERow=23,ECol=72,Border=Sr,Caption=<"&cap$,display,outin 
+00950 L950: open #102: "SRow=2,SCol=9,ERow=23,ECol=72,Border=Sr,Caption=<"&cap$,display,outIn 
 00960   pr #102: newpage
 00970   for j=1 to 20
 00980     pr #102,fields str$(j+1)&",2,C 12,N": "Item Number:"

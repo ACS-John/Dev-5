@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsUB\conversion\ubadrbil-cnv
 00020 ! converts adrbil as well as ask cno and write it so other conversion programs don't have to ask it.
 00030   def library fnub_cnv_adrbil
-00040     library 'S:\Core\Library': fncno,fnerror,fnstatus,fnCopy,fnindex_it
+00040     library 'S:\Core\Library': fncno,fnerror,fnStatus,fnCopy,fnindex_it
 00050     on error goto ERTN
-00060     fnstatus('Converting Alternate Billing Address file (S:\acsUB\conversion\ubadrbil-cnv)')
+00060     fnStatus('Converting Alternate Billing Address file (S:\acsUB\conversion\ubadrbil-cnv)')
 00070     dim a$(4)*30,cap$*128,z$*10,ab$(4)*30
 00080 ! ______________________________________________________________________
 00090 ! fntop("S:\acsUB\conversion\ubadrbil-cnv",cap$="adrbil-cnv")
@@ -14,21 +14,21 @@
 00132       fnCopy(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'),env$('temp')&"\temp."&session$)
 00134     end if 
 00140     if exists(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'))=0 then goto BUILD_FILES
-00142     open #3: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr OPN_CUST
+00142     open #3: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr OPN_CUST
 00144     goto L160
 00150 OPN_CUST: ! 
-00152     open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00152     open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00160 L160: ! 
 00162     open #1: "Name="&env$('temp')&"\temp."&session$&"",internal,input,relative 
-00170     open #2: "Name="&env$('temp')&"\tmp_x_"&session$&",RecL=130,Replace",internal,outin,relative 
+00170     open #2: "Name="&env$('temp')&"\tmp_x_"&session$&",RecL=130,Replace",internal,outIn,relative 
 00180 L180: ! 
 00182     read #3,using "form pos 1,c 10,pos 385,pd 3": z$,bra eof END1
 00190     if bra=0 then goto L180
 00200     if rln(1)=100 then goto L210 else goto L230
 00210 L210: ! 
-00212     read #1,using 'Form POS 11,3*C 30',rec=bra: a$(1),a$(2),a$(3) norec L180
+00212     read #1,using 'Form POS 11,3*C 30',rec=bra: a$(1),a$(2),a$(3) noRec L180
 00220     goto L240
-00230 L230: read #1,using 'Form POS 11,4*C 30',rec=bra: mat a$ norec L180
+00230 L230: read #1,using 'Form POS 11,4*C 30',rec=bra: mat a$ noRec L180
 00240 L240: if trim$(a$(1))="" and trim$(a$(2))="" and trim$(a$(3))="" and trim$(a$(4))="" then goto L180
 00250     write #2,using 'Form POS 1,C 10,4*C 30,': z$,mat a$
 00260     goto L180
@@ -42,7 +42,7 @@
 00330     execute "Free "&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno') ioerr ignore
 00340     goto XIT
 00350 BUILD_FILES: ! build files if don't exist
-00360     open #2: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",RecL=130,Replace",internal,outin,relative 
+00360     open #2: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",RecL=130,Replace",internal,outIn,relative 
 00370     close #2: 
 00380     fnindex_it(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'),env$('Q')&"\UBmstr\adrIndex.h"&env$('cno'),"1 10") ! execute "Index "&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&' '&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&" 1,10,Replace,DupKeys -n"
 00390     return 

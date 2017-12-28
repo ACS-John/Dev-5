@@ -13,7 +13,7 @@
 24000 def fn_setup
 24020   if ~setup then
 24040     setup=1
-24060     library 'S:\Core\Library': fntop,fntos,fnacs,fncmdkey,fnerror,fnfra,fnbutton,fnchk,fncmdset,fnopt,fnlbl,fntxt,fncmbact
+24060     library 'S:\Core\Library': fntop,fnTos,fnAcs,fnCmdKey,fnerror,fnFra,fnButton,fnChk,fnCmdSet,fnOpt,fnLbl,fnTxt,fncmbact
 24080     library 'S:\Core\Library': fngethandle,fncreg_read,fncreg_write
 24100     library 'S:\Core\Library': fnopenprn,fncloseprn,fnmsgbox,fnxit
 24120     library 'S:\Core\Library': fnget_services
@@ -24,7 +24,7 @@
 24220     transtype$(3)="Collection"
 24240     transtype$(4)="Credit Memo"
 24260     transtype$(5)="Debit Memo"
-24380     fnget_services(mat servicename$, mat srv$)
+24380     fnget_services(mat serviceName$, mat srv$)
 24400   end if
 24420 fnend
 32000 def library fntrans_total_as_of(; customer_key$,date_ccyymmdd,trans_type)
@@ -72,20 +72,20 @@
 40180   if ckey=5 then goto Tf_XIT else goto SCREEN_TRANS_GRID
 40200   ! ___________________________________________________________________
 41000   SCREEN_TRANS_GRID: ! r:
-41020   fntos(sn$="Transaction-2")
+41020   fnTos(sn$="Transaction-2")
 41040   stgFlexLine=0
-41080   fnbutton(stgFlexLine+=1,1,'Columns',opt_columns:=6)
+41080   fnButton(stgFlexLine+=1,1,'Columns',opt_columns:=6)
 41120   if z$<>'[All]' then
-41140     fnlbl(stgFlexLine+=1,1,'Account:',8,1)
-41160     fntxt(stgFlexLine,10,10,0,0,'',1)
+41140     fnLbl(stgFlexLine+=1,1,'Account:',8,1)
+41160     fnTxt(stgFlexLine,10,10,0,0,'',1)
 41180     resp$(1)=z$
 41200   end if
 41220   fn_flextran (stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
-41240   fncmdkey('Print',opt_print:=4,0,0)
-41260   fncmdkey('Edit',opt_edit:=1,1,0)
-41280   fncmdkey('Back',opt_back:=2,0,0,'Return to filter selection')
-41300   fncmdkey('Close',5,0,1)
-41320   fnacs(sn$,0,mat resp$,ckey)
+41240   fnCmdKey('Print',opt_print:=4,0,0)
+41260   fnCmdKey('Edit',opt_edit:=1,1,0)
+41280   fnCmdKey('Back',opt_back:=2,0,0,'Return to filter selection')
+41300   fnCmdKey('Close',5,0,1)
+41320   fnAcs(sn$,0,mat resp$,ckey)
 41340   if ckey=opt_back then 
 41360     goto SCREEN1
 41380   else if ckey=5 then 
@@ -100,47 +100,47 @@
 41560   end if 
 41580   goto SCREEN_TRANS_GRID ! /r
 42000   ASKTRANSET: ! r: Def FNASKTRANSET(&CKEY,&SEL_CODE,&BEG_DATE,&END_DATE,&Z$,HACT$*80)
-42020     fntos(sn$="Transaction-1")
+42020     fnTos(sn$="Transaction-1")
 42040     rc=cf=0
-42060     fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
+42060     fnFra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 42080     cf+=1 : fratype=cf
-42100     fnopt(1,3,"[All]",0,fratype)
+42100     fnOpt(1,3,"[All]",0,fratype)
 42120     if sel_code=1 or sel_code=0 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42140     fnopt(2,3,"Charges",0,fratype)
+42140     fnOpt(2,3,"Charges",0,fratype)
 42160     if sel_code=2 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42180     fnopt(3,3,"Penalties",0,fratype)
+42180     fnOpt(3,3,"Penalties",0,fratype)
 42200     if sel_code=3 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42220     fnopt(4,3,"Collections",0,fratype)
+42220     fnOpt(4,3,"Collections",0,fratype)
 42240     if sel_code=4 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42260     fnopt(5,3,"Credit Memos",0,fratype)
+42260     fnOpt(5,3,"Credit Memos",0,fratype)
 42280     if sel_code=5 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42300     fnopt(6,3,"Debit Memos",0,fratype)
+42300     fnOpt(6,3,"Debit Memos",0,fratype)
 42320     if sel_code=6 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-42340     fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
+42340     fnFra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 42360     cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-42380     fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-42400     fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+42380     fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
+42400     fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 42420     if beg_date=0 then beg_date=date('mm')*10000+100+date('yy')-1
 42440     resp$(rc+=1)=str$(beg_date)
-42460     fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-42480     fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+42460     fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
+42480     fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 42500     resp$(rc+=1)=str$(end_date)
-42520     fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
+42520     fnFra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
 42540     cf+=1 : fraaccount=cf
-42560     fnlbl(1,1,"Account:",8,1,0,fraaccount)
+42560     fnLbl(1,1,"Account:",8,1,0,fraaccount)
 42580     if trim$(hact$)='' then 
 42600       fncmbact(1,10,1,fraaccount)
 42620       rc+=1
 42640       if resp$(rc)="" then resp$(rc)="[All]"
 42660     else 
-42680       fntxt(1,10,10,0,1,'',1,'',fraaccount) ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+42680       fnTxt(1,10,10,0,1,'',1,'',fraaccount) ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 42700       resp$(rc+=1)=hact$
 42720     end if 
 42740     if trim$(hact$)<>"" then resp$(rc)=hact$ else if resp$(rc)="" then resp$(rc)="[All]"
-42760     fncmdkey("Next",1,1,0,"Displays a list of transactions on the screen")
-42780     fncmdkey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
-42800     fncmdkey("Cancel",5,0,1,"Returns to customer record")
-42820     fnacs(sn$,0,mat resp$,ckey)
+42760     fnCmdKey("Next",1,1,0,"Displays a list of transactions on the screen")
+42780     fnCmdKey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
+42800     fnCmdKey("Cancel",5,0,1,"Returns to customer record")
+42820     fnAcs(sn$,0,mat resp$,ckey)
 43000     if ckey=5 then goto L810
 43020     if resp$(1)="True" then 
 43040       sel_code=1
@@ -163,28 +163,28 @@
 44000   Tf_XIT: ! 
 45000 fnend 
 46000 def fn_TransactionEdit(editrec)
-46020   open #trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",Shr",internal,outin,relative 
+46020   open #trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",Shr",internal,outIn,relative 
 46040   read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2",rec=editrec: p$,tdate,tcode,tamount
-46060   fntos(sn$="Transaction-3")
+46060   fnTos(sn$="Transaction-3")
 46080   lc=rc=0 : mylen=20 : mypos=mylen+2
-46100   fnlbl(lc+=1,1,"Record:",mylen)
-46120   fntxt(lc,mypos,10,0,0,empty$,1)
+46100   fnLbl(lc+=1,1,"Record:",mylen)
+46120   fnTxt(lc,mypos,10,0,0,empty$,1)
 46140   resp$(rc+=1)=str$(editrec)
-46160   fnlbl(lc+=1,1,"Customer:",mylen)
-46180   fntxt(lc,mypos,10,0,0,empty$,1)
+46160   fnLbl(lc+=1,1,"Customer:",mylen)
+46180   fnTxt(lc,mypos,10,0,0,empty$,1)
 46200   resp$(rc+=1)=p$
-46220   fnlbl(lc+=1,1,"Date:",mylen)
-46240   fntxt(lc,mypos,10,0,0,"3")
+46220   fnLbl(lc+=1,1,"Date:",mylen)
+46240   fnTxt(lc,mypos,10,0,0,"3")
 46260   resp$(respc_tDate:=rc+=1)=str$(tdate)
-46280   fnlbl(lc+=1,1,"Type:",mylen)
-46300   fntxt(lc,mypos,10,0,0,empty$,1)
+46280   fnLbl(lc+=1,1,"Type:",mylen)
+46300   fnTxt(lc,mypos,10,0,0,empty$,1)
 46320   resp$(rc+=1)=transtype$(tcode)
-46340   fnlbl(lc+=1,1,"Amount:",mylen)
-46360   fntxt(lc,mypos,10,0,0,"10",1)
+46340   fnLbl(lc+=1,1,"Amount:",mylen)
+46360   fnTxt(lc,mypos,10,0,0,"10",1)
 46380   resp$(rc+=1)=str$(tamount)
-46400   fncmdkey('Save',1,1,0)
-46420   fncmdkey('Cancel',5,0,1)
-46440   fnacs(sn$,0,mat resp$,ckey)
+46400   fnCmdKey('Save',1,1,0)
+46420   fnCmdKey('Cancel',5,0,1)
+46440   fnAcs(sn$,0,mat resp$,ckey)
 46460   if ckey=1 then 
 46480     tdate=val(resp$(respc_tDate))
 46500     rewrite #trans,using "Form pos 11,N 8",rec=editrec: tdate
@@ -193,7 +193,7 @@
 46560 fnend
 48000 def fn_PRINTTRANS ! very local function - lots of inherritance
 48020   dim scr1$(10)*30,alloc(10),nam$*30
-48040   dim r(20,4),hd1$*255,servicename$(10)*20,tg(11),metraddr$*30
+48040   dim r(20,4),hd1$*255,serviceName$(10)*20,tg(11),metraddr$*30
 48060   dim srv$(10)*2
 48080   dim name$(10)*20
 48100   ! r: ask print_balance
@@ -215,38 +215,38 @@
 48420   end if 
 48440   ! /r
 48460   fnopenprn
-48480   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
-48500   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
+48480   if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
+48500   if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 48520   if trim$(z$)="[All]" then hd1$="    {\ul Account        Date   }" else hd1$="    {\ul    Date   }"
 48540   sz1=0
 48560   x=0
 48580   for j=1 to 10
 48600     if j=3 and ptShowElecUsed=1 then goto L1010 ! skp heading is electric field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
 48620     if j=4 and ptShowGasUsed=1 then goto L1010 ! skp heading is gas field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
-48640     x2=pos(trim$(servicename$(j))," ",1)
-48660     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
-48680     if trim$(servicename$(j))<>"" then 
-48700       scr1$(sz1+=1)=servicename$(j)
-48720       hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:6)),6)&"}" : name$(x+=1)=servicename$(j)
-48740     end if  ! trim$(servicename$(j))<>"" then
+48640     x2=pos(trim$(serviceName$(j))," ",1)
+48660     if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
+48680     if trim$(serviceName$(j))<>"" then 
+48700       scr1$(sz1+=1)=serviceName$(j)
+48720       hd1$=hd1$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:6)),6)&"}" : name$(x+=1)=serviceName$(j)
+48740     end if  ! trim$(serviceName$(j))<>"" then
 48760     L1010: ! 
 48780   next j
 48800   hd1$=hd1$&"{\ul     Total}"
 48820   if print_balance then 
 48840     hd1$=hd1$&"  {\ul   Balance }" 
 48880   else
-48900     if trim$(servicename$(1))="Water" then 
+48900     if trim$(serviceName$(1))="Water" then 
 48920       hd1$=hd1$&"  {\ul   Wa Used }" 
 48940       water=1
 48960     end if 
-48980     if trim$(servicename$(3))="Electric" then 
+48980     if trim$(serviceName$(3))="Electric" then 
 49000       hd1$=hd1$&"  {\ul   El Used }" 
 49020       electric=1 
 49040     else if ptShowElecUsed=1 then 
 49060       hd1$=hd1$&"  {\ul      Used }" 
 49080       electric=1
 49100     end if 
-49120     if trim$(servicename$(4))="Gas" then 
+49120     if trim$(serviceName$(4))="Gas" then 
 49140       hd1$=hd1$&"  {\ul   Ga Used }" 
 49160       gas=1 
 49180     else if ptShowGasUsed=1 then 
@@ -258,7 +258,7 @@
 49300   mat alloc(sz1) : mat totalalloc(sz1)
 49320   mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 49340   close #trans: ioerr ignore
-49360   open #trans=2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+49360   open #trans=2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 49380   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 49400   if trim$(z$)="[All]" then restore #trans: : goto L1160
 49420   read #h_customer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
@@ -283,9 +283,9 @@
 49800     r(1,ti2+1)+=tamount
 49820     x=0
 49840     for j=1 to 10
-49860       if trim$(servicename$(j))="" then goto L1370
-49880       if j=3 and (trim$(servicename$(j))<>"Electric" or trim$(servicename$(j))<>"Lawn Meter") and srv$(j)="EL" then goto L1370 ! electic being used for reduction meter
-49900       if j=4 and trim$(servicename$(j))<>"Gas" and srv$(j)="GA" then goto L1370 ! gas being used for reduction meter
+49860       if trim$(serviceName$(j))="" then goto L1370
+49880       if j=3 and (trim$(serviceName$(j))<>"Electric" or trim$(serviceName$(j))<>"Lawn Meter") and srv$(j)="EL" then goto L1370 ! electic being used for reduction meter
+49900       if j=4 and trim$(serviceName$(j))<>"Gas" and srv$(j)="GA" then goto L1370 ! gas being used for reduction meter
 49920       alloc(x+=1)=tg(j)
 49940       if ti2=3 then r(x+3,1)-=tg(j) else r(x+3,1)+=tg(j)
 49960       r(x+3,ti2+1)+=tg(j)
@@ -358,7 +358,7 @@
 62000 def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 62060   ! ___________________________________________
 62080   dim colmask$(30),colhdr$(30)*20,item$(25)*70,tg(11)
-62100   dim srv$(10)*2,servicename$(10)*20
+62100   dim srv$(10)*2,serviceName$(10)*20
 62120   ! ______________________________________________________________________
 62200   if hTrans=0 then 
 62220     close_hTrans=1
@@ -418,7 +418,7 @@
 66400     for j=1 to 10
 66420       if j=3 and ftShowElecUsed=1 then goto L440
 66440       if j=4 and ftShowGasUsed=1 then goto L440
-66460       if trim$(servicename$(j))<>"" then 
+66460       if trim$(serviceName$(j))<>"" then 
 66480         if colEnabled(colEnabledItem+=1) then
 66500           ! pr colhdr$(colEnabledItem) : pause
 66520           item$(items+=1)=cnvrt$("pic(-------.zz)",tg(j))
@@ -430,7 +430,7 @@
 66640       ! pr colhdr$(colEnabledItem) : pause
 66660       item$(items+=1)=cnvrt$("pic(-------.zz)",tg(11)) ! net
 66680     end if
-66700     if trim$(servicename$(1))<>"" then 
+66700     if trim$(serviceName$(1))<>"" then 
 66720       if colEnabled(colEnabledItem+=1) then
 66740         ! pr colhdr$(colEnabledItem) : pause
 66760         item$(items+=1)=str$(wr)
@@ -439,7 +439,7 @@
 66820         item$(items+=1)=str$(wu)
 66840       end if
 66860     end if 
-66880     if trim$(servicename$(3))="Electric" or trim$(srv$(3))="EL" then 
+66880     if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" then 
 66900       if colEnabled(colEnabledItem+=1) then
 66920         item$(items+=1)=str$(er)
 66940       end if
@@ -447,7 +447,7 @@
 66980         item$(items+=1)=str$(eu)
 67000       end if
 67020     end if 
-67040     if trim$(servicename$(3))="Lawn Meter" then 
+67040     if trim$(serviceName$(3))="Lawn Meter" then 
 67060       if colEnabled(colEnabledItem+=1) then
 67080         item$(items+=1)=str$(er)
 67100       end if
@@ -455,7 +455,7 @@
 67140         item$(items+=1)=str$(eu)
 67160       end if
 68000     end if 
-68020     if trim$(servicename$(4))="Gas" or trim$(srv$(4))="GA" then 
+68020     if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then 
 68040       if colEnabled(colEnabledItem+=1) then
 68060         item$(items+=1)=str$(gr) 
 68080       end if
@@ -485,26 +485,26 @@
 72220   colmask$(4)=""
 72240   colmask$(5)="10"
 72260   headerCount=5
-72280   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then ftShowElecUsed=1
-72300   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then ftShowGasUsed=1
+72280   if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ftShowElecUsed=1
+72300   if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ftShowGasUsed=1
 72320   for j=1 to 10
 72340     if j=3 and ftShowElecUsed=1 then goto L220
 72360     if j=4 and ftShowGasUsed=1 then goto L220
-72380     if trim$(servicename$(j))<>"" then 
-72400       colhdr$(headerCount+=1)=trim$(servicename$(j))(1:min(8,len(trim$(servicename$(j)))))
+72380     if trim$(serviceName$(j))<>"" then 
+72400       colhdr$(headerCount+=1)=trim$(serviceName$(j))(1:min(8,len(trim$(serviceName$(j)))))
 72420       colmask$(headerCount)="10"
 72440     end if 
 72460     L220: ! 
 72480   next j
 72500   colhdr$(headerCount+=1)="Net" : colmask$(headerCount)="10"
 72520   for j=1 to 4
-72540     if trim$(servicename$(j))<>"" and j=1 then 
+72540     if trim$(serviceName$(j))<>"" and j=1 then 
 72560       colhdr$(headerCount+=1)="Water Reading"
 72580       colmask$(headerCount)="20"
 72600       colhdr$(headerCount+=1)="Water Used"
 72620       colmask$(headerCount)="20"
 72640     end if 
-72660     if trim$(servicename$(j))="Electric" and j=3 then 
+72660     if trim$(serviceName$(j))="Electric" and j=3 then 
 72680       colhdr$(headerCount+=1)="Elec Reading"
 72700       colmask$(headerCount)="20"
 72720       colhdr$(headerCount+=1)="Elec Used"
@@ -515,13 +515,13 @@
 72820       colhdr$(headerCount+=1)=" 2nd Used"
 72840       colmask$(headerCount)="20"
 72860     end if 
-72880     if trim$(servicename$(j))="Lawn Meter" and j=3 then 
+72880     if trim$(serviceName$(j))="Lawn Meter" and j=3 then 
 72900       colhdr$(headerCount+=1)="Lawn Reading"
 72920       colmask$(headerCount)="20"
 72940       colhdr$(headerCount+=1)="Lawn Used"
 72960       colmask$(headerCount)="20"
 72980     end if 
-73000     if uprc$(trim$(servicename$(j)))="GAS" and j=4 then 
+73000     if uprc$(trim$(serviceName$(j)))="GAS" and j=4 then 
 73020       colhdr$(headerCount+=1)="Gas Reading"
 73040       colmask$(headerCount)="20"
 73060       colhdr$(headerCount+=1)="Gas Used"
@@ -555,16 +555,16 @@
 76240 fnend
 78000 def fn_columnSelect
 78020   dim csHeader$(30)*20
-78040   fntos(sn$='ubTrColSel') : respc=0 : csLine=0
+78040   fnTos(sn$='ubTrColSel') : respc=0 : csLine=0
 78060   fn_columnGet(mat csHeader$,mat unusedColMask$,unusedShowElecUsed,unusedShowGasUsed)
 78080   for hdrItem=6 to udim(mat csHeader$)
-78100     fnchk(csLine+=1,25,csHeader$(hdrItem), 1)
+78100     fnChk(csLine+=1,25,csHeader$(hdrItem), 1)
 78120     fncreg_read('Transaction Grid Column '&str$(hdrItem)&' Visible',resp$(respc+=1),'True')
 78130     ! pr 'read: Transaction Grid Column '&str$(hdrItem)&' Visible:'&resp$(respc)
 78140   nex hdrItem
 78150 ! pause
-78160   fncmdset(4)
-78180   fnacs(sn$,0,mat resp$,ckey)
+78160   fnCmdSet(4)
+78180   fnAcs(sn$,0,mat resp$,ckey)
 78200   if ckey<>5 then
 78210     respc=0
 78220     for hdrItem=6 to udim(mat csHeader$)

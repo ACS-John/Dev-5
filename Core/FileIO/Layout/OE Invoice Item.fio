@@ -2,7 +2,7 @@
 [Q]\[cursys]mstr\InvoiceItemIndex1.h[cno] ,  invoice
 recl=196
 ===================================================
-invoice$     ,  Invoice Number                      ,  c    8   , ! 
+invoice$     ,  Invoice Number                      ,  c    8   , !  combof(ignored,[Q]\OEmstr\Invoice.h[cno],1,10,41,30,[Q]\OEmstr\InvoiceIndex.h[cno],1)
 ! links to the "OE Invoice" table's primary key.
 qty          ,  Quantity of Items                   ,  N   5.2  , ! 
 description$ ,  Item Description                    ,  c   60   , ! 

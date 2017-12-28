@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\TransactionHamster
 00020 ! Checkbook Transaction File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*40
@@ -14,9 +14,9 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Use,RecL=78,KPs=1,KLn=11,Shr",internal,outin,keyed 
-00160   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outin,keyed 
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno')&",Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Use,RecL=78,KPs=1,KLn=11,Shr",internal,outIn,keyed 
+00160   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outIn,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno')&",Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -135,7 +135,7 @@
 00500   return 
 00510 ! ______________________________________________________________________
 00520 HAMSTER: ! 
-00530   fnhamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00530   fnHamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00540   return 
 00550 ! ______________________________________________________________________
 00560 XIT: fnxit

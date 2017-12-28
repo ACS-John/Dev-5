@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Payroll
 00020 ! GL Payroll File Menu
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fntos,fnlbl,fncombof,fncmdkey,fnacs,fnemployee_search,fntxt,fncmdset,fnmsgbox,fnFree
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnemployee_search,fnTxt,fnCmdSet,fnmsgbox,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl2$(5),sc2$(5)*38
@@ -40,8 +40,8 @@
         sc3$(2)="Check #:"
 00260   sc3$(21)="Net Pay:"
 00270   if exists (env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')) =0 then goto INITIAL_BUILD
-00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2900
-00290   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
+00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2900
+00290   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
 00300   goto MAIN
 00310 ! ______________________________________________________________________
 00320 DONE: ! 
@@ -51,17 +51,17 @@
 00360   goto XIT
 00370 ! ______________________________________________________________________
 00380 MAIN: ! 
-00390   fntos(sn$="Payroll") !:
+00390   fnTos(sn$="Payroll") !:
         mylen=20: mypos=mylen+3 : right=1
 00400   fnemployee_search(x$,99)
-00410 ! fnLBL(1,1,"Employee Number:",MYLEN,RIGHT)
+00410 ! fnLbl(1,1,"Employee Number:",MYLEN,RIGHT)
 00420 ! fnCOMBOF("PRmstr",1,MYPOS,27,env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) !:
         resp$(1)=str$(eno)
-00430   fncmdkey("&Next",1,1,0,"")
-00440   fncmdkey("&Add",2,0,0,"")
-00450   fncmdkey("&Proof Llist",4,0,0,"")
-00460   fncmdkey("&Cancel",5,0,1,"")
-00470   fnacs(sn$,0,mat resp$,ckey)
+00430   fnCmdKey("&Next",1,1,0,"")
+00440   fnCmdKey("&Add",2,0,0,"")
+00450   fnCmdKey("&Proof Llist",4,0,0,"")
+00460   fnCmdKey("&Cancel",5,0,1,"")
+00470   fnAcs(sn$,0,mat resp$,ckey)
 00480 L480: if ckey=5 then goto XIT
 00490   if ckey=2 then goto ASK_NEW_NUMBER
 00500   if ckey=4 then goto PROOF_LIST
@@ -69,14 +69,14 @@
 00520   goto DISPLAY_RECORD
 00530 ASK_NEW_NUMBER: !  add new employee
 00540   eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0)
-00550   fntos(sn$="Payroll2") !:
+00550   fnTos(sn$="Payroll2") !:
         mylen=20: mypos=mylen+3 : right=1
-00560   fnlbl(1,1,"Employee Number:",mylen,right)
-00570   fntxt(1,mypos,4,0,0,"30",0,"Enter new employee number.",0 ) !:
+00560   fnLbl(1,1,"Employee Number:",mylen,right)
+00570   fnTxt(1,mypos,4,0,0,"30",0,"Enter new employee number.",0 ) !:
         resp$(1)=""
-00580   fncmdkey("&Next",1,1,0,"")
-00590   fncmdkey("&Cancel",5,0,1,"")
-00600   fnacs(sn$,0,mat resp$,ckey)
+00580   fnCmdKey("&Next",1,1,0,"")
+00590   fnCmdKey("&Cancel",5,0,1,"")
+00600   fnAcs(sn$,0,mat resp$,ckey)
 00610   holden1=en1=val(resp$(1))
 00620   if en1=0 then goto MAIN
 00630   addemployee=1 ! code for adding new employee
@@ -85,39 +85,39 @@
 00660   read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
 00670   disable=1: goto DISPLAY_EMPLOYEE
 00680 DISPLAY_EMPLOYEE: ! 
-00690   fntos(sn$="Payroll3") !:
+00690   fnTos(sn$="Payroll3") !:
         mylen=15: mypos=mylen+3 : right=1
-00700   fnlbl(1,1,"Employee Number:",mylen,right)
-00710   fntxt(1,mypos,4,0,0,"30",disable,"",0 ) !:
+00700   fnLbl(1,1,"Employee Number:",mylen,right)
+00710   fnTxt(1,mypos,4,0,0,"30",disable,"",0 ) !:
         resp$(1)=str$(en1)
-00720   fnlbl(2,1,"Employee Name:",mylen,right)
-00730   fntxt(2,mypos,25,0,0,"",0,"",0 ) !:
+00720   fnLbl(2,1,"Employee Name:",mylen,right)
+00730   fnTxt(2,mypos,25,0,0,"",0,"",0 ) !:
         resp$(2)=k$(1)
-00740   fnlbl(3,1,"Address:",mylen,right)
-00750   fntxt(3,mypos,25,0,0,"",0,"",0 ) !:
+00740   fnLbl(3,1,"Address:",mylen,right)
+00750   fnTxt(3,mypos,25,0,0,"",0,"",0 ) !:
         resp$(3)=k$(2)
-00760   fnlbl(4,1,"City, St Zip:",mylen,right)
-00770   fntxt(4,mypos,25,0,0,"",0,"",0 ) !:
+00760   fnLbl(4,1,"City, St Zip:",mylen,right)
+00770   fnTxt(4,mypos,25,0,0,"",0,"",0 ) !:
         resp$(4)=k$(3)
-00780   fnlbl(5,1,"Social Security:",mylen,right)
-00790   fntxt(5,mypos,11,0,0,"",0,"",0 ) !:
+00780   fnLbl(5,1,"Social Security:",mylen,right)
+00790   fnTxt(5,mypos,11,0,0,"",0,"",0 ) !:
         resp$(5)=ss$
 00800   mylen2=20 : mypos=mylen+50
-00810   fnlbl(1,70,"Y T D         Q T D ",24,0)
+00810   fnLbl(1,70,"Y T D         Q T D ",24,0)
 00820   for j=1 to 18
-00830     fnlbl(j+1,42,sc1$(j+8),mylen2,right)
-00840     fntxt(j+1,mypos,12,0,0,"10",0,"",0 ) !:
+00830     fnLbl(j+1,42,sc1$(j+8),mylen2,right)
+00840     fnTxt(j+1,mypos,12,0,0,"10",0,"",0 ) !:
           resp$(j*2-1+5)=str$(m(j*2-1) )
-00850     fntxt(j+1,mypos+14,12,0,0,"10",0,"",0 ) !:
+00850     fnTxt(j+1,mypos+14,12,0,0,"10",0,"",0 ) !:
           resp$(j*2+5)=str$(m(j*2) )
 00860   next j
-00870   fncmdkey("&Next",1,1,0,"")
-00880   fncmdkey("&Review Checks",3,0,0,"")
-00885   fncmdkey("&Add Check",8,0,0,"")
-00890   fncmdkey("&Change Number",7,0,0,"")
-00900   fncmdkey("&Delete",6,0,0,"")
-00910   fncmdkey("&Cancel",5,0,1,"")
-00920   fnacs(sn$,0,mat resp$,ckey)
+00870   fnCmdKey("&Next",1,1,0,"")
+00880   fnCmdKey("&Review Checks",3,0,0,"")
+00885   fnCmdKey("&Add Check",8,0,0,"")
+00890   fnCmdKey("&Change Number",7,0,0,"")
+00900   fnCmdKey("&Delete",6,0,0,"")
+00910   fnCmdKey("&Cancel",5,0,1,"")
+00920   fnAcs(sn$,0,mat resp$,ckey)
 00930   disable=1
 00940   if ckey=5 then goto MAIN
 00950   if ckey=6 then goto DELETEIT
@@ -248,7 +248,7 @@
 02100 L2100: lr2=lrec(2)
 02110 ! REWRITE #2,USING 2360,REC=1: LR2
 02120   for j=1 to lr2
-02130     read #2,using 'Form POS 1,C 4,POS 108,PD 3',rec=j: en$,nta norec L2210
+02130     read #2,using 'Form POS 1,C 4,POS 108,PD 3',rec=j: en$,nta noRec L2210
 02140     read #1,using 'Form POS 271,2*N 5',key=en$: mat ta nokey L2210
 02150     if ta(1)=0 then ta(1)=j
 02160     if ta(2)>0 then rewrite #2,using L2200,rec=ta(2): j
@@ -269,31 +269,31 @@
 02280   if resp$="Yes" then add=1: goto L2340 else goto MAIN
 02290 L2290: adr=ta(1)
 02300 L2300: if adr=0 then goto MAIN
-02310   read #2,using L2320,rec=adr: en2,mat prd,nca norec L480
+02310   read #2,using L2320,rec=adr: en2,mat prd,nca noRec L480
 02320 L2320: form pos 1,n 4,2*pd 4,19*pd 5.2,pd 3
 02330 L2330: mat pr1=prd
-02340 L2340: fntos(sn$="Payroll4") !:
+02340 L2340: fnTos(sn$="Payroll4") !:
         mylen=15: mypos=mylen+3 : right=1
-02350   fnlbl(1,1,"Check Date:",mylen,right)
-02360   fntxt(1,mypos,1,0,0,"1",0,"Date of check.",0 ) !:
+02350   fnLbl(1,1,"Check Date:",mylen,right)
+02360   fnTxt(1,mypos,1,0,0,"1",0,"Date of check.",0 ) !:
         resp$(1)=str$(prd(1))
-02370   fnlbl(2,1,"Check Number:",mylen,right)
-02380   fntxt(2,mypos,8,0,0,"30",0,"",0 ) !:
+02370   fnLbl(2,1,"Check Number:",mylen,right)
+02380   fnTxt(2,mypos,8,0,0,"30",0,"",0 ) !:
         resp$(2)=str$(prd(2))
-02390   fnlbl(3,1,"Gross Wage:",mylen,right)
-02400   fntxt(3,mypos,12,0,0,"10",0,"",0 ) !:
+02390   fnLbl(3,1,"Gross Wage:",mylen,right)
+02400   fnTxt(3,mypos,12,0,0,"10",0,"",0 ) !:
         resp$(3)=str$(prd(3))
 02410   for j=1 to 17
-02420     fnlbl(j+3,1,sc1$(j+9),mylen,right)
-02430     fntxt(j+3,mypos,12,0,0,"10",0,"",0 ) !:
+02420     fnLbl(j+3,1,sc1$(j+9),mylen,right)
+02430     fnTxt(j+3,mypos,12,0,0,"10",0,"",0 ) !:
           resp$(j+3)=str$(prd(j+3))
 02440   next j
-02450   fnlbl(21,1,"Net Pay:",mylen,right)
-02460   fntxt(21,mypos,12,0,0,"10",0,"",0 ) !:
+02450   fnLbl(21,1,"Net Pay:",mylen,right)
+02460   fnTxt(21,mypos,12,0,0,"10",0,"",0 ) !:
         resp$(21)=str$(prd(21))
-02470   fncmdkey("&Next",1,1,0,"")
-02490   fncmdkey("&Cancel",5,0,1,"")
-02500   fnacs(sn$,0,mat resp$,ckey)
+02470   fnCmdKey("&Next",1,1,0,"")
+02490   fnCmdKey("&Cancel",5,0,1,"")
+02500   fnAcs(sn$,0,mat resp$,ckey)
 02510   if ckey=5 then add=0: goto MAIN
 02530   for j=1 to 21
 02540     prd(j)=val(resp$(j))

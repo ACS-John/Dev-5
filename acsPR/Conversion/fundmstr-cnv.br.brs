@@ -8,11 +8,11 @@
 00080 ! ______________________________________________________________________
 00090 L90: pr newpage
 00100   close #101: ioerr L110
-00110 L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=Convert Fund Master File",display,outin 
+00110 L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=Convert Fund Master File",display,outIn 
 00120   pr f "10,5,C 60": "COMPANY NUMBER (0 TO STOP):"
 00130   input fields "10,51,N 5,UE,N": cno
 00140   if cno=0 then goto XIT
-00160   open #1: "Name="&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno'),internal,outin,keyed ioerr NF1
+00160   open #1: "Name="&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno'),internal,outIn,keyed ioerr NF1
 00170   open #2: "Name=X,RecL=63,Replace",internal,output 
 00180 L180: read #1,using L190: dn$,de$,mat fgl$ eof L240
 00190 L190: form pos 1,c 3,c 30,3*c 9

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglChrt
 00020 ! General Ledger Chart of Accounts
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fntos,fnfra,fnopt,fncmdset,fnacs,fnlbl,fnqgl,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnLbl,fnqgl,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim gl(2,3),io2$(6),io1$(2),wrd1$(2)*46,cap$*128,p$(20)*50
@@ -16,21 +16,21 @@
 00160   if process=1 then sel=1 : goto L330
 00170 ! ______________________________________________________________________
 00180   pr newpage
-00190   fntos(sn$="ChartAccoutnts") !:
+00190   fnTos(sn$="ChartAccoutnts") !:
         mylen=50: mypos=mylen+3 : right=1
-00200   fnfra(1,1,2,70,"Chart of Accounts"," ",0)
-00210   fnopt(1,3,"Print Financial Statement Reference Numbers",0,1) !:
+00200   fnFra(1,1,2,70,"Chart of Accounts"," ",0)
+00210   fnOpt(1,3,"Print Financial Statement Reference Numbers",0,1) !:
         resp$(rc+=1)="False"
-00220   fnopt(2,3,"Print Account Numbers and Names only",0,1) !:
+00220   fnOpt(2,3,"Print Account Numbers and Names only",0,1) !:
         resp$(rc+=1)="True"
-00230   fnlbl(5,1,"Beginning General Ledger Number (blank for all):",mylen,right)
+00230   fnLbl(5,1,"Beginning General Ledger Number (blank for all):",mylen,right)
 00240   fnqgl(5,mypos,0,2) !:
         resp$(1)=""
-00250   fnlbl(6,1,"Ending General Ledger Number (blank for all):",mylen,right)
+00250   fnLbl(6,1,"Ending General Ledger Number (blank for all):",mylen,right)
 00260   fnqgl(6,mypos,0,2) !:
         resp$(1)=""
-00270   fncmdset(2)
-00280   fnacs(sn$,0,mat resp$,ckey)
+00270   fnCmdSet(2)
+00280   fnAcs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300   if resp$(1)="True" then sel=1 else sel=2
 00310   if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))

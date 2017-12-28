@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\ubprtbl1_millry
 10100 ! pr bills (new format)
 10200 ! ______________________________________________________________________
-10300   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt
+10300   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt
 10400   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 10500   on error goto ERTN
 10600 ! ______________________________________________________________________
@@ -34,37 +34,37 @@
 13300   mg$(3)=''
 13400 SCREEN1: ! 
 13500   a$="" : prtbkno=0
-13600   fntos(sn$="UBPrtBl1-1")
+13600   fnTos(sn$="UBPrtBl1-1")
 13700   pf=26 : ll=24 : respc=0
-13800 ! fnLBL(1,1,"Service From:",LL,1)
-13900 !  fnTXT(1,PF,8,8,1,"1",0,TT$)
+13800 ! fnLbl(1,1,"Service From:",LL,1)
+13900 !  fnTxt(1,PF,8,8,1,"1",0,TT$)
 14000 !  rESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D2)
-14100 ! fnLBL(2,1,"Service To:",LL,1)
-14200 !  fnTXT(2,PF,8,8,1,"1")
+14100 ! fnLbl(2,1,"Service To:",LL,1)
+14200 !  fnTxt(2,PF,8,8,1,"1")
 14300 !  rESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D3)
-14400   fnlbl(1,1,"Penalty Due Date:",ll,1)
-14500   fntxt(1,pf,8,8,1,"1",0,tt$)
+14400   fnLbl(1,1,"Penalty Due Date:",ll,1)
+14500   fnTxt(1,pf,8,8,1,"1",0,tt$)
 14600   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-14700   fnlbl(4,1,"Message on Bill:",ll,1)
-14800   fntxt(4,pf,30,30)
+14700   fnLbl(4,1,"Message on Bill:",ll,1)
+14800   fnTxt(4,pf,30,30)
 14900   resp$(respc+=1)=mg$(1)
-15000   fntxt(5,pf,30,30)
+15000   fnTxt(5,pf,30,30)
 15100   resp$(respc+=1)=mg$(2)
-15200   fntxt(6,pf,30,30)
+15200   fnTxt(6,pf,30,30)
 15300   resp$(respc+=1)=mg$(3)
-15400   fnlbl(7,1,"Date of Billing:",ll,1)
-15500   fntxt(7,pf,8,8,1,"1")
+15400   fnLbl(7,1,"Date of Billing:",ll,1)
+15500   fnTxt(7,pf,8,8,1,"1")
 15600   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-15700   fnlbl(8,1,"Starting Route/Sequence:",ll,1)
+15700   fnLbl(8,1,"Starting Route/Sequence:",ll,1)
 15800   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 15900   resp$(respc+=1)="[All]"
-16000   fnlbl(9,1,"Route Number:",ll,1)
+16000   fnLbl(9,1,"Route Number:",ll,1)
 16100   fncmbrt2(9,pf)
 16200   resp$(respc+=1)="[All]"
-16300   fnchk(10,pf,"Select Accounts to Print",1)
+16300   fnChk(10,pf,"Select Accounts to Print",1)
 16400   resp$(respc+=1)="False"
-16500   fncmdset(3)
-16600   fnacs(sn$,0,mat resp$,ck)
+16500   fnCmdSet(3)
+16600   fnAcs(sn$,0,mat resp$,ck)
 16700   if ck=5 then goto ENDSCR
 16800   d1=val(resp$(5))
 16900   d4=val(resp$(1))
@@ -99,7 +99,7 @@
 19900   if s5=0 then goto L640
 20000 L590: read #7,using L600: r6 eof F5_CANCEL
 20100 L600: form pos 1,pd 3
-20200   read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ norec L590
+20200   read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec L590
 20300   read #1,using L650,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,use_alt nokey L590
 20400   goto L650
 20500 L640: !
@@ -152,20 +152,20 @@
 25000 ! ______________________________________________________________________
 25100 SCREEN3: ! 
 25200   sn$="UBPrtBl1-2"
-25300   fntos(sn$)
+25300   fnTos(sn$)
 25400   txt$="Account (blank to stop)"
-25500   fnlbl(1,1,txt$,31,1)
+25500   fnLbl(1,1,txt$,31,1)
 25600   if trim$(a$)="" then goto L1070 else goto L1080
 25700 L1070: if z$<>"" then 
 25800     txt$="Last Account entered was "&z$
-25900     fnlbl(3,1,txt$,44,1)
+25900     fnLbl(3,1,txt$,44,1)
 26000   else 
 26100     txt$=""
-26200     fnlbl(3,1,txt$,44,1)
+26200     fnLbl(3,1,txt$,44,1)
 26300   end if 
 26400 L1080: fncmbact(1,17) ! 
 26500   resp$(1)=a$
-26600   fncmdset(11): fnacs(sn$,0,mat resp$,ck)
+26600   fnCmdSet(11): fnAcs(sn$,0,mat resp$,ck)
 26700   if ck=5 then goto F5_CANCEL
 26800   a$=lpad$(trim$(resp$(1)(1:10)),10)
 26900   if trim$(a$)="" then goto F5_CANCEL
@@ -202,14 +202,14 @@
 30000 ! ______________________________________________________________________
 30100 ENDSCR: ! pr totals screen
 30200   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-30300   fntos(sn$="Bills-Total")
+30300   fnTos(sn$="Bills-Total")
 30400   mylen=23 : mypos=mylen+2
 30500   respc=0
-30600   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-30700   fntxt(1,mypos,8,0,1,"",1)
+30600   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+30700   fnTxt(1,mypos,8,0,1,"",1)
 30800   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-31100   fncmdset(52)
-31200   fnacs(sn$,0,mat resp$,ck)
+31100   fnCmdSet(52)
+31200   fnAcs(sn$,0,mat resp$,ck)
 31300 XIT: fnxit
 31400 ! ______________________________________________________________________
 31500 ERTN: fnerror(program$,err,line,act$,"xit")

@@ -1,16 +1,16 @@
 00010 ! Replace work\signature
-00020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncomboa,fnmsgbox,fncmdset
+00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fnTos,fndat,fnerror,fnopenprn,fncloseprn,fncomboa,fnmsgbox,fnCmdSet
 00030   dim docname$*30,comboa$(99)*30,tt$*200,msgline$(5)*200,cap$*128,cddrive$*1,response$(5)*30
-00040   open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outin,keyed 
+00040   open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outIn,keyed 
 00050 ! read #1,using 60:docname$,docline,docposition,docsigchoice,cddrive$
 00060 L60: form pos 1,c 30,n 3,n 3,n 2,c 1
 00065   pr newpage
 00070 MAINSCREEN: ! 
 00075   sn$ = "SignatureMain"
 00076   mat comboa$(99)
-00080   fntos(sn$)
+00080   fnTos(sn$)
 00082   mylen = 17: myalign = 1
-00085   mytext$ = "Document Name:" : fnlbl(1,1,mytext$,mylen,myalign)
+00085   mytext$ = "Document Name:" : fnLbl(1,1,mytext$,mylen,myalign)
 00088   a = 0
 00090   restore #1: 
 00094 L94: read #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$ eof L105
@@ -19,10 +19,10 @@
 00105 L105: a=max(1,a)
 00106   mat comboa$(a) : filename$="DocNames" !:
         fncomboa(filename$,1,18,mat comboa$,ttt$,25)
-00110   mytext$="Number of Copies:": fnlbl(2,1,mytext$,mylen,myalign)
+00110   mytext$="Number of Copies:": fnLbl(2,1,mytext$,mylen,myalign)
 00120   response$(2)=str$(1) !:
-        fntxt(2,18,2)
-00130   fncmdset(14): fnacs(sn$,0,mat response$,ckey)
+        fnTxt(2,18,2)
+00130   fnCmdSet(14): fnAcs(sn$,0,mat response$,ckey)
 00140   docname$=response$(1)
 00150   copies=max(1,val(response$(2)))
 00160   if ckey=5 then goto XIT
@@ -40,34 +40,34 @@
 00230 ! 
 00240 ! 
 00250 EDITSCREEN: ! 
-00260   sn$ = "SignatureEdit": fntos(sn$)
+00260   sn$ = "SignatureEdit": fnTos(sn$)
 00265   mylen = 17: myalign = 1
-00270   mytext$ = "Document Name:" : fnlbl(1,1,mytext$,mylen,myalign)
+00270   mytext$ = "Document Name:" : fnLbl(1,1,mytext$,mylen,myalign)
 00275   response$(1)=docname$ !:
         tt$="Choose a name that you will remember, such as Payroll Check" !:
         mask$="" !:
-        fntxt(1,mylen+1,30,30,0,mask$,0,tt$)
-00280   mytext$ = "Line on Form:" : fnlbl(2,1,mytext$,mylen,myalign)
+        fnTxt(1,mylen+1,30,30,0,mask$,0,tt$)
+00280   mytext$ = "Line on Form:" : fnLbl(2,1,mytext$,mylen,myalign)
 00285   response$(2)=str$(docline) !:
         tt$="This is the distance from the top of the form where the signature shold print. (Normally about 6 lines per inch)" !:
         mask$="30" !:
-        fntxt(2,mylen+1,4,3,0,mask$,0,tt$)
-00290   mytext$="Position on Form:": fnlbl(3,1,mytext$,mylen,myalign)
+        fnTxt(2,mylen+1,4,3,0,mask$,0,tt$)
+00290   mytext$="Position on Form:": fnLbl(3,1,mytext$,mylen,myalign)
 00295   response$(3)=str$(docposition) !:
         tt$="This is the number of characters from the left side of the form.       (Normally about 10 characters per inch)" !:
         mask$="30" !:
-        fntxt(3,mylen+1,4,3,0,mask$,0,tt$)
-00300   mytext$="Signature Choice:": fnlbl(4,1,mytext$,mylen,myalign)
+        fnTxt(3,mylen+1,4,3,0,mask$,0,tt$)
+00300   mytext$="Signature Choice:": fnLbl(4,1,mytext$,mylen,myalign)
 00305   response$(4)=str$(docsigchoice) !:
         tt$="You can have up to 10 different signatures.  Choose the one you want printed on this document." !:
         mask$="30" !:
-        fntxt(4,mylen+1,3,2,0,mask$,0,tt$)
-00310   mytext$="CD Drive:": fnlbl(5,1,mytext$,mylen,myalign)
+        fnTxt(4,mylen+1,3,2,0,mask$,0,tt$)
+00310   mytext$="CD Drive:": fnLbl(5,1,mytext$,mylen,myalign)
 00315   response$(5)=cddrive$ !:
         tt$="Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" !:
         mask$="" !:
-        fntxt(5,mylen+1,1,1,0,mask$,0,tt$)
-00320   fncmdset(4): fnacs(sn$,0,mat response$,ckey)
+        fnTxt(5,mylen+1,1,1,0,mask$,0,tt$)
+00320   fnCmdSet(4): fnAcs(sn$,0,mat response$,ckey)
 00330   if ckey=5 then goto MAINSCREEN
 00340   docname$=response$(1)(1:30)
 00350   docline=val(response$(2)) conv BADLINE

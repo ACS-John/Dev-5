@@ -1,5 +1,5 @@
 10000 ! Replace Test\Grid
-10040   library 'S:\Core\Library': fncmdkey,fnacs,fnflexinit1,fntos,fnflexadd1
+10040   library 'S:\Core\Library': fnCmdKey,fnAcs,fnflexinit1,fnTos,fnflexadd1
 10060   test_date= 20082214 ! 20070713  ! date('ccyymmdd')
 10180   mat colhdr$(6)
 10200   colhdr$(1)="ccyymmdd"
@@ -15,7 +15,7 @@
 10380   colmask$(4)="4"
 10400   colmask$(5)="5"
 10402   colmask$(6)=""
-20000   fntos(sn$="testflex")
+20000   fnTos(sn$="testflex")
 20020   fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
 20040   dim source_format$(6)
 20060   source_format$(1)='ccyymmdd'
@@ -35,6 +35,6 @@
 20300     fnflexadd1(mat item$)
 20320   next x
 20340 EO_GRID: ! 
-20360   fncmdkey("End",5,0,0)
+20360   fnCmdKey("End",5,0,0)
 20380 ! ____
-20400   fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
+20400   fnAcs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID

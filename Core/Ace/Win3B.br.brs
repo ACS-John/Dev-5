@@ -72,10 +72,10 @@
 51420 ! 
 51440     temp_file$=env$('temp')&"\Win-"&cnvrt$("pic(###)",win)&".tmp"
 51460     close #win: ioerr ignore
-51480     open #win: "Name="&temp_file$&",Size=0,RecL=80,Replace",internal,outin 
+51480     open #win: "Name="&temp_file$&",Size=0,RecL=80,Replace",internal,outIn 
 51500     write #win,using 'Form POS 1,5*N 4': win,sc,ec,sr,er
 51520     close #win: ioerr ignore
-51540     open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+51540     open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 51560     pr #win: newpage
 51580     if display_cnam=0 then goto L610
 51600     if display_cnam=1 then 
@@ -134,7 +134,7 @@
 60340     totallen-=1
 60360     if win=0 then goto NO_TEMP_FILE
 60380     temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
-60400     open #tfn:=fngethandle: "Name="&temp_file$&",RecL=80,use",internal,outin ioerr NO_TEMP_FILE
+60400     open #tfn:=fngethandle: "Name="&temp_file$&",RecL=80,use",internal,outIn ioerr NO_TEMP_FILE
 60420     read #tfn,using 'Form POS 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
 60440     startpos=int((ec-sc-totallen)/2+sc)+1
 60460     goto L270

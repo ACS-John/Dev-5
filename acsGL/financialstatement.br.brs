@@ -1,6 +1,6 @@
 10000 ! Replace S:\acsGL\financialstatement
 10200 ! ______________________________________________________________________
-10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntos,fnfra,fnopt,fncmdkey,fnacs,fndat,fnflexinit1,fnflexadd1,fnlbl,fntxt,fnchk,fncomboa,fnmsgbox
+10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fndat,fnflexinit1,fnflexadd1,fnLbl,fnTxt,fnChk,fncomboa,fnmsgbox
 10500   on error goto ERTN
 10600 ! ______________________________________________________________________
 10700   dim ac(9),rno$*5,d$*50
@@ -24,27 +24,27 @@
 12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H"&env$('cno') : idx$(6)="FNSGINDX.H"&env$('cno')
 12600 ! ______________________________________________________________________
 12700 MENU1: ! 
-12800   fntos(sn$="FsDesign")
+12800   fnTos(sn$="FsDesign")
 12900   mylen=20: mypos=mylen+3 : right=1
-13000   fnfra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
-13100   fnopt(1,2,id$(1),0,1)
+13000   fnFra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
+13100   fnOpt(1,2,id$(1),0,1)
 13200   resp$(1)="True"
-13300   fnopt(2,2,id$(2) ,0,1)
+13300   fnOpt(2,2,id$(2) ,0,1)
 13400   resp$(2)="False"
-13500   fnopt(3,2,id$(3),0,1)
+13500   fnOpt(3,2,id$(3),0,1)
 13600   resp$(3)="False"
-13700   fnopt(4,2,id$(4),0,1)
+13700   fnOpt(4,2,id$(4),0,1)
 13800   resp$(4)="False"
-13900   fnopt(5,2,id$(5),0,1)
+13900   fnOpt(5,2,id$(5),0,1)
 14000   resp$(5)="False"
-14100   fnopt(6,2,id$(6),0,1)
+14100   fnOpt(6,2,id$(6),0,1)
 14200   resp$(6)="False"
 14300   f1=curfld
-14400   fncmdkey("&Next",1,1,0,"Access the chosen financial statement design.")
-14500   fncmdkey("&Build D Records",2,0,0,"Allows you to build all type D records automatically without having to rekey all descriptions.")
-14600   fncmdkey("&Proof List",3,0,0,"Allows you to pr a proof list of the financial statement layout.")
-14700   fncmdkey("&Cancel",5,0,1,"Return to main menu.")
-14800   fnacs(sn$,0,mat resp$,ckey)
+14400   fnCmdKey("&Next",1,1,0,"Access the chosen financial statement design.")
+14500   fnCmdKey("&Build D Records",2,0,0,"Allows you to build all type D records automatically without having to rekey all descriptions.")
+14600   fnCmdKey("&Proof List",3,0,0,"Allows you to pr a proof list of the financial statement layout.")
+14700   fnCmdKey("&Cancel",5,0,1,"Return to main menu.")
+14800   fnAcs(sn$,0,mat resp$,ckey)
 14900   if ckey=5 then goto XIT
 15000   if ckey=2 then chain "S:\acsGL\Bld_D_Records"
 15100   if resp$(1)="True" then selection=1
@@ -55,14 +55,14 @@
 15600   if resp$(6)="True" then selection=6
 15700   f1=selection
 15800   close #1: ioerr L520
-15900 L520: open #fin_stmt=1: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",KFName="&env$('Q')&"\GLmstr\"&idx$(f1)&",Shr",internal,outin,keyed ioerr MENU1
+15900 L520: open #fin_stmt=1: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",KFName="&env$('Q')&"\GLmstr\"&idx$(f1)&",Shr",internal,outIn,keyed ioerr MENU1
 16000   if ckey=3 then let fn_print_proof
 16100 FIN_STMT_GRID: ! 
-16200   fntos(sn$="fin_stmt")
+16200   fnTos(sn$="fin_stmt")
 16300   fnflexinit1('fin_stmtgl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 16400   restore #fin_stmt: 
 16500 READ_FIN_STMT: ! read fin_stmt file
-16600 L600: read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp norec L630,eof EO_FIN_STMT_GRID,conv FIXRNP
+16600 L600: read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec L630,eof EO_FIN_STMT_GRID,conv FIXRNP
 16700   item$(1)=str$(rec(fin_stmt))
 16800   item$(2)=rno$: item$(3)=d$: item$(4)=te$
 16900   item$(5)=str$(sp) : item$(6)=str$(ls) : item$(7)=str$(ds)
@@ -75,12 +75,12 @@
 17600   fnflexadd1(mat item$)
 17700 L630: goto READ_FIN_STMT
 17800 EO_FIN_STMT_GRID: ! 
-17900   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing financial statement reference number.")
-18000   fncmdkey("&Add",1,0,0,"Allows you to add new financial statement reference numbers.")
-18100   fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
-18200 ! fnCMDKEY("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
-18300   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-18400   fnacs(sn$,0,mat resp$,ckey)
+17900   fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing financial statement reference number.")
+18000   fnCmdKey("&Add",1,0,0,"Allows you to add new financial statement reference numbers.")
+18100   fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
+18200 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
+18300   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+18400   fnAcs(sn$,0,mat resp$,ckey)
 18500   if ckey=5 then goto L2350
 18600   add=edit=0
 18700   editrec=val(resp$(1))
@@ -92,23 +92,23 @@
 19300     goto ADD_EDIT_FIN_STMTS ! add
 19400   else if ckey=2 then 
 19500     edit=1
-19600     read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5",rec=editrec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp norec FIN_STMT_GRID
+19600     read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5",rec=editrec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec FIN_STMT_GRID
 19700     holdrno$=rno$
 19800     goto ADD_EDIT_FIN_STMTS
 19900   else if ckey=8 then 
-20000     read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5",rec=editrec,release: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp norec FIN_STMT_GRID
+20000     read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5",rec=editrec,release: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec FIN_STMT_GRID
 20100     gosub DELETEIT
 20200     goto FIN_STMT_GRID
 20300   end if 
 20400   goto FIN_STMT_GRID
 20500 ADD_EDIT_FIN_STMTS: ! 
-20600   fntos(sn$="fin_stmt1")
+20600   fnTos(sn$="fin_stmt1")
 20700   mylen=25: mypos=mylen+3 : right=1
-20800   fnlbl(1,1,"F/S Number:",mylen,right)
-20900   fntxt(1,mypos,5,0,right,"30",0,"",0 )
+20800   fnLbl(1,1,"F/S Number:",mylen,right)
+20900   fnTxt(1,mypos,5,0,right,"30",0,"",0 )
 21000   resp$(1)=rno$
-21100   fnlbl(2,1,"Description::",mylen,right)
-21200   fntxt(2,mypos,50,0,left,"",0,"",0 )
+21100   fnLbl(2,1,"Description::",mylen,right)
+21200   fnTxt(2,mypos,50,0,left,"",0,"",0 )
 21300   resp$(2)=d$
 21400   if trim$(te$)='' or uprc$(te$)="D" then choice$=option2$(1) : goto L875
 21500   if uprc$(te$)="T" then choice$=option2$(2) : goto L875
@@ -120,42 +120,42 @@
 22100   if uprc$(te$)="E" then choice$=option2$(8) : goto L875
 22200   if uprc$(te$)="B" then choice$=option2$(9) : goto L875
 22300   if uprc$(te$)="C" then choice$=option2$(10) : goto L875
-22400 L875: fnlbl(3,1,"Type of Entry:",mylen,right)
+22400 L875: fnLbl(3,1,"Type of Entry:",mylen,right)
 22500   fncomboa("TypeOfEntry",3,mypos,mat option2$,"Each entry must have a type of transaction.",60)
 22600   resp$(3)=choice$
-22700   fnlbl(4,1,"Starting pr Position:",mylen,right)
-22800   fntxt(4,mypos,3,0,0,"30",0,"Number of spaces to indent.",0 )
+22700   fnLbl(4,1,"Starting pr Position:",mylen,right)
+22800   fnTxt(4,mypos,3,0,0,"30",0,"Number of spaces to indent.",0 )
 22900   resp$(4)=str$(sp)
-23000   fnlbl(5,1,"Lines to Skip:",mylen,right)
-23100   fntxt(5,mypos,2,0,0,"30",0,"Number of blank lines following this line.",0 )
+23000   fnLbl(5,1,"Lines to Skip:",mylen,right)
+23100   fnTxt(5,mypos,2,0,0,"30",0,"Number of blank lines following this line.",0 )
 23200   resp$(5)=str$(ls)
-23300   fnchk(6,mypos,"Dollar Sign:",1)
+23300   fnChk(6,mypos,"Dollar Sign:",1)
 23400   if ds=1 then resp$(6)="True" else resp$(6)="False"
-23500   fnlbl(7,1,"Underlines:",mylen,right)
-23600   fntxt(7,mypos,1,0,0,"30",0,"Number of under lines following the amount.",0 )
+23500   fnLbl(7,1,"Underlines:",mylen,right)
+23600   fnTxt(7,mypos,1,0,0,"30",0,"Number of under lines following the amount.",0 )
 23700   resp$(7)=str$(ul)
-23800   fnchk(8,mypos,"Reverse Sign:",1)
+23800   fnChk(8,mypos,"Reverse Sign:",1)
 23900   if rs=1 then resp$(8)="True" else resp$(8)="False"
-24000   fnlbl(9,1,"Balance Sheet Column:",mylen,right)
-24100   fntxt(9,mypos,1,0,0,"30",0,"One of three columns available.",0 )
+24000   fnLbl(9,1,"Balance Sheet Column:",mylen,right)
+24100   fnTxt(9,mypos,1,0,0,"30",0,"One of three columns available.",0 )
 24200   resp$(9)=str$(bc)
-24300   fnlbl(10,1,"Accumulator to Print:",mylen,right)
-24400   fntxt(10,mypos,1,0,0,"30",0,"One of nine sets of totals available for total records.",0 )
+24300   fnLbl(10,1,"Accumulator to Print:",mylen,right)
+24400   fnTxt(10,mypos,1,0,0,"30",0,"One of nine sets of totals available for total records.",0 )
 24500   resp$(10)=str$(ap)
 24600   for j=1 to 9
-24700     fnlbl(10+j,1,"Clear Accumulator # "&str$(j)&":",mylen,right)
-24800     fntxt(10+j,mypos,1,0,0,"30",0,"Place a one by each accumulator that should be cleared after this line is printed.",0 )
+24700     fnLbl(10+j,1,"Clear Accumulator # "&str$(j)&":",mylen,right)
+24800     fnTxt(10+j,mypos,1,0,0,"30",0,"Place a one by each accumulator that should be cleared after this line is printed.",0 )
 24900     resp$(10+j)=str$(ac(j))
 25000   next j
-25100   fnlbl(20,1,"Base Item for %:",mylen,right)
-25200   fntxt(20,mypos,5,0,0,"30",0,"Enter the reference # of the line that should be used in calculating this percent.",0 )
+25100   fnLbl(20,1,"Base Item for %:",mylen,right)
+25200   fnTxt(20,mypos,5,0,0,"30",0,"Enter the reference # of the line that should be used in calculating this percent.",0 )
 25300   resp$(20)=str$(rnp)
-25400   fnlbl(21,1,"Cost Center Code:",mylen,right)
-25500   fntxt(21,mypos,3,0,0,"30",0,"Enter the fund number for ability to pr one fund at a time.",0 )
+25400   fnLbl(21,1,"Cost Center Code:",mylen,right)
+25500   fnTxt(21,mypos,3,0,0,"30",0,"Enter the fund number for ability to pr one fund at a time.",0 )
 25600   resp$(21)=str$(fc)
-25700   fncmdkey("&Save",1,1,0,"Saves changes.")
-25800   fncmdkey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
-25900   fnacs(sn$,0,mat resp$,ckey)
+25700   fnCmdKey("&Save",1,1,0,"Saves changes.")
+25800   fnCmdKey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
+25900   fnAcs(sn$,0,mat resp$,ckey)
 26000   if ckey=5 then goto FIN_STMT_GRID
 26100   rno$=resp$(1)
 26200   rno$=lpad$(rtrm$(rno$),5)
@@ -392,6 +392,6 @@
 49300     option2$(10)="C = Cash Flow Pause Indicator (Pauses & asks amounts)"
 49400   fnend 
 49500 FIXRNP: ! 
-49600   reread #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$ norec L630,eof EO_FIN_STMT_GRID,ioerr L9020
+49600   reread #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$ noRec L630,eof EO_FIN_STMT_GRID,ioerr L9020
 49700 L9020: delete #fin_stmt,key=rno$: 
 49800   goto L600

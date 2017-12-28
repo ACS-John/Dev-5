@@ -11,14 +11,14 @@
 00110   open #10: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno'),internal,input,relative 
 00120   open #11: "Name=RPMSTR.X,RecL=196,Replace",internal,output 
 00130   open #12: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,input,relative 
-00140   open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",internal,outin,relative 
+00140   open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",internal,outIn,relative 
 00150   ot13=1
 00160   write #13,using L170,rec=1: mat tdz,ot13,0
 00170 L170: form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,6*pd 3.2,60*pd 5.2,pd 3,pd 4.2
 00180   form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,5*pd 3.2,pos 471,pd 4.2,pos 165,pd 3.2,60*pd 5.2,pd 3
 00190 L190: r10=r10+1
 00200   if r10>lrec(10) then goto END1
-00210   read #10,using L220,rec=r10: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd norec L190,conv L190,eof END1
+00210   read #10,using L220,rec=r10: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd noRec L190,conv L190,eof END1
 00220 L220: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
 00230   adr=ta(1)
 00240   mat ta=(0)

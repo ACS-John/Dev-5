@@ -2,7 +2,7 @@
 00020 ! -- pr Income Statement !:
         ! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cch$*20,by(13),bp(13),cap$*128,udf$*256
@@ -23,15 +23,15 @@
           fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
 00210   open #1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
-00230   fntos(sn$="GLInput") !:
+00230   fnTos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
-00240   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00250   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00240   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00250   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00260   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00270   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00280   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00290   fnacs(sn$,0,mat resp$,ckey)
+00260   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00270   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00280   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00290   fnAcs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   costcntr=val(resp$(1))
 00320 L320: fnopenprn !:
@@ -175,9 +175,9 @@
 01680   fncloseprn
 01690   goto XIT
 01700 ! ______________________________________________________________________
-01710 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 
+01710 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 01720   for j=1 to lrec(3)
-01730     read #3,using L1740,rec=j: pc1,bb,cb norec L1830
+01730     read #3,using L1740,rec=j: pc1,bb,cb noRec L1830
 01735     cb=1
 01740 L1740: form pos mp1,pd 3,pos 81,2*pd 6.2
 01750     k$=cnvrt$("N 5",pc1)

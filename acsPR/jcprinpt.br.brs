@@ -20,8 +20,8 @@
 00200   close #1: 
 00210 ! ______________________________________________________________________
 00220   gosub SORTIT
-00230   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00240   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
+00230   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00240   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
 00250   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",SIZE=0,RecL=117,Replace",internal,output 
 00260   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
 00270   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,input,relative 
@@ -59,7 +59,7 @@
 00590   for j=1 to 21: label1$(j)=rtrm$(label1$(j))&":" : next j
 00600 L600: read #4,using L610: jci eof L1740
 00610 L610: form pos 1,pd 3
-00620   read #5,using L630,rec=jci: mat h,dt2,jn$ norec L600
+00620   read #5,using L630,rec=jci: mat h,dt2,jn$ noRec L600
 00630 L630: form pos 1,n 8,n 1,pd 2,2*pd 4.2,pd 5.2,n 2,n 8,c 6
 00640   if h(1)><eno or h3><h(3) then goto L840
 00650 L650: h2=h(2)
@@ -183,7 +183,7 @@
 01790   win=101
 01800   fnopenwin(win,2,7,22,74,cap$)
 01810   close #3: 
-01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),internal,outin,relative 
+01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),internal,outIn,relative 
 01830   label1$(20)=" "
 01840   label1$(21)=" "
 01850   pr #win,fields "04,02,Cr 34,N": "Total or Employee Numbers Entered:" !:
@@ -213,7 +213,7 @@
 02070   fnwait(message$,1)
 02080   fnopenprn(cp,58,220,process)
 02090 L2090: r=r+1
-02100   read #3,using L1600,rec=r: eno,dep,mat inp,gpd,mat hr,adr eof L2430,norec L2430
+02100   read #3,using L1600,rec=r: eno,dep,mat inp,gpd,mat hr,adr eof L2430,noRec L2430
 02110   if pc=9 then gosub L2240
 02120   pc=pc+1
 02130   pr(pc,1)=eno
@@ -255,7 +255,7 @@
 02490 L2490: input #win,fields "4,27,N 5,UT,N": r conv L2490
 02500   close #win: ioerr L2510
 02510 L2510: if cmdkey=5 or r=0 then goto L2700
-02520   read #3,using L1600,rec=r: eno,dep2,mat inp,gpd,mat hr,adr norec L2450,eof L2450
+02520   read #3,using L1600,rec=r: eno,dep2,mat inp,gpd,mat hr,adr noRec L2450,eof L2450
 02530   teno=teno-eno
 02540   mat tinp=tinp-inp
 02550   if eno=0 then goto L2450
@@ -328,7 +328,7 @@
 03210   gosub HDR
 03220 L3220: read #6,using L3230: jci eof END_OF_FILE
 03230 L3230: form pos 1,pd 3
-03240   read #5,using L3250,rec=jci: mat h,dt1,jn$ norec L3220
+03240   read #5,using L3250,rec=jci: mat h,dt1,jn$ noRec L3220
 03250 L3250: form pos 1,n 8,n 1,pd 2,2*pd 4.2,pd 5.2,n 2,n 8,c 6
 03260   if en1=0 then goto L3290
 03270   if en2>0 and en1><h(1) then goto L3470

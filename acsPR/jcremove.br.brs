@@ -12,13 +12,13 @@
 00120   fncno(cno)
 00130 ! 
 00135   fnconsole(1)
-00140   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outin: close #1: 
+00140   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outIn: close #1: 
 00150 ! ______________________________________________________________________
 00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&" JCMSTR.X -n"
 00170   execute "Copy "&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&" JCTRANS.X -n"
 00180   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&" JCCAT.X -n"
 00190 ! ______________________________________________________________________
-00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outin,keyed 
+00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outIn,keyed 
 00210 ! ______________________________________________________________________
 00220 L220: pr newpage
 00230   fnopenwin(win=101,10,20,14,59,cap$)
@@ -51,7 +51,7 @@
 00500   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",SIZE=0,RecL=123",internal,output 
 00510   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
 00520   close #13,free: 
-00530   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outin,relative 
+00530   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outIn,relative 
 00540   ot4=1
 00550   write #13,using L560,rec=1: " ","",mat tr," ",ot4
 00560 L560: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3

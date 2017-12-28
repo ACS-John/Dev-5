@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsCL\Department
 00020 ! __Departmental breakdown file for monticello and others for claims report
-00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00040   on error goto ERTN
 00050   fntop(program$,cap$="Department Breakdown")
 00060 ! ______________________________________________________________________
@@ -13,10 +13,10 @@
 00120   tln(1)=3 : tln(2)=2 : tln(3)=30
 00130   fltyp$(1)="N" : fltyp$(2)="n" : fltyp$(3)="C"
 00140   mask(1)=30 : mask(2)=30 : mask(3)=0
-00150   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00160   close #1: 
-00170   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
-00180   fnhamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00170   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00180   fnHamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00190   close #1: 
 00200   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&" 1 5 Replace DupKeys -n"
 00210 XIT: fnxit

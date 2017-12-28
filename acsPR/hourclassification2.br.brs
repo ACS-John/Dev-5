@@ -2,7 +2,7 @@
 00020 ! enter and track houly breakdowns of time for comp time, etc
 00030   def library fnhours(eno)
 00040 ! ______________________________________________________________________
-00050     library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnwin3,fnopenprn,fncloseprn,fntos,fnfra,fnlbl,fntxt,fnchk,fnflexinit1,fnflexadd1,fnbutton,fnacs,fnerror,fnmsgbox,fncmdset,fncombof
+00050     library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnwin3,fnopenprn,fncloseprn,fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton,fnAcs,fnerror,fnmsgbox,fnCmdSet,fncombof
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim cnam$*40,cap$*128,message$*40,resp$(10)*40
@@ -14,15 +14,15 @@
 00140 ! 
 00150 ! 
 00160     fntop("S:\acsPR\hourclassification2",cap$="Time Classification")
-00170     open #breakdown=1: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outin,keyed 
-00180     open #classification=2: "Name="&env$('Q')&"\PRmstr\HourClass.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourClass-idx.H"&env$('cno')&",Shr",internal,outin,keyed 
+00170     open #breakdown=1: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00180     open #classification=2: "Name="&env$('Q')&"\PRmstr\HourClass.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourClass-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00190     open #prmstr=3: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00200 MAIN: ! 
 00210     addhours=edithours=0
-00220     fntos(sn$="Main") !:
+00220     fnTos(sn$="Main") !:
           respc=0 : lc=0 : mat resp$=('') !:
           mylen=20 : mypos=mylen+2
-00230     fnlbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
+00230     fnLbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
 00240     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),0,pas, "Enter the employee number you wish to work with.",0) !:
           resp$(1)=str$(eno)
 00250     mat chdr$(8) : mat cmask$(8) : mat flxitm$(8) !:
@@ -51,12 +51,12 @@
 00340     fnflexadd1(mat flxitm$)
 00350     goto READHOURBREAKDOWN
 00360 EOBREAKDOWN: ! 
-00370     fnlbl(lc,100,'')
-00380     fnbutton(lc,37,"&Edit",45,"",0,0,0,0,1) !:
-          fnbutton(lc,44,"&Add",43) !:
-          fnbutton(lc,50,"&Refresh",46) !:
-          fnbutton(lc,60,"&Delete",44)
-00390     fnacs(sn$,0,mat resp$,ck) !:
+00370     fnLbl(lc,100,'')
+00380     fnButton(lc,37,"&Edit",45,"",0,0,0,0,1) !:
+          fnButton(lc,44,"&Add",43) !:
+          fnButton(lc,50,"&Refresh",46) !:
+          fnButton(lc,60,"&Delete",44)
+00390     fnAcs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto XIT
 00395     eno=val(resp$(1)(1:8))
 00400     editrec=val(resp$(2)) ! record # if edit
@@ -71,27 +71,27 @@
 00480     empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L490
 00490 L490: if addhours=1 then class$="": increase=decrease=0
 00500     if edithours=1 then !:
-            read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease norec ADD_FM_DONE
-00510     fntos(sn$="Addfm") !:
+            read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease noRec ADD_FM_DONE
+00510     fnTos(sn$="Addfm") !:
           respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
-00520     fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
-00530     fnlbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
+00520     fnFra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
+00530     fnLbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
 00540     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
           resp$(1)=str$(empno)
-00550     fnlbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
+00550     fnLbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
 00560     fncombof("Hours",lc,mypos,0,env$('Q')&"\PRmstr\Hourclass.h"&env$('cno'),1,5,6,30,env$('Q')&"\PRmstr\Hourclass-idx.h"&env$('cno'),0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) !:
           resp$(2)=class$
-00570     fnlbl(lc+=1,1,'Date:',mylen,right,0,frame1)
-00580     fntxt(lc,mypos,10,0,right,'3',0,"",frame1 ) !:
+00570     fnLbl(lc+=1,1,'Date:',mylen,right,0,frame1)
+00580     fnTxt(lc,mypos,10,0,right,'3',0,"",frame1 ) !:
           resp$(3)=str$(tdate)
-00590     fnlbl(lc+=1,1,'Increase:',mylen,right,0,frame1)
-00600     fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
+00590     fnLbl(lc+=1,1,'Increase:',mylen,right,0,frame1)
+00600     fnTxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
           resp$(4)=str$(increase)
-00610     fnlbl(lc+=1,1,'Decrease:',mylen,right,0,frame1)
-00620     fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
+00610     fnLbl(lc+=1,1,'Decrease:',mylen,right,0,frame1)
+00620     fnTxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
           resp$(5)=str$(decrease)
-00630     fncmdset(4)
-00640     fnacs(sn$,0,mat resp$,ck) !:
+00630     fnCmdSet(4)
+00640     fnAcs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto MAIN
 00650     empno=val(resp$(1)(1:8)) !:
           class$=resp$(2)(1:5) !:
@@ -135,7 +135,7 @@
 00880 ! ______________________________________________________________________
 00881 XIT: fnend 
 00890 SETUP: ! 
-00900   open #breakdown=1: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",RecL=39,KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",kps=1,kln=5,replace",internal,outin,keyed 
+00900   open #breakdown=1: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",RecL=39,KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",kps=1,kln=5,replace",internal,outIn,keyed 
 00910   close #breakdown: 
 00920   execute "Index "&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&' '&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&" 1/9/14 8/5/8 Replace DupKeys"
 00930   stop 

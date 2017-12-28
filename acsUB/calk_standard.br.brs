@@ -3,11 +3,11 @@
 08040     setup_calk=1
 08060     library 'S:\Core\Library': fnpause,fncd,fngethandle,fnget_services,fncreg_read
 08062     library 'S:\Core\Library': fnDepositChangeLog
-08080     dim x$*10,gb(10),dp$*60,servicename$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
+08080     dim x$*10,gb(10),dp$*60,serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 08140     FORM_RATEMSTR: form pos 55,32*g 10
-08160     fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
-08180     for j=1 to udim(servicename$)
-08200       servicename$(j)=trim$(servicename$(j))
+08160     fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+08180     for j=1 to udim(serviceName$)
+08200       serviceName$(j)=trim$(serviceName$(j))
 08220     next j
 08240   end if 
 08260   if env$('client')='Campbell' then
@@ -46,20 +46,20 @@
 14520   !   if service$(6)='SF' and env$('client')="Pennington" and extra(11)=0 then extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
 14900   ! 
 30000   first_non_metered_service=5
-30020   if fn_PassesOnlyMonthFilter(1) and servicename$(1)<>"" and service$(1)="WA" then let fn_calk_water ! always use WA as water code in rate file
-30040   if fn_PassesOnlyMonthFilter(3) and servicename$(3)="Lawn Meter" and service$(3)="LM" then let fn_calk_lawnmeter ! must always use LM for the rate code for lawn meters
-30060   if fn_PassesOnlyMonthFilter(3) and servicename$(3)(1:5)="Reduc" then let fn_calk_reduc
-30080   if fn_PassesOnlyMonthFilter(2) and servicename$(2)<>"" and service$(2)="SW" then let fn_calk_sewer ! always use SW for sewer code in rate file
-30100   if fn_PassesOnlyMonthFilter(3) and servicename$(3)="Electric" and service$(3)="EL" then let fn_calk_electric ! must always use EL for the rate code for electric
-30120   if fn_PassesOnlyMonthFilter(3) and servicename$(3)<>"Electric" and trim$(servicename$(3))<>"" and trim$(service$(3))="EL" then let fn_calk_electric !  allow electric go thru usage calculation if beign as another type of meter other that electric
-30140   if fn_PassesOnlyMonthFilter(3) and servicename$(3)<>"Electric" and trim$(servicename$(3))<>"" and trim$(service$(3))<>"" then 
+30020   if fn_PassesOnlyMonthFilter(1) and serviceName$(1)<>"" and service$(1)="WA" then let fn_calk_water ! always use WA as water code in rate file
+30040   if fn_PassesOnlyMonthFilter(3) and serviceName$(3)="Lawn Meter" and service$(3)="LM" then let fn_calk_lawnmeter ! must always use LM for the rate code for lawn meters
+30060   if fn_PassesOnlyMonthFilter(3) and serviceName$(3)(1:5)="Reduc" then let fn_calk_reduc
+30080   if fn_PassesOnlyMonthFilter(2) and serviceName$(2)<>"" and service$(2)="SW" then let fn_calk_sewer ! always use SW for sewer code in rate file
+30100   if fn_PassesOnlyMonthFilter(3) and serviceName$(3)="Electric" and service$(3)="EL" then let fn_calk_electric ! must always use EL for the rate code for electric
+30120   if fn_PassesOnlyMonthFilter(3) and serviceName$(3)<>"Electric" and trim$(serviceName$(3))<>"" and trim$(service$(3))="EL" then let fn_calk_electric !  allow electric go thru usage calculation if beign as another type of meter other that electric
+30140   if fn_PassesOnlyMonthFilter(3) and serviceName$(3)<>"Electric" and trim$(serviceName$(3))<>"" and trim$(service$(3))<>"" then 
 30160     j=3
 30180     g(3)=fn_calk_non_metered(j) ! go thru non-metered if using electric for something else 
 30200   end if 
-30220   ! If SERVICENAME$(3)<>"" AND SERVICE$(3)="AD" Then let fn_calk_administrative_fee ! electric service used of administrative fee
-30240   if fn_PassesOnlyMonthFilter(4) and trim$(servicename$(4))="Gas" and trim$(service$(4))="GA" then let fn_calk_gas
-30260   if fn_PassesOnlyMonthFilter(4) and servicename$(4)<>"Gas" and trim$(servicename$(4))<>"" and trim$(service$(4))="GA" then let fn_calk_gas !  allow gas go thru usage calculation if being usd as another type of meter other that gas
-30280   if fn_PassesOnlyMonthFilter(4) and servicename$(4)<>"Gas" and trim$(servicename$(4))<>"" and trim$(service$(4))<>"" then 
+30220   ! If serviceName$(3)<>"" AND SERVICE$(3)="AD" Then let fn_calk_administrative_fee ! electric service used of administrative fee
+30240   if fn_PassesOnlyMonthFilter(4) and trim$(serviceName$(4))="Gas" and trim$(service$(4))="GA" then let fn_calk_gas
+30260   if fn_PassesOnlyMonthFilter(4) and serviceName$(4)<>"Gas" and trim$(serviceName$(4))<>"" and trim$(service$(4))="GA" then let fn_calk_gas !  allow gas go thru usage calculation if being usd as another type of meter other that gas
+30280   if fn_PassesOnlyMonthFilter(4) and serviceName$(4)<>"Gas" and trim$(serviceName$(4))<>"" and trim$(service$(4))<>"" then 
 30300     j=4
 30320     g(4)=fn_calk_non_metered(j) ! go thru non-metered if using gas for something else 
 30340   end if 
@@ -70,11 +70,11 @@
 32000   fn_calk_demand
 32010   for j=first_non_metered_service to 10
 32012     if fn_PassesOnlyMonthFilter(j) then 
-32020       if trim$(servicename$(j))="Interest on Deposit" and calc_interest_on_deposit then 
+32020       if trim$(serviceName$(j))="Interest on Deposit" and calc_interest_on_deposit then 
 32030         fn_interest_credit(interest_credit_rate)
-32040       else if penalty$(j)<>"Y" and service$(j)<>"TX" and trim$(servicename$(j))<>"" then ! skip penalty, sales tax and unused services
+32040       else if penalty$(j)<>"Y" and service$(j)<>"TX" and trim$(serviceName$(j))<>"" then ! skip penalty, sales tax and unused services
 32050         if env$('client')="Kimberling" and int(d1*.0001)><2 and (j=5 or j=6) then goto LX1110 ! CALCULATE fees EACH FEB 1
-32060         if trim$(servicename$(j))="Inspection Fee" and ~charge_inspection_fee then goto LX1110 ! French Settlement Gas only ask that question, but it should only be calculated when selected
+32060         if trim$(serviceName$(j))="Inspection Fee" and ~charge_inspection_fee then goto LX1110 ! French Settlement Gas only ask that question, but it should only be calculated when selected
 32070         if j=6 and env$('client')='Lovington' then goto SKIP_THIS_NON_METERED_SERVICE
 32080         g(j)=fn_calk_non_metered(j)
 32100         SKIP_THIS_NON_METERED_SERVICE: ! 
@@ -155,8 +155,8 @@
 36240   end if 
 36300   if extra(5)>0 then usage_sewer=usage_sewer-extra(5) ! sewer reduction
 36320   if env$('client')="Ash Grove" then usage_sewer=int((usage_sewer+50)*.01)*100 ! ROUND TO NEAREST 100 ON SEWER
-36340   if servicename$(3)="Lawn Meter" then usage_sewer=usage_sewer-x2 ! reduce sewer usage by lawn meter usage
-36360   if servicename$(3)(1:5)="Reduc" and service$(3)="SW" then usage_sewer=usage_sewer-x2 ! reduce sewer usage by Reduce Sewer usage
+36340   if serviceName$(3)="Lawn Meter" then usage_sewer=usage_sewer-x2 ! reduce sewer usage by lawn meter usage
+36360   if serviceName$(3)(1:5)="Reduc" and service$(3)="SW" then usage_sewer=usage_sewer-x2 ! reduce sewer usage by Reduce Sewer usage
 36380   if env$('client')="Kimberling" then usage_sewer=usage_sewer-x2-x3 : eu1=x2
 36400   w(2)=mc1*max(1,extra(14)) ! units per meter - sewer (default to one)
 36420   if usage_sewer<=mu1 then goto L3300 else mu2=mu1
@@ -334,7 +334,7 @@
 44000 def fn_calk_electric
 44010   ! if trim$(x$)='300485.00' then pause
 44020   if env$('client')="Kimberling" then goto ELECTRIC_COMPLETED ! don't have electric
-44040   if service$(3)="EL" and servicename$(3)<>"Electric" then goto ELECTRIC_COMPLETED ! electric used for some other metered service
+44040   if service$(3)="EL" and serviceName$(3)<>"Electric" then goto ELECTRIC_COMPLETED ! electric used for some other metered service
 44060   if x(10)<>0 then 
 44080     w(3)=x(10)
 44100     if x(13)=0 then goto ELECTRIC_COMPLETED
@@ -553,8 +553,8 @@
 54010   ! if debug_account then pr x$; 'about to go through gas routine' : pause
 54020   ! w(4) seems to be the Gas Charge that accumulates as it is calculated
 54040   if env$('client')="Kimberling" then goto GAS_COMPLETED ! don't have gas (used for sewer reduction)
-54060   if service$(4)="GA" and servicename$(4)<>"Gas" then goto GAS_COMPLETED ! gas used for some other metered service
-54080   if x(11)>0 then w(4)=x(11): goto GAS_COMPLETED ! gas charge from input4172 if servicename$(4)="GA" and service$(4)<>"Gas" then goto gas_completed  !gas used for some other metered service
+54060   if service$(4)="GA" and serviceName$(4)<>"Gas" then goto GAS_COMPLETED ! gas used for some other metered service
+54080   if x(11)>0 then w(4)=x(11): goto GAS_COMPLETED ! gas charge from input4172 if serviceName$(4)="GA" and service$(4)<>"Gas" then goto gas_completed  !gas used for some other metered service
 54100   if x(14)>0 then x3=x(14) ! gas usage override
 54120   if b(4)><0 then goto STANDARD_GAS_CHARGE ! 2870
 54140   if a(4)=0 then goto L4820
@@ -605,10 +605,10 @@
 56220     if d1=f then 
 56240       fn_depr(x$,d1) ! recalculation and deposit possibly already refunded
 56260     else
-56280       if b(8)<>0 then let fnDepositChangeLog(x$,b(8),0,d1,trim$(servicename$(1))(1:15)&' Deposit Refunded')
-56300       if b(9)<>0 then let fnDepositChangeLog(x$,b(9),0,d1,trim$(servicename$(2))(1:15)&' Deposit Refunded')
-56320       if b(10)<>0 then let fnDepositChangeLog(x$,b(10),0,d1,trim$(servicename$(3))(1:15)&' Deposit Refunded')
-56340       if b(11)<>0 then let fnDepositChangeLog(x$,b(11),0,d1,trim$(servicename$(4))(1:15)&' Deposit Refunded')
+56280       if b(8)<>0 then let fnDepositChangeLog(x$,b(8),0,d1,trim$(serviceName$(1))(1:15)&' Deposit Refunded')
+56300       if b(9)<>0 then let fnDepositChangeLog(x$,b(9),0,d1,trim$(serviceName$(2))(1:15)&' Deposit Refunded')
+56320       if b(10)<>0 then let fnDepositChangeLog(x$,b(10),0,d1,trim$(serviceName$(3))(1:15)&' Deposit Refunded')
+56340       if b(11)<>0 then let fnDepositChangeLog(x$,b(11),0,d1,trim$(serviceName$(4))(1:15)&' Deposit Refunded')
 56360       b(8)=b(9)=b(10)=b(11)=0
 56380     end if
 56400   end if 
@@ -687,8 +687,8 @@
 68060 fnend 
 70000 def fn_service_other
 70020   if ~service_other_return then 
-70040     for service_other_servicename_item=1 to udim(mat servicename$)
-70060       if trim$(servicename$(service_other_servicename_item))(1:5)="Other" then 
+70040     for service_other_servicename_item=1 to udim(mat serviceName$)
+70060       if trim$(serviceName$(service_other_servicename_item))(1:5)="Other" then 
 70080         service_other_return=service_other_servicename_item
 70100         goto SERVICE_OTHER_XIT
 70120       end if 

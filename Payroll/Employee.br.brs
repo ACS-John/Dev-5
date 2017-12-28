@@ -3,39 +3,39 @@
 10000 ! r: setup and open files
 10020   fn_setup
 10040   fntop(program$)
-10060   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-10080   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+10060   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10080   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10100   if ~exists(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')) then gosub SETUP_PAYROLLCHECKS
 10120   if ~exists(env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr") then gosub INDEX_CHECKIDX3
-10140   open #h_checkhistory:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outin,keyed 
-10160   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outin,keyed 
+10140   open #h_checkhistory:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10160   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10180   if ~exists(env$('Q')&"\PRmstr\Department.h"&env$('cno')) then ! SETUP_DEPARTMENT
-10200     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",RecL=149,kps=1/9,kln=8/3,use",internal,outin,keyed 
+10200     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",RecL=149,kps=1/9,kln=8/3,use",internal,outIn,keyed 
 10220     close #2: 
 10240     execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&" 1/9 8/3 Replace DupKeys -n"
 10260   end if 
-10280   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+10280   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10300   goto MENU1
 10320 ! /r
 12000 MENU1: ndep=0 : goto ASKEMPLOYEE
 14000 ASKEMPLOYEE: ! r:
 14020   ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
-14040   fntos(sn$="Employee-ask")
+14040   fnTos(sn$="Employee-ask")
 14060   respc=0
-14080   fnlbl(1,1,"Employee Number:",16,right)
+14080   fnLbl(1,1,"Employee Number:",16,right)
 14100   fncmbemp(1,18)
 14120   if hact$="" then 
 14140     resp$(respc+=1)=""
 14160   else 
 14180     resp$(respc+=1)=hact$
 14200   end if 
-14220   fncmdkey("&Add",1,0,0,"Add a new employee" )
-14240   fncmdkey("E&dit",2,1,0,"Access the highlighted record")
-14260   fncmdkey("&Next Record",3,0,0,"Access next record in employee # order")
-14280   fncmdkey("&Search",8,0,0,"Search for employee record")
-14300   fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
-14320   fncmdkey("E&xit",6,0,1,"Returns to menu")
-14340   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+14220   fnCmdKey("&Add",1,0,0,"Add a new employee" )
+14240   fnCmdKey("E&dit",2,1,0,"Access the highlighted record")
+14260   fnCmdKey("&Next Record",3,0,0,"Access next record in employee # order")
+14280   fnCmdKey("&Search",8,0,0,"Search for employee record")
+14300   fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
+14320   fnCmdKey("E&xit",6,0,1,"Returns to menu")
+14340   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 14360   hact$=resp$(1)(1:8)
 14380   eno=ent=val(resp$(1)(1:8))
 14400   if ckey=1 then 
@@ -63,15 +63,15 @@
 14860   end if 
 14880   goto ADDREC ! /r
 16000 ADDREC: ! r:
-16020   fntos(sn$="Employeefm")
+16020   fnTos(sn$="Employeefm")
 16040   respc=0 : frac=0
 16060   mylen=25 : mypos=mylen+2
-16080   fnlbl(1,1,"Employee Number:",mylen,1)
-16100   fntxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+16080   fnLbl(1,1,"Employee Number:",mylen,1)
+16100   fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
 16120   resp$(respc+=1)=str$(eno)
-16140   fncmdkey("&Next",1,1,0,"Process employee information.")
-16160   fncmdkey("&Cancel",5,0,1,"Returns to maintenance screem.")
-16180   fnacs(sn$,0,mat resp$,ckey)
+16140   fnCmdKey("&Next",1,1,0,"Process employee information.")
+16160   fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screem.")
+16180   fnAcs(sn$,0,mat resp$,ckey)
 16200   if ckey=5 then goto ASKEMPLOYEE
 16220   add1=1
 16240   ent=val(resp$(1))
@@ -116,117 +116,117 @@
 22080   fnmsgbox(mat ml$,resp$,'',48)
 22100   goto ASKEMPLOYEE ! /r
 26000 SCR_EMPLOYEE: ! r:
-26020   fntos(sn$="Employeeedit")
+26020   fnTos(sn$="Employeeedit")
 26040   respc=0 : frac=0 ! 
 26060   mylen=28 : mypos=mylen+2
-26080   fnlbl(1,1,"Employee Number:",mylen,1)
-26100   fntxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+26080   fnLbl(1,1,"Employee Number:",mylen,1)
+26100   fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
 26120   resp$(respc+=1)=str$(eno)
-26140   fnlbl(2,1,"Name:",mylen,1)
-26160   fntxt(2,mylen+3,30,30,0,"",0,"Name can be entered first name first or last name first.")
+26140   fnLbl(2,1,"Name:",mylen,1)
+26160   fnTxt(2,mylen+3,30,30,0,"",0,"Name can be entered first name first or last name first.")
 26180   resp$(respc+=1)=em$(1)
-26200   fnlbl(3,1,"Address:",mylen,1)
-26220   fntxt(3,mylen+3,30,30,0,"",0,"")
+26200   fnLbl(3,1,"Address:",mylen,1)
+26220   fnTxt(3,mylen+3,30,30,0,"",0,"")
 26240   resp$(respc+=1)=em$(2)
-26260   fnlbl(4,1,"City, State Zip:",mylen,1)
-26280   fntxt(4,mylen+3,30,30,0,"",0,"")
+26260   fnLbl(4,1,"City, State Zip:",mylen,1)
+26280   fnTxt(4,mylen+3,30,30,0,"",0,"")
 26300   resp$(respc+=1)=em$(3)
-26320   fnlbl(5,1,"Social Security #:",mylen,1)
-26340   fntxt(5,mylen+3,11,11,0,"",0,"")
+26320   fnLbl(5,1,"Social Security #:",mylen,1)
+26340   fnTxt(5,mylen+3,11,11,0,"",0,"")
 26360   resp$(respc+=1)=ss$
-26380   fnlbl(6,1,"Race:",mylen,1)
+26380   fnLbl(6,1,"Race:",mylen,1)
 26400   respc+=1: for j=1 to udim(race_option$)
 26420     if rs(1)=val(race_option$(j)(1:1)) then resp$(respc)=race_option$(j)
 26440   next j
 26460   fncomboa("Race",6,mylen+3,mat race_option$,"",16)
-26480   fnlbl(7,1,"Sex:",mylen,1)
+26480   fnLbl(7,1,"Sex:",mylen,1)
 26500   respc+=1: for j=1 to udim(gender_option$)
 26520     if rs(2)=val(gender_option$(j)(1:1)) then resp$(respc)=gender_option$(j)
 26540   next j
 26560   fncomboa("Sex",7,mylen+3,mat gender_option$,"",10)
-26580   fnlbl(8,1,"Marital Status:",mylen,1)
+26580   fnLbl(8,1,"Marital Status:",mylen,1)
 26600   respc+=1: for j=1 to udim(married_option$)
 26620     if em(1)=val(married_option$(j)(1:1)) then resp$(respc)=married_option$(j)
 26640   next j
 26660   fncomboa("Marital",8,mylen+3,mat married_option$) ! ,"",11)
-26680   fnlbl(9,1,"Federal Exemptions:",mylen,1)
+26680   fnLbl(9,1,"Federal Exemptions:",mylen,1)
 26700   respc+=1
 26720   for j=1 to udim(fed_exemption_option$)
 26740     if em(2)=val(fed_exemption_option$(j)(1:2)) then resp$(respc)=fed_exemption_option$(j)
 26760   next j
 26780   fncomboa("FedEx",9,mylen+3,mat fed_exemption_option$,"",3)
-26800   fnlbl(10,1,"State Exemptions:",mylen,1)
+26800   fnLbl(10,1,"State Exemptions:",mylen,1)
 26820   respc+=1
 26840   for j=1 to udim(fed_exemption_option$)
 26860     if em(3)=val(fed_exemption_option$(j)(1:2)) then resp$(respc)=fed_exemption_option$(j)
 26880   next j
 26900   fncomboa("StateEx",10,mylen+3,mat fed_exemption_option$,"",3)
-26920   fnlbl(11,1,"Employment Status:",mylen,1)
+26920   fnLbl(11,1,"Employment Status:",mylen,1)
 26940   fncombof("EmpStatus",11,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 26960   resp$(respc+=1)=str$(em(4))
-26980   fnlbl(12,1,"Pay Code:",mylen,1)
+26980   fnLbl(12,1,"Pay Code:",mylen,1)
 27000   respc+=1
 27020   for j=1 to udim(payperiod_option$)
 27040     if em(5)=val(payperiod_option$(j)(1:1)) then resp$(respc)=payperiod_option$(j)
 27060   next j
 27080   fncomboa("PayCode",12,mylen+3,mat payperiod_option$,"",16)
-27100   fnlbl(13,1,"FICA Code:",mylen,1)
+27100   fnLbl(13,1,"FICA Code:",mylen,1)
 27120   respc+=1: for j=1 to udim(code6$)
 27140     if em(6)=val(code6$(j)(1:1)) then resp$(respc)=code6$(j)
 27160   next j
 27180   fncomboa("FICACode",13,mylen+3,mat code6$,"",32)
-27200   fnlbl(14,1,"EIC Code:",mylen,1)
+27200   fnLbl(14,1,"EIC Code:",mylen,1)
 27220   fncomboa("EICCode",14,mylen+3,mat code7$,"",31)
 27240   resp$(respc+=1)=code7$(em(7)+1)
-27260   fnlbl(15,1,"Sick Pay Code:",mylen,1)
-27280   fntxt(15,mylen+3,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
+27260   fnLbl(15,1,"Sick Pay Code:",mylen,1)
+27280   fnTxt(15,mylen+3,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
 27300   resp$(respc+=1)=str$(em(8))
-27320   fnlbl(16,1,"Vacation Pay Code:",mylen,1)
-27340   fntxt(16,mylen+3,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
+27320   fnLbl(16,1,"Vacation Pay Code:",mylen,1)
+27340   fnTxt(16,mylen+3,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
 27360   resp$(respc+=1)=str$(em(9))
-27380   fnlbl(17,1,"Sick Hours Accrued:",mylen,1)
-27400   fntxt(17,mylen+3,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
+27380   fnLbl(17,1,"Sick Hours Accrued:",mylen,1)
+27400   fnTxt(17,mylen+3,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
 27420   resp$(respc+=1)=str$(em(10))
-27440   fnlbl(18,1,"Vacation Hours Accrued:",mylen,1)
-27460   fntxt(18,mylen+3,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
+27440   fnLbl(18,1,"Vacation Hours Accrued:",mylen,1)
+27460   fnTxt(18,mylen+3,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
 27480   resp$(respc+=1)=str$(em(11))
-27500   fnlbl(19,1,"Standard Federal W/H:",mylen,1)
-27520   fntxt(19,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
+27500   fnLbl(19,1,"Standard Federal W/H:",mylen,1)
+27520   fnTxt(19,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
 27540   resp$(respc+=1)=str$(em(12))
 27560   col3_pos=51 : col3_len=20
-27580   fnlbl(19,col3_pos,"Federal Tax Add-On:",col3_len,1)
-27600   fntxt(19,73,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
+27580   fnLbl(19,col3_pos,"Federal Tax Add-On:",col3_len,1)
+27600   fnTxt(19,73,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
 27620   resp$(respc+=1)=str$(em(13))
-27640   fnlbl(20,1,"Standard State W/H:",mylen,1)
-27660   fntxt(20,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
+27640   fnLbl(20,1,"Standard State W/H:",mylen,1)
+27660   fnTxt(20,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
 27680   resp$(respc+=1)=str$(em(14))
-27700   fnlbl(20,col3_pos,"State Tax Add-On:",col3_len,1)
-27720   fntxt(20,73,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
+27700   fnLbl(20,col3_pos,"State Tax Add-On:",col3_len,1)
+27720   fnTxt(20,73,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
 27740   resp$(respc+=1)=str$(em(15))
-27760   fnlbl(21,1,"Date Hired:",mylen,1)
-27780   fntxt(21,mylen+3,10,10,0,"1",0,"The date hired is only used for information purposes only.")
+27760   fnLbl(21,1,"Date Hired:",mylen,1)
+27780   fnTxt(21,mylen+3,10,10,0,"1",0,"The date hired is only used for information purposes only.")
 27800   resp$(respc+=1)=str$(em(16))
-27820   fnlbl(21,col3_pos,"Last Payroll Date:",col3_len,1)
-27840   fntxt(21,73,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
+27820   fnLbl(21,col3_pos,"Last Payroll Date:",col3_len,1)
+27840   fnTxt(21,73,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
 27860   resp$(respc+=1)=str$(lpd)
-27880   fnlbl(22,1,"Birth Date:",mylen,1)
-27900   fntxt(22,mylen+3,10,10,0,"1",0,"The birth date is not required.")
+27880   fnLbl(22,1,"Birth Date:",mylen,1)
+27900   fnTxt(22,mylen+3,10,10,0,"1",0,"The birth date is not required.")
 27920   resp$(respc+=1)=str$(bd)
-27940   fnlbl(22,col3_pos,"Phone Number:",col3_len,1)
-27960   fntxt(22,73,12,12,0,"",0,"")
+27940   fnLbl(22,col3_pos,"Phone Number:",col3_len,1)
+27960   fnTxt(22,73,12,12,0,"",0,"")
 27980   resp$(respc+=1)=ph$
 28000 ! picture=0
-28020   fncmdkey("&Departments",2,0,0,"Allows you to review departmental information.")
-28040   fncmdkey("Direct D&eposit",7,0,0,"Review direct deposit information.")
-28060   fncmdkey("Re&view Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
-28080   fncmdkey("&Review Checks",10,0,0,"Review check information.")
-28100 ! fncmdkey("&Picture",6,0,0,"Place any picture in share\images.")
+28020   fnCmdKey("&Departments",2,0,0,"Allows you to review departmental information.")
+28040   fnCmdKey("Direct D&eposit",7,0,0,"Review direct deposit information.")
+28060   fnCmdKey("Re&view Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
+28080   fnCmdKey("&Review Checks",10,0,0,"Review check information.")
+28100 ! fnCmdKey("&Picture",6,0,0,"Place any picture in share\images.")
 28120   if ad1=0 then 
-28140     fncmdkey("De&lete",4,0,0,"Deletes this record")
+28140     fnCmdKey("De&lete",4,0,0,"Deletes this record")
 28160   end if 
-28180   fncmdkey("&Save",1,1,0,"Saves all changes.")
-28200   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-28220   fnacs(sn$,0,mat resp$,ckey)
+28180   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+28200   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+28220   fnAcs(sn$,0,mat resp$,ckey)
 29000   if ckey=5 then goto ASKEMPLOYEE
 29020   eno=val(resp$(1)(1:8))
 29040   em$(1)=resp$(2) ! name
@@ -277,71 +277,71 @@
 30100   if firstread=1 and teno<>eno then goto DEPARTMENT_ADD
 30120   if teno<>eno then goto SCR_EMPLOYEE
 30140 SCR_DEPARTMENT: ! 
-30160   fntos(sn$="EmployeeDep")
+30160   fnTos(sn$="EmployeeDep")
 30180   respc=0 : fram1=1
 30200   mylen=20 : mypos=mylen+2 : mat resp$=("")
-30220   fnfra(1,1,6,97,"Departmental Information - "&trim$(em$(1)))
-30240   fnlbl(1,1,"Employee Number:",mylen,1,0,fram1)
-30260   fntxt(1,mylen+3,8,8,1,"1030",0,"Employee numbers must be numeric.",fram1)
+30220   fnFra(1,1,6,97,"Departmental Information - "&trim$(em$(1)))
+30240   fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
+30260   fnTxt(1,mylen+3,8,8,1,"1030",0,"Employee numbers must be numeric.",fram1)
 30280   resp$(respc+=1)=str$(eno)
-30300   fnlbl(2,1,"Department Number:",mylen,1,0,fram1)
-30320   fntxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department # can be used twice on the same employee.",fram1)
+30300   fnLbl(2,1,"Department Number:",mylen,1,0,fram1)
+30320   fnTxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department # can be used twice on the same employee.",fram1)
 30340   resp$(respc+=1)=str$(tdn)
-30360   fnlbl(2,35,"General Ledger #:",mylen,1,0,fram1)
+30360   fnLbl(2,35,"General Ledger #:",mylen,1,0,fram1)
 30380   fnqgl(2,58,fram1)
 30400   resp$(respc+=1)=fnrgl$(gl$)
-30420   fnlbl(3,1,"Last Review Date:",mylen,1,0,fram1)
-30440   fntxt(3,mylen+3,8,8,1,"1",0,"Last review is only used for information purposes.  Use MMDDYY format.",fram1)
+30420   fnLbl(3,1,"Last Review Date:",mylen,1,0,fram1)
+30440   fnTxt(3,mylen+3,8,8,1,"1",0,"Last review is only used for information purposes.  Use MMDDYY format.",fram1)
 30460   resp$(respc+=1)=str$(tdt(1))
-30480   fnlbl(3,35,"Next Review Date:",mylen,1,0,fram1)
-30500   fntxt(3,58,8,8,1,"1",0,"Next review date is only used for information purposes.  Use MMDDYY format.",fram1)
+30480   fnLbl(3,35,"Next Review Date:",mylen,1,0,fram1)
+30500   fnTxt(3,58,8,8,1,"1",0,"Next review date is only used for information purposes.  Use MMDDYY format.",fram1)
 30520   resp$(respc+=1)=str$(tdt(2))
-30540   fnlbl(4,1,"Last Increase Date:",mylen,1,0,fram1)
-30560   fntxt(4,mylen+3,8,8,1,"1",0,"Last increase date is only used for information purposes.  Use MMDDYY format.",fram1)
+30540   fnLbl(4,1,"Last Increase Date:",mylen,1,0,fram1)
+30560   fnTxt(4,mylen+3,8,8,1,"1",0,"Last increase date is only used for information purposes.  Use MMDDYY format.",fram1)
 30580   resp$(respc+=1)=str$(tdt(3))
-30600   fnlbl(4,35,"Last Increase Amt:",mylen,1,0,fram1)
-30620   fntxt(4,58,12,12,1,"10",0,"Just a method of storing the amount of the last pay increase.  You must enter by hand.",fram1)
+30600   fnLbl(4,35,"Last Increase Amt:",mylen,1,0,fram1)
+30620   fnTxt(4,58,12,12,1,"10",0,"Just a method of storing the amount of the last pay increase.  You must enter by hand.",fram1)
 30640   resp$(respc+=1)=str$(tli)
-30660   fnlbl(5,1,"Last Payroll Date:",mylen,1,0,fram1)
-30680   fntxt(5,mylen+3,8,8,1,"1",0,"Last payroll date is updated each time pay is calculated.  Use MMDDYY format.  Do not change this date.",fram1)
+30660   fnLbl(5,1,"Last Payroll Date:",mylen,1,0,fram1)
+30680   fnTxt(5,mylen+3,8,8,1,"1",0,"Last payroll date is updated each time pay is calculated.  Use MMDDYY format.  Do not change this date.",fram1)
 30700   resp$(respc+=1)=str$(tdt(4))
-30720   fnlbl(5,35,"State Code:",mylen,1,0,fram1)
-30740 ! fnTXT(5,58,2,2,1,"30",0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
+30720   fnLbl(5,35,"State Code:",mylen,1,0,fram1)
+30740 ! fnTxt(5,58,2,2,1,"30",0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
 30760   fncomboa("StateCode",5,58,mat state_option$,"",11,fram1)
 30780   if tcd(1)=0 or tcd(1)>10 then tcd(1)=1 ! default state code to 1
 30800   resp$(respc+=1)=state_option$(tcd(1))
-30820   fnlbl(6,1,"Workmans Code:",mylen,1,0,fram1)
-30840   fntxt(6,mylen+3,2,2,1,"30",0,"You workmans comp code is used for grouping certain types of work on the workmans comp report.",fram1)
+30820   fnLbl(6,1,"Workmans Code:",mylen,1,0,fram1)
+30840   fnTxt(6,mylen+3,2,2,1,"30",0,"You workmans comp code is used for grouping certain types of work on the workmans comp report.",fram1)
 30860   resp$(respc+=1)=str$(tcd(2))
-30880   fnlbl(6,35,"Union Code:",mylen,1,0,fram1)
-30900   fntxt(6,58,2,2,1,"30",0,"You union code is used for grouping employees for the union report.",fram1)
+30880   fnLbl(6,35,"Union Code:",mylen,1,0,fram1)
+30900   fnTxt(6,58,2,2,1,"30",0,"You union code is used for grouping employees for the union report.",fram1)
 30920   resp$(respc+=1)=str$(tcd(3))
-30940   fram2=2: fnfra(9,1,3,97,"Salary and Pay Rates")
-30960   fnlbl(1,1,"Salary:",mylen,1,0,fram2)
-30980   fntxt(1,mylen+3,12,12,1,"10",0,"Enter the salary for the pay period.",fram2)
+30940   fram2=2: fnFra(9,1,3,97,"Salary and Pay Rates")
+30960   fnLbl(1,1,"Salary:",mylen,1,0,fram2)
+30980   fnTxt(1,mylen+3,12,12,1,"10",0,"Enter the salary for the pay period.",fram2)
 31000   resp$(respc+=1)=str$(tdet(1))
-31020   fnlbl(2,1,"Regular Hourly Rate:",mylen,1,0,fram2)
-31040   fntxt(2,mylen+3,12,12,1,"10",0,"Enter the regular hourly rate.",fram2)
+31020   fnLbl(2,1,"Regular Hourly Rate:",mylen,1,0,fram2)
+31040   fnTxt(2,mylen+3,12,12,1,"10",0,"Enter the regular hourly rate.",fram2)
 31060   resp$(respc+=1)=str$(tdet(2))
-31080   fnlbl(2,35,"O/T Hourly Rate:",mylen,1,0,fram2)
-31100   fntxt(2,58,12,12,1,"10",0,"Enter the overtime hourly rate.",fram2)
+31080   fnLbl(2,35,"O/T Hourly Rate:",mylen,1,0,fram2)
+31100   fnTxt(2,58,12,12,1,"10",0,"Enter the overtime hourly rate.",fram2)
 31120   resp$(respc+=1)=str$(tdet(3))
-31140   fram3=3: fnfra(14,1,10,97,"Deductions and Additions")
+31140   fram3=3: fnFra(14,1,10,97,"Deductions and Additions")
 31160   for j=1 to 10
-31180     fnlbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
-31200     fntxt(j,mylen+3,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
+31180     fnLbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
+31200     fnTxt(j,mylen+3,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
 31220     resp$(respc+=1)=str$(tdet(j*2-1+3))
-31240     fnlbl(j,35,dednames$(j*2),mylen,1,0,fram3)
-31260     fntxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
+31240     fnLbl(j,35,dednames$(j*2),mylen,1,0,fram3)
+31260     fnTxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
 31280     resp$(respc+=1)=str$(tdet(j*2+3))
 31300   next j
-31320   fncmdkey("&Next Record",3,1,0,"Save any changes and access next departmental record.")
-31340   fncmdkey("&Add Department",4,0,0,"Add an additional department record.")
-31360   fncmdkey("&Review Checks",10,0,0,"Review check information.")
-31380   fncmdkey("&Delete",9,0,0,"Deletes the department record.")
-31400   fncmdkey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
-31420   fncmdkey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
-31440   fnacs(sn$,0,mat resp$,ckey)
+31320   fnCmdKey("&Next Record",3,1,0,"Save any changes and access next departmental record.")
+31340   fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
+31360   fnCmdKey("&Review Checks",10,0,0,"Review check information.")
+31380   fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
+31400   fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
+31420   fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
+31440   fnAcs(sn$,0,mat resp$,ckey)
 32000   if ckey=5 then goto ASKEMPLOYEE
 32020   teno=val(resp$(1)) ! employee # in dept record
 32040   tdn=val(resp$(2)) ! department #
@@ -490,7 +490,7 @@
 46740   for wsid_item=1 to 99
 46760     wsid_item$=cnvrt$('pic(##)',wsid_item)
 46780     if exists(env$('Q')&'\PRmstr\rpwork'&wsid_item$&'.h'&env$('cno')) then 
-46800       open #h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&"idx.H"&env$('cno')&',shr',internal,outin,keyed ioerr RPWORK_OPEN_ERR
+46800       open #h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&"idx.H"&env$('cno')&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
 46820       fnkey_change(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 46840       close #h_rpwork: 
 46860       RPWORK_OPEN_ERR: ! 
@@ -505,7 +505,7 @@
 47060   CHGENO_XIT: ! 
 47080 goto MENU1 ! /r
 48000 def fn_setup
-48020   library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fnerror,fnhours,fntos,fnlbl,fncmbemp,fncmdkey,fnacs,fncombof,fntxt,fnmsgbox,fncomboa,fnpic,fnfra,fnrgl$,fnqgl,fnagl$,fncheckfile,fnemployee_srch,fngethandle,fnkey_change,fnDedNames,fnaddonec
+48020   library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fnerror,fnhours,fnTos,fnLbl,fncmbemp,fnCmdKey,fnAcs,fncombof,fnTxt,fnmsgbox,fncomboa,fnpic,fnFra,fnrgl$,fnqgl,fnagl$,fncheckfile,fnemployee_srch,fngethandle,fnkey_change,fnDedNames,fnaddonec
 48040   on error goto ERTN
 48060   ! on fkey 5 goto MENU1
 48080   ! ______________________________________________________________________
@@ -564,7 +564,7 @@
 49040   code7$(3)="2 - Married both filing"         !  em(7)=3
 49060   ! 
 49120   dim statenames$(10)*8
-49140   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outin,relative 
+49140   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outIn,relative 
 49160   read #1,using "form pos 150,10*c 8",rec=1: mat statenames$
 49180   close #1: 
 49200   dim state_option$(10)*11
@@ -601,35 +601,35 @@
 62040   gosub DDOPEN
 62060   read #30,using "Form pos 11,C 1,N 9,N 2,N 17",key=key$: dd$,rtn,acc,acn nokey DDREADNOKEY
 62080 ASKDD: ! 
-62100   fntos(sn$="DirectDeposit")
+62100   fnTos(sn$="DirectDeposit")
 62120   respc=0: mylen=35 : right=1
-62140   fnlbl(1,1,"Employee #:",mylen,right)
-62160   fntxt(1,mylen+3,8,8,1,"",0,"")
+62140   fnLbl(1,1,"Employee #:",mylen,right)
+62160   fnTxt(1,mylen+3,8,8,1,"",0,"")
 62180   resp$(respc+=1)=str$(eno)
-62200   fnlbl(2,1,"Direct Deposit:",mylen,right)
+62200   fnLbl(2,1,"Direct Deposit:",mylen,right)
 62220   code9$(1)="Y = Activate Direct Deposit"
 62240   code9$(2)="N = Direct Deposit not activated."
 62260   respc+=1: for j=1 to udim(code9$)
 62280     if dd$=code9$(j)(1:1) then resp$(respc)=code9$(j)
 62300   next j
 62320   fncomboa("Directd",2,mylen+3,mat code9$,"",35)
-62340   fnlbl(3,1,"Routing Number:",mylen,right)
-62360   fntxt(3,mylen+3,9,9,1,"",0,"Employee's bank's routing #. The bank account and the routing # can be found at the bottom of the employees personal check.")
+62340   fnLbl(3,1,"Routing Number:",mylen,right)
+62360   fnTxt(3,mylen+3,9,9,1,"",0,"Employee's bank's routing #. The bank account and the routing # can be found at the bottom of the employees personal check.")
 62380   resp$(respc+=1)=str$(rtn)
 62400   code8$(1)="27 = Regular Checking"
 62420   code8$(2)="37 = Savings Account"
 62440   respc+=1: for j=1 to udim(code8$)
 62460     if acc=val(code8$(j)(1:2)) then resp$(respc)=code8$(j)
 62480   next j
-62500   fnlbl(4,1,"Account Type:",mylen,right)
+62500   fnLbl(4,1,"Account Type:",mylen,right)
 62520   fncomboa("AccType",4,mylen+3,mat code8$,"",35)
-62540   fnlbl(5,1,"Employee Bank Account #:",mylen,right)
-62560   fntxt(5,mylen+3,17,17,1,"30",0,"Enter the employee's bank account #. ")
+62540   fnLbl(5,1,"Employee Bank Account #:",mylen,right)
+62560   fnTxt(5,mylen+3,17,17,1,"30",0,"Enter the employee's bank account #. ")
 62580   resp$(respc+=1)=str$(acn)
-62600   fncmdkey("&Save",1,1,0,"Saves the information on the screen." )
-62620   fncmdkey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
-62640   fncmdkey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
-62660   fnacs(sn$,0,mat resp$,ckey)
+62600   fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
+62620   fnCmdKey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
+62640   fnCmdKey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
+62660   fnAcs(sn$,0,mat resp$,ckey)
 62680   if ckey=5 then goto DDDONE
 62700   key$=resp$(1)
 62720   dd$=resp$(2)(1:1)
@@ -667,7 +667,7 @@
 66040   return  ! /r
 68000 DDOPEN: ! r:
 68020   close #30: ioerr ignore
-68040   open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outin,keyed 
+68040   open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outIn,keyed 
 68060   return  ! /r
 70000 DDDEL: ! r:
 70020   gosub DDOPEN
@@ -681,17 +681,17 @@
 72080   goto DDDONE  ! /r
 74100 ! close #2: ioerr ignore
 74120 ! execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&" 1/9 8/3 Replace DupKeys -n"
-74140 ! open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+74140 ! open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 74160 ! return
 76000 ! PICTURE: ! r:
-76020 !   fntos(sn$="Employeepic")
+76020 !   fnTos(sn$="Employeepic")
 76040 !   fnpic(1,10,24,60,str$(eno)&".bmp")
-76060 !   fnlbl(25,80,"")
-76080 !   fncmdkey("O&K",7,1,0,"Returns to customer record.")
-76100 !   fnacs(sn$,0,mat resp$,ckey)
+76060 !   fnLbl(25,80,"")
+76080 !   fnCmdKey("O&K",7,1,0,"Returns to customer record.")
+76100 !   fnAcs(sn$,0,mat resp$,ckey)
 76120 !   goto SCR_EMPLOYEE ! /r
 80000 SETUP_PAYROLLCHECKS: ! r:
-80020   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",RecL=224,use",internal,outin 
+80020   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",RecL=224,use",internal,outIn 
 80040   close #4: 
 80060   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&" 1 17 Replace DupKeys"
 80070   gosub INDEX_CHECKIDX3

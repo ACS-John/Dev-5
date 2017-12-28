@@ -2,7 +2,7 @@
 00020 ! search for employees in after fact payroll
 00030 ! ______________________________________________________________________
 00040   def library fnemployee_search(&x$;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle,fnlbl
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnLbl
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(5)*30,resp$(30)*80
@@ -13,7 +13,7 @@
 00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
-00130     fntos(sn$="EmployeeSrch")
+00130     fnTos(sn$="EmployeeSrch")
 00140     ch$(1)="Emp #" : ch$(2)="Name" : ch$(3)="Address" !:
           ch$(4)="City, ST Zip" !:
           ch$(5)="Social Security" !:
@@ -37,8 +37,8 @@
           goto READ_FILE
 00270 ! ______________________________________________________________________
 00280 L280: if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00285     fnlbl(12,1,"")
-00290     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
+00285     fnLbl(12,1,"")
+00290     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     x$=lpad$(resp$(1),4)
 00310     if ckey=5 then x$="    " ! no one selected

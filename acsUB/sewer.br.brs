@@ -1,6 +1,6 @@
 00100 ! Replace S:\acsUB\Sewer ! dont forget to change lines 510 &  640
 00120 ! ______________________________________________________________________
-00140   library 'S:\Core\Library': fntop,fnxit, fnacs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fngethandle,fncreg_read,fncreg_write,fncmdkey,fnapply_default_rates
+00140   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fngethandle,fncreg_read,fncreg_write,fnCmdKey,fnapply_default_rates
 00160 ! ______________________________________________________________________
 00180   on error goto ERTN
 00200 ! ______________________________________________________________________
@@ -9,7 +9,7 @@
 00280   fntop(program$,cap$="Calculate Sewer Average")
 00300 ! ______________________________________________________________________
 00320   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00340   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00340   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00360   read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 00370   gosub APPLY_DEFAULT_RATE
 00380   restore #h_trans,key>=x$&"         ": nokey L220
@@ -25,21 +25,21 @@
 00580   restore #h_customer: 
 00600 ! ______________________________________________________________________
 00620 SCR1: ! 
-00640   fntos(sn$:="ubsewer-1b")
+00640   fnTos(sn$:="ubsewer-1b")
 00660   mylen=47 : mypos=49
-00680   fnlbl(1,1,"Billing Dates for Months to Average:",mylen,1)
+00680   fnLbl(1,1,"Billing Dates for Months to Average:",mylen,1)
 00700   for j=1 to 8
-00720     fntxt(j,mypos,10,0,0,"3")
+00720     fnTxt(j,mypos,10,0,0,"3")
 00740     fncreg_read(sn$&'.billing date.'&str$(j),resp$(j))
 00760   next j
-00780   fnlbl(10,1,"Sewer code to average:",mylen,1)
-00800   fntxt(10,mypos,2,2,0,"20")
+00780   fnLbl(10,1,"Sewer code to average:",mylen,1)
+00800   fnTxt(10,mypos,2,2,0,"20")
 00820   fncreg_read(sn$&'.sewer code to average',resp$(9))
-00840 ! fncmdset(2)
-00842   fncmdkey("&Clear Sewer Code Averages",3,0)
-00843   fncmdkey("&Next",1,1)
-00844   fncmdkey("&Cancel",5,0,1)
-00860   fnacs(sn$,0,mat resp$,ckey)
+00840 ! fnCmdSet(2)
+00842   fnCmdKey("&Clear Sewer Code Averages",3,0)
+00843   fnCmdKey("&Next",1,1)
+00844   fnCmdKey("&Cancel",5,0,1)
+00860   fnAcs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
 00880   if ckey=3 then clear_averages=1 else clear_averages=0
 00900   for j=1 to 8

@@ -10,70 +10,67 @@
 00180 ! firstone=1   lastone=1   ! just one transaction
 00200 ! firstone=0   lastone=0   ! not first and not last
 00220 ! ______________________________________________________________________
-00240   library 'S:\Core\Library': fnacs,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnwait,fntos,fnlbl,fntxt,fnmsgbox,fnxit,fncmdset,fntop,fnfra,fnopt,fnchk,fnreg_read,fnreg_write
+00240   library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn,fnerror,fnget_services,fndat,fnwait,fnTos,fnLbl,fnTxt,fnmsgbox,fnxit,fnCmdSet,fntop,fnFra,fnOpt,fnChk,fnreg_read,fnreg_write
 00260   on error goto ERTN
 16000   dim p$*10,foot$*16,gb(10),tgb(10),ggb(10),dat$*20
 16020   dim subtotal_gb(10)
 16040   dim tg(11)
-16060   dim z$*10,e$(4)*30,cnam$*40,cap$*128
+16060   dim z$*10,e$(4)*30,cap$*128
 16080   dim t1(5),tc$(5)*14,resp$(20)*256,msgline$(1)*128
 16100   dim st1(5)
 16120   if env$('ACSDeveloper')<>'' then raw_output=1 ! 
 18000   fntop(program$,cap$="Transaction Listing")
-18020   fncno(cno,cnam$)
 18040   fndat(dat$)
 18060   ccyymmdd_mask$="3"
-18080   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
-18100   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
-18120   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
-18140   close #20: 
+18080   dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
+18100   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 18160 ! 
 18180   fnreg_read('ubtrlist.date.start',tmp$) : filter_date_start=val(tmp$) conv ignore
 18200   fnreg_read('ubtrlist.date.end',tmp$) : filter_date_end=val(tmp$) conv ignore
-18220 ! 
+18220   ! 
 18240   fnreg_read('ubtrlist.skip_line_after_account',tmp$) : skip_line_after_account=1 : if tmp$='True' then skip_line_after_account=1 else if tmp$='False' then skip_line_after_account=0
-18260 fnreg_read('ubtrlist.print_tbal',tmp$) : print_tbal=1 : if tmp$='True' then print_tbal=1 else if tmp$='False' then print_tbal=0
-18280 fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
-18300 ! 
-18320 fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : include_zero_balance_accounts=1 : include_zero_balance_accounts=val(tmp$) conv ignore
-18340 fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : include_no_activity_accounts=1 : include_no_activity_accounts=val(tmp$) conv ignore
-18360 ! 
+18260   fnreg_read('ubtrlist.print_tbal',tmp$) : print_tbal=1 : if tmp$='True' then print_tbal=1 else if tmp$='False' then print_tbal=0
+18280   fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
+18300   ! 
+18320   fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : include_zero_balance_accounts=1 : include_zero_balance_accounts=val(tmp$) conv ignore
+18340   fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : include_no_activity_accounts=1 : include_no_activity_accounts=val(tmp$) conv ignore
+18360   ! 
 18990 ! /r
 20000 SCREEN1: ! r:
-20020 fntos(sn$='TrList')
+20020 fnTos(sn$='TrList')
 20040 mylen=36 : mypos=mylen+2
-20060 fnlbl(1,1,"Report Heading Date:",mylen,1,0)
-20080 fntxt(1,mypos,20)
+20060 fnLbl(1,1,"Report Heading Date:",mylen,1,0)
+20080 fnTxt(1,mypos,20)
 20100 resp$(1)=dat$
-20120 fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-20140 fntxt(2,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the first day of the month, but it can be the beginning of any time period.")
+20120 fnLbl(2,1,"Starting Date (blank for all):",mylen,1)
+20140 fnTxt(2,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the first day of the month, but it can be the beginning of any time period.")
 20160 resp$(2)=str$(filter_date_start)
-20180 fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-20200 fntxt(3,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the Last day of the month, but it can be the end of any time period.")
+20180 fnLbl(3,1,"Ending Date (blank for all):",mylen,1)
+20200 fnTxt(3,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the Last day of the month, but it can be the end of any time period.")
 20220 resp$(3)=str$(filter_date_end)
-20240 ! fnLBL(5,2,"Note: Use CCYYMMDD format for all dates",50)
-20260 fnfra(6,1,2,60,"Choose Balance To Be Printed","You can pr the current balance or the balance as of the ending date selected abov.")
-20280 fnopt(1,3,"Use the actual current balance",0,1)
+20240 ! fnLbl(5,2,"Note: Use CCYYMMDD format for all dates",50)
+20260 fnFra(6,1,2,60,"Choose Balance To Be Printed","You can pr the current balance or the balance as of the ending date selected abov.")
+20280 fnOpt(1,3,"Use the actual current balance",0,1)
 20300 resp$(4)="True"
-20320 fnopt(2,3,"Use the balance as of the ending date",0,1)
+20320 fnOpt(2,3,"Use the balance as of the ending date",0,1)
 20340 resp$(5)="False"
-20360 fnfra(11,1,2,60,"Choose Order for Printing","You can pr in account order or in route sequence with subtotals.")
-20380 fnopt(1,3,"Account Sequence ",0,2)
+20360 fnFra(11,1,2,60,"Choose Order for Printing","You can pr in account order or in route sequence with subtotals.")
+20380 fnOpt(1,3,"Account Sequence ",0,2)
 20400 if seq=1 then resp$(6)="True" else resp$(6)='False'
-20420 fnopt(2,3,"Route Sequence",0,2)
+20420 fnOpt(2,3,"Route Sequence",0,2)
 20440 resp_seq=7
 20460 if seq=2 then resp$(resp_seq)="True" else resp$(resp_seq)='False'
-20480 fnchk(16,3,"Skip line after each account", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20480 fnChk(16,3,"Skip line after each account", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 20500 resp_skip_line=8
 20520 if skip_line_after_account then resp$(resp_skip_line)='True' else resp$(resp_skip_line)='False'
-20540 fnchk(17,3,"Include Accounts with Zero Balances", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20540 fnChk(17,3,"Include Accounts with Zero Balances", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 20560 resp_zero_balance=9
 20580 if include_zero_balance_accounts then resp$(resp_zero_balance)='True' else resp$(resp_zero_balance)='False'
-20600 fnchk(18,3,"Include Accounts without no activity", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20600 fnChk(18,3,"Include Accounts without no activity", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 20620 resp_no_activity=10
 20640 if include_no_activity_accounts then resp$(resp_no_activity)='True' else resp$(resp_no_activity)='False'
-20660 fncmdset(3)
-20990 fnacs(sn$,0,mat resp$,ckey)
+20660 fnCmdSet(3)
+20990 fnAcs(sn$,0,mat resp$,ckey)
 22000 if ckey=5 then goto XIT
 22020 dat$=resp$(1)
 22040 filter_date_start=val(resp$(2))
@@ -262,8 +259,8 @@
 50080 pr #255: ""
 50100 pr #255,using "form pos 1,c 40": "Balance Breakdown by Type of Service:"
 50120 for j=1 to 10
-50140   if trim$(servicename$(j))<>"" then 
-50160     pr #255,using 'Form POS 5,C 30,N 10.2': servicename$(j),tgb(j) pageoflow PGOF
+50140   if trim$(serviceName$(j))<>"" then 
+50160     pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PGOF
 50180   end if 
 50200   bdtotal+=tgb(j)
 50220 next j
@@ -283,8 +280,8 @@
 52080 pr #255: ""
 52100 st1=st2=st3=st4=0
 52120 for j=1 to 10
-52140   if trim$(servicename$(j))<>"" then 
-52160     pr #255,using 'Form POS 5,C 30,N 10.2': servicename$(j),subtotal_gb(j) pageoflow PGOF
+52140   if trim$(serviceName$(j))<>"" then 
+52160     pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PGOF
 52180   end if 
 52200 next j
 52220 mat subtotal_gb=(0)
@@ -307,8 +304,8 @@
 54100 !     pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Grand Totals",grand_total_a1,grand_total_a2,grand_total_a3,grand_total_a4 pageoflow PGOF
 54120 !     pr #255: ""
 54140 !     for j=1 to 10
-54160 !       if trim$(servicename$(j))<>"" then
-54180 !         pr #255,using 'Form POS 5,C 30,N 10.2': servicename$(j),ggb(j) pageoflow PGOF
+54160 !       if trim$(serviceName$(j))<>"" then
+54180 !         pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),ggb(j) pageoflow PGOF
 54200 !       end if
 54220 !     next j
 54240 !     pr #255: "    ______________________________  __________"

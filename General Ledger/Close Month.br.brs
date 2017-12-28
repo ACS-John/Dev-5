@@ -1,7 +1,7 @@
 00010 ! Formerly S:\acsGL\CloseMonth
 00020 ! GL Month End Closing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnactpd, fntos,fnlbl,fntxt,fncmdset,fnacs, fnconsole,fngethandle,fnindex_it,fnRemoveDeletedRecords
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnactpd, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fnconsole,fngethandle,fnindex_it,fnRemoveDeletedRecords
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bc(13),tr(7),tr$*12,td$*30
@@ -11,25 +11,25 @@
 00110   fncno(cno)
 00120   if fnprocess=1 then goto GET_GOING
 00130 SCREEN1: ! 
-00140   fntos(sn$='Close_Month')
+00140   fnTos(sn$='Close_Month')
 00142   lc=0 : mylen=22 : mypos=mylen+2
-00150   fnlbl(lc+=1,1,"Closing Period Number:",mylen,right)
-00160   fntxt(lc,mypos,2,0,0,'number')
+00150   fnLbl(lc+=1,1,"Closing Period Number:",mylen,right)
+00160   fnTxt(lc,mypos,2,0,0,'number')
 00162   resp$(1)=str$(fnactpd)
-00170   fncmdset(2)
-00180   fnacs(sn$,0,mat resp$,ckey)
+00170   fnCmdSet(2)
+00180   fnAcs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   actpd=val(resp$(1))
 00210   if actpd<1 or actpd>13 then goto SCREEN1
 00220 ! ______________________________________________________________________
 00230 GET_GOING: ! 
-02000   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative ioerr L440
+02000   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L440
 02020   read #1,using 'Form pos 384,n 2,POS 406,C 1,POS 417,N 1',rec=1: nap,actrcde$,reccode
 02040   close #1: 
 02060   if actrcde$="0" or actrcde$="N" then goto OPEN_GLMSTR
 02080   fn_current_to_accumlated_trans
 02100 OPEN_GLMSTR: ! 
-02120   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno'),internal,outin,keyed 
+02120   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno'),internal,outIn,keyed 
 02140 ! fnwait - "Closing Month..."
 02160   do 
 02180     read #h_glmstr,using 'Form POS 87,14*PD 6.2': cb,mat bc eof EO_GLMSTR
@@ -43,7 +43,7 @@
 02324   actpd=actpd+1
 02326   if actpd>nap then actpd=1
 02340   fnactpd(actpd)
-02343   open #21: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
+02343   open #21: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
 02344   rewrite #21,using 'Form pos 296,n 2',rec=1: lmu
 02345   close #21: 
 02360   open #1: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Size=0,RecL=73,Replace",internal,output 
@@ -51,7 +51,7 @@
 02400   close #1: 
 02420 L440: ! 
 02580   if reccode=0 then goto GLBREC_DROP
-02600   open #h_glbrec:=1: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),internal,outin,keyed ioerr GLBREC_DROP
+02600   open #h_glbrec:=1: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),internal,outIn,keyed ioerr GLBREC_DROP
 02620   do 
 02640     read #h_glbrec,using 'Form POS 63,PD 5.2,POS 68,N 1': a2,a3 eof FINIS
 02660     if a3=1 or a2=0 then delete #h_glbrec: 
@@ -62,7 +62,7 @@
 02800   fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 02820   goto XIT
 02840 GLBREC_DROP: ! 
-02860   open #h_glbrec:=1: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",SIZE=0,RecL=68,Replace",internal,outin 
+02860   open #h_glbrec:=1: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",SIZE=0,RecL=68,Replace",internal,outIn 
 02880   goto FINIS
 02900 ! ______________________________________________________________________
 02920   def fn_current_to_accumlated_trans

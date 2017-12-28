@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcRemove
 00020 ! Remove Job Cost Payroll Jobs
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fntos,fnlbl,fncmbjob,fncmdkey,fnacs,fnmsgbox,fncombof
+00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnTos,fnLbl,fncmbjob,fnCmdKey,fnAcs,fnmsgbox,fncombof
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
@@ -12,25 +12,25 @@
 00120   fntop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
 00130   fncno(cno)
 00140 ! 
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outin: close #1: 
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outIn: close #1: 
 00160 ! ______________________________________________________________________
 00170   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&" JCMSTR.X -n"
 00180   execute "Copy "&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&" JCTRANS.X -n"
 00190   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&" JCCAT.X -n"
 00200 ! ______________________________________________________________________
-00210   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outin,keyed 
+00210   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outIn,keyed 
 00220 ! ______________________________________________________________________
 00230 ASKJOB: ! 
-00240   fntos(sn$="jccpr1J") !:
+00240   fnTos(sn$="jccpr1J") !:
         respc=0
-00250   fnlbl(1,1,"Job #:",8,1)
+00250   fnLbl(1,1,"Job #:",8,1)
 00260   fncmbjob(1,11) !:
         resp$(respc+=1)=jn$
-00270   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
-00280   fncmdkey("&Next",1,1,0,"Process the job" ) !:
-        fncmdkey("Com&plete",2,0,0,"Finished with all jobs.") !:
-        fncmdkey("&Cancel",5,0,1,"Cancel without deleting any jobs.")
-00290   fnacs(sn$,0,mat resp$,ck)
+00270   if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
+00280   fnCmdKey("&Next",1,1,0,"Process the job" ) !:
+        fnCmdKey("Com&plete",2,0,0,"Finished with all jobs.") !:
+        fnCmdKey("&Cancel",5,0,1,"Cancel without deleting any jobs.")
+00290   fnAcs(sn$,0,mat resp$,ck)
 00300   if ck=5 then goto XIT
 00310   if ck=2 then goto DELETE_THEM
 00320   jn$=lpad$(trim$(resp$(1)(1:6)),6)
@@ -53,7 +53,7 @@
 00470   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",SIZE=0,RecL=123",internal,output 
 00480   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
 00490   close #13,free: 
-00500   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outin,relative 
+00500   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outIn,relative 
 00510   ot4=1
 00520   write #13,using L530,rec=1: " ","",mat tr," ",ot4
 00530 L530: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3

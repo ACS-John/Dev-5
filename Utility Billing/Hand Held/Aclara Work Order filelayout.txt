@@ -17,7 +17,7 @@ Length   Name
 1        (tab delimiter)
 3        Route
 1        (tab delimiter)
-12       Meter Serial Number from Service Screen (not meter information)
+12       Meter Serial Number from Service Screen (not meter information nor 'U4 Meter Location')
 1        (tab delimiter)
 20       Transmitter Serial Number
 1        (tab delimiter)

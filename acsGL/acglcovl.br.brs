@@ -35,7 +35,7 @@
 00220 ! _____________________________________________________________________
 00230 MENU1: pr newpage
 00240   close #101: ioerr L250
-00250 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outin 
+00250 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outIn 
 00260   pr f "3,13,Cc 51,R,N": cnam$ !:
         pr f "4,13,Cc 51,R,N": "Company Number "&env$('cno')
 00270   sc2$(1)=" 1. Edit Cover Letter" !:
@@ -48,7 +48,7 @@
 00320 L320: on t goto L370,L390 none L300
 00330 ! _____________________________________________________________________
 00340   close #101: ioerr L350
-00350 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outin 
+00350 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outIn 
 00360   pr #101,fields "1,1,Cc 52,R,N": cnam$
 00370 L370: execute "SY -s NotePad "&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno'))
 00380   goto MENU1

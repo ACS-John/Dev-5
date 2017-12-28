@@ -67,14 +67,14 @@
 00660 ! ______________________________________________________________________
 00670 OPEN_FILES: ! 
 00680   execute "Copy "&env$('Q')&"\PRmstr\PRPgmn.h"&env$('cno')&" sa"&wsid$&".tmp -n" ioerr L690
-00690 L690: open #prpgmn=1: "Name=sa"&wsid$&".tmp,Use,RecL=58",internal,outin,relative 
+00690 L690: open #prpgmn=1: "Name=sa"&wsid$&".tmp,Use,RecL=58",internal,outIn,relative 
 00700 ! ______________________________________________________________________
 00710 MENU1: ! 
 00720   fnwin3b(win=101,cap$,21,75,0,4)
 00730   pr #win,fields "1,1,C 75,R,N": "Line   Program                              Weekly    Monthly  Quarterly"
 00740   for l1=1 to 20
 00750     io1$(l1)=str$(l1+1)&",3,C 71,N"
-00760     read #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: nxtpgm$(l1),nxtdesc$(l1),wk(l1),mo(l1),qt(l1) norec L780
+00760     read #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: nxtpgm$(l1),nxtdesc$(l1),wk(l1),mo(l1),qt(l1) noRec L780
 00770     goto L790
 00780 L780: write #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: "","",0,0,0 !:
           nxtpgm$(l1)=nxtdesc$(l1)="" : wk(l1)=mo(l1)=qt(l1)=0

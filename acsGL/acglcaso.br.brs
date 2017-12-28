@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglCasO
 00020 ! Cash Flow with YTD Budget Comparison
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnwait,fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnwait,fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13)
@@ -29,15 +29,15 @@
 00220   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&env$('cno')&",Shr"
 00230   open #1: fl1$,internal,input,keyed 
 00240   if fnprocess=1 or fnUseDeptNo=0 then goto L340
-00250   fntos(sn$="Acglcaso") !:
+00250   fnTos(sn$="Acglcaso") !:
         mylen=30: mypos=mylen+3 : right=1
-00260   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00270   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00260   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00270   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00280   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00290   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00300   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00310   fnacs(sn$,0,mat resp$,ckey)
+00280   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00290   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00300   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00310   fnAcs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
 00330   costcntr=val(resp$(1))
 00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -217,18 +217,18 @@
 02030   fncloseprn
 02040   goto XIT
 02050 ! ______________________________________________________________________
-02060   fntos(sn$="ACglchgs2") !:
+02060   fnTos(sn$="ACglchgs2") !:
         mylen=30: mypos=mylen+3 : right=1
-02070 L2070: fnlbl(1,10,d$)
-02080   fnlbl(3,1,"Total Amount YTD:",mylen,right)
-02090   fntxt(3,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
+02070 L2070: fnLbl(1,10,d$)
+02080   fnLbl(3,1,"Total Amount YTD:",mylen,right)
+02090   fnTxt(3,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
         resp$(1)=str$(total2)
-02100   fnlbl(4,1,"Total Budget Year to Date:",mylen,right)
-02110   fntxt(4,mypos,12,0,right,"10",0,"Enter the annual budget.",0 ) !:
+02100   fnLbl(4,1,"Total Budget Year to Date:",mylen,right)
+02110   fnTxt(4,mypos,12,0,right,"10",0,"Enter the annual budget.",0 ) !:
         resp$(2)=str$(annualb)
-02120   fncmdkey("&Next",1,1,0,"Accept the answer.")
-02130   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02140   fnacs(sn$,0,mat resp$,ckey)
+02120   fnCmdKey("&Next",1,1,0,"Accept the answer.")
+02130   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02140   fnAcs(sn$,0,mat resp$,ckey)
 02150   if ckey=5 then goto XIT
 02160   total2=val(resp$(1))
 02170   annualb=val(resp$(2))

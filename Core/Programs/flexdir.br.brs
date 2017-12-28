@@ -1,7 +1,7 @@
 00010 !  Replace S:\Core\FlexDir
 00020 ! puts a flex grid with a directory inside... kinda a file explorer
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fngetcd,fnremove2,fngetpp,fnlbl,fntxt,fncmdset,fntop
+00040   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fngetcd,fnremove2,fnGetPp,fnLbl,fnTxt,fnCmdSet,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*255,cap$*128
@@ -17,16 +17,16 @@
 00170   for j=1 to udim(brfn$)
 00180     if brfn$(j)="" then mat brfn$(j) : goto OUT_THE_LOOP else !:
             fnremove2(dur$,brfn$(j))
-00190     fngetpp(brfn$(j),path$(1,j),prog$(1,j),ext$(1,j))
+00190     fnGetPp(brfn$(j),path$(1,j),prog$(1,j),ext$(1,j))
 00200   next j
 00210 OUT_THE_LOOP: ! 
-00220   fntos(sn$="flexdir") !:
+00220   fnTos(sn$="flexdir") !:
         mylen=20 : mypos=mylen+2
-00230   fnlbl(1,1,"Filter:",mylen,1)
-00240   fntxt(1,mypos,18) !:
+00230   fnLbl(1,1,"Filter:",mylen,1)
+00240   fnTxt(1,mypos,18) !:
         resp$(1)=filter$
-00250   fnlbl(2,1,"Directory:",mylen,1)
-00260   fntxt(2,mypos,40,255) !:
+00250   fnLbl(2,1,"Directory:",mylen,1)
+00260   fnTxt(2,mypos,40,255) !:
         resp$(2)=dur$
 00270   ch$(1)="File Name" : ch$(2)="Ext" : ch$(3)="Path" !:
         mat item$(3) : mat ch$(3) : mat cm$(3) !:
@@ -37,8 +37,8 @@
 00310     item$(3) = path$(1,j)
 00320     fnflexadd1(mat item$)
 00330   next j
-00340   fncmdset(102)
-00350 L350: fnacs(sn$,0,mat resp$,ck)
+00340   fnCmdSet(102)
+00350 L350: fnAcs(sn$,0,mat resp$,ck)
 00360   if ck=5 then goto DONE
 00370   filter$=resp$(1) !:
         dur$=resp$(2)

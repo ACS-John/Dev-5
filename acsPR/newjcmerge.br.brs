@@ -11,11 +11,11 @@
 00110   fncno(cno)
 00120 ! 
 00130 ! ______________________________________________________________________
-00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00150   open #3: "Name=jcWork."&session$,internal,input 
 00160   open #4: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",RecL=128,use",internal,output 
-00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative 
-00180   open #9: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outIn,relative 
+00180   open #9: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00190 L190: read #3,using L210: mat ji1,jn$,mat ji2,empnam$,sal eof L750
 00210 L210: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
 00220   if ji1(1)=-1 then goto L190

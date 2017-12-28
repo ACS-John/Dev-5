@@ -1,18 +1,18 @@
 10000   fn_setup
 10200   fntop(program$,cap$="Check Balance Breakdowns 2")
 10600 MENU1: ! r:
-10800   fntos(sn$="bldtrans") : chk_align=0
-11000   fnlbl(1,1,"Scan:")
-11200   fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)="True"
-11400   fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : resp$(2)="True"
-11600   fnlbl(5,1,"Error Handling:")
-11800   fnchk(6,5,"Report Erroneous Transactions",chk_align)    : resp$(3)="True"
-12000   fnchk(7,5,"Fix Erroneous Transactions",chk_align)       : resp$(4)="False"
-12100   fnlbl(9,1,"Miscellaneous:")
-12200   fnchk(10,5,"Move Credit Balnces to Other",chk_align)    : resp$(5)="False"
-12220   fnchk(11,5,"  and apply credits",chk_align)             : resp$(6)="False"
-12300   fncmdset(2)
-12400   fnacs(sn$,0,mat resp$,ck)
+10800   fnTos(sn$="bldtrans") : chk_align=0
+11000   fnLbl(1,1,"Scan:")
+11200   fnChk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)="True"
+11400   fnChk(3,5,"Scan Transaction Breakdowns",chk_align)      : resp$(2)="True"
+11600   fnLbl(5,1,"Error Handling:")
+11800   fnChk(6,5,"Report Erroneous Transactions",chk_align)    : resp$(3)="True"
+12000   fnChk(7,5,"Fix Erroneous Transactions",chk_align)       : resp$(4)="False"
+12100   fnLbl(9,1,"Miscellaneous:")
+12200   fnChk(10,5,"Move Credit Balnces to Other",chk_align)    : resp$(5)="False"
+12220   fnChk(11,5,"  and apply credits",chk_align)             : resp$(6)="False"
+12300   fnCmdSet(2)
+12400   fnAcs(sn$,0,mat resp$,ck)
 12500   if ck<>5 then 
 12600     if resp$(1)='True' then do_fix_balance_breakdowns=1 else do_fix_balance_breakdowns=0
 12800     if resp$(2)='True' then do_fix_trans_breakdowns=1 else do_fix_trans_breakdowns=0
@@ -32,8 +32,8 @@
 14800 def fn_setup
 15000   if ~setup then 
 15200     setup=1
-15400     library 'S:\Core\Library': fngethandle,fnstatus,fnget_services
-15600     library 'S:\Core\Library': fnerror,fntop,fnxit,fnopenprn,fncloseprn,fnacs,fnchk,fncmdset,fnlbl,fntos
+15400     library 'S:\Core\Library': fngethandle,fnStatus,fnget_services
+15600     library 'S:\Core\Library': fnerror,fntop,fnxit,fnopenprn,fncloseprn,fnAcs,fnChk,fnCmdSet,fnLbl,fnTos
 15800     on error goto ERTN
 16000     ! ______________________________________________________________________
 16200     dim cap$*128
@@ -53,7 +53,7 @@
 20000       setup_report_it=1
 20200       fnopenprn
 20400       pr #255,using F_HDR1: heading$
-20500       pr #255,using F_HDR2: 'Account',col_2_heading$,servicename$(1)(1:12),servicename$(2)(1:12),servicename$(3)(1:12),servicename$(4)(1:12),servicename$(5)(1:12),servicename$(6)(1:12),servicename$(7)(1:12),servicename$(8)(1:12),servicename$(9)(1:12),servicename$(10)(1:12),'*Calculated*'
+20500       pr #255,using F_HDR2: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*'
 20600       F_HDR1: form pos 1,cc 156
 20700       F_HDR2: form pos 1,13*(cc 12,',')
 20800       F_BODY: form pos 1,c 12,',',12*(n 12.2,',')
@@ -75,18 +75,18 @@
 24000 !   fnfix_balance_breakdowns=fn_fix_balance_breakdowns(do_fix,do_report)
 24200 ! fnend
 24400 def fn_fix_balance_breakdowns(do_fix,do_report) ! assumes balance is right, puts the difference into other
-24420   fnstatus('Checking Customer Balance Breakdowns')
+24420   fnStatus('Checking Customer Balance Breakdowns')
 24500   dim customer_g(10)
 24520   dim z$*10,service_rate_code(7)
 24530   dim gb(10)
 24600   gb_other=fn_service_other
-24800   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+24800   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 25000   do 
 25200     read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 25400     F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
 25600     read_count+=1
-25800     for gb_item=1 to udim(mat servicename$) ! udim(mat gb)
-26000       if trim$(servicename$(gb_item))='' then gb(gb_item)=0
+25800     for gb_item=1 to udim(mat serviceName$) ! udim(mat gb)
+26000       if trim$(serviceName$(gb_item))='' then gb(gb_item)=0
 26200     next gb_item
 26400     bal_breakdown=sum(gb)
 26600     if bal<>bal_breakdown then 
@@ -109,13 +109,13 @@
 30000   fnend 
 30200   def fn_service_other
 30400 !  this function returns en enumeration of the OTHER balance breakdown service
-30420 !   also returns sz1, mat servicename$ and mat srv$
-30600     dim servicename$(10)*20,srv$(10)*2
-30800     fnget_services(mat servicename$,mat srv$)
+30420 !   also returns sz1, mat serviceName$ and mat srv$
+30600     dim serviceName$(10)*20,srv$(10)*2
+30800     fnget_services(mat serviceName$,mat srv$)
 31400     so_return=srch(mat srv$,'OT')
 31600     if so_return<=0 then so_return=srch(mat srv$,'OC') ! Other Charge
-31700     if so_return<=0 then so_return=srch(mat servicename$,'Other') ! Other Charge
-31800     if so_return<=0 then so_return=srch(mat servicename$,rpad$('Other',20)) ! Other Charge
+31700     if so_return<=0 then so_return=srch(mat serviceName$,'Other') ! Other Charge
+31800     if so_return<=0 then so_return=srch(mat serviceName$,rpad$('Other',20)) ! Other Charge
 32000     if so_return<=0 then 
 32200       pr "OT (Other) nor OC (Other Charge) not found in Service Code abbreviations"
 32400       pr "(nor was Other found in Service Code names"
@@ -125,7 +125,7 @@
 33500 ! r: get sz1
 33520     sz1=0
 33540     for j=1 to 10
-33560       if trim$(servicename$(j))<>"" then 
+33560       if trim$(serviceName$(j))<>"" then 
 33580         sz1+=1
 33600       end if 
 33620     next j
@@ -139,9 +139,9 @@
 35000   def fn_fix_trans_breakdowns(do_fix,do_report)
 35020     dim trans_g(11),ru(6)
 35040     gb_other=fn_service_other
-35060     fnstatus('Checking Transaction Breakdowns')
+35060     fnStatus('Checking Transaction Breakdowns')
 35080     if do_fix then 
-35100       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outin,relative 
+35100       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outIn,relative 
 35120     else 
 35140       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,input,relative 
 35160     end if 
@@ -149,8 +149,8 @@
 35200       read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode eof TRANS_EOF
 35220 F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 35240       read_count+=1
-36000       for g_item=1 to udim(mat servicename$) ! udim(mat trans_g)
-36200         if trim$(servicename$(g_item))='' then trans_g(g_item)=0
+36000       for g_item=1 to udim(mat serviceName$) ! udim(mat trans_g)
+36200         if trim$(serviceName$(g_item))='' then trans_g(g_item)=0
 36400       next g_item
 36500 ! r: get bal_breakdown (requires sz1)
 36520       bal_breakdown=0
@@ -174,12 +174,12 @@
 39200     close #h_trans: 
 39400   fnend  ! fn_fix_balance_breakdowns
 42000   def fn_move_credit(do_move_credit)
-42020     fnstatus('Moving Credit Balances to Other in Customer Balance Breakdowns')
+42020     fnStatus('Moving Credit Balances to Other in Customer Balance Breakdowns')
 42040     dim customer_g(10)
 42060     dim z$*10,service_rate_code(7)
 42080     dim gb(10)
 42100     gb_other=fn_service_other
-42120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+42120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 42140     do 
 42160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
 42200       read_count+=1
@@ -201,12 +201,12 @@
 42540     close #h_customer: 
 42560   fnend 
 44000   def fn_apply_credit_from_other(do_apply_credit)
-44020     fnstatus('Applying Credit Balances (from Other) to the rest of the Customer Balance Breakdowns')
+44020     fnStatus('Applying Credit Balances (from Other) to the rest of the Customer Balance Breakdowns')
 44040     dim customer_g(10)
 44060     dim z$*10,service_rate_code(7)
 44080     dim gb(10)
 44100     gb_other=fn_service_other
-44120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+44120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 44140     do 
 44160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
 44180       read_count+=1
