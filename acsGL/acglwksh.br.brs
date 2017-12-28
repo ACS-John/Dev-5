@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglWkSh
 00020 ! pr Trial Balance Worksheet
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnpedat$, fnconsole,fntos,fnlbl,fntxt,fncmdset,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnpedat$, fnconsole,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(9)*3,glsum$(2)*12,u$*12,address$(2)*40,b$(2)*12,c$*5,d(2),p$*62
@@ -25,13 +25,13 @@
 00200   if fnprocess=1 or d(1)=0 then goto START_REPORT !:
           ! Skip Cost Center Question if not applicable or in Automatic Processing
 00210 SCREEN1: ! 
-00220   fntos(sn$="GLTBwksheet") !:
+00220   fnTos(sn$="GLTBwksheet") !:
         mylen=12 : mypos=mylen+2
-00230   fnlbl(1,1,"Cost Center:",mylen,right)
-00240   fntxt(1,mypos,3,0,0,'number') !:
+00230   fnLbl(1,1,"Cost Center:",mylen,right)
+00240   fnTxt(1,mypos,3,0,0,'number') !:
         resp$(1)=""
-00250   fncmdset(3)
-00260   fnacs(sn$,0,mat resp$,ckey)
+00250   fnCmdSet(3)
+00260   fnAcs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   costcent=val(resp$(1)) !:
         n$=lpad$(str$(costcent),3)&"     0  0"

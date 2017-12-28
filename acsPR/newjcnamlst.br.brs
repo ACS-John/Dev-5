@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcNamLst
 00020 ! pr Name and Number List
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fncno,fnerror,fndat,fnprocess,fntos,fnlbl,fntxt,fncmdset,fnacs,fnchk
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fncno,fnerror,fndat,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
@@ -19,15 +19,15 @@
 00180   if fnprocess=1 then goto L330
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
-00210   fntos(sn$="namlst1") !:
+00210   fnTos(sn$="namlst1") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
-00220   fnlbl(1,1,"Report Heading Date:",23,left)
-00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00220   fnLbl(1,1,"Report Heading Date:",23,left)
+00230   fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         resp$(resp+=1)=dat$
-00240   fnchk(2,mypos,"Print Category Names:",left) !:
+00240   fnChk(2,mypos,"Print Category Names:",left) !:
         resp$(resp+=1)="False"
-00250   fncmdset(2)
-00260   fnacs(sn$,0,mat resp$,ck)
+00250   fnCmdSet(2)
+00260   fnAcs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   dat$=resp$(1) ! heading date
 00290   if resp$(2)="True" then prtcat$="Y" else prtcat$="N"

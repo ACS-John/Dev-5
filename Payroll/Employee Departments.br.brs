@@ -1,7 +1,7 @@
 10000 ! formerly S:\acsPR\Department
 10200 ! Department names for payroll
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fntop,fnxit,fnerror,fnhamster
+10600   library 'S:\Core\Library': fntop,fnxit,fnerror,fnHamster
 10800   fntop(program$)
 11000   on error goto ERTN
 11200 ! ______________________________________________________________________
@@ -43,8 +43,8 @@
 18600   fn_add('Misc 18',10, 'PD',4.2)
 18800   fn_add('Misc 19',10, 'PD',4.2)
 19000   fn_add('Misc 20',10, 'PD',4.2)
-19210   open #1: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",use,RecL=149,kps=1/9,kln=8/3,Shr",internal,outin,keyed 
-19400   fnhamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+19210   open #1: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",use,RecL=149,kps=1/9,kln=8/3,Shr",internal,outIn,keyed 
+19400   fnHamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 19600   close #1: 
 19800   execute "Index "&env$('Q')&"\PRmstr\department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\deptidx.h"&env$('cno')&" 1 11,Replace" ioerr XIT
 20000 XIT: fnxit

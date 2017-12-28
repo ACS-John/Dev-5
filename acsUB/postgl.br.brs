@@ -1,21 +1,21 @@
 00010 ! Replace S:\acsUB\postgl
 00020 ! Company Information File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fntop,fnxit,fnchain,fnstyp,fntos,fnlbl,fntxt,fnchk,fnqgl25,fnrgl$,fncomboa,fncmdkey,fnacs,fnagl$,fnmsgbox,fnfra,fnopt,fncmdset,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
+00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fntop,fnxit,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl25,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnOpt,fnCmdSet,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
 00050   on error goto ERTN
-00060   dim cap$*128,resp$(40)*60,gln$(10,3)*12,servicename$(10)*20
+00060   dim cap$*128,resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
 00070   dim dat$*20,amount(10,3),tg(10),totaltg(10),heading$*130,dollar(3)
 00080   dim msgline$(3)*80,glwk$*256,option2$(10)*20,service$*20,gl$(3)*12
 00090   dim item$(6)*20,service$(10)*20,a(7)
 00100   fntop(program$,cap$="Post General Ledger")
 00120   fndat(dat$,1)
-00130   fnget_services(mat servicename$)
+00130   fnget_services(mat serviceName$)
 00140   x=0
 00150   for j=1 to 10
-00160     service$(j)=servicename$(j)
-00170     if trim$(servicename$(j))<>"" then option2$(x+=1)=servicename$(j)
-00180     if trim$(servicename$(j))="" then servicename$(j)="N/A"
-00190     servicename$(j)=trim$(servicename$(j)(1:8))&":"
+00160     service$(j)=serviceName$(j)
+00170     if trim$(serviceName$(j))<>"" then option2$(x+=1)=serviceName$(j)
+00180     if trim$(serviceName$(j))="" then serviceName$(j)="N/A"
+00190     serviceName$(j)=trim$(serviceName$(j)(1:8))&":"
 00200   next j
 00210   option2$(x)
 00220   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&env$('cno'),internal,input,keyed 
@@ -23,9 +23,9 @@
 00240   glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
 00250   open #14: "Name="&glwk$&",Replace,RecL=104",internal,output ioerr ignore
 00260   if exists(env$('Q')&"\UBmstr\glinfo.h"&env$('cno'))=0 then goto L270 else goto L290
-00270 L270: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr,Use,RecL=89,KPs=1,KLn=23",internal,outin,keyed 
+00270 L270: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed 
 00280   close #15: 
-00290 L290: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00290 L290: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00300 ! ______________________________________________________________________
 00310   fnstyp(14)
 00312   !  styp=11 for jobcost; styp=14 for regular payroll
@@ -33,15 +33,15 @@
 00340 ! ______________________________________________________________________
 00350 SCREEN2: ! 
 00360   respc=x=0
-00370   fntos(sn$="Postgl-2")
+00370   fnTos(sn$="Postgl-2")
 00372   mylen=10: mypos=mylen+3 : right=1 : respc=0
-00380   fram1=1: fnfra(1,1,12,100,"General Ledger Information","For each service, choose the appropriate g/l# for the bank, for the revenue, and possoibly the receivalbe account if using the accrual method.")
-00390   fnlbl(2,20,"Cash In Bank",12,right,0,fram1)
-00400   fnlbl(2,45,"Receivable",12,right,0,fram1)
-00410   fnlbl(2,75,"Revenue",12,right,0,fram1)
+00380   fram1=1: fnFra(1,1,12,100,"General Ledger Information","For each service, choose the appropriate g/l# for the bank, for the revenue, and possoibly the receivalbe account if using the accrual method.")
+00390   fnLbl(2,20,"Cash In Bank",12,right,0,fram1)
+00400   fnLbl(2,45,"Receivable",12,right,0,fram1)
+00410   fnLbl(2,75,"Revenue",12,right,0,fram1)
 00420   x=0
 00430   for j=1 to 10
-00440     fnlbl(j+2,1,servicename$(j),mylen,right,0,fram1)
+00440     fnLbl(j+2,1,serviceName$(j),mylen,right,0,fram1)
 00450     fnqgl25(j+2,12,fram1,2,pas)
 00452     resp$(respc+=1)=fnrgl$(gln$(x+=1))
 00460     fnqgl25(j+2,42,fram1,2,pas)
@@ -49,10 +49,10 @@
 00470     fnqgl25(j+2,72,fram1,2,pas)
 00472     resp$(respc+=1)=fnrgl$(gln$(x+=1))
 00480   next j
-00490   fncmdkey("&Save",1,1,0,"Saves any changes and returns to menu.")
-00500   fncmdkey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
-00510   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-00520   fnacs(sn$,0,mat resp$,ckey)
+00490   fnCmdKey("&Save",1,1,0,"Saves any changes and returns to menu.")
+00500   fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
+00510   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
+00520   fnAcs(sn$,0,mat resp$,ckey)
 00530   if ckey=5 then goto L580
 00540   if ckey=3 then chain "S:\acsUB\chartofaccounts"
 00550   for j=1 to 30
@@ -61,32 +61,32 @@
 00580 L580: rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",key=key$: service$,ratecode,gl$(1),gl$(2),gl$(3),mat amount
 00590   goto SCREEN1
 00600 SCREEN1: ! 
-00610   fntos(sn$='Postub2')
+00610   fnTos(sn$='Postub2')
 00612   mylen=36 : mypos=mylen+2
-00620   fnlbl(1,1,"Report Heading Date:",mylen,1,0)
-00630   fntxt(1,mypos,20) 
+00620   fnLbl(1,1,"Report Heading Date:",mylen,1,0)
+00630   fnTxt(1,mypos,20) 
 00632   resp$(1)=dat$
-00640   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-00650   fntxt(2,mypos,10,0,1,"3",0,"Enter the first day of the period being posted.")
+00640   fnLbl(2,1,"Starting Date (blank for all):",mylen,1)
+00650   fnTxt(2,mypos,10,0,1,"3",0,"Enter the first day of the period being posted.")
 00652   resp$(2)=str$(ld1)
-00660   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-00670   fntxt(3,mypos,10,0,1,"3",0,"Enter the Last day of the period being posted.")
+00660   fnLbl(3,1,"Ending Date (blank for all):",mylen,1)
+00670   fnTxt(3,mypos,10,0,1,"3",0,"Enter the Last day of the period being posted.")
 00672   resp$(3)=str$(hd1)
-00680   fnchk(4,30,"General Ledger Installed:",1,0)
+00680   fnChk(4,30,"General Ledger Installed:",1,0)
 00682   if gli=1 then resp$(4)="True" else resp$(4)="False"
-00690   fnchk(5,30,"Print Report:",1,0)
+00690   fnChk(5,30,"Print Report:",1,0)
 00692   if printreport=1 then resp$(5)="True" else resp$(5)="False"
-00700   fnchk(6,30,"Show Details:",1,0)
+00700   fnChk(6,30,"Show Details:",1,0)
 00702   if showdetails=1 then resp$(6)="True" else resp$(6)="False"
-00710   fnfra(8,1,2,60,"Method of Posting","You can either post on a Cash basis which only effects Cash and Revenues or you can post on an accrual method also effecting receivables.")
-00720   fnopt(1,3,"Cash Basis",0,1) !:
+00710   fnFra(8,1,2,60,"Method of Posting","You can either post on a Cash basis which only effects Cash and Revenues or you can post on an accrual method also effecting receivables.")
+00720   fnOpt(1,3,"Cash Basis",0,1) !:
         if basis=0 or basis=1 then resp$(7)="True"
-00730   fnopt(2,3,"Accrual Method",0,1) !:
+00730   fnOpt(2,3,"Accrual Method",0,1) !:
         if basis=2 then resp$(8)="False"
-00740   fncmdkey("&Post",1,1,0,"Begins the posting process.")
-00750   fncmdkey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
-00760   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-00770   fnacs(sn$,0,mat resp$,ckey)
+00740   fnCmdKey("&Post",1,1,0,"Begins the posting process.")
+00750   fnCmdKey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
+00760   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
+00770   fnAcs(sn$,0,mat resp$,ckey)
 00780   if ckey=5 then goto XIT
 00790   dat$=resp$(1) : ld1=val(resp$(2)) : hd1=val(resp$(3))
 00800   postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
@@ -191,7 +191,7 @@
 01570   pr #255: 
 01580   heading$="Account      Date     Cd"
 01590   for h=1 to 10
-01600     heading$=heading$&lpad$(servicename$(h)(1:19),9)
+01600     heading$=heading$&lpad$(serviceName$(h)(1:19),9)
 01610     a=pos(heading$,":",1)
 01620     if a>0 then heading$(a:a)=" "
 01630   next h
@@ -211,7 +211,7 @@
 01770 ! /region
 01780 ! ______________________________________________________________________
 01790 GL_INFORMATION: ! 
-01800   fntos(sn$="Breakdown") !:
+01800   fnTos(sn$="Breakdown") !:
         respc=0
 01810   mat chdr$(6) : mat cmask$(6) : mat item$(6) !:
         chdr$(1)='Rec' !:
@@ -233,11 +233,11 @@
         fnflexadd1(mat item$)
 01870   goto READ_GLINFO_1
 01880 EO_FLEX1: ! 
-01890   fncmdkey("&Add",1,0,0,"Add new records") !:
-        fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.") !:
-        fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.") !:
-        fncmdkey("E&xit",5,0,1,"Exit to menu")
-01900   fnacs(sn$,0,mat resp$,ck)
+01890   fnCmdKey("&Add",1,0,0,"Add new records") !:
+        fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.") !:
+        fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.") !:
+        fnCmdKey("E&xit",5,0,1,"Exit to menu")
+01900   fnAcs(sn$,0,mat resp$,ck)
 01910   addone=edit=0: holdvn$=""
 01920   if ck=5 then goto SCREEN1 !:
         else if ck=1 then addone=1: service$="": ratecode=0: mat gl$=("") !:
@@ -261,28 +261,28 @@
 02040 L2040: return 
 02050 MAINTAIN_GLINFO: ! 
 02060 right=1: mylen=25: mypos=mylen+3
-02070 fntos(sn$="Glinfo2")
-02080 fnlbl(1,1,"Service:",mylen,right)
+02070 fnTos(sn$="Glinfo2")
+02080 fnLbl(1,1,"Service:",mylen,right)
 02090 fncomboa("GLCmbSrv",1,mypos,mat option2$,"Set up records for every service and all rate codes within that service",20)
 02100 for j=1 to udim(optio2$)
 02110   if option2$(j)=service$ then resp$(1)=option2$(j)
 02120 next j
-02130 fnlbl(2,1,"Rate Code:",mylen,right)
-02140 fntxt(2,mypos,3,0,0,"30",0,"Set up the general ledger informatin for each rate code you have for each service.") !:
+02130 fnLbl(2,1,"Rate Code:",mylen,right)
+02140 fnTxt(2,mypos,3,0,0,"30",0,"Set up the general ledger informatin for each rate code you have for each service.") !:
       resp$(2)=str$(ratecode)
-02150 fnlbl(3,1,"Cash G/L Number:",mylen,right)
+02150 fnLbl(3,1,"Cash G/L Number:",mylen,right)
 02160 fnqgl(3,mylen,0,2,pas) !:
       resp$(3)=fnrgl$(gl$(1))
-02170 fnlbl(4,1,"Receivable G/L Number:",mylen,right)
+02170 fnLbl(4,1,"Receivable G/L Number:",mylen,right)
 02180 fnqgl(4,mylen,0,2,pas) !:
       resp$(4)=fnrgl$(gl$(2))
-02190 fnlbl(5,1,"Revenue G/L Number:",mylen,right)
+02190 fnLbl(5,1,"Revenue G/L Number:",mylen,right)
 02200 fnqgl(5,mylen,0,2,pas) !:
       resp$(5)=fnrgl$(gl$(3))
-02210 fncmdkey("&Save",1,1,0,"Saves any changes and returns to gl breakdown screen.")
-02220 fncmdkey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
-02230 fncmdkey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
-02240 fnacs(sn$,0,mat resp$,ckey)
+02210 fnCmdKey("&Save",1,1,0,"Saves any changes and returns to gl breakdown screen.")
+02220 fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
+02230 fnCmdKey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
+02240 fnAcs(sn$,0,mat resp$,ckey)
 02250 if ckey=5 then goto GL_INFORMATION
 02260 if ckey=3 then chain "S:\acsUB\chartofaccounts"
 02270 service$=resp$(1)

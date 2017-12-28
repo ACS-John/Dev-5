@@ -15,7 +15,7 @@
 00150     open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno'),internal,input,relative 
 00160     open #2: "Name="&env$('Temp')&"\WORK."&wsid$&",RecL=273,REPLACE",internal,output 
 00170     for j1=1 to lrec(1)
-00180       read #1,using L190,rec=j1: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L230,conv NJ1,norec NJ1
+00180       read #1,using L190,rec=j1: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L230,conv NJ1,noRec NJ1
 00190 L190: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
 00200       if ltrm$(r$)="" or ltrm$(r$)="0" then goto NJ1
 00210       write #2,using L190: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc

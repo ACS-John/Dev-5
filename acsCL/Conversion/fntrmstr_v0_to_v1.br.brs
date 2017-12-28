@@ -2,15 +2,15 @@
 00020 ! converts the CL TRmstr file to version 1 !:
         ! meainging the amount changes from G 10.2 to PD 10.2
 00030   def library fntrmstr_v0_to_v1
-00040     library 'S:\Core\Library': fnerror,fnmsgbox,fnwait,fnstatus
+00040     library 'S:\Core\Library': fnerror,fnmsgbox,fnwait,fnStatus
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
 00110 ! ______________________________________________________________________
-00120     fnstatus("Checkbook update Trans to v1: Updating Transaction file.")
+00120     fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
 00160 ! fnwait(message$="Converting: please wait...",0)
-00170     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),internal,outin,relative 
+00170     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),internal,outIn,relative 
 00180     if version(trmstr)=1 then pr "trmstr is already version 1" !:
             pr "press enter to continue" !:
             input fields "1,1,C 1,N": pause$ !:

@@ -2,16 +2,16 @@
 00030 fn_setup
 00110 fntop(program$,"View Total Accounts Receivable")
 11000 do 
-12000   fntos(sn$="totalBal")
+12000   fnTos(sn$="totalBal")
 12020   mylen=28 : mypos=mylen+2
-12040   fnlbl(1,1,"Total Accounts Receivable:",28,1)
-12060   fntxt(1,mypos,18,0,1,"10",1)
+12040   fnLbl(1,1,"Total Accounts Receivable:",28,1)
+12060   fnTxt(1,mypos,18,0,1,"10",1)
 12080   resp$(1)=str$(fn_total_ar)
-12100   fnchk(3,mypos,'Exclude Final Billed', 1)
+12100   fnChk(3,mypos,'Exclude Final Billed', 1)
 12120   resp$(2)=excludeFinalBilled$
-12130   fncmdkey('Close',5,0,1,'Save option(s) and exit')
-12140   fncmdkey('Refresh',1,1,0,'Recalculate')
-12160   fnacs(sn$,0,mat resp$,ck)
+12130   fnCmdKey('Close',5,0,1,'Save option(s) and exit')
+12140   fnCmdKey('Refresh',1,1,0,'Recalculate')
+12160   fnAcs(sn$,0,mat resp$,ck)
 12180   excludeFinalBilled$=resp$(2)
 12200   fncreg_write(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$)
 13000 loop until ck=5
@@ -20,7 +20,7 @@
 16010   if ~setup then 
 16020     setup=1
 16030     library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnLastBillingDate
-16031     library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnchk,fntos,fncmdkey
+16031     library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnChk,fnTos,fnCmdKey
 16032     library 'S:\Core\Library': fncreg_read,fncreg_write
 16040     on error goto ERTN
 16090   end if 

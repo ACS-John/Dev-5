@@ -1,14 +1,14 @@
 00001 forceRollBackNotMostRecentRec=0
-00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnLastBillingDate,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fncmdset,fnacs,fnmsgbox,fnopt,fnget_services,fnAutomatedSavePoint
+00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnLastBillingDate,fngethandle,fntop,fnTos,fnLbl,fnTxt,fncmbact,fncmbrt2,fnCmdSet,fnAcs,fnmsgbox,fnOpt,fnget_services,fnAutomatedSavePoint
 00040 on error goto ERTN
 00080 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 00120 fn_undobilling
 00140 goto XIT
 00160 def fn_undobilling ! main
-00180   dim program_caption$*80,billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),servicename$(10)*20
+00180   dim program_caption$*80,billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),serviceName$(10)*20
 00200   do_all=1 : do_route=2 : do_individual=3
 00220   fntop(program$,program_caption$="Reverse Billing Cycle")
-00230   fnget_services(mat servicename$,mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
+00230   fnget_services(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 00240   ! 
 06000   ASK_OPTIONS: ! 
 06020   cont=fn_options(route,billingdate$) ! collect user options
@@ -126,42 +126,42 @@
 44040     fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 44060     filter=0 : route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
-44100     fntos(screen_name$="UndoBillingOptions")
+44100     fnTos(screen_name$="UndoBillingOptions")
 44120     rcnt=0 : lc=0 : pos_col2=16
 44140     lc+=1
-44160     fnlbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
+44160     fnLbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
 44180     lc+=1
 44200 ! billing date text box
-44220     fnlbl(lc+=1,2,"Billing Date:",13,1)
-44240     fntxt(lc,pos_col2,8,0,0,"1001")
+44220     fnLbl(lc+=1,2,"Billing Date:",13,1)
+44240     fnTxt(lc,pos_col2,8,0,0,"1001")
 44260     resp_billing_date=rcnt+=1
 44280     if resp$(resp_billing_date)='' then resp$(resp_billing_date)=str$(lastbilling)
 44300 ! 
 44320     lc+=1
 44340     lc+=1
-44360     fnlbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
+44360     fnLbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
 44380     lc+=1
 44400 ! 
-44420     fnopt(lc+=1,1,'All') ! fnopt(lyne,ps, txt$*196; align,contain,tabcon)
+44420     fnOpt(lc+=1,1,'All') ! fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 44440     resp_opt_all=rcnt+=1
 44460     if resp$(resp_opt_all)='' then resp$(resp_opt_all)='True'
 44480 ! 
-44500     fnopt(lc+=1,1,'Route:')
+44500     fnOpt(lc+=1,1,'Route:')
 44520     resp_opt_route=rcnt+=1
 44540     if resp$(resp_opt_route)='' then resp$(resp_opt_route)='False'
 44560     fncmbrt2(lc,pos_col2,1)
 44580     resp_route=rcnt+=1
 44600 ! if resp$(resp_route)='' then resp$(resp_route)="[All]"
 44620 ! 
-44640     fnopt(lc+=1,1,'Individual:')
+44640     fnOpt(lc+=1,1,'Individual:')
 44660     resp_opt_individual=rcnt+=1
 44680     if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='False'
 44700     fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
 44720     resp_individual=rcnt+=1
 44740 ! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
 44760 ! 
-44780     fncmdset(2) ! show "Next" and "Cancel" buttons
-44800     fnacs(screen_name$,0,mat resp$,ckey) ! run the screen
+44780     fnCmdSet(2) ! show "Next" and "Cancel" buttons
+44800     fnAcs(screen_name$,0,mat resp$,ckey) ! run the screen
 44820 ! 
 44840     if ckey=5 then ! if user pressed Cancel
 44860       fn_options=0
@@ -183,8 +183,8 @@
 45160     end if 
 45180   fnend  ! fn_Options
 46000   def fn_openfiles
-46020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outin,keyed 
-46040     open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,outin,keyed 
+46020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outIn,keyed 
+46040     open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,outIn,keyed 
 46060   fnend 
 48000   def fn_close_files
 48020     close #h_customer: ioerr ignore

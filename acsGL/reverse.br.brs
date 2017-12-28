@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsGL\Reverse
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno, fnwait,fnlbl,fntxt,fnacs,fncmdkey,fntos,fnchk
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno, fnwait,fnLbl,fnTxt,fnAcs,fnCmdKey,fnTos,fnChk
 00040   fntop(program$,cap$="Generate Reversing Entries")
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -13,32 +13,32 @@
 00130   my_p$="Generated Reversing Entry"
 00140 ! ______________________________________________________________________
 00150 MENU1: ! 
-00160   fntos(sn$="Reverse") !:
+00160   fnTos(sn$="Reverse") !:
         mylen=20: mypos=mylen+3 : right=1
-00170   fnlbl(1,10,"Search For (blank for all)")
-00180   fnlbl(2,1,"Adjustment Date:",mylen,right)
-00190   fntxt(2,mypos,8,0,right,"1",0,"If you are wanting to reverse some specific adjustments and can identify them by date, use that date.",0 ) !:
+00170   fnLbl(1,10,"Search For (blank for all)")
+00180   fnLbl(2,1,"Adjustment Date:",mylen,right)
+00190   fnTxt(2,mypos,8,0,right,"1",0,"If you are wanting to reverse some specific adjustments and can identify them by date, use that date.",0 ) !:
         resp$(1)=str$(s_ad)
-00200   fnlbl(3,1,"Reference Number:",mylen,right)
-00210   fntxt(3,mypos,12,0,right,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 ) !:
+00200   fnLbl(3,1,"Reference Number:",mylen,right)
+00210   fnTxt(3,mypos,12,0,right,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 ) !:
         resp$(2)=s_rn$
-00220   fnlbl(4,1,"Transaction Code:",mylen,right)
-00230   fntxt(4,mypos,1,0,right,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 ) !:
+00220   fnLbl(4,1,"Transaction Code:",mylen,right)
+00230   fnTxt(4,mypos,1,0,right,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 ) !:
         resp$(3)=str$(s_tc)
-00240   fnchk(6,mypos,"Search History Also:",right) !:
+00240   fnChk(6,mypos,"Search History Also:",right) !:
         resp$(4)=sh$
-00250   fnlbl(8,5,"Reverse With (blank for no change)")
-00260   fnlbl(9,1,"Adjustment Date:",mylen,right)
-00270   fntxt(9,mypos,8,0,right,"1",0,"",0 ) !:
+00250   fnLbl(8,5,"Reverse With (blank for no change)")
+00260   fnLbl(9,1,"Adjustment Date:",mylen,right)
+00270   fnTxt(9,mypos,8,0,right,"1",0,"",0 ) !:
         resp$(5)=str$(r_ad)
-00280   fnlbl(10,1,"Reference Number:",mylen,right)
-00290   fntxt(10,mypos,12,0,right,"",0,"",0 ) !:
+00280   fnLbl(10,1,"Reference Number:",mylen,right)
+00290   fnTxt(10,mypos,12,0,right,"",0,"",0 ) !:
         resp$(6)=r_rn$
-00300   fnchk(11,mypos,"Reverse Entry Now:",right) !:
+00300   fnChk(11,mypos,"Reverse Entry Now:",right) !:
         resp$(7)="True"
-00310   fncmdkey("&Next",1,1,0,"Proceed with reversing adjustments.")
-00320   fncmdkey("&Cancel",5,0,1,"Return to menu without reversing.")
-00330   fnacs(sn$,0,mat resp$,ckey)
+00310   fnCmdKey("&Next",1,1,0,"Proceed with reversing adjustments.")
+00320   fnCmdKey("&Cancel",5,0,1,"Return to menu without reversing.")
+00330   fnAcs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   s_ad=val(resp$(1))
 00360   s_rn$=resp$(2)
@@ -50,16 +50,16 @@
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
 00440   glmstr=1 !:
-        open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+        open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00450   gltrans=2 !:
-        open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+        open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 00460   actrans=3 !:
-        open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+        open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00470   x=lrec(2)
 00480 ! ____
 00490   for j=1 to x
 00500 READ_GLTRANS: ! 
-00510     read #gltrans,using L520,rec=j: t$,s,k,mat n,l$,p$ eof HIST norec NEXT_GLTRANS
+00510     read #gltrans,using L520,rec=j: t$,s,k,mat n,l$,p$ eof HIST noRec NEXT_GLTRANS
 00520 L520: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00530     gosub SEARCH_FOR : if s_pass=0 then goto NEXT_GLTRANS
 00540     gosub REVERSE_WITH

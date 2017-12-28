@@ -3,7 +3,7 @@
 00030 ! the file name should be \program files\acs\timeclock.h&cno
 00040 ! this program places the information in same file that simple time             clock uses in the input time sheets program
 00050 ! ______________________________________________________________________
-00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnwait,fnerror,fnmsgbox,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnwait,fnerror,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00070   on error goto ERTN
 00080 ! ______________________________________________________________________
 00090   dim hen$*8,cap$*128,message$*40,io1$(7)*35,ml$(4)*70,pathtotimecard$*200
@@ -13,19 +13,19 @@
 00130   fntop(program$,cap$="Import Time from Time Clock System")
 00150   pathtotimecard$="c:\progra~1\acs\"
 00160 ! 
-00170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
+00170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
 00190 ! ______________________________________________________________________
 00200 ASK_PAYROLL_DATE: ! 
-00210   fntos(sn$="Importtime") !:
+00210   fnTos(sn$="Importtime") !:
         respc=0
-00220   fnlbl(1,1,"",34,1) ! bigger screen
-00230   fnlbl(2,1,"Payroll Date:",20,1)
-00240   fntxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
+00220   fnLbl(1,1,"",34,1) ! bigger screen
+00230   fnLbl(2,1,"Payroll Date:",20,1)
+00240   fnTxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
 00250   resp$(respc+=1)=str$(ppd)
-00260   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00270   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00260   fnCmdKey("&Next",1,1,0,"Proceed with importing time." ) !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00270   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 00280   if ckey=5 then goto XIT
 00290   endingdate=val(resp$(1))
 00300 ! ______________________________________________________________________
@@ -37,7 +37,7 @@
 00360   fnwait(wait$="Importing: please wait...",0)
 00370   on fkey 5 goto L580
 00380   simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
-00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outin,keyed 
+00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outIn,keyed 
 00400   open #5: "Name="&simple$&",RecL=76",display,input 
 00410 L410: linput #5: ln$ eof L570
 00420   eno=val(ln$(1:8)) conv MESSAGE1

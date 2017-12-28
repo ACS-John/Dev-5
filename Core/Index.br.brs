@@ -12,7 +12,7 @@
 10220   end
 10240   ! /r
 12000   def fn_index_it_setup
-12020     library 'S:\Core\Library': fnxit,fnerror,fnstatus,fnget_company_number_list,fngethandle,fnshortpath$
+12020     library 'S:\Core\Library': fnxit,fnerror,fnStatus,fnget_company_number_list,fngethandle,fnshortpath$
 12040     if ~setup_index_it then 
 12060       setup_index_it=1
 12080       on error goto ERTN
@@ -28,7 +28,7 @@
 22000 ! r: constants, dims, library, on error, etc
 22020     fn_index_it_setup
 22040 !  if ~working_dir_rights then
-22060 !    fnstatus('Skipping (due to inadaquate rights to working folder) index for '&data_file$)
+22060 !    fnStatus('Skipping (due to inadaquate rights to working folder) index for '&data_file$)
 22080 !  else 
 22100     dim cap$*128
 22120     dim index_execute_text$*512
@@ -41,11 +41,11 @@
 22260     if index_parameters$='' then index_statement_or_file=is_index_statement else index_statement_or_file=is_index_file
 25000     if exists(data_file$) then 
 26000       if index_statement_or_file=is_index_statement then 
-26010         fnstatus(index_statement_or_file$)
+26010         fnStatus(index_statement_or_file$)
 26012         index_execute_text$=index_statement_or_file$
 26020         execute index_execute_text$ ioerr EXE_INDEX_ERR
 27000       else ! index_statement_or_file=is_index_file
-27010         fnstatus(os_filename$(index_statement_or_file$))
+27010         fnStatus(os_filename$(index_statement_or_file$))
 27020         index_parameters$=lwrc$(index_parameters$)
 27040         index_parameters$=' '&index_parameters$&' '
 27050         index_parameters$=srep$(index_parameters$,',',' ')
@@ -65,18 +65,18 @@
 27180       end if 
 28000     else 
 28020       fail=1
-28040       fnstatus("Could not find data file:")
-28060       fnstatus("     "&os_filename$(data_file$))
+28040       fnStatus("Could not find data file:")
+28060       fnStatus("     "&os_filename$(data_file$))
 28080     end if 
 28090 !   end if
 28100     goto INDEX_XIT
 30000 EXE_INDEX_ERR: ! 
 30020     fail=1
-30040     fnstatus("Encountered error "&str$(err)&" executing index:")
-30060     fnstatus("     ("&index_execute_text$&")") ! pause
+30040     fnStatus("Encountered error "&str$(err)&" executing index:")
+30060     fnStatus("     ("&index_execute_text$&")") ! pause
 30100     if err=7600 then 
 30120       open #h_tmp:=fngethandle: 'name='&data_file$,internal,input error EIE_7600_XIT
-30140       fnstatus('     (Record Length is '&str$(rln(h_tmp))&')')
+30140       fnStatus('     (Record Length is '&str$(rln(h_tmp))&')')
 30160       close #h_tmp: 
 30180       EIE_7600_XIT: ! 
 30182     else if err=7605 then 
@@ -84,7 +84,7 @@
 30200     end if 
 32000 INDEX_XIT: ! 
 32020     if fail then 
-32040 !     fnstatus_pause
+32040 !     fnStatusPause
 32060       index_it_return=0
 32080     else 
 32100       index_it_return=1
@@ -117,7 +117,7 @@
 52180           fn_index_sys_do_one(cno_list(cno_item),system_id$)
 52200         next cno_item
 52220       else 
-52240         fnstatus('no companies found in '&system_id$&' to index')
+52240         fnStatus('no companies found in '&system_id$&' to index')
 52260       end if 
 52280     end if 
 52300   fnend 

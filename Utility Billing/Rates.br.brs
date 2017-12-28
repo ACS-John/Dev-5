@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\ubRate
 00020 ! -- Rate File editor
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnacs,fnlbl,fntxt,fnmsgbox,fnopenprn,fncloseprn,fncomboa,fnopt,fntos,fnerror,fnxit,fncmdset,fntop,fncmdkey,fnget_services
+00040   library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnLbl,fnTxt,fnmsgbox,fnopenprn,fncloseprn,fncomboa,fnOpt,fnTos,fnerror,fnxit,fnCmdSet,fntop,fnCmdKey,fnget_services
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
@@ -14,11 +14,11 @@
 10180     if trim$(snm$(j))<>"" then option$(x+=1)=srv$(j)
 10200   next j
 10220   mat option$(x)
-10240   open #1: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Use,RecL=374,KPs=1,KLn=4,Shr",internal,outin,keyed 
-10250   open #2: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno')&",Use,RecL=374,KPs=5,KLn=25,Shr",internal,outin,keyed 
+10240   open #1: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
+10250   open #2: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno')&",Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
 10260   goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
 20000 SCREEN_GRID: ! r:
-20020   fntos(sn$="rateflex")
+20020   fnTos(sn$="rateflex")
 20040   myline=1 : mypos=1 : height=10 : width=50
 20060   colhdr$(1)="Code"
 20080   colhdr$(2)="Description"
@@ -40,13 +40,13 @@
 20400     fnflexadd1(mat item$)
 20420   loop 
 20440 L1010: ! 
-20460   fnlbl(11,50,"",0,0)
-20480   fncmdkey("Edit",1,1,0,"Allows you to access the record that is highlited")
-20500   fncmdkey("&Add",2,0,0,"Add new rates")
-20520   fncmdkey("&Delete",4,0,0,"Deletes highlighted record")
-20540   fncmdkey("&Print",3,0,0,"Prints rate file proof list")
-20560   fncmdkey("&Complete",5,0,1,"Return to menu")
-20580   fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
+20460   fnLbl(11,50,"",0,0)
+20480   fnCmdKey("Edit",1,1,0,"Allows you to access the record that is highlited")
+20500   fnCmdKey("&Add",2,0,0,"Add new rates")
+20520   fnCmdKey("&Delete",4,0,0,"Deletes highlighted record")
+20540   fnCmdKey("&Print",3,0,0,"Prints rate file proof list")
+20560   fnCmdKey("&Complete",5,0,1,"Return to menu")
+20580   fnAcs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
 21000   k$=rpad$(resp$(1),4)
 21020   if ckey=5 then 
 21040     goto XIT
@@ -73,15 +73,15 @@
 30180   return  ! /r
 40000 ADDNEWRECORD: ! r:
 40010   mat rt$=("")
-40020   fntos(sn$="rateadd")
+40020   fnTos(sn$="rateadd")
 40040   mat resp$=("")
-40060   fnlbl(1,1,"Service Type:",20,1)
-40080   fnlbl(1,29,"Rate Code:",10,1)
+40060   fnLbl(1,1,"Service Type:",20,1)
+40080   fnLbl(1,29,"Rate Code:",10,1)
 40100   fncomboa("rate_type",1,22,mat option$,"All codes must be between 1 and 99",2)
 40120   resp$(1)=""
-40140   fntxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
-40160   fncmdset(2)
-40180   fnacs(sn$,0,mat resp$,ckey) ! CALL ADD NEW RECORD
+40140   fnTxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
+40160   fnCmdSet(2)
+40180   fnAcs(sn$,0,mat resp$,ckey) ! CALL ADD NEW RECORD
 40200   if ckey=5 then goto SCREEN_GRID
 40220   rt$=uprc$(resp$(1)) ! service type
 40240   if rtrm$(rt$)="" then 
@@ -121,46 +121,46 @@
 40940 ! /r
 50000 RATEMAINT: ! r: maintain rate file
 50010   read #1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey ignore
-50040   fntos(sn$="ratemaint")
+50040   fnTos(sn$="ratemaint")
 50060   c1=20 : c2=32 : c3=44
-50080   fnlbl(1,1,"Service Type:",20,1)
+50080   fnLbl(1,1,"Service Type:",20,1)
 50100 ! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
-50120   fntxt(1,22,2,0,0,"",1)
-50140   fnlbl(1,29,"Rate Code:",10,1)
-50160   fntxt(1,40,2,0,0,"30",1)
+50120   fnTxt(1,22,2,0,0,"",1)
+50140   fnLbl(1,29,"Rate Code:",10,1)
+50160   fnTxt(1,40,2,0,0,"30",1)
 50180 ! 
-50200   fnlbl(2,1,"Description:",20,1)
-50220   fnlbl(3,1,"Minimum Charge:",20,1)
-50240   fnlbl(3,30,"Minimum Usage:",20,1)
-50260   fntxt(2,22,50)
-50280   fntxt(3,22,9,0,1,"32")
+50200   fnLbl(2,1,"Description:",20,1)
+50220   fnLbl(3,1,"Minimum Charge:",20,1)
+50240   fnLbl(3,30,"Minimum Usage:",20,1)
+50260   fnTxt(2,22,50)
+50280   fnTxt(3,22,9,0,1,"32")
 50300 ! if env$('client')="Franklinton" and rt$(1)="GA" then 
-50320 !   fntxt(3,51,9,0,1,"31")
+50320 !   fnTxt(3,51,9,0,1,"31")
 50340 ! else 
-50360     fntxt(3,51,9,0,1,"30")
+50360     fnTxt(3,51,9,0,1,"30")
 50380 ! end if 
-50400   fnlbl(5,c1,"Usage",9,2)
-50420   fnlbl(5,c2,"Usage",9,2)
-50440   fnlbl(5,c3," Charge",9,2)
-50460   fnlbl(6,c1," From",9,2)
-50480   fnlbl(6,c2," To",9,2)
-50500   fnlbl(6,c3,"Per Unit",9,2)
+50400   fnLbl(5,c1,"Usage",9,2)
+50420   fnLbl(5,c2,"Usage",9,2)
+50440   fnLbl(5,c3," Charge",9,2)
+50460   fnLbl(6,c1," From",9,2)
+50480   fnLbl(6,c2," To",9,2)
+50500   fnLbl(6,c3,"Per Unit",9,2)
 50520   x=7
 50540   for lin=6 to 15
 50560     ! if env$('client')="Franklinton" and rt$(1)="GA" then ! Special Franklinton routines
-50580     !   fntxt(lin+1,c1,9,9,1,"31",0) ! 1 decimal
-50600     !   fntxt(lin+1,c2,9,9,1,"31",0)
+50580     !   fnTxt(lin+1,c1,9,9,1,"31",0) ! 1 decimal
+50600     !   fnTxt(lin+1,c2,9,9,1,"31",0)
 50620     ! else 
-50640       fntxt(lin+1,c1,9,10,1,"30",0) ! 0 decimal
-50660       fntxt(lin+1,c2,9,10,1,"30",0)
+50640       fnTxt(lin+1,c1,9,10,1,"30",0) ! 0 decimal
+50660       fnTxt(lin+1,c2,9,10,1,"30",0)
 50680     ! end if 
-50700     fntxt(lin+1,c3,9,9,1,"36")
+50700     fnTxt(lin+1,c3,9,9,1,"36")
 50720     x=x+3
 50740   next lin
-50760   fncmdset(4)
+50760   fnCmdSet(4)
 50762   mat resp$(udim(mat rt$))
 50764   mat resp$=rt$
-50780   fnacs(sn$,0,mat resp$,ckey) !        ! CALLS RATE MAINTENANCE
+50780   fnAcs(sn$,0,mat resp$,ckey) !        ! CALLS RATE MAINTENANCE
 50782   mat resp$(udim(mat rt$))
 50784   mat rt$=resp$
 50800   if ckey=5 then goto SCREEN_GRID
@@ -195,13 +195,13 @@
 60580   goto SCREEN_GRID
 60600 ! /r
 70000 PRINTPROOF: ! r:
-70020   fntos(sn$="RateProof")
-70040   fnopt(1,14,"Code Sequence")
+70020   fnTos(sn$="RateProof")
+70040   fnOpt(1,14,"Code Sequence")
 70060   resp$(1)="True"
-70080   fnopt(2,14,"Name Sequence")
+70080   fnOpt(2,14,"Name Sequence")
 70100   resp$(2)="False"
-70120   fncmdset(2)
-70140   fnacs(sn$,0,mat resp$,ckey) ! CALLS PROOF LIST
+70120   fnCmdSet(2)
+70140   fnAcs(sn$,0,mat resp$,ckey) ! CALLS PROOF LIST
 70160   if ckey=5 then goto SCREEN_GRID
 70180   ti2=1 ! default to code sequence
 70200   if uprc$(resp$(1))=uprc$("True") then ti2=1: k$="    " ! code sequence

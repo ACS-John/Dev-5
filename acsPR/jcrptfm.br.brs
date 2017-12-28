@@ -15,7 +15,7 @@
 00145   fnconsole(1)
 00150   pg=3
 00160 ! ______________________________________________________________________
-00170   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outin,keyed 
+00170   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outIn,keyed 
 00180 ! ______________________________________________________________________
 00190 MENU1: pr newpage
 00200   fnopenwin(win=101,09,20,15,59,cap$)

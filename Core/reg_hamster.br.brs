@@ -1,5 +1,5 @@
 20000 ! ______________________________________________________________________
-20200   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+20200   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 20400   on error goto ERTN
 20600 ! ______________________________________________________________________
 20800   dim cap$*128
@@ -14,16 +14,16 @@
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
 23000     open_file_count=0 ! this value is used in the close_file sub routine
-23200     open #open_file_count+=1: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
-23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outin,keyed
-23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outin,relative
+23200     open #open_file_count+=1: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
+23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outIn,keyed
+23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outIn,relative
 23800   fnend 
 24000   def fn_close_file
 24200     for j=1 to open_file_count : close #j: : next j
 24400   fnend  ! fn_close_file
 24600 ! ______________________________________________________________________
 24800 HAMSTER: ! 
-25000   fnhamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+25000   fnHamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 25200   return 
 25400 ! ______________________________________________________________________
 25600 XIT: fnxit

@@ -1,6 +1,6 @@
 00020 ! pr bills for Blucksberg Mountain Water (full page)
 12000 ! ______________________________________________________________________
-12020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fnpa_finis,fnpa_line,fnpa_txt,fnpa_open,fnpa_elipse,fngethandle,fnpa_newpage,fnpa_pic,fnpa_fontsize,fnpa_fontitalic,fnpa_fontbold,fntrans_total_as_of,fnget_services,fncreg_read,fncreg_write
+12020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fnpa_finis,fnpa_line,fnpa_txt,fnpa_open,fnpa_elipse,fngethandle,fnpa_newpage,fnpa_pic,fnpa_fontsize,fnpa_fontitalic,fnpa_fontbold,fntrans_total_as_of,fnget_services,fncreg_read,fncreg_write
 12040   on error goto ERTN
 12060 ! ______________________________________________________________________
 12080   dim resp$(40)*128,mg$(13)*128,cap$*128
@@ -24,19 +24,19 @@
 14260     x=len(at$(j)) : y=z-x
 14280     at$(j)=rpt$(" ",int(y/2))&at$(j)
 14300   next j
-14320   dim servicename$(10)*20
-14340   fnget_services(mat servicename$)
+14320   dim serviceName$(10)*20
+14340   fnget_services(mat serviceName$)
 14360   close #h_service: 
-14380   for j=1 to udim(servicename$)
-14400     servicename$(j)=trim$(servicename$(j))
+14380   for j=1 to udim(serviceName$)
+14400     serviceName$(j)=trim$(serviceName$(j))
 14420   next j
 14440   gosub BULKSORT
 14460   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
 14480   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
-14500   open #h_ubtransvb=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+14500   open #h_ubtransvb=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 14520 ! 
-14540   open #11: "Name="&env$('Q')&"\UBmstr\Message.h"&env$('cno'),internal,outin,relative ioerr MESSAGE_H_ALREADY_CONVERTED
-14560   read #11,using "form pos 1,11*c 60",rec=1: mat mg$(1:11) norec MESSAGE_H_FINAL
+14540   open #11: "Name="&env$('Q')&"\UBmstr\Message.h"&env$('cno'),internal,outIn,relative ioerr MESSAGE_H_ALREADY_CONVERTED
+14560   read #11,using "form pos 1,11*c 60",rec=1: mat mg$(1:11) noRec MESSAGE_H_FINAL
 14580   for mg_item=1 to 11
 14600     fncreg_write('print bill message board line '&str$(mg_item),mg$(mg_item))
 14620   next mg_item
@@ -48,44 +48,44 @@
 14740   next mg_item
 16000 SCREEN1: ! r:
 16020   a$="" : prtbkno=0
-16040   fntos(sn$="UBPrtBl1-1")
+16040   fnTos(sn$="UBPrtBl1-1")
 16060   pf=26 : ll=24
 16080   respc=0
-16100   fnlbl(3,1,"Due Date:",ll,1)
-16120   fntxt(3,pf,8,8,1,"1",0,tt$)
+16100   fnLbl(3,1,"Due Date:",ll,1)
+16120   fnTxt(3,pf,8,8,1,"1",0,tt$)
 16140   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-16160   fnlbl(5,1,"Service From Date:",ll,1)
-16180   fntxt(5,pf,8,8,1,"1",0,tt$)
+16160   fnLbl(5,1,"Service From Date:",ll,1)
+16180   fnTxt(5,pf,8,8,1,"1",0,tt$)
 16200   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d5)
-16220   fnlbl(6,1,"Service To Date:",ll,1)
-16240   fntxt(6,pf,8,8,1,"1",0,tt$)
+16220   fnLbl(6,1,"Service To Date:",ll,1)
+16240   fnTxt(6,pf,8,8,1,"1",0,tt$)
 16260   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d6)
 16280   scr_line=7
-16300   fnlbl(scr_line+1,1,"Message on Bill:",ll,1)
+16300   fnLbl(scr_line+1,1,"Message on Bill:",ll,1)
 16320   mg_len=95 : mg_display_len=60
 16340   for mg_item=1 to udim(mat mg$)
 16360     scr_line+=1
-16380     fntxt(scr_line,pf,mg_len,mg_display_len,2)
+16380     fnTxt(scr_line,pf,mg_len,mg_display_len,2)
 16400     resp$(respc+=1)=mg$(mg_item)(1:mg_len)
 16420   next mg_item
 16440   scr_line+=1
-16460   fnlbl(scr_line+=1,1,"Date of Billing:",ll,1)
-16480   fntxt(scr_line,pf,8,8,1,"1")
+16460   fnLbl(scr_line+=1,1,"Date of Billing:",ll,1)
+16480   fnTxt(scr_line,pf,8,8,1,"1")
 16500   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-16520   fnlbl(scr_line+=1,1,"Prior Date of Billing:",ll,1)
-16540   fntxt(scr_line,pf,8,8,1,"1")
+16520   fnLbl(scr_line+=1,1,"Prior Date of Billing:",ll,1)
+16540   fnTxt(scr_line,pf,8,8,1,"1")
 16560   resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
 16580   scr_line+=1
-16600   fnlbl(scr_line+=1,1,"Starting Account:",ll,1)
+16600   fnLbl(scr_line+=1,1,"Starting Account:",ll,1)
 16620   fncombof("ubm-act-nam",scr_line,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 16640   resp$(resp_start:=respc+=1)="[All]"
-16660   fnlbl(scr_line+=1,1,"Route Number:",ll,1)
+16660   fnLbl(scr_line+=1,1,"Route Number:",ll,1)
 16680   fncmbrt2(scr_line,pf)
 16700   resp$(resp_route:=respc+=1)="[All]"
-16720   fnchk(scr_line+=1,pf,"Select Accounts to Print",1)
+16720   fnChk(scr_line+=1,pf,"Select Accounts to Print",1)
 16740   resp$(resp_select_accounts:=respc+=1)="False"
-16760   fncmdset(3)
-16780   fnacs(sn$,0,mat resp$,ck)
+16760   fnCmdSet(3)
+16780   fnAcs(sn$,0,mat resp$,ck)
 18000   if ck=5 then goto XIT
 18020   d1=val(resp$(17))
 18040   d4=val(resp$(1))
@@ -162,15 +162,15 @@
 24900   goto NEXT_CUSTOMER
 24920 ! /r
 28000 SCREEN_SELECT_ACCOUNT: ! r: pick individual accounts to print
-28020   fntos(sn$:="UBPrtBl1-2")
-28040   fnlbl(1,1,"Account (blank to stop)",31,1)
+28020   fnTos(sn$:="UBPrtBl1-2")
+28040   fnLbl(1,1,"Account (blank to stop)",31,1)
 28060   if trim$(z$)<>"" then 
-28080     fnlbl(3,1,"Last Account entered was "&z$,44,1)
+28080     fnLbl(3,1,"Last Account entered was "&z$,44,1)
 28100   end if 
 28120   fncmbact(1,17)
 28140   resp$(1)=z$
-28160   fncmdset(3)
-28180   fnacs(sn$,0,mat resp$,ck)
+28160   fnCmdSet(3)
+28180   fnAcs(sn$,0,mat resp$,ck)
 28200   a$=lpad$(trim$(resp$(1)(1:10)),10)
 28220   if trim$(a$)="" or ck=5 then goto RELEASE_PRINT
 28240   read #1,using L730,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey SCREEN_SELECT_ACCOUNT
@@ -183,14 +183,14 @@
 32040   goto ENDSCR ! /r
 34000 ENDSCR: ! r: pr totals screen
 34020   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-34040   fntos(sn$="Bills-Total")
+34040   fnTos(sn$="Bills-Total")
 34060   mylen=23 : mypos=mylen+2
 34080   respc=0
-34100   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-34120   fntxt(1,mypos,8,0,1,"",1)
+34100   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+34120   fnTxt(1,mypos,8,0,1,"",1)
 34140   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-34160   fncmdset(52)
-34180   fnacs(sn$,0,mat resp$,ck) ! /r
+34160   fnCmdSet(52)
+34180   fnAcs(sn$,0,mat resp$,ck) ! /r
 34200 XIT: fnxit
 34220 ! 
 38000 VBPRINT: ! r:
@@ -308,7 +308,7 @@
 43720 ! g(6)
 43740 ! 
 43760   if g(7)<>0 then 
-43780     fnpa_txt(servicename$(7),26,lyne+=adder)
+43780     fnpa_txt(serviceName$(7),26,lyne+=adder)
 43800     fnpa_txt(cnvrt$("pic($$$$$$$$.##)",g(7)),160,lyne)
 43820   end if 
 43840 ! 

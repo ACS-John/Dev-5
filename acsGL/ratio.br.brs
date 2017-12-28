@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\ratio
 00020 ! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnwait,fncno,fnoldmsgbox,fnsearch,fnopenprn,fncloseprn,fndat,fnprocess,fntos,fnlbl,fncombof,fncmdkey,fnacs,fntxt,fnchk,fnflexinit1,fnflexadd1,fnhamster,fnmsgbox,fnqgl,fnrgl$,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnwait,fncno,fnoldmsgbox,fnsearch,fnopenprn,fncloseprn,fndat,fnprocess,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnqgl,fnrgl$,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim gln(80,3),k4$*2,cap$*128,message$*40
@@ -16,13 +16,13 @@
 00150   if exists(env$('Q')&"\GLmstr\ratiomst.h"&env$('cno'))=0 then gosub CREATE_FILES
 00160   if exists(env$('Q')&"\GLmstr\ratioidx.h"&env$('cno'))=0 then gosub INDEX
 00170   if exists(env$('Q')&"\GLmstr\schindx2.h"&env$('cno'))=0 then gosub INDEX
-00180 L180: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1380
+00180 L180: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1380
 00190   goto RATIOMSTGRID
 00200   close #ratiomst: ioerr L210
 00210 L210: execute "Index "&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 3 30 Replace DupKeys -n"
 00220   goto L180
 00230 RATIOMSTGRID: ! 
-00240   fntos(sn$="Ratiomst") !:
+00240   fnTos(sn$="Ratiomst") !:
         respc=0
 00250   mat chdr$(3) : mat cmask$(3) : mat flxitm$(3) !:
         chdr$(1)="Rec" !:
@@ -38,15 +38,15 @@
         fnflexadd1(mat item$)
 00310   goto READ_RATIOMST
 00320 EO_RATIOMST_GRID: ! 
-00330   fnlbl(11,1,"")
-00340   fncmdkey("&Add",1,0,0,"Allows you to add new Ratios.")
+00330   fnLbl(11,1,"")
+00340   fnCmdKey("&Add",1,0,0,"Allows you to add new Ratios.")
 00350 ! 
-00360   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
-00370   fncmdkey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
-00380   fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
-00390 ! fnCMDKEY("&Print",3,0,0,"Takes you directly to the pr Ratios option")
-00400   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-00410   fnacs(sn$,0,mat resp$,ckey)
+00360   fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
+00370   fnCmdKey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
+00380   fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
+00390 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Ratios option")
+00400   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+00410   fnAcs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
 00430   add=edit=0
 00440   editrec=val(resp$(1))
@@ -59,28 +59,28 @@
           goto ADD_EDIT_RATIOMST ! add
 00490 ! to ADD_EDIT_Ratiomst ! add
 00500   if ckey=2 then !:
-          read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ norec RATIOMSTGRID !:
+          read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ noRec RATIOMSTGRID !:
           holdsn=sn !:
           goto ADD_EDIT_RATIOMST
 00510   if ckey=8 then !:
-          read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ norec RATIOMSTGRID !:
+          read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ noRec RATIOMSTGRID !:
           delete #ratiomst,rec=editrec: !:
           goto RATIOMSTGRID
 00520   pause 
 00530 ! 
 00540 ADD_EDIT_RATIOMST: ! 
-00550   fntos(sn$="Ratiomst2") !:
+00550   fnTos(sn$="Ratiomst2") !:
         mylen=20: mypos=mylen+3 : right=1
-00560   fnlbl(1,1,"Ratio Number:",mylen,right)
+00560   fnLbl(1,1,"Ratio Number:",mylen,right)
 00570   fncombof('glRatiomst',1,mypos,0,env$('Q')&"\GLmstr\ratiomst.h"&env$('cno'),1,3,4,40,env$('Q')&"\GLmstr\ratioidx.h"&env$('cno'),add_all)
 00580   if edit=1 then resp$(1)=hac$
 00590   if add=1 then resp$(1)=""
-00600   fnlbl(2,1,"Ratio Nane::",mylen,right)
-00610   fntxt(2,mypos,40,0,left,"",0,"",0 ) !:
+00600   fnLbl(2,1,"Ratio Nane::",mylen,right)
+00610   fnTxt(2,mypos,40,0,left,"",0,"",0 ) !:
         resp$(2)=na$
-00620   fncmdkey("&Next",1,1,0,"Save the ratio.")
-00630   fncmdkey("&Cancel",5,0,1,"Returns to list of Ratios withouit saving any changes.")
-00640   fnacs(sn$,0,mat resp$,ckey)
+00620   fnCmdKey("&Next",1,1,0,"Save the ratio.")
+00630   fnCmdKey("&Cancel",5,0,1,"Returns to list of Ratios withouit saving any changes.")
+00640   fnAcs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto RATIOMSTGRID
 00660   hac$=resp$(1)(1:3) conv ADD_EDIT_RATIOMST
 00670   na$=resp$(2)
@@ -111,9 +111,9 @@
 00880 ! ______________________________________________________________________
 00890 CREATE_FILES: ! 
 00900   close #ratiomst: ioerr L910
-00910 L910: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno'),internal,outin,keyed ioerr L930
+00910 L910: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno'),internal,outIn,keyed ioerr L930
 00920   close #ratiomst,free: ioerr L930
-00930 L930: open #ratiomst: "Name="&env$('Q')&"\GLmstr\ratiomst.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ratioidx.h"&env$('cno')&",RecL=1163,KPs=1,KLn=3,replace",internal,outin,keyed 
+00930 L930: open #ratiomst: "Name="&env$('Q')&"\GLmstr\ratiomst.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ratioidx.h"&env$('cno')&",RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed 
 00940 L940: close #ratiomst: ioerr L950
 00950 L950: close #11: ioerr L970
 00960 INDEX: ! (main Ratio files)
@@ -173,9 +173,9 @@
 01500 ! ______________________________________________________________________
 01510 GL_NUMBERS: ! 
 01520 LEFT_SIDE: ! 
-01530   fntos(sn$="Ratiomst3") !:
+01530   fnTos(sn$="Ratiomst3") !:
         resp=0
-01540   fnlbl(1,35,"Left Side Of Ratio",30,0)
+01540   fnLbl(1,35,"Left Side Of Ratio",30,0)
 01550   mypos(1)=1: mypos (2)=50
 01560   for j=2 to 40 step 2
 01570     for x=1 to 2
@@ -183,11 +183,11 @@
             if x =1 then resp$(resp+=1)=fnrgl$(gl$(j-1)) else resp$(resp+=1)=fnrgl$(gl$(j))
 01590     next x
 01600   next j
-01610   fncmdkey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
-01620   fncmdkey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
-01630   fncmdkey("&Finished",6,0,0,"Finished with general ledger assignments.")
-01640   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-01650   fnacs(sn$,0,mat resp$,ckey)
+01610   fnCmdKey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
+01620   fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
+01630   fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
+01640   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+01650   fnAcs(sn$,0,mat resp$,ckey)
 01660   if ckey=5 then goto RATIOMSTGRID
 01670   for j=1 to 40
 01680     gl$(j)=fnagl$(resp$(j))
@@ -196,20 +196,20 @@
 01710   if ckey=3 then goto RIGHT_SIDE
 01720   if ckey=6 then goto REWRITE_EXISTING_RATIOMST
 01730 RIGHT_SIDE: : resp=0
-01740   fntos(sn$="Ratiomst4")
+01740   fnTos(sn$="Ratiomst4")
 01750   mypos(1)=1: mypos (2)=50
-01760   fnlbl(1,35,"Right Side Of Ratio",30,0)
+01760   fnLbl(1,35,"Right Side Of Ratio",30,0)
 01770   for j=2 to 40 step 2
 01780     for x=1 to 2
 01790       fnqgl(j/2+1,mypos(x),0,2,pas) !:
             if x=1 then resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else resp$(resp+=1)=fnrgl$(gl$(40+j))
 01800     next x
 01810   next j
-01820   fncmdkey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
-01830   fncmdkey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
-01840   fncmdkey("&Finished",6,0,0,"Finished with general ledger assignments.")
-01850   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-01860   fnacs(sn$,0,mat resp$,ckey)
+01820   fnCmdKey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
+01830   fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
+01840   fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
+01850   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+01860   fnAcs(sn$,0,mat resp$,ckey)
 01870   if ckey=5 then goto RATIOMSTGRID
 01880   for j=1 to 40
 01890     gl$(j+40)=fnagl$(resp$(j))

@@ -2,7 +2,7 @@
 10020 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 10040 ! and Purchases Journals a.k.a. Transaction Journals
 10060 ! ______________________________________________________________________
-10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fntos,fncmdset,fnacs,fnlbl,fntxt,fnconsole
+10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnTos,fnCmdSet,fnAcs,fnLbl,fnTxt,fnconsole
 10100   on error goto ERTN
 10120 ! r: constants and dims
 10140   dim tr(7),tr$*12,td$*30,oldtr$*12
@@ -28,7 +28,7 @@
 16060 ! 
 18020   fnopenprn
 18040 ! if cur_prior=period_current then
-18080   open #h_gltrans:=3: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+18080   open #h_gltrans:=3: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 18100 F_GLTRANS: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 20000   gosub HDR
 20020   do 
@@ -149,26 +149,26 @@
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
-40040   fntos(sn$="fix_trans_dates")
+40040   fnTos(sn$="fix_trans_dates")
 40060   respc=0
-40080 ! fnfra(1,1,5,50,"Print from current month files or history"," ")
-40100 ! fnopt(1,3,"Current Period Transactions",0,1)
+40080 ! fnFra(1,1,5,50,"Print from current month files or history"," ")
+40100 ! fnOpt(1,3,"Current Period Transactions",0,1)
 40120 ! resp$(respc+=1)="True"
-40140 ! fnopt(3,3,"Prior Period Transactions",0,1)
+40140 ! fnOpt(3,3,"Prior Period Transactions",0,1)
 40160 ! resp$(respc+=1)="False"
-40180 ! fnlbl(4,1,"Prior period code (blank for all):",35,0,0,1)
-40200   fnlbl(1,1,"Only Current Period transactions will be processed.",51,2)
-40220   fnlbl(2,1,"All matching dates will be changed.",51,2)
+40180 ! fnLbl(4,1,"Prior period code (blank for all):",35,0,0,1)
+40200   fnLbl(1,1,"Only Current Period transactions will be processed.",51,2)
+40220   fnLbl(2,1,"All matching dates will be changed.",51,2)
 40240   resp$(respc+=1)=" "
-40260 ! fnfra(7,1,4,50,"Date Correction"," ")
-40280   fnlbl(4,1,"Bad Date:",12,1) ! ,0,0,2)
-40300   fntxt(4,14,2,0,1,"1",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
+40260 ! fnFra(7,1,4,50,"Date Correction"," ")
+40280   fnLbl(4,1,"Bad Date:",12,1) ! ,0,0,2)
+40300   fnTxt(4,14,2,0,1,"1",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 40320   resp$(respc+=1)=" "
-40340   fnlbl(5,1,"Good Date:",12,1) ! ,0,0,2)
-40360   fntxt(5,14,2,0,1,"1",0,"")
+40340   fnLbl(5,1,"Good Date:",12,1) ! ,0,0,2)
+40360   fnTxt(5,14,2,0,1,"1",0,"")
 40380   resp$(respc+=1)=" "
-40400   fncmdset(2)
-40420   fnacs(sn$,0,mat resp$,ck)
+40400   fnCmdSet(2)
+40420   fnAcs(sn$,0,mat resp$,ck)
 40440   if ck<>5 then 
 40460     date_bad=val(resp$(1))
 40480     date_good=val(resp$(2))

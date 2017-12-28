@@ -1,7 +1,7 @@
 00010 ! Replace S:\Core\Programs\1099Type
 00020 ! 1099Type file
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   fntop(program$,cap$="1099Type")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -10,10 +10,10 @@
 00100   fncno(cno)
 00110   lbl$(1)="Key" : lbl$(2)="Desc"
 00120   fln(1)=1 : fln(2)=25
-00130   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
+00130   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
 00131   close #1: 
-00132   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
-00140   fnhamster("1099Type",mat lbl$,mat fln,1,mat p$)
+00132   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
+00140   fnHamster("1099Type",mat lbl$,mat fln,1,mat p$)
 00150 XIT: fnxit
 00160 ! ______________________________________________________________________
 00170 ! <Updateable Region: ERTN>

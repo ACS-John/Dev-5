@@ -2,7 +2,7 @@
 00020 ! Payroll Tax Deposit Summary !:
         ! beginning with 4.0 the tax deposit reads from the checkhistory file
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnDedNames,fnopenprn,fncloseprn,fngethandle,fntos,fnfra,fntxt,fnlbl,fncmdkey,fnacs,fnss_employee,fnss_employer,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnDedNames,fnopenprn,fncloseprn,fngethandle,fnTos,fnFra,fnTxt,fnLbl,fnCmdKey,fnAcs,fnss_employee,fnss_employer,fnGetPayrollDates
 00050   on error goto ERTN
 00060   on fkey 5 goto DONE
 00070 ! ______________________________________________________________________
@@ -17,18 +17,18 @@
 00242   ssr1=fnss_employee
 00243   ssr2=fnss_employer
 00250 ! If FNPROCESS=1 Then Goto 410
-00260   fntos(sn$="TaxDeposit") !:
+00260   fnTos(sn$="TaxDeposit") !:
         rc=0: mylen=22: mypos=mylen+3: frameno=1
-00270   fnfra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
-00280   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-00290   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
+00270   fnFra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
+00280   fnLbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+00290   fnTxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
         resp$(rc+=1)=str$(beg_date)
-00300   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-00310   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this deposit. ",frameno) !:
+00300   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+00310   fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this deposit. ",frameno) !:
         resp$(rc+=1)=str$(end_date)
-00320   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
-00330   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-00340   fnacs(sn$,0,mat resp$,ckey)
+00320   fnCmdKey("Next",1,1,0,"Calculate tax deposit.")
+00330   fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
+00340   fnAcs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
 00360   beg_date=val(resp$(1)) !:
         end_date=val(resp$(2))
@@ -41,7 +41,7 @@
 00450   next j
 00460   gosub L1000
 00470   open #h_employee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",Shr",internal,input,relative 
-00480   open #h_checks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+00480   open #h_checks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 00490 READ_AGAIN: ! 
 00500   read #h_employee,using "Form POS 1,N 8,C 30": eno,em$ eof TOTAL_THAT
 00510   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "

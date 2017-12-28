@@ -57,9 +57,9 @@
 00590   scr2$(4)="SUB CATEGORIES"
 00600   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1770
 00601   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1770
-00610   open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno'),internal,outin,relative ioerr L630
+00610   open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno'),internal,outIn,relative ioerr L630
 00620   close #2,free: 
-00630 L630: open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno')&",Replace,RecL=56",internal,outin,relative ioerr L1770
+00630 L630: open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno')&",Replace,RecL=56",internal,outIn,relative ioerr L1770
 00640 L640: scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
 00650   scrid$(2)="Enter CLIENT # as 0 when completed."
 00660   scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"

@@ -1,10 +1,10 @@
 00020   dim ace_io$(10)*256,ace_data$(10)*256
 00040 ! 
-00060 ! open #186: "SROW= 1, SCOL= 1, EROW=35, ECOL=129",d,outin
-00080   open #188: "SROW= 3, SCOL= 2, EROW=31, ECOL=114",display,outin 
-00100   open #187: "SROW=34, SCOL= 2, EROW=34, ECOL=114",display,outin 
-00120   open #186: "SROW= 2, SCOL= 2, EROW= 4, ECOL=40, PARENT=188",display,outin 
-00140   open #185: "SROW= 8, SCOL= 2, EROW=19, ECOL=61, PARENT=188",display,outin 
+00060 ! open #186: "SROW= 1, SCOL= 1, EROW=35, ECOL=129",d,outIn
+00080   open #188: "SROW= 3, SCOL= 2, EROW=31, ECOL=114",display,outIn 
+00100   open #187: "SROW=34, SCOL= 2, EROW=34, ECOL=114",display,outIn 
+00120   open #186: "SROW= 2, SCOL= 2, EROW= 4, ECOL=40, PARENT=188",display,outIn 
+00140   open #185: "SROW= 8, SCOL= 2, EROW=19, ECOL=61, PARENT=188",display,outIn 
 00160 ! 
 00161   dim opt$(5)*28
 00162   opt$(1)="0 = Not Finaled"

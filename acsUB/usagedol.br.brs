@@ -1,43 +1,39 @@
 00010 ! Replace S:\acsUB\usagedol
 00020 ! -- Accumulated Transaction Listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos, fnopenprn,fncloseprn, fndat,fncno,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fnpause,fncombof
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos, fnopenprn,fncloseprn, fndat,fnget_services,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnpause,fncombof
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim dat$*20,cap$*128,resp$(4)*20,pe2$*30,e2$*30,cnam$*40,text$*80
+00070   dim dat$*20,cap$*128,resp$(4)*20,pe2$*30,e2$*30,text$*80
 00080   dim svce$*11,srvnam$(10)*20,srv$(10),data$*256,idx$*256
 00090 ! ______________________________________________________________________
-00100   fncno(cno,cnam$) !:
-        ! 
-00110   fndat(dat$)
-00120   fntop("S:\acsUB\usagedol",cap$="Usage and Dollar Report")
-00130   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative  !:
-        read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat srvnam$,mat srv$ !:
-        close #20: 
+00120   fntop(program$,cap$="Usage and Dollar Report")
+00130   fnget_services(mat srvnam$,mat srv$)
+00132   fndat(dat$)
 00140 ! ______________________________________________________________________
 00150 SCREEN1: ! 
 00160   sn$ = "ubAccTr" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=23 !:
         mypos=mylen+2
 00170   text$="Report Heading Date:" !:
-        fnlbl(1,1,text$,mylen,1)
-00180   fntxt(1,mypos,20) !:
+        fnLbl(1,1,text$,mylen,1)
+00180   fnTxt(1,mypos,20) !:
         resp$(1)=dat$
 00190   text$="Starting Date (mmddyy):" !:
-        fnlbl(2,1,text$,mylen,1)
-00200   fntxt(2,mypos,8,0,0,"1") !:
+        fnLbl(2,1,text$,mylen,1)
+00200   fnTxt(2,mypos,8,0,0,"1") !:
         resp$(2)=""
 00210   text$="Ending Date (mmddyy):" !:
-        fnlbl(3,1,text$,mylen,1)
-00220   fntxt(3,mypos,8,0,0,"1") !:
+        fnLbl(3,1,text$,mylen,1)
+00220   fnTxt(3,mypos,8,0,0,"1") !:
         resp$(3)=""
-00230   fnlbl(4,1,"Rate for Analysis:",mylen,1)
+00230   fnLbl(4,1,"Rate for Analysis:",mylen,1)
 00240   fncombof("nerd",4,mypos,40,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) !:
         usa+=1 !:
         resp$(4)="" ! just default to the first one
-00250   fncmdset(3)
-00260   fnacs(sn$,0,mat resp$,ck)
+00250   fnCmdSet(3)
+00260   fnAcs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   dat$=resp$(1) !:
         d(1)=val(resp$(2)) !:
@@ -48,7 +44,7 @@
 00310   if d(1)<>0 then d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00320   if d(2)<>0 then d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
 00330   fndat(d$(1),2)
-00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00350   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00360   on fkey 5 goto DONE
 00370   fnopenprn
@@ -78,7 +74,7 @@
 00600 ! ______________________________________________________________________
 00610 HDR: ! 
 00620   p2=p2+1
-00630   pr #255: "\qc {\b "&cnam$ !:
+00630   pr #255: "\qc {\b "&env$('cnam') !:
         pr #255: cap$ !:
         pr #255: dat$
 00640   if d(1)<>0 then !:

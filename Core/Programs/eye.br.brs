@@ -1,7 +1,7 @@
 00010 ! Replace S:\Core\Programs\Eye
 00020 ! Eye Color file
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   fntop(program$,cap$="Eye Color")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -11,8 +11,8 @@
 00110   lbl$(1)="Eye Color"
 00120   fln(1)=10
 00130   mask(1)=2000
-00140   open #1: "Name=S:\Core\Data\Eye.dat,RecL=10,Use,Shr",internal,outin,relative 
-00150   fnhamster("Eye",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00140   open #1: "Name=S:\Core\Data\Eye.dat,RecL=10,Use,Shr",internal,outIn,relative 
+00150   fnHamster("Eye",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160 XIT: fnxit
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\DueBy
 00020 ! pr Report of Invoices Due By Selected Dates
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fntos,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnTos,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ade$*50
@@ -72,40 +72,40 @@
 00710 XIT: fnxit
 00720 ! ______________________________________________________________________
 00730 ASK: ! 
-00740   fntos(sn$="Dueby") !:
+00740   fnTos(sn$="Dueby") !:
         respc=0
-00750   fnlbl(1,40,"",1,1)
-00760   fnlbl(1,1,"1st Due By Date:",25,1)
-00770   fntxt(1,27,10,0,1,"3",0,"Normally these would be dates in the future such as how much will be due by the 15th and the 30th.  Use ccyymmdd format" ) !:
+00750   fnLbl(1,40,"",1,1)
+00760   fnLbl(1,1,"1st Due By Date:",25,1)
+00770   fnTxt(1,27,10,0,1,"3",0,"Normally these would be dates in the future such as how much will be due by the 15th and the 30th.  Use ccyymmdd format" ) !:
         resp$(respc+=1)=""
-00780   fnlbl(2,1,"2nd Due by Date:",25,1)
-00790   fntxt(2,27,10,0,1,"3") !:
+00780   fnLbl(2,1,"2nd Due by Date:",25,1)
+00790   fnTxt(2,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00800   fnlbl(3,1,"3nd Due by Date:",25,1)
-00810   fntxt(3,27,10,0,1,"3") !:
+00800   fnLbl(3,1,"3nd Due by Date:",25,1)
+00810   fnTxt(3,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00820   fnlbl(4,1,"4th Due By Date:",25,1)
-00830   fntxt(4,27,10,0,1,"3") !:
+00820   fnLbl(4,1,"4th Due By Date:",25,1)
+00830   fnTxt(4,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00840   fnlbl(5,1,"5th Due by Date:",25,1)
-00850   fntxt(5,27,10,0,1,"3") !:
+00840   fnLbl(5,1,"5th Due by Date:",25,1)
+00850   fnTxt(5,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00860   fnlbl(6,1,"6th Due by Date:",25,1)
-00870   fntxt(6,27,10,0,1,"3") !:
+00860   fnLbl(6,1,"6th Due by Date:",25,1)
+00870   fnTxt(6,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00880   fnlbl(7,1,"7th Due By Date:",25,1)
-00890   fntxt(7,27,10,0,1,"3") !:
+00880   fnLbl(7,1,"7th Due By Date:",25,1)
+00890   fnTxt(7,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00900   fnlbl(8,1,"8th Due by Date:",25,1)
-00910   fntxt(8,27,10,0,1,"3") !:
+00900   fnLbl(8,1,"8th Due by Date:",25,1)
+00910   fnTxt(8,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00920   fnlbl(9,1,"9th Due by Date:",25,1)
-00930   fntxt(9,27,10,0,1,"3") !:
+00920   fnLbl(9,1,"9th Due by Date:",25,1)
+00930   fnTxt(9,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00940   fnlbl(10,1,"10th Due By Date:",25,1)
-00950   fntxt(10,27,10,0,1,"3") !:
+00940   fnLbl(10,1,"10th Due By Date:",25,1)
+00950   fnTxt(10,27,10,0,1,"3") !:
         resp$(respc+=1)=""
-00960   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00960   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00970   if ckey=5 then goto XIT
 00980   for j=1 to 10
 00990     d2(j)=val(resp$(j))

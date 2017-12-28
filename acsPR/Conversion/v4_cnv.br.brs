@@ -21,13 +21,13 @@
 16050     close #h_rpmstr: ioerr ignore
 16060   next filename_item
 16080 ! /r
-17000 !  fnstatus_pause
+17000 !  fnStatusPause
 18000   chain "S:\acsPR\conversion\v4_part2"
 20000   def fn_setup
 20020     setup=1
 20040     library 'S:\Core\Library': fntop, fnerror,fndate_mmddyy_to_ccyymmdd
-20042     library 'S:\Core\Library': fngetdir2,fnstatus,fnindex_it,fncursys$
-20044     library 'S:\Core\Library': fnstatus_pause,fnCopy,fngethandle,fnDedNames
+20042     library 'S:\Core\Library': fngetdir2,fnStatus,fnindex_it,fncursys$
+20044     library 'S:\Core\Library': fnStatusPause,fnCopy,fngethandle,fnDedNames
 20060     on error goto ERTN
 20080 ! ______________________________________________________________________
 20100     dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40
@@ -43,19 +43,19 @@
 24010 !  pr 'all files should be closed now' : pause
 24020     on error goto ERTN
 24040 !   fncno(cno)
-24060     fnstatus('Department Conversion(v4_cnv) for Company '&env$('cno'))
+24060     fnStatus('Department Conversion(v4_cnv) for Company '&env$('cno'))
 24070     payrollcheck_write_count=0
-24080 !      fnstatus_pause
+24080 !      fnStatusPause
 24140     dim fullname$(10)*20
 25000     fnDedNames(mat fullname$)
 28000 RPMSTR_OPEN: ! 
 28020     if ~exists(env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')) then 
-28040       open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",RecL=196,Use",internal,outin 
+28040       open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",RecL=196,Use",internal,outIn 
 28060       close #h_rpmstr: 
 28080     end if 
 28100     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno'),env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),"1 8")
 28120     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&env$('cno'),env$('Q')&"\PRmstr\RPINDX2.H"&env$('cno'),"9 30")
-28140     open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+28140     open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 28160     if rln(h_rpmstr)<196 then 
 28180       close #h_rpmstr: 
 28200       fnCopy(env$('Q')&"\PRmstr\RPMstr.h"&env$('cno'),env$('Q')&"\PRmstr\RPMstr.h"&env$('cno'),196)
@@ -65,21 +65,21 @@
 32020     if exists(env$('Q')&"\PRmstr\RPTrail.h"&env$('cno')) then 
 32040       open #h_rptrail:=2: "Name="&env$('Q')&"\PRmstr\RPTrail.h"&env$('cno')&",Shr",internal,input,relative 
 32060     else 
-32080       open #h_rptrail:=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",RecL=474,Use,Shr",internal,outin,relative 
+32080       open #h_rptrail:=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",RecL=474,Use,Shr",internal,outIn,relative 
 32100     end if 
 32120 ! 
 32140     if fnindex_it(env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno'),env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno'),"1 14") then 
-32160       open #h_prckhist:=fngethandle: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCkIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L320
+32160       open #h_prckhist:=fngethandle: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCkIndx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L320
 32180       foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
 32182     else 
 32184       foundhistory=0 ! pr 'was not able to index it - setting foundhistory to ZERO - history will not be created' : pause
 32200     end if 
 32220 L320: ! 
-32240     open #12: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",RecL=149,kps=1,kln=11,replace",internal,outin,keyed 
+32240     open #12: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",RecL=149,kps=1,kln=11,replace",internal,outIn,keyed 
 32260 ! L330: !
-32280     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",RecL=224,kps=1,kln=17,replace",internal,outin,keyed 
+32280     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",RecL=224,kps=1,kln=17,replace",internal,outIn,keyed 
 32300     if exists(env$('Q')&"\PRmstr\dd.h"&env$('cno'))=0 then 
-32302       open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outin,keyed 
+32302       open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outIn,keyed 
 32304       close #30: ioerr ignore
 32380     end if 
 32460 ! L370: !
@@ -178,7 +178,7 @@
 50720 ! ______________________________________________________________________
 52000 DONE: ! 
 52020     gosub CREATENAMES
-52040     open #h_deptname:=fngethandle: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",replace,RecL=32,kps=1,kln=3,Shr",internal,outin,keyed 
+52040     open #h_deptname:=fngethandle: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",replace,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
 52060     close #h_deptname: 
 52080     close #12: ioerr ignore
 52100     fnindex_it(env$('Q')&"\PRmstr\Department.h"&env$('cno'),env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),"1 11")
@@ -192,8 +192,8 @@
 52240 ! next company_item
 54000 XIT: ! 
 54010     close #h_prckhist: ioerr ignore
-54020     fnstatus('payrollcheck_write_count='&str$(payrollcheck_write_count))
-54040 ! fnstatus_pause
+54020     fnStatus('payrollcheck_write_count='&str$(payrollcheck_write_count))
+54040 ! fnStatusPause
 54060   fnend 
 56000 ! <Updateable Region: ERTN>
 56020 ERTN: fnerror(program$,err,line,act$,"xit")

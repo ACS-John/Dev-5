@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncO
 00020 ! -- gasb 4 column budget statement with original and final budget
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
@@ -26,15 +26,15 @@
           fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr" : mp1=69
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
-00270   fntos(sn$="ACglinco") !:
+00270   fnTos(sn$="ACglinco") !:
         mylen=30: mypos=mylen+3 : right=1
-00280   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00290   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00280   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00290   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00300   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00310   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00320   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00330   fnacs(sn$,0,mat resp$,ckey)
+00300   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00310   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00320   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00330   fnAcs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   costcntr=val(resp$(1))
 00360 L360: fnopenprn !:

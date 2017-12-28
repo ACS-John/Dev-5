@@ -1,9 +1,9 @@
 12000   if ~setup then let fn_setup
 12040   fntop(program$, cap$="Client Server")
 14000   do 
-14020     fntos(sn$="test-Button")
-14040     fnlbl(2,2,'Server IP or Name:',19,1)
-14060     fntxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
+14020     fnTos(sn$="test-Button")
+14040     fnLbl(2,2,'Server IP or Name:',19,1)
+14060     fnTxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
 14080     fnureg_read('CS Server Name',server_name$)
 14100     if server_name$='' and env$('user_limit')='1' then 
 14120       server_name$='localhost'
@@ -12,23 +12,23 @@
 14180     end if 
 14200     resp$(1)=server_name$
 14220 ! 
-14240     fnlbl(4,2,'Port:',19,1)
-14260     fntxt(4,22,4,0,0,'number',0,'Default is 8555')
+14240     fnLbl(4,2,'Port:',19,1)
+14260     fnTxt(4,22,4,0,0,'number',0,'Default is 8555')
 14280     fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
 14300     resp$(2)=cs_port$
-14320     fnlbl(6,2,'Anonymous User:',19,1)
-14340     fntxt(6,22,20,128,0,'',0,'leave blank to disable')
+14320     fnLbl(6,2,'Anonymous User:',19,1)
+14340     fnTxt(6,22,20,128,0,'',0,'leave blank to disable')
 14360     fnureg_read('CS Anonymous User',anon_user$)
 14380     resp$(3)=anon_user$
-14400     fnlbl(7,2,'Anonymous Password:',19,1)
-14420     fntxt(7,22,20,128,0,'',0,'leave blank to disable')
+14400     fnLbl(7,2,'Anonymous Password:',19,1)
+14420     fnTxt(7,22,20,128,0,'',0,'leave blank to disable')
 14440     fnureg_read('CS Anonymous Password',anon_pass$)
 14460     resp$(4)=anon_pass$
 14480 ! 
-15000     fncmdkey("Install Server",2,1,0)
-15020     fncmdkey("Uninstall Server",3,0,0)
-15040     fncmdkey('&Back',5,0,1)
-15060     fnacs(sn$,0,mat resp$,ck)
+15000     fnCmdKey("Install Server",2,1,0)
+15020     fnCmdKey("Uninstall Server",3,0,0)
+15040     fnCmdKey('&Back',5,0,1)
+15060     fnAcs(sn$,0,mat resp$,ck)
 16000     server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
 16020     cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
 16040     anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
@@ -36,16 +36,16 @@
 16080     if ck=5 then goto XIT
 16100     if ck=2 then let fn_server_install
 16120     if ck=3 then let fn_server_uninstall
-16140     fnstatus_close
+16140     fnStatusClose
 16160   loop 
 34000   def fn_server_install
-34020     fnstatus('fn_server_install')
+34020     fnStatus('fn_server_install')
 34030     if ~exists(env$('temp')&'\acs\brCsInstall') then execute 'mkdir "'&env$('temp')&'\acs\brCsInstall"'
 34031     if ~exists(env$('temp')&'\acs\brCsInstall\ACS 5 Client') then exe 'mkdir "'&env$('temp')&'\acs\brCsInstall\ACS 5 Client"'
 34032     if ~exists(env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core') then exe 'mkdir "'&env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core"'
 34034     fnCopy('S:\brclient*.*',env$('temp')&'\acs\brCsInstall\ACS 5 Client\*.*')
 34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client')&'\*.*" /S'
-34040     fnstatus('make '&env$('Q')&'\brListener.conf')
+34040     fnStatus('make '&env$('Q')&'\brListener.conf')
 34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
 34080     pr #h_br_parms_txt: 'host='&server_name$
 34100     pr #h_br_parms_txt: 'label=ACS_5_CS'
@@ -68,8 +68,8 @@
 34380     pr #h_brlistener_conf: 'MultiSession'
 34400     pr #h_brlistener_conf: ']'
 34420     close #h_brlistener_conf: 
-34440     fnstatus('  and copy it into windows')
-34460     fnstatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
+34440     fnStatus('  and copy it into windows')
+34460     fnStatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
 34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
 34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 34520 !     pr #h_copy_cmd:     '@echo on'
@@ -94,7 +94,7 @@
 38040 !   fnureg_read('CS Server Activate Executable',sd_br_server_executable$)
 38060 !   if sd_br_server_executable$<>'' then
 38080 !   end if
-38100     fnstatus('fn_server_uninstall')
+38100     fnStatus('fn_server_uninstall')
 38120     fnmakesurepathexists(env$('temp')&'\acs\brCsInstall\')
 38140     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 38160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
@@ -120,7 +120,7 @@
 62000   def fn_setup
 62020     if ~setup then 
 62040       setup=1
-62060       library 'S:\Core\Library': fntop,fnxit,fnerror,fnbutton_or_disabled,fnacs,fncmdkey,fnbutton,fnCopy,fnureg_read,fnureg_write,fntos,fngetpp,fnstatus,fngethandle,fnlbl,fntxt,fnstatus_close
+62060       library 'S:\Core\Library': fntop,fnxit,fnerror,fnbutton_or_disabled,fnAcs,fnCmdKey,fnButton,fnCopy,fnureg_read,fnureg_write,fnTos,fnGetPp,fnStatus,fngethandle,fnLbl,fnTxt,fnStatusClose
 62070       library 'S:\Core\Library': fnmakesurepathexists
 62080       on error goto ERTN
 62100       dim cap$*128

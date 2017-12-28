@@ -43,7 +43,7 @@
 00410   ex$=ev$(1:p1-1)
 00420   goto L530
 00430 L430: close #101: ioerr L440
-00440 L440: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION="&cap$,display,outin 
+00440 L440: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION="&cap$,display,outIn 
 00450   pr #101: newpage
 00460   if f1>0 then pr f "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
 00470   pr f "4,5,C 60,N": "Enter File Name/VolId to pr or Blank to stop"

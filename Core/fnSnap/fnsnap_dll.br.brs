@@ -13,7 +13,7 @@
           ! Common Variables Almost Always Required By Fnsnap
 00213     library env$("PD")&"WORKMENU.br": fnmenu
 00214     library release,env$("PD")&"Core\fnsnap\FNPRTMAT.DLL": fnprtmat
-00215     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprtpag,fnpfkey,fnprtpickbar,fnpm,fnsetall,fnsetsel,fnwin,fnkeysel_ex,fnzero,fnsavpart,fnauto,fnclswin,fnrelpart,fnzlpad$,fndialog$,fnsize,fnpick,fnerrtrap,fngetk$,fnclkbuf,fnbutton,fnclrbutton,fnnokey,fnok,fnpickwin,fntype
+00215     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprtpag,fnpfkey,fnprtpickbar,fnpm,fnsetall,fnsetsel,fnwin,fnkeysel_ex,fnzero,fnsavpart,fnauto,fnclswin,fnrelpart,fnzlpad$,fndialog$,fnsize,fnpick,fnerrtrap,fngetk$,fnclkbuf,fnButton,fnclrbutton,fnnokey,fnok,fnpickwin,fntype
 00220     pgup=90 : pgdn=91 : esc=99 !:
           esc$=chr$(27) !:
           up=102 : left=103 : dn=104
@@ -44,20 +44,20 @@
           ! | Returns the location name of the PRINTDIR                   | !:
           ! |                                                             | !:
           !    !
-00641     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnstatus$
-00642     fnprintdir$=fnstatus$("PRINTDIR")
+00641     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnStatus$
+00642     fnprintdir$=fnStatus$("PRINTDIR")
 00643   fnend 
-00645   def library fnstatus$*100(_a$) !:
+00645   def library fnStatus$*100(_a$) !:
           !    !:
           ! | Returns the valu of any STATUS CONFIG statement specified   | !:
           ! | as the value of _A$                                         | !:
           !    !
 00650     dim config$(1)*100
 00660     env$("STATUS",mat config$,_a$) !:
-          fnstatus$=""
+          fnStatus$=""
 00670     for _a =1 to udim(mat config$)
 00680       if config$(_a)(1:len(_a$))=_a$ then !:
-              fnstatus$=trim$(srep$(config$(_a),_a$,"")) !:
+              fnStatus$=trim$(srep$(config$(_a),_a$,"")) !:
               goto 700
 00690     next _a
 00700   fnend 
@@ -67,7 +67,7 @@
           ! | printing of the displayed values                            | !:
           !    !
 00715     if not env then execute "PROC "&env$("PD")&"Core\fnsnap\tt"
-00720     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnstatus$,fnwinrowcol,fnlistspec$,fnsrchcrit$,fnwinbuttons
+00720     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnStatus$,fnwinrowcol,fnlistspec$,fnsrchcrit$,fnwinbuttons
 00725     library env$("PD")&"Core\fnsnap\RTFLIB.DLL": fnrtf,fnamt$,fntext$,fnlistprint
 00730     dim config$(1)*100,header$(1)*100,forms$(1)*100,widths(1),srchstring$*50
 00735     env$("STATUS",mat config$,"")
@@ -135,7 +135,7 @@
 01030     dim f$*32000
 01031     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
 01032     execute "copy "&flnm$&" work"&session$&".tmp -D -N"
-01034     open #(flin:=fngethandle): "name=work"&session$&".tmp",internal,outin 
+01034     open #(flin:=fngethandle): "name=work"&session$&".tmp",internal,outIn 
 01036     execute "free "&flnm$&" -N"
 01038     open #(flout:=fngethandle): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
 01040     flfrm$=cform$("FORM C "&str$(rln(flin)))
@@ -162,7 +162,7 @@
 01100     pr newpage
 01110     pr f "10,10,c 60,n/W:T": "Processing file #"&str$(number)&"  "&name$
 01120     fnfileok=0
-01130     open #number: "NAME="&name$,internal,outin ioerr NEWFILE
+01130     open #number: "NAME="&name$,internal,outIn ioerr NEWFILE
 01132     if version(number)=0 then close #number: !:
             fnverone(name$) !:
             goto 1130
@@ -175,7 +175,7 @@
 01152     pr f "14,1,CC 79,n/W:t": "File version is "&str$(old_version)&" it should be "&str$(file_version)
 01160     close #number: 
 01170     fnsize(name$,length)
-01180     open #number: "NAME="&name$,internal,outin ioerr NEWFILE
+01180     open #number: "NAME="&name$,internal,outIn ioerr NEWFILE
 01190     if file_version=version(number) then let fnfileok=2
 01200 FILEOK: ! 
 01202     if file(number)>-1 then close #number: 
@@ -424,14 +424,14 @@
 02640     fnupdate_version=0
 02650     if not exists("dircopy$") then execute "MKDIR "&dircopy$ ioerr 2655
 02655     execute "copy "&dirname$&"\"&filename$&" "&dircopy$&"\"&filename$&" -n"
-02660     open #120: "name="&dirname$&"\"&filename$&",version="&str$(versions(old,ver)),internal,outin ioerr WRONG_VERSION
+02660     open #120: "name="&dirname$&"\"&filename$&",version="&str$(versions(old,ver)),internal,outIn ioerr WRONG_VERSION
 02670     if version(120)=versions(new,ver) then goto WRONG_VERSION
 02680     open #121: "name="&dirname$&"\workfile.[WSID],recl="&str$(rln(120))&",replace,version="&str$(versions(new,ver)),internal,output 
 02690     mat a(max(versions(old,num),versions(new,num))) !:
           mat a$(max(versions(old,str),versions(new,str)))
 02692     if lastrec then 
 02693       if not delete_lastrec then write #121,using "form L 9": lrec(120)
-02694       if delete_lastrec then read #120,using "form L 9": y norec UPDATE_VERSION_1 eof ZUPDATE_VERSION
+02694       if delete_lastrec then read #120,using "form L 9": y noRec UPDATE_VERSION_1 eof ZUPDATE_VERSION
 02696     end if 
 02700 UPDATE_VERSION_1: read #120,using oldform$: mat a$(1:versions(old,str)),mat a(1:versions(old,num)) eof ZUPDATE_VERSION
 02710     write #121,using newform$: mat a$(1:versions(new,str)),mat a(1:versions(new,num))
@@ -465,7 +465,7 @@
 02905     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fn_cs,fnCopys2c,fnCopyc2s
 02906     dim helpfil$*100
 02910     if topic$<="" then 
-02915       open #(helpwin:=fngethandle): "srow=10,scol=10,rows=5,cols=40,parent=NONE,name=BRHELP,relative",display,outin 
+02915       open #(helpwin:=fngethandle): "srow=10,scol=10,rows=5,cols=40,parent=NONE,name=BRHELP,relative",display,outIn 
 02920       pr #helpwin, fields "2,2,c ": "Key word for search"
 02925       rinput #helpwin,fields "2,25,c 15,[D]": topic$ !:
             af=curfld !:
@@ -674,7 +674,7 @@
             for a=1 to udim(mwrk$) !:
               mwrk$(a)=str$(a)&","&str$(int(sr*maxlen/2))&",0/cc "&str$(maxlen)&",[MSG]" !:
             next a
-03840     open #(waitwin:=fngethandle): "srow="&str$(int(srow-maxrows/2))&",scol="&str$(int(scol))&",rows="&str$(4+int(maxrows))&",cols="&str$(min(70,int(sr*maxlen)))&",parent=NONE,picture="&bkgrnd$&",caption="&title$&",name="&title$&",Font.labels=Swiss:medium,Font.buttons=Swiss:small,NO_TASK_BAR",display,outin 
+03840     open #(waitwin:=fngethandle): "srow="&str$(int(srow-maxrows/2))&",scol="&str$(int(scol))&",rows="&str$(4+int(maxrows))&",cols="&str$(min(70,int(sr*maxlen)))&",parent=NONE,picture="&bkgrnd$&",caption="&title$&",name="&title$&",Font.labels=Swiss:medium,Font.buttons=Swiss:small,NO_TASK_BAR",display,outIn 
 03845     if not maxrows then pr #waitwin, fields "2,"&str$(min(70,len(message$))/2)&",cc ,[MSG]": message$ !:
             fnwaitwin=waitwin !:
           else pr #waitwin, fields mat mwrk$: mat message$ !:
@@ -751,7 +751,7 @@
 03950   end if 
 03960 fnend 
 03999 ! -----------------------------
-04000 def library fnbutton(button_text$,fk;btn) !:
+04000 def library fnButton(button_text$,fk;btn) !:
         ! +----------------------------------------------------------------+!:
         ! | Displays a button in the button row at the bottom of the screen³!:
         ! | buttons can be added incrementally see also FNCLRBUTTON       | !:
@@ -763,7 +763,7 @@
           b=button
 04050   else b=max(btn,1)
 04060   display buttons "1,"&str$(b*10-9)&",c 9,,"&str$(fk): button_text$
-04070   fnbutton=button !:
+04070   fnButton=button !:
         if b>0 then buttons(b)=1
 04080 ZBUTTON: ! 
 04090   btn=b=0
@@ -771,7 +771,7 @@
 04110 ! -----------------------------
 04120 def library fnclrbutton(;btn) !:
         ! +----------------------------------------------------------------+!:
-        ! | Removes one or more buttons that were added by FNBUTTON       | !:
+        ! | Removes one or more buttons that were added by fnButton       | !:
         ! |                                                               | !:
         ! +----------------------------------------------------------------+!
 04130   if btn>8 then goto ZCLRBUTTON
@@ -1643,7 +1643,7 @@
 10020 ! ------------------------
 10022 ! DIM A$*2000
 10025 dupa=0
-10030 open #flnr: "NAME="&flnm$&",KFNAME="&kfnm$&",SHR",internal,outin,keyed 
+10030 open #flnr: "NAME="&flnm$&",KFNAME="&kfnm$&",SHR",internal,outIn,keyed 
 10040 keylen=kln(flnr)
 10060 savecurfld=curfld
 10065 close #flnr: 
@@ -1663,7 +1663,7 @@
 10098 if choice$="" then dupa=3
 10100 return 
 10109 ! -----------------------------
-10110 DELDUPS0: open #flnr: "NAME="&flnm$&",NOSHR",internal,outin,relative 
+10110 DELDUPS0: open #flnr: "NAME="&flnm$&",NOSHR",internal,outIn,relative 
 10120 open #flnr+1: "NAME=LDUP.[WSID]",display,input 
 10130 lstkey$=""
 10140 DELDUPS1: input #flnr+1: a$ eof ZDELDUPS1
@@ -1752,14 +1752,14 @@
 10840 reportlog=10
 10850 if file(reportlog)>-1 then reportlog+=1 : goto 10850
 10860 if askdesc then 
-10870   open #reportlog: "srow=10,scol=10,rows=5,cols=40,border=s,picture=NONE,parent=0,font.LABELS=Swiss:medium",display,outin 
+10870   open #reportlog: "srow=10,scol=10,rows=5,cols=40,border=s,picture=NONE,parent=0,font.LABELS=Swiss:medium",display,outIn 
 10880   pr #reportlog,fields "2,2,C 20,N/W:T": "Report description"
 10890   rinput #reportlog,fields "3,2,V 80,N/W:W": printdesc$
 10900   if fkey=99 then goto 10910 else if not fkey then goto 10880 else goto 10910
 10910 close #reportlog: 
 10920 end if 
 10925 if save_days>0 then del_day$=str$(days(date)+save_days) else del_day$="0"
-10940 open #reportlog: "name=reportlog.fil,recl=300,kfname=reportlog.idx,kps=112,kln=75,use",internal,outin,keyed 
+10940 open #reportlog: "name=reportlog.fil,recl=300,kfname=reportlog.idx,kps=112,kln=75,use",internal,outIn,keyed 
 10941 FRMLOG: form c 8,c 3,c 40,3*c 20,c 15,c 60,3*zd 6,c 10,c 80
 10942 delby$="" !:
       delday=0
@@ -1804,7 +1804,7 @@
           msgbox("No report log file exists.") !:
           goto ZZREPRINT
 11160   if file(reportlog)>-1 then reportlog+=1: goto 11160
-11170   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr",internal,outin,keyed 
+11170   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr",internal,outIn,keyed 
 11180   dim dmu$(1),dsq$(1),dpg$(1)*40,dnm$(1)*50,dapath$(1)*65,dpath$(1)*65,ddate(1),dtyp$(1)*15,ddsc$(1)*80,duser$(1)*20,ddel(1),d$*2000
 11190   dim dpg$*40,dlnm$*20,dunm$*20,ddelby$*20,dnm$*50,dflpath$*60,dpath$*65,ddate,dtyp$*15,ddsc$*80,duser$*20,ddel
 11200   dim dmnth$(1),dmonth$(1)*15,dqty(1)
@@ -2059,7 +2059,7 @@
           logkey$="reportlog.idx"
 12260   reportog=10
 12270   if file(reportlog)>-1 then reportlog+=1: goto 12270
-12280   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr,release",internal,outin,keyed 
+12280   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr,release",internal,outIn,keyed 
 12290 CLEANLOG1: read #reportlog,using FRMLOG: dmu$,dsq$,dpg$,dlnm$,dunm$,ddelby$,dflnm$,dflpath$,ddat,sday,ddel,dtyp$,ddsc$ eof ZCLEANLOG
 12295   if not sday then !:
           sday=30 !:
@@ -2325,9 +2325,9 @@
           critwin+=1 !:
           goto 30460
 30462   if wbversion$>"4.19z" then 
-30465     open #critwin: "srow="&str$(val(sr$)*50)&",scol="&str$(val(sc$)*50)&",rows="&str$(lrows+2)&",cols="&str$(lcols)&",Parent=NONE,caption=Enter search term",display,outin  ! pane.bmp
+30465     open #critwin: "srow="&str$(val(sr$)*50)&",scol="&str$(val(sc$)*50)&",rows="&str$(lrows+2)&",cols="&str$(lcols)&",Parent=NONE,caption=Enter search term",display,outIn  ! pane.bmp
 30468   else 
-30470     open #critwin: "srow="&sr$&",scol="&sc$&",erow="&str$(val(sr$)+lrows+1)&",ecol="&str$(val(sc$)+lcols)&",Parent="&str$(parent)&",picture="&env$("PD")&"window.gif",display,outin  ! pane.bmp
+30470     open #critwin: "srow="&sr$&",scol="&sc$&",erow="&str$(val(sr$)+lrows+1)&",ecol="&str$(val(sc$)+lcols)&",Parent="&str$(parent)&",picture="&env$("PD")&"window.gif",display,outIn  ! pane.bmp
 30480     fnwinhead(critwin,message$,lcols-1)
 30490   end if 
 30500   if wbversion$>"4.19z" then !:
@@ -2518,26 +2518,26 @@
 31540     if not progbar then 
 31550 ! 
 31560 ! 
-31570       open #(progwin:=fngethandle): "srow="&str$(prow)&",scol="&str$(pcol)&",rows=12,cols=3,picture="&env$("PD")&"icons\black.bmp",display,outin 
+31570       open #(progwin:=fngethandle): "srow="&str$(prow)&",scol="&str$(pcol)&",rows=12,cols=3,picture="&env$("PD")&"icons\black.bmp",display,outIn 
 31580       execute "config attribute [PROG]n/#FFFFFF:T,FONT=ARIAL:SLANT:SMALL"
 31590       for apg=1 to 10 : pr #progwin, fields str$(12-apg)&",1,c 2,[PROG]": str$(apg) : next apg
 31620       srow=2+10-progx !:
-            open #(progbar:=fngethandle): "srow="&str$(srow)&",scol=2,rows="&str$(max(2,progx))&",cols=2,picture="&env$("PD")&"icons\green.bmp",display,outin 
+            open #(progbar:=fngethandle): "srow="&str$(srow)&",scol=2,rows="&str$(max(2,progx))&",cols=2,picture="&env$("PD")&"icons\green.bmp",display,outIn 
 31630     end if 
 31640     if progx<6 and progx>=0 then 
 31650       close #progbar: 
 31660       srow=2+10-progx !:
-            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\green.bmp",display,outin 
+            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\green.bmp",display,outIn 
 31670     end if 
 31680     if progx<8 and progx>5 then 
 31690       close #progbar: 
 31700       srow=2+10-progx !:
-            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\yellow.bmp",display,outin 
+            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\yellow.bmp",display,outIn 
 31710     end if 
 31720     if progx>7 then 
 31730       close #progbar: 
 31740       srow=2+10-progx !:
-            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\red.bmp",display,outin 
+            open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\red.bmp",display,outIn 
 31750     end if 
 31760   end if 
 31770   if pcur>=ptot then close #progwin: !:
@@ -2794,7 +2794,7 @@
           drow$="10" !:
           dlen=len(dtext$) !:
           dremove=colwidth=0
-38040   read #dialog_dat,rec=dlnr: drec,dcol,drow,dlen,dsep,mat dopts$,dfltopt,dremove,dtitle$,dtext$ norec 38045 eof 38045
+38040   read #dialog_dat,rec=dlnr: drec,dcol,drow,dlen,dsep,mat dopts$,dfltopt,dremove,dtitle$,dtext$ noRec 38045 eof 38045
 38042   dcol$=str$(dcol) !:
         drow$=str$(drow)
 38045   dtext$=dtext$&suffix$
@@ -3244,7 +3244,7 @@
       bl$=str$(blen+4) !:
       slen$=str$(ip(.6*(al)))
 40619 ! PAUSE
-40620 open #owin: "srow="&str$(max(srow,8))&",scol="&str$(max(scol,10))&",rows="&str$(pcols+arows+2)&",cols="&str$(max(35,ocols*ip(.6*al+2)))&",border=s,picture=none,caption="&title$&",parent=NONE,font.LABELS=Swiss:small,MODAL",display,outin 
+40620 open #owin: "srow="&str$(max(srow,8))&",scol="&str$(max(scol,10))&",rows="&str$(pcols+arows+2)&",cols="&str$(max(35,ocols*ip(.6*al+2)))&",border=s,picture=none,caption="&title$&",parent=NONE,font.LABELS=Swiss:small,MODAL",display,outIn 
 40622 fnwinrowcol(owin,rows,cols)
 40623 for a=1 to udim(o$) !:
         mat owrk$(a)
@@ -3322,7 +3322,7 @@
 40832     if file(textwin)>-1 then textwin+=1 : goto 40832
 40840     if border then border$="s" else border$="NONE"
 40850 !  IF FILE(TEXTWIN)>-1 THEN tEXTWIN+=1 : GOTO 40850
-40860     open #textwin: "srow="&str$(srow)&",scol="&str$(scol)&",rows="&str$(rows)&",cols="&str$(cols)&",parent="&str$(parent)&",border="&border$,display,outin 
+40860     open #textwin: "srow="&str$(srow)&",scol="&str$(scol)&",rows="&str$(rows)&",cols="&str$(cols)&",parent="&str$(parent)&",border="&border$,display,outIn 
 40870     twrk$="1,1,"&str$(rows*cols)&"/v "&str$(tlen)&",,"&tkey$
 40880   end if 
 40890   rinput #textwin,fields twrk$: text$
@@ -3377,7 +3377,7 @@
 41130   owin=10 !:
         arows=ceil(len(message$)/alen)+t+1
 41140   if file(owin)>-1 then owin+=1 : goto 41140
-41150   open #owin: "srow=2,scol=2,rows="&str$(udim(mat o$)+arows)&",cols="&str$(ip(.8*(alen+6)))&",border=s,picture=none,parent=NONE,font.LABELS=Swiss:medium,MODAL",display,outin 
+41150   open #owin: "srow=2,scol=2,rows="&str$(udim(mat o$)+arows)&",cols="&str$(ip(.8*(alen+6)))&",border=s,picture=none,parent=NONE,font.LABELS=Swiss:medium,MODAL",display,outIn 
 41160   al$=str$(ip(.8*(alen+4)))&"/"&str$(alen+4) !:
         bl$=str$(ip(.8*(blen+4)))&"/"&str$(blen+4)
 41170   fnwinrowcol(owin,rows,cols)
@@ -4048,7 +4048,7 @@
 50410   if not uprc$(short$)=uprc$(pshort$) then pass=0
 50415 ! INPUT FIELDS "23,64,c 1": PAUSE$
 50420   if srec<=lastrec then !:
-          read #sigfil,using FORMSIG,rec=srec: pshort$,ppass$ norec 50430 eof ZSIGNBOX !:
+          read #sigfil,using FORMSIG,rec=srec: pshort$,ppass$ noRec 50430 eof ZSIGNBOX !:
         else goto ZSIGNBOX
 50430   if not uprc$(trim$(pshort$))=uprc$(trim$(short$)) then srec+=1 : goto 50420
 50440   if not pass and trim$(pass$)<="" and trim$(ppass$)>"" then gosub GET_PASSWORD
@@ -4877,7 +4877,7 @@
         ! Save part of the screen at Starting Row, Starting Column, Ending Row,!:
         ! Ending Column, Clear the part saved? (1=YES, 0=NO)
 60250   ssav+=1 !:
-        open #ssav: "SROW="&sr$&",SCOL="&sc1$&",EROW="&er$&",ECOL="&ec$&",N=[S]",display,outin  !:
+        open #ssav: "SROW="&sr$&",SCOL="&sc1$&",EROW="&er$&",ECOL="&ec$&",N=[S]",display,outIn  !:
         if clearit then !:
           pr #ssav: newpage
 60260   fnsavpart=ssav !:
@@ -5130,7 +5130,7 @@
           ! Create another window device if not already assigned
 65024   dim pict$*100
 65030   if file(windev)=-1 then !:
-          open #windev: "SROW="&sr$&",SCOL="&sc1$&",EROW="&er$&",ECOL="&ec$&font$&",N="&wincol$&",BORDER="&bordtyp$&",CAPTION="&wintitl$,display,outin  !:
+          open #windev: "SROW="&sr$&",SCOL="&sc1$&",EROW="&er$&",ECOL="&ec$&font$&",N="&wincol$&",BORDER="&bordtyp$&",CAPTION="&wintitl$,display,outIn  !:
           pr #windev: newpage !:
         else !:
           pr #windev,border bordtyp$: wintitl$
@@ -5406,17 +5406,17 @@
 66711   if wbversion$<"4.20a" then 
 66712     if len(trim$(htext$))<1 then border$="S" else border$="NONE"
 66713     if len(trim$(htext$))<1 then pict$="NONE" else pict$=env$("PD")&"window.gif" ! "window.bmp" ! "window.gif" ! "pane.bmp"
-66715     open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",erow="&str$(sr+lrows+2)&",ecol="&str$(sc+lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
+66715     open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",erow="&str$(sr+lrows+2)&",ecol="&str$(sc+lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outIn  !:
           setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66716     fnwinhead(listwin,htext$,lcols)
 66718   else 
 66720     if head=0 then border$="NONE" !:
-            open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
+            open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outIn  !:
             setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66722     if head=1 then border$="S" !:
-            open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
+            open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outIn  !:
             setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
-66724     if head=2 then open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",Parent=NONE, font.buttons=Arial:small,caption="&htext$&",picture="&pict$&",NO_TASK_BAR",display,outin  !:
+66724     if head=2 then open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",Parent=NONE, font.buttons=Arial:small,caption="&htext$&",picture="&pict$&",NO_TASK_BAR",display,outIn  !:
             setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66729   end if 
 66730   if uprc$(g$)="GRID" then !:
@@ -5438,7 +5438,7 @@
         ! HTEXT$     Text to display in header !:
         ! HLEN       length of window in which displayed
 66811   hlen+=2
-66820   open #hwin+1: "srow=1,scol=1,rows=1,cols="&str$(hlen)&",parent="&str$(hwin)&",picture=icons\bhead.bmp",display,outin 
+66820   open #hwin+1: "srow=1,scol=1,rows=1,cols="&str$(hlen)&",parent="&str$(hwin)&",picture=icons\bhead.bmp",display,outIn 
 66822   execute "config attribute [T]N/#FFFFFF:T,font=SWISS:SMALL:BOLD"
 66830   pr #hwin+1,fields "1,3,c ,[T]": htext$ !:
         pr #hwin+1,fields "1,"&str$(hlen-1)&",p 1/2,,99": "icons\x.gif" !:
@@ -5529,7 +5529,7 @@
           read mat kcodes$ !:
           mat mousecodes$=kcodes$(33:56) !:
           max_sel_types=5 ! sets max nbr of selection types when MANY=-1
-67417 ! fnBUTTON("Prnt list",17) ! DISPLAY BUTTONS "1,12,c 10,,17": "Print"
+67417 ! fnButton("Prnt list",17) ! DISPLAY BUTTONS "1,12,c 10,,17": "Print"
 67418 KEYCOD: data 02,05,06,0A,0B,17,09,08,07,0D,0100,19,0200,0300,0400,0500,0600,0700,0800,0900,0A00,0B00,0C00,0D00,0E00,0F00,1000,1100,1200,1300,1400,6300,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,2A00,2B00,2C00,2D00,2E00,2F00,3000,3100,3200,3300,3400,3500,3600,3700
 67420 ! MAT KCODES$ - Key codes for: PgUp, End, PgDn, Dn Arrow, Up Arrow,!:
         ! Home, Tab, Backspace, Shift-Tab, Enter, F1, Ctrl-Y, F2-F20, & Esc
@@ -6156,7 +6156,7 @@
 78055   fnhelptip(env$("PD")&"Core\fnsnap\","errors.txt",eprog$&" line "&cnvrt$("pic(#####)",eline)&" Count "&str$(ecount),eerr,5,20)
 78060   ecufld=curfld
 78065   count=cnt
-78070   open #(errwin:=fngethandle): "srow=4,scol=4,erow=20,ecol=75,border=S,N=h/rgb:r,caption=PROGRAM_ERROR",display,outin 
+78070   open #(errwin:=fngethandle): "srow=4,scol=4,erow=20,ecol=75,border=S,N=h/rgb:r,caption=PROGRAM_ERROR",display,outIn 
 78075   pr #errwin: newpage
 78080   pr #errwin,fields "2,2,c 65": "An error has occured in the program.  Please make a note"
 78085   pr #errwin,fields "3,2,c 65": "of the following information and have it ready when you "

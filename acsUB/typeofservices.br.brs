@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\TypeOfServices   !   Type of Services (All Companies)
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit,fnlbl,fntos,fnacs,fnerror,fncmdset,fnflexinit1,fnflexadd1,fngetdir2
+00030   library 'S:\Core\Library': fntop,fnxit,fnLbl,fnTos,fnAcs,fnerror,fnCmdSet,fnflexinit1,fnflexadd1,fngetdir2
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim resp$(60)*20
@@ -8,8 +8,8 @@
 00080   dim item$(61)*20,colhdr$(61)
 00090 ! ______________________________________________________________________
 00100   fntop(program$,cap$="Type of Services (All Companies)")
-00110   fntos(sn$:="TypeOServices")
-00120   fnlbl(1,1,sn$&'1',20,2,3)
+00110   fnTos(sn$:="TypeOServices")
+00120   fnLbl(1,1,sn$&'1',20,2,3)
 00130   colhdr$(1)='CNo'
 00140   for j=1 to 10
 00150     colhdr$(j+01)='Name '&str$(j)
@@ -26,13 +26,13 @@
 00244 ! fnpause
 00250   for service_file_item=1 to udim(service_file$)
 00270     item$(1)=service_file$(service_file_item)(10:len(service_file$(service_file_item)))
-00280     open #h_service=15: "Name="&env$('Q')&"\UBmstr\ubData\"&service_file$(service_file_item),internal,outin,relative 
+00280     open #h_service=15: "Name="&env$('Q')&"\UBmstr\ubData\"&service_file$(service_file_item),internal,outIn,relative 
 00290     read #h_service,using "form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*G 2,10*G 2",rec=1: mat item$(2:61)
 00300     fnflexadd1(mat item$)
 00310     close #h_service: 
 00330   next service_file_item
-00340   fncmdset(4)
-00350   fnacs(sn$,win,mat resp$,ckey)
+00340   fnCmdSet(4)
+00350   fnAcs(sn$,win,mat resp$,ckey)
 00360   fnxit
 00370 ! ______________________________________________________________________
 00380 ! <Updateable Region: ERTN>

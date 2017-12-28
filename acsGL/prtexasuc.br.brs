@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\PRTexasUC
 00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fntos,fnlbl,fntxt,fnacs,fncmdset,fngethandle,fnreg_read,fnreg_write
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fngethandle,fnreg_read,fnreg_write
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
@@ -16,21 +16,21 @@
         close #1: 
 00160   if fnprocess=1 then goto L280
 00170 ! 
-00175 L170: fntos(sn$="PrTexasUc1") !:
+00175 L170: fnTos(sn$="PrTexasUc1") !:
         mylen=60: mypos=mylen+3 : right=1
-00180   fnlbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
-00185   fntxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) !:
+00180   fnLbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
+00185   fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) !:
         resp$(1)=""
-00190   fnlbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
-00195   fntxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) !:
+00190   fnLbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
+00195   fnTxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) !:
         resp$(2)=""
-00200   fnlbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
-00205   fntxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
+00200   fnLbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
+00205   fnTxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
 00210   fnreg_read("TexasUCFile",csvpath$)
 00215   if trim$(csvpath$)="" then csvpath$=env$('Q')&"\GLmstr\txuc.csv"
 00220   resp$(3)=csvpath$
-00225   fncmdset(2)
-00230   fnacs(sn$,0,mat resp$,ckey)
+00225   fnCmdSet(2)
+00230   fnAcs(sn$,0,mat resp$,ckey)
 00235   if ckey=5 then goto XIT
 00240   pedat$=resp$(1)
 00245   namcde$=uprc$(resp$(2))

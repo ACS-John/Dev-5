@@ -1,7 +1,7 @@
 00010 ! REPLACE S:\acsTM\EMAINT
 00020 ! 
 00030   on error goto L2380
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole,fndat
 00050   fntop(program$,cap$="Employee")
 00060   fnconsole(1)
 00070   fncno(cno,cnam$)
@@ -26,7 +26,7 @@
 00260 L260: form pos 1,30*c 30
 00270   close #1: 
 00280   gosub L1270
-00290   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2370
+00290   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2370
 00300 L300: pr newpage
 00310   on fkey 5 goto L300
 00320   pr f "3,9,C 60": "Employee Master File"
@@ -231,7 +231,7 @@
 02270   if uprc$(a$)="THINK" then goto L2280 else goto L300
 02280 L2280: pr newpage
 02290 L2290: close #1: ioerr L2300
-02300 L2300: open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno'),internal,outin ioerr L2320
+02300 L2300: open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno'),internal,outIn ioerr L2320
 02310   close #1,free: 
 02320 L2320: open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",SIZE=0,RecL=610",internal,output ioerr L2380
 02330   close #1: 

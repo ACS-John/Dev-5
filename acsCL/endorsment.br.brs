@@ -1,20 +1,20 @@
 00010 ! REPLACE S:\acsCL\Endorsment
 00020 ! pr endorsment on back of check
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fntos,fnlbl,fnacs,fntxt,fncmdkey
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fnTos,fnLbl,fnAcs,fnTxt,fnCmdKey
 00050   fntop(program$,"Endorse Checks")
 00080   on error goto ERTN
 00090 ENDORSE_CHECKS: ! 
-00100   fntos(sn$="Endorse")
-00110   fnlbl(1,1,"Number of Endorsements:",25,1,0)
-00120   fntxt(1,28,6,0,0,"30",0,"You can guess. Too many will only cause you to have to cancel print.") 
+00100   fnTos(sn$="Endorse")
+00110   fnLbl(1,1,"Number of Endorsements:",25,1,0)
+00120   fnTxt(1,28,6,0,0,"30",0,"You can guess. Too many will only cause you to have to cancel print.") 
 00122   resp$(1)=""
-00130   fnlbl(2,1,"Bank Account:",25,1,0)
-00140   fntxt(2,28,15,0,0,"30",0,"Enter your bank account number if you want it shown on the back of the check.") 
+00130   fnLbl(2,1,"Bank Account:",25,1,0)
+00140   fnTxt(2,28,15,0,0,"30",0,"Enter your bank account number if you want it shown on the back of the check.") 
 00142   resp$(2)=""
-00150   fncmdkey("&Next",1,1,0,"Proceed with printing.")
-00160   fncmdkey("&Cancel",5,0,1,"Cancel printing any check endorsments.")
-00170   fnacs(sn$,0,mat resp$,ckey) ! endorse check
+00150   fnCmdKey("&Next",1,1,0,"Proceed with printing.")
+00160   fnCmdKey("&Cancel",5,0,1,"Cancel printing any check endorsments.")
+00170   fnAcs(sn$,0,mat resp$,ckey) ! endorse check
 00180   if ckey=5 then goto XIT
 00190   endorsements=val(resp$(1))
 00200   bank=val(resp$(2))

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlInc6b
 00020 ! -- INCOME STATEMENT WITH BUDGET (month compared to month and year compared to year to date
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fntos,fnprocess,fnlbl,fntxt,fncmdkey,fnacs,fnps
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
@@ -29,15 +29,15 @@
 00280   nametab=int(44-len(rtrm$(cnam$))/2)
 00290   open #1: fl1$,internal,input,keyed 
 00300   if fnprocess=1 or fnUseDeptNo=0 then goto L390
-00310   fntos(sn$="ACglincb") !:
+00310   fnTos(sn$="ACglincb") !:
         mylen=30: mypos=mylen+3 : right=1
-00320   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00330   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00320   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00330   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00340   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00350   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00360   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00370   fnacs(sn$,0,mat resp$,ckey)
+00340   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00350   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00360   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00370   fnAcs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390 L390: costcntr=val(resp$(1))
 00400   cnam$=rtrm$(cnam$)

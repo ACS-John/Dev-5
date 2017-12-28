@@ -1,27 +1,24 @@
 00010 ! Replace S:\acsUB\UBColPrn
 00020 ! -- Cash Receipts Journal
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnchk,fnacs,fncmdset,fnmsgbox,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fndat,fnChk,fnAcs,fnCmdSet,fnmsgbox,fngethandle
 00060 ! ______________________________________________________________________
-00070   dim cnam$*40,dat$*20,scr1$(10)*30,alloc(10),nam$*30,route(200)
-00080   dim r(20,4),hd1$*255,cap$*128,servicename$(10)*20,tg(11),resp$(7)*40
+00070   dim dat$*20,scr1$(10)*30,alloc(10),nam$*30,route(200)
+00080   dim r(20,4),hd1$*255,cap$*128,serviceName$(10)*20,tg(11),resp$(7)*40
 00081   dim ml$(3)*90
 00090 ! ______________________________________________________________________
 00100   fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
-00110   fncno(cno,cnam$)
 00120 ! skip_header=1 ! <--  this is really a developer only option.
 00130   fndat(dat$,1)
-00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
-00142   read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$
-00144   close #20: 
+00140   fnget_services(mat serviceName$)
 00150   gosub SCREEN1
 00160   hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
-00180     x2=pos(trim$(servicename$(j))," ",1)
-00182     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
-00190     if trim$(servicename$(j))<>"" then 
-00192       scr1$(sz1+=1)=servicename$(j)
-00194       hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
+00180     x2=pos(trim$(serviceName$(j))," ",1)
+00182     if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
+00190     if trim$(serviceName$(j))<>"" then 
+00192       scr1$(sz1+=1)=serviceName$(j)
+00194       hd1$=hd1$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:7)),7)&"}"
 00196     end if 
 00200   next j
 00210   hd1$=hd1$&"  {\ul Customer Name               }"
@@ -50,7 +47,7 @@
 40280   r(1,ti2+1)+=tamount
 40300   x=0
 40320   for j=1 to 10
-40340     if trim$(servicename$(j))<>"" then 
+40340     if trim$(serviceName$(j))<>"" then 
 40360       alloc(x+=1)=tg(j)
 40380       if ti2=3 then r(x+3,1)-=tg(j) else r(x+3,1)+=tg(j)
 40400       r(x+3,ti2+1)+=tg(j)
@@ -103,23 +100,23 @@
 66350 XIT: fnxit
 66360 IGNORE: continue 
 68000 SCREEN1: ! r:
-68020   fntos(sn$="UBColPrn")
+68020   fnTos(sn$="UBColPrn")
 68040   mylen=33 : mypos=mylen+2
-68060   fnlbl(1,1,"Report Heading Date:",mylen,1)
-68080   fntxt(1,mypos,20)
+68060   fnLbl(1,1,"Report Heading Date:",mylen,1)
+68080   fnTxt(1,mypos,20)
 68100   resp$(1)=dat$
-68120   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-68140   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)")
+68120   fnLbl(2,1,"Starting Date (blank for all):",mylen,1)
+68140   fnTxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)")
 68160   resp$(2)=str$(ld1)
-68180   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-68200   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)")
+68180   fnLbl(3,1,"Ending Date (blank for all):",mylen,1)
+68200   fnTxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)")
 68220   resp$(3)=str$(hd1)
-68240   fnchk(4,mypos,"Include Details:",1)
+68240   fnChk(4,mypos,"Include Details:",1)
 68260   resp$(4)="True"
-68280   fnchk(5,mypos,"Show Totals by Route:",1)
+68280   fnChk(5,mypos,"Show Totals by Route:",1)
 68300   resp$(5)="False"
-68320   fncmdset(3)
-68340   fnacs(sn$,win,mat resp$,ck)
+68320   fnCmdSet(3)
+68340   fnAcs(sn$,win,mat resp$,ck)
 68360   if ck=5 then goto XIT
 68380   dat$=resp$(1)
 68400   ld1=val(resp$(2))

@@ -9,7 +9,7 @@
 00090 ! fntop(program$,"CHANGE_ME")
 00100     fncno(cno,cnam$)
 00110     close #102: ioerr L120
-00120 L120: open #102: "SRow=5,SCol=13,ERow=14,ECol=64,Border=SR,Caption=<Initial File Preparation",display,outin 
+00120 L120: open #102: "SRow=5,SCol=13,ERow=14,ECol=64,Border=SR,Caption=<Initial File Preparation",display,outIn 
 00130     pr #102: newpage !:
           pr #102,fields "1,1,Cc 52,R,N": cnam$ !:
           pr #102,fields "2,1,Cc 52,R,N": "Company Number "&env$('cno')
@@ -30,7 +30,7 @@
 00280     close #1: 
 00290     open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",Size=0,RecL=72,Replace",internal,output 
 00300     close #1: 
-00310     open #1: "Name="&env$('Q')&"\GLmstr\acglPgMn.h"&env$('cno')&",Size=0,RecL=58,Replace",internal,outin,relative 
+00310     open #1: "Name="&env$('Q')&"\GLmstr\acglPgMn.h"&env$('cno')&",Size=0,RecL=58,Replace",internal,outIn,relative 
 00320     for j=1 to 20 !:
             write #1,using 'Form POS 1,C 20,C 35,3*N 1',rec=j: "","",0,0,0 !:
           next j

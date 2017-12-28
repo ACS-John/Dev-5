@@ -1,13 +1,13 @@
 20000 ! formerly S:\acsUB\ubPenCal
 20020 ! Penalty Calculation
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fncmdset,fntop,fnchk,fnfra,fnopt,fnget_services
+20060   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fnCmdSet,fntop,fnChk,fnFra,fnOpt,fnget_services
 20080   on error goto ERTN
 20100 ! ______________________________________________________________________
 20120   dim resp$(8)*40,msgline$(1)*80,oldtg(11)
 20140   dim z$*10,g(12),dat$*20,e$(4)*30,rt(10,3),transkey$*19
 20160   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),tg(11),route(99)
-20180   dim servicename$(10)*20,tax_code$(10)*1,pencolumn(10)
+20180   dim serviceName$(10)*20,tax_code$(10)*1,pencolumn(10)
 20200   dim d(15)
 20220   dim subjectto(10),gb(10),extra(23),a(7)
 20240   dim columnhead$(10)*13,tmp$*220,coltot(10),basepenalty(10)
@@ -17,8 +17,8 @@
 20320   fnLastBillingDate(bildat)
 20340   fndat(dat$)
 20400 ! r:  get MinimumBal
-20420   open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outin,relative 
-20440   read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal norec SET_DEFAULT_MINUMUMBAL
+20420   open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outIn,relative 
+20440   read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal noRec SET_DEFAULT_MINUMUMBAL
 20460   goto EO_MINIMUMBAL
 20480 SET_DEFAULT_MINUMUMBAL: ! 
 20500   minimumbal=1.00
@@ -34,16 +34,16 @@
 20700     if ck=5 then goto XIT
 20720   end if 
 20740 ! 
-20760   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-20780   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outin,keyed 
+20760   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20780   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20800 ! 
-20820   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+20820   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 20880 ! 
 20900   for j=1 to 10
 20920     if uprc$(penalty$(j))="Y" then 
 20940       pencount=pencount+1
 20960       column(pencount)=j
-20980       columnhead$(pencount)=lpad$(rtrm$(servicename$(j)(1:10)),10)
+20980       columnhead$(pencount)=lpad$(rtrm$(serviceName$(j)(1:10)),10)
 21000 ! count number of penalty columns needed
 21020     end if 
 21040   next j
@@ -101,36 +101,36 @@
 22040 ! ______________________________________________________________________
 22060 def fn_scr_main
 22080   SM_ASK: ! 
-22100   fntos(sn$="ubPenCal")
+22100   fnTos(sn$="ubPenCal")
 22120   mylen=27
 22140   mypos=mylen+2
-22160   fnlbl(1,1,"Penalty Date:",mylen,right)
-22180   fntxt(1,mypos,10,0,1,"1003")
+22160   fnLbl(1,1,"Penalty Date:",mylen,right)
+22180   fnTxt(1,mypos,10,0,1,"1003")
 22200   resp$(1)=str$(pendat)
-22220   fnlbl(2,1,"Last Billing Date:",mylen,right)
-22240   fntxt(2,mypos,10,0,1,"1003")
+22220   fnLbl(2,1,"Last Billing Date:",mylen,right)
+22240   fnTxt(2,mypos,10,0,1,"1003")
 22260   resp$(2)=str$(bildat)
-22280   fnlbl(3,1,"Report Heading Date:",mylen,right)
-22300   fntxt(3,mypos,20)
+22280   fnLbl(3,1,"Report Heading Date:",mylen,right)
+22300   fnTxt(3,mypos,20)
 22320   resp$(3)=dat$
-22340   fnchk(4,31,"Print Meter Address:",right)
+22340   fnChk(4,31,"Print Meter Address:",right)
 22360   resp$(4)="False"
-22380   fnchk(5,31,"Print Mailing Address:",right)
+22380   fnChk(5,31,"Print Mailing Address:",right)
 22400   resp$(5)="False"
-22420   fnlbl(6,1,"Minimum Balance:",mylen,right)
-22440   fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
+22420   fnLbl(6,1,"Minimum Balance:",mylen,right)
+22440   fnTxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 22460   resp$(6)=str$(minimumbal)
-22480   fnfra(8,1,2,45,"Base for calculating penalty","The penalty can either be calculated on current bill or the total balance owed.",0)
-22500   fnopt(1,2,"Base penalty on current bill",0,1)
+22480   fnFra(8,1,2,45,"Base for calculating penalty","The penalty can either be calculated on current bill or the total balance owed.",0)
+22500   fnOpt(1,2,"Base penalty on current bill",0,1)
 22520   resp$(7)="True"
-22540   fnopt(2,2,"Base penalty on total balance",0,1)
+22540   fnOpt(2,2,"Base penalty on total balance",0,1)
 22560   resp$(8)="False"
 22580   if env$('client')="Colyell" or env$('client')="Sangamon" or env$('client')="Cerro Gordo" then ! can change the default on that to: Base penalty on total balance
 22600     resp$(7)="False"
 22620     resp$(8)="True"
 22640   end if  ! env$('client')=...
-22660   fncmdset(2)
-22680   fnacs(sn$,0,mat resp$,ck)
+22660   fnCmdSet(2)
+22680   fnAcs(sn$,0,mat resp$,ck)
 22700   if ck<>5 then 
 22720     pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 22740     bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
@@ -139,7 +139,7 @@
 22800     if resp$(4)="True" then printadr=1 ! wants meter address printed
 22820     if resp$(5)="True" then printmail=1 ! wants meter mailing address
 22840     minimumbal=val(resp$(6))
-22860     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outin,relative 
+22860     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outIn,relative 
 22880     rewrite #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal
 22900     close #minbal: 
 22920     if resp$(7)="True" then penaltybase$="Bill" ! base penalties on current bill
@@ -157,15 +157,15 @@
 23160   end if 
 23180 fnend 
 23200 def fn_scr_route_range ! Sangamon's second screen
-23220   fntos(sn$="ubPenCalb")
-23240   fnlbl(1,1,"First Route #:",27,1)
-23260   fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
+23220   fnTos(sn$="ubPenCalb")
+23240   fnLbl(1,1,"First Route #:",27,1)
+23260   fnTxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
 23280   resp$(1)=str$(prtbkno1)
-23300   fnlbl(2,1,"Last Route #:",27,1)
-23320   fntxt(2,29,2,0,1,"30")
+23300   fnLbl(2,1,"Last Route #:",27,1)
+23320   fnTxt(2,29,2,0,1,"30")
 23340   resp$(2)=str$(prtbkno2)
-23360   fncmdset(2)
-23380   fnacs(sn$,0,mat resp$,ck)
+23360   fnCmdSet(2)
+23380   fnAcs(sn$,0,mat resp$,ck)
 23400   if ck<>5 then 
 23420     prtbkno1=val(resp$(1))
 23440     prtbkno2=val(resp$(2))
@@ -417,8 +417,8 @@
 27060 fnend 
 27080 def fn_bud1
 27100   bud1=0
-27120   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr EO_BUD1
-27140   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+27120   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr EO_BUD1
+27140   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 27160   bud1=1
 27180   EO_BUD1: ! 
 27200 fnend 
@@ -436,7 +436,7 @@
 27440   ta1=badr(1)
 27460   do 
 27480     if ta1=0 then goto EO_BUD2
-27500     read #82,using "form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3",rec=ta1: z$,mat bt1,nba norec EO_BUD2
+27500     read #82,using "form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3",rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 27520     if bt1(14,1)<=0 then 
 27540       if bt1(12,1)<>0 then ! don't allow blank records to go thru routine
 27560         bd1=bd1+1

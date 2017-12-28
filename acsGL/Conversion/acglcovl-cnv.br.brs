@@ -6,9 +6,9 @@
 00070   read #20,using L80,rec=1: cno,cnam$,dat$,cp,nw,process,actpd$,pedat$
 00080 L80: form pos 1,n 2,c 40,pos 63,c 20,pos 89,2*n 1,pos 141,n 1,pos 153,c 6,pos 195,c 20
 00090   dim ln1$*78,ln$(20)*78,shd$*60,fli$(20),cnam$*40,dat$*20
-00100   open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno')&",Shr",internal,outin,relative 
+00100   open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno')&",Shr",internal,outIn,relative 
 00110   open #2: "Name=test,size=0,RecL=128,replace",display,output 
-00120 L120: read #1,using L130: mat ln$ eof L160 norec L160
+00120 L120: read #1,using L130: mat ln$ eof L160 noRec L160
 00130 L130: form pos 1,20*c 78
 00140   pr #2,using L130: mat ln$
 00150   goto L120

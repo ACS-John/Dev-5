@@ -1,6 +1,6 @@
 10000 ! Replace S:\acsGL\PRW2
 10020 ! r: setup
-10040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnpa_finis,fnpa_newpage,fnpa_open,fnNameParse,fnw3,fnacs,fncmdkey,fngethandle,fnmsgbox,fntos,fnlbl,fntxt,fnpa_background
+10040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnpa_finis,fnpa_newpage,fnpa_open,fnNameParse,fnw3,fnAcs,fnCmdKey,fngethandle,fnmsgbox,fnTos,fnLbl,fnTxt,fnpa_background
 10050   library 'S:\Core\Print\w2.br': fnask_w2_info,fnw2_text
 10060   on error goto ERTN
 10080 ! ______________________________________________________________________
@@ -19,7 +19,7 @@
 14240   fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260 ! 
 14280 ! ______________________________________________________________________
-14300   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative
+14300   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative
 14320   read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag 
 14340   close #1: 
 14360   ficarate=ficarate/100 
@@ -160,17 +160,17 @@
 37520 goto XIT ! /r
 38000 XIT: fnxit
 52000 ASK_EMP_LOCALITY: ! r:
-52020   fntos(sn$="Prw2-5")
+52020   fnTos(sn$="Prw2-5")
 52040   rc=0
 52060   mylen=30
 52080   mypos=mylen+3
-52100   fnlbl(1,1,k$(1),mylen,1,0,0)
-52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
-52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
+52100   fnLbl(1,1,k$(1),mylen,1,0,0)
+52120   fnLbl(2,1,"Locality Name:",mylen,1,0,0)
+52140   fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 52160   resp$(rc+=1)=empLocality$
-52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
-52220   fnacs(sn$,0,mat resp$,ckey)
+52180   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+52200   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+52220   fnAcs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
 52260   empLocality$=resp$(1)
 52280   ! controlNumber$=rtrm$(controlNumber$)

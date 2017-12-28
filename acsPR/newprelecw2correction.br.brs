@@ -4,7 +4,7 @@
         ! had to follow with an RT record - Right now this program will not !:
         ! create an RO record
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnwait,fnDedNames,fnoldmsgbox,fntop,fnxit,fnconsole,fnacs,fntop,fnlbl,fntxt,fntos,fnfra,fncmdkey,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnwait,fnDedNames,fnoldmsgbox,fntop,fnxit,fnconsole,fnAcs,fntop,fnLbl,fnTxt,fnTos,fnFra,fnCmdKey,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim em$(3)*30,ss$*11,d(14),tcp(32),s(9),t(9),z$*8,cap$*128,message$*40
@@ -28,30 +28,30 @@
 00290   close #1: 
 00300 ! ______________________________________________________________________
 00310 DATE_SCREEN: ! 
-00320 L320: fntos(sn$="W2-1") !:
+00320 L320: fnTos(sn$="W2-1") !:
         rc=cf=0: mylen=34 : mypos=mylen+3
-00330   fnfra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0) !:
+00330   fnFra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0) !:
         cf+=1 : fratype=cf
-00340   fnlbl(1,1,"Starting Date:",mylen,1,0,1)
-00350   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
+00340   fnLbl(1,1,"Starting Date:",mylen,1,0,1)
+00350   fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
         resp$(rc+=1)=str$(beg_date)
-00360   fnlbl(2,1,"Ending Date:",mylen,1,0,1)
-00370   fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
+00360   fnLbl(2,1,"Ending Date:",mylen,1,0,1)
+00370   fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
         resp$(rc+=1)=str$(end_date)
-00380   fnlbl(3,1,"Output File Designation and Name:",mylen,1,0,1)
-00390   fntxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1) !:
+00380   fnLbl(3,1,"Output File Designation and Name:",mylen,1,0,1)
+00390   fnTxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1) !:
         resp$(rc+=1)="c:\w2report"
-00400   fnfra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0) !:
+00400   fnFra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0) !:
         cf+=1 : fratype=cf
-00410   fnlbl(1,1,"Original Starting Date:",mylen,1,0,2)
-00420   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2) !:
+00410   fnLbl(1,1,"Original Starting Date:",mylen,1,0,2)
+00420   fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2) !:
         resp$(rc+=1)=str$(orgbeg_date)
-00430   fnlbl(2,1,"Original Ending Date:",mylen,1,0,2)
-00440   fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2) !:
+00430   fnLbl(2,1,"Original Ending Date:",mylen,1,0,2)
+00440   fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2) !:
         resp$(rc+=1)=str$(orgend_date)
-00450   fncmdkey("Next",1,1,0,"Prints the report")
-00460   fncmdkey("Cancel",5,0,1,"Returns to menu")
-00470   fnacs(sn$,0,mat resp$,ckey) !:
+00450   fnCmdKey("Next",1,1,0,"Prints the report")
+00460   fnCmdKey("Cancel",5,0,1,"Returns to menu")
+00470   fnAcs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00480   beg_date=val(resp$(1))
 00490   end_date=val(resp$(2))
@@ -100,49 +100,49 @@
 00920 ! ______________________________________________________________________
 00930 SCR1: ! 
 00940   goto L1220
-00950   fntos(sn$="ElecW2-2") !:
+00950   fnTos(sn$="ElecW2-2") !:
         rc=cf=0: mylen=30 : mypos=mylen+3
-00960   fnlbl(1,1,"Position Diskette in Drive A",mylen+25,1,0,0)
-00970   fnlbl(3,1,"Company Name:",mylen,1,0,0)
-00980   fntxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0) !:
+00960   fnLbl(1,1,"Position Diskette in Drive A",mylen+25,1,0,0)
+00970   fnLbl(3,1,"Company Name:",mylen,1,0,0)
+00980   fnTxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0) !:
         resp$(rc+=1)=a$(1)
-00990   fnlbl(4,1,"Street Address:",mylen,1,0,0)
-01000   fntxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0) !:
+00990   fnLbl(4,1,"Street Address:",mylen,1,0,0)
+01000   fnTxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0) !:
         resp$(rc+=1)=a$(2)
-01010   fnlbl(5,1,"City:",mylen,1,0,0)
-01020   fntxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0) !:
+01010   fnLbl(5,1,"City:",mylen,1,0,0)
+01020   fnTxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0) !:
         resp$(rc+=1)=ct$
-01030   fnlbl(6,1,"State:",mylen,1,0,0)
-01040   fntxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0) !:
+01030   fnLbl(6,1,"State:",mylen,1,0,0)
+01040   fnTxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0) !:
         resp$(rc+=1)=st$
-01050   fnlbl(7,1,"Zip Code:",mylen,1,0,0)
-01060   fntxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0) !:
+01050   fnLbl(7,1,"Zip Code:",mylen,1,0,0)
+01060   fnTxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0) !:
         resp$(rc+=1)=zip$
-01070   fnlbl(8,1,"Federal ID #:",mylen,1,0,0)
-01080   fntxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0) !:
+01070   fnLbl(8,1,"Federal ID #:",mylen,1,0,0)
+01080   fnTxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0) !:
         resp$(rc+=1)=str$(b1)
-01090   fnlbl(9,1,"Payment Year:",mylen,1,0,0)
-01100   fntxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0) !:
+01090   fnLbl(9,1,"Payment Year:",mylen,1,0,0)
+01100   fnTxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0) !:
         resp$(rc+=1)=str$(yr)
-01110   fnlbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
-01120   fntxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0) !:
+01110   fnLbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
+01120   fnTxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0) !:
         resp$(rc+=1)=str$(ssmax)
-01130   fnlbl(11,1,"Social Security Rate:",mylen,1,0,0)
-01140   fntxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0) !:
+01130   fnLbl(11,1,"Social Security Rate:",mylen,1,0,0)
+01140   fnTxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0) !:
         resp$(rc+=1)=str$(ssrate)
-01150   fnlbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
-01160   fntxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0) !:
+01150   fnLbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
+01160   fnTxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0) !:
         resp$(rc+=1)=str$(mcmax)
-01170   fnlbl(13,1,"Medicare Rate:",mylen,1,0,0)
-01180   fntxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0) !:
+01170   fnLbl(13,1,"Medicare Rate:",mylen,1,0,0)
+01180   fnTxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0) !:
         resp$(rc+=1)=str$(mcrate)
-01190   fncmdkey("Next",1,1,0,"Proceed with submission")
-01200   fncmdkey("Cancel",5,0,1,"Returns to menu")
-01210   fnacs(sn$,0,mat resp$,ckey) !:
+01190   fnCmdKey("Next",1,1,0,"Proceed with submission")
+01200   fnCmdKey("Cancel",5,0,1,"Returns to menu")
+01210   fnAcs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 01220 L1220: pr newpage
 01230   close #101: ioerr L1240
-01240 L1240: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outin 
+01240 L1240: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outIn 
 01250   pr f "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
 01260   pr f "5,5,C 60": "Company Name:"
 01270   pr f "6,5,C 60": "Street Address:"
@@ -194,7 +194,7 @@
 01730   io1$(2)="14,71,N 2,UT,N"
 01740   close #101: ioerr L1750
 01750 L1750: pr newpage
-01760   open #101: "SROW=7,SCOL=2,EROW=16,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outin 
+01760   open #101: "SROW=7,SCOL=2,EROW=16,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outIn 
 01770   pr f "8,4,C 72": "Some states require filing W2's on diskette.  Answer the following"
 01780   pr f "9,4,C 72": "questions if you wish to create 'RS' records during this run."
 01790   pr f "12,8,Cr 62": "State code used in your record to identify the selected state:"
@@ -223,7 +223,7 @@
 02030   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 02040   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 02050 ! Open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",Internal,Input,Relative
-02060   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+02060   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 02070 L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",display,output 
 02080   goto L2140
 02090   pr newpage
@@ -518,7 +518,7 @@
 04730 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 04740 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
 04750   close #win: ioerr L4760
-04760 L4760: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+04760 L4760: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 04770   pr #win: newpage
 04780   if display_cnam=0 then goto L4810
 04790   if display_cnam=1 then !:
@@ -557,7 +557,7 @@
 05000   for j=2 to udim(msgline$)
 05010     if msgline$(j)<>"" then endrow=endrow+1
 05020   next j
-05030   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
+05030   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outIn 
 05040   pr #104: newpage
 05050   mglinerow=2
 05060   for j=1 to udim(msgline$)
@@ -588,7 +588,7 @@
 05460   if ec<1 then ec=59
 05470   win_width=ec-sc+1
 05480   close #win: ioerr L5490
-05490 L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+05490 L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 05500   pr #win: newpage
 05510   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 05520   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))

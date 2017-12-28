@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\ubBilJrn
 00020 ! -- pr Billing Journal
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fnchk,fnfra,fnopt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnstatus_pause
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fnFra,fnOpt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnStatusPause
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,g(12)
@@ -11,24 +11,24 @@
 00100   dim hd1$*400,hd2$*400
 00102   dim px$(99)*30,px(99),tx(99),gx(99)
 00104   dim resp$(20)*128
-00110   dim servicename$(10)*20,tax_code$(10)*1
+00110   dim serviceName$(10)*20,tax_code$(10)*1
 00112   dim tg(11),usages(3)
 00120 ! ______________________________________________________________________
 00130   fntop(program$)
 00170   fnLastBillingDate(billing_date)
 00200   fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
-00230   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
+00230   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
 00260   hd1$="Account                             "
 00270   hd2$="{\ul Number   }  {\ul Name                   }  "
 00280   for j=1 to 10
-00290     x2=pos(trim$(servicename$(j))," ",1)
-00300     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
-00310     if trim$(servicename$(j))<>"" then 
-00320       x1=pos (servicename$(j)," ",1)
+00290     x2=pos(trim$(serviceName$(j))," ",1)
+00300     if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j)))
+00310     if trim$(serviceName$(j))<>"" then 
+00320       x1=pos (serviceName$(j)," ",1)
 00330       x1=min(x1,7)
 00340       hd1$=hd1$&"---------"
-00350       hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} "
-00360       sz1=sz1+1 : px$(sz1)=servicename$(j)
+00350       hd2$=hd2$&"{\ul "&lpad$(trim$(serviceName$(j)(1:x1)),8)&"} "
+00360       sz1=sz1+1 : px$(sz1)=serviceName$(j)
 00370     end if 
 00380   next j
 00390   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -39,27 +39,27 @@
 00408   if seq<1 then seq=1
 00410 ! /r
 00420 MAIN: ! r: Screen 1
-00430   fntos(sn$="UBBilJrn")
+00430   fnTos(sn$="UBBilJrn")
 00440   respc=0
-00480   fnlbl(2,1,"Billing Date:",25,1)
-00490   fntxt(2,27,8,0,1,"1")
+00480   fnLbl(2,1,"Billing Date:",25,1)
+00490   fnTxt(2,27,8,0,1,"1")
 00500   resp$(respc+=1)=str$(billing_date)
-00510   fnfra(3,1,4,65,"Sort Order","The billing journal can be printed if route number sequence, account sequence or Alpha Sort Sequence.",0)
-00520   fnopt(1,2,"Route/Sequence Number (includes Subtotals by Route)",0,1)
+00510   fnFra(3,1,4,65,"Sort Order","The billing journal can be printed if route number sequence, account sequence or Alpha Sort Sequence.",0)
+00520   fnOpt(1,2,"Route/Sequence Number (includes Subtotals by Route)",0,1)
 00530   if seq=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00540   fnopt(2,2,"Account",0,1)
+00540   fnOpt(2,2,"Account",0,1)
 00550   if seq=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00560   fnopt(3,2,"Alpha Sort",0,1)
+00560   fnOpt(3,2,"Alpha Sort",0,1)
 00570   if seq=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00572   fnopt(4,2,"Customer Name",0,1)
+00572   fnOpt(4,2,"Customer Name",0,1)
 00574   if seq=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00580   fnlbl(9,1,"Route Number:",25,1)
+00580   fnLbl(9,1,"Route Number:",25,1)
 00590   fncmbrt2(9,27)
 00600   resp$(resp_route:=respc+=1)="[All]"
-00610   fnchk(10,27,"Print Usages:",1)
+00610   fnChk(10,27,"Print Usages:",1)
 00612   fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
-00620   fncmdset(3)
-00630   fnacs(sn$,0,mat resp$,ckey)
+00620   fnCmdSet(3)
+00630   fnAcs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto XIT
 00670   billing_date=val(resp$(1))
 00680   if resp$(2)="True" then seq=1 ! route sequence
@@ -82,10 +82,10 @@
 00750     fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
 00758     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('temp')&"\customer_name"&session$&".h"&env$('cno')&",Shr",internal,input,keyed  
 00760   end if
-00770   if trim$(servicename$(1))="Water" then services=services+1 : water=1
-00780   if trim$(servicename$(3))="Electric" or trim$(service$(3))="LM" then services=services+1
-00782   if servicename$(3)(1:5)="Re-Se" then reduc=1 : services+=1
-00790   if trim$(servicename$(4))="Gas" then services=services+1 : gas=1
+00770   if trim$(serviceName$(1))="Water" then services=services+1 : water=1
+00780   if trim$(serviceName$(3))="Electric" or trim$(service$(3))="LM" then services=services+1
+00782   if serviceName$(3)(1:5)="Re-Se" then reduc=1 : services+=1
+00790   if trim$(serviceName$(4))="Gas" then services=services+1 : gas=1
 00800   mat usages(services)
 00810   hd1$=hd1$&"---------    Prior  Current"
 00820   hd2$=hd2$&"{\ul    Total} {\ul  Balance} {\ul  Balance}  "
@@ -95,10 +95,10 @@
 00860   px$(sz1+=1)="Previous Balance"
 00870   px$(sz1+=1)="Current Balance"
 00880   mat px$(sz1) : mat tx(sz1) : mat gx(sz1) : mat px(sz1)
-00890   if prtusage$="T" and trim$(servicename$(1))="Water" then hd2$=hd2$&" {\ul  W-Usage}"
-00900   if prtusage$="T" and trim$(servicename$(3))="Electric" then hd2$=hd2$&" {\ul  E-Usage}"
+00890   if prtusage$="T" and trim$(serviceName$(1))="Water" then hd2$=hd2$&" {\ul  W-Usage}"
+00900   if prtusage$="T" and trim$(serviceName$(3))="Electric" then hd2$=hd2$&" {\ul  E-Usage}"
 00910   if prtusage$="T" and trim$(service$(3))="LM" then hd2$=hd2$&" {\ul LM-Usage}"
-00920   if prtusage$="T" and trim$(servicename$(4))="Gas" then hd2$=hd2$&"{ \ul  G-Usage}"
+00920   if prtusage$="T" and trim$(serviceName$(4))="Gas" then hd2$=hd2$&"{ \ul  G-Usage}"
 00930   if prtusage$="T" then hd2$=hd2$&"{ \ul Meter Address}"
 00950   fnopenprn
 00952   gosub HDR
@@ -141,7 +141,7 @@
 01064 L910: ! r:
 01066   e=bal-g(11) : j1=0
 01068   for j=1 to 10
-01070     if trim$(servicename$(j))<>"" then px(j1+=1)=g(j)
+01070     if trim$(serviceName$(j))<>"" then px(j1+=1)=g(j)
 01072   next j
 01074   px(j1+1)=g(11) : px(j1+2)=e : px(j1+3)=bal
 01076   mat tx=tx+px : mat gx=gx+px
@@ -196,15 +196,15 @@
 01330 IGNORE: continue 
 01420 TOT1: ! r: ACCUMULATE TOTALS BY CODE
 01430   for j=1 to 10
-01440     if trim$(servicename$(j))="" or uprc$(penalty$(j))="Y" then goto L1720 ! don't allow any penalties go thur totals
+01440     if trim$(serviceName$(j))="" or uprc$(penalty$(j))="Y" then goto L1720 ! don't allow any penalties go thur totals
 01460     x2=1 : u2=0
 01462     if j<=4 then 
 01464       x2=a(j)
 01466       if j=1 or j=2 then 
 01468         u2=d(3)
-01470       else if j=3 and (trim$(servicename$(3))="Electric" or trim$(servicename$(3))="Lawn Meter") then 
+01470       else if j=3 and (trim$(serviceName$(3))="Electric" or trim$(serviceName$(3))="Lawn Meter") then 
 01472         u2=d(7)
-01474       else if j=4 and trim$(servicename$(4))="Gas" then 
+01474       else if j=4 and trim$(serviceName$(4))="Gas" then 
 01476         u2=d(11)
 01478       end if 
 01480     end if 
@@ -274,7 +274,7 @@
 01800       if env$('client')="Carrizo" and j1=3 then goto L1930
 01805       if j1>4 then goto L1930
 01890 L1890: ! pr #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-01892       pr #255,using L1950: servicename$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+01892       pr #255,using L1950: serviceName$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01900       if env$('client')="Sangamon" and st$(j1)="WA" then waterdollars+=t1(j1,j2,2) : waterusage+=t1(j1,j2,3)
 01910       if env$('client')="Sangamon" and st$(j1)="SW" then sewerdollars+=t1(j1,j2,2) : sewerusage+=t1(j1,j2,3)
 01920       goto L1960

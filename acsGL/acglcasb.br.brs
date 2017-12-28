@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglCasB
 00020 ! CASH FLOW STATEMENT  WITH BUDGET
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnprocess,fnUseDeptNo,fnactpd$,fnactpd,fnpedat$,fnfscode,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnprocess,fnUseDeptNo,fnactpd$,fnactpd,fnpedat$,fnfscode,fnpriorcd,fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13),sc1$(2)*20,fl1$*256,in3$(4),p$(20)*50,cap$*128
@@ -38,15 +38,15 @@
 00290   form c 7,skip 0
 00300   open #1: fl1$,internal,input,keyed 
 00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
-00320   fntos(sn$="ACglcasb") !:
+00320   fnTos(sn$="ACglcasb") !:
         mylen=30: mypos=mylen+3 : right=1
-00330   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00340   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00330   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00340   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00350   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00360   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00370   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00380   fnacs(sn$,0,mat resp$,ckey)
+00350   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00360   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00370   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00380   fnAcs(sn$,0,mat resp$,ckey)
 00390   if ckey=5 then goto XIT
 00400   costcntr=val(resp$(1))
 00410 L410: report$=cap$
@@ -239,24 +239,24 @@
 02210   fncloseprn
 02220   goto XIT
 02230 ! ______________________________________________________________________
-02240 L2240: fntos(sn$="ACglchgs2") !:
+02240 L2240: fnTos(sn$="ACglchgs2") !:
         mylen=30: mypos=mylen+3 : right=1
-02250   fnlbl(1,1,d$,mylen,right)
-02260   fnlbl(3,1,"Monthy Budget:",mylen,right)
-02270   fntxt(3,mypos,12,0,right,"10",0,"Enter the monthly budget.",0 ) !:
+02250   fnLbl(1,1,d$,mylen,right)
+02260   fnLbl(3,1,"Monthy Budget:",mylen,right)
+02270   fnTxt(3,mypos,12,0,right,"10",0,"Enter the monthly budget.",0 ) !:
         resp$(1)=str$(monthb)
-02280   fnlbl(4,1,"Total for the Month:",mylen,right)
-02290   fntxt(4,mypos,12,0,right,"10",0,"Enter the total for the month.",0 ) !:
+02280   fnLbl(4,1,"Total for the Month:",mylen,right)
+02290   fnTxt(4,mypos,12,0,right,"10",0,"Enter the total for the month.",0 ) !:
         resp$(2)=str$(total)
-02300   fnlbl(5,1,"Total Year to Date:",mylen,right)
-02310   fntxt(5,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
+02300   fnLbl(5,1,"Total Year to Date:",mylen,right)
+02310   fnTxt(5,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
         resp$(3)=str$(total2)
-02320   fnlbl(6,1,"Total Budget for the Year:",mylen,right)
-02330   fntxt(6,mypos,12,0,right,"10",0,"Enter the total budget for the  year.",0 ) !:
+02320   fnLbl(6,1,"Total Budget for the Year:",mylen,right)
+02330   fnTxt(6,mypos,12,0,right,"10",0,"Enter the total budget for the  year.",0 ) !:
         resp$(4)=str$(annualb)
-02340   fncmdkey("&Next",1,1,0,"Accept the answer.")
-02350   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02360   fnacs(sn$,0,mat resp$,ckey)
+02340   fnCmdKey("&Next",1,1,0,"Accept the answer.")
+02350   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02360   fnAcs(sn$,0,mat resp$,ckey)
 02370   if ckey=5 then goto XIT
 02380   monthb=val(resp$(1))
 02390   total=val(resp$(2))

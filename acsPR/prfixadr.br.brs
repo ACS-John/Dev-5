@@ -21,8 +21,8 @@
 00200   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 00210 ! ___________________________
 00220   open #addr=3: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input 
-00230   open #rptrail=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",NoShr",internal,outin,relative 
-00240   open #rpmstr=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",NoShr",internal,outin,keyed 
+00230   open #rptrail=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",NoShr",internal,outIn,relative 
+00240   open #rpmstr=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",NoShr",internal,outIn,keyed 
 00250 ! ___________________________
 00260 READ_RPMSTR: read #rpmstr,using 'Form POS 1,N 8': eno eof READ_ADDR
 00270   if eno=eno1 then delete #rpmstr: : goto READ_RPMSTR

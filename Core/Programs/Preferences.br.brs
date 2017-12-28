@@ -51,67 +51,67 @@
 30000 !  main loops - build and display screens, get, save, apply settings, etc
 32000 DO_SCREEN_MAIN: ! r:
 32020   do 
-32040     fntos(sn$="Settings_Main")
+32040     fnTos(sn$="Settings_Main")
 32060     fn_nav_buttons
 32080     col1_width=33 : col2_pos=col1_width+2 : lc=rc=0 : win_width=75
-32100     fnlbl(lc+=1,1,"** System Settings **",win_width,2)
+32100     fnLbl(lc+=1,1,"** System Settings **",win_width,2)
 32120     lc+=1
-32140     fnlbl(lc+=1,1,"ACS Client Name:",col1_width,1)
-32160     fntxt(lc,col2_pos,54,0,0,'',1,'If this is not correct contact ACS Support') ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+32140     fnLbl(lc+=1,1,"ACS Client Name:",col1_width,1)
+32160     fnTxt(lc,col2_pos,54,0,0,'',1,'If this is not correct contact ACS Support') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 32180     resp$(rc+=1)=env$('Client')
 32200 ! 
-32220     fnlbl(lc+=1,1,"BR Serial:",col1_width,1)
-32240     fntxt(lc,col2_pos,54,0,0,'',1,'Serial Number assigned by Business Rules Corp license') ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+32220     fnLbl(lc+=1,1,"BR Serial:",col1_width,1)
+32240     fnTxt(lc,col2_pos,54,0,0,'',1,'Serial Number assigned by Business Rules Corp license') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 32260     resp$(rc+=1)=str$(serial)
 32280 ! 
-32300     fnlbl(lc+=1,1,"Data Folder:",col1_width,1)
-32320     fntxt(lc,col2_pos,40,255,0,"",1)
+32300     fnLbl(lc+=1,1,"Data Folder:",col1_width,1)
+32320     fnTxt(lc,col2_pos,40,255,0,"",1)
 32340     resp$(rc+=1)=os_filename$(env$('Q')&'\')
-32360     fnbutton(lc,col2_pos+42+5,'Open',15) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+32360     fnButton(lc,col2_pos+42+5,'Open',15) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 32380     lc+=1
-32400     fnchk(lc+=1,col2_pos,'Include Report Cache in Save As',1)
+32400     fnChk(lc+=1,col2_pos,'Include Report Cache in Save As',1)
 32420     resp$(resp_enableBackupReportCache:=rc+=1)=enableBackupReportCache$
-32440     fnchk(lc+=1,col2_pos,'Enable Save Company As',1)
+32440     fnChk(lc+=1,col2_pos,'Enable Save Company As',1)
 32460     resp$(resp_enableSaveCompanyAs:=rc+=1)=enableSaveCompanyAs$
-32480     fnlbl(lc   ,col2_pos+3,'Saves Only the Current Company Number related files across all ACS systems')
-32500     fnlbl(lc+=1,col2_pos+3,'Does not save settings, reports.')
-32520     ! fnchk(lc+=1,col2_pos,'Enable Open Partial',1)
+32480     fnLbl(lc   ,col2_pos+3,'Saves Only the Current Company Number related files across all ACS systems')
+32500     fnLbl(lc+=1,col2_pos+3,'Does not save settings, reports.')
+32520     ! fnChk(lc+=1,col2_pos,'Enable Open Partial',1)
 32540     ! resp$(resp_enableOpenPartial:=rc+=1)=enableOpenPartial$
-32560     fnlbl(lc   ,col2_pos+3,'Extracts a single company for a single system from a Save')
-32580     fnlbl(lc+=1,col2_pos+3,'Does not restore report cache, global nor system settings.')
+32560     fnLbl(lc   ,col2_pos+3,'Extracts a single company for a single system from a Save')
+32580     fnLbl(lc+=1,col2_pos+3,'Does not restore report cache, global nor system settings.')
 32600     lc+=1
-32620     fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+32620     fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 32640     lc+=1
 32660 ! 
-32680     fnlbl(lc+=1,1,"Text Editor Executable:",col1_width,1)
-32700     fntxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for editing text files.')
+32680     fnLbl(lc+=1,1,"Text Editor Executable:",col1_width,1)
+32700     fnTxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for editing text files.')
 32720     resp$(resp_text_editor:=rc+=1)=text_editor$
-32740     fnbutton(lc,col2_pos+42+5,'Default',14) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+32740     fnButton(lc,col2_pos+42+5,'Default',14) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 32760 ! 
 32780     lc+=1
 32800 ! 
-32820     fnlbl(lc+=1,1,"Save (Company) As Folder Default:",col1_width,1)
-32840     fntxt(lc,col2_pos,42,80,0,'',0,'')
+32820     fnLbl(lc+=1,1,"Save (Company) As Folder Default:",col1_width,1)
+32840     fnTxt(lc,col2_pos,42,80,0,'',0,'')
 32860     resp$(resp_save_path:=rc+=1)=save_path$
-32880     fnbutton(lc,col2_pos+42+5,'Default',16) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+32880     fnButton(lc,col2_pos+42+5,'Default',16) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 32900 ! 
 32920     lc+=1
 32940 ! 
-32960     fnchk(lc+=1,col2_pos,'Assume decimal place',1)
-32980     fnlbl(lc ,col2_pos+3,'if checked    examples:  1234= 12.34   80= 0.80  5.=5.00  4=0.04')
-33000     fnlbl(lc+1,col2_pos+3,'if unchecked  examples:  1234=1234.00  80=80.00  5.=5.00  4=4.00')
+32960     fnChk(lc+=1,col2_pos,'Assume decimal place',1)
+32980     fnLbl(lc ,col2_pos+3,'if checked    examples:  1234= 12.34   80= 0.80  5.=5.00  4=0.04')
+33000     fnLbl(lc+1,col2_pos+3,'if unchecked  examples:  1234=1234.00  80=80.00  5.=5.00  4=4.00')
 33020     resp$(resp_decimal_assumed:=rc+=1)=decimal_assumed$
 33040     lc+=2
 33060 ! 
-33080     fnchk(lc+=1,col2_pos,'Disable multiple sessions',1)
-33100     fnlbl(lc,col2_pos+3,'If checked only allow one session at a time will be allowed.')
+33080     fnChk(lc+=1,col2_pos,'Disable multiple sessions',1)
+33100     fnLbl(lc,col2_pos+3,'If checked only allow one session at a time will be allowed.')
 33120     resp$(resp_disable_multisession:=rc+=1)=disable_multisession$
 33140     lc+=1
 33160 ! 
-33180     fncmdkey("&Save",1,1)
-33200     fncmdkey("Apply",2,0)
-33220     fncmdkey("&Cancel",5,0,1)
-33240     fnacs(sn$,0,mat resp$,ck)
+33180     fnCmdKey("&Save",1,1)
+33200     fnCmdKey("Apply",2,0)
+33220     fnCmdKey("&Cancel",5,0,1)
+33240     fnAcs(sn$,0,mat resp$,ck)
 33260     if ck=5 then 
 33280       goto XIT
 33300     else 
@@ -141,47 +141,47 @@
 33780   loop  ! /r
 38000 DO_SCREEN_THEME: ! r:
 38020   do 
-38040     fntos(sn$="Settings_Theme")
+38040     fnTos(sn$="Settings_Theme")
 38060     fn_nav_buttons
 38080     col1_width=19 : col2_pos=col1_width+2 : col3_pos=col2_pos+12 : lc=0 : win_width=75
-38100     fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+38100     fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 38120     lc+=1
-38140     fnlbl(lc+=1,1,"Background Picture:",col1_width,1)
-38160     fntxt(lc,col2_pos,42,256,0,'70',0,'Select any picture to be used as your ACS background image.')
+38140     fnLbl(lc+=1,1,"Background Picture:",col1_width,1)
+38160     fnTxt(lc,col2_pos,42,256,0,'70',0,'Select any picture to be used as your ACS background image.')
 38180     resp$(resp_background_picture:=1)=os_filename$(env$('at')&background_picture$)
-38200     fnbutton(lc,col2_pos+42+5,'Default',11) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+38200     fnButton(lc,col2_pos+42+5,'Default',11) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 38203     lc+=1
-38205     fnlbl(lc+=1,1,"Minimum Font Size:",col1_width,1)
-38207     fnlbl(lc,col2_pos+3,"x",1,2)
-38209     fntxt(lc,col2_pos,2,0,0,'30',0,'Height')
+38205     fnLbl(lc+=1,1,"Minimum Font Size:",col1_width,1)
+38207     fnLbl(lc,col2_pos+3,"x",1,2)
+38209     fnTxt(lc,col2_pos,2,0,0,'30',0,'Height')
 38210     if min_fontsize_height$='' or trim$(min_fontsize_height$)='0' then min_fontsize_height$=default_min_fontsize_height$
 38211     resp$(resp_min_fontsize_height:=2)=min_fontsize_height$
-38213     fntxt(lc,col2_pos+5,2,0,0,'30',0,'Width')
+38213     fnTxt(lc,col2_pos+5,2,0,0,'30',0,'Width')
 38214     if min_fontsize_width$='' or trim$(min_fontsize_width$)='0' then min_fontsize_width$=default_min_fontsize_width$
 38215     resp$(resp_min_fontsize_width:=3)=min_fontsize_width$
-38217     fnbutton(lc,col2_pos+9,'Default',12) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+38217     fnButton(lc,col2_pos+9,'Default',12) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 38219 ! Min_FontSize 14x6
 38220     lc+=1
-38240     fnlbl(lc+=1,1,"*** Colors ***",win_width,2) : rc_color=rc_color_zero=3
-38260     fnlbl(lc+=1,col2_pos,"Foreground",10,2)
-38280     fnlbl(lc,col3_pos,"Background",10,2)
+38240     fnLbl(lc+=1,1,"*** Colors ***",win_width,2) : rc_color=rc_color_zero=3
+38260     fnLbl(lc+=1,col2_pos,"Foreground",10,2)
+38280     fnLbl(lc,col3_pos,"Background",10,2)
 38300 ! 
 38320     fn_do_screen_theme_add_theme('Screen','#000000','#E7EDF5')
-38340     fnlbl(lc,col3_pos+12,'Base for all settings, including buttons that are not cancel nor default')
+38340     fnLbl(lc,col3_pos+12,'Base for all settings, including buttons that are not cancel nor default')
 38360     fn_do_screen_theme_add_theme('ScreenHeader','#000000','#FFFFFF')
 38380     fn_do_screen_theme_add_theme('TextBoxes','#000000','#FFFFFF')
 38400     fn_do_screen_theme_add_theme('Labels','#000000','#B0C4DE')
 38420     fn_do_screen_theme_add_theme('Buttons','#000000','#74DF00')
-38440     fnlbl(lc,col3_pos+12,'Default Button')
+38440     fnLbl(lc,col3_pos+12,'Default Button')
 38460     fn_do_screen_theme_add_theme('ButtonCancel','#000000','#CD5C5C')
-38480     fnlbl(lc,col3_pos+12,'Cancel Button')
+38480     fnLbl(lc,col3_pos+12,'Cancel Button')
 38500     fn_do_screen_theme_add_theme('GridHeaders','#000000','#FFFFFF')
 38520 ! 
 38540 ! 
-38560     fncmdkey("&Save",1,1)
-38580     fncmdkey("Apply",2,0)
-38600     fncmdkey("&Cancel",5,0,1)
-38620     fnacs(sn$,0,mat resp$,ck)
+38560     fnCmdKey("&Save",1,1)
+38580     fnCmdKey("Apply",2,0)
+38600     fnCmdKey("&Cancel",5,0,1)
+38620     fnAcs(sn$,0,mat resp$,ck)
 40000     if ck=5 then 
 40020       goto XIT
 40040     else 
@@ -220,63 +220,63 @@
 40600   loop  ! /r
 41000 def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_default$)
 41020   lc+=1
-41040   fnlbl(lc+=1,1,attribute$&":",col1_width,1)
-41060   fntxt(lc,col2_pos,10,7,0,'',0,attribute$&' Foreground: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
+41040   fnLbl(lc+=1,1,attribute$&":",col1_width,1)
+41060   fnTxt(lc,col2_pos,10,7,0,'',0,attribute$&' Foreground: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
 41080   fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=foreground_default$
-41100   fntxt(lc,col3_pos,10,7,0,'',0,attribute$&' Background: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
+41100   fnTxt(lc,col3_pos,10,7,0,'',0,attribute$&' Background: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
 41120   fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=background_default$
 41140 fnend 
 50000 DO_SCREEN_PRINTER: ! r:
 50020   do 
-50040     fntos(sn$="Settings_Printer")
+50040     fnTos(sn$="Settings_Printer")
 50060     fn_nav_buttons
 50080     col1_width=33 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsp_rc=0
-50100     fnlbl(lc+=1,1,"** System Settings **",win_width,2)
+50100     fnLbl(lc+=1,1,"** System Settings **",win_width,2)
 50120     lc+=1
-50140     ! fnchk(lc+=1,5,"Enable Report Cache",1) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+50140     ! fnChk(lc+=1,5,"Enable Report Cache",1) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 50160     ! resp$(resp_report_cache:=dsp_rc+=1)=report_cache$
-50180     fntxt(lc,35,40,256,0,'',1,'') ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+50180     fnTxt(lc,35,40,256,0,'',1,'') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 50200     resp$(dsp_rc+=1)=os_filename$(env$('Q')&'\Report Cache')
-50210     fnbutton(lc,30,'Open',12) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+50210     fnButton(lc,30,'Open',12) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 50220     lc+=1
-50230     fnlbl(lc+=1,1,"PrintAce Max Pages:",col1_width,1)
-50240     fntxt(lc,col2_pos,3,3,0,'30',0,'Use to break up large PrintAce type pr jobs into smaller batches. 0 disables feature.')
+50230     fnLbl(lc+=1,1,"PrintAce Max Pages:",col1_width,1)
+50240     fnTxt(lc,col2_pos,3,3,0,'30',0,'Use to break up large PrintAce type pr jobs into smaller batches. 0 disables feature.')
 50250     resp$(resp_pa_max_pages:=dsp_rc+=1)=pa_max_pages$
 50251     lc+=1
-50252     fnlbl(lc+=1,1,"Forms Format:",col1_width,1)
+50252     fnLbl(lc+=1,1,"Forms Format:",col1_width,1)
 50254     fncomboa('formsFormat',lc,col2_pos,mat pdf_or_printace$,'Select a format for special forms',10) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 50256     resp$(resp_formsFormat:=dsp_rc+=1)=formsFormat$
 50260     lc+=1
-50270     fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+50270     fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 50280 !   lc+=1
-50290 !   fnlbl(lc+=1,1,"Client's path to Report Cache:",col1_width,1)
-50300 !   fntxt(lc,col2_pos,40,256,0,'',0,'client path to '&os_filename$(env$('Q')&'\Report Cache')&'\nOnly necessary if using Client/Server.') ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+50290 !   fnLbl(lc+=1,1,"Client's path to Report Cache:",col1_width,1)
+50300 !   fnTxt(lc,col2_pos,40,256,0,'',0,'client path to '&os_filename$(env$('Q')&'\Report Cache')&'\nOnly necessary if using Client/Server.') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 50310 !   resp$(resp_client_report_cache:=dsp_rc+=1)=client_report_cache$
 50320     lc+=1
-50330     fnlbl(lc+=1,1,"Word Executable:",col1_width,1,0,0,0,'Or default word processor')
-50340     fntxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for Word or your default Word Processor to display and pr your RTF reports.')
+50330     fnLbl(lc+=1,1,"Word Executable:",col1_width,1,0,0,0,'Or default word processor')
+50340     fnTxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for Word or your default Word Processor to display and pr your RTF reports.')
 50350     resp$(resp_word:=dsp_rc+=1)=word_exe$
-50360     fnbutton(lc,col2_pos+42+5,'Default',15) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
-50365     fnopt(lc,col2_pos+42+5+7+2,"Use Word as Default") : resp$(resp_use_word:=dsp_rc+=1)=use_word$
-50370     fnlbl(lc+=1,1,"Atlantis Executable:",col1_width,1)
-50380     fntxt(lc,col2_pos,42,80,0,'70',0,'Select the executable for your Atlantis Word Processor.')
+50360     fnButton(lc,col2_pos+42+5,'Default',15) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+50365     fnOpt(lc,col2_pos+42+5+7+2,"Use Word as Default") : resp$(resp_use_word:=dsp_rc+=1)=use_word$
+50370     fnLbl(lc+=1,1,"Atlantis Executable:",col1_width,1)
+50380     fnTxt(lc,col2_pos,42,80,0,'70',0,'Select the executable for your Atlantis Word Processor.')
 50390     resp$(resp_atlantis:=dsp_rc+=1)=atlantis_exe$ ! os_filename$(atlantis_exe$)
-50400     fnbutton(lc,col2_pos+42+5,'Default',13) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
-50402     fnopt(lc,col2_pos+42+5+7+2,"Use Atlantis as Default") : resp$(resp_use_atlantis:=dsp_rc+=1)=use_atlantis$
+50400     fnButton(lc,col2_pos+42+5,'Default',13) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
+50402     fnOpt(lc,col2_pos+42+5+7+2,"Use Atlantis as Default") : resp$(resp_use_atlantis:=dsp_rc+=1)=use_atlantis$
 50410 ! 
 50420     ! lc+=1
-50430     ! fnchk(lc+=1,55,"Wait for word processor to close before continuing",1)
+50430     ! fnChk(lc+=1,55,"Wait for word processor to close before continuing",1)
 50450     ! resp$(resp_wait_wp_close:=dsp_rc+=1)=wait_wp_close$
 50460     lc+=1
 50470 ! 
-50480     fnlbl(lc+=1,1,"Receipt Printer:",col1_width,1)
+50480     fnLbl(lc+=1,1,"Receipt Printer:",col1_width,1)
 50490     fncomboa('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to pr receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 50500     resp$(resp_receipt_printer:=dsp_rc+=1)=receipt_printer$
-50510     fnbutton(lc,col2_pos+42+5,'Test',14)
-50520     fncmdkey("&Save",1,1)
-50530     fncmdkey("Apply",2,0)
-50540     fncmdkey("&Cancel",5,0,1)
-50550     fnacs(sn$,0,mat resp$,ck)
+50510     fnButton(lc,col2_pos+42+5,'Test',14)
+50520     fnCmdKey("&Save",1,1)
+50530     fnCmdKey("Apply",2,0)
+50540     fnCmdKey("&Cancel",5,0,1)
+50550     fnAcs(sn$,0,mat resp$,ck)
 50560     if ck=5 then 
 50570       goto XIT
 50580     else 
@@ -319,32 +319,32 @@
 51000   loop  ! /r
 52000 DO_SCREEN_HH: ! r:
 52020 do
-52040   fntos(sn$="Settings_HH")
+52040   fnTos(sn$="Settings_HH")
 52060   fn_nav_buttons
 52080   col1_width=25 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsh_rc=0
-52100   fnlbl(lc+=1,1,"** System Settings **",win_width,2)
-52120   lc+=1 ! fnlbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
-52140   fnlbl(lc+=1,1,"Device Type:",col1_width,1,0,0,0,'Select device type - leave blank to reset to default')
+52100   fnLbl(lc+=1,1,"** System Settings **",win_width,2)
+52120   lc+=1 ! fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
+52140   fnLbl(lc+=1,1,"Device Type:",col1_width,1,0,0,0,'Select device type - leave blank to reset to default')
 52160   fncomboa('u4Device',lc,col2_pos,mat u4_deviceOption$,'Select device type - leave blank to reset to default')
 52180   resp$(resp_u4_device:=dsh_rc+=1)=u4_device$
 52200   lc+=1
-52220   fnchk(lc+=1,col2_pos,'Enable Meter Address LocationID',1)
-52240 ! fnlbl(lc,col2_pos+3,'(extra explaination)')
+52220   fnChk(lc+=1,col2_pos,'Enable Meter Location table',1)
+52240 ! fnLbl(lc,col2_pos+3,'(extra explanation)')
 52260   resp$(resp_u4_meterAddress:=dsh_rc+=1)=u4_meterAddress$
 52280   lc+=1
-52300   fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+52300   fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 52320   lc+=1
-52340   fnlbl(lc+=1,1,"File to Create:",col1_width,1,0,0,0,'Select a path and file for ACS to create output files for hand helds.')
-52360   fntxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to create output files for hand helds.')
+52340   fnLbl(lc+=1,1,"File to Create:",col1_width,1,0,0,0,'Select a path and file for ACS to create output files for hand helds.')
+52360   fnTxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to create output files for hand helds.')
 52380   resp$(resp_hhto:=dsh_rc+=1)=hhto$
-52400   fnlbl(lc+=1,1,"File to Retreive:",col1_width,1,0,0,0,'Select a path and file for ACS to read input files from hand helds.')
-52420   fntxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
+52400   fnLbl(lc+=1,1,"File to Retrieve:",col1_width,1,0,0,0,'Select a path and file for ACS to read input files from hand helds.')
+52420   fnTxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
 52440   resp$(resp_hhfro:=dsh_rc+=1)=hhfro$ 
-52450   fnlbl(lc,col2_pos+45,"(set to [Ask] to ask everytime)")
-52460   fncmdkey("&Save",1,1)
-52480   fncmdkey("Apply",2,0)
-52500   fncmdkey("&Cancel",5,0,1)
-52520   fnacs(sn$,0,mat resp$,ck)
+52450   fnLbl(lc,col2_pos+45,"(set to [Ask] to ask every time)")
+52460   fnCmdKey("&Save",1,1)
+52480   fnCmdKey("Apply",2,0)
+52500   fnCmdKey("&Cancel",5,0,1)
+52520   fnAcs(sn$,0,mat resp$,ck)
 52540   if ck=5 then 
 52560     goto XIT
 52580   else 
@@ -362,29 +362,29 @@
 52820 loop ! /r
 54000 DO_SCREEN_UB: ! r:
 54020 do
-54040   fntos(sn$="Settings_UB")
+54040   fnTos(sn$="Settings_UB")
 54060   fn_nav_buttons
 54080   col1_width=46 : col2_pos=col1_width+2 : lc=0 : win_width=75 : ub_rc=0
-54090   fnlbl(lc+=1,1,"** System Settings **",win_width,2)
+54090   fnLbl(lc+=1,1,"** System Settings **",win_width,2)
 54092   lc+=1
-54094   fnlbl(lc+=1,1,'Collections',win_width,2)
-54100   fnchk(lc+=1,col2_pos,'Print in Account Number order',1)
-54110   fnlbl(lc,col2_pos+3,'Instead of order entered')
+54094   fnLbl(lc+=1,1,'Collections',win_width,2)
+54100   fnChk(lc+=1,col2_pos,'Print in Account Number order',1)
+54110   fnLbl(lc,col2_pos+3,'Instead of order entered')
 54120   resp$(resp_ub_cpiao:=ub_rc+=1)=ub_collPrintInAccountOrder$
-54122   fnchk(lc+=1,col2_pos,'Disable Deposit Listing',1)
-54124   fnlbl(lc,col2_pos+3,'Receipt Listing only')
+54122   fnChk(lc+=1,col2_pos,'Disable Deposit Listing',1)
+54124   fnLbl(lc,col2_pos+3,'Receipt Listing only')
 54126   resp$(resp_ub_collDisableDepositList:=ub_rc+=1)=ub_collDisableDepositList$
 54130   lc+=1
-54140   fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+54140   fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 54150   lc+=1
-54152   fnchk(lc+=1,col2_pos,'Display Total Accounts Receivable on Dashboard',1)
-54160   fnlbl(lc,col2_pos+3,'May increase load time.')
+54152   fnChk(lc+=1,col2_pos,'Display Total Accounts Receivable on Dashboard',1)
+54160   fnLbl(lc,col2_pos+3,'May increase load time.')
 54170   resp$(resp_ub_total_ar:=ub_rc+=1)=ub_total_ar_on_dashboard$
 54180   !
-54360   fncmdkey("&Save",1,1)
-54380   fncmdkey("Apply",2,0)
-54400   fncmdkey("&Cancel",5,0,1)
-54420   fnacs(sn$,0,mat resp$,ck)
+54360   fnCmdKey("&Save",1,1)
+54380   fnCmdKey("Apply",2,0)
+54400   fnCmdKey("&Cancel",5,0,1)
+54420   fnAcs(sn$,0,mat resp$,ck)
 54440   if ck=5 then 
 54460     goto XIT
 54480   else 
@@ -401,21 +401,21 @@
 54700 loop ! /r
 56000 DO_SCREEN_GL: ! r:
 56020 do
-56040   fntos(sn$="Settings_GL")
+56040   fnTos(sn$="Settings_GL")
 56060   fn_nav_buttons
 56080   col1_width=46 : col2_pos=col1_width+2 : lc=0 : win_width=75 : gl_rc=0
-56090   fnlbl(lc+=1,1,"** System Settings **",win_width,2)
+56090   fnLbl(lc+=1,1,"** System Settings **",win_width,2)
 56092   lc+=1
-56100   fnchk(lc+=1,col2_pos,'Enter Transactions - retain some fields between additions',1)
+56100   fnChk(lc+=1,col2_pos,'Enter Transactions - retain some fields between additions',1)
 56120   resp$(resp_gl_retainFieldsDuringAdd:=gl_rc+=1)=gl_retainFieldsDuringAdd$
 56130   lc+=1
-56140   ! fnlbl(lc+=1,1,"** User Settings **",win_width,2)
+56140   ! fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 56150   ! lc+=1
 56180   !
-56360   fncmdkey("&Save",1,1)
-56380   fncmdkey("Apply",2,0)
-56400   fncmdkey("&Cancel",5,0,1)
-56420   fnacs(sn$,0,mat resp$,ck)
+56360   fnCmdKey("&Save",1,1)
+56380   fnCmdKey("Apply",2,0)
+56400   fnCmdKey("&Cancel",5,0,1)
+56420   fnAcs(sn$,0,mat resp$,ck)
 56440   if ck=5 then 
 56460     goto XIT
 56480   else 
@@ -496,7 +496,7 @@
 68200   end if 
 68220   if screen=0 then screen=screen_main
 68240   nb_lc=0 : nb_pos=110 : nb_len=15
-68260   fnlbl(win_height,nb_len,'') ! forces all the windows for each screen to be at least the hight specified by win_height (set toward the top of this program)
+68260   fnLbl(win_height,nb_len,'') ! forces all the windows for each screen to be at least the hight specified by win_height (set toward the top of this program)
 68280   fnbutton_or_disabled(screen<>screen_main,nb_lc+=1,nb_pos,'Main',1001, '',nb_len)
 68300   fnbutton_or_disabled(screen<>screen_theme,nb_lc+=1,nb_pos,'Theme',1002, '',nb_len)
 68320   fnbutton_or_disabled(screen<>screen_print,nb_lc+=1,nb_pos,'Printer',1003, '',nb_len)
@@ -510,13 +510,13 @@
 68420   if fnclient_has('U4') then
 68440     fnbutton_or_disabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
 68460   end if
-68480   fnlbl(22,1,'')
+68480   fnLbl(22,1,'')
 68999 fnend 
 70000 def fn_setup
 70020   if ~setup then 
 70040     setup=1
-70060     library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt ,fnerror,fntos,fnchk,fnreg_read,fnreg_write,fnbutton,fncmdkey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
-70080     library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnopt,fngetpp,fncopyfile
+70060     library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt ,fnerror,fnTos,fnChk,fnreg_read,fnreg_write,fnButton,fnCmdKey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
+70080     library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnOpt,fnGetPp,fncopyfile
 70100     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 70110     library 'S:\Core\Library': fnaddonec
 70120     on error goto ERTN
@@ -615,7 +615,7 @@
 82540   dim efEditOnClientCopyOfFile$*256
 82560   if clientServer then
 82580     dim efFilePath$*256,efFileName$*128,efFileExt$*128
-82600     fngetpp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
+82600     fnGetPp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
 82620     efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Temp\Session'&session$&'\'&efFileName$&efFileExt$
 82640     fnmakesurepathexists(efEditOnClientCopyOfFile$)
 82650     if exists(efFileToEdit$) then

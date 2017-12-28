@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Label
 00020 ! pr labels for payees
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnaddlabel,fnlabel,fntos,fnlbl,fncomboa,fnchk,fncmdset,fnacs,fntxt,fncombof
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnaddlabel,fnlabel,fnTos,fnLbl,fncomboa,fnChk,fnCmdSet,fnAcs,fnTxt,fncombof
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,io2$(3),wrd2$(3)
@@ -14,33 +14,33 @@
         off=0 : left=0 : center=2
 00140 ! ______________________________________________________________________
 00150 MAIN: ! 
-00160   fntos(sn$="cllabel-1")
+00160   fnTos(sn$="cllabel-1")
 00170   respc=0 : mylen=25 : mypos=mylen+2
-00180   fnlbl(1,1,"Print Labels For:",mylen,right)
+00180   fnLbl(1,1,"Print Labels For:",mylen,right)
 00190   fi$="cllabels" !:
         item1$(print_all=1)="[All]" !:
         item1$(check_range=2)="Range of Checks" !:
         item1$(specific_payees=3)="Specific payees" !:
         fncomboa(fi$,1,mypos,mat item1$,"The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence") !:
         resp$(respc+=1)=item1$(1)
-00200   fnchk(2,mypos+2,'Print Payee Number on Label',right) !:
+00200   fnChk(2,mypos+2,'Print Payee Number on Label',right) !:
         resp$(respc+=1)='False'
-00210   fnlbl(4,1,"Bank:",mylen,right)
+00210   fnLbl(4,1,"Bank:",mylen,right)
 00220   fncombof('Bank',4,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list) !:
         resp$(respc+=1)=""
-00230   fnlbl(5,1,"Starting Check Number:",25,1)
+00230   fnLbl(5,1,"Starting Check Number:",25,1)
 00240   fncombof('Check',5,mypos,33,env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),4,8,36,35) !:
         resp$(respc+=1)=""
-00250   fnlbl(6,1,"Ending Check Number:",25,1)
+00250   fnLbl(6,1,"Ending Check Number:",25,1)
 00260   fncombof('Check',6,mypos,33,env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),4,8,36,35) !:
         resp$(respc+=1)=""
-00270   fnlbl(8,1,"Starting Payee Number:",25,1)
-00280 ! fnTXT(8,27,8,0,1,"",0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')! !:
+00270   fnLbl(8,1,"Starting Payee Number:",25,1)
+00280 ! fnTxt(8,27,8,0,1,"",0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')! !:
         ! rESP$(RESPC+=1)=""
 00290   fncombof("Payee",8,27,20,env$('Q')&"\CLmstr\Paymstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),1,0, "Select starting payee record for printing") !:
         resp$(respc+=1)=""
-00300   fncmdset(2)
-00310   fnacs(sn$,0,mat resp$,ck) !:
+00300   fnCmdSet(2)
+00310   fnAcs(sn$,0,mat resp$,ck) !:
         if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then prtall=print_all else !:
             if resp$(1)=item1$(2) then prtall=check_range else !:
@@ -55,13 +55,13 @@
 00350   if prtall=check_range then goto ASK_BANK_ETC else !:
           if prtall=print_all then goto ASK_FIRST_PAYEE
 00360 ASK_VN: ! 
-00370   fntos(sn$="cllabel-2") !:
+00370   fnTos(sn$="cllabel-2") !:
         respc=0 : mylen=20
-00380   fnlbl(1,1,"Payee to Print:",mylen,right)
+00380   fnLbl(1,1,"Payee to Print:",mylen,right)
 00390   fncombof("Payee",1,22,20,env$('Q')&"\CLmstr\Paymstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"') !:
         resp$(respc+=1)=""
-00400   fncmdset(3)
-00410   fnacs(sn$,0,mat resp$,ck) !:
+00400   fnCmdSet(3)
+00410   fnAcs(sn$,0,mat resp$,ck) !:
         if ck=5 then goto END1 else !:
           vn$=lpad$(rtrm$(resp$(1)(1:8)),8)
 00420   read #paymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey MSGBOX1

@@ -18,7 +18,7 @@
 00360 L190: pr newpage
 00380   if prtall=1 then let fnopenprn
 00400   close #101: ioerr L220
-00420 L220: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=60,BORDER=DR,CAPTION=PRINT LABELS FOR SELECTED CLIENTS",display,outin 
+00420 L220: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=60,BORDER=DR,CAPTION=PRINT LABELS FOR SELECTED CLIENTS",display,outIn 
 00440   pr f "11,21,C 14,N": "Client Number:"
 00460   pr f "13,22,C 32,B,5": "Cancel (Esc)"
 00480   pr f "14,22,C 32,B,6": "Search (F6)"
@@ -99,10 +99,10 @@
 01980   pr f "24,3,C 78,N": ""
 02000   retry 
 02020 SRCH1: s1=1 ! NAME SEARCH
-02040   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin  ! SAVE SCREEN
+02040   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn  ! SAVE SCREEN
 02060 L990: pr #127: newpage
 02080   close #101: ioerr L1010
-02100 L1010: open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUSINESS NAME SEARCH",display,outin 
+02100 L1010: open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUSINESS NAME SEARCH",display,outIn 
 02120   prtall=0
 02140   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 02160   pr f "9,32,C 16,R,N": "Press F5 to stop"

@@ -10,7 +10,7 @@
 00100   pr newpage
 00110   pr f "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
 00120 L120: input fields "10,55,N 2,UE,N": cno conv L120
-00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outin,keyed ioerr L120
+00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed ioerr L120
 00140   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),internal,output ioerr L160
 00150   close #2,free: 
 00160 L160: open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",SIZE=0,RecL=416",internal,output 

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncV
 00020 ! COMPARATIVE INCOME STATEMENT WITH PERCENTAGES & VARIANCES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
@@ -39,15 +39,15 @@
 00320   goto L2530
 00330 L330: open #1: fl1$,internal,input,keyed 
 00340   if fnprocess=1 or fnUseDeptNo=0 or percent=1 then goto L440
-00350   fntos(sn$="ACglincv") !:
+00350   fnTos(sn$="ACglincv") !:
         mylen=30: mypos=mylen+3 : right=1
-00360   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00370   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00360   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00370   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00380   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00390   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00400   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00410   fnacs(sn$,0,mat resp$,ckey)
+00380   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00390   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00400   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00410   fnAcs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
 00430   costcntr=val(resp$(1))
 00440 L440: report$="Statement of Income and Expenses"

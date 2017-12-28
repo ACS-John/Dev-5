@@ -9,8 +9,8 @@
 18000 def fn_setup
 18020   if ~setup then 
 18040     setup=1
-18060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnindex_it,fnstatus_close
-18080     library 'S:\Core\Library': fntos,fnlbl,fntxt,fncombof,fncmdset,fnacs,fnmsgbox,fnfra,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
+18060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnindex_it,fnStatusClose
+18080     library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fncombof,fnCmdSet,fnAcs,fnmsgbox,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
 18100     left=0: right=1
 18140   end if
 18160 fnend
@@ -30,21 +30,21 @@
 24200   dim gldesc$*30,resp$(60)*50
 24220   ! r: setup files
 26000   if ~exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno')) then 
-26020     open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",RecL=276,kln=8,kps=1,Replace",internal,outin,keyed 
+26020     open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",RecL=276,kln=8,kps=1,Replace",internal,outIn,keyed 
 26040     close #paymstr: ioerr ignore
 26060   end if
 26080   if ~exists(env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')) or ~exists(env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')) then 
 26100     fnindex_it(env$('Q')&'\GLmstr\paymstr.H'&env$('cno'),env$('Q')&'\GLmstr\Payidx1.H'&env$('cno'),'1 8 ')
 26120     fnindex_it(env$('Q')&'\GLmstr\paymstr.H'&env$('cno'),env$('Q')&'\GLmstr\Payidx2.H'&env$('cno'),'9 38')
-26140     fnstatus_close
+26140     fnStatusClose
 26160   end if
-26180   open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-26200   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-26220   open #payeegl:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
-26240   open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outin,keyed 
+26180   open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26200   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26220   open #payeegl:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+26240   open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 26260   ! /r
 28000   MENU1: ! r:
-28020     fntos(sn$="payee-1")
+28020     fnTos(sn$="payee-1")
 28040     respc=0
 28060     mat chdr$(12) : mat cmask$(12) : mat item$(12)
 28080     chdr$(1)='Rec' 
@@ -81,11 +81,11 @@
 28700       fnflexadd1(mat item$)
 28720     loop
 28740     EO_FLEX1: ! 
-28760     fncmdkey("&Add",1,0,0,"Add new payee records") 
-28780     fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.") 
-28800     fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
-28820     fncmdkey("E&xit",5,0,1,"Exit to menu")
-28840     fnacs(sn$,0,mat resp$,ck)
+28760     fnCmdKey("&Add",1,0,0,"Add new payee records") 
+28780     fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.") 
+28800     fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
+28820     fnCmdKey("E&xit",5,0,1,"Exit to menu")
+28840     fnAcs(sn$,0,mat resp$,ck)
 28860     add=edit=0
 28880     if ck=5 then 
 28900       goto XitFn
@@ -116,7 +116,7 @@
 32160     loop
 32180     EO_DELETE_PAYEE: ! 
 32200     ! 
-32220     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+32220     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 32240     if trim$(holdvn$)="" then goto EO_DEL_KEY_ON_TRANS
 32260     restore #trans, key>=holdvn$: nokey EO_DEL_KEY_ON_TRANS
 32280     L570: !
@@ -135,47 +135,47 @@
 34060   goto EDIT_PAYEE  ! /r
 36000   EDIT_PAYEE: ! r:
 36020     holdvn$=vn$
-36040     fntos(sn$="payee-2")
+36040     fnTos(sn$="payee-2")
 36060     respc=0
 36080     mylen=28 : mypos=mylen+2
-36100     fnfra(1,1,12,70,"Payee Information"," ")
-36120     fnlbl(1,1,"Payee Number:",mylen,1,0,1)
-36140     fntxt(1,mypos,8,0,1,"",0,"",1)
+36100     fnFra(1,1,12,70,"Payee Information"," ")
+36120     fnLbl(1,1,"Payee Number:",mylen,1,0,1)
+36140     fnTxt(1,mypos,8,0,1,"",0,"",1)
 36160     resp$(respc+=1)=vn$
-36180     fnlbl(2,1,"Payee Name:",mylen,1,0,1)
-36200     fntxt(2,mypos,30,0,0,"",0,"",1)
+36180     fnLbl(2,1,"Payee Name:",mylen,1,0,1)
+36200     fnTxt(2,mypos,30,0,0,"",0,"",1)
 36220     resp$(respc+=1)=nam$
-36240     fnlbl(3,1,"Address:",mylen,1,0,1)
-36260     fntxt(3,mypos,30,0,0,"",0,"",1)
+36240     fnLbl(3,1,"Address:",mylen,1,0,1)
+36260     fnTxt(3,mypos,30,0,0,"",0,"",1)
 36280     resp$(respc+=1)=ad1$
-36300     fnlbl(4,1,"Address:",mylen,1,0,1)
-36320     fntxt(4,mypos,30,0,0,"",0,"",1) 
+36300     fnLbl(4,1,"Address:",mylen,1,0,1)
+36320     fnTxt(4,mypos,30,0,0,"",0,"",1) 
 36340     resp$(respc+=1)=ad2$
-36360     fnlbl(5,1,"City, St. Zip:",mylen,1,0,1)
+36360     fnLbl(5,1,"City, St. Zip:",mylen,1,0,1)
 36380     fncombof("CityStZip",5,mypos,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",1,0) 
 36400     resp$(respc+=1)=csz$
-36420     fnlbl(6,1,"Type:",mylen,1,0,1)
+36420     fnLbl(6,1,"Type:",mylen,1,0,1)
 36440     fncombof("Payeetype",6,mypos,27,env$('Q')&"\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
 36460     resp$(respc+=1)=str$(typ)
-36480     fnlbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
-36500     fntxt(7,mypos,11,0,0,"",0,"",1) 
+36480     fnLbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
+36500     fnTxt(7,mypos,11,0,0,"",0,"",1) 
 36520     resp$(respc+=1)=ss$
-36540     fnlbl(8,1,"Phone Number:",mylen,1,0,1)
-36560     fntxt(8,mypos,12,0,0,"",0,"",1) 
+36540     fnLbl(8,1,"Phone Number:",mylen,1,0,1)
+36560     fnTxt(8,mypos,12,0,0,"",0,"",1) 
 36580     resp$(respc+=1)=ph$
-36600     fnlbl(9,1,"Contact Name:",mylen,1,0,1)
-36620     fntxt(9,mypos,30,0,0,"",0,"",1)
+36600     fnLbl(9,1,"Contact Name:",mylen,1,0,1)
+36620     fnTxt(9,mypos,30,0,0,"",0,"",1)
 36640     resp$(respc+=1)=contact$
-36660     fnlbl(10,1,"E-mail Address:",mylen,1,0,1)
-36680     fntxt(10,mypos,30,50,0,"",0,"",1)
+36660     fnLbl(10,1,"E-mail Address:",mylen,1,0,1)
+36680     fnTxt(10,mypos,30,50,0,"",0,"",1)
 36700     resp$(respc+=1)=email$
-36720     fnlbl(11,1,"Fax Number:",mylen,1,0,1)
-36740     fntxt(11,mypos,12,0,0,"",0,"",1)
+36720     fnLbl(11,1,"Fax Number:",mylen,1,0,1)
+36740     fnTxt(11,mypos,12,0,0,"",0,"",1)
 36760     resp$(respc+=1)=fax$
-36780     fnlbl(12,1,"My Account Number:",mylen,1,0,1)
-36800     fntxt(12,mypos,20,0,0,"",0,"",1)
+36780     fnLbl(12,1,"My Account Number:",mylen,1,0,1)
+36800     fnTxt(12,mypos,20,0,0,"",0,"",1)
 36820     resp$(respc+=1)=myact$
-36840     fnlbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
+36840     fnLbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
 36860     ! r: General Ledger Breakdown Grid
 36880     mat chdr$(5) : mat cmask$(5) : mat glitem$(5) 
 36900     chdr$(1)='Refenence'
@@ -197,13 +197,13 @@
 37220       fnflexadd1(mat glitem$)
 37240     loop
 37260     EO_FLEX3: ! /r
-37300     fnlbl(21,1,"",1,0,0,0) ! add space before buttons
-37320     fnbutton(lc=21,61,"Add",2,"Add a standard general ledger breakdowns",0,4) 
-37340     fnbutton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns")
-37360     fncmdkey("Save",1,1,0,"Saves and returns to payee selection") 
-37380     fncmdkey("&Transactions",4,0,0,"List all checks for this payee") 
-37400     fncmdkey("&Cancel",5,0,1,"Return to payee selection")
-37420     fnacs(sn$,0,mat resp$,ck)
+37300     fnLbl(21,1,"",1,0,0,0) ! add space before buttons
+37320     fnButton(lc=21,61,"Add",2,"Add a standard general ledger breakdowns",0,4) 
+37340     fnButton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns")
+37360     fnCmdKey("Save",1,1,0,"Saves and returns to payee selection") 
+37380     fnCmdKey("&Transactions",4,0,0,"List all checks for this payee") 
+37400     fnCmdKey("&Cancel",5,0,1,"Return to payee selection")
+37420     fnAcs(sn$,0,mat resp$,ck)
 38000     if ck=5 then goto MENU1
 38020     vn$=lpad$(trim$(resp$(1)(1:8)),8) 
 38040     nam$=resp$(2) ! name 
@@ -254,7 +254,7 @@
 42000   KEY_CHANGE: ! r: a gosub routine
 42020     ! change the references to this file in the payee transaction file
 42040     close #trans: ioerr ignore
-42060     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+42060     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 42080     restore #trans,key>=holdvn$: nokey EO_CHANGE_KEY_ON_TRANS
 42100     do    
 42120       read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -291,19 +291,19 @@
 54120 fnend 
 66000 PAYEE_TRANSACTIONS: ! r:
 66020   close #trans: ioerr ignore
-66040   open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-66060   fntos(sn$='payee_hist') 
+66040   open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+66060   fnTos(sn$='payee_hist') 
 66080   lc=0 : mylen=25 : mypos=mylen+2 : width=50
 66100   lc+=1
-66120   fnlbl(lc+=1,30,'Payee Transactions',width,center)
-66140   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
-66160   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
+66120   fnLbl(lc+=1,30,'Payee Transactions',width,center)
+66140   fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
+66160   fnTxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
 66180   resp$(1)=str$(transactionstartingdate)
-66200   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
-66220   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
+66200   fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
+66220   fnTxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
 66240   resp$(2)=str$(transactionendingdate)
 66260   wbc=0
-66280   fnlbl(lc=6,40,'Transaction Grid')
+66280   fnLbl(lc=6,40,'Transaction Grid')
 66300   mat chdr$(6) : mat cmask$(6) : mat item6$(6) 
 66320   chdr$(1)='Rec' 
 66340   chdr$(2)='Payee' 
@@ -330,16 +330,16 @@
 66760     transactionstotal+=am
 66780   loop
 66800   EO_FLEX2: ! 
-66820   fnlbl(5,1,'Transactions Total:',mylen,right)
-66840   fntxt(5,mypos,12,0,right,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ') 
+66820   fnLbl(5,1,'Transactions Total:',mylen,right)
+66840   fnTxt(5,mypos,12,0,right,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ') 
 66860   resp$(3)=str$(transactionstotal)
-66880   fncmdkey('&Refresh',2,0,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
-66900   fncmdkey('&Add',3,1,0,"Allows you to add a transaction that you would like to have included in the totals on a 1099 form.")
+66880   fnCmdKey('&Refresh',2,0,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
+66900   fnCmdKey('&Add',3,1,0,"Allows you to add a transaction that you would like to have included in the totals on a 1099 form.")
 66920   if transOnScreenCount>0 then
-66940     fncmdkey('&Edit',4,0,0,"Allows you to change or delete a transaction.")
+66940     fnCmdKey('&Edit',4,0,0,"Allows you to change or delete a transaction.")
 66960   end if
-66980   fncmdkey('&Close',5,0,1)
-67000   fnacs(sn$,0,mat resp$,ck)
+66980   fnCmdKey('&Close',5,0,1)
+67000   fnAcs(sn$,0,mat resp$,ck)
 68000   edittrans=0
 68020   if ck<>5 then 
 68040     if ck=3 then 
@@ -359,20 +359,20 @@
 68280   close #trans: ioerr ignore
 68300 return ! /r
 72000 GL_BREAKDOWNS: ! r: sub routine
-72020   fntos(sn$='payee_gl_dist') 
+72020   fnTos(sn$='payee_gl_dist') 
 72040   respc=0 : mylen=28 : mypos=mylen+2
-72060   fnlbl(1,25,"Breakdown for "&nam$(1:20),40)
-72080   fnlbl(3,1,"General Ledger Number:",mylen,right)
+72060   fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
+72080   fnLbl(3,1,"General Ledger Number:",mylen,right)
 72100   fnqgl(3,mypos) 
 72120   resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
-72140   fnlbl(4,1,'Percent:',mylen,right)
-72160   fntxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!") 
+72140   fnLbl(4,1,'Percent:',mylen,right)
+72160   fnTxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!") 
 72180   resp$(respc+=1)=str$(percent)
-72200   fnlbl(5,1,"Description:",mylen,right)
-72220   fntxt(5,mypos,30) 
+72200   fnLbl(5,1,"Description:",mylen,right)
+72220   fnTxt(5,mypos,30) 
 72240   resp$(respc+=1)=gldesc$
-72260   fncmdset(7)
-72280   fnacs(sn$,0,mat resp$,ck)
+72260   fnCmdSet(7)
+72280   fnAcs(sn$,0,mat resp$,ck)
 72300   if ck<>5 then 
 72320     payeekey$=vn$
 72340     payeegl$=fnagl$(resp$(1))
@@ -414,24 +414,24 @@
 82060 return ! /r
 84000 ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 84020   if edittrans=0 then dt=am=0: rn$=de$=""
-84040   fntos(sn$='add_trans')
+84040   fnTos(sn$='add_trans')
 84060   respc=0 : mylen=28 : mypos=mylen+2
-84080   fnlbl(1,1,"Date:",mylen,right)
-84100   fntxt(1,mypos,6,0,left,'1',0,'')
+84080   fnLbl(1,1,"Date:",mylen,right)
+84100   fnTxt(1,mypos,6,0,left,'1',0,'')
 84120   resp$(1)=str$(dt)
-84140   fnlbl(2,1,"Amount:",mylen,right)
-84160   fntxt(2,mypos,12,0,0,'10',0,'')
+84140   fnLbl(2,1,"Amount:",mylen,right)
+84160   fnTxt(2,mypos,12,0,0,'10',0,'')
 84180   resp$(2)=str$(am)
-84200   fnlbl(3,1,"Ref #:",mylen,right)
-84220   fntxt(3,mypos,12,0,0,'',0,'')
+84200   fnLbl(3,1,"Ref #:",mylen,right)
+84220   fnTxt(3,mypos,12,0,0,'',0,'')
 84240   resp$(3)=rn$
-84260   fnlbl(4,1,"Description:",mylen,right)
-84280   fntxt(4,mypos,30,0,0,'',0,'')
+84260   fnLbl(4,1,"Description:",mylen,right)
+84280   fnTxt(4,mypos,30,0,0,'',0,'')
 84300   resp$(4)=de$
-84320   fncmdkey("Save",1,1,0,"Saves any changes and returns to Payee selection")
-84340   fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing transaction.")
-84360   fncmdkey("&Cancel",5,0,1,"Return to Payee selection screen.")
-84380   fnacs(sn$,0,mat resp$,ck)
+84320   fnCmdKey("Save",1,1,0,"Saves any changes and returns to Payee selection")
+84340   fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing transaction.")
+84360   fnCmdKey("&Cancel",5,0,1,"Return to Payee selection screen.")
+84380   fnAcs(sn$,0,mat resp$,ck)
 86000   if ck=5 then 
 86020     goto XitTransactionAdd
 86040   else if ck=3 then 

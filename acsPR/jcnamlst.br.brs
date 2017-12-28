@@ -21,7 +21,7 @@
 00190 ! ______________________________________________________________________
 00200   pr newpage
 00210   close #101: ioerr L220
-00220 L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&cap$,display,outin 
+00220 L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&cap$,display,outIn 
 00230   pr #101: newpage
 00240   pr #101,fields "1,1,Cc 53,R,N": cnam$
 00250   pr #101,fields "2,1,Cc 53,R,N": "Company Number "&env$('cno')

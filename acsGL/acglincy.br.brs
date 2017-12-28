@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncY
 00020 ! -- INCOME STATEMENT FOR THIRTEEN PERIODS
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fntos,fntxt,fncmdkey,fnacs,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnTos,fnTxt,fnCmdKey,fnAcs,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim p$(20)*50
@@ -24,7 +24,7 @@
 00240 ! 
 00250   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00260   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
+00260   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00270   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
 00280 ! ______________________________________________________________________
@@ -39,21 +39,21 @@
 00370   nametab=int(95-len(rtrm$(cnam$))/2)
 00380   open #1: fl1$,internal,input,keyed 
 00390   if fnprocess=1 or fnUseDeptNo=0 then goto L490
-00400   fntos(sn$="Acglincy") !:
+00400   fnTos(sn$="Acglincy") !:
         mylen=30: mypos=mylen+3 : right=1
-00410   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00420   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00410   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00420   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00430   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00440   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00450   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00460   fnacs(sn$,0,mat resp$,ckey)
+00430   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00440   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00450   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00460   fnAcs(sn$,0,mat resp$,ckey)
 00470   if ckey=5 then goto XIT
 00480   costcntr=val(resp$(1))
 00490 L490: cnam$=rtrm$(cnam$)
 00500   pf1=len(cnam$)+int((43-len(cnam$))/2)
 00510   close #101: ioerr L520
-00520 L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outin 
+00520 L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outIn 
 00530   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
 00540   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&env$('cno')
 00550   pr f "11,18,C 41,R,N": "              IN PROCESS"

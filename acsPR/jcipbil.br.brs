@@ -13,10 +13,10 @@
 00130   c1=3
 00135   fnconsole(1)
 00140 ! ______________________________________________________________________
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00160   open #2: "Name="&env$('temp')&"\Work."&session$,internal,output ioerr L180
 00170   close #2,free: 
-00180 L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",internal,outin,relative 
+00180 L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",internal,outIn,relative 
 00190 L190: shoption=1
 00200 L200: pr newpage
 00210   win=101
@@ -105,7 +105,7 @@
 01000   pr #255: 
 01010   pr #255: "Ref #   Job #      Amount     Date     Status"
 01020   for j=1 to lrec(2)
-01030     read #2,using L700,rec=j: jn$,mat inp norec L1100
+01030     read #2,using L700,rec=j: jn$,mat inp noRec L1100
 01040     if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1070
 01050     pr #255,using L1060: j,jn$,mat inp
 01060 L1060: form pos 1,n 5,x 2,c 8,n 10.2,2*n 10,skip 1
@@ -133,7 +133,7 @@
 01280   goto L200
 01290 ! ______________________________________________________________________
 01300 L1300: for j=1 to rw
-01310     read #2,using L700,rec=j: jn$,mat inp norec XIT
+01310     read #2,using L700,rec=j: jn$,mat inp noRec XIT
 01320     if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1370
 01330     read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1370
 01340     b3=b3+inp(1)

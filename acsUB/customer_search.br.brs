@@ -3,10 +3,10 @@
 20040 ! ______________________________________________________________________
 20060   def library fncustomer_search(&x$;fixgrid)
 20080 ! x$=account   to extract the flexgrid information (master file)
-20100     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fngethandle
+20100     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle
 20120     on error goto ERTN
 20140     dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
-20160     fntos(sn$="CustomerSrch")
+20160     fnTos(sn$="CustomerSrch")
 20180     open #file_num:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 20200     restore #file_num: 
 20220     mat ch$(12) : mat cm$(12) : mat cm$(12)
@@ -37,8 +37,8 @@
 20700     goto READ_FILE
 20720 ! ______________________________________________________________________
 20740 EO_CUSTOMER: ! 
-20760     fncmdset(2)
-20780     fnacs(sn$,0,mat resp$,ckey)
+20760     fnCmdSet(2)
+20780     fnAcs(sn$,0,mat resp$,ckey)
 20800     x$=lpad$(resp$(1),10)
 20820     if ckey=5 then x$="          " ! no one selected
 20840     goto XIT

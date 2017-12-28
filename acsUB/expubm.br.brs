@@ -1,7 +1,7 @@
 20000 ! Replace S:\acsUB\expubm
 20020 ! -- Export UB Master File
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fntop,fnxit,fntos,fnlbl,fntxt,fnacs,fnxit,fnerror,fncmdset,fntop,fnreg_read,fnreg_write,fncustomer_address,fnget_services
+20060   library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnTxt,fnAcs,fnxit,fnerror,fnCmdSet,fntop,fnreg_read,fnreg_write,fncustomer_address,fnget_services
 20070   library 'S:\Core\Library': fngethandle
 20080 ! ______________________________________________________________________
 20100   on error goto ERTN
@@ -18,19 +18,19 @@
 20320   dim delim$*1,streetnam$*30,streetnum$*30,state$*30,city$*30,zip$*30
 20340   dim resp$(3)*256,extra$(11)*30
 20380   fntop(program$,cap$="Export UB Master File")
-24000   dim servicename$(10)*20
-24020   fnget_services(mat servicename$) : for sNitem=1 to udim(mat servicename$) : servicename$(sNitem)=trim$(servicename$(sNitem)) : nex sNitem
+24000   dim serviceName$(10)*20
+24020   fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 34000 MENU1: ! r:
-34020   fntos(sn$="expubm")
-34040   fnlbl(1,1,"Destination Path and File Name:",34,1)
-34060   fntxt(1,36,40,256,0,"71")
+34020   fnTos(sn$="expubm")
+34040   fnLbl(1,1,"Destination Path and File Name:",34,1)
+34060   fnTxt(1,36,40,256,0,"71")
 34080   fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
-34100   fnlbl(2,1,"Delimiter (ASCII Code):" ,34,1)
-34120   fntxt(2,36,3,0,0,"30")
+34100   fnLbl(2,1,"Delimiter (ASCII Code):" ,34,1)
+34120   fnTxt(2,36,3,0,0,"30")
 34140   resp$(2)="9"
-34160   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-34180   fncmdset(2)
-34200   fnacs(sn$,0,mat resp$,ckey)
+34160   fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
+34180   fnCmdSet(2)
+34200   fnAcs(sn$,0,mat resp$,ckey)
 38000   if ckey=5 then goto XIT
 38020   dest$=resp$(1)
 38040   delas=val(resp$(2))
@@ -42,7 +42,7 @@
 42040 ! /r
 46000 OPENS: ! 
 46020   delim$=chr$(delas)
-46030   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&',shr',internal,outin,relative 
+46030   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&',shr',internal,outIn,relative 
 46040   ! open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,input,relative 
 46060   open #2: "Name="&br_filename$(dest$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr OP2ERR
 46080 ! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
@@ -96,72 +96,72 @@
 62080   pr #2: 'Address 1 - Primary'&delim$;   ! e$(3)
 62100   pr #2: 'Address 2 - Primary'&delim$;   ! extra$(1)
 62120   pr #2: 'CSZ - Primary'&delim$;         ! e$(4)
-62140   pr #2: servicename$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
-62160   pr #2: servicename$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
-62180   pr #2: servicename$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
-62200   pr #2: servicename$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
-62220   pr #2: servicename$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
-62240   pr #2: servicename$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
-62260   pr #2: servicename$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
-62280   pr #2: servicename$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
-62300   pr #2: servicename$(1)&' Standard Charge'&delim$; ! str$(b(1))&delim$;
-62320   pr #2: servicename$(2)&' Standard Charge'&delim$; ! str$(b(2))&delim$;
-62340   pr #2: servicename$(3)&' Standard Charge'&delim$; ! str$(b(3))&delim$;
-62360   pr #2: servicename$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
-62380   pr #2: servicename$(5)&' Standard Charge'&delim$; ! str$(b(5))&delim$;
-62400   pr #2: servicename$(6)&' Standard Charge'&delim$; ! str$(b(6))&delim$;
-62420   pr #2: servicename$(7)&' Standard Charge'&delim$; ! str$(b(7))&delim$;
-62440   pr #2: servicename$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
-62460   pr #2: servicename$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
-62480   pr #2: servicename$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
-62500   pr #2: servicename$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
-62520   pr #2: servicename$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
-62540   pr #2: servicename$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
-62560   pr #2: servicename$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
-62580   pr #2: servicename$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
-62600   pr #2: servicename$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
-62620   pr #2: servicename$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
-62640   pr #2: servicename$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
-62660   pr #2: servicename$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
-62680   pr #2: servicename$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
-62700   pr #2: servicename$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
-62720   pr #2: servicename$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
-62740   pr #2: servicename$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
-62760   pr #2: servicename$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
-62780   pr #2: servicename$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
-62800   pr #2: servicename$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
-62820   pr #2: servicename$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
+62140   pr #2: serviceName$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
+62160   pr #2: serviceName$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
+62180   pr #2: serviceName$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
+62200   pr #2: serviceName$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
+62220   pr #2: serviceName$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
+62240   pr #2: serviceName$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
+62260   pr #2: serviceName$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
+62280   pr #2: serviceName$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
+62300   pr #2: serviceName$(1)&' Standard Charge'&delim$; ! str$(b(1))&delim$;
+62320   pr #2: serviceName$(2)&' Standard Charge'&delim$; ! str$(b(2))&delim$;
+62340   pr #2: serviceName$(3)&' Standard Charge'&delim$; ! str$(b(3))&delim$;
+62360   pr #2: serviceName$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
+62380   pr #2: serviceName$(5)&' Standard Charge'&delim$; ! str$(b(5))&delim$;
+62400   pr #2: serviceName$(6)&' Standard Charge'&delim$; ! str$(b(6))&delim$;
+62420   pr #2: serviceName$(7)&' Standard Charge'&delim$; ! str$(b(7))&delim$;
+62440   pr #2: serviceName$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
+62460   pr #2: serviceName$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
+62480   pr #2: serviceName$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
+62500   pr #2: serviceName$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
+62520   pr #2: serviceName$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
+62540   pr #2: serviceName$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
+62560   pr #2: serviceName$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
+62580   pr #2: serviceName$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
+62600   pr #2: serviceName$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
+62620   pr #2: serviceName$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
+62640   pr #2: serviceName$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
+62660   pr #2: serviceName$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
+62680   pr #2: serviceName$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
+62700   pr #2: serviceName$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
+62720   pr #2: serviceName$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
+62740   pr #2: serviceName$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
+62760   pr #2: serviceName$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
+62780   pr #2: serviceName$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
+62800   pr #2: serviceName$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
+62820   pr #2: serviceName$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
 62840   pr #2: 'Units Per Meter'&delim$; ! str$(d(13))&delim$;
 62860   pr #2: 'Demand Multiplier'&delim$; ! str$(d(14))&delim$;
 62880   pr #2: 'Demand Reading'&delim$; ! str$(d(15))&delim$;
 62900   pr #2: 'Current Balance'&delim$; ! str$(bal)&delim$;
 62920   pr #2: 'Date of Charge'&delim$; ! str$(f)&delim$;
-62940   pr #2: servicename$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
-62960   pr #2: servicename$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
-62980   pr #2: servicename$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
-63000   pr #2: servicename$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
-63020   pr #2: servicename$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
-63040   pr #2: servicename$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
-63060   pr #2: servicename$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
-63080   pr #2: servicename$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
-63100   pr #2: servicename$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
-63120   pr #2: servicename$(10)&' Charge'&delim$; ! str$(g(10))&delim$;
+62940   pr #2: serviceName$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
+62960   pr #2: serviceName$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
+62980   pr #2: serviceName$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
+63000   pr #2: serviceName$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
+63020   pr #2: serviceName$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
+63040   pr #2: serviceName$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
+63060   pr #2: serviceName$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
+63080   pr #2: serviceName$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
+63100   pr #2: serviceName$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
+63120   pr #2: serviceName$(10)&' Charge'&delim$; ! str$(g(10))&delim$;
 63140   pr #2: 'Current Bill – Net Bill'&delim$; ! str$(g(11))&delim$;
 63160   pr #2: 'Current Bill – Gross Bill'&delim$; ! str$(g(12))&delim$;
 63180   pr #2: 'Alpha Sort Field'&delim$; ! alp$&delim$;
-63200   pr #2: servicename$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
-63220   pr #2: servicename$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
+63200   pr #2: serviceName$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
+63220   pr #2: serviceName$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
 63240   pr #2: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
-63260   pr #2: servicename$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
-63280   pr #2: servicename$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
-63300   pr #2: servicename$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
-63320   pr #2: servicename$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
-63340   pr #2: servicename$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
-63360   pr #2: servicename$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
-63380   pr #2: servicename$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
-63400   pr #2: servicename$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
-63420   pr #2: servicename$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
-63440   pr #2: servicename$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
+63260   pr #2: serviceName$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
+63280   pr #2: serviceName$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
+63300   pr #2: serviceName$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
+63320   pr #2: serviceName$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
+63340   pr #2: serviceName$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
+63360   pr #2: serviceName$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
+63380   pr #2: serviceName$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
+63400   pr #2: serviceName$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
+63420   pr #2: serviceName$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
+63440   pr #2: serviceName$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
 63460   pr #2: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
 63480   pr #2: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
 63500   pr #2: 'CSZ - Alternate Billing'&delim$; ! ab$(3)

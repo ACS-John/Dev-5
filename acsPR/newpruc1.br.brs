@@ -1,5 +1,5 @@
 10020 ! State U/C Report
-10060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fntos,fnlbl,fntxt,fncmdset,fnacs,fnchk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
+10060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
 10080   on error goto ERTN
 10100 ! r: setup
 22000   dim ss$*11,em$(3)*30,department$*128
@@ -72,32 +72,32 @@
 32580   fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then column$(1)='True'
 32590 ! /r
 32600 ! r: main screen (falls through to next section)
-34000   fntos(sn$="pruc1b")
+34000   fnTos(sn$="pruc1b")
 34020   respc=0: x=0
-34040   fnlbl(1,1,"Quarter Ending Date:",26,1)
-34060   fntxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
+34040   fnLbl(1,1,"Quarter Ending Date:",26,1)
+34060   fnTxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
 34080   if trim$(quarter_ending_date$)='' then resp$(respc+=1)=date$("Month DD, CCYY") else resp$(respc+=1)=quarter_ending_date$
-34100   fnlbl(2,1,"State Code:",26,1)
+34100   fnLbl(2,1,"State Code:",26,1)
 34120   fncomboa("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
 34140   resp$(respc+=1)=option1$(1)
-34180   fnlbl(3,1,"Quarter Code:",26,1)
+34180   fnLbl(3,1,"Quarter Code:",26,1)
 34200   fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
 34220   resp$(respc+=1)=quarter$
-34240   fnchk(5,40,"Round to Whole Dollars:",1)
+34240   fnChk(5,40,"Round to Whole Dollars:",1)
 34260   resp$(respc+=1)="False"
-34280   fnchk(6,40,"Show Total Column:",1)
+34280   fnChk(6,40,"Show Total Column:",1)
 34300   resp$(respc+=1)=column$(1)
-34320   fnchk(7,40,"Show Excess Wage Column:",1)
+34320   fnChk(7,40,"Show Excess Wage Column:",1)
 34340   resp$(respc+=1)=column$(2)
-34360   fnchk(8,40,"Show Taxable Column:",1)
+34360   fnChk(8,40,"Show Taxable Column:",1)
 34380   resp$(respc+=1)=column$(3)
-34400   fnchk(8,40,"Show State Tax Withheld:",1)
+34400   fnChk(8,40,"Show State Tax Withheld:",1)
 34420   resp$(respc+=1)=column$(4)
-34440   fnlbl(10,1,"Payroll Department:",26,1)
+34440   fnLbl(10,1,"Payroll Department:",26,1)
 34460   fncombof("DeptName",10,30,29,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),2,0, " ",0,0)
 34480   resp$(respc+=1)='[All]'
-34580   fncmdset(2)
-34600   fnacs(sn$,0,mat resp$,ck)
+34580   fnCmdSet(2)
+34600   fnAcs(sn$,0,mat resp$,ck)
 36000   if ck=5 then goto XIT
 36020   quarter_ending_date$=resp$(1) ! quarter ending date
 36040   stcode=val(resp$(2)(1:2)) ! state code
@@ -125,8 +125,8 @@
 38060   if file$(255)(1:3)="PRN" then redir=0 else redir=1
 38080 ! ______________________________________________________________________
 38100   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-38120   open #h_department:=3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
-38140   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+38120   open #h_department:=3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+38140   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 38160   gosub HDR
 42000 TOP: ! 
 42020   read #2,using "Form POS 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE

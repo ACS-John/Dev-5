@@ -19,7 +19,7 @@
 00180   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00190 L190: execute "Index "&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&' '&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&" 1 10 Replace DupKeys -n"
 00200   open #31: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #32: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outin,relative 
+00210   open #32: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative 
 00220 L220: read #31,using L230: z$,mat ra eof L320
 00230 L230: form pos 1,c 10,2*pd 3
 00240   close #33: ioerr L245

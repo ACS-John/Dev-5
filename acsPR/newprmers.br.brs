@@ -1,6 +1,6 @@
 12000 ! r: setup stuff
 12020   on error goto ERTN
-12040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fntos,fnfra,fnopt,fnlbl,fntxt,fncmbact,fncmdkey,fnacs,fnchk,fnDedNames
+12040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fncmbact,fnCmdKey,fnAcs,fnChk,fnDedNames
 12060   fntop(program$,cap$="Pension Report")
 12100 ! 
 12120   dim em$*30,tcp(32),tdc(10),cp(32),ttdc(10)
@@ -75,31 +75,31 @@
 32040   gosub HDR
 32200   continue  ! /r
 60000 SCREEN_PENSION1: ! r:
-60010   fntos(sn$="Pension-1")
+60010   fnTos(sn$="Pension-1")
 60020   rc=cf=0
-60040   fnfra(1,1,21,23,"Deductions Effecting Pension Wage","Mark any deduction that either needs to be added to gross wages or deducted from gross wages before calculating the Pension Wage",0)
+60040   fnFra(1,1,21,23,"Deductions Effecting Pension Wage","Mark any deduction that either needs to be added to gross wages or deducted from gross wages before calculating the Pension Wage",0)
 60060   cf+=1 : fratype=cf
 60080   for j=1 to 20
-60100     fnchk(j,3,fullname$(j),0,fratype)
+60100     fnChk(j,3,fullname$(j),0,fratype)
 60120     resp$(rc+=1)="False"
 60140   next j
-60160   fnfra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
+60160   fnFra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
 60180   cf+=1 : fratype=cf
 60200   for j=1 to 20
-60220     fnopt(j,3,fullname$(j),0,fratype)
+60220     fnOpt(j,3,fullname$(j),0,fratype)
 60240     resp$(rc+=1)="False"
 60260   next j
-60280   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
+60280   fnFra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
 60300   cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-60320   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-60340   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+60320   fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
+60340   fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 60360   resp$(rc+=1)=str$(beg_date)
-60380   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-60400   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+60380   fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
+60400   fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 60420   resp$(rc+=1)=str$(end_date)
-60440   fncmdkey("Next",1,1,0,"Prints the report")
-60460   fncmdkey("Cancel",5,0,1,"Returns to menu")
-60480   fnacs(sn$,0,mat resp$,ckey)
+60440   fnCmdKey("Next",1,1,0,"Prints the report")
+60460   fnCmdKey("Cancel",5,0,1,"Returns to menu")
+60480   fnAcs(sn$,0,mat resp$,ckey)
 60500   if ckey=5 then goto XIT
 60520   for j=1 to 20
 60540     if resp$(j)="True" then sel_ded(j)=1

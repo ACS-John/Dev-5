@@ -2,7 +2,7 @@
 00011 ! newJCRpt-MOD will be modified by S:\acsPR\newjcRptS1 to make used designed JCPrntXX
 00012 ! DO NOT RENUMBER !!!
 00015 ! ______________________________________________________________________
-00016   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fndat,fntos,fnlbl,fntxt,fnacs,fncmdset
+00016   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fndat,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
 00017   on error goto ERTN
 00020 ! ______________________________________________________________________
 00021   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),t(20),s(20),c(20)
@@ -18,13 +18,13 @@
 00055   if fnprocess=1 then goto L103
 00056 ! ______________________________________________________________________
 00059 MAIN_SCREEN: ! 
-00060   fntos(sn$="namlst1") !:
+00060   fnTos(sn$="namlst1") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
-00062   fnlbl(1,1,"Report Heading Date:",23,left)
-00063   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00062   fnLbl(1,1,"Report Heading Date:",23,left)
+00063   fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         resp$(resp+=1)=dh$
-00064   fncmdset(2)
-00065   fnacs(sn$,0,mat resp$,ck)
+00064   fnCmdSet(2)
+00065   fnAcs(sn$,0,mat resp$,ck)
 00066   if ck=5 then goto XIT
 00067   dat$=dh$=resp$(1) ! heading date
 00068   close #win: ioerr L69

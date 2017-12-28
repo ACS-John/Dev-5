@@ -1,6 +1,6 @@
 20000 ! Replace S:\acsTM\Systems
 20020 ! ______________________________________________________________________
-20040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster,fnindex_it
+20040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster,fnindex_it
 20060   on error goto ERTN
 20080 ! ______________________________________________________________________
 20100   dim cap$*128,lbl$(3)*38,tln(3),p$(3)*160,fltyp$(3),sln(3),mask(3)
@@ -14,7 +14,7 @@
 20260 ! ______________________________________________________________________
 20280 OPEN_FILE: ! 
 20300   open_file_count=0 ! this value is used in the close_file sub routine
-20320   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Systems.h420,Version=1,KFName="&env$('Q')&"\TMmstr\Systems-Idx.h420,Use,RecL=90,KPs=1,KLn=2,Shr",internal,outin,keyed 
+20320   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Systems.h420,Version=1,KFName="&env$('Q')&"\TMmstr\Systems-Idx.h420,Use,RecL=90,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 20340   return 
 20360 ! ______________________________________________________________________
 20380 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -53,7 +53,7 @@
 21040   return 
 21060 ! ______________________________________________________________________
 21080 HAMSTER: ! 
-21100   fnhamster("Systems",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp) ! ,mat c$)
+21100   fnHamster("Systems",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp) ! ,mat c$)
 21120   return 
 21140 XIT: fnxit
 21160 ! <Updateable Region: ERTN>

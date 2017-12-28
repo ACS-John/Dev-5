@@ -10,7 +10,7 @@
 00110 ! Service 7 is Merchandise
 00120 ! Service 8 is Other
 00130 ! ______________________________________________________________________
-00140   library 'S:\Core\Library': fnerror,fntop,fntos,fnacs,fncmdset,fnlbl,fndate_mmddyy_to_ccyymmdd,fnchk,fnxit,fnpause,fngethandle,fnub_index_customer,fnstatus
+00140   library 'S:\Core\Library': fnerror,fntop,fnTos,fnAcs,fnCmdSet,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnpause,fngethandle,fnub_index_customer,fnStatus
 00150   on error goto ERTN
 00160 ! ______________________________________________________________________
 00170   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
@@ -22,12 +22,12 @@
 00240   fn_ub_build_transactions
 00250   goto XIT
 26000 MENU1: ! r:
-26020   fntos(sn$="bldtrans")
-26040   fnlbl(1,1,"Convert Transactions")
-26060   fnchk(4,1,"Delete existing transaction file before conversion") : resp$(1)="True"
-26080   fnchk(5,1,"Remove Transactions with Bad Dates") : resp$(2)="False"
-26100   fncmdset(2)
-26120   fnacs(sn$,0,mat resp$,ck)
+26020   fnTos(sn$="bldtrans")
+26040   fnLbl(1,1,"Convert Transactions")
+26060   fnChk(4,1,"Delete existing transaction file before conversion") : resp$(1)="True"
+26080   fnChk(5,1,"Remove Transactions with Bad Dates") : resp$(2)="False"
+26100   fnCmdSet(2)
+26120   fnAcs(sn$,0,mat resp$,ck)
 26140   delubtransvb$=resp$(1) : removebaddates$=resp$(2)
 26160   if ck=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
 26180 ! 
@@ -35,25 +35,25 @@
 27000 XIT: chain "S:\acsUB\conversion\UBmstr-vb"
 27010 IGNORE: continue 
 28000   def library fnub_cnv_build_transactions
-28020     library 'S:\Core\Library': fnerror,fntop,fntos,fnacs,fncmdset,fnlbl,fndate_mmddyy_to_ccyymmdd,fnchk,fnxit,fnpause,fngethandle,fnub_index_customer,fnstatus,fnindex_it
+28020     library 'S:\Core\Library': fnerror,fntop,fnTos,fnAcs,fnCmdSet,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnpause,fngethandle,fnub_index_customer,fnStatus,fnindex_it
 28060     delubtransvb$="True"
 28080 ! removebaddates$="True" ! Gosub MENU1
 28100     fnub_cnv_build_transactions=fn_ub_build_transactions
 28120   fnend 
 40000   def fn_ub_build_transactions
-40020     fnstatus('Building Transactions...')
+40020     fnStatus('Building Transactions...')
 40040     if uprc$(delubtransvb$)=uprc$("True") and exists(env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')) then execute "Free "&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&" -n"
 40060 ! 
-40062     fnstatus('   * an error indexing ubindx5 on the next line is acceptable')
+40062     fnStatus('   * an error indexing ubindx5 on the next line is acceptable')
 40080     fnub_index_customer
 40100     open #master=3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 40120 ! 
 40140 ! open NEW files
-40160     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
+40160     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 40180 PHASE1: ! 
 46000 ! r: convert transactions from ubAccTrn
-46020     fnstatus('converting transactions from History Transactions (ubAccTrn.h'&env$('cno')&')')
-46040     open #h_ubacctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno'),internal,outin 
+46020     fnStatus('converting transactions from History Transactions (ubAccTrn.h'&env$('cno')&')')
+46040     open #h_ubacctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno'),internal,outIn 
 46060     if env$('client')='Franklinton' then 
 46080       acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
 46100     else if rln(h_ubacctrn)=64 or rln(h_ubacctrn)=72 then 
@@ -68,12 +68,12 @@
 46280     fn_transaction_conv(h_ubacctrn)
 46300 ! /r
 48000 ! r: convert transactions from ubTrans
-48020     fnstatus('converting transactions from Current Transactions (ubTrans.h'&env$('cno')&')')
+48020     fnStatus('converting transactions from Current Transactions (ubTrans.h'&env$('cno')&')')
 48040     open #h_ubtrans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTrans.h"&env$('cno'),internal,input 
 48060     fn_transaction_conv(h_ubtrans)
 48080 ! /r
 50000 ! r: convert transactions 13 month history
-50020     fnstatus('converting charge (only) transactions from 13 month history (deletes previously made matching entries)')
+50020     fnStatus('converting charge (only) transactions from 13 month history (deletes previously made matching entries)')
 50040     restore #master: 
 50060     do 
 50080       read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
@@ -140,8 +140,8 @@
 54040     close #transvb: 
 54060     fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&env$('cno'), env$('Q')&"\UBmstr\UBTrindx.h"&env$('cno'),"1 19")
 54080     if removebaddates$="True" then let fn_removebaddates
-54100     fnstatus('    Build Transaction - write_count='&str$(write_count))
-54120     fnstatus('Building Transactions complete.')
+54100     fnStatus('    Build Transaction - write_count='&str$(write_count))
+54120     fnStatus('Building Transactions complete.')
 54140   fnend  ! fn_ub_build_transactions
 56000   def fn_translate_transcode
 56020     if transcode=1 and postcode=4 then 
@@ -157,7 +157,7 @@
 56220     end if  ! end of translate transcode
 56240   fnend  ! fn_translate_transcode
 58000   def fn_removebaddates
-58020     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
+58020     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 58040     do 
 58060       read #transvb,using "Form Pos 11,N 8": tdate eof TRANSVB_EOF
 58080       tdate$=str$(tdate)

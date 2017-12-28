@@ -1,7 +1,7 @@
 10000 ! replace S:\Checkbook\Transaction
 10100 ! Checkbook transaction file editor
 10200 ! ______________________________________________________________________
-10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fncmdset,fntos,fnlbl,fnacs,fncombof,fnmsgbox,fnfra,fntxt,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fnaddpayee,fnagl$,fnqgl,fnrgl$,fnupdatebankbal,fnbankbal,fngethandle,fnaddreceipt,fnchain,fnRemoveDeletedRecords,fnIndex
+10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnTos,fnLbl,fnAcs,fncombof,fnmsgbox,fnFra,fnTxt,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fnChk,fnaddpayee,fnagl$,fnqgl,fnrgl$,fnupdatebankbal,fnbankbal,fngethandle,fnaddreceipt,fnchain,fnRemoveDeletedRecords,fnIndex
 10400   on error goto ERTN
 10500 ! r: dim
 10600   dim cap$*128,tr$(5)*35,de$*30,bn$*40,aa(2)
@@ -31,45 +31,45 @@
 13000   transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 13100   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative ioerr CHAIN_SELCNO: read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20: 
 13200   gosub OPEN_TRANSACTION_FILES
-13300   open #h_tralloc=fngethandle: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+13300   open #h_tralloc=fngethandle: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 13400 ! /r
 13500 SCREEN1: ! r:
 13600 ! select limitations for the menu1's record selection grid
-13700   fntos(sn$='Trans-Screen1')
+13700   fnTos(sn$='Trans-Screen1')
 13800   lc=0 : mylen=25 : mypos=mylen+2 : width=100
-13900   fnlbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
+13900   fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 14000   lc+=1
-14100   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
+14100   fnLbl(lc+=1,1,"Working Bank:",mylen,right)
 14200   fncombof('BankAll',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),add_all)
 14300   if wbc=0 then resp$(1)='[All]' else resp$(1)=str$(wbc)
-14400   fnlbl(lc+=1,1,"Working Transaction Type:",mylen,right)
+14400   fnLbl(lc+=1,1,"Working Transaction Type:",mylen,right)
 14500   fncombof('TransactionTypeall',lc,mypos,0,env$('Q')&"\CLmstr\TransactionType.dat",1,1,2,25,env$('Q')&"\CLmstr\TransactionType.idx",add_all)
 14600   if wtt=0 then resp$(2)='[All]' else resp$(2)=str$(wtt)
-14700   fnlbl(lc+=1,1,"Payee:",mylen,right)
+14700   fnLbl(lc+=1,1,"Payee:",mylen,right)
 14800   fncombof('Payeeall',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),add_all)
 14900   if wpayee$='' then resp$(3)='[All]' else resp$(3)=wpayee$
 15000   lc+=1
-15100   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
-15200   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15100   fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
+15200   fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15300   resp$(4)=str$(transstartdate)
-15400   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
-15500   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15400   fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
+15500   fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15600   resp$(5)=str$(transenddate)
-15700   fnlbl(lc+=1,1,"Statement Date Cleared:",mylen,right)
-15800   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15700   fnLbl(lc+=1,1,"Statement Date Cleared:",mylen,right)
+15800   fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15900   resp$(6)=''
 16000   lc+=1
-16100   fnlbl(lc+=1,1,"Posting Status:",mylen,right)
+16100   fnLbl(lc+=1,1,"Posting Status:",mylen,right)
 16200   fncombof('PostCodeall',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",add_all)
 16300   resp$(7)='[All]'
-16400   fnlbl(lc+=1,1,"Source:",mylen,right)
+16400   fnLbl(lc+=1,1,"Source:",mylen,right)
 16500   fncombof('SourceAll',lc,mypos,0,"S:\acsCL\SourceCode.dat",1,1,2,25,"S:\acsCL\SourceCode.idx",add_all)
 16600   resp$(8)='[All]'
-16700   fnlbl(lc+=1,1,"Check/Reference #:",mylen,right)
-16800   fntxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
+16700   fnLbl(lc+=1,1,"Check/Reference #:",mylen,right)
+16800   fnTxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
 16900   resp$(9)=''
-17000   fncmdset(2)
-17100   fnacs(sn$,0,mat resp$,ckey)
+17000   fnCmdSet(2)
+17100   fnAcs(sn$,0,mat resp$,ckey)
 17200   if ckey=5 or ckey=cancel then goto XIT
 17300   if resp$(1)='[All]' then 
 17400     wbc=0 : bn$='[All]'
@@ -98,53 +98,53 @@
 19700   editrec=rec(h_trmstr(1)): goto DO_EDIT
 19800   goto MENU1 ! /r
 20000 OPEN_TRANSACTION_FILES: ! r:
-20100   open #h_trmstr(1)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-20200   open #h_trmstr(2)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+20100   open #h_trmstr(1)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20200   open #h_trmstr(2)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20300   return  ! /r
 20500 MENU1: ! r:
-20600   fntos(sn$='Transaction-Menu1')
+20600   fnTos(sn$='Transaction-Menu1')
 20700   lc=0 : mylen=30 : mypos=mylen+2
 20800   fc=0 ! frame count
-20900   fnfra(1,1,10,100,'Transaction Grid Selection Criteria')
+20900   fnFra(1,1,10,100,'Transaction Grid Selection Criteria')
 21000   frame=fc+=1
 21100   lc=0
-21200   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-21300   fntxt(lc,mypos,3,0,center,'',disable,'',frame)
+21200   fnLbl(lc+=1,1,'Bank:',mylen,right,0,frame)
+21300   fnTxt(lc,mypos,3,0,center,'',disable,'',frame)
 21400   resp$(1)=str$(wbc)
-21500   fntxt(lc,mypos+5,30,0,center,'',disable,'',frame)
+21500   fnTxt(lc,mypos+5,30,0,center,'',disable,'',frame)
 21600   resp$(2)=bn$
-21700   fntxt(lc,mypos+38,15,0,right,pointtwo$,disable,'',frame)
+21700   fnTxt(lc,mypos+38,15,0,right,pointtwo$,disable,'',frame)
 21800   resp$(3)=str$(fnbankbal(wbc))
-21900   fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
-22000   fntxt(lc,mypos,1,0,left,'',disable,'',frame)
+21900   fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
+22000   fnTxt(lc,mypos,1,0,left,'',disable,'',frame)
 22100   resp$(4)=str$(wtt)
-22200   fntxt(lc,mypos+4,25,0,left,'',disable,'',frame)
+22200   fnTxt(lc,mypos+4,25,0,left,'',disable,'',frame)
 22300   resp$(5)=tcde$
 22400   lc+=1
-22500   fnlbl(lc+=1,1,'Transaction Starting Date:',mylen,right,0,frame)
-22600   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+22500   fnLbl(lc+=1,1,'Transaction Starting Date:',mylen,right,0,frame)
+22600   fnTxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 22700   resp$(6)=str$(transstartdate)
 22720 ! 
-22800   fnlbl(lc+=1,1,'Transaction Ending Date:',mylen,right,0,frame)
-22900   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+22800   fnLbl(lc+=1,1,'Transaction Ending Date:',mylen,right,0,frame)
+22900   fnTxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 23000   resp$(7)=str$(transenddate)
 23020 ! 
-23100   fnlbl(lc+=1,1,'Statement Cleared Date:',mylen,right,0,frame)
-23200   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+23100   fnLbl(lc+=1,1,'Statement Cleared Date:',mylen,right,0,frame)
+23200   fnTxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 23300   resp$(8)=str$(statementcleareddate)
 23320 ! 
 23400   lc+=1
 23420 ! 
-23500   fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
-23600   fntxt(lc,mypos,30,0,left,'',disable,'',frame)
+23500   fnLbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
+23600   fnTxt(lc,mypos,30,0,left,'',disable,'',frame)
 23700   resp$(9)=postingcode$
 23720 ! 
-23800   fnlbl(lc+=1,1,'Source:',mylen,right,0,frame)
-23900   fntxt(lc,mypos,30,0,left,'',disable,'',frame)
+23800   fnLbl(lc+=1,1,'Source:',mylen,right,0,frame)
+23900   fnTxt(lc,mypos,30,0,left,'',disable,'',frame)
 24000   resp$(10)=sourcecode$
-24100   fnbutton(1,90,'Change',1,'',1,10,frame)
+24100   fnButton(1,90,'Change',1,'',1,10,frame)
 24200 ! r: Transaction Allocation Grid
-24210   fnlbl(lc=13,1,'Transaction Grid',20)
+24210   fnLbl(lc=13,1,'Transaction Grid',20)
 24220   mat chdr$(11) : mat cmask$(11) : mat item$(11)
 24230   chdr$(1)='Rec'
 24240   chdr$(2)='Ck/Rf'
@@ -189,17 +189,17 @@
 27710   resp$(11)=''
 27720 !  r:
 27740 !  this uses the transactionstotal which is calculated when the flex grid is made
-27750   fnlbl(13,31,'Transactions Total:',mylen,right)
-27760   fntxt(13,mypos+30,15,0,right,pointtwo$,disable,'This is the total of only the transactions shown in the Transaction Grid above.  To update this total click the change button at the top and reselect your Transaction Grid Selection Criteria')
+27750   fnLbl(13,31,'Transactions Total:',mylen,right)
+27760   fnTxt(13,mypos+30,15,0,right,pointtwo$,disable,'This is the total of only the transactions shown in the Transaction Grid above.  To update this total click the change button at the top and reselect your Transaction Grid Selection Criteria')
 27780   resp$(12)=str$(transactionstotal)
 27790 ! /r
-28100   fncmdkey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
-28200   fncmdkey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
-28300   fncmdkey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
-28400   fncmdkey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
-28500   fncmdkey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
-28600   fncmdkey('E&xit',5,0,1,"Exits the checkbook system.")
-28700   fnacs(sn$,0,mat resp$,ckey)
+28100   fnCmdKey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
+28200   fnCmdKey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
+28300   fnCmdKey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
+28400   fnCmdKey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
+28500   fnCmdKey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
+28600   fnCmdKey('E&xit',5,0,1,"Exits the checkbook system.")
+28700   fnAcs(sn$,0,mat resp$,ckey)
 28800   if ckey=5 or ckey=cancel then goto XIT
 28900   if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 29000 ! pas=1
@@ -267,10 +267,10 @@
 35500 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 35600   if typeofentry=2 then 
 35700     open #payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\recIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-35800     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\ReceiptGLBkdIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+35800     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\ReceiptGLBkdIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 35900   else 
 36000     open #payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-36100     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+36100     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 36200   end if 
 36300 ! 
 36400   read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL
@@ -298,7 +298,7 @@
 38600 EO_READSTGL: ! 
 38700   if totalamt<>val(tr$(3)) then 
 38800     allocamt-=totalamt-val(tr$(3))
-38900     rewrite #h_tralloc,using 'Form Pos 24,Pd 5.2',rec=lastrec: allocamt norec ASSIGN_IF_EMPTY
+38900     rewrite #h_tralloc,using 'Form Pos 24,Pd 5.2',rec=lastrec: allocamt noRec ASSIGN_IF_EMPTY
 39000 ! plug any rounding differences into last allocation
 39100   end if 
 39200 ASSIGN_IF_EMPTY: if trim$(tr$(5))="" then tr$(5)=resp$(6)(9:30) ! assign a name if none entered
@@ -309,7 +309,7 @@
 39700   return  ! /r
 39900 DO_EDIT: ! r:
 40000   if editrec=0 then goto MENU1
-40100   read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! norec MENU1
+40100   read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec MENU1
 40200   tr$(3)=str$(tx3)
 40300   ti=3 : ad1=0
 40400 ! if posting_code>0 then gosub crgl1
@@ -444,16 +444,16 @@
 53500 VOID_EO_TRALLOC: ! 
 53600   return  ! /r
 53800 DELETE_TRANSACTION: ! r:
-53900   fntos(sn$='Trans-Delete')
+53900   fnTos(sn$='Trans-Delete')
 54000   lc=0 : width=50
-54100   fnlbl(lc+=1,1,'Delete Transaction Options',width,center)
+54100   fnLbl(lc+=1,1,'Delete Transaction Options',width,center)
 54200   ln+=1
-54300   fnchk(lc+=1,1,'Update Bank Balance')
+54300   fnChk(lc+=1,1,'Update Bank Balance')
 54400   resp$(1)="True"
-54500   fnchk(lc+=1,1,'Delete Transaction Allocations too')
+54500   fnChk(lc+=1,1,'Delete Transaction Allocations too')
 54600   resp$(2)='True'
-54700   fncmdset(2)
-54800   fnacs(sn$,0,mat resp$,ckey)
+54700   fnCmdSet(2)
+54800   fnAcs(sn$,0,mat resp$,ckey)
 54900   if ckey=5 or ckey=cancel then goto DELETE_TRANSACTION_DONE
 55000   updatebankbalance$=resp$(1)
 55100   deletetransactionallocation$=resp$(2)
@@ -499,37 +499,37 @@
 59300 L2670: return  ! /r
 59500 FM_ALLOCATION: ! r:
 59600   allocations_messed_with=true
-59700   fntos(sn$='Trans-TrAlloc')
+59700   fnTos(sn$='Trans-TrAlloc')
 59800   lc=0 : mylen=22 : mypos=mylen+2
-59900   fnlbl(lc+=1,1,'Bank:',mylen,right)
-60000   fntxt(lc,mypos,2,0,left,number$,disable)
+59900   fnLbl(lc+=1,1,'Bank:',mylen,right)
+60000   fnTxt(lc,mypos,2,0,left,number$,disable)
 60100   resp$(1)=str$(trabank_code)
-60200   fnlbl(lc+=1,1,'Transaction Type:',mylen,right)
-60300   fntxt(lc,mypos,1,0,left,number$,disable)
+60200   fnLbl(lc+=1,1,'Transaction Type:',mylen,right)
+60300   fnTxt(lc,mypos,1,0,left,number$,disable)
 60400   resp$(2)=str$(tratcde)
-60500   fnlbl(lc+=1,1,'Check/Reference:',mylen,right)
-60600   fntxt(lc,mypos,8,0,right,'',disable)
+60500   fnLbl(lc+=1,1,'Check/Reference:',mylen,right)
+60600   fnTxt(lc,mypos,8,0,right,'',disable)
 60700   resp$(3)=track$
-60800   fnlbl(lc+=1,1,'General Ledger Number:',mylen,right)
+60800   fnLbl(lc+=1,1,'General Ledger Number:',mylen,right)
 60900   fnqgl(lc,mypos)
 61000   resp$(4)=fnrgl$(tragl$)
-61100   fnlbl(lc+=1,1,'Amount:',mylen,right)
-61200   fntxt(lc,mypos,9,0,right,pointtwo$)
+61100   fnLbl(lc+=1,1,'Amount:',mylen,right)
+61200   fnTxt(lc,mypos,9,0,right,pointtwo$)
 61300   resp$(5)=str$(traamt)
-61400   fnlbl(lc+=1,1,'Description:',mylen,right)
-61500   fntxt(lc,mypos,30,0,left)
+61400   fnLbl(lc+=1,1,'Description:',mylen,right)
+61500   fnTxt(lc,mypos,30,0,left)
 61600   resp$(6)=tradesc$
-61700   fnlbl(lc+=1,1,'Reference:',mylen,right)
-61800   fntxt(lc,mypos,6,0,left,"",0)
+61700   fnLbl(lc+=1,1,'Reference:',mylen,right)
+61800   fnTxt(lc,mypos,6,0,left,"",0)
 61900   resp$(7)=traivd$ ! the last zero above was disabled, why kj
-62000   fnlbl(lc+=1,1,'Purchase Order:',mylen,right)
-62100   fntxt(lc,mypos,12,0,left)
+62000   fnLbl(lc+=1,1,'Purchase Order:',mylen,right)
+62100   fnTxt(lc,mypos,12,0,left)
 62200   resp$(8)=trapo$
-62300   fnlbl(lc+=1,1,'Posting Status:',mylen,right)
-62400   fntxt(lc,mypos,1,0,left,number$,disable)
+62300   fnLbl(lc+=1,1,'Posting Status:',mylen,right)
+62400   fnTxt(lc,mypos,1,0,left,number$,disable)
 62500   resp$(9)=str$(tragde)
-62600   fncmdset(4)
-62700   fnacs(sn$,0,mat resp$,ckey)
+62600   fnCmdSet(4)
+62700   fnAcs(sn$,0,mat resp$,ckey)
 62800   if ckey=5 then goto CANCEL_ALLOC
 62900   trabank_code=val(resp$(1))
 63000   tratcde=val(resp$(2))
@@ -567,7 +567,7 @@
 66300   return  ! /r
 66500 DEL_ALLOCATION: ! r: uses allocrec
 66600   allocations_messed_with=true
-66700   delete #h_tralloc,rec=allocrec: norec DEL_ALLOCATION_NOREC
+66700   delete #h_tralloc,rec=allocrec: noRec DEL_ALLOCATION_NOREC
 66800   return  ! /r
 67000 DEL_ALLOCATION_NOREC: ! r:
 67100   mat ml$(3)
@@ -577,56 +577,56 @@
 67500   fnmsgbox(mat ml$,ok$,cap$,48)
 67600   continue  ! /r
 67800 FM_SCREEN: ! r:
-67900   fntos(sn$='transfm2b'&str$(typeofentry))
+67900   fnTos(sn$='transfm2b'&str$(typeofentry))
 68000   lc=0 ! line count
 68100   fc=0 ! frame count
 68200   width=120 ! screen width
-68300   fnfra(1,1,10,width,'Transaction Data')
+68300   fnFra(1,1,10,width,'Transaction Data')
 68400   frame=fc+=1
 68500   lc=0 : mylen=23 : mypos=mylen+2
-68600   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
+68600   fnLbl(lc+=1,1,'Bank:',mylen,right,0,frame)
 68700   fncombof('Bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
 68800   resp$(1)=str$(bank_code)
-68900   fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
+68900   fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 69000 ! fncombof('TransactionType',lc,mypos,0,env$('Q')&'\CLmstr\TransactionType.dat',1,1,2,25,env$('Q')&'\CLmstr\TransactionType.idx',limit_to_list,0,'',frame)
 69100 ! resp$(2)=str$(tcde)
-69200   fntxt(lc,mypos,28,0,left,'',disable,'',frame)
+69200   fnTxt(lc,mypos,28,0,left,'',disable,'',frame)
 69300   resp$(2)=str$(tcde)
 69400   if wit=1 then 
-69500     fnlbl(lc+=1,1,'Check Number:',mylen,right,0,frame)
+69500     fnLbl(lc+=1,1,'Check Number:',mylen,right,0,frame)
 69600   else 
-69700     fnlbl(lc+=1,1,'Reference Number:',mylen,right,0,frame)
+69700     fnLbl(lc+=1,1,'Reference Number:',mylen,right,0,frame)
 69800   end if 
-69900   fntxt(lc,mypos,8,0,right,'',0,'',frame)
+69900   fnTxt(lc,mypos,8,0,right,'',0,'',frame)
 70000   resp$(3)=tr$(1)
-70100   fnlbl(lc+=1,1,'Transaction Date:',mylen,right,0,frame)
-70200   fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
+70100   fnLbl(lc+=1,1,'Transaction Date:',mylen,right,0,frame)
+70200   fnTxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
 70300   resp$(4)=tr$(2)
-70400   fnlbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
-70500   fntxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
+70400   fnLbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
+70500   fnTxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
 70600   resp$(5)=cnvrt$("N 10.2",val(tr$(3)))
 70700   if typeofentry=2 then 
-70800     fnlbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
+70800     fnLbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
 70900     fncombof('ReceiptType',lc,mypos,0,env$('Q')&"\CLmstr\RecMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\RecIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
 71000     resp$(6)=tr$(4)
 71100   else 
-71200     fnlbl(lc+=1,1,'Payee:',mylen,right,0,frame)
+71200     fnLbl(lc+=1,1,'Payee:',mylen,right,0,frame)
 71300     if scd=4 then 
-71400       fntxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
+71400       fnTxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
 71500       resp$(6)=tr$(4)
 71600     else 
 71700       fncombof('Payee',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
 71800       resp$(6)=tr$(4)
 71900     end if  ! scd=4   /   else 
 72000   end if  ! typeofentry=2   /   else 
-72100   fnlbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
-72200   fntxt(lc,mypos,35,0,left,'',0,'',frame)
+72100   fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
+72200   fnTxt(lc,mypos,35,0,left,'',0,'',frame)
 72300   resp$(7)=tr$(5)
-72400   fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
+72400   fnLbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
 72500   fncombof('PostCode',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",limit_to_list,0,'',frame)
 72600   resp$(8)=str$(posting_code)
-72700   fnlbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
-72800   fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
+72700   fnLbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
+72800   fnTxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
 72900   resp$(9)=str$(clr)
 73000 !  r: the transaction allocation grid
 73300   mat chdr$(7) : mat cmask$(7) : mat item$(7)
@@ -657,22 +657,22 @@
 75100   fnflexadd1(mat item$)
 75200   goto READ_TRALLOC_1
 75300 EO_FLEX2: ! /r
-75400   fnlbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$("N 15.2",allocationstotal)),40,right)
-76100   fnbutton(lc=15,(61),'&Add',8,'Add Allocation')
-76200   fnbutton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
-76300   fnbutton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
-76400   fnbutton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
+75400   fnLbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$("N 15.2",allocationstotal)),40,right)
+76100   fnButton(lc=15,(61),'&Add',8,'Add Allocation')
+76200   fnButton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
+76300   fnButton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
+76400   fnButton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
 76500   if typeofentry=2 then 
-76600     fnbutton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
+76600     fnButton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
 76700   else 
-76800     fnbutton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
+76800     fnButton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
 76900   end if 
 77000   lc+=1
-77100   fncmdkey('&Save',1,1,0,"Saves this record and any changes back to the files.")
-77200   fncmdkey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
-77300   fncmdkey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
-77400   fncmdkey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
-77500   fnacs(sn$,0,mat resp$,ckey)
+77100   fnCmdKey('&Save',1,1,0,"Saves this record and any changes back to the files.")
+77200   fnCmdKey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
+77300   fnCmdKey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
+77400   fnCmdKey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
+77500   fnAcs(sn$,0,mat resp$,ckey)
 78000   holdtr1$=tr$(1)
 78020   if ckey=3 then 
 78040     gosub DELETE_TRANSACTION

@@ -8,15 +8,15 @@
 00075   dim contact$*30,ph$*12,email$*60
 00080 L80: pr newpage
 00090   close #101: ioerr L100
-00100 L100: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT JOB COST AND CATEGORY FILES",display,outin 
+00100 L100: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT JOB COST AND CATEGORY FILES",display,outIn 
 00110   pr f "10,10,C 60": "COMPANY NUMBER (0 to stop):"
 00120   pr f "12,20,C 32,R,N": "PRESS F1 TO CONTINUE; F5 TO STOP"
 00130   input fields "10,56,Nz 5,U,N": cno
 00140   if cmdkey=5 then goto XIT
 00150 ! 
 00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",X -D -n"
-00170   open #2: "Name=X",internal,outin,relative 
-00180   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",RecL=300,Replace",internal,outin,relative 
+00170   open #2: "Name=X",internal,outIn,relative 
+00180   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",RecL=300,Replace",internal,outIn,relative 
 00190   for j=1 to lrec(2)
 00200     read #2,using L210,rec=j: jn$,n$,mat a$,mat b
 00210 L210: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 5.2,n 2
@@ -28,8 +28,8 @@
 00270   close #2: 
 00280   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -n"
 00290   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",X -D -n"
-00300   open #2: "Name=X",internal,outin,relative 
-00310   open #1: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",RecL=123,Replace",internal,outin,relative 
+00300   open #2: "Name=X",internal,outIn,relative 
+00310   open #1: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",RecL=123,Replace",internal,outIn,relative 
 00320   for j=1 to lrec(2)
 00330     read #2,using L340: cn$,k$,mat l,mat ta
 00340 L340: form pos 1,c 11,c 25,11*pd 5.2,2*pd 2,2*pd 3

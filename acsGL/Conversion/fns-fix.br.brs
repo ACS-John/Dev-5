@@ -22,7 +22,7 @@
 00220     close #2,free: 
 00230 L230: open #2: "Name=X,SIZE=0,RecL=83",internal,output ioerr L230
 00240     for j=1 to lrec(1)
-00250       read #1,using L260,rec=j: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp norec L280,conv L280
+00250       read #1,using L260,rec=j: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec L280,conv L280
 00260 L260: form pos 1,c 5,c 50,c 1,2*n 2,15*n 1,n 3,n 5
 00270       write #2,using L260: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp
 00280 L280: next j

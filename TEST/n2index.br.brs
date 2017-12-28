@@ -1,7 +1,7 @@
 00010 ! Replace Test\N2Index
 00020   dim b$*40,keyform$*80,blank$(10)
-00030   open #fin:=1: "Name=Test\Temp.dat,KFName=Test\Temp.idx,Replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
-00040   open #fish:=2: "Name=Test\Temp.dat,KFName=Test\TempFish.idx,Use,RecL=64,KPs=10,KLn=10,Shr",internal,outin,keyed 
+00030   open #fin:=1: "Name=Test\Temp.dat,KFName=Test\Temp.idx,Replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
+00040   open #fish:=2: "Name=Test\Temp.dat,KFName=Test\TempFish.idx,Use,RecL=64,KPs=10,KLn=10,Shr",internal,outIn,keyed 
 00050   keyform$='Form ' : key$=''
 00060   do while kps(fin,j+=1)>0
 00070     keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
@@ -21,7 +21,7 @@
 00190   release #fin: 
 00200   close #fin: 
 00210   close #fish: ioerr L220
-00220 L220: open #tmpfile:=12: "Name=TEST\Temp.dat,KFName=TEST\Temp.idx,Shr",internal,outin,keyed 
+00220 L220: open #tmpfile:=12: "Name=TEST\Temp.dat,KFName=TEST\Temp.idx,Shr",internal,outIn,keyed 
 00230   key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
 00231 ! kEY$=CNVRT$("PIC(##)",8)&CNVRT$("PIC(##)",9) !:

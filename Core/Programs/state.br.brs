@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\Programs\State
 20000 ! r: General Setup
-20020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster,fnopenfile
+20020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster,fnOpenFile
 20040   dim cap$*128
 20060   fntop(program$,cap$="State")
 20080   on error goto ERTN
@@ -30,8 +30,8 @@
 40260   mask(1)=2000 
 40280   mask(3)=30
 40300   hState=fnOpenFile(layoutName$,mat statedata$,mat statedatan,mat form$)
-40320   ! open #1: "Name=S:\Core\Data\State.dat,KFName=S:\Core\Data\State.Idx,Use,RecL=29,KPs=1,KLn=2,Shr",internal,outin,keyed 
-40340   fnhamster(layoutName$,mat lbl$,mat fln,hState,mat p$,mat fltyp$,mat sln,mat mask)
+40320   ! open #1: "Name=S:\Core\Data\State.dat,KFName=S:\Core\Data\State.Idx,Use,RecL=29,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+40340   fnHamster(layoutName$,mat lbl$,mat fln,hState,mat p$,mat fltyp$,mat sln,mat mask)
 40360 goto XIT ! /r
 70000 XIT: fnxit
 80000 ! <Updateable Region: ERTN>

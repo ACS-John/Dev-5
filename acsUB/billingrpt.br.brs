@@ -1,27 +1,27 @@
 00020 ! pr utility billing reports based on bills
 00030   on fkey 5 goto DONE
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fnTos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fntop,fnpause,fnChk,fncmbact,fnOpt
 00050   dim cap$*128,sendto$*80,z$*10,e2$*30,temp$(3)*26,resp$(10)*50,cnam$*40
 00060   fntop("S:\Utility Billing\Billing Journal",cap$="Secondary Water Usage Report")
 00065   fnLastBillingDate(d1)
 00070   fncno(cno,cnam$)
 00090 ! ______________________________________________________________________
-00100   fntos(sn$="billingrpt")
-00110   fnlbl(1,1,"First Account:",25,1)
+00100   fnTos(sn$="billingrpt")
+00110   fnLbl(1,1,"First Account:",25,1)
 00120   fncmbact(1,28) !:
         resp$(1)=selz$
-00130   fnlbl(2,1,"Last Account:",25,1)
+00130   fnLbl(2,1,"Last Account:",25,1)
 00140   fncmbact(2,28) !:
         resp$(2)=selz$
-00150   fnchk(3,29,"Print Grand Totals:",1)
+00150   fnChk(3,29,"Print Grand Totals:",1)
 00160   resp$(3)="True"
-00170   fnchk(4,29,"Print Details:",1)
+00170   fnChk(4,29,"Print Details:",1)
 00180   resp$(4)="True"
-00190   fnlbl(5,1,"Billing Date:",25,1)
-00200   fntxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) !:
+00190   fnLbl(5,1,"Billing Date:",25,1)
+00200   fnTxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) !:
         resp$(5)=str$(d1)
-00210   fncmdset(2)
-00220   fnacs(sn$,0,mat resp$,ckey)
+00210   fnCmdSet(2)
+00220   fnAcs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 00250   lan$=lpad$(rtrm$(resp$(2)(1:10)),10)

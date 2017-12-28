@@ -1,5 +1,5 @@
 00020   on error goto L820
-00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
+00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00040   fntop(program$,cap$="Merge")
 00050   fncno(cno,cnam$)
 00060   pr newpage
@@ -8,12 +8,12 @@
 00100   pr newpage
 00110   pr f "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
 00120   open #3: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno')&",NoShr",internal,input ioerr L820
-00130   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outin,relative ioerr L820
+00130   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outIn,relative ioerr L820
 00140 L140: form pos 54,pd 3
-00150   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L820
-00160   open #4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outin,relative ioerr L820
-00170   open #5: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L820
-00180   open #6: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L820
+00150   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L820
+00160   open #4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L820
+00170   open #5: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L820
+00180   open #6: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L820
 00190 L190: form pos 1,pd 3
 00200 L200: read #3,using L280: k$,e$,mat b,sc$,iv$,nta,des$ eof L750 ioerr L820
 00210   if b(7)=0 then goto L200
@@ -32,7 +32,7 @@
 00340   if ca(b(5))=0 then goto L440
 00350   p1=1+(b8-1)*6
 00360   p2=150+b8
-00370   read #4,using L380,rec=ca(b(5)): ta1,ta2,fb1 norec L580 ioerr L820
+00370   read #4,using L380,rec=ca(b(5)): ta1,ta2,fb1 noRec L580 ioerr L820
 00380 L380: form pos p1,2*pd 3,pos p2,n 1
 00390   if ta2>0 then rewrite #2,using L140,rec=ta2: lta
 00400   if b(7)=-2 then fb1=1

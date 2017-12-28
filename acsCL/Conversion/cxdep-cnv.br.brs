@@ -2,8 +2,8 @@
 00020   cno=3
 00030 ! 
 00040   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
-00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outin 
-00060   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outin 
+00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outIn 
+00060   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outIn 
 00070   fln=trmstr
 00080 L80: read #fln,using 'Form POS 4,C 2,C 6': ty$,d$ eof END1
 00090   if ty$="CA" then goto L140

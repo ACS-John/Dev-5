@@ -50,13 +50,13 @@
 00500   data "      5 TO MAKE CORRECTIONS"
 00510   data "      6 TO MERGE TRANSACTIONS"
 00520   read mat scr2$ ioerr L2650
-00530   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2650
-00540   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00550   open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno'),internal,outin,relative ioerr L570
+00530   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2650
+00540   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00550   open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno'),internal,outIn,relative ioerr L570
 00560   close #2,free: 
-00570 L570: open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno')&",RecL=86,REPLACE",internal,outin,relative ioerr L2650
+00570 L570: open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno')&",RecL=86,REPLACE",internal,outIn,relative ioerr L2650
 00580   open #7: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2650
-00590   open #8: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2650
+00590   open #8: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2650
 00600 L600: pr newpage
 00610   scrid$(1)="TIME MANAGEMENT INPUT SUB-MENU"
 00620   scrid$(2)="ENTER THE SELECTION NUMBER OF YOUR CHOICE"
@@ -202,7 +202,7 @@
 01920   expcode=1
 01930   if pe$="Y" then goto L2080
 01940   close #101: ioerr L1950
-01950 L1950: open #101: "SROW=20,SCOL=14,EROW=20,ECOL=60,BORDER=DR",display,outin 
+01950 L1950: open #101: "SROW=20,SCOL=14,EROW=20,ECOL=60,BORDER=DR",display,outIn 
 01960   pr #101: newpage
 01970   pr f "20,15,C 44": "Do you wish to record PHONE EXPENSE (Y/N):"
 01980 L1980: pe$="N" ! input fields "20,58,CU 1,UEA,N": pe$
@@ -288,10 +288,10 @@
 02780 XIT: pr newpage : fnxit
 02790   dim bk$(20)*30,nam$*25,a1$*30
 02800 SRCH1: s1=1 ! NAME SEARCH
-02810   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin  ! SAVE SCREEN
+02810   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn  ! SAVE SCREEN
 02820 L2820: pr #127: newpage
 02830   close #101: ioerr L2840
-02840 L2840: open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUSINESS NAME SEARCH",display,outin 
+02840 L2840: open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUSINESS NAME SEARCH",display,outIn 
 02850   prtall=0
 02860   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 02870   pr f "9,32,C 16,R,N": "Press F5 to stop"

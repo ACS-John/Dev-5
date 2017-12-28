@@ -19,10 +19,10 @@
 00170   read #1,using L180,rec=1: mat dedfed
 00180 L180: form pos 638,10*n 1
 00190   close #1: 
-00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),internal,outin,keyed 
-00210   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno'),internal,outin,keyed 
-00220   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outin,keyed 
-00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,outin,relative 
+00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),internal,outIn,keyed 
+00210   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno'),internal,outIn,keyed 
+00220   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,outIn,relative 
 00240   goto L430
 00250 ! ______________________________________________________________________
 00260 UPDT: ent$=lpad$(str$(heno),8)

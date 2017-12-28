@@ -1,6 +1,6 @@
 00020 ! 
 00030   on error goto L770
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole
 00050   fncno(cno,cnam$)
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6
 00070   dim z$*5,a$*30,sc(10),cnam$*40,cat$(30)*30,prg$*20
@@ -9,7 +9,7 @@
 00100   read #1,using L110,rec=1: mat cat$ ioerr L770
 00110 L110: form pos 1,30*c 30
 00120   close #1: 
-00130   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L770
+00130   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L770
 00140 L140: pr newpage
 00150   pr f "10,10,c 53,n": "ENTER 1 FOR A LISTING, ENTER 2 TO RESET STATUS CODES"
 00160   input fields "10,65,n 1,eu,n": lstres conv L220

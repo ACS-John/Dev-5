@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubAccTr
 00020 ! -- Accumulated Transaction Listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fntos, fnopenprn,fncloseprn, fndat,fncno,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fnpause
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnTos, fnopenprn,fncloseprn, fndat,fncno,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnpause
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cap$*128,resp$(3)*20,pe2$*30,e2$*30,cnam$*40,text$*80
@@ -16,25 +16,25 @@
 00130 ! ______________________________________________________________________
 00140 SCREEN1: ! 
 00150   sn$ = "ubAccTr" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=26 !:
         mypos=mylen+2
 00160   text$="Report Heading Date:" !:
-        fnlbl(1,1,text$,mylen,1)
-00170   fntxt(1,mypos,20) !:
+        fnLbl(1,1,text$,mylen,1)
+00170   fnTxt(1,mypos,20) !:
         resp$(1)=dat$
 00180   text$="Starting Date (mmddyy):" !:
-        fnlbl(2,1,text$,mylen,1)
-00190   fntxt(2,mypos,8,0,0,"1") !:
+        fnLbl(2,1,text$,mylen,1)
+00190   fnTxt(2,mypos,8,0,0,"1") !:
         resp$(2)=""
 00200   text$="Ending Date (mmddyy):" !:
-        fnlbl(3,1,text$,mylen,1)
-00210   fntxt(3,mypos,8,0,0,"1") !:
+        fnLbl(3,1,text$,mylen,1)
+00210   fnTxt(3,mypos,8,0,0,"1") !:
         resp$(3)=""
 00220   text$="You may leave Starting Date and/or Ending Date blank to indicate all." !:
-        fnlbl(5,1,text$,75)
-00230   fncmdset(3)
-00240   fnacs(sn$,0,mat resp$,ck)
+        fnLbl(5,1,text$,75)
+00230   fnCmdSet(3)
+00240   fnAcs(sn$,0,mat resp$,ck)
 00250   if ck=5 then goto XIT
 00260   dat$=resp$(1) !:
         d(1)=val(resp$(2)) !:
@@ -42,7 +42,7 @@
 00270   if d(1)<>0 then d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00280   if d(2)<>0 then d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
 00290   fndat(d$(1),2)
-00300   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00300   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00310   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00320   on fkey 5 goto DONE
 00330   fnopenprn

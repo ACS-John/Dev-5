@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\fixytdqtd
 00020 ! -- PAYROLL REGISTER
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,empd(22)
@@ -12,38 +12,38 @@
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
 00130 ! ______________________________________________________________________
-00140   fntos(sn$="FixYTDQTD") !:
+00140   fnTos(sn$="FixYTDQTD") !:
         rc=cf=0: mylen=28: mypos=mylen+3: frameno=1
-00150   fnfra(1,1,3,45,"Date Range to Fix Quarter To Date Earnings","Enter the date range for the payrolls to be included in this quarter. Leave blank to skip quarter.")
-00160   fnlbl(1,1,"Beginning Date of Quarter:",mylen,1,0,frameno)
-00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
+00150   fnFra(1,1,3,45,"Date Range to Fix Quarter To Date Earnings","Enter the date range for the payrolls to be included in this quarter. Leave blank to skip quarter.")
+00160   fnLbl(1,1,"Beginning Date of Quarter:",mylen,1,0,frameno)
+00170   fnTxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
         resp$(rc+=1)=str$(beg_date)
-00180   fnlbl(2,1,"Ending Date of Quarter:",mylen,1,0,frameno)
-00190   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this quarter. Blank if not fixing quarter.",frameno) !:
+00180   fnLbl(2,1,"Ending Date of Quarter:",mylen,1,0,frameno)
+00190   fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this quarter. Blank if not fixing quarter.",frameno) !:
         resp$(rc+=1)=str$(end_date)
 00200   frameno=2
-00210   fnfra(6,1,3,45,"Date Range to Fix YTD Earnings.","Enter the date range for the payrolls to be included in year to date earnings. Leave blank to skip fixing the year to date earnings.")
-00220   fnlbl(1,1,"Beginning Date of the Year:",mylen,1,0,frameno)
-00230   fntxt(1,mypos,12,0,1,"3",0,"Enter the first day of the year. Leave blank in only fixing the quarter.",frameno) !:
+00210   fnFra(6,1,3,45,"Date Range to Fix YTD Earnings.","Enter the date range for the payrolls to be included in year to date earnings. Leave blank to skip fixing the year to date earnings.")
+00220   fnLbl(1,1,"Beginning Date of the Year:",mylen,1,0,frameno)
+00230   fnTxt(1,mypos,12,0,1,"3",0,"Enter the first day of the year. Leave blank in only fixing the quarter.",frameno) !:
         resp$(rc+=1)=str$(begytd_date)
-00240   fnlbl(2,1,"Ending Date of Year:",mylen,1,0,frameno)
-00250   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in then annual figures. Blank if not fixing year to date.",frameno) !:
+00240   fnLbl(2,1,"Ending Date of Year:",mylen,1,0,frameno)
+00250   fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in then annual figures. Blank if not fixing year to date.",frameno) !:
         resp$(rc+=1)=str$(endytd_date)
-00260   fncmdkey("Next",1,1,0,"Fix earnings records.")
-00270   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-00280   fnacs(sn$,0,mat resp$,ckey)
+00260   fnCmdKey("Next",1,1,0,"Fix earnings records.")
+00270   fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
+00280   fnAcs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300 ! 
 00310   beg_date=val(resp$(1)) !:
         end_date=val(resp$(2))
 00320   begytd_date=val(resp$(3)) !:
         endytd_date=val(resp$(4))
-00330   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
+00330   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00340   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 00350   nametab=66-int(len(rtrm$(cnam$))/2)
-00360   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00370   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
+00360   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00370   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
 00380 L380: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof XIT
 00390   fixqtr=fixytd=0
 00400   if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440
@@ -56,7 +56,7 @@
 00470   next j
 00480 L480: if adr(1)=0 then goto REWRITE_MASTER
 00490   ca=adr(1)
-00500 L500: read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca norec REWRITE_MASTER
+00500 L500: read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca noRec REWRITE_MASTER
 00510   if fixqtr=0 or (fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date) then goto L560
 00520   x=3
 00530   for j=2 to 36 step 2

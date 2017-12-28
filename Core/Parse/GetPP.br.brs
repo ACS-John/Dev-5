@@ -3,7 +3,7 @@
 20040 ! rev 1.01 - changes to a shorter file name from S:\Core\getpathprog.br
 20040 ! rev 1.02 - clean up code
 20060 ! to S:\Core\getpp.br
-20080 def library fngetpp(&input$,&path$,&prog$,&ext$)
+20080 def library fnGetPp(&input$,&path$,&prog$,&ext$)
 20100   library 'S:\Core\Library': fnerror
 20120   on error goto ERTN
 20140   ! ______________________________________________________________________

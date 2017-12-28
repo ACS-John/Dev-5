@@ -13,7 +13,7 @@
 00150   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
 00170 L170: gosub HDR
 00180   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00190   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&", KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
+00190   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&", KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
 00200 READ_EMPLOYEE: ! 
 00210 L210: read #1,using L220: eno,em$,em4,mat em eof DONE
 00220 L220: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173,2*pd 3

@@ -59,7 +59,7 @@
        if ParentWindow then parentWindow$=",parent="&Str$(ParentWindow)
 
        if DisplayOnly then
-          open #(HiddenWindow:=fnGetFileNumber): "srow=3,scol=3,rows=1,cols=1"&ParentWindow$,display,outin
+          open #(HiddenWindow:=fnGetFileNumber): "srow=3,scol=3,rows=1,cols=1"&ParentWindow$,display,outIn
        end if
 
        ! Preinspect screen record the attributes and the color settings, compile into Attributes list.
@@ -382,7 +382,7 @@
 
  !  #AutoNumber# 90000,10
     def fnDisplayLoadMessage(;___,Window)
-       open #(Window:=Fngetfilenumber): "SROW=12,SCOL=15,ROWS=3,COLS=50,Border=S",display,outin
+       open #(Window:=Fngetfilenumber): "SROW=12,SCOL=15,ROWS=3,COLS=50,Border=S",display,outIn
        pr #Window, fields "1,1,CC 50" : "Now Reading Record - Requesting Write Permission"
        pr #Window, fields "2,1,CC 50" : "If you see this message for more then a"
        pr #Window, fields "3,1,CC 50" : "few seconds the record is probably in use."
@@ -463,7 +463,7 @@
  OPEN: ! ***** Function To Call Library Openfile And Proc Subs
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*32
-          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
+          fnopen=fnOpenFile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
           if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
  !

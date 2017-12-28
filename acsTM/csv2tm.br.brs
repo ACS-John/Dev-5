@@ -1,5 +1,5 @@
 00400 ! r: setup
-10000   library 'S:\Core\Library': fnacs,fncmdset,fnlbl,fntxt,fnerror,fntos,fncno,fnxit,fntop,fnpause,fngethandle,fnopenprn,fncloseprn
+10000   library 'S:\Core\Library': fnAcs,fnCmdSet,fnLbl,fnTxt,fnerror,fnTos,fncno,fnxit,fntop,fnpause,fngethandle,fnopenprn,fncloseprn
 10200   on error goto ERTN
 10600   dim cap$*128
 10800   dim line$*512,item$(1)*512
@@ -24,7 +24,7 @@
 14400   fn_ask_dates(mat label$,mat filter_date)
 14600   if fkey=93 or fkey=99 then goto XIT
 14800   open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input 
-15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&env$('cno')&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&env$('cno')&",Replace,KPs=1,KLn=5",internal,outin,keyed 
+15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&env$('cno')&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&env$('cno')&",Replace,KPs=1,KLn=5",internal,outIn,keyed 
 15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&",Shr",internal,input,keyed 
 15400 FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 15600   fnopenprn
@@ -210,15 +210,15 @@
 46200   goto ERTN
 46400 ! /region
 46600   def fn_ask_dates(mat label$,mat filter_date)
-46800     fntos(sn$="ask_"&str$(udim(mat label$))&'_dates')
+46800     fnTos(sn$="ask_"&str$(udim(mat label$))&'_dates')
 47000     respc=0
 47200     for ad_line=1 to udim(mat label$)
-47400       fnlbl(ad_line+1,1,label$(ad_line),25,1)
-47600       fntxt(ad_line+1,27,8,0,1,"3")
+47400       fnLbl(ad_line+1,1,label$(ad_line),25,1)
+47600       fnTxt(ad_line+1,27,8,0,1,"3")
 47800       resp$(respc+=1)=str$(filter_date(ad_line))
 48000     next ad_line
-48200     fncmdset(3)
-48400     fnacs(sn$,0,mat resp$,ckey)
+48200     fnCmdSet(3)
+48400     fnAcs(sn$,0,mat resp$,ckey)
 48600     if ckey=5 then let fkey(99)
 48800     for ad_line=1 to udim(mat label$)
 49000       filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))

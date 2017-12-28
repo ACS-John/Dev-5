@@ -1,3 +1,14 @@
+02000 ! r: functions that do not redirect!
+02020 def library fnKeyExists(hFile,keyToTest$*128)
+02040   read #hFile,key=rpad$(keyToTest$,KLN(hFile)),release: nokey MaeNo
+02060   maeReturn=1
+02080   goto MaeFinis
+02100   MaeNo: !
+02120   maeReturn=0
+02140   MaeFinis: !
+02160   fn_keyExists=maeReturn
+02180 fnend
+02200 ! /r
 20000 ! r: S:\Core\Start.br
 20052   def library fnSetQ(setQ$*256)
 20054     library 'S:\Core\Start.br': fnSetQ
@@ -35,10 +46,10 @@
 32018 fnend
 32100 ! /r
 33000 ! r: FileIO
-33010 def library fnopenfile(filename$*64,mat f$,mat fn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
-33011 ! fnopenfile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
-33013   library 'S:\Core\FileIO\fileio.br': fnopenfile
-33014   fnopenfile=fnopenfile(filename$,mat f$,mat fn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
+33010 def library fnOpenFile(filename$*64,mat f$,mat fn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+33011 ! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+33013   library 'S:\Core\FileIO\fileio.br': fnOpenFile
+33014   fnOpenFile=fnOpenFile(filename$,mat f$,mat fn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
 33016 fnend
 33020 def library fnMakeSurePathExists(Filename$*255; Path$*255) ! mkdir funciton from fileio.brs - except fileio version is not a library 2/7/2017
 33022   library 'S:\Core\fnMakeSurePathExists.br':fnMakeSurePathExists
@@ -124,6 +135,10 @@
 41160 fnend
 41180 ! /r
 42000 ! r: Client
+42021   def library fnSetClient(clientSelected$*128)
+42022     library 'S:\Core\Client.br': fnSetClient
+42023     fnSetClient=fnSetClient(clientSelected$)
+42024   fnend
 42031   def library fnClientSelect
 42032     library 'S:\Core\Client.br': fnClientSelect
 42033     fnClientSelect=fnClientSelect
@@ -312,17 +327,17 @@
 46120     library 'S:\Core\Programs\Update.br': fnAcsInstallationPath$
 46140     fnAcsInstallationPath$=fnAcsInstallationPath$( longFileName)
 46160   fnend
-46180   def library fnstatus(text$*512)
-46200     library 'S:\Core\Programs\Update.br': fnstatus
-46220     fnstatus=fnstatus(text$)
+46180   def library fnStatus(text$*512)
+46200     library 'S:\Core\Programs\Update.br': fnStatus
+46220     fnStatus=fnStatus(text$)
 46240   fnend
-46260   def library fnstatus_pause
-46280     library 'S:\Core\Programs\Update.br': fnstatus_pause
-46300     fnstatus_pause=fnstatus_pause
+46260   def library fnStatusPause
+46280     library 'S:\Core\Programs\Update.br': fnStatusPause
+46300     fnStatusPause=fnStatusPause
 46320   fnend
-46340   def library fnstatus_close
-46360     library 'S:\Core\Programs\Update.br': fnstatus_close
-46380     fnstatus_close=fnstatus_close
+46340   def library fnStatusClose
+46360     library 'S:\Core\Programs\Update.br': fnStatusClose
+46380     fnStatusClose=fnStatusClose
 46400   fnend
 46420   def library fnqgl(myline,mypos; con,x,use_or_replace,qgllength)
 46440     library 'S:\Core\ACS_Component.br': fnqgl
@@ -546,9 +561,9 @@
 52100     library 'S:\Core\Parse\csz.br': fncsz
 52110     fncsz=fncsz(csz$,city$,state$,zip$)
 52120   fnend
-52130   def library fngetpp(&input$,&path$,&prog$,&ext$)
-52140     library 'S:\Core\Parse\GetPP.br': fngetpp
-52150     fngetpp=fngetpp(input$,path$,prog$,ext$)
+52130   def library fnGetPp(&input$,&path$,&prog$,&ext$)
+52140     library 'S:\Core\Parse\GetPP.br': fnGetPp
+52150     fnGetPp=fnGetPp(input$,path$,prog$,ext$)
 52160   fnend
 52170 ! /r
 54000 ! r: label   S:\Core\label\
@@ -670,37 +685,37 @@
 60004     library 'S:\Core\HamsterFio.br': fnHamsterFio
 60006     fnHamsterFio=fnHamsterFio(fileid$)
 60008   fnend
-60010   def library fnhamster(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
-60020     library 'S:\Core\Hamster.br': fnhamster
-60030     fnhamster=fnhamster(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
+60010   def library fnHamster(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
+60020     library 'S:\Core\Hamster.br': fnHamster
+60030     fnHamster=fnHamster(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
 60040   fnend
-60050   def library fnhamster_add_combof(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
-60060     library 'S:\Core\Hamster_Setup.br': fnhamster_add_combof
-60070     fnhamster_add_combof=fnhamster_add_combof(hac_screen_item,hac_data_file$,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$,hac_limit_to_list)
+60050   def library fnH2AddComboF(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
+60060     library 'S:\Core\Hamster_Setup.br': fnH2AddComboF
+60070     fnH2AddComboF=fnH2AddComboF(hac_screen_item,hac_data_file$,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$,hac_limit_to_list)
 60080   fnend
-60090   def library fnhamster_add_comboa(hac_screen_item,mat hac_option$)
-60100     library 'S:\Core\Hamster_Setup.br': fnhamster_add_comboa
-60110     fnhamster_add_comboa=fnhamster_add_comboa(hac_screen_item,mat hac_option$)
+60090   def library fnH2AddComboA(hac_screen_item,mat hac_option$)
+60100     library 'S:\Core\Hamster_Setup.br': fnH2AddComboA
+60110     fnH2AddComboA=fnH2AddComboA(hac_screen_item,mat hac_option$)
 60120   fnend
-60130   def library fnhamster_2(a$*20; h_file)
-60140     library 'S:\Core\Hamster_Setup.br': fnhamster_2
-60150     fnhamster_2=fnhamster_2(a$, h_file)
+60130   def library fnHamster2(a$*20; h_file)
+60140     library 'S:\Core\Hamster_Setup.br': fnHamster2
+60150     fnHamster2=fnHamster2(a$, h_file)
 60160   fnend
 60170   def library fnhamster_print(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
 60180     library 'S:\Core\Hamster_print.br': fnhamster_print
 60190     fnhamster_print=fnhamster_print(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
 60200   fnend
-60210   def library fnhamster_field_reset
-60220     library 'S:\Core\Hamster_Setup.br': fnhamster_field_reset
-60230     fnhamster_field_reset=fnhamster_field_reset
+60210   def library fnH2Init
+60220     library 'S:\Core\Hamster_Setup.br': fnH2Init
+60230     fnH2Init=fnH2Init
 60240   fnend
-60250   def library fnhamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
-60260     library 'S:\Core\Hamster_Setup.br': fnhamster_field_add
-60270     fnhamster_field_add=fnhamster_field_add(label$,textbox_len, field_type$,storage_length,ar_mask,storage_position)
+60250   def library fnH2AddText(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
+60260     library 'S:\Core\Hamster_Setup.br': fnH2AddText
+60270     fnH2AddText=fnH2AddText(label$,textbox_len, field_type$,storage_length,ar_mask,storage_position)
 60280   fnend
-60290   def library fnhamster_add_combo(mat c$)
-60300     library 'S:\Core\Hamster_Setup.br': fnhamster_add_combo
-60310     fnhamster_add_combo=fnhamster_add_combo(mat c$)
+60290   def library fnHamster2AddCombo(mat c$)
+60300     library 'S:\Core\Hamster_Setup.br': fnHamster2AddCombo
+60310     fnHamster2AddCombo=fnHamster2AddCombo(mat c$)
 60320   fnend
 60330 ! /r
 62000 ! r: Screen Ace
@@ -712,33 +727,33 @@
 62044     library 'S:\Core\ACS_Component.br': fncompany_name
 62046     fncompany_name=fncompany_name(window,win_cols)
 62048   fnend
-62050   def library fncmdkey(caption$*200,returnkey; default,cancel,tt$*200)
-62060     library 'S:\Core\ACS_Component.br': fncmdkey
-62070     fncmdkey=fncmdkey(caption$,returnkey, default,cancel,tt$)
+62050   def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
+62060     library 'S:\Core\ACS_Component.br': fnCmdKey
+62070     fnCmdKey=fnCmdKey(caption$,returnkey, default,cancel,tt$)
 62080   fnend
 62090   def library fnflexadd1(mat item$)
 62100     library 'S:\Core\ACS_Component.br': fnflexadd1
 62110     fnflexadd1=fnflexadd1(mat item$)
 62120   fnend
-62130   def library fntos(sn$*100)
-62140     library 'S:\Core\ACS_Component.br': fntos
-62150     fntos=fntos(sn$)
+62130   def library fnTos(sn$*100)
+62140     library 'S:\Core\ACS_Component.br': fnTos
+62150     fnTos=fnTos(sn$)
 62160   fnend
-62170   def library fnlbl(myline,mypos,t$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
-62180     library 'S:\Core\ACS_Component.br': fnlbl
-62190     fnlbl=fnlbl(myline,mypos,t$,mylen,myalign,font_mod,container,tabcon,lbl_tooltip$)
+62170   def library fnLbl(myline,mypos,t$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
+62180     library 'S:\Core\ACS_Component.br': fnLbl
+62190     fnLbl=fnLbl(myline,mypos,t$,mylen,myalign,font_mod,container,tabcon,lbl_tooltip$)
 62200   fnend
-62210   def library fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
-62220     library 'S:\Core\ACS_Component.br': fntxt
-62230     fntxt=fntxt(lyne,ps,width, maxlen,ali,mask$,disable,tooltip$,contain,tabcon,addtomask$)
+62210   def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+62220     library 'S:\Core\ACS_Component.br': fnTxt
+62230     fnTxt=fnTxt(lyne,ps,width, maxlen,ali,mask$,disable,tooltip$,contain,tabcon,addtomask$)
 62240   fnend
-62250   def library fnopt(lyne,ps,txt$*196; align,contain,tabcon)
-62260     library 'S:\Core\ACS_Component.br': fnopt
-62270     fnopt=fnopt(lyne,ps,txt$, align,contain,tabcon)
+62250   def library fnOpt(lyne,ps,txt$*196; align,contain,tabcon)
+62260     library 'S:\Core\ACS_Component.br': fnOpt
+62270     fnOpt=fnOpt(lyne,ps,txt$, align,contain,tabcon)
 62280   fnend
-62290   def library fnchk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
-62300     library 'S:\Core\ACS_Component.br': fnchk
-62310     fnchk=fnchk(lyne,ps,txt$, align,contain,tabcon,chk_disable)
+62290   def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
+62300     library 'S:\Core\ACS_Component.br': fnChk
+62310     fnChk=fnChk(lyne,ps,txt$, align,contain,tabcon,chk_disable)
 62320   fnend
 62330   def library fnflexinit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,con,tabcon)
 62340     library 'S:\Core\ACS_Component.br': fnflexinit1
@@ -752,9 +767,9 @@
 62420     library 'S:\Core\ACS_Component.br': fncombof
 62430     fncombof=fncombof(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,urep,ttt$,contain,tabcon)
 62440   fnend
-62450   def library fnbutton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
-62460     library 'S:\Core\ACS_Component.br': fnbutton
-62470     fnbutton=fnbutton(lyne,ps,txt$,comkey, tt$,height,width,container,tabcon,default,cancel)
+62450   def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
+62460     library 'S:\Core\ACS_Component.br': fnButton
+62470     fnButton=fnButton(lyne,ps,txt$,comkey, tt$,height,width,container,tabcon,default,cancel)
 62480   fnend
 62490   def library fnbutton_or_disabled(enable,lyne,ps,txt$*200,comkey; tt$*200,width,container,tabcon,default,cancel)
 62500     library 'S:\Core\fnbutton_or_disabled.br': fnbutton_or_disabled
@@ -772,16 +787,16 @@
 62620     library 'S:\Core\ACS_Component.br': fnclear_menu
 62630     fnclear_menu=fnclear_menu
 62640   fnend
-62650   def library fnacs(sn$*100,win,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
-62660     library 'S:\Core\ACS_Component.br': fnacs
-62670     fnacs=fnacs(sn$,win,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
+62650   def library fnAcs(sn$*100,win,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+62660     library 'S:\Core\ACS_Component.br': fnAcs
+62670     fnAcs=fnAcs(sn$,win,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
 62680   def library fnpic(lyne,ps,hi,wd,picture$*300; x,y)
 62690     library 'S:\Core\ACS_Component.br': fnpic
 62700     fnpic=fnpic(lyne,ps,hi,wd,picture$, x,y)
 62710   fnend
-62720   def library fnfra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
-62730     library 'S:\Core\ACS_Component.br': fnfra
-62740     fnfra=fnfra(lyne,ps,hi,wd, cap$,tooltip$,contain,tabcon)
+62720   def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
+62730     library 'S:\Core\ACS_Component.br': fnFra
+62740     fnFra=fnFra(lyne,ps,hi,wd, cap$,tooltip$,contain,tabcon)
 62750   fnend
 62760   def library fntab(lyne,mypos,height,width,mat cap$)
 62770     library 'S:\Core\ACS_Component.br': fntab
@@ -791,9 +806,9 @@
 62810     library 'S:\Core\ACS_Component.br': fnmultiline
 62820     fnmultiline=fnmultiline(lyne,ps,height,width, contain,tabcon,tt$)
 62830   fnend
-62840   def library fncmdset(a)
-62850     library 'S:\Core\ACS_Component.br': fncmdset
-62860     fncmdset=fncmdset(a)
+62840   def library fnCmdSet(a)
+62850     library 'S:\Core\ACS_Component.br': fnCmdSet
+62860     fnCmdSet=fnCmdSet(a)
 62870   fnend
 62880   def library fnmsgbox(mat message$; &response$,cap$*128,mtype)
 62890     library 'S:\Core\Ace\MsgBox.br': fnmsgbox
@@ -945,14 +960,16 @@
 70022     library 'S:\Utility Billing\Customer.br': fnDepositChangeLog
 70023     fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)
 70024   fnend
-70031   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
-70032     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressLocationID
-70033     fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
-70034   fnend
+70025   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
+70026     ! library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressLocationID
+70027     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressLocationID
+70028     fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
+70029   fnend
 70041   def library fnMeterAddressName$*30(locationID; leaveFileOpen)
-70042     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressName$
-70043     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
-70044   fnend
+70042     ! library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressName$
+70043     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressName$
+70044     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
+70045   fnend
 70051   def library fnAccountFromLocationId$*10(locationID; leaveFileOpen)
 70052     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnAccountFromLocationId$
 70053     fnAccountFromLocationId$=fnAccountFromLocationId$(locationID, leaveFileOpen)
@@ -965,6 +982,10 @@
 70072     library 'S:\Utility Billing\Work Order Add.br': fnWorkOrderAdd
 70073     fnWorkOrderAdd=fnWorkOrderAdd(z$)
 70074   fnend
+70081   def library fnInitialializeMeterLocation
+70082     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnInitialializeMeterLocation
+70083     fnInitialializeMeterLocation=fnInitialializeMeterLocation
+70084   fnend
 70090   def library fnWorkOrderList(; z$*10)
 70100     library 'S:\Utility Billing\Work Order List.br': fnWorkOrderList
 70110     fnWorkOrderList=fnWorkOrderList(z$)
@@ -985,10 +1006,14 @@
 70220     library 'S:\Utility Billing\Customer.br': fnapply_default_rates
 70230     fnapply_default_rates=fnapply_default_rates(mat extra, mat a)
 70240   fnend
-70250   def library fnget_services(mat servicename$; mat servicecode$, mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
-70260     library 'S:\acsUB\TypeOfService.br': fnget_services
-70270     fnget_services=fnget_services(mat servicename$, mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
-70280   fnend
+70252   def library fnget_services(mat serviceName$; mat serviceCode$, mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+70254     library 'S:\Utility Billing\Type of Service.br': fnget_services
+70256     fnget_services=fnget_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+70258   fnend
+70262   def library fnGetServiceCodesMetered(mat serviceCodeMetered$)
+70264     library 'S:\Utility Billing\Type of Service.br': fnGetServiceCodesMetered
+70266     fnGetServiceCodesMetered=fnGetServiceCodesMetered(mat serviceCodeMetered$)
+70268   fnend
 70290   def library fncmbact(lyne,mypos; addall,container,indexfile$*256)
 70300     library 'S:\acsUB\CmbAct.br': fncmbact
 70310     fncmbact=fncmbact(lyne,mypos, addall,container,indexfile$)
@@ -1066,10 +1091,14 @@
 74120       library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnHandHeldList
 74140       fnHandHeldList=fnHandHeldList(mat device$, mat deviceOption$)
 74160     fnend
-74180     def library fnretrieve_hand_held_file
-74200       library 'S:\Utility Billing\Hand Held\Import from Hand Held to Book.br': fnretrieve_hand_held_file
-74220       fnretrieve_hand_held_file=fnretrieve_hand_held_file
-74240     fnend
+74172     def library fnRetrieveHandHeldFile
+74174       library 'S:\Utility Billing\Hand Held\Import from Hand Held to Book.br': fnRetrieveHandHeldFile
+74176      fnRetrieveHandHeldFile=fnRetrieveHandHeldFile
+74178     fnend
+74182     def library fnMeterInfo$*20(mi_field$,z$*10,serviceCode$; closeHandle)
+74184       library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnMeterInfo$
+74186      fnMeterInfo$=fnMeterInfo$(mi_field$,z$,serviceCode$, closeHandle)
+74188     fnend
 74260   ! /r
 74280 ! /r
 82000 ! r: GL   general ledger

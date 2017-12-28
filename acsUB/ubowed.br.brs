@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBowed
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fndat,fncno,fnwin3,fnwait,fnacs,fntxt,fnlbl,fntos,fnfra,fnxit,fncmdset,fntop,fnchk
+00030   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fndat,fncno,fnwin3,fnwait,fnAcs,fnTxt,fnLbl,fnTos,fnFra,fnxit,fnCmdSet,fntop,fnChk
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim dat$*20,message$*40,resp$(5)*20
@@ -11,25 +11,25 @@
 00130   fndat(dat$,1)
 00140 ! 
 00150 ! ______________________________________________________________________
-00160   fntos(sn$="ubowed")
+00160   fnTos(sn$="ubowed")
 00162   respc=0 : mylen=29 : mypos=mylen+2 : frac=0
-00170   fnfra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : fraaging=frac+=1
-00180   fnlbl(1,1,"Last Day of Current Month:",mylen,1,0,fraaging)
-00190   fntxt(1,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00170   fnFra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : fraaging=frac+=1
+00180   fnLbl(1,1,"Last Day of Current Month:",mylen,1,0,fraaging)
+00190   fnTxt(1,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         resp$(respc+=1)=''
-00200   fnlbl(2,1,"Last Day of Last Month:",mylen,1,0,fraaging)
-00210   fntxt(2,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00200   fnLbl(2,1,"Last Day of Last Month:",mylen,1,0,fraaging)
+00210   fnTxt(2,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         resp$(respc+=1)=''
-00220   fnlbl(3,1,"Last Day of Third Month:",mylen,1,0,fraaging)
-00230   fntxt(3,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00220   fnLbl(3,1,"Last Day of Third Month:",mylen,1,0,fraaging)
+00230   fnTxt(3,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         resp$(respc+=1)=''
-00240   fnlbl(7,1,"Report Heading Dage:",mylen,1)
-00250   fntxt(7,mypos,20) !:
+00240   fnLbl(7,1,"Report Heading Dage:",mylen,1)
+00250   fnTxt(7,mypos,20) !:
         resp$(respc+=1)=dat$
-00260   fnchk(9,mypos+10,"Skip customers with credit balance:",1) !:
+00260   fnChk(9,mypos+10,"Skip customers with credit balance:",1) !:
         resp$(respc+=1)="False"
-00270   fncmdset(3) !:
-        fnacs(sn$,0,mat resp$,ckey,1)
+00270   fnCmdSet(3) !:
+        fnAcs(sn$,0,mat resp$,ckey,1)
 00280   if ckey=5 then goto XIT
 00290   for j=1 to 3
 00300 ! x=POS(RESP$(J),"/",1)

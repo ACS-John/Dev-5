@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\PRSTATUC
 00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fntos,fnlbl,fntxt,fnacs,fncmdset
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
@@ -15,13 +15,13 @@
 00160   close #1: 
 00170   if fnprocess=1 then goto L240
 00180 ! 
-00190   fntos(sn$="Prstatuc")
+00190   fnTos(sn$="Prstatuc")
 00200   mylen=35: mypos=mylen+3 : right=1
-00210   fnlbl(1,1,"Quarterly Period Ending Date:",mylen,right)
-00220   fntxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
+00210   fnLbl(1,1,"Quarterly Period Ending Date:",mylen,right)
+00220   fnTxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
 00230   resp$(1)=""
-00240   fncmdset(2)
-00250   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdSet(2)
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   pedat$=resp$(1)
 00275 L240: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 

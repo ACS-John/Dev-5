@@ -1,28 +1,28 @@
-00010   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnpause,fnLastBillingDate,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fnchk,fncmdset,fnacs,fnmsgbox ! fncombof
+00010   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnpause,fnLastBillingDate,fngethandle,fntop,fnTos,fnLbl,fnTxt,fncmbact,fncmbrt2,fnChk,fnCmdSet,fnAcs,fnmsgbox ! fncombof
 00030   on error goto ERTN
 00040   fncno(cno) ! get account first
 00050   fn_main_loop
 01010   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 01020     dim screen_name$*100,resp$(4)*255
-01030     fntos(screen_name$="UndoBillingOptions")
+01030     fnTos(screen_name$="UndoBillingOptions")
 01050 ! screen instructions
-01060     fnlbl(2,2,"Use the options below to limit the customers to reverse.")
-01070     fnlbl(3,2,"Warning: only the most recent billing date can be reversed for any account.")
+01060     fnLbl(2,2,"Use the options below to limit the customers to reverse.")
+01070     fnLbl(3,2,"Warning: only the most recent billing date can be reversed for any account.")
 01080 ! 
 01140 ! combo for route selection
-01150     fnlbl(7,2,"Select a route (or undo all):")
+01150     fnLbl(7,2,"Select a route (or undo all):")
 01160     fncmbrt2(7,35)
 01170     resp$(1)="[All]"
 01180 ! 
 01190 ! billing date text box
-01200     fnlbl(9,2,"Billing date:")
-01210     fntxt(9,35,8,0,0,"1")
+01200     fnLbl(9,2,"Billing date:")
+01210     fnTxt(9,35,8,0,0,"1")
 01220     fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 01230     resp$(2)=str$(lastbilling)
 01270 ! 
-01280     fncmdset(2) ! show "Next" and "Cancel" buttons
+01280     fnCmdSet(2) ! show "Next" and "Cancel" buttons
 01290 ! 
-01300     fnacs(screen_name$,0,mat resp$,ckey) ! run the screen
+01300     fnAcs(screen_name$,0,mat resp$,ckey) ! run the screen
 01310 ! 
 01320     if ckey=5 then ! if user pressed Cancel
 01330       fn_options=0
@@ -34,8 +34,8 @@
 01410     end if 
 01420   fnend  ! fn_Options
 01430   def fn_openfiles
-01440     open #(f_custacct:=fngethandle): "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outin,keyed 
-01450     open #(f_trans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,outin,keyed 
+01440     open #(f_custacct:=fngethandle): "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outIn,keyed 
+01450     open #(f_trans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,outIn,keyed 
 01460   fnend 
 01770   def fn_printheader
 01780     pg+=1

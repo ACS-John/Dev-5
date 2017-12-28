@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsPR\newprWkMCmp
 10200 ! Workmans Compensation Report
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fnerror,fntos,fnlbl,fntxt,fncmdset,fnacs,fnGetPayrollDates
+10600   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim ename$*30,subtot(2),tottot(2),tqm(17),cap$*128,message$*40
@@ -11,17 +11,17 @@
 12400   fnGetPayrollDates(beg_date,end_date)
 13000 ! ______________________________________________________________________
 13200 MENU1: ! 
-13400   fntos(sn$="prwkmcmp")
+13400   fnTos(sn$="prwkmcmp")
 13600   respc=0
-13800   fnlbl(1,47," ",1,1)
-14000   fnlbl(1,1,"Beginning Date to Analyze:",30,1)
-14200   fntxt(1,34,12,0,0,"3",0,"")
+13800   fnLbl(1,47," ",1,1)
+14000   fnLbl(1,1,"Beginning Date to Analyze:",30,1)
+14200   fnTxt(1,34,12,0,0,"3",0,"")
 14400   resp$(respc+=1)=str$(beg_date)
-14600   fnlbl(2,1,"Ending Date to Analyze:",30,1)
-14800   fntxt(2,34,12,0,0,"3",0,"")
+14600   fnLbl(2,1,"Ending Date to Analyze:",30,1)
+14800   fnTxt(2,34,12,0,0,"3",0,"")
 15000   resp$(respc+=1)=str$(end_date)
-15200   fncmdset(2)
-15400   fnacs(sn$,0,mat resp$,ck)
+15200   fnCmdSet(2)
+15400   fnAcs(sn$,0,mat resp$,ck)
 15600   if ck=5 then goto XIT
 15800   beg_date=val(resp$(1)) ! beginning of year
 16000   end_date=val(resp$(2)) ! ending day of year

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\glCkRec
 00020 ! Bank Reconciliation Report  (prints the actual bank reconciliation form the general ledger system
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fndate_mmddyy_to_ccyymmdd,fnwait,fntos,fnlbl,fnacs,fncmdset,fnqgl,fnagl$,fntxt,fnrgl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fndate_mmddyy_to_ccyymmdd,fnwait,fnTos,fnLbl,fnAcs,fnCmdSet,fnqgl,fnagl$,fnTxt,fnrgl$,fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim flo2$(3),io1$(6),sc$(9),sd$(7),se$(7)*30,sf$(4),cnam$*40,dat$*20
@@ -13,9 +13,9 @@
 00130   fncno(cno,cnam$)
 00140   fndat(dat$)
 00150   right=1 : center=2 : pointtwo$="32"
-00160   fntos(sn$="glCkRec") !:
+00160   fnTos(sn$="glCkRec") !:
         lc=0 : mylen=40 : mypos=mylen+2
-00170   fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
+00170   fnLbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
 00180   fnqgl(lc,mypos) !:
         resp$(1)=fnrgl$(resp$(1))
 00190 ! iO1$(1)="2,43,Nz 3,UT,N" : iO1$(2)="2,47,Nz 6,UT,N" !:
@@ -23,18 +23,18 @@
         ! iO1$(5)="4,43,Nz 12.2,UT,N" : iO1$(6)="5,43,Nz 6,UT,N"
 00200 ! pr f "15,29,C 10,B,1": "Print (F1)" !:
         ! pr f "15,41,C 09,B,5": "Exit (F5)"
-00210   fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
-00220   fntxt(lc,mypos,20) !:
+00210   fnLbl(lc+=1,1,"Report Heading Date:",mylen,right)
+00220   fnTxt(lc,mypos,20) !:
         resp$(2)=dat$
-00230   fnlbl(lc+=1,1,"Balance per Bank Statement:",mylen,right)
-00240   fntxt(lc,mypos,12,0,0,'PointTwo') !:
+00230   fnLbl(lc+=1,1,"Balance per Bank Statement:",mylen,right)
+00240   fnTxt(lc,mypos,12,0,0,'PointTwo') !:
         resp$(3)=str$(bankbal)
-00250   fnlbl(lc+=1,1,"Last Check Date for Reconciliation:",mylen,right)
-00260   fntxt(lc,mypos,0,0,0,'CCYYMMDD') !:
+00250   fnLbl(lc+=1,1,"Last Check Date for Reconciliation:",mylen,right)
+00260   fnTxt(lc,mypos,0,0,0,'CCYYMMDD') !:
         resp$(4)=str$(lcd)
-00270   fncmdset(3)
+00270   fnCmdSet(3)
 00280 ! Rinput #101,Fields MAT IO1$: GL1,GL2,GL3,DAT$,BANKBAL,LCD !:
-        fnacs(sn$,0,mat resp$,ckey)
+        fnAcs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300   resp$(1)=fnagl$(resp$(1)) !:
         gl1=val(resp$(1)(1:3)) !:

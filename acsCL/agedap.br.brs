@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\AgedAP
 00020 ! pr Aged AP Listing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fntos,fnlbl,fntxt,fncmdset,fnacs, fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*50,fd$*30,ft(3)
@@ -22,22 +22,22 @@
 00190     fnjd=jd0
 00200   fnend 
 00210 ! ______________________________________________________________________
-00220   fntos(sn$="agedap") !:
+00220   fnTos(sn$="agedap") !:
         respc=0
-00230   fnlbl(1,38,"",1,1)
-00240   fnlbl(1,1,"Aging Date:",23,1)
-00250   fntxt(1,25,10,0,1,"1001") !:
+00230   fnLbl(1,38,"",1,1)
+00240   fnLbl(1,1,"Aging Date:",23,1)
+00250   fnTxt(1,25,10,0,1,"1001") !:
         resp$(respc+=1)=str$(d1)
-00260   fnlbl(3,1,"Aging Break 1:",23,1)
-00270   fntxt(3,25,3,0,1,"30",0,"Aging break 1 is the maximum age of an invoice (in days) to be grouped in the first category") !:
+00260   fnLbl(3,1,"Aging Break 1:",23,1)
+00270   fnTxt(3,25,3,0,1,"30",0,"Aging break 1 is the maximum age of an invoice (in days) to be grouped in the first category") !:
         resp$(respc+=1)="30"
-00280   fnlbl(4,1,"Aging Break 2:",23,1)
-00290   fntxt(4,25,3,0,1,"30") !:
+00280   fnLbl(4,1,"Aging Break 2:",23,1)
+00290   fnTxt(4,25,3,0,1,"30") !:
         resp$(respc+=1)="60"
-00300   fnlbl(5,1,"Aging Break 3:",23,1)
-00310   fntxt(5,25,3,0,1,"30") !:
+00300   fnLbl(5,1,"Aging Break 3:",23,1)
+00310   fnTxt(5,25,3,0,1,"30") !:
         resp$(respc+=1)="90"
-00320   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00320   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   d1=val(resp$(1))
 00350   bk(1,2)=val(resp$(2))
@@ -47,7 +47,7 @@
 00390   if bk(2,2)>0 then bk(2,1)=bk(1,2)+1
 00400   if bk(3,2)>0 then bk(3,1)=bk(2,2)+1
 00410   fnopenprn
-00420   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00420   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00430   open #paymstr=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 00440   gosub HDR
 00450 READ_PAYTRANS: ! 

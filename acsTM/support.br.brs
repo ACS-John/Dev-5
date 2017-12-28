@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsTM\Support
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
@@ -14,7 +14,7 @@
 00140 ! ______________________________________________________________________
 00150 OPEN_FILE: ! 
 00160   open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -121,7 +121,7 @@
 01240   return 
 01250 ! ______________________________________________________________________
 01260 HAMSTER: ! 
-01270   fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01270   fnHamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01280   return 
 01290 ! ______________________________________________________________________
 01300 XIT: fnxit

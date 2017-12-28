@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsPR\NewpRInput
 00020 ! enter time sheets
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fntos,fnfra,fnopt,fnlbl,fntxt,fncmdkey,fnacs,fncombof,fnchk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnstatus_close,fncreg_write,fncreg_read
+00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnStatusClose,fncreg_write,fncreg_read
 00050   on error goto ERTN
 00052   fntop(program$,cap$="Enter Time Sheets")
 00060 ! r: dims and constants
@@ -41,45 +41,45 @@
 00428   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00430   read #1,using 'form pos 726,pd 3.2': mhw
 00440   close #1: 
-00450   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outin,relative 
-00460   read #11,using "form pos 49,n 8,c 20",rec=1: d1,d1$ norec ignore
+00450   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outIn,relative 
+00460   read #11,using "form pos 49,n 8,c 20",rec=1: d1,d1$ noRec ignore
 00470   close #11: 
 00471 ! 
 00472   open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
 00480 ! 
-00490   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prwork"&wsid$&"idx.H"&env$('cno'),internal,outin,keyed ioerr ignore
+00490   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prwork"&wsid$&"idx.H"&env$('cno'),internal,outIn,keyed ioerr ignore
 00500 F_RPWORK: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 00502 ! ______________________________________________________________________
 00510 SCREEN_1: ! 
-00520   fntos(sn$="Prinput-1")
+00520   fnTos(sn$="Prinput-1")
 00522   rc=cf=0
-00530   fnfra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
+00530   fnFra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
 00532   cf+=1 : franum=cf
-00540   fnopt(1,3,"Regular Time Sheet Entry",0,franum)
+00540   fnOpt(1,3,"Regular Time Sheet Entry",0,franum)
 00542   resp$(rc+=1)="True"
-00550   fnopt(2,3,"Additions to Previous Input",0,franum)
+00550   fnOpt(2,3,"Additions to Previous Input",0,franum)
 00552   resp$(rc+=1)="False"
-00560   fnfra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
+00560   fnFra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
 00562   cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
-00570   fnlbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
-00580   fntxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
+00570   fnLbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
+00580   fnTxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
 00582   resp$(rc+=1)=str$(prd)
-00590   fnfra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
+00590   fnFra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
 00592   cf+=1 : franum=cf
-00600   fnopt(1,3,"Select employees to pay",0,franum)
+00600   fnOpt(1,3,"Select employees to pay",0,franum)
 00602   resp$(rc+=1)="True"
-00610   fnopt(2,3,"Automatically pay salaried employees",0,franum)
+00610   fnOpt(2,3,"Automatically pay salaried employees",0,franum)
 00612   resp$(rc+=1)="False"
-00620   fnopt(3,3,"Pull time from time card system",0,franum)
+00620   fnOpt(3,3,"Pull time from time card system",0,franum)
 00622   resp$(rc+=1)="False"
-00630   fnopt(4,3,"Pull time from job cost system",0,franum)
+00630   fnOpt(4,3,"Pull time from job cost system",0,franum)
 00632   resp$(rc+=1)="False"
-00640   fnlbl(6,1,"Employment Status:",mylen,1,0,franum)
+00640   fnLbl(6,1,"Employment Status:",mylen,1,0,franum)
 00650   fncombof("EmpStatus",6,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
 00652   resp$(rc+=1)=""
-00660   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-00670   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-00680   fnacs(sn$,0,mat resp$,ckey)
+00660   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+00670   fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
+00680   fnAcs(sn$,0,mat resp$,ckey)
 00682   if ckey=5 then goto XIT
 00690   if resp$(1)="True" then ! Regular Time Sheet Entry
 00691     noauto=ti1=1
@@ -107,21 +107,21 @@
 00740   end if 
 00742   em4=val(resp$(8)(1:2))
 00750 ! SKIPDEDUCTIONS: !
-00760   fntos(sn$="Prinput-2")
+00760   fnTos(sn$="Prinput-2")
 00762   rc=cf=linecnt=0
-00770   fnfra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
+00770   fnFra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
 00772   cf+=1 : franum=cf
 00780   for j=1 to 19 step 2
 00790     if trim$(dednames$(j))<>"" then x$=":" else x$=""
-00800     fnchk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
+00800     fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
 00802     resp$(rc+=1)="False"
 00810     if trim$(dednames$(j+1))<>"" then x$=":" else x$=""
-00820     fnchk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)
+00820     fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)
 00822     resp$(rc+=1)="False"
 00830   next j
-00840   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-00850   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-00860   fnacs(sn$,0,mat resp$,ckey)
+00840   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+00850   fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
+00860   fnAcs(sn$,0,mat resp$,ckey)
 00862   if ckey=5 then goto L900
 00870   for j=1 to 20
 00880     if resp$(j)="True" then skipit$(j)="Y" else skipit$(j)="N"
@@ -133,7 +133,7 @@
 00907     close #h_rpwork: 
 00908   end if 
 00909   fnindex_it(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),"1,11")
-00910   fnstatus_close
+00910   fnStatusClose
 00911   if additional=2 then 
 00912 !   if exists(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')) then
 00914     gosub OFILE
@@ -210,63 +210,63 @@
 01592   if foundept=1 then 
 01594     read #9,using "form pos 4,c 20",key=rpad$(ltrm$(str$(dep)),3): deptname$ nokey ignore
 01596   end if 
-01602   fntos(sn$="prinput-4")
+01602   fnTos(sn$="prinput-4")
 01604   respc=0: mylen=20: franum=0: rc=0
-01610   fnlbl(1,1,"Employee Number: "&str$(eno),60,2,0,franum)
-01620   fnlbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
-01630   fnlbl(3,1,"Department Number: "&str$(dep)&" "&trim$(deptname$),60,2,0,franum)
-01640   fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
-01650   fntxt(5,mylen+2,12,0,1,"10",0,".",franum)
+01610   fnLbl(1,1,"Employee Number: "&str$(eno),60,2,0,franum)
+01620   fnLbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
+01630   fnLbl(3,1,"Department Number: "&str$(dep)&" "&trim$(deptname$),60,2,0,franum)
+01640   fnLbl(5,1,"Regular Hours:",mylen,1,0,franum)
+01650   fnTxt(5,mylen+2,12,0,1,"10",0,".",franum)
 01652   resp$(rc+=1)=str$(inp(1))
-01660   fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-01670   fntxt(6,mylen+2,12,0,1,"10",0,".",franum)
+01660   fnLbl(6,1,"Overtime Hours:",mylen,1,0,franum)
+01670   fnTxt(6,mylen+2,12,0,1,"10",0,".",franum)
 01672   resp$(rc+=1)=str$(inp(2))
-01680   fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
-01690   fntxt(7,mylen+2,12,0,1,"10",0,".",franum)
+01680   fnLbl(7,1,"Sick Hours:",mylen,1,0,franum)
+01690   fnTxt(7,mylen+2,12,0,1,"10",0,".",franum)
 01692   resp$(rc+=1)=str$(inp(3))
-01700   fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-01710   fntxt(8,mylen+2,12,0,1,"10",0,".",franum)
+01700   fnLbl(8,1,"Vacation Hours:",mylen,1,0,franum)
+01710   fnTxt(8,mylen+2,12,0,1,"10",0,".",franum)
 01712   resp$(rc+=1)=str$(inp(4))
 01720 L1720: ! note: the goto that points to this line just can't be right...
-01722   fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-01730   fntxt(9,mylen+2,12,0,1,"10",0,".",franum)
+01722   fnLbl(9,1,"Holiday Hours:",mylen,1,0,franum)
+01730   fnTxt(9,mylen+2,12,0,1,"10",0,".",franum)
 01732   resp$(rc+=1)=str$(inp(5))
-01740   fnlbl(10,1,"Salary:",mylen,1,0,franum)
-01750   fntxt(10,mylen+2,12,0,1,"10",0,".",franum)
+01740   fnLbl(10,1,"Salary:",mylen,1,0,franum)
+01750   fnTxt(10,mylen+2,12,0,1,"10",0,".",franum)
 01752   resp$(rc+=1)=str$(inp(6))
-01760   fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
-01770   fntxt(11,mylen+2,12,0,1,"10",0,".",franum)
+01760   fnLbl(11,1,"Other Compensation:",mylen,1,0,franum)
+01770   fnTxt(11,mylen+2,12,0,1,"10",0,".",franum)
 01772   resp$(rc+=1)=str$(inp(7))
-01780   fnlbl(12,1,"Meals:",mylen,1,0,franum)
-01790   fntxt(12,mylen+2,12,0,1,"10",0,".",franum)
+01780   fnLbl(12,1,"Meals:",mylen,1,0,franum)
+01790   fnTxt(12,mylen+2,12,0,1,"10",0,".",franum)
 01792   resp$(rc+=1)=str$(inp(8))
-01800   fnlbl(13,1,"Tips:",mylen,1,0,franum)
-01810   fntxt(13,mylen+2,12,0,1,"10",0,".",franum)
+01800   fnLbl(13,1,"Tips:",mylen,1,0,franum)
+01810   fnTxt(13,mylen+2,12,0,1,"10",0,".",franum)
 01812   resp$(rc+=1)=str$(inp(9))
-01820   fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-01830   fntxt(15,mylen+2,12,0,1,"10",0,".",franum)
+01820   fnLbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
+01830   fnTxt(15,mylen+2,12,0,1,"10",0,".",franum)
 01832   resp$(rc+=1)=str$(hr(1))
-01840   fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-01850   fntxt(16,mylen+2,12,0,1,"10",0,".",franum)
+01840   fnLbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
+01850   fnTxt(16,mylen+2,12,0,1,"10",0,".",franum)
 01852   resp$(rc+=1)=str$(hr(2))
 01860   for j=1 to 20
 01870 ! If TRIM$(DEDNAMES$)="" Then Goto 1450
 01880     if trim$(dednames$(j))="" then name$(j)="" else name$(j)=trim$(dednames$(j))&":"
 01890     if skipit$(j)="Y" then inp(j+9)=0
 01892     disable_deduction=0 : if trim$(name$(j))='' then disable_deduction=1
-01900     fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-01910     fntxt(j+4,47,12,0,1,"10",disable_deduction,".",franum)
+01900     fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
+01910     fnTxt(j+4,47,12,0,1,"10",disable_deduction,".",franum)
 01912     resp$(rc+=1)=str$(inp(j+9))
 01920   next j
-01930   fncmdkey("&Next",1,1,0,"Record this time" )
-01940   if editmode=0 then let fncmdkey("&Skip Department F2",2,0,0,"Skips this department.")
-01941   if editmode=0 and semp>=1 then let fncmdkey("&Prev Department",12,0,0,"Go back to last department.")
-01950   if editmode=1 then let fncmdkey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
-01960   if editmode=0 then let fncmdkey("&Track Hours",8,0,0,"Track hours other than those entered above.")
-01970   fncmdkey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
-01980   if editmode=0 then let fncmdkey("E&xit",5,0,1,"Returns to menu")
-01990   if editmode=1 then let fncmdkey("&Finish",7,0,1,"Finished making corrections")
-02000   fnacs(sn$,0,mat resp$,ckey) ! ask time
+01930   fnCmdKey("&Next",1,1,0,"Record this time" )
+01940   if editmode=0 then let fnCmdKey("&Skip Department F2",2,0,0,"Skips this department.")
+01941   if editmode=0 and semp>=1 then let fnCmdKey("&Prev Department",12,0,0,"Go back to last department.")
+01950   if editmode=1 then let fnCmdKey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
+01960   if editmode=0 then let fnCmdKey("&Track Hours",8,0,0,"Track hours other than those entered above.")
+01970   fnCmdKey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
+01980   if editmode=0 then let fnCmdKey("E&xit",5,0,1,"Returns to menu")
+01990   if editmode=1 then let fnCmdKey("&Finish",7,0,1,"Finished making corrections")
+02000   fnAcs(sn$,0,mat resp$,ckey) ! ask time
 02010   if ckey=5 and editmode=0 then goto FINISH
 02020   for j=1 to 9
 02030     inp(j)=val(resp$(j))
@@ -341,56 +341,56 @@
 02580   close #108: ioerr ignore
 02590 PROOF_TOTALS: ! 
 02592   fn_add_proof_totals(teno,count_employees_entered,mat tinp)
-02595   fntos(sn$="ProofTotal")
+02595   fnTos(sn$="ProofTotal")
 02600   respc=0 : mylen=20 : franum=0 : rc=0
-02605   fnlbl(1,1,"P R O O F  T O T A L S",60,2,0,franum)
-02610   fnlbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
-02612   fnlbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
-02615   fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
-02620   fntxt(5,mylen+2,12,0,1,"10",1,".",franum)
+02605   fnLbl(1,1,"P R O O F  T O T A L S",60,2,0,franum)
+02610   fnLbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
+02612   fnLbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
+02615   fnLbl(5,1,"Regular Hours:",mylen,1,0,franum)
+02620   fnTxt(5,mylen+2,12,0,1,"10",1,".",franum)
 02625   resp$(rc+=1)=str$(tinp(1))
-02630   fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-02635   fntxt(6,mylen+2,12,0,1,"10",1,".",franum)
+02630   fnLbl(6,1,"Overtime Hours:",mylen,1,0,franum)
+02635   fnTxt(6,mylen+2,12,0,1,"10",1,".",franum)
 02640   resp$(rc+=1)=str$(tinp(2))
-02645   fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
-02650   fntxt(7,mylen+2,12,0,1,"10",1,".",franum)
+02645   fnLbl(7,1,"Sick Hours:",mylen,1,0,franum)
+02650   fnTxt(7,mylen+2,12,0,1,"10",1,".",franum)
 02655   resp$(rc+=1)=str$(tinp(3))
-02660   fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-02665   fntxt(8,mylen+2,12,0,1,"10",1,".",franum)
+02660   fnLbl(8,1,"Vacation Hours:",mylen,1,0,franum)
+02665   fnTxt(8,mylen+2,12,0,1,"10",1,".",franum)
 02670   resp$(rc+=1)=str$(tinp(4))
-02675   fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-02680   fntxt(9,mylen+2,12,0,1,"10",1,".",franum)
+02675   fnLbl(9,1,"Holiday Hours:",mylen,1,0,franum)
+02680   fnTxt(9,mylen+2,12,0,1,"10",1,".",franum)
 02685   resp$(rc+=1)=str$(tinp(5))
-02690   fnlbl(10,1,"Salary:",mylen,1,0,franum)
-02695   fntxt(10,mylen+2,12,0,1,"10",1,".",franum)
+02690   fnLbl(10,1,"Salary:",mylen,1,0,franum)
+02695   fnTxt(10,mylen+2,12,0,1,"10",1,".",franum)
 02700   resp$(rc+=1)=str$(tinp(6))
-02705   fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
-02710   fntxt(11,mylen+2,12,0,1,"10",1,".",franum)
+02705   fnLbl(11,1,"Other Compensation:",mylen,1,0,franum)
+02710   fnTxt(11,mylen+2,12,0,1,"10",1,".",franum)
 02715   resp$(rc+=1)=str$(tinp(7))
-02720   fnlbl(12,1,"Meals:",mylen,1,0,franum)
-02725   fntxt(12,mylen+2,12,0,1,"10",1,".",franum)
+02720   fnLbl(12,1,"Meals:",mylen,1,0,franum)
+02725   fnTxt(12,mylen+2,12,0,1,"10",1,".",franum)
 02730   resp$(rc+=1)=str$(tinp(8))
-02735   fnlbl(13,1,"Tips:",mylen,1,0,franum)
-02740   fntxt(13,mylen+2,12,0,1,"10",1,".",franum)
+02735   fnLbl(13,1,"Tips:",mylen,1,0,franum)
+02740   fnTxt(13,mylen+2,12,0,1,"10",1,".",franum)
 02745   resp$(rc+=1)=str$(tinp(9))
-02750   fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-02755   fntxt(15,mylen+2,12,0,1,"10",1,".",franum)
+02750   fnLbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
+02755   fnTxt(15,mylen+2,12,0,1,"10",1,".",franum)
 02760   resp$(rc+=1)=str$(hr(1))
-02765   fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-02770   fntxt(16,mylen+2,12,0,1,"10",1,".",franum)
+02765   fnLbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
+02770   fnTxt(16,mylen+2,12,0,1,"10",1,".",franum)
 02775   resp$(rc+=1)=str$(hr(2))
 02780   for j=1 to 20
 02785     if trim$(dednames$(j))="" then name$(j)="" else name$(j)=trim$(dednames$(j))&":"
-02790     fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-02795     fntxt(j+4,47,12,0,1,"10",1,".",franum)
+02790     fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
+02795     fnTxt(j+4,47,12,0,1,"10",1,".",franum)
 02800     resp$(rc+=1)=str$(tinp(j+9))
 02805   next j
-02900   fncmdkey("Co&rrections",1,0,0,"Correct any entries.")
-02910   fncmdkey("&Listing",2,0,0,"Prints a listing of the entries you have made.")
-02920   fncmdkey("&Calculate",3,1,0,"Calculates the pay.")
-02930   fncmdkey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
-02940   fncmdkey("E&xit",5,0,1,"Exit without calculating")
-02950   fnacs(sn$,0,mat resp$,ckey) ! proof totals
+02900   fnCmdKey("Co&rrections",1,0,0,"Correct any entries.")
+02910   fnCmdKey("&Listing",2,0,0,"Prints a listing of the entries you have made.")
+02920   fnCmdKey("&Calculate",3,1,0,"Calculates the pay.")
+02930   fnCmdKey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
+02940   fnCmdKey("E&xit",5,0,1,"Exit without calculating")
+02950   fnAcs(sn$,0,mat resp$,ckey) ! proof totals
 02960   estat=0
 02970   cor=ckey
 02980   if ckey=5 then goto XITWOCAL
@@ -402,7 +402,7 @@
 03890 ! dEP=0
 03900 ! Mat INP=(0)
 03910 ! gPD=0
-03920   delete #h_rpwork,rec=rec(h_rpwork): norec L3990
+03920   delete #h_rpwork,rec=rec(h_rpwork): noRec L3990
 03930   goto L4000
 03940 REWRITE_WORK: ! 
 03950   rewrite #h_rpwork,using F_RPWORK,rec=rec(h_rpwork): eno,dep,mat inp,gpd,mat hr
@@ -429,8 +429,8 @@
 05000 ! /r
 35000 GOCALK: ! r:
 35020   close #11: ioerr ignore
-35040   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outin,relative 
-35060   rewrite #11,using "form pos 49,n 8,c 20",rec=1: fndate_mmddyy_to_ccyymmdd(prd),d1$ norec ignore
+35040   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outIn,relative 
+35060   rewrite #11,using "form pos 49,n 8,c 20",rec=1: fndate_mmddyy_to_ccyymmdd(prd),d1$ noRec ignore
 35080   close #11: 
 35100   if jobcost=1 then close #5,free: 
 35120   fnchain("S:\Payroll\Calc") ! /r
@@ -444,7 +444,7 @@
 35260   if resp$(1:1)="N" then goto L1060 ! in1=1
 35280 ! /r
 35300 L4180: ! 
-35320   open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outin,keyed ioerr L4200 ! timecard
+35320   open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4200 ! timecard
 35340   timecard=1 ! timecard files exist
 35360 L4200: ! 
 35362   read #h_rpmstr,using F_RPMSTR_3: en$,em$,em4,em8,em9,lpd,tgp,mat ta eof FINISH
@@ -488,14 +488,14 @@
 36160   goto L2220
 38000 CORRECTIONS: ! r:
 38020   editmode=1
-38040   fntos(sn$="Employee-ask2")
+38040   fnTos(sn$="Employee-ask2")
 38060   respc=0
-38080   fnlbl(1,1,"Employee to Correct:",22,right)
+38080   fnLbl(1,1,"Employee to Correct:",22,right)
 38100   fncmbemp(1,24)
 38120   resp$(respc+=1)=""
-38140   fncmdkey("&Next",1,1,0,"Make corrections to this employee's time." )
-38160   fncmdkey("&Finish",6,0,1,"Finished making corrections")
-38180   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+38140   fnCmdKey("&Next",1,1,0,"Make corrections to this employee's time." )
+38160   fnCmdKey("&Finish",6,0,1,"Finished making corrections")
+38180   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 38200   if ckey=6 then editmode=0: goto PROOF_TOTALS ! finished corretions
 38220   eno=ent=val(resp$(1)(1:8))
 38240   read #h_rpwork,using F_RPWORK,key>=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",0),release: depeno,dep2,mat inp,gpd,mat hr nokey L4790
@@ -526,18 +526,18 @@
 38680   goto ASK_TIME
 38700 ! /r
 42000 OFILE: ! r: OPEN FILES
-42020   open #h_rpmstr:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+42020   open #h_rpmstr:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 42040 F_RPMSTR_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
 42060 F_RPMSTR_2: form pos 162,n 6,pd 5.2
 42070 F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
 42080   close #11: ioerr ignore
-42100   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
+42100   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 42120   close #2: ioerr ignore
-42140   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+42140   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 42160   close #h_rpwork:=3: ioerr ignore
-42180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&',shr',internal,outin,keyed 
+42180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&',shr',internal,outIn,keyed 
 42200   close #4: ioerr ignore
-42220   open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outin,keyed ioerr L4630 ! timecard
+42220   open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4630 ! timecard
 42240   timecard=1 ! timecard files exist
 42260 L4630: ! 
 42280   return  ! /r
@@ -602,7 +602,7 @@
 56120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output 
 56140   close #h_rpwork: 
 56160   execute "Index "&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&' '&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&" 1,11 replace,DupKeys -N"
-56180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outin,keyed 
+56180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
 56200 ! Restore #h_rpmstr:
 56220 ! Read #h_rpmstr,Using 5480: EN$ Eof 5520
 56240 ! Form POS 1,C 8
@@ -614,7 +614,7 @@
 56360 L5520: ! 
 56380   holdeno=h(1): holddep=h(3)
 56400   read #6,using 'form pos 1,pd 3': jci eof L5990
-56420   read #5,using 'form pos 1,n 8,n 1,pd 2,2*pd 4.2,pd 5.2,n 2,n 8,c 6',rec=jci: mat h,dt2,jn$ norec L5520
+56420   read #5,using 'form pos 1,n 8,n 1,pd 2,2*pd 4.2,pd 5.2,n 2,n 8,c 6',rec=jci: mat h,dt2,jn$ noRec L5520
 56440   if h(1)=0 then goto L5520 ! don't allow entry without employee #
 56460   if rec(6)>1 and (h(1)><eno or holddep><h(3)) then goto L5820 ! first record or not same emp # or not same dept#
 56480 L5590: ! 
@@ -689,16 +689,16 @@
 60160   return  ! /r
 62000 ASK_EMPLOYEE: ! r:
 62020   editmode=0
-62040   fntos(sn$="Employee-ask")
+62040   fnTos(sn$="Employee-ask")
 62060   respc=0
-62080   fnlbl(1,1,"Employee:",11,right)
+62080   fnLbl(1,1,"Employee:",11,right)
 62100   fncmbemp(1,13)
 62120   resp$(respc+=1)=""
-62140   fncmdkey("&Next",1,1,0,"Enter time on this employee" )
-62160   fncmdkey("&Search",2,0,0,"Search for employee record")
-62180   fncmdkey("&Finish",6,0,1,"Finished entering hours")
-62200 !                     fnCMDKEY("E&xit",5,0,1,"Returns to menu") !   fix kj
-62220   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+62140   fnCmdKey("&Next",1,1,0,"Enter time on this employee" )
+62160   fnCmdKey("&Search",2,0,0,"Search for employee record")
+62180   fnCmdKey("&Finish",6,0,1,"Finished entering hours")
+62200 !                     fnCmdKey("E&xit",5,0,1,"Returns to menu") !   fix kj
+62220   fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 62240   eno=ent=val(resp$(1)(1:8))
 62260   if ckey=1 then 
 62280     goto ENTER_TIME
@@ -738,14 +738,14 @@
 66080   if additional=2 then goto L3160
 66110   fncreg_read('enter time sheets proof sequence',printorder$) : printorder=val(printorder$) conv ignore
 66120 L3080: ! 
-66140   fntos(sn$="Print-order")
-66170   fnlbl(1,1,"Sequence:",11,right)
-66180   fnopt(1,13,"Account Order",0)
+66140   fnTos(sn$="Print-order")
+66170   fnLbl(1,1,"Sequence:",11,right)
+66180   fnOpt(1,13,"Account Order",0)
 66200   if printorder<>2 then resp$(1)="True" else resp$(1)='False'
-66220   fnopt(2,13,"Order Entered",0)
+66220   fnOpt(2,13,"Order Entered",0)
 66240   if printorder=2 then resp$(2)='True' else resp$(2)="False"
-66260   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-66280   fnacs(sn$,0,mat resp$,ckey)
+66260   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+66280   fnAcs(sn$,0,mat resp$,ckey)
 66300   if resp$(1)="False" and resp$(2)="False" then goto L3080
 66320   if resp$(1)="True" then printorder=1 else printorder=2
 66330   fncreg_write('enter time sheets proof sequence',str$(printorder))
@@ -757,7 +757,7 @@
 66420   if printorder=2 then 
 66440 L3200: ! 
 66460     record+=1 : if record>lrec(3) then goto PL_FINIS
-66480     read #h_rpwork,using F_RPWORK,rec=record,release: eno,dep,mat inp,gpd,mat hr eof PL_FINIS norec L3200
+66480     read #h_rpwork,using F_RPWORK,rec=record,release: eno,dep,mat inp,gpd,mat hr eof PL_FINIS noRec L3200
 66500   else 
 66520     read #h_rpwork,using F_RPWORK,release: eno,dep,mat inp,gpd,mat hr eof PL_FINIS
 66540   end if 
@@ -771,7 +771,7 @@
 66700     ml$(4)="                         Click OK to continue. "
 66720     fnmsgbox(mat ml$,resp$,cap$,0)
 66740     if additional=2 then 
-66760       delete #h_rpwork,rec=rec(h_rpwork): norec L3270
+66760       delete #h_rpwork,rec=rec(h_rpwork): noRec L3270
 66780       goto PL_READ
 66800     end if 
 66820   end if 

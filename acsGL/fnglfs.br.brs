@@ -3,9 +3,9 @@
 14000 def library fnglfs
 14020   if glfsSetup<>val(env$('cno')) then ! r:
 14040     glfsSetup=val(env$('cno'))
-14060     library 'S:\Core\Library': fngethandle,fntos,fnlbl,fncomboa,fntxt,fnacs,fnerror,fncmdset,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
+14060     library 'S:\Core\Library': fngethandle,fnTos,fnLbl,fncomboa,fnTxt,fnAcs,fnerror,fnCmdSet,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
 14080     on error goto ERTN
-14100     open #company=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
+14100     open #company=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
 14120     read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 14140     ! lmu = Last Accounting Period Closed
 14160     ! nap = Number of Accounting Periods
@@ -24,19 +24,19 @@
 16060     fnps(1)
 16080     fnpriorcd(1)
 16100   else
-22000     fntos(sn$="glFS-lib") 
+22000     fnTos(sn$="glFS-lib") 
 22020     lc=rc=0 : mylen=23 : mypos=mylen+3
-22040     fnlbl(lc+=1,1,"Statement Format:",mylen,1)
+22040     fnLbl(lc+=1,1,"Statement Format:",mylen,1)
 22060     fncomboa("ps",lc,mypos,mat formatOption$) 
 22080     resp$(resp_format:=rc+=1)=formatOption$(1)
-22100     fnlbl(lc+=1,1,"Year:",mylen,1)
+22100     fnLbl(lc+=1,1,"Year:",mylen,1)
 22120     fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
 22140     resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
-22160     fnlbl(lc+=1,1,"Period to Print:",mylen,1)
+22160     fnLbl(lc+=1,1,"Period to Print:",mylen,1)
 22180     fncomboa("FSCode",lc,mypos,mat periodOption$) 
 22200     resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
-22220     fncmdset(3)
-22240     fnacs(sn$,0,mat resp$,ckey)
+22220     fnCmdSet(3)
+22240     fnAcs(sn$,0,mat resp$,ckey)
 32000     if ckey=5 then 
 32020       fnglfs=5 
 32040     else

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AutoProc
 00020 ! GL - Begin Atomatic Processing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnopenprn,fncloseprn,fnputcno,fnchain,fnprocess,fnpgnum,fncursys$,fntos,fnlbl,fncomboa,fncmdkey,fnacs,fngetdir,fnflexinit1,fnflexadd1
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnopenprn,fncloseprn,fnputcno,fnchain,fnprocess,fnpgnum,fncursys$,fnTos,fnLbl,fncomboa,fnCmdKey,fnAcs,fngetdir,fnflexinit1,fnflexadd1
 00050   fntop(program$,cap$="Begin Automatic Processing")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -10,12 +10,12 @@
 00100 ! ______________________________________________________________________
 00110   cap$="Begin Automatic Processing"
 00120   fncno(cno,oldcnam$)
-00130   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat",internal,outin,relative ioerr BUILD_GLCLNT
+00130   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat",internal,outIn,relative ioerr BUILD_GLCLNT
 00140   rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=1: cno,cnam$
 00150   goto L210
 00160 ! ______________________________________________________________________
 00170 BUILD_GLCLNT: ! 
-00180   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outin,relative 
+00180   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outIn,relative 
 00190   for j=1 to 20 !:
           write #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," " !:
         next j
@@ -27,16 +27,16 @@
 00230   gosub BLD_ACNO
 00240 ! ______________________________________________________________________
 00250 MAIN: ! 
-00260   fntos(sn$="autoproc") !:
+00260   fnTos(sn$="autoproc") !:
         respc=0
-00270   fnlbl(1,20,"Select From the Following Companies:",50,1)
-00280   fnlbl(2,1,"Company:",10,1)
+00270   fnLbl(1,20,"Select From the Following Companies:",50,1)
+00280   fnLbl(2,1,"Company:",10,1)
 00290   for j=1 to udim(opt$)
 00300     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then resp$(1)=opt$(j): goto L330
 00310   next j
 00320   resp$(1)=opt$(1) ! default to 1st in none found
 00330 L330: fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
-00340   fnlbl(4,30,"Selected Companies:")
+00340   fnLbl(4,30,"Selected Companies:")
 00350   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Company #' !:
         chdr$(2)='Company Name'
@@ -48,10 +48,10 @@
           item$(2)=clnam$(j) !:
           fnflexadd1(mat item$)
 00390   next j
-00400   fncmdkey("&Select",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
-        fncmdkey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") !:
-        fncmdkey("&Cancel",5,0,1)
-00410   fnacs(sn$,0,mat resp$,ckey)
+00400   fnCmdKey("&Select",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
+        fnCmdKey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") !:
+        fnCmdKey("&Cancel",5,0,1)
+00410   fnAcs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
 00430   if ckey=2 then goto L470
 00440   clnam$(count+=1)=resp$(1)(1:30)

@@ -1,13 +1,13 @@
 00010 ! Replace Test\Flex
 00020 ! -------------------------------------------------------------------
-00030   library 'S:\Core\Library': fntos,fnacs,fnflexinit1,fnflexadd1,fncmdkey,fntop,fnxit,fngethandle
+00030   library 'S:\Core\Library': fnTos,fnAcs,fnflexinit1,fnflexadd1,fnCmdKey,fntop,fnxit,fngethandle
 00040 ! -------------------------------------------------------------------
 00041   dim resp$(22)*100
 00042 ! -------------------------------------------------------------------
 00050   fntop(program$,cap$="Test Flex")
 00070   dim item$(6)*30,prg$*30,chdr$(6)*20,cm$(6)*2
 00072 SCREEN1: ! 
-00080   fntos("S-Flex")
+00080   fnTos("S-Flex")
 00081 ! use_old=1 : replace_old=0 : select_by_row=1
 00090 ! chdr$(1)="AccountX" : chdr$(2)="Name" !:
         ! chdr$(3)="Address" : chdr$(4)="City" !:
@@ -38,9 +38,9 @@
 75100     fnflexadd1(mat item$)
 75200   loop 
 75300 EOF1: close #h_tralloc: 
-75400   fncmdkey('Ok',1,1,0)
-75500   fncmdkey('Cancel',99,0,1)
-75600   fnacs("S-Flex",0,mat resp$,ck)
+75400   fnCmdKey('Ok',1,1,0)
+75500   fnCmdKey('Cancel',99,0,1)
+75600   fnAcs("S-Flex",0,mat resp$,ck)
 75700   pr "returned response is "&resp$(1)
 75800   pr "Press Enter to continue"
 75900 ! input fields "1,1,C 1,AE,N": pause$

@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\ubmeans.br
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnacs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fncno,fnxit,fncmdset,fntop
+00030   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fncno,fnxit,fnCmdSet,fntop
 00040 ! ______________________________________________________________________
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -11,7 +11,7 @@
 00100   fntop("S:\acsUB\ubMeans",cap$="Median Sewer Charge")
 00110 ! ______________________________________________________________________
 00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00140   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",RecL=22,REPLACE",internal,output 
 00150   read #1,using L490: x$,a2 eof DONE
 00160   restore #2,key>=x$&"         ": nokey L230
@@ -27,15 +27,15 @@
 00240 ! ______________________________________________________________________
 00250 SCR1: ! 
 00260   sn$="Means-1" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=62 : mypos=50
 00270   txt$="Billing Dates for Months to be Considered:" !:
-        fnlbl(1,1,txt$,mylen,1)
+        fnLbl(1,1,txt$,mylen,1)
 00280   for j=1 to 8 !:
-          fntxt(j+1,mypos,10,0,0,"3") !:
+          fnTxt(j+1,mypos,10,0,0,"3") !:
           resp$(j)="" !:
         next j
-00290   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00290   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   for j=1 to 8
 00320 L320: x=pos(resp$(j),"/",1)
@@ -52,12 +52,12 @@
 00370 ! ______________________________________________________________________
 00380 SCR2: ! 
 00390   sn$="Means-2" !:
-        fntos(sn$)
+        fnTos(sn$)
 00400   txt$="Sewer code to analyze:" !:
-        fnlbl(1,1,txt$,22,1)
-00410   fntxt(1,24,2,2,0,"20") !:
+        fnLbl(1,1,txt$,22,1)
+00410   fnTxt(1,24,2,2,0,"20") !:
         resp$(1)=""
-00420   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00420   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00430   if ckey=5 then goto SCR1
 00440   sewcode=val(resp$(1)) conv SCR2
 00450   if sewcode=0 then !:
@@ -105,7 +105,7 @@
 00820 L820: close #2: ioerr L830
 00830 L830: close #5: ioerr L840
 00840 L840: execute "Index "&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&","&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&" 11,12,REPLACE,DupKeys -n"
-00850   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&",Shr",internal,outin,keyed 
+00850   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00860   gosub HEADER
 00870   means=int(lrec(5)/2)
 00880 L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940

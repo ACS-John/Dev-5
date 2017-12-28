@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsGL\AcPrReg
 10200 ! -- PAYROLL REGISTER
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnpedat$,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fndate_mmddyy_to_ccyymmdd,fngethandle
+10600   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnpedat$,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim miscname$(10)*20,dedcode(10),cap$*128,empd(22)
@@ -11,28 +11,28 @@
 12000   fntop(program$,cap$="Print Payroll Registers")
 12400   fndat(dat$)
 12600 ! ______________________________________________________________________
-12800   fntos(sn$="PayrollReg")
+12800   fnTos(sn$="PayrollReg")
 13000   rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
-13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
-13400   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
+13200   fnFra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
+13400   fnLbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+13600   fnTxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
 13800   resp$(rc+=1)=str$(beg_date)
-14000   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-14200   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
+14000   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+14200   fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
 14400   resp$(rc+=1)=str$(end_date)
-14600   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
-14800   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-15000   fnacs(sn$,0,mat resp$,ckey)
+14600   fnCmdKey("Next",1,1,0,"Calculate tax deposit.")
+14800   fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
+15000   fnAcs(sn$,0,mat resp$,ckey)
 15200   if ckey=5 then goto XIT
 15400 ! 
 15600   beg_date=val(resp$(1))
 15800   end_date=val(resp$(2))
 16000 ! 
-16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
+16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
 16400   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
-16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 16900   fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
-17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
+17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
 17200   report$="Payroll Check Register"
 17400   fnopenprn(cp,58,220,0)
 17600   fn_hdr1

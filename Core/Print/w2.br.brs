@@ -83,7 +83,7 @@
 15680   end if
 17000   ASK_INFO: !
 17020   ! r: build and display the ASK_INFO screen
-17040   fntos(sn$="Prw2-2")
+17040   fnTos(sn$="Prw2-2")
 17060   rc=cf=0: mylen=21: mypos=mylen+2 
 17080    if enableAskCLocality then 
 17100      fraWidth=94
@@ -95,105 +95,105 @@
 17220   if enableDateRange then fraGeneralHeight+=2
 17240   if enableEmpRange then fraGeneralHeight+=3
 17260   if enableAskCLocality then fraGeneralHeight+=5
-17280   fnfra(1,1,fraGeneralHeight,fraWidth,"General","Normally this would the first and last day of the calendar year",0)
+17280   fnFra(1,1,fraGeneralHeight,fraWidth,"General","Normally this would the first and last day of the calendar year",0)
 17300   cf+=1 : franum=cf : lc=0
-17320   fnlbl(lc+=1,1,"Tax Year:",mylen,1,0,franum)
-17340   fntxt(lc,mypos,4,0,1,"",1,"Year to pr W-2s for",franum)
+17320   fnLbl(lc+=1,1,"Tax Year:",mylen,1,0,franum)
+17340   fnTxt(lc,mypos,4,0,1,"",1,"Year to pr W-2s for",franum)
 17360   resp$(resc_taxYear:=rc+=1)=taxYear$
 17380   if enableDateRange then
-17400     fnlbl(lc+=1,1,"Starting Date:",mylen,1,0,franum)
-17420     fntxt(lc,mypos,10,0,1,"3",0,"First day of calendar year",franum)
+17400     fnLbl(lc+=1,1,"Starting Date:",mylen,1,0,franum)
+17420     fnTxt(lc,mypos,10,0,1,"3",0,"First day of calendar year",franum)
 17440     resp$(respc_startdate:=rc+=1)='0101'&date$(days(date$)-180,'YY')
-17460     fnlbl(lc+=1,1,"Ending Date:",mylen,1,0,franum)
-17480     fntxt(lc,mypos,10,0,1,"3",0,"Last day of calendar year",franum)
+17460     fnLbl(lc+=1,1,"Ending Date:",mylen,1,0,franum)
+17480     fnTxt(lc,mypos,10,0,1,"3",0,"Last day of calendar year",franum)
 17500     resp$(respc_enddate:=rc+=1)='1231'&date$(days(date$)-180,'YY')
 17520     lc+=1
 17540   end if
 17560   if enableEmpRange then
-17580     fnlbl(lc+=1,1,"Starting Employee:",mylen,1,0,franum)
+17580     fnLbl(lc+=1,1,"Starting Employee:",mylen,1,0,franum)
 17600     fncmbemp(lc,mypos,1,franum)
 17620     resp$(respc_empStart:=rc+=1)=""
-17640     fnlbl(lc+=1,1,"Ending Employee:",mylen,1,0,franum)
+17640     fnLbl(lc+=1,1,"Ending Employee:",mylen,1,0,franum)
 17660     fncmbemp(lc,mypos,1,franum)
 17680     resp$(respc_empEnd:=rc+=1)=""
 17700     lc+=1
 17720   end if
 17740   if enableAskCLocality then
-17760     fnlbl(lc+=1,1,"Locality Name:",mylen,1,0,franum)
-17780     fntxt(lc,mypos,12,0,1,"",0,cLocalityToolTip$,franum)
+17760     fnLbl(lc+=1,1,"Locality Name:",mylen,1,0,franum)
+17780     fnTxt(lc,mypos,12,0,1,"",0,cLocalityToolTip$,franum)
 17800     resp$(resp_cLocality:=rc+=1)=cLocality$
-17820     fnlbl(lc   ,mypos+12+2,"Enter the locality name if the same on all employees.",57,0,0,franum)
-17840     fnlbl(lc+=1,mypos+12+2,"Enter NO (or blank) if it is not applicable.",57,0,0,franum)
-17860     fnlbl(lc+=1,mypos+12+2,"Enter YES if applicable, but not he same on all employees",57,0,0,franum)
+17820     fnLbl(lc   ,mypos+12+2,"Enter the locality name if the same on all employees.",57,0,0,franum)
+17840     fnLbl(lc+=1,mypos+12+2,"Enter NO (or blank) if it is not applicable.",57,0,0,franum)
+17860     fnLbl(lc+=1,mypos+12+2,"Enter YES if applicable, but not he same on all employees",57,0,0,franum)
 17880     lc+=1
 17900   end if
-17920   fnlbl(lc+=1,1,"Employee Name Format:",mylen,1,0,franum)
+17920   fnLbl(lc+=1,1,"Employee Name Format:",mylen,1,0,franum)
 17940   fncomboa('nameFormat',lc,mypos,mat optNameFormat$, '',20,franum)
 17960   resp$(resp_namcde:=rc+=1)=nameFormat$
 17980   !
 18000   fra2Height=5 : fra2Y=fraGeneralHeight+3
-18020   fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
+18020   fnFra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
 18040   cf+=1 : franum=cf : lc=0
 18060   mylen=46: mypos=mylen+2
-18080   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
-18100   fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
+18080   fnLbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
+18100   fnTxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
 18120   resp$(respc_ssrate:=rc+=1)=str$(ssrate)
-18140   fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-18160   fntxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
+18140   fnLbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
+18160   fnTxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
 18180   resp$(respc_ssmax:=rc+=1)=str$(ssmax)
-18200   fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
-18220   fntxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
+18200   fnLbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
+18220   fnTxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
 18240   resp$(respc_mcrate:=rc+=1)=str$(mcrate)
-18260   fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-18280   fntxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
+18260   fnLbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
+18280   fnTxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 18300   resp$(respc_mcmax:=rc+=1)=str$(mcmax)
 18320   !
 18340   fra3Y=fra2Y+fra2Height+2 : fra3Height=6
-18360   fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
+18360   fnFra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 18380   cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
-18400   fnopt(1,3,"Print W-2",0,franum)
+18400   fnOpt(1,3,"Print W-2",0,franum)
 18420   resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
-18440   fnlbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
-18460   fnlbl(2,5,"Copy:",12,1,0,franum)
+18440   fnLbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
+18460   fnLbl(2,5,"Copy:",12,1,0,franum)
 18480   fncomboa('w2Copy',2,19,mat optW2Copy$, '',20,franum)
 18500   resp$(respc_w2copy:=rc+=1)=w2Copy$
-18520   fnchk(2,68,'W-2 - Enable Background',1,franum)
+18520   fnChk(2,68,'W-2 - Enable Background',1,franum)
 18540   resp$(respc_enableBackground:=rc+=1)=enableBackground$
-18560   ! fnchk(3,68,'2 Per Page',1,franum)
-18600   fnchk(4,68,'Print W-3 also',1,franum)
+18560   ! fnChk(3,68,'2 Per Page',1,franum)
+18600   fnChk(4,68,'Print W-3 also',1,franum)
 18620   resp$(respc_w3:=rc+=1)=enableW3$
-18640   fnopt(4,3,"Export for Advanced Micro Solutions",0,franum)
+18640   fnOpt(4,3,"Export for Advanced Micro Solutions",0,franum)
 18660   resp$(respc_export_ams:=rc+=1)=w2destinationOpt$(2)
-18680 ! fnopt(5,3,"Export for Center Piece Software",0,franum)  ! removed access 01/03/2017
+18680 ! fnOpt(5,3,"Export for Center Piece Software",0,franum)  ! removed access 01/03/2017
 18700 ! resp$(respc_export_cps:=rc+=1)=w2destinationOpt$(3)  ! removed access 01/03/2017
-18720   fnlbl(5,5,"Export File:",12,1,0,franum)
-18740   fntxt(5,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
+18720   fnLbl(5,5,"Export File:",12,1,0,franum)
+18740   fnTxt(5,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
 18760   resp$(resp_w2_export_file:=rc+=1)=w2laser_output_filename$
-18780   fnbutton(5,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
-18800   fnlbl(6,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
+18780   fnButton(5,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
+18800   fnLbl(6,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
 18820   !
 18840   if enablePayrollDeductions then
 18860     fra4Y=fra3y+fra3Height+2 ! 25
-18880     fnfra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
+18880     fnFra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 18900     cf+=1 : franum=cf
-18920     fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-18940     fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+18920     fnLbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
+18940     fnTxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 18960     resp$(respc_qpenplan:=rc+=1)=str$(pn1)
-18980     fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-19000     fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+18980     fnLbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
+19000     fnTxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19020     resp$(respc_depCareBen:=rc+=1)=str$(dc1)
 19040   else if enableAskState then
 19060     fra4Y=fra3y+fra3Height+2 ! 25
-19080     fnfra(fra4Y,1,2,fraWidth,"State","")
+19080     fnFra(fra4Y,1,2,fraWidth,"State","")
 19100     cf+=1 : franum=cf
-19120     fnlbl(1,1,"State Name:",mylen,1,0,franum)
-19140     fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+19120     fnLbl(1,1,"State Name:",mylen,1,0,franum)
+19140     fnTxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19160     resp$(respc_state:=rc+=1)=state$
 19180   end if
-19200   fncmdkey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
-19220   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-19240   fncmdkey("&Cancel",5,0,1,"Returns to menu")
-19260   fnacs(sn$,0,mat resp$,ckey)
+19200   fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
+19220   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+19240   fnCmdKey("&Cancel",5,0,1,"Returns to menu")
+19260   fnAcs(sn$,0,mat resp$,ckey)
 19280   ! /r
 20000   ! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
 20020   if ckey=5 then 
@@ -287,7 +287,7 @@
 33020   if ~setup then
 33040     setup=1
 33060     dim w2laser_output_filename$*256
-33070     library 'S:\Core\Library': fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnopt,fnmsgbox,fnchk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnbutton,fncmdset,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnreg_read,fnreg_write,fncomboa,fnw3,fnpa_pic,fnAddOneC
+33070     library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnreg_read,fnreg_write,fncomboa,fnw3,fnpa_pic,fnAddOneC
 33160     on error goto ERTN
 33162     dim optNameFormat$(2)*20,nameFormat$*20
 33164     optNameFormat$(1)='First Name First'
@@ -299,16 +299,16 @@
 36040   fnreg_read('W-2 - Form 1 Y',amResp$(1),'10' )
 36060   fnreg_read('W-2 - Form 2 Y',amResp$(2),'151')
 36080   fnreg_read('W-2 - X'       ,amResp$(3),'12' )
-36100   fntos(sn$='w2_ask_margins')
+36100   fnTos(sn$='w2_ask_margins')
 36120   mylen=30 : mypos=mylen+2
-36140   fnlbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
-36160   fntxt(lc,mypos,3,0,1,'30')
-36180   fnlbl(lc+=1,1,"Form 2 Distance from Top (mm):",mylen,1)
-36200   fntxt(lc,mypos,3,0,1,'30')
-36220   fnlbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
-36240   fntxt(lc,mypos,3,0,1,'30')
-36260   fncmdset(4)
-36280   fnacs(sn$,0,mat amResp$,ckey)
+36140   fnLbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
+36160   fnTxt(lc,mypos,3,0,1,'30')
+36180   fnLbl(lc+=1,1,"Form 2 Distance from Top (mm):",mylen,1)
+36200   fnTxt(lc,mypos,3,0,1,'30')
+36220   fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
+36240   fnTxt(lc,mypos,3,0,1,'30')
+36260   fnCmdSet(4)
+36280   fnAcs(sn$,0,mat amResp$,ckey)
 36300   if ckey<>5 then
 36320     fnreg_write('W-2 - Form 1 Y' ,amResp$(1))
 36340     fnreg_write('W-2 - Form 2 Y' ,amResp$(2))

@@ -1,6 +1,6 @@
 00020   on fkey 5 goto L470
 00030   on error goto L920
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole
 00050   fntop(program$,cap$="Service Production Report")
 00060   fncno(cno,cnam$)
 00070   fnconsole(1)
@@ -13,7 +13,7 @@
 00140   read #2,using L150: mat cat$ ioerr L920
 00150 L150: form pos 1,30*c 30
 00160   close #2: 
-00170   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
+00170   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outIn,relative 
 00180   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 00190   pr newpage
 00200   pr f "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"

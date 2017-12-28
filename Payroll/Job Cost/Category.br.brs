@@ -1,7 +1,7 @@
 00010 ! (formerly)  S:\acsPR\category
 00020 ! Service Code File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnmsgbox,fnxit,fndat,fntop,fntos,fnlbl,fncmdkey,fnacs,fntxt,fncmdset,fncombof,fnflexinit1,fnflexadd1,fncmbcategory,fncategory_srch
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnmsgbox,fnxit,fndat,fntop,fnTos,fnLbl,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnflexinit1,fnflexadd1,fncmbcategory,fncategory_srch
 00050   fntop(program$)
 00060   on error goto ERTN
 00070   dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*60
@@ -13,27 +13,27 @@
 00140   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00150 ! 
 00160   if exists(env$('Q')&"\PRmstr\Category.H"&env$('cno'))=0 then goto SETUP_FILES
-00170 L170: open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outin,keyed 
+00170 L170: open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00180 L180: form pos 1,n 5,c 30
 00190 ASKCATEGORY: ! 
 00200   mat resp$=("")
 00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
-00220   fntos(sn$="Pr-askcategory") !:
+00220   fnTos(sn$="Pr-askcategory") !:
         respc=0
-00230   fnlbl(1,1,"Category Number:",20,right)
+00230   fnLbl(1,1,"Category Number:",20,right)
 00240   fncmbcategory(1,23)
 00250   if hact$="" then !:
           resp$(respc+=1)="" else !:
           resp$(respc+=1)=hact$
-00260   fncmdkey("&Add",1,0,0,"Add a new category record." ) !:
-        fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
-        fncmdkey("&Next",3,0,0,"Access next record in category order") !:
-        fncmdkey("&Search",6,0,0,"Search for category record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
-        fncmdkey("&Proof List",8,0,0,"Returns to menu") !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00270   fnacs(sn$,0,mat resp$,ckey)
+00260   fnCmdKey("&Add",1,0,0,"Add a new category record." ) !:
+        fnCmdKey("E&dit",2,1,0,"Access the highlited record") !:
+        fnCmdKey("&Next",3,0,0,"Access next record in category order") !:
+        fnCmdKey("&Search",6,0,0,"Search for category record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
+        fnCmdKey("&Proof List",8,0,0,"Returns to menu") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00270   fnAcs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   if ckey=8 then gosub PRINT_PROOF: goto ASKCATEGORY
 00300   if ckey=1 then goto ADD_RECORD
@@ -45,19 +45,19 @@
 00360   if trim$(category$)="" then goto ASKCATEGORY else read #1,using L180,key=catergory$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKCATEGORY
 00380 SCREEN_1: ! maintain category screen
-00390   fntos(sn$="Pr-Category") !:
+00390   fnTos(sn$="Pr-Category") !:
         respc=0
 00400   mylen=12: mypos=mylen+3 : right=1
-00410   fnlbl(1,1,"Category #:",mylen,right)
-00420   fntxt(1,mypos,6,0,0,"") !:
+00410   fnLbl(1,1,"Category #:",mylen,right)
+00420   fnTxt(1,mypos,6,0,0,"") !:
         resp$(1)=str$(category)
-00430   fnlbl(2,1,"Name:",mylen,right)
-00440   fntxt(2,mypos,30,0,0,"",0,"The enter the category name.") !:
+00430   fnLbl(2,1,"Name:",mylen,right)
+00440   fnTxt(2,mypos,30,0,0,"",0,"The enter the category name.") !:
         resp$(2)=name$
-00450   fncmdkey("&Save",1,1,0,"Saves any changes and returns to main screen.")
-00460   fncmdkey("&Delete",4,0,0,"Deletes this record from the Category file.")
-00470   fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
-00480   fnacs(sn$,0,mat resp$,ckey)
+00450   fnCmdKey("&Save",1,1,0,"Saves any changes and returns to main screen.")
+00460   fnCmdKey("&Delete",4,0,0,"Deletes this record from the Category file.")
+00470   fnCmdKey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
+00480   fnAcs(sn$,0,mat resp$,ckey)
 00490   if ckey=5 then goto ASKCATEGORY
 00500   category=val(resp$(1)(1:5)) : category$=lpad$(trim$(resp$(1)),5)
 00510   name$=resp$(2)
@@ -82,14 +82,14 @@
 00640   return 
 00650 ADD_RECORD: ! 
 00660   if reindex>3 then goto ERTN
-00670   fntos(sn$="category2")
-00680   fnlbl(1,5,"New Category Information",30,1)
-00690   fnlbl(3,1,"Category Number:",15,0)
-00700   fntxt(3,18,5,0,0,"") !:
+00670   fnTos(sn$="category2")
+00680   fnLbl(1,5,"New Category Information",30,1)
+00690   fnLbl(3,1,"Category Number:",15,0)
+00700   fnTxt(3,18,5,0,0,"") !:
         resp$(1)=str$(category)
 00710   resp$(1)=""
-00720   fncmdset(11)
-00730   fnacs(sn$,0,mat resp$,ckey)
+00720   fnCmdSet(11)
+00730   fnAcs(sn$,0,mat resp$,ckey)
 00740   if ckey=5 then goto ASKCATEGORY
 00750   category=val(resp$(1)(1:5)) !:
         category$=lpad$(trim$(resp$(1)(1:5)),5)
@@ -106,7 +106,7 @@
 00820   gosub RECREATE_GRID
 00830   goto SCREEN_1
 00840 SETUP_FILES: ! 
-00850   open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",RecL=128,replace",internal,outin 
+00850   open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",RecL=128,replace",internal,outIn 
 00860   close #1: 
 00870   goto REINDEX
 00880 REINDEX: ! indexes if needed

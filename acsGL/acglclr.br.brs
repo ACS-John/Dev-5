@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlClr
 00020 ! -- Clear Accumulated Transactions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd, fntos,fnlbl,fncmdset,fntxt,fnacs, fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs, fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
@@ -10,18 +10,18 @@
 00100   fntop(program$,cap$="Clear Accumulated Transactions")
 00110   fnconsole(off=0)
 00120   fncno(cno,cnam$)
-00130   fntos(sn$='ClrAccTrans') !:
+00130   fnTos(sn$='ClrAccTrans') !:
         lc=0 !:
         mylen=50 : mypos=mylen+2 : width=80
-00140   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
-00150   fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)
-00160   fnlbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)
-00170   fnlbl(lc+=1,1,"older than the date entered.",width,center)
-00180   fnlbl(lc+=1,1,"Enter the Removal Date:",mylen,right)
-00190   fntxt(lc,mypos,8,0,0,'ccyymmdd') !:
+00140   fnLbl(lc+=1,1,"* * *   Warning   * * *",width,center)
+00150   fnLbl(lc+=1,1,"This selection will remove all records from the",width,center)
+00160   fnLbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)
+00170   fnLbl(lc+=1,1,"older than the date entered.",width,center)
+00180   fnLbl(lc+=1,1,"Enter the Removal Date:",mylen,right)
+00190   fnTxt(lc,mypos,8,0,0,'ccyymmdd') !:
         resp$=''
-00200   fncmdset(2)
-00210   fnacs(sn$,0,mat resp$,ckey)
+00200   fnCmdSet(2)
+00210   fnAcs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
 00230   rd1=val(resp$(1))
 00240 ! 

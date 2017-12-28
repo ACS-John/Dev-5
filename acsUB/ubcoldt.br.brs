@@ -1,27 +1,24 @@
 00010 ! Replace S:\acsUB\UBColPrn
 00020 ! -- Cash Receipts Journal
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnwait,fndate_mmddyy_to_ccyymmdd,fnxit,fncmdset,fnchk,fntop,fnacs,fnopt,fncmdset,fnerror,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fndat,fnwait,fndate_mmddyy_to_ccyymmdd,fnxit,fnCmdSet,fnChk,fntop,fnAcs,fnOpt,fnCmdSet,fnerror,fnmsgbox
 00060 ! ______________________________________________________________________
-00070   dim cnam$*40,dat$*20,scr1$(10)*30,alloc(10),nam$*30,o(2),route(200)
-00080   dim r(20,4),hd1$*255,cap$*128,servicename$(10)*20,tg(11),resp$(7)*40
+00070   dim dat$*20,scr1$(10)*30,alloc(10),nam$*30,o(2),route(200)
+00080   dim r(20,4),hd1$*255,cap$*128,serviceName$(10)*20,tg(11),resp$(7)*40
 00081   dim ml$(3)*90
 00090 ! ______________________________________________________________________
 00100   fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
-00110   fncno(cno,cnam$)
 00120 ! 
 00130   fndat(dat$,1)
-00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative  !:
-        read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
-        close #20: 
+00140   fnget_services(mat serviceName$)
 00150   gosub SCREEN1
 00160   hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
-00180     x2=pos(trim$(servicename$(j))," ",1) !:
-          if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
-00190     if trim$(servicename$(j))<>"" then !:
-            scr1$(sz1+=1)=servicename$(j) !:
-            hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
+00180     x2=pos(trim$(serviceName$(j))," ",1) !:
+          if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
+00190     if trim$(serviceName$(j))<>"" then !:
+            scr1$(sz1+=1)=serviceName$(j) !:
+            hd1$=hd1$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:7)),7)&"}"
 00200   next j
 00210   hd1$=hd1$&"  {\ul Customer Name               }"
 00220   mat scr1$(sz1)
@@ -57,7 +54,7 @@
 00530   r(1,ti2+1)+=tamount
 00540   x=0
 00550   for j=1 to 10
-00560     if trim$(servicename$(j))="" then goto L600
+00560     if trim$(serviceName$(j))="" then goto L600
 00570     alloc(x+=1)=tg(j)
 00580     if ti2=3 then r(x+3,1)-=tg(j) else r(x+3,1)+=tg(j)
 00590     r(x+3,ti2+1)+=tg(j)
@@ -92,21 +89,21 @@
 00860 XIT: fnxit
 00870 ! ______________________________________________________________________
 00880 SCREEN1: ! 
-00890   fntos(sn$="UBColPrn") !:
+00890   fnTos(sn$="UBColPrn") !:
         mylen=33 : mypos=mylen+2
-00900   fnlbl(1,1,"Report Heading Date:",mylen,1)
-00910   fntxt(1,mypos,20) !:
+00900   fnLbl(1,1,"Report Heading Date:",mylen,1)
+00910   fnTxt(1,mypos,20) !:
         resp$(1)=dat$
-00920   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-00930   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)") !:
+00920   fnLbl(2,1,"Starting Date (blank for all):",mylen,1)
+00930   fnTxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)") !:
         resp$(2)=str$(ld1)
-00940   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-00950   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)") !:
+00940   fnLbl(3,1,"Ending Date (blank for all):",mylen,1)
+00950   fnTxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)") !:
         resp$(3)=str$(hd1)
-00960   fnchk(4,mypos,"Include Details:",1) !:
+00960   fnChk(4,mypos,"Include Details:",1) !:
         resp$(4)="True"
-00980   fncmdset(3)
-00990   fnacs(sn$,win,mat resp$,ck)
+00980   fnCmdSet(3)
+00990   fnAcs(sn$,win,mat resp$,ck)
 00992   if ck=5 then goto XIT
 01000   dat$=resp$(1) !:
         ld1=val(resp$(2)) !:

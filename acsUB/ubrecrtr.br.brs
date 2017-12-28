@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBRECRTR
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fncno,fnxit,fnerror,fnwait,fnacs,fntos,fnlbl,fntxt,fncmdset,fntop
+00030   library 'S:\Core\Library': fncno,fnxit,fnerror,fnwait,fnAcs,fnTos,fnLbl,fnTxt,fnCmdSet,fntop
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim p$*10,z$*10,o(2),adr(2),cap$*128,txt$*40,gb(10),tg(11),d(15)
@@ -9,22 +9,22 @@
 00090 ! 
 00100   fntop("S:\acsUB\UbRecrTr",cap$="Recreate Transaction File")
 00110   sn$="ubRecrTr" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=30 !:
         mypos=mylen+2
 00120   txt$="Transaction Date:" !:
-        fnlbl(1,1,txt$,mylen,1)
-00130   fntxt(1,mypos,10,0,0,"3") !:
+        fnLbl(1,1,txt$,mylen,1)
+00130   fnTxt(1,mypos,10,0,0,"3") !:
         resp$(1)=date$("ccyymmdd")
-00140   fnlbl(3,1,"Warning ! Do not continue",mylen,1)
-00150   fnlbl(4,1,"without consulting ACS",mylen,1)
-00160   fnlbl(4,15,"",mylen,1)
-00170   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
+00140   fnLbl(3,1,"Warning ! Do not continue",mylen,1)
+00150   fnLbl(4,1,"without consulting ACS",mylen,1)
+00160   fnLbl(4,15,"",mylen,1)
+00170   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
 00180 L180: x=pos(resp$(1),"/",1) !:
         if x>0 then resp$(1)(x:x)="": goto L180
 00190   trandate=val(resp$(1))
 00200   if ckey=5 then goto XIT
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outin,keyed 
+00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outIn,keyed 
 00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",RecL=102,Replace",internal,output 
 00230 READ_CUSTOMER: ! 
 00240 L240: read #1,using L250: z$,bal,mat d,mat gb eof READ_CUSTOMER_EOF

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newQTRFedUC
 00020 ! Quarterly Federal U/C Worksheet
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fnmsgbox,fncreg_read,fnDedNames,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fncreg_read,fnDedNames,fnGetPayrollDates
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
@@ -26,23 +26,23 @@
 00270 ! ______________________________________________________________________
 00280 ! If FNPROCESS=1 Then Goto 230
 00290 MENU1: ! 
-00300   fntos(sn$="prqtrfeduc") !:
+00300   fnTos(sn$="prqtrfeduc") !:
         respc=0
 00310   if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
-00320   fnlbl(1,1,"Tax Year:",26,1)
-00330   fntxt(1,30,4,0,0,"30",0,"") !:
+00320   fnLbl(1,1,"Tax Year:",26,1)
+00330   fnTxt(1,30,4,0,0,"30",0,"") !:
         resp$(respc+=1)=str$(taxyear)
 00340   option1$(1)="March 31"
 00350   option1$(2)="June 30"
 00360   option1$(3)="September 30"
 00370   option1$(4)="December 31"
-00380   fnlbl(2,1,"Quarter Ending Date:",26,1)
+00380   fnLbl(2,1,"Quarter Ending Date:",26,1)
 00390   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00400   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then resp$(respc+=1)=option1$(1) ! march filing
 00410   if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 00420   if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 00430   if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-00440   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+00440   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 00450   if ck=5 then goto XIT
 00460   taxyear=val(resp$(1)) ! tax year
 00470   if taxyear<2000 then goto L510
@@ -65,8 +65,8 @@
 00600   on pageoflow goto PGOF
 00610   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00620   gosub HDR
-00630   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
-00640   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00630   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00640   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00650 L650: read #2,using L660: eno,mat em$,ss$,em5,em6 eof DONE
 00660 L660: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
 00670   m1=m2=h2=h3=dedytdfeduc=dedqtrfeduc=0

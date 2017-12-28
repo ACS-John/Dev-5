@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcPctCmp
 00020 ! Enter Percent Complete
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnmsgbox,fntos,fnlbl,fntxt,fncmbjob,fncmbcategory,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnmsgbox,fnTos,fnLbl,fnTxt,fncmbjob,fncmbcategory,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,ml$(2)*60,resp$(5)*30
@@ -11,31 +11,31 @@
 00110   fncno(cno)
 00120 ! 
 00130 ! ______________________________________________________________________
-00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00160 TRANSACTION_ENTRY: ! 
 00165   cn=l10=l12=l13=0
-00170   fntos(sn$="Percentinput") !:
+00170   fnTos(sn$="Percentinput") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
-00180   fnlbl(1,1,"Job Number:",mylen,1)
+00180   fnLbl(1,1,"Job Number:",mylen,1)
 00190   fncmbjob(1,mypos) !:
         resp$(respc+=1)=jn$
-00200   fnlbl(2,1,"Category:",mylen,1)
+00200   fnLbl(2,1,"Category:",mylen,1)
 00210   fncmbcategory(2,mypos) !:
         resp$(respc+=1)=str$(cn)
-00220   fnlbl(3,1,"Percent Complete - Labor:",mylen,1)
-00230   fntxt(3,mypos,3,3,0,"30",0,"Enter whole numbers. For example:  10% would be entered as 10") !:
+00220   fnLbl(3,1,"Percent Complete - Labor:",mylen,1)
+00230   fnTxt(3,mypos,3,3,0,"30",0,"Enter whole numbers. For example:  10% would be entered as 10") !:
         resp$(respc+=1)=str$(l12)
-00240   fnlbl(4,1,"Percent Complete - Other:",mylen,1)
-00250   fntxt(4,mypos,3,3,0,"30",0,"Enter whole numbers. For example:  10% would be entered as 10") !:
+00240   fnLbl(4,1,"Percent Complete - Other:",mylen,1)
+00250   fnTxt(4,mypos,3,3,0,"30",0,"Enter whole numbers. For example:  10% would be entered as 10") !:
         resp$(respc+=1)=str$(l13)
-00260   fnlbl(5,1,"Units Completed:",mylen,1)
-00270   fntxt(5,mypos,7,7,0,"30",0,"If you are tracking units on the category, enter the units completed.") !:
+00260   fnLbl(5,1,"Units Completed:",mylen,1)
+00270   fnTxt(5,mypos,7,7,0,"30",0,"If you are tracking units on the category, enter the units completed.") !:
         resp$(respc+=1)=str$(l10)
-00280   fncmdkey("&Update Job",1,1,0,"Posts these percentages immediately to this job.")
-00290   fncmdkey("&Complete",5,0,1,"Returns you to main menu.")
-00300   fnacs(sn$,0,mat resp$,ckey)
+00280   fnCmdKey("&Update Job",1,1,0,"Posts these percentages immediately to this job.")
+00290   fnCmdKey("&Complete",5,0,1,"Returns you to main menu.")
+00300   fnAcs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   jn$=lpad$(trim$(resp$(1)(1:6)),6) ! job number
 00330   if trim$(jn$)="" then goto L340 else goto L350

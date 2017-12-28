@@ -1,7 +1,7 @@
 00020 ! -- RECalculate All Current Bills    *** DO NOT FORGET TO PARALLEL CHANGES FROM S:\acsUB\UBCALK
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncloseprn,fnopenprn,fnxit,fnerror,fntos,fnlbl,fnacs
-00050   library 'S:\Core\Library': fntxt,fnmsgbox,fncmdset,fntop,fnpause,fncd,fnchk,fncreg_read,fncreg_write,fncomboa
+00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncloseprn,fnopenprn,fnxit,fnerror,fnTos,fnLbl,fnAcs
+00050   library 'S:\Core\Library': fnTxt,fnmsgbox,fnCmdSet,fntop,fnpause,fncd,fnChk,fncreg_read,fncreg_write,fncomboa
 00060   library 'S:\Core\Library': fnget_services,fnapply_default_rates,fnAutomatedSavePoint
 00062   library 'S:\Core\Library': fngethandle
 00070   if env$('client')="Chatom" then 
@@ -39,7 +39,7 @@
 00160   dim elecdat(12)
 00162   dim gasuse(12)
 00164   dim gasdat(12)
-00166   dim servicename$(10)*20
+00166   dim serviceName$(10)*20
 00168   dim tax_code$(10)*1
 00170   dim work$*256
 00172   dim work_addr$*256
@@ -55,9 +55,9 @@
 00290 ! get date meter read
 00300   fncreg_read('Meter Reading Date Current',tmp$) : dateread=val(tmp$)
 00330 ! 
-00340   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
-00380   for j=1 to udim(servicename$)
-00385     servicename$(j)=trim$(servicename$(j))
+00340   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+00380   for j=1 to udim(serviceName$)
+00385     serviceName$(j)=trim$(serviceName$(j))
 00390   next j
 00400   fn_ask_billing_date
 00420   if ck=5 then goto XIT
@@ -67,20 +67,20 @@
 00505 ! 
 00510   open #h_ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00550 L550: form pos 55,32*g 10
-00560   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00560   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00570 F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00580 F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-00590   open #h_ubtrans:=3: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00590   open #h_ubtrans:=3: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00600 FORM_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-00610 ! open #h_work:=2: "Name="&work$,internal,outin,relative
+00610 ! open #h_work:=2: "Name="&work$,internal,outIn,relative
 00620 F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
 00630   fn_deposit_open
 00640   fn_bud_open
 00650 ! ______________________________________________________________________
 00660 TOP: ! 
 00670   if r3=>lrec(h_customer) then goto FINIS
-00680 ! read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,norec TOP
-00690   read #h_customer,using F_CUSTOMER_W_ACCT,rec=r3+=1: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra norec TOP eof FINIS
+00680 ! read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,noRec TOP
+00690   read #h_customer,using F_CUSTOMER_W_ACCT,rec=r3+=1: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra noRec TOP eof FINIS
 00700   if f<>d1 then goto TOP
 00710   mat x=(0)
 00720   x(1)=d(1) ! current water reading
@@ -211,9 +211,9 @@
 44120   goto TOP ! /r
 58000 CHECK_UNUSUAL_USAGE: ! r:
 58020   unusual_service$=''
-58040   if fn_cuu_water then let fn_cuu_report_main(unusual_service$&'/'&servicename$(1))
-58060   if fn_cuu_electric then let fn_cuu_report_main(unusual_service$&'/'&servicename$(3))
-58080   if fn_cuu_gas then let fn_cuu_report_main(unusual_service$&'/'&servicename$(4))
+58040   if fn_cuu_water then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
+58060   if fn_cuu_electric then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
+58080   if fn_cuu_gas then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
 58100   unusual_service$=trim$(unusual_service$,'/')
 58120 ! 
 58140   if r9_usage_is_zero=1 then 
@@ -253,15 +253,15 @@
 60440     pr #255: "Type of Service     Old Reading   Current Reading       Calculated Usage"
 60460 F_PR_SERVICE: form c 22,pic(---------),x 9,pic(---------),x 11,pic(----------),x 2,c 30,x 2,c 30
 60480 F_PR_PRIOR_USAGES: form pos 1,c 13,12*(pic(zzzz/zz/zz),nz 9,x 1)
-60500     if trim$(servicename$(1))<>"" then ! test vs. water
+60500     if trim$(serviceName$(1))<>"" then ! test vs. water
 60520       pr #255,using F_PR_SERVICE: "Water",d(1),x(1),usage_srv1
 60540       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",watdat(1),watuse(1),watdat(2),watuse(2),watdat(3),watuse(3),watdat(4),watuse(4),watdat(5),watuse(5),watdat(6),watuse(6),watdat(7),watuse(7),watdat(8),watuse(8),watdat(9),watuse(9),watdat(10),watuse(10),watdat(11),watuse(11),watdat(12),watuse(12)
 60560     end if 
-60580     if trim$(servicename$(3))="Electric" or trim$(servicename$(3))="Lawn Meter" then ! test vs. Electric/lawn meter
+60580     if trim$(serviceName$(3))="Electric" or trim$(serviceName$(3))="Lawn Meter" then ! test vs. Electric/lawn meter
 60600       pr #255,using F_PR_SERVICE: "Electric",d(5),x(3),usage_srv3
 60620       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),elecuse(1),elecdat(2),elecuse(2),elecdat(3),elecuse(3),elecdat(4),elecuse(4),elecdat(5),elecuse(5),elecdat(6),elecuse(6),elecdat(7),elecuse(7),elecdat(8),elecuse(8),elecdat(9),elecuse(9),elecdat(10),elecuse(10),elecdat(11),elecuse(11),elecdat(12),elecuse(12)
 60640     end if 
-60660     if trim$(servicename$(4))="Gas" then ! test vs. Gas
+60660     if trim$(serviceName$(4))="Gas" then ! test vs. Gas
 60680       pr #255,using F_PR_SERVICE: "Gas",d(9),x(2),usage_srv4
 60700       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),gasuse(1),elecdat(2),gasuse(2),elecdat(3),gasuse(3),elecdat(4),gasuse(4),elecdat(5),gasuse(5),elecdat(6),gasuse(6),elecdat(7),gasuse(7),elecdat(8),gasuse(8),elecdat(9),gasuse(9),elecdat(10),gasuse(10),elecdat(11),gasuse(11),elecdat(12),gasuse(12)
 60720     end if 
@@ -305,14 +305,14 @@
 64320   fnend  ! return
 68000   def fn_bud_open
 68020     bud1=0
-68040     open #budmstr:=6: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr BUD1_XIT
-68060     open #budtrans:=7: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+68040     open #budmstr:=6: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr BUD1_XIT
+68060     open #budtrans:=7: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 68080     bud1=1
 68100 BUD1_XIT: ! 
 68120   fnend 
 69000   def fn_deposit_open !
-69020     open #hDeposit1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outin,keyed 
-69080     open #hDeposit2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed
+69020     open #hDeposit1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed 
+69080     open #hDeposit2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed
 69120   fnend 
 70000   def fn_bud2
 70020     bud2=0
@@ -324,7 +324,7 @@
 70140 ! TRANS ROUTINE
 70160     ta1=badr(1)
 70180 L6840: if ta1=0 then goto UPDATE_BUDGET_FILE
-70200     read #budtrans,using L6860,rec=ta1: z$,mat bt1,nba norec UPDATE_BUDGET_FILE
+70200     read #budtrans,using L6860,rec=ta1: z$,mat bt1,nba noRec UPDATE_BUDGET_FILE
 70220 L6860: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 70240     if bt1(1,2)=d1 then bud2=1 : goto UPDATE_BUDGET_FILE
 70260     ta1=nba : goto L6840
@@ -393,7 +393,7 @@
 74520   fnend 
 76000   def fn_cuu_water
 76020     cuu_water_return=0
-76040     if servicename$(1)="Water" then 
+76040     if serviceName$(1)="Water" then 
 76060       if a(1)=0 and a(2)=0 then goto CUU_WATER_XIT ! skip if no water code and no sewer code
 76080 ! 
 76100       usage_srv1=fn_usage(1)
@@ -402,7 +402,7 @@
 76160         if d(3)=0 then goto CUU_WATER_XIT
 76180         if usage_srv1<d(3)-d(3)*pcent or usage_srv1>d(3)+d(3)*pcent then 
 76200           if unusual_usage_report=3 then 
-76220             pr #255: '* '&servicename$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
+76220             pr #255: '* '&serviceName$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
 76240           end if 
 76260           cuu_water_return=1
 76280         end if 
@@ -415,7 +415,7 @@
 76420   fnend 
 78000   def fn_cuu_electric
 78020     cuu_electric_return=0
-78040     if servicename$(3)="Electric" or servicename$(3)="Lawn Meter" or service$(3)="EL" then 
+78040     if serviceName$(3)="Electric" or serviceName$(3)="Lawn Meter" or service$(3)="EL" then 
 78060       if x(3)=0 then goto CUU_ELEC_XIT
 78080 ! 
 78100       usage_srv3=fn_usage(3)
@@ -424,7 +424,7 @@
 78160         if d(7)=0 then goto CUU_ELEC_XIT
 78180         if usage_srv3<d(7)-d(7)*pcent or usage_srv3>d(7)+d(7)*pcent then 
 78200           if unusual_usage_report=3 then 
-78220             pr #255: '* '&servicename$(3)&' unusual because '&str$(usage_srv3)&'<'&str$(d(7)-d(7)*pcent)&' or '&str$(usage_srv3)&'>'&str$(d(7)+d(7)*pcent)
+78220             pr #255: '* '&serviceName$(3)&' unusual because '&str$(usage_srv3)&'<'&str$(d(7)-d(7)*pcent)&' or '&str$(usage_srv3)&'>'&str$(d(7)+d(7)*pcent)
 78240           end if 
 78260           cuu_electric_return=1
 78280         end if 
@@ -437,7 +437,7 @@
 78420   fnend 
 80000   def fn_cuu_gas
 80020     cuu_gas_return=0
-80040     if service$(4)="GA" or servicename$(4)="Gas" then 
+80040     if service$(4)="GA" or serviceName$(4)="Gas" then 
 80060       if x(2)=0 then goto CUU_GAS_XIT
 80080 ! 
 80100       usage_srv4=fn_usage(4)
@@ -446,7 +446,7 @@
 80160         if d(11)=0 then goto CUU_GAS_XIT
 80180         if usage_srv4<d(11)-d(11)*pcent or usage_srv4>d(11)+d(11)*pcent then 
 80200           if unusual_usage_report=3 then 
-80220             pr #255: '* '&servicename$(4)&' unusual because '&str$(usage_srv4)&'<'&str$(d(11)-d(11)*pcent)&' or '&str$(usage_srv4)&'>'&str$(d(11)+d(11)*pcent)
+80220             pr #255: '* '&serviceName$(4)&' unusual because '&str$(usage_srv4)&'<'&str$(d(11)-d(11)*pcent)&' or '&str$(usage_srv4)&'>'&str$(d(11)+d(11)*pcent)
 80240           end if 
 80260           cuu_gas_return=1
 80280         end if 
@@ -460,37 +460,37 @@
 82000   def fn_ask_billing_date
 82020 ! returns ck (if ck=5 upon return then cancel  was selected)
 82040 ASK_BILLING_DATE: ! 
-82060     fntos(sn$='ubCalk_'&str$(btu_factor_enabled)&'_'&env$('client')(1:1))
+82060     fnTos(sn$='ubCalk_'&str$(btu_factor_enabled)&'_'&env$('client')(1:1))
 82080     mylen=24 : mypos=mylen+2
 82090     respc=0 : linec=0
-82100     fnlbl(linec+=1,1,"Billing Date:",mylen,1)
-82120 ! fnlbl(1,1,"",34,1)
-82140     fntxt(linec,mypos,8,0,1,"1001")
+82100     fnLbl(linec+=1,1,"Billing Date:",mylen,1)
+82120 ! fnLbl(1,1,"",34,1)
+82140     fnTxt(linec,mypos,8,0,1,"1001")
 82160     resp$(respc_billing_date:=respc+=1)=str$(d1)
 82180     if env$('client')='Campbell' then
 82190         linec+=1
-82200         fnlbl(linec+=1,1,"Sewer Cap Date:",mylen,1)
-82220         fntxt(linec,mypos,8,0,1,"1")
+82200         fnLbl(linec+=1,1,"Sewer Cap Date:",mylen,1)
+82220         fnTxt(linec,mypos,8,0,1,"1")
 82260         fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
 82280         resp$(resp_sewer_cap_date:=respc+=1)=sewer_cap_date$
 82300     end if 
 82320     if btu_factor_enabled=1 then ! ask BTU question on Edinburg and French Settlement
 82340       if env$('client')='French Settlement' then 
-82360         fnlbl(linec+=1,1,"Cost of Gas Adjustment:",mylen,1)
+82360         fnLbl(linec+=1,1,"Cost of Gas Adjustment:",mylen,1)
 82380       else 
-82400         fnlbl(linec+=1,1,"Current BTU Factor:",mylen,1)
+82400         fnLbl(linec+=1,1,"Current BTU Factor:",mylen,1)
 82420       end if 
-82440       fntxt(linec,mypos,10,0,1,"1045")
+82440       fnTxt(linec,mypos,10,0,1,"1045")
 82460       resp$(resp_btu_factor:=respc+=1)=str$(btu)
 82480     end if 
 82500     if env$('client')='French Settlement' then 
 82510       linec+=1
-82520       fnchk(linec+=1,1,"Calculate Interest on Deposit")
+82520       fnChk(linec+=1,1,"Calculate Interest on Deposit")
 82540       resp$(resp_calc_interest_on_deposit:=respc+=1)='False'
-82560       fnchk(linec+=1,1,"Charge Inspection Fee")
+82560       fnChk(linec+=1,1,"Charge Inspection Fee")
 82580       resp$(resp_charge_inspection_fee:=respc+=1)='False'
-82600       fnlbl(linec-2,35,"Interest Credit Rate:",21,1)
-82620       fntxt(linec-2,58,10,0,1,"44")
+82600       fnLbl(linec-2,35,"Interest Credit Rate:",21,1)
+82620       fnTxt(linec-2,58,10,0,1,"44")
 82640       resp$(resp_interest_credit_rate:=respc+=1)='.0500' ! str$(.05)
 82660     end if 
 83000 ! r: unusual usage report qusetion
@@ -498,15 +498,15 @@
 83040     unusual_usage_report_opt$(1)="Unusual and Skipped (Classic)"
 83060     unusual_usage_report_opt$(2)="Skipped Accounts Only"
 83080     unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
-83320     fnlbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
+83320     fnLbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
 83340     fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
 83360     fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
 83380     unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83400     if unusual_usage_report=0 then unusual_usage_report=1 : unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)
 83420     resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 83440 ! /r
-83460     fncmdset(2)
-83480     fnacs(sn$,0,mat resp$,ck)
+83460     fnCmdSet(2)
+83480     fnAcs(sn$,0,mat resp$,ck)
 83500     if ck<>5 then 
 83520       d1=val(resp$(respc_billing_date))
 83540       if btu_factor_enabled then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes

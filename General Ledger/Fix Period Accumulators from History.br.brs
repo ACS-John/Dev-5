@@ -5,7 +5,7 @@
 12200 ! 
 12400   process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
 12600 ! 
-12800   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
+12800   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
 13000   read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 13020 ! lmu = Last Accounting Period Closed
 13040 ! nap = Number of Accounting Periods
@@ -18,15 +18,15 @@
 14000   fn_report(cap$)
 14200   fn_report(date$('mm/dd/ccyy'))
 14400   fn_report('')
-14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outin,keyed 
+14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 15000 F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 15200   if process_gltrans then 
 15400     fnindex_it(env$('Q')&"\GLmstr\GLTrans.H"&env$('cno'),env$('Temp')&"\GLIndex.H"&env$('cno'),"1 12")
-15600     open #h_gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",KFName="&env$('Temp')&"\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+15600     open #h_gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",KFName="&env$('Temp')&"\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 15800   end if  ! process_gltrans
 16000 F_GLTRANS: form pos 1,c 12,n 6,pd 6.2,n 2
-16200   open #h_glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
-16400   open #h_glmstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+16200   open #h_glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+16400   open #h_glmstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
 16600 F_GLMSTR: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 16800   do 
 17000     read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
@@ -90,7 +90,7 @@
 24600 ! fncloseprn : report_open=0
 24800 XIT: fnxit ! if env$('acsdeveloper')<>'' then stop else let fnxit ! XXX
 25000 def fn_setup
-25020   library 'S:\Core\Library': fntop,fnxit,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncmdset,fnchk,fncreg_write,fncreg_read,fncd,fnactpd,fnstatus,fnqgl,fnagl$,fnindex_it,fnrgl$
+25020   library 'S:\Core\Library': fntop,fnxit,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fnCmdSet,fnChk,fncreg_write,fncreg_read,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$
 25040   on error goto ERTN
 25060 ! ______________________________________________________________________
 25080   dim cap$*128,resp$(100)*60
@@ -102,17 +102,17 @@
 26040     period_date_start=(0)
 26060     mat prior_period_date_start(nap)
 26080     prior_period_date_start=(0)
-26100     fntos(sn$="FixPA2_"&str$(nap))
+26100     fnTos(sn$="FixPA2_"&str$(nap))
 26120     mylen=31
 26140     mypos=mylen+2
 26160     respc=0 : myline=0
 26180     for period=1 to nap
-26200       fnlbl(myline+=1,1,"Period "&str$(period)&" Start Date:",mylen,1)
-26220       fntxt(myline,mypos,8,0,1,"1")
+26200       fnLbl(myline+=1,1,"Period "&str$(period)&" Start Date:",mylen,1)
+26220       fnTxt(myline,mypos,8,0,1,"1")
 26240       respc+=1
 26260       fncreg_read("Period "&str$(period)&" Start Date",resp$(respc))
 26280     next period
-26300     fnchk(myline+=2,mypos,"Correct Prior Year",1)
+26300     fnChk(myline+=2,mypos,"Correct Prior Year",1)
 26320     respc+=1
 26340     fncreg_read("correct prior year",resp$(respc))
 26360     if resp$(respc)='' then resp$(respc)='False'
@@ -121,22 +121,22 @@
 26410     resp_lrea_fund_1=respc+1
 26420     if use_dept then 
 26440       col4_pos=col3_pos+10
-26460       fnlbl(1,col3_pos,'Last Retained Earnings Account(s)')
+26460       fnLbl(1,col3_pos,'Last Retained Earnings Account(s)')
 26500       for fund_item=1 to udim(mat fund_list)
-26520         fnlbl(myline+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
+26520         fnLbl(myline+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
 26540         fnqgl(myline,col4_pos)
 26560         respc+=1
 26580         fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 26600       next fund_item
 26620     else 
 26630       col4_pos=col3_pos+32
-26640       fnlbl(1,col3_pos,'Last Retained Earnings Account:',31,1)
+26640       fnLbl(1,col3_pos,'Last Retained Earnings Account:',31,1)
 26660       fnqgl(myline,col4_pos)
 26680       respc+=1
 26700       fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 26720     end if 
-26740     fncmdset(2)
-26760     fnacs(sn$,0,mat resp$,ck)
+26740     fnCmdSet(2)
+26760     fnAcs(sn$,0,mat resp$,ck)
 26780     if ck<>5 then 
 26800       respc=0
 26820       for period=1 to nap
@@ -219,7 +219,7 @@
 41000 !     fnopenprn
 41200 !   end if  ! ~report_open
 41400 !   pr #255: line$
-41420     fnstatus(line$) ! pr line$ ! XXX
+41420     fnStatus(line$) ! pr line$ ! XXX
 41600   fnend 
 51670 ! ______________________________________________________________________
 51680 ! <Updateable Region: ERTN>

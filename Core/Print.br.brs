@@ -5,10 +5,10 @@
 12020   on error goto ERTN
 12040   if ~setup then 
 12060     setup=1
-12080     library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnfree,fnreg_read,fnureg_read,fnSystemName$,fngetpp
-12100     library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe,fninch2twip,fnprocess,fngethandle,fnstatus_close
+12080     library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnfree,fnreg_read,fnureg_read,fnSystemName$,fnGetPp
+12100     library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe,fninch2twip,fnprocess,fngethandle,fnStatusClose
 12110     library 'S:\Core\Library': fnmakesurepathexists
-12112     ! library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fnopt,fncmdset
+12112     ! library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnOpt,fnCmdSet
 12120     ! 
 12140     ! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
 12160     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
@@ -128,7 +128,7 @@
 38130       pr 'copy failed.  report lost at temp file: "'&env$('Q')&'\tmp_'&session$&'.prn"'
 38140       pause 
 38160     end if 
-38180     fnstatus_close
+38180     fnStatusClose
 38200     fn_start(cp_destinationFileName$, 0,forceWordProcessor$)
 38220   end if 
 38400   g_prgCapForSettingsOverride$=''
@@ -284,7 +284,7 @@
 49280       dim cache_sendto_path$*512
 49300       dim cache_sendto_file_base$*256
 49320       dim cache_sendto_file_ext$*128
-49340       fngetpp(serverSendto$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
+49340       fnGetPp(serverSendto$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
 49360     !       pause
 49380       serverSendto$=fn_report_cache_folder_current$&'\'&cache_sendto_file_base$&cache_sendto_file_ext$
 49400     !       pr 'CS set destination to: '&serverSendto$

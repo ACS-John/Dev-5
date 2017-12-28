@@ -15,9 +15,9 @@
 32000 def library fnworkOrderAdd(z$*10)
 32020   if ~wo_setup then ! r:
 32040     wo_setup=1
-32060     library 'S:\Core\Library': fnWorkOrderPrint,fnacs,fntos,fnlbl,fntxt
+32060     library 'S:\Core\Library': fnWorkOrderPrint,fnAcs,fnTos,fnLbl,fnTxt
 32070     library 'S:\Core\Library': fngethandle
-32080     library 'S:\Core\Library': fnNoteDir$,fncmdkey,fnWorkOrderList,fnerror
+32080     library 'S:\Core\Library': fnNoteDir$,fnCmdKey,fnWorkOrderList,fnerror
 32100     on error goto ERTN
 32120     dim ws$(13)*30
 32140     dim workinfo$(15)*512
@@ -64,58 +64,58 @@
 33070   close #wo_h_customer:
 
 34000   WO_TOS: !
-34020   fntos(sn$="workorder")
+34020   fnTos(sn$="workorder")
 34040   respc=0
-34060   fnlbl(1,30,"WORK ORDER",20,0,4)
-34080   fnlbl(2,1,"Account:",10,1)
-34160   fntxt(2,12,10,0,1,"",1)
+34060   fnLbl(1,30,"WORK ORDER",20,0,4)
+34080   fnLbl(2,1,"Account:",10,1)
+34160   fnTxt(2,12,10,0,1,"",1)
 34200   workinfo$(respc_accont=respc+=1)=z$
-34220   fnlbl(2,24,"Name:",5,1)
-34240   fntxt(2,31,25,30,0,"",1)
+34220   fnLbl(2,24,"Name:",5,1)
+34240   fnTxt(2,31,25,30,0,"",1)
 34260   workinfo$(respc+=1)=customer_name$
-34280   fnlbl(4,1,"Date Order Taken:",23,1)
-34300   fntxt(4,25,25)
+34280   fnLbl(4,1,"Date Order Taken:",23,1)
+34300   fnTxt(4,25,25)
 34320   workinfo$(respc+=1)=dat$
-34340   fnlbl(5,1,ws$(2),23,1)
-34360   fntxt(5,25,25)
+34340   fnLbl(5,1,ws$(2),23,1)
+34360   fnTxt(5,25,25)
 34380   workinfo$(respc+=1)=""
-34400   fnlbl(6,1,ws$(3),23,1)
-34420   fntxt(6,25,25)
+34400   fnLbl(6,1,ws$(3),23,1)
+34420   fnTxt(6,25,25)
 34440   workinfo$(respc+=1)=""
-34460   fnlbl(7,1,ws$(4),23,1)
-34480   fntxt(7,25,25)
+34460   fnLbl(7,1,ws$(4),23,1)
+34480   fnTxt(7,25,25)
 34500   workinfo$(respc+=1)=""
-34520   fnlbl(8,1,ws$(5),23,1)
-34540   fntxt(8,25,25)
+34520   fnLbl(8,1,ws$(5),23,1)
+34540   fnTxt(8,25,25)
 34560   workinfo$(respc+=1)=""
-34580   fnlbl(9,1,ws$(6),23,1)
-34600   fntxt(9,25,14)
+34580   fnLbl(9,1,ws$(6),23,1)
+34600   fnTxt(9,25,14)
 34620   workinfo$(respc+=1)=customer_phone_number$
-34640   fnlbl(10,1,ws$(7),23,1)
-34660   fntxt(10,25,25)
+34640   fnLbl(10,1,ws$(7),23,1)
+34660   fnTxt(10,25,25)
 34680   workinfo$(respc+=1)=""
-34700   fnlbl(11,1,ws$(8),23,1)
-34720   fntxt(11,25,8,0,0,"1")
+34700   fnLbl(11,1,ws$(8),23,1)
+34720   fnTxt(11,25,8,0,0,"1")
 34740   workinfo$(respc+=1)=""
-34760   fnlbl(12,1,ws$(9),23,1)
-34780   fntxt(12,25,8,0,0,"1")
+34760   fnLbl(12,1,ws$(9),23,1)
+34780   fnTxt(12,25,8,0,0,"1")
 34800   workinfo$(respc+=1)=""
-34820   fnlbl(13,1,ws$(10),23,1)
-34840   fntxt(13,25,8)
+34820   fnLbl(13,1,ws$(10),23,1)
+34840   fnTxt(13,25,8)
 34860   workinfo$(respc+=1)=""
-34880   fnlbl(14,1,ws$(11),23,1)
-34900   fntxt(14,25,30)
+34880   fnLbl(14,1,ws$(11),23,1)
+34900   fnTxt(14,25,30)
 34920   workinfo$(respc+=1)=""
-34940   fnlbl(15,1,ws$(12),23,1)
-34960   fntxt(15,25,30)
+34940   fnLbl(15,1,ws$(12),23,1)
+34960   fnTxt(15,25,30)
 34980   workinfo$(respc+=1)=""
-35000   fnlbl(16,1,ws$(13),23,1)
-35020   fntxt(16,25,50,280)
+35000   fnLbl(16,1,ws$(13),23,1)
+35020   fnTxt(16,25,50,280)
 35040   workinfo$(respc+=1)=""
-35060   fncmdkey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
-35080   fncmdkey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
-35100   fncmdkey("&Cancel",5,0,1,"Returns to main customer record.")
-35120   fnacs(sn$,0,mat workinfo$,ckey) ! work order screen
+35060   fnCmdKey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
+35080   fnCmdKey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
+35100   fnCmdKey("&Cancel",5,0,1,"Returns to main customer record.")
+35120   fnAcs(sn$,0,mat workinfo$,ckey) ! work order screen
 
 38000   if ckey=5 then goto woaXIT
 38020   z$=workinfo$(respc_accont)(1:10) ! lpad$(trim$(workinfo$(respc_accont)(1:10)),10)
@@ -146,7 +146,7 @@
 40020 ! fn_workorder_print_legacy
 
 43000    ! r: write to WorkOrder History file (z$)
-43020     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed
+43020     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
 43040     write #h_workorder,using "form pos 1,Cr 10,n 8,c 30,5*c 100": z$,date('ccyymmdd'),customer_name$,mat line$
 43060     close #h_workorder: 
 43080   ! /r

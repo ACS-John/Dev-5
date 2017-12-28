@@ -1,43 +1,43 @@
 00010 ! Replace Core\PrtFlex\GridLayout
 00020 ! layout for grid program
 00030 ! ______________________________________________________________________
-00040   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fncmdset,fnerror,fntop
+00040   library 'Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnCmdSet,fnerror,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
 00080 ! ______________________________________________________________________
 00090   fntop("Core\PrtFlex\GridLayout","Grid Layout")
-00100 L100: fntos(sn$="file_layout") !:
+00100 L100: fnTos(sn$="file_layout") !:
         lablen=15
-00110   fnlbl(1,1,"File Name:",lablen,1)
-00120   fntxt(1,lablen+2,60,0,0,"") !:
+00110   fnLbl(1,1,"File Name:",lablen,1)
+00120   fnTxt(1,lablen+2,60,0,0,"") !:
         resp$(1)="programfolder\grid\data_base_name\filename"
-00130   fncmdset(2)
-00140   fnacs(sn$,0,mat resp$,ckey)
+00130   fnCmdSet(2)
+00140   fnAcs(sn$,0,mat resp$,ckey)
 00150   outputfile$=trim$(resp$(1))&".fil"
 00160   open #10: "Name="&outputfile$&",RecL=87,Use",display,output ioerr L100
-00170 L170: fntos(sn$="file_layout") !:
+00170 L170: fnTos(sn$="file_layout") !:
         lablen=30
-00180   fnlbl(1,1,"Field name:",lablen,1)
-00190   fntxt(1,lablen+2,30,0,0,"") !:
+00180   fnLbl(1,1,"Field name:",lablen,1)
+00190   fnTxt(1,lablen+2,30,0,0,"") !:
         resp$(1)=""
-00200   fnlbl(2,1,"Variable Name:",lablen,1)
-00210   fntxt(2,lablen+2,20,0,0,"") !:
+00200   fnLbl(2,1,"Variable Name:",lablen,1)
+00210   fnTxt(2,lablen+2,20,0,0,"") !:
         resp$(1)=""
-00220   fnlbl(3,1,"Field Length:",lablen,1)
-00230   fntxt(3,lablen+2,4,0,0,"20") !:
+00220   fnLbl(3,1,"Field Length:",lablen,1)
+00230   fnTxt(3,lablen+2,4,0,0,"20") !:
         resp$(1)=""
-00240   fnlbl(4,1,"# of Decimal Positions:",lablen,1)
-00250   fntxt(4,lablen+2,2,0,0,"20") !:
+00240   fnLbl(4,1,"# of Decimal Positions:",lablen,1)
+00250   fnTxt(4,lablen+2,2,0,0,"20") !:
         resp$(1)=""
-00260   fnlbl(5,1,"Format (eg. C 30,pd 4.2):",lablen,1)
-00270   fntxt(5,lablen+2,11,0,0,"") !:
+00260   fnLbl(5,1,"Format (eg. C 30,pd 4.2):",lablen,1)
+00270   fnTxt(5,lablen+2,11,0,0,"") !:
         resp$(5)=""
-00280   fnlbl(6,1,"Abbreviated Name:",lablen,1)
-00290   fntxt(6,lablen+2,20,0,0,"") !:
+00280   fnLbl(6,1,"Abbreviated Name:",lablen,1)
+00290   fnTxt(6,lablen+2,20,0,0,"") !:
         resp$(6)=""
-00300   fncmdset(11)
-00310   fnacs(sn$,0,mat resp$,ckey)
+00300   fnCmdSet(11)
+00310   fnAcs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
 00330   fieldnam$=trim$(resp$(1))
 00340   vn$=trim$(resp$(2))

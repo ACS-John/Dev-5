@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\Escrow1
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntop,fntos,fnacs,fnlbl,fntxt,fndat,fnxit,fncomboa,fncmdset,fnopenprn,fncloseprn
+00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntop,fnTos,fnAcs,fnLbl,fnTxt,fndat,fnxit,fncomboa,fnCmdSet,fnopenprn,fncloseprn
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
@@ -9,16 +9,16 @@
 00090   fncno(cno,cnam$)
 00100   fndat(resp$(1))
 00110 ! 
-00120   fntos(sn$="escrow1") !:
+00120   fnTos(sn$="escrow1") !:
         mylen=20 : mypos=mylen+2 : lc=0
-00130   fnlbl(lc+=1,1,"Report Heading Date:",mylen,1)
-00140   fntxt(lc,mypos,20)
-00150   fnlbl(lc+=1,1,"Sort by:",mylen,1)
+00130   fnLbl(lc+=1,1,"Report Heading Date:",mylen,1)
+00140   fnTxt(lc,mypos,20)
+00150   fnLbl(lc+=1,1,"Sort by:",mylen,1)
 00160   opt$(1)="1. Account" : opt$(2)="2. Name" : mat opt$(2) !:
         fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
         resp$(2)=opt$(1)
-00170   fncmdset(3)
-00180   fnacs(sn$,0,mat resp$,ck)
+00170   fnCmdSet(3)
+00180   fnAcs(sn$,0,mat resp$,ck)
 00190   if ck=5 then goto XIT
 00200   fndat(resp$(1),put=2)
 00210   customer=1 !:

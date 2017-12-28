@@ -78,7 +78,7 @@
 00770     write #1,using 'Form POS 1,23*C 20,46*C 18': mat a$,mat floa$,mat io1$
 00780     write #1,using 'Form POS 1,14*C 20,28*C 18': mat b$,mat flob$,mat io2$
 00790     close #1: 
-00800     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Shr",internal,outin ioerr L830
+00800     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Shr",internal,outIn ioerr L830
 00810     close #1: 
 00820     goto XIT
 00830 L830: fnacglbld

@@ -1,29 +1,29 @@
 20000 ! Replace S:\acsUB\ubUnPen
 20020 ! Undo Penalty Calculation
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fnlbl,fnxit,fntxt,fnacs,fnerror,fnwait,fntos,fncmdset,fntop,fnAutomatedSavePoint,fnget_services
+20060   library 'S:\Core\Library': fnLbl,fnxit,fnTxt,fnAcs,fnerror,fnwait,fnTos,fnCmdSet,fntop,fnAutomatedSavePoint,fnget_services
 20080   on error goto ERTN
 20100 ! 
 20120   dim o(2),z$*10,g(12),adr(2),e$(4)*30,cap$*128,txt$*40,tg(11),pen(10)
-20140   dim servicename$(10)*20,servicecode$(10)*2,tax_code$(10)*1,pencolumn(10)
+20140   dim serviceName$(10)*20,serviceCode$(10)*2,tax_code$(10)*1,pencolumn(10)
 20160   dim penatly$(10)*1,gb(10),extra(23),extra$(11)*30,a(7)
 20180 ! 
 20200   fntop(program$,cap$="Undo Penalty Calculation")
 20220 ! ______________________________________________________________________
-20240   fntos(sn$="ubUnPen") 
+20240   fnTos(sn$="ubUnPen") 
 20260   mylen=26 : mypos=mylen+2
-20280   fnlbl(1,1,"Penalty Date:",mylen,1)
-20300   fntxt(1,mypos,10,0,0,"3") 
+20280   fnLbl(1,1,"Penalty Date:",mylen,1)
+20300   fnTxt(1,mypos,10,0,0,"3") 
 20320   resp$(1)=""
-20340   fnlbl(1,40,"")
-20360   fncmdset(2) 
-20380   fnacs(sn$,win,mat resp$,ckey)
+20340   fnLbl(1,40,"")
+20360   fnCmdSet(2) 
+20380   fnAcs(sn$,win,mat resp$,ckey)
 20400   ubpendat=val(srep$(resp$(1),'/',''))
 20420   if ckey=5 then goto XIT
 20440   fnAutomatedSavePoint('before')
-20460   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
-20480   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-20500   open #2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outin,keyed 
+20460   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
+20480   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20500   open #2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20520 ! 
 20540 do
 20560   L280: !

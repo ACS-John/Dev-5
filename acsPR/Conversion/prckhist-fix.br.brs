@@ -13,13 +13,13 @@
 00130 L130: input fields "10,55,N 2,UE,N": cno conv L130
 00140   if cno=0 then goto XIT
 00150 ! 
-00160   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outin,relative 
+00160   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outIn,relative 
 00170 L170: r1+=1
-00180   read #4,using L190,rec=r1: eno,prd,ckno,mat tdc,mat tc2 eof L330,conv L220,norec L330
+00180   read #4,using L190,rec=r1: eno,prd,ckno,mat tdc,mat tc2 eof L330,conv L220,noRec L330
 00190 L190: form pos 1,n 8,pd 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2
 00200   goto L170
 00210 ! ______________________________________________________________________
-00220 L220: read #4,using L230,rec=r1: eno,prd,ckno,mat tdc,mat tc2 eof L330,conv L290,norec L330
+00220 L220: read #4,using L230,rec=r1: eno,prd,ckno,mat tdc,mat tc2 eof L330,conv L290,noRec L330
 00230 L230: form pos 1,n 8,n 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2
 00240   prd=19000000+fncd(prd)
 00250   rewrite #4,using L260,rec=r1: prd

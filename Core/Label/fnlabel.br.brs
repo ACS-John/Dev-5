@@ -2,7 +2,7 @@
 00020 ! pr label library, finds out how to format the labels and then !:
         ! prints them using PrintAce so bar codes pr right
 00030   def library fnlabel(win,&cap$,mat linestyle$,cp,nw)
-00040     library 'S:\Core\Library': fnerror,fnwait,fnopenprn,fncloseprn, fnacs,fnlbl,fntos,fnbutton,fnfra,fntxt,fncmdset,fncomboa,fnxit,fnreg_read,fnreg_write,fnpa_finis,fnpa_newpage,fnpa_open
+00040     library 'S:\Core\Library': fnerror,fnwait,fnopenprn,fncloseprn, fnAcs,fnLbl,fnTos,fnButton,fnFra,fnTxt,fnCmdSet,fncomboa,fnxit,fnreg_read,fnreg_write,fnpa_finis,fnpa_newpage,fnpa_open
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim label_hold_cap$*128
@@ -35,32 +35,32 @@
 00290     goto LABEL_XIT
 00300 ! ______________________________________________________________________
 00310 ASK_LABEL_FORMAT: ! r:
-00320     fntos(sn$="labellib1")
-00330     fnlbl(1,1,"Label Format:",15,1)
+00320     fnTos(sn$="labellib1")
+00330     fnLbl(1,1,"Label Format:",15,1)
 00340     opt$(1)="Avery 8160 (30/Page Ink Jet)" !:
           opt$(2)="Avery 5160 (30/Page Laser)" !:
           opt$(3)="Universal Data Processing (1-Up Dot-Matrix)" !:
           fncomboa("labellib1."&wsid$,1,17,mat opt$,"Choose either dot-matrix or laser type labels",32) !:
           resp$(1)=opt$(1)
-00350     fncmdset(2)
-00360     fnacs(sn$,win,mat resp$,ckey)
+00350     fnCmdSet(2)
+00360     fnAcs(sn$,win,mat resp$,ckey)
 00370     if ckey=5 then goto XIT_ASK_LABEL
 00380     if resp$(1)=opt$(3) then !:
             label_format=1 else label_format=2
 00390 XIT_ASK_LABEL: return  ! /r
 00400 ! ______________________________________________________________________
 00410 ASK_LABEL_FORMAT_2_LSTART: ! r:
-00420     fntos(sn$="labellib2")
-00430     fnfra(1,2,10,28,"Select First Label to Print","If you only have a partial sheet of labels, you can select the starting place of the first label") !:
+00420     fnTos(sn$="labellib2")
+00430     fnFra(1,2,10,28,"Select First Label to Print","If you only have a partial sheet of labels, you can select the starting place of the first label") !:
           myline=1: mypos=1
 00440     for j=1 to 30
-00450       fnbutton(myline,mypos,"  "&cnvrt$("pic(zz)",j)&"  ",j+20,"Starts with label "&str$(j),0,6,1)
+00450       fnButton(myline,mypos,"  "&cnvrt$("pic(zz)",j)&"  ",j+20,"Starts with label "&str$(j),0,6,1)
 00460       if j/3=int(j/3) then myline+=1
 00470       mypos+=10
 00480       if mypos>30 then mypos=1
 00490     next j
-00500     fncmdset(1)
-00510     fnacs(sn$,win,mat resp$,ckey)
+00500     fnCmdSet(1)
+00510     fnAcs(sn$,win,mat resp$,ckey)
 00520     if ckey=5 then goto XIT_ASK_LABEL_2
 00530     lstart=ckey-21 ! because the other routine starts out adding one.
 00540     labx=int((lstart+2)/3) !:
@@ -81,21 +81,21 @@
 00582       top_marg=2
 00583     end if  ! top_marg=0 and label_pos1+label_pos2+label_pos3=0
 00584     sn$="labellib3" !:
-          fntos(sn$)
-00590     fnlbl(1,1,"Top Margin (lines):",24,1)
-00600     fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
+          fnTos(sn$)
+00590     fnLbl(1,1,"Top Margin (lines):",24,1)
+00600     fnTxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
           resp$(1)=str$(top_marg)
-00610     fnlbl(2,1,"Left Column Position:",24,1)
-00620     fntxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
+00610     fnLbl(2,1,"Left Column Position:",24,1)
+00620     fnTxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
           resp$(2)=str$(label_pos1)
-00630     fnlbl(3,1,"Center Column Position:",24,1)
-00640     fntxt(3,26,3,3,1,'20',0,"Increase or decrease the position to move the center label right or left") !:
+00630     fnLbl(3,1,"Center Column Position:",24,1)
+00640     fnTxt(3,26,3,3,1,'20',0,"Increase or decrease the position to move the center label right or left") !:
           resp$(3)=str$(label_pos2)
-00650     fnlbl(4,1,"Right Column Position:",24,1)
-00660     fntxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") !:
+00650     fnLbl(4,1,"Right Column Position:",24,1)
+00660     fnTxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") !:
           resp$(4)=str$(label_pos3)
-00670     fncmdset(2)
-00680     fnacs(sn$,win,mat resp$,ckey)
+00670     fnCmdSet(2)
+00680     fnAcs(sn$,win,mat resp$,ckey)
 00690     top_marg=val(resp$(1)) !:
           label_pos1=val(resp$(2)) !:
           label_pos2=val(resp$(3)) !:
@@ -211,7 +211,7 @@
 01870     goto LABEL_DONE
 01880 ! ______________________________________________________________________
 01890 OPEN_LABEL_WSID: ! r:
-01900     open #88: "Name="&env$('temp')&"\Label.dat,RecL=600,Use",internal,outin ioerr XNOW
+01900     open #88: "Name="&env$('temp')&"\Label.dat,RecL=600,Use",internal,outIn ioerr XNOW
 01910     return  ! /r
 01920 ! ______________________________________________________________________
 01930 LABEL_XIT: ! 

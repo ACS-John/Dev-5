@@ -6,7 +6,7 @@
 10100     open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
 10120     sreg_setup_return=1
 10140   else
-10160     open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed
+10160     open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 10180     sreg_setup_return=2
 10200   end if
 10220   fn_sreg_setup=sreg_setup_return
@@ -106,7 +106,7 @@
 20820 fnend
 20840 def fn_reg_setup
 20860   library 'S:\Core\Library': fngethandle,fnerror
-20880   open #reg_h:=fngethandle: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed
+20880   open #reg_h:=fngethandle: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 20900   fn_reg_setup=1
 20920   on error goto ERTN
 20940 fnend
@@ -167,17 +167,17 @@
 34620     fnIndex_it(mcregFileData$,mcregFileIndex$,'1 128')
 34640     fn_mcreg_setup
 34660   end if
-34680   fnstatus_close
+34680   fnStatusClose
 34700 retry ! /r
 34720 def fn_mcreg_setup
 34760   if ~mcreg_setup then
 34800      mcreg_setup=1
-34820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnstatus_close
+34820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnStatusClose
 34840     dim mcregFileData$*256
 34860     dim mcregFileIndex$*256
 34880     mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
 34900     mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
-34920     open #mcreg_h:=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed
+34920     open #mcreg_h:=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 34980   end if
 35000   on error goto ERTN
 35020 fnend
@@ -220,18 +220,18 @@
 40620     fnIndex_it(cregFileData$,cregFileIndex$,'1 128')
 40640     fn_creg_setup
 40660   end if
-40680   fnstatus_close
+40680   fnStatusClose
 40700 retry ! /r
 40720 def fn_creg_setup
 40760   if creg_setup<>val(env$('CNo')) then
 40780     if creg_setup>0 then let fn_creg_close
 40800      !
-40820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnstatus_close
+40820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnStatusClose
 40840     dim cregFileData$*256
 40860     dim cregFileIndex$*256
 40880     cregFileData$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h'&env$('CNo')
 40900     cregFileIndex$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')
-40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed
+40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 40940     fn_creg_setup=val(env$('CNo'))
 40960     creg_setup=val(env$('CNo'))
 40980   end if

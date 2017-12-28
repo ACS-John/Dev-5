@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprRpt3
 00020 ! User Designed Reports
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnerror,fntos,fnlbl,fncmdkey,fnacs,fncombof,fnmsgbox,fnchk,fntxt,fnfra,fncomboa,fnindex_it,fngethandle,fnstatus_close,fnprint_designed_report
+00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnerror,fnTos,fnLbl,fnCmdKey,fnAcs,fncombof,fnmsgbox,fnChk,fnTxt,fnFra,fncomboa,fnindex_it,fngethandle,fnStatusClose,fnprint_designed_report
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim rt$*78,ch$(2)*132,psc(100)
@@ -11,24 +11,24 @@
 00120 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Design Reports")
 00150   fnindex_it(env$('Q')&"\PRmstr\PRReport.h"&env$('cno'),env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno'),"1 2")
-00152   fnstatus_close
-00160   open #h_prreport:=1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outin,keyed 
+00152   fnStatusClose
+00160   open #h_prreport:=1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed 
 00162 F_PRREPORT: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 00163 ! 
 00180 ! ______________________________________________________________________
 00190   gosub DATANAMES
 00200 SCR1: ! 
 00210 ASKREPORT: ! 
-00220   fntos(sn$="Report-ask")
+00220   fnTos(sn$="Report-ask")
 00222   respc=0
-00230   fnlbl(1,1,"Report:",11,1)
+00230   fnLbl(1,1,"Report:",11,1)
 00240   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
 00242   resp$(respc+=1)=""
-00250   fncmdkey("&Add",1,0,0,"Add a new employee" )
-00252   fncmdkey("E&dit",2,0,0,"Modify the selected report")
-00254   fncmdkey("Print",4,1,0,"Run the selected report")
-00258   fncmdkey("E&xit",5,0,1,"Return to menu")
-00260   fnacs(sn$,0,mat resp$,ckey) ! ask report #
+00250   fnCmdKey("&Add",1,0,0,"Add a new employee" )
+00252   fnCmdKey("E&dit",2,0,0,"Modify the selected report")
+00254   fnCmdKey("Print",4,1,0,"Run the selected report")
+00258   fnCmdKey("E&xit",5,0,1,"Return to menu")
+00260   fnAcs(sn$,0,mat resp$,ckey) ! ask report #
 00270   if ckey=5 then goto XIT
 00280   editrec=addone=0
 00292   rptn=val(resp$(1)(1:2))
@@ -74,33 +74,33 @@
 00434     mat ti=(0)
 00436     holdrn=0
 00438   end if  ! /r
-00440   fntos(sn$="Report-add")
+00440   fnTos(sn$="Report-add")
 00442   respc=0: mylen=15: mypos=mylen+3
-00450   fnlbl(1,1,"Report #:",mylen,1)
-00460   fntxt(1,mypos,2,2,0,"30",0,"")
+00450   fnLbl(1,1,"Report #:",mylen,1)
+00460   fnTxt(1,mypos,2,2,0,"30",0,"")
 00462   resp$(respc+=1)=str$(rn)
-00470   fnlbl(2,1,"Report Title:",mylen,1)
-00480   fntxt(2,mypos,78,0,0,"",0,"")
+00470   fnLbl(2,1,"Report Title:",mylen,1)
+00480   fnTxt(2,mypos,78,0,0,"",0,"")
 00482   resp$(respc+=1)=rt$
-00490   fnlbl(3,1,"Column Headings:",mylen,1)
-00500   fnlbl(4,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
-00510   fntxt(5,1,132,0,0,"",0,"The heading can be two lines.  This will be the 1st line.")
+00490   fnLbl(3,1,"Column Headings:",mylen,1)
+00500   fnLbl(4,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
+00510   fnTxt(5,1,132,0,0,"",0,"The heading can be two lines.  This will be the 1st line.")
 00512   resp$(respc+=1)=ch$(1)
-00520   fnlbl(6,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
-00530   fntxt(7,1,132,0,0,"",0,"This is the 2nd line of the heading line.")
+00520   fnLbl(6,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
+00530   fnTxt(7,1,132,0,0,"",0,"This is the 2nd line of the heading line.")
 00532   resp$(respc+=1)=ch$(2)
 00540   mylen=50
-00550   fnlbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
+00550   fnLbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
 00560   if ips>0 and ips=<udim(code$) then resp$(respc+=1)=code$(ips+1) else resp$(respc+=1)=""
 00570   fncomboa("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
-00580 !  fnTXT(12,MYLEN+3,3,0,0,"30",0,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.")
+00580 !  fnTxt(12,MYLEN+3,3,0,0,"30",0,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.")
 00582 ! rESP$(RESPC+=1)=STR$(IPS)
-00590   fnchk(13,mylen+3,"Summarize Departmental Records:",1)
+00590   fnChk(13,mylen+3,"Summarize Departmental Records:",1)
 00600   if sd= 1 then resp$(respc+=1)="TRUE" else resp$(respc+=1)="FALSE"
-00610   fncmdkey("&Next",1,1,0,"Save changes and move to next questions" )
-00612   fncmdkey("&Delete",4,0,0,"Deletes this report from your system.")
-00614   fncmdkey("&Cancel",5,0,1,"Return to selection screen.")
-00620   fnacs(sn$,0,mat resp$,ckey) ! ask report #
+00610   fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
+00612   fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.")
+00614   fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
+00620   fnAcs(sn$,0,mat resp$,ckey) ! ask report #
 00630   addone=0
 00640   if ckey=5 then goto SCR1
 00650   rn=val(resp$(1)(1:2))
@@ -152,20 +152,20 @@
 00900 ! SCR3: !
 00910 ! If RN=0 Then Goto DONE  ! ain't this just redundant?
 00920   if ips=0 then goto SCR4
-00930   fntos(sn$="Report-sel")
+00930   fnTos(sn$="Report-sel")
 00932   respc=0: mylen=15: mypos=mylen+3
-00940   fnlbl(1,1,"Print Selection Criteria:",30,1)
+00940   fnLbl(1,1,"Print Selection Criteria:",30,1)
 00950   z=0
 00960   for x=1 to 5
 00970     for j=2 to 21
-00980       fntxt(j,x*16,12,0,0,"33",0,"If you chosen to limit the report to certain criteria, enter the values here that should match information in the employee's record.")
+00980       fnTxt(j,x*16,12,0,0,"33",0,"If you chosen to limit the report to certain criteria, enter the values here that should match information in the employee's record.")
 00982       resp$(respc+=1)=str$(psc(z+=1))
 00990     next j
 01000   next x
-01010   fncmdkey("&Next",1,1,0,"Save changes and move to next questions" )
-01012   fncmdkey("&Back",6,0,0,"Back up a screen.")
-01014   fncmdkey("&Cancel",5,0,1,"Return to selection screen.")
-01020   fnacs(sn$,0,mat resp$,ckey) ! ask matching criteria
+01010   fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
+01012   fnCmdKey("&Back",6,0,0,"Back up a screen.")
+01014   fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
+01020   fnAcs(sn$,0,mat resp$,ckey) ! ask matching criteria
 01030   if ckey=5 then goto SCR1
 01040   for j=1 to 100
 01050     psc(j)=val(resp$(j))
@@ -174,25 +174,25 @@
 01080   goto SCR4
 01090 ! ______________________________________________________________________
 01100 SCR4: ! 
-01110   fntos(sn$="Report-scr4") !:
+01110   fnTos(sn$="Report-scr4") !:
         respc=0: mylen=15: mypos=mylen+3
-01120   fnfra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
-01130   fnlbl(1,1,"Print       Want ",50,1,0,1)
-01140   fnlbl(2,1,"Item to pr                 Position    A Total",52,1,0,1)
+01120   fnFra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
+01130   fnLbl(1,1,"Print       Want ",50,1,0,1)
+01140   fnLbl(2,1,"Item to pr                 Position    A Total",52,1,0,1)
 01150   for j=1 to 20
 01160     if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)+1) else resp$(respc+=1)=" "
 01170 ! If INP(J)>0 AND INP(J)=<UDIM(CODE$) Then rESP$(RESPC+=1)=CODE$(INP(J)) Else rESP$(RESPC+=1)=" "
 01180     fncomboa("DataNames",j+2,1,mat code$,"",25,1)
-01190     fntxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1) !:
+01190     fnTxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1) !:
           resp$(respc+=1)=str$(pp(j))
 01200     if ti(j)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-01210     fnchk(j+2,48,"",1,1) ! total the column
+01210     fnChk(j+2,48,"",1,1) ! total the column
 01220   next j
-01230   fncmdkey("&Next",1,1,0,"Save changes on this report design." ) !:
+01230   fnCmdKey("&Next",1,1,0,"Save changes on this report design." ) !:
         !:
-        fncmdkey("&Back",6,0,0,"Back up a screen.") !:
-        fncmdkey("&Cancel",5,0,1,"Return to report selection screen without saving any changes.")
-01240   fnacs(sn$,0,mat resp$,ckey) ! enter column information
+        fnCmdKey("&Back",6,0,0,"Back up a screen.") !:
+        fnCmdKey("&Cancel",5,0,1,"Return to report selection screen without saving any changes.")
+01240   fnAcs(sn$,0,mat resp$,ckey) ! enter column information
 01250   if ckey=5 then goto SCR1
 01260   x=0
 01270   for j=3 to 60 step 3
@@ -223,7 +223,7 @@
 01530 ! L1530: pr newpage ! r:
 01532 !   dim io5$(2),wrd5$(2)*38
 01540 !   close #105: ioerr ignore
-01550 !   open #105: "SRow=8,Scol=20,ERow=15,ECol=59,Border=Sr,Caption=<"&cap$,display,outin
+01550 !   open #105: "SRow=8,Scol=20,ERow=15,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn
 01560 !   pr #105: newpage
 01580 !   pr #105,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 01590 !   pr #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."

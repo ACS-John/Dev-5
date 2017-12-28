@@ -27,7 +27,7 @@
 02900     dim forms$(1)*255
 03000     days_in_week=7
 03100     rows_on_grid=6
-03200     open #window:=fngetfilenumber: "parent=none,srow="&str$(row)&",scol="&str$(column)&",rows=10,cols=25,caption=Please select a date,N=/#000066:#B0C4DE",display,outin 
+03200     open #window:=fngetfilenumber: "parent=none,srow="&str$(row)&",scol="&str$(column)&",rows=10,cols=25,caption=Please select a date,N=/#000066:#B0C4DE",display,outIn 
 03300     pr #window, fields "1,1,C 1,,B2500;1,6,C 1,,B2501;1,8,C 1,,B2502;1,15,C 1,,B2503": "<", ">", "<", ">"
 03400     pr #window, fields "10,1,C 7,,B2504;10,18,C 7,,B2505": "OK", "Cancel"
 03500     pr #window, fields "9,1,C 25": "Today: "&date$("d3 m3 dd, ccyy")

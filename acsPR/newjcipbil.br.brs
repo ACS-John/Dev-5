@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newjcipbil
 00020 ! Enter (Job Cost) billings
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnmsgbox,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnemployee_srch,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnemployee_srch,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
@@ -20,10 +20,10 @@
         ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00190   if resp$="Yes" then goto L220 else goto L200
-00200 L200: open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
+00200 L200: open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
 00210   goto L230
-00220 L220: open #3: "Name=jcbillings."&wsid$,internal,outin,relative 
-00230 L230: open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00220 L220: open #3: "Name=jcbillings."&wsid$,internal,outIn,relative 
+00230 L230: open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00240   open #14: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,input,keyed 
 00250   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00260   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -32,28 +32,28 @@
 00290 ! ______________________________________________________________________
 00300 TRANSACTION_ENTRY: ! 
 00310   if addone=1 then inp(1)=inp(3)=0
-00320   fntos(sn$="billinginput") !:
+00320   fnTos(sn$="billinginput") !:
         respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
-00330   fnlbl(1,1,"Job Number:",mylen,1)
+00330   fnLbl(1,1,"Job Number:",mylen,1)
 00340   fncmbjob(1,mypos) !:
         resp$(respc+=1)=jn$
-00350   fnlbl(2,1,"Amount:",mylen,1)
-00360   fntxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.") !:
+00350   fnLbl(2,1,"Amount:",mylen,1)
+00360   fnTxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.") !:
         resp$(respc+=1)=str$(inp(1))
-00370   fnlbl(3,1,"Date:",mylen,1)
-00380   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
+00370   fnLbl(3,1,"Date:",mylen,1)
+00380   fnTxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
         resp$(respc+=1)=str$(inp(2))
-00390   fnlbl(4,1,"Status:",mylen,1)
-00400   fntxt(4,mypos,2,2,0,"30",0,"") !:
+00390   fnLbl(4,1,"Status:",mylen,1)
+00400   fnTxt(4,mypos,2,2,0,"30",0,"") !:
         resp$(respc+=1)=str$(inp(3))
-00410   fncmdkey("&Save",1,1,0,"Saves all changes.")
-00420   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
-00430   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
-00440   fncmdkey("De&lete",4,0,0,"Deletes this entry.")
-00450   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-00460   fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
-00470   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+00410   fnCmdKey("&Save",1,1,0,"Saves all changes.")
+00420   fnCmdKey("Co&rrection",7,0,0,"Make a correction to any entry.")
+00430   fnCmdKey("&LIsting",9,0,0,"Print a listing of all entries.")
+00440   fnCmdKey("De&lete",4,0,0,"Deletes this entry.")
+00450   fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+00460   fnCmdKey("&Post",8,0,1,"Post these entries to the job files.")
+00470   fnAcs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00480   if ckey=5 then goto L490 else goto L510
 00490 L490: mat ml$(2) !:
         ml$(1)="You have chosen to cancel without postng these entries!  " !:
@@ -77,7 +77,7 @@
 00620 L620: write #3,using L640: jn$,mat inp
 00630   goto L660
 00640 L640: form pos 1,c 6,pd 5.2,pd 4,n 2
-00650 L650: rewrite #3,using L640,rec=editrec: jn$,mat inp norec CORRECTIONS
+00650 L650: rewrite #3,using L640,rec=editrec: jn$,mat inp noRec CORRECTIONS
 00660 L660: if addone=1 then goto TRANSACTION_ENTRY else goto CORRECTIONS
 00670 ! ______________________________________________________________________
 00680 PRINTPROOFLIST: ! 
@@ -111,7 +111,7 @@
 00960 ! ______________________________________________________________________
 00970 POSTTOJOBS: ! 
 00980   for j=1 to lrec(3)
-00990     read #3,using L640,rec=j: jn$,mat inp norec L1050
+00990     read #3,using L640,rec=j: jn$,mat inp noRec L1050
 01000     if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1050
 01010     read #11,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1050
 01020     b3=b3+inp(1)
@@ -142,7 +142,7 @@
 01270 ! ______________________________________________________________________
 01280 CORRECTIONS: ! 
 01290   addone=0: editone=0
-01300   fntos(sn$="EntryCorrection")
+01300   fnTos(sn$="EntryCorrection")
 01310   ch2$(1)="Rec #": ch2$(2)="Job #": ch2$(3)="Amount": ch2$(4)="Date #" !:
         ch2$(5)="Status" !:
         mat ch2$(5) ! : Mat CM2$(5) : Mat ITEM2$(5)
@@ -159,12 +159,12 @@
         item2$(5)=str$(inp(3))
 01380   fnflexadd1(mat item2$)
 01390   goto READ_FILE
-01400 L1400: fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
-        fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
-        fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
-        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
-        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-01410   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+01400 L1400: fnCmdKey("&Add",1,0,0,"Add a new transaction." ) !:
+        fnCmdKey("E&dit",2,1,0,"Edit the highlited record") !:
+        fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") !:
+        fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
+01410   fnAcs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01420   if ckey=5 then goto TRANSACTION_ENTRY
 01430   editrec=val(resp$(1))
 01440   if ckey=1 then addone=1: mat inp=(0): jn$="": goto TRANSACTION_ENTRY

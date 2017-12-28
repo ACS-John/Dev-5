@@ -11,10 +11,10 @@
 00110   fncno(cno)
 00120 ! 
 00170 ! ______________________________________________________________________
-00180   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00180   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00190   open #3: "Name="&env$('temp')&"\Work."&session$,internal,input 
 00200   open #4: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",Shr",internal,output 
-00210   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative 
+00210   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outIn,relative 
 00220 L220: read #3,using L230: mat ji1,jn$,mat ji2,empnam$,sal eof L720
 00230 L230: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
 00240   if ji1(1)=-1 then goto L220

@@ -1,18 +1,18 @@
 00010 ! Replace S:\acsUB\BudRpt1
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwait,fnget_services,fnopenprn,fncloseprn, fndate_mmddyy_to_ccyymmdd, fnxit,fnacs,fntos,fnlbl,fntxt,fncmdset
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwait,fnget_services,fnopenprn,fncloseprn, fndate_mmddyy_to_ccyymmdd, fnxit,fnAcs,fnTos,fnLbl,fnTxt,fnCmdSet
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
-00070   dim t1(11),t2(11),t3(11),cap$*128,message$*40,servicename$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
+00070   dim t1(11),t2(11),t3(11),cap$*128,message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
 00100   fntop(program$, cap$="Worksheet")
 00110 ! ______________________________________________________________________
-00120   fnget_services(mat servicename$,mat service$)
+00120   fnget_services(mat serviceName$,mat service$)
 00130   hdr$="{\ul  Date   }"
 00140   underline$="          "
 00150   for j=1 to 10
-00160     if trim$(servicename$(j))<>"" then !:
-            hdr$=hdr$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:8)),8)&"}" !:
+00160     if trim$(serviceName$(j))<>"" then !:
+            hdr$=hdr$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:8)),8)&"}" !:
             underline$=underline$&"{\ul         }  " !:
             totserv=totserv+1
 00170   next j
@@ -23,23 +23,23 @@
 00190 ! ______________________________________________________________________
 00200 BUD1: ! INITILIZE BUDGET FILE
 00210   bud1=bg1=bg2=0
-00220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-00240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 00250   bud1=1
 00260   sn$="BudRpt1" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         mylen=32 : mypos=mylen+2
 00270   txt$="Starting Date (blank for all):" !:
-        fnlbl(1,1,txt$,mylen,1)
-00280   fntxt(1,mypos,8,0,0,"1") !:
+        fnLbl(1,1,txt$,mylen,1)
+00280   fnTxt(1,mypos,8,0,0,"1") !:
         resp$(1)=""
 00290   txt$="Ending Date (blank for all):" !:
-        fnlbl(2,1,txt$,mylen,1)
-00300   fntxt(2,mypos,8,0,0,"1") !:
+        fnLbl(2,1,txt$,mylen,1)
+00300   fnTxt(2,mypos,8,0,0,"1") !:
         resp$(2)=""
-00310   fncmdset(3)
-00320   fnacs(sn$,0,mat resp$,ckey)
+00310   fnCmdSet(3)
+00320   fnAcs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   d1=val(resp$(1)) conv L350
 00350 L350: d2=val(resp$(2)) conv L360
@@ -66,7 +66,7 @@
 00550   mat badr=(0)
 00560   bt1=btdue=0
 00570 L570: if ta1=0 then goto L810
-00580   read #82,using L600,rec=ta1: x$,mat bt1,nba norec L810
+00580   read #82,using L600,rec=ta1: x$,mat bt1,nba noRec L810
 00590   if sum(bt1)=0 then goto L800 ! skip any blank records
 00600 L600: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 00610   y=bt1(1,2) : y=fndate_mmddyy_to_ccyymmdd(y)
@@ -77,7 +77,7 @@
 00660 L660: service=1
 00670   t1(1)=bt1(1,1) ! date
 00680   for j=1 to 10
-00690     if trim$(servicename$(j))="" then goto L720
+00690     if trim$(serviceName$(j))="" then goto L720
 00700     service=service+1
 00710     t1(service)=bt1(j+1,2) !:
           totalbudget=totalbudget+bt1(j+1,1) !:
@@ -103,9 +103,9 @@
 00890   pr #255: "" pageoflow NEWPGE
 00900   budget$="Current Budget Amounts: "
 00910   for j=1 to 10
-00920     if trim$(servicename$(j))="" then goto L950
+00920     if trim$(serviceName$(j))="" then goto L950
 00930     if ba(j+1)=0 then goto L950
-00940     budget$=budget$&"  "&trim$(servicename$(j))&"="&trim$(cnvrt$("pic($$$$$.$$",ba(j+1)))
+00940     budget$=budget$&"  "&trim$(serviceName$(j))&"="&trim$(cnvrt$("pic($$$$$.$$",ba(j+1)))
 00950 L950: next j
 00960   pr #255: budget$ pageoflow NEWPGE
 00970   pr #255: "Current Balance:"&cnvrt$("PIC($$$,$$$.$$ CR",bal) pageoflow NEWPGE

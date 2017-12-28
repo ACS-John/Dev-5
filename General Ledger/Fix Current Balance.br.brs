@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsGL\CB
 00020 ! fixes Current Balance, by taking Beginning Balance (or previous balance 2 yrs ago) and adding current transactions (optional a range of accumulated transactions too) to it.
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnacs,fnchk,fnlbl,fntxt,fntos,fncmdset,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnGetFundList
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnAcs,fnChk,fnLbl,fnTxt,fnTos,fnCmdSet,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnGetFundList
 00050   fntop(program$,"Fix Current Balance")
 00060   on error goto ERTN
 00100   dim bp(13)
@@ -21,7 +21,7 @@
 34040     open #hAcTrans:=fngethandle: 'Name='&env$('Q')&'\GLmstr\AcTrans.h'&env$('cno')&',KFName='&env$('Q')&'\GLmstr\AcTrIdx.h'&env$('cno'),internal,input,keyed
 34100     startWithBalEndOfPriorYear=1
 34120   end if
-34140   open #hGlMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+34140   open #hGlMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 34160   open #hGlTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,input,relative 
 34180   fTransBoth: form pos 1,c 12,n 6,pd 6.2
 34200   ! /r
@@ -93,46 +93,46 @@
 54020   fncreg_read(cap$&': enableProcessAccumulatedTrans',enableProcessAccumulatedTrans$,'False')
 54040   fncreg_read(cap$&': dayStart',tmp$) : dayStart=val(tmp$)
 54060   fncreg_read(cap$&': dayEnd',tmp$) : dayEnd=val(tmp$)
-54080   fntos(sn$=Cap$)
+54080   fnTos(sn$=Cap$)
 54100   rc=0
 54120
-54140   fnlbl(lc+=1,1,'WARNING: This program recalculates all the Current Balance files in General Ledger Accounts.')
-54160   fnlbl(lc+=1,1,'Normally this program rebuilds the current balance from current transactions only.')
-54180   fnlbl(lc+=1,1,'However you may choose to process History Transactions too.')
-54200   fnlbl(lc+=1,1,'    If you do process History Transactions you must use a date range also')
-54220   fnlbl(lc+=1,1,'    If you do process History Transactions the base for the date will be ')
-54240   fnlbl(lc+=1,1,'          Previous Balance Two Years ago instead of Beginning Balance.')
+54140   fnLbl(lc+=1,1,'WARNING: This program recalculates all the Current Balance files in General Ledger Accounts.')
+54160   fnLbl(lc+=1,1,'Normally this program rebuilds the current balance from current transactions only.')
+54180   fnLbl(lc+=1,1,'However you may choose to process History Transactions too.')
+54200   fnLbl(lc+=1,1,'    If you do process History Transactions you must use a date range also')
+54220   fnLbl(lc+=1,1,'    If you do process History Transactions the base for the date will be ')
+54240   fnLbl(lc+=1,1,'          Previous Balance Two Years ago instead of Beginning Balance.')
 54260   lc+=1 : mylen=14 : mypos=mylen+2 
-54280   fnchk(lc+=1,1,'Process History Transactions')
+54280   fnChk(lc+=1,1,'Process History Transactions')
 54300   resp$(resp_enableAcTrans:=rc+=1)=enableProcessAccumulatedTrans$
 54310 lc+=1
-54320   fnlbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
-54340   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
+54320   fnLbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
+54340   fnTxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54360   resp$(resp_dateStart=rc+=1)=date$(dayStart,'ccyymmdd')
-54380   fnlbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
-54400   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
+54380   fnLbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
+54400   fnTxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54420   resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
 56000 ! 
 56020     lc+=1 : col3_pos=mypos+20
 56410     resp_lrea_fund_1=rc+1
 56420     if use_dept then 
 56440       col4_pos=col3_pos+10
-56460       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
+56460       fnLbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 56500       for fund_item=1 to udim(mat fund_list)
-56520         fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
+56520         fnLbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
 56540         fnqgl(lc,col4_pos)
 56560         rc+=1
 56580         fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 56600       next fund_item
 56620     else 
 56630       col4_pos=col3_pos+32
-56640       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
+56640       fnLbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
 56660       fnqgl(lc,col4_pos)
 56680       rc+=1
 56700       fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 56720     end if 
-58000   fncmdset(2)
-58020   fnacs(sn$,0,mat resp$,ckey)
+58000   fnCmdSet(2)
+58020   fnAcs(sn$,0,mat resp$,ckey)
 58040   if ckey=5 then 
 58060     theScreenReturn=0
 58080   else

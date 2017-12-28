@@ -36,7 +36,7 @@
 00340     iolabel1$(j)=str$(j+3)&",2,Cr 17,N"
 00350   next j
 00360 ! ______________________________________________________________________
-00370   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outin,relative 
+00370   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outIn,relative 
 00380   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00390   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00400   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -214,7 +214,7 @@
 01920   seq=11 : goto L2020
 01930   for j=1 to udim(ios$): ios$(j)=str$(j+12)&",25,C 30,N": next j
 01940 L1940: close #101: ioerr L1950
-01950 L1950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outin 
+01950 L1950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outIn 
 01960   pr #101: newpage
 01970   pr f mat ios$: mat wrds$
 01980   pr f str$(udim(ios$)+14)&",35,C 09,B,5": "Stop (F5)"

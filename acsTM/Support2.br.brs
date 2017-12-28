@@ -1,18 +1,18 @@
 00100 ! ______________________________________________________________________
-00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
+00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
 00700   fntop(program$)
 00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-01100   ! fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-01110   fnhamster_2("ARTrans")
+01100   ! fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01110   fnHamster2("ARTrans")
 01200   gosub CLOSE_FILE
 01300   goto XIT
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
+01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 01800 return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -38,22 +38,22 @@
 35180     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 35200     textlen_mmddyy=8 : textlen_ccyymmdd=10
 35220     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-35240     fnhamster_field_reset
+35240     fnH2Init
 35260  !
 35280  !
-35300   fnhamster_field_add("Client ID"       ,6               ,'N'                     ,mask_number   )    
-35320   fnhamster_field_add("Sys#"            ,2               ,'N',0                   ,mask_number   )    
-35340   fnhamster_field_add("System ID"       ,2               ,'C'                                    )    
-35360   fnhamster_field_add("Starting Date"   ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
-35380   fnhamster_field_add("Time Frame"      ,2               ,'C'                                    )    
-35400   fnhamster_field_add("Ending Date"     ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )
-35420   fnhamster_field_add("Cost to User"    ,10              ,'N'                                    )
-35440   fnhamster_field_add("Name"            ,50              ,'C'                                    )     
-35460 ! fnhamster_field_add("Contact (1)"     ,50              ,'C'                                    )           
-35480 ! fnhamster_field_add("Contact (2)"     ,50              ,'C'                                    )           
-35500 ! fnhamster_field_add("Contact (3)"     ,50              ,'C'                                    )           
+35300   fnH2AddText("Client ID"       ,6               ,'N'                     ,mask_number   )    
+35320   fnH2AddText("Sys#"            ,2               ,'N',0                   ,mask_number   )    
+35340   fnH2AddText("System ID"       ,2               ,'C'                                    )    
+35360   fnH2AddText("Starting Date"   ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
+35380   fnH2AddText("Time Frame"      ,2               ,'C'                                    )    
+35400   fnH2AddText("Ending Date"     ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )
+35420   fnH2AddText("Cost to User"    ,10              ,'N'                                    )
+35440   fnH2AddText("Name"            ,50              ,'C'                                    )     
+35460 ! fnH2AddText("Contact (1)"     ,50              ,'C'                                    )           
+35480 ! fnH2AddText("Contact (2)"     ,50              ,'C'                                    )           
+35500 ! fnH2AddText("Contact (3)"     ,50              ,'C'                                    )           
 35520  !
-35540     fnhamster_add_combof(1,env$('Q')&'\TMmstr\Clmstr.h420',1,5,6,30,env$('Q')&'\TMmstr\CLIndex.h420',1)
+35540     fnH2AddComboF(1,env$('Q')&'\TMmstr\Clmstr.h420',1,5,6,30,env$('Q')&'\TMmstr\CLIndex.h420',1)
 35560  !
 35580 ! old program !  ! ** Combo Boxes **
 35600 ! old program !  ! CL=Field Number  : C$(CL,1)='ComboF'
@@ -63,13 +63,13 @@
 35680 ! old program !  ! C$(CL,7)=Index File
 35700 ! old program !  ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 35720  !
-35740 !          fnhamster_add_combof(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
+35740 !          fnH2AddComboF(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 35760   fnend
 
 
 55000 ! old program !  ! Replace S:\acsTM\Support
 55020 ! old program !  ! ______________________________________________________________________
-55040 ! old program !    library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
+55040 ! old program !    library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
 55060 ! old program !    on error goto ERTN
 55080 ! old program !  ! ______________________________________________________________________
 55100 ! old program !    dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
@@ -83,7 +83,7 @@
 55260 ! old program !  ! ______________________________________________________________________
 55280 ! old program !  OPEN_FILE: ! 
 55300 ! old program !    open_file_count=0 ! this value is used in the close_file sub routine
-55320 ! old program !    open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
+55320 ! old program !    open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 55340 ! old program !    return 
 55360 ! old program !  ! ______________________________________________________________________
 55380 ! old program !  CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -190,7 +190,7 @@
 57400 ! old program !    return 
 57420 ! old program !  ! ______________________________________________________________________
 57440 ! old program !  HAMSTER: ! 
-57460 ! old program !    fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+57460 ! old program !    fnHamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 57480 ! old program !    return 
 57500 ! old program !  ! ______________________________________________________________________
 57520 ! old program !  XIT: fnxit

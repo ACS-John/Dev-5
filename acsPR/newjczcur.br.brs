@@ -29,7 +29,7 @@
 00260 L260: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00270   close #1: 
 00280 ! ______________________________________________________________________
-00290 L290: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outin,keyed 
+00290 L290: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outIn,keyed 
 00300   if kt=0 then goto L360
 00310 L310: read #2,using L330: a1,a2,a3 eof DONE
 00320   rewrite #2,using L330: 0,0,0

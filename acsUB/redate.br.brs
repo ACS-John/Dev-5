@@ -1,30 +1,30 @@
 00010 ! Replace S:\acsUB\reDate
 00011 ! Change Wrong Transaction Dates
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fntos,fnlbl,fnacs,fnwait,fntxt,fncmdset,fngethandle,fndate_mmddyy_to_ccyymmdd
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnTos,fnLbl,fnAcs,fnwait,fnTxt,fnCmdSet,fngethandle,fndate_mmddyy_to_ccyymmdd
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 10000   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
 10600   fntop(program$,cap$="Change Wrong Transaction Dates")
 10800 MAIN: ! 
 11000   sn$="redate"
-11200   fntos(sn$)
-11600   fnlbl(1,1,"Wrong Date:",22,1)
-11800   fntxt(1,23,8,0,0,"1")
+11200   fnTos(sn$)
+11600   fnLbl(1,1,"Wrong Date:",22,1)
+11800   fnTxt(1,23,8,0,0,"1")
 12000   resp$(1)='' ! '120101' ! '012011'
-12400   fnlbl(2,1,"Correct Date:",22,1)
-12600   fntxt(2,23,8,0,0,"1")
+12400   fnLbl(2,1,"Correct Date:",22,1)
+12600   fnTxt(2,23,8,0,0,"1")
 12800   resp$(2)='' ! '120102' ! '012012'
-13200   fnlbl(4,1,"Lowest Record Number:",22,1)
-13400   fntxt(4,23,8,0,0,"0")
+13200   fnLbl(4,1,"Lowest Record Number:",22,1)
+13400   fnTxt(4,23,8,0,0,"0")
 13600   resp$(3)='0' ! str$(33430) ! str$(88000)
-13800   fncmdset(2)
-14000   fnacs(sn$,0,mat resp$,ckey)
+13800   fnCmdSet(2)
+14000   fnAcs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then goto XIT
 14400   date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 14600   date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
 14800   rec_low=val(resp$(3))
-15000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+15000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 15200   do 
 15400     read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
 15500 ! if trans_date=date_bad then pause

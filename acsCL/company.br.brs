@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Company
 00020 ! maintain company information file for checkbook management
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fntos,fnlbl,fnacs,fncmdset,fntxt,fncombof,fnchk,fnbutton,fnfra,fncomboa,fnqgl,fnrgl$,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fnTos,fnLbl,fnAcs,fnCmdSet,fnTxt,fncombof,fnChk,fnButton,fnFra,fncomboa,fnqgl,fnrgl$,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,actrcde$*1
@@ -15,8 +15,8 @@
         ccyymmdd$='3' : mmddyy$='1' : on=1 : off=0 !:
         cancel=5 : save=1 : limit_to_list=1 : pointtwo$='32' !:
         pointthree$='33'
-00150   open #glmstr=11: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L160
-00160 L160: open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative ioerr BUILD_COMPANY
+00150   open #glmstr=11: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L160
+00160 L160: open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr BUILD_COMPANY
 00170   goto READ_COMPANY
 00180 ! ______________________________________________________________________
 00190 READ_COMPANY: ! 
@@ -37,20 +37,20 @@
                     ! to do it the old way change this whole line to read  GoTo Screen1
 00250 ! ______________________________________________________________________
 00260 NEWSCREEN: ! 
-00270   fntos(sn$='Company-Pg'&str$(page)) !:
+00270   fnTos(sn$='Company-Pg'&str$(page)) !:
         lc=0
 00280   page1=6 : page2=07 : page3=08 : page4=09
-00290   fnbutton(1,01,'&Basic            ',page1,'',height=02,23) !:
-        fnbutton(1,26,'&General Ledger   ',page2,'',height=2,23) !:
-        fnbutton(1,51,'&Rates and Maxs   ',page3,'',height=2,23) !:
-        fnbutton(1,76,'&Deductions       ',page4,'',height=2,23)
+00290   fnButton(1,01,'&Basic            ',page1,'',height=02,23) !:
+        fnButton(1,26,'&General Ledger   ',page2,'',height=2,23) !:
+        fnButton(1,51,'&Rates and Maxs   ',page3,'',height=2,23) !:
+        fnButton(1,76,'&Deductions       ',page4,'',height=2,23)
 00300   if page=0 then page=1
 00310   if page=1 then gosub PAGE1 else !:
           if page=2 then gosub PAGE2 else !:
             if page=3 then gosub PAGE3 else !:
               if page=4 then gosub PAGE4
-00320   fncmdset(4) ! Save and Cancel
-00330   fnacs(sn$,0,mat resp$,ckey)
+00320   fnCmdSet(4) ! Save and Cancel
+00330   fnAcs(sn$,0,mat resp$,ckey)
 00340   if page=1 then 
 00350     a$(1)=resp$(1) !:
           a$(2)=resp$(2) !:
@@ -122,80 +122,80 @@
 00670   goto NEWSCREEN
 00680 PAGE1: ! _____________________________________________________________ !:
         lc=3 : mylen=40 : mypos=mylen+2
-00690   fnlbl(lc+=1,1,'Company Name:',mylen,right)
-00700   fntxt(lc,mypos,40,0,left) !:
+00690   fnLbl(lc+=1,1,'Company Name:',mylen,right)
+00700   fnTxt(lc,mypos,40,0,left) !:
         resp$(1)=a$(1)
-00710   fnlbl(lc+=1,1,'Address:',mylen,right)
-00720   fntxt(lc,mypos,40,0,left) !:
+00710   fnLbl(lc+=1,1,'Address:',mylen,right)
+00720   fnTxt(lc,mypos,40,0,left) !:
         resp$(2)=a$(2)
-00730   fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
-00740   fntxt(lc,mypos,40,0,left) !:
+00730   fnLbl(lc+=1,1,'City State and Zip Code:',mylen,right)
+00740   fnTxt(lc,mypos,40,0,left) !:
         resp$(3)=a$(3)
-00750   fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
-00760   fntxt(lc,mypos,12,0,left) !:
+00750   fnLbl(lc+=1,1,'Federal Identification Number:',mylen,right)
+00760   fnTxt(lc,mypos,12,0,left) !:
         resp$(4)=b$(1)
-00770   fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
-00780   fntxt(lc,mypos,12,0,left) !:
+00770   fnLbl(lc+=1,1,'State Identification Number:',mylen,right)
+00780   fnTxt(lc,mypos,12,0,left) !:
         resp$(5)=b$(2)
-00790   fnlbl(lc+=1,1,'Type of Business:',mylen,right)
-00800   fntxt(lc,mypos,30,0,left) !:
+00790   fnLbl(lc+=1,1,'Type of Business:',mylen,right)
+00800   fnTxt(lc,mypos,30,0,left) !:
         resp$(6)=tb$
-00810   fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
-00820   fntxt(lc,mypos,30,0,left,number$) !:
+00810   fnLbl(lc+=1,1,'Number of Periods:',mylen,right)
+00820   fnTxt(lc,mypos,30,0,left,number$) !:
         resp$(7)=str$(nap)
-00830   fnlbl(lc+=1,1,'Working Bank:',mylen,right)
+00830   fnLbl(lc+=1,1,'Working Bank:',mylen,right)
 00840   fncombof('bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list) !:
         resp$(8)=str$(wbc)
-00850   fnchk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
+00850   fnChk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
         if prenum=1 then resp$(9)='True' else resp$(9)='False'
-00860   fnchk(lc+=1,mypos,'Utilize Bank Reconciliation Features',right) !:
+00860   fnChk(lc+=1,mypos,'Utilize Bank Reconciliation Features',right) !:
         if reccode=1 then resp$(10)='True' else resp$(10)='False'
 00870   return 
 00880 PAGE2: ! _____________________________________________________________ !:
         lc=3 : mylen=40 : mypos=mylen+2 !:
         fc=0 ! framecount
-00890   fnfra(04,1,5,framewidth=110,'General Ledger') !:
+00890   fnFra(04,1,5,framewidth=110,'General Ledger') !:
         frame=fc+=1 : lc=0
-00900   fnchk(lc+=1,mypos,'Utilize Department Number Field',right,frame) !:
+00900   fnChk(lc+=1,mypos,'Utilize Department Number Field',right,frame) !:
         if d(1)=1 then resp$(1)='True' else resp$(1)='False'
-00910   fnchk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
+00910   fnChk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
         if d(2)=1 then resp$(2)='True' else resp$(2)='False'
-00920   fnlbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
+00920   fnLbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
 00930 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(3)=STR$(WBC)
 00932   fnqgl(lc,mypos,frame,2) !:
         resp$(3)=fnrgl$(lastact$)
-00940   fnfra(11,1,2,framewidth,'Accounts Receivable') !:
+00940   fnFra(11,1,2,framewidth,'Accounts Receivable') !:
         frame=fc+=1 : lc=0
-00950   fnchk(lc+=1,mypos,'Post Deposits from Accounts Receivable',right,frame) !:
+00950   fnChk(lc+=1,mypos,'Post Deposits from Accounts Receivable',right,frame) !:
         if ar1=1 then resp$(4)='True' else resp$(4)='False'
-00960   fnfra(15,1,5,framewidth,'Payroll') !:
+00960   fnFra(15,1,5,framewidth,'Payroll') !:
         frame=fc+=1 : lc=0 : mylen=32 : mypos=mylen+2
-00970   fnlbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
+00970   fnLbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
 00980 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(5)=CNVRT$('pic(zz#)',PRGL(1,1))&CNVRT$('pic(zzzzz#)',PRGL(1,2))&CNVRT$('pic(zz#)',PRGL(1,3))
 00982   fnqgl(lc,mypos,frame,2) !:
         resp$(5)=cnvrt$('pic(zz#)',prgl(1,1))&cnvrt$('pic(zzzzz#)',prgl(1,2))&cnvrt$('pic(zz#)',prgl(1,3)) !:
         resp$(5)=fnrgl$(resp$(5))
-00990   fnlbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
+00990   fnLbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
 01000 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(6)=CNVRT$('pic(zz#)',PRGL(2,1))&CNVRT$('pic(zzzzz#)',PRGL(2,2))&CNVRT$('pic(zz#)',PRGL(2,3))
 01002   fnqgl(lc,mypos,frame,2) !:
         resp$(6)=cnvrt$('pic(zz#)',prgl(2,1))&cnvrt$('pic(zzzzz#)',prgl(2,2))&cnvrt$('pic(zz#)',prgl(2,3)) !:
         resp$(6)=fnrgl$(resp$(6))
-01010   fnlbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
+01010   fnLbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
 01020 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(7)=CNVRT$('pic(zz#)',PRGL(3,1))&CNVRT$('pic(zzzzz#)',PRGL(3,2))&CNVRT$('pic(zz#)',PRGL(3,3))
 01022   fnqgl(lc,mypos,frame,2) !:
         resp$(7)=cnvrt$('pic(zz#)',prgl(3,1))&cnvrt$('pic(zzzzz#)',prgl(3,2))&cnvrt$('pic(zz#)',prgl(3,3)) !:
         resp$(7)=fnrgl$(resp$(7))
-01030   fnlbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
+01030   fnLbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
 01040 !  fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         !  rESP$(8)=CNVRT$('pic(zz#)',PRGL(4,1))&CNVRT$('pic(zzzzz#)',PRGL(4,2))&CNVRT$('pic(zz#)',PRGL(4,3))
 01042   fnqgl(lc,mypos,frame,2) !:
         resp$(8)=cnvrt$('pic(zz#)',prgl(4,1))&cnvrt$('pic(zzzzz#)',prgl(4,2))&cnvrt$('pic(zz#)',prgl(4,3)) !:
         resp$(8)=fnrgl$(resp$(8))
-01050   fnlbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
+01050   fnLbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
 01060 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(9)=CNVRT$('pic(zz#)',PRGL(5,1))&CNVRT$('pic(zzzzz#)',PRGL(5,2))&CNVRT$('pic(zz#)',PRGL(5,3))
 01062   fnqgl(lc,mypos,frame,2) !:
@@ -205,67 +205,67 @@
 01080 PAGE3: ! _____________________________________________________________ !:
         lc=3 : mylen=44 : mypos=mylen+2 !:
         fc=0 ! frame count
-01090   fnfra(04,1,2,framewidth=110,'State Unemployment Compensation') !:
+01090   fnFra(04,1,2,framewidth=110,'State Unemployment Compensation') !:
         frame=fc+=1 : lc=0
-01100   fnlbl(lc+=1,1,'State Unemployment Compensation Rate:',mylen,right,0,frame)
-01110   fntxt(lc,mypos,5,0,left,'',0,'',frame) !:
+01100   fnLbl(lc+=1,1,'State Unemployment Compensation Rate:',mylen,right,0,frame)
+01110   fnTxt(lc,mypos,5,0,left,'',0,'',frame) !:
         resp$(1)=c$
-01120   fnlbl(lc+=1,1,'State Unemployment Compensation Maximum:',mylen,right,0,frame)
-01130   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01120   fnLbl(lc+=1,1,'State Unemployment Compensation Maximum:',mylen,right,0,frame)
+01130   fnTxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(2)=str$(ucm)
-01140   fnfra(08,1,2,framewidth=110,'Social Security') !:
+01140   fnFra(08,1,2,framewidth=110,'Social Security') !:
         frame=fc+=1 : lc=0
-01150   fnlbl(lc+=1,1,'Social Security Rate:',mylen,right,0,frame)
-01160   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01150   fnLbl(lc+=1,1,'Social Security Rate:',mylen,right,0,frame)
+01160   fnTxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(3)=str$(ficarate)
-01170   fnlbl(lc+=1,1,'Social Security Maximum:',mylen,right,0,frame)
-01180   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01170   fnLbl(lc+=1,1,'Social Security Maximum:',mylen,right,0,frame)
+01180   fnTxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(4)=str$(ficawage)
-01190   fnfra(12,1,2,framewidth=110,'Federal Unemployment Compensation') !:
+01190   fnFra(12,1,2,framewidth=110,'Federal Unemployment Compensation') !:
         frame=fc+=1 : lc=0
-01200   fnlbl(lc+=1,1,'Federal Unemployment Compensation Rate:',mylen,right,0,frame)
-01210   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01200   fnLbl(lc+=1,1,'Federal Unemployment Compensation Rate:',mylen,right,0,frame)
+01210   fnTxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(5)=str$(feducrat)
-01220   fnlbl(lc+=1,1,'Federal Unemployment Compensation Maximum:',mylen,right,0,frame)
-01230   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01220   fnLbl(lc+=1,1,'Federal Unemployment Compensation Maximum:',mylen,right,0,frame)
+01230   fnTxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(6)=str$(feducwag)
-01240   fnfra(16,1,2,framewidth=110,'MediCare') !:
+01240   fnFra(16,1,2,framewidth=110,'MediCare') !:
         frame=fc+=1 : lc=0
-01250   fnlbl(lc+=1,1,'MediCare Rate:',mylen,right,0,frame)
-01260   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01250   fnLbl(lc+=1,1,'MediCare Rate:',mylen,right,0,frame)
+01260   fnTxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(7)=str$(mcr)
-01270   fnlbl(lc+=1,1,'MediCare Maximum:',mylen,right,0,frame)
-01280   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01270   fnLbl(lc+=1,1,'MediCare Maximum:',mylen,right,0,frame)
+01280   fnTxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(8)=str$(mcm)
 01290   return 
 01300 PAGE4: ! _____________________________________________________________ !:
         lc=3 : mylen=40 : mypos=mylen+2 !:
         rc=0 ! Resp$ Counter
-01310   fnlbl(lc+=1,1,'Enter the names of the 10 miscellaneous deductions.',width,center)
-01320   fnlbl(lc+=1,1,'Indicate how the deductions are to be handled by the system.',width,center)
-01330   fnlbl(lc+=1,1,'Place a Check in the appropriate column to indicate if it should be',width,center)
-01340   fnlbl(lc+=1,1,'deducted for Federal, FICA, State, or State Unemployment Compensation.',width,center)
+01310   fnLbl(lc+=1,1,'Enter the names of the 10 miscellaneous deductions.',width,center)
+01320   fnLbl(lc+=1,1,'Indicate how the deductions are to be handled by the system.',width,center)
+01330   fnLbl(lc+=1,1,'Place a Check in the appropriate column to indicate if it should be',width,center)
+01340   fnLbl(lc+=1,1,'deducted for Federal, FICA, State, or State Unemployment Compensation.',width,center)
 01350 ! 
-01360   fnlbl(lc+=1,24,'Deduction or Addition',10,center)
-01370   fnlbl(lc+=1,1,'Deduction Name')
-01380   fnlbl(lc,40,'Fed')
-01390   fnlbl(lc,45,'FICA')
-01400   fnlbl(lc,50,'State')
-01410   fnlbl(lc,56,'UC')
-01420   fnlbl(lc,60,'General Ledger Number')
+01360   fnLbl(lc+=1,24,'Deduction or Addition',10,center)
+01370   fnLbl(lc+=1,1,'Deduction Name')
+01380   fnLbl(lc,40,'Fed')
+01390   fnLbl(lc,45,'FICA')
+01400   fnLbl(lc,50,'State')
+01410   fnLbl(lc,56,'UC')
+01420   fnLbl(lc,60,'General Ledger Number')
 01430   for j=1 to 10
-01440     fntxt(j+lc,1,20) !:
+01440     fnTxt(j+lc,1,20) !:
           resp$(rc+=1)=miscname$(j)
 01450     item$(1)='Deduction' : item$(2)='Addition' : mat item$(2) !:
           fncomboa('ded_or_add',j+lc,24,mat item$) !:
           resp$(rc+=1)=item$(dedcode(j))
-01460     fnchk(j+lc,40,'',right) !:
+01460     fnChk(j+lc,40,'',right) !:
           rc+=1 : if dedfed(j)=1 then resp$(rc)='True' else resp$(rc)='False'
-01470     fnchk(j+lc,45,'',right) !:
+01470     fnChk(j+lc,45,'',right) !:
           rc+=1 : if dedfica(j)=1 then resp$(rc)='True' else resp$(rc)='False'
-01480     fnchk(j+lc,50,'',right) !:
+01480     fnChk(j+lc,50,'',right) !:
           rc+=1 : if dedst(j)=1 then resp$(rc)='True' else resp$(rc)='False'
-01490     fnchk(j+lc,55,'',right) !:
+01490     fnChk(j+lc,55,'',right) !:
           rc+=1 : if deduc(j)=1 then resp$(rc)='True' else resp$(rc)='False'
 01500 ! fnCOMBOF(env$('Q')&'\GLmstr',LC+J,62,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,30,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST) !:
           ! rESP$(RC+=1)=MISCGL$(J)
@@ -275,7 +275,7 @@
 01520   return 
 01530 ! ______________________________________________________________________
 01540 BUILD_COMPANY: ! 
-01550   open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Size=0,RecL=882,Replace",internal,outin,relative 
+01550   open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Size=0,RecL=882,Replace",internal,outIn,relative 
 01560   write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 01570   goto READ_COMPANY
 01580 ! ______________________________________________________________________

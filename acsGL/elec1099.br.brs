@@ -2,7 +2,7 @@
 00020 ! Create Electronic 1099s !:
         ! modified for new 750 recl for 1998 (this change not made until 2/26/99          so everybodys will be wrong! must do conversion pgm to change to new            format when disketts returned
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdset,fnacs,fncmdkey,fnchk
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnCmdKey,fnChk
 00050   fntop(program$,cap$="Create Electronic 1099s")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -252,51 +252,51 @@
 02490   typemp$="R"
 02500   pr newpage
 02510 MAIN: ! 
-02520   fntos(sn$="Elec1099") !:
+02520   fnTos(sn$="Elec1099") !:
         mylen=30: mypos=mylen+3 : right=1
-02530   fnlbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
-02540   fnlbl(3,1,"Company Namme:",mylen,right)
-02550   fntxt(3,mypos,40,0,0,"",0,"The filer's company name.",0 ) !:
+02530   fnLbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
+02540   fnLbl(3,1,"Company Namme:",mylen,right)
+02550   fnTxt(3,mypos,40,0,0,"",0,"The filer's company name.",0 ) !:
         resp$(1)=a$(1)
-02560   fnlbl(4,1,"Address:",mylen,right)
-02570   fntxt(4,mypos,40,0,0,"",0,"The filer's address.",0 ) !:
+02560   fnLbl(4,1,"Address:",mylen,right)
+02570   fnTxt(4,mypos,40,0,0,"",0,"The filer's address.",0 ) !:
         resp$(2)=a$(2)
-02580   fnlbl(5,1,"City State Zip:",mylen,right)
-02590   fntxt(5,mypos,40,0,0,"",0,"The filer's city state zip.",0 ) !:
+02580   fnLbl(5,1,"City State Zip:",mylen,right)
+02590   fnTxt(5,mypos,40,0,0,"",0,"The filer's city state zip.",0 ) !:
         resp$(3)=a$(3)
 02600   mylen=40: mypos=mylen+3
-02610   fnlbl(7,1,"Federal ID Number:",mylen,right)
-02620   fntxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) !:
+02610   fnLbl(7,1,"Federal ID Number:",mylen,right)
+02620   fnTxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) !:
         resp$(4)=str$(b1)
-02630   fnlbl(8,1,"Payment Year:",mylen,right)
-02640   fntxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) !:
+02630   fnLbl(8,1,"Payment Year:",mylen,right)
+02640   fnTxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) !:
         resp$(5)=str$(yr)
-02650   fnlbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
-02660   fntxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) !:
+02650   fnLbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
+02660   fnTxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) !:
         resp$(6)=pnc$
-02670   fnchk(11,mypos,"Combined Federal/State Filer:",1) !:
+02670   fnChk(11,mypos,"Combined Federal/State Filer:",1) !:
         resp$(7)=cfsy$
-02680   fnlbl(12,1,"5 Character Transmitter Code:",mylen,right)
-02690   fntxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) !:
+02680   fnLbl(12,1,"5 Character Transmitter Code:",mylen,right)
+02690   fnTxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) !:
         resp$(8)=pnc$
-02700   fnchk(13,mypos,"Is Payer a Foreign Corporation:",1) !:
+02700   fnChk(13,mypos,"Is Payer a Foreign Corporation:",1) !:
         resp$(9)=tcc$
-02710   fnlbl(14,1,"Contact Name:",mylen,right)
-02720   fntxt(14,mypos,40,0,0,"",0,"",0 ) !:
+02710   fnLbl(14,1,"Contact Name:",mylen,right)
+02720   fnTxt(14,mypos,40,0,0,"",0,"",0 ) !:
         resp$(10)=cn$
-02730   fnlbl(15,1,"Contact Phone Number:",mylen,right)
-02740   fntxt(15,mypos,10,0,0,"30",0,"",0 ) !:
+02730   fnLbl(15,1,"Contact Phone Number:",mylen,right)
+02740   fnTxt(15,mypos,10,0,0,"30",0,"",0 ) !:
         resp$(11)=str$(cpn)
 02750   mylen=60: mypos=mylen+3
-02760   fnlbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
-02770   fntxt(17,mypos,1,0,0,"",0,"",0 ) !:
+02760   fnLbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
+02770   fnTxt(17,mypos,1,0,0,"",0,"",0 ) !:
         resp$(12)=orc$
-02780   fnlbl(18,1,"Payer Phone Number:",mylen,right)
-02790   fntxt(18,mypos,10,0,0,"30",0,"",0 ) !:
+02780   fnLbl(18,1,"Payer Phone Number:",mylen,right)
+02790   fnTxt(18,mypos,10,0,0,"30",0,"",0 ) !:
         resp$(13)=str$(ppn)
-02800   fncmdkey("&Next",1,1,0,"Moves to next questions.")
-02810   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
-02820   fnacs(sn$,0,mat resp$,ckey)
+02800   fnCmdKey("&Next",1,1,0,"Moves to next questions.")
+02810   fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
+02820   fnAcs(sn$,0,mat resp$,ckey)
 02830   if ckey=5 then goto XIT
 02850 ! Input #101,Fields MAT IO1$: MAT A$,B1,YR,PNC$,CFSYN$,TCC$,FCIYN$,CN$,CPN,ORC$,PPN Conv CONV1
 02860   if cfsyn$="Y" then cfs$="1" else cfs$=" "
@@ -316,25 +316,25 @@
 03000   if cfs$><"1" then goto MAIN
 03010 SELECT_ST: ! 
 03015   resp=0
-03020   fntos(sn$="elec10992") !:
+03020   fnTos(sn$="elec10992") !:
         mylen=28 : mypos=mylen+3
-03035   fnlbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
+03035   fnLbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
 03040   for j=1 to 17
 03060     for x=1 to 3
-03070 ! fnCHK(J+1,X*20,ST$(STOP2),1) !:
+03070 ! fnChk(J+1,X*20,ST$(STOP2),1) !:
             ! rESP$(RESP+=1)=ST$(J*3-2)
 03080     next x
 03090   next j
-03100   fncmdkey("&Next",1,1,0,"Moves to next questions.")
-03110   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
-03120   fnacs(sn$,0,mat resp$,ckey)
+03100   fnCmdKey("&Next",1,1,0,"Moves to next questions.")
+03110   fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
+03120   fnAcs(sn$,0,mat resp$,ckey)
 03130   for j=1 to 51
 03140     if resp$(j)="True" then stu(j)=1
 03150   next j
 03170 ! ______________________________________________________________________
 03180 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing
 03190   close #102: ioerr L3200
-03200 L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&cap$,display,outin 
+03200 L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn 
 03210   pr #102: newpage
 03220   pr #102,fields "2,2,C 17,N": "Select Form Type:"
 03230   for j=1 to 13
@@ -347,7 +347,7 @@
 03300   if ti1<1 or ti1>udim(tr$) then goto L3280
 03310   ti$=tr$(ti1)(1:1)
 03320   close #101: ioerr L3330
-03330 L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outin 
+03330 L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outIn 
 03340   pr #101: newpage
 03350   pr f "4,05,C 04,R,N": "Type"
 03360   pr f "4,11,C 40,R,N": "Category"
@@ -376,21 +376,21 @@
 03590 L3590: next j
 03600   gosub PROCESS
 03610 ASKDAT: ! 
-03620   fntos(sn$="VendorTransList") !:
+03620   fnTos(sn$="VendorTransList") !:
         mylen=28 : mypos=mylen+3
-03630   fnlbl(1,1,"Transaction Starting Date:",mylen,1)
-03640   fntxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') !:
+03630   fnLbl(1,1,"Transaction Starting Date:",mylen,1)
+03640   fnTxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') !:
         resp$(1)=str$(transactionstartingdate)
-03650   fnlbl(2,1,"Transaction Ending Date:",mylen,1)
-03660   fntxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') !:
+03650   fnLbl(2,1,"Transaction Ending Date:",mylen,1)
+03660   fnTxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') !:
         resp$(2)=str$(transactionendingdate)
-03670   fnlbl(2,1,"",45,1)
-03680   fncmdset(2)
-03690   fnacs(sn$,0,mat resp$,ckey)
+03670   fnLbl(2,1,"",45,1)
+03680   fnCmdSet(2)
+03690   fnAcs(sn$,0,mat resp$,ckey)
 03700 ! 
 03710   transactionstartingdate=val(resp$(1))
 03720   transactionendingdate=val(resp$(2))
-03730   open #paymstr=1: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+03730   open #paymstr=1: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 03740   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 03750   if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output 
 03760   if ct1=0 then gosub RECT
@@ -437,7 +437,7 @@
 04170 ! ______________________________________________________________________
 04180 L4180: pr newpage
 04190   close #103: ioerr L4200
-04200 L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outin 
+04200 L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outIn 
 04210   io3$(1)="7,55,Cu 1,UT,N"
 04220   io3$(2)="8,55,C 9,UT,N"
 04230   pr #103,fields "4,2,C 60,N": "Vendor Number: "&ltrm$(vn$)
@@ -481,7 +481,7 @@
 04610 L4610: next j
 04620   pr newpage
 04630   close #103: ioerr L4640
-04640 L4640: open #103: "SROW=7,SCOL=14,EROW=15,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outin 
+04640 L4640: open #103: "SROW=7,SCOL=14,EROW=15,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outIn 
 04650   pr #103: newpage
 04660   pr #103,fields "2,2,Cc 50,H,N": "invalid State Code encountered"
 04670   pr #103,fields "1,1,C 7,N": hex$("07")
@@ -543,7 +543,7 @@
 05230   close #1: 
 05240   pr newpage
 05250   close #104: ioerr L5260
-05260 L5260: open #104: "SROW=7,SCOL=8,EROW=09,ECOL=72,Border=SR,Caption=<"&cap$,display,outin 
+05260 L5260: open #104: "SROW=7,SCOL=8,EROW=09,ECOL=72,Border=SR,Caption=<"&cap$,display,outIn 
 05270   pr #104,fields "2,2,C 58,N": "Do you have another type of return for this company (Y/N):"
 05280   yn$="N" ! default
 05290 L5290: rinput #104,fields "2,61,Cu 1,UT,N": yn$ conv L5290
@@ -560,7 +560,7 @@
 05400 ! ______________________________________________________________________
 05410 PROCESS: pr newpage
 05420   close #101: ioerr L5430
-05430 L5430: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outin 
+05430 L5430: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outIn 
 05440   pr f "10,35,C 10,N": "processing"
 05450   pr f "13,34,C 11,B,5": "Cancel (F5)"
 05460   pr f "12,32,C 20": "  0% COMPLETED"

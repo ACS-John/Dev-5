@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\hourclassification
 00020 ! Classification file for tracking comp time etc
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2),mask(2),sp(2),c$(2,8)*40
@@ -14,7 +14,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\hourclass.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\PRmstr\hourclass-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\hourclass.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\PRmstr\hourclass-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -54,7 +54,7 @@
 00420   return 
 00430 ! ______________________________________________________________________
 00440 HAMSTER: ! 
-00450   fnhamster("TimeClass",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00450   fnHamster("TimeClass",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00460   return 
 00470 ! ______________________________________________________________________
 00490 ! ______________________________________________________________________

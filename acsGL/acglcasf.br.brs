@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglCasF
 00020 ! Cash Flow Statement with Fund Comparisons
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd, fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnopt
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd, fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
@@ -34,15 +34,15 @@
 00280   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
 00290   open #1: fl1$,internal,input,keyed 
 00300   if fnprocess=1 or fnUseDeptNo=0 then goto L410
-00310   fntos(sn$="ACglcasf") !:
+00310   fnTos(sn$="ACglcasf") !:
         mylen=30: mypos=mylen+3 : right=1
-00320   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00330   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00320   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00330   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00340   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00350   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00360   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00370   fnacs(sn$,0,mat resp$,ckey)
+00340   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00350   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00360   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00370   fnAcs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   costcntr=val(resp$(1))
 00400   gosub ASK_MONTHLY
@@ -245,23 +245,23 @@
 02340 ! ______________________________________________________________________
 02350 XIT: fnxit
 02360 ! ______________________________________________________________________
-02370 L2370: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outin,relative 
+02370 L2370: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outIn,relative 
 02380   read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 02390 L2390: form pos 1,10*n 3,10*c 20
-02400 L2400: fntos(sn$="ACglcasf3") !:
+02400 L2400: fnTos(sn$="ACglcasf3") !:
         mylen=1: mypos=mylen+3
-02410   fntos(sn$="ACglcasf3") !:
+02410   fnTos(sn$="ACglcasf3") !:
         mylen=1: mypos=mylen+3
-02420   fnlbl(1,4,"Fund                 Description ")
+02420   fnLbl(1,4,"Fund                 Description ")
 02430   for j=1 to 10
-02440     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
+02440     fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
           resp$(j*2-1)=str$(fundnum(j))
-02450     fntxt(j+1,mypos+10,40,0,0,"",0,"Enter the fund description.") !:
+02450     fnTxt(j+1,mypos+10,40,0,0,"",0,"Enter the fund description.") !:
           resp$(j*2)=funddesc$(j)
 02460   next j
-02470   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
-02480   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02490   fnacs(sn$,0,mat resp$,ckey)
+02470   fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
+02480   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02490   fnAcs(sn$,0,mat resp$,ckey)
 02500   if ckey=5 then goto XIT
 02510   for j=1 to 10
 02520     fundnum(j)=val(resp$(j*2-1))
@@ -280,15 +280,15 @@
 02630   return 
 02640 ! ______________________________________________________________________
 02650 ASK_MONTHLY: ! ask monthly info or ytd info
-02660   fntos(sn$="ACglcasf2") !:
+02660   fnTos(sn$="ACglcasf2") !:
         mylen=30: mypos=mylen+3 : right=1
-02670   fnopt(1,2,"Print Monthly Figures" ,0,0) !:
+02670   fnOpt(1,2,"Print Monthly Figures" ,0,0) !:
         resp$(2)="False"
-02680   fnopt(2,2,"Print Year to Date Figures" ,0,0) !:
+02680   fnOpt(2,2,"Print Year to Date Figures" ,0,0) !:
         resp$(2)="True"
-02690   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-02700   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02710   fnacs(sn$,0,mat resp$,ckey)
+02690   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+02700   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02710   fnAcs(sn$,0,mat resp$,ckey)
 02720   if ckey=5 then goto XIT
 02730   if resp$(1)="True" then monthly=1
 02740   if resp$(2)="True" then monthly=2

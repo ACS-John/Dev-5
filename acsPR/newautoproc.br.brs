@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newAutoProc
 00020 ! PR - Begin Atomatic Processing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fncno,fnopenprn,fncloseprn,fnputcno,fnprocess,fnpgnum,fncursys$,fntos,fnlbl,fncomboa,fncmdkey,fnacs,fngetdir,fnflexinit1,fnflexadd1,fnfra,fnopt
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fncno,fnopenprn,fncloseprn,fnputcno,fnprocess,fnpgnum,fncursys$,fnTos,fnLbl,fncomboa,fnCmdKey,fnAcs,fngetdir,fnflexinit1,fnflexadd1,fnFra,fnOpt
 00050   fntop(program$,cap$="Begin Automatic Processing")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -13,7 +13,7 @@
 00130   fncno(cno,oldcnam$)
 00170 ! ______________________________________________________________________
 00180 BUILD_PRCLNT: ! 
-00190   open #prclnt=1: "Name="&env$('Q')&"\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outin,relative 
+00190   open #prclnt=1: "Name="&env$('Q')&"\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outIn,relative 
 00200   for j=1 to 20 !:
           write #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0 !:
         next j
@@ -25,16 +25,16 @@
 00240   gosub BLD_ACNO
 00250 ! ______________________________________________________________________
 00260 MAIN: ! 
-00270   fntos(sn$="autoproc") !:
+00270   fnTos(sn$="autoproc") !:
         respc=0
-00280   fnlbl(1,20,"Select From the Following Companies:",50,1)
-00290   fnlbl(2,1,"Company:",10,1)
+00280   fnLbl(1,20,"Select From the Following Companies:",50,1)
+00290   fnLbl(2,1,"Company:",10,1)
 00300   for j=1 to udim(opt$)
 00310     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then resp$(respc+=1)=opt$(j): goto L340
 00320   next j
 00330   resp$(1)=opt$(1) ! default to 1st in none found
 00340 L340: fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
-00350   fnlbl(4,30,"Selected Companies:")
+00350   fnLbl(4,30,"Selected Companies:")
 00360   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Company #' !:
         chdr$(2)='Company Name'
@@ -46,17 +46,17 @@
           item$(2)=clnam$(j) !:
           fnflexadd1(mat item$)
 00400   next j
-00410   fnfra(22,1,4,30,"Period to Print","Select the type of processing.")
-00420   fnopt(1,3,"Weekly",0,1) !:
+00410   fnFra(22,1,4,30,"Period to Print","Select the type of processing.")
+00420   fnOpt(1,3,"Weekly",0,1) !:
         if wmq=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00430   fnopt(2,3,"Monthly",0,1) !:
+00430   fnOpt(2,3,"Monthly",0,1) !:
         if wmq=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00440   fnopt(3,3,"Quarterly",0,1) !:
+00440   fnOpt(3,3,"Quarterly",0,1) !:
         if wmq=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-00450   fncmdkey("&Next",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
-        fncmdkey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") !:
-        fncmdkey("&Cancel",5,0,1)
-00460   fnacs(sn$,0,mat resp$,ckey)
+00450   fnCmdKey("&Next",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
+        fnCmdKey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") !:
+        fnCmdKey("&Cancel",5,0,1)
+00460   fnAcs(sn$,0,mat resp$,ckey)
 00470   if ckey=5 then goto XIT
 00480   if ckey=2 and count>0 then goto L550
 00490   clnam$(count+=1)=resp$(1)(1:30)

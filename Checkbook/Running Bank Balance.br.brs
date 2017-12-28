@@ -1,31 +1,31 @@
 00010 ! formerly S:\acsCL\BankBal
 00020 ! Running Bank Balance
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fntos,fnlbl,fntxt,fncmdset,fnacs, fndate_mmddyy_to_ccyymmdd,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,de$*35,bn$*30,ml$(0)*100
 00080 ! ______________________________________________________________________
 00100   fntop(program$)
 00120   fndat(dat$,1)
-00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative
+00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative
 00132   read #20,using 'Form POS 152,N 2',rec=1,release: bank_code 
 00134   close #20: 
 00140 MAIN: ! 
-00150   fntos(sn$="bankbal")
+00150   fnTos(sn$="bankbal")
 00152   respc=0
-00160   fnlbl(1,40,"",1,1)
-00170   fnlbl(1,1,"Starting Date:",31,1)
-00180   fntxt(1,33,10,0,1,"3") 
+00160   fnLbl(1,40,"",1,1)
+00170   fnLbl(1,1,"Starting Date:",31,1)
+00180   fnTxt(1,33,10,0,1,"3") 
 00182   resp$(respc+=1)=""
-00190   fnlbl(2,1,"Beginning Checkbook Balance:",31,1)
-00200   fntxt(2,33,12,0,1,"10")
+00190   fnLbl(2,1,"Beginning Checkbook Balance:",31,1)
+00200   fnTxt(2,33,12,0,1,"10")
 00202   resp$(respc+=1)=""
-00210   fnlbl(3,1,"Bank Number to Print:",31,1)
-00220   fntxt(3,33,2,0,1,"30") 
+00210   fnLbl(3,1,"Bank Number to Print:",31,1)
+00220   fnTxt(3,33,2,0,1,"30") 
 00222   resp$(respc+=1)=str$(bank_code)
-00230   fncmdset(2)
-00232   fnacs(sn$,0,mat resp$,ckey)
+00230   fnCmdSet(2)
+00232   fnAcs(sn$,0,mat resp$,ckey)
 00240   if ckey=5 then goto XIT
 00250   d1=val(resp$(1))
 00260   b1=val(resp$(2))

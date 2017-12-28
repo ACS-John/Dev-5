@@ -1,28 +1,28 @@
 00010 ! formerly S:\acsUB\UBDATfix
 00020 ! -- Change Wrong Billing Date
 00030 ! r: setup
-00040   library 'S:\Core\Library': fnxit,fnacs,fnlbl,fnwait,fntos,fntxt,fnerror,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fncmbact,fnmsgbox,fnAutomatedSavePoint
+00040   library 'S:\Core\Library': fnxit,fnAcs,fnLbl,fnwait,fnTos,fnTxt,fnerror,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fncmbact,fnmsgbox,fnAutomatedSavePoint
 00050   on error goto ERTN
 00060 ! 
 00070   dim z$*10,o(2),bt1(14,2),badr(2),ba(13),txt$*40,tg(11),resp$(10)*80
 00090   fntop(program$)
 00100 ! /r
 24000 SCREEN1: ! r:
-24020   fntos(sn$:="DatFix2")
-24040   fnlbl(1,1,'Bad Billing Date:',24,1)
-24060   fntxt(1,26,8,0,0,"1") 
+24020   fnTos(sn$:="DatFix2")
+24040   fnLbl(1,1,'Bad Billing Date:',24,1)
+24060   fnTxt(1,26,8,0,0,"1") 
 24080   resp$(1)=str$(d1)
-24100   fnlbl(2,1,'Good Billing Date:',24,1)
-24120   fntxt(2,26,8,0,0,"1") 
+24100   fnLbl(2,1,'Good Billing Date:',24,1)
+24120   fnTxt(2,26,8,0,0,"1") 
 24140   resp$(2)=str$(d2)
-24160   fnlbl(4,1,"Starting Account:",24,1)
+24160   fnLbl(4,1,"Starting Account:",24,1)
 24180   fncmbact(4,26)
 24200   resp$(3)="[All]"
-24220   fnlbl(5,1,"Ending Account:",24,1)
+24220   fnLbl(5,1,"Ending Account:",24,1)
 24240   fncmbact(5,26)
 24260   resp$(4)="[All]"
-24280   fncmdset(2)
-24300   fnacs(sn$,0,mat resp$,ckey)
+24280   fnCmdSet(2)
+24300   fnAcs(sn$,0,mat resp$,ckey)
 24320   if ckey=5 then goto XIT
 24340   d1=val(resp$(1))
 24360   d2=val(resp$(2))
@@ -34,8 +34,8 @@
 24480 goto Initialize ! /r
 28000 Initialize: ! r:
 28010   fnAutomatedSavePoint('before')
-28020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-28040   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+28020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+28040   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 28060 F_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 28080   gosub BUD1
 28100 goto READ_UBTRANS ! /r
@@ -65,8 +65,8 @@
 34060 fnxit ! /r
 36000 BUD1: ! r:
 36020   bud1=0
-36040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L490
-36060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+36040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L490
+36060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 36080   bud1=1
 36100   L490:  !
 36120 return ! /r
@@ -77,7 +77,7 @@
 38080   L550: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 38100   ta1=badr(1)
 38120   do until ta1=0
-38140     read #82,using L590,rec=ta1: x$,mat bt1,nba norec XIT_BUD2
+38140     read #82,using L590,rec=ta1: x$,mat bt1,nba noRec XIT_BUD2
 38160     L590: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 38180     if bt1(1,1)=d1 then 
 38200       bt1(1,1)=bt1(1,2)=d2 

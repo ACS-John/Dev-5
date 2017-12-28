@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsTM\Client
 00020 ! TM Client - Hamster
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
@@ -14,7 +14,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00152   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&env$('cno')&",Version=0,Use,RecL=86,Shr",internal,outin,relative 
+00152   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&env$('cno')&",Version=0,Use,RecL=86,Shr",internal,outIn,relative 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -53,7 +53,7 @@
 00460   return 
 00470 ! ______________________________________________________________________
 00480 HAMSTER: ! 
-00490   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00490   fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00500   return 
 00510 ! ______________________________________________________________________
 00520 XIT: fnxit

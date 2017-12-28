@@ -2,37 +2,37 @@
 10040 fn_setup
 10100   fntop(program$)
 14000 SCR1: ! r:
-14020   fntos(sn$="ublabel-1b")
-14040   fnlbl(1,1,"Sort by:",20,1)
+14020   fnTos(sn$="ublabel-1b")
+14040   fnLbl(1,1,"Sort by:",20,1)
 14060   fncomboa("ublabels-ord",1,22,mat sequence_option$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
 14080   fnreg_read('ublabel.sequence',resp$(1)) : if resp$(1)='' then resp$(1)=sequence_option$(sequence_account)
 14100 ! 
-14120   fnlbl(3,1,"Print Address:",20,1)
+14120   fnLbl(3,1,"Print Address:",20,1)
 14140   fncomboa("ubnamlst-act",3,22,mat address_option$)
 14160   fnreg_read('ublabel.address',resp$(2)) : if srch(mat address_option$,resp$(2))<=0 then resp$(2)=address_option$(ao_billing)
 14280 ! 
-14300   fnlbl(5,1,"Line 1:",20,1)
+14300   fnLbl(5,1,"Line 1:",20,1)
 14320   fncomboa("ublabel_tl1",5,22,mat line_x_option$,'',70)
 14340   fnreg_read('ublabel.line 1',resp$(3)) : if resp$(3)='' then resp$(3)=line_x_option$(1)
 14360 ! 
-14380   fnlbl(6,1,"Line 2:",20,1)
+14380   fnLbl(6,1,"Line 2:",20,1)
 14400   fncomboa("ublabel_tl2",6,22,mat line_x_option$,'',70)
 14420   fnreg_read('ublabel.line 2',resp$(4)) : if resp$(4)='' then resp$(4)=line_x_option$(2)
 14440 ! 
-14460   fnlbl(7,1,"Line 3:",20,1)
+14460   fnLbl(7,1,"Line 3:",20,1)
 14480   fncomboa("ublabel_tl3",7,22,mat line_x_option$,'',70)
 14500   fnreg_read('ublabel.line 3',resp$(5)) : if resp$(5)='' then resp$(5)=line_x_option$(3)
 14520 ! 
-14540   fnlbl(8,1,"Line 4:",20,1)
+14540   fnLbl(8,1,"Line 4:",20,1)
 14560   fncomboa("ublabel_tl4",8,22,mat line_x_option$,'',70)
 14580   fnreg_read('ublabel.line 4',resp$(6)) : if resp$(6)='' then resp$(6)=line_x_option$(4)
 14600 ! 
-14620   fnlbl(9,1,"Line 5:",20,1)
+14620   fnLbl(9,1,"Line 5:",20,1)
 14640   fncomboa("ublabel_tl5",9,22,mat line_x_option$,'',70)
 14660   fnreg_read('ublabel.line 5',resp$(7)) : if resp$(7)='' then resp$(7)=line_x_option$(5 )
 14680 ! 
-14700   fncmdset(2)
-14720   fnacs(sn$,0,mat resp$,ck) ! select order of printing
+14700   fnCmdSet(2)
+14720   fnAcs(sn$,0,mat resp$,ck) ! select order of printing
 14740   if ck=5 then goto XIT
 14760   fnreg_write('ublabel.sequence',resp$(1))
 14780   fnreg_write('ublabel.address',resp$(2))
@@ -61,7 +61,7 @@
 15240   altaddr=srch(mat address_option$,resp$(2))
 15340 ! 
 15360   line_1_print=srch(mat line_x_option$,resp$(3))
-15380   line_2_print=srch(mat line_x_option$,resp$(4))
+15380   lineToPrint=srch(mat line_x_option$,resp$(4))
 15400   line_3_print=srch(mat line_x_option$,resp$(5))
 15420   line_4_print=srch(mat line_x_option$,resp$(6))
 15440   line_5_print=srch(mat line_x_option$,resp$(7))
@@ -79,8 +79,8 @@
 15680     goto BULK_READ
 15700   end if 
 15720 SCR2: ! 
-15740   fntos(sn$="ublabel-2")
-15760   fnlbl(1,1,"Select by:",12,0,0)
+15740   fnTos(sn$="ublabel-2")
+15760   fnLbl(1,1,"Select by:",12,0,0)
 15780   if annbc=sequence_account then 
 15800     filter_option_enabled$(1)=filter_option$(1)
 15820     filter_option_enabled$(2)=filter_option$(2)
@@ -114,8 +114,8 @@
 16380   fncomboa("ublabels-ord",1,14,mat filter_option_enabled$,'',30)
 16400   resp$(1)=filter_option_enabled$(1)
 16420   gosub OPEN_FILES
-16440   fncmdset(6)
-16460   fnacs(sn$,0,mat resp$,ckey) ! method of selection
+16440   fnCmdSet(6)
+16460   fnAcs(sn$,0,mat resp$,ckey) ! method of selection
 16480   filter_selection=srch(mat filter_option$,resp$(1))
 16500   if ckey=5 then goto XIT
 16520   if ckey=2 then goto SCR1
@@ -131,7 +131,7 @@
 20040   if annbc=sequence_bar_code then 
 20060 BARCODE_READ_ADDR: ! 
 20080     read #addr,using 'Form POS 1,PD 3': r6 eof DONE
-20100     read #6,using "Form POS 1,C 16,C 10",rec=r6: srt$,z$ norec TOP
+20100     read #6,using "Form POS 1,C 16,C 10",rec=r6: srt$,z$ noRec TOP
 20120     if rtrm$(x$)<>"" and x$<>z$ then goto BARCODE_READ_ADDR
 20140     x$=""
 20160     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey TOP
@@ -163,7 +163,7 @@
 24060 ! else 
 24080   fn_set_line_text(labeltext$(1),line_1_print)
 24100 ! end if
-24120   fn_set_line_text(labeltext$(2),line_2_print)
+24120   fn_set_line_text(labeltext$(2),lineToPrint)
 24140   fn_set_line_text(labeltext$(3),line_3_print)
 24160   fn_set_line_text(labeltext$(4),line_4_print)
 24180   fn_set_line_text(labeltext$(5),line_5_print)
@@ -181,24 +181,30 @@
 26020   close #1: ioerr ignore
 26040   fnlabel(101,cap$,mat pt$,cp,nw)
 26080   goto XIT ! /r
-27000   def fn_set_line_text(&labeltext$,line_2_print)
-27020     if line_2_print=line_x_blank then 
+27000   def fn_set_line_text(&labeltext$,lineToPrint)
+27020     if lineToPrint=line_x_blank then 
 27040       labeltext$=''
-27060     else if line_2_print=line_x_account_number then 
+27060     else if lineToPrint=line_x_account_number then 
 27080       labeltext$=z$
-27100     else if line_2_print=line_x_meter_address then 
+27082     else if lineToPrint=line_x_accountRightJustified then 
+27084       labeltext$=lpad$(z$,40)
+27100     else if lineToPrint=line_x_meter_address then 
 27120       labeltext$=meter_address$
-27140     else if line_2_print=line_x_customer_name then 
+27140     else if lineToPrint=line_x_customer_name then 
 27160       labeltext$=pe$(1)
-27180     else if line_2_print=line_x_mailing_address_line_1 then ! Mailing Address Line 1
+27180     else if lineToPrint=line_x_mailing_address_line_1 then ! Mailing Address Line 1
 27200       labeltext$=pe$(2)
-27220     else if line_2_print=line_x_mailing_address_line_2 then ! Mailing Address Line 2 or if blank City State Zip
+27220     else if lineToPrint=line_x_mailing_address_line_2 then ! Mailing Address Line 2 or if blank City State Zip
 27240       labeltext$=pe$(3)
-27260     else if line_2_print=line_x_mailing_address_line_3 then ! City State Zip if Mailing Address Line 2 not blank
+27260     else if lineToPrint=line_x_mailing_address_line_3 then ! City State Zip if Mailing Address Line 2 not blank
 27280       labeltext$=pe$(4)
-27282     else if line_2_print=line_x_meter_route_and_sequenc then ! City State Zip if Mailing Address Line 2 not blank
-27284       labeltext$=f3$&' '&str$(route)&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
-27286     else if line_2_print=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
+27281     else if lineToPrint=line_x_meter_route_and_sequenc then ! City State Zip if Mailing Address Line 2 not blank
+27282       labeltext$=f3$&' '&str$(route)&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27283     else if lineToPrint=line_x_meterAndSequence then ! City State Zip if Mailing Address Line 2 not blank
+27284       labeltext$=f3$&'   '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27286     else if lineToPrint=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
+27288       labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27286     else if lineToPrint=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
 27288       labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27300     else 
 27320       labeltext$='(invalid selection)'
@@ -206,15 +212,15 @@
 27360   fnend 
 28000 XIT: fnxit
 30000 SELR: ! r: select range of accounts
-30020   fntos(sn$="ublabel-3")
-30040   fnlbl(1,1,"Starting Account:",20)
+30020   fnTos(sn$="ublabel-3")
+30040   fnLbl(1,1,"Starting Account:",20)
 30060   fncmbact(1,22,1)
 30080   resp$(1)=l1$
-30100   fnlbl(2,1,"Ending Account:",20)
+30100   fnLbl(2,1,"Ending Account:",20)
 30120   fncmbact(2,22,1)
 30140   resp$(2)=h1$
-30160   fncmdset(22)
-30180   fnacs(sn$,0,mat resp$,ckey) ! select by range
+30160   fnCmdSet(22)
+30180   fnAcs(sn$,0,mat resp$,ckey) ! select by range
 30200   if ckey=5 then goto XIT
 30220   l1$=lpad$(trim$(resp$(1)(1:10)),10)
 30240   h1$=lpad$(trim$(resp$(2)(1:10)),10)
@@ -234,14 +240,14 @@
 30520   restore #customer,key=l1$: nokey SELR
 30540   goto TOP ! /r
 32000 IACC: ! r: select individual accounts
-32020   fntos(sn$="ublabel-4")
-32040   fnlbl(1,1,"Account:",15)
+32020   fnTos(sn$="ublabel-4")
+32040   fnLbl(1,1,"Account:",15)
 32060   fncmbact(1,17)
 32080   resp$(1)=selz$
-32100   fnlbl(3,1,"Last selection: "&hz$,35,0)
-32120   if trim$(sele$(2))<>"" then let fnlbl(2,17,sele$(2),20,0)
-32140   fncmdset(23)
-32160   fnacs(sn$,0,mat resp$,ckey)
+32100   fnLbl(3,1,"Last selection: "&hz$,35,0)
+32120   if trim$(sele$(2))<>"" then let fnLbl(2,17,sele$(2),20,0)
+32140   fnCmdSet(23)
+32160   fnAcs(sn$,0,mat resp$,ckey)
 32180   if ckey=2 then 
 32190     fncustomer_search(resp$(1))
 32200     selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -260,16 +266,16 @@
 32460   meter_address$=e$(1)
 32480   goto THERE ! /r
 34000 SELBK: ! r: selects by route
-34020   fntos(sn$="ublabel-5")
+34020   fnTos(sn$="ublabel-5")
 34040   respc=0
-34060   fnlbl(1,1,"Route Number:",15,0)
+34060   fnLbl(1,1,"Route Number:",15,0)
 34080   fncmbrt2(1,17)
 34100   resp$(respc+=1)="1"
-34120   fnlbl(2,1,"Sequence Number:",15,0)
-34140   fntxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
+34120   fnLbl(2,1,"Sequence Number:",15,0)
+34140   fnTxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
 34160   resp$(respc+=1)=""
-34180   fncmdset(22)
-34200   fnacs(sn$,0,mat resp$,ckey) ! select labels by route
+34180   fnCmdSet(22)
+34200   fnAcs(sn$,0,mat resp$,ckey) ! select labels by route
 34220   if ckey=5 then goto XIT
 34240   if ckey=2 then goto SCR2
 34260   bk=0 : bk=val(resp$(1)) conv L1860
@@ -280,15 +286,15 @@
 34360   restore #customer,key>=routekey$: nokey SELBK
 34380 goto TOP ! /r
 36000 SCR4F3: ! r: select starting account name
-36020   fntos(sn$="ublabel-7")
-36040   fnlbl(1,1,"Customer Name:",15,0)
-36060   fntxt(1,17,30,30,1,"",0,"Search and find the exact customer name if you wish to start with a specific customer")
+36020   fnTos(sn$="ublabel-7")
+36040   fnLbl(1,1,"Customer Name:",15,0)
+36060   fnTxt(1,17,30,30,1,"",0,"Search and find the exact customer name if you wish to start with a specific customer")
 36080   resp$(1)=""
 36100   if trim$(sele$(2))<>"" then 
-36120     fnlbl(2,17,sele$(2),20,0)
+36120     fnLbl(2,17,sele$(2),20,0)
 36140   end if 
-36160   fncmdset(21)
-36180   fnacs(sn$,0,mat resp$,ckey) ! select starting customer name
+36160   fnCmdSet(21)
+36180   fnAcs(sn$,0,mat resp$,ckey) ! select starting customer name
 36200   if ckey=5 then goto XIT
 36220   if ckey=6 then let fncustomer_search(resp$(1))
 36260   restore #customer,key>="       ": nokey ignore
@@ -344,13 +350,13 @@
 40180   BARCODE_XIT: ! 
 40200 return  ! /r
 42000 SELSTART: ! r: select customer to start with
-42020   fntos(sn$="ublabel-6")
+42020   fnTos(sn$="ublabel-6")
 42040   mylen=26 : mypos=mylen+2
-42060   fnlbl(1,1,"Starting account:",mylen,0)
+42060   fnLbl(1,1,"Starting account:",mylen,0)
 42080   fncmbact(1,mypos,1)
 42100   if trim$(selz$)='' then resp$(1)='[All]' else resp$(1)=selz$
-42180   fncmdset(5)
-42200   fnacs(sn$,0,mat resp$,ckey) ! select starting customer
+42180   fnCmdSet(5)
+42200   fnAcs(sn$,0,mat resp$,ckey) ! select starting customer
 42220   if ckey=6 then 
 42240     fncustomer_search(resp$(1))
 42260     selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -365,13 +371,13 @@
 42440   meter_address$=e$(1)
 42460   goto THERE ! /r
 44000 READ_FROM_GRID: ! r: select customers from grid
-44020   fntos(sn$="ublabel-7")
-44040   fnlbl(1,1,"Grid name (including folders):",30,0)
-44060   fntxt(1,30,30,66,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
+44020   fnTos(sn$="ublabel-7")
+44040   fnLbl(1,1,"Grid name (including folders):",30,0)
+44060   fnTxt(1,30,30,66,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
 44080   resp$(1)=""
-44100   fnlbl(2,40,"",30,0)
-44120   fncmdset(3)
-44140   fnacs(sn$,0,mat resp$,ckey) ! select starting customer #
+44100   fnLbl(2,40,"",30,0)
+44120   fnCmdSet(3)
+44140   fnAcs(sn$,0,mat resp$,ckey) ! select starting customer #
 44160   if ckey=5 then goto XIT
 44180   open #6: "Name="&trim$(resp$(1)),display,input ioerr READ_FROM_GRID
 44200   LIN6: linput #6: x$ eof DONE
@@ -487,8 +493,8 @@
 62060   end if 
 62080   return  ! /r
 64000 IGNORE: continue 
-68000   def fn_setup
-68020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnacs,fncomboa,fnlbl,fntos,fnmsgbox,fntxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fncmdset,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
+68000 def fn_setup
+68020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
 68040   on error goto ERTN
 68060 ! r: constants and dims
 68080   on fkey 5 goto DONE
@@ -502,15 +508,17 @@
 68260   fnget_services(mat srvnam$, mat srv$)
 68280 ! 
 68300   dim line_x_option$(9)*70
-68320   line_x_option$(line_x_blank:=1)="(blank)"
-68340   line_x_option$(line_x_account_number:=2)="Account"
-68360   line_x_option$(line_x_meter_address:=3)="Meter Address"
-68380   line_x_option$(line_x_customer_name:=4)="Name"
-68400   line_x_option$(line_x_mailing_address_line_1:=5)="Mailing Address Line 1"
-68420   line_x_option$(line_x_mailing_address_line_2:=6)="Mailing Address Line 2 or if blank City State Zip"
-68440   line_x_option$(line_x_mailing_address_line_3:=7)="City State Zip if Mailing Address Line 2 not blank"
-68460   line_x_option$(line_x_meter_route_and_sequenc:=8)=trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"
-68480   line_x_option$(line_x_account_meter4_and_seq:=9)="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
+68320   line_x_option$(line_x_blank                    :=1 )="(blank)"
+68340   line_x_option$(line_x_account_number           :=2 )="Account"
+68342   line_x_option$(line_x_accountRightJustified    :=12)="Account (right justified)"
+68360   line_x_option$(line_x_meter_address            :=3 )="Meter Address"
+68380   line_x_option$(line_x_customer_name            :=4 )="Name"
+68400   line_x_option$(line_x_mailing_address_line_1   :=5 )="Mailing Address Line 1"
+68420   line_x_option$(line_x_mailing_address_line_2   :=6 )="Mailing Address Line 2 or if blank City State Zip"
+68440   line_x_option$(line_x_mailing_address_line_3   :=7 )="City State Zip if Mailing Address Line 2 not blank"
+68460   line_x_option$(line_x_meter_route_and_sequenc  :=8 )=trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"
+68480   line_x_option$(line_x_account_meter4_and_seq   :=9 )="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
+68490   line_x_option$(line_x_meterAndSequence         :=11)=trim$(srvnam$(4))&" Meter and Sequence Numbers"
 68500 ! 
 68520   dim address_option$(3)*30
 68540   address_option$(ao_primary:=1)="Primary Address"

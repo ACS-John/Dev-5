@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\glZer109
 00020 ! Zero Year To Date Purchases
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnchain,fnprocess,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnchain,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   fntop(program$,cap$="Zero Year To Date Purchases")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -9,33 +9,33 @@
 00090 ! ______________________________________________________________________
 00100   fncno(cno,cnam$)
 00110 ! 
-00120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L440
-00130   open #2: "Name="&env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),internal,outin,relative 
+00120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L440
+00130   open #2: "Name="&env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),internal,outIn,relative 
 00140   pr newpage
 00150 SCR1: ! 
-00160   fntos(sn$="Glzer109") !:
+00160   fnTos(sn$="Glzer109") !:
         lc=0 : mylen=55 : mypos=mylen+3 : center=2 : right=1
-00170   fnlbl(lc+=1,1,"* * *   Warning   * * *",60,center)
-00180   fnlbl(lc+=1,1,"This selection will dump all old purchase transactions from each",width,0)
-00190   fnlbl(lc+=1,1,"vendor (payee) record. This selection should only be run at year end",width,0)
-00200   fnlbl(lc+=1,1," after all 1099 forms have been printed.:",mylen,0)
-00210   fnlbl(lc+=1,1," Enter ZERO to continue:",mylen,right)
-00220   fntxt(lc,mypos,5) !:
+00170   fnLbl(lc+=1,1,"* * *   Warning   * * *",60,center)
+00180   fnLbl(lc+=1,1,"This selection will dump all old purchase transactions from each",width,0)
+00190   fnLbl(lc+=1,1,"vendor (payee) record. This selection should only be run at year end",width,0)
+00200   fnLbl(lc+=1,1," after all 1099 forms have been printed.:",mylen,0)
+00210   fnLbl(lc+=1,1," Enter ZERO to continue:",mylen,right)
+00220   fnTxt(lc,mypos,5) !:
         resp$(1)=""
-00230   fncmdset(2)
-00240   fnacs(sn$,0,mat resp$,ckey)
+00230   fnCmdSet(2)
+00240   fnAcs(sn$,0,mat resp$,ckey)
 00250   if ckey=5 then goto XIT
 00260   pas$=resp$(1)
 00270   if lwrc$(pas$)<>lwrc$("zero") then goto SCR1
 00280 OLDEST_DATE: ! 
-00290   fntos(sn$="Glzer1092") !:
+00290   fnTos(sn$="Glzer1092") !:
         lc=0 : mylen=30 : mypos=mylen+3 : width=0
-00300   fnlbl(lc+=1,1,"Oldest Date to be Retained:",mylen,right)
-00310   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'For example, if you wantto dump all transactions up to the beginning of the new year, you would enter the first day of the new year.') !:
+00300   fnLbl(lc+=1,1,"Oldest Date to be Retained:",mylen,right)
+00310   fnTxt(1,mypos,8,0,left,'CCYYMMDD',0,'For example, if you wantto dump all transactions up to the beginning of the new year, you would enter the first day of the new year.') !:
         resp$(1)=str$(transactionendingdate)
-00320   fnlbl(lc,45,"",0,right)
-00330   fncmdset(2)
-00340   fnacs(sn$,0,mat resp$,ckey)
+00320   fnLbl(lc,45,"",0,right)
+00330   fnCmdSet(2)
+00340   fnAcs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
 00360   lastdate=val(resp$(1))
 00370 L370: read #2,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30': trvn$,da,amt,re$,de$ eof L400

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\RemoveChecks
 00020 ! Remove Transactions
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35,cp(32),tdc(10)
@@ -10,18 +10,18 @@
 00100   fntop(program$,"Remove Old Payroll Checks")
 00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
-00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",NoShr",internal,outin,keyed 
-00130   open #work1:=2: "Name="&env$('Q')&"\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outin,relative 
-00140   fntos(sn$='RemoveChecks') !:
+00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",NoShr",internal,outIn,keyed 
+00130   open #work1:=2: "Name="&env$('Q')&"\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outIn,relative 
+00140   fnTos(sn$='RemoveChecks') !:
         mylen=22 : mypos=mylen+3 : lc=0
-00150   fnlbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
-00160   fntxt(lc,mypos,10,0,0,'1003') !:
+00150   fnLbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
+00160   fnTxt(lc,mypos,10,0,0,'1003') !:
         resp$(1)=str$(date('ccyymmdd')-50000)
 00170   lc+=1
-00180   fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
-00190   fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
-00200   fncmdset(2)
-00210   fnacs(sn$,0,mat resp$,ckey)
+00180   fnLbl(lc+=1,1,"All transactions with a",mylen*2,center)
+00190   fnLbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
+00200   fnCmdSet(2)
+00210   fnAcs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 or ckey=cancel then goto XIT else !:
           rd1=val(resp$(1))
 00230 READ_CHECKS: ! 

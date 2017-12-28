@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\ACGLINCQ
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fncch$,fnpedat$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnactpd$,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fncch$,fnpedat$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnactpd$,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,bp(13)
@@ -28,15 +28,15 @@
 00270   nametab=int(44-len(rtrm$(cnam$))/2)
 00280   open #1: fl1$,internal,input,keyed 
 00290   if fnprocess=1 or fnUseDeptNo=0 then goto L390
-00300   fntos(sn$="ACglincq") !:
+00300   fnTos(sn$="ACglincq") !:
         mylen=30: mypos=mylen+3 : right=1
-00310   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00320   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00310   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00320   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00330   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00340   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00350   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00360   fnacs(sn$,0,mat resp$,ckey)
+00330   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00340   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00350   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00360   fnAcs(sn$,0,mat resp$,ckey)
 00370   if ckey=5 then goto XIT
 00380   costcntr=val(resp$(1))
 00390 L390: fnopenprn
@@ -184,9 +184,9 @@
 01750   fnpriorcd(1)
 01760   goto XIT
 01770 ! ______________________________________________________________________
-01780 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 
+01780 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 01790   for j=1 to lrec(3)
-01800     read #3,using L1810,rec=j: pc1,bb,cb norec L1900
+01800     read #3,using L1810,rec=j: pc1,bb,cb noRec L1900
 01810 L1810: form pos mp1,pd 3,pos 81,2*pd 6.2
 01820     k$=cnvrt$("N 5",pc1)
 01830     read #10,using L1840,key=k$: pc1,pc2,yt2 nokey L1890

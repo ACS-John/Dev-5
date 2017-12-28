@@ -1,4 +1,3 @@
-02000 ! Replace S:\Core\Client.br
 02020 ! we use this library to tell programs which client is using the system
 02040 if env$('enableClientSelection')='Yes' then goto ClientSelect
 02500 !   ! r: sandbox for testing local functions
@@ -28,7 +27,7 @@
 13080   fnClientSelect=fn_clientSelect
 13100 fnend
 14000 def fn_clientSelect
-14020   fntos('clientSelect') ! r:
+14020   fnTos('clientSelect')
 14040   dim flexItem$(4)*256
 14060   mat clientSelectHeading$(4)
 14080   clientSelectHeading$(1)='Name'
@@ -49,30 +48,37 @@
 14380     flexItem$(4)=client_name$(clientItem)
 14400     fnflexadd1(mat flexItem$)
 14420   nex clientItem
-14440   fncmdset(2)
-14460   fnacs('clientSelect',0,mat resp$,ckey) ! /r
-15000   if ckey=1 then ! r: select that client
-15060     dim dataNew$*256
-15100     setenv('Client',resp$(1)) ! pr 'env$ client set to '&env$('client') : pause
-15102     setenv('clientSelected',env$('Client'))
-15104     fnmcreg_write('clientSelected',env$('clientSelected'))
-15110     if env$('enableDataFolderByClient')='Yes' then
-15120       dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
-15176       fnmakesurepathexists(dataNew$)
-15180       setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
-15190       fnreg_close
-15200       ! fnMapToVirturalDrive(dataNew$,'Q:') 
-15210       fnSetQ(dataNew$)
-15220       fncursys$( '',1)
-15240       fncno(unused)
-15280     end if
-15300   end if ! /r 
-15320 fnend
+14440   fnCmdSet(2)
+14460   fnAcs('clientSelect',0,mat resp$,ckey)
+14480   if ckey=1 then ! r: select that client
+14500     fn_setClient(resp$(1))
+14520   end if ! /r 
+14540 fnend
+15000 def library fnSetClient(scClient$*128)
+15020   if ~setup then let fn_setup
+15040   fnSetClient=fn_setClient(scClient$)
+15060 fnend
+15080 def fn_setClient(scClient$*128)
+15100   dim dataNew$*256
+15120   setenv('Client',scClient$) ! pr 'env$ client set to '&env$('client') : pause
+15140   setenv('clientSelected',env$('Client'))
+15160   fnmcreg_write('clientSelected',env$('clientSelected'))
+15180   if env$('enableDataFolderByClient')='Yes' then
+15200     dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
+15220     fnmakesurepathexists(dataNew$)
+15240     setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
+15260     fnreg_close
+15280     ! fnMapToVirturalDrive(dataNew$,'Q:') 
+15300     fnSetQ(dataNew$)
+15320     fncursys$( '',1)
+15340     fncno(unused)
+15360   end if
+15380 fnend
 16000 def fn_setup
 16020   if ~setup_library then 
 16030     setup_library=1
 16032     library 'S:\Core\Library': fnerror,fngethandle,fnreg_read
-16034     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fncmdset,fntop,fnacs
+16034     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnCmdSet,fntop,fnAcs
 16036     library 'S:\Core\Library': fnXit
 16038     library 'S:\Core\Library': fnreg_close
 16040     library 'S:\Core\Library': fnSetQ
@@ -692,25 +698,25 @@
 56980     fn_upp_add("Cerro Gordo","ubprtlas_cerro")
 57000     fn_upp_add("Choctaw",'(basic)') ! "ubprtlas_choctaw"
 57020     ! fn_upp_add("Colyell","ubprtlas_colyell")
-57040     !  fn_upp_add("Carrizo","ubprtthree_Carrizo")
-57060 !   fn_upp_add("Ed","ubprtthree_barcode")
-57080 !   fn_upp_add("Gilbertown","ubprtthree_Gilb")
-57100 !   fn_upp_add("Granby","ubprt3prace_Granby")
-57120 !   fn_upp_add("Riverside","ubprtthree_River")
+57040     ! fn_upp_add("Carrizo","ubprtthree_Carrizo")
+57060     ! fn_upp_add("Ed","ubprtthree_barcode")
+57080     ! fn_upp_add("Gilbertown","ubprtthree_Gilb")
+57100     ! fn_upp_add("Granby","ubprt3prace_Granby")
+57120     ! fn_upp_add("Riverside","ubprtthree_River")
 57140     fn_upp_add("Omaha",'(basic)') ! "ubprtthree_Omaha")
-57160 !   fn_upp_add("Sangamon","ubprtthree_san")
-57180 ! >>Bills-Dot Matrix 4x6 ^ S:\acsUB\ubPrtBl14X6
-57200 ! >>Bills-Dot Matrix 3.5x6 ^ S:\acsUB\Bill35X6
-57220 ! >>Bills-Dot Matrix 3.5x7.5 ^ S:\acsUB\Bill35X75
+57160     !   fn_upp_add("Sangamon","ubprtthree_san")
+57180     ! >>Bills-Dot Matrix 4x6 ^ S:\acsUB\ubPrtBl14X6
+57200     ! >>Bills-Dot Matrix 3.5x6 ^ S:\acsUB\Bill35X6
+57220     ! >>Bills-Dot Matrix 3.5x7.5 ^ S:\acsUB\Bill35X75
 57240     fn_upp_add("Pennington","(basic)") ! PrintBill_Pennington ! atlantis format - hits preprinted stock
-57260 ! >>Bills-Dot Matrix Double Wide ^ S:\acsUB\billDouble
-57280 ! >>Bills-Full Page ^ S:\acsUB\Ubprtfull
+57260     ! >>Bills-Dot Matrix Double Wide ^ S:\acsUB\billDouble
+57280     ! >>Bills-Full Page ^ S:\acsUB\Ubprtfull
 57300     fn_upp_add("Blucksberg","PrintBill_Blucksberg")
-57320 ! >>Bills-Miscellaneous ^ S:\acsUB\Ubprtful
-57340 ! 
+57320     ! >>Bills-Miscellaneous ^ S:\acsUB\Ubprtful
+57340     ! 
 57360     mat ub_printbill_client$(ub_printbill_count)
 57380     mat ub_printbill_program$(ub_printbill_count)
-57400 ! 
+57400     ! 
 57420   end if  ! /r
 57440   upp_return$='S:\Core\Menu.br'
 57840     ua_which=srch(mat ub_printbill_client$,env$('Client'))

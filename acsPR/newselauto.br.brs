@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newSelAuto
 00020 ! Select Automatic Processing Programs
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntos,fnflexinit1,fnflexadd1,fncmdkey,fnacs,fntxt,fnlbl,fnchk
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnTos,fnflexinit1,fnflexadd1,fnCmdKey,fnAcs,fnTxt,fnLbl,fnChk
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
@@ -14,26 +14,26 @@
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Select Auto Processing Programs")
 00160   fncno(cno)
-00170   open #1: "Name="&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&",Use,RecL=61",internal,outin,relative ioerr MAIN
+00170   open #1: "Name="&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&",Use,RecL=61",internal,outIn,relative ioerr MAIN
 00180   for j=1 to lrec(1)
-00190     read #1,using L810: nxtpgm$(j),nxtdesc$(j),wk(j),mo(j),qt(j) norec L200
+00190     read #1,using L810: nxtpgm$(j),nxtdesc$(j),wk(j),mo(j),qt(j) noRec L200
 00200 L200: next j
 00210   form pos 1,c 20,c 35,n 3,3*n 1
 00220   close #1: 
 00230 MAIN: ! 
-00240 L240: fntos(sn$="PrAuto") !:
+00240 L240: fnTos(sn$="PrAuto") !:
         mylen=20: mypos=mylen+3 : right=1
 00250   item=0: resp=0
-00260   fnlbl(1,1,"Selected Items                       Wk Qtr Anl       Menu Options to Select From",80,0)
+00260   fnLbl(1,1,"Selected Items                       Wk Qtr Anl       Menu Options to Select From",80,0)
 00270   for j=1 to 20
 00280 ! If TRIM$(NXTDESC$(J))="Employee" Then nXTDESC$(J)="": nXTPGM$(J)=""
-00290     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
+00290     fnTxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
           resp$(resp+=1)=nxtdesc$(j)
-00300     fnchk(j+1,39,"",1)
+00300     fnChk(j+1,39,"",1)
 00310     if wk(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
-00320     fnchk(j+1,43,"",1)
+00320     fnChk(j+1,43,"",1)
 00330     if mo(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
-00340     fnchk(j+1,47,"",1)
+00340     fnChk(j+1,47,"",1)
 00350     if qt(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
@@ -60,12 +60,12 @@
         item$(2)=desc$ !:
         fnflexadd1(mat item$)
 00530   goto L410
-00540 L540: fnlbl(22,1," ")
-00550   fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
-00560   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
-00570   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
-00580   fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
-00590   fnacs(sn$,0,mat resp$,ckey)
+00540 L540: fnLbl(22,1," ")
+00550   fnCmdKey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
+00560   fnCmdKey("&Save",2,0,0,"Saves the selections and returns to menu.")
+00570   fnCmdKey("&Delete All",4,0,0,"Deletes all selections.")
+00580   fnCmdKey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
+00590   fnAcs(sn$,0,mat resp$,ckey)
 00600   if ckey=5 then goto XIT
 00610   if ckey=2 then goto L630
 00620   if ckey=4 then mat nxtdesc$=(""): !:
@@ -90,7 +90,7 @@
 00750 L750: if ckey=1 then goto L240
 00760   execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&" -n"
 00770   close #1: ioerr L780
-00780 L780: open #1: "Name="&env$('Q')&"\PRmstr\NewPRPgmn.h"&env$('cno')&",Use,RecL=61",internal,outin,relative 
+00780 L780: open #1: "Name="&env$('Q')&"\PRmstr\NewPRPgmn.h"&env$('cno')&",Use,RecL=61",internal,outIn,relative 
 00790   for j1=1 to 20 !:
           if j1>lrec(3) then write #1,using L810: nxtpgm$(j1),nxtdesc$(j1),wk(j1),mo(j1),qt(j1)
 00800   next j1

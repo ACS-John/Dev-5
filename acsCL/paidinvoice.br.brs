@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\PaidInvoice
 00020 ! Checkbook PaidInvoice File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070 ! Dimension Ony the Arrays you need (this is important for Hamster) !:
@@ -17,7 +17,7 @@
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! (open_file_count)
 00180   open_file_count=0
-00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Use,RecL=34,KPs=1,KLn=20,Shr",internal,outin,keyed  !:
+00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Use,RecL=34,KPs=1,KLn=20,Shr",internal,outIn,keyed  !:
         ! Version=0 or Version=1
 00200   return 
 00210 ! ______________________________________________________________________
@@ -92,7 +92,7 @@
           close #j: !:
         next j
 00440   gosub OPEN_FILE
-00450   fnhamster("PaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00450   fnHamster("PaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00460   return 
 00470 ! ______________________________________________________________________
 00480 XIT: fnxit

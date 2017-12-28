@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBRevCaldouble
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnlbl, fntxt,fncmbact,fncmbrt2,fnacs, fntos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fnchk,fntop
+00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnLbl, fnTxt,fncmbact,fncmbrt2,fnAcs, fnTos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fntop
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim x$*10,p$*10,reqz$*10,reqz12$*2,sr$*1,gb(10)
@@ -15,34 +15,34 @@
 00140   fnLastBillingDate(d1)
 00150   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00160 ! ______________________________________________________________________
-00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00190   open #12: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&env$('cno')&",Shr",internal,outin,keyed 
-00200   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00190   open #12: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00200   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00210   gosub BUD1
 00220 ASK1: ! 
 00230   x=6
 00240   close #111: ioerr L250
-00250 L250: fntos(sn$="ubrevcal") !:
+00250 L250: fnTos(sn$="ubrevcal") !:
         respc=0
-00260   fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
-00270   fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
-00280   fnlbl(4,1,"Account:",27,1)
+00260   fnLbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
+00270   fnLbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
+00280   fnLbl(4,1,"Account:",27,1)
 00290   fncmbact(4,29,1) !:
         resp$(respc+=1)=""
-00300   fnlbl(5,1,"Current Billing Date:",27,1)
-00310   fntxt(5,29,8,0,0,"1") !:
+00300   fnLbl(5,1,"Current Billing Date:",27,1)
+00310   fnTxt(5,29,8,0,0,"1") !:
         resp$(respc+=1)=str$(d1)
-00320   fnlbl(6,1,"Previous Billing Date:",27,1)
-00330   fntxt(6,29,8,0,0,"1") !:
+00320   fnLbl(6,1,"Previous Billing Date:",27,1)
+00330   fnTxt(6,29,8,0,0,"1") !:
         resp$(respc+=1)=""
-00340   fnlbl(7,1,"Route Number:",27,1)
+00340   fnLbl(7,1,"Route Number:",27,1)
 00350   fncmbrt2(7,29) !:
         resp$(respc+=1)="1"
-00360   fnchk(8,29,"Print Status Report") !:
+00360   fnChk(8,29,"Print Status Report") !:
         resp$(respc+=1)="True"
-00370   fncmdset(2) !:
-        fnacs(sn$,0,mat resp$,ckey)
+00370   fnCmdSet(2) !:
+        fnAcs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   if resp$(1)="[All]" then resp$(1)=""
 00400   if resp$(4)="[All]" then resp$(4)=""
@@ -144,8 +144,8 @@
 01200   gosub SRHDR
 01210   continue 
 01220 BUD1: bud1=0
-01230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1260
-01240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+01230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1260
+01240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 01250   bud1=1
 01260 L1260: return 
 01270 ! ______________________________________________________________________
@@ -156,7 +156,7 @@
 01320 L1320: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 01330   ta1=badr(1)
 01340 L1340: if ta1=0 then goto L1400
-01350   read #82,using L1360,rec=ta1: x$,mat bt1,nba norec L1400
+01350   read #82,using L1360,rec=ta1: x$,mat bt1,nba noRec L1400
 01360 L1360: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 01370   if bt1(1,1)=n then !:
           mat bt1=(0) !:

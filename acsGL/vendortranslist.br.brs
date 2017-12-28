@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\VendorTransList
 00020 ! Vendor(Payee)  File - Transaction List
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fntos,fnlbl,fntxt,fncmdset,fnacs,fnconsole,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnconsole,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,holdvn$*8,vcode$*8
@@ -14,28 +14,28 @@
 00140   fnconsole(off=0)
 00150   fncno(cno,cnam$) !:
         fndat(dat$)
-00160   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00170   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-00180   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00160   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00190   namtab=66-int(len(rtrm$(cnam$))/2)
 00200   dattab=66-int(len(rtrm$(dat$))/2)
 00210   if fnprocess=1 then goto L380
 00220 ! _________________________
 00230 MENU1: ! 
 00240 ASKDAT: ! 
-00250   fntos(sn$="VendorTransList") !:
+00250   fnTos(sn$="VendorTransList") !:
         mylen=28 : mypos=mylen+2
-00260   fnlbl(1,1,"Report Heading Date:",mylen,right=1)
-00270   fntxt(1,mypos,20) !:
+00260   fnLbl(1,1,"Report Heading Date:",mylen,right=1)
+00270   fnTxt(1,mypos,20) !:
         resp$(1)=dat$
-00280   fnlbl(3,1,"Transaction Starting Date:",mylen,right)
-00290   fntxt(3,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the first day of the year, but you can analyze any time frame.') !:
+00280   fnLbl(3,1,"Transaction Starting Date:",mylen,right)
+00290   fnTxt(3,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the first day of the year, but you can analyze any time frame.') !:
         resp$(1)=str$(transactionstartingdate)
-00300   fnlbl(4,1,"Transaction Ending Date:",mylen,right)
-00310   fntxt(4,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the last day of the year, but you can analyze any time frame.') !:
+00300   fnLbl(4,1,"Transaction Ending Date:",mylen,right)
+00310   fnTxt(4,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the last day of the year, but you can analyze any time frame.') !:
         resp$(2)=str$(transactionendingdate)
-00320   fncmdset(2)
-00330   fnacs(sn$,0,mat resp$,ckey)
+00320   fnCmdSet(2)
+00330   fnAcs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   dat$=resp$(1)
 00360   dattab=66-int(len(rtrm$(dat$))/2)

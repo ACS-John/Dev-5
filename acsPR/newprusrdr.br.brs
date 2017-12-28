@@ -1,21 +1,21 @@
 00010 ! Replace S:\acsPR\newPrUsrDR
 00020 ! pr User-Designed Reports
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fncombof,fntos,fncmdset,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fncombof,fnTos,fnCmdSet,fnAcs
 00045   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim jcs$(40),cap$*128,rn(20),rn$(20)*74,resp$(5)*90,df$*256,if$*256
 00070 ! ______________________________________________________________________
 00080   fntop(program$,cap$="User Designed Report")
 00090 MAIN_SCREEN: ! 
-00100   fntos(sn$="user1") !:
+00100   fnTos(sn$="user1") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
 00110   df$="S:\acsPR\Jcreport.mst" : if$="S:\acsPR\jcreport.idx" !:
         fncombof("CRjcreport",1,1,80,df$,1,2,3,74,if$,1) !:
         fncombof("CRjcreportALL",1,1,80,df$,1,2,3,74,if$,2)
 00115   resp$(1)=""
-00150   fncmdset(2)
-00160   fnacs(sn$,0,mat resp$,ck)
+00150   fnCmdSet(2)
+00160   fnAcs(sn$,0,mat resp$,ck)
 00170   if ck=5 then goto XIT
 00180   rno=val(resp$(1)(1:2))
 00360 ! ______________________________________________________________________

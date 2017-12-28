@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncF
 00020 ! -- INCOME STATEMENT COMPARING UP TO 10 FUNDS  - USES 2ND I/C DESIGN
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd$,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnopt
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd$,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
@@ -37,15 +37,15 @@
 00360   nametab=int(44-len(rtrm$(cnam$))/2)
 00370   open #1: fl1$,internal,input,keyed 
 00380   if fnprocess=1 or fnUseDeptNo=0 then goto L480
-00390   fntos(sn$="ACglincf") !:
+00390   fnTos(sn$="ACglincf") !:
         mylen=30: mypos=mylen+3 : right=1
-00400   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00410   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00400   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+00410   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         resp$(1)=""
-00420   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00430   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00440   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00450   fnacs(sn$,0,mat resp$,ckey)
+00420   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
+00430   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+00440   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+00450   fnAcs(sn$,0,mat resp$,ckey)
 00460   if ckey=5 then goto XIT
 00470   costcntr=val(resp$(1))
 00480 L480: report$="STATEMENT OF INCOME AND EXPENSES - FUND COMPARISON"
@@ -226,9 +226,9 @@
 02230 ! ______________________________________________________________________
 02240 XIT: fnxit
 02250 ! ______________________________________________________________________
-02260 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 
+02260 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 02270   for j=1 to lrec(3)
-02280     read #3,using L2290,rec=j: pc1,bb,cb norec L2380
+02280     read #3,using L2290,rec=j: pc1,bb,cb noRec L2380
 02290 L2290: form pos mp1,pd 3,pos 81,2*pd 6.2
 02300     k$=cnvrt$("N 5",pc1)
 02310     read #10,using L2320,key=k$: pc1,pc2,yt2 nokey L2370
@@ -251,21 +251,21 @@
 02480 L2480: if total2(fund)=0 then goto L2510
 02490   pc4=round(((total2(fund)-yt2)/total(fund))*100,0)
 02500   if pc4<-999 or pc4>9999 then pc4=0
-02510 L2510: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outin,relative 
+02510 L2510: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outIn,relative 
 02520   read #5,using L2530: mat fundnum,mat funddesc$ ioerr L2530
 02530 L2530: form pos 1,10*n 3,10*c 20
-02540   fntos(sn$="ACglcasf3") !:
+02540   fnTos(sn$="ACglcasf3") !:
         mylen=1: mypos=mylen+3
-02550   fnlbl(1,4,"Fund                 Description ")
+02550   fnLbl(1,4,"Fund                 Description ")
 02560   for j=1 to 10
-02570     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
+02570     fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
           resp$(j*2-1)=str$(fundnum(j))
-02580     fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
+02580     fnTxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
           resp$(j*2)=funddesc$(j)
 02590   next j
-02600   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
-02610   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02620   fnacs(sn$,0,mat resp$,ckey)
+02600   fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
+02610   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02620   fnAcs(sn$,0,mat resp$,ckey)
 02630   if ckey=5 then goto XIT
 02640   for j=1 to 10
 02650     fundnum(j)=val(resp$(j*2-1))
@@ -281,15 +281,15 @@
 02750   big=totcol*14
 02760   return 
 02770 ASK_MONTHLY: ! ask monthly info or ytd info
-02780   fntos(sn$="ACglcasf2") !:
+02780   fnTos(sn$="ACglcasf2") !:
         mylen=30: mypos=mylen+3 : right=1
-02790   fnopt(1,2,"Print Monthly Figures" ,0,0) !:
+02790   fnOpt(1,2,"Print Monthly Figures" ,0,0) !:
         resp$(2)="False"
-02800   fnopt(2,2,"Print Year to Date Figures" ,0,0) !:
+02800   fnOpt(2,2,"Print Year to Date Figures" ,0,0) !:
         resp$(2)="True"
-02810   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-02820   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02830   fnacs(sn$,0,mat resp$,ckey)
+02810   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
+02820   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+02830   fnAcs(sn$,0,mat resp$,ckey)
 02840   if ckey=5 then goto XIT
 02850   if resp$(1)="True" then monthly=1
 02860   if resp$(2)="True" then monthly=2

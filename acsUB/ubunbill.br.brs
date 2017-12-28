@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\ubUnBill
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fncmdset,fntop,fnchk
+00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fnTos,fndat,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fnCmdSet,fntop,fnChk
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim z$*10,e$(4)*30,dat$*20,resp$(10)*40,text$*40, cap$*128
@@ -10,21 +10,21 @@
 00110   fntop(program$)
 00120 ! ______________________________________________________________________
 00130 MAIN: ! 
-00140   fntos(sn$:="UBUnBill") 
+00140   fnTos(sn$:="UBUnBill") 
 00150   mylen=20 
 00160   mypos=mylen+2
-00170   fnlbl(1,1,"Report Heading Date:" ,mylen,1)
-00180   fntxt(1,mypos,20) 
+00170   fnLbl(1,1,"Report Heading Date:" ,mylen,1)
+00180   fnTxt(1,mypos,20) 
 00190   resp$(1) = dat$
-00200   fnlbl(2,1,"Billing Date:" ,mylen,1)
-00202   fntxt(2,mypos,8,8,0,"1") 
+00200   fnLbl(2,1,"Billing Date:" ,mylen,1)
+00202   fnTxt(2,mypos,8,8,0,"1") 
 00204   resp$(2)=str$(d1)
-00206   fnlbl(3,1,"Route Number:" ,mylen,1)
+00206   fnLbl(3,1,"Route Number:" ,mylen,1)
 00208   fncmbrt2(3,mypos) 
 00209   resp$(3)="[All]"
-00210   fnchk(4,23,"Print Meter Address:",1)
+00210   fnChk(4,23,"Print Meter Address:",1)
 00220   resp$(4)="True"
-00230   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
+00230   fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
 00240   if ck=5 then goto XIT
 00250   dat$ = resp$(1) 
 00252   d1 = val(resp$(2))

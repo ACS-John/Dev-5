@@ -1,4 +1,4 @@
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnwait,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fndat,fncmdset,fntop,fngethandle
+00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnwait,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fndat,fnCmdSet,fntop,fngethandle
 00040   on error goto ERTN
 00050   dim cap$*128
 00060 ! 
@@ -8,16 +8,16 @@
 00120   fntop(program$,cap$="Notes")
 00130   fnLastBillingDate(d1)
 00180 SCR1: ! 
-00190   fntos(sn$="ubnotes") 
+00190   fnTos(sn$="ubnotes") 
 00192   respc=0
-00200   fnlbl(1,1,"Route Number:",31,1)
+00200   fnLbl(1,1,"Route Number:",31,1)
 00210   fncmbrt2(1,33) 
 00212   resp$(respc+=1)="1"
-00220   fnlbl(2,1,"Billing Date (Blank for all):",31,1)
-00230   fntxt(2,33,8,0,0,"1") 
+00220   fnLbl(2,1,"Billing Date (Blank for all):",31,1)
+00230   fnTxt(2,33,8,0,0,"1") 
 00232   resp$(respc+=1)=str$(d1)
-00240   fncmdset(3) 
-00242   fnacs(sn$,0,mat resp$,ckey)
+00240   fnCmdSet(3) 
+00242   fnAcs(sn$,0,mat resp$,ckey)
 00250   if ckey=5 then goto XIT
 00260   if resp$(1)="[All]" then rt1=0 else rt1=val(resp$(1))
 00270   d1=val(resp$(2))

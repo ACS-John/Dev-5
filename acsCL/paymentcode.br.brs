@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\PaymentCode
 00020 ! Checkbook PaymentCode File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
@@ -16,10 +16,10 @@
 00150   fltyp$(1)="N" : fltyp$(2)="C"
 00160   sln(1)=1 : sln(2)=25
 00170   mask(1)=1030
-00180   open #1: "Name="&env$('Q')&"\CLmstr\PaymentCode.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
+00180   open #1: "Name="&env$('Q')&"\CLmstr\PaymentCode.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
 00190   close #1: 
-00200   open #1: "Name="&env$('Q')&"\CLmstr\PaymentCode.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
-00210   fnhamster("PaymentCode",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00200   open #1: "Name="&env$('Q')&"\CLmstr\PaymentCode.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
+00210   fnHamster("PaymentCode",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00220 XIT: fnxit
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>

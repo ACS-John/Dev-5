@@ -1,9 +1,39 @@
 10000 !  (formerly) S:\acsPR\newPRW2A 
 10020 ! r: setup
-10040   library 'S:\Core\Library': fntop,fnxit,fnchain,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnmsgbox,fnchk,fnpa_finis,fnerror,fncmdset,fnpa_open,fnpa_newpage,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fncomboa,fnw3,fnNameParse,fnAddOneC,fnask_w2_info,fnw2_text,fnfree
-10060   on error goto ERTN
-10080 ! ______________________________________________________________________
-10090   dim fw2box16$*255,ss$*11,s(13),t(13)
+10100   library 'S:\Core\Library': fntop
+10120   library 'S:\Core\Library': fnxit
+10140   library 'S:\Core\Library': fnchain
+10160   library 'S:\Core\Library': fnTos
+10180   library 'S:\Core\Library': fnLbl
+10200   library 'S:\Core\Library': fnTxt
+10220   library 'S:\Core\Library': fnCmdKey
+10240   library 'S:\Core\Library': fnAcs
+10260   library 'S:\Core\Library': fnmsgbox
+10280   library 'S:\Core\Library': fnChk
+10300   library 'S:\Core\Library': fnpa_finis
+10320   library 'S:\Core\Library': fnerror
+10340   library 'S:\Core\Library': fnCmdSet
+10360   library 'S:\Core\Library': fnpa_open
+10380   library 'S:\Core\Library': fnpa_newpage
+10400   library 'S:\Core\Library': fnerror
+10420   library 'S:\Core\Library': fnCmdSet
+10440   library 'S:\Core\Library': fnpa_open
+10460   library 'S:\Core\Library': fnpa_newpage
+10480   library 'S:\Core\Library': fncreg_read
+10500   library 'S:\Core\Library': fncreg_write
+10520   library 'S:\Core\Library': fnpa_background
+10540   library 'S:\Core\Library': fngethandle
+10560   library 'S:\Core\Library': fnDedNames
+10580   library 'S:\Core\Library': fncomboa
+10600   library 'S:\Core\Library': fnw3
+10620   library 'S:\Core\Library': fnNameParse
+10640   library 'S:\Core\Library': fnAddOneC
+10660   library 'S:\Core\Library': fnask_w2_info
+10680   library 'S:\Core\Library': fnw2_text
+10700   library 'S:\Core\Library': fnfree
+11000   on error goto ERTN
+12000 ! ______________________________________________________________________
+12090   dim fw2box16$*255,ss$*11,s(13),t(13)
 12100   dim cLocality$*8,desc$(6)*15,amt(6)
 12220   dim tcp(32),tdc(10),resp$(128)*256
 12240   dim w(13),a$(3)*40,empId$*12,controlNumber$*12,d$(10)*8,e$(10)*12,cap$*128
@@ -65,14 +95,14 @@
 22180   end if 
 22200   ! /r
 24000 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
-24020   fntos(sn$="Prw2-box12")
+24020   fnTos(sn$="Prw2-box12")
 24040   rc=cf=0 : mylen=20 : mypos=mylen+3
-24060   fnlbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
-24080   fnlbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
-24100   fnlbl(4,7,"Deduction Name")
-24120   fnlbl(4,26,"Yes" )
-24140   fnlbl(4,35,"Box" )
-24160   fnlbl(4,45,"Code")
+24060   fnLbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
+24080   fnLbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
+24100   fnLbl(4,7,"Deduction Name")
+24120   fnLbl(4,26,"Yes" )
+24140   fnLbl(4,35,"Box" )
+24160   fnLbl(4,45,"Code")
 24180   for dedItem=1 to 20
 24200     if trim$(fullname$(dedItem))<>'' then
 24220       fncreg_read('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem),'False')
@@ -85,8 +115,8 @@
 24350   tmpLine=5
 24360   for dedItem=1 to 20
 24420     if trim$(fullname$(dedItem))<>'' then 
-24430       fnlbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
-24440       fnchk(tmpLine,26,"",0,0,0,0)
+24430       fnLbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
+24440       fnChk(tmpLine,26,"",0,0,0,0)
 24460       resp$(rc+=1)=dedyn$(dedItem)
 24480       fncomboa('w2Copy',tmpLine,35,mat w2box12Opt$, '',3)
 24500       if box12which(dedItem)=0 then
@@ -94,12 +124,12 @@
 24540       else
 24560         resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
 24580       end if
-24660       fntxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
+24660       fnTxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
 24680       resp$(rc+=1)=dedcode$(dedItem)
 24700     end if
 24720   next dedItem
-24740   fncmdset(2)
-24780   fnacs(sn$,0,mat resp$,ckey)
+24740   fnCmdSet(2)
+24780   fnAcs(sn$,0,mat resp$,ckey)
 24800   if ckey=5 then 
 24820     if exportFormatID then
 24840       close #hExport:
@@ -126,8 +156,8 @@
 26080 ! lyne=topmargin ! starting of 1st line
 26100   goproc=0
 26120   open #hEmployee:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-26140   open #hDepartment:=2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outin,keyed 
-26160   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
+26140   open #hDepartment:=2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outIn,keyed 
+26160   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
 26180   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",Replace,RecL=33,NoShr",internal,output 
 26200   write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
 26220   open #hW2Box16:=fngethandle: "Name="&env$('Q')&"\PRmstr\W2Box16.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\W2Index.h"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
@@ -328,17 +358,17 @@
 40140   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 40160 fnchain("S:\acsPR\prw2b") ! /r
 52000 ASK_EMP_LOCALITY: ! r:
-52020   fntos(sn$="Prw2-5")
+52020   fnTos(sn$="Prw2-5")
 52040   rc=cf=0
 52060   mylen=30
 52080   mypos=mylen+3
-52100   fnlbl(1,1,k$(1),mylen,1,0,0)
-52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
-52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
+52100   fnLbl(1,1,k$(1),mylen,1,0,0)
+52120   fnLbl(2,1,"Locality Name:",mylen,1,0,0)
+52140   fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 52160   resp$(rc+=1)=empLocality$
-52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
-52220   fnacs(sn$,0,mat resp$,ckey)
+52180   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
+52200   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+52220   fnAcs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
 52260   empLocality$=resp$(1)
 52280   controlNumber$=rtrm$(controlNumber$)

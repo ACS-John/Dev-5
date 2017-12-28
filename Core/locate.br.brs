@@ -1,6 +1,6 @@
 00010 !  Replace S:\Core\Locate
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fnAcsInstallationPath$,fntxt,fnlbl,fnchk,fnxit,fncmdset,fntop,fnpause,fnfree
+00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fnAcsInstallationPath$,fnTxt,fnLbl,fnChk,fnxit,fnCmdSet,fntop,fnpause,fnfree
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim a$*132,prg$*40,lc$*80,dur$*40,rep$*40,resp$(20)*100,txt$*100
@@ -19,37 +19,37 @@
         tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
 00180 ! ______________________________________________________________________
 00190 MAIN: ! 
-00200   fntos("Locate") !:
+00200   fnTos("Locate") !:
         lngth=17 : ps=lngth+2 : rc=lc=0
-00210   fnlbl(lc+=1,1,'Find:',lngth,1)
-00220   fntxt(lc,ps,16,63) !:
+00210   fnLbl(lc+=1,1,'Find:',lngth,1)
+00220   fnTxt(lc,ps,16,63) !:
         resp$(rc+=1)=lc$
-00230   fnlbl(lc,ps+18,'and',lngth)
-00240   fntxt(lc,ps+22,16,40) !:
+00230   fnLbl(lc,ps+18,'and',lngth)
+00240   fnTxt(lc,ps+22,16,40) !:
         resp$(rc+=1)=lc2$
-00250   fnlbl(lc+=1,1,'Path:',lngth,1)
-00260   fntxt(lc,ps,38,66,0,'72') !:
+00250   fnLbl(lc+=1,1,'Path:',lngth,1)
+00260   fnTxt(lc,ps,38,66,0,'72') !:
         resp$(rc+=1)=dur$
 00270   lc+=1 ! blank line
-00280   fnlbl(lc+=1,1,'Replace:',lngth,1)
-00290   fntxt(lc,ps,38) !:
+00280   fnLbl(lc+=1,1,'Replace:',lngth,1)
+00290   fnTxt(lc,ps,38) !:
         resp$(rc+=1)=rep$
-00300   fnlbl(lc,ps+40,"Leave Replace blank to locate only" )
-00310   fnlbl(lc+=1,1,"Filter:",lngth,1)
-00320   fntxt(lc,ps,38) !:
+00300   fnLbl(lc,ps+40,"Leave Replace blank to locate only" )
+00310   fnLbl(lc+=1,1,"Filter:",lngth,1)
+00320   fnTxt(lc,ps,38) !:
         resp$(rc+=1)=filter$
-00330   fnchk(lc+=1,ps,'Append Previous Report',0) !:
+00330   fnChk(lc+=1,ps,'Append Previous Report',0) !:
         resp$(rc+=1)="False"
-00340   fnchk(lc+=1,ps,'Renumber all Programs',0) !:
+00340   fnChk(lc+=1,ps,'Renumber all Programs',0) !:
         resp$(rc+=1)="False"
 00350   lc+=1 ! blank line
-00360   fnlbl(lc+=1,1,"Insert this Line:",lngth,1)
-00370   fntxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" ) !:
+00360   fnLbl(lc+=1,1,"Insert this Line:",lngth,1)
+00370   fnTxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" ) !:
         resp$(rc+=1)=""
 00380   lc+=1 ! blank line
-00390   fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
-00400   fncmdset(2)
-00410   fnacs("Locate",0,mat resp$,ck)
+00390   fnLbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
+00400   fnCmdSet(2)
+00410   fnAcs("Locate",0,mat resp$,ck)
 00420   if ck=cancel then goto XIT
 00430   lc$=trim$(resp$(1)) !:
         lc2$=trim$(resp$(2)) !:

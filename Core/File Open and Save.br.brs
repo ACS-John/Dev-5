@@ -3,9 +3,9 @@
 18020     setup=1
 18028     library 'S:\Core\Library': fnsave_as_path$,fngethandle,fnreg_close,fnreg_write
 18030     library 'S:\Core\Library': fnmsgbox,fnEditFile,fnSystemName$,fnlog
-18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
+18032     library 'S:\Core\Library': fnAcs,fnCmdSet,fnTos,fnLbl,fnTxt,fncomboa
 18034     library 'S:\Core\Library': fncursys$,fncheckfileversion,fnmakesurepathexists
-18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
+18036     library 'S:\Core\Library': fnStatus,fnStatusClose,fnStatusPause,fnCopy,fnindex_sys
 18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
 18040     dim company_import_path$*256
 18050     dim resp$(5)*256
@@ -132,8 +132,8 @@
 42240     fnlog(save_name$&': '&'FAILURE: '&success_text_line1$)
 42260     if suppressErrorLog then
 42280       fnCopy(arc_filename$,save_name$&'(failureLog).txt')
-42300       fnstatus('Automated Save Point encountered had errors.')
-42320       fnstatus('Automated Save Point log file made: "'&save_name$&'(failureLog).txt"')
+42300       fnStatus('Automated Save Point encountered had errors.')
+42320       fnStatus('Automated Save Point log file made: "'&save_name$&'(failureLog).txt"')
 42340     else
 42360       mat ml$(4)
 42380       ml$(1)='An error occurred during the process.'
@@ -149,8 +149,8 @@
 42560   else 
 42580     fnlog(save_name$&': '&success_text_line1$)
 42600     if statusInsteadOfMsgBox then 
-42620       fnstatus(success_text_line1$)
-42640       fnstatus(save_name$)
+42620       fnStatus(success_text_line1$)
+42640       fnStatus(save_name$)
 42660     else
 42680       mat ml$(2)
 42700       ml$(1)=success_text_line1$
@@ -183,11 +183,11 @@
 46160   close #h_tmp: 
 46180   execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
+46210   fileCount=0
 46220   do 
-46240     linput #h_tmp: ln$
+46240     linput #h_tmp: ln$ eof ZflaEof
 46260   loop until ln$='------------------- ----- ------------ ------------  ------------------------'
 46280   ln$=''
-46300   fileCount=0
 46320   do
 46340     linput #h_tmp: ln$
 46360     if ln$<>'------------------- ----- ------------ ------------  ------------------------' then
@@ -197,7 +197,7 @@
 46440       filename$(fileCount)=ln$(54:len(ln$))
 46460     end if
 46480   loop until ln$='------------------- ----- ------------ ------------  ------------------------'
-46520   close #h_tmp,free: 
+46520   ZflaEof: close #h_tmp,free: 
 46540   fn_7zFileListFromArchive=fileCount
 46560 fnend
 47000 def fn_fileListToArchiveList(mat fileList$,mat archiveList$)
@@ -238,10 +238,10 @@
 48300   else
 48320     tmpFileOpen$=opFileOpen$
 48340   end if
-48360   fnstatus('Getting list of companies from "'&opFileOpen$&'"...')
+48360   fnStatus('Getting list of companies from "'&opFileOpen$&'"...')
 48380   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
 48400   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
-48420   fnstatus_close
+48420   fnStatusClose
 48440   fnreg_close
 48460   fn_opMain(tmpFileOpen$)
 48480   goto OP_XIT
@@ -261,20 +261,20 @@
 52000 def fn_opMain(omFileOpen$*256)
 52020   ! destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
-52060   fntos(sn$="Open Partial")
+52060   fnTos(sn$="Open Partial")
 52080   col1_width=24 : col2_pos=col1_width+2 : lc=rc=0
-52100   fnlbl(lc+=1,1,"Source File:",col1_width,1)
-52120   fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
+52100   fnLbl(lc+=1,1,"Source File:",col1_width,1)
+52120   fnTxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 52140   resp$(rc+=1)=omFileOpen$
-52160   fnlbl(lc+=2,1,"Company to Load:",col1_width,1)
+52160   fnLbl(lc+=2,1,"Company to Load:",col1_width,1)
 52180   fncomboa('compList',lc,col2_pos,mat archiveList$)
 52200   resp$(resp_fileSource:=rc+=1)=archiveList$(1)
-52220   ! fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
-52240   ! fntxt(lc,col2_pos,5,5,0,'1030',0,'')
-52250   ! fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
+52220   ! fnLbl(lc+=1,1,"Destination Company Number:",col1_width,1)
+52240   ! fnTxt(lc,col2_pos,5,5,0,'1030',0,'')
+52250   ! fnLbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
 52260   ! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
-52340   fncmdset(2)
-52360   fnacs(sn$,0,mat resp$,ckey)
+52340   fnCmdSet(2)
+52360   fnAcs(sn$,0,mat resp$,ckey)
 52380   ! /r
 52400   dim selectedSource$*128
 52420   selectedSource$=resp$(resp_fileSource)
@@ -289,16 +289,16 @@
 54000       source_company_number=archiveCNo(sourceWhich)
 54020       destination_company_number=source_company_number
 54040       cursys$=archiveSysAbbr$(sourceWhich)
-54060       fnstatus('** Open Partial Settings **')
-54080       fnstatus('Source File: '&omFileOpen$)
-54100       fnstatus('Source System: '&cursys$)
-54120       fnstatus('Source Company Number: '&str$(source_company_number))
-54140       ! fnstatus('Destination Company Number: '&str$(destination_company_number))
-54160       fnstatus('**')
-54180       fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
+54060       fnStatus('** Open Partial Settings **')
+54080       fnStatus('Source File: '&omFileOpen$)
+54100       fnStatus('Source System: '&cursys$)
+54120       fnStatus('Source Company Number: '&str$(source_company_number))
+54140       ! fnStatus('Destination Company Number: '&str$(destination_company_number))
+54160       fnStatus('**')
+54180       fnStatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 54200       cursys$=fncursys$(cursys$)
 54220       fnputcno(destination_company_number) : cno=destination_company_number
-54240       fnstatus('Set active Company Number to: '&str$(destination_company_number))
+54240       fnStatus('Set active Company Number to: '&str$(destination_company_number))
 54260       ! 
 54280       dim omSourceFilter$*64
 54300       if cursys$='UB' then
@@ -318,7 +318,7 @@
 56160         setenv('force_reindex','yes') 
 56180         fncheckfileversion
 56200         fnindex_sys(cno)
-56210         fnstatus_close
+56210         fnStatusClose
 56220         dim msgTmp$(0)*128
 56240         fnaddonec(mat msgTmp$,'Completed.')
 56260         fnaddonec(mat msgTmp$,'Company '&env$('cno')&' loaded from')
@@ -376,7 +376,7 @@
 59020     end if
 59040     fncheckfileversion
 59060     fnindex_sys(cno)
-59080     fnstatus_close
+59080     fnStatusClose
 59100   else if env$('acsDebug')='Yes' then
 59120     pr 'fn_analyze_7zip_compresslog failed.'
 59140     pause
@@ -412,14 +412,14 @@
 62580 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
 64020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
-64040   fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
+64040   fnStatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
 64060   cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 64080   if cfiReturn>0 then
 64100     if env$('cursys')='UB' then
 64120       cfiReturn=fn_ub_copy_extras(company_import_path$,company_import_extension$,destination_company_number)
 64140     end if
 64160     if cfiReturn>0 then
-64180       fnstatus('Import data copied in.')
+64180       fnStatus('Import data copied in.')
 64200     end if
 64220   end if
 64240   fn_copy_files_in=cfiReturn
@@ -432,17 +432,17 @@
 68100     end if  ! exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68120     uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68140     if uceReturn>0 then
-68160       fnstatus('UBmstr\ubData found in source and is replacing destination.')
+68160       fnStatus('UBmstr\ubData found in source and is replacing destination.')
 68180     end if
 68440   else 
-68460     fnstatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
+68460     fnStatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
 68680   end if 
 68700   ! /r
 68720   ! r: import notes folder
 68740   if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then 
 68760     fnFree(env$('Q')&'\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
 68780     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$(env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
-68800     fnstatus('UB Notes imported.')
+68800     fnStatus('UB Notes imported.')
 68820   end if  ! exists [import path]'&env$('Q')&'\UBmstr\notes.h[company_import_extension]
 68840   ! /r
 68850   fn_ub_copy_extras=uceReturn

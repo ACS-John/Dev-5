@@ -913,8 +913,8 @@
         ! ?pen a window and allow data entry                            !:
         ! ?                                                             !:
         ! -------------------------------- !
-15260 ! OPEN #(ENTERWIN:=FNGETHANDLE): "srow=5,scol=5,rows="&STR$(UDIM(MAT CC$)+1)&",cols="&STR$(50)&",PARENT=NONE",DISPLAY,OUTIN
-15261   open #(enterwin:=fngethandle): "srow=5,scol=5,rows="&str$(udim(mat cc$)+1)&",cols="&str$(hlen+wlen+10)&",PARENT=NONE",display,outin 
+15260 ! OPEN #(ENTERWIN:=FNGETHANDLE): "srow=5,scol=5,rows="&STR$(UDIM(MAT CC$)+1)&",cols="&STR$(50)&",PARENT=NONE",DISPLAY,outIn
+15261   open #(enterwin:=fngethandle): "srow=5,scol=5,rows="&str$(udim(mat cc$)+1)&",cols="&str$(hlen+wlen+10)&",PARENT=NONE",display,outIn 
 15270   for a=1 to udim(mat headers$)
 15280     pr #enterwin,fields str$(a)&",2,c "&str$(hlen)&",N/W:T": trim$(headers$(a))
 15290     mat inwrk$(a): mat indate(a): mat indate$(a) !:

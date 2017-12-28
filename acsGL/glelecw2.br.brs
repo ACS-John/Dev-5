@@ -59,7 +59,7 @@
 00580 SCR1: ! 
 00590   pr newpage
 00600   close #101: ioerr L610
-00610 L610: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outin 
+00610 L610: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outIn 
 00620   pr f "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
 00630   pr f "5,5,C 60": "Company Name:"
 00640   pr f "6,5,C 60": "Street Address:"
@@ -111,7 +111,7 @@
 01100   io1$(2)="14,71,N 2,UT,N"
 01110   close #101: ioerr L1120
 01120 L1120: pr newpage
-01130   open #101: "SROW=7,SCOL=2,EROW=15,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outin 
+01130   open #101: "SROW=7,SCOL=2,EROW=15,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outIn 
 01140   pr f "8,4,C 72": "Some states require filing W2's on diskette.  Answer the following"
 01150   pr f "9,4,C 72": "questions if you wish to create 'RS' records during this run."
 01160   pr f "12,8,Cr 62": "State code used in your record to identify the selected state:"
@@ -348,7 +348,7 @@
 03400 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 03410 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
 03420   close #win: ioerr L3430
-03430 L3430: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+03430 L3430: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 03440   pr #win: newpage
 03450   if display_cnam=0 then goto L3480
 03460   if display_cnam=1 then !:
@@ -389,7 +389,7 @@
 03690   for j=2 to udim(msgline$)
 03700     if msgline$(j)<>"" then endrow=endrow+1
 03710   next j
-03720   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
+03720   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outIn 
 03730   pr #104: newpage
 03740   mglinerow=2
 03750   for j=1 to udim(msgline$)
@@ -418,7 +418,7 @@
 03980 ! if stopable=1 will display "Cancel (F5)" button
 03990 ! win = window number
 04040   close #win: ioerr ignore
-04050   open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outin 
+04050   open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn 
 04060   pr #win: newpage
 04070   pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
 04080   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
@@ -434,7 +434,7 @@
 04220   if ec<1 then ec=59
 04230   win_width=ec-sc+1
 04240   close #win: ioerr L4250
-04250 L4250: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+04250 L4250: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 04260   pr #win: newpage
 04270   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 04280   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))

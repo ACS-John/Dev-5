@@ -1,6 +1,6 @@
 10010 ! pr checks
 10020 ! ______________________________________________________________________
-10030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fncombof,fnfra,fnmsgbox,fnbutton,fnopt,fncmdkey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write
+10030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fncombof,fnFra,fnmsgbox,fnButton,fnOpt,fnCmdKey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write
 10032   library 'S:\Core\Library': fnIndex_it,fnRemoveDeletedRecords
 10040   on error goto ERTN
 10050 ! ______________________________________________________________________
@@ -20,18 +20,18 @@
 10190 ! ______________________________________________________________________
 10200   fntop(program$)
 10230   prd=val(date$(4:5)&date$(7:8)&date$(1:2))
-10240   open #bankmstr:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-10250   open #h_paymstr1:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-10260   open #paymstr2:=14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-10270   open #trmstr1:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-10280   open #trmstr2:=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-10290   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outin,keyed 
-10300   open #h_paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-10310   open #h_unpdaloc:=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\uaidx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-10320   open #glmstr18:=18: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-10330   open #glcontrol:=19: "Name="&env$('Q')&"\CLmstr\Fundmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Fundidx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-10340   open #ivpaid:=6: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-10350   open #payeegl:=17: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
+10240   open #bankmstr:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10250   open #h_paymstr1:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10260   open #paymstr2:=14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10270   open #trmstr1:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10280   open #trmstr2:=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10290   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10300   open #h_paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10310   open #h_unpdaloc:=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\uaidx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10320   open #glmstr18:=18: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10330   open #glcontrol:=19: "Name="&env$('Q')&"\CLmstr\Fundmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Fundidx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10340   open #ivpaid:=6: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10350   open #payeegl:=17: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 10360   fn_get_coinfo
 10370 MENU1: ! 
 10380   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -48,7 +48,7 @@
 10490   if ti1=1 then h_vf1=13
 10500   allign=0
 10510   if ti1=3 then goto REPRINT_CHECKS
-10520   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
+10520   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
 10530   rewrite #company,using 'Form POS 152,N 2',rec=1: bankcode
 10540   close #company: 
 10550   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -136,26 +136,26 @@
 11410     end if 
 11420   end if  ! ~allign
 11430 SCR_CKPRT7: ! 
-11440   fntos(sn$="ckprt-7")
+11440   fnTos(sn$="ckprt-7")
 11450   respc=0
-11460   fnlbl(1,1,"",40,0)
-11470   fnlbl(1,1,"Print Options:",38,0)
-11480   fnopt(2,3,inl$(1),0)
+11460   fnLbl(1,1,"",40,0)
+11470   fnLbl(1,1,"Print Options:",38,0)
+11480   fnOpt(2,3,inl$(1),0)
 11490   resp$(respc+=1)="False"
-11500   fnopt(3,3,inl$(2),0)
+11500   fnOpt(3,3,inl$(2),0)
 11510   resp$(respc+=1)="True" !  if ckoption=1 or ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-11520   fnopt(4,3,inl$(3),0)
+11520   fnOpt(4,3,inl$(3),0)
 11530   if ckoption=2 then 
 11540     resp$(respc+=1)="True"
 11550   else 
 11560     resp$(respc+=1)="False"
 11570     if trim$(inl$(4))<>"" then 
-11580       fnopt(5,3,inl$(4),0)
+11580       fnOpt(5,3,inl$(4),0)
 11590       resp$(respc+=1)="False"
 11600     end if 
 11610   end if 
-11620   fncmdset(2)
-11630   fnacs(sn$,0,mat resp$,ck)
+11620   fnCmdSet(2)
+11630   fnAcs(sn$,0,mat resp$,ck)
 11640   if (ck=5 or ck=99) and ckoption=1 then let fn_write_ck_hist_1 : goto MENU1
 11650   if (ck=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
 11660   for j=1 to 4
@@ -202,31 +202,31 @@
 12080   goto MENU3
 12090 ! /r
 12100 MENU3: ! r: (reprint or transfer to history)
-12110   fntos(sn$="ckprt-4")
+12110   fnTos(sn$="ckprt-4")
 12120   respc=0
-12130   fnlbl(1,1,"Reprint Options:",38)
+12130   fnLbl(1,1,"Reprint Options:",38)
 12140   item5$(1)="Reprint Checks"
 12150   item5$(2)="Transfer to Check History"
 12160   fncomboa("ckprt-cmb1",1,40,mat item5$,tt$)
 12170   resp$(respc+=1)=item5$(2)
-12180   fncmdset(41): fnacs(sn$,0,mat resp$,ck)
+12180   fnCmdSet(41): fnAcs(sn$,0,mat resp$,ck)
 12190   if resp$(1)=item5$(1) then ti2=1 else ti2=2
 12200   allign=0
 12210   on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
 12220 ! /r
 12250 MENU4: ! r: (Reprint Options)
-12260   fntos(sn$="ckprt-reprint")
+12260   fnTos(sn$="ckprt-reprint")
 12270   respc=0
-12280   fnlbl(1,1,"Reprint Options:",38)
+12280   fnLbl(1,1,"Reprint Options:",38)
 12290   item4$(1)="Reprint all checks"
 12300   item4$(2)="Begin with specific Payee"
 12310   fncomboa("ckprt-cmb2",1,40,mat item4$,tt$)
 12320   resp$(respc+=1)=item4$(1)
-12330   fnlbl(3,1,"Beginning payee number:",38)
+12330   fnLbl(3,1,"Beginning payee number:",38)
 12340   fncombof("Paymstr",3,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 12350   resp$(respc+=1)=holdpayee$
-12360   fncmdset(2)
-12370   fnacs(sn$,0,mat resp$,ck)
+12360   fnCmdSet(2)
+12370   fnAcs(sn$,0,mat resp$,ck)
 12380   if ck=5 then goto XIT
 12390   if resp$(1)=item4$(1) then ti2=1 else ti2=2
 12400   begvn$=resp$(2)(1:8) ! beginning payee to start reprint
@@ -337,16 +337,16 @@
 13460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 13470 ! /r
 13480 REPRINT_CHECKS: ! r:
-13490   fntos(sn$="reprintnumber")
+13490   fnTos(sn$="reprintnumber")
 13500   respc=0
-13510   fnlbl(1,1,"First Check Number to Reprint:",38,1)
-13520   fntxt(1,40,8,0,1,"30",0,"")
+13510   fnLbl(1,1,"First Check Number to Reprint:",38,1)
+13520   fnTxt(1,40,8,0,1,"30",0,"")
 13530   resp$(respc+=1)=str$(firstckn)
-13540   fnlbl(2,1,"Last Check Number to Reprint:",38,1)
-13550   fntxt(2,40,8,0,1,"30",0,"")
+13540   fnLbl(2,1,"Last Check Number to Reprint:",38,1)
+13550   fnTxt(2,40,8,0,1,"30",0,"")
 13560   resp$(respc+=1)=str$(lastckn)
-13570   if reprintckn>0 then let fnlbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
-13580   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+13570   if reprintckn>0 then let fnLbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
+13580   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 13590   if ck=5 then goto XIT
 13600   firstckn=ckn1=reprintckn=val(resp$(1))
 13610   lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
@@ -412,7 +412,7 @@
 14210   if firstckn<>lastckn then goto XIT
 14220   goto REPRINT_CHECKS ! /r
 14230 def fn_get_coinfo
-14240   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
+14240   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
 14250   read #company,using 'Form POS 1,C 40,POS 150,2*N 1,N 2,POS 418,10*C 20,POS 668,10*C 12,POS 298,15*PD 4,POS 618,10*N 1,POS 406,N 1,POS 788,N 1',rec=1,release: cnam$,mat d,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum,port
 14260   method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$
 14270   close #company: 
@@ -431,51 +431,51 @@
 14400   EO_PAYTRANS_1: ! 
 14410 fnend 
 14910 def fn_scr_check_entry
-14930   fntos(sn$="ckprt-3")
+14930   fnTos(sn$="ckprt-3")
 14940   respc=0
-14950   fnfra(1,1,6,87,"Check"," ")
-14960   fnlbl(1,1,env$('cnam'),40,2,0,1)
-14970   fnlbl(2,1,bn$,40,2,0,1)
-14980   fnlbl(3,55,"Amount:",10,1,0,1)
-14990   fntxt(3,67,12,0,1,"10",0,"",1)
+14950   fnFra(1,1,6,87,"Check"," ")
+14960   fnLbl(1,1,env$('cnam'),40,2,0,1)
+14970   fnLbl(2,1,bn$,40,2,0,1)
+14980   fnLbl(3,55,"Amount:",10,1,0,1)
+14990   fnTxt(3,67,12,0,1,"10",0,"",1)
 15000   resp$(respc+=1)=tr$(3)
-15010   fnlbl(5,1,"Payee:",8,1,0,1)
+15010   fnLbl(5,1,"Payee:",8,1,0,1)
 15020   fncombof("Paymstr",5,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
 15030   resp$(respc+=1)=holdpayee$
-15040   fnfra(9,1,12,96,"Breakdown Information"," ")
-15050   fnlbl(1,1,"General Ledger",30,0,0,2)
-15052   fnlbl(1,41,"Amount             Description",12,0,0,2)
-15054   fnlbl(1,56,"Description",30,0,0,2)
+15040   fnFra(9,1,12,96,"Breakdown Information"," ")
+15050   fnLbl(1,1,"General Ledger",30,0,0,2)
+15052   fnLbl(1,41,"Amount             Description",12,0,0,2)
+15054   fnLbl(1,56,"Description",30,0,0,2)
 15060   for j=1 to 10
 15070     fnqgl(j+1,1,2,2)
 15080     resp$(respc+=1)=fnrgl$(resp$(respc))
 15082     ! 
-15090     fntxt(j+1,41,12,0,1,"currency",0,"",2)
+15090     fnTxt(j+1,41,12,0,1,"currency",0,"",2)
 15100     resp$(respc+=1)=resp$(respc)
 15102     ! 
-15110     fntxt(j+1,56,30,0,0,"",0,"",2)
+15110     fnTxt(j+1,56,30,0,0,"",0,"",2)
 15120     resp$(respc+=1)=resp$(respc)
 15122     ! 
 15130   next j
 15140   if screen=2 or screen=3 then 
-15150     fnbutton(12,74,"Back",21,"Previous breakdown screen",1,4,2)
+15150     fnButton(12,74,"Back",21,"Previous breakdown screen",1,4,2)
 15160   end if 
 15170   if screen=0 or screen=1 or screen=2 then 
-15180     fnbutton(12,82,"More",20,"Allows another screen of breakdowns",1,4,2)
+15180     fnButton(12,82,"More",20,"Allows another screen of breakdowns",1,4,2)
 15190   end if 
 15200   pas=1 ! don't redo combo boxes
-15210   fnlbl(1,45,"Check Number:",15,1,0,1)
-15220   fntxt(1,62,8,0,1,"30",0,"",1)
+15210   fnLbl(1,45,"Check Number:",15,1,0,1)
+15220   fnTxt(1,62,8,0,1,"30",0,"",1)
 15230   resp$(respc+=1)=str$(ckn)
-15240   fnlbl(3,30,"Check Date:",12,1,0,1)
-15250   fntxt(3,44,10,0,1,"3",0,"",1)
+15240   fnLbl(3,30,"Check Date:",12,1,0,1)
+15250   fnTxt(3,44,10,0,1,"3",0,"",1)
 15260   resp$(respc+=1)=str$(prd)
-15270   fnbutton(5,52,"Add Payee",50,"Click to add a new payee record",0,0,1)
-15280   fncmdkey("Print",1,1,0,"Prnt this check and advance to next check")
-15290   fncmdkey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
-15300   fncmdkey("&Complete",5,0,1,"Return to menu.")
-15310   ! need a fncmdkey to change screens for the breakdowns  (screen 1,2 or 3)
-15320   fnacs(sn$,0,mat resp$,ck)
+15270   fnButton(5,52,"Add Payee",50,"Click to add a new payee record",0,0,1)
+15280   fnCmdKey("Print",1,1,0,"Prnt this check and advance to next check")
+15290   fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
+15300   fnCmdKey("&Complete",5,0,1,"Return to menu.")
+15310   ! need a fnCmdKey to change screens for the breakdowns  (screen 1,2 or 3)
+15320   fnAcs(sn$,0,mat resp$,ck)
 15340   if ck=5 then screen=0 : goto SCE_XIT
 15350   ! 
 15360   for j=3 to 30, step 3
@@ -546,7 +546,7 @@
 16010   holdvn$=""
 16020   hck=0
 16030   fn_close(h_paytrans:=4)
-16040   open #h_paytrans: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+16040   open #h_paytrans: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 16050   WH_LOOP_TOP: ! 
 16060   read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ckpay,dp,gde eof WH_XIT
 16070   if gde=1 then gde=0 ! dont allow posting code of 1 from unpaid file
@@ -756,19 +756,19 @@
 18130   read #trmstr1,using 'Form POS 4,C 8,G 6,pd 10.2,C 8,C 35',key=dk$: dtr$(1),dtr$(2),dtr3,dtr$(4),dtr$(5) nokey CKNUM_XIT
 18140   dtr$(3)=str$(dtr3)
 18150   SCR_CKPRT6: ! 
-18160   fntos(sn$="ckprt-6")
+18160   fnTos(sn$="ckprt-6")
 18170   respc=0
-18180   fnlbl(1,1,"Check number "&str$(ckn)&" has been previously used.",45,1)
-18190   fnlbl(2,10," Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),45,0)
-18200   fnlbl(3,10," Amount: "&dtr$(3),45,0)
-18210   fnlbl(4,10," To: "&dtr$(5),45,0)
-18220   fnchk(6,48,"Delete the previous entry:",1)
+18180   fnLbl(1,1,"Check number "&str$(ckn)&" has been previously used.",45,1)
+18190   fnLbl(2,10," Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),45,0)
+18200   fnLbl(3,10," Amount: "&dtr$(3),45,0)
+18210   fnLbl(4,10," To: "&dtr$(5),45,0)
+18220   fnChk(6,48,"Delete the previous entry:",1)
 18230   resp$(respc+=1)="False"
-18240   fnlbl(8,1,"New check number (if applicable):",45,1)
-18250   fntxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
+18240   fnLbl(8,1,"New check number (if applicable):",45,1)
+18250   fnTxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
 18260   resp$(respc+=1)=""
 18270   ! ______________________________________________________________________
-18280   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
+18280   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
 18290   ckn2=val(resp$(2))
 18300   if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
 18310   if ckn2<=0 then 
@@ -795,7 +795,7 @@
 18530 fnend 
 18540 def fn_index
 18550   L4050: ! 
-18560   open #31: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",NoShr",internal,outin,keyed ioerr L4070
+18560   open #31: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",NoShr",internal,outIn,keyed ioerr L4070
 18570   close #31: ! 
 18580   goto L4080
 18590   L4070: ! 
@@ -1292,32 +1292,32 @@
 64140     layoutOption$(4)="Stub, Check, Check" : scc$(4)="SCC"
 64160     fncreg_read('Check Layout Option',layoutOptionSelected$, layoutOption$(1))
 64180   end if
-64200   fntos(sn$="ckprt1a")
+64200   fnTos(sn$="ckprt1a")
 64220   respc=0
-64240   fnlbl(1,1,"Method of Printing checks:",38,1)
-64260   fnopt(1,40,"Enter and pr Checks",0)
+64240   fnLbl(1,1,"Method of Printing checks:",38,1)
+64260   fnOpt(1,40,"Enter and pr Checks",0)
 64280   if ckoption<=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-64300   fnopt(2,40,"Print Checks for Selected Invoices",0)
+64300   fnOpt(2,40,"Print Checks for Selected Invoices",0)
 64320   if ckoption=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-64340   fnopt(3,40,"Reprint from Check History",0)
+64340   fnOpt(3,40,"Reprint from Check History",0)
 64360   if ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
-64380   fnlbl(5,1,"Date of Checks:",38,1)
-64400   fntxt(5,40,10,0,1,"3",0,"")
+64380   fnLbl(5,1,"Date of Checks:",38,1)
+64400   fnTxt(5,40,10,0,1,"3",0,"")
 64420   resp$(respc+=1)=date$("ccYYMMDD")
-64440   fnlbl(6,1,"Beginning check number:",38,1)
-64460   fntxt(6,40,8,0,1,"30",0,"Next available check #. If reprinting checks from history, this check # is not applicable.")
+64440   fnLbl(6,1,"Beginning check number:",38,1)
+64460   fnTxt(6,40,8,0,1,"30",0,"Next available check #. If reprinting checks from history, this check # is not applicable.")
 64480   resp$(respc+=1)=str$(ckn)
-64500   fnlbl(7,1,"Bank Account:",38,1)
+64500   fnLbl(7,1,"Bank Account:",38,1)
 64520   fncombof("Bankmstr",7,40,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing")
 64540   resp$(respc+=1)=str$(bankcode)
-64560   fnlbl(8,1,"Check Format:",38,1)
+64560   fnLbl(8,1,"Check Format:",38,1)
 64580   fncomboa("ckprt-2",8,40,mat layoutOption$)
 64600   resp$(respc+=1)=layoutOptionSelected$
 64620   !   if env$('client')="Washington Parrish" then resp$(respc)=layoutOption$(4)
 64640   if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then resp$(respc)=layoutOption$(2)
 64660   ! need button to show totals
-64680   fncmdset(2)
-64700   fnacs(sn$,0,mat resp$,ck)
+64680   fnCmdSet(2)
+64700   fnAcs(sn$,0,mat resp$,ck)
 64720   if ck<>5 then 
 64740     for j=1 to 3
 64760       if resp$(j)='True' then ti1=j : ckoption=j

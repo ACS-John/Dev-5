@@ -1,7 +1,7 @@
 06000 ! formerly S:\acsPR\newprCkPrt
 06020 ! pr Payroll Checks ! Nebs 9039t: Standard Check Format (Laser Stub-Check-Stub)
 06040 ! ______________________________________________________________________
-06060   library 'S:\Core\Library': fntop,fnxit, fnerror,fnGetPayrollDates, fnopenprn,fncloseprn,fnchain,fntos,fnlbl,fncomboa,fntxt,fncombof,fncmdset,fnacs,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnopt,fnqgl,fnrgl$,fncmdkey,fnagl$,fnbutton,fnss_employee,fnss_employer,fncd,fnclient_has,fnreg_read,fnreg_write,fngethandle,fncreg_read,fncreg_write,fnDedNames
+06060   library 'S:\Core\Library': fntop,fnxit, fnerror,fnGetPayrollDates, fnopenprn,fncloseprn,fnchain,fnTos,fnLbl,fncomboa,fnTxt,fncombof,fnCmdSet,fnAcs,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnOpt,fnqgl,fnrgl$,fnCmdKey,fnagl$,fnButton,fnss_employee,fnss_employer,fncd,fnclient_has,fnreg_read,fnreg_write,fngethandle,fncreg_read,fncreg_write,fnDedNames
 06080   on error goto ERTN
 06100   fntop(program$)
 06160   if env$('client')="Divernon" then print_netzero_checks=1
@@ -115,70 +115,70 @@
 10742   fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 10745   goto MAIN_QUESTIONS ! /r
 10750 MAIN_QUESTIONS: ! r:
-10760   fntos(sn$="prckprt")
+10760   fnTos(sn$="prckprt")
 10770   respc=0
-10780   fnlbl(1,1,"Payroll Date:",38,1)
-10790   fntxt(1,41,10,0,1,"3",0,"")
+10780   fnLbl(1,1,"Payroll Date:",38,1)
+10790   fnTxt(1,41,10,0,1,"3",0,"")
 10800   resp$(resp_payroll_date:=1)=str$(d1)
-10810   fnlbl(2,1,"Are Checks Prenumbered?",38,1)
+10810   fnLbl(2,1,"Are Checks Prenumbered?",38,1)
 10840   fncomboa("prckprt-2",2,41,mat opt_yn$,"The system needs to know if the checks are already numbered.",3)
 10850   if pre$="Y" then resp$(2)=opt_yn$(1) else resp$(2)=opt_yn$(2)
-10860   fnlbl(3,1,"Beginning Check Number:",38,1)
-10870   fntxt(3,41,7,0,1,"30",0,"")
+10860   fnLbl(3,1,"Beginning Check Number:",38,1)
+10870   fnTxt(3,41,7,0,1,"30",0,"")
 10880   resp$(3)=str$(check_number)
-10890   fnlbl(4,1,"Date of Checks:",38,1)
-10900   fntxt(4,41,10,0,1,"3",0,"")
+10890   fnLbl(4,1,"Date of Checks:",38,1)
+10900   fnTxt(4,41,10,0,1,"3",0,"")
 10910   resp$(resp_date_of_checks:=4)=date$("ccYYMMDD")
-10920   fnlbl(5,1,"Beginning Employee Number:",38,1)
-10930   fntxt(5,41,8,0,1,"30",0,"")
+10920   fnLbl(5,1,"Beginning Employee Number:",38,1)
+10930   fnTxt(5,41,8,0,1,"30",0,"")
 10940   resp$(5)=str$(empno)
-10950   fnlbl(6,1,"Post to ACS Checkbook",38,1)
+10950   fnLbl(6,1,"Post to ACS Checkbook",38,1)
 10952   if fnclient_has('CL') then 
 10954     fncomboa("prckprt-3",6,41,mat opt_yn$)
 10956     if acsclcv$="Y" then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
 10958   else 
-10960     fntxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
+10960     fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
 10962     resp$(6)=opt_yn$(2) : acsclcv$='N'
 10964   end if 
-10980   fnlbl(7,1,"Post Employer's Portion of FiCA?",38,1)
+10980   fnLbl(7,1,"Post Employer's Portion of FiCA?",38,1)
 10990   fncomboa("prckprt-4",7,41,mat opt_yn$,"The system can generate and post the employer's portion of FICA at the time the check is being written.",3)
 11000   if ficam1$="Y" then resp$(7)=opt_yn$(1) else resp$(7)=opt_yn$(2)
-11010   fnlbl(8,1,"Check Format:",38,1)
+11010   fnLbl(8,1,"Check Format:",38,1)
 11060   fncomboa("ckprt-2",8,41,mat opt_check_format$)
 11070   whichScc=srch(mat scc$,sc1$)
 11080   if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
-11140   fnlbl(9,1,"Check Type (Regular or Direct Deposit):",38,1)
+11140   fnLbl(9,1,"Check Type (Regular or Direct Deposit):",38,1)
 11150   fncomboa("ckprt-5",9,41,mat opt_check_type$,"If you have direct deposits, you can use this option to pr check on plain paper to give the employees.",15)
 11160   if ddcode$="R" then resp$(9)=opt_check_type$(1)
 11170   if ddcode$="D" then resp$(9)=opt_check_type$(2)
 11180   if ddcode$="A" then resp$(9)=opt_check_type$(3)
-11190   fnlbl(10,1,"Print Vacation and Sick Leave?",38,1)
+11190   fnLbl(10,1,"Print Vacation and Sick Leave?",38,1)
 11200   fncomboa("prckprt-6",10,41,mat opt_yn$)
 11210   if accr$="Y" then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
 11212 ! 
 11213   respc=10
 11214 ! 
 11220   if cl_installed=0 and exists(env$('Q')&"\CLmstr\bankmstr.h"&env$('cno')) then 
-11230     fnlbl(11,1,"Bank Account:",38,1)
+11230     fnLbl(11,1,"Bank Account:",38,1)
 11240     fncombof("Bankmstr",11,41,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing")
 11250     resp$(resp_cl_bankcode:=respc+=1)=str$(bankcode)
 11252   end if 
 11260   if exists(env$('Q')&"\PRmstr\hourclass.h"&env$('cno')) then 
-11280     fnlbl(12,1,"Comp Time Code:",38,1)
+11280     fnLbl(12,1,"Comp Time Code:",38,1)
 11290     fncombof("timeclass",12,41,20,env$('Q')&"\PRmstr\hourclass.h"&env$('cno'),1,5,6,25,env$('Q')&"\PRmstr\hourclass-idx.h"&env$('cno'),1,0, "Select time classification code for comp time, if applicable.")
 11300     resp$(resp_combcode:=respc+=1)=compcode$
 11310   end if 
-11314   fnlbl(14,1,"Print All Checks (or ask after first):",38,1)
+11314   fnLbl(14,1,"Print All Checks (or ask after first):",38,1)
 11315   fncomboa("prckprt-prall",14,41,mat opt_yn$)
 11316   resp$(resp_skip_align=respc+=1)=skip_alignment$
 11318   if gl_installed then 
-11320     fnlbl(16,1,"General Ledger detected.",38,1)
+11320     fnLbl(16,1,"General Ledger detected.",38,1)
 11322   end if 
 11323   if cl_installed then 
-11324     fnlbl(17,1,"Checkbook detected.",38,1)
+11324     fnLbl(17,1,"Checkbook detected.",38,1)
 11325   end if 
-11327   fncmdset(2) ! need button to show totals
-11328   fnacs(sn$,0,mat resp$,ck)
+11327   fnCmdSet(2) ! need button to show totals
+11328   fnAcs(sn$,0,mat resp$,ck)
 11330   if ck=5 then goto XIT ! /r
 11332 ! r: validate answers (and move to local variables from mat resp$)
 11340   d1=val(resp$(resp_payroll_date)) ! payroll date
@@ -266,13 +266,13 @@
 11840   end if 
 11850   open #praddr:=1: "Name="&env$('Q')&"\PRmstr\prAddr1.h"&env$('cno')&",Shr",internal,input 
 11860   open #rpmstr:=2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpindex.h"&env$('cno')&",Shr",internal,input,keyed 
-11870   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
-11880   open #3: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
-11890   open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outin,keyed 
-11900   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
+11870   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
+11880   open #3: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+11890   open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outIn,keyed 
+11900   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
 11910   if fnclient_has('GL') and gl_installed=1 then 
 11920     gl_installed=0
-11930     open #h_gl_glbrec:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRECIDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1440
+11930     open #h_gl_glbrec:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRECIDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1440
 11940     gl_installed=1
 11950 L1440: ! 
 11960   end if 
@@ -337,16 +337,16 @@
 12570   goto ALLIGNMENT
 12580 ! ______________________________________________________________________
 12590 ALLIGNMENT: ! r:
-12600   fntos(sn$="prckprt2")
+12600   fnTos(sn$="prckprt2")
 12610   respc=0 : rc=0
-12620   fnopt(1,3,"Reprint same check",0,franum)
+12620   fnOpt(1,3,"Reprint same check",0,franum)
 12630   resp$(rc+=1)="False"
-12640   fnopt(2,3,"Print next",0,franum)
+12640   fnOpt(2,3,"Print next",0,franum)
 12650   resp$(rc+=1)="False"
-12660   fnopt(3,3,"Print all remaining",0,franum)
+12660   fnOpt(3,3,"Print all remaining",0,franum)
 12670   resp$(rc+=1)="True"
 12672   if env$('client')='Billings' then resp$(2)='True' : resp$(3)='False'
-12680   fncmdset(2): fnacs(sn$,0,mat resp$,ck) ! allignment
+12680   fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck) ! allignment
 12690   if resp$(1)="True" then allign=1
 12700   if resp$(2)="True" then allign=2
 12710   if resp$(3)="True" then allign=3
@@ -473,19 +473,19 @@
 13850   if cl_installed=1 and allign=4 then let fn_build_check_record
 13870 XIT: fnxit
 13890 def fn_open_acscl
-13900   open #h_cl_bank:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4220
+13900   open #h_cl_bank:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4220
 13910   cl_installed=1
-13920   open #15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
-13930   open #h_cl_payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-13940   open #14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-13950   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
-13960   open #22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+13920   open #15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+13930   open #h_cl_payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+13940   open #14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+13950   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+13960   open #22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
 13970   !   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then
-13980   open #h_cl_trans_alloc:=23: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+13980   open #h_cl_trans_alloc:=23: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 13990   !   else 
-14000   !     open #h_cl_trans_alloc:=23: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outin,relative
+14000   !     open #h_cl_trans_alloc:=23: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outIn,relative
 14010   !   end if
-14020   open #h_cl_glmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+14020   open #h_cl_glmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 14050   read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey L4200
 14060   L4200: ckno=ckno+1
 14070   ! dAT=VAL(DATE$(4:5)&DATE$(7:8)&DATE$(1:2))
@@ -554,7 +554,7 @@
 14660   !     end if
 14670   ! L4630: !
 14680   !   close #h_cl_trans: ioerr ignore
-14690   !   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.h"&env$('cno')&",Shr",internal,outin,keyed
+14690   !   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.h"&env$('cno')&",Shr",internal,outIn,keyed
 14700   read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
 14710   ytdp=ytdp+val(tr$(3)) conv ignore
 14720   ! REWRITE #h_cl_payee,USING 3720,KEY=LPAD$(RTRM$(TR$(4)),8): YTDP NOKEY 3730
@@ -638,22 +638,22 @@
 15720   dtr$(3)=str$(dtr3)
 15730   L5440: form pos 4,c 8,g 6,pd 10.2,c 8,c 35,pos 79,2*pd 3
 15740   DUPLICATE_CHECK: ! 
-15750   fntos(sn$="Prckprt4")
+15750   fnTos(sn$="Prckprt4")
 15760   respc=0: mypos=50
-15770   fnlbl(1,1,"Check Number "&str$(check_number)&" has been previously used!",50,1)
-15780   fnlbl(3,1,"Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),50,0)
-15790   fnlbl(4,1,"Amount: "&dtr$(3),50,0)
-15800   fnlbl(5,1,"To: "&rtrm$(dtr$(5)),50,0)
-15810   fnlbl(7,1,"Click          to Delete the previous entry else" ,50,1)
-15820   fnbutton(7,10,"Delete",3,"Press Delete to delete the old check from history and replace it with the new check, else",1,6)
+15770   fnLbl(1,1,"Check Number "&str$(check_number)&" has been previously used!",50,1)
+15780   fnLbl(3,1,"Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),50,0)
+15790   fnLbl(4,1,"Amount: "&dtr$(3),50,0)
+15800   fnLbl(5,1,"To: "&rtrm$(dtr$(5)),50,0)
+15810   fnLbl(7,1,"Click          to Delete the previous entry else" ,50,1)
+15820   fnButton(7,10,"Delete",3,"Press Delete to delete the old check from history and replace it with the new check, else",1,6)
 15830   text$="enter the correct check number for "&trim$(dtr$(5))&":"
 15840   textlenght=len(trim$(text$))
-15850   fnlbl(8,4,text$,textlenght,0)
-15860   fntxt(8,textlenght+7,7,0,1,"30",0,"")
+15850   fnLbl(8,4,text$,textlenght,0)
+15860   fnTxt(8,textlenght+7,7,0,1,"30",0,"")
 15870   resp$(respc+=1)=str$(check_number)
-15880   fncmdkey("&Next",1,1,0,"Continue with checkprinting." )
-15890   fncmdkey("E&xit",5,0,1,"Returns to menu")
-15900   fnacs(sn$,0,mat resp$,ckey) ! dupllicate check number
+15880   fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
+15890   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+15900   fnAcs(sn$,0,mat resp$,ckey) ! dupllicate check number
 15910   if ckey=5 then goto XIT
 15920   if ckey=3 then goto L5670 ! if delete
 15930   ckn2=val(resp$(1))
@@ -1668,32 +1668,32 @@
 85260   fn_print_stub
 85280 fnend 
 88000 INVALIDGLNUMBER: ! r:
-88020   fntos(sn$="Prckprt3")
+88020   fnTos(sn$="Prckprt3")
 88040   mylen=30 : mypos=mylen+2
-88060   fnlbl(1,1,"Employee Number:",mylen,1)
-88080   fntxt(1,mypos,10, 0,0,'',1)
+88060   fnLbl(1,1,"Employee Number:",mylen,1)
+88080   fnTxt(1,mypos,10, 0,0,'',1)
 88100   resp$(1)=str$(eno)
 88120 ! 
-88140   fnlbl(2,1,"Department Number:",mylen,1)
-88160   fntxt(2,mypos,10, 0,0,'',1)
+88140   fnLbl(2,1,"Department Number:",mylen,1)
+88160   fnTxt(2,mypos,10, 0,0,'',1)
 88180   resp$(2)=str$(tdn)
 88200 ! 
-88220   fnlbl(4,1,"Invalid General Ledger Number:",mylen,1)
-88240   fntxt(4,mypos,12, 0,0,'',1)
+88220   fnLbl(4,1,"Invalid General Ledger Number:",mylen,1)
+88240   fnTxt(4,mypos,12, 0,0,'',1)
 88260   resp$(3)=gl$
 88280 ! 
-88300   fnlbl(5,1,"Purpose for GL Number:",mylen,1)
-88320   fntxt(5,mypos,40, 0,0,'',1)
+88300   fnLbl(5,1,"Purpose for GL Number:",mylen,1)
+88320   fnTxt(5,mypos,40, 0,0,'',1)
 88340   resp$(4)=sd5$
 88360 ! 
-88380   fnlbl(7,1,"The General Ledger Number is invalid.",40,0)
-88400   fnlbl(8,1,"Please select the correct one.",40,0)
-88420   fnlbl(3,1,"Correct General Ledger Number:",mylen,1)
+88380   fnLbl(7,1,"The General Ledger Number is invalid.",40,0)
+88400   fnLbl(8,1,"Please select the correct one.",40,0)
+88420   fnLbl(3,1,"Correct General Ledger Number:",mylen,1)
 88440   fnqgl(3,mypos,0,2,pas)
 88460   resp$(5)=fnrgl$(goodgl$)
-88480   fncmdkey("&Next",1,1,0,"Continue with checkprinting." )
-88500   fncmdkey("E&xit",5,0,1,"Returns to menu")
-88520   fnacs(sn$,0,mat resp$,ckey) ! bad general ledger numbers
+88480   fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
+88500   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+88520   fnAcs(sn$,0,mat resp$,ckey) ! bad general ledger numbers
 88540   if ckey=5 then goto XIT
 88560   gl$=fnagl$(resp$(5))
 88600   read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER

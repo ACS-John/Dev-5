@@ -1,6 +1,6 @@
 00020 ! Company Information File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnstyp,fntos,fnlbl,fntxt,fnchk,fnqgl,fnrgl$,fncomboa,fncmdkey,fnacs,fnagl$,fnmsgbox,fnfra,fnDedNames,fnclient_has
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnDedNames,fnclient_has
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   if fnclient_has('P2') then let fnstyp(11) else let fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
@@ -30,7 +30,7 @@
 00227   opt_std_or_percent$(2)="Percent"
 00230 ! ______________________________________________________________________
 00240 ! ______________________________________________________________________
-00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&',recl=759,version=0,use',internal,outin,relative 
+00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&',recl=759,version=0,use',internal,outIn,relative 
 00260   if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 00270   read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 00280   ficamaxw=ficamaxw*10
@@ -40,61 +40,61 @@
 00380 ! ______________________________________________________________________
 00390 SCREEN_1: ! 
 00400   resp=0
-00410   fntos(sn$="Company-1") !:
+00410   fnTos(sn$="Company-1") !:
         mylen=30: mypos=mylen+3 : right=1
-00420   fram1=1: fnfra(1,1,10,80,"Company # "&env$('cno'))
-00430   fnlbl(1,1,"Company Name:",mylen,right,0,fram1)
-00440   fntxt(1,mypos,40,0,left,"",0,"",fram1) !:
+00420   fram1=1: fnFra(1,1,10,80,"Company # "&env$('cno'))
+00430   fnLbl(1,1,"Company Name:",mylen,right,0,fram1)
+00440   fnTxt(1,mypos,40,0,left,"",0,"",fram1) !:
         resp$(1)=a$(1)
-00450   fnlbl(2,1,"Company Address:",mylen,right,0,fram1)
-00460   fntxt(2,mypos,40,0,left,"",0,"",fram1) !:
+00450   fnLbl(2,1,"Company Address:",mylen,right,0,fram1)
+00460   fnTxt(2,mypos,40,0,left,"",0,"",fram1) !:
         resp$(2)=a$(2)
-00470   fnlbl(3,1,"City, State, Zip:",mylen,right,0,fram1)
-00480   fntxt(3,mypos,40,0,left,"",0,"",fram1) !:
+00470   fnLbl(3,1,"City, State, Zip:",mylen,right,0,fram1)
+00480   fnTxt(3,mypos,40,0,left,"",0,"",fram1) !:
         resp$(3)=a$(3)
-00490   fnlbl(4,1,"Federal ID #:",mylen,right,0,fram1)
-00500   fntxt(4,mypos,12,0,left,"",0,"",fram1) !:
+00490   fnLbl(4,1,"Federal ID #:",mylen,right,0,fram1)
+00500   fnTxt(4,mypos,12,0,left,"",0,"",fram1) !:
         resp$(4)=fid$
-00510   fnlbl(5,1,"Federal U/C Rate:",mylen,right,0,fram1)
-00520   fntxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1) !:
+00510   fnLbl(5,1,"Federal U/C Rate:",mylen,right,0,fram1)
+00520   fnTxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1) !:
         resp$(5)=str$(feducrat)
-00530   fnlbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
-00540   fntxt(6,mypos,12,0,left,"10",0,"",fram1) !:
+00530   fnLbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
+00540   fnTxt(6,mypos,12,0,left,"10",0,"",fram1) !:
         resp$(6)=str$(feducmax)
-00550   fnlbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
-00560   fntxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 ) !:
+00550   fnLbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
+00560   fnTxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 ) !:
         resp$(7)=str$(ficarate)
-00570   fnlbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
-00580   fntxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
+00570   fnLbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
+00580   fnTxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
 00852   resp$(8)=str$(ficamaxw)
-00590   fnlbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
-00600   fntxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1) !:
+00590   fnLbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
+00600   fnTxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1) !:
         resp$(9)=str$(mcr)
-00610   fnlbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
-00620   fntxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) !:
+00610   fnLbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
+00620   fnTxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) !:
         resp$(10)=str$(mcm)
-00630   fram2=2: fnfra(13,1,8,90,"General Ledger Information")
-00640   fnchk(1,30,"General Ledger Installed:",1,fram2)
+00630   fram2=2: fnFra(13,1,8,90,"General Ledger Information")
+00640   fnChk(1,30,"General Ledger Installed:",1,fram2)
 00650   if gli=1 then resp$(11)="True" else resp$(11)="False"
-00660   fnlbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
+00660   fnLbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
 00670   fnqgl(2,32,fram2,2,pas) 
 00672   resp$(12)=fnrgl$(gln$(15))
-00680   fnlbl(3,1,"Federal W/H:",mylen,right,0,fram2)
+00680   fnLbl(3,1,"Federal W/H:",mylen,right,0,fram2)
 00690   fnqgl(3,32,fram2,2,pas) 
 00692   resp$(13)=fnrgl$(gln$(1))
-00700   fnlbl(4,1,"SS & Medicare W/H:",mylen,right,0,fram2)
+00700   fnLbl(4,1,"SS & Medicare W/H:",mylen,right,0,fram2)
 00710   fnqgl(4,32,fram2,2,pas) 
 00712   resp$(14)=fnrgl$(gln$(2))
-00720   fnlbl(5,1,"State W/H:",mylen,right,0,fram2)
+00720   fnLbl(5,1,"State W/H:",mylen,right,0,fram2)
 00730   fnqgl(5,32,fram2,2,pas) 
 00732   resp$(15)=fnrgl$(gln$(3))
-00740   fnlbl(6,1,"EIC:",mylen,right,0,fram2)
+00740   fnLbl(6,1,"EIC:",mylen,right,0,fram2)
 00750   fnqgl(6,32,fram2,2,pas) 
 00752   resp$(16)=fnrgl$(gln$(14))
-00760   fncmdkey("&Next",1,1,0,"Moves to 2nd screen of company information.")
-00770   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
-00780   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
-00790   fnacs(sn$,0,mat resp$,ckey)
+00760   fnCmdKey("&Next",1,1,0,"Moves to 2nd screen of company information.")
+00770   fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
+00780   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
+00790   fnAcs(sn$,0,mat resp$,ckey)
 00800   if ckey=5 then goto CONFIRMEXIT
 00810   a$(1)=resp$(1)
 00820   a$(2)=resp$(2)
@@ -129,7 +129,7 @@
 01030 L1030: if ckey=4 then goto DONE
 01040 ! ______________________________________________________________________
 01050 SCREEN_2: ! 
-01052   fntos(sn$="Company-2")
+01052   fnTos(sn$="Company-2")
 01054   mylen=32: mypos=mylen+3 : right=1
 01055   pos_col(1)=1 ! deduction numbers
 01056   pos_col(2)=5 ! deduction name
@@ -141,28 +141,28 @@
 01068   pos_col(8)=67 ! ded state
 01070   pos_col(9)=72 ! ded u/c
 01072   pos_col(10)=75
-01074   fnlbl(1,1,"Enter your deductions names. Mark whether a deduction or addition.",90,left)
-01076   fnlbl(2,1,"A check mark will indicate 'yes' to deduct before calculating Federal w/h, etc.",90,left)
-01078   fnlbl(5,pos_col(2),"Deduction Name")
-01080   fnlbl(5,pos_col(3),"Abbr")
-01082   fnlbl(5,pos_col(3),"Name")
-01084   fnlbl(5,pos_col(4),"Ded/Add")
-01086   fnlbl(5,pos_col(5),"Std/Pct")
-01088   fnlbl(4,pos_col(6)-2,"Ded")
-01090   fnlbl(5,pos_col(6)-2,"Fed")
-01092   fnlbl(4,pos_col(7)-2,"Ded")
-01094   fnlbl(5,pos_col(7)-2,"FICA")
-01096   fnlbl(4,pos_col(8)-2,"Ded")
-01098   fnlbl(5,pos_col(8)-2,"State")
-01100   fnlbl(4,pos_col(9)-2,"Ded")
-01102   fnlbl(5,pos_col(9)-2,"U/C")
-01115   fnlbl(5,pos_col(10),"GL Number")
+01074   fnLbl(1,1,"Enter your deductions names. Mark whether a deduction or addition.",90,left)
+01076   fnLbl(2,1,"A check mark will indicate 'yes' to deduct before calculating Federal w/h, etc.",90,left)
+01078   fnLbl(5,pos_col(2),"Deduction Name")
+01080   fnLbl(5,pos_col(3),"Abbr")
+01082   fnLbl(5,pos_col(3),"Name")
+01084   fnLbl(5,pos_col(4),"Ded/Add")
+01086   fnLbl(5,pos_col(5),"Std/Pct")
+01088   fnLbl(4,pos_col(6)-2,"Ded")
+01090   fnLbl(5,pos_col(6)-2,"Fed")
+01092   fnLbl(4,pos_col(7)-2,"Ded")
+01094   fnLbl(5,pos_col(7)-2,"FICA")
+01096   fnLbl(4,pos_col(8)-2,"Ded")
+01098   fnLbl(5,pos_col(8)-2,"State")
+01100   fnLbl(4,pos_col(9)-2,"Ded")
+01102   fnLbl(5,pos_col(9)-2,"U/C")
+01115   fnLbl(5,pos_col(10),"GL Number")
 01120   resp=0
 01125   for j=1 to 20
-01130     fnlbl(j+5,pos_col(1),str$(j)&'.',3,1)
-01131     fntxt(j+5,pos_col(2),15,20,left,"",0,"Enter your deduction name.",0 )
+01130     fnLbl(j+5,pos_col(1),str$(j)&'.',3,1)
+01131     fnTxt(j+5,pos_col(2),15,20,left,"",0,"Enter your deduction name.",0 )
 01132     resp$(resp+=1)=fullname$(j)
-01140     fntxt(j+5,pos_col(3),8,0,left,"",0,"Enter an abbreviated name that will be used in report headings.",0 )
+01140     fnTxt(j+5,pos_col(3),8,0,left,"",0,"Enter an abbreviated name that will be used in report headings.",0 )
 01142     resp$(resp+=1)=abrevname$(j)
 01160     fncomboa("MiscDeduct",j+5,pos_col(4),mat opt_ded_or_add$,"Indicate whether the amont should be deducted from the check or added to the check.",6)
 01170     if newdedcode(j)=0 then newdedcode(j)=1
@@ -170,23 +170,23 @@
 01200     fncomboa("std_or_percent",j+5,pos_col(5),mat opt_std_or_percent$,"Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.",8)
 01210     if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 01220     resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
-01230     fnchk(j+5,pos_col(6),"",1)
+01230     fnChk(j+5,pos_col(6),"",1)
 01240     if newdedfed(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
-01250     fnchk(j+5,pos_col(7),"",1)
+01250     fnChk(j+5,pos_col(7),"",1)
 01260     if dedfica(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
-01270     fnchk(j+5,pos_col(8),"",1)
+01270     fnChk(j+5,pos_col(8),"",1)
 01280     if dedst(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
-01290     fnchk(j+5,pos_col(9),"",1)
+01290     fnChk(j+5,pos_col(9),"",1)
 01300     if deduc(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 01310     linecount=j+5
 01320     fnqgl(linecount,pos_col(10),0,2,pas)
 01323     resp$(resp+=1)=fnrgl$(gl$(j))
 01330   next j
-01340   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
-01350   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
-01360   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-01370   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
-01380   fnacs(sn$,0,mat resp$,ckey)
+01340   fnCmdKey("&Next",1,1,0,"Moves to next screen of company information.")
+01350   fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
+01360   fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
+01370   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
+01380   fnAcs(sn$,0,mat resp$,ckey)
 01390   if ckey=5 then goto CONFIRMEXIT
 01400   resp=0
 01410   for j=1 to 20
@@ -209,28 +209,28 @@
 01580   if ckey=1 then goto SCREEN_3
 01590 ! ______________________________________________________________________
 01600 SCREEN_3: ! 
-01610   fntos(sn$="Company-3") !:
+01610   fnTos(sn$="Company-3") !:
         mylen=32: mypos=mylen+3 : right=1
-01620   fnlbl(1,10,"STATE CODES AND UNEMPLOYMENT INFORMATION",0,0)
-01630   fnlbl(3,1,"Code State Name     State ID    U/C Maximum      U/C Rate",0,0)
+01620   fnLbl(1,10,"STATE CODES AND UNEMPLOYMENT INFORMATION",0,0)
+01630   fnLbl(3,1,"Code State Name     State ID    U/C Maximum      U/C Rate",0,0)
 01640   resp=0
 01650 ! 
 01660   for j=1 to 10
-01670     fnlbl(j+3,3,str$(j),mylen,0,0)
-01680     fntxt(j+3,6,8,0,left,"",0,"Enter your state name.",0 ) !:
+01670     fnLbl(j+3,3,str$(j),mylen,0,0)
+01680     fnTxt(j+3,6,8,0,left,"",0,"Enter your state name.",0 ) !:
           resp$(resp+=1)=d$(j)
-01690     fntxt(j+3,19,12,0,left,"",0,"Enter the state id #.",0 ) !:
+01690     fnTxt(j+3,19,12,0,left,"",0,"Enter the state id #.",0 ) !:
           resp$(resp+=1)=e$(j)
-01700     fntxt(j+3,32,12,0,left,"10",0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 ) !:
+01700     fnTxt(j+3,32,12,0,left,"10",0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 ) !:
           resp$(resp+=1)=str$(m(j))
-01710     fntxt(j+3,49,8,0,left,"33",0,"Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00",0 ) !:
+01710     fnTxt(j+3,49,8,0,left,"33",0,"Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00",0 ) !:
           resp$(resp+=1)=str$(r(j))
 01720   next j
-01730   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
-01740   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
-01750   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-01760   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
-01770   fnacs(sn$,0,mat resp$,ckey)
+01730   fnCmdKey("&Next",1,1,0,"Moves to next screen of company information.")
+01740   fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
+01750   fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
+01760   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
+01770   fnAcs(sn$,0,mat resp$,ckey)
 01780   if ckey=5 then goto CONFIRMEXIT
 01790   resp=0
 01800   for j=1 to 10
@@ -244,49 +244,49 @@
 01880   if ckey=5 then goto CONFIRMEXIT
 01890 ! ______________________________________________________________________
 01900 SCREEN_4: ! 
-01910   fntos(sn$="Company-4") !:
+01910   fnTos(sn$="Company-4") !:
         mylen=45: mypos=mylen+3 : right=1: resp=0
-01920   fram3=1: fnfra(1,1,6,60,"Vacation and Sick Pay Information")
-01930   fnlbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
-01940   fntxt(1,mypos,8,0,0,"30",0,"",fram3) !:
+01920   fram3=1: fnFra(1,1,6,60,"Vacation and Sick Pay Information")
+01930   fnLbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
+01940   fnTxt(1,mypos,8,0,0,"30",0,"",fram3) !:
         resp$(1)=str$(sck(1))
-01950   fnlbl(2,1,"Sick hours accrued after eligibility period:",mylen,right,0,fram3)
-01960   fntxt(2,mypos,8,0,0,"33",0,"",fram3) !:
+01950   fnLbl(2,1,"Sick hours accrued after eligibility period:",mylen,right,0,fram3)
+01960   fnTxt(2,mypos,8,0,0,"33",0,"",fram3) !:
         resp$(2)=str$(sck(2))
-01970   fnlbl(3,1,"Sick hours to accrue once eligible:",mylen,right,0,fram3)
-01980   fntxt(3,mypos,8,0,0,"33",0,"",fram3) !:
+01970   fnLbl(3,1,"Sick hours to accrue once eligible:",mylen,right,0,fram3)
+01980   fnTxt(3,mypos,8,0,0,"33",0,"",fram3) !:
         resp$(3)=str$(sck(3))
-01990   fnlbl(4,1,"Maximum Sick Hours:",mylen,right,0,fram3)
-02000   fntxt(4,mypos,8,0,0,"32",0,"",fram3) !:
+01990   fnLbl(4,1,"Maximum Sick Hours:",mylen,right,0,fram3)
+02000   fnTxt(4,mypos,8,0,0,"32",0,"",fram3) !:
         resp$(4)=str$(sck(4))
-02010   fnlbl(5,1,"Maximum Vacation Hours:",mylen,right,0,fram3)
-02020   fntxt(5,mypos,8,0,0,"32",0,"",fram3) !:
+02010   fnLbl(5,1,"Maximum Vacation Hours:",mylen,right,0,fram3)
+02020   fnTxt(5,mypos,8,0,0,"32",0,"",fram3) !:
         resp$(5)=str$(vacm)
-02030   fram4=2: fnfra(9,1,3,60,"Miscellaneous Payroll Information")
-02040   fnlbl(1,1,"Minimum Hourly Wage:",mylen,right,0,fram4)
-02050   fntxt(1,mypos,10,0,0,"10",0,"",fram4) !:
+02030   fram4=2: fnFra(9,1,3,60,"Miscellaneous Payroll Information")
+02040   fnLbl(1,1,"Minimum Hourly Wage:",mylen,right,0,fram4)
+02050   fnTxt(1,mypos,10,0,0,"10",0,"",fram4) !:
         resp$(6)=str$(mhw)
-02060   fnlbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
-02070   fntxt(2,mypos,2,0,0,"30",0,"If one the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) !:
+02060   fnLbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
+02070   fnTxt(2,mypos,2,0,0,"30",0,"If one the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) !:
         resp$(7)=str$(loccode)
-02080   fram5=3: fnfra(14,1,5,60,"Workman's Compensation Limits")
-02090   fnlbl(1,1,"Monthly:",mylen,right,0,fram5)
-02100   fntxt(1,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
+02080   fram5=3: fnFra(14,1,5,60,"Workman's Compensation Limits")
+02090   fnLbl(1,1,"Monthly:",mylen,right,0,fram5)
+02100   fnTxt(1,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
         resp$(8)=str$(wcm(1))
-02110   fnlbl(2,1,"Semi-Monthly:",mylen,right,0,fram5)
-02120   fntxt(2,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
+02110   fnLbl(2,1,"Semi-Monthly:",mylen,right,0,fram5)
+02120   fnTxt(2,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
         resp$(9)=str$(wcm(2))
-02130   fnlbl(3,1,"Bi-Weekly:",mylen,right,0,fram5)
-02140   fntxt(3,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
+02130   fnLbl(3,1,"Bi-Weekly:",mylen,right,0,fram5)
+02140   fnTxt(3,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
         resp$(10)=str$(wcm(3))
-02150   fnlbl(4,1,"Weekly:",mylen,right,0,fram5)
-02160   fntxt(4,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
+02150   fnLbl(4,1,"Weekly:",mylen,right,0,fram5)
+02160   fnTxt(4,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
         resp$(11)=str$(wcm(4))
-02170   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
-02180   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
-02190   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-02200   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
-02210   fnacs(sn$,0,mat resp$,ckey)
+02170   fnCmdKey("&Next",1,1,0,"Moves to next screen of company information.")
+02180   fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
+02190   fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
+02200   fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
+02210   fnAcs(sn$,0,mat resp$,ckey)
 02220   if ckey=5 then goto CONFIRMEXIT
 02230   sck(1)=val(resp$(1))
 02240   sck(2)=val(resp$(2))
@@ -312,7 +312,7 @@
 02440   close #106: ioerr L2450
 02450 L2450: if fnstyp=14 then win6$="SRow=14,SCol=12,ECol=67"
 02460   if fnstyp<>14 then win6$="SRow=09,SCol=11,ECol=69"
-02470   open #106: win6$&",ERow=22,Border=SR,Caption=<"&cap$,display,outin 
+02470   open #106: win6$&",ERow=22,Border=SR,Caption=<"&cap$,display,outIn 
 02480   pr #106: newpage
 02490   pr #106,fields "2,2,Cr 44,N": "ACS General Ledger Installed (Y/N):"
 02500   pr #106,fields "3,2,Cr 44,N": "Days employed before accruing Sick Hours:"
@@ -369,7 +369,7 @@
         if resp$="Yes" then goto DONE else goto XIT
 02950 ! ______________________________________________________________________
 02960 DONE: ! 
-02970   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outin,relative 
+02970   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outIn,relative 
 02980   ficamaxw=ficamaxw*.1
 02990   rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 03000   close #1: 

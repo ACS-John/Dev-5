@@ -24,17 +24,17 @@
 12000 def fn_wesupSetup
 12020   if ~w2supSetup then
 12040     w2supSetup=1
-12060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnopenprn,fncloseprn,fnacs,fncmdset,fnflexadd1,fnflexinit1,fntos,fngethandle,fnlbl,fncombof,fncomboa,fntxt
+12060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnopenprn,fncloseprn,fnAcs,fnCmdSet,fnflexadd1,fnflexinit1,fnTos,fngethandle,fnLbl,fncombof,fncomboa,fnTxt
 12080     on error goto ERTN
 12100     dim resp$(64)*128
 12120     dim t$*8
-12180     open #hw2box16:=fngethandle: "Name="&env$('Q')&"\GLmstr\W2Box16.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\GLmstr\W2Index.h"&env$('cno')&",Use,RecL=158,KPs=1,KLn=8,Shr",internal,outin,keyed
+12180     open #hw2box16:=fngethandle: "Name="&env$('Q')&"\GLmstr\W2Box16.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\GLmstr\W2Index.h"&env$('cno')&",Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed
 12200     dim fw2box16$*255
 12220     fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 12240   end if
 12260 fnend
 24000 MENU1: ! r:
-24020   fntos(sn$='w2box16.menu1')
+24020   fnTos(sn$='w2box16.menu1')
 24040   fnflexinit1(sn$,2,2,10,10,mat m1ColHeading$,mat m1ColMask$)
 24060   restore #hw2box16:
 24070   recCount=0
@@ -44,8 +44,8 @@
 24130     recCount+=1
 24140   loop
 24160   m1EoList: !
-24180   if recCount then let fncmdset(14) else let fncmdset(15)
-24280   fnacs(sn$,0,mat resp$,ckey)
+24180   if recCount then let fnCmdSet(14) else let fnCmdSet(15)
+24280   fnAcs(sn$,0,mat resp$,ckey)
 24300   if ckey=1 then ! Add
 24320     fn_w2supEdit
 24360   else if ckey=2 then ! Edit
@@ -69,13 +69,13 @@
 33160     t$=rpad$(empNo$,kln(hw2box16))
 33180     read #hw2box16,using fw2box16$,key=t$: t$,mat in1$ noKey ignore 
 33200   else
-34000     fntos(sn$='w2supEdit1')
+34000     fnTos(sn$='w2supEdit1')
 34020     mylen=15 : mypos=mylen+2
-34040     fnlbl(1,1,'Employee:',mylen,1)
+34040     fnLbl(1,1,'Employee:',mylen,1)
 34060     fncombof('emp',1,mypos,width,env$('Q')&'\GLmstr\PRmstr.h'&env$('cno'),1,4,5,25, env$('Q')&'\GLmstr\PRIndex.h'&env$('cno'),1)
 34080     resp$(1)=t$
-34100     fncmdset(2)
-34120     fnacs(sn$,0,mat resp$,ckey)
+34100     fnCmdSet(2)
+34120     fnAcs(sn$,0,mat resp$,ckey)
 34140     if ckey=5 then goto w2eFinis
 34160     empNo$=resp$(1)(1:4)
 34180     t$=uprc$(lpad$(rtrm$(t$),8))
@@ -83,7 +83,7 @@
 34220     read #hw2box16,using fw2box16$,key=t$: t$,mat in1$ nokey ignore
 34240   end if
 36000   ! r: RecEdit
-36020   fntos(sn$='w2supEdit2')
+36020   fnTos(sn$='w2supEdit2')
 36040   lenCol1=16
 36060   posCol2=18 ! 30
 36080   posCol3=34 ! 50  
@@ -91,34 +91,34 @@
 36120   posCol5=58
 36140   posCol6=70
 36160   rc=0
-36180   fnlbl(1,2,'Employee Number:',lenCol1)
-36200   fntxt(1,posCol2,8,0,0,'',1)
+36180   fnLbl(1,2,'Employee Number:',lenCol1)
+36200   fnTxt(1,posCol2,8,0,0,'',1)
 36220   resp$(rc+=1)=t$
-36240   fnlbl(4,posCol2,'Description')
-36260   fnlbl(4,posCol3,'Amount')
-36280   fnlbl(3,posCol4,'Effect on Wages')
-36300   fnlbl(4,posCol4,'Fed')
-36320   fnlbl(4,posCol5,'FICA')
-36340   fnlbl(4,posCol6,'State')
+36240   fnLbl(4,posCol2,'Description')
+36260   fnLbl(4,posCol3,'Amount')
+36280   fnLbl(3,posCol4,'Effect on Wages')
+36300   fnLbl(4,posCol4,'Fed')
+36320   fnLbl(4,posCol5,'FICA')
+36340   fnLbl(4,posCol6,'State')
 36360   dim nasOption$(3)*10
 36380   nasOption$(1)='0 None'
 36400   nasOption$(2)='1 Add'
 36420   nasOption$(3)='2 Subtract'
 36440   lc=4
-36460   fnlbl(lc+=1,1,"Box 11:",lenCol1,1)
+36460   fnLbl(lc+=1,1,"Box 11:",lenCol1,1)
 36480     fn_add_this_one(mat in1$(01:05))
-36500   fnlbl(lc+=1,1,"Unused:",lenCol1,1)
+36500   fnLbl(lc+=1,1,"Unused:",lenCol1,1)
 36520     fn_add_this_one(mat in1$(06:10))
-36540   fnlbl(lc+=1,1,"Box 12a:",lenCol1,1)
+36540   fnLbl(lc+=1,1,"Box 12a:",lenCol1,1)
 36560     fn_add_this_one(mat in1$(11:15))
-36580   fnlbl(lc+=1,1,"Box 12b:",lenCol1,1)
+36580   fnLbl(lc+=1,1,"Box 12b:",lenCol1,1)
 36600     fn_add_this_one(mat in1$(16:20))
-36620   fnlbl(lc+=1,1,"Box 12c:",lenCol1,1)
+36620   fnLbl(lc+=1,1,"Box 12c:",lenCol1,1)
 36640     fn_add_this_one(mat in1$(21:25))
-36660   fnlbl(lc+=1,1,"Box 12d:",lenCol1,1)
+36660   fnLbl(lc+=1,1,"Box 12d:",lenCol1,1)
 36680     fn_add_this_one(mat in1$(26:30))
-36700   fncmdset(4)
-36702   fnacs(sn$,0,mat resp$,ckey)
+36700   fnCmdSet(4)
+36702   fnAcs(sn$,0,mat resp$,ckey)
 38000   if cmdkey=5 then goto w2eFinis
 38020   rc=0
 38040   t$=resp$(rc+=1)
@@ -141,8 +141,8 @@
 39120 fnend
 
 42000 def fn_add_this_one(mat in1Five$)
-42020   fntxt(lc,posCol2,12) : resp$(rc+=1)=in1Five$(1) ! desc
-42040   fntxt(lc,posCol3,11,0,0,'10') : resp$(rc+=1)=in1Five$(2) ! amount
+42020   fnTxt(lc,posCol2,12) : resp$(rc+=1)=in1Five$(1) ! desc
+42040   fnTxt(lc,posCol3,11,0,0,'10') : resp$(rc+=1)=in1Five$(2) ! amount
 42060   fncomboa('nas',lc,posCol4,mat nasOption$)
 42080   resp$(rc+=1)=nasOption$(val(in1Five$(3))+1) !  Fed
 42100   fncomboa('nas',lc,posCol5,mat nasOption$)

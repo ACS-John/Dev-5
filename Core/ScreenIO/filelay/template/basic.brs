@@ -75,13 +75,13 @@
        for Index=1 to udim(mat Keys$)
           additor=Index-1
           if Additor then
-             fnReturnCode(' open #'&FileLay$&'+'&str$(Additor)&': "name='&FileName$&',kfname='&Keys$(Index)&'",internal,outin,keyed')
+             fnReturnCode(' open #'&FileLay$&'+'&str$(Additor)&': "name='&FileName$&',kfname='&Keys$(Index)&'",internal,outIn,keyed')
           else
-             fnReturnCode(' open #'&FileLay$&': "name='&FileName$&',kfname='&Keys$(Index)&'",internal,outin,keyed')
+             fnReturnCode(' open #'&FileLay$&': "name='&FileName$&',kfname='&Keys$(Index)&'",internal,outIn,keyed')
           end if
        next Index
     else
-       fnReturnCode(' open #'&FileLay$&': "name='&FileName$&'",internal,outin,relative')
+       fnReturnCode(' open #'&FileLay$&': "name='&FileName$&'",internal,outIn,relative')
     end if
     
     fnReturnCode(' ')
@@ -712,7 +712,7 @@
     fnReturnCode(' OPEN: ! ***** Function To Call Library Openfile And Proc Subs')
     fnReturnCode('       def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)')
     fnReturnCode('          dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80')
-    fnReturnCode('          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)')
+    fnReturnCode('          fnopen=fnOpenFile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)')
     fnReturnCode('          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index')
     fnReturnCode('       fnend')
     fnReturnCode('')
@@ -788,7 +788,7 @@
  OPEN: ! ***** Function To Call Library Openfile And Proc Subs
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80
-          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
+          fnopen=fnOpenFile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
           if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
 

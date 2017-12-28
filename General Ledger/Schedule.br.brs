@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\glSchFM
 00020 ! Schedule File  (Maintenance routines) was Form POS 1,N 2,2*C 78,3*N  1,80*c 12  now Form POS 1,N 3,2*C 78,3*N  1  Breakdowns in seperate file
 32000 ! r: setup, open files, library, set constants, on err, etc
-32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fntos,fnlbl,fncombof,fncmdkey,fnacs,fntxt,fnchk,fncomboa,fnflexinit1,fnflexadd1,fnhamster,fnmsgbox,fnFree
+32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fncomboa,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnFree
 32040   on error goto ERTN
 32060 ! ______________________________________________________________________
 32080   dim gl$(80)*12
@@ -14,7 +14,7 @@
 32220   gosub BUILD_LAYOUT
 32240   if exists(env$('Q')&"\GLmstr\acglschs.h"&env$('cno'))=0 then 
 32260     close #10: ioerr ignore
-32280     open #10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno'),internal,outin,keyed ioerr ignore
+32280     open #10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno'),internal,outIn,keyed ioerr ignore
 32300     close #10,free: ioerr ignore
 32320     CreateAcGlSchs: open #10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",SIZE=0,RecL=162",internal,output 
 32340     CloseAcGlSchs: close #10: ioerr ignore
@@ -24,14 +24,14 @@
 32420     gosub INDEX
 32440   end if
 32460   L210: !
-32480   open #schedule:=10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1580
-32500   open #11: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&",Shr",internal,outin,keyed ioerr CloseAcGlSchs
+32480   open #schedule:=10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1580
+32500   open #11: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr CloseAcGlSchs
 32520   goto SCHEDULEGRID
 32540   close #10: ioerr ignore
 32560   execute "Index "&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 3 30 Replace DupKeys -n"
 32580 goto L210 ! /r
 44000 SCHEDULEGRID: ! r:
-44020   fntos(sn$="Schedule") 
+44020   fnTos(sn$="Schedule") 
 44040   respc=0
 44060   mat chdr$(7) : mat cmask$(7) : mat flxitm$(7) 
 44080   chdr$(1)="Rec" 
@@ -44,20 +44,20 @@
 44220   fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 44240   restore #10:
 44260 READ_SCHEDULE: ! read schedule file
-44280   read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID norec L350
+44280   read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID noRec L350
 44300   item$(1)=str$(rec(schedule)) 
 44320   item$(2)=str$(sn): item$(3)=schnam$: item$(4)=ft$ 
 44340   item$(5)=str$(dp) : item$(6)=str$(rs) : item$(7)=str$(cm) 
 44360   fnflexadd1(mat item$)
 44380 L350: goto READ_SCHEDULE
 44400 EO_SCHEDULE_GRID: ! 
-44420   fncmdkey("&Add",1,0,0,"Allows you to add new schedules.")
+44420   fnCmdKey("&Add",1,0,0,"Allows you to add new schedules.")
 44440 ! 
-44460   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
-44480   fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
-44500 ! fnCMDKEY("&Print",3,0,0,"Takes you directly to the pr Schedules option")
-44520   fncmdkey("E&xit",5,0,1,"Exits to main menu")
-44540   fnacs(sn$,0,mat resp$,ckey)
+44460   fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
+44480   fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
+44500 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Schedules option")
+44520   fnCmdKey("E&xit",5,0,1,"Exits to main menu")
+44540   fnAcs(sn$,0,mat resp$,ckey)
 44560   if ckey=5 then goto XIT
 44580   add=edit=0
 44600   editrec=val(resp$(1))
@@ -69,34 +69,34 @@
 44700     schnam$=ft$="" 
 44720     goto ADD_EDIT_SCHEDULES ! add
 44740   else if ckey=2 then 
-44760     read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec: sn,schnam$,ft$,dp,rs,cm norec SCHEDULEGRID 
+44760     read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID 
 44780     holdsn=sn 
 44800     goto ADD_EDIT_SCHEDULES
 44820   else if ckey=8 then 
-44840     read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec,release: sn,schnam$,ft$,dp,rs,cm norec SCHEDULEGRID 
+44840     read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec,release: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID 
 44860     gosub DELETEIT 
 44880     goto SCHEDULEGRID
 44900   end if
 44920   pause 
 44940 ! /r
 48000 ADD_EDIT_SCHEDULES: ! r:
-48020   fntos(sn$="Schedule1") 
+48020   fnTos(sn$="Schedule1") 
 48040   mylen=20: mypos=mylen+3 : right=1
-48060   fnlbl(1,1,"Schedule Number:",mylen,right)
+48060   fnLbl(1,1,"Schedule Number:",mylen,right)
 48080   fncombof('glschedule',1,mypos,0,env$('Q')&"\GLmstr\acglschs.h"&env$('cno'),1,3,4,30,env$('Q')&"\GLmstr\schindex.h"&env$('cno'),add_all)
 48100   if edit=1 then resp$(1)=str$(sn)
 48120   if add=1 then resp$(1)=""
-48140   fnlbl(2,1,"Schedule Nane::",mylen,right)
-48160   fntxt(2,mypos,80,0,left,"",0,"",0 ) 
+48140   fnLbl(2,1,"Schedule Nane::",mylen,right)
+48160   fnTxt(2,mypos,80,0,left,"",0,"",0 ) 
 48180   resp$(2)=schnam$
-48200   fnlbl(3,1,"Footnote:",mylen,right)
-48220   fntxt(3,mypos,80,0,left,"",0,"",0 ) 
+48200   fnLbl(3,1,"Footnote:",mylen,right)
+48220   fnTxt(3,mypos,80,0,left,"",0,"",0 ) 
 48240   resp$(3)=ft$
-48260   fnchk(4,mypos,"Print Dollar Signs:",1) 
+48260   fnChk(4,mypos,"Print Dollar Signs:",1) 
 48280   if dp=1 then resp$(4)="True" else resp$(4)="False"
-48300   fnchk(5,mypos,"Reverse Sign:",1) 
+48300   fnChk(5,mypos,"Reverse Sign:",1) 
 48320   if rs=1 then resp$(5)="True" else resp$(5)="False"
-48340   fnlbl(6,1,"Type of Schedule:",mylen,right)
+48340   fnLbl(6,1,"Type of Schedule:",mylen,right)
 48360   option$(1)="Print Year to Date Only" 
 48380   option$(2)="Print Current Month and Year to Date" 
 48400   option$(3)="Print Comparison (Income and Expense Accounts" 
@@ -104,9 +104,9 @@
 48440   fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
 48460   if cm=0 then cm=1
 48480   resp$(6)=option$(cm)
-48500   fncmdkey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
-48520   fncmdkey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
-48540   fnacs(sn$,0,mat resp$,ckey)
+48500   fnCmdKey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
+48520   fnCmdKey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
+48540   fnAcs(sn$,0,mat resp$,ckey)
 48560   if ckey=5 then goto SCHEDULEGRID
 48580   sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
 48600   schnam$=resp$(2)
@@ -210,7 +210,7 @@
 68060   dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),sp(1),c$(1,8)*40
 68080   ! ______________________________________________________________________
 68100   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE 
-68120   fnhamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+68120   fnHamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 68140   gosub FIXGLACCOUNTS
 68160   gosub CLOSE_FILE
 68180   gosub INDEX2
@@ -219,12 +219,12 @@
 70020   open_file_count=1 ! this value is used in the close_file sub routine
 70040   close #open_file_count: ioerr ignore
 70060   if exists(env$('Q')&"\GLmstr\Schedule"&str$(sn)&".h"&env$('cno'))=0 then 
-70080     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outin 
+70080     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outIn 
 70100     gosub CLOSE_FILE
 70120     gosub INDEX2
 70140   else
 70160     if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.h"&env$('cno'))=0 then gosub INDEX2
-70180     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.H"&env$('cno')&",Shr",internal,outin,keyed 
+70180     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 70200   end if
 70220 return ! /r
 74000 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number

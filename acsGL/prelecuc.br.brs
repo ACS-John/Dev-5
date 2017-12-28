@@ -57,7 +57,7 @@
 00650 SCR1: ! 
 00660   pr newpage
 00670   close #101: ioerr L680
-00680 L680: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outin 
+00680 L680: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outIn 
 00690   pr f "3,15,C 51,R,N": "  Insert diskette for elecronic U/C in drive A:"
 00700   pr f "5,5,C 60": "Company Name:"
 00710   pr f "6,5,C 60": "Street Address:"
@@ -290,7 +290,7 @@
 02840 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 02850 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
 02860   close #win: ioerr L2870
-02870 L2870: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+02870 L2870: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 02880   pr #win: newpage
 02890   if display_cnam=0 then goto L2920
 02900   if display_cnam=1 then !:
@@ -330,7 +330,7 @@
 03120   for j=2 to udim(msgline$)
 03130     if msgline$(j)<>"" then endrow=endrow+1
 03140   next j
-03150   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
+03150   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outIn 
 03160   pr #104: newpage
 03170   mglinerow=2
 03180   for j=1 to udim(msgline$)
@@ -358,7 +358,7 @@
 03400 ! if stopable=1 will display "Cancel (F5)" button
 03410 ! win = window number
 03420   close #win: ioerr L3430
-03430 L3430: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outin 
+03430 L3430: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn 
 03440   pr #win: newpage
 03450   pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
 03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
@@ -374,7 +374,7 @@
 03560   if ec<1 then ec=59
 03570   win_width=ec-sc+1
 03580   close #win: ioerr L3590
-03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
+03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 03600   pr #win: newpage
 03610   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))

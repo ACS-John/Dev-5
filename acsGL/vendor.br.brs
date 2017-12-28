@@ -1,7 +1,7 @@
 20000 ! Replace S:\acsGL\Vendor
 20020 ! Vendor file with dynamic editor - hamster
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+20060   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 20080   fntop(program$,cap$="Vendor")
 20100   on error goto ERTN
 20120 ! ______________________________________________________________________
@@ -36,8 +36,8 @@
 20700   c$(07,3)='1' : c$(07,4)='2'
 20720   c$(07,5)='3' : c$(07,6)='60'
 20740   c$(07,7)=env$('Q')&"\Data\1099Box.idx" : c$(07,8)='1'
-20760   open #1: "Name="&env$('Q')&"\GLmstr\gl1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gl109idx.h"&env$('cno')&",Use,RecL=127,KPs=1,KLn=8,Shr",internal,outin,keyed 
-20780   fnhamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
+20760   open #1: "Name="&env$('Q')&"\GLmstr\gl1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gl109idx.h"&env$('cno')&",Use,RecL=127,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+20780   fnHamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
 20800 XIT: fnxit
 20820 ! ______________________________________________________________________
 20840 ! <Updateable Region: ERTN>

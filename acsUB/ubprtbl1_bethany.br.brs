@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtbl1_Bethany
 00020 ! pr bills for Village of Bethany
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fncmdkey,fnpa_finis,fnpa_txt,fnpa_newpage,fnpa_open
+00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnCmdKey,fnpa_finis,fnpa_txt,fnpa_newpage,fnpa_open
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
@@ -36,42 +36,42 @@
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
 00240   a$="" : prtbkno=0
-00250   fntos(sn$="UBPrtBl1-1") !:
+00250   fnTos(sn$="UBPrtBl1-1") !:
         pf=33 : ll=30 !:
         respc=0
-00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
-00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
+00260   fnLbl(3,1,"Penalty Due Date:",ll,1)
+00270   fnTxt(3,pf,8,8,1,"1",0,tt$) !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00280   fnlbl(4,1,"Message on Bill:",ll,1)
-00290   fntxt(4,pf,30,30) !:
+00280   fnLbl(4,1,"Message on Bill:",ll,1)
+00290   fnTxt(4,pf,30,30) !:
         resp$(respc+=1)=mg$(1)
-00300   fntxt(5,pf,30,30) !:
+00300   fnTxt(5,pf,30,30) !:
         resp$(respc+=1)=mg$(2)
-00310   fntxt(6,pf,30,30) !:
+00310   fnTxt(6,pf,30,30) !:
         resp$(respc+=1)=mg$(3)
-00320   fnlbl(7,1,"Date of Billing:",ll,1)
-00330   fntxt(7,pf,8,8,1,"1") !:
+00320   fnLbl(7,1,"Date of Billing:",ll,1)
+00330   fnTxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00340   fnlbl(8,1,"Starting Account:",ll,1)
+00340   fnLbl(8,1,"Starting Account:",ll,1)
 00350   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
         resp$(respc+=1)="[All]"
-00360   fnlbl(9,1,"Route Number:",ll,1)
+00360   fnLbl(9,1,"Route Number:",ll,1)
 00370   fncmbrt2(9,pf) !:
         resp$(respc+=1)="[All]"
-00380   fnchk(10,pf,"Select Accounts to Print:",1) !:
+00380   fnChk(10,pf,"Select Accounts to Print:",1) !:
         resp$(respc+=1)="False"
-00390   fnlbl(11,1,"Date Meter Read:",ll,1) !:
-        fntxt(11,pf,8,8,1,"1",0,tt$) !:
+00390   fnLbl(11,1,"Date Meter Read:",ll,1) !:
+        fnTxt(11,pf,8,8,1,"1",0,tt$) !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",newd3)
-00400   fnlbl(12,1,"Previous Reading Date:",ll,1) !:
-        fntxt(12,pf,8,8,1,"1",0,tt$) !:
+00400   fnLbl(12,1,"Previous Reading Date:",ll,1) !:
+        fnTxt(12,pf,8,8,1,"1",0,tt$) !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",newd2)
-00410   fncmdset(3) !:
-        fnacs(sn$,0,mat resp$,ck)
+00410   fnCmdSet(3) !:
+        fnAcs(sn$,0,mat resp$,ck)
 00420   if ck=5 then goto ENDSCR
 00430   d1 = val(resp$(5)) !:
         d4 = val(resp$(1)) !:
@@ -153,20 +153,20 @@
 01090 ! ______________________________________________________________________
 01100 SCREEN3: ! 
 01110   sn$ = "UBPrtBl1-2" !:
-        fntos(sn$)
+        fnTos(sn$)
 01120   txt$="Account (blank to stop)" !:
-        fnlbl(1,1,txt$,31,1)
+        fnLbl(1,1,txt$,31,1)
 01130 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 01140   if trim$(z$)<>"" then !:
           txt$="Last Account entered was "&z$ !:
-          fnlbl(3,1,txt$,44,1) else !:
+          fnLbl(3,1,txt$,44,1) else !:
           txt$="" !:
-          fnlbl(3,1,txt$,44,1)
+          fnLbl(3,1,txt$,44,1)
 01150   fncmbact(1,17) ! !:
         resp$(1)=a$
-01160   fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
-        fncmdkey("&Complete",5,0,1,"Print all selected records")
-01170   fnacs(sn$,0,mat resp$,ck)
+01160   fnCmdKey("&Next",1,1,0,"Accept this record for printing") !:
+        fnCmdKey("&Complete",5,0,1,"Print all selected records")
+01170   fnAcs(sn$,0,mat resp$,ck)
 01180   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01190   if ck=5 then goto RELEASE_PRINT
@@ -207,14 +207,14 @@
 01520 ! ______________________________________________________________________
 01530 ENDSCR: ! pr totals screen
 01540   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-01550   fntos(sn$="Bills-Total") !:
+01550   fnTos(sn$="Bills-Total") !:
         mylen=23 : mypos=mylen+2 !:
         respc=0
-01560   fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01570   fntxt(1,mypos,8,0,1,"",0) !:
+01560   fnLbl(1,1,"Total Bills Printed:",mylen,1)
+01570   fnTxt(1,mypos,8,0,1,"",0) !:
         resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-01640   fncmdset(52) !:
-        fnacs(sn$,0,mat resp$,ck)
+01640   fnCmdSet(52) !:
+        fnAcs(sn$,0,mat resp$,ck)
 01650 XIT: fnxit
 01660 ! ______________________________________________________________________
 01670 ERTN: fnerror(program$,err,line,act$,"xit")
@@ -397,8 +397,8 @@
 03110 L3110: return 
 03120 BUD1: bud1=0
 03130   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-03140   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L3200
-03150   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+03140   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L3200
+03150   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 03160   bud1=1
 03170   for j=1 to 5
 03180     bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
@@ -414,7 +414,7 @@
 03280 L3280: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 03290   ta1=badr(1)
 03300 L3300: if ta1=0 then goto L3360
-03310   read #82,using L3320,rec=ta1: z$,mat bt1,nba norec L3360
+03310   read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec L3360
 03320 L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 03330   if bt1(1,1)=d1 then budget=budget+bt1(12,1): goto L3350 ! budget for current month
 03340   if bt1(14,1)=0 then pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid

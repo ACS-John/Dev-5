@@ -15,9 +15,9 @@
 00150   csz$="Townsville, AR  55555"
 00160 L160: rinput fields mat io1$: cno,csz$ conv L160
 00170   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
-00180   open #1: "Name="&env$('Q')&"\UBmstr\ubadrbil.h"&env$('cno'),internal,outin,relative 
+00180   open #1: "Name="&env$('Q')&"\UBmstr\ubadrbil.h"&env$('cno'),internal,outIn,relative 
 00190   for j=1 to lrec(1)
-00200     rewrite #1,using "Form Pos 101,c 30",rec=j: csz$ norec L220
+00200     rewrite #1,using "Form Pos 101,c 30",rec=j: csz$ noRec L220
 00210     pr f "1,1,N 10,R,N": j
 00220 L220: next j
 00230   goto DONE

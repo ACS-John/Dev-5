@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubBudLst
 00020 ! -- Budget Customer List
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnwait,fnerror,fnopenprn,fncloseprn,fnxit,fnacs,fntxt,fncomboa,fnlbl,fntos,fncmdset,fntop
+00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnwait,fnerror,fnopenprn,fncloseprn,fnxit,fnAcs,fnTxt,fncomboa,fnLbl,fnTos,fnCmdSet,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,dat$*20,idx$(3)*20,wrd2$(3)
@@ -15,27 +15,27 @@
 00150 ! ______________________________________________________________________
 00160 SCR1: ! 
 00170   sn$="ubBudLst" !:
-        fntos(sn$) !:
+        fnTos(sn$) !:
         respc=0
 00180   mylen=22 !:
         mypos=mylen+2
-00190   fnlbl(1,1,"Sort by:",mylen,1)
+00190   fnLbl(1,1,"Sort by:",mylen,1)
 00200   wrd2$(1)="Account" !:
         wrd2$(2)="Customer Name" !:
         wrd2$(3)="Street" !:
         fncomboa("bs",1,mypos,mat wrd2$) !:
         resp$(respc+=1)=wrd2$(1)
-00210   fnlbl(2,1,"Report Heading Date:",mylen,1)
-00220   fntxt(2,mypos,20) !:
+00210   fnLbl(2,1,"Report Heading Date:",mylen,1)
+00220   fnTxt(2,mypos,20) !:
         resp$(respc+=1)=dat$
-00230   fnlbl(3,1,"Print:",mylen,1)
+00230   fnLbl(3,1,"Print:",mylen,1)
 00240   sel$(1)="Active customers" !:
         sel$(2)="Inactive customers" !:
         sel$(3)="[All]" !:
         fncomboa("bs2",3,mypos,mat sel$) !:
         resp$(respc+=1)=sel$(1)
-00250   fncmdset(2)
-00260   fnacs(sn$,0,mat resp$,ckey)
+00250   fnCmdSet(2)
+00260   fnAcs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   if resp$(1)=wrd2$(1) then q0=1 else !:
           if resp$(1)=wrd2$(2) then q0=2 else !:
@@ -87,8 +87,8 @@
 00700 ! ______________________________________________________________________
 00710 BUD1: bud1=0
 00720   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-00730   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L760
-00740   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00730   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L760
+00740   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
 00750   bud1=1
 00760 L760: return 
 00770 ! ______________________________________________________________________

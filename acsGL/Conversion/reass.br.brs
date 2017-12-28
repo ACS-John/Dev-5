@@ -14,7 +14,7 @@
 00140 L140: input fields "10,43,N 5,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
-00170   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outin,keyed ioerr L140
+00170   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outIn,keyed ioerr L140
 00180   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,Replace",internal,output 
 00190 L190: read #1,using L200: pr1$,mat pr1 eof END1
 00200 L200: form pos 1,c 90,18*pd 5.2,2*n 5

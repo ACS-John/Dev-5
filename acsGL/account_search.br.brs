@@ -2,7 +2,7 @@
 00020 ! search for general ledger accounts
 00030 ! ______________________________________________________________________
 00040   def library fnaccount_search(&x$;fixgrid)
-00050     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fnacs,fncmdset,fnerror,fncno,fngethandle
+00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim item$(10)*50,resp$(30)*80,rf(6)
@@ -13,7 +13,7 @@
 00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
-00150     fntos(sn$="AccountSrch")
+00150     fnTos(sn$="AccountSrch")
 00160     ch$(1)="Account" : ch$(2)="Description" : ch$(3)="Balance" !:
           ch$(4)="B/S Ref" : ch$(5)="B/S Ref2" !:
           ch$(6)="I/C Ref" : ch$(7)="I/C Ref2" !:
@@ -43,7 +43,7 @@
           goto READ_FILE
 00320 ! ______________________________________________________________________
 00330 L330: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE without displaying it
-00340     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
+00340     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00350     x$=lpad$(resp$(1),12)
 00360     if ckey=5 then x$="            " ! no one selected

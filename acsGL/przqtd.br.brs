@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\PRZQTD
 00020 ! Zero Quarterly Information (After-Fact-Payroll)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fntos,fnlbl,fntxt,fncmdset,fnacs,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim n(2),k$(3)*25,ss$*11,m(36),adr(2),cnam$*40,cap$*128,ml$(3)*80
@@ -9,18 +9,18 @@
 00090   fntop(program$,cap$="Zero QTD Payroll Information")
 00100   fncno(cno,cnam$)
 00130   if fnprocess=1 then goto L290
-00140 L140: fntos(sn$="PrZqtr") !:
+00140 L140: fnTos(sn$="PrZqtr") !:
         mylen=40: mypos=mylen+3 : right=2
-00150   fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
-00160   fnlbl(3,1,"This program zeroes all quarterly",mylen,right)
-00170   fnlbl(4,1,"information. It should be run at",mylen,right)
-00180   fnlbl(5,1,"the end of each quarter after all",mylen,right)
-00190   fnlbl(6,1,"quarterly reports have been run.",mylen,right)
-00200   fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
-00210   fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the quarter.",0 ) !:
+00150   fnLbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
+00160   fnLbl(3,1,"This program zeroes all quarterly",mylen,right)
+00170   fnLbl(4,1,"information. It should be run at",mylen,right)
+00180   fnLbl(5,1,"the end of each quarter after all",mylen,right)
+00190   fnLbl(6,1,"quarterly reports have been run.",mylen,right)
+00200   fnLbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
+00210   fnTxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the quarter.",0 ) !:
         resp$(1)=""
-00220   fncmdset(2)
-00230   fnacs(sn$,0,mat resp$,ckey)
+00220   fnCmdSet(2)
+00230   fnAcs(sn$,0,mat resp$,ckey)
 00240   if ckey=5 then goto XIT
 00250   pas$=uprc$(resp$(1))
 00260   if pas$="ZERO" then goto L290
@@ -31,7 +31,7 @@
         fnmsgbox(mat ml$,resp$,cap$,49)
 00273   if resp$="OK" then goto L140 else goto XIT
 00280 ! ______________________________________________________________________
-00290 L290: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+00290 L290: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00300 L300: read #1,using 'Form POS 91,36*PD 5.2': mat m eof L340
 00310   for j=2 to 36 step 2 : m(j)=0 : next j
 00320   rewrite #1,using 'Form POS 91,36*PD 5.2': mat m

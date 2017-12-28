@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\glreass
 00020 ! duh
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnerror,fncno,fnwait,fntos,fnlbl,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnerror,fncno,fnwait,fnTos,fnLbl,fnCmdKey,fnAcs
 00050   fntop(program$,"Reassign Transaction Addresses")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -14,22 +14,22 @@
 00140   h$=".H"&env$('cno')
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 
-00170   fntos(sn$="glreorg") !:
+00170   fnTos(sn$="glreorg") !:
         mylen=20: mypos=mylen+3 : right=1
-00180   fnlbl(1,1,"If you get errors trying to access general ledger")
-00190   fnlbl(2,1,"transaction, this option might help.  It")
-00200   fnlbl(3,1,"will reassign all transactions back to the ")
-00210   fnlbl(4,1,"correct general ledger accounts.")
-00220   fnlbl(5,1,"Take Next to continue with the reassign process.")
-00230   fncmdkey("&Next",1,1,0,"Reassigns the general ledger transactions.")
-00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without processing.")
-00250   fnacs(sn$,0,mat resp$,ckey)
+00180   fnLbl(1,1,"If you get errors trying to access general ledger")
+00190   fnLbl(2,1,"transaction, this option might help.  It")
+00200   fnLbl(3,1,"will reassign all transactions back to the ")
+00210   fnLbl(4,1,"correct general ledger accounts.")
+00220   fnLbl(5,1,"Take Next to continue with the reassign process.")
+00230   fnCmdKey("&Next",1,1,0,"Reassigns the general ledger transactions.")
+00240   fnCmdKey("&Cancel",5,0,1,"Returns to menu without processing.")
+00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   if ckey=1 then gosub REORG
 00280   goto XIT
 00290 REORG: ! 
-00300   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
-00310   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
+00300   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00310   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
 00320 L320: read #1,using L330: mat ta eof L360
 00330 L330: form pos 333,2*pd 3
 00340   rewrite #1,using L330: 0,0
@@ -37,7 +37,7 @@
 00360 L360: lr2=lrec(2)
 00370   rewrite #2,using L470,rec=1: lr2
 00380   for j=1 to lr2
-00390     read #2,using L400,rec=j: k$,nta norec L480
+00390     read #2,using L400,rec=j: k$,nta noRec L480
 00400 L400: form pos 1,c 12,pos 71,pd 3
 00410     read #1,using L330,key=k$: mat ta nokey L480
 00420     if ta(1)=0 then ta(1)=j

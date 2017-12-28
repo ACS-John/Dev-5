@@ -1,6 +1,6 @@
 00020 ! 
 00030   on error goto L320
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnconsole
 00050   fntop(program$,cap$="Employee")
 00060   fncno(cno,cnam$)
 00070 ! 
@@ -17,7 +17,7 @@
 00180   on a goto L190,L310 none L110
 00190 L190: pr newpage
 00200   pr f "10,20,c 50,n": "REMOVE TERMINATED EMPLOYEES IN PROCESS"
-00210   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L320
+00210   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L320
 00220 L220: read #1,using L230: eno$,emp eof L270 ioerr L320
 00230 L230: form pos 1,c 9,pos 37,n 1
 00240   if emp><9 then goto L220

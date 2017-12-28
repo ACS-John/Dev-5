@@ -1,5 +1,5 @@
 20000 ! ______________________________________________________________________
-20200   library 'S:\Core\Library': fntop,fnxit, fnget_services,fnerror,fnhamster
+20200   library 'S:\Core\Library': fntop,fnxit, fnget_services,fnerror,fnHamster
 20400   on error goto ERTN
 20600 ! ______________________________________________________________________
 20800   dim cap$*128
@@ -16,11 +16,11 @@
 24600 ! ______________________________________________________________________
 24800   def fn_open_file
 25000     open_file_count=0 ! this value is used in the close_file sub routine
-25200     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-25400     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-25600     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outin,keyed 
-25800     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outin,keyed 
-26000     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outin,keyed 
+25200     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25400     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25600     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25800     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26000     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed 
 26200   fnend 
 26400   def fn_close_file
 26600     for j=1 to open_file_count : close #j: : next j
@@ -57,7 +57,7 @@
 32800   fnend 
 33000 ! ______________________________________________________________________
 33200 HAMSTER: ! 
-33400   fnhamster("Customer_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+33400   fnHamster("Customer_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 33600   return 
 33800 ! ______________________________________________________________________
 34000 XIT: fnxit

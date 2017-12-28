@@ -58,7 +58,7 @@
 00842 ! /r
 00850 REGULAR_ENTRY: ! 
 00860 ! close #h_tmwk1,free:
-00870   open #h_tmwk1:=2: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",RecL=2484,Replace",internal,outin,relative 
+00870   open #h_tmwk1:=2: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",RecL=2484,Replace",internal,outIn,relative 
 00880 L880: ! 
 00882   open #3: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00890   fnopenprn(cp,58,220,process)
@@ -197,7 +197,7 @@
 01920   pr f "10,10,c 60": "Enter ref # to correct; enter 0 when completed"
 01930 L1930: input fields "10,60,N 5,UE,N": rr conv L1930
 01940   if rr=0 then goto SCR_FINAL
-01950   read #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ norec SCR_ADDEDIT ioerr ERTN
+01950   read #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT ioerr ERTN
 01960   pt(1)=pt(1)-inp(1)
 01970   for j=1 to 10
 01980     pt(2)=pt(2)-da(j)
@@ -275,7 +275,7 @@
 02672   restore #h_tmwk1: 
 02680   do  ! for j=1 to lrec(h_tmwk1)
 02690 PR_SELECTED_INVOICE: ! 
-02692     read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF norec L2870 ioerr ERTN
+02692     read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF noRec L2870 ioerr ERTN
 02700     if inp(1)=0 then goto L2840
 02710     k$=lpad$(str$(inp(1)),5)
 02720     read #1,using L2730,key=k$: mat a$ ioerr ERTN
@@ -298,7 +298,7 @@
 02940 REPR_PREV_INV: ! 
 02942   mat pt=(0)
 02950   for rw=1 to lrec(2)
-02960     read #h_tmwk1,using F_TMWK1,rec=rw: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc norec L3050 ioerr ERTN
+02960     read #h_tmwk1,using F_TMWK1,rec=rw: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc noRec L3050 ioerr ERTN
 02970 F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 02980     if inp(1)=0 then goto L2840
 02990     pt(1)=pt(1)+inp(1)
@@ -324,10 +324,10 @@
 03190   retry 
 03200 L3200: goto XIT
 03210 SRCH1: s1=1 ! NAME SEARCH
-03220   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin  ! SAVE SCREEN
+03220   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn  ! SAVE SCREEN
 03230 L3230: pr #127: newpage
 03240   close #101: ioerr ignore
-03250   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUsiness Name Search",display,outin 
+03250   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUsiness Name Search",display,outIn 
 03260   prtall=0
 03270   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 03280   pr f "9,32,C 16,R,N": "Press F5 to stop"
@@ -380,7 +380,7 @@
 03730 !  SCRNSAV: ! r:
 03732 !    sav1=1
 03740 !    close #99: ioerr ignore
-03750 !    open #99: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin
+03750 !    open #99: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn
 03760 !    pr #99: newpage
 03770 !  L3770: !
 03772 !    j1=int(rnd*22+1)
@@ -407,11 +407,11 @@
 03960   goto CT1
 03970 SRCH2: ! r:
 03972   s1=2 ! CODE SEARCH
-03980   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin 
+03980   open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn 
 03990 L3990: ! 
 03992   pr #127: newpage
 04000   close #101: ioerr ignore
-04010   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=CODE SEARCH",display,outin 
+04010   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=CODE SEARCH",display,outIn 
 04020   prtall=0
 04030   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 04040   pr f "9,32,C 16,R,N": "Press F5 to stop"

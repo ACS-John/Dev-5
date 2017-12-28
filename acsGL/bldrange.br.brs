@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\BldRange
 00020 ! Build Range of Accounts
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror, fnchain,fntos,fnlbl,fnqgl,fnrgl$,fntxt,fnfra,fncombof,fncmdkey,fnacs,fnagl$,fncmdset,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror, fnchain,fnTos,fnLbl,fnqgl,fnrgl$,fnTxt,fnFra,fncombof,fnCmdKey,fnAcs,fnagl$,fnCmdSet,fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1
@@ -12,48 +12,48 @@
 00130   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00140   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00150   close #company: 
-00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00170   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00180   fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
 00190 ! ______________________________________________________________________
 00210 MAIN: ! 
-00230   fntos(sn$="Bldrange") 
+00230   fnTos(sn$="Bldrange") 
 00232   mylen=40: mypos=mylen+3 : right=1: rc=0
-00240   fnfra(1,1,6,90,"Duplicate Range of Accounts","This option will allow you to quickly duplicate a range of general ledger numbers when setting up multiple departments with similar accounts. ",0)
-00250   fnlbl(1,50,"Source",0,0,0,1)
-00260   fnlbl(2,1,"1st G/L Number to Duplicate:",mylen,right,0,1)
+00240   fnFra(1,1,6,90,"Duplicate Range of Accounts","This option will allow you to quickly duplicate a range of general ledger numbers when setting up multiple departments with similar accounts. ",0)
+00250   fnLbl(1,50,"Source",0,0,0,1)
+00260   fnLbl(2,1,"1st G/L Number to Duplicate:",mylen,right,0,1)
 00270   fnqgl(2,mypos,1,0) 
 00272   resp$(rc+=1)=fnrgl$(gl1$)
-00280   fnlbl(3,1,"Last G/L Number to Duplicate:",mylen,right,0,1)
+00280   fnLbl(3,1,"Last G/L Number to Duplicate:",mylen,right,0,1)
 00290   fnqgl(3,mypos,1,0) 
 00292   resp$(rc+=1)=fnrgl$(gl2$)
-00300   fnlbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
-00310   fnlbl(5,44,"Fund #",6,1,0,1)
-00320   fnlbl(5,58,"Sub #",6,2,0,1)
-00330   if use_dept=1 then let fntxt(6,46,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",1 ) else let fntxt(6,46,3,0,right,"30",1,"Enter the fund portion of the general ledger number.",1 ) ! : rESP$(RC+=1)=STR$(DNO)
-00340   fntxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 ) 
+00300   fnLbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
+00310   fnLbl(5,44,"Fund #",6,1,0,1)
+00320   fnLbl(5,58,"Sub #",6,2,0,1)
+00330   if use_dept=1 then let fnTxt(6,46,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",1 ) else let fnTxt(6,46,3,0,right,"30",1,"Enter the fund portion of the general ledger number.",1 ) ! : rESP$(RC+=1)=STR$(DNO)
+00340   fnTxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 ) 
 00342   resp$(rc+=1)=""
-00350   if use_sub=1 then let fntxt(6,60,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",1 ) else let fntxt(6,60,3,0,right,"30",1,"Enter the sub portion of the general ledger number.",1 ) 
+00350   if use_sub=1 then let fnTxt(6,60,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",1 ) else let fnTxt(6,60,3,0,right,"30",1,"Enter the sub portion of the general ledger number.",1 ) 
 00352     resp$(rc+=1)=""
-00360   fnfra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
+00360   fnFra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
 00370 ! 
-00380   fnlbl(1,1,"Beginning                         Ending",90,right,0,2)
-00390   fnlbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
+00380   fnLbl(1,1,"Beginning                         Ending",90,right,0,2)
+00390   fnLbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
 00400   fncombof("fs-bal",2,43,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
 00402   resp$(rc+=1)="" ! first balance sheet ref # to be duplicated
 00410   fncombof("fs-bal2",2,85,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
 00412   resp$(5)="" ! ending balance sheet ref # to be duplicated
-00420   fnlbl(4,1,"Beginning                         Ending",90,right,0,2)
-00430   fnlbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
+00420   fnLbl(4,1,"Beginning                         Ending",90,right,0,2)
+00430   fnLbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
 00440   fncombof("fs-inc",5,43,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
 00442   resp$(rc+=1)="" ! 1st income statement ref # to be duplicated
 00450   fncombof("fs-inc-2",5,85,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
 00452   resp$(rc+=1)="" ! last income statement ref # to be duplicated
-00460   fnlbl(7,1,"First new reference # to be used:",mylen,right,0,2)
-00470   fntxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
+00460   fnLbl(7,1,"First new reference # to be used:",mylen,right,0,2)
+00470   fnTxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
 00472   resp$(rc+=1)=""
-00480   fncmdset(2)
-00490   fnacs(sn$,0,mat resp$,ckey)
+00480   fnCmdSet(2)
+00490   fnAcs(sn$,0,mat resp$,ckey)
 00500   pas=0 ! rebuild each time
 00510   if ckey=5 then goto XIT
 00520   gl$=fnagl$(resp$(1))
@@ -93,7 +93,7 @@
 00860   if rf(1)>0 then fln=1: goto L890
 00870   if rf(3)>0 then fln=2: goto L890
 00880   goto L830
-00890 L890: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",Shr",internal,outin,keyed 
+00890 L890: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",Shr",internal,outIn,keyed 
 00900   restore #2,key=lpad$(str$(fin(1)),5): nokey L970
 00910 L910: read #2,using L920: rno,d$,te$,mat ac eof L980
 00920 L920: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3

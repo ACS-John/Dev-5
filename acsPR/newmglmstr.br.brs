@@ -1,6 +1,6 @@
 00020 ! Maintain Department Matching GL Numbers
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncloseprn,fnopenprn,fncno,fntop,fnxit,fntos,fnlbl,fncmdkey,fnacs,fnqgl,fnrgl$,fncombof,fnagl$,fnmsgbox,fntxt,fnDedNames
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncloseprn,fnopenprn,fncno,fntop,fnxit,fnTos,fnLbl,fnCmdKey,fnAcs,fnqgl,fnrgl$,fncombof,fnagl$,fnmsgbox,fnTxt,fnDedNames
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim label1$(22)*20,io2$(34),mgl$(11)*12
@@ -14,21 +14,21 @@
 00160   gosub BLDSCR
 00170 ! ______________________________________________________________________
 00180   if exists(env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno'))=0 then gosub CREATE_FILES
-00190   open #1: "Name="&env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\MGLIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00190   open #1: "Name="&env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\MGLIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00200   open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed 
 00210 ! ______________________________________________________________________
 00220 MENU1: ! 
 00230 ASKDEPARTMENT: ! 
-00240   fntos(sn$="Department-ask") !:
+00240   fnTos(sn$="Department-ask") !:
         respc=0
-00250   fnlbl(1,1,"Department #:",15,1)
+00250   fnLbl(1,1,"Department #:",15,1)
 00260   fncombof("Dept",1,18,3,env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),1,3,0,0,env$('Q')&"\PRmstr\mglidx1.h"&env$('cno'),0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) !:
         resp$(respc+=1)=""
-00270   fncmdkey("&Add",1,0,0,"Enter accrual information on a new department." ) !:
-        fncmdkey("E&dit",2,1,0,"Change or review then highlighted record") !:
-        fncmdkey("&Delete",3,0,0,"Deletes the highlited record.") !:
-        fncmdkey("E&xit",5,0,1,"Returns to menu")
-00280   fnacs(sn$,0,mat resp$,ckey) ! ask department #
+00270   fnCmdKey("&Add",1,0,0,"Enter accrual information on a new department." ) !:
+        fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record") !:
+        fnCmdKey("&Delete",3,0,0,"Deletes the highlited record.") !:
+        fnCmdKey("E&xit",5,0,1,"Returns to menu")
+00280   fnAcs(sn$,0,mat resp$,ckey) ! ask department #
 00290   if ckey=5 then goto XIT
 00300   dp$=resp$(1)
 00310   dp$=lpad$(uprc$(rtrm$(dp$)),3)
@@ -42,25 +42,25 @@
 00370 L370: if addrec=1 then dp$="": mat mgl$=(""): goto L400
 00380   k$=dp$=lpad$(uprc$(rtrm$(dp$)),3)
 00390   read #1,using "Form POS 1,G 3,11*C 12",key=k$,release: dp$,mat mgl$ nokey MENU1
-00400 L400: fntos(sn$="Department-gl") !:
+00400 L400: fnTos(sn$="Department-gl") !:
         respc=0
-00410   fnlbl(1,1,deptname$,50,2)
-00420   fnlbl(2,1,"Department #:",15,1)
-00430   fntxt(2,18,3,3,1,"30",0,"Department # to change or add.") !:
+00410   fnLbl(1,1,deptname$,50,2)
+00420   fnLbl(2,1,"Department #:",15,1)
+00430   fnTxt(2,18,3,3,1,"30",0,"Department # to change or add.") !:
         resp$(respc+=1)=dp$
-00440   fnlbl(3,1,label1$(1),15,1)
+00440   fnLbl(3,1,label1$(1),15,1)
 00450   fnqgl(3,18,0,2,0) !:
         resp$(respc+=1)=fnrgl$(mgl$(1)) ! fica
 00460   x=1 : y=3
 00470   for j=1 to 20
 00480     if dedcode(j)=3 then goto L490 else goto L510
-00490 L490: fnlbl(y+=1,1,label1$(x+=1),15,1)
+00490 L490: fnLbl(y+=1,1,label1$(x+=1),15,1)
 00500     fnqgl(y,18,0,2,0) !:
           resp$(respc+=1)=fnrgl$(mgl$(j+1))
 00510 L510: next j
-00520   fncmdkey("&Next",1,1,0,"Save changes and move to next record" ) !:
-        fncmdkey("&Complete",5,0,1,"Returns to menu")
-00530   fnacs(sn$,0,mat resp$,ckey) ! ask gl numbers
+00520   fnCmdKey("&Next",1,1,0,"Save changes and move to next record" ) !:
+        fnCmdKey("&Complete",5,0,1,"Returns to menu")
+00530   fnAcs(sn$,0,mat resp$,ckey) ! ask gl numbers
 00540   if ckey=5 then goto XIT
 00550   dp$=resp$(1)
 00560   dp$=lpad$(uprc$(rtrm$(dp$)),3)

@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\ubUnBill
 00020 ! r: setup 
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fncmdset,fntop,fnchk
+00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fnCmdSet,fntop,fnChk
 00040   on error goto ERTN
 00050   ! 
 00060   dim z$*10,e$(4)*30,resp$(10)*40
@@ -9,19 +9,19 @@
 00110   fntop(program$)
 00120 goto MAIN ! /r
 28000 MAIN: ! r: main screen
-28020   fntos(sn$:="UBUnBill") 
+28020   fnTos(sn$:="UBUnBill") 
 28040   mylen=20 
 28060   mypos=mylen+2
-28080   fnlbl(2,1,"Billing Date:" ,mylen,1)
-28100   fntxt(2,mypos,8,8,0,"1") 
+28080   fnLbl(2,1,"Billing Date:" ,mylen,1)
+28100   fnTxt(2,mypos,8,8,0,"1") 
 28120   resp$(1)=str$(d1)
-28140   fnlbl(3,1,"Route Number:" ,mylen,1)
+28140   fnLbl(3,1,"Route Number:" ,mylen,1)
 28160   fncmbrt2(3,mypos) 
 28180   resp$(2)="[All]"
-28200   fnchk(4,23,"Print Meter Address:",1)
+28200   fnChk(4,23,"Print Meter Address:",1)
 28220   resp$(3)="True"
-28240   fncmdset(3)
-28260   fnacs(sn$,0,mat resp$,ck)
+28240   fnCmdSet(3)
+28260   fnAcs(sn$,0,mat resp$,ck)
 28280   if ck=5 then goto XIT
 28300 goto Initialize ! /r
 32000 Initialize: ! r:

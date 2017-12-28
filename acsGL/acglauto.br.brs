@@ -11,7 +11,7 @@
 00110 ! ______________________________________________________________________
 00120   pgnum=fnpgnum
 00130   open #20: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&env$('cno')&",Shr",internal,input,relative ioerr MSGBOX1 !:
-        read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,norec XIT !:
+        read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,noRec XIT !:
         close #20: 
 00140   if rtrm$(prg$)="" then goto L220
 00150   fnprg(prg$,put=2)
@@ -27,7 +27,7 @@
 00210 ! ______________________________________________________________________
 00220 L220: fnkillauto : fnpgnum(-1) !:
         ! ! CHECK FOR ADDITIONAL COMPANIES
-00230   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,NoShr",internal,outin,relative ioerr XIT
+00230   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,NoShr",internal,outIn,relative ioerr XIT
 00240   for j=2 to 20
 00250     read #glclnt,using 'Form POS 1,N 5',rec=j: cno
 00260     if cno<>0 then goto L300
