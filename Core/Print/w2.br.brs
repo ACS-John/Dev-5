@@ -485,7 +485,13 @@
 86060     lReturn=w2Yoffset+1
 86080   else  ! if lineNumber>=1 and lineNumber<=14 then
 86100     lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
-86120     if lineNumber>=11 then lReturn+=3.5
+86120     if lineNumber>=11 then 
+86121        if env$('client')='Edinburg' then 
+86122          lReturn+=7
+86123        else
+86124          lReturn+=3.5
+86125        end if
+86130     end if
 86140   end if 
 86160   fn_line=lReturn
 86900 fnend

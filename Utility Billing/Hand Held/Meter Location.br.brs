@@ -52,7 +52,7 @@
 14080   end if
 14100   hMeterLocation=fn_open(table$,mat location$,mat locationN,mat form$)
 14120   if imlCreateNew then
-14140     hAddress=fn_open(table$,mat addr$,mat addrN,mat form$, 0,2)
+14140     hAddress=fn_open('UB Meter Address',mat addr$,mat addrN,mat form$, 0,2)
 14160     fnStatus('Initializing U4 Meter Location table...')
 14180     fnCloseFile(hLocation,table$) 
 14200     fnindex_it(env$('Q')&'\UBmstr\MeterLocation.h'&env$('cno'),env$('Q')&'\UBmstr\MeterLocationIdx2.h'&env$('cno'), '12 30u')
