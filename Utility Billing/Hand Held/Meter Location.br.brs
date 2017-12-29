@@ -26,8 +26,8 @@
 12072     library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read,fnreg_write
 12074     library 'S:\Core\Library': fnAccountFromLocationId$
 12076     library 'S:\Core\Library': fnget_services
-12078     library 'S:\Core\Library': fnBuildKey$,fnKeyExists
-12080     library 'S:\Core\Library': fnFree
+12078     library 'S:\Core\Library': fnBuildKey$
+12080     library 'S:\Core\Library': fnKeyExists
 12082     library 'S:\Core\Library': fnStatusPause
 12084     dim info$(0)*20,infoN(0)
 12086     dim addr$(0)*30,addrN(0)

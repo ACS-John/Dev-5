@@ -1,13 +1,12 @@
 00010 ! Replace S:\acsGL\Reverse
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno, fnwait,fnLbl,fnTxt,fnAcs,fnCmdKey,fnTos,fnChk
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnLbl,fnTxt,fnAcs,fnCmdKey,fnTos,fnChk
 00040   fntop(program$,cap$="Generate Reversing Entries")
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,wait_message$*40
 00080   dim t$*12,n(2),l$*12,adr(2),ta(2),p$*30,my_p$*30,test_p$*30,io1$(7)*25
 00090 ! ______________________________________________________________________
-00100   fncno(cno)
 00110   wait_message$="Generating Reversing Entries"
 00120 ! 
 00130   my_p$="Generated Reversing Entry"

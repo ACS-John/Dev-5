@@ -2,12 +2,11 @@
 00020 ! converts fin stmts files (all of them) !:
         ! from recl=79 to recl=83 and version 1
 00030   def library fnfinstmt_v0_to_v1
-00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwait,fnmsgbox,fncno,fnStatus,fnindex_it
+00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnStatus,fnindex_it
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     dim cap$*128
 00090     dim fil$(6),idx$(6)
-00120     fncno(cno)
 00130 ! ______________________________________________________________________
 00140     fnStatus('Converting Financial Statement.')
 20000 GOON: ! 

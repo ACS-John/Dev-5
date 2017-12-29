@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\swap_cur_prior
 10200 ! -- for all billing dates that match - put the lower of prior/current water readings into prior and the higher into current
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnget_services,fnLastBillingDate,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnwait,fnmsgbox,fnCmdSet,fntop,fngethandle
+10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnget_services,fnLastBillingDate,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnmsgbox,fnCmdSet,fntop,fngethandle
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50

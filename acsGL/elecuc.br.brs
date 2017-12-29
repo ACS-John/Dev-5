@@ -4,7 +4,7 @@
         ! had to follow with an RT record - Right now this program will not !:
         ! create an RO record
 00030 ! ______________________________________________________________________
-00040   library "S:\Core\Library": fntop,fnxit, fnerror,fnwait,fnoldmsgbox,fntop,fnxit,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd
+00040   library "S:\Core\Library": fntop,fnxit, fnerror,fnoldmsgbox,fntop,fnxit,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40

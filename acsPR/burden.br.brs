@@ -1,7 +1,7 @@
 00010 ! Replace  S:\acsPR\burden
 00020 ! Service Code File
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnwait,fncno,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fncno,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
 00050   fntop("S:\acsPR\burden",cap$="Personnel Burden")
 00060   on error goto ERTN
 00070   dim cnam$*40,dat$*20,gl(3),sf1$*28,sn$*30,cap$*128,search$(22),resp$(10)*60

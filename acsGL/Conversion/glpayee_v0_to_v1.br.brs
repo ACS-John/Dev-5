@@ -2,7 +2,7 @@
 00020 ! converts general ledger payee files to new rln
 00022 ! from recl=127 to recl=276 and version 1
 00030   def library fnglpayee_v0_to_v1
-00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwait,fnmsgbox,fngethandle,fnStatus,fnindex_it,fncopy
+00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fngethandle,fnStatus,fnindex_it,fncopy
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim cap$*128

@@ -2,18 +2,16 @@
 00020 ! enter and track houly breakdowns of time for comp time, etc
 00030   def library fnhours(eno)
 00040 ! ______________________________________________________________________
-00050     library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnwin3,fnopenprn,fncloseprn,fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton,fnAcs,fnerror,fnmsgbox,fnCmdSet,fncombof
+00050     library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton,fnAcs,fnerror,fnmsgbox,fnCmdSet,fncombof
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
-00080     dim cnam$*40,cap$*128,message$*40,resp$(10)*40
+00080     dim cap$*128,message$*40,resp$(10)*40
 00090     dim oldclass$*5,class$*5,classification$*30,impname$*25,empname$*30
 00100     dim flxitm$(8)*30,key$*21
 00110 ! ______________________________________________________________________
-00120     fncno(cno,cnam$)
-00130 ! ______________________________________________________________________
 00140 ! 
 00150 ! 
-00160     fntop("S:\acsPR\hourclassification2",cap$="Time Classification")
+00160     fntop(program$,cap$="Time Classification")
 00170     open #breakdown=1: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00180     open #classification=2: "Name="&env$('Q')&"\PRmstr\HourClass.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourClass-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00190     open #prmstr=3: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 

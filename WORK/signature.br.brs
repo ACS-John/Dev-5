@@ -1,5 +1,5 @@
 00010 ! Replace work\signature
-00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fnTos,fndat,fnerror,fnopenprn,fncloseprn,fncomboa,fnmsgbox,fnCmdSet
+00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fndat,fnerror,fnopenprn,fncloseprn,fncomboa,fnmsgbox,fnCmdSet
 00030   dim docname$*30,comboa$(99)*30,tt$*200,msgline$(5)*200,cap$*128,cddrive$*1,response$(5)*30
 00040   open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outIn,keyed 
 00050 ! read #1,using 60:docname$,docline,docposition,docsigchoice,cddrive$

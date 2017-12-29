@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\BudInpt
 00020 ! used to enter new budget figures at beginning of new year
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnrgl$,fnerror,fnwait,fnoldmsgbox,fnsearch,fnopenprn,fncloseprn,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnagl$,fnLbl,fnqgl,fnTxt
+00040   library 'S:\Core\Library': fntop,fnxit, fnrgl$,fnerror,fnoldmsgbox,fnsearch,fnopenprn,fncloseprn,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnagl$,fnLbl,fnqgl,fnTxt
 00050   on error goto ERTN
 00060   fntop(program$,"Budget Amounts")
 00070 ! ______________________________________________________________________

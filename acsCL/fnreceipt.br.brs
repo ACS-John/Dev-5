@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\fnReceipt
 00020 ! Standard Receipt file
 00030   def library fnaddreceipt
-00040     library 'S:\Core\Library': fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnwait,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
+00040     library 'S:\Core\Library': fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim rec$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,vcode$*8
