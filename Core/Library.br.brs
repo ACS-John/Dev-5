@@ -886,10 +886,18 @@
 63438   fnend
 63990 ! /r
 64000 ! r: array stuff
-64010   def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
-64020     library 'S:\Core\Array.br': fnarray_item_insert$
-64030     fnarray_item_insert$=fnarray_item_insert$(mat array$, insert_item$, insert_item_number)
-64040   fnend
+64021   def library fnArrayWasPassedC(mat array$)
+64022     library 'S:\Core\Array.br': fnArrayWasPassedC
+64023     fnArrayWasPassedC=fnArrayWasPassedC(mat array$)
+64024   fnend
+64031   def library fnArrayWasPassedN(mat arrayN)
+64032     library 'S:\Core\Array.br': fnArrayWasPassedN
+64033     fnArrayWasPassedN=fnArrayWasPassedN(mat arrayN)
+64034   fnend
+64041   def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
+64042     library 'S:\Core\Array.br': fnarray_item_insert$
+64043     fnarray_item_insert$=fnarray_item_insert$(mat array$, insert_item$, insert_item_number)
+64044   fnend
 64050   def library fnarray_item_insert(mat array, insert_item, insert_item_number)
 64060     library 'S:\Core\Array.br': fnarray_item_insert
 64070     fnarray_item_insert=fnarray_item_insert(mat array, insert_item, insert_item_number)

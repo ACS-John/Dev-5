@@ -62,6 +62,7 @@
 34020   if ~setup then 
 34040     setup=1
 34060     library 'S:\Core\Library': fntop,fnxit, fnTxt,fnLbl,fnTos,fnAcs,fnerror,fnCmdSet,fnChk,fngethandle,fnAddOneC
+34070     library 'S:\Core\Library': fnArrayWasPassedC,fnArrayWasPassedN
 34080     on error goto ERTN
 34100     ! 
 34120     dim resp$(60)*20,serviceName$(10)*20,serviceCode$(10)*2
@@ -94,11 +95,11 @@
 36460     close #hService:
 36480   end if
 36500   mat serviceName$(udim(mat cacheServiceName$)) : mat serviceName$=cacheServiceName$
-36520   mat serviceCode$(udim(mat cacheServiceCode$)) : mat serviceCode$=cacheServiceCode$
-36540   mat taxCode$    (udim(mat cacheeTaxCode$   )) : mat taxCode$    =cacheTaxCode$
-36560   mat penalty$    (udim(mat cacheePenalty$   )) : mat penalty$    =cacheePenalty$
-36580   mat subjectTo   (udim(mat cacheSubjectTo   )) : mat subjectTo   =cacheSubjectTo
-36600   mat orderToApply(udim(mat cacheOrderToApply)) : mat orderToApply=cacheOrderToApply
+36520   if fnArrayWasPassedC( mat serviceCode$) then mat serviceCode$(udim(mat cacheServiceCode$)) : mat serviceCode$=cacheServiceCode$
+36540   if fnArrayWasPassedC( mat taxCode$    ) then mat taxCode$    (udim(mat cacheeTaxCode$   )) : mat taxCode$    =cacheTaxCode$
+36560   if fnArrayWasPassedC( mat penalty$    ) then mat penalty$    (udim(mat cacheePenalty$   )) : mat penalty$    =cacheePenalty$
+36580   if fnArrayWasPassedN( mat subjectTo   ) then mat subjectTo   (udim(mat cacheSubjectTo   )) : mat subjectTo   =cacheSubjectTo
+36600   if fnArrayWasPassedN( mat orderToApply) then mat orderToApply(udim(mat cacheOrderToApply)) : mat orderToApply=cacheOrderToApply
 36620 fnend
 42000 def library fnget_services(mat serviceName$; mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 42020   fn_setup
