@@ -148,3 +148,28 @@
 44420   close #hFta:
 44440   fnFileTo2Arrays=udim(mat ftaArrayLeft$)+ftaSkipFirstLine
 44460 fnend
+48000 def library fnArrayWasPassedC(mat array$)
+48020   ! 1-D arrays only please
+48040   on error goto awpcFinis
+48060   awpcReturn=0
+48080   awpcUdim=udim(mat array$)
+48100   mat array$(awpcUdim+1)
+48120   mat array$(awpcUdim)
+48140   awpcReturn=1
+48160   AwpcFinis: !
+48180   on error System
+48200   fnArrayWasPassedC=awpcReturn
+48220 fnend
+48240 def library fnArrayWasPassedN(mat arrayN)
+48260   ! 1-D arrays only please
+48280   on error goto AwpnFinis
+48300   awpnReturn=0
+48320   awpnUdim=udim(mat arrayN)
+48340   mat arrayN(awpnUdim+1)
+48360   mat arrayN(awpnUdim)
+48380   awpnReturn=1
+48400   AwpnFinis: !
+48420   on error System
+48440   fnArrayWasPassedN=awpnReturn
+48460 fnend
+      
