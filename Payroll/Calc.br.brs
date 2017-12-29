@@ -1,9 +1,11 @@
-00100       if env$('ACSdeveloper')<>'' then 
-00120         fn_setup 
-00130         fn_setupOpenFiles
-00140         fn_test_state_calk
-00160         end
-00180       end if
+00080 ! r: Test The Tables!
+00100    !  if env$('ACSdeveloper')<>'' then 
+00120    !    fn_setup 
+00130    !    fn_setupOpenFiles
+00140    !    fn_test_state_calk
+00160    !    end
+00180    !  end if
+00190 ! /r
 00210 ! S:\Payroll\Calc (formerly) S:\acsPR\newprCalk
 00220 ! Payroll Calculation
 00230 ! if you accidentally renumber it, be sure and list 'every year' and make sure the line numbers still match up
