@@ -22,7 +22,7 @@
 12040     setup=1
 12050     library 'S:\Core\Library': fntop,fnxit,fngethandle,fnerror,fnindex_it,fnStatusClose,fnStatus,fnHamsterFio
 12060     library 'S:\Core\Library': fnAddOneC,fnAddOneN,fnCountMatchesN,fnArrayMax
-12070     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile
+12070     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile,fnAutomatedSavePoint
 12072     library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read,fnreg_write
 12074     library 'S:\Core\Library': fnAccountFromLocationId$
 12076     library 'S:\Core\Library': fnget_services
@@ -52,6 +52,7 @@
 14080   end if
 14100   hMeterLocation=fn_open(table$,mat location$,mat locationN,mat form$)
 14120   if imlCreateNew then
+14130     fnAutomatedSavePoint('before meter location initialize')
 14140     hAddress=fn_open('UB Meter Address',mat addr$,mat addrN,mat form$, 0,2)
 14160     fnStatus('Initializing U4 Meter Location table...')
 14180     fnCloseFile(hLocation,table$) 
