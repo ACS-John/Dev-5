@@ -1,17 +1,16 @@
 00010 ! Replace S:\acsGL\ACGLCHGC
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION FOR 8 1/2 * 11 PAPER WITH            COMPARSION
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnwait,fncno,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim fl1$*256,cogl$(3)*12,cnam$*40,acct$*12,bp(13),by(13),udf$*256
+00070   dim fl1$*256,cogl$(3)*12,acct$*12,bp(13),by(13),udf$*256
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13),cap$*128
+00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13),cap$*128
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Comparative Change Amount")
 00120   if fnglfs=5 then goto XIT
 00130   udf$=env$('temp')&'\'
-00140   fncno(cno,cnam$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
 00160   actpd=fnactpd : fscode=fnfscode : priorcd=fnpriorcd
 00170   on fkey 5 goto L2060

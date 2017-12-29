@@ -30,7 +30,7 @@
 10640   library 'S:\Core\Library': fnAddOneC
 10660   library 'S:\Core\Library': fnask_w2_info
 10680   library 'S:\Core\Library': fnw2_text
-10700   library 'S:\Core\Library': fnfree
+10700   library 'S:\Core\Library': fnFree
 11000   on error goto ERTN
 12000 ! ______________________________________________________________________
 12090   dim fw2box16$*255,ss$*11,s(13),t(13)

@@ -6,7 +6,7 @@
 02100   MaeNo: !
 02120   maeReturn=0
 02140   MaeFinis: !
-02160   fn_keyExists=maeReturn
+02160   fnKeyExists=maeReturn
 02180 fnend
 02200 ! /r
 20000 ! r: S:\Core\Start.br
@@ -430,7 +430,7 @@
 48180     fngetdir2=fngetdir2(dir$,mat filename$, option$,filter$,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 48200   fnend
 48220   !
-48240   def library fnwait(; win,&cap$,message$*40,stopable)
+48240   def library fnwait(; message$*40,stopable)
 48260     library 'S:\Core\Wait.br': fnwait
 48280     fnwait(message$,stopable)
 48300   fnend

@@ -32,10 +32,7 @@
 00240   read #bankmstr,using 'Form Pos 45,PD 6.2,PD 6.2,G 8',key=bc$,release: bal,upi,lcn$ nokey L250
 00250 L250: sc3$(1)=" Bank Code "&bc$&" Current Bank Balance:"
 00260   t1(1)=bal
-00270   fnopenprn !:
-        ! fnwait !:
-        pr f "13,34,C 12,B,99": "Cancel (Esc)" !:
-        on fkey 99 goto EO_PAYTRANS
+00270   fnopenprn
 00280   restore #paytrans,key>="                    ": nokey EO_PAYTRANS !:
         hvn$="" : t1=pg1=0
 00290   gosub HEADER

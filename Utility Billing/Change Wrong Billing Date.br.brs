@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\UBDATfix
 00020 ! -- Change Wrong Billing Date
 00030 ! r: setup
-00040   library 'S:\Core\Library': fnxit,fnAcs,fnLbl,fnwait,fnTos,fnTxt,fnerror,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fncmbact,fnmsgbox,fnAutomatedSavePoint
+00040   library 'S:\Core\Library': fnxit,fnAcs,fnLbl,fnTos,fnTxt,fnerror,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fncmbact,fnmsgbox,fnAutomatedSavePoint
 00050   on error goto ERTN
 00060 ! 
 00070   dim z$*10,o(2),bt1(14,2),badr(2),ba(13),txt$*40,tg(11),resp$(10)*80

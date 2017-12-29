@@ -48,7 +48,7 @@
 00450 ! ______________________________________________________________________
 00460 L460: pr newpage
 00470   message$="Printing: please wait"
-00480   fnwait (102,cap$,message$,1)
+00480   fnwait(message$,1)
 00490   on fkey 5 goto L710
 00500   fnopenprn
 00510   gosub HDR

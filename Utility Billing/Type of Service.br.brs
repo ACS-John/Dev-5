@@ -72,16 +72,34 @@
 36000 def fn_readService
 36020   if ~readServiceSetup=val(env$('cno')) then
 36040     readServiceSetup=val(env$('cno'))
-36060     open #hService:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
-36080     if lrec(hService)<1 then 
-36100       write #hService,using F_service,rec=1: mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply
-36120       pr 'A new empty Type of Service file was created.  Only ACS can edit this file type.  Type GO and press Enter to continue.' : pause
-36140     end if
-36160     read #hService,using F_service,rec=1: mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply
-36180     F_service: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
-36200     close #hService:
-36220   end if
-36240 fnend
+36060     dim cacheServiceName$(10)*20
+36080     dim cacheServiceCode$(10)*2
+36100     dim cacheTaxCode$(10)*1
+36120     dim cacheePenalty$(10)*1
+36140     dim cacheSubjectTo(10)
+36160     dim cacheOrderToApply(10)
+36180     mat cacheServiceName$ =('')
+36200     mat cacheServiceCode$ =('')
+36220     mat cacheTaxCode$     =('')
+36240     mat cacheePenalty$    =('')
+36260     mat cacheSubjectTo    =(0)
+36280     mat cacheOrderToApply =(0)
+36300     open #hService:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
+36320     if lrec(hService)<1 then 
+36340       write #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
+36360       pr 'A new empty Type of Service file was created.  Only ACS can edit this file type.  Type GO and press Enter to continue.' : pause
+36380     end if
+36400     read #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
+36440     F_service: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
+36460     close #hService:
+36480   end if
+36500   mat serviceName$(udim(mat cacheServiceName$)) : mat serviceName$=cacheServiceName$
+36520   mat serviceCode$(udim(mat cacheServiceCode$)) : mat serviceCode$=cacheServiceCode$
+36540   mat taxCode$    (udim(mat cacheeTaxCode$   )) : mat taxCode$    =cacheTaxCode$
+36560   mat penalty$    (udim(mat cacheePenalty$   )) : mat penalty$    =cacheePenalty$
+36580   mat subjectTo   (udim(mat cacheSubjectTo   )) : mat subjectTo   =cacheSubjectTo
+36600   mat orderToApply(udim(mat cacheOrderToApply)) : mat orderToApply=cacheOrderToApply
+36620 fnend
 42000 def library fnget_services(mat serviceName$; mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 42020   fn_setup
 42030   fn_readService

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Conversion\UnPdAloc-v1-to-v2
 00020 ! converts the CL UnPdAloc file from version 0 or version 1 to Version 2
 00030   def library fnunpdaloc_v1_to_v2
-00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnwait,fnCopy,fnindex_it,fnStatus
+00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnCopy,fnindex_it,fnStatus
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\conversion\fixmedicare
 00020 ! special program to fix medicare wh
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim em$*30,em(6),cap$*128,message$*40

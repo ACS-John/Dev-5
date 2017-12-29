@@ -187,7 +187,7 @@
 27060     else if lineToPrint=line_x_account_number then 
 27080       labeltext$=z$
 27082     else if lineToPrint=line_x_accountRightJustified then 
-27084       labeltext$=lpad$(z$,40)
+27084       labeltext$=lpad$(z$,22)
 27100     else if lineToPrint=line_x_meter_address then 
 27120       labeltext$=meter_address$
 27140     else if lineToPrint=line_x_customer_name then 
@@ -201,9 +201,7 @@
 27281     else if lineToPrint=line_x_meter_route_and_sequenc then ! City State Zip if Mailing Address Line 2 not blank
 27282       labeltext$=f3$&' '&str$(route)&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27283     else if lineToPrint=line_x_meterAndSequence then ! City State Zip if Mailing Address Line 2 not blank
-27284       labeltext$=f3$&'   '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
-27286     else if lineToPrint=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
-27288       labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27284       labeltext$=f3$&'    '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27286     else if lineToPrint=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
 27288       labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27300     else 
@@ -495,6 +493,7 @@
 64000 IGNORE: continue 
 68000 def fn_setup
 68020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
+68022   library 'S:\Core\Library': fnAddOneC
 68040   on error goto ERTN
 68060 ! r: constants and dims
 68080   on fkey 5 goto DONE
@@ -508,17 +507,18 @@
 68260   fnget_services(mat srvnam$, mat srv$)
 68280 ! 
 68300   dim line_x_option$(9)*70
-68320   line_x_option$(line_x_blank                    :=1 )="(blank)"
-68340   line_x_option$(line_x_account_number           :=2 )="Account"
-68342   line_x_option$(line_x_accountRightJustified    :=12)="Account (right justified)"
-68360   line_x_option$(line_x_meter_address            :=3 )="Meter Address"
-68380   line_x_option$(line_x_customer_name            :=4 )="Name"
-68400   line_x_option$(line_x_mailing_address_line_1   :=5 )="Mailing Address Line 1"
-68420   line_x_option$(line_x_mailing_address_line_2   :=6 )="Mailing Address Line 2 or if blank City State Zip"
-68440   line_x_option$(line_x_mailing_address_line_3   :=7 )="City State Zip if Mailing Address Line 2 not blank"
-68460   line_x_option$(line_x_meter_route_and_sequenc  :=8 )=trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"
-68480   line_x_option$(line_x_account_meter4_and_seq   :=9 )="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
-68490   line_x_option$(line_x_meterAndSequence         :=11)=trim$(srvnam$(4))&" Meter and Sequence Numbers"
+68310   mat line_x_option$(0)
+68320   line_x_blank                   =fnAddoneC(mat line_x_option$,"(blank)"                                                        )
+68340   line_x_account_number          =fnAddoneC(mat line_x_option$,"Account"                                                        )
+68342   line_x_accountRightJustified   =fnAddoneC(mat line_x_option$,"Account (right justified)"                                      )
+68360   line_x_meter_address           =fnAddoneC(mat line_x_option$,"Meter Address"                                                  )
+68380   line_x_customer_name           =fnAddoneC(mat line_x_option$,"Name"                                                           )
+68400   line_x_mailing_address_line_1  =fnAddoneC(mat line_x_option$,"Mailing Address Line 1"                                         )
+68420   line_x_mailing_address_line_2  =fnAddoneC(mat line_x_option$,"Mailing Address Line 2 or if blank City State Zip"              )
+68440   line_x_mailing_address_line_3  =fnAddoneC(mat line_x_option$,"City State Zip if Mailing Address Line 2 not blank"             )
+68460   line_x_meter_route_and_sequenc =fnAddoneC(mat line_x_option$,trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"          )
+68480   line_x_account_meter4_and_seq  =fnAddoneC(mat line_x_option$,"Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"    )
+68490   line_x_meterAndSequence        =fnAddoneC(mat line_x_option$,trim$(srvnam$(4))&" Meter and Sequence Numbers"                 )
 68500 ! 
 68520   dim address_option$(3)*30
 68540   address_option$(ao_primary:=1)="Primary Address"

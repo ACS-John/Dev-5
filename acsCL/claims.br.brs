@@ -1,7 +1,7 @@
 00010 ! 
 00020 ! 
 00030 ! 
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnAcs,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnwait,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnAcs,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
