@@ -147,10 +147,6 @@
 42042     library 'S:\Core\Client.br': fnsystem_code_standardize$
 42043     fnsystem_code_standardize$=fnsystem_code_standardize$(st_code$)
 42044   fnend
-42050   def library fnacs_version$
-42060     library 'S:\Core\Client.br': fnacs_version$
-42070     fnacs_version$=fnacs_version$
-42080   fnend
 42090   def library fnclient$
 42100     library 'S:\Core\Client.br': fnclient$
 42110     fnclient$=fnclient$
@@ -303,10 +299,6 @@
 45460     library 'S:\Core\program_properties.br': fnprogram_properties
 45470     fnprogram_properties=fnprogram_properties( forceProgramCaption$)
 45480   fnend
-45490   def library fnprogram_ini_filename$*256(a$*256; doNotCreate)
-45500     library 'S:\Core\Program_Properties.br': fnprogram_ini_filename$
-45510     fnprogram_ini_filename$=fnprogram_ini_filename$(a$, doNotCreate)
-45520   fnend
 45890   def library fncd(x)
 45900     library 'S:\Core\fncd.br': fncd
 45910     fncd=fncd(x)
@@ -499,10 +491,6 @@
 50120     library 'S:\Core\CNo.br': fnget_company_number_list
 50140     fnget_company_number_list=fnget_company_number_list(mat cno_list, sysid$)
 50160   fnend
-50180   def library fnCnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
-50200     library 'S:\Core\CNo.br': fnCnoLegacyNtoCReg
-50220     fnCnoLegacyNtoCReg=fnCnoLegacyNtoCReg(legacyFilename$,legacyForm$,registryKey$, valuePassedIn)
-50240   fnend
 50260   def library fnpgnum(;pgnum)
 50280     library 'S:\Core\CNo.br': fnpgnum
 50300     fnpgnum=fnpgnum(pgnum)
@@ -660,7 +648,7 @@
 58300     fncloseprn=fncloseprn(forceWordProcessor$)
 58320   fnend
 58420   def library fnpglen(&pglen)
-58440     library 'S:\Core\Print\PgLen.br': fnpglen
+58440     library 'S:\Core\program_properties.br': fnpglen
 58460     fnpglen=fnpglen(pglen)
 58480   fnend
 58500   def library fnsavetoasstart(a$*400)
@@ -869,11 +857,11 @@
 63386     fnIniToReg=fnIniToReg
 63388   fnend
 63392   def library fnread_program_print_property(key$*80,&value$; programFileOverride$*256)
-63394     library 'S:\Core\Reg.br': fnread_program_print_property
+63394     library 'S:\Core\program_properties.br': fnread_program_print_property
 63396     fnread_program_print_property=fnread_program_print_property(key$,value$, programFileOverride$)
 63398   fnend
 63412   def library fnwrite_program_print_property(key$*80,value$*256; programFileOverride$*256)
-63414     library 'S:\Core\Reg.br': fnwrite_program_print_property
+63414     library 'S:\Core\program_properties.br': fnwrite_program_print_property
 63416     fnwrite_program_print_property=fnwrite_program_print_property(key$,value$, programFileOverride$)
 63418   fnend
 63422   def library fnmcreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)

@@ -1,13 +1,13 @@
-00010 ! Replace S:\acsCL\UnPdInv
+00010 ! formerly S:\acsCL\UnPdInv
 00020 ! Unpaid Invoice Listing (Current)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fnTos,fnLbl,fncomboa,fnCmdSet,fnAcs,fnwait,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
-00080   dim cap$*128,io1$(2),wrd1$(2),item1$(2)*15
+00080   dim io1$(2),wrd1$(2),item1$(2)*15
 00100 ! ______________________________________________________________________
-00110   fntop(program$,cap$="Unpaid Invoice Listing")
+00110   fntop(program$)
 00130   cancel=99
 00140   fndat (dat$)
 00150   fnTos(sn$="unpdinv")

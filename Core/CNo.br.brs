@@ -4,7 +4,6 @@
 12040     setup=1
 12080     library 'S:\Core\Library': fngetdir2,fnerror
 12100     library 'S:\Core\Library': fngethandle
-12120     library 'S:\Core\Library': fnCnoLegacyNtoCReg
 12140     library 'S:\Core\Library': fnreg_read,fnreg_write
 12160     library 'S:\Core\Library': fncreg_read,fncreg_write
 12960   end if
@@ -76,11 +75,7 @@
 38220   next filename_item
 38240   mat cno_list(company_count)
 38260   fnget_company_number_list=company_count
-38280 fnend 
-40000 def library fnCnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
-40020   if ~setup then let fn_setup
-40040   fnCnoLegacyNtoCReg=fn_CnoLegacyNtoCReg(legacyFilename$,legacyForm$,registryKey$, valuePassedIn)
-40060 fnend
+38280 fnend
 42000 def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
 42040   ! Get_or_Put=1 then GET 
 42060   ! Get_or_Put=2 then PUT
@@ -128,27 +123,27 @@
 44520 fnend 
 46000 def library fnfscode(;fscode)
 46020   if ~setup then let fn_setup
-46040   fnfscode=fnCnoLegacyNtoCReg(env$('temp')&"\fscode-"&session$&".dat","Form POS 1,N 9",'Financial Statement Code', fscode)
+46040   fnfscode=fn_CnoLegacyNtoCReg(env$('temp')&"\fscode-"&session$&".dat","Form POS 1,N 9",'Financial Statement Code', fscode)
 46060 fnend 
 46080 def library fnpriorcd(;PriorCD)
 46100   if ~setup then let fn_setup
-46120   fnpriorcd=fnCnoLegacyNtoCReg(env$('temp')&"\priorcd-"&session$&".dat","Form POS 1,N 9",'PriorCD', PriorCD)
+46120   fnpriorcd=fn_CnoLegacyNtoCReg(env$('temp')&"\priorcd-"&session$&".dat","Form POS 1,N 9",'PriorCD', PriorCD)
 46140 fnend
 46160 def library fnpgnum(;pgnum)
 46180   if ~setup then let fn_setup
-46200   fnpgnum=fnCnoLegacyNtoCReg(env$('temp')&"\PgNum-"&session$&".dat","Form POS 1,N 9",'PgNum', pgnum)
+46200   fnpgnum=fn_CnoLegacyNtoCReg(env$('temp')&"\PgNum-"&session$&".dat","Form POS 1,N 9",'PgNum', pgnum)
 46220 fnend
 46240 def library fnrx(;rx)
 46260   if ~setup then let fn_setup
-46280   fnrx=fnCnoLegacyNtoCReg(env$('temp')&"\rx-"&session$&".dat","Form POS 1,N 9",'rx', rx)
+46280   fnrx=fn_CnoLegacyNtoCReg(env$('temp')&"\rx-"&session$&".dat","Form POS 1,N 9",'rx', rx)
 46300 fnend
 46320 def library fnstyp(;STyp)
 46340   if ~setup then let fn_setup
-46360   fnstyp=fnCnoLegacyNtoCReg(env$('temp')&"\STyp-"&session$&".dat","Form POS 1,N 9",'STyp', STyp)
+46360   fnstyp=fn_CnoLegacyNtoCReg(env$('temp')&"\STyp-"&session$&".dat","Form POS 1,N 9",'STyp', STyp)
 46380 fnend
 46400 def library fnps(;ps)
 46420   if ~setup then let fn_setup
-46440   fnps=fnCnoLegacyNtoCReg(env$('temp')&"\ps-"&session$&".dat","Form POS 1,N 9",'ps', ps)
+46440   fnps=fn_CnoLegacyNtoCReg(env$('temp')&"\ps-"&session$&".dat","Form POS 1,N 9",'ps', ps)
 46460 fnend
 48000 def library fnUseDeptNo
 48010   if ~setup then let fn_setup

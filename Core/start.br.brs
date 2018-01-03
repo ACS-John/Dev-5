@@ -153,7 +153,7 @@
 14200     ! setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
 14202     setenv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
 15000     version_prior$=fn_last_version_used$ 
-15020     version_current$=fnacs_version$       
+15020     version_current$=fn_acsVersion$       
 15030     setenv('acsVersion',version_current$)
 15040     if fn_update_needed(version_prior$,version_current$) then 
 15044       fnclient$ ! this needs to be called to set client environment variables
@@ -259,7 +259,7 @@
 22040     setup=1
 22060     option retain 
 22100     library 'S:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme
-22110     library 'S:\Core\Library': fnCopy,fnshortpath$,fnureg_read,fnacs_version$
+22110     library 'S:\Core\Library': fnCopy,fnshortpath$,fnureg_read
 22120     library 'S:\Core\Library': fnreg_read,fnreg_write
 22140     library 'S:\Core\Library': fnAcsInstallationPath$,fnMakeSurepathExists,fnclient$
 22160   end if 
@@ -464,7 +464,7 @@
 50000 def fn_multisession_test
 50020   fnureg_read('Disable_MultiSession',disable_multisession$)
 50040   if val(session$(len(session$):len(session$)))=>2 and disable_multisession$='True' then 
-50060     msgbox('Multipe sessions have been disabled in user prefrences.')
+50060     msgbox('Multiple sessions have been disabled in user preferences.')
 50080     mt_return=0
 50100   else 
 50120     mt_return=1
@@ -475,7 +475,7 @@
 52040   open #h_tmp:=fn_gethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output 
 52060   pr #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
 52080   pr #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
-52100   pr #h_tmp: 'AppVersion='&fnacs_version$
+52100   pr #h_tmp: 'AppVersion='&env$('acsVersion')
 52120   close #h_tmp: 
 52140 fnend 
 54000 def fncs_env
@@ -647,3 +647,11 @@
 68000 def fn_startStatus(text$*128)
 68020   pr f str$(startStatusLine+=1)&',1,C': text$
 68040 fnend
+70000 def fn_acsVersion$
+70020   if ~setup then let fn_setup
+70040   open #hBuild:=fn_gethandle: 'name=S:\Core\Build.txt',d,i
+70060   linput #hBuild: build$
+70080   close #hBuild:
+70090    setenv('acsVersion','5.'&rtrm$(build$))
+70100   fn_acsVersion$=env$('acsVersion')
+70120 fnend 

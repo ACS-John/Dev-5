@@ -1,11 +1,11 @@
-10040   library 'S:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
+10040   library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
 10060   on error goto ERTN
 10100   dim txt$(1)*256
 10140   fntop(program$, cap$="About ACS")
 10160   c_has_count=fnclient_has_mat(mat c_has$)
 10180   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
 20000   txt_item=0
-20020   mat txt$(txt_item+=1) : txt$(txt_item)='ACS Version '&fnacs_version$
+20020   mat txt$(txt_item+=1) : txt$(txt_item)='ACS Version '&env$('acsVersion')
 20040   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Customized for '&env$('Client')
 20060   if env$('user_limit')='1' then 
 20080     mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&env$('user_limit')&' User Liscensed'

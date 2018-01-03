@@ -39,7 +39,6 @@
 11600     library 'S:\Core\Library': fnclear_menu
 11620     library 'S:\Core\Library': fndisplay_menu
 11640     library 'S:\Core\Library': fndecimal_assumed
-11660     library 'S:\Core\Library': fnacs_version$
 11680     library 'S:\Core\Library': fntotal_ar
 11700     library 'S:\Core\Library': fnindex_sys
 11720     library 'S:\Core\Library': fncheckfileversion
@@ -120,7 +119,7 @@
 16000 def fn_checkFileVersionIfNecessary
 16020   ! r: if necessary detect if this company needs any automatic conversions
 16040   fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
-16060   version_current$=fnacs_version$
+16060   version_current$=env$('acsVersion')
 16080   if company_last_version$<version_current$ then
 16100     fncheckfileversion
 16120     fncreg_write('last version used',version_current$)

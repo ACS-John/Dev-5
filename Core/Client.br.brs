@@ -16,8 +16,8 @@
 05000 !   end ! /r
 06000 !   !  it is now ...  !!!     pr program$&' is not intended to be run directly' : end 
 11000 ClientSelect: ! r:
-11020   fntop(program$)
-11040   fn_setup
+11020   fn_setup
+11040   fntop(program$)
 11060   fn_clientSelect
 11070 goto XIT ! /r
 11080 XIT: fnXit
@@ -229,6 +229,7 @@
 26810 !   fn_setup_client_add("Riverside",3725,18332)
 26820 !   fn_setup_client_add("Sangamon",3815,34066)
 26830     fn_setup_client_add("Scottville Rural",3840,33390)
+26832     fn_setup_client_add("Starr County Gas",4127,33390)
 26840     fn_setup_client_add("Thayer",4245,32800)
 26850     fn_setup_client_add("Thomasboro",4260,34068)
 26860     fn_setup_client_add("Unity",4380,34478)
@@ -407,8 +408,8 @@
 29494       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 29500     else if env$('client')='Payroll Done Right' then 
 29502       fn_user_limit(1)
-29504       if days(date)<=days(20171231,'ccyymmdd') then let fn_add_ch_sys('GL')
-29506       if days(date)<=days(20171231,'ccyymmdd') then let fn_add_ch_sys('PR')
+29504       fn_add_ch_sys('GL')
+29506       fn_add_ch_sys('PR')
 29520     else if env$('client')='Hope Welty' then 
 29530       fn_user_limit(1)
 29540       fn_add_ch_sys('GL')
@@ -495,6 +496,9 @@
 30340     else if env$('client')='Scottville Rural' then 
 30350       fn_user_limit(1)
 30360       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+30362     else if env$('client')='Starr County Gas' then 
+30364       fn_user_limit(1)
+30366       if days(date$)<=days('04/15/2018','mm/dd/ccyy') then let fn_add_ch_sys('UB') : fn_set_ub_limit(9999)
 30370     else if env$('client')='Thayer' then 
 30380       fn_user_limit(1)
 30390       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -928,22 +932,20 @@
 82300 fnend 
 97000 def library fnclient_is_converting
 97020   fn_setup
-97060   fnclient_is_converting=fn_client_is_converting
-97080 fnend 
-97100 def fn_client_is_converting
-97120   cic_return=0
-97140   if env$('ACSDeveloper')<>'' then
-97160     cic_return=1
-97220   else if env$('client')='Kathys Bookkeeping' or env$('client')='Halfway' or env$('client')='Campbell' then
-97240     cic_return=1
-97340   end if 
-97360   fn_client_is_converting=cic_return
-97380 fnend 
-98000 def library fnacs_version$
-98020   if ~setup then let fn_setup
-98040   open #hBuild:=fngethandle: 'name=S:\Core\Build.txt',d,i
-98060   linput #hBuild: build$
-98080   close #hBuild:
-98100   fnacs_version$='5.'&rtrm$(build$) ! '5.7211'
-98120 fnend 
-
+97040   fnclient_is_converting=fn_client_is_converting
+97060 fnend 
+97080 def fn_client_is_converting
+97100   cic_return=0
+97120   if env$('ACSDeveloper')<>'' then
+97140     cic_return=1
+97160   else if env$('client')='Starr County Gas'   and days(date$)<=days('02/15/2018','mm/dd/ccyy') then ! just testing
+97180     cic_return=1
+97200   else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('06/15/2018','mm/dd/ccyy')  then
+97220     cic_return=1
+97240   else if env$('client')='Halfway'            and days(date$)<=days('04/15/2018','mm/dd/ccyy')  then
+97260     cic_return=1
+97280   else if env$('client')='Campbell'           and days(date$)<=days('02/15/2018','mm/dd/ccyy')  then
+97300     cic_return=1
+97320   end if 
+97340   fn_client_is_converting=cic_return
+97360 fnend 

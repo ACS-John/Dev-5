@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\BalanceSheet
 00020 ! Balance Sheet - Standard 8.5x11
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd,fnactpd$,fnindex_it
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd,fnactpd$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00080   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
@@ -25,36 +25,33 @@
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
 00190 Screen1: ! r:
-00192   fnTos(sn$="GLInput") 
-00194   mylen=30: mypos=mylen+3 : right=1
+00192   fnTos(sn$="GLInput") !:
+        mylen=30: mypos=mylen+3 : right=1
 00200   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-00210   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
-00212   resp$(1)=""
+00210   fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+        resp$(1)=""
 00220   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 00230   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 00240   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
 00250   fnAcs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   costcntr=val(resp$(1)) 
-00272 goto GetStarted ! /r
-00280 GetStarted: !
-00282   if fnps=2 then 
-00284     ! secondary
-00286     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\fsindex.H"&env$('cno'),"66 3")
-00288   else
-00290     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\fsindex.H"&env$('cno'),"63 3")
-00292   end if
-00320   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00282 goto GetStarted ! /r
+00280 GetStarted: if fnps=2 then goto L310 ! secondary
+00290   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
+00300   goto L320
+00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
+00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00330   fnopenprn
 00340   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00350   report$="Balance Sheet"
-00360   READ_TOP: ! 
+00360 READ_TOP: ! 
 00370   read #1,using L380: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
-00380   L380: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
+00380 L380: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
 00390   if ltrm$(r$)="" or ltrm$(r$)="0" then goto READ_TOP
 00400   if costcntr=0 then goto L420
 00410   if costcntr><fc then goto READ_TOP
-00420   L420: if te$="S" or te$="F" then goto L440
+00420 L420: if te$="S" or te$="F" then goto L440
 00430   if heading=0 and te$><"R" then gosub HEADER
 00440 L440: on pos ("RFHDTSPE",te$,1) goto L970,L1010,L460,L520,L840,L970,L840,L520 none READ_TOP
 00450 ! ______________________________________________________________________
@@ -111,9 +108,9 @@
 00910   gosub UNDERLINE
 00920 L920: gosub FOOTER
 00930   if te$><"P" then goto L950
-00940   for j=1 to 9
-00942     accum(j)=accum(j)-accum(ap) 
-00944   next j
+00940   for j=1 to 9 !:
+          accum(j)=accum(j)-accum(ap) !:
+        next j
 00950 L950: goto READ_TOP
 00960 ! ______________________________________________________________________
 00970 L970: if te$="R" then report$=d$
