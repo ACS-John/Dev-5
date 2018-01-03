@@ -493,6 +493,9 @@
 54180   ce_br_temp_file$=env$('Q')&'\cs-'&session$&'.txt'
 54182   ce_retry_4152_count=0
 54190   CE_MAKE_TEMP_FILE: !
+54192   fnmakesurepathexists(ce_br_temp_file$)
+
+
 54200   execute '*sys -M set > "'&ce_os_temp_file$&'"'
 54220   open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_FNCS_ENV
 54240   do
