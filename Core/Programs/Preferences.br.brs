@@ -704,7 +704,7 @@
 87000 def fn_get_office_word(&office_word_exe$)
 87020   gow_which=0
 87040   office_word_exe$=fnMsExe$("winword.exe")
-87060   if office_word_exe$<>'Key not found' and exists(office_word_exe$) then
+87060   if office_word_exe$<>'Key not found' and exists(env$('at')&office_word_exe$) then
 87080     gow_which=1
 87100   end if
 87320   fn_get_office_word=gow_which

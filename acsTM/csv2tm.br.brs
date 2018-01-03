@@ -230,7 +230,7 @@
 51072     else if wo_client=client_id_brc then 
 51074       hr_return=60
 51080     else if wo_client=client_id_sage_ax then 
-51100       hr_return=fn_sage_hourly_rate(wo_sage_code$)
+51100       hr_return=fn_sage_hourly_rate(wo_sage_code$, the_date)
 51120     else if fn_onsupport(wo_client,wo_month,the_date) then 
 51140       if hr_category=6 then 
 51160         hr_return=0
@@ -260,13 +260,13 @@
 53300 OS_FINIS: ! 
 53320     fn_onsupport=os_return
 53340   fnend 
-54000   def fn_sage_hourly_rate(wo_sage_code$)
+54000   def fn_sage_hourly_rate(wo_sage_code$; the_date)
 54020     if lwrc$(wo_sage_code$)='glover' then 
-54040       shr_return=40
+54040       if the_date<20180101 then shr_return=40
 54060     else if lwrc$(wo_sage_code$)='pbj offsite' or lwrc$(wo_sage_code$)='acc offsite' or lwrc$(wo_sage_code$)='offsite' then 
-54120       shr_return=40
+54120       if the_date<20180101 then shr_return=40 else shr_return=45
 54140     else 
-54160       shr_return=48.5
+54160       if the_date<20180101 then shr_return=48.5 else shr_return=53.5
 54180     end if 
 54200     fn_sage_hourly_rate=shr_return
 54220   fnend 

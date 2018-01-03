@@ -193,8 +193,7 @@
 40080   cr_field_name$=rpad$(lwrc$(trim$(cr_field_name$)),128)
 40100   cr_tmpfield_value$=cr_field_value$=''
 40120   ! pr 'read #creg_h'
-40140   read #creg_h,using 'form pos 1,C 128,v 256',key=cr_field_name$,release: cr_key_compare$,cr_tmpfield_value$ ioerr CREG_LOAD_IOERR ! XXX
-40160   CREG_LOAD_IOERR: !
+40140   read #creg_h,using 'form pos 1,C 128,v 256',key=cr_field_name$,release: cr_key_compare$,cr_tmpfield_value$ ioerr ignore
 40180   if cr_key_compare$=cr_field_name$ then
 40200     cr_field_value$=rtrm$(cr_tmpfield_value$)
 40220   else
@@ -322,59 +321,4 @@
 86280 nex sysItem
 86290 fnhamsterfio('CO System Registry')
 86300 ! /r
-88000 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
-88020   if ~reg_setup then reg_setup=fn_reg_setup
-88040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
-88060   on error goto ERTN
-88080   dim prg$*256
-88100   if prgCapForSettingsOverride$='' then
-88120     prg$=env$('Program_Caption')
-88140   else
-88160     prg$=prgCapForSettingsOverride$
-88180   end if
-88200   len_prg=len(prg$)
-88220   ! if lwrc$(prg$(len_prg-2:len_prg))='.br' then prg$(len_prg-2:len_prg)='' ! remove the .br ending, if it is there
-88240   ! if lwrc$(trim$(prg$))=lwrc$("acspr\checkfile") then prg$="acspr\checkhistory"
-88260   if env$('ACSDeveloper')<>'' then !  if it is a developer
-88280     fn_sreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-88300   else
-88320     fn_reg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-88340     if value$='' then
-88360       fn_sreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-88380     end if
-88400   end if
-88420   if value$='' then
-88440     if lwrc$(key$)=lwrc$('Orientation' ) then value$= 'Portrait'
-88460     if lwrc$(key$)=lwrc$('Height'      ) then value$= '11.000'
-88480     if lwrc$(key$)=lwrc$('Width'       ) then value$= '8.500'
-88500     if lwrc$(key$)=lwrc$('Lines'       ) then value$= '54'
-88520     if lwrc$(key$)=lwrc$('FontSize'    ) then value$= '10'
-88540     if lwrc$(key$)=lwrc$('TopMargin'   ) then value$= '0.500'
-88560     if lwrc$(key$)=lwrc$('BottomMargin') then value$= '0.500'
-88580     if lwrc$(key$)=lwrc$('LeftMargin'  ) then value$= '0.500'
-88600     if lwrc$(key$)=lwrc$('RightMargin' ) then value$= '0.500'
-88640     if env$('ACSDeveloper')='' then ! if not a developer
-88660        fn_reg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-88680     end if
-88620   end if
-88700   ! pr 'read   "'&value$&'" from Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
-88720   ! pause
-88760 fnend
-90000 def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
-90020   if ~reg_setup then reg_setup=fn_reg_setup
-90040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
-90060   on error goto ERTN
-90080   dim prg$*256
-90100   if prgCapForSettingsOverride$='' then
-90120     prg$=env$('Program_Caption')
-90140   else
-90160     prg$=prgCapForSettingsOverride$
-90180   end if
-90200   if env$('ACSDeveloper')<>'' then
-90220     fn_sreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-90240   else
-90260     fn_reg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-90270     ! pr 'writting "'&value$&'" to Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
-90272     ! pause
-90280   end if
-90300 fnend
+

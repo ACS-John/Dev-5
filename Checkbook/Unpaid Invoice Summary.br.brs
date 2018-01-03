@@ -1,21 +1,19 @@
-00010 ! Replace S:\acsCL\UnPdInv2
+00010 ! formerly S:\acsCL\UnPdInv2
 00020 ! Unpaid Invoice Summary
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fntop,fnxit,fnwait
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fndat,fnerror,fntop,fnxit,fnwait
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim dat$*20,cnam$*40,vnam$*30,de$*31,gl(3),ade$*50,cap$*128,udf$*256
+00070   dim dat$*20,vnam$*30,de$*31,gl(3),ade$*50
 00080   dim gl$*12,gd$*50
 00090 ! ______________________________________________________________________
-00100   fntop(program$,cap$="Unpaid Invoice Summary")
-00110   fncno(cno,cnam$) !:
-        fndat(dat$)
+00100   fntop(program$)
+00110   fndat(dat$)
 00120   fnwait
-00130   udf$=env$('temp')&'\'
 00140   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\unpdidx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00150   open #glmstr=7: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,input,keyed 
 00160   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
-00170   open #work=9: "Name="&udf$&"WORK.tmp,KFName="&udf$&"ADDR.tmp,KPS=1,KLN=12,RecL=68,Replace",internal,outIn,keyed 
+00170   open #work=9: "Name="&env$('temp')&'\work.tmp,KFName='&env$('temp')&'\addr.tmp,KPS=1,KLN=12,RecL=68,Replace',internal,outIn,keyed 
 00180   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
 00190   gosub HDR
 00200 READ_PAYTRANS: ! 
@@ -44,7 +42,7 @@
 00400 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00410 HDR: ! 
 00420   fnopenprn
-00430   pr #255,using 'FORM POS 1,C 8,CC 86': date$,cnam$
+00430   pr #255,using 'FORM POS 1,C 8,CC 86': date$,env$('cnam')
 00440   pr #255,using 'FORM POS 1,C 8,POS 40,C 40': time$,"Unpaid Invoice Summary"
 00450   pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg+=1,dat$
 00460   pr #255: "Payee Name                      Description                    Ck-Amount  GL-Amount    GL-Number"

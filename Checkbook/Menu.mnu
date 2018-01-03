@@ -6,8 +6,8 @@ Transaction                               ^ Checkbook\Transaction
 >Endorse Checks                           ^ acsCL\endorsment
 Unpaid Invoice                            ^ Checkbook\Unpaid Invoice
 >Print Selected Invoice Listing           ^ acsCL\PrintSelectInvoice
->Unpaid Invoice Listing (Current)         ^ acsCL\UnPdInv
->Unpaid Invoice Summary                   ^ acsCL\UnPdInv2
+>Unpaid Invoice Listing (Current)         ^ Checkbook\Unpaid Invoice Listing (Current)
+>Unpaid Invoice Summary                   ^ Checkbook\Unpaid Invoice Summary
 >Report of Invoices Due by Selected Dates ^ acsCL\DueBy
 Paid Invoice                              ^ acsCL\PaidInvoice
 >Remove Paid Invoices                     ^ acsCL\RemovePaidInvoices

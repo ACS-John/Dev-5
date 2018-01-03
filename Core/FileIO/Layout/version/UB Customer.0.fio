@@ -1,9 +1,9 @@
-[Q]\UBmstr\Customer.h[cno]  ,  customer_  , 0pro
-[Q]\UBmstr\ubIndex.h[cno] ,  account
-[Q]\UBmstr\ubIndx2.h[cno] ,  alphaSort
-[Q]\UBmstr\ubIndx3.h[cno] ,  meterAddress
-[Q]\UBmstr\ubIndx4.h[cno] ,  name
-[Q]\UBmstr\ubIndx5.h[cno] ,  route/sequence 
+[Q]\UBmstr\oCustomer.h[cno], ocustomer_, 0
+[Q]\UBmstr\oubIndex.h[cno] ,  account
+[Q]\UBmstr\oubIndx2.h[cno] ,  alphaSort
+[Q]\UBmstr\oubIndx3.h[cno] ,  meterAddress
+[Q]\UBmstr\oubIndx4.h[cno] ,  name
+[Q]\UBmstr\oubIndx5.h[cno] ,  route/sequence
 recl=2067
 ===================================================
 ! meterAddress Index needs to be (CaseIgnored) - manually handled outside fileio for now.
@@ -21,73 +21,73 @@ s04rate           ,  Service 4 (Gas) – Rate Code                             ,  
 s05rate           ,  Service 5 – Rate Code                                   ,  PD    2    , ! SPos= 151 EPos=152   aka=a(5)
 s09rate           ,  Service 9 (Sales Tax) – Rate Code                       ,  PD    2    , ! SPos= 153 EPos=154   aka=a(6)
 s10rate           ,  Service 10 (Penalty) – Rate Code                        ,  PD    2    , ! SPos= 155 EPos=156   aka=a(7)
-s01stdCharge      ,    Service 1 Standard Charge                             ,  PD    4.2  , ! SPos= 157 EPos=160   aka=b01 
-s02stdCharge      ,    Service 2 Standard Charge                             ,  PD    4.2  , ! SPos= 161 EPos=164   aka=b02 
-s03stdCharge      ,    Service 3 Standard Charge                             ,  PD    4.2  , ! SPos= 165 EPos=168   aka=b03 
-s04stdCharge      ,    Service 4 (Gas) – Standard Charge                     ,  PD    4.2  , ! SPos= 169 EPos=172   aka=b04 
-s05stdCharge      ,    Service 5 Standard Charge                             ,  PD    4.2  , ! SPos= 173 EPos=176   aka=b05 
-s06stdCharge      ,    Service 6 Standard Charge                             ,  PD    4.2  , ! SPos= 177 EPos=180   aka=b06 
-s07stdCharge      ,    Service 7 Standard Charge                             ,  PD    4.2  , ! SPos= 181 EPos=184   aka=b07 
-s01depositAmt     ,    Service 1 Deposit                                     ,  PD    4.2  , ! SPos= 185 EPos=188   aka=b08 
-s02depositAmt     ,    Service 2 Deposit                                     ,  PD    4.2  , ! SPos= 189 EPos=192   aka=b09 
-s03depositAmt     ,    Service 3 Deposit                                     ,  PD    4.2  , ! SPos= 193 EPos=196   aka=b10 
-s04depositAmt     ,    Service 4 Deposit                                     ,  PD    4.2  , ! SPos= 197 EPos=200   aka=b11 
-s01depositDate    ,  Service 1 Deposit Date                                  ,  PD    4    , ! SPos= 201 EPos=204   aka=c1  
-s02depositDate    ,  Service 2 Deposit Date                                  ,  PD    4    , ! SPos= 205 EPos=208   aka=c2  
-s03depositDate    ,  Service 3 Deposit Date                                  ,  PD    4    , ! SPos= 209 EPos=212   aka=c3  
-s04depositDate    ,  Service 4 (Gas) – Deposit Date                          ,  PD    4    , ! SPos= 213 EPos=216   aka=c4  
-s01readingCur     ,  Service 1 (Water) – Reading – Current                   ,  PD    5    , ! SPos= 217 EPos=221   aka=d01 
-s01readingPri     ,  Service 1 (Water) – Reading – Prior                     ,  PD    5    , ! SPos= 222 EPos=226   aka=d02 
-s01UsageCur       ,  Service 1 (Water) – Usage – Current                     ,  PD    5    , ! SPos= 227 EPos=231   aka=d03 
-s01UsageYtd       ,  Service 1 (Water) – Usage – YTD                         ,  PD    5    , ! SPos= 232 EPos=236   aka=d04 
-s03readingCur     ,  Service 3 (Electric) – Reading – Current                ,  PD    5    , ! SPos= 237 EPos=241   aka=d05 
-s03ReadingPri     ,  Service 3 (Electric) – Reading – Prior                  ,  PD    5    , ! SPos= 242 EPos=246   aka=d06 
-s03UsageCur       ,  Service 3 (Electric) – Usage – Current                  ,  PD    5    , ! SPos= 247 EPos=251   aka=d07 
-s03UsageYtd       ,  Service 3 (Electric) – Usage – YTD                      ,  PD    5    , ! SPos= 252 EPos=256   aka=d08 
-s04readingCur     ,  Service 4 (Gas) – Reading - Current                     ,  PD    5    , ! SPos= 257 EPos=261   aka=d09 
-s04readingPri     ,  Service 4 (Gas) – Reading - Prior                       ,  PD    5    , ! SPos= 262 EPos=266   aka=d10 
-s04usageCur       ,  Service 4 (Gas) – Usage – Current                       ,  PD    5    , ! SPos= 267 EPos=271   aka=d11 
-s04usageYtd       ,  Service 4 (Gas) – Usage – YTD                           ,  PD    5    , ! SPos= 272 EPos=276   aka=d12 
-d13               ,  Service 1 (Water) – Unit Count                          ,  PD    5    , ! SPos= 277 EPos=281   aka=d13 
-demandMultiplier  ,  Demand Multiplier                                       ,  PD    5    , ! SPos= 282 EPos=286   aka=d14 
-demandReading     ,  Demand Reading                                          ,  PD    5    , ! SPos= 287 EPos=291   aka=d15 
-balance           ,    Current Balance                                       ,  PD    4.2  , ! SPos= 292 EPos=295   aka=bal 
-lastBillingDate   ,    Last Billing Date                                     ,  PD    4    , ! SPos= 296 EPos=299   aka=f   
-s01bill           ,    Service 1 Charge                                      ,  PD    4.2  , ! SPos= 300 EPos=303   aka=g01 
-s02bill           ,    Service 2 Charge                                      ,  PD    4.2  , ! SPos= 304 EPos=307   aka=g02 
-s03bill           ,    Current Bill – Service 3 (Electric)                   ,  PD    4.2  , ! SPos= 308 EPos=311   aka=g03 
-s04bill           ,    Current Bill – Service 4 (Gas)                        ,  PD    4.2  , ! SPos= 312 EPos=315   aka=g04 
-s05bill           ,    Service 5 Charge                                      ,  PD    4.2  , ! SPos= 316 EPos=319   aka=g05 
-s06bill           ,    Service 6 Charge                                      ,  PD    4.2  , ! SPos= 320 EPos=323   aka=g06 
-s07bill           ,    Service 7 Charge                                      ,  PD    4.2  , ! SPos= 324 EPos=327   aka=g07 
-s08bill           ,    Service 8 Charge                                      ,  PD    4.2  , ! SPos= 328 EPos=331   aka=g08 
-s09bill           ,    Service 9 Charge                                      ,  PD    4.2  , ! SPos= 332 EPos=335   aka=g09 
-s10bill           ,    Current Bill – Service 10? (Penalty)                  ,  PD    4.2  , ! SPos= 336 EPos=339   aka=g10 
-netBill           ,    Current Bill – Net Bill                               ,  PD    4.2  , ! SPos= 340 EPos=343   aka=g11 
-grossBill         ,    Current Bill – Gross Bill                             ,  PD    4.2  , ! SPos= 344 EPos=347   aka=g12 
+s01stdCharge      ,    Service 1 Standard Charge                             ,  PD    4.2  , ! SPos= 157 EPos=160   aka=b01
+s02stdCharge      ,    Service 2 Standard Charge                             ,  PD    4.2  , ! SPos= 161 EPos=164   aka=b02
+s03stdCharge      ,    Service 3 Standard Charge                             ,  PD    4.2  , ! SPos= 165 EPos=168   aka=b03
+s04stdCharge      ,    Service 4 (Gas) – Standard Charge                     ,  PD    4.2  , ! SPos= 169 EPos=172   aka=b04
+s05stdCharge      ,    Service 5 Standard Charge                             ,  PD    4.2  , ! SPos= 173 EPos=176   aka=b05
+s06stdCharge      ,    Service 6 Standard Charge                             ,  PD    4.2  , ! SPos= 177 EPos=180   aka=b06
+s07stdCharge      ,    Service 7 Standard Charge                             ,  PD    4.2  , ! SPos= 181 EPos=184   aka=b07
+s01depositAmt     ,    Service 1 Deposit                                     ,  PD    4.2  , ! SPos= 185 EPos=188   aka=b08
+s02depositAmt     ,    Service 2 Deposit                                     ,  PD    4.2  , ! SPos= 189 EPos=192   aka=b09
+s03depositAmt     ,    Service 3 Deposit                                     ,  PD    4.2  , ! SPos= 193 EPos=196   aka=b10
+s04depositAmt     ,    Service 4 Deposit                                     ,  PD    4.2  , ! SPos= 197 EPos=200   aka=b11
+s01depositDate    ,  Service 1 Deposit Date                                  ,  PD    4    , ! SPos= 201 EPos=204   aka=c1
+s02depositDate    ,  Service 2 Deposit Date                                  ,  PD    4    , ! SPos= 205 EPos=208   aka=c2
+s03depositDate    ,  Service 3 Deposit Date                                  ,  PD    4    , ! SPos= 209 EPos=212   aka=c3
+s04depositDate    ,  Service 4 (Gas) – Deposit Date                          ,  PD    4    , ! SPos= 213 EPos=216   aka=c4
+s01readingCur     ,  Service 1 (Water) – Reading – Current                   ,  PD    5    , ! SPos= 217 EPos=221   aka=d01
+s01readingPri     ,  Service 1 (Water) – Reading – Prior                     ,  PD    5    , ! SPos= 222 EPos=226   aka=d02
+s01UsageCur       ,  Service 1 (Water) – Usage – Current                     ,  PD    5    , ! SPos= 227 EPos=231   aka=d03
+s01UsageYtd       ,  Service 1 (Water) – Usage – YTD                         ,  PD    5    , ! SPos= 232 EPos=236   aka=d04
+s03readingCur     ,  Service 3 (Electric) – Reading – Current                ,  PD    5    , ! SPos= 237 EPos=241   aka=d05
+s03ReadingPri     ,  Service 3 (Electric) – Reading – Prior                  ,  PD    5    , ! SPos= 242 EPos=246   aka=d06
+s03UsageCur       ,  Service 3 (Electric) – Usage – Current                  ,  PD    5    , ! SPos= 247 EPos=251   aka=d07
+s03UsageYtd       ,  Service 3 (Electric) – Usage – YTD                      ,  PD    5    , ! SPos= 252 EPos=256   aka=d08
+s04readingCur     ,  Service 4 (Gas) – Reading - Current                     ,  PD    5    , ! SPos= 257 EPos=261   aka=d09
+s04readingPri     ,  Service 4 (Gas) – Reading - Prior                       ,  PD    5    , ! SPos= 262 EPos=266   aka=d10
+s04usageCur       ,  Service 4 (Gas) – Usage – Current                       ,  PD    5    , ! SPos= 267 EPos=271   aka=d11
+s04usageYtd       ,  Service 4 (Gas) – Usage – YTD                           ,  PD    5    , ! SPos= 272 EPos=276   aka=d12
+d13               ,  Service 1 (Water) – Unit Count                          ,  PD    5    , ! SPos= 277 EPos=281   aka=d13
+demandMultiplier  ,  Demand Multiplier                                       ,  PD    5    , ! SPos= 282 EPos=286   aka=d14
+demandReading     ,  Demand Reading                                          ,  PD    5    , ! SPos= 287 EPos=291   aka=d15
+balance           ,    Current Balance                                       ,  PD    4.2  , ! SPos= 292 EPos=295   aka=bal
+lastBillingDate   ,    Last Billing Date                                     ,  PD    4    , ! SPos= 296 EPos=299   aka=f
+s01bill           ,    Service 1 Charge                                      ,  PD    4.2  , ! SPos= 300 EPos=303   aka=g01
+s02bill           ,    Service 2 Charge                                      ,  PD    4.2  , ! SPos= 304 EPos=307   aka=g02
+s03bill           ,    Current Bill – Service 3 (Electric)                   ,  PD    4.2  , ! SPos= 308 EPos=311   aka=g03
+s04bill           ,    Current Bill – Service 4 (Gas)                        ,  PD    4.2  , ! SPos= 312 EPos=315   aka=g04
+s05bill           ,    Service 5 Charge                                      ,  PD    4.2  , ! SPos= 316 EPos=319   aka=g05
+s06bill           ,    Service 6 Charge                                      ,  PD    4.2  , ! SPos= 320 EPos=323   aka=g06
+s07bill           ,    Service 7 Charge                                      ,  PD    4.2  , ! SPos= 324 EPos=327   aka=g07
+s08bill           ,    Service 8 Charge                                      ,  PD    4.2  , ! SPos= 328 EPos=331   aka=g08
+s09bill           ,    Service 9 Charge                                      ,  PD    4.2  , ! SPos= 332 EPos=335   aka=g09
+s10bill           ,    Current Bill – Service 10? (Penalty)                  ,  PD    4.2  , ! SPos= 336 EPos=339   aka=g10
+netBill           ,    Current Bill – Net Bill                               ,  PD    4.2  , ! SPos= 340 EPos=343   aka=g11
+grossBill         ,    Current Bill – Gross Bill                             ,  PD    4.2  , ! SPos= 344 EPos=347   aka=g12
 adr1              ,  (unused) 1                                              ,  PD    3    , ! SPos= 348 EPos=350   aka=adr1
 adr2              ,  (unused) 2                                              ,  PD    3    , ! SPos= 351 EPos=353   aka=adr2
 alphaSort$        , Alpha Sort Field                                         ,  C     7    , ! SPos=354  EPos=360   aka=alp$
 s03meterNumber$   ,  Service 3 (Electric) - Meter Number                     ,  C    12    , ! SPos= 361 EPos=372   aka=f2$
 s04meterNumber$   ,  Service 4 (Gas) – Meter Number                          ,  C    12    , ! SPos= 373 EPos=384   aka=f3$
 bra               ,  (unused) 3                                              ,  pd    3    , ! SPos= 385 EPos=387   aka=bra  (used to be alternate billing address – now that's extra(22))
-s01breakdown      ,    Service 1 Breakdown                                   ,  PD    5.2  , ! SPos= 388 EPos=392    aka=gb01  
-s02breakdown      ,    Service 2 Breakdown                                   ,  PD    5.2  , ! SPos= 393 EPos=397    aka=gb02  
-s03breakdown      ,    Service 3 Breakdown                                   ,  PD    5.2  , ! SPos= 398 EPos=402    aka=gb03  
-s04breakdown      ,    Service 4 Breakdown                                   ,  PD    5.2  , ! SPos= 403 EPos=407    aka=gb04  
-s05breakdown      ,    Service 5 Breakdown                                   ,  PD    5.2  , ! SPos= 408 EPos=412    aka=gb05  
-s06breakdown      ,    Service 6 Breakdown                                   ,  PD    5.2  , ! SPos= 413 EPos=417    aka=gb06  
-s07breakdown      ,    Service 7 Breakdown                                   ,  PD    5.2  , ! SPos= 418 EPos=422    aka=gb07  
-s08breakdown      ,    Service 8 Breakdown                                   ,  PD    5.2  , ! SPos= 423 EPos=427    aka=gb08  
-s09breakdown      ,    Service 9 Breakdown                                   ,  PD    5.2  , ! SPos= 428 EPos=432    aka=gb09  
-s10breakdown      ,    Service 10 Breakdown                                  ,  PD    5.2  , ! SPos= 433 EPos=437    aka=gb10  
+s01breakdown      ,    Service 1 Breakdown                                   ,  PD    5.2  , ! SPos= 388 EPos=392    aka=gb01
+s02breakdown      ,    Service 2 Breakdown                                   ,  PD    5.2  , ! SPos= 393 EPos=397    aka=gb02
+s03breakdown      ,    Service 3 Breakdown                                   ,  PD    5.2  , ! SPos= 398 EPos=402    aka=gb03
+s04breakdown      ,    Service 4 Breakdown                                   ,  PD    5.2  , ! SPos= 403 EPos=407    aka=gb04
+s05breakdown      ,    Service 5 Breakdown                                   ,  PD    5.2  , ! SPos= 408 EPos=412    aka=gb05
+s06breakdown      ,    Service 6 Breakdown                                   ,  PD    5.2  , ! SPos= 413 EPos=417    aka=gb06
+s07breakdown      ,    Service 7 Breakdown                                   ,  PD    5.2  , ! SPos= 418 EPos=422    aka=gb07
+s08breakdown      ,    Service 8 Breakdown                                   ,  PD    5.2  , ! SPos= 423 EPos=427    aka=gb08
+s09breakdown      ,    Service 9 Breakdown                                   ,  PD    5.2  , ! SPos= 428 EPos=432    aka=gb09
+s10breakdown      ,    Service 10 Breakdown                                  ,  PD    5.2  , ! SPos= 433 EPos=437    aka=gb10
 unused04a$        ,    old mat rw4 part 1                                    ,  C   174    , ! SPos= 438 EPos=1711   aka=mat rw4(?,?)
-unused04b$        ,    old mat rw4 part 2                                    ,  C   200    , ! 
-unused04c$        ,    old mat rw4 part 3                                    ,  C   200    , ! 
-unused04d$        ,    old mat rw4 part 4                                    ,  C   200    , ! 
-unused04e$        ,    old mat rw4 part 5                                    ,  C   200    , ! 
-unused04f$        ,    old mat rw4 part 6                                    ,  C   200    , ! 
-unused04g$        ,    old mat rw4 part 7                                    ,  C   100    , ! 
+unused04b$        ,    old mat rw4 part 2                                    ,  C   200    , !
+unused04c$        ,    old mat rw4 part 3                                    ,  C   200    , !
+unused04d$        ,    old mat rw4 part 4                                    ,  C   200    , !
+unused04e$        ,    old mat rw4 part 5                                    ,  C   200    , !
+unused04f$        ,    old mat rw4 part 6                                    ,  C   200    , !
+unused04g$        ,    old mat rw4 part 7                                    ,  C   100    , !
 bankDraft$        ,   Bank Draft (Y)                                         ,  C     1    , ! SPos=1712 EPos=1712   aka=df$  comboA(ignore,Y,N)
 bankRoutingNumber$,   Bank Routing Number                                    ,  C     9    , ! SPos=1713 EPos=1721   aka=dr$
 bankAccountCode$  ,   Bank Account Code                                      ,  C     2    , ! SPos=1722 EPos=1723   aka=dc$  comboA(ignore,27=Checking 37=Savings)

@@ -18,7 +18,6 @@
 08220     library 'S:\Core\Library': fngetdir2
 08240     library 'S:\Core\Library': fnGetPp
 08260     library 'S:\Core\Library': fncreg_write
-08280     library 'S:\Core\Library': fnprogram_ini_filename$
 08300     library 'S:\Core\Library': fnAddOneC
 08320     library 'S:\Core\Library': fnkey_change
 08340     library 'S:\Core\Library': fnSystemName$
@@ -30,6 +29,7 @@
 08440     dim form$(0)*512
 08460   end if
 08480 fnend
+
 10240 def library fncheckfileversion
 10260   ! Checks the File versions and calls conversion programs if necessary
 10280   ! This Fn is called from S:\Core\Program\Select Company.br and S:\Core\Company Import
@@ -1083,8 +1083,8 @@
 80610     dim imbrTo$*256
 80620     imBrFrom$='S:\'&imProgramOld$(imItem)&'.br'
 80630     imBrTo$  ='S:\'&imProgramNew$(imItem)&'.br'
-80640     imIniFrom$=fnprogram_ini_filename$(imProgramOld$(imItem), 1)
-80650     imIniTo$  =fnprogram_ini_filename$(imProgramNew$(imItem), 1)
+80640     imIniFrom$=fn_program_ini_filename$(imProgramOld$(imItem), 1)
+80650     imIniTo$  =fn_program_ini_filename$(imProgramNew$(imItem), 1)
 80660        ! if pos(lwrc$(imBrFrom$),'acglbalc')>0 then pause
 80670 ! if pos(lwrc$(imIniFrom$),'ubipcoll')>0 and env$('acsdeveloper')<>'' then pause
 80680     if ~(imIniFrom$='S:\Core\Default\Program.ini' or imIniTo$='S:\Core\Default\Program.ini') then
@@ -1160,3 +1160,13 @@
 89200   end if
 89220 fnend
 89240 ! </updateable region: fnopen>
+90000 def fn_program_ini_filename$*256(pif_program$*256; doNotCreate)
+90020   dim pif_return$*256
+90040   pif_return$=''
+90060   pif_program$=trim$(pif_program$)
+90080     posDotBr=pos(pif_program$,'.br')
+90100     if posDotBr>0 then pif_program$(posDotBr:posDotBr+2)=''
+90120   pif_return$=env$('Q')&'\INI\'&pif_program$&'.ini'
+90140   ! if env$('ACSDeveloper')<>'' then pr 'fn_program_ini_filename$ > pif_return$="'&pif_return$&'"' : pause
+90160   fn_program_ini_filename$=pif_return$ ! pr pif_return$ : pause
+90180 fnend 
