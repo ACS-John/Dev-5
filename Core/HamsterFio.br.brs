@@ -26,7 +26,7 @@
 24060   past_header=0
 24080   hfItem=0
 24100   mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask(0) : mat hfFieldLen(0) 
-24112   dim comboBox$(0,8)*256 ! comboBox$(60,64)*256
+24112   dim comboBox$(0,9)*256 ! comboBox$(0,8)*256<-worked most of the time.    comboBox$(60,64)*256
 24114   mat comboBox$(0,udim(mat comboBox$,2)) ! mat comboBox$=('') ! 
 24120   do
 24140     linput #hLay: line$ 

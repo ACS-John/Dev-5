@@ -7,8 +7,8 @@ DNO                ,    Department Number                      ,  N  3       , !
 ANO                ,    Major Account Number                   ,  N  6       , !  Pos=4        ANO        ^Major
 SNO                ,    Sub Account Number                     ,  N  3       , !  Pos=10       SNO        ^Sub
 Description$       ,    Description                            ,  C  50      , !  Pos=13        D$        ^Desc
-RefBalSheet1       ,    Balance Sheet Ref Number               ,  PD 3       , !  Pos=63        RF(1)     ^BalShtRf1
-RefBalSheet2       ,    Secondary Balance Sheet Ref Number     ,  PD 3       , !  Pos=66        RF(2)     ^BalShtRf2
+RefBalSheet1       ,    Balance Sheet Ref Number               ,  PD 3       , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\Fnsbindx.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
+RefBalSheet2       ,    Secondary Balance Sheet Ref Number     ,  PD 3       , !  Pos=66        RF(2)     ^BalShtRf2     combof(ok,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\Fnscindx.h[cno],0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
 RefIncome1         ,    Income Statement Ref Number            ,  PD 3       , !  Pos=69        RF(3)     ^IncStmtRf1
 RefIncome2         ,    Secondary Income Statement Ref Number  ,  PD 3       , !  Pos=72        RF(4)     ^IncStmtRf2
 RefFund1           ,    Fund Statement Ref Number              ,  PD 3       , !  Pos=75        RF(5)     ^FundStmtRf1

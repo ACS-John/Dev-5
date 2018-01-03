@@ -1090,7 +1090,7 @@
 45700   end if ! /r
 45720   fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
 45740   fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
-45760 ! fn_record_addc(9,,fn_meterInfo$('reading multipler',z$,'WA'))                       ! Meter Size
+45760 ! fn_record_addc(9,,fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
 45780   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
 45800   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
 45820   fn_record_write(h_out)
@@ -1117,7 +1117,7 @@
 46172   ! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
 46180   fn_record_addc(17,fn_meterInfo$('latitude',z$,'WA'))           ! Meter.Latitude
 46190   fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))         ! Meter Model/Type
-46200   tmp$=fn_meterInfo$('reading multipler',z$,'WA') : if tmp$='' then tmp$='1'
+46200   tmp$=fn_meterInfo$('reading multiplier',z$,'WA') : if tmp$='' then tmp$='1'
 46210   fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
 46220   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
 46230   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
@@ -1354,7 +1354,7 @@
 70450       mat mt_data$=("")
 70460       read #mi_h_metertype,using F_METER_TYPE,key=rpad$(trim$(mt_key$),kln(mi_h_metertype)): mat mt_data$ nokey MI_FINIS
 70470     end if  ! z$<>mi_z_prior$
-70480     if mi_field$='reading multipler' then
+70480     if mi_field$='reading multipler' or mi_field$='reading multiplier' then
 70490       mi_return$=rtrm$(mt_data$(3))
 70500     else if mi_field$='number of dials' then
 70510       mi_return$=rtrm$(mt_data$(4))
