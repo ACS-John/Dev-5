@@ -41,7 +41,7 @@
 50120 !     fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 50140     fnH2AddText("Code",5)
 50160     fnH2AddText("Description",40)
-50180     fnH2AddText("Reading Multipler",9,'C',0,22) ! 22=unlimited decimals, no commas
+50180     fnH2AddText("Reading multiplier",9,'C',0,22) ! 22=unlimited decimals, no commas
 50200     fnH2AddText("Number of Dials",2,'N',0,mask_number) ! 30 (mask_number) =no decimals, no commas
 50220     fnH2AddText("Read Type",2,'N',0,mask_number)
 50240   fnend 

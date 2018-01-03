@@ -1,6 +1,7 @@
 General Ledger ^ ACS General Ledger
 General Ledger - Programmer
 >Hamsters
+>glMstr                                     ^ HamsterFio:glMstr
 >>Year ^ acsGL\year
 >>Vendor ^ acsGL\Vendor
 >>GLMaster ^ acsGL\glmstr_hamster

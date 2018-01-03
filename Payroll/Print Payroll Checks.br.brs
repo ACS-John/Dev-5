@@ -184,9 +184,7 @@
 11240   if cl_installed then 
 11244     fnLbl(17,1,"Checkbook detected.",38,1)
 11248   end if 
-11256   if env$('acsDeveloper')<>'' then 
-11260     fncmdkey('Test Check Format',ck_TestCheck:=21)
-11264   end if
+11260   fncmdkey('Test Check Format',ck_TestCheck:=21)
 11265   fnCmdSet(2) ! need button to show totals
 11268   fnAcs(sn$,0,mat resp$,ck)
 11272   if ck=5 then goto XIT ! /r
@@ -747,7 +745,14 @@
 34120   else if env$('client')="Billings" then 
 34125     fn_check_billings
 34130   else if env$('client')="Campbell" then 
-34135     fn_check_dynamic(26,13,13,9,15, 58,69)
+          length                 =26
+          line_date              =13
+          line_amount            =13
+          line_amount_english    =9
+          line_amount_english    =15
+          line_name_and_address  =58
+          pos_date               =69
+34135     fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date)
 34140   else if env$('client')="Carr Plumbing" then ! r:
 34145     length                = 26
 34150     line_date             =  4
