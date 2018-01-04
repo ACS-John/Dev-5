@@ -3,60 +3,58 @@
 [Q]\GLmstr\GLIndx2.H[cno] ,  Description$
 recl=416
 ===================================================
-DNO                ,    Department Number                      ,  N  3       , !  Pos=1        DNO        ^Dept
-ANO                ,    Major Account Number                   ,  N  6       , !  Pos=4        ANO        ^Major
-SNO                ,    Sub Account Number                     ,  N  3       , !  Pos=10       SNO        ^Sub
-Description$       ,    Description                            ,  C  50      , !  Pos=13        D$        ^Desc
-RefBalSheet1       ,    Balance Sheet Ref Number               ,  PD 3       , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\Fnsbindx.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
-RefBalSheet2       ,    Secondary Balance Sheet Ref Number     ,  PD 3       , !  Pos=66        RF(2)     ^BalShtRf2     combof(ok,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\Fnscindx.h[cno],0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
-RefIncome1         ,    Income Statement Ref Number            ,  PD 3       , !  Pos=69        RF(3)     ^IncStmtRf1
-RefIncome2         ,    Secondary Income Statement Ref Number  ,  PD 3       , !  Pos=72        RF(4)     ^IncStmtRf2
-RefFund1           ,    Fund Statement Ref Number              ,  PD 3       , !  Pos=75        RF(5)     ^FundStmtRf1
-RefFund2           ,    Secondary Fund Statement Ref Number    ,  PD 3       , !  Pos=78        RF(6)     ^FundStmtRf2
-BalanceBeginning   ,    Beginning Account Balance              ,  PD 6.2     , !  Pos=81        BB        ^AccBal-Begin
-BalanceCurrent     ,    Current Account Balance                ,  PD 6.2     , !  Pos=87        CB        ^Bal
-BalMthEndCrYrPer01 ,    Balance Current Year-Period 1           ,  PD 6.2     , !  Pos=93        BC(01)    ^Bal-CY-M1
-BalMthEndCrYrPer02 ,    Balance Current Year-Period 2           ,  PD 6.2     , !  Pos=99        BC(02)    ^Bal-CY-M2
-BalMthEndCrYrPer03 ,    Balance Current Year-Period 3           ,  PD 6.2     , !  Pos=105       BC(03)    ^Bal-CY-M3
-BalMthEndCrYrPer04 ,    Balance Current Year-Period 4           ,  PD 6.2     , !  Pos=111       BC(04)    ^Bal-CY-M4
-BalMthEndCrYrPer05 ,    Balance Current Year-Period 5           ,  PD 6.2     , !  Pos=117       BC(05)    ^Bal-CY-M5
-BalMthEndCrYrPer06 ,    Balance Current Year-Period 6           ,  PD 6.2     , !  Pos=123       BC(06)    ^Bal-CY-M6
-BalMthEndCrYrPer07 ,    Balance Current Year-Period 7           ,  PD 6.2     , !  Pos=129       BC(07)    ^Bal-CY-M7
-BalMthEndCrYrPer08 ,    Balance Current Year-Period 8           ,  PD 6.2     , !  Pos=135       BC(08)    ^Bal-CY-M8
-BalMthEndCrYrPer09 ,    Balance Current Year-Period 9           ,  PD 6.2     , !  Pos=141       BC(09)    ^Bal-CY-M9
-BalMthEndCrYrPer10 ,    Balance Current Year-Period 10          ,  PD 6.2     , !  Pos=147       BC(10)    ^Bal-CY-M10
-BalMthEndCrYrPer11 ,    Balance Current Year-Period 11          ,  PD 6.2     , !  Pos=153       BC(11)    ^Bal-CY-M11
-BalMthEndCrYrPer12 ,    Balance Current Year-Period 12          ,  PD 6.2     , !  Pos=159       BC(12)    ^Bal-CY-M12
-BalMthEndCrYrPer13 ,    Balance Current Year-Period 13          ,  PD 6.2     , !  Pos=165       BC(13)    ^Bal-CY-M13
-BalMthEndPrYrPer01 ,    Balance Prior Year-Period 1             ,  PD 6.2     , !  Pos=171       BP(01)    ^Bal-PY-M1
-BalMthEndPrYrPer02 ,    Balance Prior Year-Period 2             ,  PD 6.2     , !  Pos=177       BP(02)    ^Bal-PY-M2
-BalMthEndPrYrPer03 ,    Balance Prior Year-Period 3             ,  PD 6.2     , !  Pos=183       BP(03)    ^Bal-PY-M3
-BalMthEndPrYrPer04 ,    Balance Prior Year-Period 4             ,  PD 6.2     , !  Pos=189       BP(04)    ^Bal-PY-M4
-BalMthEndPrYrPer05 ,    Balance Prior Year-Period 5             ,  PD 6.2     , !  Pos=195       BP(05)    ^Bal-PY-M5
-BalMthEndPrYrPer06 ,    Balance Prior Year-Period 6             ,  PD 6.2     , !  Pos=201       BP(06)    ^Bal-PY-M6
-BalMthEndPrYrPer07 ,    Balance Prior Year-Period 7             ,  PD 6.2     , !  Pos=207       BP(07)    ^Bal-PY-M7
-BalMthEndPrYrPer08 ,    Balance Prior Year-Period 8             ,  PD 6.2     , !  Pos=213       BP(08)    ^Bal-PY-M8
-BalMthEndPrYrPer09 ,    Balance Prior Year-Period 9             ,  PD 6.2     , !  Pos=219       BP(09)    ^Bal-PY-M9
-BalMthEndPrYrPer10 ,    Balance Prior Year-Period 10            ,  PD 6.2     , !  Pos=225       BP(10)    ^Bal-PY-M10
-BalMthEndPrYrPer11 ,    Balance Prior Year-Period 11            ,  PD 6.2     , !  Pos=231       BP(11)    ^Bal-PY-M11
-BalMthEndPrYrPer12 ,    Balance Prior Year-Period 12            ,  PD 6.2     , !  Pos=237       BP(12)    ^Bal-PY-M12
-BalMthEndPrYrPer13 ,    Balance Prior Year-Period 13            ,  PD 6.2     , !  Pos=243       BP(13)    ^Bal-PY-M13
-BudgetPeriod01     ,    Budget - Month 1                       ,  PD 6.2     , !  Pos=249       BM(01)    ^Budget-M1
-BudgetPeriod02     ,    Budget - Month 2                       ,  PD 6.2     , !  Pos=255       BM(02)    ^Budget-M2
-BudgetPeriod03     ,    Budget - Month 3                       ,  PD 6.2     , !  Pos=261       BM(03)    ^Budget-M3
-BudgetPeriod04     ,    Budget - Month 4                       ,  PD 6.2     , !  Pos=267       BM(04)    ^Budget-M4
-BudgetPeriod05     ,    Budget - Month 5                       ,  PD 6.2     , !  Pos=273       BM(05)    ^Budget-M5
-BudgetPeriod06     ,    Budget - Month 6                       ,  PD 6.2     , !  Pos=279       BM(06)    ^Budget-M6
-BudgetPeriod07     ,    Budget - Month 7                       ,  PD 6.2     , !  Pos=285       BM(07)    ^Budget-M7
-BudgetPeriod08     ,    Budget - Month 8                       ,  PD 6.2     , !  Pos=291       BM(08)    ^Budget-M8
-BudgetPeriod09     ,    Budget - Month 9                       ,  PD 6.2     , !  Pos=297       BM(09)    ^Budget-M9
-BudgetPeriod10     ,    Budget - Month 10                      ,  PD 6.2     , !  Pos=303       BM(10)    ^Budget-M10
-BudgetPeriod11     ,    Budget - Month 11                      ,  PD 6.2     , !  Pos=309       BM(11)    ^Budget-M11
-BudgetPeriod12     ,    Budget - Month 12                      ,  PD 6.2     , !  Pos=315       BM(12)    ^Budget-M12
-BudgetPeriod13     ,    Budget - Month 13                      ,  PD 6.2     , !  Pos=321       BM(13)    ^Budget-M13
-PBP                ,    EOY Balance 2 Years Ago                ,  PD 6.2     , !  Pos=327       PBP       ^Bal-EOY-2yr
-TA1                ,    First Transaction Address              ,  PD 3       , !  Pos=333       TA(1)     ^FTA
-TA2                ,    Last Transaction Address               ,  PD 3       , !  Pos=336       TA(2)     ^LTA
+DNO                ,    Department Number                      ,   C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
+Description$       ,    Description                            ,   C  50      , !  Pos=13        D$        ^Desc
+RefBalSheet1       ,    Balance Sheet Ref Number               ,   PD  3      , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\Fnsbindx.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
+RefBalSheet2       ,    Secondary Balance Sheet Ref Number     ,   PD  3      , !  Pos=66        RF(2)     ^BalShtRf2     combof(ignore,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\Fnscindx.h[cno]) ! ,0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
+RefIncome1         ,    Income Statement Ref Number            ,   PD  3      , !  Pos=69        RF(3)     ^IncStmtRf1    combof(ignore,[Q]\GLmstr\acglfnsi.h[cno],1,5,6,30,[Q]\GLmstr\Fnsiindx.h[cno]) ! ,0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
+RefIncome2         ,    Secondary Income Statement Ref Number  ,   PD  3      , !  Pos=72        RF(4)     ^IncStmtRf2    combof(ignore,[Q]\GLmstr\acglfnsj.h[cno],1,5,6,30,[Q]\GLmstr\Fnsjindx.h[cno]) ! ,0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
+RefFund1           ,    Fund Statement Ref Number              ,   PD  3      , !  Pos=75        RF(5)     ^FundStmtRf1   combof(ignore,[Q]\GLmstr\acglfnsf.h[cno],1,5,6,30,[Q]\GLmstr\Fnsfindx.h[cno]) ! ,0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+RefFund2           ,    Secondary Fund Statement Ref Number    ,   PD  3      , !  Pos=78        RF(6)     ^FundStmtRf2   combof(ignore,[Q]\GLmstr\acglfnsg.h[cno],1,5,6,30,[Q]\GLmstr\Fnsgindx.h[cno]) ! ,0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+BalanceBeginning   ,    Beginning Account Balance              ,   PD  6.2    , !  Pos=81        BB        ^AccBal-Begin   mask=10
+BalanceCurrent     ,    Current Account Balance                ,   PD  6.2    , !  Pos=87        CB        ^Bal            mask=10
+BalMthEndCrYrPer01 ,    Balance Current Year-Period 1           ,  PD  6.2    , !  Pos=93        BC(01)    ^Bal-CY-M1     mask=10
+BalMthEndCrYrPer02 ,    Balance Current Year-Period 2           ,  PD  6.2    , !  Pos=99        BC(02)    ^Bal-CY-M2     mask=10
+BalMthEndCrYrPer03 ,    Balance Current Year-Period 3           ,  PD  6.2    , !  Pos=105       BC(03)    ^Bal-CY-M3     mask=10
+BalMthEndCrYrPer04 ,    Balance Current Year-Period 4           ,  PD  6.2    , !  Pos=111       BC(04)    ^Bal-CY-M4     mask=10
+BalMthEndCrYrPer05 ,    Balance Current Year-Period 5           ,  PD  6.2    , !  Pos=117       BC(05)    ^Bal-CY-M5     mask=10
+BalMthEndCrYrPer06 ,    Balance Current Year-Period 6           ,  PD  6.2    , !  Pos=123       BC(06)    ^Bal-CY-M6     mask=10
+BalMthEndCrYrPer07 ,    Balance Current Year-Period 7           ,  PD  6.2    , !  Pos=129       BC(07)    ^Bal-CY-M7     mask=10
+BalMthEndCrYrPer08 ,    Balance Current Year-Period 8           ,  PD  6.2    , !  Pos=135       BC(08)    ^Bal-CY-M8     mask=10
+BalMthEndCrYrPer09 ,    Balance Current Year-Period 9           ,  PD  6.2    , !  Pos=141       BC(09)    ^Bal-CY-M9     mask=10
+BalMthEndCrYrPer10 ,    Balance Current Year-Period 10          ,  PD  6.2    , !  Pos=147       BC(10)    ^Bal-CY-M10    mask=10
+BalMthEndCrYrPer11 ,    Balance Current Year-Period 11          ,  PD  6.2    , !  Pos=153       BC(11)    ^Bal-CY-M11    mask=10
+BalMthEndCrYrPer12 ,    Balance Current Year-Period 12          ,  PD  6.2    , !  Pos=159       BC(12)    ^Bal-CY-M12    mask=10
+BalMthEndCrYrPer13 ,    Balance Current Year-Period 13          ,  PD  6.2    , !  Pos=165       BC(13)    ^Bal-CY-M13    mask=10
+BalMthEndPrYrPer01 ,    Balance Prior Year-Period 1             ,  PD  6.2    , !  Pos=171       BP(01)    ^Bal-PY-M1     mask=10
+BalMthEndPrYrPer02 ,    Balance Prior Year-Period 2             ,  PD  6.2    , !  Pos=177       BP(02)    ^Bal-PY-M2     mask=10
+BalMthEndPrYrPer03 ,    Balance Prior Year-Period 3             ,  PD  6.2    , !  Pos=183       BP(03)    ^Bal-PY-M3     mask=10
+BalMthEndPrYrPer04 ,    Balance Prior Year-Period 4             ,  PD  6.2    , !  Pos=189       BP(04)    ^Bal-PY-M4
+BalMthEndPrYrPer05 ,    Balance Prior Year-Period 5             ,  PD  6.2    , !  Pos=195       BP(05)    ^Bal-PY-M5
+BalMthEndPrYrPer06 ,    Balance Prior Year-Period 6             ,  PD  6.2    , !  Pos=201       BP(06)    ^Bal-PY-M6
+BalMthEndPrYrPer07 ,    Balance Prior Year-Period 7             ,  PD  6.2    , !  Pos=207       BP(07)    ^Bal-PY-M7
+BalMthEndPrYrPer08 ,    Balance Prior Year-Period 8             ,  PD  6.2    , !  Pos=213       BP(08)    ^Bal-PY-M8
+BalMthEndPrYrPer09 ,    Balance Prior Year-Period 9             ,  PD  6.2    , !  Pos=219       BP(09)    ^Bal-PY-M9
+BalMthEndPrYrPer10 ,    Balance Prior Year-Period 10            ,  PD  6.2    , !  Pos=225       BP(10)    ^Bal-PY-M10
+BalMthEndPrYrPer11 ,    Balance Prior Year-Period 11            ,  PD  6.2    , !  Pos=231       BP(11)    ^Bal-PY-M11
+BalMthEndPrYrPer12 ,    Balance Prior Year-Period 12            ,  PD  6.2    , !  Pos=237       BP(12)    ^Bal-PY-M12
+BalMthEndPrYrPer13 ,    Balance Prior Year-Period 13            ,  PD  6.2    , !  Pos=243       BP(13)    ^Bal-PY-M13
+BudgetPeriod01     ,    Budget - Month 1                        ,  PD  6.2    , !  Pos=249       BM(01)    ^Budget-M1
+BudgetPeriod02     ,    Budget - Month 2                        ,  PD  6.2    , !  Pos=255       BM(02)    ^Budget-M2
+BudgetPeriod03     ,    Budget - Month 3                        ,  PD  6.2    , !  Pos=261       BM(03)    ^Budget-M3
+BudgetPeriod04     ,    Budget - Month 4                        ,  PD  6.2    , !  Pos=267       BM(04)    ^Budget-M4
+BudgetPeriod05     ,    Budget - Month 5                        ,  PD  6.2    , !  Pos=273       BM(05)    ^Budget-M5
+BudgetPeriod06     ,    Budget - Month 6                        ,  PD  6.2    , !  Pos=279       BM(06)    ^Budget-M6
+BudgetPeriod07     ,    Budget - Month 7                        ,  PD  6.2    , !  Pos=285       BM(07)    ^Budget-M7
+BudgetPeriod08     ,    Budget - Month 8                        ,  PD  6.2    , !  Pos=291       BM(08)    ^Budget-M8
+BudgetPeriod09     ,    Budget - Month 9                        ,  PD  6.2    , !  Pos=297       BM(09)    ^Budget-M9
+BudgetPeriod10     ,    Budget - Month 10                       ,  PD  6.2    , !  Pos=303       BM(10)    ^Budget-M10
+BudgetPeriod11     ,    Budget - Month 11                       ,  PD  6.2    , !  Pos=309       BM(11)    ^Budget-M11
+BudgetPeriod12     ,    Budget - Month 12                       ,  PD  6.2    , !  Pos=315       BM(12)    ^Budget-M12
+BudgetPeriod13     ,    Budget - Month 13                       ,  PD  6.2    , !  Pos=321       BM(13)    ^Budget-M13
+PBP                ,    EOY Balance 2 Years Ago                 ,  PD  6.2    , !  Pos=327       PBP       ^Bal-EOY-2yr
+TA1                ,    First Transaction Address               ,  PD  3      , !  Pos=333       TA(1)     ^FTA
+TA2                ,    Last Transaction Address                ,  PD  3      , !  Pos=336       TA(2)     ^LTA
                    
 
 

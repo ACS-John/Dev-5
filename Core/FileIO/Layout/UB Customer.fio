@@ -12,7 +12,7 @@ meterAddress$     ,Meter Address                                             ,  
 name$             ,Name                                                      ,  C    30    , ! SPos=  41 EPos= 70
 addr1$            , Address 1 - Primary                                      ,  C    30    , ! SPos=  71 EPos=100
 csz$              ,  CSZ                                                     ,  C    30    , ! SPos= 101 EPos=130   ComboF(ignore,[Q]\Data\CityStZip.dat,1,30,0,0,[Q]\Data\CityStZip.idx)
-																    combof(ignored,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
+! 																    combof(ignored,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
 s1meterNumber$    ,  Service 1 Meter Number                                  ,  C    12    , ! SPos= 131 EPos=142   aka=f1$
 s01rate           ,  Service 1 (Water) – Rate Code                           ,  PD    2    , ! SPos= 143 EPos=144   aka=a(1)
 s02rate           ,  Service 2 (Sewer) – Rate Code                           ,  PD    2    , ! SPos= 145 EPos=146   aka=a(2)

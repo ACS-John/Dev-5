@@ -120,7 +120,7 @@
 12300       execute 'CD '&env$('temp')(1:2)
 12320       execute 'CD '&env$('temp')(3:len(env$('temp')))
 13000       fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
-13010       fnCopy('S:\sio.lic','sio.lic')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+13010       fnCopy('S:\sio.lic','sio.lic')
 13020       fn_CopySfileIoIniToFileIoIni
 13040     end if
 13060     open #hR:=fn_gethandle: 'name=r,replace',d,o
