@@ -333,7 +333,7 @@
 37200     gosub PrintW2
 37220     fnpa_finis
 37240   end if
-37260   if enableW3$="True" then let fnw3(empId$,mat a$,mat w,dcb,state$,stcode$)
+37260   if enableW3$="True" then let fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
 37280   if exportFormatID then 
 37300       mat tmpMsgLine$(2)
 37320       tmpMsgLine$(1)='Export file created:'

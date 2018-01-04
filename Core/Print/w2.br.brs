@@ -269,6 +269,7 @@
 21460     fnreg_write('Print W-2',w2destinationOpt$(1))
 21480     fnreg_write('Print W-3 also',enableW3$)
 21500     fnreg_write('W-2 - Enable Background',enableBackground$)
+21510     fnreg_write('W-3 - Enable Background',enableBackground$)
 21540     fnreg_write('Export for Advanced Micro Solutions',w2destinationOpt$(2))
 21560 !   fnreg_write('Export for Center Piece Software'   ,w2destinationOpt$(3))  ! removed access 01/03/2017
 21580     fnureg_write('W-2 - Export Filename',w2laser_output_filename$)
@@ -287,7 +288,7 @@
 33020   if ~setup then
 33040     setup=1
 33060     dim w2laser_output_filename$*256
-33070     library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnreg_read,fnreg_write,fncomboa,fnw3,fnpa_pic,fnAddOneC
+33070     library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnreg_read,fnreg_write,fncomboa,fnpa_pic,fnAddOneC
 33160     on error goto ERTN
 33162     dim optNameFormat$(2)*20,nameFormat$*20
 33164     optNameFormat$(1)='First Name First'

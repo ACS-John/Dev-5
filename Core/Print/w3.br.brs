@@ -13,10 +13,10 @@
 20020   if ~setup then
 20040     setup=1
 20060     library 'S:\Core\Library': fntop,fnxit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
-20080     fnreg_read('W-3 Enable background'              ,enableBackground$   ,'True' )
+20080     fnreg_read('W-3 - Enable Background'              ,enableBackground$   ,'True' )
 20160   end if
 20180 fnend
-30000 def library fnw3(ein$*12,mat a$,mat w,dcb,state$,stcode$)
+30000 def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$)
 30020   ! ein$      Employer Identification Number (EIN)
 30040   ! a$(1)     Employer Name
 30060   ! a$(2)     Employer Address
@@ -38,7 +38,7 @@
 30380   ! stcode$   
 32000   if ~setup then let fn_setup
 32020   fnpa_open('','W-3','PDF')
-32040   if enableBackground$='True' then let fnpa_background('S:\Core\pdf\2016\W-3.pdf')
+32040   if enableBackground$='True' then let fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 32080   fnpa_fontsize(12)
 32100   fnpa_txt("X",38,fn_line(2))
 32120   col1=  8

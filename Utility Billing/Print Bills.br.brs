@@ -1803,61 +1803,75 @@
 96810     fnpa_newpage
 96820   end if 
 96830 fnend 
-97000 def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,d4,mat pe$,final$,z$)
-97010   ! three per page RTF Bill
-97020   if final=2 then g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
-97030   penalty=0
-97040   for j=1 to 10
-97050     if penalty$(j)="Y" then penalty+=g(j) : g(j)=0 ! accumulate all penalties and set charge to zero
-97060   next j
-97070   pb=bal-g(11)
-97080   pr #255: ''
-97090   pr #255,using 'form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
-97100   pr #255,using 'form pos 1,c 10,pos 13,c 18': trim$(z$),e$(1)(1:18)
+97000 def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,datePastDue,mat pe$,final$,z$)  ! three per page RTF Bill
+97010   if final=2 then g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
+97020   penalty=0
+97030   for j=1 to 10
+97040     if penalty$(j)="Y" then penalty+=g(j) : g(j)=0 ! accumulate all penalties and set charge to zero
+97050   next j
+97060   pb=bal-g(11)
+97070   pr #255: ''
+97080   pr #255,using 'form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
+97090   pr #255,using 'form pos 1,c 10,pos 13,c 18': trim$(z$),e$(1)(1:18)
+97100   pr #255: ''
 97110   pr #255: ''
-97120   pr #255: ''
-97130   if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""
-97140   if g(1)=0 then t$="" else t$="WTR"
-97150   pr #255,using billings_fL1620: t$,0,d(1),d(3),g(1)
-97160   billings_fL1620: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,skip 1
-97170   billings_fL1630: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,pos 38,pic(zz/zz/zz),skip 1
-97180   if g(2)=0 then t$="" else t$="SWR"
-97190   pr #255,using billings_fL1620: t$,0,0,0,g(2)
-97200   if g(3)=0 then t$="" else t$="PRI"
-97210   pr #255,using billings_fL1620: t$,0,0,0,g(3)
-97220   if g(4)=0 then t$="" else t$="SF "
-97230   pr #255,using billings_fL1630: t$,0,0,0,g(4),d4
-97240   if g(5)=0 then t$="" else t$="SOL"
-97250   pr #255,using billings_fL1620: t$,0,0,0,g(5)
-97260   if g(9)=0 then t$="" else t$="TAX"
-97270   pr #255,using billings_fL1620: t$,0,0,0,g(9)
-97280   if bal>0 then 
-97290     pr #255,using billings_fL1590: pb$,pb,bal+penalty,bal 
-97300     billings_fL1590: form pos 1,c 17,nz 10.2,pos 35,nz 10.2,pos 50,nz 10.2,skip 1
-97310   else
-97320     pr #255,using billings_fL1590: pb$,pb,0,bal
-97330   end if
-97340   if d(10)=1 then est$="BILL ESTIMATED" else est$=""
-97350   if c4>0 then final$="FINAL BILL" else final$=""
-97360   if df$="Y" then final$="DRAFTED"
-97370   if bal>g(11) then final$="DELINQUENT NOTICE"
-97380   if bal<=0 then g(10)=0
-97390   if g(8)=0 then t$="" else t$="OTH"
-97400   pr #255,using billings_fL1620: t$,0,0,0,g(8)
-97410   if bal<=0 then 
-97420     pr #255,using billings_f1840: est$,trim$(z$),pe$(1),pe$(2),0,d4,bal,pe$(3),final$,pe$(4)
-97430     billings_f1840: form pos 7,c 20,pos 37,c 30,skip 1,pos 37,c 30,skip 1,pos 37,c 30,skip 1,pos 1,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 37,c 30,skip 1,c 30,pos 37,c 30
-97440   else
-97450     pr #255,using billings_f1840: est$,trim$(z$),pe$(1),pe$(2),bal+penalty,d4,bal,pe$(3),final$,pe$(4)
-97460   end if
-97470   pr #255,using 'form skip 1,c 30,skip 1,c 30,skip 1,c 30': mg$(1),mg$(2),mg$(3)
-97480   bills=bills+1
-97490   if int(bills/3)<>bills/3 then pr #255,using 'form pos 2,c 30,skip 2': ""
-97500   if int(bills/3)=bills/3 then  ! BOTTOM OF PAGE
-97510     pr #255: newpage
-97520   end if
-97530   billsPrintedCount+=1
-97540 fnend
+97120   if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""
+97130   if g(1)=0 then t$="" else t$="WTR"
+97140   pr #255,using billings_fL1620: t$,0,d(1),d(3),g(1)
+97150   billings_fL1620: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,skip 1
+97160   billings_fL1630: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,pos 38,pic(zz/zz/zz),skip 1
+97170   if g(2)=0 then t$="" else t$="SWR"
+97180   pr #255,using billings_fL1620: t$,0,0,0,g(2)
+97190   if g(3)=0 then t$="" else t$="PRI"
+97200   pr #255,using billings_fL1620: t$,0,0,0,g(3)
+97210   if g(4)=0 then t$="" else t$="SF "
+97220   pr #255,using billings_fL1630: t$,0,0,0,g(4),datePastDue
+97230   if g(5)=0 then t$="" else t$="SOL"
+97240   pr #255,using billings_fL1620: t$,0,0,0,g(5)
+97250   if g(9)=0 then t$="" else t$="TAX"
+97260   pr #255,using billings_fL1620: t$,0,0,0,g(9)
+97270   if g(8) and g(6) then
+97280     t$=serviceCode$(8)&"+"&serviceCode$(6)
+97290   else if g(8) then
+97300     t$=serviceCode$(8)
+97310   else if g(6) then
+97320     t$=serviceCode$(6)
+97330   else
+97340     t$="" 
+97350   end if
+97360   pr #255,using 'form pos 1,c 20,nz 9.2': t$,g(8)+g(6)
+97370   if bal>0 then 
+97380     pr #255,using billings_fL1590: pb$,pb,bal+penalty,bal 
+97390     billings_fL1590: form pos 1,c 17,nz 10.2,pos 35,nz 10.2,pos 50,nz 10.2,skip 1
+97400   else
+97410     pr #255,using billings_fL1590: pb$,pb,0,bal
+97420   end if
+97430   if d(10)=1 then est$="BILL ESTIMATED" else est$=""
+97440   if c4>0 then final$="FINAL BILL" else final$=""
+97450   if df$="Y" then final$="DRAFTED"
+97460   if bal>g(11) then final$="DELINQUENT NOTICE"
+97470   if bal<=0 then g(10)=0
+97480   pr #255,using 'form pos 7,c 20,pos 37,c 30': est$,trim$(z$)
+97490   pr #255,using 'form pos 37,c 30': pe$(1)
+97500   pr #255,using 'form pos 37,c 30': pe$(2)
+97510   if bal<=0 then 
+97520     pr #255,using 'form pos 1,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 37,c 30': 0,datePastDue,bal,pe$(3)
+97530   else
+97540     pr #255,using 'form pos 1,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 37,c 30': bal+penalty,datePastDue,bal,pe$(3)
+97550   end if
+97560   pr #255,using 'form pos 1,C 30,pos 37,c 37': final$,pe$(4)
+97570   pr #255,using 'form skip 1,c 30': mg$(1)
+97580   pr #255,using 'form skip 1,c 30': mg$(2)
+97590   pr #255,using 'form skip 1,c 30': mg$(3)
+97600   bills=bills+1
+97610   if int(bills/3)=bills/3 then  ! BOTTOM OF PAGE
+97620     pr #255: newpage
+97630   else ! in between bills
+97640     pr #255: ''
+97650     pr #255: ''
+97660   end if
+97670   ! billsPrintedCount(1)+=1  ! not sure if (1) is right.
+97680 fnend
 98000 def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final)
 98010 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"
 98020 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"

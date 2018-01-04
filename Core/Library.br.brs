@@ -205,9 +205,9 @@
 43200     library 'S:\Core\Print\w2.br': fnw2_text
 43220     fnw2_text=fnw2_text(w2Yoffset,maskSsn,mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$)
 43240   fnend
-43260   def library fnw3(b$,mat a$,mat w,dcb,state$,stcode$)
+43260   def library fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
 43280     library 'S:\Core\Print\w3.br': fnw3
-43300     fnw3=fnw3(b$,mat a$,mat w,dcb,state$,stcode$)
+43300     fnw3=fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
 43320   fnend
 43340   def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 43360     library 'S:\Core\Print\w2.br': fnNameParse
