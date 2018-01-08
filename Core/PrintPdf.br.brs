@@ -12,21 +12,20 @@
 06200   end if
 06220 fnend
 08000 def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
-08010   pdfDecipos=0 ! no longer passed - no longer needed
-08020   if ~setup then let fn_Setup
-08040   dim pdfOutFile$*1024
-        dim g_filename_work$*1024
-        dim g_filename_final$*1024
-        g_filename_work$=env$('Q')&'\tmp_'&session$&'.prn'
-08060   g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
-08080   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_work$&',Replace,RecL=5000',Display,Output ioerr poFAIL
-08100   poReturn=hPdfOut
-08120   gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
-08140   if lwrc$(pdfOrientation$)='landscape' then
-08160     fn_phe('&l1O')
-08180   else ! if pdfOrientation$='Portrait' then
-08200     fn_phe('&l0O')
-08220   end if
+08020   pdfDecipos=0 ! no longer passed - no longer needed
+08040   if ~setup then let fn_Setup
+08080   dim g_filename_work$*1024
+08100   dim g_filename_final$*1024
+08120   g_filename_work$=env$('Q')&'\tmp_'&session$&'.prn'
+08140   g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
+08160   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_work$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+08180   poReturn=hPdfOut
+08200   gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
+08220   if lwrc$(pdfOrientation$)='landscape' then
+08240     fn_phe('&l1O')
+08260   else ! if pdfOrientation$='Portrait' then
+08280     fn_phe('&l0O')
+08300   end if
 08500   ! *****  Top Margin
 08520   ! fn_phe('&l0E') 
 08540   fn_phe('&l2E') 
@@ -57,9 +56,8 @@
 12120     else
 12140       fnCopy(g_filename_work$,env$('at')&g_filename_final$)
 12160     end if
-12180       fnWindowsStart(os_filename$(env$('at')&g_filename_final$))
 12200   end if 
-12220   ! fnWindowsStart(g_filename_final$)
+12220   fnWindowsStart(os_filename$(env$('at')&g_filename_final$))
 12240 goto pdfCloseFinit
 13000 PDFCLOSEERR: !
 13020 if debug then 
