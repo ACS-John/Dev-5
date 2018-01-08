@@ -1,7 +1,7 @@
 06000 def fn_Setup
 06020   if ~setup then
 06040     setup=1
-06060     library 'S:\Core\Library': fngethandle,fnprint_file_name$,fnWindowsStart
+06060     library 'S:\Core\Library': fngethandle,fnprint_file_name$,fnWindowsStart,fnCopy
 06070 !   exec 'Config Option 68 On' ! Prevent stretching printed fonts. (unfortunately it also turns off all font size respect)
 06080     esc$=chr$(27)
 06100     gFontItalic=0
@@ -15,8 +15,11 @@
 08010   pdfDecipos=0 ! no longer passed - no longer needed
 08020   if ~setup then let fn_Setup
 08040   dim pdfOutFile$*1024
-08060   pdfOutFile$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
-08080   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&pdfOutFile$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+        dim g_filename_work$*1024
+        dim g_filename_final$*1024
+        g_filename_work$=env$('Q')&'\tmp_'&session$&'.prn'
+08060   g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
+08080   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_work$&',Replace,RecL=5000',Display,Output ioerr poFAIL
 08100   poReturn=hPdfOut
 08120   gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
 08140   if lwrc$(pdfOrientation$)='landscape' then
@@ -48,23 +51,31 @@
 12000 def library fnpdf_Close
 12020   if ~setup then let fn_Setup
 12040   close #hPdfOut: error PDFCLOSEERR
-12060   fnWindowsStart(pdfOutFile$)
-12080 goto pdfCloseFinit
-12100 PDFCLOSEERR: !
-12120 if debug then 
-12140   pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
-12160   close #hDebugLog:
-12180   debugLogSetup=0
-12200   exe 'sy -M -C "'&os_filename$('acsBrPdf.txt')&'"'
-12220   if debugScriptSetup then
-12240     debugScriptSetup=0
-12260     close #hDebugScript:
-12280     exe 'sy -M -C "'&os_filename$('acsBrPdfScript.txt')&'"'
-12300   end if
-12320 end if
-12340 goto pdfCloseFinit
-12360 pdfCloseFinit: !
-12380 fnend
+12060   if g_filename_work$<>'' then 
+12080     if g_filename_final$='' the
+12100       g_filename_final$=g_filename_work$
+12120     else
+12140       fnCopy(g_filename_work$,env$('at')&g_filename_final$)
+12160     end if
+12180       fnWindowsStart(os_filename$(env$('at')&g_filename_final$))
+12200   end if 
+12220   ! fnWindowsStart(g_filename_final$)
+12240 goto pdfCloseFinit
+13000 PDFCLOSEERR: !
+13020 if debug then 
+13040   pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
+13060   close #hDebugLog:
+13080   debugLogSetup=0
+13100   exe 'sy -M -C "'&os_filename$('acsBrPdf.txt')&'"'
+13120   if debugScriptSetup then
+13140     debugScriptSetup=0
+13160     close #hDebugScript:
+13180     exe 'sy -M -C "'&os_filename$('acsBrPdfScript.txt')&'"'
+13200   end if
+13220 end if
+13240 goto pdfCloseFinit
+13260 pdfCloseFinit: !
+13280 fnend
 14000 def library fnpdf_newpage
 14020   if ~setup then let fn_Setup
 14040   fn_print('[newpage]')
