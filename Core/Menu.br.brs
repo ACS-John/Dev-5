@@ -221,12 +221,13 @@
 20100         fnLbl(program_grid_line+11,1,'Client'(1:info_col_width),info_col_width,2)
 20120       end if
 20130       if env$('BR_XP_Mode')='True' then
-20132         fnLbl(program_grid_line+13,1,'XP Compatability'(1:info_col_width),info_col_width,2)
+20132         fnLbl(program_grid_line+13,1,'XP Compatibility'(1:info_col_width),info_col_width,2)
 20134       end if
-20140   !
 20160       tmp_tooltip$="ACS was last updated on "&last_update$&'\n to version '&version_current$&'.'
 20180       fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_col_width,2,0,0,0,tmp_tooltip$)
-20200       fnLbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+20190       if env$('acsProduct')<>'ACS Online' then 
+20200         fnLbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+20201       end if 
 20202       fnLbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
 20220       fn_dashboard_draw
 20230       if enableFavorites then let fn_favoritesDraw
@@ -615,12 +616,12 @@
 30520       fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width)
 30530       fnLbl(1,1,'Time Management is for Advanced Computer Services LLC only.',0,0,0,fraDashboard)
 30540     end if
-30550     if env$('acsDeveloper')<>'' then
-30560       fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)
-30570       fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
-30571       fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "'&env$('Q')&'"',int(dashboard_width/2)-1,0,0,fraDashboard)
-30572       fnLbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
-30580     end if
+30550     ! if env$('acsDeveloper')<>'' then
+30560     !   fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)
+30570     !   fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
+30571     !   fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "'&env$('Q')&'"',int(dashboard_width/2)-1,0,0,fraDashboard)
+30572     !   fnLbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
+30580     ! end if
 30590   end if
 30600 fnend
 32000 def fn_display_buttons
