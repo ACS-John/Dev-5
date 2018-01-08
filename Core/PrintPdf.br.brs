@@ -14,11 +14,9 @@
 08000 def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 08020   pdfDecipos=0 ! no longer passed - no longer needed
 08040   if ~setup then let fn_Setup
-08080   dim g_filename_work$*1024
 08100   dim g_filename_final$*1024
-08120   g_filename_work$=env$('temp')&'\PrintPdf_s'&session$&'.pdf'
-08140   g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
-08160   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_work$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+08140   g_filename_final$=env$('at')&fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
+08160   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
 08180   poReturn=hPdfOut
 08200   gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
 08220   if lwrc$(pdfOrientation$)='landscape' then
@@ -50,14 +48,7 @@
 12000 def library fnpdf_Close
 12020   if ~setup then let fn_Setup
 12040   close #hPdfOut: error PDFCLOSEERR
-12060   if g_filename_work$<>'' then 
-12080     if g_filename_final$='' the
-12100       g_filename_final$=g_filename_work$
-12120     else
-12140       fnCopy(g_filename_work$,env$('at')&g_filename_final$)
-12160     end if
-12200   end if 
-12220   fnWindowsStart(os_filename$(env$('at')&g_filename_final$))
+12220   fnWindowsStart(os_filename$(g_filename_final$))
 12240 goto pdfCloseFinit
 13000 PDFCLOSEERR: !
 13020 if debug then 
