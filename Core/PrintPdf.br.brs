@@ -16,7 +16,7 @@
 08040   if ~setup then let fn_Setup
 08080   dim g_filename_work$*1024
 08100   dim g_filename_final$*1024
-08120   g_filename_work$=env$('Q')&'\tmp_'&session$&'.prn'
+08120   g_filename_work$=env$('temp')&'\PrintPdf_s'&session$&'.pdf'
 08140   g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
 08160   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_work$&',Replace,RecL=5000',Display,Output ioerr poFAIL
 08180   poReturn=hPdfOut
@@ -61,6 +61,7 @@
 12240 goto pdfCloseFinit
 13000 PDFCLOSEERR: !
 13020 if debug then 
+13030   if env$('acsDeveloper')<>'' then pr 'PDFCLOSEERR - debugging logic follows ' : pause
 13040   pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
 13060   close #hDebugLog:
 13080   debugLogSetup=0
