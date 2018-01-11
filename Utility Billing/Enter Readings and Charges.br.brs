@@ -42,7 +42,7 @@
 04100     opt_final_billing$(5)="4 = Finaled, but not billed"
 04120   !
 04140     fnLastBillingDate(d1)
-04160     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-15 then d1=0
+04160     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-25 then d1=0
 04180     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input
 04200     read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 04220     close #1:
@@ -69,7 +69,6 @@
 05040     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 05060     open #hCustomer1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
 05080   F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
-05100   ! fn_CHECK_FOR_CALCULATION  ! checking to see if file is uncalculated - never could get it work correctly - need to know current billing date asked first and also need work file opened before this screen displayed (shows all records entered for file maintenance)
 05120     open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
 05140     open #hCustomer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed
 05160     open #hCustomer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed
@@ -654,7 +653,7 @@
 20870   if device$='Sensus' then goto HH_OTHER_TYPE1
 20880   fn_hh_other_type2(listonly)
 20890   goto HH_W_END ! /r
-20880   HH_OTHER_TYPE1: ! r:
+20892   HH_OTHER_TYPE1: ! r:
 20900   if listonly=1 then let fnopenprn
 20910   close #h_readings: ioerr ignore
 20930   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=30",display,input
@@ -1044,10 +1043,10 @@
 42120   frame_bd_witdh=42
 42140   fnFra(1,1,5,frame_bd_witdh,"Batch Data")
 42160   disable=0 ! If LREC(hWork)>1 Then dISABLE=1 Else dISABLE=0
-42180   fnLbl(2,2,"Billing Date (mmddyy):",mylen,1,0,1)
+42180   fnLbl(2,2,"Billing Date:",mylen,1,0,1)
 42200   fnTxt(2,mypos,8,0,0,"1001",disable,empty$,1)
 42220   resp$(1)=str$(d1)
-42240   fnLbl(4,2,"Meter Reading Date (mmddyy):",mylen,1,0,1)
+42240   fnLbl(4,2,"Meter Reading Date:",mylen,1,0,1)
 42260   fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
 42280   resp$(2)=str$(d2)
 42300 !
@@ -2141,7 +2140,6 @@
 95640         pr '  Customer.Number='&hot_z$
 95660         pr '  MeterAddress.LocationID='&hpValue$
 95680         pr '  Customer Number derived from Location ID='&hot_zFromLocationID$
-95680         pr '  Customer Number derived from Location ID='&hot_zFromLocationID$
 95700         hot_z$=hot_zFromLocationID$
 95720       end if
 95740     else
@@ -2232,6 +2230,10 @@
 97590     hMeter=0
 97600   end if
 97610 fnend
+97900 def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
+97910   if ~setup then let fn_setup
+97920   fnCustomerData$=fn_customerData$(account$,fieldName$, leaveOpen)
+97930 fnend
 98000 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
 98010   account$=lpad$(trim$(account$),10)
 98020   if customerDataSetup$<>account$ then ! r:
@@ -2248,15 +2250,17 @@
 98130     customerDataName$=''
 98140     customerDataA=(0)
 98150     customerDataD=(0)
-98160     customerDataFinal=0
-98170     read #customerData_hCustomer,using CustomerData_Fcustomer,key=account$,release: customerDataAcccount$,customerDataName$,mat customerDataA,customerDataFinal,mat customerDataD
-98180     CustomerData_Fcustomer: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5
+98160     customerDataFinal=customerLastBillingDate=0
+98170     read #customerData_hCustomer,using CustomerData_Fcustomer,key=account$,release: customerDataAcccount$,customerDataName$,mat customerDataA,customerLastBillingDate,customerDataFinal,mat customerDataD nokey CustomerDataFinis
+98180     CustomerData_Fcustomer: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 296,pd 4,pos 1821,n 1,pos 217,15*pd 5
 98190   end if ! /r
 98200   dim customerDataReturn$*128
 98210   customerDataReturn$=''
 98220   fieldName$=lwrc$(fieldName$)
 98230   if fieldName$='final billing code' then
 98240     if customerDataFinal<>0 then customerDataReturn$=str$(customerDataFinal)
+98242   else if fieldName$='last billing day' then
+98244     if customerLastBillingDate<>0 then customerDataReturn$=str$(days(customerLastBillingDate,'mmddyy'))
 98250   else if fieldName$='name' then
 98260     customerDataReturn$=customerDataName$
 98270   else if fieldName$='service 1.rate code' then
@@ -2307,6 +2311,7 @@
 98720     pr 'fn_customerData$ does not recognize the field: '&fieldName$
 98730     pause
 98740   end if
+98742   CustomerDataFinis: !
 98750   if ~leaveOpen then
 98760     close #customerData_hCustomer: 
 98770     customerData_hCustomer=0
