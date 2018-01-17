@@ -41,6 +41,7 @@
 12082     library 'S:\Core\Library': fnStatusPause
 12083     library 'S:\Core\Library': fnCustomerData$
 12084     library 'S:\Core\Library': fnFree,fnRename
+12085     library 'S:\Core\Library': fnlbl,fntos,fnacs,fncmdkey
 12100     dim info$(0)*20,infoN(0)
 12101     dim addr$(0)*30,addrN(0)
 12102     dim form$(0)*256
@@ -266,13 +267,6 @@
 41100     mat hLocation=(0)
 41120   end if
 41140 fnend
-42000 def fn_lwCompareLine(label$*128,valueLeft$*128,valueRight$*128)
-42010   if rtrm$(valueLeft$)<>rtrm$(valueRight$) then
-42020     pr label$&' (DIFF) "'&valueLeft$&'" vs "'&valueRight$&'"         <-DIFF'
-42030   else
-42040     pr label$&' (same) '&valueLeft$
-42050   end if
-42060 fnend
 42070 def fn_leftIsSuperior(left$*128,right$*128; isAccountNumber)
 42080   lisReturn=0
 42090   left$=trim$(left$)
@@ -319,21 +313,33 @@
 42490   end if
 42500   fn_leftIsSuperior=lisReturn
 42510 fnend
-42800 LwKeyMatchDisplay: ! r:
-42810   pr 'key match found on index '&str$(lwIndex)
-42820   pr 'Data Comparison'
-42830   fn_lwCompareLine('Location ID       :',str$(locReadN(loc_locationID     )),str$(locationN(loc_locationID     )))
-42840   fn_lwCompareLine('Meter Address     :',locRead$(loc_name           ),location$(loc_name           ))
-42850   fn_lwCompareLine('Current Customer  :',locRead$(loc_activeCustomer ),location$(loc_activeCustomer ))
-42860   fn_lwCompareLine('Service ID        :',locRead$(loc_serviceId      ),location$(loc_serviceId      ))
-42870   fn_lwCompareLine('Longitude         :',locRead$(loc_longitude      ),location$(loc_longitude      ))
-42880   fn_lwCompareLine('Latitude          :',locRead$(loc_latitude       ),location$(loc_latitude       ))
-42890   fn_lwCompareLine('Meter Number      :',locRead$(loc_meterNumber    ),location$(loc_meterNumber    ))
-42900   fn_lwCompareLine('Transmitter Number:',locRead$(loc_transmitter    ),location$(loc_transmitter    ))
-42910   fn_lwCompareLine('Meter Type        :',locRead$(loc_meterType      ),location$(loc_meterType      ))
-42920   pr 'what now?' 
-42930   pause
-42940 return ! /r
+42700 LwKeyMatchDisplay: ! r:
+42710   fntos(sn$='LwKeyMatchDisplay') : lc=0
+42720   fnlbl(lc+=1,1,'key match found on index '&str$(lwIndex))
+42730   fnlbl(lc+=1,1,'Data Comparison')
+42740   fn_lwCompareLine('Location ID       :',str$(locReadN(loc_locationID     )),str$(locationN(loc_locationID     )))
+42750   fn_lwCompareLine('Meter Address     :',locRead$(loc_name           ),location$(loc_name           ))
+42760   fn_lwCompareLine('Current Customer  :',locRead$(loc_activeCustomer ),location$(loc_activeCustomer ))
+42770   fn_lwCompareLine('Service ID        :',locRead$(loc_serviceId      ),location$(loc_serviceId      ))
+42780   fn_lwCompareLine('Longitude         :',locRead$(loc_longitude      ),location$(loc_longitude      ))
+42790   fn_lwCompareLine('Latitude          :',locRead$(loc_latitude       ),location$(loc_latitude       ))
+42800   fn_lwCompareLine('Meter Number      :',locRead$(loc_meterNumber    ),location$(loc_meterNumber    ))
+42810   fn_lwCompareLine('Transmitter Number:',locRead$(loc_transmitter    ),location$(loc_transmitter    ))
+42820   fn_lwCompareLine('Meter Type        :',locRead$(loc_meterType      ),location$(loc_meterType      ))
+42830   fnlbl(lc+=1,1,'what now?')
+42840   fncmdkey('Keep Left',2)
+42850   fncmdkey('Keep Right',4)
+42860   fnacs(sn$,0,mat resp$,ckey)
+42870   if ckey=2 then lisReturn=1 else lisReturn=0
+42880 return ! /r
+42890 def fn_lwCompareLine(label$*128,valueLeft$*128,valueRight$*128)
+42900   if rtrm$(valueLeft$)<>rtrm$(valueRight$) then
+42910     fnlbl(lc+=1,1,label$&' (DIFF) "'&valueLeft$&'" vs "'&valueRight$&'"         <-DIFF')
+42920   else
+42930     fnlbl(lc+=1,1,label$&' (same) '&valueLeft$)
+42940   end if
+42950 fnend
+
 43000 def fn_AllStringsMatch(mat a$,mat b$; caseInsensitive)
 43010   asmReturn=asmMatchCount=0
 43020   if udim(mat a$)=udim(mat b$) then
@@ -458,7 +464,7 @@
 62140     nliLastLocation+=1
 62160     fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
 62180   end if
-62200   fn_newLocationID=nliLastLocation : pr 'fn_newLocationID is returning ';nliLastLocation
+62200   fn_newLocationID=nliLastLocation ! pr 'fn_newLocationID is returning ';nliLastLocation
 62220 fnend
 64000 def fn_askAddNew$(meterAddressBefore$*30,meterAddressAfter$*80)
 64040   mat mg$(0)
