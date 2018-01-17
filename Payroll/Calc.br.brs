@@ -305,7 +305,7 @@
 02080   if g2<=eic1 then eic4=round(tgp*.2040,2)
 02090   if g2>eic1 and g2<=eic2 then eic4=eic3
 02100   if g2>eic2 then eic4=eic3-(tgp-eic2)*.09588
-02110   if ytdtotal(25)+eic4<0 then eic4=-ytdtotal(25)
+02110   if ytdTotal(25)+eic4<0 then eic4=-ytdTotal(25)
 02120   eic4=round(eic4*pog,2)
 02130 CURRENT_PERIOD: ! 
 02132   tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh: tcp(4)=tcp4
@@ -384,7 +384,7 @@
 02462   write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 02463 ! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 02464 ! fnStatusPause
-02470   twy+=gpd : cafy+=ficat3 : eicytd+=ytdtotal(25)
+02470   twy+=gpd : cafy+=ficat3 : eicytd+=ytdTotal(25)
 02480   if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 02490   goto ReadRpWork
 02500 ! /r
@@ -407,12 +407,6 @@
 02840 CALK_ALL_DEDUCTIONS_ALL_DEPT: ! r:
 02842 ! Calculate all deduct for federal for all departments
 02850   tgp=t3=ded=0
-02860 ! defcompmatch=0
-02862 ! if env$('client')="Washington Parrish" then
-02864 !   defcompmatch=round(gpd*inp(9)/100,2)
-02866 !   totaldef=totaldef+defcompmatch ! deferred comp match is taxable for medicare and gross pension (must calculate it first)  (deferred comp match must be misc ded #2) (need total for medicare)
-02868 ! end if
-02870 ! 
 03020 L3020: ! 
 03022   for j=1 to 20
 03024     if (j+9)=17 and (env$('client')='West Accounting' or env$('client')='Payroll Done Right') then goto L3090 ! if processing inp(17) SKIP IT do not process it.
@@ -421,10 +415,6 @@
 03034     else 
 03036       goto L3060
 03038     end if 
-03040 !   if env$('client')="Washington Parrish" and j=3 then
-03042 !     ded=ded+inp(j+9)*(gpd+defcomp)/100
-03044 !     goto L3060
-03046 !   end if
 03050     if newcalcode(j)=1 then 
 03052       ded=ded+inp(j+9)
 03054     else 
@@ -432,10 +422,6 @@
 03058     end if 
 03060 L3060: ! 
 03062     if newdedfed(j)><2 then goto L3090
-03070 !   if env$('client')="Washington Parrish" and j=3 then
-03072 !     t3=t3+inp(j+9)*(gpd+defcompmatch)/100
-03074 !     goto L3090
-03076 !   end if
 03078     if newcalcode(j)=1 then 
 03080       t3=t3+inp(j+9)
 03082     else 
@@ -452,7 +438,7 @@
 03152   workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
 03160   restore #h_rpwork,key>=workkey$: 
 03170   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
-03172   if env$('client')='West Accounting' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8
+03172   if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8
 03174 ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
 03180   return  ! /r
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY
@@ -470,19 +456,19 @@
 03234   sswg=tf0
 03238   goto FICAEND ! UNDER MAX /r
 03240 L3240: ! r: MEDICARE-TAX ONLY??
-03242 ! if env$('client')="Washington Parrish" then ! MEDICARE-TAX ONLY  (add deferred comp match to medicare wages)
-03244 !   tf0=tgp-t3+totaldef
-03246 !   goto L3260
-03248 ! end if
+03242   ! if env$('client')="Washington Parrish" then ! MEDICARE-TAX ONLY  (add deferred comp match to medicare wages)
+03244   !   tf0=tgp-t3+totaldef
+03246   !   goto L3260
+03248   ! end if
 03250   tf0=tgp-t3 ! MEDICARE-TAX ONLY
-03260 ! L3260: ! 
+03260   ! L3260: ! 
 03262   if ficatfy>=mcmax then goto FICAEND ! OVER MAX
 03270   if ficatfy+tf0>=mcmax then ! Went over max this time
 03272     mcwh=(mcmax-ficatfy)*ficar2
 03274     goto FICAEND
 03276   end if 
 03280   mcwh=tf0*ficar2
-03282   goto FICAEND ! UNDER MAX  /r
+03282 goto FICAEND ! UNDER MAX  /r
 03290 SUBROUTINE6: ! r:
 03292   sc1=1
 03294   read #h_department,using 'form pos 48,n 2',key=newdeptkey$: sc1 nokey ignore
@@ -524,7 +510,7 @@
 03620 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
 08000 ILWH: ! r: REPLACE ACSWRK\ILLINOIS.WH,SOURCE ! ILLINOIS   NO TABLE
 08020   ! line 1 allowances = +1 for claiming self, +1 for claiming spouse
-08040   ! line 2 allowances = +1 for each other (not you nor spouse) dependant
+08040   ! line 2 allowances = +1 for each other (not you nor spouse) dependent
 08060   ! em(3) - number of allowances
 08080   ! g_pay_periods_per_year = number of pay periods (formerly b8)
 08100   g2=round((stwh(tcd(1),1))*g_pay_periods_per_year,2)
@@ -580,7 +566,7 @@
 09880   s3=round(s3,0)
 09900   if s3<.1 then s3=0
 09920 return  ! /r
-10000 ARWH: ! r: REPLACE ACSWRK\ARKANSAS.WH,SOURCE ! arkansas #5 ar(7,3)  REVISED 7/01/91
+10000 ARWH: ! r: REPLACE ACSWRK\ARKANSAS.WH,SOURCE ! Arkansas #5 ar(7,3)  REVISED 7/01/91
 10020   if ~setup_arwh then ! r: setup AR Arkansas
 10040     dim ar(6,3) ! ar(7,3)
 10060     setup_arwh=1
@@ -713,25 +699,25 @@
 14740     close #h_dates: 
 14760   end if
 14780 return  ! /r
-15000 DETERMINE_EARNINGS: ! r: passed eno, dep,beg_date, end_date, returns mat ytdtotal,ytdFICA,tmd,td14,twd,mat caf
+15000 DETERMINE_EARNINGS: ! r: passed eno, dep,beg_date, end_date, returns mat ytdTotal,ytdFICA,tmd,td14,twd,mat caf
 15020   ytdFICA=tmd=td14=0: mat caf=(0)
 15040   mat tcp=(0)
-15060   mat ytdtotal=(0) : mat tdc=(0)
+15060   mat ytdTotal=(0) : mat tdc=(0)
 15080   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 15100   restore #h_payrollchecks,key>=checkkey$: nokey dePrCkNokey
 15120   do
 15140     read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
 15160     if heno=eno and prdate=>beg_date and prdate<=end_date then 
-15200       mat ytdtotal=ytdtotal+tcp
+15200       mat ytdTotal=ytdTotal+tcp
 15220     end if
 15240   loop while heno=eno
 15260   dePrCkEof: ! 
-15280   ytdFICA=ytdtotal(2) ! fica year to date
-15300   tmd=ytdtotal(3) ! medicare year to date
-15320   td14=ytdtotal(25) ! eic
-15340   twd=ytdtotal(31) ! total wages
+15280   ytdFICA=ytdTotal(2) ! fica year to date
+15300   tmd=ytdTotal(3) ! medicare year to date
+15320   td14=ytdTotal(25) ! eic
+15340   twd=ytdTotal(31) ! total wages
 15360   for j=1 to 20
-15380     caf(j)=ytdtotal(j+4) ! total miscellaneous deductions for year
+15380     caf(j)=ytdTotal(j+4) ! total miscellaneous deductions for year
 15400   next j
 15420   dePrCkNokey:!
 15440 return  ! /r
@@ -745,7 +731,7 @@
 16140   dim inp(29),dat$*20,cap$*128,caf(20)
 16160   dim fullname$(20)*20,abrevname$(20)*8,resp$(10)*40
 16180   dim tdt(4),tcd(3),tdet(17),tdc(10),tcp(32)
-16200   dim ytdtotal(32)
+16200   dim ytdTotal(32)
 16240   dim x$*8,em(16),hr(2),n$*8,in2$(4),stuc(10)
 16260   dim dedcode(10),calcode(10),dedfed(10),d1$*20,wcm(4) ,newx$*8
 16280   dim newdedcode(20),newcalcode(20),newdedfed(20),newdedcode(20)

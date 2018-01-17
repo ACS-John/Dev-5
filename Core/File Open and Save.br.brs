@@ -47,7 +47,7 @@
 38500   else
 38520     serverTempSaveFile$=save_name$
 38540   end if
-38560   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
+38560   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.tmp1 -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
 38580   pr #h_tmp: '@echo off'
 38600   pr #h_tmp: '@echo Advanced Computer Services LLC'
 38620   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'

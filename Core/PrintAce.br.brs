@@ -98,11 +98,10 @@
 26100   if file(h_printace)=-1 then 
 26120     dim g_pa_filename$*1024
 26140     ! if print_report_caching then 
-26160     dim g_pa_filename$*256
 26162     g_pa_filename$=env$('Q')&'\tmp_'&session$&'.prn' ! fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
 26170     dim g_finial_filename$*256
 26172     g_finial_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
-26174     fnStatus('  Report Cache Name: '&g_pa_filename$)
+26174     fnStatus('  Report Cache Name: '&g_finial_filename$)
 26180     ! else 
 26200     !   g_pa_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     ! end if 

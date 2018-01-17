@@ -87,7 +87,7 @@
 25360         hfMask(hfitem)+=tmp
 25370         ! /r
 26000       else if posComboF>0 or posComboA>0 then
-26010        debugCombo=0 ! debugCombo=1
+26010        ! if env$('acsDeveloper')<>'' then debugCombo=1
 26020         ! r: comoboboxes
 26040         mat comboBox$(hfItem,udim(mat comboBox$,2))
 26060         posComboA=pos(lwrc$(line$),'comboa(')
@@ -95,11 +95,11 @@
 26100         if posComboF>0 then 
 26120           posComboX=posComboF 
 26300           comboBox$(hfItem,1)='ComboF'                 ! 'ComboF'
-28000           pr "comboBox$(hfItem,1)='ComboF'"
+28000           ! pr "comboBox$(hfItem,1)='ComboF'"
 28020         else if posComboA then
 28040           posComboX=posComboA
 28060           comboBox$(hfItem,1)='ComboA'                 ! 'ComboA'
-28080           pr "comboBox$(";hfItem;",1)='ComboA'"
+28080           ! pr "comboBox$(";hfItem;",1)='ComboA'"
 28100         else 
 28120           pr 'unexpected comboBox err in hamsterFio line$="'&line$&'"' : pause
 28140         end if

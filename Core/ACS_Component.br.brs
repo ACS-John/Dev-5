@@ -1176,17 +1176,20 @@
 32960   frames(udim(frames),3)=ps+1
 32980 fnend 
 33000 def fn_ace_rd_flex(;___,index_)
-33040   lyne=val(control$(2))
-33060   ps=val(control$(3))
-33080   height= rows - lyne ! val(control$(4))
-33100   width= cols - ps -2 ! val(control$(5))
-33120   seltype=val(control$(7))
-33140   sorttype=val(control$(8))
-33160   path1$=control$(9)
-33180   hdr_count=val(control$(10))
-33200   container=val(control$(11))
-33220   tabcon=val(control$(12))
-33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*2100,_forms$(1)*1000,filterspec$*255,gridspec$*255,loading_spec$*50
+33040   lyne     = val(control$(2))
+33060   ps       = val(control$(3))
+33080   height   = rows - lyne ! val(control$(4))
+33100   width    = cols - ps -2 ! val(control$(5))
+33120   seltype  = val(control$(7))
+33140   sorttype = val(control$(8))
+33160   path1$   = control$(9)
+33180   hdr_count= val(control$(10))
+33200   container= val(control$(11))
+33220   tabcon   = val(control$(12))
+33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*2100,_forms$(1)*1000
+33247   dim filterspec$*255  ! 
+33248   dim gridspec$*255    ! 
+33249   dim loading_spec$*50 ! where to print Loading: please wait...
 33250   ! pr env$('temp')&'\acs\'&trim$(path1$)&'.hdr' : pause
 33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input 
 33280   linput #grid_headers: _line$
@@ -1206,14 +1209,14 @@
 33560   if udim(frames) and not container and ps > 2 then 
 33580     ps+=1
 33600   end if 
-33620   ! 
-33640   filterspec$=str$(lyne)&","&str$(ps)&","&str$(width+2)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
+33620   widthEnhanced=width+2 ! tried to increase to +28 on 1/6/2018 to make work for UB Meter Info via fnHamsterFio  but it did not fix the error 4
+33640   filterspec$=str$(lyne)&","&str$(ps)&","&str$(widthEnhanced)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
 33660   ! 
 33680   if not container and not tabcon then 
-33700     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(width+2)
+33700     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(widthEnhanced)
 33720     loading_spec$=str$(lyne + height)&","&str$(ps)&",C "
 33740   else 
-33760     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(width+2)
+33760     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(widthEnhanced)
 33780     loading_spec$=str$(lyne + height-1)&","&str$(ps)&",C "
 33800   end if 
 33820   ! 
@@ -1227,7 +1230,7 @@
 33980   filterspec$(0:0)=window_prefix$
 34000   gridspec$(0:0)=window_prefix$
 34020   loading_spec$(0:0)=window_prefix$
-34040   ! 
+34040   ! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause ! 
 34060   pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
 34080   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
 34100   clearflag$="="
@@ -1318,12 +1321,13 @@
 35920     if not printed then 
 35940       pr f gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
 35960     else if row_count <> rows then 
-35980       pr f gridspec$&",+L": mat long_row$(1:(row_count)*udim(_chunks$))
+35962       ! get an error 58 below - check (mat _headings$,mat _widths,mat _forms$)
+35980       pr f gridspec$&",+L": mat long_row$(1:(row_count)*udim(_chunks$)) ! soflow ignore
 36000     end if 
 36020   end if 
 36040   GRID_DATA_LOAD_COMPLETE: ! 
 36060   ! clear the "Loading..." message
-36080   pr f loading_spec$ : rpt$(" ",30)
+36080   pr f loading_spec$: rpt$(" ",30)
 36100   ! 
 36120   close #grid_data: 
 36140   fn_ace_io_add(gridspec$&",row,selone")
@@ -1351,39 +1355,42 @@
 36580     end if 
 36600   next index_
 36620 fnend 
-36640 def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
-36660   data_file_nonempty=0
-36680   mat _headings$(udim(_headings$)+1)
-36700   mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
-36720   _headings$(1)="Combined"
-36740   mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
-36760   ! 
-36780   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
-36800   for count=1 to 500
-36820     linput #grid_data: _line$ eof ignore
-36840     if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
-36860     str2mat(_line$,mat _chunks$,chr$(9))
-36880     if udim(_chunks$)<> udim(_headings$)-1 then ! truncate extra columns, which are there by mistake or are missing
-36900       mat _chunks$( udim(_headings$)-1 )
-36920     end if 
-36940     mat2str(mat _chunks$,_line$," ")
-36960     _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
-36980     for _index=1 to udim(mat _chunks$)
-37000       _widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
-37020       _widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
-37040       if _widths(_index+1) then data_file_nonempty=1
-37060       _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
-37080     next _index
-37100   next count
-37120   GRIDFORM_COMPLETE: ! 
-37140   for index_=2 to udim(mat _mask$)+1
-37160     fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
-37180   next index_
-37200   _forms$(1)="0/C 500"
-37220   _widths(1)=0
-37240   close #grid_data: 
-37260   fn_gridform=data_file_nonempty
-37280 fnend 
+36640   def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
+36660     let data_file_nonempty=0
+36680     mat _headings$(udim(_headings$)+1)
+36700     mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
+36720     let _headings$(1)="Combined"
+36740     mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
+36760 ! 
+36780     open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
+36800     for count=1 to 1500
+36820       linput #grid_data: _line$ eof ignore
+36840       if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
+36860       let str2mat(_line$,mat _chunks$,chr$(9))
+36880       if udim(_chunks$)<> udim(_headings$)-1 then ! truncate extra columns, which are there by mistake or are missing
+36900         mat _chunks$( udim(_headings$)-1 )
+36920       end if 
+36940       let mat2str(mat _chunks$,_line$," ")
+36960       let _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
+36980       for _index=1 to udim(mat _chunks$)
+37000         let _widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
+37020         let _widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
+37040         if _widths(_index+1) then let data_file_nonempty=1
+37060         let _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
+37080       next _index
+37100     next count
+37120 GRIDFORM_COMPLETE: ! 
+37140     for index_=2 to udim(mat _mask$)+1
+37160       let fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
+37180     next index_
+37200     let _forms$(1)="0/C 500"
+37220     let _widths(1)=0
+37240     close #grid_data: 
+37260     let fn_gridform=data_file_nonempty
+37280   fnend 
+
+
+
 37300 def fn_column_mask(&form$,&width,mask$;___,invisible)
 37320   maxlen=width + 10 ! to deal with bad data
 37340   mask=val(mask$) conv ignore

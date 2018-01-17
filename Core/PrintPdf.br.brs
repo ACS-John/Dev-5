@@ -14,7 +14,7 @@
 08000 def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 08020   pdfDecipos=0 ! no longer passed - no longer needed
 08040   if ~setup then let fn_Setup
-08100   dim g_filename_final$*1024
+08100   dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
 08140   g_filename_final$=env$('at')&fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
 08160   open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
 08180   poReturn=hPdfOut

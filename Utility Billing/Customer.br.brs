@@ -393,7 +393,8 @@
 25340       custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
 25360       !
 25380         ! fnButton(9,48,'…',fkey_meterAddress:=54,"Select an existing Meter Address/Location ID",0,1)
-25400         fnLbl(9,50,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID')
+25400         fnLbl(9,50,str$(fnLocationIdFromAccount(z$)),9,0,0,0,0,'Location ID for Account Number')
+25410         fnLbl(9,59,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID derived from Meter Address')
 25420     else
 25440       fnLbl(9,1,"Meter Address:",mylen,1)
 25460       fnTxt(9,27,20,30)
@@ -1734,7 +1735,7 @@
 90010     library 'S:\Core\Library': fnerror,fnAcs,fnflexadd1,fnflexinit1,fnTos
 90020     library 'S:\Core\Library': fncustomer_search,fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 90030     library 'S:\Core\Library': fncmbact,fnComboF,fncmbrt2
-90032     library 'S:\Core\Library': fnMeterAddressLocationID,fnMeterAddressUpdate
+90032     library 'S:\Core\Library': fnMeterAddressLocationID,fnLocationIdFromAccount,fnMeterAddressUpdate
 90040     library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle,fnreg_read
 90050     library 'S:\Core\Library': fntransfile,fncreg_read,fncreg_write,fnopen_meter,fnEditFile
 90060     library 'S:\Core\Library': fnureg_write,fnureg_read,fnbutton_or_disabled,fnget_services,fnkey_change

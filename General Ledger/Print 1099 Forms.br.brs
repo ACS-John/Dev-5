@@ -1,15 +1,14 @@
 00010 ! (formerly) S:\acsGL\glPrt109
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndat,fncombof,fnFra,fnOpt,fnask_1099_info,fn1099print_close,fn1099print
-00050   fntop(program$,cap$="Print 1099 Forms")
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndat,fncombof,fnFra,fnOpt,fnask_1099_info,fn1099print_close,fn1099print,fngethandle
+00050   fntop(program$)
 00060   on error goto ERTN
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
-00090   dim cap$*128
 00200   if ~fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then goto XIT
-00460   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00470   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00460   open #hPayee=fngethandle: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00470   open #hTrans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
 32000   do
-32020     read #payee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
-32040     ytdp=fn_YearToDapPay(trans,vn$, beg_date,end_date)
+32020     read #hPayee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
+32040     ytdp=fn_YearToDapPay(hTrans,vn$, beg_date,end_date)
 32060     form pos 1,c 8,c 35,3*c 20,x 5,n 2,c 11
 32080     if typ<>0 then 
 32100       if ytdp=>minamt then 
@@ -23,8 +22,8 @@
 32260     end if
 32280   loop
 36000   FINIS: !
-36020   close #payee: ioerr ignore
-36040   close #trans: ioerr ignore
+36020   close #hPayee: ioerr ignore
+36040   close #hTrans: ioerr ignore
 36060   fn1099print_close
 36080 XIT: fnxit
 38000 ! <Updateable Region: ERTN>
@@ -34,11 +33,11 @@
 38080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38120 ! /region
-40000 def fn_YearToDapPay(trans,key$; beg_date,end_date)
+40000 def fn_YearToDapPay(hTrans,key$; beg_date,end_date)
 40020   ytdpReturn=0
-40040   restore #trans,key>=key$: nokey ytdpFinis 
+40040   restore #hTrans,key>=key$: nokey ytdpFinis 
 40060   do
-40080     read #trans,using 'Form POS 1,c 8,N 6,PD 5.2',release: trvn$,dt,am eof ytdpFinis
+40080     read #hTrans,using 'Form POS 1,c 8,N 6,PD 5.2',release: trvn$,dt,am eof ytdpFinis
 40100     if trim$(key$)=trim$(trvn$) then 
 40120       if beg_date=0 or fndate_mmddyy_to_ccyymmdd(dt)=>beg_date then 
 40140         if end_date=0 or fndate_mmddyy_to_ccyymmdd(dt)<=end_date then 
