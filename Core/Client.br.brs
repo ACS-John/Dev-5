@@ -893,10 +893,6 @@
 76660     mat css_system_id$=cache_css_system_id$
 76680     mat css_system_support_end_date(cache_css_system_count)
 76700     mat css_system_support_end_date=cache_css_system_sup_end_date
-76720     !  removed - caused problems on 3/3/2017   !!!   ! if cache_css_system_count>0 then
-76740     !  removed - caused problems on 3/3/2017   !!!   !   cache_css_system_id$(cache_css_system_count)=fn_system_code_standardize$(scode$)
-76760     !  removed - caused problems on 3/3/2017   !!!   !   cache_css_system_sup_end_date(cache_css_system_count)=sup_exp_date
-76780     !  removed - caused problems on 3/3/2017   !!!   ! end if
 76800   ! /r
 78000   ! r: determine if on support
 78040     for css_item=1 to cache_css_client_owns_count ! udim(mat css_system_id$)
@@ -938,6 +934,8 @@
 97100   cic_return=0
 97120   if env$('ACSDeveloper')<>'' then
 97140     cic_return=1
+97142   else if env$('client')='Payroll Done Right' and days(date$)<=days('04/01/2018','mm/dd/ccyy') then ! just testing
+97144     cic_return=1
 97160   else if env$('client')='Starr County Gas'   and days(date$)<=days('02/15/2018','mm/dd/ccyy') then ! just testing
 97180     cic_return=1
 97200   else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('06/15/2018','mm/dd/ccyy')  then

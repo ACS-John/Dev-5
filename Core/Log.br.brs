@@ -1,6 +1,6 @@
 00010 ! 
 00020 ! ______________________________________________________________________
-20000 def library fnlog(log$*190;log_type)
+20000 def library fnlog(log$*512;log_type)
 20020   ! Log_Type = 0 = why do i even bother logging this crap.
 20040   !          = 1 = chained somewhere
 20060   !          = 2 = you had an error.

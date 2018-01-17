@@ -45,7 +45,7 @@ Print
 >Past Due Balance Breakdown                           ^ acsUB\ubDelinq
 >Meter Reading Book                                   ^ acsUB\ubMetrBk
 >Route Book Pages                                     ^ acsUB\ubMetrB2
->Median Sewer Charge                                  ^ acsUB\Ubmeans
+>Median Sewer Charge                                  ^ Utility Billing\Median Sewer Charge
 >Average Sewer Usage Report                           ^ acsUB\averagesewer
 >Secondary Water Usage Report                         ^ acsUB\billingrpt
 ! >Print Postal Permit                                ^ acsUB\permitbox
@@ -63,7 +63,7 @@ Hand Held                                             ^                         
 >Meter Location                                       ^ Utility Billing\Hand Held\Meter Location                ^ U4
 >Meter Type                                           ^ Utility Billing\Hand Held\Meter Type                    ^ U4
 ! >Meter Information                                    ^ Utility Billing\Hand Held\Meter Information             ^ U4
-! >Meter Address                                        ^ Utility Billing\Hand Held\Meter Address                 ^ U4
+! >Meter Address                                        ^ HamsterFio:Meter Address                                ^ U4
 >Duplicate Meter Address Report                       ^ Utility Billing\Hand Held\Duplicate Meter Address Report^ U4
 
 External Collections Processing                       ^                                                         ^ U5

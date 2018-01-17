@@ -13,7 +13,7 @@ File
 Pay Period                                  
 >Enter Time Sheets                          ^ Payroll\Enter Time Sheets
 >Payroll Registers                          ^ acsPR\newprReg1
->Other Pay and Deductions Register          ^ acsPR\newPropDreg
+>Other Pay and Deductions Register          ^ Payroll\Other Pay and Deductions Register
 >Direct Deposits                            ^ acsPR\newDD
 >Print Payroll Checks                       ^ Payroll\Print Payroll Checks
 >YTD and QTD Register                       ^ acsPR\newprYTDQTD

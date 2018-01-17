@@ -204,7 +204,7 @@
 19820       fnreg_read('Last Save Date',last_save_date$)
 19830       fnreg_read('Last Save File',last_save$)
 19840       dim tmp_tooltip$*2048
-19850       tmp_tooltip$='Last succesful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
+19850       tmp_tooltip$='Last successful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
 19860       fnLbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 19870       fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 19880       fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
@@ -392,9 +392,13 @@
 23660             which=srch(mat program_name_trim$,trim$(favorite$(fkey_value-fkey_favorite_program_base)))
 23680             if which<=0 then
 23700               msgbox('Could not find "'&trim$(favorite$(fkey_value-fkey_favorite_program_base))&'" on your current menu.')
-23720             else
-23740               fnchain('S:\'&program_file$(which))
-23760             end if
+23710             else
+23720               if lwrc$(ltrm$(program_file$(which))(1:11))='hamsterfio:' then
+23730                 fn_callHamsterFio(program_file$(which))
+23740               else
+23750                 fnchain('S:\'&program_file$(which))
+23760               end if
+23762             end if
 23770           end if
 23780         else if env$('acsDeveloper')<>'' then
 23800           pr 'fkey_value=';fkey_value
@@ -467,9 +471,9 @@
 25000 def fn_callHamsterFio(tmpCap$*128)
 25020   tmpCap$=trim$(tmpCap$)
 25040   tmpCap$=tmpCap$(12:len(tmpCap$))
-25060   if uprc$(tmpCap$(1:3))='CO ' then !
-25080     tmpCap$(1:3)=''
-25100     tmpCursys$='CO'
+25060   if tmpCap$(1:3)=uprc$(tmpCap$(1:2))&' ' then !  if the first two letters are uppercase and the third is a space then assume it includes it's own system code
+25080     tmpCursys$=tmpCap$(1:2)
+25100     tmpCap$(1:3)=''
 25120   else
 25140     tmpCursys$=env$('cursys')
 25160   end if

@@ -345,7 +345,7 @@
 18360     hd1=20000000+fncd(d1)
 18380   end if 
 18400 ! hsk$=lpad$(str$(eno),8)&cnvrt$("PD 6",hd1)
-18420   if ~testCheckFormat and (allign=3 or skip_alignment$='Yes') then 
+18420   if allign=3 or skip_alignment$='Yes' then 
 18440     pr #255: chr$(12) ! NEWPAGE
 18460     goto CHECK_PRINT_TOP
 18480   end if 
@@ -744,15 +744,15 @@
 34115     fn_check_bethany
 34120   else if env$('client')="Billings" then 
 34125     fn_check_billings
-34128   else if env$('client')="Campbell" then ! r:
-34129     length                 =26
-34130     line_date              =13
-34131     line_amount            =13
-34132     line_amount_english    =9
-34133     line_amount_english    =15
-34134     line_name_and_address  =58
-34135     pos_date               =69
-34136     fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date) ! /r
+34130   else if env$('client')="Campbell" then 
+          length                 =26
+          line_date              =13
+          line_amount            =13
+          line_amount_english    =9
+          line_amount_english    =15
+          line_name_and_address  =58
+          pos_date               =69
+34135     fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date)
 34140   else if env$('client')="Carr Plumbing" then ! r:
 34145     length                = 26
 34150     line_date             =  4
@@ -833,12 +833,12 @@
 34525     if env$('client')="Payroll Done Right" and env$('cno')='18' then ! r: 12/29/2017  (most recent)
 34530       length                = 25
 34535       line_date             =  3
-34540       line_amount           =  6
-34545       line_amount_english   =  8
+34540       line_amount           =  5
+34545       line_amount_english   =  7
 34550       line_name_and_address =  0  ! 0/not printing is the default
 34555       pos_date              = 80  ! 65 is default
 34560       pos_amt               = 75 ! pos_date+18 is default
-34565       line_nameOnly         =  6
+34565       line_nameOnly         =  5
 34570       pos_nameOnly          =  8
 34575       line_checkNumber      =  0
 34580       pos_checkNumber       =  0

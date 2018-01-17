@@ -241,7 +241,7 @@
 43600   ! no need now that we have U4 Meter Location    !   fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
 43610   ! no need now that we have U4 Meter Location    !   fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
 43612   !
-43614   if ~exists(env$('Q')&"\UBmstr\MeterLocation.h"&env$('cno')) then let fnInitialializeMeterLocation
+43614   fnInitialializeMeterLocation
 43620   !
 43630   if exists(env$('Q')&'\UBmstr\CityStZip.dat') then
 43640     fnStatus('Migrating UB City State Zip records into Core City State Zip table...')

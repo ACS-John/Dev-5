@@ -22,11 +22,12 @@
 12320   dim copyCurrent$*68
 12340   !
 12360   dim copyFile$(5)*128,ssnMask(5)
-12380   copyFile$(1)='S:\Core\pdf\2016\1099-Misc\Copy A.pdf' : ssnMask(1)=0
-12400   copyFile$(2)='S:\Core\pdf\2016\1099-Misc\Copy 1.pdf' : ssnMask(2)=0
-12420   copyFile$(3)='S:\Core\pdf\2016\1099-Misc\Copy B.pdf' : ssnMask(3)=0
-12440   copyFile$(4)='S:\Core\pdf\2016\1099-Misc\Copy C.pdf' : ssnMask(4)=1
-12460   copyFile$(5)='S:\Core\pdf\2016\1099-Misc\Copy 2.pdf' : ssnMask(5)=1
+12362   taxYear$=date$(days(date$)-120,'CCYY')
+12380   copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy A.pdf' : ssnMask(1)=0
+12400   copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 1.pdf' : ssnMask(2)=0
+12420   copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy B.pdf' : ssnMask(3)=0
+12440   copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy C.pdf' : ssnMask(4)=1
+12460   copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 2.pdf' : ssnMask(5)=1
 12480     ! /r
 12500   end if
 12520 fnend
@@ -143,14 +144,14 @@
 28040     fnpa_txt(a$(2)(1:30),column1,fn_line(1)+5)
 28060     fnpa_txt(a$(3)(1:30),column1,fn_line(1)+10)
 28080     fnpa_txt(ph$,column1,fn_line(1)+20)
-28100     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(1)),column2,fn_line(1))
-28120     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(2)),column2,fn_line(2))
-28140     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(3)),column2,fn_line(3))
-28160     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(4)),column3,fn_line(3))
+28100     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(1)),column2,fn_line(1))
+28120     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(2)),column2,fn_line(2))
+28140     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(3)),column2,fn_line(3))
+28160     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(4)),column3,fn_line(3))
 28180     fnpa_txt(fed$,column1,fn_line(4))
 28200     fnpa_txt(ss$,column1+45,fn_line(4))
-28220     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(5)),column2,fn_line(4))
-28240     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(6)),column3,fn_line(4))
+28220     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(5)),column2,fn_line(4))
+28240     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(6)),column3,fn_line(4))
 28260     fnpa_txt(nam$(1:30),column1,fn_line(5)-8)
 28280     fnpa_txt(ad$(1),column1,fn_line(5)+5) ! address line 1
 28300     if udim(mat ad$)=2 then
@@ -161,8 +162,8 @@
 28440     else 
 28460       pr 'udim(mat ad$)=';udim(mat ad$);' this is unexpected by '&program$ : pause
 28480     end if
-28500     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(7)),column2,fn_line(5))
-28520     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.##",box(8)),column3,fn_line(5))
+28500     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(7)),column2,fn_line(5))
+28520     fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(8)),column3,fn_line(5))
 28540     fnpa_txt(vn$,column1,fn_line(8))
 29000     if twoPerPage$='False' or ten99Count=2 then 
 29020        fnpa_newpage

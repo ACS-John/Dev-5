@@ -44,7 +44,7 @@
 32120   col1=  8
 32140   col2=113
 32160   col3=169
-32180   fnpa_txt(ein$,col1,fn_line(4)) ! Employer Identification Number (EIN)
+32180   fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
 32200   fnpa_txt(a$(1),col1,fn_line(6))
 32220   fnpa_txt(a$(2),col1,fn_line(7)-2)
 32240   fnpa_txt(a$(3),col1,fn_line(7)+2)

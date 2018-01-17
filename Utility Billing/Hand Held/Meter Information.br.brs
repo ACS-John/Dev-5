@@ -32,7 +32,7 @@
 14060 fnend 
 16000 def fn_open_meter
 16020   fn_open_file
-16040   fn_close_file
+16040   close #open_file(1):
 16060   fn_open_meter=fn_open_file
 16080 fnend 
 18000 def fn_open_file

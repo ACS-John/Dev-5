@@ -409,7 +409,7 @@
 47920     library 'S:\Core\fnerror': fnerror
 47940     fnerror=fnerror(callingProgram$,errornumber,linenumber,act$,stopable$)
 47960   fnend
-47980   def library fnlog(log$*190;x)
+47980   def library fnlog(log$*512;x)
 48000     library 'S:\Core\Log.br': fnlog
 48020     fnlog=fnlog(log$,x)
 48040   fnend
@@ -957,19 +957,21 @@
 70023     fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)
 70024   fnend
 70025   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
-70026     ! library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressLocationID
 70027     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressLocationID
 70028     fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
 70029   fnend
 70041   def library fnMeterAddressName$*30(locationID; leaveFileOpen)
-70042     ! library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressName$
 70043     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressName$
 70044     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
 70045   fnend
 70051   def library fnAccountFromLocationId$*10(locationID; leaveFileOpen)
-70052     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnAccountFromLocationId$
+70052     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnAccountFromLocationId$
 70053     fnAccountFromLocationId$=fnAccountFromLocationId$(locationID, leaveFileOpen)
 70054   fnend
+70055   def library fnLocationIdFromAccount(account$*10; leaveFileOpen)
+70056     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnLocationIdFromAccount
+70057     fnLocationIdFromAccount=fnLocationIdFromAccount(account$, leaveFileOpen)
+70058   fnend
 70061   def library fnNoteDir$*256
 70062     library 'S:\Utility Billing\Customer.br': fnNoteDir$
 70063     fnNoteDir$=fnNoteDir$
@@ -990,10 +992,14 @@
 70140     library 'S:\Utility Billing\Work Order Print.br': fnWorkOrderPrint
 70150     fnWorkOrderPrint=fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
 70160   fnend
-70170   def library fncustomer_address(z$,mat addr$; ca_address_type)
-70180     library 'S:\Utility Billing\Labels.br': fncustomer_address
-70190     fncustomer_address=fncustomer_address(z$,mat addr$, ca_address_type)
-70200   fnend
+70182   def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
+70184     library 'S:\Utility Billing\Enter Readings and Charges.br': fnCustomerData$
+70186     fnCustomerData$=fnCustomerData$(account$,fieldName$, leaveOpen)
+70188   fnend
+70192   def library fncustomer_address(z$,mat addr$; ca_address_type)
+70194     library 'S:\Utility Billing\Labels.br': fncustomer_address
+70196     fncustomer_address=fncustomer_address(z$,mat addr$, ca_address_type)
+70198   fnend
 70202   def library fnCustomerNotes(z$)
 70204     library 'S:\Utility Billing\Customer.br': fnCustomerNotes
 70206     fnCustomerNotes=fnCustomerNotes(z$)
