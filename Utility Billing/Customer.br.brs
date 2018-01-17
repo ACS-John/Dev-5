@@ -397,7 +397,7 @@
 25410         fnLbl(9,59,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID derived from Meter Address')
 25420     else
 25440       fnLbl(9,1,"Meter Address:",mylen,1)
-25460       fnTxt(9,27,20,30)
+25460       fnTxt(9,27,20,30,0,'',1)
 25480       custInfo$(respc+=1)=e$(1)
 25500     end if
 25520     fnLbl(10,1,"Alpha Sort Name:",mylen,1)
