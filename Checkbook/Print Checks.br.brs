@@ -918,6 +918,8 @@
 40080     fn_portion_check_ashgrove(amt)
 40140   else if env$('client')="Billings" then 
 40160     fn_portion_check_billings(amt)
+40162   else if env$('client')="Campbell" then 
+40164     fn_portion_check_generic(amt, 28,57)
 40220   else if env$('client')="Cerro Gordo" then 
 40240     fn_portion_check_cerrogordo(amt)
 40242   else if env$('client')="Cerro Gordo T" then 
@@ -959,7 +961,6 @@
 41040   end if
 41060   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 41080   pr #255: "" ! line 13
-41082   normal4=4
 41084   if posDate then
 41086     a=posDate
 41088   else
@@ -969,8 +970,9 @@
 41180     if env$('client')="Hope Welty" or env$('client')="Philo" then a=55
 41200     if env$('client')="Monticello" or env$('client')="Edinburg" then a=55
 41210   end if
-41220   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$ ! line 14
-41240   pr #255: ""
+41212   if env$('client')='Campbell' then pr #255: ''
+41220   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$ ! line 14
+41240   if env$('client')<>'Campbell' then pr #255: ''
 41260   pr #255: "" ! line 16
 41280   if env$('client')="Cerro Gordo T"  then pr #255: ""
 41300   for j=1 to 4
@@ -1007,8 +1009,7 @@
 41920   if prenum=2 then skipline=max(skipline-3,1)
 41940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 41980   a=65
-42000   normal4=4
-42020   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$
+42020   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
 42060   pr #255: ""
 42080   if trim$(b$(2))="" then 
 42100     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""

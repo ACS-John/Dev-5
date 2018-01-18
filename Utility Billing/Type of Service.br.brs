@@ -112,7 +112,7 @@
 52080   for srv_item=1 to udim(mat serviceCode$)
 52100     if (srv_item=1 and trim$(serviceCode$(srv_item))<>'') or (serviceName$(srv_item)="GAS" or serviceCode$(srv_item)="GA") or serviceCode$(srv_item)='EL' or serviceName$(srv_item)="Lawn Meter" then ! if it is a metered service
 52120       fnAddOneC(mat serviceCodeMetered$,serviceCode$(srv_item))
-52130       pr 'found metered service: '&serviceCode$(srv_item) 
+52130       ! pr 'found metered service: '&serviceCode$(srv_item) 
 52140     end if 
 52160   next srv_item
 52180 fnend

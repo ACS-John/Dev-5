@@ -744,15 +744,15 @@
 34115     fn_check_bethany
 34120   else if env$('client')="Billings" then 
 34125     fn_check_billings
-34128   else if env$('client')="Campbell" then ! r:
+34128   else if env$('client')="Campbell" then ! r: updated 1/17/2018 - uses very few options
 34129     length                 =26
 34130     line_date              =13
 34131     line_amount            =13
 34132     line_amount_english    =9
-34133     line_amount_english    =15
-34134     line_name_and_address  =58
-34135     pos_date               =69
-34136     fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date) ! /r
+34134     line_name_and_address  =15
+34135     pos_date               =57
+34136     pos_amt                =69
+34137     fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt) ! /r
 34140   else if env$('client')="Carr Plumbing" then ! r:
 34145     length                = 26
 34150     line_date             =  4

@@ -1,10 +1,6 @@
 00010 ! ______________________________________________________________________
 00020   library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnH2AddComboF,fnHamster2
-00030   on error goto ERTN
-00040 ! ______________________________________________________________________
-00050   dim cap$*128
-00060 ! ______________________________________________________________________
-00070   fntop(program$,cap$='GLMaster')
+00070   fntop(program$)
 00090   dim srvnam$(10)*20,srv$(10)*2
 00190   fn_hamster_setup
 00200   fn_open_file : fn_close_file : fn_open_file
@@ -20,14 +16,6 @@
 00300     for j=1 to open_file_count : close #j: : next j
 00310   fnend  ! fn_close_file
 00320 XIT: fnxit
-00330 ! ______________________________________________________________________
-00340 ! region
-00350 ERTN: fnerror(program$,err,line,act$,"xit")
-00360   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00370   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00400 ! /region
 00410 ! ______________________________________________________________________
 00420   def fn_hamster_setup
 00430     mask_pointtwo=32 : mask_number=30
@@ -37,6 +25,7 @@
 00470     fnH2Init
 00480 !     fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 00490     fnH2AddText("Account",12)
+00492     fnH2AddText("Description",50,"C",50,0,13)
 00500     fnH2AddText("Income Stmt Ref",5,"PD",3,mask_number,69)
 00501     fnH2AddText("Beginning Balance",11,"PD",6,mask_pointtwo,81)
 00502     fnH2AddText("Current Balance",11,"PD",6,mask_pointtwo,87)

@@ -11,8 +11,6 @@
 00120   dim ta(2),revb(13)
 00130   dim ack$*20,resp$(100)*60
 00150   dim ml$(3)*128,item$(9)*30
-00152   ! dim de$*50
-00154   ! dim e(13),h(13),g(13),rf2(6)
 00180 ! ______________________________________________________________________
 00190   fntop(program$,cap$="General Ledger Master")
 00220   fixgrid=99
@@ -22,26 +20,18 @@
 00290   open #8: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L310
 00300   cl1=1
 00310 L310: ! 
-00320   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00330   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed ! ioerr L350
-00340 ! goto L400
-00350 ! should be done in checkfileversion, not here ! L350: close #1: ioerr ignore
-00360 ! should be done in checkfileversion, not here !   close #11: ioerr ignore
-00370 ! should be done in checkfileversion, not here !   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\glIndx2.H"&env$('cno'),"13 30")
-00380 ! should be done in checkfileversion, not here !   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.H"&env$('cno'),"1 12")
-00390 ! should be done in checkfileversion, not here !   goto L310
-00400 ! L400: 
-00402   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
-00410   ! open #hAcTrans:=3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr MAIN
-00412   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
+00320   open #hAccount:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00330   open #hAccountUnused:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed ! ioerr L350
+00340   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
+00350   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
+00360   F_acTrans: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 00420 MAIN: ! 
 00430   fnTos(sn$="GLProb2-"&str$(edit_mode))
-00432   mylen=23: mypos=mylen+3 : right=1
+00432   mylen=23 : mypos=mylen+3 : right=1
 00440   fnLbl(1,1,"General Ledger Number:",mylen,right)
 00450   if edit_mode=1 then ! attempt to put disabled text box for acct #
 00452     fnTxt(1,mypos,60,0,0,"",1,"",0)
-00454     resp$(1)=fnrglbig$(gl$) ! lpad$(gl$,12)
-00456 !   fnLbl(1,40,de$)
+00454     resp$(1)=fnrglbig$(gl$)
 00458   else 
 00460     fnqglbig(1,mypos,0,2)
 00462     resp$(1)=fnrglbig$(gl$)
@@ -155,12 +145,16 @@
 01250   if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 01260   if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
 01270   fnLbl(2,1,"General Ledger Number:",mylen,right)
-01280   if use_dept=1 then let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
-01282   resp$(rc+=1)=str$(dno)
-01290   fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+01280   if use_dept then 
+01281     let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+01282     resp$(rc+=1)=str$(dno)
+01288   end if
+01290   fnTxt(2,31,6,0,right,"1030",0,"Enter the main part of the general ledger number.",0)
 01292   resp$(rc+=1)=str$(ano)
-01300   if use_sub=1 then let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
-01302   resp$(rc+=1)=str$(sno)
+01300   if use_sub then 
+01301     let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
+01302     resp$(rc+=1)=str$(sno)
+01308   end if
 01310   fnLbl(3,1,"Description:",mylen,right)
 01320   fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 01322   resp$(rc+=1)=""
@@ -168,17 +162,13 @@
 01340   fnAcs(sn$,0,mat resp$,ckey)
 01360   if ckey=5 then goto MAIN
 01370   fixgrid=99
-01380   dno=ano=sno=0
-01390   if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
-01400   if use_dept=0 then ano=val(resp$(1))
-01410   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
-01420   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
-01430   if use_dept=1 and use_sub=1 then d$=resp$(4)
-01440   if use_dept=0 and use_sub=1 then d$=resp$(3)
-01450   if use_dept=0 and use_sub=0 then d$=resp$(2)
-01460   if use_dept=1 and use_sub=0 then d$=resp$(3)
+01380   dno=ano=sno=0  : rc=0
+01390   if use_dept then dno=val(resp$(rc+=1))
+01400   ano=val(resp$(rc+=1))
+01410   if use_sub then sno=val(resp$(rc+=1))
+01430   d$=resp$(rc+=1)
 01470   key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
-01480   read #1,using 'Form POS 1,N 3',key=key$: dno nokey ignore
+01480   read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey ignore
 01530 ! NEW_RECORD: !
 01540 ! L1540: ! 
 01541   bb=cb=pbp=0
@@ -186,7 +176,7 @@
 01543   edit_mode=1
 01544   gl$=key$
 01550 ! write_new_record
-01560   write #1,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
+01560   write #hAccount,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 01562   if cl1=1 then 
 01564     write #8,using L1740: gl$,d$
 01566   end if 
@@ -194,7 +184,7 @@
 01570 ! ______________________________________________________________________
 01580 DO_EDIT: ! r:
 01582   pr newpage
-01590   read #1,using L1740,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
+01590   read #hAccount,using L1740,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
 01600   fnrglbig$(key$)
 01610   for j=1 to 13
 01620     if revb(j)=-202020202.02 then revb(j)=0
@@ -215,7 +205,7 @@
 01696     end if 
 01698   end if 
 01720 ! !f BB=0 Then bB=CB  ! need to make current bal & begbalance same if adding new record
-01730   rewrite #1,using L1740,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
+01730   rewrite #hAccount,using L1740,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 01740 L1740: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 01750   if cl1=1 then 
 01752     rewrite #8,using L1740,key=key$: gl$,d$ nokey L1760
@@ -250,7 +240,7 @@
 01892   if resp$="OK" then delete_it=1: goto L1910
 01900   if resp$="Cancel" then goto L2030
 01910 L1910: !
-01912   delete #1,key=gl$: ioerr L2030
+01912   delete #hAccount,key=gl$: ioerr L2030
 01920   if cl1=1 then delete #8,key=gl$: nokey ignore
 01922   goto CHANGE_CURRENT_TRANS ! /r
 01930 CHANGE_CURRENT_TRANS: ! r:
@@ -265,58 +255,6 @@
 02020   adr=nta : goto L1960
 02030 L2030: delete_it=0
 02040   return  ! /r
-02050 ! PRINT_PROOF: ! r:  pr proof list is currently unused
-02060 !   restore #1,key>="            ": eof ignore
-02070 !   fnwait("Printing: Please wait...",1)
-02080 ! ! on fkey 5 goto PP_FINIS
-02090 !   fnopenprn
-02100 !   gosub PP_HEADER
-02110 ! PP_READ_1: ! 
-02112 !   read #1,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp eof PP_FINIS
-02120 !   read #1,using L1740: gl2$,de$,mat rf2,d,c,mat e,mat h,mat g,pb eof PP_EOF_1
-02130 !   goto PP_DETAILS ! /r
-02140 ! PP_HEADER: ! r:
-02142 !   pr #255,using L2150: date$('mm/dd/yy'),time$,env$('cnam'),"G/L Proof List",date$("Month DD, CCYY")
-02150 ! L2150: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,cc 50,skip 1,pos 59,c 30,skip 1,cc 66,skip 2
-02160 !   return  ! /r
-02162 ! PP_EOF_1: ! r:
-02163 !   c=d=pb=0
-02164 !   de$="0"
-02165 !   mat e=(0) : mat h=(0) : mat g=(0)
-02166 !   goto PP_DETAILS ! /r
-02170 ! PP_DETAILS: ! r: some printing stuff
-02180 !   pr #255,using L2190: gl$,gl2$
-02190 ! L2190: form pos 1,c 13,pos 69,c 13,skip 2
-02200 !   pr #255,using L2210: "Description",d$,"Description",de$
-02210 ! L2210: form pos 1,c 12,c 50,pos 69,c 12,c 50,skip 2
-02220 !   pr #255,using L2230: "Beginning Balance",bb,"Current Balance",cb,"Beginning Balance",d,"Current Balance",c
-02230 ! L2230: form pos 1,c 18,pic(---------.##),x 4,c 16,pic(---------.##),pos 69,c 18,pic(---------.##),x 4,c 16,pic(---------.##),skip 2
-02240 !   pr #255,using L2250: "Balance Sheet #",rf(1),"2nd Balance Sheet #",rf(2),"Balance Sheet",rf2(1),"2nd Balance Sheet #",rf2(2)
-02250 ! L2250: form pos 1,c 20,n 5,x 9,c 23,n 5,pos 69,c 20,n 5,x 9,c 23,n 5,skip 1
-02260 !   pr #255,using L2250: "Income Statement",rf(3),"2nd Income Statement",rf(4),"Income Statement",rf2(3),"2ND Income Statement",rf2(4)
-02270 !   pr #255,using L2250: "Fund Statement  ",rf(5),"2nd Fund Statement",rf(6),"Fund Statement  ",rf2(5),"2nd Fund Statement",rf2(6)
-02280 !   pr #255,using L2290: "EOY Balance 2 Yr Ago",pbp,"EOY Balance 2 Yr Ago",pb
-02290 ! L2290: form pos 1,c 20,pic(--------.##),pos 69,c 20,pic(--------.##),skip 2
-02300 !   pr #255,using L2310: "Current Year","Prior Year","Budget","Current Year","Prior Year","Budget"
-02310 ! L2310: form skip 2,pos 12,c 16,c 19,c 12,pos 80,c 16,c 19,c 12,skip 1
-02320 !   for j=1 to 13
-02330 !     pr #255,using L2340: "Period",j,bc(j),bp(j),bm(j),"Period",j,e(j),h(j),g(j)
-02340 ! L2340: form pos 1,c 6,n 3,pic(------------.##),pic(-----------.##),pic(------------.##),pos 69,c 6,n 3,pic(------------.##),pic(-----------.##),pic(------------.##),skip 1
-02350 !   next j
-02360 !   pr #255,using L2370: ""
-02370 ! L2370: form c 1,skip 2
-02380 !   cn=cn+1
-02390 !   if cn<>2 then goto PP_READ_1
-02410 !   pr #255: ""
-02412 !   pr #255: ""
-02420 !   cn=0
-02430 !   gosub PP_HEADER
-02440 !   goto PP_READ_1
-02450 ! PP_FINIS: ! 
-02452 !   fncloseprn
-02460 !   on fkey 5 ignore 
-02470 !   if fnprocess=1 then goto XIT else goto MAIN
-02480 ! ! /r
 02550 IGNORE: continue 
 02560 REVIEW_TRANS: ! r:
 02570   fnTos(sn$="review_trans")
@@ -333,43 +271,42 @@
 02670   if resp$(2)="True" then rv=2
 02680 ! ______________________________________________________________________
 02690 TRANSACTION_GRID: ! 
-02692   mat chdr$(9) : mat cmask$(9) : mat item$(9) !:
-        chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date' !:
-        chdr$(4)='Amount' !:
-        chdr$(5)='T Code' : chdr$(6)='P Code' !:
-        chdr$(7)='Ck/Rec #' : chdr$(8)='Description' !:
-        chdr$(9)='Period'
-02700   cmask$(1)="30"
-02702   cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' !:
-        cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' !:
-        cmask$(8)='' : cmask$(9)='30'
-02710   fnTos(sn$="gltrans")
+02692   mat chdr$(9) : mat cmask$(9) : mat item$(9) 
+02694   chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date' 
+02696   chdr$(4)='Amount' 
+02698   chdr$(5)='T Code' : chdr$(6)='P Code' 
+02700   chdr$(7)='Ck/Rec #' : chdr$(8)='Description' 
+02702   chdr$(9)='Period'
+02704   cmask$(1)="30"
+02706   cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' 
+02708   cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' 
+02710   cmask$(8)='' : cmask$(9)='30'
+02712   fnTos(sn$="gltrans")
 02720   fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 02730   adr=ta(1): pc2=0
 02740 !  read current or history files
 02750   if rv=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
-02760 READ_FROM_CURRENT: ! 
+02760   READ_FROM_CURRENT: ! 
 02770   transfile=2
-02780 L2780: if adr=0 then goto EO_TRANS_GRID
+02780   L2780: if adr=0 then goto EO_TRANS_GRID
 02790   read #2,using L2800,rec=adr,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
-02800 L2800: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
+02800   L2800: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 02810   adr=nta
 02820   goto DISPLAY_TRANS
-02830 READ_FROM_HISTORY: ! 
+02830   READ_FROM_HISTORY: ! 
 02840   transfile=3
 02850   ack$=gl$&cnvrt$("N 2",pc1)&"      "
 02860   restore #hAcTrans,key>=ack$: nokey EO_TRANS_GRID
-02870 L2870: read #hAcTrans,using L2880,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
-02880 L2880: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
+02870   L2870: read #hAcTrans,using F_acTrans,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
 02890   if key$><trgl$ then goto EO_TRANS_GRID
 02900   if pc1=0 then goto L2930
 02910   if pc1><pc2 then goto L2870
 02920 DISPLAY_TRANS: ! 
 02930 L2930: item$(1)=str$(rec(transfile))
-02932   item$(2)=trgl$: item$(3)=str$(tr(4)): item$(4)=str$(tr(5)) !:
-        item$(5)=str$(tr(6)) : item$(6)=str$(tr(7)) : item$(7)=tr$ !:
-        item$(8)=td$: item$(9)=str$(pc2) !:
-        fnflexadd1(mat item$)
+02932   item$(2)=trgl$: item$(3)=str$(tr(4)): item$(4)=str$(tr(5)) 
+02933   item$(5)=str$(tr(6)) : item$(6)=str$(tr(7)) : item$(7)=tr$ 
+02934   item$(8)=td$: item$(9)=str$(pc2) 
+02935   fnflexadd1(mat item$)
 02940   if rv=1 then goto L2780 else goto L2870 ! read from current or history
 02950 EO_TRANS_GRID: ! 
 02960   if rv=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
@@ -382,12 +319,12 @@
 03030   if rv=1 then 
 03032     read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
 03034   else 
-03036     read #hAcTrans,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03036     read #hAcTrans,using F_acTrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 03038   end if
 03040   resp$(1)=str$(recordnum): resp$(2)=trgl$: resp$(3)=str$(tr(4))
-03042   resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7)) !:
-        resp$(7)=tr$: resp$(8)=td$ !:
-        resp$(9)=str$(pc2)
+03042   resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7)) 
+03044   resp$(7)=tr$: resp$(8)=td$ 
+03046   resp$(9)=str$(pc2)
 03050   fnTos(sn$="Tredit")
 03052   mylen=23: mypos=mylen+3 : right=1
 03060   fnLbl(1,1,"General Ledger Number:",mylen,right)
@@ -429,16 +366,15 @@
 03340   if rv=1 then 
 03342     rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
 03344   else 
-03346     rewrite #hAcTrans,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03346     rewrite #hAcTrans,using F_acTrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 03348   end if
-03350 L3350: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-03360   adr=ta(1): goto TRANSACTION_GRID
-03370 ! /r
+03360   adr=ta(1)
+03370 goto TRANSACTION_GRID ! /r
 03630 SEARCH_GRID: ! r:
 03640   fnaccount_search(gl$,fixgrid)
 03650   fixgrid=0
-03660   read #1,using L1740,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey MAIN
-03670   goto MAIN ! need search grid here   KJ
+03660   read #hAccount,using L1740,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey MAIN
+03670   goto MAIN
 03680 ! /r
 03690 ! <Updateable Region: ERTN>
 03700 ERTN: fnerror(program$,err,line,act$,"xit")
@@ -447,7 +383,6 @@
 03730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03750 ! /region
-03760 ! ______________________________________________________________________
 03770 CHG_GLNO_IN_HISTORY: ! r: change gl # in history
 03780   ack$=holdgl$&cnvrt$("N 2",0)&"      "
 03785   if trim$(ack$)="" then goto L3850
@@ -459,7 +394,7 @@
 03830       rewrite #hAcTrans,using L3810: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 03832     end if
 03840   loop
-03850 L3850: !
+03850   L3850: !
 03860 return ! /r
 03870 CHANGE_ACCT_NUM: ! r:
 03880   dno=val(gl$(1:3)): ano=val(gl$(4:9)): sno=val(gl$(10:12))
@@ -469,13 +404,13 @@
 03910   if use_dept =1 then let fnLbl(1,31,"Fund #",6,2)
 03920   if use_sub =1 then let fnLbl(1,45,"Sub #",6,2)
 03930   fnLbl(2,1,"New General Ledger Number:",mylen,right)
-03940   if use_dept=1 then 
+03940   if use_dept then 
 03941     fnTxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
 03942     resp$(rc+=1)=str$(dno)
 03946   end if
 03950   fnTxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
 03952   resp$(rc+=1)=str$(ano)
-03960   if use_sub=1 then 
+03960   if use_sub then 
 03962     fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 03964     resp$(rc+=1)=str$(sno)
 03966   end if
@@ -487,36 +422,36 @@
 04020   if ckey=5 then goto MAIN
 04030   fixgrid=99
 04040   dno=ano=sno=0
-04050   if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
-04060   if use_dept=0 then ano=val(resp$(1))
-04070   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
-04080   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
-04090   if use_dept=1 and use_sub=1 then d$=resp$(4)
-04100   if use_dept=0 and use_sub=1 then d$=resp$(3)
-04110   if use_dept=0 and use_sub=0 then d$=resp$(2)
-04120   if use_dept=1 and use_sub=0 then d$=resp$(3)
+04050   if use_dept then dno=val(resp$(1)) : ano=val(resp$(2))
+04060   if ~use_dept then ano=val(resp$(1))
+04070   if use_dept and use_sub then sno=val(resp$(3))
+04080   if ~use_dept and use_sub then sno=val(resp$(2))
+04090   if use_dept and use_sub then d$=resp$(4)
+04100   if ~use_dept and use_sub then d$=resp$(3)
+04110   if ~use_dept and ~use_sub then d$=resp$(2)
+04120   if use_dept and ~use_sub then d$=resp$(3)
 04130   key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 04140   if key$=gl$ then goto L4200 ! only changing description
-04150   read #1,using 'Form POS 1,N 3',key=key$: dno nokey L4190
-04160 ! MSGBOX5: !
+04150   read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey L4190
+04160   ! MSGBOX5: !
 04170   mat ml$(3)
 04172   ml$(1)="General ledger account # "&key$&" already " 
 04174   ml$(2)="exists. Take OK to review the account." 
 04176   ml$(3)="Take Cancel to return to main screen." 
 04178   fnmsgbox(mat ml$,resp$,cap$,49)
 04180   if resp$="OK" then goto DO_EDIT else goto MAIN
-04190 L4190: !
+04190   L4190: !
 04192   gl$=key$
-04200 L4200: !
-04202   rewrite #1,using L4210,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-04210 L4210: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
+04200   L4200: !
+04202   rewrite #hAccount,using L4210,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
+04210   L4210: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 04220   if cl1=1 then 
 04222     rewrite #8,using L4210,key=holdgl$: gl$,d$ nokey L4230
 04224   end if
-04230 L4230: !
+04230   L4230: !
 04234   gosub CHG_GLNO_IN_HISTORY ! change account numbers in history
 04240   gosub CHANGE_CURRENT_TRANS
-04250   goto MAIN ! /r
+04250 goto MAIN ! /r
 20000 MSGBOX4: ! r:
 20020   mat ml$(4)
 20040   ml$(1)="You cannot change an account number in this manner!"
