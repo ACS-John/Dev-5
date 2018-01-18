@@ -1027,6 +1027,7 @@
 52640   gosub SERVICE_BUTTONS
 52660 ! pICTURE$="data\sewer.jpg"
 52680 ! .   ! fnpic(3,45,3,12,PICTURE$)
+52681   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 52690   fnLbl(21,45,'') ! force all service windows to be same size
 52700   fnCmdSet(2)
 52720   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 2
@@ -1116,6 +1117,7 @@
 55380 L8200: gosub SERVICE_BUTTONS
 55400 ! pICTURE$="data\electric.jpg"
 55420 ! .   ! fnpic(3,45,3,12,PICTURE$)
+55421   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 55430   fnLbl(21,45,'') ! force all service windows to be same size
 55440   fnCmdSet(2)
 55460   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! ELECTRIC RATE SCREEN
@@ -1195,6 +1197,7 @@
 56960   end if 
 56980   gosub SERVICE_BUTTONS
 57000 ! pICTURE$="data\gas.jpg" : fnpic(3,45,3,12,PICTURE$)
+57001   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 57010   fnLbl(21,45,'') ! force all service windows to be same size
 57020   fnCmdSet(2)
 57030   fnAcs(sn$,0,mat rateinfo$,ckey) ! gas rate screen
@@ -1234,6 +1237,7 @@
 58340   gosub SERVICE_BUTTONS
 58360 ! pICTURE$="data\misc5.jpg"
 58380 ! .   ! fnpic(3,45,3,12,PICTURE$)
+58381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 58390   fnLbl(21,45,'') ! force all service windows to be same size
 58400   fnCmdSet(2)
 58410   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 5
@@ -1262,6 +1266,7 @@
 60340   gosub SERVICE_BUTTONS
 60360 ! pICTURE$="data\misc5.jpg"
 60380 ! .   ! fnpic(3,45,3,12,PICTURE$)
+60381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 60390   fnLbl(21,45,'') ! force all service windows to be same size
 60400   fnCmdSet(2)
 60410   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 6
@@ -1290,6 +1295,7 @@
 62340   gosub SERVICE_BUTTONS
 62360 ! pICTURE$="data\misc7.jpg"
 62380 ! .   ! fnpic(3,45,3,12,PICTURE$)
+62381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 62390   fnLbl(21,45,'') ! force all service windows to be same size
 62400   fnCmdSet(2)
 62410   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 7
@@ -1317,6 +1323,7 @@
 64320   rateinfo$(respc+=1)=str$(b(7))
 64340   gosub SERVICE_BUTTONS
 64360 ! pICTURE$="data\misc8.jpg" : fnpic(3,45,3,12,PICTURE$)
+64361   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 64370   fnLbl(21,45,'') ! force all service windows to be same size
 64380   fnCmdSet(2)
 64400   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 8
@@ -1341,6 +1348,7 @@
 66260   respc+=1
 66280   gosub SERVICE_BUTTONS
 66300 ! pICTURE$="data\misc5.jpg" : fnpic(3,45,3,12,PICTURE$)
+66301   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 66310   fnLbl(21,45,'') ! force all service windows to be same size
 66320   fnCmdSet(2)
 66340   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 9
@@ -1364,6 +1372,7 @@
 68260   respc+=1
 68280   gosub SERVICE_BUTTONS
 68300 ! pICTURE$="data\misc10.jpg" : fnpic(3,45,3,12,PICTURE$)
+68301   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
 68310   fnLbl(21,45,'') ! force all service windows to be same size
 68320   fnCmdSet(2)
 68330   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 5

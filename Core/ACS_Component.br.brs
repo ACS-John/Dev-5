@@ -2041,7 +2041,7 @@
 54400     else if qgl_cursys$="GL" then 
 54410       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from General Ledger
 54420     else if qgl_cursys$="PR" or qgl_cursys$="UB" or qgl_cursys$="CR" then 
-54430       use_dept=1: use_sub=1 ! default both to yes if from pr chart of accounts
+54430       use_dept=1 : use_sub=1 ! default both to yes if from pr chart of accounts
 54440     end if 
 54450 CLOSECOMPANY: ! 
 54460     close #company: ioerr ignore
