@@ -116,10 +116,10 @@
 21030           servicesFound=0
 21040           for serviceItem=1 to udim(mat serviceName$)
 21050             if serviceCode$(serviceItem)<>'' then
+21052               if ~imlImportFromInfo then goto InfoNokey
 21060               mat info$=('') : mat infoN=(0)
 21070               info$(meter_customer )=trim$(account$)
 21080               info$(meter_serviceId)=serviceCode$(serviceItem)
-21090               if ~imlImportFromInfo then goto InfoNokey
 21100               read #hInfo,using form$(hInfo),key=fnBuildKey$('UB Meter Info',mat info$,mat infoN): mat info$,mat infoN nokey InfoNokey
 21110               servicesFound+=1
 21120               location$(loc_serviceId      )=info$(meter_serviceId      )
