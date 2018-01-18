@@ -57,7 +57,7 @@
 12900 fnend
 13000 def library fnInitialializeMeterLocation
 13020   if ~setup then let fn_setup
-13040   fnInitialializeMeterLocation=fn_InitialializeMeterLocation
+13040   ! fnInitialializeMeterLocation=fn_InitialializeMeterLocation    <---  fn_setup handles it if it is necessary.
 13060 fnend
 14000 def fn_InitialializeMeterLocation
 14020   imlCreateNew  = imlImportFromInfo = 0
@@ -254,9 +254,9 @@
 40860   LwWrite: ! r:
 40870     if locationN(loc_locationID)=0 then 
 40880       locationN(loc_locationID)=fn_newLocationID
-40890     else
-40900       pr 'location ID of 0 is expected at this point.  it is a new record and should not already be assigned.'
-40920       pause
+40890     ! else
+40900     !   pr 'location ID of 0 is expected at this point.  it is a new record and should not already be assigned.'
+40920     !   pause
 40940     end if
 40950     if locationN(loc_locationId)=0 then pr 'CCC - about to write a ZERO location Id' : pause
 40960     write #hLocation(1),using form$(hLocation(1)): mat location$,mat locationN
