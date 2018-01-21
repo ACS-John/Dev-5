@@ -192,11 +192,7 @@
 30480     else if deviceSelected$="Psion Workabout" then
 30500       hif_return$=env$('Q')&"\UBmstr\Readings.out"
 30520     else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
-30540       if env$('client')="Sangamon" then
-30560         hif_return$="c:\Progra~1\connect3\connect.ot3"
-30580       else
-30600         hif_return$="c:\connect\connect.ot3"
-30620       end if
+30540       hif_return$="c:\connect\connect.ot3"
 30640     else if deviceSelected$="Unisys" then
 30660       hif_return$=env$('Q')&"\UBmstr\ReadOut.dat"
 30680     else if deviceSelected$="Boson" then

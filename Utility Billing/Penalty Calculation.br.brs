@@ -29,11 +29,6 @@
 20600   fn_scr_main
 20620   if ck=5 then goto XIT
 20640 ! 
-20660   if env$('client')="Sangamon" then 
-20680     fn_scr_route_range
-20700     if ck=5 then goto XIT
-20720   end if 
-20740 ! 
 20760   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20780   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20800 ! 
@@ -62,7 +57,6 @@
 21272     if debug_this_account then show_math=1 else show_math=0
 21280     route_number=extra(1)
 21300 !   if env$('client')="Divernon" and bal<0 then goto READ_CUSTOMER
-21320     if env$('client')="Sangamon" and (route_number<prtbkno1 or route_number>prtbkno2) then goto READ_CUSTOMER ! bill certain routes at different billing dates
 21340     if bud1=1 then 
 21360       fn_bud2
 21380       if env$('client')='White Hall' and bd1>0 then goto READ_CUSTOMER ! Never penalize if Budget Billing
@@ -70,7 +64,6 @@
 21420       if totba>0 and bd1=0 then goto READ_CUSTOMER ! have budget billing and have paid last bill
 21440     end if 
 21460     if bal=0 or bal<minimumbal then goto READ_CUSTOMER
-21480     if env$('client')='Sangamon' then goto EO_READ
 21500     if f<>bildat then goto READ_CUSTOMER
 21520 EO_READ: ! 
 21540     fn_pencal
@@ -125,7 +118,7 @@
 22520   resp$(7)="True"
 22540   fnOpt(2,2,"Base penalty on total balance",0,1)
 22560   resp$(8)="False"
-22580   if env$('client')="Colyell" or env$('client')="Sangamon" or env$('client')="Cerro Gordo" then ! can change the default on that to: Base penalty on total balance
+22580   if env$('client')="Colyell" or env$('client')="Cerro Gordo" then ! can change the default on that to: Base penalty on total balance
 22600     resp$(7)="False"
 22620     resp$(8)="True"
 22640   end if  ! env$('client')=...
@@ -156,21 +149,6 @@
 23140     pendat=fndate_mmddyy_to_ccyymmdd(pendat)
 23160   end if 
 23180 fnend 
-23200 def fn_scr_route_range ! Sangamon's second screen
-23220   fnTos(sn$="ubPenCalb")
-23240   fnLbl(1,1,"First Route #:",27,1)
-23260   fnTxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
-23280   resp$(1)=str$(prtbkno1)
-23300   fnLbl(2,1,"Last Route #:",27,1)
-23320   fnTxt(2,29,2,0,1,"30")
-23340   resp$(2)=str$(prtbkno2)
-23360   fnCmdSet(2)
-23380   fnAcs(sn$,0,mat resp$,ck)
-23400   if ck<>5 then 
-23420     prtbkno1=val(resp$(1))
-23440     prtbkno2=val(resp$(2))
-23460   end if 
-23480 fnend 
 23500 def fn_pencal ! penalty calculation
 23520   negatives=0 ! if breakdown is by mat gb and mat gb has some negatives, then do something special
 23540   mat basepenalty=(0)
@@ -181,8 +159,7 @@
 23560   if env$('client')="Galena" then 
 23580     bdiff=sum(mat gb)-bal
 23600     gb(8)=gb(8)-bdiff
-23620   end if 
-23640   if env$('client')='Sangamon' or env$('client')='Colyell' or env$('client')='White Hall' then 
+23620   else if env$('client')='Colyell' or env$('client')='White Hall' then 
 23650     basepenalty(10)=bal
 23660     goto GOT_BASEPENALTY
 23700   else if env$('client')='Lovington' and penaltybase$="Balance" then 

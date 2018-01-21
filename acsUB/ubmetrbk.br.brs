@@ -11,7 +11,6 @@
 02160 ! ______________________________________________________________________
 02180   fntop(program$,cap$="Meter Reading Book")
 02240   fndat(dat$,1)
-02260   if env$('client')="Gilbertown" then seq=2
 02280 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
 02300   fnget_services(mat snm$,mat srv$)
 02360   x=0
@@ -114,7 +113,6 @@
 15060   if extra(17)>0 and skipdisconnects=0 then goto L730
 15080   if route=0 then goto L790
 15100   if extra(1)<>route then goto LOOP_TOP
-15120   if env$('client')="Gilbertown" then goto L790
 15140   if a(1)=0 and a(3)=0 and a(4)=0 then goto LOOP_TOP ! don't have any services
 15160 L790: x=0
 15180   for j=1 to udim(x_service$)

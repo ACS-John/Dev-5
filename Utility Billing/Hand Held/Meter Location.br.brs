@@ -31,23 +31,23 @@
 12052     library 'S:\Core\Library': fngethandle,fnerror
 12054     library 'S:\Core\Library': fnindex_it,fnHamsterFio
 12056     library 'S:\Core\Library': fnStatusClose,fnStatus
-12060     library 'S:\Core\Library': fnAddOneC,fnAddOneN,fnArrayMax
+12060     library 'S:\Core\Library': fnAddOneC
 12070     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile
 12071     library 'S:\Core\Library': fnAutomatedSavePoint
-12072     library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read,fnreg_write
+12072     library 'S:\Core\Library': fncreg_read,fncreg_write
 12076     library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
 12078     library 'S:\Core\Library': fnBuildKey$
 12080     library 'S:\Core\Library': fnKeyExists
-12082     library 'S:\Core\Library': fnStatusPause
 12083     library 'S:\Core\Library': fnCustomerData$
 12084     library 'S:\Core\Library': fnFree,fnRename
-12085     library 'S:\Core\Library': fnlbl,fntos,fnacs,fncmdkey
+12085     library 'S:\Core\Library': fnlbl,fntos,fnacs,fncmdkey,fnflexinit1,fnflexadd1,fntxt,fncmdset,fncombof
 12100     dim info$(0)*20,infoN(0)
 12101     dim addr$(0)*30,addrN(0)
 12102     dim form$(0)*256
 12110     dim location$(0)*256,locationN(0)
 12120     dim mg$(0)*128
 12430     dim serviceName$(10)*60,serviceCode$(10)*2
+12431     dim resp$(128)*128
 12432     fnget_services(mat serviceName$, mat serviceCode$)
 12433     for snI=1 to udim(mat serviceName$) : serviceName$(snI)=trim$(serviceName$(snI)) : nex snI
 12434     table$='U4 Meter Location'
@@ -235,10 +235,7 @@
 40450     else
 40460       gosub LwKeyMatchDisplay
 40700     end if
-40710     pause
-40720     goto LwNextLwIndex
 40730     LwNoKeyEncountered: !
-40740     LwNextLwIndex: !
 40750   nex lwIndex
 40760   goto LwWrite
 40770   LwRewrite: ! r:
@@ -339,7 +336,6 @@
 42930     fnlbl(lc+=1,1,label$&' (same) '&valueLeft$)
 42940   end if
 42950 fnend
-
 43000 def fn_AllStringsMatch(mat a$,mat b$; caseInsensitive)
 43010   asmReturn=asmMatchCount=0
 43020   if udim(mat a$)=udim(mat b$) then
@@ -454,16 +450,12 @@
 60720     fnCloseFile(hMeterAddressLocationID,table$)
 60740   end if
 60760 fnend
-62000 def fn_newLocationID ! (; initialize)
-62020   if initialize then
-62040     nliLastLocation=0
-62060     fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
-62080   else
-62100     fncreg_read('Last Location ID Assigned',nliLastLocation$)
-62120     nliLastLocation=val(nliLastLocation$)
-62140     nliLastLocation+=1
-62160     fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
-62180   end if
+62000 def fn_newLocationID(; alterAmount) ! (; initialize)
+62020   if alterAmount=0 then let alterAmount=1
+62100   fncreg_read('Last Location ID Assigned',nliLastLocation$)
+62120   nliLastLocation=val(nliLastLocation$)
+62140   nliLastLocation+=alterAmount
+62160   fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
 62200   fn_newLocationID=nliLastLocation ! pr 'fn_newLocationID is returning ';nliLastLocation
 62220 fnend
 64000 def fn_askAddNew$(meterAddressBefore$*30,meterAddressAfter$*80)
@@ -492,8 +484,132 @@
 65260   fn_askAddDuplicate$=aaResponse$
 65280 fnend
 
+66000 def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
+66020   if ~setup then let fn_setup
+66040   hCmlsLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
+66060   for j=2 to 5 : hCmlsLocation(j)=hCmlsLocation(1)+j-1 : nex j
+66080   fntos(sn$='cmls')
+66100   fnlbl(1,1,'Account: ',20,1)
+66120   fntxt(1,22,10, 0,0,'',1)
+66140   resp$(respc+=1)=account$
+66160   fnlbl(3,1,'Select '&serviceCode$&' Meter Location for Account')
+66180   dim cmlsFlexItem$(8)*128
+66200   cmlsFlexItem$(1)='Location ID       '
+66220   cmlsFlexItem$(2)='Meter Address     '
+66240   cmlsFlexItem$(3)='Current Customer  '
+66260   cmlsFlexItem$(4)='Longitude         '
+66280   cmlsFlexItem$(5)='Latitude          '
+66300   cmlsFlexItem$(6)='Meter Number      '
+66320   cmlsFlexItem$(7)='Transmitter Number'
+66340   cmlsFlexItem$(8)='Meter Type        '
+66360   fnflexinit1('locationSelect',4,1,20,20,mat ch$) 
+66380   do
+66400     read #hCmlsLocation(5),using form$(hCmlsLocation(1)): mat location$,mat locationN eof CmlsEoLocation
+66420     if location$(loc_serviceId)=serviceCode$ then
+66440       cmlsFlexItem$(1)=str$(locationN(loc_LocationID))
+66460       cmlsFlexItem$(2)=location$(loc_name           )
+66480       cmlsFlexItem$(3)=location$(loc_activeCustomer )
+66500       cmlsFlexItem$(4)=location$(loc_longitude      )
+66520       cmlsFlexItem$(5)=location$(loc_latitude       )
+66540       cmlsFlexItem$(6)=location$(loc_meterNumber    )
+66560       cmlsFlexItem$(7)=location$(loc_transmitter    )
+66580       cmlsFlexItem$(8)=location$(loc_meterType      )
+66600       fnflexadd1(mat cmlsFlexItem$)
+66620     end if
+66640   loop
+66660   CmlsEoLocation: !
+66680   fncmdkey('Select',1,1,0)
+66700   fncmdkey('New',2,0,0)
+66720   fncmdkey('Cancel',5,0,1)
+66740   fnAcs(sn$,0,mat resp$,ckey)
+66760   if ckey<>5 then
+66780     cmlsSelectedLocationId=val(resp$(2))
+66800     if ckey=1 then 
+66820       mat location$=('')
+66840       mat locationN=(0)
+66860       locationN(loc_locationID)=cmlsSelectedLocationId
+66880       location$(loc_serviceId)=serviceCode$
+66900       dim cmlsLocationKey$*128
+66920       cmlsLocationKey$=fnBuildKey$(table$,mat location$,mat locationN, 5)
+66940       read #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$,release: mat location$,mat locationN
+66960       if trim$(location$(loc_activeCustomer))='' and trim$(location$(loc_activeCustomer))<>trim$(account$) then
+66980           location$(loc_activeCustomer)=trim$(account$)
+67000           rewrite #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$: mat location$,mat locationN
+67020       else if trim$(location$(loc_activeCustomer))<>trim$(account$) then
+67040         mat mg$(0)
+67060         fnAddOneC(mat mg$,'Location ID '&str$(cmlsSelectedLocationId)&' currently belongs to customer '&trim$(location$(loc_activeCustomer)))
+67080         fnAddOneC(mat mg$,'Are you sure you want to change the active customer to '&trim$(account$)&'?')
+67100         fnmsgbox(mat mg$,resp$,'',32+4)
+67120         if resp$='Yes' then
+67140           fn_purgeSrvAccountFromLocation(serviceCode$,account$)
+67160           location$(loc_activeCustomer)=trim$(account$)
+67180           rewrite #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$: mat location$,mat locationN
+67200         else
+67220           release #hCmlsLocation(5):
+67240         end if
+67260       end if
+67280     else if ckey=2 then
+67300       fntos(sn$='LocationAdd') : lc=respc=0
+67320       fnlbl(lc+=1,1,'Location ID       ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationID)
+67340       fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=''
+67360       fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=trim$(account$)
+67380       fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=serviceCode$
+67400       fnlbl(lc+=1,1,'Longitude         ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
+67420       fnlbl(lc+=1,1,'Latitude          ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
+67440       fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=''
+67460       fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=''
+67480       fnlbl(lc+=1,1,'Meter Type        ', 20,1)
+67500       fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+67520       resp$(respc+=1)=''
+67540       fncmdset(4)
+67560       fnacs(sn$,0,mat resp$,ckey)
+67580       if ckey=5 then
+67600         fn_newLocationID(-1)
+67620       else
+67640         fn_purgeSrvAccountFromLocation(serviceCode$,account$)
+67660         mat locationN=(0)
+67680         mat location$=('')
+67700         respc=0
+67720         locationN(loc_locationID    )=val(resp$(respc+=1))
+67740         location$(loc_name          )=resp$(respc+=1)
+67760         location$(loc_activeCustomer)=resp$(respc+=1)
+67780         location$(loc_serviceId     )=resp$(respc+=1)
+67800         location$(loc_longitude     )=resp$(respc+=1)
+67820         location$(loc_latitude      )=resp$(respc+=1)
+67840         location$(loc_meterNumber   )=resp$(respc+=1)
+67860         location$(loc_transmitter   )=resp$(respc+=1)
+67880         location$(loc_meterType     )=resp$(respc+=1)(1:5)
+67900         fnLocationWrite(mat location$,mat locationN)
+67920       end if
+67940     end if
+67960   end if
+67980   fnclosefile(hCmlsLocation(1),table$)
+68000 fnend
 
-
+70000 def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
+70020   ! remove account$ from all previously assigned Meter Location records
+70040   dim tmpLoc$(0)*128,tmpLocN(0),tmpLocKey$*128
+70060   mat tmpLoc$(udim(mat location$))
+70080   mat tmpLocN(udim(mat locationN))
+70100   mat tmpLoc$=('')
+70120   mat tmpLocN=(0)
+70140   tmpLoc$(loc_activeCustomer)=trim$(account$)
+70160   tmpLoc$(loc_serviceId)=serviceCode$
+70180   tmpLocKey$=fnBuildKey$(table$,mat tmpLoc$,mat tmpLocN, 4)
+70200   restore #hCmlsLocation(4),key=tmpLocKey$: nokey CmlsDelFinis
+70220   do
+70240     read #hCmlsLocation(4),using form$(hCmlsLocation(1)): mat tmpLoc$,mat tmpLocN eof CmlsDelFinis ! locked CmlsDelLocked
+70260     if trim$(tmpLoc$(loc_activeCustomer))=trim$(account$) then
+70280       tmpLoc$(loc_activeCustomer)=''
+70300       rewrite #hCmlsLocation(4),using form$(hCmlsLocation(1)): mat tmpLoc$,mat tmpLocN
+70320       tmpMatch=1
+70340     else
+70360       release #hCmlsLocation(4):
+70380       tmpMatch=0
+70400     end if
+70420   loop while tmpMatch
+70440   CmlsDelFinis: !
+70460 fnend
 86000 ! <updateable region: fn_open (supressprompt:=2)>  
 86020 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
 86040   dim _fileiosubs$(1)*800, loadedsubs$(1)*32

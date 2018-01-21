@@ -43,14 +43,11 @@
 32360   open #42: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",internal,outIn,relative 
 32380   close #26: ioerr ignore
 32400   open #26: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
-32420   close #27: ioerr ignore
-32440   close #28: ioerr ignore
 32460   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed 
 32480   open #unused0:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed 
 32482   open #unused1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed 
 32483   open #unused2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed 
-32500   close #14: ioerr ignore
-32520   open #14: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32520   open #hUbTranVb:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed 
 32540   close #23: ioerr ignore
 32560   open #23: "Name="&env$('Q')&"\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 32660   close #51: ioerr ignore
@@ -93,13 +90,13 @@
 38020 L970: read #2,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1040
 38040 L980: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 38060   if p$<>z$ then goto L1040
-38080   write #14,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+38080   write #hUbTranVb,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 38100   delete #2: 
 38120   goto L970
 38140 ! ______________________________________________________________________
 40000 L1040: gosub ALTBILLADDR
 40020   write #26,using mstrform$: z2$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
-40040   gosub PRNT1
+40040   pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
 40060   delete #1,key=z$: 
 40080   goto MENU2
 40100 ! ______________________________________________________________________
@@ -107,7 +104,7 @@
 42020   close #2: 
 42040   close #3: 
 42060   close #26: 
-42080   close #14: 
+42080   close #hUbTranVb: 
 42100   close #23: 
 46000 FINIS: ! r:
 46020   ! close #31: 
@@ -119,7 +116,11 @@
 48000 ALTBILLADDR: ! r: alternate billing address
 48020   read #3,using "Form POS 1,C 10,4*C 30",key=z$: z$,mat ab$ nokey L1440
 48040   write #23,using "Form POS 1,C 10,4*C 30": z2$,mat ab$
-48060 L1440: return  ! /r
+48060   L1440: !
+48080 return  ! /r
+49000 ! def fn_moveKeyPartialMatches(hFrom,hTo,MatchPos,MatchLen,matchType$)
+49020 !   
+49040 ! fnend
 50000 DONE: ! r:
 50020   close #1: ioerr ignore
 50040   close #2: ioerr ignore
@@ -132,7 +133,7 @@
 50180   close #unused0: ioerr ignore
 50182   close #unused1: ioerr ignore
 50183   close #unused2: ioerr ignore
-50200   close #14: ioerr ignore
+50200   close #hUbTranVb: ioerr ignore
 50220   close #23: ioerr ignore
 50280   close #51: ioerr ignore
 50300   close #52: ioerr ignore
@@ -145,9 +146,6 @@
 61812   pr #255: ""
 61820   pr #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
 61830 return  ! /r
-61850 PRNT1: ! r: pr TRANSFERS
-61860   pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
-61880 return  ! /r
 61890 IGNORE: continue 
 61900 PGOF: ! r:
 61910   pr #255: newpage

@@ -63,13 +63,11 @@
 32000 HDR1: ! r: ! FILE HEADER RECORD
 32020   pcde=01 ! PRIORITY CODE
 32040   ! will need simular lines for anyone using this option; actually need to be moved to company information
-32060   if env$('client')="Sangamon" then imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
 32080   if env$('client')="Monticello" then imd$=" 071121963" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
 32100   if env$('client')="Franklinton" then imd$=" 061000146" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
 32120   if env$('client')="Billings" then imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
 32140   if env$('client')="Thomasboro" then imd$="          " ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
 32160   ! if env$('client')="Ashland" then imd$=" 084000039" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
-32180   if env$('client')="Sangamon" then imo$=" 071102076" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32200   if env$('client')="Monticello" then imo$=" 071121963" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32220   if env$('client')="Franklinton" then imo$=" 065201611" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32240   if env$('client')="Billings" then imo$=" 071000301" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
@@ -87,7 +85,6 @@
 32480   ! if env$('client')="Ashland" then ion$="Merchants & Farmers    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32500   fc$="1" ! FORMAT CODE
 32520   idn$="                       " ! (23) IMMEDIATE DESTINATION NAME
-32540   if env$('client')="Sangamon" then ion$="First Med Illinois     " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32560   if env$('client')="Monticello" then ion$="First State Bank       " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32580   if env$('client')="Franklinton" then ion$="Parish National Bank  " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32600   rc$="0000000" ! REFERENCE CODE
@@ -96,8 +93,6 @@
 32660   ! COMPANY/BATCH HEADER RECORD
 32680   scc=225 ! SERVICE CLASS CODE
 32700   cdd$="" ! COMPANY DISCRETIONARY DATA
-32720   if env$('client')="Sangamon" and env$('cno')='1' then cid$="1370902201" ! COMPANY IDENTIFICATION   (code 1 followed by federal id number)
-32740   if env$('client')="Sangamon" and env$('cno')='2' then cid$="1371337231" ! COMPANY IDENTIFICATION
 32760   if env$('client')="Monticello" then cid$="1376001815" ! COMPANY IDENTIFICATION
 32780   if env$('client')="Franklinton" then cid$="Franklinto" ! COMPANY IDENTIFICATION
 32800   if env$('client')="Billings" then cid$=" 430903099" ! COMPANY IDENTIFICATION
@@ -108,8 +103,6 @@
 32900   ced$="UTILITIES" ! COMPANY ENTRY DESCRIPTIVE
 32920   eed$=date$(1:2)&date$(4:5)&date$(7:8) ! EFFECTIVE ENTRY DATE
 32940   osc$="1" ! ORIGINATOR STATUS CODE
-32960   if env$('client')="Sangamon" and cno=1 then odi$="00707945" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-32980   if env$('client')="Sangamon" and cno=2 then odi$="00208977" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33000   if env$('client')="Monticello" then odi$="010251" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33020   if env$('client')="Franklinton" then odi$="06520161" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33040   if env$('client')="Billings" then odi$="08150596" ! ORIGINATING DFI IDENTIFICATION  (bank's account)

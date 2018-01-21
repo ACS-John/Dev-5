@@ -960,6 +960,10 @@
 70027     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressLocationID
 70028     fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
 70029   fnend
+70031   def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2)
+70032     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnCustomerMeterLocationSelect
+70033     fnCustomerMeterLocationSelect=fnCustomerMeterLocationSelect(account$,serviceCode$)
+70034   fnend
 70041   def library fnMeterAddressName$*30(locationID; leaveFileOpen)
 70043     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressName$
 70044     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
