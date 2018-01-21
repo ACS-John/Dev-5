@@ -71,7 +71,7 @@
 34180   end if 
 34200 fnend 
 36000 def fn_readService
-36020   if ~readServiceSetup=val(env$('cno')) then
+36020   if readServiceSetup<>val(env$('cno')) then
 36040     readServiceSetup=val(env$('cno'))
 36060     dim cacheServiceName$(10)*20
 36080     dim cacheServiceCode$(10)*2

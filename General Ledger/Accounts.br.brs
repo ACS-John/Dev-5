@@ -28,7 +28,7 @@
 00420 MAIN: ! 
 00430   fnTos(sn$="GLProb2-"&str$(edit_mode))
 00432   mylen=23 : mypos=mylen+3 : right=1
-00440   fnLbl(1,1,"General Ledger Number:",mylen,right)
+00440   fnLbl(1,1,"Account:",mylen,right)
 00450   if edit_mode=1 then ! attempt to put disabled text box for acct #
 00452     fnTxt(1,mypos,60,0,0,"",1,"",0)
 00454     resp$(1)=fnrglbig$(gl$)
@@ -97,7 +97,7 @@
 00772     fnCmdKey("&Save",6,1,0,"")
 00774     fnCmdKey("Review &Transactions",3,0,0,"")
 00776     fnCmdKey("&Delete",7,0,0,"")
-00778     fnButton(1,mypos+60+2,"C&hange",9,"Change the Account Number and/or the Description of this General Ledger Account") ! fnCmdKey("C&hange Acct-Desc",9,0,0,"")
+00778     fnButton(1,mypos+60+2,"C&hange",9,"Change the Account and/or the Description of this General Ledger Account") ! fnCmdKey("C&hange Acct-Desc",9,0,0,"")
 00780   else 
 00782     fnCmdKey("&Edit",1,1,0,"") ! if edit_mode=1 then let fnCmdKey("&Edit",1,0,0,"") else let fnCmdKey("&Edit",1,1,0,"")
 00784     fnCmdKey("&Add",2,0,0,"")
@@ -144,15 +144,15 @@
 01242   mylen=23: mypos=mylen+3 : right=1: rc=0
 01250   if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 01260   if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
-01270   fnLbl(2,1,"General Ledger Number:",mylen,right)
+01270   fnLbl(2,1,"Account:",mylen,right)
 01280   if use_dept then 
-01281     let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+01281     let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the account.",0 )
 01282     resp$(rc+=1)=str$(dno)
 01288   end if
-01290   fnTxt(2,31,6,0,right,"1030",0,"Enter the main part of the general ledger number.",0)
+01290   fnTxt(2,31,6,0,right,"1030",0,"Enter the main part of the account.",0)
 01292   resp$(rc+=1)=str$(ano)
 01300   if use_sub then 
-01301     let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
+01301     let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the account.",0 )
 01302     resp$(rc+=1)=str$(sno)
 01308   end if
 01310   fnLbl(3,1,"Description:",mylen,right)
@@ -194,9 +194,9 @@
 01658   goto MAIN
 01660 ! /r
 01670 SAVE: ! r:
-01680   if holdgl$<>gl$ then ! attempting to change general ledger number
+01680   if holdgl$<>gl$ then ! attempting to change account
 01682     mat ml$(3)
-01684     ml$(1)="You are attempting to change account # "&holdgl$&"!"
+01684     ml$(1)="You are attempting to change account "&holdgl$&"!"
 01686     ml$(2)="to "&gl$&".  Take OK to change the account."
 01688     ml$(3)="Take Cancel to return to main screen."
 01690     fnmsgbox(mat ml$,resp$,cap$,49)
@@ -212,7 +212,7 @@
 01754   end if 
 01760 L1760: ! 
 01762   if gl$<>holdkey$ then 
-01764     gosub CHG_GLNO_IN_HISTORY ! change account numbers in history
+01764     gosub CHG_GLNO_IN_HISTORY ! change accounts in history
 01770     gosub CHANGE_CURRENT_TRANS
 01772   end if
 01780 L1780: ! 
@@ -327,7 +327,7 @@
 03046   resp$(9)=str$(pc2)
 03050   fnTos(sn$="Tredit")
 03052   mylen=23: mypos=mylen+3 : right=1
-03060   fnLbl(1,1,"General Ledger Number:",mylen,right)
+03060   fnLbl(1,1,"Account:",mylen,right)
 03070   fnqglbig(1,mypos,0,2)
 03072   resp$(1)=fnrglbig$(trgl$)
 03080   holdgl$=gl$
@@ -403,15 +403,15 @@
 03902   mylen=28: mypos=mylen+3 : right=1: rc=0
 03910   if use_dept =1 then let fnLbl(1,31,"Fund #",6,2)
 03920   if use_sub =1 then let fnLbl(1,45,"Sub #",6,2)
-03930   fnLbl(2,1,"New General Ledger Number:",mylen,right)
+03930   fnLbl(2,1,"New Account:",mylen,right)
 03940   if use_dept then 
-03941     fnTxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+03941     fnTxt(2,31,3,0,right,"30",0,"Enter the fund portion of the account.",0 )
 03942     resp$(rc+=1)=str$(dno)
 03946   end if
-03950   fnTxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+03950   fnTxt(2,36,6,0,right,"30",0,"Enter the main part of the account.",0 )
 03952   resp$(rc+=1)=str$(ano)
 03960   if use_sub then 
-03962     fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+03962     fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the account.",0 ) 
 03964     resp$(rc+=1)=str$(sno)
 03966   end if
 03970   fnLbl(3,1,"Description:",mylen,right)
@@ -449,14 +449,14 @@
 04222     rewrite #8,using L4210,key=holdgl$: gl$,d$ nokey L4230
 04224   end if
 04230   L4230: !
-04234   gosub CHG_GLNO_IN_HISTORY ! change account numbers in history
+04234   gosub CHG_GLNO_IN_HISTORY ! change accounts in history
 04240   gosub CHANGE_CURRENT_TRANS
 04250 goto MAIN ! /r
 20000 MSGBOX4: ! r:
 20020   mat ml$(4)
-20040   ml$(1)="You cannot change an account number in this manner!"
+20040   ml$(1)="You cannot change an account in this manner!"
 20060   ml$(2)="Take the 'Change #' option to change either the"
-20080   ml$(3)="account number or the description."
+20080   ml$(3)="account or the description."
 20100   ml$(4)="Click OK to access the new account; else Cancel to quit."
 20120   fnmsgbox(mat ml$,resp$,cap$,49)
 20140   if resp$='OK' then goto DO_EDIT

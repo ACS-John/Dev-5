@@ -241,20 +241,6 @@
 62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
-64000 ! r: Sangamon's second screen
-64020   fnTos(sn$="ubPenCal22")
-64040   fnLbl(1,1,"First Route #:",27,1)
-64060   fnTxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
-64080   resp$(1)=str$(prtbkno1)
-64100   fnLbl(2,1,"Last Route #:",27,1)
-64120   fnTxt(2,29,2,0,1,"30")
-64140   resp$(2)=str$(prtbkno2)
-64160   fnCmdSet(2)
-64180   fnAcs(sn$,0,mat resp$,ck)
-64200   if ck=5 then goto XIT
-64220   prtbkno1=val(resp$(1))
-64240   prtbkno2=val(resp$(2))
-64260   return  ! /r
 66000 ! WORRYABOUT: ! r:
 66010 !   dim basepenalty(10)
 66020 !   if sum(basepenalty)<>0 then

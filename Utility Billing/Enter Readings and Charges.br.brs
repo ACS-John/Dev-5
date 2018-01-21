@@ -643,7 +643,6 @@
 20770   return ! if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 20780   ! goto HH_CONTINUE ! /r
 20790   HH_OTHER: ! r:
-20800   ! if env$('client')="Gilbertown" then goto HH_OTHER_TYPE1 ! Green Tree
 20810   if device$='AMR' then goto HH_OTHER_TYPE1
 20820   if device$='EZReader' then goto HH_OTHER_TYPE1
 20830   if device$='Green Tree' then goto HH_OTHER_TYPE1
@@ -663,9 +662,9 @@
 20970   x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_OTHER_TYPE1_READ ! Account Key
 20980   ti1=1 ! water
 20982   x(ti1)=0
-20984   if device$='READy Water' then ! or env$('client')="Gilbertown"
+20984   if device$='READy Water' then 
 20986     x(ti1)=val(ln$(11:len(ln$))) conv ignore
-20990   else if env$('client')="Lovington" then ! or env$('client')="Gilbertown"
+20990   else if env$('client')="Lovington" then 
 20992     x(ti1)=val(ln$(11:19)) conv ignore
 21000   else
 21010     x(ti1)=val(ln$(11:20)) conv ignore
@@ -1002,7 +1001,6 @@
 40700     x$=lpad$(rtrm$(ln$(1:10)),10) conv IT_W_NEXT ! Account Key
 40720     ti1=1 ! water
 40740     if env$('client')="Lovington" then x(ti1)=0: x(ti1)=val(ln$(11:19)) conv IT_L5870 : goto IT_L5870
-40760     ! if env$('client')="Gilbertown" then x(ti1)=0: x(ti1)=val(ln$(11:19)) conv IT_L5870 : goto IT_L5870
 40780     x(ti1)=0: x(ti1)=val(ln$(11:20)) conv ignore
 40800 IT_L5870: !
 40820     read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore

@@ -1,9 +1,9 @@
 [Q]\GLmstr\glMstr.H[cno]  ,  gl_          , 0
-[Q]\GLmstr\GLIndex.H[cno] ,  DNO/ANO/SNO
-[Q]\GLmstr\GLIndx2.H[cno] ,  Description$
+[Q]\GLmstr\GLIndex.H[cno] ,  Account
+[Q]\GLmstr\GLIndx2.H[cno] ,  Description
 recl=416
 ===================================================
-DNO                ,    Department Number                      ,   C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
+Account            ,    Department Number                      ,   C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
 Description$       ,    Description                            ,   C  50      , !  Pos=13        D$        ^Desc
 RefBalSheet1       ,    Balance Sheet Ref Number               ,   PD  3      , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\Fnsbindx.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
 RefBalSheet2       ,    Secondary Balance Sheet Ref Number     ,   PD  3      , !  Pos=66        RF(2)     ^BalShtRf2     combof(ignore,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\Fnscindx.h[cno]) ! ,0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
@@ -55,7 +55,19 @@ BudgetPeriod13     ,    Budget - Month 13                       ,  PD  6.2    , 
 PBP                ,    EOY Balance 2 Years Ago                 ,  PD  6.2    , !  Pos=327       PBP       ^Bal-EOY-2yr
 TA1                ,    First Transaction Address               ,  PD  3      , !  Pos=333       TA(1)     ^FTA
 TA2                ,    Last Transaction Address                ,  PD  3      , !  Pos=336       TA(2)     ^LTA
-                   
+revb01             ,    revb 01                                 ,  PD 6.2     , !                revb(01)
+revb02             ,    revb 02                                 ,  PD 6.2     , !                revb(02)
+revb03             ,    revb 03                                 ,  PD 6.2     , !                revb(03)
+revb04             ,    revb 04                                 ,  PD 6.2     , !                revb(04)
+revb05             ,    revb 05                                 ,  PD 6.2     , !                revb(05)
+revb06             ,    revb 06                                 ,  PD 6.2     , !                revb(06)
+revb07             ,    revb 07                                 ,  PD 6.2     , !                revb(07)
+revb08             ,    revb 08                                 ,  PD 6.2     , !                revb(08)
+revb09             ,    revb 09                                 ,  PD 6.2     , !                revb(09)
+revb10             ,    revb 10                                 ,  PD 6.2     , !                revb(10)
+revb11             ,    revb 11                                 ,  PD 6.2     , !                revb(11)
+revb12             ,    revb 12                                 ,  PD 6.2     , !                revb(12)
+revb13             ,    revb 13                                 ,  PD 6.2     , !                revb(13)
 
 
 

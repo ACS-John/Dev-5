@@ -46,7 +46,7 @@
 04420     end if
 04440     if env$('BR_MODEL')='CLIENT/SERVER' then
 04460       execute 'config shell default client'
-04480       setenv('at','@:') 
+04480       setenv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
 04490       fn_startStatus('Collecting local environment variables...')
 04500       fncs_env
 04510       if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
@@ -175,7 +175,10 @@
 15990 fnend
 16000 def fn_uniqueComputerId_initialize
 16020   if env$('Unique_Computer_ID')='' then 
-16040     dim uci_tmp_filename$*512,tmp_line$*128,uuid$*36,hdd_serial$*36
+16040     dim uci_tmp_filename$*512
+16042     dim tmp_line$*128
+16044     dim uuid$*36
+16046     dim hdd_serial$*36
 16060     uci_tmp_filename$='acs_uuid_tmp'&session$&'.txt'
 16080     hdd_serial$=''
 16100     uuid$=''

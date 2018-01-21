@@ -3,7 +3,7 @@
 00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncloseprn,fnopenprn,fnxit,fnerror,fnTos,fnLbl,fnAcs
 00050   library 'S:\Core\Library': fnTxt,fnmsgbox,fnCmdSet,fntop,fnpause,fncd,fnChk,fncreg_read,fncreg_write,fncomboa
 00060   library 'S:\Core\Library': fnget_services,fnapply_default_rates,fnAutomatedSavePoint
-00062   library 'S:\Core\Library': fngethandle
+00062   library 'S:\Core\Library': fngethandle,fnFree
 00070   if env$('client')="Chatom" then 
 00072     library "S:\acsUB\calk_Chatom": fncalk
 00074   else 
@@ -66,7 +66,6 @@
 00500   fnopenprn
 00505 ! 
 00510   open #h_ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00550 L550: form pos 55,32*g 10
 00560   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00570 F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00580 F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
@@ -77,7 +76,7 @@
 00630   fn_deposit_open
 00640   fn_bud_open
 00650 ! ______________________________________________________________________
-00660 TOP: ! 
+00660 TOP: ! r:
 00670   if r3=>lrec(h_customer) then goto FINIS
 00680 ! read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,noRec TOP
 00690   read #h_customer,using F_CUSTOMER_W_ACCT,rec=r3+=1: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra noRec TOP eof FINIS
@@ -177,9 +176,9 @@
 36020   fn_t9notification
 36040   close #h_customer: ioerr ignore
 36060   ! close #h_work,free: ioerr ignore
-36070   ! execute 'free '&work_addr$ ioerr ignore
+36070   ! fnFree(work_addr$)
 36080   close #h_ubtrans: ioerr ignore
-36090 ! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
+36090   ! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 36100   if print_count_unusual or print_count_skip then let fncloseprn
 36120 ! /r
 38000 XIT: fnxit
@@ -288,7 +287,7 @@
 62060   fnend 
 64000   def fn_demand
 64020     if env$('client')="Bethany" then 
-64040       read #h_ratemst,using L550,key="DM"&lpad$(str$(extra(11)),2): mc1,mu1,mat rt nokey DEMAND_XIT
+64040       read #h_ratemst,using 'form pos 55,32*g 10',key="DM"&lpad$(str$(extra(11)),2): mc1,mu1,mat rt nokey DEMAND_XIT
 64060       goto L6360
 64080     end if 
 64100 !  Read #h_ratemst,Using 540,Key="DM"&LPAD$(STR$(B(2)),2): MC1,MU1,MAT RT Nokey 6070  ! don't have a demand code any where in record.  wlll have to customize for each client  on Bethany we used service 6 to hold demand
@@ -473,7 +472,7 @@
 82220         fnTxt(linec,mypos,8,0,1,"1")
 82260         fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
 82280         resp$(resp_sewer_cap_date:=respc+=1)=sewer_cap_date$
-82300     end if 
+82300     end if
 82320     if btu_factor_enabled=1 then ! ask BTU question on Edinburg and French Settlement
 82340       if env$('client')='French Settlement' then 
 82360         fnLbl(linec+=1,1,"Cost of Gas Adjustment:",mylen,1)

@@ -60,7 +60,6 @@ Utilities
 Hand Held                                             ^                                                         ^ U4
 >Create Hand Held File                                ^ Utility Billing\Hand Held\Create Hand Held File         ^ U4
 >Import from Hand Held to Book                        ^ Utility Billing\Hand Held\Import from Hand Held to Book ^ U4
->Meter Location                                       ^ Utility Billing\Hand Held\Meter Location                ^ U4
 >Meter Type                                           ^ Utility Billing\Hand Held\Meter Type                    ^ U4
 ! >Meter Information                                    ^ Utility Billing\Hand Held\Meter Information             ^ U4
 ! >Meter Address                                        ^ HamsterFio:Meter Address                                ^ U4

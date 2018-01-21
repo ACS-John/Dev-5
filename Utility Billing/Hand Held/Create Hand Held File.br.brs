@@ -354,8 +354,6 @@
 16120     if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
 16140     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
 16160     if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-16180     if env$('client')="Sangamon" then manual_or_dialog$=f$(1)(1:1)
-16200     if env$('client')='Sangamon' then z$=trim$(z$)
 16220     rt$=cnvrt$("pic(##)",extra(1))&"  "
 16240     if env$('client')='Raymond' then manual_or_dialog$="N"
 16260     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
@@ -389,7 +387,7 @@
 18000 def fn_legacyMultiDevice
 18020   ! r: set cd$ - included in several records - maybe some sort of meter id - not sure
 18040   cd$="M"
-18060   if (env$('client')="Oakland" or env$('client')="Lovington" or env$('client')="Gilbertown") then
+18060   if env$('client')="Oakland" or env$('client')="Lovington" then
 18080     if trim$(extra$(7))="1" then 
 18100       cd$="B"
 18120     end if

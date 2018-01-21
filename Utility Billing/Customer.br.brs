@@ -7,26 +7,25 @@
 00300 def library fnCustomer(x)
 00310   fn_setup
 00320   ! r: open files
-00330   open #h_ubadrbil:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
+00330   open #h_ubadrbil:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h"&env$('cno')&",KFName=[Q]\UBmstr\AdrIndex.h"&env$('cno')&",Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
 00332   F_ADRBIL: form pos 1,c 10,4*c 30
 00340   gosub OPEN_CASS1
 00360   fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
 00401   ! r: BUD1: ! INITILIZE BUDGET FILE
 00402   bud1=0
-00404   open #h_budmstr:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
+00404   open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h"&env$('cno')&",KFName=[Q]\UBmstr\BudIdx1.h"&env$('cno')&",Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
 00405   F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-00406   open #h_budtrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr,Use,RecL=149",internal,outIn,relative  ! was 82
+00406   open #h_budtrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h"&env$('cno')&",Shr,Use,RecL=149",internal,outIn,relative  ! was 82
 00407   F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 00409   bud1=1
 00410   ! /r
-00470   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ! 1
-00480   open #h_customer_2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed  ! 11
-00490   open #h_customer_3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed ! Meter address
-00500   open #h_customer_4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00510   open #h_customer_5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00470   open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ! 1
+00480   open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed  ! 11
+00490   open #h_customer_3:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed ! Meter address
+00500   open #h_customer_4:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00510   open #h_customer_5:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed 
 00512   F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-00520   open #h_ubtransvb:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
-00530   open #h_citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+00530   open #h_citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 00542   ! /r
 00554   ! 
 00560   goto ASKACCT
@@ -125,11 +124,13 @@
 01452     end if 
 01480     ! 
 01492     rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
-01494     fnkey_change(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! gosub REW_HIST ! change # in history transactions
-01496     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
+01493     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&env$('cno')&",KFName=[Q]\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+01494     fnkey_change(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
+01495     close #h_ubtransvb:
+01496     open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h"&env$('cno')&",KFName=[Q]\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
 01498     fnkey_change(h_workorder,'form pos 1,c 10',holdz$,z$)
 01500     close #h_workorder: 
-01516     fn_account_key_change_meter(holdz$,z$) ! gosub REW_HIST ! change # in history transactions
+01516     fn_account_key_change_meter(holdz$,z$) 
 01522     ! 
 01528     fnkey_change(h_deposit2,'form pos 1,c 10',x$,z$)
 01530     gosub BUD3
@@ -138,12 +139,6 @@
 01560     if exists(noteFile$)<>0 then execute "rename "&noteFile$&" "&noteFileNew$&" -d -n"
 01580   goto ASKACCT ! /r
 01590   ! ______________________________________________________________________
-01600   DONE: ! r:
-01605     ! close #2: ioerr ignore
-01620     close #h_customer_3: ioerr ignore
-01630     close #h_customer_2: ioerr ignore
-01640   goto XIT ! /r
-01650   ! ______________________________________________________________________
 01660   CONFIRM_DELETE: ! r:
 01662     mat ml$(1)
 01664     ml$(1)="Do you wish to delete Account "&trim$(x$)&"?"
@@ -354,7 +349,7 @@
 16220    L4100: !
 16240   return ! /r
 17000   OPEN_CASS1: ! r:
-17020     open #h_cass1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\CASS1IDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4150 
+17020     open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h"&env$('cno')&",KFName=[Q]\UBmstr\CASS1IDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4150 
 17040     cassopen=1
 17060     L4150: ! 
 17080   return  ! /r
@@ -364,6 +359,7 @@
 18060     end if 
 18080   return  ! /r
 20000   DEL_HIST: ! r: Delete History with old account
+20010     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&env$('cno')&",KFName=[Q]\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 20020     restore #h_ubtransvb,key>=x$&"         ": nokey DEL_HIST_FINIS
 20040     do 
 20060       read #h_ubtransvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate eof DEL_HIST_FINIS
@@ -371,6 +367,7 @@
 20100       if p$=x$ then delete #h_ubtransvb: 
 20120     loop 
 20140     DEL_HIST_FINIS: ! 
+20150     close #h_ubtransvb:
 20160   return  ! /r
 25000   NAMESCREEN: ! r: the main customer screen
 25020     fnTos(sn$="custinfo")
@@ -384,22 +381,22 @@
 25180     fnLbl(2,1,"Address:",13,1,0,fraCustInfo) : fnTxt(2,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=e$(3)
 25200     fnLbl(3,1,"Address:",13,1,0,fraCustInfo) : fnTxt(3,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=extra$(1)
 25220     fnLbl(4,1,"City, St Zip:",13,1,0,fraCustInfo)
-25240     fnComboF("CityStZip",4,15,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",fraCustInfo,0)
+25240     fnComboF("CityStZip",4,15,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",fraCustInfo,0)
 25260     custInfo$(respc+=1)=e$(4)
-25280     if u4_meterAddress$='True' then
-25300       fnLbl(9,1,"Meter Location:",mylen,1)
-25320       ! fnComboF('locationId',9,27,40,env$('Q')&'\UBmstr\MeterLocation.h'&env$('cno'),1,11,12,30,env$('Q')&'\UBmstr\MeterLocationIdx1.h'&env$('cno'))
-25330       fnTxt(9,27,20,30,0,'',1,'Must be selected via Location ID button')
-25340       custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
-25360       !
-25380         ! fnButton(9,48,'…',fkey_meterAddress:=54,"Select an existing Meter Address/Location ID",0,1)
-25400         fnLbl(9,50,str$(fnLocationIdFromAccount(z$)),9,0,0,0,0,'Location ID for Account Number')
-25410         fnLbl(9,59,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID derived from Meter Address')
-25420     else
+25280     ! if u4_meterAddress$='True' then
+25300     !   fnLbl(9,1,"Meter Location:",mylen,1)
+25320     !   ! fnComboF('locationId',9,27,40,'[Q]\UBmstr\MeterLocation.h'&env$('cno'),1,11,12,30,'[Q]\UBmstr\MeterLocationIdx1.h'&env$('cno'))
+25330     !   fnTxt(9,27,20,30,0,'',1,'Must be selected via Location ID button')
+25340     !   custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
+25360     !   !
+25380     !     ! fnButton(9,48,'…',fkey_meterAddress:=54,"Select an existing Meter Address/Location ID",0,1)
+25400     !     ! fnLbl(9,50,str$(fnLocationIdFromAccount(z$)),9,0,0,0,0,'Location ID for Account Number')
+25410     !     ! fnLbl(9,59,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID derived from Meter Address')
+25420     ! else
 25440       fnLbl(9,1,"Meter Address:",mylen,1)
 25460       fnTxt(9,27,20,30,0,'',1)
 25480       custInfo$(respc+=1)=e$(1)
-25500     end if
+25500     ! end if
 25520     fnLbl(10,1,"Alpha Sort Name:",mylen,1)
 25540     fnTxt(10,27,7)
 25560     custInfo$(respc+=1)=alp$
@@ -467,7 +464,7 @@
 26460     if do_not_use_alt_addr then 
 26470       fnTxt(4,15,20,30,0,"",do_not_use_alt_addr,empty$,2)
 26480     else 
-26490       fnComboF("CityStZip",4,15,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",2,0)
+26490       fnComboF("CityStZip",4,15,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",2,0)
 26500     end if 
 26510     custInfo$(respc+=1)=ab$(4)
 26520     !
@@ -574,23 +571,23 @@
 28420       goto REWRITE_RECORD
 28440     else if ckey=20 then 
 28460       if trim$(srvnam$(1))<>'' then 
-28480         goto SERVICE1
+28480         ckey=21 : goto SERVICE_SCREEN
 28500       else if trim$(srvnam$(2))<>'' then 
-28520         goto SERVICE2
+28520         ckey=22 : goto SERVICE_SCREEN
 28540       else if trim$(srvnam$(4))<>'' then 
-28560         goto SERVICE4
+28560         ckey=24 : goto SERVICE_SCREEN
 28580       else if trim$(srvnam$(5))<>'' then 
-28600         goto SERVICE5
+28600         ckey=25 : goto SERVICE_SCREEN
 28620       else if trim$(srvnam$(6))<>'' then 
-28640         goto SERVICE6
+28640         ckey=26 : goto SERVICE_SCREEN
 28660       else if trim$(srvnam$(7))<>'' then 
-28680         goto SERVICE7
+28680         ckey=27 : goto SERVICE_SCREEN
 28700       else if trim$(srvnam$(8))<>'' then 
-28720         goto SERVICE8
+28720         ckey=28 : goto SERVICE_SCREEN
 28740       else if trim$(srvnam$(9))<>'' then 
-28760         goto SERVICE9
+28760         ckey=29 : goto SERVICE_SCREEN
 28780       else if trim$(srvnam$(10))<>'' then 
-28800         goto SERVICE10
+28800         ckey=30 : goto SERVICE_SCREEN
 28820       else 
 28840         pr 'no services';bell : goto NAMESCREEN
 28860       end if 
@@ -629,38 +626,6 @@
 29580       goto NAMESCREEN
 29600     end if 
 29620   ! /r (namescreen)
-32000   GET_CODES: ! fnget_codes(service_code,&ratecode,mat rates$ ) requires h_rate1 r: get applicable rate codes
-32020     ! search routine must be passed code for service (WA for water) in searchcode$
-32040     if ~gcode_setup then 
-32060       gcode_setup=1
-32080       open #h_rate1:=51: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
-32082       open #h_rate2:=52: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno')&",Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
-32100     end if 
-32120     restore #h_rate1: 
-32140     mat rates$(99)
-32160     mat rates$=("")
-32180     fncreg_read('default rate '&str$(service_code),tmp_rate$)
-32200     if tmp_rate$<>'' then 
-32240       x=0
-32260       if ratecode=0 then 
-32280         ratecode=val(tmp_rate$(1:pos(tmp_rate$,'=')-1))
-32300       end if 
-32320     else 
-32340       x=1
-32360       rates$(1)=" 0=Not applicable"
-32380     end if 
-32400     do 
-32420       read #h_rate1,using "Form POS 1,C 54",release: rt$ eof GCODE_FINIS
-32440       if trim$(rt$(1:2))=searchcode$ then 
-32460         x=x+1
-32480         rates$(x)=rt$(3:4)&"="&rt$(5:25)
-32500         if ratecode=val(rt$(3:4)) then rateinfo$(3)=rt$(3:4)&"="&rt$(5:25)
-32520       end if 
-32540     loop 
-32560     GCODE_FINIS: ! 
-32580     if x>0 then mat rates$(x) else mat rates$(1)
-32600     if ratecode=0 then rateinfo$(3)=" 0=Not applicable"
-32620   return  ! /r
 34000   BILLING_INFO: ! r:
 34020     sn$="billing_info"
 34040     fnTos(sn$)
@@ -815,7 +780,7 @@
 43340     else if ckey=1 then ! edit
 43380       goto EDIT_CUSTOMER
 43600     else if ckey=5 then ! Cancel
-43620       goto DONE
+43620       goto XIT
 43880     end if 
 43900     goto ASKACCT
 43920   ! /r
@@ -852,32 +817,34 @@
 44962     fixgrid=1
 44980     read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 45000   goto EDIT_LOADED_CUSTOMER ! /r
-45010   IGNORE: continue 
-45020   XIT: ! r: close files and leave
-45080   fn_close_file(h_rate1)
-45100   fn_close_file(h_rate2)
-45120   fn_close_file(h_ubadrbil)
-45140   fn_close_file(h_citystzip)
-45160   fn_close_file(h_ubtransvb)
-45180   ! fn_close_file(h_deposit1)
-45200   fn_close_file(h_deposit2)
-45220   fn_close_file(h_cass1)
-45240   fn_close_file(h_budtrans)
-45260   fn_close_file(h_budmstr)
-45280   fn_close_file(h_budtrans)
-45300   fn_close_file(h_customer_1)
-45320   fn_close_file(h_customer_2)
-45340   fn_close_file(h_customer_3)
-45360   fn_close_file(h_customer_4)
-45380   fn_close_file(h_customer_5) ! /r
-45400 fnend 
+45020   IGNORE: continue 
+45040   XIT: ! r: close files and leave
+45060     ! close #2: ioerr ignore
+45080     fn_close_file(h_customer_3)
+45100     fn_close_file(h_customer_2)
+45120     fnCloseFile(hLocation,'U4 Meter Location')
+45140     setup_MeterLocation=0
+45200   fn_close_file(h_ubadrbil)
+45220   fn_close_file(h_citystzip)
+45260   ! fn_close_file(h_deposit1)
+45280   fn_close_file(h_deposit2)
+45300   fn_close_file(h_cass1)
+45320   fn_close_file(h_budtrans)
+45340   fn_close_file(h_budmstr)
+45360   fn_close_file(h_budtrans)
+45380   fn_close_file(h_customer_1)
+45400   fn_close_file(h_customer_2)
+45420   fn_close_file(h_customer_3)
+45440   fn_close_file(h_customer_4)
+45460   fn_close_file(h_customer_5) ! /r
+45480 fnend 
 46000 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 46010   if ~setup then let fn_setup
 46020   if ~setup_depositChange then let fn_setup_depositChange
 46040   fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 46060 fnend
 46080 def fn_setup_depositChange
-46140   open #h_deposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative  ! was 42
+46140   open #h_deposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h'&env$('cno')&',KFName=[Q]\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative  ! was 42
 46180 fnend
 46200 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 46220   ! requires local:  #h_deposit2
@@ -890,507 +857,295 @@
 47000 def fn_close_file(cf_handle)
 47020   close #cf_handle: ioerr ignore
 47040 fnend 
-48000 SERVICE_BUTTONS: ! r:
-48020   lyne=5
-48040   for j=1 to 10
-48060     if trim$(srv$(j))<>"" and trim$(srvnam$(j))<>"" then 
-48070       lyne+=1 : funkeyval=j+20
-48086       fnbutton_or_disabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
-48200     end if
-48220   next j
-48240 return  ! /r
 50000 SERVICE_SCREEN: ! r:
-50020   if ckey=5 then goto NAMESCREEN
-50040   if env$('client')="Gilbertown" then 
-50060     if a(7)=0 then a(7)=1
-50080     if a(6)=0 then a(6)=1
-50100   end if 
-50120   mat rateinfo$=("")
-50140   if ckey>20 and ckey<=30 then 
-50160     on ckey-20 goto SERVICE1,SERVICE2,SERVICE3,SERVICE4,SERVICE5,SERVICE6,SERVICE7,SERVICE8,SERVICE9,SERVICE10
-50180   end if 
-50220 goto NAMESCREEN ! /r
-51000 SERVICE1: ! r: 1ST SERVICE  -  Water
-51010   fnTos(sn$="Service1") : service_code=1
-51020   respc=0
-51030   fnLbl(1,19,srvnam$(service_code),20,2,4)
-51040   fnLbl(2,1,"Account:",10,1)
-51050   fnTxt(2,12,10,0,1,'',1)
-51060   rateinfo$(respc+=1)=z$ ! 1
-51070   fnLbl(2,24,"Name:",5,1)
-51080   fnTxt(2,31,25,30,0,'',1)
-51090   rateinfo$(respc+=1)=e$(2) ! 2
-51100   fnLbl(4,1,"Rate Code:",17,1)
-51110   searchcode$=srv$(service_code)
-51120   ratecode=a(1)
-51130   gosub GET_CODES
-51140   fncomboa("ubfm-rates",4,19,mat rates$,"",30)
-51150   respc+=1 ! 3
-51160   if env$('client')="Sangamon" then 
-51170     fnLbl(5,1,"Device Code:",17,1)
-51180   else 
-51190     fnLbl(5,1,"MeterNo:",17,1)
-51200   end if 
-51210   fnTxt(5,19,12)
-51220   rateinfo$(respc+=1)=f$(1) ! 4
-51230   fnLbl(6,1,'Serial No:',17,1)
-51240   fnTxt(6,19,12)
-51250   rateinfo$(respc+=1)=extra$(3) ! 5
-51260   fnLbl(7,1,"Deposit:",17,1)
-51270   fnTxt(7,19,8,0,1,'10')
-51280   rateinfo$(respc+=1)=str$(b(8)) ! 6
-51290   fnLbl(8,1,"Deposit Date:",17,1)
-51300   fnTxt(8,19,8,0,1,'1')
-51310   rateinfo$(respc+=1)=str$(c(1)) ! 7
-51320   fnLbl(9,1,"Standard Charge:",17,1)
-51330   fnTxt(9,19,10,0,1,'10')
-51340   rateinfo$(respc+=1)=str$(b(1)) ! 8
-51350   fnLbl(10,1,"Current Reading:",17,1)
-51360   fnTxt(10,19,11,0,1,'20')
-51370   rateinfo$(respc+=1)=str$(d(1)) ! 9
-51380   fnLbl(11,1,"Prior Reading:",17,1)
-51390   fnTxt(11,19,11,0,1,'20',0)
-51400   rateinfo$(respc+=1)=str$(d(2)) ! 10
-51410   fnLbl(12,1,"Usage - Current:",17,1)
-51420   fnTxt(12,19,11,0,1,'20')
-51430   rateinfo$(respc+=1)=str$(d(3)) ! 11
-51440   fnLbl(13,1,"Usage - YTD:",17,1)
-51450   fnTxt(13,19,11,0,1,'20')
-51460   rateinfo$(respc+=1)=str$(d(4)) ! 12
-51470   fnLbl(14,1,"Unit Count:",17,1)
-51480   fnTxt(14,19,5,0,1,'20')
-51490   rateinfo$(respc+=1)=str$(d(13)) ! 13
-51500   gosub SERVICE_BUTTONS
-51510 ! pICTURE$="water.jpg"
-51520 ! .    ! fnPIC(3,45,3,12,PICTURE$)
-51521   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-51522   fnLbl(21,45,'') ! force all service windows to be same size
-51530   fnCmdSet(2)
-51540   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 1
-51550   if ckey=5 then goto NAMESCREEN
-51560   x=pos(rateinfo$(3),"=",1)
-51570   if x=3 then a(1)=val(rateinfo$(3)(1:2)) else a(1)=val(rateinfo$(3)(1:1))
-51580   f$(1)=rateinfo$(4)(1:12)
-51590   extra$(3)=rateinfo$(5)(1:12)
-51600   b(8)=val(rateinfo$(6))
-51610   c(1)=val(rateinfo$(7))
-51620   b(1)=val(rateinfo$(8))
-51630   d(1)=val(rateinfo$(9))
-51640   d(2)=val(rateinfo$(10))
-51650   d(3)=val(rateinfo$(11))
-51660   d(4)=val(rateinfo$(12))
-51670   d(13)=val(rateinfo$(13))
-51680   if ckey=1 then goto NAMESCREEN
-51690   goto SERVICE_SCREEN
-51700 return  ! /r
-51710 def fn_ScrAddServiceMeterInfo(respc1,mat rateinfo$,service_code)
-51720   if fn_serviceIsMetered(service_code) then
-51730     fnLbl(24,1,'Meter Location')
-51740     !
-51750     !
-51760     !
-51770   end if
-51780 fnend
-51790 def fn_serviceIsMetered(serviceNumber)=max(0,srch(mat serviceCodeMetered$,srv$(serviceNumber))) ! /r
-52000 SERVICE2: ! r: 2nd SERVICE  -  Sewer
-52020   fnTos(sn$="service2") : service_code=2
-52040   respc=0
-52060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-52080   fnLbl(2,1,"Account:",10,1)
-52100   fnTxt(2,12,10,0,1,'',1)
-52120   rateinfo$(respc+=1)=z$
-52140   fnLbl(2,24,"Name:",5,1)
-52160   fnTxt(2,31,25,30,0,'',1)
-52180   rateinfo$(respc+=1)=e$(2)
-52200   fnLbl(4,1,"Rate Code:",17,1)
-52220   searchcode$=srv$(service_code) : ratecode=a(2) : gosub GET_CODES
-52240   fncomboa("ubfm-rates",4,19,mat rates$,"",30)
-52260   respc+=1
-52280   fnLbl(5,1,"Deposit:",17,1)
-52300   fnTxt(5,19,8,0,1,'10')
-52320   rateinfo$(respc+=1)=str$(b(9))
-52340   fnLbl(6,1,"Deposit Date:",17,1)
-52360   fnTxt(6,19,8,0,1,'1')
-52380   rateinfo$(respc+=1)=str$(c(2))
-52400   fnLbl(7,1,"Standard Charge:",17,1)
-52420   fnTxt(7,19,10,0,1,'10')
-52440   rateinfo$(respc+=1)=str$(b(2))
-52460   fnLbl(8,1,"Sewer Reduction:",17,1)
-52480   fnTxt(8,19,9,0,1,'20')
-52500   rateinfo$(respc+=1)=str$(extra(5))
-52520   fnLbl(9,1,"Sewer Average:",17,1)
-52540   fnTxt(9,19,9,0,1,'20',0)
-52560   rateinfo$(respc+=1)=str$(extra(18))
-52580   fnLbl(10,1,"Units Per Meter:",17,1)
-52600   fnTxt(10,19,3,0,1,'20',0)
-52620   rateinfo$(respc+=1)=str$(extra(14))
-52640   gosub SERVICE_BUTTONS
-52660 ! pICTURE$="data\sewer.jpg"
-52680 ! .   ! fnpic(3,45,3,12,PICTURE$)
-52681   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-52690   fnLbl(21,45,'') ! force all service windows to be same size
-52700   fnCmdSet(2)
-52720   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 2
-52740   if ckey=5 then goto NAMESCREEN
-52760   x=pos(rateinfo$(3),"=",1)
-52780   if x=3 then 
-52800     a(2)=val(rateinfo$(3)(1:2))
-52820   else 
-52840     a(2)=val(rateinfo$(3)(1:1))
-52860   end if 
-52880   b(9)=val(rateinfo$(4))
-52900   c(2)=val(rateinfo$(5))
-52920   b(2)=val(rateinfo$(6))
-52940   extra(5)=val(rateinfo$(7))
-52960   extra(18)=val(rateinfo$(8))
-52980   extra(14)=val(rateinfo$(9))
-53000 goto SERVICE_SCREEN ! /r
-54000 SERVICE3: ! r: 3RD SERVICE  -  Electric
-54020   fnTos(sn$="service3") : service_code=3
-54040   respc=0
-54060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-54080   fnLbl(2,1,"Account:",10,1)
-54100   fnTxt(2,12,10,0,1,'',1)
-54120   rateinfo$(respc+=1)=z$
-54140   fnLbl(2,24,"Name:",5,1)
-54160   fnTxt(2,31,25,30,0,'',1)
-54180   rateinfo$(respc+=1)=e$(2)
-54200   fnLbl(4,1,"Rate Code:",14,1)
-54220   searchcode$=srv$(service_code) : ratecode=a(3) : gosub GET_CODES
-54240   fncomboa("ubfm-rates",4,18,mat rates$,"",30)
-54260   respc+=1
-54280   if srv$(3)="EL" or srv$(3)="LM" then 
-54300     goto L7870
-54320   else ! .    ! skip all of electric information if field is used for something  other than electric
-54340     goto L8200
-54360   end if 
-54380 L7870: ! 
-54400   fnLbl(5,1,"Meter Number:",18,1)
-54420   fnTxt(5,20,12)
-54440   rateinfo$(respc+=1)=f$(2)
-54460   fnLbl(6,1,'Serial Number:',18,1)
-54480   fnTxt(6,20,12,0,0,'',0)
-54500   rateinfo$(respc+=1)=extra$(4)
-54520   fnLbl(7,1,"Deposit:",18,1)
-54540   fnTxt(7,20,8,0,1,'10',0)
-54560   rateinfo$(respc+=1)=str$(b(10))
-54580   fnLbl(8,1,"Deposit Date:",18,1)
-54600   fnTxt(8,20,8,0,1,'1',0)
-54620   rateinfo$(respc+=1)=str$(c(3))
-54640   fnLbl(9,1,"Standard Charge:",18,1)
-54660   fnTxt(9,20,10,0,1,'10',0)
-54680   rateinfo$(respc+=1)=str$(b(3))
-54700   fnLbl(10,1,"Current Reading:",18,1)
-54720   fnTxt(10,20,9,0,1,'20',0)
-54740   rateinfo$(respc+=1)=str$(d(5))
-54760   fnLbl(11,1,"Prior Reading:",18,1)
-54780   fnTxt(11,20,9,0,1,'20',0)
-54800   rateinfo$(respc+=1)=str$(d(6))
-54820   fnLbl(12,1,"Usage - Current:",18,1)
-54840   fnTxt(12,20,9,0,1,'20',0)
-54860   rateinfo$(respc+=1)=str$(d(7))
-54880   fnLbl(13,1,"Usage - YTD:",18,1)
-54900   fnTxt(13,20,9,0,1,"20")
-54920   rateinfo$(respc+=1)=str$(d(8))
-54940   if srv$(3)="LM" then goto L8200 ! .    ! skip rest of information on lawn meters
-54960   fnLbl(14,1,"Demand Reading:",18,1)
-54980   fnTxt(14,20,9,0,1,"20")
-55000   rateinfo$(respc+=1)=str$(d(15))
-55020   fnLbl(15,1,"Demand Multiplier:",18,1)
-55040   fnTxt(15,20,9,0,1,"33")
-55060   rateinfo$(respc+=1)=str$(d(14)*.001)
-55080   fnLbl(16,1,"Average Usage:",18,1)
-55100   fnTxt(16,20,9,0,1,"20")
-55120   rateinfo$(respc+=1)=str$(extra(9))
-55140   fnLbl(17,1,"Usage Multiplier:",18,1)
-55160   fnTxt(17,20,9,0,1,"33")
-55180   rateinfo$(respc+=1)=str$(extra(8)*.001)
-55200   fnLbl(18,1,"Security Light $:",18,1)
-55220   fnTxt(18,20,9,0,1,"10")
-55240   rateinfo$(respc+=1)=str$(extra(6))
-55260   fnLbl(19,1,"Num of Lights:",18,1)
-55280   fnTxt(19,20,3,0,1,"20")
-55300   rateinfo$(respc+=1)=str$(extra(7))
-55320   fnLbl(20,1,"Units per Meter:",18,1)
-55340   fnTxt(20,20,3,0,1,"20")
-55360   rateinfo$(respc+=1)=str$(extra(15))
-55380 L8200: gosub SERVICE_BUTTONS
-55400 ! pICTURE$="data\electric.jpg"
-55420 ! .   ! fnpic(3,45,3,12,PICTURE$)
-55421   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-55430   fnLbl(21,45,'') ! force all service windows to be same size
-55440   fnCmdSet(2)
-55460   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! ELECTRIC RATE SCREEN
-55480   if ckey=5 then goto NAMESCREEN
-55500   x=pos(rateinfo$(3),"=",1)
-55520   if x=3 then 
-55540     a(3)=val(rateinfo$(3)(1:2))
-55560   else 
-55580     a(3)=val(rateinfo$(3)(1:1))
-55600   end if 
-55620   f$(2)=rateinfo$(4)(1:12)
-55640   extra$(4)=rateinfo$(5)(1:12)
-55660   b(10)=val(rateinfo$(6))
-55680   c(3)=val(rateinfo$(7))
-55700   b(3)=val(rateinfo$(8))
-55720   d(5)=val(rateinfo$(9))
-55740   d(6)=val(rateinfo$(10))
-55760   d(7)=val(rateinfo$(11))
-55780   d(8)=val(rateinfo$(12))
-55800   d(15)=val(rateinfo$(13))
-55820   d(14)=val(rateinfo$(14))*1000
-55840   extra(9)=val(rateinfo$(15))
-55860   extra(8)=val(rateinfo$(16))*1000
-55880   extra(6)=val(rateinfo$(17))
-55900   extra(7)=val(rateinfo$(18))
-55920   extra(15)=val(rateinfo$(19))
-55940   if ckey=1 then goto NAMESCREEN
-55960   goto SERVICE_SCREEN ! /r
-56000 SERVICE4: ! r: 4th SERVICE  -  Gas
-56020   fnTos(sn$="service4") : service_code=4
-56040   respc=0
-56060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-56080   fnLbl(2,1,"Account:",10,1)
-56100   fnTxt(2,12,10,0,1,"",1)
-56120   rateinfo$(respc+=1)=z$
-56140   fnLbl(2,24,"Name:",5,1)
-56160   fnTxt(2,31,25,30,0,"",1)
-56180   rateinfo$(respc+=1)=e$(2)
-56200   fnLbl(4,1,"Rate Code:",14,1)
-56220   searchcode$=srv$(service_code) : ratecode=a(4) : gosub GET_CODES
-56240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
-56260   respc+=1
-56280   if srv$(4)="GA" then ! show all of gas information (unless field is used for something other than gas)
-56300     fnLbl(5,1,"Meter Number:",18,1)
-56320     fnTxt(5,20,12)
-56340     rateinfo$(respc+=1)=f$(3)
-56360     fnLbl(6,1,"Serial Number:",18,1)
-56380     fnTxt(6,20,12)
-56400     rateinfo$(respc+=1)=extra$(5)
-56420     fnLbl(7,1,"Deposit:",18,1)
-56440     fnTxt(7,20,8,0,1,"10")
-56460     rateinfo$(respc+=1)=str$(b(11))
-56480     fnLbl(8,1,"Deposit Date:",18,1)
-56500     fnTxt(8,20,8,0,1,"1")
-56520     rateinfo$(respc+=1)=str$(c(4))
-56540     fnLbl(9,1,"Standard Charge:",18,1)
-56560     fnTxt(9,20,10,0,1,"10")
-56580     rateinfo$(respc+=1)=str$(b(4))
-56600     fnLbl(10,1,"Current Reading:",18,1)
-56620     fnTxt(10,20,12,0,1,"20")
-56640     rateinfo$(respc+=1)=str$(d(9))
-56660     fnLbl(11,1,"Prior Reading:",18,1)
-56680     fnTxt(11,20,12,0,1,"20")
-56700     rateinfo$(respc+=1)=str$(d(10))
-56720     fnLbl(12,1,"Usage - Current:",18,1)
-56740     fnTxt(12,20,12,0,1,"20")
-56760     rateinfo$(respc+=1)=str$(d(11))
-56780     fnLbl(13,1,"Usage - YTD:",18,1)
-56800     fnTxt(13,20,12,0,1,"20")
-56820     rateinfo$(respc+=1)=str$(d(12))
-56840     fnLbl(14,1,"Multiplier:",18,1)
-56860     fnTxt(14,20,9,0,1,"33")
-56880     rateinfo$(respc+=1)=str$(extra(10)*.001)
-56900     fnLbl(15,1,"Number of Units:",18,1)
-56920     fnTxt(15,20,3,0,1,"20")
-56940     rateinfo$(respc+=1)=str$(extra(16))
-56960   end if 
-56980   gosub SERVICE_BUTTONS
-57000 ! pICTURE$="data\gas.jpg" : fnpic(3,45,3,12,PICTURE$)
-57001   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-57010   fnLbl(21,45,'') ! force all service windows to be same size
-57020   fnCmdSet(2)
-57030   fnAcs(sn$,0,mat rateinfo$,ckey) ! gas rate screen
-57040   if ckey=5 then goto NAMESCREEN
-57060   x=pos(rateinfo$(3),"=",1)
-57080   if x=3 then a(4)=val(rateinfo$(3)(1:2)) else a(4)=val(rateinfo$(3)(1:1))
-57100   f$(3)=rateinfo$(4)(1:12)
-57120   extra$(5)=rateinfo$(5)(1:12)
-57140   b(11)=val(rateinfo$(6))
-57160   c(4)=val(rateinfo$(7))
-57180   b(4)=val(rateinfo$(8))
-57200   d(9)=val(rateinfo$(9))
-57220   d(10)=val(rateinfo$(10))
-57240   d(11)=val(rateinfo$(11))
-57260   d(12)=val(rateinfo$(12))
-57280   extra(10)=val(rateinfo$(13))*1000
-57300   extra(16)=val(rateinfo$(14))
-57320   if ckey=1 then goto NAMESCREEN
-57340   goto SERVICE_SCREEN ! /r
-58000 SERVICE5: ! r: 5th SERVICE
-58020   fnTos(sn$="service5") : service_code=5
-58040   respc=0
-58060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-58080   fnLbl(2,1,"Account:",10,1)
-58100   fnTxt(2,12,10,0,1,"",1)
-58120   rateinfo$(respc+=1)=z$
-58140   fnLbl(2,24,"Name:",5,1)
-58160   fnTxt(2,31,25,30,0,"",1)
-58180   rateinfo$(respc+=1)=e$(2)
-58200   fnLbl(4,1,"Rate Code:",14,1)
-58220   searchcode$=srv$(service_code) : ratecode=a(5) : gosub GET_CODES
-58240   fncomboa("ubfm-rates",4,20,mat rates$,"",30)
-58260   respc+=1
-58280   fnLbl(5,1,"Standard Charge:",18,1)
-58300   fnTxt(5,20,10,0,1,"10",0)
-58320   rateinfo$(respc+=1)=str$(b(5))
-58340   gosub SERVICE_BUTTONS
-58360 ! pICTURE$="data\misc5.jpg"
-58380 ! .   ! fnpic(3,45,3,12,PICTURE$)
-58381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-58390   fnLbl(21,45,'') ! force all service windows to be same size
-58400   fnCmdSet(2)
-58410   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 5
-58420   if ckey=5 then goto NAMESCREEN
-58440   x=pos(rateinfo$(3),"=",1)
-58460   if x=3 then a(5)=val(rateinfo$(3)(1:2)) else a(5)=val(rateinfo$(3)(1:1))
-58480   b(5)=val(rateinfo$(4))
-58500   goto SERVICE_SCREEN ! /r
-60000 SERVICE6: ! r: 6th SERVICE
-60020   fnTos(sn$="service6") : service_code=6
-60040   respc=0
-60060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-60080   fnLbl(2,1,"Account:",10,1)
-60100   fnTxt(2,12,10,0,1,"",1)
-60120   rateinfo$(respc+=1)=z$
-60140   fnLbl(2,24,"Name:",5,1)
-60160   fnTxt(2,31,25,30,0,"",1)
-60180   rateinfo$(respc+=1)=e$(2)
-60200   fnLbl(4,1,"Rate Code:",14,1)
-60220   searchcode$=srv$(service_code) : ratecode=extra(11) : gosub GET_CODES
-60240   fncomboa("ubfm-rates",4,20,mat rates$,"",30)
-60260   respc+=1
-60280   fnLbl(5,1,"Standard Charge:",18,1)
-60300   fnTxt(5,20,10,0,1,"10")
-60320   rateinfo$(respc+=1)=str$(b(6))
-60340   gosub SERVICE_BUTTONS
-60360 ! pICTURE$="data\misc5.jpg"
-60380 ! .   ! fnpic(3,45,3,12,PICTURE$)
-60381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-60390   fnLbl(21,45,'') ! force all service windows to be same size
-60400   fnCmdSet(2)
-60410   fnAcs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 6
-60420   if ckey=5 then goto NAMESCREEN
-60440   x=pos(rateinfo$(3),"=",1)
-60460   if x=3 then extra(11)=val(rateinfo$(3)(1:2)) else extra(11)=val(rateinfo$(3)(1:1))
-60480   b(6)=val(rateinfo$(4))
-60500   goto SERVICE_SCREEN ! /r
-62000 SERVICE7: ! r:  7th SERVICE
-62020   fnTos(sn$="service7") : service_code=7
-62040   respc=0
-62060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-62080   fnLbl(2,1,"Account:",10,1)
-62100   fnTxt(2,12,10,0,1,"",1)
-62120   rateinfo$(respc+=1)=z$
-62140   fnLbl(2,24,"Name:",5,1)
-62160   fnTxt(2,31,25,30,0,"",1)
-62180   rateinfo$(respc+=1)=e$(2)
-62200   fnLbl(4,1,"Rate Code:",14,1)
-62220   searchcode$=srv$(service_code) : ratecode=extra(12) : gosub GET_CODES
-62240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
-62260   respc+=1
-62280 ! fnLbl(5,1,"Standard Charge:",16,1)
-62300 ! fnTxt(5,16,10,10,1,"10")
-62320 ! .   ! rATEINFO$(4)=STR$(B(7))
-62340   gosub SERVICE_BUTTONS
-62360 ! pICTURE$="data\misc7.jpg"
-62380 ! .   ! fnpic(3,45,3,12,PICTURE$)
-62381   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-62390   fnLbl(21,45,'') ! force all service windows to be same size
-62400   fnCmdSet(2)
-62410   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 7
-62420   if ckey=5 then goto NAMESCREEN
-62440   x=pos(rateinfo$(3),"=",1)
-62460   if x=3 then extra(12)=val(rateinfo$(3)(1:2)) else extra(12)=val(rateinfo$(3)(1:1))
-62480 ! b(7)=VAL(RATEINFO$(4))
-62500   goto SERVICE_SCREEN ! /r
-64000 SERVICE8: ! r:  8th SERVICE
-64020   fnTos(sn$="service8") : service_code=8
-64040   respc=0
-64060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-64080   fnLbl(2,1,"Account:",10,1)
-64100   fnTxt(2,12,10,10,1,"",1)
-64120   rateinfo$(respc+=1)=z$
-64140   fnLbl(2,24,"Name:",5,1)
-64160   fnTxt(2,31,25,30,0,"",1)
-64180   rateinfo$(respc+=1)=e$(2)
-64200   fnLbl(4,1,"Rate Code:",14,1)
-64220   searchcode$=srv$(service_code) : ratecode=extra(13) : gosub GET_CODES
-64240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
-64260   respc+=1
-64280   fnLbl(5,1,"Standard Charge:",16,1)
-64300   fnTxt(5,16,10,0,1,"10")
-64320   rateinfo$(respc+=1)=str$(b(7))
-64340   gosub SERVICE_BUTTONS
-64360 ! pICTURE$="data\misc8.jpg" : fnpic(3,45,3,12,PICTURE$)
-64361   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-64370   fnLbl(21,45,'') ! force all service windows to be same size
-64380   fnCmdSet(2)
-64400   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 8
-64420   if ckey=5 then goto NAMESCREEN
-64440   x=pos(rateinfo$(3),"=",1)
-64460   if x=3 then extra(13)=val(rateinfo$(3)(1:2)) else extra(13)=val(rateinfo$(3)(1:1))
-64480   b(7)=val(rateinfo$(4))
-64500   goto SERVICE_SCREEN ! /r
-66000 SERVICE9: ! r:  9th service (sales tax)
-66020   fnTos(sn$="service9") : service_code=9
-66040   respc=0
-66060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-66080   fnLbl(2,1,"Account:",10,1)
-66100   fnTxt(2,12,10,10,1,"",1)
-66120   rateinfo$(respc+=1)=z$
-66140   fnLbl(2,24,"Name:",5,1)
-66160   fnTxt(2,31,25,30,0,"",1)
-66180   rateinfo$(respc+=1)=e$(2)
-66200   fnLbl(4,1,"Rate Code:",14,1)
-66220   searchcode$=srv$(service_code) : ratecode=a(6) : gosub GET_CODES
-66240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
-66260   respc+=1
-66280   gosub SERVICE_BUTTONS
-66300 ! pICTURE$="data\misc5.jpg" : fnpic(3,45,3,12,PICTURE$)
-66301   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-66310   fnLbl(21,45,'') ! force all service windows to be same size
-66320   fnCmdSet(2)
-66340   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 9
-66360   if ckey=5 then goto NAMESCREEN
-66380   x=pos(rateinfo$(3),"=",1)
-66400   if x=3 then a(6)=val(rateinfo$(3)(1:2)) else a(6)=val(rateinfo$(3)(1:1))
-66420   goto SERVICE_SCREEN ! /r
-68000 SERVICE10: ! r:  10th SERVICE   (penalty)
-68020   fnTos(sn$="service10") : service_code=10
-68040   respc=0
-68060   fnLbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
-68080   fnLbl(2,1,"Account:",10,1)
-68100   fnTxt(2,12,10,10,1,"",1)
-68120   rateinfo$(respc+=1)=z$
-68140   fnLbl(2,24,"Name:",5,1)
-68160   fnTxt(2,31,25,30,0,"",1)
-68180   rateinfo$(respc+=1)=e$(2)
-68200   fnLbl(4,1,"Rate Code:",14,1)
-68220   searchcode$=srv$(service_code) : ratecode=a(7) : gosub GET_CODES
-68240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
-68260   respc+=1
-68280   gosub SERVICE_BUTTONS
-68300 ! pICTURE$="data\misc10.jpg" : fnpic(3,45,3,12,PICTURE$)
-68301   fn_ScrAddServiceMeterInfo(serviceMeterInfo_resp1:=respc+=1,mat rateinfo$,service_code)
-68310   fnLbl(21,45,'') ! force all service windows to be same size
-68320   fnCmdSet(2)
-68330   fnAcs(sn$,0,mat rateinfo$,ckey) ! rate screen 5
-68340   if ckey=5 then goto NAMESCREEN
-68360   x=pos(rateinfo$(3),"=",1)
-68380   if x=3 then a(7)=val(rateinfo$(3)(1:2)) else a(7)=val(rateinfo$(3)(1:1))
-68400 goto SERVICE_SCREEN ! /r
-73000 ERTN: ! r:
-73020   fnerror(program$,err,line,act$,"xit")
+50010   ! if ckey=5 then goto NAMESCREEN
+50020   mat rateInfo$=("")
+50030   if ckey>20 and ckey<=30 then 
+50040     ! on ckey-20 goto SERVICE1,SERVICE2,SERVICE3,SERVICE4,SERVICE5,SERVICE6,SERVICE7,SERVICE8,SERVICE9,SERVICE10
+50050     ! r: set service_code and ratecode
+50060     if ckey=21 then 
+50070       service_code=1 : ratecode=a(1)
+50080     else if ckey=22 then
+50090       service_code=2 : ratecode=a(2)
+50100     else if ckey=23 then
+50110       service_code=3 : ratecode=a(3)
+50120     else if ckey=24 then
+50130       service_code=4 : ratecode=a(4)
+50140     else if ckey=25 then
+50150       service_code=5 : ratecode=a(5)
+50160     else if ckey=26 then
+50170       service_code=6 : ratecode=extra(11)
+50180     else if ckey=27 then
+50190       service_code=7 : ratecode=extra(12)
+50200     else if ckey=28 then
+50210       service_code=8 : ratecode=extra(13)
+50220     else if ckey=29 then
+50230       service_code=9 : ratecode=a(6)
+50240     else if ckey=30 then
+50250       service_code=10 : ratecode=a(7)
+50260     end if
+50270     ! /r
+50280     ! r: ServicePart1
+50290     respc=gFkeyMeterLocationSelect=srvLine=0 
+50292     srvCol1len=20 : srvCol2pos=22 
+50300     gLocationFirstRespc=0 : gLocationKey$=''
+50310     fnTos(sn$='service'&str$(service_code))
+50320     fnLbl(srvLine+=1,19,srvnam$(service_code),20,2,4)
+50330     fnLbl(srvLine+=1, 1,"Account:"  ,10,1) : fnTxt(srvLine,12,10, 0,1,'',1) : rateInfo$(respc+=1)=z$    ! 1
+50340     fnLbl(srvLine    ,24,"Name:"    , 5,1) : fnTxt(srvLine,31,25,30,0,'',1) : rateInfo$(respc+=1)=e$(2) ! 2
+50350     srvLine+=1
+50360     fnLbl(srvLine+=1,1,"Rate Code:",srvCol1len,1) 
+50370     fn_getRateCodeOptions(service_code,ratecode,mat rates$)
+50380     fncomboa("ubfm-rates",srvLine,srvCol2pos,mat rates$,"",30)
+50390     respc+=1                                                                                 ! 3
+50400     if service_code=1 then
+50410       fnLbl(srvLine+=1,1,"MeterNo:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=f$(1)       ! 4
+50420       fnLbl(srvLine+=1,1,'Serial No:'      ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=extra$(3)   ! 5
+50430       fnLbl(srvLine+=1,1,"Deposit:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'10') : rateInfo$(respc+=1)=str$(b(8))  ! 6
+50440       fnLbl(srvLine+=1,1,"Deposit Date:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'1' ) : rateInfo$(respc+=1)=str$(c(1))  ! 7
+50450       fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(1))  ! 8
+50460       fnLbl(srvLine+=1,1,"Current Reading:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,11,0,1,'20') : rateInfo$(respc+=1)=str$(d(1))  ! 9
+50470       fnLbl(srvLine+=1,1,"Prior Reading:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,11,0,1,'20') : rateInfo$(respc+=1)=str$(d(2))  ! 10
+50480       fnLbl(srvLine+=1,1,"Usage - Current:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,11,0,1,'20') : rateInfo$(respc+=1)=str$(d(3))  ! 11
+50490       fnLbl(srvLine+=1,1,"Usage - YTD:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,11,0,1,'20') : rateInfo$(respc+=1)=str$(d(4))  ! 12
+50500       fnLbl(srvLine+=1,1,"Unit Count:"     ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 5,0,1,'20') : rateInfo$(respc+=1)=str$(d(13)) ! 13
+50510     else if service_code=2 then
+50520       fnLbl(srvLine+=1,1,"Deposit:"         ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'10') : rateInfo$(respc+=1)=str$(b(9))
+50530       fnLbl(srvLine+=1,1,"Deposit Date:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'1' ) : rateInfo$(respc+=1)=str$(c(2))
+50540       fnLbl(srvLine+=1,1,"Standard Charge:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(2))
+50550       fnLbl(srvLine+=1,1,"Sewer Reduction:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(extra(5))
+50560       fnLbl(srvLine+=1,1,"Sewer Average:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(extra(18))
+50570       fnLbl(srvLine+=1,1,"Units Per Meter:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 3,0,1,'20') : rateInfo$(respc+=1)=str$(extra(14))
+50580     else if service_code=3 then
+50590       if srv$(service_code)="EL" or srv$(service_code)="LM" then 
+50600         fnLbl(srvLine+=1,1,"Meter Number:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=f$(2)
+50610         fnLbl(srvLine+=1,1,'Serial Number:'  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=extra$(4)
+50620         fnLbl(srvLine+=1,1,"Deposit:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'10') : rateInfo$(respc+=1)=str$(b(10))
+50630         fnLbl(srvLine+=1,1,"Deposit Date:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'1' ) : rateInfo$(respc+=1)=str$(c(3))
+50640         fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(3))
+50650         fnLbl(srvLine+=1,1,"Current Reading:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(d(5))
+50660         fnLbl(srvLine+=1,1,"Prior Reading:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(d(6))
+50670         fnLbl(srvLine+=1,1,"Usage - Current:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(d(7))
+50680         fnLbl(srvLine+=1,1,"Usage - YTD:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,"20") : rateInfo$(respc+=1)=str$(d(8))
+50690         if srv$(service_code)="EL" then  ! .    ! skip rest of information on lawn meters
+50700           fnLbl(srvLine+=1,1,"Demand Reading:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"20") : rateInfo$(respc+=1)=str$(d(15))
+50710           fnLbl(srvLine+=1,1,"Demand Multiplier:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"33") : rateInfo$(respc+=1)=str$(d(14)*.001)
+50720           fnLbl(srvLine+=1,1,"Average Usage:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"20") : rateInfo$(respc+=1)=str$(extra(9))
+50730           fnLbl(srvLine+=1,1,"Usage Multiplier:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"33") : rateInfo$(respc+=1)=str$(extra(8)*.001)
+50740           fnLbl(srvLine+=1,1,"Security Light $:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"10") : rateInfo$(respc+=1)=str$(extra(6))
+50750           fnLbl(srvLine+=1,1,"Num of Lights:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(7))
+50760           fnLbl(srvLine+=1,1,"Units per Meter:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(15))
+50770         end if
+50780       end if 
+50790     else if service_code=4 then
+50800       if srv$(service_code)="GA" then ! show all of gas information (unless field is used for something other than gas)
+50810         fnLbl(srvLine+=1,1,"Meter Number:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=f$(3)
+50820         fnLbl(srvLine+=1,1,"Serial Number:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=extra$(5)
+50830         fnLbl(srvLine+=1,1,"Deposit:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,"10") : rateInfo$(respc+=1)=str$(b(11))
+50840         fnLbl(srvLine+=1,1,"Deposit Date:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,"1" ) : rateInfo$(respc+=1)=str$(c(4))
+50850         fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(4))
+50860         fnLbl(srvLine+=1,1,"Current Reading:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(9))
+50870         fnLbl(srvLine+=1,1,"Prior Reading:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(10))
+50880         fnLbl(srvLine+=1,1,"Usage - Current:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(11))
+50890         fnLbl(srvLine+=1,1,"Usage - YTD:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(12))
+50900         fnLbl(srvLine+=1,1,"Multiplier:"     ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,"33") : rateInfo$(respc+=1)=str$(extra(10)*.001)
+50910         fnLbl(srvLine+=1,1,"Number of Units:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(16))
+50920       end if 
+50930     else if service_code=5 then
+50940       fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10",0) : rateInfo$(respc+=1)=str$(b(5))
+50950     else if service_code=6 then
+50960       fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(6))
+50970     else if service_code=7 then
+50980         ! (place holder for future developemnt)
+50990     else if service_code=8 then
+51000       fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(7))
+51010     else if service_code=9 then
+51020         ! (place holder for future developemnt)
+51030     else if service_code=10 then
+51040         ! (place holder for future developemnt)
+51050     end if 
+51052     ! /r
+51060     ! r: SERVICE_BUTTONS
+51070     lyne=5
+51080     for j=1 to 10
+51090       if trim$(srv$(j))<>"" and trim$(srvnam$(j))<>"" then 
+51100         lyne+=1 : funkeyval=j+20
+51110         fnbutton_or_disabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
+51120       end if
+51130     next j
+51150     fn_ScrAddServiceMeterInfo(srvLine,respc+=1,mat rateInfo$,srv$(service_code),service_code)
+51160     fnCmdSet(2)
+51170     fnAcs(sn$,0,mat rateInfo$,ckey) ! rate screen 1
+51180     ! /r
+51190     if ckey<>5 then ! r: get local values out of mat rateInfo$ and Save the record
+51200       ! r: receive ratecode back
+51210       ratecode=val(rateInfo$(3)(1:(pos(rateInfo$(3),"=",1)-1)))
+51220       if service_code=1 then !  r: 1ST SERVICE  -  Water
+51230         a(1)     =ratecode
+51240         f$(1)    =rateInfo$(4)(1:12)
+51250         extra$(3)=rateInfo$(5)(1:12)
+51260         b(8)     =val(rateInfo$(6))
+51270         c(1)     =val(rateInfo$(7))
+51280         b(1)     =val(rateInfo$(8))
+51290         d(1)     =val(rateInfo$(9))
+51300         d(2)     =val(rateInfo$(10))
+51310         d(3)     =val(rateInfo$(11))
+51320         d(4)     =val(rateInfo$(12))
+51330         d(13)    =val(rateInfo$(13))
+51340          ! /r
+51350       else if service_code=2 then ! r: 2nd SERVICE  -  Sewer
+51360         a(2)     =ratecode
+51370         b(9)     =val(rateInfo$(4))
+51380         c(2)     =val(rateInfo$(5))
+51390         b(2)     =val(rateInfo$(6))
+51400         extra(5) =val(rateInfo$(7))
+51410         extra(18)=val(rateInfo$(8))
+51420         extra(14)=val(rateInfo$(9))
+51430          ! /r
+51440       else if service_code=3 then ! r: 3RD SERVICE  -  Electric
+51450         a(3)     =ratecode
+51460         f$(2)    =rateInfo$(4)(1:12)
+51470         extra$(4)=rateInfo$(5)(1:12)
+51480         b(10)    =val(rateInfo$(6))
+51490         c(3)     =val(rateInfo$(7))
+51500         b(3)     =val(rateInfo$(8))
+51510         d(5)     =val(rateInfo$(9))
+51520         d(6)     =val(rateInfo$(10))
+51530         d(7)     =val(rateInfo$(11))
+51540         d(8)     =val(rateInfo$(12))
+51550         d(15)    =val(rateInfo$(13))
+51560         d(14)    =val(rateInfo$(14))*1000
+51570         extra(9) =val(rateInfo$(15))
+51580         extra(8) =val(rateInfo$(16))*1000
+51590         extra(6) =val(rateInfo$(17))
+51600         extra(7) =val(rateInfo$(18))
+51610         extra(15)=val(rateInfo$(19))
+51620         ! /r
+51630       else if service_code=4 then ! r: 4th SERVICE  -  Gas
+51640         a(4)     =ratecode
+51650         f$(3)    =rateInfo$(4)(1:12)
+51660         extra$(5)=rateInfo$(5)(1:12)
+51670         b(11)    =val(rateInfo$(6))
+51680         c(4)     =val(rateInfo$(7))
+51690         b(4)     =val(rateInfo$(8))
+51700         d(9)     =val(rateInfo$(9))
+51710         d(10)    =val(rateInfo$(10))
+51720         d(11)    =val(rateInfo$(11))
+51730         d(12)    =val(rateInfo$(12))
+51740         extra(10)=val(rateInfo$(13))*1000
+51750         extra(16)=val(rateInfo$(14))
+51760          ! /r
+51770       else if service_code=5 then ! r: 5th SERVICE
+51780         a(5)     =ratecode
+51790         b(5)     =val(rateInfo$(4))
+51800       ! /r
+51810       else if service_code=6 then ! r: 6th SERVICE
+51820         extra(11)=ratecode
+51830         b(6)     =val(rateInfo$(4))
+51840         ! /r
+51850       else if service_code=7 then ! r:  7th SERVICE
+51860         extra(12)=ratecode
+51870         ! b(7)     =VAL(rateInfo$(4))
+51880         ! /r
+51890       else if service_code=8 then ! r:  8th SERVICE
+51900         extra(13)=ratecode
+51910         b(7)     =val(rateInfo$(4))
+51920         ! /r
+51930       else if service_code=9 then ! r: 9th service (sales tax)
+51940         a(6)     =ratecode
+51950         ! /r
+51960       else if service_code=10 then ! r: 10th SERVICE   (penalty)
+51970         a(7)     =ratecode
+51980         ! /r
+51990       end if
+52000       fn_ScrAddSrvMeterLocSave
+52010     end if ! /r
+52020     if ckey=5 then 
+52030       goto SERVICE_SCREEN
+52040     else if gFkeyMeterLocationSelect<>0 and ckey=gFkeyMeterLocationSelect then
+52050       fnCustomerMeterLocationSelect(x$,srv$(service_code))
+52052       ckey=service_code+20
+52054       goto SERVICE_SCREEN
+52056     else if ckey=>21 and ckey<=30 then
+52058       goto SERVICE_SCREEN
+52060     end if
+52070     ! /r
+52080   end if 
+52090 goto NAMESCREEN ! /r
+69790  dim gLocationKey$*128
+69800  dim gLocationFirstRespc
+70000 def fn_ScrAddServiceMeterInfo(&srvLine,&respc1,mat rateInfo$,serviceCode$*2,service_code)
+70020   if fn_serviceIsMetered(service_code) then
+70040     if ~setup_MeterLocation then
+70060       setup_MeterLocation=1
+70080       hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,4)
+70100     end if
+70120     srvLine+=1
+70140     fnLbl(srvLine+=1,19,trim$(srvnam$(service_code))&' Meter Location',20,2,4)
+70150     fncmdkey('Select Location',gFkeyMeterLocationSelect:=2101)
+70152     srvLine+=1
+70160     mat location$=('')
+70180     mat locationN=(0)
+70200     location$(loc_activeCustomer)=trim$(x$)
+70220     location$(loc_serviceId)=serviceCode$
+70260     gLocationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN,4)
+70280     gLocationFirstRespc=respc1
+70300     read #hLocation,using form$(hLocation),key=gLocationKey$: mat location$,mat locationN nokey SasNoLocation
+70320     fnlbl(srvLine+=1,1,'Location ID:'       ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,11, 0,0,'',1) : rateInfo$(respc1   )=str$(locationN(loc_locationID     ))
+70340     fnlbl(srvLine+=1,1,'Meter Address:'     ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,30, 0,0,'',1) : rateInfo$(respc1+=1)=location$(loc_name           )
+70400     fnlbl(srvLine+=1,1,'Longitude:'         ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_longitude     )
+70420     fnlbl(srvLine+=1,1,'Latitude:'          ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_latitude       )
+70440     fnlbl(srvLine+=1,1,'Meter Number:'      ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,12, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_meterNumber   )
+70460     fnlbl(srvLine+=1,1,'Transmitter Number:',srvCol1len,1) : fntxt(srvLine,srvCol2pos,20, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_transmitter    )
+70480     fnlbl(srvLine+=1,1,'Meter Type:'        ,17,1) : fncombof('',srvLine,srvCol2pos,0,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1) : rateInfo$(respc1+=1)=location$(loc_meterType     )
+70500     goto SasFinis
+70520   end if
+70540   SasNoLocation: !
+70542     gLocationKey$=''
+70550     fnlbl(srvLine+=1,1,'No Meter Location attached.')
+70620   goto SasFinis
+70640   SasFinis: !
+70660   fnLbl(29,1,'') ! force all service windows to be same size
+70680 fnend
+70700 def fn_ScrAddSrvMeterLocSave
+70720   if gLocationKey$<>'' then
+70740     sasrRespc=gLocationFirstRespc
+70760     locationN(loc_locationID     )=val(rateInfo$(sasrRespc))
+70780     location$(loc_name           )=rateInfo$(sasrRespc+=1)
+70800     location$(loc_longitude      )=rateInfo$(sasrRespc+=1)
+70820     location$(loc_latitude       )=rateInfo$(sasrRespc+=1)
+70840     location$(loc_meterNumber    )=rateInfo$(sasrRespc+=1)
+70860     location$(loc_transmitter    )=rateInfo$(sasrRespc+=1)
+70880     location$(loc_meterType      )=rateInfo$(sasrRespc+=1)(1:5)
+70890     rewrite #hLocation,using form$(hLocation): mat location$,mat locationN
+70892     gLocationKey$=''
+70900   end if
+70920 fnend
+72000 def fn_serviceIsMetered(serviceNumber)=max(0,srch(mat serviceCodeMetered$,srv$(serviceNumber))) ! /r
+73000 ! <updateable region: ertn>
+73020 ERTN: fnerror(program$,err,line,act$,"xit")
 73040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-73060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+73060   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 73080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 73100 ERTN_EXEC_ACT: execute act$ : goto ERTN
-73120 ! /r
+73120 ! </updateable region: ertn>
+73500 ! <updateable region: fn_open (supressprompt:=2)>  
+73510 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
+73520   dim _fileiosubs$(1)*800, loadedsubs$(1)*32
+73530   fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
+73540   if ~max(srch(loadedsubs$,uprc$(filename$)),0) then 
+73550     mat loadedsubs$(udim(loadedsubs$)+1) 
+73560     loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
+73570     for index=1 to udim(mat _fileiosubs$) 
+73580       execute (_fileiosubs$(index)) 
+73590     next index
+73600   end if
+73610 fnend
+73620 ! </updateable region: fnopen>
 74000 TGB_SET: ! r:
 74020   tgb=0
 74040   for j=1 to 10 : tgb=tgb+gb(j) : next j
-74060 return  ! /r TGB_SET
+74060 return ! /r
 75000 REMOVE_INCORRECT_ALLOCATIONS: ! r:
 75020   gosub TGB_SET
 75140   for j=1 to 10
@@ -1458,13 +1213,14 @@
 78320   mat rp_prev$=('')
 78340 fnend 
 79000 def library fnNoteDir$*256
+79010   if ~setup then let fn_setup
 79020   fnNoteDir$=fn_notedir$
 79040 fnend 
 79060 def fn_notedir$*256
 79080   if notedir_setup<>val(env$('cno')) then
 79100     dim notedir$*256
-79120     notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
-79140     if ~exists(notedir$) then execute 'mkdir "'&notedir$&'" -n'
+79120     notedir$="[Q]\UBmstr\notes.h[cno]"
+79140     fnmakesurepathexists(notedir$&'\')
 79160   end if
 79180   fn_notedir$=notedir$
 79200 fnend 
@@ -1481,7 +1237,7 @@
 81240 fnend 
 82000 def fn_customer_grid(cg_line,cg_pos)
 82020   dim cg_item$(12)*30,cg_ch$(12),cg_cm$(12)
-82040   open #cg_file_num:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+82040   open #cg_file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 82060   restore #file_num: 
 82080   mat cg_ch$(12) : mat cg_cm$(12) : mat cg_cm$(12)
 82100   cg_ch$(1)="Account"
@@ -1744,13 +1500,22 @@
 90010     library 'S:\Core\Library': fnerror,fnAcs,fnflexadd1,fnflexinit1,fnTos
 90020     library 'S:\Core\Library': fncustomer_search,fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 90030     library 'S:\Core\Library': fncmbact,fnComboF,fncmbrt2
-90032     library 'S:\Core\Library': fnMeterAddressLocationID,fnLocationIdFromAccount,fnMeterAddressUpdate
+90032     library 'S:\Core\Library': fnMeterAddressLocationID,fnMeterAddressUpdate
 90040     library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle,fnreg_read
-90050     library 'S:\Core\Library': fntransfile,fncreg_read,fncreg_write,fnopen_meter,fnEditFile
-90060     library 'S:\Core\Library': fnureg_write,fnureg_read,fnbutton_or_disabled,fnget_services,fnkey_change
+90050     library 'S:\Core\Library': fntransfile
+90052     library 'S:\Core\Library': fncreg_read,fncreg_write
+90054     library 'S:\Core\Library': fnopen_meter
+90056     library 'S:\Core\Library': fnEditFile
+90060     library 'S:\Core\Library': fnureg_write,fnureg_read
+90062     library 'S:\Core\Library': fnbutton_or_disabled
+90063     library 'S:\Core\Library': fnget_services
+90064     library 'S:\Core\Library': fnkey_change
 90070     library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
 90071     library 'S:\Core\Library': fnGetServiceCodesMetered
 90072     library 'S:\Core\Library': fnfm$,fnMeterAddressName$,fnAccountFromLocationId$
+90074     library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
+90076     library 'S:\Core\Library': fnCustomerMeterLocationSelect
+90077     library 'S:\Core\Library': fnmakesurepathexists
 90080     on error goto ERTN
 90090     ! r: dims
 90100     dim z$*10
@@ -1780,7 +1545,7 @@
 90350     dim olde3$*30
 90360     dim code$(5)*32
 90370     dim rates$(50)*30
-90380     dim rateinfo$(20)*30
+90380     dim rateInfo$(128)*128
 90420     dim citykey$*30
 90430     dim citystzip$*30
 90440     dim extra(23)
@@ -1796,6 +1561,8 @@
 90590     dim bxnf$(30)*30      ! Billing Information Responses
 90600     dim dri$(8)*30        ! Draft Information Responses
 90610     dim df$*1             ! Bank Draft (Y)
+90612     dim form$(0)*512
+90614     dim location$(0)*256,locationN(0)
 90620     ! /r
 90670   end if
 90672   ! r: CONSTANTS
@@ -1804,7 +1571,7 @@
 90700   fnget_services(mat srvnam$,mat srv$)
 90702   dim serviceCodeMetered$(0)*2
 90704   fnGetServiceCodesMetered(mat serviceCodeMetered$)
-90710   open #20: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+90710   open #20: "Name=[Q]\UBmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 90720   read #20,using "Form POS 81,C 30,pos 129,c 1",rec=1: newe4$,escrow$
 90730   close #20: 
 90740   j=first_service=0
@@ -1815,3 +1582,33 @@
 90784   fnreg_read('Meter Address Enable',u4_meterAddress$,'False')
 90790   ! /r
 90800 fnend 
+92000 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
+92020   ! search routine must be passed code for service (WA for water) in searchcode$
+92030   searchcode$=srv$(service_code)
+92080   open #h_rate1:=fngethandle: "Name=[Q]\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName=[Q]\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed
+92120   restore #h_rate1: 
+92140   mat rates$(99)
+92160   mat rates$=("")
+92180   fncreg_read('default rate '&str$(service_code),tmp_rate$)
+92200   if tmp_rate$<>'' then 
+92240     x=0
+92260     if ratecode=0 then 
+92280       ratecode=val(tmp_rate$(1:pos(tmp_rate$,'=')-1))
+92300     end if 
+92320   else 
+92340     x=1
+92360     rates$(1)=" 0=Not applicable"
+92380   end if 
+92400   do 
+92420     read #h_rate1,using "Form POS 1,C 54",release: rt$ eof GCODE_FINIS
+92440     if trim$(rt$(1:2))=searchcode$ then 
+92460       x=x+1
+92480       rates$(x)=rt$(3:4)&"="&rt$(5:25)
+92500       if ratecode=val(rt$(3:4)) then rateInfo$(3)=rt$(3:4)&"="&rt$(5:25)
+92520     end if 
+92540   loop 
+92560   GCODE_FINIS: ! 
+92580   if x>0 then mat rates$(x) else mat rates$(1)
+92600   if ratecode=0 then rateInfo$(3)=" 0=Not applicable"
+92610   close #h_rate1: ioerr ignore
+92620 fnend

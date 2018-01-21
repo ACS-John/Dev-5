@@ -22,7 +22,7 @@
 09992 Ignore: continue
 10010 def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 10011   debug_account=0
-10013   ! if trim$(x$)='405051.00' and env$('acsdeveloper')<>'' then debug_account=1 ! pause
+10013   ! if trim$(x$)='101200.00' and env$('acsdeveloper')<>'' then debug_account=1 ! pause
 10015   ! if trim$(x$)='300485.00' then pause
 10018   ! 
 10020   if ~setup_calk then let fn_setup_calk
@@ -98,6 +98,7 @@
 33160   fn_PassesOnlyMonthFilter=pomfReturn
 33180 fnend
 34000 def fn_calk_water
+34010   ! if debug_account then pr x$; 'about to go through water routine' : pause
 34020   if x(9)=0 then goto L2670
 34040   w(1)=x(9)
 34060   if x(12)=0 then goto WATER_COMPLETED
@@ -112,9 +113,10 @@
 34240   ! WATER
 34260   if a(1)=0 and a(2)=0 then goto WATER_END
 34280   read #h_ratemst,using FORM_RATEMSTR, key="WA"&lpad$(str$(a(1)),2): mc1,mu1,mat rt nokey STANDARD_WATER_CHARGE
-34300   !   if env$('client')="Riverside" and usage_water>0 then goto LX2770 ! minimum not in total
-34320   w(1)=mc1*max(1,d(13))
-34340   ! LX2770: ! if env$('client')="Albany" and (a(1)=3 or a(1)=6) then usage_water=usage_water/2
+        ! w(1)   is the water charge
+        ! mc1    is the minimum charge
+        ! d(13)  is Service 1 (Water) – Unit Count
+34320   w(1)=mc1*max(1,d(13)) ! set the water charge to minimum charge * Unit Count
 34360   if usage_water<=mu1*max(1,d(13)) then goto WATER_COMPLETED else mu2=mu1*max(1,d(13))
 34380   for j=1 to 10
 34400     if rt(j,1)>usage_water then goto WATER_COMPLETED
@@ -125,8 +127,9 @@
 34500   next j
 34520   goto WATER_COMPLETED
 34540   ! ______________________________________________________________________
-34560   goto WATER_COMPLETED
-34580   STANDARD_WATER_CHARGE: w(1)=b(1)
+34580   STANDARD_WATER_CHARGE: !
+34582     w(1)=b(1)
+34584   goto WATER_COMPLETED
 34600   WATER_COMPLETED: ! 
 34620   !   if env$('client')="Riverside" and w(1)<mc1 then w(1)=mc1
 34640   !   if env$('client')="Albany" and (a(1)=3 or a(1)=6) then usage_water=usage_water*2 ! correct usage after using 1/2 of it
@@ -252,9 +255,6 @@
 39020     read #h_ratemst,using FORM_RATEMSTR,key=service_code$&lpad$(str$(rate_code),2): mc1,mu1,mat rt nokey NM_XIT
 39040     calk_non_metered_return=max(mc1,rt(1,3)) ! g(j)=max(mc1,rt(1,3))
 39060     ! if j=6 and env$('client')="Eldorado" then calk_non_metered_return=g(6)*g(5)
-39080     ! if env$('client')="Sangamon" and cno=1 and service_code$="SF" then calk_non_metered_return=mc1+max(0,(usage_sewer-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
-39100     ! if env$('client')="Sangamon" and cno=2 and service_code$="SF" then calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
-39120     ! if env$('client')="Sangamon" and service_code$="WF" then calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in water facilities rate file
 39140     ! if env$('client')="Carrizo" and j=7 then gosub CARRIZO_TRASH_TAX
 39150     if env$('client')="Pennington" and service_code$='SF' then gosub PENNINGTON_SERVICE_FEE
 39160   end if 
@@ -438,14 +438,6 @@
 48450     else if env$('client')="White Hall" and f<>d1 then 
 48455       basepenalty(10)=g(1)+g(2)+g(4)+g(9)
 48460     end if 
-48465     ! if env$('client')="Sangamon" and d1=f then 
-48470     !   basepenalty(10)=basepenalty(10)+bal
-48475     ! end if 
-48480     ! if env$('client')="Sangamon" and d1<>f then 
-48485     !   basepenalty(10)=basepenalty(10)+bal
-48490     ! end if 
-48520     !    if env$('client')="Cerro Gordo" and d1=f then basepenalty(10)=basepenalty(10)+bal
-48540     !    if env$('client')="Cerro Gordo" and d1<>f then basepenalty(10)=basepenalty(10)+bal
 48560     if env$('client')="Brier Lake" and d1=f then basepenalty(10)=basepenalty(10)+bal-gb(10)
 48580     if env$('client')="Brier Lake" and d1<>f then basepenalty(10)=basepenalty(10)+bal-gb(10)
 48600     if env$('client')="Granby" and d1=f then basepenalty(10)=basepenalty(10)+bal-gb(10)
@@ -453,8 +445,6 @@
 48640     if env$('client')="Kimberling" and g(2)>0 then basepenalty(10)=basepenalty(10)-g(1) ! no penalty on water if they have sewer
 48660     g(j)=round(basepenalty(j)*rt(1,3),2) ! penalty based on base amount that was accumulated for each penalty field * rate for that penalty code
 48680     if env$('client')="Millry" and g(j)<5 then g(j)=5
-48700     ! if env$('client')="Sangamon" and cno=1 and g(10)<.20 then g(10)=0
-48720     ! if env$('client')="Sangamon" and cno=2 and g(10)<.10 then g(10)=0
 48740     CP_NEXT_J: ! 
 48750   next j
 48760   ! If env$('client')="Pennington" Then g(10)=ROUND(G(10)*(1+HOLDTAXRATE),2)
@@ -522,6 +512,7 @@
 52620       if uprc$(tax_code$(j))="Y" then taxable=taxable+g(j) ! determine total      taxable sales
 52640     next j
 52660   !   end if 
+52670   ! if debug_account then pr x$; 'taxcode=';taxcode;'    taxservice=';taxservice;' total taxable amount:';taxable : pause
 52680   if taxservice>0 and taxservice <=10 then g(taxservice)=round(taxable*rt(1,3),2) ! holdtaxrate=rt(1,3)
 52700   if env$('client')="Edinburg" and btu<>0 then g(taxservice)=min(g(taxservice),round(x3*btu*.024,2)) ! env$('client')="Edinburg"   !! BUT DEFINATELY  NOT French Settlement
 52720   goto SALES_TAX_XIT ! /r SALES_TAX
@@ -614,7 +605,7 @@
 56400   end if 
 56410   ! if debug_account then pr x$&' has a g('&str$(serviceOther)&') of '&str$(g(serviceOther))&' at the end of fn_calk_for_final_bill' : pause
 56420 fnend  ! fn_calk_for_final_bill
-58000 def fn_depr(rk$*10,d1)
+58000 def fn_depr(rk$*10,d1) ! deposit refund
 58020   ! uses a lot of local variables ie: 
 58040   ! check to see if recalculation and deposit already refunded on previous calculation
 58060   ! dim da(2)

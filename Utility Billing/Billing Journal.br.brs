@@ -111,7 +111,6 @@
 00980 READ_CUSTOMER: ! 
 00990   read #1,using L680: z$,mat e$,mat a,mat d,bal,f,mat g,route,estimatedate,mat extra eof TOTAL_GRAND
 00995 L680: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 217,15*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1831,n 9,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
-01000   if env$('client')="Gilbertown" and f<>billing_date and bal<>0 then mat g=(0): goto L730
 01005   if f=billing_date then goto L730
 01015   if f><billing_date then no_match_found=fn_pull_from_history else no_match_found=0
 01020   if no_match_found=0 then goto READ_CUSTOMER
@@ -275,8 +274,6 @@
 01805       if j1>4 then goto L1930
 01890 L1890: ! pr #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01892       pr #255,using L1950: serviceName$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-01900       if env$('client')="Sangamon" and st$(j1)="WA" then waterdollars+=t1(j1,j2,2) : waterusage+=t1(j1,j2,3)
-01910       if env$('client')="Sangamon" and st$(j1)="SW" then sewerdollars+=t1(j1,j2,2) : sewerusage+=t1(j1,j2,3)
 01920       goto L1960
 01930 L1930: ! 
 01932       pr #255,using L1940: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
@@ -292,8 +289,6 @@
 01998     end if 
 02000   next j
 02010 L2010: ! 
-02012   if env$('client')="Sangamon" then pr #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Water Totals",waterdollars,waterusage
-02020   if env$('client')="Sangamon" then pr #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Sewer Totals",sewerdollars,sewerusage
 02030   pr #255: " ": pr #255: "    Total # of Bills To Be Printed: "&str$(tbp)
 02040   return  ! /r
 02060 def fn_pull_from_history

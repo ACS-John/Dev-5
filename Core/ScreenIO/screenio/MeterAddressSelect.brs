@@ -2,7 +2,7 @@
 00020 ! ScreenIO Generated Helper Library for METERADDRESSSELECT screen
 00030 ! Copyright 2008 by Sage AX
 00040 !
-00050 ! Compiled On: 12/26/2017
+00050 ! Compiled On: 01/19/2018
 00060 ! Version: 1
 00070 !
 00080 !
