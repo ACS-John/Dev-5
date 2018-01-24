@@ -763,6 +763,7 @@
 35000   if itron_number_of_dials=0 then itron_number_of_dials=6
 35020   fn_record_addn(2,itron_number_of_dials) ! field 10  -  number of dials
 35040   fn_record_addn(2,0) !
+35050   dim transmitter_number$*128
 35060   transmitter_number$=fn_meterInfo$('transmitter number',z$,serviceCode$(a_item))
 35080   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
 35100   fn_record_addn(10,reading_current)
