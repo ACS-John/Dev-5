@@ -797,6 +797,7 @@
 62880     fn_pcs_add("Raymond",'IL')
 62900     fn_pcs_add("R R Crawford",'KY')
 62920 !   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
+62930     fn_pcs_add("Sheila",'MO')
 62940     fn_pcs_add("Thomas Richardson",'LA')
 62960     fn_pcs_add("Thomasboro",'IL')
 62980     fn_pcs_add("Unity",'IL')
