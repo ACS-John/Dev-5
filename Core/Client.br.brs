@@ -225,6 +225,7 @@
 26770     fn_setup_client_add("Purdy",3610,34570)
 26780     fn_setup_client_add("Raymond",3660,32798)
 26790     fn_setup_client_add('R R Crawford',760,12466)
+26792     fn_setup_client_add('Sheila',770,0)
 26800     fn_setup_client_add("Thomas Richardson",3720,7718)
 26810 !   fn_setup_client_add("Riverside",3725,18332)
 26820 !   fn_setup_client_add("Sangamon",3815,34066)
@@ -471,6 +472,13 @@
 30090       fn_user_limit(1)
 30100       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 30110       fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+30112     else if env$('client')='Sheila' then 
+30113       fn_user_limit(1)
+30114       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+30115       fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+30116       fn_add_ch_sys('CL')
+30117       fn_add_ch_sys('GL')
+30118       fn_add_ch_sys('PR')
 30120     else if env$('client')='Omaha' then 
 30130       if days(date$)<=days('03/03/2018','mm/dd/ccyy') then let fn_user_limit(3) else let fn_user_limit(1) ! 2 user bonus for 60 days
 30140       fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
