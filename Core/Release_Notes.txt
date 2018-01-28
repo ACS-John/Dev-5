@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                         
+4:26 PM 1/28/2018	U4	Aclara work orders now trim double quotes from field values if they exist
 1:49 PM 1/28/2018	U4	Fixed serious bug in fnmeterinfo which is used heavily in Create Hand Held Files
 10:19 01/18/2018	CO	5.73106  
 10:39 01/18/2018	CO	5.73105   
