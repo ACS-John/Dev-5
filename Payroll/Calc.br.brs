@@ -103,7 +103,7 @@
 01100   dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
 01110   if ppd-dh<sck(1) then goto L1110
 01120   em(8)=sck(3) : em(10)=sck(2)
-01125 L1110: ! 
+01125   L1110: ! 
 01126   if em(8)>0 then em(10)+=em(8) ! Accrue Sick
 01130   ! if env$('client')='Battlefield' then goto L1140
 01135   if em(8)>0 then write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,em(8),0 ioerr ignore
@@ -508,157 +508,7 @@
 03600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03620 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
-08000 ILWH: ! r: REPLACE ACSWRK\ILLINOIS.WH,SOURCE ! ILLINOIS   NO TABLE
-08020   ! line 1 allowances = +1 for claiming self, +1 for claiming spouse
-08040   ! line 2 allowances = +1 for each other (not you nor spouse) dependent
-08060   ! em(3) - number of allowances
-08080   ! g_pay_periods_per_year = number of pay periods (formerly b8)
-08100   g2=round((stwh(tcd(1),1))*g_pay_periods_per_year,2)
-08120   !  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
-08140   !  new way needs awesome function !    allowances_line_2=em(3)-allowances_line_1
-08160   !  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
-08180   g2=g2-1000*em(3)
-08200   s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
-08220   s3=round(s3/g_pay_periods_per_year,2)
-08240   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-08260 return  ! /r
-09000 MOWH: ! r: REPLACE ACSWRK\MISSOURI.WH,SOURCE ! MISSOURI MO(10,3) REC # 28  REVISED 1/1/2002
-09020   if ~setup_mowh then  ! r: MO Missouri
-09040     setup_mowh=1
-09060     dim mo(10,3)
-09080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
-09100     mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
-09120     mo( 2,1)=1000 : mo( 2,2)= 15  : mo( 2,3)=0.02
-09140     mo( 3,1)=2000 : mo( 3,2)= 35  : mo( 3,3)=0.025
-09160     mo( 4,1)=3000 : mo( 4,2)= 60  : mo( 4,3)=0.03
-09180     mo( 5,1)=4000 : mo( 5,2)= 90  : mo( 5,3)=0.035
-09200     mo( 6,1)=5000 : mo( 6,2)=125  : mo( 6,3)=0.04
-09220     mo( 7,1)=6000 : mo( 7,2)=165  : mo( 7,3)=0.045
-09240     mo( 8,1)=7000 : mo( 8,2)=210  : mo( 8,3)=0.05
-09260     mo( 9,1)=8000 : mo( 9,2)=260  : mo( 9,3)=0.055
-09280     mo(10,1)=9000 : mo(10,2)=315  : mo(10,3)=0.06
-09300   end if ! /r
-09320   ! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
-09340   numb4=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-09360   if em(1)=0 or em(1)=2 then numb6=min(5000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 5000 FOR SINGLE
-09380   if em(1)<>0 then numb6=min(10000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 10000 FOR MARRIED OR HEAD OF HOUSEHOLD
-09400   if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then h1=3925 : goto L4110
-09420   if em(1)=2 then h1=7850 : goto L4110
-09440   h1=4700
-09460   goto L4110
-09480   L4110: ! 
-09500   h2=0
-09510   ! on em(1)+1 goto L4160,L4140,L4180 none L4190
-09520   if em(3)<>0 then 
-09530     !
-09540     if em(1)=0 then 
-09550       h2=1200+(em(3)-1)*1200 ! SINGLE
-09560     else if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then 
-09570       h2=min(em(3),2)*1200+max(em(3)-2,0)*1200 ! MARRIED
-09580     else if em(1)=2 then 
-09590       h2=3500+max(em(3)-4,0)*1200 ! HEAD OF HOUSE HOLD
-09600     end if
-09610   end if
-09700   h3=numb4-h1-h2-numb6
-09720   if h3<0 then h3=0
-09740   j1=fn_table_line(mat mo,h3)
-09860   s3=(mo(j1,2)+(h3-mo(j1,1))*mo(j1,3))/g_pay_periods_per_year
-09880   s3=round(s3,0)
-09900   if s3<.1 then s3=0
-09920 return  ! /r
-10000 ARWH: ! r: REPLACE ACSWRK\ARKANSAS.WH,SOURCE ! Arkansas #5 ar(7,3)  REVISED 7/01/91
-10020   if ~setup_arwh then ! r: setup AR Arkansas
-10040     dim ar(6,3) ! ar(7,3)
-10060     setup_arwh=1
-10080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=5: mat ar ! Arkansas
-10100     ! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
-10120     ! over                              Percentage
-10140     ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
-10160     ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
-10180     ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
-10200     ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
-10220     ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
-10240     ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
-10260   end if ! /r
-10280   t1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-10300   t2=2000
-10320   t3=t1-t2
-10340   j1=fn_table_line(mat ar,t3)
-10360   s1=round(ar(j1,2)+(t3-ar(j1,1))*ar(j1,3),2)
-10380   s2=em(3)*20
-10400   s3=round((s1-s2)/g_pay_periods_per_year,2)
-10420   if s3<.1 then s3=0
-10440 return  ! /r
-11000 AZWH: ! r: REPLACE ACSWRK\ARIZONA.WH,SOURCE ! ARIZONA:  NO TABLE  REVISED 1/01/10
-11020   ! effective june 30, 2010 the rates changed and also the base change from a percent of federal wh to a percent of total taxable wages
-11040   stp=0
-11060   if em(3)=1 then stp=.013
-11080   if em(3)=2 then stp=.018
-11100   if em(3)=3 then stp=.027
-11120   if em(3)=4 then stp=.036
-11140   if em(3)=5 then stp=.042
-11160   if em(3)=6 then stp=.0510
-11180   s3=round(stwh(tcd(1),1)*stp,2)
-11200   h3=min(h3,1200)
-11220 return  ! /r
-12000 MSWH: ! r: REPLACE ACSWRK\MISISIPI.WH,SOURCE ! MISSISSIPPI  NO TABLE
-12020   ! **********  REMOVE THE EM(15) FROM LINE 740 **********
-12040   ! SUBSTITUTE THE EXEMPTIONS INTO THE FIELD NOW CALLED STATE TAX ADD-ON
-12060   ! THE EXEMPTIONS MUST BE ENTERED IN DOLLARS AND THE STANDARD DEDUCTION
-12080   ! MUST BE ADDED TO THE EXEMPTIONS.
-12100   ! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
-12120   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-12140   h3=h1-em(15)
-12160   if h3<=0 then s3=0 : goto L4481
-12180   if h3<10000 then goto L4474
-12200   s3=350+.05*(h3-10000)
-12220   goto L4481
-12240   L4474: if h3>0 and h3<=5000 then goto L4477
-12260   s3=150+.04*(h3-5000)
-12280   goto L4481
-12300   L4477: s3=.03*h3
-12320   if s3<.1 then s3=0
-12340   goto L4481
-12360   L4481: s3=s3/g_pay_periods_per_year
-12380   s3=round(s3,2)
-12400   if s3<.1 then s3=0
-12420 return  ! /r
-13000 OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table change also!)
-13020   if ~setup_okwh then ! r: OK Oklahoma
-13040     setup_okwh=1
-13060     dim ok(8,6)
-13080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
-13100     ! r: single 
-13120     ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
-13140     ok(2,1)= 6300 : ok(2,2)=   0   : ok(2,3)=0.005
-13160     ok(3,1)= 7300 : ok(3,2)=   5   : ok(3,3)=0.01
-13180     ok(4,1)= 8800 : ok(4,2)=  20   : ok(4,3)=0.02
-13200     ok(5,1)=10050 : ok(5,2)=  45   : ok(5,3)=0.03
-13220     ok(6,1)=11200 : ok(6,2)=  79.5 : ok(6,3)=0.04
-13240     ok(7,1)=13500 : ok(7,2)= 171.5 : ok(7,3)=0.05
-13260     ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
-13280     ! /r
-13300     ! r: married 
-13320     ok(1,4)=    0  : ok(1,5)=  0 : ok(1,6)=0
-13340     ok(2,4)=12600  : ok(2,5)=  0 : ok(2,6)=0.005
-13360     ok(3,4)=14600  : ok(3,5)= 10 : ok(3,6)=0.01
-13380     ok(4,4)=17600  : ok(4,5)= 40 : ok(4,6)=0.02
-13400     ok(5,4)=20100  : ok(5,5)= 90 : ok(5,6)=0.03
-13420     ok(6,4)=22400  : ok(6,5)=159 : ok(6,6)=0.04
-13440     ok(7,4)=24800  : ok(7,5)=255 : ok(7,6)=0.05
-13460     ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
-13480     ! /r
-13500   end if ! /r
-13520   g2=stwh(tcd(1),1)*g_pay_periods_per_year
-13540   g2=g2-em(3)*1000
-13560   if em(1)=0 or em(1)=2 then j2=1 else j2=4 ! single of married
-13580   j1=fn_table_line(mat ok,g2)
-13600   s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
-13620   s3=s3/g_pay_periods_per_year
-13640   s3=round(s3,2)
-13660   s3=round(s3,0)
-13680   if s3<.1 then s3=0
-13700 return  ! /r
+
 14000 ASKDATES: ! r:
 14020   open #h_dates:=11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76,shr",internal,outIn,relative 
 14040   read #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1,release: beg_date,end_date,d1,d1$ noRec ASKDATES_WRITE_DATE
@@ -686,6 +536,9 @@
 14480   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
 14500   fnTxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
 14520   resp$(rc+=1)=str$(end_date)
+14530   fnchk(13,65,'Enable 2018 Federal Withholdings (FOR TESTING ONLY)', 1,0) 
+14532   rc_taxYear=rc+=1 
+14534   if env$('taxYear')='2018' then resp$(rc_taxYear)='True' else resp$(rc_taxYear)='False'
 14540   fnCmdKey("Next",1,1,0,"Proceed with calculations.")
 14560   fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
 14580   fnAcs(sn$,0,mat resp$,ckey)
@@ -695,6 +548,8 @@
 14660     if resp$(3)(1:1)="T" then d3$="Y" else d3$="N"
 14680     beg_date=val(resp$(4))
 14700     end_date=val(resp$(5))
+14710 if resp$(rc_taxYear)='True' then let setenv('taxYear','2018') else let setenv('taxYear','2017') 
+14712 ! pr env$('taxYear') : pause
 14720     rewrite #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14740     close #h_dates: 
 14760   end if
@@ -759,397 +614,572 @@
 17260   !   saif(4)=40
 17280   ! end if 
 17300 fnend 
-18000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
-18020   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
-18040   dim ft(8,6)
-18060   ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
-18080   ! r: Federal - SINGLE person (including head of household)
-18100    ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
-18120    ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1  
-18140    ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15 
-18160    ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25 
-18180    ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28 
-18200    ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33 
-18220    ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35 
-18240    ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
-18260   ! /r
-18280   ! r: Federal - MARRIED person
-18300    ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
-18320    ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
-18340    ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
-18360    ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
-18380    ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
-18400    ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
-18420    ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
-18440    ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
-18460   ! /r
-18480   ! close #h_tables: 
-18500 fnend
-30000 def fn_setupOpenFiles
-30020   open #breakdown=fngethandle: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
-30040   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno'),internal,outIn,keyed  ! formerly file #1
-30060   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-30080   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
-30100   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
-30120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
-30140   F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
-30160 fnend
-32000 GET_ALPHA_DATE: ! r:
-32010   dim month$(12),payrolldate$*20
-32020   payrolldate$=cnvrt$("pic(########)",d1)
-32040   year=val(payrolldate$(1:4))
-32060   month=val(payrolldate$(5:6))
-32080   day=val(payrolldate$(7:8))
-32100   month$(1)="January"
-32120   month$(2)="February"
-32140   month$(3)="March"
-32160   month$(4)="April"
-32180   month$(5)="May"
-32200   month$(6)="June"
-32220   month$(7)="July"
-32240   month$(8)="August"
-32260   month$(9)="September"
-32280   month$(10)="October"
-32300   month$(11)="November"
-32320   month$(12)="December"
-32340   d1$=month$(month)&" "&str$(day)&", "&str$(year)
-32360 return  ! /r
-36000 def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
-36002   ! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
-36004   ! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first 
-36010   if tl_second_dimension=0 then tl_second_dimension=1
-36020   for tl_item=1 to udim(mat tl_table,1)-1
-36040     if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then 
-36060       goto TL_XIT
-36080     end if 
-36100   next tl_item
-36120   tl_item=udim(mat tl_table,1)
-36140   TL_XIT: ! 
-36160   fn_table_line=tl_item
-36180 fnend 
-37000 ST01: ! r:
-37020 ! tcd(1) = state code
-37040 ! g_pay_periods_per_year     = number of pay periods per year (formerly b8)
-37060 ! em(3)  = allowances
-37080 ! em(1)  = married (1=yes and more )
-37100   s3=0
-37120   if fnpayroll_client_state$='AR' then 
-37140     gosub ARWH
-37160   else if fnpayroll_client_state$='AZ' then 
-37180     gosub AZWH
-37200   else if fnpayroll_client_state$='GA' then 
-37220     ! if env$('acsDeveloper')<>'' then 
-37240     s3=fn_wh_georgia(stwh(tcd(1),1),g_pay_periods_per_year,em(3),em(1),em(7))
-37260     ! else
-37280     !   s3=0 ! fn_wh_georgia(stwh(tcd(1),1),g_pay_periods_per_year,em(3),em(1),em(7))
-37300     ! end if
-37320   else if fnpayroll_client_state$='IL' then 
-37340     gosub ILWH
-37360   else if fnpayroll_client_state$='IN' then 
-37380     gosub INWH
-37400   else if fnpayroll_client_state$='KY' then ! added 10/03/2016 for R R Crawford Engineering
-37420     s3=fn_wh_kentuky(stwh(tcd(1),1),g_pay_periods_per_year,em(3))
-37440   else if fnpayroll_client_state$='LA' then 
-37460     gosub LAWH
-37480   else if fnpayroll_client_state$='MO' then 
-37500     gosub MOWH
-37520   else if fnpayroll_client_state$='MS' then 
-37540     gosub MSWH
-37560   else if fnpayroll_client_state$='OK' then 
-37580     gosub OKWH
-37600   else if fnpayroll_client_state$='OR' then 
-37620     s3=fn_wh_oregon(stwh(tcd(1),1),fed_wh_annual_estimate,g_pay_periods_per_year,em(3),em(1))
-37640   else if fnpayroll_client_state$='TN' then 
-37660     goto ST1_XIT ! no Tenn wh
-37680   else if fnpayroll_client_state$='TX' then 
-37700     goto ST1_XIT ! no Texas wh
-37720   end if 
-37740   ST1_XIT: ! 
-37760 return  ! /r
-37780 ST02: s3=0 : return
-37800 ST03: s3=0 : return
-37820 ST04: s3=0 : return
-37840 ST05: s3=0 : return
-37860 ST06: s3=0 : return
-37880 ST07: s3=0 : return
-37900 ST08: s3=0 : return
-37920 ST09: s3=0 : return
-37940 ST10: s3=0 : return
-38000 LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
-38020   h1=0
-38040   h2=0
-38060   h3=0
-38080   mat la=(0)
-38100   s=round(stwh(tcd(1),1),2)
-38120   if em(1)=0 or em(1)=2 then 
-38140     y=em(3)-1
-38160     x=1
-38180     if y>=0 then goto L3800
-38200     x=0
-38220     y=0
-38240     goto L3800
-38260   end if
-38280   if em(3)=0 then y=0 : x=0
-38300   if em(3)=1 then y=0 : x=1
-38320   if em(3)>=2 then y=em(3)-2 : x=2
-38340   L3800: ! 
-38360   if x<2 then m1=12500 : m2=25000
-38380   if x>=2 then m1=25000 : m2=50000
-38400   n=g_pay_periods_per_year
-38420   if s>0 then a=(s*.021) else a=0
-38440   if s>(m1/n) then b=.0135*(s-(m1/n)) else b=0
-38460   if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
-38480   d=.021*(((x*4500)+(y*1000))/n)
-38500   if ((x*4500)+(y*1000))>m1 then 
-38520     e=.0135*(((x*4500)+(y*1000)-m1)/n)
-38540   else 
-38560     e=0
-38580   end if 
-38600   if (a+b+c)-(d+e)>0 then 
-38620     s3=(a+b+c)-(d+e)
-38640   else 
-38660     s3=0
-38680   end if 
-38700   s3=round(s3,2)
-38720   if s3<.1 then s3=0
-38740 return  ! /r
-39000 INWH: ! r: INDIANA    NO TABLE   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
-39020   ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-39040   h1=h2=h3=0
-39060   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-39080   h2=em(3)*1000
-39100   h3=h1-h2
-39120   if h3>0 then 
-39140     s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
-39160     s3=round(s3/g_pay_periods_per_year,2)
-39180     if s3<.1 then s3=0
-39200   end if 
-39220 return  ! /r
-40000 def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married)
-40020   if ~wor_setup then 
-40040     wor_setup=1
-40080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
-40120     dim or1(4,3) !  r: Withholding Table for Single with fewer than 3 allowances
-40140     or1(1,1)=    0 : or1(1,2)= 197   : or1(1,3)=0.05
-40160     or1(2,1)= 3350 : or1(2,2)= 367   : or1(2,3)=0.07
-40180     or1(3,1)= 8450 : or1(3,2)= 724   : or1(3,3)=0.09
-40200     or1(4,1)=50000 : or1(4,2)=4459.5 : or1(4,3)=0.09
-40210     ! /r
-40220     dim or2(4,3) ! r: Single with 3 or more allowances, or married
-40240     or2(1,1)=    0 : or2(1,2)= 197 : or2(1,3)=0.05
-40260     or2(2,1)= 6700 : or2(2,2)= 537 : or2(2,3)=0.07
-40280     or2(3,1)=16900 : or2(3,2)=1251 : or2(3,3)=0.09
-40300     or2(4,1)=50000 : or2(4,2)=4223 : or2(4,3)=0.09
-40340     ! /r
-40360   end if 
-41000     ! requires locally populated variables Mat OR1 and Mat OR2
-41020     ! returns Oregon State Withholding
-41040     ! Oregon  !  rec=40
-41060     ! 
-41120     ! RECALK: ! used only for debugging purposes
-41140   wor_allowances_effective=wor_allowances
-41160     ! 
-41180   wor_they_are_single=wor_they_are_married=0
-41200   if wor_is_married=0 or wor_is_married=2 then wor_they_are_single=1
-41220   if wor_is_married=1 or wor_is_married=3 or wor_is_married=4 or wor_is_married=5 then wor_they_are_married=1
-41240     ! 
-41260   if wor_wages_taxable_current>100000 and wor_they_are_single then wor_allowances_effective=0
-41280   if wor_wages_taxable_current>200000 and wor_they_are_married then wor_allowances_effective=0
-41300     ! 
-41320   if wor_they_are_married or (wor_they_are_single and wor_allowances_effective>=3) then ! (married or more than 3 allowances)
-41340     wor_table=2
-41360   else ! (single and less than 3 allowances)
-41380     wor_table=1
-41400   end if 
-41420     ! 
-41440   if wor_table=2 then ! wor_they_are_married then
-41460     wor_standard_deduction=4350
-41480   else ! if wor_table=1 then ! if wor_they_are_single then
-41500     wor_standard_deduction=2175
-41520   end if 
-41540     ! 
-41560   wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
-41580     ! 
-41600   wor_phase_out=fn_oregonPhaseOut(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
-41620     ! 
-41640     ! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
-41660   wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
-41680     ! 
-41700   if wor_table=2 then 
-41720     wor_table_line=fn_table_line(mat or2,wor_base)
-41740     wor_pre_base=or2(wor_table_line,2)
-41760     wor_tax_rate=or2(wor_table_line,3)
-41780     wor_remove_prev=or2(wor_table_line,1)
-41800   else ! wor_table=1
-41820     wor_table_line=fn_table_line(mat or1,wor_base)
-41840     wor_pre_base=or1(wor_table_line,2)
-41860     wor_tax_rate=or1(wor_table_line,3)
-41880     wor_remove_prev=or1(wor_table_line,1)
-41900   end if 
-42000   if debug then let fnStatus('-------------------------------------------')
-42020   if wor_they_are_single then 
-42040     if debug then let fnStatus('  Single with '&str$(wor_allowances_effective)&' allowances')
-42060   else if wor_they_are_married then 
-42080     if debug then let fnStatus('  Married with '&str$(wor_allowances_effective)&' allowances')
-42100   else 
-42120     if debug then let fnStatus('  Maridal Status is undetermined!!!  ')
-42140   end if 
-42160   if debug then let fnStatus('    Current Wage (Gross)    = '&str$(wor_wages_taxable_current))
-42180   if debug then let fnStatus('    Pay Periods Per Year    = '&str$(wor_pay_periods_per_year))
-42200   if debug then let fnStatus('    Annual wage (estimate)  = '&str$(wor_wages_annual_estimate))
-42220   if debug then let fnStatus('    standard deduction     = '&str$(wor_standard_deduction))
-42240   if debug then let fnStatus('    table '&str$(wor_table)&' line '&str$(wor_table_line))
-42260   if debug then let fnStatus('    phase out              = '&str$(wor_phase_out))
-42280   if debug then let fnStatus('    fed_wh_annual_estimate = '&str$(wor_fed_wh_annual_estimate))
-42300   if debug then let fnStatus('.')
-42320   if debug then let fnStatus('    BASE = '&str$(wor_wages_annual_estimate)&' (an..wages) - '&str$(wor_phase_out)&' (phase out/fed wh) - '&str$(wor_standard_deduction)&' (std ded)')
-42340   if debug then let fnStatus('    base                   = '&str$(wor_base))
-42360     ! fn  status('    pre_base               = '&str$(wor_pre_base))
-42380     ! fn  status('    tax rate               = '&str$(wor_tax_rate))
-42400     ! fn  status('    remove_prev            = '&str$(wor_remove_prev))
-42420   if debug then let fnStatus('.')
-42440   if debug then let fnStatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
-42460     ! 
-42480     ! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
-42500     ! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
-42520   wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
-42540   fnStatus('withholding before dividing by pay periods = '&str$(wor_return))
-42560   wor_return=wor_return/wor_pay_periods_per_year
-42580   wor_return=round(wor_return,2)
-42600   if wor_return<.1 then wor_return=0
-42620   fnStatus('calculated withholding ='&str$(wor_return))
-42640   if debug then let fnStatusPause ! pause
-42660   fn_wh_oregon=wor_return
-42680 fnend 
-44000 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
-44020   if opo_wages<50000 then 
-44040     opo_return=min(opo_fed_wh,6500)
-44060   else if opo_table=1 then 
-44080     if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
-44100     if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
-44120     if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
-44140     if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
-44160     if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
-44180     if opo_wages =>145000 then opo_return=0
-44200   else ! if opo_table=2 then
-44220     if opo_is_married then 
-44240       if opo_wages => 50000 and opo_wages<250000 then opo_return= 6550 : goto OPO_XIT
-44260       if opo_wages =>250000 and opo_wages<260000 then opo_return= 5200 : goto OPO_XIT
-44280       if opo_wages =>260000 and opo_wages<270000 then opo_return= 3900 : goto OPO_XIT
-44300       if opo_wages =>270000 and opo_wages<280000 then opo_return= 2600 : goto OPO_XIT
-44320       if opo_wages =>280000 and opo_wages<290000 then opo_return= 1300 : goto OPO_XIT
-44340       if opo_wages =>290000 then opo_return=0
-44360     else ! if opo_is_single then
-44380       if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
-44400       if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
-44420       if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
-44440       if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
-44460       if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
-44480       if opo_wages =>145000 then opo_return=0
-44500     end if 
-44520   end if 
-44540   OPO_XIT: ! 
-44560   fn_oregonPhaseOut=opo_return
-44580 fnend 
-46000 def fn_wh_kentuky(wky_wages_taxable_current,g_pay_periods_per_year,wky_allowances)
-46020   ! KYWH: ! REPLACE kentucky.wh/acswrk,source ! kentucky:  rec=20  ky(6,3) ! revised 12/31/2005
-46040   ! wky_wages_taxable_current - formerly b8
-46060   ! g_pay_periods_per_year - formerly stwh(tcd1,1)
-46080   if ~wky_setup then 
-46100     wky_setup=1
-46120     ! r: Pull the withholding routines from new\acswrk
-46160     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=20: mat ky ! Kentucky
-46180     dim ky(6,3)
-46200     ky(1,1)=0     : ky(1,2)=0    : ky(1,3)=0.02
-46220     ky(2,1)=3000  : ky(2,2)=60   : ky(2,3)=0.03
-46240     ky(3,1)=4000  : ky(3,2)=90   : ky(3,3)=0.04
-46260     ky(4,1)=5000  : ky(4,2)=130  : ky(4,3)=0.05
-46280     ky(5,1)=8000  : ky(5,2)=280  : ky(5,3)=0.058
-46300     ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
-46340     ! /r
-46360   end if 
-46380   h1=(wky_wages_taxable_current)*g_pay_periods_per_year
-46400   h2=h1-1970
-46420   j1=fn_table_line(mat ky,h2)
-46440   s3=ky(j1,2)+(h2-ky(j1,1))*ky(j1,3)
-46460   s3=s3-20*wky_allowances
-46480   s3=s3/g_pay_periods_per_year
-46500   s3=round(s3,2)
-46520   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-46540   fn_wh_kentuky=s3
-46560 fnend 
-47000 def fn_wh_georgia(wga_wages_taxable_current,g_pay_periods_per_year,wga_allowances,wga_is_married,wga_eicCode)
-47010   ! created 06/29/2017
-47020   ! wga_wages_taxable_current - formerly b8
-47030   ! g_pay_periods_per_year - formerly stwh(tcd1,1)
-47040   if ~wga_setup then 
-47050     wga_setup=1
-47052     gaAnnualDependantAllowance=3000
-47060     ! r: single Table F Page 43 of Employeer's Tax Guide dated 1/16/2017
-47070     dim gawhTableF(6,3)
-47080     gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
-47090     gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
-47100     gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
-47110     gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
-47120     gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
-47130     gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.06
-47140     ! /r
-47150     ! r: single Table G Page 44 of Employeer's Tax Guide dated 1/16/2017
-47160     dim gawhTableG(6,3)
-47170     gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
-47180     gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
-47190     gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
-47200     gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
-47210     gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
-47220     gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.06
-47230     ! /r
-47240     ! r: single Table H Page 45 of Employeer's Tax Guide dated 1/16/2017
-47250     dim gawhTableH(6,3)
-47260     gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
-47270     gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
-47280     gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
-47290     gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
-47300     gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
-47310     gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.06
-47320     ! /r
-47330   end if 
-47340   Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-47350   Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
-47360   if env$('acsDeveloper')<>'' then dev=1 else dev=0
-47370   ! if dev then pr 'wga_wages_taxable_current=';wga_wages_taxable_current
-47380   ! if dev then pr '   g_pay_periods_per_year=';g_pay_periods_per_year
-47382   ! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
-47390   ! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
-47410   ! if dev then pr '   wga_allowances=';wga_allowances
-47420   ga_WagesAnnual=(wga_wages_taxable_current)*g_pay_periods_per_year
-47430   ! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
-47440   ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-47450   ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-47460   ! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
-47480   if wga_is_married=0 then ! SINGLE INDIVIDUAL 
-47490     mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
-47500     mat gawh=gawhTableH
-47502     ! if dev then pr '   using Table H'
-47510   else if wga_is_married=4 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
-47520     mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
-47530     mat gawh=gawhTableG
-47532     ! if dev then pr '   using Table G'
-47540   else if wga_is_married=3 or wga_is_married=2 or wga_is_married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
-47550     mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
-47560     mat gawh=gawhTableF
-47562     ! if dev then pr '   using Table F'
-47570   end if
-47580   j1=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
-47582   ! if dev then pr '   table line ';j1
-47610   ! if dev then pause
-47612   ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*wga_allowances
-47620   s3=gawh(j1,2)+(ga_AnnualWagesSubjToWithhold-gawh(j1,1))*gawh(j1,3)
-47630   s3=s3
-47640   s3=s3/g_pay_periods_per_year
-47650   s3=round(s3,2) ! round to the nearest whole dollar
-47660   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-47670   fn_wh_georgia=s3
-47680 fnend 
+20000 def fn_setupOpenFiles
+20020   open #breakdown=fngethandle: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
+20040   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno'),internal,outIn,keyed  ! formerly file #1
+20060   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20080   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+20100   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
+20140   F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
+20160 fnend
+22000 GET_ALPHA_DATE: ! r:
+22010   dim month$(12),payrolldate$*20
+22020   payrolldate$=cnvrt$("pic(########)",d1)
+22040   year=val(payrolldate$(1:4))
+22060   month=val(payrolldate$(5:6))
+22080   day=val(payrolldate$(7:8))
+22100   month$(1)="January"
+22120   month$(2)="February"
+22140   month$(3)="March"
+22160   month$(4)="April"
+22180   month$(5)="May"
+22200   month$(6)="June"
+22220   month$(7)="July"
+22240   month$(8)="August"
+22260   month$(9)="September"
+22280   month$(10)="October"
+22300   month$(11)="November"
+22320   month$(12)="December"
+22340   d1$=month$(month)&" "&str$(day)&", "&str$(year)
+22360 return  ! /r
+26000 def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
+26002   ! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
+26004   ! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first 
+26010   if tl_second_dimension=0 then tl_second_dimension=1
+26020   for tl_item=1 to udim(mat tl_table,1)-1
+26040     if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then 
+26060       goto TL_XIT
+26080     end if 
+26100   next tl_item
+26120   tl_item=udim(mat tl_table,1)
+26140   TL_XIT: ! 
+26160   fn_table_line=tl_item
+26180 fnend 
+27000 ST01: ! r:
+27020 ! tcd(1) = state code
+27040 ! g_pay_periods_per_year     = number of pay periods per year (formerly b8)
+27060 ! em(3)  = allowances
+27080 ! em(1)  = married (1=yes and more )
+27100   s3=0
+27120   if fnpayroll_client_state$='AR' then 
+27140     gosub ARWH
+27160   else if fnpayroll_client_state$='AZ' then 
+27180     gosub AZWH
+27200   else if fnpayroll_client_state$='GA' then 
+27220     ! if env$('acsDeveloper')<>'' then 
+27240     s3=fn_wh_georgia(stwh(tcd(1),1),g_pay_periods_per_year,em(3),em(1),em(7))
+27260     ! else
+27280     !   s3=0 ! fn_wh_georgia(stwh(tcd(1),1),g_pay_periods_per_year,em(3),em(1),em(7))
+27300     ! end if
+27320   else if fnpayroll_client_state$='IL' then 
+27340     gosub ILWH
+27360   else if fnpayroll_client_state$='IN' then 
+27380     gosub INWH
+27400   else if fnpayroll_client_state$='KY' then ! added 10/03/2016 for R R Crawford Engineering
+27420     s3=fn_wh_kentuky(stwh(tcd(1),1),g_pay_periods_per_year,em(3))
+27440   else if fnpayroll_client_state$='LA' then 
+27460     gosub LAWH
+27480   else if fnpayroll_client_state$='MO' then 
+27500     gosub MOWH
+27520   else if fnpayroll_client_state$='MS' then 
+27540     gosub MSWH
+27560   else if fnpayroll_client_state$='OK' then 
+27580     gosub OKWH
+27600   else if fnpayroll_client_state$='OR' then 
+27620     s3=fn_wh_oregon(stwh(tcd(1),1),fed_wh_annual_estimate,g_pay_periods_per_year,em(3),em(1))
+27640   else if fnpayroll_client_state$='TN' then 
+27660     goto ST1_XIT ! no Tenn wh
+27680   else if fnpayroll_client_state$='TX' then 
+27700     goto ST1_XIT ! no Texas wh
+27720   end if 
+27740   ST1_XIT: ! 
+27760 return  ! /r
+27780 ST02: s3=0 : return
+27800 ST03: s3=0 : return
+27820 ST04: s3=0 : return
+27840 ST05: s3=0 : return
+27860 ST06: s3=0 : return
+27880 ST07: s3=0 : return
+27900 ST08: s3=0 : return
+27920 ST09: s3=0 : return
+27940 ST10: s3=0 : return
+28000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
+28020   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
+28040   dim ft(8,6)
+28060   if env$('taxYear')<>'' then taxYear=2017 else taxYear=val(env$('taxYear'))
+28080   ! r: Federal - SINGLE person (including head of household)
+28100   if taxYear<=2017 then
+28120     ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+28140     ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
+28160     ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1  
+28180     ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15 
+28200     ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25 
+28220     ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28 
+28240     ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33 
+28260     ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35 
+28280     ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
+28300   else if taxYear=2018 then
+28320     ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
+28340     ft(2,1)=  1850 : ft(2,2)=     0    : ft(2,3)=0.1  
+28360     ft(3,1)=  6613 : ft(3,2)=   476.3  : ft(3,3)=0.12 
+28380     ft(4,1)= 21200 : ft(4,2)=  2226.74 : ft(4,3)=0.22 
+28400     ft(5,1)= 43100 : ft(5,2)=  7044.74 : ft(5,3)=0.24 
+28420     ft(6,1)= 80600 : ft(6,2)= 16044.74 : ft(6,3)=0.32 
+28440     ft(7,1)=101850 : ft(7,2)= 22844.74 : ft(7,3)=0.35 
+28460     ft(8,1)=251850 : ft(8,2)= 75344.74 : ft(8,3)=0.37 
+28480   end if
+28500   ! /r
+28520   ! r: Federal - MARRIED person
+28540   if taxYear<=2017 then
+28560     ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+28580     ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+28600     ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
+28620     ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
+28640     ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
+28660     ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
+28680     ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
+28700     ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
+28720     ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
+28740   else if taxYear=2018 then
+28760     ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+28780     ft(2,4)= 11550  : ft(2,5)=     0    : ft(2,6)=0.1
+28800     ft(3,4)= 30600  : ft(3,5)=  1905    : ft(3,6)=0.12
+28820     ft(4,4)= 88950  : ft(4,5)=  8907    : ft(4,6)=0.22
+28840     ft(5,4)=176550  : ft(5,5)= 28179    : ft(5,6)=0.24
+28860     ft(6,4)=326550  : ft(6,5)= 64179    : ft(6,6)=0.32
+28880     ft(7,4)=411550  : ft(7,5)= 91379    : ft(7,6)=0.35
+28900     ft(8,4)=611550  : ft(8,5)=161379    : ft(8,6)=0.37
+28920   end if
+28940   ! /r
+28980 fnend
+30000 ARWH: ! r: REPLACE ACSWRK\ARKANSAS.WH,SOURCE ! Arkansas #5 ar(7,3)  REVISED 7/01/91
+30020   if ~setup_arwh then ! r: setup AR Arkansas
+30040     dim ar(6,3) ! ar(7,3)
+30060     setup_arwh=1
+30080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=5: mat ar ! Arkansas
+30100     ! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
+30120     ! over                              Percentage
+30140     ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
+30160     ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
+30180     ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
+30200     ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
+30220     ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
+30240     ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
+30260   end if ! /r
+30280   t1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+30300   t2=2000
+30320   t3=t1-t2
+30340   j1=fn_table_line(mat ar,t3)
+30360   s1=round(ar(j1,2)+(t3-ar(j1,1))*ar(j1,3),2)
+30380   s2=em(3)*20
+30400   s3=round((s1-s2)/g_pay_periods_per_year,2)
+30420   if s3<.1 then s3=0
+30440 return  ! /r
+32000 AZWH: ! r: REPLACE ACSWRK\ARIZONA.WH,SOURCE ! ARIZONA:  NO TABLE  REVISED 1/01/10
+32020   ! effective june 30, 2010 the rates changed and also the base change from a percent of federal wh to a percent of total taxable wages
+32040   stp=0
+32060   if em(3)=1 then stp=.013
+32080   if em(3)=2 then stp=.018
+32100   if em(3)=3 then stp=.027
+32120   if em(3)=4 then stp=.036
+32140   if em(3)=5 then stp=.042
+32160   if em(3)=6 then stp=.0510
+32180   s3=round(stwh(tcd(1),1)*stp,2)
+32200   h3=min(h3,1200)
+32220 return  ! /r
+34000 def fn_wh_georgia(wga_wages_taxable_current,g_pay_periods_per_year,wga_allowances,wga_is_married,wga_eicCode)
+34010   ! created 06/29/2017
+34020   ! wga_wages_taxable_current - formerly b8
+34030   ! g_pay_periods_per_year - formerly stwh(tcd1,1)
+34040   if ~wga_setup then 
+34050     wga_setup=1
+34052     gaAnnualDependantAllowance=3000
+34060     ! r: single Table F Page 43 of Employeer's Tax Guide dated 1/16/2017
+34070     dim gawhTableF(6,3)
+34080     gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
+34090     gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
+34100     gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
+34110     gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
+34120     gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
+34130     gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.06
+34140     ! /r
+34150     ! r: single Table G Page 44 of Employeer's Tax Guide dated 1/16/2017
+34160     dim gawhTableG(6,3)
+34170     gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
+34180     gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
+34190     gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
+34200     gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
+34210     gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
+34220     gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.06
+34230     ! /r
+34240     ! r: single Table H Page 45 of Employeer's Tax Guide dated 1/16/2017
+34250     dim gawhTableH(6,3)
+34260     gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
+34270     gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
+34280     gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
+34290     gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
+34300     gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
+34310     gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.06
+34320     ! /r
+34330   end if 
+34340   Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+34350   Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
+34360   if env$('acsDeveloper')<>'' then dev=1 else dev=0
+34370   ! if dev then pr 'wga_wages_taxable_current=';wga_wages_taxable_current
+34380   ! if dev then pr '   g_pay_periods_per_year=';g_pay_periods_per_year
+34382   ! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
+34390   ! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
+34410   ! if dev then pr '   wga_allowances=';wga_allowances
+34420   ga_WagesAnnual=(wga_wages_taxable_current)*g_pay_periods_per_year
+34430   ! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
+34440   ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+34450   ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+34460   ! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
+34480   if wga_is_married=0 then ! SINGLE INDIVIDUAL 
+34490     mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
+34500     mat gawh=gawhTableH
+34502     ! if dev then pr '   using Table H'
+34510   else if wga_is_married=4 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
+34520     mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
+34530     mat gawh=gawhTableG
+34532     ! if dev then pr '   using Table G'
+34540   else if wga_is_married=3 or wga_is_married=2 or wga_is_married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
+34550     mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
+34560     mat gawh=gawhTableF
+34562     ! if dev then pr '   using Table F'
+34570   end if
+34580   j1=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
+34582   ! if dev then pr '   table line ';j1
+34610   ! if dev then pause
+34612   ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*wga_allowances
+34620   s3=gawh(j1,2)+(ga_AnnualWagesSubjToWithhold-gawh(j1,1))*gawh(j1,3)
+34630   s3=s3
+34640   s3=s3/g_pay_periods_per_year
+34650   s3=round(s3,2) ! round to the nearest whole dollar
+34660   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
+34670   fn_wh_georgia=s3
+34680 fnend 
+36000 ILWH: ! r: REPLACE ACSWRK\ILLINOIS.WH,SOURCE ! ILLINOIS   NO TABLE
+36020   ! line 1 allowances = +1 for claiming self, +1 for claiming spouse
+36040   ! line 2 allowances = +1 for each other (not you nor spouse) dependent
+36060   ! em(3) - number of allowances
+36080   ! g_pay_periods_per_year = number of pay periods (formerly b8)
+36100   g2=round((stwh(tcd(1),1))*g_pay_periods_per_year,2)
+36120   !  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
+36140   !  new way needs awesome function !    allowances_line_2=em(3)-allowances_line_1
+36160   !  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
+36180   g2=g2-1000*em(3)
+36200   s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
+36220   s3=round(s3/g_pay_periods_per_year,2)
+36240   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
+36260 return  ! /r
+38000 INWH: ! r: INDIANA    NO TABLE   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
+38020   ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
+38040   h1=h2=h3=0
+38060   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+38080   h2=em(3)*1000
+38100   h3=h1-h2
+38120   if h3>0 then 
+38140     s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
+38160     s3=round(s3/g_pay_periods_per_year,2)
+38180     if s3<.1 then s3=0
+38200   end if 
+38220 return  ! /r
+42000 def fn_wh_kentuky(wky_wages_taxable_current,g_pay_periods_per_year,wky_allowances)
+42020   ! KYWH: ! REPLACE kentucky.wh/acswrk,source ! kentucky:  rec=20  ky(6,3) ! revised 12/31/2005
+42040   ! wky_wages_taxable_current - formerly b8
+42060   ! g_pay_periods_per_year - formerly stwh(tcd1,1)
+42080   if ~wky_setup then 
+42100     wky_setup=1
+42120     ! r: Pull the withholding routines from new\acswrk
+42160     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=20: mat ky ! Kentucky
+42180     dim ky(6,3)
+42200     ky(1,1)=0     : ky(1,2)=0    : ky(1,3)=0.02
+42220     ky(2,1)=3000  : ky(2,2)=60   : ky(2,3)=0.03
+42240     ky(3,1)=4000  : ky(3,2)=90   : ky(3,3)=0.04
+42260     ky(4,1)=5000  : ky(4,2)=130  : ky(4,3)=0.05
+42280     ky(5,1)=8000  : ky(5,2)=280  : ky(5,3)=0.058
+42300     ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
+42340     ! /r
+42360   end if 
+42380   h1=(wky_wages_taxable_current)*g_pay_periods_per_year
+42400   h2=h1-1970
+42420   j1=fn_table_line(mat ky,h2)
+42440   s3=ky(j1,2)+(h2-ky(j1,1))*ky(j1,3)
+42460   s3=s3-20*wky_allowances
+42480   s3=s3/g_pay_periods_per_year
+42500   s3=round(s3,2)
+42520   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
+42540   fn_wh_kentuky=s3
+42560 fnend 
+44000 LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
+44020   h1=0
+44040   h2=0
+44060   h3=0
+44080   mat la=(0)
+44100   s=round(stwh(tcd(1),1),2)
+44120   if em(1)=0 or em(1)=2 then 
+44140     y=em(3)-1
+44160     x=1
+44180     if y>=0 then goto L3800
+44200     x=0
+44220     y=0
+44240     goto L3800
+44260   end if
+44280   if em(3)=0 then y=0 : x=0
+44300   if em(3)=1 then y=0 : x=1
+44320   if em(3)>=2 then y=em(3)-2 : x=2
+44340   L3800: ! 
+44360   if x<2 then m1=12500 : m2=25000
+44380   if x>=2 then m1=25000 : m2=50000
+44400   n=g_pay_periods_per_year
+44420   if s>0 then a=(s*.021) else a=0
+44440   if s>(m1/n) then b=.0135*(s-(m1/n)) else b=0
+44460   if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
+44480   d=.021*(((x*4500)+(y*1000))/n)
+44500   if ((x*4500)+(y*1000))>m1 then 
+44520     e=.0135*(((x*4500)+(y*1000)-m1)/n)
+44540   else 
+44560     e=0
+44580   end if 
+44600   if (a+b+c)-(d+e)>0 then 
+44620     s3=(a+b+c)-(d+e)
+44640   else 
+44660     s3=0
+44680   end if 
+44700   s3=round(s3,2)
+44720   if s3<.1 then s3=0
+44740 return  ! /r
+46000 MOWH: ! r: REPLACE ACSWRK\MISSOURI.WH,SOURCE ! MISSOURI MO(10,3) REC # 28  REVISED 1/1/2002
+46020   if ~setup_mowh then  ! r: MO Missouri
+46040     setup_mowh=1
+46060     dim mo(10,3)
+46080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
+46100     mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
+46120     mo( 2,1)=1000 : mo( 2,2)= 15  : mo( 2,3)=0.02
+46140     mo( 3,1)=2000 : mo( 3,2)= 35  : mo( 3,3)=0.025
+46160     mo( 4,1)=3000 : mo( 4,2)= 60  : mo( 4,3)=0.03
+46180     mo( 5,1)=4000 : mo( 5,2)= 90  : mo( 5,3)=0.035
+46200     mo( 6,1)=5000 : mo( 6,2)=125  : mo( 6,3)=0.04
+46220     mo( 7,1)=6000 : mo( 7,2)=165  : mo( 7,3)=0.045
+46240     mo( 8,1)=7000 : mo( 8,2)=210  : mo( 8,3)=0.05
+46260     mo( 9,1)=8000 : mo( 9,2)=260  : mo( 9,3)=0.055
+46280     mo(10,1)=9000 : mo(10,2)=315  : mo(10,3)=0.06
+46300   end if ! /r
+46320   ! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
+46340   numb4=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+46360   if em(1)=0 or em(1)=2 then numb6=min(5000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 5000 FOR SINGLE
+46380   if em(1)<>0 then numb6=min(10000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 10000 FOR MARRIED OR HEAD OF HOUSEHOLD
+46400   if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then h1=3925 : goto L4110
+46420   if em(1)=2 then h1=7850 : goto L4110
+46440   h1=4700
+46460   goto L4110
+46480   L4110: ! 
+46500   h2=0
+46510   ! on em(1)+1 goto L4160,L4140,L4180 none L4190
+46520   if em(3)<>0 then 
+46530     !
+46540     if em(1)=0 then 
+46550       h2=1200+(em(3)-1)*1200 ! SINGLE
+46560     else if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then 
+46570       h2=min(em(3),2)*1200+max(em(3)-2,0)*1200 ! MARRIED
+46580     else if em(1)=2 then 
+46590       h2=3500+max(em(3)-4,0)*1200 ! HEAD OF HOUSE HOLD
+46600     end if
+46610   end if
+46700   h3=numb4-h1-h2-numb6
+46720   if h3<0 then h3=0
+46740   j1=fn_table_line(mat mo,h3)
+46860   s3=(mo(j1,2)+(h3-mo(j1,1))*mo(j1,3))/g_pay_periods_per_year
+46880   s3=round(s3,0)
+46900   if s3<.1 then s3=0
+46920 return  ! /r
+48000 MSWH: ! r: REPLACE ACSWRK\MISISIPI.WH,SOURCE ! MISSISSIPPI  NO TABLE
+48020   ! **********  REMOVE THE EM(15) FROM LINE 740 **********
+48040   ! SUBSTITUTE THE EXEMPTIONS INTO THE FIELD NOW CALLED STATE TAX ADD-ON
+48060   ! THE EXEMPTIONS MUST BE ENTERED IN DOLLARS AND THE STANDARD DEDUCTION
+48080   ! MUST BE ADDED TO THE EXEMPTIONS.
+48100   ! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
+48120   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+48140   h3=h1-em(15)
+48160   if h3<=0 then s3=0 : goto L4481
+48180   if h3<10000 then goto L4474
+48200   s3=350+.05*(h3-10000)
+48220   goto L4481
+48240   L4474: if h3>0 and h3<=5000 then goto L4477
+48260   s3=150+.04*(h3-5000)
+48280   goto L4481
+48300   L4477: s3=.03*h3
+48320   if s3<.1 then s3=0
+48340   goto L4481
+48360   L4481: s3=s3/g_pay_periods_per_year
+48380   s3=round(s3,2)
+48400   if s3<.1 then s3=0
+48420 return  ! /r
+52000 OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table change also!)
+52020   if ~setup_okwh then ! r: OK Oklahoma
+52040     setup_okwh=1
+52060     dim ok(8,6)
+52080     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
+52100     ! r: single 
+52120     ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
+52140     ok(2,1)= 6300 : ok(2,2)=   0   : ok(2,3)=0.005
+52160     ok(3,1)= 7300 : ok(3,2)=   5   : ok(3,3)=0.01
+52180     ok(4,1)= 8800 : ok(4,2)=  20   : ok(4,3)=0.02
+52200     ok(5,1)=10050 : ok(5,2)=  45   : ok(5,3)=0.03
+52220     ok(6,1)=11200 : ok(6,2)=  79.5 : ok(6,3)=0.04
+52240     ok(7,1)=13500 : ok(7,2)= 171.5 : ok(7,3)=0.05
+52260     ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
+52280     ! /r
+52300     ! r: married 
+52320     ok(1,4)=    0  : ok(1,5)=  0 : ok(1,6)=0
+52340     ok(2,4)=12600  : ok(2,5)=  0 : ok(2,6)=0.005
+52360     ok(3,4)=14600  : ok(3,5)= 10 : ok(3,6)=0.01
+52380     ok(4,4)=17600  : ok(4,5)= 40 : ok(4,6)=0.02
+52400     ok(5,4)=20100  : ok(5,5)= 90 : ok(5,6)=0.03
+52420     ok(6,4)=22400  : ok(6,5)=159 : ok(6,6)=0.04
+52440     ok(7,4)=24800  : ok(7,5)=255 : ok(7,6)=0.05
+52460     ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
+52480     ! /r
+52500   end if ! /r
+52520   g2=stwh(tcd(1),1)*g_pay_periods_per_year
+52540   g2=g2-em(3)*1000
+52560   if em(1)=0 or em(1)=2 then j2=1 else j2=4 ! single of married
+52580   j1=fn_table_line(mat ok,g2)
+52600   s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
+52620   s3=s3/g_pay_periods_per_year
+52640   s3=round(s3,2)
+52660   s3=round(s3,0)
+52680   if s3<.1 then s3=0
+52700 return  ! /r
+54000 def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married)
+54020   if ~wor_setup then 
+54040     wor_setup=1
+54060     ! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
+54080     dim or1(4,3) !  r: Withholding Table for Single with fewer than 3 allowances
+54100     or1(1,1)=    0 : or1(1,2)= 197   : or1(1,3)=0.05
+54120     or1(2,1)= 3350 : or1(2,2)= 367   : or1(2,3)=0.07
+54140     or1(3,1)= 8450 : or1(3,2)= 724   : or1(3,3)=0.09
+54160     or1(4,1)=50000 : or1(4,2)=4459.5 : or1(4,3)=0.09
+54180     ! /r
+54200     dim or2(4,3) ! r: Single with 3 or more allowances, or married
+54220     or2(1,1)=    0 : or2(1,2)= 197 : or2(1,3)=0.05
+54240     or2(2,1)= 6700 : or2(2,2)= 537 : or2(2,3)=0.07
+54260     or2(3,1)=16900 : or2(3,2)=1251 : or2(3,3)=0.09
+54280     or2(4,1)=50000 : or2(4,2)=4223 : or2(4,3)=0.09
+54300     ! /r
+54320   end if 
+54340     ! requires locally populated variables Mat OR1 and Mat OR2
+54360     ! returns Oregon State Withholding
+54380     ! Oregon  !  rec=40
+54400     ! 
+54420     ! RECALK: ! used only for debugging purposes
+54440   wor_allowances_effective=wor_allowances
+54460     ! 
+54480   wor_they_are_single=wor_they_are_married=0
+54500   if wor_is_married=0 or wor_is_married=2 then wor_they_are_single=1
+54520   if wor_is_married=1 or wor_is_married=3 or wor_is_married=4 or wor_is_married=5 then wor_they_are_married=1
+54540     ! 
+54560   if wor_wages_taxable_current>100000 and wor_they_are_single then wor_allowances_effective=0
+54580   if wor_wages_taxable_current>200000 and wor_they_are_married then wor_allowances_effective=0
+54600     ! 
+54620   if wor_they_are_married or (wor_they_are_single and wor_allowances_effective>=3) then ! (married or more than 3 allowances)
+54640     wor_table=2
+54660   else ! (single and less than 3 allowances)
+54680     wor_table=1
+54700   end if 
+54720     ! 
+54740   if wor_table=2 then ! wor_they_are_married then
+54760     wor_standard_deduction=4350
+54780   else ! if wor_table=1 then ! if wor_they_are_single then
+54800     wor_standard_deduction=2175
+54820   end if 
+54840     ! 
+54860   wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
+54880     ! 
+54900   wor_phase_out=fn_oregonPhaseOut(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
+54920     ! 
+54940     ! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
+54960   wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
+54980     ! 
+55000   if wor_table=2 then 
+55020     wor_table_line=fn_table_line(mat or2,wor_base)
+55040     wor_pre_base=or2(wor_table_line,2)
+55060     wor_tax_rate=or2(wor_table_line,3)
+55080     wor_remove_prev=or2(wor_table_line,1)
+55100   else ! wor_table=1
+55120     wor_table_line=fn_table_line(mat or1,wor_base)
+55140     wor_pre_base=or1(wor_table_line,2)
+55160     wor_tax_rate=or1(wor_table_line,3)
+55180     wor_remove_prev=or1(wor_table_line,1)
+55200   end if 
+55220   if debug then let fnStatus('-------------------------------------------')
+55240   if wor_they_are_single then 
+55260     if debug then let fnStatus('  Single with '&str$(wor_allowances_effective)&' allowances')
+55280   else if wor_they_are_married then 
+55300     if debug then let fnStatus('  Married with '&str$(wor_allowances_effective)&' allowances')
+55320   else 
+55340     if debug then let fnStatus('  Maridal Status is undetermined!!!  ')
+55360   end if 
+55380   if debug then let fnStatus('    Current Wage (Gross)    = '&str$(wor_wages_taxable_current))
+55400   if debug then let fnStatus('    Pay Periods Per Year    = '&str$(wor_pay_periods_per_year))
+55420   if debug then let fnStatus('    Annual wage (estimate)  = '&str$(wor_wages_annual_estimate))
+55440   if debug then let fnStatus('    standard deduction     = '&str$(wor_standard_deduction))
+55460   if debug then let fnStatus('    table '&str$(wor_table)&' line '&str$(wor_table_line))
+55480   if debug then let fnStatus('    phase out              = '&str$(wor_phase_out))
+55500   if debug then let fnStatus('    fed_wh_annual_estimate = '&str$(wor_fed_wh_annual_estimate))
+55520   if debug then let fnStatus('.')
+55540   if debug then let fnStatus('    BASE = '&str$(wor_wages_annual_estimate)&' (an..wages) - '&str$(wor_phase_out)&' (phase out/fed wh) - '&str$(wor_standard_deduction)&' (std ded)')
+55560   if debug then let fnStatus('    base                   = '&str$(wor_base))
+55580     ! fn  status('    pre_base               = '&str$(wor_pre_base))
+55600     ! fn  status('    tax rate               = '&str$(wor_tax_rate))
+55620     ! fn  status('    remove_prev            = '&str$(wor_remove_prev))
+55640   if debug then let fnStatus('.')
+55660   if debug then let fnStatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
+55680     ! 
+55700     ! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
+55720     ! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
+55740   wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
+55760   fnStatus('withholding before dividing by pay periods = '&str$(wor_return))
+55780   wor_return=wor_return/wor_pay_periods_per_year
+55800   wor_return=round(wor_return,2)
+55820   if wor_return<.1 then wor_return=0
+55840   fnStatus('calculated withholding ='&str$(wor_return))
+55860   if debug then let fnStatusPause ! pause
+55880   fn_wh_oregon=wor_return
+55900 fnend 
+58000 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
+58020   if opo_wages<50000 then 
+58040     opo_return=min(opo_fed_wh,6500)
+58060   else if opo_table=1 then 
+58080     if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
+58100     if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
+58120     if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
+58140     if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
+58160     if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+58180     if opo_wages =>145000 then opo_return=0
+58200   else ! if opo_table=2 then
+58220     if opo_is_married then 
+58240       if opo_wages => 50000 and opo_wages<250000 then opo_return= 6550 : goto OPO_XIT
+58260       if opo_wages =>250000 and opo_wages<260000 then opo_return= 5200 : goto OPO_XIT
+58280       if opo_wages =>260000 and opo_wages<270000 then opo_return= 3900 : goto OPO_XIT
+58300       if opo_wages =>270000 and opo_wages<280000 then opo_return= 2600 : goto OPO_XIT
+58320       if opo_wages =>280000 and opo_wages<290000 then opo_return= 1300 : goto OPO_XIT
+58340       if opo_wages =>290000 then opo_return=0
+58360     else ! if opo_is_single then
+58380       if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
+58400       if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
+58420       if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
+58440       if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
+58460       if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+58480       if opo_wages =>145000 then opo_return=0
+58500     end if 
+58520   end if 
+58540   OPO_XIT: ! 
+58560   fn_oregonPhaseOut=opo_return
+58580 fnend 
+
 64000 def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
 64020   if state$='GA' then
 64040     if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)

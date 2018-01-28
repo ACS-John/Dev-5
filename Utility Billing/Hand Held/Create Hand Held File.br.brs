@@ -1306,21 +1306,21 @@
 69010   if ~setup then let fn_setup
 69020   fnMeterInfo$=fn_meterInfo$(mi_field$,z$,serviceCode$, closeHandle)
 69030 fnend
-70000 def fn_meterInfo$*20(mi_field$,z$*10,serviceCode$)
+70000 def fn_meterInfo$*20(mi_field$,z$*10,serviceCode$; closeHandle)
 70010   if ~mi_setup then
 70020     mi_setup=1
 70030     dim mi_data$(7)*20
 70040     dim mt_data$(5)*40
 70050     dim mi_return$*20
-70070     if meterDataSourceOverrideEnabled then
+70070     ! if meterDataSourceOverrideEnabled then
 70080       dim location$(0)*128
 70090       dim locationN(0)
 70100       hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1)
 70110       !
-70120     else
-70130       open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed  ! mi_h_meter=fnopen_meter ! open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed
-70140       F_METER: form pos 1,c 10,c 2,c 17,c 17,c 12,c 20,c 5
-70150     end if
+70120     ! else
+70130     !   open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed  ! mi_h_meter=fnopen_meter ! open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed
+70140     !   F_METER: form pos 1,c 10,c 2,c 17,c 17,c 12,c 20,c 5
+70150     ! end if
 70160     open #mi_h_metertype:=fngethandle: "Name="&env$('Q')&"\UBmstr\MeterType.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno')&",Shr",internal,input,keyed
 70170     F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 2
 70180     !
@@ -1329,25 +1329,25 @@
 70210   if z$<>mi_z_prior$ or mi_servicecode_prior$<>serviceCode$ then
 70220     mi_z_prior$=z$ : mi_servicecode_prior$=serviceCode$
 70230     mat mi_data$=("")
-70240     if meterDataSourceOverrideEnabled then
+70240     ! if meterDataSourceOverrideEnabled then
 70250       read #hLocation,using form$(hLocation),release: mat location$,mat locationN
-70260     else
-70270       read #mi_h_meter,using F_METER,key=rpad$(trim$(z$),10)&rpad$(serviceCode$,2),release: mat mi_data$ nokey MI_FINIS
-70280     end if
+70260     ! else
+70270     !   read #mi_h_meter,using F_METER,key=rpad$(trim$(z$),10)&rpad$(serviceCode$,2),release: mat mi_data$ nokey MI_FINIS
+70280     ! end if
 70290   end if  ! z$<>mi_z_prior$
 70300   mi_field$=lwrc$(trim$(mi_field$))
 70310   if mi_field$='longitude' then
-70320     if meterDataSourceOverrideEnabled then mi_return$=location$(loc_longitude) else mi_return$=rtrm$(mi_data$(3))
+70320     mi_return$=location$(loc_longitude)   ! if meterDataSourceOverrideEnabled then mi_return$=location$(loc_longitude) else mi_return$=rtrm$(mi_data$(3))
 70330   else if mi_field$='latitude' then
-70340     if meterDataSourceOverrideEnabled then mi_return$=location$(loc_latitude) else mi_return$=rtrm$(mi_data$(4))
+70340     mi_return$=location$(loc_latitude)    ! if meterDataSourceOverrideEnabled then mi_return$=location$(loc_latitude) else mi_return$=rtrm$(mi_data$(4))
 70350   else if mi_field$='meter number' then
-70360     if meterDataSourceOverrideEnabled then mi_return$=location$(loc_meterNumber) else mi_return$=rtrm$(mi_data$(5))
+70360     mi_return$=location$(loc_meterNumber) ! if meterDataSourceOverrideEnabled then mi_return$=location$(loc_meterNumber) else mi_return$=rtrm$(mi_data$(5))
 70370   else if mi_field$='transmitter number' then
-70380     if meterDataSourceOverrideEnabled then mi_return$=location$(loc_transmitter) else mi_return$=rtrm$(mi_data$(6))
+70380     mi_return$=location$(loc_transmitter) ! if meterDataSourceOverrideEnabled then mi_return$=location$(loc_transmitter) else mi_return$=rtrm$(mi_data$(6))
 70390   else if mi_field$='meter type' then
-70400     if meterDataSourceOverrideEnabled then mi_return$=location$(loc_meterType) else mi_return$=rtrm$(mi_data$(7))
+70400     mi_return$=location$(loc_meterType)   ! if meterDataSourceOverrideEnabled then mi_return$=location$(loc_meterType) else mi_return$=rtrm$(mi_data$(7))
 70410   else ! it's probably a MeterType field
-70420     if meterDataSourceOverrideEnabled then mt_key$=location$(loc_meterType) else mt_key$=mi_data$(7)
+70420     mt_key$=location$(loc_meterType)      ! if meterDataSourceOverrideEnabled then mt_key$=location$(loc_meterType) else mt_key$=mi_data$(7)
 70430     if mt_key_prior$<>mt_key$ then
 70440       mt_key_prior$=mt_key$
 70450       mat mt_data$=("")

@@ -42,7 +42,7 @@
 04100     opt_final_billing$(5)="4 = Finaled, but not billed"
 04120   !
 04140     fnLastBillingDate(d1)
-04160     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-25 then d1=0
+04160     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-23 then d1=0
 04180     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input
 04200     read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 04220     close #1:
