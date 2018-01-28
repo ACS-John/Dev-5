@@ -350,6 +350,7 @@
 58000 def fn_awoParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
 58020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 58040     str2mat(line$,mat lineItem$,chr$(9))
+58042     for x=1 to udim(mat lineItem$) : lineItem$(x)=trim$(lineItem$(x),'"') : next x
 58060     mat tmpDataName$(0)
 58080     mat tmpDataValue$(0)
 58100     ! fn_addTmpData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
