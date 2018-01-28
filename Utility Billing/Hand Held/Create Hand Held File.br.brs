@@ -1413,19 +1413,11 @@
 74010   if locationId and ~LastLocationIdOnFileSetup then ! r: get LastLocationIdOnFile
 74020     LastLocationIdOnFileSetup=1
 74030     dim form$(0)*256
-74040     if meterDataSourceOverrideEnabled then
-74050       dim location$(0)*128,locationN(0)
-74060       hLocationByLocationID=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1)
-74070       read #hLocationByLocationID,using form$(hLocationByLocationID),last: mat location$,mat locationN
-74080       close #hLocationByLocationID:
-74090       LastLocationIdOnFile=locationN(loc_LocationID)
-74100     else
-74110       dim maData$(0)*30,maDataN(0)
-74120       hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
-74130       read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),last: mat maData$,mat maDataN
-74140       close #hMeterAddressLocationID:
-74150       LastLocationIdOnFile=maDataN(ma_LocationID)
-74160     end if
+74050     dim location$(0)*128,locationN(0)
+74060     hLocationByLocationID=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1)
+74070     read #hLocationByLocationID,using form$(hLocationByLocationID),last: mat location$,mat locationN
+74080     close #hLocationByLocationID:
+74090     LastLocationIdOnFile=locationN(loc_LocationID)
 74170   end if ! /r
 74180   ! #h_customer_i1 and #h_customer_i5 are inherited local variables
 74190   dim extra$(11)*30
@@ -1453,30 +1445,31 @@
 74410       end if
 74420     end if
 74430   else if locationId<>0 then
-74440     accountFromLocationId$=fnAccountFromLocationId$(locationId,1)
-74450     if accountFromLocationId$='' then
+74440     z$=lpad$(trim$(fnAccountFromLocationId$(locationId,1)),kln(h_customer_i1))
+74450     if trim$(z$)='' then
 74460       if locationId>LastLocationIdOnFile then 
 74470         goto CrEoF
 74480       else
 74490         crReturn=0
 74500         goto CrFinis
 74510       end if
-74520     end if
-74530     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74540   else
-74550     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74560   end if
-74570   crReturn=1
-74580   goto CrFinis
-74590   CrNoKey: ! r:
-74600     crReturn=-4272
-74610   goto CrFinis ! /r
-74620   CrEoF: ! r:
-74630     crReturn=-54
-74640   goto CrFinis ! /r
-74650   CrFinis: !
-74660   fn_customerRead=crReturn
-74670 fnend
+74520     else
+74530       read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74540     end if
+74550   else
+74560     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74570   end if
+74580   crReturn=1
+74590   goto CrFinis
+74600   CrNoKey: ! r:
+74610     crReturn=-4272
+74620   goto CrFinis ! /r
+74630   CrEoF: ! r:
+74640     crReturn=-54
+74650   goto CrFinis ! /r
+74660   CrFinis: !
+74670   fn_customerRead=crReturn
+74680 fnend
 76000 def fn_getFilterAccount(mat filterAccount$)
 76002   mat filterAccount$(0)
 76004   fnAddOneC(mat filterAccount$,'100050.05')
