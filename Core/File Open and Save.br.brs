@@ -164,7 +164,7 @@
 42860   ml$(1)='FAILURE: The log file could not be opened.'
 42880   ml$(2)=arc_filename$
 42900   fnmsgbox(mat ml$,resp$,"ACS",0)
-42910   ! if env$('acsDebug')<>'' then pause
+42910   if env$('acsDeveloper')<>'' then pause
 42920   ARC_XIT: ! 
 42940   fn_analyze_7zip_compresslog=~failure
 42960 fnend 
