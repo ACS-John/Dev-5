@@ -12,7 +12,7 @@
 11060     library 'S:\Core\Library': fntop
 11080     library 'S:\Core\Library': fnSystemName$
 11100     library 'S:\Core\Library': fncompany_name
-11120     library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnCmdKey,fnButton,fnLbl,fnTos
+11120     library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnCmdKey,fnButton,fnLbl,fnTos,fnchk
 11140     library 'S:\Core\Library': fnFra
 11160     library 'S:\Core\Library': fnbutton_or_disabled
 11180     library 'S:\Core\Library': fnmsgbox
@@ -53,7 +53,7 @@
 11900     library 'S:\Core\Library': fnClientSelect
 11920     library 'S:\Core\Programs\PrintAce_Test': fnPrintAceTest
 11940     dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
-11960     dim resp$(1)*255
+11960     dim resp$(32)*255
 11980   end if
 11990 fnend
 12000 def fn_setup_once
@@ -232,6 +232,10 @@
 20220       fn_dashboard_draw
 20230       if enableFavorites then let fn_favoritesDraw
 20240       fn_display_menu
+20250       ! if env$('cursys')="PR" then
+20252       !   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard) 
+20254       !   if env$('taxYear')='2018' then resp$(2)='^' else resp$(2)='False'
+20256       ! end if
 20260   !
 20300       setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 20310       fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
@@ -241,6 +245,9 @@
 20380       program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
 20400       program_selection$(1:pos(program_selection$,']'))=''
 20420       curfld_value=curfld
+20422       ! if env$('cursys')="PR" then
+20430       !   if resp$(2)='True' or resp$(2)='^' then let setenv('taxYear','2018') else let setenv('taxYear','') 
+20432       ! end if
 20440     end if
 20460   !
 20480     if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
