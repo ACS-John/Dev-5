@@ -1,14 +1,12 @@
 00010 ! Formerly S:\acsGL\CloseMonth
 00020 ! GL Month End Closing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnactpd, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fnconsole,fngethandle,fnindex_it,fnRemoveDeletedRecords
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnactpd, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fnconsole,fngethandle,fnindex_it,fnRemoveDeletedRecords,fnAutomatedSavePoint
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bc(13),tr(7),tr$*12,td$*30
 00080 ! ______________________________________________________________________
-00090   fntop(program$,cap$="Close Month")
-00100   fnconsole(off=0)
-00110   fncno(cno)
+00090   fntop(program$)
 00120   if fnprocess=1 then goto GET_GOING
 00130 SCREEN1: ! 
 00140   fnTos(sn$='Close_Month')
@@ -23,7 +21,8 @@
 00210   if actpd<1 or actpd>13 then goto SCREEN1
 00220 ! ______________________________________________________________________
 00230 GET_GOING: ! 
-02000   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L440
+01000   fnAutomatedSavePoint('before')
+02000   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ! ioerr L440
 02020   read #1,using 'Form pos 384,n 2,POS 406,C 1,POS 417,N 1',rec=1: nap,actrcde$,reccode
 02040   close #1: 
 02060   if actrcde$="0" or actrcde$="N" then goto OPEN_GLMSTR
@@ -49,7 +48,7 @@
 02360   open #1: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Size=0,RecL=73,Replace",internal,output 
 02380   write #1,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,PD 3': 0,0,0,0,0,0,0," "," ",1
 02400   close #1: 
-02420 L440: ! 
+02420   ! L440: ! 
 02580   if reccode=0 then goto GLBREC_DROP
 02600   open #h_glbrec:=1: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),internal,outIn,keyed ioerr GLBREC_DROP
 02620   do 
