@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                         
+7:13 PM 1/28/2018	CO	Automated Save Points will not display faulty error message when in Client/Server
+7:13 PM 1/28/2018	PR	enter time sheets - skip deductions will not ask if there are no deduction names at all
 4:26 PM 1/28/2018	U4	Aclara work orders now trim double quotes from field values if they exist
 1:49 PM 1/28/2018	U4	Fixed serious bug in fnmeterinfo which is used heavily in Create Hand Held Files
 10:19 01/18/2018	CO	5.73106  
