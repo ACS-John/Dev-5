@@ -707,9 +707,9 @@
 28000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
 28040   dim ft(8,6)
 28060   if env$('taxYear')<>'' then taxYear=2017 else taxYear=val(env$('taxYear'))
-28070   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
 28080   ! r: Federal - SINGLE person (including head of household)
 28100   if taxYear<=2017 then
+28110     fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
 28120     ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
 28140     ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
 28160     ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1  
@@ -734,6 +734,7 @@
 28520   ! r: Federal - MARRIED person
 28540   if taxYear<=2017 then
 28560     ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+28570     fed_annual_wh_allowance=4050
 28580     ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
 28600     ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
 28620     ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
@@ -743,6 +744,7 @@
 28700     ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
 28720     ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
 28740   else if taxYear=2018 then
+28750     fed_annual_wh_allowance=4150
 28760     ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
 28780     ft(2,4)= 11550  : ft(2,5)=     0    : ft(2,6)=0.1
 28800     ft(3,4)= 30600  : ft(3,5)=  1905    : ft(3,6)=0.12
