@@ -80,7 +80,6 @@
 39060     fnmakesurepathexists(env$('at')&save_name$)
 39070     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
 39080   else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
-39090     ! if env$('acsDeveloper')<>'' then 
 39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 39110     dim save_path$*1024,save_filename$*256,save_ext$
 39120     fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
