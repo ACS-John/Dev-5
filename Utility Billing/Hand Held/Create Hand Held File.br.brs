@@ -534,7 +534,7 @@
 27040   ! returns open file handle
 27060   if deviceTest$='' or deviceSelected$=deviceTest$ then
 27080     if out_filename$='' then out_filename$=defaultOut_filename$
-27100     fnmakesurepathexists(out_filename$)
+27100     fnmakesurepathexists(env$('at')&out_filename$)
 27120     open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
 27140   end if
 27160   fn_ifMatchOpenDo=hImodoReturn
