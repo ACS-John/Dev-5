@@ -4,11 +4,13 @@
 18028     library 'S:\Core\Library': fnsave_as_path$,fngethandle,fnreg_close,fnreg_write
 18030     library 'S:\Core\Library': fnmsgbox,fnEditFile,fnSystemName$,fnlog
 18032     library 'S:\Core\Library': fnAcs,fnCmdSet,fnTos,fnLbl,fnTxt,fncomboa
-18034     library 'S:\Core\Library': fncursys$,fncheckfileversion,fnmakesurepathexists
+18034     library 'S:\Core\Library': fncursys$,fncheckfileversion
+18035     library 'S:\Core\Library': fnmakesurepathexists
 18036     library 'S:\Core\Library': fnStatus,fnStatusClose,fnStatusPause,fnCopy,fnindex_sys
 18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
-18040     dim company_import_path$*256
-18050     dim resp$(5)*256
+18040     library 'S:\Core\Library': fnRename,fnGetPp
+18056     dim company_import_path$*256
+18058     dim resp$(5)*256
 18060     dim ml$(0)*128
 18062     if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 18070   end if
@@ -77,9 +79,13 @@
 39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 39110     fnmakesurepathexists(env$('at')&save_name$)
 39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
-39140   else
-39160     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
-39180   end if
+39130   else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
+39140     dim save_path$*1024,save_filename$*256,save_ext$
+39150     fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
+39160     fnRename(serverTempSaveFile$,save_filename$&save_ext$)
+39170   else
+39180     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
+39190   end if
 39200   if fsa_automatedSaveFileName$<>'' then
 39220     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
 39240       fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
