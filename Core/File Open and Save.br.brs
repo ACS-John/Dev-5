@@ -81,13 +81,11 @@
 39070     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
 39080   else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
 39090     ! if env$('acsDeveloper')<>'' then 
-39100     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
-39110       dim save_path$*1024,save_filename$*256,save_ext$
-39120       fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
-39130       fnmakesurepathexists('C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
-39140      ! pause
-39150       fnRename(serverTempSaveFile$,'C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
-39160     ! end if
+39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+39110     dim save_path$*1024,save_filename$*256,save_ext$
+39120     fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
+39130     fnmakesurepathexists('C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+39150     fnRename(serverTempSaveFile$,'C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
 39170   else
 39180     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
 39190   end if
