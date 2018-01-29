@@ -11,7 +11,7 @@
 02050     fn_startStatus("Loading ACS System..." )
 02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
 03000     ! r: set environment variables based on login_name$ and/or BR_MODEL
-03020     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
+03020     ! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
 03040     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
 03060       setenv('enableClientSelection','Yes')
 03080     end if
