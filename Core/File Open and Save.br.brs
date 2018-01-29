@@ -72,17 +72,19 @@
 38960   pr #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
 38980   pr #h_tmp: '@echo.'
 39000   pr #h_tmp: '@echo.'
-39020   pr #h_tmp: '@echo SAVE PROCESSING...'
-39040   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
-39060   close #h_tmp: 
-39080   if clientServer and ~disableCopyToLocal then
-39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
-39110     fnmakesurepathexists(env$('at')&save_name$)
-39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
-39130   else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
-39140     dim save_path$*1024,save_filename$*256,save_ext$
-39150     fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
-39160     fnRename(serverTempSaveFile$,save_filename$&save_ext$)
+39010   pr #h_tmp: '@echo SAVE PROCESSING...'
+39020   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
+39030   close #h_tmp: 
+39040   if clientServer and ~disableCopyToLocal then
+39050     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+39060     fnmakesurepathexists(env$('at')&save_name$)
+39070     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
+39080   else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
+39090     dim save_path$*1024,save_filename$*256,save_ext$
+39100     fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
+39120     fnmakesurepathexists('C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+39160     fnRename(serverTempSaveFile$,'C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+39162     if env$('acsDeveloper')<>'' then pause
 39170   else
 39180     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
 39190   end if
