@@ -160,7 +160,7 @@
 01425     g2=round(g2*g_pay_periods_per_year,2) ! g2 - becomes estimated annual net pay
 01430     j1=fn_table_line(mat ft,g2, j2)
 01460     fed_wh_annual_estimate=tf4_a=round(ft(j1,j2+1)+(g2-ft(j1,j2))*ft(j1,j2+2),2)
-01465     ! table total federal w/h used in some state routines
+01465     ! if env$('acsDeveloper')<>'' then pause ! table total federal w/h used in some state routines
 01470     tf4_a=round(tf4_a/g_pay_periods_per_year,2)
 01475   else 
 01480     g2=0
@@ -706,7 +706,7 @@
 27940 ST10: s3=0 : return
 28000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
 28040   dim ft(8,6)
-28060   if env$('taxYear')<>'' then taxYear=2017 else taxYear=val(env$('taxYear'))
+28060   if env$('taxYear')='' then taxYear=2017 else taxYear=val(env$('taxYear'))
 28080   ! r: Federal - SINGLE person (including head of household)
 28100   if taxYear<=2017 then
 28110     fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
