@@ -172,4 +172,14 @@
 48420   on error System
 48440   fnArrayWasPassedN=awpnReturn
 48460 fnend
-      
+52000 def library fnArrayEmpty(mat ae$)
+52010   arrayEmptyReturn=1
+52020   for aeItem=1 to udim(mat ae$)
+52030     if trim$(ae$(aeItem))<>'' then goto AeNotEmpty
+52040   nex aeItem
+52050   goto AeFinis
+52060   AeNotEmpty: !
+52070   arrayEmptyReturn=0
+52080   AeFinis: !
+52090   fnArrayEmpty=arrayEmptyReturn
+52100 fnend
