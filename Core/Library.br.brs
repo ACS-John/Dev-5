@@ -874,6 +874,10 @@
 63438   fnend
 63990 ! /r
 64000 ! r: array stuff
+64011   def library fnArrayEmpty(mat array$)
+64012     library 'S:\Core\Array.br': fnArrayEmpty
+64013     fnArrayEmpty=fnArrayEmpty(mat array$)
+64024   fnend
 64021   def library fnArrayWasPassedC(mat array$)
 64022     library 'S:\Core\Array.br': fnArrayWasPassedC
 64023     fnArrayWasPassedC=fnArrayWasPassedC(mat array$)

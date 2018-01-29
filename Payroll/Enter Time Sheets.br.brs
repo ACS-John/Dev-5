@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsPR\NewpRInput
 00020 ! enter time sheets
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnStatusClose,fncreg_write,fncreg_read
+00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnStatusClose,fncreg_write,fncreg_read,fnArrayEmpty
 00050   on error goto ERTN
 00052   fntop(program$,cap$="Enter Time Sheets")
 00060 ! r: dims and constants
@@ -107,6 +107,7 @@
 00740   end if 
 00742   em4=val(resp$(8)(1:2))
 00750 ! SKIPDEDUCTIONS: !
+00752   if fnArrayEmpty(mat dednames$) then mat resp$(1:20)=('False') : goto PastSkipDeductionsScreen
 00760   fnTos(sn$="Prinput-2")
 00762   rc=cf=linecnt=0
 00770   fnFra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
@@ -123,6 +124,7 @@
 00850   fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
 00860   fnAcs(sn$,0,mat resp$,ckey)
 00862   if ckey=5 then goto L900
+00864   PastSkipDeductionsScreen: !
 00870   for j=1 to 20
 00880     if resp$(j)="True" then skipit$(j)="Y" else skipit$(j)="N"
 00890   next j
