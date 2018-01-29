@@ -1,7 +1,7 @@
 20000 ! formerly S:\acsUB\ubPenCal
 20020 ! Penalty Calculation
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fnCmdSet,fntop,fnChk,fnFra,fnOpt,fnget_services
+20060   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fnCmdSet,fntop,fnChk,fnFra,fnOpt,fnget_services,fnAutomatedSavePoint
 20080   on error goto ERTN
 20100 ! ______________________________________________________________________
 20120   dim resp$(8)*40,msgline$(1)*80,oldtg(11)
@@ -28,7 +28,7 @@
 20580 ! /r
 20600   fn_scr_main
 20620   if ck=5 then goto XIT
-20640 ! 
+20640   fnAutomatedSavePoint('before')
 20760   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20780   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
 20800 ! 
