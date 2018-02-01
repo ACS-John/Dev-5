@@ -128,11 +128,13 @@
 33160       cc15_pos=pos(gtd_source$,', 15')
 33180       cc16_pos=pos(gtd_source$,', 16')
 33200       cc17_pos=pos(gtd_source$,', 17')
+33202       cc18_pos=pos(gtd_source$,', 18')
 33220       if cc13_pos<=0 then cc13_pos=pos(gtd_source$,', 2013')
 33240       if cc14_pos<=0 then cc14_pos=pos(gtd_source$,', 2014')
 33260       if cc15_pos<=0 then cc15_pos=pos(gtd_source$,', 2015')
 33280       if cc16_pos<=0 then cc16_pos=pos(gtd_source$,', 2016')
 33300       if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
+33302       if cc18_pos<=0 then cc18_pos=pos(gtd_source$,', 2018')
 33320       if cc12_pos>0 then 
 33340         gtd_source$(cc12_pos:len(gtd_source$))=''
 33360         gtd_date_ccyy=2012
@@ -151,6 +153,9 @@
 33620       else if cc17_pos>0 then 
 33640         gtd_source$(cc17_pos:len(gtd_source$))=''
 33660         gtd_date_ccyy=2017
+33662       else if cc18_pos>0 then 
+33664         gtd_source$(cc18_pos:len(gtd_source$))=''
+33666         gtd_date_ccyy=2018
 33680       else 
 33700         pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause 
 36000       end if  ! 
