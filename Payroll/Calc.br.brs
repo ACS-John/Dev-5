@@ -536,9 +536,9 @@
 14480   fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
 14500   fnTxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
 14520   resp$(rc+=1)=str$(end_date)
-14530   fnchk(13,65,'Enable 2018 Federal Withholdings (FOR TESTING ONLY)', 1,0) 
-14532   rc_taxYear=rc+=1 
-14534   if env$('taxYear')='2018' then resp$(rc_taxYear)='True' else resp$(rc_taxYear)='False'
+14530   ! fnchk(13,65,'Enable 2018 Federal Withholdings (FOR TESTING ONLY)', 1,0) 
+14532   ! rc_taxYear=rc+=1 
+14534   ! if env$('taxYear')='2018' then resp$(rc_taxYear)='True' else resp$(rc_taxYear)='False'
 14540   fnCmdKey("Next",1,1,0,"Proceed with calculations.")
 14560   fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
 14580   fnAcs(sn$,0,mat resp$,ckey)
@@ -548,8 +548,12 @@
 14660     if resp$(3)(1:1)="T" then d3$="Y" else d3$="N"
 14680     beg_date=val(resp$(4))
 14700     end_date=val(resp$(5))
-14710 if resp$(rc_taxYear)='True' then let setenv('taxYear','2018') else let setenv('taxYear','2017') 
-14712 ! pr env$('taxYear') : pause
+14702     ! if resp$(rc_taxYear)='True' then 
+14704         taxYear=2018
+14706     ! else 
+14708     !   taxYear=2017
+14710     ! end if
+14712     fn_setupFederalTables(taxYear,mat ft,fed_annual_wh_allowance)
 14720     rewrite #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14740     close #h_dates: 
 14760   end if
@@ -592,7 +596,7 @@
 16280   dim newdedcode(20),newcalcode(20),newdedfed(20),newdedcode(20)
 16300   dim dedfica(20),dedst(20),deduc(20)
 16320   dim ml$(1)*256
-16380   fn_setupFederalTables(mat ft,fed_annual_wh_allowance)
+16380   ! fn_setupFederalTables(2017,mat ft,fed_annual_wh_allowance)
 16460   mtc=0 ! motab counter
 16480   motab(mtc+=1)=0   : motab(mtc+=1)=31  : motab(mtc+=1)=59
 16500   motab(mtc+=1)=90  : motab(mtc+=1)=120 : motab(mtc+=1)=151
@@ -704,9 +708,8 @@
 27900 ST08: s3=0 : return
 27920 ST09: s3=0 : return
 27940 ST10: s3=0 : return
-28000 def fn_setupFederalTables(mat ft,&fed_annual_wh_allowance)
+28000 def fn_setupFederalTables(taxYear,mat ft,&fed_annual_wh_allowance)
 28040   dim ft(8,6)
-28060   if env$('taxYear')='' then taxYear=2017 else taxYear=val(env$('taxYear'))
 28080   ! r: Federal - SINGLE person (including head of household)
 28100   if taxYear<=2017 then
 28110     fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050

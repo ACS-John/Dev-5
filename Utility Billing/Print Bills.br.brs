@@ -1860,15 +1860,16 @@
 97540     pr #255,using 'form pos 1,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 37,c 30': bal+penalty,datePastDue,bal,pe$(3)
 97550   end if
 97560   pr #255,using 'form pos 1,C 30,pos 37,c 37': final$,pe$(4)
-97570   pr #255,using 'form skip 1,c 30': mg$(1)
-97580   pr #255,using 'form skip 1,c 30': mg$(2)
-97590   pr #255,using 'form skip 1,c 30': mg$(3)
+97570   pr #255,using 'form pos 1,c 30': mg$(1)
+97580   pr #255,using 'form pos 1,c 30': mg$(2)
+97590   pr #255,using 'form pos 1,c 30': mg$(3)
 97600   bills=bills+1
 97610   if int(bills/3)=bills/3 then  ! BOTTOM OF PAGE
 97620     pr #255: newpage
 97630   else ! in between bills
 97640     pr #255: ''
 97650     pr #255: ''
+97652     pr #255: ''
 97660   end if
 97670   ! billsPrintedCount(1)+=1  ! not sure if (1) is right.
 97680 fnend

@@ -225,7 +225,11 @@
 40354       ! it's a new service for an existing location
 40355       locationN(loc_locationID)=fn_newLocationID
 40356       goto LwWrite
-40360     else if locationN(loc_locationID)=0 then
+40358     else if location$(loc_locationID)=locRead$(loc_locationID) and location$(loc_serviceId)=locRead$(loc_serviceId) then
+40360       for lwLocItem=1 to udim(mat locRead$)
+40362         if fn_leftIsSuperior(locRead$(lwLocItem),location$(lwLocItem), lwLocItem==loc_activeCustomer) then location$(lwLocItem)=locRead$(lwLocItem)
+40364       nex lwLocItem
+40366     else if locationN(loc_locationID)=0 then
 40370       pr 'new location being added, but it already exists - gather any new info on it'
 40380       locationN(loc_locationID)=locReadN(loc_locationID)
 40390       for lwLocItem=1 to udim(mat locRead$)
@@ -367,7 +371,7 @@
 46050   mat locationN=(0)
 46060   locationN(loc_locationId)=locationId
 46070   read #hAliLocation,using form$(hAliLocation),key=fnBuildKey$(table$,mat location$,mat locationN): mat location$,mat locationN nokey ignore
-46080   aliReturn$=location$(loc_activeCustomer)
+46080   aliReturn$=lpad$(trim$(location$(loc_activeCustomer)),10)
 46090   if ~leaveFileOpen then
 46100     close #hAliLocation:
 46110     hAliLocation=0
@@ -488,7 +492,7 @@
 66020   if ~setup then let fn_setup
 66040   hCmlsLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
 66060   for j=2 to 5 : hCmlsLocation(j)=hCmlsLocation(1)+j-1 : nex j
-66080   fntos(sn$='cmls')
+66080   fntos(sn$='cmls'&account$) : respc=0
 66100   fnlbl(1,1,'Account: ',20,1)
 66120   fntxt(1,22,10, 0,0,'',1)
 66140   resp$(respc+=1)=account$
