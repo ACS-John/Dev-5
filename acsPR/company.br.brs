@@ -39,40 +39,40 @@
 00310   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 00380 ! ______________________________________________________________________
 00390 SCREEN_1: ! 
-00400   resp=0
-00410   fnTos(sn$="Company-1") !:
-        mylen=30: mypos=mylen+3 : right=1
-00420   fram1=1: fnFra(1,1,10,80,"Company # "&env$('cno'))
-00430   fnLbl(1,1,"Company Name:",mylen,right,0,fram1)
-00440   fnTxt(1,mypos,40,0,left,"",0,"",fram1) !:
-        resp$(1)=a$(1)
-00450   fnLbl(2,1,"Company Address:",mylen,right,0,fram1)
-00460   fnTxt(2,mypos,40,0,left,"",0,"",fram1) !:
-        resp$(2)=a$(2)
-00470   fnLbl(3,1,"City, State, Zip:",mylen,right,0,fram1)
-00480   fnTxt(3,mypos,40,0,left,"",0,"",fram1) !:
-        resp$(3)=a$(3)
-00490   fnLbl(4,1,"Federal ID #:",mylen,right,0,fram1)
-00500   fnTxt(4,mypos,12,0,left,"",0,"",fram1) !:
-        resp$(4)=fid$
-00510   fnLbl(5,1,"Federal U/C Rate:",mylen,right,0,fram1)
-00520   fnTxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1) !:
-        resp$(5)=str$(feducrat)
-00530   fnLbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
-00540   fnTxt(6,mypos,12,0,left,"10",0,"",fram1) !:
-        resp$(6)=str$(feducmax)
-00550   fnLbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
-00560   fnTxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 ) !:
-        resp$(7)=str$(ficarate)
-00570   fnLbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
-00580   fnTxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
-00852   resp$(8)=str$(ficamaxw)
-00590   fnLbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
-00600   fnTxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1) !:
-        resp$(9)=str$(mcr)
-00610   fnLbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
-00620   fnTxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) !:
-        resp$(10)=str$(mcm)
+00395   resp=0
+00400   fnTos(sn$="Company-1") 
+00405   mylen=30: mypos=mylen+3 : right=1
+00410   fram1=1: fnFra(1,1,10,80,"Company # "&env$('cno'))
+00415   fnLbl(1,1,"Company Name:",mylen,right,0,fram1)
+00420   fnTxt(1,mypos,40,0,left,"",0,"",fram1) 
+00425   resp$(1)=a$(1)
+00430   fnLbl(2,1,"Company Address:",mylen,right,0,fram1)
+00435   fnTxt(2,mypos,40,0,left,"",0,"",fram1) 
+00440   resp$(2)=a$(2)
+00445   fnLbl(3,1,"City, State, Zip:",mylen,right,0,fram1)
+00450   fnTxt(3,mypos,40,0,left,"",0,"",fram1) 
+00455   resp$(3)=a$(3)
+00460   fnLbl(4,1,"Federal ID #:",mylen,right,0,fram1)
+00465   fnTxt(4,mypos,12,0,left,"",0,"",fram1) 
+00470   resp$(4)=fid$
+00475   fnLbl(5,1,"Federal U/C Rate:",mylen,right,0,fram1)
+00480   fnTxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1) 
+00485   resp$(5)=str$(feducrat)
+00490   fnLbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
+00495   fnTxt(6,mypos,12,0,left,"10",0,"",fram1) 
+00500   resp$(6)=str$(feducmax)
+00505   fnLbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
+00510   fnTxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 ) 
+00515   resp$(7)=str$(ficarate)
+00520   fnLbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
+00525   fnTxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
+00530   resp$(8)=str$(ficamaxw)
+00535   fnLbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
+00540   fnTxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1) 
+00545   resp$(9)=str$(mcr)
+00550   fnLbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
+00555   fnTxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) 
+00560   resp$(10)=str$(mcm)
 00630   fram2=2: fnFra(13,1,8,90,"General Ledger Information")
 00640   fnChk(1,30,"General Ledger Installed:",1,fram2)
 00650   if gli=1 then resp$(11)="True" else resp$(11)="False"
@@ -103,7 +103,7 @@
 00850   feducrat=val(resp$(5))
 00860   feducmax=val(resp$(6))
 00870   ficarate=val(resp$(7))
-00880   ficamaxw=val(resp$(8))
+00880   ficamaxw=val(resp$(8)) ! pr ficamaxw : pause
 00890   mcr=val(resp$(9))
 00900   mcm=val(resp$(10))
 00910   if resp$(11)="True" then gli=1 else gli=0
