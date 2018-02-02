@@ -331,6 +331,7 @@
 28740       fn_add_ch_sys('CL')
 28750       fn_add_ch_sys('PR')
 28760       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
+28762       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
 28770     else if env$('client')='Carr Plumbing' then 
 28780       fn_user_limit(1)
 28790       fn_add_ch_sys('PR')
