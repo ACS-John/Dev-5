@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                              
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                              
+2:02 PM 2/12/2018	UB	Customer > Services - Next and Cancel buttons are now simplified to just one button: Save
+9:01 AM 2/12/2018	UB	Collections > Post - always prints the report, without stopping to ask
 12:35 02/18/2018	CO	5.73111  
 12:34 PM 2/2/2018	PR	Fixed issue with SS Max Wage not saving properly in Company>Configure 
 8:57 02/18/2018	CO	5.73110   

@@ -952,10 +952,10 @@
 68200   fnend
 68250 ! /r
 70000 ! r: UB   utility billing
-70011   def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
-70012     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
-70013     fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
-70014   fnend
+70011   ! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
+70012   !   library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
+70013   !   fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
+70014   ! fnend
 70021   def library fnDepositChangeLog(z$*10,odp,ndp,chgDate,comment$*32)
 70022     library 'S:\Utility Billing\Customer.br': fnDepositChangeLog
 70023     fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)
@@ -976,9 +976,9 @@
 70052     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnAccountFromLocationId$
 70053     fnAccountFromLocationId$=fnAccountFromLocationId$(locationID, leaveFileOpen)
 70054   fnend
-70055   def library fnLocationIdFromAccount(account$*10; leaveFileOpen)
-70056     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnLocationIdFromAccount
-70057     fnLocationIdFromAccount=fnLocationIdFromAccount(account$, leaveFileOpen)
+70055   def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*14,leaveFileOpen)
+70056     library 'S:\Utility Billing\Hand Held\Meter Location.br': fnLocationIdFromAccountAndServ$
+70057     fnLocationIdFromAccountAndServ$=fnLocationIdFromAccountAndServ$(account$,serviceId$, field$,leaveFileOpen)
 70058   fnend
 70061   def library fnNoteDir$*256
 70062     library 'S:\Utility Billing\Customer.br': fnNoteDir$
@@ -1048,10 +1048,6 @@
 70500     library 'S:\Utility Billing\Customer.br': fnask_account
 70510     fnask_account=fnask_account(prev_list_id$,x$,h_customer, select_button_text$,aa_button_enable_add)
 70520   fnend
-70610   def library fnopen_meter
-70620     library 'S:\Utility Billing\Hand Held\Meter Information': fnopen_meter
-70630     fnopen_meter=fnopen_meter
-70640   fnend
 70650   def library fncmbrt2(lyne,mypos;all)
 70660     library 'S:\acsUB\CmbRt2.br': fncmbrt2
 70670     fncmbrt2=fncmbrt2(lyne,mypos,all)

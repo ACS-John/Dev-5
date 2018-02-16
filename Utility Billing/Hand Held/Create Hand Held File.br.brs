@@ -261,8 +261,10 @@
 13220       fn_acs_meter_reader
 13240     else if deviceSelected$="AMR" then 
 13260       fn_amr
-13280     else if deviceSelected$="Badger" then 
-13300       fn_badger
+13280     else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then 
+13300       fn_badgerConnectC
+13302     else if deviceSelected$="Badger Beacon" then 
+13304       fn_badgerBeacon   ! newest/current interface as of 2/2/2018
 13320     else if deviceSelected$="Boson" then 
 13340       fn_boson
 13360     else if deviceSelected$="EZReader" or deviceSelected$="Green Tree" or deviceSelected$="Hersey" or deviceSelected$="Sensus" then 
@@ -345,45 +347,104 @@
 15180   write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20,n 3,n 7": z$,e$(2),e$(1),"G",gasread,gasusage,d(9),d(12),f$(3),ft$,route,sequence : goto LAPTOP_XIT
 15200   LAPTOP_XIT: !
 15220 fnend
-16000 def fn_badger
-16020   for j=1 to len(seq$)
-16040     on val(seq$(j:j)) goto BADGER_WATER,BADGER_ELECTRIC,BADGER_DEMAND,BADGER_GAS none BADGER_NEXT_SEQUENCE
-16060     BADGER_WATER: !
-16080     if a(1)=0 then goto BADGER_NEXT_SEQUENCE
-16100     m$=ltrm$(f$(1))(1:10)
-16120     if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
-16140     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
-16160     if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-16220     rt$=cnvrt$("pic(##)",extra(1))&"  "
-16240     if env$('client')='Raymond' then manual_or_dialog$="N"
-16260     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
-16280     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-16300     ! serial # can be extra$(3) rather than f$(1)
-16320     ! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
-16340     goto BADGER_NEXT_SEQUENCE
-16360     ! ___________________________
-16380     BADGER_ELECTRIC: !
-16400     if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BADGER_NEXT_SEQUENCE
-16420     m$=ltrm$(f$(2))(1:10)
-16440     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-16460     L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
-16480     goto BADGER_NEXT_SEQUENCE
-16500     ! ___________________________
-16520     BADGER_DEMAND: !
-16540     goto BADGER_NEXT_SEQUENCE
-16560     m$=""
-16580     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-16600     goto BADGER_NEXT_SEQUENCE
-16620     ! ___________________________
-16640     BADGER_GAS: !
-16660     if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BADGER_NEXT_SEQUENCE
-16680     m$=ltrm$(f$(3))(1:10)
-16700     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-16720     goto BADGER_NEXT_SEQUENCE
-16740     ! ___________________________
-16760     BADGER_NEXT_SEQUENCE: !
-16780   next j
-16800 fnend
+16000 def fn_badgerBeacon
+16010   if ~beaconHeaderSent then ! r:
+16020     beaconHeaderSent=1
+16030     fn_record_init(chr$(9))
+16040     fn_record_addc(10,'Account_ID')
+16050     fn_record_addc(30,'Account_Full_Name')
+16060     fn_record_addc(13,'Account_Phone')
+16070     fn_record_addc(11,'Location_ID')
+16080     fn_record_addc(30,'Location_Address_Line1')
+16090     fn_record_addc(40,'Location_City')
+16100     fn_record_addc(14,'Location_State')
+16110     fn_record_addc(12,'Location_Zip')
+16120     fn_record_addc(18,'Location_Latitude')
+16130     fn_record_addc(18,'Location_Longitude')
+16140     fn_record_addc(19,'Service_Point_Route')
+16150     fn_record_addc(18,'Service_Point_Latitude')
+16160     fn_record_addc(18,'Service_Point_Longitude')
+16170     fn_record_addc(12,'Meter_ID') ! (meter number)
+16180     fn_record_addc(12,'Meter_SN') ! (meter number)
+16190     fn_record_addc(15,'Register_Number') ! (blank)
+16200     fn_record_addc(64,'Register_Unit_Of_Measure') ! (ask and add)
+16210     fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
+16220     fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
+16230     fn_record_addc(19,'Endpoint_Type') ! meter type - read type
+16240     fn_record_addc(13,'Read_Sequence') ! sequence
+16250     fn_record_addc(14,'High_Read_Limit')
+16260     fn_record_addc(14,'Low_Read_Limit') 
+16270   end if ! /r
+16500   dim tmpCity$*64,tmpState$*64,tmpZip$*64
+16510   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+16520   unusual_usage_low=round(reading_current+usage_current*fn_pcent,2) : if unusual_usage_low<0 then unusual_usage_low=0
+16530   unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+16540   fn_record_init(chr$(9))                                           ! BadgerBeacon Name      ACS Name (if different)
+16550   fn_record_addc(10,z$)                                             ! Account_ID             Account Number
+16560   fn_record_addc(30,e$(2))                                          ! Account_Full_Name      Customer Name
+16562   ! fn_record_addc(30,fnCustomerData$(z$,'name', 1))   <-- this might be a better way...
+16570   fn_record_addc(13,extra$(2))                                      ! Account_Phone          Phone Number
+16580   fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))    ! Location_ID
+16600   fn_record_addc(30,e$(3))                                           ! Location_Address_Line1
+16610   fn_record_addc(40,tmpCity$)                                        ! Location_City
+16620   fn_record_addc(14,tmpState$)                                       ! Location_State
+16630   fn_record_addc(12,tmpZip$)                                         ! Location_Zip
+16640   fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))      ! Location_Latitude
+16650   fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))      ! Location_Longitude
+16660   fn_record_addn(3,route)                                            ! Service_Point_Route    Route Number
+16670   fn_record_addn(3,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
+16680   fn_record_addn(3,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
+16690   fn_record_addn(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
+16700   fn_record_addn(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
+16710   fn_record_addn(15,'')                                               ! Register_Number           (blank)                  (meter number)
+16720   fn_record_addn(19,'GAL')                                            ! Register_Resolution       (blank)                  (meter number)
+16730   fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+16740   fn_record_addn(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
+16750   fn_record_addn(13,sequence)                                        ! Read_Sequence                Sequence
+16760   fn_record_addn(14,unusual_usage_high)
+16770   fn_record_addn(14,unusual_usage_low) 
+16780    !
+16790   fn_record_write(h_out)
+16960 fnend
+17000 def fn_badgerConnectC
+17020   for j=1 to len(seq$)
+17040     on val(seq$(j:j)) goto BadgerCcWater,BadgerCcElectric,BadgerCcDemand,BadgerCcGas none BadgerCcNextSequence
+17060     BadgerCcWater: !
+17080     if a(1)=0 then goto BadgerCcNextSequence
+17100     m$=ltrm$(f$(1))(1:10)
+17120     if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
+17140     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
+17160     if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+17220     rt$=cnvrt$("pic(##)",extra(1))&"  "
+17240     if env$('client')='Raymond' then manual_or_dialog$="N"
+17260     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
+17280     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+17300     ! serial # can be extra$(3) rather than f$(1)
+17320     ! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
+17340     goto BadgerCcNextSequence
+17360     ! ___________________________
+17380     BadgerCcElectric: !
+17400     if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BadgerCcNextSequence
+17420     m$=ltrm$(f$(2))(1:10)
+17440     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+17460     L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
+17480     goto BadgerCcNextSequence
+17500     ! ___________________________
+17520     BadgerCcDemand: !
+17540     goto BadgerCcNextSequence
+17560     m$=""
+17580     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+17600     goto BadgerCcNextSequence
+17620     ! ___________________________
+17640     BadgerCcGas: !
+17660     if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BadgerCcNextSequence
+17680     m$=ltrm$(f$(3))(1:10)
+17700     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+17720     goto BadgerCcNextSequence
+17740     ! ___________________________
+17760     BadgerCcNextSequence: !
+17780   next j
+17800 fnend
 18000 def fn_legacyMultiDevice
 18020   ! r: set cd$ - included in several records - maybe some sort of meter id - not sure
 18040   cd$="M"
@@ -507,13 +568,15 @@
 25340 fnend
 26000 def fn_openOutFile ! open work areas based on type of Hand Held
 26020   dim out_filename$*256
-26040   fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
+26040   ! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
+26050   fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('userprofile')&'\Desktop\ACS to '&deviceSelected$&'.txt'))
 26060   if deviceSelected$='Itron FC300' then
 26080     fn_itron_open ! default
 26100   else
 26120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                        80)
 26140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                    80)
 26160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                            256)
+26170     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3",                                            256)
 26180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                                   204)
 26200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                                     200)
 26220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                          256)
@@ -1036,22 +1099,22 @@
 44160     transmitterSerialNumber$(posTsnDash:len(transmitterSerialNumber$))=''
 44180   end if
 44200   !
-44220   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-44240   fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))     ! LocationID
-44260   fn_record_addc(10,z$)                                                              ! Account Number
-44280   fn_record_addc(30,e$(2))                                                           ! Customer Name
-44300   fn_record_addc(12,extra$(2))                                                       ! Phone Number
-44320   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-44340   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+44220   fn_record_init(chr$(9))                                      ! Aclara Name               ACS Name (if different)
+44240   fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
+44260   fn_record_addc(10,z$)                                        ! Account Number
+44280   fn_record_addc(30,e$(2))                                     ! Customer Name
+44300   fn_record_addc(12,extra$(2))                                 ! Phone Number
+44320   fn_record_addc(30,e$(3))                                     ! Service Address 1          Address 1 - Primary
+44340   fn_record_addc(30,extra$(1))                                 ! Service Address 2          Address 2 - Primary
 44360   fn_record_addc(30,tmpCity$)
 44380   fn_record_addc(10,tmpState$)
 44400   fn_record_addc(15,tmpZip$)
-44420   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-44440   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-44460   fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
+44420   fn_record_addn(3,route)                                      ! Cycle and Route            Route Number
+44440   fn_record_addn(7,sequence)                                   ! Sequence                   Sequence
+44460   fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))    ! Meter Serial Number        Meter.Meter Number
 44480   fn_record_addc(20,transmitterSerialNumber$)                  ! Transmitter Serial Number  Meter.Transmitter Number
-44500   fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))                          ! Meter Model/Type
-44520   fn_record_addc(1,portNumber$)                          ! Port Number
+44500   fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))     ! Meter Model/Type
+44520   fn_record_addc(1,portNumber$)                                ! Port Number
 44540   fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
 44560 fnend
 45000 def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
@@ -1256,8 +1319,6 @@
 62240     end if  ! ckey<>5
 62260     goto TRANSFER_XIT
 62280   end if  ! deviceSelected$="ACS Meter Reader"
-62400   !   else if deviceSelected$="Badger" then
-62420   !     goto TRANSFER_XIT ! output file already if folder for                                               badger to read
 62440   if deviceSelected$="LapTop" then ! else if...
 62460     goto TRANSFER_TO_LAPTOP
 62480   else if deviceSelected$="Psion Workabout" then
@@ -1325,7 +1386,9 @@
 70202   location$(loc_activeCustomer)=trim$(z$)
 70204   location$(loc_serviceId)=serviceCode$
 70206   locationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN, 4) ! pr locationKey$ : pause
-70210   if mi_locationKey_prior$<>locationKey$ then
+70207   if mi_field$='location_id' then
+70208     mi_return$=str$(locationN(loc_locationId))
+70210   else if mi_locationKey_prior$<>locationKey$ then
 70220     mat location$=('') : mat location=(0)
 70230     mi_locationKey_prior$=locationKey$
 70250     read #hLocation,using form$(hLocation),key=locationKey$,release: mat location$,mat locationN nokey MI_FINIS
@@ -1379,6 +1442,8 @@
 72160     fnAddOneC(mat deviceNameCache$,'Aclara Work Order') : fnAddOneC(mat deviceOptionCache$,'')
 72180     fnAddOneC(mat deviceNameCache$,'ACS Meter Reader' ) : fnAddOneC(mat deviceOptionCache$,'')
 72200     fnAddOneC(mat deviceNameCache$,'Badger'           ) : fnAddOneC(mat deviceOptionCache$,'')
+72202     fnAddOneC(mat deviceNameCache$,'Badger Connect C' ) : fnAddOneC(mat deviceOptionCache$,'')
+72204     fnAddOneC(mat deviceNameCache$,'Badger Beacon'    ) : fnAddOneC(mat deviceOptionCache$,'')
 72220     fnAddOneC(mat deviceNameCache$,'Boson'            ) : fnAddOneC(mat deviceOptionCache$,'')
 72240     fnAddOneC(mat deviceNameCache$,'CSV by LocationID') : fnAddOneC(mat deviceOptionCache$,'ImportOnly')
 72260     fnAddOneC(mat deviceNameCache$,'Itron FC300'      ) : fnAddOneC(mat deviceOptionCache$,'')

@@ -192,40 +192,40 @@
 35220 !   fnMeterAddressName$=maData$(ma_name)
 35240 ! fnend
 
-40000 def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
-40020   if ~setup then let fn_setup
-40040   meterAddressBefore$=rtrm$(meterAddressBefore$)
-40060   meterAddressAfter$=rtrm$(meterAddressAfter$)
-40080   if meterAddressBefore$<>meterAddressAfter$ then
-40100     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$)
-40120     hMeterAddressName=hMeterAddressLocationID+1
-40140     if fnKeyExists(hMeterAddressName,meterAddressAfter$) then
-40160       doAdd$=fn_askAddDuplicate$(meterAddressBefore$,meterAddressAfter$)
-40170       if doAdd$='No' then meterAddressAfter$=meterAddressBefore$ : doAdd$='Cancel'
-40200     else if meterAddressBefore$='' and ~fnKeyExists(hMeterAddressName,meterAddressAfter$) then ! changed from blank - it is new
-40220       doAdd$='Yes'
-40300     else if lwrc$(meterAddressBefore$)=lwrc$(meterAddressAfter$) then  ! only case changes - it is an update
-40320       doAdd$='No'
-40340     else
-40360       doAdd$=fn_askAddNew$(meterAddressBefore$,meterAddressAfter$)
-40380     end if
-40400 ! pr 'doAdd$=';doAdd$ : pause
-40460     if doAdd$='Yes' then
-40480       maDataN(ma_LocationID)=fn_newLocationID
-40500       maData$(ma_Name)=meterAddressAfter$
-40520       write #hMeterAddressName,using form$(hMeterAddressLocationID): mat maData$,mat maDataN
-40540       ! pr 'just wrote one' : pause
-40560     else if doAdd$='No' then 
-40580       read #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-40600       maData$(ma_Name)=meterAddressAfter$
-40620       rewrite #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-40640       ! pr 'rewrote ' : pause
-40660     else if doAdd$='Cancel' then 
-40680       meterAddressAfter$=meterAddressBefore$
-40700     end if
-40720     fnCloseFile(hMeterAddressLocationID,'UB Meter Address')
-40740   end if
-40760 fnend
+40000 ! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
+40020 !   if ~setup then let fn_setup
+40040 !   meterAddressBefore$=rtrm$(meterAddressBefore$)
+40060 !   meterAddressAfter$=rtrm$(meterAddressAfter$)
+40080 !   if meterAddressBefore$<>meterAddressAfter$ then
+40100 !     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$)
+40120 !     hMeterAddressName=hMeterAddressLocationID+1
+40140 !     if fnKeyExists(hMeterAddressName,meterAddressAfter$) then
+40160 !       doAdd$=fn_askAddDuplicate$(meterAddressBefore$,meterAddressAfter$)
+40170 !       if doAdd$='No' then meterAddressAfter$=meterAddressBefore$ : doAdd$='Cancel'
+40200 !     else if meterAddressBefore$='' and ~fnKeyExists(hMeterAddressName,meterAddressAfter$) then ! changed from blank - it is new
+40220 !       doAdd$='Yes'
+40300 !     else if lwrc$(meterAddressBefore$)=lwrc$(meterAddressAfter$) then  ! only case changes - it is an update
+40320 !       doAdd$='No'
+40340 !     else
+40360 !       doAdd$=fn_askAddNew$(meterAddressBefore$,meterAddressAfter$)
+40380 !     end if
+40400 ! ! pr 'doAdd$=';doAdd$ : pause
+40460 !     if doAdd$='Yes' then
+40480 !       maDataN(ma_LocationID)=fn_newLocationID
+40500 !       maData$(ma_Name)=meterAddressAfter$
+40520 !       write #hMeterAddressName,using form$(hMeterAddressLocationID): mat maData$,mat maDataN
+40540 !       ! pr 'just wrote one' : pause
+40560 !     else if doAdd$='No' then 
+40580 !       read #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
+40600 !       maData$(ma_Name)=meterAddressAfter$
+40620 !       rewrite #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
+40640 !       ! pr 'rewrote ' : pause
+40660 !     else if doAdd$='Cancel' then 
+40680 !       meterAddressAfter$=meterAddressBefore$
+40700 !     end if
+40720 !     fnCloseFile(hMeterAddressLocationID,'UB Meter Address')
+40740 !   end if
+40760 ! fnend
 42000 def fn_newLocationID(; initialize)
 42020   if initialize then
 42040     nliLastLocation=0

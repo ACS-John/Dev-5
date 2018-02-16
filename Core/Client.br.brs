@@ -278,22 +278,13 @@
 28210       !   fn_add_ch_sys('PR')
 28220       !   fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 28230       !   fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
-28240     else if env$('client')='Ash Grove' and (env$('Unique_Computer_Id')="27932D73-8B8B-4D40-943D-08EFB9E5CFE9" or env$('Unique_Computer_Id')="4C4C4544-0037-3610-8058-C8C04F4E5731") then ! Melissa on Windows XP mode and Local Server Machine only uses UB
-28250       fn_user_limit(1)
-28260       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-28270       fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-28280     else if env$('client')='Ash Grove' and env$('Unique_Computer_Id')="4C4C4544-0054-3710-8058-C7C04F4E5731" then ! Debbie
-28290       fn_user_limit(1)
-28300       fn_add_ch_sys('PR')
-28310       fn_add_ch_sys('GL')
-28320       fn_add_ch_sys('CL')
 28330     else if env$('client')='Ash Grove' then 
 28340       fn_user_limit(1)
 28350       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 28360       fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-28370       fn_add_ch_sys('PR')
-28380       fn_add_ch_sys('GL')
-28390       fn_add_ch_sys('CL')
+28370       ! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('PR')
+28380       ! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('GL')
+28390       ! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('CL')
 28400     else if env$('client')='Bethany' then 
 28410       fn_user_limit(1)
 28420       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -331,7 +322,7 @@
 28740       fn_add_ch_sys('CL')
 28750       fn_add_ch_sys('PR')
 28760       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-28762       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
+28762       fn_add_ch_sys('U4') : u4_device$="Badger Beacon"
 28770     else if env$('client')='Carr Plumbing' then 
 28780       fn_user_limit(1)
 28790       fn_add_ch_sys('PR')
@@ -465,7 +456,7 @@
 30010     else if env$('client')='Moweaqua' then 
 30020       fn_user_limit(1)
 30030       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-30040       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
+30040       fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
 30050     else if env$('client')='Pennington' then 
 30060       fn_user_limit(1)
 30070       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -486,7 +477,7 @@
 30150     else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
 30160       fn_user_limit(1)
 30170       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30180       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
+30180       fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
 30190     else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
 30200       fn_user_limit(1)
 30210       fn_add_ch_sys('PR')
@@ -497,7 +488,7 @@
 30260       fn_user_limit(2)
 30270       fn_add_ch_sys('PR')
 30280       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30290       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
+30290       fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
 30300     else if env$('client')='R R Crawford' then 
 30310       fn_user_limit(1)
 30320       fn_add_ch_sys('PR')
@@ -511,11 +502,11 @@
 30370     else if env$('client')='Thayer' then 
 30380       fn_user_limit(1)
 30390       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30400       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
+30400       fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
 30410     else if env$('client')='Thomasboro' then 
 30420       fn_user_limit(1)
 30430       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30440       fn_add_ch_sys('U4') : u4_device$="Badger" ! U4 Utility Billing Hand Held Add-On
+30440       fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
 30450       fn_add_ch_sys('GL')
 30460       fn_add_ch_sys('PR')
 30470       fn_add_ch_sys('CL')

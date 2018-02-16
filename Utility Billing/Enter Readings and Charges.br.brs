@@ -586,7 +586,7 @@
 20160   if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 20170   goto HH_CONTINUE ! /r
 20180   !
-20190   HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        '&env$('Q')&'\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
+20190   HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
 20210   last_ln$=""
 20220   if listonly=1 then let fnopenprn
 20230   close #h_readings: ioerr ignore
@@ -2269,7 +2269,7 @@
 98060   if customerDataSetup$<>account$ then ! r:
 98070     customerDataSetup$=account$
 98080     if ~customerData_hCustomer then
-98090       open #customerData_hCustomer:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Customer.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\ubIndex.h'&env$('cno')&',Shr',internal,input,keyed
+98090       open #customerData_hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
 98100     end if
 98110     dim customerDataAcccount$*10
 98120     dim customerDataName$*30
