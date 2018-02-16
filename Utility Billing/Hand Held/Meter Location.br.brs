@@ -378,19 +378,46 @@
 46120   end if
 46130   fn_accountFromLocIdViaLocation$=aliReturn$
 46140 fnend
-48000 def library fnLocationIdFromAccount(account$*10; leaveFileOpen)
+48000 def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*14,leaveFileOpen)
 48020   if ~setup then let fn_setup
-48040   if ~hLfaLocation then hLfaLocation=fn_open(table$,mat location$,mat locationN,mat form$, 1,3)
-48060   mat location$=('')
-48080   mat locationN=(0)
-48120   read #hLfaLocation,using form$(hLfaLocation),key=rpad$(trim$(account$),kln(hLfaLocation)): mat location$,mat locationN nokey ignore
-48140   lfaReturn=locationN(loc_locationID)
-48160   if ~leaveFileOpen then
-48180     close #hLfaLocation:
-48200     hLfaLocation=0
-48220   end if
-48240   fnLocationIdFromAccount=lfaReturn
-48260 fnend
+48040   if ~hLfaLocation then hLfaLocation=fn_open(table$,mat location$,mat locationN,mat form$, 1,4)
+48050   dim lfaReturn$*30
+48060   lfaReturn$=''
+48070   if field$='' then field$='LocationId'
+48080   field$=lwrc$(field$)
+48100   mat location$=('')
+48120   mat locationN=(0)
+48122   dim locationKey$*12
+48130   locationKey$=rpad$(trim$(account$),kln(hLfaLocation,1))&rpad$(trim$(serviceId$),kln(hLfaLocation,2))
+48140   read #hLfaLocation,using form$(hLfaLocation),key=locationKey$: mat location$,mat locationN nokey ignore
+48160   if field$='locationid' then 
+48180     lfaReturn$=str$(locationN(loc_locationID))
+48240   else if field$='name' then
+48260     lfaReturn$=location$(loc_name          )
+48280   else if field$='activecustomer' then
+48300     lfaReturn$=location$(loc_activeCustomer)
+48320   else if field$='serviceid' then
+48340     lfaReturn$=location$(loc_serviceId     )
+48360   else if field$='longitude' then
+48380     lfaReturn$=location$(loc_longitude     )
+48400   else if field$='latitude' then
+48420     lfaReturn$=location$(loc_latitude      )
+48440   else if field$='meternumber' then
+48460     lfaReturn$=location$(loc_meterNumber   )
+48480   else if field$='transmitter' then
+48500     lfaReturn$=location$(loc_transmitter   )
+48520   else if field$='metertype' then
+48540     lfaReturn$=location$(loc_meterType     )
+48560   else
+48580     pr 'meter location field ('&field$&') not recognized.'
+48600     pause
+48620   end if
+48640   if ~leaveFileOpen then
+48660     close #hLfaLocation:
+48680     hLfaLocation=0
+48700   end if
+48720   fnLocationIdFromAccountAndServ$=lfaReturn$
+48740 fnend
 53000 def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns the locationID for a provided meterAddress$
 53020   if ~setup then let fn_setup
 53040   if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
@@ -492,6 +519,7 @@
 66020   if ~setup then let fn_setup
 66040   hCmlsLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
 66060   for j=2 to 5 : hCmlsLocation(j)=hCmlsLocation(1)+j-1 : nex j
+66070   CmlsSelect: !
 66080   fntos(sn$='cmls'&account$) : respc=0
 66100   fnlbl(1,1,'Account: ',20,1)
 66120   fntxt(1,22,10, 0,0,'',1)
@@ -506,7 +534,7 @@
 66300   cmlsFlexItem$(6)='Meter Number      '
 66320   cmlsFlexItem$(7)='Transmitter Number'
 66340   cmlsFlexItem$(8)='Meter Type        '
-66360   fnflexinit1('locationSelect',4,1,20,20,mat ch$) 
+66360   fnflexinit1('locationSelect',4,1,20,20,mat ch$) : cmlsFlexCount=0
 66380   do
 66400     read #hCmlsLocation(5),using form$(hCmlsLocation(1)): mat location$,mat locationN eof CmlsEoLocation
 66420     if location$(loc_serviceId)=serviceCode$ then
@@ -518,10 +546,17 @@
 66540       cmlsFlexItem$(6)=location$(loc_meterNumber    )
 66560       cmlsFlexItem$(7)=location$(loc_transmitter    )
 66580       cmlsFlexItem$(8)=location$(loc_meterType      )
-66600       fnflexadd1(mat cmlsFlexItem$)
+66600       fnflexadd1(mat cmlsFlexItem$) : cmlsFlexCount+=1
 66620     end if
 66640   loop
 66660   CmlsEoLocation: !
+66666   if cmlsFlexCount=0 then 
+66667     ckey=2
+66668     cmlsAddForceServiceId$=serviceCode$ 
+66669     gosub CmlsAdd
+66670     if ckey=5 then goto CmslFinis
+66671     goto CmlsSelect
+66672   end if
 66680   fncmdkey('Select',1,1,0)
 66700   fncmdkey('New',2,0,0)
 66720   fncmdkey('Cancel',5,0,1)
@@ -537,8 +572,8 @@
 66920       cmlsLocationKey$=fnBuildKey$(table$,mat location$,mat locationN, 5)
 66940       read #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$,release: mat location$,mat locationN
 66960       if trim$(location$(loc_activeCustomer))='' and trim$(location$(loc_activeCustomer))<>trim$(account$) then
-66980           location$(loc_activeCustomer)=trim$(account$)
-67000           rewrite #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$: mat location$,mat locationN
+66980         location$(loc_activeCustomer)=trim$(account$)
+67000         rewrite #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$: mat location$,mat locationN
 67020       else if trim$(location$(loc_activeCustomer))<>trim$(account$) then
 67040         mat mg$(0)
 67060         fnAddOneC(mat mg$,'Location ID '&str$(cmlsSelectedLocationId)&' currently belongs to customer '&trim$(location$(loc_activeCustomer)))
@@ -553,43 +588,46 @@
 67240         end if
 67260       end if
 67280     else if ckey=2 then
-67300       fntos(sn$='LocationAdd') : lc=respc=0
-67320       fnlbl(lc+=1,1,'Location ID       ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationID)
-67340       fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=''
-67360       fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=trim$(account$)
-67380       fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=serviceCode$
-67400       fnlbl(lc+=1,1,'Longitude         ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
-67420       fnlbl(lc+=1,1,'Latitude          ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
-67440       fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=''
-67460       fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=''
-67480       fnlbl(lc+=1,1,'Meter Type        ', 20,1)
-67500       fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
-67520       resp$(respc+=1)=''
-67540       fncmdset(4)
-67560       fnacs(sn$,0,mat resp$,ckey)
-67580       if ckey=5 then
-67600         fn_newLocationID(-1)
-67620       else
-67640         fn_purgeSrvAccountFromLocation(serviceCode$,account$)
-67660         mat locationN=(0)
-67680         mat location$=('')
-67700         respc=0
-67720         locationN(loc_locationID    )=val(resp$(respc+=1))
-67740         location$(loc_name          )=resp$(respc+=1)
-67760         location$(loc_activeCustomer)=resp$(respc+=1)
-67780         location$(loc_serviceId     )=resp$(respc+=1)
-67800         location$(loc_longitude     )=resp$(respc+=1)
-67820         location$(loc_latitude      )=resp$(respc+=1)
-67840         location$(loc_meterNumber   )=resp$(respc+=1)
-67860         location$(loc_transmitter   )=resp$(respc+=1)
-67880         location$(loc_meterType     )=resp$(respc+=1)(1:5)
-67900         fnLocationWrite(mat location$,mat locationN)
-67920       end if
-67940     end if
-67960   end if
-67980   fnclosefile(hCmlsLocation(1),table$)
-68000 fnend
-
+67300       gosub CmlsAdd
+67320     end if
+67340   end if
+67350   CmslFinis: !
+67360   fnclosefile(hCmlsLocation(1),table$)
+67380 fnend
+68000 CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires a log of local stuff
+68020   fntos(sn$='LocationAdd') : lc=respc=0
+68040   fnlbl(lc+=1,1,'Location ID       ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationID)
+68060   fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=''
+68080   fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=trim$(account$)
+68100   fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=serviceCode$
+68120   fnlbl(lc+=1,1,'Longitude         ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
+68140   fnlbl(lc+=1,1,'Latitude          ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
+68160   fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=''
+68180   fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=''
+68200   fnlbl(lc+=1,1,'Meter Type        ', 20,1)
+68220   fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+68240   resp$(respc+=1)=''
+68260   fncmdset(4)
+68280   fnacs(sn$,0,mat resp$,ckey)
+68300   if ckey=5 then
+68320     fn_newLocationID(-1)
+68340   else
+68360     fn_purgeSrvAccountFromLocation(serviceCode$,account$)
+68380     mat locationN=(0)
+68400     mat location$=('')
+68420     respc=0
+68440     locationN(loc_locationID    )=val(resp$(respc+=1))
+68460     location$(loc_name          )=resp$(respc+=1)
+68480     location$(loc_activeCustomer)=resp$(respc+=1)
+68500     location$(loc_serviceId     )=resp$(respc+=1) : if cmlsAddForceServiceId$<>'' then resp$(respc)=cmlsAddForceServiceId$
+68520     location$(loc_longitude     )=resp$(respc+=1)
+68540     location$(loc_latitude      )=resp$(respc+=1)
+68560     location$(loc_meterNumber   )=resp$(respc+=1)
+68580     location$(loc_transmitter   )=resp$(respc+=1)
+68600     location$(loc_meterType     )=resp$(respc+=1)(1:5)
+68620     fnLocationWrite(mat location$,mat locationN)
+68640   end if
+68660 return ! /r
 70000 def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
 70020   ! remove account$ from all previously assigned Meter Location records
 70040   dim tmpLoc$(0)*128,tmpLocN(0),tmpLocKey$*128

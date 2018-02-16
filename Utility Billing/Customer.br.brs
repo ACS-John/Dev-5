@@ -7,23 +7,23 @@
 00300 def library fnCustomer(x)
 00310   fn_setup
 00320   ! r: open files
-00330   open #h_ubadrbil:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h"&env$('cno')&",KFName=[Q]\UBmstr\AdrIndex.h"&env$('cno')&",Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
+00330   open #h_ubadrbil:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
 00332   F_ADRBIL: form pos 1,c 10,4*c 30
 00340   gosub OPEN_CASS1
 00360   fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
 00401   ! r: BUD1: ! INITILIZE BUDGET FILE
 00402   bud1=0
-00404   open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h"&env$('cno')&",KFName=[Q]\UBmstr\BudIdx1.h"&env$('cno')&",Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
+00404   open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
 00405   F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-00406   open #h_budtrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h"&env$('cno')&",Shr,Use,RecL=149",internal,outIn,relative  ! was 82
+00406   open #h_budtrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative  ! was 82
 00407   F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 00409   bud1=1
 00410   ! /r
-00470   open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ! 1
-00480   open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed  ! 11
-00490   open #h_customer_3:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed ! Meter address
-00500   open #h_customer_4:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00510   open #h_customer_5:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00470   open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
+00480   open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
+00490   open #h_customer_3:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
+00500   open #h_customer_4:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed 
+00510   open #h_customer_5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed 
 00512   F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00530   open #h_citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 00542   ! /r
@@ -45,7 +45,7 @@
 01050   olde3$=e$(3)
 01054   EDIT_LOADED_CUSTOMER: ! 
 01056     dim meterAddressBeforeEdit$*30
-01058     if u4_meterAddress$='True' then meterAddressBeforeEdit$=e$(1)
+01058     ! if u4_meterAddress$='True' then meterAddressBeforeEdit$=e$(1)
 01070     oldService1DepositAmount=b(8)
 01072     oldService2DepositAmount=b(9)
 01074     oldService3DepositAmount=b(10)
@@ -66,11 +66,11 @@
 01200   REWRITE_RECORD: ! r:
 01210     gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 01220     if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
-01221     if u4_meterAddress$='True' then
-01222       if meterAddressBeforeEdit$<>e$(1) then
-01224         fnMeterAddressUpdate(meterAddressBeforeEdit$,e$(1))
-01226       end if
-01228     end if 
+01221     ! if u4_meterAddress$='True' then
+01222     !   if meterAddressBeforeEdit$<>e$(1) then
+01224     !     fnMeterAddressUpdate(meterAddressBeforeEdit$,e$(1))
+01226     !   end if
+01228     ! end if 
 01230     release #h_customer_2: ioerr ignore
 01240     rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 01242     if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
@@ -124,13 +124,13 @@
 01452     end if 
 01480     ! 
 01492     rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
-01493     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&env$('cno')&",KFName=[Q]\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+01493     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 01494     fnkey_change(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 01495     close #h_ubtransvb:
-01496     open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h"&env$('cno')&",KFName=[Q]\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
+01496     open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
 01498     fnkey_change(h_workorder,'form pos 1,c 10',holdz$,z$)
 01500     close #h_workorder: 
-01516     fn_account_key_change_meter(holdz$,z$) 
+01516     fn_accountKeyChange_meter(holdz$,z$) 
 01522     ! 
 01528     fnkey_change(h_deposit2,'form pos 1,c 10',x$,z$)
 01530     gosub BUD3
@@ -349,7 +349,7 @@
 16220    L4100: !
 16240   return ! /r
 17000   OPEN_CASS1: ! r:
-17020     open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h"&env$('cno')&",KFName=[Q]\UBmstr\CASS1IDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4150 
+17020     open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr L4150 
 17040     cassopen=1
 17060     L4150: ! 
 17080   return  ! /r
@@ -359,7 +359,7 @@
 18060     end if 
 18080   return  ! /r
 20000   DEL_HIST: ! r: Delete History with old account
-20010     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&env$('cno')&",KFName=[Q]\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+20010     open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 20020     restore #h_ubtransvb,key>=x$&"         ": nokey DEL_HIST_FINIS
 20040     do 
 20060       read #h_ubtransvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate eof DEL_HIST_FINIS
@@ -389,9 +389,6 @@
 25330     !   fnTxt(9,27,20,30,0,'',1,'Must be selected via Location ID button')
 25340     !   custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
 25360     !   !
-25380     !     ! fnButton(9,48,'…',fkey_meterAddress:=54,"Select an existing Meter Address/Location ID",0,1)
-25400     !     ! fnLbl(9,50,str$(fnLocationIdFromAccount(z$)),9,0,0,0,0,'Location ID for Account Number')
-25410     !     ! fnLbl(9,59,str$(fnMeterAddressLocationID(e$(1))),9,0,0,0,0,'Location ID derived from Meter Address')
 25420     ! else
 25440       fnLbl(9,1,"Meter Address:",mylen,1)
 25460       fnTxt(9,27,20,30) ! ,0,'',1)
@@ -844,7 +841,7 @@
 46040   fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 46060 fnend
 46080 def fn_setup_depositChange
-46140   open #h_deposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h'&env$('cno')&',KFName=[Q]\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative  ! was 42
+46140   open #h_deposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h'&env$('cno')&',KFName=[Q]\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
 46180 fnend
 46200 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 46220   ! requires local:  #h_deposit2
@@ -974,7 +971,7 @@
 51120       end if
 51130     next j
 51150     fn_ScrAddServiceMeterInfo(srvLine,respc+=1,mat rateInfo$,srv$(service_code),service_code)
-51160     fnCmdSet(2)
+51160     fnCmdKey("&Save",1,1,1) ! fnCmdSet(2)  <---  remove the cancel button
 51170     fnAcs(sn$,0,mat rateInfo$,ckey) ! rate screen 1
 51180     ! /r
 51190     if ckey<>5 then ! r: get local values out of mat rateInfo$ and Save the record
@@ -1090,7 +1087,7 @@
 70220     location$(loc_serviceId)=serviceCode$
 70260     gLocationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN,4)
 70280     gLocationFirstRespc=respc1
-70300     read #hLocation,using form$(hLocation),key=gLocationKey$: mat location$,mat locationN nokey SasNoLocation
+70300     read #hLocation,using form$(hLocation),key=gLocationKey$,release: mat location$,mat locationN nokey SasNoLocation
 70320     fnlbl(srvLine+=1,1,'Location ID:'       ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,11, 0,0,'',1) : rateInfo$(respc1   )=str$(locationN(loc_locationID     ))
 70340     fnlbl(srvLine+=1,1,'Meter Address:'     ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,30, 0,0,'',1) : rateInfo$(respc1+=1)=location$(loc_name           )
 70400     fnlbl(srvLine+=1,1,'Longitude:'         ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_longitude     )
@@ -1117,7 +1114,7 @@
 70840     location$(loc_meterNumber    )=rateInfo$(sasrRespc+=1)
 70860     location$(loc_transmitter    )=rateInfo$(sasrRespc+=1)
 70880     location$(loc_meterType      )=rateInfo$(sasrRespc+=1)(1:5)
-70890     rewrite #hLocation,using form$(hLocation): mat location$,mat locationN
+70890     rewrite #hLocation,using form$(hLocation),key=gLocationKey$: mat location$,mat locationN
 70892     gLocationKey$=''
 70900   end if
 70920 fnend
@@ -1230,14 +1227,14 @@
 80060   read #h_customer_1,using 'form pos 41,C 30',key=cn_account$,release: customer_name_return$ ioerr ignore
 80080   fn_customer_name$=rtrm$(customer_name_return$)
 80100 fnend 
-81000 def fn_account_key_change_meter(key_from$*10,key_to$*10)
-81020   h_meterinfo=fnopen_meter
-81030   fnkey_change(h_meterinfo,'form pos 1,c 10',key_from$,key_to$)
-81220   close #h_meterinfo: 
+81000 def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
+81020   hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,3)
+81030   fnkey_change(hLocation,'form pos 42,c 10',key_from$,key_to$)
+81220   fnclosefile(hLocation,'U4 Meter Location')
 81240 fnend 
 82000 def fn_customer_grid(cg_line,cg_pos)
 82020   dim cg_item$(12)*30,cg_ch$(12),cg_cm$(12)
-82040   open #cg_file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&env$('cno')&",KFName=[Q]\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+82040   open #cg_file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 82060   restore #file_num: 
 82080   mat cg_ch$(12) : mat cg_cm$(12) : mat cg_cm$(12)
 82100   cg_ch$(1)="Account"
@@ -1360,11 +1357,11 @@
 84400     end if 
 84410     fnLbl(askacct_line+=1,1,"Selection Method:",col1_width,1)
 84420     btn_width=14
-84430     fnbutton_or_disabled(account_selection_method<>asm_combo,askacct_line,col2_pos,'Combo',2001,'tooltip',btn_width)
-84440     fnbutton_or_disabled(account_selection_method<>asm_grid,askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'tooltip',btn_width)
-84450     fnbutton_or_disabled(account_selection_method<>asm_text,askacct_line,col2_pos+((btn_width+1)*2),'Text',2003,'tooltip',btn_width)
+84430     fnbutton_or_disabled(account_selection_method<>asm_combo,askacct_line,col2_pos,'Combo',2001,'',btn_width)
+84440     fnbutton_or_disabled(account_selection_method<>asm_grid,askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
+84450     fnbutton_or_disabled(account_selection_method<>asm_text,askacct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
 84460     if u4_meterAddress$='True' then
-84470       fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'tooltip',btn_width)
+84470       fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
 84480     end if
 84482     askacct_line+=1
 84484     if account_selection_method=asm_locationId then
@@ -1500,8 +1497,10 @@
 90010     library 'S:\Core\Library': fnerror,fnAcs,fnflexadd1,fnflexinit1,fnTos
 90020     library 'S:\Core\Library': fncustomer_search,fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 90030     library 'S:\Core\Library': fncmbact,fnComboF,fncmbrt2
-90032     library 'S:\Core\Library': fnMeterAddressLocationID,fnMeterAddressUpdate
-90040     library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle,fnreg_read
+90032     library 'S:\Core\Library': fnMeterAddressLocationID
+90033     ! library 'S:\Core\Library': fnMeterAddressUpdate
+90040     library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle
+90046     library 'S:\Core\Library': fnreg_read
 90050     library 'S:\Core\Library': fntransfile
 90052     library 'S:\Core\Library': fncreg_read,fncreg_write
 90054     library 'S:\Core\Library': fnopen_meter
@@ -1512,8 +1511,10 @@
 90064     library 'S:\Core\Library': fnkey_change
 90070     library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
 90071     library 'S:\Core\Library': fnGetServiceCodesMetered
-90072     library 'S:\Core\Library': fnfm$,fnMeterAddressName$,fnAccountFromLocationId$
-90074     library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
+90072     library 'S:\Core\Library': fnfm$
+90073     library 'S:\Core\Library': fnMeterAddressName$
+90074     library 'S:\Core\Library': fnAccountFromLocationId$
+90075     library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
 90076     library 'S:\Core\Library': fnCustomerMeterLocationSelect
 90077     library 'S:\Core\Library': fnmakesurepathexists
 90080     on error goto ERTN
@@ -1571,7 +1572,7 @@
 90700   fnget_services(mat srvnam$,mat srv$)
 90702   dim serviceCodeMetered$(0)*2
 90704   fnGetServiceCodesMetered(mat serviceCodeMetered$)
-90710   open #20: "Name=[Q]\UBmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+90710   open #20: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input,relative 
 90720   read #20,using "Form POS 81,C 30,pos 129,c 1",rec=1: newe4$,escrow$
 90730   close #20: 
 90740   j=first_service=0
@@ -1585,7 +1586,7 @@
 92000 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
 92020   ! search routine must be passed code for service (WA for water) in searchcode$
 92030   searchcode$=srv$(service_code)
-92080   open #h_rate1:=fngethandle: "Name=[Q]\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName=[Q]\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed
+92080   open #h_rate1:=fngethandle: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
 92120   restore #h_rate1: 
 92140   mat rates$(99)
 92160   mat rates$=("")

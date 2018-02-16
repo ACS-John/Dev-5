@@ -130,7 +130,7 @@
 28340     fn_acsmr(bookFile$)
 28360   else if deviceSelected$="AMR" then
 28380     fn_amr(bookFile$)
-28400   else if deviceSelected$="Badger" then
+28400   else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then
 28420     fnCopy(fn_hh_input_filename$,bookFile$)
 28440   else if deviceSelected$="Boson" then
 28460     fn_boson(bookFile$)
@@ -191,7 +191,7 @@
 30440       ! end if
 30480     else if deviceSelected$="Psion Workabout" then
 30500       hif_return$=env$('Q')&"\UBmstr\Readings.out"
-30520     else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
+30520     else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" or deviceSelected$="DriveBy" then
 30540       hif_return$="c:\connect\connect.ot3"
 30640     else if deviceSelected$="Unisys" then
 30660       hif_return$=env$('Q')&"\UBmstr\ReadOut.dat"

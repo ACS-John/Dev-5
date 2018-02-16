@@ -26,21 +26,21 @@
 12100     on error goto ERTN
 12120   end if
 12140 fnend 
-14000 def library fnopen_meter
-14020   fn_setup
-14040   fnopen_meter=fn_open_meter
-14060 fnend 
-16000 def fn_open_meter
-16020   fn_open_file
-16040   close #open_file(1):
-16060   fn_open_meter=fn_open_file
-16080 fnend 
-18000 def fn_open_file
-18020   open_file_count=0 ! this value is used in the close_file sub routine
-18040   mat open_file(1)
-18060   open #open_file(open_file_count+=1):=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outIn,keyed 
-18080   fn_open_file=open_file(1)
-18100 fnend 
+14000 ! def library fnopen_meter
+14020 !   fn_setup
+14040 !   fnopen_meter=fn_open_meter
+14060 ! fnend 
+16000 ! def fn_open_meter
+16020 !   fn_open_file
+16040 !   close #open_file(1):
+16060 !   fn_open_meter=fn_open_file
+16080 ! fnend 
+18000 ! def fn_open_file
+18020 !   open_file_count=0 ! this value is used in the close_file sub routine
+18040 !   mat open_file(1)
+18060 !   open #open_file(open_file_count+=1):=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outIn,keyed 
+18080 !   fn_open_file=open_file(1)
+18100 ! fnend 
 20700 ! <Updateable Region: ERTN>
 20710 ERTN: fnerror(program$,err,line,act$,"xit")
 20720   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -48,8 +48,6 @@
 20740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20750 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20760 ! /region
-28000   ! 101075.03  should be 101070.06
-28020   ! 200271.00  should be 200272.00
 32000 def fn_CsvToMeterInformation
 32020   colP=16
 32040   dim line$*1024,item$(0)*256

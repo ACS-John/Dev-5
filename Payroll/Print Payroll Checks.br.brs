@@ -833,12 +833,12 @@
 34525     if env$('client')="Payroll Done Right" and env$('cno')='18' then ! r: 12/29/2017  (most recent)
 34530       length                = 25
 34535       line_date             =  3
-34540       line_amount           =  6
-34545       line_amount_english   =  8
+34540       line_amount           =  7
+34545       line_amount_english   =  9
 34550       line_name_and_address =  0  ! 0/not printing is the default
 34555       pos_date              = 80  ! 65 is default
 34560       pos_amt               = 75 ! pos_date+18 is default
-34565       line_nameOnly         =  6
+34565       line_nameOnly         =  7
 34570       pos_nameOnly          =  8
 34575       line_checkNumber      =  0
 34580       pos_checkNumber       =  0
