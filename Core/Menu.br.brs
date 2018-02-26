@@ -117,14 +117,13 @@
 13300   setenv('ForceScreenIOUpdate','')
 13900 fnend
 16000 def fn_checkFileVersionIfNecessary
-16020   ! r: if necessary detect if this company needs any automatic conversions
+16020   ! if necessary detect if this company needs any automatic conversions
 16040   fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
 16060   version_current$=env$('acsVersion')
 16080   if company_last_version$<version_current$ then
 16100     fncheckfileversion
 16120     fncreg_write('last version used',version_current$)
 16140   end if
-16160   ! /r
 16180 fnend
 17000 def fn_grid_setup
 17040   screen_height=35 : grid_height=screen_height-5-dashboard_height

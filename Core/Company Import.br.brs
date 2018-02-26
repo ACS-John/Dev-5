@@ -131,15 +131,15 @@
 21140   end if 
 21160   ! /r
 21180   ! r: set is_[client]
-21200   is_french_settlement=is_merriam_woods=is_west_accounting=is_exeter=0
+21200   is_french_settlement=is_merriam_woods=is_payrollDoneRight=is_exeter=0
 21220   if ((env$('ACSDeveloper')<>'' and destination_company_number=1880) or (env$('client')="French Settlement" and serial=33380)) then 
 21240     is_french_settlement=1
 21242   else if ((env$('ACSDeveloper')<>'' and destination_company_number=1615) or (env$('client')="Exeter" and serial=31210)) then 
 21244     is_exeter=1
 21260   else if ((env$('ACSDeveloper')<>'' and destination_company_number=2900) or (env$('client')="Merriam Woods" and serial=31702)) then 
 21280     is_merriam_woods=1
-21282   else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or ((env$('client')="West Accounting" or env$('client')="Payroll Done Right") and serial=30176)) then 
-21284     is_west_accounting=1
+21282   else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or (env$('client')="Payroll Done Right" and serial=30176)) then  ! env$('client')="West Accounting" or 
+21284     is_payrollDoneRight=1
 21286   else if ((env$('ACSDeveloper')<>'' and destination_company_number=700) or (env$('client')="Campbell")) then 
 21288     is_campbell=1
 21300   end if 
@@ -158,7 +158,7 @@
 21480     end if 
 21500     fnStatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
 21520   else if cnv_pr then 
-21540     !     if is_merriam_woods or is_west_accounting then
+21540     !     if is_merriam_woods or is_payrollDoneRight then
 21560     !       cnv_pr=1
 21580     !     end if
 21600     fnStatus('Processing as '&env$('client')&' '&cursys$&' Conversion')

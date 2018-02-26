@@ -362,27 +362,29 @@
 16120     fn_record_addc(18,'Location_Latitude')
 16130     fn_record_addc(18,'Location_Longitude')
 16140     fn_record_addc(19,'Service_Point_Route')
-16150     fn_record_addc(18,'Service_Point_Latitude')
-16160     fn_record_addc(18,'Service_Point_Longitude')
+16150     fn_record_addc(23,'Service_Point_Latitude')
+16160     fn_record_addc(23,'Service_Point_Longitude')
 16170     fn_record_addc(12,'Meter_ID') ! (meter number)
 16180     fn_record_addc(12,'Meter_SN') ! (meter number)
 16190     fn_record_addc(15,'Register_Number') ! (blank)
-16200     fn_record_addc(64,'Register_Unit_Of_Measure') ! (ask and add)
+16200     fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
 16210     fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
 16220     fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
 16230     fn_record_addc(19,'Endpoint_Type') ! meter type - read type
 16240     fn_record_addc(13,'Read_Sequence') ! sequence
 16250     fn_record_addc(14,'High_Read_Limit')
 16260     fn_record_addc(14,'Low_Read_Limit') 
+16262     fn_record_write(h_out)
 16270   end if ! /r
 16500   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 16510   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+16512   account$=z$
 16520   unusual_usage_low=round(reading_current+usage_current*fn_pcent,2) : if unusual_usage_low<0 then unusual_usage_low=0
 16530   unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
 16540   fn_record_init(chr$(9))                                           ! BadgerBeacon Name      ACS Name (if different)
-16550   fn_record_addc(10,z$)                                             ! Account_ID             Account Number
+16550   fn_record_addc(10,account$)                                       ! Account_ID             Account Number
 16560   fn_record_addc(30,e$(2))                                          ! Account_Full_Name      Customer Name
-16562   ! fn_record_addc(30,fnCustomerData$(z$,'name', 1))   <-- this might be a better way...
+16562   ! fn_record_addc(30,fnCustomerData$(account$,'name', 1))   <-- this might be a better way...
 16570   fn_record_addc(13,extra$(2))                                      ! Account_Phone          Phone Number
 16580   fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))    ! Location_ID
 16600   fn_record_addc(30,e$(3))                                           ! Location_Address_Line1
@@ -391,15 +393,16 @@
 16630   fn_record_addc(12,tmpZip$)                                         ! Location_Zip
 16640   fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))      ! Location_Latitude
 16650   fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))      ! Location_Longitude
-16660   fn_record_addn(3,route)                                            ! Service_Point_Route    Route Number
-16670   fn_record_addn(3,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
-16680   fn_record_addn(3,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
-16690   fn_record_addn(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
-16700   fn_record_addn(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
-16710   fn_record_addn(15,'')                                               ! Register_Number           (blank)                  (meter number)
-16720   fn_record_addn(19,'GAL')                                            ! Register_Resolution       (blank)                  (meter number)
-16730   fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
-16740   fn_record_addn(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
+16660   fn_record_addn(19,route)                                            ! Service_Point_Route    Route Number
+16670   fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
+16680   fn_record_addC(23,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
+16690   fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
+16700   fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
+16710   fn_record_addC(15,'')                                               ! Register_Number           (blank)                  (meter number)
+16720   fn_record_addC(24,'GAL')                                            ! Register_Unit_Of_Measure
+16722   fn_record_addC(19,'')                                            ! Register_Resolution       (blank)                  (meter number)
+16730   fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+16740   fn_record_addC(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
 16750   fn_record_addn(13,sequence)                                        ! Read_Sequence                Sequence
 16760   fn_record_addn(14,unusual_usage_high)
 16770   fn_record_addn(14,unusual_usage_low) 
@@ -1103,9 +1106,9 @@
 44240   fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
 44260   fn_record_addc(10,z$)                                        ! Account Number
 44280   fn_record_addc(30,e$(2))                                     ! Customer Name
-44300   fn_record_addc(12,extra$(2))                                 ! Phone Number
-44320   fn_record_addc(30,e$(3))                                     ! Service Address 1          Address 1 - Primary
-44340   fn_record_addc(30,extra$(1))                                 ! Service Address 2          Address 2 - Primary
+44300   fn_record_addc(12,fn_meterInfo$('address',z$,'WA'))        ! Phone Number
+44320   fn_record_addc(30,'')                                        ! Service Address 1          Address 1 - Primary  - formerly e$(3)
+44340   fn_record_addc(30,extra$(1))                                 ! Service Address 2          Address 2 - Primary  - formerly extra$(1)
 44360   fn_record_addc(30,tmpCity$)
 44380   fn_record_addc(10,tmpState$)
 44400   fn_record_addc(15,tmpZip$)
@@ -1386,15 +1389,17 @@
 70202   location$(loc_activeCustomer)=trim$(z$)
 70204   location$(loc_serviceId)=serviceCode$
 70206   locationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN, 4) ! pr locationKey$ : pause
-70207   if mi_field$='location_id' then
-70208     mi_return$=str$(locationN(loc_locationId))
-70210   else if mi_locationKey_prior$<>locationKey$ then
+70210   if mi_locationKey_prior$<>locationKey$ then
 70220     mat location$=('') : mat location=(0)
 70230     mi_locationKey_prior$=locationKey$
 70250     read #hLocation,using form$(hLocation),key=locationKey$,release: mat location$,mat locationN nokey MI_FINIS
 70290   end if
 70300   mi_field$=lwrc$(trim$(mi_field$))
-70310   if mi_field$='longitude' then
+70207   if mi_field$='location_id' then
+70208     mi_return$=str$(locationN(loc_locationId))
+70310   else if mi_field$='address' or mi_field$='name' then
+70208     mi_return$=str$(locationN(loc_name))
+70310   else if mi_field$='longitude' then
 70320     mi_return$=location$(loc_longitude)
 70330   else if mi_field$='latitude' then
 70340     mi_return$=location$(loc_latitude)

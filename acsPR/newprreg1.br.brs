@@ -11,16 +11,16 @@
 00055   dim dedfica(20),dedst(20),deduc(20),thc(5)
 00060 ! ______________________________________________________________________
 00065   fntop(program$,cap$="Payroll Registers")
-00076   fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='' then include_tips_in_other_wh$='True'
-00078   fnreg_read('prreg2.append_reg1',append_reg1$) : if append_reg1$='' then append_reg1$='False'
+00076   fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$,'True')
+00078   fnreg_read('prreg2.append_reg1',append_reg1$,'True')
 00080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 00082   fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 00090 ! 
-00120   open #12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,input,keyed ioerr L240
+00120   open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr L240
 00130   read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 00140   close #12: ioerr ignore
 00145 L240: ! 
-00150   open #1: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input ioerr L270
+00150   open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L270
 00155   read #1,using 'Form POS 5,N 8': ckno
 00160   close #1: 
 00165 L270: ! 
@@ -32,9 +32,9 @@
 00205 L320: if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
 00210 ! 
 00250 ! 
-00265   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00270   open #h_dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00275   open #h_checks:=4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&',Shr',internal,input,keyed 
+00265   open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
+00270   open #h_dd=30: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed 
+00275   open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h"&env$('cno')&',Shr',internal,input,keyed 
 00280 ! /r
 00340   if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
 46000 ASK_CHECK_NO: ! r:

@@ -275,18 +275,18 @@
 45140     library 'S:\Core\booktitle.br': fnbooktitle$
 45150     fnbooktitle$=fnbooktitle$(x$)
 45160   fnend
-45170   def library fnsave_as_path$*256
-45180     library 'S:\Core\Programs\Preferences.br': fnsave_as_path$
-45190     fnsave_as_path$=fnsave_as_path$
-45200   fnend
-45210   def library fndecimal_assumed
-45220     library 'S:\Core\Programs\Preferences.br': fndecimal_assumed
-45230     fndecimal_assumed=fndecimal_assumed
-45240   fnend
-45282   def library fnget_wordprocessor_exe(&wp_exe$; force$)
-45284     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
-45286     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
-45288   fnend
+45171   def library fnsave_as_path$*256
+45172     library 'S:\Core\Programs\Preferences.br': fnsave_as_path$
+45173     fnsave_as_path$=fnsave_as_path$
+45174   fnend
+45181   def library fndecimal_assumed
+45182     library 'S:\Core\Programs\Preferences.br': fndecimal_assumed
+45183     fndecimal_assumed=fndecimal_assumed
+45184   fnend
+45191   def library fnget_wordprocessor_exe(&wp_exe$; force$)
+45192     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
+45193     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
+45194   fnend
 45330   def library fnEditFile(editorType$,fileToEdit$*256)
 45340     library 'S:\Core\Programs\Preferences.br': fnEditFile
 45350     fnEditFile=fnEditFile(editorType$,fileToEdit$)

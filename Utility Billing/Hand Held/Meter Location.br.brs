@@ -193,8 +193,12 @@
 28502     fn_accountFromLocIdViaLocation$(1, 0) ! close the files it had opened previously
 28504     fnCloseFile(hAddress,table$)
 28506     fnCloseFile(hInfo,'UB Meter Info')
-28507     fnRename('[Q]\UBmstr\Meter.h[cno]','[Q]\UBmstr\Meter(old).h[cno]')
-28508     fnFree('[Q]\UBmstr\Meter_Idx.h[cno]')
+28508     if exists('[Q]\UBmstr\Meter(old).h[cno]') then
+28510       fnFree('[Q]\UBmstr\Meter.h[cno]')
+28512     else
+28514       fnRename('[Q]\UBmstr\Meter.h[cno]','[Q]\UBmstr\Meter(old).h[cno]')
+28516     end if
+28518     fnFree('[Q]\UBmstr\Meter_Idx.h[cno]')
 28540     ! if env$('acsDeveloper')<>'' then let fnStatusPause
 28560     fnStatusClose
 28620   end if

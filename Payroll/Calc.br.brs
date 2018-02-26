@@ -29,7 +29,7 @@
 00564   fn_setupOpenFiles
 00567   ReadRpWork: ! 
 00568   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
-00569   if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP
+00569   if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP ! env$('client')='West Accounting' or 
 00571   ! pr 'FIRST READ OF RPWORK right after read rpwork inp(6)=';inp(6) : pause
 00572   newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
 00573   ! totaldef=0
@@ -409,7 +409,7 @@
 02850   tgp=t3=ded=0
 03020 L3020: ! 
 03022   for j=1 to 20
-03024     if (j+9)=17 and (env$('client')='West Accounting' or env$('client')='Payroll Done Right') then goto L3090 ! if processing inp(17) SKIP IT do not process it.
+03024     if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing inp(17) SKIP IT do not process it.   ! env$('client')='West Accounting' or 
 03030     if newdedfed(j)>=1 and newdedcode(j)=1 then 
 03032       gosub SUBROUTINE6
 03034     else 
@@ -431,14 +431,14 @@
 03092   next j
 03110   tgp=tgp+gpd
 03130   read #h_rpwork,using F_RPWORK: newx$,newdep,mat inp,gpd,mat hr eof L3150
-03132   if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP
+03132   if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP ! env$('client')='West Accounting' or 
 03133 ! pr 'A right after read rpwork inp(6)=';inp(6) : pause
 03140   if newx$=x$ then goto L3020
 03150 L3150: ! 
 03152   workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
 03160   restore #h_rpwork,key>=workkey$: 
 03170   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
-03172   if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8
+03172   if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or 
 03174 ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
 03180   return  ! /r
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY

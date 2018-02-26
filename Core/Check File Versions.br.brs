@@ -1083,8 +1083,8 @@
 80610     dim imbrTo$*256
 80620     imBrFrom$='S:\'&imProgramOld$(imItem)&'.br'
 80630     imBrTo$  ='S:\'&imProgramNew$(imItem)&'.br'
-80640     imIniFrom$=fn_program_ini_filename$(imProgramOld$(imItem), 1)
-80650     imIniTo$  =fn_program_ini_filename$(imProgramNew$(imItem), 1)
+80640     imIniFrom$=fn_programIniFileName$(imProgramOld$(imItem), 1)
+80650     imIniTo$  =fn_programIniFileName$(imProgramNew$(imItem), 1)
 80660        ! if pos(lwrc$(imBrFrom$),'acglbalc')>0 then pause
 80670 ! if pos(lwrc$(imIniFrom$),'ubipcoll')>0 and env$('acsdeveloper')<>'' then pause
 80680     if ~(imIniFrom$='S:\Core\Default\Program.ini' or imIniTo$='S:\Core\Default\Program.ini') then
@@ -1160,13 +1160,12 @@
 89200   end if
 89220 fnend
 89240 ! </updateable region: fnopen>
-90000 def fn_program_ini_filename$*256(pif_program$*256; doNotCreate)
+90000 def fn_programIniFileName$*256(pif_program$*256; doNotCreate)
 90020   dim pif_return$*256
 90040   pif_return$=''
 90060   pif_program$=trim$(pif_program$)
 90080     posDotBr=pos(pif_program$,'.br')
 90100     if posDotBr>0 then pif_program$(posDotBr:posDotBr+2)=''
 90120   pif_return$=env$('Q')&'\INI\'&pif_program$&'.ini'
-90140   ! if env$('ACSDeveloper')<>'' then pr 'fn_program_ini_filename$ > pif_return$="'&pif_return$&'"' : pause
-90160   fn_program_ini_filename$=pif_return$ ! pr pif_return$ : pause
+90160   fn_programIniFileName$=pif_return$
 90180 fnend 
