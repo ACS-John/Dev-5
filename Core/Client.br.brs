@@ -236,7 +236,7 @@
 26860     fn_setup_client_add("Unity",4380,34478)
 26870 !   fn_setup_client_add("Washington Parrish",4510,34116)
 26880 !   fn_setup_client_add("Waverly",4515,34430)
-26890     fn_setup_client_add("West Accounting",4560,30176)
+26890 !   fn_setup_client_add("West Accounting",4560,30176)   retired as of 02/22/2018
 26900 !   fn_setup_client_add("West Rest Haven",4567,34032)
 26910     fn_setup_client_add("White Hall",4625,32242)
 26920 !   fn_setup_client_add("Willard",4650,33514)
@@ -514,12 +514,12 @@
 30490       fn_user_limit(1)
 30500       fn_add_ch_sys('GL')
 30510       fn_add_ch_sys('PR')
-30520       !   else if env$('client')='Waverly' then 
-30530       !     fn_user_limit(1)
-30540       !     fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30550     else if env$('client')='West Accounting' then 
-30560       fn_user_limit(1)
-30570       fn_add_ch_sys('PR')
+30520     !   else if env$('client')='Waverly' then 
+30530     !     fn_user_limit(1)
+30540     !     fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+30550     ! else if env$('client')='West Accounting' then 
+30560     !   fn_user_limit(1)
+30570     !   fn_add_ch_sys('PR')
 30580     else if env$('client')='White Hall' then 
 30590       fn_user_limit(2)
 30600       fn_add_ch_sys('UB')
@@ -795,7 +795,7 @@
 62980     fn_pcs_add("Unity",'IL')
 63000 !   fn_pcs_add("Washington Parrish",'LA')
 63020 !   fn_pcs_add("West Rest Haven",'')
-63040     fn_pcs_add("West Accounting",'OR')
+63040 !   fn_pcs_add("West Accounting",'OR')
 63060     fn_pcs_add("Zaleski",'TX')
 63080     mat pr_clientstate_client$(pr_clientstate_count)
 63100     mat pr_clientstate_state$(pr_clientstate_count)

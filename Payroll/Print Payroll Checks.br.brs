@@ -12,7 +12,7 @@
 06090 ! /r
 06100   fntop(program$)
 06160   if env$('client')="Divernon" then print_netzero_checks=1
-06180   if env$('client')="West Accounting" or env$('client')="Payroll Done Right" then print_netzero_checks=1
+06180   if env$('client')="Payroll Done Right" then print_netzero_checks=1 ! env$('client')="West Accounting" or 
 08100 ! r: dims and constants
 08120   dim em$(3)*30 ! payee name and address
 08122   dim tdet(17)
@@ -94,7 +94,7 @@
 10000 ! r: set default answers and semi-consants and open some files
 10020   ssr1=fnss_employee*.01
 10040   ssr2=fnss_employer*.01
-10060   open #20: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input 
+10060   open #20: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input 
 10080   read #20,using 'Form POS 2,POS 5,N 5': ckno
 10100   close #20: 
 10120   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
@@ -106,7 +106,7 @@
 10240   fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 10260   fncreg_read('Comp Time Code',compcode$)
 10280   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
-10300   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+10300   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 10320   read #20,using 'Form POS 1,x 120,POS 150,10*C 8,POS 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 10340   close #20: 
 10360 ! ___________________________
@@ -272,17 +272,17 @@
 17010 ! if env$('client')<>"Washington Parrish" then prdate=d1
 17020   if ~testCheckFormat then
 17030     if cl_installed then 
-17040       open #7: "Name="&env$('Q')&"\PRmstr\MGLMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\MGLIDX1.h"&env$('cno')&",Shr",internal,input,keyed 
+17040       open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed 
 17050     end if 
-17060     open #praddr:=1: "Name="&env$('Q')&"\PRmstr\prAddr1.h"&env$('cno')&",Shr",internal,input 
-17070     open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpindex.h"&env$('cno')&",Shr",internal,input,keyed 
-17080     open #hDepartment:=fngethandle: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
-17090     open #3: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
-17100     open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outIn,keyed 
-17110     open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
+17060     open #praddr:=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input 
+17070     open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\rpindex.h[cno],Shr",internal,input,keyed 
+17080     open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
+17090     open #3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+17100     open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outIn,keyed 
+17110     open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed 
 17120     if fnclient_has('GL') and gl_installed=1 then 
 17130       gl_installed=0
-17140       open #h_gl_glbrec:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRECIDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1440
+17140       open #h_gl_glbrec:=fngethandle: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
 17150       gl_installed=1
 17160       L1440: ! 
 17170     end if 
@@ -492,19 +492,19 @@
 24140   if cl_installed=1 and allign=4 then let fn_build_check_record
 24160 XIT: fnxit
 25000 def fn_open_acscl
-25020   open #h_cl_bank:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L4220
+25020   open #h_cl_bank:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr L4220
 25040   cl_installed=1
-25060   open #15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
-25080   open #h_cl_payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25100   open #14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25120   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25140   open #22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25060   open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
+25080   open #h_cl_payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+25100   open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+25120   open #h_cl_trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
+25140   open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 25160   !   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then
-25180   open #h_cl_trans_alloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25180   open #h_cl_trans_alloc:=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed 
 25200   !   else 
-25220   !     open #h_cl_trans_alloc:=f: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outIn,relative
+25220   !     open #h_cl_trans_alloc:=f: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
 25240   !   end if
-25260   open #h_cl_glmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25260   open #h_cl_glmstr:=fngethandle: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
 25280   read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey L4200
 25300   L4200: ckno=ckno+1
 25320   ! dAT=VAL(DATE$(4:5)&DATE$(7:8)&DATE$(1:2))
@@ -829,8 +829,8 @@
 34505     fn_check_tom_richardson
 34510   else if env$('client')="Unity" then 
 34515     fn_check_unity
-34520   else if env$('client')="West Accounting" or env$('client')="Payroll Done Right" then 
-34525     if env$('client')="Payroll Done Right" and env$('cno')='18' then ! r: 12/29/2017  (most recent)
+34520   else if env$('client')="Payroll Done Right" then ! env$('client')="West Accounting" or 
+34525     if env$('cno')='18' then ! r: 12/29/2017  (most recent)
 34530       length                = 25
 34535       line_date             =  3
 34540       line_amount           =  7
@@ -846,7 +846,7 @@
 34590       fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,check_number,pos_amount_english)
 34595       ! /r
 34600     else
-34605       fn_check_west_accounting
+34605       fn_check_payrollDoneRight
 34610     end if
 34615   else 
 34620     fn_check_dynamic(21,6,6,7,13) ! fn_check_legacy ! default for everyone without a special routine...
@@ -1216,7 +1216,7 @@
 56340   next j
 56360   pr #255,using "form pos 1,c 1,skip 6": ""
 56380 fnend 
-57000 def fn_check_west_accounting
+57000 def fn_check_payrollDoneRight
 57020   for j=1 to 8
 57040     pr #255: ""                                                ! line 1-8
 57060   next j
@@ -1259,7 +1259,7 @@
 60240     fn_stub_standard( 0,4)
 60250   else if env$('client')='Kincaid' then 
 60260     fn_stub_kincaid
-60270   else if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then 
+60270   else if env$('client')='Payroll Done Right' then ! env$('client')='West Accounting' or 
 60280     fn_stub_standard( 1) ! standard, but show tips
 60290   else if env$('client')='Energy Exchanger' then 
 60300     ! r: setup mat ltext$ and mat lPos for fn_stub_hitBoxes

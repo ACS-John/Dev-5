@@ -1503,7 +1503,6 @@
 90046     library 'S:\Core\Library': fnreg_read
 90050     library 'S:\Core\Library': fntransfile
 90052     library 'S:\Core\Library': fncreg_read,fncreg_write
-90054     library 'S:\Core\Library': fnopen_meter
 90056     library 'S:\Core\Library': fnEditFile
 90060     library 'S:\Core\Library': fnureg_write,fnureg_read
 90062     library 'S:\Core\Library': fnbutton_or_disabled

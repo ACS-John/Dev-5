@@ -11,8 +11,8 @@ if %ERRORLEVEL% == 0 goto WIN_XP
 rem Set BR_XP_Mode=False
 rem 
 rem If /I "%ACSDeveloper%" NEQ "" (
-    Set BR_Version=432f
-    Set BR_Date=2017-04-12
+    Set BR_Version=432d
+    Set BR_Date=2017-03-06
     rem Set BR_Version=432g
     rem Set BR_Date=2017-04-19
     Set BRListener_Version=430

@@ -254,8 +254,8 @@
 48460   fn_opMain(tmpFileOpen$)
 48480   goto OP_XIT
 48500   OP_OP_ERR: ! 
-48520   if err=622 then ! it was just cancelled
-48540     pr 'cancelled' : goto OP_XIT
+48520   if err=622 then ! it was just canceled
+48540     pr 'canceled' : goto OP_XIT
 48560   else 
 48580     mat ml$(2)
 48600     ml$(1)='Select a different file name.'
