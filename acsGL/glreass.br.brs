@@ -20,8 +20,8 @@
 00270   if ckey=1 then gosub REORG
 00280   goto XIT
 00290 REORG: ! r:
-00300   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00310   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
+00300   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
+00310   open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
 00320   L320: read #1,using L330: mat ta eof L360
 00330   L330: form pos 333,2*pd 3
 00340   rewrite #1,using L330: 0,0

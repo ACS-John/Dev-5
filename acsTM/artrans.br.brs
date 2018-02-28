@@ -15,7 +15,7 @@
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Version=0,Use,RecL=60,Shr",internal,outIn,relative 
+01700   open #open_file_count+=1: "Name=[Q]\TMmstr\ARTrans.h[cno],Version=0,Use,RecL=60,Shr",internal,outIn,relative 
 01800   return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

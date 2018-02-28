@@ -42,10 +42,10 @@
 00420   next j
 00430   io1$(27)="21,30,C 20,U,N"
 00440   hd1$="TIME MANAGEMENT CHANGE COMPANY INFORMATION"
-00450   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno'),internal,outIn,relative ioerr L480
+00450   open #1: "Name=[Q]\TMmstr\Company.h[cno]",internal,outIn,relative ioerr L480
 00460   goto L500
 00470   close #1,free: 
-00480 L480: open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Replace,RecL=245",internal,outIn,relative ioerr L750
+00480 L480: open #1: "Name=[Q]\TMmstr\Company.h[cno],Replace,RecL=245",internal,outIn,relative ioerr L750
 00490   write #1,using L510,rec=1: mat co$,mat co,mat ag,mat gln,dat$
 00500 L500: read #1,using L510,rec=1: mat co$,mat co,mat ag,mat gln,dat$ ioerr L750
 00510 L510: form pos 1,4*c 40,4*n 1,pd 3.3,5*pd 2,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,c 20

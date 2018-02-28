@@ -13,8 +13,8 @@
 00260   on fkey 5 goto L710
 00280   fncno(cno,cnam$)
 00300 ! needs something like Let FNPRG$
-00320   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
-00340   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.H"&env$('cno')&",Shr",internal,input,keyed 
+00320   open #1: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndex.H[cno],Shr",internal,input,keyed 
+00340   open #32: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndx2.H[cno],Shr",internal,input,keyed 
 00360 L190: pr newpage
 00380   if prtall=1 then let fnopenprn
 00400   close #101: ioerr L220

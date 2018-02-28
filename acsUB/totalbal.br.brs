@@ -41,7 +41,7 @@
 22030 fnend 
 24000 def fn_total_ar
 24020   totalBal=0
-24060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",Shr",internal,input
+24060   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input
 25000   do 
 25020     read #h_customer,using "Form POS 292,PD 4.2,PD 4,pos 1821,N 1": bal,customerBillingDate,finalBillingCode eof TA_FINIS
 25040     if excludeFinalBilled$='False' or finalBillingCode=0 then 

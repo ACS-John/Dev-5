@@ -3,7 +3,7 @@
 24120   service=2 ! NOT READY FOR SERVICES 8, 9 nor 10, ADDITIONAL PROGRAMMING REQUIRED FOR THAT.
 24160   fncno(cno)
 30000   ! r: customer file
-30020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",SHR",internal,outIn,keyed 
+30020     open #h_customer:=fngethandle: "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\ubindex.h[cno],SHR",internal,outIn,keyed 
 30040     dim z$*10,customer_b(7)
 30060     F_CUSTOMER: form pos 1,c 10,pos 157,7*pd 4.2
 30080     customer_change_count=0

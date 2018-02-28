@@ -16,7 +16,7 @@
 00190   dim fm4$*255,in4$(30),sel$(4)*40,io6$(4),dedcode$(20)*2,dedyn$(20)*1
 00200   dim miscded(20),box12(20),txt$*80,totalbox12(20)
 00210   fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-00220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00220   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00230   read #1,using L240: mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 00240 L240: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1
 00250   for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -116,16 +116,16 @@
 00880   gosub VBOPENPRINT
 00890   goproc=0
 00900   if w1=2 then gosub L5930
-00910   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00920   open #2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outIn,keyed 
-00930   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00910   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00920   open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
+00930   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00940   open #3: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L960
 00950   close #3,free: 
 00960 L960: open #3: "Name="&env$('Temp')&"\Addr."&session$&",size=0,RecL=33,NoShr",internal,output 
 00970   if w1=3 then gosub L4430
 00980   write #3,using L990: ssmax,w1,nw
 00990 L990: form pos 1,n 10.2,2*n 1
-01000   open #14: "Name="&env$('Q')&"\PRmstr\W2Box16.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\W2Index.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1030
+01000   open #14: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr L1030
 01010   z$="NO" ! 1/12/90
 01020   box16=1
 01030 L1030: if loccode=0 then goto ASK_STARTING else goto L2310
@@ -314,10 +314,10 @@
 02810 PRW2B: open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
 02820   restore #1: 
 02830 L2830: form pos 1,c 128
-02840   write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H"&env$('cno')&","&env$('Q')&"\PRmstr,,"&env$('Q')&"\PRmstr,,A,N"
+02840   write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 02850   write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
 02860   close #1: 
-02870   fnFree(env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno'))
+02870   fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
 02880 L2880: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 02890   fnxit ! stop  ! fnCHAIN("S:\acsPR\prw2b")
 02900 ! ___________________________________________
@@ -637,7 +637,7 @@
 06010   return 
 06020 VBOPENPRINT: ! 
 06030   if file(20)=-1 then 
-06040     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
+06040     fnpa_open ! open #20: "Name=[Q]\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
 06070     lyne=topmargin ! starting of 1st line
 06080     character=1.5
 06090   end if 

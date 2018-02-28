@@ -33,7 +33,7 @@
 28140   if resp$(3)="True" then printadr=1 ! wants meter address printed
 28160   if d1<10100 or d1>123199 then goto MAIN
 36000   fnopenprn
-36020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+36020   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 36040   gosub HDR
 36060   if prtbkno=0 then goto READ_CUSTOMER
 36080   prtbkno$=lpad$(str$(prtbkno),2)&"       "

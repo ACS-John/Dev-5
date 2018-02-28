@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno,cnam$)
 00120   fnLastBillingDate(d1)
-00130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00130   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 00140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00150   close #21: 
 00160   cnam$='Chatom Utilities'
@@ -29,8 +29,8 @@
 00290 ! 
 00300   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00310   fn_bulksort
-00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.H"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
-00330   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.H"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
+00320   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
+00330   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.H[cno],Shr",internal,input,keyed  ! open in route-sequence #
 00340 ! ______________________________________________________________________
 00350 SCREEN1: ! 
 00360   a$="" : prtbkno=0
@@ -52,8 +52,8 @@
 00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00530   fnLbl(8,1,"Starting Account:",ll,1)
 00540   fe$="ubm-act-nam"
-00550   datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno')
-00560   indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno')
+00550   datafile$="[Q]\UBmstr\Customer.h[cno]"
+00560   indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
 00570   kp=1741: kl=9 : dp=41 : dl=30
 00580   fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 00590   resp$(respc+=1)="[All]"
@@ -83,7 +83,7 @@
 00815   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00820   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 00825 ! ______________________________________________________________________
-00830   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr FAIL_OPEN_3
+00830   open #3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed ioerr FAIL_OPEN_3
 00835 FAIL_OPEN_3: ! 
 00840   fnPa_open("Landscape")
 00845   lyne=3
@@ -155,7 +155,7 @@
 00986   goto READALTADR
 00988 ! ______________________________________________________________________
 00990 SORT1: ! SELECT & SORT
-00992   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1370
+00992   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1370
 00994   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 00996   s5=1
 00998   if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -365,7 +365,7 @@
 03060   fnend 
 03070 ! ______________________________________________________________________
 03080   def fn_bulksort ! bulk sort order
-03090     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+03090     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 03100     open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
 03105 L2730: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
 03110     write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$

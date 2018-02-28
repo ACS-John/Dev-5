@@ -9,9 +9,9 @@
 00090 L90: input fields "10,55,N 5,UE,N": cno conv L90
 00100   if cno=0 then stop 
 00110 ! 
-00120   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,output 
+00120   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",internal,output 
 00130   close #4: 
-00140   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&" 1 14 Replace DupKeys -n"
+00140   execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 00150   chain "S:\acsPR\company"
 00160 ! ______________________________________________________________________
 00170 XIT: stop 

@@ -49,11 +49,11 @@
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
 00440   glmstr=1 !:
-        open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+        open #glmstr: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00450   gltrans=2 !:
-        open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+        open #gltrans: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative 
 00460   actrans=3 !:
-        open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+        open #actrans: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed 
 00470   x=lrec(2)
 00480 ! ____
 00490   for j=1 to x

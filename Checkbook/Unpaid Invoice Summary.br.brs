@@ -10,11 +10,11 @@
 00100   fntop(program$)
 00110   fndat(dat$)
 00120   fnwait
-00140   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\unpdidx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00150   open #glmstr=7: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,input,keyed 
-00160   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
+00140   open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\unpdidx1.h[cno],Shr",internal,input,keyed 
+00150   open #glmstr=7: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLINDEX.H[cno],Shr",internal,input,keyed 
+00160   open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,input,keyed 
 00170   open #work=9: "Name="&env$('temp')&'\work.tmp,KFName='&env$('temp')&'\addr.tmp,KPS=1,KLN=12,RecL=68,Replace',internal,outIn,keyed 
-00180   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00180   open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed 
 00190   gosub HDR
 00200 READ_PAYTRANS: ! 
 00210   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof END1

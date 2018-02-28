@@ -15,10 +15,10 @@
 00142 ! r: top of programs, constants,initial setup, etc
 00150   fntop(program$)
 00170   tmp_rtf_filename$=fnprint_file_name$
-00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then hard_coded=1 ! env$('client')='Merriam Woods' or
+00202   if env$('client')='French Settlement' or env$('client')='Granby' then hard_coded=1
 00210   fnLastBillingDate(d1)
 00220   fndat(d$(4))
-00230   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00230   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 00240   read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
 00250   close #21: 
 00260   z=21
@@ -34,9 +34,9 @@
 00352 ! 
 00354   deltype=0 : fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : deltype=val(deltype$) conv ignore
 00356 ! 
-00360   open #adrbil=3: "Name="&env$('Q')&"\UBmstr\UBADRBIL.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00370   open #customer5=11: "Name="&env$('Q')&"\UBmstr\Customer.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBINDx5.H"&env$('cno')&",Shr",internal,input,keyed 
-00380   open #customer1=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.H"&env$('cno')&",Shr",internal,input,keyed 
+00360   open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
+00370   open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed 
+00380   open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed 
 00382   F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00390 goto MENU1 ! /r
 00400 MENU1: ! r:
@@ -123,8 +123,6 @@
 01465     fn_vbprint
 01470   else if env$('client')="Granby" then 
 01472     fn_print_granby
-01474   else if env$('client')="Eldorado" then 
-01476     fn_eldorado
 01478   else if env$('client')="French Settlement" then 
 01480     fn_french_settlement_gas
 01482 ! else if env$('client')="Merriam Woods" then
@@ -139,7 +137,7 @@
 01525 ! /r
 16000   def fn_open_template
 16020     if ~h_template then 
-16040       open #h_template:=fngethandle: "Name="&env$('Q')&"\UBmstr\"&flname$&",RecL=1",external,input,relative 
+16040       open #h_template:=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative 
 16060     end if 
 16080     fn_open_template=h_template
 16100   fnend  ! fn_open_template
@@ -411,26 +409,7 @@
 33080     else 
 33100       pr #255: '' : pr #255: '' : pr #255: '' : pr #255: '' : pr #255: ''
 33120     end if 
-33140   fnend  ! fn_print_granby
-33160   def fn_eldorado
-33180     fnopenprn
-33200     pr #255,using 'form skip 8,pos 37,c 30': e$(2)
-33220     pr #255,using 'form pos 37,c 30': e$(3)
-33240     pr #255,using 'form pos 37,c 30': e$(4)
-33260     pr #255: ''
-33280     pr #255: ''
-33300     pr #255: ''
-33320     pr #255,using 'form pos 37,n 10.2,x 2,c 10': bal,z$
-33340     pr #255: ''
-33360     pr #255,using 'form pos 1,pic(zz/zz/zz),c 10,n 14.2': d2,z$,bal
-33380     checkcounter+=1
-33400     if checkcounter=3 then 
-33420       pr #255: newpage
-33440       checkcounter=0
-33460     else 
-33480       pr #255,using 'form pos 1,c 1,skip 8': ''
-33500     end if 
-33520   fnend  ! fn_eldorado
+33140   fnend
 34000   def fn_french_settlement_gas
 34020     fnopenprn
 34040 ! ______________pre-print calculations__________________________________
@@ -494,7 +473,7 @@
 35200   fnend 
 36000 UBFORM: ! r: pr FROM TEXT FILE
 36020   dim file_rtf$(1)*512
-36060   fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
+36060   fngetdir2("[Q]\UBmstr",mat file_rtf$, '/ON','*.rtf')
 36080   fl1=udim(mat file_rtf$)
 36100   for fl1=1 to udim(mat file_rtf$)
 36120     file_rtf$(fl1)=file_rtf$(fl1)
@@ -615,14 +594,14 @@
 41360     if ckey=5 then goto MENU1
 41380     dim newname$*256
 41400     newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
-41420     fnCopy("S:\Core\default\plain.rtf",os_filename$(env$('Q')&"\UBmstr\"&newname$))
-41440     fnEditFile('atlantis',env$('Q')&"\UBmstr\"&newname$)
+41420     fnCopy("S:\Core\default\plain.rtf",os_filename$("[Q]\UBmstr\"&newname$))
+41440     fnEditFile('atlantis',"[Q]\UBmstr\"&newname$)
 41460     goto UBFORM ! /r
 41480   else if ckey=3 then 
-41500     fnEditFile('atlantis',env$('Q')&"\UBmstr\"&flname$)
+41500     fnEditFile('atlantis',"[Q]\UBmstr\"&flname$)
 41520     goto UBFORM
 41540   else if ckey=7 then 
-41560     fnFree(env$('Q')&"\UBmstr\"&trim$(flname$))
+41560     fnFree("[Q]\UBmstr\"&trim$(flname$))
 41580     goto UBFORM
 41600   else 
 41620     goto UBFORM

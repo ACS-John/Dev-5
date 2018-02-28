@@ -7,7 +7,7 @@
 24080   dim acno$*12,bc(13),bp(13),bud(13)
 24100   dim resp$(10)*80
 24120   fntop(program$,"Close Books at Year End")
-24140   open #hCompany:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+24140   open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 24160   read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
 24180   close #hCompany: 
 24200   fnGetFundList(mat fund_list)
@@ -77,16 +77,16 @@
 36380     fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 36400   end if
 36420 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
-38000 open #hGlMstr1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-38020 open #hGlMstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+38000 open #hGlMstr1:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
+38020 open #hGlMstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
 38040 fGlMstr1: form pos 1,c 12,pos 81,41*pd 6.2
-38060 open #hBudgetInfo:=fngethandle: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+38060 open #hBudgetInfo:=fngethandle: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed 
 38080 ! r: empty GLmstr\acprcks - file handle (#1) used to conflict hGlMstr1 (also #1) and it didn't close, but it did ioerr ignore, so it probably didn't do anything for years
-38100 open #hAcPrCks:=fngethandle: "Name="&env$('Q')&"\GLmstr\acprcks.h"&env$('cno')&",SIZE=0,RecL=110,Replace",internal,output ioerr ignore
+38100 open #hAcPrCks:=fngethandle: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",internal,output ioerr ignore
 38120 close #hAcPrCks: ioerr ignore
 38140 ! /r
-38160 ! r: reset some stuff in env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')
-38180 open #hPrMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno'),internal,outIn,keyed ioerr SCR2
+38160 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
+38180 open #hPrMstr:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
 38200 do
 38220   read #hPrMstr,using 'Form POS 271,2*N 5': n1,n2 eof L500
 38240   rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0

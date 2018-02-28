@@ -12,7 +12,7 @@
 22180   fntop(program$)
 22200   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 22220   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
-22240   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+22240   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 22260 ! r: setup mat name$, mat dedname$, numberded1, numberded2
 22280   name$(1)="O/T"
 22300   name$(2)="Other"
@@ -51,7 +51,7 @@
 30040   on fkey 5 goto DONE
 30060   fnopenprn
 30080   gosub HDR
-30100   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+30100   open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
 30120   do
 30140     ReadEmployee: !
 30160     read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS

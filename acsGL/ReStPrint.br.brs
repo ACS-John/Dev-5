@@ -38,7 +38,7 @@
 20660   else if tempx=14 then 
 20680     actpd$="fourteen"
 20700   end if
-20720 L180: open #1: "Name="&env$('Q')&"\GLmstr\acglstmt.h"&env$('cno')&",Shr",display,input ioerr XIT
+20720 L180: open #1: "Name=[Q]\GLmstr\acglstmt.h[cno],Shr",display,input ioerr XIT
 20740   fnopenprn
 20760 READ_ACGLREST: ! 
 20780   linput #1: ln$ eof DONE ioerr DONE

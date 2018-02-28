@@ -29,8 +29,8 @@
 00270   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00280   mp1=69
 00290   if fnps=2 then mp1=mp1+3
-00300   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
-00310   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
+00300   fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr"
+00310   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr"
 00320   form c 9,skip 0
 00330 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 00340   form c 7,skip 0
@@ -60,7 +60,7 @@
 00570   close #101: ioerr L580
 00580 L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE INCOME STATEMENT ",display,outIn 
 00590   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
-00600   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&env$('cno')
+00600   pr f "09,18,C 41,H,N": "            COMPANY NUMBER [cno]"
 00610   pr f "11,18,C 41,R,N": "              IN PROCESS"
 00620   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00630   if cmdkey=5 then goto L2610
@@ -68,10 +68,10 @@
 00650   fnopenprn(cp,58,220,process)
 00660   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00670   if fnps=2 then goto L700 ! secondary
-00680   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
+00680   execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"
 00690   goto L710
-00700 L700: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
-00710 L710: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00700 L700: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 72 3 Replace DupKeys -N"
+00710 L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00720 L720: ! 
 00730 L730: read #1,using L780: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2510
 00740   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L720

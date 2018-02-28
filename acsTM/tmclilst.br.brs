@@ -17,9 +17,9 @@
 00145   if sapp<0 or sapp>20 then goto L144
 00150   if numalp<1 or numalp>2 then goto L140
 00160   if numalp=1 then goto L170 else goto L190
-00170 L170: open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L530
+00170 L170: open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L530
 00180   goto L200
-00190 L190: open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr L530
+00190 L190: open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L530
 00200 L200: pr newpage
 00210   pr f "10,10,c 46,n": "ENTER DATE FOR CLIENT LISTING IN MMDDYY FORMAT"
 00220   pr f "10,60,n 6,n": dat

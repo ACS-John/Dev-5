@@ -31,8 +31,8 @@
 00360       sz1=sz1+1 : px$(sz1)=serviceName$(j)
 00370     end if 
 00380   next j
-00390   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00400   open #8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+00390   open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+00400   open #8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 00402 ! r: get default sequence
 00404   fncreg_read('ubBilJrn.Sort_Option',sequence$)
 00406   seq=val(sequence$) conv ignore
@@ -73,14 +73,14 @@
 00726   fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
 00732 ! /r
 00740   if seq=0 or seq=1 then ! route number
-00742     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+00742     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 00744   else if seq=2 then            ! account
-00745     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00745     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00746   else if seq=3 then ! Alpha Sort Sequence
-00747     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,input,keyed  
+00747     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed  
 00748   else if seq=4 then ! Customer Name
-00750     fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
-00758     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('temp')&"\customer_name"&session$&".h"&env$('cno')&",Shr",internal,input,keyed  
+00750     fnindex_it("[Q]\UBmstr\Customer.h[cno]", env$('temp')&"\customer_name"&session$&".h[cno]","41 30")
+00758     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&env$('temp')&"\customer_name"&session$&".h[cno],Shr",internal,input,keyed  
 00760   end if
 00770   if trim$(serviceName$(1))="Water" then services=services+1 : water=1
 00780   if trim$(serviceName$(3))="Electric" or trim$(service$(3))="LM" then services=services+1

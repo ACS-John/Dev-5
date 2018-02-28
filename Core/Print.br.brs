@@ -48,12 +48,12 @@
 25140   if env$('BR_MODEL')='CLIENT/SERVER' then
 25180     report_cache_base$='C:\ProgramData\ACS\Report Cache'
 25260   else
-25280     report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
+25280     report_cache_base$=os_filename$('[Q]\Report Cache')
 25300   end if
-25320   if report_cache_base$='' then report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
+25320   if report_cache_base$='' then report_cache_base$=os_filename$('[Q]\Report Cache')
 25340   dim tmp_dir$*512
 25360   tmp_dir$=report_cache_base$&'\'&fnSystemName$
-25380   tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ('&env$('cno')&')'
+25380   tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
 25440   fnmakesurepathexists(env$('at')&tmp_dir$&'\')
 25520   fn_report_cache_folder_current$=tmp_dir$
 25540 fnend
@@ -107,7 +107,7 @@
 30140   if lpp$='' then gosub SET_DEFAULTS
 30180   dim g_prn_destination_name$*1024
 30200   g_prn_destination_name$=op_printFileName$
-30220   open #255: 'Name='&env$('Q')&'\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output 
+30220   open #255: 'Name=[Q]\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output 
 30240   goto XIT
 30260   SET_DEFAULTS: ! r:
 30280     pr "Lines settings for this program were not found."
@@ -122,10 +122,10 @@
 38040   if file(255)<>-1 then ! if the printer file is open.
 38060     cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
 38080     close #255: 
-38100     if fnCopy(env$('Q')&'\tmp_'&session$&'.prn',g_prn_destination_name$) then 
-38110       fnfree(env$('Q')&'\tmp_'&session$&'.prn')
+38100     if fnCopy('[Q]\tmp_'&session$&'.prn',g_prn_destination_name$) then 
+38110       fnfree('[Q]\tmp_'&session$&'.prn')
 38120     else
-38130       pr 'copy failed.  report lost at temp file: "'&env$('Q')&'\tmp_'&session$&'.prn"'
+38130       pr 'copy failed.  report lost at temp file: "[Q]\tmp_'&session$&'.prn"'
 38140       pause 
 38160     end if 
 38180     fnStatusClose

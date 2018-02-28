@@ -8,8 +8,8 @@
 00240 ! ______________________________________________________________________
 00280   fntop(program$,cap$="Calculate Sewer Average")
 00300 ! ______________________________________________________________________
-00320   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00340   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00320   open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 
+00340   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00360   read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 00370   gosub APPLY_DEFAULT_RATE
 00380   restore #h_trans,key>=x$&"         ": nokey L220

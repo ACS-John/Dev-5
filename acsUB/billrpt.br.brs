@@ -38,7 +38,7 @@
 00320 STARTREPORT: ! 
 00330   fnwait("Printing: please wait...",1)
 00340   on fkey 5 goto DONE
-00350   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00350   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00360   fnopenprn
 00370   gosub HEADER
 00380   goto REPORT

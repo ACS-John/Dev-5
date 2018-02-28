@@ -4,7 +4,7 @@
 00130   fntop(program$,cap$="Print Designed Reports")
 01220 OPEN3: ! 
 01230   close #3: ioerr ignore
-01240   open #3: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr NO_PRREPORT
+01240   open #3: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr",internal,input,keyed ioerr NO_PRREPORT
 01250   if lrec(3)=0 then goto NO_PRREPORT
 01252   close #3: 
 01260   goto MENU1
@@ -13,7 +13,7 @@
 01290   fnTos(sn$="PrintReport-ask")
 01292   respc=0
 01300   fnLbl(1,1,"Report:",11,1)
-01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
+01310   fncombof("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
 01312   resp$(respc+=1)=""
 01320   fnCmdKey("&Next",1,1,0,"Prints the highlighted report." )
 01322   fnCmdKey("&Complete",5,0,1,"Returns to menu")
@@ -30,7 +30,7 @@
 01354   def fn_print_designed_report(rn)
 01358     rn$=lpad$(str$(rn),2)
 01360 ! 
-01361     open #h_prreport:=fngethandle: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr PDR_XIT
+01361     open #h_prreport:=fngethandle: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr",internal,input,keyed ioerr PDR_XIT
 01362     read #h_prreport,using 'form pos 3,c 78',key=rn$: rt$ nokey NORECORDSONFILE
 01364     read #h_prreport,using 'form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1',key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat a,mat pp,mat ti ioerr NORECORDSONFILE ! nokey NORECORDSONFILE
 01366     close #h_prreport: 
@@ -42,9 +42,9 @@
 01378       goto PDR_XIT
 01380     end if 
 01400 ! 
-01410     fnCopy('S:\acsPR\newPRRpt_s1.brs',env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno'))
+01410     fnCopy('S:\acsPR\newPRRpt_s1.brs',"[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno]")
 01464 ! 
-01472     open #h_tmp_dr:=fngethandle: "Name="&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",RecL=255",display,output 
+01472     open #h_tmp_dr:=fngethandle: "Name=[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],RecL=255",display,output 
 01474     pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
 01520     pf$="19900 pr #255, USING F_PR_OUT: "
 01530     pfd$="20010 pr #255, USING F_PR_OUT: "
@@ -132,7 +132,7 @@
 02212     pr #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
 02220     close #h_tmp_dr: 
 02230     open #h_tmp_proc:=fngethandle: "Name="&env$('temp')&"\PROC."&session$&",Replace",display,output 
-02240     pr #h_tmp_proc,using F_C255: "load "&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",Source"
+02240     pr #h_tmp_proc,using F_C255: "load [Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],Source"
 02250     pr #h_tmp_proc,using F_C255: "RUN"
 02260     close #h_tmp_proc: 
 02270     chain "PROC="&env$('temp')&"\PROC."&session$

@@ -5,7 +5,7 @@
 14040     glfsSetup=val(env$('cno'))
 14060     library 'S:\Core\Library': fngethandle,fnTos,fnLbl,fncomboa,fnTxt,fnAcs,fnerror,fnCmdSet,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
 14080     on error goto ERTN
-14100     open #company=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+14100     open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
 14120     read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 14140     ! lmu = Last Accounting Period Closed
 14160     ! nap = Number of Accounting Periods

@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100     jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
 00110     fncno(cno)
-00120     open #category:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jccat.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\catindx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+00120     open #category:=fngethandle: "Name=[Q]\PRmstr\Jccat.h[cno],KFName=[Q]\PRmstr\catindx.h[cno],Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #category: 
 00150     fnTos(sn$="CatSrch")

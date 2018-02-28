@@ -14,7 +14,7 @@
 44120     pr #hWsCmd: '@echo Advanced Computer Services LLC'
 44140     pr #hWsCmd: '@echo Opening: "'&wsFile$&'"'
 44160     ! pr #hWsCmd: '@echo .'
-44180     ! pr #hWsCmd: '@echo Relative To: '&os_filename$(env$('Q')&'\')
+44180     ! pr #hWsCmd: '@echo Relative To: '&os_filename$('[Q]\')
 44200     pr #hWsCmd: '@echo .'
 44220     pr #hWsCmd: '"'&wsFile$&'"'
 44240     close #hWsCmd: 

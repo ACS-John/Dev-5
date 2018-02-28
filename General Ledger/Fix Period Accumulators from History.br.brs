@@ -5,7 +5,7 @@
 12200 ! 
 12400   process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
 12600 ! 
-12800   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+12800   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
 13000   read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 13020 ! lmu = Last Accounting Period Closed
 13040 ! nap = Number of Accounting Periods
@@ -18,15 +18,15 @@
 14000   fn_report(cap$)
 14200   fn_report(date$('mm/dd/ccyy'))
 14400   fn_report('')
-14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outIn,keyed 
+14600   open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.H[cno],KFName=[Q]\GLmstr\AcTrIdx.H[cno],Shr",internal,outIn,keyed 
 15000 F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 15200   if process_gltrans then 
-15400     fnindex_it(env$('Q')&"\GLmstr\GLTrans.H"&env$('cno'),env$('Temp')&"\GLIndex.H"&env$('cno'),"1 12")
-15600     open #h_gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",KFName="&env$('Temp')&"\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+15400     fnindex_it("[Q]\GLmstr\GLTrans.H[cno]",env$('Temp')&"\GLIndex.H[cno]","1 12")
+15600     open #h_gltrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],KFName="&env$('Temp')&"\GLIndex.h[cno],Shr",internal,outIn,keyed 
 15800   end if  ! process_gltrans
 16000 F_GLTRANS: form pos 1,c 12,n 6,pd 6.2,n 2
-16200   open #h_glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-16400   open #h_glmstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+16200   open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
+16400   open #h_glmstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed 
 16600 F_GLMSTR: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 16800   do 
 17000     read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
@@ -256,12 +256,12 @@
 55060 fnend
 56000 def fn_get_fund_list(mat fund_list)
 56020   ! returns an array of all unique gl number funds
-56040   open #company=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+56040   open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 56060   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 56080   close #company: 
 56100   if use_dept then 
 56120     mat fund_list(999)
-56140     open #gfl_h_glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
+56140     open #gfl_h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,input,keyed 
 56160     do 
 56180       read #gfl_h_glmstr,using 'form pos 1,N 3': fund eof GFL_EO_GLMSTR
 56200       if fund<>fund_prior then 

@@ -32,14 +32,14 @@
         fnmsgbox(mat ml$,resp$,cap$,49)
 00280   if resp$="OK" then goto L120 else goto XIT
 00290 ! ______________________________________________________________________
-00300 L300: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00300 L300: open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed 
 00310 L310: read #1,using L320: x eof L350
 00320 L320: form pos 91,36*pd 5.2,2*n 5
 00330   rewrite #1,using L320: mat m,mat adr
 00340   goto L310
 00350 L350: close #1: 
 00360 ! _____________________
-00370   open #1: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",size=0,RecL=110,Replace",internal,output 
+00370   open #1: "Name=[Q]\GLmstr\ACPRCKS.h[cno],size=0,RecL=110,Replace",internal,output 
 00380   close #1: 
 00390   goto XIT
 00400 ! ______________________________________________________________________

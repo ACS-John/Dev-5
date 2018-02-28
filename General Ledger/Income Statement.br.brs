@@ -22,10 +22,10 @@
 00200   if fnps=2 then 
 00202     mp1=mp1+3
 00204     mp2=78
-00206     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
+00206     fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr"
 00208   else 
 00210     mp2=75
-00212     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
+00212     fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr"
 00214   end if 
 00216   open #h_acglfnx:=1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
@@ -43,11 +43,11 @@
 00320 L320: ! 
 00322   fnopenprn
 00330   if fnps=2 then ! secondary
-00332     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&"\fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
+00332     execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 72 3 Replace DupKeys -N"
 00334   else 
-00336     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&"\fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
+00336     execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 69 3 Replace DupKeys -N"
 00338   end if 
-00370   open #h_glmstr:=3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00370   open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&"\fsindex.h[cno],Shr",internal,input,keyed 
 00372 F_GLMSTR_A: form pos mp1,pd 3,pos 81,2*pd 6.2
 00374 F_GLMSTR_B: form pos 1,c 12,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00380   report$="Statement of Income and Expenses"

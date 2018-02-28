@@ -6,7 +6,7 @@
 00050   stop 
 00060 VBOPENPRINT: ! 
 00070   if file(20)=-1 then 
-00080     open #20: "Name="&env$('Q')&"\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output 
+00080     open #20: "Name=[Q]\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output 
 00090     pr #20: 'Call Print.MyOrientation("Portrait")'
 00100     lyne=4
 00110   end if 

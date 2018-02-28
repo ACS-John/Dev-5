@@ -12,23 +12,23 @@
 32180 ! ______________________________________________________________________
 32200   fntop(program$)
 32220   gosub BUILD_LAYOUT
-32240   if exists(env$('Q')&"\GLmstr\acglschs.h"&env$('cno'))=0 then 
+32240   if exists("[Q]\GLmstr\acglschs.h[cno]")=0 then 
 32260     close #10: ioerr ignore
-32280     open #10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno'),internal,outIn,keyed ioerr ignore
+32280     open #10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno]",internal,outIn,keyed ioerr ignore
 32300     close #10,free: ioerr ignore
-32320     CreateAcGlSchs: open #10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",SIZE=0,RecL=162",internal,output 
+32320     CreateAcGlSchs: open #10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],SIZE=0,RecL=162",internal,output 
 32340     CloseAcGlSchs: close #10: ioerr ignore
 32360     close #11: ioerr ignore
 32380     gosub INDEX
-32400   else if ~exists(env$('Q')&"\GLmstr\schindex.h"&env$('cno'))or ~exists(env$('Q')&"\GLmstr\schindx2.h"&env$('cno'))=0 then 
+32400   else if ~exists("[Q]\GLmstr\schindex.h[cno]")or ~exists("[Q]\GLmstr\schindx2.h[cno]")=0 then 
 32420     gosub INDEX
 32440   end if
 32460   L210: !
-32480   open #schedule:=10: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1580
-32500   open #11: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr CloseAcGlSchs
+32480   open #schedule:=10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,outIn,keyed ioerr L1580
+32500   open #11: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\SchIndX2.h[cno],Shr",internal,outIn,keyed ioerr CloseAcGlSchs
 32520   goto SCHEDULEGRID
 32540   close #10: ioerr ignore
-32560   execute "Index "&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 3 30 Replace DupKeys -n"
+32560   execute "Index [Q]\GLmstr\ACGLSCHS.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
 32580 goto L210 ! /r
 44000 SCHEDULEGRID: ! r:
 44020   fnTos(sn$="Schedule") 
@@ -83,7 +83,7 @@
 48020   fnTos(sn$="Schedule1") 
 48040   mylen=20: mypos=mylen+3 : right=1
 48060   fnLbl(1,1,"Schedule Number:",mylen,right)
-48080   fncombof('glschedule',1,mypos,0,env$('Q')&"\GLmstr\acglschs.h"&env$('cno'),1,3,4,30,env$('Q')&"\GLmstr\schindex.h"&env$('cno'),add_all)
+48080   fncombof('glschedule',1,mypos,0,"[Q]\GLmstr\acglschs.h[cno]",1,3,4,30,"[Q]\GLmstr\schindex.h[cno]",add_all)
 48100   if edit=1 then resp$(1)=str$(sn)
 48120   if add=1 then resp$(1)=""
 48140   fnLbl(2,1,"Schedule Nane::",mylen,right)
@@ -134,7 +134,7 @@
 52220   ml$(3)="else Cancel to prevent changing the #." 
 52240   fnmsgbox(mat ml$,resp$,'',49)
 52260   if resp$="OK" then 
-52280     execute "Copy "&env$('Q')&"\GLmstr\schedule"&str$(holdsn)&".h"&env$('cno')&' '&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&" -n" ioerr ignore ! move breakdowns to new schedule #
+52280     execute "Copy [Q]\GLmstr\schedule"&str$(holdsn)&".h[cno]"&' '&"[Q]\GLmstr\schedule"&str$(sn)&".h[cno] -n" ioerr ignore ! move breakdowns to new schedule #
 52300     L950: !
 52320     rewrite #10,using L1010,rec=editrec: sn,schnam$,ft$,dp,rs,cm
 52340     goto SCHEDULE_BREAKDOWN
@@ -146,11 +146,11 @@
 54060   new1=1
 54080 goto SCHEDULE_BREAKDOWN ! /r
 56000 INDEX: ! r: (main schedule files)
-56020   execute "Index "&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&' '&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&" 1 3 Replace DupKeys -n"
-56040   execute "Index "&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 4 30 Replace DupKeys -n"
+56020   execute "Index [Q]\GLmstr\ACGLSCHS.h[cno]"&' '&"[Q]\GLmstr\schindex.h[cno] 1 3 Replace DupKeys -n"
+56040   execute "Index [Q]\GLmstr\ACGLSCHS.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 4 30 Replace DupKeys -n"
 56060 return ! /r
 57000 INDEX2: ! r: index to gl breakdowns
-57020   execute "Index "&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&' '&env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.h"&env$('cno') &" 1 12 Replace,DupKeys" ioerr ignore
+57020   execute "Index [Q]\GLmstr\schedule"&str$(sn)&".H[cno]"&' '&"[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]" &" 1 12 Replace,DupKeys" ioerr ignore
 57040 return ! /r
 58000 ! PROOF: ! r:
 58020 !   restore #10,key>="  ": eof ignore ioerr ADD_EDIT_SCHEDULES
@@ -218,13 +218,13 @@
 70000 OPEN_FILE: ! r:
 70020   open_file_count=1 ! this value is used in the close_file sub routine
 70040   close #open_file_count: ioerr ignore
-70060   if exists(env$('Q')&"\GLmstr\Schedule"&str$(sn)&".h"&env$('cno'))=0 then 
-70080     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outIn 
+70060   if exists("[Q]\GLmstr\Schedule"&str$(sn)&".h[cno]")=0 then 
+70080     open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],Version=1,Replace,RecL=12",internal,outIn 
 70100     gosub CLOSE_FILE
 70120     gosub INDEX2
 70140   else
-70160     if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.h"&env$('cno'))=0 then gosub INDEX2
-70180     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
+70160     if exists("[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]")=0 then gosub INDEX2
+70180     open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".H[cno],KFName=[Q]\GLmstr\schedule"&str$(sn)&"-idx.H[cno],Shr",internal,outIn,keyed 
 70200   end if
 70220 return ! /r
 74000 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number
@@ -268,18 +268,18 @@
 78480   sp(ic+=1)=1
 78500 ! ** Combo Boxes **                                                   
 78520   cl=1 : c$(cl,1)='ComboF' 
-78540   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') 
+78540   c$(cl,2)="[Q]\GLmstr\GLmstr.h[cno]" 
 78560   c$(cl,3)="1" : c$(cl,4)="12" 
 78580   c$(cl,5)="13": c$(cl,6)="40" 
-78600   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') 
+78600   c$(cl,7)="[Q]\GLmstr\glindex.h[cno]" 
 78620   ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     
 78640   limit_to_list$='1'
 78660 ! ** Combo Boxes **                                                   
 78680   ! cL=2 : c$(CL,1)='ComboF' 
-78700   ! c$(CL,2)=env$('Q')&"\GLmstr\transcode.h"&env$('cno') 
+78700   ! c$(CL,2)="[Q]\GLmstr\transcode.h[cno]" 
 78720   ! c$(CL,3)="1" : c$(CL,4)="2" 
 78740   ! c$(CL,5)="3" : c$(CL,6)="30" 
-78760   ! c$(CL,7)=env$('Q')&"\GLmstr\transcode-idx.h"&env$('cno') 
+78760   ! c$(CL,7)="[Q]\GLmstr\transcode-idx.h[cno]" 
 78780   ! c$(CL,8)="1" 
 78800   ! lIMIT_TO_LIST$=('1'=yes' ; '0'=NO)
 78820 return ! /r
@@ -291,5 +291,5 @@
 82100   fnmsgbox(mat ml$,resp$,'',49)
 82120   if uprc$(resp$)="OK" then goto L2310 else goto ADD_EDIT_SCHEDULES
 82140   L2310: delete #10,rec=editrec: 
-82160   fnFree(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))
+82160   fnFree("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")
 82180 return ! /r

@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Texas Unemployment Compensation Report")
 00120   fncno(cno,cnam$)
-00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00130   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2': mat a$,mat b$,c$,ucm !:
         close #1: 
 00140   if fnprocess=1 then goto L220
@@ -21,7 +21,7 @@
 00190   close #win: 
 00200   if cmdkey=5 or cmdkey=99 then goto XIT
 00210 ! ______________________________________________________________________
-00220 L220: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00220 L220: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
 00230   message$="Printing: please wait..." !:
         fnwait(message$,1)
 00240   on fkey 5 goto XIT

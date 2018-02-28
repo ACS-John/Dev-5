@@ -12,9 +12,9 @@
 00120   cancel=99
 00130   fndat(dat$)
 00140   gosub ASK
-00150   execute "Index "&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&' '&env$('Q')&"\CLmstr\Unpdidx2.H"&env$('cno')&" 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
-00160   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
-00170   open #paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Unpdidx2.H"&env$('cno')&",Shr",internal,input,keyed 
+00150   execute "Index [Q]\CLmstr\PayTrans.h[cno]"&' '&"[Q]\CLmstr\Unpdidx2.H[cno] 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
+00160   open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
+00170   open #paytrans:=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\Unpdidx2.H[cno],Shr",internal,input,keyed 
 00180   fnopenprn
 00190   gosub HDR
 00200   vn$=iv$=""

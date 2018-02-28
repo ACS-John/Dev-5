@@ -12,7 +12,7 @@
 00120   data FNSBINDX,FNSIINDX,FNSJINDX
 00130   read mat idx$
 00140   for j=1 to 3
-00150     open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno'),internal,input,relative 
+00150     open #1: "Name=[Q]\GLmstr\"&fil$(j)&".h[cno]",internal,input,relative 
 00160     open #2: "Name="&env$('Temp')&"\WORK."&wsid$&",RecL=273,REPLACE",internal,output 
 00170     for j1=1 to lrec(1)
 00180       read #1,using L190,rec=j1: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L230,conv NJ1,noRec NJ1
@@ -22,7 +22,7 @@
 00220 NJ1: next j1
 00230 L230: close #1: 
 00240     close #2: 
-00250     execute "COPY "&env$('Temp')&"\WORK."&wsid$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')
-00260     execute "Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno')&" 1 5 REPLACE DupKeys"
+00250     execute "COPY "&env$('Temp')&"\WORK."&wsid$&' '&"[Q]\GLmstr\"&fil$(j)&".h[cno]"
+00260     execute "Index [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&"[Q]\GLmstr\"&idx$(j)&".h[cno] 1 5 REPLACE DupKeys"
 00270   next j
 00280   goto L40

@@ -11,8 +11,8 @@
 00120 ! ______________________________________________________________________
 00140   fntop("S:\acsUB\ubMetrB2",cap$="Route Book Pages")
 00150   fndat(dat$,1)
-00160   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
-00170   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00160   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+00170   open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00180 ! ______________________________________________________________________
 00190 ! this section+the comboA on the first screen is just what you need !:
         ! for a fnCurrently availableServiceTypeComboBox

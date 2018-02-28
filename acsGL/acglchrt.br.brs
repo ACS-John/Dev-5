@@ -35,7 +35,7 @@
 00300   if resp$(1)="True" then sel=1 else sel=2
 00310   if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))
 00320   if trim$(resp$(4))<>"" then gl2$=fnagl$(resp$(4))
-00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00330 L330: open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 00340 ! ______________________________________________________________________
 00350   pr newpage
 00360   fnopenprn

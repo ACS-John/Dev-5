@@ -2013,19 +2013,19 @@
 54120   dim qglsetupkeycurrent$*128
 54130   dim qglsetupkeyprior$*128
 54140 ! r: set qgl_cursys$ (for fnqgl purposes only)
-54150   if env$('CurSys')="UB" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
+54150   if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then 
 54160     qgl_cursys$="GL"
 54170   else if env$('CurSys')="PR" then 
-54180     if exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
+54180     if exists("[Q]\GLmstr\Company.h[cno]") then 
 54190       qgl_cursys$="GL"
-54200     else if exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then 
+54200     else if exists("[Q]\CLmstr\Company.h[cno]") then 
 54210       qgl_cursys$="CL"
 54220     else 
 54230       qgl_cursys$="PR"
 54240     end if 
-54250   else if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
+54250   else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then 
 54260     qgl_cursys$='GL'
-54270   else if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno'))=0 then 
+54270   else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then 
 54280     qgl_cursys$='CR'
 54290   else if env$('CurSys')='CL' then 
 54300     qgl_cursys$='CL'
@@ -2035,7 +2035,7 @@
 54340 ! /r
 54350   if setupqgl$<>qgl_cursys$ then ! r:
 54360     setupqgl$=qgl_cursys$
-54370     open #company:=fngethandle: "Name="&env$('Q')&"\"&qgl_cursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,input ioerr CLOSECOMPANY
+54370     open #company:=fngethandle: "Name=[Q]\"&qgl_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr CLOSECOMPANY
 54380     if qgl_cursys$='CL' then 
 54390       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
 54400     else if qgl_cursys$="GL" then 
@@ -2066,7 +2066,7 @@
 54650     end if 
 54660 ! read the chart of accounts from the appropriate system into an array
 54670     if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then 
-54680       open #glmstr:=fngethandle: "Name="&env$('Q')&"\"&qgl_cursys$&"mstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\"&qgl_cursys$&"mstr\glIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr QGL_ERROR
+54680       open #glmstr:=fngethandle: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
 54690     end if 
 54700     do 
 54710       read #glmstr,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR

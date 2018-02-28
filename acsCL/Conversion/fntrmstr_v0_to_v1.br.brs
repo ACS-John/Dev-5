@@ -10,7 +10,7 @@
 00110 ! ______________________________________________________________________
 00120     fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
 00160 ! fnwait(message$="Converting: please wait...",0)
-00170     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),internal,outIn,relative 
+00170     open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative 
 00180     if version(trmstr)=1 then pr "trmstr is already version 1" !:
             pr "press enter to continue" !:
             input fields "1,1,C 1,N": pause$ !:

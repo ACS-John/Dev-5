@@ -21,12 +21,12 @@
 00130   fntop(program$,cap$="Enter Transactions")
 00132   gltyp=7
 00135   fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
-00136 ! fil$(1)="Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr"
-00138 ! fil$(2)="Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
-00140 ! fil$(3)="Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno')
+00136 ! fil$(1)="Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr"
+00138 ! fil$(2)="Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
+00140 ! fil$(3)="Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]"
 00142 ! 
-00144 ! fil$(5)="Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')
-00146 ! fil$(6)="Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr"
+00144 ! fil$(5)="Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]"
+00146 ! fil$(6)="Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr"
 00148 ! 
 00150   typeofentry_option$(1)="1 = Disbursements"
 00152   typeofentry_option$(2)="2 = Receipts"
@@ -73,17 +73,17 @@
 00234   cmask2$(6)='10'
 00236   cmask2$(7)=""
 00238 ! 
-00240   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00240   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00242   read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 00244   close #1: 
 00246 ! /r
-00248   open #h_glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00248   open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00310 ! ______________________________________________________________________
 00330   if gltyp<>1 then 
-00340     open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
-00352     open #3: "Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno'),internal,outIn,relative ioerr ignore ! PR Work File
+00340     open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
+00352     open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
 00360   end if
-00362   open #h_gl_work:=2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno'),internal,outIn,relative ioerr ignore ! GL Work File
+00362   open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative ioerr ignore ! GL Work File
 00364   F_2A: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 00365   F_2B: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 00370   pc=1
@@ -93,10 +93,10 @@
 00410   read #h_gl_work,using 'form pos 27,n 2',rec=adr: pc noRec CHECK_FOR_DELETED conv L460
 00420   if pc=0 then post=1 ! if previous batch not posted, set post=1
 00430   if pc>0 then goto L460 ! PREVIOUS TRANSACTIONS HAVE BEEN POSTED
-00440   open #5: "Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno'),internal,outIn,relative ioerr L460
+00440   open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]",internal,outIn,relative ioerr L460
 00450   goto SCREEN_1
 00460 L460: ! 
-00462   open #5: "Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')&",SIZE=0,RecL=538,Replace",internal,outIn,relative 
+00462   open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],SIZE=0,RecL=538,Replace",internal,outIn,relative 
 00470   write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 28000 SCREEN_1: ! r:
 28020   edit=0
@@ -167,28 +167,28 @@
 29280   close #paymstr: ioerr ignore
 29300   close #payeegl: ioerr ignore
 29320   if pt1=3 then 
-29340     fnCopy(dv$&"GLWK101.H"&env$('cno'),env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno'))
-29360     fnCopy(dv$&"GLWK201.H"&env$('cno'),env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno'))
-29380     open #3: "Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno'),internal,outIn,relative 
-29400     open #h_gl_work:=2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno'),internal,outIn,relative 
-29420     open #9: "Name="&dv$&"PAYMSTR.H"&env$('cno')&",KFName="&dv$&"PAYIDX1.H"&env$('cno'),internal,input,keyed ioerr ignore
+29340     fnCopy(dv$&"GLWK101.H[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
+29360     fnCopy(dv$&"GLWK201.H[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
+29380     open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative 
+29400     open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative 
+29420     open #9: "Name="&dv$&"PAYMSTR.H[cno],KFName="&dv$&"PAYIDX1.H[cno]",internal,input,keyed ioerr ignore
 29440   else 
-29460     open #3: "Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno')&",size=0,RecL=110,Replace",internal,outIn,relative 
-29480     open #h_gl_work:=2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",SIZE=0,RecL=104,Replace",internal,outIn,relative 
+29460     open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative 
+29480     open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative 
 29500   end if 
-29520   open #5: "Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')&",Size=0,RecL=538,Replace",internal,outIn,relative 
+29520   open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",internal,outIn,relative 
 29540   write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 29560 F_5: form pos 1,pd 6.2,80*pd 6.2,pd 6.2,pd 6.2,20*n 2
 29580   goto L1140 ! /r
 29600 L1140: ! 
 29620   close #6: ioerr ignore
-29640   open #6: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-29660   open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-29680   open #payeegl:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+29640   open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed 
+29660   open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+29680   open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 29700   close #glallocations: ioerr ignore
-29720   open #glallocations=12: "Name="&env$('Q')&"\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
+29720   open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
 29740   if jccode then 
-29760     open #8: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
+29760     open #8: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed ioerr ignore
 29780   end if 
 29800   if ckey=3 then goto PROOF_TOTALS
 29820 goto MAIN
@@ -200,7 +200,7 @@
 34100   read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
 34120   holdtr$=tr$
 34140   close #glallocations: ioerr ignore
-34160   open #glallocations=12: "Name="&env$('Q')&"\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
+34160   open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
 34180   restore #h_gl_work: 
 34200 GLALLOCATIONS_READ: ! 
 34220   read #h_gl_work,using F_2B: payeegl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof GLALLOCATIONS_EOF
@@ -243,7 +243,7 @@
 36380   if resp$(4)="True" then let fnprocess(4) ! post both
 36400   if resp$(1)="True" then goto ACGLMRGE
 36420   if resp$(3)="True" then let fnchain("S:\acsGL\PRMerge")
-36440   open #h_process:=30: "Name="&env$('Q')&"\GLmstr\Process.h"&env$('cno')&",RecL=128,Use",internal,outIn,relative 
+36440   open #h_process:=30: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative 
 36460   if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 36480   if resp$(2)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 36500   if resp$(4)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
@@ -294,7 +294,7 @@
 42520       fnTxt(6,mypos,8,0,right,"",1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 42540       resp$(4)=""
 42560     else 
-42580       fncombof("Paymstrcomb",6,mypos,35,env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),1,8,9,39,env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+42580       fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\paymstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 42600       resp$(4)=vn$
 42620     end if 
 42640   end if 
@@ -471,7 +471,7 @@
 47000 goto CLEAN_MAIN_SCREEN
 48000 CLEAN_MAIN_SCREEN: ! r: clear entry screen before returning
 48020   close #glallocations: ioerr ignore
-48040   open #glallocations=12: "Name="&env$('Q')&"\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
+48040   open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
 48060   transactionamt=0
 48080   if gl_retainFieldsDuringAdd$='False' then
 48100     td$=""
@@ -588,7 +588,7 @@
 58760 return  ! /r
 62000 COPY_AR_IN: ! r:
 62020   close #h_gl_work: 
-62040   execute "COPY "&dv$&"GLWK101.H"&env$('cno')&","&"Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&" -n"
+62040   execute "COPY "&dv$&"GLWK101.H[cno],"&"Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
 62060   open #10: "Name="&dv$&"ARTOGL.DAT",internal,input ioerr L5670
 62080   read #10,using L5650: cgl$(1),camt(1),cgl$(2),camt(2),cgl$(3),camt(3),cgl$(4),camt(4),cgl$(5),camt(5)
 62100 L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2
@@ -761,7 +761,7 @@
 76260   fnTxt(5,mypos,12,0,0,"",0,"Enter check number.",0)
 76280   resp$(3)=tr$
 76300   fnLbl(6,1,"Employee #:",mylen,right)
-76320   fncombof("PRmstr",6,mypos,35,env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),1,4,5,30,env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno'),1,pas, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
+76320   fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRINDEX.h[cno]",1,pas, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
 76340   resp$(4)=str$(pr(1))
 76360   fnLbl(7,1,"General Ledger #:",mylen,right)
 76380   fnqgl(7,mypos,0,2,pas)

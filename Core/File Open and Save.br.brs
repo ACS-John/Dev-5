@@ -9,6 +9,7 @@
 18036     library 'S:\Core\Library': fnStatus,fnStatusClose,fnStatusPause,fnCopy,fnindex_sys
 18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
 18040     library 'S:\Core\Library': fnRename,fnGetPp
+18042     library 'S:\Core\Library': fnSrepEnv$
 18056     dim company_import_path$*256
 18058     dim resp$(5)*256
 18060     dim ml$(0)*128
@@ -24,6 +25,8 @@
 38020   dim save_name$*256,ln$*512
 38040   dim save_log_filename$*256
 38060   failure=0
+38070   save_what$=fnSrepEnv$(save_what$)
+38072   fsa_automatedSaveFileName$=fnSrepEnv$(fsa_automatedSaveFileName$)
 38080   save_log_filename$=env$('temp')&'\Save_As_Log.txt'
 38100   fnFree(br_filename$(save_log_filename$))
 38120   if fsa_automatedSaveFileName$<>'' then
@@ -32,8 +35,8 @@
 38180     open #h_tmp:=fngethandle: "Name=SAVE:"&fnsave_as_path$&"\*.zip,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
 38200     save_name$=os_filename$(file$(h_tmp))
 38220     close #h_tmp,free: 
-38240     fnCopy('S:\drive.sys',env$('Q')&'\*.*')
-38260     fnCopy('S:\brserial.dat',env$('Q')&'\*.*')
+38240     fnCopy('S:\drive.sys','[Q]\*.*')
+38260     fnCopy('S:\brserial.dat','[Q]\*.*')
 38280   end if
 38300   fnreg_close
 38320   open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
@@ -49,7 +52,8 @@
 38500   else
 38520     serverTempSaveFile$=save_name$
 38540   end if
-38560   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.tmp1 -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
+38560   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "[Q]\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.tmp1 -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
+38562   tmp7ZipCommand$=fnSrepEnv$(tmp7ZipCommand$)
 38580   pr #h_tmp: '@echo off'
 38600   pr #h_tmp: '@echo Advanced Computer Services LLC'
 38620   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
@@ -315,7 +319,7 @@
 54400         omSourceFilter$='*.h'&str$(source_company_number)
 54420       end if
 54440       fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
-56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',omFileOpen$, 1) then 
+56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company [cno] from ',omFileOpen$, 1) then 
 56020         fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 56040         fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
 56060         fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
@@ -329,7 +333,7 @@
 56210         fnStatusClose
 56220         dim msgTmp$(0)*128
 56240         fnaddonec(mat msgTmp$,'Completed.')
-56260         fnaddonec(mat msgTmp$,'Company '&env$('cno')&' loaded from')
+56260         fnaddonec(mat msgTmp$,'Company [cno] loaded from')
 56280         fnaddonec(mat msgTmp$,omFileOpen$)
 56300         fnmsgbox(mat msgTmp$)
 56320       end if 
@@ -378,7 +382,7 @@
 58800     fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
 58820     if clientServer then
 58940       fnStatus('Copying Files in...')
-58960       fnCopy(foeDestinationFolder$&'\*.*',env$('q')&'\*.*',0,'recursive')
+58960       fnCopy(foeDestinationFolder$&'\*.*','[Q]\*.*',0,'recursive')
 58980       opScreenReturn=1 
 59000       setenv('force_reindex','yes') 
 59020     end if
@@ -419,9 +423,9 @@
 62540   execute 'sy -s "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
 62580 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
-64020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
-64040   fnStatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
-64060   cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
+64020   fnFree('[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
+64040   fnStatus('Existing files ('&os_filename$('[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
+64060   cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,'[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 64080   if cfiReturn>0 then
 64100     if env$('cursys')='UB' then
 64120       cfiReturn=fn_ub_copy_extras(company_import_path$,company_import_extension$,destination_company_number)
@@ -435,10 +439,10 @@
 68000 def fn_ub_copy_extras(company_import_path$*256,company_import_extension$,destination_company_number)
 68020   ! r: import rates
 68040   if exists(company_import_path$&'ubdata') then 
-68060     if exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number)) then 
-68080       fnFree(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
-68100     end if  ! exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
-68120     uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
+68060     if exists('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number)) then 
+68080       fnFree('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
+68100     end if  ! exists('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
+68120     uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,'[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68140     if uceReturn>0 then
 68160       fnStatus('UBmstr\ubData found in source and is replacing destination.')
 68180     end if
@@ -448,10 +452,10 @@
 68700   ! /r
 68720   ! r: import notes folder
 68740   if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then 
-68760     fnFree(env$('Q')&'\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
-68780     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$(env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
+68760     fnFree('[Q]\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
+68780     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$('[Q]\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
 68800     fnStatus('UB Notes imported.')
-68820   end if  ! exists [import path]'&env$('Q')&'\UBmstr\notes.h[company_import_extension]
+68820   end if  ! exists [import path][Q]\UBmstr\notes.h[company_import_extension]
 68840   ! /r
 68850   fn_ub_copy_extras=uceReturn
 68860 fnend 
@@ -461,9 +465,9 @@
 70040     dim asp_path$*256
 70060     dim asp_filename$*256
 70080     dim asp_saveFilter$*64
-70100     asp_saveFilter$=env$('cursys')&'mstr\*.h'&env$('cno')
+70100     asp_saveFilter$=env$('cursys')&'mstr\*.h[cno]'
 70120     asp_path$=env$('temp')&'\acs\Automated Saves'
-70130     asp_filename$=env$('cursys')&' Company '&env$('cno')&' '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
+70130     asp_filename$=env$('cursys')&' Company [cno] '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
 70140     fnmakesurepathexists(asp_path$&'\')
 70160     fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 70170   end if

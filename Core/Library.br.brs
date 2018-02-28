@@ -8,7 +8,19 @@
 02140   MaeFinis: !
 02160   fnKeyExists=maeReturn
 02180 fnend
-02200 ! /r
+02200 def library fnSrepEnv$*2048(text$*2048)
+02220   dim seVariable$*128
+02240   do
+02260     sePosOpen=pos(text$,'[')
+02280     sePosClose=pos(text$,']',sePosOpen)
+02300     if sePosOpen>0 and sePosClose>sePosOpen then
+02320       seVariable$=text$(sePosOpen+1:sePosClose-1)
+02340       text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
+02360     end if
+02380   loop while sePosOpen>0 and sePosClose>sePosOpen
+02400   fnSrepEnv$=text$
+02420 fnend
+19999 ! /r
 20000 ! r: S:\Core\Start.br
 20052   def library fnSetQ(setQ$*256)
 20054     library 'S:\Core\Start.br': fnSetQ
@@ -481,7 +493,7 @@
 49412     library 'S:\Core\Menu.br': fnGetProgramList
 49413     fnGetProgramList=fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 49414   fnend
-49580 ! /r
+49990 ! /r
 50000 ! r: cno   S:\Core\CNo\   -   use cno or similar
 50020   def library fncno(&cno;&cnam$)
 50040     library 'S:\Core\CNo.br': fncno
@@ -669,14 +681,14 @@
 58800   fnend
 58820 ! /r
 60000 ! r: hamster
-60002   def library fnHamsterFio(fileid$*64)
-60004     library 'S:\Core\HamsterFio.br': fnHamsterFio
-60006     fnHamsterFio=fnHamsterFio(fileid$)
-60008   fnend
-60010   def library fnHamster(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
-60020     library 'S:\Core\Hamster.br': fnHamster
-60030     fnHamster=fnHamster(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
-60040   fnend
+60032   def library fnHamsterFio(fileid$*64)
+60034     library 'S:\Core\HamsterFio.br': fnHamsterFio
+60036     fnHamsterFio=fnHamsterFio(fileid$)
+60038   fnend
+60042   def library fnHamster(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
+60044     library 'S:\Core\Hamster.br': fnHamster
+60046     fnHamster=fnHamster(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
+60048   fnend
 60050   def library fnH2AddComboF(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
 60060     library 'S:\Core\Hamster_Setup.br': fnH2AddComboF
 60070     fnH2AddComboF=fnH2AddComboF(hac_screen_item,hac_data_file$,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$,hac_limit_to_list)

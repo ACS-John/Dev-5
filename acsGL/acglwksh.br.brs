@@ -13,7 +13,7 @@
 00130   fnconsole(off=0)
 00140   first=1
 00150   fncno(cno,cnam$)
-00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,input,relative  !:
+00160   open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1) !:
         read #20,using 'Form POS 176,C 12',rec=1: cogl$ !:
         close #20: 
@@ -21,7 +21,7 @@
         a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" !:
         a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
 00180   p$="|        *         |         *         |         *        |"
-00190   open #glmstr=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00190   open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed 
 00200   if fnprocess=1 or d(1)=0 then goto START_REPORT !:
           ! Skip Cost Center Question if not applicable or in Automatic Processing
 00210 SCREEN1: ! 

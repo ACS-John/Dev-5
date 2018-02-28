@@ -29,7 +29,7 @@
 00220   fnTxt(3,mypos,8,0,0,"1") !:
         resp$(3)=""
 00230   fnLbl(4,1,"Rate for Analysis:",mylen,1)
-00240   fncombof("nerd",4,mypos,40,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) !:
+00240   fncombof("nerd",4,mypos,40,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1,usa) !:
         usa+=1 !:
         resp$(4)="" ! just default to the first one
 00250   fnCmdSet(3)
@@ -44,8 +44,8 @@
 00310   if d(1)<>0 then d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00320   if d(2)<>0 then d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
 00330   fndat(d$(1),2)
-00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00350   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00340   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+00350   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 00360   on fkey 5 goto DONE
 00370   fnopenprn
 00380   gosub HDR

@@ -12,7 +12,7 @@
 00120   pr f "10,5,C 60": "COMPANY NUMBER (0 TO STOP):"
 00130   input fields "10,51,N 5,UE,N": cno
 00140   if cno=0 then goto XIT
-00160   open #1: "Name="&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno'),internal,outIn,keyed ioerr NF1
+00160   open #1: "Name=[Q]\CLmstr\FUNDMSTR.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno]",internal,outIn,keyed ioerr NF1
 00170   open #2: "Name=X,RecL=63,Replace",internal,output 
 00180 L180: read #1,using L190: dn$,de$,mat fgl$ eof L240
 00190 L190: form pos 1,c 3,c 30,3*c 9
@@ -22,10 +22,10 @@
 00230 ! ______________________________________________________________________
 00240 L240: close #1: 
 00250 L250: close #2: 
-00260   execute "COPY X,"&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&" -n"
-00270   execute "Index "&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&","&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno')&",1,3,Replace,DupKeys -n"
-00280   execute "Index "&env$('Q')&"\CLmstr\FUNDMSTR.h"&env$('cno')&","&env$('Q')&"\CLmstr\FundIdx2.h"&env$('cno')&",4,28,Replace,DupKeys -n"
-00290   pr f "12,5,C 60": "Completed Converting FundMstr File for Company: "&env$('cno')
+00260   execute "COPY X,[Q]\CLmstr\FUNDMSTR.h[cno] -n"
+00270   execute "Index [Q]\CLmstr\FUNDMSTR.h[cno],[Q]\CLmstr\FundIdx1.h[cno],1,3,Replace,DupKeys -n"
+00280   execute "Index [Q]\CLmstr\FUNDMSTR.h[cno],[Q]\CLmstr\FundIdx2.h[cno],4,28,Replace,DupKeys -n"
+00290   pr f "12,5,C 60": "Completed Converting FundMstr File for Company: [cno]"
 00300   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00310   input fields "13,40,C 1,IAE,N": pause$
 00320   goto L90

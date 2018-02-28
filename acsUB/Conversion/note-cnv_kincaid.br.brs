@@ -17,15 +17,15 @@
 00160   io1$(1)="10,40,N 2,UT,N"
 00170 L170: rinput fields mat io1$: cno conv L170
 00180   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
-00190 L190: execute "Index "&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&' '&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&" 1 10 Replace DupKeys -n"
-00200   open #31: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #32: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outIn,relative 
+00190 L190: execute "Index [Q]\UBmstr\Note1.h[cno]"&' '&"[Q]\UBmstr\NoteIdx1.h[cno] 1 10 Replace DupKeys -n"
+00200   open #31: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno],Shr",internal,input,keyed 
+00210   open #32: "Name=[Q]\UBmstr\Note2.h[cno],Shr,Use,RecL=73",internal,outIn,relative 
 00220 L220: read #31,using L230: z$,mat ra eof L320
 00230 L230: form pos 1,c 10,2*pd 3
 00240   close #33: ioerr L245
-00245 L245: if exists(env$('Q')&"\UBmstr\notes.h"&env$('cno')) = 0 then !:
-          execute "mkdir "&env$('Q')&"\UBmstr\notes.h"&env$('cno')
-00250   open #33: "Name="&env$('Q')&"\UBmstr\notes.h"&env$('cno')&"\"&trim$(z$)&".txt,RecL=128,use",display,output 
+00245 L245: if exists("[Q]\UBmstr\notes.h[cno]") = 0 then !:
+          execute "mkdir [Q]\UBmstr\notes.h[cno]"
+00250   open #33: "Name=[Q]\UBmstr\notes.h[cno]\"&trim$(z$)&".txt,RecL=128,use",display,output 
 00260   adr=ra(1)
 00270 L270: if adr=0 then goto L220
 00280   read #32,using L300,rec=adr: k32$,rm$,adr
@@ -35,7 +35,7 @@
 00320 L320: goto DONE
 00330 ! ______________________________________________________________________
 00340 DONE: ! 
-00350   pr "company number "&env$('cno')&" completed successfully"
+00350   pr "company number [cno] completed successfully"
 00360 ! Goto 110
 00370 XIT: chain "S:\acsUB\conversion\ubadrbil-cnv"
 00380 ! ______________________________________________________________________

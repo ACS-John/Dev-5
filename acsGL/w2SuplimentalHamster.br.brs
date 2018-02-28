@@ -13,7 +13,7 @@
 01300   goto XIT
 01500 OPEN_FILE: ! r:
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: 'Name='&env$('Q')&'\'&env$('cursys')&'mstr\W2Box16.h'&env$('cno')&',KFName='&env$('Q')&'\'&env$('cursys')&'mstr\W2INDEX.h'&env$('cno')&',Use,RecL=158,Version=0,KPs=1,KLn=8,Shr',internal,outIn,keyed
+01700   open #open_file_count+=1: 'Name=[Q]\'&env$('cursys')&'mstr\W2Box16.h[cno],KFName=[Q]\'&env$('cursys')&'mstr\W2INDEX.h[cno],Use,RecL=158,Version=0,KPs=1,KLn=8,Shr',internal,outIn,keyed
 01800 return ! /r
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 02200 XIT: fnxit

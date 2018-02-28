@@ -12,20 +12,20 @@
 12180   dim dedst(20),deduc(20),gl$(20)*12,d1$*20
 12200   ! ______________________________________________________________________
 16000   fntop(program$,cap$="Post to General Ledger")
-16040   fnIndex_it(env$('Q')&'\PRmstr\Department.h'&env$('cno'),env$('Q')&'\PRmstr\DeptId4.h'&env$('cno'),'12/1/9 12/8/3') ! sort department file in general ledger sequence
+16040   fnIndex_it('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
 16050   fnStatusClose
 16060   fnopenprn
 16080   ! ______________________________________________________________________
-16100   open #20: "Name="&env$('Q')&"\GLmstr\GLBucket.h"&env$('cno')&",Shr",internal,input,relative ioerr L260
+16100   open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",internal,input,relative ioerr L260
 16120   read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 16140   close #20: 
 16160   if glb=2 then let fn_askaccrue
 16200   L260: ! 
 16180   ! ______________________________________________________________________
 18000   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-18020   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,input,keyed 
+18020   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed 
 18040   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
-18060   if fnclient_has('CL') then ! exists(env$('Q')&"\CLmstr") then 
+18060   if fnclient_has('CL') then ! exists("[Q]\CLmstr") then 
 18080     mat ml$(3)
 18100     ml$(1)="Normally you would not take this menu option to post"
 18120     ml$(2)="General Ledger if you have the Checkbook system."
@@ -53,13 +53,13 @@
 24020   dat1=d1=val(resp$(1))
 24040   dat2=d2=val(resp$(2))
 24060   if resp$(3)="True" then skipposting=1
-24080   if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h"&env$('cno')
-24100   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+24080   if glb=2 then glwk$="[Q]\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h[cno]"
+24100   if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
 24120   if glb=2 and accrue$="Yes" then 
-24140     open #11: "Name="&env$('Q')&"\GLmstr\GL"&date$(days(d2,'ccyymmdd'),'mmddyy')&".h"&env$('cno')&",RecL=104,Use",internal,output 
+24140     open #11: "Name=[Q]\GLmstr\GL"&date$(days(d2,'ccyymmdd'),'mmddyy')&".h[cno],RecL=104,Use",internal,output 
 24160   end if 
 24180 ! 
-26000   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+26000   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 26020   read #1,using 'Form POS 1,C 40,POS 437,15*C 12,N 1,POS 618,10*N 1': a$,mat prgl$,glinstal ! need to get from other file
 26040   for j=1 to 4 ! 1=fed 2=fica/med 3=med 4=state
 26060     if j=3 then 
@@ -85,8 +85,8 @@
 26460   prgl(j,3)=val(prgl$(15)(10:12)) ! cash
 26480   nametab=36-len(rtrm$(a$))/2
 26500   close #1: 
-26520   open #2: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-26540   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptId4.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26520   open #2: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
+26540   open #6: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptId4.h[cno],Shr",internal,outIn,keyed 
 26560   fn_pr_hdr
 28000   do
 28020     DEPT_READ: ! 
@@ -292,7 +292,7 @@
 52100   pr #255: newpage
 52120 fnend 
 56000 def fn_askaccrue
-56020   open #12: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2500
+56020   open #12: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",internal,input,keyed ioerr L2500
 56040   glthere=1
 56060   L2500: ! 
 56080   msgline$(1)="Do you wish to accrue part of this Payroll"

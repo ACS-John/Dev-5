@@ -10,10 +10,10 @@
 00090 ! fntop
 00100     fncno(cno)
 00110 ! 
-00120     execute "Copy "&env$('Q')&"\CLmstr\fundmstr.h"&env$('cno')&" X."&session$&" -75"
-00130     execute "COPY X."&session$&' '&env$('Q')&"\CLmstr\fundmstr.h"&env$('cno')&" -D"
+00120     execute "Copy [Q]\CLmstr\fundmstr.h[cno] X."&session$&" -75"
+00130     execute "COPY X."&session$&' '&"[Q]\CLmstr\fundmstr.h[cno] -D"
 00140     execute "Free X."&session$
-00150     execute "Index "&env$('Q')&"\CLmstr\fundmstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\fundidx1.h"&env$('cno')&",1,3,Replace,DupKeys"
+00150     execute "Index [Q]\CLmstr\fundmstr.h[cno],[Q]\CLmstr\fundidx1.h[cno],1,3,Replace,DupKeys"
 00160     goto XIT
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

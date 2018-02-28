@@ -8,7 +8,7 @@
 00090 ! ______________________________________________________________________
 00100   fntop(program$,cap$="User Designed Reports Proof List")
 00110   fncno(cno,cnam$)
-00120   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&",Shr",internal,input,keyed 
+00120   open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",internal,input,keyed 
 00130   fnopenprn
 00160 ! ______________________________________________________________________
 00170   do 

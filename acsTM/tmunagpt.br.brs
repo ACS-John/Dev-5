@@ -9,13 +9,13 @@
 00100   fncno(cno,cnam$)
 00110   namtab=66-int(len(rtrm$(cnam$))/2)
 00120 ! ______________________________________________________________________
-00130   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr ERTN
+00130   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr ERTN
 00140   read #1,using L150,rec=1: mat cat$ ioerr ERTN
 00150 L150: form pos 1,30*c 30
 00160   close #1: 
 00170 ! ______________________________________________________________________
-00180   open #1: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
-00190   open #2: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+00180   open #1: "Name=[Q]\TMmstr\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
+00190   open #2: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 00200   pr newpage
 00210   pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
 00220   pr f "12,30,Cc 20,B,5": "Cancel (F5)"
@@ -28,7 +28,7 @@
 00290   goto L250
 00300 L300: close #1,free: 
 00310   close #2: 
-00320   open #3: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+00320   open #3: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 00330   gosub L350
 00340   goto L420
 00350 L350: pr #255,using L360: "_________   _________  _________  _________  _________  _________"

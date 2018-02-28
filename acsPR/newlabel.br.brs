@@ -20,9 +20,9 @@
 00220   goto GET_STARTED
 00240 ! ______________________________________________________________________
 00250 OPEN_KEYED: ! r:
-00260   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00260   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 00270   L270: form pos 1,n 8,3*c 30,c 11,pos 110,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6
-00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00280   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00290 return ! /r
 00310 GET_STARTED: ! r:
 00330   lb1=0
@@ -75,7 +75,7 @@
 00800   respc=0
 00810   fnTos(sn$="prlabel-2")
 00820   fnLbl(1,1,"Employee Number to Print:",25,1)
-00830   fncombof("Employee",1,28,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select any employee number you wish printed") !:
+00830   fncombof("Employee",1,28,20,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",1,0, "Select any employee number you wish printed") !:
         resp$(respc+=1)=""
 00840   fnCmdKey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
 00850   fnCmdKey("&Complete",2,0,0,"Print selected labels.")
@@ -112,7 +112,7 @@
 01060   fnTxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! !:
         resp$(respc+=1)=""
 01070   fnLbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
-01080   fncombof("Employee",13,mypos,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") !:
+01080   fncombof("Employee",13,mypos,20,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") !:
         resp$(respc+=1)=""
 01090   fnCmdSet(2)
 01100   fnAcs(sn$,0,mat resp$,ck) !:

@@ -156,7 +156,7 @@
 60740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60760 ! /region
 72020 SERVICE_LOAD: ! r: Type Of Service Open
-72040   open #service=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
+72040   open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 72060   F_SERVICE: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
 72080   read #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
 72100   goto SERVICE_LOAD_FINIS
@@ -171,7 +171,7 @@
 73060   next service_item
 73080 return  ! /r
 76000 SERVICE_SAVE: ! r:
-76020   open #service=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
+76020   open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 76040   rewrite #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
 76060   close #service: 
 77000   ! 
@@ -181,7 +181,7 @@
 77060   next service_item
 77080 return  ! /r
 82000 COMPANY_LOAD: ! r:
-82020   open #h_company:=1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input 
+82020   open #h_company:=1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
 82040   read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent ioerr COMPANY_READ_ERR
 82060   close #h_company: 
 82080   fnLastBillingDate(d1)
@@ -201,14 +201,14 @@
 83080   pr "Converting UB Company Information"
 83100   pr "From Record Length "&str$(company_rln)&" to 133"
 83120   close #h_company: ioerr ignore
-83140   fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'), 133)
+83140   fnCopy("[Q]\UBmstr\Company.h[cno]","[Q]\UBmstr\Company.h[cno]", 133)
 83160 goto COMPANY_LOAD ! /r
 84000 COMPANY_SAVE: ! r:
 84020   if rcpt$="True" then rcpt$="Y" else rcpt$="N"
 84040   if escrow$="True" then escrow$="Y" else escrow$="N"
 84060   maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 84080   close #1,free: ioerr ignore
-84100   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Size=0,RecL=133,Replace",internal,outIn 
+84100   open #1: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 
 84120   write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent
 84140   close #1: 
 84160   fnLastBillingDate(d1,1)
@@ -222,7 +222,7 @@
 86020   ! GET_CODES: ! r: get applicable rate codes
 86040   ! search routine must be passed code for service (WA for water) in searchcode$
 86060   dim rates$(50)*30,rt$*54
-86080   open #h_rate1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+86080   open #h_rate1:=fngethandle: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 86100   restore #h_rate1: 
 86120   cr_rate_item=1: mat rates$=("")
 86140   mat rates$(50)

@@ -19,12 +19,12 @@
 14320   ! pr newpage
 14340   if fnps=2 then 
 14360     mp1=66 
-14380     fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&"," 
-14400     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr" 
+14380     fl1$="Name=[Q]\GLmstr\AcGLFnSc.h[cno]," 
+14400     fl1$=fl1$&"KFName=[Q]\GLmstr\FnScIndx.h[cno],Shr" 
 14420   else 
 14440     mp1=63 
-14460     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&"," 
-14480     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
+14460     fl1$="Name=[Q]\GLmstr\ACGLFNSB.h[cno]," 
+14480     fl1$=fl1$&"KFName=[Q]\GLmstr\FnSBIndx.h[cno],Shr"
 14500   end if
 14520   ! if actpd>0 and actpd<13 then goto L230
 14540   ! pr newpage
@@ -52,11 +52,11 @@
 20280   ! /r
 22000   ! r: open glmstr with new fsindex
 22020   if fnps=2 then ! secondary
-22040     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&"\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
+22040     execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 66 3 Replace DupKeys -N"
 22060   else
-22080     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&"\fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
+22080     execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 63 3 Replace DupKeys -N"
 22100   end if
-22120   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&'\'&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+22120   open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed 
 22140   ! /r
 23020   fnopenprn 
 23040   report$=env$('program_caption')

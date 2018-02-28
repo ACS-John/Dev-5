@@ -14,8 +14,8 @@
 10180     if trim$(snm$(j))<>"" then option$(x+=1)=srv$(j)
 10200   next j
 10220   mat option$(x)
-10240   open #1: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
-10250   open #2: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno')&",Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
+10240   open #1: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
+10250   open #2: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
 10260   goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
 20000 SCREEN_GRID: ! r:
 20020   fnTos(sn$="rateflex")

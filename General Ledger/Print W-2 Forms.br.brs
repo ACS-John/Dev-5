@@ -19,12 +19,12 @@
 14240   fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260 ! 
 14280 ! ______________________________________________________________________
-14300   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative
+14300   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
 14320   read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag 
 14340   close #1: 
 14360   ficarate=ficarate/100 
 14380   feducrat=feducrat/100
-14400   open #hCompany:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  
+14400   open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  
 14420   read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst 
 14440   close #hCompany: 
 14460   for j=1 to 3 : a$(j)=a$(j)(1:30) : next j
@@ -64,9 +64,9 @@
 26020   if exportFormatID=0 then 
 26040     fnpa_open('',w2Copy$,'PDF') 
 26060   end if 
-26080   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+26080   open #hEmployee:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed 
 26100   box16=0
-26120   open #hW2Box16:=fngethandle: "Name="&env$('Q')&"\GLmstr\W2Box16.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\W2INDEX.H"&env$('cno')&",Shr",internal,input,keyed ioerr w2b16openfail
+26120   open #hW2Box16:=fngethandle: "Name=[Q]\GLmstr\W2Box16.H[cno],KFName=[Q]\GLmstr\W2INDEX.H[cno],Shr",internal,input,keyed ioerr w2b16openfail
 26140   box16=1
 26160   w2b16openfail: !
 26240   cLocality$="NO"

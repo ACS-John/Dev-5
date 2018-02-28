@@ -190,7 +190,7 @@
 37000 def fn_service_chg_from_history(service_number,history_date,scfh_account$)
 37020   if ~scfh_setup then
 37040     scfh_setup=1
-37060     open #scfh_h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+37060     open #scfh_h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 37080   end if
 37100   scfh_return=0
 37120   dim scfh_key$*19,scfh_alloc_amt(10)
@@ -254,7 +254,6 @@
 39000   else 
 39020     read #h_ratemst,using FORM_RATEMSTR,key=service_code$&lpad$(str$(rate_code),2): mc1,mu1,mat rt nokey NM_XIT
 39040     calk_non_metered_return=max(mc1,rt(1,3)) ! g(j)=max(mc1,rt(1,3))
-39060     ! if j=6 and env$('client')="Eldorado" then calk_non_metered_return=g(6)*g(5)
 39140     ! if env$('client')="Carrizo" and j=7 then gosub CARRIZO_TRASH_TAX
 39150     if env$('client')="Pennington" and service_code$='SF' then gosub PENNINGTON_SERVICE_FEE
 39160   end if 
@@ -564,7 +563,6 @@
 54380     mu2=rt(j,2)
 54400   next j
 54420   L4670: w(4)=max(mc1*max(1,extra(16)),w(4))
-54440   ! if env$('client')="Eldorado" and w(4)<((rt(1,3)*10)*2) then w(4)=((rt(1,3)*10)*2)
 54460   goto GAS_COMPLETED
 54480   ! ___________________________
 54500   STANDARD_GAS_CHARGE: ! 

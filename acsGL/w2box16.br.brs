@@ -28,7 +28,7 @@
 12080     on error goto ERTN
 12100     dim resp$(64)*128
 12120     dim t$*8
-12180     open #hw2box16:=fngethandle: "Name="&env$('Q')&"\GLmstr\W2Box16.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\GLmstr\W2Index.h"&env$('cno')&",Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed
+12180     open #hw2box16:=fngethandle: "Name=[Q]\GLmstr\W2Box16.h[cno],Version=0,KFName=[Q]\GLmstr\W2Index.h[cno],Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed
 12200     dim fw2box16$*255
 12220     fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 12240   end if
@@ -72,7 +72,7 @@
 34000     fnTos(sn$='w2supEdit1')
 34020     mylen=15 : mypos=mylen+2
 34040     fnLbl(1,1,'Employee:',mylen,1)
-34060     fncombof('emp',1,mypos,width,env$('Q')&'\GLmstr\PRmstr.h'&env$('cno'),1,4,5,25, env$('Q')&'\GLmstr\PRIndex.h'&env$('cno'),1)
+34060     fncombof('emp',1,mypos,width,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,25, '[Q]\GLmstr\PRIndex.h[cno]',1)
 34080     resp$(1)=t$
 34100     fnCmdSet(2)
 34120     fnAcs(sn$,0,mat resp$,ckey)

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsCL\Conversion\GLmstr-to-recL62
-00020 ! convert CL '&env$('Q')&'\GLmstr from any record length to 62 !:
+00020 ! convert CL [Q]\GLmstr from any record length to 62 !:
         ! for use from version 0 to version 0 !:
         ! okay to use on RecL of 72 or 80
 00030   def library fnglmstrtorecl62
@@ -11,10 +11,10 @@
 00090 ! fntop
 00100     fncno(cno)
 00110 ! 
-00120     execute "Copy "&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&" X."&session$&" -62"
-00130     execute "COPY X."&session$&' '&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&" -D"
+00120     execute "Copy [Q]\CLmstr\GLmstr.H[cno] X."&session$&" -62"
+00130     execute "COPY X."&session$&' '&"[Q]\CLmstr\GLmstr.H[cno] -D"
 00140     execute "Free X."&session$
-00150     execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&","&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",1,12,Replace,DupKeys"
+00150     execute "Index [Q]\CLmstr\GLmstr.H[cno],[Q]\CLmstr\GLIndex.h[cno],1,12,Replace,DupKeys"
 00160     goto XIT
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

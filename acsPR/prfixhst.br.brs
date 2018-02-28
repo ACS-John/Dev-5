@@ -15,14 +15,14 @@
 00135   fnconsole(1)
 00140 ! 
 00150 ! ______________________________________________________________________
-00160   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,input,relative 
+00160   open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,input,relative 
 00170   read #1,using L180,rec=1: mat dedfed
 00180 L180: form pos 638,10*n 1
 00190   close #1: 
-00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),internal,outIn,keyed 
-00210   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno'),internal,outIn,keyed 
-00220   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,outIn,relative 
+00200   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno]",internal,outIn,keyed 
+00210   open #11: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDX2.h[cno]",internal,outIn,keyed 
+00220   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCKINDX.h[cno],Shr",internal,outIn,keyed 
+00230   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,outIn,relative 
 00240   goto L430
 00250 ! ______________________________________________________________________
 00260 UPDT: ent$=lpad$(str$(heno),8)

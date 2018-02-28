@@ -10,15 +10,15 @@
 00100 ! ______________________________________________________________________
 00110   right=1
 00120   fntop(program$,cap$="Trial Balance")
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,input,relative 
+00150   open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative 
 00151   read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) 
 00152   read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ 
 00153   close #20: 
 00160   a$(1)="C/D" : a$(2)="C/R" : a$(3)="ADJ" 
 00162   a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" 
 00164   a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
-00170   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
-00180   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,input,relative 
+00170   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,input,keyed 
+00180   open #2: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative 
 00190   if fnprocess=1 then goto START_REPORT
 00200 SCREEN1: ! 
 00210   fnTos(sn$="GLTB") 

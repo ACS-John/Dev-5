@@ -16,13 +16,13 @@
 00180   fndat(dat$,1)
 00190 ! 
 00200   fntop(program$,cap$="Bar Graph")
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input  !:
+00210   open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input  !:
         read #1,using "Form POS 121,N 6": d1 ioerr L230 !:
         close #1: 
 00220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
 00230 L230: fnget_services(mat serviceName$,mat srv$)
-00240   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00240   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+00250   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00260 L260: read #1,using L990,release: z$,e$,bildat eof SCREEN1
 00265   if bildat<>d1 then goto L260 ! current customer
 00270   restore #2,key>=z$&"         ": nokey L260
@@ -241,7 +241,7 @@
 01980 ! ______________________________________________________________________
 01990 VBOPENPRINT: ! 
 02000   if file(20)=-1 then 
-02010     open #20: "Name="&env$('Q')&"\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
+02010     open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
 02020     pr #20: 'Call Print.MyOrientation("Landscape")'
 02030     lyne=margin ! starting of 1st line
 02040     column1=16 !:

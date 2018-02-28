@@ -22,7 +22,7 @@
         priorcd=fnpriorcd
 00170   udf$=env$('temp')&'\'
 00180   monthly=1 ! default to monthly information
-00190   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
+00190   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00200   fscode=fnfscode
 00210   pors=1
 00220   gosub L2370
@@ -30,8 +30,8 @@
 00240   in3$(1)="8,25,N 12.2,UT,N" : in3$(2)="8,45,N 12.2,UT,N"
 00250   mp1=75
 00260   if fnps=2 then mp1=mp1+3
-00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
-00280   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
+00270   fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\FNSFIndx.h[cno],Shr"
+00280   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\FNSGIndx.h[cno],Shr"
 00290   open #1: fl1$,internal,input,keyed 
 00300   if fnprocess=1 or fnUseDeptNo=0 then goto L410
 00310   fnTos(sn$="ACglcasf") !:
@@ -49,10 +49,10 @@
 00410 L410: on fkey 5 goto L2250
 00420   if fnps=2 then goto L450 ! secondary
 00425   close #3: ioerr L430
-00430 L430: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
+00430 L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 75 3 Replace DupKeys -N"
 00440   goto L460
-00450 L450: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
-00460 L460: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00450 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 78 3 Replace DupKeys -N"
+00460 L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00470   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00480 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250
@@ -245,7 +245,7 @@
 02340 ! ______________________________________________________________________
 02350 XIT: fnxit
 02360 ! ______________________________________________________________________
-02370 L2370: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outIn,relative 
+02370 L2370: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative 
 02380   read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 02390 L2390: form pos 1,10*n 3,10*c 20
 02400 L2400: fnTos(sn$="ACglcasf3") !:

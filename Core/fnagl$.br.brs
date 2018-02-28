@@ -6,17 +6,17 @@
 00060 ! _______________________________________________________________________
 00070     if x$="[All]" or x$='' then let fnagl$="  0     0  0" : goto XIT
 00080     tmp_cursys$=env$('CurSys')
-00090     if env$('CurSys')='UB' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
-00100     if env$('CurSys')='UB' and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then tmp_cursys$="UB": goto COMPANY_POST_READ
-00110     if env$('CurSys')='PR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
-00120     if env$('CurSys')='PR' and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then tmp_cursys$="CL": goto COMPANY_OPEN
-00130     if env$('CurSys')='PR' and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then tmp_cursys$="PR": goto COMPANY_OPEN
-00140     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
-00150     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'))=0 then tmp_cursys$="CR": goto COMPANY_OPEN
+00090     if env$('CurSys')='UB' and exists("[Q]\GLmstr\Company.h[cno]") then tmp_cursys$="GL": goto COMPANY_OPEN
+00100     if env$('CurSys')='UB' and exists("[Q]\UBmstr\GLmstr.h[cno]") then tmp_cursys$="UB": goto COMPANY_POST_READ
+00110     if env$('CurSys')='PR' and exists("[Q]\GLmstr\Company.h[cno]") then tmp_cursys$="GL": goto COMPANY_OPEN
+00120     if env$('CurSys')='PR' and exists("[Q]\CLmstr\Company.h[cno]") then tmp_cursys$="CL": goto COMPANY_OPEN
+00130     if env$('CurSys')='PR' and exists("[Q]\PRmstr\glmstr.h[cno]") then tmp_cursys$="PR": goto COMPANY_OPEN
+00140     if env$('CurSys')='CR' and exists("[Q]\GLmstr\GLmstr.h[cno]") then tmp_cursys$="GL": goto COMPANY_OPEN
+00150     if env$('CurSys')='CR' and exists("[Q]\GLmstr\GLmstr.h[cno]")=0 then tmp_cursys$="CR": goto COMPANY_OPEN
 00160     if env$('CurSys')='CL' then tmp_cursys$='CL' else tmp_cursys$='GL'
 00170 ! find out if I should use the department number and/or the sub account number
 00180 COMPANY_OPEN: ! 
-00190     open #company:=fngethandle: "Name="&env$('Q')&"\"&tmp_cursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,input ioerr COMPANY_OPEN_IOERR
+00190     open #company:=fngethandle: "Name=[Q]\"&tmp_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr COMPANY_OPEN_IOERR
 00200     if tmp_cursys$='GL' then 
 00210       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 00220     else if tmp_cursys$='CL' then 

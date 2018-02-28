@@ -10,9 +10,9 @@
 00110   dim ml$(4)*128
 00120 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Design Reports")
-00150   fnindex_it(env$('Q')&"\PRmstr\PRReport.h"&env$('cno'),env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno'),"1 2")
+00150   fnindex_it("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
 00152   fnStatusClose
-00160   open #h_prreport:=1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed 
+00160   open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed 
 00162 F_PRREPORT: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 00163 ! 
 00180 ! ______________________________________________________________________
@@ -22,7 +22,7 @@
 00220   fnTos(sn$="Report-ask")
 00222   respc=0
 00230   fnLbl(1,1,"Report:",11,1)
-00240   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
+00240   fncombof("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
 00242   resp$(respc+=1)=""
 00250   fnCmdKey("&Add",1,0,0,"Add a new employee" )
 00252   fnCmdKey("E&dit",2,0,0,"Modify the selected report")
@@ -225,7 +225,7 @@
 01540 !   close #105: ioerr ignore
 01550 !   open #105: "SRow=8,Scol=20,ERow=15,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn
 01560 !   pr #105: newpage
-01580 !   pr #105,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+01580 !   pr #105,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 01590 !   pr #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."
 01600 !   io5$(1)="6,2,Cc 38,N"
 01610 !   io5$(2)="7,2,Cc 38,N"

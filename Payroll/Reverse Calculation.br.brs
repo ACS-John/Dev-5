@@ -17,35 +17,35 @@
 00180 ! 
 00190   cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00200   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-00210   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00210   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00212   read #1,using 'Form POS 605,C 12,N 1': bankgl$,gli
 00214   close #1: 
 00220   if gli=1 then 
 00222     gosub POSTGL0
-00224     open #14: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L250
+00224     open #14: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L250
 00226     goto L260
 00228 L250: ! 
 00230     gli=0
 00260 L260: ! 
 00262   end if 
-00264   open #6: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L330
-00270   open #7: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00280   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then 
-00282     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00264   open #6: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX1.H[cno],Shr",internal,outIn,keyed ioerr L330
+00270   open #7: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX2.H[cno],Shr",internal,outIn,keyed 
+00280   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then 
+00282     open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed 
 00284   else 
-00286     open #tralloc:=8: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Shr",internal,outIn,relative 
+00286     open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative 
 00288   end if 
-00290   open #9: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00300   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative ioerr L330
+00290   open #9: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 
+00300   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr L330
 00310   read #20,using 'Form POS 152,N 2',rec=1: bcde
 00312   close #20: 
 00320   cli=1
 00330 L330: ! 
-00340   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00350   open #hDepartment:=5: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00370   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00340   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
+00350   open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
+00370   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00380 ! ______________________________________________________________________
-00390   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Shr",internal,input,relative 
+00390   open #11: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,input,relative 
 00400   read #11,using "form pos 1,x 16,x 32,n 8",rec=1: d1 noRec ignore
 00410   close #11: 
 00420   dat$=cnvrt$("pic(########)",d1)
@@ -56,7 +56,7 @@
 00470   fnTos(sn$="Prrevcal")
 00472   respc=0
 00480   fnLbl(1,1,"Employee to Reverse:",25,1)
-00490   fncombof("Employee",1,28,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,0, "Select the employee to reverse.")
+00490   fncombof("Employee",1,28,0,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",2,0, "Select the employee to reverse.")
 00492   resp$(respc+=1)="[All]"
 00500   fnLbl(2,1,"Payroll Date:",25,1)
 00510   fnTxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
@@ -64,9 +64,9 @@
 00530   fnLbl(3,1,"Check Number:",25,1)
 00540   fnTxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
 00550   resp$(respc+=1)= ""
-00560   if exists(env$('Q')&'\CLmstr\BankMstr.h'&env$('cno')) then 
+00560   if exists('[Q]\CLmstr\BankMstr.h[cno]') then 
 00570     fnLbl(4,1,"Bank Code for Checkbook:",25,1)
-00580     fncombof('Bank',4,28,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
+00580     fncombof('Bank',4,28,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
 00582     resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
 00584   end if 
 00590   if success=1 then 
@@ -175,7 +175,7 @@
 01420   mat tr=(0)
 01430   if clr=0 then clr=cd1
 01440   rewrite #6,using L1320,key=k$: bcde,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd
-01450   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then goto DELETE4_02ALLOC
+01450   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then goto DELETE4_02ALLOC
 01460 L1460: if adr=0 then goto L1510
 01470   read #8,using 'form pos 65,pd 3',rec=adr: nta noRec L1510
 01480   delete #8,rec=adr: 
@@ -202,7 +202,7 @@
 01660   fli2$(1)="11,64,n 3,u"
 01670   fli2$(2)="11,68,n 6,u"
 01680   fli2$(3)="11,75,n 3,u"
-01690   open #1: "Name="&env$('Q')&"\GLmstr\GLBUCKET.H"&env$('cno')&",Shr",internal,input,relative ioerr L1740
+01690   open #1: "Name=[Q]\GLmstr\GLBUCKET.H[cno],Shr",internal,input,relative ioerr L1740
 01700   read #1,using 'form pos 1,n 1',rec=1: glb noRec ignore
 01720   close #1: 
 01730   if glb=2 then gosub L3690
@@ -216,10 +216,10 @@
 01820   fnAcs(sn$,0,mat resp$,ckey) ! posting date
 01830   if ckey<>5 then 
 01840     dat1=val(resp$(1))
-01850     if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
-01860     if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
-01870     if glb=2 and uprc$(rtrm$(accrue$))="Y" then open #11: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H"&env$('cno')&",RecL=104,USE",internal,output 
-01880     open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+01850     if glb=2 then glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H[cno]"
+01860     if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
+01870     if glb=2 and uprc$(rtrm$(accrue$))="Y" then open #11: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H[cno],RecL=104,USE",internal,output 
+01880     open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 01890     read #1,using 'form pos 1,c 40,pos 437,15*c 12': a$,mat prgl$
 01910     close #1: 
 01920     for j=1 to 15
@@ -405,7 +405,7 @@
 03670   return  ! /r
 03690 L3690: ! r:
 03692   close #101: ioerr ignore
-03700   open #12: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
+03700   open #12: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLINDEX.H[cno],Shr",internal,input,keyed ioerr ignore
 03720   mat ml$(2) 
 03722   ml$(1)="Did you accrue part of this payroll" 
 03724   ml$(2)="in the previous month? (Y/N)" 

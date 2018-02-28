@@ -5,7 +5,7 @@
 00050 ! on error goto ertn
 00060 ! ____________
 00070   cno=2
-00080   open #trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno'),internal,outIn 
+00080   open #trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno]",internal,outIn 
 00090 L90: read #trans,using "Form pos 1,C 10": p$ eof L120
 00100   if p$(1:2)=" 3" then delete #trans: : pr "deleted one"
 00110   goto L90

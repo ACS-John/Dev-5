@@ -29,8 +29,8 @@
 15600   date_bad=val(resp$(1))
 15800   date_good=val(resp$(2))
 16000 ! 
-16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
+16800   open #h_prmstr:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed 
+17000   open #h_acprcks:=fngethandle: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative 
 17400   fnopenprn(cp,58,220,0)
 17600   fn_hdr1
 17800 L350: if d(1)>0 then goto L360 else goto L390

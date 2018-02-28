@@ -5,7 +5,7 @@
 00060   on error goto ERTN
 00100   dim bp(13)
 00120   dim resp$(128)*256
-00200   open #company=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00200   open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00260   read #company,using 'Form Pos 150,2*N 1,Pos 384,n 2': use_dept,use_sub,nap
 00280   close #company: 
 00320   fnGetFundList(mat fund_list)
@@ -18,11 +18,11 @@
 32000   if ~fn_theScreen then goto XIT
 34000   ! r: setup and open files
 34020   if enableProcessAccumulatedTrans$='True' then
-34040     open #hAcTrans:=fngethandle: 'Name='&env$('Q')&'\GLmstr\AcTrans.h'&env$('cno')&',KFName='&env$('Q')&'\GLmstr\AcTrIdx.h'&env$('cno'),internal,input,keyed
+34040     open #hAcTrans:=fngethandle: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',internal,input,keyed
 34100     startWithBalEndOfPriorYear=1
 34120   end if
-34140   open #hGlMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-34160   open #hGlTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,input,relative 
+34140   open #hGlMstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
+34160   open #hGlTrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative 
 34180   fTransBoth: form pos 1,c 12,n 6,pd 6.2
 34200   ! /r
 36000   do ! r: main loop

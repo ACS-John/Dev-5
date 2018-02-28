@@ -17,8 +17,8 @@
 00039 ! /r
 00040   fntop(program$,cap$="Print Flex")
 00050   programfolder$=env$('cursys')&"mstr"
-00060   datafolder$=env$('Q')&'\'&env$('cursys')&"mstr"
-00062   dataext$='.h'&env$('cno')
+00060   datafolder$='[Q]\'&env$('cursys')&"mstr"
+00062   dataext$='.h[cno]'
 00122   dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 00123   dim tg(11),p$*10
 00124   dim ck1$*1,ck2$*1,ck3$*1,ck4$*1,ck5$*1,ck5d$*60,amt(7),amt2(5),cksa$*1,eshome$*1,esstreet$*30,weather$*1,sign$*1,signhelp$*30,witname$*30
@@ -66,7 +66,7 @@
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! r: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 08001 !             remove the old reads in case they dont match
-08010   open #1: "name="&datafolder$&"\ubtransvb.h"&env$('cno')&",kfname="&datafolder$&"\ubtrindx.h"&env$('cno')&",Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+08010   open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 08100   return  ! /r
 08999 ! __________________ this is 8999 next is 9000 _________________________
 09000 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info

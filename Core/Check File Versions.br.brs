@@ -67,8 +67,8 @@
 24080   for camf_item=1 to udim(mat camf_filename$)
 24100     fnGetPp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
 24102     ! if lwrc$(camf_filename$(camf_item))='department' then pause
-24120     if ~exists(env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno')) then 
-24140       fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno'))
+24120     if ~exists('[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]') then 
+24140       fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),'[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]')
 24160     end if 
 24180   next camf_item
 24200 fnend 
@@ -149,7 +149,7 @@
 33060   close #h_mr_file: 
 33080   if mr_rln_current<mr_rln_minimum then 
 33100     fnCopy(mr_filename$,mr_filename$,mr_rln_minimum)
-33140     fnFree(env$('Q')&"\x")
+33140     fnFree("[Q]\x")
 33160   end if  ! 
 33180 fnend  ! fn_min_rln
 34000 def fn_check_version(cv_version_current,cv_version_proper,cv_file$*256)
@@ -179,17 +179,17 @@
 39040   ! fn_check_version(tmpversion,version_proper,'')
 39060 fnend
 43000 def fn_cfv_utility_billing
-43010   if exists(env$('Q')&"\UBmstr")=0 then execute 'MkDir "'&env$('Q')&'\UBmstr"'
-43020   if exists(env$('Q')&"\UBmstr\UBdata")=0 then execute 'MkDir "'&env$('Q')&'\UBmstr\UBdata"'
-43030   if exists(env$('Q')&"\WorkOrder")=0 then execute 'MkDir "'&env$('Q')&'\WorkOrder"'
-43040   ! if ~exists(env$('Q')&'\INI\Utility Billing') then execute 'mkdir env$('Q')&"\INI\Utility Billing"'
-43050   ! if ~exists(env$('Q')&'\INI\acs'&env$('cursys')&'\UBdata') then execute 'mkdir '&env$('Q')&'\INI\acs'&env$('cursys')&'\UBdata'
+43010   if exists("[Q]\UBmstr")=0 then execute 'MkDir "[Q]\UBmstr"'
+43020   if exists("[Q]\UBmstr\UBdata")=0 then execute 'MkDir "[Q]\UBmstr\UBdata"'
+43030   if exists("[Q]\WorkOrder")=0 then execute 'MkDir "[Q]\WorkOrder"'
+43040   ! if ~exists('[Q]\INI\Utility Billing') then execute 'mkdir "[Q]\INI\Utility Billing"'
+43050   ! if ~exists('[Q]\INI\acs'&env$('cursys')&'\UBdata') then execute 'mkdir [Q]\INI\acs'&env$('cursys')&'\UBdata'
 43060   fn_ini_move(env$('cursys'))
 43070   fnIniToReg
 43080   fn_reg_rename(env$('cursys'))
 43090   ! r: move ubBkNo.h into CReg and delete ubBkNo.h
-43100   if exists(env$('Q')&'\UBmstr\ubBkNo.h'&env$('cno')) then 
-43110     open #h_ubbkno:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubBkNo.h"&env$('cno'),internal,outIn,relative 
+43100   if exists('[Q]\UBmstr\ubBkNo.h[cno]') then 
+43110     open #h_ubbkno:=fngethandle: "Name=[Q]\UBmstr\ubBkNo.h[cno]",internal,outIn,relative 
 43120     read #h_ubbkno,using "Form POS 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
 43130     fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 43140     fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
@@ -202,7 +202,7 @@
 43210   ! do company different
 43220   ! - don't make it exist,
 43230   ! - and skip out if it don't exist
-43240   name$=env$('Q')&"\UBmstr\Company.h"&env$('cno')
+43240   name$="[Q]\UBmstr\Company.h[cno]"
 43250   kfname$=''
 43260   myrln=133
 43270   version_proper=0
@@ -213,39 +213,39 @@
 43320     fnStatus('Record Length Error in File: '&tmpfile$)
 43330     fnStatus('         RLn: '&str$(tmprln))
 43340     fnStatus('Fixing the Record Length of Company')
-43350     fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133)
+43350     fnCopy("[Q]\UBmstr\Company.h[cno]","[Q]\UBmstr\Company.h[cno]",133)
 43360   end if 
 43370   SKIP_UB_COMPANY: ! 
 43380   ! 
-43390   fn_file_setup_data(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067,1)
-43400   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),"1","10")
-43410   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno'),"354","7")
-43420   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno'),"11","30")
-43430   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno'),"41","30")
-43440   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno'),"1741/1743","2/7")
+43390   fn_file_setup_data("[Q]\UBmstr\Customer.h[cno]",2067,1)
+43400   fn_file_setup_index("[Q]\UBmstr\ubIndex.h[cno]","1","10")
+43410   fn_file_setup_index("[Q]\UBmstr\ubIndx2.h[cno]","354","7")
+43420   fn_file_setup_index("[Q]\UBmstr\ubIndx3.h[cno]","11","30")
+43430   fn_file_setup_index("[Q]\UBmstr\ubIndx4.h[cno]","41","30")
+43440   fn_file_setup_index("[Q]\UBmstr\ubIndx5.h[cno]","1741/1743","2/7")
 43450   ! 
-43460   fn_file_setup_data(env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno'),130,0)
-43470   fn_file_setup_index(env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno'),'1','10')
+43460   fn_file_setup_data("[Q]\UBmstr\ubAdrBil.h[cno]",130,0)
+43470   fn_file_setup_index("[Q]\UBmstr\AdrIndex.h[cno]",'1','10')
 43480   ! 
-43490   !     fn_file_setup_data(env$('Q')&"\UBmstr\Deposit1.h"&env$('cno'),16,0)
-43500   !     fn_file_setup_index(env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno'),'1','10')
-43510   fn_file_setup_data(env$('Q')&"\UBmstr\Deposit2.h"&env$('cno'),73,0)
-43520   fn_file_setup_index(env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno'),'1','10')
+43490   !     fn_file_setup_data("[Q]\UBmstr\Deposit1.h[cno]",16,0)
+43500   !     fn_file_setup_index("[Q]\UBmstr\DepIdx1.h[cno]",'1','10')
+43510   fn_file_setup_data("[Q]\UBmstr\Deposit2.h[cno]",73,0)
+43520   fn_file_setup_index("[Q]\UBmstr\Deposit2Index.h[cno]",'1','10')
 43530   ! 
-43540   fn_file_setup_data(env$('Q')&"\UBmstr\workOrder.h"&env$('cno'),600,0)
-43550   fn_file_setup_index(env$('Q')&"\UBmstr\wkIndex.h"&env$('cno'),'1/11','10/8')
+43540   fn_file_setup_data("[Q]\UBmstr\workOrder.h[cno]",600,0)
+43550   fn_file_setup_index("[Q]\UBmstr\wkIndex.h[cno]",'1/11','10/8')
 43560   ! 
-43570   fn_file_setup_data(env$('Q')&"\UBmstr\MeterType.h"&env$('cno'),128,1)
-43580   fn_file_setup_index(env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno'),'1','5')
+43570   fn_file_setup_data("[Q]\UBmstr\MeterType.h[cno]",128,1)
+43580   fn_file_setup_index("[Q]\UBmstr\MeterTypeIdx.h[cno]",'1','5')
 43590   ! 
-43600   ! no need now that we have U4 Meter Location    !   fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
-43610   ! no need now that we have U4 Meter Location    !   fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
+43600   ! no need now that we have U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
+43610   ! no need now that we have U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
 43612   !
 43614   fnInitialializeMeterLocation
 43620   !
-43630   if exists(env$('Q')&'\UBmstr\CityStZip.dat') then
+43630   if exists('[Q]\UBmstr\CityStZip.dat') then
 43640     fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
-43650     open #hUbCsz:=fngethandle: "Name="&env$('Q')&"\UBmstr\CityStZip.dat,KFName="&env$('Q')&"\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+43650     open #hUbCsz:=fngethandle: "Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 43660     dim cszData$(0)*128,cszDataN(0),csz$*30
 43670     hCoCsz:=fn_open('CO City State Zip',mat cszData$,mat cszDataN,mat form$)
 43680     do
@@ -259,30 +259,30 @@
 43760     loop
 43770     CszFinis: !
 43780     close #hUbCsz:
-43790     fnFree(env$('Q')&'\UBmstr\CityStZip.dat')
-43800     fnFree(env$('Q')&'\UBmstr\CityStZip.idx')
+43790     fnFree('[Q]\UBmstr\CityStZip.dat')
+43800     fnFree('[Q]\UBmstr\CityStZip.idx')
 43810     fnCloseFile(hCoCsz,'CO City State Zip')
 43820   end if
 43830   !
-43840   if exists(env$('Q')&'\UBmstr\Collections-'&wsid$&'.h'&env$('cno')) then
-43850     if fnCopy(env$('Q')&'\UBmstr\Collections-'&wsid$&'.h'&env$('cno'),env$('Q')&'\UBmstr\Collections-'&env$('acsUserId')&'.h'&env$('cno')) then
-43860       fnFree(env$('Q')&'\UBmstr\Collections-'&wsid$&'.h'&env$('cno'))
+43840   if exists('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]') then
+43850     if fnCopy('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]','[Q]\UBmstr\Collections-'&env$('acsUserId')&'.h[cno]') then
+43860       fnFree('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]')
 43870     end if
 43880   end if
 43890   !
-43900   if exists(env$('Q')&'\UBmstr\IpChg01.h'&env$('cno')) then
-43910     open #hupipchg:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpChg01.h"&env$('cno')&",RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
+43900   if exists('[Q]\UBmstr\IpChg01.h[cno]') then
+43910     open #hupipchg:=fngethandle: "Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
 43920     read #hupipchg,using "Form pos 1,N 6": d2 ioerr ignore
 43930     close #hupipchg,free: 
 43940     for wsidItem=1 to 99
-43950       fnFree(env$('Q')&'\UBmstr\IpChg'&cnvrt$('pic(##)',wsidItem)&'.h'&env$('cno'))
+43950       fnFree('[Q]\UBmstr\IpChg'&cnvrt$('pic(##)',wsidItem)&'.h[cno]')
 43960     nex wsidItem
 43970     ubipchgOpenErr: !
 43980     fncreg_write('Meter Reading Date Current',str$(d2))
 43990   end if
-44000   if exists(env$('Q')&"\UBmstr\per1000.h"&env$('cno')) then
+44000   if exists("[Q]\UBmstr\per1000.h[cno]") then
 44010     dim range(16)
-44020     open #hPer1000:=fngethandle: "Name="&env$('Q')&"\UBmstr\per1000.h"&env$('cno')&",Shr",internal,outIn,relative 
+44020     open #hPer1000:=fngethandle: "Name=[Q]\UBmstr\per1000.h[cno],Shr",internal,outIn,relative 
 44030     read #hPer1000,using "Form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
 44040     fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 44050     fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
@@ -290,31 +290,31 @@
 44070       fncreg_write('Per 1000 Usage - Range '&str$(rangeItem),str$(range(rangeItem)))
 44080     nex rangeItem
 44090     close #hPer1000: 
-44100     fnFree(env$('Q')&'\UBmstr\per1000.h'&env$('cno'))
+44100     fnFree('[Q]\UBmstr\per1000.h[cno]')
 44110   end if
 44120   ! 
-44130   fn_file_setup_data(env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),374,0)
-44140   fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),'1','4')
-44150   fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno'),'5','25')
+44130   fn_file_setup_data("[Q]\UBmstr\ubData\RateMst.h[cno]",374,0)
+44140   fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx1.h[cno]",'1','4')
+44150   fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx2.h[cno]",'5','25')
 44160   ! 
 44170 fnend 
 52000 def fn_cfv_checkbook
 52020   ! Checkbook Only
 52040   library 'S:\Core\Library': fntrmstr_v1_to_v2, fntralloc_v1_to_v2, fnunpdaloc_v1_to_v2, fnpaytrans_v1_to_v2, fnpaymstr_v0_to_v1, fnglmstrtorecl62, fntrmstr_v0_to_v1
-52060   if exists(env$('Q')&"\CLmstr")=0 then execute "MkDir "&env$('Q')&"\CLmstr"
-52070   ! if ~exists(env$('Q')&'\INI\Checkbook') then execute 'mkdir env$('Q')&"\INI\Checkbook"'
+52060   if exists("[Q]\CLmstr")=0 then execute "MkDir [Q]\CLmstr"
+52070   ! if ~exists('[Q]\INI\Checkbook') then execute 'mkdir "[Q]\INI\Checkbook"'
 52072   fn_ini_move(env$('cursys'))
 52074   fnIniToReg
 52076   fn_reg_rename(env$('cursys'))
 52080   ! 
-52090   ! if ~exists(env$('Q')&'\CLmstr\PayeeType.dat') and exists('S:\acsCL\PayeeType.dat') then
-52092   !   fnCopy('S:\acsCL\PayeeType.dat',env$('Q')&'\CLmstr\PayeeType.dat')
-52094   !   fnCopy('S:\acsCL\PayeeType.Idx',env$('Q')&'\CLmstr\PayeeType.Idx')
+52090   ! if ~exists('[Q]\CLmstr\PayeeType.dat') and exists('S:\acsCL\PayeeType.dat') then
+52092   !   fnCopy('S:\acsCL\PayeeType.dat','[Q]\CLmstr\PayeeType.dat')
+52094   !   fnCopy('S:\acsCL\PayeeType.Idx','[Q]\CLmstr\PayeeType.Idx')
 52096   ! end if
 52098   !
 52100   CL_TRMSTR1: ! Primary Non-Split Index
-52120   fn_file_setup_data(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),78,2)
-52140   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno'),'1','11')
+52120   fn_file_setup_data("[Q]\CLmstr\TrMstr.h[cno]",78,2)
+52140   fn_file_setup_index("[Q]\CLmstr\TrIdx1.h[cno]",'1','11')
 52180   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 52200   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 52220   if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then 
@@ -328,15 +328,15 @@
 52380     end if 
 52400   end if 
 52420   ! CL_TRMSTR2: ! Secondary Split Index
-52440   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno'),'28/1','8/11')
+52440   fn_file_setup_index("[Q]\CLmstr\TrIdx2.h[cno]",'28/1','8/11')
 52460   ! CL_TRMSTR3: ! Secondary 3-Split Index
-52480   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno'),'16/12/4','2/4/8')
+52480   fn_file_setup_index("[Q]\CLmstr\TrIdx3.h[cno]",'16/12/4','2/4/8')
 52500   ! 
 53880   CL_TRALLOC: ! 1 file and 1 key
 53900   ! (index file did not exists in previous versions,
 53920   ! so it'll build it if need be here, before it opens it)
-53940   name$=env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')
-53960   kfname$=env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')
+53940   name$="[Q]\CLmstr\TrAlloc.h[cno]"
+53960   kfname$="[Q]\CLmstr\TrAlloc-Idx.h[cno]"
 53980   myrln=80
 54000   version_proper=2
 54020   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -367,8 +367,8 @@
 54520   ! it is important that if conversion from version 1 to 2 occur on this
 54540   ! that this file process before PayTrans - the file it is linked to
 54560   ! So that record sequence is maintained.
-54580   name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-54600   kfname$=env$('Q')&"\CLmstr\UAIdx1.h"&env$('cno')
+54580   name$="[Q]\CLmstr\UnPdAloc.h[cno]"
+54600   kfname$="[Q]\CLmstr\UAIdx1.h[cno]"
 54620   myrln=67
 54640   version_proper=2
 54660   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -400,8 +400,8 @@
 55180   end if 
 55200   ! 
 55220   ! CL_UNPDALOC2: ! Secondary, Non-Split Index
-55240   name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-55260   kfname$=env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')
+55240   name$="[Q]\CLmstr\UnPdAloc.h[cno]"
+55260   kfname$="[Q]\CLmstr\UAIdx2.h[cno]"
 55280   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 55300     fnindex_it(name$,kfname$,'1 20')
 55320   end if 
@@ -417,8 +417,8 @@
 55520   end if 
 55540   ! 
 55560   CL_PAYTRANS1: ! Primary Non-Split Index
-55580   name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-55600   kfname$=env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')
+55580   name$="[Q]\CLmstr\PayTrans.h[cno]"
+55600   kfname$="[Q]\CLmstr\UnPdIdx1.h[cno]"
 55620   myrln=114
 55640   version_proper=2
 55660   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -434,9 +434,9 @@
 55860     pr 'Record Length Error in File: '&tmpfile$
 55880     pr '         RLn: '&str$(tmprln)
 55900     pr 'Fixing it'
-55920     fnCopy(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'),env$('Q')&"\X."&session$&' -'&str$(myrln))
-55940     fnFree(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
-55960     fnRename(env$('Q')&"\X."&session$,env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
+55920     fnCopy("[Q]\CLmstr\PayTrans.h[cno]","[Q]\X."&session$&' -'&str$(myrln))
+55940     fnFree("[Q]\CLmstr\PayTrans.h[cno]")
+55960     fnRename("[Q]\X."&session$,"[Q]\CLmstr\PayTrans.h[cno]")
 55980   end if 
 56000   x=1 : if tmpkps(x)<>1 then 
 56020     pr 'Key Position ('&str$(x)&') Error in '&kfname$
@@ -448,8 +448,8 @@
 56140   end if 
 56160   ! 
 56180   ! CL_PAYTRANS2: ! seconday 3-Split Index
-56200   name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-56220   kfname$=env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')
+56200   name$="[Q]\CLmstr\PayTrans.h[cno]"
+56220   kfname$="[Q]\CLmstr\UnPdIdx2.h[cno]"
 56240   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 56260     fnindex_it(name$,kfname$,'31/27/1 2/4/26')
 56280   end if 
@@ -481,8 +481,8 @@
 56800   end if 
 56820   ! 
 56840   CL_PAYMSTR1: ! Primary Non-Split Index
-56860   name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-56880   kfname$=env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')
+56860   name$="[Q]\CLmstr\PayMstr.h[cno]"
+56880   kfname$="[Q]\CLmstr\PayIdx1.h[cno]"
 56900   myrln=736
 56920   version_proper=1
 56940   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -508,8 +508,8 @@
 57340     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 57360   end if 
 57380   ! CL_RECMSTR1: ! Primary Non-Split Index
-57400   name$=env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')
-57420   kfname$=env$('Q')&"\CLmstr\RecIdx1.h"&env$('cno')
+57400   name$="[Q]\CLmstr\RecMstr.h[cno]"
+57420   kfname$="[Q]\CLmstr\RecIdx1.h[cno]"
 57440   myrln=38
 57460   version_proper=1
 57480   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -537,8 +537,8 @@
 57920   end if 
 57940   ! 
 57960   ! CL_PAYMSTR2: ! Secondary, Non-Split Index
-57980   name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-58000   kfname$=env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')
+57980   name$="[Q]\CLmstr\PayMstr.h[cno]"
+58000   kfname$="[Q]\CLmstr\PayIdx2.h[cno]"
 58020   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 58040     fnindex_it(name$,kfname$,'9 30')
 58060   end if 
@@ -554,16 +554,16 @@
 58260   end if 
 58280   ! 
 58300   ! CL_GLMSTR1: ! Primary Non-Split Index
-58310   name$=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')
-58320   kfname$=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')
+58310   name$="[Q]\CLmstr\GLmstr.h[cno]"
+58320   kfname$="[Q]\CLmstr\GLIndex.h[cno]"
 58330   myrln=62
 58340   !   version_proper=0
 58350   !   fn_make_data_file_exist(name$,myrln,version_proper)
 58360   !   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
 58370   !     fnindex_it(name$,kfname$,'1 12')
 58380   !   end if
-58390   fn_file_setup_data(env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),62,1)
-58400   fn_file_setup_index(env$('Q')&"\CLmstr\GLIndex.h"&env$('cno'),'1','12')
+58390   fn_file_setup_data("[Q]\CLmstr\GLmstr.h[cno]",62,1)
+58400   fn_file_setup_index("[Q]\CLmstr\GLIndex.h[cno]",'1','12')
 58410   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 58420   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 58430   fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -582,41 +582,41 @@
 58560   !   end if
 58570   ! 
 58820   ! CL_PAYEEGLBREAKDOWN: ! Primary Non-Split Index
-58840   fn_file_setup_data(env$('Q')&"\CLmstr\payeeglbreakdown.h"&env$('cno'),56,1)
-58860   fn_file_setup_index(env$('Q')&"\CLmstr\payeeglbkdidx.h"&env$('cno'),'1','8')
+58840   fn_file_setup_data("[Q]\CLmstr\payeeglbreakdown.h[cno]",56,1)
+58860   fn_file_setup_index("[Q]\CLmstr\payeeglbkdidx.h[cno]",'1','8')
 59000   ! CL_GLCONTROL: ! Primary Non-Split Index
-59020   fn_file_setup_data(env$('Q')&"\CLmstr\fundmstr.h"&env$('cno'),75,0)
-59040   fn_file_setup_index(env$('Q')&"\CLmstr\fundidx1.h"&env$('cno'),'1','3')
+59020   fn_file_setup_data("[Q]\CLmstr\fundmstr.h[cno]",75,0)
+59040   fn_file_setup_index("[Q]\CLmstr\fundidx1.h[cno]",'1','3')
 59060   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outIn,keyed 
 59080   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 59100   fn_check_version(tmpversion,version_proper,tmpfile$)
 59120   if tmprln=63 then let fnglcontrol
 59140   ! 
-59160   fn_file_setup_data(env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),64,1)
-59180   fn_file_setup_index(env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),'1','2')
+59160   fn_file_setup_data("[Q]\CLmstr\BankMstr.h[cno]",64,1)
+59180   fn_file_setup_index("[Q]\CLmstr\BankIdx1.h[cno]",'1','2')
 59200   !
-59220   if ~exists(env$('Q')&'\CLmstr\TransactionType.dat') then
-59240     open #hTransactionType:=fngethandle: "Name="&env$('Q')&"\CLmstr\TransactionType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed
+59220   if ~exists('[Q]\CLmstr\TransactionType.dat') then
+59240     open #hTransactionType:=fngethandle: "Name=[Q]\CLmstr\TransactionType.dat,Version=1,KFName=[Q]\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed
 59260     write #hTransactionType,using 'form pos 1,n 1,C 25': 1,'Check (Disbursment)'
 59280     write #hTransactionType,using 'form pos 1,n 1,C 25': 2,'Deposit   (Receipt)'
 59300     close #hTransactionType:
 59320   end if
-59340   if ~exists(env$('Q')&'\CLmstr\PayeeType.dat') then
-59360     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
+59340   if ~exists('[Q]\CLmstr\PayeeType.dat') then
+59360     open #hPayeeType:=fngethandle: "Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 59380     write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 59400     write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 59420     close #hPayeeType:
 59440   end if
 59460 fnend 
 62000 def fn_cfv_payroll
-62020   if exists(env$('Q')&"\PRmstr")=0 then execute "MkDir "&env$('Q')&"\PRmstr"
-62022   ! if ~exists(env$('Q')&'\INI\Payroll') then execute 'mkdir env$('Q')&"\INI\Payroll"'
+62020   if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
+62022   ! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'
 62024   fn_ini_move(env$('cursys'))
 62026   fnIniToReg
 62028   fn_reg_rename(env$('cursys'))
 62040   ! r: move CheckInfo.h into CReg and delete checkinfo.h
-62060   if exists(env$('Q')&'\PRmstr\Checkinfo.h'&env$('cno')) then 
-62080     open #h_pr_checkinfo:=fngethandle: "Name="&env$('Q')&"\PRmstr\Checkinfo.h"&env$('cno')&",USE,RecL=128",internal,outIn,relative 
+62060   if exists('[Q]\PRmstr\Checkinfo.h[cno]') then 
+62080     open #h_pr_checkinfo:=fngethandle: "Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128",internal,outIn,relative 
 62100     read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
 62120     fncreg_write('Prenumbered Checks',pre$)
 62140     fncreg_write('Post to CL',acsclcv$)
@@ -630,8 +630,8 @@
 62300   end if 
 62320   ! /r
 63000   ! r: move rpDate.h into CReg and delete rpDate.h
-63020   if exists(env$('Q')&'\PRmstr\rpDate.h'&env$('cno')) then 
-63040     open #h_pr_rpdate:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpDate.h"&env$('cno'),internal,outIn,relative 
+63020   if exists('[Q]\PRmstr\rpDate.h[cno]') then 
+63040     open #h_pr_rpdate:=fngethandle: "Name=[Q]\PRmstr\rpDate.h[cno]",internal,outIn,relative 
 63060     dim cfvpr_rpdate_d$*20
 63080     read #h_pr_rpdate,using 'Form POS 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
 63100     fncreg_write('calculation date',str$(cfvpr_rpdate_ppd)) ! quarter ending date, i think - definately NOT the payroll calculation date!
@@ -640,17 +640,17 @@
 63160     close #h_pr_rpdate,free: 
 63180   end if 
 63200   ! /r
-64000   fn_file_setup_data(env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),32,0)
-64020   fn_file_setup_index(env$('Q')&"\PRmstr\DeptNameIdx-idx.h"&env$('cno'),'1','3')
+64000   fn_file_setup_data("[Q]\PRmstr\DeptName.h[cno]",32,0)
+64020   fn_file_setup_index("[Q]\PRmstr\DeptNameIdx-idx.h[cno]",'1','3')
 64040   ! 
-64060   fn_file_setup_data(env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),135,0)
-64080   fn_file_setup_index(env$('Q')&"\PRmstr\mglidx1-idx.h"&env$('cno'),'1','3')
+64060   fn_file_setup_data("[Q]\PRmstr\mglmstr.h[cno]",135,0)
+64080   fn_file_setup_index("[Q]\PRmstr\mglidx1-idx.h[cno]",'1','3')
 64100   ! 
-64120   fn_file_setup_data(env$('Q')&"\PRmstr\HourBreakdown.h"&env$('cno'),39,0)
-64140   fn_file_setup_index(env$('Q')&"\PRmstr\HourBreakdown-idx.h"&env$('cno'),'1/9/14','8/5/8')
+64120   fn_file_setup_data("[Q]\PRmstr\HourBreakdown.h[cno]",39,0)
+64140   fn_file_setup_index("[Q]\PRmstr\HourBreakdown-idx.h[cno]",'1/9/14','8/5/8')
 64160   ! r: Dates.h
-64180   fn_file_setup_data(env$('Q')&"\PRmstr\Dates.h"&env$('cno'),76,0)
-64200   open #tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Use,RecL=76,Shr",internal,outIn,relative 
+64180   fn_file_setup_data("[Q]\PRmstr\Dates.h[cno]",76,0)
+64200   open #tmp:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno],Use,RecL=76,Shr",internal,outIn,relative 
 64220   read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec PR_WRITE_BLANK_DATE_REC
 64240   goto PR_CLOSE_DATE
 64260   PR_WRITE_BLANK_DATE_REC: ! 
@@ -658,13 +658,13 @@
 64300   PR_CLOSE_DATE: ! 
 64320   close #tmp: 
 64340   ! /r
-64360   fn_file_setup_data(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),224,0)
-64380   fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx.h"&env$('cno'),'1','17')
-64400   fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),'1/12/9','3/6/8')
-64420   fn_file_setup_index(env$('Q')&"\PRmstr\checkidx3.h"&env$('cno'),'1/12/9','8/6/3')
+64360   fn_file_setup_data("[Q]\PRmstr\PayrollChecks.h[cno]",224,0)
+64380   fn_file_setup_index("[Q]\PRmstr\CheckIdx.h[cno]",'1','17')
+64400   fn_file_setup_index("[Q]\PRmstr\CheckIdx2.h[cno]",'1/12/9','3/6/8')
+64420   fn_file_setup_index("[Q]\PRmstr\checkidx3.h[cno]",'1/12/9','8/6/3')
 64440   ! 
 65000   ! r: DedNames.h setup
-65020   ! if exists(env$('Q')&"\PRmstr\dednames.h"&env$('cno'))=0 then
+65020   ! if exists("[Q]\PRmstr\dednames.h[cno]")=0 then
 65040   dim pr_dednames_fullname$(20)*20
 65060   dim pr_dednames_abrevname$(20)*8
 65080   dim pr_dednames_newcalcode(20)
@@ -674,7 +674,7 @@
 65160   dim pr_dednames_dedst(20)
 65180   dim pr_dednames_deduc(20)
 65200   dim pr_dednames_gl$(20)*12
-65220   open #h_dednames:=fngethandle: "Name="&env$('Q')&"\PRmstr\dednames.h"&env$('cno')&",RecL=920,use",internal,outIn,relative 
+65220   open #h_dednames:=fngethandle: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",internal,outIn,relative 
 65240   if lrec(h_dednames)=0 then 
 65260     write #h_dednames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
 65280   end if 
@@ -682,61 +682,61 @@
 65320   ! end if
 65340   ! /r
 66100   PrGlindex: !
-66110   open #h_tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\GLMstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\PRmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
+66110   open #h_tmp:=fngethandle: "Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
 66120   close #h_tmp: 
 66140   ! 
-66160   if ~exists(env$('Q')&'\PRmstr\EmpStatus.dat') then 
-66180     open #h_pr_emp_status:=fngethandle: "Name="&env$('Q')&"\PRmstr\EmpStatus.dat,KFName="&env$('Q')&"\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+66160   if ~exists('[Q]\PRmstr\EmpStatus.dat') then 
+66180     open #h_pr_emp_status:=fngethandle: "Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 66200     write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 66220   end if 
 66900 fnend 
 67000 Check4124OnPrGlindex: ! r:
 67020  if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
-67040    fnindex_it(env$('Q')&'\PRmstr\GLMstr.h'&env$('cno'),env$('Q')&'\PRmstr\GLIndex.h'&env$('cno'),'1 12')
+67040    fnindex_it('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')
 67060    goto PrGlindex
 67080  else
 67100     fnStatus('Failure.')
-67120     fnStatus('* Data File: PRmstr\GLMstr.h'&env$('cno'))
-67140     fnStatus('* Index: PRmstr\GLIndex.h'&env$('cno'))
+67120     fnStatus('* Data File: PRmstr\GLMstr.h[cno]')
+67140     fnStatus('* Index: PRmstr\GLIndex.h[cno]')
 67160     fnStatus('* reindex completed however error 4124 persist.')
 67180     fnStatusPause
 67200  end if
 67220  goto ERTN ! /r
 68000 def fn_cfv_job_cost_payroll
-68012   ! if ~exists(env$('Q')&'\INI\Payroll\Job Cost') then execute 'mkdir env$('Q')&"\INI\Payroll\Job Cost"'
+68012   ! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir "[Q]\INI\Payroll\Job Cost"'
 68014   fn_ini_move('JC')
 68020   ! r: JCMSTR.h
-68040   fn_file_setup_data(env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),300,0)
-68060   fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX.h"&env$('cno'),'1','6')
-68080   fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX2.h"&env$('cno'),'7','25')
+68040   fn_file_setup_data("[Q]\PRmstr\JCMSTR.h[cno]",300,0)
+68060   fn_file_setup_index("[Q]\PRmstr\JCINDX.h[cno]",'1','6')
+68080   fn_file_setup_index("[Q]\PRmstr\JCINDX2.h[cno]",'7','25')
 68100   ! /r
 68120 fnend 
 74000 def fn_cfv_general_ledger
 74030   ! General Ledger Only
-74032   fn_file_setup_data(env$('Q')&"\GLmstr\ACTrans.h"&env$('cno'),72,0)
-74034   fn_file_setup_index(env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno'),'1/71/17/13','12/2/2/4')
+74032   fn_file_setup_data("[Q]\GLmstr\ACTrans.h[cno]",72,0)
+74034   fn_file_setup_index("[Q]\GLmstr\AcTrIdx.h[cno]",'1/71/17/13','12/2/2/4')
 74036   !
-74042   fn_file_setup_data(env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),73,0)
+74042   fn_file_setup_data("[Q]\GLmstr\GLTrans.h[cno]",73,0)
 74046   !
 74040   library 'S:\Core\Library': fnfinstmt_v0_to_v1,fnglmstr_338_416
 74060   library 'S:\Core\Library': fnglpayee_v0_to_v1 
-74080   if exists(env$('Q')&"\GLmstr")=0 then execute "MkDir "&env$('Q')&"\GLmstr"
-74100   ! if ~exists(env$('Q')&'\INI\General Ledger') then execute 'mkdir env$('Q')&"\INI\General Ledger"'
-74120   ! if ~exists(env$('Q')&'\INI\General Ledger\Accountants') then execute 'mkdir env$('Q')&"\INI\General Ledger\Accountants"'
+74080   if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
+74100   ! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'
+74120   ! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir "[Q]\INI\General Ledger\Accountants"'
 74140   fn_ini_move(env$('cursys'))
 74142   fnIniToReg
 74144   fn_reg_rename(env$('cursys'))
 74160   !
-74180   if ~exists(env$('Q')&'\GLmstr\PayeeType.dat') then
-74200     open #hPayeeType:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
+74180   if ~exists('[Q]\GLmstr\PayeeType.dat') then
+74200     open #hPayeeType:=fngethandle: "Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 74220     write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 74240     write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 74260     close #hPayeeType:
 74280   end if
 74300   !
 74320   ! BudgetInfo: ! Primary Non-Split Index
-74340   name$=env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')
-74360   kfname$=env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')
+74340   name$="[Q]\GLmstr\BudgetInfo.h[cno]"
+74360   kfname$="[Q]\GLmstr\BudIndx.h[cno]"
 74380   myrln=28
 74400   version_proper=0
 74420   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -744,8 +744,8 @@
 74460     fnindex_it(name$,kfname$,'1 14')
 74480   end if 
 74500   ! GL_GLMSTR1: ! Primary Non-Split Index
-74520   name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
-74540   kfname$=env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')
+74520   name$="[Q]\GLmstr\GLmstr.h[cno]"
+74540   kfname$="[Q]\GLmstr\GLIndex.h[cno]"
 74560   myrln=416
 74580   version_proper=0
 74600   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -769,8 +769,8 @@
 74960   end if 
 74980   ! 
 75000   ! GL_GLMSTR2: ! Secondary, Non-Split Index
-75020   name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
-75040   kfname$=env$('Q')&"\GLmstr\GLIndx2.h"&env$('cno')
+75020   name$="[Q]\GLmstr\GLmstr.h[cno]"
+75040   kfname$="[Q]\GLmstr\GLIndx2.h[cno]"
 75060   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 75080     fnindex_it(name$,kfname$,'13 30')
 75100   end if 
@@ -788,15 +788,15 @@
 75340     fnindex_it(name$,kfname$,'13 30')
 75360   end if 
 75380   ! 
-75390   fn_file_setup_data(env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno'),83,1)
-75392   fn_file_setup_index(env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno'),'1','5')
+75390   fn_file_setup_data("[Q]\GLmstr\AcGLFnSc.h[cno]",83,1)
+75392   fn_file_setup_index("[Q]\GLmstr\FnScIndx.h[cno]",'1','5')
 75400   ! r:  Six Files, with 1 primary index each
 75410   !         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
-75420   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),83,1)
-75430   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),'1','5')
+75420   fn_file_setup_data("[Q]\GLmstr\acglfnsj.h[cno]",83,1)
+75430   fn_file_setup_index("[Q]\GLmstr\Fnsjindx.h[cno]",'1','5')
 75440   ! r: GLmstr\acglfnsi
-75450   name$=env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno')
-75460   kfname$=env$('Q')&"\GLmstr\fnsiindx.h"&env$('cno')
+75450   name$="[Q]\GLmstr\acglfnsi.h[cno]"
+75460   kfname$="[Q]\GLmstr\fnsiindx.h[cno]"
 75470   fn_file_setup_data(name$,83,1)
 75480   fn_file_setup_index(kfname$,'1','5')
 75490   ! myrln=83
@@ -822,22 +822,22 @@
 75690     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 75700   end if 
 75710   !
-75720   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),83,1)
-75730   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),'1','5')
+75720   fn_file_setup_data("[Q]\GLmstr\acglfnsb.h[cno]",83,1)
+75730   fn_file_setup_index("[Q]\GLmstr\Fnsbindx.h[cno]",'1','5')
 75740   !
-75750   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),83,1)
-75760   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),'1','5')
+75750   fn_file_setup_data("[Q]\GLmstr\acglfnsb.h[cno]",83,1)
+75760   fn_file_setup_index("[Q]\GLmstr\Fnsbindx.h[cno]",'1','5')
 75770   !
-75780   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),83,1)
-75790   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),'1','5')
+75780   fn_file_setup_data("[Q]\GLmstr\acglfnsf.h[cno]",83,1)
+75790   fn_file_setup_index("[Q]\GLmstr\Fnsfindx.h[cno]",'1','5')
 75800   !
-75810   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),83,1)
-75820   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),'1','5')
+75810   fn_file_setup_data("[Q]\GLmstr\acglfnsg.h[cno]",83,1)
+75820   fn_file_setup_index("[Q]\GLmstr\Fnsgindx.h[cno]",'1','5')
 75830   !
 75840   ! /r
 75940   ! PAYEEGLBREAKDOWN: !
-75960   name$=env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno')
-75980   kfname$=env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')
+75960   name$="[Q]\GLmstr\payeeglbreakdown.h[cno]"
+75980   kfname$="[Q]\GLmstr\Payeeglbkdidx.h[cno]"
 76000   myrln=56
 76020   version_proper=1
 76040   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -858,10 +858,10 @@
 76340     goto L3510
 76360   end if 
 76380   ! GLPAYMSTR: ! Primary, Non-Split Index  (Vendor or payee files in g/l)
-76400   if exists(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))<>0 then let fnglpayee_v0_to_v1
-76420   if exists(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))<>0 then let fnFree(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))
-76440   name$=env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')
-76460   kfname$=env$('Q')&"\GLmstr\Payidx1.h"&env$('cno')
+76400   if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then let fnglpayee_v0_to_v1
+76420   if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then let fnFree("[Q]\GLmstr\gl1099.h[cno]")
+76440   name$="[Q]\GLmstr\PayMstr.h[cno]"
+76460   kfname$="[Q]\GLmstr\Payidx1.h[cno]"
 76480   myrln=276
 76500   version_proper=1
 76520   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -885,8 +885,8 @@
 76880   end if 
 76900     ! 
 76920     ! GLTR1099: ! Primary, Non-Split Index  (Vendor transactions)
-76940   name$=env$('Q')&"\GLmstr\GlTr1099.h"&env$('cno')
-76960   kfname$=env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')
+76940   name$="[Q]\GLmstr\GlTr1099.h[cno]"
+76960   kfname$="[Q]\GLmstr\gltridx1.h[cno]"
 76980   myrln=64
 77000   version_proper=1
 77020   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -909,8 +909,8 @@
 77360     goto L3690
 77380   end if 
 77400   ! GLBREC: ! Primary, Non-Split Index
-77420   name$=env$('Q')&"\GLmstr\Glbrec.h"&env$('cno')
-77440   kfname$=env$('Q')&"\GLmstr\glrecidx.h"&env$('cno')
+77420   name$="[Q]\GLmstr\Glbrec.h[cno]"
+77440   kfname$="[Q]\GLmstr\glrecidx.h[cno]"
 77460   myrln=68
 77480   version_proper=1
 77500   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -942,8 +942,8 @@
 77790   ! 
 77880   ! SCHEDULE: ! Primary, Non-Split Index  (General ledger schedules)
 77900   dim sn$*78,ft$*78,gl$(80)*12
-77920   name$=env$('Q')&"\GLmstr\acglschs.h"&env$('cno')
-77940   kfname$=env$('Q')&"\GLmstr\schindex.h"&env$('cno')
+77920   name$="[Q]\GLmstr\acglschs.h[cno]"
+77940   kfname$="[Q]\GLmstr\schindex.h[cno]"
 77960   myrln=162
 77980   version_proper=1
 78000   fn_make_data_file_exist(name$,myrln,version_proper)
@@ -960,11 +960,11 @@
 78210   L3920: read #tmp, using "Form POS 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 78220   if sn=0 then goto L3920
 78230   rewrite #tmp, using "Form POS 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
-78240   if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))=0 then open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule: 
-78250   if exists(env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'))=0 then 
-78260     fnindex_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'),env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'),"1 12")
+78240   if exists("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")=0 then open #schedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule: 
+78250   if exists("[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]")=0 then 
+78260     fnindex_it("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]","[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]","1 12")
 78270   end if 
-78280   open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
+78280   open #schedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
 78290   for j=1 to 80
 78300     if val(gl$(j))=0 then goto L4010
 78310     write #schedule,using "form pos 1,c 12": gl$(j)
@@ -993,8 +993,8 @@
 78540   fnps
 78550   ! /r
 78560   ! 
-78570   if ~exists(env$('Q')&'\GLmstr\Period.h'&env$('cno')) then
-78580     open #hGlPeriod:=fngethandle: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+78570   if ~exists('[Q]\GLmstr\Period.h[cno]') then
+78580     open #hGlPeriod:=fngethandle: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 78590     for periodRecord=1 to 12
 78600       write #hGlPeriod,using 'form pos 1,N 2,C 30': periodRecord,date$(days(cnvrt$('pic(##)',periodRecord)&'0117','mmddyy'),'month')
 78610     nex periodRecord
@@ -1002,15 +1002,15 @@
 78630     close #hGlPeriod:
 78640   end if
 78650   ! 
-78660   if exists(env$('Q')&"\GLmstr\GLWK1"&wsid$&".h"&env$('cno')) and ~exists(env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')) then
-78670     if fncopy(env$('Q')&"\GLmstr\GLWK1"&wsid$&".h"&env$('cno'),env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')) then
-78680       fnFree(env$('Q')&"\GLmstr\GLWK1"&wsid$&".h"&env$('cno'))
+78660   if exists("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
+78670     if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
+78680       fnFree("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]")
 78690     end if
 78700   end if
 78710   !
-78720   if exists(env$('Q')&"\GLmstr\GLWK1"&wsid$&".dat") and ~exists(env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
-78730     if fncopy(env$('Q')&"\GLmstr\GLWK1"&wsid$&".dat",env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
-78740       fnFree(env$('Q')&'\GLmstr\GLWK1'&wsid$&'.dat')
+78720   if exists("[Q]\GLmstr\GLWK1"&wsid$&".dat") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
+78730     if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".dat","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
+78740       fnFree('[Q]\GLmstr\GLWK1'&wsid$&'.dat')
 78750     end if
 78760   end if
 78770   ! 
@@ -1166,6 +1166,6 @@
 90060   pif_program$=trim$(pif_program$)
 90080     posDotBr=pos(pif_program$,'.br')
 90100     if posDotBr>0 then pif_program$(posDotBr:posDotBr+2)=''
-90120   pif_return$=env$('Q')&'\INI\'&pif_program$&'.ini'
+90120   pif_return$='[Q]\INI\'&pif_program$&'.ini'
 90160   fn_programIniFileName$=pif_return$
 90180 fnend 

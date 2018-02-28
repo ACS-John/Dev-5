@@ -52,9 +52,10 @@
 08280 ! /r
 09000   def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
 09020 ! r: library, on error, constants, initialize variables
-09040     library 'S:\Core\Library': fngethandle,fnerror,fnFree
+09040     library 'S:\Core\Library': fngethandle,fnerror,fnFree,fnSrepEnv$
 10060     on error goto ERTN
 10220     dim tmp$*512,directory_of$*256
+10222     dir$=fnSrepEnv$(dir$)
 10230     if pos(lwrc$(option$),'/s')>0 then gd2_full_path=1
 10232     if pos(lwrc$(option$),'/b')>0 then slash_b=1 else slash_b=0
 10240     mat filename$(0)

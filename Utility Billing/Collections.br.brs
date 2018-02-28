@@ -1,12 +1,12 @@
 06000 ! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
 06020   fn_setup ! r:
 06040   fntop(program$) ! for now use the settings from Enter Collections for page formatting of reports
-06060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-06080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-06100   open #4: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+06060   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+06080   open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed 
+06100   open #4: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 06120   bud1=0
-06140   open #h_budmstr:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L630
-06160   open #h_budTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+06140   open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L630
+06160   open #h_budTrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 06180   bud1=1
 06200   L630: ! 
 06220   open #h_ubcolinp:=6: "Name="&collections_filename$,internal,outIn,relative ioerr L700
@@ -720,9 +720,9 @@
 60560     ! 
 60580     tab$=chr$(9)
 60640     ! 
-60660     collections_filename$=env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')
+60660     collections_filename$="[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno]"
 60700     ! 
-60720     open #20: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",NoShr",internal,input 
+60720     open #20: "Name=[Q]\UBmstr\Company.h[cno],NoShr",internal,input 
 60740     read #20,using "Form pos 128,C 1,c 1": receipt$,escrow$
 60760     close #20: 
 60780     !

@@ -11,10 +11,10 @@
 00110 ! ______________________________________________________________________
 00120     fnStatus("Updating Checkbook Transaction Allocation from v1 to v2")
 00180 ! fnwait(message$="Converting: please wait...",0)
-00190     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno'),"1 11")
-00200     open #tralloc=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno'),internal,outIn,keyed 
+00190     fnindex_it("[Q]\CLmstr\TrAlloc.H[cno]","[Q]\CLmstr\TrAlloc-Idx.H[cno]","1 11")
+00200     open #tralloc=1: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed 
 00210     close #tralloc: 
-00220     open #tralloc: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno'),internal,outIn,keyed 
+00220     open #tralloc: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed 
 00240     if version(tralloc)=2 then let fnStatus("TrAlloc is already version 2") : goto XIT
 00250     version(tralloc,2)
 00260     goto XIT
@@ -31,7 +31,7 @@
 00370 ! ______________________________________________________________________
 00380 XIT: ! 
 00390     close #tralloc: 
-00400     fnCopy(env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno'),80)
-00430     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno'),"1 11")
+00400     fnCopy("[Q]\CLmstr\TrAlloc.h[cno]","[Q]\CLmstr\TrAlloc.h[cno]",80)
+00430     fnindex_it("[Q]\CLmstr\TrAlloc.H[cno]","[Q]\CLmstr\TrAlloc-Idx.H[cno]","1 11")
 00440   fnend 
 00450 ! ______________________________________________________________________

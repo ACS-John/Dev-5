@@ -14,16 +14,16 @@
 00180 ! ______________________________________________________________________
 00190   fntop(program$,cap$="General Ledger Master")
 00220   fixgrid=99
-00260   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00260   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00270   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00280   close #company: 
-00290   open #8: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L310
+00290   open #8: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
 00300   cl1=1
 00310 L310: ! 
-00320   open #hAccount:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00330   open #hAccountUnused:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outIn,keyed ! ioerr L350
-00340   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
-00350   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
+00320   open #hAccount:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
+00330   open #hAccountUnused:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed ! ioerr L350
+00340   open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
+00350   open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
 00360   F_acTrans: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 00420 MAIN: ! 
 00430   fnTos(sn$="GLProb2-"&str$(edit_mode))
@@ -50,22 +50,22 @@
 00528     f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
 00529     fnFra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
 00530     fnLbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
-00540     fncombof("fs-bal",1,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
+00540     fncombof("fs-bal",1,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsbindx.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
 00542     resp$(4)=str$(rf(1)) ! balance sheet ref #
 00550     fnLbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
-00560     fncombof("fs-bal2",1,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
+00560     fncombof("fs-bal2",1,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsc.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnscindx.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
 00562     resp$(5)=str$(rf(2)) ! balance sheet ref #
 00570     fnLbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
-00580     fncombof("fs-inc",2,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
+00580     fncombof("fs-inc",2,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsiindx.h[cno]",0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
 00582     resp$(6)=str$(rf(3)) ! income statement ref #
 00590     fnLbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
-00600     fncombof("fs-inc2",2,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
+00600     fncombof("fs-inc2",2,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsj.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsjindx.h[cno]",0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
 00602     resp$(7)=str$(rf(4)) ! 2nd income statement
 00610     fnLbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
-00620     fncombof("fs-cash",3,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+00620     fncombof("fs-cash",3,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsf.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsfindx.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00622     resp$(8)=str$(rf(5)) ! income statement ref #
 00630     fnLbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
-00640     fncombof("fs-cash2",3,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+00640     fncombof("fs-cash2",3,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsg.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsgindx.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00642     resp$(9)=str$(rf(6)) ! 2nd cash flow
 
 00650     fnLbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)

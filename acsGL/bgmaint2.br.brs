@@ -32,16 +32,16 @@
 00310   for j=2 to 7 : an2(j)=12 : next j ! defaults for column widths
 00320   mat maxan2=an2
 00330   an2(8)=40 : an2(9)=12 : an2(10)=12: an2(11)=12
-00340   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00340   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub !:
         close #1: 
-00350   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00350   open #1: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
 00360 ! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
-00370   open #5: "Name="&env$('Q')&"\GLmstr\BudInfo.H"&env$('cno')&",use,KFName="&env$('Q')&"\GLmstr\BudInfo_Index.H"&env$('cno')&",RecL=532,KPs=1,KLn=2",internal,outIn,keyed 
+00370   open #5: "Name=[Q]\GLmstr\BudInfo.H[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.H[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed 
 00380   read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
-00390   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
+00390   open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
 00400 ! ______________________________________________________________________
-00410   open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outIn,keyed ioerr MENU1
+00410   open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
 00420 ! ______________________________________________________________________
 00450   mat ml$(2) !:
         ml$(1)="Budget Management is a separately licensed product. " !:
@@ -54,7 +54,7 @@
 00500   fnTos(sn$="Budget_File") !:
         respc=0
 00510   fnLbl(1,1,"Budget File #:",14,right)
-00520   execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&env$('cno')&" >"&env$('temp')&"\FlexWork.tmp" ioerr L530
+00520   execute "Dir [Q]\GLmstr\budget*.H[cno] >"&env$('temp')&"\FlexWork.tmp" ioerr L530
 00530 L530: j=0
 00540   open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
 00550 L550: linput #13: ln$ eof L680
@@ -74,7 +74,7 @@
 00680 L680: close #13: 
 00690 L690: if j<=0 then j=1
 00700   mat options$(j)
-00710   fen$="CBud.h"&env$('cno')
+00710   fen$="CBud.h[cno]"
 00720   fncomboa(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
 00730 ! fnCMBBUD(INDEXFILE$)
 00740   if hact$="" then !:
@@ -113,16 +113,16 @@
 00950 return 
 00960 CREATE_NEW_FILE: ! 
 00970 close #2: ioerr L1020
-00980 open #2: "Name="&env$('Q')&"\GLmstr\BUDGET"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1000
+00980 open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr L1000
 00990 goto L1020
 01000 L1000: mat ml$(2) !:
       ml$(1)="You already have a budget file # "&str$(bud) ! " !:
       ml$(2)="Take YES to continue, else NO to retain the old file." !:
       fnmsgbox(mat ml$,resp$,cap$,52)
 01010 if resp$="Yes" then goto L1020 else goto MENU1
-01020 L1020: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",Replace,KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed 
+01020 L1020: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],Replace,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed 
 01030 close #2: ioerr L1040
-01040 L1040: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",use,KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed 
+01040 L1040: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],use,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed 
 01050 return 
 01060 READD_TOTALS: ! 
 01070 ! from general ledger __________________________________________________
@@ -150,17 +150,17 @@
 01270 g1$="999999999999"
 01280 ! Write #2,Using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': G1$,MAT BG,GD$,EX$,CD$    why was it doing this  ??? kj
 01290 close #2: 
-01300 execute "Index "&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&","&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",1/149,12/1,Replace,DupKeys -n"
-01310 open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outIn,keyed 
+01300 execute "Index [Q]\GLmstr\Budget"&str$(bud)&".H[cno],[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],1/149,12/1,Replace,DupKeys -n"
+01310 open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed 
 01320 ! holding files in gl___________________________________________________
-01330 execute "DIR "&env$('Q')&"\GLmstr\GL*.H"&env$('cno')&" >"&env$('temp')&"\Work."&session$
+01330 execute "DIR [Q]\GLmstr\GL*.H[cno] >"&env$('temp')&"\Work."&session$
 01340 open #3: "Name="&env$('temp')&"\Work."&session$,display,input 
 01350 L1350: linput #3: ln$ eof L1530
 01360 ln$=uprc$(ln$)
 01370 if ln$(1:2)><"GL" then goto L1350
 01380 d1=val(ln$(3:8)) conv L1350
 01390 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1350
-01400 open #4: "Name="&env$('Q')&"\GLmstr\"&ln$(1:8)&".H"&env$('cno'),internal,input 
+01400 open #4: "Name=[Q]\GLmstr\"&ln$(1:8)&".H[cno]",internal,input 
 01410 L1410: read #4,using L1420: g1$,d1,amt,tcde eof L1500
 01420 L1420: form pos 1,c 12,n 6,pd 6.2,n 2
 01430 if g1$(3:3)=" " then g1$(3:3)="0"
@@ -175,8 +175,8 @@
 01520 ! from unpaid invoice file _____________________________________________
 01530 L1530: close #3: ioerr L1540
 01540 L1540: close #4: ioerr L1550
-01550 L1550: open #3: "Name="&env$('Q')&"\CLmstr\PAYTRANS.H"&env$('cno')&",Shr",internal,input,relative ioerr L1740
-01560 open #4: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+01550 L1550: open #3: "Name=[Q]\CLmstr\PAYTRANS.H[cno],Shr",internal,input,relative ioerr L1740
+01560 open #4: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
 01570 for j=1 to lrec(3)
 01580   read #3,using L1590,rec=j: vn$,iv$,d1,gde noRec L1720
 01590 L1590: form pos 1,c 8,c 12,pos 27,n 6,pos 96,n 1
@@ -196,8 +196,8 @@
 01730 ! from check history (checks not posted)____________________________
 01740 L1740: close #3: ioerr L1750
 01750 L1750: close #4: ioerr L1760
-01760 L1760: open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,input,keyed ioerr L1930
-01770 open #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.H"&env$('cno')&",Shr",internal,input,relative 
+01760 L1760: open #3: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX1.H[cno],Shr",internal,input,keyed ioerr L1930
+01770 open #4: "Name=[Q]\CLmstr\TRALLOC.H[cno],Shr",internal,input,relative 
 01780 L1780: read #3,using L1790: bcde,tcde,iv$,d1,pcde,scd eof L1930
 01790 L1790: form pos 1,n 2,n 1,c 8,pos 12,g 6,pos 71,n 1,x 6,n 1
 01800 if pcde=1 or pcde=3 then goto L1780
@@ -216,8 +216,8 @@
 01920 ! from purchase order file_________________________________________
 01930 L1930: close #3: ioerr L1940
 01940 L1940: close #4: ioerr L1950
-01950 L1950: open #3: "Name="&env$('Q')&"\POmstr\POmstr.H"&env$('cno')&",KFName="&env$('Q')&"\POmstr\POMSIDX.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2080
-01960 open #4: "Name="&env$('Q')&"\POmstr\POTRANS.H"&env$('cno')&",Shr",internal,input,relative 
+01950 L1950: open #3: "Name=[Q]\POmstr\POmstr.H[cno],KFName=[Q]\POmstr\POMSIDX.H[cno],Shr",internal,input,keyed ioerr L2080
+01960 open #4: "Name=[Q]\POmstr\POTRANS.H[cno],Shr",internal,input,relative 
 01970 L1970: read #3,using L1980: d1,mat aa eof L2080
 01980 L1980: form pos 10,n 6,pos 161,2*pd 3
 01990 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1970
@@ -232,7 +232,7 @@
 02080 L2080: close #3: ioerr L2090
 02090 L2090: close #4: ioerr L2100
 02100 L2100: close #2: ioerr L2110
-02110 L2110: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outIn,keyed 
+02110 L2110: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed 
 02120 L2120: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof READD_SUB_TOTALS
 02130 bg(5)=bg(1)+bg(4) ! update new balance for any changes
 02140 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
@@ -579,7 +579,7 @@
 04390 L4390: fnopenprn
 04400 restore #2,search>="": nokey MENU1 ioerr L4420
 04410 goto L4430
-04420 L4420: open #2: "Name="&env$('Q')&"\GLmstr\BUDGET"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",Shr",internal,outIn,keyed ioerr MENU1
+04420 L4420: open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
 04430 L4430: if an1$(1)<>"Y" then goto L4470
 04440 header$="GL Description                            "(1:an2(1))&"  "
 04450 uline$="                                          "(1:an2(1)+2)

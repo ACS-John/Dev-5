@@ -9,16 +9,16 @@
 00130   dim cno$*5,cna$*30,en$*9,d(8)
 00140   dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
 00150   namtab=66-int(len(rtrm$(cnam$))/2)
-00160   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr L2780
+00160   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L2780
 00170   read #1,using L180,rec=1: mat cat$ ioerr L2780
 00180 L180: form pos 1,30*c 30
 00190   close #1: 
-00200   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outIn,relative 
+00200   open #8: "Name=[Q]\TMmstr\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
 00210   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
-00220   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
-00230   open #2: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,input,relative ioerr L2780
-00240   open #3: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,input,relative ioerr L2780
-00250   open #4: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
+00220   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L2780
+00230   open #2: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,input,relative ioerr L2780
+00240   open #3: "Name=[Q]\TMmstr\TMTRANS.H[cno],Shr",internal,input,relative ioerr L2780
+00250   open #4: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,input,keyed ioerr L2780
 00260   goto L460
 00270 L270: read #4,using L280,key=e$: empname$ nokey L300 ioerr L2780
 00280 L280: form pos 10,c 25
@@ -39,16 +39,16 @@
 00430   goto L450
 00440 L440: empname$="*** FINAL BILLED"
 00450 L450: return 
-00460 L460: open #5: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
+00460 L460: open #5: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno],Shr",internal,input,keyed ioerr L2780
 00470   goto L530
 00480   read #5,using L490,key=sc$: scdesc$ nokey L510 ioerr L2780
 00490 L490: form pos 5,c 30
 00500   goto L520
 00510 L510: scdesc$=" "
 00520 L520: return 
-00530 L530: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$,internal,input ioerr L550
+00530 L530: open #6: "Name=[Q]\TMmstr\Work2.H"&wsid$,internal,input ioerr L550
 00540   close #6,free: 
-00550 L550: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$&",SIZE=0,RecL=76",internal,output ioerr L2780
+00550 L550: open #6: "Name=[Q]\TMmstr\Work2.H"&wsid$&",SIZE=0,RecL=76",internal,output ioerr L2780
 00560 L560: pr newpage
 00570   in1$(1)="10,46,n 6,ute,n"
 00580   in1$(2)="11,46,n 6,ute,n"
@@ -80,9 +80,9 @@
 00840 L840: input fields "10,55,n 1,ue,n": prtcli conv L840
 00850   if prtcli=1 then goto L990
 00860   if prtcli><2 then goto L820
-00870   open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$,internal,input ioerr L890
+00870   open #7: "Name=[Q]\TMmstr\Work1.h"&wsid$,internal,input ioerr L890
 00880   close #7,free: 
-00890 L890: open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",SIZE=0,RecL=5",internal,output ioerr L2780
+00890 L890: open #7: "Name=[Q]\TMmstr\Work1.h"&wsid$&",SIZE=0,RecL=5",internal,output ioerr L2780
 00900 L900: pr newpage
 00910   pr f "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
 00920 L920: input fields "10,65,n 5,ue,n": cliprt conv L920
@@ -97,7 +97,7 @@
 01010   pr f "23,2,c 30,n": "Press F5 to stop"
 01020   gosub L2600
 01030   if prtcli=1 then goto L1090
-01040   open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",NoShr",internal,input ioerr L2780
+01040   open #7: "Name=[Q]\TMmstr\Work1.h"&wsid$&",NoShr",internal,input ioerr L2780
 01050 L1050: if prtcli=1 then goto L1090
 01060 L1060: read #7,using L960: cliprt$ eof L1480 ioerr L2780
 01070   read #1,using L1100,key=cliprt$: z$,cliname$,pno,mat ca nokey L1060 ioerr L2780 ! READ CLIENT RECORDS

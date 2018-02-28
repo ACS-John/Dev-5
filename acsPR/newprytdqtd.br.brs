@@ -13,21 +13,21 @@
 00130   dim quartertotals(32),tcp(32),tdc(10),resp$(10)*40
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="YTD and Qtd Register")
-00170   open #1: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input ioerr L180 
+00170   open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L180 
 00172   read #1,using 'Form POS 5,N 5': ckno 
 00174   close #1: 
-00180 L180: open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00180 L180: open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 133,PD 6.3,PD 6.2,POS 239,PD 4.2,POS 618,30*N 1,10*C 6': mcr,mcm,ficamaxw !:
         close #1: 
 00190   ficamaxw=ficamaxw*10
 00200   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-00210   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,input,keyed 
+00210   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed 
 00220   if fnprocess=1 then goto L240
 00230   gosub ASK_DATES
 00240 L240: fnopenprn
 00250 ! ______________________________________________________________________
 00260   gosub HDR
-00270   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00270   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 00280 L280: read #1,using L290: eno,em$,mat em eof L930
 00290 L290: form pos 1,n 8,c 30,pos 112,6*n 2
 00300   a=pos (rtrm$(em$)," ",1)
@@ -197,7 +197,7 @@
 01840   qtr5=val(resp$(9)(1:4))*10000+1231
 01850   begin_year=val(resp$(9)(1:4))*10000+0101
 01860   end_year=val(resp$(9)(1:4))*10000+1231
-01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outIn,relative 
+01870   open #11: "Name=[Q]\PRmstr\Dates.h[cno]",internal,outIn,relative 
 01880 ! Rewrite #11,Using "form pos 1,6*n 8,n 8,c 20",Rec=1: BEG_DATE,END_DATE,QTR1,QTR2,QTR3,QTR4,D1,DAT$
 01890   close #11: 
 01900   return 

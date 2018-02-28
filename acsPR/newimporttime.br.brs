@@ -13,8 +13,8 @@
 00130   fntop(program$,cap$="Import Time from Time Clock System")
 00150   pathtotimecard$="c:\progra~1\acs\"
 00160 ! 
-00170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
+00170   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
+00180   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
 00190 ! ______________________________________________________________________
 00200 ASK_PAYROLL_DATE: ! 
 00210   fnTos(sn$="Importtime") !:
@@ -32,11 +32,11 @@
 00310   fnopenprn
 00320   filename$="Payroll"&cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
 00330 ! if env$('client')="West Rest Haven" then filename$=cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
-00340 ! if env$('client')="West Rest Haven" then execute "Copy c:\Acs\local\wrhPayroll"&filename$&" "&pathtotimecard$&"TimeCard.h"&env$('cno')
+00340 ! if env$('client')="West Rest Haven" then execute "Copy c:\Acs\local\wrhPayroll"&filename$&" "&pathtotimecard$&"TimeCard.h[cno]"
 00350   gosub HDR
 00360   fnwait(wait$="Importing: please wait...",0)
 00370   on fkey 5 goto L580
-00380   simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
+00380   simple$=pathtotimecard$&"TimeCard.h[cno]"
 00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outIn,keyed 
 00400   open #5: "Name="&simple$&",RecL=76",display,input 
 00410 L410: linput #5: ln$ eof L570

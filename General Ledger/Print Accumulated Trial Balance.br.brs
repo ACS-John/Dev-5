@@ -19,7 +19,7 @@
 12320   a$(9)=" "
 12340 ! /r
 14000   fntop(program$,cap$="Print Accumulated Trial Balance")
-14020   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+14020   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 14040   read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$
 14060   read #20,using "Form pos 296,N 2",rec=1: lmu
 14080   read #20,using 'Form Pos 384,n 2',rec=1: nap
@@ -31,8 +31,8 @@
 14200   m2GlmCbAmtPos=87
 14220   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
 14240   ! last=val(lastCapitalAccount$(4:9))
-14260   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-14280   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,input,keyed 
+14260   open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
+14280   open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed 
 14300   if fnprocess=1 then s1=1 : goto mainLoopInit
 14320 goto SCREEN1
 16000 SCREEN1: ! r:

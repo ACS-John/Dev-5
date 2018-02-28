@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\Conversion\add-h.wb
-00020 ! this program renames "&env$('Q')&"\GLmstr\*.[cno] to "&env$('Q')&"\GLmstr\*.H[cno]
+00020 ! this program renames [Q]\GLmstr\*.[cno] to [Q]\GLmstr\*.H[cno]
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   fntop(program$,"CHANGE_ME")
@@ -19,12 +19,12 @@
 00190 XIT: stop 
 00200 ! ______________________________________________________________________
 00210 START: ! 
-00220   execute "Rename "&env$('Q')&"\GLmstr\*."&env$('cno')&' '&env$('Q')&"\GLmstr\*.h"&env$('cno')&" -n" ioerr RER
-00230   pr 'company '&env$('cno')&' completed.'
+00220   execute "Rename [Q]\GLmstr\*.[cno]"&' '&"[Q]\GLmstr\*.h[cno] -n" ioerr RER
+00230   pr 'company [cno] completed.'
 00240   goto MENU1
 00250 ! ______________________________________________________________________
 00260 RER: ! 
-00270   pr 'company '&env$('cno')&' had problems.'
+00270   pr 'company [cno] had problems.'
 00280   goto MENU1
 00290 ! ______________________________________________________________________
 00300 ! <Updateable Region: ERTN>

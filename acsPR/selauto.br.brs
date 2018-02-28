@@ -66,7 +66,7 @@
 00650 L650: read m$(i+=1),pgm$(i) eof OPEN_FILES : goto L650
 00660 ! ______________________________________________________________________
 00670 OPEN_FILES: ! 
-00680   execute "Copy "&env$('Q')&"\PRmstr\PRPgmn.h"&env$('cno')&" sa"&wsid$&".tmp -n" ioerr L690
+00680   execute "Copy [Q]\PRmstr\PRPgmn.h[cno] sa"&wsid$&".tmp -n" ioerr L690
 00690 L690: open #prpgmn=1: "Name=sa"&wsid$&".tmp,Use,RecL=58",internal,outIn,relative 
 00700 ! ______________________________________________________________________
 00710 MENU1: ! 
@@ -187,7 +187,7 @@
           rewrite #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=j1: nxtpgm$(j1),nxtdesc$(j1),wk(j1),mo(j1),qt(j1) !:
         next j1
 01670   close #prpgmn: 
-01680   execute "copy sa"&wsid$&".tmp "&env$('Q')&"\PRmstr\PRPgmn.h"&env$('cno')&" -n"
+01680   execute "copy sa"&wsid$&".tmp [Q]\PRmstr\PRPgmn.h[cno] -n"
 01690   execute "Free sa"&wsid$&".tmp -n"
 01700   goto XIT
 01710 ! ______________________________________________________________________

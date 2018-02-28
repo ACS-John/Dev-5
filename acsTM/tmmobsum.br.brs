@@ -29,15 +29,15 @@
 00300   dattab2=43-int(len(rtrm$(dat$))/2)
 00310   namtab=66-int(len(rtrm$(cnam$))/2)
 00320   namtab2=43-int(len(rtrm$(cnam$))/2)
-00330   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr L2080
+00330   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L2080
 00340   read #1,using L350,rec=1: mat cat$ ioerr L2080
 00350 L350: form pos 1,30*c 30
 00360   close #1: 
 00370   gosub L1020
-00380   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2080
-00390   open #2: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,input,relative ioerr L2080
-00400   open #3: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,input,relative ioerr L2080
-00410   open #4: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2080
+00380   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L2080
+00390   open #2: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,input,relative ioerr L2080
+00400   open #3: "Name=[Q]\TMmstr\TMTRANS.H[cno],Shr",internal,input,relative ioerr L2080
+00410   open #4: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,input,keyed ioerr L2080
 00420   goto L480
 00430 L430: read #4,using L440,key=lpad$(str$(pno),9): enam$ nokey L460 ioerr L2080
 00440 L440: form pos 10,c 25

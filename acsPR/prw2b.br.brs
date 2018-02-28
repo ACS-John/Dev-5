@@ -9,7 +9,7 @@
 00080   dim a$(3)*40,b$*12,f$*8,g$*8,h$*8,d$(10)*8,e$(10)*12
 00090   dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),eno$*8
 00100 ! ______________________________________________________________________
-00120   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00120   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00130   read #1,using L140: mat a$,b$,mat d$,loccode,mat e$
 00140 L140: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12
 00150   for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -18,8 +18,8 @@
 00180   pr f "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
 00190   pr f "12,15,C 60": "PRESS ENTER TO CONTINUE:"
 00200   input fields "12,40,C 1,I,N": pause$
-00210   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00220   open #2: "Name="&env$('Q')&"\PRmstr\PRW2ADDR.h"&env$('cno')&",NoShr",internal,input 
+00210   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00220   open #2: "Name=[Q]\PRmstr\PRW2ADDR.h[cno],NoShr",internal,input 
 00230   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input,relative 
 00240   read #hAddr,using 'form pos 1,n 10.2,n 1',rec=1: ficamax,w1
 00245   ficamaw=ficamax*10

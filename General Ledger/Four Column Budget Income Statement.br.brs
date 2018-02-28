@@ -22,14 +22,14 @@
 00220 ! ______________________________________________________________________
 00240   if fnps=2 then 
 00242     mp1=72 
-00244     open #hAcGlFnsX:=fngethandle:"Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr" ,internal,input,keyed 
+00244     open #hAcGlFnsX:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr" ,internal,input,keyed 
 00246   else 
 00248     mp1=69 
-00250     open #hAcGlFnsX:=fngethandle:"Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr",internal,input,keyed 
+00250     open #hAcGlFnsX:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr",internal,input,keyed 
 00252   end if
-00254   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('temp')&"\fsindex.H"&env$('cno'),str$(mp1)&" 3")
+00254   fnindex_it("[Q]\GLmstr\GLmstr.h[cno]",env$('temp')&"\fsindex.H[cno]",str$(mp1)&" 3")
 00260   fnopenprn
-00290   open #hGlMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00290   open #hGlMstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&"\fsindex.h[cno],Shr",internal,input,keyed 
 00300   fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
 00320   ! /r
 00350 ReadFinStmtLayout: ! r:

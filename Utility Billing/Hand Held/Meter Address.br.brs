@@ -26,21 +26,21 @@
 12100     dim maData$(0)*30,maDataN(0)
 12120     dim mg$(0)*128
 12480   end if
-12500   if ~exists(env$('Q')&'\UBmstr\MeterAddress.h'&env$('cno')) then let fn_InitialializeMeterAddress
+12500   if ~exists('[Q]\UBmstr\MeterAddress.h[cno]') then let fn_InitialializeMeterAddress
 12900 fnend
 14000 def fn_InitialializeMeterAddress
 14020   imaNeedsInitialization=0
-14040   if ~exists(env$('Q')&'\UBmstr\MeterAddress.h'&env$('cno')) then
+14040   if ~exists('[Q]\UBmstr\MeterAddress.h[cno]') then
 14060     imaNeedsInitialization=1
 14080   end if
 14100   hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, imaInputOnly,2)
 15000   if imaNeedsInitialization then
 15020     fnStatus('Initializing UB Meter Address table...')
 15040     fnCloseFile(hMeterAddressLocationID,'UB Meter Address') 
-15060     fnindex_it(env$('Q')&'\UBmstr\MeterAddress.h'&env$('cno'),env$('Q')&'\UBmstr\MeterAddress_Idx2.h'&env$('cno'), '12 30u')
+15060     fnindex_it('[Q]\UBmstr\MeterAddress.h[cno]','[Q]\UBmstr\MeterAddress_Idx2.h[cno]', '12 30u')
 15080     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 0,2)
 15100     fn_newLocationID( 1)
-15120     open #hCustomer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",Shr",internal,input,relative
+15120     open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input,relative
 15140     dim imaMeterAddress$*30
 15160     do
 15180       read #hCustomer,using 'form pos 11,C 30':  imaMeterAddress$ eof imaCustomerFinis
@@ -95,7 +95,7 @@
 28100 !     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
 28120 !     aflPastOpen1: !
 28140 !     if leaveFileOpen and hCustomerMeterAddress<>0 then goto aflPastOpen2
-28160 !     open #hCustomerMeterAddress:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,input,keyed ! Meter address
+28160 !     open #hCustomerMeterAddress:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,input,keyed ! Meter address
 28180 !     aflPastOpen2: !
 28200 !   ! /r
 28220 !   mat maData$=('') : mat maDataN=(0) 

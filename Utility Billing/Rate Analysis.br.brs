@@ -19,7 +19,7 @@
 20040   fnTxt(1,mypos,8,0,0,"1") 
 20050   resp$(rc+=1)=str$(bdate)
 20060   fnLbl(2,1,"Rate for Analysis:",mylen,1)
-20070   fncombof("nerd",2,mypos,55,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) 
+20070   fncombof("nerd",2,mypos,55,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1,usa) 
 20080   usa+=1 
 20090   resp$(rc+=1)="" ! just default to the first one
 20100   fnCmdSet(2)
@@ -32,7 +32,7 @@
 20170   for j=1 to udim(srv$)
 20180     if uprc$(resp$(2)(1:2))=uprc$(srv$(j)) then svce=j
 20190   next j
-20200   open #20: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+20200   open #20: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 20210   read #20,using "Form POS 55,32*G 10",key=svce$: mat rt$ ioerr SCR1 
 20220   close #20: 
 20900 goto SCR2 ! /r
@@ -105,7 +105,7 @@
 24660   use_to(11)=val(resp$(32))
 24900   goto initialize ! /r
 26000 initialize: ! r: initialize
-26010   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+26010   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 26020   fnopenprn
 26030   mat customer=(0) 
 26040   numbcust=0   

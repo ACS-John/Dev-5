@@ -17,7 +17,7 @@
 00180   fnDedNames(mat fullname$,mat abbrevname$)
 00210   io1$(1)="10,34,c 45,UT,N" !:
         io1$(2)="12,34,C 45,UT,N"
-00220   outputfile$=env$('Q')&"\acsPR\grid\departments\department.fil"
+00220   outputfile$="[Q]\acsPR\grid\departments\department.fil"
 00230   ev$="S:\acsPR\Layouts\department.LAY"
 00240   goto L340 ! for utility billing automatically from menu
 00250   close #101: ioerr L260

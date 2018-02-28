@@ -14,7 +14,7 @@
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Create Electronic W-2s")
 00175   pr newpage
-00180   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00180   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,C 12,POS 618,50*N 1': mat a$,b$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc !:
         close #1: 
 00190   on fkey 5 goto XIT
@@ -137,7 +137,7 @@
 01360   message$=""
 01370   stopable=1: gosub L3970 ! fnWAIT(MESSAGE$,1)
 01380 ! ______________________________________________________________________
-01390   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+01390   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed 
 01400 L1400: open #22: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output 
 01410   goto L1480
 01420 ! ______________________________________________________________________
@@ -353,9 +353,9 @@
 03450   if display_cnam=0 then goto L3480
 03460   if display_cnam=1 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) !:
-          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 03470   if display_cnam=2 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 03480 L3480: if button_option=0 then goto L3590
 03490   mat fkey$=("") : em$="" : es=0
 03500   fkey$(5)="Cancel" ! included by default
@@ -421,7 +421,7 @@
 04050   open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn 
 04060   pr #win: newpage
 04070   pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
-04080   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+04080   pr #win,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 04090   pr #win,fields "4,1,Cc 40,N": message$
 04100   if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please wait..."
 04110   if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
@@ -437,7 +437,7 @@
 04250 L4250: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 04260   pr #win: newpage
 04270   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
-04280   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+04280   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 04290 ! 
 04300 ! ______________________________________________________________________
 04310   return  ! Fnend

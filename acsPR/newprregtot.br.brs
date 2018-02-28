@@ -40,8 +40,8 @@
 00440     ab$(j)=lpad$(rtrm$(ab$(j)),8)
 00450   next j
 00460   gosub L1000
-00470   open #h_employee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",Shr",internal,input,relative 
-00480   open #h_checks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00470   open #h_employee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],Shr",internal,input,relative 
+00480   open #h_checks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00490 READ_AGAIN: ! 
 00500   read #h_employee,using "Form POS 1,N 8,C 30": eno,em$ eof TOTAL_THAT
 00510   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "

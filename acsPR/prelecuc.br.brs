@@ -30,7 +30,7 @@
 00220   on fkey 5 goto XIT
 00230 ! 
 00240 ! 
-00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00250   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00260   read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 00270 L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 00280   close #1: 
@@ -123,9 +123,9 @@
 01140   message$=""
 01150   stopable=1: gosub L3370 ! fnwait(MESSAGE$,1)
 01160 ! ______________________________________________________________________
-01170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-01180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
-01190 L1190: open #22: "Name="&env$('Q')&"\UCReport,RecL=512,eol=crlf,replace",display,output 
+01170   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+01180   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
+01190 L1190: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output 
 01200 ! ______________________________________________________________________
 01210   goto BEGINNING_OF_FILE
 01220   pr newpage
@@ -212,7 +212,7 @@
 02050   dim a$*512
 02060 L2060: close #22: ioerr L2070
 02070 L2070: open #24: "Name=X,RecL=514,EOL=NONE,REPLACE",external,output 
-02080   open #22: "Name="&env$('Q')&"\UCReport,RecL=512",display,input 
+02080   open #22: "Name=[Q]\UCReport,RecL=512",display,input 
 02090 L2090: linput #22: a$ eof L2140
 02100   if a$(512:512)="X" then a$(512:512)=""
 02110   write #24,using L2120: rpad$(a$,512),chr$(13),chr$(10)
@@ -222,7 +222,7 @@
 02150   close #22: 
 02152   savelocation$=trim$(savelocation$)
 02154   if savelocation$(len(savelocation$):len(savelocation$))<>"\" then savelocation$=savelocation$&"\"
-02160   execute "COPY x "&savelocation$&env$('Q')&"\UCReport"
+02160   execute "COPY x "&savelocation$&"[Q]\UCReport"
 02170   return 
 02180 SCR2: ! 
 02190   dim contact$*27,email$*40,savelocation$*40
@@ -326,9 +326,9 @@
 02870   if display_cnam=0 then goto L2900
 02880   if display_cnam=1 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width)) !:
-          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 02890   if display_cnam=2 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 02900 L2900: if button_option=0 then goto L3010
 02910   mat fkey$=("") : em$="" : es=0
 02920   fkey$(5)="Cancel" ! included by default
@@ -393,7 +393,7 @@
 03420 L3420: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn 
 03430   pr #win: newpage
 03440   pr #win,fields "1,1,Cc 40,R,N": cnam$
-03450   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+03450   pr #win,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 03460   pr #win,fields "4,1,Cc 40,N": message$
 03470   if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please wait..."
 03480   if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
@@ -410,7 +410,7 @@
 03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 03600   pr #win: newpage
 03610   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width))
-03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 03630 ! 
 03640 ! 
 03650   return  ! Fnend

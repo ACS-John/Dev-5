@@ -8,12 +8,12 @@
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
-00116   execute "Index "&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4,Replace,DupKeys"
+00116   execute "Index [Q]\GLmstr\ACTrans.h[cno]"&' '&"[Q]\GLmstr\AcTrIdx.h[cno] 1/71/17/13 12/2/2/4,Replace,DupKeys"
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! r:
 00142   open_file_count=0 ! this value is used in the close_file sub routine
-00152   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
+00152   open #open_file_count+=1: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
 00160 return ! /r
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -31,22 +31,22 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00430 ! cl=1 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno') !:
+        ! c$(cl,2)='[Q]\TMmstr\Client.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='6' !:
         ! c$(cl,5)='7' : c$(cl,6)='50' !:
-        ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno') !:
+        ! c$(cl,7)='[Q]\TMmstr\Client-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00440 ! cl=3 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno') !:
+        ! c$(cl,2)='[Q]\TMmstr\Systems.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='2' !:
         ! c$(cl,5)='3' : c$(cl,6)='50' !:
-        ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno') !:
+        ! c$(cl,7)='[Q]\TMmstr\Systems-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00450 ! cl=5 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno') !:
+        ! c$(cl,2)='[Q]\TMmstr\TimeFrame.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='2' !:
         ! c$(cl,5)='3' : c$(cl,6)='50' !:
-        ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno') !:
+        ! c$(cl,7)='[Q]\TMmstr\TimeFrame-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00460   return 
 00470 ! ______________________________________________________________________

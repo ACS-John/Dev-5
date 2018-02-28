@@ -23,9 +23,9 @@
 00200   fndat(resp$(1),put=2)
 00210   customer=1 !:
         if resp$(2)=opt$(1) then !:
-          open #customer: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed else !:
+          open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed else !:
           if resp$(2)=opt$(2) then !:
-            open #customer: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,input,keyed 
+            open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed 
 00220   fnopenprn
 00230   on pageoflow goto PGOF
 00240   gosub HDR

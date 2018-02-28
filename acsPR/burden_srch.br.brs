@@ -10,7 +10,7 @@
 00100 ! x$=account #     !:
           ! to extract the flexgrid information (personnel burden)
 00110     fncno(cno)
-00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\burden.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\burdenidx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+00120     open #file_num:=fngethandle: "Name=[Q]\PRmstr\burden.h[cno],KFName=[Q]\PRmstr\burdenidx.h[cno],Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
 00150     fnTos(sn$="BurdenSrch")

@@ -14,7 +14,7 @@
 00140   dim p$(20)*50,cap$*128,dedcode(10)
 00150 ! ______________________________________________________________________
 00160   fntop(program$,cap$="Employee")
-00180   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00180   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 418,10*C 20,10*N 1': mat miscname$,mat dedcode !:
         close #1: 
 00190 ! 
@@ -38,9 +38,9 @@
 00250   sc3$(1)="Check Date:" !:
         sc3$(2)="Check #:"
 00260   sc3$(21)="Net Pay:"
-00270   if exists (env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')) =0 then goto INITIAL_BUILD
-00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2900
-00290   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
+00270   if exists ("[Q]\GLmstr\PRmstr.h[cno]") =0 then goto INITIAL_BUILD
+00280   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr L2900
+00290   open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative 
 00300   goto MAIN
 00310 ! ______________________________________________________________________
 00320 DONE: ! 
@@ -54,7 +54,7 @@
         mylen=20: mypos=mylen+3 : right=1
 00400   fnemployee_search(x$,99)
 00410 ! fnLbl(1,1,"Employee Number:",MYLEN,RIGHT)
-00420 ! fnCOMBOF("PRmstr",1,MYPOS,27,env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) !:
+00420 ! fnCOMBOF("PRmstr",1,MYPOS,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) !:
         resp$(1)=str$(eno)
 00430   fnCmdKey("E&dit",1,1,0,"")
 00440   fnCmdKey("&Add",2,0,0,"")
@@ -168,17 +168,17 @@
 01290 L1290: eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
 01300 ! ______________________________________________________________________
 01310 INITIAL_BUILD: ! 
-01320   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),internal,output ioerr L1330
+01320   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno]",internal,output ioerr L1330
 01330 L1330: close #1,free: ioerr L1340
-01340 L1340: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",SIZE=0,RecL=280,Replace",internal,output 
+01340 L1340: open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],SIZE=0,RecL=280,Replace",internal,output 
 01350   close #2: ioerr ignore
-01360   fnFree(env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'))
-01370 L1370: open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno'),internal,output ioerr L1380
+01360   fnFree("[Q]\GLmstr\PRIndex.h[cno]")
+01370 L1370: open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno]",internal,output ioerr L1380
 01380 L1380: close #2,free: ioerr L1390
-01390 L1390: open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",SIZE=0,RecL=110,Replace",internal,output,relative 
+01390 L1390: open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace",internal,output,relative 
 01400   close #2: 
 01410 L1410: close #1: ioerr L1420
-01420 L1420: execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&" 1 4 Replace DupKeys -n"
+01420 L1420: execute "Index [Q]\GLmstr\PRmstr.h[cno]"&' '&"[Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n"
 01430   goto MAIN
 01440 ! ______________________________________________________________________
 01450 PROOF_LIST: ! 

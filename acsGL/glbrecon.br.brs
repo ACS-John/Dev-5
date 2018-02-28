@@ -43,13 +43,13 @@
 00430   se$(6)="Amount:"
 00440   se$(7)="Cleared Bank (1=YES)"
 00450 OPEN_FILES: ! 
-00460   open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L2660
+00460   open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L2660
 00470   goto L2390
 00480 L480: pr newpage
 00490   close #101: ioerr L500
 00500 L500: open #101: "SROW=3,SCOL=20,EROW=13,ECOL=59,BORDER=DR,CAPTION=<Bank Reconciliation File",display,outIn 
 00510   pr #101,fields "1,1,Cc 40,R,N": cnam$
-00520   pr #101,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+00520   pr #101,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 00530   pr f "14,35,C 09,B,5": "Exit (F5)"
 00540   rinput #101,select mat fl2$,attr "H": mat sc2$
 00550   scode=curfld
@@ -60,7 +60,7 @@
 00600   close #101: ioerr L610
 00610 L610: open #101: "SROW=5,SCOL=20,EROW=15,ECOL=59,BORDeR=SR,CAPTION=Initial File Preparation",display,outIn 
 00620   pr #101,fields "1,1,Cc 40,R,N": cnam$
-00630   pr #101,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+00630   pr #101,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 00640   pr #101,fields "4,1,Cc 40,R,N": "* * *   WARNING   * * *"
 00650   pr #101,fields "5,1,Cc 40,N": "This selection will destroy all"
 00660   pr #101,fields "6,1,Cc 40,N": "existing Bank Reconciliation records"
@@ -71,7 +71,7 @@
 00710   if pas$><"ERASE" then goto L690
 00720   new1=1
 00730   close #1: ioerr L740
-00740 L740: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",Size=0,RecL=68,Replace",internal,outIn,relative 
+00740 L740: open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],Size=0,RecL=68,Replace",internal,outIn,relative 
 00750   goto L2620
 00760 L760: form pos 1,n 3,n 6,n 3,c 12,c 30,c 2,n 6,pd 5.2,n 1
 00770 L770: new1=1
@@ -204,7 +204,7 @@
 02040 L2040: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print Listing of Checks",display,outIn 
 02050   pr #101: newpage
 02060   pr #101,fields "1,1,Cc 41,R,N": cnam$
-02070   pr #101,fields "2,1,Cc 41,R,N": "Company Number "&env$('cno')
+02070   pr #101,fields "2,1,Cc 41,R,N": "Company Number [cno]"
 02080   pr #101,fields "4,1,Cc 41,N": "Printing..."
 02090   pr f "13,34,C 11,B,5": "Cancel (F5)"
 02100   on fkey 5 goto L2250
@@ -260,7 +260,7 @@
 02600   goto L480
 02610 L2610: if new1=1 or z1=1 then goto L2620 else goto XIT
 02620 L2620: close #1: 
-02630   fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
+02630   fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 02640   if z1=1 then goto OPEN_FILES else goto XIT
 02650 ! ______________________________________________________________________
 02660 L2660: if err=4152 then goto L740 else goto ERTN

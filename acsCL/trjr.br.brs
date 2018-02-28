@@ -17,7 +17,7 @@
         ti$(2)="Deposits" !:
         ti$(3)="Adjustments"
 00170 ! ______________________________________________________________________
-00180   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00180   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'form POS 152,N 2': wbc !:
         close #20: 
 00190 ! ______________________________________________________________________
@@ -42,7 +42,7 @@
 00310   fnChk(9,40,"Print Adjustments Journal:",1) !:
         resp$(respc+=1)="False"
 00320   fnLbl(11,1,"Bank Account:",38,1)
-00330   fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing") !:
+00330   fncombof("Bankmstr",11,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing") !:
         resp$(respc+=1)=str$(wbc)
 00340   fnCmdSet(2) !:
         fnAcs(sn$,0,mat resp$,ck)
@@ -58,12 +58,12 @@
         else sltyn$(3)="N" ! adj jrn
 00400   wbc=val(resp$(7)(1:2))
 00410 ! FNWAIT
-00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
-00440   open #glmstr=4: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00420   open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,input,keyed 
+00430   open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed 
+00440   open #glmstr=4: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 00450   open #work=3: "Name="&udf$&"WORK,KFName="&udf$&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outIn,keyed  !:
         ! this file is used to total Amounts by General Ledger Number
-00460   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00460   open #bankmstr=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
 00470   read #bankmstr,using 'Form POS 3,C 30,C 12,PD 6.2',key=cnvrt$("N 2",wbc),release: bn$ nokey MAIN
 00480   close #bankmstr: 
 00490   bn$=rtrm$(bn$)

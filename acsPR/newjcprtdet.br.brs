@@ -18,7 +18,7 @@
 00180   prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" !:
         prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
 00190 ! ______________________________________________________________________
-00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00200   open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed 
 00210   for j=1 to 100
 00220     read #1,using 'Form POS 1,C 3,C 30': dcode$(j),desc$(100) eof L250
 00230     desc$(val(dcode$(j)))=desc$(100) conv L240
@@ -26,12 +26,12 @@
 00250 L250: close #1: 
 00260   desc$(100)="Unassigned"
 00270 ! ______________________________________________________________________
-00280   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
+00280   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  !:
         read #20,using 'Form POS 1,C 40,POS 746,2*C 6',rec=1: cnam$,mat npj$ !:
         close #20: 
-00290   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00300   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00310   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,input,relative 
+00290   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
+00300   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
+00310   open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative 
 00320 ! ______________________________________________________________________
 00330 L330: fnTos(sn$="prtdet") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1

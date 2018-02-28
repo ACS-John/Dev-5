@@ -16,8 +16,8 @@
         fnmsgbox(mat msgline$,resp$,cap$,49)
 00140   if uprc$(resp$)=uprc$("CANCEL") then goto XIT
 00150 ! ______________________________________________________________________
-00160   open #1: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno'),internal,outIn,keyed ioerr MAIN
-00170   open #2: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno'),internal,outIn,relative ioerr MAIN
+00160   open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno]",internal,outIn,keyed ioerr MAIN
+00170   open #2: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno]",internal,outIn,relative ioerr MAIN
 00180 ! ______________________________________________________________________
 00190 TOP: ! 
 00200   read #1,using "Form POS 11,2*PD 3": mat ta eof L240

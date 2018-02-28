@@ -16,7 +16,7 @@
 00180 L180: open #win: 'SRow='&str$(sr)&',SCol='&str$(sc)&',ERow='&str$(er)&',ECol='&str$(ec)&',Border=Sr,Caption=<'&cap$,display,outIn 
 00190     pr #win: newpage
 00200     pr #win,fields '1,1,Cc '&str$(win_width)&',R,N': env$('cnam')(1:min(40,win_width))
-00210     pr #win,fields '2,1,Cc '&str$(win_width)&',R,N': 'Company Number '&env$('cno')(1:min(40,win_width))
+00210     pr #win,fields '2,1,Cc '&str$(win_width)&',R,N': 'Company Number [cno]'(1:min(40,win_width))
 00220     goto XIT
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>

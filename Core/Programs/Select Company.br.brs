@@ -33,8 +33,8 @@
 28030   !  r: add that company grid to the screen
 28160   fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 34000   ! 
-34020   ! temp$=env$('Q')&'\'&env$('cursys')&"mstr"
-34040   fngetdir2(env$('Q')&'\'&env$('cursys')&"mstr",mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
+34020   ! temp$='[Q]\'&env$('cursys')&"mstr"
+34040   fngetdir2('[Q]\'&env$('cursys')&"mstr",mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 34060   company_count=filename_item=0
 34080   for filename_item=1 to udim(mat filename$)
 34100     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
@@ -63,12 +63,12 @@
 36140     fnButton(2,102,"I&mport",13,'',1,9)
 36160   end if 
 37000   fnCmdKey("&Save",15,1,0)
-37020   if exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel only allowed if they have not deleted their current company
+37020   if exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 37040     fnCmdKey("&Cancel",5,0,1)
 37060   end if 
 37080   fnAcs(sn$,win,mat resp$,ck)
 38000   ! 
-38020   if ck=5 and exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel
+38020   if ck=5 and exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel
 38040     goto XIT
 38060   else if ck=2 then 
 38080     goto COMPANY_ADD
@@ -131,9 +131,9 @@
 45020   fncheckfileversion
 45040   if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursys')='TM' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
 45060     if exists('S:\'&fnSystemName$&'\mstr\*.h99999') then
-45080       fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999',env$('Q')&'\'&env$('cursys')&'mstr\*.h'&env$('cno'))
+45080       fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
 45100     else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
-45120       fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999',env$('Q')&'\'&env$('cursys')&'mstr\*.h'&env$('cno'))
+45120       fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
 45140     end if
 45160     if env$('cursys')='CL' then ! r: special processing for CL
 45180       mat ml$(5)
@@ -166,7 +166,7 @@
 48120 ! /region
 50000 def fn_company_already_exists(cae_cno)
 50020   cae_return=0
-50040   if exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cae_cno)) then 
+50040   if exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cae_cno)) then 
 50060     cae_return=1
 50080     ! mat mg$(3)
 50100     mat mg$(2)
@@ -185,7 +185,7 @@
 52000 def fn_cname_of_cno$*40(cno)
 52020   dim coc_return$*40
 52040   coc_return$=''
-52060   open #h_tmp:=fngethandle: "Name="&env$('Q')&"\"&env$('cursys')&"mstr\Company.h"&str$(cno),internal,input ioerr COC_FINIS
+52060   open #h_tmp:=fngethandle: "Name=[Q]\"&env$('cursys')&"mstr\Company.h"&str$(cno),internal,input ioerr COC_FINIS
 52080   read #h_tmp,using "Form pos 1,c 40": coc_return$
 52100   close #h_tmp: 
 52120   COC_FINIS: ! 
@@ -206,7 +206,7 @@
 62240   e$=uprc$(trim$(resp$(1)))
 62260   if ckey<>5 then 
 62280     if e$="ERASE" then 
-62300       fnFree(env$('Q')&'\'&env$('cursys')&"mstr"&"\*.h"&str$(cno))
+62300       fnFree('[Q]\'&env$('cursys')&"mstr"&"\*.h"&str$(cno))
 62320       mat mg$(1)
 62340       mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
 62360       fnmsgbox(mat mg$,resp$,'',0)
@@ -249,10 +249,10 @@
 72500     dcno=val(resp$(1))
 72520     dcnam$=resp$(2)
 72540     if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
-72560     fnCopy(env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(scno),env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(dcno))
+72560     fnCopy("[Q]\"&env$('cursys')&"mstr"&"\*.h"&str$(scno),"[Q]\"&env$('cursys')&"mstr"&"\*.h"&str$(dcno))
 72580     ! fnCopy("S:\acs"&env$('cursys')&"\*.h"&str$(scno),"S:\acs"&env$('cursys')&"\*.h"&str$(dcno))
 72600     if uprc$(env$('cursys'))=uprc$("UB") then 
-72620       fnCopy(env$('Q')&"\UBmstr\ubData\*.h"&str$(scno),env$('Q')&"\UBmstr\ubData\*.h"&str$(dcno))
+72620       fnCopy("[Q]\UBmstr\ubData\*.h"&str$(scno),"[Q]\UBmstr\ubData\*.h"&str$(dcno))
 72640     end if 
 72660     fn_update_company_name(dcno,dcnam$)
 72680   end if 
@@ -260,7 +260,7 @@
 74000 def fn_update_company_name(cno,cnam$*40)
 74020   cnam$=rtrm$(cnam$)
 74040   if cnam$<>'' then 
-74060     open #h_company:=fngethandle: 'Name='&env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&str$(cno),internal,outIn,relative 
+74060     open #h_company:=fngethandle: 'Name=[Q]\'&env$('cursys')&'mstr\Company.h'&str$(cno),internal,outIn,relative 
 74080     rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
 74100     close #h_company: 
 74120   end if 
@@ -331,6 +331,6 @@
 80120     fncno(cno,cnam$)
 80140   end if 
 80160   ! 
-80180   if ~exists(env$('Q')&'\'&cursys$&'mstr') and cursys$<>'CO' then execute 'mkdir "'&env$('Q')&'\'&cursys$&'mstr"'
-80200   ! if ~exists(env$('Q')&'\INI\acs'&cursys$) then execute 'mkdir '&env$('Q')&'\INI\acs'&cursys$
+80180   if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
+80200   ! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
 80220 fnend 

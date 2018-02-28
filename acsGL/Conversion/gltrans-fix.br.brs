@@ -11,7 +11,7 @@
 00090 L90: input fields "10,57,N 2,UE,N",attr "R": cno conv L90
 00100   if cmdkey=5 then stop 
 00110 ! 
-00120   open #1: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,input ioerr L90
+00120   open #1: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input ioerr L90
 00130   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=73,REPLACE",internal,output 
 00140   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 00150 L150: read #1,using L190: mat tr,tr$,td$ eof L220
@@ -24,9 +24,9 @@
 00210   goto L150
 00220 L220: close #1,free: 
 00230   close #2: 
-00240   execute "RENAME "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')
-00250   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed 
-00260   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),internal,outIn,relative 
+00240   execute "RENAME "&env$('Temp')&"\Work."&session$&' '&"[Q]\GLmstr\GLTrans.h[cno]"
+00250   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,outIn,keyed 
+00260   open #2: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,outIn,relative 
 00270   pr newpage
 00280   pr f "10,15,c 60,h,n": "REASSIGN TRANSACTION ADDRESSES IN PROCESS"
 00290   restore #1,key>="            ": eof L300

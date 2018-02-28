@@ -3,6 +3,7 @@
 38020   if ~setup then
 38040     setup=1
 38060     library 'S:\Core\Library': fnerror,fnStatus,fnMakeSurePathExists,fngetdir2,fnGetPp
+38062     library 'S:\Core\Library': fnSrepEnv$
 38080     on error goto ERTN
 38100   end if
 38120 fnend
@@ -20,6 +21,8 @@
 52000 def fn_Copy(from$*256,to$*256; new_record_length,options$)
 52020   ! options$ (separate by space)  supported options$ values include
 52040   !           recursive - includes all subdirectories and their files
+52042   from$=fnSrepEnv$(from$)
+52044   to$=fnSrepEnv$(to$)
 52100   from$=trim$(from$,'"')
 52120   to$=trim$(to$,'"')
 52140   options$=rtrm$(options$)&' ' 
@@ -86,6 +89,8 @@
 80040 def library fncscopy(&source$,&destination$)
 80042   ! client server copy function
 80050   if ~setup the let fn_setup
+80052   source$=fnSrepEnv$(source$)
+80054   destination$=fnSrepEnv$(destination$)
 80070   ! source$ = the file to copy from
 80071   ! destination$ = file to copy to
 80072   ! (start either source$ or destination$ with a @ in pos 1 to specify it's location is on the client)
@@ -146,6 +151,7 @@
 80522 fnend 
 82000 def library fnFree(fileToDelete$*256)
 82010   if ~setup then let fn_setup
+82012   fileToDelete$=fnSrepEnv$(fileToDelete$)
 82020   freeReturn=0
 82040   fileToDelete$=trim$(fileToDelete$,'"')
 82060   execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
@@ -158,6 +164,8 @@
 82200 fnend
 84000 def library fnRename(from$*256,to$*256)
 84010   if ~setup then let fn_setup
+84012   from$=fnSrepEnv$(from$)
+84014   to$=fnSrepEnv$(to$)
 84020   from$=trim$(from$,'"')
 84040   to$=trim$(to$,'"')
 84060   if (from$(1:2)='@:' and to$(1:2)<>'@:') or (from$(1:2)<>'@:' and to$(1:2)='@:') then
@@ -170,15 +178,16 @@
 84200 fnend
 86000 def library fnRemoveDeletedRecords(from$*256)
 86020   if ~setup then let fn_setup
+86030   from$=fnSrepEnv$(from$)
 86040   rdrReturn=0
-86060  execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr RdrFail
-86080  execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr RdrFail
-86100  execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
-86120  rdrReturn=1
-86140  goto RdrFinis
-86160  RdrFail: !
-86180  rdrReturn=-err
-86200  goto RdrFinis
-86220  RdrFinis: !
-86240  fnRemoveDeletedRecords=rdrReturn
+86060   execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr RdrFail
+86080   execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr RdrFail
+86100   execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
+86120   rdrReturn=1
+86140   goto RdrFinis
+86160   RdrFail: !
+86180   rdrReturn=-err
+86200   goto RdrFinis
+86220   RdrFinis: !
+86240   fnRemoveDeletedRecords=rdrReturn
 86260 fnend

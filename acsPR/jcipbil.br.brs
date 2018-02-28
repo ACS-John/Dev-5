@@ -13,7 +13,7 @@
 00130   c1=3
 00135   fnconsole(1)
 00140 ! ______________________________________________________________________
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed 
 00160   open #2: "Name="&env$('temp')&"\Work."&session$,internal,output ioerr L180
 00170   close #2,free: 
 00180 L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",internal,outIn,relative 

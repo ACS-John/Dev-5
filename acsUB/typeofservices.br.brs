@@ -22,11 +22,11 @@
 00220   mat colmask$(60)
 00230   mat colmask$=("")
 00240   fnflexinit1(filename$:='toses',2,1,10,72,mat colhdr$,mat colmask$,1)
-00243   fngetdir2(env$('Q')&"\UBmstr\ubData\",mat service_file$, '/ON','Service.h*')
+00243   fngetdir2("[Q]\UBmstr\ubData\",mat service_file$, '/ON','Service.h*')
 00244 ! fnpause
 00250   for service_file_item=1 to udim(service_file$)
 00270     item$(1)=service_file$(service_file_item)(10:len(service_file$(service_file_item)))
-00280     open #h_service=15: "Name="&env$('Q')&"\UBmstr\ubData\"&service_file$(service_file_item),internal,outIn,relative 
+00280     open #h_service=15: "Name=[Q]\UBmstr\ubData\"&service_file$(service_file_item),internal,outIn,relative 
 00290     read #h_service,using "form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*G 2,10*G 2",rec=1: mat item$(2:61)
 00300     fnflexadd1(mat item$)
 00310     close #h_service: 

@@ -22,7 +22,7 @@
 00190   fntop("S:\acsPR\prElecW2",cap$="Electronic W-2")
 00230   on fkey 5 goto XIT
 00250 ! 
-00260   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00260   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00270   read #1,using L280: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax
 00280 L280: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2
 00290   close #1: 
@@ -221,9 +221,9 @@
 02000   message$=""
 02020 ! ______________________________________________________________________
 02030   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-02040   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-02050 ! Open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",Internal,Input,Relative
-02060   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+02040   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+02050 ! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",Internal,Input,Relative
+02060   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 02070 L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",display,output 
 02080   goto L2140
 02090   pr newpage
@@ -523,9 +523,9 @@
 04780   if display_cnam=0 then goto L4810
 04790   if display_cnam=1 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) !:
-          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 04800   if display_cnam=2 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 04810 L4810: if button_option=0 then goto L4920
 04820   mat fkey$=("") : em$="" : es=0
 04830   fkey$(5)="Cancel" ! included by default
@@ -591,7 +591,7 @@
 05490 L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 05500   pr #win: newpage
 05510   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
-05520   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+05520   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 05530 ! 
 05540 ! 
 05550   return  ! Fnend

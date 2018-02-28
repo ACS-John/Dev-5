@@ -24,8 +24,8 @@
 14400   fn_ask_dates(mat label$,mat filter_date)
 14600   if fkey=93 or fkey=99 then goto XIT
 14800   open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input 
-15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&env$('cno')&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&env$('cno')&",Replace,KPs=1,KLn=5",internal,outIn,keyed 
-15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&",Shr",internal,input,keyed 
+15000   open #h_out:=fngethandle: "Name=[Q]\TMmstr\TimeSheet.h[cno],RecL=86,KFName=[Q]\TMmstr\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed 
+15200   open #h_support:=fngethandle: "Name=[Q]\TMmstr\SUPPORT.h[cno],KFName=[Q]\TMmstr\support-idx.h[cno],Shr",internal,input,keyed 
 15400 FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 15600   fnopenprn
 15800   pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
@@ -279,7 +279,7 @@
 56020     dim wo_sage_code_prior$*128
 56040     if ~setup_sawo then 
 56060       setup_sawo=1
-56080       open #sawo_h_out:=fngethandle: 'Name='&env$('Q')&'\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output 
+56080       open #sawo_h_out:=fngethandle: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output 
 56100     end if 
 56120     if wo_sage_code_prior$='' and wo_sage_code$='' then 
 56140       pr #255: '!!! Sage Code is blank !!!'

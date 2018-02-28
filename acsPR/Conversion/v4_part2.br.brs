@@ -3,7 +3,7 @@
 10180 ! ______________________________________________________________________
 10200   fntop("S:\acsPR\conversion\v4_part2",cap$="add missing files and indexes")
 10220 ! r: do every company - loop top
-10240   fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
+10240   fngetdir2('[Q]\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
 10260   company_count=filename_item=0
 10280   for filename_item=1 to udim(mat filename$)
 10300     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
@@ -35,24 +35,24 @@
 30060   fnend 
 40000   def fn_pr_conversion_add_missing(cno)
 40020 !   pr 'all files should be closed now' : pause
-40080     fnStatus('PR adding missing files and indexes - Company Number '&env$('cno'))
+40080     fnStatus('PR adding missing files and indexes - Company Number [cno]')
 40160     dim company_file$(1)*128,tmp$*256
-40180     tmp$=env$('Q')&"\PRmstr"
-40320     open #14: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed ioerr L2180
+40180     tmp$="[Q]\PRmstr"
+40320     open #14: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed ioerr L2180
 40340     goto L2200
 40360 L2180: ! 
-40380     open #14: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",RecL=224,kps=1,kln=17,replace",internal,outIn,keyed 
+40380     open #14: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace",internal,outIn,keyed 
 40400 L2200: ! 
 40420     close #14: 
-40440 !   fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),env$('Q')&"\PRmstr\checkidx3.h"&env$('cno'),"1/12/9 8/6/3")
+40440 !   fnindex_it("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx3.h[cno]","1/12/9 8/6/3")
 40460 ! 
-40480     open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",RecL=39,KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
+40480     open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
 40500     close #breakdown: 
-40520 !   fnindex_it(env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno'),env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno'),"1/9/14 8/5/8")
+40520 !   fnindex_it("[Q]\PRmstr\HourBreakdown.H[cno]","[Q]\PRmstr\HourBreakdown-idx.H[cno]","1/9/14 8/5/8")
 40540 ! 
-40560     open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outIn,keyed 
+40560     open #30: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed 
 40580     close #30: 
-40600 !   fnindex_it(env$('Q')&"\PRmstr\dd.H"&env$('cno'),env$('Q')&"\PRmstr\ddidx1.H"&env$('cno'),"1,10")
+40600 !   fnindex_it("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
 40620 ! 
 40680     fnindex_sys(cno,'PR')
 40700     goto XIT

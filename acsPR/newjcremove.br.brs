@@ -12,13 +12,13 @@
 00120   fntop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
 00130   fncno(cno)
 00140 ! 
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outIn: close #1: 
+00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,outIn: close #1: 
 00160 ! ______________________________________________________________________
-00170   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&" JCMSTR.X -n"
-00180   execute "Copy "&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&" JCTRANS.X -n"
-00190   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&" JCCAT.X -n"
+00170   execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
+00180   execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
+00190   execute "Copy [Q]\PRmstr\JCCAT.H[cno] JCCAT.X -n"
 00200 ! ______________________________________________________________________
-00210   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outIn,keyed 
+00210   open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",internal,outIn,keyed 
 00220 ! ______________________________________________________________________
 00230 ASKJOB: ! 
 00240   fnTos(sn$="jccpr1J") !:
@@ -43,17 +43,17 @@
 00370 ! ______________________________________________________________________
 00380 DELETE_THEM: ! 
 00390   restore #1: 
-00400   open #2: "Name=JCCAT.X,KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,input,keyed 
+00400   open #2: "Name=JCCAT.X,KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,input,keyed 
 00410   open #3: "Name=JCTRANS.X",internal,input,relative 
-00420   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,output 
+00420   open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,output 
 00430   close #11,free: 
-00440   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",SIZE=0,RecL=300",internal,output 
-00450   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno'),internal,output 
+00440   open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],SIZE=0,RecL=300",internal,output 
+00450   open #12: "Name=[Q]\PRmstr\JCCAT.H[cno]",internal,output 
 00460   close #12,free: 
-00470   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",SIZE=0,RecL=123",internal,output 
-00480   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
+00470   open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],SIZE=0,RecL=123",internal,output 
+00480   open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno]",internal,output 
 00490   close #13,free: 
-00500   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outIn,relative 
+00500   open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno],SIZE=0,RecL=88",internal,outIn,relative 
 00510   ot4=1
 00520   write #13,using L530,rec=1: " ","",mat tr," ",ot4
 00530 L530: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
@@ -91,10 +91,10 @@
 00850   close #11: 
 00860   close #12: 
 00870   close #13: 
-00880   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -n"
-00890   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys -n"
-00895   df$=env$('Q')&"\PRmstr\jcmstr.h"&env$('cno') : if$=env$('Q')&"\PRmstr\jcindx.h"&env$('cno') !:
-        fncombof("CJob.h"&env$('cno'),lyne,mypos,43,df$,1,6,7,25,if$,1)
+00880   execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
+00890   execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -n"
+00895   df$="[Q]\PRmstr\jcmstr.h[cno]" : if$="[Q]\PRmstr\jcindx.h[cno]" !:
+        fncombof("CJob.h[cno]",lyne,mypos,43,df$,1,6,7,25,if$,1)
 00900   goto XIT
 00910 ! ______________________________________________________________________
 00920 XIT: fnxit

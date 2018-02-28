@@ -22,10 +22,10 @@
 00210   fntop(program$,cap$="Direct Deposits")
 00240   cancel=5
 00250   crlf$=chr$(13)&chr$(10)
-00260   open #mstr=1: "Name="&env$('Q')&"\PRmstr\RPmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00270   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
-00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
-00290   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outIn,relative 
+00260   open #mstr=1: "Name=[Q]\PRmstr\RPmstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
+00270   open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed 
+00280   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+00290   open #ddinfo=31: "Name=[Q]\PRmstr\DDInfo.h[cno],RecL=256,Use",internal,outIn,relative 
 00300   if lrec(31)=0 then write #31,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1,release: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00310   read #31,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00320   close #ddinfo: 
@@ -87,7 +87,7 @@
 00720   fedid$=cid$=resp$(7) : cid$="1"&cid$
 00740   if resp$(8)="True" then report$="Y" else report$="N"
 00745   if resp$(9)="True" then testfile=1 else testfile=0
-00750   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outIn,relative 
+00750   open #ddinfo=31: "Name=[Q]\PRmstr\DDInfo.h[cno],RecL=256,Use",internal,outIn,relative 
 00760   rewrite #ddinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1,release: path$,bankaccount$,bankrouting$,federalrouting$,fedid$,bankname$,banksaccount$
 00770   close #ddinfo: 
 00780   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 

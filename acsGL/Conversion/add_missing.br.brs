@@ -10,25 +10,25 @@
 00170 ! r: main loop
 02000   cno_origional=cno
 02020   dim company_file$(1)*128
-02040   tmp$=env$('Q')&"\GLmstr"
+02040   tmp$="[Q]\GLmstr"
 02060   fngetdir2(tmp$,mat company_file$, option$,'Company.h*')
 02080   for company_item=1 to udim(mat company_file$)
 02100     cno_current=val(company_file$(company_item)(10:len(company_file$(company_item))))
 02120     if cno_current<>0 then 
 02140       fnputcno(cno_current) : cno=cno_current : ! 
 02160 ! 
-02180       open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",RecL=276,kln=8,kps=1,replace",internal,outIn,keyed 
+02180       open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],RecL=276,kln=8,kps=1,replace",internal,outIn,keyed 
 02200       close #paymstr: 
-02220       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\Payidx1.H"&env$('cno')&" 1 8 Replace DupKeys -N"
-02240       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\Payidx2.H"&env$('cno')&" 9 38 Replace DupKeys -N"
+02220       execute "Index [Q]\GLmstr\paymstr.H[cno]"&' '&"[Q]\GLmstr\Payidx1.H[cno] 1 8 Replace DupKeys -N"
+02240       execute "Index [Q]\GLmstr\paymstr.H[cno]"&' '&"[Q]\GLmstr\Payidx2.H[cno] 9 38 Replace DupKeys -N"
 02260 ! 
-02280       open #6: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&env$('cno')&",Version=1,Shr",internal,outIn,keyed 
+02280       open #6: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankrec-idx.H[cno],Version=1,Shr",internal,outIn,keyed 
 02300       close #6: 
-02320       execute "Index "&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno') &" 79/3/4 12/1/8 Replace,DupKeys"
+02320       execute "Index [Q]\GLmstr\bankrec.H[cno]"&' '&"[Q]\GLmstr\bankrec-idx.h[cno]" &" 79/3/4 12/1/8 Replace,DupKeys"
 02340 ! 
-02342       open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Use",internal,outIn 
+02342       open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno],RecL=64,Use",internal,outIn 
 02344       close #2: 
-02348       execute "Index "&env$('Q')&"\GLmstr\gltr1099.H"&env$('cno')&' '&env$('Q')&"\GLmstr\gltridx1.H"&env$('cno')&" 1 8 Replace DupKeys -N"
+02348       execute "Index [Q]\GLmstr\gltr1099.H[cno]"&' '&"[Q]\GLmstr\gltridx1.H[cno] 1 8 Replace DupKeys -N"
 02360     end if  ! cno_current<>0
 02380   next company_item
 02400   fnputcno(cno_origional)

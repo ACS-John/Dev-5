@@ -12,8 +12,8 @@
 00120   fncno(cno,cnam$)
 00130   fntop(program$, cap$="Check Listing by Payee")
 00140   right=1
-00150   open #trmstr=22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00160   open #paymstr:=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #trmstr=22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+00160   open #paymstr:=1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
 00170 ! ______________________________________________________________________
 00180   fnTos(sn$="cklstv") !:
         respc=0 : mylen=25 : mypos=mylen+2
@@ -35,7 +35,7 @@
 00310 ! ______________________________________________________________________
 00320 HDR: ! Page Heading
 00330   pr #255,using 'Form POS 1,CC 80': cnam$
-00340   pr #255,using 'Form POS 1,CC 80': "Company Number "&env$('cno')
+00340   pr #255,using 'Form POS 1,CC 80': "Company Number [cno]"
 00350   pr #255,using 'Form POS 1,CC 80': "Check Listing By Vendor"
 00360   pr #255,using 'Form Pos 1,Cc 80': "For the Date Range Starting "&cnvrt$("pic(zzzz/zz/zz)",date1)&" and Ending "&cnvrt$("pic(zzzz/zz/zz)",date2)
 00370   pr #255: ""

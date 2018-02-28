@@ -11,7 +11,7 @@
 00110   lbl$(1)="Box Number" : lbl$(2)="Description" ! lBL$(3)="NA"
 00120   fln(1)=2 : fln(2)=60 ! flN(3)=40
 00130   mask(1)=1030 ! mASK(3)=20000
-00140   open #1: "Name="&env$('Q')&"\Data\1099Box.dat,KFName="&env$('Q')&"\Data\1099Box.Idx,Use,RecL=102,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+00140   open #1: "Name=[Q]\Data\1099Box.dat,KFName=[Q]\Data\1099Box.Idx,Use,RecL=102,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 00150   fnHamster("1099Box",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160 XIT: fnxit
 00170 ! ______________________________________________________________________

@@ -45,12 +45,12 @@
 34032     if ~exists(env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core') then exe 'mkdir "'&env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core"'
 34034     fnCopy('S:\brclient*.*',env$('temp')&'\acs\brCsInstall\ACS 5 Client\*.*')
 34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client')&'\*.*" /S'
-34040     fnStatus('make '&env$('Q')&'\brListener.conf')
+34040     fnStatus('make [Q]\brListener.conf')
 34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
 34080     pr #h_br_parms_txt: 'host='&server_name$
 34100     pr #h_br_parms_txt: 'label=ACS_5_CS'
 34120     close #h_br_parms_txt: 
-34140     open #h_brlistener_conf:=fngethandle: 'Name='&env$('Q')&'\brListener.conf,RecL=256,replace',display,output 
+34140     open #h_brlistener_conf:=fngethandle: 'Name=[Q]\brListener.conf,RecL=256,replace',display,output 
 34160     pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\acs-Log-CS.txt'
 34180     pr #h_brlistener_conf: 'LogLevel=10'
 34200     pr #h_brlistener_conf: '['
@@ -73,7 +73,7 @@
 34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
 34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 34520 !     pr #h_copy_cmd:     '@echo on'
-34540     pr #h_copy_cmd: 'copy "'&os_filename$(env$('Q')&'\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
+34540     pr #h_copy_cmd: 'copy "'&os_filename$('[Q]\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 34560     ! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
 34580     pr #h_copy_cmd: 'type "'&os_filename$(env$('windir')&'\brListener.conf')&'"' ! just to see some nice info on the screen.
 35000     dim windowsSystem32bitFolder$*256

@@ -12,7 +12,7 @@
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
+01700   open #open_file_count+=1: "Name=[Q]\TMmstr\Support.h420,Version=2,KFName=[Q]\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 01800 return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -53,7 +53,7 @@
 35480 ! fnH2AddText("Contact (2)"     ,50              ,'C'                                    )           
 35500 ! fnH2AddText("Contact (3)"     ,50              ,'C'                                    )           
 35520  !
-35540     fnH2AddComboF(1,env$('Q')&'\TMmstr\Clmstr.h420',1,5,6,30,env$('Q')&'\TMmstr\CLIndex.h420',1)
+35540     fnH2AddComboF(1,'[Q]\TMmstr\Clmstr.h420',1,5,6,30,'[Q]\TMmstr\CLIndex.h420',1)
 35560  !
 35580 ! old program !  ! ** Combo Boxes **
 35600 ! old program !  ! CL=Field Number  : C$(CL,1)='ComboF'
@@ -78,12 +78,12 @@
 55160 ! old program !    gosub BUILD_LAYOUT
 55180 ! old program !    gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 55200 ! old program !    gosub HAMSTER: gosub CLOSE_FILE
-55220 ! old program !    execute "Index "&env$('Q')&"\TMmstr\support.h420  "&env$('Q')&"\TMmstr\support-idx.h420 1/7,6/2,replace,DupKeys"
+55220 ! old program !    execute "Index [Q]\TMmstr\support.h420  [Q]\TMmstr\support-idx.h420 1/7,6/2,replace,DupKeys"
 55240 ! old program !    goto XIT
 55260 ! old program !  ! ______________________________________________________________________
 55280 ! old program !  OPEN_FILE: ! 
 55300 ! old program !    open_file_count=0 ! this value is used in the close_file sub routine
-55320 ! old program !    open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
+55320 ! old program !    open #open_file_count+=1: "Name=[Q]\TMmstr\Support.h420,Version=2,KFName=[Q]\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 55340 ! old program !    return 
 55360 ! old program !  ! ______________________________________________________________________
 55380 ! old program !  CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -168,24 +168,24 @@
 56960 ! old program !  ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 56980 ! old program !    limit_to_list$='1'
 57000 ! old program !    cl=1 : c$(cl,1)='ComboF'
-57020 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\Clmstr.h420"
+57020 ! old program !    c$(cl,2)="[Q]\TMmstr\Clmstr.h420"
 57040 ! old program !    c$(cl,3)='1' : c$(cl,4)='5'
 57060 ! old program !  ! c$(cl,3)='1' : c$(cl,4)='6'
 57080 ! old program !    c$(cl,5)='6' : c$(cl,6)='30'
 57100 ! old program !  ! c$(cl,5)='7' : c$(cl,6)='50'
-57120 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\CLIndex.h420"
+57120 ! old program !    c$(cl,7)="[Q]\TMmstr\CLIndex.h420"
 57140 ! old program !    c$(cl,8)=limit_to_list$
 57160 ! old program !    cl=3 : c$(cl,1)='ComboF'
-57180 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\Systems.h420"
+57180 ! old program !    c$(cl,2)="[Q]\TMmstr\Systems.h420"
 57200 ! old program !    c$(cl,3)='1' : c$(cl,4)='2'
 57220 ! old program !    c$(cl,5)='3' : c$(cl,6)='50'
-57240 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\Systems-Idx.h420"
+57240 ! old program !    c$(cl,7)="[Q]\TMmstr\Systems-Idx.h420"
 57260 ! old program !    c$(cl,8)=limit_to_list$
 57280 ! old program !    cl=5 : c$(cl,1)='ComboF'
-57300 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\TimeFrame.h420"
+57300 ! old program !    c$(cl,2)="[Q]\TMmstr\TimeFrame.h420"
 57320 ! old program !    c$(cl,3)='1' : c$(cl,4)='2'
 57340 ! old program !    c$(cl,5)='3' : c$(cl,6)='50'
-57360 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\TimeFrame-Idx.h420"
+57360 ! old program !    c$(cl,7)="[Q]\TMmstr\TimeFrame-Idx.h420"
 57380 ! old program !    c$(cl,8)=limit_to_list$
 57400 ! old program !    return 
 57420 ! old program !  ! ______________________________________________________________________

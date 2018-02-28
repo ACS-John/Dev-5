@@ -19,10 +19,10 @@
 00210   comboname$(1)=" 0 Not Applicable"
 00220   comboname$(22)="21 Add Amount to Pay"
 00230 ! ______________________________________________________________________
-00240   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00250   open #5: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,input,keyed 
-00260   open #7: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&",Shr",internal,input,keyed 
-00270   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
+00240   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00250   open #5: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDX2.h[cno],Shr",internal,input,keyed 
+00260   open #7: "Name=[Q]\PRmstr\Burden.H[cno],KFName=[Q]\PRmstr\BurdenIdx.H[cno],Shr",internal,input,keyed 
+00270   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
 00280   if exists("jcWork."&session$) >0 then goto L280 else goto L300
 00285 L280: mat ml$(2) !:
         ml$(1)="An unposted file appears to exist! " !:
@@ -32,10 +32,10 @@
 00300 L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
 00310   goto L330
 00320 L320: open #3: "Name=jcWork."&session$,internal,outIn,relative 
-00330 L330: open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00340   open #14: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,input,keyed 
-00350   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00360   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00330 L330: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
+00340   open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,input,keyed 
+00350   open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
+00360   open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed 
 00370 ! ______________________________________________________________________
 00380   addone=1 ! set code as adding when first entering
 00390 ! ______________________________________________________________________
@@ -58,7 +58,7 @@
 00510   fnTxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
         resp$(respc+=1)=str$(ji1(3))
 00520   fnLbl(4,1,"Payroll Department:",mylen,1)
-00530   fncombof("Deptname",4,mypos,25,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),0,0, " ",0,0) !:
+00530   fncombof("Deptname",4,mypos,25,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",0,0, " ",0,0) !:
         resp$(respc+=1)=str$(ji1(4))
 00540   fnLbl(5,1,"Regular Hours:",mylen,1)
 00550   fnTxt(5,mypos,8,8,0,"32",0,"") !:

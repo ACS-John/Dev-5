@@ -23,8 +23,8 @@
 00210   hd1$=hd1$&"  {\ul Customer Name               }"
 00220   mat scr1$(sz1)
 00230   mat alloc(sz1)
-00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00250   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrdt.h"&env$('cno')&",Shr",internal,input,keyed 
+00240   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+00250   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\ubtrdt.h[cno],Shr",internal,input,keyed 
 00260 ! ______________________________________________________________________
 00270   on fkey 5 goto XIT
 00280   fnopenprn

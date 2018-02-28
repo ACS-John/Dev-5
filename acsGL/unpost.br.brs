@@ -36,24 +36,24 @@
 18440 ! r: get ready to run
 24000   fnStatus('date range: '&str$(begdat)&' - '&str$(enddat))
 24020   if del_dupe_only then let fnStatus('only deleting duplicate entries')
-24040   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+24040   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 24060   if uprc$(code$)="H" then 
 24080     fnStatus('Processing history instead of current transactions')
 24100     if del_dupe_only then 
-24120       fnindex_it(env$('Q')&"\GLmstr\AcTrans.h"&env$('cno'),env$('Q')&"\GLmstr\tmp70.h"&env$('cno'),"1,70")
+24120       fnindex_it("[Q]\GLmstr\AcTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 24140     end if  ! del_dupe_only
-24160     open #h_trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outIn,keyed  ! 3
+24160     open #h_trans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed  ! 3
 24180     if del_dupe_only then 
-24200       open #h_trans_dupe:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\tmp70.h"&env$('cno')&",Shr",internal,input,keyed 
+24200       open #h_trans_dupe:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",internal,input,keyed 
 24220     end if  ! del_dupe_only
 24240   else 
 24260     fnStatus('Processing current transactions only')
 24280     if del_dupe_only then 
-24300       fnindex_it(env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),env$('Q')&"\GLmstr\tmp70.h"&env$('cno'),"1,70")
+24300       fnindex_it("[Q]\GLmstr\GLTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 24320     end if  ! del_dupe_only
-24340     open #h_trans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative  ! 2
+24340     open #h_trans=fngethandle: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative  ! 2
 24360     if del_dupe_only then 
-24380       open #h_trans_dupe:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\tmp70.h"&env$('cno')&",Shr",internal,input,keyed 
+24380       open #h_trans_dupe:=fngethandle: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",internal,input,keyed 
 24400     end if  ! del_dupe_only
 24420   end if 
 24500 ! /r

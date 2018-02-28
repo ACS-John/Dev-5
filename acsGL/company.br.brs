@@ -16,21 +16,21 @@
 00160   gltyp=7
 00180   fnstyp(0)
 00190 ! ____________________________________________________
-00200   open #glmstr=11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L220
+00200   open #glmstr=11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L220
 00210 ! ____________________
-00220 L220: open #20: "Name="&env$('Q')&"\GLmstr\GLBucket.h"&env$('cno')&",RecL=1,Use",internal,outIn,relative 
+00220 L220: open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",internal,outIn,relative 
 00230   if lrec(20)=0 then !:
           write #20,using 'Form POS 1,N 1',rec=1: 1
 00240   read #20,using 'Form POS 1,N 1',rec=1: glb
 00250   close #20: 
 00260 ! ______________________________________________________________________
-00270   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr BLD_COINFO
+00270   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr BLD_COINFO
 00280   goto READ_COINFO
 00290 ! ____________________
 00300 COINFO_READ_ERR: close #company: ioerr BLD_COINFO : goto BLD_COINFO
 00310 ! ____________________
 00320 BLD_COINFO: ! 
-00330   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",RecL=882,Replace",internal,outIn,relative 
+00330   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace",internal,outIn,relative 
 00340 COINFO_WRITE: ! !:
         write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 00350 ! ____________________
@@ -44,7 +44,7 @@
 00420 SCREEN_1: ! 
 00430   fnTos(sn$="Company-1") !:
         mylen=30: mypos=mylen+3 : right=1
-00440   fnLbl(1,30,"Company # "&env$('cno'))
+00440   fnLbl(1,30,"Company # [cno]")
 00450   fnLbl(3,1,"Company Name:",mylen,right)
 00460   fnTxt(3,mypos,40,0,left,"",0,"",0 ) !:
         resp$(1)=a$(1)
@@ -266,7 +266,7 @@
 02360 ! /region
 02380 SAVE: ! r:
 02390   rewrite #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-02400   open #20: "Name="&env$('Q')&"\GLmstr\GLBucket.h"&env$('cno')&",RecL=1,Use",internal,outIn,relative  
+02400   open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",internal,outIn,relative  
 02402   rewrite #20,using 'Form POS 1,N 1',rec=1: glb 
 02404   close #20: 
 02410   return ! /r

@@ -13,7 +13,7 @@
 00140   fn_openfiles
 00150   fnHamster("Deptname",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160   close #1: !:
-        execute "Index "&env$('Q')&"\PRmstr\deptname.h"&env$('cno')&' '&env$('Q')&"\PRmstr\Depnameidx.h"&env$('cno')&" 1 3,Replace" ioerr ignore
+        execute "Index [Q]\PRmstr\deptname.h[cno]"&' '&"[Q]\PRmstr\Depnameidx.h[cno] 1 3,Replace" ioerr ignore
 00170 XIT: fnxit
 00180 ! ______________________________________________________________________
 00190 ! <Updateable Region: ERTN>
@@ -27,7 +27,7 @@
 46000 def fn_openfiles
 46020   if ~openFiles then
 46040     openFiles=1
-46060     open #1: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",use,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
+46060     open #1: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],use,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
 46080   end if
 46100 fnend
 46120 def fn_addMissingDepartments

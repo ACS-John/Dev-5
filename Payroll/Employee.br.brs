@@ -3,18 +3,18 @@
 10000 ! r: setup and open files
 10020   fn_setup
 10040   fntop(program$)
-10060   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10080   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10100   if ~exists(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')) then gosub SETUP_PAYROLLCHECKS
-10120   if ~exists(env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr") then gosub INDEX_CHECKIDX3
-10140   open #h_checkhistory:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10160   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10180   if ~exists(env$('Q')&"\PRmstr\Department.h"&env$('cno')) then ! SETUP_DEPARTMENT
-10200     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",RecL=149,kps=1/9,kln=8/3,use",internal,outIn,keyed 
+10060   open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
+10080   open #11: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPIndx2.h[cno],Shr",internal,outIn,keyed 
+10100   if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then gosub SETUP_PAYROLLCHECKS
+10120   if ~exists("[Q]\PRmstr\checkidx3.h[cno],Shr") then gosub INDEX_CHECKIDX3
+10140   open #h_checkhistory:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
+10160   open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
+10180   if ~exists("[Q]\PRmstr\Department.h[cno]") then ! SETUP_DEPARTMENT
+10200     open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],RecL=149,kps=1/9,kln=8/3,use",internal,outIn,keyed 
 10220     close #2: 
-10240     execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&" 1/9 8/3 Replace DupKeys -n"
+10240     execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx.h[cno] 1/9 8/3 Replace DupKeys -n"
 10260   end if 
-10280   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10280   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 10300   goto MENU1
 10320 ! /r
 12000 MENU1: ndep=0 : goto ASKEMPLOYEE
@@ -162,7 +162,7 @@
 26880   next j
 26900   fncomboa("StateEx",10,mylen+3,mat fed_exemption_option$,"",3)
 26920   fnLbl(11,1,"Employment Status:",mylen,1)
-26940   fncombof("EmpStatus",11,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
+26940   fncombof("EmpStatus",11,mylen+3,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 26960   resp$(respc+=1)=str$(em(4))
 26980   fnLbl(12,1,"Pay Code:",mylen,1)
 27000   respc+=1
@@ -417,11 +417,11 @@
 38280   close #1: 
 38300   close #2: 
 38320   if r1=1 then 
-38340     execute "Index "&env$('Q')&"\PRmstr\RPMSTR.H"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDEX.H"&env$('cno')&" 1,8 Replace DupKeys -n"
-38360     execute "Index "&env$('Q')&"\PRmstr\dd.H"&env$('cno')&' '&env$('Q')&"\PRmstr\ddidx1.H"&env$('cno')&" 1,10 Replace DupKeys -n"
+38340     execute "Index [Q]\PRmstr\RPMSTR.H[cno]"&' '&"[Q]\PRmstr\RPINDEX.H[cno] 1,8 Replace DupKeys -n"
+38360     execute "Index [Q]\PRmstr\dd.H[cno]"&' '&"[Q]\PRmstr\ddidx1.H[cno] 1,10 Replace DupKeys -n"
 38380   end if 
 38400   if r2=1 then 
-38420     execute "Index "&env$('Q')&"\PRmstr\RPMSTR.H"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDX2.H"&env$('cno')&" 9 30 Replace DupKeys -n"
+38420     execute "Index [Q]\PRmstr\RPMSTR.H[cno]"&' '&"[Q]\PRmstr\RPINDX2.H[cno] 9 30 Replace DupKeys -n"
 38440   end if 
 38460   goto XIT ! /r
 42000 DELETE_EMPLOYEE: ! r:
@@ -489,8 +489,8 @@
 46720   ! r: change employee number in any and all rpwork files.
 46740   for wsid_item=1 to 99
 46760     wsid_item$=cnvrt$('pic(##)',wsid_item)
-46780     if exists(env$('Q')&'\PRmstr\rpwork'&wsid_item$&'.h'&env$('cno')) then 
-46800       open #h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&"idx.H"&env$('cno')&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
+46780     if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then 
+46800       open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
 46820       fnkey_change(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 46840       close #h_rpwork: 
 46860       RPWORK_OPEN_ERR: ! 
@@ -564,7 +564,7 @@
 49040   code7$(3)="2 - Married both filing"         !  em(7)=3
 49060   ! 
 49120   dim statenames$(10)*8
-49140   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outIn,relative 
+49140   open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative 
 49160   read #1,using "form pos 150,10*c 8",rec=1: mat statenames$
 49180   close #1: 
 49200   dim state_option$(10)*11
@@ -667,7 +667,7 @@
 66040   return  ! /r
 68000 DDOPEN: ! r:
 68020   close #30: ioerr ignore
-68040   open #30: "Name="&env$('Q')&"\PRmstr\dd.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",kps=1,kln=10,Use",internal,outIn,keyed 
+68040   open #30: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed 
 68060   return  ! /r
 70000 DDDEL: ! r:
 70020   gosub DDOPEN
@@ -680,8 +680,8 @@
 72060   rewrite #30,using "Form Pos 1,C 10",key=rpad$(trim$(ent$),10): key$ nokey ignore
 72080   goto DDDONE  ! /r
 74100 ! close #2: ioerr ignore
-74120 ! execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&" 1/9 8/3 Replace DupKeys -n"
-74140 ! open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+74120 ! execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx.h[cno] 1/9 8/3 Replace DupKeys -n"
+74140 ! open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 74160 ! return
 76000 ! PICTURE: ! r:
 76020 !   fnTos(sn$="Employeepic")
@@ -691,13 +691,13 @@
 76100 !   fnAcs(sn$,0,mat resp$,ckey)
 76120 !   goto SCR_EMPLOYEE ! /r
 80000 SETUP_PAYROLLCHECKS: ! r:
-80020   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",RecL=224,use",internal,outIn 
+80020   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],RecL=224,use",internal,outIn 
 80040   close #4: 
-80060   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&" 1 17 Replace DupKeys"
+80060   execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx.h[cno] 1 17 Replace DupKeys"
 80070   gosub INDEX_CHECKIDX3
 80072   return  ! /r
 80080 INDEX_CHECKIDX3: ! r:
-80100   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&" 1/12/9 8/6/3 Replace DupKeys"
+80100   execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx3.h[cno] 1/12/9 8/6/3 Replace DupKeys"
 80120   return  ! /r
 82000 CHECK_INFORMATION: ! r:
 82020   hact$=str$(eno)

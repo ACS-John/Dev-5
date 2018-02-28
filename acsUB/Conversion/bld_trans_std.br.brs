@@ -51,18 +51,18 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 CONVERT_CNO: ! 
-00390   pr "conversion of cno="&env$('cno')&" has begun."
+00390   pr "conversion of cno=[cno] has begun."
 00400 ! 
 00410 ! 
-00420   if uprc$(delubtransvb$)=uprc$("True") and exists(env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')) then execute "Free "&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')
+00420   if uprc$(delubtransvb$)=uprc$("True") and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno]"
 00430 ! 
-00440   open #master=3: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00440   open #master=3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00450 ! 
 00460 ! open NEW files
-00470   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
+00470   open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 00480 PHASE1: ! 
 00490   pr 'moving trans from ubAccTrn to ubTranVB'
-00500   open #acctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubAcTIx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00500   open #acctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno],KFName=[Q]\UBmstr\ubAcTIx1.h[cno],Shr",internal,outIn,keyed 
 00510   if rln(acctrn)=64 or rln(acctrn)=72 then !:
           acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' !:
         else !:
@@ -84,7 +84,7 @@
 00630 ! 
 00640 ! 
 00650   pr 'moving trans from ubTrans to ubTranVB'
-00660   open #trans=2: "Name="&env$('Q')&"\UBmstr\ubTrans.h"&env$('cno'),internal,input 
+00660   open #trans=2: "Name=[Q]\UBmstr\ubTrans.h[cno]",internal,input 
 00670 READ_TRANS: ! 
 00680 L680: read #trans,using 'Form Pos 1,C 10,pd 4.2,pd 4,n 1,n 1,pd 3': p$,tamt,tdate,transcode,postcode,nta eof PHASE3
 00682   if postcode=5 then goto L680 ! don't get trans from current file that also been transferred to history
@@ -131,8 +131,8 @@
 00990 ! 
 01000   close #transvb: 
 01010   pr "ReIndexing ubTransVB..."
-01020   fnindex_it(env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno'),env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno'),"1 19")
-01030   pr "Transactions for company "&env$('cno')&" were built successfully."
+01020   fnindex_it("[Q]\UBmstr\UBTransVB.h[cno]","[Q]\UBmstr\UBTrIndx.h[cno]","1 19")
+01030   pr "Transactions for company [cno] were built successfully."
 01040   pr ""
 01050   if removebaddates$="True" then gosub REMOVEBADDATES
 01060   return 
@@ -156,7 +156,7 @@
 01200   continue 
 01210 ! ______________________________________________________________________
 01220 REMOVEBADDATES: ! 
-01230   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
+01230   open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 01240 L1240: read #transvb,using "Form Pos 11,N 8": tdate eof L1270
 01250   tdate$=str$(tdate) !:
         if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then !:

@@ -31,7 +31,7 @@
         fnmsgbox(mat ml$,resp$,cap$,49)
 00273   if resp$="OK" then goto L140 else goto XIT
 00280 ! ______________________________________________________________________
-00290 L290: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00290 L290: open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed 
 00300 L300: read #1,using 'Form POS 91,36*PD 5.2': mat m eof L340
 00310   for j=2 to 36 step 2 : m(j)=0 : next j
 00320   rewrite #1,using 'Form POS 91,36*PD 5.2': mat m

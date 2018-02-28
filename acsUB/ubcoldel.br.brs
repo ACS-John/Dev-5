@@ -12,7 +12,7 @@
 00120   fntop("S:\acsUB\ubColDel","Remove Cash Receipt Records")
 00130   fncno(cno) !:
         ! 
-00140   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&env$('cno'),internal,input 
+00140   open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,input 
 00150   open #7: "Name="&env$('temp')&"\Work."&session$&",Replace,RecL=72",internal,output 
 00160 ! ----------------------------------------------------------------------
 00170   gosub ASKDATE
@@ -46,7 +46,7 @@
 00360 ! ______________________________________________________________________
 00370 END1: close #7: 
 00380   close #6,free: 
-00390   execute "Rename "&env$('temp')&"\Work."&session$&' '&env$('Q')&"\UBmstr\Collect.h"&env$('cno')&" -n"
+00390   execute "Rename "&env$('temp')&"\Work."&session$&' '&"[Q]\UBmstr\Collect.h[cno] -n"
 00400 XIT: fnxit
 00410 ! ______________________________________________________________________
 00420 ! <Updateable Region: ERTN>

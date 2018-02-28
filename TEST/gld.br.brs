@@ -8,7 +8,7 @@
 00080   fncno(cno)
 00090   fnTos(sn$='alpha-GLD') !:
         lc=0
-00100   fncombof('gld-alpha',lc+=1,1,0,env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),13,20,1,12,env$('Q')&"\CLmstr\GLIndx2.h"&env$('cno'),1) !:
+00100   fncombof('gld-alpha',lc+=1,1,0,"[Q]\CLmstr\GLmstr.h[cno]",13,20,1,12,"[Q]\CLmstr\GLIndx2.h[cno]",1) !:
         resp$(1)=fngld$('0   700  0')
 00110   fnCmdSet(1)
 00120   fnAcs(sn$,0,mat resp$,ckey)

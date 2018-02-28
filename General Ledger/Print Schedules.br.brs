@@ -16,9 +16,9 @@
 00130   if fnglfs=5 then goto XIT
 00135   fnfscode
 00136   fnpriorcd
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
-00170   open #hAcGlSchs1:=1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr DONE
-00180   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00150   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
+00170   open #hAcGlSchs1:=1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,input,keyed ioerr DONE
+00180   open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 24000   if fnprocess=1 then 
 24020     prtall=1 
 24040   else
@@ -37,7 +37,7 @@
 24350       ! pr 'SN=';sn : pause
 24360       if dp=1 then dollar$="$" else dollar$=" "
 24380       gosub PrintHeadings
-24400       open #hSchedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".H"&env$('cno')&",Shr",internal,outIn,keyed 
+24400       open #hSchedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".H[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".H[cno],Shr",internal,outIn,keyed 
 26000       do 
 26020         read #hSchedule,using "form pos 1,c 12": gl$ eof EoSchedule
 26040         ! pr '"'&gl$&'"' : pause

@@ -11,14 +11,14 @@
 00150 ! 
 00160 ! ______________________________________________________________________
 00171     fnStatus('updating Payee file format.')
-00210     open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outIn,keyed ioerr ignore
-00215     if exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'))=0 then open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",RecL=276,kps=1,kln=8,replace",internal,outIn,keyed: version(2,1): close #2: 
-00220     open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),internal,outIn,relative  ! open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),internal,outIn,keyed
+00210     open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",internal,outIn,keyed ioerr ignore
+00215     if exists("[Q]\GLmstr\paymstr.h[cno]")=0 then open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",internal,outIn,keyed: version(2,1): close #2: 
+00220     open #2: "Name=[Q]\GLmstr\paymstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
 00221     if rln(2)<>276 then 
 00222       close #2: 
-00223       fnCopy(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('temp')&"\WORK."&session$,276)
-00224       fnCopy(env$('temp')&"\WORK."&session$,env$('Q')&"\GLmstr\paymstr.h"&env$('cno'))
-00225       open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),internal,outIn,relative  ! open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),internal,outIn,keyed
+00223       fnCopy("[Q]\GLmstr\paymstr.h[cno]",env$('temp')&"\WORK."&session$,276)
+00224       fnCopy(env$('temp')&"\WORK."&session$,"[Q]\GLmstr\paymstr.h[cno]")
+00225       open #2: "Name=[Q]\GLmstr\paymstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
 00226     end if 
 00227     do 
 00230       read #1,using "form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11": vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$ eof EOD_GL1099 ioerr EOD_GL1099
@@ -28,11 +28,11 @@
 00260     version(2,1)
 00270     close #1,free: ioerr ignore
 00280     close #2: ioerr ignore
-00290     fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),"1 8")
-00300     fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx2.h"&env$('cno'),"9 38")
-00310     fnindex_it(env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno'),env$('Q')&"\GLmstr\payeeglbkdidx.h"&env$('cno'),"1 8")
-00314     if ~exists(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno')) then let fnCopy("S:\General Ledger\mstr\gltr1099.h99999",env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'))
-00316     fnindex_it(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),env$('Q')&"\GLmstr\gltridx.h"&env$('cno'),"1 8")
+00290     fnindex_it("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
+00300     fnindex_it("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
+00310     fnindex_it("[Q]\GLmstr\payeeglbreakdown.h[cno]","[Q]\GLmstr\payeeglbkdidx.h[cno]","1 8")
+00314     if ~exists("[Q]\GLmstr\gltr1099.h[cno]") then let fnCopy("S:\General Ledger\mstr\gltr1099.h99999","[Q]\GLmstr\gltr1099.h[cno]")
+00316     fnindex_it("[Q]\GLmstr\gltr1099.h[cno]","[Q]\GLmstr\gltridx.h[cno]","1 8")
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>

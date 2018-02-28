@@ -18,7 +18,7 @@
 00190   fncreg_read('calculation date text',m$)
 00200   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00210   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-00220   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00220   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00230   read #20,using L250: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 00240   ficamaxw=ficamaxw*10
 00250 L250: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
@@ -63,10 +63,10 @@
 00580   if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
 00590 ! ______________________________________________________________________
 00600   on pageoflow goto PGOF
-00610   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00610   open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 00620   gosub HDR
-00630   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
-00640   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00630   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+00640   open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 00650 L650: read #2,using L660: eno,mat em$,ss$,em5,em6 eof DONE
 00660 L660: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
 00670   m1=m2=h2=h3=dedytdfeduc=dedqtrfeduc=0

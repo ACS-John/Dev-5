@@ -20,8 +20,8 @@
 00190 ! pr NEWPAGE
 00200   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1: goto L210
 00210 L210: if fnps=2 then mp1=72 else mp1=69
-00220   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
-00230   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
+00220   fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr"
+00230   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.H[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr"
 00240   form c 9,skip 0
 00250 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00260   form c 7,skip 0
@@ -41,10 +41,10 @@
 00380   costcntr=val(resp$(1))
 00390 L390: fnopenprn
 00400   if fnps=2 then goto L430 ! secondary
-00410   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
+00410   execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"
 00420   goto L440
-00430 L430: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
-00440 L440: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00430 L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 72 3 Replace DupKeys -N"
+00440 L440: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00450   report$="STATEMENT OF INCOME AND EXPENSES"
 00460 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 00470 L470: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1720

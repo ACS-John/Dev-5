@@ -8,7 +8,7 @@
 00080   dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)
 00090   dim x$*10,p$*10
 00100 ! ______________________________________________________________________
-00120   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\uBIndex.h"&env$('cno'),internal,outIn,keyed 
+00120   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\uBIndex.h[cno]",internal,outIn,keyed 
 00130 L130: read #1,using L140: alp$,final eof L190
 00140 L140: form pos 354,c 7,pos 1821,n 1
 00150   if alp$(1:1)="*" and final=0 then final=1 ! cnange any zeros to ones
@@ -16,7 +16,7 @@
 00170 L170: form pos 1821,n 1
 00180   goto L130
 00190 L190: close #1: 
-00200   execute "Index "&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&" 354 7 Replace DupKeys"
+00200   execute "Index [Q]\UBmstr\Customer.h[cno]"&' '&"[Q]\UBmstr\UBIndx2.h[cno] 354 7 Replace DupKeys"
 00210 XIT: fnxit
 00220 ! __________________________________________________
 00230 ! <Updateable Region: ERTN>

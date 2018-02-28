@@ -50,15 +50,15 @@
 24020   if ~setup then let fn_setup
 24040   if ~ten99initialized then ! r: initialize output destination (if necessary)
 24060     if env$('CurSys')='PR' then
-24080       open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\company.h"&env$('cno')&",Shr", internal,input,relative
+24080       open #hCompany:=fngethandle: "Name=[Q]\PRmstr\company.h[cno],Shr", internal,input,relative
 24100       read #hCompany,using "Form POS 1,3*C 40,C 12": mat a$,mat fed$
 24120       close #hCompany: 
 24140     else if env$('CurSys')='GL' then
-24160       open #hCompany:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative
+24160       open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 24180       read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$ 
 24200       close #hCompany: 
 24202     else if env$('CurSys')='CL' then
-24204       open #hCompany:=fngethandle: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative
+24204       open #hCompany:=fngethandle: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
 24206       read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$ 
 24208       close #hCompany: 
 24220     end if
@@ -269,11 +269,11 @@
 44280     resp$(respc_type:=rc+=1)=""
 44300   else if env$('cursys')='GL' then
 44310     fnLbl(lc+=1,1,"Payee Type to Print:",mylen,1)
-44320     fncombof("PayeeType",lc,mypos,27,env$('Q')&"\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.") 
+44320     fncombof("PayeeType",lc,mypos,27,"[Q]\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.") 
 44340     resp$(respc_deduction:=rc+=1)=seltp$
 44342   else if env$('cursys')='CL' then
 44344     fnLbl(lc+=1,1,"Payee Type to Print:",mylen,1)
-44346     fncombof("Payeetype",lc,mypos,27,env$('Q')&"\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.")
+44346     fncombof("Payeetype",lc,mypos,27,"[Q]\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.")
 44348     resp$(respc_deduction:=rc+=1)=seltp$
 44360 !
 44380   end if

@@ -10,7 +10,7 @@
 10900 ! main routine
 11000     if fn_getdates then 
 11100       fncno(cno,cnam$)
-11200       open #(h_prchecks:=fngethandle): "Name=PRmstr\Payrollchecks.h"&env$('cno')&",KFName=PRmstr\checkidx3.h"&env$('cno'),internal,outIn,keyed 
+11200       open #(h_prchecks:=fngethandle): "Name=PRmstr\Payrollchecks.h[cno],KFName=PRmstr\checkidx3.h[cno]",internal,outIn,keyed 
 11300 CHECKSFORM: form pos 1,n 8,n 3,pd 6
 11400       do 
 11500         read #h_prchecks,using CHECKSFORM: eno,tdn,prd eof CHECKSDONE

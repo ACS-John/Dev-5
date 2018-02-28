@@ -11,12 +11,12 @@
 00110   gosub BUILD_LAYOUT
 00120   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER: gosub CLOSE_FILE
-00130   execute "Index "&env$('Q')&"\TMmstr\client.h"&env$('cno')&","&env$('Q')&"\TMmstr\client-idx.h"&env$('cno')&",1,6,replace,DupKeys,Shr -n"
+00130   execute "Index [Q]\TMmstr\client.h[cno],[Q]\TMmstr\client-idx.h[cno],1,6,replace,DupKeys,Shr -n"
 00140   goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Client.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\TMmstr\Client-Idx.h"&env$('cno')&",Use,RecL=406,KPs=1,KLn=6,Shr",internal,outIn,keyed 
+00170   open #open_file_count+=1: "Name=[Q]\TMmstr\Client.h[cno],Version=1,KFName=[Q]\TMmstr\Client-Idx.h[cno],Use,RecL=406,KPs=1,KLn=6,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

@@ -9,11 +9,11 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then fen$="Csubcat.h"&env$('cno') else !:
-            fen$="CsubcatALL.h"&env$('cno')
-00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\scindex.h"&env$('cno') else !:
+00120     if addall=0 then fen$="Csubcat.h[cno]" else !:
+            fen$="CsubcatALL.h[cno]"
+00130     if indexfile$="" then if$="[Q]\PRmstr\scindex.h[cno]" else !:
             if$=indexfile$
-00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\scmstr.h"&env$('cno'),1,3,4,25,if$,1+addall,1,"Select from the list of sub-categories. To add a sub-category record, go to the Sub-Category File.",container)
+00140     fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\scmstr.h[cno]",1,3,4,25,if$,1+addall,1,"Select from the list of sub-categories. To add a sub-category record, go to the Sub-Category File.",container)
 00150     indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

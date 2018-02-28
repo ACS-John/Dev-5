@@ -72,13 +72,13 @@
 00710       goto L730
 00720 L720: io2$(j)=str$(j+3)&",22,N 11.2,UT,N"
 00730 L730: next j
-00740     open #1: "Name="&env$('Q')&"\GLmstr\ACPRSCF.h"&env$('cno')&",NoShr",internal,output ioerr L760
+00740     open #1: "Name=[Q]\GLmstr\ACPRSCF.h[cno],NoShr",internal,output ioerr L760
 00750     close #1,free: 
-00760 L760: open #1: "Name="&env$('Q')&"\GLmstr\ACPRSCF.h"&env$('cno')&",SIZE=0,RecL=1288,NoShr",internal,output 
+00760 L760: open #1: "Name=[Q]\GLmstr\ACPRSCF.h[cno],SIZE=0,RecL=1288,NoShr",internal,output 
 00770     write #1,using 'Form POS 1,23*C 20,46*C 18': mat a$,mat floa$,mat io1$
 00780     write #1,using 'Form POS 1,14*C 20,28*C 18': mat b$,mat flob$,mat io2$
 00790     close #1: 
-00800     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Shr",internal,outIn ioerr L830
+00800     open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr",internal,outIn ioerr L830
 00810     close #1: 
 00820     goto XIT
 00830 L830: fnacglblds

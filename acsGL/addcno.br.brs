@@ -22,16 +22,16 @@
 00205   if fro_cno=0 then fro_cno=99999
 00210 L210: if to_cno<1 or to_cno=fro_cno then goto MENU1
 00220 ! ___________________________
-00230   fnCopy(env$('Q')&"\GLmstr\*.h"&str$(fro_cno),env$('Q')&"\GLmstr\*.h"&str$(to_cno))
-00240   open #20: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(to_cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(to_cno)&",NoShr",internal,outIn,keyed 
+00230   fnCopy("[Q]\GLmstr\*.h"&str$(fro_cno),"[Q]\GLmstr\*.h"&str$(to_cno))
+00240   open #20: "Name=[Q]\GLmstr\GLmstr.h"&str$(to_cno)&",KFName=[Q]\GLmstr\GLIndex.h"&str$(to_cno)&",NoShr",internal,outIn,keyed 
 00250 L250: read #20,using 'Form POS 87,PD 6.2': cb eof L280
 00260   rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
 00270   goto L250
 00280 L280: close #20: 
 00290 ! ___________________________
-00295   execute 'drop "'&env$('Q')&"GLmstr\GLTrans.H"&str$(to_cno)&'"' err ignore 
-00350   fnFree(env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno))
-00360   open #1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output 
+00295   execute 'drop "'&"[Q]GLmstr\GLTrans.H"&str$(to_cno)&'"' err ignore 
+00350   fnFree("[Q]\GLmstr\ACTrans.h"&str$(to_cno))
+00360   open #1: "Name=[Q]\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output 
 00370   close #1: 
 00380 XIT: fnchain("S:\acsGL\Company")
 00390 IGNORE: continue 

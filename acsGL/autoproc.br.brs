@@ -10,12 +10,12 @@
 00100 ! ______________________________________________________________________
 00110   cap$="Begin Automatic Processing"
 00120   fncno(cno,oldcnam$)
-00130   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat",internal,outIn,relative ioerr BUILD_GLCLNT
+00130   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat",internal,outIn,relative ioerr BUILD_GLCLNT
 00140   rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=1: cno,cnam$
 00150   goto L210
 00160 ! ______________________________________________________________________
 00170 BUILD_GLCLNT: ! 
-00180   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outIn,relative 
+00180   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outIn,relative 
 00190   for j=1 to 20 !:
           write #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," " !:
         next j

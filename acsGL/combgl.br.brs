@@ -41,16 +41,16 @@
 00310   ctr+=1
 00320   if ctr>1 then goto L390
 00330   cno1=cno
-00340   execute "Copy "&env$('Q')&"\GLmstr\*.H"&str$(cno1)&' '&env$('Q')&"\GLmstr\*.H"&str$(dcno)&" -n" ioerr MAIN
-00350   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(dcno)&"",internal,outIn  !:
+00340   execute "Copy [Q]\GLmstr\*.H"&str$(cno1)&' '&"[Q]\GLmstr\*.H"&str$(dcno)&" -n" ioerr MAIN
+00350   open #1: "Name=[Q]\GLmstr\Company.h"&str$(dcno)&"",internal,outIn  !:
         read #1,using ' Form POS 1,C 40': n$ !:
         n$(25:40)=" (Consolidated)" !:
         rewrite #1,using ' Form POS 1,C 40': n$ !:
         close #1: 
-00360   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output 
+00360   open #1: "Name=[Q]\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output 
 00370   goto MAIN
 00380 ! ______________________________________________________________________
-00390 L390: open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,input,keyed ioerr MAIN
+00390 L390: open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,input,keyed ioerr MAIN
 00400 L400: read #2,using 'Form POS 1,C 416': a$ eof L430
 00410   write #1,using 'Form POS 1,C 416': a$
 00420   goto L400
@@ -58,8 +58,8 @@
 00440   goto MAIN
 00450 ! ______________________________________________________________________
 00460 END1: close #1: ioerr L470
-00470 L470: execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\GLIndex.H"&str$(dcno)&" 1 12 Replace DupKeys" ioerr XIT
-00480   execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\glIndx2.H"&str$(dcno)&" 13 30 Replace DupKeys"
+00470 L470: execute "Index [Q]\GLmstr\GLmstr.H"&str$(dcno)&' '&"[Q]\GLmstr\GLIndex.H"&str$(dcno)&" 1 12 Replace DupKeys" ioerr XIT
+00480   execute "Index [Q]\GLmstr\GLmstr.H"&str$(dcno)&' '&"[Q]\GLmstr\glIndx2.H"&str$(dcno)&" 13 30 Replace DupKeys"
 00490   fnputcno(cno=dcno)
 00500 XIT: fnxit
 00510 ! ______________________________________________________________________

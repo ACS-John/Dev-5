@@ -20,7 +20,7 @@
 00200   fnopenprn
 00210   if file$(255)(1:3)<>"PRN" then jbskip=1
 00280 ! ______________________________________________________________________
-00290   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
+00290   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  !:
         read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un !:
         close #1: 
 00300 ! ______________________________________________________________________
@@ -30,12 +30,12 @@
 00330     if trim$(fullname$)="Union" then un=j ! determine union deduction
 00340   next j
 00350 ! ______________________________________________________________________
-00360   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00370   open #2: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00360   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00370   open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00380   open #3: "Name="&env$('temp')&"\Work."&session$,internal,input,relative 
 00390   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr XIT
-00400   open #8: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
-00410   open #7: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00400   open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
+00410   open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00420   read #3,using L430,rec=1: df,dt,mat dr
 00430 L430: form pos 1,2*n 6,7*pd 3
 00440 L440: read #4,using L450: r4 eof L1950

@@ -6,7 +6,7 @@
 00060     get=1 : put=2
 00070     if actpd=0 then get_or_put=get else get_or_put=put
 00080     fncno(cno)
-00090     open #tmp=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+00090     open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
 00100     if get_or_put=get then !:
             read #tmp,using "Form POS 268,N 2",rec=1: actpd noRec CLOSE_TMP
 00110     if get_or_put=put then !:

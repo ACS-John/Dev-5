@@ -11,9 +11,9 @@
 00110     fncno(cno)
 00120     if addall=0 then fen$="CeMP" else !:
             fen$="CEmpALL"
-00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\rpindex.h"&env$('cno') else !:
+00130     if indexfile$="" then if$="[Q]\PRmstr\rpindex.h[cno]" else !:
             if$=indexfile$
-00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,30,if$,1+addall,1,"Select from the list of employees. To add an employee, go to the Employee File.",container)
+00140     fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,30,if$,1+addall,1,"Select from the list of employees. To add an employee, go to the Employee File.",container)
 00150     indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

@@ -27,7 +27,7 @@
 00260     io1$(j*5-5)=str$(j+2)&",42,N 2,UT,N"
 00270     io1$(j*5-4)=str$(j+2)&",48,N 2,UET,N"
 00280   next j
-00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00290   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 00300   pr newpage !:
         fnopenwin(win=101,10,22,15,58,cap$)
 00310   io2$(1)="4,2,C 35,N"

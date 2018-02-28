@@ -48,7 +48,7 @@
 00310 ! ______________________________________________________________________
 00320   on fkey 5 goto DONE
 00330   fnopenprn(cp,0,0,process)
-00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\"&idx$(q0)&".h"&env$('cno')&",Shr",internal,input,keyed 
+00340   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\"&idx$(q0)&".h[cno],Shr",internal,input,keyed 
 00350   gosub BUD1
 00360   gosub HEADER
 00370   goto READ_CUSTOMER
@@ -87,8 +87,8 @@
 00700 ! ______________________________________________________________________
 00710 BUD1: bud1=0
 00720   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-00730   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L760
-00740   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+00730   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L760
+00740   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 00750   bud1=1
 00760 L760: return 
 00770 ! ______________________________________________________________________

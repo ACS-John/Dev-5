@@ -15,7 +15,7 @@
 00160   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,ppd,dat$)
 00190   gosub ASKFORMAT
 00200 ! ______________________________________________________________________
-00210   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",Shr",internal,input,relative 
+00210   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
 00220   open #5: "Name="&env$('Temp')&"\Temp1."&session$&",Size=0,RecL=66,Replace",internal,output 
 00230   fnopenprn
 00240 ! ______________________________________________________________________
@@ -98,7 +98,7 @@
         item1$(2)="Last Name First": fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).") !:
         resp$(respc+=1)=item1$(1)
 00970   fnLbl(2,1,"Status Code:",28,1)
-00980   fncombof("EmpStatus",2,30,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0) !:
+00980   fncombof("EmpStatus",2,30,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0) !:
         resp$(respc+=1)=str$(status)
 00990   fnCmdKey("&Next",1,1,0,"Proceed with printing." ) !:
         fnCmdKey("E&xit",5,0,1,"Returns to menu")

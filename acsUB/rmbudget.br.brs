@@ -57,16 +57,16 @@
 00490 END1: close #2: 
 00500   close #81: 
 00510   close #82: 
-00520   execute 'Copy "'&udf$&'Work1.dat" "'&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&'" -n'
-00530   execute "Index "&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&' '&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&" 1 10 Replace DupKeys -n"
+00520   execute 'Copy "'&udf$&'Work1.dat" "'&"[Q]\UBmstr\BudTrans.h[cno]"&'" -n'
+00530   execute "Index [Q]\UBmstr\BudMstr.h[cno]"&' '&"[Q]\UBmstr\BudIdx1.h[cno] 1 10 Replace DupKeys -n"
 00540   execute "Free "&udf$&"Work1.dat -n"
 00550   goto XIT
 00560 ! ______________________________________________________________________
 00570 XIT: fnxit
 00580 ! ______________________________________________________________________
 00590 BUD1: bud1=0
-00600   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L630
-00610   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+00600   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L630
+00610   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 00620   bud1=1
 00630 L630: return 
 00640 ! ______________________________________________________________________

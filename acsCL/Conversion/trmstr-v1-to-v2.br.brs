@@ -11,7 +11,7 @@
 00110 ! ______________________________________________________________________
 00120     fnStatus(cap$)
 00180 ! 
-00190     open #trmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\TRmstr.h"&env$('cno'),internal,outIn,relative 
+00190     open #trmstr:=fngethandle: "Name=[Q]\CLmstr\TRmstr.h[cno]",internal,outIn,relative 
 00200     if version(trmstr)<>1 and version(trmstr)<>2 then let fnStatus("TRmstr is not version 1.  You must update it to version 1 before running this conversion program") : goto XIT
 00210     if version(trmstr)=2 then let fnStatus("TRmstr is already version 2") : goto XIT
 00220     version(trmstr,2)
@@ -27,8 +27,8 @@
 00320 ! ______________________________________________________________________
 00330 XIT: ! 
 00340     if file$(trmstr)>'' then close #trmstr: 
-00350     fnCopy(env$('Q')&"\CLmstr\TRmstr.h"&env$('cno'),env$('Q')&"\CLmstr\TRmstr.h"&env$('cno'),78)
-00380     fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&env$('cno'),env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),"1 11")
-00382     fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&env$('cno'),env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno'),"28/1 8/11")
+00350     fnCopy("[Q]\CLmstr\TRmstr.h[cno]","[Q]\CLmstr\TRmstr.h[cno]",78)
+00380     fnindex_it("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx1.H[cno]","1 11")
+00382     fnindex_it("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx2.H[cno]","28/1 8/11")
 00390   fnend 
 00400 ! ______________________________________________________________________

@@ -10,7 +10,7 @@
 00100   fnconsole(off=0)
 00110   fncno(cno)
 00120   fndat(dat$)
-00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
+00130   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
         tb$="("&trim$(tb$)&")"
@@ -29,7 +29,7 @@
           if tempx=12 then actpd$="twelve" else !:
             if tempx=13 then actpd$="thirteen" else !:
               if tempx=14 then actpd$="fourteen"
-00180 L180: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno')&",Shr",display,input ioerr XIT
+00180 L180: open #1: "Name=[Q]\GLmstr\ACGLCovF.h[cno],Shr",display,input ioerr XIT
 00200   on fkey 5 goto DONE
 00210   fnopenprn
 00220 READ_ACGLCOVF: ! 

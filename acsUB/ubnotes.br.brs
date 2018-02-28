@@ -22,7 +22,7 @@
 00260   if resp$(1)="[All]" then rt1=0 else rt1=val(resp$(1))
 00270   d1=val(resp$(2))
 00280 ! 
-00290   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+00290   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 00300   fnopenprn
 00310   gosub HEADER
 00320 ! 
@@ -36,7 +36,7 @@
 00380   if d1<>0 and f><d1 then goto READ_CUSTOMER
 00390 ! READ_NOTE: ! 
 00400   close #31: ioerr ignore
-00410   open #31: "Name="&env$('Q')&"\UBmstr\notes.h"&env$('cno')&"\"&trim$(z$)&".txt",display,input ioerr READ_CUSTOMER
+00410   open #31: "Name=[Q]\UBmstr\notes.h[cno]\"&trim$(z$)&".txt",display,input ioerr READ_CUSTOMER
 00420   pr #255: "" 
 00422   pr #255: "{\b "&rpad$(trim$(z$),10)&"  Street Adr: "&e$(1)&"  Name: "&e$(2)&"}"
 00430   do

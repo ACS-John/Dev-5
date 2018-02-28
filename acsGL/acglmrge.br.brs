@@ -16,24 +16,24 @@
 00150   if fnstyp<>99 then 
 00160     if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 00170     fnprg(prg$,2)
-00180     open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00180     open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00190     read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00200     close #company: 
 00210   end if
-00220   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00230   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
-00240   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outIn 
-00250   open #paymstr=4: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00260   if ~exists(env$('Q')&"\GLmstr\bankrec.H"&env$('cno')) then 
-00270     open #6: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&env$('cno')&",Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed 
+00220   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
+00230   open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative 
+00240   open #3: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,outIn 
+00250   open #paymstr=4: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+00260   if ~exists("[Q]\GLmstr\bankrec.H[cno]") then 
+00270     open #6: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankrec-idx.H[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed 
 00280     close #6: 
-00290     fnindex_it(env$('Q')&"\GLmstr\bankrec.H"&env$('cno'),env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno'),"79/3/4 12/1/8")
+00290     fnindex_it("[Q]\GLmstr\bankrec.H[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
 00292   end if
-00300   open #6: "Name="&env$('Q')&"\GLmstr\BankRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BankRec-idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00310   if exists(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'))=0 then 
-00320     open #trans=5: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00300   open #6: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed 
+00310   if exists("[Q]\GLmstr\gltr1099.h[cno]")=0 then 
+00320     open #trans=5: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 00330   else 
-00340     open #trans=5: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00340     open #trans=5: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 00350   end if
 00360 L360: read #3,using "Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12": t$,s,k,mat n,l$,p$,ven$,key$ eof L1450
 00365   prtrans=0
@@ -185,16 +185,16 @@
 01620 L1620: close #1: 
 01630   close #2: 
 01640   close #3: 
-01650   fnFree(env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&env$('cno'))
+01650   fnFree("[Q]\GLmstr\GLPT"&wsid$&".H[cno]")
 01660 L1660: ! 
 01670   close #4: ioerr ignore
 01680   if new1=1 or new2=1 then !:
-          fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
+          fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 01690   if new1=1 then !:
-          fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),"1 12")
+          fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\GLIndex.h[cno]","1 12")
 01700   if new2=1 then !:
-          fnindex_it(env$('Q')&"\GLmstr\GL1099.h"&env$('cno'),env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),"1 8")
-01710   open #30: "Name="&env$('Q')&"\GLmstr\Process.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L1760
+          fnindex_it("[Q]\GLmstr\GL1099.h[cno]","[Q]\GLmstr\GL109IDX.h[cno]","1 8")
+01710   open #30: "Name=[Q]\GLmstr\Process.h[cno],Shr",internal,outIn,relative ioerr L1760
 01720   read #30,using "form pos 1,n 1",rec=1: process noRec L1760 ! read post payroll code
 01730   rewrite #30,using "form pos 1,n 1",rec=1: 0 noRec L1760 ! clear post payroll code
 01740   close #30: 

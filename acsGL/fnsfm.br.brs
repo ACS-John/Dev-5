@@ -10,17 +10,17 @@
 00100   fntop(program$,cap$='Financial Statement Design')
 00110   fncno(cno)
 00120   id$(1)=" 1. Balance Sheet File" !:
-        fil$(1)="ACGLFNSB.H"&env$('cno'): idx$(1)="FNSBINDX.H"&env$('cno')
+        fil$(1)="ACGLFNSB.H[cno]": idx$(1)="FNSBINDX.H[cno]"
 00130   id$(2)=" 2. Income Statement File" !:
-        fil$(2)="ACGLFNSI.H"&env$('cno'): idx$(2)="FNSIINDX.H"&env$('cno')
+        fil$(2)="ACGLFNSI.H[cno]": idx$(2)="FNSIINDX.H[cno]"
 00140   id$(3)=" 3. Fund Statement / Cash Flow File" !:
-        fil$(3)="ACGLFNSF.H"&env$('cno'): idx$(3)="FNSFINDX.H"&env$('cno')
+        fil$(3)="ACGLFNSF.H[cno]": idx$(3)="FNSFINDX.H[cno]"
 00150   id$(4)=" 4. Secondary Balance Sheet File" !:
-        fil$(4)="ACGLFNSC.H"&env$('cno'): idx$(4)="FNSCINDX.H"&env$('cno')
+        fil$(4)="ACGLFNSC.H[cno]": idx$(4)="FNSCINDX.H[cno]"
 00160   id$(5)=" 5. Secondary Income Statement File" !:
-        fil$(5)="ACGLFNSJ.H"&env$('cno'): idx$(5)="FNSJINDX.H"&env$('cno')
+        fil$(5)="ACGLFNSJ.H[cno]": idx$(5)="FNSJINDX.H[cno]"
 00170   id$(6)=" 6. Secondary Fund / Cash Flow File" !:
-        fil$(6)="ACGLFNSG.H"&env$('cno'): idx$(6)="FNSGINDX.H"&env$('cno')
+        fil$(6)="ACGLFNSG.H[cno]": idx$(6)="FNSGINDX.H[cno]"
 00180   gosub BUILD_LAYOUT
 00190 MAIN: ! 
 00200   fnTos(sn$="FsDesign") !:
@@ -56,13 +56,13 @@
 00400 ! ______________________________________________________________________
 00410 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00420   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\"&fil$(selection)&",KFName="&env$('Q')&"\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00420   open #open_file_count+=1: "Name=[Q]\GLmstr\"&fil$(selection)&",KFName=[Q]\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00430   return 
 00440 ! ______________________________________________________________________
 00450 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00460 ! ______________________________________________________________________
 00470 INDEX: ! 
-00480   execute "Index "&env$('Q')&"\GLmstr\"&fil$(selection)&' '&env$('Q')&"\GLmstr\"&idx$(selection)&" 1 5 Replace DupKeys"
+00480   execute "Index [Q]\GLmstr\"&fil$(selection)&' '&"[Q]\GLmstr\"&idx$(selection)&" 1 5 Replace DupKeys"
 00490   return 
 00500 ! ______________________________________________________________________
 00510 BUILD_LAYOUT: ! 

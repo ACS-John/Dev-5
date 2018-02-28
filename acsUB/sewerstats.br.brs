@@ -75,7 +75,7 @@
 10740     fnLbl(1,1,"Date Range:",19)
 10750     fnLbl(1,22,"Avg. Bills Per Cycle:",23)
 10760     fnLbl(1,47,"Avg. Bill:",12)
-10770     open #(h_prn:=fngethandle): "Name="&env$('Q')&"\UBmstr\Sewerstats"&wsid$&".txt,Replace,RecL=5000",display,output 
+10770     open #(h_prn:=fngethandle): "Name=[Q]\UBmstr\Sewerstats"&wsid$&".txt,Replace,RecL=5000",display,output 
 10780     pr #h_prn: 'Call Print.MyOrientation("Portrait")'
 10790     pr #h_prn: 'Call Print.MyFontSize(14)'
 10800     pr #h_prn: 'Call Print.MyFontBold(True)'
@@ -102,9 +102,9 @@
 11010     if ckey=2 then execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$('UBmstr\Sewerstats"&wsid$&".txt"') ! "sy -W -C S:\Core\PrAce UBmstr\Sewerstats"&wsid$&".txt"
 11020   fnend 
 11030   def fn_openfiles
-11040     open #(h_ubmstr:=fngethandle): "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&env$('cno'),internal,input,keyed 
+11040     open #(h_ubmstr:=fngethandle): "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed 
 11050 CUSTFORM: form c 10
-11060     open #(h_ubtrans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,input,keyed 
+11060     open #(h_ubtrans:=fngethandle): "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed 
 11070 TRANSFORM: form c 10,n 8,n 1,pos 28,pd 4.2
 11080   fnend 
 11090   def fn_closefiles

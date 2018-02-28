@@ -9,7 +9,7 @@
 12020   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7,gb(10),extra$(11)*30
 12040   dim extra(23)
 12042   dim df$*1
-12060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,outIn,relative 
+12060   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,outIn,relative 
 12082   F_CustomerSequenceOnly: form pos 1743,N 7
 12100   ! /r
 14000   do ! r: primary loop

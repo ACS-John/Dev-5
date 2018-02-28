@@ -27,7 +27,7 @@
 31000 Report: ! r: start report
 32000   if bd1=20000000 then bd1=0
 32020   if ed1=20000000 then ed1=0
-32060   open #hDeposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr",internal,outIn,relative 
+32060   open #hDeposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr",internal,outIn,relative 
 32080   fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
 32120   fnopenprn
 32140   gosub HDR 

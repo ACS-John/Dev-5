@@ -12,8 +12,8 @@
 00110   bob1=(132-len(rtrm$(cnam$)))/2 !:
         bob2=(132-len(rtrm$(dat$)))/2 !:
         bob3=132-10 : bob4=(132-26)/2
-00120   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00130   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
+00120   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00130   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
 00140   pr "please wait..."
 00150   fnopenprn(cp,0,0,process)
 00160   gosub HDR

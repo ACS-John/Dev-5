@@ -36,8 +36,8 @@
 31000 ! Gosub SCR_ASK_DATES
 32100   fnopenprn
 32120   gosub HEADER
-36000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-36020   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+36000   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+36020   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 36040   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply)
 36100   for j=1 to 10
 36120     serviceName$(j)=lpad$(rtrm$(serviceName$(j)(1:8)),8)

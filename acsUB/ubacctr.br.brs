@@ -42,8 +42,8 @@
 00270   if d(1)<>0 then d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00280   if d(2)<>0 then d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
 00290   fndat(d$(1),2)
-00300   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00310   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00300   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+00310   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 00320   on fkey 5 goto DONE
 00330   fnopenprn
 00340   gosub HDR

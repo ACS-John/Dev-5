@@ -16,11 +16,11 @@
 24600 ! ______________________________________________________________________
 24800   def fn_open_file
 25000     open_file_count=0 ! this value is used in the close_file sub routine
-25200     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25400     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25600     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
-25800     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed 
-26000     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed 
+25200     open #open_file_count+=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+25400     open #open_file_count+=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed 
+25600     open #open_file_count+=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed 
+25800     open #open_file_count+=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed 
+26000     open #open_file_count+=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed 
 26200   fnend 
 26400   def fn_close_file
 26600     for j=1 to open_file_count : close #j: : next j
@@ -37,22 +37,22 @@
 28800     limit_to_list$='1'
 29000 ! 
 29200 ! cl=1 : c$(cl,1)='ComboF'
-29400 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno')
+29400 ! c$(cl,2)='[Q]\TMmstr\Client.h[cno]'
 29600 ! c$(cl,3)='1' : c$(cl,4)='6'
 29800 ! c$(cl,5)='7' : c$(cl,6)='50'
-30000 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno')
+30000 ! c$(cl,7)='[Q]\TMmstr\Client-Idx.h[cno]'
 30200 ! c$(cl,8)=limit_to_list$
 30400 ! cl=3 : c$(cl,1)='ComboF'
-30600 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno')
+30600 ! c$(cl,2)='[Q]\TMmstr\Systems.h[cno]'
 30800 ! c$(cl,3)='1' : c$(cl,4)='2'
 31000 ! c$(cl,5)='3' : c$(cl,6)='50'
-31200 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno')
+31200 ! c$(cl,7)='[Q]\TMmstr\Systems-Idx.h[cno]'
 31400 ! c$(cl,8)=limit_to_list$
 31600 ! cl=5 : c$(cl,1)='ComboF'
-31800 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno')
+31800 ! c$(cl,2)='[Q]\TMmstr\TimeFrame.h[cno]'
 32000 ! c$(cl,3)='1' : c$(cl,4)='2'
 32200 ! c$(cl,5)='3' : c$(cl,6)='50'
-32400 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno')
+32400 ! c$(cl,7)='[Q]\TMmstr\TimeFrame-Idx.h[cno]'
 32600 ! c$(cl,8)=limit_to_list$
 32800   fnend 
 33000 ! ______________________________________________________________________

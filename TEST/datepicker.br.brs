@@ -15,7 +15,7 @@
 00170   dim gldesc$*30,ml$(3)*80
 00180   dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50
 08320 ! ______________________________________________________________________
-04815   open #clearing=89: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
+04815   open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
 04889   fnTos(sn$="paidinv")
 04891   respc=0 : mat resp$=('')
 04893   fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)

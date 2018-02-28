@@ -9,12 +9,12 @@
 20160   gosub BUILD_LAYOUT
 20180   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 20200   gosub HAMSTER: gosub CLOSE_FILE
-20220   fnindex_it(env$('Q')&"\TMmstr\Systems.h420",env$('Q')&"\TMmstr\Systems-idx.h420","1,2")
+20220   fnindex_it("[Q]\TMmstr\Systems.h420","[Q]\TMmstr\Systems-idx.h420","1,2")
 20240   goto XIT
 20260 ! ______________________________________________________________________
 20280 OPEN_FILE: ! 
 20300   open_file_count=0 ! this value is used in the close_file sub routine
-20320   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Systems.h420,Version=1,KFName="&env$('Q')&"\TMmstr\Systems-Idx.h420,Use,RecL=90,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+20320   open #open_file_count+=1: "Name=[Q]\TMmstr\Systems.h420,Version=1,KFName=[Q]\TMmstr\Systems-Idx.h420,Use,RecL=90,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 20340   return 
 20360 ! ______________________________________________________________________
 20380 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

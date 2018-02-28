@@ -67,7 +67,7 @@
 00520   fnopenprn
 00530   gosub HEADER
 00550   v=bkno1
-00560   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00560   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00570 L570: read #1,using L580: z$,e$,f,bal,mat g,mat gb eof DONE
 00580 L580: form pos 1,c 10,pos 41,c 30,pos 296,pd 4,pos 292,pd 4.2,pos 300,12*pd 4.2,pos 388,10*pd 5.2
 00590   if f<>lbill then mat g=(0)
