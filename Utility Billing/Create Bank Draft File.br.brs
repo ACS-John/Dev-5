@@ -15,8 +15,8 @@
 18140     if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 18160   next j
 18180   fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
-18200   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outIn,relative 
-18220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+18200   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative 
+18220   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 18240   close #22: ioerr ignore
 18260 goto SCREEN1 ! /r
 22000 SCREEN1: ! r:
@@ -46,9 +46,9 @@
 26000 initialization: ! r: initialization
 26020   open #22: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
 26040   if postub=1 then 
-26060     open #6: "Name="&env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')&",RecL=91,Replace", internal,outIn,relative 
+26060     open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative 
 26080   end if 
-26100   open #7: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26100   open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
 26120   fnopenprn
 26140   gosub HDRP1
 26160   gosub HDR1

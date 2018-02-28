@@ -214,7 +214,7 @@
 02150   tr$(11)="L 5498"
 02160   tr$(12)="W W-2G"
 02170 ! ______________________________________________________________________
-02180   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+02180   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$ !:
         close #20: 
 02190 ! ______________________________________________________________________
@@ -390,8 +390,8 @@
 03700 ! 
 03710   transactionstartingdate=val(resp$(1))
 03720   transactionendingdate=val(resp$(2))
-03730   open #paymstr=1: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-03740   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+03730   open #paymstr=1: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+03740   open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,input,keyed 
 03750   if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output 
 03760   if ct1=0 then gosub RECT
 03770   gosub RECA

@@ -31,8 +31,8 @@
 00290     if prtsch(j)=0 then goto L310
 00300   next j
 00310 L310: j=0
-00320 L320: open #1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr DONE
-00330   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00320 L320: open #1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,input,keyed ioerr DONE
+00330   open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 00340   pr newpage
 00350   pr f "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
 00360   pr f "12,2,C 30,B,5": "Press F5 to stop"

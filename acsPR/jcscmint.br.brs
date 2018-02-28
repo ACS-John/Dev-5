@@ -12,7 +12,7 @@
 00110   fncno(cno,cnam$)
 00115   fnconsole(1)
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1220
+00130   open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,outIn,keyed ioerr L1220
 00140 MENU1: ! 
 00150   pr newpage
 00160   fnopenwin(win=101,08,19,15,60,cap$)
@@ -43,9 +43,9 @@
 00400   if new1=2 then goto MENU1
 00410   if new1<>1 then goto L380
 00420   close #1: ioerr L430
-00430 L430: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno'),internal,output ioerr ERTN2
+00430 L430: open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno]",internal,output ioerr ERTN2
 00440   close #1,free: ioerr L450
-00450 L450: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",SIZE=0,RecL=33",internal,output 
+00450 L450: open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],SIZE=0,RecL=33",internal,output 
 00460   cont=new1=1
 00470 L470: close #1: 
 00480   if new1=0 then goto XIT
@@ -55,7 +55,7 @@
 00520 L520: open #1: "Name=PROC."&wsid$&",SIZE=0",display,output 
 00530 L530: pr #1: "CLEAR"
 00540   pr #1: "PROCERR RETURN"
-00550   pr #1: "Index "&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",1,3,Replace,DupKeys"
+00550   pr #1: "Index [Q]\PRmstr\SCMSTR.h[cno],[Q]\PRmstr\SCIndex.h[cno],1,3,Replace,DupKeys"
 00560   if cont=1 then !:
           pr #1: "CHAIN 'S:\acsPR\JCSCMINT'" else pr #1: "Chain 'menu'"
 00570   close #1: 

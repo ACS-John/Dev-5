@@ -14,8 +14,8 @@
 00140   fndat(dat$,1)
 00150   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00160 ! 
-00170   if exists(env$('Q')&"\PRmstr\Burden.H"&env$('cno'))=0 then goto SETUP_FILES
-00180 L180: open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   if exists("[Q]\PRmstr\Burden.H[cno]")=0 then goto SETUP_FILES
+00180 L180: open #1: "Name=[Q]\PRmstr\Burden.H[cno],KFName=[Q]\PRmstr\BurdenIdx.H[cno],Shr",internal,outIn,keyed 
 00190 L190: form pos 1,n 8,c 30,3*n 6.3
 00200 ASKEMPLOYEE: ! 
 00205   mat resp$=("")
@@ -87,7 +87,7 @@
 00670 ! ______________________________________________________________________
 00680 RECREATE_GRID: ! 
 00690   fnburden_srch(x$,99) !:
-        df$=env$('Q')&"\PRmstr\Burden.h"&env$('cno') : if$=env$('Q')&"\PRmstr\Burdenidx.h"&env$('cno') !:
+        df$="[Q]\PRmstr\Burden.h[cno]" : if$="[Q]\PRmstr\Burdenidx.h[cno]" !:
         fncombof("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1) !:
         fncombof("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
 00700   ad1=0 ! set add code back before returning to main screen
@@ -118,13 +118,13 @@
 00900   gosub RECREATE_GRID
 00910   goto SCREEN_1
 00920 SETUP_FILES: ! 
-00930   open #1: "Name="&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&",RecL=128,replace",internal,outIn 
+00930   open #1: "Name=[Q]\PRmstr\Burden.H[cno],RecL=128,replace",internal,outIn 
 00940   close #1: 
 00950   goto REINDEX
 00960 REINDEX: ! indexes if needed
 00970   reindex+=1
 00980   close #1: ioerr L990
-00990 L990: execute "Index "&env$('Q')&"\PRmstr\Burden.H"&env$('cno')&' '&env$('Q')&"\PRmstr\BurdenIdx.H"&env$('cno')&" 1 8 Replace DupKeys -n"
+00990 L990: execute "Index [Q]\PRmstr\Burden.H[cno]"&' '&"[Q]\PRmstr\BurdenIdx.H[cno] 1 8 Replace DupKeys -n"
 01000   goto L180
 01010 PRINT_PROOF: ! 
 01020   fnopenprn

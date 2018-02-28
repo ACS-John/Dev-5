@@ -107,14 +107,14 @@
 12020     else
 12030       setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
 12040     end if
-12050     fnMakeSurepathExists(env$('Q')&"\Data\")
-12120     fnMakeSurepathExists(env$('Q')&'\Report Cache\')
+12050     fnMakeSurepathExists("[Q]\Data\")
+12120     fnMakeSurepathExists('[Q]\Report Cache\')
 12140     if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
 12160     if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
 12180     ! fn_udf_resolve
 12200     ! if exists(udf$&"Reads_and_Chgs.h1") then
-12220     !   fn_move_data(udf$&"Reads_and_Chgs.h*",env$('Q')&"\UBmstr\Reads_and_Chgs.h*",1)
-12240     !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*",env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h*",1)
+12220     !   fn_move_data(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
+12240     !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
 12260     !  end if
 12280     if env$('temp')(2:2)=':' then
 12300       execute 'CD '&env$('temp')(1:2)
@@ -317,7 +317,7 @@
 34140   fn_move_data=md_return
 34160 fnend 
 34180 def fn_move_core_data(file_name$*256; ignore_exists)
-34200   fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,env$('Q')&"\Data\"&file_name$, ignore_exists)
+34200   fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,"[Q]\Data\"&file_name$, ignore_exists)
 34220 fnend 
 36000 def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 36020   fnMapToVirturalDrive=fn_map_to_virtural_drive(path_to_map$,drive_id$)
@@ -360,7 +360,7 @@
 42120 !     dim filename$(1)*1024,tmp_dir$(1)*1024
 42160 !     execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
 42180 !     execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-42200 !     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "'&env$('Q')&'\'&'" /S /T'
+42200 !     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\'&'" /S /T'
 42220 !     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
 42240 !     for f_i=1 to udim(mat filename$)
 42260 !       if exists(filename$(f_i))=1 then ! it is a directory
@@ -369,10 +369,10 @@
 42320 !         tmp_dir$(tmp_dir_count)=filename$(f_i)
 42340 !       else ! it is a file.
 42360 !         dim tmp_to$*1024,tmp_from$*1024
-42380 !         tmp_to$=env$('Q')&'\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
+42380 !         tmp_to$='[Q]\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
 42400 !         tmp_from$=lwrc$(filename$(f_i))
 42440 !         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
-42460 !           fnCopy(tmp_from$,env$('Q')&'\UBmstr\*.*')
+42460 !           fnCopy(tmp_from$,'[Q]\UBmstr\*.*')
 42480 !           execute 'free "'&tmp_from$&'"' ioerr ignore
 42500 !         else if ~exists(tmp_to$) then 
 42520 !           if fnCopy(tmp_from$,tmp_to$) then 
@@ -426,8 +426,8 @@
 45160   if env$('acsDeveloper')='' then 
 45180     execute 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
 45200   end if
-45220   fnmakesurepathexists(env$('Q')&'\Data\')
-45240   fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
+45220   fnmakesurepathexists('[Q]\Data\')
+45240   fnmakesurepathexists('[Q]\'&env$('CurSys')&'mstr\')
 45260   ! if env$('acsDebug')<>'' then
 45280   !   pr 'SetQ to '&env$('Q')
 45300   !   pause
@@ -457,7 +457,7 @@
 48100   else 
 48120     fnreg_read('ACS last version used',lvu_line$)
 48140     if lvu_line$='' then 
-48160       open #hAcsVersion:=fn_gethandle: 'Name='&env$('Q')&'\Data\ACS_Version.txt,RecL=256',display,input ioerr LVU_OLD_FILE_OPEN_IOERR
+48160       open #hAcsVersion:=fn_gethandle: 'Name=[Q]\Data\ACS_Version.txt,RecL=256',display,input ioerr LVU_OLD_FILE_OPEN_IOERR
 48180       linput #hAcsVersion: lvu_line$
 48200       close #hAcsVersion,free: 
 48220       fnreg_write('ACS last version used',lvu_line$)
@@ -495,7 +495,7 @@
 54140   !   setenv('data','\\JAZZ\BR Order Entry\brc_oe\Data')  !  Gordon's Linux CS Server
 54150   ! end if                                                !  Gordon's Linux CS Server
 54160   ce_os_temp_file$=rtrm$(env$('data'),'\')&'\cs-'&session$&'.txt'
-54180   ce_br_temp_file$=env$('Q')&'\cs-'&session$&'.txt'
+54180   ce_br_temp_file$='[Q]\cs-'&session$&'.txt'
 54182   ce_retry_4152_count=0
 54190   CE_MAKE_TEMP_FILE: !
 54192   fnmakesurepathexists(ce_br_temp_file$)

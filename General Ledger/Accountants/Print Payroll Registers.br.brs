@@ -28,11 +28,11 @@
 15600   beg_date=val(resp$(1))
 15800   end_date=val(resp$(2))
 16000 ! 
-16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
+16200   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
 16400   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
-16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+16800   open #h_prmstr:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed 
 16900   fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
-17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
+17000   open #h_acprcks:=fngethandle: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative 
 17200   report$="Payroll Check Register"
 17400   fnopenprn(cp,58,220,0)
 17600   fn_hdr1

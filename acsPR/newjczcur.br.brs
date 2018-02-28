@@ -17,19 +17,19 @@
         ml$(2)="current period information?." !:
         fnmsgbox(mat ml$,resp$,cap$,36)
 00160 ! ______________________________________________________________________
-00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+00170   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative 
 00180   read #1,using L190,rec=1: kt
 00190 L190: form pos 745,n 1
 00200   close #1: 
 00210   if kt=1 then goto L290
 00220 ! ______________________________________________________________________
-00230   open #1: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
+00230   open #1: "Name=[Q]\PRmstr\JCTRANS.h[cno]",internal,output 
 00240   restore #1: 
 00250   write #1,using L260: " "," ",mat tr," ",1
 00260 L260: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00270   close #1: 
 00280 ! ______________________________________________________________________
-00290 L290: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outIn,keyed 
+00290 L290: open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,outIn,keyed 
 00300   if kt=0 then goto L360
 00310 L310: read #2,using L330: a1,a2,a3 eof DONE
 00320   rewrite #2,using L330: 0,0,0

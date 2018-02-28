@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\acglBldS
-00020 ! this program calls fnacglblds to builds the file    "&env$('Q')&"\GLmstr\ACGLScr.h
+00020 ! this program calls fnacglblds to builds the file    [Q]\GLmstr\ACGLScr.h
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacglblds,fntop,fnerror,fnxit
 00050   on error goto ERTN

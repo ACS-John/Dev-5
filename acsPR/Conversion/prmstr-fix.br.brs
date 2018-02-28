@@ -8,9 +8,9 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100 ! 
-00110   open #10: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno'),internal,input,relative 
+00110   open #10: "Name=[Q]\PRmstr\RPMSTR.h[cno]",internal,input,relative 
 00120   open #11: "Name=RPMSTR.X,RecL=196,Replace",internal,output 
-00130   open #12: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,input,relative 
+00130   open #12: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,input,relative 
 00140   open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",internal,outIn,relative 
 00150   ot13=1
 00160   write #13,using L170,rec=1: mat tdz,ot13,0
@@ -41,10 +41,10 @@
 00410   close #11: 
 00420   close #12,free: 
 00430   close #13: 
-00440   execute "RENAME RPMSTR.X "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&" -n"
-00450   execute "RENAME RPTRAIL.X "&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&" -n"
-00460   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&" 1 8 Replace DupKeys -n"
-00470   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&" 9 30 Replace DupKeys -n"
+00440   execute "RENAME RPMSTR.X [Q]\PRmstr\RPMSTR.h[cno] -n"
+00450   execute "RENAME RPTRAIL.X [Q]\PRmstr\RPTRAIL.h[cno] -n"
+00460   execute "Index [Q]\PRmstr\RPMSTR.h[cno]"&' '&"[Q]\PRmstr\RPINDEX.h[cno] 1 8 Replace DupKeys -n"
+00470   execute "Index [Q]\PRmstr\RPMSTR.h[cno]"&' '&"[Q]\PRmstr\RPINDX2.h[cno] 9 30 Replace DupKeys -n"
 00480 XIT: stop 
 00490 ! ______________________________________________________________________
 00500 ! <updateable region: ertn>

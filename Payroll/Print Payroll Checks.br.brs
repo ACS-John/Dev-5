@@ -30,13 +30,13 @@
 08170   dim tr(2)
 08172   dim tr$(5)*35
 08200   dim resp$(25)*128,d1$*20,ttc(32),ttdc(10)
-08220   dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),ytdtotal(32)
+08220   dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),ytdTotal(32)
 08240   dim quartertotals(32)
 08242   dim dedfed(20)
 08244   dim calcode(20)
 08246   dim dedcode(20)
 08260   dim fullname$(20)*20
-08262   dim abrevname$(20)*8
+08262   dim abrevName$(20)*8
 08264   dim ml$(2)*128 ! temp variable for messagebox message lines
 08280   dim dedfica(20),dedSt(20),dedUc(20),gl$(20)*12
 08300   dim dtr$(5)*35,key$*21
@@ -97,7 +97,7 @@
 10060   open #20: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input 
 10080   read #20,using 'Form POS 2,POS 5,N 5': ckno
 10100   close #20: 
-10120   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
+10120   fnGetPayrollDates(old_beg_date,old_end_date,read_qtr1,read_qtr2,read_qtr3,read_qtr4,d1,d1$)
 10140   fncreg_read('Prenumbered Checks',pre$)
 10160   fncreg_read('Post to CL',acsclcv$)
 10180   fncreg_read('Post Employer Portion of FiCA',ficam1$)
@@ -105,12 +105,12 @@
 10220   fncreg_read('Print Vacation and Sick Leave on Check',accr$)
 10240   fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 10260   fncreg_read('Comp Time Code',compcode$)
-10280   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
+10280   fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
 10300   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 10320   read #20,using 'Form POS 1,x 120,POS 150,10*C 8,POS 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 10340   close #20: 
 10360 ! ___________________________
-10380   mat hnames$=abrevname$ : bankgl$=gln$(15)
+10380   mat hnames$=abrevName$ : bankgl$=gln$(15)
 10400   if fnclient_has('CL') then let fn_open_acscl
 10420 ! ___________________________
 10440   if bankcode=0 then bankcode=1
@@ -121,153 +121,160 @@
 10540   ddcode$="R"
 10560   fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 10580   goto MAIN_QUESTIONS ! /r
-11000 MAIN_QUESTIONS: ! r:
-11004   fnTos(sn$="prckprt")
-11008   respc=0
-11012   fnLbl(1,1,"Payroll Date:",38,1)
-11016   fnTxt(1,41,10,0,1,"3",0,"")
-11020   resp$(resp_payroll_date:=1)=str$(d1)
-11024   fnLbl(2,1,"Are Checks Prenumbered?",38,1)
-11028   fncomboa("prckprt-2",2,41,mat opt_yn$,"The system needs to know if the checks are already numbered.",3)
-11032   if pre$="Y" then resp$(2)=opt_yn$(1) else resp$(2)=opt_yn$(2)
-11036   fnLbl(3,1,"Beginning Check Number:",38,1)
-11040   fnTxt(3,41,7,0,1,"30",0,"")
-11044   resp$(3)=str$(check_number)
-11048   fnLbl(4,1,"Date of Checks:",38,1)
-11052   fnTxt(4,41,10,0,1,"3",0,"")
-11056   resp$(resp_date_of_checks:=4)=date$("ccYYMMDD")
-11060   fnLbl(5,1,"Beginning Employee Number:",38,1)
-11064   fnTxt(5,41,8,0,1,"30",0,"")
-11068   resp$(5)=str$(beginningEmployeeNumber)
-11072   fnLbl(6,1,"Post to ACS Checkbook",38,1)
-11076   if fnclient_has('CL') then 
-11080     fncomboa("prckprt-3",6,41,mat opt_yn$)
-11084     if acsclcv$="Y" then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
-11088   else 
-11092     fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
-11096     resp$(6)=opt_yn$(2) : acsclcv$='N'
-11100   end if 
-11104   fnLbl(7,1,"Post Employer's Portion of FiCA?",38,1)
-11108   fncomboa("prckprt-4",7,41,mat opt_yn$,"The system can generate and post the employer's portion of FICA at the time the check is being written.",3)
-11112   if ficam1$="Y" then resp$(7)=opt_yn$(1) else resp$(7)=opt_yn$(2)
-11116   fnLbl(8,1,"Check Format:",38,1)
-11120   fncomboa("ckprt-2",8,41,mat opt_check_format$)
-11124   whichScc=srch(mat scc$,sc1$)
-11128   if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
-11132   fnLbl(9,1,"Check Type (Regular or Direct Deposit):",38,1)
-11136   fncomboa("ckprt-5",9,41,mat opt_check_type$,"If you have direct deposits, you can use this option to pr check on plain paper to give the employees.",15)
-11140   if ddcode$="R" then resp$(9)=opt_check_type$(1)
-11144   if ddcode$="D" then resp$(9)=opt_check_type$(2)
-11148   if ddcode$="A" then resp$(9)=opt_check_type$(3)
-11152   fnLbl(10,1,"Print Vacation and Sick Leave?",38,1)
-11156   fncomboa("prckprt-6",10,41,mat opt_yn$)
-11160   if accr$="Y" then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
-11164 ! 
-11168   respc=10
-11172 ! 
-11176   if cl_installed=0 and exists(env$('Q')&"\CLmstr\bankmstr.h"&env$('cno')) then 
-11180     fnLbl(11,1,"Bank Account:",38,1)
-11184     fncombof("Bankmstr",11,41,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing")
-11188     resp$(resp_cl_bankcode:=respc+=1)=str$(bankcode)
-11192   end if 
-11196   if exists(env$('Q')&"\PRmstr\hourclass.h"&env$('cno')) then 
-11200     fnLbl(12,1,"Comp Time Code:",38,1)
-11204     fncombof("timeclass",12,41,20,env$('Q')&"\PRmstr\hourclass.h"&env$('cno'),1,5,6,25,env$('Q')&"\PRmstr\hourclass-idx.h"&env$('cno'),1,0, "Select time classification code for comp time, if applicable.")
-11208     resp$(resp_combcode:=respc+=1)=compcode$
-11212   end if 
-11216   fnLbl(14,1,"Print All Checks (or ask after first):",38,1)
-11220   fncomboa("prckprt-prall",14,41,mat opt_yn$)
-11224   resp$(resp_skip_align=respc+=1)=skip_alignment$
-11228   if gl_installed then 
-11232     fnLbl(16,1,"General Ledger detected.",38,1)
-11236   end if 
-11240   if cl_installed then 
-11244     fnLbl(17,1,"Checkbook detected.",38,1)
-11248   end if 
-11260   fncmdkey('Test Check Format',ck_TestCheck:=21)
-11265   fnCmdSet(2) ! need button to show totals
-11268   fnAcs(sn$,0,mat resp$,ck)
-11272   if ck=5 then goto XIT ! /r
-11276   if ck=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
-11332 ! r: validate answers (and move to local variables from mat resp$)
-11340   d1                      =val(resp$(resp_payroll_date))             ! payroll date
-11350   pre$                    =uprc$(resp$(2)(1:1))                     ! pre-numbered checks Y or N
-11360   check_number            =val(resp$(3))                             ! check #
-11370   ckdat$                  =resp$(resp_date_of_checks)                ! check date
-11380   dat                     =val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
-11390   beginningEmployeeNumber =val(resp$(5))                             ! beginning employee #
-11400   acsclcv$                =uprc$(resp$(6)(1:1))                     ! post Checkbook system
-11410   ficam1$                 =uprc$(resp$(7)(1:1))                     ! post fica match
-11430   sc1$                    =scc$(srch(mat opt_check_format$,resp$(8)))
-11460   ddcode$                 =uprc$(resp$(9)(1:1))                     ! regular check or direct deposit
-11470   accr$                   =uprc$(resp$(10)(1:1))                    ! pr vac and sick
-11472   if resp_cl_bankcode then 
-11480     bankcode              =val(resp$(resp_cl_bankcode)(1:3))        ! bank code
-11481   end if 
-11482   if resp_combcode then 
-11490     compcode$             =resp$(resp_combcode)(1:5)                 ! comp time code
-11492   end if 
-11496 ! date_of_checks=val(ckdat$)
-11500   prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
-11506   skip_alignment$         =resp$(resp_skip_align)
-11507   if skip_alignment$='Yes' then allign=3
-11508 ! 
-11510   if acsclcv$="Y" then cl_installed=1 else cl_installed=0
-11520   if ficam1$="Y" then ficam1=1 else ficam1=0
-11530   if pre$="Y" then pre=1 else pre=0
-11532 ! if env$('client')="Washington Parrish" and (prdate<10100 or prdate>123199) then goto MAIN_QUESTIONS
-11540   if d1<beg_date or d1>end_date then ! not this year
-11545     mat ml$(4)
-11550     ml$(1)='The Payroll Date you have choosen ('&cnvrt$('pic(zzzz/zz/zz)',d1)&') is is outside your years'
-11555     ml$(2)='beginning  and ending date range ('&cnvrt$('pic(zzzz/zz/zz)',beg_date)&' - '&cnvrt$('pic(zzzz/zz/zz)',end_date)&').'
-11560     ml$(3)='Checks with a payroll date outside this date range can not be processed.'
-11565     ml$(4)='Would you like to "Change Payroll Dates" now?'
-11570     fnmsgbox(mat ml$,resp$,'',16+4)
-11575     if resp$='Yes' then 
-11580       fnchain('S:\Payroll\Change Payroll Dates')
-11585     else ! if resp$='No' then
-11590       goto MAIN_QUESTIONS
-11595     end if 
-11600   end if 
-11605 ! pause
-11610 ! 
-11615   if check_number<0 then 
-11620     mat ml$(2)
-11625     ml$(1)="You must enter a valid check number!"
-11630     ml$(2)="Click OK to return to previous screen. "
-11635     fnmsgbox(mat ml$,resp$)
-11640     goto MAIN_QUESTIONS
-11645   end if 
-11646 ! /r
-11648 ! r: save answers for next time
-11650   fncreg_write('Prenumbered Checks',pre$)
-11652   fncreg_write('Post to CL',acsclcv$)
-11654   fncreg_write('Post Employer Portion of FiCA',ficam1$)
-11656   fncreg_write('Check Format',sc1$)
-11658   fncreg_write('Print Vacation and Sick Leave on Check',accr$)
-11660   fncreg_write('CL Bank Code',str$(bankcode))
-11662   fncreg_write('Comp Time Code',compcode$)
-11664   fnreg_write('PR.Check print.skip alignment',skip_alignment$)
-11670 ! /r
-11675 ! r: get and validate bank code if ACSCL is in play
-11678   if testCheckFormat then goto L1300
-11680   if cl_installed=1 then 
-11685     read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi nokey L1280 ioerr L1290
-11690   end if 
-11695   goto L1300
-11700   L1280: ! 
-11705   mat ml$(2)
-11710   ml$(1)="You must enter a valid bank code!"
-11715   ml$(2)="Click OK to return to previous screen. "
-11720   fnmsgbox(mat ml$,resp$)
-11725   goto MAIN_QUESTIONS
-11730   L1290: ! 
-11735   mat ml$(3)
-11740   ml$(1)="You have indicated that you want to post checkbook, "
-11745   ml$(2)="but no checkbook files can be found! "
-11750   ml$(3)="Click OK to return to previous screen. "
-11755   fnmsgbox(mat ml$,resp$)
-11760   goto MAIN_QUESTIONS
+12000 MAIN_QUESTIONS: ! r:
+12020   fnTos(sn$="prckprt")
+12040   respc=0
+12060   fnLbl(1,1,"Payroll Date:",38,1)
+12080   fnTxt(1,41,10,0,1,"3",0,"")
+12100   resp$(resp_payroll_date:=1)=str$(d1)
+12120   fnLbl(2,1,"Are Checks Prenumbered?",38,1)
+12140   fncomboa("prckprt-2",2,41,mat opt_yn$,"The system needs to know if the checks are already numbered.",3)
+12160   if pre$="Y" then resp$(2)=opt_yn$(1) else resp$(2)=opt_yn$(2)
+12180   fnLbl(3,1,"Beginning Check Number:",38,1)
+12200   fnTxt(3,41,7,0,1,"30",0,"")
+12220   resp$(3)=str$(check_number)
+12240   fnLbl(4,1,"Date of Checks:",38,1)
+12260   fnTxt(4,41,10,0,1,"3",0,"")
+12280   resp$(resp_date_of_checks:=4)=date$("ccYYMMDD")
+12300   fnLbl(5,1,"Beginning Employee Number:",38,1)
+12320   fnTxt(5,41,8,0,1,"30",0,"")
+12340   resp$(5)=str$(beginningEmployeeNumber)
+12360   fnLbl(6,1,"Post to ACS Checkbook",38,1)
+12380   if fnclient_has('CL') then 
+12400     fncomboa("prckprt-3",6,41,mat opt_yn$)
+12420     if acsclcv$="Y" then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
+12440   else 
+12460     fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
+12480     resp$(6)=opt_yn$(2) : acsclcv$='N'
+12500   end if 
+12520   fnLbl(7,1,"Post Employer's Portion of FiCA?",38,1)
+12540   fncomboa("prckprt-4",7,41,mat opt_yn$,"The system can generate and post the employer's portion of FICA at the time the check is being written.",3)
+12560   if ficam1$="Y" then resp$(7)=opt_yn$(1) else resp$(7)=opt_yn$(2)
+12580   fnLbl(8,1,"Check Format:",38,1)
+12600   fncomboa("ckprt-2",8,41,mat opt_check_format$)
+12620   whichScc=srch(mat scc$,sc1$)
+12640   if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
+12660   fnLbl(9,1,"Check Type (Regular or Direct Deposit):",38,1)
+12680   fncomboa("ckprt-5",9,41,mat opt_check_type$,"If you have direct deposits, you can use this option to pr check on plain paper to give the employees.",15)
+12700   if ddcode$="R" then resp$(9)=opt_check_type$(1)
+12720   if ddcode$="D" then resp$(9)=opt_check_type$(2)
+12740   if ddcode$="A" then resp$(9)=opt_check_type$(3)
+12760   fnLbl(10,1,"Print Vacation and Sick Leave?",38,1)
+12780   fncomboa("prckprt-6",10,41,mat opt_yn$)
+12800   if accr$="Y" then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
+12820 ! 
+12840   respc=10
+12860 ! 
+12880   if cl_installed=0 and exists("[Q]\CLmstr\bankmstr.h[cno]") then 
+12900     fnLbl(11,1,"Bank Account:",38,1)
+12920     fncombof("Bankmstr",11,41,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing")
+12940     resp$(resp_cl_bankcode:=respc+=1)=str$(bankcode)
+12960   end if 
+12980   if exists("[Q]\PRmstr\hourclass.h[cno]") then 
+13000     fnLbl(12,1,"Comp Time Code:",38,1)
+13020     fncombof("timeclass",12,41,20,"[Q]\PRmstr\hourclass.h[cno]",1,5,6,25,"[Q]\PRmstr\hourclass-idx.h[cno]",1,0, "Select time classification code for comp time, if applicable.")
+13040     resp$(resp_combcode:=respc+=1)=compcode$
+13060   end if 
+13080   fnLbl(14,1,"Print All Checks (or ask after first):",38,1)
+13100   fncomboa("prckprt-prall",14,41,mat opt_yn$)
+13120   resp$(resp_skip_align=respc+=1)=skip_alignment$
+13140   if gl_installed then 
+13160     fnLbl(16,1,"General Ledger detected.",38,1)
+13180   end if 
+13200   if cl_installed then 
+13220     fnLbl(17,1,"Checkbook detected.",38,1)
+13240   end if 
+13260   fncmdkey('Test Check Format',ck_TestCheck:=21)
+13280   fnCmdSet(2) ! need button to show totals
+13300   fnAcs(sn$,0,mat resp$,ck)
+13320   if ck=5 then goto XIT ! /r
+13340   if ck=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
+13360 ! r: validate answers (and move to local variables from mat resp$)
+13380   d1                       =val(resp$(resp_payroll_date))            ! payroll date
+13400   pre$                     =uprc$(resp$(2)(1:1))                     ! pre-numbered checks Y or N
+13420   check_number             =val(resp$(3))                            ! check #
+13440   ckdat$                   =resp$(resp_date_of_checks)               ! check date
+13460   dat                      =val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
+13480   beginningEmployeeNumber =val(resp$(5))                             ! beginning employee #
+13500   acsclcv$                 =uprc$(resp$(6)(1:1))                     ! post Checkbook system
+13520   ficam1$                  =uprc$(resp$(7)(1:1))                     ! post fica match
+13540   sc1$                     =scc$(srch(mat opt_check_format$,resp$(8)))
+13560   ddcode$                  =uprc$(resp$(9)(1:1))                     ! regular check or direct deposit
+13580   accr$                    =uprc$(resp$(10)(1:1))                    ! pr vac and sick
+13600   if resp_cl_bankcode then 
+13620     bankcode               =val(resp$(resp_cl_bankcode)(1:3))        ! bank code
+13640   end if 
+13660   if resp_combcode then 
+13680     compcode$              =resp$(resp_combcode)(1:5)                ! comp time code
+13700   end if 
+13720 ! date_of_checks=val(ckdat$)
+13740   prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
+13760   skip_alignment$         =resp$(resp_skip_align)
+13780   if skip_alignment$='Yes' then allign=3
+13800 ! 
+13820   if acsclcv$="Y" then cl_installed=1 else cl_installed=0
+13840   if ficam1$="Y" then ficam1=1 else ficam1=0
+13860   if pre$="Y" then pre=1 else pre=0
+13880 ! if env$('client')="Washington Parrish" and (prdate<10100 or prdate>123199) then goto MAIN_QUESTIONS
+13900   beg_date=val(str$(d1)(1:4)&'0101')
+13920   end_date=val(str$(d1)(1:4)&'1231')
+13940   qtr1=val(str$(d1)(1:4)&str$(read_qtr1)(5:8))
+13960   qtr2=val(str$(d1)(1:4)&str$(read_qtr2)(5:8))
+13980   qtr3=val(str$(d1)(1:4)&str$(read_qtr3)(5:8))
+14000   qtr4=val(str$(d1)(1:4)&str$(read_qtr4)(5:8))
+14020   !
+14040   ! if d1<old_beg_date or d1>old_end_date then ! not this year
+14060   !   mat ml$(4)
+14080   !   ml$(1)='The Payroll Date you have choosen ('&cnvrt$('pic(zzzz/zz/zz)',d1)&') is is outside your years'
+14100   !   ml$(2)='beginning  and ending date range ('&cnvrt$('pic(zzzz/zz/zz)',old_beg_date)&' - '&cnvrt$('pic(zzzz/zz/zz)',old_end_date)&').'
+14120   !   ml$(3)='Checks with a payroll date outside this date range can not be processed.'
+14140   !   ml$(4)='Would you like to "Change Payroll Dates" now?'
+14160   !   fnmsgbox(mat ml$,resp$,'',16+4)
+14180   !   if resp$='Yes' then 
+14200   !     fnchain('S:\Payroll\Change Payroll Dates')
+14220   !   else ! if resp$='No' then
+14240   !     goto MAIN_QUESTIONS
+14260   !   end if 
+14280   ! end if 
+14300 ! pause
+14320 ! 
+14340   if check_number<0 then 
+14360     mat ml$(2)
+14380     ml$(1)="You must enter a valid check number!"
+14400     ml$(2)="Click OK to return to previous screen. "
+14420     fnmsgbox(mat ml$,resp$)
+14440     goto MAIN_QUESTIONS
+14460   end if 
+14480 ! /r
+15000 ! r: save answers for next time
+15020   fncreg_write('Prenumbered Checks',pre$)
+15040   fncreg_write('Post to CL',acsclcv$)
+15060   fncreg_write('Post Employer Portion of FiCA',ficam1$)
+15080   fncreg_write('Check Format',sc1$)
+15100   fncreg_write('Print Vacation and Sick Leave on Check',accr$)
+15120   fncreg_write('CL Bank Code',str$(bankcode))
+15140   fncreg_write('Comp Time Code',compcode$)
+15160   fnreg_write('PR.Check print.skip alignment',skip_alignment$)
+15180 ! /r
+16000 ! r: get and validate bank code if ACSCL is in play
+16020   if testCheckFormat then goto L1300
+16040   if cl_installed=1 then 
+16060     read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi nokey L1280 ioerr L1290
+16080   end if 
+16100   goto L1300
+16120   L1280: ! 
+16140   mat ml$(2)
+16160   ml$(1)="You must enter a valid bank code!"
+16180   ml$(2)="Click OK to return to previous screen. "
+16200   fnmsgbox(mat ml$,resp$)
+16220   goto MAIN_QUESTIONS
+16240   L1290: ! 
+16260   mat ml$(3)
+16280   ml$(1)="You have indicated that you want to post checkbook, "
+16300   ml$(2)="but no checkbook files can be found! "
+16320   ml$(3)="Click OK to return to previous screen. "
+16340   fnmsgbox(mat ml$,resp$)
+16360   goto MAIN_QUESTIONS
 17000 L1300: ! /r
 17010 ! if env$('client')<>"Washington Parrish" then prdate=d1
 17020   if ~testCheckFormat then
@@ -276,9 +283,9 @@
 17050     end if 
 17060     open #praddr:=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input 
 17070     open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\rpindex.h[cno],Shr",internal,input,keyed 
-17080     open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
-17090     open #3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
-17100     open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outIn,keyed 
+17080     open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
+17090     open #3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+17100     open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno]",internal,outIn,keyed 
 17110     open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed 
 17120     if fnclient_has('GL') and gl_installed=1 then 
 17130       gl_installed=0
@@ -331,7 +338,6 @@
 18080 L2070: ! 
 18100   if cl_installed=1 then let fn_cknum
 18120   fnopenprn
-18140   if env$('client')="Eldorado" then let fn_eldorado_check_and_stub : goto L2150
 18160   if sc1$="SCS" then let fn_print_stub : fn_print_check : fn_print_stub
 18180   if sc1$="CSS" then let fn_print_check : fn_print_stub : fn_print_stub
 18200   if sc1$="SSC" then let fn_print_stub : fn_print_stub : fn_print_check
@@ -499,7 +505,7 @@
 25100   open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
 25120   open #h_cl_trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
 25140   open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
-25160   !   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then
+25160   !   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 25180   open #h_cl_trans_alloc:=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed 
 25200   !   else 
 25220   !     open #h_cl_trans_alloc:=f: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
@@ -560,7 +566,7 @@
 27470   end if 
 27480   L4610: ! 
 27490   ! /r
-27500   !   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then
+27500   !   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 27510   tx3=val(tr$(3))
 27520   tr2=val(tr$(2))
 27530   write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
@@ -595,7 +601,7 @@
 27820      if j=3 then sd5$="FICA WH" : gl$=gln$(2) : fica0=val(ded$(j))
 27830      if j=4 then sd5$="Medicare" : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
 27840      if j=5 then sd5$="State WH" : gl$=gln$(3)
-27850      if j>5 and j<26 then sd5$=abrevname$(j-5) : gl$=gl$(j-5)
+27850      if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=gl$(j-5)
 27860      if j=26 then gl$=gln$(1): sd5$="eic" : goto L4990 ! use federal
 27870      if j=27 then goto L4990 ! skip tips i think
 27880      ! If J=28 Then gL$=GLN$(1): sD5$="Meals" : Goto 4890 ! use wages
@@ -693,7 +699,7 @@
 30270       L5870: ! 
 30280       if dedcode(j2-6)><3 then goto L5980
 30290       j4=j2-2
-30300       sd5$=de$=rtrm$(abrevname$(j4-4))&" Match"
+30300       sd5$=de$=rtrm$(abrevName$(j4-4))&" Match"
 30310       L5900: ! 
 30320       gl$=mgl$(j2-5)
 30330       read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
@@ -1314,7 +1320,7 @@
 60890     pr #255: '{\fs16 '; !   <-- set to font size 8 
 60900     fn_stub_hitBoxes(mat ltext$,mat lPos)
 60910     pr #255: "}" ! <-- end the font size of 8
-60920     fn_stub_energyExcnahger_extra(mat v,mat abrevname$,mat deptsum)
+60920     fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
 60930   else 
 60940     fn_stub_standard
 60950   end if 
@@ -1325,7 +1331,7 @@
 62020   pr #255: ""
 62040   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 62060   for j=1 to 20
-62080     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
+62080     if tty(j+4)=0 then abrevName$(j)="" else abrevName$(j)=hnames$(j)
 62100   next j
 62120   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 62140   if uprc$(accr$)="N" then 
@@ -1337,24 +1343,24 @@
 62260   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 62280   if uprc$(accr$)="N" then 
 62300     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-62320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+62320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 62340   else 
 62360     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-62380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+62380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 62400   end if 
-62420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-62440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-62460   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+62420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevName$(2),ttc(6),tty(6)
+62440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevName$(3),ttc(7),tty(7)
+62460   pr #255,using F_STUB_01: rt$,0,0,abrevName$(4),ttc(8),tty(8)
 62480   if trim$(compcode$)="" then 
-62500     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+62500     pr #255,using F_STUB_01: "",0,0,abrevName$(5),ttc(9),tty(9)
 62520   else 
 62540     fn_extract_comp_time
-62560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+62560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevName$(5),ttc(9),tty(9)
 62580   end if 
-62600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-62620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-62640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-62660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+62600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevName$(6),ttc(10),tty(10)
+62620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevName$(7),ttc(11),tty(11)
+62640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevName$(8),ttc(12),tty(12)
+62660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevName$(9),ttc(13),tty(13)
 62680   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
 62700   pr #255: ""
 62720   if stst_show_tips and ttc(28)<>0 then 
@@ -1371,7 +1377,7 @@
 63020   pr #255: ""
 63040   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 63060   for j=1 to 20
-63080     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
+63080     if tty(j+4)=0 then abrevName$(j)="" else abrevName$(j)=hnames$(j)
 63100   next j
 63120   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 63140   if uprc$(accr$)="N" then 
@@ -1383,24 +1389,24 @@
 63260   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 63280   if uprc$(accr$)="N" then 
 63300     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-63320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+63320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 63340   else 
 63360     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-63380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+63380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 63400   end if 
-63420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-63440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-63460   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+63420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevName$(2),ttc(6),tty(6)
+63440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevName$(3),ttc(7),tty(7)
+63460   pr #255,using F_STUB_01: rt$,0,0,abrevName$(4),ttc(8),tty(8)
 63480   if trim$(compcode$)="" then 
-63500     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+63500     pr #255,using F_STUB_01: "",0,0,abrevName$(5),ttc(9),tty(9)
 63520   else 
 63540     fn_extract_comp_time
-63560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+63560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevName$(5),ttc(9),tty(9)
 63580   end if 
-63600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-63620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-63640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-63660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+63600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevName$(6),ttc(10),tty(10)
+63620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevName$(7),ttc(11),tty(11)
+63640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevName$(8),ttc(12),tty(12)
+63660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevName$(9),ttc(13),tty(13)
 63680   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
 63700   pr #255: ""
 63720   pr #255: ""
@@ -1419,7 +1425,7 @@
 64140   pr #255: ""
 64160   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 64180   for j=1 to 20
-64200     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
+64200     if tty(j+4)=0 then abrevName$(j)="" else abrevName$(j)=hnames$(j)
 64220   next j
 64240   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 64260   if uprc$(accr$)="N" then 
@@ -1431,24 +1437,24 @@
 64380   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 64400   if uprc$(accr$)="N" then 
 64420     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-64440     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+64440     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 64460   else 
 64480     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-64500     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+64500     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevName$(1),ttc(5),tty(5)
 64520   end if 
-64540   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-64560   pr #255,using F_STUB_01: "",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-64580   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+64540   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevName$(2),ttc(6),tty(6)
+64560   pr #255,using F_STUB_01: "",0,ttc(28),abrevName$(3),ttc(7),tty(7)
+64580   pr #255,using F_STUB_01: rt$,0,0,abrevName$(4),ttc(8),tty(8)
 64600   if trim$(compcode$)="" then 
-64620     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+64620     pr #255,using F_STUB_01: "",0,0,abrevName$(5),ttc(9),tty(9)
 64640   else 
 64660     fn_extract_comp_time
-64680     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+64680     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevName$(5),ttc(9),tty(9)
 64700   end if 
-64720   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-64740   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-64760   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-64780   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+64720   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevName$(6),ttc(10),tty(10)
+64740   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevName$(7),ttc(11),tty(11)
+64760   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevName$(8),ttc(12),tty(12)
+64780   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevName$(9),ttc(13),tty(13)
 64800   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
 64820   pr #255: ""
 64840   pr #255: ""
@@ -1502,7 +1508,7 @@
 74000 def fn_determine_earnings
 74020   mat caf=(0): mat ttc=(0): mat ttdc=(0)
 74040   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0)
-74060   mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
+74060   mat qtr4tcp=(0): mat ytdTotal=(0): mat tdc=(0): mat tty=(0)
 74080   fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 74100   medqtr=eicyr=eicqtr=wagesqtr=0
 74120   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
@@ -1517,21 +1523,20 @@
 74260   if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp
 74280   if prd>=qtr3 and prd<qtr4 then mat qtr3tcp=qtr3tcp+tcp
 74300   if prd>=qtr4 and prd<=end_date then mat qtr4tcp=qtr4tcp+tcp
-74320   mat ytdtotal=ytdtotal+tcp
+74320   mat ytdTotal=ytdTotal+tcp
 74340   mat tty=tty+tcp
 74360   if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
 74380   if prd=d1 then let fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
-74420   if env$('client')="Eldorado" then let fn_accumulate_dept_totals2
 74430   if env$('client')="Energy Exchanger" then let fn_accumulate_dept_totals2
 74440   if prd=d1 then rewrite #3,using "form pos 18,n 7",rec=lastrec: check_number
 74460   goto L6580
 74480   STORE_VARIABLES: ! 
-74500   !   wagesyr=ytdtotal(31) ! total wages
-74520   fedyr=ytdtotal(1) ! ytdl fed
-74540   ficayr=ytdtotal(2) ! fica year to date
-74560   medyr=ytdtotal(3) ! medicare year to date
-74580   stateyr=ytdtotal(4) ! total state  quarter
-74600   eicyr=ytdtotal(25) ! eic
+74500   !   wagesyr=ytdTotal(31) ! total wages
+74520   fedyr=ytdTotal(1) ! ytdl fed
+74540   ficayr=ytdTotal(2) ! fica year to date
+74560   medyr=ytdTotal(3) ! medicare year to date
+74580   stateyr=ytdTotal(4) ! total state  quarter
+74600   eicyr=ytdTotal(25) ! eic
 74620   if prd>=qtr1 and prd<qtr2     then mat quartertotals=qtr1tcp
 74640   if prd>=qtr2 and prd<qtr3     then mat quartertotals=qtr2tcp
 74660   if prd>=qtr3 and prd<qtr4     then mat quartertotals=qtr3tcp
@@ -1543,7 +1548,7 @@
 74780   stateqtr=quartertotals(4) ! total state  quarter
 74800   eicqtr=quartertotals(25) ! EIC qtr
 74820   !   for j=1 to 20
-74840   !     if dedfed(j)=1 then dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
+74840   !     if dedfed(j)=1 then dedfedyr+=ytdTotal(j+4) ! deduct for federal wh
 74860   !   next j
 74880   L6920: ! 
 74900 fnend 
@@ -1642,67 +1647,7 @@
 82240   medic3=medic3+medic2
 82260   MFEND: ! 
 82280 fnend 
-84000 def fn_eldorado_check_and_stub
-84020   ! meant for use at top and bottom margin at .5, left and right at .3, font size 9
-84040   !  fn_accumulate_dept_totals2
-84100   pr #255: ""
-84120   pr #255: ""
-84140   pr #255,using 'form pos 82,pic(zz/zz/zz)': dat
-84160   pr #255: ""
-84180   pr #255,using 'form pos 82,n 10': check_number
-84200   pr #255: ""
-84220   pr #255: ""
-84240   pr #255: ""
-84280   if ttc(32)<0 then ttc(32)=0
-84300   pr #255,using 'form pos 7,c 62,pos 85,pic($$$$$,$$$.##)': eng$(1:n1),ttc(32)
-84340   pr #255,using X7660: eng$(n1+1:128)
-84360   X7660: form pos 9,c 70,skip 3
-84380   pr #255,using X7700: em$(1)
-84400   pr #255,using X7700: em$(2)
-84420   pr #255,using X7701: em$(3) : goto PRINTSTUB_ELDORADO
-84440   X7700: form pos 10,c 30
-84460   X7701: form pos 10,c 30,skip 11
-84480   pr #255,using X7720: eno,d1,rate,tdc1,tdc(2),tcp(26),tcp(27),tcp(28),dat
-84500   ! pr #255,using X7720: eno,d1,rate,tdc1,tdc2,ttc(16),ttc(17),ttc(18),dat
-84520   X7720: form skip 11,pos 1,n 6,x 4,pic(zzzz/zz/zz),2*n 9.2,n 9.2,n 12.2,n 12.2,n 12.2,pos 95,pic(zz/zz/zz)
-84540   pr #255: ''
-84560   pr #255: ''
-84580   pr #255,using X7740: abrevname$(1),abrevname$(2),abrevname$(3),abrevname$(4)
-84600   X7740: form pos 44,4*c 9
-84620   pr #255: ""
-84640   pr #255,using X7760: ttc(31),ttc(1),ttc(3),ttc(2)+ttc(4),ttc(5),ttc(6),ttc(7),ttc(8),0,ttc(32)
-84660   X7760: form pos 1,2*n 9.2,5*n 9.2,n 8.2,n 8.2,pos 93,pic($$$,$$$.##)
-84680   pr #255: ""
-84700   pr #255,using X7780: ytdtotal(31),ytdtotal(1),ytdtotal(3),ytdtotal(2)+ytdtotal(4),ytdtotal(5),ytdtotal(6),ytdtotal(7),ytdtotal(8),0 ! ,YTDTOTAL(9)
-84720   X7780: form pos 1,7*n 10.2,n 8.2,n 8.2
-84740   pr #255: ""
-84760   pr #255: ""
-84780   pr #255: ""
-84800   pr #255: ""
-84820   for x=1 to 6
-84840     if deptsum(x)=0 then 
-84860       pr #255,using X7850: abrevname$(x+4),v(x,7),v(x,8)
-84880       X7850:  form pos 60,c 8,x 2,pic(-----------.##),x 5,pic(-----------.##)
-84900     else 
-84920       pr #255,using X7820: deptsum(x),v(x,1),v(x,2),v(x,3),v(x,4),v(x,5),v(x,6),abrevname$(x+4),v(x,7),v(x,8)
-84940       X7820:  form pos 1,g 3,x 1,4*n 8.2,n 9.2,n 12.2,x 2,c 8,x 7,n 9.2,x 10,n 9.2
-84960     end if 
-84980   next x
-85000   if v(7,6)=0 then 
-85020     pr #255,using X7850: "Total",v(7,7),v(7,8)
-85040   else 
-85060     pr #255,using X7820: "",v(7,1),v(7,2),v(7,3),v(7,4),v(7,5),v(7,6),"Total",v(7,7),v(7,8)
-85080   end if 
-85100   ! tDC1=TDC2=0
-85120   rate=0
-85140   mat v=(0)
-85160   for k=1 to 6
-85180     deptsum(k)=0
-85200   next k
-85220   if check_number>0 then check_number=check_number+1
-85240   PRINTSTUB_ELDORADO: pr #255: ""
-85260   fn_print_stub
-85280 fnend 
+
 88000 INVALIDGLNUMBER: ! r:
 88020   fnTos(sn$="Prckprt3")
 88040   mylen=30 : mypos=mylen+2
@@ -1735,7 +1680,6 @@
 88600   read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
 88620   on cd1 goto BCR_GLN_VALIDATED,EXLNKD_L5920 none BCR_GLN_VALIDATED
 88640 ! /r
-
 
 89000 def fn_getTestValues
 89010   eno=999

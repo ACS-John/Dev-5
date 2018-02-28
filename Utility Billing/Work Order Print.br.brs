@@ -7,7 +7,7 @@
 20120       if trim$(srvnam$(3))='Association Fee' then s3_non_metered=1 else s3_non_metered=0
 20140     end if
 24040     !
-26000     fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
+26000     fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
 26020     fnopenprn( 0,0,0,0,z$,'Work Order Add','Work Order')
 26040     !
 28000     pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"

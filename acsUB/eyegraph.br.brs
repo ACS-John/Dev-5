@@ -19,8 +19,8 @@
 00200   fntop("S:\acsUB\UBbargraph",cap$="Bar Graph")
 00220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
 00235   goto SCREEN1
-00240   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00240   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+00250   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00260 L260: read #1,using L1050,release: z$,e$,bildat eof SCREEN1
 00270   if bildat<>d1 then goto L260 ! current customer
 00280   restore #2,key>=z$&"         ": nokey L260
@@ -252,7 +252,7 @@
 02050 ! ______________________________________________________________________
 03000 VBOPENPRINT: ! r:
 03020   if file(20)=-1 then 
-03040     open #20: "Name="&env$('Q')&"\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
+03040     open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
 03060     pr #20: 'Call Print.MyOrientation("Landscape")'
 03080     lyne=margin ! starting of 1st line
 03100     column1=16

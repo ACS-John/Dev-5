@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00100   fntop(program$)
 00120   fndat(dat$,1)
-00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative
+00130   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
 00132   read #20,using 'Form POS 152,N 2',rec=1,release: bank_code 
 00134   close #20: 
 00140 MAIN: ! 
@@ -31,14 +31,14 @@
 00260   b1=val(resp$(2))
 00270   bank_code=val(resp$(3))
 00280 ! ______________________________________________________________________
-00290   open #20: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&", KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr", internal, outin, keyed  
+00290   open #20: "Name=[Q]\CLmstr\BankMstr.H[cno], KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr", internal, outin, keyed  
 00292   read #20,using 'Form POS 3,C 30',key=lpad$(str$(bank_code),2),release: bn$ nokey MAIN
 00300   close #20: 
 00310 ! ______________________________________________________________________
 00320   close #trmstr: ioerr ignore
-00330   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\Tridx3.H"&env$('cno')&" 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
+00330   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\Tridx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
 00340 ! ______________________________________________________________________
-00350   open #trmstr=5: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&", KFName="&env$('Q')&"\CLmstr\Tridx3.H"&env$('cno')&",Shr", internal, outin, keyed ioerr ignore
+00350   open #trmstr=5: "Name=[Q]\CLmstr\TrMstr.H[cno], KFName=[Q]\CLmstr\Tridx3.H[cno],Shr", internal, outin, keyed ioerr ignore
 00360   fnopenprn
 00370   gosub HDR
 00380   goto READ_1

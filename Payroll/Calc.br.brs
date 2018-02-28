@@ -400,7 +400,7 @@
 02530   close #hEmployee: 
 02540   close #h_department: 
 02550   close #h_rpwork: ! ,Free:
-02570   fnFree(env$('Q')&"\PRmstr\jcprh1.h"&env$('cno')) ! get rid of jobcost time entry file if exists
+02570   fnFree("[Q]\PRmstr\jcprh1.h[cno]") ! get rid of jobcost time entry file if exists
 02580   goto XIT ! /r
 02590 XIT: fnxit
 02600 IGNORE: continue 
@@ -510,7 +510,7 @@
 03620 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
 
 14000 ASKDATES: ! r:
-14020   open #h_dates:=11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76,shr",internal,outIn,relative 
+14020   open #h_dates:=11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76,shr",internal,outIn,relative 
 14040   read #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1,release: beg_date,end_date,d1,d1$ noRec ASKDATES_WRITE_DATE
 14060   goto ASKDATES_SCREEN
 14080   ASKDATES_WRITE_DATE: ! 
@@ -602,7 +602,7 @@
 16500   motab(mtc+=1)=90  : motab(mtc+=1)=120 : motab(mtc+=1)=151
 16520   motab(mtc+=1)=181 : motab(mtc+=1)=212 : motab(mtc+=1)=243
 16540   motab(mtc+=1)=273 : motab(mtc+=1)=304 : motab(mtc+=1)=334
-17000   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+17000   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 17020   read #20,using 'Form POS 145,PD 5.2,POS 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,POS 618,30*N 1,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
 17040   close #20: 
 17060   ficamax=ficamax*10
@@ -619,12 +619,12 @@
 17280   ! end if 
 17300 fnend 
 20000 def fn_setupOpenFiles
-20020   open #breakdown=fngethandle: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
-20040   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno'),internal,outIn,keyed  ! formerly file #1
-20060   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-20080   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
-20100   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
-20120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
+20020   open #breakdown=fngethandle: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
+20040   open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno]",internal,outIn,keyed  ! formerly file #1
+20060   open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
+20080   open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+20100   open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
+20120   open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]",internal,outIn,keyed 
 20140   F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 20160 fnend
 22000 GET_ALPHA_DATE: ! r:

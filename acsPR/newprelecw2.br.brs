@@ -18,7 +18,7 @@
 10340   dim tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 10360   dim w2(9),i1(9),t1(9),ct$*20,st$*2
 10380   dim terminat$*1,first$*15,mid$*15,last$*20,resp$(40)*256,path$*256
-10400   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+10400   open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 10420   read #hCompany,using fCompany: mat a$,federal_id$,loccode
 10440   fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
 10460   close #hCompany: 
@@ -31,10 +31,10 @@
 10600   med$="Y"
 10620 ! /r
 11000   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-11020   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-11040   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+11020   open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+11040   open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 12000 ! r: initialize variables
-12020   fnureg_read('electronic w-2 file',path$,os_filename$(env$('userprofile')&'\Desktop\w2elec-'&env$('cno')))
+12020   fnureg_read('electronic w-2 file',path$,os_filename$(env$('userprofile')&'\Desktop\w2elec-[cno]'))
 12040   beg_date=val('0101'&date$(days(date$)-180,'YY'))
 12060   end_date=val('1231'&date$(days(date$)-180,'YY'))
 12080   yr=date(days(date$)-180,'ccyy')
@@ -247,7 +247,7 @@
 24080   fncreg_write('W-2 Company City',ct$)
 24100   fncreg_write('W-2 Company State',st$)
 24120   fncreg_write('W-2 Company Zip',zip$)
-24140   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,outIn 
+24140   open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,outIn 
 24160   rewrite #hCompany,using 'form pos 1,x 120,c 12,pos 150,x 80,n 2',rec=1: federal_id$,loccode
 24180   close #hCompany: 
 24200   fncreg_write('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',str$(ins))

@@ -38,12 +38,12 @@
         end_date=val(resp$(2))
 00320   begytd_date=val(resp$(3)) !:
         endytd_date=val(resp$(4))
-00330   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
+00330   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00340   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 00350   nametab=66-int(len(rtrm$(cnam$))/2)
-00360   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00370   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outIn,relative 
+00360   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed 
+00370   open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative 
 00380 L380: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof XIT
 00390   fixqtr=fixytd=0
 00400   if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440

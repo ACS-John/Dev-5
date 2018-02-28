@@ -35,16 +35,16 @@
 14520   opt_accum_type$(accum_type_average:=2)='Average'
 14540 ! /r
 14560 ! r: open files
-14580   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-14600 ! open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
-14610   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+14580   open #h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+14600 ! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+14610   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 14620 ! /r
 25000 ! r: get default answers
 25010   dim scr1_resp$(14)*80
-25020   fnreg_read('Company.'&env$('cno')&'.ubusage2.last_run_date',last_run_date$)
+25020   fnreg_read('Company.[cno].ubusage2.last_run_date',last_run_date$)
 25040   if last_run_date$<>'' and days(last_run_date$,'ccyy/mm/dd')+30>days(date$) then ! if run within the last 30 days do this
 25060     for resp_item=1 to udim(mat scr1_resp$)
-25080       fnreg_read('Company.'&env$('cno')&'.ubusage2.answer.'&str$(resp_item),scr1_resp$(resp_item))
+25080       fnreg_read('Company.[cno].ubusage2.answer.'&str$(resp_item),scr1_resp$(resp_item))
 25100     next resp_item
 25120   else 
 25140 BDR_READ: ! 
@@ -118,9 +118,9 @@
 30220   accum_type=max(1,srch(mat opt_accum_type$,scr1_resp$(14)))
 30240 ! /r
 34000 ! r: save answers
-34020   fnreg_write('Company.'&env$('cno')&'.ubusage2.last_run_date',date$('ccyy/mm/dd'))
+34020   fnreg_write('Company.[cno].ubusage2.last_run_date',date$('ccyy/mm/dd'))
 34040   for resp_item=1 to udim(mat scr1_resp$)
-34060     fnreg_write('Company.'&env$('cno')&'.ubusage2.answer.'&str$(resp_item),scr1_resp$(resp_item))
+34060     fnreg_write('Company.[cno].ubusage2.answer.'&str$(resp_item),scr1_resp$(resp_item))
 34080   next resp_item
 34100 ! /r
 36020   fnopenprn

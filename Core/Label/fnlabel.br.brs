@@ -223,7 +223,7 @@
 01990 ! ______________________________________________________________________
 02000 VBOPENPRINT: ! 
 02010   fnpa_open ! if file(20)=-1 then
-02020 !   open #20: "Name="&env$('Q')&"\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output
+02020 !   open #20: "Name=[Q]\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output
 02030 !   pr #20: 'Call Print.MyOrientation("Portrait")'
 02032   pr #20: 'Call Print.MyFontsize(12)'
 02040   lyne=4

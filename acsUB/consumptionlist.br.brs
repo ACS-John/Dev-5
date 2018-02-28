@@ -44,7 +44,7 @@
 48192     goto MAIN
 48200   end if 
 48220   rcode=val(resp$(3))
-54000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+54000   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 54040   fnopenprn
 54060   gosub PRINTIT
 58000 DONE: close #1: ioerr ignore

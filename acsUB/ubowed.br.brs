@@ -45,8 +45,8 @@
 00390   on fkey 5 goto DONE
 00400   fnopenprn
 00410   gosub HEADER
-00430   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00440   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00430   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+00440   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 00450 READ_CUSTOMER: ! 
 00460 L460: read #1,using 'Form POS 1,C 10,POS 41,C 30,POS 155,PD 2,POS 292,PD 4.2,POS 296,PD 4,POS 300,12*PD 4.2,POS 348': z$,e$,a7,bal,f,mat g eof L640
 00470   if bal=0 then goto L460

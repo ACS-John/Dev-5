@@ -43,7 +43,7 @@
 00243   if resp$(4)="Sewer" then !:
           svce=4
 00260   fnopenprn
-00350   open #1: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00350   open #1: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00510 L510: ! 
 00540   for k9=1 to 20
 00550     pr f "20,13,C 11,N": "Rate Code:"

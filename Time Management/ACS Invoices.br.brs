@@ -26,17 +26,17 @@
 20660   if cmdkey=5 or fkey=99 then goto XIT
 20680   b4=date(days(inv_date,"mmddyy"),"ccyymmdd")
 20690   fnAutomatedSavePoint('before')
-20300   open #h_clmstr:=fngethandle: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+20300   open #h_clmstr:=fngethandle: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed 
 20320 ! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
-20340 ! execute "Index "&env$('Q')&"\TMmstr\support.h"&env$('cno')&"  "&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&" 1/7,6/2,replace,DupKeys"
-20360   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\Support.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&",Shr",internal,input,keyed 
+20340 ! execute "Index [Q]\TMmstr\support.h[cno]  [Q]\TMmstr\support-idx.h[cno] 1/7,6/2,replace,DupKeys"
+20360   open #h_support:=fngethandle: "Name=[Q]\TMmstr\Support.h[cno],KFName=[Q]\TMmstr\support-idx.h[cno],Shr",internal,input,keyed 
 20380 F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-20400   fn_thsht_combine_entries(env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno'),"TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
+20400   fn_thsht_combine_entries("[Q]\TMmstr\TIMESHEET.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 20700   restore #h_clmstr,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
 20710   pr newpage
 20720   pr f "10,10,Cc 60": "Printing Invoices..."
-22000 ! r: process env$('Q')&"\TMmstr\TMWK1"&wsid$&".h"&env$('cno')
-22020   open #h_tmwk1:=fngethandle: 'Name='&env$('Q')&'\TMmstr\TMWK1.h'&env$('cno')&',Replace,RecL=2484,Shr',internal,outIn 
+22000 ! r: process "[Q]\TMmstr\TMWK1"&wsid$&".h[cno]"
+22020   open #h_tmwk1:=fngethandle: 'Name=[Q]\TMmstr\TMWK1.h[cno],Replace,RecL=2484,Shr',internal,outIn 
 22040   F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 22060   dim cde$(30)*6
 22080   dim inv_item$(30)*55
@@ -93,7 +93,7 @@
 24000 EOJ: ! r:
 24020   fn_summary_print
 24040   fncloseprn
-24060   open #h_ivnum:=fngethandle: "Name="&env$('Q')&"\TMmstr\IVNUM.h"&env$('cno')&",Use,RecL=8,Shr",internal,outIn,relative 
+24060   open #h_ivnum:=fngethandle: "Name=[Q]\TMmstr\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
 24080   rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 24100   close #h_ivnum: 
 24120   close #h_clmstr: 

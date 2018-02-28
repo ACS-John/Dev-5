@@ -9,11 +9,11 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then fen$="Ccat.h"&env$('cno') else !:
-            fen$="CcatALL.h"&env$('cno')
-00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\catindx.h"&env$('cno') else !:
+00120     if addall=0 then fen$="Ccat.h[cno]" else !:
+            fen$="CcatALL.h[cno]"
+00130     if indexfile$="" then if$="[Q]\PRmstr\catindx.h[cno]" else !:
             if$=indexfile$
-00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\jccat.h"&env$('cno'),1,11,12,25,if$,1+addall,1,"Select from the list of categories. To add a category record, go to the Category File.",container)
+00140     fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,if$,1+addall,1,"Select from the list of categories. To add a category record, go to the Category File.",container)
 00150     indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

@@ -53,7 +53,7 @@
 32000   fntop(program$,cap$="State UnEmp Report")
 32080   fncreg_read('calculation date text',quarter_ending_date$)
 32160   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
-32220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+32220   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 32240   read #1,using 'Form POS 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,POS 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 32260   close #1: 
 32280   ficamaxw=ficamaxw*10
@@ -94,7 +94,7 @@
 34400   fnChk(8,40,"Show State Tax Withheld:",1)
 34420   resp$(respc+=1)=column$(4)
 34440   fnLbl(10,1,"Payroll Department:",26,1)
-34460   fncombof("DeptName",10,30,29,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),2,0, " ",0,0)
+34460   fncombof("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
 34480   resp$(respc+=1)='[All]'
 34580   fnCmdSet(2)
 34600   fnAcs(sn$,0,mat resp$,ck)
@@ -124,9 +124,9 @@
 38040   fnopenprn
 38060   if file$(255)(1:3)="PRN" then redir=0 else redir=1
 38080 ! ______________________________________________________________________
-38100   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-38120   open #h_department:=3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-38140   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+38100   open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+38120   open #h_department:=3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
+38140   open #h_payrollchecks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 38160   gosub HDR
 42000 TOP: ! 
 42020   read #2,using "Form POS 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE

@@ -9,7 +9,7 @@
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$='Chart of Accounts')
 00100   fncno(cno)
-00110 ! Open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",Internal,Input,Relative  !:
+00110 ! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",Internal,Input,Relative  !:
         ! Read #20,Using 'Form POS 150,2*N 1',Rec=1: D(1),D(2) !:
         ! Close #20:
 00115   d(1)=d(2)=1 ! default to fund number and sub number
@@ -17,12 +17,12 @@
 00130   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
 00135   gosub CLOSE_FILE
-00136   fnindex_it(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno'), env$('Q')&"\UBmstr\glindex.h"&env$('cno'),"1 12")
+00136   fnindex_it("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
 00140   goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\UBmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed 
+00170   open #open_file_count+=1: "Name=[Q]\UBmstr\GLmstr.h[cno],Version=0,KFName=[Q]\UBmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

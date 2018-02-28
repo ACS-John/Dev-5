@@ -9,10 +9,10 @@
 00090 ! ______________________________________________________________________
 00100   ! fnconsole(off=0)
 00110   fntop(program$,"Duplicate Range of Accounts")
-00130   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00130   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00140   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00150   close #company: 
-00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00170   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00180   fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
 00190 ! ______________________________________________________________________
@@ -39,15 +39,15 @@
 00370 ! 
 00380   fnLbl(1,1,"Beginning                         Ending",90,right,0,2)
 00390   fnLbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
-00400   fncombof("fs-bal",2,43,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
+00400   fncombof("fs-bal",2,43,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsbindx.h[cno]",0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
 00402   resp$(rc+=1)="" ! first balance sheet ref # to be duplicated
-00410   fncombof("fs-bal2",2,85,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
+00410   fncombof("fs-bal2",2,85,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsbindx.h[cno]",0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
 00412   resp$(5)="" ! ending balance sheet ref # to be duplicated
 00420   fnLbl(4,1,"Beginning                         Ending",90,right,0,2)
 00430   fnLbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
-00440   fncombof("fs-inc",5,43,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
+00440   fncombof("fs-inc",5,43,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsiindx.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
 00442   resp$(rc+=1)="" ! 1st income statement ref # to be duplicated
-00450   fncombof("fs-inc-2",5,85,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
+00450   fncombof("fs-inc-2",5,85,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsiindx.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
 00452   resp$(rc+=1)="" ! last income statement ref # to be duplicated
 00460   fnLbl(7,1,"First new reference # to be used:",mylen,right,0,2)
 00470   fnTxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
@@ -93,7 +93,7 @@
 00860   if rf(1)>0 then fln=1: goto L890
 00870   if rf(3)>0 then fln=2: goto L890
 00880   goto L830
-00890 L890: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",Shr",internal,outIn,keyed 
+00890 L890: open #2: "Name=[Q]\GLmstr\"&fil$(fln)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fln)&".h[cno],Shr",internal,outIn,keyed 
 00900   restore #2,key=lpad$(str$(fin(1)),5): nokey L970
 00910 L910: read #2,using L920: rno,d$,te$,mat ac eof L980
 00920 L920: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3
@@ -123,8 +123,8 @@
 01160 END1: !
 01162   close #1: 
 01170   close #2: ioerr ignore
-01180   ! Execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&","&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",1,12,Replace,DupKeys -n"
-01190   if fln>0 then execute "Index "&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&","&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",1,5,Replace,DupKeys -n"
+01180   ! Execute "Index [Q]\GLmstr\GLmstr.h[cno],[Q]\GLmstr\GLIndex.h[cno],1,12,Replace,DupKeys -n"
+01190   if fln>0 then execute "Index [Q]\GLmstr\"&fil$(fln)&".h[cno],[Q]\GLmstr\"&idx$(fln)&".h[cno],1,5,Replace,DupKeys -n"
 01200   goto MAIN
 01210 ! ______________________________________________________________________
 01220 XIT: fnxit

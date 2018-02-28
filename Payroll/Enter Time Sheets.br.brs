@@ -38,16 +38,16 @@
 00290   next j
 00295   pathtotimecard$="C:\progra~1\acs\"
 00300 ! /r
-00428   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00428   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00430   read #1,using 'form pos 726,pd 3.2': mhw
 00440   close #1: 
-00450   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outIn,relative 
+00450   open #11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76",internal,outIn,relative 
 00460   read #11,using "form pos 49,n 8,c 20",rec=1: d1,d1$ noRec ignore
 00470   close #11: 
 00471 ! 
-00472   open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
+00472   open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr ignore
 00480 ! 
-00490   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prwork"&wsid$&"idx.H"&env$('cno'),internal,outIn,keyed ioerr ignore
+00490   open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.H[cno]",internal,outIn,keyed ioerr ignore
 00500 F_RPWORK: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 00502 ! ______________________________________________________________________
 00510 SCREEN_1: ! 
@@ -75,7 +75,7 @@
 00630   fnOpt(4,3,"Pull time from job cost system",0,franum)
 00632   resp$(rc+=1)="False"
 00640   fnLbl(6,1,"Employment Status:",mylen,1,0,franum)
-00650   fncombof("EmpStatus",6,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
+00650   fncombof("EmpStatus",6,mylen+3,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
 00652   resp$(rc+=1)=""
 00660   fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 00670   fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
@@ -129,24 +129,24 @@
 00880     if resp$(j)="True" then skipit$(j)="Y" else skipit$(j)="N"
 00890   next j
 00900 L900: if noauto<>2 then em4=0 ! don't allow any employment status code if not selecting to automatically pay salaried
-00902   if (~exists(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')) and additional=2) or additional<>2 then 
+00902   if (~exists("[Q]\PRmstr\rpwork"&wsid$&".h[cno]") and additional=2) or additional<>2 then 
 00904     close #h_rpwork:=3,free: ioerr ignore
-00906     open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output 
+00906     open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],RecL=167,Replace",internal,output 
 00907     close #h_rpwork: 
 00908   end if 
-00909   fnindex_it(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),"1,11")
+00909   fnindex_it("[Q]\PRmstr\rpwork"&wsid$&".h[cno]","[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]","1,11")
 00910   fnStatusClose
 00911   if additional=2 then 
-00912 !   if exists(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')) then
+00912 !   if exists("[Q]\PRmstr\rpwork"&wsid$&".h[cno]") then
 00914     gosub OFILE
 00916     gosub PRINT_LISTING
 00918 !    end if
 00920     goto PROOF_TOTALS
 00922   end if 
 00928 ! close #h_rpwork:=3,free: ioerr ignore
-00930 ! open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output
+00930 ! open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],RecL=167,Replace",internal,output
 00940 ! close #h_rpwork:
-00950 ! execute "Index "&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&' '&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&" 1,11 replace,DupKeys -N"
+00950 ! execute "Index [Q]\PRmstr\rpwork"&wsid$&".h[cno]"&' '&"[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno] 1,11 replace,DupKeys -N"
 00960   gosub OFILE
 01050   if jobcost=1 then goto PULL_FROM_JOBCOST
 01060 L1060: ! 
@@ -431,7 +431,7 @@
 05000 ! /r
 35000 GOCALK: ! r:
 35020   close #11: ioerr ignore
-35040   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outIn,relative 
+35040   open #11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76",internal,outIn,relative 
 35060   rewrite #11,using "form pos 49,n 8,c 20",rec=1: fndate_mmddyy_to_ccyymmdd(prd),d1$ noRec ignore
 35080   close #11: 
 35100   if jobcost=1 then close #5,free: 
@@ -528,16 +528,16 @@
 38680   goto ASK_TIME
 38700 ! /r
 42000 OFILE: ! r: OPEN FILES
-42020   open #h_rpmstr:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+42020   open #h_rpmstr:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
 42040 F_RPMSTR_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
 42060 F_RPMSTR_2: form pos 162,n 6,pd 5.2
 42070 F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
 42080   close #11: ioerr ignore
-42100   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+42100   open #11: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDX2.h[cno],Shr",internal,outIn,keyed 
 42120   close #2: ioerr ignore
-42140   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+42140   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 42160   close #h_rpwork:=3: ioerr ignore
-42180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&',shr',internal,outIn,keyed 
+42180   open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]"&',shr',internal,outIn,keyed 
 42200   close #4: ioerr ignore
 42220   open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4630 ! timecard
 42240   timecard=1 ! timecard files exist
@@ -598,13 +598,13 @@
 56000 PULL_FROM_JOBCOST: ! r:
 56020 ! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 56040   gosub SORTIT
-56060   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,input,relative 
+56060   open #5: "Name=[Q]\PRmstr\JCPRH1.H[cno]",internal,input,relative 
 56080   open #6: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
 56100   close #h_rpwork:=3: ioerr ignore
-56120   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output 
+56120   open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],RecL=167,Replace",internal,output 
 56140   close #h_rpwork: 
-56160   execute "Index "&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&' '&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno')&" 1,11 replace,DupKeys -N"
-56180   open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,outIn,keyed 
+56160   execute "Index [Q]\PRmstr\rpwork"&wsid$&".h[cno]"&' '&"[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno] 1,11 replace,DupKeys -N"
+56180   open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]",internal,outIn,keyed 
 56200 ! Restore #h_rpmstr:
 56220 ! Read #h_rpmstr,Using 5480: EN$ Eof 5520
 56240 ! Form POS 1,C 8
@@ -682,7 +682,7 @@
 57700 ! /r
 60000 SORTIT: ! r:
 60020   open #15: "Name="&env$('Temp')&"\Sort"&session$&".tmp,RecL=128,Replace",internal,output 
-60040   write #15,using 'form pos 1,c 128': "FILE "&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
+60040   write #15,using 'form pos 1,c 128': "FILE [Q]\PRmstr\JCPRH1.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
 60060   write #15,using 'form pos 1,c 128': "MASK 1,8,N,A,10,2,PD,A"
 60080   close #15: 
 60100   close #6: ioerr ignore
@@ -715,7 +715,7 @@
 62460   end if 
 62480 ! /r
 64000   def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp)
-64020     open #apt_h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,input,keyed ioerr APT_FINIS
+64020     open #apt_h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]",internal,input,keyed ioerr APT_FINIS
 64040     apt_heno=0 ! temp variable for internal comparison
 64060     apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
 64080     apt_count_employees_entered=0 ! total unique employees entered

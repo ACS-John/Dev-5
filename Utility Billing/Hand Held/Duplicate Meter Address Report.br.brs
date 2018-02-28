@@ -14,7 +14,7 @@
 20020 fnopenprn
 30000 ! r: Duplicate LocationIDs vs Customer records
 30020   pr #255: 'Duplicate LocationIDs vs Customer'
-30040   open #hCustomer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+30040   open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 30060   customersWithDuplicateLiCount=0
 30080   ! r: build list: mat customerAccountList$ (account numbers) and mat customerLocationIdList (LocationIDs)
 30100     dim customerMeterAddress$*30

@@ -6,7 +6,7 @@
 00060     fncno(cno)
 00070     get=1 : put=2
 00080     if trim$(cch$)="" then get_or_put=get else get_or_put=put
-00090     open #tmp=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+00090     open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
 00100     if get_or_put=get then !:
             read #tmp,using "Form POS 276,C 20",rec=1: cch$ noRec CLOSE_TMP
 00110     if get_or_put=put then !:

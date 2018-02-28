@@ -10,7 +10,7 @@
 00100 L100: if fnprocess=0 then goto XIT
 00110 ! ______________________________________________________________________
 00120   pgnum=fnpgnum
-00130   open #20: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&env$('cno')&",Shr",internal,input,relative ioerr MSGBOX1 !:
+00130   open #20: "Name=[Q]\GLmstr\ACGLPGMN.h[cno],Shr",internal,input,relative ioerr MSGBOX1 !:
         read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,noRec XIT !:
         close #20: 
 00140   if rtrm$(prg$)="" then goto L220
@@ -20,14 +20,14 @@
 00180 MSGBOX1: ! 
 00190   mat ml$(3) !:
         ml$(1)="The order for automatic processing has" !:
-        ml$(2)="never been set for company # "&env$('cno')&"." !:
+        ml$(2)="never been set for company # [cno]." !:
         ml$(3)="Click OK to skip this company." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00200   goto L220
 00210 ! ______________________________________________________________________
 00220 L220: fnkillauto : fnpgnum(-1) !:
         ! ! CHECK FOR ADDITIONAL COMPANIES
-00230   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,NoShr",internal,outIn,relative ioerr XIT
+00230   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,NoShr",internal,outIn,relative ioerr XIT
 00240   for j=2 to 20
 00250     read #glclnt,using 'Form POS 1,N 5',rec=j: cno
 00260     if cno<>0 then goto L300

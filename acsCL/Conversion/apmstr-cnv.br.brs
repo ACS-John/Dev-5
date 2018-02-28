@@ -27,19 +27,19 @@
 44280   fnAcs(sn$,0,mat resp$,ckey)
 46000   if ckey=5 then goto XIT
 46020   apcno=val(resp$(2))
-46040   if ~exists(env$('Q')&'\tmpAP') then 
-46060     execute 'mkdir '&env$('Q')&'\tmpAP'
+46040   if ~exists('[Q]\tmpAP') then 
+46060     execute 'mkdir [Q]\tmpAP'
 46080   else 
-46100     fnFree(env$('Q')&'\tmpAP\*.*')
+46100     fnFree('[Q]\tmpAP\*.*')
 46120   end if 
-48000   fnCopy(resp$(1)&'\*.h'&str$(apcno),env$('Q')&'\tmpAP\*.*')
-48040   if exists(env$('Q')&"\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
-50000   open #apmstr=fngethandle: "Name="&env$('Q')&"\tmpAP\APmstr.h"&str$(apcno),internal,input  ! &",KFName="&env$('Q')&"\tmpAP\apIndex.h"&str$(apcno) ,keyed
-50020   open #aptrans=10: "Name="&env$('Q')&"\tmpAP\apTrans.H"&str$(apcno),internal,outIn,relative 
-50040   open #paymstr=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",Version=1,size=0,RecL=276,Replace",internal,outIn,relative 
-50080   open #payalloc=fngethandle: "Name="&env$('Q')&"\CLmstr\PayAlloc.H"&env$('cno')&",Size=0,RecL=56,Replace",internal,outIn,relative 
-50100   open #paytrans=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",Version=2,Size=0,RecL=114,Replace",internal,outIn,relative 
-50120   open #unpdaloc=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",SIZE=0,RecL=70,Replace",internal,outIn,relative 
+48000   fnCopy(resp$(1)&'\*.h'&str$(apcno),'[Q]\tmpAP\*.*')
+48040   if exists("[Q]\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
+50000   open #apmstr=fngethandle: "Name=[Q]\tmpAP\APmstr.h"&str$(apcno),internal,input  ! &",KFName=[Q]\tmpAP\apIndex.h"&str$(apcno) ,keyed
+50020   open #aptrans=10: "Name=[Q]\tmpAP\apTrans.H"&str$(apcno),internal,outIn,relative 
+50040   open #paymstr=fngethandle: "Name=[Q]\CLmstr\PayMstr.H[cno],Version=1,size=0,RecL=276,Replace",internal,outIn,relative 
+50080   open #payalloc=fngethandle: "Name=[Q]\CLmstr\PayAlloc.H[cno],Size=0,RecL=56,Replace",internal,outIn,relative 
+50100   open #paytrans=fngethandle: "Name=[Q]\CLmstr\PayTrans.H[cno],Version=2,Size=0,RecL=114,Replace",internal,outIn,relative 
+50120   open #unpdaloc=fngethandle: "Name=[Q]\CLmstr\UnPdAloc.h[cno],SIZE=0,RecL=70,Replace",internal,outIn,relative 
 52000   do 
 52020     read #apmstr,using 'Form POS 1,C 8,4*C 30,POS 159,C 12,POS 176,PD 5.2,POS 219,N 2,C 11,POS 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
 52040     gosub UNPDMSTR
@@ -57,14 +57,14 @@
 54080   close #unpdaloc: 
 54100   close #aptrans,free: 
 54120   close #apmstr,free: 
-54140   fnFree(env$('Q')&'\tmpAP\*.*')
-54160   execute 'RmDir "'&env$('Q')&'\tmpAP"'
-56000   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),"1 8")
-56020   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno'),"9 30")
-56040   fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno'),"1,20")
-56060   fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno'),"31/27/1 2/4/26")
-56080   fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx1.h"&env$('cno'),"9 12")
-56100   fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx2.h"&env$('cno'),"1 20")
+54140   fnFree('[Q]\tmpAP\*.*')
+54160   execute 'RmDir "[Q]\tmpAP"'
+56000   fnindex_it("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx1.h[cno]","1 8")
+56020   fnindex_it("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx2.h[cno]","9 30")
+56040   fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.h[cno]","1,20")
+56060   fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
+56080   fnindex_it("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.h[cno]","9 12")
+56100   fnindex_it("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.h[cno]","1 20")
 56120   ! /r
 58040 XIT: !
 58060 fnend

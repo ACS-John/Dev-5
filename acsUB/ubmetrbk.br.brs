@@ -98,9 +98,9 @@
 10460   fnreg_write(sn$&'.account sequence',resp$(11))
 10480 ! /r
 10500   if seq=2 then 
-10520     open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+10520     open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 10540   else 
-10560     open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+10560     open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 10580   end if 
 10600 ! ______________________________________________________________________
 12000 ! on fkey 5 goto DONE
@@ -260,7 +260,7 @@
 27020   return  ! /r
 32000 REMARK: ! r: ! read the footnote from the note file  (any note with * as first character
 32020   ft$="                    "
-32040   notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
+32040   notedir$="[Q]\UBmstr\notes.h[cno]"
 32060   notefile$=notedir$&"\"&trim$(z$)&".txt"
 32080   if exists(notedir$)=0 then goto L1510
 32100   open #20: "Name="&notefile$,display,input ioerr L1520
@@ -298,7 +298,7 @@
 36300 if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 36320 service$="W"
 36340 fnreg_write(sn$&'.route',resp$(1))
-36360 open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+36360 open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 36380 fnopenprn
 38000 do
 38010 CAMPBELL_LOOP_TOP: ! 

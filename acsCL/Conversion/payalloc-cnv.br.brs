@@ -9,17 +9,17 @@
 00080   dim rn$*12,de$*30,ta(2),tvn$*8,tr$(5)*35,tr(2),de$*30
 00090   io1$(1)="10,51,N 2,U,N"
 00100   fncno(cno)
-00110   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outIn,keyed 
-00120   open #2: "Name="&env$('Q')&"\CLmstr\X.H"&env$('cno')&",RecL=164,Replace",internal,outIn,relative 
-00130   open #3: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outIn,relative 
+00110   open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed 
+00120   open #2: "Name=[Q]\CLmstr\X.H[cno],RecL=164,Replace",internal,outIn,relative 
+00130   open #3: "Name=[Q]\CLmstr\PayAlloc.h[cno],SIZE=0,RecL=56,Replace",internal,outIn,relative 
 00140 L140: read #1,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,N 3,N 6,N 3': vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat gl eof L190
 00150   mat ta=(lrec(3)+1)
 00160   write #3,using 'Form POS 1,C 8,N 3,N 6,N 3,PD 3.2,C 30,PD 3': vn$,mat gl,100,de$,0
 00170   write #2,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12': vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$
 00180   goto L140
 00190 L190: close #1: : close #2: : close #3: 
-00200   execute "Copy "&env$('Q')&"\CLmstr\X.H"&env$('cno')&' '&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-00210   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&" 1 8 Replace DupKeys"
-00220   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&" 9 30 Replace DupKeys"
-00230   pr "COMPLETED CONVERTING PAYEE FILE FOR COMPANY #: "&env$('cno')
+00200   execute "Copy [Q]\CLmstr\X.H[cno]"&' '&"[Q]\CLmstr\PayMstr.h[cno]"
+00210   execute "Index [Q]\CLmstr\PayMstr.h[cno]"&' '&"[Q]\CLmstr\PayIdx1.h[cno] 1 8 Replace DupKeys"
+00220   execute "Index [Q]\CLmstr\PayMstr.h[cno]"&' '&"[Q]\CLmstr\PayIdx2.H[cno] 9 30 Replace DupKeys"
+00230   pr "COMPLETED CONVERTING PAYEE FILE FOR COMPANY #: [cno]"
 00240 XIT: fnxit

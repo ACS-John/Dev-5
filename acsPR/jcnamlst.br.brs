@@ -14,8 +14,8 @@
 00125   fnconsole(1)
 00130 ! ______________________________________________________________________
 00140 ! ______________________________________________________________________
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
+00160   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
 00170   prtcat$="N"
 00180   if fnprocess=1 then goto L460
 00190 ! ______________________________________________________________________
@@ -24,7 +24,7 @@
 00220 L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&cap$,display,outIn 
 00230   pr #101: newpage
 00240   pr #101,fields "1,1,Cc 53,R,N": cnam$
-00250   pr #101,fields "2,1,Cc 53,R,N": "Company Number "&env$('cno')
+00250   pr #101,fields "2,1,Cc 53,R,N": "Company Number [cno]"
 00260   pr #101,fields "4,2,Cr 30,N": "Report Heading Date:"
 00270   pr #101,fields "5,2,Cr 30,n": "Print Category Names (Y/N):"
 00280   io1$(1)="4,33,C 20,UT,N"

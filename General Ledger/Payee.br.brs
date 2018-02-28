@@ -29,19 +29,19 @@
 24180   dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 24200   dim gldesc$*30,resp$(60)*50
 24220   ! r: setup files
-26000   if ~exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno')) then 
-26020     open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",RecL=276,kln=8,kps=1,Replace",internal,outIn,keyed 
+26000   if ~exists("[Q]\GLmstr\paymstr.h[cno]") then 
+26020     open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],RecL=276,kln=8,kps=1,Replace",internal,outIn,keyed 
 26040     close #paymstr: ioerr ignore
 26060   end if
-26080   if ~exists(env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')) or ~exists(env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')) then 
-26100     fnindex_it(env$('Q')&'\GLmstr\paymstr.H'&env$('cno'),env$('Q')&'\GLmstr\Payidx1.H'&env$('cno'),'1 8 ')
-26120     fnindex_it(env$('Q')&'\GLmstr\paymstr.H'&env$('cno'),env$('Q')&'\GLmstr\Payidx2.H'&env$('cno'),'9 38')
+26080   if ~exists("[Q]\GLmstr\PayIdx1.h[cno]") or ~exists("[Q]\GLmstr\PayIdx2.h[cno]") then 
+26100     fnindex_it('[Q]\GLmstr\paymstr.H[cno]','[Q]\GLmstr\Payidx1.H[cno]','1 8 ')
+26120     fnindex_it('[Q]\GLmstr\paymstr.H[cno]','[Q]\GLmstr\Payidx2.H[cno]','9 38')
 26140     fnStatusClose
 26160   end if
-26180   open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-26200   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-26220   open #payeegl:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
-26240   open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+26180   open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+26200   open #paymstr2:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+26220   open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+26240   open #citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 26260   ! /r
 28000   MENU1: ! r:
 28020     fnTos(sn$="payee-1")
@@ -116,7 +116,7 @@
 32160     loop
 32180     EO_DELETE_PAYEE: ! 
 32200     ! 
-32220     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+32220     open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 32240     if trim$(holdvn$)="" then goto EO_DEL_KEY_ON_TRANS
 32260     restore #trans, key>=holdvn$: nokey EO_DEL_KEY_ON_TRANS
 32280     L570: !
@@ -152,10 +152,10 @@
 36320     fnTxt(4,mypos,30,0,0,"",0,"",1) 
 36340     resp$(respc+=1)=ad2$
 36360     fnLbl(5,1,"City, St. Zip:",mylen,1,0,1)
-36380     fncombof("CityStZip",5,mypos,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",1,0) 
+36380     fncombof("CityStZip",5,mypos,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",1,0) 
 36400     resp$(respc+=1)=csz$
 36420     fnLbl(6,1,"Type:",mylen,1,0,1)
-36440     fncombof("Payeetype",6,mypos,27,env$('Q')&"\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
+36440     fncombof("Payeetype",6,mypos,27,"[Q]\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
 36460     resp$(respc+=1)=str$(typ)
 36480     fnLbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
 36500     fnTxt(7,mypos,11,0,0,"",0,"",1) 
@@ -254,7 +254,7 @@
 42000   KEY_CHANGE: ! r: a gosub routine
 42020     ! change the references to this file in the payee transaction file
 42040     close #trans: ioerr ignore
-42060     open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+42060     open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 42080     restore #trans,key>=holdvn$: nokey EO_CHANGE_KEY_ON_TRANS
 42100     do    
 42120       read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -291,7 +291,7 @@
 54120 fnend 
 66000 PAYEE_TRANSACTIONS: ! r:
 66020   close #trans: ioerr ignore
-66040   open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+66040   open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 66060   fnTos(sn$='payee_hist') 
 66080   lc=0 : mylen=25 : mypos=mylen+2 : width=50
 66100   lc+=1

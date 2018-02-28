@@ -2,8 +2,8 @@
 02010 ! -- Tranfer Data From Computer to Hand Held
 02020 fn_setup
 02160 fntop(program$)
-02330 open #h_customer_i1:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
-02340 open #h_customer_i5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed
+02330 open #h_customer_i1:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+02340 open #h_customer_i5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 02368 goto SEL_ACT
 03000 def fn_setup
 03020   if ~setup then
@@ -556,7 +556,7 @@
 25040   dim rm$*1320
 25060   dim notefile$*256
 25080   ft$="                    "
-25100   notefile$=env$('Q')&'\UBmstr\notes.h'&env$('cno')&'\'&trim$(z$)&'.txt'
+25100   notefile$='[Q]\UBmstr\notes.h[cno]\'&trim$(z$)&'.txt'
 25120   if exists(notefile$) then 
 25140     open #20: "Name="&notefile$,display,input ioerr Rmk1_Finis
 25160     do  
@@ -580,15 +580,15 @@
 26140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                    80)
 26160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                            256)
 26170     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3",                                            256)
-26180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                                   204)
-26200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                                     200)
+26180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt",                                   204)
+26200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out",                                     200)
 26220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                          256)
-26240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                                   282,',eol=none')
+26240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT",                                   282,',eol=none')
 26260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                                          578,',eol=none')
 26280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256)
 26300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256, ',eol=none')
 26320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',                    256)
-26340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  env$('Q')&"\UBmstr\Readings.dat",                                   128)
+26340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat",                                   128)
 26360     if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",br_filename$(env$('userprofile')&'\Desktop\Aclara Work Order.txt'),1048)
 26362     if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,br_filename$(env$('userprofile')&'\Desktop\ACS to Aclara.txt')    ,1048)
 26380     if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
@@ -669,7 +669,7 @@
 30000 def fn_pcent
 30020   if ~pcent_setup then
 30040     pcent_setup=1
-30060     open #h_company:=fngethandle: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input
+30060     open #h_company:=fngethandle: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
 30080     read #h_company,using "Form POS 130,n 4": pcent_return
 30100     close #h_company:
 30120     if pcent_return=0 then pcent_return=100
@@ -679,7 +679,7 @@
 30200 fnend  ! fn_pcent
 32000 ! r: itron
 32020 def fn_itron_open
-32040   open #h_out:=fngethandle: "Name="&env$('Q')&"\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outIn,relative
+32040   open #h_out:=fngethandle: "Name=[Q]\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outIn,relative
 32060   fn_itron_record_fhd
 32080   itron_rdg_count=0
 32100   itron_cus_count=0
@@ -745,7 +745,7 @@
 33300   loop
 33320   IC_EOF_1: !
 33340   !
-33360   open #h_out2:=fngethandle: "Name="&env$('Q')&"\Download.dat,RecL=128,EoL=None,Replace",display,output
+33360   open #h_out2:=fngethandle: "Name=[Q]\Download.dat,RecL=128,EoL=None,Replace",display,output
 33380   restore #h_out:
 33400   do
 33420     read #h_out,using 'form pos 1,C 126': rec_line$ eof IC_EOF_2
@@ -755,7 +755,7 @@
 33500   close #h_out2:
 33520   close #h_out,free:
 33540   fnmakesurepathexists(env$('at')&out_filename$)
-33560   fnCopy(env$('Q')&"\Download.dat",env$('at')&out_filename$)
+33560   fnCopy("[Q]\Download.dat",env$('at')&out_filename$)
 33580   fn_report_created_file(out_filename$)
 33600   !   if exists ("C:\MVRS\MVRSWin5.exe") then
 33620   !     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
@@ -834,6 +834,7 @@
 35040   fn_record_addn(2,0) !
 35050   dim transmitter_number$*128
 35060   transmitter_number$=fn_meterInfo$('transmitter number',z$,serviceCode$(a_item))
+35068   ! if trim$(z$)='100025.05' and serviceCode$(a_item)='EL' then pr 'transmitter_number$=';transmitter_number$ : pause
 35080   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
 35100   fn_record_addn(10,reading_current)
 35120   fn_record_addn(10,unusual_usage_high)
@@ -1345,7 +1346,7 @@
 63220     if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
 63240     if len(dest$)=1 then dest$=dest$=":"
 63260     if len(dest$)=3 and dest$(3:3)="/" then dest$(3:3)=""
-63280     fnCopy(env$('Q')&"\UBmstr\laptop.out",env$('at')&trim$(dest$)&"\laptop.out")
+63280     fnCopy("[Q]\UBmstr\laptop.out",env$('at')&trim$(dest$)&"\laptop.out")
 63300   goto TRANSFER_XIT ! /r
 63320   TRANSFER_XIT: !
 63340 fnend  ! fn_transfer
@@ -1381,7 +1382,7 @@
 70080     dim location$(0)*128
 70090     dim locationN(0)
 70100     hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1,4)
-70160     open #mi_h_metertype:=fngethandle: "Name="&env$('Q')&"\UBmstr\MeterType.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno')&",Shr",internal,input,keyed
+70160     open #mi_h_metertype:=fngethandle: "Name=[Q]\UBmstr\MeterType.h[cno],Version=1,KFName=[Q]\UBmstr\MeterTypeIdx.h[cno],Shr",internal,input,keyed
 70170     F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 2
 70180     !
 70190   end if  ! ~mi_setup
@@ -1389,17 +1390,18 @@
 70202   location$(loc_activeCustomer)=trim$(z$)
 70204   location$(loc_serviceId)=serviceCode$
 70206   locationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN, 4) ! pr locationKey$ : pause
+70208 ! if trim$(z$)='100025.05' and serviceCode$='EL' then pr 'transmitter_number$=';transmitter_number$ : pause
 70210   if mi_locationKey_prior$<>locationKey$ then
 70220     mat location$=('') : mat location=(0)
 70230     mi_locationKey_prior$=locationKey$
 70250     read #hLocation,using form$(hLocation),key=locationKey$,release: mat location$,mat locationN nokey MI_FINIS
 70290   end if
 70300   mi_field$=lwrc$(trim$(mi_field$))
-70207   if mi_field$='location_id' then
-70208     mi_return$=str$(locationN(loc_locationId))
+70302   if mi_field$='location_id' then
+70304     mi_return$=str$(locationN(loc_locationId))
 70310   else if mi_field$='address' or mi_field$='name' then
-70208     mi_return$=str$(locationN(loc_name))
-70310   else if mi_field$='longitude' then
+70312     mi_return$=str$(locationN(loc_name))
+70314   else if mi_field$='longitude' then
 70320     mi_return$=location$(loc_longitude)
 70330   else if mi_field$='latitude' then
 70340     mi_return$=location$(loc_latitude)

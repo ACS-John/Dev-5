@@ -80,7 +80,7 @@
 24520   dim z$*10,service_rate_code(7)
 24530   dim gb(10)
 24600   gb_other=fn_service_other
-24800   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+24800   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 25000   do 
 25200     read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 25400     F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
@@ -141,9 +141,9 @@
 35040     gb_other=fn_service_other
 35060     fnStatus('Checking Transaction Breakdowns')
 35080     if do_fix then 
-35100       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outIn,relative 
+35100       open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative 
 35120     else 
-35140       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,input,relative 
+35140       open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative 
 35160     end if 
 35180     do 
 35200       read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode eof TRANS_EOF
@@ -179,7 +179,7 @@
 42060     dim z$*10,service_rate_code(7)
 42080     dim gb(10)
 42100     gb_other=fn_service_other
-42120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+42120     open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 42140     do 
 42160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
 42200       read_count+=1
@@ -206,7 +206,7 @@
 44060     dim z$*10,service_rate_code(7)
 44080     dim gb(10)
 44100     gb_other=fn_service_other
-44120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+44120     open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 44140     do 
 44160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
 44180       read_count+=1

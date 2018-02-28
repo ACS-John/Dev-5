@@ -17,10 +17,10 @@
 00147   fnpriorcd
 00150   if fnps=2 then 
 00151     mp1=66
-00152     open #1:"Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00152     open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed 
 00153   else
 00154     mp1=63
-00155     open #1:"Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00155     open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed 
 00156   end if
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
@@ -40,11 +40,11 @@
 00280 GetStarted: !
 00282   if fnps=2 then 
 00284     ! secondary
-00286     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\fsindex.H"&env$('cno'),"66 3")
+00286     fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","66 3")
 00288   else
-00290     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\fsindex.H"&env$('cno'),"63 3")
+00290     fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","63 3")
 00292   end if
-00320   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00320   open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed 
 00330   fnopenprn
 00340   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00350   report$="Balance Sheet"

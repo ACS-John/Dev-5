@@ -16,8 +16,8 @@
 00150   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00160 ! ______________________________________________________________________
 00170   fntop(program$,cap$="Direct Deposit List")
-00200   open #mstr=1: "Name="&env$('Q')&"\PRmstr\RPmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outIn,keyed 
+00200   open #mstr=1: "Name=[Q]\PRmstr\RPmstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
+00210   open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed 
 00220   goto SCREEN1
 00230 ! ______________________________________________________________________
 00240 XIT: fnxit

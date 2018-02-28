@@ -13,7 +13,7 @@
 00130   fncno(cno,oldcnam$)
 00170 ! ______________________________________________________________________
 00180 BUILD_PRCLNT: ! 
-00190   open #prclnt=1: "Name="&env$('Q')&"\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outIn,relative 
+00190   open #prclnt=1: "Name=[Q]\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outIn,relative 
 00200   for j=1 to 20 !:
           write #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0 !:
         next j
@@ -68,7 +68,7 @@
 00550 L550: goto WRITE_EM
 00560 ! ______________________________________________________________________
 00570 BLD_ACNO: ! 
-00580   dir$=env$('Q')&'\&'&fncursys$&"mstr"
+00580   dir$='[Q]\&'&fncursys$&"mstr"
 00582   filter$="Company.*"
 00584   fngetdir(dir$,mat filename$,empty$,filter$)
 00590   mat acno(99999): cav=0

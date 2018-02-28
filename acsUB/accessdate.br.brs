@@ -10,9 +10,9 @@
 00090   fncno(cno)
 00100 ! 
 00110   fntop("S:\acsUB\ACCESSDATE",cap$="Display Last Date Customer File Accessed")
-00130   execute "Dir "&env$('Q')&"\UBmstr\CUSTOMER.H"&env$('cno')&" >"&env$('Q')&"\UBmstr\DATEWork."&session$ ioerr MENU1
-00140   open #12: "Name="&env$('Q')&"\UBmstr\DATEwork2.tmp,RecL=30,Replace",internal,outIn 
-00150   open #13: "Name="&env$('Q')&"\UBmstr\DATEWork."&session$,display,input ioerr MENU1
+00130   execute "Dir [Q]\UBmstr\CUSTOMER.H[cno] >[Q]\UBmstr\DATEWork."&session$ ioerr MENU1
+00140   open #12: "Name=[Q]\UBmstr\DATEwork2.tmp,RecL=30,Replace",internal,outIn 
+00150   open #13: "Name=[Q]\UBmstr\DATEWork."&session$,display,input ioerr MENU1
 00160   linput #13: ln$ eof MENU1
 00165   linput #13: ln$ eof MENU1
 00170   access_date$=ln$(26:42)

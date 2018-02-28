@@ -17,8 +17,8 @@
 00170     fndate_mmddyy_to_ccyymmdd=x2
 00180   fnend 
 00190 ! ______________________________________________________________________
-00210   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&env$('cno'),internal,outIn,relative 
-00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00210   open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,outIn,relative 
+00220   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 00230 L230: ! 
 00240 L240: read #6,using L280: x$,m,n,mat o,adrnxt,rcpt$,mat alloc eof L440
 00250   for j=1 to udim(alloc)
@@ -39,5 +39,5 @@
 00420 L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 00430 L430: goto L240
 00440 L440: close #2: 
-00450   fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&env$('cno'),env$('Q')&"\UBmstr\UBTrindx.h"&env$('cno'),"1 19")
+00450   fnindex_it("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
 00460 XIT: fnxit

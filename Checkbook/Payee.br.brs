@@ -33,11 +33,11 @@
 16130   dim gldesc$*30,resp$(60)*50
 16140   ! ______________________________________________________________________
 18020   left=0: right=1
-18040   open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-18060   open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-18080   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-18100   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-18120   open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+18040   open #trmstr2:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+18060   open #paymstr:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+18080   open #paymstr2:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+18100   open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed 
+18120   open #citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 18140   ! 
 22000   MENU1: ! 
 22020   fnTos(sn$="payee-1") 
@@ -101,7 +101,7 @@
 26000   DELETE_PAYEE: ! r:
 26020   ! check for Linked Unpaid Invoices 
 26040   ! if there are any - than tell them, and don't delete.
-26060   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26060   open #paytrans:=fngethandle: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 26080   restore #paytrans,key>=vn$&rpt$(chr$(0),12): nokey L490
 26100   read #paytrans,using 'Form Pos 1,C 8',release: x$
 26120   if x$=vn$ then 
@@ -122,7 +122,7 @@
 26420   end if
 26440   EO_DELETE_PAYEE: ! 
 26460   ! 
-26480   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+26480   open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 26500   restore #trans, key>=holdvn$&rpt$(chr$(0),kln(trans)-len(holdvn$)): nokey EO_DEL_KEY_ON_TRANS
 26520   L590: !
 26540   read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
@@ -157,10 +157,10 @@
 32300   fnTxt(4,mypos,30,0,0,"",0,"",1) 
 32320   resp$(respc+=1)=ad2$
 32340   fnLbl(5,1,"City, St. Zip:",mylen,1,0,1)
-32360   fncombof("CityStZip",5,mypos,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",1,0) 
+32360   fncombof("CityStZip",5,mypos,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",1,0) 
 32380   resp$(respc+=1)=csz$
 32400   fnLbl(6,1,"Type:",mylen,1,0,1)
-32420   fncombof("Payeetype",6,mypos,27,env$('Q')&"\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
+32420   fncombof("Payeetype",6,mypos,27,"[Q]\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
 32440   resp$(respc+=1)=str$(typ)
 32460   fnLbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
 32480   fnTxt(7,mypos,11,0,0,"",0,"",1) 
@@ -291,7 +291,7 @@
 48140   goto MENU1 ! /r
 52000   KEY_CHANGE: ! r:
 52020   ! change the references to this file in the Transaction file
-52040   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+52040   open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 52060   restore #trans,key>=holdvn$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 52080   L1530: read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
 52100   if x$=holdvn$ then 
@@ -311,7 +311,7 @@
 52380   EO_CHANGE_KEY_ON_PAYEEGL: ! 
 52400   ! 
 52420   ! Change references to this file in the linked file PayTrans
-52440   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+52440   open #paytrans:=fngethandle: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 52460   restore #paytrans,key>=holdvn$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 52480   L1670: !
 52500   read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
@@ -323,7 +323,7 @@
 52620   close #paytrans: 
 52640   ! 
 52660   ! Change references to this file in the linked file UnPdAloc
-52680   open #unpdaloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+52680   open #unpdaloc:=fngethandle: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed 
 52700   restore #unpdaloc,key>=holdvn$&rpt$(chr$(0),kln(unpdaloc)-len(holdvn$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 52720   read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 52740   if x$=holdvn$ then 
@@ -341,7 +341,7 @@
 54080   fnmsgbox(mat ml$,resp$,cap$,16) 
 54100   goto EDIT_PAYEE ! /r
 58000   CHECK_HISTORY: ! r:
-58020   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
+58020   open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed 
 58040   fnTos(sn$='payee_hist') 
 58060   lc=0 : mylen=25 : mypos=mylen+2 : width=50
 58080   lc+=1
@@ -431,7 +431,7 @@
 62520     rewrite #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 62540   end if
 62560   goto EDIT_PAYEE ! /r
-62580   ! execute "Index "&env$('Q')&"\CLmstr\payeeglbreakdown.H"&env$('cno')&' '&env$('Q')&"\CLmstr\Payeeglbkdidx.H"&env$('cno')&" 1 8 Replace DupKeys -n"
+62580   ! execute "Index [Q]\CLmstr\payeeglbreakdown.H[cno]"&' '&"[Q]\CLmstr\Payeeglbkdidx.H[cno] 1 8 Replace DupKeys -n"
 62600   ! ______________________________________________________________________
 64000   PayeeXIT: ! 
 64020   close #trmstr2: ioerr ignore

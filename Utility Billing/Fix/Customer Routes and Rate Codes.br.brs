@@ -9,7 +9,7 @@
 12020   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7,gb(10),extra$(11)*30
 12040   dim extra(23)
 12042   dim df$*1
-12060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,outIn,relative 
+12060   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,outIn,relative 
 12080     F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 12100   ! /r
 14000   do ! r: primary loop
@@ -36,7 +36,7 @@
 28160 ! /region
 32000 OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text file
 32020   dim ln$*128
-32040   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+32040   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 32060   open #2: "Name=chg\newrouteseq.txt",display,input 
 32080   fnopenprn
 32100   READ_CUSTOMER: ! 
@@ -57,7 +57,7 @@
 32400   OWFFL_Finis: !
 32420   fncloseprn
 32440   close #1: 
-32460   fnub_index_customer ! execute "Index "&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBIndx5.h"&env$('cno')&" 1741/1743 2/7 Replace DupKeys -n"
+32460   fnub_index_customer ! execute "Index [Q]\UBmstr\Customer.h[cno]"&' '&"[Q]\UBmstr\UBIndx5.h[cno] 1741/1743 2/7 Replace DupKeys -n"
 32480 return ! /r
 34000 def fnDivideRoutesByTen(&routeNumber)
 34020   drbtReturn=0

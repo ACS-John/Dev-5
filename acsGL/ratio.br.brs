@@ -13,13 +13,13 @@
 00130   fncno(cno,cnam$) !:
         fndat(dat$)
 00142   ratiomst=10
-00150   if exists(env$('Q')&"\GLmstr\ratiomst.h"&env$('cno'))=0 then gosub CREATE_FILES
-00160   if exists(env$('Q')&"\GLmstr\ratioidx.h"&env$('cno'))=0 then gosub INDEX
-00170   if exists(env$('Q')&"\GLmstr\schindx2.h"&env$('cno'))=0 then gosub INDEX
-00180 L180: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L1380
+00150   if exists("[Q]\GLmstr\ratiomst.h[cno]")=0 then gosub CREATE_FILES
+00160   if exists("[Q]\GLmstr\ratioidx.h[cno]")=0 then gosub INDEX
+00170   if exists("[Q]\GLmstr\schindx2.h[cno]")=0 then gosub INDEX
+00180 L180: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno],Shr",internal,outIn,keyed ioerr L1380
 00190   goto RATIOMSTGRID
 00200   close #ratiomst: ioerr L210
-00210 L210: execute "Index "&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 3 30 Replace DupKeys -n"
+00210 L210: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
 00220   goto L180
 00230 RATIOMSTGRID: ! 
 00240   fnTos(sn$="Ratiomst") !:
@@ -72,7 +72,7 @@
 00550   fnTos(sn$="Ratiomst2") !:
         mylen=20: mypos=mylen+3 : right=1
 00560   fnLbl(1,1,"Ratio Number:",mylen,right)
-00570   fncombof('glRatiomst',1,mypos,0,env$('Q')&"\GLmstr\ratiomst.h"&env$('cno'),1,3,4,40,env$('Q')&"\GLmstr\ratioidx.h"&env$('cno'),add_all)
+00570   fncombof('glRatiomst',1,mypos,0,"[Q]\GLmstr\ratiomst.h[cno]",1,3,4,40,"[Q]\GLmstr\ratioidx.h[cno]",add_all)
 00580   if edit=1 then resp$(1)=hac$
 00590   if add=1 then resp$(1)=""
 00600   fnLbl(2,1,"Ratio Nane::",mylen,right)
@@ -111,13 +111,13 @@
 00880 ! ______________________________________________________________________
 00890 CREATE_FILES: ! 
 00900   close #ratiomst: ioerr L910
-00910 L910: open #ratiomst: "Name="&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno'),internal,outIn,keyed ioerr L930
+00910 L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",internal,outIn,keyed ioerr L930
 00920   close #ratiomst,free: ioerr L930
-00930 L930: open #ratiomst: "Name="&env$('Q')&"\GLmstr\ratiomst.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ratioidx.h"&env$('cno')&",RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed 
+00930 L930: open #ratiomst: "Name=[Q]\GLmstr\ratiomst.h[cno],KFName=[Q]\GLmstr\ratioidx.h[cno],RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed 
 00940 L940: close #ratiomst: ioerr L950
 00950 L950: close #11: ioerr L970
 00960 INDEX: ! (main Ratio files)
-00970 L970: execute "Index "&env$('Q')&"\GLmstr\RatioMST.h"&env$('cno')&' '&env$('Q')&"\GLmstr\RatioIDX.h"&env$('cno')&" 1 3 Replace DupKeys -n"
+00970 L970: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\RatioIDX.h[cno] 1 3 Replace DupKeys -n"
 00980   return 
 00990 ! ______________________________________________________________________
 01000 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID

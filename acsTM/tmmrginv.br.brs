@@ -1,20 +1,20 @@
 00010 ! REPLACE S:\acsTM\TMMRGINV
 00030   on error goto ERTN
 00040   library 'S:\Core\Library': fnerror,fnxit
-00050 ! fntop(program$,cap$="Merge Invoices written to temp file "&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno') ")
+00050 ! fntop(program$,cap$="Merge Invoices written to temp file [Q]\TMmstr\TMWk1.h[cno]" ")
 00070   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4
 00071   dim arta(2) ! ,ga(10)
 00072 ! clmstr dims
 00080   dim ca(10),sc(10)
 00090   pr newpage
 00100   pr f "10,20,Cc 60,h,n": "T/M Merging Invoices..."
-00108   open #h_tmwk1:=3: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",NoShr",internal,input 
+00108   open #h_tmwk1:=3: "Name=[Q]\TMmstr\TMWk1.h[cno],NoShr",internal,input 
 00109 F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2
 00112   dim cde$(30)*6,id$(30)*55,inv_amt(30),tmwk1_sc(30),ct(30)
-00120   open #h_artrans:=12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
-00130   open #h_tmtrans:=2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
-00140   open #h_clmstr:=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00150   open #h_tmtraddr:=4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outIn,relative 
+00120   open #h_artrans:=12: "Name=[Q]\TMmstr\ARTrans.h[cno],Shr",internal,outIn,relative 
+00130   open #h_tmtrans:=2: "Name=[Q]\TMmstr\TMTRANS.H[cno],Shr",internal,outIn,relative 
+00140   open #h_clmstr:=1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed 
+00150   open #h_tmtraddr:=4: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,outIn,relative 
 00202   do  ! r: main loop
 00204 READ_TMWK1: ! 
 00210     read #h_tmwk1,using F_TMWK1: k$,b(7),b(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk1_sc eof FINIS

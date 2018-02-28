@@ -10,9 +10,9 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno)
 00120 ! 
-00130   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00140   open #3: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
-00150   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00130   open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
+00140   open #3: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
+00150   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCKINDX.h[cno],Shr",internal,outIn,keyed 
 00160   open #5: "Name="&env$('Temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",RecL=30,KPS=1,KLN=12,Replace",internal,outIn,keyed 
 00170   io5$(1)="11,55,N 6,U,N"
 00180   io5$(2)="12,55,N 6,U,N"

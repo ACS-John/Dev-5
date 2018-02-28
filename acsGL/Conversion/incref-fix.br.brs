@@ -19,8 +19,8 @@
 00200   ce=cnt+1
 00210 ERR1: pr f "24,78,C 1": bell : goto L170
 00220 L220: if cmdkey=5 then goto L350
-00250   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cn1)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&str$(cn1)&"",internal,outIn,keyed 
-00260   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cn2)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&str$(cn2)&",Shr",internal,outIn,keyed 
+00250   open #1: "Name=[Q]\GLmstr\GLmstr.H"&str$(cn1)&",KFName=[Q]\GLmstr\GLINDEX.H"&str$(cn1)&"",internal,outIn,keyed 
+00260   open #2: "Name=[Q]\GLmstr\GLmstr.H"&str$(cn2)&",KFName=[Q]\GLmstr\GLINDEX.H"&str$(cn2)&",Shr",internal,outIn,keyed 
 00270 L270: read #1,using L280: k$,rf4 eof END1
 00280 L280: form pos 1,c 12,pos 72,pd 3
 00290   rewrite #2,using L300,key=k$: rf4 nokey L270

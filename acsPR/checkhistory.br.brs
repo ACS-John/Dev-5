@@ -9,11 +9,11 @@
 00090   fncno(cno,cnam$)
 00100 ! 
 00110 ! ______________________________________________________________________
-00120   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00130   if exists(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'))=0 then goto SETUP_PAYROLLCHECKS
-00135   if exists(env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr")=0 then goto L280
-00140 L140: open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00141   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00120   open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
+00130   if exists("[Q]\PRmstr\PayrollChecks.h[cno]")=0 then goto SETUP_PAYROLLCHECKS
+00135   if exists("[Q]\PRmstr\checkidx.h[cno],Shr")=0 then goto L280
+00140 L140: open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
+00141   open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
 00150   hact$="": filnum=44
 00160   fncheckfile(hact$,filnum)
 00170 XIT: fnxit
@@ -25,8 +25,8 @@
 00230 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00240 ! /region
 00250 SETUP_PAYROLLCHECKS: ! 
-00260   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&",RecL=224,use",internal,outIn,keyed 
+00260   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],RecL=224,use",internal,outIn,keyed 
 00270   close #4: 
-00280 L280: execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx3.h"&env$('cno')&" 1/12/9 8/6/3 Replace DupKeys -n"
-00282   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&" 1 17 Replace DupKeys -n"
+00280 L280: execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx3.h[cno] 1/12/9 8/6/3 Replace DupKeys -n"
+00282   execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx.h[cno] 1 17 Replace DupKeys -n"
 00290   goto L140

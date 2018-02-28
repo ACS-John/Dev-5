@@ -47,7 +47,7 @@
 80320   end_date=val(resp$(2)) ! ending day of year
 80340   askz$=lpad$(trim$(resp$(3)(1:10)),10)
 80360   fnopenprn
-80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
+80370   open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
 80380   gosub PWL_HDR
 80400   if trim$(askz$)="[All]" or trim$(askz$)="" then 
 80420     restore #h_workorder: 

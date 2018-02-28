@@ -8,8 +8,8 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100 ! 
-00110   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),internal,outIn,keyed 
-00120   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,outIn,relative 
+00110   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno]",internal,outIn,keyed 
+00120   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,outIn,relative 
 00130 L130: read #1,using L140: lpd,tgp,mat ta eof XIT
 00140 L140: form pos 162,n 6,pd 5.2,2*pd 3
 00150   if lpd><0 then goto L130

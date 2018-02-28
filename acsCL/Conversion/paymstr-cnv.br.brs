@@ -14,11 +14,11 @@
 00140 L140: rinput fields "12,57,N 2,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
-00170   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00180   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno'),internal,outIn,relative 
-00190   open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno'),internal,outIn,keyed 
-00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),INTERNAL,outIn,RELATIVE
-00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&env$('cno')&"",internal,outIn,keyed 
+00170   open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+00180   open #2: "Name=[Q]\CLmstr\PayAlloc.h[cno]",internal,outIn,relative 
+00190   open #3: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX2.H[cno]",internal,outIn,keyed 
+00200 ! OPEN #4: "Name=[Q]\CLmstr\TRALLOC.h[cno]",INTERNAL,outIn,RELATIVE
+00210   open #6: "Name=[Q]\CLmstr\IvPaid.H[cno],KFName=[Q]\CLmstr\IVINDEX.H[cno]",internal,outIn,keyed 
 00220   pr f "14,32,C 16,RB,N": "  IN PROCESS"
 00230   nk=10
 00240 L240: read #1,using L250: k1$,ad1 eof END1
@@ -50,11 +50,11 @@
 00500   close #2: 
 00510   close #3: 
 00520   close #6: 
-00530   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&" 1 8 Replace DupKeys"
-00540   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&" 9 30 Replace DupKeys"
-00550   execute "Index "&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&","&env$('Q')&"\CLmstr\IVINDEX.H"&env$('cno')&",1,20,Replace,DupKeys"
-00560   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&" 1 11 Replace DupKeys"
-00570   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno')&" 28/1 8/11 Replace DupKeys"
+00530   execute "Index [Q]\CLmstr\PayMstr.h[cno]"&' '&"[Q]\CLmstr\PayIdx1.h[cno] 1 8 Replace DupKeys"
+00540   execute "Index [Q]\CLmstr\PayMstr.h[cno]"&' '&"[Q]\CLmstr\PayIdx2.H[cno] 9 30 Replace DupKeys"
+00550   execute "Index [Q]\CLmstr\IvPaid.H[cno],[Q]\CLmstr\IVINDEX.H[cno],1,20,Replace,DupKeys"
+00560   execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX1.H[cno] 1 11 Replace DupKeys"
+00570   execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX2.H[cno] 28/1 8/11 Replace DupKeys"
 00580 XIT: fnxit
 00590 ! <Updateable Region: ERTN>
 00600 ERTN: fnerror(program$,err,line,act$,"xit")

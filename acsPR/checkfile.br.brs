@@ -19,7 +19,7 @@
 00150 ! ___________________________________________________________________
 00160     fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 00210 ! ___________________________________________________________________
-00220     open #9: "Name="&env$('Q')&"\PRmstr\GridNames.H"&env$('cno')&",USE,RecL=30",internal,outIn,relative 
+00220     open #9: "Name=[Q]\PRmstr\GridNames.H[cno],USE,RecL=30",internal,outIn,relative 
 00230     if lrec(9)=0 then oldgridname$= gridname$="[All]                         ": write #9,using "form pos 1,c 30",rec=1: gridname$
 00240     fnDedNames(mat dednames$)
 00250     mat hf=(1)
@@ -27,10 +27,10 @@
 00280       if trim$(dednames$(j))="" then hf(j+25)=0 ! default the (All) to only those deductions that have names
 00290       dednames$(j)=trim$(dednames$(j))
 00300     next j
-00320 L320: if exists(env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')) =0 then gosub SETUP_REPORTS
-00322     if exists(env$('Q')&"\PRmstr\reportidx.H"&env$('cno')) =0 then gosub CREATE_INDEX
-00330     open #29: "Name="&env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\reportidx.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00340     if kln(29)<>30 then close #29: : execute "Index "&env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')&' '&env$('Q')&"\PRmstr\reportidx.H"&env$('cno')&" 1 30 Replace DupKeys -n" : goto L320
+00320 L320: if exists("[Q]\PRmstr\payrollreports.H[cno]") =0 then gosub SETUP_REPORTS
+00322     if exists("[Q]\PRmstr\reportidx.H[cno]") =0 then gosub CREATE_INDEX
+00330     open #29: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],Shr",internal,outIn,keyed 
+00340     if kln(29)<>30 then close #29: : execute "Index [Q]\PRmstr\payrollreports.H[cno]"&' '&"[Q]\PRmstr\reportidx.H[cno] 1 30 Replace DupKeys -n" : goto L320
 00370     justopen=1: gosub SELECT_COLUMNS: justopen=0
 00380 ! ___________________________________________________________________
 00390 SCREEN1: ! 
@@ -279,7 +279,7 @@
           if trim$(hact$)<>"" then resp$(rc)=hact$ else !:
             if resp$(rc)="" or trim$(resp$(rc))="True" then resp$(rc)="[All]"
 02060     fnLbl(15,20,"Column format to use:",40,1)
-02070     fncombof("payrollrpt",15,62,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
+02070     fncombof("payrollrpt",15,62,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame) !:
           resp$(rc+=1)=gridname$
 02080     fnCmdKey("&Display Grid",1,1,0,"Displays a list of checks on the scree using the format you have selected.")
 02090     fnCmdKey("&Print Report",2,0,0,"Prints a check listing using the columns selected.")
@@ -368,7 +368,7 @@
 02690 L2690: fnTos(sn$="Checkprint") !:
           rc=cf=0 : linecnt=2
 02700     fnLbl(1,1,"Grid or Report Name:",20,1)
-02710     fncombof("payrollrpt",1,22,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
+02710     fncombof("payrollrpt",1,22,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame) !:
           resp$(rc+=1)=resp$(1)
 02720     for j=1 to 23
 02730       fnChk(linecnt+=1,16,name$(j),1,rratype) !:
@@ -699,10 +699,10 @@
 05150 SETUP_REPORTS: ! 
 05160 ! 1 - 30 Name c 30 !:
           ! 31 - 76 selections 46*n 1
-05170     open #29: "Name="&env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\reportidx.H"&env$('cno')&",RecL=85,kps=1,kln=30,replace",internal,outIn,keyed 
+05170     open #29: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed 
 05180     close #29: 
 05185 CREATE_INDEX: ! 
-05190     execute "Index "&env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')&' '&env$('Q')&"\PRmstr\reportidx.H"&env$('cno')&" 1 30 Replace DupKeys -n"
+05190     execute "Index [Q]\PRmstr\payrollreports.H[cno]"&' '&"[Q]\PRmstr\reportidx.H[cno] 1 30 Replace DupKeys -n"
 05200     return 
 05210 ADD_GRID: ! 
 05220     fnTos(sn$="Addgrid") !:

@@ -20,7 +20,7 @@
 02380 ! ______________________________________________________________________
 02400   right=1
 02420   fncno(cno)
-02440   open #20: "Name=Q:\CLmstr\PostDat.h"&env$('cno')&",Shr,Use,RecL=12",internal,outIn,relative 
+02440   open #20: "Name=Q:\CLmstr\PostDat.h[cno],Shr,Use,RecL=12",internal,outIn,relative 
 02460   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 noRec L690
 02480   goto L700
 02500 L690: ! 
@@ -28,7 +28,7 @@
 02540 L700: ! 
 02560   close #20: 
 02580 ! 
-02600   open #20: "Name=Q:\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+02600   open #20: "Name=Q:\CLmstr\Company.h[cno],Shr",internal,input,relative 
 02620   read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
 02640   if d(1)=0 and d(2)=0 then 
 02660     glnmask$='50'
@@ -42,15 +42,15 @@
 02820   close #20: 
 02840 ! 
 02860   bankcode=val(bc$)
-02880   open #bankmstr=fngethandle: "Name=Q:\CLmstr\BankMstr.H"&env$('cno')&",KFName=Q:\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal, outin, keyed 
+02880   open #bankmstr=fngethandle: "Name=Q:\CLmstr\BankMstr.H[cno],KFName=Q:\CLmstr\BankIdx1.H[cno],Shr",internal, outin, keyed 
 02900   read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 02920   close #bankmstr: 
-02940   open #glmstr=fngethandle: "Name=Q:\CLmstr\GLmstr.H"&env$('cno')&",KFName=Q:\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-02960   open #paymstr1=13: "Name=Q:\CLmstr\PayMstr.H"&env$('cno')&",KFName=Q:\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
-02980   open #paymstr2=14: "Name=Q:\CLmstr\PayMstr.H"&env$('cno')&",KFName=Q:\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
-03000   open #payeegl=17: "Name=Q:\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName=Q:\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-03020   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H"&env$('cno')&",KFName=Q:\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
-03040   open #unpdaloc=5: "Name=Q:\CLmstr\UnPdAloc.H"&env$('cno')&",KFName=Q:\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
+02940   open #glmstr=fngethandle: "Name=Q:\CLmstr\GLmstr.H[cno],KFName=Q:\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
+02960   open #paymstr1=13: "Name=Q:\CLmstr\PayMstr.H[cno],KFName=Q:\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed 
+02980   open #paymstr2=14: "Name=Q:\CLmstr\PayMstr.H[cno],KFName=Q:\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed 
+03000   open #payeegl=17: "Name=Q:\CLmstr\payeeGLBreakdown.h[cno],KFName=Q:\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed 
+03020   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H[cno],KFName=Q:\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
+03040   open #unpdaloc=5: "Name=Q:\CLmstr\UnPdAloc.H[cno],KFName=Q:\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
 03060   t1(1)=bal : upi=t1(5) : t1(3)=t1(1)-t1(2)
 03080   if fnregistered_for_job_cost_pr then havejc=1 : gosub JCBLD
 03100   goto MENU1 ! /r
@@ -185,12 +185,12 @@
 16060   chdr3$(5)='Amount'
 16070   chdr3$(6)='Description'
 16080   cmask3$(5)='10' : cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
-16090   open #41: "Name=Q:\PRmstr\JCMSTR.H"&env$('cno')&",KFName=Q:\PRmstr\JCIndx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr JCBLD_FINIS
-16100   open #category:=2: "Name=Q:\PRmstr\JCCAT.H"&env$('cno')&", KFName=Q:\PRmstr\CATIndx.H"&env$('cno')&",Shr", internal,outIn,keyed 
-16110   open #43: "Name=Q:\PRmstr\SCMSTR.H"&env$('cno')&",KFName=Q:\PRmstr\SCIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-16120   open #45: "Name=Q:\PRmstr\JCTrans.H"&env$('cno')&",Shr",internal,outIn,relative 
-16130   if not exists("Q:\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')) then gosub MAKE_JCB
-16140   open #jcbreakdown=46: "Name=Q:\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",KFName=Q:\CLmstr\JcBrkidx"&wsid$&".h"&env$('cno')&",Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
+16090   open #41: "Name=Q:\PRmstr\JCMSTR.H[cno],KFName=Q:\PRmstr\JCIndx.H[cno],Shr",internal,outIn,keyed ioerr JCBLD_FINIS
+16100   open #category:=2: "Name=Q:\PRmstr\JCCAT.H[cno], KFName=Q:\PRmstr\CATIndx.H[cno],Shr", internal,outIn,keyed 
+16110   open #43: "Name=Q:\PRmstr\SCMSTR.H[cno],KFName=Q:\PRmstr\SCIndex.H[cno],Shr",internal,outIn,keyed 
+16120   open #45: "Name=Q:\PRmstr\JCTrans.H[cno],Shr",internal,outIn,relative 
+16130   if not exists("Q:\CLmstr\JCBreakdownS"&wsid$&".h[cno]") then gosub MAKE_JCB
+16140   open #jcbreakdown=46: "Name=Q:\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=Q:\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
 16150 JCBLD_FINIS: ! 
 16160   return  ! /r
 18000 ! <Updateable Region: ERTN>
@@ -215,7 +215,7 @@
 21100     type$="Not Approved for Payment"
 21110   end if 
 21120   close #paytrans: ioerr ignore
-21130   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H"&env$('cno')&",KFName=Q:\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+21130   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H[cno],KFName=Q:\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
 21140 L4700: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
 21150   if displayunpaid=1 and pcde=1 then goto L4760 ! if only choose selected, don't allow others to list
 21160   if displayall=1 then goto L4760
@@ -517,13 +517,13 @@
 31040 goto L6700
 31050 L6900: jn$="": jobdesc$="": amt=0: cat=subcat=0
 31060 close #jcbreakdown: 
-31070 execute "Drop Q:\CLmstr\jcbreakdowns"&wsid$&".h"&env$('cno')
+31070 execute "Drop Q:\CLmstr\jcbreakdowns"&wsid$&".h[cno]"
 31080 L6930: ! 
 31090 return  ! /r
-31500 MAKE_JCB: ! r: create Q:\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')
-31520 open #jcbreakdown=46: "Name=Q:\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",Version=1,replace,RecL=79",internal,outIn,relative 
+31500 MAKE_JCB: ! r: create Q:\CLmstr\JCBreakdownS"&wsid$&".h[cno]"
+31520 open #jcbreakdown=46: "Name=Q:\CLmstr\JCBreakdownS"&wsid$&".h[cno],Version=1,replace,RecL=79",internal,outIn,relative 
 31540 close #jcbreakdown: 
-31560 execute "INDEX Q:\CLmstr\JCBreakdownS"&wsid$&".h"&env$('cno')&",Q:\CLmstr\jcbrkidx"&wsid$&".H"&env$('cno')&",48,20,Replace,DupKeys -n"
+31560 execute "INDEX Q:\CLmstr\JCBreakdownS"&wsid$&".h[cno],Q:\CLmstr\jcbrkidx"&wsid$&".H[cno],48,20,Replace,DupKeys -n"
 31580 return  ! /r
 32000 HDR2: ! r: header for jub cost listing
 32020 fnopenprn
@@ -561,14 +561,14 @@
 35120 ! TEST1: !
 35140 ! pass goes to test2 - fail goes to test_key_fail_on_iv
 35160   close #ivpaid: ioerr ignore
-35180   open #ivpaid:=fngethandle: "Name=Q:\CLmstr\IvPaid.h"&env$('cno')&",KFName=Q:\CLmstr\IvIndex.h"&env$('cno'),internal,outIn,keyed 
+35180   open #ivpaid:=fngethandle: "Name=Q:\CLmstr\IvPaid.h[cno],KFName=Q:\CLmstr\IvIndex.h[cno]",internal,outIn,keyed 
 35200   unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 35220   read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 35240   goto TEST_KEY_FAIL_ON_IV
 35260 ! ___________
 35280 TEST2: ! 
 35300 ! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-35320   open #testpaytrans:=fngethandle: "Name=Q:\CLmstr\PayTrans.h"&env$('cno')&",KFName=Q:\CLmstr\UnPdIdx1.h"&env$('cno')&",SHR",internal,outIn,keyed 
+35320   open #testpaytrans:=fngethandle: "Name=Q:\CLmstr\PayTrans.h[cno],KFName=Q:\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed 
 35340   read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 35360   goto TEST_KEY_FAIL_ON_PAYTRANS
 35380 ! ____________
@@ -647,7 +647,7 @@
 46100   lc=0 : mylen=18 : mypos=mylen+2
 46120   frame=1
 46160   fnLbl(lc+=1,1,"Payee:",mylen,right,0,frame)
-46180   fncombof("Paymstr",lc,mypos,0,"Q:\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,"Q:\CLmstr\Payidx1.h"&env$('cno'),1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
+46180   fncombof("Paymstr",lc,mypos,0,"Q:\CLmstr\paymstr.h[cno]",1,8,9,30,"Q:\CLmstr\Payidx1.h[cno]",1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
 46200   resp$(1)=vn$
 46220   fnLbl(lc+=1,1,"Invoice Number:",mylen,right,0,frame)
 46240   fnTxt(lc,mypos,12,0,0,"",0,"",frame)
@@ -683,7 +683,7 @@
 46820   if pcde=1 then resp$(10)=item1$(2) ! Pay Now
 46840   if pcde=2 then resp$(10)=item1$(3) ! Paid
 46900   fnLbl(lc+=1,1,"Bank Code:",mylen,right,0,frame)
-46920   fncombof("bankmstr",lc,mypos,23,"Q:\CLmstr\bankmstr.h"&env$('cno'),1,2,3,20,"Q:\CLmstr\bankidx1.h"&env$('cno'),0,0, "",frame)
+46920   fncombof("bankmstr",lc,mypos,23,"Q:\CLmstr\bankmstr.h[cno]",1,2,3,20,"Q:\CLmstr\bankidx1.h[cno]",0,0, "",frame)
 46940   resp$(11)=str$(bcde) ! RESP$(RESPC)
 46960   fnButton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
 47000   fnLbl(lc=15,3,"Breakdown Information",mylen,center)

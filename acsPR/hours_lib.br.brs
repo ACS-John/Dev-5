@@ -14,16 +14,16 @@
 00140 ! 
 00150 ! 
 00160 ! fnTOP("S:\acsPR\hourclassification2",CAP$="Time Classification")
-00170     open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00180     open #classification=32: "Name="&env$('Q')&"\PRmstr\HourClass.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourClass-idx.H"&env$('cno')&",Shr",internal,outIn,keyed ioerr MSGBOX3
-00190     open #prmstr=33: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00170     open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed 
+00180     open #classification=32: "Name=[Q]\PRmstr\HourClass.H[cno],KFName=[Q]\PRmstr\HourClass-idx.H[cno],Shr",internal,outIn,keyed ioerr MSGBOX3
+00190     open #prmstr=33: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
 00200 MAIN: ! 
 00210     addhours=edithours=0
 00220     fnTos(sn$="Main") !:
           respc=0 : lc=0 : mat resp$=('') !:
           mylen=20 : mypos=mylen+2
 00230     fnLbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
-00240     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,pas, "Enter the employee number you wish to work with.",0)
+00240     fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,30,"[Q]\PRmstr\Rpindex.h[cno]",2,pas, "Enter the employee number you wish to work with.",0)
 00241     if hact$="[All]" then resp$(1)="[All]" else !:
             resp$(1)=str$(eno)
 00242     fnButton(lc+=2,32,"&Refresh",46,"",0,0,0,0,1) !:
@@ -95,10 +95,10 @@
           respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
 00590     fnFra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
 00600     fnLbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
-00610     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
+00610     fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,30,"[Q]\PRmstr\Rpindex.h[cno]",0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
           resp$(1)=str$(empno)
 00620     fnLbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
-00630     fncombof("Hours",lc,mypos,0,env$('Q')&"\PRmstr\Hourclass.h"&env$('cno'),1,5,6,30,env$('Q')&"\PRmstr\Hourclass-idx.h"&env$('cno'),0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) !:
+00630     fncombof("Hours",lc,mypos,0,"[Q]\PRmstr\Hourclass.h[cno]",1,5,6,30,"[Q]\PRmstr\Hourclass-idx.h[cno]",0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) !:
           resp$(2)=class$
 00640     fnLbl(lc+=1,1,'Date:',mylen,right,0,frame1)
 00645     if addhours=1 then tdate=0
@@ -168,7 +168,7 @@
 01030   fnend 
 01040 SETUP: ! 
 01050   goto L1090 ! don't allow run to delete files
-01060   open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",RecL=39,KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&",kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
+01060   open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
 01070   close #breakdown: 
-01080   execute "Index "&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&' '&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno')&" 1/9/14 8/5/8 Replace DupKeys"
+01080   execute "Index [Q]\PRmstr\HourBreakdown.H[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.H[cno] 1/9/14 8/5/8 Replace DupKeys"
 01090 L1090: stop 

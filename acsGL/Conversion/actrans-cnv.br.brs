@@ -9,7 +9,7 @@
 00100 L100: input fields "10,57,N 2,UE,N",attr "R": cno conv L100
 00110   if cmdkey=5 then stop 
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno'),internal,input ioerr L100
+00130   open #1: "Name=[Q]\GLmstr\AcTrans.h[cno]",internal,input ioerr L100
 00140   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 00150   open #2: "Name=X,size=0,RecL=72,REPLACE",internal,output 
 00160 L160: read #1,using L190: mat tr,tr$,td$ eof L220
@@ -20,7 +20,7 @@
 00210   goto L160
 00220 L220: close #1,free: 
 00230   close #2: 
-00240   execute "RENAME X "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')
-00250   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4 REPLACE DupKeys"
+00240   execute "RENAME X [Q]\GLmstr\AcTrans.h[cno]"
+00250   execute "Index [Q]\GLmstr\AcTrans.h[cno]"&' '&"[Q]\GLmstr\AcTrIdx.h[cno] 1/71/17/13 12/2/2/4 REPLACE DupKeys"
 00260   goto L40
 01260 IGNORE: continue 

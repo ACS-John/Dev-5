@@ -15,7 +15,7 @@
 00170   fntop(program$,cap$="Annual Federal Unemployment Worksheet")
 00190   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00200   fnGetPayrollDates(beg_date,end_date)
-00210   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00210   open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 00220   read #20,using L230: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 00230 L230: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 00240   close #20: 
@@ -73,10 +73,10 @@
 00650   fnopenprn
 00660 ! ______________________________________________________________________
 00670   on pageoflow goto PGOF
-00680   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00680   open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 00690   gosub HDR
-00700   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
-00710   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00700   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+00710   open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 00720 L720: read #2,using L730: eno,mat em$,ss$,em5,em6 eof EOF2
 00730 L730: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
 00740   m2=dedytdfeduc=0
@@ -215,7 +215,7 @@
 02040   return 
 02050 VBOPENPRINT: ! 
 02060   if file(20)=-1 then 
-02070     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
+02070     fnpa_open ! open #20: "Name=[Q]\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
 02090     lyne=margin ! starting of 1st line
 02100     column2=103 !:
           column3=153

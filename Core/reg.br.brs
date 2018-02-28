@@ -106,7 +106,7 @@
 20820 fnend
 20840 def fn_reg_setup
 20860   library 'S:\Core\Library': fngethandle,fnerror
-20880   open #reg_h:=fngethandle: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+20880   open #reg_h:=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 20900   fn_reg_setup=1
 20920   on error goto ERTN
 20940 fnend
@@ -228,8 +228,8 @@
 40820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnStatusClose
 40840     dim cregFileData$*256
 40860     dim cregFileIndex$*256
-40880     cregFileData$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h'&env$('CNo')
-40900     cregFileIndex$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')
+40880     cregFileData$='[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h[cno]'
+40900     cregFileIndex$='[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h[cno]'
 40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 40940     fn_creg_setup=val(env$('CNo'))
 40960     creg_setup=val(env$('CNo'))
@@ -276,7 +276,7 @@
 84020   fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 84040   for programItem=1 to udim(mat program_name$)
 84060     if program_file$(programItem)<>'' then
-84080       fniniopen(env$('Q')&'\INI\'&trim$(program_file$(programItem))&'.ini')
+84080       fniniopen('[Q]\INI\'&trim$(program_file$(programItem))&'.ini')
 84100       ! if pos(program_name$(programItem),'Print Payroll Checks')>0 then pause
 84120       for propertyItem=1 to udim(mat property$)
 84140         dim iniData$*128

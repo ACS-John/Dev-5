@@ -14,7 +14,7 @@
 00140   fncno(cno,cnam$)
 00144   actpd$=fnactpd$
 00145   pedat=val(actpd$)
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
+00150   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00160   fscode=fnfscode
 00165   fnfscode
@@ -28,9 +28,9 @@
 00200   in3$(1)="8,25,N 12.2,UT,N" : in3$(2)="8,45,N 12.2,UT,N"
 00210   mp1=75
 00220   if fnps=2 then mp1=mp1+3
-00230   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
-00240   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&"," !:
-          fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
+00230   fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\FNSFIndx.h[cno],Shr"
+00240   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno]," !:
+          fl1$=fl1$&"KFName=[Q]\GLmstr\FNSGIndx.h[cno],Shr"
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
 00270   fnTos(sn$="ACglcash") !:
@@ -46,10 +46,10 @@
 00350   costcntr=val(resp$(1))
 00360 L360: if fnps=2 then goto L390 ! secondary
 00365   close #3: ioerr L370
-00370 L370: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('Temp')&"\fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
+00370 L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('Temp')&"\fsindex.H[cno] 75 3 Replace DupKeys -N"
 00380   goto L400
-00390 L390: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('Temp')&"\fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
-00400 L400: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00390 L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('Temp')&"\fsindex.H[cno] 78 3 Replace DupKeys -N"
+00400 L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('Temp')&"\fsindex.h[cno],Shr",internal,input,keyed 
 00410   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00420 L420: read #1,using L460: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1820

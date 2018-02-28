@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\Conversion\GLmstr-338-416
-00011 ! convert "&env$('Q')&"\GLmstr from RECL 338 to RECL 416 Format
+00011 ! convert [Q]\GLmstr from RECL 338 to RECL 416 Format
 10000   def library fnglmstr_338_416
 10020     library 'S:\Core\Library': fntop, fnerror,fncno,fnacglblds,fnStatus,fnCopy,fnindex_it
 10040     on error goto ERTN
@@ -11,9 +11,9 @@
 10160     stopable$="xit"
 10200     fnStatus('Converting GLmstr from 338 to 416...')
 10420 ! 
-10440     fnCopy(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),416) ! &" -416 -n"
+10440     fnCopy("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\GLmstr.h[cno]",416) ! &" -416 -n"
 10460     stopable$="NO"
-10520     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,outIn,keyed 
+10520     open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,outIn,keyed 
 10540     do 
 10560       read #1,using 'Form POS 339,13*PD 6.2': mat revb eof DONE
 10580       mat revb=(0)
@@ -21,7 +21,7 @@
 10620     loop 
 10660 DONE: ! 
 10680     close #1: 
-10700     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\glIndex.h"&env$('cno'),"1 12")
+10700     fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\glIndex.h[cno]","1 12")
 10720     fnacglblds
 10740     goto XIT
 10760 ! ______________________________________________________________________

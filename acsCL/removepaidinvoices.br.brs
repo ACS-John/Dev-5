@@ -25,8 +25,8 @@
 00210   if ckey=5 or ckey=cancel then goto XIT else !:
           rd1=val(resp$(1))
 00220 ! fnwait
-00230   open #ivpaid=1: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00240   open #work=2: "Name="&env$('Q')&"\CLmstr\Work."&session$&",Size=0,RecL=34,Replace",internal,output 
+00230   open #ivpaid=1: "Name=[Q]\CLmstr\IvPaid.H[cno],KFName=[Q]\CLmstr\IVIndex.H[cno],Shr",internal,outIn,keyed 
+00240   open #work=2: "Name=[Q]\CLmstr\Work."&session$&",Size=0,RecL=34,Replace",internal,output 
 00250 READ_IVPAID: ! 
 00260   read #ivpaid,using 'Form POS 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn eof EO_IVPAID
 00270   if fndate_mmddyy_to_ccyymmdd(dp)<=rd1 then goto READ_IVPAID
@@ -36,8 +36,8 @@
 00310 EO_IVPAID: ! 
 00320   close #ivpaid: 
 00330   close #work: 
-00340   fnFree(env$('Q')&"\CLmstr\IvPaid.H"&env$('cno'))
-00350   fnRename(env$('Q')&"\CLmstr\Work."&session$,env$('Q')&"\CLmstr\IvPaid.H"&env$('cno'))
+00340   fnFree("[Q]\CLmstr\IvPaid.H[cno]")
+00350   fnRename("[Q]\CLmstr\Work."&session$,"[Q]\CLmstr\IvPaid.H[cno]")
 00360   goto XIT
 00370 ! ______________________________________________________________________
 00380 XIT: fnxit

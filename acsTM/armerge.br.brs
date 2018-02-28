@@ -7,10 +7,10 @@
 00080   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
 00090   pr newpage
 00100   pr f "10,10,c 50,H,N": "A/R Merge Transactions In Process"
-00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L700
-00120   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outIn,relative ioerr L700
+00110   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L700
+00120   open #2: "Name=[Q]\TMmstr\ARTrans.h[cno],Shr",internal,outIn,relative ioerr L700
 00130   open #h_addr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn,relative ioerr L700
-00140 ! open #h_armotran:=4: "Name="&env$('Q')&"\TMmstr\ARMoTran.h"&env$('cno')&",Shr",internal,output ioerr L700
+00140 ! open #h_armotran:=4: "Name=[Q]\TMmstr\ARMoTran.h[cno],Shr",internal,output ioerr L700
 00150 LOOP_TOP: ! 
 00152   r3=r3+1
 00160   read #h_addr,using F_ADDR,rec=r3: p$,iv$,mat tr,id$,pgl$,gl$(1),ga(1),gl$(2),ga(2),gl$(3),ga(3),gl$(4),ga(4),gl$(5),ga(5),gl$(6),ga(6),gl$(7),ga(7),gl$(8),ga(8),gl$(9),ga(9),gl$(10),ga(10) eof L540,noRec L540 ioerr L700

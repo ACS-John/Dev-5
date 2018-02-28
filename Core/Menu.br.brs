@@ -172,14 +172,14 @@
 18160     fnputcno(cno)
 18180     fncno(cno)
 18200   end if
-18260   ! if ~exists(env$('Q')&'\INI\acs'&env$('cursys')) then execute 'mkdir '&env$('Q')&'\INI\acs'&env$('cursys')
+18260   ! if ~exists('[Q]\INI\acs'&env$('cursys')) then execute 'mkdir [Q]\INI\acs'&env$('cursys')
 18280   if env$('cursys')='UB' then
 18340     fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 18480   end if
 18500   !
 18520   dashboard_height=fn_dashboard_height
 18540   fn_grid_setup !
-18560   if ~exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&env$('cno')) then
+18560   if ~exists('[Q]\'&env$('cursys')&"mstr\Company.h[cno]") then
 18580     chain "S:\Core\Programs\Select Company.br"
 18600   end if
 18620 fnend
@@ -267,11 +267,7 @@
 20760         fnclear_menu
 20780         execute 'proc '&menu_option$
 20800       else if lwrc$(menu_option$(len(menu_option$)-2:len(menu_option$)))='.br' then
-20810         ! if uprc$(env$('cursys'))='P4' then
-20820         !   menu_option$=srep$(menu_option$,'[cursys]','PR')
-20830         ! else
-20840           menu_option$=srep$(menu_option$,'[cursys]',env$('cursys'))
-20850         ! end if
+20840         menu_option$=srep$(menu_option$,'[cursys]',env$('cursys'))
 20860         fnclear_menu
 20870         fn_chain(menu_option$)
 20880       else if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.cmd' then
@@ -315,7 +311,7 @@
 21580           fnFileSaveAs('*.*')
 21600         else if menu_option$='Save Company As' then
 21610           fnclear_menu
-21620           fnFileSaveAs('*h'&env$('cno'))
+21620           fnFileSaveAs('*h[cno]')
 21630         end if
 21640       else if lwrc$(ltrm$(menu_option$)(1:20))='editinwordprocessor:' then
 21642         fn_callEditInWordProcessor(menu_option$)
@@ -587,7 +583,7 @@
 29160       fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 29170     else if env$('cursys')="GL" then
 29180       library 'S:\Core\Library': fnpedat$
-29190       open #h_tmp:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr DD_GL_XIT
+29190       open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_XIT
 29200       read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
 29210       close #h_tmp:
 29220       fnLbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
@@ -629,7 +625,7 @@
 30550     ! if env$('acsDeveloper')<>'' then
 30560     !   fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)
 30570     !   fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
-30571     !   fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "'&env$('Q')&'"',int(dashboard_width/2)-1,0,0,fraDashboard)
+30571     !   fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "[Q]"',int(dashboard_width/2)-1,0,0,fraDashboard)
 30572     !   fnLbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
 30580     ! end if
 30590   end if
@@ -888,7 +884,7 @@
 71510       fn_dm_add(' -')
 71512       fn_dm_add(' Locate 1','S:\Core\Locate.br')
 71520     end if
-71540     if env$('ACSDeveloper')<>'' and exists(env$('Q')&'\tmmstr\Company.h420') then ! trim$(env$("ACSDeveloper"))<>""
+71540     if env$('ACSDeveloper')<>'' and exists('[Q]\tmmstr\Company.h420') then ! trim$(env$("ACSDeveloper"))<>""
 71560       fn_dm_add('ACS LLC')
 71580       fn_dm_add(' Client 420','S:\acsTM\Client.br')
 71600       fn_dm_add(' Support 420','S:\acsTM\Support.br')

@@ -33,7 +33,7 @@
 18380   fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
 18400   fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 18420   if minimumbal=0 then 
-18440     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Shr",internal,outIn,relative ioerr ignore
+18440     open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Shr",internal,outIn,relative ioerr ignore
 18460     read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 18480     close #minbal: ioerr ignore
 18500   end if 
@@ -92,10 +92,10 @@
 36040   fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
 36060   fndat(dat$,2)
 36080 ! 
-38100   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-38120   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+38100   open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+38120   open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed 
 38140   gosub BUD1
-38160   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+38160   open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 38180   fnopenprn
 38200   gosub HDR
 42000 READ_CUSTOMER: ! r:
@@ -211,8 +211,8 @@
 56000 XIT: fnxit
 58000 BUD1: ! r:
 58020   bud1=0
-58040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr EO_BUD1
-58060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+58040   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
+58060   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 58080   bud1=1
 58100 EO_BUD1: ! 
 58120   return  ! /r

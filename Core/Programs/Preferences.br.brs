@@ -66,7 +66,7 @@
 32280 ! 
 32300     fnLbl(lc+=1,1,"Data Folder:",col1_width,1)
 32320     fnTxt(lc,col2_pos,40,255,0,"",1)
-32340     resp$(rc+=1)=os_filename$(env$('Q')&'\')
+32340     resp$(rc+=1)=os_filename$('[Q]\')
 32360     fnButton(lc,col2_pos+42+5,'Open',15) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 32380     lc+=1
 32400     fnChk(lc+=1,col2_pos,'Include Report Cache in Save As',1)
@@ -128,7 +128,7 @@
 33520     if ck=>screen_ck_low and ck<=screen_ck_high then 
 33540       goto SCREEN_CK_GOTO
 33560     else if ck=15 then 
-33580       execute 'sy -c -w explorer "'&os_filename$(env$('Q')&'\')&'"'
+33580       execute 'sy -c -w explorer "'&os_filename$('[Q]\')&'"'
 33600     else if ck=16 then 
 33620       fnureg_write('Save As Path',os_filename$(env$('userprofile')&'\Desktop'))
 33640     else if ck=14 then 
@@ -236,7 +236,7 @@
 50140     ! fnChk(lc+=1,5,"Enable Report Cache",1) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 50160     ! resp$(resp_report_cache:=dsp_rc+=1)=report_cache$
 50180     fnTxt(lc,35,40,256,0,'',1,'') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
-50200     resp$(dsp_rc+=1)=os_filename$(env$('Q')&'\Report Cache')
+50200     resp$(dsp_rc+=1)=os_filename$('[Q]\Report Cache')
 50210     fnButton(lc,30,'Open',12) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 50220     lc+=1
 50230     fnLbl(lc+=1,1,"PrintAce Max Pages:",col1_width,1)
@@ -250,7 +250,7 @@
 50270     fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 50280 !   lc+=1
 50290 !   fnLbl(lc+=1,1,"Client's path to Report Cache:",col1_width,1)
-50300 !   fnTxt(lc,col2_pos,40,256,0,'',0,'client path to '&os_filename$(env$('Q')&'\Report Cache')&'\nOnly necessary if using Client/Server.') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+50300 !   fnTxt(lc,col2_pos,40,256,0,'',0,'client path to '&os_filename$('[Q]\Report Cache')&'\nOnly necessary if using Client/Server.') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 50310 !   resp$(resp_client_report_cache:=dsp_rc+=1)=client_report_cache$
 50320     lc+=1
 50330     fnLbl(lc+=1,1,"Word Executable:",col1_width,1,0,0,0,'Or default word processor')
@@ -311,7 +311,7 @@
 50868         word_exe$=office_word_exe$
 50870       end if 
 50880     else if ck=12 then 
-50900       execute 'sy -c -w explorer "'&os_filename$(env$('Q')&'\Report Cache')&'"'
+50900       execute 'sy -c -w explorer "'&os_filename$('[Q]\Report Cache')&'"'
 50920     else ! Save and Apply
 50940       fn_save
 50960       if ck<>2 then goto XIT

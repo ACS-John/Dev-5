@@ -36,7 +36,7 @@
 72060   close #hCompany: ioerr ignore
 72140 return  ! /r
 74000 COMPANY_SAVE: ! r:
-74020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&env$('cno'))
+74020   fnFree('[Q]\'&env$('cursys')&'mstr\Company.h[cno]')
 74070   dim fileiosubs$(0)*512
 74080   hCompany=fnOpenFile(env$('cursys')&' Company',mat Comp$,mat CompN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat fileiosubs$,supressprompt:=2)
 74100   write #hCompany,using form$(hCompany): mat Comp$,mat CompN 

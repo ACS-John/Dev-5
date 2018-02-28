@@ -13,12 +13,12 @@
 00120   tln(1)=3 : tln(2)=2 : tln(3)=30
 00130   fltyp$(1)="N" : fltyp$(2)="n" : fltyp$(3)="C"
 00140   mask(1)=30 : mask(2)=30 : mask(3)=0
-00150   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00150   open #1: "Name=[Q]\CLmstr\dptmstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00160   close #1: 
-00170   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00170   open #1: "Name=[Q]\CLmstr\dptmstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00180   fnHamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00190   close #1: 
-00200   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&" 1 5 Replace DupKeys -n"
+00200   execute "Index [Q]\CLmstr\DPTMSTR.h[cno]"&' '&"[Q]\CLmstr\DPTIDX1.h[cno] 1 5 Replace DupKeys -n"
 00210 XIT: fnxit
 00220 ! ______________________________________________________________________
 00230 ! <Updateable Region: ERTN>

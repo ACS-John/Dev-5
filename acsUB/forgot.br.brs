@@ -18,8 +18,8 @@
 11800   fbd=val(resp$(1)) conv MAIN
 11900   if ckey=5 then goto XIT
 12000   txt$="Reconstructing Year-To-Date Usage beginning with "&fbd$(1:2)&"/"&fbd$(3:4)&"/"&fbd$(5:6)&"."
-12100   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-12200   open #2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,input,keyed 
+12100   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+12200   open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,input,keyed 
 12300 READ_CUSTOMER: ! 
 12400   read #1,using L210: z$ eof XIT
 12500 L210: form pos 1,c 10

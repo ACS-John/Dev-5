@@ -11,7 +11,7 @@
 00110 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Print Texas Unemployment Report")
 00130   fncno(cno,cnam$)
-00150   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00150   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc !:
         close #1: 
 00160   if fnprocess=1 then goto L280
@@ -27,7 +27,7 @@
 00200   fnLbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
 00205   fnTxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
 00210   fnreg_read("TexasUCFile",csvpath$)
-00215   if trim$(csvpath$)="" then csvpath$=env$('Q')&"\GLmstr\txuc.csv"
+00215   if trim$(csvpath$)="" then csvpath$="[Q]\GLmstr\txuc.csv"
 00220   resp$(3)=csvpath$
 00225   fnCmdSet(2)
 00230   fnAcs(sn$,0,mat resp$,ckey)
@@ -36,7 +36,7 @@
 00245   namcde$=uprc$(resp$(2))
 00250   csvpath$=resp$(3)
 00255   if trim$(namcde$)="" then goto L170
-00280 L280: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00280 L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
 00290   open #(h_csv:=fngethandle): "Name="&csvpath$&",REPLACE",display,output 
 00300   fnopenprn
 00310   gosub HDR

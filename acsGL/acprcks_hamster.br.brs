@@ -16,7 +16,7 @@
 13400 ! ______________________________________________________________________
 13600   def fn_open_file
 13800     open_file_count=0 ! this value is used in the close_file sub routine
-14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\AcPrCks.h"&env$('cno')&",Shr",internal,outIn,relative 
+14000     open #open_file_count+=1: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",internal,outIn,relative 
 14200   fnend 
 14400   def fn_close_file
 14600     for j=1 to open_file_count : close #j: : next j

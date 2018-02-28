@@ -174,8 +174,8 @@
 22310   ! if env$('acsDeveloper')<>'' then pause
 22320   if enable_bulksort then gosub BULKSORT
 22340   if enable_cass_sort then gosub SORT1
-22360   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed  ! open in account order
-22380   open #h_customer_2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence
+22360   open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
+22380   open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
 22400 ! /r
 24000 SCREEN1: ! r:
 24020   starting_key$="" : route_filter=0 : respc=0
@@ -204,7 +204,7 @@
 24440   end if 
 24460   lc+=1
 24480   fnLbl(lc+=1,1,"Starting Route/Sequence:",25,1)
-24500   fncombof("ubm-act-nam",lc,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
+24500   fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 24520   resp$(respc_start_place:=respc+=1)="[All]"
 24540   lc+=1
 24560   fnLbl(lc+=1,1,"Route Number:",25,1)
@@ -446,8 +446,8 @@
 50090 BUD1: ! r:
 50092   bud1=0
 50100   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5)
-50110   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,input,keyed ioerr EO_BUD1
-50120   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,input,relative 
+50110   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EO_BUD1
+50120   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,input,relative 
 50130   bud1=1
 50140 EO_BUD1: ! 
 50142   return  ! /r
@@ -473,7 +473,7 @@
 53350 EO_BUD2: ! 
 53360   return  ! /r
 53500 def fn_get_mat_at(mat at$)
-53540   open #h_company:=fngethandle: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
+53540   open #h_company:=fngethandle: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 53560   read #h_company,using "Form POS 41,2*C 40": at$(2),at$(3)
 53580   close #h_company: 
 53600   at$(1)=env$('cnam')
@@ -556,7 +556,7 @@
 68010   ! r: any and all necessary setup (except opening the printer) to pr one bill
 68020   if ~pbcampbel_setup then 
 68040     pbcampbel_setup=1
-68060     open #h_pbcampbel_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+68060     open #h_pbcampbel_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 68080     F_PBCAMPBEL_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
 68110     blankbefore=1
 68120     blankafter=3
@@ -766,7 +766,7 @@
 73660 fnend 
 74000 BULKSORT: ! r: sort in bulk sort code sequence
 74020   open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
-74060   write #h_control,using 'form pos 1,c 128': "FILE "&env$('Q')&"\UBmstr\customer.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+74060   write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 74080   if route_filter>0 then 
 74082     write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
 74084   end if
@@ -778,7 +778,7 @@
 74200 return  ! /r
 76000 SORT1: ! r: SELECT & SORT - sorts Cass1 file 
 76010   enable_cass_sort=0 ! replaces old s5 variable
-76020   open #h_cass1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr XIT_SORT1
+76020   open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr XIT_SORT1
 76040   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
 76060   enable_cass_sort=1
 76080   if route_filter=0 then routekey$="" else routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -810,7 +810,7 @@
 78020   ! r: any and all necessary setup (except opening the printer) to pr one bill
 78040   if ~pbcerro_setup then 
 78060     pbcerro_setup=1
-78080     open #h_pbcerro_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+78080     open #h_pbcerro_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 78100     F_PBCERRO_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1854,pd 5.2
 78120     blankbefore=1
 78140     blankafter=3
@@ -1280,7 +1280,7 @@
 89020 ! r: any and all necessary setup (except opening the printer) to pr one bill
 89030   if ~pbomaha_setup then 
 89040     pbomaha_setup=1
-89050     open #h_pbomaha_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+89050     open #h_pbomaha_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 89060     F_PBOMAHA_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1854,pd 5.2
 89062     pboposrightcol=70
 89070   end if 
@@ -1398,7 +1398,7 @@
 92020   ! r: any and all necessary setup (except opening the printer) to pr one bill
 92030     if ~pbpennington_setup then 
 92040       pbpennington_setup=1
-92050       open #h_pbpennington_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+92050       open #h_pbpennington_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 92060     end if 
 92090     read #h_pbpennington_customer,using f_pbpennington,key=z$: z$,a4,mat b,mat d,bal,f,mat g,extra_3,extra_4
 92100     f_pbpennington: form pos 1,c 10,pos 149,pd 2,pos 157,11*pd 4.2,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1750,2*n 6
@@ -1461,7 +1461,7 @@
 94010 ! r: any and all necessary setup (except opening the printer) to pr one bill
 94015     if ~pbedinburg_setup then 
 94020       pbedinburg_setup=1
-94025       open #h_pbedinburg_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+94025       open #h_pbedinburg_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 94030       F_PBedinburg_CUSTOMER: form pos 1,c 10,pos 147,pd 2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1750,2*n 6
 94032       lyne=3
 94035     end if 

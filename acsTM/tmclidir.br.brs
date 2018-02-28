@@ -5,7 +5,7 @@
 00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00070   fntop(program$,cap$="Client Directory")
 00080   fncno(cno,cnam$)
-00090   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr L860
+00090   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L860
 00100   read #1,using L110: mat cat$ ioerr L860
 00110 L110: form pos 1,10*c 30
 00120   close #1: 
@@ -16,7 +16,7 @@
 00170   dim z$*5,a$(5)*30,ph$*12,cnam$*40,prg$*20,cm$*70
 00180   dim cat$(10)*30,flo$(10),fli$(10),catcode(10),dd(10),ph2$*12
 00190   namtab=44-len(rtrm$(cnam$))/2
-00200   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L860
+00200   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L860
 00210 L210: pr newpage
 00230   pr f "10,10,c 48,n": "ENTER DATE FOR CLIENT DIRECTORY IN MMDDYY FORMAT"
 00240   pr f "10,60,n 6,n": dat

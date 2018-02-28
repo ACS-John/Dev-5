@@ -10,10 +10,10 @@
 00100 ! ______________________________________________________________________
 00110   right=1 : center=2
 00120   fntop(program$,cap$="Print Bar Graph of Earnings")
-00140   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  !:
+00140   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  !:
         read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
 00150 ! ______________________________________________________________________
-00160   open #1: "Name="&env$('Q')&"\GLmstr\Period.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+00160   open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 00170 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 00180   if month<1 or month>13 then goto L170
 00190   month(month)=month !:
@@ -21,9 +21,9 @@
 00200   goto L170
 00210 L210: close #1: 
 00220 ! ______________________________________________________________________
-00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00240   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00250   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
+00230   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
+00240   open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
+00250   open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
 00260 SCR1: ! 
 00270   t5=0
 00280   fnTos(sn$='CloseYear3') !:
@@ -189,7 +189,7 @@
 01570 ! ______________________________________________________________________
 01580 VBOPENPRINT: ! 
 01590   if file(20)=-1 then 
-01600     open #20: "Name="&env$('Q')&"\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
+01600     open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
 01610     pr #20: 'Call Print.MyOrientation("Portrait")'
 01620     lyne=margin ! starting of 1st line
 01630     column1=16 !:

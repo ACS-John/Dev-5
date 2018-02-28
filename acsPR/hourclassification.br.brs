@@ -14,7 +14,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\hourclass.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\PRmstr\hourclass-Idx.h"&env$('cno')&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00150   open #open_file_count+=1: "Name=[Q]\PRmstr\hourclass.h[cno],Version=1,KFName=[Q]\PRmstr\hourclass-Idx.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

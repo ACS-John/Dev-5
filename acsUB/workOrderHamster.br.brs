@@ -12,8 +12,8 @@
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
 01600   open_file_count=0 ! this value is used in the close_file sub routine
-01700   open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\workorder.h"&env$('cno')&",Use,RecL=600,Shr",internal,outIn,relative
-01720 ! open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\workorder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkindex.h"&env$('cno')&",Use,RecL=600,KPs=1/11,KLn=10/8,Shr",internal,outIn,keyed 
+01700   open #open_file_count+=1: "Name=[Q]\UBmstr\workorder.h[cno],Use,RecL=600,Shr",internal,outIn,relative
+01720 ! open #open_file_count+=1: "Name=[Q]\UBmstr\workorder.h[cno],KFName=[Q]\UBmstr\wkindex.h[cno],Use,RecL=600,KPs=1/11,KLn=10/8,Shr",internal,outIn,keyed 
 01800   return 
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -51,7 +51,7 @@
 36120   fnH2AddText("line$(4)"        ,100             ,'C'                                    )    
 36140   ! fnH2AddText("line$(5)"        ,100             ,'C'                                    ) ! adding this line causes err 58 - at least with Pennington it does   
 36160   !
-36180     fnH2AddComboF(1,env$('Q')&'\UBmstr\Customer.h'&env$('cno'),1,10,41,30,env$('Q')&'\UBmstr\ubIndex.h'&env$('cno'),0)
+36180     fnH2AddComboF(1,'[Q]\UBmstr\Customer.h[cno]',1,10,41,30,'[Q]\UBmstr\ubIndex.h[cno]',0)
 36200   !
 36400 fnend
 

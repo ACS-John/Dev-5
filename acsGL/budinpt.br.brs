@@ -10,7 +10,7 @@
 00100   dim heading$*70,form$*80,numeric_format$*20,selection$*70
 00110 ! ______________________________________________________________________
 00130 ! 
-00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  
+00140   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  
 00142   read #1,using 'Form Pos 384,N 2',rec=1: nap 
 00144   close #1: 
 00150 !
@@ -38,7 +38,7 @@
 00310   if resp$(5)="True" then method_to_allocate=3 ! all to month 1
 00320   if method=2 then gosub L790
 00330   if method=2 then gosub BUDGET_FILE_NUM
-00340   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00340   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00350   fnopenprn
 00370 ! 
 00380   pr #255: "   GL Number    New Budget  Old Budget"
@@ -87,7 +87,7 @@
 00780 ! ______________________________________________________________________
 00790 L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 00820 ! 
-00830   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  
+00830   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  
 00832   read #1,using 'Form Pos 384,N 2',rec=1: nap 
 00834   close #1: 
 00840   pr newpage
@@ -117,7 +117,7 @@
 01030   fnAcs(sn$,0,mat resp$,ckey)
 01040   if ckey=5 then goto XIT
 01050   bud=val(resp$(1)) ! budget file number to pull
-01060   open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".h"&env$('cno')&",Shr",internal,outIn,keyed ioerr BUDGET_FILE_NUM
+01060   open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr BUDGET_FILE_NUM
 01070 return ! /r
 01080 ! ______________________________________________________________________
 01090 L1090: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)

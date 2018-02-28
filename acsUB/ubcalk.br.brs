@@ -47,8 +47,8 @@
 00176   dim extra(23)
 00200 ! /r
 00250   fnLastBillingDate(d1)
-00260   work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
-00264   work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
+00260   work$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
+00264   work_addr$="[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]"
 00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then btu_factor_enabled=1 else btu_factor_enabled=btu=0
 00270 ! synchronize this setting with S:\Utility Billing\Enter Readings and Charges (Enter Readings and Charges)
 00280 ! ______________________________________________________________________
@@ -65,11 +65,11 @@
 00480   fnAutomatedSavePoint('before')
 00500   fnopenprn
 00505 ! 
-00510   open #h_ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00560   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00510   open #h_ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
+00560   open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00570   F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00580 F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-00590   open #h_ubtrans:=3: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00590   open #h_ubtrans:=3: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 00600   FORM_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00610   open #h_work:=2: "Name="&work$,internal,outIn,relative 
 00620   F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
@@ -312,14 +312,14 @@
 64320   fnend  ! return
 68000   def fn_bud_open
 68020     bud1=0
-68040     open #budmstr:=6: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr BUD1_XIT
-68060     open #budtrans:=7: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+68040     open #budmstr:=6: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BUD1_XIT
+68060     open #budtrans:=7: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 68080     bud1=1
 68100 BUD1_XIT: ! 
 68120   fnend 
 69000   def fn_deposit_open !
-69020     open #hDeposit1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed 
-69080     open #hDeposit2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed
+69020     open #hDeposit1:=fngethandle: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed 
+69080     open #hDeposit2:=fngethandle: "Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]"&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed
 69120   fnend 
 70000   def fn_bud2
 70020     bud2=0

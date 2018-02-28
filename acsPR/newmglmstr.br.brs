@@ -13,16 +13,16 @@
 00140   fntop(program$,cap$="Accrued Payroll Tax Information")
 00160   gosub BLDSCR
 00170 ! ______________________________________________________________________
-00180   if exists(env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno'))=0 then gosub CREATE_FILES
-00190   open #1: "Name="&env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\MGLIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00200   open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed 
+00180   if exists("[Q]\PRmstr\MGLMstr.h[cno]")=0 then gosub CREATE_FILES
+00190   open #1: "Name=[Q]\PRmstr\MGLMstr.h[cno],KFName=[Q]\PRmstr\MGLIdx1.h[cno],Shr",internal,outIn,keyed 
+00200   open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed 
 00210 ! ______________________________________________________________________
 00220 MENU1: ! 
 00230 ASKDEPARTMENT: ! 
 00240   fnTos(sn$="Department-ask") !:
         respc=0
 00250   fnLbl(1,1,"Department #:",15,1)
-00260   fncombof("Dept",1,18,3,env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),1,3,0,0,env$('Q')&"\PRmstr\mglidx1.h"&env$('cno'),0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) !:
+00260   fncombof("Dept",1,18,3,"[Q]\PRmstr\mglmstr.h[cno]",1,3,0,0,"[Q]\PRmstr\mglidx1.h[cno]",0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) !:
         resp$(respc+=1)=""
 00270   fnCmdKey("&Add",1,0,0,"Enter accrual information on a new department." ) !:
         fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record") !:
@@ -90,9 +90,9 @@
 00770 CREATE_FILES: ! 
 00780   close #1: ioerr L790
 00790 L790: close #2: ioerr L800
-00800 L800: open #1: "Name="&env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno')&",RecL=135,Replace",internal,output 
+00800 L800: open #1: "Name=[Q]\PRmstr\MGLMstr.h[cno],RecL=135,Replace",internal,output 
 00810   close #1: 
-00820   execute "Index "&env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno')&","&env$('Q')&"\PRmstr\MGLIdx1.h"&env$('cno')&",1,3,Replace,DupKeys"
+00820   execute "Index [Q]\PRmstr\MGLMstr.h[cno],[Q]\PRmstr\MGLIdx1.h[cno],1,3,Replace,DupKeys"
 00830   return 
 00840 ! ______________________________________________________________________
 00850   restore #1: 

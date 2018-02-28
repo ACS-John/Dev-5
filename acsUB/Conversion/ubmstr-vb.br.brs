@@ -9,20 +9,20 @@
 00090     dim x$*10,p$*10,rw4(22,13)
 00100     fnStatus('Customer File Conversion (S:\acsUB\conversion\ubmstr-vb)')
 00120 ! 
-00122 ! fnCopy(env$('Q')&"\UBmstr\ubcoinfo.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133) ! this should already be done.
-00132     if exists(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')) then 
-00133       fnFree(env$('Q')&"\UBmstr\customer.h"&env$('cno'))
-00134       fnCopy(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'))
-00136       fnFree(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'))
+00122 ! fnCopy("[Q]\UBmstr\ubcoinfo.h[cno]","[Q]\UBmstr\Company.h[cno]",133) ! this should already be done.
+00132     if exists("[Q]\UBmstr\ubMaster.h[cno]") then 
+00133       fnFree("[Q]\UBmstr\customer.h[cno]")
+00134       fnCopy("[Q]\UBmstr\ubMaster.h[cno]","[Q]\UBmstr\Customer.h[cno]")
+00136       fnFree("[Q]\UBmstr\ubMaster.h[cno]")
 00138     end if 
-00150     fnCopy(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067)
+00150     fnCopy("[Q]\UBmstr\Customer.h[cno]","[Q]\UBmstr\Customer.h[cno]",2067)
 00180     fnub_index_customer
-00230     fnindex_it(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'),env$('Q')&"\UBmstr\adrIndex.h"&env$('cno'),"1 10")
+00230     fnindex_it("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
 00240 ! 
-00250     open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outIn,keyed 
+00250     open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
 00260     if version(1)=1 then goto XIT
-00270     open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
-00280     open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr,Use,RecL=149",internal,outIn,relative 
+00270     open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
+00280     open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative 
 00290 L290: read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ eof L590
 00300     form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00310     extra(1)=val(z$(1:2)) conv L290 ! route
@@ -64,7 +64,7 @@
 00600     close #1: 
 00610     close #81: ioerr ignore
 00620     close #82: ! ioerr L640
-00630     fnindex_it(env$('Q')&"\UBmstr\BudMstr.h"&env$('cno'),env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno'), '1 10')
+00630     fnindex_it("[Q]\UBmstr\BudMstr.h[cno]","[Q]\UBmstr\BudIdx1.h[cno]", '1 10')
 00640 ! L640: ! Goto 70
 00650 XIT: fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnxit
 00660 IGNORE: continue 

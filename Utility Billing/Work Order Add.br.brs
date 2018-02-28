@@ -1,7 +1,7 @@
 18000 library program$: fnworkOrderAdd
 18010 library 'S:\Core\Library': fnxit,fntop,fnask_account,fngethandle
 18020 fntop(program$)
-18030 open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+18030 open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 18040 do
 18050   if fnask_account('Work Order',z$,h_customer)=5 then 
 18060     goto XIT
@@ -55,7 +55,7 @@
 32780   end if ! /r
 
 33000   dat$=date$("Month DD, CCYY")
-33010   open #wo_h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+33010   open #wo_h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 33020   ! really only need these: (z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
 33030   read #wo_h_customer,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 33040   F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
@@ -146,7 +146,7 @@
 40020 ! fn_workorder_print_legacy
 
 43000    ! r: write to WorkOrder History file (z$)
-43020     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outIn,keyed
+43020     open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
 43040     write #h_workorder,using "form pos 1,Cr 10,n 8,c 30,5*c 100": z$,date('ccyymmdd'),customer_name$,mat line$
 43060     close #h_workorder: 
 43080   ! /r
@@ -213,8 +213,8 @@
 73120 ! /r
 77000 def fn_workorder_print_legacy
 77010   library 'S:\Core\Library': fnopenprn,fncloseprn,fnsavetoasstart
-77030 ! if exists(env$('Q')&"\WorkOrder")=0 then execute "mkdir "&env$('Q')&"\WorkOrder -n"
-77032   fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
+77030 ! if exists("[Q]\WorkOrder")=0 then execute "mkdir [Q]\WorkOrder -n"
+77032   fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
 77034   fnopenprn
 77040   pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
 77050   pr #255: "{\fs24 "&env$('cnam')&"}}}"

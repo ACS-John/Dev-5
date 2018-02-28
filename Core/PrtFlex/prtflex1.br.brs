@@ -11,7 +11,7 @@
 12100   dim name$*30,vname$*20,colmask$*3,tt$*200,colhdr$(80)*30,colmask$(80)*3
 12120   dim open_read$*80,abbrev$*20,filename$(10)*40
 12140 ! /r
-14000   datafolder$=env$('Q')&'\'&uprc$(trim$(fncursys$))&"mstr" ! data folder grid folder is for use and updating by customer
+14000   datafolder$='[Q]\'&uprc$(trim$(fncursys$))&"mstr" ! data folder grid folder is for use and updating by customer
 14020   programfolder$=os_filename$('S:\acs'&uprc$(trim$(fncursys$))) ! program grid folder (and sub-folder and files) are for distribution.  files and folders only distribute if they are missing.  makes updating them difficult.
 16000 ! r: make any missing folders in the data directory
 16020   if ~exists(datafolder$&"\Grid") then 

@@ -16,12 +16,12 @@
 11700   fn_field_labels ! get column headers
 11800   hp1=66-int(len(rtrm$(cnam$))/2)
 11900   hp2=66-int(len(rtrm$(dat$))/2)
-12000   id$(1)=" 1. Balance Sheet File" : fil$(1)="ACGLFNSB.H"&env$('cno') : idx$(1)="FNSBINDX.H"&env$('cno')
-12100   id$(2)=" 2. Income Statement File" : fil$(2)="ACGLFNSI.H"&env$('cno') : idx$(2)="FNSIINDX.H"&env$('cno')
-12200   id$(3)=" 3. Fund Statement / Cash Flow File" : fil$(3)="ACGLFNSF.H"&env$('cno') : idx$(3)="FNSFINDX.H"&env$('cno')
-12300   id$(4)=" 4. Secondary Balance Sheet File" : fil$(4)="ACGLFNSC.H"&env$('cno') : idx$(4)="FNSCINDX.H"&env$('cno')
-12400   id$(5)=" 5. Secondary Income Statement File" : fil$(5)="ACGLFNSJ.H"&env$('cno') : idx$(5)="FNSJINDX.H"&env$('cno')
-12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H"&env$('cno') : idx$(6)="FNSGINDX.H"&env$('cno')
+12000   id$(1)=" 1. Balance Sheet File" : fil$(1)="ACGLFNSB.H[cno]" : idx$(1)="FNSBINDX.H[cno]"
+12100   id$(2)=" 2. Income Statement File" : fil$(2)="ACGLFNSI.H[cno]" : idx$(2)="FNSIINDX.H[cno]"
+12200   id$(3)=" 3. Fund Statement / Cash Flow File" : fil$(3)="ACGLFNSF.H[cno]" : idx$(3)="FNSFINDX.H[cno]"
+12300   id$(4)=" 4. Secondary Balance Sheet File" : fil$(4)="ACGLFNSC.H[cno]" : idx$(4)="FNSCINDX.H[cno]"
+12400   id$(5)=" 5. Secondary Income Statement File" : fil$(5)="ACGLFNSJ.H[cno]" : idx$(5)="FNSJINDX.H[cno]"
+12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H[cno]" : idx$(6)="FNSGINDX.H[cno]"
 12600 ! ______________________________________________________________________
 12700 MENU1: ! 
 12800   fnTos(sn$="FsDesign")
@@ -55,7 +55,7 @@
 15600   if resp$(6)="True" then selection=6
 15700   f1=selection
 15800   close #1: ioerr L520
-15900 L520: open #fin_stmt=1: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",KFName="&env$('Q')&"\GLmstr\"&idx$(f1)&",Shr",internal,outIn,keyed ioerr MENU1
+15900 L520: open #fin_stmt=1: "Name=[Q]\GLmstr\"&fil$(f1)&",KFName=[Q]\GLmstr\"&idx$(f1)&",Shr",internal,outIn,keyed ioerr MENU1
 16000   if ckey=3 then let fn_print_proof
 16100 FIN_STMT_GRID: ! 
 16200   fnTos(sn$="fin_stmt")
@@ -320,12 +320,12 @@
 42100 ! ______________________________________________________________________
 42200 ! Initial build all financial statements
 42300   close #1: ioerr L2320
-42400 L2320: open #fin_stmt=1: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",NoShr",internal,output 
+42400 L2320: open #fin_stmt=1: "Name=[Q]\GLmstr\"&fil$(f1)&",NoShr",internal,output 
 42500   close #fin_stmt,free: 
-42600   open #fin_stmt: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",SIZE=0,RecL=83",internal,output 
+42600   open #fin_stmt: "Name=[Q]\GLmstr\"&fil$(f1)&",SIZE=0,RecL=83",internal,output 
 42700 L2350: for j=1 to 6
 42800     close #fin_stmt: ioerr L2370
-42900 L2370: execute "Index "&env$('Q')&"\GLmstr\"&fil$(j)&' '&env$('Q')&"\GLmstr\"&idx$(j)&" 1 5 Replace DupKeys" ioerr L2380
+42900 L2370: execute "Index [Q]\GLmstr\"&fil$(j)&' '&"[Q]\GLmstr\"&idx$(j)&" 1 5 Replace DupKeys" ioerr L2380
 43000 L2380: next j
 43100   goto MENU1
 43200 ! ______________________________________________________________________

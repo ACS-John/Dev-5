@@ -12,8 +12,8 @@
 00130   fndat(dat$,1)
 00140   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00150 ! 
-00160   if exists(env$('Q')&"\PRmstr\Category.H"&env$('cno'))=0 then goto SETUP_FILES
-00170 L170: open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00160   if exists("[Q]\PRmstr\Category.H[cno]")=0 then goto SETUP_FILES
+00170 L170: open #1: "Name=[Q]\PRmstr\Category.H[cno],KFName=[Q]\PRmstr\categoryIDX.H[cno],Shr",internal,outIn,keyed 
 00180 L180: form pos 1,n 5,c 30
 00190 ASKCATEGORY: ! 
 00200   mat resp$=("")
@@ -75,7 +75,7 @@
 00600 ! ______________________________________________________________________
 00610 RECREATE_GRID: ! 
 00620   fncategory_srch(x$,99) !:
-        df$=env$('Q')&"\PRmstr\category.h"&env$('cno') : if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') !:
+        df$="[Q]\PRmstr\category.h[cno]" : if$="[Q]\PRmstr\categoryidx.h[cno]" !:
         fncombof("Ccategory",lyne,mypos,43,df$,1,5,6,30,if$,1) !:
         fncombof("CcategoryaLL",lyne,mypos,43,df$,1,5,6,30,if$,2)
 00630   ad1=0 ! set add code back before returning to main screen
@@ -106,13 +106,13 @@
 00820   gosub RECREATE_GRID
 00830   goto SCREEN_1
 00840 SETUP_FILES: ! 
-00850   open #1: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",RecL=128,replace",internal,outIn 
+00850   open #1: "Name=[Q]\PRmstr\Category.H[cno],RecL=128,replace",internal,outIn 
 00860   close #1: 
 00870   goto REINDEX
 00880 REINDEX: ! indexes if needed
 00890   reindex+=1
 00900   close #1: ioerr L910
-00910 L910: execute "Index "&env$('Q')&"\PRmstr\Category.H"&env$('cno')&' '&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&" 1 5 Replace DupKeys -n"
+00910 L910: execute "Index [Q]\PRmstr\Category.H[cno]"&' '&"[Q]\PRmstr\categoryIDX.H[cno] 1 5 Replace DupKeys -n"
 00920   goto L170
 00930 PRINT_PROOF: ! 
 00940   fnopenprn

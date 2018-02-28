@@ -34,7 +34,7 @@
 00250 ! 
 00265   open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
 00270   open #h_dd=30: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed 
-00275   open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h"&env$('cno')&',Shr',internal,input,keyed 
+00275   open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]"&',Shr',internal,input,keyed 
 00280 ! /r
 00340   if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
 46000 ASK_CHECK_NO: ! r:

@@ -13,7 +13,7 @@
 00120   fnTos(sn$='UnClBank1') !:
         mylen=15 : mypos=mylen+3
 00130   fnLbl(1,1,"Bank:",mylen,right)
-00135   fncombof('Bank',1,mypos,32,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list)
+00135   fncombof('Bank',1,mypos,32,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list)
 00140   fnLbl(2,1,"Cleared Date:",mylen,right)
 00150   fnTxt(2,mypos,10,0,0,"3") !:
         resp$(2)=""
@@ -23,7 +23,7 @@
 00200   bc1=val(resp$(1)(1:2))
 00210   clrdate=val(resp$(2))
 00220 ! ______________________________________________________________________
-00230   open #trmstr=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00230   open #trmstr=2: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
 00240 READ_2: ! 
 00250 L250: read #trmstr,using "Form Pos 1,N 2,pos 72,n 6": bank_code,olddate eof XIT
 00260   if fndate_mmddyy_to_ccyymmdd(olddate)<>clrdate then goto L250 ! clear dates must match

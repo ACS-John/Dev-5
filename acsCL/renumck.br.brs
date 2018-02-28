@@ -10,11 +10,11 @@
 00100   fntop(program$,"Renumber Checks")
 00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
-00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00120   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outIn,keyed 
-00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&env$('cno'),internal,outIn,keyed 
+00130   open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno]",internal,outIn,keyed 
+00140   open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,outIn,keyed 
 00150 L150: fnTos(sn$='RmTrans-'&str$(rcn)) !:
         mylen=30 : mypos=mylen+3 : lc=0
 00160   fnLbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
@@ -60,10 +60,10 @@
 00470 END1: ! 
 00480   close #trmstr: 
 00490   close #tralloc: 
-00500   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&" 1 11 Replace DupKeys -n"
-00510   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&" 28/1 8/11 Replace DupKeys -n"
-00520   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx3.H"&env$('cno')&" 16/12/4 2/4/8 Replace DupKeys -n"
-00530   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&env$('cno')&" 1 11 Replace DupKeys -n"
+00500   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx1.H[cno] 1 11 Replace DupKeys -n"
+00510   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx2.H[cno] 28/1 8/11 Replace DupKeys -n"
+00520   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n"
+00530   execute "Index [Q]\CLmstr\TrAlloc.H[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.H[cno] 1 11 Replace DupKeys -n"
 00540   goto XIT
 00550 ! ______________________________________________________________________
 00560 XIT: fnxit

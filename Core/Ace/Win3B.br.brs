@@ -80,10 +80,10 @@
 51580     if display_cnam=0 then goto L610
 51600     if display_cnam=1 then 
 51620       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) 
-51640       pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+51640       pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 51660     end if
 51680     if display_cnam=2 then 
-51700       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+51700       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 51720     end if
 51740 L610: if button_option=0 then goto XIT
 51760     mat fkey$=("") : em$="" : es=0

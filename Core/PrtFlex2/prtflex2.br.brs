@@ -18,7 +18,7 @@
 00039 ! ______________________________________________________________________
 00040   fntop("Core\Programs\PrtFlex2",cap$="Print Flex")
 00099   programfolder$=fncursys$&"mstr" !:
-        datafolder$=env$('Q')&'\'&fncursys$&"mstr" 
+        datafolder$='[Q]\'&fncursys$&"mstr" 
 00102 ! 
 00122   dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 00123   dim tr(7),tr$*12,td$*30
@@ -63,7 +63,7 @@
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 08001 !             remove the old reads in case they dont match
-08010   open #1: "Name="&datafolder$&"\gltrans.h"&env$('cno')&",Shr", internal, input,relative 
+08010   open #1: "Name="&datafolder$&"\gltrans.h[cno],Shr", internal, input,relative 
 08100   return 
 08999 ! __________________ this is 8999 next is 9000 _________________________
 09000 READDATAFILES: !  These read statements will be contained in a display                            file that matches the data base name plus _info

@@ -15,13 +15,13 @@
 00150 L150: rinput fields "10,41,Nz 5,UE,N": cno conv L150
 00155   fnputcno(cno)
 00160   fm4$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L150 !:
+00170   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input ioerr L150 !:
         read #1,using 'Form POS 1,3*C 40,C 12,POS 150,10*C 8,N 2,POS 317,10*C 12,POS 618,10*N 1,POS 638,10*N 1,POS 133,PD 6.3,PD 6.2,POS 236,PD 3.3,PD 4.2': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed,mcrate,mcmax,ssrate,ssmax !:
         close #1: ! company was prcoinfo before conversion
 00180   mcmax=9999999
 00190   for j=1 to 3: a$(j)=a$(j)(1:30): next j
-00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00210   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outIn,relative 
+00200   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00210   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
 00220 L220: read #1,using L230: eno,mat em$,ss$,em6,ta eof XIT
 00230 L230: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 00240 L240: read #2,using L250,rec=ta: teno,tcd,mat ty,ta

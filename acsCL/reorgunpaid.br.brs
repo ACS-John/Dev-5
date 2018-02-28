@@ -8,9 +8,9 @@
 00090   dim cap$*128
 00130   dim gldesc$*30
 00140 ! ______________________________________________________________________
-00150   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00160   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00170   open #newunpdaloc=6: "Name="&env$('Q')&"\CLmstr\NewUnPdAloc.H"&env$('cno')&",RecL=67,replace",internal,outIn 
+00150   open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
+00160   open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
+00170   open #newunpdaloc=6: "Name=[Q]\CLmstr\NewUnPdAloc.H[cno],RecL=67,replace",internal,outIn 
 00180 READ_UNPAID_INVOICES: ! read unpaid invoice file
 00190   read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L260
 00200   restore #unpdaloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey READ_UNPAID_INVOICES
@@ -23,10 +23,10 @@
 00260 L260: close #paytrans: 
 00261   close #unpdaloc: 
 00262   close #newunpdaloc: 
-00270   fnCopy(env$('Q')&'\CLmstr\newunpdaloc.H'&env$('cno'),env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno'))
-00280   fnIndex_it(env$('Q')&'\CLmstr\PayTrans.H'&env$('cno'),env$('Q')&'\CLmstr\UnPdIdx1.H'&env$('cno'),"1,20")
-00290   fnIndex_it(env$('Q')&'\CLmstr\unpdaloc.H'&env$('cno'),env$('Q')&'\CLmstr\Uaidx2.H'&env$('cno'),"1,20")
-00300   fnIndex_it(env$('Q')&'\CLmstr\unpdaloc.H'&env$('cno'),env$('Q')&'\CLmstr\Uaidx1.H'&env$('cno'),"9,12")
+00270   fnCopy('[Q]\CLmstr\newunpdaloc.H[cno]',"[Q]\CLmstr\unpdaloc.H[cno]")
+00280   fnIndex_it('[Q]\CLmstr\PayTrans.H[cno]','[Q]\CLmstr\UnPdIdx1.H[cno]',"1,20")
+00290   fnIndex_it('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx2.H[cno]',"1,20")
+00300   fnIndex_it('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx1.H[cno]',"9,12")
 00310 XIT: fnxit
 00320 ! ______________________________________________________________________
 00330 ! <Updateable Region: ERTN>

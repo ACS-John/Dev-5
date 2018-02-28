@@ -35,7 +35,7 @@
 34020   ! transaction_type or blank for all
 34040   if ~ttao_setup then 
 34060     ttao_setup=1
-34080     open #ttao_h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+34080     open #ttao_h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 34100     dim ttao_key$*19
 34120   end if
 34140   ttao_return=0
@@ -163,7 +163,7 @@
 44000   Tf_XIT: ! 
 45000 fnend 
 46000 def fn_TransactionEdit(editrec)
-46020   open #trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",Shr",internal,outIn,relative 
+46020   open #trans=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],Shr",internal,outIn,relative 
 46040   read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2",rec=editrec: p$,tdate,tcode,tamount
 46060   fnTos(sn$="Transaction-3")
 46080   lc=rc=0 : mylen=20 : mypos=mylen+2
@@ -258,8 +258,8 @@
 49300   mat alloc(sz1) : mat totalalloc(sz1)
 49320   mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 49340   close #trans: ioerr ignore
-49360   open #trans=2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-49380   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+49360   open #trans=2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
+49380   open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 49400   if trim$(z$)="[All]" then restore #trans: : goto L1160
 49420   read #h_customer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 49440   restore #trans,key>=lpad$(rtrm$(z$),10)&"         ": nokey PT_FINIS
@@ -362,7 +362,7 @@
 62120   ! ______________________________________________________________________
 62200   if hTrans=0 then 
 62220     close_hTrans=1
-62260     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+62260     open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 
 62280   end if 
 62290   hTrans_lrec_len=len(str$(lrec(hTrans)))
 63000   fn_columnGet(mat colhdr$,mat colmask$,ftShowElecUsed,ftShowGasUsed)

@@ -5,8 +5,8 @@
 00070 L70: input fields "10,55,N 2,UE,N": cno conv L70
 00080   if cno=0 then stop 
 00090 ! 
-00100   open #1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outIn 
-00110   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outIn,relative 
+00100   open #1: "Name=[Q]\CLmstr\TRMSTR.H[cno]",internal,outIn 
+00110   open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",internal,outIn,relative 
 00120 L120: read #1,using L130: ck$,mat tr eof END1
 00130 L130: form pos 4,c 8,pos 79,2*pd 3
 00150   v1=val(ck$) conv L120

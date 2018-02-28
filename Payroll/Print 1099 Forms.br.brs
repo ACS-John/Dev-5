@@ -7,11 +7,11 @@
 00100   dim cap$*128
 00110   dim tcp(32),tdc(10)
 00120   fntop(program$,cap$="Print 1099 Forms")
-00130   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr", internal,input,relative
+00130   open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr", internal,input,relative
 00140   read #hCompany,using "Form POS 1,3*C 40,2*C 12": mat a$,mat b$
 00150   close #hCompany: 
-00160   open #hrpmstr:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00170   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00160   open #hrpmstr:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00170   open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00220 ! /r
 00250   if ~fnask_1099_info (seltp,type,min1,beg_date,end_date) then goto XIT
 00880 START: ! r: main loop

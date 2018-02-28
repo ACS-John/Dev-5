@@ -45,7 +45,7 @@
 22280       subjectTo(a)=val(resp$(a*6-1))
 22300       orderToApply(a)=val(resp$(a*6))
 22320     next a
-22340     open #hService:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
+22340     open #hService:=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 22360     rewrite #hService,using F_service,rec=1: mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply
 22380     close #hService:
 22390   end if
@@ -85,7 +85,7 @@
 36240     mat cacheePenalty$    =('')
 36260     mat cacheSubjectTo    =(0)
 36280     mat cacheOrderToApply =(0)
-36300     open #hService:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",RecL=280,use",internal,outIn,relative 
+36300     open #hService:=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 36320     if lrec(hService)<1 then 
 36340       write #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
 36360       pr 'A new empty Type of Service file was created.  Only ACS can edit this file type.  Type GO and press Enter to continue.' : pause

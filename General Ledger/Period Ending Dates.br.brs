@@ -14,7 +14,7 @@
 20060   actpd=fnactpd 
 20080   cch$=fncch$
 20100 ! 
-20120   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative  
+20120   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
 20140   read #20,using 'Form Pos 296,n 2',rec=1: lmu
 20160   close #20: 
 20180 ! ______________________________________________________________________

@@ -11,10 +11,10 @@
 00140   if fnglfs=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00150   if fnps=2 then 
 00151     mp1=66
-00152     open #1:"Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00152     open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed 
 00153   else
 00154     mp1=63
-00155     open #1:"Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00155     open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed 
 00156   end if
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
@@ -32,10 +32,10 @@
 00270   costcntr=val(resp$(1)) 
 00282 goto GetStarted ! /r
 00280 GetStarted: if fnps=2 then goto L310 ! secondary
-00290   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
+00290   execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.H[cno] 63 3 Replace DupKeys -N"
 00300   goto L320
-00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
-00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00310 L310: execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.H[cno] 66 3 Replace DupKeys -N"
+00320 L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed 
 00330   fnopenprn
 00340   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00350   report$="Balance Sheet"

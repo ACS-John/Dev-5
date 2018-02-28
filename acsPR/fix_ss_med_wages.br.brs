@@ -8,7 +8,7 @@
 00150 ! 
 00160   gosub READ_COMPANY_INFO
 00162   mcr=mcr*.01
-00170   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00170   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
 00180 RD_HIST: read #4,using F_HIST: heno,tdn,prdate,ckno,mat tdc,mat tcp eof END_HIST
 00190 F_HIST: form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
 00192   if tcp(2)=round(tcp(31)*ssrate1,2) then tdc(7)=tcp(31) else tdc(7)=round(tcp(2)/ssrate1,2)
@@ -22,7 +22,7 @@
 00280 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00290 READ_COMPANY_INFO: ! 
 00300   dim a$(3)*40
-00310   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outIn,relative 
+00310   open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative 
 00320   read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr
 00330   close #1: 
 00340   return 

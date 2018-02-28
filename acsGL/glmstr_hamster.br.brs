@@ -10,7 +10,7 @@
 00240 ! ______________________________________________________________________
 00250   def fn_open_file
 00260     open_file_count=0 ! this value is used in the close_file sub routine
-00270     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\GLmstr\glIndx2.h"&env$('cno')&",Use,RecL=416,KPs=13,KLn=30,Shr",internal,outIn,keyed 
+00270     open #open_file_count+=1: "Name=[Q]\GLmstr\GLmstr.h[cno],Version=0,KFName=[Q]\GLmstr\glIndx2.h[cno],Use,RecL=416,KPs=13,KLn=30,Shr",internal,outIn,keyed 
 00280   fnend 
 00290   def fn_close_file
 00300     for j=1 to open_file_count : close #j: : next j

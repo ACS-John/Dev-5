@@ -7,7 +7,7 @@
 20120     on error goto ERTN
 20140     dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
 20160     fnTos(sn$="CustomerSrch")
-20180     open #file_num:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+20180     open #file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 20200     restore #file_num: 
 20220     mat ch$(12) : mat cm$(12) : mat cm$(12)
 20240     ch$(1)="Account"

@@ -13,9 +13,9 @@
 00130   fntop("S:\acsGL\VendorTransList",cap$="Dump Old Payee Transactions")
 00140   fncno(cno,cnam$) !:
         fndat(dat$)
-00150   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00160   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00170   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00150   open #payee=1: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+00160   open #payee2=11: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx2.h[cno],Shr",internal,outIn,keyed 
+00170   open #trans=2: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed 
 00180   namtab=66-int(len(rtrm$(cnam$))/2)
 00190   dattab=66-int(len(rtrm$(dat$))/2)
 00200 ! _________________________

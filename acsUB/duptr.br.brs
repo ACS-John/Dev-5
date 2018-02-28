@@ -5,9 +5,9 @@
 00070   dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
 00090   fntop(program$,cap$="Duplicate Transaction Report")
 00100   ! ______________________________________________________________________
-00110   open #fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00120   open #h_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,input,relative 
-00130   open #h_trans2:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00110   open #fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
+00120   open #h_trans1:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative 
+00130   open #h_trans2:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 
 00140   trans1_lrec=lrec(h_trans1)
 00150   F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00160   ! 
@@ -112,8 +112,8 @@
 01160 def fn_trans_delete(td_rec)
 01170   if ~td_setup then 
 01180     td_setup=1
-01190     open #h_td_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outIn,relative 
-01200     open #h_td_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+01190     open #h_td_trans1:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative 
+01200     open #h_td_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 01210     dim td_msg$(1)*90
 01220     dim tdt_tg(11)
 01230     dim tdc_tg(11)

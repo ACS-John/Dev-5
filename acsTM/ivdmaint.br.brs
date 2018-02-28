@@ -9,10 +9,10 @@
 00090 ! 
 00100   io1$(1)="14,5,C 55,U,N": io1$(2)="16,40,N 10.2,U,N"
 00110   io1$(3)="18,33,N 3,U,N": io1$(4)="18,38,N 6,U,N": io1$(5)="18,46,N 3,U,N"
-00120   open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L980
+00120   open #1: "Name=[Q]\TMmstr\IVDesc.h[cno],KFName=[Q]\TMmstr\IVDIndex.h[cno],Shr",internal,outIn,keyed ioerr L980
 00130 L130: pr newpage
 00140   pr f "3,9,C 50,N": "INVOICE DESCRIPTION FILE MENU"
-00150   pr f "4,6,C 72,N": "COMPANY NUMBER "&env$('cno')&"  "&ltrm$(cnam$)
+00150   pr f "4,6,C 72,N": "COMPANY NUMBER [cno]  "&ltrm$(cnam$)
 00160   pr f "6,9,C 60": "1 = INITIAL FILE PREPARATION"
 00170   pr f "7,9,C 60": "2 = ADD OR FILE MAINTENANCE / INQUIRY"
 00180   pr f "8,9,C 60": "3 = pr PROOF LIST"
@@ -31,14 +31,14 @@
 00310 L310: input fields "15,75,C 5,IE,N": a$ conv L310
 00320   if uprc$(a$)="THINK" then goto L330 else goto L130
 00330 L330: close #1: ioerr L340
-00340 L340: open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&",NoShr",internal,outIn ioerr L360
+00340 L340: open #1: "Name=[Q]\TMmstr\IVDesc.h[cno],NoShr",internal,outIn ioerr L360
 00350   close #1,free: 
-00360 L360: open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&",Replace,RecL=84",internal,output ioerr L990
+00360 L360: open #1: "Name=[Q]\TMmstr\IVDesc.h[cno],Replace,RecL=84",internal,output ioerr L990
 00370   ti=1
 00380   new1=1
 00390 L390: close #1: 
 00400   if new1=0 then goto XIT
-00470   execute "Index "&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&","&env$('Q')&"\TMmstr\IVDIndex.h"&env$('cno')&",1,6,REPLACE,DupKeys" ioerr L480
+00470   execute "Index [Q]\TMmstr\IVDesc.h[cno],[Q]\TMmstr\IVDIndex.h[cno],1,6,REPLACE,DupKeys" ioerr L480
 00480 L480: if ti=1 then chain 'S:\acsTM\IVDMAINT'
 00490   close #1: ioerr ignore
 00500   goto XIT

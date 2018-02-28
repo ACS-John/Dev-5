@@ -9,7 +9,7 @@
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 00100 ! ______________________________________________________________________
 00110   fnLastBillingDate(d1)
-00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00120   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00122   penalty_rate=.1 ! if env$('client')='Findlay' then penalty_rate=.1 else penalty_rate=.05
@@ -27,8 +27,8 @@
 00150   linelength=62
 00160 ! 
 00180   gosub BULKSORT
-00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
-00200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
+00190   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+00200   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
 00240   a$="" : prtbkno=0
@@ -50,8 +50,8 @@
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00340   fnLbl(8,1,"Starting Route/Sequence:",ll,1)
 00350   fe$="ubm-act-nam" !:
-        datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
-        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
+        datafile$="[Q]\UBmstr\Customer.h[cno]" !:
+        indexfile$="[Q]\UBmstr\ubindx5.h[cno]" !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
         resp$(respc+=1)="[All]"
@@ -86,7 +86,7 @@
 00480   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00490   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 00500 ! ______________________________________________________________________
-00510   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00510   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00520   gosub BUD1
 00530   gosub VBOPENPRINT
 00540 ! ______________________________________________________________________
@@ -165,7 +165,7 @@
 01150   goto L660
 01160 ! ______________________________________________________________________
 01170 SORT1: ! SELECT & SORT
-01180   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1430
+01180   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1430
 01190   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 01200   s5=1
 01210   if prtbkno=0 then routekey$="" else !:
@@ -379,7 +379,7 @@
 02960   return 
 02970 ! ______________________________________________________________________
 02980 BULKSORT: ! bulk sort order
-02990   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+02990   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 03000   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
 03010   do
 03012     read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
@@ -393,8 +393,8 @@
 03082 IGNORE: continue 
 03090 BUD1: bud1=0
 03100   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5)
-03110   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr EO_BUD1
-03120   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+03110   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
+03120   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 03130   bud1=1
 03140 EO_BUD1: return 
 03150 ! ______________________________________________________________________

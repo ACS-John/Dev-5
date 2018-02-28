@@ -15,8 +15,8 @@
         ccyymmdd$='3' : mmddyy$='1' : on=1 : off=0 !:
         cancel=5 : save=1 : limit_to_list=1 : pointtwo$='32' !:
         pointthree$='33'
-00150   open #glmstr=11: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L160
-00160 L160: open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative ioerr BUILD_COMPANY
+00150   open #glmstr=11: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L160
+00160 L160: open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr BUILD_COMPANY
 00170   goto READ_COMPANY
 00180 ! ______________________________________________________________________
 00190 READ_COMPANY: ! 
@@ -144,7 +144,7 @@
 00820   fnTxt(lc,mypos,30,0,left,number$) !:
         resp$(7)=str$(nap)
 00830   fnLbl(lc+=1,1,'Working Bank:',mylen,right)
-00840   fncombof('bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list) !:
+00840   fncombof('bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list) !:
         resp$(8)=str$(wbc)
 00850   fnChk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
         if prenum=1 then resp$(9)='True' else resp$(9)='False'
@@ -161,7 +161,7 @@
 00910   fnChk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
         if d(2)=1 then resp$(2)='True' else resp$(2)='False'
 00920   fnLbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
-00930 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+00930 ! fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(3)=STR$(WBC)
 00932   fnqgl(lc,mypos,frame,2) !:
         resp$(3)=fnrgl$(lastact$)
@@ -172,31 +172,31 @@
 00960   fnFra(15,1,5,framewidth,'Payroll') !:
         frame=fc+=1 : lc=0 : mylen=32 : mypos=mylen+2
 00970   fnLbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
-00980 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+00980 ! fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(5)=CNVRT$('pic(zz#)',PRGL(1,1))&CNVRT$('pic(zzzzz#)',PRGL(1,2))&CNVRT$('pic(zz#)',PRGL(1,3))
 00982   fnqgl(lc,mypos,frame,2) !:
         resp$(5)=cnvrt$('pic(zz#)',prgl(1,1))&cnvrt$('pic(zzzzz#)',prgl(1,2))&cnvrt$('pic(zz#)',prgl(1,3)) !:
         resp$(5)=fnrgl$(resp$(5))
 00990   fnLbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
-01000 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+01000 ! fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(6)=CNVRT$('pic(zz#)',PRGL(2,1))&CNVRT$('pic(zzzzz#)',PRGL(2,2))&CNVRT$('pic(zz#)',PRGL(2,3))
 01002   fnqgl(lc,mypos,frame,2) !:
         resp$(6)=cnvrt$('pic(zz#)',prgl(2,1))&cnvrt$('pic(zzzzz#)',prgl(2,2))&cnvrt$('pic(zz#)',prgl(2,3)) !:
         resp$(6)=fnrgl$(resp$(6))
 01010   fnLbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
-01020 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+01020 ! fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(7)=CNVRT$('pic(zz#)',PRGL(3,1))&CNVRT$('pic(zzzzz#)',PRGL(3,2))&CNVRT$('pic(zz#)',PRGL(3,3))
 01022   fnqgl(lc,mypos,frame,2) !:
         resp$(7)=cnvrt$('pic(zz#)',prgl(3,1))&cnvrt$('pic(zzzzz#)',prgl(3,2))&cnvrt$('pic(zz#)',prgl(3,3)) !:
         resp$(7)=fnrgl$(resp$(7))
 01030   fnLbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
-01040 !  fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+01040 !  fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         !  rESP$(8)=CNVRT$('pic(zz#)',PRGL(4,1))&CNVRT$('pic(zzzzz#)',PRGL(4,2))&CNVRT$('pic(zz#)',PRGL(4,3))
 01042   fnqgl(lc,mypos,frame,2) !:
         resp$(8)=cnvrt$('pic(zz#)',prgl(4,1))&cnvrt$('pic(zzzzz#)',prgl(4,2))&cnvrt$('pic(zz#)',prgl(4,3)) !:
         resp$(8)=fnrgl$(resp$(8))
 01050   fnLbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
-01060 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST,0,'',FRAME) !:
+01060 ! fnCOMBOF('[Q]\GLmstr',LC,MYPOS,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,50,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(9)=CNVRT$('pic(zz#)',PRGL(5,1))&CNVRT$('pic(zzzzz#)',PRGL(5,2))&CNVRT$('pic(zz#)',PRGL(5,3))
 01062   fnqgl(lc,mypos,frame,2) !:
         resp$(9)=cnvrt$('pic(zz#)',prgl(5,1))&cnvrt$('pic(zzzzz#)',prgl(5,2))&cnvrt$('pic(zz#)',prgl(5,3)) !:
@@ -267,7 +267,7 @@
           rc+=1 : if dedst(j)=1 then resp$(rc)='True' else resp$(rc)='False'
 01490     fnChk(j+lc,55,'',right) !:
           rc+=1 : if deduc(j)=1 then resp$(rc)='True' else resp$(rc)='False'
-01500 ! fnCOMBOF(env$('Q')&'\GLmstr',LC+J,62,0,env$('Q')&'\CLmstr\GLmstr.h'&env$('cno'),1,12,13,30,env$('Q')&'\CLmstr\GLIndex.h'&env$('cno'),LIMIT_TO_LIST) !:
+01500 ! fnCOMBOF('[Q]\GLmstr',LC+J,62,0,'[Q]\CLmstr\GLmstr.h[cno]',1,12,13,30,'[Q]\CLmstr\GLIndex.h[cno]',LIMIT_TO_LIST) !:
           ! rESP$(RC+=1)=MISCGL$(J)
 01502     fnqgl(lc+j,62,0,2) !:
           resp$(rc+=1)=fnrgl$(miscgl$(j))
@@ -275,7 +275,7 @@
 01520   return 
 01530 ! ______________________________________________________________________
 01540 BUILD_COMPANY: ! 
-01550   open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Size=0,RecL=882,Replace",internal,outIn,relative 
+01550   open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Size=0,RecL=882,Replace",internal,outIn,relative 
 01560   write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 01570   goto READ_COMPANY
 01580 ! ______________________________________________________________________

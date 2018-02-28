@@ -11,10 +11,10 @@
 00110   dim dueby$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
 00120 ! ______________________________________________________________________
 00140   fnLastBillingDate(d1)
-00150   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00150   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00170   close #21: 
-00180   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+00180   open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 00190   at$(1)=env$('cnam')
 00200   z=23
 00210   at$(1)=trim$(at$(1))(1:z)
@@ -29,9 +29,9 @@
 00300   linelength=62
 00310 !  :  !
 00320   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
-00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
-00340   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
-00350   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00330   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+00340   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+00350   open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 00360   fnget_services(mat serviceName$,mat service$)
 00390 ! default message
 00400   mg$(1)="If you smell gas call"
@@ -62,8 +62,8 @@
 00650   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00660   fnLbl(8,1,"Starting Account:",ll,1)
 00670 ! fe$="ubm-act-nam"
-00680 ! datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno')
-00690 ! indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno')
+00680 ! datafile$="[Q]\UBmstr\Customer.h[cno]"
+00690 ! indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
 00700 ! kp=1741: kl=9 : dp=41 : dl=30
 00710 ! fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 00712   fncmbact(8,pf, 1) ! ,container,indexfile$*200)
@@ -103,9 +103,9 @@
 01040   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 01045   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 01050   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-01055   if exists(env$('Q')&"\UBmstr\Cass1.h"&env$('cno')) then let fn_sort1 else let fn_bulksort
+01055   if exists("[Q]\UBmstr\Cass1.h[cno]") then let fn_sort1 else let fn_bulksort
 01060 ! ______________________________________________________________________
-01065   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+01065   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 01070   fnpa_open
 01075 ! ______________________________________________________________________
 01080 ! on fkey 5 goto RELEASE_PRINT
@@ -214,7 +214,7 @@
 02010     fnAcs(sn$,0,mat resp$,ck)
 02020   fnend 
 02030   def fn_sort1 ! SELECT & SORT
-02040     open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed 
+02040     open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed 
 02050     open #h_temp:=6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
 02060     s5=1
 02070     if prtbkno=0 then 
@@ -246,7 +246,7 @@
 02173     open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 02175   fnend 
 02177   def fn_bulksort ! bulk sort order
-02179     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+02179     open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 02181     open #h_temp:=6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
 03020 L3020: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3050
 03030     write #h_temp,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$

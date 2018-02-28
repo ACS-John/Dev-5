@@ -17,7 +17,7 @@
 00180 ! ______________________________________________________________________
 00190   def fna(r)=int(r*100+.5)/100 ! /r
 00200 ! ______________________________________________________________________
-00280   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+00280   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 00290   read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 00300   ficarate=ficarate/100
 00310   mcr=mcr*.01
@@ -113,7 +113,7 @@
 01040   on fkey 5 goto DONE
 01050   fnopenprn
 01060   on pageoflow goto PGOF
-01070 L1070: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+01070 L1070: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
 01080   if frm=2 then gosub WK_HEADER
 01090 L1090: m1=0
 01100   m2=0
@@ -263,7 +263,7 @@
 02490   return 
 02500 ! ______________________________________________________________________
 02510 GET_MAT_TPT: ! 
-02520   open #19: "Name="&env$('Q')&"\GLmstr\PRTOT.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRTOTIDX.H"&env$('cno')&",Shr",internal,input,keyed 
+02520   open #19: "Name=[Q]\GLmstr\PRTOT.H[cno],KFName=[Q]\GLmstr\PRTOTIDX.H[cno],Shr",internal,input,keyed 
 02530 L2530: read #19,using L2540: mo,mat pt eof L2600
 02540 L2540: form pos 1,n 2,pos 10,25*pd 5.2,n 4
 02550   if qtr=1 and mo>0 and mo<4 then mat tpt=tpt+pt
@@ -316,7 +316,7 @@
 03030 ! ______________________________________________________________________
 03040 OPEN_PRINTER: ! 
 03050   if file(20)=-1 then 
-03060     open #20: "Name="&env$('Q')&"\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output 
+03060     open #20: "Name=[Q]\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output 
 03070     pr #20: 'Call Print.MyOrientation("Portrait")'
 03080   end if 
 03090   return 

@@ -20,7 +20,7 @@
 30040   mylen=5 : mypos=mylen+2
 30060   fnLbl(1,1,"From:",mylen,1)
 30080   fnTxt(1,mypos+.4,50, 0,0,'',1) ! fncmbcno(1,mypos)
-30100   resp$(1)=env$('cnam')&' ('&env$('cno')&')'
+30100   resp$(1)=env$('cnam')&' ([cno])'
 30120   fnLbl(2,1,"To:",mylen,1)
 30140   fncmbcno(2,mypos)
 30160   resp$(2)=''
@@ -32,28 +32,28 @@
 32060   co2=val(resp$(2)(43:47))
 32080   if co1=0 or co2=0 then goto MENU1
 32100   close #1: ioerr ignore
-32120   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co1)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndex.h"&str$(co1)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
+32120   open #1: "Name=[Q]\UBmstr\Customer.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co1)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 32140   close #2: ioerr ignore
-32160   open #2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(co1)&",Shr",internal,outIn,keyed 
+32160   open #2: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co1)&",Shr",internal,outIn,keyed 
 32180   close #3: ioerr ignore
-32200   open #3: "Name="&env$('Q')&"\UBmstr\UBADRBIL.h"&str$(co1)&",Shr,KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(co1)&",Shr",internal,outIn,keyed 
+32200   open #3: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co1)&",Shr",internal,outIn,keyed 
 32300   close #41: ioerr ignore
-32320   open #41: "Name="&env$('Q')&"\UBmstr\DEPOSIT1.h"&str$(co1)&",Shr,KFName="&env$('Q')&"\UBmstr\DEPIDX1.h"&str$(co1)&",Shr,USE,RecL=16,KPS=1,KLN=10",internal,outIn,keyed 
+32320   open #41: "Name=[Q]\UBmstr\DEPOSIT1.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\DEPIDX1.h"&str$(co1)&",Shr,USE,RecL=16,KPS=1,KLN=10",internal,outIn,keyed 
 32340   close #42: ioerr ignore
-32360   open #42: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name="&env$('Q')&"\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",internal,outIn,relative 
+32360   open #42: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",internal,outIn,relative 
 32380   close #26: ioerr ignore
-32400   open #26: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
-32460   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed 
-32480   open #unused0:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed 
-32482   open #unused1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed 
-32483   open #unused2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed 
-32520   open #hUbTranVb:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32400   open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
+32460   open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32480   open #unused0:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32482   open #unused1:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32483   open #unused2:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed 
+32520   open #hUbTranVb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed 
 32540   close #23: ioerr ignore
-32560   open #23: "Name="&env$('Q')&"\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
+32560   open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 32660   close #51: ioerr ignore
-32680   open #51: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&str$(co2)&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed ioerr MENU1
+32680   open #51: "Name=[Q]\UBmstr\Deposit1.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\DepIdx1.h"&str$(co2)&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed ioerr MENU1
 32700   close #52: ioerr ignore
-32720   open #52: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&str$(co2)&",Shr,USE,RecL=73",internal,outIn,relative 
+32720   open #52: "Name=[Q]\UBmstr\Deposit2.h"&str$(co2)&",Shr,USE,RecL=73",internal,outIn,relative 
 32740   fnopenprn
 32760   gosub HDR
 34000 MENU2: ! 

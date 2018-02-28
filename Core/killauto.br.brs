@@ -3,5 +3,5 @@
 00030 def library fnkillauto
 00040   library 'S:\Core\Library': fnprocess
 00060   fnprocess(-1)
-00080   execute "Free "&env$('temp')&'\'&session$&"-Process-"&env$('cno')&".dat" ioerr ignore
+00080   execute "Free "&env$('temp')&'\'&session$&"-Process-[cno].dat" ioerr ignore
 00090 fnend 

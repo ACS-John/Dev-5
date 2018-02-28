@@ -29,8 +29,8 @@
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00240   mp1=69
 00250   if fnps=2 then mp1=mp1+3
-00260   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr" else !:
-          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
+00260   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr" else !:
+          fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr"
 00270 L270: form pos mp1,pd 3,pos 81,41*pd 6.2
 00280   if actpd>0 and actpd<14 then goto L330
 00290   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
@@ -52,10 +52,10 @@
 00430   costcntr=val(resp$(1))
 00440 L440: report$="Statement of Income and Expenses"
 00450   if fnps=2 then goto L480 ! secondary
-00460   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
+00460   execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"
 00470   goto L490
-00480 L480: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
-00490 L490: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00480 L480: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 72 3 Replace DupKeys -N"
+00490 L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00500   goto TOP_OF_LOOP
 00510 ! ______________________________________________________________________
 00520 TOP_OF_LOOP: ! 

@@ -14,7 +14,7 @@
 46260       posCol2=lenCol1+2
 46280       ! (sfn$*100,lbuttonYNe,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
 46300       fnLbl(1,1,'Client:',lenCol1,alignRight)
-46320       fncombof('',1,posCol2,37,env$('Q')&'\TMmstr\CLmstr.H'&env$('cno'),1,5,6,30,env$('Q')&'\TMmstr\CLIndex.H'&env$('cno'),1)
+46320       fncombof('',1,posCol2,37,'[Q]\TMmstr\CLmstr.H[cno]',1,5,6,30,'[Q]\TMmstr\CLIndex.H[cno]',1)
 46340       fnCmdSet( 2)
 46360       fnAcs('',0,mat resp$, fk)
 46380       if fk<>5 then 
@@ -94,9 +94,9 @@
 47860 def fn_openFiles
 47880   if ~openFiles then
 47900     openFiles=1
-47920     open #hClientKey :=fngethandle: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-47940     open #hClientName:=fngethandle: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
-47960     open #hSupport   :=fngethandle: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
+47920     open #hClientKey :=fngethandle: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+47940     open #hClientName:=fngethandle: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
+47960     open #hSupport   :=fngethandle: "Name=[Q]\TMmstr\Support.h420,Version=2,KFName=[Q]\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 47980   end if
 48000   fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
 48020 fnend

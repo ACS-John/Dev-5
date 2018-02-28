@@ -17,7 +17,7 @@
 00150   fncno(cno,cnam$) !:
         fnLastBillingDate(d1)
 00160 ! 
-00170   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00170   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00180   at$(1)=cnam$ !:
@@ -32,9 +32,9 @@
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00200   linelength=62
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.H"&env$('cno')&",Shr",internal,input,keyed  ! open in account order
-00220   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.H"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence
-00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00210   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in account order
+00220   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.H[cno],Shr",internal,input,keyed  ! open in route-sequence
+00230   open #81: "Name=[Q]\UBmstr\BudMstr.H[cno],KFName=[Q]\UBmstr\BudIdx1.H[cno],Shr",internal,outIn,keyed 
 00240 ! 
 00250 SCREEN1: ! 
 00260   a$="" : prtbkno=0
@@ -61,7 +61,7 @@
 00390   fnTxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00400   fnLbl(8,1,"Starting Route/Sequence:",ll,1)
-00410   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2) !:
+00410   fncombof("ubm-act-nam",8,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2) !:
         resp$(respc+=1)="[All]"
 00420   fnLbl(9,1,"Route Number:",ll,1)
 00430   fncmbrt2(9,pf) !:
@@ -97,7 +97,7 @@
           restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": !:
           ! selected a route and no beginning account
 00570 ! 
-00580   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&env$('cno')&",Shr",internal,input,keyed 
+00580   open #3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed 
 00590   fnopenprn
 00600 ! 
 00610   gosub BULKSORT
@@ -172,7 +172,7 @@
 01230 BULKSORT: ! sort in bulk sort code sequence
 01240   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01250 L1250: form pos 1,c 128
-01260   write #9,using L1250: "FILE customer.H"&env$('cno')&","&env$('Q')&"\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+01260   write #9,using L1250: "FILE customer.H[cno],[Q]\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 01270   if prtbkno>0 then !:
           write #9,using L1250: 'RECORD I,1,2,N,"'&str$(prtbkno)&'","'&str$(prtbkno)&'"'
 01280   write #9,using L1250: "MASK 1942,12,C,A,1,10,C,A"

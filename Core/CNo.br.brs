@@ -37,7 +37,7 @@
 32000   ! r: read cnam
 32020   dim cnam_read$*40
 32040   cnam_read$=''
-32060   open #tf1:=fngethandle: "Name="&env$('Q')&"\"&env$('cursys')&"mstr\Company.h"&str$(cno)&",Shr",internal,input ioerr CNAM_XIT
+32060   open #tf1:=fngethandle: "Name=[Q]\"&env$('cursys')&"mstr\Company.h"&str$(cno)&",Shr",internal,input ioerr CNAM_XIT
 32080   read #tf1,using "Form pos 1,C 40": cnam_read$ ioerr ignore
 32100   close #tf1: 
 34000   CNAM_XIT: ! 
@@ -62,7 +62,7 @@
 38000 def library fnget_company_number_list(mat cno_list; sysid$*2)
 38020   if ~setup then let fn_setup
 38030   if sysid$='' then sysid$=env$('cursys')
-38040   fngetdir2(env$('Q')&'\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
+38040   fngetdir2('[Q]\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
 38060   company_count=filename_item=0
 38080   mat cno_list(99999)
 38100   for filename_item=1 to udim(mat filename$)
@@ -103,10 +103,10 @@
 44120     fncreg_read('Pay Period Ending Date',pedat$)
 44140     if pedat$='' then
 44160       dim pedatLegacyFile$*256
-44180       if exists(env$('temp')&"\pedat-"&session$&".h"&env$('cno')) then
-44200         pedatLegacyFile$=env$('temp')&"\pedat-"&session$&".h"&env$('cno')
-44220       else if exists(env$('temp')&"\pedat$-"&session$&".h"&env$('cno')) then
-44240         pedatLegacyFile$=env$('temp')&"\pedat$-"&session$&".h"&env$('cno')
+44180       if exists(env$('temp')&"\pedat-"&session$&".h[cno]") then
+44200         pedatLegacyFile$=env$('temp')&"\pedat-"&session$&".h[cno]"
+44220       else if exists(env$('temp')&"\pedat$-"&session$&".h[cno]") then
+44240         pedatLegacyFile$=env$('temp')&"\pedat$-"&session$&".h[cno]"
 44260       else
 44280         goto xLegacyOpenFail
 44300       end if
@@ -150,7 +150,7 @@
 48020   if ~useDeptNosetup then ! r:
 48040     useDeptNosetup=1
 48080     if env$('cursys')="GL" then ! read directly from gl if in gl system
-48100       open #company:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
+48100       open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 48120       read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 48140       close #company: 
 48160     else 

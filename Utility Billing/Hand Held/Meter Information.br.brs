@@ -7,8 +7,8 @@
 00170     fnmsgbox(mat msg_text$, response$,'',64)
 00190   end if 
 00241   ! ! if env$('acsdeveloper')<>'' then 
-00242   ! !   exec 'free "'&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&'"'
-00243   ! !   exec 'free "'&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&'"'
+00242   ! !   exec 'free "'&"[Q]\UBmstr\Meter.h[cno]"&'"'
+00243   ! !   exec 'free "'&"[Q]\UBmstr\Meter_Idx.h[cno]"&'"'
 00244   ! !   fn_open_meter
 00245   ! !   fn_CsvToMeterInformation 
 00246   ! !   stop
@@ -38,7 +38,7 @@
 18000 ! def fn_open_file
 18020 !   open_file_count=0 ! this value is used in the close_file sub routine
 18040 !   mat open_file(1)
-18060 !   open #open_file(open_file_count+=1):=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outIn,keyed 
+18060 !   open #open_file(open_file_count+=1):=fngethandle: "Name=[Q]\UBmstr\Meter.h[cno],Version=1,KFName=[Q]\UBmstr\Meter_Idx.h[cno],Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outIn,keyed 
 18080 !   fn_open_file=open_file(1)
 18100 ! fnend 
 20700 ! <Updateable Region: ERTN>
@@ -52,7 +52,7 @@
 32020   colP=16
 32040   dim line$*1024,item$(0)*256
 32060   open #hIn:=fngethandle: 'name='&env$('at')&'C:\ACS\(Client_Files)\Purdy\Purdy MO Installation List 20171015 Final All.txt',d,input
-32080   open #hCustomer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
+32080   open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 32100   linput #hIn: line$ eof CtmiEof ! consume headers
 32120   do
 32140     linput #hIn: line$ eof CtmiEof

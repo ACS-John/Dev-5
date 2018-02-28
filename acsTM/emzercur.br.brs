@@ -14,7 +14,7 @@
 00160   on a goto L170,XIT none L90
 00170 L170: pr newpage
 00180   pr f "10,10,c 60,n": "ZERO CURRENT FIELDS IN EMPLOYEE MASTER FILE IN PROCESS"
-00190   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr L280
+00190   open #1: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L280
 00200 L200: read #1,using L210: eno$ eof L250 ioerr L280
 00210 L210: form pos 1,c 9
 00220   rewrite #1,using L230: mat cchrs,mat ncchrs,mat ccamt,mat nccamt

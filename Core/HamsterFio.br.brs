@@ -1,7 +1,7 @@
 12000 def fn_setup
 12020   if ~setup then
 12040     setup=1
-12060     library 'S:\Core\Library': fnAddOneC,fnOpenFile,fnAddOneN,fnHamster,fngethandle,fnerror
+12060     library 'S:\Core\Library': fnAddOneC,fnOpenFile,fnAddOneN,fnHamster,fngethandle,fnerror,fnSrepEnv$
 12080     dim form$(0)*256
 12120     dim hfLabel$(0)*128
 12480   end if
@@ -125,7 +125,7 @@
 28520           ! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),"env$('cno')",env$('cno'))
 28540           ! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'[Q]',env$('Q'))
 28560           ! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'[cno]',env$('cno'))
-28570           cfItem$(cbIndex)=fn_srepEnv$(cfItem$(cbIndex))
+28570           cfItem$(cbIndex)=fnSrepEnv$(cfItem$(cbIndex))
 28580           if pos(cfItem$(cbIndex),'*custom:UB ServiceCodes*')>0 then
 28600             library 'S:\Core\Library': fnget_services
 28620             dim serviceName$(10)*20
@@ -157,17 +157,6 @@
 29260   hfEofhLay: !
 29280   close #hLay:
 29300 fnend
-32000 def fn_srepEnv$*256(text$*256)
-32010   do
-32020     sePosOpen=pos(text$,'[')
-32030     sePosClose=pos(text$,']',sePosOpen)
-32040     if sePosOpen>0 and sePosClose>sePosOpen then
-32050       seVariable$=text$(sePosOpen+1:sePosClose-1)
-32060       text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
-32070     end if
-32080   loop while sePosOpen>0 and sePosClose>sePosOpen
-32090   fn_srepEnv$=text$
-32990 fnend
 76000 ! <updateable region: fn_open (supressprompt:=2)>  
 76020 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
 76040   dim _fileiosubs$(1)*800, loadedsubs$(1)*32

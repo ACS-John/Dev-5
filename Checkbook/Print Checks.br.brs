@@ -20,18 +20,18 @@
 10190 ! ______________________________________________________________________
 10200   fntop(program$)
 10230   prd=val(date$(4:5)&date$(7:8)&date$(1:2))
-10240   open #bankmstr:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10250   open #h_paymstr1:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10260   open #paymstr2:=14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10270   open #trmstr1:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10280   open #trmstr2:=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10290   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10300   open #h_paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10310   open #h_unpdaloc:=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\uaidx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10320   open #glmstr18:=18: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10330   open #glcontrol:=19: "Name="&env$('Q')&"\CLmstr\Fundmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Fundidx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10340   open #ivpaid:=6: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-10350   open #payeegl:=17: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10240   open #bankmstr:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
+10250   open #h_paymstr1:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+10260   open #paymstr2:=14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+10270   open #trmstr1:=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
+10280   open #trmstr2:=2: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+10290   open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
+10300   open #h_paytrans:=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
+10310   open #h_unpdaloc:=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\uaidx2.h[cno],Shr",internal,outIn,keyed 
+10320   open #glmstr18:=18: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
+10330   open #glcontrol:=19: "Name=[Q]\CLmstr\Fundmstr.h[cno],KFName=[Q]\CLmstr\Fundidx1.h[cno],Shr",internal,outIn,keyed 
+10340   open #ivpaid:=6: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr",internal,outIn,keyed 
+10350   open #payeegl:=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed 
 10360   fn_get_coinfo
 10370 MENU1: ! 
 10380   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -48,7 +48,7 @@
 10490   if ti1=1 then h_vf1=13
 10500   allign=0
 10510   if ti1=3 then goto REPRINT_CHECKS
-10520   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+10520   open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
 10530   rewrite #company,using 'Form POS 152,N 2',rec=1: bankcode
 10540   close #company: 
 10550   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -223,7 +223,7 @@
 12310   fncomboa("ckprt-cmb2",1,40,mat item4$,tt$)
 12320   resp$(respc+=1)=item4$(1)
 12330   fnLbl(3,1,"Beginning payee number:",38)
-12340   fncombof("Paymstr",3,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
+12340   fncombof("Paymstr",3,10,30,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 12350   resp$(respc+=1)=holdpayee$
 12360   fnCmdSet(2)
 12370   fnAcs(sn$,0,mat resp$,ck)
@@ -412,7 +412,7 @@
 14210   if firstckn<>lastckn then goto XIT
 14220   goto REPRINT_CHECKS ! /r
 14230 def fn_get_coinfo
-14240   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outIn,relative 
+14240   open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
 14250   read #company,using 'Form POS 1,C 40,POS 150,2*N 1,N 2,POS 418,10*C 20,POS 668,10*C 12,POS 298,15*PD 4,POS 618,10*N 1,POS 406,N 1,POS 788,N 1',rec=1,release: cnam$,mat d,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum,port
 14260   method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$
 14270   close #company: 
@@ -440,7 +440,7 @@
 14990   fnTxt(3,67,12,0,1,"10",0,"",1)
 15000   resp$(respc+=1)=tr$(3)
 15010   fnLbl(5,1,"Payee:",8,1,0,1)
-15020   fncombof("Paymstr",5,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
+15020   fncombof("Paymstr",5,10,30,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
 15030   resp$(respc+=1)=holdpayee$
 15040   fnFra(9,1,12,96,"Breakdown Information"," ")
 15050   fnLbl(1,1,"General Ledger",30,0,0,2)
@@ -546,7 +546,7 @@
 16010   holdvn$=""
 16020   hck=0
 16030   fn_close(h_paytrans:=4)
-16040   open #h_paytrans: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+16040   open #h_paytrans: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 16050   WH_LOOP_TOP: ! 
 16060   read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ckpay,dp,gde eof WH_XIT
 16070   if gde=1 then gde=0 ! dont allow posting code of 1 from unpaid file
@@ -795,7 +795,7 @@
 18530 fnend 
 18540 def fn_index
 18550   L4050: ! 
-18560   open #31: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",NoShr",internal,outIn,keyed ioerr L4070
+18560   open #31: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],NoShr",internal,outIn,keyed ioerr L4070
 18570   close #31: ! 
 18580   goto L4080
 18590   L4070: ! 
@@ -807,19 +807,17 @@
 18650   L4080: ! 
 18660   fn_close(h_unpdaloc)
 18670   fn_close(ivpaid)
-18680   fnRemoveDeletedRecords(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
-18690   fnRemoveDeletedRecords(env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')) 
-18740   fnIndex_it(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'),env$('Q')&"\CLmstr\UNPdIdx1.h"&env$('cno'),"1,20")
-18750   fnIndex_it(env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno'),"1,20")
-18760   fnIndex_it(env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx1.H"&env$('cno'),"9,12")
-18770   fnIndex_it(env$('Q')&"\CLmstr\IvPaid.h"&env$('cno'),env$('Q')&"\CLmstr\IVIndex.h"&env$('cno'),"1,20")
+18680   fnRemoveDeletedRecords("[Q]\CLmstr\PayTrans.h[cno]")
+18690   fnRemoveDeletedRecords("[Q]\CLmstr\UnPdAloc.h[cno]") 
+18740   fnIndex_it("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UNPdIdx1.h[cno]","1,20")
+18750   fnIndex_it("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.H[cno]","1,20")
+18760   fnIndex_it("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.H[cno]","9,12")
+18770   fnIndex_it("[Q]\CLmstr\IvPaid.h[cno]","[Q]\CLmstr\IVIndex.h[cno]","1,20")
 18780 fnend 
 18790 ! 
 18800 def fn_portion_stub(stubOnCheck)
 18802   ! stubOnCheck - 1 or 2 to say if it is the first or second stub on a check.  Some formats care
-18810   if env$('client')="Eldorado" then 
-18840     fn_portion_stub_eldorado
-18850   else if env$('client')="Billings" then 
+18810   if env$('client')="Billings" then 
 18860     fn_portion_stub_billings(stubOnCheck)
 18870   else if env$('client')="Divernon" then 
 18880     fn_portion_stub_divernon
@@ -882,35 +880,6 @@
 19410     pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
 19420   next j
 19430 fnend 
-19440 def fn_portion_stub_eldorado
-19450   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
-19460   mat b$=(" ") : b$(1)=tr$(5)(1:30)
-19470   if h_vf1=23 then vp1=173 else vp1=147
-19480   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
-19490   if ckn1<>psb_ckn1_prior then ! it's the first stub on a check
-19500     psb_ckn1_prior=ckn1
-19510     pr #255,using 'Form POS 74,N 6': ckn1 : pr ckn1
-19520     pr #255: ""
-19530     pr #255: ""
-19540     F_PSE_ITEM: form pos 1,c 9,c 30,pic(zzzz,zzz.zzcr)
-19550     for j=1 to 15
-19560       pr #255,using F_PSE_ITEM: iv$(j,1)(1:9),de$(j,1),amt(j,1)
-19570     next j
-19580     for j=1 to 3
-19590       pr #255,using F_PSE_ITEM: iv$(j,2)(1:9),de$(j,2),amt(j,2)
-19600     next j
-19610   else ! it's the second stub on a check
-19620     pr #255: ""
-19630     pr #255: "" ! pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-19640     pr #255: ""
-19650     pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
-19660     pr #255: "_______________________________________ _______________________________________"
-19670     for j=1 to 15
-19680       pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
-19690     next j
-19700   end if  ! ckn1<>psb_ckn1_prior   /   else 
-19710 fnend 
-20050 ! 
 40000 def fn_portion_check
 40020   if env$('client')="ACS" and bankcode=2 then 
 40040     fn_portion_check_acs(amt)
@@ -928,8 +897,6 @@
 40280     fn_portion_check_divernon(amt)
 40290   else if env$('client')="Edison" then 
 40292     fn_portion_check_edison(amt)
-40300   else if env$('client')="Eldorado" then 
-40320     fn_portion_check_eldorado(amt)
 40340   else if env$('client')="Kimberling" then 
 40360     fn_portion_check_kimber(amt)
 40380   else if env$('client')="Lovington" then 
@@ -1025,48 +992,6 @@
 42300     pr #255: ""
 42320   next j
 42340 fnend 
-43060 def fn_portion_check_eldorado(dolamt)
-43080   mat b$=("")
-43100   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey PCE_L1680
-43120   if trim$(b$(2))="" then 
-43140     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
-43160   else if trim$(b$(3))="" then 
-43180     b$(3)=b$(4) : b$(4)=""
-43200   end if 
-43220   PCE_L1680: ! 
-43240   fn_englishdollar(dolamt)
-43260   if dolamt=0 then eng$='        *** V O I D ***'
-43280   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
-43300   pr #255: ''
-43320   pr #255: ''
-43340   pr #255: ''
-43360   if prenum=2 then 
-43380     pr #255,using "form pos 74,n 8": ckn1
-43400   else 
-43420     pr #255: ''
-43440   end if 
-43460   pr #255: ''
-43480   pr #255: ''
-43500   pr #255: ''
-43520   pr #255,using 'form pos 68,pic(zz/zz/zz)': prdmmddyy
-43540   pr #255: ''
-43560   pr #255: ''
-43580   pr #255: ''
-43600   pr #255,using 'Form Pos 9,C 80': eng$(1:n)
-43620   pr #255,using 'Form Pos 9,C 70': eng$(n+1:128)
-43640   pr #255,using 'Form POS 65,X 8,X 4,C 18': ca$
-43660   pr #255: ''
-43680   pr #255: ''
-43700   for j=1 to 4
-43720     pr #255,using "Form Pos 8,C 30": b$(j)
-43740   next j
-43760   pr #255: ''
-43780   pr #255: ''
-43800   pr #255: ''
-43820   pr #255: ''
-43840   pr #255: ''
-43860   pr #255: ''
-43880 fnend 
 43900 def fn_portion_check_kimber(dolamt)
 43920   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6480
 43940   goto L6490
@@ -1309,7 +1234,7 @@
 64460   fnTxt(6,40,8,0,1,"30",0,"Next available check #. If reprinting checks from history, this check # is not applicable.")
 64480   resp$(respc+=1)=str$(ckn)
 64500   fnLbl(7,1,"Bank Account:",38,1)
-64520   fncombof("Bankmstr",7,40,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing")
+64520   fncombof("Bankmstr",7,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing")
 64540   resp$(respc+=1)=str$(bankcode)
 64560   fnLbl(8,1,"Check Format:",38,1)
 64580   fncomboa("ckprt-2",8,40,mat layoutOption$)

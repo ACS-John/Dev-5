@@ -19,7 +19,7 @@
 00180   if cno=0 then goto XIT
 00190 ! 
 00200 ! ______________________________________________________________________
-00210   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outIn 
+00210   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",internal,outIn 
 00220 L220: read #4,using L230: d1 eof L350,conv L320
 00230 L230: form pos 9,pd 6
 00240   if d1<1000000 then goto L270
@@ -34,7 +34,7 @@
 00330   goto L220
 00340 ! ______________________________________________________________________
 00350 L350: close #4: 
-00360   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&" 1 14 Replace DupKeys -n"
+00360   execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 00370 XIT: stop  ! Chain "PRMENU/acsPR"
 00380 ! ______________________________________________________________________
 00390 ! <updateable region: ertn>

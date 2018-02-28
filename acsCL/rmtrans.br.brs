@@ -10,13 +10,13 @@
 00100   fntop(program$,"Remove Old Transactions")
 00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
-00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00120   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno'),internal,outIn,keyed 
-00140   open #work1:=2: "Name="&env$('Q')&"\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative 
-00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&env$('cno'),internal,input,keyed 
-00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative 
+00130   open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno]",internal,outIn,keyed 
+00140   open #work1:=2: "Name=[Q]\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative 
+00150   open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,input,keyed 
+00160   open #work2=4: "Name=[Q]\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative 
 00170   fnTos(sn$='RmTrans-'&str$(rcn)) !:
         mylen=21 : mypos=mylen+2 : lc=0
 00180   fnLbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
@@ -59,12 +59,12 @@
 00490   close #work2: 
 00500   close #trmstr,free: 
 00510   close #tralloc,free: 
-00520   execute "Rename "&env$('Q')&"\CLmstr\Work1."&wsid$&' '&env$('Q')&"\CLmstr\TRmstr.H"&env$('cno')&" -n"
-00530   execute "Rename "&env$('Q')&"\CLmstr\Work2."&wsid$&' '&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&" -n"
-00540   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&" 1 11 Replace DupKeys -n"
-00550   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&" 28/1 8/11 Replace DupKeys -n"
-00560   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrIdx3.H"&env$('cno')&" 16/12/4 2/4/8 Replace DupKeys -n"
-00570   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&env$('cno')&" 1 11 Replace DupKeys -n"
+00520   execute "Rename [Q]\CLmstr\Work1."&wsid$&' '&"[Q]\CLmstr\TRmstr.H[cno] -n"
+00530   execute "Rename [Q]\CLmstr\Work2."&wsid$&' '&"[Q]\CLmstr\TrAlloc.H[cno] -n"
+00540   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx1.H[cno] 1 11 Replace DupKeys -n"
+00550   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx2.H[cno] 28/1 8/11 Replace DupKeys -n"
+00560   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n"
+00570   execute "Index [Q]\CLmstr\TrAlloc.H[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.H[cno] 1 11 Replace DupKeys -n"
 00580   goto XIT
 00590 ! ______________________________________________________________________
 00600 XIT: fnxit

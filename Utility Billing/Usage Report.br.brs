@@ -15,7 +15,7 @@
 22100   if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
 22140   sequenceRoute=1
 22160   sequenceAccount=2
-24000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+24000   open #h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 24020 ! /r
 30000 SCREEN1: ! r:
 30020   fnTos(sn$="UBUsage")
@@ -45,18 +45,18 @@
 30620   if resp$(respc_sequenceAccount)='True' then reportSequence=sequenceAccount
 30630   filterBillingDateCcyymdd=fndate_mmddyy_to_ccyymmdd(filterBillingDate)
 30640   if reportSequence=sequenceAccount then 
-30660     open #hCustomerForReport:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+30660     open #hCustomerForReport:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 30700   else ! if reportSequence=sequenceRoute then
-30720     open #hCustomerForReport:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+30720     open #hCustomerForReport:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 30760   end if 
 36000   if filterRoute then 
 36100     if reportSequence=sequenceRoute then restore #hCustomerForReport,key>=lpad$(str$(filterRoute),2)&"       ": nokey SCREEN1
-36120     oldroute=filterRoute
+36120     routePrior=filterRoute
 36140   end if
 36780 ! /r
-47000   fnopenprn(cp,58,320,process)
-47020   gosub HDR
-48000 NextCustomer: ! r: main report loop
+47000 fnopenprn(cp,58,320,process)
+47020 gosub HDR
+48000 do ! r: main report loop
 48020   read #hCustomerForReport,using F_Customer: z$,mat e$,mat d,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
 48040   F_Customer: form pos 1,c 10,4*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
 48050   if reportSequence=sequenceAccount and filterRoute and route<>filterRoute then goto NextCustomer
@@ -67,7 +67,7 @@
 48130     ! read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,transDate,tcode,tamount,mat tg,s1read,s1use,s3read,s3usage,s5read,s5use,tbal,pcode eof L570
 48140     read #h_trans,using 'Form POS 1,C 10,N 8,pos 68,6*PD 5': transAcct$,transDate,s1read,s1use,s3read,s3usage,s5read,s5use eof L570
 48160     if transAcct$<>z$ then goto L570
-48210   loop until transDate=filterBillingDateCcyymdd
+48210   loop until transDate=filterBillingDateCcyymdd 
 48220   ! L560: ! 
 48240   d(1)=s1read
 48260   d(3)=s1use
@@ -79,12 +79,13 @@
 48380   if filterRoute and route<>filterRoute then 
 48400       goto TOTAL_AND_FINISH
 48440   end if
-48460   if route<>oldroute and oldroute<>0 then 
+48460   if route<>routePrior and routePrior<>0 then 
 48480     s9=1
 48500     gosub PRINT_ROUTE_TOTALS
 48520   end if
 48530   gosub PRINT_DETAILS
-48540 goto NextCustomer ! /r
+48532   NextCustomer: ! 
+48540 loop ! /r
 48580 FINIS: ! r:
 48590   close #hCustomerForReport: ioerr ignore
 48600   fncloseprn
@@ -134,7 +135,7 @@
 56740 return  ! /r
 58000 PRINT_DETAILS: ! r:
 58010   if sum(mat d(3:12))<>0 then
-58020     line$= z$&" "&e$(2)(1:21)
+58020     line$=z$&' '&e$(2)(1:21)
 58040     if service1enabled then 
 58060       line$=line$&cnvrt$("n 10",d(1))&cnvrt$("n 10",d(3))&cnvrt$("n 10",d(4))
 58080     end if 
@@ -145,7 +146,7 @@
 58400       line$=line$&cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
 58420     end if 
 58460     pr #255: line$ pageoflow NEWPGE
-58480     oldroute=route
+58480     routePrior=route
 58500     t(1,1)=t(1,1)+d(3)
 58520     t(1,2)=t(1,2)+d(4)
 58540     t(2,1)=t(2,1)+d(7)
@@ -163,7 +164,7 @@
 60040     pr #255: "" ! pageoflow NEWPGE
 60060     pr #255: "" ! pageoflow NEWPGE
 60080     pr #255: "" ! pageoflow NEWPGE
-60100     pr #255: tab(40);"Totals for Route Number ";oldroute;
+60100     pr #255: tab(40);"Totals for Route Number ";routePrior;
 60120     if s9=0 then pr #255: tab(75);"Grand Totals";
 60140     pr #255: ""
 60160     pr #255: tab(39);"Current    Year to Date";

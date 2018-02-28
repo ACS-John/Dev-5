@@ -18,11 +18,11 @@
 24220   if ckey=5 then goto XIT
 24240   dat=val(resp$(1))
 24260 ! ______________________________________________________________________
-36000   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,output ioerr L240
+36000   open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,output ioerr L240
 36020   close #2,free: 
 36040   L240: !
-36060   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",size=0,RecL=104,NoShr",internal,output 
-36080   open #3: "Name="&env$('Q')&"\GLmstr\GLSTDAD.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLStdIdx.h"&env$('cno')&",Shr",internal,input,keyed 
+36060   open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],size=0,RecL=104,NoShr",internal,output 
+36080   open #3: "Name=[Q]\GLmstr\GLSTDAD.h[cno],KFName=[Q]\GLmstr\GLStdIdx.h[cno],Shr",internal,input,keyed 
 36100   net=0
 36120   L270: !
 36140   read #3,using L340: ref$,des$,glan$,glam eof ChainToAcGlMrge

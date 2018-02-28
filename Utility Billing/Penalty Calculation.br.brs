@@ -17,7 +17,7 @@
 20320   fnLastBillingDate(bildat)
 20340   fndat(dat$)
 20400 ! r:  get MinimumBal
-20420   open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outIn,relative 
+20420   open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Use,RecL=10,Shr",internal,outIn,relative 
 20440   read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal noRec SET_DEFAULT_MINUMUMBAL
 20460   goto EO_MINIMUMBAL
 20480 SET_DEFAULT_MINUMUMBAL: ! 
@@ -29,8 +29,8 @@
 20600   fn_scr_main
 20620   if ck=5 then goto XIT
 20640   fnAutomatedSavePoint('before')
-20760   open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-20780   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20760   open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+20780   open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed 
 20800 ! 
 20820   fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 20880 ! 
@@ -47,7 +47,7 @@
 21100   mat columnhead$(pencount)
 21120   mat coltot(pencount)
 21140   fn_bud1
-21160   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+21160   open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 21180   fnopenprn
 21200   fn_print_header
 21220   do 
@@ -132,7 +132,7 @@
 22800     if resp$(4)="True" then printadr=1 ! wants meter address printed
 22820     if resp$(5)="True" then printmail=1 ! wants meter mailing address
 22840     minimumbal=val(resp$(6))
-22860     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outIn,relative 
+22860     open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Use,RecL=10,Shr",internal,outIn,relative 
 22880     rewrite #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal
 22900     close #minbal: 
 22920     if resp$(7)="True" then penaltybase$="Bill" ! base penalties on current bill
@@ -394,8 +394,8 @@
 27060 fnend 
 27080 def fn_bud1
 27100   bud1=0
-27120   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed ioerr EO_BUD1
-27140   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outIn,relative 
+27120   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
+27140   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 27160   bud1=1
 27180   EO_BUD1: ! 
 27200 fnend 

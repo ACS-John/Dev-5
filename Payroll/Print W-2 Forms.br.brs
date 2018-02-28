@@ -53,7 +53,7 @@
 14260   !
 14280 ! ______________________________________________________________________
 14446   !
-14460   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+14460   open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 14480   read #hCompany,using fCompany: mat a$,empId$,mat d$,loccode,mat e$
 14500   fCompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12 
 14520   for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -155,12 +155,12 @@
 26060   end if
 26080 ! lyne=topmargin ! starting of 1st line
 26100   goproc=0
-26120   open #hEmployee:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-26140   open #hDepartment:=2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outIn,keyed 
-26160   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+26120   open #hEmployee:=1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+26140   open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
+26160   open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 26180   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",Replace,RecL=33,NoShr",internal,output 
 26200   write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
-26220   open #hW2Box16:=fngethandle: "Name="&env$('Q')&"\PRmstr\W2Box16.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\W2Index.h"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
+26220   open #hW2Box16:=fngethandle: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr ignore
 26260   w2printCount=0
 27000   ! if loccode=0 or cLocality$="YES" or cLocality$="NO" then 
 27020   !   goto READ_EMPLOYEE 
@@ -351,10 +351,10 @@
 40000 PRW2B: ! r:
 40020   open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
 40040   restore #1: 
-40060   write #1,using 'form pos 1,c 128': "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H"&env$('cno')&","&env$('Q')&"\PRmstr,,"&env$('Q')&"\PRmstr,,A,N"
+40060   write #1,using 'form pos 1,c 128': "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 40080   write #1,using 'form pos 1,c 128': "MASK 9,2,n,a,1,8,n,a"
 40100   close #1: 
-40120   fnFree(env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno'))
+40120   fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
 40140   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 40160 fnchain("S:\acsPR\prw2b") ! /r
 52000 ASK_EMP_LOCALITY: ! r:

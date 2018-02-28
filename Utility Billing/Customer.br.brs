@@ -385,7 +385,7 @@
 25260     custInfo$(respc+=1)=e$(4)
 25280     ! if u4_meterAddress$='True' then
 25300     !   fnLbl(9,1,"Meter Location:",mylen,1)
-25320     !   ! fnComboF('locationId',9,27,40,'[Q]\UBmstr\MeterLocation.h'&env$('cno'),1,11,12,30,'[Q]\UBmstr\MeterLocationIdx1.h'&env$('cno'))
+25320     !   ! fnComboF('locationId',9,27,40,'[Q]\UBmstr\MeterLocation.h[cno]',1,11,12,30,'[Q]\UBmstr\MeterLocationIdx1.h[cno]')
 25330     !   fnTxt(9,27,20,30,0,'',1,'Must be selected via Location ID button')
 25340     !   custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
 25360     !   !
@@ -841,7 +841,7 @@
 46040   fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 46060 fnend
 46080 def fn_setup_depositChange
-46140   open #h_deposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h'&env$('cno')&',KFName=[Q]\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
+46140   open #h_deposit2:=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
 46180 fnend
 46200 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 46220   ! requires local:  #h_deposit2

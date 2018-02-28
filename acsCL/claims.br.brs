@@ -19,9 +19,9 @@
 00200 ASK_SORT: ! 
 00210   if fund=1 then ty1$="Vendor Sequence" else ty1$="Fund Sequence"
 00220   if coded=1 then ty2$="All Invoices" else ty2$="Selected Invoices"
-00230   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",Shr",internal,input,relative 
-00240   execute "Index "&env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno')&' '&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&" 1 20 Replace DupKeys -n" ! index in vendor, reference order
-00250   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,input,keyed 
+00230   open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],Shr",internal,input,relative 
+00240   execute "Index [Q]\CLmstr\unpdaloc.H[cno]"&' '&"[Q]\CLmstr\Uaidx2.H[cno] 1 20 Replace DupKeys -n" ! index in vendor, reference order
+00250   open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,input,keyed 
 00260 READ_PAYTRANS: ! 
 00270   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,g 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof L420
 00280   if coded=2 and cde=0 then goto READ_PAYTRANS
@@ -41,7 +41,7 @@
 00420 L420: close #paytrans: : close #unpdaloc: : close #clwork: 
 00430   upa=0 ! this sort is ok. it sorts a temporary work file. leave in
 00440   open #tmp=9: "Name="&env$('temp')&"\Control,Size=0,RecL=128,Replace",internal,output 
-00450   write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H"&env$('cno')&","&env$('Q')&"\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
+00450   write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H[cno],[Q]\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
 00460   if fund=2 then !:
           write #tmp,using 'Form POS 1,C 128': "Mask 74,12,N,A" ! "Mask 74,3,N,A,1,20,C,A,86,4,N,A"
 00470   if fund<>2 then !:
@@ -50,18 +50,18 @@
 00490   execute "Free "&env$('temp')&"\Addr -n" ioerr ignore
 00500   execute "Sort "&env$('temp')&"\Control -n"
 00510   open #addr:=9: "Name="&env$('temp')&"\Addr",internal,input 
-00520   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00530   open #rpmstr:=23: "Name="&env$('Q')&"\PRmstr\rpMstr.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L550
+00520   open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed 
+00530   open #rpmstr:=23: "Name=[Q]\PRmstr\rpMstr.H[cno],KFName=[Q]\PRmstr\rpIndex.H[cno],Shr",internal,input,keyed ioerr L550
 00540   prcode=1
-00550 L550: open #clwork:=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&env$('cno')&",Shr",internal,input,relative 
-00560   open #glmstr:=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outIn,keyed 
+00550 L550: open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".H[cno],Shr",internal,input,relative 
+00560   open #glmstr:=5: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
 00570   open #work:=6: "Name="&env$('temp')&"\Work,Size=0,RecL=22,Replace",internal,output 
 00580   close #work: 
 00590   execute "Free "&env$('temp')&"\Indx -n" ioerr ignore
 00600   execute "Index "&env$('temp')&"\Work,"&env$('temp')&"\Indx,1,12,Replace,DupKeys -n"
 00610   open #work=6: "Name="&env$('temp')&"\Work,KFName="&env$('temp')&"\Indx",internal,outIn,keyed 
-00620   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
-00630   notused=1: open #11: "Name="&env$('Q')&"\CLmstr\dptmSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\dptidx1.H"&env$('cno'),internal,input,keyed ioerr L640 : notused=0
+00620   open #fundmstr=7: "Name=[Q]\CLmstr\FundMstr.H[cno],KFName=[Q]\CLmstr\FundIdx1.H[cno],Shr",internal,input,keyed 
+00630   notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.H[cno],KFName=[Q]\CLmstr\dptidx1.H[cno]",internal,input,keyed ioerr L640 : notused=0
 00640 L640: fnopenprn
 00650   vn$="": iv$=""
 00660 L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
@@ -165,9 +165,9 @@
 01720   return  ! /r
 01730 ! ______________________________________________________________________
 01740 ASK_PP1: ! 
-01750   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&env$('cno')&", Size=0, RecL=93, Replace", internal,outIn 
-01760   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
-01770   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno')&",Shr",internal,input,keyed 
+01750   open #clwork=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".H[cno], Size=0, RecL=93, Replace", internal,outIn 
+01760   open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,input,keyed 
+01770   open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.H[cno],Shr",internal,input,keyed 
 01880   if pp1yn$="N" then goto END8
 02070   ld1=fndate_mmddyy_to_ccyymmdd(ld1) : hd1=fndate_mmddyy_to_ccyymmdd(hd1)
 02080 READ_TRMSTR: ! 

@@ -46,7 +46,7 @@
 00310   currgl$=resp$(1)
 00320   fnwait("Printing: Please wait...",1) !:
         on fkey 5 goto DONE
-00330   open #glbrec=1: "Name="&env$('Q')&"\GLmstr\glbrec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glrecidx.h"&env$('cno')&",Shr",internal,input,keyed ioerr XIT
+00330   open #glbrec=1: "Name=[Q]\GLmstr\glbrec.h[cno],KFName=[Q]\GLmstr\glrecidx.h[cno],Shr",internal,input,keyed ioerr XIT
 00340   read #glbrec,using 'Form POS 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1',key>=currgl$&"            ": gl$,c$,p$,s$,mat a nokey DONE
 00350   fnopenprn
 00360   if currgl$<>gl$ then goto DONE

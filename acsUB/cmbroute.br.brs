@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\CmbRoute.br
-00020 ! creates a screen ace combobox for "&env$('Q')&"\UBmstr accounts in route/sequence order
+00020 ! creates a screen ace combobox for [Q]\UBmstr accounts in route/sequence order
 00030   def library fncmbroute(myline,mypos; addall,container,indexfile$*25)
 00040 ! ______________________________________________________________________
 00050     library 'S:\Core\Library': fncno,fncombof,fnerror,fnpause
@@ -11,9 +11,9 @@
 00110     fncno(cno)
 00120     if addall=0 then fen$="CRte" else !:
             fen$="CRteALL"
-00130     if indexfile$="" then if$=env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno') else !:
+00130     if indexfile$="" then if$="[Q]\UBmstr\ubIndx5.h[cno]" else !:
             if$=indexfile$
-00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
+00140     fncombof(fen$,myline,mypos,43,"[Q]\UBmstr\Customer.h[cno]",1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
 00150     indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

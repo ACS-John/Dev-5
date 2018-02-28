@@ -13,8 +13,8 @@
 00130   input fields "10,51,N 2,UE,N": cno
 00140   if cno=0 then goto XIT ! CHAIN "RABLDSCR/CCRA1"
 00150 ! 
-00160   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outIn,keyed 
-00170   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outIn,relative 
+00160   open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed 
+00170   open #2: "Name=[Q]\CLmstr\PayAlloc.h[cno],SIZE=0,RecL=56,Replace",internal,outIn,relative 
 00180 L180: read #1,using L190: p$,mat gl eof L290
 00190 L190: form pos 1,c 8,pos 147,n 3,n 6,n 3
 00200   mat ta=(0)
@@ -28,12 +28,12 @@
 00280   goto L180
 00290 L290: close #1: 
 00300   close #2: 
-00310 ! EXECUTE "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",X -D -152"
-00320 ! EXECUTE "Free "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-00330 ! EXECUTE "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-00340 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx1.H"&env$('cno')&",1,8,Replace,DupKeys"
-00350 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx2.H"&env$('cno')&",9,28,Replace,DupKeys"
-00360   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&env$('cno')
+00310 ! EXECUTE "Copy [Q]\CLmstr\PayMstr.h[cno],X -D -152"
+00320 ! EXECUTE "Free [Q]\CLmstr\PayMstr.h[cno]"
+00330 ! EXECUTE "Rename X [Q]\CLmstr\PayMstr.h[cno]"
+00340 ! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx1.H[cno],1,8,Replace,DupKeys"
+00350 ! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx2.H[cno],9,28,Replace,DupKeys"
+00360   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: [cno]"
 00370   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00380   input fields "13,40,C 1,IAE,N": pause$
 00390   goto L90

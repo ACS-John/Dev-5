@@ -34,7 +34,7 @@
 00290   fndat(dat$,2)
 00300   on fkey 5 goto DONE
 00310   fnopenprn
-00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
+00320   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 00330   gosub HDR
 00340   if prtbkno=0 then goto READ_CUSTOMER
 00350   prtbkno$=lpad$(str$(prtbkno),2)&"       "

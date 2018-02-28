@@ -18,14 +18,14 @@
 00190     serviceName$(j)=trim$(serviceName$(j)(1:8))&":"
 00200   next j
 00210   option2$(x)
-00220   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&env$('cno'),internal,input,keyed 
-00230   open #ubtransvb=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,input,keyed 
-00240   glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+00220   open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed 
+00230   open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed 
+00240   glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
 00250   open #14: "Name="&glwk$&",Replace,RecL=104",internal,output ioerr ignore
-00260   if exists(env$('Q')&"\UBmstr\glinfo.h"&env$('cno'))=0 then goto L270 else goto L290
-00270 L270: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed 
+00260   if exists("[Q]\UBmstr\glinfo.h[cno]")=0 then goto L270 else goto L290
+00270 L270: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed 
 00280   close #15: 
-00290 L290: open #15: "Name="&env$('Q')&"\UBmstr\Glinfo.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\glinfoidx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00290 L290: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed 
 00300 ! ______________________________________________________________________
 00310   fnstyp(14)
 00312   !  styp=11 for jobcost; styp=14 for regular payroll
@@ -257,7 +257,7 @@
 02000 L2000: delete #15,rec=editrec: 
 02010 L2010: goto GL_INFORMATION
 02020 REINDEX: ! 
-02030 execute "Index "&env$('Q')&"\UBmstr\Ubinfo.h"&env$('cno')&' '&env$('Q')&"\UBmstr\ubinfoidx.h"&env$('cno')&" 1 23 Replace DupKeys -n" ioerr L2040
+02030 execute "Index [Q]\UBmstr\Ubinfo.h[cno]"&' '&"[Q]\UBmstr\ubinfoidx.h[cno] 1 23 Replace DupKeys -n" ioerr L2040
 02040 L2040: return 
 02050 MAINTAIN_GLINFO: ! 
 02060 right=1: mylen=25: mypos=mylen+3

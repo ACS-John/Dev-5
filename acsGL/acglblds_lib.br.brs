@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\acglBldS.br
-00020 ! this -library function- builds the file    "&env$('Q')&"\GLmstr\ACGLScr.h
+00020 ! this -library function- builds the file    [Q]\GLmstr\ACGLScr.h
 00030   def library fnacglblds
 00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr,fnFree
 00050     on error goto ERTN
@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090     fncno(cno)
 00100     fntop(program$,"CHANGE_ME")
-00110     open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00110     open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
           read #20,using 'Form POS 150,2*N 1': mat d !:
           close #20: 
 00120 ! ______________________________________________________________________
@@ -89,8 +89,8 @@
 00340     fli$(2)="3,30,N 6,UT  ,N"
 00350     if d(1)=0 then fli$(2)(11:11)="C"
 00360     if d(2)=0 then fli$(2)(12:12)="E"
-00370     fnFree(env$('Q')&"\GLmstr\ACGLScr.h"&env$('cno'))
-00380 L380: open #20: "Name="&env$('Q')&"\GLmstr\ACGLScr.h"&env$('cno')&",Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
+00370     fnFree("[Q]\GLmstr\ACGLScr.h[cno]")
+00380 L380: open #20: "Name=[Q]\GLmstr\ACGLScr.h[cno],Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
           close #20: 
 00390     fnacprscr
 00400     goto XIT

@@ -11,20 +11,20 @@
 00110   fntop(program$,cap$="Comparative Change Amount")
 00120   if fnglfs=5 then goto XIT
 00130   udf$=env$('temp')&'\'
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
+00150   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
 00160   actpd=fnactpd : fscode=fnfscode : priorcd=fnpriorcd
 00170   on fkey 5 goto L2060
 00180   mp1=75
 00190   if fnps=2 then mp1=mp1+3
-00200   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
-00210   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
+00200   fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\FNSFIndx.h[cno],Shr"
+00210   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\FNSGIndx.h[cno],Shr"
 00220   flo$(1)="8,3,C 50,N" !:
         flo$(2)="8,55,N 10.2,N" !:
         flo$(3)="8,69,N 10.2,N"
 00230   fli$(1)="08,03,C 50,UT,N" !:
         fli$(2)="08,55,N 10.2,UT,N" !:
         fli$(3)="08,69,N 10.2,UT,N"
-00240   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00240   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 00250 L250: read #1,using L260: acct$,cb,mat by,mat bp eof L350
 00260 L260: form pos 1,c 12,pos 87,27*pd 6.2
 00270   if acct$>cogl$(3) then goto L350
@@ -56,10 +56,10 @@
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00490   report$="Statement of Changes in Financial Position"
 00500   if fnps=2 then goto L530 ! secondary
-00510   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
+00510   execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 75 3 Replace DupKeys -N"
 00520   goto L540
-00530 L530: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
-00540 L540: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00530 L530: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 78 3 Replace DupKeys -N"
+00540 L540: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00550 L550: read #1,using L590: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2060
 00560   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L550
 00570   if costcntr=0 then goto L590

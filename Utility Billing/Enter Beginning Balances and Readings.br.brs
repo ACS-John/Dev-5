@@ -7,8 +7,8 @@
 00070   dim z$*10,d(15),adr(2),p$*10,txt$*80,resp$(20)*80,txt$(6)*80
 00080   dim o(2),srv$(10)*20,in1(19),gb(10),e$*30,tg(11),g(12)
 00090 ! ______________________________________________________________________
-00110   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outIn,keyed 
-00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+00110   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed 
+00120   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 00130   fnget_services(mat srv$)
 00140   for j=1 to udim(srv$)
 00150     srv$(j)=trim$(srv$(j)) !:

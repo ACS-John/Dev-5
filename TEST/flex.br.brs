@@ -29,7 +29,7 @@
 73400   cmask$(3)='10'
 73410   cmask$(5)=''
 73900   fnflexinit1('TrAlloc-tran2',17,1,4,90,mat chdr$,mat cmask$,1)
-74000   open #h_tralloc=fngethandle: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
+74000   open #h_tralloc=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed 
 74020   do 
 74040     read #h_tralloc,using 'Form Pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EOF1
 74800     allocationstotal+=tmp

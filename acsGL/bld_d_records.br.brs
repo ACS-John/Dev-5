@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Bld_D_Records
 00020 ! Create Type "D" Records
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnwait,fnfkey,fnoldmsgbox,fnwin3b,fncno,fnerror,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnwait,fnfkey,fnoldmsgbox,fnwin3b,fncno,fnerror,fnconsole,fnchain
 00050   fntop(program$,cap$="Financial Statement")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -11,7 +11,7 @@
 00120 ! 
 00125   fnconsole(on=1)
 00130   on fkey 5 goto XIT
-00140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00140   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00150   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00160   fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
 00170   fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
@@ -48,7 +48,7 @@
 00480   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00490   if curfld<>8 or fin>0 then goto L550
 00500   close #2: ioerr L510
-00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fs)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fs)&".h"&env$('cno')&",Shr",internal,outIn,keyed 
+00510 L510: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",internal,outIn,keyed 
 00520 L520: read #2,using L920: rno eof L540
 00530   goto L520
 00540 L540: pr #win,fields io1$(9): rno+20
@@ -81,7 +81,7 @@
 00810   ac(1)=3 ! indent all d records to position 3
 00820   rno=fin
 00830   close #2: ioerr L840
-00840 L840: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fs)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fs)&".h"&env$('cno')&",Shr",internal,outIn,keyed 
+00840 L840: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",internal,outIn,keyed 
 00850   restore #1,key=glk$: nokey L980
 00860 L860: read #1,using L870: dno,ano,sno,d$,mat rf eof L980
 00870 L870: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
@@ -98,7 +98,7 @@
 00970   goto L860
 00980 L980: close #2: 
 00990   if fs>0 then !:
-          execute "Index "&env$('Q')&"\GLmstr\"&fil$(fs)&".h"&env$('cno')&","&env$('Q')&"\GLmstr\"&idx$(fs)&".h"&env$('cno')&",1,5,Replace,DupKeys"
+          execute "Index [Q]\GLmstr\"&fil$(fs)&".h[cno],[Q]\GLmstr\"&idx$(fs)&".h[cno],1,5,Replace,DupKeys"
 01000   goto L310
 01010 ! ______________________________________________________________________
 01020 XIT: fnchain("S:\acsGL\financialstatement")

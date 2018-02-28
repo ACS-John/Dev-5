@@ -44,12 +44,12 @@
 04120   !
 04140     fnLastBillingDate(d1)
 04160     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-23 then d1=0
-04180     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input
+04180     open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
 04200     read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 04220     close #1:
 04240     if pcent=0 then
 04260       pcent=100
-04280       open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,outIn
+04280       open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,outIn
 04300       rewrite #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 04320       close #1:
 04340     end if
@@ -59,22 +59,22 @@
 04420   !
 04440     pcent=pcent*.01 ! convert unusual usage % to decimal
 04460     cancel=5
-04480     workFile$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
-04500     workFileIndex$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
+04480     workFile$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
+04500     workFileIndex$="[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]"
 04520   ! synchronize these settings with S:\acsUB\ubCalk
 04540     from_holding_file=3 ! enumerations for addmethod
 04560     from_hh_file=5
 04580   ! ______________________________________________________________________
 05000   ! Open_Stuff: !
 05020     fn_setup_service(mat service_enabled)
-05040     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-05060     open #hCustomer1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
+05040     open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+05060     open #hCustomer1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
 05080   F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
 05120     open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
-05140     open #hCustomer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outIn,keyed
-05160     open #hCustomer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outIn,keyed
-05180     open #hCustomer4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outIn,keyed
-05200     open #hCustomer5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outIn,keyed
+05140     open #hCustomer2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed
+05160     open #hCustomer3:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed
+05180     open #hCustomer4:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
+05200     open #hCustomer5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
 05220     fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
 05240   end if
 05260 fnend
@@ -546,7 +546,7 @@
 19670     goto HH_OTHER
 19680   end if
 19760   HH_WORKABOUT: ! r: hand held routines for workabout
-19780   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
+19780   open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
 19790   goto L5000
 19800   L4990: restore #h_readings:
 19810   L5000: if listonly=1 then let fnopenprn( 0,0,0,0, 'Book '&ip1$)
@@ -575,7 +575,7 @@
 20040   HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
 20060   if listonly=1 then let fnopenprn
 20070   close #h_readings: ioerr ignore
-20080   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=256",display,input
+20080   open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=256",display,input
 20090   HH_BADGER_READ: linput #h_readings: ln$ eof HH_W_END
 20100   if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BADGER_READ
 20110   mat x=(0)
@@ -590,7 +590,7 @@
 20210   last_ln$=""
 20220   if listonly=1 then let fnopenprn
 20230   close #h_readings: ioerr ignore
-20240   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=204",display,input
+20240   open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
 20250   HH_BOSON_READ: if last_ln$="" then linput #h_readings: ln$ eof HH_W_END else ln$=last_ln$ : last_ln$=''
 20260   if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BOSON_READ
 20270   mat x=(0)
@@ -628,7 +628,7 @@
 20620   LAPTOP: ! r: readings from a laptop using acs meter reading software
 20640     if listonly=1 then let fnopenprn
 20650     close #h_readings: ioerr ignore
-20660     open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=50",display,input
+20660     open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
 20670     HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
 20680     mat x=(0)
 20690     x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_LAPTOP_READ ! Account Key
@@ -654,7 +654,7 @@
 20892   HH_OTHER_TYPE1: ! r:
 20900   if listonly=1 then let fnopenprn
 20910   close #h_readings: ioerr ignore
-20930   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=30",display,input
+20930   open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
 20940   HH_OTHER_TYPE1_READ: !
 20950   linput #h_readings: ln$ eof HH_W_END
 20960   mat x=(0)
@@ -1308,7 +1308,7 @@
 49680 ! /r MENU1
 
 52000 def fn_holdingFileLoad
-52020   holdingFile$=env$('Q')&"\UBmstr\IpHold"&ip1$&".h"&env$('cno')
+52020   holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
 52040   open #hld9=9: "Name="&holdingFile$,internal,input ioerr L7460
 52060   do
 52080     read #hld9,using F_WORK: x$,mat x eof IPHOLD_EO_HLD9
@@ -1340,14 +1340,14 @@
 56340     holdingFileSaveReturn=1
 56360     bk1=val(resp$(1)) conv HoldingFileSave
 56380     if bk1<=0 then goto HoldingFileSave
-56400     if uprc$(resp$(respc_CreateNew))=uprc$("True") and exists(env$('Q')&'\UBmstr\IpHold'&str$(bk1)&'.h'&env$('cno')) then ! Create New Holding File
-56420       fnFree(env$('Q')&'\UBmstr\IpHold'&str$(bk1)&'.h'&env$('cno'))
+56400     if uprc$(resp$(respc_CreateNew))=uprc$("True") and exists('[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]') then ! Create New Holding File
+56420       fnFree('[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]')
 56440     end if
 56460     ! Append to Existing Holding File
 56480     dim holdingFile$*256
 56500     dim holdingFileIndex$*256
-56520     holdingFile$=env$('Q')&"\UBmstr\IpHold"&str$(bk1)&".h"&env$('cno')
-56540     holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h"&env$('cno')
+56520     holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
+56540     holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
 56560     fnindex_it(holdingFile$,holdingFileIndex$,'1 10')
 56580     open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 56600     restore #hWork: ! ,search>="": nokey AppendFinis
@@ -1372,7 +1372,7 @@
 58100     ihDirFileMask$='Readings.*'
 58120   else if addmethod=from_holding_file then
 58140     book_or_holding_file$='Holding File'
-58160     ihDirFileMask$='IPHold*.h'&env$('cno')
+58160     ihDirFileMask$='IPHold*.h[cno]'
 58180   else
 58200     pr bell;'addmethod not recognized by INPUT_HAND routine.' : goto IH_XIT
 58220   end if
@@ -1388,7 +1388,7 @@
 58420   colhdr$(4)="Time"
 58440   mat bookItem$(4)
 58460   mat colhdr$(4)
-58480   ihFileCount=fngetdir2(env$('Q')&'\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
+58480   ihFileCount=fngetdir2('[Q]\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
 58500   fnflexinit1("book_"&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
 58520   ! open #ih_file_dir=9: "Name="&ih_file_dir$,display,input
 58540   for ihFileItem=1 to ihFileCount
@@ -1427,7 +1427,7 @@
 60360     goto IH_XIT
 60380   else if ck=6 then
 60400     if book_or_holding_file$='Holding File' then
-60404       open #hpHoldingFile:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpHold"&ip1$&".h"&env$('cno'),internal,outIn,relative
+60404       open #hpHoldingFile:=fngethandle: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
 60406       fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 60408       close #hpHoldingFile:
 60420       ! fn_holdingFilePrint(ip1$) ! pr for Holding Files
@@ -1441,9 +1441,9 @@
 60560     fnmsgbox(mat txt$,resp$,'',36)
 60580     if resp$="Yes" then
 60600       if addmethod=from_hh_file then
-60620         fnFree(env$('Q')&"\UBmstr\Readings."&ip1$)
+60620         fnFree("[Q]\UBmstr\Readings."&ip1$)
 60640       else if addmethod=from_holding_file then
-60660         fnFree(env$('Q')&"\UBmstr\IPHold"&ip1$&".h"&env$('cno'))
+60660         fnFree("[Q]\UBmstr\IPHold"&ip1$&".h[cno]")
 60680       end if
 60700     end if
 60720     goto INPUT_HAND
@@ -1812,7 +1812,7 @@
 82020   if ~setupFlexRead then let fn_setupFlexRead
 82040   z$=trim$(z$)
 82060   if z$<>'' then
-82080     open #tmp=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
+82080     open #tmp=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 82100     z$=lpad$(trim$(z$),10)
 82120     read #tmp,using "Form Pos 143,7*pd 2",key=z$: mat a
 82140     close #tmp:
@@ -2006,7 +2006,7 @@
 92040   dim hotImportDataField$(0)*256
 92060   dim hotImportDataValue$(0)*256
 92080   hotDataImportAsked=0
-92100   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$,display,input
+92100   open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
 92120   linput #h_readings: hot_ver$
 92140   hot_ver$=trim$(hot_ver$)
 92160   hot_z_prior$=hot_z$=''
@@ -2065,6 +2065,7 @@
 94100   dim hpValue$*256
 94120   hpField$=line$(1:pos_equal-1)
 94140   hpValue$=line$(pos_equal+1:len(line$))
+94150   hpValue$=trim$(hpValue$,'"')
 94160   hpValueN=0
 94180   hpValueN=val(hpValue$) conv ignore
 94200   hpField$=lwrc$(trim$(hpField$))

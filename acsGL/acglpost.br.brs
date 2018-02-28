@@ -17,8 +17,8 @@
 00108   cmask$(3)=''
 00118 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Post Entries from Holding File")
-00140   open #4: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",Shr,KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outIn,keyed 
-00150   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outIn,relative 
+00140   open #4: "Name=[Q]\GLmstr\GLmstr.H[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.H[cno],Shr",internal,outIn,keyed 
+00150   open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
 00160   gosub BUILD_LAYOUT
 00170 MAIN: ! r:
 00180   fnTos(sn$="AcglPost") 
@@ -42,7 +42,7 @@
 00330   fnTos(sn$="AcglPost1") 
 00332   mylen=10: mypos=mylen+3 : right=1
 00350   fnflexinit1('acglpost2',lc=1,1,15,30,mat chdr$,mat cmask$,1)
-00372   fngetdir2(env$('Q')&'\GLmstr\',mat filename$,'','GL*.H'&env$('cno'),mat filedate$,mat filetime$)
+00372   fngetdir2('[Q]\GLmstr\',mat filename$,'','GL*.H[cno]',mat filedate$,mat filetime$)
 00410   dircount=0
 00420   for filenameItem=1 to udim(mat filename$)
 00440     x=val(filename$(filenameItem)(3:8)) conv L420
@@ -73,7 +73,7 @@
 00620   for j3=1 to dircount
 00630     if dir(j3)<>0 then 
 00632       close #3: ioerr ignore
-00640       open #3: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H"&env$('cno')&",RecL=104,USE",internal,outIn,relative 
+00640       open #3: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H[cno],RecL=104,USE",internal,outIn,relative 
 00650       if listing=1 then 
 00660         pr #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
 00664       end if
@@ -139,7 +139,7 @@
 01170 L1170: !
 01172   for j=1 to dircount
 01180     if dir(j)<>0 then 
-01190       fnFree(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H"&env$('cno'))
+01190       fnFree("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H[cno]")
 01192     end if 
 01200   next j
 01210 XIT: fnxit
@@ -174,13 +174,13 @@
 01510 ! ______________________________________________________________________
 01520   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
-01530 ! Open #3: "Name="&env$('Q')&"\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H"&env$('cno')&",RecL=104,USE",Internal,outIn,Relative
+01530 ! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H[cno],RecL=104,USE",Internal,outIn,Relative
 01540   goto MAIN
 01550 ! ______________________________________________________________________
 01560 OPEN_FILE: ! r:
 01562   open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
-01570   if exists(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno'))=0 then gosub INDEX
-01580   open #open_file_count: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H"&env$('cno')&",RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
+01570   if exists("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]")=0 then gosub INDEX
+01580   open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno],RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
 01590   return  ! /r
 01600 ! ______________________________________________________________________
 01610 CLOSE_FILE: ! r:
@@ -190,7 +190,7 @@
 01640   return  ! /r
 01650 IGNORE: continue 
 01660 INDEX: ! r:
-01670   if ~fnindex_it(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno'),env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H"&env$('cno'),"1 12") then goto MAIN
+01670   if ~fnindex_it("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno]","1 12") then goto MAIN
 01690   return  ! /r
 01700 ! ______________________________________________________________________
 01930 ! ______________________________________________________________________
@@ -328,10 +328,10 @@
 21340   sp(ic+=1)=71
 21360 ! ** Combo Boxes **
 21380   cl=1 : c$(cl,1)='ComboF'
-21400   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
+21400   c$(cl,2)="[Q]\GLmstr\GLmstr.h[cno]"
 21420   c$(cl,3)="1" : c$(cl,4)="12"
 21440   c$(cl,5)="13": c$(cl,6)="40"
-21460   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno')
+21460   c$(cl,7)="[Q]\GLmstr\glindex.h[cno]"
 21480 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 21500   limit_to_list$='1'
 21520   return  ! /r

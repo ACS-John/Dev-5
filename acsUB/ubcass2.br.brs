@@ -30,9 +30,9 @@
 00210 ! ______________________________________________________________________
 00220 ! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
 00221   open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
-00230   open #2: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",RecL=112,Replace",internal,output 
-00240   open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00250   open #4: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outIn,relative 
+00230   open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output 
+00240   open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+00250   open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative 
 00260   fnopenprn(cp,0,0,process)
 00270   pr #255: "\qc {\b "&cap$ !:
         pr #255: "Listing of Customer Addresses that could not be certified" !:
@@ -58,7 +58,7 @@
 00390 END1: ! 
 00400   close #1: 
 00410   close #2: 
-00420   execute "Index "&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&","&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",1,10,Replace,DupKeys -n"
+00420   execute "Index [Q]\UBmstr\Cass1.h[cno],[Q]\UBmstr\Cass1Idx.h[cno],1,10,Replace,DupKeys -n"
 00430   fncloseprn
 00440 XIT: fnxit
 00450 ! ______________________________________________________________________

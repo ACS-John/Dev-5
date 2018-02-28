@@ -13,12 +13,12 @@
 00150   fnwait(message$='',1)
 00160   fncreg_read('calculation date',tmp$) : ppd=val(tmp$) 
 00162   fncreg_read('calculation date text',d$)
-00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+00170   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1: 
-00180   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",Shr",internal,input,relative 
-00190   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
-00200   open #3: "Name="&env$('Q')&"\PRmstr\praddr1.h"&env$('cno'),internal,input 
-00210   open #4: "Name="&env$('Q')&"\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 
+00180   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
+00190   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
+00200   open #3: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input 
+00210   open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 
 00220 L220: read #3,using 'Form POS 1,PD 3': address eof END1
 00230   read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd noRec L220
 00240 L240: form pos 1,n 8,3*c 30,c 11,pos 156,2*n 6,pos 173,2*pd 3,pos 191,n 6
@@ -113,7 +113,7 @@
 01130 L1130: rinput #win,fields "4,33,Cu 1,UET,N": dv$
 01140   if cmdkey=5 then goto XIT
 01150   if dv$="A" or dv$="B" then goto L1160 else goto L1130
-01160 L1160: execute "Copy "&env$('Q')&"\PRmstr\PR401K.DAT "&dv$&": -N" ioerr L1180
+01160 L1160: execute "Copy [Q]\PRmstr\PR401K.DAT "&dv$&": -N" ioerr L1180
 01170 XIT: fnxit
 01180 L1180: driv=1 ! drive not ready
 01190   goto L1050

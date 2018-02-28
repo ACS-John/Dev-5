@@ -24,7 +24,7 @@
 14400   date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 14600   date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
 14800   rec_low=val(resp$(3))
-15000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+15000   open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
 15200   do 
 15400     read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
 15500 ! if trans_date=date_bad then pause

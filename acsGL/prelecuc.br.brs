@@ -17,7 +17,7 @@
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 00130 ! ______________________________________________________________________
 00260   on fkey 5 goto XIT
-00270   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00270   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00290   read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 00292 FORM_COMPANY: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 00300 ! read #1,using FORM_PRCOINFO: mat a$,b$,c$,oldmax,mat dedfed
@@ -111,8 +111,8 @@
 01190   message$=""
 01200   stopable=1: gosub L3390 ! fnWAIT(MESSAGE$,1)
 01210 ! ______________________________________________________________________
-01220   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-01230 L1230: open #22: "Name="&env$('Q')&"\UCReport,RecL=512,eol=crlf,replace",display,output 
+01220   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
+01230 L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output 
 01240 ! ______________________________________________________________________
 01250   goto BEGINNING_OF_FILE
 01260   pr newpage
@@ -201,7 +201,7 @@
 02080   dim a$*512
 02090 L2090: close #22: ioerr L2100
 02100 L2100: open #24: "Name="&env$('temp')&"\x,RecL=514,EOL=NONE,REPLACE",external,output 
-02110   open #22: "Name="&env$('Q')&"\UCReport,RecL=512",display,input 
+02110   open #22: "Name=[Q]\UCReport,RecL=512",display,input 
 02120 L2120: linput #22: a$ eof L2170
 02130   if a$(512:512)="X" then a$(512:512)=""
 02140   write #24,using L2150: rpad$(a$,512),chr$(13),chr$(10)
@@ -295,9 +295,9 @@
 02890   if display_cnam=0 then goto L2920
 02900   if display_cnam=1 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) !:
-          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 02910   if display_cnam=2 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 02920 L2920: if button_option=0 then goto L3030
 02930   mat fkey$=("") : em$="" : es=0
 02940   fkey$(5)="Cancel" ! included by default
@@ -361,7 +361,7 @@
 03430 L3430: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outIn 
 03440   pr #win: newpage
 03450   pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
-03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number [cno]"
 03470   pr #win,fields "4,1,Cc 40,N": message$
 03480   if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please wait..."
 03490   if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
@@ -377,7 +377,7 @@
 03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn 
 03600   pr #win: newpage
 03610   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
-03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 03630 ! 
 03640 ! 
 03650   return  ! Fnend

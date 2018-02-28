@@ -4,7 +4,7 @@
 20600 ! ______________________________________________________________________
 20800   dim cap$*128
 21000 ! ______________________________________________________________________
-21200   fntop(program$,cap$='CReg Hamster for '&env$('CurSys')&' Company '&env$('CNo'))
+21200   fntop(program$,cap$='CReg Hamster for '&env$('CurSys')&' Company [cno]')
 21400   fncno(cno)
 21600   fn_setup_hamster
 21800   fn_open_file : fn_close_file : fn_open_file
@@ -14,7 +14,7 @@
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
 23000     open_file_count=0 ! this value is used in the close_file sub routine
-23200     open #open_file_count+=1: 'Name='&env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h'&env$('CNo')&',Version=1,KFName='&env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
+23200     open #open_file_count+=1: 'Name=[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h[cno],Version=1,KFName=[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h[cno],Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
 23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outIn,keyed
 23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outIn,relative
 23800   fnend 

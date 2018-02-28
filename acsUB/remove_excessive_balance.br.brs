@@ -34,8 +34,8 @@
 01410     end if 
 01420   fnend  ! fn_Options
 01430   def fn_openfiles
-01440     open #(f_custacct:=fngethandle): "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outIn,keyed 
-01450     open #(f_trans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,outIn,keyed 
+01440     open #(f_custacct:=fngethandle): "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
+01450     open #(f_trans:=fngethandle): "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed 
 01460   fnend 
 01770   def fn_printheader
 01780     pg+=1
@@ -80,7 +80,7 @@
 10460       dim acct$*10,custname$*30,trcust$(3)*10,trdate(3)
 10480 CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 10520       fn_openfiles ! open data files
-10530       open #h_iphold:=fngethandle: "Name="&env$('Q')&"\UBmstr\IpHold7.h"&env$('cno'),internal,input 
+10530       open #h_iphold:=fngethandle: "Name=[Q]\UBmstr\IpHold7.h[cno]",internal,input 
 10540       fnopenprn : fn_printheader
 10560       do 
 10580 NEXT_CUSTOMER: ! 

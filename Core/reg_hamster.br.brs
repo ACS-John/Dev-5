@@ -14,7 +14,7 @@
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
 23000     open_file_count=0 ! this value is used in the close_file sub routine
-23200     open #open_file_count+=1: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
+23200     open #open_file_count+=1: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
 23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outIn,keyed
 23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outIn,relative
 23800   fnend 

@@ -69,7 +69,7 @@
 70060 fnend
 72000 def fn_getPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4,&d1,&d1$)
 72020   GpdTop: !
-72040   open #hDates:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,input,relative ioerr GpdNoRec
+72040   open #hDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno]",internal,input,relative ioerr GpdNoRec
 72060   read #hDates,using "form pos 1,6*n 8,n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1 noRec GpdNoRec
 72080   !
 72100   d1$=rpt$(' ',20) soflow SkipReadingD1
@@ -92,7 +92,7 @@
 74000   GpdFinis: !
 74020 fnend
 84000 def fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$*20)
-84020   open #hDates:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76",internal,outIn,relative 
+84020   open #hDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76",internal,outIn,relative 
 84040   rewrite #hDates,using "form pos 1,6*n 8,n 8,c 20",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$
 84060   close #hDates: 
 84080 fnend

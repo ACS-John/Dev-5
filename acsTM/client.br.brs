@@ -17,8 +17,8 @@
 21800 ! ______________________________________________________________________
 21900   def fn_open_file
 22000     open_file_count=0 ! this value is used in the close_file sub routine
-22100     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-22200     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
+22100     open #open_file_count+=1: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+22200     open #open_file_count+=1: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
 22300   fnend 
 22400   def fn_close_file
 22500     for cf_h_item=1 to open_file_count
@@ -37,29 +37,29 @@
 23800     limit_to_list$='1'
 23900 ! 
 24000 ! cl=1 : c$(cl,1)='ComboF'
-24100 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h420'
+24100 ! c$(cl,2)='[Q]\TMmstr\Client.h420'
 24200 ! c$(cl,3)='1' : c$(cl,4)='6'
 24300 ! c$(cl,5)='7' : c$(cl,6)='50'
-24400 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h420'
+24400 ! c$(cl,7)='[Q]\TMmstr\Client-Idx.h420'
 24500 ! c$(cl,8)=limit_to_list$
 24600 ! cl=3 : c$(cl,1)='ComboF'
-24700 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h420'
+24700 ! c$(cl,2)='[Q]\TMmstr\Systems.h420'
 24800 ! c$(cl,3)='1' : c$(cl,4)='2'
 24900 ! c$(cl,5)='3' : c$(cl,6)='50'
-25000 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h420'
+25000 ! c$(cl,7)='[Q]\TMmstr\Systems-Idx.h420'
 25100 ! c$(cl,8)=limit_to_list$
 25200 ! cl=5 : c$(cl,1)='ComboF'
-25300 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h420'
+25300 ! c$(cl,2)='[Q]\TMmstr\TimeFrame.h420'
 25400 ! c$(cl,3)='1' : c$(cl,4)='2'
 25500 ! c$(cl,5)='3' : c$(cl,6)='50'
-25600 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h420'
+25600 ! c$(cl,7)='[Q]\TMmstr\TimeFrame-Idx.h420'
 25700 ! c$(cl,8)=limit_to_list$
 25800 ! 
 25900 ! c_x=1 : c$(c_x,1)='ComboF'
-26000 ! c$(c_x,2)=env$('Q')&"\UBmstr\Customer.h420"
+26000 ! c$(c_x,2)="[Q]\UBmstr\Customer.h420"
 26100 ! c$(c_x,3)='1' : c$(c_x,4)='10' ! Key
 26200 ! c$(c_x,5)='41' : c$(c_x,6)='30' ! Description
-26300 ! c$(c_x,7)=env$('Q')&"\UBmstr\ubIndex.h420"
+26300 ! c$(c_x,7)="[Q]\UBmstr\ubIndex.h420"
 26400 ! c$(c_x,8)='1'
 26500 ! 
 26600 ! c_x=2 : c_y=1

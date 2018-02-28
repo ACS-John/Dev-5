@@ -9,7 +9,7 @@
 00170 L170: input fields "10,55,N 2,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
 00190 ! 
-00200   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outIn 
+00200   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",internal,outIn 
 00210 L210: read #4,using L220: d1 eof L310,conv L280
 00220 L220: form pos 9,n 6
 00230   d1=fndate_mmddyy_to_ccyymmdd(d1) ! d1=19000000+FNCD(D1)
@@ -20,7 +20,7 @@
 00290   goto L210
 00300 ! ______________________________________________________________________
 00310 L310: close #4: 
-00320   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&" 1 14 Replace DupKeys -n"
+00320   execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 00330 XIT: stop 
 00340 ! ______________________________________________________________________
 00350 ! <updateable region: ertn>

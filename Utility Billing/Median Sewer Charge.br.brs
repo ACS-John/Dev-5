@@ -8,9 +8,9 @@
 20140 ! ______________________________________________________________________
 20160   fntop(program$)
 20180 ! ______________________________________________________________________
-20200   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-20220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outIn,keyed 
-20240   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",RecL=22,REPLACE",internal,output 
+20200   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+20220   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+20240   open #5: "Name=[Q]\UBmstr\MEANs.h[cno],RecL=22,REPLACE",internal,output 
 20260   read #1,using L490: x$,a2 eof DONE
 20280   restore #2,key>=x$&"         ": nokey L230
 20300 L170: read #2,using L540: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L230
@@ -107,8 +107,8 @@
 22120   close #1: ioerr L820
 22140 L820: close #2: ioerr L830
 22160 L830: close #5: ioerr L840
-22180 L840: execute "Index "&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&","&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&" 11,12,REPLACE,DupKeys -n"
-22200   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&",Shr",internal,outIn,keyed 
+22180 L840: execute "Index [Q]\UBmstr\MEANs.h[cno],[Q]\UBmstr\MEANIDX.h[cno] 11,12,REPLACE,DupKeys -n"
+22200   open #5: "Name=[Q]\UBmstr\MEANs.h[cno],KFName=[Q]\UBmstr\MEANIDX.h[cno],Shr",internal,outIn,keyed 
 22220   gosub HEADER
 22240   means=int(lrec(5)/2)
 22260 L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940

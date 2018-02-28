@@ -26,10 +26,10 @@
 15800   beg_date=val(resp$(1)) ! beginning of year
 16000   end_date=val(resp$(2)) ! ending day of year
 16200   fnGetPayrollDates(beg_date,end_date)
-16800   open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-17000   execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx4.h"&env$('cno')&" 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
-17200   open #h_department:=2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx4.h"&env$('cno')&",Shr",internal,input,keyed  ! open in workmans comp code sequence
-17400   open #h_payrollchecks:=4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CheckIdx.h"&env$('cno')&",Shr",internal,input,keyed 
+16800   open #h_rpmstr:=1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+17000   execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx4.h[cno] 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
+17200   open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx4.h[cno],Shr",internal,input,keyed  ! open in workmans comp code sequence
+17400   open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx.h[cno],Shr",internal,input,keyed 
 17600   fnopenprn
 17800   fn_hdr
 18000   do 

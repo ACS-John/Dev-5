@@ -40,7 +40,7 @@
           srvc=4 : srvc$=resp$(2)
 00300   rcode=val(resp$(3))
 00310   fnopenprn
-00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00320   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00330 ! 
 00340   on fkey 5 goto DONE
 00350   fnopenprn(cp,58,220,process)

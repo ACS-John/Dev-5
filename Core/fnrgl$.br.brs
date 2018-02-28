@@ -10,18 +10,18 @@
 28140 ! _______________________________________________________________________
 28160     dim desc$*50
 28180 ! _______________________________________________________________________
-28200     if env$('CurSys')="UB" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$="GL": goto L180
-28220     if env$('CurSys')="UB" and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then cursys$="UB": goto L180
-28240     if env$('CurSys')="PR" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$="GL": goto L180
-28260     if env$('CurSys')="PR" and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then cursys$="CL": goto L180
-28280     if env$('CurSys')="PR" and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then cursys$="PR": goto L180
+28200     if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
+28220     if env$('CurSys')="UB" and exists("[Q]\UBmstr\GLmstr.h[cno]") then cursys$="UB": goto L180
+28240     if env$('CurSys')="PR" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
+28260     if env$('CurSys')="PR" and exists("[Q]\CLmstr\Company.h[cno]") then cursys$="CL": goto L180
+28280     if env$('CurSys')="PR" and exists("[Q]\PRmstr\glmstr.h[cno]") then cursys$="PR": goto L180
 28300     if env$('CurSys')='CL' then cursys$='CL' else cursys$='GL'
-28320     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$='GL'
-28340     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno'))=0 then cursys$='CR'
+28320     if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then cursys$='GL'
+28340     if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then cursys$='CR'
 28360 ! find out if I should use the department number and/or the sub account number
 28380 L180: !
 28400     if cursys$='GL' or cursys$='CL' then 
-28420       open #company:=fngethandle: "Name="&env$('Q')&"\"&cursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L260
+28420       open #company:=fngethandle: "Name=[Q]\"&cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr L260
 28440       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 28460       close #company: 
 28480     else if cursys$="PR" or cursys$="UB" or cursys$="CR" then 
@@ -29,7 +29,7 @@
 28520       use_dept=use_sub=1 ! default both to use
 28540     end if
 28560     desc$=''
-28580     open #glmstr:=fngethandle: "Name="&env$('Q')&"\"&cursys$&"mstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\"&cursys$&"mstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
+28580     open #glmstr:=fngethandle: "Name=[Q]\"&cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&cursys$&"mstr\GLIndex.h[cno],Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
 28600     read #glmstr,using "Form Pos 13,C 50",key=x$: desc$ nokey NOKEYGLMSTR ioerr NOKEYGLMSTR
 28620     close #glmstr: 
 28640     L_ERR_OPEN_FOR_DESC: !

@@ -18,14 +18,14 @@
 00141 L141: ! On Fnkey 5 Goto EOF1
 00142   fnopenprn
 00143 ! ______________________________________________________________________
-00190   open #1: "Name="&env$('Q')&"\PRmstr\PRREPORT.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRPTIDX.h"&env$('cno')&",shr",internal,input,keyed 
+00190   open #1: "Name=[Q]\PRmstr\PRREPORT.h[cno],KFName=[Q]\PRmstr\PRRPTIDX.h[cno],shr",internal,input,keyed 
 00200   read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
 00210 L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 00220   close #1: 
 00221 ! ______________________________________________________________________
-00300   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00301   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
-00302   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outIn,keyed 
+00300   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00301   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+00302   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
 00320   gosub HDR
 00330   goto PRTRPT
 00331 ! ______________________________________________________________________

@@ -12,11 +12,11 @@
 00070 L70: rinput fields "10,55,N 5,UT,N": cno conv L70
 00080   if cno=0 then goto XIT
 00090 ! 
-00100   execute "Copy "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&" X -196 -n"
-00110   execute "Copy X "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&" -D -n"
-00120   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&" 1 8 Replace DupKeys -n"
-00130   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&" 9 30 Replace DupKeys -n"
-00140   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",RecL=150,USE",internal,outIn 
+00100   execute "Copy [Q]\PRmstr\RPMSTR.h[cno] X -196 -n"
+00110   execute "Copy X [Q]\PRmstr\RPMSTR.h[cno] -D -n"
+00120   execute "Index [Q]\PRmstr\RPMSTR.h[cno]"&' '&"[Q]\PRmstr\RPINDEX.h[cno] 1 8 Replace DupKeys -n"
+00130   execute "Index [Q]\PRmstr\RPMSTR.h[cno]"&' '&"[Q]\PRmstr\RPINDX2.h[cno] 9 30 Replace DupKeys -n"
+00140   open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",internal,outIn 
 00150 L150: read #4,using L160: d1 eof L230,conv L210
 00160 L160: form pos 9,n 6
 00170   d1=fndate_mmddyy_to_ccyymmdd(d1) ! d1=19000000+FNCD(D1)
@@ -26,8 +26,8 @@
 00210 L210: read #4,using L190: d1 eof L230
 00220   goto L150
 00230 L230: close #4: 
-00240   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&" 1 14 Replace DupKeys"
-00250   open #1: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",SIZE=0,RecL=512,Replace",internal,output,relative 
+00240   execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys"
+00250   open #1: "Name=[Q]\PRmstr\prCode.h[cno],SIZE=0,RecL=512,Replace",internal,output,relative 
 00260   write #1,using L270,rec=1: 0,0,0,0
 00270 L270: form pos 1,n 1,n 2,n 1,n 5
 00280   close #1: 

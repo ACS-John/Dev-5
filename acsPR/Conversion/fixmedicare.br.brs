@@ -15,8 +15,8 @@
 00150   fntop("S:\acsPR\fixmedicare",cap$="Fix Medicare")
 00160   fncno(cno,cnam$)
 00170   fnopenprn
-00180   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-00190   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outIn,keyed 
+00180   open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00190   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00200 ! 
 00210 L210: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof XIT
 00220   if tcp(3)=0 and tcp(2)>0 then tcp(3)=round(tcp(2)*.189542,2): tcp(2)=tcp(2)-tcp(3) : goto L240

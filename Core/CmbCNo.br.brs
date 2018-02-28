@@ -14,9 +14,9 @@
 00140     mat opt$(9999) : mat filename$(9999)
 00150     fncno(cno,oldcnam$)
 00170     if trim$(mysys$)='' then 
-00180       sys_data_path$=env$('Q')&'\'&fncursys$&"mstr"
+00180       sys_data_path$='[Q]\'&fncursys$&"mstr"
 00190     else 
-00200       sys_data_path$=env$('Q')&'\'&mysys$&"mstr"
+00200       sys_data_path$='[Q]\'&mysys$&"mstr"
 00210     end if 
 00220 ! 
 00230     fngetdir(sys_data_path$,mat filename$,empty$,temp$="Company.h*")

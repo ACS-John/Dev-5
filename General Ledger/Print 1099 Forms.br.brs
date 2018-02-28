@@ -4,8 +4,8 @@
 00060   on error goto ERTN
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
 00200   if ~fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then goto XIT
-00460   open #hPayee=fngethandle: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00470   open #hTrans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
+00460   open #hPayee=fngethandle: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+00470   open #hTrans=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed 
 32000   do
 32020     read #hPayee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
 32040     ytdp=fn_YearToDapPay(hTrans,vn$, beg_date,end_date)

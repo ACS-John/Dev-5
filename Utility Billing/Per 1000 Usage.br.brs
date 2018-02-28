@@ -26,7 +26,7 @@
 16240   end if 
 16260 ! 
 18000   gosub USAGE_CHART_ASK_RANGE
-18020   open #customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+18020   open #customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 18040 ! on fkey 99 goto DONE
 18060 ! on fkey 5 goto DONE
 18080   on pageoflow goto PGOF

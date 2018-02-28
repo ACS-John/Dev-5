@@ -27,13 +27,13 @@
 14200     dim sucrat(10),stuc1(10),stuc2(10),err$(3)*65,cap$*128
 14220 ! ______________________________________________________________________
 16000     fntop(program$,cap$="Payroll Registers")
-16060     open #20: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input ioerr L180
+16060     open #20: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L180
 16080     read #20,using 'Form POS 5,N 5': ckno
 16100     close #20: 
 16120     L180: ! 
 16140     if ~append_reg1 then let fnopenprn( 0,0,0,fnprocess,' (Departmental Register)')
 16160     ! ______________________________________________________________________
-18000     open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L220X
+18000     open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr L220X
 18020     founddept=1
 18040     L220X: !
 18050     fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
@@ -43,7 +43,7 @@
 18200     ! ______________________________________________________________________
 18220     ssr1=fnss_employee*.01
 18240     ssr2=fnss_employer*.01
-18260     open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
+18260     open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 18280     read #1,using F_COMPANY: a$,ficar2,feducrat,mat statname$,ficar1,mat sucrat
 18300     F_COMPANY: form pos 1,c 40,pos 133,pd 6.3,pos 145,pd 5.2,pos 150,10*c 8,pos 236,pd 3.3,pos 287,10*pd 3.3,pos 618,30*n 1,pos 648,10*c 6
 18320     close #1: ioerr ignore
@@ -51,11 +51,11 @@
 18380     ficar1=ficar1*.01
 18400     ficar2=ficar2*.01
 18420     ficarate=ficar1+ficar2
-18440     fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),"9/12/1 3/6/8")
-18460     ! execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&","&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno')&" 9/12/1 3/6/8,replace,DupKeys -n"
-18480     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),internal,input,keyed 
-18500     open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
-18520     open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outIn,keyed 
+18440     fnindex_it("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\CheckIdx2.h[cno]","9/12/1 3/6/8")
+18460     ! execute "Index [Q]\PRmstr\PayrollChecks.h[cno],[Q]\PRmstr\CheckIdx2.h[cno] 9/12/1 3/6/8,replace,DupKeys -n"
+18480     open #h_payrollchecks:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",internal,input,keyed 
+18500     open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+18520     open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
 18540     ! Read #2,Using 370,Rec=ADR: ENO, DEP1,LPD,TCD(1),MAT TDET,MAT HC,MCWH,MAT CP
 22000     READ_CHECKS: ! 
 22010     read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof L1990
@@ -305,7 +305,7 @@
 36060     close #h_payrollchecks: ioerr ignore
 36070 ! fnStatusClose
 36080     fncloseprn
-36100     fnindex_it(env$('Q')&"\PRmstr\prTot.h"&env$('cno'),env$('Q')&"\PRmstr\PRTotIdx.h"&env$('cno'),"1 9")
+36100     fnindex_it("[Q]\PRmstr\prTot.h[cno]","[Q]\PRmstr\PRTotIdx.h[cno]","1 9")
 36110 ! fnStatusClose
 36120   fnend 
 38000 IGNORE: continue 

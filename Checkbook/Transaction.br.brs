@@ -29,9 +29,9 @@
 12800   endd=begd+3000
 12900   transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 13000   transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
-13100   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative ioerr CHAIN_SELCNO: read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20: 
+13100   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr CHAIN_SELCNO: read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20: 
 13200   gosub OPEN_TRANSACTION_FILES
-13300   open #h_tralloc=fngethandle: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+13300   open #h_tralloc=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed 
 13400 ! /r
 13500 SCREEN1: ! r:
 13600 ! select limitations for the menu1's record selection grid
@@ -40,13 +40,13 @@
 13900   fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 14000   lc+=1
 14100   fnLbl(lc+=1,1,"Working Bank:",mylen,right)
-14200   fncombof('BankAll',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),add_all)
+14200   fncombof('BankAll',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",add_all)
 14300   if wbc=0 then resp$(1)='[All]' else resp$(1)=str$(wbc)
 14400   fnLbl(lc+=1,1,"Working Transaction Type:",mylen,right)
-14500   fncombof('TransactionTypeall',lc,mypos,0,env$('Q')&"\CLmstr\TransactionType.dat",1,1,2,25,env$('Q')&"\CLmstr\TransactionType.idx",add_all)
+14500   fncombof('TransactionTypeall',lc,mypos,0,"[Q]\CLmstr\TransactionType.dat",1,1,2,25,"[Q]\CLmstr\TransactionType.idx",add_all)
 14600   if wtt=0 then resp$(2)='[All]' else resp$(2)=str$(wtt)
 14700   fnLbl(lc+=1,1,"Payee:",mylen,right)
-14800   fncombof('Payeeall',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),add_all)
+14800   fncombof('Payeeall',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",add_all)
 14900   if wpayee$='' then resp$(3)='[All]' else resp$(3)=wpayee$
 15000   lc+=1
 15100   fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
@@ -98,8 +98,8 @@
 19700   editrec=rec(h_trmstr(1)): goto DO_EDIT
 19800   goto MENU1 ! /r
 20000 OPEN_TRANSACTION_FILES: ! r:
-20100   open #h_trmstr(1)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-20200   open #h_trmstr(2)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outIn,keyed 
+20100   open #h_trmstr(1)=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
+20200   open #h_trmstr(2)=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 20300   return  ! /r
 20500 MENU1: ! r:
 20600   fnTos(sn$='Transaction-Menu1')
@@ -266,11 +266,11 @@
 35400 ! 
 35500 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 35600   if typeofentry=2 then 
-35700     open #payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\recIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-35800     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\ReceiptGLBkdIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+35700     open #payee:=fngethandle: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed 
+35800     open #payeegl:=fngethandle: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed 
 35900   else 
-36000     open #payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-36100     open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdIdx.h"&env$('cno')&",Shr",internal,outIn,keyed 
+36000     open #payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed 
+36100     open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed 
 36200   end if 
 36300 ! 
 36400   read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL
@@ -585,10 +585,10 @@
 68400   frame=fc+=1
 68500   lc=0 : mylen=23 : mypos=mylen+2
 68600   fnLbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-68700   fncombof('Bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
+68700   fncombof('Bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
 68800   resp$(1)=str$(bank_code)
 68900   fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
-69000 ! fncombof('TransactionType',lc,mypos,0,env$('Q')&'\CLmstr\TransactionType.dat',1,1,2,25,env$('Q')&'\CLmstr\TransactionType.idx',limit_to_list,0,'',frame)
+69000 ! fncombof('TransactionType',lc,mypos,0,'[Q]\CLmstr\TransactionType.dat',1,1,2,25,'[Q]\CLmstr\TransactionType.idx',limit_to_list,0,'',frame)
 69100 ! resp$(2)=str$(tcde)
 69200   fnTxt(lc,mypos,28,0,left,'',disable,'',frame)
 69300   resp$(2)=str$(tcde)
@@ -607,7 +607,7 @@
 70600   resp$(5)=cnvrt$("N 10.2",val(tr$(3)))
 70700   if typeofentry=2 then 
 70800     fnLbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
-70900     fncombof('ReceiptType',lc,mypos,0,env$('Q')&"\CLmstr\RecMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\RecIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
+70900     fncombof('ReceiptType',lc,mypos,0,"[Q]\CLmstr\RecMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\RecIdx1.h[cno]",limit_to_list,0,'',frame)
 71000     resp$(6)=tr$(4)
 71100   else 
 71200     fnLbl(lc+=1,1,'Payee:',mylen,right,0,frame)
@@ -615,7 +615,7 @@
 71400       fnTxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
 71500       resp$(6)=tr$(4)
 71600     else 
-71700       fncombof('Payee',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
+71700       fncombof('Payee',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",limit_to_list,0,'',frame)
 71800       resp$(6)=tr$(4)
 71900     end if  ! scd=4   /   else 
 72000   end if  ! typeofentry=2   /   else 
@@ -753,10 +753,10 @@
 84300   close #h_trmstr(1): 
 84400   close #h_trmstr(2): 
 84500   close #h_tralloc: 
-84600   fnRemoveDeletedRecords(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'))
-84900   fnIndex(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno'),"1 11")
-85000   fnIndex(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno'),"28/1 8/11")
-85100   fnIndex(env$('Q')&"\CLmstr\Tralloc.h"&env$('cno'),env$('Q')&"\CLmstr\Tralloc-idx.h"&env$('cno'),"1 11")
+84600   fnRemoveDeletedRecords("[Q]\CLmstr\TrMstr.h[cno]")
+84900   fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx1.h[cno]","1 11")
+85000   fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx2.h[cno]","28/1 8/11")
+85100   fnIndex("[Q]\CLmstr\Tralloc.h[cno]","[Q]\CLmstr\Tralloc-idx.h[cno]","1 11")
 85200   gosub OPEN_TRANSACTION_FILES
 85300   return  ! /r
 85500 ! <updateable region: ertn>

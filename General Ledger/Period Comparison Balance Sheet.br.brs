@@ -19,8 +19,8 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
 00152   ! fnfscode
 00153   ! fnpriorcd
-00160   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #1,using "Form pos 384,N 2",rec=1: nap : close #1: 
-00170   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1: 
+00160   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using "Form pos 384,N 2",rec=1: nap : close #1: 
+00170   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1: 
 00180   m1$(1)="  January" : m1$(2)=" February" !:
         m1$(3)="    March" : m1$(4)="    April" !:
         m1$(5)="      May" : m1$(6)="     June" !:
@@ -35,8 +35,8 @@
         m2$(13)="Thirteen"
 00200   mp1=63
 00210   if fnps=2 then mp1=mp1+3
-00220   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
-00230   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr"
+00220   fl1$="Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FnSBIndx.h[cno],Shr"
+00230   if fnps=2 then fl1$="Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\FnScIndx.h[cno],Shr"
 00240   open #1: fl1$,internal,input,keyed 
 00250   if fnprocess=1 or fnUseDeptNo=0 then goto L330
 00260   goto L370 ! pr NEWPAGE
@@ -53,10 +53,10 @@
 00370 L370: fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00380   if fnps=2 then goto L410 ! secondary
-00390   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&'\'&"fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
+00390   execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 63 3 Replace DupKeys -N"
 00400   goto L420
-00410 L410: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&'\'&"fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
-00420 L420: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&'\'&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
+00410 L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 66 3 Replace DupKeys -N"
+00420 L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed 
 00430   report$=env$('program_caption')
 00440 L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120
 00450   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L440

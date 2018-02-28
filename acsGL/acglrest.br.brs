@@ -27,13 +27,13 @@
 00250   on t goto EDIT,L300 none MENU1
 00260 ! ______________________________________________________________________
 00270 EDIT: ! 
-00280   execute 'SY NotePad "'&os_filename$(env$('Q')&"\GLmstr\ACGLSTMT.h"&env$('cno'))&'"'
+00280   execute 'SY NotePad "'&os_filename$("[Q]\GLmstr\ACGLSTMT.h[cno]")&'"'
 00290   goto MENU1
 00300 L300: ! ______________________________________________________________________
 00310   if fnglfs=5 then goto MENU1
 00320   fnopenprn
 00330   pr newpage
-00340   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&env$('cno')&",Shr",display,input ioerr EDIT
+00340   open #1: "Name=[Q]\GLmstr\AcGLStmt.h[cno],Shr",display,input ioerr EDIT
 00350   pr newpage !:
         pr f "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
         pr f "12,34,C 11,B,5": "Cancel (F5)" !:

@@ -12,8 +12,8 @@
 11300   dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 11400   dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 11500   fn_get_old_setup
-11600   open #h_clmstr:=9: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
-11700   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
+11600   open #h_clmstr:=9: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
+11700   open #11: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
 11800   open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
 11900 SCREEN_1: ! r:
 12000 ! exec 'config dimonly'
@@ -282,7 +282,7 @@
 38300 L4910: ! 
 38400   fnend 
 38500   def fn_get_old_setup
-38600     open #h_company:=1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr ERR_FILE
+38600     open #h_company:=1: "Name=[Q]\TMmstr\Company.h[cno],Shr",internal,input ioerr ERR_FILE
 38700     read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr ERR_FILE
 38800 ! i3=1 ! ENTER G/L #'S
 38900 L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3

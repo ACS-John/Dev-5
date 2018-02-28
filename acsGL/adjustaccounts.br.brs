@@ -8,11 +8,11 @@
 10070   fn_adjustaccounts
 10080   def fn_adjustaccounts
 10090     fncno(cno)
-10100     open #(h_glmstr:=fngethandle): "Name="&env$('Q')&"\GLmstr\glmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,outIn,keyed 
+10100     open #(h_glmstr:=fngethandle): "Name=[Q]\GLmstr\glmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",internal,outIn,keyed 
 10110 GLMSTR: form n 3,n 6,n 3,pos 81,28*pd 6.2
-10120     open #(h_actrans:=fngethandle): "Name="&env$('Q')&"\GLmstr\actrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.h"&env$('cno')&",Shr",internal,input,keyed 
+10120     open #(h_actrans:=fngethandle): "Name=[Q]\GLmstr\actrans.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,input,keyed 
 10130 ACTRANS: form n 3,n 6,n 3,n 6,pd 6.2,pos 71,n 2
-10140     open #(h_gltrans:=fngethandle): "Name="&env$('Q')&"\GLmstr\gltrans.h"&env$('cno')&",Shr",internal,input 
+10140     open #(h_gltrans:=fngethandle): "Name=[Q]\GLmstr\gltrans.h[cno],Shr",internal,input 
 10150 GLTRANS: form n 3,n 6,n 3,n 6,pd 6.2
 10160     do 
 10170       fn_getadjustment

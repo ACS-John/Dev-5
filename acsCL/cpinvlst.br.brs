@@ -29,11 +29,11 @@
 00250   fund=val(resp$(3))
 00260 ! ___________________________
 00270 ! ___________________________
-00280   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00290   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Shr",internal,outIn,keyed 
-00300   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
-00310   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00320   open #unpdaloc=6: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
+00280   open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+00290   open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
+00300   open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed 
+00310   open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,input,keyed 
+00320   open #unpdaloc=6: "Name=[Q]\CLmstr\UnPdAloc.h[cno],Version=2,KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,input,keyed 
 00330   open #work=5: "Name="&env$('Temp')&"\Work,Size=0,RecL=66,Replace",internal,output 
 00340 READ_PAYTRANS: ! 
 00350   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6',release: vn$,iv$,ivd,dd eof END1

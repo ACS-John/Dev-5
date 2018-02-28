@@ -17,7 +17,7 @@
 00240 ! ______________________________________________________________________
 00250   def fn_open_file
 00260     open_file_count=0 ! this value is used in the close_file sub routine
-00270     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\MeterType.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno')&",Use,RecL=128,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+00270     open #open_file_count+=1: "Name=[Q]\UBmstr\MeterType.h[cno],Version=1,KFName=[Q]\UBmstr\MeterTypeIdx.h[cno],Use,RecL=128,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00280   fnend 
 00290   def fn_close_file
 00300     for j=1 to open_file_count : close #j: : next j

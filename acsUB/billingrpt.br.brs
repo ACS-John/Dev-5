@@ -35,7 +35,7 @@
 00330 XIT: fnxit
 00340 ! ______________________________________________________________________
 00350 STARTREPORT: ! 
-00370   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00370   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00380 L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
 00390   fnopenprn
 00400 ! sort prep !!!
@@ -69,7 +69,7 @@
 00680 L680: form pos 1,cc 30,cc 30,cc 30,skip 1
 00690 L690: form pos 1,cc 10,x 1,cc 30,x 1,cc 10
 00700   pr #255: ""
-00710   pr #255,using L670: "Company Number "&env$('cno'),cnam$,"Page "&str$(pg)
+00710   pr #255,using L670: "Company Number [cno]",cnam$,"Page "&str$(pg)
 00720   pr #255,using L680: temp$(1),cap$,temp$(3)
 00730   pr #255,using L740: "Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
 00740 L740: form pos 30,cc 30,skip 1

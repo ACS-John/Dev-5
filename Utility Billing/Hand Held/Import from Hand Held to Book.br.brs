@@ -113,7 +113,7 @@
 28000 def fn_transfer(bk$,enableMerge$,askPath$*128)
 28020   transferReturn=0
 28040   dim bookFile$*512
-28060   bookFile$=env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)
+28060   bookFile$="[Q]\UBmstr\Readings."&ltrm$(bk$)
 28080   if enableMerge$='True' and exists(bookFile$) then 
 28100     dim mergeFileOrigional$*512
 28120     mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
@@ -190,18 +190,18 @@
 30420         hif_return$="C:\mvrs\xfer\upload\UPLOAD.DAT"
 30440       ! end if
 30480     else if deviceSelected$="Psion Workabout" then
-30500       hif_return$=env$('Q')&"\UBmstr\Readings.out"
+30500       hif_return$="[Q]\UBmstr\Readings.out"
 30520     else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" or deviceSelected$="DriveBy" then
 30540       hif_return$="c:\connect\connect.ot3"
 30640     else if deviceSelected$="Unisys" then
-30660       hif_return$=env$('Q')&"\UBmstr\ReadOut.dat"
+30660       hif_return$="[Q]\UBmstr\ReadOut.dat"
 30680     else if deviceSelected$="Boson" then
 30700       if env$('client')="Monticello" then
-30710         hif_return$=env$('Q')&"\UBmstr\outpalm.txt"
+30710         hif_return$="[Q]\UBmstr\outpalm.txt"
 30712       ! else if env$('client')="Cerro Gordo" then
 30714       !   hif_return$=env$('at')&'C:\ProgramData\ACS\UBmstr\outofpalm.txt'
 30740       else
-30760         hif_return$=env$('Q')&"\UBmstr\outofpalm.txt"
+30760         hif_return$="[Q]\UBmstr\outofpalm.txt"
 30780       end if
 30840     else if deviceSelected$="Other" and env$('client')="Brier Lake" then
 30860       hif_return$="L:\readings.txt"
@@ -399,7 +399,7 @@
 62150     fnmsgbox(mat ml$, response$, cap$,0)
 62270   else
 62300     fnCopy(fn_hh_input_filename$,bookFile$)
-62330     fnRename(fn_hh_input_filename$,env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
+62330     fnRename(fn_hh_input_filename$,"[Q]\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
 62360   end if
 62390 fnend
 64000 def fn_ezreader(bookFile$*512)
@@ -502,7 +502,7 @@
 74390   if len(source$)=0 then goto L1420
 74420   if len(source$)=1 then source$(2:2)=":"
 74450   if source$(3:3)=" " then source$(3:3)="\"
-74480   fnCopy(source$&"readings."&str$(route),env$('Q')&"\UBmstr\readings."&str$(route))
+74480   fnCopy(source$&"readings."&str$(route),"[Q]\UBmstr\readings."&str$(route))
 74510 fnend
 76000 def fn_psion_workabout(bookFile$*512)
 76240   if env$('client')="Ash Grove" then
@@ -536,7 +536,7 @@
 80210 ! /region
 82000 def fn_readings_backup(bookFile$*512)
 82030   if exists(bookFile$) then
-82060     fnCopy(bookFile$,env$('Q')&"\UBmstr\readings_"&bk$&'.bak')
+82060     fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bk$&'.bak')
 82090   end if  ! exists UBmstr\readings.[bk$]
 82120 fnend
 84000 def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
