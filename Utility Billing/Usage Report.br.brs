@@ -4,8 +4,9 @@
 20040   on error goto ERTN
 20060   fntop(program$)
 20080 ! ______________________________________________________________________
-20100   dim z$*10,e$(4)*30,d(15)
-20120   dim t(3,2),r(3,2),line$*212,serviceName$(10)*20,srv$(10)*2
+20100   dim z$*10,name$*30,d(15)
+20120   dim t(3,2),r(3,2),line$*212
+20130   dim serviceName$(10)*20,srv$(10)*2
 20140   dim resp$(10)*128
 20160 ! ______________________________________________________________________
 22020   fnLastBillingDate(filterBillingDate)
@@ -34,7 +35,9 @@
 30340   fnCmdSet(3)
 30360   fnAcs(sn$,0,mat resp$,ck)
 30380   if ck=5 then goto XIT
+30390   ! filterBillingDateDefault=filterBillingDate
 30420   filterBillingDate=val(resp$(resp_billingDate))
+30430   ! if filterBillingDateDefault=filterBillingDate then enableBillingDateFilter=1 else enableBillingDateFilter=0
 30440   if trim$(resp$(respc_routeFilter))="[All]" then 
 30460     filterRoute=0
 30480   else 
@@ -57,24 +60,27 @@
 47000 fnopenprn(cp,58,320,process)
 47020 gosub HDR
 48000 do ! r: main report loop
-48020   read #hCustomerForReport,using F_Customer: z$,mat e$,mat d,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
-48040   F_Customer: form pos 1,c 10,4*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
+48020   read #hCustomerForReport,using F_Customer: z$,name$,mat d,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
+        
+48040   F_Customer: form pos 1,c 10,pos 41,C 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
 48050   if reportSequence=sequenceAccount and filterRoute and route<>filterRoute then goto NextCustomer
-48060   !  enable prior billing dates !  if CustomerLastBillingDate=filterBillingDate then goto L570
+48060   ! if enableBillingDateFilter and CustomerLastBillingDate<>filterBillingDate then goto NextCustomer
 48080   d(1)=d(3)=d(5)=d(7)=d(9)=d(11)=0
 48100   restore #h_trans,key>=z$&"         ": nokey L570
 48120   do ! L520: ! 
-48130     ! read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,transDate,tcode,tamount,mat tg,s1read,s1use,s3read,s3usage,s5read,s5use,tbal,pcode eof L570
-48140     read #h_trans,using 'Form POS 1,C 10,N 8,pos 68,6*PD 5': transAcct$,transDate,s1read,s1use,s3read,s3usage,s5read,s5use eof L570
-48160     if transAcct$<>z$ then goto L570
-48210   loop until transDate=filterBillingDateCcyymdd 
+48130     ! read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,transDate,tcode,tamount,mat tg,trans_s1reading,trans_s1usage,trans_s3reading,trans_s3usage,trans_s5reading,trans_s5usage,tbal,pcode eof L570
+48140     read #h_trans,using 'Form POS 1,C 10,N 8,pos 68,6*PD 5': transAcct$,transDate,trans_s1reading,trans_s1usage,trans_s3reading,trans_s3usage,trans_s5reading,trans_s5usage eof L570
+48160     ! if transAcct$<>z$ then goto L570
+48210   loop until transDate=filterBillingDateCcyymdd or transAcct$<>z$
 48220   ! L560: ! 
-48240   d(1)=s1read
-48260   d(3)=s1use
-48280   d(5)=s3read
-48300   d(7)=s3usage
-48320   d(9)=s5read
-48340   d(11)=s5use
+48230   if transDate=filterBillingDateCcyymdd then
+48240     d(1) =trans_s1reading
+48260     d(3) =trans_s1usage
+48280     d(5) =trans_s3reading
+48300     d(7) =trans_s3usage
+48320     d(9) =trans_s5reading
+48340     d(11)=trans_s5usage
+48350   end if
 48360   L570: ! 
 48380   if filterRoute and route<>filterRoute then 
 48400       goto TOTAL_AND_FINISH
@@ -134,19 +140,20 @@
 56720   pr #255: "{\ul  Account  } {\ul Name                } "&heading2$
 56740 return  ! /r
 58000 PRINT_DETAILS: ! r:
-58010   if sum(mat d(3:12))<>0 then
-58020     line$=z$&' '&e$(2)(1:21)
+58002 ! if pos(lwrc$(name$),'virnig')>0 then pr name$,CustomerLastBillingDate,filterBillingDate : pause
+58010   if sum(mat d(3:12))<>0 and days(CustomerLastBillingDate,'mmddyy')=>days(filterBillingDate,'mmddyy') then
+58020     line$=z$&' '&name$(1:21)
 58040     if service1enabled then 
-58060       line$=line$&cnvrt$("n 10",d(1))&cnvrt$("n 10",d(3))&cnvrt$("n 10",d(4))
+58060       line$(inf:inf)=cnvrt$("n 10",d(1))&cnvrt$("n 10",d(3))&cnvrt$("n 10",d(4))
 58080     end if 
 58100     if service3enabled then 
-58280       line$=line$&cnvrt$("n 10",d(5))&cnvrt$("n 10",d(7))&cnvrt$("n 10",d(8))
+58280       line$(inf:inf)=cnvrt$("n 10",d(5))&cnvrt$("n 10",d(7))&cnvrt$("n 10",d(8))
 58300     end if 
 58340     if service4enabled then 
-58400       line$=line$&cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
+58400       line$(inf:inf)=cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
 58420     end if 
 58460     pr #255: line$ pageoflow NEWPGE
-58480     routePrior=route
+58480     oldroute=route
 58500     t(1,1)=t(1,1)+d(3)
 58520     t(1,2)=t(1,2)+d(4)
 58540     t(2,1)=t(2,1)+d(7)
