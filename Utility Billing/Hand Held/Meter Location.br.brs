@@ -8,19 +8,6 @@
 00072 !   fncreg_write('u4 meter location account numbers left justified','False')
 00080 ! end if 
 08000 ! /r
-10030 ! r: disallow entry without enabling Meter Address
-10040 !  fnreg_read('Meter Address Enable',u4_meterAddress$,'False')
-10060 !  if u4_meterAddress$='False' then
-10100 !    fnAddOneC(mat mg$,'Meter Location tracking is currently disabled.')
-10120 !    fnAddOneC(mat mg$,'Would you like to enable it now?')
-10160 !    fnmsgbox(mat mg$,mgResp$, '', 4)
-10180 !    if mgResp$='Yes' then
-10200 !    u4_meterAddress$='True'
-10220 !    fnreg_write('Meter Address Enable',u4_meterAddress$)
-10240 !    else
-10260 !      goto XIT
-10280 !    end if
-10290 !  end if ! /r
 10300 fnHamsterFio(table$)
 10320 XIT: !
 10340 fnxit
@@ -32,15 +19,17 @@
 12054     library 'S:\Core\Library': fnindex_it,fnHamsterFio
 12056     library 'S:\Core\Library': fnStatusClose,fnStatus
 12060     library 'S:\Core\Library': fnAddOneC
-12070     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile
-12071     library 'S:\Core\Library': fnAutomatedSavePoint
-12072     library 'S:\Core\Library': fncreg_read,fncreg_write
-12076     library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
-12078     library 'S:\Core\Library': fnBuildKey$
+12062     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile
+12064     library 'S:\Core\Library': fnAutomatedSavePoint
+12066     library 'S:\Core\Library': fnreg_read
+12068     library 'S:\Core\Library': fncreg_read,fncreg_write
+12070     library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
+12072     library 'S:\Core\Library': fnBuildKey$
 12080     library 'S:\Core\Library': fnKeyExists
-12083     library 'S:\Core\Library': fnCustomerData$
+12082     library 'S:\Core\Library': fnCustomerData$
 12084     library 'S:\Core\Library': fnFree,fnRename
-12085     library 'S:\Core\Library': fnlbl,fntos,fnacs,fncmdkey,fnflexinit1,fnflexadd1,fntxt,fncmdset,fncombof
+12086     library 'S:\Core\Library': fnlbl,fntos,fnacs,fntxt,fncmdset,fncombof
+12088     library 'S:\Core\Library': fncmdkey,fnflexinit1,fnflexadd1
 12100     dim info$(0)*20,infoN(0)
 12101     dim addr$(0)*30,addrN(0)
 12102     dim form$(0)*256
@@ -53,6 +42,7 @@
 12434     table$='U4 Meter Location'
 12450     fnGetServiceCodesMetered(mat serviceCodeMetered$)
 12480   end if
+12490   fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
 12500   if exists('[Q]\UBmstr\Meter.h[cno]') or ~exists('[Q]\UBmstr\MeterLocation.h[cno]') then let fn_InitialializeMeterLocation
 12900 fnend
 13000 def library fnInitialializeMeterLocation
@@ -85,7 +75,7 @@
 16060         location$(loc_activeCustomer)=trim$(location$(loc_activeCustomer))
 16070       end if
 16080       if umlCleanZeroLocationId$='True' then
-16090         if locationN(loc_locationId)=0 then locationN(loc_locationId)=fn_newLocationID
+16090         if locationN(loc_locationId)=0 then locationN(loc_locationId)=fn_newLocationIdSequential
 16100       end if
 16110       if locationN(loc_locationId)=0 then pr 'AAA - about to write a ZERO location Id' : pause
 16120       rewrite #hLocation,using form$(hLocation): mat location$,mat locationN
@@ -227,7 +217,7 @@
 40350       goto LwFinis
 40352     else if locationN(loc_locationID)=0 and locRead$(loc_serviceId)<>location$(loc_serviceId) then 
 40354       ! it's a new service for an existing location
-40355       locationN(loc_locationID)=fn_newLocationID
+40355       locationN(loc_locationID)=fn_newLocationIdSequential
 40356       goto LwWrite
 40358     else if location$(loc_locationID)=locRead$(loc_locationID) and location$(loc_serviceId)=locRead$(loc_serviceId) then
 40360       for lwLocItem=1 to udim(mat locRead$)
@@ -258,10 +248,12 @@
 40850   goto LwFinis ! /r
 40860   LwWrite: ! r:
 40870     if locationN(loc_locationID)=0 then 
-40880       locationN(loc_locationID)=fn_newLocationID
-40890     ! else
-40900     !   pr 'location ID of 0 is expected at this point.  it is a new record and should not already be assigned.'
-40920     !   pause
+40880       if u4_meterLocationIdSequential$='True' then 
+40890         locationN(loc_locationID)=fn_newLocationIdSequential
+40900       else 
+40910         pr 'in routine LwWrite but we are not using Sequential Location Ids - so write a new fn or something'
+40920         pause
+40930       end if
 40940     end if
 40950     if locationN(loc_locationId)=0 then pr 'CCC - about to write a ZERO location Id' : pause
 40960     write #hLocation(1),using form$(hLocation(1)): mat location$,mat locationN
@@ -449,75 +441,75 @@
 55200   end if
 55220   fnMeterAddressName$=location$(loc_name)
 55240 fnend
-60000 def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
-60001   pr 'fnMeterAddressUpdate is broken - must be fixed to update location table instead'
-60002   pause
-60020   if ~setup then let fn_setup
-60040   meterAddressBefore$=rtrm$(meterAddressBefore$)
-60060   meterAddressAfter$=rtrm$(meterAddressAfter$)
-60080   if meterAddressBefore$<>meterAddressAfter$ then
-60100     hMeterAddressLocationID=fn_open(table$,mat location$,mat locationN,mat form$)
-60120     hMeterAddressName=hMeterAddressLocationID+1
-60140     if fnKeyExists(hMeterAddressName,meterAddressAfter$) then
-60160       doAdd$=fn_askAddDuplicate$(meterAddressBefore$,meterAddressAfter$)
-60170       if doAdd$='No' then meterAddressAfter$=meterAddressBefore$ : doAdd$='Cancel'
-60200     else if meterAddressBefore$='' and ~fnKeyExists(hMeterAddressName,meterAddressAfter$) then ! changed from blank - it is new
-60220       doAdd$='Yes'
-60300     else if lwrc$(meterAddressBefore$)=lwrc$(meterAddressAfter$) then  ! only case changes - it is an update
-60320       doAdd$='No'
-60340     else
-60360       doAdd$=fn_askAddNew$(meterAddressBefore$,meterAddressAfter$)
-60380     end if
-60400 ! pr 'doAdd$=';doAdd$ : pause
-60460     if doAdd$='Yes' then
-60480       maDataN(loc_LocationID)=0 ! fn_newLocationID
-60500       maData$(ma_Name)=meterAddressAfter$
-60520       write #hMeterAddressName,using form$(hMeterAddressLocationID): mat maData$,mat maDataN
-60540       ! pr 'just wrote one' : pause
-60560     else if doAdd$='No' then 
-60580       read #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-60600       maData$(ma_Name)=meterAddressAfter$
-60620       rewrite #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-60640       ! pr 'rewrote ' : pause
-60660     else if doAdd$='Cancel' then 
-60680       meterAddressAfter$=meterAddressBefore$
-60700     end if
-60720     fnCloseFile(hMeterAddressLocationID,table$)
-60740   end if
-60760 fnend
-62000 def fn_newLocationID(; alterAmount) ! (; initialize)
+60000 ! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$) r: unused fn
+60001 !   pr 'fnMeterAddressUpdate is broken - must be fixed to update location table instead'
+60002 !   pause
+60020 !   if ~setup then let fn_setup
+60040 !   meterAddressBefore$=rtrm$(meterAddressBefore$)
+60060 !   meterAddressAfter$=rtrm$(meterAddressAfter$)
+60080 !   if meterAddressBefore$<>meterAddressAfter$ then
+60100 !     hMeterAddressLocationID=fn_open(table$,mat location$,mat locationN,mat form$)
+60120 !     hMeterAddressName=hMeterAddressLocationID+1
+60140 !     if fnKeyExists(hMeterAddressName,meterAddressAfter$) then
+60160 !       doAdd$=fn_askAddDuplicate$(meterAddressBefore$,meterAddressAfter$)
+60170 !       if doAdd$='No' then meterAddressAfter$=meterAddressBefore$ : doAdd$='Cancel'
+60200 !     else if meterAddressBefore$='' and ~fnKeyExists(hMeterAddressName,meterAddressAfter$) then ! changed from blank - it is new
+60220 !       doAdd$='Yes'
+60300 !     else if lwrc$(meterAddressBefore$)=lwrc$(meterAddressAfter$) then  ! only case changes - it is an update
+60320 !       doAdd$='No'
+60340 !     else
+60360 !       doAdd$=fn_askAddNew$(meterAddressBefore$,meterAddressAfter$)
+60380 !     end if
+60400 ! ! pr 'doAdd$=';doAdd$ : pause
+60460 !     if doAdd$='Yes' then
+60480 !       maDataN(loc_LocationID)=0 ! fn_newLocationIdSequential
+60500 !       maData$(ma_Name)=meterAddressAfter$
+60520 !       write #hMeterAddressName,using form$(hMeterAddressLocationID): mat maData$,mat maDataN
+60540 !       ! pr 'just wrote one' : pause
+60560 !     else if doAdd$='No' then 
+60580 !       read #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
+60600 !       maData$(ma_Name)=meterAddressAfter$
+60620 !       rewrite #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
+60640 !       ! pr 'rewrote ' : pause
+60660 !     else if doAdd$='Cancel' then 
+60680 !       meterAddressAfter$=meterAddressBefore$
+60700 !     end if
+60720 !     fnCloseFile(hMeterAddressLocationID,table$)
+60740 !   end if
+60760 ! fnend /r
+62000 def fn_newLocationIdSequential(; alterAmount) ! (; initialize)
 62020   if alterAmount=0 then let alterAmount=1
 62100   fncreg_read('Last Location ID Assigned',nliLastLocation$)
 62120   nliLastLocation=val(nliLastLocation$)
 62140   nliLastLocation+=alterAmount
 62160   fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
-62200   fn_newLocationID=nliLastLocation ! pr 'fn_newLocationID is returning ';nliLastLocation
+62200   fn_newLocationIdSequential=nliLastLocation ! pr 'fn_newLocationIdSequential is returning ';nliLastLocation
 62220 fnend
-64000 def fn_askAddNew$(meterAddressBefore$*30,meterAddressAfter$*80)
-64040   mat mg$(0)
-64060   fnAddOneC(mat mg$,'The Meter Address was changed from')
-64080   fnAddOneC(mat mg$,'From: "'&meterAddressBefore$&'"')
-64100   fnAddOneC(mat mg$,'  To: "'&meterAddressAfter$&'"')
-64120   fnAddOneC(mat mg$,'')
-64140   fnAddOneC(mat mg$,'Is this a new entry?')
-64160   fnAddOneC(mat mg$,'')
-64180   fnAddOneC(mat mg$,'  Yes    - Add an entry to Meter Address file')
-64200   fnAddOneC(mat mg$,'  No     - Update previous entry in Meter Address file')
-64220   fnAddOneC(mat mg$,'  Cancel - Revert Changes')
-64240   fnmsgbox(mat mg$, aaResponse$, '', 3) ! mtype 3 is yes/no/cancel
-64260   fn_askAddNew$=aaResponse$
-64280 fnend
-65000 def fn_askAddDuplicate$(meterAddressBefore$*30,meterAddressAfter$*80)
-65040   mat mg$(0)
-65060   fnAddOneC(mat mg$,'The new Meter Address entered already exist.')
-65120   fnAddOneC(mat mg$,'')
-65140   fnAddOneC(mat mg$,'Do you want to continue?')
-65160   fnAddOneC(mat mg$,'')
-65180   fnAddOneC(mat mg$,'  Yes    - use "'&meterAddressAfter$&'" as entered.')
-65200   fnAddOneC(mat mg$,'  No     - revert to "'&meterAddressBefore$&'"')
-65240   fnmsgbox(mat mg$, aaResponse$, '', 4) ! mtype 4 is yes/no
-65260   fn_askAddDuplicate$=aaResponse$
-65280 fnend
+64000 ! def fn_askAddNew$(meterAddressBefore$*30,meterAddressAfter$*80) r: unused fns
+64040 !   mat mg$(0)
+64060 !   fnAddOneC(mat mg$,'The Meter Address was changed from')
+64080 !   fnAddOneC(mat mg$,'From: "'&meterAddressBefore$&'"')
+64100 !   fnAddOneC(mat mg$,'  To: "'&meterAddressAfter$&'"')
+64120 !   fnAddOneC(mat mg$,'')
+64140 !   fnAddOneC(mat mg$,'Is this a new entry?')
+64160 !   fnAddOneC(mat mg$,'')
+64180 !   fnAddOneC(mat mg$,'  Yes    - Add an entry to Meter Address file')
+64200 !   fnAddOneC(mat mg$,'  No     - Update previous entry in Meter Address file')
+64220 !   fnAddOneC(mat mg$,'  Cancel - Revert Changes')
+64240 !   fnmsgbox(mat mg$, aaResponse$, '', 3) ! mtype 3 is yes/no/cancel
+64260 !   fn_askAddNew$=aaResponse$
+64280 ! fnend 
+65000 ! def fn_askAddDuplicate$(meterAddressBefore$*30,meterAddressAfter$*80)
+65040 !   mat mg$(0)
+65060 !   fnAddOneC(mat mg$,'The new Meter Address entered already exist.')
+65120 !   fnAddOneC(mat mg$,'')
+65140 !   fnAddOneC(mat mg$,'Do you want to continue?')
+65160 !   fnAddOneC(mat mg$,'')
+65180 !   fnAddOneC(mat mg$,'  Yes    - use "'&meterAddressAfter$&'" as entered.')
+65200 !   fnAddOneC(mat mg$,'  No     - revert to "'&meterAddressBefore$&'"')
+65240 !   fnmsgbox(mat mg$, aaResponse$, '', 4) ! mtype 4 is yes/no
+65260 !   fn_askAddDuplicate$=aaResponse$
+65280 ! fnend  /r
 
 66000 def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 66020   if ~setup then let fn_setup
@@ -600,7 +592,11 @@
 67380 fnend
 68000 CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires a log of local stuff
 68020   fntos(sn$='LocationAdd') : lc=respc=0
-68040   fnlbl(lc+=1,1,'Location ID       ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationID)
+        if u4_meterLocationIdSequential$='True' then 
+68040   fnlbl(lc+=1,1,'Location ID       ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationIdSequential)
+        else
+        
+        end if
 68060   fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=''
 68080   fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=trim$(account$)
 68100   fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=serviceCode$
@@ -614,7 +610,9 @@
 68260   fncmdset(4)
 68280   fnacs(sn$,0,mat resp$,ckey)
 68300   if ckey=5 then
-68320     fn_newLocationID(-1)
+68320     if u4_meterLocationIdSequential$='True' then 
+68322       fn_newLocationIdSequential(-1)
+68324     end if
 68340   else
 68360     fn_purgeSrvAccountFromLocation(serviceCode$,account$)
 68380     mat locationN=(0)

@@ -63,7 +63,6 @@ Hand Held                                             ^                         
 >Meter Type                                           ^ Utility Billing\Hand Held\Meter Type                    ^ U4
 ! >Meter Information                                    ^ Utility Billing\Hand Held\Meter Information             ^ U4
 ! >Meter Address                                        ^ HamsterFio:Meter Address                                ^ U4
->Duplicate Meter Address Report                       ^ Utility Billing\Hand Held\Duplicate Meter Address Report^ U4
 
 External Collections Processing                       ^                                                         ^ U5
 >Export for External Collections Process              ^ acsUB\ECP_Export                                        ^ U5
