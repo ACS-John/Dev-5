@@ -37,7 +37,7 @@
 15144     fnHandHeldList(mat u4_deviceOption$)
 15145     fnaddonec(mat u4_deviceOption$,'[Ask]')
 15146     fnreg_read('Hand Held Device',u4_device$, fnhand_held_device$)
-15148     fnreg_read('Meter Address Enable',u4_meterAddress$, 'False')
+15148     fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
 15160   end if
 15180   if fnclient_has('UB') then
 15190     fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
@@ -328,9 +328,9 @@
 52160   fncomboa('u4Device',lc,col2_pos,mat u4_deviceOption$,'Select device type - leave blank to reset to default')
 52180   resp$(resp_u4_device:=dsh_rc+=1)=u4_device$
 52200   lc+=1
-52220   fnChk(lc+=1,col2_pos,'Enable Meter Location table',1)
+52220   fnChk(lc+=1,col2_pos,'Meter Location Id Sequential',1)
 52240 ! fnLbl(lc,col2_pos+3,'(extra explanation)')
-52260   resp$(resp_u4_meterAddress:=dsh_rc+=1)=u4_meterAddress$
+52260   resp$(resp_u4_MeterLocIdSequential:=dsh_rc+=1)=u4_meterLocationIdSequential$
 52280   lc+=1
 52300   fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 52320   lc+=1
@@ -349,7 +349,7 @@
 52560     goto XIT
 52580   else 
 52600     u4_device$=resp$(resp_u4_device)
-52620     u4_meterAddress$=resp$(resp_u4_meterAddress)
+52620     u4_meterLocationIdSequential$=resp$(resp_u4_MeterLocIdSequential)
 52640     hhto$=resp$(resp_hhto)
 52660     hhfro$=resp$(resp_hhfro)
 52680   end if 
@@ -469,7 +469,7 @@
 66300   fnureg_write('Printer.Receipt',receipt_printer$)
 66320   if fnclient_has('U4') then
 66330     fnreg_write('Hand Held Device',u4_device$)
-66332     fnreg_write('Meter Address Enable',u4_meterAddress$)
+66332     fnreg_write('Meter Location Id Sequential',u4_meterLocationIdSequential$)
 66340     fnureg_write('Hand Held To File',hhto$)
 66360     fnureg_write('Hand Held From File',hhfro$)
 66380   end if

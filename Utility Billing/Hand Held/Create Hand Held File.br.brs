@@ -834,7 +834,6 @@
 35040   fn_record_addn(2,0) !
 35050   dim transmitter_number$*128
 35060   transmitter_number$=fn_meterInfo$('transmitter number',z$,serviceCode$(a_item))
-35068   ! if trim$(z$)='100025.05' and serviceCode$(a_item)='EL' then pr 'transmitter_number$=';transmitter_number$ : pause
 35080   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
 35100   fn_record_addn(10,reading_current)
 35120   fn_record_addn(10,unusual_usage_high)

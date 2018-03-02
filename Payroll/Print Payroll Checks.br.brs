@@ -225,7 +225,7 @@
 14020   !
 14040   ! if d1<old_beg_date or d1>old_end_date then ! not this year
 14060   !   mat ml$(4)
-14080   !   ml$(1)='The Payroll Date you have choosen ('&cnvrt$('pic(zzzz/zz/zz)',d1)&') is is outside your years'
+14080   !   ml$(1)='The Payroll Date you have chosen ('&cnvrt$('pic(zzzz/zz/zz)',d1)&') is is outside your years'
 14100   !   ml$(2)='beginning  and ending date range ('&cnvrt$('pic(zzzz/zz/zz)',old_beg_date)&' - '&cnvrt$('pic(zzzz/zz/zz)',old_end_date)&').'
 14120   !   ml$(3)='Checks with a payroll date outside this date range can not be processed.'
 14140   !   ml$(4)='Would you like to "Change Payroll Dates" now?'

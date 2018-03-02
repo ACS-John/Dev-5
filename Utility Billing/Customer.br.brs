@@ -45,7 +45,6 @@
 01050   olde3$=e$(3)
 01054   EDIT_LOADED_CUSTOMER: ! 
 01056     dim meterAddressBeforeEdit$*30
-01058     ! if u4_meterAddress$='True' then meterAddressBeforeEdit$=e$(1)
 01070     oldService1DepositAmount=b(8)
 01072     oldService2DepositAmount=b(9)
 01074     oldService3DepositAmount=b(10)
@@ -66,11 +65,6 @@
 01200   REWRITE_RECORD: ! r:
 01210     gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 01220     if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
-01221     ! if u4_meterAddress$='True' then
-01222     !   if meterAddressBeforeEdit$<>e$(1) then
-01224     !     fnMeterAddressUpdate(meterAddressBeforeEdit$,e$(1))
-01226     !   end if
-01228     ! end if 
 01230     release #h_customer_2: ioerr ignore
 01240     rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 01242     if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
@@ -383,17 +377,9 @@
 25220     fnLbl(4,1,"City, St Zip:",13,1,0,fraCustInfo)
 25240     fnComboF("CityStZip",4,15,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",fraCustInfo,0)
 25260     custInfo$(respc+=1)=e$(4)
-25280     ! if u4_meterAddress$='True' then
-25300     !   fnLbl(9,1,"Meter Location:",mylen,1)
-25320     !   ! fnComboF('locationId',9,27,40,'[Q]\UBmstr\MeterLocation.h[cno]',1,11,12,30,'[Q]\UBmstr\MeterLocationIdx1.h[cno]')
-25330     !   fnTxt(9,27,20,30,0,'',1,'Must be selected via Location ID button')
-25340     !   custInfo$(respc+=1)=e$(1) ! str$(fnMeterAddressLocationID(e$(1))) ! e$(1)
-25360     !   !
-25420     ! else
-25440       fnLbl(9,1,"Meter Address:",mylen,1)
-25460       fnTxt(9,27,20,30) ! ,0,'',1)
-25480       custInfo$(respc+=1)=e$(1)
-25500     ! end if
+25440     fnLbl(9,1,"Meter Address:",mylen,1)
+25460     fnTxt(9,27,20,30) ! ,0,'',1)
+25480     custInfo$(respc+=1)=e$(1)
 25520     fnLbl(10,1,"Alpha Sort Name:",mylen,1)
 25540     fnTxt(10,27,7)
 25560     custInfo$(respc+=1)=alp$
@@ -669,9 +655,13 @@
 34860     fnAcs(sn$,0,mat bxnf$,ckey) ! billing information
 34880     if ckey=5 then goto NAMESCREEN
 34900     f=val(bxnf$(3))
-34920     bal=val(bxnf$(4))
-34940     if uprc$(escrow$)="Y" then extra(23)=val(bxnf$(5))
-34960     if uprc$(escrow$)="Y" then billinfo=5 else billinfo=4
+34910     bal=val(bxnf$(4))
+34920     if uprc$(escrow$)="Y" then 
+34930       extra(23)=val(bxnf$(5))
+34940       billinfo=5 
+34950     else 
+34960       billinfo=4
+34970     end if
 34980     for j=1 to 10
 35000       if rtrm$(srvnam$(j))<>"" then 
 35020         billinfo=billinfo+1 : g(j)=val(bxnf$(billinfo))
@@ -1089,7 +1079,7 @@
 70280     gLocationFirstRespc=respc1
 70300     read #hLocation,using form$(hLocation),key=gLocationKey$,release: mat location$,mat locationN nokey SasNoLocation
 70320     fnlbl(srvLine+=1,1,'Location ID:'       ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,11, 0,0,'',1) : rateInfo$(respc1   )=str$(locationN(loc_locationID     ))
-70340     fnlbl(srvLine+=1,1,'Meter Address:'     ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,30, 0,0,'',1) : rateInfo$(respc1+=1)=location$(loc_name           )
+70340     fnlbl(srvLine+=1,1,'Meter Address:'     ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,30, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_name           )
 70400     fnlbl(srvLine+=1,1,'Longitude:'         ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_longitude     )
 70420     fnlbl(srvLine+=1,1,'Latitude:'          ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_latitude       )
 70440     fnlbl(srvLine+=1,1,'Meter Number:'      ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,12, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_meterNumber   )
@@ -1356,13 +1346,11 @@
 84390       askacct_line+=2
 84400     end if 
 84410     fnLbl(askacct_line+=1,1,"Selection Method:",col1_width,1)
-84420     btn_width=14
+84420     btn_width=10
 84430     fnbutton_or_disabled(account_selection_method<>asm_combo,askacct_line,col2_pos,'Combo',2001,'',btn_width)
 84440     fnbutton_or_disabled(account_selection_method<>asm_grid,askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
 84450     fnbutton_or_disabled(account_selection_method<>asm_text,askacct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
-84460     if u4_meterAddress$='True' then
-84470       fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
-84480     end if
+84470     fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
 84482     askacct_line+=1
 84484     if account_selection_method=asm_locationId then
 84486       fnLbl(askacct_line+=1,1,"Location ID:",col1_width,1)
@@ -1579,7 +1567,6 @@
 90770     if trim$(srvnam$(j+=1))<>'' then first_service=j
 90780   loop
 90782   !
-90784   fnreg_read('Meter Address Enable',u4_meterAddress$,'False')
 90790   ! /r
 90800 fnend 
 92000 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
