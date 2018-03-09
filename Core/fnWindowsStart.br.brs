@@ -9,7 +9,7 @@
 44020     shortTermUniqueNumber$=cnvrt$('pic(####)',shortTermUniqueNumber+=1)
 44040     hWsCmdFile$=env$('client_temp')&'\acsWinStart_'&session$&'-'&shortTermUniqueNumber$&'.cmd'
 44060     wsFile$=os_filename$(wsFile$)
-44080     open #hWsCmd:=fngethandle: 'Name='&env$('at')&br_filename$(hWsCmdFile$)&',RecL=512,Replace',display,output 
+44080     open #hWsCmd:=fngethandle: 'Name='&env$('at')&hWsCmdFile$&',RecL=512,Replace',display,output 
 44100     pr #hWsCmd: '@echo off'
 44120     pr #hWsCmd: '@echo Advanced Computer Services LLC'
 44140     pr #hWsCmd: '@echo Opening: "'&wsFile$&'"'

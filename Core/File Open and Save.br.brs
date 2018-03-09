@@ -244,7 +244,7 @@
 48180     tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
 48200     fnmakesurepathexists(tmpFileOpen$)
 48220     ! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-48240       fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$) 
+48240       fnCopyFile(env$('at')&opFileOpen$,tmpFileOpen$) 
 48260       if env$('acsDeveloper')<>'' then pr bell; : sleep(.2) : pr bell; : sleep(.1) : pr bell;
 48280     ! SKIPFORDEV: ! XXX DELETE ME
 48300   else
