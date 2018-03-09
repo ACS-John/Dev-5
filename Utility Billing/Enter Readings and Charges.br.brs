@@ -20,6 +20,7 @@
 02300     library 'S:\Core\Library': fnAccountFromLocationId$
 02320     library 'S:\Core\Library': fnAddOneC
 02322     library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
+02324     library 'S:\Core\Library': fnCustomerData$
 03000     on error goto ERTN
 03020   ! dims, constants, top, etc
 03040     dim resp$(40)*256
@@ -2240,7 +2241,7 @@
 97500       nex hotIdX
 97510     end if ! /r
 97520   end if
-97530   finalBillingCode=val(fn_customerData$(hwwAccount$,'Final Billing Code',1))
+97530   finalBillingCode=val(fnCustomerData$(hwwAccount$,'Final Billing Code',1))
 97540   if finalBillingCode and ~hotFinaledImportAsked then ! r: ask if they want to import data (non reading/usage)
 97550     mat message$(0)
 97560     fnAddOneC(mat message$,'This book contains accounts that are final billed.')
@@ -2261,94 +2262,6 @@
 97710     hLocation=0
 97720   end if
 97730 fnend
-98000 def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
-98010   if ~setup then let fn_setup
-98020   fnCustomerData$=fn_customerData$(account$,fieldName$, leaveOpen)
-98030 fnend
-98040 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
-98050   account$=lpad$(trim$(account$),10)
-98060   if customerDataSetup$<>account$ then ! r:
-98070     customerDataSetup$=account$
-98080     if ~customerData_hCustomer then
-98090       open #customerData_hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
-98100     end if
-98110     dim customerDataAcccount$*10
-98120     dim customerDataName$*30
-98130     dim customerDataA(7)
-98140     dim customerDataD(15)
-98150     dim customerDataFinal
-98160     customerDataAcccount$=''
-98170     customerDataName$=''
-98180     customerDataA=(0)
-98190     customerDataD=(0)
-98200     customerDataFinal=customerLastBillingDate=0
-98210     read #customerData_hCustomer,using CustomerData_Fcustomer,key=account$,release: customerDataAcccount$,customerDataName$,mat customerDataA,customerLastBillingDate,customerDataFinal,mat customerDataD nokey CustomerDataFinis
-98220     CustomerData_Fcustomer: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 296,pd 4,pos 1821,n 1,pos 217,15*pd 5
-98230   end if ! /r
-98240   dim customerDataReturn$*128
-98250   customerDataReturn$=''
-98260   fieldName$=lwrc$(fieldName$)
-98270   if fieldName$='final billing code' then
-98280     if customerDataFinal<>0 then customerDataReturn$=str$(customerDataFinal)
-98290   else if fieldName$='last billing day' then
-98300     if customerLastBillingDate<>0 then customerDataReturn$=str$(days(customerLastBillingDate,'mmddyy'))
-98310   else if fieldName$='name' then
-98320     customerDataReturn$=customerDataName$
-98330   else if fieldName$='service 1.rate code' then
-98340     if customerDataA(1)<>0 then customerDataReturn$=str$(customerDataA(1))
-98350   else if fieldName$='service 2.rate code' then
-98360     if customerDataA(2)<>0 then customerDataReturn$=str$(customerDataA(2))
-98370   else if fieldName$='service 3.rate code' then
-98380     if customerDataA(3)<>0 then customerDataReturn$=str$(customerDataA(3))
-98390   else if fieldName$='service 4.rate code' then
-98400     if customerDataA(4)<>0 then customerDataReturn$=str$(customerDataA(4))
-98410   else if fieldName$='service 5.rate code' then
-98420     if customerDataA(5)<>0 then customerDataReturn$=str$(customerDataA(5))
-98430   else if fieldName$='service 9.rate code' then
-98440     if customerDataA(6)<>0 then customerDataReturn$=str$(customerDataA(6))
-98450   else if fieldName$='service 10.rate code' then
-98460     if customerDataA(7)<>0 then customerDataReturn$=str$(customerDataA(7))
-98470   else if fieldName$='service 1.reading.current' then
-98480     if customerDataD(1)<>0 then customerDataReturn$=str$(customerDataD(1))
-98490   else if fieldName$='service 1.reading.prior' then
-98500     if customerDataD(2)<>0 then customerDataReturn$=str$(customerDataD(2))
-98510   else if fieldName$='service 1.usage.current' then
-98520     if customerDataD(3)<>0 then customerDataReturn$=str$(customerDataD(3))
-98530   else if fieldName$='service 1.usage.ytd' then
-98540     if customerDataD(4)<>0 then customerDataReturn$=str$(customerDataD(4))
-98550   else if fieldName$='service 3.reading.current' then
-98560     if customerDataD(5)<>0 then customerDataReturn$=str$(customerDataD(5))
-98570   else if fieldName$='service 3.reading.prior' then
-98580     if customerDataD(6)<>0 then customerDataReturn$=str$(customerDataD(6))
-98590   else if fieldName$='service 3.usage.current' then
-98600     if customerDataD(7)<>0 then customerDataReturn$=str$(customerDataD(7))
-98610   else if fieldName$='service 3.usage.ytd' then
-98620     if customerDataD(8)<>0 then customerDataReturn$=str$(customerDataD(8))
-98630   else if fieldName$='service 4.reading.current' then
-98640     if customerDataD(9)<>0 then customerDataReturn$=str$(customerDataD(9))
-98650   else if fieldName$='service 4.reading.prior' then
-98660     if customerDataD(10)<>0 then customerDataReturn$=str$(customerDataD(10))
-98670   else if fieldName$='service 4.usage.current' then
-98680     if customerDataD(11)<>0 then customerDataReturn$=str$(customerDataD(11))
-98690   else if fieldName$='service 4.usage .ytd' then
-98700     if customerDataD(12)<>0 then customerDataReturn$=str$(customerDataD(12))
-98710   else if fieldName$='service 1.unit count' then
-98720     if customerDataD(13)<>0 then customerDataReturn$=str$(customerDataD(13))
-98730   else if fieldName$='demand multiplier' then
-98740     if customerDataD(14)<>0 then customerDataReturn$=str$(customerDataD(14))
-98750   else if fieldName$='demand reading' then
-98760     if customerDataD(15)<>0 then customerDataReturn$=str$(customerDataD(15))
-98770   else 
-98780     pr 'fn_customerData$ does not recognize the field: '&fieldName$
-98790     pause
-98800   end if
-98810   CustomerDataFinis: !
-98820   if ~leaveOpen then
-98830     close #customerData_hCustomer: 
-98840     customerData_hCustomer=0
-98850   end if
-98860   fn_customerData$=customerDataReturn$
-98870 fnend
 99200 ! <updateable region: fn_open (supressprompt:=2)>  
 99220 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
 99240   dim _fileiosubs$(1)*800, loadedsubs$(1)*32,form$(0)*2048

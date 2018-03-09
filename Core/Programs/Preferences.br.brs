@@ -746,7 +746,7 @@
 94020   dim sap_return$*256
 94040   fnureg_read('Save As Path',sap_return$)
 94060   if sap_return$(1:2)='@:' then sap_return$(1:2)=''
-94080   if sap_return$='' or ~exists(env$('at')&br_filename$(sap_return$)) then 
+94080   if sap_return$='' or ~exists(env$('at')&sap_return$) then 
 94100     sap_return$=os_filename$(env$('userprofile')&'\Desktop')
 94120   end if 
 94140   fn_save_as_path$=env$('at')&sap_return$

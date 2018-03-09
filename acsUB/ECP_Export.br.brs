@@ -46,7 +46,7 @@
 20160   if ckey=5 then goto XIT
 20180   exp_filename$=resp$(1)
 20200 ! 
-20220   open #h_ecp:=fngethandle: "Name="&env$('at')&br_filename$(exp_filename$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
+20220   open #h_ecp:=fngethandle: "Name="&env$('at')&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 20240   exp_filename$=os_filename$(file$(h_ecp))
 20260   fnureg_write('ECP Export Filename',exp_filename$)
 20280 ! restore #h_customer:

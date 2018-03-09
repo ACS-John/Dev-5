@@ -1,22 +1,39 @@
 00010 ! formerly S:\acsUB\ubRate
 00020 ! -- Rate File editor
-00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnLbl,fnTxt,fnmsgbox,fnopenprn,fncloseprn,fncomboa,fnOpt,fnTos,fnerror,fnxit,fnCmdSet,fntop,fnCmdKey,fnget_services
-00050   on error goto ERTN
-00060 ! ______________________________________________________________________
-00070   dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
-00080   dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
-00090 ! ______________________________________________________________________
-10020   fntop(program$)
-10080   fnget_services(mat snm$,mat srv$)
-10140   x=0
-10160   for j=1 to 10
-10180     if trim$(snm$(j))<>"" then option$(x+=1)=srv$(j)
-10200   next j
-10220   mat option$(x)
-10240   open #1: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
-10250   open #2: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
-10260   goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
+00030 fn_setup
+10020 fntop(program$)
+10240 open #1: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
+10250 open #2: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
+10260 goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
+15000 def fn_setup
+15010   if ~setup then
+15020     setup=1
+15030     library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnLbl,fnTxt,fnmsgbox,fnopenprn,fncloseprn,fncomboa,fnOpt,fnTos,fnerror,fnxit,fnCmdSet,fntop,fnCmdKey
+15038     library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
+15040     library 'S:\Core\Library': fnapply_default_rates
+15050     ! 
+15060     dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
+15070     dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
+15080     ! 
+15090     on error goto ERTN
+15100     !
+15110     fnget_services(mat snm$,mat srv$)
+15111     dim serviceCodeMetered$(0)*2
+15112     fnGetServiceCodesMetered(mat serviceCodeMetered$)
+15120     x=0
+15130     for j=1 to 10
+15140       if trim$(snm$(j))<>"" then option$(x+=1)=srv$(j)
+15150     next j
+15160     mat option$(x)
+15170     !
+15180     library 'S:\Core\Library': fnFileioEnums
+15190     dim fioEnum$(1)*1024 ! "The maximum length of a BR statement is now 2000 characters" -brwiki
+15200     fnFileioEnums('UB Customer',mat fioEnum$)
+15210     for index=1 to udim(mat fioEnum$)
+15220       execute fioEnum$(index)
+15230     next index
+15240   end if
+15250 fnend
 20000 SCREEN_GRID: ! r:
 20020   fnTos(sn$="rateflex")
 20040   myline=1 : mypos=1 : height=10 : width=50
@@ -244,3 +261,77 @@
 80120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80160 ! /region
+82000 def library fnapplyDefaultRatesFio(mat customerN)
+82020   if ~setup then let fn_setup
+82040   fnapplyDefaultRatesFio=fn_applyDefaultRatesFio(mat customerN)
+82060 fnend 
+83000 def fn_applyDefaultRatesFio(mat customerN)
+83020   ! r: get legacy from fileio variables
+83040   dim extra(23),a(7)
+83060   mat extra=(0)
+83080   extra(1 )=customerN(c_route            )
+83100   extra(2 )=customerN(c_sequence         )
+83120   extra(3 )=customerN(c_meterReadDateCur )
+83140   extra(4 )=customerN(c_meterReadDatePri )
+83160   extra(5 )=customerN(c_sewerReduction   )
+83180   extra(6 )=customerN(c_s03securityLight )
+83200   extra(7 )=customerN(c_s03lightCount    )
+83220   extra(8 )=customerN(c_s03multiplier    )
+83240   extra(9 )=customerN(c_extra_09N        )
+83260   extra(10)=customerN(c_s04multiplier    )
+83280   extra(11)=customerN(c_s06rate          )
+83300   extra(12)=customerN(c_s07rate          )
+83320   extra(13)=customerN(c_s08rate          )
+83340   extra(14)=customerN(c_s02units         )
+83360   extra(15)=customerN(c_s03units         )
+83380   extra(16)=customerN(c_s04units         )
+83400   extra(17)=customerN(c_finalBilling     )
+83420   extra(18)=customerN(c_s02averageUsage  )
+83440   extra(19)=customerN(c_estimationDate   )
+83460   extra(20)=customerN(c_unused09         )
+83480   extra(21)=customerN(c_unused10         )
+83500   extra(22)=customerN(c_enableAltBillAddr)
+83520   extra(23)=customerN(c_unused11         )
+83540   a(1)=customerN(c_s01rate)
+83560   a(2)=customerN(c_s02rate)
+83580   a(3)=customerN(c_s03rate)
+83600   a(4)=customerN(c_s04rate)
+83620   a(5)=customerN(c_s05rate)
+83640   a(6)=customerN(c_s09rate)
+83660   a(7)=customerN(c_s10rate)
+83680   
+83700   ! /r
+83720   fnapply_default_rates(mat extra, mat a)
+83740   ! r: put legacy back in fileio variables
+83760   customerN(c_route            )=extra(1 )
+83780   customerN(c_sequence         )=extra(2 )
+83800   customerN(c_meterReadDateCur )=extra(3 )
+83820   customerN(c_meterReadDatePri )=extra(4 )
+83840   customerN(c_sewerReduction   )=extra(5 )
+83860   customerN(c_s03securityLight )=extra(6 )
+83880   customerN(c_s03lightCount    )=extra(7 )
+83900   customerN(c_s03multiplier    )=extra(8 )
+83920   customerN(c_extra_09N        )=extra(9 )
+83940   customerN(c_s04multiplier    )=extra(10)
+83960   customerN(c_s06rate          )=extra(11)
+83980   customerN(c_s07rate          )=extra(12)
+84000   customerN(c_s08rate          )=extra(13)
+84020   customerN(c_s02units         )=extra(14)
+84040   customerN(c_s03units         )=extra(15)
+84060   customerN(c_s04units         )=extra(16)
+84080   customerN(c_finalBilling     )=extra(17)
+84100   customerN(c_s02averageUsage  )=extra(18)
+84120   customerN(c_estimationDate   )=extra(19)
+84140   customerN(c_unused09         )=extra(20)
+84160   customerN(c_unused10         )=extra(21)
+84180   customerN(c_enableAltBillAddr)=extra(22)
+84200   customerN(c_unused11         )=extra(23)
+84220   customerN(c_s01rate)=a(1)
+84240   customerN(c_s02rate)=a(2)
+84260   customerN(c_s03rate)=a(3)
+84280   customerN(c_s04rate)=a(4)
+84300   customerN(c_s05rate)=a(5)
+84320   customerN(c_s09rate)=a(6)
+84340   customerN(c_s10rate)=a(7)
+84360   ! /r
+84380 fnend 

@@ -1006,7 +1006,7 @@
 76240   ecp_filename$=resp$(1)
 76260   ! 
 76280   fn_ei_backup(ecp_filename$)
-76300   open #h_csv:=fngethandle: "Name="&env$('at')&br_filename$(ecp_filename$),display,input ioerr EI_SCREEN1
+76300   open #h_csv:=fngethandle: "Name="&env$('at')&ecp_filename$,display,input ioerr EI_SCREEN1
 76320   ecp_filename$=os_filename$(file$(h_csv))
 76340   fnureg_write('Collections CSV Import Filename',ecp_filename$)
 76360   type=fn_csv_type(h_csv)
@@ -1014,7 +1014,7 @@
 76400   if type=1 then 
 76420     fn_ecp_import(h_csv)
 76440   else if type=2 then 
-76460   ! r: import stardardized CSV (column headers enums already identified in fn_csv_type)
+76460   ! r: import standardized CSV (column headers enums already identified in fn_csv_type)
 76480     dim csv_line$*512
 76500     dim csv_item$(0)*256
 76520     do 

@@ -57,7 +57,12 @@
 32016   fnfm$=fnfm$(screenname$, keyval$,srow,scol,parent_key$,parent_window,display_only,dontredolistview,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$,selecting,savedontask)
 32018 fnend
 32100 ! /r
-33000 ! r: FileIO
+32200 ! r: FileIO
+33000 def library fnFileioEnums(filename$*255; mat subs$)
+33001 ! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+33003   library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
+33004   fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
+33006 fnend
 33010 def library fnOpenFile(filename$*64,mat f$,mat fn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 33011 ! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 33013   library 'S:\Core\FileIO\fileio.br': fnOpenFile
@@ -1013,7 +1018,7 @@
 70150     fnWorkOrderPrint=fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
 70160   fnend
 70182   def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
-70184     library 'S:\Utility Billing\Enter Readings and Charges.br': fnCustomerData$
+70184     library 'S:\Utility Billing\fnCustomerData.br': fnCustomerData$
 70186     fnCustomerData$=fnCustomerData$(account$,fieldName$, leaveOpen)
 70188   fnend
 70192   def library fncustomer_address(z$,mat addr$; ca_address_type)
@@ -1024,10 +1029,14 @@
 70204     library 'S:\Utility Billing\Customer.br': fnCustomerNotes
 70206     fnCustomerNotes=fnCustomerNotes(z$)
 70208   fnend
-70210   def library fnapply_default_rates(mat extra, mat a)
-70220     library 'S:\Utility Billing\Customer.br': fnapply_default_rates
-70230     fnapply_default_rates=fnapply_default_rates(mat extra, mat a)
-70240   fnend
+70211   def library fnapply_default_rates(mat extra, mat a)
+70212     library 'S:\Utility Billing\Customer.br': fnapply_default_rates
+70213     fnapply_default_rates=fnapply_default_rates(mat extra, mat a)
+70214   fnend
+70221   def library fnapplyDefaultRatesFio(mat customerN)
+70222     library 'S:\Utility Billing\Rates.br': fnapplyDefaultRatesFio
+70223     fnapplyDefaultRatesFio=fnapplyDefaultRatesFio(mat customerN)
+70224   fnend
 70252   def library fnget_services(mat serviceName$; mat serviceCode$, mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 70254     library 'S:\Utility Billing\Type of Service.br': fnget_services
 70256     fnget_services=fnget_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
