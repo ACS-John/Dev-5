@@ -1,14 +1,15 @@
 00010 fn_setup
 00020 fntop(program$)
 00030 !   ! r: restore unconverted files and remove already converted files (for testing only, of course)
-00040 !     if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
+00040       if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
 00050 !   !   exec 'copy "C:\ACS\(Client_Files)\Bethany\ACS meter location mess\autosave before first one\UB Company 1 2018-01-02 14-02-30 Menu - before meter location initialize\Meter*.h1" "[Q]\UBmstr\*.h[cno]"'
-00060 !       exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
-00062 !       fn_populateLocationNonSeq
+00052         forceKeepLeft=1
+00060         exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
+00062         fn_populateLocationNonSeq
 00070 !   !   exec 'free "[Q]\UBmstr\MeterAddress*.h[cno]"' ioerr ignore
 00072 !   !   fncreg_write('u4 meter location account numbers left justified','False')
-00080 !     end if
-08000 !   ! pr hitCount : pause : end ! /r
+00080       end if
+08000    if forceKeepLeft then  pr 'forceKeepLeftCount=';forceKeepLeftCount : pause : end ! /r
 10300 fnHamsterFio(table$)
 10320 XIT: !
 10340 fnxit
@@ -61,7 +62,7 @@
 20180         if srch(mat serviceCodeMetered$,serviceCode$(serviceItem))>0 then
 20200           locationN(loc_locationID    )=fn_newLocationIdNonSequential(cus$(c_account))
 20220           location$(loc_name          )=cus$(c_meterAddress)
-20240           location$(loc_activeCustomer)=cus$(c_account)
+20240           location$(loc_activeCustomer)=trim$(cus$(c_account))
 20260           location$(loc_serviceId     )=serviceCode$(serviceItem)
 20280           location$(loc_longitude     )=''
 20300           location$(loc_latitude      )=''
@@ -69,17 +70,6 @@
 20340           location$(loc_transmitter   )=''
 20360           location$(loc_meterType     )=''
 20362           fnLocationWrite(mat location$,mat locationN, 1)
-20370           ! dim locationKey4$*12
-20380           ! locationKey4$=fnBuildKey$(table$,mat location$,mat locationN, 4)
-20390           ! dim locationKey5$*13
-20420           ! if fnKeyExists(hLocation4,locationKey4$) then
-20440           !   pr 'location for locationKey5: '&locationKey4$&' what should we do?'
-20460           ! else if fnKeyExists(hLocation4+1,locationKey5$:=fnBuildKey$(table$,mat location$,mat locationN, 5)) then
-20480           !   pr 'location for locationKey4: '&locationKey5$&' what should we do?'
-20500           !   pause
-20520           ! else
-20540           !   write #hLocation4,using form$(hLocation): mat location$,mat locationN
-20560           ! end if
 20580         end if
 20600       nex serviceItem
 20620     end if
@@ -169,7 +159,7 @@
 38730               location$(loc_transmitter    )=info$(meter_transmitter    )
 38740               location$(loc_meterType      )=info$(meter_meterType      )
 38750               fnstatus('importing '&account$&'.'&location$(loc_serviceId)&'.'&str$(locationId)&': ')
-38760               fnLocationWrite(mat location$,mat locationN) ! write #hLocation,using form$(hLocation): mat location$,mat locationN
+38760               fnLocationWrite(mat location$,mat locationN)
 38770               loacationRecordsAdded(serviceItem)+=1
 38780               if deleteEnabled then delete #hInfo:
 38790               InfoNokey: !
@@ -182,7 +172,7 @@
 38860               pr 'no locations found for "'&account$&'"- just write a record without any services'
 38870               pause
 38880             end if
-38890             fnLocationWrite(mat location$,mat locationN) ! write #hLocation,using form$(hLocation): mat location$,mat locationN
+38890             fnLocationWrite(mat location$,mat locationN)
 38900             loacationRecordsAdded(11)+=1
 38910           end if
 38920           if deleteEnabled then delete #hAddress:
@@ -272,58 +262,64 @@
 40500       else
 40520         locationN(loc_locationID)=fn_newLocationIdNonSequential(location$(loc_activeCustomer))
 40540       end if
-40580       goto LwWrite
-40600     else if location$(loc_locationID)=locRead$(loc_locationID) and location$(loc_serviceId)=locRead$(loc_serviceId) then
-40620       for lwLocItem=1 to udim(mat locRead$)
-40640         if fn_leftIsSuperior(locRead$(lwLocItem),location$(lwLocItem), lwLocItem==loc_activeCustomer) then location$(lwLocItem)=locRead$(lwLocItem)
-40660       nex lwLocItem
-40680     else if locationN(loc_locationID)=0 then
-40700       pr 'new location being added, but it already exists - gather any new info on it'
-40720       locationN(loc_locationID)=locReadN(loc_locationID)
-40740       for lwLocItem=1 to udim(mat locRead$)
-40760         if fn_leftIsSuperior(locRead$(lwLocItem),location$(lwLocItem), lwLocItem==loc_activeCustomer) then location$(lwLocItem)=locRead$(lwLocItem)
-40780       nex lwLocItem
-40800       goto LwRewrite
-40820     else
-40840       gosub LwKeyMatchDisplay
-40860     end if
-40880     LwNoKeyEncountered: !
-40900   nex lwIndex
-40920   goto LwWrite
-40940   LwRewrite: ! r:
-40960     if locationN(loc_locationID)=0 then
-40980       pr 'attempted to rewrite a record setting its locationID to 0'
-41000       pause
-41020     else
-41040       lwKey$=fnBuildKey$(table$,mat locRead$,mat locReadN, 1)
-41060       if locationN(loc_locationId)=0 then pr 'BBB - about to write a ZERO location Id' : pause
-41080       rewrite #hLocation(1),using form$(hLocation(1)),key=lwKey$: mat location$,mat locationN
-41100     end if
-41120   goto LwFinis ! /r
-41140   LwWrite: ! r:
-41160     if locationN(loc_locationID)=0 then
-41180       if u4_meterLocationIdSequential$='True' then
-41200         locationN(loc_locationID)=fn_newLocationIdSequential
-41220       else
-41240         locationN(loc_locationID)=fn_newLocationIdNonSequential(account$)
-41260       end if
-41280     end if
-41300     if locationN(loc_locationId)=0 then pr 'CCC - about to write a ZERO location Id' : pause
-41320     write #hLocation(1),using form$(hLocation(1)): mat location$,mat locationN
-41340   goto LwFinis ! /r
-41360   LwFinis: !
-41380   if ~leaveFileOpen then
-41400     fnCloseFile(hLocation(1),table$)   !  <--  does this close them all?  too many?
-41420     mat hLocation=(0)
-41440   end if
-41460 fnend
-42070 def fn_leftIsSuperior(left$*128,right$*128; isAccountNumber)
-42080   lisReturn=0
-42090   left$=trim$(left$)
-42100   right$=trim$(right$)
-42110   if left$=right$ then
-42120     lisReturn=0
-42130   else if left$<>'' and right$='' then
+40560       goto LwWrite
+40580     else if location$(loc_locationID)=locRead$(loc_locationID) and location$(loc_serviceId)=locRead$(loc_serviceId) then
+40600       for lwLocItem=1 to udim(mat locRead$)
+40620         if fn_leftIsSuperior(locRead$(lwLocItem),location$(lwLocItem), lwLocItem==loc_activeCustomer) then location$(lwLocItem)=locRead$(lwLocItem)
+40640       nex lwLocItem
+40660     else if locationN(loc_locationID)=0 then
+40680       pr 'new location being added, but it already exists - gather any new info on it'
+40700       locationN(loc_locationID)=locReadN(loc_locationID)
+40720       for lwLocItem=1 to udim(mat locRead$)
+40740         if fn_leftIsSuperior(locRead$(lwLocItem),location$(lwLocItem), lwLocItem==loc_activeCustomer) then location$(lwLocItem)=locRead$(lwLocItem)
+40760       nex lwLocItem
+40780       goto LwRewrite
+40800     else
+40820       gosub LwKeyMatchDisplay
+40840       ! if locationN(loc_locationId)=100590 then pr ' POINT B 100590 found - about to write.' : pause
+40860       if lisReturn=1 then goto LwFinis ! it is already written, skip writing the new one
+40880       if lisReturn=0 then goto LwRewrite ! it is already written, overwrite it
+40900       pr 'impossible lisReturn value' : pause : end
+40920     end if
+40940     LwNoKeyEncountered: !
+40960   nex lwIndex
+40980   goto LwWrite
+41000   !
+41020   LwRewrite: ! r:
+41040     if locationN(loc_locationID)=0 then
+41060       pr 'attempted to rewrite a record setting its locationID to 0'
+41080       pause
+41100     else
+41120       lwKey$=fnBuildKey$(table$,mat locRead$,mat locReadN, 1)
+41140       if locationN(loc_locationId)=0 then pr 'BBB - about to write a ZERO location Id' : pause
+41160       rewrite #hLocation(1),using form$(hLocation(1)),key=lwKey$: mat location$,mat locationN
+41180     end if
+41200   goto LwFinis ! /r
+41220   !
+41240   LwWrite: ! r:
+41260     if locationN(loc_locationID)=0 then
+41280       if u4_meterLocationIdSequential$='True' then
+41300         locationN(loc_locationID)=fn_newLocationIdSequential
+41320       else
+41340         locationN(loc_locationID)=fn_newLocationIdNonSequential(account$)
+41360       end if
+41380     end if
+41400     if locationN(loc_locationId)=0 then pr 'CCC - about to write a ZERO location Id' : pause
+41420     write #hLocation(1),using form$(hLocation(1)): mat location$,mat locationN
+41440   goto LwFinis ! /r
+41460   LwFinis: !
+41480   if ~leaveFileOpen then
+41500     fnCloseFile(hLocation(1),table$)   !  <--  does this close them all?  too many?
+41520     mat hLocation=(0)
+41540   end if
+41560 fnend
+42000 def fn_leftIsSuperior(left$*128,right$*128; isAccountNumber)
+42020   lisReturn=0
+42040   left$=trim$(left$)
+42060   right$=trim$(right$)
+42080   if left$=right$ then
+42100     lisReturn=0
+42120   else if left$<>'' and right$='' then
 42140     lisReturn=1
 42150   else if left$='' and right$<>'' then
 42160     lisReturn=0
@@ -363,7 +359,7 @@
 42490   end if
 42500   fn_leftIsSuperior=lisReturn
 42510 fnend
-42700 LwKeyMatchDisplay: ! r:
+42700 LwKeyMatchDisplay: ! r: returns lisReturn (1=left is superior) lisReturn=1 means the already written record (mat locRead$,mat locReadN) is superior to passed record (mat location$, mat locationN)
 42710   fntos(sn$='LwKeyMatchDisplay') : lc=0
 42720   fnlbl(lc+=1,1,'key match found on index '&str$(lwIndex))
 42730   fnlbl(lc+=1,1,'Data Comparison')
@@ -379,8 +375,13 @@
 42830   fnlbl(lc+=1,1,'what now?')
 42840   fncmdkey('Keep Left',2)
 42850   fncmdkey('Keep Right',4)
-42860   fnacs(sn$,0,mat resp$,ckey) ! hitCount+=1 : ckey=4 ! 
-42870   if ckey=2 then lisReturn=1 else lisReturn=0
+42852   if forceKeepLeft then
+42854     lisReturn=1
+42856     forceKeepLeftCount+=1
+42858   else
+42860     fnacs(sn$,0,mat resp$,ckey)
+42870     if ckey=2 then lisReturn=1 else lisReturn=0
+42872   end if
 42880 return ! /r
 42890 def fn_lwCompareLine(label$*128,valueLeft$*128,valueRight$*128)
 42900   if rtrm$(valueLeft$)<>rtrm$(valueRight$) then
@@ -493,42 +494,6 @@
 55200   end if
 55220   fnMeterAddressName$=location$(loc_name)
 55240 fnend
-60000 ! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$) r: unused fn
-60001 !   pr 'fnMeterAddressUpdate is broken - must be fixed to update location table instead'
-60002 !   pause
-60020 !   if ~setup then let fn_setup
-60040 !   meterAddressBefore$=rtrm$(meterAddressBefore$)
-60060 !   meterAddressAfter$=rtrm$(meterAddressAfter$)
-60080 !   if meterAddressBefore$<>meterAddressAfter$ then
-60100 !     hMeterAddressLocationID=fn_open(table$,mat location$,mat locationN,mat form$)
-60120 !     hMeterAddressName=hMeterAddressLocationID+1
-60140 !     if fnKeyExists(hMeterAddressName,meterAddressAfter$) then
-60160 !       doAdd$=fn_askAddDuplicate$(meterAddressBefore$,meterAddressAfter$)
-60170 !       if doAdd$='No' then meterAddressAfter$=meterAddressBefore$ : doAdd$='Cancel'
-60200 !     else if meterAddressBefore$='' and ~fnKeyExists(hMeterAddressName,meterAddressAfter$) then ! changed from blank - it is new
-60220 !       doAdd$='Yes'
-60300 !     else if lwrc$(meterAddressBefore$)=lwrc$(meterAddressAfter$) then  ! only case changes - it is an update
-60320 !       doAdd$='No'
-60340 !     else
-60360 !       doAdd$=fn_askAddNew$(meterAddressBefore$,meterAddressAfter$)
-60380 !     end if
-60400 ! ! pr 'doAdd$=';doAdd$ : pause
-60460 !     if doAdd$='Yes' then
-60480 !       maDataN(loc_LocationID)=0 ! fn_newLocationIdSequential
-60500 !       maData$(ma_Name)=meterAddressAfter$
-60520 !       write #hMeterAddressName,using form$(hMeterAddressLocationID): mat maData$,mat maDataN
-60540 !       ! pr 'just wrote one' : pause
-60560 !     else if doAdd$='No' then
-60580 !       read #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-60600 !       maData$(ma_Name)=meterAddressAfter$
-60620 !       rewrite #hMeterAddressName,using form$(hMeterAddressLocationID),key=rpad$(meterAddressBefore$,kln(hMeterAddressName)): mat maData$,mat maDataN
-60640 !       ! pr 'rewrote ' : pause
-60660 !     else if doAdd$='Cancel' then
-60680 !       meterAddressAfter$=meterAddressBefore$
-60700 !     end if
-60720 !     fnCloseFile(hMeterAddressLocationID,table$)
-60740 !   end if
-60760 ! fnend /r
 61000 def fn_newLocationIdNonSequential(account$)
 61020   ! if env$('client')='Campbell' then
 61040   newLocationIdNonSequential=val(fnCustomerData$(account$,'route'))*100000+val(fnCustomerData$(account$,'sequence'))
