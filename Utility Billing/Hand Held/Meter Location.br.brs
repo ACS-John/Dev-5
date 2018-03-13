@@ -1,14 +1,14 @@
 00010 fn_setup
 00020 fntop(program$)
-00030 ! r: restore unconverted files and remove already converted files (for testing only, of course)
-00040   if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
-00050 !   exec 'copy "C:\ACS\(Client_Files)\Bethany\ACS meter location mess\autosave before first one\UB Company 1 2018-01-02 14-02-30 Menu - before meter location initialize\Meter*.h1" "[Q]\UBmstr\*.h[cno]"'
-00060     exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
-00062     fn_populateLocationNonSeq
-00070 !   exec 'free "[Q]\UBmstr\MeterAddress*.h[cno]"' ioerr ignore
-00072 !   fncreg_write('u4 meter location account numbers left justified','False')
-00080   end if
-08000 pr hitCount : pause : end ! /r
+00030 !   ! r: restore unconverted files and remove already converted files (for testing only, of course)
+00040 !     if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
+00050 !   !   exec 'copy "C:\ACS\(Client_Files)\Bethany\ACS meter location mess\autosave before first one\UB Company 1 2018-01-02 14-02-30 Menu - before meter location initialize\Meter*.h1" "[Q]\UBmstr\*.h[cno]"'
+00060 !       exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
+00062 !       fn_populateLocationNonSeq
+00070 !   !   exec 'free "[Q]\UBmstr\MeterAddress*.h[cno]"' ioerr ignore
+00072 !   !   fncreg_write('u4 meter location account numbers left justified','False')
+00080 !     end if
+08000 !   ! pr hitCount : pause : end ! /r
 10300 fnHamsterFio(table$)
 10320 XIT: !
 10340 fnxit
@@ -27,7 +27,7 @@
 12070     library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
 12072     library 'S:\Core\Library': fnBuildKey$
 12080     library 'S:\Core\Library': fnKeyExists
-12082     library 'S:\Core\Library': fnCustomerData$
+12082     library 'S:\Core\Library': fnCustomerData$,fnLastBillingDate
 12084     library 'S:\Core\Library': fnFree,fnRename
 12086     library 'S:\Core\Library': fnlbl,fntos,fnacs,fntxt,fncmdset,fncombof
 12088     library 'S:\Core\Library': fncmdkey,fnflexinit1,fnflexadd1
@@ -44,7 +44,8 @@
 12434     table$='U4 Meter Location'
 12450     fnGetServiceCodesMetered(mat serviceCodeMetered$)
 12480   end if
-12490   fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
+12490   fnLastBillingDate(lastBillingDate)
+12492   fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
 12500   if exists('[Q]\UBmstr\Meter.h[cno]') or ~exists('[Q]\UBmstr\MeterLocation.h[cno]') then let fn_InitialializeMeterLocation
 12900 fnend
 
@@ -55,7 +56,7 @@
 20080   do
 20100     read #hCustomer,using form$(hCustomer): mat cus$,mat cusN eof PlnsEoCustomer
 20120     fnapplyDefaultRatesFio(mat cusN)
-20140     if cusN(c_finalBilling)=0 then
+20140     if lastBillingDate=cusN(c_lastBillingDate) and cusN(c_finalBilling)=0 then
 20160       for serviceItem=1 to udim(mat serviceCode$)
 20180         if srch(mat serviceCodeMetered$,serviceCode$(serviceItem))>0 then
 20200           locationN(loc_locationID    )=fn_newLocationIdNonSequential(cus$(c_account))
@@ -378,7 +379,7 @@
 42830   fnlbl(lc+=1,1,'what now?')
 42840   fncmdkey('Keep Left',2)
 42850   fncmdkey('Keep Right',4)
-42860   hitCount+=1 : ckey=4 ! fnacs(sn$,0,mat resp$,ckey)
+42860   fnacs(sn$,0,mat resp$,ckey) ! hitCount+=1 : ckey=4 ! 
 42870   if ckey=2 then lisReturn=1 else lisReturn=0
 42880 return ! /r
 42890 def fn_lwCompareLine(label$*128,valueLeft$*128,valueRight$*128)
@@ -530,7 +531,7 @@
 60760 ! fnend /r
 61000 def fn_newLocationIdNonSequential(account$)
 61020   ! if env$('client')='Campbell' then
-61040   newLocationIdNonSequential=val(fnCustomerData$(account$,'route'))*1000000+val(fnCustomerData$(account$,'sequence'))
+61040   newLocationIdNonSequential=val(fnCustomerData$(account$,'route'))*100000+val(fnCustomerData$(account$,'sequence'))
 61060   ! end if
 61080   fn_newLocationIdNonSequential=newLocationIdNonSequential
 61100 fnend
