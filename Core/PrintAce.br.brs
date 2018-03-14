@@ -18,7 +18,7 @@
 12340     library 'S:\Core\PrintPdf': fnpdf_pic
 12360     library 'S:\Core\PrintPdf': fnpdf_fontsize
 12380     library 'S:\Core\PrintPdf': fnpdf_background
-12390     library 'S:\Core\Library': fnCopy
+12390     library 'S:\Core\Library': fnCopy,fnSrepEnv$
 12400     ! fnreg_read('Report_Cache',report_cache$)
 12420     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12440     fnreg_read('PrintAce.Max Pages',max_pages$)
@@ -67,10 +67,10 @@
 22158       fnCopy(g_pa_filename$,env$('at')&g_finial_filename$)
 22160     end if
 22180     if pf_final_batch then 
-22200       execute 'System -W -C "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&g_finial_filename$)
+22200       execute 'System -W -C "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&fnSrepEnv$(g_finial_filename$))
 22210       fnStatusClose
 22220     else 
-22240       execute 'System -W "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&g_finial_filename$)
+22240       execute 'System -W "'&os_filename$(env$('local_program_dir')&'\Core\PrAce.exe')&'" '&os_filename$(env$('at')&fnSrepEnv$(g_finial_filename$))
 22260     end if 
 22280   end if 
 22300   g_pa_filename$=g_finial_filename$=''
