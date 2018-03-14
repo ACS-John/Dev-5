@@ -1084,12 +1084,12 @@
 70420     fnlbl(srvLine+=1,1,'Latitude:'          ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_latitude       )
 70440     fnlbl(srvLine+=1,1,'Meter Number:'      ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,12, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_meterNumber   )
 70460     fnlbl(srvLine+=1,1,'Transmitter Number:',srvCol1len,1) : fntxt(srvLine,srvCol2pos,20, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_transmitter    )
-70480     fnlbl(srvLine+=1,1,'Meter Type:'        ,17,1) : fncombof('',srvLine,srvCol2pos,0,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1) : rateInfo$(respc1+=1)=location$(loc_meterType     )
+70480     fnlbl(srvLine+=1,1,'Meter Type:'        ,srvCol1len,1) : fncombof('',srvLine,srvCol2pos,0,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1) : rateInfo$(respc1+=1)=location$(loc_meterType     )
 70500     goto SasFinis
 70520   end if
 70540   SasNoLocation: !
 70542     gLocationKey$=''
-70550     fnlbl(srvLine+=1,1,'No Meter Location attached.')
+70550     fnLbl(srvLine+=1,1,'No Meter Location attached.')
 70620   goto SasFinis
 70640   SasFinis: !
 70660   fnLbl(29,1,'') ! force all service windows to be same size
