@@ -12,7 +12,7 @@
 02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
 03000     ! r: set environment variables based on login_name$ and/or BR_MODEL
 03020     ! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
-03040     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
+03040     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then 
 03060       setenv('enableClientSelection','Yes')
 03080     end if
 03100     if env$('BR_MODEL')='CLIENT/SERVER' then ! 
@@ -105,7 +105,7 @@
 12000     if env$('acsProduct')='ACS Online' then
 12010       setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 12020     else
-12030       setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
+12030       setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
 12040     end if
 12050     fnMakeSurepathExists("[Q]\Data\")
 12120     fnMakeSurepathExists('[Q]\Report Cache\')
@@ -116,32 +116,33 @@
 12220     !   fn_move_data(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
 12240     !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
 12260     !  end if
-12280     if env$('temp')(2:2)=':' then
-12300       execute 'CD '&env$('temp')(1:2)
-12320       execute 'CD '&env$('temp')(3:len(env$('temp')))
-13000       fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
-13010       fnCopy('S:\sio.lic','sio.lic')
-13020       fn_CopySfileIoIniToFileIoIni
-13040     end if
-13060     open #hR:=fn_gethandle: 'name=r,replace',d,o
-13080     pr #hR: 'stop'
-13100     pr #hR: 'clear resi'
-13120     pr #hR: 'run '&program$
-13140     close #hR:
-13160     open #hR:=fn_gethandle: 'name=relive,replace',d,o
-13180     pr #hR: 'stop'
-13200     pr #hR: 'execute ''load "''&program$&''"'''
-13220     pr #hR: 'run '
-13240     close #hR:
-13260     if env$('ACSDeveloper')<>'' then 
-13280       open #hReload:=fn_gethandle: 'name=reload,replace',d,o
-13300       pr #hReload: 'execute ''load "''&program$&''"'''
-13320       close #hReload:
-13340     end if
-13360     open #hEd:=fn_gethandle: 'name=ed,replace',d,o
-13380     pr #hEd: "exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"'''
-13400     close #hEd:
-14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
+12500     if env$('temp')(2:2)=':' then
+12520       execute 'CD '&env$('temp')(1:2)
+12540       execute 'CD '&env$('temp')(3:len(env$('temp')))
+12560       fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+12580       fnCopy('S:\sio.lic','sio.lic')
+12600       fn_CopySfileIoIniToFileIoIni
+12620     end if
+13000     fn_writeProc('r','stop'             )
+13020     fn_writeProc('' ,'clear resi'       )
+13040     fn_writeProc('' ,'run '&program$    )
+13060     !
+13080     fn_writeProc('relive','stop'                              )
+13100     fn_writeProc(''      ,'execute ''load "''&program$&''"''' )
+13120     fn_writeProc(''      ,'run '                              )
+13140     !
+13160     if env$('ACSDeveloper')<>'' then 
+13180       fn_writeProc('reload','execute ''load "''&program$&''"''')
+13200       fn_writeProc('out',"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+13220       fn_writeProc('ed' ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+13240       fn_writeProc('in' ,'end')
+13260       fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
+13270       fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
+13280       fn_writeProc(''   ,"if pos(env$('source'),' ')<=0 then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" '&env$('source')&''")
+13290       fn_writeProc(''   ,"if pos(env$('source'),' ')>0  then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" ""'&env$('source')&'""'")
+13300       fn_writeProc(''   ,'execute ''load "''&program$&''"''')
+13320     end if
+14000     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 14040     ! if isScreenIOtest then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 14050     fn_startStatus('Identifying your system...')
 14060     fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
@@ -661,3 +662,14 @@
 70090    setenv('acsVersion','5.'&rtrm$(build$))
 70100   fn_acsVersion$=env$('acsVersion')
 70120 fnend 
+72000 def fn_writeProc(procName$*64,procLine$*256)
+72020   dim procNameHold$*64
+72040   if procName$='' then ! append last one
+72060     open #hEd:=fn_gethandle: 'name='&procNameHold$&',use',d,o
+72080   else
+72100     procNameHold$=procName$
+72120     open #hEd:=fn_gethandle: 'name='&procName$&',replace',d,o
+72140   end if
+72160   pr #hEd: procLine$
+72180   close #hEd:
+72200 fnend

@@ -270,14 +270,14 @@
 28130     else if env$('client')='BRCorp' then 
 28140       fn_user_limit(99)
 28150       fn_add_ch_sys('OE') 
-28160       ! else if env$('client')='Ed Horton' then 
-28170       !   fn_user_limit(1)
-28180       !   fn_add_ch_sys('CL')
-28190       !   fn_add_ch_sys('GL')
-28200       !   fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-28210       !   fn_add_ch_sys('PR')
-28220       !   fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-28230       !   fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
+28160     else if env$('client')='Ed Horton' then 
+28170       fn_user_limit(1)
+28180       fn_add_ch_sys('CL')
+28190       fn_add_ch_sys('GL')
+28200       fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
+28210       fn_add_ch_sys('PR')
+28220       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+28230       fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
 28330     else if env$('client')='Ash Grove' then 
 28340       fn_user_limit(1)
 28350       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)

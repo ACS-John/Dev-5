@@ -40,6 +40,7 @@
 01010   jbact$=x$ ! ken 80905
 01020   if len(x$)<>10 then goto ASKACCT
 01030   read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
+01031   fnFixPd(mat extra)
 01032   gosub REMOVE_INCORRECT_ALLOCATIONS
 01040   holdz$=z$
 01050   olde3$=e$(3)
@@ -1504,6 +1505,7 @@
 90075     library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
 90076     library 'S:\Core\Library': fnCustomerMeterLocationSelect
 90077     library 'S:\Core\Library': fnmakesurepathexists
+90078     library 'S:\Core\Library': fnFixPd
 90080     on error goto ERTN
 90090     ! r: dims
 90100     dim z$*10

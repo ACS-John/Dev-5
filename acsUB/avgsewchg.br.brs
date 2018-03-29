@@ -11,12 +11,12 @@
 00130   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00142   mat resp$=("")
 00150 SCR1: ! 
-00160   sn$="avgsewchg-1" !:
-        fnTos(sn$)
+00160   sn$="avgsewchg-1"
+00162   fnTos(sn$)
 00170   txt$="Average consumption for billing dates within range" !:
-        mylen=len(txt$)+4: fnLbl(1,5,txt$,mylen,0)
+        mylen=52+4: fnLbl(1,5,txt$,mylen,0)
 00172   txt$="Charge will be moved into Sewer Standard charge" !:
-        mylen=len(txt$)+4: fnLbl(2,5,txt$,mylen,0)
+        mylen=47+4: fnLbl(2,5,txt$,mylen,0)
 00180   mylen=12
 00190   txt$="Date From: " !:
         fnLbl(3,6,txt$,mylen,1)

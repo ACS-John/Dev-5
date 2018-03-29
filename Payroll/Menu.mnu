@@ -19,7 +19,7 @@ Pay Period
 >YTD and QTD Register                       ^ acsPR\newprYTDQTD
 >Post to General Ledger                     ^ acsPR\newprPostGL              ^ GL
 Monthly                                     
->Payroll Tax Deposit Summary                ^ acsPR\newprRegTot
+>Payroll Tax Deposit Summary                ^ Payroll\Payroll Tax Deposit Summary
 >Pension Report                             ^ acspr\newprmers
 >Deferred Compensation Report               ^ acspr\newprdefcmp
 Quarterly                                   

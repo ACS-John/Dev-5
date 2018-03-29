@@ -68,8 +68,12 @@
 20300           location$(loc_latitude      )=''
 20320           location$(loc_meterNumber   )=cus$(c_s1meterNumber)
 20340           location$(loc_transmitter   )=''
-20360           location$(loc_meterType     )=''
-20362           fnLocationWrite(mat location$,mat locationN, 1)
+20360           ! if env$('client')='Campbell' then
+20380             location$(loc_meterType     )='1'    ! probably all auto-conversions could just default to a meterType of 1
+20400           ! else
+20420           !   location$(loc_meterType     )=''
+20440           ! end if
+20460           fnLocationWrite(mat location$,mat locationN, 1)
 20580         end if
 20600       nex serviceItem
 20620     end if

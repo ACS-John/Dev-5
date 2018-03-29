@@ -319,7 +319,7 @@
 54400         omSourceFilter$='*.h'&str$(source_company_number)
 54420       end if
 54440       fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
-56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company [cno] from ',omFileOpen$, 1) then 
+56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then 
 56020         fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 56040         fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
 56060         fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
@@ -332,8 +332,9 @@
 56200         fnindex_sys(cno)
 56210         fnStatusClose
 56220         dim msgTmp$(0)*128
+56230         mat msgTmp$(0)
 56240         fnaddonec(mat msgTmp$,'Completed.')
-56260         fnaddonec(mat msgTmp$,'Company [cno] loaded from')
+56260         fnaddonec(mat msgTmp$,'Company '&str$(destination_company_number)&' loaded from')
 56280         fnaddonec(mat msgTmp$,omFileOpen$)
 56300         fnmsgbox(mat msgTmp$)
 56320       end if 
