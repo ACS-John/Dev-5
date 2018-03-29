@@ -56,6 +56,7 @@
 10060     on error goto ERTN
 10220     dim tmp$*512,directory_of$*256
 10222     dir$=fnSrepEnv$(dir$)
+10224     filter$=fnSrepEnv$(filter$)
 10230     if pos(lwrc$(option$),'/s')>0 then gd2_full_path=1
 10232     if pos(lwrc$(option$),'/b')>0 then slash_b=1 else slash_b=0
 10240     mat filename$(0)

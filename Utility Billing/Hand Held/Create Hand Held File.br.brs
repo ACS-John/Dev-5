@@ -11,7 +11,7 @@
 03060     library 'S:\Core\Library': fnerror,fnTos,fnLbl,fncomboa,fnAcs,fncmbrt2,fnxit,fncmbact,fnButton
 03080     library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet,fntop,fnCmdKey,fnmsgbox,fnTxt
 03100     library 'S:\Core\Library': fngethandle,fnpause,fnOpt,fnget_services,fnhand_held_device$
-03120     library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write
+03120     library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write,fnreg_read
 03140     library 'S:\Core\Library': fnAddOneC
 03160     library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
 03170     library 'S:\Core\Library': fnOpenFile,fnbuildkey$
@@ -51,6 +51,7 @@
 03840     ! /r
 03860     crlf$=chr$(13)&chr$(10)
 03880     fnget_services(mat serviceName$, mat serviceCode$)
+03889     fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
 03900     dim devicePreference$*20
 03920     devicePreference$=fnhand_held_device$
 03940     dim deviceName$(0)*20,deviceNameCompleteList$(0)*20,deviceNameCompleteListOption$(0)*128
@@ -62,10 +63,7 @@
 03960     nex dnclItem
 03980     dim deviceSelected$*20
 04000     if lwrc$(devicePreference$)='[ask]' then
-04020       fnureg_read('Hand Held Device Asked',deviceSelected$)
-04040       if trim$(deviceSelected$)='' then 
-04060         deviceSelected$=deviceName$(1)
-04080       end if
+04020       fnureg_read('Hand Held Device Asked',deviceSelected$, deviceName$(1))
 04100     else
 04120       deviceSelected$=devicePreference$
 04140     end if
@@ -88,9 +86,13 @@
 05140   else
 05160     fnLbl(2,18,deviceSelected$)
 05180   end if
-05200   fnLbl(4,1,"Select:",16,1)
-05220   fnOpt(4,18,"[All] (excluding final billed)")
-05240   rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
+05190   fnLbl(4,1,"Select:",16,1)
+05200   if u4_includeFinalBilled$='True' then
+05210     fnOpt(4,18,"[All] (including final billed)")
+05220   else
+05230     fnOpt(4,18,"[All] (excluding final billed)")
+05240   end if
+05250   rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
 05260   fnOpt(5,18,"An Entire Route")
 05280   rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
 05300   fnOpt(6,18,"A Range of Accounts")
@@ -136,7 +138,7 @@
 08160     fn_openOutFile ! open work files based on type of Hand Held
 08180   end if
 08200   if deviceSelected$='Aclara' then
-08220     includeFinalBilled=0
+08220     ! u4_includeFinalBilled$='True'
 08240     selection_method=sm_LocationId ! all Location IDs
 08260   end if
 08280   if selection_method=sm_allExceptFinal then
@@ -185,9 +187,9 @@
 09600 NextLocationId: ! r:
 09610 !  pr 'readLocationId=';readLocationId : pause ! if readLocationId=118 then pr 'about to do location 119' : pause
 09620   nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
-09622   if final<>0 then ! can not trust accounts to be unique if they are not active.
-09624     goto NextLocationId
-09626   else if nliCustomerReadResponse=0 then ! no active account found for LocationID
+09622   ! if final<>0 then ! can not trust accounts to be unique if they are not active.
+09624   !   goto NextLocationId
+09626   if nliCustomerReadResponse=0 then ! else if nliCustomerReadResponse=0 then ! no active account found for LocationID
 09640     goto NextLocationId
 09650   else if nliCustomerReadResponse=-54 then ! end of file
 09660     goto END1
@@ -249,7 +251,7 @@
 12360 ! /r
 13000 SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 13020   ! if trim$(z$)='100100.99' then pause
-13040   if udim(mat filterAccount$)<>0 or final=0 or includeFinalBilled then ! SKIP IF FINAL BILLED
+13040   if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
 13060     ft$=fn_rmk1$(z$)
 13080     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
 13100     seq$=str$(sq1)
@@ -1250,7 +1252,8 @@
 48280     custname$=e$(2)
 48320     z_out$=trim$(z$)&svc_flag$
 48340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
-48360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
+48360     WATER_BOSON: !
+48370     if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
 48380     x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
 48400     if env$('client')='Kincaid' then
 48420       readingt$="S"
@@ -1529,7 +1532,7 @@
 74530       read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
 74540     end if
 74550   else
-74560     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74560     read #h_customer_i1,using F_CUSTOMER,key=accountKey$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
 74570   end if
 74580   crReturn=1
 74590   goto CrFinis

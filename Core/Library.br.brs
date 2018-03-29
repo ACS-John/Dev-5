@@ -20,6 +20,16 @@
 02380   loop while sePosOpen>0 and sePosClose>sePosOpen
 02400   fnSrepEnv$=text$
 02420 fnend
+03000 def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
+03020   fpReturn=0
+03040   for fpItem=1 to udim(mat arrayOrVariableToFix)
+03060     if str$(arrayOrVariableToFix(fpItem))(1:5)='-2020' then
+03080       arrayOrVariableToFix(fpItem)=0
+03100       fpReturn+=1
+03120     end if
+03140   nex fpItem
+03160   fnFixPd=fpReturn
+03180 fnend
 19999 ! /r
 20000 ! r: S:\Core\Start.br
 20052   def library fnSetQ(setQ$*256)

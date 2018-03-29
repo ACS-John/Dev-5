@@ -1,4 +1,4 @@
-00010   enableFavorites=1
+00010   enableFavorites=1 ! a test changes  444
 00020   fn_setup
 00030   fn_setup_once
 00040   fn_main
