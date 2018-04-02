@@ -15,7 +15,7 @@ longitude$         ,    Longitude           ,  c  17      , !     SPos=54
 latitude$          ,    Latitude            ,  c  17      , !     SPos=71 
 meterNumber$       ,    Meter Number        ,  c  12      , !     SPos=88 
 transmitter$       ,    Transmitter Number  ,  c  20      , !     SPos=100 
-meterType$         ,    Meter Type          ,  c   5      , !     SPos=120 
+meterType$         ,    Meter Type          ,  c   5      , !     SPos=120 combof(ignored,[Q]\UBmstr\MeterType.h[cno],1,5,6,40,[Q]\UBmstr\MeterTypeIdx.h[cno],1)
 
 
 

@@ -949,6 +949,26 @@
 64212     library 'S:\Core\Array.br': fnFileTo2Arrays
 64213     fnFileTo2Arrays=fnFileTo2Arrays(ftaFile$,mat ftaArrayLeft$,mat ftaArrayRight$, ftaSkipFirstLine,ftaDelimiter$)
 64214   fnend
+64221   def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
+64222     library 'S:\Core\Array.br': fnRead1column
+64223     fnRead1column=fnRead1column(mat r1Return$,r1File$,r1ColumnNumber,r1Delimiter$)
+64224   fnend
+64231   def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumber1,r2ColumnNumber2,r2Delimiter$)
+64232     library 'S:\Core\Array.br': fnRead2column
+64233     fnRead2column=fnRead2column(mat r2Return1$,mat r2Return2$,r2File$,r2ColumnNumber1,r2ColumnNumber2,r2Delimiter$)
+64234   fnend
+64241   def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256,r2fColumn1Width)
+64242     library 'S:\Core\Array.br': fnRead2columnFixedWidth
+64243     fnRead2columnFixedWidth=fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$,r2fColumn1Width)
+64244   fnend
+64251   def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*256,r3ColumnNumber1,r3ColumnNumber2,r3ColumnNumber3,r3Delimiter$)
+64252     library 'S:\Core\Array.br': fnRead3column
+64253     fnRead3column=fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$,r3ColumnNumber1,r3ColumnNumber2,r3ColumnNumber3,r3Delimiter$)
+64254   fnend
+64261   def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$*256,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
+64262     library 'S:\Core\Array.br': fnRead4column
+64263     fnRead4column=fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
+64264   fnend
 65990 ! /r
 66000 ! r: ini functions and quick calls
 66020   def library fnIniOpen(ii_file$*256)

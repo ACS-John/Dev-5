@@ -619,45 +619,68 @@
 67360   fnclosefile(hCmlsLocation(1),table$)
 67380 fnend
 68000 CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires a whole lot of local stuff
-68010   fntos(sn$='LocationAdd') : lc=respc=0
 68020   if u4_meterLocationIdSequential$='True' then
-68030     fnlbl(lc+=1,1,'Location ID     ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(fn_newLocationIdSequential)
-68040   else
-68050     fnlbl(lc+=1,1,'Location ID     ', 20,1) : fntxt(lc,22,11, 0,0,'',0,'') : resp$(respc+=1)=str$(fn_newLocationIdNonSequential(account$))
-68060   end if
-68070   fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=''
-68080   fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=trim$(account$)
-68100   fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=serviceCode$
-68120   fnlbl(lc+=1,1,'Longitude         ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
-68140   fnlbl(lc+=1,1,'Latitude          ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=''
-68160   fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=''
-68180   fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=''
-68200   fnlbl(lc+=1,1,'Meter Type        ', 20,1)
-68220   fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
-68240   resp$(respc+=1)=''
-68260   fncmdset(4)
-68280   fnacs(sn$,0,mat resp$,ckey)
-68300   if ckey=5 then
-68320     if u4_meterLocationIdSequential$='True' then
-68322       fn_newLocationIdSequential(-1)
-68324     end if
-68340   else
-68360     fn_purgeSrvAccountFromLocation(serviceCode$,account$)
-68380     mat locationN=(0)
-68400     mat location$=('')
-68420     respc=0
-68440     locationN(loc_locationID    )=val(resp$(respc+=1))
-68460     location$(loc_name          )=resp$(respc+=1)
-68480     location$(loc_activeCustomer)=resp$(respc+=1)
-68500     location$(loc_serviceId     )=resp$(respc+=1) : if cmlsAddForceServiceId$<>'' then resp$(respc)=cmlsAddForceServiceId$
-68520     location$(loc_longitude     )=resp$(respc+=1)
-68540     location$(loc_latitude      )=resp$(respc+=1)
-68560     location$(loc_meterNumber   )=resp$(respc+=1)
-68580     location$(loc_transmitter   )=resp$(respc+=1)
-68600     location$(loc_meterType     )=resp$(respc+=1)(1:5)
-68620     fnLocationWrite(mat location$,mat locationN)
-68640   end if
-68660 return ! /r
+68040     locationN(loc_locationID    )=fn_newLocationIdSequential
+68060   else                          
+68080     locationN(loc_locationID    )=fn_newLocationIdNonSequential(account$)
+68100   end if                        
+68120   location$(loc_name          )=''
+68140   location$(loc_activeCustomer)=trim$(account$)
+68160   location$(loc_serviceId     )=serviceCode$
+68180   location$(loc_longitude     )=''
+68200   location$(loc_latitude      )=''
+68220   location$(loc_meterNumber   )=''
+68240   location$(loc_transmitter   )=''
+68260   location$(loc_meterType     )=''
+68280   CmlsAddReEdit: !
+68300   fntos(sn$='LocationAdd') : lc=respc=0
+68320   if u4_meterLocationIdSequential$='True' then
+68340     fnlbl(lc+=1,1,'Location ID     ', 20,1) : fntxt(lc,22,11, 0,0,'',1,'') : resp$(respc+=1)=str$(locationN(loc_locationID    ))
+68360   else
+68380     fnlbl(lc+=1,1,'Location ID     ', 20,1) : fntxt(lc,22,11, 0,0,'',0,'') : resp$(respc+=1)=str$(locationN(loc_locationID    ))
+68400   end if
+68420   fnlbl(lc+=1,1,'Meter Address     ', 20,1) : fntxt(lc,22,30, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_name          )
+68440   fnlbl(lc+=1,1,'Current Customer  ', 20,1) : fntxt(lc,22,10, 0,0,'',1,'') : resp$(respc+=1)=location$(loc_activeCustomer)
+68460   fnlbl(lc+=1,1,'Service ID        ', 20,1) : fntxt(lc,22, 2, 0,0,'',1,'') : resp$(respc+=1)=location$(loc_serviceId     )
+68480   fnlbl(lc+=1,1,'Longitude         ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_longitude     )
+68500   fnlbl(lc+=1,1,'Latitude          ', 20,1) : fntxt(lc,22,17, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_latitude      )
+68520   fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_meterNumber   )
+68540   fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_transmitter   )
+68560   fnlbl(lc+=1,1,'Meter Type        ', 20,1)
+68580   fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+68600   resp$(respc+=1)=location$(loc_meterType     )
+68620   fncmdset(4)
+68640   fnacs(sn$,0,mat resp$,ckey)
+68660   if ckey=5 then
+68680     if u4_meterLocationIdSequential$='True' then
+68700       fn_newLocationIdSequential(-1)
+68720     end if
+68740   else
+68760     
+68780     mat locationN=(0)
+68800     mat location$=('')
+68820     respc=0
+68840     locationN(loc_locationID    )=val(resp$(respc+=1))
+68860     location$(loc_name          )=resp$(respc+=1)
+68880     location$(loc_activeCustomer)=resp$(respc+=1)
+68900     location$(loc_serviceId     )=resp$(respc+=1) : if cmlsAddForceServiceId$<>'' then resp$(respc)=cmlsAddForceServiceId$
+68920     location$(loc_longitude     )=resp$(respc+=1)
+68940     location$(loc_latitude      )=resp$(respc+=1)
+68960     location$(loc_meterNumber   )=resp$(respc+=1)
+68980     location$(loc_transmitter   )=resp$(respc+=1)
+69000     location$(loc_meterType     )=resp$(respc+=1)(1:5)
+69020     if fnKeyExists(hCmlsLocation(5),fnbuildkey$(table$,mat location$,mat locationN,5)) then
+69040       dim mg$(0)*256
+69060       mat mg$(0)
+69080       fnAddOneC(mat mg$,' The Key '&fnbuildkey$(table$,mat location$,mat locationN,5)&' already exists.')
+69100       fnAddOneC(mat mg$,' Please select a different Location ID or Service')
+69120       fnmsgbox(mat mg$)
+69140       goto CmlsAddReEdit
+69160     end if
+69180     fn_purgeSrvAccountFromLocation(serviceCode$,account$)
+69200     fnLocationWrite(mat location$,mat locationN)
+69220   end if
+69240 return ! /r
 70000 def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
 70020   ! remove account$ from all previously assigned Meter Location records
 70040   dim tmpLoc$(0)*128,tmpLocN(0),tmpLocKey$*128
