@@ -61,12 +61,8 @@ If /I "%ACSForceRelease%" NEQ "" (
 
 Set BR=brserver-%BR_Version%-%BR_Architecture%-%BR_Model%-%BR_Date%.exe
 
-Set default=%~dp0ACS 5.exe
-If Exist "%default%" (
-  set executable=%default%
+If Exist "%~dp0ACS 5.exe" (
+  Start "ACS 5" "%~dp0ACS 5.exe" %*
 ) else (
-  set executable=%~dp0%BR%
+  Start "ACS 5" "%~dp0%BR%" %*
 )
-rem echo executable is %executable%
-
-Start "ACS 5" "%executable%" %*

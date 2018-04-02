@@ -22,6 +22,7 @@
 26220     end if
 26240     ! /r
 26260     if ~exists(path$) and doNotTryThisOne=0 then 
+26270       path$=rtrm$(path$',\')
 26280       execute 'mkdir "'&path$&'"'
 26300     end if
 26320   loop

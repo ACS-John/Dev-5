@@ -138,8 +138,9 @@
 13240       fn_writeProc('in' ,'end')
 13260       fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
 13270       fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
-13280       fn_writeProc(''   ,"if pos(env$('source'),' ')<=0 then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" '&env$('source')&''")
-13290       fn_writeProc(''   ,"if pos(env$('source'),' ')>0  then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" ""'&env$('source')&'""'")
+13272       fn_writeProc(''   ,"exec 'sy ""C:\ACS\Util\Lexi\ConvStoO longPathAssist.cmd"" '&env$('source')&''")
+13280       ! fn_writeProc(''   ,"if pos(env$('source'),' ')<=0 then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" '&env$('source')&''")
+13290       ! fn_writeProc(''   ,"if pos(env$('source'),' ')>0  then exec 'sy ""C:\ACS\Util\Lexi\ConvStoO v2.cmd"" ""'&env$('source')&'""'")
 13300       fn_writeProc(''   ,'execute ''load "''&program$&''"''')
 13320     end if
 14000     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)

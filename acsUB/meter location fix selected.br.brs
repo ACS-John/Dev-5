@@ -1,5 +1,5 @@
-00010 ! B change
-10000 library 'S:\Core\Library': fnOpenFile,fnXit,fnCopy,fnStime,fnChain,fnclosefile,fnHamsterFio,fnGetHandle
+00010 ! D change
+10000 library 'S:\Core\Library': fnOpenFile,fnXit,fnCopy,fnStime,fnChain,fnclosefile,fnHamsterFio,fnGetHandle,fnRead4column
 12000 ! fnCopy('[Q]\UBmstr\MeterLocation*.h[cno]','[Q]\UBmstr\MeterLocation*_before.h[cno]')
 12020 fnCopy('[Q]\UBmstr\MeterLocation_before.h[cno]','[Q]\UBmstr\MeterLocation.h[cno]')
 12040 fnCopy('[Q]\UBmstr\MeterLocationIdx1_before.h[cno]','[Q]\UBmstr\MeterLocationIdx1.h[cno]')
@@ -8,27 +8,42 @@
 12100 fnCopy('[Q]\UBmstr\MeterLocationIdx4_before.h[cno]','[Q]\UBmstr\MeterLocationIdx4.h[cno]')
 12120 fnCopy('[Q]\UBmstr\MeterLocationIdx5_before.h[cno]','[Q]\UBmstr\MeterLocationIdx5.h[cno]')
 12140 ! fnCopy('[Q]\UBmstr\MeterLocation*.h[cno]','[Q]\UBmstr\MeterLocation*_'&date$('ccyy-mm-dd')&'-'&str$(fnStime)&'.h[cno]')
-13000 fn_quickExport(' - before')
-13001 fn_quickExport(' - before 2')
-13002 fn_quickExport(' - before 3')
-13020 fn_fixIt
-13040 fn_quickExport(' - after')
+14000 fn_quickExport(' - before')
+14020 dim inLocationId$(0)*64,inLocationIdN(0)
+14040 dim inTransmitter$(0)*64
+14060 dim inMeter$(0)*64
+14070 dim inPort$(0)*64
+14080 fnRead4column(mat inLocationId$,mat inTransmitter$,mat inMeter$,mat inPort$,'C:\ACS\(Client_Files)\Purdy\Purdy ReportUSGMTUHardwareInstallation3292018.csv',1,2,8,3,',')
+14100 mat inLocationIdN(udim(mat inLocationId$))
+14120 for x=1 to udim(mat inLocationId$)
+14140   inLocationIdN(x)=val(inLocationId$(x))
+14150   inTransmitter$(x)=inTransmitter$(x)&'-'&inPort$(x)
+14160 nex x
+14180 fn_fixIt
+14200 fn_quickExport(' - after')
 21040 Xit: !
 21060 ! fnChain('S:\Utility Billing\Hand Held\Meter Location')
 21080 fnHamsterFio('U4 Meter Location')
 21100 end
-32000 def fn_fixIt
-32020   dim location$(0)*256,locationN(0)
-32040   hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$)
-32060   do
-32080     read #hLocation,using form$(hLocation): mat location$,mat locationN eof FiEoLocation
-32100     if fn_fixTransmitterMeterMixup(location$(loc_transmitter),location$(loc_meterNumber)) then
-32120       rewrite #hLocation,using form$(hLocation): mat location$,mat locationN
-32140     end if
-32160   loop
-32180   FiEoLocation: !
-32200   fnclosefile(hLocation,'U4 Meter Location')
-32240 fnend
+28000 def fn_fixIt
+28020   dim location$(0)*256,locationN(0)
+28040   hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$)
+28060   do
+28080     read #hLocation,using form$(hLocation): mat location$,mat locationN eof FiEoLocation
+28100     inWhich=srch(mat inLocationIdN,locationN(loc_locationId))
+28120     if inWhich<=0 then 
+28140       pr 'could not find location '&str$(locationN(loc_locationId))&' in Jessica table.'
+28160       pause
+28180       fn_fixTransmitterMeterMixup(location$(loc_transmitter),location$(loc_meterNumber))
+28200     else
+28220       location$(loc_transmitter)=inTransmitter$(inWhich)
+28240       location$(loc_meterNumber)=inMeter$(inWhich)
+28260     end if
+28280     rewrite #hLocation,using form$(hLocation): mat location$,mat locationN
+28300   loop
+33000   FiEoLocation: !
+33020   fnclosefile(hLocation,'U4 Meter Location')
+33040 fnend
 34000 def fn_isTransmitterNumber(number$*64)
 34020   itnReturn=0 : itnTestCount+=1
 34040   if number$(1:3)='220' then itnReturn=1
