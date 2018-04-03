@@ -1,3 +1,4 @@
+! test changes 1
 ! r: functions that do not redirect!
 def library fnKeyExists(hFile,keyToTest$*128)
   read #hFile,key=rpad$(keyToTest$,KLN(hFile)),release: nokey MaeNo
