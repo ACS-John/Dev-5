@@ -1,4 +1,4 @@
-  enableFavorites=1 ! a test change 5
+  enableFavorites=1
   fn_setup
   fn_setup_once
   fn_main
