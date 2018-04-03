@@ -126,6 +126,7 @@
 05860     fncreg_write('hhto.selection_method',str$(selection_method))
 05880   end if
 05900   mat resp$=("")
+05910   if deviceSelected$='Badger Beacon' then filterNoLocationId=1 else filterNoLocationId=0
 05920 fnend
 08000 SEL_ACT: ! r:
 08020 fn_scr_selact
@@ -252,6 +253,9 @@
 13000 SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 13020   ! if trim$(z$)='100100.99' then pause
 13040   if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
+13042   if filterNoLocationId and val(fn_meterInfo$('Location_ID',account$,'WA'))<=0 then
+13044     goto SendRecordToWorkFileFinis
+13046   end if
 13060     ft$=fn_rmk1$(z$)
 13080     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
 13100     seq$=str$(sq1)
@@ -287,7 +291,7 @@
 13780       goto SEL_ACT ! go back if Hand Held information is not available for their selection
 13800     end if
 13820   end if
-13850   ! SendRecordToWorkFileFinis: !
+13850   SendRecordToWorkFileFinis: !
 13860   if selection_method=sm_allExceptFinal then
 13870     goto NextReadForAll
 13880   else if selection_method=sm_aRoute then
@@ -350,66 +354,68 @@
 15200   LAPTOP_XIT: !
 15220 fnend
 16000 def fn_badgerBeacon
-16010   if ~beaconHeaderSent then ! r:
-16020     beaconHeaderSent=1
-16030     fn_record_init(chr$(9))
-16040     fn_record_addc(10,'Account_ID')
-16050     fn_record_addc(30,'Account_Full_Name')
-16060     fn_record_addc(13,'Account_Phone')
-16070     fn_record_addc(11,'Location_ID')
-16080     fn_record_addc(30,'Location_Address_Line1')
-16090     fn_record_addc(40,'Location_City')
-16100     fn_record_addc(14,'Location_State')
-16110     fn_record_addc(12,'Location_Zip')
-16120     fn_record_addc(18,'Location_Latitude')
-16130     fn_record_addc(18,'Location_Longitude')
-16140     fn_record_addc(19,'Service_Point_Route')
-16150     fn_record_addc(23,'Service_Point_Latitude')
-16160     fn_record_addc(23,'Service_Point_Longitude')
-16170     fn_record_addc(12,'Meter_ID') ! (meter number)
-16180     fn_record_addc(12,'Meter_SN') ! (meter number)
-16190     fn_record_addc(15,'Register_Number') ! (blank)
-16200     fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
-16210     fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
-16220     fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
-16230     fn_record_addc(19,'Endpoint_Type') ! meter type - read type
-16240     fn_record_addc(13,'Read_Sequence') ! sequence
-16250     fn_record_addc(14,'High_Read_Limit')
-16260     fn_record_addc(14,'Low_Read_Limit') 
-16262     fn_record_write(h_out)
-16270   end if ! /r
-16500   dim tmpCity$*64,tmpState$*64,tmpZip$*64
-16510   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-16512   account$=z$
-16520   unusual_usage_low=round(reading_current+usage_current*fn_pcent,2) : if unusual_usage_low<0 then unusual_usage_low=0
-16530   unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-16540   fn_record_init(chr$(9))                                           ! BadgerBeacon Name      ACS Name (if different)
-16550   fn_record_addc(10,account$)                                       ! Account_ID             Account Number
-16560   fn_record_addc(30,e$(2))                                          ! Account_Full_Name      Customer Name
-16562   ! fn_record_addc(30,fnCustomerData$(account$,'name', 1))   <-- this might be a better way...
-16570   fn_record_addc(13,extra$(2))                                      ! Account_Phone          Phone Number
-16580   fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))    ! Location_ID
-16600   fn_record_addc(30,e$(3))                                           ! Location_Address_Line1
-16610   fn_record_addc(40,tmpCity$)                                        ! Location_City
-16620   fn_record_addc(14,tmpState$)                                       ! Location_State
-16630   fn_record_addc(12,tmpZip$)                                         ! Location_Zip
-16640   fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))      ! Location_Latitude
-16650   fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))      ! Location_Longitude
-16660   fn_record_addn(19,route)                                            ! Service_Point_Route    Route Number
-16670   fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
-16680   fn_record_addC(23,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
-16690   fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
-16700   fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
-16710   fn_record_addC(15,'')                                               ! Register_Number           (blank)                  (meter number)
-16720   fn_record_addC(24,'GAL')                                            ! Register_Unit_Of_Measure
-16722   fn_record_addC(19,'')                                            ! Register_Resolution       (blank)                  (meter number)
-16730   fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
-16740   fn_record_addC(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
-16750   fn_record_addn(13,sequence)                                        ! Read_Sequence                Sequence
-16760   fn_record_addn(14,unusual_usage_high)
-16770   fn_record_addn(14,unusual_usage_low) 
-16780    !
-16790   fn_record_write(h_out)
+16010     if ~beaconHeaderSent then ! r:
+16020       beaconHeaderSent=1
+16030       fn_record_init(chr$(9))
+16040       fn_record_addc(10,'Account_ID')
+16050       fn_record_addc(30,'Account_Full_Name')
+16060       fn_record_addc(13,'Account_Phone')
+16070       fn_record_addc(16,'Service_Point_ID')
+16072       fn_record_addc(11,'Location_ID')
+16080       fn_record_addc(30,'Location_Address_Line1')
+16090       fn_record_addc(40,'Location_City')
+16100       fn_record_addc(14,'Location_State')
+16110       fn_record_addc(12,'Location_Zip')
+16120       fn_record_addc(18,'Location_Latitude')
+16130       fn_record_addc(18,'Location_Longitude')
+16140       fn_record_addc(19,'Service_Point_Route')
+16150       fn_record_addc(23,'Service_Point_Latitude')
+16160       fn_record_addc(23,'Service_Point_Longitude')
+16170       fn_record_addc(12,'Meter_ID') ! (meter number)
+16180       fn_record_addc(12,'Meter_SN') ! (meter number)
+16190       fn_record_addc(15,'Register_Number') ! (blank)
+16200       fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
+16210       fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
+16220       fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
+16230       fn_record_addc(19,'Endpoint_Type') ! meter type - read type
+16240       fn_record_addc(13,'Read_Sequence') ! sequence
+16250       fn_record_addc(14,'High_Read_Limit')
+16260       fn_record_addc(14,'Low_Read_Limit') 
+16262       fn_record_write(h_out)
+16270     end if ! /r
+16500     dim tmpCity$*64,tmpState$*64,tmpZip$*64
+16510     fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+16512     account$=z$
+16520     unusual_usage_low=round(reading_current+usage_current*fn_pcent,2) : if unusual_usage_low<0 then unusual_usage_low=0
+16530     unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+16540     fn_record_init(chr$(9))                                           ! BadgerBeacon Name      ACS Name (if different)
+16550     fn_record_addc(10,account$)                                       ! Account_ID             Account Number
+16560     fn_record_addc(30,e$(2))                                          ! Account_Full_Name      Customer Name
+16562     ! fn_record_addc(30,fnCustomerData$(account$,'name', 1))   <-- this might be a better way...
+16570     fn_record_addc(13,extra$(2))                                      ! Account_Phone          Phone Number
+16572     fn_record_addc(16,'1')                                            ! Service_Point_ID
+16580     fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))    ! Location_ID
+16600     fn_record_addc(30,fn_meterInfo$('address',account$,'WA'))        ! Location_Address_Line1
+16610     fn_record_addc(40,tmpCity$)                                        ! Location_City
+16620     fn_record_addc(14,tmpState$)                                       ! Location_State
+16630     fn_record_addc(12,tmpZip$)                                         ! Location_Zip
+16640     fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))      ! Location_Latitude
+16650     fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))      ! Location_Longitude
+16660     fn_record_addn(19,route)                                            ! Service_Point_Route    Route Number
+16670     fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
+16680     fn_record_addC(23,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
+16690     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
+16700     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
+16710     fn_record_addC(15,'')                                               ! Register_Number           (blank)                  (meter number)
+16720     fn_record_addC(24,'GAL')                                            ! Register_Unit_Of_Measure
+16722     fn_record_addC(19,'1')                                            ! Register_Resolution       (blank)             nearest unit
+16730     fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+16740     fn_record_addC(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
+16750     fn_record_addn(13,sequence)                                        ! Read_Sequence                Sequence
+16760     fn_record_addn(14,unusual_usage_high)
+16770     fn_record_addn(14,unusual_usage_low) 
+16780      !
+16790     fn_record_write(h_out)
 16960 fnend
 17000 def fn_badgerConnectC
 17020   for j=1 to len(seq$)

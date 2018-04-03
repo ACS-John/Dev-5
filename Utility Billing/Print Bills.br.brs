@@ -376,8 +376,8 @@
 33260   end if 
 33270 ! /r
 34000   billsPrintedCount(2)=billsPrintedCount(2)+1 ! accumulate totals
-34020   if env$('acsDeveloper')<>'' and sum(mat billsPrintedCount)>val(env$('UB_Limit')) then 
-34040     msgbox('UB_Limit exceeded')
+34020   if env$('acsDeveloper')<>'' and sum(mat billsPrintedCount)>val(env$('UB_Limit')) and ~ubLimitExceedAlreadyNotified then 
+34040     msgbox('UB_Limit exceeded: You are currently printing bills for more customers than you are licensed for.  Please enhance your license before limitations become enforced.') : ubLimitExceedAlreadyNotified=1
 34060   end if
 34080   goto NEXT_ACCOUNT ! /r
 35000 def fn_mg2$*80(; m2forcecnt)

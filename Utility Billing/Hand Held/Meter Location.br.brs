@@ -609,6 +609,7 @@
 67180           rewrite #hCmlsLocation(5),using form$(hCmlsLocation(1)),key=cmlsLocationKey$: mat location$,mat locationN
 67200         else
 67220           release #hCmlsLocation(5):
+67230           goto CmlsSelect
 67240         end if
 67260       end if
 67280     else if ckey=2 then
@@ -656,7 +657,6 @@
 68700       fn_newLocationIdSequential(-1)
 68720     end if
 68740   else
-68760     
 68780     mat locationN=(0)
 68800     mat location$=('')
 68820     respc=0

@@ -40,13 +40,19 @@
 14250   pr #proc_file: 'Scr_Freeze'
 14300   do
 14400     linput #dirfile: filename$ eof DONE
-14500     pr #proc_file: 'Load "'&filename$&'",Source'
-14520     parameter$=fn_build_parameter$(filename$)
-14600     if exists(filename$(1:len(filename$)-4)) then
-14700       pr #proc_file: 'Replace "'&filename$(1:len(filename$)-4)&'"'&parameter$
-14800     else
-14900       pr #proc_file: 'Save "'&filename$(1:len(filename$)-4)&'"'&parameter$
-15000     end if
+14410     if fn_hasLineNumbers(filename$) then
+14500       pr #proc_file: 'Load "'&filename$&'",Source'
+14520       parameter$=fn_build_parameter$(filename$)
+14600       if exists(filename$(1:len(filename$)-4)) then
+14700         pr #proc_file: 'Replace "'&filename$(1:len(filename$)-4)&'"'&parameter$
+14800       else
+14900         pr #proc_file: 'Save "'&filename$(1:len(filename$)-4)&'"'&parameter$
+15000       end if
+15020     else
+15030       ! pause : pr #proc_file:  'sy "C:\ACS\Util\Lexi\ConvStoO longPathAssist.cmd" '&env$('source')&''
+15040       ! pr #proc_file:  'sy "C:\ACS\Util\Lexi\ConvStoO longPathAssist.cmd" '&filename$&''
+15050       exe  'sy "C:\ACS\Util\Lexi\ConvStoO longPathAssist.cmd" '&filename$&''
+15080     end if
 15100     pr #proc_file: ''
 15200   loop
 15250   pr #proc_file: 'Scr_Thaw'
@@ -218,3 +224,37 @@
 31322   close #2:
 31330   close #1:
 32000 fnend
+34000 def fn_hasLineNumbers(filename$*256)
+34020   filename$=trim$(filename$)
+34040   ext$=filename$(pos(filename$,'.',-1):len(filename$)) !  get file identifier
+34080   if lwrc$(ext$)='.brs' or lwrc$(ext$)='.wbs' then
+34100     open #hTmp:=3: 'name='&filename$,display,input
+34120     dim hlnLine$*2048
+34140     linput #hTmp: hlnLine$ eof HlnEof
+34160     close #hTmp:
+34180     !
+34200     hlnTest1=0
+34220     hlnTest1=val(hlnLine$(1:5)) conv ignore
+34240     if hlnTest1>0 then goto HlnYesLineNumbers
+34260     !
+34280     hlnPosSpace=pos(hlnLine$,' ')
+34300     if hlnPosSpace>0 then
+34320       hlnTest1=val(hlnLine$(1:hlnPosSpace-1)) conv ignore
+34340       if hlnTest1>0 then goto HlnYesLineNumbers
+34360     end if
+34380     !
+34400     goto HlnNoLineNumbers
+34420     HlnYesLineNumbers: !
+34440       hasLineNumbersReturn=1
+34460     goto HlnFinis
+34480     HlnNoLineNumbers: !
+34500       hasLineNumbersReturn=0
+34520     goto HlnFinis
+34540     HlnEof: !
+34560     pr bell;'HlnEof file analyzed (filename$='&filename$&') had no lines (EoF).' 
+34580     pause
+34600     goto HlnFinis
+34620   end if
+34640     HlnFinis: !
+34660   fn_hasLineNumbers=hasLineNumbersReturn
+34680 fnend
