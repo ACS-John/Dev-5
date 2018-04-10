@@ -317,34 +317,34 @@
 80340     input fields status_gridspec$&",rowcnt,all,nowait": grid_rows
 80360     curfld(1,grid_rows+1)
 80380 !
-80400   fnend
-81000   def library fnStatusPause
-81010     if ~setup then let fn_setup
-81020     fnStatusPause=fn_status_pause
-81040   fnend
-82000   def fn_status_pause
-82020     fn_status('Press any key to continue.')
-82040     kstat$(1)
-82060   fnend
-86000   def fn_execute(flags$*128,exe_what$*256)
-86020     if env$('ACSDeveloper')<>'' then
-86040       pr 'Flags:  '&flags$
-86060       if exists(exe_what$) then
-86070 !       PAusE
-86080         execute 'sy -c -w notepad '&exe_what$
-86100       else
-86120         pr 'HMMM:  sy '&flags$&' '&exe_what$
-86130       end if
-86140     else
-86160       execute 'sy '&flags$&' '&exe_what$
-86180     end if
-86200   fnend
-87000   def library fnStatusClose
-87020     if ~setup then let fn_setup
-87040     fnStatusClose=fn_status_close
-87060   fnend
-87080   def fn_status_close
-87100     close #h_status_win: ioerr ignore
-87120     h_status_win=0
-87140     status_initialized=0
-87160   fnend
+80400 fnend
+81000 def library fnStatusPause
+81010   if ~setup then let fn_setup
+81020   fnStatusPause=fn_status_pause
+81040 fnend
+82000 def fn_status_pause
+82020   fn_status('Press any key to continue.')
+82040   kstat$(1)
+82060 fnend
+86000 def fn_execute(flags$*128,exe_what$*256)
+86020   if env$('ACSDeveloper')<>'' then
+86040     pr 'Flags:  '&flags$
+86060     if exists(exe_what$) then
+86070       ! PAusE
+86080       execute 'sy -c -w notepad '&exe_what$
+86100     else
+86120       pr 'HMMM:  sy '&flags$&' '&exe_what$
+86130     end if
+86140   else
+86160     execute 'sy '&flags$&' '&exe_what$
+86180   end if
+86200 fnend
+87000 def library fnStatusClose
+87020   if ~setup then let fn_setup
+87040   fnStatusClose=fn_status_close
+87060 fnend
+87080 def fn_status_close
+87100   close #h_status_win: ioerr ignore
+87120   h_status_win=0
+87140   status_initialized=0
+87160 fnend

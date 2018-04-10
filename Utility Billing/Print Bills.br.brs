@@ -906,7 +906,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
   fnpa_fontbold(1)
   fnpa_fontsize(12)
   fnpa_font
-  fnpa_txt(at$(1),xmargin+8,lyne*1-1+ymargin)
+  fnpa_txt(at$(1)(1:20),xmargin+8,lyne*1-1+ymargin)
   fnpa_font('Lucida Console')
   fnpa_fontsize
   fnpa_fontbold

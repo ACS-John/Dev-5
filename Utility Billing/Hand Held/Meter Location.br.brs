@@ -35,7 +35,6 @@ def fn_setup
     library 'S:\Core\Library': fnapplyDefaultRatesFio
     dim info$(0)*20,infoN(0)
     dim addr$(0)*30,addrN(0)
-    dim form$(0)*256
     dim location$(0)*256,locationN(0)
     dim mg$(0)*128
     dim serviceName$(10)*60,serviceCode$(10)*2
@@ -705,24 +704,7 @@ def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
   loop while tmpMatch
   CmlsDelFinis: !
 fnend
-! <updateable region: fn_open (supressprompt:=2)>
-def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
-  dim _fileiosubs$(1)*800, loadedsubs$(1)*32
-  fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
-  if ~max(srch(loadedsubs$,uprc$(filename$)),0) then
-    mat loadedsubs$(udim(loadedsubs$)+1)
-    loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
-    for index=1 to udim(mat _fileiosubs$)
-      execute (_fileiosubs$(index))
-    next index
-  end if
-fnend
-! </updateable region: fnopen>
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-  if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
+insert: fn_open
+insert: ertn
+
 
