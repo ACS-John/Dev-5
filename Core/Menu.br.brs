@@ -9,6 +9,7 @@
 def fn_setup
   if ~setup then
     setup=1
+    {coreLibrary}
     library 'S:\Core\Library': fntop
     library 'S:\Core\Library': fnSystemName$
     library 'S:\Core\Library': fncompany_name
@@ -904,12 +905,4 @@ def fn_chain(c_program$*128)
 fnend
 XIT: execute "System"
 IGNORE: continue
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-  if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
-
-
+insert: ertn
