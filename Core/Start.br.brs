@@ -138,7 +138,7 @@ def fn_acsSystemInitialize(; isScreenIOtest)
       fn_writeProc('in' ,'end')
       fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
       fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
-      fn_writeProc(''   ,"exec 'sy """"C:\ACS\Util\Lexi\ConvStoO.cmd"" ""'&env$('source')&'""'")
+      fn_writeProc(''   ,"exec 'sy """"C:\ACS\Util\Lexi\ConvStoO.cmd"" ""'&env$('source')&'""""'")
       fn_writeProc(''   ,'execute ''load "''&program$&''"''')
     end if
     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
