@@ -394,24 +394,24 @@
 16562     ! fn_record_addc(30,fnCustomerData$(account$,'name', 1))   <-- this might be a better way...
 16570     fn_record_addc(13,extra$(2))                                      ! Account_Phone          Phone Number
 16572     fn_record_addc(16,'1')                                            ! Service_Point_ID
-16580     fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))    ! Location_ID
-16600     fn_record_addc(30,fn_meterInfo$('address',account$,'WA'))        ! Location_Address_Line1
-16610     fn_record_addc(40,tmpCity$)                                        ! Location_City
-16620     fn_record_addc(14,tmpState$)                                       ! Location_State
-16630     fn_record_addc(12,tmpZip$)                                         ! Location_Zip
-16640     fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))      ! Location_Latitude
-16650     fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))      ! Location_Longitude
-16660     fn_record_addn(19,route)                                            ! Service_Point_Route    Route Number
-16670     fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,'WA'))       ! Service_Point_Latitude
-16680     fn_record_addC(23,fn_meterInfo$('Longitude',account$,'WA'))       ! Service_Point_Longitude
-16690     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_ID                  (meter number)
-16700     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))    ! Meter_SN                  (meter number)
-16710     fn_record_addC(15,'')                                               ! Register_Number           (blank)                  (meter number)
-16720     fn_record_addC(24,'GAL')                                            ! Register_Unit_Of_Measure
-16722     fn_record_addC(19,'1')                                            ! Register_Resolution       (blank)             nearest unit
-16730     fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,'WA'))   ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
-16740     fn_record_addC(19,fn_meterInfo$('Meter Type',account$,'WA'))    ! Endpoint_Type                meter type - read type
-16750     fn_record_addn(13,sequence)                                        ! Read_Sequence                Sequence
+16580     fn_record_addc(11,fn_meterInfo$('Location_ID',account$,'WA'))        ! Location_ID
+16600     fn_record_addc(30,fn_meterInfo$('address',account$,'WA'))            ! Location_Address_Line1
+16610     fn_record_addc(40,tmpCity$)                                          ! Location_City
+16620     fn_record_addc(14,tmpState$)                                         ! Location_State
+16630     fn_record_addc(12,tmpZip$)                                           ! Location_Zip
+16640     fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,'WA'))          ! Location_Latitude
+16650     fn_record_addc(18,fn_meterInfo$('Longitude',account$,'WA'))          ! Location_Longitude
+16660     fn_record_addn(19,route)                                             ! Service_Point_Route    Route Number
+16670     fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,'WA'))          ! Service_Point_Latitude
+16680     fn_record_addC(23,fn_meterInfo$('Longitude',account$,'WA'))          ! Service_Point_Longitude
+16690     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))       ! Meter_ID                  (meter number)
+16700     fn_record_addC(12,fn_meterInfo$('Meter Number',account$,'WA'))       ! Meter_SN                  (meter number)
+16710     fn_record_addC(15,'')                                                ! Register_Number           (blank)                  (meter number)
+16720     fn_record_addC(24,'GAL')                                             ! Register_Unit_Of_Measure
+16722     fn_record_addC(19,'1')                                               ! Register_Resolution       (blank)             nearest unit
+16730     fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,'WA')) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+16740     fn_record_addC(19,fn_meterInfo$('Meter Type',account$,'WA'))         ! Endpoint_Type                meter type - read type
+16750     fn_record_addn(13,sequence)                                          ! Read_Sequence                Sequence
 16760     fn_record_addn(14,unusual_usage_high)
 16770     fn_record_addn(14,unusual_usage_low) 
 16780      !

@@ -1,21 +1,25 @@
 ! r: doNotInsert
-library 'S:\Core\Library': fnOpenFile
-pr 'this clip is not intended to be compiled directly nor run directly'
-pr 'this clip replaces "include: fn_open" when processed with lexi'
-end
+	pr 'This clip is not intended to be compiled directly nor run directly.'
+	pr 'This clip replaces "include: fn_open" when processed with lexi.'
+	pr 'The area inside the doNotInsert region could be used for testing or documentation.'
+	end
 ! /r doNotInsert
-! <updateable region: fn_open (supressprompt:=2)>
-def fn_open(filename$*255, mat f$, mat fn, mat form$; inputOnly, keyNum, disableEnumSort, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
-  dim form$(0)*2048
-  dim _fileiosubs$(1)*800
-  dim loadedsubs$(1)*32
-  fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputOnly, keyNum, disableEnumSort, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
-  if ~max(srch(loadedsubs$,uprc$(filename$)),0) then
-    mat loadedsubs$(udim(mat loadedsubs$)+1)
-    loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
-    for index=1 to udim(mat _fileiosubs$)
-      execute (_fileiosubs$(index))
-    next index
-  end if
-fnend
-! </updateable region: fnopen>
+! openDataN_open (supressprompt:=2)
+dim form$(0)*2048
+
+def fn_open(openTableName$*255, mat openData$, mat openDataN, mat openForm$; openInputOnly,openKeyNumber,openDisableEnumSort,openPath$*255,mat openDescription$,mat openFieldWidth, ___,openLetEnumItem,openReturn,openSupressPrompt)
+	library 'S:\Core\Library': fnOpenFile
+	dim openLetEnum$(0)*800
+	dim openEnumLoaded$(0)*32
+	openSupressPrompt=2
+	openReturn=fnOpenFile(openTableName$,mat openData$,mat openDataN,mat openForm$, openInputOnly,openKeyNumber,openDisableEnumSort,openPath$,mat openDescription$,mat openFieldWidth,mat openLetEnum$,openSupressPrompt)
+	openTableName$=lwrc$(openTableName$)
+	if srch(mat openEnumLoaded$,openTableName$)<=0 then
+		mat openEnumLoaded$(udim(mat openEnumLoaded$)+1)
+		openEnumLoaded$(udim(mat openEnumLoaded$))=openTableName$
+		for openLetEnumItem=1 to udim(mat openLetEnum$)
+			exe openLetEnum$(openLetEnumItem)
+		nex openLetEnumItem
+	en if
+	fn_open=openReturn
+fn
