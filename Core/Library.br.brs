@@ -1153,7 +1153,7 @@ fnend
       library 'S:\Utility Billing\Hand Held\Import from Hand Held to Book.br': fnRetrieveHandHeldFile
      fnRetrieveHandHeldFile=fnRetrieveHandHeldFile
     fnend
-    def library fnMeterInfo$*20(mi_field$,z$*10,serviceCode$; closeHandle)
+    def library fnMeterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
       library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnMeterInfo$
      fnMeterInfo$=fnMeterInfo$(mi_field$,z$,serviceCode$, closeHandle)
     fnend

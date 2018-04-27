@@ -1,9 +1,9 @@
-! r: doNotInsert
+! r: doNotInclude
 pr 'this clip is not intended to be compiled directly nor run directly'
 pr 'this clip replaces 'include: fn_open' when processed with lexi'
 
 end
-! /r doNotInsert
+! /r doNotInclude
 ! ertn
 Ertn: !
 	library 'S:\Core\Library': fnerror

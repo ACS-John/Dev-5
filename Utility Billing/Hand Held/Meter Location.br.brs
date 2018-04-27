@@ -704,7 +704,7 @@ def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
   loop while tmpMatch
   CmlsDelFinis: !
 fnend
-insert: fn_open
-insert: ertn
+include: fn_open
+include: ertn
 
 

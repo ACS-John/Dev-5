@@ -508,7 +508,6 @@
 03600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03620 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
-
 14000 ASKDATES: ! r:
 14020   open #h_dates:=11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76,shr",internal,outIn,relative 
 14040   read #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1,release: beg_date,end_date,d1,d1$ noRec ASKDATES_WRITE_DATE
@@ -846,7 +845,7 @@
 34490     mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
 34500     mat gawh=gawhTableH
 34502     ! if dev then pr '   using Table H'
-34510   else if wga_is_married=4 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
+34510   else if wga_is_married=4 or wga_is_married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
 34520     mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
 34530     mat gawh=gawhTableG
 34532     ! if dev then pr '   using Table G'
@@ -854,6 +853,8 @@
 34550     mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
 34560     mat gawh=gawhTableF
 34562     ! if dev then pr '   using Table F'
+34564   else 
+34565     pr 'unrecognized wga_is_married';wga_is_married : pause
 34570   end if
 34580   j1=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
 34582   ! if dev then pr '   table line ';j1
@@ -1185,7 +1186,6 @@
 58540   OPO_XIT: ! 
 58560   fn_oregonPhaseOut=opo_return
 58580 fnend 
-
 64000 def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
 64020   if state$='GA' then
 64040     if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)

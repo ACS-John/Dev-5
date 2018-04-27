@@ -242,5 +242,5 @@ OVER_LIST: ! r:
 	end if
 return ! /r
 PGOF: pr #255: newpage : continue
-insert:ertn
-insert:fn_open
+include:ertn
+include:fn_open

@@ -1,9 +1,9 @@
-! r: doNotInsert
+! r: doNotInclude
 	pr 'This clip is not intended to be compiled directly nor run directly.'
 	pr 'This clip replaces "include: fn_open" when processed with lexi.'
 	pr 'The area inside the doNotInsert region could be used for testing or documentation.'
 	end
-! /r doNotInsert
+! /r doNotInclude
 ! openDataN_open (supressprompt:=2)
 dim form$(0)*2048
 
