@@ -9,7 +9,7 @@
 def fn_setup
   if ~setup then
     setup=1
-    {coreLibrary}
+    ! {coreLibrary}
     library 'S:\Core\Library': fntop
     library 'S:\Core\Library': fnSystemName$
     library 'S:\Core\Library': fncompany_name
@@ -905,4 +905,4 @@ def fn_chain(c_program$*128)
 fnend
 XIT: execute "System"
 IGNORE: continue
-insert: ertn
+include: ertn

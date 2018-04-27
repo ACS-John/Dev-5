@@ -222,7 +222,7 @@
 32300   goto ADD_EDIT_FIN_STMTS
 32400 L1660: on pos ("DTRHSFPEBC",te$,1) goto L1690,L1690,L1690,L1690,L1690,L1690,L1690,L1690,L1690,L1690 none L1670
 32500 L1670: mat ml$(4)
-32600   ml$(1)="Valid codes include: D=Detail; T=Total; R=Report Heading"
+32600   ml$(1)="Valid codes: D=Detail; T=Total; R=Report Heading"
 32700   ml$(2)="H=Heading; S=Secondary Heading; F=Footnote; P=Profit or Loss"
 32800   ml$(3)="E=Something; B=Bank Account; C=Something"
 32900   ml$(4)="Click OK to fix."

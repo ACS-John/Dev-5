@@ -49,7 +49,8 @@
 14900         pr #proc_file: 'Save "'&filename$(1:len(filename$)-4)&'"'&parameter$
 15000       end if
 15020     else
-15050       exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&filename$&'"'
+15050       pr #proc_file:  'sy ""C:\ACS\Util\Sad Panda\Compile.cmd" "'&filename$&'""'
+15052       ! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&filename$&'""'
 15080     end if
 15100     pr #proc_file: ''
 15200   loop

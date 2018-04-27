@@ -78,7 +78,7 @@ def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
     if cusN(c_s04readingPri)<>0 then customerDataReturn$=str$(cusN(c_s04readingPri))
   else if fieldName$='service 4.usage.current' then
     if cusN(c_s04usageCur)<>0 then customerDataReturn$=str$(cusN(c_s04usageCur))
-  else if fieldName$='service 4.usage .ytd' then
+  else if fieldName$='service 4.usage.ytd' then
     if usN(c_s04usageYtd)<>0 then customerDataReturn$=str$(usN(c_s04usageYtd))
   else if fieldName$='service 1.unit count' then
     if cusN(c_s01unitCount)<>0 then customerDataReturn$=str$(cusN(c_s01unitCount))
