@@ -428,7 +428,7 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
     fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
     fn_record_addn(14,fn_unusualUsage('high',account$,srvCode$, 1))
     fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1)) 
-     !
+    !
     fn_record_write(h_out)
 fnend
 def fn_badgerConnectC

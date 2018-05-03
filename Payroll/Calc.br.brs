@@ -92,6 +92,7 @@
 00990 return ! /r
 01010 L1010: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
 01012   read #hEmployee,using F_RPMSTR,key=x$: mat em,lpd,tgp nokey EMPLOYEE_NOT_FOUND
+01013 if trim$(x$)='37' then pause
 01014   F_RPMSTR: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2
 01020   gosub CALK_ALL_DEDUCTIONS_ALL_DEPT
 01040   n$=x$
@@ -171,7 +172,7 @@
 01489   read #h_department,using "form pos 48,n 2",key=newdeptkey$: tcd(1) ! get state code
 01491   gosub DETERMINE_EARNINGS
 01493   for j=1 to 20
-01495     if newdedfed(j)=2 and newdedcode(j)=1 then 
+01495     if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then 
 01497       cafy+=caf(j)
 01499       cafd+=caf(j)
 01501     end if 
@@ -246,7 +247,7 @@
 01840 NO_EXCESS_TIPS: ! 
 01842   deduc=ficat3=f3=0 ! FICA
 01850   for j=1 to 20
-01860     if dedfica(j)=1 and newdedcode(j)=1 then ficat3+=inp(j+9)
+01860     if dedfica(j)=1 and newdedcode(j)=newdedcode_Deduct then ficat3+=inp(j+9)
 01870     if deduc(j)=1 then deduc+=inp(j+9): deducy+=caf(j) ! total deductions for unemployment for current period and year to date
 01880   next j
 01890   sswg=sswh=mcwh=0
@@ -308,7 +309,7 @@
 02110   if ytdTotal(25)+eic4<0 then eic4=-ytdTotal(25)
 02120   eic4=round(eic4*pog,2)
 02130 CURRENT_PERIOD: ! 
-02132   tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh: tcp(4)=tcp4
+02132   tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh : tcp(4)=tcp4
 02140   for j=5 to 24
 02144     tcp(j)=inp(j+5)
 02148   next j
@@ -321,11 +322,15 @@
 02164   tcp(31)=gpd
 02166   tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
 02170   for j=5 to 24
-02180     if newdedcode(j-4)=3 then goto L2200
-02190     if newdedcode(j-4)=2 then tcp(32)+=tcp(j) else tcp(32)-=tcp(j)
-02200 L2200: ! 
-02202   next j
-02210   for j=1 to 31 : tcp(j)=round(tcp(j),2): next j
+02180     if newdedcode(j-4)=newdedcode_Benefit then 
+02182       ! do nothing
+02184     else if newdedcode(j-4)=newdedcode_Add then 
+02186       tcp(32)+=tcp(j) 
+02188     else if newdedcode(j-4)=newdedcode_Deduct then
+02190       tcp(32)-=tcp(j)
+02192     end if
+02194   next j
+02210   for j=1 to 31 : tcp(j)=round(tcp(j),2) : next j
 02220   tcp(32)+=tcp(25)-tcp(29)-tcp(30)
 02230 ! if env$('client')="Washington Parrish" then tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
 02240 ! the following commented lines may have to be put back in and the tdet array extended to hold them  ???  kj
@@ -405,12 +410,12 @@
 02590 XIT: fnxit
 02600 IGNORE: continue 
 02840 CALK_ALL_DEDUCTIONS_ALL_DEPT: ! r:
-02842 ! Calculate all deduct for federal for all departments
+02842   ! Calculate all deduct for federal for all departments
 02850   tgp=t3=ded=0
-03020 L3020: ! 
+03020   L3020: ! 
 03022   for j=1 to 20
 03024     if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing inp(17) SKIP IT do not process it.   ! env$('client')='West Accounting' or 
-03030     if newdedfed(j)>=1 and newdedcode(j)=1 then 
+03030     if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then 
 03032       gosub SUBROUTINE6
 03034     else 
 03036       goto L3060
@@ -420,27 +425,27 @@
 03054     else 
 03056       ded=ded+inp(j+9)*gpd/100
 03058     end if 
-03060 L3060: ! 
+03060     L3060: ! 
 03062     if newdedfed(j)><2 then goto L3090
 03078     if newcalcode(j)=1 then 
 03080       t3=t3+inp(j+9)
 03082     else 
 03084       t3=t3+inp(j+9)*gpd/100
 03086     end if 
-03090 L3090: ! 
+03090     L3090: ! 
 03092   next j
 03110   tgp=tgp+gpd
 03130   read #h_rpwork,using F_RPWORK: newx$,newdep,mat inp,gpd,mat hr eof L3150
 03132   if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP ! env$('client')='West Accounting' or 
-03133 ! pr 'A right after read rpwork inp(6)=';inp(6) : pause
+03133   ! pr 'A right after read rpwork inp(6)=';inp(6) : pause
 03140   if newx$=x$ then goto L3020
-03150 L3150: ! 
+03150   L3150: ! 
 03152   workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
 03160   restore #h_rpwork,key>=workkey$: 
 03170   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
 03172   if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or 
-03174 ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
-03180   return  ! /r
+03174   ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
+03180 return  ! /r
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY
 03202   tf0=tgp-t3
 03210   if ficatfy>=ssmax then 
@@ -454,7 +459,7 @@
 03228   end if 
 03230   sswh=tf0*ficar1
 03234   sswg=tf0
-03238   goto FICAEND ! UNDER MAX /r
+03238 goto FICAEND ! UNDER MAX /r
 03240 L3240: ! r: MEDICARE-TAX ONLY??
 03242   ! if env$('client')="Washington Parrish" then ! MEDICARE-TAX ONLY  (add deferred comp match to medicare wages)
 03244   !   tf0=tgp-t3+totaldef
@@ -592,7 +597,7 @@
 16200   dim ytdTotal(32)
 16240   dim x$*8,em(16),hr(2),n$*8,in2$(4),stuc(10)
 16260   dim dedcode(10),calcode(10),dedfed(10),d1$*20,wcm(4) ,newx$*8
-16280   dim newdedcode(20),newcalcode(20),newdedfed(20),newdedcode(20)
+16280   dim newdedcode(20),newcalcode(20),newdedfed(20)
 16300   dim dedfica(20),dedst(20),deduc(20)
 16320   dim ml$(1)*256
 16380   ! fn_setupFederalTables(2017,mat ft,fed_annual_wh_allowance)
@@ -616,6 +621,11 @@
 17240   !   saif(3)=80
 17260   !   saif(4)=40
 17280   ! end if 
+
+17282 newdedcode_Deduct =1
+17283 newdedcode_Add    =2
+17284 newdedcode_Benefit=3
+
 17300 fnend 
 20000 def fn_setupOpenFiles
 20020   open #breakdown=fngethandle: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
