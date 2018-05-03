@@ -16,6 +16,9 @@
 00080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 00082   fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 00090 ! 
+00092 newdedcode_Deduct =1
+00093 newdedcode_Add    =2
+00094 newdedcode_Benefit=3
 00120   open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr L240
 00130   read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 00140   close #12: ioerr ignore
@@ -100,14 +103,14 @@
 52520 ! oi=tcp(28)+tcp(29)+tcp(30)+tcp(27)
 52540   other_wh=-tcp(25)
 52560   for j=5 to 24
-52580     if newdedcode(j-4)=3 then goto L810
-52600     if newdedcode(j-4)=2 then 
-52602       other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
-52604     else 
-52606       other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
-52608     end if 
-52620 L810: ! 
-52640   next j
+52570     if newdedcode(j-4)=newdedcode_Benefit then 
+52572       ! do nothing
+52574     else if newdedcode(j-4)=newdedcode_Add then 
+52576       other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
+52578     else if newdedcode(j-4)=newdedcode_Deduct then
+52580       other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
+52582     end if 
+52600   next j
 52642   if include_tips_in_other_wh then ! include tips in Other Withholdings added for West Accounting on 1/18/2016
 52650     other_wh+=tcp(30) ! if break_is_on and tcp(30)<>0 then pr 'tcp('&str$(30)&') TIPS    adds '&str$(tcp(30))
 52652   end if 
@@ -119,7 +122,7 @@
 52760   if holdrealckno=0 then ckn2=ckno : ckno+=1 else ckn2=holdrealckno
 52780   if uprc$(dd$)="Y" then goto L915
 52800   pr #255,using L900: ckn2,eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(32) pageoflow PGOF
-52820 L900: form pos 1,n 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
+52820   L900: form pos 1,n 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
 52840   goto L940
 52860 L915: if tcp(22)=0 then tcp(22)=tcp(32)
 52880   pr #255,using L930: "DD",eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(22) pageoflow PGOF

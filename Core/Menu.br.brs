@@ -870,8 +870,6 @@ def fn_display_menu
       fn_dm_add(' Release Notes','Notepad: C:\ACS\Dev-5\Core\Release_Notes.txt')
       fn_dm_add(' Increase Build Version','C:\ACS\Util\Build Update.cmd')
       fn_dm_add(' Refresh N++ Function CallTips','S:\Dev\Notepad++ CallTip Refresh.br')
-      ! fn_dm_add(' -')
-      ! fn_dm_add(' &ScreenIO Test - MeterAddressSelect','fnFM(MeterAddressSelect)')
       fn_dm_add(' -')
       fn_dm_add(' Client','S:\Core\Client.br')
       fn_dm_add(' Registry')
