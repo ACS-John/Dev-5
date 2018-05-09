@@ -16,8 +16,8 @@ def library fnprogram_properties(; forceProgramCaption$*256)
     setenv('Program_Caption',forceProgramCaption$)
   end if
   fnBackgroundDisable(1)
-  fnfm('Properties')
-	! fn_localPropertiesEdit
+  ! fnfm('Properties')
+	fn_localPropertiesEdit
   if forceProgramCaption$<>'' then
     setenv('Program_Caption',oldCap$)
   end if
@@ -29,27 +29,30 @@ def fn_localPropertiesEdit
 	orient$(1)='Portrait'
 	orient$(2)='Landscape'
 	respc=0
-	fnread_program_print_property('Orientation' ,s$(sio_cmbOrientation :=respc+=1))
-	fnread_program_print_property('Height'      ,s$(sio_txtHeight      :=respc+=1))
-	fnread_program_print_property('Width'       ,s$(sio_txtWidth       :=respc+=1))
-	fnread_program_print_property('Lines'       ,s$(sio_txtLpp         :=respc+=1))
-	fnread_program_print_property('FontSize'    ,s$(sio_txtFontSize    :=respc+=1))
-	fnread_program_print_property('TopMargin'   ,s$(sio_txtMarginTop   :=respc+=1))
-	fnread_program_print_property('BottomMargin',s$(sio_txtMarginBottom:=respc+=1))
-	fnread_program_print_property('LeftMargin'  ,s$(sio_txtMarginLeft  :=respc+=1))
-	fnread_program_print_property('RightMargin' ,s$(sio_txtMarginRight :=respc+=1))
+	fn_readProgramPrintProperty('Orientation' ,resp$(sio_cmbOrientation :=respc+=1))
+	fn_readProgramPrintProperty('Height'      ,resp$(sio_txtHeight      :=respc+=1))
+	fn_readProgramPrintProperty('Width'       ,resp$(sio_txtWidth       :=respc+=1))
+	fn_readProgramPrintProperty('Lines'       ,resp$(sio_txtLpp         :=respc+=1))
+	fn_readProgramPrintProperty('FontSize'    ,resp$(sio_txtFontSize    :=respc+=1))
+	fn_readProgramPrintProperty('TopMargin'   ,resp$(sio_txtMarginTop   :=respc+=1))
+	fn_readProgramPrintProperty('BottomMargin',resp$(sio_txtMarginBottom:=respc+=1))
+	fn_readProgramPrintProperty('LeftMargin'  ,resp$(sio_txtMarginLeft  :=respc+=1))
+	fn_readProgramPrintProperty('RightMargin' ,resp$(sio_txtMarginRight :=respc+=1))
 	fntos(sn$:='properties')
-
-	fnlbl(1,1,'Orientation:'      ,20,1) : fncomboa('orientation',lc,33,mat orient$)
-	fnlbl(1,1,'Height:'           ,20,1) : fntxt(lc,33,10,0,0,'')
-	fnlbl(1,1,'Width:'            ,20,1) : fntxt(lc,33,10,0,0,'')
-	fnlbl(1,1,'Lines Per Page:'   ,20,1) : fntxt(lc,33,10,0,0,'',0,'How many lines print before a page break is sent.')
-	fnlbl(1,1,'Font Size:'        ,20,1) : fntxt(lc,33,10,0,0,'',0,'Base font size for printed report')
-	fnlbl(1,1,'Top Margin:'       ,20,1) : fntxt(lc,33,10,0,0,'')
-	fnlbl(1,1,'Bottom Margin:'    ,20,1) : fntxt(lc,33,10,0,0,'')
-	fnlbl(1,1,'Left Margin:'      ,20,1) : fntxt(lc,33,10,0,0,'')
-	fnlbl(1,1,'Right Margin:'     ,20,1) : fntxt(lc,33,10,0,0,'')
-	fncmdset(1)
+	lc=0
+	fnlbl(lc+=1,1,'Orientation:'      ,18,1) : fncomboa('orientation',lc,33,mat orient$)
+	lc+=1
+	fnlbl(lc+=1,1,'Height:'           ,18,1) : fntxt(lc,33,10,0,0,'')
+	fnlbl(lc+=1,1,'Width:'            ,18,1) : fntxt(lc,33,10,0,0,'')
+	lc+=1
+	fnlbl(lc+=1,1,'Lines Per Page:'   ,18,1) : fntxt(lc,33,10,0,0,'',0,'How many lines print before a page break is sent.')
+	fnlbl(lc+=1,1,'Font Size:'        ,18,1) : fntxt(lc,33,10,0,0,'',0,'Base font size for printed report')
+	lc+=1
+	fnlbl(lc+=1,1,'Top Margin:'       ,18,1) : fntxt(lc,33,10,0,0,'')
+	fnlbl(lc+=1,1,'Bottom Margin:'    ,18,1) : fntxt(lc,33,10,0,0,'')
+	fnlbl(lc+=1,1,'Left Margin:'      ,18,1) : fntxt(lc,33,10,0,0,'')
+	fnlbl(lc+=1,1,'Right Margin:'     ,18,1) : fntxt(lc,33,10,0,0,'')
+	fncmdset(2)
 	fnacs(sn$,0,mat resp$,ckey, 0,0,0,1)
 	if ckey<>5 then
 		! r: if Landscape/Portrait, than switch height and width if necessary
@@ -83,12 +86,14 @@ def fn_localPropertiesEdit
 fnend
 include: ertn
 def library fnpglen(&pglen)
-  library 'S:\Core\Library': fnread_program_print_property
-  fnread_program_print_property('Lines',lpp$) : pglen=val(lpp$)
+  fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
   fnpglen=pglen
 fnend
 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
   if ~setup then let fn_setup
+	fnread_program_print_property=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
+fnend
+def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
   on error goto ERTN
   dim prg$*256
   if prgCapForSettingsOverride$='' then

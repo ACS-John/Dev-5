@@ -27,11 +27,13 @@
 20180 XIT: fnxit
 20200 ! /r
 25000   def fn_setup
-25020     setup=1
-25040     library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle,fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
-25042     library 'S:\Core\Library': fnFree
-25050     on error goto ERTN
-25060   fnend
+25010     setup=1
+25020     library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle
+25030     library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
+25040     library 'S:\Core\Library': fnFree
+25050     library 'S:\Core\Library': fnSrepEnv$
+25060     on error goto ERTN
+25900   fnend
 26000 IGNORE: continue
 26020 ! <updateable region: ertn>
 26040 ERTN: fnerror(program$,err,line,act$,"xit")
@@ -308,6 +310,7 @@
 80160       forms$(1)='C 512'
 80180       pr f status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
 80200     end if
+80210     text$=fnSrepEnv$(text$)
 80220     if env$('ACSDeveloper')<>'' then
 80240       pr f status_gridspec$&",+": text$(1:512)
 80260     else

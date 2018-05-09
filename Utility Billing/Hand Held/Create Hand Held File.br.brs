@@ -397,7 +397,7 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
       fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
       fn_record_addc(19,'Endpoint_Type') ! meter type - read type
       fn_record_addc(13,'Read_Sequence') ! sequence
-      fn_record_addc(14,'High_Read_Limit')
+      fn_record_addc(15,'High_Read_Limit')
       fn_record_addc(14,'Low_Read_Limit') 
       fn_record_write(h_out)
     end if ! /r
@@ -426,7 +426,7 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
     fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
     fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
     fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
-    fn_record_addn(14,fn_unusualUsage('high',account$,srvCode$, 1))
+    fn_record_addn(15,fn_unusualUsage('high',account$,srvCode$, 1))
     fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1)) 
     !
     fn_record_write(h_out)
