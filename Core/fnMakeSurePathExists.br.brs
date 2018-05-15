@@ -1,39 +1,46 @@
-14000 !  ! r: testing zone
-14020 !  library program$: fnMakeSurepathExists
-14040 !  fnMakeSurepathExists('[Q]\INI\Core\PrtFlex')
-14060 !  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5')
-14080 !  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\')
-14100 !  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\acs.ini')
-14120 !  end
-14140 !  ! /r
-24000 ! from fileio.brs - md/mkdir function fileio version is not a library 2/7/2017 except this version is a library and quote encapsulates the path$ it is making
-24020 ! 8/24/2017 - more modifications to better work with UNC paths
-26000 def library fnMakeSurepathExists(fileName$*255; path$*255)
-26020   library 'S:\Core\Library': fnSrepEnv$
-26040   fileName$=fnSrepEnv$(fileName$)
-26060   path$    =fnSrepEnv$(path$)
-26080   do while pos(fileName$,"\")
-26100     path$=path$&fileName$(1:pos(fileName$,"\"))
-26120     fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
-26140     doNotTryThisOne=0
-26160     ! r: do not try entries like  [@:]\\  nor  [@:]\\server\  nor  [@:]\\server\resource\
-26180     if path$(1:2)='\\' or path$(1:3)=':\\' or path$(1:4)='@:\\' or path$(1:5)='@::\\' then 
-26200       if fn_backslashCount(path$)<=4 then doNotTryThisOne=1
-26220     end if
-26240     ! /r
-26260     if ~exists(path$) and doNotTryThisOne=0 then 
-26270       path$=rtrm$(path$',\')
-26280       execute 'mkdir "'&path$&'"'
-26300     end if
-26320   loop
-26340 fnend
-32000 def fn_backslashCount(bscText$*128)
-32020   bscCount=0
-32040   do 
-32060     bscPos=pos(bscText$,'\')
-32080     if bscPos>0 then bscCount+=1
-32100     bscText$(bscPos:bscPos)=''
-32120   loop while bscPos>0
-32140   fn_backslashCount=bscCount
-32160 fnend
+!  ! r: testing zone
+!  library program$: fnMakeSurepathExists
+!  fnMakeSurepathExists('[Q]\INI\Core\PrtFlex')
+!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5')
+!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\')
+!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\acs.ini')
+!  end
+!  ! /r
+! from fileio.brs - md/mkdir function fileio version is not a library 2/7/2017 except this version is a library and quote encapsulates the path$ it is making
+! 8/24/2017 - more modifications to better work with UNC paths
+def library fnMakeSurepathExists(fileName$*255; path$*255)
+  library 'S:\Core\Library': fnSrepEnv$
+	! if env$('acsDeveloper')<>'' and fileName$='[Q]\Data\' then
+	! 	pr 'call to fnMakeSurepathExists("'&fileName$&'"; "'&path$&'")'
+	! 	debug=1
+	! 	pause
+	! else
+	! 	debug=0
+	! end if
+  fileName$=fnSrepEnv$(fileName$)
+  path$    =fnSrepEnv$(path$)
+  do while pos(fileName$,"\")
+    path$=path$&fileName$(1:pos(fileName$,"\"))
+    fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
+    doNotTryThisOne=0
+    ! r: do not try entries like  [@:]\\  nor  [@:]\\server\  nor  [@:]\\server\resource\
+    if path$(1:2)='\\' or path$(1:3)=':\\' or path$(1:4)='@:\\' or path$(1:5)='@::\\' then 
+      if fn_backslashCount(path$)<=4 then doNotTryThisOne=1
+    end if
+    ! /r
+    if ~exists(path$) and doNotTryThisOne=0 then 
+			! if debug then pr 'about to MKDIR '&rtrm$(path$,'\') : pause
+      execute 'mkdir "'&rtrm$(path$,'\')&'"'
+    end if
+  loop
+fnend
+def fn_backslashCount(bscText$*128)
+  bscCount=0
+  do 
+    bscPos=pos(bscText$,'\')
+    if bscPos>0 then bscCount+=1
+    bscText$(bscPos:bscPos)=''
+  loop while bscPos>0
+  fn_backslashCount=bscCount
+fnend
 
