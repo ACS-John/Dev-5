@@ -1,10 +1,10 @@
 ! Replace S:\acsCL\TransactionHamster
 ! Checkbook Transaction File
 ! ______________________________________________________________________
-  library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
+  library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
   on error goto ERTN
 ! ______________________________________________________________________
-  dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*40
+  dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*256
 ! ______________________________________________________________________
   fntop(program$,cap$='Transaction (Hamster)')
   gosub BUILD_LAYOUT
@@ -22,7 +22,6 @@ OPEN_FILE: !
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 ! ______________________________________________________________________
 BUILD_LAYOUT: ! 
-  fncno(cno)
   lbl$(1)="Bank" 
   lbl$(2)="Transaction Code" 
   lbl$(3)="Check/Reference Number" 
@@ -135,12 +134,4 @@ BUILD_LAYOUT: !
   return 
 ! ______________________________________________________________________
 XIT: fnxit
-! ______________________________________________________________________
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-  execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
-! ______________________________________________________________________
+include: ertn
