@@ -117,7 +117,11 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		!   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
 		!  end if
 		dim workingDir$*512
-		workingDir$=env$('LocalAppData')&'\ACS'
+		if env$('br_model')='CLIENT/SERVER' then
+			workingDir$=env$('client_LocalAppData')&'\ACS'
+		else
+			workingDir$=env$('LocalAppData')&'\ACS'
+		end if
 		if workingDir$(2:2)=':' then
 			fnmakesurepathexists(workingDir$&'\')
 			execute 'CD '&workingDir$(1:2)
