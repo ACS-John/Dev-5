@@ -118,7 +118,7 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		!  end if
 		dim workingDir$*512
 		if env$('br_model')='CLIENT/SERVER' then
-			workingDir$=env$('client_LocalAppData')&'\ACS'
+			workingDir$=env$('temp')
 		else
 			workingDir$=env$('LocalAppData')&'\ACS'
 		end if

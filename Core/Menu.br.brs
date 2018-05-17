@@ -45,7 +45,7 @@ def fn_setup
     library 'S:\Core\Library': fncheckfileversion
     library 'S:\Core\Library': fnreport_cache_folder_current$
     library 'S:\Core\Library': fnAddOneC
-    library 'S:\Core\Library': fnFM
+    ! library 'S:\Core\Library': fnFM
     library 'S:\Core\Library': fnHamsterFio,fnEditFile
     library 'S:\Core\Library': fnxit
     library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
@@ -318,8 +318,8 @@ def fn_main
         fn_callEditInWordProcessor(menu_option$)
       else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
         fn_callHamsterFio(menu_option$)
-      else if menu_option$(1:5)='fnFM(' then
-        fnFM(menu_option$(6:len(menu_option$)-1))
+      ! else if menu_option$(1:5)='fnFM(' then
+      !   fnFM(menu_option$(6:len(menu_option$)-1))
       else if menu_option$(1:14)='fnPrintAceTest' then
         fnPrintAceTest(menu_option$(16:len(menu_option$)-1))
       else if menu_option$='Index Company' then
