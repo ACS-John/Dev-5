@@ -1,7 +1,7 @@
 def fn_setup
   setup=1
   ! library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncomboa,fnFra,fntab,fnCmdKey,fnTos
-  library 'S:\Core\Library': fnfm
+  ! library 'S:\Core\Library': fnfm
   library 'S:\Core\Library': fnerror,fnBackgroundDisable
   library 'S:\Core\Library': fnsreg_read,fnsreg_write
   library 'S:\Core\Library': fnreg_write,fnreg_read
