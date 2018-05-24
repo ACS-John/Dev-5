@@ -678,7 +678,7 @@ def library fnub_printbill_program$*256
 !   fn_upp_add("Franklinton","ubprtbl1_Franklinton")
     fn_upp_add('French Settlement','(basic)') ! 'printbill_french_settlement_gas'
     fn_upp_add("Grandview","ubprtbl1_gra")
-!   fn_upp_add("GreenCo","ubprtbl1_greenco")
+    fn_upp_add("GreenCo",'(basic)') ! "ubprtbl1_greenco"
     fn_upp_add("Kincaid","ubprtbl1_kin")
     ! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
     ! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")

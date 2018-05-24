@@ -125,7 +125,7 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		if workingDir$(2:2)=':' then
 			fnmakesurepathexists(workingDir$&'\')
 			execute 'CD '&workingDir$(1:2)
-			execute 'CD '&workingDir$(3:len(workingDir$))
+			execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
 			! fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
 			! fnCopy('S:\sio.lic','sio.lic')
 			fn_CopySfileIoIniToFileIoIni

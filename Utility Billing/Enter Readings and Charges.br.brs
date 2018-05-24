@@ -364,10 +364,10 @@ def fn_printReadings_Heading(;altHeading$*40)
 	pr #255,using 'Form Pos 20,Cc 40': cnvrt$("pic(zz/zz/zz",d2)
 	pr #255,using 'Form POS 1,C 220': reporth$
 fnend
-PrintReadings_PgOf: !
+PrintReadings_PgOf: ! r:
 	pr #255: newpage
 	fn_printReadings_Heading( printReadings_altHeading$)
-continue
+continue ! /r
 MAKE_CORRECTIONS: ! r:
 	read #hWork,using F_WORK,key=x$: x$,mat x nokey MENU1
 	t(1)-=1 ! SUBTRACT PROOF TOTALS
@@ -396,7 +396,7 @@ CHANGE_ACT_NUM: ! r:
 	read #hCustomer1,using "Form POS 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
 	goto REWRITE_WORK ! /r
 def fn_lo_pr_rec(x$,mat x)
-	pr #255,using "form pos 1,c 10,x 2,4*pic(zzzzzzzzzz)": x$,x(1),x(2),x(3),x(4)
+	pr #255,using "form pos 1,c 10,x 2,4*pic(----------)": x$,x(1),x(2),x(3),x(4)
 fnend  ! fn_lo_pr_rec
 def fn_accumulateprooftotals
 	t(1)+=1
@@ -1480,10 +1480,10 @@ ENTER_READING: ! r:
 	if srvnam$(3)="Electric" then
 		fnLbl(lc,mypos4,"Demand",10,2,0,fraro)
 	end if
-	! r: Service 1
+	! r: Service 1 - Water
 	tmpService=1
 	first_read_rc=rc
-	if a(1)=0 and a(2)=0 then disa=1 else disa=0 ! water and sewer rate codes
+	if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water and sewer rate codes
 	if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 	! water
 	if service_enabled(tmpService) then
@@ -1552,7 +1552,7 @@ ENTER_READING: ! r:
 			resp$(rc+=1)=""
 		end if
 	else if service_type(tmpService)=3.2 then
-		if a(1)=0 and a(2)=0 then disa=1 else disa=0 ! water rate code
+		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water rate code
 		if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
 		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
