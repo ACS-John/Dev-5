@@ -52,7 +52,7 @@ fnend
 def fn_populateLocationNonSeq
   dim cus$(0)*256,cusN(0)
   hCustomer=fn_open('UB Customer',mat cus$,mat cusN,mat form$)
-  hLocation4=(hLocation=fn_open(table$,mat location$,mat locationN,mat form$, 0,1)+3) ! activeCustomer/serviceId
+  hLocation=fn_open(table$,mat location$,mat locationN,mat form$, 0,1)
   do
     read #hCustomer,using form$(hCustomer): mat cus$,mat cusN eof PlnsEoCustomer
     fnapplyDefaultRatesFio(mat cusN)
@@ -107,7 +107,7 @@ def fn_InitialializeMeterLocation
   fncreg_read('u4 meter location account numbers left justified',umlCustomerLeftJustified$,'False')
   if ~imlCreateNew and umlCustomerLeftJustified$='False' or umlCleanZeroLocationId$='True' then
     do
-      read #hLocation,using form$(hLocation): mat location$,mat locationN eof LjEoLocation
+      read #hLocation,using form$(hLocation),release: mat location$,mat locationN eof LjEoLocation
       if umlCustomerLeftJustified$='False' then
         location$(loc_activeCustomer)=trim$(location$(loc_activeCustomer))
       end if

@@ -598,16 +598,6 @@ def library fnCustomer(x)
 			extra(22)=2 : goto NAMESCREEN
 		else if ckey=51 then 
 			extra(22)=1 : goto NAMESCREEN
-		else if ckey=fkey_meterAddress then ! if ckey=54
-			dim meterAddressBeforeSelect$*30
-			meterAddressBeforeSelect$=e$(1)
-			e$(1)=fnfm$('MeterAddressSelect',cnvrt$('N 11',fnMeterAddressLocationID(e$(1))),9,27)
-			if e$(1)='' then 
-				e$(1)=meterAddressBeforeSelect$
-			else
-				e$(1)=fnMeterAddressName$(val(e$(1)))
-			end if
-			goto NAMESCREEN
 		end if 
 	! /r (namescreen)
 	BILLING_INFO: ! r:
@@ -1481,7 +1471,6 @@ def fn_setup
 		library 'S:\Core\Library': fnkey_change
 		library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
 		library 'S:\Core\Library': fnGetServiceCodesMetered
-		library 'S:\Core\Library': fnfm$
 		library 'S:\Core\Library': fnMeterAddressName$
 		library 'S:\Core\Library': fnAccountFromLocationId$
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
