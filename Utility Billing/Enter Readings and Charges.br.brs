@@ -306,6 +306,7 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 	fn_printReadings_Heading( printReadings_altHeading$)
 	restore #hWork: ! ,search>="": nokey PR_TOTALS    <-- needs to work with or without an index
 	do
+		
 		read #hWork,using F_WORK: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
 		e1$=e2$=""
@@ -535,7 +536,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	device$=fnhand_held_device$
 	if device$="Psion Workabout" then
 		goto HH_WORKABOUT
-	else if device$="Badger" then
+	else if device$="Badger" or device$="Badger Connect C" then
 		goto HH_BADGER
 	else if device$="Boson" then
 		goto HH_BOSON
@@ -576,13 +577,15 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
 	if listonly=1 then let fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=256",display,input
-	HH_BADGER_READ: linput #h_readings: ln$ eof HH_W_END
+	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
+	HH_BADGER_READ: !
+	linput #h_readings: ln$ eof HH_W_END
+	! pr ln$ : pause
 	if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BADGER_READ
 	mat x=(0)
 	x$=lpad$(rtrm$(ln$(121:130)),10) conv HH_BADGER_READ ! Account Key
-	ti1=1: ti1=val(ln$(64:64)) conv HH_BADGER_READ
-	x(ti1)=val(ln$(96:104)) conv HH_BADGER_READ
+	ti1=1: ti1=val(ln$(64:64))       conv HH_BADGER_READ
+	x(ti1)=val(ln$(96:104))          conv HH_BADGER_READ
 	! if env$('client')="Moweaqua" Then x(TI1)=X(TI1)
 	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
@@ -690,7 +693,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	fn_accumulateprooftotals
 	fn_rmk1
 	HH_W_NXT: !
-	if device$="Badger" then
+	if device$="Badger" or device$="Badger Connect C" then
 		goto HH_BADGER_READ
 	else if device$="Boson" then
 		goto HH_BOSON_READ

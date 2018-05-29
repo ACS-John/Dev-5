@@ -72,9 +72,9 @@ def library fnRetrieveHandHeldFile
       fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
       resp$(rc_Device:=respc+=1)=deviceSelected$
     else
-      fnLbl(lc,32,deviceSelected$)
+      fnLbl(lc,32,devicePreference$)
     end if
-      lc+=1
+    lc+=1
     if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
       lc+=1
       fnLbl(lc+=1,1,"Source File:",30,1)
