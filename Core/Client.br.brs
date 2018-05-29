@@ -461,7 +461,7 @@ def fn_getClientLicense(mat client_has$)
     else if env$('client')='Moweaqua' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-      fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
+      fn_add_ch_sys('U4') : u4_device$="Badger Connect C" ! U4 Utility Billing Hand Held Add-On
     else if env$('client')='Pennington' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -482,7 +482,7 @@ def fn_getClientLicense(mat client_has$)
     else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-      fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
+      fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
     else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
       fn_user_limit(1)
       fn_add_ch_sys('PR')
@@ -493,7 +493,7 @@ def fn_getClientLicense(mat client_has$)
       fn_user_limit(2)
       fn_add_ch_sys('PR')
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-      fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
+      fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
     else if env$('client')='R R Crawford' then 
       fn_user_limit(1)
       fn_add_ch_sys('PR')
@@ -507,11 +507,11 @@ def fn_getClientLicense(mat client_has$)
     else if env$('client')='Thayer' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-      fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
+      fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
     else if env$('client')='Thomasboro' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-      fn_add_ch_sys('U4') : u4_device$="Badger Connect C'" ! U4 Utility Billing Hand Held Add-On
+      fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
       fn_add_ch_sys('GL')
       fn_add_ch_sys('PR')
       fn_add_ch_sys('CL')

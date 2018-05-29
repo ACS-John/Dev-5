@@ -591,7 +591,7 @@ def fn_openOutFile ! open work areas based on type of Hand Held
   if deviceSelected$='Itron FC300' then
     fn_itron_open ! default
   else
-    h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                        80)
+    h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                        80)
     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                    80)
     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                            256)
     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3",                                            256)

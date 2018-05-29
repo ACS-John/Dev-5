@@ -1072,6 +1072,10 @@ fnend
 		library 'S:\Utility Billing\Type of Service.br': fnget_services
 		fnget_services=fnget_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 	fnend
+	def library fnservice_other
+		library 'S:\Utility Billing\Type of Service.br': fnservice_other
+		fnservice_other=fnservice_other
+	fnend
 	def library fnGetServiceCodesMetered(mat serviceCodeMetered$)
 		library 'S:\Utility Billing\Type of Service.br': fnGetServiceCodesMetered
 		fnGetServiceCodesMetered=fnGetServiceCodesMetered(mat serviceCodeMetered$)

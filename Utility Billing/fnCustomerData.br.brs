@@ -86,6 +86,8 @@ def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
 		if cusN(c_demandMultiplier)<>0 then customerDataReturn$=str$(cusN(c_demandMultiplier))
 	else if fieldName$='demand reading' then
 		if cusN(c_demandReading)<>0 then customerDataReturn$=str$(cusN(c_demandReading))
+	else if fieldName$='balance' then
+		if cusN(c_balance)<>0 then customerDataReturn$=str$(cusN(c_balance))
 	else 
 		pr 'fn_customerData$ does not recognize the field: '&fieldName$
 		pause

@@ -5,8 +5,7 @@ recl=102
 ===================================================
 acct$    ,  Customer Number         , C     10    , !  SPos=1
 tdate    ,  Date                    , N     8     , !  SPos=11  CCYYMMDD
-tcode    ,  Transaction Code        , N     1     , !  SPos=19
-!       1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo
+tcode    ,  Transaction Code        , N     1     , !  SPos=19  1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo
 tamount  ,  Amount                  , PD    4.2   , !  SPos=20
 tg_1     ,  Service 1 Amount        , PD    4.2   , !  SPos=24
 tg_2     ,  Service 2 Amount        , PD    4.2   , !  SPos=28
