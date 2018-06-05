@@ -6,7 +6,7 @@ File
 >Transactions                                         ^ Utility Billing\Transactions
 Billing                                               
 >Enter Readings and Charges                           ^ Utility Billing\Enter Readings and Charges
-! >Add An Other Charge                                  ^ Utility Billing\Add An Other Charge
+>Add An Other Charge                                  ^ Utility Billing\Add An Other Charge
 >Print Reports                                        
 >>Unbilled Customer Listing                           ^ Utility Billing\Unbilled Customer Listing
 >>Billing Journal                                     ^ Utility Billing\Billing Journal
