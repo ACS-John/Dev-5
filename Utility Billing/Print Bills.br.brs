@@ -916,10 +916,10 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt(trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_from)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_to)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
-	pr #20: 'Call Print.AddText("Due upon receipt",'&str$(xmargin+2)&','&str$(lyne*8+ymargin)&')'
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_from)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_to),xmargin+2,lyne*7+ymargin)
+	fnpa_txt("Due upon receipt",xmargin+2,lyne*8+ymargin)
 	fnpa_txt(e$(2),xmargin+2,lyne*9+ymargin)
-	pr #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(xmargin+2)&','&str$(lyne*11+ymargin)&')'
+	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
 	fnpa_fontsize(7)
 	pr #20: 'Call Print.AddText("Current",'&str$(xmargin+12+5)&','&str$(lyne*13+ymargin)&')'
@@ -1933,79 +1933,84 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final
 fnend
 def fn_print_bill_greenCo
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
-	lyne=3
+	if ~setup_greenco then
+		setup_greenco=1
+		lyne=3
+	end if
 	let checkcounter+=1
-	if checkcounter=1 then let xmargin=0 : let ymargin=0
-	if checkcounter=2 then let xmargin=139 : let ymargin=0
-	if checkcounter=3 then let xmargin=0 : let ymargin=104
-	if checkcounter=4 then let xmargin=139 : let ymargin=104 : checkcounter=0
+	if checkcounter=1 then xmargin=  0 : ymargin=  0
+	if checkcounter=2 then xmargin=139 : ymargin=  0
+	if checkcounter=3 then xmargin=  0 : ymargin=110                   ! 104
+	if checkcounter=4 then xmargin=139 : ymargin=110  : checkcounter=0 ! 104
 
 	fnpa_font("Lucida Console")
 	fnpa_fontsize(9)
 	fnpa_fontbold
-	print #20: 'Call Print.AddText("'&z$&'",'&str$(xmargin+50)&','&str$(lyne+6+ymargin)&')'
-	print #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+50)&','&str$(lyne+9.5+ymargin)&')'
+	fnpa_txt(z$,xmargin+50,lyne+6+ymargin)
+	fnpa_txt(e$(1),xmargin+50,lyne+9.5+ymargin)
 	meter=9 
 	fnpa_fontsize(10)
 	if g(1) then 
-		print #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+52)&','&str$(lyne*meter+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(d(2),0,9)&'",'&str$(xmargin+75)&','&str$(lyne*meter+ymargin)&')' 
-		print #20: 'Call Print.AddText("Water Charge",'&str$(xmargin+35)&','&str$(lyne*(meter+=1.6)+ymargin)&')'
-		print #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+75)&','&str$(lyne*meter+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
+		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(2),0,9),xmargin+75,lyne*meter+ymargin)
+		fnpa_txt("Water Charge",xmargin+35,lyne*(meter+=1.6)+ymargin)
+		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+75,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
 	if g(5)=0 then 
-		print #20: 'Call Print.AddText("Primacy Fee",'&str$(xmargin+35)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
+		fnpa_txt("Primacy Fee",xmargin+35,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
 	if g(8) then
-		print #20: 'Call Print.AddText("Other",'&str$(xmargin+35)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
+		fnpa_txt("Other",xmargin+35,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
 	if g(9) then
-		print #20: 'Call Print.AddText("Sales Tax",'&str$(xmargin+35)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
+		fnpa_txt("Sales Tax",xmargin+35,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
-	if pb><0 then 
-		print #20: 'Call Print.AddLine('&str$(xmargin+106)&','&str$(lyne*(meter+=1)+ymargin)&',15,0)'
-		print #20: 'Call Print.AddLine('&str$(xmargin+106)&','&str$(lyne*(meter)+ymargin)&',15,0)'
-		print #20: 'Call Print.AddText("Current Charges",'&str$(xmargin+40)&','&str$(lyne*(meter+=.25)+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(g(1)+g(5)+g(7)+g(8)+g(9),2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
-		print #20: 'Call Print.AddText("Prior Balance",'&str$(xmargin+35)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-		print #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+100)&','&str$(lyne*meter+ymargin)&')'
+	if pb then
+		fnpa_line(xmargin+106,lyne*(meter+=1)+ymargin,15)
+		fnpa_line(xmargin+106,lyne*(meter)+ymargin,15)
+		fnpa_txt("Current Charges",xmargin+40,lyne*(meter+=.25)+ymargin)
+		fnpa_txt(fnformnumb$(g(1)+g(5)+g(7)+g(8)+g(9),2,9),xmargin+100,lyne*meter+ymargin)
+		fnpa_txt("Prior Balance",xmargin+35,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(pb,2,9),xmargin+100,lyne*meter+ymargin)
 	end if
 	fnpa_fontsize(10)
-	if estimatedate=d1 then print #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
-	print #20: 'Call Print.AddText("'&z$&'",'&str$(xmargin+5)&','&str$(52+ymargin)&')'
-	print #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100)&','&str$(58+ymargin)&')'
-	print #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+5)&','&str$(66+ymargin)&')'
+	if estimatedate=d1 then 
+		fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+	end if
+	fnpa_txt(z$,xmargin+5,52+ymargin)
+	fnpa_txt(fnformnumb$(bal,2,9),xmargin+100,58+ymargin)
+	fnpa_txt(fnformnumb$(bal,2,9),xmargin+5,66+ymargin)
 	! If G(9)=0 AND G(10)=0 Then Let PENALTY=0: Goto 2520
 	! If BAL>14.99 Then Let PENALTY=ROUND(BAL*.10,2) Else Let PENALTY=0
 	fnpa_fontsize(9)
 	let addy=14
-	print #20: 'Call Print.AddText("'&mg$(1)&'",'&str$(xmargin+35)&','&str$(63+ymargin)&')'
-	print #20: 'Call Print.AddText("'&mg$(2)&'",'&str$(xmargin+35)&','&str$(66+ymargin)&')'
-	print #20: 'Call Print.AddText("'&mg$(3)&'",'&str$(xmargin+35)&','&str$(69+ymargin)&')'
+	fnpa_txt(mg$(1),xmargin+35,63+ymargin)
+	fnpa_txt(mg$(2),xmargin+35,66+ymargin)
+	fnpa_txt(mg$(3),xmargin+35,69+ymargin)
 	let addy+=1
 	fnpa_fontsize
 	if df$="Y" then 
-		print #20: 'Call Print.AddText("Drafted",'&str$(xmargin+1)&','&str$(71+ymargin)
+		fnpa_txt("Drafted",xmargin+1,71+ymargin)
 	end if
 	if final>0 then 
-		print #20: 'Call Print.AddText("Final Bill",'&str$(xmargin+1)&','&str$(71+ymargin)&')'
+		fnpa_txt("Final Bill",xmargin+1,71+ymargin)
 	end if
 	let addy+=10
 	if pe$(1)<>"" then 
-		print #20: 'Call Print.AddText("'&trim$(pe$(1))&'",'&str$(xmargin+60)&','&str$(lyne*(addy+=1)+ymargin)&')'
+		fnpa_txt(pe$(1),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
 	if pe$(2)<>"" then 
-		print #20: 'Call Print.AddText("'&trim$(pe$(2))&'",'&str$(xmargin+60)&','&str$(lyne*(addy+=1)+ymargin)&')'
+		fnpa_txt(pe$(2),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
 	if pe$(3)<>"" then 
-		print #20: 'Call Print.AddText("'&trim$(pe$(3))&'",'&str$(xmargin+60)&','&str$(lyne*(addy+=1)+ymargin)&')'
+		fnpa_txt(pe$(3),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
 	if pe$(4)<>"" then 
-		print #20: 'Call Print.AddText("'&trim$(pe$(4))&'",'&str$(xmargin+60)&','&str$(lyne*(addy+=1)+ymargin)&')'
+		fnpa_txt(pe$(4),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
 	if checkcounter=1 then let checkx=1.375 : let checky=3.6875
 	if checkcounter=2 then let checkx=6.75 : let checky=3.6875

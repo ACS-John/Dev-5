@@ -1173,7 +1173,7 @@ def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
   end if ! /r
   fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
   fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
-! fn_record_addc(9,,fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
+! fn_record_addc(9,,fn_meterInfo$fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
   fn_record_write(h_out)
