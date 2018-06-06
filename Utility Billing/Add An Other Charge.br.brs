@@ -1,5 +1,6 @@
 fn_setup
 fn_addAnOtherCharge
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -11,6 +12,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCloseFile
 		library 'S:\Core\Library': fnCustomerData$
 		library 'S:\Core\Library': fnNoteDir$
+		library 'S:\Core\Library': fnXit
 	end if
 fnend
 def library fnAddAnOtherCharge(;z$*10,hCustomer1)
@@ -18,13 +20,15 @@ def library fnAddAnOtherCharge(;z$*10,hCustomer1)
 	fnAddAnOtherCharge=fn_addAnOtherCharge( z$,hCustomer1)
 fnend
 def fn_addAnOtherCharge(; z$*10,hCustomer1)
-	if hCustomer1<>0 then
+	if ~hCustomer1 then
+		dim c$(0)*256,cN(0)
 		hCustomer1=fn_open('UB Customer',mat c$,mat cN,mat form$)
 		needToCloseHcustomer1=1
 	else
 		needToCloseHcustomer1=0
 	end if
 	service_other=fnservice_other
+	if service_other<1 or service_other>10 then pr 'service_other is unexpected.';bell : pause
 	dim resp$(20)*256
 	! fnask_account('AddAnOtherCharge',x$,hCustomer1)
 	SCR1:! 
@@ -39,9 +43,11 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey<>5 then
 		rc=0
-		z$   =resp$(rc+=1)
+		z$   =lpad$(trim$(resp$(rc+=1)(1:10)),10)
 		amt$ =resp$(rc+=1)
+		dim note$*256
 		note$=resp$(rc+=1)
+		pr 'z$="'&z$&'"' : pause
 		read #hCustomer1,using form$(hCustomer1),key=z$: mat c$,mat cN nokey CustomerNokey
 		amt=val(amt$)
 		if amt<=0 then 
@@ -51,15 +57,36 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 			mesg$(1)='Amount ('&str$(amt)&') is invalid.'
 			fnmsgbox(mat mesg$)
 			goto SCR1
-		else if z$='' then
 		end if
 		fn_addNote(z$,amt,note$)
 		cN(c_balance)-=amt
+		if service_other=1  then
+			cN(c_s01breakdown)-=amt
+		else if service_other=2  then
+			cN(c_s02breakdown)-=amt
+		else if service_other=3  then
+			cN(c_s03breakdown)-=amt
+		else if service_other=4  then
+			cN(c_s04breakdown)-=amt
+		else if service_other=5  then
+			cN(c_s05breakdown)-=amt
+		else if service_other=6  then
+			cN(c_s06breakdown)-=amt
+		else if service_other=7  then
+			cN(c_s07breakdown)-=amt
+		else if service_other=8  then
+			cN(c_s08breakdown)-=amt
+		else if service_other=9  then
+			cN(c_s09breakdown)-=amt
+		else if service_other=10 then
+			cN(c_s10breakdown)-=amt
+		end if
 		fn_addTransaction(z$,service_other,date('ccyymmdd'),amt,cN(c_balance))
-		rewrite #hCustomer1,key=z$: mat c$, mat cN
+		rewrite #hCustomer1,using form$(hCustomer1),key=z$: mat c$, mat cN
 	end if
 	if needToCloseHcustomer1 then
 		fnCloseFile(hCustomer1,'UB Customer')
+		hCustomer1=0
 		needToCloseHcustomer1=0
 	end if
 fnend
