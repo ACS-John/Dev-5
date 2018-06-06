@@ -132,6 +132,12 @@ PrintBill_Basic: !
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
 		enable_bulksort=1
+	else if env$('client')='GreenCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
+		message1_line_count=3
+		message2_line_count=0
+		message1_max_len=52
+		pa_enabled=1 ! PrintAce
+		pa_orientation$='Landscape'
 	else !  default settings:  Findlay, Edison
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
@@ -1945,7 +1951,7 @@ def fn_print_bill_greenCo
 
 	fnpa_font("Lucida Console")
 	fnpa_fontsize(9)
-	fnpa_fontbold
+	fnpa_fontbold(1)
 	fnpa_txt(z$,xmargin+50,lyne+6+ymargin)
 	fnpa_txt(e$(1),xmargin+50,lyne+9.5+ymargin)
 	meter=9 

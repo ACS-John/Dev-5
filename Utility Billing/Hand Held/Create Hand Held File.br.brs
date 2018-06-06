@@ -591,22 +591,22 @@ def fn_openOutFile ! open work areas based on type of Hand Held
   if deviceSelected$='Itron FC300' then
     fn_itron_open ! default
   else
-    h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                        80)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                    80)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                            256)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3",                                            256)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt",                                   204)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out",                                     200)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                          256)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT",                                   282,',eol=none')
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                                          578,',eol=none')
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256, ',eol=none')
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',                    256)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat",                                   128)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",br_filename$(env$('userprofile')&'\Desktop\Aclara Work Order.txt'),1048)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,br_filename$(env$('userprofile')&'\Desktop\ACS to Aclara.txt')    ,1048)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
+    h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT"                       ,  80)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT"                                   ,  80)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3"                            , 256)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3"                            , 256)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt"                           , 204)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out"                             , 200)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat"                          , 256)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT"                           , 282,',eol=none')
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat"                          , 578,',eol=none')
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('userprofile')&'\Desktop\Aclara Work Order.txt',1048)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('userprofile')&'\Desktop\ACS to Aclara.txt'    ,1048)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('userprofile')&'\Desktop\ACS Hand Held Out.txt',1048)
   end if
   workopen=1
 fnend
