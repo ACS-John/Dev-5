@@ -234,7 +234,9 @@ PrintOneRate: ! r:
 	pr #255: "__________    __________   _____________"
 	for j=1 to udim(option$)
 		if trim$(rt$(j*3+3))<>"" or trim$(rt$(j*3+4))<>"" or trim$(rt$(j*3+5))<>"" then 
-			pr #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
+			if trim$(rt$(j*3+3))<>"0" or trim$(rt$(j*3+4))<>"0" or trim$(rt$(j*3+5))<>"0" then 
+				pr #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
+			end if 
 		end if 
 	next j
 	pr #255: ""
