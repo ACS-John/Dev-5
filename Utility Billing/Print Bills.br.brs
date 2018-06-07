@@ -1946,8 +1946,8 @@ def fn_print_bill_greenCo
 	let checkcounter+=1
 	if checkcounter=1 then xmargin=  0 : ymargin=  0
 	if checkcounter=2 then xmargin=139 : ymargin=  0
-	if checkcounter=3 then xmargin=  0 : ymargin=110                   ! 104
-	if checkcounter=4 then xmargin=139 : ymargin=110  : checkcounter=0 ! 104
+	if checkcounter=3 then xmargin=  0 : ymargin=107                   ! 104
+	if checkcounter=4 then xmargin=139 : ymargin=107  : checkcounter=0 ! 104
 
 	fnpa_font("Lucida Console")
 	fnpa_fontsize(9)
@@ -1960,7 +1960,7 @@ def fn_print_bill_greenCo
 		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+52,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(2),0,9),xmargin+75,lyne*meter+ymargin)
 		fnpa_txt("Water Charge",xmargin+35,lyne*(meter+=1.6)+ymargin)
-		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+75,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+75,lyne*meter+ymargin) ! Water Used
 		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
 	if g(5)=0 then 

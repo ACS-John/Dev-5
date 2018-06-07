@@ -212,9 +212,9 @@ PrintProof: ! r:
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ckey) ! CALLS PROOF LIST
 	if ckey=5 then goto ScreenGrid
-	ti2=1 ! default to code sequence
-	if uprc$(resp$(1))=uprc$("True") then ti2=1: k$="    " ! code sequence
-	if uprc$(resp$(2))=uprc$("True") then ti2=2: k$=rpt$(chr$(0),25) ! name sequence
+	ti2=hRate1 ! default to code sequence
+	if uprc$(resp$(1))=uprc$("True") then ti2=hRate1: k$="    " ! code sequence
+	if uprc$(resp$(2))=uprc$("True") then ti2=hRate2: k$=rpt$(chr$(0),25) ! name sequence
 	restore #ti2,key>=k$: ! Nokey ScreenGrid
 	fnopenprn
 	pg=0
