@@ -13,7 +13,7 @@ Billing
 >>Usage Report                                        ^ Utility Billing\Usage Report
 >>Zero Usage Report                                   ^ Utility Billing\Zero Usage Report
 >>Per 1000 Usage                                      ^ Utility Billing\Per 1000 Usage
->>Consumption List                                    ^ acsUB\ConsumptionList
+>>Consumption List                                    ^ Utility Billing\Consumption List
 >Print Bills                                          ^ Utility Billing\Print Bills
 >Create Bank Draft File                               ^ Utility Billing\Create Bank Draft File
 Collections                                           ^ Utility Billing\Collections
@@ -78,7 +78,7 @@ Extras
 >>Print                                               
 >>>Budget Worksheet                                   ^ acsUB\BudRpt1
 >>>Budget Customer List                               ^ acsUB\ubBudLst
->>Remove Old Budget Transactions                      ^ acsUB\RmBudget
+>>Remove Old Budget Transactions                      ^ Utility Billing\Remove Old Budget Transactions
 >>Calculate Average Charges for Date Range            ^ acsUB\AvgChg
 >>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg
 >Error Recovery

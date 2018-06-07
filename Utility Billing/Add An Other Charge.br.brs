@@ -47,7 +47,7 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 		amt$ =resp$(rc+=1)
 		dim note$*256
 		note$=resp$(rc+=1)
-		pr 'z$="'&z$&'"' : pause
+		! pr 'z$="'&z$&'"' : pause
 		read #hCustomer1,using form$(hCustomer1),key=z$: mat c$,mat cN nokey CustomerNokey
 		amt=val(amt$)
 		if amt<=0 then 
@@ -136,6 +136,7 @@ def fn_addTransaction(z$,tCode,tDate,amt,newBalance)
 	tranN(trans_s4read )=0
 	tranN(trans_tbal   )=newBalance
 	tranN(trans_pcode  )=0
+	write #hTran,using form$(hTran): mat tran$, mat tranN
 	fnclosefile(hTran,'UB Transaction')
 fnend
 def fn_addNote(z$,amt,note$*256)
