@@ -70,7 +70,7 @@ PrintBill_Basic: !
 		enable_service_to=1
 		include_zero_bal=include_credit_bal=1
 	else if env$('client')='Merriam Woods' then ! completed 5/5/16
-		message1_line_count=1
+		message1_line_count=2
 		enable_service_from=1
 		enable_service_to=1
 		pa_enabled=1
@@ -1023,16 +1023,25 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 		pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
 	end if 
-	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
-	fnpa_fontsize(7)
-	pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+2.8)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+5.6)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+8.4)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+11.2)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+14)&',7,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+17)&',7,0)'
+	fnpa_line(xmargin+1,lyne*26+1+ymargin+10,63,0)
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
+	! fnpa_fontsize(7)
+	fnpa_line(xmargin+97,ymargin+0,29, lyne*5+2,1)
+	fnpa_line(xmargin+90,ymargin+0   , 7,0)
+	fnpa_line(xmargin+90,ymargin+2.8 , 7,0)
+	fnpa_line(xmargin+90,ymargin+5.6 , 7,0)
+	fnpa_line(xmargin+90,ymargin+8.4 , 7,0)
+	fnpa_line(xmargin+90,ymargin+11.2, 7,0)
+	fnpa_line(xmargin+90,ymargin+14  , 7,0)
+	fnpa_line(xmargin+90,ymargin+17  , 7,0)
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+2.8)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+5.6)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+8.4)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+11.2)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+14)&',7,0)'
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+17)&',7,0)'
 	fnpa_fontsize(9)
 	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68+addr_indent)&','&str$(lyne*7+ymargin)&')'
 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+addr_indent)&','&str$(lyne*8+ymargin)&')'
@@ -1047,8 +1056,9 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+addr_indent)&','&str$(lyne*12+ymargin)&')'
 	end if 
 	fnpa_fontsize(9)
-	addy=12
+	addy=11.5
 	fnpa_txt(mg$(1),xmargin+4,(addy+=1)*lyne+ymargin+30)
+	fnpa_txt(mg$(2),xmargin+4,(addy+=1)*lyne+ymargin+30)
 	addy+=1
 	fnpa_fontsize
 	if df$="Y" then 
@@ -1953,6 +1963,7 @@ def fn_print_bill_greenCo
 	fnpa_fontsize(9)
 	fnpa_fontbold(1)
 	fnpa_txt(z$,xmargin+50,lyne+6+ymargin)
+	fnpa_txt(cnvrt$('pic(##/##/##)',d1),xmargin+80,lyne+6+ymargin)
 	fnpa_txt(e$(1),xmargin+50,lyne+9.5+ymargin)
 	meter=9 
 	fnpa_fontsize(10)
@@ -1963,7 +1974,7 @@ def fn_print_bill_greenCo
 		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+75,lyne*meter+ymargin) ! Water Used
 		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
-	if g(5)=0 then 
+	if g(5) then 
 		fnpa_txt("Primacy Fee",xmargin+35,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+100,lyne*meter+ymargin)
 	end if
@@ -1987,6 +1998,7 @@ def fn_print_bill_greenCo
 	if estimatedate=d1 then 
 		fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	end if
+	fnpa_txt(e$(2)(1:15),xmargin+5,lyne*12+ymargin)
 	fnpa_txt(z$,xmargin+5,52+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+100,58+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+5,66+ymargin)

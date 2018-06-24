@@ -41,8 +41,10 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	fnreg_close
 	open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 	dim tmp7ZipCommand$*512
+	dim zOmitReportCacheOption$*64
 	if enableBackupReportCache$='True' then
 		zOmitReportCacheOption$=''
+	else
 		zOmitReportCacheOption$=' -xr!"Report Cache\*"'
 	end if
 	dim serverTempSaveFile$*256

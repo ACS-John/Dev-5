@@ -1,15 +1,15 @@
 fn_setup
 fntop(program$)
 !   ! r: restore unconverted files and remove already converted files (for testing only, of course)
-      if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
+!      if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
 !   !   exec 'copy "C:\ACS\(Client_Files)\Bethany\ACS meter location mess\autosave before first one\UB Company 1 2018-01-02 14-02-30 Menu - before meter location initialize\Meter*.h1" "[Q]\UBmstr\*.h[cno]"'
-        forceKeepLeft=1
-        exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
-        fn_populateLocationNonSeq
+!       forceKeepLeft=1
+!       exec 'free "[Q]\UBmstr\MeterLocation*.h[cno]"' ioerr ignore
+!       fn_populateLocationNonSeq
 !   !   exec 'free "[Q]\UBmstr\MeterAddress*.h[cno]"' ioerr ignore
 !   !   fncreg_write('u4 meter location account numbers left justified','False')
-      end if
-   if forceKeepLeft then  pr 'forceKeepLeftCount=';forceKeepLeftCount : pause : end ! /r
+!      end if
+!  if forceKeepLeft then  pr 'forceKeepLeftCount=';forceKeepLeftCount : pause : end ! /r
 fnHamsterFio(table$)
 XIT: !
 fnxit

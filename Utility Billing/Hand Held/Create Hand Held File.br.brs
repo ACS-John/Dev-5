@@ -1121,9 +1121,9 @@ def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
   fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
   fn_record_addc(10,z$)                                        ! Account Number
   fn_record_addc(30,e$(2))                                     ! Customer Name
-  fn_record_addc(12,fn_meterInfo$('address',z$,'WA'))        ! Phone Number
-  fn_record_addc(30,'')                                        ! Service Address 1          Address 1 - Primary  - formerly e$(3)
-  fn_record_addc(30,extra$(1))                                 ! Service Address 2          Address 2 - Primary  - formerly extra$(1)
+  fn_record_addc(12,extra$(2))                                 ! Phone Number
+  fn_record_addc(30,fn_meterInfo$('address',z$,'WA'))          ! Meter Address 1
+  fn_record_addc(30,'')                                        ! blank
   fn_record_addc(30,tmpCity$)
   fn_record_addc(10,tmpState$)
   fn_record_addc(15,tmpZip$)
