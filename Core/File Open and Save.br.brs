@@ -418,7 +418,7 @@ def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDest
 	pr #h_tmp: '@echo.'
 	pr #h_tmp: '@echo.'
 	pr #h_tmp: '@echo OPENING...'
-	pr #h_tmp: 'Sy RmDir %destinationDir% /s /q'
+	pr #h_tmp: 'RmDir %destinationDir% /s /q'
 	!
 	pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa %openFile% -o%destinationDir% %filter% > %log%'
 	close #h_tmp: 

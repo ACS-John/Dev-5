@@ -902,7 +902,6 @@ def fn_rmk1
 	! Rewrite #note1,Using "Form POS 11,2*PD 3",Key=RK$: MAT RA
 	RMK1_XIT: !
 fnend
-include: ertn
 def fn_est_dates
 	EST_DATES: !
 	fnTos(sn$="estimate-1")
@@ -2019,23 +2018,26 @@ def fn_hh_other_type2(listonly)
 				hot_z_prior$=hot_z$
 				linput #h_readings: hot_line$ eof HOT_EOF
 				if trim$(srep$(hot_line$,'=',''))<>'' and trim$(hot_line$)(1:1)<>'!' then
-					! pr 'before: '&hot_line$ : pause
+					! pr 'before: hotline$='&hot_line$ ! pause
 					fn_hot_parse_line(hot_line$,hot_z$,mat x,mat hotImportDataField$,mat hotImportDataValue$,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 					! pr 'after ' : pause
 			 end if
 			loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-			! if trim$(hot_z_prior$)='100050.05' then debug=1 else debug=0
-			! if debug then 
-			!   pr 'after loop'
-			!   pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
-			!   pr 'Reading.Water=';x(1);'  Usage=';x(12)
-			!   pr 'MeterAddress.LocationID=';hotLocationID
-			!   pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
-			!   for x=1 to udim(mat hotImportDataField$)
-			!     pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
-			!   nex x
-			!   pr ''
-			!   pause
+			! if trim$(hot_z_prior$)='100020.03' then 
+			! 	debug=1 
+			! ! if debug then 
+			! 	pr 'after loop'
+			! 	pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
+			! 	pr 'Reading.Water=';x(1);'  Usage=';x(12)
+			! 	! pr 'MeterAddress.LocationID=';hotLocationID
+			! 	! pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
+			! 	! for x=1 to udim(mat hotImportDataField$)
+			! 	! 	pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
+			! 	! nex x
+			! 	pr ''
+			! 	pause
+			! else 
+			! 	debug=0
 			! end if
 			fn_hot_calcMeterChangeOut(hot_z_prior$,mat x,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 			if listonly=1 then
@@ -2090,7 +2092,7 @@ def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDat
 					pr 'encountered '&hpField$&' - add code to process it' : pause
 				end if
 			end if
-		else if lfItem$(1)="reading" then
+		else if lfItem$(1)="reading" and udim(mat lfItem$)=2 then
 			if lfItem$(2)="water" then
 				x(1)=hpValueN
 			else if lfItem$(2)="gas" then
@@ -2149,7 +2151,8 @@ def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDat
 			end if
 		else
 			HpDidNotCodeItYet: !
-			pr 'code needed for lines like: "'&line$&'"' : pause
+			! pr 'code needed for lines like: "'&line$&'"' 
+			! if env$('acsDeveloper')<>'' then pause
 		end if
 	end if
 fnend
@@ -2260,3 +2263,4 @@ def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImport
 	end if
 fnend
 include: fn_open
+include: ertn

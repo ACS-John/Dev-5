@@ -214,7 +214,7 @@ def library fnCustomer(x)
 		fnTxt(lyne,22,10,10,1,"10",0,"Net would never have a value unless all items above were budgeted",1)
 		budgetinfo$(x+=1)=str$(ba(12))
 		fnCmdKey("&Next",1,1)
-		fnCmdKey("Access &Transactions",8,1)
+		fnCmdKey("Access &Transactions",8,0)
 		fnCmdKey("&Delete",3,0)
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs(sn$,0,mat budgetinfo$,ckey) ! budget billing master record
