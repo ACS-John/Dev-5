@@ -224,7 +224,7 @@ def fn_setup_client ! ** set up for new clients
 !   fn_setup_client_add("PiattCO",3536,20832)
     fn_setup_client_add("Purdy",3610,34570)
     fn_setup_client_add("Raymond",3660,32798)
-    fn_setup_client_add('R R Crawford',760,12466)
+    fn_setup_client_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
     fn_setup_client_add('Sheila',770,0)
     fn_setup_client_add("Thomas Richardson",3720,7718)
 !   fn_setup_client_add("Riverside",3725,18332)
@@ -496,8 +496,8 @@ def fn_getClientLicense(mat client_has$)
       fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
     else if env$('client')='R R Crawford' then 
       fn_user_limit(1)
-      fn_add_ch_sys('PR')
-      fn_add_ch_sys('GL')
+      fn_add_ch_sys('PR')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
+      fn_add_ch_sys('GL')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
     else if env$('client')='Scottville Rural' then 
       fn_user_limit(1)
       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -940,17 +940,11 @@ def fn_client_is_converting
   cic_return=0
   if env$('ACSDeveloper')<>'' then
     cic_return=1
+  else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2020','mm/dd/ccyy') then ! just testing
+    cic_return=1
   else if env$('client')='Payroll Done Right' and days(date$)<=days('07/01/2018','mm/dd/ccyy') then ! just testing
     cic_return=1
-  else if env$('client')='Starr County Gas'   and days(date$)<=days('02/15/2018','mm/dd/ccyy') then ! just testing
-    cic_return=1
   else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('06/15/2018','mm/dd/ccyy')  then
-    cic_return=1
-  else if env$('client')='GreenCo'            and days(date$)<=days('05/25/2018','mm/dd/ccyy')  then
-    cic_return=1
-  else if env$('client')='Halfway'            and days(date$)<=days('04/15/2018','mm/dd/ccyy')  then
-    cic_return=1
-  else if env$('client')='Campbell'           and days(date$)<=days('02/15/2018','mm/dd/ccyy')  then
     cic_return=1
   end if 
   fn_client_is_converting=cic_return
