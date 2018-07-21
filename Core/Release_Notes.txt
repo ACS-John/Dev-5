@@ -1,5 +1,8 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                                                                                    
+9:14 AM 7/21/2018	UB	Import Transactions in Collections now allows (and defaults to) skip duplicates (in both posted and unposted trans)
+9:14 AM 7/21/2018	UB	Bill format changes for client 465
+11:11 AM 7/19/2018	CO	New Logo and Icon
 15:52 07/18/2018	CO	5.74018  
 3:50 PM 7/11/2018	U4	Badger Beacon Input file support added 
 16:55 06/18/2018	CO	5.74017   

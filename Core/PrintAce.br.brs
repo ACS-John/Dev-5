@@ -28,14 +28,6 @@ def fn_pa_setup
 	fn_pa_setup=pa_setup
 XIT: ! 
 fnend  ! fn_pa_setup
-IGNORE: continue 
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
 def library fnpa_finis(; h_printace)
 	fn_pa_setup
 	if formsFormat$="PDF" then
@@ -1042,3 +1034,4 @@ def library fnbarcode(barcode$,rightleft,updown)
 	end if
 fnend 
 ! /r
+include: ertn

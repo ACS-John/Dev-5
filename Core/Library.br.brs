@@ -1,13 +1,34 @@
-! test changes 1
+! test changes 
 ! r: functions that do not redirect!
-def library fnKeyExists(hFile,keyToTest$*128)
-	read #hFile,key=rpad$(keyToTest$,KLN(hFile)),release: nokey MaeNo
-	maeReturn=1
+def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*256)
+	origionalKey$=keyToTest$
+	keyToTest$=rpad$(keyToTest$,kLn(hFile))
+	read #hFile,key=keyToTest$,release: nokey MaeNo
+	returnN=1
 	goto MaeFinis
 	MaeNo: !
-	maeReturn=0
+	if attemptFix then 
+		keyToTest$=lpad$(rtrm$(keyToTest$),kln(hFile))
+		read #hFile,key=keyToTest$,release: nokey MaeNoLpad1
+		returnN=1
+		goto MaeFinis
+		MaeNoLpad1: ! try lpad(trim) 
+			keyToTest$=lpad$(trim$(keyToTest$),kln(hFile))
+			read #hFile,key=keyToTest$,release: nokey MaeNoLpad2
+			returnN=1
+		goto MaeFinis
+		MaeNoLpad2: ! try rpad(trim)
+			keyToTest$=rpad$(trim$(keyToTest$),kln(hFile))
+			read #hFile,key=keyToTest$,release: nokey MaeNoLpad3
+			returnN=1
+		goto MaeFinis
+		MaeNoLpad3: ! just fail
+		returnN=0
+		keyToTest$=origionalKey$
+	end if
+	goto MaeFinis
 	MaeFinis: !
-	fnKeyExists=maeReturn
+	fnKeyExists=returnN
 fnend
 def library fnSrepEnv$*2048(text$*2048)
 	dim seVariable$*128

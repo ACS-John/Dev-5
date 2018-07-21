@@ -86,12 +86,14 @@ PrintBill_Basic: !
 		message2_line_count=12
 		message2_max_len=24
 	else if env$('client')='Blucksberg' then 
-		enable_bulksort=1
+		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
+		enable_bulksort=2
 		message1_line_count=13
 		message1_max_len=95
 		message_onscreen_alignment=2
 		enable_service_from=1
 		enable_service_to=1
+		include_zero_bal=include_credit_bal=1
 	else if env$('client')='Pennington' then ! 12/07/2016
 		message1_line_count=3
 		message1_max_len=40
@@ -182,6 +184,7 @@ PrintBill_Basic: !
 	if enable_cass_sort then gosub SORT1
 	open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
 	open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
+	open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,Input,keyed 
 ! /r
 SCREEN1: ! r:
 	starting_key$="" : route_filter=0 : respc=0
@@ -315,10 +318,16 @@ SCREEN1: ! r:
 ! /r
 NEXT_ACCOUNT: ! r: main loop
 	if filter_selected_only=1 then goto SCR_ASK_ACCOUNT
-	if enable_bulksort then 
+	if enable_bulksort=1 then 
 		! READ_BULKSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
 		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est noRec NEXT_ACCOUNT ! READ_BULKSORT
+	else if enable_bulksort=2 then 
+		L680: ! 
+		read #hBulk2,using 'form pos 22,c 10': z$ eof RELEASE_PRINT
+		! if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L680 ! start with
+		! begin=0 ! cancel starting account
+		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
 	else if enable_cass_sort then 
 		! READ_CASSSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
@@ -403,6 +412,9 @@ fnend
 RELEASE_PRINT: ! r:
 	close #h_customer_1: ioerr ignore
 	close #h_customer_2: ioerr ignore
+	close #h_ubtransvb: ioerr ignore
+	close #hAddr: ioerr ignore
+	close #hBulk2: ioerr ignore
 	if pa_enabled then 
 		fnpa_finis
 	else if sum(billsPrintedCount)>0 then
@@ -440,7 +452,6 @@ ENDSCR: ! r: pr totals screen
 	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 	fnCmdSet(52)
 	fnAcs(sn$,0,mat resp$,ck)
-	close #hAddr: ioerr ignore
 	goto XIT ! /r
 XIT: fnxit
 IGNORE: continue 
@@ -773,16 +784,30 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	end if 
 fnend 
 BULKSORT: ! r: sort in bulk sort code sequence
-	open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
-	write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
-	if route_filter>0 then 
-		write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
+	if enable_bulksort=1 then
+		open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
+		write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+		if route_filter>0 then 
+			write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
+		end if
+		write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
+		close #h_control: 
+		execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
+		execute "Sort "&env$('Temp')&"\printBillsControl."&session$
+		open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
+	else if enable_bulksort=2 then
+		open #hBs2Customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+		open #hBs2Out:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output 
+		do 
+			read #hBs2Customer,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BS_EO_CUSTOMER
+			write #hBs2Out,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+		loop 
+		BS_EO_CUSTOMER: ! 
+		close #hBs2Customer: ioerr ignore
+		close #hBs2Out: ioerr ignore
+		execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n"
+		open #hBulk2:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed 
 	end if
-	write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
-	close #h_control: 
-	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
-	execute "Sort "&env$('Temp')&"\printBillsControl."&session$
-	open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
 return  ! /r
 SORT1: ! r: SELECT & SORT - sorts Cass1 file 
 	enable_cass_sort=0 ! replaces old s5 variable
@@ -1124,11 +1149,20 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 	fnpa_txt(trim$(pe$(3)),22,59)
 	fnpa_txt(trim$(pe$(4)),22,64)
-	! fnpa_fontsize(18)
-	! fnpa_fontbold(1)
-	fnpa_pic('S:\acsub\logo_blucksberg.jpg',124,13)
 	fnpa_elipse(147,24,38,.5)
 	fnpa_elipse(147,24,37,.5)
+	
+	! fnpa_pic('S:\acsub\logo_blucksberg.jpg',124,13)
+	
+	fnpa_fontSize(13)
+	fnpa_fontbold(1) : fnpa_fontitalic(1)
+	fnpa_txt('Blucksberg Mountain',121,14)
+	fnpa_txt(' Water Association' ,121,18)
+	fnpa_fontbold(0) : fnpa_fontitalic(0)
+	fnpa_fontSize(12)
+	fnpa_txt('8077 Blucksberg Drive',124,25)
+	fnpa_txt('Sturgis, SD 57785',124,29)
+	
 	! fnpa_fontbold
 	! fnpa_fontitalic(1)
 	! fnpa_txt("Blucksberg Mtn",119,14)
@@ -1136,6 +1170,7 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	! fnpa_txt("Water",126,20)
 	! fnpa_fontsize(14)
 	! fnpa_txt("Association",128,31)
+	
 	fnpa_fontitalic(0)
 	fnpa_fontsize(9)
 	tmp_box_top=55
@@ -1143,7 +1178,7 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	fnpa_txt('Billing Date:            '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),tmp_box_left_pos+5,tmp_box_top+4)
 	fnpa_txt("Account:      "&lpad$(trim$(z$),19),tmp_box_left_pos+5,tmp_box_top+8)
 	fnpa_txt('Due Date:                '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),tmp_box_left_pos+5,tmp_box_top+12)
-	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top16)
+	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
 	if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
 	! 
 	lyne=65 : adder=4
@@ -1395,22 +1430,23 @@ def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_ove
 	if aal_desc_left_override=0 then aal_desc_left_override=30
 	if aal_always_show or aal_amt<>0 then 
 		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
-		fnpa_txt(cnvrt$("pic(-------#.## CR)",aal_amt),160,lyne)
+		fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",aal_amt),160,lyne)
 	end if 
 fnend 
-PRIOR_USAGES: ! r:
+PRIOR_USAGES: ! r: Blucksberg's prior usages gathering
 	mat usage=(0): mat billdate=(0) : mat reads=(0)
 	restore #h_ubtransvb,key>=z$&"         ": nokey PU_XIT ! no average but active customer (use 0 usage)
-L3160: read #h_ubtransvb,using L3170: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PU_XIT
-L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	L3160: !
+	read #h_ubtransvb,using L3170: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PU_XIT
+	L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	if p$<>z$ then goto PU_XIT
 	if tcode<>1 then goto L3160 ! only charge transactions
 	usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
 	usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
 	usage(1)=wu: billdate(1)=tdate : reads(1)=wr
 	goto L3160
-PU_XIT: ! 
-	return  ! /r
+	PU_XIT: ! 
+return  ! /r
 def fn_print_bill_pennington(z$,mat mg$,mat mg2$,service_from,service_to,penaltyDueDate)
 	! correct margins are top:.7, bottom:.25, left:.63, right:.25
 	! r: any and all necessary setup (except opening the printer) to pr one bill

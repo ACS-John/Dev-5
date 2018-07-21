@@ -720,7 +720,7 @@ def library fnub_printbill_program$*256
     fn_upp_add("Pennington","(basic)") ! PrintBill_Pennington ! atlantis format - hits preprinted stock
     ! >>Bills-Dot Matrix Double Wide ^ S:\acsUB\billDouble
     ! >>Bills-Full Page ^ S:\acsUB\Ubprtfull
-    fn_upp_add("Blucksberg","PrintBill_Blucksberg")
+    fn_upp_add("Blucksberg",'(basic)') ! "PrintBill_Blucksberg")
     ! >>Bills-Miscellaneous ^ S:\acsUB\Ubprtful
     ! 
     mat ub_printbill_client$(ub_printbill_count)
