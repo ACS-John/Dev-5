@@ -105,7 +105,8 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		if env$('acsProduct')='ACS Online' then
 			setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 		else
-			setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
+			! this isn't even necessary because the dll and exe have updated icons.
+			setenv("Icon","S:\Core\Icon\ACS BR.ico") ! setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
 		end if
 		fnMakeSurepathExists("[Q]\Data\")
 		fnMakeSurepathExists('[Q]\Report Cache\')

@@ -668,10 +668,12 @@ CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires 
     location$(loc_meterNumber   )=resp$(respc+=1)
     location$(loc_transmitter   )=resp$(respc+=1)
     location$(loc_meterType     )=resp$(respc+=1)(1:5)
-    if fnKeyExists(hCmlsLocation(5),fnbuildkey$(table$,mat location$,mat locationN,5)) then
+		dim tmpKey$*256
+		tmpKey$=fnbuildkey$(table$,mat location$,mat locationN,5)
+    if fnKeyExists(hCmlsLocation(5),tmpKey$) then
       dim mg$(0)*256
       mat mg$(0)
-      fnAddOneC(mat mg$,' The Key '&fnbuildkey$(table$,mat location$,mat locationN,5)&' already exists.')
+      fnAddOneC(mat mg$,' The Key '&tmpKey$&' already exists.')
       fnAddOneC(mat mg$,' Please select a different Location ID or Service')
       fnmsgbox(mat mg$)
       goto CmlsAddReEdit
