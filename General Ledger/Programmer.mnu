@@ -1,22 +1,23 @@
 General Ledger ^ ACS General Ledger
 General Ledger - Programmer
 >Hamsters
->glMstr                                     ^ HamsterFio:glMstr
->>Year ^ acsGL\year
->>Vendor ^ acsGL\Vendor
->>GLMaster ^ acsGL\glmstr_hamster
->>ACTrans ^ acsGL\AcTrans
->>GLTrans ^ acsGL\GLTrans
->Build Range ^ acsGL\BldRange
->Fix Reference Numbers ^ acsGL\FixRef
->Payroll Only Month End Closing ^ acsGL\PRClose
->Texas Unemployment Compensation Report ^ acsGL\TexasUC
->General Ledger Number ^ Test\GLNumber
->Change GL Numbers in ACTrans ^ acsGL\ACTrans_Change_GLNumber
+>AcTrans                                 ^ HamsterFio:acTrans
+>glMstr                                  ^ HamsterFio:glMstr
+>>Year                                   ^ acsGL\year
+>>Vendor                                 ^ acsGL\Vendor
+>>GLMaster                               ^ acsGL\glmstr_hamster
+>>ACTrans                                ^ acsGL\AcTrans
+>>GLTrans                                ^ acsGL\GLTrans
+>Build Range                             ^ acsGL\BldRange
+>Fix Reference Numbers                   ^ acsGL\FixRef
+>Payroll Only Month End Closing          ^ acsGL\PRClose
+>Texas Unemployment Compensation Report  ^ acsGL\TexasUC
+>General Ledger Number                   ^ Test\GLNumber
+>Change GL Numbers in ACTrans            ^ acsGL\ACTrans_Change_GLNumber
 
 
 Accountants Add-On ^ ACS General Ledger for Accountants
 General Ledger Accountants Add-On - Programmer
 >File
->>AcPrCks Hamster ^ acsGL\AcPrCks_Hamster
->>PRMstr Hamster ^ acsGL\PRMstr_Hamster
+>>AcPrCks Hamster                        ^ acsGL\AcPrCks_Hamster
+>>PRMstr Hamster                         ^ acsGL\PRMstr_Hamster

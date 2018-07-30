@@ -1,5 +1,5 @@
 [Q]\GLmstr\AcTrans.h[cno], actr_, 0
-[Q]\GLmstr\AcTrIdx.h[cno], glDept,glAcct,glSub,PCDE,TR4YY,TR4MMDD
+[Q]\GLmstr\AcTrIdx.h[cno], glDept/glAcct/glSub/PostingCode/TR4YY/TR4MMDD
 recl=72
 ! GL Transactions Accumulated
 ===================================================

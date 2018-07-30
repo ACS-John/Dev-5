@@ -1485,7 +1485,8 @@ ENTER_READING: ! r:
 	! r: Service 1 - Water
 	tmpService=1
 	first_read_rc=rc
-	if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water and sewer rate codes
+	if (a(1)=0) and (a(2)=0) then disa=1 else disa=0 ! water and sewer rate codes
+	! rate 9 should still process ! if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water and sewer rate codes
 	if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 	! water
 	if service_enabled(tmpService) then
@@ -1554,7 +1555,8 @@ ENTER_READING: ! r:
 			resp$(rc+=1)=""
 		end if
 	else if service_type(tmpService)=3.2 then
-		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water rate code
+		if (a(2)=0) then disa=1 else disa=0 ! water rate code
+		! rate 9 should still process ! if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water rate code
 		if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
 		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage

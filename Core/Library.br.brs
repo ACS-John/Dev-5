@@ -95,31 +95,31 @@ def library fnFileioEnums(filename$*255; mat subs$)
 	library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
 	fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
 fnend
-def library fnOpenFile(filename$*64,mat f$,mat fn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
-! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+def library fnOpenFile(filename$*64,mat d$,mat dn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+	! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 	library 'S:\Core\FileIO\fileio.br': fnOpenFile
-	fnOpenFile=fnOpenFile(filename$,mat f$,mat fn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
+	fnOpenFile=fnOpenFile(filename$,mat d$,mat dn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
 fnend
 def library fnMakeSurePathExists(Filename$*255; Path$*255) ! mkdir funciton from fileio.brs - except fileio version is not a library 2/7/2017
 	library 'S:\Core\fnMakeSurePathExists.br':fnMakeSurePathExists
 	fnMakeSurePathExists=fnMakeSurePathExists(Filename$, Path$)
 fnend
- def library fnBuildKey$*255(layout$*30,mat bkf$,mat bkf; keynum)
-	 library 'S:\Core\FileIO\fileio.br': fnBuildKey$
-	 fnBuildKey$=fnBuildKey$(layout$,mat bkf$,mat bkf, keynum)
- fnend
- def library fnCloseFile(filenumber, filelay$*255; path$*255,out)
-	 library 'S:\Core\FileIO\fileio.br': fnCloseFile
-	 fnCloseFile=fnCloseFile(filenumber,filelay$, path$,out)
- fnend
- def library fnClearLayoutCache
-	 library 'S:\Core\FileIO\fileio.br': fnClearLayoutCache
-	 fnClearLayoutCache=fnClearLayoutCache
- fnend
- def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
-	 library 'S:\Core\FileIO\fileio.br': fnCopyFile
-	 fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
- fnend
+def library fnBuildKey$*255(layout$*30,mat bkf$,mat bkf; keynum)
+	library 'S:\Core\FileIO\fileio.br': fnBuildKey$
+	fnBuildKey$=fnBuildKey$(layout$,mat bkf$,mat bkf, keynum)
+fnend
+def library fnCloseFile(filenumber, filelay$*255; path$*255,out)
+	library 'S:\Core\FileIO\fileio.br': fnCloseFile
+	fnCloseFile=fnCloseFile(filenumber,filelay$, path$,out)
+fnend
+def library fnClearLayoutCache
+	library 'S:\Core\FileIO\fileio.br': fnClearLayoutCache
+	fnClearLayoutCache=fnClearLayoutCache
+fnend
+def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
+	library 'S:\Core\FileIO\fileio.br': fnCopyFile
+	fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
+fnend
 ! /r
 def library Fn_Encodebase64(&Content$)
 	library 'S:\Core\base64_l.br': Fn_Encodebase64
@@ -294,6 +294,10 @@ fnend
 	fnend
 ! /r
 ! r: File Open and Save
+	def library fnAskFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*256,recallAddOn$*64)
+		library 'S:\Core\askFileName.br': fnAskFileName
+		fnAskFileName=fnAskFileName(opFileOpen$,purpose$, filter$,filterDescription$,path$,recallAddOn$)
+	fnend
 	def library fnOpenPartial
 		library 'S:\Core\File Open and Save.br': fnOpenPartial
 		fnOpenPartial=fnOpenPartial
