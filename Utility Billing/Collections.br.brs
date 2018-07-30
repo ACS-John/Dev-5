@@ -1214,11 +1214,11 @@ def fn_transAlreadyPosted(p$,tdate,tcode,tamount; ___,returnN,tapKeyMatch)
 	dim tapKey$*19
 	tapKey$=fnbuildkey$('UB Transaction',mat tap$,mat tapN, 1)
 	restore #hTapTrans,key=>tapKey$: nokey TapFinis
-	pr 'testing PASSED '&p$&' '&str$(tdate)&' '&str$(tcode)&' '&str$(tamount)
+	! pr 'testing PASSED '&p$&' '&str$(tdate)&' '&str$(tcode)&' '&str$(tamount)
 	do
 		read #hTapTrans,using form$(hTapTrans): mat tap$,mat tapN eof TapFinis
-		pr 'testing v read '&tap$(trans_acct)&' '&str$(tapN(trans_tdate))&' '&str$(tapN(trans_tcode))&' '&str$(tapN(trans_tamount))
-		pau
+		! pr 'testing v read '&tap$(trans_acct)&' '&str$(tapN(trans_tdate))&' '&str$(tapN(trans_tcode))&' '&str$(tapN(trans_tamount))
+		! pau
 		if tap$(trans_acct)=p$ and tapN(trans_tdate)=tdate and tapN(trans_tcode)=tcode and tapN(trans_tamount)=tamount then
 			returnN=1
 		else

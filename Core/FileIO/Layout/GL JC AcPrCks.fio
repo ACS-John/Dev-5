@@ -2,7 +2,7 @@
 recl=110
 ===================================================
 eno,             Employee Number,     N 4
-Date,            Check Date,          PD 4, format: MMDDYY
+Date,            Check Date,          PD 4, date(MMDDYY)
 D03,             D(03),               PD 4
 D04,             D(04),               PD 5.2
 D05,             D(05),               PD 5.2

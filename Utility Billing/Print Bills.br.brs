@@ -190,7 +190,7 @@ SCREEN1: ! r:
 	starting_key$="" : route_filter=0 : respc=0
 	fnTos(sn$="UBPrtBl1-1")
 	pf=27 : lc=0
-	fnLbl(lc+=1,1,"Penalty Due Date:",25,1)
+	fnLbl(lc+=1,1,"Payment Due Date:",25,1) : fnLbl(lc,35,"(Penalty Date)",25,1)
 	fnTxt(lc,pf,8,8,1,"1",0,tt$)
 	resp$(respc_penalty_due_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 	fnLbl(lc+=1,1,"Date of Billing:",25,1)
