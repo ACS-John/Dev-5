@@ -5,7 +5,7 @@
  !  Created: 03/28/06
  ! Modified: 06/29/18
  !
- ! Version 91
+ ! Version 92
  !
  !
  ! #Autonumber# 500,1
@@ -29,6 +29,9 @@
  ! By creating a simple procfile called fileio.ini, a procfile that
  ! resides in the current path and setting the appropriate values.
  !
+ !
+ ! Version 92:
+ !  Fixed a bug introduced in Version 91 that broke layouts with all strings or all numbers (not mixed)
  !
  ! Version 91:
  !  Date formatting in 4th column in the layout (by Gabriel Bakker and Mikhail Zheleznov)
@@ -701,8 +704,10 @@
 
        mat BadRead$(0) ! Clear Bad Record Reads
 
-       mat Dc_SDateSpec$(udim(mat Dc_Data$))=dc_dateformats$(1:udim(mat Dc_Data$))
-       mat Dc_NDateSpec$(udim(mat Dc_Data))=dc_dateformats$(udim(mat Dc_Data$)+1:udim(mat Dc_DateFormats$))
+       mat Dc_SDateSpec$(udim(mat Dc_Data$))
+       if udim(mat Dc_SDateSpec$) then mat Dc_SDateSpec$=dc_dateformats$(1:udim(mat Dc_Data$))
+       mat Dc_NDateSpec$(udim(mat Dc_Data))
+       if udim(mat Dc_NDateSpec$) Then mat Dc_NDateSpec$=dc_dateformats$(udim(mat Dc_Data$)+1:udim(mat Dc_DateFormats$))
 
        do  ! Read Data
           let LastTime=Timer

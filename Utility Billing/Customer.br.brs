@@ -368,10 +368,10 @@ def library fnCustomer(x)
 		fnTos(sn$="custinfo")
 		respc=0 : frac=0
 		mylen=25 : mylen+2
-		fnLbl(1,1,"Account:",15,1)               :    fnTxt(1,17,10,10,1)                   : custInfo$(respc+=1)=trim$(z$)
-		fnLbl(1,26,"Route:",8,1)                 :    fncmbrt2(1,36,1)                      : custInfo$(respc+=1)=str$(extra(1))
-		fnLbl(1,45,"Sequence:",11,1)             :    fnTxt(1,58,7,7,1,"30")                : custInfo$(respc+=1)=str$(extra(2))
-		fnFra(3,1,4,48,"Customer Information")   :  fraCustInfo=frac+=1
+		fnLbl(1,1,"Account:",15,1)               : fnTxt(1,17,10,10,1)                     : custInfo$(respc+=1)=trim$(z$)
+		fnLbl(1,26,"Route:",8,1)                 : fncmbrt2(1,36,1)                        : custInfo$(respc+=1)=str$(extra(1))
+		fnLbl(1,45,"Sequence:",11,1)             : fnTxt(1,58,7,7,1,"30")                  : custInfo$(respc+=1)=str$(extra(2))
+		fnFra(3,1,4,48,"Customer Information")   : fraCustInfo=frac+=1
 		fnLbl(1,1,"Name:",13,1,0,fraCustInfo)    : fnTxt(1,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=e$(2)
 		fnLbl(2,1,"Address:",13,1,0,fraCustInfo) : fnTxt(2,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=e$(3)
 		fnLbl(3,1,"Address:",13,1,0,fraCustInfo) : fnTxt(3,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=extra$(1)
@@ -548,7 +548,7 @@ def library fnCustomer(x)
 			fnmsgbox(mat ml$,resp$,'',48)
 			goto NAMESCREEN
 		end if 
-		if sum(gb)<>bal then goto CHECK_BALANCE_BREAKDOWN
+		if sum(mat gb)<>bal then goto CHECK_BALANCE_BREAKDOWN
 		if ckey=1 then 
 			goto REWRITE_RECORD
 		else if ckey=2 then 
@@ -745,7 +745,9 @@ def library fnCustomer(x)
 		fnmsgbox(mat ml$,resp$,'',48)
 	goto DEPOSIT_HIST_XIT ! /r
 	TRANS_HIST: ! r:
-		fntransfile(jbact$)
+		release #h_customer_1:
+		fntransfile(jbact$,bal,mat gb)
+		read #h_customer_1,key=jbact$:
 	goto NAMESCREEN ! /r
 	ASKACCT: ! r:
 		release #h_customer_1: ioerr ignore

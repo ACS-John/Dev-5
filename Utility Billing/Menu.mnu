@@ -36,11 +36,12 @@ Annual
 >Zero Year To Date Usage                              ^ acsUB\ubZeroYT
 Print                                                 
 >Customer Listings                                    
->>Name and Number List                                ^ acsUB\ubNamLst
+>>Name and Number List                                ^ Utility Billing\Name and Number List
 >>Labels                                              ^ Utility Billing\Labels
 >>Notes                                               ^ acsUB\ubNotes
 >>Deposit List                                        ^ acsUB\ubCustDp
 >>Deposit Change List                                 ^ Utility Billing\Deposit Change List
+>>Export Billing Addresses by Rate Code               ^ Utility Billing\Export Billing Addresses by Rate Code
 >Rate Analysis                                        ^ Utility Billing\Rate Analysis
 >Final Billing Report                                 ^ acsUB\BillRpt
 >Past Due Balance Breakdown                           ^ acsUB\ubDelinq

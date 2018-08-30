@@ -2,7 +2,8 @@
 @Echo Advanced Computer Services LLC
 @Echo Launching Client...
 
-Set BR_Date=2017-04-19
+rem Set BR_Date=2017-04-19
+Set BR_Date=2018-07-28
 
 Rem If Exist %SystemRoot%\SysWow64 (
 Rem     Set BR_Architecture=x64

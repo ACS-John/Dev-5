@@ -1387,10 +1387,10 @@ def fn_loadBookOrHoldingFile(&addmethod)
 	mat colhdr$(4)
 	ihFileCount=fngetdir2('[Q]\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
 	fnflexinit1("book_"&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
-	! open #ih_file_dir=9: "Name="&ih_file_dir$,display,input
+
 	for ihFileItem=1 to ihFileCount
 		if book_or_holding_file$='Book' then
-			! pause
+
 			tmpBookNumber=val(ihFilename$(ihFileItem)(10:len(ihFilename$(ihFileItem)))) conv ihInvalidFile
 			bookItem$(1)=str$(tmpBookNumber)
 			bookItem$(2)=cnvrt$("pic(zzz,zzz,zzz,zzz)",ihFileSize(ihFileItem))
@@ -1408,8 +1408,6 @@ def fn_loadBookOrHoldingFile(&addmethod)
 		end if
 		ihInvalidFile: !
 	next ihFileItem
-	! IH_FILE_DIR_EOF: !
-	! close #ih_file_dir: ioerr IH_XIT ! /r
 	fnLbl(11,1," ",15,1)
 	fnCmdKey("&Next",1,1)
 	fnCmdKey("&Delete",4)
@@ -1418,8 +1416,6 @@ def fn_loadBookOrHoldingFile(&addmethod)
 	fnAcs(sn$,0,mat resp$,ck)
 	holdingFile$=""
 	ip1$=resp$(1)
-	! listonly=0
-	! if ck=6 then listonly=1: ck=1
 	if ck=cancel or ip1$='' then
 		goto IH_XIT
 	else if ck=6 then
