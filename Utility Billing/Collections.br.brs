@@ -976,7 +976,7 @@ BD_ALLOC: ! r:
 		end if 
 	end if 
 	BD_ALLOC_FINIS: ! 
-	return  ! /r
+return  ! /r
 def fn_open_cash_drawer
 	fnopen_receipt_printer
 	pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer

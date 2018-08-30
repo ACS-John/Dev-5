@@ -404,10 +404,10 @@ def fn_getClientLicense(mat client_has$)
       fn_add_ch_sys('GL')
       fn_add_ch_sys('PR')
     else if env$('client')='GreenCo' then 
-			if days(date$)<=days('07/31/2018','mm/dd/ccyy') then 
+			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
 				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 				fn_add_ch_sys('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
-			end if
+			! end if
     else if env$('client')='Hope Welty' then 
       fn_user_limit(1)
       fn_add_ch_sys('GL')

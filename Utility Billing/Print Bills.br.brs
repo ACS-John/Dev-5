@@ -94,6 +94,7 @@ PrintBill_Basic: !
 		enable_service_from=1
 		enable_service_to=1
 		include_zero_bal=include_credit_bal=1
+		enablePriorBillingDate=1
 	else if env$('client')='Pennington' then ! 12/07/2016
 		message1_line_count=3
 		message1_max_len=40
@@ -140,6 +141,7 @@ PrintBill_Basic: !
 		message1_max_len=52
 		pa_enabled=1 ! PrintAce
 		pa_orientation$='Landscape'
+		include_zero_bal=include_credit_bal=1
 	else !  default settings:  Findlay, Edison
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
@@ -196,6 +198,14 @@ SCREEN1: ! r:
 	fnLbl(lc+=1,1,"Date of Billing:",25,1)
 	fnTxt(lc,pf,8,8,1,"1")
 	resp$(respc_billing_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+	
+	if enablePriorBillingDate then
+	
+		fnLbl(lc+=1,1,"Prior Date of Billing:",25,1)
+		fnTxt(lc,pf,8,8,1,"1")
+		resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
+	
+	end if
 	if enable_service_from or enable_service_to then 
 		lc+=1
 		if enable_service_from then 
@@ -263,6 +273,10 @@ SCREEN1: ! r:
 	if ck=5 then goto XIT
 	d1=val(resp$(respc_billing_date))
 	d4=val(resp$(respc_penalty_due_date))
+	if enablePriorBillingDate then 
+		billing_date_prior=val(resp$(resp_billing_date_prior))
+		billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
+	end if
 	if enable_service_from then 
 		d2=val(resp$(respc_service_from))
 	end if 
@@ -371,7 +385,7 @@ HERE: !
 	else if env$('client')='Merriam Woods' then 
 		fn_print_bill_merriam(z$,mat mg$,d2,d3)
 	else if env$('client')='Blucksberg' then 
-		fn_print_bill_blucksberg(z$,mat mg$)
+		fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,d2,d3)
 	else if env$('client')='Omaha' then 
 		fn_print_bill_omaha(z$,mat mg$,mat mg2$,d2,d3,mat penalty$)
 	else if env$('client')='Pennington' then
@@ -1107,7 +1121,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	end if 
 	! /r
 fnend 
-def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer variables too
+def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_to) ! inherrits all those local customer variables too
 	if ~setup_blucksberg then ! r:
 		setup_blucksberg=1
 		lyne=3
@@ -1162,7 +1176,7 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	fnpa_fontSize(12)
 	fnpa_txt('8077 Blucksberg Drive',124,25)
 	fnpa_txt('Sturgis, SD 57785',124,29)
-	
+
 	! fnpa_fontbold
 	! fnpa_fontitalic(1)
 	! fnpa_txt("Blucksberg Mtn",119,14)
@@ -1170,7 +1184,7 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	! fnpa_txt("Water",126,20)
 	! fnpa_fontsize(14)
 	! fnpa_txt("Association",128,31)
-	
+
 	fnpa_fontitalic(0)
 	fnpa_fontsize(9)
 	tmp_box_top=55
@@ -1180,17 +1194,17 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 	fnpa_txt('Due Date:                '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),tmp_box_left_pos+5,tmp_box_top+12)
 	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
 	if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
-	! 
+
 	lyne=65 : adder=4
 	fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
-	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",d5)&" To: "&cnvrt$("pic(zz/zz/zz)",d6) ,23,lyne+=adder)
-	! 
+	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",service_from)&" To: "&cnvrt$("pic(zz/zz/zz)",service_to) ,23,lyne+=adder)
+
 	fnpa_line(26,85,157)
-	! 
+
 	fnpa_fontsize
 	fnpa_fontitalic(1)
 	fnpa_fontbold(1)
-	! 
+
 	lyne=81
 	adder=4.5
 	fnpa_fontbold(1) : fnpa_fontitalic
@@ -1296,13 +1310,13 @@ def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer va
 		fnpa_txt('repair and maintenance',25,lyne+=adder)
 	end if 
 	fnpa_fontbold(1)
-	fnpa_line(26,165,157)
+	fnpa_line(26,lyne+adder,157)
 	fnpa_fontsize
 	fnpa_fontitalic(1)
 	lyne=165
 	fnpa_txt("MESSAGE BOARD",92,lyne+=4)
 	for j=1 to 13
-		fnpa_txt(mg$(j),5,lyne+=4)
+		fnpa_txt(rpt$(' ',(message1_max_len-len(trim$(mg$(j))))/2)&trim$(mg$(j)),5,lyne+=4)
 	next j
 	fnpa_fontitalic
 	x=0

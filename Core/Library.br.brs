@@ -52,6 +52,24 @@ def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
 	nex fpItem
 	fnFixPd=fpReturn
 fnend
+def library fnEndOfMonth(day; ___,returnN,eomYear,eomMonth,eomFirstOfNextMonth$)
+	eomYear=date(day,'ccyy')
+	eomMonth=date(day,'mm')
+	! pr 'date='&date$(day,'mm/dd/ccyy')
+	! pr 'year=';eomYear
+	! pr 'month=';eomMonth
+	! pause
+	if eomMonth=12 then
+		eomMonth=1
+		eomYear+=1
+	else
+		eomMonth+=1
+	end if
+	
+	eomFirstOfNextMonth$=cnvrt$('pic(####)',eomYear)&'/'&cnvrt$('pic(##)',eomMonth)&'/01'
+	returnN=days(eomFirstOfNextMonth$,'ccyy/mm/dd')-1
+	fnEndOfMonth=returnN
+fnend
 ! /r
 ! r: S:\Core\Start.br
 	def library fnSetQ(setQ$*256)
@@ -796,9 +814,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnChk
 		fnChk=fnChk(lyne,ps,txt$, align,contain,tabcon,chk_disable)
 	fnend
-	def library fnflexinit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,con,tabcon)
+	def library fnflexinit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,container,tabcon)
 		library 'S:\Core\ACS_Component.br': fnflexinit1
-		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,con,tabcon)
+		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
 	fnend
 	def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
 		library 'S:\Core\ACS_Component.br': fncomboa
@@ -852,7 +870,7 @@ fnend
 		fnCmdSet=fnCmdSet(a)
 	fnend
 	def library fnmsgbox(mat message$; &response$,cap$*128,mtype)
-		library 'S:\Core\Ace\MsgBox.br': fnmsgbox
+		library 'S:\Core\fnMsgBox.br': fnmsgbox
 		fnmsgbox=fnmsgbox(mat message$, response$,cap$,mtype)
 	fnend
 	def library fnBackgroundDisable(; Activate)
@@ -927,6 +945,10 @@ fnend
 	fnend
 ! /r
 ! r: array stuff
+	def library fnSrepExcludeStringLiterals$*1024(in$*1024,srepFrom$,srepTo$)
+		library 'S:\Core\srep.br': fnSrepExcludeStringLiterals$
+		fnSrepExcludeStringLiterals$=fnSrepExcludeStringLiterals$(in$,srepFrom$,srepTo$)
+	fnend
 	def library fnArrayEmpty(mat array$)
 		library 'S:\Core\Array.br': fnArrayEmpty
 		fnArrayEmpty=fnArrayEmpty(mat array$)
@@ -1077,9 +1099,9 @@ fnend
 		library 'S:\Utility Billing\fnCustomerData.br': fnCustomerData$
 		fnCustomerData$=fnCustomerData$(account$,fieldName$, leaveOpen)
 	fnend
-	def library fncustomer_address(z$,mat addr$; ca_address_type)
+	def library fncustomer_address(account$,mat addr$; ca_address_type,ca_closeFiles)
 		library 'S:\Utility Billing\Labels.br': fncustomer_address
-		fncustomer_address=fncustomer_address(z$,mat addr$, ca_address_type)
+		fncustomer_address=fncustomer_address(account$,mat addr$, ca_address_type,ca_closeFiles)
 	fnend
 	def library fnCustomerNotes(z$)
 		library 'S:\Utility Billing\Customer.br': fnCustomerNotes
@@ -1133,9 +1155,9 @@ fnend
 		library 'S:\acsUB\CmbRt2.br': fncmbrt2
 		fncmbrt2=fncmbrt2(lyne,mypos,all)
 	fnend
-	def library fntransfile(hact$*81)
+	def library fntransfile(hact$*81,&bal,mat gb)
 		library 'S:\Utility Billing\Transactions.br': fntransfile
-		fntransfile=fntransfile(hact$)
+		fntransfile=fntransfile(hact$,bal,mat gb)
 	fnend
 	def library fntrans_total_as_of(; customer_key$,date_ccyymmdd,trans_type)
 		library 'S:\Utility Billing\Transactions.br': fntrans_total_as_of

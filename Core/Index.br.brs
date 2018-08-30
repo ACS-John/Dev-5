@@ -86,9 +86,7 @@ def fn_index_it(data_file$*256,index_statement_or_file$*512; index_parameters$*2
 		index_it_return=1
 	end if 
 	fn_index_it=index_it_return
-fnend 
-XIT: fnxit
-include: ertn
+fnend
 def library fnindex_sys(; only_cno,system_id$*2)
 	fn_index_it_setup
 	fnindex_sys=fn_index_sys( only_cno,system_id$)
@@ -114,10 +112,10 @@ def fn_index_sys_do_one(cno,system_id$*2)
 	! r: A
 		fn_index_it("[Q]\GLmstr\ACGLSCHS.h"&str$(cno),"[Q]\GLmstr\schindex.h"&str$(cno),"1 3")
 		fn_index_it("[Q]\GLmstr\ACGLSCHS.h"&str$(cno),"[Q]\GLmstr\SchIndX2.h"&str$(cno),"3 30")
-		! 
+
 		fn_index_it("[Q]\GLmstr\ACTrans.h"&str$(cno),"[Q]\GLmstr\AcTrIdx.h"&str$(cno),"1/71/17/13 12/2/2/4")
 		fn_index_it("[Q]\GLmstr\AcTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
-		! 
+
 		fn_index_it("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\FNSbINDX.h"&str$(cno),",1 5")
 		fn_index_it("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\FNScINDX.h"&str$(cno),",1 5")
 		fn_index_it("[Q]\GLmstr\ACGLfNSf.h"&str$(cno),"[Q]\GLmstr\FNSfINDX.h"&str$(cno),",1 5")
@@ -127,36 +125,36 @@ def fn_index_sys_do_one(cno,system_id$*2)
 	! /r
 	! r: B
 		fn_index_it("[Q]\GLmstr\bankrec.H"&str$(cno),"[Q]\GLmstr\bankrec-idx.h"&str$(cno) ,"79/3/4 12/1/8")
-	! 
+
 		fn_index_it("[Q]\GLmstr\BudgetInfo.h"&str$(cno),"[Q]\GLmstr\BudIndx.h"&str$(cno),"1,14")
 		fn_index_it("[Q]\GLmstr\BudInfo.h"&str$(cno),"[Q]\GLmstr\BudInfo_Index.h"&str$(cno),"1,14")
 	! /r
 	! r: G
 		fn_index_it("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\GLIndex.h"&str$(cno),"1 12")
 		fn_index_it("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\glIndx2.h"&str$(cno),"13 30")
-	! 
+
 	! fn_index_it("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\fsindex.H"&str$(cno),"63 3") ! Secondary
 	! fn_index_it("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\fsindex.H"&str$(cno),"66 3") ! Primary
-	! 
+
 		fn_index_it("[Q]\GLmstr\gl1099.h"&str$(cno),"[Q]\GLmstr\gl109Idx.h"&str$(cno),"1 8")
 		fn_index_it("[Q]\GLmstr\GL1099.h"&str$(cno),"[Q]\GLmstr\VNINDX2.h"&str$(cno),"9 25")
-	! 
+
 		fn_index_it("[Q]\GLmstr\gltr1099.H"&str$(cno),"[Q]\GLmstr\gltridx1.H"&str$(cno),"1 8")
-	! 
+
 		fn_index_it("[Q]\GLmstr\GLBRec.h"&str$(cno),"[Q]\GLmstr\GLRecIdx.h"&str$(cno),"1 24")
-	! 
+
 		fn_index_it("[Q]\GLmstr\glstdad.H"&str$(cno),"[Q]\GLmstr\glstdidx.h"&str$(cno),"1 12")
-	! 
+
 		fn_index_it("[Q]\GLmstr\GLTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
 	! /r
 	! r: P
 		fn_index_it("[Q]\GLmstr\payeeglbreakdown.H"&str$(cno),"[Q]\GLmstr\payeeglbkdidx.H"&str$(cno),"1 8")
-	! 
+
 		fn_index_it("[Q]\GLmstr\paymstr.H"&str$(cno),"[Q]\GLmstr\Payidx1.H"&str$(cno),"1 8")
 		fn_index_it("[Q]\GLmstr\paymstr.H"&str$(cno),"[Q]\GLmstr\Payidx2.H"&str$(cno),"9 38")
-	! 
+
 		fn_index_it("[Q]\GLmstr\PRmstr.h"&str$(cno),"[Q]\GLmstr\PRIndex.h"&str$(cno),"1 4")
-	! 
+
 		fn_index_it("[Q]\GLmstr\PayeeGLBreakdown.h"&str$(cno),"[Q]\GLmstr\payeeglbkdidx.h"&str$(cno),"1 8")
 	! /r
 	! r: R
@@ -241,32 +239,6 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index_it("[Q]\CLmstr\unpdaloc.H"&str$(cno), "[Q]\CLmstr\Uaidx1.H"&str$(cno),"9,12")
 		fn_index_it("[Q]\CLmstr\unpdaloc.H"&str$(cno), "[Q]\CLmstr\Uaidx2.H"&str$(cno),"1,20")
 	! /r
-	else if system_id$='CR' then ! r:
-		fn_index_it("[Q]\CRmstr\SCMSTR.H"&str$(cno),"[Q]\CRmstr\SCIdx1.H"&str$(cno),"1 6")
-		fn_index_it("[Q]\CRmstr\SCMSTR.H"&str$(cno),"[Q]\CRmstr\SCIDX2.H"&str$(cno),"7 28")
-		fn_index_it("[Q]\CRmstr\SCAlloc.h"&str$(cno),"[Q]\CRmstr\allocidx.H"&str$(cno),"1/49 6/3")
-		fn_index_it("[Q]\CRmstr\Batch.h"&str$(cno),"[Q]\CRmstr\BatchIdx.h"&str$(cno),"1 2")
-		fn_index_it("[Q]\CRmstr\GLmstr.h"&str$(cno),"[Q]\CRmstr\glindex.h"&str$(cno),"1 12")
-		! fn_index_it(env$('Temp')&"\crWork."&session$,env$('Temp')&"\crworkidx."&wsid$,"98/1/157 1/8/3")
-		! fn_index_it(env$('Temp')&"\crwork2."&wsid$,env$('Temp')&"\crwork2idx."&wsid$,"1/56 8/3")
-		! fn_index_it(env$('Temp')&"\crWork."&session$,env$('Temp')&"\crworkidx2."&wsid$,"98/15/1/157 1/6/8/3")
-		if exists('[Q]\CLmstr\Company.h'&str$(cno)) then ! r: CL
-			fn_index_it("[Q]\CLmstr\TRMSTR.H"&str$(cno),"[Q]\CLmstr\TRIDX1.H"&str$(cno),"1 11")
-			fn_index_it("[Q]\CLmstr\TRMSTR.H"&str$(cno),"[Q]\CLmstr\TRIDX2.H"&str$(cno),"28/1 8/11")
-		end if  ! /r
-		if exists("[Q]\UBmstr\UBMASTER.H"&str$(cno)) then ! r: ub
-			fn_index_it("[Q]\UBmstr\UBMASTER.H"&str$(cno),"[Q]\UBmstr\UBINDEX.H"&str$(cno),"1 10")
-			fn_index_it("[Q]\UBmstr\UBMASTER.H"&str$(cno),"[Q]\UBmstr\UBINDX2.H"&str$(cno),"354 7")
-			fn_index_it("[Q]\UBmstr\UBMASTER.H"&str$(cno),"[Q]\UBmstr\UBINDX3.H"&str$(cno),"11 30")
-		end if  ! /r
-		if exists("[Q]\PRmstr\Burden.h"&str$(cno)) then ! r: PR
-			fn_index_it("[Q]\PRmstr\Burden.H"&str$(cno),"[Q]\PRmstr\BurdenIdx.H"&str$(cno),"1 8")
-		end if  ! /r
-		if exists("[Q]\BLmstr\BLmstr.h"&str$(cno)) then ! r: BL
-			fn_index_it("[Q]\BLmstr\BLmstr.h"&str$(cno),"[Q]\BLmstr\BLINDX1.H"&str$(cno),"1 14")
-			fn_index_it("[Q]\BLmstr\BLmstr.h"&str$(cno),"[Q]\BLmstr\BLINDX2.H"&str$(cno),"15 28")
-		end if  ! /r
-	! /r
 	end if 
 fnend 
 def library fnub_index_customer(; cno)
@@ -280,4 +252,6 @@ def fn_ub_index_customer(cno)
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx3.h"&str$(cno),"11 30u")
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx4.h"&str$(cno),"41 30")
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
-fnend 
+fnend
+XIT: fnxit
+include: ertn
