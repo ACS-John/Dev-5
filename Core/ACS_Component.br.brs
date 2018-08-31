@@ -581,7 +581,9 @@ def fn_draw_windows
 		open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn 
 		open #button_win:=fngethandle: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn 
 	end if 
-	ace_cmdkey_ps=cols-button_win_width-3 ! -1  ! changed from -1 to -3 on 8/23/2018 to prevent error (-2 also worked) on UB transaction button drawing on display grid screen when delete button was added
+	ace_cmdkey_ps=max(1,cols-button_win_width-3) ! -1  ! changed from -1 to -3 on 8/23/2018 to prevent error (-2 also worked) on UB transaction button drawing on display grid screen when delete button was added
+	                                             ! -3 caused issues on PR Enter time sheets (actual time entry screen editmode=0,semp=1)
+	                                             ! so max(1,...) was added on 8/31/18 to resolve that issue
 fnend 
 def fn_default_cmb_options
 	dim tmp_combo_key$(1)*81,tmp_combo_item$(1)*81
