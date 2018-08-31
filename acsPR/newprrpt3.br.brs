@@ -65,7 +65,6 @@ SCR2: !
 		rn=0
 		rt$=""
 		mat ch$=("")
-!   mat tempch$=("")
 		ips=0
 		sd$=""
 		sd=cp=0

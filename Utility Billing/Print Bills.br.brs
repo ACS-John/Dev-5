@@ -211,13 +211,13 @@ SCREEN1: ! r:
 		if enable_service_from then 
 			fnLbl(lc+=1,1,"Service From:",25,1)
 			fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Prior Reading Date in the customer's record")
-			fnLbl(lc,pf+8+4,"(only use to Prior Reading Dates from individual customer records)")
+			fnLbl(lc,pf+8+4,"(only use to override the Prior Reading Dates from individual customer records)")
 			resp$(respc_service_from:=respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 		end if 
 		if enable_service_to then 
 			fnLbl(lc+=1,1,"Service To:",25,1)
 			fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Current Reading Date in the customer's record")
-			fnLbl(lc,pf+8+4,"(only use to Current Reading Dates from individual customer records)")
+			fnLbl(lc,pf+8+4,"(only use to override the Current Reading Dates from individual customer records)")
 			resp$(respc_service_to:=respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 		end if 
 	end if 
