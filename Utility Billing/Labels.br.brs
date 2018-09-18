@@ -41,12 +41,12 @@ SCR1: ! r:
 	fnreg_write('ublabel.line 3',resp$(5))
 	fnreg_write('ublabel.line 4',resp$(6))
 	fnreg_write('ublabel.line 5',resp$(7))
-	annbc=sequence_name ! default to name sequence
+	! annbc=sequence_name ! default to name sequence
 	pt$(5)=""
 	if resp$(1)=sequence_option$(sequence_account) then 
 		annbc=sequence_account
-	else if resp$(1)=sequence_option$(sequence_name) then 
-		annbc=sequence_name
+	! else if resp$(1)=sequence_option$(sequence_name) then 
+	! 	annbc=sequence_name
 	else if resp$(1)=sequence_option$(sequence_bar_code) then 
 		annbc=sequence_bar_code
 		pt$(5)="BAR"
@@ -90,13 +90,13 @@ SCR2: !
 		filter_option_enabled$(6)=filter_option$(6)
 		filter_option_enabled$(7)=filter_option$(7)
 		mat filter_option_enabled$(7)
-	else if annbc=sequence_name then 
-		filter_option_enabled$(1)=filter_option$(1)
-		filter_option_enabled$(2)=filter_option$(2)
-		filter_option_enabled$(3)=filter_option$(3)
-		filter_option_enabled$(4)=filter_option$(5)
-		filter_option_enabled$(5)=filter_option$(7)
-		mat filter_option_enabled$(5)
+	! else if annbc=sequence_name then 
+	! 	filter_option_enabled$(1)=filter_option$(1)
+	! 	filter_option_enabled$(2)=filter_option$(2)
+	! 	filter_option_enabled$(3)=filter_option$(3)
+	! 	filter_option_enabled$(4)=filter_option$(5)
+	! 	filter_option_enabled$(5)=filter_option$(7)
+	! 	mat filter_option_enabled$(5)
 	else if annbc=sequence_bar_code then 
 		filter_option_enabled$(1)=filter_option$(1)
 		filter_option_enabled$(2)=filter_option$(2)
@@ -124,7 +124,7 @@ SCR2: !
 	if filter_selection=5 then goto IACC ! select specific accounts
 	if filter_selection=6 and annbc=sequence_bar_code then goto SELBK
 	if (filter_selection=1 or filter_selection=2 or filter_selection=3 or filter_selection=7) and annbc=sequence_account then goto SELSTART
-	if (filter_selection=1 or filter_selection=7) and annbc=sequence_name then goto SCR4F3 ! all customers in name sequence
+	! if (filter_selection=1 or filter_selection=7) and annbc=sequence_name then goto SCR4F3 ! all customers in name sequence
 	goto TOP ! /r
 ! ___________________________________________________________________
 TOP: ! r:
@@ -179,7 +179,7 @@ ADDLABEL: ! r:
 ! /r
 DONE: ! r:
 	close #1: ioerr ignore
-	fnlabel(101,cap$,mat pt$,cp,nw)
+	fnlabel(mat pt$)
 	goto XIT ! /r
 	def fn_set_line_text(&labeltext$,lineToPrint)
 		if lineToPrint=line_x_blank then 
@@ -472,8 +472,8 @@ OPEN_FILES: ! r:
 	close #customer=1: ioerr ignore
 	if annbc=sequence_account or annbc=sequence_bar_code or annbc=sequence_grid or annbc=sequence_bulk_sort then 
 		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
-	else if annbc=sequence_name then 
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed 
+	! else if annbc=sequence_name then 
+	! 	open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed 
 	else if annbc=sequence_route then 
 		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 	end if 
@@ -524,12 +524,13 @@ def fn_setup
 	address_option$(ao_billing  :=3)="Billing Address"
 ! 
 	dim sequence_option$(6)*22
-	sequence_option$(sequence_account:=1)="Account"
-	sequence_option$(sequence_name:=2)="Customer Name"
-	sequence_option$(sequence_bar_code:=3)="Bar Code"
-	sequence_option$(sequence_route:=4)="Route"
-	sequence_option$(sequence_grid:=5)="Grid"
-	sequence_option$(sequence_bulk_sort:=6)="Bulk Sort Code"
+	sequenceCount=0
+	sequence_option$(sequence_account  :=sequenceCount+=1)="Account"
+	! sequence_option$(sequence_name:=2)="Customer Name"
+	sequence_option$(sequence_bar_code :=sequenceCount+=1)="Bar Code"
+	sequence_option$(sequence_route    :=sequenceCount+=1)="Route"
+	sequence_option$(sequence_grid     :=sequenceCount+=1)="Grid"
+	sequence_option$(sequence_bulk_sort:=sequenceCount+=1)="Bulk Sort Code"
 ! 
 	dim filter_option$(7)*50
 	filter_option$(1)="[All]"

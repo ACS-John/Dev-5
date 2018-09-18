@@ -532,11 +532,11 @@ ASKDATES: ! r:
 	fnChk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
 	resp$(rc+=1)="False"
 	fnFra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
-	frameno=2 : mylen=26 : mypos=mylen+2
-	fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
+	frameno=2 : mylen=31 : mypos=mylen+2
+	fnLbl(1,1,"Year Starting Date:",mylen,1,0,frameno)
 	fnTxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
 	resp$(rc+=1)=str$(beg_date)
-	fnLbl(2,1,"Ending Date:",mylen,1,0,frameno)
+	fnLbl(2,1,"Year Ending Date:",mylen,1,0,frameno)
 	fnTxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
 	resp$(rc+=1)=str$(end_date)
 	! fnchk(13,65,'Enable 2018 Federal Withholdings (FOR TESTING ONLY)', 1,0) 
@@ -1036,27 +1036,28 @@ return  ! /r
 OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table change also!)
 	if ~setup_okwh then ! r: OK Oklahoma
 		setup_okwh=1
-		dim ok(8,6)
+		! dim ok(8,6)
+		dim ok(7,6)
 		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
 		! r: single 
 		ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
-		ok(2,1)= 6300 : ok(2,2)=   0   : ok(2,3)=0.005
-		ok(3,1)= 7300 : ok(3,2)=   5   : ok(3,3)=0.01
-		ok(4,1)= 8800 : ok(4,2)=  20   : ok(4,3)=0.02
-		ok(5,1)=10050 : ok(5,2)=  45   : ok(5,3)=0.03
-		ok(6,1)=11200 : ok(6,2)=  79.5 : ok(6,3)=0.04
-		ok(7,1)=13500 : ok(7,2)= 171.5 : ok(7,3)=0.05
-		ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
+		ok(2,1)= 6350 : ok(2,2)=   0   : ok(2,3)=0.005
+		ok(3,1)= 7350 : ok(3,2)=   5   : ok(3,3)=0.01
+		ok(4,1)= 8850 : ok(4,2)=  20   : ok(4,3)=0.02
+		ok(5,1)=10100 : ok(5,2)=  45   : ok(5,3)=0.03
+		ok(6,1)=11250 : ok(6,2)=  79.5 : ok(6,3)=0.04
+		ok(7,1)=13550 : ok(7,2)= 171.5 : ok(7,3)=0.05
+		! ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
 		! /r
 		! r: married 
 		ok(1,4)=    0  : ok(1,5)=  0 : ok(1,6)=0
-		ok(2,4)=12600  : ok(2,5)=  0 : ok(2,6)=0.005
-		ok(3,4)=14600  : ok(3,5)= 10 : ok(3,6)=0.01
-		ok(4,4)=17600  : ok(4,5)= 40 : ok(4,6)=0.02
-		ok(5,4)=20100  : ok(5,5)= 90 : ok(5,6)=0.03
-		ok(6,4)=22400  : ok(6,5)=159 : ok(6,6)=0.04
-		ok(7,4)=24800  : ok(7,5)=255 : ok(7,6)=0.05
-		ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
+		ok(2,4)=12700  : ok(2,5)=  0 : ok(2,6)=0.005
+		ok(3,4)=14700  : ok(3,5)= 10 : ok(3,6)=0.01
+		ok(4,4)=17700  : ok(4,5)= 40 : ok(4,6)=0.02
+		ok(5,4)=20200  : ok(5,5)= 90 : ok(5,6)=0.03
+		ok(6,4)=22500  : ok(6,5)=159 : ok(6,6)=0.04
+		ok(7,4)=24900  : ok(7,5)=255 : ok(7,6)=0.05
+		! ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
 		! /r
 	end if ! /r
 	g2=stwh(tcd(1),1)*g_pay_periods_per_year

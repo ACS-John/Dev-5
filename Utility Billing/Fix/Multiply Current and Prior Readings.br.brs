@@ -35,13 +35,13 @@ F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,p
 ! ______________________________________________________________________
 	do 
 		read #customer,using F_CUSTOMER: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof XIT
-		if f=d1 then ! else recalculation reduce balances
+		! if f=d1 then ! else recalculation reduce balances
 			water_reading_prior=min(d(1),d(2))
 			water_reading_cur=max(d(1),d(2))
-			d(1)=water_reading_cur
-			d(2)=water_reading_prior
+			d(1)=d(1)*10
+			d(2)=d(2)*10
 			rewrite #customer,using F_CUSTOMER: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra
-		end if  ! f=d1
+		! end if  ! f=d1
 	loop 
 XIT: ! 
 	fnxit

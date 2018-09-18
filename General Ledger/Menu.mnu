@@ -2,7 +2,7 @@
 File
 >General Ledger Master                              ^ General Ledger\Accounts
 >>Duplicate Range of Accounts                       ^ acsGL\BldRange
->Financial Statement Design                         ^ acsGL\FinancialStatement
+>Financial Statement Design                         ^ General Ledger\Financial Statement Design
 >Payee                                              ^ General Ledger\Payee
 >>Payee Transaction List                            ^ acsGL\VendorTransList
 >Schedule                                           ^ General Ledger\Schedule

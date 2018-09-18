@@ -3,27 +3,27 @@
 [Q]\UBmstr\UBTrdt.h[cno]     ,  tdate/acct
 recl=102
 ===================================================
-acct$    ,  Customer Number         , C     10    ,               , !  SPos=1
-tdate    ,  Date                    , N     8     , date(ccyymmdd), !  SPos=11  CCYYMMDD
-tcode    ,  Transaction Code        , N     1     ,               , !  SPos=19  1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo
-tamount  ,  Amount                  , PD    4.2   ,               , !  SPos=20
-tg_1     ,  Service 1 Amount        , PD    4.2   ,               , !  SPos=24
-tg_2     ,  Service 2 Amount        , PD    4.2   ,               , !  SPos=28
-tG_3     ,  Service 3 Amount        , PD    4.2   ,               , !  SPos=32
-tG_4     ,  Service 4 Amount        , PD    4.2   ,               , !  SPos=36
-tG_5     ,  Service 5 Amount        , PD    4.2   ,               , !  SPos=40
-tG_6     ,  Service 6 Amount        , PD    4.2   ,               , !  SPos=44
-tG_7     ,  Service 7 Amount        , PD    4.2   ,               , !  SPos=48
-tG_8     ,  Service 8 Amount        , PD    4.2   ,               , !  SPos=52
-tG_9     ,  Sales tax               , PD    4.2   ,               , !  SPos=56
-TG_10    ,  Penalty                 , PD    4.2   ,               , !  SPos=60
-TG_11    ,  Net Bill                , PD    4.2   ,               , !  SPos=64
-s1read   ,  S1 (Water) Reading      , PD    5     ,               , !  SPos=68
-s1use    ,  S1 (Water) Usage        , PD    5     ,               , !  SPos=73
-s3read   ,  S3 (Electric) Reading   , PD    5     ,               , !  SPos=78
-s3use    ,  S3 (Electric) Usage     , PD    5     ,               , !  SPos=83
-s4read   ,  S4 (Gas) Reading        , PD    5     ,               , !  SPos=88
-s4use    ,  S4 (Gas) Usage          , PD    5     ,               , !  SPos=93
-tbal     ,  Balance                 , PD    4.2   ,               , !  SPos=98
+acct$    ,  Customer Number         , C     10    ,               , !  SPos=  1
+tdate    ,  Date                    , N     8     , date(ccyymmdd), !  SPos= 11  CCYYMMDD
+tcode    ,  Transaction Code        , N     1     ,               , !  SPos= 19  1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo
+tamount  ,  Amount                  , PD    4.2   ,               , !  SPos= 20
+tg_1     ,  Service 1 Amount        , PD    4.2   ,               , !  SPos= 24
+tg_2     ,  Service 2 Amount        , PD    4.2   ,               , !  SPos= 28
+tG_3     ,  Service 3 Amount        , PD    4.2   ,               , !  SPos= 32
+tG_4     ,  Service 4 Amount        , PD    4.2   ,               , !  SPos= 36
+tG_5     ,  Service 5 Amount        , PD    4.2   ,               , !  SPos= 40
+tG_6     ,  Service 6 Amount        , PD    4.2   ,               , !  SPos= 44
+tG_7     ,  Service 7 Amount        , PD    4.2   ,               , !  SPos= 48
+tG_8     ,  Service 8 Amount        , PD    4.2   ,               , !  SPos= 52
+tG_9     ,  Sales tax               , PD    4.2   ,               , !  SPos= 56
+TG_10    ,  Penalty                 , PD    4.2   ,               , !  SPos= 60
+TG_11    ,  Net Bill                , PD    4.2   ,               , !  SPos= 64
+s1read   ,  S1 (Water) Reading      , PD    5     ,               , !  SPos= 68
+s1use    ,  S1 (Water) Usage        , PD    5     ,               , !  SPos= 73
+s3read   ,  S3 (Electric) Reading   , PD    5     ,               , !  SPos= 78
+s3use    ,  S3 (Electric) Usage     , PD    5     ,               , !  SPos= 83
+s4read   ,  S4 (Gas) Reading        , PD    5     ,               , !  SPos= 88
+s4use    ,  S4 (Gas) Usage          , PD    5     ,               , !  SPos= 93
+tbal     ,  Balance                 , PD    4.2   ,               , !  SPos= 98
 pcode    ,  Posting Code            , N     1     ,               , !  SPos=102
 

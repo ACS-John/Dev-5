@@ -145,7 +145,8 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		fn_writeProc(''      ,'run '                              )
 		!
 		if env$('ACSDeveloper')<>'' then 
-			fn_writeProc('reload','execute ''load "''&program$&''"''')
+			fn_writeProc('reload','end')
+			fn_writeProc(''      ,'execute ''load "''&program$&''"''')
 			fn_writeProc('out',"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
 			fn_writeProc('ed' ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
 			fn_writeProc('in' ,'end')

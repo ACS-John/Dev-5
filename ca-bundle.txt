@@ -1,0 +1,15 @@
+http://brforum.brulescorp.com/viewtopic.php?p=3695#p3695
+
+In this case your intent is to access web services. This can be done with HTTP client.
+
+My earlier posting was concerning the provision of web services. For that you would need to use the BR Web Server. 
+
+You can do both in a single application but the 2 are not the same and they don't overlap in any meaningful way. Remember.. an HTTP transaction consists of an inquiry and a response. The Client initiates the Inquiry, and the server provides the response. 
+
+For HTTP Client, you will need a CA bundle named ca-bundle.crt located in the BR executable directory. This is a batch of top level root certificates from authorized certificate providers. The procedure for obtaining such bundles is described next.
+
+CA Bundle Periodic Updating
+From time to time CA root certificates expire just like end-user certificates. So it can be necessary to update your CA bundle as follows:
+
+Download the current root certificate bundle from https://curl.haxx.se/docs/caextract.html
+It will be named cacert.pem. Rename it to ca-bundle.crt which is what BR will look for.

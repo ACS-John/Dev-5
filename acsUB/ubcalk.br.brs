@@ -405,10 +405,8 @@ fnend
 def fn_cuu_water
 	cuu_water_return=0
 	if serviceName$(1)="Water" then 
-		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then goto CUU_WATER_XIT ! skip if no water code and no sewer code
-
 		usage_srv1=fn_usage(1)
-
+		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then goto CUU_WATER_XIT ! skip if no water code and no sewer code
 		if usage_srv1>=0 then 
 			if d(3)=0 then goto CUU_WATER_XIT
 			if usage_srv1<d(3)-d(3)*pcent or usage_srv1>d(3)+d(3)*pcent then 
