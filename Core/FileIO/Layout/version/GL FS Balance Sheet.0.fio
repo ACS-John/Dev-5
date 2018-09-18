@@ -1,0 +1,59 @@
+[Q]\GLmstr\oACGLFNSB.h[cno], oactr_, 0
+[Q]\GLmstr\oFNSBIndx.h[cno], glDept/glAcct/glSub/PostingCode/TR4YY/TR4MMDD
+recl=72
+! GL Financial Statement - Balance Sheet
+ 
+! dim r$*5,d$*50,te$*1,ac(9)
+! read #1,using L380: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
+! L380: form pos 1,c 5,c 50,c 1,2*n 2,  5*n 1,9*n 1,n 1  ,n 3
+!
+!       Form POS 1,C 5,C 50,C 1,2*N 2,  15*N 1           ,N 3,N 5
+===================================================
+r$          ,r$        ,c  5 , ! r$
+d$          ,d$        ,c 50 , ! d$
+te$         ,te$       ,c  1 , ! te$
+sp          ,sp        ,n  2 , ! sp
+ls          ,ls        ,n  2 , ! ls
+ds          ,ds        ,n  1 , ! ds
+ul          ,ul        ,n  1 , ! ul
+rs          ,rs        ,n  1 , ! rs
+bc          ,bc        ,n  1 , ! bc
+ap          ,ap        ,n  1 , ! ap
+ac1         ,ac1       ,n  1 , ! ac(1)
+ac2         ,ac2       ,n  1 , ! ac(2)
+ac3         ,ac3       ,n  1 , ! ac(3)
+ac4         ,ac4       ,n  1 , ! ac(4)
+ac5         ,ac5       ,n  1 , ! ac(5)
+ac6         ,ac6       ,n  1 , ! ac(6)
+ac7         ,ac7       ,n  1 , ! ac(7)
+ac8         ,ac8       ,n  1 , ! ac(8)
+ac9         ,ac9       ,n  1 , ! ac(9)
+ic          ,ic        ,n  1 , ! ic
+fc          ,fc        ,n  3 , ! fc
+dunno       ,dunno     ,n  5 , ! (not sure - in financial statement design program, but not in balance sheet read)
+#eof#
+ 
+===================================================
+glDept      ,      GL Account Dept Number      ,      N 3    , ! pos 1   TR(1)
+glAcct      ,      GL Account Number           ,      N 6    , ! pos 4   TR(2)
+glSub       ,      GL Account Sub Number       ,      N 3    , ! pos 10  TR(3)
+DateMMDD    ,      Date MMDD                   ,      N 4    , ! pos 13  TR(4)(1:4)
+DateYY      ,      Date YY                     ,      N 2    , ! pos 17  TR(4)(5:6)
+Amt         ,      Amount                      ,      PD 6.2 , ! pos 19  TR(5)
+TranCode    ,      Transaction Code            ,      N 2    , ! pos 25  TR(6)
+PostingCode ,      Posting Code                ,      N 2    , ! pos 27  TR(7)
+Ref$        ,      Reference Number            ,      C 12   , ! pos 29  TR$
+Desc$       ,      Description                 ,      C 30   , ! pos 41  TD$
+Period      ,      Period Code                 ,      N 2    , ! pos 71  PCDE
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

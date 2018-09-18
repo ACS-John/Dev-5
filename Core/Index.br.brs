@@ -1,3 +1,6 @@
+fn_index_it_setup
+fn_index_it("[Q]\UBmstr\UBTransVB.h"&env$('cno'), "[Q]\UBmstr\UBTrdt.h"&env$('cno'),"11/1 8/10")
+stop
 ! r: reindex the *new* add company files
 dim syslist$(4)*2
 syslist$(1)='GL'

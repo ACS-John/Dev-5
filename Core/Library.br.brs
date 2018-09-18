@@ -626,9 +626,9 @@ fnend
 	fnend
 ! /r
 ! r: label   S:\Core\label\
-	def library fnlabel(win,&cap$,mat linestyle$,cp,nw)
+	def library fnlabel(mat linestyle$)
 		library 'S:\Core\Label\fnLabel.br': fnlabel
-		fnlabel=fnlabel(win,cap$,mat linestyle$,cp,nw)
+		fnlabel=fnlabel(mat linestyle$)
 	fnend
 	def library fnaddlabel(mat in_labeltext$)
 		library 'S:\Core\Label\fnAddLabel.br': fnaddlabel

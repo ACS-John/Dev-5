@@ -1,3 +1,5 @@
+pr 'this program ('&program$&') is not intended to be run directly.'
+end
 def fn_setup
 	if ~setup_library then 
 		setup_library=1
@@ -116,13 +118,13 @@ def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	! align			0=left,	 1=right
 	! contain		container number (for containers like frames and tab strips)
 	if ~setup then let fn_setup
-	if align=1 then ps=ps-len(trim$(txt$))
+	if align=1 then ps=ps-len(rtrm$(txt$))
 	setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend 
 def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 	! add a screen ace check box
 	if ~setup then let fn_setup
-	if align=1 then ps=ps-len(trim$(txt$))-2
+	if align=1 then ps=ps-len(rtrm$(txt$))-2
 	setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 fnend 
 def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
@@ -250,8 +252,8 @@ def fn_comboOptionSetList_add(cosladd$*256)
 	!		comboOptionItemList(comboOptionSetListCount)=tmp_combo_count_for_set ! control_count
 fnend 
 def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
-	key$=trim$(key$)
-	txt$=trim$(txt$)
+	key$=rtrm$(key$)
+	txt$=rtrm$(txt$)
 	if reset_only then 
 		acol_env_variable$='tmp_combo'&str$(tmp_combo_count_for_set+=1) ! control_count is not right - it's a response count
 		setenv(acol_env_variable$,'') ! PR 'setting up '&acol_env_variable$
@@ -283,7 +285,7 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	! if usr=0 then pr "USR=0-Replace"
 	! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
 	! if usr<0 then pr "USR<0-append=-1		 USR="&str$(usr)
-	sfn$=trim$(sfn$)
+	sfn$=rtrm$(sfn$)
 	if sfn$='' then 
 		pr 'SFN$ is required for Flex grids'
 		pr 'Press Enter to continue without the flex grid'
@@ -592,7 +594,7 @@ def fn_default_cmb_options
 		str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
 		! 
 		tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
-		tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item)))
+		tck_which=srch(mat tmp_combo_key$,rtrm$(resp$(tck_response_item)))
 		if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then 
 			resp$(tck_response_item)=tmp_combo_item$(tck_which)
 		end if 

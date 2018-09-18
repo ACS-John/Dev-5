@@ -8,7 +8,7 @@ on error goto ERTN
 	dim f$(3)*12,a(7),b(11),c(4),d(15),g(12)
 	dim resp$(15)*512
 	dim ln$*8800,flname$*256,l2$*8800,r1$(120)*30,ln3$*1
-	dim extra$(11)*30,at$(3)*40,extra(23)
+	dim extra$(11)*30,extra(23)
 	dim tmp_rtf_filename$*1024
 ! /r
 ! r: top of programs, constants,initial setup, etc
@@ -17,6 +17,7 @@ on error goto ERTN
 	if env$('client')='French Settlement' or env$('client')='Granby' then hard_coded=1
 	fnLastBillingDate(d1)
 	fndat(d$(4))
+	dim at$(3)*40
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 	read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
 	close #21: 
@@ -124,6 +125,8 @@ READ_ADRBIL: ! r:
 		fn_print_granby
 	else if env$('client')="French Settlement" then 
 		fn_french_settlement_gas
+	else if env$('client')="Blucksberg" then 
+		fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$,z$,mat addr$,bal,d1)
 ! else if env$('client')="Merriam Woods" then
 !   fn_merriam_woods
 	else if do_print_std_form=1 then 
@@ -344,26 +347,78 @@ def fn_report_add
 fnend
 IGNORE: continue 
 include: ertn
-def fn_print_standard_form
+def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 		if a(1)=0 then water$="     " else water$="Water"
 		if a(4)=0 then gas$="   " else gas$="Gas"
-		fnopenprn(cp,33,220,process)
-		for j=1 to 4 : pr #255: "" : next j
-		for j=1 to 3 : pr #255,using "Form pos 7,C 40": at$(j) : next j
-		for j=1 to 3 : pr #255: "" : next j
+		fnopenprn
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255,using "Form pos 7,C 40": trim$(at$(1))
+		pr #255,using "Form pos 7,C 40": trim$(at$(2))
+		pr #255,using "Form pos 7,C 40": trim$(at$(3))
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
 		pr #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
-		pr #255: ""
-		for j=1 to 4 : pr #255,using "Form pos 9,C 73": mis$(j) : next j
-		pr #255: ""
-		pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&str$(reconnect_fee)
+		pr #255: ''
+		pr #255,using "Form pos 9,C 73": mis$(1)
+		pr #255,using "Form pos 9,C 73": mis$(2)
+		pr #255,using "Form pos 9,C 73": mis$(3)
+		pr #255,using "Form pos 9,C 73": mis$(4)
+		pr #255: '' 
+		pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&cnvrt$('pic(###,##z.zz)',reconnect_fee)
 		pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
-		pr #255: ""
+		pr #255: ''
 		pr #255,using "Form pos 13,C 11,N 10.2": "Amount Due:",bal
-		for j=1 to 4 : pr #255: "" : next j
-		for j=1 to 4 : pr #255,using "Form pos 50,C 30": addr$(j) : next j
-! 4 more lines from this point before next page
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255,using "Form pos 50,C 30": addr$(1)
+		pr #255,using "Form pos 50,C 30": addr$(2)
+		pr #255,using "Form pos 50,C 30": addr$(3)
+		pr #255,using "Form pos 50,C 30": addr$(4)
+		! 4 more lines from this point before next page
 		pr #255: newpage
 	fnend 
+def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat addr$,bal,d1; ___,water$*5,gas$*3) ! 9/10/2018
+	fnopenprn
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 7,C 40": trim$(at$(1))
+	pr #255,using "Form pos 7,C 40": trim$(at$(2))
+	pr #255,using "Form pos 7,C 40": trim$(at$(3))
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
+	pr #255: ''
+	pr #255,using "Form pos 9,C 73": mis$(1)
+	pr #255,using "Form pos 9,C 73": mis$(2)
+	pr #255,using "Form pos 9,C 73": mis$(3)
+	pr #255,using "Form pos 9,C 73": mis$(4)
+	pr #255: '' 
+	if a(1)=0 then water$="     " else water$="Water"
+	if a(4)=0 then gas$="   " else gas$="Gas"
+	pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&'                Reconnection Fee: $25.00'
+	pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
+	pr #255: ''
+	pr #255,using "Form pos 7,C": "Amount Due: "&cnvrt$('pic(---,$$$,$$z.zz)',bal)
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 7,C 30": addr$(1)
+	pr #255,using "Form pos 7,C 30": addr$(2)
+	pr #255,using "Form pos 7,C 30": addr$(3)
+	pr #255,using "Form pos 7,C 30": addr$(4)
+	! 4 more lines from this point before next page
+	pr #255: newpage
+fnend 
 def fn_print_granby
 	fnopenprn
 	pr #255,using 'form pos 4,c 47,skip 4': e$(1)
@@ -404,7 +459,11 @@ def fn_print_granby
 	if granby_print_count/3=int(granby_print_count/3) then 
 		pr #255: newpage
 	else 
-		pr #255: '' : pr #255: '' : pr #255: '' : pr #255: '' : pr #255: ''
+		pr #255: '' 
+		pr #255: '' 
+		pr #255: ''
+		pr #255: '' 
+		pr #255: ''
 	end if 
 fnend
 def fn_french_settlement_gas

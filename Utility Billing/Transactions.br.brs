@@ -75,7 +75,7 @@ def library fntransfile(; hact$*81,&bal,mat gb)
 fnend
 def fn_transfile(; hact$*81,&bal,mat gb)
 
-	enableDelete=1 ! if env$('acsDeveloper')<>'' then enableDelete=1
+	enableDelete=0 ! if env$('acsDeveloper')<>'' then enableDelete=1
 
 	dim resp$(10)*80
 	dim totalalloc(10),totalusage(3),usage(3)
