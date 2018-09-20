@@ -20,11 +20,21 @@ MENU1: ! r:
 		if resp$(4)='True' then do_fix=1 else do_fix=0
 		if resp$(5)='True' then do_move_credit=1 else do_move_credit=0
 		if resp$(6)='True' then do_apply_credit=1 else do_apply_credit=0
-		print_count=0
-		if do_fix_balance_breakdowns then let fn_fix_balance_breakdowns(do_fix,do_report)
-		if do_fix_trans_breakdowns then let fn_fix_trans_breakdowns(do_fix,do_report)
-		if do_move_credit then let fn_move_credit(do_move_credit)
-		if do_apply_credit then let fn_apply_credit_from_other(do_apply_credit)
+
+		if do_fix_balance_breakdowns then 
+			fn_balanceBreakdowns(do_fix,do_report)
+			pr #255: 'customers  scanned:'&str$(customerReadCount)
+			pr #255: 'customers reported:'&str$(customerReportCount)
+			pr #255: ''
+		end if
+		if do_fix_trans_breakdowns then 
+			fn_transBreakdowns(do_fix,do_report)
+			pr #255: 'transactions  scanned:'&str$(transReadCount)
+			pr #255: 'transactions reported:'&str$(transReportCount)
+			pr #255: ''
+		end if
+		if do_move_credit then let fn_moveCredit(do_move_credit)
+		if do_apply_credit then let fn_applyCreditFromOther(do_apply_credit)
 	end if
 goto XIT ! /r
 XIT: fnxit 
@@ -44,19 +54,29 @@ def fn_setup
 		fnget_services(mat serviceName$,mat srv$)
 	end if 
 fnend 
-def fn_report_it(mat report_g,bal_breakdown; heading$*80,col_2_heading$*12)
+def fn_report_it(z$,mat report_g,bal_breakdown; heading$*80,col_2_heading$*12,col_3_heading$,col_3_value$)
 	if do_report then 
 		if ~setup_report_it then 
 			setup_report_it=1
 			fnopenprn
 			pr #255,using F_HDR1: heading$
-			pr #255,using F_HDR2: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*'
+			if col_3_heading$='' then 
+				pr #255,using F_HDR2a: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*'
+				F_HDR2a: form pos 1,13*(cc 12,',')
+			else
+				pr #255,using F_HDR2b: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*',col_3_heading$
+				F_HDR2b: form pos 1,14*(cc 12,',')
+			end if
 			F_HDR1: form pos 1,cc 156
-			F_HDR2: form pos 1,13*(cc 12,',')
-			F_BODY: form pos 1,c 12,',',12*(n 12.2,',')
 		end if  ! ~setup_report_it
 		print_count+=1
-		pr #255,using F_BODY: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
+		if col_3_heading$='' then 
+			pr #255,using F_BODYa: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
+			F_BODYa: form pos 1,c 12,',',12*(n 12.2,',')
+		else
+			pr #255,using F_BODYb: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
+			F_BODYb: form pos 1,c 12,',',12*(n 12.2,','),c 10
+		end if
 		! pr #255: z$&' has a balance of '&str$(gb(10))&' but the breakdowns add up to '&str$(bal_breakdown)
 	end if 
 fnend 
@@ -69,9 +89,10 @@ def fn_any_gb_negative
 fnend  ! fn_any_gb_negative
 ! def library fnfix_balance_breakdowns(do_fix,do_report)
 !   fn_setup
-!   fnfix_balance_breakdowns=fn_fix_balance_breakdowns(do_fix,do_report)
+!   fnfix_balance_breakdowns=fn_balanceBreakdowns(do_fix,do_report)
 ! fnend
-def fn_fix_balance_breakdowns(do_fix,do_report) ! assumes balance is right, puts the difference into other
+def fn_balanceBreakdowns(do_fix,do_report) ! assumes balance is right, puts the difference into other
+	print_count=0
 	fnStatus('Checking Customer Balance Breakdowns')
 	dim customer_g(10)
 	dim z$*10,service_rate_code(7)
@@ -81,13 +102,14 @@ def fn_fix_balance_breakdowns(do_fix,do_report) ! assumes balance is right, puts
 	do 
 		read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 		F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
-		read_count+=1
+		customerReadCount+=1
 		for gb_item=1 to udim(mat serviceName$) ! udim(mat gb)
 			if trim$(serviceName$(gb_item))='' then gb(gb_item)=0
 		next gb_item
 		bal_breakdown=sum(gb)
 		if bal<>bal_breakdown then 
-			fn_report_it(mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
+			fn_report_it(z$,mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
+			customerReportCount+=1
 			if do_fix then 
 				gb(gb_other)-=(bal_breakdown-bal)
 				rewrite #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb
@@ -102,10 +124,11 @@ def fn_fix_balance_breakdowns(do_fix,do_report) ! assumes balance is right, puts
 fnend 
 def library fnfix_trans_breakdowns(do_fix,do_report)
 	fn_setup
-	fnfix_trans_breakdowns=fn_fix_trans_breakdowns(do_fix,do_report)
+	fnfix_trans_breakdowns=fn_transBreakdowns(do_fix,do_report)
 fnend 
-def fn_fix_trans_breakdowns(do_fix,do_report)
-	dim trans_g(11),ru(6)
+def fn_transBreakdowns(do_fix,do_report)
+		print_count=0
+	dim trans_g(11),unused_ru(6)
 	gb_other=fnservice_other
 	fnStatus('Checking Transaction Breakdowns')
 	if do_fix then 
@@ -114,9 +137,9 @@ def fn_fix_trans_breakdowns(do_fix,do_report)
 		open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative 
 	end if 
 	do 
-		read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode eof TRANS_EOF
+		read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat unused_ru,bal,postcode eof TRANS_EOF
 		F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-		read_count+=1
+		transReadCount+=1
 		for g_item=1 to udim(mat serviceName$) ! udim(mat trans_g)
 			if trim$(serviceName$(g_item))='' then trans_g(g_item)=0
 		next g_item
@@ -128,20 +151,30 @@ def fn_fix_trans_breakdowns(do_fix,do_report)
 	!      bal_breakdown=sum(trans_g)
 	! /r
 		if tamt<>bal_breakdown then 
-			fn_report_it(mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount')
+			fn_report_it(p$,mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount','T Date',cnvrt$('pic(zzzz/zz/zz)',tdate))
+			transReportCount+=1
 			if do_fix then 
 				trans_g(gb_other)-=(bal_breakdown-tamt)
-				rewrite #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode
+				rewrite #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat unused_ru,bal,postcode
 			end if 
 		end if  ! gb(10)<>FICTIONAL_gb10
 	loop 
 	TRANS_EOF: ! 
+	fn_reportItClose(print_count)
+	close #h_trans: 
 	if print_count>0 then let fncloseprn
 	pr 'print_count=';print_count
 	setup_report_it=0
-	close #h_trans: 
-fnend  ! fn_fix_balance_breakdowns
-def fn_move_credit(do_move_credit)
+fnend  ! fn_balanceBreakdowns
+def fn_reportItClose(&print_count)
+	if print_count>0 then let fncloseprn
+	pr 'print_count=';print_count
+	setup_report_it=0
+
+print_count=0
+
+fnend
+def fn_moveCredit(do_move_credit)
 	fnStatus('Moving Credit Balances to Other in Customer Balance Breakdowns')
 	dim customer_g(10)
 	dim z$*10,service_rate_code(7)
@@ -152,7 +185,7 @@ def fn_move_credit(do_move_credit)
 		read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
 		read_count+=1
 		if fn_any_gb_negative then 
-			fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
+			fn_report_it(z$,mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 			for gb_item=1 to 10
 				if gb_item<>gb_other then 
 					if gb(gb_item)<0 then 
@@ -168,7 +201,7 @@ def fn_move_credit(do_move_credit)
 	MC_CUSTOMER_EOF: ! 
 	close #h_customer: 
 fnend 
-def fn_apply_credit_from_other(do_apply_credit)
+def fn_applyCreditFromOther(do_apply_credit)
 	fnStatus('Applying Credit Balances (from Other) to the rest of the Customer Balance Breakdowns')
 	dim customer_g(10)
 	dim z$*10,service_rate_code(7)
@@ -179,7 +212,7 @@ def fn_apply_credit_from_other(do_apply_credit)
 		read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
 		read_count+=1
 		if gb(gb_other)<0 then 
-			fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
+			fn_report_it(z$,mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 			for gb_item=1 to 10
 				if gb_item<>gb_other then ! 
 					if gb(gb_item)=>abs(gb(gb_other)) then ! this item has more (or equal) charge than other has credit
