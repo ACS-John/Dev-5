@@ -594,7 +594,7 @@ def fn_default_cmb_options
 		str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
 		! 
 		tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
-		tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item))) ! do not turn this trim$ into a rtrm$ - it messes up in and out with same person selected during UB Customer
+		tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item))) ! do not turn this trim$ into a rtrm$ - it messes up in and out with same person selected during UB Customer 9/20/2018
 		if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then 
 			resp$(tck_response_item)=tmp_combo_item$(tck_which)
 		end if 
