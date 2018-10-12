@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglRest
 00020 ! pr Retained Earnings Statement
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnglfs
+00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnGlAskFormatPriorCdPeriod
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
@@ -30,7 +30,7 @@
 00280   execute 'SY NotePad "'&os_filename$("[Q]\GLmstr\ACGLSTMT.h[cno]")&'"'
 00290   goto MENU1
 00300 L300: ! ______________________________________________________________________
-00310   if fnglfs=5 then goto MENU1
+00310   if fnGlAskFormatPriorCdPeriod=5 then goto MENU1
 00320   fnopenprn
 00330   pr newpage
 00340   open #1: "Name=[Q]\GLmstr\AcGLStmt.h[cno],Shr",display,input ioerr EDIT

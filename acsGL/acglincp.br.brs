@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\ACGLIncP
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,tp1(4),by(13),cap$*128
@@ -15,7 +15,7 @@
 00150   actpd$=fnactpd$
 00155   fscode=fnfscode
 00156   priorcd=fnpriorcd
-00160   if fnglfs=5 then goto XIT !:
+00160   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,priorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00165   priorcd=fnpriorcd
 00166   fscode=fnfscode

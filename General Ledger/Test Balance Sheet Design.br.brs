@@ -1,14 +1,14 @@
 ! formerly S:\acsGL\BalanceSheetTest
 ! Balance Sheet - Standard 8.5x11
 ! ______________________________________________________________________
-  library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnread_program_print_property
+  library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnread_program_print_property
   on error goto ERTN
 ! ______________________________________________________________________
   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 ! ______________________________________________________________________
   fntop(program$)
-  if fnglfs=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+  if fnGlAskFormatPriorCdPeriod=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
   if fnps=2 then 
     mp1=66
     open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed 

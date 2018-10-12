@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglCasO
 00020 ! Cash Flow with YTD Budget Comparison
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13)
@@ -14,7 +14,7 @@
         actpd=fnactpd !:
         fnfscode !:
         fnpriorcd
-00130   if fnglfs=5 then goto XIT
+00130   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00135   fscode=fnfscode !:
         priorcd=fnpriorcd
 00140   fncno(cno,cnam$)

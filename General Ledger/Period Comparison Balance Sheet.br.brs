@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\acglBalY
 00020 ! G/L BALANCE SHEET with comparison on months
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnUseDeptNo,fnps,fnpedat$,fnactpd,fnpriorcd,fnglfs,fnactpd$,fnfscode
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnUseDeptNo,fnps,fnpedat$,fnactpd,fnpriorcd,fnGlAskFormatPriorCdPeriod,fnactpd$,fnfscode
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,pedat$*20,m1$(13)*9,m2$(13)*8,total(13),p$(20)*50
@@ -10,12 +10,12 @@
 00100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
 00110 ! ______________________________________________________________________
 00120   fntop(program$)
-00122   if fnglfs=5 then goto XIT
+00122   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00135   actpd$=fnactpd$ !:
         actpd=fnactpd
 00142   ! fnfscode
 00143   ! fnpriorcd
-00150   ! if fnglfs=5 then goto XIT !:
+00150   ! if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
 00152   ! fnfscode
 00153   ! fnpriorcd

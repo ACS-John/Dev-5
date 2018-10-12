@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncB6
 00020 ! -- INCOME STATEMENT WITH BUDGET (six columns)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnGlAskFormatPriorCdPeriod,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
@@ -21,7 +21,7 @@
 00210   curyear$=pedat$(len(rtrm$(pedat$))-4:len(rtrm$(pedat$)))
 00220   curyear=val(curyear$) conv L230
 00230 L230: prioryr=curyear-1
-00240   if fnglfs=5 then goto XIT !:
+00240   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00250 ! ______________________________________________________________________
 00260   pr newpage

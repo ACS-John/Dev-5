@@ -1,6 +1,6 @@
 @echo off
 rem r: custom settings
-  set editor_launcher="%ProgramW6432%\Notepad++\Notepad++.exe"
+  set editor_launcher="C:\ACS\Program\Notepad++\Notepad++.exe"
   set brLauncher="%~dp0ACS 5.cmd"
   set prefferedFormat=.brs
 rem /r

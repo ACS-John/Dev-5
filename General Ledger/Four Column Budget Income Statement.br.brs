@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\AcGlInc4
 00020 ! -- Four Column Budget Income Statement 
 00030 ! r: library, on error and dims
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnindex_it,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnindex_it,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim actpd$*6,cch$*20
@@ -11,7 +11,7 @@
 00110 ! /r
 00120   fntop(program$,cap$="Four Column Budget Income Statement")
 00130   report$="Statement of Income and Expenses"
-00150   if fnglfs=5 then goto XIT ! ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00152   on fkey 5 goto FINIS
 00154 ! r: setup files, etc
 00160   cch$=fncch$

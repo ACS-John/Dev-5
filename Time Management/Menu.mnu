@@ -29,7 +29,7 @@ Daily
 ! >>Summary                                                           ^ acsTM\tmempdpt
 ! >Zero Current Period                                                ^ acsTM\emzercur
 >Enter Pre-Printed Invoices                                           ^ acsTM\tminpinv
->Print Invoices (Enter and Print Invoices, New Sales, Upgrades, Etc)  ^ acsTM\tmprtinv
+>Enter and Print Invoices                                             ^ Time Management\Enter and Print Invoices
 ! >Print Work Schedules                                               ^ acsTM\tmwrksch
 ! >Print Messages                                                     ^ acsTM\armessag
 Monthly

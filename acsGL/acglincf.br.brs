@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncF
 00020 ! -- INCOME STATEMENT COMPARING UP TO 10 FUNDS  - USES 2ND I/C DESIGN
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd$,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd$,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
@@ -16,7 +16,7 @@
 00160   on fkey 5 goto L2170
 00170   fncno(cno,cnam$)
 00180   udf$=env$('temp')&'\'
-00190   if fnglfs=5 then goto XIT !:
+00190   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00200   actpd$=fnactpd$
 00210   pedat$=fnpedat$

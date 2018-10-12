@@ -2,7 +2,7 @@
 00020 ! -- pr Income Statement !:
         ! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cch$*20,by(13),bp(13),cap$*128,form$*200
@@ -14,7 +14,7 @@
 00142   actpd=fnactpd
 00147   ! fscode=fnfscode
 00148   ! priorcd=fnpriorcd
-00150   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00155   fscode=fnfscode 
 00156   priorcd=fnpriorcd 
 00160   pors=1

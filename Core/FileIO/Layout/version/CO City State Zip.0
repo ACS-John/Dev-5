@@ -1,0 +1,5 @@
+[Q]\Data\oCityStZip.dat, ocsz_, 0
+[Q]\Data\oCityStZip.idx, csz
+===================================================
+!  this file utilizes some hard coded form statements.  Do searches before attempting to update it's format
+csz$,       City State Zip,                    C 30, ! mask=2000

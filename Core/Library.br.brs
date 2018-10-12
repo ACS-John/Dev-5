@@ -1239,9 +1239,9 @@ fnend
 		library 'S:\acsGL\fnCCH$.br': fncch$
 		fncch$=fncch$(a$)
 	fnend
-	def library fnglfs
-		library 'S:\acsGL\fnglFS.br': fnglfs
-		fnglfs=fnglfs
+	def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$)
+		library 'S:\acsGL\fnGlAskFormatPriorCdPeriod.br': fnGlAskFormatPriorCdPeriod
+		fnGlAskFormatPriorCdPeriod=fnGlAskFormatPriorCdPeriod( defaultFormatOption$)
 	fnend
 	def library fnglmerge
 		library 'S:\acsGL\fnGLmerge.br': fnglmerge
@@ -1403,9 +1403,9 @@ fnend
 		library 'S:\acsPR\CmbCategory.br': fncmbcategory
 		fncmbcategory(lyne,mypos,addall,c,a$)
 	fnend
-	def library fncheckfile(hact$,filnum)
-		library 'S:\acsPR\checkfile.br': fncheckfile
-		fncheckfile=fncheckfile(hact$,filnum)
+	def library fncheckfile(hact$,filnum,h_checkhistory,hRpMstr)
+		library 'S:\Payroll\Payroll Check History.br': fncheckfile
+		fncheckfile=fncheckfile(hact$,filnum,h_checkhistory,hRpMstr)
 	fnend
 	def library fnhours(eno)
 		library 'S:\acsPR\hours_lib.br': fnhours

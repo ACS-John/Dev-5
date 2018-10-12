@@ -2,7 +2,7 @@
 00020 ! Statement of Change in Financial Position with Comparrison  !:
         ! FOR 8 1/2 * 11
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnactpd,fnfscode,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnactpd,fnfscode,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,p$(20)*50,cap$*128
@@ -10,7 +10,7 @@
 00090   dim cnam$*40,accum(9,2),acct$*12,bp(13),by(13),udf$*256
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Comparative (FP)")
-00120   if fnglfs=5 then goto XIT
+00120   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
 00150   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 

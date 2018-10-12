@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlDet
 00020 ! -- Modified Cash Flow Statement (Detailed Transactions, Not Balances)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnglfs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnGlAskFormatPriorCdPeriod
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,in3$(4)
@@ -16,7 +16,7 @@
         actpd=fnactpd !:
         fnfscode !:
         fnpriorcd
-00150   if fnglfs=5 then goto XIT !:
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00151   fscode=fnfscode !:
         priorcd=fnpriorcd

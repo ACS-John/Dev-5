@@ -1,0 +1,59 @@
+[Q]\GLmstr\oACGLFNSB.h[cno], ofsd1_, 0
+[Q]\GLmstr\oFNSBIndx.h[cno], r
+recl=83
+! GL Financial Statement - Balance Sheet
+ 
+! dim r$*5,d$*50,te$*1,ac(9)
+! read #1,using L380: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
+! L380: form pos 1,c 5,c 50,c 1,2*n 2,  5*n 1,9*n 1,n 1  ,n 3
+!
+!       Form POS 1,C 5,C 50,C 1,2*N 2,  15*N 1           ,N 3,N 5
+===================================================
+number$           ,financial statement number       ,c  5 , ! r$
+description$      ,Descriptin                       ,c 50 , ! d$
+entryType$        ,Type of Entry                    ,c  1 , ! te$
+startPos          ,Starting Pring Position          ,n  2 , ! sp
+lineSkip          ,Lines to Skip                    ,n  2 , ! ls
+ds                ,Dollar Sign                      ,n  1 , ! ds
+ul                ,Underlines                       ,n  1 , ! ul
+rs                ,Reverse Sign                     ,n  1 , ! rs
+bc                ,Balance Sheet Column             ,n  1 , ! bc
+ap                ,Accumulator to Print             ,n  1 , ! ap
+ac1               ,Clear Accumulator 1       ,n  1 , ! ac(1)
+ac2               ,Clear Accumulator 2       ,n  1 , ! ac(2)
+ac3               ,Clear Accumulator 3       ,n  1 , ! ac(3)
+ac4               ,Clear Accumulator 4       ,n  1 , ! ac(4)
+ac5               ,Clear Accumulator 5       ,n  1 , ! ac(5)
+ac6               ,Clear Accumulator 6       ,n  1 , ! ac(6)
+ac7               ,Clear Accumulator 7       ,n  1 , ! ac(7)
+ac8               ,Clear Accumulator 8       ,n  1 , ! ac(8)
+ac9               ,Clear Accumulator 9       ,n  1 , ! ac(9)
+ic                ,Base Item for Percentage  ,n  1 , ! ic
+fc                ,Cost Center Code          ,n  3 , ! fc
+dunno             ,dunno                     ,n  5 , ! (not sure - in financial statement design program, but not in balance sheet read)
+#eof#
+ 
+===================================================
+glDept      ,      GL Account Dept Number      ,      N 3    , ! pos 1   TR(1)
+glAcct      ,      GL Account Number           ,      N 6    , ! pos 4   TR(2)
+glSub       ,      GL Account Sub Number       ,      N 3    , ! pos 10  TR(3)
+DateMMDD    ,      Date MMDD                   ,      N 4    , ! pos 13  TR(4)(1:4)
+DateYY      ,      Date YY                     ,      N 2    , ! pos 17  TR(4)(5:6)
+Amt         ,      Amount                      ,      PD 6.2 , ! pos 19  TR(5)
+TranCode    ,      Transaction Code            ,      N 2    , ! pos 25  TR(6)
+PostingCode ,      Posting Code                ,      N 2    , ! pos 27  TR(7)
+Ref$        ,      Reference Number            ,      C 12   , ! pos 29  TR$
+Desc$       ,      Description                 ,      C 30   , ! pos 41  TD$
+Period      ,      Period Code                 ,      N 2    , ! pos 71  PCDE
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

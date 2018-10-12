@@ -1,6 +1,6 @@
 00020 ! G/L BALANCE SHEET -  STANDARD FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$,fnactpd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim sc1$(2)*20,bigul$*140,heading$*140,cch$*20,by(13),bp(13)
@@ -17,7 +17,7 @@
         actpd=fnactpd !:
         fnfscode !:
         fnpriorcd
-00160   if fnglfs=5 then goto XIT !:
+00160   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00165   fnfscode !:
         fnpriorcd

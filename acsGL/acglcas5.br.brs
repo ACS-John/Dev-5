@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglCas5
 00020 ! CASH FLOW STATEMENT  WITH BUDGET
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20 ,in3$(4),cap$*128,udf$*256
@@ -12,7 +12,7 @@
 00120   fntop(program$,cap$="Cash Flow with Budget")
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
-00150   if fnglfs=5 then goto XIT !:
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   actpd$=fnactpd$
 00170   pedat$=fnpedat$

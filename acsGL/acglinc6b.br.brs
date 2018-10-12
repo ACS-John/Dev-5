@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlInc6b
 00020 ! -- INCOME STATEMENT WITH BUDGET (month compared to month and year compared to year to date
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnGlAskFormatPriorCdPeriod,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
@@ -15,7 +15,7 @@
 00150   udf$=env$('temp')&'\'
 00160   actpd=fnactpd
 00170   actpd$=fnactpd$
-00180   if fnglfs=5 then goto XIT !:
+00180   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00190 ! ______________________________________________________________________
 00200   pr newpage

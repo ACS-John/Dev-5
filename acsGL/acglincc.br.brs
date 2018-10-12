@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncC
 00020 ! -- ! COMPARATIVE INCOME STATEMENT FOR 14 7/8*11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   fntop(program$,cap$="Comparative Income Statement")
 00060 ! ______________________________________________________________________
 00070   on error goto ERTN
@@ -17,7 +17,7 @@
         actpd=fnactpd !:
         fnfscode !:
         fnpriorcd
-00190   if fnglfs=5 then goto XIT !:
+00190   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00195   fscode=fnfscode !:
         priorcd=fnpriorcd

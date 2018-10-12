@@ -5,9 +5,14 @@ def fn_setup
 	on error goto ERTN
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnfree,fnreg_read,fnureg_read,fnSystemName$,fnGetPp
-		library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe,fninch2twip,fnprocess,fngethandle,fnStatusClose
+		library 'S:\Core\Library': fnerror,fnread_program_print_property
+		library 'S:\Core\Library': fnCopy,fnfree
+		library 'S:\Core\Library': fnreg_read,fnureg_read,fnSystemName$,fnGetPp
+		library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe
+		library 'S:\Core\Library': fninch2twip,fnprocess
+		library 'S:\Core\Library': fngethandle,fnStatusClose
 		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnSrepEnv$
 		! library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnOpt,fnCmdSet
 		! 
 		! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
@@ -233,7 +238,7 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
 	end if 
 	L660: ! 
 	close #21: 
-	execute "Type '"&trim$(line$)&"' >>"&env$('temp')&"\acs_print_tmp"&session$&".rtf"
+	execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
 	open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,RecL=800,use",display,output 
 	goto L640
 	L700: ! 
@@ -292,10 +297,11 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
 	end if
 	 !
 	fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$) 
+	wordprocessor_exe$=trim$(wordprocessor_exe$,'"')
 	if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then 
-		execute 'Sy -w '&wordprocessor_exe$&' -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
+		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
 	else ! if print_report_nowait or fnprocess=1 then 
-		execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
+		execute 'Sy -w -C "'&wordprocessor_exe$&'" "'&os_filename$(fnSrepEnv$(serverSendto$))&'"'
 	! else 
 	!   fn_waitForWpToCloseStart('Word Processor')
 	!   execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
