@@ -1,25 +1,25 @@
 def fn_setup
-  setup=1
-  ! library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncomboa,fnFra,fntab,fnCmdKey,fnTos
-  library 'S:\Core\Library': fnerror,fnBackgroundDisable
-  library 'S:\Core\Library': fnsreg_read,fnsreg_write
-  library 'S:\Core\Library': fnreg_write,fnreg_read
-  library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnwrite_program_print_property
+	setup=1
+	! library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncomboa,fnFra,fntab,fnCmdKey,fnTos
+	library 'S:\Core\Library': fnerror,fnBackgroundDisable
+	library 'S:\Core\Library': fnsreg_read,fnsreg_write
+	library 'S:\Core\Library': fnreg_write,fnreg_read
+	library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnwrite_program_print_property
 fnend
 def library fnprogram_properties(; forceProgramCaption$*256)
-  on error goto ERTN
-  if ~setup then let fn_setup
-  if forceProgramCaption$<>'' then
-    dim oldCap$*256
-    oldCap$=env$('Program_Caption')
-    setenv('Program_Caption',forceProgramCaption$)
-  end if
-  fnBackgroundDisable(1)
+	on error goto ERTN
+	if ~setup then let fn_setup
+	if forceProgramCaption$<>'' then
+		dim oldCap$*256
+		oldCap$=env$('Program_Caption')
+		setenv('Program_Caption',forceProgramCaption$)
+	end if
+	fnBackgroundDisable(1)
 	fn_localPropertiesEdit
-  if forceProgramCaption$<>'' then
-    setenv('Program_Caption',oldCap$)
-  end if
-  fnBackgroundDisable(0)
+	if forceProgramCaption$<>'' then
+		setenv('Program_Caption',oldCap$)
+	end if
+	fnBackgroundDisable(0)
 fnend
 def fn_localPropertiesEdit
 	dim orient$(0)*9
@@ -84,65 +84,65 @@ def fn_localPropertiesEdit
 fnend
 include: ertn
 def library fnpglen(&pglen)
-  fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
-  fnpglen=pglen
+	fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
+	fnpglen=pglen
 fnend
 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
-  if ~setup then let fn_setup
+	if ~setup then let fn_setup
 	fnread_program_print_property=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
 fnend
 def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
-  on error goto ERTN
-  dim prg$*256
-  if prgCapForSettingsOverride$='' then
-    prg$=env$('Program_Caption')
-  else
-    prg$=prgCapForSettingsOverride$
-  end if
-  len_prg=len(prg$)
-  ! if lwrc$(prg$(len_prg-2:len_prg))='.br' then prg$(len_prg-2:len_prg)='' ! remove the .br ending, if it is there
-  ! if lwrc$(trim$(prg$))=lwrc$("acspr\checkfile") then prg$="acspr\checkhistory"
-  if env$('ACSDeveloper')<>'' then !  if it is a developer
-    fnsreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-  else
-    fnreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-    if value$='' then
-      fnsreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-    end if
-  end if
-  if value$='' then
-    if lwrc$(key$)=lwrc$('Orientation' ) then value$= 'Portrait'
-    if lwrc$(key$)=lwrc$('Height'      ) then value$= '11.000'
-    if lwrc$(key$)=lwrc$('Width'       ) then value$= '8.500'
-    if lwrc$(key$)=lwrc$('Lines'       ) then value$= '54'
-    if lwrc$(key$)=lwrc$('FontSize'    ) then value$= '10'
-    if lwrc$(key$)=lwrc$('TopMargin'   ) then value$= '0.500'
-    if lwrc$(key$)=lwrc$('BottomMargin') then value$= '0.500'
-    if lwrc$(key$)=lwrc$('LeftMargin'  ) then value$= '0.500'
-    if lwrc$(key$)=lwrc$('RightMargin' ) then value$= '0.500'
-    if env$('ACSDeveloper')='' then ! if not a developer
-       fnreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-    end if
-  end if
-  ! if env$('acsDeveloper')<>'' and key$='Orientation' then
-  !   pr 'read   "'&value$&'" from Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
-  !   pause
-  ! end if
+	on error goto ERTN
+	dim prg$*256
+	if prgCapForSettingsOverride$='' then
+		prg$=env$('Program_Caption')
+	else
+		prg$=prgCapForSettingsOverride$
+	end if
+	len_prg=len(prg$)
+	! if lwrc$(prg$(len_prg-2:len_prg))='.br' then prg$(len_prg-2:len_prg)='' ! remove the .br ending, if it is there
+	! if lwrc$(trim$(prg$))=lwrc$("acspr\checkfile") then prg$="Payroll\Payroll Check History"
+	if env$('ACSDeveloper')<>'' then !  if it is a developer
+		fnsreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+	else
+		fnreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+		if value$='' then
+			fnsreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+		end if
+	end if
+	if value$='' then
+		if lwrc$(key$)=lwrc$('Orientation' ) then value$= 'Portrait'
+		if lwrc$(key$)=lwrc$('Height'      ) then value$= '11.000'
+		if lwrc$(key$)=lwrc$('Width'       ) then value$= '8.500'
+		if lwrc$(key$)=lwrc$('Lines'       ) then value$= '54'
+		if lwrc$(key$)=lwrc$('FontSize'    ) then value$= '10'
+		if lwrc$(key$)=lwrc$('TopMargin'   ) then value$= '0.500'
+		if lwrc$(key$)=lwrc$('BottomMargin') then value$= '0.500'
+		if lwrc$(key$)=lwrc$('LeftMargin'  ) then value$= '0.500'
+		if lwrc$(key$)=lwrc$('RightMargin' ) then value$= '0.500'
+		if env$('ACSDeveloper')='' then ! if not a developer
+			 fnreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+		end if
+	end if
+	! if env$('acsDeveloper')<>'' and key$='Orientation' then
+	!   pr 'read   "'&value$&'" from Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
+	!   pause
+	! end if
 fnend
 def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
-  if ~setup then let fn_setup
-  on error goto ERTN
-  dim prg$*256
-  if prgCapForSettingsOverride$='' then
-    prg$=env$('Program_Caption')
-  else
-    prg$=prgCapForSettingsOverride$
-  end if
-  if env$('ACSDeveloper')<>'' then
-    fnsreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-  else
-    fnreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
-    ! pr 'writting "'&value$&'" to Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
-    ! pause
-  end if
+	if ~setup then let fn_setup
+	on error goto ERTN
+	dim prg$*256
+	if prgCapForSettingsOverride$='' then
+		prg$=env$('Program_Caption')
+	else
+		prg$=prgCapForSettingsOverride$
+	end if
+	if env$('ACSDeveloper')<>'' then
+		fnsreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+	else
+		fnreg_write(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
+		! pr 'writting "'&value$&'" to Reg:'&env$('cursys')&'.'&prg$&'.Print.'&key$
+		! pause
+	end if
 fnend

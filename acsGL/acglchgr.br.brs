@@ -2,7 +2,7 @@
 00020 ! Statement of Change in Financial Position with Comparison !:
         ! for Letter size paper
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnwait,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnwait,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20
@@ -13,7 +13,7 @@
 00120   fntop(program$,cap$="Change in Financial Position")
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
-00150   if fnglfs=5 then goto XIT !:
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   pedat$=fnpedat$
 00170   actpd$=fnactpd$

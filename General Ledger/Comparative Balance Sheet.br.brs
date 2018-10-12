@@ -1,19 +1,19 @@
 12000 ! formerly S:\acsGL\AcGLBalC
 12020 ! Comparative Balance Sheet
 14000 ! r: setup library, on error, dims, fntop
-14020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnpedat$,fnps,fnpriorcd,fnfscode,fnUseDeptNo,fnactpd,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
+14020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnpedat$,fnps,fnpriorcd,fnfscode,fnUseDeptNo,fnactpd,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
 14040   on error goto ERTN
 14060 ! 
 14080   dim fl1$*256,cogl$(3)*12,accum(9,2),bp(13),by(13)
 14100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*56
 14120 ! ______________________________________________________________________
 14140   fntop(program$)
-14160   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
+14160   if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
 14180   actpd$=fnactpd$ 
 14200   actpd=fnactpd 
 14220   ! fnfscode 
 14240   ! fnpriorcd
-14260   ! if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
+14260   ! if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
 14280   ! fnfscode
 14300   ! fnpriorcd
 14320   ! pr newpage

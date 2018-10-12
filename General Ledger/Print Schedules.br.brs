@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\glSchPrt
 00020 ! pr schedules
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnglfs,fnTos,fnChk,fnAcs,fnCmdKey,fnLbl,fnpglen,fnactpd,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnChk,fnAcs,fnCmdKey,fnLbl,fnpglen,fnactpd,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dollar$*1,k$*3,by(13),bp(13),byt(13)
@@ -13,7 +13,7 @@
 00124   pedat=fnactpd
 00125   fnfscode
 00126   fnpriorcd
-00130   if fnglfs=5 then goto XIT
+00130   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00135   fnfscode
 00136   fnpriorcd
 00150   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 

@@ -1,63 +1,69 @@
-00010 ! Replace S:\acsGL\fnglfs
-00020 ! ask questions for General Ledger Financial Statements
-14000 def library fnglfs
-14020   if glfsSetup<>val(env$('cno')) then ! r:
-14040     glfsSetup=val(env$('cno'))
-14060     library 'S:\Core\Library': fngethandle,fnTos,fnLbl,fncomboa,fnTxt,fnAcs,fnerror,fnCmdSet,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
-14080     on error goto ERTN
-14100     open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
-14120     read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
-14140     ! lmu = Last Accounting Period Closed
-14160     ! nap = Number of Accounting Periods
-14180     close #company: 
-14200     dim formatOption$(2)
-14220     dim priorOrCurrentOption$(2)
-14260     formatOption$(1)="Primary" : formatOption$(2)="Secondary" 
-14280     priorOrCurrentOption$(1)="Current" : priorOrCurrentOption$(2)="Prior" 
-14300     dim periodOption$(13)
-14320     mat periodOption$(nap)
-14340     for j=1 to nap : periodOption$(j)=str$(j): next j 
-14980   end if ! /r
-16000   actpd$=fnactpd$ 
-16020   actpd=fnactpd
-16040   if fnprocess=1 then 
-16060     fnps(1)
-16080     fnpriorcd(1)
-16100   else
-22000     fnTos(sn$="glFS-lib") 
-22020     lc=rc=0 : mylen=23 : mypos=mylen+3
-22040     fnLbl(lc+=1,1,"Statement Format:",mylen,1)
-22060     fncomboa("ps",lc,mypos,mat formatOption$) 
-22080     resp$(resp_format:=rc+=1)=formatOption$(1)
-22100     fnLbl(lc+=1,1,"Year:",mylen,1)
-22120     fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
-22140     resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
-22160     fnLbl(lc+=1,1,"Period to Print:",mylen,1)
-22180     fncomboa("FSCode",lc,mypos,mat periodOption$) 
-22200     resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
-22220     fnCmdSet(3)
-22240     fnAcs(sn$,0,mat resp$,ckey)
-32000     if ckey=5 then 
-32020       fnglfs=5 
-32040     else
-32060       format=srch(mat formatOption$,resp$(resp_format))
-32080       priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))
-32100       period=srch(mat periodOption$,resp$(resp_period))
-32180       ! pr 'format=';format 
-32200       ! pr 'priorOrCurrent=';priorOrCurrent
-32220       ! pr 'period=';period 
-32240       ! pause
-33000       fnps(format)
-33020       fnpriorcd(priorOrCurrent)
-33040       fnfscode(period)
-34420     end if
-34440   end if
-34460   XIT: ! 
-34480 fnend 
-87000 ! <Updateable Region: ERTN>
-87020 ERTN: fnerror(program$,err,line,act$,"xit")
-87040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-87060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-87080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-87100 ERTN_EXEC_ACT: execute act$ : goto ERTN
-87120 ! /region
+! Replace S:\acsGL\fnGlAskFormatPriorCdPeriod
+! ask questions for General Ledger Financial Statements
+def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
+
+	if glfsSetup<>val(env$('cno')) then ! r:
+		glfsSetup=val(env$('cno'))
+		library 'S:\Core\Library': fngethandle,fnTos,fnLbl,fncomboa,fnTxt,fnAcs,fnerror,fnCmdSet,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
+		on error goto ERTN
+		
+		open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+		read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
+		! lmu = Last Accounting Period Closed
+		! nap = Number of Accounting Periods
+		close #company: 
+		
+		dim formatOption$(2)
+		formatOption$(1)="Primary" 
+		formatOption$(2)="Secondary" 
+		
+		dim priorOrCurrentOption$(2)
+		priorOrCurrentOption$(1)="Current" 
+		priorOrCurrentOption$(2)="Prior" 
+		
+		dim periodOption$(13)
+		mat periodOption$(nap)
+		for j=1 to nap 
+			periodOption$(j)=str$(j)
+		next j 
+	end if ! /r
+	actpd$=fnactpd$ 
+	actpd=fnactpd
+	format=srch(mat formatOption$,defaultFormatOption$)
+	if format<=0 or format >(udim(mat formatOption$)) then format=1
+	if fnprocess=1 then 
+		fnps(1)
+		fnpriorcd(1)
+	else
+		fnTos(sn$="glFS-lib") 
+		lc=rc=0 : mylen=23 : mypos=mylen+3
+		fnLbl(lc+=1,1,"Statement Format:",mylen,1)
+		fncomboa("ps",lc,mypos,mat formatOption$) 
+		resp$(resp_format:=rc+=1)=formatOption$(format)
+		fnLbl(lc+=1,1,"Year:",mylen,1)
+		fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
+		resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
+		fnLbl(lc+=1,1,"Period to Print:",mylen,1)
+		fncomboa("FSCode",lc,mypos,mat periodOption$) 
+		resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
+		fnCmdSet(3)
+		fnAcs(sn$,0,mat resp$,ckey)
+		if ckey=5 then 
+			returnN=5 
+		else
+			format=srch(mat formatOption$,resp$(resp_format))
+			priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))
+			period=srch(mat periodOption$,resp$(resp_period))
+			! pr 'format=';format 
+			! pr 'priorOrCurrent=';priorOrCurrent
+			! pr 'period=';period 
+			! pause
+			fnps(format)
+			fnpriorcd(priorOrCurrent)
+			fnfscode(period)
+		end if
+	end if
+	XIT: ! 
+	fnGlAskFormatPriorCdPeriod=returnN
+fnend 
+include: ertn

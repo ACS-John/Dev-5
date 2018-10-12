@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AcGlIncY
 00020 ! -- INCOME STATEMENT FOR THIRTEEN PERIODS
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnTos,fnTxt,fnCmdKey,fnAcs,fnLbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnTxt,fnCmdKey,fnAcs,fnLbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim p$(20)*50
@@ -22,7 +22,7 @@
 00220   actpd=fnactpd
 00230   actpd$=fnactpd$
 00240 ! 
-00250   if fnglfs=5 then goto XIT !:
+00250   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00260   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 

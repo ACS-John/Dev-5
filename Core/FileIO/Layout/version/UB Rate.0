@@ -1,0 +1,42 @@
+[Q]\UBmstr\ubData\oRateMst.h[cno], or_, 0
+[Q]\UBmstr\ubData\oRateIdx1.h[cno] ,  service/code
+[Q]\UBmstr\ubData\oRateIdx2.h[cno] ,  name
+recl=374
+===================================================
+! meterAddress Index needs to be (CaseIgnored) - manually handled outside fileio for now.
+! Some of the old dims:   dim extra(23)
+service$                ,Service Code                                           ,  C    2    , ! SPos=   1
+code$                   ,Rate Code                                              ,  G    2    , ! SPos=   3
+name$                   ,Description                                            ,  C   50    , ! SPos=   6
+minCharge               ,Minimum Charge                                         , G    10    , ! SPos=    Mask=32
+minUsage                ,Minumum Usage                                          , G    10    , ! SPos=    Mask=30
+Tier1usageFrom          ,Tier 1 Usage From                                      , G    10    , ! SPos=
+Tier1usageTo            ,Tier 1 Usage To                                        , G    10    , ! SPos=
+Tier1charge             ,Tier 1 Charge Per Unit                                 , G    10    , ! SPos=
+Tier2usageFrom          ,Tier 2 Usage From                                      , G    10    , ! SPos=
+Tier2usageTo            ,Tier 2 Usage To                                        , G    10    , ! SPos=
+Tier2charge             ,Tier 2 Charge Per Unit                                 , G    10    , ! SPos=
+Tier3usageFrom          ,Tier 3 Usage From                                      , G    10    , ! SPos=
+Tier3usageTo            ,Tier 3 Usage To                                        , G    10    , ! SPos=
+Tier3charge             ,Tier 3 Charge Per Unit                                 , G    10    , ! SPos=
+Tier4usageFrom          ,Tier 4 Usage From                                      , G    10    , ! SPos=
+Tier4usageTo            ,Tier 4 Usage To                                        , G    10    , ! SPos=
+Tier4charge             ,Tier 4 Charge Per Unit                                 , G    10    , ! SPos=
+Tier5usageTo            ,Tier 5 Usage To                                        , G    10    , ! SPos=
+Tier5usageFrom          ,Tier 5 Usage From                                      , G    10    , ! SPos=
+Tier5charge             ,Tier 5 Charge Per Unit                                 , G    10    , ! SPos=
+Tier6usageFrom          ,Tier 6 Usage From                                      , G    10    , ! SPos=
+Tier6usageTo            ,Tier 6 Usage To                                        , G    10    , ! SPos=
+Tier6charge             ,Tier 6 Charge Per Unit                                 , G    10    , ! SPos=
+Tier7usageFrom          ,Tier 7 Usage From                                      , G    10    , ! SPos=
+Tier7usageTo            ,Tier 7 Usage To                                        , G    10    , ! SPos=
+Tier7charge             ,Tier 7 Charge Per Unit                                 , G    10    , ! SPos=
+Tier8usageFrom          ,Tier 8 Usage From                                      , G    10    , ! SPos=
+Tier8usageTo            ,Tier 8 Usage To                                        , G    10    , ! SPos=
+Tier8charge             ,Tier 8 Charge Per Unit                                 , G    10    , ! SPos=
+Tier9usageFrom          ,Tier 9 Usage From                                      , G    10    , ! SPos=
+Tier9usageTo            ,Tier 9 Usage To                                        , G    10    , ! SPos=
+Tier9charge             ,Tier 9 Charge Per Unit                                 , G    10    , ! SPos=
+Tier10usageFrom         ,Tier 10 Usage From                                     , G    10    , ! SPos=
+Tier10usageTo           ,Tier 10 Usage To                                       , G    10    , ! SPos=
+Tier10charge            ,Tier 10 Charge Per Unit                                , G    10    , ! SPos=

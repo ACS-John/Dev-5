@@ -1,7 +1,7 @@
 ! *** PR - Payroll ***
 File
 >Employee                                   ^ Payroll\Employee
->Payroll Check History                      ^ acspr\CheckHistory
+>Payroll Check History                      ^ Payroll\Payroll Check History
 >Design Reports                             ^ acsPR\newprRpt3
 ! >W-2 Supplemental Information             ^ acsPR\W2Box16
 >Accrued Payroll Tax Information            ^ acsPR\NewMGLmstr

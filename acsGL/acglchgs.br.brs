@@ -2,7 +2,7 @@
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION WITH COMPARRISON !:
         ! FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnglfs,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cogl$(3)*12,cap$*128,udf$*256
@@ -13,7 +13,7 @@
 00120 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Change Amount")
 00140   fncno(cno,cnam$)
-00150   if fnglfs=5 then goto XIT
+00150   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00160   udf$=env$('temp')&'\'
 00170   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
 00180   fscode=fnfscode
