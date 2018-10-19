@@ -942,7 +942,7 @@ def fn_client_is_converting
     cic_return=1
   else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2020','mm/dd/ccyy') then ! just testing
     cic_return=1
-  else if env$('client')='Payroll Done Right' and days(date$)<=days('07/01/2018','mm/dd/ccyy') then ! just testing
+  else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
     cic_return=1
   else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('01/15/2019','mm/dd/ccyy')  then
     cic_return=1
