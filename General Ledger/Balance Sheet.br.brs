@@ -5,7 +5,7 @@
 	fntop(program$)
 	fn_balanceSheet
 	goto Xit
-	Xit: fnxit
+Xit: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -117,6 +117,17 @@ GetStarted: ! r:
 		end if
 	loop
 ! /r EoF (above) goes to Finis
+Finis: ! r:
+	eofcode=1
+	fn_footerPrint(foot$,tabnote,1)
+	fnfscode(actpd)
+	fnpriorcd(1)
+	fncloseprn
+	close #hGl: ioerr ignore
+	hGl=0
+	close #hFsD: ioerr ignore
+	hFsD=0
+fnend ! /r
 
 def fn_teSetHeaderOrSubHead(mat fs$,mat fsN,&reportHeadingX$,foot$*132,tabnote)
 	reportHeadingX$=fs$(fsd_description)
@@ -140,32 +151,32 @@ def fn_tePrnSectionHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpS
 	fn_setAccum(mat fsN,mat accum)
 fnend
 def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&total,&cb; ___,dollar$*1,dollar,sp2,tmpStartPos)
-
+	! De_
 	! local to TeDE only, but retained values: br
-	if notrans=1 then goto L660
-	if br>=val(fs$(fsd_number)) and val(fs$(fsd_number))><0 then goto L610
-	ReadGlMasterAmounts: ! read general ledger master file for amounts
+	if notrans=1 then goto De_L660
+	if br>=val(fs$(fsd_number)) and val(fs$(fsd_number))><0 then goto De_L610
+	De_ReadGlMasterAmounts: ! read general ledger master file for amounts
 	dim by(13)
 	dim bp(13)
-	read #hGl,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof EoGlMasterAmounts
-	if br=0 then goto ReadGlMasterAmounts
-	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
+	read #hGl,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
+	if br=0 then goto De_ReadGlMasterAmounts
+	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto De_L610
 	if fnfscode<1 or fnfscode>12 then let fnfscode(1)
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
-	L610: !
+	De_L610: !
 	if br=val(fs$(fsd_number)) then
 		total+=cb
-		goto ReadGlMasterAmounts
+		goto De_ReadGlMasterAmounts
 	else if br<val(fs$(fsd_number)) then
-		goto ReadGlMasterAmounts
+		goto De_ReadGlMasterAmounts
 	else if br>val(fs$(fsd_number)) then
-		goto L660
+		goto De_L660
 	end if
 
-	EoGlMasterAmounts: !
+	De_EoGlMasterAmounts: !
 	notrans=1
 
-	L660: !
+	De_L660: !
 	if fs$(fsd_entryType)="E" then total=-accum(fsN(fsd_accumulatorToPrint))
 
 	if fsN(fsd_clearAccumulator1)<>9 then accum(1)+=total
@@ -187,7 +198,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	if fsN(fsd_dollarSign)=1 then dollar$="$" else dollar$=" "
 	dollar=24+14*fsN(fsd_column) ! If CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
 	if total=0 and fsn(fsd_lineSkip)+fsN(fsd_underline)+fsN(fsd_dollarSign)+fsN(fsd_percentageBase)<=0 then
-		goto READ_TOP
+		goto De_Finis
 	end if
 	sp2=dollar-fsN(fsd_startPos)-1
 	tmpStartPos=fsN(fsd_startPos)
@@ -206,6 +217,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 		fn_underline(mat fsN)
 	end if
 	fn_footer(foot$,tabnote,mat fsN)
+	De_Finis: !
 fnend
 def fn_tePrnProfitLossAndTotal(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,dollar$,sp2,j,accum1,dollar,tmpStartPos)
 	if fsN(fsd_accumulatorToPrint)=0 then fsN(fsd_accumulatorToPrint)=1
@@ -306,15 +318,6 @@ def fn_tePrnHeader(reportHeading1$*50,reportHeading2$*50)
 	pr #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
 	pr #255: "\ql "
 fnend
-Finis: ! r:
-	eofcode=1
-	fn_footerPrint(foot$,tabnote,1)
-	fnfscode(actpd)
-	fnpriorcd(1)
-	fncloseprn
-	close #hGl: ioerr ignore
-	close #hFsD: ioerr ignore
-fnend ! /r
 
 include: ertn
 include: fn_open

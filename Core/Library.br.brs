@@ -1240,7 +1240,7 @@ fnend
 		fncch$=fncch$(a$)
 	fnend
 	def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$)
-		library 'S:\acsGL\fnGlAskFormatPriorCdPeriod.br': fnGlAskFormatPriorCdPeriod
+		library 'S:\acsGL\fnglfs.br': fnGlAskFormatPriorCdPeriod
 		fnGlAskFormatPriorCdPeriod=fnGlAskFormatPriorCdPeriod( defaultFormatOption$)
 	fnend
 	def library fnglmerge
