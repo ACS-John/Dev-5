@@ -4,7 +4,7 @@ fn_testNeEfile
 
 goto Xit
 def fn_testCmRead
-	C:\Brumbaugh\clsinc\PROG2\mast2.wb.brs
+	! C:\Brumbaugh\clsinc\PROG2\mast2.wb.brs
  open #hMaster:=1: "name=C:\Brumbaugh\clsinc\DATA\MASTER,kfname=C:\Brumbaugh\clsinc\DATA\MASTERX,shr",internal,outin,keyed
  pause
  close #hMaster:
