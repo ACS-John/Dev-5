@@ -56,7 +56,10 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		oldgridname$= gridname$="[All]                         "
 		write #hGridName,using "form pos 1,c 30",rec=1: gridname$
 	end if
-	fnDedNames(mat dednames$)
+	dim dednames$(20)*20
+	dim abrevname$(20)*8
+	dim newdedcode(20)
+	fnDedNames(mat dednames$,mat abrevname$,mat newdedcode)
 	mat hf=(1)
 	for j=1 to 20
 		if trim$(dednames$(j))="" then hf(j+25)=0 ! default the (All) to only those deductions that have names
@@ -127,7 +130,11 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		lc=rc=0 : mylen=20 : mypos=mylen+3
 		if addcode=1 then disablecode=0 else disablecode=1
 		fnLbl(lc+=1,1,"Employee #:",mylen,1)
+		if disablecode then
 		fnTxt(lc,mypos,8,0,0,"30",disablecode)
+		else
+			fncmbemp(lc,mypos,1)
+		end if
 		resp$(rc+=1)=str$(heno)
 		fnLbl(lc+=1,1,"Department:",mylen,1)
 		fnTxt(lc,mypos,3,0,0,"",0)
@@ -189,7 +196,9 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		fnLbl(lc+=1,1,"State U/C Wages:",mylen,1)
 		fnTxt(lc,mypos,10,0,0,"10")
 		resp$(rc+=1)=str$(tdc(10))
-		mypos+=37: fnLbl(lc=1,38,"Federal Wh:",mylen,1)
+
+		mypos+=37 : lc=2
+		fnLbl(lc+=1,38,"Federal Wh:",mylen,1)
 		fnTxt(lc,mypos,10,0,0,"10")
 		resp$(rc+=1)=str$(tcp(1))
 		fnLbl(lc+=1,38,"SS Withholdings:",mylen,1)
@@ -207,7 +216,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			else
 				fnLbl(lc+=1,38,dednames$(j)&":",mylen,1)
 			end if
-			fnTxt(lc,mypos,10,0,0,"10")
+			fnTxt(lc,mypos,10, 0,0,"10",fn_isBlank(dednames$(j)))
 			resp$(rc+=1)=str$(tcp(j+4))
 		next j
 		fnCmdKey('&Save',save,1,0)
@@ -225,35 +234,62 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			if resp$="OK" then delete #hCheckIdx3,rec=editrec: : eno=holdeno
 			goto SCREEN2
 		end if
-		heno   =val(resp$(1) ) ! employee #
-		tdn    =val(resp$(2) ) ! dept #
-		prd    =val(resp$(3) ) ! date
-		ckno   =val(resp$(4) ) ! check #
-		tdc(1) =val(resp$(5) ) ! reg hrs
-		tdc(2) =val(resp$(6) ) ! ot hrs
-		tdc(3) =val(resp$(7) ) ! sick hrs
-		tdc(4) =val(resp$(8) ) ! vac hrs
-		tdc(5) =val(resp$(9) ) ! hol hrs
-		tcp(26)=val(resp$(10)) ! reg pay
-		tcp(27)=val(resp$(11)) ! ot pay
-		tcp(28)=val(resp$(12)) ! other comp
-		tcp(29)=val(resp$(13)) ! Meals
-		tcp(30)=val(resp$(14)) ! Tips
-		tcp(31)=val(resp$(15)) ! Total Pay
-		tcp(32)=val(resp$(16)) ! Net pay
-		tdc(6) =val(resp$(17)) ! Workman comp wages
-		tdc(7) =val(resp$(18)) ! ss wages
-		tdc(8) =val(resp$(19)) ! Medicare wages
-		tdc(9) =val(resp$(20)) ! Federal uc
-		tdc(10)=val(resp$(21)) ! state uc
-		tcp(1) =val(resp$(22)) ! fed wh
-		tcp(2) =val(resp$(23)) ! ss  wh
-		tcp(3) =val(resp$(24)) ! med wh
-		tcp(4) =val(resp$(25)) ! state wh
+		! r: get local values from mat resp$
+		heno   =val(resp$(1) (1:8) ) ! employee #
+		tdn    =val(resp$(2)       ) ! dept #
+		prd    =val(resp$(3)       ) ! date
+		ckno   =val(resp$(4)       ) ! check #
+		tdc(1) =val(resp$(5)       ) ! reg hrs
+		tdc(2) =val(resp$(6)       ) ! ot hrs
+		tdc(3) =val(resp$(7)       ) ! sick hrs
+		tdc(4) =val(resp$(8)       ) ! vac hrs
+		tdc(5) =val(resp$(9)       ) ! hol hrs
+		tcp(26)=val(resp$(10)      ) ! reg pay
+		tcp(27)=val(resp$(11)      ) ! ot pay
+		tcp(28)=val(resp$(12)      ) ! other comp
+		tcp(29)=val(resp$(13)      ) ! Meals
+		tcp(30)=val(resp$(14)      ) ! Tips
+		tcp(31)=val(resp$(15)      ) ! Total Pay
+		tcp(32)=val(resp$(16)      ) ! Net pay
+		tdc(6) =val(resp$(17)      ) ! Workman comp wages
+		tdc(7) =val(resp$(18)      ) ! ss wages
+		tdc(8) =val(resp$(19)      ) ! Medicare wages
+		tdc(9) =val(resp$(20)      ) ! Federal uc
+		tdc(10)=val(resp$(21)      ) ! state uc
+		tcp(1) =val(resp$(22)      ) ! fed wh
+		tcp(2) =val(resp$(23)      ) ! ss  wh
+		tcp(3) =val(resp$(24)      ) ! med wh
+		tcp(4) =val(resp$(25)      ) ! state wh
 		for j=1 to 20
 			tcp(j+4)=val(resp$(j+25)) ! std deductions
 		next j
-		if addcode=1 then write #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp : addcode=0 : goto SCREEN2
+		! /r
+		if addcode=1 then
+			testNet=tcp(32)
+			testGross=tcp(31)
+			testNetCalculated=testGross
+			for testDeductionItem=1 to udim(mat dednames$)
+				if newdedcode(testDeductionItem)=1 then ! deduction
+					testNetCalculated-=tcp(testDeductionItem)
+				else if newdedcode(testDeductionItem)=2 then ! addition
+					testNetCalculated+=tcp(testDeductionItem)
+				else if newdedcode(testDeductionItem)=3 then ! benefit
+					! no change
+				end if
+			next testDeductionItem
+			if testNetCalculated<>testNet then
+				mat mg$(0)
+				fnAddOneC(mat mg$,'The calculated Net Amount of the check is '&str$(testNetCalculated)&',')
+				fnAddOneC(mat mg$,'but the Net Amount entered is '&str$(testNet)&'.')
+				fnAddOneC(mat mg$,'Please correct to continue.')
+				fnmsgbox(mat mg$,resp$,cap$,0+48) ! ok + excl
+				goto SCREEN3_ADD
+			else
+				write #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp
+				addcode=0
+				goto SCREEN2
+			end if
+		end if
 		if sum(holdtdc)<>sum(tdc) or sum(holdtcp)<>sum(tcp) then
 			mat mg$(3)
 			mg$(1)="You have changed dollar amounts on a real check! "
@@ -314,7 +350,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		cf+=1 : fraaccount=cf
 		fnLbl(1,1,"Employee:",8,1,0,fraaccount)
 		fncmbemp(1,10,1,fraaccount)
-		rc+=1
+		rc_employee=rc+=1
 		if trim$(hact$)<>"" then
 			resp$(rc)=hact$
 		else if resp$(rc)="" or trim$(resp$(rc))="True" then
@@ -344,7 +380,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		qtr2=val(resp$(10))
 		qtr3=val(resp$(11))
 		qtr4=val(resp$(12))
-		z$=holdz$=hact$=resp$(13)(1:8) : z$=holdz$=hact$=lpad$(trim$(z$),8)
+		z$=holdz$=hact$=resp$(rc_employee)(1:8) : z$=holdz$=hact$=lpad$(trim$(z$),8)
 		qtr5=val(resp$(12)(1:4))*10000+1231
 		begin_year=val(resp$(12)(1:4))*10000+0101
 		end_year=val(resp$(12)(1:4))*10000+1231
@@ -370,7 +406,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 	goto Screen1B ! /r
 
 	SelectColumns: ! r:
-		dim dat$*20,scr1$(10)*30,alloc(10),nam$*30,cap$*128,dednames$(20)*20
+		dim dat$*20,scr1$(10)*30,alloc(10),nam$*30,cap$*128
 		dim holdnam$*30
 		dim name$(46)*11
 		dim r(20,4),hd1$*255,serviceName$(10)*20,tg(11),end_date$*60,metraddr$*30
@@ -872,8 +908,14 @@ def fn_setup
 		library 'S:\Core\Library': fnmsgbox
 		library 'S:\Core\Library': fnDedNames
 		library 'S:\Core\Library': fnGetPayrollDates
+		library 'S:\Core\Library': fnAddOneC
 
 	end if
 fnend
-
+def fn_isBlank(text$*128; ___,returnN)
+	if trim$(text$)='' then
+		returnN=1
+	end if
+	fn_isBlank=returnN
+fnend
 include: ertn

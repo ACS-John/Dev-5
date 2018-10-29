@@ -165,7 +165,7 @@ def library fnwin3(win,&cap$,wh,ww,dc,bo,win_align)
 fnend
 def library fnopenwin(win,sr,sc,er,ec,&cap$)
 	library 'S:\Core\OpenWin.br': fnopenwin
-	fnopenwin(win,sr,sc,er,ec, cap$)
+	fnopenwin=fnopenwin(win,sr,sc,er,ec, cap$)
 fnend
 def library fnCopy(from$*256,to$*256; new_record_length,options$*256)
 	library 'S:\Core\copy.br': fnCopy
@@ -1367,14 +1367,6 @@ fnend
 		library 'S:\acsPR\Employee_srch.br': fnemployee_srch
 		fnemployee_srch(x$,fixgrid)
 	fnend
-	def library fnburden_srch(&x$;fixgrid)
-		library 'S:\acsPR\Burden_srch.br': fnburden_srch
-		fnburden_srch(x$,fixgrid)
-	fnend
-	def library fnjob_srch(&x$;fixgrid)
-		library 'S:\acsPR\Job_srch.br': fnjob_srch
-		fnjob_srch(x$,fixgrid)
-	fnend
 	def library fncat_srch(&x$;fixgrid)
 		library 'S:\acsPR\CAT_srch.br': fncat_srch
 		fncat_srch(x$,fixgrid)
@@ -1391,13 +1383,9 @@ fnend
 		library 'S:\acsPR\SubCat_srch.br': fnsubcat_srch
 		fnsubcat_srch(cde$,ckey,fixgrid)
 	fnend
-	def library fncmbemp(lyne,mypos;addall,c,a$*30)
+	def library fncmbemp(lyne,mypos; addall,container)
 		library 'S:\acsPR\CmbEmp.br': fncmbemp
-		fncmbemp(lyne,mypos,addall,c,a$)
-	fnend
-	def library fncmbburden(lyne,mypos;addall,c,a$*30)
-		library 'S:\acsPR\CmbBurden.br': fncmbburden
-		fncmbburden(lyne,mypos,addall,c,a$)
+		fncmbemp(lyne,mypos, addall,container)
 	fnend
 	def library fncmbcategory(lyne,mypos;addall,c,a$*30)
 		library 'S:\acsPR\CmbCategory.br': fncmbcategory
@@ -1431,6 +1419,19 @@ fnend
 		library 'S:\acsPR\Conversion\v4_part2.br': fnpr_conversion_add_missing
 		fnpr_conversion_add_missing=fnpr_conversion_add_missing(cno)
 	fnend
+	def library fnjob_srch(&x$;fixgrid)
+		library 'S:\acsPR\Job_srch.br': fnjob_srch
+		fnjob_srch(x$,fixgrid)
+	fnend
 ! /r
-
+! r: Job Cost Payroll
+	def library fncmbburden(lyne,mypos;addall,c,a$*30)
+		library 'S:\Payroll\Job Cost\fnCmbBurden.br': fncmbburden
+		fncmbburden(lyne,mypos,addall,c,a$)
+	fnend
+	def library fnburden_srch(&x$;fixgrid)
+		library 'S:\Payroll\Job Cost\fnBurden_srch.br': fnburden_srch
+		fnburden_srch(x$,fixgrid)
+	fnend
+! /r
 
