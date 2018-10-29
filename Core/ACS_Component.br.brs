@@ -18,7 +18,7 @@ def fn_setup
 	tab$=hex$('09')
 	setup=1
 fnend 
-def library fntop(;prg$*256,cap$*128)
+def library fntop(; prg$*256,cap$*128)
 	!	 top of (every) program function
 	if ~setup then let fn_setup
 	pr newpage
@@ -476,7 +476,7 @@ def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 	setenv('control'&str$(fn_control_count),"PicBut|"&str$(lyne)&"|"&str$(ps)&"|"&str$(comkey)&"|"&str$(btnh)&"|"&str$(btnw)&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(default)&"|"&str$(cancel)&"|"&txt$&"|"&pic1$&"|"&pic2$&"|"&tt$&"|")
 fnend 
 IGNORE: continue 
-def library fndisplay_menu (mat _menu$,mat _program$,mat _status$;___,menu_string$*10000,index_)
+def library fndisplay_menu (mat _menu$,mat _program$,mat _status$; ___,menu_string$*10000,index_)
 	if ~setup then let fn_setup
 	for index_=1 to udim(mat _menu$)
 		menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'

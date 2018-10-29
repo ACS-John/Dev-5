@@ -56,25 +56,25 @@ Utilities
 >Payroll Departmental Register              ^ acsPR\newprReg2
 >Fix Wording On Grids                       ^ acspr\pulllay
 
-Payroll Job Cost Add-On                    ^                                 ^ P2
->File                                      ^                                 ^ P2
->>Job Cost                                 ^ acsPR\NewJCMaint                ^ P2
->>Category                                 ^ Payroll\Job Cost\Category       ^ P2
->>Sub-Category Description                 ^ acsPR\NewJCSCMINT               ^ P2
->>User Designed Reports - JC               ^ acsPR\NewJCRPTFM                ^ P2
->>Personnel Burden                         ^ acsPR\Burden                    ^ P2
->Daily                                     ^                                 ^ P2
->>Enter Time                               ^ acsPR\NewJcinput                ^ P2
->>Enter Charges                            ^ acsPR\NewJCINPTC                ^ P2
->>Enter Billings                           ^ acsPR\NewJCIPBIL                ^ P2
->>Enter Percent Complete                   ^ acsPR\NewJCPCTCMP               ^ P2
->Print                                     ^                                 ^ P2
->>Certified Payroll Register               ^ acsPR\NewJCcpR1                 ^ P2
->>Job Status Worksheet                     ^ acsPR\NewJCStWksh               ^ P2
->>Job Cost Report                          ^ acsPR\NewJCPrtDET               ^ P2
->>User Designed Reports (2)                ^ acsPR\NewPrUsrDR                ^ P2
->>Name and Number List                     ^ acsPR\NewJCNamLst               ^ P2
->Current Period                            ^                                 ^ P2
->>Transfer Job Cost To Payroll             ^ Payroll\Enter Time Sheets       ^ P2
->>Zero Current Period Info                 ^ acsPR\NewJCZCur                 ^ P2
->>Remove Completed Jobs                    ^ acsPR\NewJCRemove               ^ P2
+Payroll Job Cost Add-On                    ^                                    ^ P2
+>File                                      ^                                    ^ P2
+>>Job Cost                                 ^ acsPR\NewJCMaint                   ^ P2
+>>Category                                 ^ Payroll\Job Cost\Category          ^ P2
+>>Sub-Category Description                 ^ acsPR\NewJCSCMINT                  ^ P2
+>>User Designed Reports - JC               ^ acsPR\NewJCRPTFM                   ^ P2
+>>Personnel Burden                         ^ Payroll\Job Cost\Personnel Burden  ^ P2
+>Daily                                     ^                                    ^ P2
+>>Enter Time                               ^ acsPR\NewJcinput                   ^ P2
+>>Enter Charges                            ^ acsPR\NewJCINPTC                   ^ P2
+>>Enter Billings                           ^ acsPR\NewJCIPBIL                   ^ P2
+>>Enter Percent Complete                   ^ acsPR\NewJCPCTCMP                  ^ P2
+>Print                                     ^                                    ^ P2
+>>Certified Payroll Register               ^ acsPR\NewJCcpR1                    ^ P2
+>>Job Status Worksheet                     ^ acsPR\NewJCStWksh                  ^ P2
+>>Job Cost Report                          ^ acsPR\NewJCPrtDET                  ^ P2
+>>User Designed Reports (2)                ^ acsPR\NewPrUsrDR                   ^ P2
+>>Name and Number List                     ^ acsPR\NewJCNamLst                  ^ P2
+>Current Period                            ^                                    ^ P2
+>>Transfer Job Cost To Payroll             ^ Payroll\Enter Time Sheets          ^ P2
+>>Zero Current Period Info                 ^ acsPR\NewJCZCur                    ^ P2
+>>Remove Completed Jobs                    ^ acsPR\NewJCRemove                  ^ P2
