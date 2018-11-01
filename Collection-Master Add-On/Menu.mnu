@@ -1,0 +1,6 @@
+! *** CM - Collection-Master Add-On ***
+Dealer         ^ C:\ACS\Dev-5\Collection-Master Add-On\Find Duplicate Claims.br.brs
+Contact        ^ HamsterFio:Contact
+Invoice        ^ HamsterFio:Invoice
+Invoice Item   ^ HamsterFio:Invoice Item
+State          ^ Core\Programs\State
