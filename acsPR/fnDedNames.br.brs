@@ -1,6 +1,6 @@
 library program$: fnDedNames
 dim xa$(20)*20,xb$(20)*8,xc(20)
-fnDedNames(mat xa$,mat xb$) ! , mat xc) ! ,mat xd,mat xe,mat xf,mat xg,mat xh,mat xi$)
+fnDedNames(mat xa$,mat xb$, mat xc) ! ,mat xd,mat xe,mat xf,mat xg,mat xh,mat xi$)
 pr 'fullname','abbrName','dedcode'
 for x=1 to 20
 	pr xa$(x),xb$(x),xc(x)
@@ -12,6 +12,8 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 	if ~setupDedNames then
 		setupDedNames=1
 		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnArrayWasPassedC
+		library 'S:\Core\Library': fnArrayWasPassedN
 		dim cache_fullname$(20)*20
 		dim cache_abrevname$(20)*8
 		dim cache_dedcode(20)
@@ -57,26 +59,43 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		fullname$(fullnameItem)=cache_fullname$(fullnameItem) soflow ignore
 	nex fullnameItem
 	
-	on error goto dnFINIS !  assumes that the erroring one and all further paramters were not passed
+	! on error goto dnFINIS !  assumes that the erroring one and all further paramters were not passed
+	if fnArrayWasPassedC(mat abrevname$) then
+		mat abrevname$(udim(mat cache_abrevname$))
+		for abrevnameItem=1 to udim(mat abrevname$)
+			abrevname$(abrevnameItem)=cache_abrevname$(abrevnameItem) soflow ignore
+		nex abrevnameItem
+	! else
+	! 	pr 'not passed abrevname$'
+	end if
+	if fnArrayWasPassedN(mat dedcode) then
+		mat dedcode(udim(mat cache_dedcode))
+		mat dedcode=cache_dedcode
+	end if
 	
-	mat abrevname$(udim(mat cache_abrevname$))
-	for abrevnameItem=1 to udim(mat abrevname$)
-		fullname$(abrevnameItem)=cache_abrevname$(abrevnameItem) soflow ignore
-	nex abrevnameItem
-
-	mat dedcode(udim(mat cache_dedcode))
-	mat dedcode=cache_dedcode
-	mat calcode(udim(mat cache_calcode))
-	mat calcode=cache_calcode
-	mat dedfed(udim(mat cache_dedfed))
-	mat dedfed=cache_dedfed
-	mat dedfica(udim(mat cache_dedfica))
-	mat dedfica=cache_dedfica
-	mat dedst(udim(mat cache_dedst))
-	mat dedst=cache_dedst
-	mat deduc(udim(mat cache_deduc))
-	mat deduc=cache_deduc
-	mat gl$(udim(mat cache_gl$))
-	mat gl$=cache_gl$
+	if fnArrayWasPassedN(mat calcode) then
+		mat calcode(udim(mat cache_calcode))
+		mat calcode=cache_calcode
+	end if
+	if fnArrayWasPassedN(mat dedfed) then
+		mat dedfed(udim(mat cache_dedfed))
+		mat dedfed=cache_dedfed
+	end if
+	if fnArrayWasPassedN(mat dedfica) then
+		mat dedfica(udim(mat cache_dedfica))
+		mat dedfica=cache_dedfica
+	end if
+	if fnArrayWasPassedN(mat dedst) then
+		mat dedst(udim(mat cache_dedst))
+		mat dedst=cache_dedst
+	end if
+	if fnArrayWasPassedN(mat deduc) then
+		mat deduc(udim(mat cache_deduc))
+		mat deduc=cache_deduc
+	end if
+	if fnArrayWasPassedC(mat gl$) then
+		mat gl$(udim(mat cache_gl$))
+		mat gl$=cache_gl$
+	end if
 	dnFINIS: !
 fnend
