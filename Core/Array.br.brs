@@ -150,7 +150,7 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
 fnend
 def library fnArrayWasPassedC(mat array$)
   ! 1-D arrays only please
-  on error goto awpcFinis
+  on error goto AwpcFinis
   awpcReturn=0
   awpcUdim=udim(mat array$)
   mat array$(awpcUdim+1)

@@ -238,6 +238,8 @@ def fn_system_abbr_2_name$*40(; as2n_abbr$*2)
     as2n_return$='Time Management'
   else if as2n_abbr$='oe' then 
     as2n_return$='BR Order Entry'
+  else if as2n_abbr$='cm' then 
+    as2n_return$='Collection-Master Add-On'
   end if 
   fn_system_abbr_2_name$=as2n_return$
 fnend 
