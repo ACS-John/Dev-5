@@ -87,7 +87,7 @@ def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
   end if 
   fn_addOneC=udim(mat add_to$)
 fnend 
-def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
+def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
   cmcReturn=0
   cmcIndex=0
   do

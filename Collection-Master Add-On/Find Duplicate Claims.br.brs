@@ -1,51 +1,149 @@
-
-! 92030 library "SQL/Library": fnsql_setup,fnsql_id_parse,fnsql_setup$,fnopen_sql_file
-! 99296     dim client_pf_data$(0)*60,client_pf_data(0),client_pf_fieldsc$(0)*20,client_pf_fieldsn$(0)*20,client_pf_formall$*512
-! 99298     execute "*SubProc "&fnsql_setup$('Client_PF',mat client_pf_data$,mat client_pf_data,mat client_pf_fieldsc$,mat client_pf_fieldsn$,client_pf_formall$)
-! 99300     let h_client_pf=fnopen_sql_file("Client_PF",openclosed$) ! kps=1,9,13  kln=8,4,4
-! r: setup
-	
-	execute 'config substitute [cmPath] C:\Brumbaugh\clsinc'
-	
-
-	library "[cmPath]\Prog2\Mast2.wb":	fnsql_read
-	library "[cmPath]\library\CLSUtil.wb":	fnget_formall$,fnget_formarr
-	library "[cmPath]\library\CLSUtil.wb":	fnreport_path$,fnclaim_path$,fnget_claimfiles,fnclaim_scroll
-	library "[cmPath]\library\CLSUtil.wb":	fnrange_to_array,fnarray_to_range$,fnexit_cm,fnfix_bh,fnask_payref
-	dim master_data$(1)*60,master_data(1)
-	dim master_fieldsc$(1)*20,master_fieldsn$(1)*20,master_formc$*512,master_formn$*512
-	dim master_before$(1)*60,master_before(1)
-	dim tmaster_data(1),tmaster_data$(1)
-	dim master_before_data$(1)*60,master_formall$*2048
-	
-	
-	fnget_form("Master",mat master_data$,mat master_data,mat master_fieldsc$,mat master_fieldsn$,master_formc$,master_formn$) 
-	fnunpack$(master_formc$,master_formn$) 
-	master_formall$=fnget_formall$ 
+fn_setup
+fntop(program$)
+dim reportFile$*256
+delim$=','
+reportFile$=env$('userprofile')&'\Desktop\CM-Duplicates.csv'
+limitRecordsProcessed=0 ! 50000
+if 1<>99 then ! Fnask_File1(reportFile$,Cap$, 'Output File',env$('userprofile')&'\Desktop\CM-Duplicates.csv')<>99 then ! '*.csv')<>99 then
+	timeStart=fnStime(time$)
+	fnget_form("Master",mat master_data$,mat master_data,mat master_fieldsc$,mat master_fieldsn$,master_formc$,master_formn$)
+	fnunpack$(master_formc$,master_formn$)
+	master_formall$=fnget_formall$
 	gosub DEFINE_MASTER
-	open #1: "name=master//6,kfname=masterx//6,shr",internal,outin,keyed 
-	main_read=1
-! /r
-! r: main loop
-for mRec=1 to lrec(main_read)
-	! read #1,using master_formall$,key=tfileno$,release: mat tmaster_data$,mat tmaster_data nokey 55370
-	read #main_read,using master_formall$,rec=mRec: mat master_data$,mat master_data
-	pr master_data$(master_fileno)
-next mRec
-close #main_read:
+	open #main_read:=1: "name=master//6,kfname=masterx//6,shr",internal,outin,keyed
+	open #h_internal:=4: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,outin,keyed
+	!open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',display,output 
+	AskFile: !
+	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",display,output ioerr SAVE_AS_OPEN_ERR
+	reportFile$=os_filename$(file$(hOut))
+	Fnlist_Print('creating '&reportFile$)
+	pr #hOut: 'FileNo'&delim$&'Matches'&delim$&'Forwarder'&delim$&'Forwarder File Number'
+
+	! r: MAIN LOOP
+	mat fileno$(0)
+	dim dupeSearchValue$(0)*128
+	mat dupeSearchValue$(0)
+	
+	
+	readCount=0
+	dupeCount=0
+	Fnlist_Print('gathering data from Open Claims')
+	if limitRecordsProcessed>0 then 
+		lastRecord=limitRecordsProcessed
+	else 
+		lastRecord=lrec(main_read)
+	end if
+	for mRec=1 to lastRecord
+		! read #1,using master_formall$,key=tfileno$,release: mat tmaster_data$,mat tmaster_data nokey 55370
+		read #main_read,using master_formall$,rec=mRec: mat master_data$,mat master_data
+		fnfix_bh(mat master_data)
+		! read_recno=rec(	main_read)
+		! fnmast2_int_cache(mat master_data$,mat master_data,mat master_fieldsc$,mat master_fieldsn$,mat extra_data$,mat extra_data,mat extra_fieldsc$,mat extra_fieldsn$)
+		master_data$(master_docket_no)=fnget_docket$(master_data$(1))
+		master_data$(master_forw_refno)=fnget_edi_refno$(master_data$(1))
+		master_data$(master_jmt_no)=fnget_jmt_no$(master_data$(1))
+		master_data$(master_forw_fileno)=fnget_fofile$(master_data$(1))
+	
+		readCount+=1
+		fnadd_one$(mat fileno$,master_data$(master_fileno))
+		fnadd_one$(mat dupeSearchValue$,trim$(str$(master_data(master_FORW_NO)))&'.'&trim$(master_data$(master_FORW_FILENO)))
+	next mRec
+	close #main_read:
+	Fnlist_Print('analyzing '&str$(udim(mat dupeSearchValue$))&' records for duplicates...')
+	for mItem=1 to udim(mat fileno$)
+		howMany=fnCountMatchesC(mat dupeSearchValue$,dupeSearchValue$(mItem))
+		if howMany>1 and dupeSearchValue$(mItem)(len(dupeSearchValue$(mItem)):len(dupeSearchValue$(mItem)))<>'.' then 
+			pr #hOut: fileno$(mItem)&delim$;
+			pr #hOut: str$(howMany-1)&delim$;
+			pr #hOut: srep$(dupeSearchValue$(mItem),'.',delim$)
+			dupeCount+=1
+		end if
+	nex mItem
+end if
 goto Xit ! /r
 Xit: !
-stop
+close #hOut:
+close #h_internal:
+timeStop=fnStime(time$)
+dim message$*2048
+message$='readCount='&str$(readCount)&'\n'
+message$(inf:inf)='dupeCount='&str$(dupeCount)&'\n'
+message$(inf:inf)='elapsed time='&fnStime$(timeStop-timeStart)&'\n'
+message$(inf:inf)='Output File Created:\n'
+message$(inf:inf)=reportFile$
+fnMessageBox(message$, Mbx_Type,env$('program_caption'))
+execute 'Proc=Run'
+SAVE_AS_OPEN_ERR: ! r: there was a problem opening the file.
+	if err<>622 then
+		dim ml$(0)*256
+		mat ml$(2)
+		ml$(1)='Select a different file name.'
+		ml$(2)='Error: '&str$(err)
+		fnmsgbox(mat ml$)
+		pr "Err:";err;" Line:";line
+		goto AskFile
+	else
+		goto Ertn
+	end if 
+! /r
 ! def fnsql_main_read(fileno$)
-!   mat master_data$=("") !:
-!   mat master_data=(0) !:
-!   let sql_main_read=0 !:
+!   mat master_data$=("")
+!   mat master_data=(0)
+!   let sql_main_read=0
 !   let fileno$=rpad$(fileno$,8)(1:8)
-!   read #main_read,using master_formall$,key=fileno$,release: mat master_data$,mat master_data nokey 17330 !:
+!   read #main_read,using master_formall$,key=fileno$,release: mat master_data$,mat master_data nokey 17330
 !   let sql_main_read=1
 !   let fnsql_main_read=sql_main_read
-! fnend 
+! fnend
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library.br': fngethandle
+		library 'S:\Core\Library.br': fnCountMatchesC
+		library 'S:\Core\Library.br': fnMsgBox
+		library 'S:\Core\Library.br': fntop
+		! library "SQL/Library": fnsql_setup,fnsql_id_parse,fnsql_setup$,fnopen_sql_file
+		!     dim client_pf_data$(0)*60,client_pf_data(0),client_pf_fieldsc$(0)*20,client_pf_fieldsn$(0)*20,client_pf_formall$*512
+		!     execute "*SubProc "&fnsql_setup$('Client_PF',mat client_pf_data$,mat client_pf_data,mat client_pf_fieldsc$,mat client_pf_fieldsn$,client_pf_formall$)
+		!     let h_client_pf=fnopen_sql_file("Client_PF",openclosed$) ! kps=1,9,13  kln=8,4,4
 
+		! library "[cmPath]\Prog2\Mast2.wb":	fnsql_read
+		! library "[cmPath]\library\CLSUtil.wb":	fnget_formall$,fnget_formarr
+		! library "[cmPath]\library\CLSUtil.wb":	fnreport_path$,fnclaim_path$,fnget_claimfiles,fnclaim_scroll
+		! library "[cmPath]\library\CLSUtil.wb":	fnrange_to_array,fnarray_to_range$,fnexit_cm,fnfix_bh,fnask_payref
+		! library "[cmPath]\library\CLSUtil.wb":	fnget_form
+		! library "[cmPath]\library\CLSUtil.wb":	fnunpack$
+		! library "[cmPath]\Prog2\Mast2.wb":	fnsql_read
+		library "library\CLSUtil.wb":	fnget_formall$,fnget_formarr
+		library "library\CLSUtil.wb":	fnreport_path$,fnclaim_path$,fnget_claimfiles,fnclaim_scroll
+		library "library\CLSUtil.wb":	fnrange_to_array,fnarray_to_range$,fnexit_cm,fnfix_bh,fnask_payref
+		library "library\CLSUtil.wb":	fnget_form
+		library "library\CLSUtil.wb":	fnunpack$
+		library "library\CLSUtil.wb":	fnStime,fnStime$
+		library "library\CLSUtil.wb":	fnMessageBox
+		library "library\CLSUtil.wb":	Fnlist_Print
+		library "Prog2\Mast2.wb":	fnsql_read
+		
+		library "library\CLSUtil.wb":	fnfix_bh
+		library "Prog2\Mast_SQL.wb":	fnmast2_int_cache
+		library "library\CLSUtil.wb":	fnadd_one$,fnadd_one
+		library "library\CLSUtil.wb":	fnAsk_file1
+		
+		! exe 'con sub [acsPath] C:\Brumbaugh\clsinc'
+		! if env$('status.files.drives.[s]')='' then 
+		! 	exe 'con Drive S,F:,X,\'
+		! 	pause
+		! end if
+			
+
+	
+		dim master_data$(1)*60,master_data(1)
+		dim master_fieldsc$(1)*20,master_fieldsn$(1)*20,master_formc$*1024,master_formn$*1024
+		dim master_before$(1)*60,master_before(1)
+		dim tmaster_data(1),tmaster_data$(1)
+		dim master_before_data$(1)*60,master_formall$*2048
+	end if
+fnend
 DEFINE_MASTER: ! r:
 	let master_fileno=1: let master_date_recd=2: let master_forw_file_12=3: let master_law_list=4: let master_comm=5: let master_sfee=6: let master_jmt_no=7: let master_d1_name=8: let master_d1_street=9: let master_d1_cs=10: let master_d1_zip=11: let master_d1_phone=12: let master_cred_name=13: let master_cred_xline=14: let master_filler_254=15: let master_date_debt=16: let master_suit_date=17: let master_jmt_date=18: let master_docket_no=19: let master_stat1_date=20: let master_stat1_code=21: let master_plaintiff_1=22: let master_plaintiff_2=23: let master_defendant_1=24: let master_defendant_2=25
 	let master_defendant_3=26: let master_defendant_4=27: let master_d2_name=28: let master_d2_street=29: let master_d2_csz=30: let master_d3_name=31: let master_d3_street=32: let master_d3_csz=33: let master_misc_asset1=34: let master_misc_asset2=35: let master_misc_asset3=36: let master_d1_ssn=37: let master_filler_730=38: let master_stat2_date=39: let master_stat2_code=40: let master_bank_acct_no=41: let master_int_date=42: let master_closed_yy=43: let master_closed_mm=44: let master_closed_code1=45: let master_closed_code2=46: let master_filler_adva=47: let master_ll_date=48: let master_ll_code4=49
@@ -63,3 +161,49 @@ DEFINE_MASTER: ! r:
 	let master_filler_2353=190: let master_pay_subcode=191: let master_p_entry_date=192: let master_filler_2363=193: let master_filler_2367=194: let master_filler_2371=195
 return  ! /r
 
+
+def fnget_docket$*30(docket_fileno$)
+	dim docket_no$*30
+	read #4,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
+	let fnget_docket$=docket_no$ 
+	! if trim$(docket_no$)="" and trim$(master_data$(master_docket_no))<>"" then 
+	! 	let fnget_docket$=docket_no$=master_data$(master_docket_no) 
+	! 	let fnmessagebox("Warning, Internal Docket Number is missing\nUsing MASTER.DOCKET_NO instead\n"&docket_no$,64,"Problem with Docket/Case #") 
+	! 	rewrite #4,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
+	! end if
+	L17420: !
+fnend 
+def fnget_jmt_no$*30(jmt_fileno$)
+	dim jmt_no$*30
+	read #4,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	let fnget_jmt_no$=jmt_no$
+	! if trim$(jmt_no$)="" and trim$(master_data$(master_jmt_no))<>"" then 
+	! 	let fnget_jmt_no$=jmt_no$=master_data$(master_jmt_no)
+	! 	let fnmessagebox("Warning, Internal Judgment Number is missing\nUsing MASTER.JMT_NO instead\n"&jmt_no$,mb_information+mb_okonly,"Problem with Judgment Number")
+	! 	rewrite #4,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	! end if  ! jmt_no$="" and master.jmt_no<>""
+	JMN_XIT: ! 
+fnend  ! fnget_jmt_no$
+def fnget_edi_refno$*30(edi_fileno$)
+	dim edi_refno_no$*30
+	read #4,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
+	let fnget_edi_refno$=edi_refno_no$ 
+	! if trim$(edi_refno_no$)="" and trim$(master_data$(master_forw_refno))<>"" then 
+	! 	let fnget_edi_refno$=edi_refno_no$=master_data$(master_forw_refno) 
+	! 	let fnmessagebox("Warning, Internal EDI_REFNO # is missing\nUsing MASTER.FORW_REFNO instead\n"&edi_refno_no$,64,"Problem with FORW_REFNO/Edi Ref #") 
+	! 	rewrite #4,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
+	! end if
+	L17480: !
+fnend 
+def fnget_fofile$*30(fofile_fileno$)
+	dim fofile$*30
+	read #4,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
+	let fnget_fofile$=fofile$ 
+	! if trim$(fofile$)="" and trim$(master_data$(master_forw_fileno))<>"" then 
+	! 	let fnget_fofile$=fofile$=master_data$(master_forw_fileno) 
+	! 	let fnmessagebox("Warning, Internal Forw File Number is missing\nUsing MASTER.FORW_FILENO instead\n"&fofile$,64,"Problem with Forw Fileno #") 
+	! 	rewrite #4,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
+	! end if
+		L17496: !
+fnend 
+include: ertn

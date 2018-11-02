@@ -1,0 +1,6 @@
+[Q]\[cursys]mstr\oCompany.h[cno], ocompany_, 0
+recl=120
+===================================================
+name$  ,Name               ,C      40      , !   Pos=1
+addr$  ,Address            ,C      40      , !   Pos=41
+csz$   ,City State Zip     ,C      40      , !   Pos=81

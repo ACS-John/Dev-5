@@ -168,6 +168,7 @@ def fn_setup_client ! ** set up for new clients
     !   fn_setup_client_add("Brazeal" ,570,34418)
     fn_setup_client_add("Brier Lake" ,578,20306)
     fn_setup_client_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
+    fn_setup_client_add("Brumbaugh" ,7007,200033202) ! Limited BR license
     fn_setup_client_add("Campbell" ,700,33942)
     fn_setup_client_add("Carr Plumbing" ,780,34610)
     ! fn_setup_client_add("Carrizo" ,800,34416)
