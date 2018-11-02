@@ -509,6 +509,8 @@ fnend
 def fn_dashboard_height
 	if env$('cursys')="OE" then
 		dhReturn=1
+	else if env$('cursys')="CM" then
+		dhReturn=1
 	else if env$('cursys')="CL" then
 		dhReturn=1
 	else if env$('cursys')="PR" then
@@ -652,8 +654,10 @@ def fn_get_system_abbr_list(mat system_abbr_list$)
 	!   fnAddOneC(mat system_abbr_list$,'TM')
 	!   fnAddOneC(mat system_name$,fnSystemName$('TM'))
 	! end if
+	fn_add_if_licensed('CM')
 	fn_add_if_licensed('TM')
 	fn_add_if_licensed('OE')
+	fn_add_if_licensed('CM')
 	fn_add_if_licensed('CL')
 	fn_add_if_licensed('GL')
 	fn_add_if_licensed('PR')

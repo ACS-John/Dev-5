@@ -981,7 +981,7 @@ fnend
 		library 'S:\Core\Array.br': fnAddOneC
 		fnAddOneC=fnAddOneC(mat add_to$,one$, skip_blanks,skip_dupes)
 	fnend
-	def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
+	def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
 		library 'S:\Core\Array.br': fnCountMatchesC
 		fnCountMatchesC=fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
 	fnend
