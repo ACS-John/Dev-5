@@ -10,13 +10,13 @@ if 1<>99 then ! Fnask_File1(reportFile$,Cap$, 'Output File',env$('userprofile')&
 	fnunpack$(master_formc$,master_formn$)
 	master_formall$=fnget_formall$
 	gosub DEFINE_MASTER
-	open #main_read:=1: "name=master//6,kfname=masterx//6,shr",internal,outin,keyed
-	open #h_internal:=4: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,outin,keyed
+	open #main_read:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,outin,keyed
+	open #h_internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,outin,keyed
 	!open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',display,output 
 	AskFile: !
 	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",display,output ioerr SAVE_AS_OPEN_ERR
 	reportFile$=os_filename$(file$(hOut))
-	Fnlist_Print('creating '&reportFile$)
+	Fnlist_Print('creating '&reportFile$, 0,1,'Status') ! env$('program_caption'))
 	pr #hOut: 'FileNo'&delim$&'Matches'&delim$&'Forwarder'&delim$&'Forwarder File Number'
 
 	! r: MAIN LOOP
@@ -27,7 +27,7 @@ if 1<>99 then ! Fnask_File1(reportFile$,Cap$, 'Output File',env$('userprofile')&
 	
 	readCount=0
 	dupeCount=0
-	Fnlist_Print('gathering data from Open Claims')
+	Fnlist_Print('gathering data from Open Claims', 0,1)
 	if limitRecordsProcessed>0 then 
 		lastRecord=limitRecordsProcessed
 	else 
@@ -36,6 +36,7 @@ if 1<>99 then ! Fnask_File1(reportFile$,Cap$, 'Output File',env$('userprofile')&
 	for mRec=1 to lastRecord
 		! read #1,using master_formall$,key=tfileno$,release: mat tmaster_data$,mat tmaster_data nokey 55370
 		read #main_read,using master_formall$,rec=mRec: mat master_data$,mat master_data
+		fncom(mRec,lastRecord,6)
 		fnfix_bh(mat master_data)
 		! read_recno=rec(	main_read)
 		! fnmast2_int_cache(mat master_data$,mat master_data,mat master_fieldsc$,mat master_fieldsn$,mat extra_data$,mat extra_data,mat extra_fieldsc$,mat extra_fieldsn$)
@@ -49,8 +50,9 @@ if 1<>99 then ! Fnask_File1(reportFile$,Cap$, 'Output File',env$('userprofile')&
 		fnadd_one$(mat dupeSearchValue$,trim$(str$(master_data(master_FORW_NO)))&'.'&trim$(master_data$(master_FORW_FILENO)))
 	next mRec
 	close #main_read:
-	Fnlist_Print('analyzing '&str$(udim(mat dupeSearchValue$))&' records for duplicates...')
+	Fnlist_Print('analyzing '&str$(udim(mat dupeSearchValue$))&' records for duplicates...', 0,1)
 	for mItem=1 to udim(mat fileno$)
+		fncom(mItem,udim(mat fileno$),8)
 		howMany=fnCountMatchesC(mat dupeSearchValue$,dupeSearchValue$(mItem))
 		if howMany>1 and dupeSearchValue$(mItem)(len(dupeSearchValue$(mItem)):len(dupeSearchValue$(mItem)))<>'.' then 
 			pr #hOut: fileno$(mItem)&delim$;
@@ -114,6 +116,7 @@ def fn_setup
 		! library "[cmPath]\library\CLSUtil.wb":	fnget_form
 		! library "[cmPath]\library\CLSUtil.wb":	fnunpack$
 		! library "[cmPath]\Prog2\Mast2.wb":	fnsql_read
+		library "library\CLSUtil.wb":	fncom
 		library "library\CLSUtil.wb":	fnget_formall$,fnget_formarr
 		library "library\CLSUtil.wb":	fnreport_path$,fnclaim_path$,fnget_claimfiles,fnclaim_scroll
 		library "library\CLSUtil.wb":	fnrange_to_array,fnarray_to_range$,fnexit_cm,fnfix_bh,fnask_payref
@@ -164,45 +167,45 @@ return  ! /r
 
 def fnget_docket$*30(docket_fileno$)
 	dim docket_no$*30
-	read #4,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
+	read #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
 	let fnget_docket$=docket_no$ 
 	! if trim$(docket_no$)="" and trim$(master_data$(master_docket_no))<>"" then 
 	! 	let fnget_docket$=docket_no$=master_data$(master_docket_no) 
 	! 	let fnmessagebox("Warning, Internal Docket Number is missing\nUsing MASTER.DOCKET_NO instead\n"&docket_no$,64,"Problem with Docket/Case #") 
-	! 	rewrite #4,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
+	! 	rewrite #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
 	! end if
 	L17420: !
 fnend 
 def fnget_jmt_no$*30(jmt_fileno$)
 	dim jmt_no$*30
-	read #4,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	read #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
 	let fnget_jmt_no$=jmt_no$
 	! if trim$(jmt_no$)="" and trim$(master_data$(master_jmt_no))<>"" then 
 	! 	let fnget_jmt_no$=jmt_no$=master_data$(master_jmt_no)
 	! 	let fnmessagebox("Warning, Internal Judgment Number is missing\nUsing MASTER.JMT_NO instead\n"&jmt_no$,mb_information+mb_okonly,"Problem with Judgment Number")
-	! 	rewrite #4,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	! 	rewrite #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
 	! end if  ! jmt_no$="" and master.jmt_no<>""
 	JMN_XIT: ! 
 fnend  ! fnget_jmt_no$
 def fnget_edi_refno$*30(edi_fileno$)
 	dim edi_refno_no$*30
-	read #4,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
+	read #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
 	let fnget_edi_refno$=edi_refno_no$ 
 	! if trim$(edi_refno_no$)="" and trim$(master_data$(master_forw_refno))<>"" then 
 	! 	let fnget_edi_refno$=edi_refno_no$=master_data$(master_forw_refno) 
 	! 	let fnmessagebox("Warning, Internal EDI_REFNO # is missing\nUsing MASTER.FORW_REFNO instead\n"&edi_refno_no$,64,"Problem with FORW_REFNO/Edi Ref #") 
-	! 	rewrite #4,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
+	! 	rewrite #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
 	! end if
 	L17480: !
 fnend 
 def fnget_fofile$*30(fofile_fileno$)
 	dim fofile$*30
-	read #4,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
+	read #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
 	let fnget_fofile$=fofile$ 
 	! if trim$(fofile$)="" and trim$(master_data$(master_forw_fileno))<>"" then 
 	! 	let fnget_fofile$=fofile$=master_data$(master_forw_fileno) 
 	! 	let fnmessagebox("Warning, Internal Forw File Number is missing\nUsing MASTER.FORW_FILENO instead\n"&fofile$,64,"Problem with Forw Fileno #") 
-	! 	rewrite #4,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
+	! 	rewrite #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
 	! end if
 		L17496: !
 fnend 
