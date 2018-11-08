@@ -1,13 +1,42 @@
 fn_setup
+tagTrigger$="NE-EFILE"
 fn_testCmRead
 fn_testNeEfile
-
 goto Xit
 def fn_testCmRead
-	! C:\Brumbaugh\clsinc\PROG2\mast2.wb.brs
- open #hMaster:=1: "name=C:\Brumbaugh\clsinc\DATA\MASTER,kfname=C:\Brumbaugh\clsinc\DATA\MASTERX,shr",internal,outin,keyed
- pause
- close #hMaster:
+	if ~setup_tag then
+		setup_tag=1
+		open #h_tags  :=fngethandle: "Name=Tags.int//6,kfname=Tags.idx//6,Shr",internal,outin,keyed
+		open #hTagsClm:=fngethandle: "Name=Tags.int//6,kfname=Tags.clm//6,Shr",internal,outin,keyed
+		open #hTagsCde:=fngethandle: "Name=Tags.int//6,kfname=Tags.cde//6,Shr",internal,outin,keyed
+		open #hTagsDte:=fngethandle: "Name=Tags.int//6,kfname=Tags.dte//6,Shr",internal,outin,keyed
+		dim tag$(0)*60,tagN(0),tag_fieldsc$(0)*20,tag_fieldsn$(0)*20,tag_formall$*512
+		execute "*SubProc "&fnsql_setup$('Tags',mat tag$,mat tagN,mat tag_fieldsc$,mat tag_fieldsn$,tag_formall$)
+		! let h_tags=fnopen_sql_file("tags",openclosed$) ! kps=1,9,13  kln=8,4,4
+		open #hClaim:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,outin,keyed
+		dim claim$(0)*128,claimN(0),claim_fieldsc$(0)*20,claim_fieldsn$(0)*20,claim_formall$*2048
+		execute "*SubProc "&fnsql_setup$('Master',mat claim$,mat claimN,mat claim_fieldsc$,mat claim_fieldsn$,claim_formall$)
+	end if
+
+	restore #hTagsCde,key=>rpad$(tagTrigger$,kln(hTagsCde)):
+	do
+		read #hTagsCde,using tag_formall$: mat tag$,mat tagN eof EoTags
+		tagReadCount+=1
+		if tagTrigger$=rtrm$(tag$(tags_code)) then
+			read #hClaim,using claim_formall$,key=tag$(tags_fileno): mat claim$,mat claimN
+			pr '  master.fileno='&claim$(master_fileno)
+		end if
+	loop while tagTrigger$=rtrm$(tag$(tags_code))
+	EoTags: !
+	pr 'tagReadCount=';tagReadCount
+	pause
+	
+	close #h_tags  :
+	close #hTagsClm:
+	close #hTagsCde:
+	close #hTagsDte:
+	setup_tag=0
+	close #hClaim:
 fnend
 GetBitCoinPriceTest: ! r:
 	for _price=1 to 20
@@ -20,7 +49,8 @@ Xit: end
 def fn_setup
 	if ~setup then
 		setup=1
-		! library 's:\Core\Library': fngethandle
+		library 'S:\Core\Library.br': fngethandle
+		library "SQL/Library": fnsql_setup,fnsql_id_parse,fnsql_setup$,fnopen_sql_file
 	end if
 fnend
 def fn_getBtcPrice(; ___,hConnection,Market$,string$*999)
