@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                        
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                                                                                                                        
+11:34 AM 11/8/2018	PR	Fixed a glitch in PR Registers that caused a pause on companyies that never went to company configuration since upgrade
 13:31 11/18/2018	CO	5.74054  
 22:13 10/18/2018	CO	5.74053   
 10:11 PM 10/31/2018	PR	Payroll Register Part 1 - fixed issue causing Other WH to incorrectly show 0.  

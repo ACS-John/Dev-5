@@ -127,10 +127,11 @@ L760: !
 			other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
 		else if newdedcode(j-4)=newdedcode_Deduct then
 			other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
-		else 
-			pr 'newdedcode('&str$(j-4)&')='&str$(newdedcode(j-4))&' which is invalid.'
-			pr bell 
-			pause
+		else ! default to behave like a deduction
+			other_wh=other_wh+tcp(j)
+			! pr 'newdedcode('&str$(j-4)&')='&str$(newdedcode(j-4))&' which is invalid.'
+			! pr bell 
+			! pause
 		end if 
 	next j
 
