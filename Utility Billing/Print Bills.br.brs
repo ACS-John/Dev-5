@@ -713,6 +713,10 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(11),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+45,lyne*meter+ymargin)
+	end if
+	if g(5)<>0 then 
+		fnpa_txt("Trash",xmargin+1,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+45,lyne*meter+ymargin)
 	end if 
 	if g(8)<>0 then 
 		fnpa_txt("MISC",xmargin+1,lyne*(meter+=1)+ymargin)
@@ -736,7 +740,6 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	fnpa_line(xmargin+1,lyne*26+1+ymargin,63,0)
 	fnpa_txt(raymondAdditionalText$,xmargin+1,lyne*27+ymargin)
 	!   fnpa_txt("Re-connect fee $??.00",XMARGIN+1,LYNE*28+YMARGIN)
-	! 
 	fnpa_fontsize(7)
 	fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
 	fnpa_line(xmargin+90,ymargin+0,7,0)
