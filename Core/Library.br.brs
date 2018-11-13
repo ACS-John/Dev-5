@@ -945,6 +945,22 @@ fnend
 	fnend
 ! /r
 ! r: array stuff
+	def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
+		library 'S:\Core\Array.br': fnChrCount
+		fnChrCount=fnChrCount(String_To_Search$,Chr_To_Count$)
+	fnend
+	def library fnArrayReverseC(mat in$,mat out$)
+		library 'S:\Core\Array.br': fnArrayReverseC
+		fnArrayReverseC=fnArrayReverseC(mat in$,mat out$)
+	fnend
+	def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
+		library 'S:\Core\Array.br': fnArrayAddC
+		fnArrayAddC=fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
+	fnend
+	def library fnArrayAddN(mat array_combinedN,mat arrayPartOneN,mat arrayPartTwoN)
+		library 'S:\Core\Array.br': fnArrayAddN
+		fnArrayAddN=fnArrayAddN(mat array_combinedN,mat arrayPartOneN,mat arrayPartTwoN)
+	fnend
 	def library fnSrepExcludeStringLiterals$*1024(in$*1024,srepFrom$,srepTo$)
 		library 'S:\Core\srep.br': fnSrepExcludeStringLiterals$
 		fnSrepExcludeStringLiterals$=fnSrepExcludeStringLiterals$(in$,srepFrom$,srepTo$)
