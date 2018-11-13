@@ -6,34 +6,34 @@ def fn_setup
 fnend
 def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
   fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
-fnend 
+fnend
 def fn_array_item_insert$(mat array$, insert_item$*1024, insert_item_number)
   array_item_count=udim(mat array$)
-  if insert_item_number>array_item_count then 
+  if insert_item_number>array_item_count then
     mat array$(insert_item_number)
     array$(insert_item_number)=insert_item$
-  else 
+  else
     array_item_count+=1
     mat array$(array_item_count)
     mat array$(insert_item_number+1:array_item_count)=array$(insert_item_number:array_item_count-1)
     array$(insert_item_number)=insert_item$
-  end if  ! Insert_Item_Number>Array_Item_Count   /   else 
-fnend 
+  end if  ! Insert_Item_Number>Array_Item_Count   /   else
+fnend
 def library fnarray_item_insert(mat array, insert_item, insert_item_number)
   fnarray_item_insert=fn_array_item_insert(mat array, insert_item, insert_item_number)
 fnend  ! fnARRAY_ITEM_INSERT
 def fn_array_item_insert(mat array, insert_item, insert_item_number)
   array_item_count=udim(mat array)
-  if insert_item_number>array_item_count then 
+  if insert_item_number>array_item_count then
     mat array(insert_item_number)
     array(insert_item_number)=insert_item
-  else 
+  else
     array_item_count+=1
     mat array(array_item_count)
     mat array(insert_item_number+1:array_item_count)=array(insert_item_number:array_item_count-1)
     array(insert_item_number)=insert_item
-  end if  ! Insert_Item_Number>Array_Item_Count   /   else 
-fnend 
+  end if  ! Insert_Item_Number>Array_Item_Count   /   else
+fnend
 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   ! if ~setup then let fn_setup
   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
@@ -41,21 +41,21 @@ fnend  ! fnsrch_case_insensitive
 def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   srch_array_count=udim(mat srch_array$)
   srch_return=0
-  do 
+  do
     srch_found=srch(mat srch_array$,'^'&srch_for$,srch_start_ele)
-    if srch_found>0 and lwrc$(srch_for$)=lwrc$(srch_array$(srch_found)) then 
+    if srch_found>0 and lwrc$(srch_for$)=lwrc$(srch_array$(srch_found)) then
       srch_return=srch_found
-    else if srch_found>0 then 
+    else if srch_found>0 then
       srch_start_ele=srch_found+1
     else if srch_found<=0 then ! it's not there, anywhere - get outta here.
       srch_start_ele=srch_array_count+1
-    end if 
+    end if
   loop until srch_start_ele>srch_array_count or srch_return
   fn_srch_case_insensitive=srch_return
 fnend  ! fn_srch_case_insensitive
 def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
   fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)
-fnend 
+fnend
 def fn_addOneN(mat add_to, one; skip_zeros, skip_dupes)
   ! must dim an array to 0 before you can add a first item
   !    Mat Add_To - the array to add One item to
@@ -63,16 +63,16 @@ def fn_addOneN(mat add_to, one; skip_zeros, skip_dupes)
   !    skip_Zeros - if =1 than only add One if One<>0
   !    skip_dupes - if =1 than only add One if One is not yet in Mat Add_To
   !    This function returns the number of items in the array after any add
-  if skip_zeros=0 or (skip_zeros and one<>0) then 
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to,one)=-1) then 
+  if skip_zeros=0 or (skip_zeros and one<>0) then
+    if skip_dupes=0 or (skip_dupes and srch(mat add_to,one)=-1) then
       add_to_udim=udim(mat add_to) : mat add_to(add_to_udim+1) : add_to(add_to_udim+1)=one
-    end if 
-  end if 
+    end if
+  end if
   fn_addOneN=udim(mat add_to)
-fnend 
+fnend
 def library fnAddOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
   fnAddOneC=fn_addOneC(mat add_to$, one$, skip_blanks, skip_dupes)
-fnend 
+fnend
 def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
   ! must dim an array to 0 before you can add a first item
   !    Mat Add_To$ - the array to add One$ item to
@@ -80,13 +80,13 @@ def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
   !    skip_Blanks - if =1 than only add One$ if Trim$(One$)<>""
   !    skip_dupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
   !    This function returns the number of items in the array after any add
-  if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then 
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)<=0) then 
+  if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then
+    if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)<=0) then
       add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
-    end if 
-  end if 
+    end if
+  end if
   fn_addOneC=udim(mat add_to$)
-fnend 
+fnend
 def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
   cmcReturn=0
   cmcIndex=0
@@ -115,7 +115,7 @@ def library fnArrayMax(mat arrayToSearch)
     amMax=arrayToSearch(1)
     amReturn=1
     for x=2 to udim(mat arrayToSearch)
-      if arrayToSearch(x)>amMax then 
+      if arrayToSearch(x)>amMax then
         amMax=arrayToSearch(x)
         amReturn=x
       end if
@@ -126,7 +126,7 @@ fnend
 def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
   if ~setup then let fn_setup
   dim ftaLine$*1024
-  if ftaDelimiter$='' then let ftaDelimiter$='='
+  if ftaDelimiter$='' then ftaDelimiter$='='
   open #hFta:=fngethandle: 'name='&ftaFile$,d,i
   mat ftaArrayLeft$ (0)
   mat ftaArrayRight$(0)
@@ -136,7 +136,7 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
   do
     linput #hFta: ftaLine$ eof FtaEof
     ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
-    if ftaPosDelim<=0 then 
+    if ftaPosDelim<=0 then
       fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
       fn_addOneC(mat ftaArrayRight$,'')
     else
@@ -220,7 +220,7 @@ def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumb
     end if
     if udim(mat r2LineItem$)=>r2ColumnNumber2 then
       fn_addonec(mat r2Return2$,r2LineItem$(r2ColumnNumber2))
-    else 
+    else
       fn_addonec(mat r2Return2$,'')
     end if
   loop
@@ -287,4 +287,49 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   close #hr2f:
   Eor2f: !
   fnRead2columnFixedWidth=udim(mat r2fReturn1$)
+fnend
+
+def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
+	array_part_one_udim=udim(arrayPartOne$)
+	array_part_two_udim=udim(arrayPartTwo$)
+	array_combined_udim=array_part_one_udim+array_part_two_udim
+	mat array_combined$(array_combined_udim)
+	if array_part_one_udim=0 then
+		mat array_combined$=arrayPartTwo$
+	else if array_part_two_udim=0 then
+		mat array_combined$=arrayPartOne$
+	else if array_part_one_udim>0 and array_part_two_udim>0 then
+		mat array_combined$(1:array_part_one_udim)=arrayPartOne$(1:array_part_one_udim)
+		mat array_combined$(array_part_one_udim+1:array_combined_udim)=arrayPartTwo$(1:array_part_two_udim)
+	end if
+fnend
+
+def library fnarrayaddn(mat array_combined,mat array_part_one,mat array_part_two)
+	let array_part_one_udim=udim(array_part_one)
+	let array_part_two_udim=udim(array_part_two)
+	let array_combined_udim=array_part_one_udim+array_part_two_udim
+	mat array_combined(array_combined_udim)
+	if array_part_one_udim=0 then 
+		mat array_combined=array_part_two
+	else if array_part_two_udim=0 then 
+		mat array_combined=array_part_one
+	else if array_part_one_udim>0 and array_part_two_udim>0 then 
+		mat array_combined(1:array_part_one_udim)=array_part_one(1:array_part_one_udim)
+		mat array_combined(array_part_one_udim+1:array_combined_udim)=array_part_two(1:array_part_two_udim)
+	end if 
+fnend 
+def library fnArrayReverseC(mat in$,mat out$)
+	let in_udim=udim(in$)
+	mat out$(in_udim)
+	for in_item=1 to in_udim
+		let out$(in_udim-in_item+1)=in$(in_item)
+	next in_item
+fnend 
+def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
+	Chr_Count=0
+	DO 
+		Cc_Pos_Chr=Pos(String_To_Search$,Chr_To_Count$,Cc_Pos_Chr+1)
+		IF Cc_Pos_Chr>0 THEN Chr_Count+=1
+	LOOP Until Cc_Pos_Chr<=0
+	fnChrCount=Chr_Count
 fnend
