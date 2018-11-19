@@ -85,7 +85,7 @@ ScrGrid: ! r:
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then goto IndexThenMenu1
 	add=edit=0
-	editRec=val(resp$(1))! (1:pos(resp$(1),' ')-1))
+	editRec=val(resp$(1)) ! (1:pos(resp$(1)&' ',' ')-1))
 	if ckey=1 then
 		add=1
 		sp=ls=ds=ul=rs=bc=ap=ic=fc=rnp=0
