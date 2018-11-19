@@ -303,12 +303,17 @@ def fn_badgerBeacon(fileIn$*256,bookFile$*512; ___,returnN)
 	end if
 	fn_badgerBeacon=returnN
 fnend
-def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN)
+def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN,delim$)
 	reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 	if ~bbplHeaderProcessed then 
 		! r: parse header and get enumerations
 		bbplHeaderProcessed=1
-		str2mat(line$,mat lineItem$,tab$)
+		if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
+			delim$=','
+		else
+			delim$=tab$
+		end if
+			str2mat(line$,mat lineItem$,delim$)
 		bbpl_Account_ID      =srch(mat lineItem$,'Account_ID'       )
 		bbpl_Location_ID     =srch(mat lineItem$,'Location_ID'      )
 		bbpl_Service_Point_ID=srch(mat lineItem$,'Service_Point_ID' )
@@ -328,7 +333,7 @@ def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,
 		end if
 		! /r
 	else
-		str2mat(line$,mat lineItem$,tab$)
+		str2mat(line$,mat lineItem$,delim$)
 		mat tmpDataName$(0)
 		mat tmpDataValue$(0)
 		! pr ' how do we parse this? ' :  pause
