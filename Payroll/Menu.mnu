@@ -16,7 +16,7 @@ Pay Period
 >Other Pay and Deductions Register          ^ Payroll\Other Pay and Deductions Register
 >Direct Deposits                            ^ acsPR\newDD
 >Print Payroll Checks                       ^ Payroll\Print Payroll Checks
->YTD and QTD Register                       ^ acsPR\newprYTDQTD
+>YTD and QTD Register                       ^ Payroll\YTD and QTD Register
 >Post to General Ledger                     ^ acsPR\newprPostGL              ^ GL
 Monthly                                     
 >Payroll Tax Deposit Summary                ^ Payroll\Payroll Tax Deposit Summary
