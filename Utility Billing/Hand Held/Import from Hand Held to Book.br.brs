@@ -308,15 +308,15 @@ def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,
 	if ~bbplHeaderProcessed then 
 		! r: parse header and get enumerations
 		bbplHeaderProcessed=1
-		if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
-			delim$=','
-			quotesTrim$="QUOTES:TRIM"
-			readingColumnName$='Read'
-		else
+		! if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
+		! 	delim$=','
+		! 	quotesTrim$="QUOTES:TRIM"
+		! 	readingColumnName$='Read'
+		! else
 			delim$=tab$
 			quotesTrim$=''
 			readingColumnName$='Current_Read'
-		end if
+		! end if
 		str2mat(line$,mat lineItem$,delim$,quotesTrim$)
 		bbpl_Account_ID      =srch(mat lineItem$,'Account_ID'        )
 		bbpl_Location_ID     =srch(mat lineItem$,'Location_ID'       )
