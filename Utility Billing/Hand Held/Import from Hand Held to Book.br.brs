@@ -303,21 +303,25 @@ def fn_badgerBeacon(fileIn$*256,bookFile$*512; ___,returnN)
 	end if
 	fn_badgerBeacon=returnN
 fnend
-def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN,delim$)
+def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN,delim$,quotesTrim$,readingColumnName$*64)
 	reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 	if ~bbplHeaderProcessed then 
 		! r: parse header and get enumerations
 		bbplHeaderProcessed=1
 		if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
 			delim$=','
+			quotesTrim$="QUOTES:TRIM"
+			readingColumnName$='Read'
 		else
 			delim$=tab$
+			quotesTrim$=''
+			readingColumnName$='Current_Read'
 		end if
-			str2mat(line$,mat lineItem$,delim$)
-		bbpl_Account_ID      =srch(mat lineItem$,'Account_ID'       )
-		bbpl_Location_ID     =srch(mat lineItem$,'Location_ID'      )
+		str2mat(line$,mat lineItem$,delim$,quotesTrim$)
+		bbpl_Account_ID      =srch(mat lineItem$,'Account_ID'        )
+		bbpl_Location_ID     =srch(mat lineItem$,'Location_ID'       )
 		bbpl_Service_Point_ID=srch(mat lineItem$,'Service_Point_ID' )
-		bbpl_Read            =srch(mat lineItem$,'Current_Read'     )
+		bbpl_Read            =srch(mat lineItem$,readingColumnName$  )
 		bbpl_Read_Time       =srch(mat lineItem$,'Current_Read_Date')
 
 		if bbpl_Account_ID      =0 then
@@ -328,8 +332,8 @@ def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,
 			pr 'critical header (Service_Point_ID) not found' : pause
 		else if bbpl_Read            =0 then
 			pr 'critical header (Read) not found' : pause
-		else if bbpl_Read_Time       =0 then
-			pr 'critical header (Read_Time) not found' : pause
+		! else if bbpl_Read_Time       =0 then
+		! 	pr 'critical header (Read_Time) not found' : pause
 		end if
 		! /r
 	else
@@ -340,7 +344,11 @@ def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,
 		if trim$(lineItem$(bbpl_Service_Point_ID))='WA' then
 			fn_addTmpData('Customer.Number'   ,lineItem$(bbpl_Account_ID))
 			fn_addTmpData('Reading.Water'     ,lineItem$(bbpl_Read))
-			fn_addTmpData('Reading.Water.Date',date$(days(lineItem$(bbpl_Read_Time)(1:pos(lineItem$(bbpl_Read_Time),' ')-1),'ccyy-mm-dd'),'mm/dd/ccyy'))
+			if bbpl_Read_Time then
+				fn_addTmpData('Reading.Water.Date',date$(days(lineItem$(bbpl_Read_Time)(1:pos(lineItem$(bbpl_Read_Time),' ')-1),'ccyy-mm-dd'),'mm/dd/ccyy'))
+			else
+				fn_addTmpData('Reading.Water.Date',date$('mm/dd/ccyy'))
+			end if
 			returnN=1
 		else 
 			pr 'unexpected Service_Point_ID: '&lineItem$(bbpl_Service_Point_ID) : pause
