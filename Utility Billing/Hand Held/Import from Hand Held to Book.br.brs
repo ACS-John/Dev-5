@@ -305,6 +305,7 @@ def fn_badgerBeacon(fileIn$*256,bookFile$*512; ___,returnN)
 fnend
 def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN,delim$,quotesTrim$,readingColumnName$*64)
 	reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
+	delim$=tab$
 	if ~bbplHeaderProcessed then 
 		! r: parse header and get enumerations
 		bbplHeaderProcessed=1
@@ -313,7 +314,6 @@ def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,
 		! 	quotesTrim$="QUOTES:TRIM"
 		! 	readingColumnName$='Read'
 		! else
-			delim$=tab$
 			quotesTrim$=''
 			readingColumnName$='Current_Read'
 		! end if
