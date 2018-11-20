@@ -10,7 +10,6 @@ end if
 end
 ! /r
 Xit: fnXit
-include: fn_open
 def fn_setup
 	if ~setup then
 		setup=1
@@ -34,7 +33,7 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 	end if
 	if filter$='' then filter$='*.*'
 	! fnFree(br_filename$(env$('temp')&'\acs\Open_Log.txt'))
-	if filterDescription$<>'' then filterDescription$&=' ('&filter$&') '
+	if filterDescription$<>'' then filterDescription$=filterDescription$&' ('&filter$&') '
 	dim filePath$*256
 	fnureg_read('askFileName.'&recallAddOn$,filePath$, os_filename$(env$('userprofile')&'\Desktop'))
 	open #h_tmp:=fngethandle: 'Name='&purpose$&':'&env$('at')&filterDescription$&'|'&filePath$&'\'&filter$&',RecL=1,Shr',external,input ioerr OP_OP_ERR
@@ -55,7 +54,10 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 		pr "Err:";err;" Line:";line
 	end if 
 	OP_XIT: ! 
-	if returnN then fnureg_write('askFileName.'&recallAddOn$,filePath$)
+	if returnN then 
+		fnureg_write('askFileName.'&recallAddOn$,filePath$)
+	end if
 	fn_askFileName=returnN
 fnend
 include: ertn
+include: fn_open
