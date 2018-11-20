@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                          
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                                                                                                                          
+10:50 AM 11/20/2018	U4	Badger Beacon adjustments
 17:44 11/18/2018	CO	5.74056  
 11:36 11/18/2018	CO	5.74055   
 11:34 AM 11/8/2018	PR	Fixed a glitch in PR Registers that caused a pause on companyies that never went to company configuration since upgrade  
