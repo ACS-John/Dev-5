@@ -1,6 +1,6 @@
 ! Replace S:\Core\PrtFlex\PullLay
 ! ______________________________________________________________________
-library 'S:\Core\Library': fnerror,fnsetmonth,fnxit,fnremove,fnget_services
+library 'S:\Core\Library': fnerror,fnsetmonth,fnxit,fnget_services,fnbooktitle$
 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 ! to create your own file instead of using this program, store the description,variable name,field length,# of deciaml points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
 ! if you create the display file, as just described, create a folder under your program folder called GRID; a subfolder such as CUSTOMER which will be referred to in the grid program as the data base you are using.  You can have any number of these subfolders (actually one for each file you are allowing them to access with the grid programs.
@@ -12,8 +12,7 @@ dim serviceName$(10)*20,textfile$*87,abbrev$*30
 fnget_services(mat serviceName$)
 fnsetmonth(mat mo$)
 
-gosub L1090
-dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
+dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",20"&date$(1:2)
 io1$(1)="10,34,c 45,UT,N"
 io1$(2)="12,34,C 45,UT,N"
 outputfile$="S:\acsPR\grid\checks\checkhistory"
@@ -33,7 +32,7 @@ open #2: "Name="&ev$,display,input
 open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed
 L340: !
 linput #2: ln$ eof L870
-fnremove(chr$(9),ln$)
+ln$=srep$(ln$,chr$(9),'')
 pr ln$
 if uprc$(ln$(7:10))<>"DATA" then goto L340
 DATALN: !
@@ -115,45 +114,4 @@ MOVEITTOTEXT: ! r:
 	loop
 	L1000: !
 return ! /r
-L1090: ! ______________________________________________________________________
-def fnbooktitle$*80(x$*80)
-	x$=lwrc$(trim$(x$)) : olda=0
-	x$(1:1)=uprc$(x$(1:1))
-	! capitalize anthing after a SPACE
-	L1160: !
-	a=pos(x$," ",olda)
-	if a<>0 then
-		a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a
-		goto L1160
-	end if
-	a=olda=0
-	L1180: !
-	a=pos(x$,"-",olda)
-	if a<>0 then
-		a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a
-		goto L1180
-	end if
-	a=olda=0
-	L1200: !
-	a=pos(x$,"/",olda)
-	if a<>0 then
-		a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a
-		goto L1200
-	end if
-	a=olda=0
-	L1220: !
-	a=pos(x$,"\",olda)
-	if a<>0 then
-		a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a
-		goto L1220
-	end if
-	a=olda=0
-	L1240: !
-	a=pos(x$,".",olda)
-	if a<>0 then
-		a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a
-		goto L1240
-	end if
-	fnbooktitle$=x$
-fnend
 include: ertn
