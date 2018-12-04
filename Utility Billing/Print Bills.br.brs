@@ -142,6 +142,14 @@ PrintBill_Basic: !
 		pa_enabled=1 ! PrintAce
 		pa_orientation$='Landscape'
 		include_zero_bal=include_credit_bal=1
+	else if env$('client')='Galena' then ! 11/29/2018 Portrait two per page - hit pre-printed form
+		message1_line_count=3
+		message2_line_count=0
+		message1_max_len=30
+		pa_enabled=1 ! PrintAce
+		! pa_orientation$='Landscape'
+		include_zero_bal=include_credit_bal=1
+		enable_cass_sort=1
 	else !  default settings:  Findlay, Edison
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
@@ -183,10 +191,10 @@ PrintBill_Basic: !
 	end if
 	! if env$('acsDeveloper')<>'' then pause
 	if enable_bulksort then gosub BULKSORT
-	if enable_cass_sort then gosub SORT1
 	open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
 	open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
 	open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,Input,keyed 
+	if enable_cass_sort then gosub SORT1
 ! /r
 SCREEN1: ! r:
 	starting_key$="" : route_filter=0 : respc=0
@@ -200,11 +208,9 @@ SCREEN1: ! r:
 	resp$(respc_billing_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	
 	if enablePriorBillingDate then
-	
 		fnLbl(lc+=1,1,"Prior Date of Billing:",25,1)
 		fnTxt(lc,pf,8,8,1,"1")
 		resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
-	
 	end if
 	if enable_service_from or enable_service_to then 
 		lc+=1
@@ -239,7 +245,7 @@ SCREEN1: ! r:
 	resp$(respc_filter_past_due:=respc+=1)="False"
 	fnOpt(lc+=1,pf,"All Except Past Due")
 	resp$(respc_filter_not_past_due:=respc+=1)="False"
-! 
+	! 
 	if message1_line_count then 
 		lc+=1
 		if message2_line_count then 
@@ -345,7 +351,7 @@ NEXT_ACCOUNT: ! r: main loop
 	else if enable_cass_sort then 
 		! READ_CASSSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-		read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec NEXT_ACCOUNT ! READ_CASSSORT
+		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec NEXT_ACCOUNT ! READ_CASSSORT
 		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
 	else 
 		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof RELEASE_PRINT
@@ -397,9 +403,11 @@ HERE: !
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2,d3,d4,mat pe$,final$,z$) ! 
 	else if env$('client')='Choctaw' then
 		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat e$,final)
-!   fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat pe$,final)
+		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat pe$,final)
 	else if env$('client')='GreenCo' then
-	  fn_print_bill_greenCo
+		fn_print_bill_greenCo
+	else if env$('client')='Galena' then
+		fn_print_bill_galena
 	else ! Exeter, Findlay, etc
 		if enableReturnServiceRequested=>0 then enableReturnServiceRequested=1
 		if enableIsDueNowAndPayable=>0 then enableIsDueNowAndPayable=1
@@ -669,11 +677,11 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 		fn_get_mat_at(mat at$)
 	end if 
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
-	checkcounter+=1
-	if checkcounter=1 then xmargin=0 : ymargin=0
-	if checkcounter=2 then xmargin=139 : ymargin=0
-	if checkcounter=3 then xmargin=0 : ymargin=108
-	if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
+	billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=0 : ymargin=0
+	if billOnPageCount=2 then xmargin=139 : ymargin=0
+	if billOnPageCount=3 then xmargin=0 : ymargin=108
+	if billOnPageCount=4 then xmargin=139 : ymargin=108 : billOnPageCount=0
 	! ______________________________________________________________________
 	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 	fnpa_fontbold(1)
@@ -790,13 +798,13 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	if pe$(4)<>"" then 
 		fnpa_txt(trim$(pe$(4)),xmargin+68,lyne*(addy+=1)+ymargin)
 	end if 
-	if checkcounter=1 then checkx=1.375 : checky=3.6875
-	if checkcounter=2 then checkx=6.75 : checky=3.6875
-	if checkcounter=3 then checkx=1.375 : checky=7.9375
-	if checkcounter=0 then checkx=6.75 : checky=7.9375
+	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
+	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
 	bc$=""
 	if trim$(bc$)<>"" then let fnpa_barcode(checkx,checky,bc$)
-	if checkcounter=0 then 
+	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
 fnend 
@@ -826,36 +834,36 @@ BULKSORT: ! r: sort in bulk sort code sequence
 		open #hBulk2:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed 
 	end if
 return  ! /r
-SORT1: ! r: SELECT & SORT - sorts Cass1 file 
+SORT1: ! r: SELECT & SORT - sorts Cass1 file    requires: (h_customer_2,&enable_cass_sort,&hSort1Sequence,&hAddr,d1,route_filter,... ;  ___,z$*10,customerLastBillingDate,route
 	enable_cass_sort=0 ! replaces old s5 variable
 	open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr XIT_SORT1
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
+	open #hSort1Sequence:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
 	enable_cass_sort=1
 	if route_filter=0 then routekey$="" else routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #h_customer_2,search>=routekey$: 
 	do 
-		read #h_customer_2,using 'form pos 1,c 10,pos 296,pd 4,pos 1741': z$,f,route eof END5
+		read #h_customer_2,using 'form pos 1,c 10,pos 296,pd 4,pos 1741,n 2': z$,customerLastBillingDate,route eof END5
 		if route_filter and route_filter><route then goto END5
-		if f=d1 then 
+		if customerLastBillingDate=d1 then 
 			zip5$=cr$=""
 			read #h_cass1,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey ignore
-			write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+			write #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 		end if 
 	loop 
-! 
-END5: ! 
+
+	END5: ! 
 	close #h_cass1: 
-	close #6: 
+	close #hSort1Sequence: 
 	open #h_sort1_control:=fngethandle: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 	write #h_sort1_control,using 'form pos 1,c 128': "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 	write #h_sort1_control,using 'form pos 1,c 128': "Mask 1,19,C,A"
 	close #h_sort1_control: 
 	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 	execute "Sort "&env$('Temp')&"\Control."&session$
-	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative 
+	open #hSort1Sequence:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative 
 	open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
-XIT_SORT1: ! 
-	return  ! /r
+	XIT_SORT1: ! 
+return  ! /r
 def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbcerro_setup then 
@@ -932,20 +940,19 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 		fn_get_mat_at(mat at$)
 	! 
 	end if  ! /r
-	! r: pr that bill
 	pb=bal-g(11)
 	net_bill=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
 	fn_override_service_date(service_from,service_to,extra_3,extra_4)
 	! -- Standard 4 Per Page Even Perforated Card Stock Bills
-	checkcounter+=1
-	if checkcounter=1 then xmargin=0 : ymargin=5
-	if checkcounter=2 then xmargin=142 : ymargin=5 ! xmargin was 137
-	if checkcounter=3 then xmargin=0 : ymargin=113 ! ymargin was 108
-	if checkcounter=4 then xmargin=142 : ymargin=113 : checkcounter=0
+	billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=0 : ymargin=5
+	if billOnPageCount=2 then xmargin=142 : ymargin=5 ! xmargin was 137
+	if billOnPageCount=3 then xmargin=0 : ymargin=113 ! ymargin was 108
+	if billOnPageCount=4 then xmargin=142 : ymargin=113 : billOnPageCount=0
 	! move page down 1/2 inch
 	! 
 	! ______________________________________________________________________
-	if checkcounter=1 then ! it's about to pr the first bill on the page
+	if billOnPageCount=1 then ! it's about to pr the first bill on the page
 		fnpa_line(70,1,0,1100) ! line down the middle of the page
 		fnpa_line(140,1,0,1100) ! line down the middle of the page
 		fnpa_line(215,1,0,1100) ! line down the middle of the page
@@ -1002,7 +1009,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	s4code$="GAS"
 	if g(4)<>0 then 
 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
+		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
@@ -1115,11 +1122,11 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	fnpa_txt(trim$(pe$(3)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 	fnpa_txt(trim$(pe$(4)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 	pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68+addr_indent)&','&str$(lyne*(addy+=2)+ymargin+20+addr_down)&')'
-	if checkcounter=1 then checkx=1.375 : checky=3.6875
-	if checkcounter=2 then checkx=6.75 : checky=3.6875
-	if checkcounter=3 then checkx=1.375 : checky=7.9375
-	if checkcounter=0 then checkx=6.75 : checky=7.9375
-	if checkcounter=0 then 
+	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
+	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
+	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
 	! /r
@@ -1542,11 +1549,11 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 		fncustomer_address(z$,mat pe$)
 		fn_override_service_date(service_from,service_to,extra_3,extra_4)
 ! /r
-	checkcounter+=1
-	if checkcounter=1 then xmargin=0 : ymargin=0
-	if checkcounter=2 then xmargin=139 : ymargin=0
-	if checkcounter=3 then xmargin=0 : ymargin=108
-	if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
+	billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=0 : ymargin=0
+	if billOnPageCount=2 then xmargin=139 : ymargin=0
+	if billOnPageCount=3 then xmargin=0 : ymargin=108
+	if billOnPageCount=4 then xmargin=139 : ymargin=108 : billOnPageCount=0
 	fnpa_line(xmargin+5,ymargin+2,55,lyne*3+3,1)
 	fnpa_fontbold(1)
 	fnpa_fontsize(12)
@@ -1591,7 +1598,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 			s4code$="GAS"
 		end if
 		fnpa_txt(s4code$,xmargin+1,lyne*(meter+=1)+ymargin)
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' 
+		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin) 
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' 
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
@@ -1681,11 +1688,11 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 	if pe$(4)<>"" then 
 		fnpa_txt(trim$(pe$(4)),xmargin+68,lyne*(addy+=1)+ymargin)
 	end if
-	if checkcounter=1 then checkx=1.375 : checky=3.6875
-	if checkcounter=2 then checkx=6.75 : checky=3.6875
-	if checkcounter=3 then checkx=1.375 : checky=7.9375
-	if checkcounter=0 then checkx=6.75 : checky=7.9375
-	if checkcounter=0 then 
+	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
+	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
+	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if
 fnend 
@@ -1706,11 +1713,11 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 		payLateAmount=bal+round(bal*.10,2)
 	end if
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
-	checkcounter+=1
-	if checkcounter=1 then xmargin=0 : ymargin=0
-	if checkcounter=2 then xmargin=139 : ymargin=0
-	if checkcounter=3 then xmargin=0 : ymargin=108
-	if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
+	billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=0 : ymargin=0
+	if billOnPageCount=2 then xmargin=139 : ymargin=0
+	if billOnPageCount=3 then xmargin=0 : ymargin=108
+	if billOnPageCount=4 then xmargin=139 : ymargin=108 : billOnPageCount=0
 	! ______________________________________________________________________
 	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 	fnpa_fontbold(1)
@@ -1864,13 +1871,13 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	if pe$(4)<>"" then 
 		fnpa_txt(trim$(pe$(4)),xmargin+68,lyne*(addy+=1)+ymargin)
 	end if 
-	if checkcounter=1 then checkx=1.375 : checky=3.6875
-	if checkcounter=2 then checkx=6.75 : checky=3.6875
-	if checkcounter=3 then checkx=1.375 : checky=7.9375
-	if checkcounter=0 then checkx=6.75 : checky=7.9375
+	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
+	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
 	bc$=""
 	if trim$(bc$)<>"" then let fnpa_barcode(checkx,checky,bc$)
-	if checkcounter=0 then 
+	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
 fnend 
@@ -2006,11 +2013,11 @@ def fn_print_bill_greenCo
 		setup_greenco=1
 		lyne=3
 	end if
-	let checkcounter+=1
-	if checkcounter=1 then xmargin=  0 : ymargin=  0
-	if checkcounter=2 then xmargin=139 : ymargin=  0
-	if checkcounter=3 then xmargin=  0 : ymargin=107                   ! 104
-	if checkcounter=4 then xmargin=139 : ymargin=107  : checkcounter=0 ! 104
+	let billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=  0 : ymargin=  0
+	if billOnPageCount=2 then xmargin=139 : ymargin=  0
+	if billOnPageCount=3 then xmargin=  0 : ymargin=107                   ! 104
+	if billOnPageCount=4 then xmargin=139 : ymargin=107  : billOnPageCount=0 ! 104
 
 	fnpa_font("Lucida Console")
 	fnpa_fontsize(9)
@@ -2083,13 +2090,134 @@ def fn_print_bill_greenCo
 	if pe$(4)<>"" then 
 		fnpa_txt(pe$(4),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
-	if checkcounter=1 then let checkx=1.375 : let checky=3.6875
-	if checkcounter=2 then let checkx=6.75 : let checky=3.6875
-	if checkcounter=3 then let checkx=1.375 : let checky=7.9375
-	if checkcounter=0 then let checkx=6.75 : let checky=7.9375
+	if billOnPageCount=1 then let checkx=1.375 : let checky=3.6875
+	if billOnPageCount=2 then let checkx=6.75 : let checky=3.6875
+	if billOnPageCount=3 then let checkx=1.375 : let checky=7.9375
+	if billOnPageCount=0 then let checkx=6.75 : let checky=7.9375
 	! let bc$=""
 	! if trim$(bc$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
-	if checkcounter=0 then 
+	if billOnPageCount=0 then 
 		let fnpa_newpage
 	end if
+fnend
+
+def fn_print_bill_galena
+	! -- Printer Program for New Laser Utility Bills
+	billOnPageCount+=1
+	if billOnPageCount=1 then xmargin=0 : ymargin=0
+	if billOnPageCount=2 then  xmargin=0 : ymargin=108 : billOnPageCount=0 ! xmargin=141.2 : ymargin=0 
+	! if billOnPageCount=3 then xmargin=0 : ymargin=108
+	! if billOnPageCount=4 then xmargin=141.2 : ymargin=108
+	! ___________________________
+	! - CONSTANTS
+	lyne=3
+	character=1.5
+	! pr #20: 'Call Print.MyOrientation("Landscape")'
+	fnpa_fontSize(12)
+	fnpa_fontSize
+	fnpa_fontBold
+	! pr #20: 'Call Print.MyFontSize(10)'
+	! pr #20: 'Call Print.MyFontBold(False)'
+	! pr #20: 'Call Print.MyFontColor("Black")'
+	fnpa_txt('#'&trim$(z$),xmargin,lyne*6+ymargin)
+	fnpa_txt(e$(1),xmargin+26,lyne*6+ymargin)
+	! pr #20: 'Call Print.AddText("Billing Date: ",xmargin+2,lyne*11+ymargin)&')'
+	! fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+30,lyne*11+ymargin)
+	! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&','&str$(linelength)&',0)'
+	! ___________________________
+	PRINTGRID: meter=9
+	fnpa_fontSize(8)
+	! d(1)=123456789 : d(3)=123456789 : g(1)=123456.89 : g(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : g(4)=123456.89 : g(5)=123456.89 : g(6)=123456.89 : g(8)=123456.89 : g(9)=123456.89 : pB=123456.89
+	if g(1) then 
+		fnpa_txt("WA",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+1 ,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(2),0,9),xmargin+18,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+35,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if g(2) then 
+		fnpa_txt("SW",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if g(4) then 
+		fnpa_txt("PS",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if g(5) then 
+		fnpa_txt("TR",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if g(6) then 
+		fnpa_txt("PW",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(6),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if g(8) then 
+		fnpa_txt("OC",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+52,lyne*meter+ymargin)
+	if g(9) then 
+	end if 
+		fnpa_txt("TX",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+	if pb then 
+		fnpa_txt("PB",xmargin,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(pb,2,9),xmargin+52,lyne*meter+ymargin)
+	end if 
+___________________________
+	fnpa_txt(date$(days(d3,"mmddyy"),"m"),xmargin  ,lyne*23+ymargin)
+	fnpa_txt(date$(days(d3,"mmddyy"),"D"),xmargin+6,lyne*23+ymargin)
+	if bal>0 then 
+		fnpa_txt(fnformnumb$(bal-g(9),2,9),xmargin+18,lyne*23+ymargin)
+		if g(10)>0 then 
+			fnpa_txt(fnformnumb$(g(10),2,9),xmargin+31,lyne*23+ymargin)
+		end if
+		fnpa_txt(fnformnumb$(bal+g(10)-g(9),2,9),xmargin+52,lyne*23+ymargin)
+		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*29.2+ymargin)
+		fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+52,lyne*29.2+ymargin)
+	else 
+		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*23+ymargin)
+		fnpa_txt(fnformnumb$(bal,2,9),xmargin+52,lyne*23+ymargin)
+	end if 
+	if g(9)>0 and bal>0 then 
+		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+18,lyne*25.4+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+52,lyne*25.4+ymargin)
+	end if 
+	if bal>0 then 
+	end if 
+	! fnpa_txt("Springfield",xmargin+80,lyne*2-1+ymargin)
+	! fnpa_txt("     IL    ",xmargin+80),lyne*3-1+ymargin)
+	! fnpa_txt("    62702  ",xmargin+80),lyne*4-1+ymargin)
+	! fnpa_line('&str$(xmargin+97,ymargin+0   ,29,lyne*4+2,1)
+	! fnpa_line('&str$(xmargin+90,ymargin+0   ,7,0)
+	! fnpa_line('&str$(xmargin+90,ymargin+2.8 ,7,0)
+	! fnpa_line('&str$(xmargin+90,ymargin+5.6 ,7,0)
+	! fnpa_line('&str$(xmargin+90,ymargin+8.4 ,7,0)
+	! fnpa_line('&str$(xmargin+90,ymargin+11.2,7,0)
+	! fnpa_line('&str$(xmargin+90,ymargin+14  ,7,0)
+	! fnpa_txt("First Class Mail",xmargin+100,lyne*1-1+ymargin)
+	! fnpa_txt("  U.S. Postage  ",xmargin+100,lyne*2-1+ymargin)
+	! fnpa_txt(" Paid One Ounce ",xmargin+100,lyne*3-1+ymargin)
+	! fnpa_txt("  Permit No.916 ",xmargin+100,lyne*4-1+ymargin)
+	fnpa_fontSize(8)
+	fnpa_txt("Please return this side with",xmargin+75,lyne*6+ymargin)
+	fnpa_txt('payment to:  '&cnam$,xmargin+75,lyne*7+ymargin)
+	addy=9
+	fnpa_txt(e$(2),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_txt(e$(3),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_txt(e$(4),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_txt(mg$(1),xmargin+75,lyne*(addy+=2)+ymargin)
+	fnpa_txt(mg$(2),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_txt(mg$(3),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_fontSize(9)
+	fnpa_txt(z$,xmargin+80,lyne*(addy+=5)+ymargin)
+	fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),xmargin+107,lyne*addy+ymargin)
+	fnpa_txt(fnformnumb$(bal,2,9),xmargin+75,lyne*(addy+=8.5)+ymargin)
+	if bal>0 then 
+		fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*addy+ymargin)
+	else 
+		fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*addy+ymargin)
+	end if 
+	if billOnPageCount=0 then 
+		fnpa_newpage
+	end if 
 fnend

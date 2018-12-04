@@ -608,10 +608,6 @@ fnend
 	fnend
 ! /r
 ! r: parse   S:\Core\parse\
-	def library fnremove(and$,&word$)
-		library 'S:\Core\parse\remove.br': fnremove
-		fnremove=fnremove(and$,word$)
-	fnend
 	def library fnremove2(&and$,&word$)
 		library 'S:\Core\parse\remove2.br': fnremove2
 		fnremove2=fnremove2(and$,word$)

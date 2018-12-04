@@ -11,7 +11,7 @@
 	dim serviceName$(10)*20,serviceCode$(10)*2,textfile$*87,abbrev$*30
 	fnget_services(mat mo$)
 ! 
-	dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
+	dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",20"&date$(1:2)
 	fnget_services(mat serviceName$)
 L180: io1$(1)="10,34,c 45,UT,N" 
 	io1$(2)="12,34,C 45,UT,N"
