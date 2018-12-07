@@ -4,24 +4,17 @@
 	open #hCustomer1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 	open #hCustomer2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed 
 	open #hTrans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
+	! r: open BudMstr and BudTrans, also set bud1 (1=budget files opened, 0=not)
 	bud1=0
-	open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L630
+	open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BudMstrOpenFail
 	open #h_budTrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 	bud1=1
-	L630: ! 
-		dim tau$(0)*256,tauN(0)
-		open #hTransUnposted:=fngethandle: "Name="&collections_filename$,internal,outIn,relative ioerr L700
-	if lrec(hTransUnposted)<1 then 
-		mat x=(0)
-		transType=postingCodeUnused=0
-	else 
-		xti1=2 ! edit previous unposted input and make new entries
-		! gosub READD
-	end if 
-goto MENU1B
-L700: ! 
-	open #hTransUnposted:=fngethandle: "Name="&collections_filename$&",RecL=91,Replace", internal,outIn,relative 
-	mat x=(0) : transType=postingCodeUnused=0
+	BudMstrOpenFail: ! 
+	! /r
+	! dim tau$(0)*256,tauN(0)
+	open #hTransUnposted:=fngethandle: "Name="&collections_filename$&',RecL=91,Use',internal,outIn,relative 
+	mat x=(0)
+	transType=postingCodeUnused=0
 goto MENU1B
 ! /r
 MENU1B: ! r:
@@ -144,14 +137,14 @@ fnend
 SCREEN_ADD: ! r:
 	! 
 	if x(3)=0 then x(3)=date('mmddyy') ! date should default to today
-	x(2)=0 ! amount collected should default to zero
+	x(2)=max(0,bal) ! amount collected should default to balance (or 0 if they have a credit)
 	! 
 	fnTos(sn$="ipcollAddv2")
 	respc=0
 	! 
 	fnLbl(3,1,"Amount:",25,1)
 	fnTxt(3,27,8,0,0,"32")
-	if ~do_not_blank_rcpt then resp$(respc:=1)=cnvrt$("N 10.2",max(0,bal)) ! str$(x(2))
+	if ~do_not_blank_rcpt then resp$(respc:=1)=str$(x(2))
 	! 
 	fnLbl(4,1,"Date (mmddyy):",25,1)
 	fnTxt(4,27,8,0,0,"1001")
@@ -535,7 +528,7 @@ def fn_print_listings
 	else 
 	 srt=2
 	end if
-	if ub_collDisableDepositList$='True' then 
+	if xti1=1 then 
 		fnopenprn(0,0,0,0,"Receipt Listing") : ti1_start=1 : ti1_end=1
 	else if xti1=2 then 
 		fnopenprn(0,0,0,0,"Deposit Listing") : ti1_start=2 : ti1_end=2
@@ -594,14 +587,14 @@ def fn_print_listings
 			if transType=5 then c$="Dm"
 			if transType=4 then c$="Cm"
 			! 
-			if ub_collDisableDepositList$='True' then 
-				if uprc$(escrow$)<>"Y" then 
-					pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
-					L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,x 3,c 30
-				else 
+			if xti1=1 then 
+				if uprc$(escrow$)="Y" then 
 					pr #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PGOF
 					L3090:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,n 8.2,x 3,c 30
 					totescrow+=escrow
+				else 
+					pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
+					L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,x 3,c 30
 				end if 
 			else if xti1=2 then 
 				pr #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PGOF
@@ -642,7 +635,7 @@ def fn_print_listings
 			mat water=(0)
 		end if 
 	 end if ! /r
-	 if xti1<>ti1_end and env$('acsDeveloper')='' then pr #255: newpage
+	 if xti1<>ti1_end then pr #255: newpage ! and env$('acsDeveloper')=''
 	next xti1
 	fncloseprn
 	close #h_addr: ioerr ignore
@@ -653,7 +646,7 @@ PGOF: ! r:
 	gosub HEADER
 continue  ! /r
 HEADER: ! r:
-	if ub_collDisableDepositList$='True' then 
+	if xti1=1 then 
 		pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 		pr #255: "\qc  {\f181 \fs22 \b Receipt Listing}"
 		pr #255: "\qc  {\f181 \fs16 \b "&trim$(date$('month, d, ccyy'))&"}"
@@ -1304,40 +1297,40 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			! rcpt$=trim$(resp$(3))(1:9)
 			at_customer$=lpad$(trim$(at_customer$),10)
 			! r: after SCREEN_ADD - actually do the adding stuff
-			if ub_collDisableDepositList$='True' then
+			! if ub_collDisableDepositList$='True' then
 				if sum(tgb)=x(2) then goto AT_L2020
 				if uprc$(escrow$)="Y" then gosub CHECK_ESCROW ! check escrow balance
 				mat hgb=tgb
-				! Check for previous months
-				mat tgb=(0)
-				restore #hTrans,key>=at_customer$&"         ": nokey AT_L1960
-				AT_L1800: !
-				do
-					read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof AT_L1960
-					if p$<>at_customer$ then goto AT_L1960
-					! if tcode<1 or tcode>2 then goto AT_L1800 ! only allow charge and penalty trans to flow thru
-					if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
-						mat tgb=(0)
-						j2=0
-						for j1=1 to 10
-							if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
-								pgb(j2+=1)=tg(j1)
-							else if srvname$(j1)<>"" and srvname$(j1)(1:5)<>"Reduc" then 
-								tgb(j2+=1)=tg(j1)
-							end if 
-						next j1
-						if sum(tgb)=x(2) then goto AT_L2020
-						if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
-							for x=1 to udim(tgb)
-								tgb(x)+=pgb(x)
-							next x
-							goto AT_L2020
-						end if 
-					end if 
-				loop 			! goto AT_L1800
-			end if
-			AT_L1960: ! 
-			mat tgb=hgb
+			!   this also seems wrong !!!   	! Check for previous months
+			!   this also seems wrong !!!   	mat tgb=(0)
+			!   this also seems wrong !!!   	restore #hTrans,key>=at_customer$&"         ": nokey AT_L1960
+			!   this also seems wrong !!!   	AT_L1800: !
+			!   this also seems wrong !!!   	do
+			!   this also seems wrong !!!   		read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof AT_L1960
+			!   this also seems wrong !!!   		if p$<>at_customer$ then goto AT_L1960
+			!   this also seems wrong !!!   		! if tcode<1 or tcode>2 then goto AT_L1800 ! only allow charge and penalty trans to flow thru
+			!   this also seems wrong !!!   		if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
+			!   this also seems wrong !!!   			mat tgb=(0)
+			!   this also seems wrong !!!   			j2=0
+			!   this also seems wrong !!!   			for j1=1 to 10
+			!   this also seems wrong !!!   				if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
+			!   this also seems wrong !!!   					pgb(j2+=1)=tg(j1)
+			!   this also seems wrong !!!   				else if srvname$(j1)<>"" and srvname$(j1)(1:5)<>"Reduc" then 
+			!   this also seems wrong !!!   					tgb(j2+=1)=tg(j1)
+			!   this also seems wrong !!!   				end if 
+			!   this also seems wrong !!!   			next j1
+			!   this also seems wrong !!!   			if sum(tgb)=x(2) then goto AT_L2020
+			!   this also seems wrong !!!   			if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
+			!   this also seems wrong !!!   				for x=1 to udim(tgb)
+			!   this also seems wrong !!!   					tgb(x)+=pgb(x)
+			!   this also seems wrong !!!   				next x
+			!   this also seems wrong !!!   				goto AT_L2020
+			!   this also seems wrong !!!   			end if 
+			!   this also seems wrong !!!   		end if 
+			!   this also seems wrong !!!   	loop 			! goto AT_L1800
+			!   this also seems wrong !!!   ! end if
+			!   this also seems wrong !!!   AT_L1960: ! 
+			!   this also seems wrong !!!   mat tgb=hgb
 			gosub BUD2
 			gosub BUD3
 			if ~fn_breakdown(hCustomer1,h_budmstr,at_customer$,havebudget, mat tgb, mat alloc,mat baOrder,coramt,ckey) then 
