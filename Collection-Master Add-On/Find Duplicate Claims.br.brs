@@ -85,7 +85,7 @@ return ! /r
 
 FFIT: ! r:
  delim$=','
- reportFile$=env$('userprofile')&'\Desktop\CM-Duplicates-TrakFNo.csv'
+ reportFile$='@:'&env$('userprofile')&'\Desktop\CM-Duplicates-TrakFNo.csv'
  limitRecordsProcessed=0 ! 50000
  timeStart=fnStime(time$)
  !open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',display,output 

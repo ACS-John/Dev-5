@@ -129,9 +129,9 @@ def fn_soapEncapsulateSimple(hX,text$*2048)
 
 
 dim wsseUsername$*128
-wsseUsername$='john'
+wsseUsername$='bqlaw05'
 dim wssePassword$*128
-wssePassword$='123'
+wssePassword$='UHtHXXtT'
 
 pr #hX: 'POST https://ne-test.cdc.nicusa.com/apps-EFILE/services/createFiling HTTP/1.1'
 pr #hX: 'Accept-Encoding: gzip,deflate'
