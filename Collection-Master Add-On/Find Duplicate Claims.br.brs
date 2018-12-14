@@ -29,7 +29,7 @@ dim dupeSearchValue$(0)*128
 dim reportFile$*256
 FFFN: !
  delim$=','
- reportFile$=env$('userprofile')&'\Desktop\CM-Duplicates-ForwarderFileNo.csv'
+ reportFile$='@:n:CM-Duplicates-ForwarderFileNo.csv'
  limitRecordsProcessed=0 ! 50000
  timeStart=fnStime(time$)
  Fffn_AskFile: !
@@ -85,7 +85,7 @@ return ! /r
 
 FFIT: ! r:
  delim$=','
- reportFile$='@:'&env$('userprofile')&'\Desktop\CM-Duplicates-TrakFNo.csv'
+ reportFile$='@:n:CM-Duplicates-TrakFNo.csv'
  limitRecordsProcessed=0 ! 50000
  timeStart=fnStime(time$)
  !open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',display,output 
