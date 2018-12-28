@@ -1,10 +1,10 @@
 ! r: Test The Tables!
-	 !  if env$('ACSdeveloper')<>'' then 
-	 !    fn_setup 
-	 !    fn_setupOpenFiles
-	 !    fn_test_state_calk
-	 !    end
-	 !  end if
+	  if env$('ACSdeveloper')<>'' then 
+	    fn_setup 
+	    fn_setupOpenFiles
+	    fn_test_state_calk
+	    end
+	  end if
 ! /r
 ! S:\Payroll\Calc (formerly) S:\acsPR\newprCalk
 ! Payroll Calculation
