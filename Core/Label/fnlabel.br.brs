@@ -11,6 +11,7 @@ def library fnlabel(mat linestyle$)
 	library 'S:\Core\Library': fnpa_finis,fnpa_newpage,fnpa_open
 	library 'S:\Core\Library': fnpa_fontsize
 	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnfree
 	on error goto ERTN
 
 	dim labeltext$(5)*120,wabel$(10,3,5)*120
@@ -234,6 +235,7 @@ def library fnlabel(mat linestyle$)
 
 	LABEL_XIT: ! r:
 		close #hLabelTemp,free: ioerr ignore
+		fnfree(env$('temp')&'\Label.dat')
 		hLabelTemp=0
 		! fnFree(env$('temp')&"\Label.dat")
 	goto XNOW ! /r

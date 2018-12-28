@@ -146,7 +146,7 @@ PrintBill_Basic: !
 		message1_line_count=3
 		message2_line_count=0
 		message1_max_len=30
-		pa_enabled=1 ! PrintAce
+		pa_enabled=2 ! PDF
 		! pa_orientation$='Landscape'
 		include_zero_bal=include_credit_bal=1
 		enable_cass_sort=1
@@ -2102,66 +2102,64 @@ def fn_print_bill_greenCo
 fnend
 
 def fn_print_bill_galena
-	! -- Printer Program for New Laser Utility Bills
+	if ~setup_print_bill_galena then
+		setup_print_bill_galena=1
+		lyne=4 ! 3
+		character=2 ! 1.5
+		fontBig=12 ! 10
+		fontNorm=10 ! 8
+	end if
 	billOnPageCount+=1
 	if billOnPageCount=1 then xmargin=0 : ymargin=0
-	if billOnPageCount=2 then  xmargin=0 : ymargin=108 : billOnPageCount=0 ! xmargin=141.2 : ymargin=0 
-	! if billOnPageCount=3 then xmargin=0 : ymargin=108
-	! if billOnPageCount=4 then xmargin=141.2 : ymargin=108
-	! ___________________________
-	! - CONSTANTS
-	lyne=3
-	character=1.5
-	! pr #20: 'Call Print.MyOrientation("Landscape")'
-	fnpa_fontSize(12)
-	fnpa_fontSize
+	if billOnPageCount=2 then  xmargin=0 : ymargin=108 : billOnPageCount=0
+	rightSide=125 ! xmargin+75
+	! r: left side
+	lsColService=xmargin
+	lsColPresent=xmargin+24
+	lsColPrevious=xmargin+44
+	lsColAmt=xmargin+74
+	fnpa_fontSize(fontBig)
 	fnpa_fontBold
-	! pr #20: 'Call Print.MyFontSize(10)'
-	! pr #20: 'Call Print.MyFontBold(False)'
-	! pr #20: 'Call Print.MyFontColor("Black")'
-	fnpa_txt('#'&trim$(z$),xmargin,lyne*6+ymargin)
-	fnpa_txt(e$(1),xmargin+26,lyne*6+ymargin)
-	! pr #20: 'Call Print.AddText("Billing Date: ",xmargin+2,lyne*11+ymargin)&')'
-	! fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+30,lyne*11+ymargin)
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&','&str$(linelength)&',0)'
-	! ___________________________
-	PRINTGRID: meter=9
-	fnpa_fontSize(8)
+	fnpa_txt('#'&trim$(z$),xmargin+40,lyne*2+ymargin)
+	fnpa_txt(e$(1),xmargin+26+40,lyne*2+ymargin)
+	PRINTGRID: !
+	meter=4
+	fnpa_fontSize(fontNorm)
 	! d(1)=123456789 : d(3)=123456789 : g(1)=123456.89 : g(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : g(4)=123456.89 : g(5)=123456.89 : g(6)=123456.89 : g(8)=123456.89 : g(9)=123456.89 : pB=123456.89
 	if g(1) then 
-		fnpa_txt("WA",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+1 ,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(d(2),0,9),xmargin+18,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+35,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt("WA",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(d(1),0,9),xmargin   ,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(2),0,9),lsColPresent,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(3),0,9),lsColPrevious,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(1),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if g(2) then 
 		fnpa_txt("SW",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(2),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if g(4) then 
 		fnpa_txt("PS",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(4),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if g(5) then 
 		fnpa_txt("TR",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(5),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if g(6) then 
 		fnpa_txt("PW",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(6),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(6),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if g(8) then 
 		fnpa_txt("OC",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(8),2,9),lsColAmt,lyne*meter+ymargin)
 	if g(9) then 
 	end if 
 		fnpa_txt("TX",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 	if pb then 
 		fnpa_txt("PB",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(pb,2,9),xmargin+52,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(pb,2,9),lsColAmt,lyne*meter+ymargin)
 	end if 
 ___________________________
 	fnpa_txt(date$(days(d3,"mmddyy"),"m"),xmargin  ,lyne*23+ymargin)
@@ -2171,52 +2169,41 @@ ___________________________
 		if g(10)>0 then 
 			fnpa_txt(fnformnumb$(g(10),2,9),xmargin+31,lyne*23+ymargin)
 		end if
-		fnpa_txt(fnformnumb$(bal+g(10)-g(9),2,9),xmargin+52,lyne*23+ymargin)
+		fnpa_txt(fnformnumb$(bal+g(10)-g(9),2,9),lsColAmt,lyne*23+ymargin)
 		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*29.2+ymargin)
-		fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+52,lyne*29.2+ymargin)
+		fnpa_txt(fnformnumb$(bal+g(10),2,9),lsColAmt,lyne*29.2+ymargin)
 	else 
 		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*23+ymargin)
-		fnpa_txt(fnformnumb$(bal,2,9),xmargin+52,lyne*23+ymargin)
+		fnpa_txt(fnformnumb$(bal,2,9),lsColAmt,lyne*23+ymargin)
 	end if 
 	if g(9)>0 and bal>0 then 
 		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+18,lyne*25.4+ymargin)
-		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+52,lyne*25.4+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),lsColAmt,lyne*25.4+ymargin)
 	end if 
 	if bal>0 then 
-	end if 
-	! fnpa_txt("Springfield",xmargin+80,lyne*2-1+ymargin)
-	! fnpa_txt("     IL    ",xmargin+80),lyne*3-1+ymargin)
-	! fnpa_txt("    62702  ",xmargin+80),lyne*4-1+ymargin)
-	! fnpa_line('&str$(xmargin+97,ymargin+0   ,29,lyne*4+2,1)
-	! fnpa_line('&str$(xmargin+90,ymargin+0   ,7,0)
-	! fnpa_line('&str$(xmargin+90,ymargin+2.8 ,7,0)
-	! fnpa_line('&str$(xmargin+90,ymargin+5.6 ,7,0)
-	! fnpa_line('&str$(xmargin+90,ymargin+8.4 ,7,0)
-	! fnpa_line('&str$(xmargin+90,ymargin+11.2,7,0)
-	! fnpa_line('&str$(xmargin+90,ymargin+14  ,7,0)
-	! fnpa_txt("First Class Mail",xmargin+100,lyne*1-1+ymargin)
-	! fnpa_txt("  U.S. Postage  ",xmargin+100,lyne*2-1+ymargin)
-	! fnpa_txt(" Paid One Ounce ",xmargin+100,lyne*3-1+ymargin)
-	! fnpa_txt("  Permit No.916 ",xmargin+100,lyne*4-1+ymargin)
-	fnpa_fontSize(8)
-	fnpa_txt("Please return this side with",xmargin+75,lyne*6+ymargin)
-	fnpa_txt('payment to:  '&cnam$,xmargin+75,lyne*7+ymargin)
+	end if
+	! /r
+	! r: right side
+	fnpa_fontSize(fontNorm)
+	fnpa_txt("Please return this side with",rightSide,lyne*6+ymargin)
+	fnpa_txt('payment to:  '&cnam$,rightSide,lyne*7+ymargin)
 	addy=9
-	fnpa_txt(e$(2),xmargin+75,lyne*(addy+=1)+ymargin)
-	fnpa_txt(e$(3),xmargin+75,lyne*(addy+=1)+ymargin)
-	fnpa_txt(e$(4),xmargin+75,lyne*(addy+=1)+ymargin)
-	fnpa_txt(mg$(1),xmargin+75,lyne*(addy+=2)+ymargin)
-	fnpa_txt(mg$(2),xmargin+75,lyne*(addy+=1)+ymargin)
-	fnpa_txt(mg$(3),xmargin+75,lyne*(addy+=1)+ymargin)
+	fnpa_txt(e$(2) ,rightSide,lyne*(addy+=1)+ymargin)
+	fnpa_txt(e$(3) ,rightSide,lyne*(addy+=1)+ymargin)
+	fnpa_txt(e$(4) ,rightSide,lyne*(addy+=1)+ymargin)
+	fnpa_txt(mg$(1),rightSide,lyne*(addy+=2)+ymargin)
+	fnpa_txt(mg$(2),rightSide,lyne*(addy+=1)+ymargin)
+	fnpa_txt(mg$(3),rightSide,lyne*(addy+=1)+ymargin)
 	fnpa_fontSize(9)
-	fnpa_txt(z$,xmargin+80,lyne*(addy+=5)+ymargin)
+	fnpa_txt(z$    ,xmargin+80,lyne*(addy+=5)+ymargin)
 	fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),xmargin+107,lyne*addy+ymargin)
-	fnpa_txt(fnformnumb$(bal,2,9),xmargin+75,lyne*(addy+=8.5)+ymargin)
+	fnpa_txt(fnformnumb$(bal,2,9),rightSide,lyne*(addy+=8.5)+ymargin)
 	if bal>0 then 
 		fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*addy+ymargin)
 	else 
-		fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*addy+ymargin)
+		fnpa_txt(fnformnumb$(bal,2,9),rightSide+31,lyne*addy+ymargin)
 	end if 
+	! /r
 	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 

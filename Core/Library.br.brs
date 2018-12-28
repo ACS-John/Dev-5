@@ -1223,6 +1223,10 @@ fnend
 	! /r
 ! /r
 ! r: GL   general ledger
+	def library fnregistered_for_GlBudgetMgmt
+		library 'S:\Core\Client.br': fnregistered_for_GlBudgetMgmt
+		fnregistered_for_GlBudgetMgmt=fnregistered_for_GlBudgetMgmt
+	fnend
 	def library fnGetFundList(mat fund_list)
 		library 'S:\General Ledger\Fix Period Accumulators from History.br': fnGetFundList
 		fnGetFundList=fnGetFundList(mat fund_list)

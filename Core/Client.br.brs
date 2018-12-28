@@ -178,6 +178,7 @@ def fn_setup_client ! ** set up for new clients
 		fn_setup_client_add("Choctaw" ,918,34214)
 		! fn_setup_client_add("Colyell" ,980,33948)
 		! fn_setup_client_add("Community Dev" ,982,34156)
+		fn_setup_client_add("Crocket County" ,1141,15110)
 		fn_setup_client_add("Divernon" ,1350,33698)
 		fn_setup_client_add("Dorothy Salch" ,3812,34494)
 		fn_setup_client_add("Durden" ,1406,16410)
@@ -347,6 +348,13 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('GL')
+			fn_add_ch_sys('CL')
+		else if env$('client')='Crocket County' then 
+			fn_user_limit(1)
+			fn_add_ch_sys('CL')
+			fn_add_ch_sys('PR')
+			fn_add_ch_sys('GL')
+			fn_add_ch_sys('GB')  !  GB is General Ledger Budget Management Add-On
 		else if env$('client')='Edinburg' then 
 			fn_user_limit(2)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -638,7 +646,12 @@ fnend
 def library fnregistered_for_job_cost_pr
 	fn_setup
 	fn_getClientLicense(mat client_has$)
-	fnregistered_for_job_cost_pr=fn_client_has('P4') ! fn_registered_for_job_cost_pr
+	fnregistered_for_job_cost_pr=fn_client_has('P4')
+fnend
+def library fnregistered_for_GlBudgetMgmt
+	fn_setup
+	fn_getClientLicense(mat client_has$)
+	fnregistered_for_GlBudgetMgmt=fn_client_has('GB')
 fnend
 def library fnhand_held_device$*20
 	fn_setup
@@ -668,7 +681,7 @@ def library fnub_printbill_program$*256
 		ub_printbill_count=0
 		fn_upp_add("Ash Grove","ubprtfull_ashgrove")
 	!     fn_upp_add("Ashland","ubprtbl1_ashland")
-		fn_upp_add("Bethany","ubprtbl1_Bethany")
+		fn_upp_add("Bethany","ubprtbl1_Bethany")  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
 		fn_upp_add("Campbell",'(basic)')  ! derived from printbill_french_settlement_gas which should still work too
 		fn_upp_add("Chatom","ubprtbl1_chatom")
 		fn_upp_add("Divernon","ubprtbl1_div")
@@ -699,7 +712,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add("White Hall","ubprtbl1_wh")
 		fn_upp_add("Morrisonville","ubprtbl1_morrisonville")
 		fn_upp_add("Purdy","ubprtbl1_purdy")
-		fn_upp_add("Galena","ubprtbl1_galena") ! '(basic)') ! 
+		fn_upp_add("Galena",'(basic)') ! "ubprtbl1_galena") 
 ! >>Bills-Laser (3 per page) ^ ubPrtThree
 		fn_upp_add("Ash Grove","ubprtprace_ash")
 !   fn_upp_add("Albany","ubprtthree_Albany")
@@ -769,6 +782,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Cerro Gordo",'IL')
 		fn_pcs_add("Cerro Gordo T",'IL')
 		!   fn_pcs_add("Community Dev",'TN')
+		fn_pcs_add("Crocket County",'TX')
 		fn_pcs_add("Divernon",'IL')
 		fn_pcs_add("Durden",'LA')
 		fn_pcs_add("Edinburg",'IL')
@@ -942,6 +956,8 @@ def fn_client_is_converting
 	if env$('ACSDeveloper')<>'' then
 		cic_return=1
 	else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2020','mm/dd/ccyy') then ! just testing
+		cic_return=1
+	else if env$('client')='Crocket County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
 		cic_return=1
 	else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
 		cic_return=1

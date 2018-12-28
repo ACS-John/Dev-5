@@ -87,7 +87,7 @@ Utilities
 >Test Balance Sheet Design                        ^ General Ledger\Test Balance Sheet Design
 >Test Income Statement Design                     ^ acsGL\acglinct
 >Reprint Year End Trial Balance                   ^ acsGL\yearendtb
-Budget Management                                 ^ acsGL\bgmaint2
+Budget Management                                 ^ acsGL\bgmaint2                                        ^ GB
 
 General Ledger Accountants Add-On                 ^                                                       ^ G2
 >Employee                                         ^ General Ledger\Accountants\Employee                   ^ G2

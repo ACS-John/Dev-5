@@ -130,7 +130,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index_it("[Q]\GLmstr\bankrec.H"&str$(cno),"[Q]\GLmstr\bankrec-idx.h"&str$(cno) ,"79/3/4 12/1/8")
 
 		fn_index_it("[Q]\GLmstr\BudgetInfo.h"&str$(cno),"[Q]\GLmstr\BudIndx.h"&str$(cno),"1,14")
-		fn_index_it("[Q]\GLmstr\BudInfo.h"&str$(cno),"[Q]\GLmstr\BudInfo_Index.h"&str$(cno),"1,14")
+		fn_index_it("[Q]\GLmstr\BudInfo.h"&str$(cno),"[Q]\GLmstr\BudInfo_Index.h"&str$(cno),"1,2")
 	! /r
 	! r: G
 		fn_index_it("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\GLIndex.h"&str$(cno),"1 12")

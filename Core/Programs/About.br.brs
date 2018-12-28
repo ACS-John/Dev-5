@@ -1,55 +1,49 @@
-10040   library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
-10060   on error goto ERTN
-10100   dim txt$(1)*256
-10140   fntop(program$, cap$="About ACS")
-10160   c_has_count=fnclient_has_mat(mat c_has$)
-10180   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
-20000   txt_item=0
-20020   mat txt$(txt_item+=1) : txt$(txt_item)='ACS Version '&env$('acsVersion')
-20040   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Customized for '&env$('Client')
-20060   if env$('user_limit')='1' then 
-20080     mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&env$('user_limit')&' User Liscensed'
-20100   else 
-20120     mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&env$('user_limit')&' Users Liscensed'
-20140   end if 
-20160   mat txt$(txt_item+=1) : txt$(txt_item)='Licensed Systems:'
-20180   for c_has_item=1 to c_has_count
-20200     mat txt$(txt_item+=1) : txt$(txt_item)
-20220     txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item)),40)
-22000 ! r: add support information
-22020     which=srch(mat system_id$,c_has$(c_has_item))
-22030     mat txt$(txt_item+=1) : txt$(txt_item)
-22040     if which>0 then 
-22080       if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(which),'ccyymmdd') then 
-22100         txt$(txt_item)=chr$(9)&chr$(9)&'Support active until '
-22120       else 
-22140         txt$(txt_item)=chr$(9)&chr$(9)&'Support expired on '
-22160       end if 
-22180       txt$(txt_item)(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(which))
-22220     else 
-22240       txt$(txt_item)(inf:inf)=chr$(9)&chr$(9)&'(no support data)'
-22260     end if 
-22280 ! /r
-24000   next c_has_item
-24020   mat txt$(txt_item+=1) : txt$(txt_item)=''
-24040   mat txt$(txt_item+=1) : txt$(txt_item)='Business Rules! Version '&wbversion$
-24060   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Serial Number '&str$(serial)
-24080   mat txt$(txt_item+=1) : txt$(txt_item)=''
-24100   mat txt$(txt_item+=1) : txt$(txt_item)='For support contact ACS at:'
-24120   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'1-800-643-6318'
-24140   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'acs.bowman@gmail.com'
-24160   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'planetacs.net'
-24180   mat txt$(txt_item+=1) : txt$(txt_item)=''
-24200   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Advanced Computer Services LLC'
-24220   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'4 Syme Ave'
-24240   mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'West Orange, NJ 07052'
-30000   fnmsgbox(mat txt$, response$, cap$)
-30020   goto XIT
-40000 ! <Updateable Region: ERTN>
-40020 ERTN: fnerror(program$,err,line,act$,"xit")
-40040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-40060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-40080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-40100 ERTN_EXEC_ACT: execute act$ : goto ERTN
-40120 ! /region
-40140 XIT: fnxit
+library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
+on error goto ERTN
+dim txt$(1)*256
+fntop(program$, cap$="About ACS")
+c_has_count=fnclient_has_mat(mat c_has$)
+fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
+txt_item=0
+mat txt$(txt_item+=1) : txt$(txt_item)='ACS Version '&env$('acsVersion')
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Customized for '&env$('Client')
+if env$('user_limit')='1' then 
+	mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&env$('user_limit')&' User Liscensed'
+else 
+	mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&env$('user_limit')&' Users Liscensed'
+end if 
+mat txt$(txt_item+=1) : txt$(txt_item)='Licensed Systems:'
+for c_has_item=1 to c_has_count
+	mat txt$(txt_item+=1) : txt$(txt_item)
+	txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item)),40)
+	! r: add support information
+	which=srch(mat system_id$,c_has$(c_has_item))
+	mat txt$(txt_item+=1) : txt$(txt_item)
+	if which>0 then 
+		if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(which),'ccyymmdd') then 
+			txt$(txt_item)=chr$(9)&chr$(9)&'Support active until '
+		else 
+			txt$(txt_item)=chr$(9)&chr$(9)&'Support expired on '
+		end if 
+		txt$(txt_item)(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(which))
+	else 
+		txt$(txt_item)(inf:inf)=chr$(9)&chr$(9)&'(no support data)'
+	end if 
+	! /r
+next c_has_item
+mat txt$(txt_item+=1) : txt$(txt_item)=''
+mat txt$(txt_item+=1) : txt$(txt_item)='Business Rules! Version '&wbversion$
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Serial Number '&str$(serial)
+mat txt$(txt_item+=1) : txt$(txt_item)=''
+mat txt$(txt_item+=1) : txt$(txt_item)='For support contact ACS at:'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'1-800-643-6318'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'acs.bowman@gmail.com'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'planetacs.net'
+mat txt$(txt_item+=1) : txt$(txt_item)=''
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Advanced Computer Services LLC'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'4 Syme Ave'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'West Orange, NJ 07052'
+fnmsgbox(mat txt$, response$, cap$)
+goto XIT
+XIT: fnxit
+include: ertn

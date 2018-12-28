@@ -1,3 +1,6 @@
+! make a local test facility
+
+
 fn_setup
 tagTrigger$="NE-EFILE"
 ! fn_testCmRead
