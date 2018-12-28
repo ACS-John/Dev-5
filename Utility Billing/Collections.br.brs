@@ -34,11 +34,11 @@ MENU1B: ! r:
 			m1_item$(5)=fn_collType$(transType)
 			if env$('acsDeveloper')<>'' then m1_item$(5)=m1_item$(5)&' ('&str$(transType)&')'
 			m1_item$(6)=str$(postingCodeUnused)            ! 
-			fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
+			fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			! m1_item$(7)=rcpt$
 			cHdrItem=cHdrItemFirstService=6
 			for j2=1 to 10
-				if srvname$(j2)="" or srvname$(j2)(1:5)="Reduc" then 
+				if srvName$(j2)="" or srvName$(j2)(1:5)="Reduc" then 
 					goto L1030
 				else 
 					m1_item$(cHdrItem+=1)=str$(alloc(cHdrItem-cHdrItemFirstService))
@@ -118,19 +118,18 @@ SCREEN_SELECT_ACCOUNT: ! r:
 	if fnask_account('Collections',z$,hCustomer1)=5 then 
 		goto MENU1B
 	end if 
-	coramt=0
 	x1$=z$
 	! r: read selected account and prepare data for SCREEN_ADD
 	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey SCREEN_SELECT_ACCOUNT
 	havebudget=0
-	fn_getMatTgb(mat tgb,escrow,mat gb,mat srvname$,escrow$,transType,escrowbal,oldescrowbal)
+	fn_getMatTgb(mat tgb,escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,oldescrowbal)
 	! /r
 goto SCREEN_ADD ! /r
-def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvname$,escrow$,transType,escrowbal,&oldescrowbal)
+def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,&oldescrowbal)
 	mat tgb=(0)
 	j2=0: escrow=0
 	for j=1 to 10
-		if srvname$(j)<>"" and srvname$(j)(1:5)<>"Reduc" then tgb(j2+=1)=gb(j)
+		if fn_serviceValidForCollAlloc(j) then tgb(j2+=1)=gb(j)
 	next j
 	if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
 fnend
@@ -263,53 +262,28 @@ SCREEN_ADD: ! r:
 ! /r
 ! r: after SCREEN_ADD - actually do the adding stuff
 	! if ub_collDisableDepositList$='True' then
-		if sum(tgb)=x(2) then goto L2020
+		if sum(tgb)=x(2) then 
+			for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
+			goto L2040
+		end if
 		if uprc$(escrow$)="Y" then gosub CHECK_ESCROW ! check escrow balance
 		mat hgb=tgb
-		!   this seems wrong    !!!   ! Check for previous months
-		!   this seems wrong    !!!   mat tgb=(0)
-		!   this seems wrong    !!!   restore #hTrans,key>=z$&"         ": nokey L1960
-		!   this seems wrong    !!!   do
-		!   this seems wrong    !!!   	L1800: !
-		!   this seems wrong    !!!   	read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1960
-		L1810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-		!   this seems wrong    !!!   	if p$<>z$ then goto L1960
-		!   this seems wrong    !!!   	if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
-		!   this seems wrong    !!!   		mat tgb=(0)
-		!   this seems wrong    !!!   		j2=0
-		!   this seems wrong    !!!   		for j1=1 to 10
-		!   this seems wrong    !!!   			if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
-		!   this seems wrong    !!!   				pgb(j2+=1)=tg(j1)
-		!   this seems wrong    !!!   			else if srvname$(j1)<>"" and srvname$(j1)(1:5)<>"Reduc" then 
-		!   this seems wrong    !!!   				tgb(j2+=1)=tg(j1)
-		!   this seems wrong    !!!   			end if 
-		!   this seems wrong    !!!   		next j1
-		!   this seems wrong    !!!   		if sum(tgb)=x(2) then goto L2020
-		!   this seems wrong    !!!   		if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
-		!   this seems wrong    !!!   			for x=1 to udim(tgb)
-		!   this seems wrong    !!!   				tgb(x)+=pgb(x)
-		!   this seems wrong    !!!   			next x
-		!   this seems wrong    !!!   			goto L2020
-		!   this seems wrong    !!!   		end if 
-		!   this seems wrong    !!!   	end if
-		!   this seems wrong    !!!   loop
-		!   this seems wrong    !!!   L1960: ! 
-		!   this seems wrong    !!!   mat tgb=hgb
+		! gosub SeemsWrong1
 		gosub BUD2
 		gosub BUD3
 	! end if
-	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,coramt,ckey) then goto SCREEN_SELECT_ACCOUNT
+	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto SCREEN_SELECT_ACCOUNT
+	if env$('acsDeveloper')<>'' then
+		pr 'ckey=';ckey 
+		pr 'dev-pause DD'
+		pause
+	end if
 	if ckey=2 then 
 		goto SCREEN_ADD
-	else if coramt=1 then 
-		goto SCREEN_SELECT_ACCOUNT
-	else 
-		goto L2040
 	end if 
 	! 
-	L2020: ! 
-	items=sz1 ! If UPRC$(ESCROW$)="Y" Then iTEMS=SZ1-1 Else iTEMS = SZ1
-	for j=1 to items : alloc(j)=tgb(j) : next j
+	! L2020: ! 
+	! for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 	L2040: ! 
 	transAmount=x(2) : transDate=x(3) : b7=transType
 	postingCodeUnused=0
@@ -377,12 +351,12 @@ EDIT_REC: ! r:
 	transDate=val(resp$(resp_transDate))
 	rcpt$=trim$(resp$(resp_receiptNumber))
 	if uprc$(escrow$)="Y" then gosub CHECK_ESCROW ! check escrow balance
-	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,coramt,ckey) then goto SCREEN_SELECT_ACCOUNT
+	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto SCREEN_SELECT_ACCOUNT
 	if uprc$(escrow$)="Y" then transAmount=transAmount-escrow ! .   ! .    ! subtract escrow amount from  payment amount before rewriting
 	rewrite #hTransUnposted,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
 ! If BUD1=1 Then Gosub BUD2 : Gosub BUD3
 L2590: ! 
-	! fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
+	! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 	fn_print_receipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
 goto MENU1B ! /r
 MERGE: ! r:
@@ -401,7 +375,7 @@ MERGE: ! r:
 		tmp=fndate_mmddyy_to_ccyymmdd(transDate)
 		mat tg=(0): x=0
 		for j=1 to 10
-			if srvname$(j)<>"" and srvname$(j)(1:5)<>"Reduc" then tg(j)=alloc(x+=1)
+			if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
 		next j
 		write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
 		if uprc$(escrow$)="Y" and escrow<>0 then 
@@ -411,7 +385,7 @@ MERGE: ! r:
 		end if 
 		j2=0
 		for j=1 to 10
-			if srvname$(j)="" or srvname$(j)(1:5)="Reduc" then goto L4470
+			if srvName$(j)="" or srvName$(j)(1:5)="Reduc" then goto L4470
 			j2=j2+1
 			if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
 			L4470: !
@@ -428,7 +402,69 @@ MERGE: ! r:
 	close #hTransUnposted: ioerr ignore
 	goto XIT ! /r
 XIT: fnxit
-IGNORE: continue 
+! SeemsWrong1: !
+	!   this seems wrong    !!!   ! Check for previous months
+	!   this seems wrong    !!!   mat tgb=(0)
+	!   this seems wrong    !!!   restore #hTrans,key>=z$&"         ": nokey L1960
+	!   this seems wrong    !!!   do
+	!   this seems wrong    !!!   	L1800: !
+	!   this seems wrong    !!!   	read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1960
+	! L1810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	!   this seems wrong    !!!   	if p$<>z$ then goto L1960
+	!   this seems wrong    !!!   	if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
+	!   this seems wrong    !!!   		mat tgb=(0)
+	!   this seems wrong    !!!   		j2=0
+	!   this seems wrong    !!!   		for j1=1 to 10
+	!   this seems wrong    !!!   			if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
+	!   this seems wrong    !!!   				pgb(j2+=1)=tg(j1)
+	!   this seems wrong    !!!   			else if srvName$(j1)<>"" and srvName$(j1)(1:5)<>"Reduc" then 
+	!   this seems wrong    !!!   				tgb(j2+=1)=tg(j1)
+	!   this seems wrong    !!!   			end if 
+	!   this seems wrong    !!!   		next j1
+	!   this seems wrong    !!!   		if sum(tgb)=x(2) then goto L2020
+	!   this seems wrong    !!!   		if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
+	!   this seems wrong    !!!   			for x=1 to udim(tgb)
+	!   this seems wrong    !!!   				tgb(x)+=pgb(x)
+	!   this seems wrong    !!!   			next x
+	!   this seems wrong    !!!   			goto L2020
+	!   this seems wrong    !!!   		end if 
+	!   this seems wrong    !!!   	end if
+	!   this seems wrong    !!!   loop
+	!   this seems wrong    !!!   L1960: ! 
+	!   this seems wrong    !!!   mat tgb=hgb
+! return
+! SeemsWrong2: !
+	!   this also seems wrong !!!   	! Check for previous months
+	!   this also seems wrong !!!   	mat tgb=(0)
+	!   this also seems wrong !!!   	restore #hTrans,key>=at_customer$&"         ": nokey AT_L1960
+	!   this also seems wrong !!!   	AT_L1800: !
+	!   this also seems wrong !!!   	do
+	!   this also seems wrong !!!   		read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof AT_L1960
+	!   this also seems wrong !!!   		if p$<>at_customer$ then goto AT_L1960
+	!   this also seems wrong !!!   		! if tcode<1 or tcode>2 then goto AT_L1800 ! only allow charge and penalty trans to flow thru
+	!   this also seems wrong !!!   		if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
+	!   this also seems wrong !!!   			mat tgb=(0)
+	!   this also seems wrong !!!   			j2=0
+	!   this also seems wrong !!!   			for j1=1 to 10
+	!   this also seems wrong !!!   				if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
+	!   this also seems wrong !!!   					pgb(j2+=1)=tg(j1)
+	!   this also seems wrong !!!   				else if srvName$(j1)<>"" and srvName$(j1)(1:5)<>"Reduc" then 
+	!   this also seems wrong !!!   					tgb(j2+=1)=tg(j1)
+	!   this also seems wrong !!!   				end if 
+	!   this also seems wrong !!!   			next j1
+	!   this also seems wrong !!!   			if sum(tgb)=x(2) then goto AT_L2020
+	!   this also seems wrong !!!   			if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
+	!   this also seems wrong !!!   				for x=1 to udim(tgb)
+	!   this also seems wrong !!!   					tgb(x)+=pgb(x)
+	!   this also seems wrong !!!   				next x
+	!   this also seems wrong !!!   				goto AT_L2020
+	!   this also seems wrong !!!   			end if 
+	!   this also seems wrong !!!   		end if 
+	!   this also seems wrong !!!   	loop 			! goto AT_L1800
+	!   this also seems wrong !!!   ! end if
+	!   this also seems wrong !!!   AT_L1960: ! 
+	!   this also seems wrong !!!   mat tgb=hgb
+! return
 BUD2: ! r: requires x1$
 	havebudget=0
 	bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
@@ -475,7 +511,7 @@ BUD3: ! r:
 		if bd3(j)<>0 then read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=bd2(j): z$,mat bt1,nba
 		x2=0
 		for j3=1 to 10
-			if srvname$(j3)<>"" then 
+			if srvName$(j3)<>"" then 
 				if penalty$(j3)="Y" then  ! add penalties up seperat
 					pgb(x2+=1)=bt1(j3+1,1)
 				else
@@ -576,10 +612,10 @@ def fn_print_listings
 			end if 
 			if xti1=2 and transType<>3 then goto PS_LOOP_TOP ! Skip all entries except receipts.
 			totcheck+=transAmount
-			fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
+			fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			if env$('client')="Ash Grove" and (wcode<1 or wcode>10) then wcode=1
 			if env$('client')="Ash Grove" and transType=3 then water(wcode)=water(wcode)+alloc(1) ! TOTAL WATER BY WATER CODE
-			for j=1 to sz1
+			for j=1 to validSrvCount
 				totalByService(j)+=alloc(j)
 				brk(transType,j)=brk(transType,j)+alloc(j)
 			next j
@@ -590,11 +626,11 @@ def fn_print_listings
 			if xti1=1 then 
 				if uprc$(escrow$)="Y" then 
 					pr #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PGOF
-					L3090:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,n 8.2,x 3,c 30
+					L3090:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,validSrvCount*n 8.2,n 8.2,x 3,c 30
 					totescrow+=escrow
 				else 
 					pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
-					L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,x 3,c 30
+					L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,validSrvCount*n 8.2,x 3,c 30
 				end if 
 			else if xti1=2 then 
 				pr #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PGOF
@@ -617,7 +653,7 @@ def fn_print_listings
 		pr #255,using "Form POS 34,4*C 12": " Collections","         C/M","         D/M","       Total"
 		pr #255,using F_PR_TOTAL_STUFF: "Totals",totalCollections,totalCreditMemos,totalDebitMemos,totalCollections+totalCreditMemos+totalDebitMemos
 		pr #255: ""
-		for j=1 to sz1
+		for j=1 to validSrvCount
 			pr #255,using F_PR_TOTAL_STUFF: serviceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
 		next j
 		if uprc$(escrow$)="Y" then pr #255,using F_PR_TOTAL_STUFF: "Escrow",totescrow
@@ -728,20 +764,20 @@ def fn_setup
 		read #20,using "Form pos 128,C 1,c 1": receipt$,escrow$
 		close #20: 
 		!
-		dim srvname$(10)*20
+		dim srvName$(10)*20
 		dim srv$(10)*2
 		dim penalty$(10)*1
 		dim apply(10)
-		fnget_services(mat srvname$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
-		for srvnameItem=1 to udim(mat srvname$)
-			srvname$(srvnameItem)=trim$(srvname$(srvnameItem))
+		fnget_services(mat srvName$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
+		for srvnameItem=1 to udim(mat srvName$)
+			srvName$(srvnameItem)=trim$(srvName$(srvnameItem))
 		nex srvnameItem
-		if srvname$(1)="Water" then havewater=1
-		if srvname$(3)<>"Electric" and srv$(3)="EL" then srvname$(3)=""
-		if srvname$(4)<>"Gas" and srv$(4)="GA" then srvname$(4)=""
-		if srvname$(2)="Sewer" then havesewer=1
-		! if srvname$(3)="Electric" then haveelectric=1
-		! if srvname$(4)="Gas" then havegas=1
+		if srvName$(1)="Water" then havewater=1
+		if srvName$(3)<>"Electric" and srv$(3)="EL" then srvName$(3)=""
+		if srvName$(4)<>"Gas" and srv$(4)="GA" then srvName$(4)=""
+		if srvName$(2)="Sewer" then havesewer=1
+		! if srvName$(3)="Electric" then haveelectric=1
+		! if srvName$(4)="Gas" then havegas=1
 		dim order(10)
 		dim baOrder(10)
 		applyItem=0
@@ -761,24 +797,24 @@ def fn_setup
 		dim hd1$*260
 		hd1$="{\ul Rec }  {\ul Account   }  {\ul    Total}    {\ul   Date  }  {\ul ReceiptNo}"
 		for j=1 to 10
-			if srvname$(j)<>"" and srvname$(j)(1:5)<>"Reduc" then 
-				sz1+=1
-				hd1$=hd1$&"  {\ul "&rpad$(srvname$(j),6)(1:6)&"}"
-				serviceLabel$(sz1)=srvname$(j)(1:28)&":"
+			if fn_serviceValidForCollAlloc(j) then 
+				validSrvCount+=1
+				hd1$=hd1$&"  {\ul "&rpad$(srvName$(j),6)(1:6)&"}"
+				serviceLabel$(validSrvCount)=srvName$(j)(1:28)&":"
 			end if 
 		next j
 		if uprc$(escrow$)="Y" then hd1$=rtrm$(hd1$)&"  {\ul Escrow}"
 		dim totalByService(10)
-		mat totalByService(sz1)
+		mat totalByService(validSrvCount)
 		dim alloc(10)
-		mat alloc(sz1)
+		mat alloc(validSrvCount)
 		dim tgb(10)
-		mat tgb(sz1)
+		mat tgb(validSrvCount)
 		dim hgb(10)
-		mat hgb(sz1)
+		mat hgb(validSrvCount)
 		dim serviceLabel$(11)*30
-		mat serviceLabel$(sz1)
-		F_ubColInp: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,sz1*pd 4.2,5*pd 3,pd 4.2
+		mat serviceLabel$(validSrvCount)
+		F_ubColInp: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,validSrvCount*pd 4.2,5*pd 3,pd 4.2
 	end if 
 	! r: setup column headers (mat chdr$) and column masks (mat cm$) for flex grid on MENU1B
 		dim chdr$(20)*30
@@ -793,8 +829,8 @@ def fn_setup
 		chdr$(6)="Receipt Number"
 		cHdrItem=6
 		for j2=1 to 10
-			if srvname$(j2)<>"" then 
-				chdr$(cHdrItem+=1)=rpad$(srvname$(j2),10)(1:10)
+			if srvName$(j2)<>"" then 
+				chdr$(cHdrItem+=1)=rpad$(srvName$(j2),10)(1:10)
 				chdr$(cHdrItem)=srep$(chdr$(cHdrItem),':','')
 			end if 
 		next j2
@@ -823,17 +859,17 @@ def fn_setup
 fnend 
 def fn_haveMainBudget(h_budmstr,x1$)
 	havemainbudget=0
-	read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey L3820 ! get mat ba again
+	read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey HmbFinis ! get mat ba again
 	if ba(2)+ba(3)+ba(4)+ba(5)+ba(6)+ba(7)+ba(8)+ba(9)+ba(10)+ba(11)>0 then havemainbudget=1
-	L3820: ! 
+	HmbFinis: ! 
 	fn_haveMainBudget=havemainbudget
 fnend 
-def library fnBreakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,&coramt,&ckey)
+def library fnBreakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,&ckey)
 	fn_setup
-	fnBreakdown=fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,coramt,ckey)
+	fnBreakdown=fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey)
 fnend 
-def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,&coramt,&ckey)
-	! returns 0 if canceled, else 1  (back returns 1, but also coramt=1)
+def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,&ckey)
+	! returns 0 if canceled, else 1  (back returns 2)
 	! hCustomer1 - customer file handle with account number key
 	! x1$ - customer account number key
 	! havebudget - 1=yes customer is on budget billing, 0=no
@@ -841,12 +877,11 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	! mat alloc -
 	! mat baOrder -
 	! x(2) is transaction amount
-	! coramt - used to determine if BACK was selected (coramt=1)
-	if env$('acsDeveloper')<>'' then pause
-	dim bd_real(11)
+	! if env$('acsDeveloper')<>'' then pause
+
 	
 	dim nam$*30
-	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2,pos 143,7*pd 2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal,mat ay nokey BD_TOS
+	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2,pos 143,7*pd 2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal,mat ay ! nokey BD_TOS   ! removed nokey trap on 12/9/2018 - if we can't find the customer than allocation is going to fail anyway.
 	dim extra(23)
 	fnapply_default_rates(mat extra, mat ay)
 	
@@ -861,62 +896,11 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	
 	gosub BuildAllocations
 	BD_TOS: ! 
-	fnTos(sn$="breakdown")
-	reco=0
-	fnLbl(1,1,"Account:",30,1)
-	fnTxt(1,32,10,0,1,"",1)
-	resp$(reco+=1)=x1$
-	fnLbl(2,1,"Customer Name:",30,1)
-	fnTxt(2,32,30,0,0,"",1)
-	resp$(reco+=1)=trim$(nam$)
-	fnLbl(3,1,"Transaction Amount:",30,1)
-	fnTxt(3,32,10,12,1,"10",1)
-	resp$(reco+=1)=str$(x(2))
-	fnLbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
-	fnLbl(6,31,"Allocation",10,2)
-	fnLbl(6,44,"Balance",10,2)
-	bd_line_add=0 : mat bd_real=(0)
-	for j=1 to 10
-		if srvname$(j)<>"" and srvname$(j)(1:5)<>"Reduc" then 
-			bd_line_add+=1
-			fnLbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
-			fnTxt(bd_line_add+6,44,12,0,1,"10",1)
-			! resp$(reco+=1)=str$(tgb(bd_line_add))
-			resp$(reco+=1)=str$(gb(bd_line_add))
-			fnTxt(bd_line_add+6,32,12,0,1,"10")
-			resp$(bd_real(bd_line_add):=reco+=1)=str$(alloc(bd_line_add))
-			! bd_real(bd_line_add)=reco
-		end if 
-	next j
 	
-	if uprc$(escrow$)="Y" then 
-		bd_line_add=bd_line_add+1
-		fnLbl(bd_line_add+6,1,"Escrow:",29,1)
-		resp$(reco+=1)=str$(oldescrowbal)
-		fnTxt(bd_line_add+6,44,12,0,1,"10",1)
-		resp$(reco+=1)=str$(escrow)
-		fnTxt(bd_line_add+6,32,12,0,1,"10")
-		bd_real(bd_line_add)=reco
-	end if 
-	if csv_import_in_process then 
-		fnCmdKey("&Save",1,1) : fnCmdKey("&Skip",5,0,1)
-	else 
-		fnCmdSet(6) ! fnCmdKey("&Next",1,1) : fnCmdKey("&Back",2) : fnCmdKey("&Cancel",5,0,1)
-	end if 
-	fnAcs(sn$,0,mat resp$,ckey)
-	! 
-	for j=1 to udim(mat alloc)
-		if bd_real(j)<>0 then 
-			alloc(j)=val(resp$(bd_real(j)))
-		else
-			alloc(j)=0
-		end if
-	next j
-	if uprc$(escrow$)="Y" then escrow=val(resp$(bd_real(j)))
+	ckey=fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$, csv_import_in_process,escrow$,oldescrowbal,escrow)
 	if ckey=1 then 
 		goto NEXT_AFTER_BREAKDOWN
 	else if ckey=2 then 
-		coramt=1 
 		goto BD_FINIS
 	else if ckey=5 then 
 		bd_return=0 
@@ -942,49 +926,135 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	BD_FINIS: ! 
 	fn_breakdown=bd_return
 fnend 
-BuildAllocations: ! r: returns mat alloc, mat tgb
+def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$; csv_import_in_process,escrow$,oldescrowbal,escrow,___,aaRespC,bd_line_add,ckey)
+	fnTos(sn$="breakdown")
+	fnLbl(1,1,"Account:",30,1)
+	fnTxt(1,32,10,0,1,"",1)
+	resp$(aaRespC+=1)=x1$
+	fnLbl(2,1,"Customer Name:",30,1)
+	fnTxt(2,32,30,0,0,"",1)
+	resp$(aaRespC+=1)=trim$(nam$)
+	fnLbl(3,1,"Transaction Amount:",30,1)
+	fnTxt(3,32,10,12,1,"10",1)
+	resp$(aaRespC+=1)=str$(x(2))
+	fnLbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
+	fnLbl(6,31,"Allocation",10,2)
+	fnLbl(6,44,"Balance",10,2)
+	dim bd_real(11)
+	mat bd_real=(0)
+	bd_line_add=0
+	for j=1 to 10
+		if fn_serviceValidForCollAlloc(j) then 
+			bd_line_add+=1
+			fnLbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
+			fnTxt(bd_line_add+6,44,12,0,1,"10",1)
+			! resp$(aaRespC+=1)=str$(tgb(bd_line_add))
+			resp$(aaRespC+=1)=str$(gb(bd_line_add))
+			fnTxt(bd_line_add+6,32,12,0,1,"10")
+			resp$(bd_real(bd_line_add):=aaRespC+=1)=str$(alloc(bd_line_add))
+			! bd_real(bd_line_add)=aaRespC
+		end if 
+	next j
+	
+	if uprc$(escrow$)="Y" then 
+		bd_line_add+=1
+		fnLbl(bd_line_add+6,1,"Escrow:",29,1)
+		resp$(aaRespC+=1)=str$(oldescrowbal)
+		fnTxt(bd_line_add+6,44,12,0,1,"10",1)
+		resp$(aaRespC+=1)=str$(escrow)
+		fnTxt(bd_line_add+6,32,12,0,1,"10")
+		bd_real(bd_line_add)=aaRespC
+	end if 
+	if csv_import_in_process then 
+		fnCmdKey("&Save",1,1) : fnCmdKey("&Skip",5,0,1)
+	else 
+		fnCmdSet(6) ! fnCmdKey("&Next",1,1) : fnCmdKey("&Back",2) : fnCmdKey("&Cancel",5,0,1)
+	end if 
+	fnAcs(sn$,0,mat resp$,ckey)
+	! 
+	if env$('acsDeveloper')<>'' then debug=1
+	for j=1 to udim(mat alloc)
+		if bd_real(j)<>0 then 
+			if debug then
+				pr 'setting ('&srvName$(j)&') alloc('&str$(j)&') to '&resp$(bd_real(j))&'. '
+			end if
+			alloc(j)=val(resp$(bd_real(j)))
+		else
+			alloc(j)=0
+		end if
+	next j
+	if debug then
+		pr 'dev-pause CC'
+		pause
+	end if
+	if uprc$(escrow$)="Y" then escrow=val(resp$(bd_real(j)))
+	fn_askAllocations=ckey
+fnend
+
+
+def fn_serviceValidForCollAlloc(j; ___,returnN) ! uses local mat srvName$
+	if srvName$(j)<>"" and srvName$(j)(1:5)<>"Reduc" then
+		returnN=1
+	end if
+	fn_serviceValidForCollAlloc=returnN
+fnend
+BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal,escrowbal
 	if editmode=1 then 
 		mat tgb=alloc
 	else 
 		j2=0
 		if ~havebudget=1 then 
 			for j=1 to 10
-				if srvname$(j)<>"" and srvname$(j)(1:5)<>"Reduc" then 
+				if fn_serviceValidForCollAlloc(j) then 
 					tgb(j2+=1)=gb(j)
 				end if 
 			next j
+	! 		pr '-a-' : gosub DisplayDebugAlloc
 		end if 
 	end if 
 	if uprc$(escrow$)="Y" and transType=3 then ! add escrow balance into last allocation if have escrow and processing a collection transaction
 		oldescrowbal=escrowbal
 	end if 
+
+	! pr '-b-' : gosub DisplayDebugAlloc
+	
 	bd_tgbj=tn=0
 	mat ba=(0) : mat badr=(0)
 	for j=1 to udim(mat alloc)
 		if tgb(j)<0 then tn-=tgb(j) ! Total Negative Breakdowns
 	next j
-	items=udim(mat alloc) ! If UPRC$(ESCROW$)="Y" Then iTEMS=udim(mat alloc)-1 Else iTEMS=udim(mat alloc) ! subtract one from order if escrow
+	
+	pr '-c-' : gosub DisplayDebugAlloc
+	
 	havemainbudget=fn_haveMainBudget(h_budmstr,x1$)
-	for j=1 to items
+	for j=1 to udim(mat alloc)
 		if ~(havemainbudget=1 and penalty$(baOrder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
 			if havemainbudget=1 then 
 				alloc(order(j))=max(0,min(x(2)-bd_tgbj,ba(baOrder(j)+1)))
+				pr 'a. setting alloc(order(j='&str$(j)&')='&str$(order(j))&')='&str$(alloc(order(j)))
 			else 
 				alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
+				pr 'b. setting alloc(order(j='&str$(j)&')='&str$(order(j))&')='&str$(alloc(order(j)))
 			end if 
 			bd_tgbj+=alloc(order(j))
 			if tgb(order(j))<0 then tn+=tgb(order(j))
 		end if 
 	next j
+	pr '-d-' : gosub DisplayDebugAlloc
+
 	if havemainbudget=1 and sum(alloc)<x(2) then 
-		for j=1 to items ! if have budget and pay more than budget, how to allocate remainder
+		for j=1 to udim(mat alloc) ! if have budget and pay more than budget, how to allocate remainder
 			if alloc(order(j))=0 then 
 				alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
 				bd_tgbj+=alloc(order(j))
 				if tgb(order(j))<0 then tn+=tgb(order(j))
 			end if 
 		next j
-	end if 
+	end if
+
+	pr '-e-' : gosub DisplayDebugAlloc
+
+	! r: allocate overpament amoun t
 	if env$('client')="Findlay" then
 		if s04rate>0 then ! excess in gas
 			alloc(3)=alloc(3)+x(2)-bd_tgbj
@@ -994,6 +1064,9 @@ BuildAllocations: ! r: returns mat alloc, mat tgb
 			goto BuildAllocations_FINIS
 		end if 
 	end if 
+	
+	pr '-e-' : gosub DisplayDebugAlloc
+	
 	if alloc(1)>0 or (havewater=1 and s01rate>0) then ! excess in water if it is an active service for this customer
 		alloc(1)=alloc(1)+x(2)-bd_tgbj
 		goto BuildAllocations_FINIS
@@ -1012,8 +1085,21 @@ BuildAllocations: ! r: returns mat alloc, mat tgb
 			alloc(1)+=x(2)-bd_tgbj ! if excess not allocated to any other service, allocate it to water
 		end if 
 	end if 
+	! /r
+	pr '-f-' : gosub DisplayDebugAlloc
+	
 	BuildAllocations_FINIS: ! 
 return  ! /r
+DisplayDebugAlloc: ! r:
+	if env$('acsDeveloper')<>'' then
+		pr rpad$('Service',20);'allocation';'    mt gb'
+		for dda=1 to validSrvCount
+			pr rpad$(srvName$(dda),20);cnvrt$('pic(---,--#.--)',alloc(dda));cnvrt$('pic(---,--#.--)',gb(dda))
+		nex dda
+		pr 'dev-pause AA'
+		pause
+	end if
+return ! /r
 def fn_open_cash_drawer
 	fnopen_receipt_printer
 	pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
@@ -1276,7 +1362,6 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 	rcpt$=""
 	transType=b7
 	at_customer$=rpad$(trim$(at_customer$),10)
-	coramt=0
 	! r: read selected account and prepare data for SCREEN_ADD
 	if fnKeyExists(hCustomer1,at_customer$, 1) then 
 		AT_ReadCustomer: ! 
@@ -1286,7 +1371,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 		else
 			x1$=at_customer$
 			havebudget=0
-			fn_getMatTgb(mat tgb,escrow,mat gb,mat srvname$,escrow$,transType,escrowbal,oldescrowbal)
+			fn_getMatTgb(mat tgb,escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,oldescrowbal)
 			! /r
 			! SCREEN_ADD: !
 			x(3)=at_date_mmddyy
@@ -1297,57 +1382,35 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			! rcpt$=trim$(resp$(3))(1:9)
 			at_customer$=lpad$(trim$(at_customer$),10)
 			! r: after SCREEN_ADD - actually do the adding stuff
-			! if ub_collDisableDepositList$='True' then
-				if sum(tgb)=x(2) then goto AT_L2020
+				if sum(tgb)=x(2) then
+					for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
+					goto AT_L2040
+				end if
 				if uprc$(escrow$)="Y" then gosub CHECK_ESCROW ! check escrow balance
 				mat hgb=tgb
-			!   this also seems wrong !!!   	! Check for previous months
-			!   this also seems wrong !!!   	mat tgb=(0)
-			!   this also seems wrong !!!   	restore #hTrans,key>=at_customer$&"         ": nokey AT_L1960
-			!   this also seems wrong !!!   	AT_L1800: !
-			!   this also seems wrong !!!   	do
-			!   this also seems wrong !!!   		read #hTrans,using L1810: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof AT_L1960
-			!   this also seems wrong !!!   		if p$<>at_customer$ then goto AT_L1960
-			!   this also seems wrong !!!   		! if tcode<1 or tcode>2 then goto AT_L1800 ! only allow charge and penalty trans to flow thru
-			!   this also seems wrong !!!   		if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
-			!   this also seems wrong !!!   			mat tgb=(0)
-			!   this also seems wrong !!!   			j2=0
-			!   this also seems wrong !!!   			for j1=1 to 10
-			!   this also seems wrong !!!   				if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
-			!   this also seems wrong !!!   					pgb(j2+=1)=tg(j1)
-			!   this also seems wrong !!!   				else if srvname$(j1)<>"" and srvname$(j1)(1:5)<>"Reduc" then 
-			!   this also seems wrong !!!   					tgb(j2+=1)=tg(j1)
-			!   this also seems wrong !!!   				end if 
-			!   this also seems wrong !!!   			next j1
-			!   this also seems wrong !!!   			if sum(tgb)=x(2) then goto AT_L2020
-			!   this also seems wrong !!!   			if sum(tgb)+sum(pgb)=x(2) then ! test with penalties added in
-			!   this also seems wrong !!!   				for x=1 to udim(tgb)
-			!   this also seems wrong !!!   					tgb(x)+=pgb(x)
-			!   this also seems wrong !!!   				next x
-			!   this also seems wrong !!!   				goto AT_L2020
-			!   this also seems wrong !!!   			end if 
-			!   this also seems wrong !!!   		end if 
-			!   this also seems wrong !!!   	loop 			! goto AT_L1800
-			!   this also seems wrong !!!   ! end if
-			!   this also seems wrong !!!   AT_L1960: ! 
-			!   this also seems wrong !!!   mat tgb=hgb
+				! gosub SeemsWrong2
+
 			gosub BUD2
 			gosub BUD3
-			if ~fn_breakdown(hCustomer1,h_budmstr,at_customer$,havebudget, mat tgb, mat alloc,mat baOrder,coramt,ckey) then 
+			if ~fn_breakdown(hCustomer1,h_budmstr,at_customer$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then 
 				if csv_import_in_process then 
 					goto AT_FINIS
 				else 
 					goto SCREEN_SELECT_ACCOUNT
 				end if 
 			end if 
-			if coramt=1 then 
-				pause  ! goto SCREEN_SELECT_ACCOUNT
-			else 
-				goto AT_L2040
+			if ckey=2 then 
+				if env$('acsDeveloper')<>'' then
+					pr 'dev-pause BB' 
+					pause  
+					! goto SCREEN_SELECT_ACCOUNT
+				end if
+				for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
+			! else 
+			! 	goto AT_L2040
 			end if 
-			AT_L2020: ! r:
-			items=sz1 ! If UPRC$(ESCROW$)="Y" Then iTEMS=SZ1-1 Else iTEMS = SZ1
-			for j=1 to items : alloc(j)=tgb(j) : next j
+			! AT_L2020: ! r:
+			! for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 			AT_L2040: ! 
 			transAmount=x(2) : transDate=x(3) : b7=transType
 			postingCodeUnused=0
@@ -1423,10 +1486,10 @@ fnend
 !   for j=1 to lrec(hTransUnposted)
 !     r5=j
 !     read #hTransUnposted,using F_ubColInp,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec L4690 eof L4700
-!     fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
+!     fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 ! L4690: next j
 ! L4700: return  ! /r
-def fn_increaseMatR(transType,amt,&totalCollections,&totalDebitMemos,&totalCreditMemos)
+def fn_totalAdd(transType,amt,&totalCollections,&totalDebitMemos,&totalCreditMemos)
 	if transType=1 then 
 		totalCollections+=amt
 	else if transType=3 then 

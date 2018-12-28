@@ -9,9 +9,12 @@ def fn_setup
   if ~setup then
     setup=1
     library 'S:\Core\Library': fnerror,fnTos,fnLbl,fncomboa,fnAcs,fncmbrt2,fnxit,fncmbact,fnButton
-    library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet,fntop,fnCmdKey,fnmsgbox,fnTxt
+    library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet
+    library 'S:\Core\Library': fntop,fnCmdKey,fnmsgbox,fnTxt
     library 'S:\Core\Library': fngethandle,fnpause,fnOpt,fnget_services,fnhand_held_device$
-    library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write,fnreg_read
+    library 'S:\Core\Library': fncreg_read,fncreg_write
+    library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
+    library 'S:\Core\Library': fnCopy
     library 'S:\Core\Library': fnAddOneC
     library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
     library 'S:\Core\Library': fnOpenFile,fnbuildkey$
