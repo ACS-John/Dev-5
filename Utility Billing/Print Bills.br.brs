@@ -2123,20 +2123,20 @@ def fn_print_bill_galena
 		xmargin=0
 		ymargin=140
 	end if
-	if env$('acsDeveloper')<>'' then ! r: debug values
-		d(1) =111456789 
-		d(3) =333456789 
-		g(1) =111456.89 
-		g(2) =222456.89
-		d(9) =999456789
-		d(11)=111111789
-		g(4) =444456.89 
-		g(5) =555456.89
-		g(6) =666456.89 
-		g(8) =888456.89 
-		g(9) =999456.89
-		pB   =484856.89
-	end if ! /r
+	! if env$('acsDeveloper')<>'' then ! r: debug values
+	! 	d(1) =111456789 
+	! 	d(3) =333456789 
+	! 	g(1) =111456.89 
+	! 	g(2) =222456.89
+	! 	d(9) =999456789
+	! 	d(11)=111111789
+	! 	g(4) =444456.89 
+	! 	g(5) =555456.89
+	! 	g(6) =666456.89 
+	! 	g(8) =888456.89 
+	! 	g(9) =999456.89
+	! 	pB   =484856.89
+	! end if ! /r
 
 	! r: left side
 	lsColService =xmargin     + 1
@@ -2214,7 +2214,7 @@ def fn_print_bill_galena
 		! /r
 	! /r
 	! r: right side
-		rightSide=xmargin+125
+		rightSide=xmargin+125+5
 	fnpa_fontSize(fontNorm)
 	fnpa_txt('Please return this side with payment to:',rightSide,lyne*6+ymargin)
 	fnpa_txt('payment to:  '&env$('cnam')                ,rightSide,lyne*7+ymargin)
