@@ -1094,17 +1094,19 @@ def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_pe
 	if ~wor_setup then 
 		wor_setup=1
 		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
-		dim or1(4,3) !  r: Withholding Table for Single with fewer than 3 allowances
-		or1(1,1)=    0 : or1(1,2)= 197   : or1(1,3)=0.05
-		or1(2,1)= 3350 : or1(2,2)= 367   : or1(2,3)=0.07
-		or1(3,1)= 8450 : or1(3,2)= 724   : or1(3,3)=0.09
-		or1(4,1)=50000 : or1(4,2)=4459.5 : or1(4,3)=0.09
+		dim or1(5,3) !  r: Withholding Table for Single with fewer than 3 allowances
+		or1(1,1)=    0 : or1(1,2)= 206   : or1(1,3)=0.05
+		or1(2,1)= 3550 : or1(2,2)= 383.5   : or1(2,3)=0.07
+		or1(3,1)= 8900 : or1(3,2)= 758   : or1(3,3)=0.09
+		or1(4,1)=50000 : or1(4,2)=540 : or1(4,3)=0.09
+		or1(5,1)=250000 : or1(5,2)=11007 : or1(5,3)=0.099
 		! /r
-		dim or2(4,3) ! r: Single with 3 or more allowances, or married
-		or2(1,1)=    0 : or2(1,2)= 197 : or2(1,3)=0.05
-		or2(2,1)= 6700 : or2(2,2)= 537 : or2(2,3)=0.07
-		or2(3,1)=16900 : or2(3,2)=1251 : or2(3,3)=0.09
-		or2(4,1)=50000 : or2(4,2)=4223 : or2(4,3)=0.09
+		dim or2(5,3) ! r: Single with 3 or more allowances, or married
+		or2(1,1)=    0 : or2(1,2)= 206 : or2(1,3)=0.05
+		or2(2,1)= 7100 : or2(2,2)= 561 : or2(2,3)=0.07
+		or2(3,1)=17800 : or2(3,2)=1310 : or2(3,3)=0.09
+		or2(4,1)=50000 : or2(4,2)=1080 : or2(4,3)=0.09
+		or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
 		! /r
 	end if 
 		! requires locally populated variables Mat OR1 and Mat OR2
@@ -1128,9 +1130,9 @@ def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_pe
 	end if 
 		! 
 	if wor_table=2 then ! wor_they_are_married then
-		wor_standard_deduction=4350
+		wor_standard_deduction=4545
 	else ! if wor_table=1 then ! if wor_they_are_single then
-		wor_standard_deduction=2175
+		wor_standard_deduction=2270
 	end if 
 		! 
 	wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
@@ -1175,9 +1177,9 @@ def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_pe
 	if debug then let fnStatus('.')
 	if debug then let fnStatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
 		! 
-		! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
+		! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances)
 		! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
-	wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
+	wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (206 * wor_allowances_effective)
 	fnStatus('withholding before dividing by pay periods = '&str$(wor_return))
 	wor_return=wor_return/wor_pay_periods_per_year
 	wor_return=round(wor_return,2)
@@ -1188,28 +1190,28 @@ def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_pe
 fnend 
 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
 	if opo_wages<50000 then 
-		opo_return=min(opo_fed_wh,6500)
+		opo_return=min(opo_fed_wh,6800)
 	else if opo_table=1 then 
-		if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
-		if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
-		if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
-		if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
-		if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+		if opo_wages => 50000 and opo_wages<125000 then opo_return= 6800 : goto OPO_XIT
+		if opo_wages =>125000 and opo_wages<130000 then opo_return= 5450 : goto OPO_XIT
+		if opo_wages =>130000 and opo_wages<135000 then opo_return= 4100 : goto OPO_XIT
+		if opo_wages =>135000 and opo_wages<140000 then opo_return= 2700 : goto OPO_XIT
+		if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
 		if opo_wages =>145000 then opo_return=0
 	else ! if opo_table=2 then
 		if opo_is_married then 
-			if opo_wages => 50000 and opo_wages<250000 then opo_return= 6550 : goto OPO_XIT
-			if opo_wages =>250000 and opo_wages<260000 then opo_return= 5200 : goto OPO_XIT
-			if opo_wages =>260000 and opo_wages<270000 then opo_return= 3900 : goto OPO_XIT
-			if opo_wages =>270000 and opo_wages<280000 then opo_return= 2600 : goto OPO_XIT
-			if opo_wages =>280000 and opo_wages<290000 then opo_return= 1300 : goto OPO_XIT
+			if opo_wages => 50000 and opo_wages<250000 then opo_return= 6800 : goto OPO_XIT
+			if opo_wages =>250000 and opo_wages<260000 then opo_return= 5450 : goto OPO_XIT
+			if opo_wages =>260000 and opo_wages<270000 then opo_return= 4100 : goto OPO_XIT
+			if opo_wages =>270000 and opo_wages<280000 then opo_return= 2700 : goto OPO_XIT
+			if opo_wages =>280000 and opo_wages<290000 then opo_return= 1350 : goto OPO_XIT
 			if opo_wages =>290000 then opo_return=0
 		else ! if opo_is_single then
-			if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
-			if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
-			if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
-			if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
-			if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+			if opo_wages => 50000 and opo_wages<125000 then opo_return= 6800 : goto OPO_XIT
+			if opo_wages =>125000 and opo_wages<130000 then opo_return= 5450 : goto OPO_XIT
+			if opo_wages =>130000 and opo_wages<135000 then opo_return= 4100 : goto OPO_XIT
+			if opo_wages =>135000 and opo_wages<140000 then opo_return= 2700 : goto OPO_XIT
+			if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
 			if opo_wages =>145000 then opo_return=0
 		end if 
 	end if 
