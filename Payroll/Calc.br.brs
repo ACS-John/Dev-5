@@ -1091,6 +1091,7 @@ OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table chang
 	if s3<.1 then s3=0
 return  ! /r
 def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married)
+	! if env$('ACSdeveloper')<>'' then print wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married : pause
 	if ~wor_setup then 
 		wor_setup=1
 		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
@@ -1136,7 +1137,7 @@ def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_pe
 	end if 
 		! 
 	wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
-		! 
+	wor_fed_wh_annual_estimate=wor_fed_wh_annual_estimate*wor_pay_periods_per_year ! needed to be annual, not pay period LS 12/31/18
 	wor_phase_out=fn_oregonPhaseOut(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
 		! 
 		! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
