@@ -749,6 +749,7 @@ def library fnub_printbill_program$*256
 			msgbox('Your Utility Bill settings could not be determined.  Please contact ACS at 1-800-643-6318.')
 		end if 
 	!        (basic) should be fine.   end if 
+	! if env$('acsDeveloper')<>'' then pr 'upp_return$='&upp_return$ : pause
 	fnub_printbill_program$=upp_return$
 fnend 
 def fn_upp_add(ua_client$,ua_program$*128)
