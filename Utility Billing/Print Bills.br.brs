@@ -2121,7 +2121,7 @@ def fn_print_bill_galena
 		! fnpa_background('S:\Core\pdf\Galena Bill Background.pdf')
 	else if billOnPageCount=2 then  
 		xmargin=0
-		ymargin=140
+		ymargin=140+5
 	end if
 	! if env$('acsDeveloper')<>'' then ! r: debug values
 	! 	d(1) =111456789 
@@ -2214,7 +2214,7 @@ def fn_print_bill_galena
 		! /r
 	! /r
 	! r: right side
-		rightSide=xmargin+125+5
+		rightSide=xmargin+125
 	fnpa_fontSize(fontNorm)
 	fnpa_txt('Please return this side with payment to:',rightSide,lyne*6+ymargin)
 	fnpa_txt('payment to:  '&env$('cnam')                ,rightSide,lyne*7+ymargin)
