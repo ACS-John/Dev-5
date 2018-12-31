@@ -288,7 +288,7 @@ def fn_setup
 	if ~setup then
 		setup=1
 		dim w2laser_output_filename$*256
-		library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnreg_read,fnreg_write,fncomboa,fnpa_pic,fnAddOneC
+		library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fngethandle,fnreg_read,fnreg_write,fncomboa,fnpa_pic,fnAddOneC
 		on error goto ERTN
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
