@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                  
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                                                                                                                                  
+9:42 AM 12/31/2018	UB	Print Bills enhanced for client 1945
 11:23 AM 12/28/2018	PR	Federal Withholding Tables updated
 10:59 AM 12/28/2018	PR	941 backgrounds for 2018 added
 10:53 AM 12/28/2018	CO	W-2s for 2018 are ready with backgrounds

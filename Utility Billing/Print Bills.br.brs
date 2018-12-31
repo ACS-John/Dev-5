@@ -13,10 +13,21 @@
 ! /r
 ! PrintBill_Basic - dynamic pr bill program that works for multiple clients
 def fn_setup
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fnopenprn,fncloseprn,fncreg_read,fncreg_write,fngethandle,fncustomer_address
+	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof
+	library 'S:\Core\Library': fnOpt,fnTos
+	library 'S:\Core\Library': fncmbact
+	library 'S:\Core\Library': fnLastBillingDate
+	library 'S:\Core\Library': fnxit,fnCmdSet,fnopenprn,fncloseprn
+	library 'S:\Core\Library': fncreg_read,fncreg_write
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fncustomer_address
 	library 'S:\Core\Library': fnformnumb$,fntrans_total_as_of,fnget_services
-	library 'S:\Core\Library': fnpa_open,fnpa_finis,fnpa_barcode,fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line,fnpa_fontitalic,fnpa_pic,fnpa_elipse
-	library 'S:\Core\Library': fntop,fnchain,fnub_printbill_program$
+	library 'S:\Core\Library': fnpa_fontbold,fnpa_font,fnpa_line,fnpa_fontitalic,fnpa_pic,fnpa_elipse
+	library 'S:\Core\Library': fnpa_open,fnpa_finis,fnpa_barcode,fnpa_newpage,fnpa_txt,fnpa_fontsize
+	library 'S:\Core\Library': fnpa_background
+	library 'S:\Core\Library': fntop
+	library 'S:\Core\Library': fnchain
+	library 'S:\Core\Library': fnub_printbill_program$
 	on error goto ERTN
 ! ______________________________________________________________________
 	dim resp$(60)*128
@@ -477,13 +488,6 @@ ENDSCR: ! r: pr totals screen
 	goto XIT ! /r
 XIT: fnxit
 IGNORE: continue 
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
 BUD1: ! r:
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5)
@@ -2090,10 +2094,10 @@ def fn_print_bill_greenCo
 	if pe$(4)<>"" then 
 		fnpa_txt(pe$(4),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
-	if billOnPageCount=1 then let checkx=1.375 : let checky=3.6875
-	if billOnPageCount=2 then let checkx=6.75 : let checky=3.6875
-	if billOnPageCount=3 then let checkx=1.375 : let checky=7.9375
-	if billOnPageCount=0 then let checkx=6.75 : let checky=7.9375
+	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+	if billOnPageCount=2 then checkx=6.75  : checky=3.6875
+	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+	if billOnPageCount=0 then checkx=6.75  : checky=7.9375
 	! let bc$=""
 	! if trim$(bc$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
 	if billOnPageCount=0 then 
@@ -2106,105 +2110,132 @@ def fn_print_bill_galena
 		setup_print_bill_galena=1
 		lyne=4 ! 3
 		character=2 ! 1.5
-		fontBig=12 ! 10
-		fontNorm=10 ! 8
+		fontBig  =14 ! 10
+		fontNorm =10 ! 8
+		fontSmall= 9
 	end if
 	billOnPageCount+=1
-	if billOnPageCount=1 then xmargin=0 : ymargin=0
-	if billOnPageCount=2 then  xmargin=0 : ymargin=108 : billOnPageCount=0
-	rightSide=125 ! xmargin+75
+	if billOnPageCount=1 then 
+		xmargin=0
+		ymargin=0
+		! fnpa_background('S:\Core\pdf\Galena Bill Background.pdf')
+	else if billOnPageCount=2 then  
+		xmargin=0
+		ymargin=140
+	end if
+	if env$('acsDeveloper')<>'' then ! r: debug values
+		d(1) =111456789 
+		d(3) =333456789 
+		g(1) =111456.89 
+		g(2) =222456.89
+		d(9) =999456789
+		d(11)=111111789
+		g(4) =444456.89 
+		g(5) =555456.89
+		g(6) =666456.89 
+		g(8) =888456.89 
+		g(9) =999456.89
+		pB   =484856.89
+	end if ! /r
+
 	! r: left side
-	lsColService=xmargin
-	lsColPresent=xmargin+24
-	lsColPrevious=xmargin+44
-	lsColAmt=xmargin+74
+	lsColService =xmargin     + 1
+	lsColPresent =xmargin     +14-2
+	lsColPrevious=xmargin+24  +11+2
+	lsColUsed    =xmargin+44  +18+1
+	lsColCharges =xmargin+74  +10+3
 	fnpa_fontSize(fontBig)
 	fnpa_fontBold
-	fnpa_txt('#'&trim$(z$),xmargin+40,lyne*2+ymargin)
+	fnpa_txt(trim$(z$),xmargin+40,lyne*2+ymargin)
+	fnpa_fontSize(fontSmall)
 	fnpa_txt(e$(1),xmargin+26+40,lyne*2+ymargin)
 	PRINTGRID: !
-	meter=4
+	meter=6
 	fnpa_fontSize(fontNorm)
-	! d(1)=123456789 : d(3)=123456789 : g(1)=123456.89 : g(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : g(4)=123456.89 : g(5)=123456.89 : g(6)=123456.89 : g(8)=123456.89 : g(9)=123456.89 : pB=123456.89
+	! r: top table
 	if g(1) then 
-		fnpa_txt("WA",lsColService,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(d(1),0,9),xmargin   ,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(d(2),0,9),lsColPresent,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(d(3),0,9),lsColPrevious,lyne*meter+ymargin)
-		fnpa_txt(fnformnumb$(g(1),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("WA"                  ,lsColService ,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(d(1),0,9),lsColPresent  ,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(2),0,9),lsColPrevious ,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(d(3),0,9),lsColUsed     ,lyne*meter+ymargin)
+		fnpa_txt(fnformnumb$(g(1),2,9),lsColCharges  ,lyne*meter+ymargin)
 	end if 
 	if g(2) then 
-		fnpa_txt("SW",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(2),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("SW",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(2),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if g(4) then 
-		fnpa_txt("PS",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(4),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("PS",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(4),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if g(5) then 
-		fnpa_txt("TR",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(5),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("TR",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(5),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if g(6) then 
-		fnpa_txt("PW",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(6),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("PW",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(6),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if g(8) then 
-		fnpa_txt("OC",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(8),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("OC",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(8),2,9),lsColCharges,lyne*meter+ymargin)
 	if g(9) then 
 	end if 
-		fnpa_txt("TX",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(9),2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("TX",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(g(9),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if pb then 
-		fnpa_txt("PB",xmargin,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(pb,2,9),lsColAmt,lyne*meter+ymargin)
+		fnpa_txt("PB",lsColService,lyne*(meter+=1)+ymargin)
+		fnpa_txt(fnformnumb$(pb,2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
-___________________________
-	fnpa_txt(date$(days(d3,"mmddyy"),"m"),xmargin  ,lyne*23+ymargin)
-	fnpa_txt(date$(days(d3,"mmddyy"),"D"),xmargin+6,lyne*23+ymargin)
+	! /r
+! r: bottom table
+	fnpa_txt(date$(days(d3,"mmddyy"),"m")     ,xmargin+ 2    ,lyne*23+ymargin)
+	fnpa_txt(date$(days(d3,"mmddyy"),"D")     ,xmargin+11    ,lyne*23+ymargin)
 	if bal>0 then 
-		fnpa_txt(fnformnumb$(bal-g(9),2,9),xmargin+18,lyne*23+ymargin)
-		if g(10)>0 then 
-			fnpa_txt(fnformnumb$(g(10),2,9),xmargin+31,lyne*23+ymargin)
+		fnpa_txt(fnformnumb$(bal-g(9),2,9)      ,lsColPrevious ,lyne*23+ymargin)
+		if g(10)>0 then
+			! Pay Early Save This
+			fnpa_txt(fnformnumb$(g(10),2,9)       ,lsColUsed     ,lyne*23+ymargin)
 		end if
-		fnpa_txt(fnformnumb$(bal+g(10)-g(9),2,9),lsColAmt,lyne*23+ymargin)
-		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*29.2+ymargin)
-		fnpa_txt(fnformnumb$(bal+g(10),2,9),lsColAmt,lyne*29.2+ymargin)
+		fnpa_txt(fnformnumb$(bal+g(10)-g(9),2,9),lsColCharges  ,lyne*23+ymargin)
 	else 
-		fnpa_txt(fnformnumb$(bal,2,9),xmargin+18,lyne*23+ymargin)
-		fnpa_txt(fnformnumb$(bal,2,9),lsColAmt,lyne*23+ymargin)
-	end if 
-	if g(9)>0 and bal>0 then 
-		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+18,lyne*25.4+ymargin)
-		fnpa_txt(fnformnumb$(g(9),2,9),lsColAmt,lyne*25.4+ymargin)
+		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColPrevious ,ymargin+lyne*23)
+		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColCharges  ,ymargin+lyne*23)
 	end if 
 	if bal>0 then 
+		if g(9)>0 then 
+			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColPrevious ,ymargin+lyne*25) ! *xx   was *25.4
+			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColCharges  ,ymargin+lyne*25) ! *xx   was *25.4
+		end if 
+	fnpa_txt(fnformnumb$(bal,2,9)             ,lsColPrevious ,ymargin+lyne*29.5)  ! *xx was *29.2   note: 29.6 pushes numbers off page on second bill
+	fnpa_txt(fnformnumb$(bal+g(10),2,9)       ,lsColCharges  ,ymargin+lyne*29.5)  ! *xx was *29.2   note: 29.6 pushes numbers off page on second bill
 	end if
+		! /r
 	! /r
 	! r: right side
+		rightSide=xmargin+125
 	fnpa_fontSize(fontNorm)
-	fnpa_txt("Please return this side with",rightSide,lyne*6+ymargin)
-	fnpa_txt('payment to:  '&cnam$,rightSide,lyne*7+ymargin)
-	addy=9
-	fnpa_txt(e$(2) ,rightSide,lyne*(addy+=1)+ymargin)
-	fnpa_txt(e$(3) ,rightSide,lyne*(addy+=1)+ymargin)
-	fnpa_txt(e$(4) ,rightSide,lyne*(addy+=1)+ymargin)
-	fnpa_txt(mg$(1),rightSide,lyne*(addy+=2)+ymargin)
-	fnpa_txt(mg$(2),rightSide,lyne*(addy+=1)+ymargin)
-	fnpa_txt(mg$(3),rightSide,lyne*(addy+=1)+ymargin)
-	fnpa_fontSize(9)
-	fnpa_txt(z$    ,xmargin+80,lyne*(addy+=5)+ymargin)
-	fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),xmargin+107,lyne*addy+ymargin)
-	fnpa_txt(fnformnumb$(bal,2,9),rightSide,lyne*(addy+=8.5)+ymargin)
+	fnpa_txt('Please return this side with payment to:',rightSide,lyne*6+ymargin)
+	fnpa_txt('payment to:  '&env$('cnam')                ,rightSide,lyne*7+ymargin)
+	fnpa_txt(e$(2)                          ,rightSide     ,ymargin+lyne*9 )
+	fnpa_txt(mg$(1)                         ,rightSide     ,ymargin+lyne*11 )
+	fnpa_txt(mg$(2)                         ,rightSide     ,ymargin+lyne*12 )
+	fnpa_txt(mg$(3)                         ,rightSide     ,ymargin+lyne*13 )
+
+	fnpa_txt(str$(route)                   ,rightSide+5   ,ymargin+lyne*21  )
+	fnpa_txt(z$                             ,rightSide+15  ,ymargin+lyne*21  )
+	fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)   ,rightSide+57  ,ymargin+lyne*21   )
 	if bal>0 then 
-		fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*addy+ymargin)
-	else 
-		fnpa_txt(fnformnumb$(bal,2,9),rightSide+31,lyne*addy+ymargin)
-	end if 
+		fnpa_txt(fnformnumb$(bal+g(10),2,9)  ,rightSide+60  ,ymargin+lyne*25) !  xmargin+106
+	else
+		fnpa_txt(fnformnumb$(bal,2,9)        ,rightSide+60,  ymargin+lyne*25) ! rightSide+31
+	end if
+	fnpa_txt(fnformnumb$(bal,2,9)          ,rightSide+60   ,ymargin+lyne*29) ! 25
 	! /r
-	if billOnPageCount=0 then 
+	if billOnPageCount=2 then 
 		fnpa_newpage
+		billOnPageCount=0
 	end if 
 fnend
+include: ertn
