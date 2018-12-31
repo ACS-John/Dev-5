@@ -2118,10 +2118,12 @@ def fn_print_bill_galena
 	if billOnPageCount=1 then 
 		xmargin=0
 		ymargin=0
-		! fnpa_background('S:\Core\pdf\Galena Bill Background.pdf')
+		if env$('acsDeveloper')<>'' then
+			fnpa_background('S:\Core\pdf\Galena Bill Background.pdf')
+		end if
 	else if billOnPageCount=2 then  
 		xmargin=0
-		ymargin=140+5
+		ymargin=140
 	end if
 	! if env$('acsDeveloper')<>'' then ! r: debug values
 	! 	d(1) =111456789 
