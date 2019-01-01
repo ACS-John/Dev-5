@@ -37,7 +37,7 @@ MENU1B: ! r:
 			fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			! m1_item$(7)=rcpt$
 			cHdrItem=cHdrItemFirstService=6
-			for j2=1 to 10
+			for j2=1 to possibleServiceCount
 				if srvName$(j2)="" or srvName$(j2)(1:5)="Reduc" then 
 					goto L1030
 				else 
@@ -128,7 +128,7 @@ goto SCREEN_ADD ! /r
 def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,&oldescrowbal)
 	mat tgb=(0)
 	j2=0: escrow=0
-	for j=1 to 10
+	for j=1 to possibleServiceCount
 		if fn_serviceValidForCollAlloc(j) then tgb(j2+=1)=gb(j)
 	next j
 	if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
@@ -273,11 +273,11 @@ SCREEN_ADD: ! r:
 		gosub BUD3
 	! end if
 	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto SCREEN_SELECT_ACCOUNT
-	if env$('acsDeveloper')<>'' then
-		pr 'ckey=';ckey 
-		pr 'dev-pause DD'
-		pause
-	end if
+	! if env$('acsDeveloper')<>'' then
+	! 	pr 'ckey=';ckey 
+	! 	pr 'dev-pause DD'
+	! 	pause
+	! end if
 	if ckey=2 then 
 		goto SCREEN_ADD
 	end if 
@@ -374,7 +374,7 @@ MERGE: ! r:
 		if transType=5 then bal+=transAmount else bal-=transAmount
 		tmp=fndate_mmddyy_to_ccyymmdd(transDate)
 		mat tg=(0): x=0
-		for j=1 to 10
+		for j=1 to possibleServiceCount
 			if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
 		next j
 		write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
@@ -384,7 +384,7 @@ MERGE: ! r:
 			write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode ! write a history record for escrow amount
 		end if 
 		j2=0
-		for j=1 to 10
+		for j=1 to possibleServiceCount
 			if srvName$(j)="" or srvName$(j)(1:5)="Reduc" then goto L4470
 			j2=j2+1
 			if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
@@ -414,7 +414,7 @@ XIT: fnxit
 	!   this seems wrong    !!!   	if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
 	!   this seems wrong    !!!   		mat tgb=(0)
 	!   this seems wrong    !!!   		j2=0
-	!   this seems wrong    !!!   		for j1=1 to 10
+	!   this seems wrong    !!!   		for j1=1 to possibleServiceCount
 	!   this seems wrong    !!!   			if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
 	!   this seems wrong    !!!   				pgb(j2+=1)=tg(j1)
 	!   this seems wrong    !!!   			else if srvName$(j1)<>"" and srvName$(j1)(1:5)<>"Reduc" then 
@@ -445,7 +445,7 @@ XIT: fnxit
 	!   this also seems wrong !!!   		if tcode=1 or tcode=2 then ! only allow charge and penalty trans to flow thru
 	!   this also seems wrong !!!   			mat tgb=(0)
 	!   this also seems wrong !!!   			j2=0
-	!   this also seems wrong !!!   			for j1=1 to 10
+	!   this also seems wrong !!!   			for j1=1 to possibleServiceCount
 	!   this also seems wrong !!!   				if tcode=1 and penalty$(j1)="Y" then ! add penalties up seperate
 	!   this also seems wrong !!!   					pgb(j2+=1)=tg(j1)
 	!   this also seems wrong !!!   				else if srvName$(j1)<>"" and srvName$(j1)(1:5)<>"Reduc" then 
@@ -510,7 +510,7 @@ BUD3: ! r:
 		if bd3(j)<>0 then rewrite #h_budTrans,using "Form POS 139,2*PD 4",rec=bd2(j): x(3),x(3)
 		if bd3(j)<>0 then read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=bd2(j): z$,mat bt1,nba
 		x2=0
-		for j3=1 to 10
+		for j3=1 to possibleServiceCount
 			if srvName$(j3)<>"" then 
 				if penalty$(j3)="Y" then  ! add penalties up seperat
 					pgb(x2+=1)=bt1(j3+1,1)
@@ -540,7 +540,7 @@ CHECK_ESCROW: ! r:
 	escrow=0
 	a2=a1=0
 	tg=0
-	for j=1 to 10
+	for j=1 to possibleServiceCount
 		tg=tg+gb(j)
 	next j
 	a2=0
@@ -654,7 +654,7 @@ def fn_print_listings
 		pr #255,using F_PR_TOTAL_STUFF: "Totals",totalCollections,totalCreditMemos,totalDebitMemos,totalCollections+totalCreditMemos+totalDebitMemos
 		pr #255: ""
 		for j=1 to validSrvCount
-			pr #255,using F_PR_TOTAL_STUFF: serviceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
+			pr #255,using F_PR_TOTAL_STUFF: validServiceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
 		next j
 		if uprc$(escrow$)="Y" then pr #255,using F_PR_TOTAL_STUFF: "Escrow",totescrow
 		pr #255: ""
@@ -663,7 +663,7 @@ def fn_print_listings
 			pr #255: ''
 			pr #255: ''
 			pr #255,using 'form pos 7,c 50': "Water Collection Breakdown by Rate Code"
-			for j=1 to 10
+			for j=1 to possibleServiceCount
 				if water(j)<>0 then 
 					pr #255,using 'form pos 21,c 13,n 11.2,skip 1': "WATER CODE "&str$(j),water(j)
 				end if 
@@ -727,6 +727,7 @@ def fn_setup
 		library 'S:\Core\Library': fnapply_default_rates
 		on error goto ERTN
 
+		possibleServiceCount=10
 		dim z$*10
 
 		dim original(10)
@@ -778,29 +779,30 @@ def fn_setup
 		if srvName$(2)="Sewer" then havesewer=1
 		! if srvName$(3)="Electric" then haveelectric=1
 		! if srvName$(4)="Gas" then havegas=1
-		dim order(10)
-		dim baOrder(10)
+		dim allocOrder(0)
 		applyItem=0
-		for j=1 to 10
+		for j=1 to possibleServiceCount
 			original(j)=apply(j)
-			if apply(j)>0 then 
-				order(applyItem+=1)=apply(j) ! set order of applying     collections
+			if apply(j)>0 then
+				mat allocOrder(applyItem+=1)
+				allocOrder(applyItem)=apply(j) ! set order of applying     collections
 			end if
-			if apply(j)=0 then noapply+=1 ! notuse(noapply)=apply(j) ! set non used services
 		next j
-		for j=1 to 10
-			for j1=1 to 10
+		dim baOrder(10)
+		for j=1 to possibleServiceCount
+			for j1=1 to possibleServiceCount
 				if j=original(j1) then baOrder(j)=j1
 			next j1
 		next j
 		if env$('client')="Divernon" then mat baOrder=original ! may need to be made standard for everyone   !!!
 		dim hd1$*260
 		hd1$="{\ul Rec }  {\ul Account   }  {\ul    Total}    {\ul   Date  }  {\ul ReceiptNo}"
-		for j=1 to 10
+		for j=1 to possibleServiceCount
 			if fn_serviceValidForCollAlloc(j) then 
 				validSrvCount+=1
 				hd1$=hd1$&"  {\ul "&rpad$(srvName$(j),6)(1:6)&"}"
-				serviceLabel$(validSrvCount)=srvName$(j)(1:28)&":"
+				mat validServiceLabel$(validSrvCount)
+				validServiceLabel$(validSrvCount)=srvName$(j)(1:28)&":"
 			end if 
 		next j
 		if uprc$(escrow$)="Y" then hd1$=rtrm$(hd1$)&"  {\ul Escrow}"
@@ -808,12 +810,15 @@ def fn_setup
 		mat totalByService(validSrvCount)
 		dim alloc(10)
 		mat alloc(validSrvCount)
+		
+		mat allocOrder(validSrvCount)
+		
 		dim tgb(10)
 		mat tgb(validSrvCount)
 		dim hgb(10)
 		mat hgb(validSrvCount)
-		dim serviceLabel$(11)*30
-		mat serviceLabel$(validSrvCount)
+		dim validServiceLabel$(0)*30
+		mat validServiceLabel$(validSrvCount)
 		F_ubColInp: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,validSrvCount*pd 4.2,5*pd 3,pd 4.2
 	end if 
 	! r: setup column headers (mat chdr$) and column masks (mat cm$) for flex grid on MENU1B
@@ -828,7 +833,7 @@ def fn_setup
 		! chdr$(6)="PC"
 		chdr$(6)="Receipt Number"
 		cHdrItem=6
-		for j2=1 to 10
+		for j2=1 to possibleServiceCount
 			if srvName$(j2)<>"" then 
 				chdr$(cHdrItem+=1)=rpad$(srvName$(j2),10)(1:10)
 				chdr$(cHdrItem)=srep$(chdr$(cHdrItem),':','')
@@ -897,7 +902,7 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	gosub BuildAllocations
 	BD_TOS: ! 
 	
-	ckey=fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$, csv_import_in_process,escrow$,oldescrowbal,escrow)
+	ckey=fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat validServiceLabel$, csv_import_in_process,escrow$,oldescrowbal,escrow)
 	if ckey=1 then 
 		goto NEXT_AFTER_BREAKDOWN
 	else if ckey=2 then 
@@ -910,7 +915,7 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	end if 
 	! 
 	NEXT_AFTER_BREAKDOWN: ! 
-	tal=0 : for j=1 to udim(mat alloc) : tal+=alloc(j) : next j
+	tal=sum(mat alloc) ! for j=1 to udim(mat alloc) : tal+=alloc(j) : next j
 	if tal<>x(2) then 
 		mat mesg$(6)
 		mesg$(1)="Total Allocations must equal Transaction Amount!"
@@ -926,7 +931,7 @@ def fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baO
 	BD_FINIS: ! 
 	fn_breakdown=bd_return
 fnend 
-def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$; csv_import_in_process,escrow$,oldescrowbal,escrow,___,aaRespC,bd_line_add,ckey)
+def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat validServiceLabel$; csv_import_in_process,escrow$,oldescrowbal,escrow,___,aaRespC,bd_line_add,ckey)
 	fnTos(sn$="breakdown")
 	fnLbl(1,1,"Account:",30,1)
 	fnTxt(1,32,10,0,1,"",1)
@@ -942,19 +947,21 @@ def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$; csv_i
 	fnLbl(6,44,"Balance",10,2)
 	dim bd_real(11)
 	mat bd_real=(0)
-	bd_line_add=0
-	for j=1 to 10
-		if fn_serviceValidForCollAlloc(j) then 
+	bd_line_add=validServiceItem=0
+	for possibleServiceItem=1 to possibleServiceCount
+		bdAllocItem=0
+		if fn_serviceValidForCollAlloc(possibleServiceItem) then 
 			bd_line_add+=1
-			fnLbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
+			validServiceItem+=1
+			fnLbl(bd_line_add+6,1,validServiceLabel$(validServiceItem),29,1)
 			fnTxt(bd_line_add+6,44,12,0,1,"10",1)
 			! resp$(aaRespC+=1)=str$(tgb(bd_line_add))
-			resp$(aaRespC+=1)=str$(gb(bd_line_add))
+			resp$(aaRespC+=1)=str$(gb(possibleServiceItem))
 			fnTxt(bd_line_add+6,32,12,0,1,"10")
-			resp$(bd_real(bd_line_add):=aaRespC+=1)=str$(alloc(bd_line_add))
+			resp$(bd_real(bd_line_add):=aaRespC+=1)=str$(alloc(validServiceItem))
 			! bd_real(bd_line_add)=aaRespC
 		end if 
-	next j
+	next possibleServiceItem
 	
 	if uprc$(escrow$)="Y" then 
 		bd_line_add+=1
@@ -983,10 +990,10 @@ def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat serviceLabel$; csv_i
 			alloc(j)=0
 		end if
 	next j
-	if debug then
-		pr 'dev-pause CC'
-		pause
-	end if
+	! if debug then
+	! 	pr 'dev-pause CC'
+	! 	pause
+	! end if
 	if uprc$(escrow$)="Y" then escrow=val(resp$(bd_real(j)))
 	fn_askAllocations=ckey
 fnend
@@ -1004,7 +1011,7 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 	else 
 		j2=0
 		if ~havebudget=1 then 
-			for j=1 to 10
+			for j=1 to possibleServiceCount
 				if fn_serviceValidForCollAlloc(j) then 
 					tgb(j2+=1)=gb(j)
 				end if 
@@ -1018,41 +1025,57 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 
 	! pr '-b-' : gosub DisplayDebugAlloc
 	
-	bd_tgbj=tn=0
+	bd_tgbj=0 ! amount allocated so far    (i think)
+	tn=0  ! total negative breakdowns
 	mat ba=(0) : mat badr=(0)
 	for j=1 to udim(mat alloc)
 		if tgb(j)<0 then tn-=tgb(j) ! Total Negative Breakdowns
 	next j
 	
-	pr '-c-' : gosub DisplayDebugAlloc
+	! pr '-c-' : gosub DisplayDebugAlloc
 	
 	havemainbudget=fn_haveMainBudget(h_budmstr,x1$)
 	for j=1 to udim(mat alloc)
-		if ~(havemainbudget=1 and penalty$(baOrder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
-			if havemainbudget=1 then 
-				alloc(order(j))=max(0,min(x(2)-bd_tgbj,ba(baOrder(j)+1)))
-				pr 'a. setting alloc(order(j='&str$(j)&')='&str$(order(j))&')='&str$(alloc(order(j)))
-			else 
-				alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
-				pr 'b. setting alloc(order(j='&str$(j)&')='&str$(order(j))&')='&str$(alloc(order(j)))
-			end if 
-			bd_tgbj+=alloc(order(j))
-			if tgb(order(j))<0 then tn+=tgb(order(j))
-		end if 
+	
+		! r: new allocation logic
+		if fn_serviceValidForCollAlloc(j) then
+			alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(j))))
+			bd_tgbj+=alloc(allocOrder(j))
+			if tgb(allocOrder(j))<0 then tn+=tgb(allocOrder(j))
+		end if
+		! /r5
+		! r: old allocation logic
+		!   if ~(havemainbudget=1 and penalty$(baOrder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
+		!   	
+		!   	if havemainbudget=1 then 
+		!   		alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj,ba(baOrder(j)+1)))
+		!   		pr 'a. setting alloc(allocOrder(j='&str$(j)&')='&str$(allocOrder(j))&')='&str$(alloc(allocOrder(j)))
+		!   	else 
+		!   		! whichTgb=srch(mat apply,allocOrder(j))
+		!   		! alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(whichTgb)))
+		!   		alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(j))))
+		!   		pr 'b. setting alloc(allocOrder(j='&str$(j)&')='&str$(allocOrder(j))&')='&str$(alloc(allocOrder(j)))
+		!   	end if
+		!   	
+		!   	bd_tgbj+=alloc(allocOrder(j))
+		!   	if tgb(allocOrder(j))<0 then tn+=tgb(allocOrder(j))
+		!   	
+		!   end if 
+		! /r
 	next j
-	pr '-d-' : gosub DisplayDebugAlloc
+	! pr '-d-' : gosub DisplayDebugAlloc
 
 	if havemainbudget=1 and sum(alloc)<x(2) then 
 		for j=1 to udim(mat alloc) ! if have budget and pay more than budget, how to allocate remainder
-			if alloc(order(j))=0 then 
-				alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
-				bd_tgbj+=alloc(order(j))
-				if tgb(order(j))<0 then tn+=tgb(order(j))
+			if alloc(allocOrder(j))=0 then 
+				alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(j))))
+				bd_tgbj+=alloc(allocOrder(j))
+				if tgb(allocOrder(j))<0 then tn+=tgb(allocOrder(j))
 			end if 
 		next j
 	end if
 
-	pr '-e-' : gosub DisplayDebugAlloc
+	! pr '-e-' : gosub DisplayDebugAlloc
 
 	! r: allocate overpament amoun t
 	if env$('client')="Findlay" then
@@ -1065,7 +1088,7 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		end if 
 	end if 
 	
-	pr '-e-' : gosub DisplayDebugAlloc
+	! pr '-e-' : gosub DisplayDebugAlloc
 	
 	if alloc(1)>0 or (havewater=1 and s01rate>0) then ! excess in water if it is an active service for this customer
 		alloc(1)=alloc(1)+x(2)-bd_tgbj
@@ -1086,20 +1109,20 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		end if 
 	end if 
 	! /r
-	pr '-f-' : gosub DisplayDebugAlloc
+	! pr '-f-' : gosub DisplayDebugAlloc
 	
 	BuildAllocations_FINIS: ! 
 return  ! /r
-DisplayDebugAlloc: ! r:
-	if env$('acsDeveloper')<>'' then
-		pr rpad$('Service',20);'allocation';'    mt gb'
-		for dda=1 to validSrvCount
-			pr rpad$(srvName$(dda),20);cnvrt$('pic(---,--#.--)',alloc(dda));cnvrt$('pic(---,--#.--)',gb(dda))
-		nex dda
-		pr 'dev-pause AA'
-		pause
-	end if
-return ! /r
+! DisplayDebugAlloc: ! r:
+! 	if env$('acsDeveloper')<>'' then
+! 		pr rpad$('Service',20);'allocation';'    mt gb'
+! 		for dda=1 to validSrvCount
+! 			pr rpad$(validServiceLabel$(dda),20);cnvrt$('pic(---,--#.--)',alloc(dda));cnvrt$('pic(---,--#.--)',gb(dda))
+! 		nex dda
+! 		! pr 'dev-pause AA'
+! 		! pause
+! 	end if
+! return ! /r
 def fn_open_cash_drawer
 	fnopen_receipt_printer
 	pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
@@ -1400,11 +1423,11 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 				end if 
 			end if 
 			if ckey=2 then 
-				if env$('acsDeveloper')<>'' then
-					pr 'dev-pause BB' 
-					pause  
-					! goto SCREEN_SELECT_ACCOUNT
-				end if
+				! if env$('acsDeveloper')<>'' then
+				! 	pr 'dev-pause BB' 
+				! 	pause  
+				! 	! goto SCREEN_SELECT_ACCOUNT
+				! end if
 				for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 			! else 
 			! 	goto AT_L2040
