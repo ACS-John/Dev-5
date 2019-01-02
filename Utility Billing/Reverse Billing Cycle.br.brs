@@ -162,12 +162,12 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 ! 
 	fnCmdSet(2) ! show "Next" and "Cancel" buttons
 	fnAcs(screen_name$,0,mat resp$,ckey) ! run the screen
-! 
+	 ! if env$('ACSDeveloper')<>'' then pause
 	if ckey=5 then ! if user pressed Cancel
 		fn_options=0
 	else 
 		billingdate$=resp$(resp_billing_date)
-		if resp$(resp_opt_individual)='False' and resp$(resp_individual)<>'[All]' t
+		if resp$(resp_opt_individual)='False' and resp$(resp_individual)<>'[All]' and resp$(resp_individual)<>'' t
 		  resp$(resp_opt_individual)='True'
 			resp$(resp_opt_route)='False'
 			resp$(resp_opt_all)='False'
