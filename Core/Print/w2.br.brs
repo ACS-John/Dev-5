@@ -464,13 +464,24 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	fnpa_txt(box12dCode$,w2Box12CodePos,fn_line(10))
 	fnpa_txt(box12dAmt$,w2Box12AmtPos,fn_line(10))
 	if env$('client')<>'Zaleski' then ! cLocality$<>'NO' then
-		fnpa_txt(state$,left,fn_line(11))
-		fnpa_txt(stcode$,left+10,fn_line(11))
-		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(9)),left+51,fn_line(11))
-		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(7)),left+79,fn_line(11))
-		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(10)),left+109,fn_line(11))
-		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(8)),left+137,fn_line(11))
-		fnpa_txt(printLocality$(1:6),left+164,fn_line(11))
+		if env$('client')='Thomasboro' then 
+			! thomasboro had special pre-printed forms for 2018 tax year
+			fnpa_txt(state$,left-3,fn_line(12))
+			fnpa_txt(stcode$,left+10,fn_line(12))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(9)),left+51,fn_line(12))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(7)),left+79,fn_line(12))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(10)),left+109,fn_line(12))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(8)),left+137,fn_line(12))
+			fnpa_txt(printLocality$(1:6),left+164,fn_line(12))
+		else 
+			fnpa_txt(state$,left-3,fn_line(11))
+			fnpa_txt(stcode$,left+10,fn_line(11))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(9)),left+51,fn_line(11))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(7)),left+79,fn_line(11))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(10)),left+109,fn_line(11))
+			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(8)),left+137,fn_line(11))
+			fnpa_txt(printLocality$(1:6),left+164,fn_line(11))
+		end if 
 	end if
 fnend
 def fn_line(lineNumber)
@@ -479,6 +490,10 @@ def fn_line(lineNumber)
 		lReturn=w2Yoffset+1
 	else  ! if lineNumber>=1 and lineNumber<=14 then
 		lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
+		if env$('client')='Thomasboro' and lineNumber=12 then
+			lReturn+=1
+			goto Thomasboroskip
+		end if 
 		if lineNumber>=11 then 
 			! if env$('client')='Edinburg' then 
 			! 	lReturn+=7
@@ -487,6 +502,7 @@ def fn_line(lineNumber)
 			! end if
 		end if
 	end if 
+	Thomasboroskip: ! skip here for special pre-printed forms
 	fn_line=lReturn
 fnend
 def library fnFormCopyAwithBackgroundWarn
