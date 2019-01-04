@@ -396,7 +396,7 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 	! /r
 	! pr nameFirst$,nameMiddle$,nameLast$
 fnend
-def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6)
+def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; w2Box14Amt)
 	if ~setup then let fn_setup
 	! r: variable definations
 	! topmargin       how far down the page (mm) is the top of W-2
@@ -428,6 +428,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 		w2Col3=left+160 
 		w2Box12CodePos=w2Col3-14
 		w2Box12AmtPos=w2Box12CodePos+18
+		w2Box14AmtPos=w2Box12AmtPos
 	end if
 	fnpa_fontsize
 	if maskSsn then
@@ -463,6 +464,9 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	fnpa_txt(box12dCode$,w2Box12CodePos,fn_line(10))
 	fnpa_txt(box12dAmt$,w2Box12AmtPos,fn_line(10))
+	if w2Box14Amt<>0 then
+		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w2Box14Amt),left+109,fn_line(10))
+	end if
 	if env$('client')<>'Zaleski' then ! cLocality$<>'NO' then
 		if env$('client')='Thomasboro' then 
 			! thomasboro had special pre-printed forms for 2018 tax year

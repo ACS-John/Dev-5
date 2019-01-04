@@ -11,11 +11,9 @@
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnChk
 	library 'S:\Core\Library': fnpa_finis
-	library 'S:\Core\Library': fnerror
 	library 'S:\Core\Library': fnCmdSet
 	library 'S:\Core\Library': fnpa_open
 	library 'S:\Core\Library': fnpa_newpage
-	library 'S:\Core\Library': fnerror
 	library 'S:\Core\Library': fnCmdSet
 	library 'S:\Core\Library': fnpa_open
 	library 'S:\Core\Library': fnpa_newpage
@@ -32,11 +30,18 @@
 	library 'S:\Core\Library': fnw2_text
 	library 'S:\Core\Library': fnFree
 	on error goto ERTN
-! ______________________________________________________________________
-	dim fw2box16$*255,ss$*11,s(13),t(13)
-	dim cLocality$*8,desc$(6)*15,amt(6)
-	dim tcp(32),tdc(10),resp$(128)*256
-	dim w(13),a$(3)*40,empId$*12,controlNumber$*12,d$(10)*8,e$(10)*12,cap$*128
+
+	dim fw2box16$*255
+	dim ss$*11
+	dim sx(13),tx(13)
+	dim cLocality$*8
+	dim desc$(6)*15,amt(6)
+	dim tcp(32),tdc(10)
+	dim resp$(128)*256
+	dim w(13)
+	dim a$(3)*40
+	dim empId$*12,controlNumber$*12
+	dim d$(10)*8,e$(10)*12
 	dim newdedfed(20),newdedcode(20)
 	dim newcalcode(20),dedfica(20),dedst(20),deduc(20),fullname$(20)*20
 	dim abrevname$(20)*8
@@ -47,12 +52,10 @@
 	dim in4$(30)
 	dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 	dim k$(3)*30
-! ______________________________________________________________________
-	fntop(program$,cap$="Print W-2 Forms")
+
+	fntop(program$)
 	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-	!
-! ______________________________________________________________________
-	!
+
 	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 	read #hCompany,using fCompany: mat a$,empId$,mat d$,loccode,mat e$
 	fCompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12 
@@ -67,6 +70,7 @@
 	box_12b=fnAddOneC(mat w2box12Opt$,'12b')
 	box_12c=fnAddOneC(mat w2box12Opt$,'12c')
 	box_12d=fnAddOneC(mat w2box12Opt$,'12d')
+	box_14 =fnAddOneC(mat w2box12Opt$,'14')
 	!
 	dim w2laser_output_filename$*256
 	!
@@ -98,7 +102,7 @@
 	fnTos(sn$="Prw2-box12")
 	rc=cf=0 : mylen=20 : mypos=mylen+3
 	fnLbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
-	fnLbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
+	fnLbl(2,1,"should appear in box 12 or 14 on the W-2.",44,1,0,0)
 	fnLbl(4,7,"Deduction Name")
 	fnLbl(4,26,"Yes" )
 	fnLbl(4,35,"Box" )
@@ -178,6 +182,7 @@ READ_EMPLOYEE: ! r:
 		kz$=lpad$(rtrm$(str$(eno)),8)
 		retirementPlanX$=""
 		box12aCode$=box12aAmt$=box12bCode$=box12bAmt$=box12cCode$=box12cAmt$=box12dCode$=box12dAmt$=''
+		box14Amt=0
 		mat amt=(0)
 		mat miscded=(0)
 !   tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
@@ -274,6 +279,12 @@ READ_EMPLOYEE: ! r:
 							box12dAmt$=cnvrt$("Nz 10.2",miscded(dedItem))
 							totalbox12(dedItem)+=miscded(dedItem)
 						end if
+					else if box12which(dedItem)=box_14 then  !   box 14 stuff
+						if ~box14Amt then 
+							box14Amt=miscded(dedItem)
+							totalbox14(dedItem)+=box14Amt
+							! if box14Amt then pause
+						end if
 						! descWhich=6
 					end if
 					! if trim$(desc$(descWhich))="" then 
@@ -301,14 +312,14 @@ READ_EMPLOYEE: ! r:
 			else 
 				gosub PrintW2
 			end if
-			mat s=s+w
+			mat sx=sx+w
 			wctr=wctr+1
 		end if
 		mat w=(0)
 		nqp=dcb=ytdFica=0
 	loop ! /r
 EO_EMPLOYEE: ! r:
-	mat t=t+s
+	mat tx=tx+sx
 	misc=3
 	for dedItem=1 to 20 ! changed from 10 to 20 on 1/4/17
 		if totalbox12(dedItem)<>0 then 
@@ -324,7 +335,7 @@ FINIS: ! r:
 	close #hAddr: 
 	close #hW2Box16: 
 	if ~exportFormatID then 
-		mat w=t 
+		mat w=tx 
 		controlNumber$="Final Total" 
 		nameFirst$=nameMiddle$=nameLast$=""
 		mat k$=("")
@@ -339,7 +350,7 @@ FINIS: ! r:
 			tmpMsgLine$(1)='Export file created:'
 			tmpMsgLine$(2)=os_filename$(file$(hExport))
 			close #hExport:
-			fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
+			fnmsgbox(mat tmpMsgLine$,resp$) ! ,16+4)
 		goto XIT
 	else
 		if goproc=1 then 
@@ -437,7 +448,7 @@ EXPORT_AMS: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
 	pr #hExport: "RADDR1="
 	pr #hExport: "RADDR2="&(k$(3)(1:24))
 	pr #hExport: "LAB14A="
-	pr #hExport: "BOX14A=0"
+	pr #hExport: "BOX14A="&str$(box14Amt) ! pr #hExport: "BOX14A=0"
 	pr #hExport: "LAB12A="&box12aCode$
 	pr #hExport: "BOX12A="&box12aAmt$
 	pr #hExport: "CNTRYCODE="
@@ -480,26 +491,18 @@ EXPORT_AMS: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
 	pr #hExport: "PHONE="
 	pr #hExport: "*"
 return ! /r
-IGNORE: continue 
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
 PrintW2: ! r:
 	w2printCount+=1
 	if w2printCount/2=int(w2printCount/2) then ! it's the second one on a page 
 		!   if enableBackground$='True' then let fnpa_pic('S:\Core\pdf\W-2 Copy 1.png',1,bottom,200,200)
 		!   if enableBackground$='True' then let fnpa_pic(W2CopyFile$(w2Copy),1,bottom,200,200)
-		fnw2_text(bottom,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6))
+		fnw2_text(bottom,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
 		fnpa_newpage
 	else
 		if enableBackground$='True' then 
 			fnpa_background('S:\Core\pdf\'&taxYear$&'\W-2\Copy '&w2Copy$(1:1)&'.pdf')
 		end if
-		fnw2_text(topmargin,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6))
+		fnw2_text(topmargin,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
 	end if
 return  ! /r
 def fnQAC(mat qac$,qacText$*256)
@@ -508,4 +511,4 @@ def fnQAC(mat qac$,qacText$*256)
 	qac$(qacCount)=qacText$
 	fnQAC=qacCount
 fnend
-
+include: ertn

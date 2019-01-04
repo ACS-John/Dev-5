@@ -267,7 +267,7 @@ SCREEN_4: !
 	fnTxt(1,mypos,10,0,0,"10",0,"",fram4) 
 	resp$(6)=str$(mhw)
 	fnLbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
-	fnTxt(2,mypos,2,0,0,"30",0,"If one the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) 
+	fnTxt(2,mypos,2,0,0,"30",0,"If one of the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) 
 	resp$(7)=str$(loccode)
 	fram5=3: fnFra(14,1,5,60,"Workman's Compensation Limits")
 	fnLbl(1,1,"Monthly:",mylen,right,0,fram5)

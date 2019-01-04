@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                                                                                                   10:55 AM 1/2/2019	UB	fixed bug that was forcing reverse billing to individual radio button                                                                 
+7:43 AM 1/4/2019	PR	Print W-2 Forms - add option to include miscelaneous deductions in box 14 similar to the box 12s
 12:18 01/19/2019	CO	5.74074  
 15:44 01/19/2019	CO	5.74073   
 10:44 01/19/2019	CO	5.74072    

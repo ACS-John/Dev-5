@@ -48,6 +48,7 @@ fnend
 def library fnpdf_Close
 	if ~setup then let fn_Setup
 	close #hPdfOut: error PDFCLOSEERR
+	hPdfOut=0
 	fnWindowsStart(os_filename$(g_filename_final$))
 goto pdfCloseFinit
 PDFCLOSEERR: !
