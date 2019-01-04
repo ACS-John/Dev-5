@@ -16,7 +16,7 @@
 			fnreg_read('W-3 - Enable Background'              ,enableBackground$   ,'True' )
 		end if
 	fnend
-	def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$)
+	def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialform2018)
 		! ein$      Employer Identification Number (EIN)
 		! a$(1)     Employer Name
 		! a$(2)     Employer Address
@@ -44,6 +44,8 @@
 		col1=  8
 		col2=113
 		col3=169
+		! if env$('acsdeveloper')<>'' then let specialform2018=1
+		if env$('client')='Thomasboro' or env$('client')="Cerro Gordo" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
 		fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
 		fnpa_txt(a$(1),col1,fn_line(6))
 		fnpa_txt(a$(2),col1,fn_line(7)-2)
@@ -78,6 +80,12 @@
 		! else 
 		!   pr 'invalid lineNumber ('&str$(lineNumber)&')'
 		!   pause
+		end if 
+		if specialform2018=1 then 
+			let lreturn-=1
+			if linenumber<10 then
+				let lreturn-=2
+			end if 
 		end if 
 		fn_line=lReturn
 	fnend
