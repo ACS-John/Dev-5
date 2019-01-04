@@ -507,7 +507,7 @@ def fn_line(lineNumber)
 	else  ! if lineNumber>=1 and lineNumber<=14 then
 		lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
 		if specialform2018=1 and lineNumber=12 then
-			lReturn+=1
+			lReturn+=.5
 			goto Thomasboroskip
 		else if specialform2018=1 and lineNumber=8 then 
 			lReturn+=2
