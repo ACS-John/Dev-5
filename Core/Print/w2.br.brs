@@ -436,6 +436,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	else
 		fnpa_txt(ss$,left+44,fn_line(1))
 	end if
+	! if env$('acsdeveloper')<>'' then let specialform2018=1
 	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
 	fnpa_txt(empId$,w2Col1,fn_line(2))
 	fnpa_txt(cnvrt$("pic(--,---,---.##",w(2)),w2Col2,fn_line(2))
@@ -452,7 +453,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	! fnpa_txt(cnvrt$("pic(--,---,---.##",w(4)),w2Col2,fn_line(6)) ! EIC - no longer reported - just greyed out
 	fnpa_txt(cnvrt$("pic(--,---,---.##",dcb),w2Col3,fn_line(6))
 	fnpa_txt((rtrm$(nameFirst$)&" "&rtrm$(nameMiddle$))(1:17),w2Col1,fn_line(7))
-	fnpa_txt(rtrm$(nameLast$),left+48,fn_line(7))
+	fnpa_txt(rtrm$(nameLast$),left+40,fn_line(7))
 	fnpa_txt(rtrm$(nameSuffix$),left+92,fn_line(7))
 	fnpa_txt(box12aCode$,w2Box12CodePos,fn_line(7))
 	fnpa_txt(box12aAmt$,w2Box12AmtPos,fn_line(7))
@@ -466,10 +467,10 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 		fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	else if specialform2018=1 then
 		fnpa_txt(k$(2),w2Col1,fn_line(8))
+		fnpa_txt(retirementPlanX$,left+119,fn_line(8)) 
 		fnpa_txt(box12bCode$,w2Box12CodePos,fn_line(8))
 		fnpa_txt(box12bAmt$,w2Box12AmtPos,fn_line(8))
 		fnpa_txt(k$(3),w2Col1,fn_line(9))
-		fnpa_txt(retirementPlanX$,left+118,fn_line(9)) ! moved this to line 9
 		fnpa_txt(box12cCode$,w2Box12CodePos,fn_line(9))
 		fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	end if 
@@ -507,6 +508,9 @@ def fn_line(lineNumber)
 		lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
 		if specialform2018=1 and lineNumber=12 then
 			lReturn+=1
+			goto Thomasboroskip
+		else if specialform2018=1 and lineNumber=8 then 
+			lReturn+=2
 			goto Thomasboroskip
 		end if 
 		if lineNumber>=11 then 
