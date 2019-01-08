@@ -445,7 +445,11 @@ EXPORT_AMS: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
 	pr #hExport: "RNAME2="&(k$(2)(1:24))
 ! pr #hExport: "AEIC=";w(4)    ! this field is no longer supported 1/4/2017
 	pr #hExport: "DEPDCARE="&str$(dcb)
-	pr #hExport: "RADDR1="
+	if box14Amt<>0 then 
+		pr #hExport: "RADDR1=TRANSIT"
+	else
+		pr #hExport: "RADDR1="
+	end if 
 	pr #hExport: "RADDR2="&(k$(3)(1:24))
 	pr #hExport: "LAB14A="
 	pr #hExport: "BOX14A="&str$(box14Amt) ! pr #hExport: "BOX14A=0"
