@@ -44,7 +44,7 @@
 		col1=  8
 		col2=113
 		col3=169
-		! if env$('acsdeveloper')<>'' then let specialform2018=1
+		 ! if env$('acsdeveloper')<>'' then  pause ! let specialform2018=1
 		if env$('client')='Thomasboro' or env$('client')="Cerro Gordo" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
 		fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
 		fnpa_txt(a$(1),col1,fn_line(6))
