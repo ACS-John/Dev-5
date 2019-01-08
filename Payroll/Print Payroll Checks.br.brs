@@ -750,6 +750,10 @@ def fn_print_check
 		fn_check_bethany
 	else if env$('client')="Billings" then 
 		fn_check_billings
+	else if env$('client')="Crocket County" then 
+		! if env$('acsDeveloper')<>"" then pause
+		fn_check_dynamic(21,7,7,9,0,58,0,6)
+		! length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english
 	else if env$('client')="Campbell" then ! r: updated 1/17/2018 - uses very few options
 		length                 =26
 		line_date              =13
