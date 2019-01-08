@@ -887,6 +887,8 @@ def fn_portion_check
 		fn_portion_check_cerrogordo(amt)
 	else if env$('client')="Cerro Gordo T" then 
 		fn_portion_check_generic(amt, 28,55)
+	else if env$('client')="Crocket County" then 
+		fn_portion_check_Crocket(amt)
 	else if env$('client')="Divernon" then 
 		fn_portion_check_divernon(amt)
 	else if env$('client')="Edison" then 
@@ -1019,6 +1021,46 @@ def fn_portion_check_kimber(dolamt)
 		pr #255: ""
 	next j
 fnend 
+def fn_portion_check_Crocket(dolamt)
+	! r: this is the same as generic, but with spacing for crocket
+	! if env$('acsDeveloper')<>"" then pause
+	mat b$=("")
+	read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
+	if trim$(b$(2))="" then 
+		b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
+	else if trim$(b$(3))="" then 
+		b$(3)=b$(4) : b$(4)=""
+	end if 
+	pr #255,using 'form skip 4,c 1': " " ! line 1
+		! for j=1 to 4 ! just print name here
+	pr #255,using "Form Pos 8,C 30": b$(1) ! lines 17-20
+	! next j
+	fn_englishdollar(dolamt)
+	if dolamt=0 then eng$='        *** V O I D ***'
+	if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+	skipline=0
+	if prenum=2 then 
+		pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1 ! line 2,3, 4
+		skipline-=3
+	end if
+		a=60
+	pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 5,C 18': prdmmddyy,ca$ ! line 14
+	pr #255: "" ! line 16
+	pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
+	pr #255: "" ! line 13
+	if length=0 then ! do it the old way
+		skipline=6
+		if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
+		for j=1 to skipline
+			pr #255: ""
+		next j
+	else
+		for lineItem=21 to length  ! default length is 27, i think
+			pr #255: ''
+		nex lineItem
+	end if
+	! /r
+fnend
 def fn_portion_check_divernon(dolamt)
 	read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6690
 	goto L6700
