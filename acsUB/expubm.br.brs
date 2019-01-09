@@ -24,7 +24,7 @@ MENU1: ! r:
 	fnTos(sn$="expubm")
 	fnLbl(1,1,"Destination Path and File Name:",34,1)
 	fnTxt(1,36,40,256,0,"71")
-	fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
+	fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=os_filename$(env$('Desktop'))&"\ubm.txt"
 	fnLbl(2,1,"Delimiter (ASCII Code):" ,34,1)
 	fnTxt(2,36,3,0,0,"30")
 	resp$(2)="9"

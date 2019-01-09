@@ -97,6 +97,10 @@ fnend
 		fnSpoolPath$=fnSpoolPath$(initialize)
 	fnend
 ! /r
+def library fnSpecialFolderPath$*256(folderName$*64)
+	library 'S:\Core\specialFolderPath.br': fnSpecialFolderPath$
+	fnSpecialFolderPath$=fnSpecialFolderPath$(folderName$)
+fnend
 ! r: ScreenIO
 ! def library fnfm(screenname$; keyval$*255,srow,scol,parent_key$*255,parent_window,display_only,dontRedoListView,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$*255,selecting,savedontask)
 ! 	library 'S:\Core\ScreenIO\screenio.br': fnfm
@@ -109,7 +113,6 @@ fnend
 ! /r
 ! r: FileIO
 def library fnFileioEnums(filename$*255; mat subs$)
-! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 	library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
 	fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
 fnend

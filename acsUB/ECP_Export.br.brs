@@ -33,7 +33,7 @@
 	open #h_alt_bill:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
 ! 
 	fnureg_read('ECP Export Filename',exp_filename$)
-	if exp_filename$='' then exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
+	if exp_filename$='' then exp_filename$=os_filename$(env$('Desktop'))&"\ACS_ECP_Export.txt"
 ! /r
 MENU1: ! 
 	fnTos(sn$="ecp_export")

@@ -100,7 +100,7 @@
 52000 def fn_quickExport(; append$*18)
 52020   dim location$(0)*256,locationN(0)
 52040   hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,1)
-52060   open #hOut:=fnGetHandle: 'name='&env$('userprofile')&'\Desktop\Meter Location'&append$&',replace,recl=2048',d,o
+52060   open #hOut:=fnGetHandle: 'name='&env$('Desktop')&'\Meter Location'&append$&',replace,recl=2048',d,o
 52080   pr #hOut: 'LocationID ,MeterNumber ,Transmitter         '
 52100   do
 52120     read #hLocation,using form$(hLocation): mat location$,mat locationN eof QeEoLocation

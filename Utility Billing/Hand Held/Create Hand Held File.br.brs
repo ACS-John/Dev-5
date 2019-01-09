@@ -590,7 +590,7 @@ fnend
 def fn_openOutFile ! open work areas based on type of Hand Held
   dim out_filename$*256
   ! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
-  fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('userprofile')&'\Desktop\ACS to '&deviceSelected$&'.txt'))
+  fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('Desktop')&'\ACS to '&deviceSelected$&'.txt'))
   if deviceSelected$='Itron FC300' then
     fn_itron_open ! default
   else
@@ -607,9 +607,9 @@ def fn_openOutFile ! open work areas based on type of Hand Held
     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('userprofile')&'\Desktop\Aclara Work Order.txt',1048)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('userprofile')&'\Desktop\ACS to Aclara.txt'    ,1048)
-    if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('userprofile')&'\Desktop\ACS Hand Held Out.txt',1048)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
+    if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
   end if
   workopen=1
 fnend
