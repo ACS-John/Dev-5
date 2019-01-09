@@ -58,7 +58,11 @@ def library fnpdf_Close
 goto pdfCloseFinit
 PDFCLOSEERR: !
 if debug then 
-	if env$('acsDeveloper')<>'' then pr 'PDFCLOSEERR - debugging logic follows ' : pause
+	if env$('acsDeveloper')<>'' then 
+		pr 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
+		pr 'PDFCLOSEERR - debugging log follows... '
+		pause
+	end if
 	pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
 	close #hDebugLog:
 	debugLogSetup=0
