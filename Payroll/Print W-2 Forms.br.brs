@@ -162,6 +162,7 @@
 	open #hEmployee:=1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
 	open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
 	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+	if env$('acsDeveloper')<>'' then pr 'hChecks=';hChecks : pause
 	open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",Replace,RecL=33,NoShr",internal,output 
 	write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
 	open #hW2Box16:=fngethandle: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr ignore
