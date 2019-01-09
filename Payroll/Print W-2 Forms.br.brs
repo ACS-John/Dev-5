@@ -101,7 +101,7 @@
 	fullnameBlankCount=0
 	for fullnameItem=1 to udim(mat fullname$)
 		if trim$(fullname$(fullnameItem))='' then fullnameBlankCount+=1
-	end if
+	nex fullnameItem
 	if fullnameBlankCount<udim(mat fullname$) then ! if they're not all blank
 		fnTos(sn$="Prw2-box12")
 		rc=cf=0 : mylen=20 : mypos=mylen+3
