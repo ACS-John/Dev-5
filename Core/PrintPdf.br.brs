@@ -16,8 +16,8 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 	if ~setup then let fn_Setup
 	dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
 	g_filename_final$=env$('at')&fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
-	open #hPdfOut:=fngethandle: 'Name='&env$('at')&'PDF:,PrintFile='&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
-	if env$('acsDeveloper')<>'' then pr 'hPdfOut=';hPdfOut : pause
+	open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+	! if env$('acsDeveloper')<>'' then pr 'hPdfOut=';hPdfOut : pause
 	poReturn=hPdfOut
 	gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
 	if lwrc$(pdfOrientation$)='landscape' then
