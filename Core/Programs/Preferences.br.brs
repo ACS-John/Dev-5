@@ -131,7 +131,7 @@ DO_SCREEN_MAIN: ! r:
 		else if ck=15 then 
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\')&'"'
 		else if ck=16 then 
-			fnureg_write('Save As Path',os_filename$(env$('userprofile')&'\Desktop'))
+			fnureg_write('Save As Path',os_filename$(env$('Desktop')))
 		else if ck=14 then 
 			fnureg_write('Text_Editor','')
 			text_editor$=fn_text_editor_default$
@@ -746,7 +746,7 @@ def fn_save_as_path$*256
 	fnureg_read('Save As Path',sap_return$)
 	if sap_return$(1:2)='@:' then sap_return$(1:2)=''
 	if sap_return$='' or ~exists(env$('at')&sap_return$) then 
-		sap_return$=os_filename$(env$('userprofile')&'\Desktop')
+		sap_return$=os_filename$(env$('Desktop'))
 	end if 
 	fn_save_as_path$=env$('at')&sap_return$
 fnend 

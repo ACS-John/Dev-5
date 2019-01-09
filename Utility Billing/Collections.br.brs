@@ -1155,7 +1155,7 @@ fnend
 def fn_csv_import
 	fnureg_read('Collections CSV Import Filename',ecp_filename$)
 	fnureg_read('Collections CSV Import Skip Duplicates',enableSkipDuplicates$,'True')
-	! if ecp_filename$='' then ecp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
+	! if ecp_filename$='' then ecp_filename$=os_filename$(env$('Desktop'))&"\ACS_ECP_Export.txt"
 	EI_SCREEN1: ! 
 	fnTos(sn$="coll_csv_imp")
 	fnLbl(1,1,"Import CSV Path and File Name:",33,1)

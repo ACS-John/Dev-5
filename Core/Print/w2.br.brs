@@ -56,7 +56,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then w2Copy=1
 		fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
 		w2Copy$=optW2Copy$(w2Copy)
-		fnureg_read('W-2 - Export Filename',w2laser_output_filename$,os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt'))
+		fnureg_read('W-2 - Export Filename',w2laser_output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt'))
 		fncreg_read('Qualified Pension Plan' ,tmp$) : pn1=val(tmp$)
 		fncreg_read('Dependent Care Benefits',tmp$) : dc1=val(tmp$)
 		fncreg_read('W-2 - State',state$)
@@ -256,7 +256,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 			!     else if exportFormatID=2 then  ! removed access 01/03/2017
 			!       w2laser_output_filename$=os_filename$("\CPS04\ASCIIW2.TXT")  ! removed access 01/03/2017
 			!     else 
-				w2laser_output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt')
+				w2laser_output_filename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt')
 			!     end if 
 			goto ASK_INFO
 		else if ckey=ckey_margins then

@@ -174,6 +174,8 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 			fnclient$ ! this needs to be called to set client environment variables
 			fnchain('S:\Core\Programs\Update.br')
 		end if 
+		library 'S:\Core\Library': fnSpecialFolderPath$
+		setenv('Desktop',fnSpecialFolderPath$('Desktop'))
 		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then 
 			fn_show_release_notes(version_prior$,version_current$)
 			fn_FreeVirtualStore

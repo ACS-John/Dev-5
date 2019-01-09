@@ -69,7 +69,7 @@
 24320     fnreg_read('1099 - X'       ,tmp$,'5'  ) : left=val(tmp$)
 24340     fnreg_read('1099 - 2 Per Page',twoPerPage$,'False' )
 24360     fnreg_read('1099 - Enable Background',enableBackground$,'True' )
-24380     fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+24380     fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 24400     fncreg_read('1099 - Your Phone Number',ph$)
 24420     fncreg_read('1099 - Copy Current'    ,copyCurrent$,optCopy$(1)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
 24440     !
@@ -244,7 +244,7 @@
 42360     fnreg_read('1099 - Enable Background',enableBackground$  ,'True' )
 42380     fnreg_read('1099 - 2 Per Page'       ,twoPerPage$        ,'False' )
 42400     fncreg_read('1099 - Copy Current'    ,copyCurrent$,optCopy$(1)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
-42440     fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+42440     fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 42450     fncreg_read('1099 - Your Phone Number',ph$)
 42452     dim seltp$*256
 42454     fncreg_read('1099 - seltp',seltp$) 
@@ -345,7 +345,7 @@
 47260       goto ASK_INFO
 47280     end if
 47300     if ckey=14 then 
-47320         output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
+47320         output_filename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
 47340       goto ASK_INFO
 47360     else if ckey=ckey_margins then
 47380       fn_ask_margins

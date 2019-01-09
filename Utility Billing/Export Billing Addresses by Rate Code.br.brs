@@ -24,7 +24,7 @@
 	resp$(resp_enableFinaled:=respc+=1)='false'
 	fnLbl(6,1,"Filename:",col1_len,1)
 	fnTxt(6,col2_pos,42,256,0,'70',0,'Choose the output file name. [Rate Code] will be replaced with the rate code selected.')
-	resp$(resp_fileOut:=respc+=1)=env$('userprofile')&'\Desktop\ACS-Customer-[Rate Code].txt'
+	resp$(resp_fileOut:=respc+=1)=env$('Desktop')&'\ACS-Customer-[Rate Code].txt'
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ck)
 	if ck=5 then goto XIT

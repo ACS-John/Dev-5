@@ -14,7 +14,7 @@
 18120   for j=1 to 10
 18140     if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 18160   next j
-18180   fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
+18180   fnureg_read('Bank Draft File',pth$,env$('Desktop')&'\bkdraft.dat')
 18200   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative 
 18220   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 18240   close #22: ioerr ignore
