@@ -42,6 +42,10 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 	goto poFINIS
 	poFAIL: !
 		poReturn=min(-1,-err)
+		if env$('acsDeveloper')<>'' then
+			pr bell;'fnPdf_Open Open failed error: '&str$(err)
+			pause
+		end if
 	goto poFINIS
 	poFINIS: !
 	fnpdf_open=poReturn

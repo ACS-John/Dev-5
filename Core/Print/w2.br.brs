@@ -251,7 +251,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 			state$=resp$(respc_state)
 		end if
 		if ckey=14 then 
-			!     if exportFormatID=1 then
+			!     if exportFormatID=1
 			!       w2laser_output_filename$=os_filename$("\1099ETC.W"&date$(days(date$)-180,'YY')&"\W2DATA\W2DAT.PRN")
 			!     else if exportFormatID=2 then  ! removed access 01/03/2017
 			!       w2laser_output_filename$=os_filename$("\CPS04\ASCIIW2.TXT")  ! removed access 01/03/2017
@@ -288,7 +288,16 @@ def fn_setup
 	if ~setup then
 		setup=1
 		dim w2laser_output_filename$*256
-		library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fngethandle,fnreg_read,fnreg_write,fncomboa,fnpa_pic,fnAddOneC
+		library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
+		library 'S:\Core\Library': fnmsgbox
+		library 'S:\Core\Library': fnChk,fncmbemp,fnpa_finis
+		library 'S:\Core\Library': fnButton,fnCmdSet
+		library 'S:\Core\Library': fnpa_fontsize,fnpa_txt
+		library 'S:\Core\Library': fnreg_read,fnreg_write
+		library 'S:\Core\Library': fnureg_read,fnureg_write
+		library 'S:\Core\Library': fncreg_read,fncreg_write
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fncomboa,fnAddOneC
 		on error goto ERTN
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
