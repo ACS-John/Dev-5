@@ -1035,13 +1035,14 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 	! pr '-c-' : gosub DisplayDebugAlloc
 	
 	havemainbudget=fn_haveMainBudget(h_budmstr,x1$)
-	for j=1 to udim(mat alloc)
-	
+	validServiceItem=0
+	for j=1 to possibleServiceCount ! to udim(mat alloc)
 		! r: new allocation logic
 		if fn_serviceValidForCollAlloc(j) then
-			alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(j))))
-			bd_tgbj+=alloc(allocOrder(j))
-			if tgb(allocOrder(j))<0 then tn+=tgb(allocOrder(j))
+			validServiceItem+=1
+			alloc(allocOrder(validServiceItem))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(validServiceItem))))
+			bd_tgbj+=alloc(allocOrder(validServiceItem))
+			if tgb(allocOrder(validServiceItem))<0 then tn+=tgb(allocOrder(validServiceItem))
 		end if
 		! /r5
 		! r: old allocation logic

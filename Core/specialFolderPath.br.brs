@@ -9,7 +9,7 @@ end if
 	fnAddOneC(mat testValue$,'Desktop')
 	fnAddOneC(mat testValue$,'My Pictures')
 	fnAddOneC(mat testValue$,'My Video')
-	fnAddOneC(mat testValue$,'Personal')
+	fnAddOneC(mat testValue$,'Personal') ! my documents
 	for testValueItem=1 to udim(mat testValue$)
 		print 'fn_specialFolderPath$("'&testValue$(testValueItem)&'") returns "'&fn_specialFolderPath$(testValue$(testValueItem))&'".'
 	nex testValueItem
