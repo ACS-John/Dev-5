@@ -41,7 +41,7 @@ def fn_print_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$
 	! else 
 	!   pfnReturn$=env$('temp')&'\acs-'&session$&'.'&pfn_extension$
 	! end if 
-	pfnReturn$=env$('at')&fnSrepEnv$(pfnReturn$)
+	pfnReturn$=fnSrepEnv$(pfnReturn$)
 	fn_print_file_name$=pfnReturn$
 fnend 
 def library fnreport_cache_folder_current$*512
