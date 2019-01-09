@@ -98,59 +98,65 @@
 	end if 
 	! /r
 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
-	fnTos(sn$="Prw2-box12")
-	rc=cf=0 : mylen=20 : mypos=mylen+3
-	fnLbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
-	fnLbl(2,1,"should appear in box 12 or 14 on the W-2.",44,1,0,0)
-	fnLbl(4,7,"Deduction Name")
-	fnLbl(4,26,"Yes" )
-	fnLbl(4,35,"Box" )
-	fnLbl(4,45,"Code")
-	for dedItem=1 to 20
-		if trim$(fullname$(dedItem))<>'' then
-			fncreg_read('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem),'False')
-			fncreg_read('w2 deduction '&str$(dedItem)&' box 12 which',tmpBox12x$) : box12which(dedItem)=val(tmpBox12x$)
-			fncreg_read('w2 deduction '&str$(dedItem)&' box 12 code',dedcode$(dedItem))
-		end if
-	nex dedItem
-	dedItem=0
-	dim respc_box12opt(20),box12which(20)
-	tmpLine=5
-	for dedItem=1 to 20
-		if trim$(fullname$(dedItem))<>'' then 
-			fnLbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
-			fnChk(tmpLine,26,"",0,0,0,0)
-			resp$(rc+=1)=dedyn$(dedItem)
-			fncomboa('w2Copy',tmpLine,35,mat w2box12Opt$, '',3)
-			if box12which(dedItem)=0 then
-				resp$(respc_box12opt(dedItem)=rc+=1)=''
-			else
-				resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
-			end if
-			fnTxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
-			resp$(rc+=1)=dedcode$(dedItem)
-		end if
-	next dedItem
-	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then 
-		if exportFormatID then
-			close #hExport:
-		end if
-		goto ASK_INFO
-	else
-		x=0
+	fullnameBlankCount=0
+	for fullnameItem=1 to udim(mat fullname$)
+		if trim$(fullname$(fullnameItem))='' then fullnameBlankCount+=1
+	end if
+	if fullnameBlankCount<udim(mat fullname$) then ! if they're not all blank
+		fnTos(sn$="Prw2-box12")
+		rc=cf=0 : mylen=20 : mypos=mylen+3
+		fnLbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
+		fnLbl(2,1,"should appear in box 12 or 14 on the W-2.",44,1,0,0)
+		fnLbl(4,7,"Deduction Name")
+		fnLbl(4,26,"Yes" )
+		fnLbl(4,35,"Box" )
+		fnLbl(4,45,"Code")
 		for dedItem=1 to 20
 			if trim$(fullname$(dedItem))<>'' then
-				dedyn$(dedItem)=resp$(x+=1)
-				box12which(dedItem)=srch(mat w2box12Opt$,resp$(respc_box12opt(dedItem)))
-				x+=1 ! box12(dedItem)=val(resp$(x+=1))
-				dedcode$(dedItem)=resp$(x+=1)
-				fncreg_write('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem))
-				fncreg_write('w2 deduction '&str$(dedItem)&' box 12 which',str$(box12which(dedItem)))
-				fncreg_write('w2 deduction '&str$(dedItem)&' box 12 code',dedcode$(dedItem))
+				fncreg_read('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem),'False')
+				fncreg_read('w2 deduction '&str$(dedItem)&' box 12 which',tmpBox12x$) : box12which(dedItem)=val(tmpBox12x$)
+				fncreg_read('w2 deduction '&str$(dedItem)&' box 12 code',dedcode$(dedItem))
 			end if
 		nex dedItem
+		dedItem=0
+		dim respc_box12opt(20),box12which(20)
+		tmpLine=5
+		for dedItem=1 to 20
+			if trim$(fullname$(dedItem))<>'' then 
+				fnLbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
+				fnChk(tmpLine,26,"",0,0,0,0)
+				resp$(rc+=1)=dedyn$(dedItem)
+				fncomboa('w2Copy',tmpLine,35,mat w2box12Opt$, '',3)
+				if box12which(dedItem)=0 then
+					resp$(respc_box12opt(dedItem)=rc+=1)=''
+				else
+					resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
+				end if
+				fnTxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
+				resp$(rc+=1)=dedcode$(dedItem)
+			end if
+		next dedItem
+		fnCmdSet(2)
+		fnAcs(sn$,0,mat resp$,ckey)
+		if ckey=5 then 
+			if exportFormatID then
+				close #hExport:
+			end if
+			goto ASK_INFO
+		else
+			x=0
+			for dedItem=1 to 20
+				if trim$(fullname$(dedItem))<>'' then
+					dedyn$(dedItem)=resp$(x+=1)
+					box12which(dedItem)=srch(mat w2box12Opt$,resp$(respc_box12opt(dedItem)))
+					x+=1 ! box12(dedItem)=val(resp$(x+=1))
+					dedcode$(dedItem)=resp$(x+=1)
+					fncreg_write('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem))
+					fncreg_write('w2 deduction '&str$(dedItem)&' box 12 which',str$(box12which(dedItem)))
+					fncreg_write('w2 deduction '&str$(dedItem)&' box 12 code',dedcode$(dedItem))
+				end if
+			nex dedItem
+		end if
 	end if ! /r
 	! r: open files, initialize output, etc
 	if exportFormatID=0 then 
