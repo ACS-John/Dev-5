@@ -793,9 +793,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnflexadd1
 		fnflexadd1=fnflexadd1(mat item$)
 	fnend
-	def library fnTos(sn$*100)
+	def library fnTos(; sn$*100)
 		library 'S:\Core\ACS_Component.br': fnTos
-		fnTos=fnTos(sn$)
+		fnTos=fnTos( sn$)
 	fnend
 	def library fnLbl(myline,mypos,t$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
 		library 'S:\Core\ACS_Component.br': fnLbl
