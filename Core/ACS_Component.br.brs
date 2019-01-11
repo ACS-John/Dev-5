@@ -44,9 +44,15 @@ def library fntop(; prg$*256,cap$*128)
 		end if
 	end if
 fnend 
-def library fnTos(sn$*100)
+def library fnTos(;sn$*100)
 	! screen ace top of screen function
 	if ~setup then let fn_setup
+	if sn$='' then
+		if env$('cursys')<>'' then 
+			sn$=env$('cursys')&'\'
+		end if
+		sn$=sn$&env$('program_caption')
+	end if
 	sn$=trim$(sn$&session$)
 	tmp_combo_count_for_set=0
 	combooptionsetlistcount=combooption_which_prior=combooption_which=0
@@ -551,7 +557,7 @@ def fn_draw_windows
 	if env$('enableClientSelection')='Yes' then borderText$(inf:inf)='- '&env$('client')&' '
 	!
 	if session$(3:3)<>'1' then
-		borderText$(inf:inf)='(Session '&session$(3:3)&') '
+		borderText$(inf:inf)='(Session '&session$(len(session$):len(session$))&') '
 	end if
 	if env$('CurSystem')=cap$ then ! pr border:
 		borderText$(inf:inf)='- '&env$('CurSystem')
