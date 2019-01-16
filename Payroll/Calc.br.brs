@@ -949,12 +949,12 @@ def fn_wh_kentuky(wky_wages_taxable_current,g_pay_periods_per_year,wky_allowance
 	if s3<.1 then s3=0 ! do not withhold less than 10 cents.
 	fn_wh_kentuky=s3
 fnend 
-LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
+LAWH: ! r: REPLACE ACSWRK\LOUISIANA.WH,SOURCE ! LOUISIANA: NO TABLE: LA(5): revised 1/01/03
 	h1=0
 	h2=0
 	h3=0
 	mat la=(0)
-	s=round(stwh(tcd(1),1),2)
+	s=round(stwh(tcd(1),1),2) ! state earnings
 	if em(1)=0 or em(1)=2 then 
 		y=em(3)-1
 		x=1
@@ -966,7 +966,7 @@ LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revise
 	if em(3)=0 then y=0 : x=0
 	if em(3)=1 then y=0 : x=1
 	if em(3)>=2 then y=em(3)-2 : x=2
-	L3800: ! 
+	L3800: ! married formula or >1 exemptions
 	if x<2 then m1=12500 : m2=25000
 	if x>=2 then m1=25000 : m2=50000
 	n=g_pay_periods_per_year
@@ -990,23 +990,23 @@ return  ! /r
 MOWH: ! r: REPLACE ACSWRK\MISSOURI.WH,SOURCE ! MISSOURI MO(10,3) REC # 28  REVISED 1/1/2002
 	if ~setup_mowh then  ! r: MO Missouri
 		setup_mowh=1
-		dim mo(10,3)
+		dim mo(9,3)
 		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
 		mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
-		mo( 2,1)=1000 : mo( 2,2)= 15  : mo( 2,3)=0.02
-		mo( 3,1)=2000 : mo( 3,2)= 35  : mo( 3,3)=0.025
-		mo( 4,1)=3000 : mo( 4,2)= 60  : mo( 4,3)=0.03
-		mo( 5,1)=4000 : mo( 5,2)= 90  : mo( 5,3)=0.035
-		mo( 6,1)=5000 : mo( 6,2)=125  : mo( 6,3)=0.04
-		mo( 7,1)=6000 : mo( 7,2)=165  : mo( 7,3)=0.045
-		mo( 8,1)=7000 : mo( 8,2)=210  : mo( 8,3)=0.05
-		mo( 9,1)=8000 : mo( 9,2)=260  : mo( 9,3)=0.055
-		mo(10,1)=9000 : mo(10,2)=315  : mo(10,3)=0.06
+		mo( 2,1)=1053 : mo( 2,2)= 16  : mo( 2,3)=0.02
+		mo( 3,1)=2106 : mo( 3,2)= 37  : mo( 3,3)=0.025
+		mo( 4,1)=3159 : mo( 4,2)= 63  : mo( 4,3)=0.03
+		mo( 5,1)=4212 : mo( 5,2)= 95  : mo( 5,3)=0.035
+		mo( 6,1)=5265 : mo( 6,2)=132  : mo( 6,3)=0.04
+		mo( 7,1)=6318 : mo( 7,2)=174  : mo( 7,3)=0.045
+		mo( 8,1)=7371 : mo( 8,2)=221  : mo( 8,3)=0.05
+		mo( 9,1)=8424 : mo( 9,2)=274  : mo( 9,3)=0.054
 	end if ! /r
 	! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
 	numb4=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-	if em(1)=0 or em(1)=2 then numb6=min(5000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 5000 FOR SINGLE
-	if em(1)<>0 then numb6=min(10000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 10000 FOR MARRIED OR HEAD OF HOUSEHOLD
+	if em(1)=0 or em(1)=1 or em(1)=4 or em(1)=5 then numb6=min(12200,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 12200 FOR SINGLE or married, filing seperately
+	if em(1)=2 then numb6=min(18350,fed_wh_annual_estimate) ! FEDERAL DED LIMIT FOR SINGLE HEAD OF HOUSEHOLD
+	if em(1)=3 then numb6=min(24400,fed_wh_annual_estimate) ! Married filing joint, spouse doesn't work
 	if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then h1=3925 : goto L4110
 	if em(1)=2 then h1=7850 : goto L4110
 	h1=4700

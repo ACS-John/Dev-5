@@ -42,6 +42,7 @@
 		fnpa_fontsize(12)
 		fnpa_txt("X",38,fn_line(2))
 		col1=  8
+		if env$('client')="Kincaid" then let col1+=2
 		col2=113
 		col3=169
 		 ! if env$('acsdeveloper')<>'' then  pause ! let specialform2018=1
