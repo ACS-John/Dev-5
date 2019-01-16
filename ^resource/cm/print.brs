@@ -2,6 +2,7 @@ SetupPrint: ! r:
 	if ~setupPrint then
 		setupPrint=1
 		library "Print/Library": fnSel_lib,fnGet_prnLegacyVar,fnGet_prnVar$,fnclose,fnpage
+		library "Print/Library": fnReopen_last_printer
 		! library "Print/Library": fnGet_prnLegacyVar,fnGet_prnVar$,fnclose,fnpage
 		dim prn_data$(1)*80,prn_fieldsc$(1)*20 ! for fnGet_prnVar$
 		! dim prnname$*80,comp$*80,orient$(6)*30,size$(18)*30,tsize$(3)*80,boldon$*18,boldoff$*18,undon$*18,undoff$*18 ! for fnGet_prnLegacyVar
