@@ -4,16 +4,34 @@ Error_Hanler: !
 	on error system 
 	dim err_dummy$*80
 	print bell;
-	let e1=err: let l1=line : if err=5 then goto ErrorHelpBr
+	e1=err : l1=line : if err=5 then goto ErrorHelpBr
 	ScreenError1: ! 
-	open #err_win=127: "SCol=10,SRow=10,ECol=70,ERow=14,Border=S[E],Caption=Error:"&str$(e1)&" on Line:"&str$(l1),display,outin 
-	print #err_win,fields "1,1,C 61,[E];2,1,C 61,[E];3,1,C 61,[E];4,1,C 61,[E];5,1,C 61,[E]": "1. Go into on-line help","2. Retry last command","3. Return to MAIN MENU","4. Return to SYSTEM MENU","5. Restart this Program"
-	input #err_win,select "1,1,C 61,[F]AE;2,1,C 61,[F]AE;3,1,C 61,[F]AE;4,1,C 61,[F]AE;5,1,C 61,[F]AE",attr '[L]': err_dummy$,err_dummy$,err_dummy$,err_dummy$,err_dummy$ : let hchoice=curfld
+	err_win=127
+	close #err_win: ioerr ignore
+	open #err_win=127: 'SCol=8,SRow=10,Cols=62,Rows=10,Border=S[E],Caption=Collection-Master Add-On Error Trap',display,outin 
+	dim errFieldPos$ (5)*64
+	dim errFieldText$(5)*23
+	pr #err_win,f '1,1,Cc 60,[E]' : 'Error: '&str$(e1)
+	pr #err_win,f '2,1,Cc 60,[E]' : ' Line: '&str$(l1)
+	pr #err_win,f '4,1,C  60,[E]' : 'Select a course of action:'
+	errFieldPos$(1)='5,5,C 23,[E]' : errFieldText$(1)="1. Online Help"
+	errFieldPos$(2)='6,5,C 23,[E]' : errFieldText$(2)="2. Retry"
+	errFieldPos$(3)='7,5,C 23,[E]' : errFieldText$(3)="3. Quit to MAIN MENU"
+	errFieldPos$(4)='8,5,C 23,[E]' : errFieldText$(4)="4. Exit"
+	errFieldPos$(5)='9,5,C 23,[E]' : errFieldText$(5)="5. Restart this Program"
+	! print #err_win,fields "1,1,C 61,[E]": "1. Go into on-line help"
+	! print #err_win,fields "2,1,C 61,[E]": "2. Retry last command"
+	! print #err_win,fields "3,1,C 61,[E]": "3. Return to MAIN MENU"
+	! print #err_win,fields "4,1,C 61,[E]": "4. Return to SYSTEM MENU"
+	! print #err_win,fields "5,1,C 61,[E]": "5. Restart this Program"
+	! input #err_win,select "1,1,C 61,[F]AE;2,1,C 61,[F]AE;3,1,C 61,[F]AE;4,1,C 61,[F]AE;5,1,C 61,[F]AE",attr '[L]': err_dummy$,err_dummy$,err_dummy$,err_dummy$,err_dummy$ : hchoice=curfld
+	rinput #err_win,select mat errFieldPos$,attr '[L]': mat errFieldText$
+	hchoice=curfld
 	if cmdkey=20 then ! Hidden Continue Key 
 		close #err_win: 
 		on error goto Error_Hanler 
 		continue 
-	else if cmdkey=19 then ! Fix Program 
+	else if cmdkey=12 or cmdkey=19 then ! Fix Program 
 		close #err_win: 
 		execute "List -"&str$(line) 
 		pause 
@@ -24,8 +42,10 @@ Error_Hanler: !
 	end if
 	close #err_win: 
 	on hchoice goto ErrorHelpBr, ErrorRetry, ErrorXitToMenu, ErrorXitSys, ErrorRerun
-	ErrorHelpBr: let hhelp_$=("ERR"&cnvrt$("PIC(####)",err)&",WBCMD.WBH") : if err=5 then let hhelp_$="HELP,WBCMD.WBH"
-	let err_dummy$=help$(hhelp_$)
+	ErrorHelpBr: !
+	hhelp_$=("ERR"&cnvrt$("PIC(####)",err)&",WBCMD.WBH") 
+	if err=5 then hhelp_$="HELP,WBCMD.WBH"
+	err_dummy$=help$(hhelp_$)
 	goto ScreenError1
 	pause 
 	ErrorRetry: on error goto Error_Hanler
