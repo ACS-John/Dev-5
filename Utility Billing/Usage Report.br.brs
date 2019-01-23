@@ -1,13 +1,13 @@
 ! formerly S:\acsUB\UBUsage
 ! r: setup library, on err, dims, constants, etc
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fnOpt,fnget_services
+	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fnOpt,fnget_services,fnapply_default_rates,fnapplyDefaultRatesFio,fnChk
 	on error goto ERTN
 	fntop(program$)
 ! ______________________________________________________________________
 	dim z$*10,name$*30,dx(15)
 	dim totalRoute(3,2),line$*212
 	dim serviceName$(10)*20,srv$(10)*2
-	dim resp$(10)*128
+	dim resp$(11)*128
 ! ______________________________________________________________________
 	fnLastBillingDate(filterBillingDate)
 	fnget_services(mat serviceName$,mat srv$)
@@ -17,7 +17,8 @@
 	sequenceRoute=1
 	sequenceAccount=2
 	open #h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
-! /r
+	open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ! 1
+	! /r
 SCREEN1: ! r:
 	fnTos(sn$="UBUsage")
 	respc=0
@@ -32,6 +33,16 @@ SCREEN1: ! r:
 	resp$(respc_sequenceRoute:=respc+=1)='True'
 	fnOpt(6,34,'Account')
 	resp$(respc_sequenceAccount:=respc+=1)='False'
+	! chkrow=6
+	! only include only those billed for sewer
+	! for servicecount=1 to udim(servicename$)
+		! if trim$(Servicename$(servicecount))<>"" then
+			! mat resp$(udim(resp$)+1)
+			! chkrow+=2
+			fnChk(8,34,"Only include those billed for sewer",1)
+			resp$(respc_OnlySewer:=respc+=1)="False"
+		! end if
+	! next servicecount
 	fnCmdSet(3)
 	fnAcs(sn$,0,mat resp$,ck)
 	if ck=5 then goto XIT
@@ -60,6 +71,7 @@ gosub HDR
 do ! r: main report loop
 	read #hCustomerForReport,using F_Customer: z$,name$,mat dx,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
 	F_Customer: form pos 1,c 10,pos 41,C 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
+	if resp$(respc_OnlySewer)="True" and FnHasSewer(z$)=0 then goto nextcustomer
 	if reportSequence=sequenceAccount and filterRoute and route<>filterRoute then goto NextCustomer
 	dx(1)=dx(3)=dx(5)=dx(7)=dx(9)=dx(11)=0
 	restore #h_trans,key>=z$&"         ": nokey L570
@@ -204,6 +216,13 @@ def fn_printTotals(totalRoute)
 		end if
 	end if  ! reportSequence=sequenceRoute
 	mat totalRoute=(0)
-fnend
+	fnend
+	def FnHasSewer(acctno$)
+		! this function returns 1 if the customer account has a sewer service1enabled
+		dim hs_a(7)
+		read #h_customer_1,using F_CUSTOMER_1,key=acctno$: hs_z$,mat hs_a
+		F_CUSTOMER_1: form pos 1,c 10,x 132,7*pd 2
+		if hs_a(2)<>0 then let fnHasSewer=1 else let fnHasSewer=0
+	fnend 
 XIT: fnxit
 include: ertn
