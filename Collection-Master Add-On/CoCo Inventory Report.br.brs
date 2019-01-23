@@ -4,7 +4,8 @@ fntop(program$)
 
 	! r: open master
 	dim masterData$(1)*60,masterDataN(1)
-	dim masterFieldsc$(1)*20,masterFieldsN$(1)*20,masterFormC$*1024,masterFormN$*1024
+	dim masterFieldsc$(1)*20,masterFieldsN$(1)*20
+	dim masterFormC$*1024,masterFormN$*1024
 	dim mFormAll$*2048
 	fnget_form("Master",mat masterData$,mat masterDataN,mat masterFieldsc$,mat masterFieldsN$,masterFormC$,masterFormN$)
 	fnunpack$(masterFormC$,masterFormN$)
@@ -19,8 +20,8 @@ fntop(program$)
 	fnAddOneN(mat coco, 821)
 	fnAddOneN(mat coco, 945)
 	fnAddOneN(mat coco, 976)
-	! fnAddOneN(mat coco, 540)
-	! fnAddOneN(mat coco,1116)
+	fnAddOneN(mat coco, 540)
+	fnAddOneN(mat coco,1116)
 	! fnAddOneN(mat coco,1124)
 	! fnAddOneN(mat coco, 973)
 	! fnAddOneN(mat coco,6011)
@@ -88,7 +89,7 @@ for cocoItem=1 to udim(mat coco)
 		end if
 	loop
 	NextCoCo: !
-	pr #hM: '</table>'
+	pr #255: '</table>'
 	fnClose
 nex cocoItem
 goto Finis ! /r
