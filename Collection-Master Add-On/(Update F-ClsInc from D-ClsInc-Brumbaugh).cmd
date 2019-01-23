@@ -1,4 +1,43 @@
-copy "D:\Brumbaugh\clsinc\custom\menu_win.txt" "F:\clsinc\custom\*.*"
-copy "D:\Brumbaugh\clsinc\Collection-Master Add-On\*.br" "F:\clsinc\Collection-Master Add-On\*.*"
+@echo off
+rem type "%~dp0bqLogo.txt"
 
-pause
+rem   echo "   /\   /¯¯¯¯\ '‚         /¯¯¯\‚               ";
+rem   echo " /    \|   |:'\    \‘   '   /        '\'              ";
+rem   echo "|\         |:::|    | '‚  /      _    '\‚            ";
+rem   echo "|:|        |::/    /|‘  '|      /::\     \      °    ";
+rem   echo "|:|        |/    /::|°  |     |:::::\     '\         ";
+rem   echo " \|            (:::'|  °|\     \::::::\     \°      ";
+rem   echo "  |        |\    \:/‘   |::\     \:::::|     |‘      ";
+rem   echo "  |        |::\    \‘   |::::\     \|\¯      ¯\    ";
+rem   echo "  |        |::::\    \ ‘ \:::::\    '\/     ___\'‚ ";
+rem   echo " /         |:::::|    |    \:::::\_____/|:::::|‘ ";
+rem   echo "|\    /|\   \:::/    /|      \::::|:::::::|:|:::::|  ";
+rem   echo "|::\/::|::\____ /::|        \::|:::::::|:|:::::|  ";
+rem   echo "|:::|::|:::|:::::::|:::|‘         \|:::::::|/ ¯¯¯° ";
+rem   echo "\::'|::/\::|:::::::|::/'            ¯¯¯¯          ";
+rem   echo "  '\|/    \|:::::::|/'                               ";
+rem   echo "           ¯¯¯¯'‚                                ";
+rem   
+
+echo "      ,.  - · - .,  '                  ,.-·~·-., '        ";
+echo ",·'´,.-,   ,. -.,   \`';,'          ,.·´ ,. - .,   '\`.       ";
+echo " \::\.'´  ;'\::::;:'  ,·':\'      ,'´ ,·´\::::::::\`;  ';\  '  ";
+echo "  '\:';   ;:;:·'´,.·'´\::::';    ,'  ;'::::\;::-::;:';  ;:\   ";
+echo "  ,.·'   ,.·:'´:::::::'\;·´     ';  ';::;·´       ,'  ,'::';  ";
+echo "  '·,   ,.\`' ·- :;:;·'´        .';'\  '\;'       .'  .':::::;' ";
+echo "     ;  ';:\:\`*·,  '\`·,  °  ';  \:'.   '·,  ,·´ .·'::::::;'  ";
+echo "     ;  ;:;:'-·'´  ,.·':\     \   \`·:\`·   '´ ;´::::::::;' '  ";
+echo "  ,·',  ,. -~:*'´\:::::'\‘     \\` ·- · :\\`·.  \`·:;:·´ '    ";
+echo "   \:\\`'´\:::::::::'\;:·'´       '\::::::::\:;\` · .,.'·  '   ";
+echo "    '\;\:::\;: -~*´‘             \` ·- · '´\`·:::::\::\     ";
+echo "             '                                \` · :\_\‚   ";
+
+set pathFrom=D:\Brumbaugh\clsinc
+set pathTo=F:\clsinc
+
+@echo Source:       %pathFrom%
+@echo Destination:  %pathTo%
+copy "%pathFrom%\custom\menu_win.txt" "%pathTo%\custom\*.*"
+copy "%pathFrom%\Collection-Master Add-On\*.br" "%pathTo%\Collection-Master Add-On\*.*"
+
+rem pause
