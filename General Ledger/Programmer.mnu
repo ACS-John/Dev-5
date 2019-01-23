@@ -1,13 +1,13 @@
 General Ledger ^ ACS General Ledger
 General Ledger - Programmer
 >Hamsters
->AcTrans                                 ^ HamsterFio:acTrans
+>AcTrans (Accumulated Transactions)      ^ HamsterFio:acTrans
 >glMstr                                  ^ HamsterFio:glMstr
 >>Year                                   ^ acsGL\year
 >>Vendor                                 ^ acsGL\Vendor
 >>GLMaster                               ^ acsGL\glmstr_hamster
 >>ACTrans                                ^ acsGL\AcTrans
->>GLTrans                                ^ acsGL\GLTrans
+>>GLTrans (Current Transactions)         ^ acsGL\GLTrans
 >Build Range                             ^ acsGL\BldRange
 >Fix Reference Numbers                   ^ acsGL\FixRef
 >Payroll Only Month End Closing          ^ acsGL\PRClose
