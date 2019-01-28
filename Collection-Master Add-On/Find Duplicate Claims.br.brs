@@ -277,4 +277,4 @@ def fnget_fofile$*30(fofile_fileno$)
 	L17496: !
 fnend 
 include: ertn
-include: cm\enumMaster
+include: cm\enum\master

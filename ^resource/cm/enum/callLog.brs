@@ -1,0 +1,5 @@
+EnumCallLog: ! This section defines the SQL enumerations for Call_Log
+	call_log_fileno=1: call_log_description=2: call_log_code=3: call_log_type=4: call_log_status=5: call_log_contact_type=6: call_log_contact_name=7: call_log_phone_number=8: call_log_ext=9: call_log_phone_type=10: call_log_consent=11: call_log_pref_method=12: call_log_pref_st_time=13: call_log_pref_end_time=14: call_log_pref_language=15: call_log_contact_result=16: call_log_call_type=17: call_log_third_party=18: call_log_informed_cr=19: call_log_mini_miranda=20: call_log_payment_opt=21: call_log_payment_type=22
+	call_log_ten_ninety=23: call_log_resp_party=24: call_log_ssn=25: call_log_consent_type=26: call_log_spoke_with=27: call_log_not_recorded=28: call_log_not_attorney=29
+	call_log_trans_date=1: call_log_trans_time=2: call_log_user_id=3: call_log_recno=4: call_log_start_time=5: call_log_end_time=6: call_log_call_date=7: call_log_duration=8: call_log_relation=9: call_log_int_number=10: call_log_dbt_number=11: call_log_last_call_date=12: call_log_last_call_time=13: call_log_promise_date=14: call_log_promise_amount=15: call_log_promise_dcode=16
+return
