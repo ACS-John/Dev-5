@@ -195,7 +195,7 @@ OPEN_FILES: ! r: (Ends by Line 20990) - Open_Files #AutoNumber# 20000,10
 	open #groupmem_handle:=70: "Name=GROUPMEM//8,KFName=GROUPMEM.GRP//8,USE,RecL=6,KPs=1/4,KLn=3U/3U,Shr",internal,outin,keyed 
 	open #groupmem_usr_handle:=71: "Name=GROUPMEM//8,KFName=GROUPMEM.USR//8,USE,RecL=6,KPs=4/1,KLn=3U/3U,Shr",internal,outin,keyed 
 return  ! /r
-include: cm\enum
+include: cm\enum\common
 include: cm\err
 include: cm\print
-include: cm\enumMaster
+include: cm\enum\master
