@@ -1,7 +1,7 @@
 ! Replace S:\acsUB\postgl
 ! Company Information File
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit,fntop,fnxit,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl25,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnOpt,fnCmdSet,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
+	library 'S:\Core\Library': fntop,fnxit,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl25,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnOpt,fnCmdSet,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
 	on error goto ERTN
 	dim cap$*128,resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
 	dim dat$*20,amount(10,3),tg(10),totaltg(10),heading$*130,dollar(3)
