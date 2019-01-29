@@ -1079,14 +1079,15 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 	! pr '-e-' : gosub DisplayDebugAlloc
 
 	! r: allocate overpament amoun t
-	if env$('client')="Findlay" then
-		if s04rate>0 then ! excess in gas
-			alloc(3)=alloc(3)+x(2)-bd_tgbj
-			goto BuildAllocations_FINIS
-		else if (1)>0 then ! if no gas, put excess in water
-			alloc(1)+=x(2)-bd_tgbj
-			goto BuildAllocations_FINIS
-		end if 
+	if env$('client')="Billings" and s02rate>0 then !  put excess in service 2 - sewer
+		alloc(2)=alloc(2)+x(2)-bd_tgbj
+		goto BuildAllocations_FINIS
+	else if env$('client')="Findlay" and  s04rate>0 then ! excess in gas
+		alloc(3)=alloc(3)+x(2)-bd_tgbj
+		goto BuildAllocations_FINIS
+	else if (1)>0 then ! if no gas, put excess in water
+		alloc(1)+=x(2)-bd_tgbj
+		goto BuildAllocations_FINIS
 	end if 
 	
 	! pr '-e-' : gosub DisplayDebugAlloc

@@ -159,7 +159,7 @@ message$(inf:inf)='elapsed time='&fnStime$(timeStop-timeStart)&'\n'
 message$(inf:inf)='Output File Created:\n'
 message$(inf:inf)=reportFile$
 fnMessageBox(message$, Mbx_Type,env$('program_caption'))
-execute 'Proc=Run'
+fnXit
 SAVE_AS_OPEN_ERR: ! r: there was a problem opening the file.
  if err<>622 then
   dim ml$(0)*256
@@ -197,6 +197,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnXit
 
 		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom

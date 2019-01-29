@@ -12,7 +12,7 @@ def fn_setup
 		library 'S:\Core\Library': fnSrepEnv$
 		dim company_import_path$*256
 		dim resp$(5)*256
-		dim ml$(0)*128
+		dim ml$(0)*1024
 		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 	end if
 fnend
