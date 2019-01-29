@@ -117,7 +117,7 @@ PrHeader: ! r:
 return ! /r
 Finis: ! 
 goto Xit ! /r
-Xit: CHAIN "m/prog1"
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -129,6 +129,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
 		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnXit
 
 		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom
