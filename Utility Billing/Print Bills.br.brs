@@ -550,7 +550,7 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	if pb<>0 then pb$="Prior Balance" else pb$=""
 	!   if g(1)=0 then t1$="" else t1$="WTR"
 	!   if g(2)=0 then t2$="" else t2$="SWR"
-	!   if g(3)=0 then t3$="" else t3$="RPR"
+	if g(3)=0 then t3$="" else t3$="Capital Surcharge"
 	if g(4)=0 then t4$="" else t4$="GAS"
 	if g(5)=0 then t5$="" else t5$="Purchased Gas Adj."
 	if g(6)=0 then t6$="" else t6$="Inspection Fee"
@@ -580,10 +580,11 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t6$,g(6),pe$(3) ! Inspection Fee
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t7$,g(7),pe$(4) ! Deposit Interest
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t8$,g(8),mg$(1) ! Deposit Refund or Other
+	pr #255,using F_PR_TABLE_AND_ADDR_2: t3$,g(3),""
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t9$,g(9),bud$(1:30) ! La. Sales Tax
 	pr #255,using F_PR_TABLE_AND_ADDR_2: pb$,bal-g(11) ! Prior Balance
 	pr #255,using 'form pos 22,c 10': final$
-	pr #255: ""
+	! pr #255: ""
 	pr #255: "" ! mg$(1)  <-- messages can not pr there - it hits a lot of preprinted text there
 	pr #255: "" ! mg$(2)
 	pr #255: "" ! mg$(3)
