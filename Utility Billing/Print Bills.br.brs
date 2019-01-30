@@ -558,7 +558,8 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	if g(8)=0 then 
 		t8$=""
 	else if g(8)<0 and final>0 then 
-		t8$="Deposit Refund"
+		t8$="Deposit Ref"
+		if g(8) and g(3) then let t8$="Dep Ref"
 	else 
 		t8$="Other"
 	end if 
@@ -579,12 +580,21 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t5$,g(5),pe$(2) ! Purchased Gas Adj.
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t6$,g(6),pe$(3) ! Inspection Fee
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t7$,g(7),pe$(4) ! Deposit Interest
-	pr #255,using F_PR_TABLE_AND_ADDR_2: t8$,g(8),mg$(1) ! Deposit Refund or Other
-	pr #255,using F_PR_TABLE_AND_ADDR_2: t3$,g(3),""
+	if ~g(8) and g(3) then
+		pr #255,using F_PR_TABLE_AND_ADDR_2: t3$,g(3),mg$(1)! cap surcharge
+	else if g(8) and g(3) then
+		pr #255,using F_PR_TABLE_AND_ADDR_2: t8$&" & Cap Sur",g(8)+g(3),mg$(1) ! Deposit Refund or Other and Cap surcharge
+	else if g(8) and ~g(3) then
+		pr #255,using F_PR_TABLE_AND_ADDR_2: t8$,g(8),mg$(1) ! Deposit Refund or Other
+	else if ~g(8) and ~g(3) then
+		pr #255,using F_PR_TABLE_AND_ADDR_2: '',0,mg$(1) ! none on this row
+	end if
+	! pr #255,using F_PR_TABLE_AND_ADDR_2: t8$,g(8),mg$(1) ! Deposit Refund or Other
+	! pr #255,using F_PR_TABLE_AND_ADDR_2: t3$,g(3),""
 	pr #255,using F_PR_TABLE_AND_ADDR_2: t9$,g(9),bud$(1:30) ! La. Sales Tax
 	pr #255,using F_PR_TABLE_AND_ADDR_2: pb$,bal-g(11) ! Prior Balance
 	pr #255,using 'form pos 22,c 10': final$
-	! pr #255: ""
+	pr #255: ""
 	pr #255: "" ! mg$(1)  <-- messages can not pr there - it hits a lot of preprinted text there
 	pr #255: "" ! mg$(2)
 	pr #255: "" ! mg$(3)
