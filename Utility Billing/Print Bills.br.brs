@@ -369,8 +369,9 @@ NEXT_ACCOUNT: ! r: main loop
 	end if 
 ! if trim$(z$)='100100.00'  then pr g(8) : pause
 F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1831,n 9
-	if route_filter<>0 and route_filter><route then goto RELEASE_PRINT
-
+	! if z$=" 201700.00" and env$('acsDeveloper')="Laura" then pause
+	if route_filter<>0 and route_filter><route and enable_bulksort=0 then goto RELEASE_PRINT
+	if enable_bulksort and route_filter and route_filter<>route then goto NEXT_ACCOUNT
 ! if trim$(z$)='106700.00' then pr z$,f,d1 : pause
 
 	if f><d1 then goto NEXT_ACCOUNT
@@ -824,7 +825,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	end if 
 fnend 
 BULKSORT: ! r: sort in bulk sort code sequence
-	if enable_bulksort=1 then
+	if enable_bulksort=1 then ! 
 		open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
 		write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 		if route_filter>0 then 
