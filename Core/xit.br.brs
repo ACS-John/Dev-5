@@ -14,7 +14,7 @@
 			setenv("xit_override","")
 			fnchain(tmp$)
 		else if env$('CurSys')='CM' then 
-			execute 'Proc COMMON\RUN.PRC'
+			execute 'Proc RUN'
 		end if 
 		fnchain('S:\Core\Menu.br',0,1)
 XIT: fnend 
