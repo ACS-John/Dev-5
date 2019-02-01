@@ -23,7 +23,7 @@
 	label$(2)='Ending Date'
 	fn_ask_dates(mat label$,mat filter_date)
 	if fkey=93 or fkey=99 then goto XIT
-	open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
+	open #h_in:=fngethandle: 'Name=D:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
 	! open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	open #h_out:=fngethandle: "Name=[Q]\TMmstr\TimeSheet.h[cno],RecL=86,KFName=[Q]\TMmstr\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
 	open #h_support:=fngethandle: "Name=[Q]\TMmstr\SUPPORT.h[cno],KFName=[Q]\TMmstr\support-idx.h[cno],Shr",internal,input,keyed
@@ -150,6 +150,8 @@ def fn_get_the_date(gtd_source$*256)
 		if cc16_pos<=0 then cc16_pos=pos(gtd_source$,', 2016')
 		if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
 		if cc18_pos<=0 then cc18_pos=pos(gtd_source$,', 2018')
+		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 2019')
+		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 19')
 		if cc12_pos>0 then
 			gtd_source$(cc12_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2012
@@ -171,6 +173,9 @@ def fn_get_the_date(gtd_source$*256)
 		else if cc18_pos>0 then
 			gtd_source$(cc18_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2018
+		else if cc19_pos>0 then
+			gtd_source$(cc19_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2019
 		else
 			pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause
 		end if  !
