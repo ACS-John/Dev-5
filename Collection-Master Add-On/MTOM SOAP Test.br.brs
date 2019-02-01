@@ -3,7 +3,9 @@ fn_setup
 	dim mtomSoapUtil$*256
 	mtomSoapUtil$=os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
 	
-	filerBarNumber=16805  ! Kirk is 16805
+	! bar number that can be used for test filing from the court: 25623
+	filerBarNumber=25623  ! Kirk is 16805
+	! filerBarNumber=16805 <-- Kirk 
 	
 	dim notificationEmail$*128
 	notificationEmail$='jbowman@bqlaw.com'
@@ -64,7 +66,7 @@ fntop(program$)
 		else if choice=(choiceWalker+=1)  then ! submitFiling
 			fn_submitFiling
 		else
-			execute 'Proc=Run'
+			fnXit
 		end if
 	loop
 ! /r
@@ -76,6 +78,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnXit
 
 		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom
@@ -101,7 +104,7 @@ fnend
 
 def fn_mtomSoapOpen(; efilOpen$*128)
 	dim outFile$*256
-	outFile$=os_filename$(env$('temp'))&'\mtomSoapOut'&session$&'.txt'
+	outFile$=os_filename$(env$('temp'))&'\mtomSoapOut'&session$&'.xml'
 	open #hOut:=fngethandle: 'name='&outFile$&',recl=2048,replace',d,o
 	if efilOpen$<>'' then 
 		fn_prOutXmlEfil_open(efilOpen$)
@@ -144,6 +147,7 @@ def fn_prOutXmlItem(encap$*128,value$*128; optional)
 fnend
 ! r: APIs('
 def fn_listMunicipalities
+	pr #hOut: 'List<Municipalities> listFilers();'
 	fn_mtomSoapOpen('ListMunicipalities')
 	! pr #hOut: 'List<Municipalities> listFilers();'
 	! pr #hOut: 'List<Municipalities> listFilers();'
@@ -151,8 +155,8 @@ def fn_listMunicipalities
 fnend
 def fn_loadExistingCase
 	fn_mtomSoapOpen('loadExistingCase')
-	fn_prOutXmlItem('caseNumber'         ,'C99CI150000004')
-	fn_prOutXmlItem('filerBarNumber'     ,'10151')
+	fn_prOutXmlItem('caseNumber'         ,'C99CR160000004')
+	fn_prOutXmlItem('filerBarNumber'     ,str$(filerBarNumber))
 	fn_prOutXmlItem('hearingDate'        ,'2018-11-05T13:00:00Z', 1)
 	fn_prOutXmlItem('notificationEmail'  ,notificationEmail$)
 	fn_optNotificationEmails
