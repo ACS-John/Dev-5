@@ -10,6 +10,7 @@ def fn_setup
 		library 'S:\Core\Library': fnlistprint
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnSystemName$
 	end if 
 	on error goto ERTN
 	dim _program$(1)*255
@@ -559,10 +560,12 @@ def fn_draw_windows
 	if session$(3:3)<>'1' then
 		borderText$(inf:inf)='(Session '&session$(len(session$):len(session$))&') '
 	end if
-	if env$('CurSystem')=cap$ then ! pr border:
-		borderText$(inf:inf)='- '&env$('CurSystem')
+	dim systemName$*128
+	systemName$=fnSystemName$(env$('cursys'))
+	if systemName$=cap$ then ! pr border:
+		borderText$(inf:inf)='- '&systemName$
 	else 
-		borderText$(inf:inf)='- '&env$('CurSystem')&' - '&cap$
+		borderText$(inf:inf)='- '&systemName$&' - '&cap$
 	end if 
 	pr #0, border: borderText$
 		! 

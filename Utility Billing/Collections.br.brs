@@ -73,8 +73,8 @@ MENU1B: ! r:
 			fnCmdKey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
 			fnCmdKey("&Close",5,0,1,"Returns to menu.")
 		else 
-			fnCmdKey("&Add",2)
-			fnCmdKey("E&dit",1,1)
+			fnCmdKey("&Add",2,totalacct==0)
+			fnCmdKey("E&dit",1,(totalacct<>0))
 			fnCmdKey("Delete",4)
 			fnCmdKey("&Print",3)
 			fnCmdKey("&Close",5,0,1,'Return to main menu.\nEntries will not be lost nor will they be posted to accounts.')
@@ -1010,7 +1010,12 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		mat tgb=alloc
 	else 
 		j2=0
-		if ~havebudget=1 then 
+		if havebudget=1 then 
+		else ! if havebudget<>1 then 
+			pause
+			
+			
+			
 			for j=1 to possibleServiceCount
 				if fn_serviceValidForCollAlloc(j) then 
 					tgb(j2+=1)=gb(j)

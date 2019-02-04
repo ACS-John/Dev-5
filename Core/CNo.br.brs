@@ -190,9 +190,9 @@ def library fnprg(&curprg$; g_p)
 fnend 
 def library fnSystemName$*40(; as2n_abbr$*2)
   if ~setup then let fn_setup
-  fnSystemName$=fn_system_abbr_2_name$( as2n_abbr$)
+  fnSystemName$=fn_systemName$( as2n_abbr$)
 fnend
-def fn_system_abbr_2_name$*40(; as2n_abbr$*2)
+def fn_systemName$*40(; as2n_abbr$*2)
   dim as2n_return$*40
   if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
   as2n_abbr$=lwrc$(as2n_abbr$)
@@ -241,7 +241,7 @@ def fn_system_abbr_2_name$*40(; as2n_abbr$*2)
   else if as2n_abbr$='cm' then 
     as2n_return$='Collection-Master Add-On'
   end if 
-  fn_system_abbr_2_name$=as2n_return$
+  fn_systemName$=as2n_return$
 fnend 
 def library fncursys$(; cursys_set$*2,resetCache)
   if ~setup then let fn_setup
@@ -273,7 +273,7 @@ def library fncursys$(; cursys_set$*2,resetCache)
   if uprc$(cursys_cache$)="G3" then cursys_cache$="GL" ! Budget Management
   if env$('CurSys')<>cursys_cache$ then
     setenv('CurSys',cursys_cache$)
-    setenv('CurSystem',fn_system_abbr_2_name$(cursys_cache$))
+    ! just fnSystemName$ instead       --->      setenv('CurSystem',fn_systemName$(cursys_cache$))
     execute 'config substitute [CurSys] '&cursys_cache$
   end if
   fncursys$=cursys_cache$
