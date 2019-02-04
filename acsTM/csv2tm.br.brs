@@ -113,6 +113,10 @@ def fn_get_next_line(&line$)
 fnend  ! fn_get_next_line
 def fn_get_the_date(gtd_source$*256)
 	gtd_return=0
+	if pos(gtd_source$,'Thu, Jan 10, 19')>0 then 
+		pr gtd_source$
+		pause
+	end if
 	if gtd_source$<>'' then
 	!   pr 'set the_date from '&gtd_source$
 		gtd_source$=srep$(gtd_source$,'Mon, ','')
@@ -144,6 +148,7 @@ def fn_get_the_date(gtd_source$*256)
 		cc16_pos=pos(gtd_source$,', 16')
 		cc17_pos=pos(gtd_source$,', 17')
 		cc18_pos=pos(gtd_source$,', 18')
+		cc19_pos=pos(gtd_source$,', 19')
 		if cc13_pos<=0 then cc13_pos=pos(gtd_source$,', 2013')
 		if cc14_pos<=0 then cc14_pos=pos(gtd_source$,', 2014')
 		if cc15_pos<=0 then cc15_pos=pos(gtd_source$,', 2015')
@@ -151,7 +156,6 @@ def fn_get_the_date(gtd_source$*256)
 		if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
 		if cc18_pos<=0 then cc18_pos=pos(gtd_source$,', 2018')
 		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 2019')
-		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 19')
 		if cc12_pos>0 then
 			gtd_source$(cc12_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2012

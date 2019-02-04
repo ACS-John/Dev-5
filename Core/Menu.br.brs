@@ -676,9 +676,9 @@ fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 	glpa_program_count=0
-	fn_getProgramList_add('S:\'&fnSystemName$(env$('cursys'))&'\Menu.mnu')
+	fn_getProgramList_add('S:\'&fnSystemName$&'\Menu.mnu')
 	if env$("ACSDeveloper")<>"" then
-		fn_getProgramList_add('S:\'&env$('CurSystem')&'\Programmer.mnu')
+		fn_getProgramList_add('S:\'&fnSystemName$&'\Programmer.mnu')
 	end if  ! serial=env$('ACSDeveloper')<>''
 fnend
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
