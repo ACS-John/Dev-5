@@ -315,8 +315,8 @@ def library fnWaitForShellCloseStart(whatsRunning$*256)
 	fnWaitForShellCloseStart=fn_waitForWpToCloseStart(whatsRunning$)
 fnend
 def fn_waitForWpToCloseStart(whatsRunning$*256)
-	open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('acs_win_rows')&",cols="&env$('acs_win_cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output 
-	pr #h_win_wait,fields str$(val(env$('acs_win_rows'))/2)&',1,Cc '&env$('acs_win_cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
+	open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output 
+	pr #h_win_wait,fields str$(val(env$('Session_Rows'))/2)&',1,Cc '&env$('Session_Cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
 fnend 
 def library fnWaitForShellCloseEnd
 	if ~setup then let fn_setup

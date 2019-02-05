@@ -6,22 +6,28 @@ def library fnAcsSystemInitialize(; isScreenIOtest)
 	 fnAcsSystemInitialize=fn_acsSystemInitialize( isScreenIOtest)
 fnend
 def fn_acsSystemInitialize(; isScreenIOtest)
+	! isScreenIOtest=1 =  Screen IO Test
+	! isScreenIOtest=2 =  Collection-Master Add-On
 	if ~isScreenIOtest or env$('acsVersion')='' then
 		startStatusLine=0 : pr newpage
-		fn_startStatus("Loading ACS System..." )
-		if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
-		! r: set environment variables based on login_name$ and/or BR_MODEL
-		! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
-		if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then 
-			setenv('enableClientSelection','Yes')
-		end if
-		if env$('BR_MODEL')='CLIENT/SERVER' then ! 
-			if login_name$='niceguywinning@gmail.com' then 
-				setenv('enableDataFolderByClient','Yes')
-				pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
+		if isScreenIOtest=2 then
+			fn_startStatus("Loading Collection-Master Add-On core components..." )
+		else
+			fn_startStatus("Loading ACS System..." )
+			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
+			! r: set environment variables based on login_name$ and/or BR_MODEL
+			! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
+			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then 
+				setenv('enableClientSelection','Yes')
 			end if
+			if env$('BR_MODEL')='CLIENT/SERVER' then ! 
+				if login_name$='niceguywinning@gmail.com' then 
+					setenv('enableDataFolderByClient','Yes')
+					pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
+				end if
+			end if
+			! /r
 		end if
-		! /r
 		execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 		if ~setup then let fn_setup
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
@@ -102,39 +108,41 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 				fnSetClient(tmpClientSelected$)
 			end if
 		! /r
-		if env$('acsProduct')='ACS Online' then
-			setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
-		else
-			! this isn't even necessary because the dll and exe have updated icons.
-			setenv("Icon","S:\Core\Icon\ACS BR.ico") ! setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
-		end if
-		fnMakeSurepathExists("[Q]\Data\")
-		fnMakeSurepathExists('[Q]\Report Cache\')
-		if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
-		if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
-		! fn_udf_resolve
-		! if exists(udf$&"Reads_and_Chgs.h1") then
-		!   fn_move_data(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
-		!   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
-		!  end if
-		dim workingDir$*512
-		if env$('br_model')='CLIENT/SERVER' then
-			workingDir$=env$('temp')
-		else
-			workingDir$=env$('LocalAppData')&'\ACS'
-		end if
-		if workingDir$(2:2)=':' then
-			fnmakesurepathexists(workingDir$&'\')
-			execute 'CD '&workingDir$(1:2)
-			execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
-			! fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
-			! fnCopy('S:\sio.lic','sio.lic')
-			fn_CopySfileIoIniToFileIoIni
-		else
-			pr 'Problem: workingDir is "'&workingDir$&'"'
-			pr '         a : was expected as the second character but was not found.'
-			pr '         Contact ACS Techincal Support'
-			pause
+		if isScreenIOtest<>2 then
+			if env$('acsProduct')='ACS Online' then
+				setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
+			else
+				! this isn't even necessary because the dll and exe have updated icons.
+				setenv("Icon","S:\Core\Icon\ACS BR.ico") ! setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
+			end if
+			fnMakeSurepathExists("[Q]\Data\")
+			fnMakeSurepathExists('[Q]\Report Cache\')
+			if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
+			if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
+			! fn_udf_resolve
+			! if exists(udf$&"Reads_and_Chgs.h1") then
+			!   fn_move_data(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
+			!   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
+			!  end if
+			dim workingDir$*512
+			if env$('br_model')='CLIENT/SERVER' then
+				workingDir$=env$('temp')
+			else
+				workingDir$=env$('LocalAppData')&'\ACS'
+			end if
+			if workingDir$(2:2)=':' then
+				fnmakesurepathexists(workingDir$&'\')
+				execute 'CD '&workingDir$(1:2)
+				execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
+				! fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+				! fnCopy('S:\sio.lic','sio.lic')
+				fn_CopySfileIoIniToFileIoIni
+			else
+				pr 'Problem: workingDir is "'&workingDir$&'"'
+				pr '         a : was expected as the second character but was not found.'
+				pr '         Contact ACS Techincal Support'
+				pause
+			end if
 		end if
 		fn_writeProc('r','stop'             )
 		fn_writeProc('' ,'clear resi'       )

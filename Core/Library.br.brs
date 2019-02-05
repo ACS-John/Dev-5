@@ -777,9 +777,9 @@ fnend
 	fnend
 ! /r
 ! r: Screen Ace
-	def library fntop(;prg$*256,cap$*128)
-		library 'S:\Core\ACS_Component.br': fntop
-		fntop=fntop( prg$,cap$)
+	def library fnTop(;prg$*256,cap$*128)
+		library 'S:\Core\fnTop.br': fnTop
+		fnTop=fnTop( prg$,cap$)
 	fnend
 	def library fncompany_name(window,win_cols)
 		library 'S:\Core\ACS_Component.br': fncompany_name
