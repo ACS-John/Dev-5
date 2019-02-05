@@ -1,7 +1,7 @@
 pr 'this program ('&program$&') is not intended to be run directly.'
 end
 def fn_setup
-	if ~setup_library then 
+	if ~setup_library then
 		setup_library=1
 		library 'S:\Core\Library': fnprg,fnerror
 		library 'S:\Core\Library': fnmsgbox,fnpause
@@ -11,45 +11,20 @@ def fn_setup
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnSystemName$
-	end if 
+	end if
 	on error goto ERTN
 	dim _program$(1)*255
 	dim _menu$(1)*255
 	dim combooptionsetlist$(0)*256
 	tab$=hex$('09')
 	setup=1
-fnend 
-def library fntop(; prg$*256,cap$*128)
-	!	 top of (every) program function
-	if ~setup then let fn_setup
-	pr newpage
-	cap$=trim$(cap$)
-	prg$=trim$(prg$)
-	if cap$='' and prg$<>'' then 
-		cap$=prg$(pos(prg$,'\',-1)+1:pos(prg$,'.',-1)-1)
-	else if cap$='' then 
-		cap$="(untitled)"
-	end if 
-	if prg$='' then 
-		prg$="(unknown)"
-		if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause 
-	end if 
-	fnprg(prg$,put=2)
-	setenv('Program_Caption',cap$)
-	if env$('acsDeveloper')='' then
-		if ~exists('FileIO.ini') then
-			fnCopy('S:\FileIO.ini','FileIO.ini')
-		end if
-		if ~exists('ScreenIO.ini') then
-				fnCopy('S:\ScreenIO.ini','ScreenIO.ini')
-		end if
-	end if
-fnend 
+fnend
+
 def library fnTos(;sn$*100)
 	! screen ace top of screen function
 	if ~setup then let fn_setup
 	if sn$='' then
-		if env$('cursys')<>'' then 
+		if env$('cursys')<>'' then
 			sn$=env$('cursys')&'\'
 		end if
 		sn$=sn$&env$('program_caption')
@@ -63,7 +38,7 @@ def library fnTos(;sn$*100)
 	! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outIn,relative	! recl was 500
 	fn_clear_env
 	if env$('GUIMode')='OFF' then execute 'config GUI On'
-fnend 
+fnend
 def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
 	! add a label to a screen ace form	 ! fnLbl(l,p,t$*200; mylen,myalign,fm,c,tc)
 	! myline	 vertical (that's up and down) Position of the Label.
@@ -76,48 +51,48 @@ def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon
 	if ~setup then let fn_setup
 	if mylen=0 then mylen=len(txt$)
 	setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
-fnend 
+fnend
 def library fnpic(lyne,ps,height,width,picture$*300;con,tabcon)
 	! add a picture/image to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
-fnend 
+fnend
 def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 	if ~setup then let fn_setup
 	! screen ace text box
-	if lwrc$(mask$)='mmddyy' then 
+	if lwrc$(mask$)='mmddyy' then
 		mask$='1'
-	else if lwrc$(mask$)='ccyymmdd' then 
+	else if lwrc$(mask$)='ccyymmdd' then
 		mask$='3'
-	else if lwrc$(mask$)='pointtwo' then 
+	else if lwrc$(mask$)='pointtwo' then
 		mask$='32'
-	else if lwrc$(mask$)='number' then 
+	else if lwrc$(mask$)='number' then
 		mask$='30'
-	else if lwrc$(mask$)='currency' then 
+	else if lwrc$(mask$)='currency' then
 		mask$='10'
-	end if 
-	if mask$='1' then 
+	end if
+	if mask$='1' then
 		width=8
-	else if mask$='2' then 
+	else if mask$='2' then
 		width=10
-	else if mask$='3' then 
+	else if mask$='3' then
 		width=10
-	else if mask$='4' then 
+	else if mask$='4' then
 		width=10
-	else if mask$='5' then 
+	else if mask$='5' then
 		width=8
-	end if 
+	end if
 	if val(mask$)>=10 and val(mask$)<=49 then ali=1
 	if maxlen=0 then maxlen=width
 	setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
-fnend 
+fnend
 def library fnmultiline(lyne,ps,height,width;contain,tabcon,tooltip$*200)
 	! add a multiline text box to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 	lyne=ps=height=width=contain=tabcon=0
 	tooltip$=""
-fnend 
+fnend
 def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	! lyne			vertical (that's up and down) Position of the Option.
 	! ps				horizontal (left and right) position of the option.
@@ -127,17 +102,17 @@ def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	if ~setup then let fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))
 	setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
-fnend 
+fnend
 def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 	! add a screen ace check box
 	if ~setup then let fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))-2
 	setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
-fnend 
+fnend
 def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
 	if ~setup then let fn_setup
 	fncomboa=fn_comboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
-fnend 
+fnend
 def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
 	if env$('exitnow')='yes' then goto COMBOA_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from an array) to a screen ace form
@@ -150,11 +125,11 @@ def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	! ** get/set constants ********
 	! fncno(cno)
 	sfn$=trim$(sfn$)&env$('cno')
-	if width=0 then 
+	if width=0 then
 		for j=1 to udim(mat opt$)
 			width=max(width,len(opt$(j)))
 		next j
-	end if 
+	end if
 	fn_add_combo_option_list('','',1)
 	for rec_count=1 to udim(mat opt$)
 		fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
@@ -162,8 +137,8 @@ def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
 	fn_comboOptionSetList_add(comboa_combooptionset$)
 	width=contain=0
-	COMBOA_COMPLETE: ! 
-fnend 
+	COMBOA_COMPLETE: !
+fnend
 def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
@@ -184,9 +159,9 @@ def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
 	if$=trim$(if$)
 	form$="Form Pos "&str$(psk)&",C "&str$(lnk) : nodesc=1
-	if psd<>0 and lnd<>0 then 
+	if psd<>0 and lnd<>0 then
 		form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
-	end if 
+	end if
 	becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\acs\'&becky$
 	! __________________________________________________
 	if width=0 then width=lnk+lnd+1
@@ -198,41 +173,41 @@ def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	!				setenv(acol_env_variable$,'dupe') ! XXX env$(acol_env_variable_prior$))
 	! !			pr 'saved time here ';savedtimecount+=1
 	!				goto EODF
-	!			else 
-	if if$="" then 
-		open #df:=fngethandle: "Name="&df$&",Shr",internal,input 
-	else 
+	!			else
+	if if$="" then
+		open #df:=fngethandle: "Name="&df$&",Shr",internal,input
+	else
 		open #df:=fngethandle: "Name="&df$&",KFName="&if$&",Shr",internal,input,keyed ioerr COMBOF_OPEN_IOERR
-	end if 
+	end if
 	fn_add_combo_option_list('','',1)
-	if limlis=2 then 
+	if limlis=2 then
 		fn_add_combo_option_list("[All]","[All]")
-	end if 
+	end if
 	do	! READ_DF: !
-		if nodesc=0 then 
+		if nodesc=0 then
 			read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
 			fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&" "&desc$)
-		else 
+		else
 			desc$=''
 			read #df,using form$: key$ eof EODF ioerr ERR_READ
 			fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
-		end if 
+		end if
 	loop
 
 	ERR_READ: ! r:
 	! this whole routine is untested because I've yet to see a need for it - but if there is a need for it - it should work...
 	! just comment in the ioerrs on the reads in read_df above
-	if err=61 then 
+	if err=61 then
 		mat ml$(2)
 		ml$(1)='Combo Box creation has encountered a locked record'
 		ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
 		fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
-	else 
+	else
 		goto ERTN
-	end if 
-	read #df,release: 
+	end if
+	read #df,release:
 	continue	! /r
-	EODF: ! 
+	EODF: !
 	acol_env_variable_prior$=acol_env_variable$
 	combokeyprior$=combokeycurrent$
 	close #df: ioerr ignore
@@ -244,36 +219,36 @@ def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	pr '	KFName= '
 	pr '		'&if$
 	pr '	err='&str$(err)&' on line '&str$(line)
-	! 
+	!
 	fnpause
 	goto WRITE_IT ! /r
-	WRITE_IT: ! 
+	WRITE_IT: !
 	setenv('control'&str$(fn_control_count),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
 	fn_comboOptionSetList_add(combokeycurrent$)
-	COMBOF_COMPLETE: ! 
-fnend 
+	COMBOF_COMPLETE: !
+fnend
 def fn_comboOptionSetList_add(cosladd$*256)
 	mat combooptionsetlist$(combooptionsetlistcount+=1)
 	!		mat comboOptionItemList(comboOptionSetListCount)
 	combooptionsetlist$(combooptionsetlistcount)=cosladd$
 	!		comboOptionItemList(comboOptionSetListCount)=tmp_combo_count_for_set ! control_count
-fnend 
+fnend
 def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
 	key$=rtrm$(key$)
 	txt$=rtrm$(txt$)
-	if reset_only then 
+	if reset_only then
 		acol_env_variable$='tmp_combo'&str$(tmp_combo_count_for_set+=1) ! control_count is not right - it's a response count
 		setenv(acol_env_variable$,'') ! PR 'setting up '&acol_env_variable$
 		acol_is_first=1
-	else if acol_is_first then 
+	else if acol_is_first then
 		acol_is_first=0
 		setenv(acol_env_variable$&'_key',key$) ! pr 'adding first key: '&key$ : pause
 		setenv(acol_env_variable$,txt$)
-	else 
+	else
 		setenv(acol_env_variable$&'_key',env$(acol_env_variable$&'_key')&'|'&key$)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
-	end if 
-fnend 
+	end if
+fnend
 def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,con,tabcon)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
 	! mat cm$		(column mask)=(see mask chart in screen ace manual)
@@ -293,12 +268,12 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
 	! if usr<0 then pr "USR<0-append=-1		 USR="&str$(usr)
 	sfn$=rtrm$(sfn$)
-	if sfn$='' then 
+	if sfn$='' then
 		pr 'SFN$ is required for Flex grids'
 		pr 'Press Enter to continue without the flex grid'
-		pause 
+		pause
 		goto FLEXINIT1_COMPLETE
-	end if 
+	end if
 	if ~setup then let fn_setup
 	! fncno(cno)
 	all_hdr$=all_mask$=""
@@ -310,18 +285,18 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	XRETRY: ! !print "Retrying delete here! (If you see this twice)"
 	if exists(env$('temp')&'\acs\'&optfile$) then execute '*free "'&env$('temp')&'\acs\'&optfile$&'" -n' ioerr ignore ! retry
 	close #filenumber: ioerr ignore
-	if exists(env$('temp')&'\acs\'&hdrfile$)<>0 then 
+	if exists(env$('temp')&'\acs\'&hdrfile$)<>0 then
 		execute '*free "'&env$('temp')&'\acs\'&hdrfile$&'" -n' ioerr XRETRY
-	end if 
-	USEPREVIOUS: ! 
-	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then 
+	end if
+	USEPREVIOUS: !
+	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then
 		fnflexinit1=1 : goto WRITE_TO_ACE
-	end if 
+	end if
 	! _______________________
 	! ***	 test validity of some stuff **********
 	fnflexinit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
-	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output 
+	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output
 	for j=1 to udim(cm$)
 		if trim$(cm$(j))="" then cm$(j)="80"
 	next j
@@ -329,24 +304,24 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	for j=1 to udim(cm$) : all_mask$=all_mask$&cm$(j)&chr$(9) : next j
 	pr #filenumber,using "Form pos 1,C "&str$(len(all_hdr$)): all_hdr$
 	pr #filenumber,using "Form pos 1,C "&str$(len(all_mask$)): all_mask$
-	close #filenumber: 
+	close #filenumber:
 	! hdrfile name is expected by screen ace to be the same name as
 	! .	 ! optfile$ only with the added .hdr extenstion
-	if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then 
+	if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then
 		fnflexinit1=1 : goto WRITE_TO_ACE
-	end if 
+	end if
 	! __________________________________________________
 	fnflexinit1=0
-	if exists(env$('temp')&'\acs\'&optfile$)<>0 then 
+	if exists(env$('temp')&'\acs\'&optfile$)<>0 then
 		execute "*free "&env$('temp')&'\acs\'&optfile$&" -n" ioerr ignore
-	end if 
-	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output 
-	WRITE_TO_ACE: ! 
+	end if
+	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output
+	WRITE_TO_ACE: !
 	sorttype=0
 	setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
 	usr=0
-	FLEXINIT1_COMPLETE: ! 
-fnend 
+	FLEXINIT1_COMPLETE: !
+fnend
 def library fnflexadd1(mat item$) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
 	! add a line to a flexgrid on a screen ace form
 	if env$('exitnow')='yes' then goto FLEXADD1_COMPLETE ! special processing to increase speed for exitnow
@@ -356,13 +331,13 @@ def library fnflexadd1(mat item$) ! this function may need to be updated to save
 	flexhandle=fn_get_flexhandle
 	grid_populated+=1
 	pr #flexhandle,using "Form pos 1,C "&str$(len(all_item$)): all_item$ ioerr ignore
-	FLEXADD1_COMPLETE: ! 
-fnend 
+	FLEXADD1_COMPLETE: !
+fnend
 def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 	! add a frame to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
-fnend 
+fnend
 def library fntab(myline,mypos,height,width,mat cap$)
 	! myline sets the vertical (up and down) position
 	! mypos sets the horizontal (left and right) position
@@ -373,96 +348,96 @@ def library fntab(myline,mypos,height,width,mat cap$)
 	! each tab caption should not be longer than 80 characters
 	! no more than 99 tabs
 	if ~setup then let fn_setup
-	open #tf1:=fngethandle: "Name="&env$('temp')&"\tab.txt,size=0,RecL=80,replace",internal,output 
+	open #tf1:=fngethandle: "Name="&env$('temp')&"\tab.txt,size=0,RecL=80,replace",internal,output
 	for j=1 to udim(mat cap$)
 		write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
 	next j
-	close #tf1: 
+	close #tf1:
 	setenv('control'&str$(fn_control_count),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
-fnend 
+fnend
 def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 	! add a button to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
-fnend 
+fnend
 def library fnCmdSet(bon)
 	if ~setup then let fn_setup
-	if bon=1 then 
+	if bon=1 then
 		fnCmdKey("&Cancel",5,1,1)
-	else if bon=2 then 
+	else if bon=2 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=3 then 
+	else if bon=3 then
 		fnCmdKey("&Print",1,1)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=4 then 
+	else if bon=4 then
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=5 then 
+	else if bon=5 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Cancel",5,0,1)
 		fnCmdKey("&Search",6)
-	else if bon=6 then 
+	else if bon=6 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Back",2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=7 then 
+	else if bon=7 then
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("&Delete",4)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=8 then 
+	else if bon=8 then
 		fnCmdKey("&Print",1,1)
 		fnCmdKey("&Back", 2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=11 then 
+	else if bon=11 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Finish",5,0,1)
-	else if bon=13 then 
+	else if bon=13 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Add",2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=14 then 
+	else if bon=14 then
 		fnCmdKey("&Add",1)
 		fnCmdKey("E&dit",2,1)
 		fnCmdKey("&Print",4)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=15 then 
+	else if bon=15 then
 		fnCmdKey("&Add",1,1)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=17 then 
+	else if bon=17 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Skip",2,0,1)
 		fnCmdKey("&Finish",3)
-	else if bon=19 then 
+	else if bon=19 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Finish",2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=21 then 
+	else if bon=21 then
 		fnCmdKey("&Print",1,1)
 		fnCmdKey("&Search", 2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=22 then 
+	else if bon=22 then
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("&Back",2)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=23 then 
+	else if bon=23 then
 		fnCmdKey("&Add",1,1)
 		fnCmdKey("&Search",2)
 		fnCmdKey("&Finish",4)
 		fnCmdKey("&Cancel",5,0,1)
-	else if bon=41 then 
+	else if bon=41 then
 		fnCmdKey("&Ok",1,1,1)
-	else if bon=52 then 
+	else if bon=52 then
 		fnCmdKey("&Finish",5,1,1)
-	else if bon=102 then 
+	else if bon=102 then
 		fnCmdKey("&Print",1,1)
 		fnCmdKey("E&dit",3)
 		fnCmdKey("&Add",4)
 		fnCmdKey("&Delete",7)
 		fnCmdKey("&Refresh",6)
 		fnCmdKey("&Cancel",5,0,1)
-	end if 
-fnend 
+	end if
+fnend
 def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
 	! adds a screen ace button
 	! mylen		 button.width
@@ -472,7 +447,7 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	height=max(height,1) ! button height is at least 1
 	if width=0 then width=len(txt$)
 	setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
-fnend 
+fnend
 def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
 	if ~setup then let fn_setup
 	! mylen		 button.width
@@ -481,22 +456,22 @@ def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 	btnh=max(btnh,1) ! button height is at least 1
 	if btnw=0 then btnw=len(txt$)
 	setenv('control'&str$(fn_control_count),"PicBut|"&str$(lyne)&"|"&str$(ps)&"|"&str$(comkey)&"|"&str$(btnh)&"|"&str$(btnw)&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(default)&"|"&str$(cancel)&"|"&txt$&"|"&pic1$&"|"&pic2$&"|"&tt$&"|")
-fnend 
-IGNORE: continue 
+fnend
+IGNORE: continue
 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$; ___,menu_string$*10000,index_)
 	if ~setup then let fn_setup
 	for index_=1 to udim(mat _menu$)
 		menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
 	next index_
 	setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
-fnend 
+fnend
 def library fnclear_menu
 	fn_clear_menu
-fnend 
+fnend
 def fn_clear_menu
 	mat _m$(0): mat _p$(0): mat _s$(0)
 	display menu: mat _m$,mat _p$,mat _s$
-fnend 
+fnend
 def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
 	if ~setup then let fn_setup
 	dim txt$*201,path1$*300,tt$*400,tabline$*8019
@@ -518,17 +493,17 @@ def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,paren
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 	goto XIT
-	ERTN: ! 
+	ERTN: !
 	! execute "Config Console On" ! in ertn
 	!		pr f "15,1,Cc 80,H,N": "Screen Ace 5 encountered an error."
 	fnerror(program$,err,line,act$,"xit")
 	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 	execute "List -"&str$(line)
-	pause 
-	ERTN_EXEC_ACT: ! 
+	pause
+	ERTN_EXEC_ACT: !
 	execute act$ : goto ERTN
 	! please note for program pause to work the way we want XIT: and fnend must be on the same line.!
-XIT: fnend 
+XIT: fnend
 def fn_ace_init
 	ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
 	grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
@@ -543,16 +518,16 @@ def fn_ace_init
 	control_count=val(env$('control_count'))
 	if udim(mat resp$)<control_count then mat resp$(control_count)
 	mat ace_typ$(control_count)
-	acs_win_rows=35 : setenv('acs_win_rows',str$(acs_win_rows))
-	acs_win_cols=115 : setenv('acs_win_cols',str$(acs_win_cols))
-fnend 
+	Session_Rows=35 : setenv('Session_Rows',str$(Session_Rows))
+	Session_Cols=115 : setenv('Session_Cols',str$(Session_Cols))
+fnend
 def fn_draw_windows
-	acs_win_rows=max(acs_win_rows,ace_lyne_max+4) : setenv('acs_win_rows',str$(acs_win_rows)) ! in case 35 rows is not enough
-		! 
-	acs_win_cols=max(acs_win_cols,ace_column_max+4) : setenv('acs_win_cols',str$(acs_win_cols)) ! in case 115 columns is not enough
-	if acs_win_rows>35 or acs_win_cols>115 then 
-		open #0: 'SRow=1,SCol=2,Rows='&str$(acs_win_rows)&",Cols="&str$(acs_win_cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen]',display,outIn 
-	end if 
+	Session_Rows=max(Session_Rows,ace_lyne_max+4) : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
+		!
+	Session_Cols=max(Session_Cols,ace_column_max+4) : setenv('Session_Cols',str$(Session_Cols)) ! in case 115 columns is not enough
+	if Session_Rows>35 or Session_Cols>115 or env$('cursys')='CM' then
+		open #0: 'SRow=1,SCol=2,Rows='&str$(Session_Rows)&",Cols="&str$(Session_Cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen],buttonRows=0',display,outIn
+	end if
 	dim borderText$*256
 	if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
 	if env$('enableClientSelection')='Yes' then borderText$(inf:inf)='- '&env$('client')&' '
@@ -564,281 +539,283 @@ def fn_draw_windows
 	systemName$=fnSystemName$(env$('cursys'))
 	if systemName$=cap$ then ! pr border:
 		borderText$(inf:inf)='- '&systemName$
-	else 
+	else
 		borderText$(inf:inf)='- '&systemName$&' - '&cap$
-	end if 
-	pr #0, border: borderText$
-		! 
-	fn_company_name(0,acs_win_cols) ! fn_company_name(0,acs_win_cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
-		! 
-	if not grid_present then 
-		row=ceil((acs_win_rows-ace_lyne_max)/2 )
-		col=ceil((acs_win_cols-ace_column_max)/2 )
+	end if
+	if env$('cursys')<>'CM' then
+		pr #0, border: borderText$
+	end if
+		!
+	fn_company_name(0,Session_Cols) ! fn_company_name(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
+		!
+	if not grid_present then
+		row=ceil((Session_Rows-ace_lyne_max)/2 )
+		col=ceil((Session_Cols-ace_column_max)/2 )
 		rows=ace_lyne_max
 		cols=max(ace_column_max+2,button_win_width+2)
-	else 
+	else
 		row= 3
 		col= 2
-		rows=acs_win_rows-6
-		cols=acs_win_cols-2
-	end if 
-	if parent_none then 
-		!			if disabled_background then open #disable_win=fngethandle: "srow=2,scol=2,rows="&str$(acs_win_rows-2)&",cols="&str$(acs_win_cols-2)&",picture=S:\Core\disable.png:TILE",display,output
-		!			if disabled_background then open #disable_win=fngethandle: "srow=1,scol=1,rows="&str$(acs_win_rows+2)&",cols="&str$(acs_win_cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
+		rows=Session_Rows-6
+		cols=Session_Cols-2
+	end if
+	if parent_none then
+		!			if disabled_background then open #disable_win=fngethandle: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",display,output
+		!			if disabled_background then open #disable_win=fngethandle: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
 		if disabled_background then let fn_backgrounddisable(1)
-		open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn 
-		open #button_win:=fngethandle: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn 
-	else 
-		open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn 
-		open #button_win:=fngethandle: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn 
-	end if 
+		open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
+		open #button_win:=fngethandle: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
+	else
+		open #acs_win:=fngethandle: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
+		open #button_win:=fngethandle: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn
+	end if
 	ace_cmdkey_ps=max(1,cols-button_win_width-3) ! -1  ! changed from -1 to -3 on 8/23/2018 to prevent error (-2 also worked) on UB transaction button drawing on display grid screen when delete button was added
 	                                             ! -3 caused issues on PR Enter time sheets (actual time entry screen editmode=0,semp=1)
 	                                             ! so max(1,...) was added on 8/31/18 to resolve that issue
-fnend 
+fnend
 def fn_default_cmb_options
 	dim tmp_combo_key$(1)*81,tmp_combo_item$(1)*81
 	for tmp_combo_key_item=1 to tmp_combo_count_for_set
 		str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
 		str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
-		! 
+		!
 		tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
 		tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item))) ! do not turn this trim$ into a rtrm$ - it messes up in and out with same person selected during UB Customer 9/20/2018
-		if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then 
+		if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then
 			resp$(tck_response_item)=tmp_combo_item$(tck_which)
-		end if 
+		end if
 	next tmp_combo_key_item
-fnend 
+fnend
 def fn_set_controls
 	dim control$(1)*5095
 	for index_=1 to control_count
 		str2mat(env$('control'&str$(index_)),mat control$,"|")
 		ace_typ$(index_)=typ$=uprc$(control$(1))
-		if typ$="LABEL" then 
+		if typ$="LABEL" then
 			fn_ace_rd_label
-		else if typ$="TEXT" then 
+		else if typ$="TEXT" then
 			fn_ace_rd_text
-		else if typ$="COMBOA" then 
+		else if typ$="COMBOA" then
 			fn_ace_rd_combo('A')
-		else if typ$="COMBOF" then 
+		else if typ$="COMBOF" then
 			fn_ace_rd_combo('F')
-		else if typ$="CHECK" then 
+		else if typ$="CHECK" then
 			fn_ace_rd_check
-		else if typ$="OPTION" then 
+		else if typ$="OPTION" then
 			fn_ace_rd_option
-		else if typ$="FLEX" then 
+		else if typ$="FLEX" then
 			fn_ace_rd_flex
-		else if typ$="BUTTON" then 
+		else if typ$="BUTTON" then
 			fn_ace_rd_button
-		else if typ$="PICTURE" then 
+		else if typ$="PICTURE" then
 			fn_ace_rd_pic
-		else if typ$="CMDKEY" then 
+		else if typ$="CMDKEY" then
 			fn_ace_rd_cmdkey
-		else if typ$="PICBUT" then 
+		else if typ$="PICBUT" then
 			fn_ace_rd_picbut
-		else if typ$="MULTILINE" then 
+		else if typ$="MULTILINE" then
 			fn_ace_rd_multiline
-		else if typ$="FRAME" then 
+		else if typ$="FRAME" then
 			fn_ace_rd_frame
-		else if typ$="TAB" then 
+		else if typ$="TAB" then
 			fn_ace_rd_tab
-		else if typ$='MENU' then 
+		else if typ$='MENU' then
 			fn_ace_rd_menu
-		end if 
+		end if
 	next index_
-fnend 
+fnend
 def fn_equalize_resp_arrays
 	respc=0
 	dim ace_resp$(1)*1000, grid_filter$*1000
 	if ace_io_count>udim(mat resp$) then mat resp$(ace_io_count)
-	if ace_io_count then 
-		if grid_present then 
+	if ace_io_count then
+		if grid_present then
 			resp_size+=1
 			grid_index=fn_grid_index
 			mat ace_resp$(ace_io_count)
-			if grid_index=1 then 
+			if grid_index=1 then
 				mat ace_resp$(2:ace_io_count)=resp$(1:ace_io_count-1)
-			else if grid_index=ace_io_count then 
+			else if grid_index=ace_io_count then
 				mat ace_resp$(1:ace_io_count-1)=resp$(1:ace_io_count-1)
-			else 
+			else
 				mat ace_resp$(1:grid_index-1)=resp$(1:grid_index-1) : mat ace_resp$(grid_index+1:ace_io_count)=resp$(grid_index:ace_io_count-1)
-			end if 
-		else 
+			end if
+		else
 			mat ace_resp$(ace_io_count)=resp$(1:ace_io_count)
-		end if 
-	end if 
-fnend 
+		end if
+	end if
+fnend
 def fn_string_array_empty (mat arr$; ___,index_,nonempty)
 	for index_=1 to udim(mat arr$)
-		if trim$(arr$(index_))<>'' then 
+		if trim$(arr$(index_))<>'' then
 			nonempty=1
-		end if 
+		end if
 	next index_
 	fn_string_array_empty=~ nonempty
-fnend 
+fnend
 def fn_validate_grid_selection
 	grid_selection_valid=1
-	if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) or fkey=default_button_fkey then 
-		if grid_present then 
-			if row_count then 
-				if udim(ace_io$)=2 then 
-					if fn_string_array_empty(mat ace_resp$) then 
+	if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) or fkey=default_button_fkey then
+		if grid_present then
+			if row_count then
+				if udim(ace_io$)=2 then
+					if fn_string_array_empty(mat ace_resp$) then
 						msgbox("Please, click on a row to select it and repeat your attempt.")
 						grid_selection_valid=0
-					end if 
-				else 
-					if fn_string_array_empty(mat grid_row$) then 
+					end if
+				else
+					if fn_string_array_empty(mat grid_row$) then
 						msgbox("Please, click on a row to select it and repeat your attempt.")
 						grid_selection_valid=0
-					end if 
-				end if 
-			end if 
-		end if 
-	end if 
+					end if
+				end if
+			end if
+		end if
+	end if
 	fn_validate_grid_selection=grid_selection_valid
-fnend 
+fnend
 def fn_process_user_input
 	goto_main_input=0
-	if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) then 
+	if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) then
 		fkey(default_button_fkey) ! activate the default button when enter is pressed
 		ckey=fkey
-	else if fkey=2501 then 
+	else if fkey=2501 then
 		fn_export_grid
 		fkey(-1) : goto_main_input=1
-	else if fkey=2502 then 
+	else if fkey=2502 then
 		fn_print_grid
 		fkey(-1) : goto_main_input=1
 		!		else if fkey=2503 then
 		!			pr f gridspec$&",sort": 1
 		!			fkey(-1) : goto_main_input=1
-	else if fkey > date_fkey_base and fkey < date_fkey_base+100 then 
+	else if fkey > date_fkey_base and fkey < date_fkey_base+100 then
 		_date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
 		row=date_fielddata(fkey-date_fkey_base,2)
 		column=date_fielddata(fkey-date_fkey_base,3)+date_fielddata(fkey-date_fkey_base,4)+1
 		ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fndate_picker$ (_date$,'mdy',row,column)
 		fkey(-1) : goto_main_input=1
-	else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then 
+	else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then
 		fn_selectfile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
 		fkey(-1) : goto_main_input=1
-	else if fkey=93 then 
+	else if fkey=93 then
 		if env$('ACSDeveloper')<>'' then let setenv('ExitNow','yes')
 		ckey=fkey_cancel
-	else if fkey=98 then 
+	else if fkey=98 then
 		ckey=fkey
-	else if fkey=99 then 
+	else if fkey=99 then
 		ckey=fkey_cancel
 	else if fkey=1504 then ! 2504 then
-		if cap$='Select Company' then 
+		if cap$='Select Company' then
 			help_cursys$='co'
-		else 
+		else
 			help_cursys$=lwrc$(env$('CurSys'))
-		end if 
+		end if
 		execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(trim$(cap$),' ','%20')&'.html'
 		goto_main_input=1
-	else if fkey=1505 then 
+	else if fkey=1505 then
 		fn_program_properties
 		goto_main_input=1
-	else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then 
+	else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then
 		goto_main_input=1
 		if fkey=105 or fkey=124 then let setenv('current_grid_row','1')
 	else if not srch(mat return_keys,fkey)>0 or fkey=92 or fkey=208 or fkey=txtbox_fkey then ! this means user switched tabs (fkey 92) or picked a value from a combo box (fkey 208)
 		goto_main_input=1
-	else 
+	else
 		ckey=fkey
-	end if 
+	end if
 	fn_process_user_input=goto_main_input
-fnend 
+fnend
 def fn_reformat_user_input
 	!		if udim(resp$)<ace_io_count then mat resp$(ace_io_count)
 	!		if udim(ace_resp$)<ace_io_count then mat ace_resp$(ace_io_count)
 	for ace_resp_item=1 to ace_io_count
-		if ace_resp_item<=udim(mat ace_resp$) and ace_resp_item<=udim(mat resp$) then 
-			if pos(ace_io$(ace_resp_item),'check ')>0 or pos(ace_io$(ace_resp_item),'radio ')>0 then 
-				if ace_resp$(ace_resp_item)(1:1)='^' then 
+		if ace_resp_item<=udim(mat ace_resp$) and ace_resp_item<=udim(mat resp$) then
+			if pos(ace_io$(ace_resp_item),'check ')>0 or pos(ace_io$(ace_resp_item),'radio ')>0 then
+				if ace_resp$(ace_resp_item)(1:1)='^' then
 					resp$(ace_resp_item)='True'
-				else 
+				else
 					resp$(ace_resp_item)='False'
-				end if 
-			else if date_index := fn_is_date(mat date_fielddata,ace_resp_item) > 0 then 
+				end if
+			else if date_index := fn_is_date(mat date_fielddata,ace_resp_item) > 0 then
 				_mask=date_fielddata(date_index,6)
-				if _mask=1 then 
+				if _mask=1 then
 					date_format$="mdy"
-				else if _mask=2 then 
+				else if _mask=2 then
 					date_format$="mdcy"
-				else if _mask=3 then 
+				else if _mask=3 then
 					date_format$="cymd"
-				else if _mask=4 then 
+				else if _mask=4 then
 					date_format$="dmcy"
-				else if _mask=5 then 
+				else if _mask=5 then
 					date_format$="dmy"
-				end if 
-				if date_format$<>'mdy' then 
+				end if
+				if date_format$<>'mdy' then
 					_days=days(lpad$(trim$(ace_resp$(ace_resp_item)),6,'0'),'mdy')
 					resp$(ace_resp_item)=date$(_days,date_format$)
-				else 
+				else
 					resp$(ace_resp_item)=ace_resp$(ace_resp_item)
-				end if 
-			else 
+				end if
+			else
 				resp$(ace_resp_item)=rtrm$(ace_resp$(ace_resp_item))
-			end if 
-		end if 
+			end if
+		end if
 	next ace_resp_item
-fnend 
+fnend
 def fn_error_redirection
-	if env$("ACSDeveloper")<>"" then 
+	if env$("ACSDeveloper")<>"" then
 		on soflow goto ERTN
-	else 
-		on soflow ignore 
-	end if 
-fnend 
+	else
+		on soflow ignore
+	end if
+fnend
 def fn_grid_index(;___,index_,grid_idx)
 	for index_=1 to udim(mat ace_io$)
-		if pos(ace_io$(index_),'list ') then 
+		if pos(ace_io$(index_),'list ') then
 			grid_idx=index_
-		end if 
+		end if
 	next index_
 	fn_grid_index=grid_idx
-fnend 
+fnend
 def fn_main_input
-	if grid_present then 
+	if grid_present then
 		grid_index=fn_grid_index
-		PopulateGrid: ! 
+		PopulateGrid: !
 		current_grid_row=val( env$('current_grid_row')) ! if current_grid_row then pr 'current_grid_row=';current_grid_row : pause
-		if current_grid_row then 
+		if current_grid_row then
 			curfld(grid_index,current_grid_row)
 			setenv('current_grid_row','')
 			input fields gridspec$&",rowcnt,all,nowait": grid_rows
-		else 
+		else
 			curfld(grid_index,row_count)
-		end if 
-		!	 
+		end if
+		!
 		grid_filter$=''
 		dim grid_row$(1)*10000
 		if not grid_populated then ! file_nonempty then ! if no rows have been populated, we have to create one
 			pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
 			mat grid_row$(udim(ace_resp$))=("")
 			pr f gridspec$&",=": mat grid_row$
-		end if 
-		! 
-		! 
+		end if
+		!
+		!
 		! mat ace_io$(ace_io_count)
 		! mat ace_resp$(ace_io_count)
 		if udim(ace_io$)=2 then ! this is if the grid is the only control
 			curfld(2) !	 if ~current_grid_row then let curfld(2) ! if grid is first control than set the focus to the filter box
 			rinput fields mat ace_io$: mat ace_resp$, grid_filter$ error ignore ! error MainInput886Avoidance
 			current_grid_row=0
-			if udim(ace_resp$)>1 then 
+			if udim(ace_resp$)>1 then
 				mat ace_resp$(1:udim(ace_resp$)-1)=ace_resp$(2:udim(ace_resp$))
 				mat ace_resp$(udim(ace_resp$)-1)
-			else 
+			else
 				mat ace_resp$(ace_io_count)=resp$(1:ace_io_count)
-			end if 
+			end if
 		else ! this is if the grid is not the only control
 			mat grid_row$(udim(_headings$))=("") ! this will contain the selected row data
-			if not udim(ace_io$)-1=udim(ace_resp$) then 
+			if not udim(ace_io$)-1=udim(ace_resp$) then
 				mat ace_resp$(udim(mat ace_resp$)-1) ! this will contain the rest of the non-grid data
 				ace_io_count-=1
-			end if 
+			end if
 			if grid_index=1 then ! the grid and filter are the FIRST two controls in ace_io$
 				curfld(2) ! if grid is first control than set the focus to the filter box
 				rinput fields mat ace_io$: mat grid_row$, grid_filter$, mat ace_resp$(2:udim(ace_resp$)) error IGNORE ! conv CONV_HANDLER
@@ -848,26 +825,26 @@ def fn_main_input
 			else ! the grid and filter are in the middle of other controls in ace_io$
 				curfld(1)
 				rinput fields mat ace_io$: mat ace_resp$(1:grid_index-1), mat grid_row$, grid_filter$, mat ace_resp$(grid_index+1:udim(ace_resp$)) conv CONV_HANDLER error IGNORE
-			end if 
+			end if
 			if udim(grid_row$)>1 then ace_resp$(grid_index)=grid_row$(2) else ace_resp$(grid_index)=""
-		end if 
-	else if ace_io_count <> 0 then 
-		if fn_all_fields_protected(mat ace_io$) then 
+		end if
+	else if ace_io_count <> 0 then
+		if fn_all_fields_protected(mat ace_io$) then
 			pr f mat ace_io$: mat ace_resp$
-			input #0, fields str$(acs_win_rows)&","&str$(acs_win_cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
-		else 
+			input #0, fields str$(Session_Rows)&","&str$(Session_Cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
+		else
 			rinput fields mat ace_io$: mat ace_resp$ conv CONV_HANDLER
-		end if 
-	else 
+		end if
+	else
 		input #acs_win, fields str$(rows)&','&str$(cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
-		! .!input #0, fields str$(acs_win_rows)&","&str$(acs_win_cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
-	end if 
-fnend 
+		! .!input #0, fields str$(Session_Rows)&","&str$(Session_Cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
+	end if
+fnend
 def fn_ace(sn$*100, unused,mat resp$, &ckey;startfield, close_on_exit, parent_none,background)
-	if env$('ExitNow')='yes' then 
+	if env$('ExitNow')='yes' then
 		ckey=fkey_cancel
 		goto ACE_COMPLETE
-	end if 
+	end if
 	dim ace_io$(1)*255
 	fn_ace_init
 	fn_window_size
@@ -878,38 +855,38 @@ def fn_ace(sn$*100, unused,mat resp$, &ckey;startfield, close_on_exit, parent_no
 	fn_clear_env
 	fn_equalize_resp_arrays
 	if not dropdown_menu_present then let fn_clear_menu
-	MAIN_INPUT: ! 
+	MAIN_INPUT: !
 	fn_main_input
-	if fn_process_user_input or not fn_validate_grid_selection then 
+	if fn_process_user_input or not fn_validate_grid_selection then
 		goto MAIN_INPUT
-	end if 
-	if env$('ExitNow')='yes' then 
+	end if
+	if env$('ExitNow')='yes' then
 		ckey=fkey_cancel
 		goto ACE_COMPLETE
-	end if 
-	if ckey<>fkey_cancel then 
-		if not fn_validate_fields then 
+	end if
+	if ckey<>fkey_cancel then
+		if not fn_validate_fields then
 			goto MAIN_INPUT
-		end if 
-	end if 
+		end if
+	end if
 	fn_reformat_user_input
-	on soflow system 
-	if udim(mat resp$)<resp_size then 
+	on soflow system
+	if udim(mat resp$)<resp_size then
 		mat resp$(resp_size)
-	end if 
-	ACE_COMPLETE: ! 
+	end if
+	ACE_COMPLETE: !
 	fkey(-1)
 	fn_close_windows ! :display menu:
 	if disabled_background then let fn_backgrounddisable(0)
-fnend 
+fnend
 def fn_close_windows
-	if file(acs_win)<>-1 then close #acs_win: 
-	if file(button_win)<>-1 then close #button_win: 
-	if file(disable_win)<>-1 then close #disable_win: 
-	if acs_win_cols then 
-		pr #0, fields "1,"&str$(acs_win_cols-5)&",C 2;1,"&str$(acs_win_cols-2)&",C 2": rpt$(' ',2), rpt$(' ',2)
-	end if 
-fnend 
+	if file(acs_win)<>-1 then close #acs_win:
+	if file(button_win)<>-1 then close #button_win:
+	if file(disable_win)<>-1 then close #disable_win:
+	if Session_Cols then
+		pr #0, fields "1,"&str$(Session_Cols-5)&",C 2;1,"&str$(Session_Cols-2)&",C 2": rpt$(' ',2), rpt$(' ',2)
+	end if
+fnend
 CONV_HANDLER: ! r:
 	dim message$(1)*255, response$*255,temp_io$(1)*255
 	bad_field=cnt+1
@@ -924,13 +901,13 @@ retry	 ! /r
 def fn_is_date (mat date_data,ace_item;___,index_,isdate)
 	isdate=0
 	for index_=1 to udim(mat date_data)
-		if date_data(index_,5)=ace_item then 
+		if date_data(index_,5)=ace_item then
 			isdate=index_ : goto DATESEARCH_COMPLETE
-		end if 
+		end if
 	next index_
-	DATESEARCH_COMPLETE: ! 
+	DATESEARCH_COMPLETE: !
 	fn_is_date=isdate
-fnend 
+fnend
 def fn_program_properties
 	library 'S:\Core\Library': fnprogram_properties
 	dim temp_resp$(1)*512,temp_ace_resp$(1)*512
@@ -943,14 +920,14 @@ def fn_program_properties
 	mat resp$(udim(temp_resp$))=temp_resp$
 	mat ace_resp$(udim(temp_ace_resp$))=temp_ace_resp$
 	ace_io_count=temp_io_count
-fnend 
+fnend
 def fn_all_fields_protected(mat ace_io$)
 	all_fields_protected=1
 	for index_=1 to udim(mat ace_io$)
 		if not pos(ace_io$(index_),',P') then all_fields_protected=0
 	next index_
 	fn_all_fields_protected=all_fields_protected
-fnend 
+fnend
 def fn_clear_env
 	for index_=1 to control_count
 		setenv('control'&str$(index_),"")
@@ -963,60 +940,60 @@ def fn_clear_env
 	next tmp_combo_item
 	tmp_combo_count_for_set=tmp_combo_count_for_read=0
 	setenv('control_count',0)
-fnend 
+fnend
 def fn_window_size
 	!		frame_or_tab_present=0
 	for index_=1 to control_count
 		str2mat(env$('control'&str$(index_)),mat control$,"|")
 		ace_typ$(index_)=typ$=uprc$(control$(1))
-		if typ$="LABEL" then 
+		if typ$="LABEL" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max(ace_column_max, val(control$(3))+max(val(control$(4)),len(control$(6))))
-		else if typ$="TEXT" or typ$="COMBOA" or typ$="COMBOF" then 
+		else if typ$="TEXT" or typ$="COMBOA" or typ$="COMBOF" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(4)) )
-		else if typ$="CHECK" or typ$="OPTION" then 
+		else if typ$="CHECK" or typ$="OPTION" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 		 ! if index_=5 then pr 'it is 5' : pause
 			ace_column_max=max( ace_column_max, val(control$(3))+len(control$(5))+4) ! max( ace_column_max, val(control$(3))+len(trim$(control$(5)))+4)
-		else if typ$="FLEX" or typ$="MULTILINE" or typ$="FRAME" or typ$="TAB" then 
+		else if typ$="FLEX" or typ$="MULTILINE" or typ$="FRAME" or typ$="TAB" then
 			if typ$="FLEX" then grid_present=1
 			ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)))
 			if typ$="FRAME" or typ$="TAB" and (not save_bottom or val(control$(2))+val(control$(4))>save_bottom) then ace_lyne_max += 1
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
 			save_bottom=val(control$(2))+val(control$(4))
-		else if typ$="CMDKEY" then 
+		else if typ$="CMDKEY" then
 			button_win_width +=(len(control$(2))+1)
-		else if typ$="BUTTON" then 
+		else if typ$="BUTTON" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
-		else if typ$="PICTURE" then 
+		else if typ$="PICTURE" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(6)) )
-		else if typ$="PICBUT" then 
+		else if typ$="PICBUT" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(6)) )
-		else if typ$="MENU" then 
+		else if typ$="MENU" then
 			dropdown_menu_present=1
-		end if 
+		end if
 	next index_
-fnend 
+fnend
 def fn_validate_fields(;___,found_invalid)
 	for _idx=1 to udim(text_masks)
-		if text_masks(_idx)>=1 and text_masks(_idx)<=5 then 
-			if ace_resp$(_idx)<>'0' then 
-				if not fn_validate_mdy(ace_resp$(_idx)) then 
-					if val(resp$(_idx)) then 
+		if text_masks(_idx)>=1 and text_masks(_idx)<=5 then
+			if ace_resp$(_idx)<>'0' then
+				if not fn_validate_mdy(ace_resp$(_idx)) then
+					if val(resp$(_idx)) then
 						msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid. Previous value of '&resp$(_idx)&' will be restored')
 						ace_resp$(_idx)=resp$(_idx)
-					else 
+					else
 						msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid.')
-					end if 
+					end if
 					found_invalid=1
 					curfld(_idx) : fkey(-1)
-				end if 
-			end if 
-		else if text_masks(_idx)>1000 and (trim$(ace_resp$(_idx))='' or trim$(ace_resp$(_idx))='0') then 
+				end if
+			end if
+		else if text_masks(_idx)>1000 and (trim$(ace_resp$(_idx))='' or trim$(ace_resp$(_idx))='0') then
 			msgbox('Field '&str$(_idx)&' is required.')
 			found_invalid=1
 			curfld(_idx) : fkey(-1)
@@ -1026,10 +1003,10 @@ def fn_validate_fields(;___,found_invalid)
 			!				pr 'ace_resp$(_idx)=';ace_resp$(_idx) : pause
 			!				curfld(_idx) : fkey(-1)
 			!				found_invalid=1
-		end if 
+		end if
 	next _idx
 	fn_validate_fields=~ found_invalid
-fnend 
+fnend
 def fn_validate_mdy (_date$;separator$,___,month,day,year)
 	fn_validate_mdy=1
 	_date$=lpad$(_date$,6,'0')
@@ -1038,22 +1015,22 @@ def fn_validate_mdy (_date$;separator$,___,month,day,year)
 	year=val(_date$(5:6))
 	if not (fn_validate_month(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then let fn_validate_mdy=0
  ! FINISHEDVALIDATE_MDY: !
-fnend 
+fnend
 def fn_validate_month(month)
 	fn_validate_month=1
 	if month < 1 or month > 12 then let fn_validate_month=0
-fnend 
+fnend
 def fn_validate_day(day,month,year)
 	fn_validate_day=1
 	if day<1 or day>fn_days_in_month(month,year) then let fn_validate_day=0
-fnend 
+fnend
 def fn_validate_year(year)
 	fn_validate_year=1
 	if year < 0 or year > 99 then let fn_validate_year=0
-fnend 
+fnend
 def fn_days_in_month (month,year;___,daysinmonth)
 	fn_days_in_month=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
-fnend 
+fnend
 def fn_ace_rd_menu (;___,index_,item_count)
 	dim menu_items$(1)*1023,menu_sub_items$(1)*255,_menu$(1)*255,_program$(1)*255,_status$(1)*255
 	str2mat(control$(2),mat menu_items$,'###')
@@ -1066,7 +1043,7 @@ def fn_ace_rd_menu (;___,index_,item_count)
 		_status$(index_)=menu_sub_items$(3)
 	next index_
 	display menu: mat _menu$,mat _program$,mat _status$
-fnend 
+fnend
 def fn_ace_rd_multiline
 	respc+=1
 	lyne=val(control$(2))
@@ -1078,7 +1055,7 @@ def fn_ace_rd_multiline
 	tabcon=val(control$(8))
 	fn_remove_crlf(resp$(respc))
 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
-fnend 
+fnend
 def fn_ace_rd_picbut
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1093,7 +1070,7 @@ def fn_ace_rd_picbut
 	path1$=control$(12)
 	! path2$=control$(13)
 	tt$=control$(14)
-fnend 
+fnend
 def fn_ace_rd_cmdkey
 	dim spec$*255
 	spec$=''
@@ -1102,66 +1079,66 @@ def fn_ace_rd_cmdkey
 	returnkey=return_keys(udim(return_keys))=val(control$(3))
 	default=val(control$(4))
 	cancel=val(control$(5))
-	if udim(control$)>=6 then 
+	if udim(control$)>=6 then
 		tt$=control$(6)
-	end if 
+	end if
 	if cancel then fkey_cancel=returnkey
 	txt$=srep$(txt$,'&','') ! remove underlined letters...	 would be nice to use them. xxx
 	width=len(txt$)
 	spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
-	if default then 
+	if default then
 		default_button_fkey=returnkey
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
 		pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
-	else if cancel then 
+	else if cancel then
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
-		if env$('tmp_acs_back_arrow')<>'' then 
+		if env$('tmp_acs_back_arrow')<>'' then
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
-		else 
+		else
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
-		end if 
-	else 
+		end if
+	else
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
-	end if 
-	! 
+	end if
+	!
 	dim _help$*255
-	if tt$='' then 
+	if tt$='' then
 		_help$="1;Press ["
-		if default then 
+		if default then
 			_help$(inf:inf)="Enter"
-		else if cancel then 
+		else if cancel then
 			_help$(inf:inf)="Esc"
 		else if returnkey >=2 and returnkey<=12 then ! because F1 will be used for Help
 			_help$(inf:inf)="F"&str$(returnkey)
-		else 
+		else
 			_help$=''
-		end if 
+		end if
 		if _help$<>'' then _help$(inf:inf)="] to "&txt$&";"
-	else 
+	else
 		_help$='1;'&tt$&';'
-	end if 
+	end if
 	pr #button_win, fields spec$, help _help$: txt$
 	ace_cmdkey_ps+=(width+2)
-fnend 
+fnend
 def fn_ace_rd_tab
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
 	width=val(control$(5))
 	path1$=control$(6) & control$(7)
-	open #tab_file:=fngethandle: "Name="&path1$,internal,outIn 
+	open #tab_file:=fngethandle: "Name="&path1$,internal,outIn
 	tabline$=""
 	for j=1 to min(lrec(tab_file),99)
 		read #tab_file,using "Form Pos 1,C 80": txt$
 		tabline$=tabline$&trim$(txt$)&tab$
-		open #tab:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn 
+		open #tab:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
 		mat tabs(udim(tabs)+1,3)
 		tabs(udim(tabs),1)=tab
 		tabs(udim(tabs),2)=lyne+1
 		tabs(udim(tabs),3)=ps+1
 	next j
-	close #tab_file: 
-fnend 
+	close #tab_file:
+fnend
 def fn_ace_rd_frame
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1175,16 +1152,16 @@ def fn_ace_rd_frame
 	txt$=trim$(txt$)
 	! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 	mat frames(udim(frames)+1,4)
-	if tabcon then 
-		open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn 
+	if tabcon then
+		open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
 		frames(udim(frames),4)=tabs(tabcon,1)
-	else 
-		open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn 
-	end if 
+	else
+		open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
+	end if
 	frames(udim(frames),1)=frame
 	frames(udim(frames),2)=lyne+1
 	frames(udim(frames),3)=ps+1
-fnend 
+fnend
 def fn_ace_rd_flex(;___,index_)
 	lyne		 = val(control$(2))
 	ps			 = val(control$(3))
@@ -1197,100 +1174,100 @@ def fn_ace_rd_flex(;___,index_)
 	container= val(control$(11))
 	tabcon	 = val(control$(12))
 	dim _headings$(1)*1000,_line$*10000,_chunks$(1)*2100,_forms$(1)*1000
-	dim filterspec$*255	 ! 
-	dim gridspec$*255		 ! 
+	dim filterspec$*255	 !
+	dim gridspec$*255		 !
 	dim loading_spec$*50 ! where to print Loading: please wait...
 	! pr env$('temp')&'\acs\'&trim$(path1$)&'.hdr' : pause
-	open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input 
+	open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input
 	linput #grid_headers: _line$
 	str2mat(_line$,mat _headings$,tab$)
 	linput #grid_headers: _line$
 	str2mat(_line$,mat _mask$,tab$)
 	mat _mask$(udim(_headings$))
-	close #grid_headers: 
+	close #grid_headers:
 	file_nonempty=fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$)
-	if not file_nonempty then 
+	if not file_nonempty then
 		for col_index_=2 to udim(mat _headings$)
 			_widths (col_index_)=len(_headings$(col_index_))
 			_forms$(col_index_)="C "&str$(_widths (col_index_))
 		next col_index_
-	end if 
+	end if
 	! this is done when there is a grid to the right of a frame, so they don't overlap
-	if udim(frames) and not container and ps > 2 then 
+	if udim(frames) and not container and ps > 2 then
 		ps+=1
-	end if 
+	end if
 	widthEnhanced=width+2 ! tried to increase to +28 on 1/6/2018 to make work for UB Meter Info via fnHamsterFio	but it did not fix the error 4
 	filterspec$=str$(lyne)&","&str$(ps)&","&str$(widthEnhanced)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
-	! 
-	if not container and not tabcon then 
+	!
+	if not container and not tabcon then
 		gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(widthEnhanced)
 		loading_spec$=str$(lyne + height)&","&str$(ps)&",C "
-	else 
+	else
 		gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(widthEnhanced)
 		loading_spec$=str$(lyne + height-1)&","&str$(ps)&",C "
-	end if 
-	! 
-	if container then 
+	end if
+	!
+	if container then
 		window_prefix$='#'&str$(frames(container,1))&','
-	else if tabcon then 
+	else if tabcon then
 		window_prefix$='#'&str$(tabs(tabcon,1))&','
-	else 
+	else
 		window_prefix$='#'&str$(acs_win)&','
-	end if 
+	end if
 	filterspec$(0:0)=window_prefix$
 	gridspec$(0:0)=window_prefix$
 	loading_spec$(0:0)=window_prefix$
-	! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause ! 
+	! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause !
 	pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
-	open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
+	open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	clearflag$="="
-	! 
+	!
 	dim long_row$(1)*2100		 ! dim long_row$(1)*1024
 	rows=1000								 ! rows=2000
 	mat long_row$(rows * udim(_headings$))
 	row_count=1 : record_count=1
 	printed=0
-	! 
+	!
 	scr_thaw
-	! 
+	!
 	fn_alpha_mask_indices (mat alpha_mask_indices)
 	do while file_nonempty
 		linput #grid_data: _line$ eof ignore
 		! remove this line after you figure out how to addtomask$ negative numbers to the #pic spec
 		!		_line$=srep$(_line$,'-','')
-		! 
-		if file(grid_data)<>0 then exit do 
+		!
+		if file(grid_data)<>0 then exit do
 		record_count += 1
-		if record_count=30000 then 
+		if record_count=30000 then
 			value= msgbox( "30,000 records have been loaded. Do you wish to continue loading?", "Message", "YN", "INF")
 			if value=3 then goto GRID_DATA_LOAD_COMPLETE
-		end if 
-		! 
+		end if
+		!
 		str2mat(_line$,mat _chunks$,tab$)
 		if udim(_chunks$)<>udim(_headings$)-1 then ! truncate extra columns, which are there by mistake
 			mat _chunks$(udim(_headings$)-1 )
-		end if 
-		! 
+		end if
+		!
 		mat2str(mat _chunks$,_line$," ")
-		! 
+		!
 		for index_=1 to udim(mat alpha_mask_indices)
 			cell_value=val(_chunks$(alpha_mask_indices(index_))) conv BAD_NUMERIC_CELL
 		next index_
 		goto CREATE_FILTER_COLUMN
-		BAD_NUMERIC_CELL: ! 
-		_chunks$(alpha_mask_indices(index_))='0' : retry 
-		! 
-		CREATE_FILTER_COLUMN: ! 
+		BAD_NUMERIC_CELL: !
+		_chunks$(alpha_mask_indices(index_))='0' : retry
+		!
+		CREATE_FILTER_COLUMN: !
 		mat _chunks$(udim(_chunks$)+1)
 		mat _chunks$(2:udim(_chunks$))=_chunks$(1:udim(_chunks$)-1)
 		_chunks$(1)=_line$
-		! 
+		!
 		! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
 		dim datemask$,masknumber
 		for index_=1 to udim(mat _mask$)
 			masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
 			if masknumber>=1000 then masknumber-=1000
-			if masknumber>=01 and masknumber<=05 then 
+			if masknumber>=01 and masknumber<=05 then
 		!					if masknumber=01 then !		 date format : mm/dd/yy
 		!						datemask$="ccyymmdd" ! "mmddyy" ! Expected programs sending dates like mddyy
 		!					else if masknumber=02 then !		date format : mm/dd/ccyy
@@ -1308,12 +1285,12 @@ def fn_ace_rd_flex(;___,index_)
 				if quick_len=6 then _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 		!					pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 				_chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
-			end if 
+			end if
 			NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
 		next index_
-		if row_count <= rows then 
+		if row_count <= rows then
 			mat long_row$(1+(row_count-1)*udim(_chunks$):row_count*udim(_chunks$))= _chunks$
-			if row_count=rows then 
+			if row_count=rows then
 				pr f gridspec$&","&clearflag$&"L": mat long_row$
 				pr f loading_spec$ : "Loading... Please wait"
 				scr_freeze
@@ -1321,39 +1298,39 @@ def fn_ace_rd_flex(;___,index_)
 				mat long_row$=('')
 				row_count=1
 				printed=1
-			else 
+			else
 				row_count += 1
-			end if 
-		end if 
-	loop 
+			end if
+		end if
+	loop
 	row_count -= 1
-	if row_count<>0 then 
-		if not printed then 
+	if row_count<>0 then
+		if not printed then
 			pr f gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
-		else if row_count <> rows then 
+		else if row_count <> rows then
 			! get an error 58 below - check (mat _headings$,mat _widths,mat _forms$)
 			pr f gridspec$&",+L": mat long_row$(1:(row_count)*udim(_chunks$)) ! soflow ignore
-		end if 
-	end if 
-	GRID_DATA_LOAD_COMPLETE: ! 
+		end if
+	end if
+	GRID_DATA_LOAD_COMPLETE: !
 	! clear the "Loading..." message
 	pr f loading_spec$: rpt$(" ",30)
-	! 
-	close #grid_data: 
+	!
+	close #grid_data:
 	fn_ace_io_add(gridspec$&",row,selone")
 	fn_ace_io_add(filterspec$)
 	!		filter_index=ace_io_count
-	! 
-	if not container and not tabcon then 
+	!
+	if not container and not tabcon then
 		srow$=str$(lyne+height)
-	else 
+	else
 		srow$=str$(lyne+height-1)
-	end if 
-	! 
+	end if
+	!
 	pr f window_prefix$&srow$&","&str$(ps+00)&",CC 7,,B2501": "Export"
 	! pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
 	!		pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
-fnend 
+fnend
 def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
 	mat alpha_mask_indices(0)
 	for index_=1 to udim(mat _mask$)
@@ -1362,9 +1339,9 @@ def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
 		if mask<>0 and mask<>80 and mask<>81 then ! is numeric
 			mat alpha_mask_indices(udim(mat alpha_mask_indices)+1)
 			alpha_mask_indices(udim(mat alpha_mask_indices))=index_
-		end if 
+		end if
 	next index_
-fnend 
+fnend
 def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 	let data_file_nonempty=0
 	mat _headings$(udim(_headings$)+1)
@@ -1372,14 +1349,14 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 	let _headings$(1)="Combined"
 	mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
 
-	open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
+	open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	for count=1 to 1500
 		linput #grid_data: _line$ eof ignore
 		if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
 		let str2mat(_line$,mat _chunks$,chr$(9))
 		if udim(_chunks$)<> udim(_headings$)-1 then ! truncate extra columns, which are there by mistake or are missing
 			mat _chunks$( udim(_headings$)-1 )
-		end if 
+		end if
 		let mat2str(mat _chunks$,_line$," ")
 		let _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
 		for _index=1 to udim(mat _chunks$)
@@ -1389,24 +1366,24 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 			let _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
 		next _index
 	next count
-	GRIDFORM_COMPLETE: ! 
+	GRIDFORM_COMPLETE: !
 	for index_=2 to udim(mat _mask$)+1
 		let fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
 	next index_
 	let _forms$(1)="0/C 500"
 	let _widths(1)=0
-	close #grid_data: 
+	close #grid_data:
 	let fn_gridform=data_file_nonempty
-fnend 
+fnend
 def fn_column_mask(&form$,&width,mask$;___,invisible)
 	maxlen=width + 10 ! to deal with bad data
 	mask=val(mask$) conv ignore
-	if mask >= 1000 then 
+	if mask >= 1000 then
 		mask -= 1000
 		invisible=1
-	end if 
+	end if
 	if mask=1 then ! date format : mm/dd/yy
-		form$=str$(width)&'/date(m/d/yy)' ! 
+		form$=str$(width)&'/date(m/d/yy)' !
 	else if mask=2 then !		 date format : mm/dd/ccyy
 		form$=str$(width)&'/date(m/d/ccyy)' ! $$$$$ GSB This code used to say FMT(99/99/99) which is only 6 digits long and appears wrong
 	else if mask=03 then !		date format : ccyy/mm/dd
@@ -1418,11 +1395,11 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 	else if mask=10 then ! dollars, 2 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen-4
-			if mod(tm_char_index,4)=0 then 
+			if mod(tm_char_index,4)=0 then
 				form$(0:0)=','
-			else 
+			else
 				form$(0:0)='-'
-			end if 
+			end if
 		next tm_char_index
 		if form$(1:1)=',' then form$(0:0)='-'
 		form$(0:0)=str$(width)&"/#PIC("
@@ -1430,11 +1407,11 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 	else if mask=20 then ! 0 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen
-			if mod(tm_char_index,4)=0 then 
+			if mod(tm_char_index,4)=0 then
 				form$(0:0)=','
-			else 
+			else
 				form$(0:0)='-'
-			end if 
+			end if
 		next tm_char_index
 		if form$(1:1)=',' then form$(0:0)='-'
 		form$(0:0)=str$(width)&"/#PIC("
@@ -1467,13 +1444,13 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 		form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
 	else if mask=46 then ! defaults 1 to 0.1000000
 		form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
-	else if mask=50 then 
+	else if mask=50 then
 		form$=str$(width)&"/#PIC(------)" ! ######
-	else if mask=51 then 
+	else if mask=51 then
 		form$=str$(width)&"/#PIC(---D------)" ! ###-######
-	else if mask=52 then 
+	else if mask=52 then
 		form$=str$(width)&"/#PIC(------D---)" ! ######-###
-	else if mask=53 then 
+	else if mask=53 then
 		form$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
 	else if mask=51 then !				general ledger : ###-######
 		form$='fmt(999-999999)'
@@ -1489,9 +1466,9 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 		form$="C "&str$(width)
 	else if mask=81 then !				force column right aligned
 		form$="CR "&str$(width)
-	end if 
+	end if
 	if invisible then width=0
-fnend 
+fnend
 def fn_print_grid
 	! library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
 	! fnLISTPRINT(LISTWIN,LISTSPEC$,"Selected Clients","","Selected clients	 for "&CLNR$,MAT DUMMY,0,0,"11111",0) : GOTO 5290
@@ -1510,24 +1487,24 @@ def fn_print_grid
 	!		next rowindex_
 	!		fncloseprn
 	! PRINT_GRID_XIT: !
-fnend 
+fnend
 def fn_ace_rd_pic
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	width=val(control$(4))
 	height=val(control$(5))
 	path1$=control$(6)
-fnend 
+fnend
 def fn_ace_rd_button
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
 	width=val(control$(5))
 	comkey=val(control$(6))
-	! 
+	!
 	mat return_keys(udim(return_keys)+1)
 	return_keys(udim(return_keys))=comkey
-	! 
+	!
 	txt$=srep$(trim$(control$(7)),chr$(38),"")
 	tt$=control$(8) error ignore
 	default=val(control$(9)) error ignore
@@ -1538,48 +1515,48 @@ def fn_ace_rd_button
 	spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
 	! r: new logic 10/19/2015
 	!		spec$=str$(lyne)&','&str$(ps)&',CC '&str$(width)&',,B'&str$(comkey)
-	if default then 
+	if default then
 		default_button_fkey=comkey
 		spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttons],B'&str$(comkey)
 		pr #0, fields "1,5,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
-	else if cancel then 
+	else if cancel then
 		spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttoncancel],B'&str$(comkey)
-		if env$('tmp_acs_back_arrow')<>'' then 
+		if env$('tmp_acs_back_arrow')<>'' then
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(comkey): env$('tmp_acs_back_arrow') ioerr ignore
-		else 
+		else
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\back-icon.png" ioerr ignore
-		end if 
-	else 
+		end if
+	else
 		spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
-	end if 
+	end if
 	! /r
-	if container then 
+	if container then
 		tmp_win=frames(container,1) ! pr #frames(container,1), fields spec$: txt$
-	else if tabcon then 
+	else if tabcon then
 		tmp_win=tabs(tabcon,1) ! pr #tabs(tabcon,1), fields spec$: txt$
-	else 
+	else
 		tmp_win=acs_win ! pr #acs_win, fields spec$: txt$
-	end if 
+	end if
 	! r: new help logic 10/19/2015
 	dim _help$*255
-	if tt$='' then 
+	if tt$='' then
 		_help$="1;Press ["
-		if default then 
+		if default then
 			_help$(inf:inf)="Enter"
-		else if cancel then 
+		else if cancel then
 			_help$(inf:inf)="Esc"
-		else if returnkey >=2 and returnkey<=12 then 
+		else if returnkey >=2 and returnkey<=12 then
 			_help$(inf:inf)="F"&str$(returnkey)
-		else 
+		else
 			_help$=''
-		end if 
+		end if
 		if not _help$='' then _help$(inf:inf)="] to "&txt$&";"
-	else 
+	else
 		_help$='1;'&tt$&';'
-	end if 
+	end if
 	! /r
 	pr #tmp_win, fields spec$, help _help$: txt$
-fnend 
+fnend
 def fn_ace_rd_option
 	respc+=1
 	lyne=val(control$(2))
@@ -1592,14 +1569,14 @@ def fn_ace_rd_option
 	if trim$(uprc$(resp$(respc)))<>"TRUE" and trim$(uprc$(resp$(respc)))<>"FALSE" then resp$(respc)="FALSE"
 	txt$=ltrm$(txt$,'^')
 	if trim$(uprc$(resp$(respc)))="TRUE" then resp$(respc)='^'&trim$(txt$) else resp$(respc)=trim$(txt$)
-	if container then 
+	if container then
 		fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
-	else if tabcon then 
+	else if tabcon then
 		fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
-	else 
+	else
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
-	end if 
-fnend 
+	end if
+fnend
 def fn_ace_rd_check
 	respc+=1
 	lyne=val(control$(2))
@@ -1614,23 +1591,23 @@ def fn_ace_rd_check
 	txt$=ltrm$(txt$,'^')
 	if trim$(uprc$(resp$(respc)))="TRUE" then resp$(respc)='^' else resp$(respc)=''
 	spec$=','&str$(lyne)&','&str$(ps+len(txt$)+1)&',check 2'
-	if align then 
+	if align then
 		align$='CR'
-	else 
+	else
 		align$='C'
-	end if 
+	end if
 	if chk_disable then chk_protected$=',P' else chk_protected$=',T' ! either Protect the field or force it to be in the tab order
-	if container then 
+	if container then
 		fn_ace_io_add('#'&str$(frames(container,1))&spec$&chk_protected$) ! Tab Order
 		pr #frames(container,1), fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
-	else if tabcon then 
+	else if tabcon then
 		fn_ace_io_add('#'&str$(tabs(tabcon,1))&spec$&chk_protected$) ! Tab Order
 		pr #tabs(tabcon,1), fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
-	else 
+	else
 		fn_ace_io_add('#'&str$(acs_win)&spec$&chk_protected$) ! Tab Order
 		pr #acs_win, fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
-	end if 
-fnend 
+	end if
+fnend
 def fn_ace_rd_label
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1643,27 +1620,27 @@ def fn_ace_rd_label
 	txt$=srep$(trim$(txt$),'&','')
 	dim lbl_tooltip$*256
 	if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
-	if txt$<>'' then 
+	if txt$<>'' then
 	! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 		mylen=max(mylen,len(txt$))
 		if align=1 then ace_rd_label_align$='r' else if align=2 then ace_rd_label_align$='c' else ace_rd_label_align$='l'
-		if container then 
+		if container then
 			lbl_win=frames(container,1)
 		! pr #frames(container,1), fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
-		else if tabcon then 
+		else if tabcon then
 			lbl_win=tabs(tabcon,1)
 		! pr #tabs(tabcon,1), fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
-		else 
+		else
 			lbl_win=acs_win
 		! pr #acs_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
-		end if 
-		if lbl_tooltip$<>'' then 
+		end if
+		if lbl_tooltip$<>'' then
 			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen), help '4;'&lbl_tooltip$&';': trim$(txt$)
-		else 
+		else
 			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
-		end if 
-	end if 
-fnend 
+		end if
+	end if
+fnend
 def fn_ace_rd_text
 	respc+=1
 	lyne=val(control$(2))
@@ -1684,49 +1661,49 @@ def fn_ace_rd_text
 	spec$=fn_textmask$(mask$,lyne,ps,width,container,maxlen)
 	mat text_masks(respc)
 	text_masks(respc)=val(mask$)
-	if container then 
+	if container then
 		fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
-	else if tabcon then 
+	else if tabcon then
 		fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
-	else 
+	else
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
-	end if 
-fnend 
+	end if
+fnend
 def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 	dim attr$*255
 	attr$=''
-	! 
+	!
 	mask=0
 	mask=val(mask$) conv MASK_VAL_CONV
-	MASK_VAL_CONV: ! 
-	! 
+	MASK_VAL_CONV: !
+	!
 	if mask>1000 then mask-=1000
-	if mask>=1 and mask<=5 then 
+	if mask>=1 and mask<=5 then
 		fn_datetextbox(mask,lyne,ps,width,container,disable)
-		! 
+		!
 		attr$="9/#PIC(--/--/--)" ! attr$="9/DATE(m/d/y)"
-		if mask=1 then 
+		if mask=1 then
 			resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
 			date_format$='mdy'
-		else if mask=2 then 
+		else if mask=2 then
 			date_format$='mdcy'
 			resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
-		else if mask=3 then 
+		else if mask=3 then
 			date_format$='cymd'
-			if len(trim$(resp$(respc)))<=6 then 
+			if len(trim$(resp$(respc)))<=6 then
 				resp$(respc)=date$(days(val(lpad$(trim$(resp$(respc)),6,'0')),'mdy'),'cymd')
 				if val(resp$(respc)(1:2))=19 and val(resp$(respc)(3:4)) < 20 then resp$(respc)(1:2)="20"
-			end if 
-		else if mask=4 then 
+			end if
+		else if mask=4 then
 			date_format$='dmcy'
 			resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
-		else if mask=5 then 
+		else if mask=5 then
 			date_format$='dmy'
 			resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
-		end if 
-		! 
+		end if
+		!
 		resp$(respc)=date$(days(trim$(resp$(respc)),date_format$),'mdy')
-		! 
+		!
 	else if mask=9 then ! defaults 100 to 1.00
 		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 		resp$(respc)=str$(val(resp$(respc))/100)
@@ -1735,7 +1712,7 @@ def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 		for tm_char_index=1 to maxlen-4
 !			if mod(tm_char_index,4)=0 then
 !				attr$(0:0)=','
-!			else 
+!			else
 			attr$(0:0)='-'
 !			end if
 		next tm_char_index
@@ -1746,11 +1723,11 @@ def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 	else if mask=12 then ! defaults 100 to 100.00, currency : American (2 decimals, commas)
 		form$=''
 		for tm_char_index=1 to maxlen-4
-			if mod(tm_char_index,4)=0 then 
+			if mod(tm_char_index,4)=0 then
 				attr$(0:0)=','
-			else 
+			else
 				attr$(0:0)='-'
-			end if 
+			end if
 		next tm_char_index
 ! pr attr$ : pause
 		attr$(0:0)=str$(width)&"/#PIC("
@@ -1758,11 +1735,11 @@ def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 	else if mask=20 then ! 0 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen
-			if mod(tm_char_index,4)=0 then 
+			if mod(tm_char_index,4)=0 then
 				attr$(0:0)=','
-			else 
+			else
 				attr$(0:0)='-'
-			end if 
+			end if
 		next tm_char_index
 		attr$(0:0)=str$(width)&"/#PIC("
 		attr$(inf:inf)=")"
@@ -1801,105 +1778,105 @@ def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 	else if mask=46 then ! defaults 1 to 0.1000000
 		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
-	else if mask=50 then 
+	else if mask=50 then
 		attr$=str$(width)&"/#PIC(------)" ! ######
-	else if mask=51 then 
+	else if mask=51 then
 		attr$=str$(width)&"/#PIC(---D------)" ! ###-######
-	else if mask=52 then 
+	else if mask=52 then
 		attr$=str$(width)&"/#PIC(------D---)" ! ######-###
-	else if mask=53 then 
+	else if mask=53 then
 		attr$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
-	else if mask=60 then 
+	else if mask=60 then
 		attr$=str$(width)&"/#PIC(---D---D----)" ! ###-###-#### or ####-###-####
-	else if mask=70 or mask=71 or mask=72 then 
+	else if mask=70 or mask=71 or mask=72 then
 		fn_fileselection(mask,lyne,ps,width,container)
-	end if 
-	if attr$='' then 
-		if align=1 then 
+	end if
+	if attr$='' then
+		if align=1 then
 			attr$=str$(width)&'/CR '&str$(maxlen) ! right
-		else if align=2 then 
+		else if align=2 then
 			attr$=str$(width)&'/CC '&str$(maxlen) ! centered
-		else 
+		else
 			attr$=str$(width)&'/C '&str$(maxlen) ! left=default
-		end if 
-	end if 
-! 
+		end if
+	end if
+!
 	if disable then protected$='P' else protected$='T' ! either Protect the field or force it to be in the tab order
 	attr$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
 	attr$=srep$(attr$,'PIC(,','PIC(')
 	fn_textmask$=attr$
-fnend 
+fnend
 def fn_fileselection(mask,lyne,ps,width,container)
 	dim file_select_button_spec$*255
 	file_select_boxes+=1
 	file_select_button_spec$=str$(lyne)&','&str$(ps+width+1)&',C 1,,B'&str$(file_select_fkey_base+file_select_boxes)
-	if container then 
+	if container then
 		file_select_button_spec$(0:0)='#'&str$(frames(container,1))&','
-	else if tabcon then 
+	else if tabcon then
 		file_select_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
-	else 
+	else
 		file_select_button_spec$(0:0)='#'&str$(acs_win)&','
-	end if 
+	end if
 	mat file_select_data(file_select_boxes,2)
 	file_select_data(file_select_boxes,1)=respc
 	file_select_data(file_select_boxes,2)=mask
 	pr f file_select_button_spec$: "."
-fnend 
+fnend
 def fn_selectfile (&filename$,mask)
-	if mask=70 or mask=71 then 
-		if env$('BR_MODEL')='CLIENT/SERVER' then 
+	if mask=70 or mask=71 then
+		if env$('BR_MODEL')='CLIENT/SERVER' then
 			open #h_selectfile:=fngethandle: "Name=OPEN:@:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
-		else 
+		else
 			open #h_selectfile:=fngethandle: "Name=OPEN:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
-		end if 
-	else if mask=72 then 
-		if env$('BR_MODEL')='CLIENT/SERVER' then 
+		end if
+	else if mask=72 then
+		if env$('BR_MODEL')='CLIENT/SERVER' then
 			open #h_selectfile:=fngethandle: "Name=SAVE:@:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
-		else 
+		else
 			open #h_selectfile:=fngethandle: "Name=SAVE:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
-		end if 
-	else 
+		end if
+	else
 		goto SELECTFILE_COMPLETE
-	end if 
-	if file(h_selectfile)=0 then 
+	end if
+	if file(h_selectfile)=0 then
 		filename$=os_filename$(file$(h_selectfile))
 ! filename$=trim$(file$(h_selectfile)) (2:inf)
 		if filename$(1:2)='@:' then filename$(1:2)=''
 		if filename$(1:1)=':' then filename$(1:1)=''
-		close #h_selectfile: 
-	end if 
-SELECTFILE_COMPLETE: ! 
-fnend 
+		close #h_selectfile:
+	end if
+SELECTFILE_COMPLETE: !
+fnend
 def fn_datetextbox (mask,lyne,ps,&width,container;disable)
 	dim date_button_spec$*255
 	date_button_spec$=''
 	date_boxes+=1
-	if disable then 
+	if disable then
 		date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,P,'&str$(date_fkey_base+date_boxes)
-	else 
+	else
 		date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,,'&str$(date_fkey_base+date_boxes)
-	end if 
+	end if
 	mat date_fielddata(date_boxes,6)
-	if container then 
+	if container then
 		date_fielddata(date_boxes,1)=container
 		date_fielddata(date_boxes,2)=lyne+frames(container,2)
 		date_fielddata(date_boxes,3)=ps+frames(container,3)
 		date_button_spec$(0:0)='#'&str$(frames(container,1))&','
-	else if tabcon then 
+	else if tabcon then
 		date_fielddata(date_boxes,1)=tabcon
 		date_fielddata(date_boxes,2)=lyne+tabs(tabcon,2)
 		date_fielddata(date_boxes,3)=ps+tabs(tabcon,3)
 		date_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
-	else 
+	else
 		date_fielddata(date_boxes,2)=lyne
 		date_fielddata(date_boxes,3)=ps
 		date_button_spec$(0:0)='#'&str$(acs_win)&','
-	end if 
+	end if
 	pr f date_button_spec$: "S:\Core\Icon\calendar_icon.png" ioerr ignore
 	date_fielddata(date_boxes,4)=width
 	date_fielddata(date_boxes,5)=respc ! parent textbox number
 	date_fielddata(date_boxes,6)=mask
-fnend 
+fnend
 def fn_ace_rd_combo(combo$*1)
 	dim ace_combo_io$*255
 	ace_combo_io$=''
@@ -1916,49 +1893,49 @@ def fn_ace_rd_combo(combo$*1)
 	tabcon=val(control$(10))
 	dim combooptionset$*256
 	combooptionset$=control$(11)
-! 
+!
 	tmp_combo_count_for_read+=1
-! 
-	if width<=2 then 
+!
+	if width<=2 then
 		width=4
-	end if 
-	if combo$='F' then 
+	end if
+	if combo$='F' then
 		poskeylen=pos(combooptionset$,'lnk=')
 		keylen=val(combooptionset$(poskeylen+4:pos(combooptionset$,',',poskeylen)-1))
 		posdesclen=pos(combooptionset$,'lnd=')
 		desclen=val(combooptionset$(posdesclen+4:pos(combooptionset$,',',posdesclen)-1))
 		if desclen>0 then spacerlen=1 else spacerlen=0
-		if (keylen+desclen+spacerlen)>width then 
+		if (keylen+desclen+spacerlen)>width then
 			width=keylen+desclen+spacerlen
-		end if 
-	end if 
-	if limittolist=1 or limittolist=2 then 
+		end if
+	end if
+	if limittolist=1 or limittolist=2 then
 		ace_combo_io$=str$(lyne)&','&str$(ps)&','&str$(width)&'/combo 128,+,Select'
-	else 
+	else
 !		ace_combo_io$=str$(lyne)&','&str$(ps)&','&str$(width)&'/combo 128,+'
 		ace_combo_io$=str$(lyne)&','&str$(ps)&','&str$(width)&'/combo '&str$(width)&',+'
-	end if 
+	end if
 ! tt$=srep$(tt$,'"','""') ! fn2quote(tt$)
 ! r: test for invalid containter and/or tabcon
-	if container>udim(mat frames,1) then 
+	if container>udim(mat frames,1) then
 		pr 'invalid container ('&str$(container)&') specified for combobox (type '&combo$&')'
 		fnpause
 		container=0
-	end if 
-	if tabcon>udim(mat tabs,1) then 
+	end if
+	if tabcon>udim(mat tabs,1) then
 		pr 'invalid tab container (tabcon='&str$(container)&') specified for combobox (type '&combo$&')'
 		fnpause
 		tabcon=0
-	end if 
+	end if
 ! /r
-	if container then 
+	if container then
 		spec$='#'&str$(frames(container,1))&','&ace_combo_io$
-	else if tabcon then 
+	else if tabcon then
 		spec$='#'&str$(tabs(tabcon,1))&','&ace_combo_io$
-	else 
+	else
 		spec$='#'&str$(acs_win)&','&ace_combo_io$
-	end if 
-! 
+	end if
+!
 ! setenv('combo'&str$(respc),env$('tmp_combo'&str$(tmp_combo_count_for_read)))
 	dim tmp_combo_option$(1)*81
 	combooption_which=srch(mat combooptionsetlist$,combooptionset$)
@@ -1969,42 +1946,42 @@ def fn_ace_rd_combo(combo$*1)
 !		pr 'comboOption_which=';comboOption_which
 !		pr 'it is a repeat.'
 !		fnpause
-! else 
+! else
 !		pr 'comboOption_which=';comboOption_which
 ! end if
 ! if comboOption_which>0 and comboOption_which<>comboOption_which_prior then
 	str2mat(env$('tmp_combo'&str$(tmp_combo_count_for_read)),mat tmp_combo_option$,'|')
-! else 
+! else
 !		pr 'saved time on tmp_combo'&str$(tmp_combo_count_for_read)
 ! end if
 	combooption_which_prior=combooption_which
 	pr f spec$: mat tmp_combo_option$
-! 
+!
 	setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item',str$(respc))
 ! COMBO_COMPLETE: !
-! 
-	if pos(spec$,"+,Select")>0 then 
+!
+	if pos(spec$,"+,Select")>0 then
 		spec$=srep$(spec$,"+,Select","Select")
-	else 
+	else
 		spec$=srep$(spec$,",+",",")
-	end if 
+	end if
 	spec$=spec$&'T[textboxes]'
 	if pos (spec$,',Select')>0 then ! move the ,select to the end
 		spec$=srep$(spec$,',Select',',')
 		spec$=spec$&',Select'
-	end if 
+	end if
 	fn_ace_io_add(spec$)
-fnend 
+fnend
 def fn_ace_io_add(aia_in$*255)
 	ace_io_count=udim(mat ace_io$)+1
 	mat ace_io$(ace_io_count)
 	ace_io$(ace_io_count)=aia_in$
-fnend 
+fnend
 def fn_control_count
 	control_count=val(env$('control_count'))+1
 	setenv('control_count',str$(control_count))
 	fn_control_count=control_count
-fnend 
+fnend
 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
 	if ~setup then let fn_setup
 	if qgllength=0 then qgllength=35
@@ -2020,37 +1997,37 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgl
 	dim qglsetupkeycurrent$*128
 	dim qglsetupkeyprior$*128
 ! r: set qgl_cursys$ (for fnqgl purposes only)
-	if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then 
+	if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then
 		qgl_cursys$="GL"
-	else if env$('CurSys')="PR" then 
-		if exists("[Q]\GLmstr\Company.h[cno]") then 
+	else if env$('CurSys')="PR" then
+		if exists("[Q]\GLmstr\Company.h[cno]") then
 			qgl_cursys$="GL"
-		else if exists("[Q]\CLmstr\Company.h[cno]") then 
+		else if exists("[Q]\CLmstr\Company.h[cno]") then
 			qgl_cursys$="CL"
-		else 
+		else
 			qgl_cursys$="PR"
-		end if 
-	else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then 
+		end if
+	else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then
 		qgl_cursys$='GL'
-	else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then 
+	else if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then
 		qgl_cursys$='CR'
-	else if env$('CurSys')='CL' then 
+	else if env$('CurSys')='CL' then
 		qgl_cursys$='CL'
-	else 
+	else
 		qgl_cursys$='GL'
-	end if 
+	end if
 ! /r
 	if setupqgl$<>qgl_cursys$ then ! r:
 		setupqgl$=qgl_cursys$
 		open #company:=fngethandle: "Name=[Q]\"&qgl_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr CLOSECOMPANY
-		if qgl_cursys$='CL' then 
+		if qgl_cursys$='CL' then
 			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
-		else if qgl_cursys$="GL" then 
+		else if qgl_cursys$="GL" then
 			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from General Ledger
-		else if qgl_cursys$="PR" or qgl_cursys$="UB" or qgl_cursys$="CR" then 
+		else if qgl_cursys$="PR" or qgl_cursys$="UB" or qgl_cursys$="CR" then
 			use_dept=1 : use_sub=1 ! default both to yes if from pr chart of accounts
-		end if 
-CLOSECOMPANY: ! 
+		end if
+CLOSECOMPANY: !
 		close #company: ioerr ignore
 		if use_dept<>0 and use_sub<>0 then glmstr_form$="Form Pos 1,C 12"
 		if use_dept =0 and use_sub<>0 then glmstr_form$="Form Pos 4,C 09"
@@ -2060,33 +2037,33 @@ CLOSECOMPANY: !
 		glmstr_form$=glmstr_form$&",Pos 13,C 50"
 	end if	! /r
 	qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
-	if qglsetupkeycurrent$=qglsetupkeyprior$ then 
+	if qglsetupkeycurrent$=qglsetupkeyprior$ then
 !		pr 'saving time ';timesavecount+=1 : pause
 		goto QGLFINIS
-	else 
+	else
 		qglsetupkeyprior$=qglsetupkeycurrent$
 		mat qgloption$(0) : option_count=0
-		if add_all_or_blank=1 then 
+		if add_all_or_blank=1 then
 			mat qgloption$(option_count+=1) : qgloption$(option_count)='[All]'
-		else if add_all_or_blank=2 then 
+		else if add_all_or_blank=2 then
 			mat qgloption$(option_count+=1) : qgloption$(option_count)=''
-		end if 
+		end if
 ! read the chart of accounts from the appropriate system into an array
-		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then 
+		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
 			open #glmstr:=fngethandle: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
-		end if 
-		do 
+		end if
+		do
 			read #glmstr,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
 ! reformat the options for typing
-			if use_dept<>0 and use_sub<>0 then 
+			if use_dept<>0 and use_sub<>0 then
 				qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))&"-"&trim$(qglopt$(10:12))
-			else if use_dept=0 and use_sub<>0 then 
+			else if use_dept=0 and use_sub<>0 then
 				qglopt$=trim$(qglopt$(1:6))&"-"&trim$(qglopt$(7:9))
-			else if use_dept=0 and use_sub=0 then 
+			else if use_dept=0 and use_sub=0 then
 				qglopt$=trim$(qglopt$(1:6))
-			else if use_dept<>0 and use_sub=0 then 
+			else if use_dept<>0 and use_sub=0 then
 				qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))
-			end if 
+			end if
 !	 add spaces to the end of it
 !	 - for spacing of the description,
 !	 and the description
@@ -2094,39 +2071,39 @@ CLOSECOMPANY: !
 !		write it into the comobobox option file
 !		pr #whr,using "Form Pos 1,C 81": qglOpt$
 			mat qgloption$(option_count+=1) : qgloption$(option_count)=qglopt$
-QGL_LOOP_COMPLETE: ! 
-		loop 
-EO_QGL_GLMSTR: ! 
+QGL_LOOP_COMPLETE: !
+		loop
+EO_QGL_GLMSTR: !
 		close #glmstr: ioerr ignore
-	end if 
+	end if
 	goto QGLFINIS
-QGL_ERROR: ! 
+QGL_ERROR: !
 	pr 'err ';err;' on line ';line
-	pause 
+	pause
 	goto QGLFINIS
 QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
 	qgloptfile$=qgl_cursys$&"GLNumber"
 	fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
 	myline=mypos=con=0
-fnend 
+fnend
 def fn_remove_crlf(&txt$)
 	lastx=x=0
-	do 
+	do
 		x=pos(txt$,hex$("0D0A"),lastx)
-		if x>0 then 
+		if x>0 then
 			txt$=txt$(1:x-1)&"HEX$(0D0A)"&txt$(x+2:len(trim$(txt$)))
 			lastx=x
-		end if 
+		end if
 	loop while x>0
-fnend 
+fnend
 def fn_export_grid(;___,index_)
 	dim filename$*1000
 	filename$=''
 	grid_rows=grid_columns=index_=0
 	open #export_file:=fngethandle: "Name=save:Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
 	filename$=file$(export_file)
-	close #export_file: 
-	open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output 
+	close #export_file:
+	open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output
 	input fields gridspec$&",RowCnt,all,nowait": grid_rows
 	input fields gridspec$&",ColCnt,all,nowait": grid_columns
 	mat _chunks$(grid_columns)
@@ -2136,62 +2113,62 @@ def fn_export_grid(;___,index_)
 		input fields gridspec$&",row,range,nowait": index_, index_, mat _chunks$
 		for eg_grid_line_item=2 to udim(mat _chunks$)
 			eg_tmp_mask=val(_mask$(eg_grid_line_item-1))
-			if eg_tmp_mask=>1 and eg_tmp_mask<=5 then 
+			if eg_tmp_mask=>1 and eg_tmp_mask<=5 then
 ! r: get date_format$
-				if eg_tmp_mask=1 then 
+				if eg_tmp_mask=1 then
 					date_format$='mdy'
-				else if eg_tmp_mask=2 then 
+				else if eg_tmp_mask=2 then
 					date_format$='mdcy'
-				else if eg_tmp_mask=3 then 
+				else if eg_tmp_mask=3 then
 					date_format$='cymd'
-				else if eg_tmp_mask=4 then 
+				else if eg_tmp_mask=4 then
 					date_format$='dmcy'
-				else if eg_tmp_mask=5 then 
+				else if eg_tmp_mask=5 then
 					date_format$='dmy'
-				end if 
+				end if
 ! /r
 !					pr _chunks$(eg_grid_line_item);'	date format is '&date_format$ : pause
 				_chunks$(eg_grid_line_item)=date$(val(_chunks$(eg_grid_line_item)),date_format$)
-			else if eg_tmp_mask<2 or eg_tmp_mask>65 then 
+			else if eg_tmp_mask<2 or eg_tmp_mask>65 then
 				_chunks$(eg_grid_line_item)='"'&rtrm$(_chunks$(eg_grid_line_item))&'"'
-			end if 
+			end if
 		next eg_grid_line_item
-! 
+!
 		mat2str(mat _chunks$(2:udim(_chunks$)),_line$,tab$)
 		pr #export_file: _line$ ! pr _line$ : pause
 	next index_
-	close #export_file: 
+	close #export_file:
 ! GRID_EXPORT_COMPLETE: !
 	mat ml$(2)
 	ml$(1)='Grid successfully exported to:'
 	ml$(2)=os_filename$(filename$)
 	fnmsgbox(mat ml$,resp$,"ACS",0)
-GRID_EXPORT_XIT: ! 
-fnend 
+GRID_EXPORT_XIT: !
+fnend
 def fn_get_flexhandle(;forceclose)
-	if forceclose then 
+	if forceclose then
 		forceclose=0
 		close #118: ioerr ignore
-	end if 
+	end if
 	fn_get_flexhandle=118
-fnend 
+fnend
 def library fnbackgrounddisable(; activate)
 	if ~setup_library then let fn_setup
 	fnbackgrounddisable=fn_backgrounddisable( activate)
-fnend 
+fnend
 def fn_backgrounddisable(; activate)
-	if activate then 
-		acs_win_rows=val(env$('acs_win_rows')) : if acs_win_rows<=0 then acs_win_rows=35
-		acs_win_cols=val(env$('acs_win_cols')) : if acs_win_cols<=0 then acs_win_cols=115
-		open #disable_win=fngethandle: "srow=1,scol=1,rows="&str$(acs_win_rows)&",cols="&str$(acs_win_cols)&",border=none,picture=S:\Core\disable.png:TILE,parent=0",display,output 
-	else 
+	if activate then
+		Session_Rows=val(env$('Session_Rows')) : if Session_Rows<=0 then Session_Rows=35
+		Session_Cols=val(env$('Session_Cols')) : if Session_Cols<=0 then Session_Cols=115
+		open #disable_win=fngethandle: "srow=1,scol=1,rows="&str$(Session_Rows)&",cols="&str$(Session_Cols)&",border=none,picture=S:\Core\disable.png:TILE,parent=0",display,output
+	else
 		close #disable_win: ioerr ignore
-	end if 
-fnend 
+	end if
+fnend
 def library fncompany_name(window,win_cols)
 	if ~setup_library then let fn_setup
 	fncompany_name=fn_company_name(window,win_cols)
-fnend 
+fnend
 def fn_company_name(window,win_cols)
 	pr #window, fields "1,08,CC 18,[screenheader]": date$("Month dd, ccyy")(1:18)
 	pr #window, fields "1,27,CC 05,[screenheader]": env$("cno")
@@ -2199,7 +2176,7 @@ def fn_company_name(window,win_cols)
 	pr #window, fields "1,86,22/CC 24,[screenheader]": env$('cnam')(1:24)
 	if env$('tmp_acs_back_arrow')='' then ! it is not the main menu.
 		pr #window, fields "1,"&str$(win_cols-05)&",P 1/2,[buttons],1505": "S:\Core\Icon\Properties.png" ioerr ignore
-	end if 
+	end if
 	pr #window, fields "1,"&str$(win_cols-02)&",P 1/2,[buttons],1504": "S:\Core\Icon\help_icon.png" ioerr ignore
-fnend 
+fnend
 

@@ -1,6 +1,6 @@
 ! Replace S:\Core\Xit.br
 ! ______________________________________________________________________
-	def library fnxit(;cursys$)
+	def library fnXit(;cursys$)
 		library 'S:\Core\Library': fnchain,fnprocess
 		on error goto ERTN
 ! ______________________________________________________________________
@@ -14,6 +14,9 @@
 			setenv("xit_override","")
 			fnchain(tmp$)
 		else if env$('CurSys')='CM' then 
+			setenv('Session_Rows',24)
+			setenv('Session_Cols',80)
+			open #0: 'SRow=1,SCol=1,Rows=24,Cols=80',display,outIn
 			execute 'Proc RUN'
 		end if 
 		fnchain('S:\Core\Menu.br',0,1)
