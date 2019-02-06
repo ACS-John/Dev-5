@@ -5,7 +5,7 @@
  !  Created: 03/28/06
  ! Modified: 06/29/18
  !
- ! Version 92
+ ! Version 95
  !
  !
  ! #Autonumber# 500,1
@@ -29,6 +29,15 @@
  ! By creating a simple procfile called fileio.ini, a procfile that
  ! resides in the current path and setting the appropriate values.
  !
+ !
+ ! Version 95: Fixed a small bug that caused trouble using the SendEmail function when
+ !  fileio is not installed in the default location. Thanks John Bowman!
+ !
+ ! Version 94:
+ !  Fixed a bug that occasionally caused the Datacrawler to crash when reading large negative values stored in ZD fields.
+ !
+ ! Version 93:
+ !  Added an option to the Export Listview CSV so that it supports multi-select listviews and exports only the selected rows.
  !
  ! Version 92:
  !  Fixed a bug introduced in Version 91 that broke layouts with all strings or all numbers (not mixed)
@@ -5023,7 +5032,8 @@
              if Spec$(1:2)="PD" then ! Pd Is Different
                 let _Speclen=(2*_Speclen)-1+2
              else if Spec$(1:2)="N " or Spec$(1:2)="ZD" or Spec$(1:2)="G " then
-                if pos(Spec$,".") then let _Speclen=_Speclen+1 ! Add 2 for the potential "0."
+                if pos(Spec$,".") then let _Speclen+=1 ! Add 1 for the potential "."
+                if Spec$(1:2)="ZD" then let _Speclen+=1 ! Add one of the potential "-"
              else if Spec$(1:2)="L " then ! L keeps max precision 15 decimals plus . and -
                 let _SpecLen=17
              else ! All The Others Are About The Same
@@ -6431,26 +6441,35 @@
     dim start(1),ender(1),mask(1)
     DIM HEADERS$(1)*50,EXWIDTHS(1),EXFORMS$(1)*50,HEADERS$*2000, SortOrder(1)
     dim ListData$(1)*1023, ListRow$(1)*1023
+    dim SelectedRows(1)
 
-    def library fnExportListviewCSV(Window,SPEC$;GenFileName,Delim$,Filename$*255,___,WaitWin,CS,NumOfCols,turn,instance,n,m,SortNext,Format$*64)
+    def library fnExportListviewCSV(Window,SPEC$;GenFileName,Delim$,Filename$*255,___,WaitWin,CS,NumOfCols,turn,instance,n,m,SortNext,Format$*64,Selno,Selected)
        if fn43 then
           library : fnGetFileNumber,fnShowMessage
 
           if ~len(trim$(Delim$)) then let delim$='","'
           let WaitWin=fnShowMessage("Exporting... Please Wait.")
 
-          ! Query the listview Header
-          INPUT #Window, FIELDS SPEC$&",HEADERS,,nowait ": (MAT HEADERS$,MAT EXWIDTHS,MAT EXFORMS$)
+          ! Query the Listview Header
+          input #Window, fields Spec$&",HEADERS,,nowait ": (MAT HEADERS$,MAT EXWIDTHS,MAT EXFORMS$)
           let Mat2str(Mat Headers$,Headers$,'","')
 
           ! Read the Listview Filter
-          input #Window, fields spec$&",mask,,nowait" : (mat mask)
+          input #Window, fields Spec$&",mask,,nowait" : (mat mask)
           ! Read number of columns
-          INPUT #Window, FIELDS SPEC$&",colcnt,all,nowait" : numofcols
+          input #Window, fields Spec$&",colcnt,all,nowait" : numofcols
 
           ! Handle any Sorting that has occurred.
-          INPUT #Window, FIELDS SPEC$&",rowsub,all,displayed_order,nowait": MAT SortOrder
+          input #Window, fields Spec$&",rowsub,all,displayed_order,nowait": MAT SortOrder
 
+          input #Window, fields Spec$&",rowcnt,sel,nowait ": Selno
+          if Selno>1 And Msgbox("Do you ONLY want to include selected items in your report?","List Report","Yn","QST")=2 then
+             let Selected=1
+             mat SelectedRows(Selno)
+             input #Window, fields Spec$&",rowsub,sel,nowait": Mat SelectedRows
+          else
+             let Selected=0
+          end if
 
           ! Calculate the mat Start and mat End necessary to read the data
           ! We're using a trick here. Looks like BR Returns displayed_order with all the
@@ -6465,10 +6484,16 @@
           mat ListRow$(numofcols)
 
           ! Read the data in the order sorted
+          let M=0
           for n=1 to udim(mat Start)
-             input #Window, fields spec$&",row,range,nowait" : start(n), ender(n), (mat ListRow$)
-             mat ListData$(((n-1)*numofcols)+1:n*numofcols)=ListRow$
+             if ~Selected or srch(mat SelectedRows,Start(n))>0 then ! If not "selection only" or if this is part of the selection
+                let M+=1
+                input #Window, fields spec$&",row,range,nowait" : start(n), ender(n), (mat ListRow$)
+                mat ListData$(((M-1)*numofcols)+1:M*numofcols)=ListRow$
+             end if
           next n
+          
+          mat ListData$(numOfCols*M)
 
           ! Find a unique name
           if GenFileName then
@@ -6515,7 +6540,7 @@
 
              let printrow$=""
              let turn=turn+numofcols
-          loop while turn<(numofcols*udim(mat Start))
+          loop while turn<udim(mat listdata$)
 
           close #CS:
 
@@ -6551,7 +6576,7 @@
     dim EmailAddressString$*10256
     def library FnSendEmail(Emailaddress$*255,EmailMessage$*10000;Subject$*255,Invoicefile$*255,noprompt,BCCEmail$*255,mat CCEmails$,CCAsTo,___,Resultfile,Success,Outputstring$*1024,Index)
 
-       library "fileio" : fnOpenFile, fnGetFileNumber, fnDoesLayoutExist
+       library : fnOpenFile, fnGetFileNumber, fnDoesLayoutExist
        if fnDoesLayoutExist("emailcfg") then
           if exists("sendemail.exe") then
              let EmailConf=fnOpen("emailcfg",mat EmailConf$,mat EmailConf,mat Form$,1,0,0,"",d$,D,0,0,1)
