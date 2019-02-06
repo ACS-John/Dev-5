@@ -528,8 +528,8 @@ def fn_setup
 		on error goto ERTN
 		dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256
-		default_min_fontsize_height$='14'
-		default_min_fontsize_width$='6'
+		default_min_fontsize_height$='15' ! '14'
+		default_min_fontsize_width$='8' ! '6'
 		dim background_picture_default$*256
 		background_picture_default$=os_filename$('S:\Core\wallpaper\301H.jpg')
 		!

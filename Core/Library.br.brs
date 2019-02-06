@@ -141,6 +141,13 @@ def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
 	library 'S:\Core\FileIO\fileio.br': fnCopyFile
 	fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
 fnend
+def library fnSendEmail(emailAddress$*255,emailMessage$*10000; subject$*255,invoiceFile$*255,noPrompt,BCCEmail$*255,mat CCEmails$,CCAsTo)
+	library 'S:\Core\FileIO\fileio.br': fnSendEmail
+	fnSendEmail=fnSendEmail(emailAddress$,emailMessage$, subject$,invoiceFile$,noPrompt,BCCEmail$,mat CCEmails$,CCAsTo)
+fnend
+
+
+
 ! /r
 def library Fn_Encodebase64(&Content$)
 	library 'S:\Core\base64_l.br': Fn_Encodebase64

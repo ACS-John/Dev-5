@@ -1,17 +1,17 @@
 fn_acsSystemInitialize
 fn_setup
 fnChain('S:\Core\Menu.br', 0,1)
-def library fnAcsSystemInitialize(; isScreenIOtest)
+def library fnAcsSystemInitialize(; syInitMode)
 	 if ~setup then let fn_setup
-	 fnAcsSystemInitialize=fn_acsSystemInitialize( isScreenIOtest)
+	 fnAcsSystemInitialize=fn_acsSystemInitialize( syInitMode)
 fnend
-def fn_acsSystemInitialize(; isScreenIOtest)
-	! isScreenIOtest=1 =  Screen IO Test
-	! isScreenIOtest=2 =  Collection-Master Add-On
-	if ~isScreenIOtest or env$('acsVersion')='' then
+def fn_acsSystemInitialize(; syInitMode)
+	! syInitMode=1 =  Screen IO Test
+	! syInitMode=2 =  Collection-Master Add-On
+	if ~syInitMode or env$('acsVersion')='' then
 		startStatusLine=0 : pr newpage
-		if isScreenIOtest=2 then
-			fn_startStatus("Loading Collection-Master Add-On core components..." )
+		if syInitMode=2 then
+			fn_startStatus("Loading Collection-Master Add-On coresyu components..." )
 		else
 			fn_startStatus("Loading ACS System..." )
 			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
@@ -76,12 +76,12 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 		execute 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~isScreenIOtest then let fncheckcompiled ! sets the current directory to "S:" if it is not already 
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then let fncheckcompiled ! sets the current directory to "S:" if it is not already 
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			execute 'config editor'
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
-			setenv('programdata',env$('CsServerTemp'))
+				setenv('programdata',env$('CsServerTemp'))
 			end if
 			setenv('Temp',env$('programdata')&'\ACS\Temp\Session'&session$)
 			fnmakesurepathexists(env$('Temp')&'\')
@@ -108,7 +108,7 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 				fnSetClient(tmpClientSelected$)
 			end if
 		! /r
-		if isScreenIOtest<>2 then
+		if syInitMode<>2 then
 			if env$('acsProduct')='ACS Online' then
 				setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 			else
@@ -164,7 +164,7 @@ def fn_acsSystemInitialize(; isScreenIOtest)
 			fn_writeProc(''   ,'execute ''load "''&program$&''"''')
 		end if
 		setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
-		! if isScreenIOtest then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
+		! if syInitMode then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 		fn_startStatus('Identifying your system...')
 		fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
 		if env$('unique_computer_id')='42601D50-D3A4-81E4-29A3-605718581E48' then ! little koi
