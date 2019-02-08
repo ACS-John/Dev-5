@@ -37,7 +37,8 @@ set pathTo=F:\clsinc
 
 @echo Source:       %pathFrom%
 @echo Destination:  %pathTo%
-copy "%pathFrom%\custom\menu_win.txt" "%pathTo%\*.*"
-copy "%pathFrom%\fileio.ini" "%pathTo%\*.*"
+copy "%pathFrom%\custom\menu_win.txt" "%pathTo%\custom\*.*"
+REM DO NOT DO THIS - IT BREAKS conditional theme editor.		copy "%pathFrom%\fileio.ini" "%pathTo%\*.*"
 roboCopy "%pathFrom%\Collection-Master Add-On" "%pathTo%\Collection-Master Add-On" *.* /XF *.brs /S
 roboCopy "%pathFrom%\Core" "%pathTo%\Core" *.* /s
+rem pause

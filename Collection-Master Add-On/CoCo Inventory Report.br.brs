@@ -22,47 +22,64 @@ fntop(program$)
 	fnAddOneN(mat coco, 976)
 	fnAddOneN(mat coco, 540)
 	fnAddOneN(mat coco,1116)
-	! fnAddOneN(mat coco,1124)
-	! fnAddOneN(mat coco, 973)
-	! fnAddOneN(mat coco,6011)
-	! fnAddOneN(mat coco, 962)
-	! fnAddOneN(mat coco, 995)
-	! fnAddOneN(mat coco, 101)
-	! fnAddOneN(mat coco, 110)
-	! fnAddOneN(mat coco, 966)
-	! fnAddOneN(mat coco,1014)
-	! fnAddOneN(mat coco,1147)
-	! fnAddOneN(mat coco, 999)
-	! fnAddOneN(mat coco, 994)
-	! fnAddOneN(mat coco, 980)
-	! fnAddOneN(mat coco, 675)
-	! fnAddOneN(mat coco,1005)
-	! fnAddOneN(mat coco,1018)
-	! fnAddOneN(mat coco, 969)
-	! fnAddOneN(mat coco, 979)
-	! fnAddOneN(mat coco,1105)
-	! fnAddOneN(mat coco, 986)
-	! fnAddOneN(mat coco,1127)
-	! fnAddOneN(mat coco, 984)
-	! fnAddOneN(mat coco,   2)
-	! fnAddOneN(mat coco, 967)
-	! fnAddOneN(mat coco,1133)
-	! fnAddOneN(mat coco,1083)
-	! fnAddOneN(mat coco, 749)
+	fnAddOneN(mat coco,1124)
+	fnAddOneN(mat coco, 973)
+	fnAddOneN(mat coco,6011)
+	fnAddOneN(mat coco, 962)
+	fnAddOneN(mat coco, 995)
+	fnAddOneN(mat coco, 101)
+	fnAddOneN(mat coco, 110)
+	fnAddOneN(mat coco, 966)
+	fnAddOneN(mat coco,1014)
+	fnAddOneN(mat coco,1147)
+	fnAddOneN(mat coco, 999)
+	fnAddOneN(mat coco, 994)
+	fnAddOneN(mat coco, 980)
+	fnAddOneN(mat coco, 675)
+	fnAddOneN(mat coco,1005)
+	fnAddOneN(mat coco,1018)
+	fnAddOneN(mat coco, 969)
+	fnAddOneN(mat coco, 979)
+	fnAddOneN(mat coco,1105)
+	fnAddOneN(mat coco, 986)
+	fnAddOneN(mat coco,1127)
+	fnAddOneN(mat coco, 984)
+	fnAddOneN(mat coco,   2)
+	fnAddOneN(mat coco, 967)
+	fnAddOneN(mat coco,1133)
+	fnAddOneN(mat coco,1083)
+	fnAddOneN(mat coco, 749)
 	! /r
 ! ! r: ask 
 ! 	fntos
+dim coco_selected$(0)*256
+dim coco_unselected$(0)*256
+mat coco_selected$(udim(mat coco))
+for item=1 to udim(mat coco)
+	coco_selected$(item)=str$(coco(item))&'³'&rtrm$(fn_cocoData$(coco(item),'name'))&'³'&rtrm$(fn_cocoData$(coco(item),'email'))
+nex item
+if ~cocoSelectSetup then
+	cocoSelectSetup=1
+	mat D_Grid_Heading$(3)     	: mat D_Grid_Width(3)	: mat D_Grid_Form$(3)
+	D_Grid_Heading$(1)='Key'  	: D_Grid_Width(1)= 5 	: D_Grid_Form$(1)='128/C 5,[T]L'
+	D_Grid_Heading$(2)='Name' 	: D_Grid_Width(2)=25 	: D_Grid_Form$(2)='128/C 25,[T]L'
+	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=25 	: D_Grid_Form$(3)='128/C 25,[T]L'
+end if
+
+fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$,1)
+
 ! 	fnacs
 ! ! /r
-for cocoItem=1 to udim(mat coco)
+for cocoItem=1 to udim(mat coco_selected$)
+	coco$=coco_selected$(cocoItem)
 	if cocoItem=1 then
-		fnSel(1024, 'Select Output for all '&str$(udim(mat coco))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
+		fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
 		! fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32)
 		! fnSel(80,"Select Report Printer",'Cancel','HTML')
 	else
 		fnReopen_last_printer
 	end if
-	print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&str$(coco(cocoItem))&'.'
+	print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&coco$&'.'
 	! masterKey$=  "forwarder number here"
 	restore #hM: ! ,key=>masterKey$: 
 	pr #255: '</pre>'
@@ -70,7 +87,7 @@ for cocoItem=1 to udim(mat coco)
 	gosub PrHeader
 	do
 		read #hM,using mFormAll$: mat masterData$,mat masterDataN eof NextCoCo
-		if masterDataN(master_coco_no)=coco(cocoItem) then
+		if masterDataN(master_coco_no)=val(coco$) then
 			pr #255: '<tr> ';
 			pr #255: '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
 			pr #255: '<td>'&masterData$(master_fileno)&'</td>';
@@ -151,13 +168,14 @@ def fn_setup
 		
 		
 		
-		library "CLSUtil/Library": fnadd_one$,fngrid_setup,fnget_file,fnget_groups,fnuser_init$,fnsecurity,fnget_form,fnget_formall$,fnget_var$,fngethandle,fnremove_arrayitem$,fnremove_arrayitem,fnadd_one,fncom
-		library "CLSUtil/Library": fnmessagebox,fn_encryptdecrypt,fndefault_password$,fnlist_print,fnsetmatcnc,fngui_push_on,fnprogram_top
-		library "CLSUtil/Library": fngenerate_buttons,fnerase_buttons,fndisplay_top ! ,fnarray_item_insert$
-		library 'GridIO/Library': fnmulti_select,fnconfirm,fnconfirm_delete
-		library 'RE/Prog2': fnrights_effective
-		library 'Theme/Theme': fnsection_divider
-		library 'sql/library': fnopen_sql_file,fnsql_setup$
+		library 'Library\clsUtil': fnmessagebox
+		library 'Library\clsUtil': fngrid_setup
+		library 'Library\GridIO': fnmulti_select
+		library 'Library\GridIO': fnconfirm
+		library 'Library\GridIO': fnconfirm_delete
+		library 'Prog2\RE': fnrights_effective
+		library 'Theme\Theme': fnsection_divider
+		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
 		
 		gosub SetupSql
 		gosub SetupPrint
@@ -196,6 +214,36 @@ OPEN_FILES: ! r: (Ends by Line 20990) - Open_Files #AutoNumber# 20000,10
 	open #groupmem_handle:=70: "Name=GROUPMEM//8,KFName=GROUPMEM.GRP//8,USE,RecL=6,KPs=1/4,KLn=3U/3U,Shr",internal,outin,keyed 
 	open #groupmem_usr_handle:=71: "Name=GROUPMEM//8,KFName=GROUPMEM.USR//8,USE,RecL=6,KPs=4/1,KLn=3U/3U,Shr",internal,outin,keyed 
 return  ! /r
+def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
+	if ~setupCocoData then
+		setupCocoData=1
+		dim cocoData$(0)*60
+		dim cocoDataN(0)
+		dim cocoFieldsc$(0)*20
+		dim cocoFieldsN$(0)*20
+		dim cocoFormAll$*256
+		execute "*SubProc "&fnsql_setup$('masco',mat cocoData$,mat cocoDataN,mat cocoFieldsc$,mat cocoFieldsN$,cocoFormAll$)
+	end if
+	if ~hCoco then
+		open #hCoco:=fngethandle:'name=masco//8,kfname=masco.idx//8,shr',internal,input,keyed
+	end if
+	field$=trim$(uprc$(field$))
+	if cocoNo<>cocoNo_prior then
+		read #hCoco,using cocoFormAll$,key=cnvrt$('BH 3',cocoNo): mat cocoData$,mat cocoDataN
+		cocoNo_prior=cocoNo
+	end if
+	whichC=srch(mat cocoFieldsc$,field$)
+	whichN=srch(mat cocoFieldsn$,field$)
+	if whichC then
+		return$=cocoData$(whichC)
+	else if whichN then
+		return$=str$(cocoDataN(whichN))
+	else
+		pr 'can not find a field with the name '&field$&' in masco.'
+		pause
+	end if
+	fn_cocoData$=return$
+fnend
 include: cm\enum\common
 include: cm\err
 include: cm\print
