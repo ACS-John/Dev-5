@@ -293,7 +293,7 @@ def fn_setup
 
 
 		library "CLSUtil/Library": fnadd_one$,fngrid_setup,fnget_file,fnget_groups,fnuser_init$,fnsecurity,fnget_form,fnget_formall$,fnget_var$,fngethandle,fnremove_arrayitem$,fnremove_arrayitem,fnadd_one,fncom
-		library "CLSUtil/Library": fnmessagebox,fn_encryptdecrypt,fndefault_password$,fnlist_print,fnsetmatcnc,fngui_push_on,fnprogram_top
+		library "CLSUtil/Library": fnmessagebox,fn_encryptdecrypt,fndefault_password$,fnlist_print,fngui_push_on,fnprogram_top
 		library "CLSUtil/Library": fngenerate_buttons,fnerase_buttons,fndisplay_top ! ,fnarray_item_insert$
 		library 'GridIO/Library': fnmulti_select,fnconfirm,fnconfirm_delete
 		library 'RE/Prog2': fnrights_effective
