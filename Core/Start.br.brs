@@ -11,7 +11,7 @@ def fn_acsSystemInitialize(; syInitMode)
 	if ~syInitMode or env$('acsVersion')='' then
 		startStatusLine=0 : pr newpage
 		if syInitMode=2 then
-			fn_startStatus("Loading Collection-Master Add-On coresyu components..." )
+			fn_startStatus("Loading Collection-Master Add-On core components..." )
 		else
 			fn_startStatus("Loading ACS System..." )
 			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"

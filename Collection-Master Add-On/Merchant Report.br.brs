@@ -113,7 +113,7 @@ fnAddOneN(mat forwarderFilter,4035)
 				else if trim$(masterData$((master_lpaymnt_date)))<>'' then
 					paymentScheduled(month)+=1
 				end if
-				dim allDebtor$(0)*256,allDebtorN(0)
+				dim allDebtor$(0,0)*256,allDebtorN(0,0)
 				debtorCount=fnAllDebtors(fileno$,hDebtor,Mat allDebtor$,Mat allDebtorN)
 				! if trim$(fileno$)='14893630' then pr 'found it.  this person should have a bankruptcy.' : pause
 				! if trim$(fileno$)='14901075' then pr 'found it.  this person should have a D1 Employer.' : pause

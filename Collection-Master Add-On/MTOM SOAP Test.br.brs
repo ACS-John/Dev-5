@@ -106,6 +106,7 @@ def fn_mtomSoapOpen(; efilOpen$*128)
 	dim outFile$*256
 	outFile$=os_filename$(env$('temp'))&'\mtomSoapOut'&session$&'.xml'
 	open #hOut:=fngethandle: 'name='&outFile$&',recl=2048,replace',d,o
+	pr #hOut: 'Nonce='&str$(days(date$))&srep$(time$,':','')&str$(int(rnd*9999990300))&str$(int(rnd*9999990300))
 	if efilOpen$<>'' then 
 		fn_prOutXmlEfil_open(efilOpen$)
 	end if
