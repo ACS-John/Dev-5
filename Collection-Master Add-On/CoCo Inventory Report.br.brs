@@ -52,21 +52,22 @@ fntop(program$)
 	! /r
 ! ! r: ask 
 ! 	fntos
-dim coco_selected$(0)*256
-dim coco_unselected$(0)*256
-mat coco_selected$(udim(mat coco))
+dim coco_selected$(0)*2048
+mat coco_selected$(0)
+dim coco_unselected$(0)*2048
+mat coco_unselected$(udim(mat coco))
 for item=1 to udim(mat coco)
-	coco_selected$(item)=str$(coco(item))&'³'&rtrm$(fn_cocoData$(coco(item),'name'))&'³'&rtrm$(fn_cocoData$(coco(item),'email'))
+	coco_unselected$(item)=str$(coco(item))&'Â³'&rtrm$(fn_cocoData$(coco(item),'name'))&'Â³'&rtrm$(fn_cocoData$(coco(item),'email'))
 nex item
 if ~cocoSelectSetup then
 	cocoSelectSetup=1
 	mat D_Grid_Heading$(3)     	: mat D_Grid_Width(3)	: mat D_Grid_Form$(3)
-	D_Grid_Heading$(1)='Key'  	: D_Grid_Width(1)= 5 	: D_Grid_Form$(1)='128/C 5,[T]L'
-	D_Grid_Heading$(2)='Name' 	: D_Grid_Width(2)=25 	: D_Grid_Form$(2)='128/C 25,[T]L'
-	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=25 	: D_Grid_Form$(3)='128/C 25,[T]L'
+	D_Grid_Heading$(1)='Key'  	: D_Grid_Width(1)= 5 	: D_Grid_Form$(1)='C 5,[T]L'
+	D_Grid_Heading$(2)='Name' 	: D_Grid_Width(2)=60 	: D_Grid_Form$(2)='C 60,[T]L'
+	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=60 	: D_Grid_Form$(3)='C 60,[T]L'
 end if
 
-fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$,1)
+fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
 
 ! 	fnacs
 ! ! /r

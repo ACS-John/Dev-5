@@ -144,24 +144,32 @@ def fn_acsSystemInitialize(; syInitMode)
 				pause
 			end if
 		end if
-		fn_writeProc('r','stop'             )
-		fn_writeProc('' ,'clear resi'       )
-		fn_writeProc('' ,'run '&program$    )
+		if ~exists('r') then
+			fn_writeProc('r','stop'             )
+			fn_writeProc('' ,'clear resi'       )
+			fn_writeProc('' ,'run '&program$    )
+		end if
 		!
-		fn_writeProc('relive','stop'                              )
-		fn_writeProc(''      ,'execute ''load "''&program$&''"''' )
-		fn_writeProc(''      ,'run '                              )
+		! fn_writeProc('relive','stop'                              )
+		! fn_writeProc(''      ,'execute ''load "''&program$&''"''' )
+		! fn_writeProc(''      ,'run '                              )
 		!
 		if env$('ACSDeveloper')<>'' then 
-			fn_writeProc('reload','end')
-			fn_writeProc(''      ,'execute ''load "''&program$&''"''')
-			fn_writeProc('out',"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
-			fn_writeProc('ed' ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
-			fn_writeProc('in' ,'end')
-			fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
-			fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
-			fn_writeProc(''   ,"exec 'sy """"C:\ACS\Util\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
-			fn_writeProc(''   ,'execute ''load "''&program$&''"''')
+			if ~exists('reload') then
+				fn_writeProc('reload','end')
+				fn_writeProc(''      ,'execute ''load "''&program$&''"''')
+				fn_writeProc('out',"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+			end if
+			if ~exists('ed') then
+				fn_writeProc('ed' ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+			end if
+			if ~exists('in') then
+				fn_writeProc('in' ,'end')
+				fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
+				fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
+				fn_writeProc(''   ,"exec 'sy """"C:\ACS\Util\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
+				fn_writeProc(''   ,'execute ''load "''&program$&''"''')
+			end if
 		end if
 		setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 		! if syInitMode then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
