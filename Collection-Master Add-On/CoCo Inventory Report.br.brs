@@ -52,12 +52,14 @@ fntop(program$)
 	! /r
 ! ! r: ask 
 ! 	fntos
+msDelim$=chr$(179) ! ("³") '|' ! '³'
 dim coco_selected$(0)*2048
 mat coco_selected$(0)
 dim coco_unselected$(0)*2048
 mat coco_unselected$(udim(mat coco))
 for item=1 to udim(mat coco)
-	coco_unselected$(item)=str$(coco(item))&'³'&rtrm$(fn_cocoData$(coco(item),'name'))&'³'&rtrm$(fn_cocoData$(coco(item),'email'))
+	! coco_unselected$(item)=str$(coco(item))&'³'&rtrm$(fn_cocoData$(coco(item),'name'))&'³'&rtrm$(fn_cocoData$(coco(item),'email'))
+	coco_unselected$(item)=str$(coco(item))&msDelim$&rtrm$(fn_cocoData$(coco(item),'name'))&msDelim$&rtrm$(fn_cocoData$(coco(item),'email'))
 nex item
 if ~cocoSelectSetup then
 	cocoSelectSetup=1
@@ -72,7 +74,7 @@ fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',
 ! 	fnacs
 ! ! /r
 for cocoItem=1 to udim(mat coco_selected$)
-	coco$=coco_selected$(cocoItem)
+	coco$=coco_selected$(cocoItem)(1:pos(coco_selected$(cocoItem),msDelim$,1)-1)
 	if cocoItem=1 then
 		fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
 		! fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32)

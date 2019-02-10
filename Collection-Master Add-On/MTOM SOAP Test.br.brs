@@ -222,6 +222,7 @@ def fn_streamDocument
 		pr #hOut: tmpLine$
 	loop
 	SdTmpEof: !
+	close #hTmp: 
 	! /r
 	fn_prOutXmlItem('filedFor'           ,'')
 	fn_prOutXmlItem('docNumber'          ,'')
