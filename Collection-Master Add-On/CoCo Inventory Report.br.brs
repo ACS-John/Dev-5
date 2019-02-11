@@ -69,6 +69,9 @@ if ~cocoSelectSetup then
 	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=60 	: D_Grid_Form$(3)='C 60,[T]L'
 end if
 
+setenv('Session_Rows',str$(24))
+setenv('Session_Cols',str$(80))
+
 fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
 
 ! 	fnacs
