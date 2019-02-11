@@ -3,14 +3,18 @@ end
 def fn_setup
 	if ~setup_library then
 		setup_library=1
-		library 'S:\Core\Library': fnprg,fnerror
-		library 'S:\Core\Library': fnmsgbox,fnpause
-		library 'S:\Core\Library': fngethandle,fnCmdKey
+		library 'S:\Core\Library': fnprg
+		library 'S:\Core\Library': fnerror
+		library 'S:\Core\Library': fnmsgbox
+		library 'S:\Core\Library': fnpause
+		library 'S:\Core\Library': fnCmdKey
+		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fndate_picker$
-		library 'S:\Core\Library': fnlistprint
+		library 'S:\Core\Library': fnListPrint
 		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnMakeSurePathExists
 		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnFree
 	end if
 	on error goto ERTN
 	dim _program$(1)*255
@@ -249,9 +253,9 @@ def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 	end if
 fnend
-def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,con,tabcon)
+def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,seltype,usr,con,tabcon)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
-	! mat cm$		(column mask)=(see mask chart in screen ace manual)
+	! mat colMask$		(column mask)=(see mask chart in screen ace manual)
 	! seltype		0=editable cells,	 1=row selection,	 2=column selection
 	! usr				(use or repl)=0=replace/build new,
 	!												 >0=use previous (sorta disables fnflexadd1
@@ -279,14 +283,18 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	all_hdr$=all_mask$=""
 	! fn_get_flexhandle
 	filenumber=fn_get_flexhandle(1)
-	sfn$=trim$(sfn$)&env$('cno') : optfile$=sfn$&"[SESSION].tmp"
+	sfn$=trim$(sfn$)&env$('cno')
+	optfile$=sfn$&"[SESSION].tmp"
 	hdr_count=udim(ch$) : hdrfile$=sfn$&".hdr"
 	if usr<>0 then goto USEPREVIOUS
 	XRETRY: ! !print "Retrying delete here! (If you see this twice)"
-	if exists(env$('temp')&'\acs\'&optfile$) then execute '*free "'&env$('temp')&'\acs\'&optfile$&'" -n' ioerr ignore ! retry
+	if exists(env$('temp')&'\acs\'&optfile$) then
+		fnFree(env$('temp')&'\acs\'&optfile$)
+	end if
+	
 	close #filenumber: ioerr ignore
 	if exists(env$('temp')&'\acs\'&hdrfile$)<>0 then
-		execute '*free "'&env$('temp')&'\acs\'&hdrfile$&'" -n' ioerr XRETRY
+		fnFree(env$('temp')&'\acs\'&hdrfile$)
 	end if
 	USEPREVIOUS: !
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then
@@ -297,11 +305,11 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	fnflexinit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
 	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output
-	for j=1 to udim(cm$)
-		if trim$(cm$(j))="" then cm$(j)="80"
+	for j=1 to udim(mat colMask$)
+		if trim$(colMask$(j))="" then colMask$(j)="80"
 	next j
 	for j=1 to udim(ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
-	for j=1 to udim(cm$) : all_mask$=all_mask$&cm$(j)&chr$(9) : next j
+	for j=1 to udim(mat colMask$) : all_mask$=all_mask$&colMask$(j)&chr$(9) : next j
 	pr #filenumber,using "Form pos 1,C "&str$(len(all_hdr$)): all_hdr$
 	pr #filenumber,using "Form pos 1,C "&str$(len(all_mask$)): all_mask$
 	close #filenumber:
@@ -312,9 +320,9 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,us
 	end if
 	! __________________________________________________
 	fnflexinit1=0
-	if exists(env$('temp')&'\acs\'&optfile$)<>0 then
-		execute "*free "&env$('temp')&'\acs\'&optfile$&" -n" ioerr ignore
-	end if
+	! if exists(env$('temp')&'\acs\'&optfile$) then
+	! 	fnFree(env$('temp')&'\acs\'&optfile$)
+	! end if
 	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output
 	WRITE_TO_ACE: !
 	sorttype=0
@@ -338,7 +346,7 @@ def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend
-def library fntab(myline,mypos,height,width,mat cap$)
+def library fnTab(myline,mypos,height,width,mat cap$)
 	! myline sets the vertical (up and down) position
 	! mypos sets the horizontal (left and right) position
 	! height/width	-	 duh
@@ -475,8 +483,6 @@ fnend
 def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
 	if ~setup then let fn_setup
 	dim txt$*201,path1$*300,tt$*400,tabline$*8019
-	! dim mycd$*256
-	! env$('Core_Program_Current')	dim prg$*80 ! current running program with relative to app.path
 	dim cap$*128 ! caption / title bar text
 	dim addtomask$*40
 	! on=1
@@ -488,8 +494,7 @@ def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,paren
 	for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j ! was trim$ before 4/25/2017
 	cap$=env$('Program_Caption')
 	fn_get_flexhandle(1)
-	! do we even need this line - it screws up other things.
-	! does removing it screw anything up?
+	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 	goto XIT
@@ -522,7 +527,7 @@ def fn_ace_init
 	Session_Cols=115 : setenv('Session_Cols',str$(Session_Cols))
 fnend
 def fn_draw_windows
-	Session_Rows=max(Session_Rows,ace_lyne_max+4) : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
+	Session_Rows=max(Session_Rows,ace_lyne_max+4)   : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
 		!
 	Session_Cols=max(Session_Cols,ace_column_max+4) : setenv('Session_Cols',str$(Session_Cols)) ! in case 115 columns is not enough
 	if Session_Rows>35 or Session_Cols>115 or env$('cursys')='CM' then

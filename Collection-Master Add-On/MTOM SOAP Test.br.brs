@@ -115,8 +115,8 @@ def fn_mtomSoapFinis
 	pr #hout: '</efil:'&efilCache$&'>'
 	close #hOut:
 
-	dim mtomSoapSettings$*256
-	mtomSoapSettings$=os_filename$(program$(1:pos(program$,'\',-1)-1))&'\settings.ini'
+	! dim mtomSoapSettings$*256
+	! mtomSoapSettings$=os_filename$(program$(1:pos(program$,'\',-1)-1))&'\settings.ini'
 	dim replyFile$*256
 	replyFile$=outFile$(1:pos(outFile$,'.',-1)-1)&'-reply'&outFile$(pos(outFile$,'.',-1):inf)
 
@@ -124,7 +124,8 @@ def fn_mtomSoapFinis
 	mtomSoapCallFile$=os_filename$(env$('temp'))&'\call'&session$&'.cmd'
 	open #hCall:=fngethandle: 'name='&mtomSoapCallFile$&',recl=4096,replace',d,o
 	pr #hCall: 'prompt $p$g'
-	pr #hCall: '"'&mtomSoapUtil$&'" /settings="'&mtomSoapSettings$&'" /in="'&outFile$&'" /out="'&replyFile$&'"'
+	! pr #hCall: '"'&mtomSoapUtil$&'" /settings="'&mtomSoapSettings$&'" /in="'&outFile$&'" /out="'&replyFile$&'"'
+	pr #hCall: '"'&mtomSoapUtil$&'" /in="'&outFile$&'" /out="'&replyFile$&'"'
 	close #hCall:
 
 	execute 'sy "'&mtomSoapCallFile$&'"'
@@ -216,8 +217,8 @@ def fn_streamDocument
 	fn_prOutXmlItem('docType'            ,'')
 	! r: add sample PDF file    ! DataHandler pdfFile,
 	dim tmpLine$*4096
+	open #hTmp:=fngethandle: 'name='&program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf,Shr',d,i
 	do
-		open #hTmp:=fngethandle: 'name='&program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf',d,i
 		linput #hTmp: tmpLine$ eof SdTmpEof
 		pr #hOut: tmpLine$
 	loop
