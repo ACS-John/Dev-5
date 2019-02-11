@@ -52,14 +52,13 @@ fntop(program$)
 	! /r
 ! ! r: ask 
 ! 	fntos
-msDelim$=chr$(179) ! ("³") '|' ! '³'
+msDelim$=chr$(179) ! ("³") '|' ! '³'    !  chr$(179) works - the other things here do not.
 dim coco_selected$(0)*2048
 mat coco_selected$(0)
 dim coco_unselected$(0)*2048
 mat coco_unselected$(udim(mat coco))
 for item=1 to udim(mat coco)
-	! coco_unselected$(item)=str$(coco(item))&'³'&rtrm$(fn_cocoData$(coco(item),'name'))&'³'&rtrm$(fn_cocoData$(coco(item),'email'))
-	coco_unselected$(item)=str$(coco(item))&msDelim$&rtrm$(fn_cocoData$(coco(item),'name'))&msDelim$&rtrm$(fn_cocoData$(coco(item),'email'))
+	coco_unselected$(item)=str$(coco(item))&msDelim$&fn_cocoData$(coco(item),'name')&msDelim$&fn_cocoData$(coco(item),'email')
 nex item
 if ~cocoSelectSetup then
 	cocoSelectSetup=1
@@ -74,18 +73,23 @@ setenv('Session_Cols',str$(80))
 
 fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
 
-! 	fnacs
+! r: main loop
 ! ! /r
 for cocoItem=1 to udim(mat coco_selected$)
 	coco$=coco_selected$(cocoItem)(1:pos(coco_selected$(cocoItem),msDelim$,1)-1)
-	if cocoItem=1 then
-		fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
+	cocoN=val(coco$)
+	dim outFileName$*1024
+	outFileName$=fnSpecialFolderPath$('desktop')&'\'&env$('program_caption')&' - '&coco$&' - '&fnsafe_filename$(fn_cocoData$(cocoN,'name'))&' - '&date$('ccyy-mm-dd')&'-'&srep$(time$,':','-')&'.xls'
+	open #255: 'name='&env$('at')&outFileName$&',RecL=1024',d,o
+		
+	! if cocoItem=1 then
+		! fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
 		! fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32)
 		! fnSel(80,"Select Report Printer",'Cancel','HTML')
-	else
-		fnReopen_last_printer
-	end if
-	print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&coco$&'.'
+	! else
+	! 	fnReopen_last_printer
+	! end if
+	! print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&coco$&'.'
 	! masterKey$=  "forwarder number here"
 	restore #hM: ! ,key=>masterKey$: 
 	pr #255: '</pre>'
@@ -93,7 +97,7 @@ for cocoItem=1 to udim(mat coco_selected$)
 	gosub PrHeader
 	do
 		read #hM,using mFormAll$: mat masterData$,mat masterDataN eof NextCoCo
-		if masterDataN(master_coco_no)=val(coco$) then
+		if masterDataN(master_coco_no)=cocoN then
 			pr #255: '<tr> ';
 			pr #255: '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
 			pr #255: '<td>'&masterData$(master_fileno)&'</td>';
@@ -113,7 +117,19 @@ for cocoItem=1 to udim(mat coco_selected$)
 	loop
 	NextCoCo: !
 	pr #255: '</table>'
-	fnClose
+	fnAddOneC(mat fileCreated$,outFileName$)
+	fnAddOneC(mat fileEmailAddr$,fn_cocoData$(cocoN,'email'))
+	close #255:
+nex cocoItem
+for cocoItem=1 to udim(mat coco_selected$)
+	dim tmpEmail$*256
+	dim tmpEmailList$(0)*256
+	tmpEmail$=fn_cocoData$(cocoN,'email')
+	str2mat(tmpEmail$,mat tmpEmailList$,';')
+	for emailItem=1 to udim(mat tmpEmail$)
+		EXECUTE "sy -@ -c -M start mailto:"&tmpEmail$(emailItem)&"^&Subject="&Email_Subject$&'^&Attach="'&fileCreated$(cocoItem)
+		pause
+	nex emailItem
 nex cocoItem
 goto Finis ! /r
 PgOf: ! r:
@@ -138,7 +154,7 @@ PrHeader: ! r:
 		pr #255: '<th> Garn Date </th>'
 		pr #255: '</tr>'
 return ! /r
-Finis: ! 
+Finis: ! r:
 goto Xit ! /r
 Xit: fnXit
 def fn_setup
@@ -146,6 +162,8 @@ def fn_setup
 		setup=1
 		library 'library\CLSUtil.wb': fnDate_rpt10$
 		
+		library 'S:\Core\Library.br': fnsafe_filename$
+		library 'S:\Core\Library.br': fnSpecialFolderPath$
 		library 'S:\Core\Library.br': fngethandle
 		library 'S:\Core\Library.br': fnCountMatchesC
 		library 'S:\Core\Library.br': fnMsgBox
@@ -183,20 +201,20 @@ def fn_setup
 		library 'Theme\Theme': fnsection_divider
 		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
 		
-		gosub SetupSql
+		! gosub SetupSql
 		gosub SetupPrint
 		
 		
 	end if
 fnend
-SetupSql: ! r: (Ends by Line 14990) - SQL Setup #AutoNumber# 14900,1
-if ~setup_sql then 
-	setup_sql=1
-	!   printer
-	dim printer_data$(0)*60,printer_data(0),printer_fieldsc$(0)*20,printer_fieldsn$(0)*20,printer_formall$*512,printer_fc$(1,3)*80,printer_fn$(1,3)*80,printer_desc_c$(0)*80,printer_desc_n$(0)*80,printer_seq$(0)*80,printer_valid$(0)*80
-	execute "*SubProc "&fnsql_setup$('printer',mat printer_data$,mat printer_data,mat printer_fieldsc$,mat printer_fieldsn$,printer_formall$,mat printer_fc$,mat printer_fn$,mat printer_desc_c$,mat printer_desc_n$,mat printer_seq$,mat printer_valid$)
-end if  ! ~Setup_SQL
-return  ! /r SETUP_SQL
+! SetupSql: ! r: (Ends by Line 14990) - SQL Setup #AutoNumber# 14900,1
+! 	if ~setup_sql then 
+! 		setup_sql=1
+! 		!   printer
+! 		dim printer_data$(0)*60,printer_data(0),printer_fieldsc$(0)*20,printer_fieldsn$(0)*20,printer_formall$*512,printer_fc$(1,3)*80,printer_fn$(1,3)*80,printer_desc_c$(0)*80,printer_desc_n$(0)*80,printer_seq$(0)*80,printer_valid$(0)*80
+! 		execute "*SubProc "&fnsql_setup$('printer',mat printer_data$,mat printer_data,mat printer_fieldsc$,mat printer_fieldsn$,printer_formall$,mat printer_fc$,mat printer_fn$,mat printer_desc_c$,mat printer_desc_n$,mat printer_seq$,mat printer_valid$)
+! 	end if  ! ~Setup_SQL
+! return  ! /r SETUP_SQL
 OPEN_FILES: ! r: (Ends by Line 20990) - Open_Files #AutoNumber# 20000,10
 	fnopen_sql_file
 	table_related_count=6
@@ -241,7 +259,7 @@ def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
 	whichC=srch(mat cocoFieldsc$,field$)
 	whichN=srch(mat cocoFieldsn$,field$)
 	if whichC then
-		return$=cocoData$(whichC)
+		return$=rtrm$(cocoData$(whichC))
 	else if whichN then
 		return$=str$(cocoDataN(whichN))
 	else
