@@ -817,7 +817,7 @@ def fn_portion_stub(stubOnCheck)
 		fn_portion_stub_divernon
 	else 
 		fn_portion_stub_generic
-		if env$('client')='Edison' and stubOnCheck=1 then
+		if (env$('client')='Edison' or env$('client')='Crocket County') and stubOnCheck=1 then
 			pr #255: ''
 			pr #255: ''
 			pr #255: ''

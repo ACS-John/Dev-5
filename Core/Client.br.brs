@@ -319,6 +319,9 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
 			fn_add_ch_sys('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Brumbaugh' then 
+			fn_user_limit(64)
+			fn_add_ch_sys('CM')
 		else if env$('client')='Campbell' then 
 			fn_user_limit(4)
 			fn_add_ch_sys('CL')

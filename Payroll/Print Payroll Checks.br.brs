@@ -1325,14 +1325,14 @@ def fn_print_stub
 		fn_stub_hitBoxes(mat ltext$,mat lPos)
 		pr #255: "}" ! <-- end the font size of 8
 		fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
-	else if env$('client')='Crocket County' then
-		stubCount+=1
-		if stubCount=1 then
-			fn_stub_standard(4)
-		else if stubCount=2 then
-			stubCount=0
-			fn_stub_standard
-		end if
+	! else if env$('client')='Crocket County' then   <-- not necessary - that change was supposed to be in Checkbook.
+	! 	stubCount+=1
+	! 	if stubCount=1 then
+	! 		fn_stub_standard(4)
+	! 	else if stubCount=2 then
+	! 		stubCount=0
+	! 		fn_stub_standard
+	! 	end if
 	else 
 		fn_stub_standard
 	end if 
