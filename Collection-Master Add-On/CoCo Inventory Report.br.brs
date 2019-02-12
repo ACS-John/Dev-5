@@ -80,7 +80,7 @@ for cocoItem=1 to udim(mat coco_selected$)
 	cocoN=val(coco$)
 	dim outFileName$*1024
 	outFileName$=fnSpecialFolderPath$('desktop')&'\'&env$('program_caption')&' - '&coco$&' - '&fnsafe_filename$(fn_cocoData$(cocoN,'name'))&' - '&date$('ccyy-mm-dd')&'-'&srep$(time$,':','-')&'.xls'
-	open #255: 'name='&env$('at')&outFileName$&',RecL=1024',d,o
+	open #255: 'name='&env$('at')&outFileName$&',RecL=1024,replace',d,o
 		
 	! if cocoItem=1 then
 		! fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
@@ -92,52 +92,9 @@ for cocoItem=1 to udim(mat coco_selected$)
 	! print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&coco$&'.'
 	! masterKey$=  "forwarder number here"
 	restore #hM: ! ,key=>masterKey$: 
-	pr #255: '</pre>'
+	! pr #255: '</pre>'
 	pr #255: '<table>'
-	gosub PrHeader
-	do
-		read #hM,using mFormAll$: mat masterData$,mat masterDataN eof NextCoCo
-		if masterDataN(master_coco_no)=cocoN then
-			pr #255: '<tr> ';
-			pr #255: '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
-			pr #255: '<td>'&masterData$(master_fileno)&'</td>';
-			pr #255: '<td>'&masterData$(master_d1_name)&'</td>';
-			pr #255: '<td>'&masterData$(master_suit_date)&'</td>';
-			pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_suit_amt))&'</td>';
-			pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_balance))&'</td>';
-			pr #255: '<td>'&masterData$(master_jmt_date)&'</td>';
-			pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_jmt_amt))&'</td>';
-			pr #255: '<td>'&masterData$(master_lpaymnt_date)&'</td>';
-			pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_lpaymnt_amt))&'</td>';
-			pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>';
-			pr #255: '<td></td>'
-			pr #255: '<td></td>'
-			pr #255: '</tr> '
-		end if
-	loop
-	NextCoCo: !
-	pr #255: '</table>'
-	fnAddOneC(mat fileCreated$,outFileName$)
-	fnAddOneC(mat fileEmailAddr$,fn_cocoData$(cocoN,'email'))
-	close #255:
-nex cocoItem
-for cocoItem=1 to udim(mat coco_selected$)
-	dim tmpEmail$*256
-	dim tmpEmailList$(0)*256
-	tmpEmail$=fn_cocoData$(cocoN,'email')
-	str2mat(tmpEmail$,mat tmpEmailList$,';')
-	for emailItem=1 to udim(mat tmpEmail$)
-		EXECUTE "sy -@ -c -M start mailto:"&tmpEmail$(emailItem)&"^&Subject="&Email_Subject$&'^&Attach="'&fileCreated$(cocoItem)
-		pause
-	nex emailItem
-nex cocoItem
-goto Finis ! /r
-PgOf: ! r:
-	pr #255: newpage
-	! gosub PrHeader
-continue ! /r
-PrHeader: ! r:
-
+	! r: Pr Header
 		pr #255: '<tr>'
 		pr #255: '<th> CoCo  </th>'
 		pr #255: '<th> FileNo   </th>'
@@ -153,7 +110,50 @@ PrHeader: ! r:
 		pr #255: '<th> Interest </th>'
 		pr #255: '<th> Garn Date </th>'
 		pr #255: '</tr>'
-return ! /r
+	! /r
+
+	do
+		read #hM,using mFormAll$: mat masterData$,mat masterDataN eof NextCoCo
+		if masterDataN(master_coco_no)=cocoN then
+			! r: Pr Row
+				pr #255: '<tr> ';
+				pr #255: '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
+				pr #255: '<td>'&masterData$(master_fileno)&'</td>';
+				pr #255: '<td>'&masterData$(master_d1_name)&'</td>';
+				pr #255: '<td>'&masterData$(master_suit_date)&'</td>';
+				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_suit_amt))&'</td>';
+				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_balance))&'</td>';
+				pr #255: '<td>'&masterData$(master_jmt_date)&'</td>';
+				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_jmt_amt))&'</td>';
+				pr #255: '<td>'&masterData$(master_lpaymnt_date)&'</td>';
+				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_lpaymnt_amt))&'</td>';
+				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>';
+				pr #255: '<td></td>'
+				pr #255: '<td></td>'
+				pr #255: '</tr> '
+			! /r
+		end if
+	loop
+	NextCoCo: !
+	pr #255: '</table>'
+	dim fileCreated$(0)*1024
+	fnAddOneC(mat fileCreated$,outFileName$)
+	close #255:
+nex cocoItem
+for cocoItem=1 to udim(mat coco_selected$)
+	dim tmpEmail$*256
+	dim tmpEmailList$(0)*256
+	tmpEmail$=fn_cocoData$(cocoN,'email')
+	str2mat(tmpEmail$,mat tmpEmailList$,';')
+	for emailItem=1 to udim(mat tmpEmail$)
+		EXECUTE "sy -@ -c -M start mailto:"&tmpEmail$(emailItem)&"^&Subject="&Email_Subject$&'^&Attach="'&fileCreated$(cocoItem)
+		pause
+	nex emailItem
+nex cocoItem
+goto Finis ! /r
+PgOf: ! r:
+	pr #255: newpage
+continue ! /r
 Finis: ! r:
 goto Xit ! /r
 Xit: fnXit
@@ -195,49 +195,13 @@ def fn_setup
 		library 'Library\clsUtil': fnmessagebox
 		library 'Library\clsUtil': fngrid_setup
 		library 'Library\GridIO': fnmulti_select
-		library 'Library\GridIO': fnconfirm
-		library 'Library\GridIO': fnconfirm_delete
-		library 'Prog2\RE': fnrights_effective
-		library 'Theme\Theme': fnsection_divider
 		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
 		
-		! gosub SetupSql
-		gosub SetupPrint
+		! gosub SetupPrint
 		
 		
 	end if
 fnend
-! SetupSql: ! r: (Ends by Line 14990) - SQL Setup #AutoNumber# 14900,1
-! 	if ~setup_sql then 
-! 		setup_sql=1
-! 		!   printer
-! 		dim printer_data$(0)*60,printer_data(0),printer_fieldsc$(0)*20,printer_fieldsn$(0)*20,printer_formall$*512,printer_fc$(1,3)*80,printer_fn$(1,3)*80,printer_desc_c$(0)*80,printer_desc_n$(0)*80,printer_seq$(0)*80,printer_valid$(0)*80
-! 		execute "*SubProc "&fnsql_setup$('printer',mat printer_data$,mat printer_data,mat printer_fieldsc$,mat printer_fieldsn$,printer_formall$,mat printer_fc$,mat printer_fn$,mat printer_desc_c$,mat printer_desc_n$,mat printer_seq$,mat printer_valid$)
-! 	end if  ! ~Setup_SQL
-! return  ! /r SETUP_SQL
-OPEN_FILES: ! r: (Ends by Line 20990) - Open_Files #AutoNumber# 20000,10
-	fnopen_sql_file
-	table_related_count=6
-	! 
-	h_table_related(tr_stat_msg  =1)=fnopen_sql_file(table_related$(tr_stat_msg    )='Stat_Msg')    : tr_group_pos(tr_stat_msg   )=val(stat_msg_fc$(stat_msg_group,1))
-	h_table_related(tr_collfile  =2)=fnopen_sql_file(table_related$(tr_collfile    )='CollFile')    : tr_group_pos(tr_collfile   )=val(collfile_fc$(collfile_group_access_cd,1))
-	h_table_related(tr_printer   =3)=fnopen_sql_file(table_related$(tr_printer     )='Printer')     : tr_group_pos(tr_printer    )=val(printer_fc$(printer_group,1))
-	h_table_related(tr_masforw   =4)=fnopen_sql_file(table_related$(tr_masforw     )='MasForw')     : tr_group_pos(tr_masforw    )=val(masforw_fc$(masforw_group_access_cd,1))
-	h_table_related(tr_diarycdsec=5)=fnopen_sql_file(table_related$(tr_diarycdsec  )='DiaryCdSec') : tr_group_pos(tr_diarycdsec  )=val(stat_msg_fc$(diarycdsec_groupcode,1))
-	h_table_related(tr_zone_sec  =6)=fnopen_sql_file(table_related$(tr_zone_sec    )='Zone_Sec')    : tr_group_pos(tr_zone_sec   )=val(zone_sec_fc$(diarycdsec_groupcode,1))
-	! 
-	table_related_record_count=0
-	for table_item=1 to table_related_count
-		table_related_record_count+=lrec(h_table_related(table_item))
-	next table_item
-	open #masterhandle:=64: "Name=PERMISN//8,KFName=PERMISN.IDX//8,USE,RecL=60,KPs=1/4,KLn=3U/20U,Shr",internal,outin,keyed 
-	open #65: "Name=PERMISN//8,KFName=PERMISN.COD//8,USE,RecL=60,KPs=4/1,KLn=20U/3U,Shr",internal,outin,keyed 
-	open #h_userlist_in:=51: "Name=USERLIST//8,KFName=USERLIST.IN//8,Shr",internal,outin,keyed 
-	open #h_userlist_nam_unused:=52: "Name=USERLIST//8,KFName=USERLIST.NAM//8,Shr",internal,outin,keyed 
-	open #h_groups:=69: "Name=GROUPS//8,KFName=GROUPS.IDX//8,USE,RecL=43,KPs=1,KLn=3U,Shr",internal,outin,keyed 
-	open #groupmem_handle:=70: "Name=GROUPMEM//8,KFName=GROUPMEM.GRP//8,USE,RecL=6,KPs=1/4,KLn=3U/3U,Shr",internal,outin,keyed 
-	open #groupmem_usr_handle:=71: "Name=GROUPMEM//8,KFName=GROUPMEM.USR//8,USE,RecL=6,KPs=4/1,KLn=3U/3U,Shr",internal,outin,keyed 
-return  ! /r
 def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
 	if ~setupCocoData then
 		setupCocoData=1
@@ -270,5 +234,5 @@ def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
 fnend
 include: cm\enum\common
 include: cm\err
-include: cm\print
+! include: cm\print
 include: cm\enum\master
