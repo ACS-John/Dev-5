@@ -1,57 +1,47 @@
 on error goto Error_Hanler
 fn_setup
+setenv('Session_Rows',str$(24))
+setenv('Session_Cols',str$(80))
 fntop(program$)
 
-	! r: open master
-	dim masterData$(1)*60,masterDataN(1)
-	dim masterFieldsc$(1)*20,masterFieldsN$(1)*20
-	dim masterFormC$*1024,masterFormN$*1024
-	dim mFormAll$*2048
-	fnget_form("Master",mat masterData$,mat masterDataN,mat masterFieldsc$,mat masterFieldsN$,masterFormC$,masterFormN$)
-	fnunpack$(masterFormC$,masterFormN$)
-	mFormAll$=fnget_formall$
-	gosub enumMaster
-	open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,input,keyed
-	! dim masterData$(1)*60,masterDataN(1),masterFieldsc$(1)*20,masterFieldsN$(1)*20,masterFormC$*512,masterFormN$*512,masterFormAll$*512
-	! /r
-	! r: get mat CoCo
+open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,input,keyed
+! r: get mat CoCo
 	dim coco(0)
 	mat coco(0)
-	fnAddOneN(mat coco, 821)
-	fnAddOneN(mat coco, 945)
-	fnAddOneN(mat coco, 976)
-	fnAddOneN(mat coco, 540)
-	fnAddOneN(mat coco,1116)
-	fnAddOneN(mat coco,1124)
-	fnAddOneN(mat coco, 973)
-	fnAddOneN(mat coco,6011)
-	fnAddOneN(mat coco, 962)
-	fnAddOneN(mat coco, 995)
+	fnAddOneN(mat coco,   2)
 	fnAddOneN(mat coco, 101)
 	fnAddOneN(mat coco, 110)
-	fnAddOneN(mat coco, 966)
-	fnAddOneN(mat coco,1014)
-	fnAddOneN(mat coco,1147)
-	fnAddOneN(mat coco, 999)
-	fnAddOneN(mat coco, 994)
-	fnAddOneN(mat coco, 980)
+	fnAddOneN(mat coco, 540)
 	fnAddOneN(mat coco, 675)
-	fnAddOneN(mat coco,1005)
-	fnAddOneN(mat coco,1018)
-	fnAddOneN(mat coco, 969)
-	fnAddOneN(mat coco, 979)
-	fnAddOneN(mat coco,1105)
-	fnAddOneN(mat coco, 986)
-	fnAddOneN(mat coco,1127)
-	fnAddOneN(mat coco, 984)
-	fnAddOneN(mat coco,   2)
-	fnAddOneN(mat coco, 967)
-	fnAddOneN(mat coco,1133)
-	fnAddOneN(mat coco,1083)
 	fnAddOneN(mat coco, 749)
-	! /r
-! ! r: ask 
-! 	fntos
+	fnAddOneN(mat coco, 821)
+	fnAddOneN(mat coco, 945)
+	fnAddOneN(mat coco, 962)
+	fnAddOneN(mat coco, 966)
+	fnAddOneN(mat coco, 967)
+	fnAddOneN(mat coco, 969)
+	fnAddOneN(mat coco, 973)
+	fnAddOneN(mat coco, 976)
+	fnAddOneN(mat coco, 979)
+	fnAddOneN(mat coco, 980)
+	fnAddOneN(mat coco, 984)
+	fnAddOneN(mat coco, 986)
+	fnAddOneN(mat coco, 994)
+	fnAddOneN(mat coco, 995)
+	fnAddOneN(mat coco, 999)
+	fnAddOneN(mat coco,1005)
+	fnAddOneN(mat coco,1014)
+	fnAddOneN(mat coco,1018)
+	fnAddOneN(mat coco,1083)
+	fnAddOneN(mat coco,1105)
+	fnAddOneN(mat coco,1116)
+	fnAddOneN(mat coco,1124)
+	fnAddOneN(mat coco,1127)
+	fnAddOneN(mat coco,1133)
+	fnAddOneN(mat coco,1147)
+	fnAddOneN(mat coco,6011)
+! /r
+! r: ask 
 msDelim$=chr$(179) ! ("³") '|' ! '³'    !  chr$(179) works - the other things here do not.
 dim coco_selected$(0)*2048
 mat coco_selected$(0)
@@ -68,92 +58,95 @@ if ~cocoSelectSetup then
 	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=60 	: D_Grid_Form$(3)='C 60,[T]L'
 end if
 
-setenv('Session_Rows',str$(24))
-setenv('Session_Cols',str$(80))
-
 fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
-
-! r: main loop
 ! ! /r
-for cocoItem=1 to udim(mat coco_selected$)
-	coco$=coco_selected$(cocoItem)(1:pos(coco_selected$(cocoItem),msDelim$,1)-1)
-	cocoN=val(coco$)
-	dim outFileName$*1024
-	outFileName$=fnSpecialFolderPath$('desktop')&'\'&env$('program_caption')&' - '&coco$&' - '&fnsafe_filename$(fn_cocoData$(cocoN,'name'))&' - '&date$('ccyy-mm-dd')&'-'&srep$(time$,':','-')&'.xls'
-	open #255: 'name='&env$('at')&outFileName$&',RecL=1024,replace',d,o
-		
-	! if cocoItem=1 then
-		! fnSel(1024, 'Select Output for all '&str$(udim(mat coco_selected$))&' '&env$('cap')&'s' ,255, 'Cancel','HTML',env$('cap'))
-		! fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32)
-		! fnSel(80,"Select Report Printer",'Cancel','HTML')
-	! else
-	! 	fnReopen_last_printer
-	! end if
-	! print #255: 'As of '&fnDate_rpt10$(Date$)&' for CoCo '&coco$&'.'
-	! masterKey$=  "forwarder number here"
-	restore #hM: ! ,key=>masterKey$: 
-	! pr #255: '</pre>'
-	pr #255: '<table>'
-	! r: Pr Header
-		pr #255: '<tr>'
-		pr #255: '<th> CoCo  </th>'
-		pr #255: '<th> FileNo   </th>'
-		pr #255: '<th> d1_name </th>'
-		pr #255: '<th> suit_date </th>'
-		pr #255: '<th> suit_amt </th>'
-		pr #255: '<th> suit_amt </th>'
-		pr #255: '<th> Balance </th>'
-		pr #255: '<th>  Jmt Date </th>'
-		pr #255: '<th> Jmt Amount </th>'
-		pr #255: '<th> Last Payment Date </th>'
-		pr #255: '<th> Last Payment Amount </th>'
-		pr #255: '<th> Interest </th>'
-		pr #255: '<th> Garn Date </th>'
-		pr #255: '</tr>'
-	! /r
 
-	do
-		read #hM,using mFormAll$: mat masterData$,mat masterDataN eof NextCoCo
-		if masterDataN(master_coco_no)=cocoN then
-			! r: Pr Row
-				pr #255: '<tr> ';
-				pr #255: '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
-				pr #255: '<td>'&masterData$(master_fileno)&'</td>';
-				pr #255: '<td>'&masterData$(master_d1_name)&'</td>';
-				pr #255: '<td>'&masterData$(master_suit_date)&'</td>';
-				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_suit_amt))&'</td>';
-				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_balance))&'</td>';
-				pr #255: '<td>'&masterData$(master_jmt_date)&'</td>';
-				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_jmt_amt))&'</td>';
-				pr #255: '<td>'&masterData$(master_lpaymnt_date)&'</td>';
-				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_lpaymnt_amt))&'</td>';
-				pr #255: '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>';
-				pr #255: '<td></td>'
-				pr #255: '<td></td>'
-				pr #255: '</tr> '
-			! /r
-		end if
-	loop
-	NextCoCo: !
-	pr #255: '</table>'
-	dim fileCreated$(0)*1024
-	fnAddOneC(mat fileCreated$,outFileName$)
-	close #255:
+! r: open the files and pr headers
+cocoCount=udim(mat coco_selected$)
+dim outFileName$(0)*1024
+mat outFileName$(cocoCount)
+mat coco$(cocoCount)
+mat cocoN(cocoCount)
+mat hOut(cocoCount)
+for cocoItem=1 to cocoCount
+	coco$(cocoItem)=coco_selected$(cocoItem)(1:pos(coco_selected$(cocoItem),msDelim$,1)-1)
+	cocoN(cocoItem)=val(coco$(cocoItem))
+	dim tempFolder$*256 ! a safe place for read/write/delete/etc on the server.
+	tempFolder$='F:\CLSINC\TEMP'
+	outFileName$(cocoItem)=env$('program_caption')&' - '&coco$(cocoItem)&' - '&fnsafe_filename$(fn_cocoData$(cocoN(cocoItem),'name'))&' - '&date$('ccyy-mm-dd')&'-'&srep$(time$,':','-')&'.xls'
+	! outFileName$(cocoItem)=srep$(outFileName$(cocoItem),' ','_')
+	outFileName$(cocoItem)(0:0)=tempFolder$&'\'
+	open #hOut(cocoItem):=fngethandle: 'name='&outFileName$(cocoItem)&',RecL=1024,replace',d,o
+	pr #hOut(cocoItem): '<table>'
+	! r: Pr Header
+		pr #hOut(cocoItem): '<tr>'
+		pr #hOut(cocoItem): '<th> CoCo  </th>'
+		pr #hOut(cocoItem): '<th> FileNo   </th>'
+		pr #hOut(cocoItem): '<th> d1_name </th>'
+		pr #hOut(cocoItem): '<th> suit_date </th>'
+		pr #hOut(cocoItem): '<th> suit_amt </th>'
+		pr #hOut(cocoItem): '<th> suit_amt </th>'
+		pr #hOut(cocoItem): '<th> Balance </th>'
+		pr #hOut(cocoItem): '<th>  Jmt Date </th>'
+		pr #hOut(cocoItem): '<th> Jmt Amount </th>'
+		pr #hOut(cocoItem): '<th> Last Payment Date </th>'
+		pr #hOut(cocoItem): '<th> Last Payment Amount </th>'
+		pr #hOut(cocoItem): '<th> Interest </th>'
+		pr #hOut(cocoItem): '<th> Garn Date </th>'
+		pr #hOut(cocoItem): '</tr>'
+	! /r
 nex cocoItem
-for cocoItem=1 to udim(mat coco_selected$)
+! /r
+! r: add the bodys to the files 
+restore #hM: !
+do
+	read #hM,using mFormAll$: mat masterData$,mat masterDataN eof EoMaster
+	fncom(readCount+=1,lrec(hM),12)
+	cocoWhich=srch(mat cocoN,masterDataN(master_coco_no))
+	if cocoWhich>0 then
+		! r: Pr Row
+			pr #hOut(cocoWhich): '<tr> ';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&masterData$(master_fileno)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&masterData$(master_d1_name)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&masterData$(master_suit_date)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_suit_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_balance))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&masterData$(master_jmt_date)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_jmt_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&masterData$(master_lpaymnt_date)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_lpaymnt_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>';
+			pr #hOut(cocoWhich): '<td></td>'
+			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>'
+			pr #hOut(cocoWhich): '</tr> '
+		! /r
+	end if
+loop
+EoMaster: !
+! /r
+! r: finalize the files, close them, and email them
+for cocoItem=1 to cocoCount
+	pr #hOut(cocoItem): '</table>'
+	pr file$(hOut(cocoItem))
+	close #hOut(cocoItem):
+nex cocoItem
+for cocoItem=1 to cocoCount
 	dim tmpEmail$*256
+	tmpEmail$=fn_cocoData$(cocoN(cocoItem),'email')
 	dim tmpEmailList$(0)*256
-	tmpEmail$=fn_cocoData$(cocoN,'email')
 	str2mat(tmpEmail$,mat tmpEmailList$,';')
-	for emailItem=1 to udim(mat tmpEmail$)
-		EXECUTE "sy -@ -c -M start mailto:"&tmpEmail$(emailItem)&"^&Subject="&Email_Subject$&'^&Attach="'&fileCreated$(cocoItem)
-		pause
+	for emailItem=1 to udim(mat tmpEmailList$)
+		dim emailSubject$*256
+		emailSubject$=env$('program_caption')&' as of '&date$('month d, ccyy')&' for '&fn_cocoData$(cocoN(cocoItem),'name')
+		dim emailMessage$*1048
+		emailMessage$='See attached report.'&chr$(10)&'Should have been sent to '&tmpEmailList$(emailItem)
+		fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		! pause
 	nex emailItem
 nex cocoItem
+fncom(100,100,12)
 goto Finis ! /r
-PgOf: ! r:
-	pr #255: newpage
-continue ! /r
 Finis: ! r:
 goto Xit ! /r
 Xit: fnXit
@@ -162,6 +155,7 @@ def fn_setup
 		setup=1
 		library 'library\CLSUtil.wb': fnDate_rpt10$
 		
+		library 'S:\Core\Library.br': fnSendEmail
 		library 'S:\Core\Library.br': fnsafe_filename$
 		library 'S:\Core\Library.br': fnSpecialFolderPath$
 		library 'S:\Core\Library.br': fngethandle
@@ -197,7 +191,14 @@ def fn_setup
 		library 'Library\GridIO': fnmulti_select
 		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
 		
-		! gosub SetupPrint
+		dim masterData$(1)*60,masterDataN(1)
+		dim masterFieldsc$(1)*20,masterFieldsN$(1)*20
+		dim masterFormC$*1024,masterFormN$*1024
+		dim mFormAll$*2048
+		fnget_form("Master",mat masterData$,mat masterDataN,mat masterFieldsc$,mat masterFieldsN$,masterFormC$,masterFormN$)
+		fnunpack$(masterFormC$,masterFormN$)
+		mFormAll$=fnget_formall$
+		gosub enumMaster
 		
 		
 	end if
@@ -234,5 +235,4 @@ def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
 fnend
 include: cm\enum\common
 include: cm\err
-! include: cm\print
 include: cm\enum\master

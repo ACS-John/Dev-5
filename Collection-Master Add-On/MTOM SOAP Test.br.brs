@@ -1,3 +1,31 @@
+! For Method - listMunicipalities
+! <info>
+! 	<method>
+! 		ListMunicipalities
+! 	</method>
+! 	<parameterList>
+! 	</parameterList>
+! </info>
+! 
+! For Method - loadExistingCase
+! <info>
+! 	<method>
+! 		LoadExistingCase
+! 	</method>
+! 	<parameterList>
+! 		<caseNumber>C99CR160000004</caseNumber>
+! 		<fileBarNumber></fileBarNumber>
+! 		<hearingDate></hearingDate>
+! 		<notificationEmail></notificationEmail>
+! 		<optNotificationEmail1></optNotificationEmail1>
+! 		<optNotificationEmail2></optNotificationEmail2>
+! 		<custMemo></custMemo>
+! 		<dssNumber></dssNumber>
+! 	</parameterList>
+! </info>
+
+
+
 fn_setup
 ! r: highly subjective setup
 	dim mtomSoapUtil$*256
@@ -102,17 +130,23 @@ def fn_setup
 	end if
 fnend
 
-def fn_mtomSoapOpen(; efilOpen$*128)
+def fn_mtomSoapOpen(method$*128)
 	dim outFile$*256
 	outFile$=os_filename$(env$('temp'))&'\mtomSoapOut'&session$&'.xml'
 	open #hOut:=fngethandle: 'name='&outFile$&',recl=2048,replace',d,o
-	pr #hOut: 'Nonce='&str$(days(date$))&srep$(time$,':','')&str$(int(rnd*9999990300))&str$(int(rnd*9999990300))
-	if efilOpen$<>'' then 
-		fn_prOutXmlEfil_open(efilOpen$)
-	end if
+	! pr #hOut: 'Nonce='&str$(days(date$))&srep$(time$,':','')&str$(int(rnd*9999990300))&str$(int(rnd*9999990300))
+	! efilCache$=value$
+	! pr #hout: '<efil:'&value$&'>'
+	pr #hout: '<info>'
+	pr #hout: '  <method>'
+	pr #hout: '    '&method$
+	pr #hout: '  </method>'
+	pr #hout: '  <parameterList>'
 fnend
 def fn_mtomSoapFinis
-	pr #hout: '</efil:'&efilCache$&'>'
+	! pr #hout: '</efil:'&efilCache$&'>'
+	pr #hout: '  </parameterList>'
+	pr #hout: '</info>'
 	close #hOut:
 
 	! dim mtomSoapSettings$*256
@@ -134,22 +168,18 @@ def fn_mtomSoapFinis
 	execute 'sy -C "'&replyFile$&'"'
 
 fnend
-dim efilCache$*128
-def fn_prOutXmlEfil_open(value$*128)
-	efilCache$=value$
-	pr #hout: '<efil:'&value$&'>'
-fnend
+! dim efilCache$*128
 def fn_prOutXmlItem(encap$*128,value$*128; optional)
 	if ~optional or trim$(value$)<>'' then
-		if optional then
-			pr #hOut: '<!--Optional:-->'
-		end if
-		pr #hout: '<'&encap$&'>'&value$&'</'&encap$&'>'
+		! if optional then
+		! 	pr #hOut: '<!--Optional:-->'
+		! end if
+		pr #hout: '    <'&encap$&'>'&value$&'</'&encap$&'>'
 	end if
 fnend
 ! r: APIs('
 def fn_listMunicipalities
-	pr #hOut: 'List<Municipalities> listFilers();'
+	! pr #hOut: 'List<Municipalities> listFilers();'
 	fn_mtomSoapOpen('ListMunicipalities')
 	! pr #hOut: 'List<Municipalities> listFilers();'
 	! pr #hOut: 'List<Municipalities> listFilers();'

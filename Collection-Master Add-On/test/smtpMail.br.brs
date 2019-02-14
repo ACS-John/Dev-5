@@ -1,3 +1,5 @@
+! after installing it just says I don't have a license for it.  lame.
+
 fn_setup
 
 
@@ -46,7 +48,7 @@ def fn_setup
 		library "CLSUtil/Library": fnMessageBox
 		library "CLSUtil/Library": fnExe
 		library "CLSUtil/Library": fnGetinf$
-		library "CLSUtil/Library": Fnlist_Print
+		library "CLSUtil/Library": fnList_print
 		library "CLSUtil/Library": fnGetHandle
 		library "CLSUtil/Library": fnClient_Os_Path$
 	end if
@@ -61,7 +63,11 @@ def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayNam
 		dim reply$*80
 		fn_readClsSetup(smtp$,bcc$,reply$)
 		if smtp$='' then 
-			smtp$='smtp.gmail.com'
+			smtp$='10.20.129.12'
+			! smtp$='smtp.gmail.com'
+			
+			! port=25
+			
 			bcc$='niceguywinning@gmail.com'
 			reply$='noreply@papernapkin.net'
 		end if
@@ -70,7 +76,7 @@ def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayNam
 		fnMessageBox("Please Stand By, Automatically Installing & Registering the SMTP email Windows Control.\nThis should only happen 1 time per machine.",16,"Installing SMTPMAIL Email")
 		fnExe('-w QUOTE=NONE','VBSetup\Install_SMTPMail.exe','')
 	end if
-	Fnlist_Print("Sending email to "&recip$)
+	fnList_print("Sending email to "&recip$)
 
 		open #19: "name=[Temp]E-[SESSION].INI,replace,recl=1024",DISPLAY,OUTPUT 
 		pr #19: "ServerName = "&Smtp$ 
@@ -88,14 +94,11 @@ def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayNam
 
 		fnExe('-w QUOTE=NONE','vb32\smtpmail.exe',iniFile$) 
 	goto SmtpMailXit
-	EMAIL_REJECT: ! Reject EMAIL NO - TO ADDR
-		pr 'EMAIL_REJECT'
+	EmailReject: ! Reject EMAIL NO - TO ADDR
+		pr 'EmailReject'
 		pause
 	goto SmtpMailXit
 	SmtpMailXit: !
-fnend
-def fnGet_merge$*1024(x)
-	fnGet_merge$='fnGet_merge$('&str$(x)&') callled.'
 fnend
 def fn_readClsSetup(&smtp$,&bcc$,&reply$)
 	open #hClsSetup:=fngethandle: "name=clssetup//8,shr",internal,outin,relative ioerr ChainClsSetup
