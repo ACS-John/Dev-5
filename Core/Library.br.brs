@@ -101,6 +101,11 @@ def library fnSpecialFolderPath$*256(folderName$*64)
 	library 'S:\Core\specialFolderPath.br': fnSpecialFolderPath$
 	fnSpecialFolderPath$=fnSpecialFolderPath$(folderName$)
 fnend
+def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFile$*1024,prompt,BCCEmail$*256,mat CCEmails$)
+	library 'S:\Core\email.br': fnSendEmail
+	fnSendEmail=fnSendEmail(toEmail$,emailMessage$, subject$,attachFile$,prompt,BCCEmail$,mat CCEmails$)
+fnend
+
 ! r: ScreenIO
 ! def library fnfm(screenname$; keyval$*255,srow,scol,parent_key$*255,parent_window,display_only,dontRedoListView,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$*255,selecting,savedontask)
 ! 	library 'S:\Core\ScreenIO\screenio.br': fnfm
