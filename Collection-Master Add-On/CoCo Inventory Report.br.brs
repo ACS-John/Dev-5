@@ -1,8 +1,8 @@
 on error goto Error_Hanler
 fn_setup
-setenv('Session_Rows',str$(24))
-setenv('Session_Cols',str$(80))
-fntop(program$)
+! setenv('Session_Rows',str$(24))
+! setenv('Session_Cols',str$(80))
+fntop(program$,'',1)
 
 open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,input,keyed
 ! r: get mat CoCo
@@ -82,12 +82,11 @@ for cocoItem=1 to cocoCount
 		pr #hOut(cocoItem): '<tr>'
 		pr #hOut(cocoItem): '<th> CoCo  </th>'
 		pr #hOut(cocoItem): '<th> FileNo   </th>'
-		pr #hOut(cocoItem): '<th> d1_name </th>'
-		pr #hOut(cocoItem): '<th> suit_date </th>'
-		pr #hOut(cocoItem): '<th> suit_amt </th>'
-		pr #hOut(cocoItem): '<th> suit_amt </th>'
+		! pr #hOut(cocoItem): '<th> d1_name </th>'
+		pr #hOut(cocoItem): '<th> Suit Date </th>'
+		pr #hOut(cocoItem): '<th> Suit Amt </th>'
 		pr #hOut(cocoItem): '<th> Balance </th>'
-		pr #hOut(cocoItem): '<th>  Jmt Date </th>'
+		pr #hOut(cocoItem): '<th> Jmt Date </th>'
 		pr #hOut(cocoItem): '<th> Jmt Amount </th>'
 		pr #hOut(cocoItem): '<th> Last Payment Date </th>'
 		pr #hOut(cocoItem): '<th> Last Payment Amount </th>'
@@ -98,27 +97,35 @@ for cocoItem=1 to cocoCount
 nex cocoItem
 ! /r
 ! r: add the bodys to the files 
+open #hDebtor:=fngethandle: 'name=debtor//6,kfname=debtor.idx//6,shr',internal,input,keyed
 restore #hM: !
 do
 	read #hM,using mFormAll$: mat masterData$,mat masterDataN eof EoMaster
 	fncom(readCount+=1,lrec(hM),12)
 	cocoWhich=srch(mat cocoN,masterDataN(master_coco_no))
 	if cocoWhich>0 then
+	
+	dim allDebtor$(0,0)*256,allDebtorN(0,0)
+	debtorCount=fnAllDebtors(MasterData$(master_fileno),hDebtor,Mat allDebtor$,Mat allDebtorN)
+	garn_date$=''
+	if debtorCount=>1 then
+		garn_date$=str$(allDebtorN(1,debtor_garn_date))
+	end if
+	
 		! r: Pr Row
 			pr #hOut(cocoWhich): '<tr> ';
 			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 4',masterDataN(master_coco_no))&'</td>';
 			pr #hOut(cocoWhich): '<td>'&masterData$(master_fileno)&'</td>';
-			pr #hOut(cocoWhich): '<td>'&masterData$(master_d1_name)&'</td>';
-			pr #hOut(cocoWhich): '<td>'&masterData$(master_suit_date)&'</td>';
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_suit_amt))&'</td>';
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_balance))&'</td>';
-			pr #hOut(cocoWhich): '<td>'&masterData$(master_jmt_date)&'</td>';
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_jmt_amt))&'</td>';
-			pr #hOut(cocoWhich): '<td>'&masterData$(master_lpaymnt_date)&'</td>';
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_lpaymnt_amt))&'</td>';
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>';
-			pr #hOut(cocoWhich): '<td></td>'
-			pr #hOut(cocoWhich): '<td>'&cnvrt$('N 10.2',masterDataN(master_stored_int))&'</td>'
+			! pr #hOut(cocoWhich): '<td>'&masterData$(master_d1_name)&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtDate$(masterData$(master_suit_date))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtCurrency$(masterDataN(master_suit_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtCurrency$(masterDataN(master_balance))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtDate$(masterData$(master_jmt_date))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtCurrency$(masterDataN(master_jmt_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtDate$(masterData$(master_lpaymnt_date))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtCurrency$(masterDataN(master_lpaymnt_amt))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtCurrency$(masterDataN(master_stored_int))&'</td>';
+			pr #hOut(cocoWhich): '<td>'&fn_fmtDate$(garn_date$)&'</td>'
 			pr #hOut(cocoWhich): '</tr> '
 		! /r
 	end if
@@ -141,18 +148,35 @@ for cocoItem=1 to cocoCount
 		emailSubject$=env$('program_caption')&' as of '&date$('month d, ccyy')&' for '&fn_cocoData$(cocoN(cocoItem),'name')
 		dim emailMessage$*1048
 		emailMessage$='See attached report.'&chr$(10)&'Should have been sent to '&tmpEmailList$(emailItem)
-		fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		fnSendEmail('jbowman@bqlaw.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		sleep(3)
 		! pause
 	nex emailItem
 nex cocoItem
 fncom(100,100,12)
+fnMessageBox('Completed processing '&str$(udim(mat tmpEmailList$))&' email(s).', mb_ok,env$('program_caption'),'cocoInvSuccess')
 goto Finis ! /r
 Finis: ! r:
 goto Xit ! /r
 Xit: fnXit
+def fn_fmtCurrency$*40(amount; ___,return$*40)
+	return$=cnvrt$('pic(---,---,---,---,--#.##)',amount)
+	fn_fmtCurrency$=return$
+fnend
+def fn_fmtDate$*10(theDate$; providedFormat$,___,return$*10)
+	if providedFormat$='' then providedFormat$='ccyymmdd'
+	theDate$=trim$(theDate$)
+	if theDate$='0' or theDate$='' then
+		return$=''
+	else
+		return$=date$(days(theDate$,providedFormat$),'mm/dd/ccyy')
+	end if
+	fn_fmtDate$=return$
+fnend
 def fn_setup
 	if ~setup then
 		setup=1
+		library 'library\CLSUtil.wb': fnAllDebtors
 		library 'library\CLSUtil.wb': fnDate_rpt10$
 		
 		library 'S:\Core\Library.br': fnSendEmail
@@ -186,7 +210,6 @@ def fn_setup
 		
 		
 		
-		library 'Library\clsUtil': fnmessagebox
 		library 'Library\clsUtil': fngrid_setup
 		library 'Library\GridIO': fnmulti_select
 		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
@@ -199,6 +222,7 @@ def fn_setup
 		fnunpack$(masterFormC$,masterFormN$)
 		mFormAll$=fnget_formall$
 		gosub enumMaster
+		gosub enumDebtor
 		
 		
 	end if
@@ -235,4 +259,5 @@ def fn_cocoData$*60(cocoNo,field$*20; ___,return$*60)
 fnend
 include: cm\enum\common
 include: cm\err
+include: cm\enum\debtor
 include: cm\enum\master

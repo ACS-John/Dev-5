@@ -64,7 +64,9 @@ copy "%pathFrom%\custom\menu_win.txt" "%pathTo%\custom\*.*"
 REM DO NOT DO THIS - IT BREAKS conditional theme editor.		copy "%pathFrom%\fileio.ini" "%pathTo%\*.*"
 roboCopy "%pathFrom%\Collection-Master Add-On" "%pathTo%\Collection-Master Add-On" *.* /XF *.brs /S
 
-@echo CORE SYNC REMOVED FOR NOW!
+@echo CORE SYNC COMMENTED OUT!!!
+@echo CORE SYNC COMMENTED OUT!!!
+@echo CORE SYNC COMMENTED OUT!!!
 rem roboCopy "%pathFrom%\Core" "%pathTo%\Core" *.* /s
 
 roboCopy "%pathFrom%\Test" "%pathTo%\Test" *.* /XF *.brs /S

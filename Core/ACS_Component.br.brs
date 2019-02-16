@@ -523,14 +523,28 @@ def fn_ace_init
 	control_count=val(env$('control_count'))
 	if udim(mat resp$)<control_count then mat resp$(control_count)
 	mat ace_typ$(control_count)
-	Session_Rows=35 : setenv('Session_Rows',str$(Session_Rows))
-	Session_Cols=115 : setenv('Session_Cols',str$(Session_Cols))
+	Session_Rows=val(env$('session_rows'))
+	Session_Cols=val(env$('Session_Cols'))
+	if Session_Rows<=0 then
+		Session_Rows=35
+		setenv('Session_Rows',str$(Session_Rows))
+	end if
+	if Session_Cols<=0 then
+		Session_Cols=115
+		setenv('Session_Cols',str$(Session_Cols))
+	end if
 fnend
 def fn_draw_windows
 	Session_Rows=max(Session_Rows,ace_lyne_max+4)   : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
 		!
 	Session_Cols=max(Session_Cols,ace_column_max+4) : setenv('Session_Cols',str$(Session_Cols)) ! in case 115 columns is not enough
 	if Session_Rows>35 or Session_Cols>115 or env$('cursys')='CM' then
+		if env$('force80x24')='Yes' then
+			Session_Rows=24
+			setenv('Session_Rows',str$(Session_Rows))
+			Session_Cols=80
+			setenv('Session_Cols',str$(Session_Cols))
+		end if
 		open #0: 'SRow=1,SCol=2,Rows='&str$(Session_Rows)&",Cols="&str$(Session_Cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen],buttonRows=0',display,outIn
 	end if
 	dim borderText$*256

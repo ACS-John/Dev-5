@@ -1,4 +1,4 @@
-def library fntop(; prg$*256,cap$*128)
+def library fnTop(; prg$*256,cap$*128,force80x24)
 	!	 top of (every) program function
 	if ~setup then
 		setup=1
@@ -34,11 +34,18 @@ def library fntop(; prg$*256,cap$*128)
 		! 		fnCopy('S:\ScreenIO.ini','ScreenIO.ini')
 		! end if
 	end if
-	if env$('cursys')='CM' and env$('CM_Core_Initialized')='' then
-		setenv('CM_Core_Initialized','Yes')
-		! library 'S:\Core\Library': fnapply_theme
-		! fnapply_theme
-		fnAcsSystemInitialize(2)
+	if env$('cursys')='CM' then
+		if force80x24 then
+			setenv('force80x24','Yes')
+		else
+			setenv('force80x24','')
+		end if
+		if env$('CM_Core_Initialized')='' then
+			setenv('CM_Core_Initialized','Yes')
+			! library 'S:\Core\Library': fnapply_theme
+			! fnapply_theme
+			fnAcsSystemInitialize(2)
+		end if
 	end if
 fnend
 include: ertn

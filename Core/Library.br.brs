@@ -81,19 +81,19 @@ fnend
 		fngethandle=fngethandle
 	fnend
 	def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
-		library 'S:\Core\start.br': fnMapToVirturalDrive
+		library 'S:\Core\Start.br': fnMapToVirturalDrive
 		fnMapToVirturalDrive=fnMapToVirturalDrive(path_to_map$,drive_id$)
 	fnend
 	def library fnAcsSystemInitialize(; isScreenIOtest)
-		library 'S:\Core\start.br': fnAcsSystemInitialize
+		library 'S:\Core\Start.br': fnAcsSystemInitialize
 		fnAcsSystemInitialize=fnAcsSystemInitialize( isScreenIOtest)
 	fnend
 	def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-		library 'S:\Core\start.br': fnrights_test
+		library 'S:\Core\Start.br': fnrights_test
 		fnrights_test=fnrights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
 	fnend
 	def library fnSpoolPath$*256(; initialize)
-		library 'S:\Core\start.br': fnSpoolPath$
+		library 'S:\Core\Start.br': fnSpoolPath$
 		fnSpoolPath$=fnSpoolPath$(initialize)
 	fnend
 ! /r
@@ -789,9 +789,9 @@ fnend
 	fnend
 ! /r
 ! r: Screen Ace
-	def library fnTop(;prg$*256,cap$*128)
+	def library fnTop(;prg$*256,cap$*128,force80x24)
 		library 'S:\Core\fnTop.br': fnTop
-		fnTop=fnTop( prg$,cap$)
+		fnTop=fnTop( prg$,cap$,force80x24)
 	fnend
 	def library fncompany_name(window,win_cols)
 		library 'S:\Core\ACS_Component.br': fncompany_name
