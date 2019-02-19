@@ -1012,10 +1012,7 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		j2=0
 		if havebudget=1 then 
 		else ! if havebudget<>1 then 
-			pause
-			
-			
-			
+			! pause
 			for j=1 to possibleServiceCount
 				if fn_serviceValidForCollAlloc(j) then 
 					tgb(j2+=1)=gb(j)
