@@ -110,9 +110,6 @@ def fn_mtomSoapOpen(method$*128)
 	dim reqFile$*256
 	reqFile$=folderIn$&'\mtomSoap'&session$&'-Request.xml'
 	open #hOut:=fngethandle: 'name='&reqFile$&',recl=2048,replace',d,o
-	! pr #hOut: 'Nonce='&str$(days(date$))&srep$(time$,':','')&str$(int(rnd*9999990300))&str$(int(rnd*9999990300))
-	! efilCache$=value$
-	! pr #hout: '<efil:'&value$&'>'
 	pr #hout: '<info>'
 	pr #hout: '  <method>'
 	pr #hout: '    '&method$

@@ -18,116 +18,102 @@ loop
 pause 
 end 
 def library fnis_val(amt$*512)
-	let fnis_val=fn_is_val(amt$)
+	fnis_val=fn_is_val(amt$)
 fnend  ! Fnis_Val
 def fn_is_val(amt$*512)
-	let amt$=srep$(amt$,"-","") 
-	let amt$=srep$(amt$,"$","") 
-	let amt$=srep$(amt$,"(","") 
-	let amt$=srep$(amt$,")","")
-	let is_val_amt=val(amt$) conv L1030 
-	let fn_is_val=1 
-	goto L1090
-	L1030: ! 
+	amt$=srep$(amt$,"-","") 
+	amt$=srep$(amt$,"$","") 
+	amt$=srep$(amt$,"(","") 
+	amt$=srep$(amt$,")","")
+	is_val_amt=val(amt$) conv L1090 
+	fn_is_val=1 
 	L1090: !
 fnend 
 def fn_setup ! Setup_  #AutoNumber# 30000,20
 	if ~setup then 
-		let setup=1
+		setup=1
 		gosub SETUP_LIBRARY
 		gosub SETUP_CONSTANTS
 	end if  ! ~setup
 	goto SETUP_XIT
 	SETUP_LIBRARY: ! 
-	if ~setup_library then 
-		let setup_library=1
-		library "CLSUtil/library": fngethandle,fnhtml$,fnlist,fnhelp,fnstime,fnkey_after$,fngenerate_buttons_for_window
-		library "CLSUtil/library": fngenerate_buttons,fnerase_buttons,fnsession_size_setup,fnopen_parent$,fnarray_add$
-		library 'CLSUtil/Library': fnmessagebox,fnadd_one$,fnadd_one,fnwinscroll,fndate10$,fnsymbol_xlate$,fnspin$
-		library 'CLSUtil/Library': fnremove_arrayitem$,fnremove_arrayitem,fndisplay_top,fndate_dis10$,fnsecurity,fncheck_time
-		library "CLSUtil/Library": fnmat_1d_to_2d,fnchr_count,fnuser_init$,fnmenu_autonumber,fnexit_cm,fnstime$
-		library "ToolBar/Library": fnpk_cleanup$
-		library "Spell/Library": fnsoundex$
-		library program$: fngeneric_search_ask
-	end if  ! ~setup_library
+		if ~setup_library then 
+			let setup_library=1
+			library 'Collection-Master Add-On\fn\Library.br': fnsession_size_setup
+			library "CLSUtil/library": fngethandle,fnhtml$,fnlist,fnhelp,fnstime,fnkey_after$,fngenerate_buttons_for_window
+			library "CLSUtil/library": fngenerate_buttons,fnerase_buttons,fnopen_parent$,fnarray_add$
+			library 'CLSUtil/Library': fnmessagebox,fnadd_one$,fnadd_one,fnwinscroll,fndate10$,fnsymbol_xlate$,fnspin$
+			library 'CLSUtil/Library': fnremove_arrayitem$,fnremove_arrayitem,fndisplay_top,fndate_dis10$,fnsecurity,fncheck_time
+			library "CLSUtil/Library": fnmat_1d_to_2d,fnchr_count,fnuser_init$,fnmenu_autonumber
+			library "ToolBar/Library": fnpk_cleanup$
+			library "Spell/Library": fnsoundex$
+			library program$: fngeneric_search_ask
+		end if  ! ~setup_library
 	return  ! SETUP_LIBRARY
 	SETUP_CONSTANTS: ! 
-	if ~setup_constants then 
-		let setup_constants=1
-		let true=yes=1 : let false=no=0 : let cancel=esc=99 : let tab$=chr$(9) : let lf$=chr$(10) : let crlf$=chr$(13)&lf$
-		let fkey_menu=98 : let fkey_exit=93 : let fkey_escape=99 : let fkey_ae_field_exit=107 : let fkey_pageup=90 : let fkey_pagedown=91 : let fkey_tab_change=92 : let fkey_click=200 : let fkey_click_double=201 ! Standard FKey Enumerations
-		gosub SETUP_MESSAGEBOX
-		let fnsession_size_setup(session_rows,session_cols)
-		if uprc$(env$("Developer"))="YES" then let developer=1
-		if uprc$(env$("Debug"))="YES" then let debug=1
-		if lwrc$(env$('UserName'))='jbowman' and serial=12906 then let jbowman=1 else let jbowman=0
-	end if  ! ~Setup_Constants
+		if ~setup_constants then 
+			setup_constants=1
+			gosub Enum
+			fnsession_size_setup(session_rows,session_cols)
+			if lwrc$(login_name$)='jbowman' then jbowman=1 else jbowman=0
+		end if  ! ~Setup_Constants
 	return  ! SETUP_CONSTANTS
-	SETUP_MESSAGEBOX: ! 
-	if ~setup_messagebox then 
-		let setup_messagebox=1
-		let mb_ok=1 : let mb_cancel=2 : let mb_abort=3 : let mb_retry=4 : let mb_ignore=5 : let mb_yes=6 : let mb_no=7 ! fnMessageBox Response Enumerations
-		let mb_stop=16 : let mb_question=32 : let mb_exclamation=48 : let mb_information=64 ! fnMessageBox Icon Enumerations
-		let mb_button1_default=0 : let mb_button2_default=256 : let mb_button3_default=512 ! fnMessageBox Default Button Enumerations
-		let mb_okonly=0 : let mb_okcancel=1 : let mb_abortretryignore=2 : let mb_yesnocancel=3 : let mb_yesno=4 : let mb_retrycancel=5 ! fnMessageBox Button Set Enumerations
-	end if  ! ~Setup_MessageBox
-	return  ! SETUP_MESSAGEBOX
 	SETUP_XIT: ! 
 fnend  ! fn_setup
 ! ______________________________________________________________________
 GRID_METRIX: ! r: Figure out the Grid Metrix
-	if max_width<sum(max_field) then let max_width=sum(max_field)
-	if grid_rows=0 then let grid_rows=udim(grid_data$)
-	if grid_srow=0 then let grid_srow=int(13-(grid_rows/2))
-	if grid_srow<1 then let grid_srow=1
-	if grid_srow=1 and trim$(grid_title$)<>"" then let grid_srow+=1
-	if grid_srow+grid_rows>23 then let grid_rows=23-grid_srow           ! ** 22 leaves a 2 line gap at the bottom
-	let grid_window_rows=max(grid_rows+1,3) 
-	if grid_window_rows>23 then let grid_window_rows=23
+	if max_width<sum(max_field) then max_width=sum(max_field)
+	if grid_rows=0 then grid_rows=udim(grid_data$)
+	if grid_srow=0 then grid_srow=int((session_rows/2+1)-(grid_rows/2))
+	if grid_srow<1 then grid_srow=1
+	if grid_srow=1 and trim$(grid_title$)<>"" then grid_srow+=1
+	if grid_srow+grid_rows>(session_rows-1) then grid_rows=(session_rows-1)-grid_srow           ! ** 22 leaves a 2 line gap at the bottom
+	grid_window_rows=max(grid_rows+1,3) 
+	if grid_window_rows>(session_rows-1) then grid_window_rows=(session_rows-1)
 	if grid_cols=0 then 
-		let grid_cols=int(grid_scol+max_width+1)
+		grid_cols=int(grid_scol+max_width+1)
 	end if
-	let grid_cols+=1
+	grid_cols+=1
 	if grid_scol=0 then 
-		let grid_scol=int(40-(grid_cols/2))-1
+		grid_scol=int(40-(grid_cols/2))-1
 	end if
-	if grid_scol<1 then let grid_scol=1
-	if trim$(grid_title$)<>"" and grid_scol=1 then let grid_scol+=1
+	if grid_scol<1 then grid_scol=1
+	if trim$(grid_title$)<>"" and grid_scol=1 then grid_scol+=1
 	! 
-	let grid_max=80-grid_scol 
-	if trim$(grid_title$)<>"" then let grid_max=79-grid_scol
-	if grid_cols>grid_max then let grid_cols=grid_max
+	grid_max=80-grid_scol 
+	if trim$(grid_title$)<>"" then grid_max=79-grid_scol
+	if grid_cols>grid_max then grid_cols=grid_max
 	for nghead=1 to max_fields
 		if max_field(nghead)<len(grid_heading$(nghead)) then 
-			let max_field(nghead)=len(grid_heading$(nghead))
+			max_field(nghead)=len(grid_heading$(nghead))
 		end if
-		let grid_form$="C" 
-		if grid_type$(nghead)="N" then let grid_form$="CR"
-		let grid_form$(999:0)=" "&str$(max_field(nghead))&",[T]T"
-		let grid_form$(nghead)=grid_form$
+		grid_form$="C" 
+		if grid_type$(nghead)="N" then grid_form$="CR"
+		grid_form$(999:0)=" "&str$(max_field(nghead))&",[T]T"
+		grid_form$(nghead)=grid_form$
 	next nghead
 	mat grid_cache_data$(1,max_fields)=("")
-	if trim$(grid_border$)="" then let grid_border$="S"
+	if trim$(grid_border$)="" then grid_border$="S"
 return  ! /r
 ! ______________________________________________________________________
 GRID_SEARCH: ! r: Search Grid
 	dim search_type$*20,search_form$(4)*40,search$*80,search_direction$(2)*30,search_seek$*30,list_data$(1)*80,search_match$*256,prior_search$*80,searching$*80
-	let search_seek=search_find=0 
+	search_seek=search_find=0 
 	if cmdkey=2 then 
-		let search_seek=1 : let search_find=1 
-		let search_type$="Seek" 
+		search_seek=1 : search_find=1 
+		search_type$="Seek" 
 	else if cmdkey=10 then 
-		let search_seek=0 : let search_find=1 
-		let search_type$="Find" 
+		search_seek=0 : search_find=1 
+		search_type$="Find" 
 	else if cmdkey=20 then 
-		let search_seek=0 : let search_find=-1 
-		let search_type$="Rev. Find"
+		search_seek=0 : search_find=-1 
+		search_type$="Rev. Find"
 	end if
-	let search_form$(1)="1,10,CU 30/80,[D]S" 
-	let search_form$(2)="1,41,CHECK 16/18,[W],1001" 
-	let search_form$(3)="1,58,RADIO 6/6,0,1001" 
-	let search_form$(4)="1,65,RADIO 5/6,0,1001"
-	let grid_search_handle=fngethandle 
+	search_form$(1)="1,10,CU 30/80,[D]S" 
+	search_form$(2)="1,41,CHECK 16/18,[W],1001" 
+	search_form$(3)="1,58,RADIO 6/6,0,1001" 
+	search_form$(4)="1,65,RADIO 5/6,0,1001"
+	grid_search_handle=fngethandle 
 	open #grid_search_handle: "SCOL=1,SROW=24,COLS=80,ROWS=1",display,outin  
 	! OPEN #GRID_SEARCH_HANDLE: "SCOL=2,SROW=2,COLS=78,ROWS=1,BORDER=S[M],N=[X],CAPTION="&SEARCH_TYPE$,DISPLAY,OUTIN  
 	print #grid_search_handle: newpage
@@ -136,28 +122,28 @@ GRID_SEARCH: ! r: Search Grid
 	end if
 L59310: !
 	if search_seek=1 then 
-		let search_seek$="Extended search" 
+		search_seek$="Extended search" 
 	else 
-		let search_seek$="^Extended search"
+		search_seek$="^Extended search"
 	end if
 	if search_find=1 then 
-		let search_direction$(1)="^Down" 
-		let search_direction$(2)="Up" 
+		search_direction$(1)="^Down" 
+		search_direction$(2)="Up" 
 	else 
-		let search_direction$(1)="Down" 
-		let search_direction$(2)="^Up"
+		search_direction$(1)="Down" 
+		search_direction$(2)="^Up"
 	end if
 	print #grid_search_handle,fields "1,1,C 9/15,[W];1,71,CC 7,[W],B0": search_type$,"Search"
 	rinput #grid_search_handle,fields mat search_form$,attr '[A]': search$,search_seek$,mat search_direction$
 	if search_seek$(1:1)<>"^" then 
-		let search_seek=1 
+		search_seek=1 
 	else 
-		let search_seek=0
+		search_seek=0
 	end if
 	if search_direction$(1)(1:1)="^" then 
-		let search_find=1 
+		search_find=1 
 	else 
-		let search_find=-1
+		search_find=-1
 	end if
 	if fkey=1001 then goto L59310       ! ** After user selects a choice, allow them to type more
 	close #grid_search_handle: 
@@ -165,113 +151,117 @@ L59310: !
 		print #gridio_footer_handle,fields "1,1,C "&str$(grid_footer_len)&",[P]": grid_footer$
 	end if
 	if search_find=1 then 
-		let nsearch_start=1 
+		nsearch_start=1 
 		else 
-		let nsearch_start=max_body
+		nsearch_start=max_body
 	end if
-	let search$=uprc$(rtrm$(search$)) 
-	let search_len=len(search$) 
+	search$=uprc$(rtrm$(search$)) 
+	search_len=len(search$) 
 	mat list_data$(max_fields)=("") 
 	if cmdkey=99 or search$="" then goto L59391
-	let nsearch=nsearch_start 
-	let nsearch_match=default_start
+	nsearch=nsearch_start 
+	nsearch_match=default_start
 	if prior_search$<>search$ then 
-		let prior_search$=search$ 
+		prior_search$=search$ 
 		goto SEARCH_LOOP 
 		! If it's a new Search, just search
 	end if
-	let nsearch=nsearch_start=prior_match 
+	nsearch=nsearch_start=prior_match 
 	goto L59385    ! ** Skip the last match & start searching again!
 SEARCH_LOOP: !
-	let search_pass=0 
+	search_pass=0 
 	do while nsearch<>0 and search_pass<2 
 		! ** Search through the list, looking for a match 
 		! * For Repeat Searches, start at "Last Match" - Skipping the actual match 
 		! ** End search is defined by "Looping" back to nsearch_Start (the 2nd time)
-! LET CURFLD(1,NSEARCH) 
+! CURFLD(1,NSEARCH) 
 		! INPUT #GRIDIO_HANDLE,FIELDS GRID_HANDLE$&",ROW,CUR,NOWAIT": MAT LIST_DATA$ 
 		! Adding This feature scrolls the search & Allows Unlimited Matches
-		let search_match$=uprc$(grid_data$(nsearch)) 
+		search_match$=uprc$(grid_data$(nsearch)) 
 		! FOR NMATCH=1 TO UDIM(LIST_DATA$) 
-		! LET SEARCH_MATCH$(9999:0)=UPRC$(LIST_DATA$(NMATCH)&"�") 
+		! SEARCH_MATCH$(9999:0)=UPRC$(LIST_DATA$(NMATCH)&"�") 
 		! NEXT NMATCH
-		let search_match=0 
+		search_match=0 
 		if search_seek=1 then 
-			let search_match=(search$==search_match$(1:search_len)) 
+			search_match=(search$==search_match$(1:search_len)) 
 		else 
-			let search_match=pos(search_match$,search$)
+			search_match=pos(search_match$,search$)
 		end if
 		if search_match>0 then 
-			let nsearch_match=prior_match=nsearch 
-			let nsearch=0 
+			nsearch_match=prior_match=nsearch 
+			nsearch=0 
 		end if
 			goto L59390
 ! PAUSE
-L59385: let nsearch+=search_find
+L59385: nsearch+=search_find
 		if nsearch>max_body then 
-			let nsearch=1: let search_pass+=1 
+			nsearch=1: search_pass+=1 
 		else if nsearch<1 then 
-			let nsearch=max_body : let search_pass+=1
+			nsearch=max_body : search_pass+=1
 		end if
-		if nsearch=nsearch_start then let nsearch=0
+		if nsearch=nsearch_start then nsearch=0
 L59390: loop 
-L59391: if nsearch_match<>0 then let default_start=nsearch_match
+L59391: if nsearch_match<>0 then default_start=nsearch_match
 	return  ! /r
 ! ______________________________________________________________________
 	def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*20,grid_footer$*999,grid_heading$*999,grid_keys$*999,grid_labels$*999,grid_scol,grid_srow,grid_cols,grid_rows,free,display_only) 
 		! (Grid_Title$*1024,Grid_heading$*1024,MAT Grid_Data$)
 		on soflow ignore 
 		! IF TRIM$(LOGIN_NAME$)="siul" THEN PAUSE
-		let msg$("Building Grid") 
+		msg$("Building Grid") 
 		if ~setup then let fn_setup
-		let max_body=udim(grid_data$) 
-		let search$=prior_search$="": let prior_match=0 
-		let grid_title$=srep$(grid_title$,",",".")
+		max_body=udim(grid_data$) 
+		search$=prior_search$="": prior_match=0 
+		grid_title$=srep$(grid_title$,",",".")
 		dim grid_heading$(1)*80,xml_line$(1)*80,max_field(1),grid_type$(1)*15,grid_keys$(1)*80,grid_labels$(1)*80,grid_form$(1)*32,grid_form$*32,grid_handle$*200,grid_cache_data$(1,1)*80
-		let gridio_handle=gridio_footer_handle=0 
-		let searching$=""
-		let max_width=10 
+		gridio_handle=gridio_footer_handle=0 
+		searching$=""
+		max_width=10 
 		mat max_field(1)=(0) 
 		mat grid_type$(1)=("") 
-		let max_fields=0 
+		max_fields=0 
 		for nfield=1 to max_body
 			if len(grid_data$(nfield))>max_width then 
-				let max_width=len(grid_data$(nfield))
+				max_width=len(grid_data$(nfield))
 			end if
-			let this_field=1 
-			let last_pos=0
+			this_field=1 
+			last_pos=0
 			L59710: !
-			let xpos=pos(grid_data$(nfield),"�",last_pos+1) 
-			let xxpos=xpos 
-			if xpos<=0 then let xxpos=9999
+			xpos=pos(grid_data$(nfield),"�",last_pos+1) 
+			xxpos=xpos 
+			if xpos<=0 then xxpos=9999
 			if udim(max_field)<this_field then 
 				mat max_field(this_field): mat grid_type$(this_field)
 			end if
-			let xlen=max(1,len(rtrm$(grid_data$(nfield)(last_pos+1:xxpos-1))))
-			if xlen>max_field(this_field) then let max_field(this_field)=xlen
+			xlen=max(1,len(rtrm$(grid_data$(nfield)(last_pos+1:xxpos-1))))
+			if xlen>max_field(this_field) then max_field(this_field)=xlen
 ! 
 			if grid_type$(this_field)="C" then goto L59760
 			if ~fn_is_val(grid_data$(nfield)(last_pos+1:xxpos-1)) then 
 				goto L59755
 			end if
 			if trim$(grid_type$(this_field))="" or trim$(grid_type$(this_field))="N" then 
-				let grid_type$(this_field)="N" 
+				grid_type$(this_field)="N" 
 				goto L59760
 			end if
-L59755: let dval$=fndate10$(grid_data$(nfield)(last_pos+1:xxpos-1)(1:18)) 
+			L59755: !
+			dval$=fndate10$(grid_data$(nfield)(last_pos+1:xxpos-1)(1:18)) 
 			if trim$(dval$)="" then goto L59757
 			if trim$(grid_type$(this_field))="" or trim$(grid_type$(this_field))="D" then 
-				let grid_type$(this_field)="D" 
+				grid_type$(this_field)="D" 
 				goto L59760
 			end if
-L59757: let grid_type$(this_field)="C"
-L59760: if xpos<=0 then goto L59770
-			let last_pos=xpos 
-			let this_field+=1 
+			L59757: !
+			grid_type$(this_field)="C"
+			L59760: !
+			if xpos<=0 then goto L59770
+			last_pos=xpos 
+			this_field+=1 
 			goto L59710
-L59770: if this_field>max_fields then let max_fields=this_field
+			L59770: !
+			if this_field>max_fields then max_fields=this_field
 		next nfield
-		let fnlist(":"&grid_heading$,mat grid_heading$,";") 
+		fnlist(":"&grid_heading$,mat grid_heading$,";") 
 		if udim(grid_heading$)<max_fields then 
 			mat grid_heading$(max_fields) 
 			mat grid_type$(max_fields)
@@ -279,46 +269,46 @@ L59770: if this_field>max_fields then let max_fields=this_field
 		if udim(grid_heading$)>udim(mat max_field) then 
 			mat max_field(udim(grid_heading$))
 		end if
-		let max_fields=udim(grid_heading$)
+		max_fields=udim(grid_heading$)
 		mat grid_type$(max_fields) 
 		mat grid_form$(max_fields) 
 		mat grid_heading$(max_fields)
 		gosub GRID_METRIX
-		let gridio_handle=fngethandle 
+		gridio_handle=fngethandle 
 		open #gridio_handle: "SCOL="&str$(grid_scol)&",SROW="&str$(grid_srow)&",COLS="&str$(grid_cols)&",ROWS="&str$(grid_window_rows)&",BORDER="&grid_border$&",N=[T],TAB="&grid_title$,display,outin  
 		print #gridio_handle: newpage
 		if trim$(grid_footer$)<>"" then goto L59855
 		if trim$(grid_border$)<>"" and grid_cols>=20 then 
-			let grid_footer$="[F2/F10 to Search]" 
+			grid_footer$="[F2/F10 to Search]" 
 		else if trim$(grid_border$)<>"" then 
-			let grid_footer$="[F2/F10]"(1:grid_cols-1)
+			grid_footer$="[F2/F10]"(1:grid_cols-1)
 		end if
-L59855: let grid_footer_len=len(grid_footer$) 
+L59855: grid_footer_len=len(grid_footer$) 
 		if grid_footer_len>grid_cols then 
-			let grid_footer=grid_cols 
-			let grid_footer$(grid_cols+1:9999)=""
+			grid_footer=grid_cols 
+			grid_footer$(grid_cols+1:9999)=""
 		end if
-		let grid_footer_scol=max(grid_scol,grid_scol+grid_cols-grid_footer_len) 
-		let grid_footer_cols=min(grid_footer_len,grid_cols)
+		grid_footer_scol=max(grid_scol,grid_scol+grid_cols-grid_footer_len) 
+		grid_footer_cols=min(grid_footer_len,grid_cols)
 		if trim$(grid_border$)<>"" then 
-			let gridio_footer_handle=fngethandle 
+			gridio_footer_handle=fngethandle 
 			open #gridio_footer_handle: "SCOL="&str$(grid_footer_scol)&",SROW="&str$(grid_srow+grid_window_rows)&",COLS="&str$(grid_footer_cols)&",ROWS=1",display,outin  
 			print #gridio_footer_handle,fields "1,1,"&str$(grid_footer_cols)&"/C 200"&",[S]": grid_footer$ 
-			let searching$=rpad$("Searching",grid_footer_len,".")
+			searching$=rpad$("Searching",grid_footer_len,".")
 		end if
 		if len(searching$)>grid_footer_len then 
-			let searching$=rpad$("Search",grid_footer_len,".")
+			searching$=rpad$("Search",grid_footer_len,".")
 		end if
 		if len(searching$)>grid_footer_len then 
-			let searching$=rpad$("",grid_footer_len,".")
+			searching$=rpad$("",grid_footer_len,".")
 		end if
 		if trim$(grid_keys$)="" or trim$(grid_labels$)="" then 
 			goto L59880 
 		else 
-			let fnlist(":"&grid_keys$,mat grid_keys$,";") 
-			let fnlist(":"&grid_labels$,mat grid_labels$,";")
+			fnlist(":"&grid_keys$,mat grid_keys$,";") 
+			fnlist(":"&grid_labels$,mat grid_labels$,";")
 		end if
-		let fnerase_buttons
+		fnerase_buttons
 		label_fkeys=0 
 		if len(grid_labels$)<60 then label_fkeys=1
 		fngenerate_buttons(srep$(grid_keys$,";",","),srep$(grid_labels$,";",","),1,0,label_fkeys)
@@ -377,12 +367,12 @@ L59880: grid_handle$="1,1,LIST "&str$(grid_window_rows)&"/"&str$(grid_cols)
 			gosub GRID_SEARCH 
 			goto L59975
 		end if
-		let item_fkey=fkey
+		item_fkey=fkey
 		if default_start>udim(grid_data$) or default_start<0 then 
-			let default_start=0 
-			let item_fkey=99
+			default_start=0 
+			item_fkey=99
 		end if
-		let fngridio=default_start
+		fngridio=default_start
 		if xfkey>0 then let fkey(item_fkey)
 		if gridio_handle then close #gridio_handle: ioerr L59988
 L59988: if gridio_footer_handle then close #gridio_footer_handle: ioerr L59989
@@ -395,22 +385,22 @@ L59989: !
 		mat xml_node_stack$(0)
 		open #(xmlfh:=fngethandle): "NAME="&filename$&",REPLACE,RECL=4096",display,output 
 ! PRINT #XMLFH: '<?xml version="1.0"?>'
-		let fnopen_xml_writer = xmlfh
+		fnopen_xml_writer = xmlfh
 	fnend 
 	def fnxml_push_node(name$*100)
 		mat xml_node_stack$(udim(mat xml_node_stack$) + 1)
-		let xml_node_stack$(udim(mat xml_node_stack$)) = name$
+		xml_node_stack$(udim(mat xml_node_stack$)) = name$
 	fnend 
 	def fnxml_pop_node$*100
 		if udim(mat xml_node_stack$) < 1 then 
-			let xml_node_stack$ = "" 
+			xml_node_stack$ = "" 
 			goto L61190
 		end if
-		let fnxml_pop_node$ = xml_node_stack$(udim(mat xml_node_stack$))
+		fnxml_pop_node$ = xml_node_stack$(udim(mat xml_node_stack$))
 		mat xml_node_stack$(udim(mat xml_node_stack$) - 1)
 L61190: fnend 
 	def library fnopen_node(xml_filehandle, name$*100; mat attr$, mat attr_val$)
-		let fnopen_node = fnopen_node_(xml_filehandle, name$, mat attr$, mat attr_val$)
+		fnopen_node = fnopen_node_(xml_filehandle, name$, mat attr$, mat attr_val$)
 	fnend 
 	def fnopen_node_(xml_filehandle, name$*100; mat attr$, mat attr_val$)
 		print #xml_filehandle: "<"&name$;
@@ -420,49 +410,49 @@ L61190: fnend
 			next iter
 		end if 
 		print #xml_filehandle: ">";
-		let fnxml_push_node(name$)
+		fnxml_push_node(name$)
 	fnend 
 	def library fnclose_node(xml_filehandle; name$*100)
-		let fnclose_node = fnclose_node_(xml_filehandle, name$)
+		fnclose_node = fnclose_node_(xml_filehandle, name$)
 	fnend 
 	def fnclose_node_(xml_filehandle; name$*100)
 		if len(name$) = 0 then 
-			let name$ = xml_node_stack$(udim(mat xml_node_stack$))
+			name$ = xml_node_stack$(udim(mat xml_node_stack$))
 		end if
 		if srch(xml_node_stack$, name$) < 1 then goto L61480
 		dim popped$*100
 		do 
-			let popped$ = fnxml_pop_node$
+			popped$ = fnxml_pop_node$
 			print #xml_filehandle: "</"&popped$&">"
 		loop while popped$ <> name$
 L61480: fnend 
 	def fnclose_all_nodes(xml_filehandle)
 		if udim(xml_node_stack$) > 0 then 
-			let fnclose_node_(xml_filehandle, xml_node_stack$(1))
+			fnclose_node_(xml_filehandle, xml_node_stack$(1))
 		end if
 	fnend 
 	def library fnclose_xml_writer(xml_filehandle)
-		let fnclose_all_nodes(xml_filehandle)
+		fnclose_all_nodes(xml_filehandle)
 		close #xml_filehandle: 
 	fnend 
 	def library fnadd_data(xml_filehandle, data$*10000)
-		let fnadd_data = fnadd_data_(xml_filehandle, data$)
+		fnadd_data = fnadd_data_(xml_filehandle, data$)
 	fnend 
 	def fnadd_data_(xml_filehandle, data$*10000)
 		print #xml_filehandle: fnhtml$(data$);
 	fnend 
 	def library fnadd_node(xml_filehandle, name$*100, data$*10000; mat attr$, mat attr_val$)
-		let fnadd_node = fnadd_node_(xml_filehandle, name$, data$, mat attr$, mat attr_val$)
+		fnadd_node = fnadd_node_(xml_filehandle, name$, data$, mat attr$, mat attr_val$)
 	fnend 
 	def fnadd_node_(xml_filehandle, name$*100, data$*10000; mat attr$, mat attr_val$)
-		let fnopen_node_(xml_filehandle, name$, mat attr$, mat attr_val$)
-		let fnadd_data_(xml_filehandle, data$)
-		let fnclose_node_(xml_filehandle, name$)
+		fnopen_node_(xml_filehandle, name$, mat attr$, mat attr_val$)
+		fnadd_data_(xml_filehandle, data$)
+		fnclose_node_(xml_filehandle, name$)
 	fnend 
 ! /r ------------------XML Management Functions-End------------------------
 ! ______________________________________________________________________
 	def library fnmulti_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
-		let fnmulti_select=fn_multi_select(mat ms_selected$,mat ms_unselected$, cap$,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
+		fnmulti_select=fn_multi_select(mat ms_selected$,mat ms_unselected$, cap$,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 	fnend 
 	def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 ! 
@@ -1458,7 +1448,7 @@ GRID_SEARCH_ASK_AGAIN: !
 		else if m2_preserve_backgroud=2 then 
 			dim m2_dtp_data$(1)*128,dumb_tmp$*2048
 			let dumb_tmp$=fnopen_parent$('Parent=None,SRow=1,SCol=1,Cols=80,Rows=30,Border=None,Name=M2,button.fkey=0;99,button.text=OK;Exit',mat m2_dtp_data$,1)
-!     if jbowman then pr 'dumb_tmp$=';dumb_tmp$ : pause
+     if jbowman then pr 'dumb_tmp$=';dumb_tmp$ : pause
 			open #m2_display_top_parent:=fngethandle: dumb_tmp$,display,output 
 			let fngenerate_buttons_for_window(mat m2_dtp_data$,m2_display_top_parent)
 		else 
@@ -2122,3 +2112,4 @@ CB_ASK: !
 CB_XIT: ! 
 		let fn_combobox$=cb_return$
 	fnend  ! fn_combobox$
+include: cm\enum
