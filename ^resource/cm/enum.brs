@@ -3,7 +3,11 @@ Enum: ! r:Common Enumerations for Collection-Master Add-On
 	if ~setupEnum then
 		setupEnum=1
 		tab$=chr$(9)
-		true=yes=1
+		lf$=chr$(10)
+		crlf$=chr$(13)&lf$
+		true=yes=1 : false=no=0 : cancel=esc=99 
+		fkey_menu=98 : fkey_exit=93 : fkey_escape=99 : fkey_ae_field_exit=107 : fkey_pageup=90 : fkey_pagedown=91 : fkey_tab_change=92 : fkey_click=200 : fkey_click_double=201 ! Standard FKey Enumerations
+			
 		if uprc$(env$("Developer"))="YES" then developer=1
 		if uprc$(env$("Debug"))="YES" then debug=1
 	

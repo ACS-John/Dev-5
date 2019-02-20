@@ -1,7 +1,6 @@
 on error goto Error_Hanler
 fn_setup
-! setenv('Session_Rows',str$(24))
-! setenv('Session_Cols',str$(80))
+! fnsession_size_setup(Session_Rows,Session_Cols)
 fntop(program$,'',1)
 
 open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,input,keyed
@@ -58,7 +57,8 @@ if ~cocoSelectSetup then
 	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=60 	: D_Grid_Form$(3)='C 60,[T]L'
 end if
 
-fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
+msReply=fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
+pr msReply : pause
 ! ! /r
 
 ! r: open the files and pr headers
@@ -148,8 +148,9 @@ for cocoItem=1 to cocoCount
 		emailSubject$=env$('program_caption')&' as of '&date$('month d, ccyy')&' for '&fn_cocoData$(cocoN(cocoItem),'name')
 		dim emailMessage$*1048
 		emailMessage$='See attached report.'&chr$(10)&'Should have been sent to '&tmpEmailList$(emailItem)
+		fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
 		fnSendEmail('jbowman@bqlaw.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
-		sleep(3)
+		sleep(16)
 		! pause
 	nex emailItem
 nex cocoItem
@@ -176,6 +177,9 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
+		library 'library\Gridio.wb': fnmulti_select
+		! library 'Collection-Master Add-On\fn\Library.br': fnmulti_select
+		library 'Collection-Master Add-On\fn\Library.br': fnsession_size_setup
 		library 'library\CLSUtil.wb': fnAllDebtors
 		library 'library\CLSUtil.wb': fnDate_rpt10$
 		
@@ -192,14 +196,10 @@ def fn_setup
 
 		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom
-		library "library\CLSUtil.wb": fnget_formall$,fnget_formarr
-		library "library\CLSUtil.wb": fnreport_path$,fnclaim_path$
-		library "library\CLSUtil.wb": fnget_claimfiles,fnclaim_scroll
-		library "library\CLSUtil.wb": fnrange_to_array,fnarray_to_range$
-		library "library\CLSUtil.wb": fnfix_bh,fnask_payref
 		library "library\CLSUtil.wb": fnget_form
+		library "library\CLSUtil.wb": fnget_formall$
+		library "library\CLSUtil.wb": fnreport_path$
 		library "library\CLSUtil.wb": fnunpack$
-		library "library\CLSUtil.wb": fnStime,fnStime$
 		library "library\CLSUtil.wb": fnMessageBox
 		library "library\CLSUtil.wb": Fnlist_Print
 		library "Prog2\Mast2.wb": fnsql_read
@@ -211,7 +211,6 @@ def fn_setup
 		
 		
 		library 'Library\clsUtil': fngrid_setup
-		library 'Library\GridIO': fnmulti_select
 		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
 		
 		dim masterData$(1)*60,masterDataN(1)
