@@ -1031,7 +1031,7 @@ def fn_portion_check_Crocket(dolamt)
 	else if trim$(b$(3))="" then 
 		b$(3)=b$(4) : b$(4)=""
 	end if 
-	pr #255,using 'form skip 4,c 1': " " ! line 1
+	pr #255,using 'form skip 3,c 1': " " ! line 1
 		! for j=1 to 4 ! just print name here
 	pr #255,using "Form Pos 8,C 30": b$(1) ! lines 17-20
 	! next j
@@ -1044,12 +1044,13 @@ def fn_portion_check_Crocket(dolamt)
 		skipline-=3
 	end if
 		a=60
-	pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 5,C 18': prdmmddyy,ca$ ! line 14
-	pr #255: "" ! line 16
+	pr #255,using 'Form pos 8, c 30,POS A,PIC(ZZ/ZZ/ZZ),X 5,C 18': trim$(b$(2)),prdmmddyy,ca$ ! line 14
+	pr #255,using "Form Pos 8,C 30": b$(3) ! line 16
+	pr #255,using "Form Pos 8,C 30": b$(4) ! last address line or blank for spacing 
 	pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
-	pr #255: "" ! line 13
+	pr #255: "" ! spacing 
 	if length=0 then ! do it the old way
-		skipline=6
+		skipline=12
 		if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 		for j=1 to skipline
 			pr #255: ""
