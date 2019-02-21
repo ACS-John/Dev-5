@@ -1417,27 +1417,29 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		pr #255: 
 		pr #255: 
 	end if 
-	pr #255,using 'form pos 25,pic(##/##/##),pos pboPosRightCol,c message2_max_len': d1,fn_mg2$(1)
+	! if env$('acsDeveloper') <> "" then pause
+	pr #255,using 'form pos 25,pic(##/##/##),pos pboPosRightCol,c message2_max_len': d1,fn_mg2$(1) 
 	pr #255,using 'form pos 4,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "From",int(pbo_service_from*.01),"To",int(pbo_service_to*.01)
 	pr #255: ""
 	if pb<>0 then pb$="   Prior Balance" else pb$=""
 	pr #255: ""
-	if g(1)=0 then t$="" else t$="Wtr"
+	pr #255: "" ! extra space for new printer 
+	if g(1)=0 then t$="" else t$="Wtr" 
 	pr #255,using PBO_F_ONE: t$,0,d(1),d(3),g(1),0,0,fn_mg2$
 	PBO_F_ONE: form pos 4,c 3,nz 1,nz 8,nz 8,nz 9.2,x 4,nz 10.2,nz 12.2,pos pboposrightcol,c message2_max_len
-	if g(2)=0 then t$="" else t$="Swr"
+	if g(2)=0 then t$="" else t$="Swr" ! omaha doesn't have swr 
 	if bal<=0 then 
 		pr #255,using PBO_F_ONE: t$,0,0,0,g(2),0,bal,fn_mg2$
 	else 
 		pr #255,using PBO_F_ONE: t$,0,0,0,g(2),0,0,fn_mg2$
 	end if 
-	if g(3)=0 then t$="" else t$="Pri"
-	pr #255,using PBO_F_ONE: t$,0,0,0,g(3),bal+penalty,bal,fn_mg2$
+	! if g(3)=0 then t$="" else t$="Pri"
+	! pr #255,using PBO_F_ONE: t$,0,0,0,g(3),bal+penalty,bal,fn_mg2$ ! moved bal's up to wtr line
 	if g(5)=0 then t$="" else t$="W/F"
-	pr #255,using PBO_L1610: t$,0,0,0,g(5),d4,fn_mg2$
+	pr #255,using PBO_F_ONE: t$,0,0,0,g(5),bal+penalty,bal,fn_mg2$ ! bal+penalty,bal
 	PBO_L1610: form pos 4,c 3,nz 1,nz 8,nz 8,nz 9.2,x 3,pic(zz/zz/zz),pos pboposrightcol,c message2_max_len
-	if g(9)=0 then t$="" else t$="Tax"
-	pr #255,using PBO_F_ONE: t$,0,0,0,g(9),0,0,fn_mg2$
+	if g(9)=0 then t$="" else t$="Tax" ! if env$('acsDeveloper') <> "" then pause
+	pr #255,using PBO_L1610: t$,0,0,0,g(9),d4,fn_mg2$
 	pr #255,using PBO_L1620: pb$,pb,z$,fn_mg2$
 	PBO_L1620: form pos 6,c 17,nz 10.2,pos 36,c 10,pos pboposrightcol,c message2_max_len
 	if g(4)=0 then t$="" else t$="SF "
