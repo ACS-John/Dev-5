@@ -80,7 +80,7 @@ GetStarted: ! r:
 		READ_TOP: !
 
 		read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis
-
+		! if pos(trim$(fs$(2)),"CURRENT ASSETS") then pause
 		if ltrm$(fs$(fsd_number))<>"" and ltrm$(fs$(fsd_number))<>"0" then
 			if costcntr=0 or costcntr=fsN(fsd_costCenterCode) then
 				if fs$(fsd_entryType)<>"S" and fs$(fsd_entryType)<>"F" and fs$(fsd_entryType)<>"R" and heading=0 then
@@ -146,6 +146,7 @@ fnend
 def fn_tePrnSectionHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpStartPos)
 	tmpStartPos=fsN(fsd_startPos)
 	pr #255,using L470: fs$(fsd_description)
+	! if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
 	L470: form pos tmpStartPos,c 50,skip 1
 	fn_footer(foot$,tabnote,mat fsN)
 	fn_setAccum(mat fsN,mat accum)
@@ -225,7 +226,7 @@ def fn_tePrnProfitLossAndTotal(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,
 	if fsN(fsd_dollarSign)=1 then dollar$="$" else dollar$=" "
 	dollar=24+14*fsN(fsd_column) ! if  CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
 	sp2=dollar-fsN(fsd_startPos)-1
-	tmpStartPos=fsN(fsd_startPos)
+	tmpStartPos=fsN(fsd_startPos) !  if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
 	if fsN(fsd_underline)=1 then
 		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF
 	else
@@ -269,8 +270,8 @@ def fn_footer(foot$*132,tabnote,mat fsN; ___,tmpLineSkip)
 	if fsn(fsd_lineSkip)=99 then
 		fn_footerPrint(foot$,tabnote)
 	else if fsn(fsd_lineSkip)<>0 then
-		pr #255,using F_skipLs: " "
 		tmpLineSkip=fsn(fsd_lineSkip)
+		pr #255,using F_skipLs: " " ! pr #255: "got here "&str$(tmplineskip) ! pause
 		F_skipLs: form pos 1,c 1,skip tmpLineSkip
 	end if
 fnend
