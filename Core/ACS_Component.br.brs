@@ -546,6 +546,7 @@ def fn_draw_windows
 			setenv('Session_Cols',str$(Session_Cols))
 		end if
 		open #0: 'SRow=1,SCol=2,Rows='&str$(Session_Rows)&",Cols="&str$(Session_Cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen],buttonRows=0',display,outIn
+		if login_name$='jbowman' then pr 'i opened zero, jbowman.' : pause
 	end if
 	dim borderText$*256
 	if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
@@ -2194,7 +2195,7 @@ def fn_company_name(window,win_cols)
 	pr #window, fields "1,33,CC 51,[screenheader]": env$('Program_Caption')(1:51)
 	pr #window, fields "1,86,22/CC 24,[screenheader]": env$('cnam')(1:24)
 	if env$('tmp_acs_back_arrow')='' then ! it is not the main menu.
-		pr #window, fields "1,"&str$(win_cols-05)&",P 1/2,[buttons],1505": "S:\Core\Icon\Properties.png" ioerr ignore
+		! pr #window, fields "1,"&str$(win_cols-05)&",P 1/2,[buttons],1505": "S:\Core\Icon\Properties.png" ioerr ignore
 	end if
 	pr #window, fields "1,"&str$(win_cols-02)&",P 1/2,[buttons],1504": "S:\Core\Icon\help_icon.png" ioerr ignore
 fnend

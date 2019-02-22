@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________  
+11:48 AM 2/22/2019	CO	Removed faulty Print Properties button from within program.  Consistently causes 526 error.  Will be added back once repaired.
 11:49 02/19/2019	CO	5.74110  
 11:48 02/21/2019	UB	adjusted billing printout for 3320     
 8:38 02/19/2019	GL	5.74109  adjusted spacing in balance sheets 
