@@ -78,7 +78,7 @@ def fn_setup
 		dim folderOut$*256
 		folderOut$='C:\clsinc\MTOM SOAP\Out'
 		dim mtomSoapUtil$*256
-		mtomSoapUtil$=os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
+		mtomSoapUtil$=os_filename$('Collection-Master Add-On\mtomSoap.cmd') ! os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
 		
 		library 'S:\Core\Library.br': fngethandle
 		library 'S:\Core\Library.br': fnCountMatchesC
@@ -86,6 +86,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fntop
 		library 'S:\Core\Library.br': fnXit
+		library 'S:\Core\Library.br': fnFree
 
 		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom
@@ -129,7 +130,7 @@ def fn_mtomSoapFinis
 	! mtomSoapSettings$=os_filename$(program$(1:pos(program$,'\',-1)-1))&'\settings.ini'
 	dim replyFile$*256
 	replyFile$=reqFile$(1:pos(reqFile$,'.',-1)-1)&'-reply'&reqFile$(pos(reqFile$,'.',-1):inf)
-
+	fnFree(replyFile$)
 	dim mtomSoapCallFile$*256
 	mtomSoapCallFile$=os_filename$(env$('temp'))&'\call'&session$&'.cmd'
 	open #hCall:=fngethandle: 'name='&mtomSoapCallFile$&',recl=4096,replace',d,o
@@ -138,7 +139,7 @@ def fn_mtomSoapFinis
 	! pr #hCall: '"'&mtomSoapUtil$&'" /in="'&fn_filenameOnly$(reqFile$)&'" /out="'&fn_filenameOnly$(replyFile$)&'"'
 	pr #hCall: '"'&mtomSoapUtil$&'" /in="'&reqFile$&'" /out="'&replyFile$&'"'
 	close #hCall:
-	pause
+	! exec 'type '&mtomSoapCallFile$ : pause
 	execute 'sy "'&mtomSoapCallFile$&'"'
 	! execute 'sy -C "'&reqFile$&'"'
 	! execute 'sy -C "'&mtomSoapSettings$&'"'
@@ -273,10 +274,12 @@ def fn_caseSubType
 	!   for us     CNTRUNSP  99% 1 ! county
 	!   for us     CONTRACT  99%   ! district
 	!   for us     CNTRPVN    1%   only in cases of replevin
+	! these are from page 25 under the section (starting on page 24) titled: Appendix 5 Case Subtypes/Jurisdiction Mapping
+	!      of the document NebraskaEFilingWEDocs.docx
 	if enableReplevin then
-		fn_prOutXmlItem('caseSubType','CNTRPVN', 1)
+		fn_prOutXmlItem('caseSubType','CNTRPVN', 1) ! Contract-Replevin
 	else if court$='County' then
-		fn_prOutXmlItem('caseSubType','CNTRUNSP', 1)
+		fn_prOutXmlItem('caseSubType','CNTRUNSP', 1) ! Contract-Unspecified
 	else if court$='District' then
 		fn_prOutXmlItem('caseSubType','CONTRACT', 1)
 	end if
