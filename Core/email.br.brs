@@ -23,7 +23,8 @@ def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFil
 		if env$('client')='Brumbaugh' then
 			! server$='10.20.129.12:25' <--- that would use port 25
 			server$='10.20.129.12'
-			fromEmail$='noreply@bqlaw.com'
+			dim fromEmail$*128
+			fromEmail$='reportDaemon@bqlaw.com'
 			userAccount$=''
 			password$=''
 		else

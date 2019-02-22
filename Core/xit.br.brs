@@ -16,7 +16,7 @@
 		else if env$('CurSys')='CM' then 
 			setenv('Session_Rows',24)
 			setenv('Session_Cols',80)
-			open #0: 'SRow=1,SCol=1,Rows=24,Cols=80',display,outIn
+			open #0: 'SRow=1,SCol=1,Rows=24,Cols=80,buttonrows=2,Font=MEDIUM:Width+',display,outIn
 			execute 'Proc RUN'
 		end if 
 		fnchain('S:\Core\Menu.br',0,1)
