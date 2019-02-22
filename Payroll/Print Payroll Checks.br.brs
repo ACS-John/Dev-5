@@ -752,7 +752,7 @@ def fn_print_check
 		fn_check_billings
 	else if env$('client')="Crocket County" then 
 		! if env$('acsDeveloper')<>"" then pause
-		fn_check_dynamic(21,7,7,9,0,58,0,6)
+		fn_check_dynamic(26,7,7,9,12,58,0,6)
 		! length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english
 	else if env$('client')="Campbell" then ! r: updated 1/17/2018 - uses very few options
 		length                 =26
@@ -1325,14 +1325,14 @@ def fn_print_stub
 		fn_stub_hitBoxes(mat ltext$,mat lPos)
 		pr #255: "}" ! <-- end the font size of 8
 		fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
-	! else if env$('client')='Crocket County' then   <-- not necessary - that change was supposed to be in Checkbook.
-	! 	stubCount+=1
-	! 	if stubCount=1 then
-	! 		fn_stub_standard(4)
-	! 	else if stubCount=2 then
-	! 		stubCount=0
-	! 		fn_stub_standard
-	! 	end if
+	else if env$('client')='Crocket County' then
+		stubCount+=1
+		if stubCount=1 then
+			fn_stub_standard(4)
+		else if stubCount=2 then
+			stubCount=0
+			fn_stub_standard
+		end if
 	else 
 		fn_stub_standard
 	end if 
