@@ -33,6 +33,7 @@ fntop(program$)
 		fnAddOneC(mat menuOption$,' >  addParty Defendant')
 		fnAddOneC(mat menuOption$,' >  streamDocument')
 		fnAddOneC(mat menuOption$,' >  submitFiling')
+		fnAddOneC(mat menuOption$,' >  addPartySummonsInformation')
 
 		choice=fnMenu(env$('program_caption'),Mat menuOption$, pk$,'John Bowman Services LLC') ! ,0,1) ! ; &Pk$, Title$*80, Footer$*80, Nnp, Autonumber,Mstart,Mat Custom_Menubar$, Mat Custom_Menuprg$, Mat Custom_Menustatus$,&Menu_Startup$,Menu_Offset,M_Timeout,M_Trust$*30,M_F93_Enable)
 
@@ -40,14 +41,14 @@ fntop(program$)
 		if choice=(choiceWalker+=1)  then ! list<municipalities>
 			fnListMunicipalities
 		else if choice=(choiceWalker+=1) then ! New      Non-Criminal Flow (4-8)
-			fnCreateNewFiling(court$,'1','CI',filerBarNumber$,notificationEmail$)
+			fnCreateNewFiling(court$,'99','CI',filerBarNumber$,notificationEmail$)
 			fnAddParty ! Plantiff
 			fnAddParty ! Defendant
 			fnStreamDocument('','',program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf')
 			fnSubmitFiling('','')
 		else if choice=(choiceWalker+=1) then ! Existing Non-Criminal Flow (3,5-8)
 			fnLoadExistingCase('C99CR160000004',filerBarNumber$,'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
-			fnCreateNewFiling(court$,'1','CI',filerBarNumber$,notificationEmail$)
+			fnCreateNewFiling(court$,'99','CI',filerBarNumber$,notificationEmail$)
 			fnAddParty ! Plantiff
 			fnAddParty ! Defendant
 			fnStreamDocument('','',program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf')
@@ -55,7 +56,7 @@ fntop(program$)
 		else if choice=(choiceWalker+=1)  then ! loadExistingCase
 			fnLoadExistingCase('C99CR160000004',filerBarNumber$,'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
 		else if choice=(choiceWalker+=1)  then ! CreateNewFiling
-			fnCreateNewFiling(court$,'1','CI',filerBarNumber$,notificationEmail$)
+			fnCreateNewFiling(court$,'99','CI',filerBarNumber$,notificationEmail$)
 		else if choice=(choiceWalker+=1)  then ! addParty Plantiff
 			fnAddParty ! Plantiff
 		else if choice=(choiceWalker+=1)  then ! addParty Defendant

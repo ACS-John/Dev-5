@@ -11,7 +11,7 @@ If %ERRORLEVEL%==1 (
 	rem @echo start "NebraskaWebClient" /B /WAIT /D "C:\Test Folder" "C:\Test Folder\NebraskaWebClient.exe" %*
 	rem @echo start "NebraskaWebClient" /WAIT /D "C:\Test Folder" "NebraskaWebClient.exe %*"
 	@echo "%~dp0NebraskaWebClient\NebraskaWebClient.exe" %*"
-	"%~dp0NebraskaWebClient.exe" %*
+	"%~dp0NebraskaWebClient\NebraskaWebClient.exe" %*
 ) else (
 	@echo execute skipped.
 )
