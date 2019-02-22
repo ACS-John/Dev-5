@@ -172,7 +172,7 @@ def library fndate_picker$ (;_date$,format$,row,column,___, window,days_in_week,
 fnend
 def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 	library 'S:\Core\ace\win3b.br': fnfkey
-	fnfkey(scrline,mat fkey$,mat disfk,em$,es)
+	fnfkey=fnfkey(scrline,mat fkey$,mat disfk,em$,es)
 fnend
 def library fnwin3(win,&cap$,wh,ww,dc,bo,win_align)
 	library 'S:\Core\ace\Win3b.br': fnwin3b
