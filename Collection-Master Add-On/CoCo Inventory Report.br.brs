@@ -58,7 +58,7 @@ if ~cocoSelectSetup then
 end if
 
 msReply=fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
-pr msReply : pause
+if msReply=0 then goto Xit
 ! ! /r
 
 ! r: open the files and pr headers
@@ -149,7 +149,7 @@ for cocoItem=1 to cocoCount
 		dim emailMessage$*1048
 		emailMessage$='See attached report.'&chr$(10)&'Should have been sent to '&tmpEmailList$(emailItem)
 		fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
-		fnSendEmail('jbowman@bqlaw.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		! fnSendEmail('jbowman@bqlaw.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
 		sleep(16)
 		! pause
 	nex emailItem

@@ -1,74 +1,4 @@
 pr 'this program was not intended to be run directly.' : stop
-!  fn_setup
-!  ! r: highly subjective setup
-!  	
-!  	! bar number that can be used for test filing from the court: 25623
-!  	filerBarNumber=25623  ! Kirk is 16805
-!  	! filerBarNumber=16805 <-- Kirk 
-!  	
-!  	dim notificationEmail$*128
-!  	notificationEmail$='jbowman@bqlaw.com'
-!  	dim optNotificationEmail1$*128
-!  	optNotificationEmail1$=''
-!  	dim optNotificationEmail2$*128
-!  	optNotificationEmail2$=''
-!  
-!  	court$='County' ! or 'District'
-!  	enableReplevin=0
-!  ! /r
-!  fntop(program$)
-!  
-!  ! r: Menu
-!  	do
-!  		pk$='A-M'
-!  
-!  		dim menuOption$(0)*128
-!  		mat menuOption$(0)
-!  		fnAddOneC(mat menuOption$,' List<Municipalities> listFilers();')
-!  		fnAddOneC(mat menuOption$,' New      Non-Criminal Flow (4-8)') ! Always Civil cases
-!  		fnAddOneC(mat menuOption$,' Existing Non-Criminal Flow (3,5-8)') ! Always Civil cases
-!  		fnAddOneC(mat menuOption$,' >  loadExistingCase') ! Always Civil cases
-!  		fnAddOneC(mat menuOption$,' >  CreateNewFiling')
-!  		fnAddOneC(mat menuOption$,' >  addParty Plantiff')
-!  		fnAddOneC(mat menuOption$,' >  addParty Defendant')
-!  		fnAddOneC(mat menuOption$,' >  streamDocument')
-!  		fnAddOneC(mat menuOption$,' >  submitFiling')
-!  
-!  		choice=fnMenu(env$('program_caption'),Mat menuOption$, pk$,'John Bowman Services LLC') ! ,0,1) ! ; &Pk$, Title$*80, Footer$*80, Nnp, Autonumber,Mstart,Mat Custom_Menubar$, Mat Custom_Menuprg$, Mat Custom_Menustatus$,&Menu_Startup$,Menu_Offset,M_Timeout,M_Trust$*30,M_F93_Enable)
-!  
-!  		choiceWalker=0
-!  		if choice=(choiceWalker+=1)  then ! list<municipalities>
-!  			fn_listMunicipalities
-!  		else if choice=(choiceWalker+=1) then ! New      Non-Criminal Flow (4-8)
-!  			fn_createNewFiling
-!  			fn_addParty ! _Plantiff
-!  			fn_addParty ! _Defendant
-!  			fn_streamDocument
-!  			fn_submitFiling
-!  		else if choice=(choiceWalker+=1) then ! Existing Non-Criminal Flow (3,5-8)
-!  			fn_loadExistingCase('C99CR160000004',str$(filerBarNumber),'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
-!  			fn_createNewFiling
-!  			fn_addParty ! _Plantiff
-!  			fn_addParty ! _Defendant
-!  			fn_streamDocument
-!  			fn_submitFiling
-!  		else if choice=(choiceWalker+=1)  then ! loadExistingCase
-!  			fn_loadExistingCase('C99CR160000004',str$(filerBarNumber),'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
-!  		else if choice=(choiceWalker+=1)  then ! CreateNewFiling
-!  			fn_createNewFiling
-!  		else if choice=(choiceWalker+=1)  then ! addParty Plantiff
-!  			fn_addParty ! _Plantiff
-!  		else if choice=(choiceWalker+=1)  then ! addParty Defendant
-!  			fn_addParty ! _Defendant
-!  		else if choice=(choiceWalker+=1)  then ! streamDocument
-!  			fn_streamDocument
-!  		else if choice=(choiceWalker+=1)  then ! submitFiling
-!  			fn_submitFiling
-!  		else
-!  			fnXit
-!  		end if
-!  	loop
-!  ! /r
 def fn_setup
 	if ~setup then
 		setup=1
@@ -81,32 +11,8 @@ def fn_setup
 		mtomSoapUtil$=os_filename$('Collection-Master Add-On\mtomSoap.cmd') ! os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
 		
 		library 'S:\Core\Library.br': fngethandle
-		library 'S:\Core\Library.br': fnCountMatchesC
-		library 'S:\Core\Library.br': fnMsgBox
-		library 'S:\Core\Library.br': fnAddOneC
-		library 'S:\Core\Library.br': fntop
-		library 'S:\Core\Library.br': fnXit
 		library 'S:\Core\Library.br': fnFree
 
-		library "library\CLSUtil.wb": fnGetInf$
-		library "library\CLSUtil.wb": fncom
-		library "library\CLSUtil.wb": fnget_formall$,fnget_formarr
-		library "library\CLSUtil.wb": fnreport_path$,fnclaim_path$
-		library "library\CLSUtil.wb": fnget_claimfiles,fnclaim_scroll
-		library "library\CLSUtil.wb": fnrange_to_array,fnarray_to_range$
-		library "library\CLSUtil.wb": fnfix_bh,fnask_payref
-		library "library\CLSUtil.wb": fnget_form
-		library "library\CLSUtil.wb": fnunpack$
-		library "library\CLSUtil.wb": fnStime,fnStime$
-		library "library\CLSUtil.wb": fnMessageBox
-		library "library\CLSUtil.wb": Fnlist_Print
-		library "Prog2\Mast2.wb": fnsql_read
-
-		library "library\CLSUtil.wb": fnfix_bh
-		library "Prog2\Mast_SQL.wb": fnmast2_int_cache
-		library "library\CLSUtil.wb": fnAsk_file1
-		! LIBRARY "Toolbar/Library": Fnsubmenu
-		library "library\CLSUtil.wb": fnmenu
 	end if
 fnend
 
