@@ -24,7 +24,7 @@ def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFil
 			! server$='10.20.129.12:25' <--- that would use port 25
 			server$='10.20.129.12'
 			dim fromEmail$*128
-			fromEmail$='reportDaemon@bqlaw.com'
+			fromEmail$='bqreportingservices@bqlaw.com' ! 'reportDaemon@bqlaw.com'
 			userAccount$=''
 			password$=''
 		else

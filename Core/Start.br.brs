@@ -192,7 +192,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if 
 		library 'S:\Core\Library': fnSpecialFolderPath$
 		setenv('Desktop',fnSpecialFolderPath$('Desktop'))
-		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then 
+		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' and serial<>200033202 then   ! serial<>200033202 is Brumbaugh - they should never see this pop-up
 			fn_show_release_notes(version_prior$,version_current$)
 			fn_FreeVirtualStore
 			fn_UpdateQFileIO
