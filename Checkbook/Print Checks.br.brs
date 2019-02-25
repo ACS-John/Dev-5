@@ -396,7 +396,7 @@ L7910: !
 	fnopenprn
 	ckn1=reprintckn: amt=tr3
 	if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
-	if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
+	! if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2) ! reprint checks does it double for no reason!?
 	if scc$="SCS" then let fn_portion_stub(1) : fn_portion_check   : fn_portion_stub(2)
 	if scc$="SSC" then let fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
 	if scc$="SCC" then let fn_portion_stub(1) : fn_portion_check    : fn_portion_check
@@ -821,7 +821,7 @@ def fn_portion_stub(stubOnCheck)
 			pr #255: ''
 			pr #255: ''
 			pr #255: ''
-			pr #255: ''
+			if env$('client')='Edison' then pr #255: ''
 		end if
 	end if 
 fnend 
