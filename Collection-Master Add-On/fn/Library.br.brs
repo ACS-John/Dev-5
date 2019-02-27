@@ -9,7 +9,7 @@ def library fnmulti_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_g
 	fnmulti_select=fnmulti_select(mat ms_selected$,mat ms_unselected$, cap$,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 fnend
 ! r: mtomSoap
-def library fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$*256; custMemo$*256,dssNumber$)
+def library fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationEmail$*256; custMemo$*256,dssNumber$)
 	library 'Collection-Master Add-On\fn\mtomSoap.br': fnLoadExistingCase
 	fnLoadExistingCase=fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$, custMemo$,dssNumber$)
 fnend

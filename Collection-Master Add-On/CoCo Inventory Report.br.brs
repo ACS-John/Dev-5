@@ -57,8 +57,8 @@ if ~cocoSelectSetup then
 	D_Grid_Heading$(3)='Email' 	: D_Grid_Width(3)=60 	: D_Grid_Form$(3)='C 60,[T]L'
 end if
 
-msReply=fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
-if msReply=0 then goto Xit
+fnmulti_select(mat coco_selected$,mat coco_unselected$,'Select CoCo to include',Mat D_Grid_Heading$,Mat D_Grid_Width,Mat D_Grid_Form$)
+if fkey=93 or fkey=99 then goto Xit
 ! ! /r
 
 ! r: open the files and pr headers
@@ -138,6 +138,7 @@ for cocoItem=1 to cocoCount
 	pr file$(hOut(cocoItem))
 	close #hOut(cocoItem):
 nex cocoItem
+emailCount=0
 for cocoItem=1 to cocoCount
 	dim tmpEmail$*256
 	tmpEmail$=fn_cocoData$(cocoN(cocoItem),'email')
@@ -148,14 +149,17 @@ for cocoItem=1 to cocoCount
 		emailSubject$=env$('program_caption')&' as of '&date$('month d, ccyy')&' for '&fn_cocoData$(cocoN(cocoItem),'name')
 		dim emailMessage$*1048
 		emailMessage$='See attached report.'&chr$(10)&'Should have been sent to '&tmpEmailList$(emailItem)
-		fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		! pause
+		! fnSendEmail('niceguywinning@gmail.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
 		! fnSendEmail('jbowman@bqlaw.com',emailMessage$, emailSubject$ ,outFileName$(cocoItem))
-		sleep(16)
+		emailCount+=1
+		fnSendEmail(tmpEmailList$(emailItem),emailMessage$, emailSubject$ ,outFileName$(cocoItem))
+		! sleep(16)
 		! pause
 	nex emailItem
 nex cocoItem
 fncom(100,100,12)
-fnMessageBox('Completed processing '&str$(udim(mat tmpEmailList$))&' email(s).', mb_ok,env$('program_caption'),'cocoInvSuccess')
+fnMessageBox('Completed processing '&str$(emailCount)&' emailCountemail(s).', mb_ok,env$('program_caption'),'cocoInvSuccess')
 goto Finis ! /r
 Finis: ! r:
 goto Xit ! /r
@@ -185,33 +189,20 @@ def fn_setup
 		
 		library 'S:\Core\Library.br': fnSendEmail
 		library 'S:\Core\Library.br': fnsafe_filename$
-		library 'S:\Core\Library.br': fnSpecialFolderPath$
 		library 'S:\Core\Library.br': fngethandle
-		library 'S:\Core\Library.br': fnCountMatchesC
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 		library 'S:\Core\Library.br': fnXit
 
-		library "library\CLSUtil.wb": fnGetInf$
 		library "library\CLSUtil.wb": fncom
 		library "library\CLSUtil.wb": fnget_form
 		library "library\CLSUtil.wb": fnget_formall$
-		library "library\CLSUtil.wb": fnreport_path$
 		library "library\CLSUtil.wb": fnunpack$
 		library "library\CLSUtil.wb": fnMessageBox
-		library "library\CLSUtil.wb": Fnlist_Print
-		library "Prog2\Mast2.wb": fnsql_read
-
-		library "library\CLSUtil.wb": fnfix_bh
-		library "Prog2\Mast_SQL.wb": fnmast2_int_cache
-		library "library\CLSUtil.wb": fnAsk_file1
 		
-		
-		
-		library 'Library\clsUtil': fngrid_setup
-		library 'Library\SQL': fnopen_sql_file,fnsql_setup$
+		library 'Library\SQL': fnsql_setup$
 		
 		dim masterData$(1)*60,masterDataN(1)
 		dim masterFieldsc$(1)*20,masterFieldsN$(1)*20

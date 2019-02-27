@@ -77,11 +77,11 @@ def fn_listMunicipalities
 	fn_mtomSoapFinis
 fnend
 
-def library fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$; custMemo$*256,dssNumber$)
+def library fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationEmail$; custMemo$*256,dssNumber$)
 	if ~setup then let fn_setup
 	fnLoadExistingCase=fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$, custMemo$,dssNumber$)
 fnend
-def fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$*256; custMemo$*256,dssNumber$)
+def fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationEmail$*256; custMemo$*256,dssNumber$)
 	fn_mtomSoapOpen('loadExistingCase')
 	fn_prOutXmlItem('caseNumber'         ,caseNumber$)
 	fn_prOutXmlItem('filerBarNumber'     ,fileBarNumber$)

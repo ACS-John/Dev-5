@@ -1,20 +1,24 @@
-!		! r: test zone
-!			! library 'S:\Core\Library.br': fntop
-!			library program$: fnSendEmail
-!			! fntop(program$)
-!			dim subject$*255
-!			subject$='fnSendEmail Test'
-!			dim emailMessage$*10000
-!			emailMessage$='This is a test<br>This is line two testing<br>'
-!			dim attachFile$*255
-!			attachFile$=''
-!			prompt=0
-!			dim bccEmail$*256
-!			bccEmail$=''
-!			mat ccEmails$(0)
-!			CCAsTo=0
-!			fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$,attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-!		! /r
+	! r: test zone
+		! library 'S:\Core\Library.br': fntop
+		library program$: fnSendEmail
+		! fntop(program$)
+		dim subject$*255
+		subject$='fnSendEmail Test'
+		dim emailMessage$*10000
+		emailMessage$='This is a test<br>This is line two testing<br>'
+		dim attachFile$*255
+		attachFile$=program$
+		prompt=0
+		dim bccEmail$*256
+		bccEmail$=''
+		mat ccEmails$(0)
+		CCAsTo=0
+		fnSendEmail('jbowman@bqlaw.com',emailMessage$, subject$&' with attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
+		fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$&' with attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
+		fnSendEmail('jbowman@bqlaw.com',emailMessage$, subject$&' withOUT attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
+		fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$&' withOUT attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
+		! fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$,attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
+	! /r
 end
 def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFile$*1024,prompt,BCCEmail$*256,mat CCEmails$,CCAsTo,___,hResult,success,line$*1024,item,emailAddr$*1024,returnN)
 	library 'S:\Core\Library.br': fngethandle
@@ -22,9 +26,10 @@ def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFil
 	if exists("Core\sendEmail.exe") then
 		if env$('client')='Brumbaugh' then
 			! server$='10.20.129.12:25' <--- that would use port 25
-			server$='10.20.129.12'
+			! server$='10.20.129.12' ! <-- old works
+			server$='10.20.129.21' ! <-- new fails
 			dim fromEmail$*128
-			fromEmail$='bqreportingservices@bqlaw.com' ! 'reportDaemon@bqlaw.com'
+			fromEmail$='bqreportservices@bqlaw.com' ! 'reportDaemon@bqlaw.com'
 			userAccount$=''
 			password$=''
 		else

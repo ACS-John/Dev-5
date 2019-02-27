@@ -261,50 +261,23 @@ def fn_setup
 		setup=1
 		library 'library\clsUtil.wb': fnDate_rpt10$
 		library 'library\clsUtil.wb': fnAllDebtors
-		library 'prog2\intermnt.wb': fninternal_data
-
+		! library 'prog2\intermnt.wb': fninternal_data
 
 		library 'S:\Core\Library.br': fnEndOfMonth
 		library 'S:\Core\Library.br': fngethandle
-		library 'S:\Core\Library.br': fnCountMatchesC
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 
-		library "library\CLSUtil.wb": fnGetInf$
-		library "library\CLSUtil.wb": fncom
-		library "library\CLSUtil.wb": fnget_formall$,fnget_formarr
-		library "library\CLSUtil.wb": fnreport_path$,fnclaim_path$
-		library "library\CLSUtil.wb": fnget_claimfiles,fnclaim_scroll
-		library "library\CLSUtil.wb": fnrange_to_array,fnarray_to_range$
-		library "library\CLSUtil.wb": fnfix_bh,fnask_payref
-		library "library\CLSUtil.wb": fnget_form
+		library "Library\CLSUtil.wb": fnget_formall$
 		library "library\CLSUtil.wb": fnunpack$
-		library "library\CLSUtil.wb": fnStime,fnStime$
-		library "library\CLSUtil.wb": fnMessageBox
-		library "library\CLSUtil.wb": fnList_Print
-		library "Prog2\Mast2.wb": fnsql_read
-
-		library "library\CLSUtil.wb": fnfix_bh
-		library "Prog2\Mast_SQL.wb": fnmast2_int_cache
-		library "library\CLSUtil.wb": fnAsk_file1
-
-
-
-		library "CLSUtil/Library": fnadd_one$,fngrid_setup,fnget_file,fnget_groups,fnuser_init$,fnsecurity,fnget_form,fnget_formall$,fnget_var$,fngethandle,fnremove_arrayitem$,fnremove_arrayitem,fnadd_one,fncom
-		library "CLSUtil/Library": fnmessagebox,fn_encryptdecrypt,fndefault_password$,fnlist_print,fngui_push_on,fnprogram_top
-		library "CLSUtil/Library": fngenerate_buttons,fnerase_buttons,fndisplay_top ! ,fnarray_item_insert$
-		library 'GridIO/Library': fnmulti_select,fnconfirm,fnconfirm_delete
-		library 'RE/Prog2': fnrights_effective
-		library 'Theme/Theme': fnsection_divider
-		library 'sql/library': fnopen_sql_file,fnsql_setup$
-
+		library "Library\CLSUtil.wb": fnget_form
+		library "Library\CLSUtil.wb": fnget_formarr
+		
 		gosub Enum
 		gosub SetupPrint
 
-
-		library "CLSUtil/Library": fnget_form,fnget_formarr
 		dim employer_data$(1)*60,employer_data(1),employer_fieldsc$(1)*20,employer_fieldsn$(1)*20,employer_formc$*2048,employer_formn$*2048
 		dim employer_des_c$(1)*80,employer_des_n$(1)*80,employer_seq$(1)*80,employer_valid$(1)*80,employer_fc$(1,3)*80,employer_fn$(1,3)*80
 		fnget_form("EMPLOYER",mat employer_data$,mat employer_data,mat employer_fieldsc$,mat employer_fieldsn$,employer_formc$,employer_formn$)
