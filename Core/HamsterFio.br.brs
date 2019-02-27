@@ -8,15 +8,21 @@ def fn_setup
 fnend
 def library fnHamsterFio(fileid$*64)
 	if ~setup then let fn_setup
-	dim DefaultFileLayoutPath$*256
-	DefaultFileLayoutPath$="S:\Core\FileIO\Layout\"
-	DefaultFileLayoutExtension$=".fio"
+	dim defaultFileLayoutPath$*256
+	
+	if env$('client')='Brumbaugh' then
+		defaultFileLayoutExtension$=''
+		defaultFileLayoutPath$="S:\FileLay\"
+	else
+		defaultFileLayoutExtension$='.fio'
+		defaultFileLayoutPath$="S:\Core\FileIO\Layout\"
+	end if
 	dim hfData$(0)*2048
 	dim hfDataN(0)
 	dim hfDataAll$(0)*2048
 	hFile=fn_open(fileid$,mat hfData$,mat hfDataN,mat form$)
 	if hFile then
-		fn_hfLayoutRead(DefaultFileLayoutPath$&fileid$&DefaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
+		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
 		fnHamster(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat startingPosition,mat comboBox$)
 	end if
 fnend

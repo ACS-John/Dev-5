@@ -546,7 +546,7 @@ def fn_draw_windows
 			setenv('Session_Cols',str$(Session_Cols))
 		end if
 		open #0: 'SRow=1,SCol=2,Rows='&str$(Session_Rows)&",Cols="&str$(Session_Cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen],buttonRows=0',display,outIn
-		if login_name$='jbowman' then pr 'i opened zero, jbowman.' : pause
+		! if login_name$='jbowman' then pr 'i opened zero, jbowman.' : pause
 	end if
 	dim borderText$*256
 	if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '

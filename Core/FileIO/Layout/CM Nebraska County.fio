@@ -1,0 +1,6 @@
+S:\DATA\Nebraska County.dat, nc_, 0
+S:\DATA\Nebraska County.idx, dmv
+recl=130
+===================================================
+dmv$  , DMV Code     ,  C   2  , ! pos 1
+name$ , Name         ,  C 128  , ! pos 3
