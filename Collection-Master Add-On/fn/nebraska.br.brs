@@ -1,4 +1,19 @@
-
+	fn_setup
+	gosub SetupCounties
+	dim nc$(0)*2048
+	dim ncN(0)
+	dim hfDataAll$(0)*2048
+	hNeCounty=fn_open('CM Nebraska County',mat nc$,mat ncN,mat form$)
+	pr udim(mat nc$) : pause
+	for recItem=1 to udim(mat countyNumberList$)
+		mat nc$=('')
+		mat ncN=(0)
+		nc$(nc_dmv)=countyNumberList$(recItem)
+		nc$(nc_name)=countyNameList$(recItem)
+		write #hNeCounty,using form$(hNeCounty): mat nc$,mat ncN
+	nex recItem
+	close #hNeCounty:
+end
 if ~setup_municipalities then ! r: 
 	setup_municipalities=1
 	fn_addMunicipality('1','County Ordinance','COU'                   )
@@ -633,12 +648,13 @@ if ~setup_municipalities then ! r:
 	fn_addMunicipality('630','Hooker','A93'                           )
 end if ! /r
 def fn_addMunicipality(a$,b$*128,c$)
+	
 fnend
 def fn_addCounty(countyNumber$*2,countyName$*40)
 	if ~setup_addCounty then
 		setup_addCounty=1
 		dim countyNumberList$(0)*2
-		dim countyNameList$(0)*2
+		dim countyNameList$(0)*128
 	end if
 	fnAddOneC(mat countyNumberList$,countyNumber$)
 	fnAddOneC(mat countyNameList$,countyName$)
@@ -649,7 +665,19 @@ def fn_setup
 fnend
 def library fnNeCountyNumber$*2(countyName$*40; ___,return$*2,which)
 	if ~setup then let fn_setup
-	if ~setup_counties then ! r:
+	if ~setup_counties then 
+		pr 'replace this logic with a read of the file' : pause
+		! gosub SetupCounties
+	end if
+	
+	which=fn_srch_case_insensitive(mat countyNameList$,countyName$)
+	if which>0 then
+		return$=countyNumberList$(which)
+	end if
+	fnNeCountyNumber$=return$
+fnend
+SetupCounties: ! r:
+	if ~setup_counties then
 		setup_counties=1
 		! this list was derived from:   https://en.wikipedia.org/wiki/List_of_counties_in_Nebraska   on 2/22/2019
 		fn_addCounty('14','Adams')
@@ -745,12 +773,6 @@ def library fnNeCountyNumber$*2(countyName$*40; ___,return$*2,which)
 		fn_addCounty('45','Webster')
 		fn_addCounty('84','Wheeler')
 		fn_addCounty('17','York')
-	end if ! /r
-
-	
-	which=fn_srch_case_insensitive(mat countyNameList$,countyName$)
-	if which>0 then
-		return$=countyNumberList$(which)
 	end if
-	fnNeCountyNumber$=return$
-fnend
+return ! /r
+include: fn_open

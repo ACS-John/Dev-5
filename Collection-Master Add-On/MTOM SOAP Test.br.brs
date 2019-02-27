@@ -34,6 +34,7 @@ fntop(program$)
 		fnAddOneC(mat menuOption$,' >  streamDocument')
 		fnAddOneC(mat menuOption$,' >  submitFiling')
 		fnAddOneC(mat menuOption$,' >  addPartySummonsInformation')
+		fnAddOneC(mat menuOption$,' >  listValidActionsForCase (only after loadExistingCase)')
 
 		choice=fnMenu(env$('program_caption'),Mat menuOption$, pk$,'John Bowman Services LLC') ! ,0,1) ! ; &Pk$, Title$*80, Footer$*80, Nnp, Autonumber,Mstart,Mat Custom_Menubar$, Mat Custom_Menuprg$, Mat Custom_Menustatus$,&Menu_Startup$,Menu_Offset,M_Timeout,M_Trust$*30,M_F93_Enable)
 
@@ -67,6 +68,11 @@ fntop(program$)
 			fnStreamDocument('','',program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf')
 		else if choice=(choiceWalker+=1)  then ! submitFiling
 			fnSubmitFiling('','')
+			
+		else if choice=(choiceWalker+=1)  then ! addPartySummonsInformation
+			
+		else if choice=(choiceWalker+=1)  then ! listValidActionsForCase
+			
 		else
 			fnXit
 		end if
