@@ -1,6 +1,7 @@
 on error goto Error_Hanler
 fn_setup
-fnTop(program$)
+! fnTop(program$)
+fntop(program$,'',1)
 ! r: Set Defaults and Filters
 	mat forwarderFilter(0)
 	fnAddOneN(mat forwarderFilter,4033)
@@ -209,49 +210,20 @@ def fn_setup
 	if ~setup then
 		setup=1
 		
-		LIBRARY 'Library\OpenFile.wb': Fnopen_Active
 		
 		library 'library\clsUtil.wb': fnDate_rpt10$
-		library 'library\clsUtil.wb': fnAllDebtors
 		library 'library\clsUtil.wb': fnArray_to_range$,fnRange_to_array
-		library 'prog2\intermnt.wb': fnInternal_data
-
 
 		library 'S:\Core\Library.br': fnXit
 		library 'S:\Core\Library.br': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
 		library 'S:\Core\Library.br': fnGetHandle
-		! library "CLSUtil/Library": fnGetHandle
-		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 
-		library 'library\CLSUtil.wb': fnGetInf$
 		library 'library\CLSUtil.wb': fncom
-		library 'library\CLSUtil.wb': fnreport_path$,fnclaim_path$
-		library 'library\CLSUtil.wb': fnget_claimfiles,fnclaim_scroll
-		library 'library\CLSUtil.wb': fnrange_to_array,fnarray_to_range$
-		library 'library\CLSUtil.wb': fnfix_bh,fnask_payref
-		library 'library\CLSUtil.wb': fnunpack$
-		library 'library\CLSUtil.wb': fnStime,fnStime$
-		library 'library\CLSUtil.wb': fnMessageBox
 		library 'library\CLSUtil.wb': fnList_Print
-		library 'library\CLSUtil.wb': fncom
-		library 'Prog2\Mast2.wb': fnsql_read
 
-		library 'library\CLSUtil.wb': fnfix_bh
-		library 'Prog2\Mast_SQL.wb': fnmast2_int_cache
-		library 'library\CLSUtil.wb': fnAsk_file1
-
-
-
-		library "Library\CLSUtil.wb": fnremove_arrayitem$,fnremove_arrayitem
-		library "Library\CLSUtil.wb": fnget_file
-		library "Library\CLSUtil.wb": fnmessagebox
-		library "Library\CLSUtil.wb": fndisplay_top
-		library 'Library\GridIO.wb': fnmulti_select,fnconfirm,fnconfirm_delete
-		library 'Theme\Theme.wb': fnsection_divider
-		library 'Library\SQL.wb': fnopen_sql_file
 		library 'Library\SQL.wb': fnsql_setup$
 
 		gosub Enum

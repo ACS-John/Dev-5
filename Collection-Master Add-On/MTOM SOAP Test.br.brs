@@ -5,8 +5,8 @@ fnTop(program$,'',1)
 	! bar number that can be used for test filing from the court: 25623
 	filerBarNumber$='25623'  ! Kirk is 16805
 	! filerBarNumber=16805 <-- Kirk 
-	
 	dim notificationEmail$*128
+	
 	notificationEmail$='jbowman@bqlaw.com'
 	dim optNotificationEmail1$*128
 	optNotificationEmail1$=''
@@ -47,14 +47,16 @@ fntop(program$)
 			fnStreamDocument('','',program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf')
 			fnSubmitFiling('','')
 		else if choice=(choiceWalker+=1) then ! Existing Non-Criminal Flow (3,5-8)
-			fnLoadExistingCase('C99CR160000004',filerBarNumber$,'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
+			! fnLoadExistingCase('C01CI170003507',filerBarNumber$,'2015-06-15T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
+			fnLoadExistingCase('C99CI170003507',filerBarNumber$,'2015-06-15T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
 			fnCreateNewFiling(court$,'99','CI',filerBarNumber$,notificationEmail$)
 			fnAddParty ! Plantiff
 			fnAddParty ! Defendant
 			fnStreamDocument('','',program$(1:pos(program$,'\',-1))&'mtom soap sample 1.pdf')
 			fnSubmitFiling('','')
 		else if choice=(choiceWalker+=1)  then ! loadExistingCase
-			fnLoadExistingCase('C99CR160000004',filerBarNumber$,'2018-11-05T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
+			! fnLoadExistingCase('C01CI170003507',filerBarNumber$,'2015-06-15T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
+			fnLoadExistingCase('C99CI170003507',filerBarNumber$,'2015-06-15T13:00:00Z',notificationEmail$, 'This is a sample customer memo')
 		else if choice=(choiceWalker+=1)  then ! CreateNewFiling
 			fnCreateNewFiling(court$,'99','CI',filerBarNumber$,notificationEmail$)
 		else if choice=(choiceWalker+=1)  then ! addParty Plantiff

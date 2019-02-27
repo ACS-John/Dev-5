@@ -489,6 +489,7 @@ def fn_ezreader(bookFile$*512)
 		pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 		! if fncustomerdata$('meter multiplier')
 		if env$('client')='GreenCo' then reading=reading*10
+		if env$('client')='Morrisonville' then reading=reading*100
 	loop
 	EXREADER_XIT: !
 	close #2: ioerr ignore
