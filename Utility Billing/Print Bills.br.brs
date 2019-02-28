@@ -1407,7 +1407,9 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		pr #255: 
 		pr #255: 
 		pr #255: 
+		pr #255: 
 	else if bills=3 then 
+		pr #255: 
 		pr #255: 
 		pr #255: 
 		pr #255: 
