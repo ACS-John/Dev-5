@@ -1423,6 +1423,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 	if pb<>0 then pb$="   Prior Balance" else pb$=""
 	pr #255: ""
 	if g(1)=0 then t$="" else t$="Wtr"
+	pr #255: ""
 	pr #255,using PBO_F_ONE: t$,0,d(1),d(3),g(1),0,0,fn_mg2$
 	PBO_F_ONE: form pos 4,c 3,nz 1,nz 8,nz 8,nz 9.2,x 4,nz 10.2,nz 12.2,pos pboposrightcol,c message2_max_len
 	if g(2)=0 then t$="" else t$="Swr"
@@ -1453,10 +1454,10 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		pr #255,using PBO_L1810: bal+penalty,d4,bal,pe$(2)(1:25),fn_mg2$
 	end if 
 	PBO_L1810: form pos 4,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 38,c 25,pos pboposrightcol,c message2_max_len
-	pr #255,using 'Form pos 16,c 18,pos 38,c 25,pos pboPosRightCol,c message2_max_len': e$(1)(1:18),pe$(3)(1:25),fn_mg2$
-	pr #255,using 'Form pos 5,c 10,x 5,c 10,pos 38,c 25,pos pboPosRightCol,c message2_max_len': z$,final$,pe$(4)(1:25),fn_mg2$
-	pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(1),fn_mg2$
-	pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(2),fn_mg2$
+	pr #255,using 'Form pos 16,c 18,pos 38,c 25,pos pboPosRightCol,c 30': e$(1)(1:18),pe$(3)(1:25),mg$(1) ! fn_mg2$
+	pr #255,using 'Form pos 5,c 10,x 5,c 10,pos 38,c 25,pos pboPosRightCol,c 30': z$,final$,pe$(4)(1:25),mg$(2) ! fn_mg2$
+	! pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(1)
+	! pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(2)
 	if bills=3 then ! Bottom of Page
 		bills=0
 		pr #255: newpage
