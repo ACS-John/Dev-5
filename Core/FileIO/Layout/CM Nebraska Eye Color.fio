@@ -1,0 +1,6 @@
+S:\DATA\Nebraska Eye Color.dat, nec_, 0
+S:\DATA\Nebraska Eye Color.idx, code
+recl=131
+===================================================
+code$ , Code          ,  C   3  , ! pos 1
+name$ , Description   ,  C 128  , ! pos 4

@@ -1,8 +1,8 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________      
+11:04 AM 3/6/2019	CO	minor change to increase stability of fnstatus's cached values
 16:45 02/19/2019	CO	5.74114  
 16:03 02/19/2019	CO	5.74113   
-ECHO is off. 
 16:02 02/28/2019	UB	adjusted bill print for 3320  
 9:02 02/19/2019	CO	5.74106    
 7:58 02/19/2019	CO	5.74105     
@@ -24,7 +24,8 @@ ECHO is off.
 7:22 AM 1/24/2019	UB	added option to include only those with sewer service to the Usage Report                   
 13:46 01/19/2019	CO	5.74090                    
 1:45 PM 1/17/2019       PR	fixed errors in 1099 form printing                                                                                                                                      
-2:17 PM 1/4/2019  	CO	allowed special W-2 and W-3 printing on pre-printed forms                                     10:55 AM 1/2/2019	UB	fixed bug that was forcing reverse billing to individual radio button                                                                                                   
+2:17 PM 1/4/2019  	CO	allowed special W-2 and W-3 printing on pre-printed forms                                     
+10:55 AM 1/2/2019	UB	fixed bug that was forcing reverse billing to individual radio button                                                                                                   
 12:17 01/19/2019	CO	5.74089                     
 15:53 01/19/2019	CO	5.74088                      
 9:33 01/19/2019	CO	5.74087                       
