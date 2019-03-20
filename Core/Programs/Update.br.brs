@@ -34,14 +34,6 @@ XIT: fnxit
 		library 'S:\Core\Library': fnSrepEnv$
 		on error goto ERTN
 	fnend
-IGNORE: continue
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
 ! def fn_acs_update_date$*40(;setit$*40)
 !   dim aud_return$*40
 !   if setit$='(default)' then setit$=date$('ccyy/mm/dd')&' - '&time$
@@ -278,23 +270,25 @@ fnend
 					pr #h_drive_sys: line$
 				end if
 			loop
-DSME_BRCONFIG_EOF: !
+			DSME_BRCONFIG_EOF: !
 			close #h_brconfig_sys:
 			close #h_drive_sys:
 		end if
 	fnend
-	def fn_make_mnu_file(mmf_file$*256)
-		open #h_tmp:=fngethandle: 'Name='&mmf_file$&',RecL=256,New',display,output ioerr MMF_FAIL
-		close #h_tmp:
-		goto MMF_XIT
-MMF_FAIL: !
-		dim mg$(2)*80
-		mat mg$(2)
-		mg$(1)='Failed to create'
-		mg$(2)=os_filename$(mmf_file$)
-		fnmsgbox(mat mg$,response$, cap$,48+0)
-MMF_XIT: !
-	fnend
+def fn_execute(flags$*128,exe_what$*256)
+	if env$('ACSDeveloper')<>'' then
+		pr 'Flags:  '&flags$
+		if exists(exe_what$) then
+			! PAusE
+			execute 'sy -c -w notepad '&exe_what$
+		else
+			pr 'HMMM:  sy '&flags$&' '&exe_what$
+		end if
+	else
+		execute 'sy '&flags$&' '&exe_what$
+	end if
+fnend
+! r: fnStatus*
 	def library fnStatus(text$*512)
 		if ~setup then let fn_setup
 		fnStatus=fn_status(text$)
@@ -321,33 +315,25 @@ MMF_XIT: !
 		curfld(1,grid_rows+1)
 !
 fnend
-def library fnStatusPause
-	if ~setup then let fn_setup
-	fnStatusPause=fn_status_pause
-fnend
-def fn_status_pause
-	fn_status('Press any key to continue.')
-	kstat$(1)
-fnend
-def fn_execute(flags$*128,exe_what$*256)
-	if env$('ACSDeveloper')<>'' then
-		pr 'Flags:  '&flags$
-		if exists(exe_what$) then
-			! PAusE
-			execute 'sy -c -w notepad '&exe_what$
-		else
-			pr 'HMMM:  sy '&flags$&' '&exe_what$
-		end if
-	else
-		execute 'sy '&flags$&' '&exe_what$
-	end if
-fnend
-def library fnStatusClose
-	if ~setup then let fn_setup
-	fnStatusClose=fn_status_close
-fnend
-def fn_status_close
-	close #h_status_win: ioerr ignore
-	h_status_win=0
-	status_initialized=0
-fnend
+
+	def library fnStatusPause
+		if ~setup then let fn_setup
+		fnStatusPause=fn_status_pause
+	fnend
+	def fn_status_pause
+		fn_status('Press any key to continue.')
+		kstat$(1)
+	fnend
+
+
+	def library fnStatusClose
+		if ~setup then let fn_setup
+		fnStatusClose=fn_status_close
+	fnend
+	def fn_status_close
+		close #h_status_win: ioerr ignore
+		h_status_win=0
+		status_initialized=0
+	fnend
+! /r
+include: ertn
