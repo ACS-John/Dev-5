@@ -11,6 +11,7 @@
 	fn_get_system_list(mat sys_name$)
 	fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 	invoice_number+=1
+	if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
 	pr newpage
 	pr f "5,2,cr 43": "Invoice Date (mmddyy):"
 	pr f "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
@@ -139,15 +140,15 @@ def fn_bld_rec(client_id$)
 	b(3)=inpX(5)
 	b(8)=b8
 	b3=b3+b(3)
-	! inv_line=inv_line+1
+	inv_line+=1
 	if val(client_id$)=client_id_sage_ax or val(client_id$)=client_id_brc then 
 		if val(client_id$)=client_id_sage_ax or val(client_id$)=client_id_brc then 
 		!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inpX(6))
-			inv_item$(inv_line+=1)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
+			inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
 		else if inpX(7)=2 then 
-			inv_item$(inv_line+=1)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
+			inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
 		else 
-			inv_item$(inv_line+=1)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
+			inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
 		end if 
 	end if 
 	
@@ -238,9 +239,9 @@ def fn_summary_add
 	if piv$<>'' then 
 		pr #22,using Fsa22: client_id$,client_addr$(1)(1:14),inv_date,pbal,b3,pbal+b3,piv$
 		Fsa22: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
+		totalInvoicesPrinted+=b3
+		totalPreviousBalances+=pbal
 	end if  ! piv$<>''
-	totalInvoicesPrinted+=b3
-	totalPreviousBalances+=pbal
 fnend 
 def fn_summary_print
 	close #22: ioerr SP_XIT

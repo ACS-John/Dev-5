@@ -72,7 +72,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		!  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
 		execute "load S:\Core\Index.br,Resident"
 		execute "load S:\Core\ACS_Component.br,Resident"
-		execute "load S:\Core\fnWindowsStart.br,resident"
+		execute "load S:\Core\fnWindowsStart.br,Resident"
 		execute 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
@@ -134,8 +134,8 @@ def fn_acsSystemInitialize(; syInitMode)
 				fnmakesurepathexists(workingDir$&'\')
 				execute 'CD '&workingDir$(1:2)
 				execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
-				! fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
-				! fnCopy('S:\sio.lic','sio.lic')
+				fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+				fnCopy('S:\sio.lic','sio.lic')
 				fn_CopySfileIoIniToFileIoIni
 			else
 				pr 'Problem: workingDir is "'&workingDir$&'"'

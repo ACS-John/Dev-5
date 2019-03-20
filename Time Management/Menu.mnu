@@ -5,7 +5,7 @@ File
 >>Import Transactions from Mint CSV to Checkbook                      ^ acsTM\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)                              ^ acsTM\TMTrans
 >Support                                                              ^ acsTM\Support
->>Update support expiration date                                       ^ Time Management\Update support expiration date
+>>Update Support Expiration Date                                       ^ Time Management\Update Support Expiration Date
 >Support2                                                             ^ acsTM\Support2
 >Category                                                             ^ acsTM\Ctmaint
 >Service Code                                                         ^ acsTM\svmaint
@@ -33,7 +33,7 @@ Daily
 ! >Print Work Schedules                                               ^ acsTM\tmwrksch
 ! >Print Messages                                                     ^ acsTM\armessag
 Monthly
->CSV2TM ^ acsTM\csv2tm
+>Import CSV to Time Sheets                                            ^ Time Management\Import CSV to Time Sheets
 >Print Monthly Billing Summary                                        ^ acsTM\tmmobsum
 ! >Post to General Ledger                                             ^ acsTM\arpostgl    ^ GL
 ! >Month End Closing                                                  ^ acsTM\tmpytd
