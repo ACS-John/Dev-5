@@ -26,120 +26,114 @@
 	end if
 XIT: fnxit
 ! /r
-	def fn_setup
-		setup=1
-		library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle
-		library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnSrepEnv$
-		on error goto ERTN
-	fnend
-! def fn_acs_update_date$*40(;setit$*40)
-!   dim aud_return$*40
-!   if setit$='(default)' then setit$=date$('ccyy/mm/dd')&' - '&time$
-!   if setit$<>'' then
-!     aud_return$=setit$
-!     fnreg_write('ACS.Update.Date',setit$)
-!   else
-!     fnreg_read('ACS.Update.Date',aud_return$)
-!   end if
-!   fn_acs_update_date$=aud_return$
-! fnend
-	def fn_simple_connectivity_test
-		dim conectivity_test_result$*40
-		dim ua_acs_datetime$*40
-!
-		conectivity_test_result$=fn_conectivity_test$
-		if env$('ACSDeveloper')<>'' then
-			fn_status('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
-			ua_return=0
-		else if conectivity_test_result$='' then
-			fn_status('Connectivity test failed.')
-			ua_return=0
-		else
-			ua_return=1
+def fn_setup
+	setup=1
+	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle
+	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
+	library 'S:\Core\Library': fnFree
+	library 'S:\Core\Library': fnSrepEnv$
+	on error goto ERTN
+fnend
+
+def fn_simple_connectivity_test
+	dim conectivity_test_result$*40
+	dim ua_acs_datetime$*40
+
+	conectivity_test_result$=fn_conectivity_test$
+	if env$('ACSDeveloper')<>'' then
+		fn_status('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
+		ua_return=0
+	else if conectivity_test_result$='' then
+		fn_status('Connectivity test failed.')
+		ua_return=0
+	else
+		ua_return=1
+	end if
+
+
+	!   ua_acs_datetime$=fn_acs_update_date$
+	fn_simple_connectivity_test=ua_return
+fnend
+def fn_conectivity_test$*40
+	fn_status("testing connectivity...")
+	wud_success=0
+	dim wud_return$*40
+	wud_return$=''
+	open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
+	pr #h_script: 'user acs5update'
+	pr #h_script: 'ACSKen!1'
+	pr #h_script: 'Dir ACS-5-Update-CO.exe'
+	pr #h_script: 'quit'
+	close #h_script:
+
+	open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
+	pr #h_batch: 'prompt $p$g'
+	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
+	close #h_batch:
+	fn_execute('-m',os_filename$(batch_name$))
+	open #h_return:=fngethandle: 'Name='&return_name$,display,input
+	do
+		linput #h_return: line$ eof WUD_RETURN_EOF
+		if line$(3:3)='-' then
+			wud_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
+			wud_time$=line$(11:15)
+			wud_ampm$=line$(16:17)
+			if wud_ampm$='PM' then
+				wud_time$(1:2)=str$(val(wud_time$(1:2))+12)
+			end if
+			wud_return$=wud_date$&' - '&wud_time$&':00'
 		end if
-!
-!
-!   ua_acs_datetime$=fn_acs_update_date$
-		fn_simple_connectivity_test=ua_return
-	fnend
-	def fn_conectivity_test$*40
-		fn_status("testing connectivity...")
-		wud_success=0
-		dim wud_return$*40
-		wud_return$=''
-		open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
-		pr #h_script: 'user acs5update'
-		pr #h_script: 'ACSKen!1'
-		pr #h_script: 'Dir ACS-5-Update-CO.exe'
-		pr #h_script: 'quit'
-		close #h_script:
-!
-		open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
-		pr #h_batch: 'prompt $p$g'
-		pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
-		close #h_batch:
-		fn_execute('-m',os_filename$(batch_name$))
-		open #h_return:=fngethandle: 'Name='&return_name$,display,input
-		do
-			linput #h_return: line$ eof WUD_RETURN_EOF
-			if line$(3:3)='-' then
-				wud_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
-				wud_time$=line$(11:15)
-				wud_ampm$=line$(16:17)
-				if wud_ampm$='PM' then
-					wud_time$(1:2)=str$(val(wud_time$(1:2))+12)
-				end if
-				wud_return$=wud_date$&' - '&wud_time$&':00'
+	loop
+	WUD_RETURN_EOF: !
+	close #h_return:
+	fnFree(return_name$)
+	fnFree(script_name$)
+	fnFree(batch_name$)
+	fn_conectivity_test$=wud_return$
+fnend
+def library fnUpdateLicense
+	if ~setup then let fn_setup
+	fnUpdateLicense=fn_update_license
+fnend
+def fn_update_license
+	fn_status("updating license information...")
+	ul_success=0
+	dim ul_return$*40
+	ul_return$=''
+	open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
+	pr #h_script: 'user acs5update'
+	pr #h_script: 'ACSKen!1'
+	pr #h_script: 'LCD '&env$('Temp')
+	pr #h_script: 'get ACS_5_Update_Support_Cache.exe'
+	pr #h_script: 'quit'
+	close #h_script:
+
+	open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
+	pr #h_batch: 'prompt $p$g'
+	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
+	close #h_batch:
+	fn_execute('-m',os_filename$(batch_name$))
+	open #h_return:=fngethandle: 'Name='&return_name$,display,input
+	do
+		linput #h_return: line$ eof ul_RETURN_EOF
+		if line$(3:3)='-' then
+			ul_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
+			ul_time$=line$(11:15)
+			ul_ampm$=line$(16:17)
+			if ul_ampm$='PM' then
+				ul_time$(1:2)=str$(val(ul_time$(1:2))+12)
 			end if
-		loop
-WUD_RETURN_EOF: !
-		close #h_return:
-		fnFree(return_name$)
-		fnFree(script_name$)
-		fnFree(batch_name$)
-		fn_conectivity_test$=wud_return$
-	fnend
-	def fn_update_license
-		fn_status("updating license information...")
-		ul_success=0
-		dim ul_return$*40
-		ul_return$=''
-		open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
-		pr #h_script: 'user acs5update'
-		pr #h_script: 'ACSKen!1'
-		pr #h_script: 'LCD '&env$('Temp')
-		pr #h_script: 'get ACS_5_Update_Support_Cache.exe'
-		pr #h_script: 'quit'
-		close #h_script:
-!
-		open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
-		pr #h_batch: 'prompt $p$g'
-		pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
-		close #h_batch:
-		fn_execute('-m',os_filename$(batch_name$))
-		open #h_return:=fngethandle: 'Name='&return_name$,display,input
-		do
-			linput #h_return: line$ eof ul_RETURN_EOF
-			if line$(3:3)='-' then
-				ul_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
-				ul_time$=line$(11:15)
-				ul_ampm$=line$(16:17)
-				if ul_ampm$='PM' then
-					ul_time$(1:2)=str$(val(ul_time$(1:2))+12)
-				end if
-				ul_return$=ul_date$&' - '&ul_time$&':00'
-			end if
-		loop
-ul_RETURN_EOF: !
-		close #h_return:
-		fnFree(return_name$)
-		fnFree(script_name$)
-		fnFree(batch_name$)
-		fn_execute('-c',env$('temp')&'\acs_5_Update_Support_Cache.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
-		fn_update_license=1
-	fnend
+			ul_return$=ul_date$&' - '&ul_time$&':00'
+		end if
+	loop
+	ul_RETURN_EOF: !
+	close #h_return:
+	fnFree(return_name$)
+	fnFree(script_name$)
+	fnFree(batch_name$)
+	fn_execute('-c',env$('temp')&'\acs_5_Update_Support_Cache.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
+	fn_update_license=1
+fnend
 def fn_update
 	if env$('acsClient')='Ed Horton' then
 		mat client_has$(5)
@@ -238,43 +232,36 @@ def fn_update
 		end if
 	end if
 fnend
-	def library fnAcsInstallationPath$*256(; longFileName)
-		if ~setup then let fn_setup
-		fnAcsInstallationPath$=fn_acs_installation_path$( longFileName)
-	fnend
-	def fn_acs_installation_path$*256(; longFileName)
-		dim acs_installation_path$*256
-!   if ~setup_acs_installation_path then
-!     setup_acs_installation_path=1
-!     fnIniOpen('acs.ini')
-!     acs_installation_path$=fnIniRead$('Core','InstallPath')
-!     if acs_installation_path$='' then
-		acs_installation_path$=os_filename$('S:\')
-!     end if
-!   end if
-		if longFileName then
-			acs_installation_path$=srep$(acs_installation_path$,'PROGRA~2','Program Files (x86)')
-			acs_installation_path$=srep$(acs_installation_path$,'ACS5~1','ACS 5')
-		end if
-		fn_acs_installation_path$=acs_installation_path$
-	fnend
-	def fn_drive_sys_must_exist
-		if ~exists('S:\Drive.sys') then
-			fn_status('creating missing Drive.sys')
-			open #h_drive_sys:=fngethandle: 'Name=S:\Drive.sys,RecL=256,New',display,output
-			open #h_brconfig_sys:=fngethandle: 'Name=S:\BRConfig.sys',display,input
-			pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
-			do
-				linput #h_return: line$ eof DSME_BRCONFIG_EOF
-				if lwrc$(line$(1:6))='drive ' or line$(1:1)='@' then
-					pr #h_drive_sys: line$
-				end if
-			loop
-			DSME_BRCONFIG_EOF: !
-			close #h_brconfig_sys:
-			close #h_drive_sys:
-		end if
-	fnend
+def library fnAcsInstallationPath$*256(; longFileName)
+	if ~setup then let fn_setup
+	fnAcsInstallationPath$=fn_acs_installation_path$( longFileName)
+fnend
+def fn_acs_installation_path$*256(; longFileName)
+	dim acs_installation_path$*256
+	acs_installation_path$=os_filename$('S:\')
+	if longFileName then
+		acs_installation_path$=srep$(acs_installation_path$,'PROGRA~2','Program Files (x86)')
+		acs_installation_path$=srep$(acs_installation_path$,'ACS5~1','ACS 5')
+	end if
+	fn_acs_installation_path$=acs_installation_path$
+fnend
+def fn_drive_sys_must_exist
+	if ~exists('S:\Drive.sys') then
+		fn_status('creating missing Drive.sys')
+		open #h_drive_sys:=fngethandle: 'Name=S:\Drive.sys,RecL=256,New',display,output
+		open #h_brconfig_sys:=fngethandle: 'Name=S:\BRConfig.sys',display,input
+		pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
+		do
+			linput #h_return: line$ eof DSME_BRCONFIG_EOF
+			if lwrc$(line$(1:6))='drive ' or line$(1:1)='@' then
+				pr #h_drive_sys: line$
+			end if
+		loop
+		DSME_BRCONFIG_EOF: !
+		close #h_brconfig_sys:
+		close #h_drive_sys:
+	end if
+fnend
 def fn_execute(flags$*128,exe_what$*256)
 	if env$('ACSDeveloper')<>'' then
 		pr 'Flags:  '&flags$
