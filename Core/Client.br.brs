@@ -455,7 +455,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('PR')
 			fn_add_ch_sys('CL')
 		else if env$('client')='Merriam Woods' then 
-			fn_user_limit(1)
+			fn_user_limit(2)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_add_ch_sys('U5') ! UB External Collections Processing
 			!     fn_add_ch_sys('CR')
