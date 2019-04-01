@@ -254,10 +254,10 @@ def fn_acs_hourly_rate(wo_client,the_date,wo_month; hr_category,wo_sage_code$*12
 		if hr_category=6 then
 			hr_return=0
 		else
-			hr_return=125
+			hr_return=75
 		end if
 	else
-		hr_return=250
+		hr_return=150
 	end if
 	fn_acs_hourly_rate=hr_return
 fnend
