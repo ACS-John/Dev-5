@@ -145,7 +145,7 @@ PrintBill_Basic: !
 	else if env$('client')='Billings' then ! 04/26/2017 ! three per page RTF
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
-		enable_bulksort=1
+		enable_bulksort=0
 	else if env$('client')='GreenCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
 		message1_line_count=3
 		message2_line_count=0
