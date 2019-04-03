@@ -141,10 +141,13 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 		end_date=val(resp$(8))
 		z$=resp$(9)(1:10)
 		if ckey=2 then 
-			if trim$(z$)<>"" and trim$(z$)<>"[All]"  then 
+			! if trim$(z$)<>"" and trim$(z$)<>"[All]"  then 
 				fn_printTrans ! pr report of charges
 				goto ScreenAskFilters 
-			end if
+			! else
+				! messagebox stating you can't
+				! goto ScreenTransGrid
+			! end if
 		end if
 	end if
 	goto ScreenTransGrid
@@ -214,7 +217,7 @@ def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 		tranRec+=1
 		read #hTranRelative,using form$(hTran),rec=tranRec,release: mat tran$,mat tranN noRec NextTran
 		if tran$(trans_acct)=origTran$(trans_acct) then
-		
+			! if tranN(trans_tcode)=tcode_penalty then pause
 			if tranN(trans_tcode)=tcode_charge or tranN(trans_tcode)=tcode_penalty or tranN(trans_tcode)=tcode_debit then
 				runningBalance +=tranN(trans_tamount)
 			else if tranN(trans_tcode)=tcode_collection or tranN(trans_tcode)=tcode_credit then
@@ -414,14 +417,10 @@ def fn_printTrans ! very local function - lots of inherritance
 		if end_date<>0 and tdate>end_date then goto PT_TRANS_READ
 		if tamount=0 then goto PT_TRANS_READ
 		if sel_code>1 and tcode<>sel_code-1 then goto PT_TRANS_READ
-		! 
-		
-		
-
-		
 		if tcode=tcode_collection then ti2=1 ! REG.COLLECTION
 		if tcode=tcode_credit     then ti2=2 ! CREDIT MEMO
 		if tcode=tcode_debit      then ti2=3 ! DEBIT MEMO
+		! if tcode=tcode_penalty then pause
 		if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
 		r(1,ti2+1)+=tamount
 		x=0
@@ -454,22 +453,56 @@ def fn_printTrans ! very local function - lots of inherritance
 		if electric=1 then service+=1: usage(service)=eu ! Electric
 		if gas=1 then service+=1: usage(service)=gu ! Gas
 		dim printlineform$*1024
-		if print_balance then 
-			printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
-			usage(1)=tbal
-		else 
-			printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(zzzzzzzzzzz),x 1"
+		if cx$="CHG" then
+			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*c 8,n 10.2,3*pic(--------.--),x 1"
+			! build string alloc$ and set penalty to "" 
+			mat alloc$(udim(alloc)) : mat alloc$=("")
+			for counter=1 to udim(alloc)
+				let alloc$(counter)=str$(alloc(counter))
+				if pos(alloc$(counter),".")=0 then let alloc$(counter)=alloc$(counter)&".00"
+				if len(alloc$(counter))-pos(alloc$(counter),".")<2 then alloc$(counter)=alloc$(counter)&"0"
+				if len(alloc$(counter))-pos(alloc$(counter),".")<2 then alloc$(counter)=alloc$(counter)&"0" ! get both decimals if needed 
+				alloc$(counter)=lpad$(alloc$(counter),8," ")
+				next counter 
+			penaltyindex=fnGetPenaltyIndex(mat serviceName$)
+			if penaltyindex<>0 then alloc$(penaltyindex)=""
+		else
+			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
 		end if 
-		if trim$(z$)="[All]" then 
-			pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+		if print_balance then 
+			usage(1)=tbal
+		end if 
+		! if env$('acsDeveloper')<>"" then pause
+		if trim$(z$)="[All]" then
+			if cx$="CHG" then
+				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+			else 
+				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+			end if 
 		else 
-			pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+			if cx$="CHG" then
+				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+			else
+				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+			end if 
 		end if  ! trim$(z$)="[All]"   /   else 
-		if tcode=tcode_charge     then mat totalalloc=totalalloc+alloc: totaltamount+=tamount: mat totalusage=totalusage+usage ! charges
+		if tcode=tcode_charge     then 
+			mat totalalloc=totalalloc+alloc: totaltamount+=tamount  ! charges
+			mat totalusage=totalusage+usage
+			! reverse penaltyindex charges
+			if penaltyindex<>0 then totalalloc(penaltyindex)-=alloc(penaltyindex)
+		end if
 		if tcode=tcode_penalty    then mat totalalloc=totalalloc+alloc: totaltamount+=tamount ! penalties
-		if tcode=tcode_collection then mat totalalloc=totalalloc+alloc: totaltamount+=tamount ! collections
+		if tcode=tcode_collection then mat totalalloc=totalalloc-alloc: totaltamount-=tamount ! collections
 		if tcode=tcode_credit     then mat totalalloc=totalalloc-alloc: totaltamount-=tamount ! credit memos
 		if tcode=tcode_debit      then mat totalalloc=totalalloc+alloc: totaltamount+=tamount ! debit memos
+		!if env$('acsDeveloper')<>"" then
+		!	if lamt2<>totaltamount then 
+		!		lamt2=totaltamount
+		!		print totaltamount
+		!		pause
+		!	end if 
+		!end if 
 	loop 
 	PGOF: ! r:
 		pr #255: newpage
@@ -513,6 +546,15 @@ def fn_printTrans ! very local function - lots of inherritance
 	fncloseprn
 	PT_XIT: ! 
 fnend
+def fnGetPenaltyIndex(mat serviceName$;___,pindex,moveone)
+	! this function returns the slot for penalty
+	for pindex=1 to udim(mat serviceName$)
+		if trim$((serviceName$(pindex)))="" then let moveone+=1
+		if trim$(uprc$(serviceName$(pindex)))="PENALTY" then
+			let fnGetPenaltyIndex=pindex-moveone
+		end if 
+	next pindex
+fnend 
 def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 	! ___________________________________________
 	dim colmask$(30),colhdr$(30)*20,item$(25)*70,tg(11)
