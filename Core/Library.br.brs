@@ -348,6 +348,20 @@ fnend
 		fnAutomatedSavePoint=fnAutomatedSavePoint(fileNameAddition$)
 	fnend
 ! /r
+! r: Status ( a pop up window that displays a running status of progress
+	def library fnStatus(text$*512)
+		library 'S:\Core\status.br': fnStatus
+		fnStatus=fnStatus(text$)
+	fnend
+	def library fnStatusPause
+		library 'S:\Core\status.br': fnStatusPause
+		fnStatusPause=fnStatusPause
+	fnend
+	def library fnStatusClose
+		library 'S:\Core\status.br': fnStatusClose
+		fnStatusClose=fnStatusClose
+	fnend
+! /r
 ! r: core   all the libraries that aren't filed anywhere else
 	def library fnWindowsStart(wsFile$*1024)
 		library 'S:\Core\fnWindowsStart.br': fnWindowsStart
@@ -408,18 +422,6 @@ fnend
 	def library fnAcsInstallationPath$*256(; longFileName)
 		library 'S:\Core\Programs\Update.br': fnAcsInstallationPath$
 		fnAcsInstallationPath$=fnAcsInstallationPath$( longFileName)
-	fnend
-	def library fnStatus(text$*512)
-		library 'S:\Core\Programs\Update.br': fnStatus
-		fnStatus=fnStatus(text$)
-	fnend
-	def library fnStatusPause
-		library 'S:\Core\Programs\Update.br': fnStatusPause
-		fnStatusPause=fnStatusPause
-	fnend
-	def library fnStatusClose
-		library 'S:\Core\Programs\Update.br': fnStatusClose
-		fnStatusClose=fnStatusClose
 	fnend
 	def library fnqgl(myline,mypos; con,x,use_or_replace,qgllength)
 		library 'S:\Core\ACS_Component.br': fnqgl

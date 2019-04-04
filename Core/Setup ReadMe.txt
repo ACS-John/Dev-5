@@ -20,8 +20,8 @@ Software Support?
 
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Telephone:	1-800-643-6318
-	E-Mail:		acs.bowman@gmail.com
-	Web Site:	http://planetacs.net
+	E-Mail:	info@advancedcomputer.services
+	Web Site:	http://advancedcomputer.services
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ACS has been in the business of providing for

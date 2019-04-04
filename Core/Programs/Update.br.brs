@@ -15,10 +15,10 @@
 ! /r
 	fntop(program$,"ACS Update")
 ! r: main loop
-	fn_status('launching update')
+	fnStatus('launching update')
 	if ~fn_simple_connectivity_test then
-!   fn_status('No newer update is available.')
-		fn_status_pause
+!   fnStatus('No newer update is available.')
+		fnStatusPause
 	else
 		fn_drive_sys_must_exist
 		fn_update_license
@@ -32,6 +32,7 @@ def fn_setup
 	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
 	library 'S:\Core\Library': fnFree
 	library 'S:\Core\Library': fnSrepEnv$
+	library 'S:\Core\Library': fnStatus,fnStatusPause
 	on error goto ERTN
 fnend
 
@@ -41,10 +42,10 @@ def fn_simple_connectivity_test
 
 	conectivity_test_result$=fn_conectivity_test$
 	if env$('ACSDeveloper')<>'' then
-		fn_status('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
+		fnStatus('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
 		ua_return=0
 	else if conectivity_test_result$='' then
-		fn_status('Connectivity test failed.')
+		fnStatus('Connectivity test failed.')
 		ua_return=0
 	else
 		ua_return=1
@@ -55,7 +56,7 @@ def fn_simple_connectivity_test
 	fn_simple_connectivity_test=ua_return
 fnend
 def fn_conectivity_test$*40
-	fn_status("testing connectivity...")
+	fnStatus("testing connectivity...")
 	wud_success=0
 	dim wud_return$*40
 	wud_return$=''
@@ -96,7 +97,7 @@ def library fnUpdateLicense
 	fnUpdateLicense=fn_update_license
 fnend
 def fn_update_license
-	fn_status("updating license information...")
+	fnStatus("updating license information...")
 	ul_success=0
 	dim ul_return$*40
 	ul_return$=''
@@ -147,15 +148,15 @@ def fn_update
 		client_has_count=fnclient_has_on_support_list(mat client_has$, grace_days)
 	end if
 	if client_has_count=0 then
-		fn_status('')
-		fn_status('No ACS Support detected.')
-		fn_status('To update contact ACS at 1-800-643-6318.')
-		fn_status('')
-		fn_status_pause
+		fnStatus('')
+		fnStatus('No ACS Support detected.')
+		fnStatus('To update contact ACS at 1-800-643-6318.')
+		fnStatus('')
+		fnStatusPause
 	else
-		fn_status('Systems on Support:')
+		fnStatus('Systems on Support:')
 		for client_has_item=1 to client_has_count
-			fn_status('   '&fnSystemName$(client_has$(client_has_item)))
+			fnStatus('   '&fnSystemName$(client_has$(client_has_item)))
 			dim support_text$*256
 			u_which=srch(mat system_id$,client_has$(client_has_item))
 			if u_which>0 then
@@ -169,9 +170,9 @@ def fn_update
 						support_text$(inf:inf)=' but update is allowed during '&str$(grace_days)&' day grace period.'
 					end if
 				end if
-				fn_status(support_text$)
+				fnStatus(support_text$)
 			else
-				fn_status(chr$(9)&chr$(9)&'      (no support data)')
+				fnStatus(chr$(9)&chr$(9)&'      (no support data)')
 			end if
 		next client_has_item
 		! client_has_count=udim((mat client_has$))
@@ -179,10 +180,10 @@ def fn_update
 		if srch(mat client_has$,'HH')>0 then client_has_count=client_has_count-1
 		if srch(mat client_has$,'P4')>0 then client_has_count=client_has_count-1
 		if srch(mat client_has$,'U4')>0 then client_has_count=client_has_count-1
-		fn_status("Downloading Updates for "&str$(client_has_count)&" support licensed systems.")
-		fn_status("This may take up to "&str$(client_has_count*2+11)&" minutes on systems with slow internet connections.")
-		fn_status("Download started at "&time$)
-		fn_status("Please wait...")
+		fnStatus("Downloading Updates for "&str$(client_has_count)&" support licensed systems.")
+		fnStatus("This may take up to "&str$(client_has_count*2+11)&" minutes on systems with slow internet connections.")
+		fnStatus("Download started at "&time$)
+		fnStatus("Please wait...")
 		!  fn_download_an_update(system_id$*2)
 		open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
 		pr #h_script: 'user acs5update'
@@ -213,12 +214,12 @@ def fn_update
 		if u_download_success then
 			for ch_item=1 to udim(mat client_has$)
 				if client_has$(ch_item)<>'CO' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'HH' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U4' then
-					fn_status('launching '&client_has$(ch_item)&' update.')
+					fnStatus('launching '&client_has$(ch_item)&' update.')
 					fn_execute('',env$('temp')&'\acs-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
 			!       execute 'sy '&env$('temp')&'\acs-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS' ! /SILENT
 				end if
 			next ch_item
-			fn_status('Closing program and launching Core update.')
+			fnStatus('Closing program and launching Core update.')
 			fn_execute('-c',env$('temp')&'\acs-5-Update-CO.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS')
 			sleep(4)
 			fnFree(batch_name$)
@@ -227,8 +228,8 @@ def fn_update
 			fnreg_write('Last Update',date$('ccyy/mm/dd')) ! &' '&time$)
 			execute "System"
 		else
-			fn_status('*** Update failed to download ***')
-			fn_status_pause
+			fnStatus('*** Update failed to download ***')
+			fnStatusPause
 		end if
 	end if
 fnend
@@ -247,7 +248,7 @@ def fn_acs_installation_path$*256(; longFileName)
 fnend
 def fn_drive_sys_must_exist
 	if ~exists('S:\Drive.sys') then
-		fn_status('creating missing Drive.sys')
+		fnStatus('creating missing Drive.sys')
 		open #h_drive_sys:=fngethandle: 'Name=S:\Drive.sys,RecL=256,New',display,output
 		open #h_brconfig_sys:=fngethandle: 'Name=S:\BRConfig.sys',display,input
 		pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
@@ -275,52 +276,5 @@ def fn_execute(flags$*128,exe_what$*256)
 		execute 'sy '&flags$&' '&exe_what$
 	end if
 fnend
-! r: fnStatus*
-	def library fnStatus(text$*512)
-		if ~setup then let fn_setup
-		fnStatus=fn_status(text$)
-	fnend
-	def fn_status(text$*512)
-		if ~status_initialized or file$(h_status_win)='' or h_status_win=0 then
-			status_initialized=1
-			dim headings$(1)*40,widths(1),forms$(1)*40,status_gridspec$*80
-			open #h_status_win:=fngethandle: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
-			status_gridspec$='#'&str$(h_status_win)&',1,1,List 20/80'
-			headings$(1)='Status'
-			widths(1)=80
-			forms$(1)='C 512'
-			pr f status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
-		end if
-		text$=fnSrepEnv$(text$)
-		if env$('ACSDeveloper')<>'' then
-			pr f status_gridspec$&",+": text$(1:512)
-		else
-			pr f status_gridspec$&",+": text$(1:512) error ignore
-		end if
-!
-		input fields status_gridspec$&",rowcnt,all,nowait": grid_rows
-		curfld(1,grid_rows+1)
-!
-fnend
 
-	def library fnStatusPause
-		if ~setup then let fn_setup
-		fnStatusPause=fn_status_pause
-	fnend
-	def fn_status_pause
-		fn_status('Press any key to continue.')
-		kstat$(1)
-	fnend
-
-
-	def library fnStatusClose
-		if ~setup then let fn_setup
-		fnStatusClose=fn_status_close
-	fnend
-	def fn_status_close
-		close #h_status_win: ioerr ignore
-		h_status_win=0
-		status_initialized=0
-	fnend
-! /r
 include: ertn
