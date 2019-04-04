@@ -39,7 +39,7 @@ library program$: fnSmtpMail
 		pr 'msgNotehtml$="'&msgNotehtml$&'"'
 		close #hMsg: 
 
-fnSmtpMail('acs.bowman@gmail.com','Test Subject',msgNotehtml$)
+fnSmtpMail('info@advancedcomputer.services','Test Subject',msgNotehtml$)
 end
 def fn_setup
 	if ~setup then

@@ -37,7 +37,7 @@ mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Serial Number '&str$(serial)
 mat txt$(txt_item+=1) : txt$(txt_item)=''
 mat txt$(txt_item+=1) : txt$(txt_item)='For support contact ACS at:'
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'1-800-643-6318'
-mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'acs.bowman@gmail.com'
+mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'info@advancedcomputer.services'
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'planetacs.net'
 mat txt$(txt_item+=1) : txt$(txt_item)=''
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Advanced Computer Services LLC'

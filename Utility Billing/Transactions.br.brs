@@ -53,7 +53,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	end if
 	ttao_return=0
 	customer_key$=lpad$(customer_key$,10)
-! ttao_key$=rpad$(customer_key$,kln(ttao_h_trans)) 
+	! ttao_key$=rpad$(customer_key$,kln(ttao_h_trans)) 
 	ttao_key$=customer_key$&lpad$(str$(date_ccyymmdd),8)&cnvrt$('pic(z)',trans_type)
 	restore #ttao_h_trans,key>=ttao_key$: nokey TTAO_FINIS
 	do

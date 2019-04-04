@@ -17,7 +17,8 @@ def fn_setup
 	library 'S:\Core\Library': fnOpt,fnTos
 	library 'S:\Core\Library': fncmbact
 	library 'S:\Core\Library': fnLastBillingDate
-	library 'S:\Core\Library': fnxit,fnCmdSet,fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnxit,fnCmdSet
+	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fncustomer_address
@@ -348,7 +349,7 @@ SCREEN1: ! r:
 ! IF filter_selected_only=0 THEN GOSUB SORT1
 ! /r
 NEXT_ACCOUNT: ! r: main loop
-	if filter_selected_only=1 then goto SCR_ASK_ACCOUNT
+	if filter_selected_only=1 then goto ScrAskIndividual
 	if enable_bulksort=1 then 
 		! READ_BULKSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
@@ -385,12 +386,12 @@ F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 182
 !     goto NEXT_ACCOUNT
 !   end if
 ! end if
-HERE: ! 
-	fncustomer_address(z$,mat pe$) ! read alternate billing address
+AfterCustomerRead: ! 
 	pb=bal-g(11)
-	fn_override_service_date(d2,d3,extra_3,extra_4)
 	if filter_past_due_only and pb<=0 then goto NEXT_ACCOUNT
 	if filter_no_past_due and pb>0 then goto NEXT_ACCOUNT
+	fncustomer_address(z$,mat pe$) ! read alternate billing address
+	fn_override_service_date(d2,d3,extra_3,extra_4)
 ! r: pr bill routine
 	if env$('client')='French Settlement' then 
 		fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budgetpb,d2,d3)
@@ -445,18 +446,22 @@ def fn_mg2$*80(; m2forcecnt)
 fnend 
 RELEASE_PRINT: ! r:
 	close #h_customer_1: ioerr ignore
+	h_customer_1=0
 	close #h_customer_2: ioerr ignore
+	h_customer_2=0
 	close #h_ubtransvb: ioerr ignore
+	h_ubtransvb=0
 	close #hAddr: ioerr ignore
+	hAddr=0
 	close #hBulk2: ioerr ignore
+	hBulk2=0
 	if pa_enabled then 
 		fnpa_finis
 	else if sum(billsPrintedCount)>0 then
 		fncloseprn( forceWordProcessor$)
 	end if 
-	goto ENDSCR
-! /r
-SCR_ASK_ACCOUNT: ! r: account selection screen
+goto ENDSCR ! /r
+ScrAskIndividual: ! r: account selection screen
 	fnTos(sn$:="UBPrtBl1-FS3")
 	fnLbl(1,1,"Account (blank to stop)",31,1)
 	if trim$(starting_key$)="" then 
@@ -470,12 +475,10 @@ SCR_ASK_ACCOUNT: ! r: account selection screen
 	resp$(1)=starting_key$
 	fnCmdSet(11)
 	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto RELEASE_PRINT
+	if ck=5 or trim$(resp$(1))='' then goto RELEASE_PRINT
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
-	if trim$(starting_key$)="" then goto RELEASE_PRINT
-	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey SCR_ASK_ACCOUNT
-	goto HERE
-! /r
+	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
+goto AfterCustomerRead ! /r
 ENDSCR: ! r: pr totals screen
 	if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
 	fnTos(sn$="Bills-Total")
@@ -495,33 +498,41 @@ BUD1: ! r:
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EO_BUD1
 	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,input,relative 
 	bud1=1
-EO_BUD1: ! 
-	return  ! /r
+	EO_BUD1: ! 
+return  ! /r
 BUD2: ! r:
 	totba=bd1=bd2=budgetpb=havebudget=00
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 	if bud1=0 then goto EO_BUD2
 	read #81,using L3230,key=z$: z$,mat ba,mat badr nokey EO_BUD2
 	havebudget=1
-	for j=2 to 12: totba=totba+ba(j): next j
-L3230: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	for j=2 to 12
+		totba=totba+ba(j)
+	next j
+	L3230: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	if totba=0 then havebudget=0: goto EO_BUD2
 	ta1=badr(1)
-L3260: if ta1=0 then goto EO_BUD2
+	L3260: !
+	if ta1=0 then goto EO_BUD2
 	read #82,using L3280,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
-L3280: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+	L3280: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(14,1)>0 then goto L3340
-! IF BT1(1,2)=F THEN GOTO 3350 ! ignore current budget billing record
+	! IF BT1(1,2)=F THEN GOTO 3350 ! ignore current budget billing record
 	budgetpb=budgetpb+bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not counting current bill
 	bd1=bd1+1
-	if bd1>5 then goto EO_BUD2
-L3340: ta1=nba : goto L3260
-EO_BUD2: ! 
-	return  ! /r
+	if bd1>5 then 
+		goto EO_BUD2
+	end if
+	L3340: !
+	ta1=nba 
+	goto L3260
+	EO_BUD2: ! 
+return  ! /r
 def fn_get_mat_at(mat at$)
 	open #h_company:=fngethandle: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 	read #h_company,using "Form POS 41,2*C 40": at$(2),at$(3)
 	close #h_company: 
+	h_company=0
 	at$(1)=env$('cnam')
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
@@ -833,6 +844,7 @@ BULKSORT: ! r: sort in bulk sort code sequence
 		end if
 		write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
 		close #h_control: 
+		h_control=0
 		execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 		execute "Sort "&env$('Temp')&"\printBillsControl."&session$
 		open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
@@ -845,7 +857,9 @@ BULKSORT: ! r: sort in bulk sort code sequence
 		loop 
 		BS_EO_CUSTOMER: ! 
 		close #hBs2Customer: ioerr ignore
+		hBs2Customer=0
 		close #hBs2Out: ioerr ignore
+		hBs2Out=0
 		execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n"
 		open #hBulk2:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed 
 	end if
@@ -869,11 +883,14 @@ SORT1: ! r: SELECT & SORT - sorts Cass1 file    requires: (h_customer_2,&enable_
 
 	END5: ! 
 	close #h_cass1: 
+	h_cass1=0
 	close #hSort1Sequence: 
+	hSort1Sequence=0
 	open #h_sort1_control:=fngethandle: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 	write #h_sort1_control,using 'form pos 1,c 128': "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 	write #h_sort1_control,using 'form pos 1,c 128': "Mask 1,19,C,A"
 	close #h_sort1_control: 
+	h_sort1_control=0
 	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 	execute "Sort "&env$('Temp')&"\Control."&session$
 	open #hSort1Sequence:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative 

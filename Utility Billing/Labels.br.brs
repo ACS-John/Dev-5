@@ -409,7 +409,9 @@ def fn_customer_address(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	if ca_closeFiles then
 		ca_setup=0
 		close #h_ca_customer:
+		h_ca_customer=0
 		close #adrbil:
+		adrbil=0
 	end if
 fnend
 def fn_get_address_lines
