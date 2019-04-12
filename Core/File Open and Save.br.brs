@@ -274,6 +274,7 @@ def fn_openPartial
 fnend
 def fn_opMain(omFileOpen$*256)
 	! destination_company_number=val(env$('cno'))
+	fn_automatedSavePoint('before Open')
 	OpmAskWhichToOpen: ! r: screen
 	fnTos(sn$="Open Partial")
 	col1_width=24 : col2_pos=col1_width+2 : lc=rc=0
@@ -463,6 +464,10 @@ def fn_ub_copy_extras(company_import_path$*256,company_import_extension$,destina
 	fn_ub_copy_extras=uceReturn
 fnend 
 def library fnAutomatedSavePoint(fileNameAddition$*128)
+	if ~setup then let fn_setup
+	fnAutomatedSavePoint=fn_automatedSavePoint(fileNameAddition$)
+fnend
+def fn_automatedSavePoint(fileNameAddition$*128)
 	if ~setup then let fn_setup
 	if ~env$('disableAutomatedSavePoints')='Yes' then
 		dim asp_path$*256

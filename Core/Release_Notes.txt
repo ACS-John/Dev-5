@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________         
+6:13 PM 4/12/2019	CO	Added autmated save point after File Open is selected before selection of what to open
 14:17 04/19/2019	CO	5.74124  
 2:07 PM 4/4/2019	UB	Print Bills - fixed the ability to print individual bills - a bug in the status displaying kept it from functioning properly 
 14:37 04/19/2019	CO	5.74122   
