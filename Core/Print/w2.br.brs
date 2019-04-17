@@ -37,13 +37,18 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		! /r
 		! r: read or set values for ASK_INFO screen
 		taxYear$=date$(days(date$)-120,'CCYY')
+		if env$('client')='Payroll Done Right' then let taxYear$=date$(days(date$)-100,'CCYY') ! client requested to print 2019 early
 		empStart$='[All]'
 		empEnd$='[All]'
 		ssrate=.062
 		if taxYear$='2016' then
 			ssmax=118500 ! 2016
-		else ! if taxYear$='2017' then
+		else if taxYear$='2017' then
 				ssmax=127200 ! 2017
+		else if taxyear$='2018' then 
+				ssmax=128400
+		else if taxyear$='2019' then 
+				ssmax=132900
 		end if
 		mcrate=.0145
 		mcmax=999999
@@ -462,7 +467,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	! fnpa_txt(cnvrt$("pic(--,---,---.##",w(4)),w2Col2,fn_line(6)) ! EIC - no longer reported - just greyed out
 	fnpa_txt(cnvrt$("pic(--,---,---.##",dcb),w2Col3,fn_line(6))
 	fnpa_txt((rtrm$(nameFirst$)&" "&rtrm$(nameMiddle$))(1:17),w2Col1,fn_line(7))
-	fnpa_txt(rtrm$(nameLast$),left+40,fn_line(7))
+	fnpa_txt(rtrm$(nameLast$),left+44,fn_line(7))
 	fnpa_txt(rtrm$(nameSuffix$),left+92,fn_line(7))
 	fnpa_txt(box12aCode$,w2Box12CodePos,fn_line(7))
 	fnpa_txt(box12aAmt$,w2Box12AmtPos,fn_line(7))
