@@ -468,7 +468,6 @@ def library fnAutomatedSavePoint(fileNameAddition$*128)
 	fnAutomatedSavePoint=fn_automatedSavePoint(fileNameAddition$)
 fnend
 def fn_automatedSavePoint(fileNameAddition$*128)
-	if ~setup then let fn_setup
 	if ~env$('disableAutomatedSavePoints')='Yes' then
 		dim asp_path$*256
 		dim asp_filename$*256
