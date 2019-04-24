@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                      
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________   
+3:33 PM 4/24/2019	PR	Renamed program/report from Deduction(s) Register YTD to YTD Deductions Register - this was to fix a spelling and help file issue with inconsistent naming causing print properties not to be respected.
 14:10 04/19/2019	CO	5.74126  
 2:10 PM 04/19/2019	CK	print checks.br hit a error 122 on resp$(j)=payeegl line, so increased dim statement to fix   
 8:48 04/19/2019	CO	5.74125   

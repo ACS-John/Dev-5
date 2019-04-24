@@ -2,7 +2,11 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnStatus,fnMakeSurePathExists,fngetdir2,fnGetPp
+		library 'S:\Core\Library': fnStatus
+		library 'S:\Core\Library': fnStatusPause
+		library 'S:\Core\Library': fnGetDir2
+		library 'S:\Core\Library': fnMakeSurePathExists
+		library 'S:\Core\Library': fnGetPp
 		library 'S:\Core\Library': fnSrepEnv$
 		on error goto ERTN
 	end if
@@ -13,46 +17,49 @@ def library fnCopy(from$*256,to$*256; new_record_length,options$)
 fnend
 def fn_Copy(from$*256,to$*256; new_record_length,options$)
 	! options$ (separate by space)  supported options$ values include
-	!           recursive - includes all subdirectories and their files
+	!           recursive   - includes all subdirectories and their files
+	!           errorNotify - displays a message box when an error is detected letting the user know of the failure and then proceeds as normal
 	from$=fnSrepEnv$(from$)
 	to$=fnSrepEnv$(to$)
 	from$=trim$(from$,'"')
 	to$=trim$(to$,'"')
 	options$=rtrm$(options$)&' ' 
 	copyRecursive=0
+	errorNotify=0
 	if from$(1:2)='@:' then fromAt$='@:' else fromAt$=''
 	if to$(1:2)='@:' then toAt$='@:' else toAt$=''
 	if pos(lwrc$(options$),'recursive ') then copyRecursive=1
-		fnMakeSurePathExists(to$)
-		if copyRecursive then
-			fnGetPp(from$,fromPath$,fromFile$,fromExt$)
-			fnGetPp(to$,toPath$,toFile$,toExt$)
-			dim fromPath$*256,fromFile$*256,fromExt$*256
-			dim toPath$*256,toFile$*256,toExt$*256
-			dim copyFromFolder$(0)*256
-			gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
-			! 
-			! pr 'gd2_return=';gd2_return : pause
-			for cfi=1 to udim(mat copyFromFolder$)
-				dim copyToFolder$*256
-				copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
-				fnmakesurepathexists(copyToFolder$)
-				fnStatus ('Creating files  in "'&copyToFolder$&'"') 
-				execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
-				copy_return+=1! if int(cfi/10)=cfi/10 then pause
-				copyFailA: ! 
-			nex cfi
-		else
-			if new_record_length then 
-				if new_record_length and uprc$(from$)=uprc$(to$) then 
-					execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
-					execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
-					execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
-				end if 
+	if pos(lwrc$(options$),'errornotify ') then errorNotify=1
+	fnMakeSurePathExists(to$)
+	if copyRecursive then
+		fnGetPp(from$,fromPath$,fromFile$,fromExt$)
+		fnGetPp(to$,toPath$,toFile$,toExt$)
+		dim fromPath$*256,fromFile$*256,fromExt$*256
+		dim toPath$*256,toFile$*256,toExt$*256
+		dim copyFromFolder$(0)*256
+		gd2_return=fnGetDir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
+		! 
+		! pr 'gd2_return=';gd2_return : pause
+		for cfi=1 to udim(mat copyFromFolder$)
+			dim copyToFolder$*256
+			copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
+			fnMakeSurePathExists(copyToFolder$)
+			fnStatus ('Creating files  in "'&copyToFolder$&'"') 
+			execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
+			copy_return+=1! if int(cfi/10)=cfi/10 then pause
+			copyFailA: ! 
+		nex cfi
+	else
+		if new_record_length then 
+			if new_record_length and uprc$(from$)=uprc$(to$) then 
+				execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
+				execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
+				execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
 			end if 
-			execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
-			copy_return=1
-		end if
+		end if 
+		execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
+		copy_return=1
+	end if
 	goto COPY_XIT
 	COPY_FAIL: ! r:
 		copy_return=min(-1,-err)
@@ -61,6 +68,16 @@ def fn_Copy(from$*256,to$*256; new_record_length,options$)
 			execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_RETRY_NEW_RLN_FAILED
 			execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr ignore
 			copy_return=2
+		else if errorNotify then 
+			fnStatus('**************************************************************************************')
+			fnStatus('**** File Copy process failed! ****')
+			fnStatus('Error: '&chr$(9)&str$(err))
+			fnStatus('Line: '&chr$(9)&str$(line))
+			fnStatus('     Source:'&chr$(9)&'"'&from$&'"')
+			fnStatus('Desitnation:'&chr$(9)&'"'&to$&'"')
+			fnStatus('The program will attempt to proceed as normal, but errors may occur and the current process will not complete successfully.')
+			fnStatus('**************************************************************************************')
+			fnStatusPause
 		else if env$("ACSDeveloper")<>"" then 
 			pr 'first copy failed with error ';err
 			pr 'From: "'&from$&'"'
