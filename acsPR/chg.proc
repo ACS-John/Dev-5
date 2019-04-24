@@ -1,3 +1,0 @@
-copy chg\*.* *.*/acspr
-Print 'Change installation complete.'
-Sy ShowMenu.exe

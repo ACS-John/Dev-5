@@ -1,8 +1,6 @@
 ! formerly S:\acsPR\checkhistory
 ! Payroll Check History
 fn_setup
-
-
 fntop(program$)
 
 open #hRpMstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
@@ -52,7 +50,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 
 	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.H[cno],USE,RecL=30",internal,outIn,relative
-	if lrec(9)=0 then
+	if lrec(hGridName)=0 then
 		oldgridname$= gridname$="[All]                         "
 		write #hGridName,using "form pos 1,c 30",rec=1: gridname$
 	end if
@@ -66,13 +64,22 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		dednames$(j)=trim$(dednames$(j))
 	next j
 	L320: !
-	if exists("[Q]\PRmstr\payrollreports.H[cno]") =0 then gosub SETUP_REPORTS
-	if exists("[Q]\PRmstr\reportidx.H[cno]") =0 then gosub CREATE_INDEX
-	open #hPrReport:=29: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],Shr",internal,outIn,keyed
-	if kln(hPrReport)<>30 then
+	if exists("[Q]\PRmstr\payrollreports.H[cno]") =0 then 
+		open #hPrReport:=fngethandle: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed
+		! 1 - 30 Name c 30
+		! 31 - 76 selections 46*n 1
 		close #hPrReport:
+	else if exists("[Q]\PRmstr\reportidx.H[cno]") =0 then
 		fnindex_it('[Q]\PRmstr\payrollreports.H[cno]','[Q]\PRmstr\reportidx.H[cno]','1 30')
 		fnStatusClose
+	end if
+	
+	
+	open #hPrReport:=fngethandle: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],Shr",internal,outIn,keyed
+	if kln(hPrReport)<>30 then
+		close #hPrReport:
+		fnFree('[Q]\PRmstr\payrollreports.H[cno]')
+		fnFree('[Q]\PRmstr\reportidx.H[cno]')
 		goto L320
 	end if
 	justopen=1 : gosub SelectColumns : justopen=0
@@ -86,12 +93,17 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		mat totaltdc=(0): mat totaltcp=(0) : mat grand2tcp=(0) : : mat grand2tdc=(0)
 		goto ScrFilters ! fnScrFilters(CKEY,SEL_CODE,BEG_DATE,END_DATE,Z$,HACT$)
 		Screen1B: !
-		printit=0 : if ckey=2 then printit=1
-		if ckey=2 and trim$(z$)="" then goto SCREEN1 ! don't allow pr to work if no customer selected
-		! If CKEY=2 AND TRIM$(Z$)="[All]" Then Goto SCREEN1
-		if ckey=2 then let fnopenprn: goto READ_CHECKS ! read headings for reports then start reading thru the checks same as a grid
-		if ckey=1 then goto SCREEN2 ! READ_CHECKS
-		if ckey=cancel then goto CheckFileXit
+		printit=0 
+		if ckey=1 then 
+			goto SCREEN2
+		else if ckey=2 then 
+			printit=1
+			if trim$(z$)="" or trim$(z$)="[All]" then goto SCREEN1 ! don't allow pr to work if no customer selected
+			fnopenprn
+			goto PastFlexInit ! read headings for reports then start reading thru the checks same as a grid
+		else if ckey=cancel then 
+			goto CheckFileXit
+		end if
 	goto SCREEN2 ! /r
 	SCREEN2: ! r:
 		fnTos(sn$="CheckHistory-2")
@@ -441,7 +453,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		next j
 		name$(46)="EIC"
 		OPEN_SELECTIONS: !
-		if lrec(9) then
+		if lrec(hGridName) then
 			read #hGridName,using "form pos 1,c 30",rec=1: gridname$
 			read #hPrReport,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L2600
 			goto L2620
@@ -452,7 +464,6 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		write #hPrReport,using "form pos 1,c 30,46*n 1": gridname$,mat hf
 		L2620: !
 		oldgridname$=gridname$
-		L2630: !
 		resp$(1)=gridname$
 		for j=1 to udim(hf)
 			if hf(j)=1 then resp$(j+1)="True"
@@ -492,8 +503,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 				gridname$=rpad$(trim$(resp$(1)),30)
 				if oldgridname$<>gridname$ then
 					read #hPrReport,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey SelectColumnsXit
-					oldgridname$=gridname$
-					goto L2630
+					goto L2620
 				end if
 				for j=1 to 46
 					if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
@@ -548,7 +558,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		for j=1 to udim(hs1)
 			if j=1 and eno<>holdeno then
 				empz$=lpad$(str$(hs1(1)),8): nam$=""
-				read #1,using "form pos 9,c 25",key=empz$: nam$ nokey ignore
+				read #hRpMstr,using "form pos 9,c 25",key=empz$: nam$ nokey ignore
 			end if
 			if hf(j)<>0 then
 				hs3+=1
@@ -662,7 +672,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		next j
 		mat colhdr$(x) : mat colmask$(x) : mat printitem$(x)
 		fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
-	READ_CHECKS: !
+	PastFlexInit: !
 		if trim$(hact$)="[All]" then restore #hCheckIdx3: : goto READ_BREAKDOWNS
 		restore #hCheckIdx3,key>=lpad$(hact$,8)&cnvrt$("pd 6",beg_date)&"   ": nokey FlexGridXit ioerr FlexGridXit
 	READ_BREAKDOWNS: !
@@ -738,7 +748,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		end if
 		L4660: !
 		if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto PrintGridXit
-		read #1,using "form pos 9,c 18",key=employeekey$: desc$ nokey L4680
+		read #hRpMstr,using "form pos 9,c 18",key=employeekey$: desc$ nokey L4680
 		L4680: !
 		item$(1)=cnvrt$("pic(zzzzzzz)",recnum) : : item$(2)=desc$
 		item$(3)=cnvrt$("pic(zzzzzzzz)",enoprint)
@@ -852,16 +862,6 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		if printit=1 then let fncloseprn : goto SCREEN1
 		FlexGridXit: !
 	return ! /r
-	SETUP_REPORTS: ! r:
-		! 1 - 30 Name c 30
-		! 31 - 76 selections 46*n 1
-		open #hPrReport:=fngethandle: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed
-		close #hPrReport:
-	goto CREATE_INDEX ! /r
-	CREATE_INDEX: ! r:
-		fnindex_it('[Q]\PRmstr\payrollreports.H[cno]','[Q]\PRmstr\reportidx.H[cno]','1 30')
-		fnStatusClose
-	return  ! /r
 	ADD_GRID: ! r:
 		fnTos(sn$="Addgrid")
 		lc=rc=0 : mylen=20 : mypos=mylen+3
@@ -879,14 +879,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			mat resp$=(""): resp$(1)=gridname$
 		end if
 	return ! /r
-	NOKEY_ON_GRID: ! r:
-		oldgridname$=gridname$=resp$(1)
-		rewrite #hGridName,using "form pos 1,c 30",rec=1: gridname$
-		mat hf=(0)
-		write #hPrReport,using "form pos 1,c 30,46*n 1": gridname$,mat hf
-		mat resp$=(""): resp$(1)=gridname$
-	goto L2620 ! /r
-	CheckFileXit: !
+  CheckFileXit: !
 	close #hGridName: ioerr ignore
 	close #hPrReport: ioerr ignore
 fnend
@@ -909,6 +902,7 @@ def fn_setup
 		library 'S:\Core\Library': fnDedNames
 		library 'S:\Core\Library': fnGetPayrollDates
 		library 'S:\Core\Library': fnAddOneC
+		library 'S:\Core\Library': fnFree
 
 	end if
 fnend

@@ -1,193 +1,187 @@
-00010 ! Replace S:\Core\copy.br
-38000 def fn_setup
-38020   if ~setup then
-38040     setup=1
-38060     library 'S:\Core\Library': fnerror,fnStatus,fnMakeSurePathExists,fngetdir2,fnGetPp
-38062     library 'S:\Core\Library': fnSrepEnv$
-38080     on error goto ERTN
-38100   end if
-38120 fnend
-40020 ! <Updateable Region: ERTN
-40040 ERTN: fnerror(program$,err,line,act$,"xit")
-40060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-40080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-40100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-40120 ERTN_EXEC_ACT: execute act$ : goto ERTN
-40140 ! /region
-48000 def library fnCopy(from$*256,to$*256; new_record_length,options$)
-48010   if ~setup the let fn_setup
-48020   fnCopy=fn_Copy(from$,to$, new_record_length,options$)
-48040 fnend
-52000 def fn_Copy(from$*256,to$*256; new_record_length,options$)
-52020   ! options$ (separate by space)  supported options$ values include
-52040   !           recursive - includes all subdirectories and their files
-52042   from$=fnSrepEnv$(from$)
-52044   to$=fnSrepEnv$(to$)
-52100   from$=trim$(from$,'"')
-52120   to$=trim$(to$,'"')
-52140   options$=rtrm$(options$)&' ' 
-52160   copyRecursive=0
-52170    if from$(1:2)='@:' then fromAt$='@:' else fromAt$=''
-52172    if to$(1:2)='@:' then toAt$='@:' else toAt$=''
-52180   if pos(lwrc$(options$),'recursive ') then copyRecursive=1
-52200     fnMakeSurePathExists(to$)
-58020     if copyRecursive then
-58040       fnGetPp(from$,fromPath$,fromFile$,fromExt$)
-58060       fnGetPp(to$,toPath$,toFile$,toExt$)
-58080       dim fromPath$*256,fromFile$*256,fromExt$*256
-58100       dim toPath$*256,toFile$*256,toExt$*256
-58240       dim copyFromFolder$(0)*256
-58260       gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
-58300       ! 
-58320       ! pr 'gd2_return=';gd2_return : pause
-58340       for cfi=1 to udim(mat copyFromFolder$)
-58360         dim copyToFolder$*256
-58380         copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
-58400         fnmakesurepathexists(copyToFolder$)
-58410         fnStatus ('Creating files  in "'&copyToFolder$&'"') 
-58420         execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
-58440         copy_return+=1! if int(cfi/10)=cfi/10 then pause
-58450         copyFailA: ! 
-58460       nex cfi
-59000     else
-59020       if new_record_length then 
-59100         if new_record_length and uprc$(from$)=uprc$(to$) then 
-59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
-59140           execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
-59160           execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
-59180         end if 
-59200       end if 
-59220       execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
-59240       copy_return=1
-59260     end if
-60000   goto COPY_XIT
-64000   COPY_FAIL: ! r:
-64020     copy_return=min(-1,-err)
-64040     if new_record_length then 
-64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr COPY_RETRY_NEW_RLN_FAILED
-64080       execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_RETRY_NEW_RLN_FAILED
-64100       execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr ignore
-64120       copy_return=2
-65000     else if env$("ACSDeveloper")<>"" then 
-65020       pr 'first copy failed with error ';err
-65040       pr 'From: "'&from$&'"'
-65060       pr '  To: "'&to$&'"'
-65140       pause 
-65160     end if 
-65180   goto COPY_XIT ! /r
-66000   COPY_RETRY_NEW_RLN_FAILED: ! r:
-66020     if env$("ACSDeveloper")<>"" then 
-66040       pr 'first copy (new record length) failed with error ';abs(copy_return)
-66060       pr 'second attempt failed with error ';err
-66080       pause 
-66100     end if 
-66120     copy_return=copy_return*10000-err
-66140   goto COPY_XIT ! /r
-68000   COPY_XIT: ! 
-68020   fn_Copy=copy_return
-68040 fnend 
-80040 def library fncscopy(&source$,&destination$)
-80042   ! client server copy function
-80050   if ~setup the let fn_setup
-80052   source$=fnSrepEnv$(source$)
-80054   destination$=fnSrepEnv$(destination$)
-80070   ! source$ = the file to copy from
-80071   ! destination$ = file to copy to
-80072   ! (start either source$ or destination$ with a @ in pos 1 to specify it's location is on the client)
-80080   dim serverip$*20
-80090   open #20: "Name=ServerIP.txt",display,input 
-80100   linput #20: serverip$
-80104   close #20: 
-80108   if source$(1:1)="@" then 
-80112     source$=source$(2:len(source$))
-80116     copy_from_client=1
-80117   else 
-80118     copy_from_server=1
-80120   end if 
-80124   if destination$(1:1)="@" then 
-80128     destination$=destination$(2:len(destination$))
-80132     copy_to_client=1
-80133   else 
-80134     copy_to_server=1
-80136   end if 
-80140   if copy_from_client=1 and copy_to_server=1 then 
-80144     gosub COPY_FROM_CLIENT_TO_SERVER
-80148   end if 
-80152   if copy_from_client=1 and copy_to_client=1 then 
-80156     gosub COPY_FROM_CLIENT_TO_CLIENT
-80160   end if 
-80164   if copy_from_server=1 and copy_to_client=1 then 
-80168     gosub COPY_FROM_SERVER_TO_CLIENT
-80172   end if 
-80176   if copy_from_server=1 and copy_to_server=1 then 
-80180     gosub COPY_FROM_SERVER_TO_SERVER
-80184   end if 
-80188   goto XIT
-80190   ! ______________________________________________________________________
-80200   COPY_FROM_CLIENT_TO_SERVER: ! r:
-80210   open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
-80220   ! pr #20: "open "&RTRM$(SERVERIP$)
-80230   pr #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
-80240   pr #20: "WOCS"&str$(val(wsid$)-50)
-80250   pr #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
-80260   pr #20: "bye"
-80270   close #20: 
-80280   open #20: "Name=csCopy"&wsid$&".cmd,Size=0,RecL=255,Replace",display,output 
-80290   pr #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
-80300   pr #20: "pause"
-80310   close #20: 
-80320   execute "Sy csCopy"&wsid$&".cmd"
-80330   return ! /r
-80340   ! ______________________________________________________________________
-80350   COPY_FROM_CLIENT_TO_CLIENT: pause 
-80360   return 
-80370   ! ______________________________________________________________________
-80380   COPY_FROM_SERVER_TO_CLIENT: pause 
-80390   return 
-80400   ! ______________________________________________________________________
-80410   COPY_FROM_SERVER_TO_SERVER: pause 
-80420   return 
-80520   XIT: ! 
-80522 fnend 
-82000 def library fnFree(fileToDelete$*256)
-82010   if ~setup then let fn_setup
-82012   fileToDelete$=fnSrepEnv$(fileToDelete$)
-82020   freeReturn=0
-82040   fileToDelete$=trim$(fileToDelete$,'"')
-82060   execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
-82080   freeReturn=1
-82100   goto FreeXit
-82120   FreeErr: !
-82140   freeReturn=-err
-82160   FreeXit: !
-82180   fnFree=freeReturn
-82200 fnend
-84000 def library fnRename(from$*256,to$*256)
-84010   if ~setup then let fn_setup
-84012   from$=fnSrepEnv$(from$)
-84014   to$=fnSrepEnv$(to$)
-84020   from$=trim$(from$,'"')
-84040   to$=trim$(to$,'"')
-84060   if (from$(1:2)='@:' and to$(1:2)<>'@:') or (from$(1:2)<>'@:' and to$(1:2)='@:') then
-84080     if fn_Copy(from$,to$) then
-84100       exec 'Free "'&from$&'"'
-84120     end if
-84140   else 
-84160     execute 'Rename "'&from$&'" "'&to$&'" -n'
-84180   end if
-84200 fnend
-86000 def library fnRemoveDeletedRecords(from$*256)
-86020   if ~setup then let fn_setup
-86030   from$=fnSrepEnv$(from$)
-86040   rdrReturn=0
-86060   execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr RdrFail
-86080   execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr RdrFail
-86100   execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
-86120   rdrReturn=1
-86140   goto RdrFinis
-86160   RdrFail: !
-86180   rdrReturn=-err
-86200   goto RdrFinis
-86220   RdrFinis: !
-86240   fnRemoveDeletedRecords=rdrReturn
-86260 fnend
+! Replace S:\Core\copy.br
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library': fnStatus,fnMakeSurePathExists,fngetdir2,fnGetPp
+		library 'S:\Core\Library': fnSrepEnv$
+		on error goto ERTN
+	end if
+fnend
+def library fnCopy(from$*256,to$*256; new_record_length,options$)
+	if ~setup the let fn_setup
+	fnCopy=fn_Copy(from$,to$, new_record_length,options$)
+fnend
+def fn_Copy(from$*256,to$*256; new_record_length,options$)
+	! options$ (separate by space)  supported options$ values include
+	!           recursive - includes all subdirectories and their files
+	from$=fnSrepEnv$(from$)
+	to$=fnSrepEnv$(to$)
+	from$=trim$(from$,'"')
+	to$=trim$(to$,'"')
+	options$=rtrm$(options$)&' ' 
+	copyRecursive=0
+	if from$(1:2)='@:' then fromAt$='@:' else fromAt$=''
+	if to$(1:2)='@:' then toAt$='@:' else toAt$=''
+	if pos(lwrc$(options$),'recursive ') then copyRecursive=1
+		fnMakeSurePathExists(to$)
+		if copyRecursive then
+			fnGetPp(from$,fromPath$,fromFile$,fromExt$)
+			fnGetPp(to$,toPath$,toFile$,toExt$)
+			dim fromPath$*256,fromFile$*256,fromExt$*256
+			dim toPath$*256,toFile$*256,toExt$*256
+			dim copyFromFolder$(0)*256
+			gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
+			! 
+			! pr 'gd2_return=';gd2_return : pause
+			for cfi=1 to udim(mat copyFromFolder$)
+				dim copyToFolder$*256
+				copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
+				fnmakesurepathexists(copyToFolder$)
+				fnStatus ('Creating files  in "'&copyToFolder$&'"') 
+				execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
+				copy_return+=1! if int(cfi/10)=cfi/10 then pause
+				copyFailA: ! 
+			nex cfi
+		else
+			if new_record_length then 
+				if new_record_length and uprc$(from$)=uprc$(to$) then 
+					execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
+					execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
+					execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
+				end if 
+			end if 
+			execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
+			copy_return=1
+		end if
+	goto COPY_XIT
+	COPY_FAIL: ! r:
+		copy_return=min(-1,-err)
+		if new_record_length then 
+			execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr COPY_RETRY_NEW_RLN_FAILED
+			execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_RETRY_NEW_RLN_FAILED
+			execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr ignore
+			copy_return=2
+		else if env$("ACSDeveloper")<>"" then 
+			pr 'first copy failed with error ';err
+			pr 'From: "'&from$&'"'
+			pr '  To: "'&to$&'"'
+			pause 
+		end if 
+	goto COPY_XIT ! /r
+	COPY_RETRY_NEW_RLN_FAILED: ! r:
+		if env$("ACSDeveloper")<>"" then 
+			pr 'first copy (new record length) failed with error ';abs(copy_return)
+			pr 'second attempt failed with error ';err
+			pause 
+		end if 
+		copy_return=copy_return*10000-err
+	goto COPY_XIT ! /r
+	COPY_XIT: ! 
+	fn_Copy=copy_return
+fnend 
+def library fncscopy(&source$,&destination$)
+	! client server copy function
+	if ~setup the let fn_setup
+	source$=fnSrepEnv$(source$)
+	destination$=fnSrepEnv$(destination$)
+	! source$ = the file to copy from
+	! destination$ = file to copy to
+	! (start either source$ or destination$ with a @ in pos 1 to specify it's location is on the client)
+	dim serverip$*20
+	open #20: "Name=ServerIP.txt",display,input 
+	linput #20: serverip$
+	close #20: 
+	if source$(1:1)="@" then 
+		source$=source$(2:len(source$))
+		copy_from_client=1
+	else 
+		copy_from_server=1
+	end if 
+	if destination$(1:1)="@" then 
+		destination$=destination$(2:len(destination$))
+		copy_to_client=1
+	else 
+		copy_to_server=1
+	end if 
+	if copy_from_client=1 and copy_to_server=1 then 
+		gosub COPY_FROM_CLIENT_TO_SERVER
+	end if 
+	if copy_from_client=1 and copy_to_client=1 then 
+		gosub COPY_FROM_CLIENT_TO_CLIENT
+	end if 
+	if copy_from_server=1 and copy_to_client=1 then 
+		gosub COPY_FROM_SERVER_TO_CLIENT
+	end if 
+	if copy_from_server=1 and copy_to_server=1 then 
+		gosub COPY_FROM_SERVER_TO_SERVER
+	end if 
+	goto XIT
+	! ______________________________________________________________________
+	COPY_FROM_CLIENT_TO_SERVER: ! r:
+	open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
+	! pr #20: "open "&RTRM$(SERVERIP$)
+	pr #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
+	pr #20: "WOCS"&str$(val(wsid$)-50)
+	pr #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
+	pr #20: "bye"
+	close #20: 
+	open #20: "Name=csCopy"&wsid$&".cmd,Size=0,RecL=255,Replace",display,output 
+	pr #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
+	pr #20: "pause"
+	close #20: 
+	execute "Sy csCopy"&wsid$&".cmd"
+	return ! /r
+	! ______________________________________________________________________
+	COPY_FROM_CLIENT_TO_CLIENT: pause 
+	return 
+	! ______________________________________________________________________
+	COPY_FROM_SERVER_TO_CLIENT: pause 
+	return 
+	! ______________________________________________________________________
+	COPY_FROM_SERVER_TO_SERVER: pause 
+	return 
+	XIT: ! 
+fnend 
+def library fnFree(fileToDelete$*256)
+	if ~setup then let fn_setup
+	fileToDelete$=fnSrepEnv$(fileToDelete$)
+	freeReturn=0
+	fileToDelete$=trim$(fileToDelete$,'"')
+	execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
+	freeReturn=1
+	goto FreeXit
+	FreeErr: !
+	freeReturn=-err
+	FreeXit: !
+	fnFree=freeReturn
+fnend
+def library fnRename(from$*256,to$*256)
+	if ~setup then let fn_setup
+	from$=fnSrepEnv$(from$)
+	to$=fnSrepEnv$(to$)
+	from$=trim$(from$,'"')
+	to$=trim$(to$,'"')
+	if (from$(1:2)='@:' and to$(1:2)<>'@:') or (from$(1:2)<>'@:' and to$(1:2)='@:') then
+		if fn_Copy(from$,to$) then
+			exec 'Free "'&from$&'"'
+		end if
+	else 
+		execute 'Rename "'&from$&'" "'&to$&'" -n'
+	end if
+fnend
+def library fnRemoveDeletedRecords(from$*256)
+	if ~setup then let fn_setup
+	from$=fnSrepEnv$(from$)
+	rdrReturn=0
+	execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr RdrFail
+	execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr RdrFail
+	execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
+	rdrReturn=1
+	goto RdrFinis
+	RdrFail: !
+	rdrReturn=-err
+	goto RdrFinis
+	RdrFinis: !
+	fnRemoveDeletedRecords=rdrReturn
+fnend
+include: ertn
