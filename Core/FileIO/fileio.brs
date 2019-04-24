@@ -3,9 +3,9 @@
  ! This Library Houses All File Maintenance Operations
  !
  !  Created: 03/28/06
- ! Modified: 06/29/18
+ ! Modified: 02/11/19
  !
- ! Version 95
+ ! Version 100
  !
  !
  ! #Autonumber# 500,1
@@ -29,6 +29,15 @@
  ! By creating a simple procfile called fileio.ini, a procfile that
  ! resides in the current path and setting the appropriate values.
  !
+ ! Version 100: Fixed a bug in the CSV import routine. Thanks Mikhail Zheleznov!!
+ !
+ ! Version 99: Increased Length used in Export functionality to support fields up to 1000 characters long (matching the ScreenIO limit).
+ !
+ ! Version 98: Fixed a bug with the automatic Date Handling logic that caused FileIO's automatic updates to crash
+ !
+ ! Version 97:   added fnCalculateHours(timein$,tout$) which returns the hours between timein and tout, which must be passed in as hhmmss
+ !
+ ! Version 96: Added functions to convert time between American and Military time: fnStandardTime$ and fnMilitaryTime$
  !
  ! Version 95: Fixed a small bug that caused trouble using the SendEmail function when
  !  fileio is not installed in the default location. Thanks John Bowman!
@@ -80,7 +89,7 @@
  ! Version 89:
  !  Added fnSubstituteStringCode which is like fnSubstituteString but instead of using the file layout it uses a
  !   list of variables passed in as BR code to the function.
- 
+
  ! Version 88:
  !  Added fnSubstituteString(&Message$,LayoutName$,mat F$,mat F) Which takes the passed in record and layout and subsitutes anything it finds
  !   in the string that matches.
@@ -1682,7 +1691,7 @@
        else
           let fmtndate$ = date$(fmtndate, outformat$)
        end if
-       
+
        ! if couldn't convert, then use original value
        if fmtndate$='' then fmtndate$ = str$(candi_date)
     else ! non-date numeric value
@@ -1693,9 +1702,12 @@
 
  dim CsvFieldNames$(1)*128,CSVFieldPositions(1)
  dim CsvSDateSpec$(1)*64,CsvNDateSpec$(1)*64
+ dim Csv_PrintStr$*2000
 
  EXPORTTOCSV: ! **** Export a data file to CSV format
-    def fnExportToCSV(Layout$*64,CSVFile$*300,UseRecNums;Keynumber,&Key$,&RecordNum,mat Records,&SearchMatch$,&KeyMatch$,&SearchNow$,DialogType,___,CSVFile,Datafile,bRecNum,ScreenRows,ScreenCols,fmtdate$,csv_numindx,csv_printstr$*800)
+    def fnExportToCSV(Layout$*64,CSVFile$*300,UseRecNums;Keynumber,&Key$,&RecordNum,mat Records,&SearchMatch$,&KeyMatch$,&SearchNow$,DialogType,___,CSVFile,Datafile,bRecNum,ScreenRows,ScreenCols,fmtdate$,csv_numindx)
+       let Csv_PrintStr$=""  ! This is really a local variable, its dimmed to conserve Workstack Memory.
+       
        library : fnReadLayoutHeader,fnReadLayoutArrays,fnOpenFile, fnGetFileNumber, fnSelectDataCrawlerCols
 
        OPEN #(CSVFile:=fngetfilenumber): "name="&CSVFile$&",recl=32000,replace",DISPLAY,OUTPUT IOERR IGNORE
@@ -1913,7 +1925,7 @@
          let fnClearCSVApplyMessages
 
          do
-             let CSVLine$=fnReadCSVLine$
+             let CSVLine$=fnReadCSVLine$(CSVFile)
              if File(CSVFile) = 0 then
                  let fnExtractCSVLine(CSVLine$,mat Csv_Data$,mat Csv_Data,mat CsvFieldNames$,mat SrcFieldNames$)
 
@@ -1968,7 +1980,6 @@
           let CSVLine$=CSVLine$&CSVLineBuf$
        end if
     loop until Mod(fnCountCharacter(CsvLine$,""""),2)=0
-    let fnReadCSVLine$=CSVLine$
  fnend
 
  ! Fast way to count number of occurances of given char in a string
@@ -4128,13 +4139,13 @@
                 for Index=1 to Udim(Ossubs$) ! Copy String Values
                    if (Nndex:=Srch(Mat Nssubs$,Ossubs$(Index)))>0 then
                       ! If there are dates, convert them from the from format to the to format.
-                      let NF$(Nndex)=trim$(fnfmtsdate$(Of$(Index),osDate$(Index),NsDate$(Index)))
+                      let NF$(Nndex)=trim$(fnfmtsdate$(Of$(Index),osDate$(Index),NsDate$(Nndex)))
                    end if
                 next Index
                 for Index=1 to Udim(Onsubs$) ! Copy Number Values
                    if (Nndex:=Srch(Mat Nnsubs$,Onsubs$(Index)))>0 then
                       ! If there are dates, convert them from the from format to the to format.
-                      let NF(Nndex)=val(fnfmtNdate$(OF(Index),onDate$(Index),NnDate$(Index))) conv UpdateFallbackNumber
+                      let NF(Nndex)=val(fnfmtNdate$(OF(Index),onDate$(Index),NnDate$(Nndex))) conv UpdateFallbackNumber
                    end if
                 next Index
                 write #Newfile, using Fm$(Newfile) : Mat Nf$, Mat Nf
@@ -4160,7 +4171,7 @@
              execute "system"
           end if
        fnend
-       
+
  UpdateFallbackNumber: ! Fallback if date conversion fails in updating a number
     let Nf(Nndex)=Of(Index)
  continue
@@ -4754,7 +4765,7 @@
        end if
        let fnReadChunk$=Chunk$
     fnend
-    
+
     dim LineChunks$(1)*255
     def fnParseDetailLayoutLine(Line$*1000,&SubName$,&Description$,&Spec$,&DateFormat$;___,P,Column4$*255)
        let SubName$=fnReadChunk$(Line$)
@@ -6492,7 +6503,7 @@
                 mat ListData$(((M-1)*numofcols)+1:M*numofcols)=ListRow$
              end if
           next n
-          
+
           mat ListData$(numOfCols*M)
 
           ! Find a unique name
@@ -6606,8 +6617,8 @@
 
                 if len(trim$(CCEmailString$)) then let CCEmailString$=" -cc "&CCEmailString$
 
-                
-                
+
+
                 if len(trim$(InvoiceFile$)) then
                    execute 'sy -M -s sendemail -s '&EmailConf$(conf_server)&' -t '&EmailAddressString$&' -f '&EmailConf$(conf_fromaddr)&' -xu '&EmailConf$(conf_UserAccount)&' -xp '&EmailConf$(conf_password)&' -u "'&Subject$&'" -m "'&EmailMessage$&'" -a "'&os_filename$(InvoiceFile$)&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
                 else
@@ -6645,9 +6656,107 @@
           let SubString$=fnExtractSubstring$(String$,SCS$,SCE$)
           execute "Value$="&Substring$ error SkipThis
           let String$=srep$(String$,trim$(SCS$&Substring$&Sce$),Value$)
-          
+
           SkipThis: ! Jump here if error executing Substring
        loop
+    fnend
+
+    def library fnStandardTime$(MT$;Seconds,___,H,M,S,P)
+       library : fnParseTime, fnBuildTime$
+       let fnParseTime(MT$,H,M,S,P)
+       let fnStandardTime$=fnBuildTime$(H,M,S,P,0,Seconds)
+    fnend
+
+    def library fnMilitaryTime$(ST$;Seconds,___,H,M,S,P)
+       library : fnParseTime, fnBuildTime$
+       let fnParseTime(ST$,H,M,S,P)
+       let fnMilitaryTime$=fnBuildTime$(H,M,S,P,1,Seconds)
+    fnend
+
+ def library fnCalculateHours(timein$,tout$,daysin,daysout;___,hrin,hrout,minin,minout,secin,secout,total)
+    ! this function returns the hours between timein and tout, which must be passed in as hhmmss in string form
+    let hrin=val(timein$(1:2))
+    let hrout=val(tout$(1:2))
+    let minin=val(timein$(3:4))
+    let minout=val(tout$(3:4))
+    let secin=val(timein$(5:6))
+    let secout=val(tout$(5:6))
+    
+    let daycount=daysout-daysin
+
+    if daycount>2 then
+       ! add 24 hours for each full day
+       let total+=24*(daycount-2)
+    end if
+    
+    if daycount>=1 then
+       ! first day trough midnight calculation
+       total+=(24-hrin)
+       if minin<>0 then
+          total-=((minin)/60)
+       end if
+       if secin<>0 then
+          total-=(secin/360)
+       end if
+       ! last day from midnight calculation
+       total+=hrout
+       total+=(minout/60)
+       total+=(secout/360)
+    else
+       ! in same day
+       total+=hrout-hrin
+       if minin<>0 then
+          total-=((minin)/60)
+       end if
+       if secin<>0 then
+          total-=(secin/360)
+       end if
+       total+=(minout/60)
+       total+=(secout/360)
+    end if
+    
+    let fnCalculateHours=round(total,2)
+ fnend
+ 
+
+    def library fnBuildTime$(H,M,S,P;Military,Seconds,___,P$,H$,M$,S$)
+       let M$=":"&cnvrt$("PIC(##)",M)
+       if Seconds then let S$=":"&cnvrt$("PIC(##)",S)
+
+       if Military then
+          if P then let H+=12 : let P=0
+       else
+          if H>12 then let H-=12 : let P=1
+          if P then let P$="pm" else let P$="am"
+       end if
+
+       let H$=str$(H)
+
+       let fnBuildTime$=H$&M$&S$&P$
+    fnend
+
+    def library fnParseTime(T$,&H,&M,&S,&P;___,Colon)
+       let T$=lwrc$(T$)
+
+       if pos(T$,"p")>0 then let P=1
+       let T$=srep$(T$,"a","")
+       let T$=srep$(T$,"p","")
+       let T$=srep$(T$,"m","")
+
+       let H=fnParseNextColon(T$)
+       let M=fnParseNextColon(T$)
+       let S=fnParseNextColon(T$)
+    fnend
+
+    def fnParseNextColon(&T$;___,Colon)
+       let Colon=pos(T$,":")
+       if Colon>0 then
+          let fnParseNextColon=val(T$(1:Colon-1))
+          let T$(1:Colon)=""
+       else
+          let fnParseNextColon=val(T$)
+          let T$=""
+       end if
     fnend
 
     dim SubStringSubs$(1)*255,SubNumericSubs$(1)*255
@@ -6667,7 +6776,7 @@
           end if
        loop
     fnend
-    
+
     def fnSubMatchValue$*1023(Substring$,mat StringSubs$,mat NumSubs$,mat F$,mat F;___,Index,CaseUpper,CaseLower,CaseTitle)
        if pos(Substring$,"::U") then
           let Substring$=srep$(Substring$,"::U","")

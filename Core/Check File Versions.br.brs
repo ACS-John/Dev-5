@@ -136,7 +136,6 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 	CI_XIT: ! 
 	fn_check_indexes=ci_return
 fnend 
-include: ertn
 def fn_min_rln(mr_filename$*512,mr_rln_minimum)
 	open #h_mr_file:=fngethandle: "Name="&mr_filename$&",Shr",internal,input 
 	mr_rln_current=rln(h_mr_file)
@@ -608,6 +607,31 @@ def fn_cfv_payroll
 	fn_ini_move(env$('cursys'))
 	fnIniToReg
 	fn_reg_rename(env$('cursys'))
+	! r: move DDInfo.h into CReg and delete DDInfo.h
+	if exists('[Q]\PRmstr\DDInfo.h[cno]') then 
+		open #h_prDdinfo:=fngethandle: "Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256",internal,outIn,relative 
+		read #h_prDdinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
+		
+		if lrec(h_prDdinfo)>=1 then 
+			dim ddinfo_path$*30
+			dim ddinfo_bankaccount$*20
+			dim ddinfo_bankrouting$*20
+			dim ddinfo_federalrouting$*20
+			dim ddinfo_fedid$*12
+			dim ddinfo_bankname$*23
+			dim ddinfo_banksaccount$*12
+			read #h_prDdinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: ddinfo_path$,ddinfo_bankaccount$,ddinfo_bankrouting$,ddinfo_federalrouting$,ddinfo_fedid$,ddinfo_bankname$,ddinfo_banksaccount$ noRec CfvPrDdInfoNoRec
+			fncreg_write('Direct Deposit Save File Path',ddinfo_path$) ! The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'
+			fncreg_write('Direct Deposit Source Bank Account',ddinfo_bankaccount$) ! The right hand set of numbers at the bottom of your checks.
+			fncreg_write('Direct Deposit Source Bank Routing',ddinfo_bankrouting$) ! The middle set of numbers at the bottom of your checks.
+			fncreg_write('Direct Deposit Federal Reserve Routing',ddinfo_federalrouting$) ! Routing Number of Federal Reserve Used by Your Bank
+			fncreg_write('Direct Deposit Source Bank Name',ddinfo_bankname$)
+			fncreg_write('Direct Deposit Federal ID Number',ddinfo_fedid$) ! The Federal ID number can be found on any payroll report.
+		end if
+		CfvPrDdInfoNoRec: ! 
+		close #h_prDdinfo,free: 
+	end if 
+	! /r
 	! r: move CheckInfo.h into CReg and delete checkinfo.h
 	if exists('[Q]\PRmstr\Checkinfo.h[cno]') then 
 		open #h_pr_checkinfo:=fngethandle: "Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128",internal,outIn,relative 
@@ -1141,7 +1165,6 @@ def fn_rrOne(from$*256,to$*256)
 		end if
 	nex propertyItem
 fnend
-include: fn_open
 def fn_programIniFileName$*256(pif_program$*256; doNotCreate)
 	dim pif_return$*256
 	pif_return$=''
@@ -1151,3 +1174,5 @@ def fn_programIniFileName$*256(pif_program$*256; doNotCreate)
 	pif_return$='[Q]\INI\'&pif_program$&'.ini'
 	fn_programIniFileName$=pif_return$
 fnend 
+include: fn_open
+include: ertn

@@ -5,7 +5,7 @@ xit: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnHamsterFio,fnOpenFile,fnCloseFile,fnerror,fnAddOneC,fnBuildKey$
+		library 'S:\Core\Library': fntop,fnxit,fnHamsterFio,fnCloseFile,fnAddOneC,fnBuildKey$
 		on error goto ERTN
 		dim form$(0)*256
 		dim favData$(0)*128,favDataN(0)

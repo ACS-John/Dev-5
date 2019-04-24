@@ -304,7 +304,7 @@ def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
 	end if
 fnend
 
-def library fnarrayaddn(mat array_combined,mat array_part_one,mat array_part_two)
+def library fnArrayAddN(mat array_combined,mat array_part_one,mat array_part_two)
 	let array_part_one_udim=udim(array_part_one)
 	let array_part_two_udim=udim(array_part_two)
 	let array_combined_udim=array_part_one_udim+array_part_two_udim

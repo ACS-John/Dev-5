@@ -70,6 +70,22 @@ def library fnEndOfMonth(day; ___,returnN,eomYear,eomMonth,eomFirstOfNextMonth$)
 	returnN=days(eomFirstOfNextMonth$,'ccyy/mm/dd')-1
 	fnEndOfMonth=returnN
 fnend
+def library fncd(x)
+	fncd=(x-int(x*.01)*100)*10000+int(x*.01)
+fnend
+def library fndate_mmddyy_to_ccyymmdd(x)
+	! (previously fn2000)   converts mmddyy (of x) to ccyymmdd and returns it as the value of fndate_mmddyy_to_ccyymmdd
+	fndate_mmddyy_to_ccyymmdd=date(days(x,'mmddyy'),'ccyymmdd')
+fnend 
+def library fnformnumb$(numb,decimals,size)
+	fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
+fnend
+def library fnpause(;unused)
+	if env$("ACSDeveloper")<>"" then 
+		execute 'Go XIT Step'
+	end if 
+fnend 
+
 ! /r
 ! r: S:\Core\Start.br
 	def library fnSetQ(setQ$*256)
@@ -403,10 +419,6 @@ fnend
 		library 'S:\Core\program_properties.br': fnprogram_properties
 		fnprogram_properties=fnprogram_properties( forceProgramCaption$)
 	fnend
-	def library fncd(x)
-		library 'S:\Core\fncd.br': fncd
-		fncd=fncd(x)
-	fnend
 	def library fnindex_it(data_file$*256,index_statement$*512; index_parameters$*256)
 		library 'S:\Core\Index.br': fnindex_it
 		fnindex_it=fnindex_it(data_file$,index_statement$, index_parameters$)
@@ -477,10 +489,6 @@ fnend
 		library 'S:\Core\Ace\GetCD.br': fngetcd
 		fngetcd=fngetcd(mcd$)
 	fnend
-	def library fndate_mmddyy_to_ccyymmdd(x)
-		library 'S:\Core\2000.br': fndate_mmddyy_to_ccyymmdd
-		fndate_mmddyy_to_ccyymmdd=fndate_mmddyy_to_ccyymmdd(x)
-	fnend
 	def library fnxit(;cursys$)
 		library 'S:\Core\xit.br': fnxit
 		fnxit=fnxit(cursys$)
@@ -530,10 +538,6 @@ fnend
 		library 'S:\Core\Check File Versions.br': fncheckfileversion
 		fncheckfileversion=fncheckfileversion
 	fnend
-	def library fndemo
-		library 'S:\Core\Demo.br': fndemo
-		fndemo=fndemo
-	fnend
 	def library fnconsole(;on_off)
 		library 'S:\Core\Ace\Console.br': fnconsole
 		fnconsole(on_off)
@@ -542,23 +546,12 @@ fnend
 		library 'S:\Core\CmbCNo.br': fncmbcno
 		fncmbcno(myline,mypos,mysys$)
 	fnend
-	def library fnpause(;unused)
-		library 'S:\Core\Pause.br': fnpause
-		fnpause(unused) : fnend
-	def library fnformnumb$(numb,decimals,size)
-		library 'S:\Core\FormNumb.br': fnformnumb$
-		fnformnumb$=fnformnumb$(numb,decimals,size)
-	fnend
-	def library fncombo1(win,n$,mat l$,mat s,mat f,mat c$,filter$)
-		library 'S:\Core\combo1.br': fncombo1
-		fncombo1(win,n$,mat l$,mat s,mat f, mat c$,filter$)
-	fnend
 	def library fnprocess(; chgpro)
-		library 'S:\Core\Process.br': fnprocess
+		library 'S:\Core\process.br': fnprocess
 		fnprocess=fnprocess(chgpro)
 	fnend
 	def library fnkillauto
-		library 'S:\Core\KillAuto.br': fnkillauto
+		library 'S:\Core\process.br': fnkillauto
 		fnkillauto=fnkillauto
 	fnend
 	def library fnoldmsgbox(mat response$,&cap$,mat msgline$,mtype)
@@ -1404,10 +1397,10 @@ fnend
 		library 'S:\acsPR\Employee_srch.br': fnemployee_srch
 		fnemployee_srch(x$,fixgrid)
 	fnend
-	def library fncat_srch(&x$;fixgrid)
-		library 'S:\acsPR\CAT_srch.br': fncat_srch
-		fncat_srch(x$,fixgrid)
-	fnend
+	! def library fncat_srch(&x$;fixgrid)
+	! 	library 'S:\acsPR\CAT_srch.br': fncat_srch
+	! 	fncat_srch(x$,fixgrid)
+	! fnend
 	def library fncat_srch2(&x$,&ckey;fixgrid)
 		library 'S:\acsPR\CAT_srch2.br': fncat_srch2
 		fncat_srch2(x$,ckey,fixgrid)
