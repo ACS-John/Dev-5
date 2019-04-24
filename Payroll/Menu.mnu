@@ -29,7 +29,7 @@ Quarterly
 >State UnEmp.-Electronic Submission         ^ acsPR\prelecuc
 Annual
 >Annual Federal Unemployment Worksheet      ^ acsPR\newprFedUC
->Deduction Register YTD                     ^ acsPR\newprYTDMis
+>YTD Deductions Register                    ^ Payroll\YTD Deductions Register
 >Print W-2 Forms                            ^ Payroll\Print W-2 Forms
 >Corrected W-2                              ^ acspr\newcorrectedprw2a
 >Electronic W-2                             ^ acsPR\newprElecW2

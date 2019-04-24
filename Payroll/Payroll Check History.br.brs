@@ -398,20 +398,12 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		end_year=val(resp$(12)(1:4))*10000+1231
 		gridname$=rpad$(trim$(resp$(14)),30)
 		rewrite #hGridName,using "form pos 1,c 30",rec=1: gridname$
-		if checkonly=1 and details=1 then
-			mg$(1)="You cannot select 'Checkonly' and Details "
-			mg$(2)="at the same time. Click OK to correct."
-			fnmsgbox(mat mg$,resp$,cap$,0)
-			goto SCREEN1
-		end if
-	L2300: !
-		if ckey<>3 and checkonly+details+grand+quarterly+annual+employee=0 then
-
-			mg$(1)="You must select at least one type of information to be shown. "
-			mg$(2)="                Click OK to correct."
-			fnmsgbox(mat mg$,resp$,cap$,0)
-			goto SCREEN1
-		end if
+		! if ckey<>3 and checkonly+details+grand+quarterly+annual+employee=0 then
+		! 	mg$(1)="You must select at least one type of information to be shown. "
+		! 	mg$(2)="                Click OK to correct."
+		! 	fnmsgbox(mat mg$,resp$,cap$,0)
+		! 	goto SCREEN1
+		! end if
 
 		if ckey=3 then gosub SelectColumns : goto ScrFilters
 		justopen=1: gosub SelectColumns: justopen=0
@@ -513,25 +505,25 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 				ul$=hd$="            "
 				hs1=0: hs2=0
 				for j=1 to udim(hf$)
-					if hf(j)=0 then goto L3070
-					hs2=hs2+1
-					if j=1 then ! employee #
-						hfm$=hfm$&",NZ 8"             : hs1=hs1+8  : hz1=hs2 : ul$=ul$&" -------"    : hs3=8
-					else if j=2 then ! dept #
-						hfm$=hfm$&",NZ 5"             : hs1=hs1+5  : hz1=hs2 : ul$=ul$&" ----"       : hs3=5
-					else if j=3 then ! date
-						hfm$=hfm$&",pic(bzzzz/zz/zz)" : hs1=hs1+11 : hz1=hs2 : ul$=ul$&" ----------" : hs3=11
-					else if j=4 then ! check number
-						hfm$=hfm$&",NZ 7"             : hs1=hs1+7  : hz1=hs2 : ul$=ul$&" ------"     : hs3=7
-					else if j>4 and j<10 then ! hours
-						hfm$=hfm$&",G 8.2"            : hs1=hs1+8            : ul$=ul$&" -------"    : hs3=8
-					else if j>9 and j<17 then ! wages
-						hfm$=hfm$&",G 10.2"           : hs1=hs1+10           : ul$=ul$&" ---------"  : hs3=10
-					else if j>16 and j<47 then ! deductions
-						hfm$=hfm$&",G 10.2"           : hs1=hs1+10           : ul$=ul$&" ---------"  : hs3=10
+					if hf(j)<>0 then
+						hs2=hs2+1
+						if j=1 then ! employee #
+							hfm$=hfm$&",NZ 8"             : hs1=hs1+8  : hz1=hs2 : ul$=ul$&" -------"    : hs3=8
+						else if j=2 then ! dept #
+							hfm$=hfm$&",NZ 5"             : hs1=hs1+5  : hz1=hs2 : ul$=ul$&" ----"       : hs3=5
+						else if j=3 then ! date
+							hfm$=hfm$&",pic(bzzzz/zz/zz)" : hs1=hs1+11 : hz1=hs2 : ul$=ul$&" ----------" : hs3=11
+						else if j=4 then ! check number
+							hfm$=hfm$&",NZ 7"             : hs1=hs1+7  : hz1=hs2 : ul$=ul$&" ------"     : hs3=7
+						else if j>4 and j<10 then ! hours
+							hfm$=hfm$&",G 8.2"            : hs1=hs1+8            : ul$=ul$&" -------"    : hs3=8
+						else if j>9 and j<17 then ! wages
+							hfm$=hfm$&",G 10.2"           : hs1=hs1+10           : ul$=ul$&" ---------"  : hs3=10
+						else if j>16 and j<47 then ! deductions
+							hfm$=hfm$&",G 10.2"           : hs1=hs1+10           : ul$=ul$&" ---------"  : hs3=10
+						end if
+						hd$=hd$&lpad$(trim$(name$(j)(1:hs3-1)),hs3)
 					end if
-					hd$=hd$&lpad$(trim$(name$(j)(1:hs3-1)),hs3)
-					L3070: !
 				next j
 				mat cp0(hs2)
 				mat cp1(hs2)
