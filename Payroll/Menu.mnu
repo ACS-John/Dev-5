@@ -10,7 +10,7 @@ File
 >Employment Status                          ^ acspr\Empstatus
 >Department Names                           ^ Payroll\Department Names
 >Chart of Accounts                          ^ acspr\chartofaccounts
-Pay Period                                  
+Pay Period
 >Enter Time Sheets                          ^ Payroll\Enter Time Sheets
 >Payroll Registers                          ^ acsPR\newprReg1
 >Other Pay and Deductions Register          ^ Payroll\Other Pay and Deductions Register
@@ -18,11 +18,11 @@ Pay Period
 >Print Payroll Checks                       ^ Payroll\Print Payroll Checks
 >YTD and QTD Register                       ^ Payroll\YTD and QTD Register
 >Post to General Ledger                     ^ acsPR\newprPostGL              ^ GL
-Monthly                                     
+Monthly
 >Payroll Tax Deposit Summary                ^ Payroll\Payroll Tax Deposit Summary
 >Pension Report                             ^ acspr\newprmers
 >Deferred Compensation Report               ^ acspr\newprdefcmp
-Quarterly                                   
+Quarterly
 >State UnEmp Report                         ^ acsPR\newprUC1
 >941 Summary                                ^ acsPR\newPR941
 >Quarterly Federal Unemployment Worksheet   ^ acsPR\newQtrFedUC
