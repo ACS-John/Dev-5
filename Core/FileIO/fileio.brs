@@ -5,7 +5,7 @@
  !  Created: 03/28/06
  ! Modified: 02/11/19
  !
- ! Version 100
+ ! Version 102
  !
  !
  ! #Autonumber# 500,1
@@ -28,6 +28,12 @@
  ! Global Settings Such As The Default File Layout Path May Be Set
  ! By creating a simple procfile called fileio.ini, a procfile that
  ! resides in the current path and setting the appropriate values.
+ !
+ ! Version 103: Fixed a bug when exporting data files that had no numbers and data files that had no strings
+ !
+ ! Version 102: Added optional parameters Mat F$ and mat F for two arrays that get resized for the data file.
+ !
+ ! Version 101: Fixed a glitch in the automatic update process when adding an additional key
  !
  ! Version 100: Fixed a bug in the CSV import routine. Thanks Mikhail Zheleznov!!
  !
@@ -1720,8 +1726,8 @@
 
           let Datafile=fnOpen(Layout$,mat Csv_Data$,mat Csv_Data,mat Csv_Forms$,1,Keynumber,Dont_Sort_Subs:=0,path$:='',Mat Csv_Dfdescr$, Mat dummy,0,0,0,mat csv_dateformats$)
 
-          mat CSVSDateSpec$(udim(mat Csv_Data$))=csv_DateFormats$(1:udim(mat Csv_Data$))
-          mat CSVNDateSpec$(udim(mat Csv_Data))=csv_DateFormats$(udim(mat Csv_Data$)+1:udim(mat CSV_DateFormats$))
+          if udim(mat csv_data$)=0 then mat CsvSDateSpec$(0) else mat CsvSDateSpec$(udim(mat csv_data$))=CSV_DateFormats$(1:udim(mat csv_data$))
+          if udim(mat csv_data)=0 then mat CsvNDateSpec$(0) else mat CSVNDateSpec$(udim(mat Csv_Data))=csv_DateFormats$(udim(mat Csv_Data$)+1:udim(mat CSV_DateFormats$))
 
           if DialogType=2 or DialogType=3 then
              let fnReadScreenS(ScreenRows,ScreenCols)
@@ -3825,7 +3831,7 @@
           close #Filenumber:
           for Index=2 to Udim(Mat Keys$)
              let fnCompressIndexParms(KPos$(Index),KLen$(Index))
-             execute fnNeedStar$&"index "&Path$&Filename$&" "&Path$&Keys$(Index)&" "&Kpos$(Index)&" "&Klen$(Index)&" dupkeys -N"
+             execute fnNeedStar$&"index "&Path$&Filename$&" "&Path$&Keys$(Index)&" "&Kpos$(Index)&" "&Klen$(Index)&" dupkeys replace -N"
           next Index
           let Fncreateversionsaveinfo(Filelay$)
        fnend
@@ -4587,16 +4593,21 @@
  !
  ! #Autonumber# 25500,2
  MAKESUBPROC: ! Read File Layout, Returning All Subscripts As A Procfile
-       def library Fnmakesubproc(Filename$*255;Mat Subs$,___,Index,Dummy$*512,Dummy2$*255,Subname$*255,Layout,Subs,Prefix$*255,LayoutPath$*255,Stringsize,Numbersize,Line$*512,Star$)
+       def library Fnmakesubproc(Filename$*255;Mat Subs$,mat f$,mat f,___,AnFWasGiven,Index,Dummy$*512,Dummy2$*255,Subname$*255,Layout,Subs,Prefix$*255,LayoutPath$*255,Stringsize,Numbersize,Line$*512,Star$)
           let Star$=fnNeedStar$
           let Layoutpath$=fnSettings$("layoutpath")
           let FileLayoutExtension$=fnSettings$("layoutextension")
+
+
 
           if ~fnopenlayout(layoutpath$&filename$&FileLayoutExtension$) then goto ERRORREADFILELAYOUT
           if fnSMatrixPresent(mat Subs$) then
              mat Subs$(0)
           else
              open #(Subs:=Fngetfilenumber): "Name=subs.$$$, replace", display, output
+          end if
+          if fnSMatrixPresent(mat F$) and fnNMatrixPresent(mat F) then
+             let AnFWasGiven=1
           end if
 
           let Line$=fnLayoutLinput$
@@ -4654,6 +4665,10 @@
           goto READNEXTSUBPROCLINE
  DONEMAKESUBPROC: ! We Finished With All The File Layout
           if Subs then close #Subs:
+          if AnFWasGiven then
+             mat F$(StringSize)
+             mat F(NumberSize)
+          end if
        fnend
 
 
