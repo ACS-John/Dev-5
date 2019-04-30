@@ -120,14 +120,14 @@ def library fnCustomer(x)
 		! 
 		rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
 		open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
-		fnkey_change(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
+		fnKeyChange(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 		close #h_ubtransvb:
 		open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
-		fnkey_change(h_workorder,'form pos 1,c 10',holdz$,z$)
+		fnKeyChange(h_workorder,'form pos 1,c 10',holdz$,z$)
 		close #h_workorder: 
 		fn_accountKeyChange_meter(holdz$,z$) 
 		! 
-		fnkey_change(h_deposit2,'form pos 1,c 10',x$,z$)
+		fnKeyChange(h_deposit2,'form pos 1,c 10',x$,z$)
 		gosub BUD3
 		noteFile$=fn_notedir$&"\"&trim$(holdz$)&".txt" ! old notes
 		noteFileNew$=fn_notedir$&"\"&trim$(z$)&".txt" ! new notes
@@ -1194,7 +1194,7 @@ def fn_customer_name$*30(cn_account$*10)
 fnend 
 def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
 	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,3)
-	fnkey_change(hLocation,'form pos 42,c 10',key_from$,key_to$)
+	fnKeyChange(hLocation,'form pos 42,c 10',key_from$,key_to$)
 	fnclosefile(hLocation,'U4 Meter Location') : setup_MeterLocation=0
 fnend 
 def fn_customer_grid(cg_line,cg_pos)
@@ -1470,7 +1470,7 @@ def fn_setup
 		library 'S:\Core\Library': fnureg_write,fnureg_read
 		library 'S:\Core\Library': fnbutton_or_disabled
 		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnkey_change
+		library 'S:\Core\Library': fnKeyChange
 		library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
 		library 'S:\Core\Library': fnGetServiceCodesMetered
 		library 'S:\Core\Library': fnMeterAddressName$

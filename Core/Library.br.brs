@@ -178,9 +178,13 @@ def library Fn_Decodebase64(&Content$)
 	library 'S:\Core\base64_l.br': Fn_Decodebase64
 	Fn_Decodebase64=Fn_Decodebase64(Content$)
 fnend
-def library fnkey_change(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
-	library 'S:\Core\fnkey_change.br': fnkey_change
-	fnkey_change=fnkey_change(h_filehandle,f_fileform_key_only$,key_from$,key_to$)
+def library fnKeyChange(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
+	library 'S:\Core\key.br': fnKeyChange
+	fnKeyChange=fnKeyChange(h_filehandle,f_fileform_key_only$,key_from$,key_to$)
+fnend
+def library fnKeyDelete(h_filehandle,f_fileform_key_only$*128,key$*128)
+	library 'S:\Core\key.br': fnKeyDelete
+	fnKeyDelete=fnKeyDelete(h_filehandle,f_fileform_key_only$,key$)
 fnend
 def library fndate_picker$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
 	library 'S:\Core\date_picker.br': fndate_picker$
@@ -419,6 +423,10 @@ fnend
 		library 'S:\Core\program_properties.br': fnprogram_properties
 		fnprogram_properties=fnprogram_properties( forceProgramCaption$)
 	fnend
+	def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
+		library 'S:\Core\fnFixWordingOnGrid.br': fnFixWordingOnGrid
+		fnFixWordingOnGrid=fnFixWordingOnGrid(ev$,outputfile$)
+	fnend
 	def library fnindex_it(data_file$*256,index_statement$*512; index_parameters$*256)
 		library 'S:\Core\Index.br': fnindex_it
 		fnindex_it=fnindex_it(data_file$,index_statement$, index_parameters$)
@@ -558,9 +566,9 @@ fnend
 		library 'S:\Core\OldMsgBox.br': fnoldmsgbox
 		fnoldmsgbox=fnoldmsgbox(mat response$,cap$,mat msgline$,mtype)
 	fnend
-	def library fnsearch(&cap$,fum,&hea$,&form$,nformat$,&sel$,klength)
+	def library fnsearch(unused$,fum,&hea$,&form$,nformat$,&sel$,klength)
 		library 'S:\Core\Search.br': fnsearch
-		fnsearch=fnsearch(cap$,fum,hea$,form$,nformat$,sel$,klength)
+		fnsearch=fnsearch(unused$,fum,hea$,form$,nformat$,sel$,klength)
 	fnend
 	def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 		library 'S:\Core\Menu.br': fnGetProgramList
@@ -897,9 +905,9 @@ fnend
 		library 'S:\Core\Reg.br': fnsreg_write
 		fnsreg_write=fnsreg_write(reg_field_name$,reg_field_value$)
 	fnend
-	def library fncreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
+	def library fncreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank)
 		library 'S:\Core\Reg.br': fncreg_read
-		fncreg_read=fncreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
+		fncreg_read=fncreg_read(reg_field_name$,reg_field_value$, reg_field_default$,cr_alsoApplyDefaultIfReadBlank)
 	fnend
 	def library fncreg_write(reg_field_name$*128,reg_field_value$*256)
 		library 'S:\Core\Reg.br': fncreg_write

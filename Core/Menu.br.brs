@@ -446,7 +446,9 @@ def fn_main
 				end if
 			else if env$('cursys')='TM' and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then
-					fnchain('S:\acsTM\arinput')
+					fnchain('S:\Time Management\Collections')
+				else if fkey_value=fkey_tm_updateSupportExpir then
+					fnchain('S:\Time Management\Update support expiration date')
 				end if
 			end if
 			! /r
@@ -536,7 +538,7 @@ def fn_dashboard_height
 	if env$('ACSDeveloper')<>'' then dhReturn=5
 	fn_dashboard_height=dhReturn
 fnend
-def fn_ddAddButton(buttonText$,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
+def fn_ddAddButton(buttonText$*64,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
 	if buttonLine=0 then buttonLine=1
 	if btnItem=1 then
 		fnButton(buttonLine,dashboard_width-tmp_btn_width,buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
@@ -621,9 +623,10 @@ def fn_dashboard_draw
 				fnLbl(1,68,str$(fntotal_ar),4,0,0,1)
 			end if
 		else if env$('cursys')="TM" then
-			tmp_btn_width=11 : tmpBtnItem=0
-			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width)
-			fnLbl(1,1,'Time Management is for Advanced Computer Services LLC only.',0,0,0,fraDashboard)
+			tmp_btn_width=30 : tmpBtnItem=0
+			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width,1)
+			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,2)
+			fnLbl(5,1,'Advanced Computer Services LLC Management Menu.',0,0,0,fraDashboard)
 		end if
 		! if env$('acsDeveloper')<>'' then
 		!   fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)

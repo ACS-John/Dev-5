@@ -19,7 +19,7 @@ def fn_setup
 		library 'S:\Core\Library': fnGetPp
 		library 'S:\Core\Library': fncreg_write
 		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnkey_change
+		library 'S:\Core\Library': fnKeyChange
 		library 'S:\Core\Library': fnSystemName$
 		library 'S:\Core\Library': fnIniToReg
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile
@@ -661,6 +661,12 @@ def fn_cfv_payroll
 	fn_file_setup_data("[Q]\PRmstr\DeptName.h[cno]",32,0)
 	fn_file_setup_index("[Q]\PRmstr\DeptNameIdx-idx.h[cno]",'1','3')
 	! 
+	fn_file_setup_data("[Q]\PRmstr\Department.h[cno]",149,0)
+	fn_file_setup_index("[Q]\PRmstr\DeptIdx.h[cno]",'1/9','8/3')
+	! 
+	fn_file_setup_data("[Q]\PRmstr\dd.h[cno]",72,0)
+	fn_file_setup_index("[Q]\PRmstr\DDidx1.h[cno]",'1','10')
+	! 
 	fn_file_setup_data("[Q]\PRmstr\mglmstr.h[cno]",135,0)
 	fn_file_setup_index("[Q]\PRmstr\mglidx1-idx.h[cno]",'1','3')
 	! 
@@ -1112,7 +1118,7 @@ def fn_ini_move(cursys$*2)
 				end if
 			end if
 		end if
-		fnkey_change(hFavProgram,'form pos '&str$(kps(hFavProgram))&',C '&str$(kln(hFavProgram)),imBrFrom$,imBrTo$)
+		fnKeyChange(hFavProgram,'form pos '&str$(kps(hFavProgram))&',C '&str$(kln(hFavProgram)),imBrFrom$,imBrTo$)
 	nex imItem
 	hFavProgram=fnCloseFile(hFavProgram,'CO Favorites')
 fnend

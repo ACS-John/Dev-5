@@ -1437,7 +1437,11 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 		form$(0:0)=str$(width)&"/#PIC("
 		form$(inf:inf)=")"
 	else if mask=30 then ! defaults 1 to 1
-		form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+		if maxlen>15 then
+			form$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
+		else
+			form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+		end if
 	else if mask=31 then ! defaults 1 to 1.0
 		form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 	else if mask=32 then ! defaults 1 to 1.00
@@ -1764,7 +1768,11 @@ def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
 		attr$(0:0)=str$(width)&"/#PIC("
 		attr$(inf:inf)=")"
 	else if mask=30 then ! defaults 1 to 1
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+		if maxlen>15 then
+			attr$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
+		else
+			attr$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+		end if
 	else if mask=31 then ! defaults 1 to 1.0
 		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 	else if mask=32 then ! defaults 1 to 1.00
