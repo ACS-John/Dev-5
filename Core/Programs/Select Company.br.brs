@@ -33,12 +33,7 @@ MENU1: ! r:
 	!  r: add that company grid to the screen
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 	! 
-	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
-		dim dataFolder$*256
-		dataFolder$='S:\Core\Data\acsllc'
-	else
-		dataFolder$='[Q]\'&env$('cursys')&"mstr"
-	end if
+
 	fngetdir2(dataFolder$,mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 	company_count=filename_item=0
 	for filename_item=1 to udim(mat filename$)
@@ -296,6 +291,12 @@ def fn_setup
 		!  * Add Company program must be called acs[cursys]\ADDCNO.br
 		!  * Company files must be named Company.hxx
 		!
+		if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+			dim dataFolder$*256
+			dataFolder$='S:\Core\Data\acsllc'
+		else
+			dataFolder$='[Q]\'&env$('cursys')&"mstr"
+		end if
 	end if 
 	! 
 	! r: constants and variables setup for the company grid
