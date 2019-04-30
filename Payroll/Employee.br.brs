@@ -3,66 +3,57 @@
 ! r: setup and open files
 	fn_setup
 	fntop(program$)
-	open #hRpMstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
-	open #11: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPIndx2.h[cno],Shr",internal,outIn,keyed 
-	if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then gosub SETUP_PAYROLLCHECKS
-	if ~exists("[Q]\PRmstr\checkidx3.h[cno],Shr") then gosub INDEX_CHECKIDX3
-	open #h_checkhistory:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
-	open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
-	if ~exists("[Q]\PRmstr\Department.h[cno]") then ! SETUP_DEPARTMENT
-		open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],RecL=149,kps=1/9,kln=8/3,use",internal,outIn,keyed 
-		close #2: 
-		execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx.h[cno] 1/9 8/3 Replace DupKeys -n"
-	end if 
-	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
-	goto MENU1
-! /r
-MENU1: ndep=0 : goto ASKEMPLOYEE
-ASKEMPLOYEE: ! r:
+fn_openFiles
+goto MENU1 ! /r
+
+
+MENU1: !
+goto AskEmployee
+AskEmployee: ! r:
+	departmentAddMode=0  !  this used to be in MENU1, but I moved it here because it shouldn't matter and I'd like to remove the MENU1 in favor of AskEmployee
 	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
 	fnTos(sn$="Employee-ask")
 	respc=0
 	fnLbl(1,1,"Employee Number:",16,right)
 	fncmbemp(1,18)
-	if hact$="" then 
+	if hact$="" then
 		resp$(respc+=1)=""
-	else 
+	else
 		resp$(respc+=1)=hact$
-	end if 
+	end if
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,1,0,"Access the highlighted record")
-	fnCmdKey("&Next Record",3,0,0,"Access next record in employee # order")
+	fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
-	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
+	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
 	fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
-	if ckey=1 then 
-		ti1=ad1=1
-		goto ADDREC
-	else if ckey=2 then 
-		goto EDITREC
-	else if ckey=3 then 
-		read #hRpMstr,using L870: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof L1120
-L870: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
+	if ckey=1 then
+		ad1=1 ! ti1=1
+		goto AddEmployee
+	else if ckey=2 then
+		goto EditEmployee
+	else if ckey=3 then
+		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EmpNotFound
 		holdeno=eno
 		ent$=lpad$(str$(eno),8)
-		goto SCR_EMPLOYEE
-	else if ckey=4 then 
+		goto ScrEmployee
+	else if ckey=4 then
 		ent=eno
-		goto EDITREC
-	else if ckey=8 then 
+		goto EditEmployee
+	else if ckey=8 then
 		fnemployee_srch(x$,fixgrid)
 		ent=val(x$)
-		goto EDITREC
+		goto EditEmployee
 	else if ckey=6 or env$('ExitNow')='yes' then ! Added ExitNow env$ by GSB to ensure program recursively exits when they click the Windows X in a Subwindow
-		goto XIT
-	else if ckey=7 then 
-		goto ASKEMPLOYEE
-	end if 
-	goto ADDREC ! /r
-ADDREC: ! r:
+		goto Finis
+	else if ckey=7 then
+		goto AskEmployee
+	end if
+goto AddEmployee ! /r
+AddEmployee: ! r:
 	fnTos(sn$="Employeefm")
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
@@ -72,17 +63,18 @@ ADDREC: ! r:
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screem.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto ASKEMPLOYEE
+	if ckey=5 then goto AskEmployee
 	add1=1
 	ent=val(resp$(1))
 	ent$=lpad$(str$(ent),8)
-	read #hRpMstr,using F_RPMSTR,key=ent$: tempeno nokey L1020
+	read #hEmployee,using F_employee,key=ent$: tempeno nokey DoEmployeeAdd
+	! r: only happens if employee number already exists
 	mat ml$(2)
 	ml$(1)="A record with this number already exists!"
 	ml$(2)="Select a different employee number."
 	fnmsgbox(mat ml$,resp$,'',48)
-	goto ADDREC ! /r
-L1020: ! r:
+	goto AddEmployee ! /r
+	DoEmployeeAdd: !
 	mat em$=("")
 	ph$=ss$=""
 	bd=0
@@ -95,29 +87,29 @@ L1020: ! r:
 	mat tcp=(0)
 	mat sc=(0)
 	eno=teno=holdeno=ent
-! holdem$=em$(1)
+	! holdem$=em$(1)
 	dd$="N"
-! clear bank draft
+	! clear bank draft
 	rtn=0
 	acc=0
-	acn=0
-	goto SCR_EMPLOYEE ! /r
-EDITREC: ! r:
-	if ent=0 then goto ASKEMPLOYEE
+	acn$=''
+goto ScrEmployee ! /r
+EditEmployee: ! r:
+	if ent=0 then goto AskEmployee
 	teno=eno=ent ! hdar=0
 	ent$=lpad$(str$(ent),8)
-	read #hRpMstr,using F_RPMSTR,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd nokey L1120
+	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd nokey EmpNotFound
 	holdeno=eno
-	goto SCR_EMPLOYEE ! /r
-L1120: ! r:
+goto ScrEmployee ! /r
+EmpNotFound: ! r:
 	mat ml$(2)
 	ml$(1)="A record with this number does not exist!"
 	ml$(2)="Select a different employee number."
 	fnmsgbox(mat ml$,resp$,'',48)
-	goto ASKEMPLOYEE ! /r
-SCR_EMPLOYEE: ! r:
+goto AskEmployee ! /r
+ScrEmployee: ! r:
 	fnTos(sn$="Employeeedit")
-	respc=0 : frac=0 ! 
+	respc=0 : frac=0 !
 	mylen=28 : mypos=mylen+2
 	fnLbl(1,1,"Employee Number:",mylen,1)
 	fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
@@ -215,19 +207,19 @@ SCR_EMPLOYEE: ! r:
 	fnLbl(22,col3_pos,"Phone Number:",col3_len,1)
 	fnTxt(22,73,12,12,0,"",0,"")
 	resp$(respc+=1)=ph$
-! picture=0
-	fnCmdKey("&Departments",2,0,0,"Allows you to review departmental information.")
+	! picture=0
+	fnCmdKey('&Departments ('&str$(fn_EmployeeDepartmentCount(eno))&')',2,0,0,"Review this employee's departmental information.")
 	fnCmdKey("Direct D&eposit",7,0,0,"Review direct deposit information.")
 	fnCmdKey("Re&view Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
 	fnCmdKey("&Review Checks",10,0,0,"Review check information.")
-! fnCmdKey("&Picture",6,0,0,"Place any picture in share\images.")
-	if ad1=0 then 
+	! fnCmdKey("&Picture",6,0,0,"Place any picture in share\images.")
+	if ad1=0 then
 		fnCmdKey("De&lete",4,0,0,"Deletes this record")
-	end if 
+	end if
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto ASKEMPLOYEE
+	if ckey=5 then goto AskEmployee
 	eno=val(resp$(1)(1:8))
 	em$(1)=resp$(2) ! name
 	em$(2)=resp$(3)
@@ -255,34 +247,58 @@ SCR_EMPLOYEE: ! r:
 	bd=val(resp$(25)) ! birth date
 	ph$=resp$(26) ! phone
 	! if ckey=6 then goto PICTURE
-	if ckey=8 then let fnhours(eno): goto SCR_EMPLOYEE
-	if ckey=7 then gosub DD: goto EDITREC
-	if ckey=10 then goto CHECK_INFORMATION ! check information
-	if ckey=1 or ckey=2 then 
+	if ckey=8 then
+		fnhours(eno)
+		goto ScrEmployee
+	else if ckey=7 then
+		gosub DD
+		goto EditEmployee
+	else if ckey=10 then
+		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
+		goto EditEmployee
+	else if ckey=1 or ckey=2 then
 		if em(5)=0 then ! pay code not selected
 			mat ml$(1) : ml$(1)='Pay Code is required.'
 			fnmsgbox(mat ml$,resp$)
-			goto SCR_EMPLOYEE
-		end if 
-		goto REWRITE_MAIN_FILE
-	end if 
-	if ckey=4 then goto DELETE_EMPLOYEE
-	goto REVIEW_DEPARTMENT
+			goto ScrEmployee
+		end if
+		gosub SaveEmployee
+		if ckey=2 then 
+			goto FirstDepartment
+		else 
+			goto MENU1
+		end if
+	else if ckey=4 then
+		goto DeleteEmployee
+	end if
+goto FirstDepartment
 ! /r
-REVIEW_DEPARTMENT: ! r:
+EndOfDepartments: !
+goto ScrEmployee
+FirstDepartment: ! r:
 	firstread=1
-	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DEPARTMENT_ADD
-L2400: ! 
-	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof SCR_EMPLOYEE
-	if firstread=1 and teno<>eno then goto DEPARTMENT_ADD
-	if teno<>eno then goto SCR_EMPLOYEE
-SCR_DEPARTMENT: ! 
+	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DepartmentAdd
+	whichDepartment=0
+goto NextDepartment ! /r
+NextDepartment: ! r:
+	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
+	whichDepartment+=1
+	if firstread=1 and teno<>eno then goto DepartmentAdd
+	if teno<>eno then goto EndOfDepartments
+ScrDepartment: !
 	fnTos(sn$="EmployeeDep")
 	respc=0 : fram1=1
 	mylen=20 : mypos=mylen+2 : mat resp$=("")
-	fnFra(1,1,6,97,"Departmental Information - "&trim$(em$(1)))
+	dim departmentCap$*128
+	departmentCount=fn_EmployeeDepartmentCount(eno)
+	if departmentAddMode then
+		departmentCap$='Adding Department '&str$(departmentCount+1)&' for '&trim$(em$(1))
+	else
+		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(departmentCount)&' for '&trim$(em$(1))
+	end if
+	fnFra(1,1,6,97,departmentCap$)
 	fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
-	fnTxt(1,mylen+3,8,8,1,"1030",0,"Employee numbers must be numeric.",fram1)
+	fnTxt(1,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.",fram1)
 	resp$(respc+=1)=str$(eno)
 	fnLbl(2,1,"Department Number:",mylen,1,0,fram1)
 	fnTxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department # can be used twice on the same employee.",fram1)
@@ -306,7 +322,7 @@ SCR_DEPARTMENT: !
 	fnTxt(5,mylen+3,8,8,1,"1",0,"Last payroll date is updated each time pay is calculated.  Use MMDDYY format.  Do not change this date.",fram1)
 	resp$(respc+=1)=str$(tdt(4))
 	fnLbl(5,35,"State Code:",mylen,1,0,fram1)
-! fnTxt(5,58,2,2,1,"30",0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
+	! fnTxt(5,58,2,2,1,"30",0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
 	fncomboa("StateCode",5,58,mat state_option$,"",11,fram1)
 	if tcd(1)=0 or tcd(1)>10 then tcd(1)=1 ! default state code to 1
 	resp$(respc+=1)=state_option$(tcd(1))
@@ -335,17 +351,24 @@ SCR_DEPARTMENT: !
 		fnTxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
-	fnCmdKey("&Next Record",3,1,0,"Save any changes and access next departmental record.")
+	if departmentCount=whichDepartment then
+	fnCmdKey("Retur&n to Employee",3,1,0,"Save any changes and access next departmental record.")
+	else
+	fnCmdKey("&Next Department",3,1,0,"Save any changes and access next departmental record.")
+	end if
 	fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
 	fnCmdKey("&Review Checks",10,0,0,"Review check information.")
 	fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
 	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto ASKEMPLOYEE
+	if ckey=5 then goto AskEmployee
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
-	if ckey=9 then delete #2,key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn): : goto EDITREC
+	if ckey=9 then 
+		delete #hDepartment,key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn):
+		goto EditEmployee
+	end if
 	if resp$(3)="combos" then resp$(3)=""
 	gl$=fnagl$(resp$(3))
 	tdt(1)=val(resp$(4)) ! last review date
@@ -364,29 +387,36 @@ SCR_DEPARTMENT: !
 	for j=4 to 23
 		tdet(j)=val(resp$(14+j-3)) ! standard deductions
 	next j
-	if tdn=0 then 
+	
+	if tdn=0 then
 		mat ml$(2)
-		ml$(1)="The department # can not be 0 (zero)."
+		ml$(1)="The department number can not be 0 (zero)."
 		ml$(2)="Enter a valid department number!"
 		fnmsgbox(mat ml$,resp$)
-		goto REVIEW_DEPARTMENT
-	end if 
-	if ndep<>0 then ! if ndep=0 then goto L3160
-		write #2,using 'Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
-	else 
+		goto ScrDepartment
+	end if
+	if departmentAddMode then
+		write #hDepartment,using 'Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
+	else
 		if eno<>ent then goto CHGENO
-		rewrite #2,using "Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2": teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	end if 
+		rewrite #hDepartment,using "Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2": teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+	end if
 	firstread=0
-	ndep=0
-	if ckey=4 then goto DEPARTMENT_ADD ! add new department
-	if ckey=3 then goto L2400 ! move to next departmental record
-	if ckey=1 then goto EDITREC
-	if ckey=10 then goto CHECK_INFORMATION
-	goto ASKEMPLOYEE
+	departmentAddMode=0
+	if ckey=4 then ! add new department
+		goto DepartmentAdd
+	else if ckey=3 then  ! move to next departmental record
+		goto NextDepartment
+	else if ckey=1 then
+		goto EditEmployee
+	else if ckey=10 then
+		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
+		goto EditEmployee
+	end if
+	goto AskEmployee
 ! /r
-DEPARTMENT_ADD: ! r: new department
-	ndep=1
+DepartmentAdd: ! r: new department
+	departmentAddMode=1
 	tdn=0
 	gl$=""
 	mat tdt=(0)
@@ -394,129 +424,141 @@ DEPARTMENT_ADD: ! r: new department
 	tli=0
 	mat tdet=(0)
 	firstread=0
-	goto SCR_DEPARTMENT ! /r
-! r: unreferenced code
-	if ti1=2 then goto L3370
-	write #hRpMstr,using F_RPMSTR: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
-	r1=r2=1 ! r4=
-	goto MENU1
-! /r
-REWRITE_MAIN_FILE: ! r:
-	if add1=1 then goto L3390
-	if holdeno<>eno then goto CHGENO
-L3370: ! 
-	rewrite #hRpMstr,using F_RPMSTR,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
-	goto L3420
-L3390: ! 
-	write #hRpMstr,using F_RPMSTR: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
-	add1=0
-L3420: ! 
-	if ckey=2 then goto REVIEW_DEPARTMENT
-	goto MENU1 ! /r
-! DONE: ! r:
-	close #hRpMstr: 
-	close #2: 
-	if r1=1 then 
-		execute "Index [Q]\PRmstr\RPMSTR.H[cno]"&' '&"[Q]\PRmstr\RPINDEX.H[cno] 1,8 Replace DupKeys -n"
-		execute "Index [Q]\PRmstr\dd.H[cno]"&' '&"[Q]\PRmstr\ddidx1.H[cno] 1,10 Replace DupKeys -n"
-	end if 
-	if r2=1 then 
-		execute "Index [Q]\PRmstr\RPMSTR.H[cno]"&' '&"[Q]\PRmstr\RPINDX2.H[cno] 9 30 Replace DupKeys -n"
-	end if 
-	goto XIT ! /r
-DELETE_EMPLOYEE: ! r:
+goto ScrDepartment ! /r
+
+SaveEmployee: ! r:
+	if add1=1 then 
+		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+		add1=0
+	else if holdeno<>eno then 
+		goto CHGENO
+	else
+		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+	end if
+return ! /r
+
+DeleteEmployee: ! r:
 	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(ent$)&" will be Deleted."
 	ml$(2)="Do you wish to continue?"
 	fnmsgbox(mat ml$,resp$,'',52)
-	if resp$="Yes" then goto L3540 else goto MENU1
-L3540: ! delete direct deposit
-	gosub DDDEL ! uses ent$
-	delete #hRpMstr,key=ent$: 
-! delete departmental records
-	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": 
-L3580: read #2,using 'Form POS 1,N 8': teno eof ASKEMPLOYEE
-	if teno<>eno then goto L3620
-	delete #2: 
-	goto L3580
-L3620: ! delete check transactions
-	heno$=lpad$(str$(eno),8)
-	restore #h_checkhistory,key>=heno$&"         ": nokey L3700
-L3650: read #h_checkhistory,using 'form pos 1,n 8': histeno eof L3700
-!   form pos 1,n 8
-	if histeno<>eno then goto L3700
-	delete #h_checkhistory: 
-	goto L3650
-L3700: ! 
-	goto MENU1 ! /r
-! r: unused: employee number will be changed (old) messagebox
-	msgline$(1)="Employee Number "&ltrm$(ent$)&" will be changed "
-	msgline$(1)=msgline$(1)&"to "&str$(eno)&"."
-	msgline$(2)="Do you wish to continue?"
-	fnoldmsgbox(mat response$,'',mat msgline$,2)
-	if response$(1)="Y" then 
-		goto CHGENO
-	else 
-		goto MENU1
-	end if  ! /r
+	if resp$="Yes" then ! delete direct deposit
+		fn_dDdelete(eno)
+		delete #hEmployee,key=ent$:
+		fnKeyDelete(hDepartment,'Form POS 1,N 8',cnvrt$("pic(zzzzzzz#)",eno))
+		! delete departmental records
+		fnKeyDelete(hDepartment,'Form POS 1,N 8',cnvrt$("pic(zzzzzzz#)",eno))
+		! delete check transactions
+		heno$=lpad$(str$(eno),8)
+		fnKeyDelete(hCheckIdx1,'Form POS 1,N 8',heno$)
+		! restore #hCheckIdx1,key>=heno$&"         ": nokey DeleteEmployeeFinis
+		! do
+		! 	read #hCheckIdx1,using 'form pos 1,n 8': histeno eof DeleteEmployeeFinis
+		! 	if histeno<>eno then goto DeleteEmployeeFinis
+		! 	delete #hCheckIdx1:
+		! loop
+	else
+		goto DeleteEmployeeFinis
+	end if
+	DeleteEmployeeFinis: !
+goto MENU1 ! /r
 CHGENO: ! r:
 	mat ml$(3)
 	ml$(1)="You have chosen to change the employee number"
 	ml$(2)="from "&str$(holdeno)&" to "&str$(eno)&"."
 	ml$(3)="Do you wish to continue?"
 	fnmsgbox(mat ml$,resp$,'',52)
-	if resp$<>"Yes" then 
+	if resp$<>"Yes" then
 		goto CHGENO_XIT
-	end if 
-	read #hRpMstr,using 'form pos 1,n 8',key=lpad$(str$(eno),8): teno nokey L3790
+	end if
+	read #hEmployee,using 'form pos 1,n 8',key=lpad$(str$(eno),8): teno nokey L3790
 	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(ent$)&" already exists."
 	ml$(2)="You cannot change to this number."
 	fnmsgbox(mat ml$,resp$)
 	goto CHGENO_XIT
 	L3790: ! change direct deposit
-	gosub DDCHGKEY ! from ent$ to eno
+	fn_DirectDepositKeyChange(rpad$(trim$(ent$),10),key$:=fn_dDkey$(eno))
 	! CHANGE DEPARTMENTS NUMBERS
 	heno$=lpad$(str$(holdeno),8) ! &"   "
-	restore #2,key>=rpad$(heno$,kln(2)): nokey L3890
-	do 
-		read #2,using 'Form POS 1,N 8': deno eof L3890
+	restore #hDepartment,key>=rpad$(heno$,kln(hDepartment)): nokey L3890
+	do
+		read #hDepartment,using 'Form POS 1,N 8': deno eof L3890
 		if deno<>holdeno then goto L3890
-		rewrite #2,using 'form pos 1,n 8',rec=rec(2): eno
-	loop 
+		rewrite #hDepartment,using 'form pos 1,n 8',rec=rec(hDepartment): eno
+	loop
 	L3890: ! pause
-	fnkey_change(h_checkhistory,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
+	fnKeyChange(hCheckIdx1,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 	! r: change employee number in any and all rpwork files.
 	for wsid_item=1 to 99
 		wsid_item$=cnvrt$('pic(##)',wsid_item)
-		if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then 
+		if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
 			open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
-			fnkey_change(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
-			close #h_rpwork: 
-			RPWORK_OPEN_ERR: ! 
-		end if 
+			fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
+			close #h_rpwork:
+			RPWORK_OPEN_ERR: !
+		end if
 	next wsid_item
 	! /r
 	! L3980: ! change main employee record
-	delete #hRpMstr,key=ent$: 
-	write #hRpMstr,using F_RPMSTR: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+	delete #hEmployee,key=ent$:
+	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
 	ent$=lpad$(str$(eno),8)
 	hact$=ent$
-	CHGENO_XIT: ! 
+	CHGENO_XIT: !
 goto MENU1 ! /r
+def fn_openFiles
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
+	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
+	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPIndx2.h[cno],Shr",internal,outIn,keyed
+	open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
+	open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
+	open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+fnend
+def fn_EmployeeDepartmentCount(eno; ___,returnN)
+	if ~edc_setup or ~edc_hDepartment then
+		edc_setup=1
+		open #edc_hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed
+	end if
+	restore #edc_hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey edcFinis
+	do
+		read #edc_hDepartment,using 'Form POS 1,N 8': teno eof edcFinis
+		if teno=eno then returnN+=1
+	loop while teno=eno
+	edcFinis: !
+	fn_EmployeeDepartmentCount=returnN
+fnend
 def fn_setup
-	library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fnerror,fnhours,fnTos,fnLbl,fncmbemp,fnCmdKey,fnAcs,fncombof,fnTxt,fnmsgbox,fncomboa,fnpic,fnFra,fnrgl$,fnqgl,fnagl$,fncheckfile,fnemployee_srch,fngethandle,fnkey_change,fnDedNames,fnaddonec
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnhours
+	library 'S:\Core\Library': fnTos,fnLbl,fnCmdKey,fnAcs,fncombof,fnTxt
+	library 'S:\Core\Library': fncmbemp
+	library 'S:\Core\Library': fncomboa,fnpic
+	library 'S:\Core\Library': fnFra
+	library 'S:\Core\Library': fnrgl$,fnqgl,fnagl$
+	library 'S:\Core\Library': fncheckfile
+	library 'S:\Core\Library': fnemployee_srch
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnKeyChange,fnKeyDelete
+	library 'S:\Core\Library': fnDedNames
+	library 'S:\Core\Library': fnaddonec
+	library 'S:\Core\Library': fnmsgbox
 	on error goto ERTN
-	! on fkey 5 goto MENU1
 	! ______________________________________________________________________
 	dim ph$*12
-	dim response$(5)*1,msgline$(2)*60,resp$(50)*128
-	dim ty(21),tqm(17),tcp(22),em(16),ta(2)
-	dim tdt(4),tcd(3),tdet(23),ss$*11,rs(2)
+	dim resp$(50)*128
+	dim ty(21)
+	dim tqm(17)
+	dim tcp(22)
+	dim em(16)
+	dim ta(2)
+	dim tdt(4),tcd(3)
+	dim tdet(23)
+	dim ss$*11
+	dim rs(2)
 	dim em$(3)*30
-	dim code8$(2)*22
-	dim code9$(2)*33,ml$(2)*80
-	! 
+	dim ml$(2)*80
+	!
 	dim race_option$(7)*15
 	race_option$(1)="0 - Unknown"
 	race_option$(2)="1 - Caucasian"
@@ -525,12 +567,12 @@ def fn_setup
 	race_option$(5)="4 - Oriental"
 	race_option$(6)="5 - AmIndian"
 	race_option$(7)="6 - Indochines"
-	! 
+	!
 	dim gender_option$(3)*11
 	gender_option$(1)="0 - Unknown"
 	gender_option$(2)="1 - Male"
 	gender_option$(3)="2 - Female"
-	! 
+	!
 	dim married_option$(0)*58
 	mat married_option$(0)
 	fnaddonec(mat married_option$,"0 - Single")
@@ -539,168 +581,153 @@ def fn_setup
 	fnaddonec(mat married_option$,'3 - Married - filing joint - only one working')
 	fnaddonec(mat married_option$,'4 - Married - filing joint - both working')
 	fnaddonec(mat married_option$,'5 - Married - filing seperate - both working')
-! 
+
 	dim fed_exemption_option$(22)
 	for j=1 to 21
 		fed_exemption_option$(j)=str$(j-1)
 	next j
 	fed_exemption_option$(22)="99"
-	! 
+
 	dim payperiod_option$(4)
 	payperiod_option$(1)="1 - Monthly"
 	payperiod_option$(2)="2 - Semi-monthly"
 	payperiod_option$(3)="3 - Bi-weekly"
 	payperiod_option$(4)="4 - Weekly"
-	! 
+
 	dim code6$(4)*28
 	code6$(1)="0 - Subject to SS and Med WH"
 	code6$(2)="1 - SS only"
 	code6$(3)="2 - Medicare Only"
 	code6$(4)="9 - Neither SS nor Medicare"
-	! 
+
 	dim code7$(3)*29
 	code7$(1)="0 - Not qualified for EIC"       !  em(7)=1
 	code7$(2)="1 - Single or Spouse not file"   !  em(7)=2
 	code7$(3)="2 - Married both filing"         !  em(7)=3
-	! 
+
 	dim statenames$(10)*8
-	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative 
+	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
 	read #1,using "form pos 150,10*c 8",rec=1: mat statenames$
-	close #1: 
+	close #1:
 	dim state_option$(10)*11
 	for j=1 to 10: state_option$(j)=cnvrt$("Pic(z#)",j)&" "&statenames$(j): next j
-	! 
+
 	dim dednames$(20)*20
 	fnDedNames(mat dednames$)
-	L430: ! 
 	for j=1 to 20
-		if trim$(dednames$(j))<>"" then 
+		if trim$(dednames$(j))<>"" then
 			dednames$(j)=trim$(dednames$(j))&":"
-		end if 
+		end if
 	next j
-fnend 
-F_RPMSTR: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
+fnend
+Finis: ! ! r:
+	close #hEmployee:
+	close #hEmployeeIdx2:
+	close #hDepartment:
+goto XIT ! /r
 XIT: fnxit
-IGNORE: continue 
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
-DDREADNOKEY: ! r:
-	dd$='N' : rtn=acc=acn=0 ! defaults
-	write #30,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn nokey DDREADNOKEY
-	goto ASKDD ! /r
-DDKEY: ! r:
-	key$=rpad$(str$(eno),10)
-return  ! /r
+IGNORE: continue
+
+
 DD: ! r:
-	gosub DDKEY
-	gosub DDOPEN
-	read #30,using "Form pos 11,C 1,N 9,N 2,N 17",key=key$: dd$,rtn,acc,acn nokey DDREADNOKEY
-ASKDD: ! 
+	key$=fn_dDkey$(eno)
+	hDd=fn_dDopen
+	read #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$ nokey DdReadNoKey
+ASKDD: !
+	if ~setup_askdd then
+		setup_askdd=1
+		dim optDirectDepositAccountType$(2)*22
+		optDirectDepositAccountType$(1)="27 = Regular Checking"
+		optDirectDepositAccountType$(2)="37 = Savings Account"
+		dim optEnableDirectDeposit$(2)*33
+		optEnableDirectDeposit$(1)="Y = Activate Direct Deposit"
+		optEnableDirectDeposit$(2)="N = Direct Deposit not activated."
+	end if
+
 	fnTos(sn$="DirectDeposit")
 	respc=0: mylen=35 : right=1
-	fnLbl(1,1,"Employee #:",mylen,right)
-	fnTxt(1,mylen+3,8,8,1,"",0,"")
+	fnLbl(1,1,"Employee Number:",mylen,right)
+	fnTxt(1,mylen+3,8,8,1,"",1,"")
 	resp$(respc+=1)=str$(eno)
 	fnLbl(2,1,"Direct Deposit:",mylen,right)
-	code9$(1)="Y = Activate Direct Deposit"
-	code9$(2)="N = Direct Deposit not activated."
-	respc+=1: for j=1 to udim(code9$)
-		if dd$=code9$(j)(1:1) then resp$(respc)=code9$(j)
+	fncomboa("Directd",2,mylen+3,mat optEnableDirectDeposit$,"",35)
+	respc+=1
+	for j=1 to udim(optEnableDirectDeposit$)
+		if dd$=optEnableDirectDeposit$(j)(1:1) then resp$(respc)=optEnableDirectDeposit$(j)
 	next j
-	fncomboa("Directd",2,mylen+3,mat code9$,"",35)
-	fnLbl(3,1,"Routing Number:",mylen,right)
+	fnLbl(3,1,"Employee Bank Routing Number:",mylen,right)
 	fnTxt(3,mylen+3,9,9,1,"",0,"Employee's bank's routing #. The bank account and the routing # can be found at the bottom of the employees personal check.")
 	resp$(respc+=1)=str$(rtn)
-	code8$(1)="27 = Regular Checking"
-	code8$(2)="37 = Savings Account"
-	respc+=1: for j=1 to udim(code8$)
-		if acc=val(code8$(j)(1:2)) then resp$(respc)=code8$(j)
-	next j
 	fnLbl(4,1,"Account Type:",mylen,right)
-	fncomboa("AccType",4,mylen+3,mat code8$,"",35)
-	fnLbl(5,1,"Employee Bank Account #:",mylen,right)
-	fnTxt(5,mylen+3,17,17,1,"30",0,"Enter the employee's bank account #. ")
-	resp$(respc+=1)=str$(acn)
+	fncomboa("AccType",4,mylen+3,mat optDirectDepositAccountType$,"",35)
+	respc+=1
+	resp$(respc)=''
+	for j=1 to udim(mat optDirectDepositAccountType$)
+		if acc=val(optDirectDepositAccountType$(j)(1:2)) then resp$(respc)=optDirectDepositAccountType$(j)
+	next j
+	if resp$(respc)='' then let resp$(respc)=optDirectDepositAccountType$(1)
+	fnLbl(5,1,"Employee Bank Account Number:",mylen,right)
+	! fnTxt(5,mylen+3,17,17,1,"30",0,"Enter the employee's bank account number. ")
+	fnTxt(5,mylen+3,17,17,1,'30',0,"Enter the employee's bank account number. ")
+	resp$(respc+=1)=acn$
 	fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
 	fnCmdKey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto DDDONE
+	if ckey=5 then goto DdFinis
 	key$=resp$(1)
 	dd$=resp$(2)(1:1)
 	rtn=val(resp$(3)) !  banks routing #
 	acc=val(resp$(4)(1:2)) ! checking or savings
-	acn=val(resp$(5)) ! employee bank acct #
-	if ckey=4 then 
+	acn$=resp$(5) ! employee bank acct #
+	if ckey=4 then
 		dd$="N"
-		rtn=acc=acn=0
+		rtn=acc=0 : acn$=''
 		key$=rpad$(key$,10)
-		delete #30,key=key$: nokey L4660
-		goto DDDONE
-	end if 
-L4660: ! 
-	if dd$="Y" and (rtn=0 or acc=0 or acn=0) then 
-		goto L4670
-	else 
-		goto L4680
-	end if 
-L4670: ! 
-	mat ml$(2)
-	ml$(1)="You must have valid answers in the routing #, account"
-	ml$(2)="type, and bank account before you can answer yes."
-	fnmsgbox(mat ml$,resp$)
-	goto ASKDD
-L4680: ! 
-	if ckey=1 or ckey=4 then goto SAVEDD
-	goto ASKDD ! /r
-SAVEDD: ! r:
-	key$=rpad$(str$(eno),10)
-	rewrite #30,using "Form pos 11,C 1,N 9,N 2,N 17",key=key$: dd$,rtn,acc,acn
-	goto DDDONE ! /r
-DDDONE: ! r:
-	close #30: 
+		delete #hDd,key=key$: nokey ignore
+		goto DdFinis
+	end if
+	if dd$="Y" and (rtn=0 or acc=0 or acn$='') then
+		mat ml$(2)
+		ml$(1)="You must have valid answers in the routing #, account"
+		ml$(2)="type, and bank account before you can answer yes."
+		fnmsgbox(mat ml$,resp$)
+		goto ASKDD
+	else if ckey=1 or ckey=4 then
+		key$=rpad$(str$(eno),10)
+		rewrite #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$
+		goto DdFinis
+	end if
+goto ASKDD ! /r
+
+DdReadNoKey: ! r:
+	dd$='N' : rtn=acc=0 : acn$='' ! defaults
+	write #hDd,using "Form pos 1,C 10,C 1,N 9,N 2,C 17": key$,dd$,rtn,acc,acn$ nokey DdReadNoKey
+goto ASKDD ! /r
+DdFinis: ! r:
+	fn_dDclose
 return  ! /r
-DDOPEN: ! r:
-	close #30: ioerr ignore
-	open #30: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed 
-return  ! /r
-DDDEL: ! r:
-	gosub DDOPEN
-! set the key with ENT$
-! delete the record
-goto DDDONE ! /r
-DDCHGKEY: ! r: update the dd file when you change an employee number
-	gosub DDOPEN
-	gosub DDKEY
-	rewrite #30,using "Form Pos 1,C 10",key=rpad$(trim$(ent$),10): key$ nokey ignore
-goto DDDONE  ! /r
-! close #2: ioerr ignore
-! execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx.h[cno] 1/9 8/3 Replace DupKeys -n"
-! open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
-! return
-! PICTURE: ! r:
-!   fnTos(sn$="Employeepic")
-!   fnpic(1,10,24,60,str$(eno)&".bmp")
-!   fnLbl(25,80,"")
-!   fnCmdKey("O&K",7,1,0,"Returns to customer record.")
-!   fnAcs(sn$,0,mat resp$,ckey)
-! goto SCR_EMPLOYEE ! /r
-SETUP_PAYROLLCHECKS: ! r:
-	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],RecL=224,use",internal,outIn 
-	close #4: 
-	execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx.h[cno] 1 17 Replace DupKeys"
-	gosub INDEX_CHECKIDX3
-return  ! /r
-INDEX_CHECKIDX3: ! r:
-	execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx3.h[cno] 1/12/9 8/6/3 Replace DupKeys"
-return  ! /r
-CHECK_INFORMATION: ! r:
-	hact$=str$(eno)
-	filnum=44 ! 44 for date sequence
-	fncheckfile(hact$,filnum,h_checkhistory,hRpMstr)
-goto EDITREC ! /r
+def fn_dDkey$*10(eno)
+	fn_dDkey$=rpad$(str$(eno),10)
+fnend
+def fn_dDopen
+	open #hDd:=fngethandle: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed
+	fn_dDopen=hDd
+fnend
+def fn_dDclose
+	close #hDd:
+	hDd=0
+fnend
+
+def fn_dDdelete(eno)
+	! delete the record
+	hDd=fn_dDopen
+	fnKeyDelete(hDd,'Form POS 1,N 8',cnvrt$("pic(zzzzzzz#)",eno))
+	fn_dDclose
+fnend
+def fn_DirectDepositKeyChange(from$,to$)
+	hDd=fn_dDopen
+	fnKeyChange(hDd,'form pos 1,C 10',from$,to$)
+	fn_dDclose
+fnend
+include: ertn

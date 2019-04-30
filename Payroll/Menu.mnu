@@ -44,10 +44,10 @@ Print
 >User Designed Reports Proof List           ^ acsPR\newprRpt4
 >Input Worksheet                            ^ acsPR\newprInpWk
 >Active Employee List                       ^ acsPR\newEmpList
->Direct Deposit List                        ^ acspr\newddlist
-Automatic Processing
->Select Automatic Processing Programs       ^ acsPR\newSelAuto
->Begin Automatic Processing                 ^ acsPR\newAutoProc
+>Direct Deposit List                        ^ Payroll\Direct Deposit List
+! Automatic Processing
+! >Select Automatic Processing Programs       ^ acsPR\newSelAuto
+! >Begin Automatic Processing                 ^ acsPR\newAutoProc
 Utilities
 >Change Payroll Dates                       ^ Payroll\Change Payroll Dates
 >Remove Old Payroll Checks                  ^ acspr\removechecks

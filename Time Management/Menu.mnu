@@ -22,7 +22,7 @@ File
 >tmshtHamster                                                         ^ acsTM\tmshtHamster
 Daily
 >Enter Time and Charges                                               ^ acsTM\tminput
->Enter Charges and Collections                                        ^ acsTM\arinput
+>Collections                                                          ^ Time Management\Collections
 ! >Unbilled Work In Process                                           ^ acsTM\tmunblwk
 ! >Productivity Report                                                
 ! >>Employee                                                          ^ acsTM\tmempprd

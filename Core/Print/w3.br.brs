@@ -12,7 +12,7 @@
 	def fn_setup
 		if ~setup then
 			setup=1
-			library 'S:\Core\Library': fntop,fnxit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
+			library 'S:\Core\Library': fntop,fnxit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
 			fnreg_read('W-3 - Enable Background'              ,enableBackground$   ,'True' )
 		end if
 	fnend

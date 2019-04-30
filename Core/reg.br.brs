@@ -188,7 +188,7 @@ def fn_mcreg_close
 fnend
 ! /r
 ! r: Company Registry - tied to Client, System and Company Number
-def library fncreg_read(cr_field_name$*128,&cr_field_value$; cr_default_if_not_read$*128)
+def library fncreg_read(cr_field_name$*128,&cr_field_value$; cr_default_if_not_read$*128,cr_alsoApplyDefaultIfReadBlank)
   fn_creg_setup
   dim cr_tmpfield_value$*256,cr_key_compare$*128
   cr_field_name$=rpad$(lwrc$(trim$(cr_field_name$)),128)
@@ -197,6 +197,7 @@ def library fncreg_read(cr_field_name$*128,&cr_field_value$; cr_default_if_not_r
   read #creg_h,using 'form pos 1,C 128,v 256',key=cr_field_name$,release: cr_key_compare$,cr_tmpfield_value$ ioerr ignore
   if cr_key_compare$=cr_field_name$ then
     cr_field_value$=rtrm$(cr_tmpfield_value$)
+		if cr_alsoApplyDefaultIfReadBlank and cr_field_value$='' then cr_field_value$=cr_default_if_not_read$
   else
     cr_field_value$=cr_default_if_not_read$
   end if

@@ -1,5 +1,7 @@
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnsearch
-	fntop(program$,cap$="Collections")
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnsearch
+	fntop(program$)
 	dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25
 	dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 	dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
@@ -250,7 +252,7 @@ TMSRCH: ! search for customer #
 	numeric_format$='pic($$$,$$$.##)'
 	key_length=5
 	heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-	fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+	fnsearch('',file_num,heading$,form$,numeric_format$,selection$,key_length)
 	p$=selection$ ! pull key from first field in search line
 	ano=0
 	ano=val(selection$) conv L4910
