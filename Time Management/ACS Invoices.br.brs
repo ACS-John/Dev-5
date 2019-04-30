@@ -27,17 +27,17 @@ SCREEN1_ASK: !
 	if cmdkey=5 or fkey=99 then goto XIT
 	b4=date(days(inv_date,"mmddyy"),"ccyymmdd")
 	fnAutomatedSavePoint('before')
-	open #h_clmstr:=fngethandle: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed 
+	open #h_clmstr:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed 
 ! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
-! execute "Index [Q]\TMmstr\support.h[cno]  [Q]\TMmstr\support-idx.h[cno] 1/7,6/2,replace,DupKeys"
-	open #h_support:=fngethandle: "Name=[Q]\TMmstr\Support.h[cno],KFName=[Q]\TMmstr\support-idx.h[cno],Shr",internal,input,keyed 
+! execute "Index S:\Core\Data\acsllc\support.h[cno]  S:\Core\Data\acsllc\support-idx.h[cno] 1/7,6/2,replace,DupKeys"
+	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed 
 F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-	fn_thsht_combine_entries("[Q]\TMmstr\TIMESHEET.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
+	fn_thsht_combine_entries("S:\Core\Data\acsllc\TIMESHEET.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 	restore #h_clmstr,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
 	pr newpage
 	pr f "10,10,Cc 60": "Printing Invoices..."
-! r: process "[Q]\TMmstr\TMWK1"&wsid$&".h[cno]"
-	open #h_tmwk1:=fngethandle: 'Name=[Q]\TMmstr\TMWK1.h[cno],Replace,RecL=2484,Shr',internal,outIn 
+! r: process "S:\Core\Data\acsllc\TMWK1"&wsid$&".h[cno]"
+	open #h_tmwk1:=fngethandle: 'Name=S:\Core\Data\acsllc\TMWK1.h[cno],Replace,RecL=2484,Shr',internal,outIn 
 	F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	dim cde$(30)*6
 	dim inv_item$(30)*55
@@ -94,7 +94,7 @@ F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 EOJ: ! r:
 	fn_summary_print
 	fncloseprn
-	open #h_ivnum:=fngethandle: "Name=[Q]\TMmstr\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
+	open #h_ivnum:=fngethandle: "Name=S:\Core\Data\acsllc\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
 	rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 	close #h_ivnum: 
 	close #h_clmstr: 

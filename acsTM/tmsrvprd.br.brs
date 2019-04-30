@@ -8,12 +8,12 @@
 00090   dim cat$(30)*30
 00100   dim sc$*4,ds$*30,catno$*2,cnam$*40,cap$*128
 00110   namtab=41-int(len(rtrm$(cnam$))/2)
-00120   open #1: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno],Shr",internal,input,keyed ioerr L920
-00130   open #2: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L920
+00120   open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,input,keyed ioerr L920
+00130   open #2: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative ioerr L920
 00140   read #2,using L150: mat cat$ ioerr L920
 00150 L150: form pos 1,30*c 30
 00160   close #2: 
-00170   open #8: "Name=[Q]\TMmstr\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
+00170   open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
 00180   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 00190   pr newpage
 00200   pr f "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"

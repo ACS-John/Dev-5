@@ -7,7 +7,7 @@
 00090   namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
 00100   dim scr1$(8),fl1$(11),in1$(10),ot1$(10),scrid$(3)*80,inp(9),iv$*12,a1$*30
 00110   dim m$*11,fm$*54,fp$*80,pt(4),fl2$(7),scr2$(4),ot2$(4)
-00120   open #1: "Name=[Q]\TMmstr\Company.h[cno],Shr",internal,input ioerr L1770
+00120   open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr L1770
 00130   read #1,using L140: dept,subac ioerr L1770
 00140 L140: form pos 162,2*n 1
 00150   close #1: 
@@ -55,11 +55,11 @@
 00570   scr2$(2)="AMOUNTS"
 00580   scr2$(3)="CATEGORIES"
 00590   scr2$(4)="SUB CATEGORIES"
-00600   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L1770
-00601   open #11: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L1770
-00610   open #2: "Name=[Q]\TMmstr\TMWk2"&wsid$&".H[cno]",internal,outIn,relative ioerr L630
+00600   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr L1770
+00601   open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L1770
+00610   open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".H[cno]",internal,outIn,relative ioerr L630
 00620   close #2,free: 
-00630 L630: open #2: "Name=[Q]\TMmstr\TMWk2"&wsid$&".H[cno],Replace,RecL=56",internal,outIn,relative ioerr L1770
+00630 L630: open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".H[cno],Replace,RecL=56",internal,outIn,relative ioerr L1770
 00640 L640: scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
 00650   scrid$(2)="Enter CLIENT # as 0 when completed."
 00660   scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"

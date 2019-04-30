@@ -9,12 +9,12 @@
 00090   gosub BUILD_LAYOUT
 00100   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 00110   gosub HAMSTER: gosub CLOSE_FILE
-00120   execute "Index [Q]\TMmstr\support.h420  [Q]\TMmstr\support-idx.h420 1/7,6/2,replace,DupKeys"
+00120   execute "Index S:\Core\Data\acsllc\support.h420  S:\Core\Data\acsllc\support-idx.h420 1/7,6/2,replace,DupKeys"
 00130   goto XIT
 00140 ! ______________________________________________________________________
 00150 OPEN_FILE: ! 
 00160   open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name=[Q]\TMmstr\Support.h420,Version=2,KFName=[Q]\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
+00170   open #open_file_count+=1: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -99,24 +99,24 @@
 01000 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 01010   limit_to_list$='1'
 01020   cl=1 : c$(cl,1)='ComboF'
-01030   c$(cl,2)="[Q]\TMmstr\Clmstr.h420"
+01030   c$(cl,2)="S:\Core\Data\acsllc\Clmstr.h420"
 01050   c$(cl,3)='1' : c$(cl,4)='5'
 01060 ! c$(cl,3)='1' : c$(cl,4)='6'
 01070   c$(cl,5)='6' : c$(cl,6)='30'
 01080 ! c$(cl,5)='7' : c$(cl,6)='50'
-01090   c$(cl,7)="[Q]\TMmstr\CLIndex.h420"
+01090   c$(cl,7)="S:\Core\Data\acsllc\CLIndex.h420"
 01110   c$(cl,8)=limit_to_list$
 01120   cl=3 : c$(cl,1)='ComboF'
-01130   c$(cl,2)="[Q]\TMmstr\Systems.h420"
+01130   c$(cl,2)="S:\Core\Data\acsllc\Systems.h420"
 01140   c$(cl,3)='1' : c$(cl,4)='2'
 01150   c$(cl,5)='3' : c$(cl,6)='50'
-01160   c$(cl,7)="[Q]\TMmstr\Systems-Idx.h420"
+01160   c$(cl,7)="S:\Core\Data\acsllc\Systems-Idx.h420"
 01170   c$(cl,8)=limit_to_list$
 01180   cl=5 : c$(cl,1)='ComboF'
-01190   c$(cl,2)="[Q]\TMmstr\TimeFrame.h420"
+01190   c$(cl,2)="S:\Core\Data\acsllc\TimeFrame.h420"
 01200   c$(cl,3)='1' : c$(cl,4)='2'
 01210   c$(cl,5)='3' : c$(cl,6)='50'
-01220   c$(cl,7)="[Q]\TMmstr\TimeFrame-Idx.h420"
+01220   c$(cl,7)="S:\Core\Data\acsllc\TimeFrame-Idx.h420"
 01230   c$(cl,8)=limit_to_list$
 01240   return 
 01250 ! ______________________________________________________________________

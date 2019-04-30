@@ -25,8 +25,8 @@
 	if fkey=93 or fkey=99 then goto XIT
 	open #h_in:=fngethandle: 'Name=D:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
 	! open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
-	open #h_out:=fngethandle: "Name=[Q]\TMmstr\TimeSheet.h[cno],RecL=86,KFName=[Q]\TMmstr\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
-	open #h_support:=fngethandle: "Name=[Q]\TMmstr\SUPPORT.h[cno],KFName=[Q]\TMmstr\support-idx.h[cno],Shr",internal,input,keyed
+	open #h_out:=fngethandle: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
+	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 	FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	fnopenprn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'

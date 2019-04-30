@@ -10,7 +10,7 @@
 00190   dim p$*5,iv$*12,tr(6),id$*20 ,cat$(10)*30
 00195   dim st$(20)*24,scot$(21),sct$(40),app(20),ma(20)
 00196   dim st2$(20)*24,ap2(20),ma2(20)
-00260   open #1: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndex.H[cno],Shr",internal,outIn,keyed 
+00260   open #1: "Name=S:\Core\Data\acsllc\CLmstr.H[cno],KFName=S:\Core\Data\acsllc\CLIndex.H[cno],Shr",internal,outIn,keyed 
 00730 L730: read #1,using L740: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 eof END1
 00740 L740: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
 00750   if app(4)=0 then goto L730

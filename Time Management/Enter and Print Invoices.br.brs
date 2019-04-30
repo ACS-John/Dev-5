@@ -44,8 +44,8 @@
 	scr1$(2)="Billing Code"
 	scr1$(3)="Date"
 	scr1$(4)="Invoice"
-	open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
-	open #32: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,input,keyed
+	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
 ! /r
 	pr newpage ! r: select entry type (regular or repringing previously entered invoices)
 	pr f "8,30,c 16,r,n": " pr Invoices"
@@ -58,9 +58,9 @@ L820: rinput fields "10,73,N 1,UE,N": f1 conv L820
 ! /r
 REGULAR_ENTRY: ! r:
 	! close #h_tmwk1,free:
-	open #h_tmwk1:=2: "Name=[Q]\TMmstr\TMWk1.h[cno],RecL=2484,Replace",internal,outIn,relative
+	open #h_tmwk1:=2: "Name=S:\Core\Data\acsllc\TMWk1.h[cno],RecL=2484,Replace",internal,outIn,relative
 	L880: !
-	open #3: "Name=[Q]\TMmstr\IVDesc.h[cno],KFName=[Q]\TMmstr\IVDIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #3: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 	fnopenprn(cp,58,220,process)
 	if f1=2 then gosub REPR_PREV_INV
 	L910: !

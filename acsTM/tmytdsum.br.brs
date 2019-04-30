@@ -24,20 +24,20 @@
 00250   dattab2=43-int(len(rtrm$(dat$))/2)
 00260   namtab=66-int(len(rtrm$(cnam$))/2)
 00270   namtab2=43-int(len(rtrm$(cnam$))/2)
-00280   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L1950
+00280   open #1: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative ioerr L1950
 00290   read #1,using L300,rec=1: mat cat$ ioerr L1950
 00300 L300: form pos 1,30*c 30
 00310   close #1: 
 00320   gosub L830
-00330   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L1950
+00330   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr L1950
 00340   goto L400
 00350 L350: read #1,using L360,key=cn$: cliname$ nokey L380 ioerr L1950
 00360 L360: form pos 6,c 30
 00370   goto L390
 00380 L380: cliname$=" "
 00390 L390: return 
-00400 L400: open #2: "Name=[Q]\TMmstr\TMYTDTrn.h[cno],Shr",internal,input,relative ioerr L1950
-00410   open #3: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,input,keyed ioerr L1950
+00400 L400: open #2: "Name=S:\Core\Data\acsllc\TMYTDTrn.h[cno],Shr",internal,input,relative ioerr L1950
+00410   open #3: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr L1950
 00420   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L1950
 00430   goto L490
 00440 L440: read #3,using L450,key=lpad$(rtrm$(en$),9): enam$ nokey L470 ioerr L1950
@@ -206,7 +206,7 @@
 02070 L2070: goto XIT
 02080 L2080: open #9: "Name="&env$('Temp')&"\Control."&session$&",SIZE=0,RecL=128,REPLACE",internal,output 
 02090 L2090: form pos 1,c 128
-02100   write #9,using L2090: "FILE tmytdtrn.H[cno],[Q]\TMmstr,,"&env$('Temp')&"\Addr."&session$&",,,ACSTM,,A,N"
+02100   write #9,using L2090: "FILE tmytdtrn.H[cno],S:\Core\Data\acsllc,,"&env$('Temp')&"\Addr."&session$&",,,ACSTM,,A,N"
 02110   write #9,using L2090: "MASK 1,5,C,A,39,2,N,A,37,2,N,A,35,2,N,A,31,4,N,A"
 02120   close #9: 
 02130   execute "FREE "&env$('Temp')&"\Addr."&session$ ioerr L2140

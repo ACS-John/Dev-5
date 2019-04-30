@@ -25,13 +25,13 @@
 00270   scrt$(5)=scrt$(6)=""
 00280   for j=22 to 31: scr1$(j)=rtrm$(scr1$(j)): next j
 00290   gosub L4300
-00300   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],Shr,KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L4160
-00310   open #11: "Name=[Q]\TMmstr\CLmstr.h[cno],Shr,KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,outIn,keyed ioerr L4160
-00320   open #2: "Name=[Q]\TMmstr\TMTrans.h[cno],Shr",internal,outIn,relative 
-00330   open #3: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,input,relative 
-00340   open #4: "Name=[Q]\TMmstr\ARTrans.h[cno],Shr",internal,outIn,relative 
+00300   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],Shr,KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L4160
+00310   open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],Shr,KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,outIn,keyed ioerr L4160
+00320   open #2: "Name=S:\Core\Data\acsllc\TMTrans.h[cno],Shr",internal,outIn,relative 
+00330   open #3: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,input,relative 
+00340   open #4: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative 
 00350   open #5: "Name=S:\acsTM\CLMst.Hlp,Shr",internal,outIn,relative ioerr L4170
-00360   open #6: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,outIn,relative ioerr L380
+00360   open #6: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,outIn,relative ioerr L380
 00370   goto L390
 00380 L380: chain "S:\acsTM\CTMAINT"
 00390 L390: read #6,using L400,rec=1: mat cat$ ioerr L4170
@@ -212,8 +212,8 @@
 02010   close #5: 
 02020   close #11: 
 02030   if cmdkey=5 then let fnxit
-02040   execute "Index [Q]\TMmstr\CLmstr.h[cno]"&' '&"[Q]\TMmstr\CLIndex.h[cno] 1 5 REPLACE DupKeys -n"
-02050   execute "Index [Q]\TMmstr\CLmstr.h[cno]"&' '&"[Q]\TMmstr\CLIndx2.h[cno] 6 28 REPLACE DupKeys -n"
+02040   execute "Index S:\Core\Data\acsllc\CLmstr.h[cno]"&' '&"S:\Core\Data\acsllc\CLIndex.h[cno] 1 5 REPLACE DupKeys -n"
+02050   execute "Index S:\Core\Data\acsllc\CLmstr.h[cno]"&' '&"S:\Core\Data\acsllc\CLIndx2.h[cno] 6 28 REPLACE DupKeys -n"
 02060   if ti=6 then chain "S:\acsTM\TMCLIDIR"
 02070   if ti=7 then chain "S:\acsTM\TMCLILST"
 02080   if ti=8 then chain "S:\acsTM\CLILABEL"

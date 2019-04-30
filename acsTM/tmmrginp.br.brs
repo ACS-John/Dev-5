@@ -7,13 +7,13 @@
 00090   dim e(4,30),sc(2),scc(10),des$*30
 00100   pr newpage
 00110   pr f "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
-00120   open #3: "Name=[Q]\TMmstr\TMWK"&wsid$&".H[cno],NoShr",internal,input ioerr L820
-00130   open #2: "Name=[Q]\TMmstr\TMTRANS.H[cno],Shr",internal,outIn,relative ioerr L820
+00120   open #3: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".H[cno],NoShr",internal,input ioerr L820
+00130   open #2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative ioerr L820
 00140 L140: form pos 54,pd 3
-00150   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L820
-00160   open #4: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,outIn,relative ioerr L820
-00170   open #5: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L820
-00180   open #6: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno],Shr",internal,outIn,keyed ioerr L820
+00150   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L820
+00160   open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative ioerr L820
+00170   open #5: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L820
+00180   open #6: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,outIn,keyed ioerr L820
 00190 L190: form pos 1,pd 3
 00200 L200: read #3,using L280: k$,e$,mat b,sc$,iv$,nta,des$ eof L750 ioerr L820
 00210   if b(7)=0 then goto L200

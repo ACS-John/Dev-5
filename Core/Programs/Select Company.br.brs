@@ -33,8 +33,13 @@ MENU1: ! r:
 	!  r: add that company grid to the screen
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 	! 
-	! temp$='[Q]\'&env$('cursys')&"mstr"
-	fngetdir2('[Q]\'&env$('cursys')&"mstr",mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
+	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+		dim dataFolder$*256
+		dataFolder$='S:\Core\Data\acsllc'
+	else
+		dataFolder$='[Q]\'&env$('cursys')&"mstr"
+	end if
+	fngetdir2(dataFolder$,mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 	company_count=filename_item=0
 	for filename_item=1 to udim(mat filename$)
 		tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
@@ -63,12 +68,12 @@ MENU1: ! r:
 		fnButton(2,102,"I&mport",13,'',1,9)
 	end if 
 	fnCmdKey("&Save",15,1,0)
-	if exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel only allowed if they have not deleted their current company
+	if exists(dataFolder$&'\Company.h'&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 		fnCmdKey("&Cancel",5,0,1)
 	end if 
 	fnAcs(sn$,win,mat resp$,ck)
 	! 
-	if ck=5 and exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cno)) then ! cancel
+	if ck=5 and exists(dataFolder$&'\Company.h'&str$(cno)) then ! cancel
 		goto XIT
 	else if ck=2 then 
 		goto COMPANY_ADD
@@ -131,9 +136,9 @@ COMPANY_ADD: ! r:
 	fncheckfileversion
 	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursys')='TM' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
 		if exists('S:\'&fnSystemName$&'\mstr\*.h99999') then
-			fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]', 0,'errornotify')
+			fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999',dataFolder$&'\*.h[cno]', 0,'errornotify')
 		else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
-			fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]', 0,'errornotify')
+			fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999',dataFolder$&'\*.h[cno]', 0,'errornotify')
 		end if
 		if env$('cursys')='CL' then ! r: special processing for CL
 			mat ml$(5)
@@ -159,7 +164,7 @@ XIT: fnxit
 IGNORE: continue 
 def fn_company_already_exists(cae_cno)
 	cae_return=0
-	if exists('[Q]\'&env$('cursys')&"mstr\Company.h"&str$(cae_cno)) then 
+	if exists(dataFolder$&'\Company.h'&str$(cae_cno)) then 
 		cae_return=1
 		! mat mg$(3)
 		mat mg$(2)
@@ -178,7 +183,7 @@ fnend
 def fn_cname_of_cno$*40(cno)
 	dim coc_return$*40
 	coc_return$=''
-	open #h_tmp:=fngethandle: "Name=[Q]\"&env$('cursys')&"mstr\Company.h"&str$(cno),internal,input ioerr COC_FINIS
+	open #h_tmp:=fngethandle: 'Name='&dataFolder$&'\Company.h'&str$(cno),internal,input ioerr COC_FINIS
 	read #h_tmp,using "Form pos 1,c 40": coc_return$
 	close #h_tmp: 
 	COC_FINIS: ! 
@@ -199,7 +204,7 @@ def fn_company_delete(cno)
 	e$=uprc$(trim$(resp$(1)))
 	if ckey<>5 then 
 		if e$="ERASE" then 
-			fnFree('[Q]\'&env$('cursys')&"mstr"&"\*.h"&str$(cno))
+			fnFree(dataFolder$&'\*.h'&str$(cno))
 			mat mg$(1)
 			mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
 			fnmsgbox(mat mg$,resp$,'',0)
@@ -242,7 +247,7 @@ def fn_company_copy(scno)
 		dcno=val(resp$(1))
 		dcnam$=resp$(2)
 		if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
-		fnCopy("[Q]\"&env$('cursys')&"mstr"&"\*.h"&str$(scno),"[Q]\"&env$('cursys')&"mstr"&"\*.h"&str$(dcno), 0,'errornotify')
+		fnCopy(dataFolder$&'\*.h'&str$(scno),dataFolder$&'\*.h'&str$(dcno), 0,'errornotify')
 		if uprc$(env$('cursys'))=uprc$("UB") then 
 			fnCopy("[Q]\UBmstr\ubData\*.h"&str$(scno),"[Q]\UBmstr\ubData\*.h"&str$(dcno), 0,'errornotify')
 		end if 
@@ -252,7 +257,7 @@ fnend
 def fn_update_company_name(cno,cnam$*40)
 	cnam$=rtrm$(cnam$)
 	if cnam$<>'' then 
-		open #h_company:=fngethandle: 'Name=[Q]\'&env$('cursys')&'mstr\Company.h'&str$(cno),internal,outIn,relative 
+		open #h_company:=fngethandle: 'Name='&dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative 
 		rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
 		close #h_company: 
 	end if 
@@ -335,7 +340,7 @@ def fn_setup_on_cursys_change
 		fncno(cno,cnam$)
 	end if 
 	! 
-	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
+	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'TM' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
 	! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
 fnend 
 

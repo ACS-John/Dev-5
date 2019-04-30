@@ -18,18 +18,18 @@
 00190   on a goto L200,END1 none L120
 00200 L200: pr newpage
 00210   pr f "10,20,C 60,H,N": "ZERO YEAR TO DATE INFORMATION IN PROCESS"
-00220   open #1: "Name=[Q]\TMmstr\EMmstr.h[cno],KFName=[Q]\TMmstr\EMINDEX.h[cno],Shr",internal,outIn,keyed ioerr L410
+00220   open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMINDEX.h[cno],Shr",internal,outIn,keyed ioerr L410
 00230 L230: read #1,using L240: eno$ eof L280 ioerr L410
 00240 L240: form pos 1,c 9
 00250   rewrite #1,using L260: mat cytdhrs,mat ncytdhrs,mat cytdamt,mat ncytdamt
 00260 L260: form pos 158,30*pd 4.2,pos 428,30*pd 5.2
 00270   goto L230
 00280 L280: close #1: 
-00290   open #1: "Name=[Q]\TMmstr\TMYTDTrn.h[cno]",internal,output ioerr L310
+00290   open #1: "Name=S:\Core\Data\acsllc\TMYTDTrn.h[cno]",internal,output ioerr L310
 00300   close #1,free: 
-00310 L310: open #1: "Name=[Q]\TMmstr\TMYTDTrn.h[cno],SIZE=0,RecL=56",internal,output ioerr L410
+00310 L310: open #1: "Name=S:\Core\Data\acsllc\TMYTDTrn.h[cno],SIZE=0,RecL=56",internal,output ioerr L410
 00320   close #1: 
-00330   open #1: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno],Shr",internal,outIn,keyed ioerr L410
+00330   open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,outIn,keyed ioerr L410
 00340 L340: read #1,using L360: a1 eof L380 ioerr L410
 00350   rewrite #1,using L360: 0,0
 00360 L360: form pos 35,pd 4.2,pd 5.2

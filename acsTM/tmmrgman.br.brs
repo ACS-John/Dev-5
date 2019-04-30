@@ -6,14 +6,14 @@
 00070   dim cde$(10)*6,gl$*12,des$*20
 00080   pr newpage
 00090   pr f "10,20,c 60,h,n": "T/M MERGE INVOICES IN PROCESS"
-00100   open #3: "Name=[Q]\TMmstr\TMWk2"&wsid$&".H[cno],NoShr",internal,input 
-00110   open #12: "Name=[Q]\TMmstr\ARTrans.h[cno],Shr",internal,outIn,relative 
-00120   open #2: "Name=[Q]\TMmstr\TMTRANS.H[cno],Shr",internal,outIn,relative 
+00100   open #3: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".H[cno],NoShr",internal,input 
+00110   open #12: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative 
+00120   open #2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative 
 00130 L130: form pos 54,pd 3
-00140   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed 
-00150   open #4: "Name=[Q]\TMmstr\TMTRAddr.h[cno],Shr",internal,outIn,relative 
-00160 ! open #h_armotran:=5: "Name=[Q]\TMmstr\ARMoTran.h[cno],Shr",internal,output 
-00170   open #6: "Name=[Q]\TMmstr\Company.h[cno],Shr",internal,input 
+00140   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed 
+00150   open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative 
+00160 ! open #h_armotran:=5: "Name=S:\Core\Data\acsllc\ARMoTran.h[cno],Shr",internal,output 
+00170   open #6: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input 
 00180   read #6,using L190: pgl$ 
 00190 L190: form pos 190,c 12
 00200   close #6: 

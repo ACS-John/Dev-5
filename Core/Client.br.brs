@@ -350,7 +350,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Choctaw' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('GL')
+			! fn_add_ch_sys('GL')  -  removed from support as of 4/30/19
 			fn_add_ch_sys('CL')
 		else if env$('client')='Crocket County' then 
 			fn_user_limit(1)

@@ -17,14 +17,14 @@
 00180   on a goto L190,L310 none L110
 00190 L190: pr newpage
 00200   pr f "10,20,c 50,n": "REMOVE TERMINATED EMPLOYEES IN PROCESS"
-00210   open #1: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L320
+00210   open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L320
 00220 L220: read #1,using L230: eno$,emp eof L270 ioerr L320
 00230 L230: form pos 1,c 9,pos 37,n 1
 00240   if emp><9 then goto L220
 00250   delete #1: 
 00260   goto L220
 00270 L270: close #1: 
-00280   execute "Index [Q]\TMmstr\EMmstr.H[cno],[Q]\TMmstr\EMIndex.h[cno],1,9,REPLACE,DupKeys"
+00280   execute "Index S:\Core\Data\acsllc\EMmstr.H[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
 00290   if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain 'S:\acsTM\EMAINT'
 00300   goto XIT
 00310 L310: goto XIT

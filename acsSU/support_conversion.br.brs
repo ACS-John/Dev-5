@@ -16,9 +16,9 @@
 00160   goto XIT
 00170 ! ______________________________________________________________________
 00180 OPEN_FILE: ! 
-00190 ! Open #SUPPORT=2: "Name=[Q]\TMmstr\Support.h[cno],Version=1,KFName=[Q]\TMmstr\Support-Idx.h[cno],replace,RecL=246,KPs=1,KLn=10,Shr",Internal,outIn,Keyed
-00200   open #1: "Name=c:\acs\vol002\acs.inc\TMmstr\CLmstr.h1,KFName=[Q]\TMmstr\CLIndex.h1",internal,outIn,keyed 
-00210   open #client=3: "Name=[Q]\TMmstr\Client.h1,Version=1,KFName=[Q]\TMmstr\Client-Idx.h1,replace,RecL=406,KPs=1,KLn=6",internal,outIn,keyed 
+00190 ! Open #SUPPORT=2: "Name=S:\Core\Data\acsllc\Support.h[cno],Version=1,KFName=S:\Core\Data\acsllc\Support-Idx.h[cno],replace,RecL=246,KPs=1,KLn=10,Shr",Internal,outIn,Keyed
+00200   open #1: "Name=c:\acs\vol002\acs.inc\TMmstr\CLmstr.h1,KFName=S:\Core\Data\acsllc\CLIndex.h1",internal,outIn,keyed 
+00210   open #client=3: "Name=S:\Core\Data\acsllc\Client.h1,Version=1,KFName=S:\Core\Data\acsllc\Client-Idx.h1,replace,RecL=406,KPs=1,KLn=6",internal,outIn,keyed 
 00220   return 
 00230 READ_FILES: ! 
 00240   read #1,using L250: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 eof XIT
