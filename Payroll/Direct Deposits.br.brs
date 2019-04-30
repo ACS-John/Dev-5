@@ -22,7 +22,7 @@
 	! em17  = Last Payroll Date (from first screen of employee record,  not departmental record)
 	! tdt4  = Last Payroll Date (from Departmental record)
 	! tcp(32) = Net Pay
-	dim idn$*23,resp$(10)*30,bankname$*23 ! (23) Immediate Destination Name
+	dim idn$*23,resp$(10)*256,bankname$*23 ! (23) Immediate Destination Name
 	dim imo$*10 ! Immediage Origin Routing Number
 	dim ion$*23 ! (23) Immediate Origin Name
 	dim em$(3)*30 ! (1)=Emp Name, (2)=Emp Addr, (3)=Emp CSZ
