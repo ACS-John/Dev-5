@@ -57,7 +57,7 @@ ASK_INFO: !
 	fnTxt(2,mypos+3,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can transfer older payrolls by using a previous payroll date.")
 	resp$(respc+=1)=str$(d1)
 	fnLbl(3,1,"Path to Save File to:",mypos,1)
-	fnTxt(3,mypos+3,30,0,0,"70",0,"The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'")
+	fnTxt(3,mypos+3,30,128,0,"70",0,"The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'")
 	resp$(respc+=1)=path$
 	fnLbl(5,1,"Your Bank Account Number:",mypos,1)
 	fnTxt(5,mypos+3,8,0,0,"number",0,"The right hand set of numbers at the bottom of your checks.")
