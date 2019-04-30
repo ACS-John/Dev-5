@@ -50,13 +50,13 @@
 00500   data "      5 TO MAKE CORRECTIONS"
 00510   data "      6 TO MERGE TRANSACTIONS"
 00520   read mat scr2$ ioerr L2650
-00530   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
-00540   open #32: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,outIn,keyed 
-00550   open #2: "Name=[Q]\TMmstr\TMWK"&wsid$&".H[cno]",internal,outIn,relative ioerr L570
+00530   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
+00540   open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,outIn,keyed 
+00550   open #2: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".H[cno]",internal,outIn,relative ioerr L570
 00560   close #2,free: 
-00570 L570: open #2: "Name=[Q]\TMmstr\TMWK"&wsid$&".H[cno],RecL=86,REPLACE",internal,outIn,relative ioerr L2650
-00580   open #7: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno],Shr",internal,input,keyed ioerr L2650
-00590   open #8: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
+00570 L570: open #2: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".H[cno],RecL=86,REPLACE",internal,outIn,relative ioerr L2650
+00580   open #7: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,input,keyed ioerr L2650
+00590   open #8: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
 00600 L600: pr newpage
 00610   scrid$(1)="TIME MANAGEMENT INPUT SUB-MENU"
 00620   scrid$(2)="ENTER THE SELECTION NUMBER OF YOUR CHOICE"

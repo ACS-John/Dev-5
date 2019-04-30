@@ -2,7 +2,7 @@
 00030   fncno(cno)
 00060   dim z$*5,a$(3)*30,prg$*20,ma(20)
 00070   open #255: "Name=LPT2:",display,output 
-00080   open #1: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndex.H[cno],Shr",internal,input,keyed 
+00080   open #1: "Name=S:\Core\Data\acsllc\CLmstr.H[cno],KFName=S:\Core\Data\acsllc\CLIndex.H[cno],Shr",internal,input,keyed 
 00085   do 
 00090     pr newpage
 00100     pr f "10,10,C 50": "Account Number to pr (Blank to Stop):"

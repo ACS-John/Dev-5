@@ -34,10 +34,10 @@
 24800   system_id$(20)='??' ! Printing
 25000   date_start=20110701
 25200   date_end=20110731
-25400   open #1: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndex.H[cno],Shr",internal,outIn,keyed 
-25600   open #11: "Name=[Q]\TMmstr\CLmstr.H[cno],KFName=[Q]\TMmstr\CLIndx2.H[cno],Shr",internal,outIn,keyed 
+25400   open #1: "Name=S:\Core\Data\acsllc\CLmstr.H[cno],KFName=S:\Core\Data\acsllc\CLIndex.H[cno],Shr",internal,outIn,keyed 
+25600   open #11: "Name=S:\Core\Data\acsllc\CLmstr.H[cno],KFName=S:\Core\Data\acsllc\CLIndx2.H[cno],Shr",internal,outIn,keyed 
 25800 FORM_CLMSTR: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
-26000   open #h_support:=2: "Name=[Q]\TMmstr\Support.h[cno],Version=2,KFName=[Q]\TMmstr\Support-Idx.h[cno],Shr",internal,outIn,keyed 
+26000   open #h_support:=2: "Name=S:\Core\Data\acsllc\Support.h[cno],Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h[cno],Shr",internal,outIn,keyed 
 26200 FORM_SUPPORT: form pos 1,n 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 26400   z$=lpad$(str$(ano),5)
 26600   do 

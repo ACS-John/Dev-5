@@ -6,7 +6,7 @@
 00070   fncno(cno,cnam$)
 00090   dim sc$*4,ds$*30
 00100   dim cnam$*40,prg$*20
-00110   open #1: "Name=[Q]\TMmstr\SCMSTR.H[cno],KFName=[Q]\TMmstr\SCIndex.H[cno]",internal,input,keyed ioerr L550
+00110   open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno]",internal,input,keyed ioerr L550
 00120   namtab=43-int(len(rtrm$(cnam$))/2)
 00130 L130: pr newpage
 00140   pr f "7,10,c 60,n": "POSITION PAPER IN PRINTER FOR SERVICE CODE LISTING"

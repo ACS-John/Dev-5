@@ -55,6 +55,14 @@ def fn_setup
 		library 'S:\Core\Programs\PrintAce_Test': fnPrintAceTest
 		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
 		dim resp$(32)*255
+
+		if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+			dim dataFolder$*256
+			dataFolder$='S:\Core\Data\acsllc'
+		else
+			dataFolder$='[Q]\'&env$('cursys')&"mstr"
+		end if
+
 	end if
 fnend
 def fn_setup_once
@@ -180,7 +188,7 @@ def fn_setup_on_cursys_change
 	!
 	dashboard_height=fn_dashboard_height
 	fn_grid_setup !
-	if ~exists('[Q]\'&env$('cursys')&"mstr\Company.h[cno]") then
+	if ~exists(dataFolder$&'\Company.h[cno]') then
 		chain "S:\Core\Programs\Select Company.br"
 	end if
 fnend
@@ -890,7 +898,7 @@ def fn_display_menu
 			! fn_dm_add(' ScreenIO','ScreenIO')
 			! fn_dm_add(' -')
 			! fn_dm_add(' Locate 1','S:\Core\Locate.br')
-			if exists('[Q]\tmmstr\Company.h420') then
+			if exists('S:\Core\Data\acsllc\Company.h420') then
 				fn_dm_add('ACS LLC')
 				fn_dm_add(' Client 420','S:\acsTM\Client.br')
 				fn_dm_add(' Support 420','S:\acsTM\Support.br')

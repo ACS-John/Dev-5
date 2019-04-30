@@ -87,23 +87,23 @@
 27000     limit_to_list$='1'
 27200 ! 
 27400 ! cl=1 : c$(cl,1)='ComboF'
-27600 ! c$(cl,2)='[Q]\TMmstr\Client.h[cno]'
+27600 ! c$(cl,2)='S:\Core\Data\acsllc\Client.h[cno]'
 27800 ! c$(cl,3)='1' : c$(cl,4)='6'
 28000 ! c$(cl,5)='7' : c$(cl,6)='50'
-28200 ! c$(cl,7)='[Q]\TMmstr\Client-Idx.h[cno]'
+28200 ! c$(cl,7)='S:\Core\Data\acsllc\Client-Idx.h[cno]'
 28400 ! c$(cl,8)=limit_to_list$
 28600 ! 
 28800 ! cl=3 : c$(cl,1)='ComboF'
-29000 ! c$(cl,2)='[Q]\TMmstr\Systems.h[cno]'
+29000 ! c$(cl,2)='S:\Core\Data\acsllc\Systems.h[cno]'
 29200 ! c$(cl,3)='1' : c$(cl,4)='2'
 29400 ! c$(cl,5)='3' : c$(cl,6)='50'
-29600 ! c$(cl,7)='[Q]\TMmstr\Systems-Idx.h[cno]'
+29600 ! c$(cl,7)='S:\Core\Data\acsllc\Systems-Idx.h[cno]'
 29800 ! c$(cl,8)=limit_to_list$
 30000 ! 
 30200 ! cl=5 : c$(cl,1)='ComboF'
-30400 ! c$(cl,2)='[Q]\TMmstr\TimeFrame.h[cno]'
+30400 ! c$(cl,2)='S:\Core\Data\acsllc\TimeFrame.h[cno]'
 30600 ! c$(cl,3)='1' : c$(cl,4)='2'
 30800 ! c$(cl,5)='3' : c$(cl,6)='50'
-31000 ! c$(cl,7)='[Q]\TMmstr\TimeFrame-Idx.h[cno]'
+31000 ! c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]'
 31200 ! c$(cl,8)=limit_to_list$
 31400   fnend 

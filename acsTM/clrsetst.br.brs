@@ -5,11 +5,11 @@
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6
 00070   dim z$*5,a$*30,sc(10),cnam$*40,cat$(30)*30,prg$*20
 00080   namtab=43-int(len(rtrm$(cnam$))/2)
-00090   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L770
+00090   open #1: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative ioerr L770
 00100   read #1,using L110,rec=1: mat cat$ ioerr L770
 00110 L110: form pos 1,30*c 30
 00120   close #1: 
-00130   open #1: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L770
+00130   open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L770
 00140 L140: pr newpage
 00150   pr f "10,10,c 53,n": "ENTER 1 FOR A LISTING, ENTER 2 TO RESET STATUS CODES"
 00160   input fields "10,65,n 1,eu,n": lstres conv L220

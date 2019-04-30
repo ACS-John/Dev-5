@@ -1,7 +1,7 @@
 20000 ! Replace S:\acsTM\Support-CNV
 20200   dim c$(4)*50
-20400   open #1: "Name=[Q]\TMmstr\Support.h50420,Version=1,KFName=[Q]\TMmstr\Support-Idx.h50420,Use,RecL=246,KPs=11/17,KLn=6/2,Shr",internal,outIn,keyed 
-20600   open #2: "Name=[Q]\TMmstr\Support.h420,KFName=[Q]\TMmstr\Support-Idx.h420,Replace,Version=2,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,output,keyed 
+20400   open #1: "Name=S:\Core\Data\acsllc\Support.h50420,Version=1,KFName=S:\Core\Data\acsllc\Support-Idx.h50420,Use,RecL=246,KPs=11/17,KLn=6/2,Shr",internal,outIn,keyed 
+20600   open #2: "Name=S:\Core\Data\acsllc\Support.h420,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Replace,Version=2,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,output,keyed 
 20800   do 
 21000     read #1,using FORM_1: id_a,id_b,client,id$,sd,tf$,_ed,c1,mat c$ eof END1
 21200 FORM_1: form pos 1,n 5,n 5,n 6,c 2,n 8,c 2,n 8,n 10.2,4*c 50

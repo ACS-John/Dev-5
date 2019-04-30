@@ -14,7 +14,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 			posCol2=lenCol1+2
 			! (sfn$*100,lbuttonYNe,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
 			fnLbl(1,1,'Client:',lenCol1,alignRight)
-			fncombof('',1,posCol2,37,'[Q]\TMmstr\CLmstr.H[cno]',1,5,6,30,'[Q]\TMmstr\CLIndex.H[cno]',1)
+			fncombof('',1,posCol2,37,'S:\Core\Data\acsllc\CLmstr.H[cno]',1,5,6,30,'S:\Core\Data\acsllc\CLIndex.H[cno]',1)
 			fnCmdSet( 2)
 			fnAcs('',0,mat resp$, fk)
 			if fk<>5 then 
@@ -94,9 +94,9 @@ fnend
 def fn_openFiles
 	if ~openFiles then
 		openFiles=1
-		open #hClientKey :=fngethandle: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-		open #hClientName:=fngethandle: "Name=[Q]\TMmstr\CLmstr.h420,Version=0,KFName=[Q]\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
-		open #hSupport   :=fngethandle: "Name=[Q]\TMmstr\Support.h420,Version=2,KFName=[Q]\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
+		open #hClientKey :=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+		open #hClientName:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
+		open #hSupport   :=fngethandle: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 	end if
 	fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
 fnend

@@ -21,12 +21,12 @@
 00210   read #1,using L180: mat fl5$,mat ot5$,mat in5$ ioerr L2380
 00220   read #1,using L180: mat fl6$,mat ot6$,mat in6$ ioerr L2380
 00230   close #1: 
-00240   open #1: "Name=[Q]\TMmstr\TMCat.h[cno],Shr",internal,input,relative ioerr L2380
+00240   open #1: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative ioerr L2380
 00250   read #1,using L260: mat ccat$,mat nccat$ ioerr L2380
 00260 L260: form pos 1,30*c 30
 00270   close #1: 
 00280   gosub L1270
-00290   open #1: "Name=[Q]\TMmstr\EMmstr.H[cno],KFName=[Q]\TMmstr\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
+00290   open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
 00300 L300: pr newpage
 00310   on fkey 5 goto L300
 00320   pr f "3,9,C 60": "Employee Master File"
@@ -231,11 +231,11 @@
 02270   if uprc$(a$)="THINK" then goto L2280 else goto L300
 02280 L2280: pr newpage
 02290 L2290: close #1: ioerr L2300
-02300 L2300: open #1: "Name=[Q]\TMmstr\EMmstr.H[cno]",internal,outIn ioerr L2320
+02300 L2300: open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno]",internal,outIn ioerr L2320
 02310   close #1,free: 
-02320 L2320: open #1: "Name=[Q]\TMmstr\EMmstr.H[cno],SIZE=0,RecL=610",internal,output ioerr L2380
+02320 L2320: open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],SIZE=0,RecL=610",internal,output ioerr L2380
 02330   close #1: 
-02340 L2340: execute "Index [Q]\TMmstr\EMmstr.H[cno],[Q]\TMmstr\EMIndex.h[cno],1,9,REPLACE,DupKeys"
+02340 L2340: execute "Index S:\Core\Data\acsllc\EMmstr.H[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
 02350   if ti<2 then chain 'S:\acsTM\EMAINT' else goto XIT
 02360   goto XIT
 02370 L2370: if err=4152 then goto L2290

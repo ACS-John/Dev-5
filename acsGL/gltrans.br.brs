@@ -31,22 +31,22 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00430 ! cl=1 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)='[Q]\TMmstr\Client.h[cno]' !:
+        ! c$(cl,2)='S:\Core\Data\acsllc\Client.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='6' !:
         ! c$(cl,5)='7' : c$(cl,6)='50' !:
-        ! c$(cl,7)='[Q]\TMmstr\Client-Idx.h[cno]' !:
+        ! c$(cl,7)='S:\Core\Data\acsllc\Client-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00440 ! cl=3 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)='[Q]\TMmstr\Systems.h[cno]' !:
+        ! c$(cl,2)='S:\Core\Data\acsllc\Systems.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='2' !:
         ! c$(cl,5)='3' : c$(cl,6)='50' !:
-        ! c$(cl,7)='[Q]\TMmstr\Systems-Idx.h[cno]' !:
+        ! c$(cl,7)='S:\Core\Data\acsllc\Systems-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00450 ! cl=5 : c$(cl,1)='ComboF' !:
-        ! c$(cl,2)='[Q]\TMmstr\TimeFrame.h[cno]' !:
+        ! c$(cl,2)='S:\Core\Data\acsllc\TimeFrame.h[cno]' !:
         ! c$(cl,3)='1' : c$(cl,4)='2' !:
         ! c$(cl,5)='3' : c$(cl,6)='50' !:
-        ! c$(cl,7)='[Q]\TMmstr\TimeFrame-Idx.h[cno]' !:
+        ! c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]' !:
         ! c$(cl,8)=limit_to_list$
 00460   return 
 00470 ! ______________________________________________________________________

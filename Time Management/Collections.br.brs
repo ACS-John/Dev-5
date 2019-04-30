@@ -6,7 +6,7 @@
 	dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 	dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 	dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
-	open #h_company:=1: "Name=[Q]\TMmstr\Company.h[cno],Shr",internal,input ioerr L2290
+	open #h_company:=1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr L2290
 	read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr L2290
 ! i3=1 ! ENTER G/L #'S
 L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3
@@ -54,8 +54,8 @@ L530: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239"
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr L2290
 L560: form pos 1,c 255,142*c 18
 	close #1: 
-	open #9: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndex.h[cno],Shr",internal,input,keyed ioerr L2290
-	open #11: "Name=[Q]\TMmstr\CLmstr.h[cno],KFName=[Q]\TMmstr\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L2290
+	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr L2290
+	open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L2290
 L590: hd$(1)="A/R Input Selection Menu"
 	hd$(2)="ENTER SELECTION"
 L610: pr newpage

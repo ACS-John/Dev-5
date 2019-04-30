@@ -91,7 +91,7 @@ PAGE1: ! r:
 	resp$(7)=str$(nap)
 return ! /r
 BUILD_COMPANY: ! r:
-	open #company=1: "Name=[Q]\TMmstr\Company.h[cno],Size=0,RecL=882,Replace",internal,outIn,relative 
+	open #company=1: "Name=S:\Core\Data\acsllc\Company.h[cno],Size=0,RecL=882,Replace",internal,outIn,relative 
 	write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 goto READ_COMPANY ! /r
 SAVE: ! r:
