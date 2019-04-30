@@ -10,7 +10,7 @@
 	dim ade$*30,dedcode(10),agl(3),de$*50
 	dim t1(5),arec(100),d(2)
 	dim pr$(4)*30,myact$*20,disamt(15,3)
-	dim resp$(50)*50,item4$(2)*35,item5$(2)*35
+	dim resp$(92)*50,item4$(2)*35,item5$(2)*35
 	dim holdpayee$*50,holdresp$(94)*50,contact$*30,email$*50,fax$*12
 	dim inl$(4)*50,ml$(5)*90
 	dim allockey$*20
