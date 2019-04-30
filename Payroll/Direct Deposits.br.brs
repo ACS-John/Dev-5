@@ -16,7 +16,7 @@
 	on error goto ERTN
 
 	dim ml$(3)*80,tcp(32),cp(32),tdc(10)
-	dim path$*30 ! Path to Save File to
+	dim path$*256 ! Path to Save File to
 	dim email$*30 ! OR E-Mail Address to send file to
 	dim ta(2) ! first and last trailer address
 	! em17  = Last Payroll Date (from first screen of employee record,  not departmental record)
