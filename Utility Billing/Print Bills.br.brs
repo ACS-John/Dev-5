@@ -146,7 +146,7 @@ PrintBill_Basic: !
 	else if env$('client')='Billings' then ! 04/26/2017 ! three per page RTF
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
-		enable_bulksort=0
+		enable_bulksort=1
 	else if env$('client')='GreenCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
 		message1_line_count=3
 		message2_line_count=0
@@ -157,7 +157,7 @@ PrintBill_Basic: !
 	else if env$('client')='Galena' then ! 11/29/2018 Portrait two per page - hit pre-printed form
 		message1_line_count=3
 		message2_line_count=0
-		message1_max_len=30
+		message1_max_len=40
 		pa_enabled=2 ! PDF
 		! pa_orientation$='Landscape'
 		include_zero_bal=include_credit_bal=1
