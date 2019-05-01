@@ -1,8 +1,8 @@
 ! r: setup
-	library 'S:\Core\Library': fnopenprn,fncloseprn,fntop,fnxit,fncreg_read,fncreg_write
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\acsTM\Print_Invoice': fnprint_invoice
-! ______________________________________________________________________
-!
 	on error goto ERTN
 	fntop(program$)
 	dim fl1$(8),io1$(60),scrid$(4)*80,inp(3),iv$*12,a1$*30
@@ -12,9 +12,9 @@
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
 	bc$(3)="WRITE OFF"
-!
+
 	fncreg_read('Last Invoice Number',tmp$) : iv1=val(tmp$)
-!
+
 	fl1$(5)="1,10,c 60,h,n"
 	fl1$(6)="2,10,c 60,h,n"
 	fl1$(7)="9,1,c 80,h,n"
@@ -93,7 +93,7 @@ REGULAR_ENTRY: ! r:
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if cmdkey>0 then goto L1260 else ce=curfld
 	goto L1260
-L1200: !
+	L1200: !
 	ce=ce+1
 	if ce>udim(io1$) then ce=1
 	CT1: !
@@ -189,7 +189,7 @@ L1200: !
 	goto L1080
 	L1900: !
 	rewrite #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
-SCR_ADDEDIT: !
+	SCR_ADDEDIT: !
 	pr newpage
 	pr f "10,10,c 60": "Enter ref # to correct; enter 0 when completed"
 	L1930: ! 
@@ -203,7 +203,7 @@ SCR_ADDEDIT: !
 		pt(4)=pt(4)-sc(j)
 	next j
 goto L1080 ! /r
-! ______________________________________________________________________
+
 SCR_FINAL: ! r:
 	pr newpage
 	scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
@@ -212,7 +212,7 @@ SCR_FINAL: ! r:
 	scrid$(4)=""
 	pr f mat fl2$: mat scr2$,mat scrid$
 	pr f mat ot2$: mat pt
-L2110: input fields "16,30,N 1,UE,N": chg conv L2110
+	L2110: input fields "16,30,N 1,UE,N": chg conv L2110
 	on chg goto PR_PROOF,SCR_CORRECTION,L910,SCR_PRINT_INVOICES,GO_MERGE none L2110
 ! /r
 PR_PROOF: ! r:
@@ -226,7 +226,7 @@ PR_PROOF: ! r:
 			pr #255: "Ref    Client    Billing-Code     Date      Invoice  "
 			pr #255,using 'form pos 1,n 4,n 8,n 10,n 12,x 2,c 12': j,mat inp,iv$ pageoflow PR_PROOF_PGOF
 			pr #255: ''
-			pr #255: "-CODE-  -------Description-------------------------------------  --Amount--      Cat     Sub  -GL--NUMBER-"
+			pr #255: "-Code-  -------Description-------------------------------------  --Amount--      Cat     Sub  -GL--Number-"
 			for j1=1 to 30
 				if rtrm$(id$(j1))<>"" then
 					pr #255,using 'form pos 1,c 8,c 56,n 11.2,2*n 8,x 3,c 12': cde$(j1),id$(j1),da(j1),ct(j1),sc(j1),gl$(j1) pageoflow PR_PROOF_PGOF
@@ -237,32 +237,31 @@ PR_PROOF: ! r:
 		end if
 	next j
 	fncloseprn
-	goto SCR_FINAL ! /r
+goto SCR_FINAL ! /r
 PR_PROOF_HEAD: ! r:
-	pr #255,using L2200: date$,env$('cnam'),time$,"Time Management pr Invoices Proof Listing"
-L2200: form skip 1,pos 1,c 8,pos 44,cc 44,skip 1,pos 1,c 8,pos 44,c 44,skip 2
-	return  ! /r
+	pr #255,using F_Head: date$,env$('cnam'),time$,"Enter and  Print Invoices - Proof Listing"
+	F_Head: form skip 1,pos 1,c 8,pos 44,cc 44,skip 1,pos 1,c 8,pos 44,c 44,skip 2
+return  ! /r
 PR_PROOF_PGOF: ! r:
 	pr #255: newpage
 	gosub PR_PROOF_HEAD
-	continue  ! /r
+continue  ! /r
 SCR_CORRECTION: ! r:
 	scrid$(1)="TIme Management Input Correction Screen"
 	scrid$(2)="Enter client # as 0 to delete this entry"
 	scrid$(3)="  Desc/Code   Invoice Descriptions"
 	scrid$(4)="  Press F1 when completed with this screen"
-	goto SCR_ADDEDIT ! /r
+goto SCR_ADDEDIT ! /r
 GO_MERGE: ! r:
 	close #1:
 	close #h_tmwk1:
-	chain "S:\acsTM\TMMRGINV"
-! /r
+chain "S:\acsTM\TMMRGINV" ! /r
 SCR_PRINT_INVOICES: ! r:
 	pr newpage
 	pr f "10,20,c 30,h,n": "position invoices in printer"
 	pr f "11,20,c 38,n": "Enter 1 to pr selected invoices,"
 	pr f "12,20,c 38,n": "   Or 0 to pr all invoices entered."
-L2590: input fields "13,26,N 1,UE,N": select_invoices_to_print conv L2590
+	L2590: input fields "13,26,N 1,UE,N": select_invoices_to_print conv L2590
 	if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	if select_invoices_to_print><0 then goto L2590
 	pr newpage
@@ -271,32 +270,33 @@ L2590: input fields "13,26,N 1,UE,N": select_invoices_to_print conv L2590
 	align=0
 	restore #h_tmwk1:
 	do  ! for j=1 to lrec(h_tmwk1)
-PR_SELECTED_INVOICE: !
+		PR_SELECTED_INVOICE: !
 		read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF noRec L2870 ioerr ERTN
 		if inp(1)=0 then goto L2840
 		k$=lpad$(str$(inp(1)),5)
 		read #1,using L2730,key=k$: mat a$ ioerr ERTN
-L2730: form pos 6,3*c 30
+		L2730: form pos 6,3*c 30
 		fnprint_invoice(align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
-L2840: !
+		L2840: !
 		if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop  ! next j
-PRI_EOF: !
+	PRI_EOF: !
 	fncloseprn
-L2870: !
-	goto SCR_FINAL ! /r
+	L2870: !
+goto SCR_FINAL ! /r
 SCR_SELECT_INVOICE: ! r:
 	pr newpage
 	pr f "10,10,c 60": "Ref # of invoice to print, 0 when finished"
-L2900: input fields "10,70,N 5,UE,N": j conv L2900
+	L2900: !
+	input fields "10,70,N 5,UE,N": j conv L2900
 	if j=0 then goto SCR_FINAL
 	if j<1 or j>rw then goto SCR_SELECT_INVOICE
 	goto PR_SELECTED_INVOICE ! /r
-REPR_PREV_INV: ! r:
+	REPR_PREV_INV: ! r:
 	mat pt=(0)
 	for rw=1 to lrec(2)
 		read #h_tmwk1,using F_TMWK1,rec=rw: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc noRec L3050 ioerr ERTN
-F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
+		F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 		if inp(1)=0 then goto L2840
 		pt(1)=pt(1)+inp(1)
 		for j=1 to 10
@@ -304,27 +304,10 @@ F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c
 			pt(3)=pt(3)+ct(j)
 			pt(4)=pt(4)+sc(j)
 		next j
-L3050: next rw
-	return ! /r
+		L3050: !
+	next rw
+return ! /r
 XIT: fnxit
-ERTN: ! r:
-	if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN Use!" else goto L3100
-	goto L3140
-	L3100: !
-	pr newpage
-	if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN Use AND CANNOT BE SHARED!" else goto L3130
-	goto L3140
-	L3130: !
-	pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-	L3140: !
-	pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
-	input fields "24,60,C 1,N": quitcode$
-	if rtrm$(uprc$(quitcode$))="Q" then goto L3200
-	pr f "23,3,C 78,N": ""
-	pr f "24,3,C 78,N": ""
-	retry
-	L3200: !
-goto XIT ! /r
 SRCH1: ! r: name search
 	s1=1
 	open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn  ! SAVE SCREEN
@@ -394,7 +377,7 @@ HELP1: ! r:
 	if ce=1 then gosub SRCH1 : goto CT1
 	if ce>4 and ce<16 then gosub SRCH2 : goto CT1
 	goto CT1
-SRCH2: !
+	SRCH2: !
 	s1=2 ! CODE SEARCH
 	open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn
 	L3990: !
@@ -450,3 +433,4 @@ SRCH2: !
 	L4430: !
 	selclp=0
 goto L3990 ! /r
+include: ertn

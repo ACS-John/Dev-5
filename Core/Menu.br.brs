@@ -844,7 +844,7 @@ def fn_display_menu
 			fn_dm_add(' Import','S:\Core\Company Import.br')
 		end if
 		fn_dm_add('&Utilities')
-		fn_dm_add(' Grids','S:\Core\PrtFlex\PrtFlex1.br')
+		fn_dm_add(' Grids','S:\Core\PrtFlex\Grids.br')
 		fn_dm_add(' City State Zip','HamsterFio:CO City State Zip')
 		fn_dm_add(' -')
 		! fn_dm_add(' Registry')
