@@ -67,16 +67,49 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 	a(j3,6)=b
 	a=b
 	rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
-	! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME ON EACH SERVICE IN PAYROLL
-	if uprc$(a$(j3,1)(1:4))<>"MISC" then goto L840
-	x=val(a$(j3,1)(8:9)) conv L840
-	if trim$(fullname$(x))="" then goto L870 ! SERVICE NOT USED
-	a$(j3,1)=fullname$(x)
-	! If UPRC$(ABBREV$)(1:4)="MISC" Then Pause
-	if uprc$(abbrev$)(1:4)<>"MISC" then goto L840
-	x=val(abbrev$(5:6)) conv L840
-	abbrev$=""
-	abbrev$=trim$(abbrevname$(x))(1:9)
+
+
+
+		if env$('cursys')='PR' then
+		
+			! r: PAYROLL - PLACE CORRECT SERVICE NAME ON EACH SERVICE
+			if uprc$(a$(j3,1)(1:4))<>"MISC" then goto L840
+			x=val(a$(j3,1)(8:9)) conv L840
+			if trim$(fullname$(x))="" then goto L870 ! SERVICE NOT USED
+			a$(j3,1)=fullname$(x)
+			! If UPRC$(ABBREV$)(1:4)="MISC" Then Pause
+			if uprc$(abbrev$)(1:4)<>"MISC" then goto L840
+			x=val(abbrev$(5:6)) conv L840
+			abbrev$=""
+			abbrev$=trim$(abbrevname$(x))(1:9)
+			! /r
+		else if env$('cursys')='UB' then
+			! r: UTILITY BILLING - PLACE CORRECT SERVICE NAME ON EACH SERVICE
+			if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto Pr850
+			x=val(a$(j3,1)(9:10)) conv Pr850
+			if trim$(serviceName$(x))="" then goto ReadEv ! SERVICE NOT USED
+			a$(j3,1)(1:9)=""
+			if x=3 and trim$(serviceName$(x))<>"Electric" and srv$(3)="EL" then goto Pr840
+			if x=4 and trim$(serviceName$(x))<>"Gas" and srv$(4)="GA" then goto Pr840 ! gas or electric used for some some reading other that gas or electric (code must be GA or EL for this to work
+			if x=3 and trim$(serviceName$(x))<>"Electric" and a$(j3,1)(2:6)="Prior" then goto ReadEv
+			if x=3 and trim$(serviceName$(x))<>"Electric" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Prior") then goto ReadEv
+			if x=4 and trim$(serviceName$(x))<>"Gas" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Meter") then goto ReadEv
+			if x=4 and trim$(serviceName$(x))<>"Gas" and a$(j3,1)(2:6)="Prior" then goto ReadEv
+			Pr840: ! 
+			a$(j3,1)=trim$(serviceName$(x))&" "&trim$(a$(j3,1))
+			Pr850: ! 
+			if uprc$(abbrev$)(1:7)<>"SERVICE" then goto Pr890
+			x=val(abbrev$(9:10)) conv Pr890
+			abbrev$(1:9)=""
+			abbrev$=trim$(serviceName$(x))&" "&trim$(abbrev$)
+			Pr890: ! 
+			if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(2:6)='EXTRA' or trim$(abbrev$)="" then goto ReadEv
+			! /r
+		else
+			pr program$&' does not know how to process cursys ('&env$('cursys')&')'
+			pause
+		end if
+
 	L840: ! store as description,variable name,field length,# of deciaml points, format
 	write #15,using L860: trim$(a$(j3,1)(1:30)),a$(j3,2),a(j3,2),a(j3,3),a$(j3,3),abbrev$(1:20)
 	L860: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20

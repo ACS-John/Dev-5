@@ -1,9 +1,9 @@
-Account Code 27-Checking 37-Sadc$                    0 0           Account Code
+Account Code 27-Checking 37-Sa(dc$                   0 0           Account Code
 Alpha Sort Field              ALP$                   0 0           Alpha Sort F
 Alternate Billing Address 6   BRA                    0 0           Alternate Bi
 Average Sewer Usage           extra(18)              0 0           Average Sewe
-Bank Account #                da$                    0 0           Bank Account
-Bank Draft (y)                df$                    0 0           Bank Draft (
+Bank Account #                (da$                   0 0           Bank Account
+Bank Draft (y)                (df$                   0 0           Bank Draft (
 Bulk Sort Code                extra$(6)              0 0           Bulk Sort Co
 Cellphone                     extra$(8)              0 0           Cellphone
 City,state Zip                E$(4)                 30 0C 30       City,ST Zip
@@ -27,44 +27,52 @@ Extra6                        extra(22)              0 0           Extra6
 Extra6$                       extra$(11)             0 0           Extra6$
 Final Billing Code            extra(17)              0 0           Final Billin
 Gross Bill                    G(12)                  0 0           Gross Bill
-Lawn Meter Breakdown          GB(3)                  0 0           Lawn Meter Br
-Lawn Meter Charge             G(3)                   0 0           Lawn Meter Ch
-Lawn Meter Kwh Used - Current D(7)                   0 0           Lawn Meter Kw
-Lawn Meter Kwh Used -Ytd      D(8)                   0 0           Lawn Meter Kw
-Lawn Meter Light Count        Extra(7)               0 0           Lawn Meter Li
-Lawn Meter Meter Serial #     Extra$(4)              0 0           Lawn Meter Me
-Lawn Meter Rate Code          A(3)                   0 0           Lawn Meter Ra
-Lawn Meter Security Light     Extra(6)               0 0           Lawn Meter Se
-Lawn Meter Standard Charge    B(3)                   0 0           Lawn Meter St
 Net Bill                      G(11)                  0 0           Net Bill
-Other Charge Breakdown        GB(8)                  0 0           Other Charge Br
-Other Charge Charge           G(8)                   0 0           Other Charge Ch
-Other Charge Rate Code        Extra(12)              0 0           Other Charge Ra
+Non Residency Breakdown       GB(6)                  0 0           Non Residency Br
+Non Residency Charge          G(6)                   0 0           Non Residency Ch
+Non Residency Rate Code       Extra(11)              0 0           Non Residency Ra
+Non Residency Standard Charge B(6)                   0 0           Non Residency St
+Other Breakdown               GB(8)                  0 0           Other Br
+Other Charge                  G(8)                   0 0           Other Ch
+Other Rate Code               Extra(12)              0 0           Other Ra
+Penalty 0 Breakdown           GB(10)                 0 0           Penalty 0 B
+Penalty 0 Charge              G(10)                  0 0           Penalty 0 C
+Penalty 0 Code                A(7)                   0 0           Penalty 0 C
 Phone #                       Extra$(2)              0 0           Phone #
+Primacy Breakdown             GB(3)                  0 0           Primacy Br
+Primacy Charge                G(3)                   0 0           Primacy Ch
+Primacy Kwh Used - Current    D(7)                   0 0           Primacy Kw
+Primacy Kwh Used -Ytd         D(8)                   0 0           Primacy Kw
+Primacy Light Count           Extra(7)               0 0           Primacy Li
+Primacy Meter Serial #        Extra$(4)              0 0           Primacy Me
+Primacy Rate Code             A(3)                   0 0           Primacy Ra
+Primacy Security Light        Extra(6)               0 0           Primacy Se
+Primacy Standard Charge       B(3)                   0 0           Primacy St
 Prior Meter Reading Date      Extra(4)               0 0           Prior Meter
 Route #                       Extra(1)               0 0           Route #
-Routing #                     dr$                    0 0           Routing #
-S-Penalty 0 Breakdown         GB(10)                 0 0           S-Penalty 0 B
-S-Penalty 0 Charge            G(10)                  0 0           S-Penalty 0 C
-S-Penalty 0 Code              A(7)                   0 0           S-Penalty 0 C
+Routing #                     (dr$                   0 0           Routing #
 Sequence #                    Extra(2)               0 0           Sequence #
 Sewer Breakdown               GB(2)                  0 0           Sewer Br
 Sewer Charge                  G(2)                   0 0           Sewer Ch
+Sewer Connection Breakdown    GB(4)                  0 0           Sewer Connection Br
+Sewer Connection Charge       G(4)                   0 0           Sewer Connection Ch
+Sewer Connection Rate Code    A(4)                   0 0           Sewer Connection Ra
+Sewer Connection Standard CharB(4)                   0 0           Sewer Connection St
 Sewer Deposit                 B(9)                   0 0           Sewer De
 Sewer Deposit Date            C(2)                   0 0           Sewer De
 Sewer Rate Code               A(2)                   3 0PD 2       Sewer Cd
 Sewer Reduction               Extra(5)               0 0           Sewer Reduct
 Sewer Standard Charge         B(2)                   0 0           Sewer St
 Sewer Units Per Meter         Extra(13)              0 0           Sewer Un
+Solid Waste Breakdown         GB(5)                  0 0           Solid Waste Br
+Solid Waste Charge            G(5)                   0 0           Solid Waste Ch
+Solid Waste Rate Code         A(5)                   0 0           Solid Waste Ra
+Solid Waste Standard Charge   B(5)                   0 0           Solid Waste St
 Tax Breakdown                 GB(9)                  0 0           Tax Br
 Tax Charge                    G(9)                   0 0           Tax Ch
 Tax Code                      A(6)                   0 0           Tax Co
 Test Cycle Code               extra$(7)              0 0           Test Cycle C
 Units Per Meter               D(13)                  0 0           Units Per Me
-W-Penalty Breakdown           GB(7)                  0 0           W-Penalty Br
-W-Penalty Charge              G(7)                   0 0           W-Penalty Ch
-W-Penalty Rate Code           Extra(12)              0 0           W-Penalty Ra
-W-Penalty Standard Charge     B(7)                   0 0           W-Penalty St
 Water Breakdown               GB(1)                  0 0           Water Br
 Water Charge                  G(1)                   0 0           Water Ch
 Water Deposit                 B(8)                   0 0           Water De

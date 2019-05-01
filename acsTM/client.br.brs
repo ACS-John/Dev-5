@@ -1,31 +1,29 @@
 ! Replace S:\acsTM\Client
 ! TM Client - Hamster
 
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
+	library 'S:\Core\Library': fntop,fnxit, fnHamster
 	on error goto ERTN
 
-	dim cap$*128
+	fntop(program$,'Client 420')
 
-	fntop(program$,cap$='Client 420')
-! 
 	fn_hamster_setup_1
 	fn_hamster_setup_2
 	fn_open_file : fn_close_file : fn_open_file
 	gosub HAMSTER
 	fn_close_file
-	goto XIT
+goto XIT
 
-	def fn_open_file
-		open_file_count=0 ! this value is used in the close_file sub routine
-		open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-		open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outIn,keyed 
-	fnend 
-	def fn_close_file
-		for cf_h_item=1 to open_file_count
-			close #cf_h_item: 
-		next cf_h_item
-	fnend  ! fn_close_file
-	def fn_hamster_setup_2
+def fn_open_file
+	open_file_count=0 ! this value is used in the close_file sub routine
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed 
+fnend 
+def fn_close_file
+	for cf_h_item=1 to open_file_count
+		close #cf_h_item: 
+	next cf_h_item
+fnend  ! fn_close_file
+def fn_hamster_setup_2
 ! 
 ! ** Combo Boxes **
 ! c_x=Field Number  : C$(c_x,1)='ComboF'
