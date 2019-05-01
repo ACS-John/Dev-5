@@ -1,24 +1,18 @@
-125 CP                        tcp(7)                 9 2pd 5.2     125 CP
-Chd Sp                        tcp(10)                9 2pd 5.2     Chd Sp
+AFLAC                         tcp(7)                 9 2pd 5.2     AFLAC
+CHSUPP                        tcp(6)                 9 2pd 5.2     CHSUPP
 Check Number                  ckno                   7 0N 7        Ckno
-Clr Fe                        tcp(13)                9 2pd 5.2     Clr Fe
 Department Number             TDN                    3 0N 3        Dep#
 Eic                           tcp(25)                9 2pd 5.2     EIC
-Emp In                        tcp(5)                 9 2PD 5.2     Emp In
-Emp25%                        tcp(6)                 9 2pd 5.2     Emp25%
 Employee Number               dENO                   8 0N 8        Emp#
 Federal U/C Wage              Tdc(9)                 9 2PD 5.2     Fed U/C W
 Federal Withholdings          Tcp(1)                 9 2PD 5.2     Fed WH
+GARNIS                        tcp(8)                 9 2pd 5.2     GARNIS
 Holiday Hours                 Tdc(5)                 5 2PD 3.2     Hol Hrs
-Hosp                          tcp(12)                9 2pd 5.2     Hosp
-LAGERS                        tcp(8)                 9 2pd 5.2     LAGERS
-Lf Ins                        tcp(14)                9 2pd 5.2     Lf Ins
 Meals                         tcp(29)                9 2pd 5.2     Meals
 Medicare Wages                Tdc(8)                 9 2PD 5.2     Med Wage
 Medicare Withholdings         Tcp(3)                 9 2PD 5.2     Med WH
 Net Pay                       tcp(32)                9 2pd 5.2     Net Pay
 Ot Earnings                   tcp(27)                9 2pd 5.2     OT Pay
-Other                         tcp(11)                9 2pd 5.2     Other
 Other Compensation            tcp(28)                9 2pd 5.2     Other Com
 Overtime Hours                Tdc(2)                 5 2Pd 3.2     OT Hrs
 Payroll Date                  prd                   11 0pd 6       Date
@@ -29,8 +23,8 @@ Ss Wages                      tdc(7)                 9 2PD 5.2     SS Wage
 Ss Withholdings               Tcp(2)                 9 2PD 5.2     SS WH
 State U/C Wage                Tdc(10)                9 2PD 5.2     St U/C W
 State Withholdings            Tcp(4)                 9 2PD 5.2     State WH
+TRUCK                         tcp(5)                 9 2PD 5.2     TRUCK
 Tips                          tcp(30)                9 2pd 5.2     Tips
 Total Wage                    tcp(31)                9 2pd 5.2     Total Wage
-Unifms                        tcp(9)                 9 2pd 5.2     Unifms
 Vacation Hours                Tdc(4)                 5 2PD 3.2     Vac Hrs
 Workman's Comp Wages          Tdc(6)                 9 2Pd 5.2     W/C Wages
