@@ -100,11 +100,11 @@ goto L340
 L870: !
 	close #2: ioerr ignore
 	close #15: ioerr ignore
-	gosub MOVEITTOTEXT
+	gosub MoveItToText
 	pr f "24,1,C 7,UT,N": "Done..."
 stop
 ! ______________________________________________________________________
-MOVEITTOTEXT: ! r:
+MoveItToText: ! r:
 	open #10: "Name="&outputfile$&",RecL=87,Replace",display,output
 	open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed
 	do
