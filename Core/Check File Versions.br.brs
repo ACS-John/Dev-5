@@ -684,7 +684,7 @@ def fn_cfv_payroll
 	! /r
 	fn_file_setup_data("[Q]\PRmstr\PayrollChecks.h[cno]",224,0)
 	fn_file_setup_index("[Q]\PRmstr\CheckIdx.h[cno]",'1','17')
-	fn_file_setup_index("[Q]\PRmstr\CheckIdx2.h[cno]",'1/12/9','3/6/8')
+	fn_file_setup_index("[Q]\PRmstr\CheckIdx2.h[cno]",'9/12/1','3/6/8')
 	fn_file_setup_index("[Q]\PRmstr\checkidx3.h[cno]",'1/12/9','8/6/3')
 	! 
 	! r: DedNames.h setup

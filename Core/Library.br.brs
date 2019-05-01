@@ -82,7 +82,7 @@ def library fnformnumb$(numb,decimals,size)
 fnend
 def library fnpause(;unused)
 	if env$("ACSDeveloper")<>"" then 
-		execute 'Go XIT Step'
+		pause
 	end if 
 fnend 
 
