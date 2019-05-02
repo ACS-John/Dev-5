@@ -373,12 +373,9 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Exeter' then 
 			fn_user_limit(2)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Energy Exchanger' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')
-			! if days(date$)<=days('05/18/2017','mm/dd/ccyy') then let fn_add_ch_sys('P4')
-			if days(date$)<=days('05/31/2017','mm/dd/ccyy') then let fn_add_ch_sys('CL')
-			if days(date$)<=days('05/31/2017','mm/dd/ccyy') then let fn_add_ch_sys('GL')
+		! else if env$('client')='Energy Exchanger' then 
+		! 	fn_user_limit(1)
+		! 	fn_add_ch_sys('PR')
 		else if env$('client')='Dorothy Salch' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('GL')
@@ -791,7 +788,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Edinburg",'IL')
 		fn_pcs_add("Edison",'GA')
 		fn_pcs_add("Ed Horton",'IL')
-		fn_pcs_add("Energy Exchanger",'OK')
+		! fn_pcs_add("Energy Exchanger",'OK')  dropped support of april 2019, removed april 2020
 !   fn_pcs_add("Franklin and Son",'AR')
 !   fn_pcs_add("Franklinton",'LA')
 		fn_pcs_add("Galena",'MO')

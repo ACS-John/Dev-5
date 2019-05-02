@@ -3,7 +3,7 @@
 fn_setup
 fntop(program$)
 
-open #hRpMstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
+open #hEmployee:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
 if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then
 	open #hTmp:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],RecL=224,use",internal,outIn,keyed
 	close #hTmp:
@@ -14,8 +14,8 @@ end if
 open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
 hact$=""
-fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hRpMstr)
-close #hRpMstr: ioerr ignore
+fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hEmployee)
+close #hEmployee: ioerr ignore
 close #hCheckIdx1: ioerr ignore
 close #hCheckIdx3: ioerr ignore
 gosub ReIndexPayrollChecks
@@ -27,11 +27,11 @@ ReIndexPayrollChecks: ! r:
 return ! /r
 
 
-def library fncheckfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
+def library fncheckfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	if ~setup then let fn_Setup
-	fncheckfile=fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hRpMstr)
+	fncheckfile=fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hEmployee)
 fnend
-def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
+def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 
 	dim resp$(60)*128
 	dim hf(46)
@@ -98,7 +98,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			goto SCREEN2
 		else if ckey=2 then 
 			printit=1
-			if trim$(z$)="" or trim$(z$)="[All]" then goto SCREEN1 ! don't allow pr to work if no customer selected
+			! if trim$(z$)="" or trim$(z$)="[All]" then goto SCREEN1 ! don't allow pr to work if no customer selected
 			fnopenprn
 			goto PastFlexInit ! read headings for reports then start reading thru the checks same as a grid
 		else if ckey=cancel then 
@@ -550,7 +550,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		for j=1 to udim(hs1)
 			if j=1 and eno<>holdeno then
 				empz$=lpad$(str$(hs1(1)),8): nam$=""
-				read #hRpMstr,using "form pos 9,c 25",key=empz$: nam$ nokey ignore
+				read #hEmployee,using "form pos 9,c 25",key=empz$: nam$ nokey ignore
 			end if
 			if hf(j)<>0 then
 				hs3+=1
@@ -673,13 +673,13 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		holdtdn=tdn
 		holdprd=prd
 		L4310: !
-		read #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",release: eno,tdn,prd,ckno,mat tdc,mat tcp eof CONSIDER_ANNUAL_EOF
-		if trim$(hact$)<>"[All]" and hact$<>cnvrt$("pic(zzzzzzzz)",eno) then goto CONSIDER_ANNUAL
+		read #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",release: eno,tdn,prd,ckno,mat tdc,mat tcp eof EoChecks
+		if trim$(hact$)<>"[All]" and hact$<>cnvrt$("pic(zzzzzzzz)",eno) then goto ConsiderAnnual
 		if beg_date<>0 and prd<beg_date then goto L4310
 		if end_date><0 and prd>end_date then goto L4310
 		dim printitem$(48)*70
-		if holdeno>0 and eno<>holdeno and trim$(hact$)<>"[All]" then goto CONSIDER_ANNUAL_EOF ! not same account and should treated as end of file
-		if holdeno>0 and eno<>holdeno then goto CONSIDER_ANNUAL             ! not same account
+		if holdeno>0 and eno<>holdeno and trim$(hact$)<>"[All]" then goto EoChecks ! not same account and should treated as end of file
+		if holdeno>0 and eno<>holdeno then goto ConsiderAnnual             ! not same account
 		L4380: !
 		if annual=1 and prd>=begin_year and prd<=end_year then mat annualtdc=annualtdc+tdc: mat annualtcp=annualtcp+tcp
 		if prd>=beg_date and prd<=end_date then mat employeetdc=employeetdc+tdc: mat employeetcp=employeetcp+tcp : mat grand2tcp=grand2tcp+tcp: mat grand2tdc=grand2tdc+tdc
@@ -693,7 +693,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			if prd=>qtr4 and qtr3printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
 			if prd=>qtr4 and qtr3printed=0 and sum(qtr3tdc)+sum(qtr3tcp)>0 then mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1: desc$="3rd Qtr": gosub PRINT_GRID: holdckno=0
 			if prd=>qtr5 and qtr4printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-			if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1: desc$="4th Qtr": gosub PRINT_GRID : goto CONSIDER_ANNUAL
+			if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1: desc$="4th Qtr": gosub PRINT_GRID : goto ConsiderAnnual
 			if prd>=qtr1 and prd<qtr2 then mat qtr1tdc=qtr1tdc+tdc : : mat qtr1tcp=qtr1tcp+tcp
 			if prd>=qtr2 and prd<qtr3 then mat qtr2tdc=qtr2tdc+tdc : mat qtr2tcp=qtr2tcp+tcp
 			if prd>=qtr3 and prd<qtr4 then mat qtr3tdc=qtr3tdc+tdc : mat qtr3tcp=qtr3tcp+tcp
@@ -740,24 +740,35 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		end if
 		L4660: !
 		if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto PrintGridXit
-		read #hRpMstr,using "form pos 9,c 18",key=employeekey$: desc$ nokey L4680
-		L4680: !
-		item$(1)=cnvrt$("pic(zzzzzzz)",recnum) : : item$(2)=desc$
-		item$(3)=cnvrt$("pic(zzzzzzzz)",enoprint)
-		item$(4)=cnvrt$("pic(zzz)",tdnprint): item$(5)=str$(prdprint)
-		item$(6)=cnvrt$("pic(zzzzzzz)",cknoprint)
+		read #hEmployee,using "form pos 9,c 18",key=employeekey$: desc$ nokey ignore
+		item$( 1)=cnvrt$("pic(zzzzzzz)",recnum)
+		item$( 2)=desc$
+		item$( 3)=cnvrt$("pic(zzzzzzzz)",enoprint)
+		item$( 4)=cnvrt$("pic(zzz)",tdnprint)
+		item$( 5)=str$(prdprint)
+		item$( 6)=cnvrt$("pic(zzzzzzz)",cknoprint)
 		L4690: !
-		item$(7)=str$(totaltdc(1)): item$(8)=str$(totaltdc(2))
-		item$(9)=str$(totaltdc(3)): item$(10)=str$(totaltdc(4))
-		item$(11)=str$(totaltdc(5)): item$(12)=str$(totaltcp(26))
-		item$(13)=str$(totaltcp(27)): item$(14)=str$(totaltcp(28))
-		item$(15)=str$(totaltcp(29)): item$(16)=str$(totaltcp(30))
-		item$(17)=str$(totaltcp(31)): item$(18)=str$(totaltcp(32))
-		item$(19)=str$(totaltdc(6))
-		item$(20)=str$(totaltdc(7)): item$(21)=str$(totaltdc(8))
-		item$(22)=str$(totaltdc(9)): item$(23)=str$(totaltdc(10))
-		item$(24)=str$(totaltcp(1)): item$(25)=str$(totaltcp(2))
-		item$(26)=str$(totaltcp(3)): item$(27)=str$(totaltcp(4))
+		item$( 7)=str$(totaltdc( 1))
+		item$( 8)=str$(totaltdc(2))
+		item$( 9)=str$(totaltdc( 3))
+		item$(10)=str$(totaltdc( 4))
+		item$(11)=str$(totaltdc( 5))
+		item$(12)=str$(totaltcp(26))
+		item$(13)=str$(totaltcp(27))
+		item$(14)=str$(totaltcp(28))
+		item$(15)=str$(totaltcp(29))
+		item$(16)=str$(totaltcp(30))
+		item$(17)=str$(totaltcp(31))
+		item$(18)=str$(totaltcp(32))
+		item$(19)=str$(totaltdc( 6))
+		item$(20)=str$(totaltdc( 7))
+		item$(21)=str$(totaltdc( 8))
+		item$(22)=str$(totaltdc( 9))
+		item$(23)=str$(totaltdc(10))
+		item$(24)=str$(totaltcp( 1))
+		item$(25)=str$(totaltcp( 2))
+		item$(26)=str$(totaltcp( 3))
+		item$(27)=str$(totaltcp( 4))
 		items=27
 		for j=1 to 20
 			item$(items+=1)=cnvrt$("pic(-------.zz)",totaltcp(j+4))
@@ -776,12 +787,15 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		holdtdn=tdn
 		holdprd=prd
 		L4840: !
-		if repeatit=1 then repeatit=0 : goto L4860
-		if trim$(desc$)="1st Qtr" or trim$(desc$)="2nd Qtr" or trim$(desc$)="3rd Qtr" or trim$(desc$)="4th Qtr" then
-			mat item$=(""): repeatit=1
-			goto L4820
+		if repeatit=1 then 
+			repeatit=0
+		else
+			if trim$(desc$)="1st Qtr" or trim$(desc$)="2nd Qtr" or trim$(desc$)="3rd Qtr" or trim$(desc$)="4th Qtr" then
+				mat item$=("")
+				repeatit=1
+				goto L4820
+			end if
 		end if
-		L4860: !
 		if trim$(printitem$(2))="Employee Total" then
 			mat printitem$=(""): fnflexadd1(mat printitem$)
 		end if
@@ -798,10 +812,10 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 		end if
 		PrintGridXit: !
 	return ! /r
-	CONSIDER_ANNUAL_EOF: ! r:
+	EoChecks: ! r:
 		eofcode=1
-	goto CONSIDER_ANNUAL ! /r
-	CONSIDER_ANNUAL: ! r:
+	goto ConsiderAnnual ! /r
+	ConsiderAnnual: ! r:
 		! If EOFCODE=1 AND EMPLOYEE=1 AND PRD>=BEG_DATE AND PRD<=END_DATE Then Mat EMPLOYEETDC=EMPLOYEETDC+TDC: Mat EMPLOYEETCP=EMPLOYEETCP+TCP : Mat GRAND2TCP=GRAND2TCP+TCP: Mat GRAND2TDC=GRAND2TDC+TDC
 		! If EOFCODE=1 AND ANNUAL=1 AND PRD>=BEGIN_YEAR AND PRD<=END_YEAR Then Mat ANNUALTDC=ANNUALTDC+TDC: Mat ANNUALTCP=ANNUALTCP+TCP
 		if sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
@@ -871,7 +885,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hRpMstr)
 			mat resp$=(""): resp$(1)=gridname$
 		end if
 	return ! /r
-  CheckFileXit: !
+	CheckFileXit: !
 	close #hGridName: ioerr ignore
 	close #hPrReport: ioerr ignore
 fnend
