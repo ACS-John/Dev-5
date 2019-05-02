@@ -610,8 +610,6 @@ def fn_cfv_payroll
 	! r: move DDInfo.h into CReg and delete DDInfo.h
 	if exists('[Q]\PRmstr\DDInfo.h[cno]') then 
 		open #h_prDdinfo:=fngethandle: "Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256",internal,outIn,relative 
-		read #h_prDdinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
-		
 		if lrec(h_prDdinfo)>=1 then 
 			dim ddinfo_path$*30
 			dim ddinfo_bankaccount$*20
@@ -620,7 +618,7 @@ def fn_cfv_payroll
 			dim ddinfo_fedid$*12
 			dim ddinfo_bankname$*23
 			dim ddinfo_banksaccount$*12
-			read #h_prDdinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: ddinfo_path$,ddinfo_bankaccount$,ddinfo_bankrouting$,ddinfo_federalrouting$,ddinfo_fedid$,ddinfo_bankname$,ddinfo_banksaccount$ noRec CfvPrDdInfoNoRec
+			read #h_prDdinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: ddinfo_path$,ddinfo_bankaccount$,ddinfo_bankrouting$,ddinfo_federalrouting$,ddinfo_fedid$,ddinfo_bankname$,ddinfo_banksaccount$ ioerr CfvPrDdInfoNoRec
 			fncreg_write('Direct Deposit Save File Path',ddinfo_path$) ! The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'
 			fncreg_write('Direct Deposit Source Bank Account',ddinfo_bankaccount$) ! The right hand set of numbers at the bottom of your checks.
 			fncreg_write('Direct Deposit Source Bank Routing',ddinfo_bankrouting$) ! The middle set of numbers at the bottom of your checks.
