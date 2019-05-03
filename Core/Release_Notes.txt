@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                            
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________         
+10:26 AM 5/3/2019	CO	Fixed: Export button was failing in Client instances
 11:19 05/19/2019	CO	5.74133  
 11:14 AM 5/2/2019	PR	Payroll Check History - enabled Print Report for [All] employees.  Client 3720 uses it. 
 10:49 AM 5/2/2019	PR	Fixed a bug in DDInfo conversion to CReg - was trying to read in wrong format at start 
