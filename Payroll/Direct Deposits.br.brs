@@ -151,7 +151,8 @@ FileHeaderRecord: ! r: File Header Record ______________________________________
 	! if env$('client')="West Rest Haven" then ion$="State National Bank    " ! (23) Immediate Origin Name
 	if env$('client')="Billings" then ion$="Bank of Billings       " ! (23) Immediate Origin Name
 	rc$="" ! Reference Code
-	write #ddout,using 'Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2': 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0",crlf$
+	write #ddout,using F_ddout1: 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0",crlf$
+	F_ddout1: Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2
 	! Company/Batch Header Record __________________________________________
 	scc=220 ! Service Class Code
 	cdd$="" ! Company Discretionary Data
@@ -166,7 +167,8 @@ FileHeaderRecord: ! r: File Header Record ______________________________________
 	! if env$('client')="Washington Parrish" then odi$="20428027" ! Origination DFI Identification  (your bank account number)
 	! if env$('client')="West Rest Haven" then odi$=" 1055003" ! Origination DFI Identification  (your bank account number)
 	if env$('client')="Billings" then odi$=" 0040118" ! Origination DFI Identification  (your bank account number)
-	write #ddout,using 'Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2': 5,scc,env$('cnam')(1:16),cdd$="Payroll",cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn,crlf$
+	write #ddout,using F_ddout2: 5,scc,env$('cnam')(1:16),cdd$="Payroll",cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn,crlf$
+	F_ddout2: Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2
 return ! /r
 
 EntryDetailRecord: ! r: entry detail
@@ -182,7 +184,8 @@ EntryDetailRecord: ! r: entry detail
 	dr$="081505731"
 	da$="10004147         "
 	if testfile=1 then tcp(32)=0
-	write #ddout,using 'Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2': 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(odi$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
+	write #ddout,using F_ddout3: 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(odi$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
+	F_ddout3: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	pr #255: z$&" "&em$(1)&" "&str$(tcp(32)) pageoflow ReportPgof
 	td1=td1+(tcp(32)*100)
 	tc1+=(tcp(32)*100) ! added this for the batch totals - ??
@@ -206,7 +209,8 @@ BatchControlRecord: ! r: Company/Batch Control Record
 		fnmsgbox(mat ml$,resp$)
 		goto XIT
 	end if
-	write #ddout,using 'Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2': 8,scc,eac,eh,td1,tc1,cid$,mac$,"",odi$,bn,crlf$ ! removed *100 from TD1 and from TC1
+	write #ddout,using F_ddout4: 8,scc,eac,eh,td1,tc1,cid$,mac$,"",odi$,bn,crlf$ ! removed *100 from TD1 and from TC1
+	F_ddout4: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	!
 	! File Control Record
 	bactr=1 ! Batch Count
@@ -225,12 +229,15 @@ BatchControlRecord: ! r: Company/Batch Control Record
 		fnmsgbox(mat ml$,resp$)
 		goto XIT
 	end if
-	write #ddout,using 'Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2': 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,td1,"","","",ari,lpad$(trim$(odi$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
-	write #ddout,using 'Form POS 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2': 9,bactr,blctr,eac,eh,td1,tc1,rpt$(" ",38)," ",crlf$    ! removed *100 from TD1 and TC1
+	write #ddout,using F_ddout5: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,td1,"","","",ari,lpad$(trim$(odi$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
+	F_ddout5: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
+	write #ddout,using F_ddout6: 9,bactr,blctr,eac,eh,td1,tc1,rpt$(" ",38)," ",crlf$    ! removed *100 from TD1 and TC1
+	F_ddout6: Form POS 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2
 	if bkfactor<>0 then
 		for j=1 to bkfactor
 			! pr "l22="&STR$(L22+=1)
-			write #ddout,using 'Form POS 1,C 96': rpt$("9",94)&crlf$
+			write #ddout,using F_ddout7: rpt$("9",94)&crlf$
+			F_ddout7: Form POS 1,C 96
 		next j
 	end if
 return ! /r

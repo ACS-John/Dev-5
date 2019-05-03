@@ -2128,7 +2128,7 @@ def fn_export_grid(;___,index_)
 	dim filename$*1000
 	filename$=''
 	grid_rows=grid_columns=index_=0
-	open #export_file:=fngethandle: "Name=save:Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
+	open #export_file:=fngethandle: "Name=save:"&env$('at')&"Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
 	filename$=file$(export_file)
 	close #export_file:
 	open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output
