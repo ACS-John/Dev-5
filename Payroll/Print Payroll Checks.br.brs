@@ -1328,7 +1328,7 @@ def fn_print_stub
 	else if env$('client')='Crocket County' then
 		stubCount+=1
 		if stubCount=1 then
-			fn_stub_standard(4)
+			fn_stub_standard(0)
 		else if stubCount=2 then
 			stubCount=0
 			fn_stub_standard
