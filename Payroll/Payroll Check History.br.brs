@@ -3,7 +3,7 @@
 fn_setup
 fntop(program$)
 
-open #hEmployee:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
+open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
 if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then
 	open #hTmp:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],RecL=224,use",internal,outIn,keyed
 	close #hTmp:
@@ -108,7 +108,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	goto SCREEN2 ! /r
 	SCREEN2: ! r:
 		fnTos(sn$="CheckHistory-2")
-		gosub FLEXGRID
+		gosub FlexGrid
 		fnCmdKey('&Edit',ckEdit,1,0)
 		fnCmdKey('&Back',back,0,0)
 		fnCmdKey('&Add',add,0,0)
@@ -407,7 +407,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! end if
 
 		if ckey=3 then gosub SelectColumns : goto ScrFilters
-		justopen=1: gosub SelectColumns: justopen=0
+		justopen=1 : gosub SelectColumns : justopen=0
 	goto Screen1B ! /r
 
 	SelectColumns: ! r:
@@ -462,7 +462,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			if hf(j)=1 then resp$(j+1)="True"
 			hf$(j)=rtrm$(name$(j))&r$
 		next j
-		if justopen=1 then goto L2930
+		if justopen=1 then goto DoJustOpen
 		SelectColumnsTos: !
 		fnTos(sn$="Checkprint")
 		rc=cf=0 : linecnt=2
@@ -490,7 +490,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			addone=0
 			if ckey=2 then
 				addone=1
-				gosub ADD_GRID
+				gosub AddGrid
 				goto SelectColumnsTos
 			else
 				gridname$=rpad$(trim$(resp$(1)),30)
@@ -501,7 +501,10 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				for j=1 to 46
 					if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
 				next j
-				L2930: !
+				DoJustOpen: !
+				dim hfm$*500
+				dim hd$*500
+				dim ul$*500
 				if enableLongName then 
 					hfm$="FORM POS 1,c 25"
 					ul$=hd$="                         "
@@ -543,10 +546,10 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		SelectColumnsXit: !
 	return ! /r
 
-	PRINT_DETAILS: ! r:
+	PrintDetails: ! r:
 	dim desc$*25,ds$*25
-		if f1=0 then gosub HDR
-		if printit=0 and employee=1 and holdeno>0 and checkonly=0 and holdeno><eno then gosub EMPLOYEE_TOTALS
+		if f1=0 then gosub Hdr
+		if printit=0 and employee=1 and holdeno>0 and checkonly=0 and holdeno><eno then gosub EmployeeTotal
 		mat cp0=(0)
 		ds$=item$(2)
 		for j=1 to 45
@@ -583,12 +586,12 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! Mat CP2=CP2+CP0  kj 1/30/08
 		mat cp0=(0)
 	return ! /r
-	PGOF: ! r:
+	PgOf: ! r:
 		pr #255: newpage
-		gosub HDR
+		gosub Hdr
 	continue ! /r
 
-	HDR: ! r:
+	Hdr: ! r:
 		! need date$,time$
 		pr #255: "\qc  {\f181 \fs20 \b "&trim$(env$('cnam'))&" }"
 		pr #255: "\qc  {\f181 \fs28 \b "&trim$(gridname$)&" }"
@@ -602,31 +605,31 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		f1=1
 	return ! /r
 
-	GRAND_TOTAL: ! r:
-		if grand=0 then goto L3750
-		if printit=1 then pr #255: ul$
-		if printit=1 then pr #255: "     <Grand Totals>"
-		if hf(1)=1 then cp2(1)=0 ! no totals on employee numbers
-		if hf(1)=1 and hf(2)=1 then cp2(2)=0 ! no totals on departments
-		if hf(1)=0 and hf(2)=1 then cp2(1)=0 ! no totals on departments
-		if hf(1)=1 and hf(2)=1 and hf(3)=1 then cp2(3)=0 ! no totals on date
-		if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp2(2)=0 ! no totals on date
-		if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp2(2)=0 ! no totals on date
-		if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp2(1)=0 ! no totals on date
-		if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp2(4)=0 ! no totals on ck num
-		if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(2)=0 ! no totals on ck num ! new 11/9/15 could this be right?
-		if hf(1)=0 and hf(2)=0 and hf(3)=0 and hf(4)=1 then cp2(1)=0 ! no totals on cknum
-		if hf(1)=1 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(3)=0 ! no totals on cknum
-		if printit=1 then pr #255,using hfm$: "",mat cp2
-		if printit=0 then desc$="Grand Total": mat totaltcp=grand2tcp: mat totaltdc=grand2tdc: gosub PRINT_GRID
-		mat grand2tcp=(0) : : mat grand2tdc=(0)
-		mat cp2=(0)
-		form pos 1,c 29,18*g 10.2,skip 1
-		if printit=1 then pr #255: ul$
-		L3750: !
+	GrandTotal: ! r:
+		if grand then
+			if printit=1 then pr #255: ul$
+			if printit=1 then pr #255: "     <Grand Totals>"
+			if hf(1)=1 then cp2(1)=0 ! no totals on employee numbers
+			if hf(1)=1 and hf(2)=1 then cp2(2)=0 ! no totals on departments
+			if hf(1)=0 and hf(2)=1 then cp2(1)=0 ! no totals on departments
+			if hf(1)=1 and hf(2)=1 and hf(3)=1 then cp2(3)=0 ! no totals on date
+			if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp2(2)=0 ! no totals on date
+			if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp2(2)=0 ! no totals on date
+			if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp2(1)=0 ! no totals on date
+			if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp2(4)=0 ! no totals on ck num
+			if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(2)=0 ! no totals on ck num ! new 11/9/15 could this be right?
+			if hf(1)=0 and hf(2)=0 and hf(3)=0 and hf(4)=1 then cp2(1)=0 ! no totals on cknum
+			if hf(1)=1 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(3)=0 ! no totals on cknum
+			if printit=1 then pr #255,using hfm$: "",mat cp2
+			if printit=0 then desc$="Grand Total": mat totaltcp=grand2tcp: mat totaltdc=grand2tdc: gosub PrintGrid
+			mat grand2tcp=(0) : mat grand2tdc=(0)
+			mat cp2=(0)
+			form pos 1,c 29,18*g 10.2,skip 1
+			if printit=1 then pr #255: ul$
+		end if
 	return ! /r
 
-	EMPLOYEE_TOTALS: ! r:
+	EmployeeTotal: ! r:
 		if hf(1)=1 then cp1(1)=0 ! no totals on employee numbers
 		if hf(1)=1 and hf(2)=1 then cp1(2)=0 ! no totals on departments
 		if hf(1)=0 and hf(2)=1 then cp1(1)=0 ! no totals on departments
@@ -640,15 +643,23 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 
 		pr #255,using hfm$: "   Emp Total",mat cp1
 		mat cp1=(0)
-		pr #255: "" pageoflow PGOF
+		pr #255: "" pageoflow PgOf
 	return ! /r
 
-	FLEXGRID: ! r:
-		dim colmask$(48),colhdr$(48)*20,item$(48)*70,transtype$(5)*40,tcp(32)
-		dim totaltcp(32),totaltdc(10),holdtotaltcp(32),holdtotaltdc(10)
-		dim tdc(10),qtr1tdc(10),qtr2tdc(10),qtr3tdc(10),qtr4tdc(10)
+	FlexGrid: ! r:
+		dim colmask$(48),colhdr$(48)*20
+		
+		dim transtype$(5)*40,tcp(32)
+		dim totaltcp(32),totaltdc(10)
+		dim holdtotaltcp(32)
+		dim holdtotaltdc(10)
+		dim tdc(10)
+		dim qtr1tdc(10),qtr2tdc(10),qtr3tdc(10),qtr4tdc(10)
 		dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32)
-		dim annualtdc(10),annualtcp(32),mg$(2)*80,hfm$*500,ul$*500,hd$*500
+		dim annualtdc(10),annualtcp(32)
+		dim mg$(2)*80
+		
+		
 		dim employeetdc(10),employeetcp(32),holdtdc(10),holdtcp(32),grand2tcp(32)
 		dim grand2tdc(10)
 
@@ -698,14 +709,14 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! need to start analyzing quarters, etc here
 		if quarterly<>0 then
 			mat holdtotaltcp=totaltcp: mat holdtotaltdc=totaltdc ! hold these subtotals in case the quarterly destroys them
-			if prd=>qtr2 and qtr1printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID : holdckno=0 ! last check not printed yet
-			if prd=>qtr2 and qtr1printed=0 and sum(qtr1tdc)+sum(qtr1tcp)>0 then mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp: qtr1printed=1: desc$="1st Qtr" : gosub PRINT_GRID : holdckno=0
-			if prd=>qtr3 and qtr2printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-			if prd=>qtr3 and qtr2printed=0 and sum(qtr2tdc)+sum(qtr2tcp)>0 then mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: qtr2printed=1: desc$="2nd Qtr" : gosub PRINT_GRID : holdckno=0
-			if prd=>qtr4 and qtr3printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-			if prd=>qtr4 and qtr3printed=0 and sum(qtr3tdc)+sum(qtr3tcp)>0 then mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1: desc$="3rd Qtr": gosub PRINT_GRID: holdckno=0
-			if prd=>qtr5 and qtr4printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-			if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1: desc$="4th Qtr": gosub PRINT_GRID : goto ConsiderAnnual
+			if prd=>qtr2 and qtr1printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid : holdckno=0 ! last check not printed yet
+			if prd=>qtr2 and qtr1printed=0 and sum(qtr1tdc)+sum(qtr1tcp)>0 then mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp: qtr1printed=1: desc$="1st Qtr" : gosub PrintGrid : holdckno=0
+			if prd=>qtr3 and qtr2printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid ! last check not printed yet
+			if prd=>qtr3 and qtr2printed=0 and sum(qtr2tdc)+sum(qtr2tcp)>0 then mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: qtr2printed=1: desc$="2nd Qtr" : gosub PrintGrid : holdckno=0
+			if prd=>qtr4 and qtr3printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid ! last check not printed yet
+			if prd=>qtr4 and qtr3printed=0 and sum(qtr3tdc)+sum(qtr3tcp)>0 then mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1: desc$="3rd Qtr": gosub PrintGrid: holdckno=0
+			if prd=>qtr5 and qtr4printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid ! last check not printed yet
+			if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1: desc$="4th Qtr": gosub PrintGrid : goto ConsiderAnnual
 			if prd>=qtr1 and prd<qtr2 then mat qtr1tdc=qtr1tdc+tdc : : mat qtr1tcp=qtr1tcp+tcp
 			if prd>=qtr2 and prd<qtr3 then mat qtr2tdc=qtr2tdc+tdc : mat qtr2tcp=qtr2tcp+tcp
 			if prd>=qtr3 and prd<qtr4 then mat qtr3tdc=qtr3tdc+tdc : mat qtr3tcp=qtr3tcp+tcp
@@ -720,7 +731,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		else if checkonly=1 and holdckno<>0 and holdckno<>ckno and (sum(tdc)+sum(tcp))>0 then
 			desc$="Total Ck"
 			holdrecnum=0
-			gosub PRINT_GRID
+			gosub PrintGrid
 			mat totaltdc=totaltdc+tdc: mat totaltcp=totaltcp+tcp
 			desc$="Total Ck"
 		end if
@@ -732,34 +743,34 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			mat totaltdc=totaltdc+tdc
 			mat totaltcp=totaltcp+tcp
 		end if
-		if details=1 then gosub PRINT_GRID
+		if details=1 then gosub PrintGrid
 	goto READ_BREAKDOWNS ! /r
-	PRINT_GRID: ! r:
+	PrintGrid: ! r:
+		dim item$(48)*70
 		recnum=rec(hCheckIdx3): if trim$(desc$)<>"" then recnum=0
 		if trim$(desc$)="1st Qtr" or trim$(desc$)="2nd Qtr" or trim$(desc$)="3rd Qtr" or trim$(desc$)="4th Qtr" or trim$(desc$)="YTD" or trim$(desc$)="Grand Total" or trim$(desc$)="Employee Total" then
 			enoprint=tdnprint=prdprint=cknoprint=0
-			item$(1)=item$(3)=item$(4)=item$(5)=item$(6)="": item$(2)=desc$
+			item$(1)=item$(3)=item$(4)=item$(5)=item$(6)="" : item$(2)=desc$
 			desc$=""
-			goto L4690
+		else
+			if details=0 then enoprint=holdeno : tdnprint=holdtdn : prdprint=holdprd : cknoprint=holdckno
+			if printit=1 then ! use different key for pr instead of grid
+				employeekey$=cnvrt$("pic(zzzzzzzz)",eno)
+			else if printit=1 or details=1 then  ! use different key for pr instead of grid
+				employeekey$=cnvrt$("pic(zzzzzzzz)",eno)
+			else ! key for grids
+				employeekey$=cnvrt$("pic(zzzzzzzz)",holdeno)
+			end if
+			L4660: !
+			if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto PrintGridXit
+			read #hEmployee,using "form pos 9,c 25",key=employeekey$: desc$ nokey ignore
+			item$( 1)=cnvrt$("pic(zzzzzzz)",recnum)
+			item$( 2)=desc$
+			item$( 3)=cnvrt$("pic(zzzzzzzz)",enoprint)
+			item$( 4)=cnvrt$("pic(zzz)",tdnprint)
+			item$( 5)=str$(prdprint)
+			item$( 6)=cnvrt$("pic(zzzzzzz)",cknoprint)
 		end if
-		if details=0 then enoprint=holdeno: tdnprint=holdtdn: prdprint=holdprd: cknoprint=holdckno
-		if printit=1 then ! use different key for pr instead of grid
-			employeekey$=cnvrt$("pic(zzzzzzzz)",eno)
-		else if printit=1 or details=1 then  ! use different key for pr instead of grid
-			employeekey$=cnvrt$("pic(zzzzzzzz)",eno)
-		else ! key for grids
-			employeekey$=cnvrt$("pic(zzzzzzzz)",holdeno)
-		end if
-		L4660: !
-		if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto PrintGridXit
-		read #hEmployee,using "form pos 9,c 25",key=employeekey$: desc$ nokey ignore
-		item$( 1)=cnvrt$("pic(zzzzzzz)",recnum)
-		item$( 2)=desc$
-		item$( 3)=cnvrt$("pic(zzzzzzzz)",enoprint)
-		item$( 4)=cnvrt$("pic(zzz)",tdnprint)
-		item$( 5)=str$(prdprint)
-		item$( 6)=cnvrt$("pic(zzzzzzz)",cknoprint)
-		L4690: !
 		item$( 7)=str$(totaltdc( 1))
 		item$( 8)=str$(totaltdc(2))
 		item$( 9)=str$(totaltdc( 3))
@@ -786,7 +797,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			item$(items+=1)=cnvrt$("pic(-------.zz)",totaltcp(j+4))
 		next j
 		item$(items+=1)=str$(totaltcp(25)) ! eic
-		if printit=1 then desc$=item$(2): gosub PRINT_DETAILS: goto L4840
+		if printit=1 then desc$=item$(2): gosub PrintDetails: goto L4840
 		x=2
 		printitem$(1)=item$(1): printitem$(2)=item$(2)
 		for j=1 to 46
@@ -830,42 +841,42 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	ConsiderAnnual: ! r:
 		! If EOFCODE=1 AND EMPLOYEE=1 AND PRD>=BEG_DATE AND PRD<=END_DATE Then Mat EMPLOYEETDC=EMPLOYEETDC+TDC: Mat EMPLOYEETCP=EMPLOYEETCP+TCP : Mat GRAND2TCP=GRAND2TCP+TCP: Mat GRAND2TDC=GRAND2TDC+TDC
 		! If EOFCODE=1 AND ANNUAL=1 AND PRD>=BEGIN_YEAR AND PRD<=END_YEAR Then Mat ANNUALTDC=ANNUALTDC+TDC: Mat ANNUALTCP=ANNUALTCP+TCP
-		if sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
+		if sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid ! last check not printed yet
 		if sum(totaltdc)+sum(totaltcp)<>0 and checkonly=1 then desc$="Total Ck"
 		if (sum(qtr1tdc)>0 or sum(qtr1tcp)>0) and qtr1printed=0 then
 			mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp
-			qtr1printed=1: desc$="1st Qtr": holdnam$="": gosub PRINT_GRID
+			qtr1printed=1: desc$="1st Qtr": holdnam$="": gosub PrintGrid
 		end if
 		if (sum(qtr2tdc)>0 or sum(qtr2tcp)>0) and qtr2printed=0 then
 			mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: qtr2printed=1
-			desc$="2nd Qtr": holdnam$="": gosub PRINT_GRID
+			desc$="2nd Qtr": holdnam$="": gosub PrintGrid
 		end if
 		if (sum(qtr3tdc)>0 or sum(qtr3tcp)>0) and qtr3printed=0 then
 			mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1
-			desc$="3rd Qtr": holdnam$="" : gosub PRINT_GRID
+			desc$="3rd Qtr": holdnam$="" : gosub PrintGrid
 		end if
 		if (sum(qtr4tdc)>0 or sum(qtr4tcp)>0) and qtr4printed=0 then
 			mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1
-			desc$="4th Qtr": holdnam$="": gosub PRINT_GRID
+			desc$="4th Qtr": holdnam$="": gosub PrintGrid
 		end if
 		if annual=1 then
 			enoprint=tdnprint=prdprint=cknoprint=0
 			mat totaltdc=annualtdc: mat totaltcp=annualtcp
-			annual_printed=1 : desc$="YTD": gosub PRINT_GRID
+			annual_printed=1 : desc$="YTD": gosub PrintGrid
 			mat annualtcp=(0) : mat annualtdc=(0)
 		end if
 		! If PRINTIT=1 Then Goto 4810 ! don't use the totals if pr report
-		! If PRINTIT=1 Then Gosub EMPLOYEE_TOTALS
+		! If PRINTIT=1 Then Gosub EmployeeTotal
 		if employee=1 and holdeno<>0 then
 			mat totaltdc=employeetdc
 			mat totaltcp=employeetcp
 			employee_printed=1
 			desc$="Employee Total"
-			gosub PRINT_GRID
+			gosub PrintGrid
 			mat employeetcp=(0)
 			mat employeetdc=(0)
 		end if
-		if eofcode=1 and grand=1 then gosub GRAND_TOTAL
+		if eofcode=1 and grand=1 then gosub GrandTotal
 		if eofcode=1 then eofcode=0: holdeno=0: goto L5120
 		if trim$(hact$)="[All]" and quarterly=1 and holdeno>0 then
 			qtr1printed=qtr2printed=qtr3printed=qtr4printed=0
@@ -880,7 +891,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		if printit=1 then let fncloseprn : goto SCREEN1
 		FlexGridXit: !
 	return ! /r
-	ADD_GRID: ! r:
+	AddGrid: ! r:
 		fnTos(sn$="Addgrid")
 		lc=rc=0 : mylen=20 : mypos=mylen+3
 		fnLbl(1,1,"Grid or Report Name:",20,1)
