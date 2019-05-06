@@ -45,9 +45,9 @@ Print
 >Input Worksheet                            ^ acsPR\newprInpWk
 >Active Employee List                       ^ acsPR\newEmpList
 >Direct Deposit List                        ^ Payroll\Direct Deposit List
-! Automatic Processing
-! >Select Automatic Processing Programs       ^ acsPR\newSelAuto
-! >Begin Automatic Processing                 ^ acsPR\newAutoProc
+! removed 5/3/19 - i dont think anyone uses it anyway           	Automatic Processing
+! removed 5/3/19 - i dont think anyone uses it anyway           	>Select Automatic Processing Programs       ^ acsPR\newSelAuto
+! removed 5/3/19 - i dont think anyone uses it anyway           	>Begin Automatic Processing                 ^ acsPR\newAutoProc
 Utilities
 >Change Payroll Dates                       ^ Payroll\Change Payroll Dates
 >Remove Old Payroll Checks                  ^ acspr\removechecks
