@@ -1,7 +1,7 @@
 ! Replace S:\Core\Programs\Preferences
 ! maintain ACS Core system settings
 	if ~setup then let fn_setup
-	fntop(program$, cap$="Preferences")
+	fntop(program$)
 	win_height=20
 ! r: read all the setting here (unless read and set on the fly)
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
@@ -48,11 +48,14 @@
 	if fnclient_has('GL') then
 		fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
 	end if
+	if fnclient_has('PR') then
+		fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
+	end if
 ! /r
 !  main loops - build and display screens, get, save, apply settings, etc
 DO_SCREEN_MAIN: ! r:
 	do 
-		fnTos(sn$="Settings_Main")
+		fnTos
 		fn_nav_buttons
 		col1_width=33 : col2_pos=col1_width+2 : lc=rc=0 : win_width=75
 		fnLbl(lc+=1,1,"** System Settings **",win_width,2)
@@ -112,7 +115,7 @@ DO_SCREEN_MAIN: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(sn$,0,mat resp$,ck)
+		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
 			goto XIT
 		else 
@@ -142,7 +145,7 @@ DO_SCREEN_MAIN: ! r:
 	loop  ! /r
 DO_SCREEN_THEME: ! r:
 	do 
-		fnTos(sn$="Settings_Theme")
+		fnTos
 		fn_nav_buttons
 		col1_width=19 : col2_pos=col1_width+2 : col3_pos=col2_pos+12 : lc=0 : win_width=75
 		fnLbl(lc+=1,1,"** User Settings **",win_width,2)
@@ -182,7 +185,7 @@ DO_SCREEN_THEME: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(sn$,0,mat resp$,ck)
+		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
 			goto XIT
 		else 
@@ -229,7 +232,7 @@ def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_defau
 fnend 
 DO_SCREEN_PRINTER: ! r:
 	do 
-		fnTos(sn$="Settings_Printer")
+		fnTos
 		fn_nav_buttons
 		col1_width=33 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsp_rc=0
 		fnLbl(lc+=1,1,"** System Settings **",win_width,2)
@@ -277,7 +280,7 @@ DO_SCREEN_PRINTER: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(sn$,0,mat resp$,ck)
+		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
 			goto XIT
 		else 
@@ -320,7 +323,7 @@ DO_SCREEN_PRINTER: ! r:
 	loop  ! /r
 DO_SCREEN_HH: ! r:
 do
-	fnTos(sn$="Settings_HH")
+	fnTos
 	fn_nav_buttons
 	col1_width=25 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsh_rc=0
 	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
@@ -348,7 +351,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
 		goto XIT
 	else 
@@ -367,7 +370,7 @@ do
 loop ! /r
 DO_SCREEN_UB: ! r:
 do
-	fnTos(sn$="Settings_UB")
+	fnTos
 	fn_nav_buttons
 	col1_width=46 : col2_pos=col1_width+2 : lc=0 : win_width=75 : ub_rc=0
 	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
@@ -389,7 +392,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
 		goto XIT
 	else 
@@ -406,7 +409,7 @@ do
 loop ! /r
 DO_SCREEN_GL: ! r:
 do
-	fnTos(sn$="Settings_GL")
+	fnTos
 	fn_nav_buttons
 	col1_width=46 : col2_pos=col1_width+2 : lc=0 : win_width=75 : gl_rc=0
 	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
@@ -420,11 +423,40 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
 		goto XIT
 	else 
 		gl_retainFieldsDuringAdd$=resp$(resp_gl_retainFieldsDuringAdd)
+	end if 
+	if ck=>screen_ck_low and ck<=screen_ck_high then 
+		goto SCREEN_CK_GOTO
+	else ! Save and Apply
+		fn_save
+		if ck<>2 then goto XIT
+	end if
+loop ! /r
+DO_SCREEN_PR: ! r:
+do
+	fnTos
+	fn_nav_buttons
+	col1_width=46 : col2_pos=col1_width+2 : lc=0 : win_width=75 : gl_rc=0
+	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
+	lc+=1
+	fnChk(lc+=1,col2_pos,'Check History - enable long names when printing',1)
+	resp$(resp_pr_ckHstEnableLongNames:=gl_rc+=1)=pr_ckHstEnableLongNames$
+	lc+=1
+	! fnLbl(lc+=1,1,"** User Settings **",win_width,2)
+	! lc+=1
+	!
+	fnCmdKey("&Save",1,1)
+	fnCmdKey("Apply",2,0)
+	fnCmdKey("&Cancel",5,0,1)
+	fnAcs('',0,mat resp$,ck)
+	if ck=5 then 
+		goto XIT
+	else 
+		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
 	end if 
 	if ck=>screen_ck_low and ck<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
@@ -446,6 +478,8 @@ SCREEN_CK_GOTO: ! r:
 		screen=screen_ub : goto DO_SCREEN_UB
 	else if ck=1006 then 
 		screen=screen_gl : goto DO_SCREEN_GL
+	else if ck=1007 then 
+		screen=screen_pr : goto DO_SCREEN_PR
 	else
 		pr 'SCREEN_CK_GOTO does not know how to handle ck='&str$(ck)&'.'
 		pause
@@ -487,6 +521,9 @@ def fn_save
 	if fnclient_has('GL') then
 		fnreg_write('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$)
 	end if
+	if fnclient_has('PR') then
+		fnreg_write('Check History - enable long names when printing',pr_ckHstEnableLongNames$)
+	end if
 fnend 
 def fn_nav_buttons
 	if ~setup_nav_buttons then 
@@ -497,8 +534,9 @@ def fn_nav_buttons
 		screen_hh=4
 		screen_ub=5
 		screen_gl=6
+		screen_pr=7
 		screen_ck_low=1001
-		screen_ck_high=1006
+		screen_ck_high=1007
 	end if 
 	if screen=0 then screen=screen_main
 	nb_lc=0 : nb_pos=110 : nb_len=15
@@ -507,6 +545,9 @@ def fn_nav_buttons
 	fnbutton_or_disabled(screen<>screen_theme,nb_lc+=1,nb_pos,'Theme',1002, '',nb_len)
 	fnbutton_or_disabled(screen<>screen_print,nb_lc+=1,nb_pos,'Printer',1003, '',nb_len)
 	nb_lc+=1
+	if fnclient_has('PR') then
+		fnbutton_or_disabled(screen<>screen_pr,nb_lc+=1,nb_pos,'Payroll',1007, '',nb_len)
+	end if
 	if fnclient_has('GL') then
 		fnbutton_or_disabled(screen<>screen_gl,nb_lc+=1,nb_pos,'General Ledger',1006, '',nb_len)
 	end if
@@ -526,7 +567,7 @@ def fn_setup
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
 		on error goto ERTN
-		dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
+		dim resp$(20)*256,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256
 		default_min_fontsize_height$='15' ! '14'
 		default_min_fontsize_width$='8' ! '6'
