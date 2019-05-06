@@ -28,11 +28,10 @@ return ! /r
 
 
 def library fncheckfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
-	if ~setup then let fn_Setup
+	if ~setup then let fn_setup
 	fncheckfile=fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hEmployee)
 fnend
 def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
-
 	dim resp$(60)*128
 	dim hf(46)
 	dim hf$(46)
@@ -48,6 +47,8 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	transtype$(4)="Quarterly Totals"
 	transtype$(5)="Annual Totals"
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
+	fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
+	if pr_ckHstEnableLongNames$='True' then enableLongName=1 else enableLongName=0
 
 	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.H[cno],USE,RecL=30",internal,outIn,relative
 	if lrec(hGridName)=0 then
@@ -501,7 +502,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 					if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
 				next j
 				L2930: !
-				if env$('client')="Crocket County" then 
+				if enableLongName then 
 					hfm$="FORM POS 1,c 25"
 					ul$=hd$="                         "
 				else
@@ -567,7 +568,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				L3330: !
 			end if
 		next j
-		if env$('client')="Crocket County" then
+		if enableLongName then
 			let namelen=25
 		else
 			let namelen=12
@@ -920,6 +921,7 @@ def fn_setup
 		library 'S:\Core\Library': fnGetPayrollDates
 		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnFree
+		library 'S:\Core\Library': fnreg_read
 
 	end if
 fnend
