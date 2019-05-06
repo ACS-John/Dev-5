@@ -321,7 +321,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	ScrFilters: ! r:
 		fnTos(sn$="CHECKhISTORY")
 		rc=cf=0
-		fnFra(1,1,3,26,"Informatin to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0)
+		fnFra(1,1,3,26,"Information to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0)
 		cf+=1 : fratype=cf
 		fnOpt(1,3,"Departmental Details",0,fratype)
 		if checkonly=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
@@ -501,8 +501,13 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 					if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
 				next j
 				L2930: !
-				hfm$="FORM POS 1,c 12"
-				ul$=hd$="            "
+				if env$('client')="Crocket County" then 
+					hfm$="FORM POS 1,c 25"
+					ul$=hd$="                         "
+				else
+						hfm$="FORM POS 1,c 12"
+						ul$=hd$="            "
+				end if 
 				hs1=0: hs2=0
 				for j=1 to udim(hf$)
 					if hf(j)<>0 then
@@ -538,6 +543,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	return ! /r
 
 	PRINT_DETAILS: ! r:
+	dim desc$*25,ds$*25
 		if f1=0 then gosub HDR
 		if printit=0 and employee=1 and holdeno>0 and checkonly=0 and holdeno><eno then gosub EMPLOYEE_TOTALS
 		mat cp0=(0)
@@ -561,10 +567,15 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				L3330: !
 			end if
 		next j
-		if trim$(nam$)<>"" and holdnam$<>nam$ then desc$=nam$(1:12) : holdnam$=nam$ : nam$=""
+		if env$('client')="Crocket County" then
+			let namelen=25
+		else
+			let namelen=12
+		end if 
+		if trim$(nam$)<>"" and holdnam$<>nam$ then desc$=nam$(1:namelen) : holdnam$=nam$ : nam$=""
 		! if trim$(desc$)="Total Ck" then goto L3360 ! don't pr total check on printout
 		! L3360: !
-		pr #255,using hfm$: desc$(1:12),mat cp0
+		pr #255,using hfm$: desc$(1:namelen),mat cp0
 		if desc$(1:12)="Employee Tot" then pr #255:
 		desc$=""
 		mat cp1=cp1+cp0
@@ -586,7 +597,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		pr #255: ""
 		pr #255: "\ql "
 		pr #255: hd$
-		pr #255: ul$
+		pr #255: ul$ ! pause
 		f1=1
 	return ! /r
 
@@ -740,7 +751,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		end if
 		L4660: !
 		if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto PrintGridXit
-		read #hEmployee,using "form pos 9,c 18",key=employeekey$: desc$ nokey ignore
+		read #hEmployee,using "form pos 9,c 25",key=employeekey$: desc$ nokey ignore
 		item$( 1)=cnvrt$("pic(zzzzzzz)",recnum)
 		item$( 2)=desc$
 		item$( 3)=cnvrt$("pic(zzzzzzzz)",enoprint)
