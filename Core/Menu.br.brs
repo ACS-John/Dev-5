@@ -56,13 +56,6 @@ def fn_setup
 		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
 		dim resp$(32)*255
 
-		if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
-			dim dataFolder$*256
-			dataFolder$='S:\Core\Data\acsllc'
-		else
-			dataFolder$='[Q]\'&env$('cursys')&"mstr"
-		end if
-
 	end if
 fnend
 def fn_setup_once
@@ -96,6 +89,13 @@ def fn_setup_once
 	!
 	dim cursys$*2
 	cursys$=fncursys$(cursys$)
+	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+		dim dataFolder$*256
+		dataFolder$='S:\Core\Data\acsllc'
+	else
+		dataFolder$='[Q]\'&env$('cursys')&"mstr"
+	end if
+
 	!   h_plus=fn_open_plus_initial
 	fndecimal_assumed
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
@@ -189,6 +189,7 @@ def fn_setup_on_cursys_change
 	dashboard_height=fn_dashboard_height
 	fn_grid_setup !
 	if ~exists(dataFolder$&'\Company.h[cno]') then
+	
 		chain "S:\Core\Programs\Select Company.br"
 	end if
 fnend
