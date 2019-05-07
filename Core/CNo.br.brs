@@ -8,7 +8,7 @@ def fn_setup
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 	end if
 fnend
-include: ertn
+
 def library fncno(&cno; &cnam$)
 	if ~setup then let fn_setup
 	! cursys$=env$('cursys')
@@ -282,3 +282,4 @@ def library fncursys$(; cursys_set$*2,resetCache)
 	end if
 	fncursys$=cursys_cache$
 fnend 
+include: ertn
