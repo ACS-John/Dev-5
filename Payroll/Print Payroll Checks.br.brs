@@ -502,7 +502,7 @@ def fn_open_acscl
 	cl_installed=1
 	open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
 	open #h_cl_payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-	open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+	! open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
 	open #h_cl_trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
 	open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
@@ -569,6 +569,8 @@ def fn_build_check_record
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 	tx3=val(tr$(3))
 	tr2=val(tr$(2))
+	if env$('client')='Crocket County' then tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/15/19 JB
+	! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
 	write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
 	ytdp=ytdp+val(tr$(3)) conv ignore
