@@ -178,7 +178,7 @@ def fn_setup_client ! ** set up for new clients
 		fn_setup_client_add("Choctaw" ,918,34214)
 		! fn_setup_client_add("Colyell" ,980,33948)
 		! fn_setup_client_add("Community Dev" ,982,34156)
-		fn_setup_client_add("Crocket County" ,1141,15110)
+		fn_setup_client_add("Crockett County" ,1141,15110)
 		fn_setup_client_add("Divernon" ,1350,33698)
 		fn_setup_client_add("Dorothy Salch" ,3812,34494)
 		fn_setup_client_add("Durden" ,1406,16410)
@@ -351,7 +351,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			! fn_add_ch_sys('GL')  -  removed from support as of 4/30/19
-		else if env$('client')='Crocket County' then 
+		else if env$('client')='Crockett County' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('CL')
 			fn_add_ch_sys('PR')
@@ -782,7 +782,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Cerro Gordo",'IL')
 		fn_pcs_add("Cerro Gordo T",'IL')
 		!   fn_pcs_add("Community Dev",'TN')
-		fn_pcs_add("Crocket County",'TX')
+		fn_pcs_add("Crockett County",'TX')
 		fn_pcs_add("Divernon",'IL')
 		fn_pcs_add("Durden",'LA')
 		fn_pcs_add("Edinburg",'IL')
@@ -957,7 +957,7 @@ def fn_client_is_converting
 		cic_return=1
 	else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2020','mm/dd/ccyy') then ! just testing
 		cic_return=1
-	else if env$('client')='Crocket County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
+	else if env$('client')='Crockett County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
 		cic_return=1
 	else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
 		cic_return=1

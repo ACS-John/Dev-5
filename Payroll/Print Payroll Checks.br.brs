@@ -569,7 +569,7 @@ def fn_build_check_record
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 	tx3=val(tr$(3))
 	tr2=val(tr$(2))
-	if env$('client')='Crocket County' then tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/15/19 JB
+	if env$('client')='Crockett County' then tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/15/19 JB
 	! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
 	write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
@@ -752,7 +752,7 @@ def fn_print_check
 		fn_check_bethany
 	else if env$('client')="Billings" then 
 		fn_check_billings
-	else if env$('client')="Crocket County" then 
+	else if env$('client')="Crockett County" then 
 		! if env$('acsDeveloper')<>"" then pause
 		fn_check_dynamic(26,7,7,9,12,58,0,6)
 		! length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english
@@ -1327,7 +1327,7 @@ def fn_print_stub
 		fn_stub_hitBoxes(mat ltext$,mat lPos)
 		pr #255: "}" ! <-- end the font size of 8
 		fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
-	else if env$('client')='Crocket County' then
+	else if env$('client')='Crockett County' then
 		stubCount+=1
 		if stubCount=1 then
 			fn_stub_standard(0)
