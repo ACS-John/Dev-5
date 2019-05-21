@@ -231,7 +231,7 @@ def library fnlistprint(winno,spec$*100;header$*200,footer$*200,title$*200,mat s
 	library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
 	fnlistprint=fnlistprint(winno,spec$, header$,footer$,title$,mat selected,nolines,nosort,nototals$,nosubtotal,_print)
 fnend
-def library fnMsExe$*100(l$)
+def library fnMsExe$*256(l$)
 	library 'S:\Core\fnSnap\fnMsExe.br': fnMsExe$
 	fnMsExe$=fnMsExe$(l$)
 fnend

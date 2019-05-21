@@ -1,4 +1,4 @@
-def library fnMsExe$*100(l$) 
+def library fnMsExe$*256(l$) 
 	! this version is modified by ACS to work in our environment.
 	! Returns the installed path of Microsoft programs such as
 	! WinWord i.e. fnMsExe$("winword.exe")
@@ -15,9 +15,9 @@ def library fnMsExe$*100(l$)
 	execute "sys -M "&pathToBrRegister$&"\BRRegister2.exe -B"&session$&" -N"&l$
 	exefil=1
 	open #exefil:=fngethandle: "name="&env$('at')&pathToBrRegister$&"\dbde"&session$&".txt",display,input 
-	dim exefil$*100
+	dim exefil$*2048
 	linput #exefil: exefil$
 	close #exefil,free: 
-	fnMsExe$=exefil$
+	fnMsExe$=exefil$(1:256)
 	exefil=0
 fnend 

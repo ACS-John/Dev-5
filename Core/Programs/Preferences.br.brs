@@ -258,12 +258,12 @@ DO_SCREEN_PRINTER: ! r:
 !   resp$(resp_client_report_cache:=dsp_rc+=1)=client_report_cache$
 		lc+=1
 		fnLbl(lc+=1,1,"Word Executable:",col1_width,1,0,0,0,'Or default word processor')
-		fnTxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for Word or your default Word Processor to display and pr your RTF reports.')
+		fnTxt(lc,col2_pos,42,256,0,'70',0,'Select an executable for Word or your default Word Processor to display and pr your RTF reports.')
 		resp$(resp_word:=dsp_rc+=1)=word_exe$
 		fnButton(lc,col2_pos+42+5,'Default',15) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 		fnOpt(lc,col2_pos+42+5+7+2,"Use Word as Default") : resp$(resp_use_word:=dsp_rc+=1)=use_word$
 		fnLbl(lc+=1,1,"Atlantis Executable:",col1_width,1)
-		fnTxt(lc,col2_pos,42,80,0,'70',0,'Select the executable for your Atlantis Word Processor.')
+		fnTxt(lc,col2_pos,42,256,0,'70',0,'Select the executable for your Atlantis Word Processor.')
 		resp$(resp_atlantis:=dsp_rc+=1)=atlantis_exe$ ! os_filename$(atlantis_exe$)
 		fnButton(lc,col2_pos+42+5,'Default',13) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 		fnOpt(lc,col2_pos+42+5+7+2,"Use Atlantis as Default") : resp$(resp_use_atlantis:=dsp_rc+=1)=use_atlantis$
