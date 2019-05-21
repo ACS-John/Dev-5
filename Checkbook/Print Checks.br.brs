@@ -817,7 +817,7 @@ def fn_portion_stub(stubOnCheck)
 		fn_portion_stub_divernon
 	else 
 		fn_portion_stub_generic
-		if (env$('client')='Edison' or env$('client')='Crocket County') and stubOnCheck=1 then
+		if (env$('client')='Edison' or env$('client')='Crockett County') and stubOnCheck=1 then
 			pr #255: ''
 			pr #255: ''
 			pr #255: ''
@@ -887,7 +887,7 @@ def fn_portion_check
 		fn_portion_check_cerrogordo(amt)
 	else if env$('client')="Cerro Gordo T" then 
 		fn_portion_check_generic(amt, 28,55)
-	else if env$('client')="Crocket County" then 
+	else if env$('client')="Crockett County" then 
 		fn_portion_check_Crocket(amt)
 	else if env$('client')="Divernon" then 
 		fn_portion_check_divernon(amt)
