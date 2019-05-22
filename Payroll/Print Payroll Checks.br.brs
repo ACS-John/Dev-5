@@ -569,7 +569,7 @@ def fn_build_check_record
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 	tx3=val(tr$(3))
 	tr2=val(tr$(2))
-	if env$('client')='Crockett County' then tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/15/19 JB
+	tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/22/19 JB - Do this for everyone.
 	! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
 	write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
