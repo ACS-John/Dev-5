@@ -12,15 +12,15 @@ return
 ! This region was last updated on 2019.01.10
 def fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32) ! open printer routine
 	fnSel=fnSel_lib(Width,Printer_Prompt$,Printfile_Handle, Print_Cancel_Option$,Supported_Printer_Type_List$,Print_Destination_Custom$,Pk$)
-	IF Fkey=93 Or Fkey=99 then 
-		Prnname$=Comp$=Ff$=Orient$=""
-		Lpp=Wid=Prn_Num=0
-		mat Prn_Data$=("") : MAT Orient$=("") : MAT Size$=("") : MAT Tsize$=("")
+	if fkey=93 or fkey=99 then 
+		prnname$=comp$=ff$=orient$=""
+		lpp=wid=prn_num=0
+		mat prn_data$=("") : mat orient$=("") : mat size$=("") : mat tsize$=("")
 	else 
 		execute fnGet_prnVar$(Mat Prn_Data$,Mat Prn_Fieldsc$)
 		! fnGet_prnLegacyVar(prnname$, mat orient$, mat size$, mat tsize$, comp$, ff$, lpp, wid, orient$, prn_num,boldon$,boldoff$,undon$,undoff$)
 	end iF  ! FKey=93 or FKey=99   /   else 
 fnend
-FORM_FNSEL: FORM Pos 1,C ,Skip 0
+FORM_FNSEL: Form pos 1,C ,Skip 0
 ! Updateable Region . Printer Selection . End 
 ! ________________________________________________________________________
