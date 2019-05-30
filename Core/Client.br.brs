@@ -204,6 +204,7 @@ def fn_setup_client ! ** set up for new clients
 		fn_setup_client_add("Halfway" ,2130,33768)
 		fn_setup_client_add("Hope Welty" ,851,34152)
 		fn_setup_client_add("Payroll Done Right" ,3393,0)
+		fn_setup_client_add("Schachtner Portnoy" ,3828,200008100)
 		! fn_setup_client_add("Illiopolis",2340,0)
 		fn_setup_client_add("Kathys Bookkeeping",3979,33672)
 		! fn_setup_client_add("Kimberling",2530,19212)
@@ -411,6 +412,9 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('GL')
 			fn_add_ch_sys('PR')
+		else if env$('client')='Schachtner Portnoy' then 
+			fn_user_limit(76)
+			fn_add_ch_sys('CM')
 		else if env$('client')='GreenCo' then 
 			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
 				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)

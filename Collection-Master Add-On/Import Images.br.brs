@@ -1,11 +1,16 @@
+
+! todo:   FinSum  (a trust and a cost) - see:    C:\ACS\Dev-5\Collection-Master Add-On\Import Finsum.br.brs
+
 ! first run Get images for claims from DB3 and put them into DB1
+
 
 fn_setup
 on error goto Error_Hanler
 fnTop(program$)
 enableMoveFiles=0
 dim pathFrom$*256
-pathFrom$='D:\wherever'
+pathFrom$='\\192.168.111.44\Data1\CLS_LOCAL\CMSS' ! test Db3
+! pathFrom$='\\192.168.111.44\Data\CLSINC2' ! real db3
 dim imagePathFrom$*128
 imagePathFrom$='F:\IMASTER2\IMAGES\CM\'
 dim imagePathTo$*128
@@ -13,42 +18,54 @@ imagePathTo$  ='S:\CM\'
 
 dim filenoList$(0)*8
 mat filenoList$(0)
-fnasci(env$('at')&'D:\Schachtner\claims.txt',mat filenoList$)
+fnasci(env$('at')&'claimsToGetFromDB3.txt',mat filenoList$)
 ! fnAddOneC(mat filenoList$,'firstOne')
 ! fnAddOneC(mat filenoList$,'secondUn')
 mat hitCount(udim(mat filenoList$))
 mat hitCount=(0)
 
-oc_first=oc_last=1 !  open only
+oc_first=1 : oc_last=2 !  both open and closed
 for oc=oc_first to oc_last
 	if oc=1 then ! open
-		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//6,KFNAME=IMAGES.IDX//6,shr",INTERNAL,OUTIN,KEYED
-		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\data\IMAGES.INT,KFNAME='&pathFrom$&'\data\IMAGES.IDX,shr',INTERNAL,OUTIN,KEYED
+		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\data\IMAGES.INT,kfname='&pathFrom$&'\data\IMAGES.IDX,shr',internal,input,keyed
+		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//6,kfname=IMAGES.IDX//6,shr",internal,outin,keyed
 		! kps=1/9/13/76 kln=8/4/4/4
 	else if oc=2 then ! closed
-		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//1,KFNAME=IMAGES.IDX//1,shr",INTERNAL,OUTIN,KEYED 
-		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\history\IMAGES.INT,KFNAME='&pathFrom$&'\history\IMAGES.IDX,shr',INTERNAL,OUTIN,KEYED
+		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\history\IMAGES.INT,kfname='&pathFrom$&'\history\IMAGES.IDX,shr',internal,input,keyed
+		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//1,kfname=IMAGES.IDX//1,shr",internal,outin,keyed 
 	end if
+	readCount=0
 	for filenoItem=1 to udim(mat filenoList$)
 		fileno$=filenoList$(filenoItem)
 		restore #hImagesFrom,search=>fileno$:
-		read  #hImagesFrom,using images_formall$: mat images_data$,mat images_data
-		if rtrm$(images_data$(images_fileno))=rtrm$(fileno$) then
-			images_data$(images_npath)=srep$(images_data$(images_npath),imagePathFrom$,imagePathTo$)
-			write #hImagesTo,using images_formall$: mat images_data$,mat images_data
-			hitCount(filenoItem)+=1
-			if enableMoveFiles then
-				pr 'move files is not yet written   [npath]\[nfile]*.*   '
-				pause
+		do
+			read  #hImagesFrom,using images_formall$: mat images_data$,mat images_data eof EoImagesFrom
+			readCount+=1
+			! pr 'just read "'&images_data$(images_fileno)&'" when looking for "'&fileno$&'"' : pause
+			if rtrm$(images_data$(images_fileno))=rtrm$(fileno$) then
+			! filenoItem=srch(mat filenoList$,trim$(images_data$(images_fileno)))
+			! if filenoItem>0 then
+				images_data$(images_npath)=srep$(images_data$(images_npath),imagePathFrom$,imagePathTo$)
+				write #hImagesTo,using images_formall$: mat images_data$,mat images_data
+				hitCount(filenoItem)+=1
+				if enableMoveFiles then
+					pr 'move files is not yet written   [npath]\[nfile]*.*   '
+					pause
+				end if
+					! no need to move the actual image files at this time.
 			end if
-				! no need to move the actual image files at this time.
-			
-			
-		end if
+		loop while rtrm$(images_data$(images_fileno))=rtrm$(fileno$)
 	nex filenoItem
+	EoImagesFrom: !
 	close #hImagesFrom:
 	close #hImagesTo:
+	pr 'Stage: '&oc$(oc)
+	pr '  read count: '&str$(readCount) : readCount=0
+	pr '  Claims searhed for: '&str$(udim(mat filenoList$))
+	pr '  total hits: '&str$(sum(mat hitCount)) : mat hitCount=(0)
 nex oc
+pr 'Type GO and hit Enter to continue.'
+pause
 goto Xit
 Xit: fnXit
 def fn_setup
@@ -79,7 +96,7 @@ def fn_setup
 
 		library 'Library\SQL.wb': fnsql_setup$
 
-		dim images_data$(0)*60,images_data(0)
+		dim images_data$(0)*128,images_data(0)
 		dim images_fieldsc$(0)*20,images_fieldsn$(0)*20
 		dim images_formall$*2048
 		execute "*SubProc "&fnsql_setup$('images',mat images_data$,mat images_data,mat images_fieldsc$,mat images_fieldsn$,images_formall$)
