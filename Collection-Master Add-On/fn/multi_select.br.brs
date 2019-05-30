@@ -1912,204 +1912,204 @@ STUKL_EOF: !
 WVWL_XIT: ! 
 		let fn_word_vs_wordlist_left=wvwl_return
 	fnend  ! fn_word_vs_wordlist_left
-	def fn_is_number(hn_string$*128)
-		let hn_return=0
-		let val(hn_string$) conv HN_FINIS
-		let hn_return=1
-HN_FINIS: ! 
-		let fn_is_number=hn_return
-	fnend  ! fn_is_number
-	def fn_array_move_braketed_to_top(mat amb_list$)
-		dim amb_bracketed$(1)*128
-		mat amb_bracketed$(0)
-		let amb_item=0
-		do until amb_item>=udim(mat amb_list$)
-			let amb_item+=1
-			if amb_list$(amb_item)(1:1)='[' then 
-				let fnadd_one$(mat amb_bracketed$,amb_list$(amb_item))
-				let fnremove_arrayitem$(mat amb_list$,amb_item)
-				let amb_item-=1
-			end if  ! amb_list$(amb_item)(1:1)='[' then
-		loop 
-		let amb_list_count=udim(mat amb_list$)
-		let amb_bracketed_count=udim(mat amb_bracketed$)
-		if amb_bracketed_count>0 then 
-			mat amb_list$(amb_list_count+amb_bracketed_count)
-			mat amb_list$(amb_bracketed_count+1:amb_list_count+amb_bracketed_count)=amb_list$(1:amb_list_count)
-			mat amb_list$(1:amb_bracketed_count)=amb_bracketed$
-		end if  ! amb_bracketed_count>0
-	fnend  ! fn_array_move_braketed_to_top(mat ambtt_array$)
-	def library fncombobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable)
-		if ~setup then let fn_setup
-		let fncombobox$=fn_combobox$(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$, cb_col_heading$,cb_default_selection$,cb_timeout,cb_select_disable)
-	fnend  ! fncombobox
-	def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable) ! cb_
-! this function will return fkey 93 (big x), fkey 101 (timeout), or fkey 0 (selection made or canceled)
-		dim cb_field$(2)*80,cb_return$*128,cb_filter$(1)*128,cb_filter$*128,last_cb_filter$*128
-		dim cb_heading$(1)*80,cb_width(1),cb_form$(1)*20
-		dim cb_filter$*128
-! 
-		let cb_return$=''
-		let cb_rinput_process_count=0
-		let cb_opt_count=udim(mat cb_opt$) 
-		if cb_opt_count=0 then             print bell; : goto CB_XIT
-		let cb_width$=str$(cb_width)
-		let fn_array_sort$(mat cb_opt$)
-		let fn_array_move_braketed_to_top(mat cb_opt$)
-		let cb_opt_filter=0
-		if udim(cb_opt$)=0 then             print bell; : goto CB_XIT
-		mat cb_filter$(udim(cb_opt$))=(""): let cb_filter$=last_cb_filter$=""
-		for cb_opt_item=1 to cb_opt_count
-			let cb_filter$=rtrm$(cb_opt$(cb_opt_item))
-			if uprc$(cb_filter$)<>uprc$(last_cb_filter$) then 
-				let cb_filter$(cb_opt_filter+=1)=cb_filter$ 
-				let last_cb_filter$=uprc$(cb_filter$)
-			end if
-		next cb_opt_item
-		let cb_opt_count=cb_opt_filter 
-		if cb_opt_filter=0 then             print bell; : goto CB_XIT
-		mat cb_opt$(cb_opt_count)=cb_filter$(1:cb_opt_count)
-		let cb_default_selection$=rtrm$(cb_default_selection$)
-! 
-		if cb_opt_count=0 then print bell;'ComboBox - no options to select, default returned.' : let cb_return$=cb_default_selection$ : goto CB_XIT
-! 
-		if cb_default_selection$='' and srch(mat cb_opt$,'')<=0 and ~cb_select_disable then let cb_default_selection$=cb_opt$(1)
-		let cb_default_which=srch(mat cb_opt$,cb_default_selection$)
-		if cb_default_which<=0 and ~cb_select_disable then 
-			let cb_filter$=''
-			let cb_default_which=1
-			print bell;'ComboBox - invalid default selection passed ('&cb_default_selection$&') could not be found in passed options (mat cb_opt$).  cb_opt$(1) ('&cb_opt$(1)&') will be the default instead.'
-			if developer then pause 
-		end if 
-		let cb_return$=cb_filter$=cb_default_selection$ ! cb_opt$(cb_default_which)
-		let cb_current_selection=cb_default_which
-! 
-		if cb_parent=0 and (cb_parent_rows=0 or cb_parent_cols=0) then let cb_parent_rows=session_rows : let cb_parent_cols=session_cols
-		if cb_parent<>0 and (cb_parent_rows=0 or cb_parent_cols=0) then print 'error - parent used but parents size was not passed.' : pause 
-! calc above or below
-		let tmp_lines_above=cb_srow-1
-		let tmp_lines_below=cb_parent_rows-cb_srow
-		if tmp_lines_above>tmp_lines_below then let cb_parent_above=1 else let cb_parent_above=0
-! calc above or below
-		if cb_parent_above then ! combo box apears on and ABOVE cb_srow
-			let cb_srow_origional=cb_srow
-			let cb_rows=min(cb_opt_count+2,cb_srow_origional)
-			let cb_rows=max(cb_rows,4)
-			let cb_srow=max(cb_srow_origional-cb_rows+1,2)
-		else ! combo box apears on and BELOW cb_srow
-			let cb_rows=min(cb_opt_count+2,cb_parent_rows-cb_srow)
-		end if  ! cb_parent_above
-! 
-		open #cb_canvas_handle:=fngethandle: 'Parent='&str$(cb_parent)&',SRow='&str$(cb_srow)&',SCol='&str$(cb_scol)&',Cols='&str$(cb_width)&',Rows='&str$(cb_rows)&',Border=S,N=[N]',display,output 
-! 
-		let cb_canvas_handle$=str$(cb_canvas_handle)
-! 
-		let cb_grid_height$=str$(cb_grid_height=cb_rows-1)
-		let cb_heading$(1)=cb_col_heading$
-		let cb_width(1)=cb_width
-		let cb_form$(1)='Cl 128,[M]LX^NoSort'
-! 
-		if cb_parent_above then 
-			open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
-!     open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
-			let cb_grid_field$='1,1,List '&cb_grid_height$&'/'&cb_width$
-			let cb_field$(1)=str$(cb_rows)&',1,'&str$(cb_width)&'/Search 128,[D]STAEX,1,1'
-		else ! combo box apears on and BELOW cb_srow
-			open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
-!     open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
-			let cb_grid_field$='2,1,List '&cb_grid_height$&'/'&cb_width$
-			let cb_field$(1)='1,1,'&str$(cb_width)&'/Search 128,[D]STAEX,2,1'
-		end if  ! cb_parent_above   /   else 
-		print #cb_x_handle,fields '1,1,P 1/2,[Toolbar],B99',help "3a;[Esc] Exit;": 'Icons\Combo_X.PNG'
-		let cb_field$(2)=cb_grid_field$&',RowSub,SelOne'
-! 
-		print #cb_canvas_handle, fields cb_grid_field$&",Headers,S[N]": (mat cb_heading$, mat cb_width, mat cb_form$)
-		print #cb_canvas_handle, fields cb_grid_field$&",=R,-1": mat cb_opt$
-		print #cb_canvas_handle, fields cb_grid_field$&",Sort": 1
-! 
-CB_ASK: ! 
-!   rinput #cb_canvas_handle,wait=0,fields cb_field$(2): cb_current_selection timeout IGNORE
-		let curfld(2,cb_current_selection)
-		rinput #cb_canvas_handle, fields cb_field$(2)&',nowait': cb_current_selection
-		let curfld(1)
-		if cb_timeout>0 then 
-			rinput #cb_canvas_handle, fields mat cb_field$,attr '[A]',wait=cb_timeout: cb_filter$,cb_current_selection timeout ignore
-		else 
-			rinput #cb_canvas_handle, fields mat cb_field$: cb_filter$,cb_current_selection
-		end if  ! cb_timeout>0   /   else 
-! 
-		let cb_rinput_process_count+=1
-		let cb_curfld=curfld
-		if fkey=93 then 
-			let cb_return$=cb_default_selection$
-		else if fkey=99 then 
-			let cb_return$=cb_default_selection$
-		else if fkey=101 then ! Timeout
-			let cb_return$=cb_default_selection$
-		else if fkey=103 then ! left
-			goto CB_ASK
-		else if fkey=90 or fkey=91 or fkey=102 or fkey=104 or fkey=105 or fkey=106 then 
-			if fkey=90 then ! Text, PgUp
-				let cb_current_selection=cb_nextrow=max(1,cb_current_selection-cb_grid_height)
-			else if fkey=91 then ! Text, PgDn
-				let cb_current_selection=cb_nextrow=min(cb_opt_count,cb_current_selection+cb_grid_height)
-			else if fkey=102 then ! Text, Up
-				let cb_current_selection=max(1,cb_current_selection-1)
-				let cb_filter$=cb_opt$(cb_current_selection)
-!       let cb_nextrow=cb_current_selection-1
-			else if fkey=104 then ! Text, Down
-				let cb_current_selection=min(cb_opt_count,cb_current_selection+1)
-				let cb_filter$=cb_opt$(cb_current_selection)
-!       let cb_nextrow=cb_current_selection+1
-			else if fkey=105 then 
-				let cb_nextrow=currow-1
-			else if fkey=106 then 
-				let cb_nextrow=currow+1
-			end if 
-			let cb_nextrow=max(1,cb_nextrow)
-			let cb_nextrow=min(cb_nextrow,cb_opt_count)
-			let curfld(2,cb_nextrow)
-			goto CB_ASK
-		else if fkey=112 then ! Home
-			let cb_filter$=cb_opt$(1)
-			let curfld(2,1)
-			goto CB_ASK
-		else if fkey=113 then ! End
-			let cb_filter$=cb_opt$(cb_opt_count)
-			let curfld(2,cb_opt_count)
-			goto CB_ASK
-		else if fkey=116 or fkey=126 or fkey=127 or fkey=135 or fkey=136 then ! Right or Ctrl+Up or Ctrl+Down or Ctrl+Shift+Up or Ctrl+Shift+Down
-			goto CB_ASK
-		else if fkey=201 then ! they double clicked on an option
-			if nxtfld=1 then 
-				goto CB_ASK
-			else 
-				rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
-				let cb_return$=cb_filter$=cb_opt$(cb_current_selection)
-				let fkey(0)
-			end if  ! nxtfld=1   /   else 
-		else if fkey=200 or fkey=206 then 
-			let curfld(cb_curfld,fkey)
-			let cb_filter$=""
-			rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
+def fn_is_number(hn_string$*128)
+	let hn_return=0
+	let val(hn_string$) conv HN_FINIS
+	let hn_return=1
+	HN_FINIS: ! 
+	let fn_is_number=hn_return
+fnend  ! fn_is_number
+def fn_array_move_braketed_to_top(mat amb_list$)
+	dim amb_bracketed$(1)*128
+	mat amb_bracketed$(0)
+	let amb_item=0
+	do until amb_item>=udim(mat amb_list$)
+		let amb_item+=1
+		if amb_list$(amb_item)(1:1)='[' then 
+			let fnadd_one$(mat amb_bracketed$,amb_list$(amb_item))
+			let fnremove_arrayitem$(mat amb_list$,amb_item)
+			let amb_item-=1
+		end if  ! amb_list$(amb_item)(1:1)='[' then
+	loop 
+	let amb_list_count=udim(mat amb_list$)
+	let amb_bracketed_count=udim(mat amb_bracketed$)
+	if amb_bracketed_count>0 then 
+		mat amb_list$(amb_list_count+amb_bracketed_count)
+		mat amb_list$(amb_bracketed_count+1:amb_list_count+amb_bracketed_count)=amb_list$(1:amb_list_count)
+		mat amb_list$(1:amb_bracketed_count)=amb_bracketed$
+	end if  ! amb_bracketed_count>0
+fnend  ! fn_array_move_braketed_to_top(mat ambtt_array$)
+def library fncombobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable)
+	if ~setup then let fn_setup
+	let fncombobox$=fn_combobox$(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$, cb_col_heading$,cb_default_selection$,cb_timeout,cb_select_disable)
+fnend  ! fncombobox
+def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable) ! cb_
+	! this function will return fkey 93 (big x), fkey 101 (timeout), or fkey 0 (selection made or canceled)
+	dim cb_field$(2)*80,cb_return$*128,cb_filter$(1)*128,cb_filter$*128,last_cb_filter$*128
+	dim cb_heading$(1)*80,cb_width(1),cb_form$(1)*20
+	dim cb_filter$*128
+
+	let cb_return$=''
+	let cb_rinput_process_count=0
+	let cb_opt_count=udim(mat cb_opt$) 
+	if cb_opt_count=0 then             print bell; : goto CB_XIT
+	let cb_width$=str$(cb_width)
+	let fn_array_sort$(mat cb_opt$)
+	let fn_array_move_braketed_to_top(mat cb_opt$)
+	let cb_opt_filter=0
+	if udim(cb_opt$)=0 then             print bell; : goto CB_XIT
+	mat cb_filter$(udim(cb_opt$))=(""): let cb_filter$=last_cb_filter$=""
+	for cb_opt_item=1 to cb_opt_count
+		let cb_filter$=rtrm$(cb_opt$(cb_opt_item))
+		if uprc$(cb_filter$)<>uprc$(last_cb_filter$) then 
+			let cb_filter$(cb_opt_filter+=1)=cb_filter$ 
+			let last_cb_filter$=uprc$(cb_filter$)
+		end if
+	next cb_opt_item
+	let cb_opt_count=cb_opt_filter 
+	if cb_opt_filter=0 then             print bell; : goto CB_XIT
+	mat cb_opt$(cb_opt_count)=cb_filter$(1:cb_opt_count)
+	let cb_default_selection$=rtrm$(cb_default_selection$)
+	! 
+	if cb_opt_count=0 then print bell;'ComboBox - no options to select, default returned.' : let cb_return$=cb_default_selection$ : goto CB_XIT
+	! 
+	if cb_default_selection$='' and srch(mat cb_opt$,'')<=0 and ~cb_select_disable then let cb_default_selection$=cb_opt$(1)
+	let cb_default_which=srch(mat cb_opt$,cb_default_selection$)
+	if cb_default_which<=0 and ~cb_select_disable then 
+		let cb_filter$=''
+		let cb_default_which=1
+		print bell;'ComboBox - invalid default selection passed ('&cb_default_selection$&') could not be found in passed options (mat cb_opt$).  cb_opt$(1) ('&cb_opt$(1)&') will be the default instead.'
+		if developer then pause 
+	end if 
+	let cb_return$=cb_filter$=cb_default_selection$ ! cb_opt$(cb_default_which)
+	let cb_current_selection=cb_default_which
+	! 
+	if cb_parent=0 and (cb_parent_rows=0 or cb_parent_cols=0) then let cb_parent_rows=session_rows : let cb_parent_cols=session_cols
+	if cb_parent<>0 and (cb_parent_rows=0 or cb_parent_cols=0) then print 'error - parent used but parents size was not passed.' : pause 
+	! calc above or below
+	let tmp_lines_above=cb_srow-1
+	let tmp_lines_below=cb_parent_rows-cb_srow
+	if tmp_lines_above>tmp_lines_below then let cb_parent_above=1 else let cb_parent_above=0
+	! calc above or below
+	if cb_parent_above then ! combo box apears on and ABOVE cb_srow
+		let cb_srow_origional=cb_srow
+		let cb_rows=min(cb_opt_count+2,cb_srow_origional)
+		let cb_rows=max(cb_rows,4)
+		let cb_srow=max(cb_srow_origional-cb_rows+1,2)
+	else ! combo box apears on and BELOW cb_srow
+		let cb_rows=min(cb_opt_count+2,cb_parent_rows-cb_srow)
+	end if  ! cb_parent_above
+
+	open #cb_canvas_handle:=fngethandle: 'Parent='&str$(cb_parent)&',SRow='&str$(cb_srow)&',SCol='&str$(cb_scol)&',Cols='&str$(cb_width)&',Rows='&str$(cb_rows)&',Border=S,N=[N]',display,output 
+
+	let cb_canvas_handle$=str$(cb_canvas_handle)
+
+	let cb_grid_height$=str$(cb_grid_height=cb_rows-1)
+	let cb_heading$(1)=cb_col_heading$
+	let cb_width(1)=cb_width
+	let cb_form$(1)='Cl 128,[M]LX^NoSort'
+
+	if cb_parent_above then 
+		open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
+	!     open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
+		let cb_grid_field$='1,1,List '&cb_grid_height$&'/'&cb_width$
+		let cb_field$(1)=str$(cb_rows)&',1,'&str$(cb_width)&'/Search 128,[D]STAEX,1,1'
+	else ! combo box apears on and BELOW cb_srow
+		open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
+	!     open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
+		let cb_grid_field$='2,1,List '&cb_grid_height$&'/'&cb_width$
+		let cb_field$(1)='1,1,'&str$(cb_width)&'/Search 128,[D]STAEX,2,1'
+	end if  ! cb_parent_above   /   else 
+	print #cb_x_handle,fields '1,1,P 1/2,[Toolbar],B99',help "3a;[Esc] Exit;": 'Icons\Combo_X.PNG'
+	let cb_field$(2)=cb_grid_field$&',RowSub,SelOne'
+
+	print #cb_canvas_handle, fields cb_grid_field$&",Headers,S[N]": (mat cb_heading$, mat cb_width, mat cb_form$)
+	print #cb_canvas_handle, fields cb_grid_field$&",=R,-1": mat cb_opt$
+	print #cb_canvas_handle, fields cb_grid_field$&",Sort": 1
+
+	CB_ASK: ! 
+	!   rinput #cb_canvas_handle,wait=0,fields cb_field$(2): cb_current_selection timeout IGNORE
+	let curfld(2,cb_current_selection)
+	rinput #cb_canvas_handle, fields cb_field$(2)&',nowait': cb_current_selection
+	let curfld(1)
+	if cb_timeout>0 then 
+		rinput #cb_canvas_handle, fields mat cb_field$,attr '[A]',wait=cb_timeout: cb_filter$,cb_current_selection timeout ignore
+	else 
+		rinput #cb_canvas_handle, fields mat cb_field$: cb_filter$,cb_current_selection
+	end if  ! cb_timeout>0   /   else 
+
+	let cb_rinput_process_count+=1
+	let cb_curfld=curfld
+	if fkey=93 then 
+		let cb_return$=cb_default_selection$
+	else if fkey=99 then 
+		let cb_return$=cb_default_selection$
+	else if fkey=101 then ! Timeout
+		let cb_return$=cb_default_selection$
+	else if fkey=103 then ! left
+		goto CB_ASK
+	else if fkey=90 or fkey=91 or fkey=102 or fkey=104 or fkey=105 or fkey=106 then 
+		if fkey=90 then ! Text, PgUp
+			let cb_current_selection=cb_nextrow=max(1,cb_current_selection-cb_grid_height)
+		else if fkey=91 then ! Text, PgDn
+			let cb_current_selection=cb_nextrow=min(cb_opt_count,cb_current_selection+cb_grid_height)
+		else if fkey=102 then ! Text, Up
+			let cb_current_selection=max(1,cb_current_selection-1)
 			let cb_filter$=cb_opt$(cb_current_selection)
+	!       let cb_nextrow=cb_current_selection-1
+		else if fkey=104 then ! Text, Down
+			let cb_current_selection=min(cb_opt_count,cb_current_selection+1)
+			let cb_filter$=cb_opt$(cb_current_selection)
+	!       let cb_nextrow=cb_current_selection+1
+		else if fkey=105 then 
+			let cb_nextrow=currow-1
+		else if fkey=106 then 
+			let cb_nextrow=currow+1
+		end if 
+		let cb_nextrow=max(1,cb_nextrow)
+		let cb_nextrow=min(cb_nextrow,cb_opt_count)
+		let curfld(2,cb_nextrow)
+		goto CB_ASK
+	else if fkey=112 then ! Home
+		let cb_filter$=cb_opt$(1)
+		let curfld(2,1)
+		goto CB_ASK
+	else if fkey=113 then ! End
+		let cb_filter$=cb_opt$(cb_opt_count)
+		let curfld(2,cb_opt_count)
+		goto CB_ASK
+	else if fkey=116 or fkey=126 or fkey=127 or fkey=135 or fkey=136 then ! Right or Ctrl+Up or Ctrl+Down or Ctrl+Shift+Up or Ctrl+Shift+Down
+		goto CB_ASK
+	else if fkey=201 then ! they double clicked on an option
+		if nxtfld=1 then 
 			goto CB_ASK
-		else ! any other FKey, should return with the selection
-			if cb_select_disable then 
-				let cb_return$=cb_filter$
-			else 
-				let cb_return$=cb_opt$(cb_current_selection)
-			end if  ! cb_select_disable
-		end if  ! Fkey=...
-! ~
-! ~  only succesful result should fall through, all othere should goto CB_ASK
-		let scr_freeze
-		close #cb_canvas_handle: ioerr ignore
-		let cb_canvas_handle=0
-!   if fkey<>93 and fkey<>101 and fkey<>110 and fkey<>111 then let fkey(0) ! all FKey values should be returned.
-		goto CB_XIT
-! ~
-CB_XIT: ! 
-		let fn_combobox$=cb_return$
-	fnend  ! fn_combobox$
-include: cm\enum
+		else 
+			rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
+			let cb_return$=cb_filter$=cb_opt$(cb_current_selection)
+			let fkey(0)
+		end if  ! nxtfld=1   /   else 
+	else if fkey=200 or fkey=206 then 
+		let curfld(cb_curfld,fkey)
+		let cb_filter$=""
+		rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
+		let cb_filter$=cb_opt$(cb_current_selection)
+		goto CB_ASK
+	else ! any other FKey, should return with the selection
+		if cb_select_disable then 
+			let cb_return$=cb_filter$
+		else 
+			let cb_return$=cb_opt$(cb_current_selection)
+		end if  ! cb_select_disable
+	end if  ! Fkey=...
+	! ~
+	! ~  only succesful result should fall through, all othere should goto CB_ASK
+	let scr_freeze
+	close #cb_canvas_handle: ioerr ignore
+	let cb_canvas_handle=0
+	!   if fkey<>93 and fkey<>101 and fkey<>110 and fkey<>111 then let fkey(0) ! all FKey values should be returned.
+	goto CB_XIT
+	! ~
+	CB_XIT: ! 
+	let fn_combobox$=cb_return$
+fnend  ! fn_combobox$
+include: cm\enum\common
