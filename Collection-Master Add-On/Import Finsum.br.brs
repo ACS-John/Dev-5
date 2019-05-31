@@ -3,6 +3,22 @@ fn_setup
 on error goto Error_Hanler
 fnTop(program$)
 
+dim basePath_db1_test$*512
+dim basePath_db2_test$*512
+dim basePath_db3_test$*512
+dim basePath_db1_real$*512
+dim basePath_db2_real$*512
+dim basePath_db3_real$*512
+basePath_db1_test$='\\192.168.111.44\Data1\CLS_LOCAL\CMNJ'
+basePath_db2_test$='\\192.168.111.44\Data1\CLS_LOCAL\CMNY'
+basePath_db3_test$='\\192.168.111.44\Data1\CLS_LOCAL\CMSS'
+basePath_db1_real$='\\192.168.111.44\Data\ROOT	'
+basePath_db2_real$='\\192.168.111.44\Data\CLSINC'
+basePath_db3_real$='\\192.168.111.44\Data\CLSINC2'
+
+dim sourcePath$*512
+sourcePath$=basePath_db3_test$
+
 fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
 if fkey=93 or fkey=99 then goto Xit
 
@@ -16,14 +32,14 @@ mat hitCount=(0)
 
 	dim trustPath$(0)*40
 dim trustName$(0)*28
-if ~Setup_Trust then max_trust=fn_getTrusts(mat trustPath$,mat trustName$)
-
+sourceTrustCount=fn_getTrusts(mat trustPath$,mat trustName$, sourcePath$)
+pr mat trustPath$ : pause
 dim amt(0,0)
-mat amt(udim(mat filenoList$),max_trust)
+mat amt(udim(mat filenoList$),sourceTrustCount)
 mat amt=(0)
 
-for trustItem=1 TO max_trust
-	fncom(trustItem,max_trust,10)
+for trustItem=1 TO sourceTrustCount
+	fncom(trustItem,sourceTrustCount,10)
 	hFinSum=Fnget_File("Name=K:"&trustPath$(trustItem)&"\FINSUM,KFName=K:"&trustPath$(trustItem)&"\FNSUMTA.IDX,SHR","INPUT")
 	F_Trust: FORM Pos 1,2*C 8,Pos 263,6*Pd 6.2,8*Pd 6.2,Pos 455,Pd 4,Pos 477,B 2,Pos 517,C 8
 	if hFinSum>0 then
@@ -45,8 +61,18 @@ for trustItem=1 TO max_trust
 		close #hFinSum: ioerr ignore
 	end if
 next trustItem
-Xit: !
 
+! r: (onetime only) Header
+	pr #255: '</pre>'
+	pr #255: '<table align="Center">'
+	pr #255: '<tr>'
+	pr #255: '<td align="Center"><h2>'&env$('program_caption')&'</h2></td>'
+	pr #255: '</tr>'
+	pr #255: '<tr>'
+	pr #255: '<td  align="Center">As of '&fnDate_rpt10$(Date$)&'.</td>'
+	pr #255: '</tr>'
+	pr #255: '</table>'
+	! /r
 	pr #255: '<table cellpadding=10 border=1>'
 	pr #255: '  <tr><th>Category</th><th>Total</th></tr>'
 	fn_finisAddRow('Read Count',str$(readCount))
@@ -63,7 +89,7 @@ mat hitCount=(0)
 		! if listBalance(filenoItem)<=0 or listDiary$(filenoItem)<>'' then
 		pr #255: '<tr> ';
 		pr #255: '<td              >'&filenoList$    (filenoItem)&'</td>';
-		for trustItem=1 to max_trust
+		for trustItem=1 to sourceTrustCount
 			pr #255: '<td align="right">'&str$(amt(filenoItem,trustItem))&'</td>';
 		nex trustItem
 		pr #255: '</tr> '
@@ -72,7 +98,14 @@ mat hitCount=(0)
 	pr #255: '</table>'
 
 fnClose
+Xit: !
 fnXit
+def fn_2dTotalRow(mat d2,row; ___,x,returnN)
+	for x=1 to udim(mat d2,2)
+		returnN+=d2(row,x)
+	nex x
+	fn_2dTotalRow=returnN
+fnend
 PgOf: ! r:
 	pr #255: newpage
 	! gosub PrHeader
@@ -80,7 +113,7 @@ continue ! /r
 PrHeader: ! r:
 		pr #255: '<tr>'
 		pr #255: '  <th>FileNo             </th>'
-		for trustItem=1 to max_trust
+		for trustItem=1 to sourceTrustCount
 			pr #255: '  <th>'&trustName$(trustItem)&'</th>'
 		nex trustItem
 		pr #255: '</tr>'
@@ -91,12 +124,14 @@ def fn_finisAddRow(label$*256,value$*256)
 	pr #255: '    <td align="right">'&value$&'</td>'
 	pr #255: '  </tr>'
 fnend
-def fn_getTrusts(mat trustPath$,mat trustName$; ___,path$*40,tName$*28,Ntrust,returnN)
+def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName$*28,Ntrust,returnN)
 	mat trustPath$(0)
 	mat trustName$(0)
 	dim path$*80
 	if ~setup_categ then let fnsetup_categ
-	open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
+	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
+	open #hFinSum:=fnGetHandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
+	! open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
 	for Ntrust=1 TO lrec(hFinSum)
 		read #hFinSum,using "form pos 1,c 40,c 28",rec=Ntrust,release: Path$,tName$
 		if exists(path$) and pos(uprc$(path$),"\ACCOUNT")>0 then
@@ -110,20 +145,23 @@ def fn_getTrusts(mat trustPath$,mat trustName$; ___,path$*40,tName$*28,Ntrust,re
 	Xitfn_getTrusts: !
 	fn_getTrusts=returnN
 fnend
-def fnsetup_categ(; ___,returnN)
-	dim categ2$(99)*80,heading$(48)*80
-	dim autostatus2$(99),finlstat$(1)*20
+def fnsetup_categ(; basePath$*512,___,returnN)
+	dim categ2$(99)*80
+	dim heading$(48)*80
+	dim autostatus2$(99)
+	dim finlstat$(1)*20
 	mat categ$(udim(mat categ2$))
 	Categ_Worked=Setup_Categ=1
+	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
 	! categ2$(1)-categ2$(99) Are No Longer Hard Coded
 	! Use CATEG.LST//9 To Modify the List
 	! Codes 33-80 Are Defined by 2-S-2 and "Heading//8"
 	hCateg=fnget_display("CATEG.LST//9")
 	linput #hCateg: mat Categ2$
 	close #hCateg:
-	hHeading=fnget_file("HEADING/COMMON/5")
+	hHeading=fnget_file(basePath$&'\COMMON\HEADING')
 	if hHeading<=0 then
-		fnmessagebox("Warning COULD NOT OPEN FINANCIAL"&Chr$(10)&os_filename$("HEADING/COMMON/5")&Chr$(10)&"Error:"&Str$(Err)&" Line:"&Str$(Line)&" - In "&program$,16,"Error!")
+		fnmessagebox("Warning COULD NOT OPEN FINANCIAL"&lf$&basePath$&'\COMMON\HEADING'&lf$&"Error:"&Str$(Err)&" Line:"&Str$(Line)&" - In "&program$,16,"Error!")
 		Categ_Worked=0
 	else
 		read #hHeading,using 'FORM 30*C 30',rec=1,release: mat heading$(19:48) norec ignore
@@ -137,7 +175,7 @@ def fnsetup_categ(; ___,returnN)
 		categ2$(z)=rpad$(categ2$(z),30)
 	next z
 	returnN=categ_worked
-	Autostatus_Worked=fnAsci("finlstat.ini//8",mat Finlstat$)
+	Autostatus_Worked=fnAsci(basePath$&'common\finlstat.ini',mat Finlstat$)
 	if autostatus_worked>0 then
 		_finlstat=udim(finlstat$)
 		if _finlstat<99 then
