@@ -1,0 +1,7 @@
+S:\Core\Data\acsllc\Systems.h420, sys_, 1
+S:\Core\Data\acsllc\Systems-Idx.h420 ,  id
+recl=90
+===================================================
+id$		,Id			,C   2
+name$		,Name			,C  50
+Number		,Number		,N   3

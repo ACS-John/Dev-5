@@ -144,6 +144,25 @@ ERTN: fnerror(program$,err,line,act$,"NO")
 	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
 ! /region
+def library fnClientNameShort$*18(; clientId,___,return$*18,which)
+	if ~setup then let fn_setup
+	if ~setup_client then let fn_setup_client
+	if clientId<=0 then
+		return$=env$('client')
+	else
+		which=srch(mat client_cno,clientId)
+		if which<=0 then
+			pr 'could not locate client ID: '&str$(clientId)&'.'
+			pr '  Will return blank instead'
+			if env$('acsDeveloper')<>'' then
+				pause
+			end if
+		else
+			return$=client_name$(which)
+		end if
+	end if
+	fnClientNameShort$=return$
+fnend
 def fn_setup_client ! ** set up for new clients
 	if ~setup_client then 
 		setup_client=1
@@ -249,7 +268,7 @@ def fn_setup_client ! ** set up for new clients
 		! fn_setup_client_add("Demo",20002,34450)
 		! fn_setup_client_add("Demo",20003,34450)
 		! fn_setup_client_add("Demo",20004,34450)
-	end if  ! ~setup_client
+	end if
 	! 
 fnend
 def fn_getClientLicense(mat client_has$)

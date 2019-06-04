@@ -30,17 +30,21 @@ fnasci(env$('at')&'claimsToGetFromDB3.txt',mat filenoList$)
 mat hitCount(udim(mat filenoList$))
 mat hitCount=(0)
 
-	dim trustPath$(0)*40
+	dim trustPath$(0)*512
 dim trustName$(0)*28
 sourceTrustCount=fn_getTrusts(mat trustPath$,mat trustName$, sourcePath$)
-pr mat trustPath$ : pause
+for trustPathItem=1 to udim(mat trustPath$)
+	trustPath$(trustPathItem)=sourcePath$&trustPath$(trustPathItem)(pos(trustPath$(trustPathItem),'\',-1):inf)
+nex trustPathItem
+
 dim amt(0,0)
 mat amt(udim(mat filenoList$),sourceTrustCount)
 mat amt=(0)
 
 for trustItem=1 TO sourceTrustCount
 	fncom(trustItem,sourceTrustCount,10)
-	hFinSum=Fnget_File("Name=K:"&trustPath$(trustItem)&"\FINSUM,KFName=K:"&trustPath$(trustItem)&"\FNSUMTA.IDX,SHR","INPUT")
+
+	hFinSum=Fnget_File('Name='&trustPath$(trustItem)&'\FINSUM,KFName='&trustPath$(trustItem)&'\FNSUMTA.IDX,shr','INPUT')
 	F_Trust: FORM Pos 1,2*C 8,Pos 263,6*Pd 6.2,8*Pd 6.2,Pos 455,Pd 4,Pos 477,B 2,Pos 517,C 8
 	if hFinSum>0 then
 		pr file$(hFinSum)
@@ -49,10 +53,10 @@ for trustItem=1 TO sourceTrustCount
 			fncom(recCount+=1,lrec(hFinSum),12)
 			fileno$=finsum_data$(finsum_fileno)
 			readCount+=1
-			filenoItem=srch(mat filenoList$,trim$(fileno$))>0
-			if srch(mat filenoList$,trim$(fileno$))>0 then
-				hitCount(filenoItem)+=1
+			filenoItem=srch(mat filenoList$,trim$(fileno$))
+			if filenoItem>0 then
 				amt(filenoItem,trustItem)+=finsum_dataN(finsum_ACC_D1_BAL)
+				hitCount(filenoItem)+=1
 				! translate which trust acocunt it goes to, open it, etc
 				! write to new one
 			end if
