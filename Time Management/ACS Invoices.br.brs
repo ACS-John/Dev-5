@@ -31,7 +31,7 @@ SCREEN1_ASK: !
 ! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 ! execute "Index S:\Core\Data\acsllc\support.h[cno]  S:\Core\Data\acsllc\support-idx.h[cno] 1/7,6/2,replace,DupKeys"
 	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed 
-F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
+	F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 	fn_thsht_combine_entries("S:\Core\Data\acsllc\TIMESHEET.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 	restore #h_clmstr,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
 	pr newpage
