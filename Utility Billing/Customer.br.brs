@@ -1102,8 +1102,6 @@ def fn_ScrAddSrvMeterLocSave
 	end if
 fnend
 def fn_serviceIsMetered(serviceNumber)=max(0,srch(mat serviceCodeMetered$,srv$(serviceNumber))) ! /r
-include: ertn
-include: fn_open
 TGB_SET: ! r:
 	tgb=0
 	for j=1 to 10 : tgb=tgb+gb(j) : next j
@@ -1574,3 +1572,5 @@ def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable r
 	if ratecode=0 then rateInfo$(3)=" 0=Not applicable"
 	close #h_rate1: ioerr ignore
 fnend
+include: ertn
+include: fn_open

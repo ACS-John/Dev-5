@@ -1,6 +1,6 @@
 ! r: System Registry - ACS System defaults, Clients can only read this, only developers can write to it, delivered to Clients in updates
 def fn_sreg_setup
-	library 'S:\Core\Library': fngethandle,fnerror
+	library 'S:\Core\Library': fngethandle
 	sreg_setup_return=0
 	if env$('ACSDeveloper')='' then
 		open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
@@ -125,15 +125,6 @@ def fn_creg_close
 	close #creg_h: ioerr ignore
 	creg_setup=0
 fnend
-IGNORE: continue
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-	ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
-! /r
 ! r: Multi-Client Registry - tied to nothing
 def library fnmcreg_read(mcr_field_name$*128,&mcr_field_value$; mcr_default_if_not_read$*128)
 	fn_mcreg_setup
@@ -333,3 +324,4 @@ nex sysItem
 fnhamsterfio('CO System Registry')
 ! /r
 
+include: ertn

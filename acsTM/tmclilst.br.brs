@@ -58,7 +58,7 @@
 00480   return 
 00490 L490: close #1: ioerr L500
 00500 L500: fncloseprn
-00510   if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
+00510   if uprc$(rtrm$(prg$))="S:\acsTM\client" then chain prg$
 00520   goto XIT
 00530 L530: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L550
 00540   goto L590

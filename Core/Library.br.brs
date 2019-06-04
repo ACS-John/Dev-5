@@ -150,7 +150,7 @@ def library fnBuildKey$*255(layout$*30,mat bkf$,mat bkf; keynum)
 	library 'S:\Core\FileIO\fileio.br': fnBuildKey$
 	fnBuildKey$=fnBuildKey$(layout$,mat bkf$,mat bkf, keynum)
 fnend
-def library fnCloseFile(filenumber, filelay$*255; path$*255,out)
+def library fnCloseFile(filenumber,filelay$*255; path$*255,out)
 	library 'S:\Core\FileIO\fileio.br': fnCloseFile
 	fnCloseFile=fnCloseFile(filenumber,filelay$, path$,out)
 fnend
@@ -237,6 +237,10 @@ def library fnMsExe$*256(l$)
 fnend
 ! /r
 ! r: Client
+	def library fnClientNameShort$(clientId)
+		library 'S:\Core\Client.br': fnClientNameShort$
+		fnClientNameShort$=fnClientNameShort$(clientId)
+	fnend
 	def library fnSetClient(clientSelected$*128)
 		library 'S:\Core\Client.br': fnSetClient
 		fnSetClient=fnSetClient(clientSelected$)
@@ -1470,6 +1474,12 @@ fnend
 	def library fnburden_srch(&x$;fixgrid)
 		library 'S:\Payroll\Job Cost\fnBurden_srch.br': fnburden_srch
 		fnburden_srch(x$,fixgrid)
+	fnend
+! /r
+! r: Time Management
+	def library fnRead30Categories(mat dimTo30$)
+		library 'S:\Time Management\Category.br': fnRead30Categories
+		fnRead30Categories(mat dimTo30$)
 	fnend
 ! /r
 

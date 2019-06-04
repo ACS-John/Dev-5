@@ -1,0 +1,6 @@
+S:\Core\Data\acsllc\oCategory.h[cno], ocat_, 0
+S:\Core\Data\acsllc\oCategory_Id_Idx.h[cno] ,  id
+S:\Core\Data\acsllc\oCategory_Name_Idx.h[cno] ,  name
+===================================================
+id		,Category Id			,N   3
+name$		,Category Name		,C  30

@@ -8,15 +8,16 @@ end
 Ertn: !
 	library 'S:\Core\Library': fnerror
 	fnerror(program$,err,line,act$,'xit')
-	if lwrc$(act$)='pause' then 
-		if env$('ACSDeveloper')<>'' then 
-			execute 'List '&str$(line) 
+	if lwrc$(act$)='pause' then
+		if env$('ACSDeveloper')<>'' then
+			execute 'List '&str$(line)
 		else
-			pr 'PROGRAM PAUSE: Type GO and press [Enter] to continue.' 
-			pr '' 
+			pr 'PROGRAM PAUSE: Type GO and press [Enter] to continue.'
+			pr ''
 		en if
 		pause
 	en if
-	goto Ertn_executeAct 
+	goto Ertn_executeAct
 Ertn_executeAct: !
-execute act$ : goto Ertn
+	execute act$
+goto Ertn
