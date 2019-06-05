@@ -30,15 +30,28 @@ fnasci(env$('at')&'claimsToGetFromDB3.txt',mat filenoList$)
 mat hitCount(udim(mat filenoList$))
 mat hitCount=(0)
 
-	dim trustPath$(0)*512
+dim trustPath$(0)*512
 dim trustName$(0)*28
 sourceTrustCount=fn_getTrusts(mat trustPath$,mat trustName$, sourcePath$)
 for trustPathItem=1 to udim(mat trustPath$)
 	trustPath$(trustPathItem)=sourcePath$&trustPath$(trustPathItem)(pos(trustPath$(trustPathItem),'\',-1):inf)
 nex trustPathItem
 
-dim amt(0,0)
-mat amt(udim(mat filenoList$),sourceTrustCount)
+dim fieldsToReportN(0)
+mat fieldsToReportN(0)
+dim fieldsToReport$(0)
+mat fieldsToReport$(0)
+fnAddOneN(mat fieldsToReportN,finsum_EOD_AMT_RCV   ) : fnAddOneC(mat fieldsToReport$,'EOD_AMT_RCV   ')
+fnAddOneN(mat fieldsToReportN,finsum_EOD_COSTS_DISB) : fnAddOneC(mat fieldsToReport$,'EOD_COSTS_DISB')
+fnAddOneN(mat fieldsToReportN,finsum_EOD_COSTS_RET ) : fnAddOneC(mat fieldsToReport$,'EOD_COSTS_RET ')
+fnAddOneN(mat fieldsToReportN,finsum_EOD_COLLHOLD  ) : fnAddOneC(mat fieldsToReport$,'EOD_COLLHOLD  ')
+fnAddOneN(mat fieldsToReportN,finsum_EOD_REMITHOLD ) : fnAddOneC(mat fieldsToReport$,'EOD_REMITHOLD ')
+fnAddOneN(mat fieldsToReportN,finsum_EOD_CHECK_AMT ) : fnAddOneC(mat fieldsToReport$,'EOD_CHECK_AMT ')
+ftrCount=udim(mat fieldsToReportN)
+
+
+dim amt(0,0,0)
+mat amt(udim(mat filenoList$),sourceTrustCount,ftrCount)
 mat amt=(0)
 
 for trustItem=1 TO sourceTrustCount
@@ -55,7 +68,9 @@ for trustItem=1 TO sourceTrustCount
 			readCount+=1
 			filenoItem=srch(mat filenoList$,trim$(fileno$))
 			if filenoItem>0 then
-				amt(filenoItem,trustItem)+=finsum_dataN(finsum_ACC_D1_BAL)
+				for ftrItem=1 to ftrCount
+					amt(filenoItem,trustItem,ftrItem)+=finsum_dataN(fieldsToReportN(ftrItem))
+				nex ftrItem
 				hitCount(filenoItem)+=1
 				! translate which trust acocunt it goes to, open it, etc
 				! write to new one
@@ -82,33 +97,44 @@ next trustItem
 	fn_finisAddRow('Read Count',str$(readCount))
 	fn_finisAddRow('Claims searhed for',str$(udim(mat filenoList$)))
 	fn_finisAddRow('Match Count',str$(sum(mat hitCount)))
+	for trustItem=1 to sourceTrustCount
+		for ftrItem=1 to ftrCount						! amt(Claim,Trust,Field)
+			tmpTotal=fn_3dTotalRow(mat amt,trustItem,ftrItem)
+			if tmpTotal<>0 then
+				fn_finisAddRow('Total '&fieldsToReport$(ftrItem)&' in '&trustName$(trustItem),str$(tmpTotal))
+			end if
+		nex ftrItem
+	nex trustItem
 	pr #255: '</table>'
 readCount=0
 mat hitCount=(0)
-
-	pr #255: '<table cellpadding=10 border=1>'
-	gosub PrHeader
-	For filenoItem=1 to udim(mat filenoList$)
-		! fncom(filenoItem,udim(mat filenoList$))
-		! if listBalance(filenoItem)<=0 or listDiary$(filenoItem)<>'' then
-		pr #255: '<tr> ';
-		pr #255: '<td              >'&filenoList$    (filenoItem)&'</td>';
-		for trustItem=1 to sourceTrustCount
-			pr #255: '<td align="right">'&str$(amt(filenoItem,trustItem))&'</td>';
-		nex trustItem
-		pr #255: '</tr> '
-		! end if
-	nex filenoItem
-	pr #255: '</table>'
-
+! r: report individual amounts
+	for ftrItem=1 to ftrCount
+		pr #255: '<h2>'&fieldsToReport$(ftrItem)&'</h2>'
+		pr #255: '<table cellpadding=10 border=1>'
+		gosub PrHeader
+		For filenoItem=1 to udim(mat filenoList$)
+			! fncom(filenoItem,udim(mat filenoList$))
+			! if listBalance(filenoItem)<=0 or listDiary$(filenoItem)<>'' then
+			pr #255: '<tr> ';
+			pr #255: '<td              >'&filenoList$    (filenoItem)&'</td>';
+			for trustItem=1 to sourceTrustCount
+				pr #255: '<td align="right">'&str$(amt(filenoItem,trustItem,ftrItem))&'</td>';
+			nex trustItem
+			pr #255: '</tr> '
+			! end if
+		nex filenoItem
+		pr #255: '</table>'
+	nex ftrItem
+! /r
 fnClose
 Xit: !
 fnXit
-def fn_2dTotalRow(mat d2,row; ___,x,returnN)
+def fn_3dTotalRow(mat d2,row,d3; ___,x,returnN)
 	for x=1 to udim(mat d2,2)
-		returnN+=d2(row,x)
+		returnN+=d2(row,x,d3)
 	nex x
-	fn_2dTotalRow=returnN
+	fn_3dTotalRow=returnN
 fnend
 PgOf: ! r:
 	pr #255: newpage
@@ -128,26 +154,23 @@ def fn_finisAddRow(label$*256,value$*256)
 	pr #255: '    <td align="right">'&value$&'</td>'
 	pr #255: '  </tr>'
 fnend
-def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName$*28,Ntrust,returnN)
+def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName$*28,trustItem)
 	mat trustPath$(0)
 	mat trustName$(0)
-	dim path$*80
 	if ~setup_categ then let fnsetup_categ
 	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
 	open #hFinSum:=fnGetHandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
 	! open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
-	for Ntrust=1 TO lrec(hFinSum)
-		read #hFinSum,using "form pos 1,c 40,c 28",rec=Ntrust,release: Path$,tName$
+	for trustItem=1 TO lrec(hFinSum)
+		read #hFinSum,using "form pos 1,c 40,c 28",rec=trustItem,release: path$,tName$
 		if exists(path$) and pos(uprc$(path$),"\ACCOUNT")>0 then
 			fnAddOneC(mat trustPath$,path$(1:pos(path$,"\ACCOUNT")-1))
 			fnAddOneC(mat trustName$,tName$)
 		end if
-	next Ntrust
+	next trustItem
 	close #hFinSum:
-	returnN=udim(mat trustPath$)
-	setup_trust=1
 	Xitfn_getTrusts: !
-	fn_getTrusts=returnN
+	fn_getTrusts=udim(mat trustPath$)
 fnend
 def fnsetup_categ(; basePath$*512,___,returnN)
 	dim categ2$(99)*80
