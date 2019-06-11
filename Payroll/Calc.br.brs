@@ -16,7 +16,7 @@
 ! twy - total wages yearToDate
 ! gdp - gross pay for department
 	fn_setup
-	fntop(program$,cap$="Payroll Calculation")
+	fntop(program$,"Payroll Calculation")
 	gosub ASKDATES
 	if ckey=5 then goto XIT
 	dat$=lpad$(str$(d1),6)
@@ -135,7 +135,7 @@ L1010: ! r: read employee, call calc deduction etc  basically beginning of main 
 BAD_PAY_CODE: ! r:
 	mat ml$(1)
 	ml$(1)="Incorrect Pay Code "&str$(em(5))&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 goto ReadRpWork ! /r
 ! ______________________________________________________________________
 PAYCODE_1: t6=12 : g_pay_periods_per_year=12 : goto PAST_PAYCODE
@@ -186,7 +186,7 @@ PAST_PAYCODE: ! r: continues here
 	if tgp<>0 then goto L1610
 	mat ml$(1)
 	ml$(1)="Employee Number "&trim$(x$)&" skipped Total Gross Pay = 0, Must be Re-entered"
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	goto ReadRpWork
 	L1610: !
 	pog=gpd/tgp
@@ -396,7 +396,7 @@ EMPLOYEE_NOT_FOUND: ! r:
 	n$=" "
 	mat ml$(1)
 	ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	goto ReadRpWork
 ! /r
 EO_RPWORK: ! r:
@@ -590,7 +590,7 @@ def fn_setup
 	debug=0 ! if env$('ACSDeveloper')<>'' then debug=1 else debug=0
 	! ______________________________________________________________________
 	dim sck(4),motab(12),stwh(10,2),sucw(10),sucr(10)
-	dim inp(29),dat$*20,cap$*128,caf(20)
+	dim inp(29),dat$*20,caf(20)
 	dim fullname$(20)*20,abrevname$(20)*8,resp$(10)*40
 	dim tdt(4),tcd(3),tdet(17),tdc(10),tcp(32)
 	dim ytdTotal(32)
