@@ -122,7 +122,9 @@ def fn_setup_once
 	fn_grid_setup
 	fn_checkFileVersionIfNecessary
 	! fnreg_read('Report_Cache',report_cache$)
-	fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
+	if ~(env$('cursys')='TM' and env$('cno')='420') then
+		fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
+	end if
 	setenv('ForceScreenIOUpdate','')
 fnend
 def fn_checkFileVersionIfNecessary
