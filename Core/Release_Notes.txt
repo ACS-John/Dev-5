@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                    
+1:42 PM 6/18/2019	CO	Added Preference to Reset Word Executable persistently - for systems that where the destination changes regularly
 11:01 05/19/2019	CO	5.74144  
 11:00 AM 5/22/2019	CL	When Payroll check post to Checkbook they will no longer put the employee number into the payee number field. 
 11:46 05/19/2019	CO	5.74143   

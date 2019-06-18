@@ -18,6 +18,7 @@
 	fnureg_read('Word Path',word_exe$,atlantis_exe$)
 	fnureg_read('Default to Use Word',use_word$,'True')
 	fnureg_read('Default to Use Atlantis',use_atlantis$,'False')
+	fnureg_read('Reset Word Executable persistently',resetWordExePersistently$,'False')
 	fnureg_read('Text_Editor',text_editor$,fn_text_editor_default$)
 	background_picture$=os_filename$(background_picture$)
 	fnureg_read('Decimal',decimal_assumed$,'False')
@@ -262,6 +263,8 @@ DO_SCREEN_PRINTER: ! r:
 		resp$(resp_word:=dsp_rc+=1)=word_exe$
 		fnButton(lc,col2_pos+42+5,'Default',15) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 		fnOpt(lc,col2_pos+42+5+7+2,"Use Word as Default") : resp$(resp_use_word:=dsp_rc+=1)=use_word$
+		fnChk(lc+=1,col2_pos+42,"Reset Word Executable persistently",1)
+		resp$(resp_useWordDefault:=dsp_rc+=1)=resetWordExePersistently$
 		fnLbl(lc+=1,1,"Atlantis Executable:",col1_width,1)
 		fnTxt(lc,col2_pos,42,256,0,'70',0,'Select the executable for your Atlantis Word Processor.')
 		resp$(resp_atlantis:=dsp_rc+=1)=atlantis_exe$ ! os_filename$(atlantis_exe$)
@@ -286,13 +289,14 @@ DO_SCREEN_PRINTER: ! r:
 		else 
 			! report_cache$=resp$(resp_report_cache)
 			! wait_wp_close$=resp$(resp_wait_wp_close)
-			pa_max_pages$=resp$(resp_pa_max_pages)
-			atlantis_exe$=resp$(resp_atlantis)
-			word_exe$=resp$(resp_word)
-			use_word$=resp$(resp_use_word)
-			use_atlantis$=resp$(resp_use_atlantis)
+			pa_max_pages$		=resp$(resp_pa_max_pages)
+			atlantis_exe$		=resp$(resp_atlantis)
+			word_exe$				=resp$(resp_word)
+			resetWordExePersistently$=resp$(resp_useWordDefault)
+			use_word$				=resp$(resp_use_word)
+			use_atlantis$		=resp$(resp_use_atlantis)
 			receipt_printer$=resp$(resp_receipt_printer)
-			formsFormat$=resp$(resp_formsFormat)
+			formsFormat$			=resp$(resp_formsFormat)
 		end if 
 ! 
 ! 
@@ -501,6 +505,7 @@ def fn_save
 	fnureg_write('Word Path',word_exe$)
 	fnureg_write('Default to Use Word',use_word$)
 	fnureg_write('Default to Use Atlantis',use_atlantis$)
+	fnureg_write('Reset Word Executable persistently',resetWordExePersistently$)
 	fnureg_write('Text_Editor',text_editor$)
 	fnureg_write('Decimal',decimal_assumed$)
 	fnureg_write('Disable_MultiSession',disable_multisession$)
@@ -695,6 +700,9 @@ def library fnget_wordprocessor_exe(&wordprocessor_exe$; force$)
 	fnget_wordprocessor_exe=fn_get_wordprocessor_exe(wordprocessor_exe$, force$)
 fnend
 def fn_get_wordprocessor_exe(&wordprocessor_exe$; force$)
+	if resetWordExePersistently$='' then
+		fnureg_read('Reset Word Executable persistently',resetWordExePersistently$,'False')
+	end if
 	! fnureg_read('Default to Use Word',use_word$,'True')  ! it's the default
 	if force$='' then
 		fnureg_read('Default to Use Atlantis',use_atlantis$,'False')
@@ -703,7 +711,7 @@ def fn_get_wordprocessor_exe(&wordprocessor_exe$; force$)
 		fn_get_atlantis(wordprocessor_exe$)
 	else 
 		fnureg_read('Word Path',wordprocessor_exe$)
-		if trim$(wordprocessor_exe$)='' then 
+		if trim$(wordprocessor_exe$)='' or resetWordExePersistently$='True' then 
 			if fn_get_office_word(wordprocessor_exe$) then
 				fnureg_write('Word Path',wordprocessor_exe$)
 			else
