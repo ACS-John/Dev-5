@@ -253,6 +253,7 @@ def fn_setup_client ! ** set up for new clients
 !   fn_setup_client_add("Sangamon",3815,34066)
 		fn_setup_client_add("Scottville Rural",3840,33390)
 		fn_setup_client_add("Starr County Gas",4127,33390)
+		fn_setup_client_add("Stern and Stern",4132,0)
 		fn_setup_client_add("Thayer",4245,32800)
 		fn_setup_client_add("Thomasboro",4260,34068)
 		fn_setup_client_add("Unity",4380,34478)
@@ -500,13 +501,6 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Sheila' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
 		else if env$('client')='Omaha' then 
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then let fn_user_limit(3) else let fn_user_limit(1) ! 2 user bonus for 60 days
 			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
@@ -535,6 +529,16 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Starr County Gas' then 
 			fn_user_limit(1)
 			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then let fn_add_ch_sys('UB') : fn_set_ub_limit(9999)
+		else if env$('client')='Sheila' then 
+			fn_user_limit(1)
+			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+			fn_add_ch_sys('CL')
+			fn_add_ch_sys('GL')
+			fn_add_ch_sys('PR')
+		else if env$('client')='Stern and Stern' then 
+			fn_user_limit(99) ! unknown
+			fn_add_ch_sys('CM')
 		else if env$('client')='Thayer' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
