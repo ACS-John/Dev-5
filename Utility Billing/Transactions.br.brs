@@ -21,11 +21,11 @@ def fn_setup
 		library 'S:\Core\Library': fnCustomerData$
 		on error goto ERTN
 		
-		tcode_charge      =1
-		tcode_penalty     =2
-		tcode_collection  =3
-		tcode_credit      =4
-		tcode_debit       =5
+		tcode_charge      	=1
+		tcode_penalty     	=2
+		tcode_collection 	=3
+		tcode_credit      	=4
+		tcode_debit       	=5
 		
 		dim transType$(5)*11
 		transType$(tcode_charge    )="Charge"
@@ -163,7 +163,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 			fnTxt(stgFlexLine,10,10,0,0,'',1)
 			resp$(1)=z$
 		end if
-		fn_flextran (stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
+		fn_flextran(stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
 		fnCmdKey('Back',opt_back:=2,0,0,'Return to filter selection')
 		if enableDelete then
 			fnCmdKey("Delete",optDelete:=8,0,0,"Displays a list of transactions on the screen")
@@ -352,7 +352,7 @@ def fn_printTrans ! very local function - lots of inherritance
 	fnopenprn
 	if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
 	if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
-	if trim$(z$)="[All]" then hd1$="    {\ul Account        Date   }" else hd1$="    {\ul    Date   }"
+	if trim$(z$)="[All]" then hd1$="{\ul  Account }     {\ul     Date   }" else hd1$="    {\ul    Date   }"
 	sz1=0
 	x=0
 	for j=1 to 10
@@ -421,16 +421,17 @@ def fn_printTrans ! very local function - lots of inherritance
 		if tcode=tcode_credit     then ti2=2 ! CREDIT MEMO
 		if tcode=tcode_debit      then ti2=3 ! DEBIT MEMO
 		! if tcode=tcode_penalty then pause
+		! if trim$(transAcct$)='100145.00' then pr transAcct$;tg(4) : pause
 		if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
 		r(1,ti2+1)+=tamount
 		x=0
 		for j=1 to 10
 			if trim$(serviceName$(j))<>"" then 
-				if j=3 and (trim$(serviceName$(j))<>"Electric" or trim$(serviceName$(j))<>"Lawn Meter") and srv$(j)="EL" then 
-					goto L1370 ! electic being used for reduction meter
+				if j=3 and srv$(3)="EL" and trim$(serviceName$(3))<>"Electric" and trim$(serviceName$(3))<>"Lawn Meter" then ! electic being used for reduction meter
+					goto L1370
 				end if
-				if j=4 and trim$(serviceName$(j))<>"Gas" and srv$(j)="GA" then 
-					goto L1370 ! gas being used for reduction meter
+				if j=4 and srv$(4)="GA" and trim$(serviceName$(4))<>"Gas" then ! gas being used for reduction meter
+					goto L1370
 				end if
 				alloc(x+=1)=tg(j)
 				if ti2=3 then 
@@ -449,9 +450,9 @@ def fn_printTrans ! very local function - lots of inherritance
 		if tcode=tcode_credit     then cx$="CM"
 		if tcode=tcode_debit      then cx$="DM"
 		service=0
-		if water=1 then service+=1: usage(service)=wu ! water
-		if electric=1 then service+=1: usage(service)=eu ! Electric
-		if gas=1 then service+=1: usage(service)=gu ! Gas
+		if water=1      	then service+=1 : usage(service)=wu ! water
+		if electric=1   	then service+=1 : usage(service)=eu ! Electric
+		if gas=1        	then service+=1 : usage(service)=gu ! Gas
 		dim printlineform$*1024
 		if cx$="CHG" then
 			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*c 8,n 10.2,3*pic(--------.--),x 1"

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                        
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                     
+5:04 PM 6/27/2019	UB	Fixed: Transactions > Print was misreporting some allocations after 3rd service in some cases
 13:46 06/19/2019	CO	5.74146  
 1:42 PM 6/18/2019	CO	Added Preference to Reset Word Executable persistently - for systems that where the destination changes regularly 
 11:01 05/19/2019	CO	5.74144   

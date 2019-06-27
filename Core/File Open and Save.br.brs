@@ -78,7 +78,11 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	pr #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
 	pr #h_tmp: '@echo.'
 	pr #h_tmp: '@echo.'
+	if fsa_automatedSaveFileName$<>'' then
 	pr #h_tmp: '@echo SAVE PROCESSING...'
+	else
+	pr #h_tmp: '@echo PROCESSING AUTOMATED SAVE...'
+	end if
 	pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 	close #h_tmp: 
 	if clientServer and ~disableCopyToLocal then
