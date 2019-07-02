@@ -20,6 +20,7 @@ for fileItem=1 to fileNameCount
 	open #h_in:=fngethandle: 'Name='&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
+	! gnl_buffer$='' ! fn_getNextLine_reset
 	! open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	if fileItem=1 then
 		open #h_out:=fngethandle: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
@@ -40,9 +41,10 @@ for fileItem=1 to fileNameCount
 	FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*512
 
-	fn_get_next_line(line$) : line_count+=1 ! consume headings
+	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
+	! if fileItem=2 then pr 'header:',line_count,line$ : pause
 	do
-		fn_get_next_line(line$) : line_count+=1
+		fn_get_next_line(h_in,line$) : line_count+=1
 		the_date_prior=the_date
 		isEmptyLine=fn_lineIsEmpty(line$)
 		if ~isEmptyLine then
@@ -51,6 +53,7 @@ for fileItem=1 to fileNameCount
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
 			if the_date<the_date_prior and the_date_prior>20151218 then pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause
 			if the_date=>filter_date(1) and the_date<=filter_date(2) then
+				! if fileItem=2 then pr 'body:',line_count,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
 					!       pr the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
 					client_id=val(item$(4))
@@ -72,6 +75,7 @@ for fileItem=1 to fileNameCount
 		end if  ! line$<>''
 	loop until isEmptyLine
 	close #h_in:
+	fn_getNextLine_reset
 nex fileItem
 fncloseprn
 close #h_out:
@@ -156,7 +160,7 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_writeOutAcs
 
-def fn_get_next_line(&line$)
+def fn_get_next_line(h_in,&line$)
 	dim gnl_block$*512
 	dim gnl_buffer$*32767
 	do until pos(gnl_buffer$,crlf$)>0 or gnl_eof
@@ -175,7 +179,11 @@ def fn_get_next_line(&line$)
 	gnl_eof=1
 	continue  ! gnl_h_in_read_ioerr
 	GNL_XIT: !
-fnend  ! fn_get_next_line
+fnend
+def fn_getNextLine_reset
+	gnl_buffer$=''
+	gnl_eof=0
+fnend
 def fn_get_the_date(gtd_source$*256)
 	gtd_return=0
 	! if pos(gtd_source$,'Thu, Jan 10, 19')>0 then 
