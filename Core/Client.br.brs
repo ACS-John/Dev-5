@@ -253,7 +253,7 @@ def fn_setup_client ! ** set up for new clients
 !   fn_setup_client_add("Sangamon",3815,34066)
 		fn_setup_client_add("Scottville Rural",3840,33390)
 		fn_setup_client_add("Starr County Gas",4127,33390)
-		fn_setup_client_add("Stern and Stern",4132,0)
+		fn_setup_client_add("Stern and Stern",4132,200014280)
 		fn_setup_client_add("Thayer",4245,32800)
 		fn_setup_client_add("Thomasboro",4260,34068)
 		fn_setup_client_add("Unity",4380,34478)
