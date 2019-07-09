@@ -1038,14 +1038,16 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 	
 	havemainbudget=fn_haveMainBudget(h_budmstr,x1$)
 	validServiceItem=0
-	for j=1 to possibleServiceCount ! to udim(mat alloc)
+	for j=1 to udiM(allocorder) ! to udim(mat alloc)
 		! r: new allocation logic
-		if fn_serviceValidForCollAlloc(j) then
-			validServiceItem+=1
+		! if fn_serviceValidForCollAlloc(j) then
+			validServiceItem=allocorder(j) ! +=1 ! if allocOrder(validServiceItem)=6 then pause 
 			alloc(allocOrder(validServiceItem))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(validServiceItem))))
 			bd_tgbj+=alloc(allocOrder(validServiceItem))
 			if tgb(allocOrder(validServiceItem))<0 then tn+=tgb(allocOrder(validServiceItem))
-		end if
+		! end if
+		! print j,validserviceitem, alloc(allocOrder(validServiceItem)), sum(alloc)
+		! pause
 		! /r5
 		! r: old allocation logic
 		!   if ~(havemainbudget=1 and penalty$(baOrder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
