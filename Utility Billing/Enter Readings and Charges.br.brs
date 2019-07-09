@@ -1273,8 +1273,8 @@ MENU1READWORKEOF: ! /r
 	else if ck=9 then
 		if fn_meter_change_out=3 then goto ENTER_READING3
 	else if ck=10 then
-		if days(d1,"mmddyy")<days(date$)-15 then 
-			let ok_click=msgbox('The billing date entered is over two weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
+		if days(d1,"mmddyy")<days(date$)-25 then 
+			let ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
 			end if 
 		fnchain("S:\acsUB\ubCalk") ! goto CALCULATE
