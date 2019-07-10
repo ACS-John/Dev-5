@@ -564,6 +564,7 @@ def fn_print_listings
 	else 
 	 srt=2
 	end if
+	! print xtil : pause
 	if xti1=1 then 
 		fnopenprn(0,0,0,0,"Receipt Listing") : ti1_start=1 : ti1_end=1
 	else if xti1=2 then 
@@ -614,6 +615,7 @@ def fn_print_listings
 			totcheck+=transAmount
 			fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			if env$('client')="Ash Grove" and (wcode<1 or wcode>10) then wcode=1
+			! pr mat water : pause
 			if env$('client')="Ash Grove" and transType=3 then water(wcode)=water(wcode)+alloc(1) ! TOTAL WATER BY WATER CODE
 			for j=1 to validSrvCount
 				totalByService(j)+=alloc(j)
@@ -637,6 +639,7 @@ def fn_print_listings
 			end if
 		loop ! goto PS_LOOP_TOP ! /r
 	PS_TOTALS: ! r:
+	! print "got to totals",xti1 : pause
 	if xti1=2 then 
 		! r: DEPOSIT_LIST_TOTAL
 		pr #255,using F_PR_TOTALS: "__________","Total Checks",totcheck
@@ -644,6 +647,7 @@ def fn_print_listings
 		pr #255,using F_PR_TOTALS: "__________","Total Deposit",totcheck+totcash
 		pr #255,using "form pos 16,c 10": "=========="
 		F_PR_TOTALS: form pos 16,c 10,skip 1,pos 1,c 15,n 10.2
+		if env$('client')="Ash Grove" then mat water=(0)
 		! /r
 	else ! ub_collDisableDepositList$='True'
 		pr #255: ""
