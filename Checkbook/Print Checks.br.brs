@@ -938,6 +938,7 @@ def fn_portion_check_generic(dolamt; length,posDate)
 	if env$('client')<>'Campbell' then pr #255: ''
 	pr #255: "" ! line 16
 	if env$('client')="Cerro Gordo T"  then pr #255: ""
+	if env$('client')="Thomasboro" then pr #255: "" : pr #255: "" ! bump address down two spaces
 	for j=1 to 4
 		pr #255,using "Form Pos 8,C 30": b$(j) ! lines 17-20
 	next j
@@ -946,7 +947,7 @@ def fn_portion_check_generic(dolamt; length,posDate)
 		if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 		! if env$('client')="Washington Parrish" then skipline=skipline-1
 		if env$('client')="ACS" or env$('client')="Hope Welty" then skipline=skipline+2
-		if env$('client')="Philo" or env$('client')="Thomasboro" then skipline=skipline+2
+		if env$('client')="Philo" then skipline=skipline+2 ! or env$('client')="Thomasboro"  ! moved address down
 		! if env$('client')="PiattCO" then skipline=skipline+4
 		for j=1 to skipline
 			pr #255: ""
