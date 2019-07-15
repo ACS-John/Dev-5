@@ -143,10 +143,11 @@ def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	width=contain=0
 	COMBOA_COMPLETE: !
 fnend
-def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
+def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
 	if ~setup then let fn_setup
+	if keyFormat$='' then let keyFormat$='C'
 	dim key$*30,desc$*120,form$*200,becky$*199
 	dim ml$(10)*256
 	! df$ (data file) must be internal br format
@@ -162,7 +163,7 @@ def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	lnk=min(lnk,30) : lnd=min(lnd,60)
 	width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
 	if$=trim$(if$)
-	form$="Form Pos "&str$(psk)&",C "&str$(lnk) : nodesc=1
+	form$="Form Pos "&str$(psk)&","&keyFormat$&" "&str$(lnk) : nodesc=1
 	if psd<>0 and lnd<>0 then
 		form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 	end if
@@ -189,7 +190,15 @@ def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	end if
 	do	! READ_DF: !
 		if nodesc=0 then
-			read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
+			! pr form$ : pause
+			if keyFormat$(1:1)='B' or keyFormat$(1:1)='N' or keyFormat$(1:2)='PD' then
+				read #df,using form$: keyN,desc$ eof EODF ioerr ERR_READ
+				key$=str$(keyN)
+				! key$=cnvrt$(keyFormat$&' '&str$(lnk),keyN)
+			else
+				read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
+			end if
+			! pr key$,desc$
 			fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&" "&desc$)
 		else
 			desc$=''
