@@ -844,9 +844,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fncomboa
 		fncomboa=fncomboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 	fnend
-	def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
+	def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
 		library 'S:\Core\ACS_Component.br': fncombof
-		fncombof=fncombof(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,urep,ttt$,contain,tabcon)
+		fncombof=fncombof(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,unused_userOrReplace,ttt$,contain,tabcon,keyFormat$)
 	fnend
 	def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
 		library 'S:\Core\ACS_Component.br': fnButton

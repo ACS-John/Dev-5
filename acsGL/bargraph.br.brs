@@ -1,202 +1,202 @@
-00010 ! Replace S:\acsGL\bargraph
-00020 ! pr bar graph of earnings by month for current year of prior year.
-00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fnUseDeptNo, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnqgl,fnagl$,fnOpt,fnFra,fnpa_finis
-00050   on error goto ERTN
-00060 ! ______________________________________________________________________
-00070   dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
-00080   dim resp$(10)*80,profit(12),txt$*80
-00090   dim month(13), month$(13)*25,month$*25
-00100 ! ______________________________________________________________________
-00110   right=1 : center=2
-00120   fntop(program$,cap$="Print Bar Graph of Earnings")
-00140   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  !:
-        read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
-00150 ! ______________________________________________________________________
-00160   open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
-00170 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
-00180   if month<1 or month>13 then goto L170
-00190   month(month)=month !:
-        month$(month)=month$
-00200   goto L170
-00210 L210: close #1: 
-00220 ! ______________________________________________________________________
-00230   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
-00240   open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
-00250   open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
-00260 SCR1: ! 
-00270   t5=0
-00280   fnTos(sn$='CloseYear3') !:
-        lc=0 : mylen=20 : mypos=mylen+2 : width=50
-00290   fnLbl(lc+=1,1,"Year to Print:",18,1)
-00300   fnTxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
-        resp$(1)=""
-00310   fnFra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) !:
-        fnOpt(1,2,"Pull from Current",0,1) !:
-        fnOpt(2,2,"Pull from Prior Year",0,1)
-00320   fnLbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
-00330   fnLbl(lc+=1,1,"or Equity Account:",width,0)
-00340   fnqgl(lc,mypos) !:
-        resp$(2)=""
-00350   fnCmdSet(2)
-00360   fnAcs(sn$,0,mat resp$,ckey)
-00370   if ckey=5 then goto XIT
-00380   year=val(resp$(1))
-00390   if resp$(2)="True" then pullfrom$="Current"
-00400   if resp$(3)="True" then pullfrom$="Prior"
-00410   glnumber$=fnagl$(resp$(4))
-00420   read #1,using L430,key=glnumber$: dno$,ano$,sno$ nokey SCR1
-00430 L430: form pos 1,c 3,c 6,c 3
-00440   acno$=glnumber$(1:3)&"         "
-00450 ! ______________________________________________________________________
-00460   read #1,using L480,key>=glnumber$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR1
-00470 L470: read #1,using L480: acno$,bb,cb,mat bc,mat bp, mat bud eof PRINT_CHART
-00480 L480: form pos 1,c 12,pos 81,41*pd 6.2
-00490   if fnUseDeptNo=0 or dn1=1 then goto L510
-00500   if glnumber$(1:3)><acno$(1:3) then goto PRINT_CHART ! may want to quit
-00510 L510: ! If ACNO$><GLNUMBER$ Then Goto 830
-00520   for j=1 to 12
-00530 ! check no further down in current year past last month closed  KJ need to do
-00540     if pullfrom$="Current" then goto L550 else goto L590
-00550 L550: if j>lmu then goto L610 ! don't go past last month updated
-00560     if j=1 then profit(j)+=bc(j): goto L610 ! first month
-00570     profit(j)+=bc(j)-bc(j-1) ! 2nd thru 12 th months
-00580     goto L610
-00590 L590: if j=1 then profit(j)+=bp(j): goto L610 ! first month prior year
-00600     profit(j)+=bp(j)-bp(j-1) ! 2nd thru 12 th months
-00610 L610: next j
-00620   goto L470
-00630 PRINT_CHART: ! 
-00640   gosub VBOPENPRINT
-00650 ! determine maximum height and depth
-00660   for j=1 to 12
-00670     if profit(j)>0 then maximumdepth=max(profit(j),maximumdepth) ! largest loss any one month either this year or last year
-00680     if profit(j)<0 then maximumheight=min(profit(j),maximumheight) ! largest profit by month for either year  (profit is negative figure
-00690   next j
-00700 ! determine top line and bottom line
-00710   if maximumheight<-1000000 then top=1000000 : x=10000: goto DETERMINE_BOTTOM_LINE
-00720   if maximumheight>-50000 and maximumheight<-10000 then top=50000: x=500: goto DETERMINE_BOTTOM_LINE
-00730   if maximumheight<-10000 then top=100000: x=1000: goto DETERMINE_BOTTOM_LINE
-00740   if maximumheight<-1000 then top=10000: x=100: goto DETERMINE_BOTTOM_LINE
-00750   if maximumheight<-100 then top=1000 : x=10: goto DETERMINE_BOTTOM_LINE
-00760 DETERMINE_BOTTOM_LINE: ! 
-00770   if maximumdepth<1000 then bottom=-1000 : goto L800
-00780   if maximumdepth<10000 then bottom=-10000 : goto L800
-00790   if maximumdepth<100000 then bottom=-100000 : goto L800
-00800 L800: spacing=10 : lyne=10
-00810   cnam=(len(trim$(env$('cnam')))/2)+50
-00820   pr #20: 'Call Print.MyFontsize(14)'
-00830   pr #20: 'Call Print.AddText("'&env$('cnam')&'",'&str$(cnam)&','&str$(1)&')'
-00840   pr #20: 'Call Print.MyFontsize(12)'
-00850   txt$="Earnings By Month " !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(80)&','&str$(5)&')'
-00860   txt$="For the Year "&str$(year) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(80)&','&str$(10)&')'
-00870   pr #20: 'Call Print.MyFontsize(9)'
-00877 ! pr #20: 'Call Print.AddText("'&month$(1)&'",'&STR$(10)&','&STR$(11)&')'
-00880   for j=1 to 12
-00890     txt$=trim$(month$(j))(1:3) !:
-          indent=8+(10*j) !:
-          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(15)&')'
-00900   next j
-00910   txt$=cnvrt$("pic(--------)",top) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-00920   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-00930   for j=1 to 9
-00940     txt$=cnvrt$("pic(--------)",top-((.10*j)*top)) !:
-          pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-00950     pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-00960   next j
-00970   goto L1140
-00980   txt$=cnvrt$("pic(--------)",top*.80) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-00990   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01000   txt$=cnvrt$("pic(--------)",top*.70) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01010   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01020   txt$=cnvrt$("pic(--------)",top*.60) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01030   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01040   txt$=cnvrt$("pic(--------)",top*.50) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01050   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01060   txt$=cnvrt$("pic(--------)",top*.40) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01070   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01080   txt$=cnvrt$("pic(--------)",top*.30) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01090   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01100   txt$=cnvrt$("pic(--------)",top*.20) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01110   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01120   txt$=cnvrt$("pic(--------)",top*.10) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01130   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01140 L1140: ! zero line starts right here
-01142   for j=1 to 12
-01143     txt$=trim$(month$(j))(1:3) !:
-          indent=8+(10*j) !:
-          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(120)&')'
-01144   next j
-01150   txt$=cnvrt$("pic(-------#)",0) !:
-        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01160   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01170   for j=1 to 10
-01180     txt$=cnvrt$("pic(-------#)",-top*(.10*j)) !:
-          pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01190     pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
-01200   next j
-01210   linezero=(spacing*10)+20
-01220   column=18 ! spacing sideways
-01230   pr #20: 'Call Print.MyFontBold(1)'
-01240   for j=1 to 12
-01250     homedot=linezero+(profit(j)/x)
-01260 ! never could make the line chart work!! kj
-01270 ! If PROFIT(J+1)<=0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)*(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)) ! profit
-01280 ! If PROFIT(J+1)>0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)+LINEZERO)*(ABS(PROFIT(J+1)/X)+LINEZERO)) ! loss
-01290 ! nEXTDOT=LINEZERO+(PROFIT(J+1)/X)-HOMEDOT
-01300 ! \If NEXTDOT=0 Then nEXTDOT=1
-01310     if homedot<10 then homedot=10
-01320     if homedot>220 then homedot=220
-01330     pr #20: 'Call Print.AddLine('&str$(column-1)&','&str$(homedot)&','&str$(7)&','&str$(linezero-homedot)&',1)'
-01340     for q=1 to 6
-01350       pr #20: 'Call Print.AddLine('&str$(column-1+q)&','&str$(homedot)&','&str$(7-q)&','&str$(linezero-homedot)&',1)'
-01360     next q
-01370     pr #20: 'Call Print.MyFontsize(6)'
-01380     if profit(j)<0 then txt$=cnvrt$("pic(--------#)",-round(profit(j),0)): pr #20: 'Call Print.AddText('&txt$&','&str$(column)&','&str$(homedot-3)&')'
-01390     if profit(j)>0 then txt$=cnvrt$("pic(--------#)",-round(profit(j),0)): pr #20: 'Call Print.AddText('&txt$&','&str$(column)&','&str$(homedot+2)&')'
-01400     pr #20: 'Call Print.MyFontsize(9)'
-01410     column+=10
-01420   next j
-01421   for j=1 to nap
-01422     txt$=trim$(month$(j))(1:3) !:
-          indent=8+(10*j) !:
-          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(230)&')'
-01423   next j
-01430   gosub RELEASE_PRINT
-01450   close #1: 
-01460   goto XIT
-01470 ! ______________________________________________________________________
-01480 XIT: fnxit
-01490 ! ______________________________________________________________________
-01500 ! <Updateable Region: ERTN>
-01510 ERTN: fnerror(program$,err,line,act$,"xit")
-01520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-01530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-01550 ERTN_EXEC_ACT: execute act$ : goto ERTN
-01560 ! /region
-01570 ! ______________________________________________________________________
-01580 VBOPENPRINT: ! 
-01590   if file(20)=-1 then 
-01600     open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
-01610     pr #20: 'Call Print.MyOrientation("Portrait")'
-01620     lyne=margin ! starting of 1st line
-01630     column1=16 !:
-          column2=103 !:
-          column3=153
-01640   end if 
-01650   return 
-01660 RELEASE_PRINT: ! 
-01680   fnpa_finis
-01700   return 
+! Replace S:\acsGL\bargraph
+! pr bar graph of earnings by month for current year of prior year.
+! ______________________________________________________________________
+	library 'S:\Core\Library': fntop,fnxit, fnerror,fnUseDeptNo, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnqgl,fnagl$,fnOpt,fnFra,fnpa_finis
+	on error goto ERTN
+! ______________________________________________________________________
+	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
+	dim resp$(10)*80,profit(12),txt$*80
+	dim month(13), month$(13)*25,month$*25
+! ______________________________________________________________________
+	right=1 : center=2
+	fntop(program$,cap$="Print Bar Graph of Earnings")
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+	read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
+! ______________________________________________________________________
+	open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
+L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
+	if month<1 or month>13 then goto L170
+	month(month)=month 
+	month$(month)=month$
+	goto L170
+L210: close #1: 
+! ______________________________________________________________________
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
+	open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
+	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
+SCR1: ! 
+	t5=0
+	fnTos(sn$='CloseYear3') 
+	lc=0 : mylen=20 : mypos=mylen+2 : width=50
+	fnLbl(lc+=1,1,"Year to Print:",18,1)
+	fnTxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") 
+	resp$(1)=""
+	fnFra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) 
+	fnOpt(1,2,"Pull from Current",0,1) 
+	fnOpt(2,2,"Pull from Prior Year",0,1)
+	fnLbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
+	fnLbl(lc+=1,1,"or Equity Account:",width,0)
+	fnqgl(lc,mypos) 
+	resp$(2)=""
+	fnCmdSet(2)
+	fnAcs(sn$,0,mat resp$,ckey)
+	if ckey=5 then goto XIT
+	year=val(resp$(1))
+	if resp$(2)="True" then pullfrom$="Current"
+	if resp$(3)="True" then pullfrom$="Prior"
+	glnumber$=fnagl$(resp$(4))
+	read #1,using L430,key=glnumber$: dno$,ano$,sno$ nokey SCR1
+L430: form pos 1,c 3,c 6,c 3
+	acno$=glnumber$(1:3)&"         "
+! ______________________________________________________________________
+	read #1,using L480,key>=glnumber$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR1
+L470: read #1,using L480: acno$,bb,cb,mat bc,mat bp, mat bud eof PRINT_CHART
+L480: form pos 1,c 12,pos 81,41*pd 6.2
+	if fnUseDeptNo=0 or dn1=1 then goto L510
+	if glnumber$(1:3)><acno$(1:3) then goto PRINT_CHART ! may want to quit
+L510: ! If ACNO$><GLNUMBER$ Then Goto 830
+	for j=1 to 12
+! check no further down in current year past last month closed  KJ need to do
+		if pullfrom$="Current" then goto L550 else goto L590
+L550: if j>lmu then goto L610 ! don't go past last month updated
+		if j=1 then profit(j)+=bc(j): goto L610 ! first month
+		profit(j)+=bc(j)-bc(j-1) ! 2nd thru 12 th months
+		goto L610
+L590: if j=1 then profit(j)+=bp(j): goto L610 ! first month prior year
+		profit(j)+=bp(j)-bp(j-1) ! 2nd thru 12 th months
+L610: next j
+	goto L470
+PRINT_CHART: ! 
+	gosub VBOPENPRINT
+! determine maximum height and depth
+	for j=1 to 12
+		if profit(j)>0 then maximumdepth=max(profit(j),maximumdepth) ! largest loss any one month either this year or last year
+		if profit(j)<0 then maximumheight=min(profit(j),maximumheight) ! largest profit by month for either year  (profit is negative figure
+	next j
+! determine top line and bottom line
+	if maximumheight<-1000000 then top=1000000 : x=10000: goto DETERMINE_BOTTOM_LINE
+	if maximumheight>-50000 and maximumheight<-10000 then top=50000: x=500: goto DETERMINE_BOTTOM_LINE
+	if maximumheight<-10000 then top=100000: x=1000: goto DETERMINE_BOTTOM_LINE
+	if maximumheight<-1000 then top=10000: x=100: goto DETERMINE_BOTTOM_LINE
+	if maximumheight<-100 then top=1000 : x=10: goto DETERMINE_BOTTOM_LINE
+DETERMINE_BOTTOM_LINE: ! 
+	if maximumdepth<1000 then bottom=-1000 : goto L800
+	if maximumdepth<10000 then bottom=-10000 : goto L800
+	if maximumdepth<100000 then bottom=-100000 : goto L800
+L800: spacing=10 : lyne=10
+	cnam=(len(trim$(env$('cnam')))/2)+50
+	pr #20: 'Call Print.MyFontsize(14)'
+	pr #20: 'Call Print.AddText("'&env$('cnam')&'",'&str$(cnam)&','&str$(1)&')'
+	pr #20: 'Call Print.MyFontsize(12)'
+	txt$="Earnings By Month " 
+	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(80)&','&str$(5)&')'
+	txt$="For the Year "&str$(year) 
+	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(80)&','&str$(10)&')'
+	pr #20: 'Call Print.MyFontsize(9)'
+! pr #20: 'Call Print.AddText("'&month$(1)&'",'&STR$(10)&','&STR$(11)&')'
+	for j=1 to 12
+		txt$=trim$(month$(j))(1:3) 
+		indent=8+(10*j) 
+		pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(15)&')'
+	next j
+	txt$=cnvrt$("pic(--------)",top) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	for j=1 to 9
+		txt$=cnvrt$("pic(--------)",top-((.10*j)*top)) 
+		pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+		pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	next j
+	goto L1140
+	txt$=cnvrt$("pic(--------)",top*.80) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.70) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.60) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.50) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.40) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.30) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.20) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	txt$=cnvrt$("pic(--------)",top*.10) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+L1140: ! zero line starts right here
+	for j=1 to 12
+		txt$=trim$(month$(j))(1:3) 
+		indent=8+(10*j) 
+		pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(120)&')'
+	next j
+	txt$=cnvrt$("pic(-------#)",0) 
+	pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+	pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	for j=1 to 10
+		txt$=cnvrt$("pic(-------#)",-top*(.10*j)) 
+		pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+		pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
+	next j
+	linezero=(spacing*10)+20
+	column=18 ! spacing sideways
+	pr #20: 'Call Print.MyFontBold(1)'
+	for j=1 to 12
+		homedot=linezero+(profit(j)/x)
+! never could make the line chart work!! kj
+! If PROFIT(J+1)<=0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)*(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)) ! profit
+! If PROFIT(J+1)>0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)+LINEZERO)*(ABS(PROFIT(J+1)/X)+LINEZERO)) ! loss
+! nEXTDOT=LINEZERO+(PROFIT(J+1)/X)-HOMEDOT
+! \If NEXTDOT=0 Then nEXTDOT=1
+		if homedot<10 then homedot=10
+		if homedot>220 then homedot=220
+		pr #20: 'Call Print.AddLine('&str$(column-1)&','&str$(homedot)&','&str$(7)&','&str$(linezero-homedot)&',1)'
+		for q=1 to 6
+			pr #20: 'Call Print.AddLine('&str$(column-1+q)&','&str$(homedot)&','&str$(7-q)&','&str$(linezero-homedot)&',1)'
+		next q
+		pr #20: 'Call Print.MyFontsize(6)'
+		if profit(j)<0 then txt$=cnvrt$("pic(--------#)",-round(profit(j),0)): pr #20: 'Call Print.AddText('&txt$&','&str$(column)&','&str$(homedot-3)&')'
+		if profit(j)>0 then txt$=cnvrt$("pic(--------#)",-round(profit(j),0)): pr #20: 'Call Print.AddText('&txt$&','&str$(column)&','&str$(homedot+2)&')'
+		pr #20: 'Call Print.MyFontsize(9)'
+		column+=10
+	next j
+	for j=1 to nap
+		txt$=trim$(month$(j))(1:3) 
+		indent=8+(10*j) 
+		pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(230)&')'
+	next j
+	gosub RELEASE_PRINT
+	close #1: 
+	goto XIT
+! ______________________________________________________________________
+XIT: fnxit
+! ______________________________________________________________________
+! <Updateable Region: ERTN>
+ERTN: fnerror(program$,err,line,act$,"xit")
+	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
+ERTN_EXEC_ACT: execute act$ : goto ERTN
+! /region
+! ______________________________________________________________________
+VBOPENPRINT: ! 
+	if file(20)=-1 then 
+		open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
+		pr #20: 'Call Print.MyOrientation("Portrait")'
+		lyne=margin ! starting of 1st line
+		column1=16 
+		column2=103 
+		column3=153
+	end if 
+return 
+RELEASE_PRINT: ! 
+	fnpa_finis
+return 

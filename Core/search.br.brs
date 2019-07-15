@@ -9,30 +9,30 @@ def library fnsearch(unused$,file_num,&heading$,&form$,numeric_format$,&selectio
 	! key_length - numeric LENGTH of the index used to access the actual            record in the main prgram
 	! you can have one column of numeric information on the search screen - it      must always be the fourth item - fs_info - enter the format that would be        used in a cnvrt$ statement after the open (   such as "pic(zz/zz/zz)"
 
-	library 'S:\Core\Library': fnerror,fnwait,fncno,fnfkey,fnmsgbox,fnwin3b
+	library 'S:\Core\Library': fnfkey,fnwin3b
 
 	dim fs_sk$(22)*30,fs_bk$(99)*30,fs_sfl$(22),fs_sw$(22)*70,selection$*70,fs_info$(3)*30,numeric$*40,na1$*30
 	selection$=''
 
 	ASK_NAS: ! 
 		alpha_key_length=kln(file_num)
-		win=104
-		fnwin3b(win,env$('program_caption'),4,45,0,2,5,2)
+		fnwin3b(win:=104,env$('program_caption'),4,45,0,2,5,2)
 		bk1=prtall=0
 		pr #win,fields "2,2,Cc 40,N": "Enter Search Criteria (blank for all):"
 		key_position=22-round((alpha_key_length/2),0)
 		na$(1)="3,"&str$(key_position)&",C "&str$(alpha_key_length)&",UT,N"
 		input #win,fields mat na$: na1$
-		if cmdkey=5 then goto CANCEL_OUT
+		if cmdkey=5 then goto Finis
 		! If CMDKEY><1 Then Goto 260
 		close #win: 
 		if len(rtrm$(na1$))=0 and len(rtrm$(na2$))=0 then prtall=1
-		L320: !
+	goto Screen2Ask ! /r
+	Screen2Ask: !
 		fnwin3b(win,heading$,22,70,0,2,5,2)
 		cde=0
 		mat fs_sw$(22)
 		for j=1 to 20
-			if j>1 or selclp=1 then goto L380
+			if j>1 or skipRestore=1 then goto L380
 			restore #file_num,search>=na1$(1:len(rtrm$(na1$))),release: nokey ASK_NAS
 			L380: !
 			read #file_num,using form$,release: mat fs_info$,fs_info eof L490
@@ -65,13 +65,17 @@ def library fnsearch(unused$,file_num,&heading$,&form$,numeric_format$,&selectio
 		if cmdkey=1 then goto L590
 		if cmdkey=2 then goto BACK
 		selection$=fs_sk$(curfld)
-		if rtrm$(selection$)><"" then alp=1: goto L720
+		if rtrm$(selection$)><"" then 
+			alp=1
+			selection$=selection$(1:key_length) ! carry selection$ back; must pull key out in main program
+			goto Finis
+		end if
 	L590: !
-		selclp=1
-	goto L320
+		skipRestore=1
+	goto Screen2Ask
 
 	L620: !
-		selclp=0
+		skipRestore=0
 	goto ASK_NAS
 
 	BACK: ! r:
@@ -79,13 +83,9 @@ def library fnsearch(unused$,file_num,&heading$,&form$,numeric_format$,&selectio
 		if bk1<1 then goto L620
 		restore #file_num,key=fs_bk$(bk1)(1:alpha_key_length): nokey L620
 		bk1=bk1-1
-	goto L320 ! /r
+	goto Screen2Ask ! /r
 
-	L720: ! carry selection$ back; must pull key out in main program
-		selection$=selection$(1:key_length)
-	CANCEL_OUT: ! 
-		close #win: 
-	goto L770
-	L770: !
+	Finis: ! 
+	close #win: 
 fnend 
 

@@ -1,6 +1,7 @@
 Rem [---- Collection-Master Add-Ons ----]
 Rem Necessary for Collection-Master Add-Ons
 Drive S,.,x,\
+rem Drive S,F:\clsinc,Drive_C,\
 Style Keyword lower Expressions lower labels upper Indent 2 0
 filenames mixed_case
 setenv cursys CM
