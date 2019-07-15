@@ -868,6 +868,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnclear_menu
 		fnclear_menu=fnclear_menu
 	fnend
+	def library fnAcs2(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+		library 'S:\Core\ACS_Component.br': fnAcs
+		fnAcs2=fnAcs('',0,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
 	def library fnAcs(sn$*100,win,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
 		library 'S:\Core\ACS_Component.br': fnAcs
 		fnAcs=fnAcs(sn$,win,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
