@@ -1,4 +1,4 @@
-on error goto Error_Hanler
+on error goto Ertn
 fn_setup
 ! fnsession_size_setup(Session_Rows,Session_Cols)
 fntop(program$,'',1)

@@ -16,7 +16,7 @@
 ! E or B on debtor screen than they do have assets
 
 
-on error goto Error_Hanler
+on error goto Ertn
 fn_setup
 fntop(program$)
 mat forwarderFilter(0)

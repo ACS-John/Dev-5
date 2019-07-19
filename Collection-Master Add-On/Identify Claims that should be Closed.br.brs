@@ -1,4 +1,4 @@
-on error goto Error_Hanler
+on error goto Ertn
 fn_setup
 ! fnTop(program$)
 fntop(program$,'',1)

@@ -5,7 +5,7 @@
 
 
 fn_setup
-on error goto Error_Hanler
+on error goto Ertn
 fnTop(program$)
 enableMoveFiles=0
 dim pathFrom$*256

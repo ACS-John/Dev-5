@@ -1,14 +1,14 @@
 ! r: Updateable Region . Error Handler . Top 
 	! This region was last updated on 2019.01.10
-Error_Hanler: ! 
+Ertn: ! 
 	on error system 
 	dim err_dummy$*80
 	print bell;
 	e1=err : l1=line : if err=5 then goto ErrorHelpBr
 	ScreenError1: ! 
 	err_win=127
-	close #err_win: ioerr ignore
-	open #err_win=127: 'SCol=8,SRow=10,Cols=62,Rows=10,Border=S[E],Caption=Collection-Master Add-On Error Trap',display,outin 
+	if file(err_win)<>-1 then close #err_win: ioerr ignore
+	open #err_win: 'SCol=8,SRow=10,Cols=62,Rows=10,Border=S[E],Caption=Collection-Master Add-On Error Trap',display,outin 
 	dim errFieldPos$ (5)*64
 	dim errFieldText$(5)*23
 	pr #err_win,f '1,1,Cc 60,[E]' : 'Error: '&str$(e1)
@@ -29,7 +29,7 @@ Error_Hanler: !
 	hchoice=curfld
 	if cmdkey=20 then ! Hidden Continue Key 
 		close #err_win: 
-		on error goto Error_Hanler 
+		on error goto Ertn 
 		continue 
 	else if cmdkey=12 or cmdkey=19 then ! Fix Program 
 		close #err_win: 
@@ -48,10 +48,10 @@ Error_Hanler: !
 	err_dummy$=help$(hhelp_$)
 	goto ScreenError1
 	pause 
-	ErrorRetry: on error goto Error_Hanler
+	ErrorRetry: on error goto Ertn
 	retry 
 	ErrorXitToMenu: goto XIT
 	ErrorXitSys: execute "System"
-	ErrorRerun: on error goto Error_Hanler
+	ErrorRerun: on error goto Ertn
 	chain "Proc=ReRun//8"
 ! Updateable Region . Error Handler . End
