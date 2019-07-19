@@ -68,7 +68,7 @@ enableMatchingAccountsOnly=1
 ! Berman transfer if it helps you identify. 
 
 
-on error goto Error_Hanler
+on error goto Ertn
 fn_setup
 fnTop(program$)
 ! r: Set Defaults and Filters

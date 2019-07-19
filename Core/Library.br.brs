@@ -970,6 +970,11 @@ fnend
 	fnend
 ! /r
 ! r: array stuff
+	def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd)
+		library 'S:\Core\Array.br': fnPosOfAny
+		fnPosOfAny=fnPosOfAny(textToSearch$,mat searchFor$, fromEnd)
+	fnend
+
 	def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 		library 'S:\Core\Array.br': fnChrCount
 		fnChrCount=fnChrCount(String_To_Search$,Chr_To_Count$)

@@ -333,3 +333,23 @@ def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 	LOOP Until Cc_Pos_Chr<=0
 	fnChrCount=Chr_Count
 fnend
+def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd,___,returnN,howMany,x)
+	! fromEnd - set to -1 to search from end for last instance
+	howMany=udim(mat searchFor$)
+	mat posIs(howMany)
+	for x=1 to howMany
+		posIs(x)=pos(textToSearch$,searchFor$(x), fromEnd)
+		! pr 'in "'&textToSearch$&'" the first instance of '&searchFor$(x)&' is at position '&str$(posIs(x))&'.' ! pause
+		if posIs(x)>0 then
+			if fromEnd and posIs(x)>returnN then
+				returnN=posIs(x)
+				! pr 'AA returnN set to ';returnN
+			else if posIs(x)>0 and (returnN<=0 or posIs(x)<returnN) then
+				returnN=posIs(x)
+				! pr 'BB returnN set to ';returnN
+			end if
+		end if
+	nex x
+	! pr 'at end - returning';returnN : pause
+	fnPosOfAny=returnN
+fnend

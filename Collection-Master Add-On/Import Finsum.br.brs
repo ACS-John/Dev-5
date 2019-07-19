@@ -1,6 +1,6 @@
 
 fn_setup
-on error goto Error_Hanler
+on error goto Ertn
 fnTop(program$)
 
 dim basePath_db1_test$*512
