@@ -513,9 +513,9 @@ fnend
 		library 'S:\Core\Twip2Inch.br': fntwip2inch
 		fntwip2inch=fntwip2inch(x)
 	fnend
-	def library fnchain(prg$*255; no_fnprg_setting,noLog)
-		library 'S:\Core\Chain.br': fnchain
-		fnchain=fnchain(prg$, no_fnprg_setting,noLog)
+	def library fnChain(prg$*255; no_fnprg_setting,noLog)
+		library 'S:\Core\fn\chain.br': fnChain
+		fnChain=fnChain(prg$, no_fnprg_setting,noLog)
 	fnend
 	def library fnerror(callingProgram$*256,errornumber,linenumber,&act$,stopable$)
 		library 'S:\Core\fnerror': fnerror
@@ -526,16 +526,16 @@ fnend
 		fnlog=fnlog(log$,x)
 	fnend
 	def library fngetdir(&dir$,mat filename$;option$,filter$*40)
-		library 'S:\Core\GetDir.br': fngetdir
+		library 'S:\Core\fn\getDir.br': fngetdir
 		fngetdir=fngetdir(dir$,mat filename$,option$,filter$)
 	fnend
 	def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
-		library 'S:\Core\GetDir2.br': fngetdir2
+		library 'S:\Core\fn\getDir2.br': fngetdir2
 		fngetdir2=fngetdir2(dir$,mat filename$, option$,filter$,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 	fnend
 	!
 	def library fnwait(; message$*40,stopable)
-		library 'S:\Core\Wait.br': fnwait
+		library 'S:\Core\fn\wait.br': fnwait
 		fnwait(message$,stopable)
 	fnend
 	def library fnadd1099(mat cinfo$, mat einfo$, mat box)
@@ -800,8 +800,8 @@ fnend
 	fnend
 ! /r
 ! r: Screen Ace
-	def library fnTop(;prg$*256,cap$*128,force80x24)
-		library 'S:\Core\fnTop.br': fnTop
+	def library fnTop(; prg$*256,cap$*128,force80x24)
+		library 'S:\Core\fn\top.br': fnTop
 		fnTop=fnTop( prg$,cap$,force80x24)
 	fnend
 	def library fncompany_name(window,win_cols)
@@ -921,7 +921,7 @@ fnend
 		fncreg_write=fncreg_write(reg_field_name$,reg_field_value$)
 	fnend
 	def library fnreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
-		library 'S:\Core\Reg.br': fnreg_read
+		library 'S:\Core\reg.br': fnreg_read
 		fnreg_read=fnreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
 	fnend
 	def library fnreg_write(reg_field_name$*128,reg_field_value$*256)

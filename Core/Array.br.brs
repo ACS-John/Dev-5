@@ -4,6 +4,7 @@ def fn_setup
     library 'S:\Core\Library.br': fngethandle
   end if
 fnend
+
 def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
   fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
 fnend
@@ -34,6 +35,7 @@ def fn_array_item_insert(mat array, insert_item, insert_item_number)
     array(insert_item_number)=insert_item
   end if  ! Insert_Item_Number>Array_Item_Count   /   else
 fnend
+
 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   ! if ~setup then let fn_setup
   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
@@ -53,6 +55,7 @@ def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   loop until srch_start_ele>srch_array_count or srch_return
   fn_srch_case_insensitive=srch_return
 fnend  ! fn_srch_case_insensitive
+
 def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
   fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)
 fnend
@@ -87,6 +90,7 @@ def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
   end if
   fn_addOneC=udim(mat add_to$)
 fnend
+
 def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
   cmcReturn=0
   cmcIndex=0
@@ -105,6 +109,7 @@ def library fnCountMatchesN(mat arrayToSearch,valueToMatch)
   loop while cmcIndex>0
   fnCountMatchesN=cmcReturn
 fnend
+
 def library fnArrayMax(mat arrayToSearch)
   ! returns index (not value), if multiple = maxes it returns the first one.
   amReturn=0
@@ -123,31 +128,7 @@ def library fnArrayMax(mat arrayToSearch)
   end if
   fnArrayMax=amReturn
 fnend
-def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
-  if ~setup then let fn_setup
-  dim ftaLine$*1024
-  if ftaDelimiter$='' then ftaDelimiter$='='
-  open #hFta:=fngethandle: 'name='&ftaFile$,d,i
-  mat ftaArrayLeft$ (0)
-  mat ftaArrayRight$(0)
-  for ftaSkipFirstLineItem=1 to ftaSkipFirstLine
-    linput #hFta: ftaLine$ eof FtaEof
-  nex ftaSkipFirstLineItem
-  do
-    linput #hFta: ftaLine$ eof FtaEof
-    ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
-    if ftaPosDelim<=0 then
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
-      fn_addOneC(mat ftaArrayRight$,'')
-    else
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
-      fn_addOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
-    end if
-  loop
-  FtaEof: !
-  close #hFta:
-  fnFileTo2Arrays=udim(mat ftaArrayLeft$)+ftaSkipFirstLine
-fnend
+
 def library fnArrayWasPassedC(mat array$)
   ! 1-D arrays only please
   on error goto AwpcFinis
@@ -183,6 +164,34 @@ def library fnArrayEmpty(mat ae$)
   AeFinis: !
   fnArrayEmpty=arrayEmptyReturn
 fnend
+
+! r: read a file into parallel 1-D Arrays
+def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
+  if ~setup then let fn_setup
+  dim ftaLine$*1024
+  if ftaDelimiter$='' then ftaDelimiter$='='
+  open #hFta:=fngethandle: 'name='&ftaFile$,d,i
+  mat ftaArrayLeft$ (0)
+  mat ftaArrayRight$(0)
+  for ftaSkipFirstLineItem=1 to ftaSkipFirstLine
+    linput #hFta: ftaLine$ eof FtaEof
+  nex ftaSkipFirstLineItem
+  do
+    linput #hFta: ftaLine$ eof FtaEof
+    ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
+    if ftaPosDelim<=0 then
+      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
+      fn_addOneC(mat ftaArrayRight$,'')
+    else
+      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
+      fn_addOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
+    end if
+  loop
+  FtaEof: !
+  close #hFta:
+  fnFileTo2Arrays=udim(mat ftaArrayLeft$)+ftaSkipFirstLine
+fnend
+
 def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
   if ~setup then let fn_setup
   dim r1Line$*256
@@ -289,6 +298,7 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   fnRead2columnFixedWidth=udim(mat r2fReturn1$)
 fnend
 
+! /r
 def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
 	array_part_one_udim=udim(arrayPartOne$)
 	array_part_two_udim=udim(arrayPartTwo$)
@@ -339,12 +349,12 @@ def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd,___,returnN,ho
 	mat posIs(howMany)
 	for x=1 to howMany
 		posIs(x)=pos(textToSearch$,searchFor$(x), fromEnd)
-		! pr 'in "'&textToSearch$&'" the first instance of '&searchFor$(x)&' is at position '&str$(posIs(x))&'.' ! pause
+		!  pr 'in "'&textToSearch$&'" the first instance of '&searchFor$(x)&' is at position '&str$(posIs(x))&'.' : pause
 		if posIs(x)>0 then
 			if fromEnd and posIs(x)>returnN then
 				returnN=posIs(x)
 				! pr 'AA returnN set to ';returnN
-			else if posIs(x)>0 and (returnN<=0 or posIs(x)<returnN) then
+			else if ~fromEnd and posIs(x)>0 and (returnN<=0 or posIs(x)<returnN) then
 				returnN=posIs(x)
 				! pr 'BB returnN set to ';returnN
 			end if

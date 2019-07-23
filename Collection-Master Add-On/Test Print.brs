@@ -1,3 +1,4 @@
+fn_setup
 fntop(program$)
 on error goto Ertn
 Fnsel(80,"Select Test Destination")
