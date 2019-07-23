@@ -46,6 +46,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 			! fnapply_theme
 			fnAcsSystemInitialize(2)
 		end if
+		execute 'Config FileNames Mixed_Case'
 	end if
 fnend
 include: ertn
