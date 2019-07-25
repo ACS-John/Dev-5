@@ -290,7 +290,7 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 			fn_add('SSN'         	,item$(csv_social)             	)
 			fn_add('RESP_PARTY' 	,'N'                            	)
 			fn_add('BIRTH_DATE' 	,item$(csv_patientDOB)         	)
-			fn_pr(111)
+			fn_pr(111, 1)
 			! /r
 		end if
 		
@@ -382,10 +382,10 @@ def fn_add(hLineAdd$*128,dLineAdd$*1024; reset)
 		dLine$(inf:inf)=tab$&dLineAdd$
 	end if
 fnend
-def fn_pr(num)
+def fn_pr(num; forceHeader)
 	! fn_pr_hOut_header(num,hLine$)
 	headerNow$=str$(num)&tab$&'H'
-	if headerNow$<>headerPrior$ then
+	if forceHeader or headerNow$<>headerPrior$ then
 		fn_pr_hOut(headerNow$&tab$&'Date'&tab$&'Time'&tab$&hLine$)
 		headerPrior$=headerNow$
 	end if
@@ -614,13 +614,12 @@ def fn_setup
 		setup=1
 		! library 'Library\clsUtil.wb': fnErase_buttons
 
-		library 'Library\clsUtil.wb': Fnopen_Csv
-		library 'Library\clsUtil.wb': Fnopen_Csv
-		library 'Library\clsUtil.wb': fnasci
-		library 'Library\clsUtil.wb': fnBr_filename$
+		library 'Library\clsUtil.wb': fnOpen_Csv
+		library 'Library\clsUtil.wb': fnAsci
+		! library 'Library\clsUtil.wb': fnBr_filename$
 		library 'Library\clsUtil.wb': fnMessageBox
 		library 'Library\clsUtil.wb': fnOpen$
-		library 'Library\clsUtil.wb': Fnstring_Len_Max
+		library 'Library\clsUtil.wb': fnString_Len_Max
 		library 'Library\clsUtil.wb': fnVal
 
 		library 'S:\Core\Library.br': fnTop
