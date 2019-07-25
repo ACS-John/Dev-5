@@ -30,7 +30,9 @@ def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN)
 		! /r
 		if ~exists(path$) and doNotTryThisOne=0 then 
 			! if debug then pr 'about to MKDIR '&rtrm$(path$,'\') : pause
+			if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 			execute 'mkdir "'&rtrm$(path$,'\')&'"' err MspeErr
+			if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 		end if
 	loop
 	goto MspeFinis

@@ -143,7 +143,7 @@ def library fnOpenFile(filename$*64,mat d$,mat dn,mat form$; inputonly,keynum,do
 	fnOpenFile=fnOpenFile(filename$,mat d$,mat dn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
 fnend
 def library fnMakeSurePathExists(Filename$*255; Path$*255) ! mkdir funciton from fileio.brs - except fileio version is not a library 2/7/2017
-	library 'S:\Core\fnMakeSurePathExists.br':fnMakeSurePathExists
+	library 'S:\Core\fn\makeSurePathExists.br':fnMakeSurePathExists
 	fnMakeSurePathExists=fnMakeSurePathExists(Filename$, Path$)
 fnend
 def library fnBuildKey$*255(layout$*30,mat bkf$,mat bkf; keynum)
@@ -921,7 +921,7 @@ fnend
 		fncreg_write=fncreg_write(reg_field_name$,reg_field_value$)
 	fnend
 	def library fnreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
-		library 'S:\Core\reg.br': fnreg_read
+		library 'S:\Core\Reg.br': fnreg_read
 		fnreg_read=fnreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
 	fnend
 	def library fnreg_write(reg_field_name$*128,reg_field_value$*256)

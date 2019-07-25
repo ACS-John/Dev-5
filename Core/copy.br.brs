@@ -45,28 +45,38 @@ def fn_Copy(from$*256,to$*256; new_record_length,options$)
 			copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 			fnMakeSurePathExists(copyToFolder$)
 			fnStatus ('Creating files  in "'&copyToFolder$&'"') 
+			if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 			execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
-			copy_return+=1! if int(cfi/10)=cfi/10 then pause
+			copy_return+=1 
+			! if int(cfi/10)=cfi/10 then pause
 			copyFailA: ! 
+			if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 		nex cfi
 	else
 		if new_record_length then 
 			if new_record_length and uprc$(from$)=uprc$(to$) then 
+				if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 				execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
 				execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
 				execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
+				if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 			end if 
 		end if 
+		if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 		execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
+		if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 		copy_return=1
 	end if
 	goto COPY_XIT
 	COPY_FAIL: ! r:
+		if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 		copy_return=min(-1,-err)
 		if new_record_length then 
+			if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 			execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr COPY_RETRY_NEW_RLN_FAILED
 			execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_RETRY_NEW_RLN_FAILED
 			execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr ignore
+			if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 			copy_return=2
 		else if errorNotify then 
 			fnStatus('**************************************************************************************')
@@ -183,19 +193,24 @@ def library fnRename(from$*256,to$*256)
 			exec 'Free "'&from$&'"'
 		end if
 	else 
+		if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 		execute 'Rename "'&from$&'" "'&to$&'" -n'
+		if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 	end if
 fnend
 def library fnRemoveDeletedRecords(from$*256)
 	if ~setup then let fn_setup
 	from$=fnSrepEnv$(from$)
 	rdrReturn=0
+	if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
 	execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr RdrFail
 	execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr RdrFail
+	if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 	execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
 	rdrReturn=1
 	goto RdrFinis
 	RdrFail: !
+	if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
 	rdrReturn=-err
 	goto RdrFinis
 	RdrFinis: !
