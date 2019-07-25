@@ -30,9 +30,9 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		if exists('S:\FileIO.ini') and ~exists('FileIO.ini') then
 			fnCopy('S:\FileIO.ini','FileIO.ini')
 		end if
-		! if ~exists('ScreenIO.ini') then
-		! 		fnCopy('S:\ScreenIO.ini','ScreenIO.ini')
-		! end if
+		if exists('S:\ScreenIO.ini') and ~exists('ScreenIO.ini') then
+				fnCopy('S:\ScreenIO.ini','ScreenIO.ini')
+		end if
 	end if
 	if env$('cursys')='CM' then
 		if force80x24 then
@@ -46,7 +46,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 			! fnapply_theme
 			fnAcsSystemInitialize(2)
 		end if
-		execute 'Config FileNames Mixed_Case'
+		! execute 'Config FileNames Mixed_Case'
 	end if
 fnend
 include: ertn

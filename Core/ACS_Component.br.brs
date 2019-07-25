@@ -862,7 +862,9 @@ def fn_main_input
 			pr f mat ace_io$: mat ace_resp$
 			input #0, fields str$(Session_Rows)&","&str$(Session_Cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
 		else
+			! if env$('cursys')='CM' then execute 'Config FileNames Mixed_Case'
 			rinput fields mat ace_io$: mat ace_resp$ conv CONV_HANDLER
+			! if env$('cursys')='CM' then execute 'Config FileNames UPPER_CASE'
 		end if
 	else
 		input #acs_win, fields str$(rows)&','&str$(cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
@@ -1859,30 +1861,52 @@ def fn_fileselection(mask,lyne,ps,width,container)
 	file_select_data(file_select_boxes,2)=mask
 	pr f file_select_button_spec$: "."
 fnend
-def fn_selectfile (&filename$,mask)
-	if mask=70 or mask=71 then
-		if env$('BR_MODEL')='CLIENT/SERVER' then
-			open #h_selectfile:=fngethandle: "Name=OPEN:@:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
-		else
-			open #h_selectfile:=fngethandle: "Name=OPEN:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
+def fn_selectfile (&filename$,mask; ___,openOrSave$,newOrShare$)
+	if mask=70 or mask=71 or mask=72 then 
+		if mask=70 or mask=71 then 
+			openOrSave$='OPEN'
+			newOrShare$='Shr'
+		else if mask=72 then
+			openOrSave$='SAVE'
+			newOrShare$='New'
 		end if
-	else if mask=72 then
-		if env$('BR_MODEL')='CLIENT/SERVER' then
-			open #h_selectfile:=fngethandle: "Name=SAVE:@:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
-		else
-			open #h_selectfile:=fngethandle: "Name=SAVE:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
+		h_selectfile=fngethandle
+		if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
+		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,input ioerr ignore
+		if file(h_selectfile)=0 then
+			filename$=os_filename$(file$(h_selectfile))
+			! filename$=trim$(file$(h_selectfile)) (2:inf)
+			if filename$(1:2)='@:' then filename$(1:2)=''
+			if filename$(1:1)=':' then filename$(1:1)=''
+			close #h_selectfile:
 		end if
-	else
-		goto SELECTFILE_COMPLETE
+		if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
+
 	end if
-	if file(h_selectfile)=0 then
-		filename$=os_filename$(file$(h_selectfile))
-! filename$=trim$(file$(h_selectfile)) (2:inf)
-		if filename$(1:2)='@:' then filename$(1:2)=''
-		if filename$(1:1)=':' then filename$(1:1)=''
-		close #h_selectfile:
-	end if
-SELECTFILE_COMPLETE: !
+	! if mask=70 or mask=71 then
+	! 	if env$('BR_MODEL')='CLIENT/SERVER' then
+	! 		open #h_selectfile:=fngethandle: "Name=OPEN:@:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
+	! 	else
+	! 		open #h_selectfile:=fngethandle: "Name=OPEN:"&filename$&"All documents (*.*) |*.*,RecL=1,Shr",external,input ioerr ignore
+	! 	end if
+	! else if mask=72 then
+	! 	if env$('BR_MODEL')='CLIENT/SERVER' then
+	! 		open #h_selectfile:=fngethandle: "Name=SAVE:@:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
+	! 	else
+	! 		open #h_selectfile:=fngethandle: "Name=SAVE:"&filename$&"All documents (*.*) |*.*,RecL=1,new",external,output ioerr ignore
+	! 	end if
+	! else
+	! 	goto SELECTFILE_COMPLETE
+	! end if
+	! 
+	! if file(h_selectfile)=0 then
+	! 	filename$=os_filename$(file$(h_selectfile))
+	! 	! filename$=trim$(file$(h_selectfile)) (2:inf)
+	! 	if filename$(1:2)='@:' then filename$(1:2)=''
+	! 	if filename$(1:1)=':' then filename$(1:1)=''
+	! 	close #h_selectfile:
+	! end if
+	! SELECTFILE_COMPLETE: !
 fnend
 def fn_datetextbox (mask,lyne,ps,&width,container;disable)
 	dim date_button_spec$*255

@@ -134,8 +134,12 @@ def fn_acsSystemInitialize(; syInitMode)
 				fnmakesurepathexists(workingDir$&'\')
 				execute 'CD '&workingDir$(1:2)
 				execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
-				fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
-				fnCopy('S:\sio.lic','sio.lic')
+				if exists('S:\ScreenIO.ini') then
+					fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+				end if
+				if exists('S:\sio.lic') and ~exists('sio.lic') then
+					fnCopy('S:\sio.lic','sio.lic')
+				end if
 				fn_CopySfileIoIniToFileIoIni
 			else
 				pr 'Problem: workingDir is "'&workingDir$&'"'

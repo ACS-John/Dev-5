@@ -38,7 +38,7 @@ def fn_setup
 		library "clsutil/library": fnsql_int,fncustom,fnmessagebox,fnask_file1
 		library "clsutil/library": fnedi_finis
 		library "clsutil/library": fnadd_one$
-		library "intermnt/prog2": fnmasforw_data$
+		! library "intermnt/prog2": fnmasforw_data$
 
 		dim finan_data$(1)*60,finan_data(1)
 		dim finan_fieldsc$(1)*20,finan_fieldsn$(1)*20
