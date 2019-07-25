@@ -1,50 +1,63 @@
 ! Formerly S:\acsGL\glMaint
 ! General Ledger Master File editor
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fnxit,fntop, fnerror,fnTos,fnOpt,fnLbl,fnCmdSet,fnAcs,fnagl$,fnFra,fnTxt,fncombof,fnCmdKey,fnmsgbox,fnaccount_search,fnflexinit1,fnflexadd1,fnqglbig,fnrglbig$,fnButton,fngethandle
+	library 'S:\Core\Library': fnxit,fntop
+	library 'S:\Core\Library': fnTos,fnOpt,fnLbl,fnCmdSet,fnAcs
+	library 'S:\Core\Library': fnagl$,fnFra,fnTxt,fncombof,fnCmdKey
+	library 'S:\Core\Library': fnflexinit1,fnflexadd1
+	library 'S:\Core\Library': fnaccount_search
+	library 'S:\Core\Library': fnqglbig,fnrglbig$
+	library 'S:\Core\Library': fnButton
+	library 'S:\Core\Library': fnmsgbox
+	library 'S:\Core\Library': fngethandle
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
 	on error goto ERTN
 ! ______________________________________________________________________
-	dim cap$*128
 	dim tr(7),tr$*12,td$*30
-	dim d$*50,bc(13),bp(13),bm(13),rf(6),key$*12
-	dim ta(2),revb(13)
-	dim ack$*20,resp$(100)*60
-	dim ml$(3)*128,item$(9)*30
+	dim d$*50,bc(13),bp(13)
+	dim bm(13)
+	dim rf(6)
+	dim key$*12
+	dim ta(2)
+	dim revb(13)
+	dim ack$*20
+	dim resp$(100)*60
+	dim ml$(3)*128
+	dim item$(9)*30
 ! ______________________________________________________________________
-	fntop(program$,cap$="General Ledger Master")
+	fntop(program$)
 	fixgrid=99
-	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
+	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
-	close #company: 
+	close #company:
 	open #8: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
 	cl1=1
-L310: ! 
-	open #hAccount:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed 
+L310: !
+	open #hAccount:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
 	open #hAccountUnused:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed ! ioerr L350
-	open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
-	open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed 
-	F_acTrans: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-MAIN: ! 
+	open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative
+	open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed
+	Factrans: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
+MAIN: !
 	fnTos(sn$="GLProb2-"&str$(edit_mode))
 	mylen=23 : mypos=mylen+3 : right=1
 	fnLbl(1,1,"Account:",mylen,right)
 	if edit_mode=1 then ! attempt to put disabled text box for acct #
 		fnTxt(1,mypos,60,0,0,"",1,"",0)
 		resp$(1)=fnrglbig$(gl$)
-	else 
+	else
 		fnqglbig(1,mypos,0,2)
 		resp$(1)=fnrglbig$(gl$)
-	end if 
+	end if
 	holdgl$=gl$
-	if edit_mode=1 then 
+	if edit_mode=1 then
 		fnLbl(2,1,"Beginning Balance:",mylen,right)
 		fnTxt(2,mypos,14,0,right,"10",0,"The beginning balance will always be the account balance at the beginning of the period. It gets updated when you close the month.",0 )
 		resp$(2)=str$(bb)
 		fnLbl(2,40,"Current Balance:",mylen,right)
 		fnTxt(2,66,14,0,right,"10",0,"The current balance will be updated any time a transaction is posted. The beginning and current balances should both be the same when you begin.",0 )
 		resp$(3)=str$(cb)
-		f1Col1Len=21 
+		f1Col1Len=21
 		f1Col2=1+f1Col1Len+2 : f1Col2Len=36
 		f1Col3=f1Col2+f1Col2Len+2 : f1Col3len=21
 		f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
@@ -92,17 +105,17 @@ MAIN: !
 			resp$(x)=str$(revb(j))
 			x=x+1
 		next j
-	end if 
-	if edit_mode=1 then 
+	end if
+	if edit_mode=1 then
 		fnCmdKey("&Save",6,1,0,"")
 		fnCmdKey("Review &Transactions",3,0,0,"")
 		fnCmdKey("&Delete",7,0,0,"")
 		fnButton(1,mypos+60+2,"C&hange",9,"Change the Account and/or the Description of this General Ledger Account") ! fnCmdKey("C&hange Acct-Desc",9,0,0,"")
-	else 
+	else
 		fnCmdKey("&Edit",1,1,0,"") ! if edit_mode=1 then let fnCmdKey("&Edit",1,0,0,"") else let fnCmdKey("&Edit",1,1,0,"")
 		fnCmdKey("&Add",2,0,0,"")
 		fnCmdKey("Sea&rch",8,0,0,"")
-	end if 
+	end if
 	fnCmdKey("&Cancel",5,0,1,"")
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then goto XIT
@@ -110,9 +123,9 @@ MAIN: !
 	gl$=fnagl$(resp$(1)) : key$=gl$
 	if ckey=7 then gosub DELETE_ACCT : goto L1780
 	if edit_mode=1 and gl$<>holdgl$ then goto MSGBOX4 else goto L960
-L960: ! 
+L960: !
 ! de$=resp$(1)(13:60)
-	if edit_mode=1 then 
+	if edit_mode=1 then
 		bb=val(resp$(2)) ! beginning bal
 		cb=val(resp$(3)) ! current balance
 		for j=1 to 6
@@ -126,7 +139,7 @@ L960: !
 			bm(j)=val(resp$(x)): x+=1
 			revb(j)=val(resp$(x)): x+=1
 		next j
-	end if 
+	end if
 	if ckey<>3 then edit_mode=0
 	if ckey=1 then goto DO_EDIT
 	if ckey=2 then goto ADD ! add new accounts
@@ -139,19 +152,19 @@ L960: !
 ! BLDRANGE: fnchain("S:\acsGL\BldRange")
 XIT: fnxit
 ! ______________________________________________________________________
-ADD: ! 
+ADD: !
 	fnTos(sn$="GLAdd")
 	mylen=23: mypos=mylen+3 : right=1: rc=0
 	if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 	if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
 	fnLbl(2,1,"Account:",mylen,right)
-	if use_dept then 
+	if use_dept then
 		let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the account.",0 )
 		resp$(rc+=1)=str$(dno)
 	end if
 	fnTxt(2,31,6,0,right,"1030",0,"Enter the main part of the account.",0)
 	resp$(rc+=1)=str$(ano)
-	if use_sub then 
+	if use_sub then
 		let fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the account.",0 )
 		resp$(rc+=1)=str$(sno)
 	end if
@@ -170,16 +183,16 @@ ADD: !
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 	read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey ignore
 ! NEW_RECORD: !
-! L1540: ! 
+! L1540: !
 	bb=cb=pbp=0
 	mat bc=(0): mat bp=(0): mat bm=(0): mat revb=(0): mat ta=(0): mat rf=(0)
 	edit_mode=1
 	gl$=key$
 ! write_new_record
 	write #hAccount,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-	if cl1=1 then 
+	if cl1=1 then
 		write #8,using L1740: gl$,d$
-	end if 
+	end if
 	goto MAIN
 ! ______________________________________________________________________
 DO_EDIT: ! r:
@@ -190,7 +203,7 @@ DO_EDIT: ! r:
 		if revb(j)=-202020202.02 then revb(j)=0
 	next j
 	edit_mode=1
-L1650: ! 
+L1650: !
 	goto MAIN
 ! /r
 SAVE: ! r:
@@ -199,23 +212,23 @@ SAVE: ! r:
 		ml$(1)="You are attempting to change account "&holdgl$&"!"
 		ml$(2)="to "&gl$&".  Take OK to change the account."
 		ml$(3)="Take Cancel to return to main screen."
-		fnmsgbox(mat ml$,resp$,cap$,49)
-		if resp$<>"OK" then 
+		fnmsgbox(mat ml$,resp$,'',49)
+		if resp$<>"OK" then
 			goto L1780
-		end if 
-	end if 
+		end if
+	end if
 ! !f BB=0 Then bB=CB  ! need to make current bal & begbalance same if adding new record
 	rewrite #hAccount,using L1740,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 L1740: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-	if cl1=1 then 
+	if cl1=1 then
 		rewrite #8,using L1740,key=key$: gl$,d$ nokey L1760
-	end if 
-L1760: ! 
-	if gl$<>holdkey$ then 
+	end if
+L1760: !
+	if gl$<>holdkey$ then
 		gosub CHG_GLNO_IN_HISTORY ! change accounts in history
 		gosub CHANGE_CURRENT_TRANS
 	end if
-L1780: ! 
+L1780: !
 	bb=cb=pbp=0
 	mat bc=(0) : mat bp=(0) : mat bm=(0) : mat revb=(0) : mat ta=(0) : mat rf=(0)
 	edit_mode=0
@@ -224,19 +237,19 @@ L1780: !
 ! /r
 DELETE_ACCT: ! r:
 	if cb=0 then goto L1880
-	mat ml$(3) 
-	ml$(1)="Account # "&gl$&" has a balance. You should not " 
-	ml$(2)="delete an account with a balance." 
-	ml$(3)="Take OK to delete; else Cancel to return to main screen." 
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	mat ml$(3)
+	ml$(1)="Account # "&gl$&" has a balance. You should not "
+	ml$(2)="delete an account with a balance."
+	ml$(3)="Take OK to delete; else Cancel to return to main screen."
+	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then delete_it=1: goto L1910
 	if resp$="Cancel" then goto L2030
 L1880: !
 	mat ml$(3)
-	ml$(1)="You have chosen to delete account # "&gl$&"!" 
-	ml$(2)="Take OK to delete the account." 
-	ml$(3)="Take Cancel to return to main screen." 
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	ml$(1)="You have chosen to delete account # "&gl$&"!"
+	ml$(2)="Take OK to delete the account."
+	ml$(3)="Take Cancel to return to main screen."
+	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then delete_it=1: goto L1910
 	if resp$="Cancel" then goto L2030
 L1910: !
@@ -255,7 +268,7 @@ L2010: if nta=0 then goto L2030
 	adr=nta : goto L1960
 L2030: delete_it=0
 	return  ! /r
-IGNORE: continue 
+IGNORE: continue
 REVIEW_TRANS: ! r:
 	fnTos(sn$="review_trans")
 	mylen=23: mypos=mylen+3 : right=1: rc=0
@@ -270,45 +283,50 @@ REVIEW_TRANS: ! r:
 	if resp$(1)="True" then rv=1
 	if resp$(2)="True" then rv=2
 ! ______________________________________________________________________
-TRANSACTION_GRID: ! 
-	mat chdr$(9) : mat cmask$(9) : mat item$(9) 
-	chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date' 
-	chdr$(4)='Amount' 
-	chdr$(5)='T Code' : chdr$(6)='P Code' 
-	chdr$(7)='Ck/Rec #' : chdr$(8)='Description' 
+TRANSACTION_GRID: !
+	mat chdr$(9) : mat cmask$(9) : mat item$(9)
+	chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date'
+	chdr$(4)='Amount'
+	chdr$(5)='T Code' : chdr$(6)='P Code'
+	chdr$(7)='Ck/Rec #' : chdr$(8)='Description'
 	chdr$(9)='Period'
 	cmask$(1)="30"
-	cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' 
-	cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' 
+	cmask$(2)="": cmask$(3)="3" : cmask$(4)='10'
+	cmask$(5)='30' : cmask$(6)='30': cmask$(7)=''
 	cmask$(8)='' : cmask$(9)='30'
 	fnTos(sn$="gltrans")
 	fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	adr=ta(1): pc2=0
 !  read current or history files
 	if rv=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
-	READ_FROM_CURRENT: ! 
+	READ_FROM_CURRENT: !
 	transfile=2
 	L2780: if adr=0 then goto EO_TRANS_GRID
 	read #2,using L2800,rec=adr,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 	L2800: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 	adr=nta
 	goto DISPLAY_TRANS
-	READ_FROM_HISTORY: ! 
+	READ_FROM_HISTORY: !
 	transfile=3
 	ack$=gl$&cnvrt$("N 2",pc1)&"      "
 	restore #hAcTrans,key>=ack$: nokey EO_TRANS_GRID
-	L2870: read #hAcTrans,using F_acTrans,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
+	ReadAcTrans: !
+	read #hAcTrans,using Factrans,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
 	if key$><trgl$ then goto EO_TRANS_GRID
-	if pc1=0 then goto L2930
-	if pc1><pc2 then goto L2870
-DISPLAY_TRANS: ! 
-L2930: item$(1)=str$(rec(hAcTrans))
-	item$(2)=trgl$: item$(3)=str$(tr(4)): item$(4)=str$(tr(5)) 
-	item$(5)=str$(tr(6)) : item$(6)=str$(tr(7)) : item$(7)=tr$ 
-	item$(8)=td$: item$(9)=str$(pc2) 
+	if pc1 and pc1><pc2 then goto ReadAcTrans
+	DISPLAY_TRANS: !
+	item$(1)=str$(rec(hAcTrans))
+	item$(2)=trgl$
+	item$(3)=str$(tr(4))
+	item$(4)=str$(tr(5))
+	item$(5)=str$(tr(6))
+	item$(6)=str$(tr(7))
+	item$(7)=tr$
+	item$(8)=td$
+	item$(9)=str$(pc2)
 	fnflexadd1(mat item$)
-	if rv=1 then goto L2780 else goto L2870 ! read from current or history
-EO_TRANS_GRID: ! 
+	if rv=1 then goto L2780 else goto ReadAcTrans ! read from current or history
+EO_TRANS_GRID: !
 	if rv=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
 	fnAcs(sn$,0,mat resp$,ck)
@@ -316,14 +334,14 @@ EO_TRANS_GRID: !
 	if ck=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
 	if recordnum=0 then goto MAIN
-	if rv=1 then 
-		read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
-	else 
-		read #hAcTrans,using F_acTrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+	if rv=1 then
+		read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
+	else
+		read #hAcTrans,using Factrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 	end if
 	resp$(1)=str$(recordnum): resp$(2)=trgl$: resp$(3)=str$(tr(4))
-	resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7)) 
-	resp$(7)=tr$: resp$(8)=td$ 
+	resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7))
+	resp$(7)=tr$: resp$(8)=td$
 	resp$(9)=str$(pc2)
 	fnTos(sn$="Tredit")
 	mylen=23: mypos=mylen+3 : right=1
@@ -363,10 +381,10 @@ EO_TRANS_GRID: !
 	tr$=resp$(6) ! reference #
 	td$=resp$(7) ! reference #
 	pc2=val(resp$(8)) ! period code from history; blank when returning from current
-	if rv=1 then 
-		rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
-	else 
-		rewrite #hAcTrans,using F_acTrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+	if rv=1 then
+		rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
+	else
+		rewrite #hAcTrans,using Factrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 	end if
 	adr=ta(1)
 goto TRANSACTION_GRID ! /r
@@ -376,22 +394,14 @@ SEARCH_GRID: ! r:
 	read #hAccount,using L1740,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey MAIN
 	goto MAIN
 ! /r
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
 CHG_GLNO_IN_HISTORY: ! r: change gl # in history
 	ack$=holdgl$&cnvrt$("N 2",0)&"      "
 	if trim$(ack$)="" then goto L3850
 	restore #hAcTrans,key>=rpad$(ack$,kln(3)): nokey L3850
 	do
-		read #hAcTrans,using L3810: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
-		L3810: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-		if holdgl$=trgl$ then 
-			rewrite #hAcTrans,using L3810: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+		read #hAcTrans,using Factrans: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
+		if holdgl$=trgl$ then
+			rewrite #hAcTrans,using Factrans: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 		end if
 	loop
 	L3850: !
@@ -404,14 +414,14 @@ CHANGE_ACCT_NUM: ! r:
 	if use_dept =1 then let fnLbl(1,31,"Fund #",6,2)
 	if use_sub =1 then let fnLbl(1,45,"Sub #",6,2)
 	fnLbl(2,1,"New Account:",mylen,right)
-	if use_dept then 
+	if use_dept then
 		fnTxt(2,31,3,0,right,"30",0,"Enter the fund portion of the account.",0 )
 		resp$(rc+=1)=str$(dno)
 	end if
 	fnTxt(2,36,6,0,right,"30",0,"Enter the main part of the account.",0 )
 	resp$(rc+=1)=str$(ano)
-	if use_sub then 
-		fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the account.",0 ) 
+	if use_sub then
+		fnTxt(2,45,3,0,right,"30",0,"Enter the sub portion of the account.",0 )
 		resp$(rc+=1)=str$(sno)
 	end if
 	fnLbl(3,1,"Description:",mylen,right)
@@ -431,22 +441,22 @@ CHANGE_ACCT_NUM: ! r:
 	if ~use_dept and ~use_sub then d$=resp$(2)
 	if use_dept and ~use_sub then d$=resp$(3)
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
-	if key$=gl$ then goto L4200 ! only changing description
-	read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey L4190
-	! MSGBOX5: !
-	mat ml$(3)
-	ml$(1)="General ledger account # "&key$&" already " 
-	ml$(2)="exists. Take OK to review the account." 
-	ml$(3)="Take Cancel to return to main screen." 
-	fnmsgbox(mat ml$,resp$,cap$,49)
-	if resp$="OK" then goto DO_EDIT else goto MAIN
-	L4190: !
-	gl$=key$
-	L4200: !
-	rewrite #hAccount,using L4210,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-	L4210: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-	if cl1=1 then 
-		rewrite #8,using L4210,key=holdgl$: gl$,d$ nokey L4230
+	if key$<>gl$ then ! change account number
+		read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey L4190
+		! MSGBOX5: !
+		mat ml$(3)
+		ml$(1)="General ledger account # "&key$&" already "
+		ml$(2)="exists. Take OK to review the account."
+		ml$(3)="Take Cancel to return to main screen."
+		fnmsgbox(mat ml$,resp$,'',49)
+		if resp$="OK" then goto DO_EDIT else goto MAIN
+		L4190: !
+		gl$=key$
+	end if
+	rewrite #hAccount,using Faccount,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
+	Faccount: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
+	if cl1=1 then
+		rewrite #8,using Faccount,key=holdgl$: gl$,d$ nokey L4230
 	end if
 	L4230: !
 	gosub CHG_GLNO_IN_HISTORY ! change accounts in history
@@ -458,6 +468,7 @@ MSGBOX4: ! r:
 	ml$(2)="Take the 'Change #' option to change either the"
 	ml$(3)="account or the description."
 	ml$(4)="Click OK to access the new account; else Cancel to quit."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto DO_EDIT
 if resp$='Cancel' then gl$=key$=holdgl$: goto MAIN ! /r
+include: ertn

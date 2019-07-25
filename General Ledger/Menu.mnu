@@ -1,6 +1,6 @@
 ! *** GL - General Ledger ***
 File
->General Ledger Master                              ^ General Ledger\Accounts
+>Accounts (General Ledger Master)                   ^ General Ledger\Accounts
 >>Duplicate Range of Accounts                       ^ acsGL\BldRange
 >Financial Statement Design                         ^ General Ledger\Financial Statement Design
 >Payee                                              ^ General Ledger\Payee
