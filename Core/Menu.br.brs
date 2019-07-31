@@ -866,7 +866,7 @@ def fn_display_menu
 		!  fn_dm_add('  -')
 		fn_dm_add(' PrintAce Install &Dependencies','S:\Core\Programs\PrintAce_Setup.br')
 		if env$('BR_MODEL')<>'CLIENT/SERVER' then
-			fn_dm_add(' Client Server','S:\Core\Client_Server.br')
+			fn_dm_add(' Client Server','S:\Core\Programs\Client Server.br')
 		end if
 		fn_dm_add(' Restart','Restart')
 		fn_dm_add('&Help')

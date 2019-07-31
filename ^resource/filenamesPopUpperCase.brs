@@ -1,0 +1,1 @@
+if wasFilenamesUpperCase then exe 'con filenames UPPER_CASE'

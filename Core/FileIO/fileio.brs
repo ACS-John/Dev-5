@@ -5,7 +5,7 @@
  !  Created: 03/28/06
  ! Modified: 02/11/19
  !
- ! Version 102
+ def fnVersion=104
  !
  !
  ! #Autonumber# 500,1
@@ -29,126 +29,7 @@
  ! By creating a simple procfile called fileio.ini, a procfile that
  ! resides in the current path and setting the appropriate values.
  !
- ! Version 103: Fixed a bug when exporting data files that had no numbers and data files that had no strings
- !
- ! Version 102: Added optional parameters Mat F$ and mat F for two arrays that get resized for the data file.
- !
- ! Version 101: Fixed a glitch in the automatic update process when adding an additional key
- !
- ! Version 100: Fixed a bug in the CSV import routine. Thanks Mikhail Zheleznov!!
- !
- ! Version 99: Increased Length used in Export functionality to support fields up to 1000 characters long (matching the ScreenIO limit).
- !
- ! Version 98: Fixed a bug with the automatic Date Handling logic that caused FileIO's automatic updates to crash
- !
- ! Version 97:   added fnCalculateHours(timein$,tout$) which returns the hours between timein and tout, which must be passed in as hhmmss
- !
- ! Version 96: Added functions to convert time between American and Military time: fnStandardTime$ and fnMilitaryTime$
- !
- ! Version 95: Fixed a small bug that caused trouble using the SendEmail function when
- !  fileio is not installed in the default location. Thanks John Bowman!
- !
- ! Version 94:
- !  Fixed a bug that occasionally caused the Datacrawler to crash when reading large negative values stored in ZD fields.
- !
- ! Version 93:
- !  Added an option to the Export Listview CSV so that it supports multi-select listviews and exports only the selected rows.
- !
- ! Version 92:
- !  Fixed a bug introduced in Version 91 that broke layouts with all strings or all numbers (not mixed)
- !
- ! Version 91:
- !  Date formatting in 4th column in the layout (by Gabriel Bakker and Mikhail Zheleznov)
- !  for csv export, data crawler, and other FileIO library functions such as:
- !  fnReadLayoutArrays
- !  fnReadEntireLayout
- !  fnOpenFile
- !  fnExportToCSV
- !  fnCsvExport
- !  fnShowData
- !
- !  For example:
- !  Specify DATE(YMD) to indicate the date is saved in the file as MDY.
- !  Specify DATE(JULIAN) if the date is saved in the file as a julian date.
- !
- !  This automatically integrates with ScreenIO to format the fields as dates automatically when
- !   you put the controls on your screen. It automatically works in the Data Crawler. And the
- !   date formats are returned by the fnReadLayout functions.
- !
- !  Specify your preferred DateFormatDisplay and DateFormatExport in the fileio.ini file.
- !
- !  Press F6 (View Raw) or F7 (Edit Raw) in the data crawler to bypass date formatting and see the raw disk values.
- !
- !  FileIO Date Processing works with Automatic Updates, so if you change your file format on disk,
- !   for example, from DATE(YMD) to DATE(JULIAN) and increase the version number, FileIO will automatically
- !   update the date format on disk. You'll have to update any programs that work with the date, however, including
- !   screenIO programs.
- !
- !  Fixed a bug with fnExportListviewCSV that made it require OPTION 38. It no longer requires OPTION 38.
- !
- ! Version 90:
- !  Made fnAddToForm into a library function so people can use it in their programs.
- !  Removed "let" from subscript assignment code resulting in 4 fewer characters per subscript
- !   resulting in fewer lines of code to run to set them, and faster execution.
- !   (Thanks Mikhail Zheleznov for both of these contributions)
- !
- ! Version 89:
- !  Added fnSubstituteStringCode which is like fnSubstituteString but instead of using the file layout it uses a
- !   list of variables passed in as BR code to the function.
-
- ! Version 88:
- !  Added fnSubstituteString(&Message$,LayoutName$,mat F$,mat F) Which takes the passed in record and layout and subsitutes anything it finds
- !   in the string that matches.
- !  Fixed EmailSend function to handle CRLFs as well as \n's for CR in the Message String
- !   Added ability to type ::U or ::L or ::T to Upper, Lower, or Title Case a substitute value in fnSubstituteString
- !
- ! Version 87:
- !  Fixed DisplayLength of L spec fields to 17.
- !  Fixed another bug in CSV Export that would fail if there was a quoted string field with a comma in it.
- !
- ! Version 86:
- !  Fixed it so that mat badreads doesn't error when there are lots of bad records.
- !
- ! Version 85:
- !  Added option to Save the Selected Columns on CSV export by filename and restore them next time.
- !
- ! Version 84:
- !  Added option for Select Columns Only.
- !  Added code to CSV Export so that if Dialog is off and Filename is not given, then
- !   an unused filename will be generated.
- !  Fixed bug in reading Rows and Columns during Upgrade Process that caused an error when running in
- !   Gui Off mode on a Linux Terminal, when doing an update of a file.
- !
- ! Version 83:
- !  Select Columns on CSV Export. Made Select Columns screen slightly smaller.
- !
- ! Version 82:
- !  Fixed a minor Bug in Datacrawler
- !
- ! Version 81:
- !  Improvements to the built in "Compare" (before and after) functionality (formerly called "AuditBR")
- !
- ! Version 80:
- !  Fixed a bug in CSV Import involving Quoted fields
- !
- ! Version 79:
- !  Minor Graphical Improvements, Fine Tuned Progress Bar Function
- !
- ! Vesion 78:
- !  Dramatically improved the Bad Read functionality. If some records cannot be read, FileIO tells you about it and
- !   asks if you want to see them. If you say "Yes" it displays them in Notepad. This is a big help when writing layouts
- !   for preexisting files with PD fields in them, because before you just wouldn't know they were gone.
- !
- ! Version 77:
- !  Made the Progress bar a callable library function, so that you can use it in your own programs. Call fnProgressBar in
- !   whatever looping code you want to display the progress bar for, give it the percent done. Call fnCloseBar when you're done.
- !
- ! Version 76:
- !  Custom File Layout Extensions. Special Thanks to John Bowman who wrote nearly all of the code supporting this. Includes a Layout
- !   Wizard to help you implement it now. Added Filter Box to the Data Crawler. Added Settings for Filter Boxes and Custom Layouts.
- !   Better Progress Bar for fnUpdate. Many minor improvements. Implemented Update Message instead of the "Create File" message you
- !    saw before on update.
- !
+ ! Recent Changes have been moved to FileIOUpdateLog.txt
     goto DIMS
  !
  ! #Autonumber# 1000,5
@@ -357,6 +238,8 @@
     print #Dc_Window, fields str$(ScreenRows-5)&",3,CC 10,/W:W,B43;"&str$(ScreenRows-5)&",27,CC 10,/W:W,B44" : "Quit","View"
     print #Dc_Window, fields str$(ScreenRows-5)&",15,CC 10,/W:W,B47", help "3;Run Once to set the Start Reference Point. Then test an Operation on your Files. Run again to display all changes found in the selected files.;"  : "Compare"
     print #Dc_Window, fields str$(ScreenRows-2)&",10,CC 20,/W:W,B45" : "Generate Code"
+    print #Dc_Window, fields str$(ScreenRows-3)&",32,CC 6,/W:W,B8", help "3;Check for Updates (F8);" : "v"&str$(fnVersion)
+    print #Dc_Window, fields str$(ScreenRows-2)&",32,CC 6,/W:W,B9", help "3;View FileIO Recent Changes;" : "Log"
     print #Dc_Window, fields str$(ScreenRows-3)&",10,CC 20,/W:W,B46" : "New Layout Wizard"
     print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,HEADERS,/W:W" : (Mat Lvdir_Headings$, Mat Lvdir_Widths, Mat Lvdir_Fieldforms$)
     print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,=" : (Mat Lvdir_Listing$)
@@ -414,6 +297,12 @@
           let fnIgnoreLayouts(mat LvDir_Listing$)
           print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,=" : (Mat Lvdir_Listing$)
           print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,SORT" : 1
+       end if
+       if Dc_Key=8 then
+          let fnCheckForUpdates
+       end if
+       if Dc_Key=9 then
+          if exists("FileIOUpdateLog.txt") then execute "sy -C -M start FileIOUpdateLog.txt"
        end if
        if Dc_Key=47 then
           let fnCallAudit(mat SelectedRecords,mat lvdir_listing$)
@@ -689,6 +578,36 @@
           let GridSpec$=str$(FirstRow+o_search)&",1,LIST "&str$(rows-((firstrow-1)+o_search+fnButtonRows))&"/"&str$(cols)
        end if
        mat ID$(udim(mat ID$)-1) ! Remove Data element for list; it has to be given as a Scalar
+    fnend
+
+    def fnCheckForUpdates(;___,Connection,V,String$*1000,Window)
+       if fn43 then
+          open #(Window:=fnGetFileNumber): "srow=10,scol=20,rows=1,cols=30,Border=S",display,outin
+          print #Window, fields "1,1,CC 30" : "Contacting Server..."
+          open #(Connection:=fnGetFileNumber): "name=http://www.sageax.com/downloads/FileIOVersion.txt, http=client",display,outin
+          if file(Connection)=0 then
+             linput #Connection: String$ eof Ignore
+             close #Connection:
+             close #Window:
+             let V=-999
+             let V=Val(String$) conv Ignore
+             if V=-999 then
+                let msgbox("There was an error checking the latest version on the Server. Check your internet connection, or try again later."&hex$("0D0A0D0A")&"If the problem persists, please contact Gabriel Bakker at gabriel.bakker@gmail.com.","Connection Failed","Ok","EXCL")
+             else if V>fnVersion then
+                if (2==msgbox("A newer version (FileIO v"&str$(V)&") is available. (You're currently running FileIO v"&str$(fnVersion)&")."&hex$("0D0A0D0A")&"Would you like to download the update from our website?","Update Y/N?","Yn","QST")) then
+                   execute "sy -C -M start http://www.sageax.com/downloads/FileIO.zip"
+                end if
+             else
+                let msgbox("Your version is up to date!"&hex$("0D0A0D0A")&"You are running FileIO v"&str$(fnVersion)&", the current version.","FileIO is Up to Date","Ok","EXCL")
+             end if
+          else
+             let msgbox("The server, www.sageax.com, could not be reached. Check your internet connection, or try again later."&hex$("0D0A0D0A")&"If the problem persists, please contact Gabriel Bakker at gabriel.bakker@gmail.com.","Connection Failed","Ok","EXCL")
+             close #Window:
+             if file(Connection)><-1 then close #Connection:
+          end if
+       else
+          let msgbox("This feature requires BR 4.3+")
+       end if
     fnend
 
     def fnPrepareWindow(&sRow,&sCol,&Rows,&Cols,Edit,mat Includebuttons$,&Caption$,&GridSpec$,mat Inputspec$,mat OutputSpec$,mat Inputdata$,mat OutputData$,&o_position,mat FilterFields$,mat FilterForm$,mat FilterCompare$,mat FilterCaption$,mat FilterDefaults$,mat FilterSubs,mat FilterValSubs,mat ColumnNames$,mat FilterKey,&Searchsub;___,o_caption,o_border,o_recl)
@@ -4598,8 +4517,6 @@
           let Layoutpath$=fnSettings$("layoutpath")
           let FileLayoutExtension$=fnSettings$("layoutextension")
 
-
-
           if ~fnopenlayout(layoutpath$&filename$&FileLayoutExtension$) then goto ERRORREADFILELAYOUT
           if fnSMatrixPresent(mat Subs$) then
              mat Subs$(0)
@@ -6131,11 +6048,11 @@
                          if file(OldFile)=0 then
                             if srch(Records,rec(OldFile))<1 then
                                if OutFile then
-                                  print #Outfile: "Record "&str$(rec(OldFile))&" was deleted with key: '"&fnBuildKey$(FileList$(Index),mat OldF$,mat OldF)&"', The Data was:"
+                                  print #Outfile: "Record "&str$(rec(OldFile))&" was deleted with key: '"&fnBuildKey$(FileList$(Index),mat OldF$,mat OldF)&"', The Data was:";
                                   let fnPrintArrays$(OutFile,mat OldF$,mat OldF)
                                end if
                                if Printer then
-                                  print #255: "[RED]Record "&str$(rec(OldFile))&" was deleted with key: '"&fnBuildKey$(FileList$(Index),mat OldF$,mat OldF)&"', The Data was:"
+                                  print #255: "[RED]Record "&str$(rec(OldFile))&" was deleted with key: '"&fnBuildKey$(FileList$(Index),mat OldF$,mat OldF)&"', The Data was:";
                                   let fnPrintArrays$(255,mat OldF$,mat OldF)
                                   print #255: "[BLACK]";
                                end if

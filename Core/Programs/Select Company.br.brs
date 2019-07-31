@@ -11,21 +11,21 @@ MENU1: ! r:
 	fnFra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
 	ch_line=1
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
-		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' then 
+		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' then
 			ch_line+=1
 			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
-			! if env$('cursys')=client_has$(ch_item) then 
+			! if env$('cursys')=client_has$(ch_item) then
 			!   fnLbl(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),37,2,0,1)
-			! else 
+			! else
 			!   fnButton(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item,'',1,37,1)
-			! end if 
-		end if 
+			! end if
+		end if
 	next ch_item
 	! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 	! /r
 	!  r: add that company grid to the screen
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
-	! 
+	!
 
 	fngetdir2(fn_dataFolder$,mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 	company_count=filename_item=0
@@ -34,13 +34,13 @@ MENU1: ! r:
 		if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
 			company_count+=1
 			item$(1)=str$(tmp_cno)
-			item$(2)=fn_cname_of_cno$(tmp_cno)
+			item$(2)=fn_companyName$(tmp_cno)
 			fnflexadd1(mat item$)
-			if tmp_cno=cno then 
+			if tmp_cno=cno then
 				setenv('current_grid_row',str$(company_count))
-			end if 
-		end if 
-	ACNO_CONV: ! 
+			end if
+		end if
+	ACNO_CONV: !
 	next filename_item
 	! /r
 	fnLbl(1,42,"Company:",9,0)
@@ -50,38 +50,38 @@ MENU1: ! r:
 	fnButton(2,82,"Co&py",3,'',1,9)
 	if company_count=>2 then ! Delete only allowed if there are 2 or more companies on the list
 		fnButton(2,92,"&Delete",4,'',1,9)
-	end if 
+	end if
 	fnButton(1,102,"Open...",17,'',1,9)
-	if (fnclient_is_converting or company_count=0) then 
+	if (fnclient_is_converting or company_count=0) then
 		fnButton(2,102,"I&mport",13,'',1,9)
-	end if 
+	end if
 	fnCmdKey("&Save",15,1,0)
 	if exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 		fnCmdKey("&Cancel",5,0,1)
-	end if 
+	end if
 	fnAcs(sn$,win,mat resp$,ck)
-	! 
+	!
 	if ck=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
 		goto XIT
-	else if ck=2 then 
+	else if ck=2 then
 		goto COMPANY_ADD
 	else if ck=17 then ! Open...
 		fnOpenPartial
 		chain program$
 	else if ck=13 and (fnclient_is_converting or company_count=0) then ! import
 		fnchain('S:\Core\Company Import.br')
-	end if 
-	! 
+	end if
+	!
 	cno_selected=val(resp$(1))
-	! 
+	!
 	if ck=3 then ! Copy
-		fn_company_copy(cno_selected)
+		fn_companyCopy(cno_selected)
 	!   goto MENU1
 	else if ck=14 then ! Delete Company
 		gosub SELECT_COMPANY
-		fn_company_configure(scno)
+		fn_companyConfigure(scno)
 	else if ck=4 and company_count=>2 then ! Delete Company
-		fn_company_delete(cno_selected)
+		fn_companyDelete(cno_selected)
 	!   goto MENU1
 	else if ck=10 then ! Select that Company
 		gosub SELECT_COMPANY
@@ -102,7 +102,7 @@ MENU1: ! r:
 	else if ck=15 then ! SAVE
 		gosub SELECT_COMPANY
 		goto XIT
-	end if 
+	end if
 	goto MENU1 ! /r
 SELECT_COMPANY: ! r:
 	fnputcno(cno_selected)
@@ -134,7 +134,7 @@ COMPANY_ADD: ! r:
 			ml$(2)='ACS Accounts Payable system?'
 			ml$(3)='This is only chance.'
 			fnmsgbox(mat ml$,resp$,'',36)
-			if resp$='Yes' then 
+			if resp$='Yes' then
 				fnApMstrConversion
 				fnchain("S:\acsCL\Conversion\GLBLD-CNV")
 			end if
@@ -143,79 +143,65 @@ COMPANY_ADD: ! r:
 	else if env$('cursys')='UB' then
 		fnchain(txt$="S:\Core\AddCNo")
 	else if exists('S:\'&fnSystemName$(env$('cursys'))&'\Company.br') then
-		fnchain('S:\'&fnSystemName$(env$('cursys'))&'\Company.br') 
-	else 
+		fnchain('S:\'&fnSystemName$(env$('cursys'))&'\Company.br')
+	else
 		fnchain(txt$="S:\acs"&env$('cursys')&"\AddCNo")
-	end if 
+	end if
 ! /r
 XIT: fnxit
-IGNORE: continue 
+IGNORE: continue
 def fn_company_already_exists(cae_cno)
 	cae_return=0
-	if exists(fn_dataFolder$&'\Company.h'&str$(cae_cno)) then 
+	if exists(fn_dataFolder$&'\Company.h'&str$(cae_cno)) then
 		cae_return=1
 		! mat mg$(3)
 		mat mg$(2)
-		mg$(1)="Company number "&str$(cae_cno)&". "&rtrm$(fn_cname_of_cno$(cae_cno))&" already exist!"
+		mg$(1)="Company number "&str$(cae_cno)&". "&rtrm$(fn_companyName$(cae_cno))&" already exist!"
 		mg$(2)="Would you like to erase it first?"
 		fnmsgbox(mat mg$,response$,'',32+4+256) ! (i)+(yn)+(secondButtonDefault)
 		if response$='Yes' then
-			if fn_company_delete(cae_cno) then cae_return=0
+			if fn_companyDelete(cae_cno) then cae_return=0
 		end if
 		!  mg$(2)="Select a different company number"
 		!  mg$(3)="or exit and erase the existing company first."
 		!  fnmsgbox(mat mg$,response$,'',16)
-	end if 
+	end if
 	fn_company_already_exists=cae_return
-fnend 
-def fn_cname_of_cno$*40(cno)
+fnend
+def fn_companyName$*40(cno)
 	dim coc_return$*40
 	coc_return$=''
 	open #h_tmp:=fngethandle: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,input ioerr COC_FINIS
 	read #h_tmp,using "Form pos 1,c 40": coc_return$
-	close #h_tmp: 
-	COC_FINIS: ! 
-	fn_cname_of_cno$=coc_return$
-fnend 
-def fn_company_delete(cno)
-	companyDeleteReturn=0
-	fnTos(sn$="company_delete")
-	fnLbl(1,1,"**** WARNING ****",40,1,5)
-	fnLbl(3,1,"You have chosen to completely delete company:",60,2)
-	fnLbl(4,1,str$(cno)&". "&fn_cname_of_cno$(cno),60,2)
-	fnLbl(6,1,"The only way to get it back will be to restore a backup.",60,2)
-	fnLbl(9,11,"Enter ERASE to continue:",24,1)
-	fnTxt(9,36,5)
-	resp$(1)=""
-	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	e$=uprc$(trim$(resp$(1)))
-	if ckey<>5 then 
-		if e$="ERASE" then 
-			fnFree(fn_dataFolder$&'\*.h'&str$(cno))
-			mat mg$(1)
-			mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
-			fnmsgbox(mat mg$,resp$,'',0)
-			companyDeleteReturn=1
-		end if 
-	end if 
-	fn_company_delete=companyDeleteReturn
-fnend 
-def fn_company_configure(scno)
+	close #h_tmp:
+	COC_FINIS: !
+	fn_companyName$=coc_return$
+fnend
+def fn_companyDelete(cno)
+	if fnConfirmDeleteHard('company',str$(cno)&". "&fn_companyName$(cno)) then
+		fnFree(fn_dataFolder$&'\*.h'&str$(cno))
+		mat mg$(1)
+		mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
+		fnmsgbox(mat mg$,resp$,'',0)
+		companyDeleteReturn=1
+	end if
+	fn_companyDelete=companyDeleteReturn
+fnend
+def fn_companyConfigure(scno)
 	setenv("xit_override","")
 	setenv("xit_override","S:\Core\Programs\Select Company")
 	fnchain('S:\acs'&env$('cursys')&'\Company.br')
-fnend 
-def fn_company_copy(scno)
+fnend
+def fn_companyCopy(scno)
 	dim dcnam$*40
 	dcno=0
-	dcnam$=fn_cname_of_cno$(scno)
-	CC_SCREEN1: ! 
+	dcnam$=fn_companyName$(scno)
+	CC_SCREEN1: !
 	fnTos(sn$='CopyCNo3')
 	lc=0
 	mylen=29 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Source Company:",mylen,1)
-	fnLbl(lc,mypos,str$(scno)&'. '&fn_cname_of_cno$(scno),50)
+	fnLbl(lc,mypos,str$(scno)&'. '&fn_companyName$(scno),50)
 	lc+=1
 	fnLbl(lc+=1,1,"&Destination Company Number:",mylen,1)
 	fnTxt(lc,mypos,5,0,0,'30')
@@ -231,28 +217,29 @@ def fn_company_copy(scno)
 	fnLbl(lc+=1,1,"it will be overwritten!",80,2)
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ck)
-	if ck<>5 then 
+	if ck<>5 then
 		dcno=val(resp$(1))
 		dcnam$=resp$(2)
 		if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
 		fnCopy(fn_dataFolder$&'\*.h'&str$(scno),fn_dataFolder$&'\*.h'&str$(dcno), 0,'errornotify')
-		if uprc$(env$('cursys'))=uprc$("UB") then 
+		if uprc$(env$('cursys'))=uprc$("UB") then
 			fnCopy("[Q]\UBmstr\ubData\*.h"&str$(scno),"[Q]\UBmstr\ubData\*.h"&str$(dcno), 0,'errornotify')
-		end if 
-		fn_update_company_name(dcno,dcnam$)
-	end if 
-fnend 
-def fn_update_company_name(cno,cnam$*40)
+		end if
+		fn_companyNameSet(dcno,dcnam$)
+	end if
+fnend
+def fn_companyNameSet(cno,cnam$*40)
 	cnam$=rtrm$(cnam$)
-	if cnam$<>'' then 
-		open #h_company:=fngethandle: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative 
+	if cnam$<>'' then
+		open #h_company:=fngethandle: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative
 		rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
-		close #h_company: 
-	end if 
-fnend 
+		close #h_company:
+	end if
+fnend
 def fn_setup
-	if setup<>1 then 
+	if setup<>1 then
 		setup=1
+		library 'S:\Core\Library': fnConfirmDeleteHard
 		library 'S:\Core\Library': fnAcs,fncno,fnTos
 		library 'S:\Core\Library': fnchain,fnxit
 		library 'S:\Core\Library': fnputcno
@@ -283,8 +270,8 @@ def fn_setup
 		! NOTE: Regardless of which ACS System:
 		!  * Add Company program must be called acs[cursys]\ADDCNO.br
 		!  * Company files must be named Company.hxx
-	end if 
-	! 
+	end if
+	!
 	! r: constants and variables setup for the company grid
 		mat colhdr$(2)
 		colhdr$(1)='Number'
@@ -295,7 +282,7 @@ def fn_setup
 		dim item$(2)*40
 	! /r
 	fn_system_setup
-fnend 
+fnend
 def fn_dataFolder$*256(; ___,return$*256)
 	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
 		return$='S:\Core\Data\acsllc'
@@ -305,7 +292,7 @@ def fn_dataFolder$*256(; ___,return$*256)
 	fn_dataFolder$=return$
 fnend
 def fn_system_setup
-	if ~fnclient_has_mat(mat client_has$) and env$("ACSDeveloper")="" then 
+	if ~fnclient_has_mat(mat client_has$) and env$("ACSDeveloper")="" then
 		dim ml$(1)*128
 		mat ml$(4)
 		ml$(1)='Client '&env$('client')&' has nothing licensed.  Please perform an update.'
@@ -313,12 +300,12 @@ def fn_system_setup
 		ml$(3)='still receiving this message contact ACS at 1-800-643-6318'
 		ml$(4)='Perform an Update now?'
 		fnmsgbox(mat ml$,resp$,'',16+4)
-		if uprc$(resp$)=uprc$("Yes") then 
+		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
-		else 
+		else
 			goto XIT
-		end if 
-	end if 
+		end if
+	end if
 
 	gosub IfCoTryAgain
 
@@ -327,7 +314,7 @@ def fn_system_setup
 	fnreg_read(session$&'.CurSys',cursys$)
 	cursys$=fncursys$(cursys$)
 	fn_setup_on_cursys_change
-fnend 
+fnend
 IfCoTryAgain: ! r: if cursys=CO than just pick the first thing they are licensed for
 	if ( env$('cursys')='CO' or srch(mat client_has$,env$('cursys'))<=0 ) and udim(mat client_has$)=>2 then
 		cursys$=client_has$(2)
@@ -340,14 +327,14 @@ return ! /r
 def fn_setup_on_cursys_change
 	dim cnam$*80
 	fncno(cno,cnam$)
-	if cno=0 then 
+	if cno=0 then
 		cno=1
 		fnputcno(cno)
 		fncno(cno,cnam$)
-	end if 
-	! 
+	end if
+	!
 	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'TM' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
 	! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
-fnend 
+fnend
 
 include: ertn

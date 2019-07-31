@@ -31,7 +31,17 @@ def fn_acsSystemInitialize(; syInitMode)
 		execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 		if ~setup then let fn_setup
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
-		fn_env_data_default
+		
+		if syInitMode=2 then
+			fn_env_data_default(1)
+			setenv('data',os_filename$('//6')&'\ACS')
+			! setenv('data',os_filename$(env$('Status.Files.Drives.[I]')&'ACS')
+			fnMakeSurepathExists(env$('data')&'\')
+			! pause
+		else
+			fn_env_data_default(0)
+		end if
+		
 		!
 		if env$('Q')='' then
 			if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
@@ -72,7 +82,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		!  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
 		execute "load S:\Core\Index.br,Resident"
 		execute "load S:\Core\ACS_Component.br,Resident"
-		execute "load S:\Core\fnWindowsStart.br,Resident"
+		execute "load S:\Core\fn\windowsStart.br,Resident"
 		execute 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
@@ -148,7 +158,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				pause
 			end if
 		end if
-		if ~exists('r') then
+		if ~exists('r') and env$('cursys')<>'CM' then
 			fn_writeProc('r','stop'             )
 			fn_writeProc('' ,'clear resi'       )
 			fn_writeProc('' ,'run '&program$    )
@@ -196,9 +206,12 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if 
 		library 'S:\Core\Library': fnSpecialFolderPath$
 		setenv('Desktop',fnSpecialFolderPath$('Desktop'))
-		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' and serial<>200033202 then   ! serial<>200033202 is Brumbaugh - they should never see this pop-up
-			fn_show_release_notes(version_prior$,version_current$)
-			fn_FreeVirtualStore
+		! pr 'point XXX1' : pause
+		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then 
+			if  env$('cursys')<>'CM' then 
+				fn_show_release_notes(version_prior$,version_current$)
+				fn_FreeVirtualStore
+			end if
 			fn_UpdateQFileIO
 			fn_UpdateQScreenIO
 			fn_last_version_used$(version_current$)
@@ -287,22 +300,20 @@ def fn_AcsUserId_Initialize
 	end if
 fnend
 XIT: execute "System"
-IGNORE: continue 
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
 def fn_setup
 	if ~setup then 
 		setup=1
 		option retain 
-		library 'S:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme
-		library 'S:\Core\Library': fnCopy,fnshortpath$,fnureg_read
+		library 'S:\Core\Library': fnchain
+		library 'S:\Core\Library': fncheckcompiled
+		library 'S:\Core\Library': fnapply_theme
+		library 'S:\Core\Library': fnCopy
+		library 'S:\Core\Library': fnshortpath$
+		library 'S:\Core\Library': fnureg_read
 		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnAcsInstallationPath$,fnMakeSurepathExists,fnclient$
+		library 'S:\Core\Library': fnAcsInstallationPath$
+		library 'S:\Core\Library': fnMakeSurepathExists
+		library 'S:\Core\Library': fnclient$
 	end if 
 fnend 
 def library fnSpoolPath$*256(; initialize)
@@ -435,19 +446,24 @@ fnend
 !   end if 
 !   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
 ! fnend /r
-def fn_env_data_default
-	if env$('data')='' then ! if env$('data') is blank than set it here.
-		dim edd_base$*256
-		if env$('ProgramData')='' then 
-			edd_base$=fnshortpath$(env$('appdata'))
-		else 
-			edd_base$=env$('ProgramData')
-		end if 
-		setenv('data',edd_base$&'\ACS\')
-		fnmakesurepathexists(env$('data')&'\Data\')
-		if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
-			setenv('data',env$('data')&'\')
-		end if 
+def fn_env_data_default(; colletionMasterMode)
+	if colletionMasterMode then
+		fnmakesurepathexists(env$('status.files.drives.[i]')&'ACS\')
+		setenv('data',env$('status.files.drives.[i]')&'ACS\')
+	else
+		if env$('data')='' then ! if env$('data') is blank than set it here.
+			dim edd_base$*256
+			if env$('ProgramData')='' then 
+				edd_base$=fnshortpath$(env$('appdata'))
+			else 
+				edd_base$=env$('ProgramData')
+			end if 
+			setenv('data',edd_base$&'\ACS\')
+			fnmakesurepathexists(env$('data')&'\Data\')
+			if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
+				setenv('data',env$('data')&'\')
+			end if 
+		end if
 	end if
 fnend 
 def library fnSetQ(setQ$*256)
@@ -517,6 +533,7 @@ def fn_update_version_for_inno
 	pr #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
 	pr #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
 	pr #h_tmp: 'AppVersion='&env$('acsVersion')
+	pr #h_tmp: 'AppVerName=ACS '&env$('acsVersion')
 	close #h_tmp: 
 fnend 
 def fncs_env
@@ -639,13 +656,37 @@ def fn_FreeVirtualStore ! does not seem to work.
 	end if
 fnend
 def fn_UpdateQFileIO
-	if env$('acsDeveloper')='' then ! because I used symbolic link
+	if env$('acsDeveloper')='' and env$('cursys')<>'CM' then ! because I used symbolic link
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\')
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
 		fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
 		fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
+	else if env$('cursys')='CM' then
+		library 'S:\Core\Library': fngetdir2
+		dim sLayFile$(0)*256
+		dim sLayDate$(1)*32
+		dim sLayTime$(1)*32
+		fngetdir2('S:\Core\FileIO\Layout\',mat sLayFile$, '','*.fio',mat sLayDate$,mat sLayTime$)
+		dim dLayFile$(0)*256
+		dim dLayDate$(1)*32
+		dim dLayTime$(1)*32
+		fngetdir2('filelay\',mat dLayFile$, '','*.',mat dLayDate$,mat dLayTime$)
+		for sItem=1 to udim(mat sLayFile$)
+			if sLayFile$(sItem)(1:3)='CM ' or sLayFile$(sItem)(1:3)='CO ' then
+				dWhich=srch(mat dLayFile$,sLayFile$(sItem)(1:pos(sLayFile$(sItem),'.',-1)-1))
+				if dWhich<=0 then ! it isn't there at all
+					fnCopy('S:\Core\FileIO\Layout\'&sLayFile$(sItem)        ,'filelay\*'        )
+					! pause
+				else ! TODO: see if it is newer and copy in ONLY if it is.
+					fnCopy('S:\Core\FileIO\Layout\'&sLayFile$(sItem)        ,'filelay\*'        )
+					! pause
+				end if
+			end if
+		nex sItem
+		! pause
 	end if
 fnend
+
 def fn_UpdateQScreenIO
 	if env$('acsDeveloper')='' then ! because I used: mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen" "C:\ACS\Dev-5\Core\ScreenIO\Screen"
 		fnMakeSurepathExists(env$('QBase')&'\Core\ScreenIO\screen\')
@@ -708,3 +749,4 @@ def fn_writeProc(procName$*64,procLine$*256)
 	pr #hEd: procLine$
 	close #hEd:
 fnend
+include: ertn

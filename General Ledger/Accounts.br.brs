@@ -280,8 +280,8 @@ REVIEW_TRANS: ! r:
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then goto MAIN
-	if resp$(1)="True" then rv=1
-	if resp$(2)="True" then rv=2
+	if resp$(1)="True" then currentOrHistory=1
+	if resp$(2)="True" then currentOrHistory=2
 ! ______________________________________________________________________
 TRANSACTION_GRID: !
 	mat chdr$(9) : mat cmask$(9) : mat item$(9)
@@ -298,7 +298,7 @@ TRANSACTION_GRID: !
 	fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	adr=ta(1): pc2=0
 !  read current or history files
-	if rv=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
+	if currentOrHistory=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
 	READ_FROM_CURRENT: !
 	transfile=2
 	L2780: if adr=0 then goto EO_TRANS_GRID
@@ -325,16 +325,16 @@ TRANSACTION_GRID: !
 	item$(8)=td$
 	item$(9)=str$(pc2)
 	fnflexadd1(mat item$)
-	if rv=1 then goto L2780 else goto ReadAcTrans ! read from current or history
+	if currentOrHistory=1 then goto L2780 else goto ReadAcTrans ! read from current or history
 EO_TRANS_GRID: !
-	if rv=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
+	if currentOrHistory=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
 	fnAcs(sn$,0,mat resp$,ck)
 	if ck=5 then goto MAIN
 	if ck=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
 	if recordnum=0 then goto MAIN
-	if rv=1 then
+	if currentOrHistory=1 then
 		read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 	else
 		read #hAcTrans,using Factrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
@@ -381,7 +381,7 @@ EO_TRANS_GRID: !
 	tr$=resp$(6) ! reference #
 	td$=resp$(7) ! reference #
 	pc2=val(resp$(8)) ! period code from history; blank when returning from current
-	if rv=1 then
+	if currentOrHistory=1 then
 		rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 	else
 		rewrite #hAcTrans,using Factrans,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2

@@ -45,8 +45,9 @@ def fn_Copy(from$*256,to$*256; new_record_length,options$)
 			copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 			fnMakeSurePathExists(copyToFolder$)
 			fnStatus ('Creating files  in "'&copyToFolder$&'"') 
-			if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
+include: filenamesPushMixedCase
 			execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
+include: filenamesPopUpperCase
 			copy_return+=1 
 			! if int(cfi/10)=cfi/10 then pause
 			copyFailA: ! 

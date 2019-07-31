@@ -52,9 +52,9 @@ Screen1: !
 		dim outFile$*256
 		outFile$=csvPath$&csvProg$&'-CM_EDI'&'.csv'
 		hOut=fnGetHandle
-		execute 'Config FileNames Mixed_Case'
+include: filenamesPushMixedCase
 		open #hOut: 'name='&outFile$&',recl=1024,replace',display,output
-		execute 'Config FileNames UPPER_CASE'
+include: filenamesPopUpperCase
 		fn_pr_hOut('0[tab]H[tab]This file is "'&os_filename$(outFile$)&'"'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made by the "'&env$('program_caption')&'" (a Collection-Master Add-On program) on '&date$('mm/dd/ccyy')&' at '&time$&'.'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made from the source file: "'&csvFile$&'".'	)

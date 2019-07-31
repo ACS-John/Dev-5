@@ -50,9 +50,13 @@
 	! Switches may be preset in the DIRCMD environment variable.  Override
 	! preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 ! /r
-def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
+def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
 	! r: library, on error, constants, initialize variables
-		library 'S:\Core\Library': fngethandle,fnerror,fnFree,fnSrepEnv$
+		library 'S:\Core\Library': fnFree
+		library 'S:\Core\Library': fnSrepEnv$
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnArrayWasPassedC
+		library 'S:\Core\Library': fnArrayWasPassedN
 		on error goto ERTN
 		dim tmp$*512,directory_of$*256
 		dir$=fnSrepEnv$(dir$)
@@ -66,15 +70,19 @@ def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		dir$=trim$(dir$)
 		if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
 		mat filename$(0)
-		if udim(mat gd2_date$)>0 then 
-			gd2_date_requested=1
+		gd2_date_requested=fnArrayWasPassedC(mat gd2_date$)
+		if gd2_date_requested then 
 			directory_of$=os_filename$(dir$)
-		else 
-			gd2_date_requested=0
+			if slash_b then 
+				pr 'DIR /B does not return dates - either enhance fngetdir2 or change your call'
+				pause 
+			end if
 		end if 
-		if gd2_date_requested and slash_b then pr 'DIR /B does not return dates - either enhance fngetdir2 or change your call' : pause 
-		if udim(mat gd2_time$)>0 then gd2_time_requested=1 else gd2_time_requested=0
-		if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
+		! if udim(mat gd2_time$)>0 then gd2_time_requested=1 else gd2_time_requested=0
+		gd2_time_requested=fnArrayWasPassedC(mat gd2_time$)
+		! if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
+		gd2_size_requested=fnArrayWasPassedN(mat gd2_size)
+
 	! /r
 		dim fileList$*256
 		if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then

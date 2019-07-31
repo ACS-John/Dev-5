@@ -30,7 +30,7 @@ dim reportFile$*256
 FFFN: ! r:
 	delim$=','
 	reportFile$='n:CM-Duplicates-ForwarderFileNo.csv'
-	if env$('client_server')='Yes' then
+	if env$('BR_MODEL')='CLIENT/SERVER' then
 		reportFile$(0:0)='@:'
 	end if
 	limitRecordsProcessed=0 ! 50000
