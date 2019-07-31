@@ -5,9 +5,7 @@
 ! Data\Finan
 !  have ready by monday.
 fn_setup
-		! OPEN #hFinan:=fngethandle: "NAME=FINAN.INT//6,KFNAME=FINAN.IDX//6,shr",INTERNAL,OUTIN,KEYED
-exec 'config filenames mixed_case'
-exec 'copy FINAN.INT//6 Finan(beforePrePurge'&date$('ccyymmdd')&srep$(time$,':','')&'.int//6'
+fnCopy('FINAN.INT//6','Finan(beforePrePurge'&date$('ccyymmdd')&srep$(time$,':','')&'.int//6')
 open #hFinan:=fngethandle: "NAME=FINAN.INT//6,Shr",internal,outin,relative
 do
 	read #hFinan,using finan_formall$: mat finan_data$,mat finan_data eof EoFinan
@@ -29,6 +27,8 @@ Xit: end
 def fn_setup
 	if ~setup then 
 		setup=1
+
+		library 'S:\Core\Library': fnCopy
 
 		library "clsutil/library": fncom
 		library "clsutil/library": fnplus,fnget_form,fnget_formarr

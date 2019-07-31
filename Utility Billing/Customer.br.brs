@@ -28,17 +28,17 @@ def library fnCustomer(x)
 	open #h_citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 	! /r
 	! 
-	goto ASKACCT
+	goto AskAcct
 	! ______________________________________________________________________
 	ACCOUNT_X_NOKEY: ! r:
 		mat ml$(2)
 		ml$(1)="Account "&x$&' could not be found.'
 		ml$(2)="Select a different account."
 		fnmsgbox(mat ml$,resp$,'',48)
-	goto ASKACCT ! /r
+	goto AskAcct ! /r
 	EDIT_CUSTOMER: ! r:
 	jbact$=x$ ! ken 80905
-	if len(x$)<>10 then goto ASKACCT
+	if len(x$)<>10 then goto AskAcct
 	read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
 	fnFixPd(mat extra)
 	gosub REMOVE_INCORRECT_ALLOCATIONS
@@ -55,7 +55,7 @@ def library fnCustomer(x)
 		read #h_ubadrbil,using "Form POS 11,4*C 30",key=z$: mat ab$ nokey ignore
 		! pb=bal
 		odp=b(8)+b(9)+b(11)
-	goto NAMESCREEN ! /r
+	goto NameScreen ! /r
 	! ______________________________________________________________________
 	CHECK_BALANCE_BREAKDOWN: ! r:
 		gosub TGB_SET
@@ -87,7 +87,7 @@ def library fnCustomer(x)
 		delete #h_cass1,key=z$: ioerr ignore
 	PAST_CASS_DELETE: ! 
 	! probably change customer in ubtrans-vb here !Gosub 5130
-	if ad1=1 then goto ADD_RECORD else goto ASKACCT ! /r
+	if ad1=1 then goto ADD_RECORD else goto AskAcct ! /r
 	! ______________________________________________________________________
 	ASK_CONFIRM_KEY_CHANGE: ! r:
 		mat ml$(2)
@@ -98,7 +98,7 @@ def library fnCustomer(x)
 			goto ACC_KEY_CHANGE_TEST_EXIST
 		else if uprc$(resp$(1:1))="N" then 
 			z$=x$
-			goto NAMESCREEN
+			goto NameScreen
 		else 
 			goto ASK_CONFIRM_KEY_CHANGE
 		end if  ! /r
@@ -108,14 +108,14 @@ def library fnCustomer(x)
 		ml$(1)="Account "&trim$(z$)&" already exists."
 		ml$(2)="You must use a different account."
 		fnmsgbox(mat ml$,resp$,'',16)
-		goto NAMESCREEN ! /r
+		goto NameScreen ! /r
 	ACC_KC_VALID_ROUTE_TEST: ! r:
 		if extra(1)<bkno1 or extra(1)>bkno2 then 
 			mat ml$(2)
 			ml$(1)="You must have a valid route number!"
 			ml$(2)="(from "&bkno1$&" to "&bkno2$&")"
 			fnmsgbox(mat ml$,resp$,'',48)
-			goto NAMESCREEN
+			goto NameScreen
 		end if 
 		! 
 		rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
@@ -132,29 +132,26 @@ def library fnCustomer(x)
 		noteFile$=fn_notedir$&"\"&trim$(holdz$)&".txt" ! old notes
 		noteFileNew$=fn_notedir$&"\"&trim$(z$)&".txt" ! new notes
 		if exists(noteFile$)<>0 then execute "rename "&noteFile$&" "&noteFileNew$&" -d -n"
-	goto ASKACCT ! /r
+	goto AskAcct ! /r
 	! ______________________________________________________________________
-	CONFIRM_DELETE: ! r:
-		mat ml$(1)
-		ml$(1)="Do you wish to delete Account "&trim$(x$)&"?"
-		fnmsgbox(mat ml$,resp$,'',36)
-		if uprc$(resp$)="YES" then delconf$="Y" else delconf$="N"
-		if delconf$="N" then goto ASKACCT
-		if bal<>0 then 
+	DeleteCustomer: ! r:
+	if bal<>0 then 
 			mat ml$(3)
-			ml$(1)="You can not delete a customer with a balance."
-			ml$(2)="You must issue a debit memo or credit memo"
+			ml$(1)="You can not delete a customer with a non-zero balance."
+			ml$(2)="You must first issue a debit memo or credit memo"
 			ml$(3)="to bring the balance to zero."
 			fnmsgbox(mat ml$,resp$,'',16)
-			goto NAMESCREEN
-		end if 
-		gosub BUD4 ! delete budget info
-		delete #h_customer_1,key=x$: 
-		gosub DEL_CASS
-		delete #h_ubadrbil,key=x$: nokey ignore
-		gosub DEL_HIST
-		hact$=""
-	goto ASKACCT ! /r
+			goto NameScreen
+		end if 	
+		if fnConfirmDeleteHard('customer',"Account "&trim$(x$)) then
+			gosub BUD4 ! delete budget info
+			delete #h_customer_1,key=x$: 
+			gosub DEL_CASS
+			delete #h_ubadrbil,key=x$: nokey ignore
+			gosub DEL_HIST
+			hact$=""
+		end if
+	goto AskAcct ! /r
 	! ______________________________________________________________________
 	ALT_ADDRESS_SAVE: ! r: write or rewrite alternate billing address
 		rewrite #h_ubadrbil,using F_ADRBIL,key=z$: z$,mat ab$ nokey AAS_WRITE
@@ -182,7 +179,7 @@ def library fnCustomer(x)
 		fnmsgbox(mat ml$,resp$,'',48)
 	goto BILLING_INFO ! /r
 	BUD2: ! r:
-		if bud1=0 then goto NAMESCREEN
+		if bud1=0 then goto NameScreen
 		framelen=0
 		for j=1 to 10
 			if trim$(srvnam$(j))<>"" then framelen=framelen+1
@@ -218,7 +215,7 @@ def library fnCustomer(x)
 		fnCmdKey("&Delete",3,0)
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs(sn$,0,mat budgetinfo$,ckey) ! budget billing master record
-		if ckey=5 then goto NAMESCREEN
+		if ckey=5 then goto NameScreen
 		if ckey=8 then goto TRANS_ROUTINE
 		x=1: ba(1)=val(budgetinfo$(1)) conv ignore
 		for j=2 to 11
@@ -228,11 +225,11 @@ def library fnCustomer(x)
 		next j
 		x+=1: ba(12)=val(budgetinfo$(x))
 		if br1=1 and ckey=3 then goto DEL_BUDGET_HISTORY ! if they choose to delete exiting record
-		if br1=0 and ckey=3 then goto NAMESCREEN ! if press delete without writing a record
+		if br1=0 and ckey=3 then goto NameScreen ! if press delete without writing a record
 		if br1=0 then goto L3330 ! create record if none exists
 		rewrite #h_budmstr,using F_BUDMSTR: z$,mat ba,mat badr
 		if ckey=2 then goto L3350
-	goto NAMESCREEN 
+	goto NameScreen 
 	! 
 	L3330: !
 	if sum(ba)=0 then goto TRANS_ROUTINE
@@ -250,7 +247,7 @@ def library fnCustomer(x)
 		DBH_DEL: ! 
 		if br1=1 then delete #h_budmstr,key=z$: nokey ignore
 		DBH_XIT: ! 
-	goto NAMESCREEN ! /r
+	goto NameScreen ! /r
 	TRANS_ROUTINE: ! r:
 		ta1=badr(1)
 		if ta1=0 and sum(ba)>0 then 
@@ -303,7 +300,7 @@ def library fnCustomer(x)
 			fnTxt(lyne,34,8,8,1,"1",0,'',1)
 			fnCmdSet(2)
 			fnAcs(sn$,0,mat budgetinfo$,ckey) ! budget billing transactions
-			if ckey=5 then goto NAMESCREEN
+			if ckey=5 then goto NameScreen
 			x=0
 			for j=1 to 14
 				if j<2 or j>11 or trim$(srvnam$(j-1))<>"" then 
@@ -364,7 +361,7 @@ def library fnCustomer(x)
 		DEL_HIST_FINIS: ! 
 		close #h_ubtransvb:
 	return  ! /r
-	NAMESCREEN: ! r: the main customer screen
+	NameScreen: ! r: the main customer screen
 		fnTos(sn$="custinfo")
 		respc=0 : frac=0
 		mylen=25 : mylen+2
@@ -490,7 +487,7 @@ def library fnCustomer(x)
 			if ad1=1 then 
 				goto ADD_CANCEL
 			else 
-				goto ASKACCT
+				goto AskAcct
 			end if 
 		end if 
 		z$=lpad$(trim$(custInfo$(1)),10) : if ckey<>5 then rp_prev$(1)=z$ ! important in case of an account number change
@@ -535,18 +532,18 @@ def library fnCustomer(x)
 		write #h_citystzip,using 'form pos 1,c 30': ab$(4)
 		L5530: ! 
 		! /r
-		if ckey=4 and ad1=0 then goto CONFIRM_DELETE ! delete account
+		if ckey=4 and ad1=0 then goto DeleteCustomer ! delete account
 		if extra(2)=0 then 
 			mat ml$(1)
 			ml$(1)="Sequence number is required!"
 			fnmsgbox(mat ml$,resp$,'',48)
-			goto NAMESCREEN
+			goto NameScreen
 		else if extra(1)<bkno1 or extra(1)>bkno2  then 
 			mat ml$(2)
 			ml$(1)="You must have a valid route number within the range of "&bkno1$&" and "&bkno2$&"!"
 			ml$(2)="You can use Company > Configure to set the route number range.."
 			fnmsgbox(mat ml$,resp$,'',48)
-			goto NAMESCREEN
+			goto NameScreen
 		end if 
 		if sum(mat gb)<>bal then goto CHECK_BALANCE_BREAKDOWN
 		if ckey=1 then 
@@ -573,7 +570,7 @@ def library fnCustomer(x)
 			else if trim$(srvnam$(10))<>'' then 
 				ckey=30 : goto SERVICE_SCREEN
 			else 
-				pr 'no services';bell : goto NAMESCREEN
+				pr 'no services';bell : goto NameScreen
 			end if 
 		else if ckey=21 then 
 			goto BILLING_INFO
@@ -581,7 +578,7 @@ def library fnCustomer(x)
 			goto BANK_DRAFT
 		else if ckey=23 then 
 			fn_customerNotes(z$)
-			goto NAMESCREEN 
+			goto NameScreen 
 		else if ckey=25 then 
 			goto DEPOSIT_HIST
 		else if ckey=26 then 
@@ -590,16 +587,16 @@ def library fnCustomer(x)
 			goto BUD2
 		else if ckey=28 then 
 			fnWorkOrderAdd(holdz$)
-			goto NAMESCREEN 
+			goto NameScreen 
 		else if ckey=29 then
 			fnWorkOrderList(z$)
-			goto NAMESCREEN
+			goto NameScreen
 		else if ckey=50 then 
-			extra(22)=2 : goto NAMESCREEN
+			extra(22)=2 : goto NameScreen
 		else if ckey=51 then 
-			extra(22)=1 : goto NAMESCREEN
+			extra(22)=1 : goto NameScreen
 		end if 
-	! /r (namescreen)
+	! /r (NameScreen)
 	BILLING_INFO: ! r:
 		sn$="billing_info"
 		fnTos(sn$)
@@ -644,7 +641,7 @@ def library fnCustomer(x)
 		bxnf$(billinfo+=1)=str$(g(12))
 		fnCmdSet(2)
 		fnAcs(sn$,0,mat bxnf$,ckey) ! billing information
-		if ckey=5 then goto NAMESCREEN
+		if ckey=5 then goto NameScreen
 		f=val(bxnf$(3))
 		bal=val(bxnf$(4))
 		if uprc$(escrow$)="Y" then 
@@ -661,7 +658,7 @@ def library fnCustomer(x)
 		next j
 		billinfo=billinfo+1 : g(11)=val(bxnf$(billinfo))
 		billinfo=billinfo+1 : g(12)=val(bxnf$(billinfo))
-	goto NAMESCREEN ! /r
+	goto NameScreen ! /r
 	BANK_DRAFT: ! r:
 		sn$="bank_draft"
 		fnTos(sn$)
@@ -697,12 +694,12 @@ def library fnCustomer(x)
 		dri$(6)=da$
 		fnCmdSet(2)
 		fnAcs(sn$,0,mat dri$,ckey) ! bank draft information
-		if ckey=5 then goto NAMESCREEN ! dont update information
+		if ckey=5 then goto NameScreen ! dont update information
 		df$=dri$(3)
 		dr$=dri$(4)
 		dc$=dri$(5)(1:2)
 		da$=dri$(6)
-	goto NAMESCREEN ! /r
+	goto NameScreen ! /r
 	DEPOSIT_HIST: ! r:
 		read #h_deposit2,using 'form pos 1,c 10,g 8,c 32,2*n 10.2',key=z$: k32$,dt1,dp$,dp1,dp2 nokey DEPOSIT_HIST_NONE
 		fnTos(sn$="billing_info")
@@ -738,7 +735,7 @@ def library fnCustomer(x)
 		fnCmdSet(2)
 		fnAcs(sn$,0,mat resp$,ckey) ! CALL deposit change grd
 		DEPOSIT_HIST_XIT: ! 
-	goto NAMESCREEN ! /r
+	goto NameScreen ! /r
 	DEPOSIT_HIST_NONE: ! r:
 		mat ml$(1)
 		ml$(1)="There is no deposit history to display!"
@@ -748,8 +745,8 @@ def library fnCustomer(x)
 		release #h_customer_1:
 		fntransfile(jbact$,bal,mat gb)
 		read #h_customer_1,key=jbact$:
-	goto NAMESCREEN ! /r
-	ASKACCT: ! r:
+	goto NameScreen ! /r
+	AskAcct: ! r:
 		release #h_customer_1: ioerr ignore
 		ad1=0 ! add code - used to tell other parts of the program, that I am currently adding a customer record.
 		ckey=fn_ask_account('ubfm',x$,h_customer_1, 'Edit',1)
@@ -762,7 +759,7 @@ def library fnCustomer(x)
 		else if ckey=5 then ! Cancel
 			goto XIT
 		end if 
-		goto ASKACCT
+		goto AskAcct
 	! /r
 	ADD_RECORD: ! r:
 		fnTos(sn$="customer8")
@@ -772,7 +769,7 @@ def library fnCustomer(x)
 		resp$(1)=""
 		fnCmdSet(11)
 		fnAcs(sn$,0,mat resp$,ckey)
-		if ckey=5 then goto ASKACCT
+		if ckey=5 then goto AskAcct
 		x$=lpad$(trim$(resp$(1)),10)
 		if trim$(x$)="" then goto ADD_RECORD
 		read #h_customer_1,using F_CUSTOMER_1,key=x$: z$ nokey ADD_CONTINUE
@@ -838,7 +835,7 @@ def fn_close_file(cf_handle)
 	close #cf_handle: ioerr ignore
 fnend 
 SERVICE_SCREEN: ! r:
-	! if ckey=5 then goto NAMESCREEN
+	! if ckey=5 then goto NameScreen
 	mat rateInfo$=("")
 	if ckey>20 and ckey<=30 then 
 		! on ckey-20 goto SERVICE1,SERVICE2,SERVICE3,SERVICE4,SERVICE5,SERVICE6,SERVICE7,SERVICE8,SERVICE9,SERVICE10
@@ -1051,7 +1048,7 @@ SERVICE_SCREEN: ! r:
 		end if
 		! /r
 	end if 
-goto NAMESCREEN ! /r
+goto NameScreen ! /r
  dim gLocationKey$*128
  dim gLocationFirstRespc
 def fn_ScrAddServiceMeterInfo(&srvLine,&respc1,mat rateInfo$,serviceCode$*2,service_code)
@@ -1305,39 +1302,39 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	AAS_TOP: ! 
 		fnTos(sn$="Customer-AskAcct2")
 		respc=0
-		askacct_line=0
+		AskAcct_line=0
 		if rp_prev$(1)<>'' then 
 			if rp_prev$(1)<>'' then 
-				fnButton(askacct_line+=1,col2_pos,'Clear Recent',1000,'Clear Recent Accounts list')
+				fnButton(AskAcct_line+=1,col2_pos,'Clear Recent',1000,'Clear Recent Accounts list')
 			end if 
-			fnLbl(askacct_line+=1,1,"Recent:",col1_width,1) : askacct_line=askacct_line-1
+			fnLbl(AskAcct_line+=1,1,"Recent:",col1_width,1) : AskAcct_line=AskAcct_line-1
 			for rp_item=udim(mat rp_prev$) to 1, step -1
 				if rp_prev$(rp_item)<>'' then 
-					fnButton(askacct_line+=1,col2_pos,rp_prev$(rp_item)&' '&fn_customer_name$(rp_prev$(rp_item)),1000+rp_item, 'click to select this previously accessed account',1,43)
+					fnButton(AskAcct_line+=1,col2_pos,rp_prev$(rp_item)&' '&fn_customer_name$(rp_prev$(rp_item)),1000+rp_item, 'click to select this previously accessed account',1,43)
 				end if 
 			next rp_item
-			askacct_line+=2
+			AskAcct_line+=2
 		end if 
-		fnLbl(askacct_line+=1,1,"Selection Method:",col1_width,1)
+		fnLbl(AskAcct_line+=1,1,"Selection Method:",col1_width,1)
 		btn_width=10
-		fnbutton_or_disabled(account_selection_method<>asm_combo,askacct_line,col2_pos,'Combo',2001,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_grid,askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_text,askacct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
-		askacct_line+=1
+		fnbutton_or_disabled(account_selection_method<>asm_combo,AskAcct_line,col2_pos,'Combo',2001,'',btn_width)
+		fnbutton_or_disabled(account_selection_method<>asm_grid,AskAcct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
+		fnbutton_or_disabled(account_selection_method<>asm_text,AskAcct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
+		fnbutton_or_disabled(account_selection_method<>asm_locationId,AskAcct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
+		AskAcct_line+=1
 		if account_selection_method=asm_locationId then
-			fnLbl(askacct_line+=1,1,"Location ID:",col1_width,1)
+			fnLbl(AskAcct_line+=1,1,"Location ID:",col1_width,1)
 		else
-			fnLbl(askacct_line+=1,1,"Account:",col1_width,1)
+			fnLbl(AskAcct_line+=1,1,"Account:",col1_width,1)
 		end if
 		if account_selection_method=asm_combo then 
-			fncmbact(askacct_line,col2_pos)
+			fncmbact(AskAcct_line,col2_pos)
 		else if account_selection_method=asm_grid then 
-			fn_customer_grid(askacct_line,col2_pos)
+			fn_customer_grid(AskAcct_line,col2_pos)
 		else if account_selection_method=asm_text then 
-			fnTxt(askacct_line,col2_pos,10)
+			fnTxt(AskAcct_line,col2_pos,10)
 		else if account_selection_method=asm_locationId then 
-			fnTxt(askacct_line,col2_pos,11, 0,0,'30')
+			fnTxt(AskAcct_line,col2_pos,11, 0,0,'30')
 		end if 
 		if account_selection_method=asm_locationId then
 			resp$(respc+=1)=str$(tmpLocationId)
@@ -1459,7 +1456,6 @@ def fn_setup
 		library 'S:\Core\Library': fncustomer_search,fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 		library 'S:\Core\Library': fncmbact,fnComboF,fncmbrt2
 		library 'S:\Core\Library': fnMeterAddressLocationID
-		! library 'S:\Core\Library': fnMeterAddressUpdate
 		library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle
 		library 'S:\Core\Library': fnreg_read
 		library 'S:\Core\Library': fntransfile
@@ -1477,6 +1473,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCustomerMeterLocationSelect
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnFixPd
+		library 'S:\Core\Library': fnConfirmDeleteHard
 		on error goto ERTN
 		! r: dims
 		dim z$*10

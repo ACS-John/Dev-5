@@ -8,7 +8,7 @@
 !  ! /r
 ! from fileio.brs - md/mkdir function fileio version is not a library 2/7/2017 except this version is a library and quote encapsulates the path$ it is making
 ! 8/24/2017 - more modifications to better work with UNC paths
-def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN)
+def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN,wasFilenamesUpperCase)
 	library 'S:\Core\Library': fnSrepEnv$
 	! if env$('acsDeveloper')<>'' and fileName$='[Q]\Data\' then
 	! 	pr 'call to fnMakeSurepathExists("'&fileName$&'"; "'&path$&'")'
@@ -30,9 +30,9 @@ def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN)
 		! /r
 		if ~exists(path$) and doNotTryThisOne=0 then 
 			! if debug then pr 'about to MKDIR '&rtrm$(path$,'\') : pause
-			if env$('cursys')='CM' then exe 'con filenames Mixed_Case'
+include: filenamesPushMixedCase
 			execute 'mkdir "'&rtrm$(path$,'\')&'"' err MspeErr
-			if env$('cursys')='CM' then exe 'con filenames UPPER_CASE'
+include: filenamesPopUpperCase
 		end if
 	loop
 	goto MspeFinis

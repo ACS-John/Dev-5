@@ -170,9 +170,23 @@ fnend
 
 
 ! /r
-def library Fn_Encodebase64(&Content$)
-	library 'S:\Core\base64_l.br': Fn_Encodebase64
-	Fn_Encodebase64=Fn_Encodebase64(Content$)
+! r: Confirm
+def library fnConfirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
+	library 'S:\Core\Confirm.br': fnConfirm
+	fnConfirm=fnConfirm(Verb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
+fnend
+def library fnConfirmDelete(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
+	library 'S:\Core\Confirm.br': fnConfirmDelete
+	fnConfirmDelete=fnConfirmDelete(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
+fnend
+def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
+	library 'S:\Core\Confirm.br': fnConfirmDeleteHard
+	fnConfirmDeleteHard=fnConfirmDeleteHard(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
+fnend
+! /r
+def library fn_encodebase64(&content$)
+	library 'S:\Core\base64_l.br': fn_encodebase64
+	fn_encodebase64=fn_encodebase64(content$)
 fnend
 def library Fn_Decodebase64(&Content$)
 	library 'S:\Core\base64_l.br': Fn_Decodebase64
@@ -388,7 +402,7 @@ fnend
 ! /r
 ! r: core   all the libraries that aren't filed anywhere else
 	def library fnWindowsStart(wsFile$*1024)
-		library 'S:\Core\fnWindowsStart.br': fnWindowsStart
+		library 'S:\Core\fn\windowsStart.br': fnWindowsStart
 		fnWindowsStart=fnWindowsStart(wsFile$)
 	fnend
 	def library fnSystemName$*40(; systemAbbreviation$*2)
@@ -529,9 +543,9 @@ fnend
 		library 'S:\Core\fn\getDir.br': fngetdir
 		fngetdir=fngetdir(dir$,mat filename$,option$,filter$)
 	fnend
-	def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
+	def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 		library 'S:\Core\fn\getDir2.br': fngetdir2
-		fngetdir2=fngetdir2(dir$,mat filename$, option$,filter$,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
+		fngetdir2=fnGetDir2(dir$,mat filename$, option$,filter$,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 	fnend
 	!
 	def library fnwait(; message$*40,stopable)

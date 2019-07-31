@@ -1,13 +1,33 @@
 ! formerly S:\acsUB\ubPdNot
 ! Past Due Notices
 ! _______________________________________________________________________
-library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnOpt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnFra,fncmbrt2,fncmbact,fnChk,fnCmdKey,fndat,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
+library 'S:\Core\Library': fnOpenprn,fncloseprn
+library 'S:\Core\Library': fnXit
+library 'S:\Core\Library': fnComboA,fnFra,fncmbrt2
+library 'S:\Core\Library': fnDat,fnLastBillingDate,fngethandle
+library 'S:\Core\Library': fnTop
+library 'S:\Core\Library': fnLbl,fnTxt,fnTos,fnOpt
+library 'S:\Core\Library': fnCmbAct,fnChk,fnCmdKey
+library 'S:\Core\Library': fnCmdSet
+library 'S:\Core\Library': fnAcs
+library 'S:\Core\Library': fnReg_read,fnReg_write
+library 'S:\Core\Library': fnCreg_read,fnCreg_write
+library 'S:\Core\Library': fnprint_file_name$
+library 'S:\Core\Library': fnGetdir2,fncustomer_address
+library 'S:\Core\Library': fnPa_open
+library 'S:\Core\Library': fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line
+library 'S:\Core\Library': fnPa_finis
+library 'S:\Core\Library': fnFree,fnEditFile,fncopy
 on error goto ERTN
 ! r: dims
-	dim z$*10,meter_address$*30,gb(10),d$(4)*20,b4$*30
+	dim z$*10
+	dim meter_address$*30
+	dim gb(10)
+	dim d$(4)*20
 	dim f$(3)*12,a(7),b(11),c(4),d(15),g(12)
 	dim resp$(15)*512
-	dim ln$*8800,flname$*256,l2$*8800,r1$(120)*30,ln3$*1
+	dim ln$*8800,flname$*256
+	dim r1$(120)*30
 	dim extra$(11)*30,extra(23)
 	dim tmp_rtf_filename$*1024
 ! /r
@@ -95,7 +115,6 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	end if 
 	if deltype<3 and bal<=1 then goto PRINT_NEXT
 	if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
-	b4$=""
 	! pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
 	if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
 	if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
@@ -115,7 +134,6 @@ READ_ADRBIL: ! r:
 ! if trim$(altadr$(1)&altadr$(2)&altadr$(3)&altadr$(4))<>"" then 
 !   e$(2)=altadr$(1)
 !   e$(3)=altadr$(2)
-!   b4$=altadr$(3)
 !   e$(4)=altadr$(4)
 ! end if 
 ! L940: ! /r
@@ -149,15 +167,20 @@ def fn_prnt1
 	end if 
 	fn_bldr1
 	r=0
-P1_NEXT_LN: ! 
+	dim ln3$*1
+	P1_NEXT_LN: ! 
 	ln$=""
-	P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
-	if ln3$=chr$(13) then goto P1_L2310
-	ln$=ln$&ln3$
-	if len(rtrm$(ln$))>3900 then pr #h_prnt1: ln$ : goto P1_NEXT_LN
-	goto P1_L2250
-	! ___________________________
+	do
+		read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
+		if ln3$=chr$(13) then goto P1_L2310
+		ln$=ln$&ln3$
+		if len(rtrm$(ln$))>3900 then 
+			pr #h_prnt1: ln$ 
+			goto P1_NEXT_LN
+		end if
+	loop
 	P1_L2310: !
+	dim l2$*8800
 	p3=len(ln$) : l2$="" : p1=0
 	P1_L2320: !
 	p2=pos(ln$,"@",p1)
@@ -180,8 +203,6 @@ P1_NEXT_LN: !
 	! ___________________________
 	P1_L2480: ! 
 	! if uprc$(ln$(p2+1:p2+2))><"B4" then
-	!   if rtrm$(b4$)="" then b4$=extra$(1) : r1$(5)=e$(4)
-	!   l2$=l2$&rtrm$(b4$)
 	! end if
 	if uprc$(ln$(p2+1:p2+1))><"D" then goto P1_L2550
 	v1=val(ln$(p2+2:p2+2)) conv P1_L2550
@@ -198,13 +219,9 @@ P1_NEXT_LN: !
 	P1_END1: ! 
 	restore #h_template: 
 	pr #h_prnt1: "\page"
-fnend  ! fn_prnt1
+fnend
 def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 	! if trim$(z$)='901246.40' then pr 'the beginning of it' : pause
-	!   if trim$(b4$)="" then b4$=extra$(1)
-	!   if trim$(e$(3))="" then e$(3)=b4$: b4$=""
-	!   if trim$(b4$)="" then b4$=e$(4) ! : e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
-	!   if trim$(extra$(1))="" then extra$(1)=e$(4) : e$(4)='' ! re=added to make @108 the address line 2 or CSZ (if no addr line 2) and thusly @5 be blank.
 	mat r1$=("")
 	r1$(1)=ltrm$(z$)
 	r1$(2)=rtrm$(meter_address$) ! meter address
@@ -265,35 +282,34 @@ def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 	! if trim$(z$)='901246.40' then pr 'the end of it' : pause
 fnend  ! fn_bldr1
 def fn_vbopenprint
-	h_vb_pr_out:=20
 	fnpa_open
 	lyne=3
 	spacer=0
 fnend  ! fn_vbopenprint
 def fn_vbprint
-	pr #h_vb_pr_out: "Call Print.MyFontBold(True)"
-	pr #h_vb_pr_out: 'Call Print.MyFontSize(16)'
-	pr #h_vb_pr_out: 'Call Print.MyFont("Courier New")'
-	pr #h_vb_pr_out: 'Call Print.AddText("'&at$(1)&'",'&str$(10)&','&str$(lyne*4+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.MyFont("Lucida Console")'
-	pr #h_vb_pr_out: 'Call Print.MyFontSize(12)'
-	pr #h_vb_pr_out: 'Call Print.MyFontBold(False)'
-	pr #h_vb_pr_out: 'Call Print.AddText("'&at$(2)&'",'&str$(10)&','&str$(lyne*6.5+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("'&at$(3)&'",'&str$(10)&','&str$(lyne*8+spacer)&')'
-	pr #h_vb_pr_out: "Call Print.MyFontBold(True)"
-	pr #h_vb_pr_out: 'Call Print.MyFontSize(12)'
-	pr #h_vb_pr_out: 'Call Print.AddLine('&str$(115)&','&str$(lyne*12+spacer)&',75,'&str$(30)&',True)'
-	pr #h_vb_pr_out: 'Call Print.AddText("A Friendly Reminder....",'&str$(100)&','&str$(lyne+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.MyFontSize(10)'
-	pr #h_vb_pr_out: 'Call Print.MyFontBold(False)'
-	pr #h_vb_pr_out: 'Call Print.AddText("If your check has already been mailed,please ",'&str$(100)&','&str$(lyne*3+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("disregard this notice.  If not, your remittance by mail ",'&str$(100)&','&str$(lyne*4+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("will be greatly appreciated.",'&str$(100)&','&str$(lyne*5+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("Thank You!",'&str$(150)&','&str$(lyne*7+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("Customer #:  '&z$&'",'&str$(125)&','&str$(lyne*14+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1)&'",'&str$(125)&','&str$(lyne*16+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.AddText("Balance Due: '&cnvrt$("pic(---,---.##)",bal)&'",'&str$(125)&","&str$(lyne*18+spacer)&')'
-	pr #h_vb_pr_out: 'Call Print.MyFontSize(13)'
+	fnpa_fontbold(1)
+	fnpa_fontsize(16)
+	fnpa_font
+	fnpa_txt(at$(1),10,lyne*4+spacer)
+	fnpa_font("Lucida Console")
+	fnpa_fontsize(12)
+	fnpa_fontbold
+	fnpa_txt(at$(2),10,lyne*6.5+spacer)
+	fnpa_txt(at$(3),10,lyne*8+spacer)
+	fnpa_fontbold(1)
+	fnpa_fontsize(12)
+	fnpa_line(115,lyne*12+spacer,75, 30,1)
+	fnpa_txt("A Friendly Reminder....",100,lyne+spacer)
+	fnpa_fontsize
+	fnpa_fontbold
+	fnpa_txt('If your check has already been mailed,please',100,lyne*3+spacer)
+	fnpa_txt('disregard this notice.  If not, your remittance by mail',100,lyne*4+spacer)
+	fnpa_txt('will be greatly appreciated.',100,lyne*5+spacer)
+	fnpa_txt('Thank You!',150,lyne*7+spacer)
+	fnpa_txt('Customer No: '&z$,125,lyne*14+spacer)
+	fnpa_txt('Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1),125,lyne*16+spacer)
+	fnpa_txt('Balance Due: '&cnvrt$("pic(---,---.##)",bal),125,lyne*18+spacer)
+	fnpa_fontsize(13)
 	fnpa_txt(addr$(2),20,lyne*16+spacer)
 	fnpa_txt(addr$(3),20,lyne*17.5+spacer)
 	fnpa_txt(addr$(3),20,lyne*19+spacer)
@@ -345,8 +361,6 @@ def fn_report_add
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
  
 fnend
-IGNORE: continue 
-include: ertn
 def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 		if a(1)=0 then water$="     " else water$="Water"
 		if a(4)=0 then gas$="   " else gas$="Gas"
@@ -423,35 +437,35 @@ def fn_print_granby
 	fnopenprn
 	pr #255,using 'form pos 4,c 47,skip 4': e$(1)
 	if gb(1)=0 then 
-		pr #255,using L3640: "Your Utility Account is Past Due."
+		pr #255,using Fgranby1: "Your Utility Account is Past Due."
 	else 
-		pr #255,using L3650: "Your Utility Account is Past Due.","Water",gb(1)
+		pr #255,using Fgranby2: "Your Utility Account is Past Due.","Water",gb(1)
 	end if 
-	L3640: form pos 4,c 47
-	L3650: form pos 4,c 47,pos 53,c 10,pos 65,n 10.2
+	Fgranby1: form pos 4,c 47
+	Fgranby2: form pos 4,c 47,pos 53,c 10,pos 65,n 10.2
 	if gb(4)=0 then 
-		pr #255,using L3640: "Please pay the amount due by "&ltrm$(d$(2))
+		pr #255,using Fgranby1: "Please pay the amount due by "&ltrm$(d$(2))
 	else 
-		pr #255,using L3650: "Please pay the amount due by "&ltrm$(d$(2)),"Gas",gb(4)
+		pr #255,using Fgranby2: "Please pay the amount due by "&ltrm$(d$(2)),"Gas",gb(4)
 	end if 
 	if gb(5)=0 then 
-		pr #255,using L3640: "to avoid Utility Disconnection."
+		pr #255,using Fgranby1: "to avoid Utility Disconnection."
 	else 
-		pr #255,using L3650: "to avoid Utility Disconnection.","Sanitation",gb(5)
+		pr #255,using Fgranby2: "to avoid Utility Disconnection.","Sanitation",gb(5)
 	end if 
-	if gb(2)=0 then pr #255: else pr #255,using L3700: "Sewer",gb(2)
-	if gb(7)=0 then pr #255: else pr #255,using L3700: "Primacy",gb(7)
-	if gb(8)=0 then pr #255: else pr #255,using L3700: "Other",gb(8)
-	L3700: form pos 53,c 10,pos 65,n 10.2
-	if gb(9)=0 then pr #255: else pr #255,using L3700: "Sales Tax",gb(9)
-	if gb(10)=0 then pr #255: "" else pr #255,using L3740: "Penalty",gb(10)
-	L3740: form pos 53,c 10,pos 65,n 10.2
+	if gb(2)=0 then pr #255: else pr #255,using Fgranby3: "Sewer",gb(2)
+	if gb(7)=0 then pr #255: else pr #255,using Fgranby3: "Primacy",gb(7)
+	if gb(8)=0 then pr #255: else pr #255,using Fgranby3: "Other",gb(8)
+	Fgranby3: form pos 53,c 10,pos 65,n 10.2
+	if gb(9)=0 then pr #255: else pr #255,using Fgranby3: "Sales Tax",gb(9)
+	if gb(10)=0 then pr #255: "" else pr #255,using Fgranby4: "Penalty",gb(10)
+	Fgranby4: form pos 53,c 10,pos 65,n 10.2
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using L3760: e$(2)
-	L3760: form pos 10,c 30
-	pr #255,using L3760: e$(3)
+	pr #255,using Fgranby5: e$(2)
+	Fgranby5: form pos 10,c 30
+	pr #255,using Fgranby5: e$(3)
 	pr #255,using 'form pos 10,c 30,pos 52,c 10': e$(4),z$
 	pr #255: ''
 	pr #255,using 'form pos 63,n 10.2': bal
@@ -559,7 +573,7 @@ SELECT_SCREEN: ! r:
 		resp$(respc+=1)='hard coded'
 	else 
 		fncomboa("PDNOTRTF",1,30,mat file_rtf$)
-! resp$(respc+=1)=file_rtf$(1)
+		! resp$(respc+=1)=file_rtf$(1)
 		if env$('client')='White Hall' then 
 			resp$(respc+=1)='White_Ha'
 		else if env$('client')='Ash Grove' then 
@@ -577,7 +591,7 @@ SELECT_SCREEN: ! r:
 	fncmbact(4,30,1)
 	resp$(respc+=1)="[All]"
 	fnChk(6,30,"Print only Selected Accounts")
-! fnCmdSet(102)
+	! fnCmdSet(102)
 	fnCmdKey("&Print",1,1)
 	if ~hard_coded then let fnCmdKey("E&dit",3)
 	if ~hard_coded then let fnCmdKey("&Add",4)
@@ -695,7 +709,6 @@ ASK_NEXT_ACT: ! r:
 ! ______________________________________________________________________
 READ_CUSTOMER: ! 
 	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
-	b4$=""
 	goto READ_ADRBIL ! /r
 EO_CUSTOMER: ! r:
 ! if env$('client')='Merriam Woods' then
@@ -714,7 +727,7 @@ EO_CUSTOMER: ! r:
 	end if 
 	close #customer1: ioerr ignore
 	customer1=0
-	fnpa_finis(h_vb_pr_out)
+	fnpa_finis
 ! end if
 ! 
 	if h_prnt1 then 
@@ -725,5 +738,6 @@ EO_CUSTOMER: ! r:
 	end if  ! /r
 XIT: ! r:
 	fn_report_close
-	fnxit
+fnxit
 ! /r
+include: ertn

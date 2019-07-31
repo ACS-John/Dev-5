@@ -1,0 +1,1 @@
+if env$('status.config.filenames')='UPPER_CASE' then wasFilenamesUpperCase=1 : exe 'con filenames Mixed_Case'
