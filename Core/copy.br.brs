@@ -175,8 +175,12 @@ def library fnFree(fileToDelete$*256)
 	fileToDelete$=fnSrepEnv$(fileToDelete$)
 	freeReturn=0
 	fileToDelete$=trim$(fileToDelete$,'"')
-	execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
-	freeReturn=1
+	if exists(fileToDelete$) then
+		execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
+		freeReturn=1
+	else
+		freeReturn=-4152
+	end if
 	goto FreeXit
 	FreeErr: !
 	freeReturn=-err

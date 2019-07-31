@@ -9,7 +9,7 @@ def fn_setup
 		library 'S:\Core\Library': fnpause
 		library 'S:\Core\Library': fnCmdKey
 		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fndate_picker$
+		library 'S:\Core\Library': fnDateSelect$
 		library 'S:\Core\Library': fnListPrint
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnMakeSurePathExists
@@ -656,7 +656,7 @@ def fn_set_controls
 fnend
 def fn_equalize_resp_arrays
 	respc=0
-	dim ace_resp$(1)*1000, grid_filter$*1000
+	dim ace_resp$(1)*1024, grid_filter$*1024
 	if ace_io_count>udim(mat resp$) then mat resp$(ace_io_count)
 	if ace_io_count then
 		if grid_present then
@@ -712,7 +712,7 @@ def fn_processUserInput
 		_date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
 		row=date_fielddata(fkey-date_fkey_base,2)
 		column=date_fielddata(fkey-date_fkey_base,3)+date_fielddata(fkey-date_fkey_base,4)+1
-		ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fndate_picker$ (_date$,'mdy',row,column)
+		ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fnDateSelect$ (_date$,'mdy',row,column)
 		fkey(-1) : goto_main_input=1
 	else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then
 		fn_selectFile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
@@ -1192,7 +1192,7 @@ def fn_ace_rd_flex(;___,index_)
 	hdr_count  	= val(control$(10))
 	container  	= val(control$(11))
 	tabcon     	= val(control$(12))
-	dim _headings$(1)*1000,_line$*10000,_chunks$(1)*2100,_forms$(1)*1000
+	dim _headings$(1)*1024,_line$*10000,_chunks$(1)*2100,_forms$(1)*1024
 	dim filterspec$*255	 !
 	dim gridspec$*255		 !
 	dim loading_spec$*50 ! where to print Loading: please wait...
@@ -1389,8 +1389,9 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 	for index_=2 to udim(mat _mask$)+1
 		fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
 	next index_
-	_forms$(1)="0/C 500"
-	! _forms$(1)="0/C 1024"
+	! _forms$(1)="0/C 500" works... old, small
+	_forms$(1)="0/C 999"
+	! _forms$(1)="0/C 1024" fails
 	_widths(1)=0
 	close #grid_data:
 	fn_gridform=data_file_nonempty
@@ -1398,8 +1399,8 @@ fnend
 def fn_column_mask(&form$,&width,mask$;___,invisible)
 	maxlen=width + 10 ! to deal with bad data
 	mask=val(mask$) conv ignore
-	if mask >= 1000 then
-		mask -= 1000
+	if mask=>1000 then
+		mask-=1000
 		invisible=1
 	end if
 	if mask=1 then ! date format : mm/dd/yy
@@ -2118,7 +2119,7 @@ def fn_remove_crlf(&txt$)
 	loop while x>0
 fnend
 def fn_export_grid(;___,index_)
-	dim filename$*1000
+	dim filename$*1024
 	filename$=''
 	grid_rows=grid_columns=index_=0
 	open #export_file:=fngethandle: "Name=save:"&env$('at')&"Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT

@@ -52,31 +52,11 @@ def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
 	nex fpItem
 	fnFixPd=fpReturn
 fnend
-def library fnEndOfMonth(day; ___,returnN,eomYear,eomMonth,eomFirstOfNextMonth$)
-	eomYear=date(day,'ccyy')
-	eomMonth=date(day,'mm')
-	! pr 'date='&date$(day,'mm/dd/ccyy')
-	! pr 'year=';eomYear
-	! pr 'month=';eomMonth
-	! pause
-	if eomMonth=12 then
-		eomMonth=1
-		eomYear+=1
-	else
-		eomMonth+=1
-	end if
-	
-	eomFirstOfNextMonth$=cnvrt$('pic(####)',eomYear)&'/'&cnvrt$('pic(##)',eomMonth)&'/01'
-	returnN=days(eomFirstOfNextMonth$,'ccyy/mm/dd')-1
-	fnEndOfMonth=returnN
-fnend
+
 def library fncd(x)
 	fncd=(x-int(x*.01)*100)*10000+int(x*.01)
 fnend
-def library fndate_mmddyy_to_ccyymmdd(x)
-	! (previously fn2000)   converts mmddyy (of x) to ccyymmdd and returns it as the value of fndate_mmddyy_to_ccyymmdd
-	fndate_mmddyy_to_ccyymmdd=date(days(x,'mmddyy'),'ccyymmdd')
-fnend 
+
 def library fnformnumb$(numb,decimals,size)
 	fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
 fnend
@@ -199,10 +179,6 @@ fnend
 def library fnKeyDelete(h_filehandle,f_fileform_key_only$*128,key$*128)
 	library 'S:\Core\key.br': fnKeyDelete
 	fnKeyDelete=fnKeyDelete(h_filehandle,f_fileform_key_only$,key$)
-fnend
-def library fndate_picker$ (;_date$,format$,row,column)
-	library 'S:\Core\Date.br': fndate_picker$
-	fndate_picker$=fndate_picker$ ( _date$,format$,row,column)
 fnend
 def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 	library 'S:\Core\ace\win3b.br': fnfkey
@@ -370,7 +346,7 @@ fnend
 ! /r
 ! r: File Open and Save
 	def library fnAskFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*256,recallAddOn$*64)
-		library 'S:\Core\askFileName.br': fnAskFileName
+		library 'S:\Core\fn\askFileName.br': fnAskFileName
 		fnAskFileName=fnAskFileName(opFileOpen$,purpose$, filter$,filterDescription$,path$,recallAddOn$)
 	fnend
 	def library fnOpenPartial
@@ -491,10 +467,6 @@ fnend
 		library 'S:\Core\fnRGL$.br': fnrgl$
 		fnrglbig$=fnrgl$(x$, 60)
 	fnend
-	def library fnsetmonth(mat mo$)
-		library 'S:\Core\SetMonth.br': fnsetmonth
-		fnsetmonth=fnsetmonth(mat mo$)
-	fnend
 	def library fnosver(&osver$;get_or_put)
 		library 'S:\Core\OSVer.br': fnosver
 		fnosver=fnosver(osver$,get_or_put)
@@ -516,7 +488,7 @@ fnend
 		fngetcd=fngetcd(mcd$)
 	fnend
 	def library fnxit(;cursys$)
-		library 'S:\Core\xit.br': fnxit
+		library 'S:\Core\fn\xit.br': fnxit
 		fnxit=fnxit(cursys$)
 	fnend
 	def library fninch2twip(&x)
@@ -983,7 +955,7 @@ fnend
 		fnmcreg_write=fnmcreg_write(reg_field_name$,reg_field_value$)
 	fnend
 ! /r
-! r: array stuff
+! r: Array stuff
 	def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd)
 		library 'S:\Core\Array.br': fnPosOfAny
 		fnPosOfAny=fnPosOfAny(textToSearch$,mat searchFor$, fromEnd)
@@ -1006,7 +978,7 @@ fnend
 		fnArrayAddN=fnArrayAddN(mat array_combinedN,mat arrayPartOneN,mat arrayPartTwoN)
 	fnend
 	def library fnSrepExcludeStringLiterals$*1024(in$*1024,srepFrom$,srepTo$)
-		library 'S:\Core\srep.br': fnSrepExcludeStringLiterals$
+		library 'S:\Core\Srep.br': fnSrepExcludeStringLiterals$
 		fnSrepExcludeStringLiterals$=fnSrepExcludeStringLiterals$(in$,srepFrom$,srepTo$)
 	fnend
 	def library fnArrayEmpty(mat array$)
@@ -1076,6 +1048,24 @@ fnend
 	def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$*256,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
 		library 'S:\Core\Array.br': fnRead4column
 		fnRead4column=fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
+	fnend
+! /r
+! r: Date stuff
+def library fnDateSelect$ (;_date$,format$,row,column)
+	library 'S:\Core\Date.br': fnDateSelect$
+	fnDateSelect$=fnDateSelect$ ( _date$,format$,row,column)
+fnend
+def library fnEndOfMonth(day)
+	library 'S:\Core\Date.br': fnEndOfMonth
+	fnEndOfMonth=fnEndOfMonth(day)
+fnend
+def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
+	library 'S:\Core\Date.br': fndate_mmddyy_to_ccyymmdd
+	fndate_mmddyy_to_ccyymmdd=fndate_mmddyy_to_ccyymmdd(x_mmddyy)
+fnend
+	def library fnSetMonth(mat mo$)
+		library 'S:\Core\Date.br': fnSetMonth
+		fnSetMonth=fnSetMonth(mat mo$)
 	fnend
 ! /r
 ! r: ini functions and quick calls
