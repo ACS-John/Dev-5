@@ -200,9 +200,9 @@ def library fnKeyDelete(h_filehandle,f_fileform_key_only$*128,key$*128)
 	library 'S:\Core\key.br': fnKeyDelete
 	fnKeyDelete=fnKeyDelete(h_filehandle,f_fileform_key_only$,key$)
 fnend
-def library fndate_picker$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
-	library 'S:\Core\date_picker.br': fndate_picker$
-	fndate_picker$=fndate_picker$ ( _date$,format$,row,column,___, window,days_in_week,gridspec$,usermonth,save_date$,baseyear)
+def library fndate_picker$ (;_date$,format$,row,column)
+	library 'S:\Core\Date.br': fndate_picker$
+	fndate_picker$=fndate_picker$ ( _date$,format$,row,column)
 fnend
 def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 	library 'S:\Core\ace\win3b.br': fnfkey
