@@ -14,7 +14,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	dim mask2(199),startPos2(199)
 	dim option$(199)*256
 	dim control$(60,26)*256
-	dim p2$(100)*256 ! used to hold mat P$ + 1 more response for Add Loop
+	dim p2$(100)*1024 ! used to hold mat P$ + 1 more response for Add Loop
 	dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
 	dim cmask$(199) ! Flexgrid Column Mask
 	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
@@ -279,7 +279,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		else if fltyp2$(j)="pd" and ord(p$(j))=15 then
 			p$(j)=""
 		end if
-! Read 2nd to Last Item
+		! Read 2nd to Last Item
 		for j=2 to itemCount-1
 			if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 				tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
@@ -295,7 +295,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 				p$(j)=""
 			end if
 		next j
-! read Last Item
+		! read Last Item
 		j=itemCount
 		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))

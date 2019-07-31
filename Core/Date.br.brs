@@ -1,363 +1,172 @@
-def fn_setup
-  if ~setup then
-    setup=1
-    library 'S:\Core\Library.br': fngethandle
-  end if
-fnend
-
-def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
-  fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
-fnend
-def fn_array_item_insert$(mat array$, insert_item$*1024, insert_item_number)
-  array_item_count=udim(mat array$)
-  if insert_item_number>array_item_count then
-    mat array$(insert_item_number)
-    array$(insert_item_number)=insert_item$
-  else
-    array_item_count+=1
-    mat array$(array_item_count)
-    mat array$(insert_item_number+1:array_item_count)=array$(insert_item_number:array_item_count-1)
-    array$(insert_item_number)=insert_item$
-  end if  ! Insert_Item_Number>Array_Item_Count   /   else
-fnend
-def library fnarray_item_insert(mat array, insert_item, insert_item_number)
-  fnarray_item_insert=fn_array_item_insert(mat array, insert_item, insert_item_number)
-fnend  ! fnARRAY_ITEM_INSERT
-def fn_array_item_insert(mat array, insert_item, insert_item_number)
-  array_item_count=udim(mat array)
-  if insert_item_number>array_item_count then
-    mat array(insert_item_number)
-    array(insert_item_number)=insert_item
-  else
-    array_item_count+=1
-    mat array(array_item_count)
-    mat array(insert_item_number+1:array_item_count)=array(insert_item_number:array_item_count-1)
-    array(insert_item_number)=insert_item
-  end if  ! Insert_Item_Number>Array_Item_Count   /   else
-fnend
-
-def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
-  ! if ~setup then let fn_setup
-  fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
-fnend  ! fnsrch_case_insensitive
-def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
-  srch_array_count=udim(mat srch_array$)
-  srch_return=0
-  do
-    srch_found=srch(mat srch_array$,'^'&srch_for$,srch_start_ele)
-    if srch_found>0 and lwrc$(srch_for$)=lwrc$(srch_array$(srch_found)) then
-      srch_return=srch_found
-    else if srch_found>0 then
-      srch_start_ele=srch_found+1
-    else if srch_found<=0 then ! it's not there, anywhere - get outta here.
-      srch_start_ele=srch_array_count+1
-    end if
-  loop until srch_start_ele>srch_array_count or srch_return
-  fn_srch_case_insensitive=srch_return
-fnend  ! fn_srch_case_insensitive
-
-def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
-  fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)
-fnend
-def fn_addOneN(mat add_to, one; skip_zeros, skip_dupes)
-  ! must dim an array to 0 before you can add a first item
-  !    Mat Add_To - the array to add One item to
-  !    One - the One item to add to Mat Add_To
-  !    skip_Zeros - if =1 than only add One if One<>0
-  !    skip_dupes - if =1 than only add One if One is not yet in Mat Add_To
-  !    This function returns the number of items in the array after any add
-  if skip_zeros=0 or (skip_zeros and one<>0) then
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to,one)=-1) then
-      add_to_udim=udim(mat add_to) : mat add_to(add_to_udim+1) : add_to(add_to_udim+1)=one
-    end if
-  end if
-  fn_addOneN=udim(mat add_to)
-fnend
-def library fnAddOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
-  fnAddOneC=fn_addOneC(mat add_to$, one$, skip_blanks, skip_dupes)
-fnend
-def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
-  ! must dim an array to 0 before you can add a first item
-  !    Mat Add_To$ - the array to add One$ item to
-  !    One$ - the One$ item to add to Mat Add_To$
-  !    skip_Blanks - if =1 than only add One$ if Trim$(One$)<>""
-  !    skip_dupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
-  !    This function returns the number of items in the array after any add
-  if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)<=0) then
-      add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
-    end if
-  end if
-  fn_addOneC=udim(mat add_to$)
-fnend
-
-def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
-  cmcReturn=0
-  cmcIndex=0
-  do
-    cmcIndex=srch(mat arrayToSearch$,valueToMatch$,cmcIndex+1)
-    if cmcIndex>0 then cmcReturn+=1
-  loop while cmcIndex>0
-  fnCountMatchesC=cmcReturn
-fnend
-def library fnCountMatchesN(mat arrayToSearch,valueToMatch)
-  cmcReturn=0
-  cmcIndex=0
-  do
-    cmcIndex=srch(mat arrayToSearch,valueToMatch,cmcIndex+1)
-    if cmcIndex>0 then cmcReturn+=1
-  loop while cmcIndex>0
-  fnCountMatchesN=cmcReturn
-fnend
-
-def library fnArrayMax(mat arrayToSearch)
-  ! returns index (not value), if multiple = maxes it returns the first one.
-  amReturn=0
-  amMax=-99999
-  if udim(mat arrayToSearch)=0 then
-    amReturn=0
-  else
-    amMax=arrayToSearch(1)
-    amReturn=1
-    for x=2 to udim(mat arrayToSearch)
-      if arrayToSearch(x)>amMax then
-        amMax=arrayToSearch(x)
-        amReturn=x
-      end if
-    nex x
-  end if
-  fnArrayMax=amReturn
-fnend
-
-def library fnArrayWasPassedC(mat array$; ___,returnN)
-  ! 1-D arrays only please
-  on error goto AwpcFinis
-  awpcUdim=udim(mat array$)
-  mat array$(awpcUdim+1)
-  mat array$(awpcUdim)
-  returnN=1
-  AwpcFinis: !
-  on error System
-  fnArrayWasPassedC=returnN
-fnend
-def library fnArrayWasPassedN(mat arrayN; ___,returnN)
-  ! 1-D arrays only please
-  on error goto AwpnFinis
-  awpnUdim=udim(mat arrayN)
-  mat arrayN(awpnUdim+1)
-  mat arrayN(awpnUdim)
-  returnN=1
-  AwpnFinis: !
-  on error System
-  fnArrayWasPassedN=returnN
-fnend
-def library fnArrayEmpty(mat ae$)
-  arrayEmptyReturn=1
-  for aeItem=1 to udim(mat ae$)
-    if trim$(ae$(aeItem))<>'' then goto AeNotEmpty
-  nex aeItem
-  goto AeFinis
-  AeNotEmpty: !
-  arrayEmptyReturn=0
-  AeFinis: !
-  fnArrayEmpty=arrayEmptyReturn
-fnend
-
-! r: read a file into parallel 1-D Arrays
-def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
-  if ~setup then let fn_setup
-  dim ftaLine$*1024
-  if ftaDelimiter$='' then ftaDelimiter$='='
-  open #hFta:=fngethandle: 'name='&ftaFile$,d,i
-  mat ftaArrayLeft$ (0)
-  mat ftaArrayRight$(0)
-  for ftaSkipFirstLineItem=1 to ftaSkipFirstLine
-    linput #hFta: ftaLine$ eof FtaEof
-  nex ftaSkipFirstLineItem
-  do
-    linput #hFta: ftaLine$ eof FtaEof
-    ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
-    if ftaPosDelim<=0 then
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
-      fn_addOneC(mat ftaArrayRight$,'')
-    else
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
-      fn_addOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
-    end if
-  loop
-  FtaEof: !
-  close #hFta:
-  fnFileTo2Arrays=udim(mat ftaArrayLeft$)+ftaSkipFirstLine
-fnend
-
-def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
-  if ~setup then let fn_setup
-  dim r1Line$*256
-  dim r1LineItem$(0)*128
-  mat r1Return$(0)
-  open #hr1:=fngethandle: 'name='&r1File$,d,input ioerr EoR1
-  linput #hr1: r1Line$ eof EoR1 ! just consume the headings
-  do
-    linput #hr1: r1Line$ eof EoR1
-    str2mat(r1Line$,mat r1LineItem$,r1Delimiter$)
-    if udim(mat r1LineItem$)=>r1ColumnNumber then
-      fn_addonec(mat r1Return$,r1LineItem$(r1ColumnNumber))
-    end if
-  loop
-  close #hr1:
-  EoR1: !
-  fnRead1column=udim(mat r1Return$)
-fnend
-def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumber1,r2ColumnNumber2,r2Delimiter$)
-
-  if ~setup then let fn_setup
-  dim r2Line$*256
-  dim r2LineItem$(0)*128
-  mat r2Return1$(0)
-  mat r2Return2$(0)
-  open #hr2:=fngethandle: 'name='&r2File$,d,input ioerr Eor2
-  linput #hr2: r2Line$ eof Eor2 ! just consume the headings
-  do
-    linput #hr2: r2Line$ eof Eor2
-    str2mat(r2Line$,mat r2LineItem$,r2Delimiter$)
-    if udim(mat r2LineItem$)=>r2ColumnNumber1 then
-      fn_addonec(mat r2Return1$,r2LineItem$(r2ColumnNumber1))
-    else
-      fn_addonec(mat r2Return1$,'')
-    end if
-    if udim(mat r2LineItem$)=>r2ColumnNumber2 then
-      fn_addonec(mat r2Return2$,r2LineItem$(r2ColumnNumber2))
-    else
-      fn_addonec(mat r2Return2$,'')
-    end if
-  loop
-  close #hr2:
-  Eor2: !
-  fnRead2column=udim(mat r2Return1$)
-fnend
-def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*256,r3ColumnNumber1,r3ColumnNumber2,r3ColumnNumber3,r3Delimiter$)
-  if ~setup then let fn_setup
-  dim r3Line$*256
-  dim r3LineItem$(0)*128
-  mat r3Return1$(0)
-  mat r3Return2$(0)
-  open #hr3:=fngethandle: 'name='&r3File$,d,input ioerr Eor3
-  linput #hr3: r3Line$ eof Eor3 ! just consume the headings
-  do
-    linput #hr3: r3Line$ eof Eor3
-    str2mat(r3Line$,mat r3LineItem$,r3Delimiter$)
-    if udim(mat r3LineItem$)<max(r3ColumnNumber3,r3ColumnNumber2,r3ColumnNumber1) then mat r3LineItem$(max(r3ColumnNumber3,r3ColumnNumber2,r3ColumnNumber1))
-    fn_addonec(mat r3Return1$,r3LineItem$(r3ColumnNumber1))
-    fn_addonec(mat r3Return2$,r3LineItem$(r3ColumnNumber2))
-    fn_addonec(mat r3Return3$,r3LineItem$(r3ColumnNumber3))
-  loop
-  close #hr3:
-  Eor3: !
-  fnRead3column=udim(mat r3Return1$)
-fnend
-def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$*256,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
-  if ~setup then let fn_setup
-  dim r4Line$*256
-  dim r4LineItem$(0)*128
-  mat r4Return1$(0)
-  mat r4Return2$(0)
-  open #hr4:=fngethandle: 'name='&r4File$,d,input ioerr Eor4
-  linput #hr4: r4Line$ eof Eor4 ! just consume the headings
-  do
-    linput #hr4: r4Line$ eof Eor4
-    str2mat(r4Line$,mat r4LineItem$,r4Delimiter$)
-    if udim(mat r4LineItem$)<max(r4ColumnNumber4,r4ColumnNumber2,r4ColumnNumber1) then mat r4LineItem$(max(r4ColumnNumber4,r4ColumnNumber2,r4ColumnNumber1))
-    fn_addonec(mat r4Return1$,r4LineItem$(r4ColumnNumber1))
-    fn_addonec(mat r4Return2$,r4LineItem$(r4ColumnNumber2))
-    fn_addonec(mat r4Return3$,r4LineItem$(r4ColumnNumber3))
-    fn_addonec(mat r4Return4$,r4LineItem$(r4ColumnNumber4))
-  loop
-  close #hr4:
-  Eor4: !
-  fnRead4column=udim(mat r4Return1$)
-fnend
-
-def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256,r2fColumn1Width)
-  ! for reading files into two arrays where the first X positions in the file are column1 and the rest of the line is column2
-  ! a 1 character delimiter between the two columns is assumed.
-  ! no headings is assumed
-  if ~setup then let fn_setup
-  dim r2fLine$*256
-  mat r2fReturn1$(0)
-  mat r2fReturn2$(0)
-  open #hr2f:=fngethandle: 'name='&r2fFile$,d,input ioerr Eor2f
-  do
-    linput #hr2f: r2fLine$ eof Eor2f
-    fn_addonec(mat r2fReturn1$,r2fLine$(1:r2fColumn1Width))
-    fn_addonec(mat r2fReturn2$,r2fLine$(r2fColumn1Width+2:inf))
-  loop
-  close #hr2f:
-  Eor2f: !
-  fnRead2columnFixedWidth=udim(mat r2fReturn1$)
-fnend
-
+! r: test zone
+library program$: fnDateSelect$
+pr 'fnDateSelect$ returns "'&fnDateSelect$&'"'
+end
 ! /r
-def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
-	array_part_one_udim=udim(arrayPartOne$)
-	array_part_two_udim=udim(arrayPartTwo$)
-	array_combined_udim=array_part_one_udim+array_part_two_udim
-	mat array_combined$(array_combined_udim)
-	if array_part_one_udim=0 then
-		mat array_combined$=arrayPartTwo$
-	else if array_part_two_udim=0 then
-		mat array_combined$=arrayPartOne$
-	else if array_part_one_udim>0 and array_part_two_udim>0 then
-		mat array_combined$(1:array_part_one_udim)=arrayPartOne$(1:array_part_one_udim)
-		mat array_combined$(array_part_one_udim+1:array_combined_udim)=arrayPartTwo$(1:array_part_two_udim)
+
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library.br': fnGetHandle
 	end if
 fnend
 
-def library fnArrayAddN(mat array_combined,mat array_part_one,mat array_part_two)
-	let array_part_one_udim=udim(array_part_one)
-	let array_part_two_udim=udim(array_part_two)
-	let array_combined_udim=array_part_one_udim+array_part_two_udim
-	mat array_combined(array_combined_udim)
-	if array_part_one_udim=0 then 
-		mat array_combined=array_part_two
-	else if array_part_two_udim=0 then 
-		mat array_combined=array_part_one
-	else if array_part_one_udim>0 and array_part_two_udim>0 then 
-		mat array_combined(1:array_part_one_udim)=array_part_one(1:array_part_one_udim)
-		mat array_combined(array_part_one_udim+1:array_combined_udim)=array_part_two(1:array_part_two_udim)
-	end if 
-fnend 
-def library fnArrayReverseC(mat in$,mat out$)
-	let in_udim=udim(in$)
-	mat out$(in_udim)
-	for in_item=1 to in_udim
-		let out$(in_udim-in_item+1)=in$(in_item)
-	next in_item
-fnend 
-def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
-	Chr_Count=0
-	DO 
-		Cc_Pos_Chr=Pos(String_To_Search$,Chr_To_Count$,Cc_Pos_Chr+1)
-		IF Cc_Pos_Chr>0 THEN Chr_Count+=1
-	LOOP Until Cc_Pos_Chr<=0
-	fnChrCount=Chr_Count
-fnend
-def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd,___,returnN,howMany,x)
-	! fromEnd - set to -1 to search from end for last instance
-	howMany=udim(mat searchFor$)
-	mat posIs(howMany)
-	for x=1 to howMany
-		posIs(x)=pos(textToSearch$,searchFor$(x), fromEnd)
-		!  pr 'in "'&textToSearch$&'" the first instance of '&searchFor$(x)&' is at position '&str$(posIs(x))&'.' : pause
-		if posIs(x)>0 then
-			if fromEnd and posIs(x)>returnN then
-				returnN=posIs(x)
-				! pr 'AA returnN set to ';returnN
-			else if ~fromEnd and posIs(x)>0 and (returnN<=0 or posIs(x)<returnN) then
-				returnN=posIs(x)
-				! pr 'BB returnN set to ';returnN
-			end if
+def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
+	if ~setup then let fn_setup
+	save_date$=_date$
+	baseyear=val(env$('status.config.baseyear'))
+	if baseyear <= 1900 then execute 'config baseyear 1930'
+
+	format$=lwrc$(format$)
+	date$("*mdcy")
+	if val(_date$)=0 then
+		if format$='' then
+			_date$=date$: format$="mdcy"
+		else
+			date$("*"&format$)
+			_date$=date$
+			_date$=date$(days(val(_date$),format$),'mdcy')
+			date$("*mdcy")
 		end if
-	nex x
-	! pr 'at end - returning';returnN : pause
-	fnPosOfAny=returnN
+	else
+		if (lwrc$(_date$(1:1))='m' or lwrc$(_date$(1:1))='d') and len(format$)=8 then
+			_date$=lpad$(_date$,8,"0")
+		end if
+		if format$='' then format$="mdcy"
+		_date$=date$(days(val(_date$),format$),'mdcy')
+	end if
+
+	if not row then row=1
+	if not column then column=1
+	dim forms$(1)*255
+	days_in_week=7
+	rows_on_grid=6
+	open #window:=fnGetHandle: "parent=none,srow="&str$(row)&",scol="&str$(column)&",rows=10,cols=25,caption=Date Selection,N=/#000066:#B0C4DE",display,outIn
+	pr #window, fields "1,1,C 1,,B2500;1,6,C 1,,B2501;1,8,C 1,,B2502;1,15,C 1,,B2503": "<", ">", "<", ">"
+	pr #window, fields "10,1,C 7,,B2504;10,18,C 7,,B2505": "OK", "Cancel"
+	pr #window, fields "9,1,C 25": "Today: "&date$("d3 m3 dd, ccyy")
+	month=val(_date$(1:2)) : year=val(_date$(5:8))
+	fn_gridForm(mat headers$,mat widths,mat forms$,days_in_week)
+	gridspec$="2,1,grid "&str$(rows_on_grid+1)&"/27"
+	pr #window, fields gridspec$&",headers,/W:#B0C4DE" : (mat headers$,mat widths,mat forms$)
+	do
+		fn_printDays (_date$,window,gridspec$,days_in_week,rows_on_grid)
+		usermonth=month
+		useryear=year
+		rinput #window, fields gridspec$&",cell,cur;1,3,N 02,AEX/#000066:#FFFFFF;1,10,N 4,AEX/#000066:#FFFFFF": day$, usermonth, useryear
+		fn_updateMonthAndYear (usermonth,useryear,month,year,fkey)
+		if fkey=2504 then let fkey(201)
+		if fkey=2505 then let fkey(99)
+
+		_date$= lpad$(str$(month),2,'0')&day$&str$(year)
+	loop until fkey=93 or fkey=99 or (fkey=201 and trim$(day$)<>'')
+	if fkey=93 or fkey=99 then _date$=save_date$
+	close #window:
+	if not format$='mdcy' and not (fkey=93 or fkey=99) then
+		_date$=date$(days(val(_date$),'mdcy'),format$)
+	end if
+	fkey(-1) ! reset fkey, so the calling program doesn't start reacting unexpectedly
+	fnDateSelect$=_date$
+	DateSelectFinis: !
+	if baseyear<=1900 then execute 'config baseyear '&str$(baseyear)
+fnend
+def fn_updateMonthAndYear (usermonth,useryear,&month,&year,_fkey;___)
+	if usermonth < 1 or usermonth > 12 then
+		msgbox("Invalid month")
+	else
+		month=usermonth
+	end if
+	if useryear<1900 or useryear>2100 then
+		msgbox("Invalid year")
+	else
+		year=useryear
+	end if
+	if _fkey=2500 then
+		month-=1
+		if month=0 then
+			month=12
+			year-=1
+		end if
+	else if _fkey=2501 then
+		month+=1
+		if month=13 then
+			month=1
+			year+=1
+		end if
+	else if _fkey=2502 then
+		year-=1
+	else if _fkey=2503 then
+		year+=1
+	end if
+fnend
+def fn_printDays(_date$,window,gridspec$,days_in_week,rows_on_grid;___,index_,offset,days_this_month,idx,year)
+	mat days$(42)=("")
+	month=val(_date$(1:2))
+	year=val(_date$(5:8))
+	offset=fn_dayOfWeek(_date$(1:2)&'01'&_date$(5:8),days_in_week)
+	days_this_month=fn_daysInMonth(month,year)
+	for rowindex_=1 + offset to days_this_month + offset
+		days$(rowindex_)=lpad$(str$(idx:=idx+1),2,'0')
+	next rowindex_
+	pr #window, fields gridspec$&",=": mat days$
+fnend
+def fn_gridForm(mat headers$,mat widths,mat forms$,days_in_week;___,index_)
+	mat headers$(days_in_week)=("")
+	mat widths(days_in_week)=(0)
+	mat forms$(days_in_week)=('')
+	for index_=1 to days_in_week
+		widths(index_)=3
+		forms$(index_)="CC 2,/#000066:#FFFFFF"
+	next index_
+	headers$(1) ="Sun"
+	headers$(2) ="Mon"
+	headers$(3) ="Tue"
+	headers$(4) ="Wed"
+	headers$(5) ="Thu"
+	headers$(6) ="Fri"
+	headers$(7) ="Sat"
+fnend
+def fn_daysInMonth (month,year;___,daysinmonth)
+	fn_daysInMonth=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
+fnend
+def fn_dayOfWeek(_date$,days_in_week) ! 0=sunday,1=monday, etc
+	fn_dayOfWeek=mod(days(_date$),days_in_week)
+fnend
+
+def library fnEndOfMonth(day; ___,returnN,eomYear,eomMonth,eomFirstOfNextMonth$)
+	eomYear=date(day,'ccyy')
+	eomMonth=date(day,'mm')
+	! pr 'date='&date$(day,'mm/dd/ccyy')
+	! pr 'year=';eomYear
+	! pr 'month=';eomMonth
+	! pause
+	if eomMonth=12 then
+		eomMonth=1
+		eomYear+=1
+	else
+		eomMonth+=1
+	end if
+
+	eomFirstOfNextMonth$=cnvrt$('pic(####)',eomYear)&'/'&cnvrt$('pic(##)',eomMonth)&'/01'
+	returnN=days(eomFirstOfNextMonth$,'ccyy/mm/dd')-1
+	fnEndOfMonth=returnN
+fnend
+def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
+	! (previously fn2000)   converts mmddyy (of x) to ccyymmdd and returns it as the value of fndate_mmddyy_to_ccyymmdd
+	fndate_mmddyy_to_ccyymmdd=date(days(x_mmddyy,'mmddyy'),'ccyymmdd')
+fnend
+def library fnSetMonth(mat mo$)
+	mat mo$(12)
+	mo$(01)="January"
+	mo$(02)="February"
+	mo$(03)="March"
+	mo$(04)="April"
+	mo$(05)="May"
+	mo$(06)="June"
+	mo$(07)="July"
+	mo$(08)="August"
+	mo$(09)="September"
+	mo$(10)="October"
+	mo$(11)="November"
+	mo$(12)="December"
 fnend
