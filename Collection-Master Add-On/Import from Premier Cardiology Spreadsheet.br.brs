@@ -307,7 +307,7 @@ def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
 	fn_add('FIRM_FILENO'   	,item$(csv_fileNo)                 	)
 	fn_add('INV_DATE'      	,item$(csv_serviceDate)           	)
 	fn_add('DESCRIPTION'   	,item$(csv_providerName)          	)
-	fn_add('INV_DESC'     	,'CPT Code '&item$(csv_cpt)   	)
+	fn_add('INV_DESC'     	,fnCptCode$(item$(csv_cpt))(1:20) 	)
 	fn_add('ACCT_NO'       	,item$(csv_facilityName)          	)
 	fn_add('DEBTOR_NO'     	,'1'                                	)
 	fn_add('CUR_BAL'       	,item$(csv_balance    )           	)
@@ -339,7 +339,7 @@ def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
 	fn_writePaperlessOneLine('Secondary Carrier:',item$(csv_secondaryCarrier 	))
 	fn_writePaperlessOneLine('Sec Insurance Num:',item$(csv_secInsuranceN    	))
 	fn_writePaperlessOneLine('     Service Date:',item$(csv_serviceDate      	))
-	fn_writePaperlessOneLine('              CPT:',item$(csv_cpt               	))
+	fn_writePaperlessOneLine('              CPT:',item$(csv_cpt)&': '&fnCptCode$(item$(csv_cpt)))
 	fn_writePaperlessOneLine('   Insurance Paid:',item$(csv_insurancePaid    	))
 	fn_writePaperlessOneLine('     Patient Paid:',item$(csv_patientPaid      	))
 	fn_writePaperlessOneLine('       Total Paid:',item$(csv_totalPaid        	))
@@ -349,8 +349,8 @@ def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
 	fn_writePaperlessOneLine('           FileNo:',item$(csv_fileNo            	))
 	fn_writePaperlessOneLine('       Invoice No:',item$(csv_invoiceNo        	))
 fnend
-def fn_writePaperlessOneLine(comment$*256,comment2$*256;___, which)
-	dim polWrote$(0)*512
+def fn_writePaperlessOneLine(comment$*256,comment2$*2048;___, which)
+	dim polWrote$(0)*2048
 	which=srch(mat polWrote$,item$(csv_patientId)&item$(csv_fileNo)&comment$&comment2$)
 	if which<=0 then
 		fnAddOneC(mat polWrote$,item$(csv_patientId)&item$(csv_fileNo)&comment$&comment2$)
@@ -373,7 +373,7 @@ def fn_writeInfinity(hOut,mat item$)
 	fn_pr(134)
 fnend
 dim hLine$*2048,dLine$*2408
-def fn_add(hLineAdd$*128,dLineAdd$*1024; reset)
+def fn_add(hLineAdd$*128,dLineAdd$*2048; reset)
 	if reset then
 		hLine$=hLineAdd$
 		dLine$=dLineAdd$
@@ -393,7 +393,7 @@ def fn_pr(num; forceHeader)
 	dLine$(0:0)=str$(num)&'[tab]D[tab]'&date$('mm/dd/ccyy')&tab$&time$&tab$
 	fn_pr_hOut(dLine$)
 fnend
-def fn_pr_hOut(x$*512)
+def fn_pr_hOut(x$*2048)
 	x$=srep$(x$,'[tab]',tab$)
 	pr #hOut: x$&tab$&'#'
 fnend
@@ -629,14 +629,15 @@ def fn_setup
 		library 'S:\Core\Library.br': fnCopy
 		library 'S:\Core\Library.br': fnXit
 		library 'S:\Core\Library.br': fnAddOneC,fnAddOneN
-		library 'S:\Core\Library.br': fncsz
-		library 'S:\Core\Library.br': fnTos,fnlbl,fntxt,fncmdset
-		library 'S:\Core\Library.br': fnchk
-		library 'S:\Core\Library.br': fncombof
-		library 'S:\Core\Library.br': fnacs2
+		library 'S:\Core\Library.br': fnCsz
+		library 'S:\Core\Library.br': fnTos,fnLbl,fnTxt,fnCmdSet
+		library 'S:\Core\Library.br': fnChk
+		library 'S:\Core\Library.br': fnCombof
+		library 'S:\Core\Library.br': fnAcs2
 		library 'S:\Core\Library.br': fnPosOfAny
-		library 'S:\Core\Library.br': fnreg_read
-		library 'S:\Core\Library.br': fnreg_write
+		library 'S:\Core\Library.br': fnReg_read
+		library 'S:\Core\Library.br': fnReg_write
+		library 'S:\Collection-Master Add-On\fn\Library.br': fnCptCode$
 		gosub Enum
 		! fnErase_buttons
 
@@ -658,4 +659,3 @@ fnXit
 include: cm\enum\common
 include: cm\enum\forw
 include: cm\err
-EnumMasforw

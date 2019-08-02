@@ -7,8 +7,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	! r: setup
 	library 'S:\Core\Library': fnerror,fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
 	on error goto ERTN
-	! ______________________________________________________________________
-	dim tmp$*80
+
 	dim sln2(199)
 	dim fltyp2$(199)*2
 	dim mask2(199),startPos2(199)
@@ -19,8 +18,8 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	dim cmask$(199) ! Flexgrid Column Mask
 	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
 	dim key$*80,blank$(20)*80 ! dynamically built key
-	dim keyform$*1024
 	dim resp$(256)*1024
+	! /r
 	! r: prepare arrays
 		mat flxItem$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
 		mat mask2(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
@@ -118,7 +117,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	goto MENU1
 
 
-	! KEYORDER_BUILD: ! r:
+	! KEYORDER_BUILD: ! r: unused
 	! uses: FIN, mat startPos2
 	! returns: mat keyorder
 	! this section is not used currently
@@ -130,61 +129,55 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 					if startPos2=kps(fin,j) then keyorder(j)=bowman+=1
 				next j
 			loop
-			return
-	! /r
+	return ! /r
 	MENU1: ! r:
-			fnTos
-			fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
-			for j1=1 to lrec(fin)
-				prec=j1
-				gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
-				if pnorec<>1 then
-					fic=0 : flxItem$(fic+=1)=str$(rec(fin))
-					for j2=2 to itemCount+1
-						controlX=j2-1
-						if mask2(controlX)<20000 then
-							dim hcfDesc$*128,hcfKey$*128
-							hcfDesc$='' ! p$(controlX)
-							if controlX<=udim(mat control$,1) and lwrc$(control$(controlX,1))='combof' and control$(controlX,7)<>'' then
-								hcfKey$=rpad$(trim$(p$(controlX))(1:kln(hComboF(controlX))),kln(hComboF(controlX)))
-								read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
-								hcfDesc$=rtrm$(hcfDesc$)
-							end if
-							flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
-	!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
+		fnTos
+		fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
+		for j1=1 to lrec(fin)
+			prec=j1
+			gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
+			if pnorec<>1 then
+				fic=0 : flxItem$(fic+=1)=str$(rec(fin))
+				for j2=2 to itemCount+1
+					controlX=j2-1
+					if mask2(controlX)<20000 then
+						dim hcfDesc$*128,hcfKey$*128
+						hcfDesc$='' ! p$(controlX)
+						if controlX<=udim(mat control$,1) and lwrc$(control$(controlX,1))='combof' and control$(controlX,7)<>'' then
+							hcfKey$=rpad$(trim$(p$(controlX))(1:kln(hComboF(controlX))),kln(hComboF(controlX)))
+							read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
+							hcfDesc$=rtrm$(hcfDesc$)
 						end if
-					next j2
-					fnflexadd1(mat flxItem$)
-				end if
-			next j1
-			for hComboFitem=1 to hComboFcount
-				if hComboF(hComboFitem) then
-					close #hComboF(hComboFitem): ioerr ignore
-					hComboF(hComboFitem)=0
-				end if
-			next hComboFitem
-			fnLbl(21,20," ") ! move command buttons down one line so search box ok
-			fnCmdKey("Edi&t",opt_edit,1)
-			fnCmdKey("&Add",opt_add)
-			fnCmdKey("&Delete",opt_delete)
-			fnCmdKey("E&xit",opt_cancel,0,1)
-			fnAcs2(mat resp$,menu1_opt)
-			prec=val(resp$(1)) conv MENU1
-			if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
-			if menu1_opt=opt_cancel then
-				goto XIT
-			else if menu1_opt=opt_add then
-				goto TO_ADD
-			else if menu1_opt=opt_edit then
-				goto TO_EDIT
-			else if menu1_opt=opt_delete then
-				goto SUB_DELETE
-			else
-				goto MENU1
+						flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
+						!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
+					end if
+				next j2
+				fnflexadd1(mat flxItem$)
 			end if
-	! /r
-	SUB_DELETE: ! r:
-		delete #fin,rec=prec:
+		next j1
+		for hComboFitem=1 to hComboFcount
+			if hComboF(hComboFitem) then
+				close #hComboF(hComboFitem): ioerr ignore
+				hComboF(hComboFitem)=0
+			end if
+		next hComboFitem
+		fnLbl(21,20," ") ! move command buttons down one line so search box ok
+		fnCmdKey("Edi&t",opt_edit,1)
+		fnCmdKey("&Add",opt_add)
+		fnCmdKey("&Delete",opt_delete)
+		fnCmdKey("E&xit",opt_cancel,0,1)
+		fnAcs2(mat resp$,menu1_opt)
+		prec=val(resp$(1)) conv MENU1
+		if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
+		if menu1_opt=opt_cancel then
+			goto XIT
+		else if menu1_opt=opt_add then
+			goto TO_ADD
+		else if menu1_opt=opt_edit then
+			goto TO_EDIT
+		else if menu1_opt=opt_delete then
+			delete #fin,rec=prec:
+		end if
 	goto MENU1 ! /r
 	TO_EDIT: ! r: ADD and EDIT routines
 			gosub READ_P
@@ -219,12 +212,12 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 				end if
 				if j<udim(mxl) then maxlen=mxl(j) else maxlen=0
 				if j>udim(control$,1) or trim$(control$(j,1))="" or lwrc$(control$(j,1))="txt" then
-					if fln(j)>40 and (maxlen=0 or maxlen>40) then 
+					if fln(j)>40 and (maxlen=0 or maxlen>40) then
 						maxlen=fln(j)
-						fln(j)=40 
+						fln(j)=40
 					end if
 					fnTxt(lc,mypos,fln(j),maxlen,0,str$(mask2(ic)),disable) ! p$(j)
-				else if lwrc$(control$(j,1))="comboa" then 
+				else if lwrc$(control$(j,1))="comboa" then
 					mat option$(999)
 					L1160: !
 					cj+=1
@@ -259,12 +252,13 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	! /r
 
 	READ_P: ! r:
-! Pnorec (returned value)= 0 = ok    = 1 = noRec error encountered
-! Peof (returned value)  = 0 = ok    = 1 = EOF   error encountered
-! PRec (sent value)= record number to read
+		! Pnorec (returned value)= 0 = ok    = 1 = noRec error encountered
+		! Peof (returned value)  = 0 = ok    = 1 = EOF   error encountered
+		! PRec (sent value)= record number to read
 		pnorec=0 : peof=0
-! Read 1st Item
+		! Read 1st Item
 		j=1
+		dim tmp$*512
 		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
 			read #fin,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
@@ -310,55 +304,38 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			p$(j)=""
 		end if
 		goto READ_P_XIT
-PNOREC: pnorec=1 : goto READ_P_XIT
-PEOF: peof=1 : goto READ_P_XIT
-READ_P_XIT: return
-! /r
-	SET_KEY_FORM: ! r:
-! uses: Fin
-! returns: mat blank, keyForm$, key$
-		keyform$='Form ' : key$='' : j=0
-		do while kps(fin,j+=1)>0
-			keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
-			keyform$=keyform$&'C '&str$(kln(fin,j))&','
-			blank$(j)=rpt$(chr$(48),kln(fin,j))
-			key$=key$&blank$(j)
-		loop
-		keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
-		mat blank$(j-1)
-! pr 'KeyForm$='&KEYFORM$ ! XXX
-		return
-! /r
-	RIGHT_KEY_WRONG_RECORD: ! r:
-		do  !  L1780: !
-			read #fin:
-		loop until rec(fin)=prec !  if rec(fin)<>prec then goto L1780
+		PNOREC: !
+			pnorec=1
+		goto READ_P_XIT
+		PEOF: !
+			peof=1
+		goto READ_P_XIT
+		READ_P_XIT: !
 	return ! /r
-	SPECIAL_NOKEY: ! r:
-! pr 'Special Nokey routine' ! XXX
-		key$=""
-		read #fin,using keyform$,rec=prec: mat blank$
-		for j=1 to udim(blank$) : key$=key$&blank$(j) : next j
-		continue  ! not Return  ! not Retry
-! /r
+	RightKeyWrongRecord: ! r:
+		do
+			read #fin:
+		loop until rec(fin)=prec
+	return ! /r
+
 	REWR_P: ! r:
-! spos=1
+		! spos=1
 		if menu1_opt=opt_add then
 			prec=lrec(fin)+1
-			gosub SET_KEY_FORM
-			write #fin,using keyform$,reserve: mat blank$
-! .! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyform$='&KEYFORM$
+			keyForm$=fn_setKeyForm$(mat blank$,keyForm$,key$,fin)
+			write #fin,using keyForm$,reserve: mat blank$
+			! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyForm$='&keyForm$
 			read #fin,key=key$: nokey SPECIAL_NOKEY
 		else
-			gosub SET_KEY_FORM
-			reread #fin,using keyform$: mat blank$
+			keyForm$=fn_setKeyForm$(mat blank$,keyForm$,key$,fin)
+			reread #fin,using keyForm$: mat blank$
 			j=0 : key$=''
 			do while kps(fin,j+=1)>0
 				key$=key$&blank$(j)
 			loop
 			read #fin,key=key$: nokey SPECIAL_NOKEY
 			if rec(fin)<>prec then
-				gosub RIGHT_KEY_WRONG_RECORD
+				gosub RightKeyWrongRecord
 			end if
 		end if
 		for j=1 to itemCount
@@ -376,7 +353,7 @@ READ_P_XIT: return
 				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
 				tmp$=tmp$&str$(sln2(j))
 				rewrite #fin,using tmp$,same,reserve: p$(j)
-! .! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
+				! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 			end if
 			if crflag=1 then fltyp2$(j)="cr" : crflag=0
 			if fltyp2$(j)="n" or fltyp2$(j)="pd" then
@@ -386,9 +363,28 @@ READ_P_XIT: return
 			end if
 		next j
 		release #fin:
-! REWR_P_XIT: !
-		return
-! /r
+		! REWR_P_XIT: !
+	return ! /r
+	SPECIAL_NOKEY: ! r:
+		! pr 'Special Nokey routine' ! XXX
+		key$=""
+		dim keyForm$*1024
+		read #fin,using keyForm$,rec=prec: mat blank$
+		for j=1 to udim(blank$) : key$=key$&blank$(j) : next j
+	continue  ! not Return  ! not Retry ! /r
 	XIT: !
+fnend
+
+def fn_setKeyForm$*1024(mat blank$,keyForm$,&key$,fin)
+	keyForm$='Form ' : key$='' : j=0
+	do while kps(fin,j+=1)>0
+		keyForm$=keyForm$&'Pos '&str$(kps(fin,j))&','
+		keyForm$=keyForm$&'C '&str$(kln(fin,j))&','
+		blank$(j)=rpt$(chr$(48),kln(fin,j))
+		key$=key$&blank$(j)
+	loop
+	keyForm$=keyForm$(1:len(keyForm$)-1) ! remove the trailing comma
+	mat blank$(j-1)
+	! pr 'keyForm$='&keyForm$ ! XXX
 fnend
 include: ertn

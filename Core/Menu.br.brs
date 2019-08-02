@@ -286,28 +286,13 @@ def fn_main
 				execute 'Sy -c "'&trim$(menu_option$)&'"'
 			else if menu_option$(1:8)='Notepad:' then
 				execute 'Sy -c c:\Windows\notepad.exe "'&trim$(menu_option$(9:inf))&'"'
-			else if menu_option$(1:6)='FileIO' or menu_option$(1:8)='ScreenIO' then
+			else if menu_option$(1:8)='ScreenIO' then
 				if menu_option$(1:8)='ScreenIO' then
 					execute 'cd S:'
 					library 'S:\Core\ScreenIO\screenio.br': fnDesignScreen
 					fnDesignScreen
 					chain 's:\core\start'
 					! fn_chain('S:\Core\ScreenIO\screenio.br')
-				else if menu_option$(1:6)='FileIO' then
-					if menu_option$='FileIO (update and launch)' then
-						msgbox( 'obsoleted by local administrative execution of cmd:   mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\FileIO\Layout" "C:\ACS\Dev-5\Core\FileIO\Layout" ')
-						! fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
-						! fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
-					end if
-					open  #hProc:=fngethandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
-					pr #hProc: 'load S:\Core\FileIO\fileio.br'
-					pr #hProc: 'cd S:'
-					pr #hProc: 'Run'
-					pr #hProc: 'cd C:'
-					pr #hProc: 'load S:\Core\Menu.br'
-					pr #hProc: 'run'
-					close #hProc:
-					execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
 				else
 					pr 'unrecognized syntax: '&menu_option$ : pause
 				end if
@@ -896,7 +881,7 @@ def fn_display_menu
 			fn_dm_add('  Company','S:\Core\CReg_Hamster.br')
 			fn_dm_add('  Standard and User','S:\Core\Reg_Hamster.br')
 			fn_dm_add('  System','HamsterFio:CO System Registry')
-			fn_dm_add(' FileIO','FileIO')
+			fn_dm_add(' FileIO','S:\Core\FileIO\File IO.br')
 			!   fn_dm_add(' FileIO (update and launch)','FileIO (update and launch)')
 			! fn_dm_add(' ScreenIO','ScreenIO')
 			! fn_dm_add(' -')

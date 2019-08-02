@@ -1,6 +1,6 @@
 fn_setup(table$)
 on error goto Ertn
-pr 'table$=';table$
+! pr 'table$=';table$
 fntop(program$)
 if ~exists('[Q]\Data\cpt.dat') then let fn_InitialializeCpt
 fnHamsterFio(table$)
@@ -90,7 +90,21 @@ def fn_addCpt(hCpt,code$*5,desc$*1024) ! requires local form$ and cpt_ enumerati
 	goto AddCptXit
 	AddCptXit: !
 fnend
+
+
+
+def library fnCptCode$*800(code$*5)
+	if ~setup then let fn_setup(table$)
+	if ~setup_fnCptCode then
+		setup_fnCptCode=1
+		hFnCptCode=fn_open(table$,mat cpt$,mat cptN,mat form$)
+	end if
+	cpt$(cpt_code)=code$
+	mat cpt$=('')
+	mat cptN=(0)
+	read #hFnCptCode,using form$(hFnCptCode),key=rpad$(code$,kln(hFnCptCode)): mat cpt$,mat cptN nokey ignore
+	fnCptCode$=cpt$(cpt_desc)
+fnend
+
 include: fn_open
 include: ertn
-
-

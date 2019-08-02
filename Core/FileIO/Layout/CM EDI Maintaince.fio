@@ -1,0 +1,15 @@
+EDI\MAINTAIN.CLS       ,  em1_  , 0
+Recl=128
+===================================================
+Name$              ,Name                 ,C    35      , !
+Path$              ,Path                 ,C    40      , !
+Type$              ,Type                 ,C     1      , !
+Rcln               ,Rcln                 ,PD    6      , !
+New_Io$            ,New IO               ,C     8      , !
+Edi_Type$          ,Edi Type             ,C     9      , !
+
+
+
+
+
+

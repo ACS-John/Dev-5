@@ -501,7 +501,7 @@ def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,paren
 	tabcon=0
 	! if debug=1 then pr newpage
 	! ****************
-	for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j ! was trim$ before 4/25/2017
+	for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j
 	cap$=env$('Program_Caption')
 	fn_get_flexhandle(1)
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
@@ -509,8 +509,6 @@ def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,paren
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 	goto XIT
 	ERTN: !
-	! execute "Config Console On" ! in ertn
-	!		pr f "15,1,Cc 80,H,N": "Screen Ace 5 encountered an error."
 	fnerror(program$,err,line,act$,"xit")
 	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 	execute "List -"&str$(line)
@@ -1022,7 +1020,7 @@ def fn_validateFields(;___,found_invalid,_idx)
 	next _idx
 	fn_validateFields=~ found_invalid
 fnend
-def fn_validate_mdy (_date$;separator$,___,month,day,year)
+def fn_validate_mdy(_date$;separator$,___,month,day,year)
 	fn_validate_mdy=1
 	_date$=lpad$(_date$,6,'0')
 	month=val(_date$(1:2))
@@ -1350,7 +1348,7 @@ def fn_ace_rd_flex(;___,index_)
 	! pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
 	!		pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
 fnend
-def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
+def fn_alpha_mask_indices(mat alpha_mask_indices;___,index_,mask)
 	mat alpha_mask_indices(0)
 	for index_=1 to udim(mat _mask$)
 		mask=val(_mask$(index_)) conv ignore
@@ -1390,8 +1388,9 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 		fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
 	next index_
 	! _forms$(1)="0/C 500" works... old, small
-	_forms$(1)="0/C 999"
-	! _forms$(1)="0/C 1024" fails
+	_forms$(1)="0/C 999" 
+	! _forms$(1)="0/C 800"
+	! _forms$(1)="0/C 1024" fails (unable to select things from grids)
 	_widths(1)=0
 	close #grid_data:
 	fn_gridform=data_file_nonempty
@@ -1694,7 +1693,7 @@ def fn_ace_rd_text
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
 	end if
 fnend
-def fn_textMask$*255 (mask$*255,lyne,ps,width,container,maxlen)
+def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen)
 	dim attr$*255
 	attr$=''
 	!
@@ -1851,7 +1850,7 @@ def fn_fileSelection(mask,lyne,ps,width,container)
 	file_select_data(file_select_boxes,2)=mask
 	pr f file_select_button_spec$: "."
 fnend
-def fn_selectFile (&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpperCase)
+def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpperCase)
 	if mask=70 or mask=71 or mask=72 then 
 		if mask=70 or mask=71 then 
 			openOrSave$='OPEN'
@@ -1874,7 +1873,7 @@ include: filenamesPopUpperCase
 
 	end if
 fnend
-def fn_dateTextBox (mask,lyne,ps,&width,container; disable,___,disable$*1,date_button_spec$*255)
+def fn_dateTextBox(mask,lyne,ps,&width,container; disable,___,disable$*1,date_button_spec$*255)
 	date_boxes+=1
 	if disable then disable$='P'
 	date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,'&disable$&','&str$(date_fkey_base+date_boxes)
