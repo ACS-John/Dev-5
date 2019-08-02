@@ -85,7 +85,7 @@ Extras
 >Error Recovery
 >>Undo Penalty Calculation                            ^ acsUB\ubUnPen
 >>Change Wrong Billing Date                           ^ Utility Billing\Change Wrong Billing Date
->>Recalculate All Current Bills                       ^ acsub\ubrecalk
+>>Recalculate All Current Bills                       ^ Utility Billing\Recalculate All Current Bills
 >Forgot to Zero Year To Date Usage                    ^ acsUB\Forgot
 >>Reassign Deposit Change Addresses                   ^ acsUB\DepReas
 >>Change Wrong Transaction Dates                      ^ acsUB\ReDate
