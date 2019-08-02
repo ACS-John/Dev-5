@@ -14,11 +14,9 @@ Ertn: !
 	err_win=127
 	if file(err_win)<>-1 then close #err_win: ioerr ignore
 	if env$('acsDeveloper')<>'' then
-		errOptionCount=6
-		errDeveloper=1
+		errOptionCount=7
 	else
 		errOptionCount=5
-		errDeveloper=0
 	end if
 	open #err_win: 'SCol=8,SRow=10,Cols=62,Rows=11,Border=S[E],Caption=Collection-Master Add-On Error Trap',display,outin
 	dim errFieldPos$ (0)*64
@@ -33,10 +31,9 @@ Ertn: !
 	errFieldPos$(3)='7,5,C 23,[E]' : errFieldText$(3)="3. Quit to MAIN MENU"
 	errFieldPos$(4)='8,5,C 23,[E]' : errFieldText$(4)="4. Exit"
 	errFieldPos$(5)='9,5,C 23,[E]' : errFieldText$(5)="5. Restart this Program"
-	if errDeveloper then
+	if env$('acsDeveloper')<>'' then
 		errFieldPos$(6)='10,5,C 23,[E]' : errFieldText$(6)="6. Proc Reload"
 		errFieldPos$(7)='11,5,C 23,[E]' : errFieldText$(7)="7. Reload and Run"
-
 	end if
 	! print #err_win,fields "1,1,C 61,[E]": "1. Go into on-line help"
 	! print #err_win,fields "2,1,C 61,[E]": "2. Retry last command"

@@ -25,5 +25,10 @@ def library fnAddParty(; filingId$,partyRole$,partyType$,firstName$,lastName$,mi
 	library 'Collection-Master Add-On\fn\mtomSoap.br': fnAddParty
 	fnAddParty=fnAddParty( filingId$,partyRole$,partyType$,firstName$,lastName$,middleInitial$,suffix$,gender$,businessName$,SSNFTIN$,aka1type$,aka1$,aka2type$,aka2$,address1$,address2$,city$,state$,zipCode$,homePhone$,dateOfBirth$,dateOfDeath$)
 fnend
-
 ! /r
+def library fnCptCode$*800(code$*5)
+	library 'Collection-Master Add-On\cpt.br': fnCptCode$
+	fnCptCode$=fnCptCode$(code$)
+fnend
+
+

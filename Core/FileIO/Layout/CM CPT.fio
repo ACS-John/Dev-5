@@ -1,7 +1,6 @@
 [Q]\cpt.dat       ,  cpt_  , 1
 [Q]\cptIndex1.idx ,  code
 ===================================================
-! Name Index needs to be (CaseIgnored) - manually handled outside fileio for now.
 code$              ,    CPT Code          ,  C    5     , !     SPos=1   Required=True
 desc$              ,    Description       ,  C  800    , !     SPos=6
 
