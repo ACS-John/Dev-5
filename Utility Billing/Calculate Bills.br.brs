@@ -1,4 +1,4 @@
-! -- Calculate Bills    *** DO NOT FORGET TO PARALLEL CHANGES IN S:\acsUB\UBRECALK
+! -- Calculate Bills    *** DO NOT FORGET TO PARALLEL CHANGES IN S:\Utility Billing\Recalculate All Current Bills
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncloseprn,fnopenprn,fnxit,fnerror,fnTos,fnLbl,fnAcs
 	library 'S:\Core\Library': fnTxt,fnmsgbox,fnCmdSet,fntop,fnpause,fncd,fnChk,fncreg_read,fncreg_write,fncomboa
@@ -10,7 +10,7 @@
 		library "S:\acsUB\calk_standard": fncalk
 	end if 
 	on error goto ERTN
-	fntop(program$,"Calculate Bills")
+	fntop(program$)
 ! r: dims
 	dim resp$(10)*128
 	dim w(5)            ! only dimmed and reset locally - it is used and set in fncalk

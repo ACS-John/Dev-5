@@ -5,7 +5,7 @@
 ! mat p$      array of
 def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	! r: setup
-	library 'S:\Core\Library': fnerror,fnTos,fnflexinit1,fnCmdKey,fnAcs,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
+	library 'S:\Core\Library': fnerror,fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
 	on error goto ERTN
 	! ______________________________________________________________________
 	dim tmp$*80
@@ -19,9 +19,8 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	dim cmask$(199) ! Flexgrid Column Mask
 	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
 	dim key$*80,blank$(20)*80 ! dynamically built key
-	dim keyform$*1000
+	dim keyform$*1024
 	dim resp$(256)*1024
-	dim sn$*256 ! screen name - used to uniquely identify screen... well, it used to be.  it does nothing now.
 	! r: prepare arrays
 		mat flxItem$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
 		mat mask2(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
@@ -134,7 +133,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			return
 	! /r
 	MENU1: ! r:
-			fnTos(sn$=uw$&"1b")
+			fnTos
 			fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 			for j1=1 to lrec(fin)
 				prec=j1
@@ -169,7 +168,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			fnCmdKey("&Add",opt_add)
 			fnCmdKey("&Delete",opt_delete)
 			fnCmdKey("E&xit",opt_cancel,0,1)
-			fnAcs(sn$,0,mat resp$,menu1_opt)
+			fnAcs2(mat resp$,menu1_opt)
 			prec=val(resp$(1)) conv MENU1
 			if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
 			if menu1_opt=opt_cancel then
@@ -203,7 +202,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 				mylen=max(mylen,len(lbl$(j)))
 			next j
 			mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
-			fnTos(sn$=uw$&"3")
+			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
 			for j=1 to itemCount
 				if itemCount>30 and j>(itemCount/2) and col=1 then
@@ -252,7 +251,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			fnCmdKey("&Save",1,1)
 			fnCmdKey("&Cancel",opt_cancel,0,1)
 			!
-			fnAcs(sn$,0,mat p2$,ck)
+			fnAcs2(mat p2$,ck)
 			mat p$(1:udim(p$))=p2$(1:udim(p$))
 			if ck<>opt_cancel then gosub REWR_P
 			addloop$=p2$(alana)

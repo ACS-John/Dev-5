@@ -674,12 +674,12 @@ def fn_UpdateQFileIO
 		for sItem=1 to udim(mat sLayFile$)
 			if sLayFile$(sItem)(1:3)='CM ' or sLayFile$(sItem)(1:3)='CO ' then
 				dWhich=srch(mat dLayFile$,sLayFile$(sItem)(1:pos(sLayFile$(sItem),'.',-1)-1))
+				sDay=days(slaydate$(sitem),'mm/dd/ccyy')
+				dDay=days(dlaydate$(dWhich),'mm/dd/ccyy')
 				if dWhich<=0 then ! it isn't there at all
 					fnCopy('S:\Core\FileIO\Layout\'&sLayFile$(sItem)        ,'filelay\*'        )
-					! pause
-				else ! TODO: see if it is newer and copy in ONLY if it is.
+				else if dDay<=sDay then
 					fnCopy('S:\Core\FileIO\Layout\'&sLayFile$(sItem)        ,'filelay\*'        )
-					! pause
 				end if
 			end if
 		nex sItem

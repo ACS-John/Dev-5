@@ -62,7 +62,7 @@ def fn_setup
 		cancel=5
 		workFile$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
 		workFileIndex$="[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]"
-	! synchronize these settings with S:\acsUB\ubCalk
+	! synchronize these settings with S:\Utility Billing\Calculate Bills
 		from_holding_file=3 ! enumerations for addmethod
 		from_hh_file=5
 	! ______________________________________________________________________
