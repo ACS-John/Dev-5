@@ -60,8 +60,8 @@ def Fn_Messagebox(Mbx_Message$*2048; Mbx_Type,Mbx_Title$*200,Mbx_Nogui$*28) ! mb
 	end if  ! mbx_name$<>''   /   else 
 	Mbx_File_Count=Fn_Mbx_Get_File_List(Mbx_H_Text,Mbx_Message$,Mbx_H_Cols,Mat Mbx_File_Os$,Mat Mbx_File_V$)
 	if Mbx_Always_Ask Or Mbx_Checked<=9999 then 
-		MAT Mbx_Win_Field$(1)=('')
-		MAT Mbx_Win_Text$(1)=('')
+		mat Mbx_Win_Field$(1)=('')
+		mat Mbx_Win_Text$(1)=('')
 		Mbx_Win$=''
 		Mbx_Timeout=0
 !   if mbx_checked>9999 then mbx_dont_ask_again_text$='^'&mbx_dont_ask_again_text$

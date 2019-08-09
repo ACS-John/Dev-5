@@ -19,6 +19,7 @@ def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN,wasFilenam
 	! end if
 	fileName$=fnSrepEnv$(fileName$)
 	path$    =fnSrepEnv$(path$)
+	! addAt$='' ! if pos(path$(1:2),'@')>0 then addAt$=env$('at') else addAt$=''
 	do while pos(fileName$,"\")
 		path$=path$&fileName$(1:pos(fileName$,"\"))
 		fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
@@ -27,11 +28,15 @@ def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN,wasFilenam
 		if path$(1:2)='\\' or path$(1:3)=':\\' or path$(1:4)='@:\\' or path$(1:5)='@::\\' then 
 			if fn_backslashCount(path$)<=4 then doNotTryThisOne=1
 		end if
+		if path$(1:3)='@::' and path$(5:6)=':\' and len(path$)=6 then  ! 
+			doNotTryThisOne=1
+		end if
 		! /r
 		if ~exists(path$) and doNotTryThisOne=0 then 
 			! if debug then pr 'about to MKDIR '&rtrm$(path$,'\') : pause
 include: filenamesPushMixedCase
 			execute 'mkdir "'&rtrm$(path$,'\')&'"' err MspeErr
+			! execute 'mkdir "'&addAt$&rtrm$(path$,'\')&'"' err MspeErr
 include: filenamesPopUpperCase
 		end if
 	loop
@@ -40,6 +45,9 @@ include: filenamesPopUpperCase
 	MspeErr: !
 	returnN=-err
 		pr 'fnMakeSurepathExists got an error '&str$(err)&' and continued passing back its failure to the calling program to handle.'
+		pr '  path$='&path$
+		pr '  filename$='&filename$
+		pause ! if env$('debug')='Yes' then pause
 	goto MspeFinis
 	MspeFinis: !
 	fnMakeSurepathExists=returnN

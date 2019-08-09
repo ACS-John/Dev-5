@@ -1,6 +1,7 @@
-library 'S:\Core\Library': fnTop,fnXit,fnGetHandle
+library 'S:\Core\Library.br': fnTop,fnXit,fnGetHandle
 fnTop(program$)
-open  #hProc:=fnGetHandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
+open  #hProc:=fnGetHandle: 'name=fileioproc'&session$&'.$$$,replace',display,output
+! open  #hProc:=fnGetHandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
 pr #hProc: 'load S:\Core\FileIO\fileio.br'
 pr #hProc: 'cd S:'
 pr #hProc: 'Run'
@@ -12,4 +13,5 @@ else
 end if
 pr #hProc: 'run'
 close #hProc:
-execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
+! execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
+execute 'proc fileioproc'&session$&'.$$$'

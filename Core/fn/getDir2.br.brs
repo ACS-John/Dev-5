@@ -1,11 +1,19 @@
 ! r: test area
 	library program$: fngetdir2
-	dim tmp_file_list$(1)*256
-	fngetdir2('C:\ACS\Dev-5\ACSUB\Grid\',mat tmp_file_list$, '/s /b','*.*')
-	pr mat tmp_file_list$(1:10) : pause 
-	!
-	dim fl$(1)*99
-	pr 'function returns ';fngetdir2(env$('userprofile')&"\Desktop", mat fl$,'/s /tc','*.rtf',mat test_date$,mat test_time$,enable_full_path=1)
+	
+	
+		dim fl$(0)*256
+		dim test_date$(1)*32
+		dim test_time$(1)*32
+		pr 'function returns ';fngetdir2('S:\Core\FileIO\Layout\',mat fl$, '','*.fio',mat test_date$,mat test_time$)
+	
+	
+	! dim tmp_file_list$(1)*256
+	! fngetdir2('C:\ACS\Dev-5\ACSUB\Grid\',mat tmp_file_list$, '/s /b','*.*')
+	! pr mat tmp_file_list$(1:10) : pause 
+	! !
+	! dim fl$(1)*99
+	! pr 'function returns ';fngetdir2(env$('userprofile')&"\Desktop", mat fl$,'/s /tc','*.rtf',mat test_date$,mat test_time$,enable_full_path=1)
 	for x=1 to udim(mat fl$) : pr '| '&test_date$(x)&' | '&test_time$(x)&' | '&fl$(x) : next x
 	end  ! /r
 ! r: originally S:\Core\GetDir2.br
@@ -84,25 +92,36 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		gd2_size_requested=fnArrayWasPassedN(mat gd2_size)
 
 	! /r
-		dim fileList$*256
+		dim fileList_br$*256
+		dim fileList_os$*256
 		if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
-			clientOrServer$='Server' ! server
-			csat$=''
-			csExeOption$=' -s' ! server
-			fileList$=env$('temp')&'\GetDir'&session$&'.tmp'
+			if env$('cursys')='CM' then
+				clientOrServer$='Server' ! server
+				csat$=''
+				csExeOption$=' -s' ! server
+				fileList_br$='F:\clsinc\temp\GetDir'&session$&'.tmp'
+				fileList_os$=os_filename$('F:\')&'\clsinc\temp\GetDir'&session$&'.tmp'
+			else
+				clientOrServer$='Server' ! server
+				csat$=''
+				csExeOption$=' -s' ! server
+				fileList_br$=env$('temp')&'\GetDir'&session$&'.tmp'
+				fileList_os$=env$('temp')&'\GetDir'&session$&'.tmp'
+			end if
 		else
 			clientOrServer$='Client' ! server
 			csat$=env$('at')
 			csExeOption$=' -@' ! client
-			fileList$=env$('client_temp')&'\GetDir'&session$&'.tmp'
+			fileList_br$=env$('client_temp')&'\GetDir'&session$&'.tmp'
+			fileList_os$=env$('client_temp')&'\GetDir'&session$&'.tmp'
 		end if
 	! r: create temp text file by redirecting a shell called DIR command to it
-		fnFree(csat$&fileList$)
-		tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList$&'"'
+		fnFree(csat$&fileList_br$)
+		tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList_os$&'"'
 		execute tmp$ ioerr XIT
 	! /r
 	! r: read the temp file into the dynamic-ly sizing array mat filename$
-		open #tf1:=fngethandle: "Name="&csat$&fileList$,display,input  ioerr EO_TF1
+		open #tf1:=fngethandle: "Name="&csat$&fileList_br$,display,input  ioerr Gd2_openReturnFailure
 		filename_count=line_count=0
 		do 
 			linput #tf1: tmp$ eof EO_TF1
@@ -156,6 +175,12 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 				!     pr tmp$ ! pause
 			end if 
 		loop 
+	Gd2_openReturnFailure: !
+		pr 'line executed:'
+		pr 'tmp$=';tmp$
+		pr 'failed to open dir file: error '&str$(err)&' on line '&str$(line)&' in '&program$
+		if env$('debug')<>'' or env$('acsDeveloper')<>'' then pause
+	goto EO_TF1
 	EO_TF1: ! /r
 	gd2_return=filename_count
 	! r: close and delete the temporary text file.  Return the number of files found
