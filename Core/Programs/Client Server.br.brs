@@ -71,7 +71,7 @@ def fn_server_install
 	close #h_brlistener_conf: 
 	fnStatus('  and copy it into windows')
 	fnStatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
-  execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
+  ! execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
 	open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
     pr #h_copy_cmd:     '@echo on'
 	pr #h_copy_cmd: 'copy "'&os_filename$('[Q]\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'

@@ -215,6 +215,8 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_UpdateQFileIO
 			fn_UpdateQScreenIO
 			fn_last_version_used$(version_current$)
+		else if  env$('cursys')='CM' then 
+			fn_UpdateQFileIO
 		end if 
 	end if
 	!
@@ -547,8 +549,16 @@ def fncs_env
 	! if env$('data')='/br/orders/brc_oe/Data' then        !  Gordon's Linux CS Server
 	!   setenv('data','\\JAZZ\BR Order Entry\brc_oe\Data')  !  Gordon's Linux CS Server
 	! end if                                                !  Gordon's Linux CS Server
-	ce_os_temp_file$=rtrm$(env$('data'),'\')&'\cs-'&session$&'.txt'
-	ce_br_temp_file$='[Q]\cs-'&session$&'.txt'
+	if env$('cursys')='CM' then
+		ce_os_temp_file$=rtrm$(env$('cs_temp'),'\')&'\cs-'&session$&'.txt'
+		ce_br_temp_file$='@::'&env$('cs_temp')&'\cs-'&session$&'.txt'
+	else
+		ce_os_temp_file$=rtrm$(env$('data'),'\')&'\cs-'&session$&'.txt'
+		ce_br_temp_file$='[Q]\cs-'&session$&'.txt'
+	end if
+	if env$('cursys')='CM' then
+		ce_br_temp_file$='F:\CLSINC\temp\cs-'&session$&'.txt'
+	end if
 	ce_retry_4152_count=0
 	CE_MAKE_TEMP_FILE: !
 	fnmakesurepathexists(ce_br_temp_file$)
@@ -581,9 +591,10 @@ def fncs_env
 			end if
 			goto CE_MAKE_TEMP_FILE
 		else if (ce_retry_4152_count+=1)<=9 then 
-			fnmakesurepathexists('@::C:\ProgramData\ACS\Temp\Session'&session$&'\')
+			
 			ce_os_temp_file$='C:\ProgramData\ACS\Temp\Session'&session$&'\cs.txt'
 			ce_br_temp_file$='@::'&ce_os_temp_file$
+			fnmakesurepathexists(ce_br_temp_file$)
 			goto CE_MAKE_TEMP_FILE
 		end if
 	end if
@@ -670,6 +681,7 @@ def fn_UpdateQFileIO
 		dim dLayFile$(0)*256
 		dim dLayDate$(1)*32
 		dim dLayTime$(1)*32
+		if udim(mat sLayFile$)=0 then pause
 		fngetdir2('filelay\',mat dLayFile$, '','*.',mat dLayDate$,mat dLayTime$)
 		for sItem=1 to udim(mat sLayFile$)
 			if sLayFile$(sItem)(1:3)='CM ' or sLayFile$(sItem)(1:3)='CO ' then
