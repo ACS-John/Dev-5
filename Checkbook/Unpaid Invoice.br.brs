@@ -795,8 +795,8 @@ def fn_InvoiceValid ! very local
 		ivReturn=0
 	else if tac<>upa then ! allocations don't match total invoice
 		mat ml$(3)
-		ml$(1)="The allocations of "&trim$(cnvrt$("pic($$$$,$$$.##)",tac))&" do not agree with"
-		ml$(2)="the total invoice of "&trim$(cnvrt$("pic($$$$,$$$.##)",upa))&"."
+		ml$(1)="The allocations of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(tac)))&" do not agree with"
+		ml$(2)="the total invoice of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(upa)))&"."
 		ml$(3)="You must correct the problem before you can continue!"
 		fnmsgbox(mat ml$,resp$,cap$,16)
 		ivReturn=0 
