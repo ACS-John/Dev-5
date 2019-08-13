@@ -1190,6 +1190,7 @@ fnend
 def fn_record_previous_clear
 	mat rp_prev$=('')
 fnend 
+
 def library fnNoteDir$*256
 	if ~setup then let fn_setup
 	fnNoteDir$=fn_notedir$
@@ -1295,6 +1296,7 @@ def fn_key_tweak(&kt_key$,h_customer_1)
 	if ~kt_return then kt_key$=kt_key_origional$
 	fn_key_tweak=kt_return
 fnend 
+
 def library fnask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_button_enable_add)
 	if ~setup then let fn_setup
 	fnask_account=fn_ask_account(prev_list_id$,x$,h_customer_1, select_button_text$,aas_button_enable_add)
@@ -1817,7 +1819,6 @@ def fn_customer2legacy(mat customer$,mat customerN,&z$,mat e$,&f1$,mat a,mat b,m
 	extra$(10)          	=customer$(c_unused07          		)
 	extra$(11)          	=customer$(c_unused08          		)
 fnend
-
 
 def fn_customerBeforeSet(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
 	if ~setup_customerBeforeSet then
