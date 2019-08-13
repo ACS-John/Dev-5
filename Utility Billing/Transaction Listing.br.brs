@@ -1,4 +1,4 @@
-! Replace S:\acsUB\ubTrList
+! formerly S:\acsUB\ubTrList
 	! debug_account_of_interest$='100416.10'
 ! r: NOTES, dims, defaults, constants, libraries, on err, etc
 ! -- Transaction Listing
@@ -10,31 +10,36 @@
 ! firstone=1   lastone=1   ! just one transaction
 ! firstone=0   lastone=0   ! not first and not last
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn,fnerror,fnget_services,fndat,fnwait,fnTos,fnLbl,fnTxt,fnmsgbox,fnxit,fnCmdSet,fntop,fnFra,fnOpt,fnChk,fnreg_read,fnreg_write
+	library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnget_services,fndat
+	library 'S:\Core\Library': fnTos,fnLbl,fnTxt
+	library 'S:\Core\Library': fnCmdSet,fntop,fnFra,fnOpt,fnChk
+	library 'S:\Core\Library': fnmsgbox,fnxit
+	library 'S:\Core\Library': fnreg_read,fnreg_write
 	on error goto ERTN
 	dim p$*10,foot$*16,gb(10),tgb(10),ggb(10),dat$*20
 	dim subtotal_gb(10)
 	dim tg(11)
-	dim z$*10,e$(4)*30,cap$*128
+	dim z$*10,e$(4)*30
 	dim t1(5),tc$(5)*14,resp$(20)*256,msgline$(1)*128
 	dim st1(5)
-	if env$('ACSDeveloper')<>'' then raw_output=1 ! 
-	fntop(program$,cap$="Transaction Listing")
+	if env$('ACSDeveloper')<>'' then raw_output=1
+	fntop(program$)
 	fndat(dat$)
 	ccyymmdd_mask$="3"
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
 	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
-! 
+!
 	fnreg_read('ubtrlist.date.start',tmp$) : filter_date_start=val(tmp$) conv ignore
 	fnreg_read('ubtrlist.date.end',tmp$) : filter_date_end=val(tmp$) conv ignore
-	! 
+	!
 	fnreg_read('ubtrlist.skip_line_after_account',tmp$) : skip_line_after_account=1 : if tmp$='True' then skip_line_after_account=1 else if tmp$='False' then skip_line_after_account=0
 	fnreg_read('ubtrlist.print_tbal',tmp$) : print_tbal=1 : if tmp$='True' then print_tbal=1 else if tmp$='False' then print_tbal=0
 	fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
-	! 
+	!
 	fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : include_zero_balance_accounts=1 : include_zero_balance_accounts=val(tmp$) conv ignore
 	fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : include_no_activity_accounts=1 : include_no_activity_accounts=val(tmp$) conv ignore
-	! 
+	!
 ! /r
 SCREEN1: ! r:
 fnTos(sn$='TrList')
@@ -82,14 +87,14 @@ if resp$(resp_seq)="True" then seq=2
 if resp$(resp_skip_line)='True' then skip_line_after_account=1 else skip_line_after_account=0
 if resp$(resp_zero_balance)='True' then include_zero_balance_accounts=1 else include_zero_balance_accounts=0
 if resp$(resp_no_activity)='True' then include_no_activity_accounts=1 else include_no_activity_accounts=0
-! 
-if filter_date_start>filter_date_end and filter_date_start>0 and filter_date_end>0 then 
+!
+if filter_date_start>filter_date_end and filter_date_start>0 and filter_date_end>0 then
 	mat msgline$(1)
 	msgline$(1)="Ending Date Before Starting Date!"
-	fnmsgbox(mat msgline$,resp$,cap$,48)
+	fnmsgbox(mat msgline$,resp$,'',48)
 	goto SCREEN1
-end if 
-! 
+end if
+!
 fndat(dat$,put=2)
 fnreg_write('ubtrlist.date.start',str$(filter_date_start))
 fnreg_write('ubtrlist.date.end',str$(filter_date_end))
@@ -101,14 +106,14 @@ fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_acc
 ! /r
 ! on fkey 5 goto DONE
 fnopenprn
-if seq=1 then 
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
-else 
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
-end if 
-open #ubtransvb=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+if seq=1 then
+	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+else
+	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+end if
+open #ubtransvb=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 gosub HDR
-do 
+do
 READ_CUSTOMER: ! r: report main loop
 	holdroute=route : tdate=0
 	read #h_customer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
@@ -125,7 +130,7 @@ READ_CUSTOMER: ! r: report main loop
 ! tdate=0
 	restore #ubtransvb,key>=z$&"         ": nokey TRANS_NOKEY
 	lastone=0: firstone=1 : have_tbal=0
-READ_UBTRANSVB: ! 
+READ_UBTRANSVB: !
 ! tdate=0
 	read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
 	if p$=z$ and tbal<>0 then have_tbal=1 ! try to see if only transactions on customer were when converted and transaction balances were not set
@@ -133,7 +138,7 @@ READ_UBTRANSVB: !
 	if p$<>z$ and noneprinted=0 then tamount=0 ! no transactions found
 	if p$<>z$ and firstone=1 then lastone=1 : goto TRANS_EO_CUSTOMER ! no transactions
 	if p$<>z$ then firstone=2 : lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
-TEST_TRANS: ! 
+TEST_TRANS: !
 	if filter_date_end<>0 and tdate>filter_date_end then goto READ_UBTRANSVB
 	if filter_date_start<>0 and tdate<filter_date_start then goto READ_UBTRANSVB
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pause
@@ -143,40 +148,40 @@ TEST_TRANS: !
 	if filter_date_end>0 and testtdate>filter_date_end then lastone=1
 	gosub PRINT_INFO
 	firstone=0
-	if lastone=1 then 
+	if lastone=1 then
 		goto READ_CUSTOMER
-	else 
+	else
 		reread #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gr,tbal,pcode eof READ_CUSTOMER
-	end if 
+	end if
 	goto TEST_TRANS
 !   ----------      pr 'nothing hits this line!!!' : pause ! nothing hits this line!!!
 TRANS_NOKEY: ! r:
 	tdate=0 !                               if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'trans_nokey' : pause
-	if include_no_activity_accounts and (bal<>0 or (bal=0 and include_zero_balance_accounts)) then 
+	if include_no_activity_accounts and (bal<>0 or (bal=0 and include_zero_balance_accounts)) then
 		gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL<>0 Then Gosub PRINT_INFO ! no transactions KJ
-	end if 
+	end if
 	goto READ_CUSTOMER
 ! /r
-TRANS_EO_CUSTOMER: ! 
+TRANS_EO_CUSTOMER: !
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'trans_EO_customer' : pause
 	if bal<>0 or (bal=0 and include_zero_balance_accounts) then gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL<>0 Then Gosub PRINT_INFO ! no transactions KJ
-loop 
-! 
-EO_CUSTOMER: ! 
+loop
+
+EO_CUSTOMER: !
 q9=9
 if t9<>0 then gosub ACCUM_TOTALS
 if seq=2 then gosub PRINT_SUB_TOTALS
 gosub PRINT_TOTALS
-close #h_customer: 
-close #ubtransvb: 
+close #h_customer:
+close #ubtransvb:
 goto DONE ! /r Goto PRINT_GRAND_TOTALS  ! can't get totals by route in Account sequence
 HDR: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 	pr #255: "\qc {\f181 \fs24 \b UB Transaction Listing}"
 	pr #255: "\qc {\f181 \fs24 \b "&dat$&"}"
-	if filter_date_start<>0 and filter_date_end<>0 then 
+	if filter_date_start<>0 and filter_date_end<>0 then
 		pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",filter_date_start)&" to "&cnvrt$("pic(zzzz/zz/zz)",filter_date_end))&"}"
-	end if 
+	end if
 	pr #255,using 'Form POS 1,C 20,POS 107,C 12': "\ql","Page "&str$(p2+=1)
 	pr #255: tab(58);"Beginning";tab(106);"Current"
 	pr #255: "           {\ul Customer Name}                 {\ul    Date    }     {\ul  Balance }        {\ul    Debits}   {\ul    Credits}      {\ul    Balance}"
@@ -209,7 +214,7 @@ PRINT_INFO: !  r: If TAMOUNT=0 Then Goto 1460
 	! pr #255: "FIRST AND LAST" :   if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'tdate=';tdate : pause
 		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),tdate,begbal,tamount,code$,bal,foot$ pageoflow PGOF
 		if skip_line_after_account then pr #255: "" pageoflow PGOF
-	end if 
+	end if
 	if lastone=1 or lastone=2 then gosub ACCUM_TOTALS
 	! pr #40,Using "form pos 1,c 11,n 12.2": Z$,S4
 	! pr #255,Using "form pos 1,c 11,n 12.2": Z$,S4
@@ -236,10 +241,10 @@ return  ! /r
 !    end if
 !  return  ! /r
 PGOF: ! r:
-	if ~raw_output then 
+	if ~raw_output then
 		pr #255: newpage
 		gosub HDR
-	end if 
+	end if
 continue  ! /r
 ACCUM_TOTALS: ! r:
 	s1+=r1
@@ -259,9 +264,9 @@ PRINT_TOTALS: ! r:
 	pr #255: ""
 	pr #255,using "form pos 1,c 40": "Balance Breakdown by Type of Service:"
 	for j=1 to 10
-		if trim$(serviceName$(j))<>"" then 
+		if trim$(serviceName$(j))<>"" then
 			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PGOF
-		end if 
+		end if
 		bdtotal+=tgb(j)
 	next j
 	pr #255,using "form pos 5,c 30,n 10.2": "Total Breakdown",bdtotal
@@ -280,9 +285,9 @@ PRINT_SUB_TOTALS: ! r:
 	pr #255: ""
 	st1=st2=st3=st4=0
 	for j=1 to 10
-		if trim$(serviceName$(j))<>"" then 
+		if trim$(serviceName$(j))<>"" then
 			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PGOF
-		end if 
+		end if
 	next j
 	mat subtotal_gb=(0)
 	pr #255: "    ______________________________  __________"
@@ -318,15 +323,15 @@ return  ! /r
 !       pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),t1(j) pageoflow PGOF
 !     next j
 !   goto DONE ! /r
-DONE: ! 
+DONE: !
 close #ubtransvb: ioerr ignore
 fncloseprn
 XIT: fnxit
-IGNORE: continue 
-include: ertn
+
+
 DETERMINE_CURRRENT_BALANCE: !  r: determine current balance by subtracting or adding any transactions with a later date than the highest transaction date entered.
 	restore #ubtransvb,key>=z$&"         ": nokey L2140
-	READ_UBTRANSVB2: ! 
+	READ_UBTRANSVB2: !
 	read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2140
 	! If TRIM$(Z$)="100018.00" Then Pause
 	if p$<>z$ then goto L2140
@@ -353,7 +358,7 @@ DETERMINE_BEGINNING_BALANCE: ! r:
 	if tcode=4 then begbal=begbal+tamount ! add any credit memos back in current begbalance to get current begbalance to show on report
 	if tcode=5 then begbal=begbal-tamount ! subtract any debit memo back out of current begbalance to get current begbalance to show on report
 	L2280: goto L2190
-L2290: r1+=begbal: return 
+L2290: r1+=begbal: return
 FIX_BALANCE_BREAKDOWN: ! fix balance breakdown so it matches balance when something other than current balance is chosen
 	! If TRIM$(Z$)="100130.00" Then Pause
 	if tcode>2 then goto L2360
@@ -371,3 +376,4 @@ FIX_BALANCE_BREAKDOWN: ! fix balance breakdown so it matches balance when someth
 	! pr MAT GB: Pause
 	! If SUM(GB)<>BAL Then Pause
 return  ! /r
+include: ertn
