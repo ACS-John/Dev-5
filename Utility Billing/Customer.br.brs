@@ -19,11 +19,15 @@ def library fnCustomer(x)
 	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bud1=1
 	! /r
-	open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
-	open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
-	open #h_customer_3:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
-	open #h_customer_4:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed 
-	open #h_customer_5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed 
+	dim customer$(0)*256
+	dim customerN(0)
+	h_customer_1=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+	h_customer_2=h_customer_1+1
+	! open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
+	! open #h_customer_2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
+	! open #h_customer_3:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
+	! open #h_customer_4:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed 
+	! open #h_customer_5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed 
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	open #h_citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 	! /r
@@ -39,9 +43,14 @@ def library fnCustomer(x)
 	EDIT_CUSTOMER: ! r:
 	jbact$=x$ ! ken 80905
 	if len(x$)<>10 then goto AskAcct
-	read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
+
+	read #h_customer_1,using form$(h_customer_1),key=x$: mat customer$,mat customerN nokey ACCOUNT_X_NOKEY
+	fn_customer2legacy(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
+	! read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
+
 	fnFixPd(mat extra)
 	gosub REMOVE_INCORRECT_ALLOCATIONS
+
 	holdz$=z$
 	olde3$=e$(3)
 	EDIT_LOADED_CUSTOMER: ! 
@@ -67,7 +76,11 @@ def library fnCustomer(x)
 		gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 		if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
 		release #h_customer_2: ioerr ignore
-		rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
+
+		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
+		rewrite #h_customer_1,using form$(h_customer_1),key=z$: mat customer$,mat customerN
+		! rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
+
 		if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
 		if oldService1DepositAmount<>b(8) then 
 			fn_depositChangeLog(z$,oldService1DepositAmount,b(8),date('mmddyy'),trim$(srvnam$(1))(1:15)&' Deposit Changed')
@@ -117,8 +130,12 @@ def library fnCustomer(x)
 			fnmsgbox(mat ml$,resp$,'',48)
 			goto NameScreen
 		end if 
-		! 
-		rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
+
+		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
+		rewrite #h_customer_1,using form$(h_customer_1),key=z$: mat customer$,mat customerN
+		! rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
+
+		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
 		open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
 		fnKeyChange(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 		close #h_ubtransvb:
@@ -395,7 +412,7 @@ def library fnCustomer(x)
 		custInfo$(respc+=1)=str$(bal)
 		fnLbl(15,1,"Last Billing Date:",mylen,1)
 		fnTxt(15,27,8,8,1,"1")
-		custInfo$(respc+=1)=str$(f)
+		custInfo$(respc+=1)=str$(lastBillingDate)
 		fnLbl(16,1,"Current Reading Date:",mylen,1)
 		fnTxt(16,27,8,0,1,"1")
 		custInfo$(respc+=1)=str$(extra(3))
@@ -510,7 +527,7 @@ def library fnCustomer(x)
 		extra$(8)=custInfo$(11)
 		extra$(9)=custInfo$(12)
 		bal=val(custInfo$(13))
-		f=val(custInfo$(14))
+		lastBillingDate=val(custInfo$(14))
 		extra(3)=val(custInfo$(15))
 		extra(4)=val(custInfo$(16))
 		extra(17)=val(custInfo$(17)(1:1))
@@ -610,7 +627,7 @@ def library fnCustomer(x)
 		fnFra(3,1,16,49,'')
 		fnLbl(1,1,"Date of Charge:",14,1,0,1)
 		fnTxt(1,16,8,0,0,'1',0,'',1)
-		bxnf$(3)=str$(f)
+		bxnf$(3)=str$(lastBillingDate)
 		fnLbl(2,1,"Balance:",8,0,0,1)
 		fnTxt(2,10,10,0,1,'10',1,'',1)
 		bxnf$(4)=str$(bal)
@@ -642,7 +659,7 @@ def library fnCustomer(x)
 		fnCmdSet(2)
 		fnAcs(sn$,0,mat bxnf$,ckey) ! billing information
 		if ckey=5 then goto NameScreen
-		f=val(bxnf$(3))
+		lastBillingDate=val(bxnf$(3))
 		bal=val(bxnf$(4))
 		if uprc$(escrow$)="Y" then 
 			extra(23)=val(bxnf$(5))
@@ -786,21 +803,25 @@ def library fnCustomer(x)
 	ADD_CONTINUE: ! r:
 		z$=x$ : mat e$=("") : e$(4)=newe4$
 		mat f$=("") : mat a=(0) : mat b=(0) : mat c=(0) : mat d=(0)
-		mat g=(0) : mat adr=(0) : mat gb=(0) : bal=f=0
+		mat g=(0) : mat adr=(0) : mat gb=(0) : bal=lastBillingDate=0
 		alp$="" : df$=dr$=dc$=da$="" : mat extra=(0) : mat extra$=("")
 		ad1=1 : holdz$=z$
 		fn_apply_default_rates(mat extra, mat a)
-		write #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$
+
+		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
+		write #h_customer_1,using form$(h_customer_1): mat customer$,mat customerN
+		! 		write #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$
+
 		fixgrid=1
 		read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
 	IGNORE: continue 
 	XIT: ! r: close files and leave
-		! close #2: ioerr ignore
-		fn_close_file(h_customer_3)
-		fn_close_file(h_customer_2)
-		fnCloseFile(hLocation,'U4 Meter Location')
-		setup_MeterLocation=0
+	! close #2: ioerr ignore
+	fn_close_file(h_customer_2)
+	fnCloseFile(hLocation,'U4 Meter Location')
+	fnCloseFile(h_customer_1,'UB Customer')
+	setup_MeterLocation=0
 	fn_close_file(h_ubadrbil)
 	fn_close_file(h_citystzip)
 	! fn_close_file(h_deposit1)
@@ -809,11 +830,11 @@ def library fnCustomer(x)
 	fn_close_file(h_budtrans)
 	fn_close_file(h_budmstr)
 	fn_close_file(h_budtrans)
-	fn_close_file(h_customer_1)
-	fn_close_file(h_customer_2)
-	fn_close_file(h_customer_3)
-	fn_close_file(h_customer_4)
-	fn_close_file(h_customer_5) ! /r
+	! fn_close_file(h_customer_1)
+	! fn_close_file(h_customer_2)
+	! fn_close_file(h_customer_3)
+	! fn_close_file(h_customer_4)
+	! fn_close_file(h_customer_5) ! /r
 fnend 
 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	if ~setup then let fn_setup
@@ -1568,6 +1589,249 @@ def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable r
 	if x>0 then mat rates$(x) else mat rates$(1)
 	if ratecode=0 then rateInfo$(3)=" 0=Not applicable"
 	close #h_rate1: ioerr ignore
+fnend
+
+def fn_legacy2customer(mat customer$,mat customerN,&z$,mat e$,&f1$,mat a,mat b,mat c,mat d,&bal,&lastBillingDate,mat g,mat adr,&alp$,&f2$,&f3$,&bra_legacy,mat gb,&df$,&dr$,&dc$,&da$,mat extra,mat extra$)
+	customer$(c_account           		)			=z$                   	
+	customer$(c_meterAddress      		)			=e$(1)                	
+	customer$(c_name              		)			=e$(2)                	
+	customer$(c_addr1             		)			=e$(3)                	
+	customer$(c_csz               		)			=e$(4)                	
+	customer$(c_s1meterNumber     		)			=f1$                  	
+	customerN(c_s01rate           		)			=a(1)                 	
+	customerN(c_s02rate           		)			=a(2)                 	
+	customerN(c_s03rate           		)			=a(3)                 	
+	customerN(c_s04rate           		)			=a(4)                 	
+	customerN(c_s05rate           		)			=a(5)                 	
+	customerN(c_s09rate           		)			=a(6)                 	
+	customerN(c_s10rate           		)			=a(7)                 	
+	customerN(c_s01stdCharge      		)			=b(1)                 	
+	customerN(c_s02stdCharge      		)			=b(2)                 	
+	customerN(c_s03stdCharge      		)			=b(3)                 	
+	customerN(c_s04stdCharge      		)			=b(4)                 	
+	customerN(c_s05stdCharge      		)			=b(5)                 	
+	customerN(c_s06stdCharge      		)			=b(6)                 	
+	customerN(c_s07stdCharge      		)			=b(7)                 	
+	customerN(c_s01depositAmt     		)			=b(8)                 	
+	customerN(c_s02depositAmt     		)			=b(9)                 	
+	customerN(c_s03depositAmt     		)			=b(10)                	
+	customerN(c_s04depositAmt     		)			=b(11)                	
+	customerN(c_s01depositDate    		)			=c(1)                 	
+	customerN(c_s02depositDate    		)			=c(2)                 	
+	customerN(c_s03depositDate    		)			=c(3)                 	
+	customerN(c_s04depositDate    		)			=c(4)                 	
+	customerN(c_s01readingCur     		)			=d(1)                 	
+	customerN(c_s01readingPri     		)			=d(2)                 	
+	customerN(c_s01UsageCur       		)			=d(3)                 	
+	customerN(c_s01UsageYtd       		)			=d(4)                 	
+	customerN(c_s03readingCur     		)			=d(5)                 	
+	customerN(c_s03ReadingPri     		)			=d(6)                 	
+	customerN(c_s03UsageCur       		)			=d(7)                 	
+	customerN(c_s03UsageYtd       		)			=d(8)                 	
+	customerN(c_s04readingCur     		)			=d(9)                 	
+	customerN(c_s04readingPri     		)			=d(10)                	
+	customerN(c_s04usageCur       		)			=d(11)                	
+	customerN(c_s04usageYtd       		)			=d(12)                	
+	customerN(c_s01unitCount      		)			=d(13)                	
+	customerN(c_demandMultiplier  		)			=d(14)                	
+	customerN(c_demandReading     		)			=d(15)                	
+	customerN(c_balance           		)			=bal                  	
+	customerN(c_lastBillingDate   		)			=lastBillingDate    	
+	customerN(c_s01bill           		)			=g(1)                 	
+	customerN(c_s02bill           		)			=g(2)                 	
+	customerN(c_s03bill           		)			=g(3)                 	
+	customerN(c_s04bill           		)			=g(4)                 	
+	customerN(c_s05bill           		)			=g(5)                 	
+	customerN(c_s06bill           		)			=g(6)                 	
+	customerN(c_s07bill           		)			=g(7)                 	
+	customerN(c_s08bill           		)			=g(8)                 	
+	customerN(c_s09bill           		)			=g(9)                 	
+	customerN(c_s10bill           		)			=g(10)                	
+	customerN(c_netBill           		)			=g(11)                	
+	customerN(c_grossBill         		)			=g(12)                	
+	customerN(c_adr1              		)			=adr1                 	
+	customerN(c_adr2              		)			=adr2                 	
+	customer$(c_alphaSort         		)			=alp$                 	
+	customer$(c_s03meterNumber    		)			=f2$                  	
+	customer$(c_s04meterNumber    		)			=f3$                  	
+	customerN(c_bra               		)			=bra_legacy          	
+	customerN(c_s01breakdown      		)			=gb(1)                	
+	customerN(c_s02breakdown      		)			=gb(2)                	
+	customerN(c_s03breakdown      		)			=gb(3)                	
+	customerN(c_s04breakdown      		)			=gb(4)                	
+	customerN(c_s05breakdown      		)			=gb(5)                	
+	customerN(c_s06breakdown      		)			=gb(6)                	
+	customerN(c_s07breakdown      		)			=gb(7)                	
+	customerN(c_s08breakdown      		)			=gb(8)                	
+	customerN(c_s09breakdown      		)			=gb(9)                	
+	customerN(c_s10breakdown      		)			=gb(10)               	
+	customer$(c_bankDraft         		)			=df$                  	
+	customer$(c_bankRoutingNumber 		)			=dr$                  	
+	customer$(c_bankAccountCode   		)			=dc$                  	
+	customer$(c_bankAccountNumber 		)			=da$                  	
+	customerN(c_route             		)			=extra(1)             	
+	customerN(c_sequence          		)			=extra(2)             	
+	customerN(c_meterReadDateCur  		)			=extra(3)             	
+	customerN(c_meterReadDatePri  		)			=extra(4)             	
+	customerN(c_sewerReduction    		)			=extra(5)             	
+	customerN(c_s03securityLight  		)			=extra(6)             	
+	customerN(c_s03lightCount     		)			=extra(7)             	
+	customerN(c_s03multiplier     		)			=extra(8)             	
+	customerN(c_extra_09N         		)			=extra(9)             	
+	customerN(c_s04multiplier     		)			=extra(10)            	
+	customerN(c_s06rate           		)			=extra(11)            	
+	customerN(c_s07rate           		)			=extra(12)            	
+	customerN(c_s08rate           		)			=extra(13)            	
+	customerN(c_s02units          		)			=extra(14)            	
+	customerN(c_s03units          		)			=extra(15)            	
+	customerN(c_s04units          		)			=extra(16)            	
+	customerN(c_finalBilling      		)			=extra(17)            	
+	customerN(c_s02averageUsage   		)			=extra(18)            	
+	customerN(c_estimationDate    		)			=extra(19)            	
+	customerN(c_unused09          		)			=extra(20)            	
+	customerN(c_unused10          		)			=extra(21)            	
+	customerN(c_enableAltBillAddr 		)			=extra(22)            	
+	customerN(c_unused11          		)			=extra(23)            	
+	customer$(c_addr2             		)			=extra$(1)            	
+	customer$(c_phoneMain         		)			=extra$(2)            	
+	customer$(c_s01serialNumber   		)			=extra$(3)            	
+	customer$(c_s03serialNumber   		)			=extra$(4)            	
+	customer$(c_s04serialNumber   		)			=extra$(5)            	
+	customer$(c_unused05          		)			=extra$(6)            	
+	customer$(c_unused06          		)			=extra$(7)            	
+	customer$(c_phoneCell         		)			=extra$(8)            	
+	customer$(c_email             		)			=extra$(9)            	
+	customer$(c_unused07          		)			=extra$(10)           	
+	customer$(c_unused08          		)			=extra$(11)           	
+fnend
+def fn_customer2legacy(mat customer$,mat customerN,&z$,mat e$,&f1$,mat a,mat b,mat c,mat d,&bal,&lastBillingDate,mat g,mat adr,&alp$,&f2$,&f3$,&bra_legacy,mat gb,&df$,&dr$,&dc$,&da$,mat extra,mat extra$)
+	z$                   	=customer$(c_account           		)
+	e$(1)                	=customer$(c_meterAddress      		)
+	e$(2)                	=customer$(c_name              		)
+	e$(3)                	=customer$(c_addr1             		)
+	e$(4)                	=customer$(c_csz               		)
+	f1$                  	=customer$(c_s1meterNumber     		)
+	a(1)                 	=customerN(c_s01rate           		)
+	a(2)                 	=customerN(c_s02rate           		)
+	a(3)                 	=customerN(c_s03rate           		)
+	a(4)                 	=customerN(c_s04rate           		)
+	a(5)                 	=customerN(c_s05rate           		)
+	a(6)                 	=customerN(c_s09rate           		)
+	a(7)                 	=customerN(c_s10rate           		)
+	b(1)                 	=customerN(c_s01stdCharge      		)
+	b(2)                 	=customerN(c_s02stdCharge      		)
+	b(3)                 	=customerN(c_s03stdCharge      		)
+	b(4)                 	=customerN(c_s04stdCharge      		)
+	b(5)                 	=customerN(c_s05stdCharge      		)
+	b(6)                 	=customerN(c_s06stdCharge      		)
+	b(7)                 	=customerN(c_s07stdCharge      		)
+	b(8)                 	=customerN(c_s01depositAmt     		)
+	b(9)                 	=customerN(c_s02depositAmt     		)
+	b(10)                	=customerN(c_s03depositAmt     		)
+	b(11)                	=customerN(c_s04depositAmt     		)
+	c(1)                 	=customerN(c_s01depositDate    		)
+	c(2)                 	=customerN(c_s02depositDate    		)
+	c(3)                 	=customerN(c_s03depositDate    		)
+	c(4)                 	=customerN(c_s04depositDate    		)
+	d(1)                 	=customerN(c_s01readingCur     		)
+	d(2)                 	=customerN(c_s01readingPri     		)
+	d(3)                 	=customerN(c_s01UsageCur       		)
+	d(4)                 	=customerN(c_s01UsageYtd       		)
+	d(5)                 	=customerN(c_s03readingCur     		)
+	d(6)                 	=customerN(c_s03ReadingPri     		)
+	d(7)                 	=customerN(c_s03UsageCur       		)
+	d(8)                 	=customerN(c_s03UsageYtd       		)
+	d(9)                 	=customerN(c_s04readingCur     		)
+	d(10)                	=customerN(c_s04readingPri     		)
+	d(11)                	=customerN(c_s04usageCur       		)
+	d(12)                	=customerN(c_s04usageYtd       		)
+	d(13)                	=customerN(c_s01unitCount      		)
+	d(14)                	=customerN(c_demandMultiplier  		)
+	d(15)                	=customerN(c_demandReading     		)
+	bal                  	=customerN(c_balance           		)
+	lastBillingDate    	=customerN(c_lastBillingDate   		)
+	g(1)                 	=customerN(c_s01bill           		)
+	g(2)                 	=customerN(c_s02bill           		)
+	g(3)                 	=customerN(c_s03bill           		)
+	g(4)                 	=customerN(c_s04bill           		)
+	g(5)                 	=customerN(c_s05bill           		)
+	g(6)                 	=customerN(c_s06bill           		)
+	g(7)                 	=customerN(c_s07bill           		)
+	g(8)                 	=customerN(c_s08bill           		)
+	g(9)                 	=customerN(c_s09bill           		)
+	g(10)                	=customerN(c_s10bill           		)
+	g(11)                	=customerN(c_netBill           		)
+	g(12)                	=customerN(c_grossBill         		)
+	adr1                 	=customerN(c_adr1              		)
+	adr2                 	=customerN(c_adr2              		)
+	alp$                 	=customer$(c_alphaSort         		)
+	f2$                  	=customer$(c_s03meterNumber    		)
+	f3$                  	=customer$(c_s04meterNumber    		)
+	bra_legacy          	=customerN(c_bra               		)
+	gb(1)                	=customerN(c_s01breakdown      		)
+	gb(2)                	=customerN(c_s02breakdown      		)
+	gb(3)                	=customerN(c_s03breakdown      		)
+	gb(4)                	=customerN(c_s04breakdown      		)
+	gb(5)                	=customerN(c_s05breakdown      		)
+	gb(6)                	=customerN(c_s06breakdown      		)
+	gb(7)                	=customerN(c_s07breakdown      		)
+	gb(8)                	=customerN(c_s08breakdown      		)
+	gb(9)                	=customerN(c_s09breakdown      		)
+	gb(10)               	=customerN(c_s10breakdown      		)
+	df$                  	=customer$(c_bankDraft         		)
+	dr$                  	=customer$(c_bankRoutingNumber 		)
+	dc$                  	=customer$(c_bankAccountCode   		)
+	da$                  	=customer$(c_bankAccountNumber 		)
+	extra(1)             	=customerN(c_route             		)
+	extra(2)             	=customerN(c_sequence          		)
+	extra(3)            	=customerN(c_meterReadDateCur  		)
+	extra(4)            	=customerN(c_meterReadDatePri  		)
+	extra(5)            	=customerN(c_sewerReduction    		)
+	extra(6)            	=customerN(c_s03securityLight  		)
+	extra(7)            	=customerN(c_s03lightCount     		)
+	extra(8)            	=customerN(c_s03multiplier     		)
+	extra(9)            	=customerN(c_extra_09N         		)
+	extra(10)           	=customerN(c_s04multiplier     		)
+	extra(11)           	=customerN(c_s06rate           		)
+	extra(12)           	=customerN(c_s07rate           		)
+	extra(13)           	=customerN(c_s08rate           		)
+	extra(14)           	=customerN(c_s02units          		)
+	extra(15)           	=customerN(c_s03units          		)
+	extra(16)           	=customerN(c_s04units          		)
+	extra(17)           	=customerN(c_finalBilling      		)
+	extra(18)           	=customerN(c_s02averageUsage   		)
+	extra(19)           	=customerN(c_estimationDate    		)
+	extra(20)           	=customerN(c_unused09          		)
+	extra(21)           	=customerN(c_unused10          		)
+	extra(22)           	=customerN(c_enableAltBillAddr 		)
+	extra(23)           	=customerN(c_unused11          		)
+	extra$(1)           	=customer$(c_addr2             		)
+	extra$(2)           	=customer$(c_phoneMain         		)
+	extra$(3)           	=customer$(c_s01serialNumber   		)
+	extra$(4)           	=customer$(c_s03serialNumber   		)
+	extra$(5)           	=customer$(c_s04serialNumber   		)
+	extra$(6)           	=customer$(c_unused05          		)
+	extra$(7)           	=customer$(c_unused06          		)
+	extra$(8)           	=customer$(c_phoneCell         		)
+	extra$(9)           	=customer$(c_email             		)
+	extra$(10)          	=customer$(c_unused07          		)
+	extra$(11)          	=customer$(c_unused08          		)
+fnend
+
+
+def fn_customerBeforeSet(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
+	if ~setup_customerBeforeSet then
+		setup_customerBeforeSet=1
+		dim customerBefore$(0)*256
+		dim customerBeforeN(0)
+		mat customerBefore$(udim(mat customer$))
+		mat customerBeforeN(udim(mat customerN))
+	end if
+	mat customerBefore$=customer$
+	mat customerBeforeN=customerN
+fnend
+def fn_customerChangesReport(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
+	open #h_notefile:=fngethandle:'name='&fn_notedir$&"\"&trim$(z$)&".log",d,output
 fnend
 include: ertn
 include: fn_open

@@ -24,8 +24,8 @@ Mid-Month
 >Penalty Calculation                                  ^ Utility Billing\Penalty Calculation
 >Additional Penalty Calculation                       ^ Utility Billing\Additional Penalty Calculation
 Month-End                                             
->Transaction Listing                                  ^ acsUB\ubTrList
->Cash Receipts Journal                                ^ acsUB\ubColPrn
+>Transaction Listing                                  ^ Utility Billing\Transaction Listing
+>Cash Receipts Journal                                ^ Utility Billing\Cash Receipts Journal
 >Balance Breakdown (Aged by Month)                    ^ acsUB\ubOwed
 >Post to General Ledger                               ^ acsub\postgl                                            ^ GL
 Annual                                                
@@ -33,7 +33,7 @@ Annual
 >>Accumulated Transaction List                        ^ acsUB\ubAccTr
 >>Annual Usage Report                                 ^ Utility Billing\Annual Usage Report
 ! >Remove Old Transactions                            ^ acsUB\ubRemove ! removed 1/18/2017 because it is just a bad idea
->Zero Year To Date Usage                              ^ acsUB\ubZeroYT
+>Zero Year To Date Usage                              ^ Utility Billing\Zero Year to Date Usage
 Print                                                 
 >Customer Listings                                    
 >>Name and Number List                                ^ Utility Billing\Name and Number List
@@ -54,11 +54,11 @@ Print
 >Bar Graph                                            ^ acsUB\ubbargraph
 >Work Order List                                      ^ Utility Billing\Work Order List
 Utilities                                             
->Calculate Sewer Average                              ^ acsUB\Sewer
+>Calculate Sewer Average                              ^ Utility Billing\Calculate Sewer Average
 >View Total Accounts Receivable                       ^ acsUB\TotalBal
 >Enter Beginning Balances and Readings                ^ Utility Billing\Enter Beginning Balances and Readings
 >Transfer Accounts Between Companies                  ^ Utility Billing\Transfer Accounts Between Companies
->Display Last Date Customer File Accessed             ^ acsUB\accessdate
+>Display Last Date Customer File Accessed             ^ Utility Billing\Display Last Date Customer File Accessed
 Hand Held                                             ^                                                         ^ U4
 >Create Hand Held File                                ^ Utility Billing\Hand Held\Create Hand Held File         ^ U4
 >Import from Hand Held to Book                        ^ Utility Billing\Hand Held\Import from Hand Held to Book ^ U4
@@ -86,7 +86,7 @@ Extras
 >>Undo Penalty Calculation                            ^ acsUB\ubUnPen
 >>Change Wrong Billing Date                           ^ Utility Billing\Change Wrong Billing Date
 >>Recalculate All Current Bills                       ^ Utility Billing\Recalculate All Current Bills
->Forgot to Zero Year To Date Usage                    ^ acsUB\Forgot
+>Forgot to Zero Year To Date Usage                    ^ Utility Billing\Forgot to Zero Year-To-Date
 >>Reassign Deposit Change Addresses                   ^ acsUB\DepReas
 >>Change Wrong Transaction Dates                      ^ acsUB\ReDate
 >>Reverse Billing Cycle                               ^ Utility Billing\Reverse Billing Cycle

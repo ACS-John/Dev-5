@@ -1277,7 +1277,7 @@ MENU1READWORKEOF: ! /r
 			let ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
 			end if 
-		fnchain("S:\acsUB\ubCalk") ! goto CALCULATE
+		fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
 	else if ck=2001 then
 		addmethod=1
 		goto AUTO_REC
