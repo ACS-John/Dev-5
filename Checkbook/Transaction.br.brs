@@ -1,10 +1,22 @@
 ! replace S:\Checkbook\Transaction
 ! Checkbook transaction file editor
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnTos,fnLbl,fnAcs,fncombof,fnmsgbox,fnFra,fnTxt,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fnChk,fnaddpayee,fnagl$,fnqgl,fnrgl$,fnupdatebankbal,fnbankbal,fngethandle,fnaddreceipt,fnchain,fnRemoveDeletedRecords,fnIndex
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnmsgbox
+	library 'S:\Core\Library': fnCmdSet,fnTos,fnLbl,fnAcs,fncombof,fnFra,fnTxt,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fnChk
+	library 'S:\Core\Library': fnagl$,fnqgl,fnrgl$
+	library 'S:\Core\Library': fnupdatebankbal,fnbankbal
+	library 'S:\Core\Library': fnaddpayee
+	library 'S:\Core\Library': fnaddreceipt
+	library 'S:\Core\Library': fnRemoveDeletedRecords
+	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnchain
+	library 'S:\Core\Library': fnIndex
 	on error goto ERTN
 ! r: dim
-	dim cap$*128,tr$(5)*35,de$*30,bn$*40,aa(2)
+	dim tr$(5)*35,de$*30,bn$*40,aa(2)
 	dim ml$(10)*80 ! message box message lines
 	dim resp$(100)*100,gldesc$*30
 	dim vn$*8,ph$*12 ! payee file
@@ -13,7 +25,7 @@
 	dim item$(10)*50 ! flex grid items
 	dim tradesc$*30 ! for tralloc file
 ! /r
-	fntop(program$, cap$="Transaction") 
+	fntop(program$) 
 ! r: constants and defaults
 ! constants
 	cancel=99 : right=1 : limit_to_list=1 : center=2
@@ -21,7 +33,6 @@
 	pointtwo$='32' : disable=1 : add_all=2 : false=0
 ! defaults
 	addloop$='True'
-	fncno(cno)
 	d1=val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 	if d1<19999 then d1=d1+110000 : rollback=1 else d1=d1-10000 : rollback=0
 	begd=(int(d1/10000)*10000)+100+val(date$('yy'))-rollback
@@ -34,7 +45,7 @@
 ! /r
 SCREEN1: ! r:
 	! select limitations for the menu1's record selection grid
-	fnTos(sn$='Trans-Screen1')
+	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=100
 	fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 	lc+=1
@@ -220,17 +231,18 @@ MENU1: ! r:
 	sourcecode$=resp$(10) ! source code code
 	transactionsTotal=val(resp$(12)) conv TEST_CKEY ! transaction total
 	TEST_CKEY: ! 
-	if ckey=3 then typeofentry=tcde
+	! if ckey=3 then typeofentry=tcde
 	if ckey=2 then 
-		ti=typeofentry=2
+		typeofentry=2
 		editrec=0
 		goto ADD
 	else if ckey=8 then 
-		ti=typeofentry=1
+		typeofentry=1
 		editrec=0
 		goto ADD
 	else if ckey=3 then 
-		ti=typeofentry=2
+		typeofentry=tcde
+		! typeofentry=2
 		allocations_messed_with=false
 		editrec=val(resp$(11))
 		goto DO_EDIT
@@ -285,7 +297,7 @@ READ_PAYEEGL: !
 	mat ml$(3)
 	ml$(1)='You must enter the transaction amount before'
 	ml$(2)="you can pull the standard general ledger breakdowns."
-	fnmsgbox(mat ml$,ok$,cap$,48)
+	fnmsgbox(mat ml$,ok$,'',48)
 	goto EO_READSTGL
 GET_TOTAL: ! 
 	do until totalamt>=val(tr$(3))
@@ -315,7 +327,7 @@ DO_EDIT: ! r:
 	if editrec=0 then goto MENU1
 	read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec MENU1
 	tr$(3)=str$(tx3)
-	ti=3 : ad1=0
+	ad1=0
 ! if posting_code>0 then gosub crgl1
 	hamt=val(tr$(3)) : hkey$=key$ : tr3=val(tr$(3))
 	goto FM_SCREEN ! /r
@@ -326,26 +338,26 @@ SAVE: ! r:
 	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
 	goto FM_SCREEN
 	EMPTY_BANK_MSG: ! 
 	if bank_code=0 then 
 		mat ml$(1)
 		ml$(1)="You must first select a Bank."
-		fnmsgbox(mat ml$,resp$,cap$,0)
+		fnmsgbox(mat ml$,resp$,'',0)
 		goto EO_SAVE
 	end if 
 	! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>"VOID" then mat ml$(1)
 	! ml$(1)="You must first select a Payee."
-	! fnmsgbox(mat ml$,resp$,cap$,0)
+	! fnmsgbox(mat ml$,resp$,'',0)
 	! goto eo_save
 	! end if
 	if allocationstotal=val(tr$(3)) then goto RELEASE_TRMSTR1 ! allow zero checks to go thru as long as the allocations = 0 also
 	if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>"VOID" then 
 		mat ml$(1)
 		ml$(1)="You must first enter an amount."
-		fnmsgbox(mat ml$,resp$,cap$,0)
+		fnmsgbox(mat ml$,resp$,'',0)
 		goto EO_SAVE
 	end if 
 RELEASE_TRMSTR1: release #h_trmstr(1): 
@@ -358,7 +370,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		mat ml$(2)
 		ml$(1)='Your allocations have changed on a posted transaction.'
 		ml$(2)='You will need to update your General Ledger!'
-		fnmsgbox(mat ml$,resp$,cap$,0)
+		fnmsgbox(mat ml$,resp$,'',0)
 		allocations_messed_with=false
 	end if 
 ! 
@@ -410,7 +422,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L2250
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
 	goto FM_SCREEN
 	L2250: ! 
@@ -423,7 +435,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		ml$(2)='Please correct the Check Amount or '
 		ml$(3)='the Allocations'
 		ml$(4)='You are off by '&str$(val(tr$(3))-allocationstotal)
-		fnmsgbox(mat ml$,yn$,cap$,48)
+		fnmsgbox(mat ml$,yn$,'',48)
 		goto EO_SAVE
 	end if 
 	save_good=1
@@ -549,16 +561,16 @@ FM_ALLOCATION: ! r:
 		goto FM_ALLOCATION
 ! add loop
 	end if 
-CANCEL_ALLOC: ! r:
-	if adding_allocation=1 then 
-! delete #h_tralloc,same:
-	else 
-		release #h_tralloc: 
-	end if 
+	CANCEL_ALLOC: ! r:
+		if adding_allocation=1 then 
+		! delete #h_tralloc,same:
+		else 
+			release #h_tralloc: 
+		end if 
 	goto EO_ALLOC ! /r
-EO_ALLOC: ! 
+	EO_ALLOC: ! 
 	adding_allocation=0
-	return  ! /r
+return  ! /r
 SAVE_ALLOC: ! r:
 	track$=lpad$(trim$(track$),8)
 	if adding_allocation=0 then 
@@ -566,20 +578,20 @@ SAVE_ALLOC: ! r:
 	else 
 		write #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 	end if 
-	return  ! /r
+return  ! /r
 DEL_ALLOCATION: ! r: uses allocrec
 	allocations_messed_with=1
 	delete #h_tralloc,rec=allocrec: noRec DEL_ALLOCATION_NOREC
-	return  ! /r
+return  ! /r
 DEL_ALLOCATION_NOREC: ! r:
 	mat ml$(3)
 	ml$(1)='Delete Allocation Error'
 	ml$(2)="You must select an Allocation Record to delete"
 	ml$(3)="before clicking the Delete Allocation button."
-	fnmsgbox(mat ml$,ok$,cap$,48)
-	continue  ! /r
-FM_SCREEN: ! r:
-	fnTos(sn$='transfm2b'&str$(typeofentry))
+	fnmsgbox(mat ml$,ok$,'',48)
+continue  ! /r
+FM_SCREEN: ! r: requires typeofentry, scd, and many more
+	fnTos
 	lc=0 ! line count
 	fc=0 ! frame count
 	width=120 ! screen width
@@ -607,21 +619,22 @@ FM_SCREEN: ! r:
 	fnLbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
 	fnTxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
 	resp$(5)=cnvrt$("N 10.2",val(tr$(3)))
-	if typeofentry=2 then 
+	if tcde=2 then ! typeofentry=2 then 
 		fnLbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
 		fncombof('ReceiptType',lc,mypos,0,"[Q]\CLmstr\RecMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\RecIdx1.h[cno]",limit_to_list,0,'',frame)
 		resp$(6)=tr$(4)
+		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
+	else if scd=4 then 
+		fnLbl(lc+=1,1,'Payroll Employee Number:',mylen,right,0,frame)
+		fnTxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
+		resp$(6)=tr$(4)
+		fnLbl(lc+=1,1,'Payroll Employee Name:',mylen,right,0,frame)
 	else 
 		fnLbl(lc+=1,1,'Payee:',mylen,right,0,frame)
-		if scd=4 then 
-			fnTxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
-			resp$(6)=tr$(4)
-		else 
-			fncombof('Payee',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",limit_to_list,0,'',frame)
-			resp$(6)=tr$(4)
-		end if  ! scd=4   /   else 
-	end if  ! typeofentry=2   /   else 
-	fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
+		fncombof('Payee',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",limit_to_list,0,'',frame)
+		resp$(6)=tr$(4)
+		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
+	end if
 	fnTxt(lc,mypos,35,0,left,'',0,'',frame)
 	resp$(7)=tr$(5)
 	fnLbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
@@ -666,7 +679,7 @@ EO_FLEX2: ! /r
 	fnButton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
 	if typeofentry=2 then 
 		fnButton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
-	else 
+	else if scd<>4 then
 		fnButton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
 	end if 
 	lc+=1
@@ -697,13 +710,13 @@ EO_FLEX2: ! /r
 		ml$(1)='Allocations ('&cnvrt$('pic(---,---,--#.##)',allocationstotal)&') do not equal the Check Amount ('&cnvrt$('pic(---,---,--#.##)',val(tr$(3)))&')'
 		ml$(2)='Please correct the Check Amount or the Allocations'
 		ml$(3)='You are off by '&str$(val(tr$(3))-allocationstotal)
-		fnmsgbox(mat ml$,yn$,cap$,48)
+		fnmsgbox(mat ml$,yn$,'',48)
 		goto FM_SCREEN
 	end if 
 	if (ckey=1 or ckey=8) and trim$(tr$(1))="" then 
 		mat ml$(1)
 		ml$(1)="You must first enter a Reference Number."
-		fnmsgbox(mat ml$,resp$,cap$,0)
+		fnmsgbox(mat ml$,resp$,'',0)
 		goto FM_SCREEN
 	end if 
 	if ckey=6 then 
@@ -716,7 +729,7 @@ EO_FLEX2: ! /r
 	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L3780
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
 	goto FM_SCREEN
 L3780: ! /r

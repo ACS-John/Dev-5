@@ -3,15 +3,14 @@
 
 library 'S:\Core\Library': fntop,fnxit, fnerror,fnDedNames,fnopenprn,fncloseprn,fngethandle,fnTos,fnFra,fnTxt,fnLbl,fnCmdKey,fnAcs,fnss_employee,fnss_employer,fnGetPayrollDates
 on error goto ERTN
-! 
+
 dim deptot(999,2),t(36)
 dim fullname$(20)*20,ab$(20)*8,cp(32),tdc(10)
-dim d1$*20
 dim em$*30
-! 
+
 fntop(program$)
-! 
-fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d2,d1$)
+
+fnGetPayrollDates(beg_date,end_date)
 ssr1=fnss_employee
 ssr2=fnss_employer
 ! If FNPROCESS=1 Then Goto 410
@@ -109,5 +108,4 @@ PrHeader: ! r:
 	L1080: form pos 3,c 4,pos 11,4*c 10,x 2,10*c 10,x 2,c 6,c 10,c 5,skip 2
 return ! /r
 XIT: fnxit
-IGNORE: continue 
 include: ertn

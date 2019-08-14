@@ -13,7 +13,7 @@
 	library 'S:\Core\Library': fnFra
 	library 'S:\Core\Library': fnAcs
 	library 'S:\Core\Library': fnprocess
-	library 'S:\Core\Library': fnGetPayrollDates
+	library 'S:\Core\Library': fnGetPayrollDates,fnPayPeriodEndingDate
 	library 'S:\Core\Library': fnDedNames
 	on error goto ERTN
 ! gosub CHECK_PASSWORD
@@ -156,7 +156,8 @@ return ! /r
 XIT: fnxit
 
 ASK_DATES: ! r:
-	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
+	d1=fnPayPeriodEndingDate
+	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 	fnTos(sn$="YtdQtdReg-1") 
 	rc=cf=0: mylen=42: mypos=45: frameno=1
 	fnFra(1,1,4,66,"Payroll Date","Enter the payroll date.")
@@ -165,7 +166,7 @@ ASK_DATES: ! r:
 	resp$(rc+=1)=str$(d1)
 	fnLbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
 	fnTxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) 
-	resp$(rc+=1)= dat$
+	resp$(rc+=1)=date$("Month DD, CCYY")
 	fnFra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") 
 	frameno=2 : mylen=26 : mypos=mylen+2
 	fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
@@ -201,9 +202,6 @@ ASK_DATES: ! r:
 	qtr5=val(resp$(9)(1:4))*10000+1231
 	begin_year=val(resp$(9)(1:4))*10000+0101
 	end_year=val(resp$(9)(1:4))*10000+1231
-	! open #11: "Name=[Q]\PRmstr\Dates.h[cno]",internal,outIn,relative 
-	! Rewrite #11,Using "form pos 1,6*n 8,n 8,c 20",Rec=1: BEG_DATE,END_DATE,QTR1,QTR2,QTR3,QTR4,D1,DAT$
-	! close #11: 
 return ! /r
 DETERMINE_EARNINGS: ! r:
 	tfd=tmd=td14=tdw=0: mat caf=(0)

@@ -16,7 +16,7 @@
 
 	fncreg_read('calculation date text',m$)
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
-	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
+	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 	read #20,using L280: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10

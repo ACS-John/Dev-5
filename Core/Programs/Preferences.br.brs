@@ -54,7 +54,7 @@
 		fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
 		if fnclient_has('CL') then
 			fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
-			fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+			! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
 ! /r
@@ -455,9 +455,9 @@ do
 		fnLbl(lc+=1,1,'Post to Checkbook',win_width,2)
 		fnChk(lc+=1,col2_pos,'Populate Checkbook Payee from Payroll Employee',1)
 		resp$(resp_pr_prEmpToClPayee:=gl_rc+=1)=pr_prEmpToClPayee$
-		fnLbl(lc+=1,1,'Prefix (optional):',col1_width,1,0,0,0,'')
-		fnTxt(lc,col2_pos,3,0,0,'',0,'This would be added to the beginning of the Payroll Employee Number when setting the Checkbook Payee Key')
-		resp$(resp_pr_clPayeePrefix:=gl_rc+=1)=pr_clPayeePrefix$
+		! fnLbl(lc+=1,1,'Prefix (optional):',col1_width,1,0,0,0,'')
+		! fnTxt(lc,col2_pos,3,0,0,'',0,'This would be added to the beginning of the Payroll Employee Number when setting the Checkbook Payee Key')
+		! resp$(resp_pr_clPayeePrefix:=gl_rc+=1)=pr_clPayeePrefix$
 	end if
 
 	! fnLbl(lc+=1,1,"** User Settings **",win_width,2)
@@ -474,7 +474,7 @@ do
 		pr_prNetZeroChecks$=resp$(resp_pr_prNetZeroChecks)
 		if fnclient_has('CL') then
 			pr_prEmpToClPayee$=resp$(resp_pr_prEmpToClPayee)
-			pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
+			! pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
 		end if
 	end if 
 	if ck=>screen_ck_low and ck<=screen_ck_high then 
@@ -546,7 +546,7 @@ def fn_save
 		fnreg_write('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$)
 		if fnclient_has('CL') then
 			fnreg_write('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$)
-			fnreg_write('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+			! fnreg_write('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
 fnend 

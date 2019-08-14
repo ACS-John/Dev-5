@@ -1,7 +1,7 @@
 ! formerly S:\acsPR\newprOPDReg
 ! Other Pay and Deductions Register
 ! r: setup library, on error, dims, open files, etc
-  library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnDedNames,fnGetPayrollDates
+  library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnDedNames,fnPayPeriodEndingDate
   on error goto ERTN
 ! 
   dim em$*30,tdc(10),tcp(32),rpTemp(25),rptot(25),message$*40
@@ -14,7 +14,7 @@
 ! ______________________________________________________________________
   fntop(program$)
   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
-  fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
+	d1=fnPayPeriodEndingDate
   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 ! r: setup mat name$, mat dedname$, numberded1, numberded2
   name$(1)="O/T"

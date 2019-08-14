@@ -1401,10 +1401,6 @@ fnend
 		end if
 		fnPrPrintNetZeroDefault$=return$
 	fnend
-	def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4,&d1,&d1$)
-		library 'S:\Payroll\Change Payroll Dates.br': fnGetPayrollDates
-		fnGetPayrollDates=fnGetPayrollDates(beg_date,end_date, qtr1,qtr2,qtr3,qtr4,d1,d1$)
-	fnend
 	def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$,doWrite)
 		library 'S:\acsPR\fnDedNames.br': fnDedNames
 		fnDedNames=fnDedNames(mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$,doWrite)
@@ -1481,9 +1477,21 @@ fnend
 		library 'S:\acsPR\Conversion\v4_part2.br': fnpr_conversion_add_missing
 		fnpr_conversion_add_missing=fnpr_conversion_add_missing(cno)
 	fnend
-	def library fnjob_srch(&x$;fixgrid)
+	def library fnjob_srch(&x$; fixgrid)
 		library 'S:\acsPR\Job_srch.br': fnjob_srch
-		fnjob_srch(x$,fixgrid)
+		fnjob_srch=fnjob_srch(x$,fixgrid)
+	fnend
+	def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
+		library 'S:\Payroll\Change Payroll Dates.br': fnGetPayrollDates
+		fnGetPayrollDates=fnGetPayrollDates(beg_date,end_date, qtr1,qtr2,qtr3,qtr4)
+	fnend
+	def library fnPayPeriodEndingDate(; setIt)
+		library 'S:\Payroll\Change Payroll Dates.br': fnPayPeriodEndingDate
+		fnPayPeriodEndingDate=fnPayPeriodEndingDate( setIt)
+	fnend
+	def library fnSetPayrollDatesForYear(; year)
+		library 'S:\Payroll\Change Payroll Dates.br': fnSetPayrollDatesForYear
+		fnSetPayrollDatesForYear=fnSetPayrollDatesForYear( year)
 	fnend
 ! /r
 ! r: Job Cost Payroll

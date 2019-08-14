@@ -1,5 +1,8 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________         
+5:55 PM 8/14/2019	PR	Not posting Employee Number to Checkbook Payee number is now an option and must be enabled to be utilized, however Transaction records better recognize that transactions are from Payroll and more appropriately label those fields
+5:55 PM 8/14/2019	PR	Payroll Calculation now sets all Change Payroll Dates' dates for the year of the payroll being calculated - no more manually changing it.
+5:54 PM 8/14/2019	PR	Fixed a bug that may have caused some employees Federal withholding to be caluclated based on the 2018 tables instead of the 2019 tables
  9:11 08/19/2019	CO	5.74180  
 9:11 08/19/2019	CO	5.74179   
 10:09 08/19/2019	CO	5.74179    

@@ -4,7 +4,7 @@
 	library 'S:\Core\Library': fntop,fnxit
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnqgl,fnrgl$,fnagl$,fnChk
-	library 'S:\Core\Library': fnGetPayrollDates,fnDedNames
+	library 'S:\Core\Library': fnPayPeriodEndingDate,fnDedNames
 	library 'S:\Core\Library': fnclient_has
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnStatusClose
@@ -19,7 +19,7 @@
 	dim t(26),prgl(26,3),prgl$(15)*12,dedcode(20)
 	dim message$*40,msgline$(2)*60,ml$(4)*80,resp$(10)*60
 	dim fullname$(20)*20,abbrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20)
-	dim dedst(20),deduc(20),gl$(20)*12,d1$*20
+	dim dedst(20),deduc(20),gl$(20)*12
 
 	fntop(program$)
 	fnIndex_it('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
@@ -34,7 +34,7 @@
 
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
-	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
+	d1=fnPayPeriodEndingDate
 	if fnclient_has('CL') then ! exists("[Q]\CLmstr") then
 		mat ml$(3)
 		ml$(1)="Normally you would not take this menu option to post"
