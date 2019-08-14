@@ -6,13 +6,17 @@
 	library 'S:\Core\Library': fncomboa,fnTxt,fncombof,fnCmdSet,fnAcs,fnmsgbox
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnOpt,fnqgl,fnrgl$
 	library 'S:\Core\Library': fnCmdKey,fnagl$,fnButton,fnss_employee,fnss_employer
-	library 'S:\Core\Library': fncd,fnclient_has,fnreg_read,fnreg_write
+	library 'S:\Core\Library': fncd
+	library 'S:\Core\Library': fnreg_read,fnreg_write
+	library 'S:\Core\Library': fnclient_has
 	library 'S:\Core\Library': fngethandle,fncreg_read,fncreg_write,fnDedNames
+	library 'S:\Core\Library': fnPrPrintNetZeroDefault$
 	on error goto ERTN
 ! /r
 	fntop(program$)
-	if env$('client')="Divernon" then print_netzero_checks=1
-	if env$('client')="Payroll Done Right" then print_netzero_checks=1 ! env$('client')="West Accounting" or 
+	fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
+	fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
+	fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 ! r: dims and constants
 	dim em$(3)*30 ! payee name and address
 	dim tdet(17)
@@ -109,10 +113,10 @@
 	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 	read #20,using 'Form POS 1,x 120,POS 150,10*C 8,POS 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	close #20: 
-! ___________________________
+
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
 	if fnclient_has('CL') then let fn_open_acscl
-! ___________________________
+
 	if bankcode=0 then bankcode=1
 	check_number=ckno
 ! if env$('client')="West Rest Haven" then sc1$="C"
@@ -324,13 +328,13 @@ L1300: ! /r
 	if ~testCheckFormat then 
 		fn_determine_earnings
 	end if
-	if print_netzero_checks and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto ProduceThatCheck ! pr zero checks
+	if pr_prNetZeroChecks$='True' and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto ProduceThatCheck ! pr zero checks
 	if ttc(32)=0 then goto ReadNextEmployee ! no earnings
 	ProduceThatCheck: ! 
 	! Mat TCP=(0)
 	! Mat TDC=(0)
 	goto PRE_CHECK
-! ______________________________________________________________________
+
 PRE_CHECK: ! 
 	ttc(26)=ttc(26)-tpd3-tpd4-tpd5
 	ttc(28)=ttc(28)+ttc(29)+ttc(30) ! OTHER COMP-CURRENT
@@ -358,7 +362,7 @@ L2150: !
 	fncloseprn
 	if testCheckFormat then let fnChain(program$)
 	goto ALLIGNMENT
-! ______________________________________________________________________
+
 ALLIGNMENT: ! r:
 	fnTos(sn$="prckprt2")
 	respc=0 : rc=0
@@ -383,7 +387,7 @@ REPRINT_SAME_CHECK: !
 	check_number=check_number+1
 L3130: ! 
 	goto L2070
-! ______________________________________________________________________
+
 CHECK_PRINT_TOP: ! 
 	if cl_installed=1 then let fn_build_check_record
 	tdc1=0
@@ -500,7 +504,7 @@ XIT: fnxit
 def fn_open_acscl
 	open #h_cl_bank:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr L4220
 	cl_installed=1
-	open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
+	! not used - commented out 8/13/19 jb    			open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative 
 	open #h_cl_payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
 	! open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
 	open #h_cl_trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
@@ -542,12 +546,12 @@ def fn_build_check_record
 		mat ded$=("")
 	end if
 	goto WRITE_PAYROLL_TRANS
-	! ______________________________________________________________________
+
 	L4480: ! If EM(5)=1 Then dED$(29)="4" ! weeks worked
 	if em(5)=2 then ded$(29)="2"
 	if em(5)=3 then ded$(29)="2"
 	if em(5)=4 then ded$(29)="1"
-	! ______________________________________________________________________
+
 	WRITE_PAYROLL_TRANS: ! 
 	if testCheckFormat then goto L5250
 	! pr tr$(1),tr$(5) :  pause
@@ -569,18 +573,22 @@ def fn_build_check_record
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 	tx3=val(tr$(3))
 	tr2=val(tr$(2))
-	tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/22/19 JB - Do this for everyone.
-	! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
+	if pr_prEmpToClPayee$='False' then 
+		tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/22/19 JB - Do this for everyone.
+		! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
+		! 8/13/19 - we got complaints, not everyone liked it - made it an option, also added prefix option
+	end if
+	tr$(4)(0:0)=trim$(pr_clPayeePrefix$)
 	write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
 	ytdp=ytdp+val(tr$(3)) conv ignore
 	L4690: ! 
-	read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey L4740
+	read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey NoKeyOnClBank
 	bn$=rtrm$(bn$)
 	bal=bal-val(tr$(3)) conv ignore
-	rewrite #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2): bn$,bal,upi,tr$(1) nokey L4740
+	rewrite #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2): bn$,bal,upi,tr$(1) nokey NoKeyOnClBank
 	F_CLFILE_12: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
-	L4740: ! 
+	NoKeyOnClBank: ! 
 	F_CL_TRANS_V1: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
 	! WRITE ALLOCATIONS
 	if allign=1 then goto L5250
@@ -588,7 +596,7 @@ def fn_build_check_record
 	 if val(ded$(j))=0 then goto L5230
 	 gl$=""
 	 on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220_Next_J1,L5220_Next_J1,BCR_GLN_VALIDATED none L5230
-	 ! ______________________________________________________________________
+
 	 L4840: ! 
 	 for j1=1 to tdepXcount
 		 if j<6 or j>25 then goto L4870 ! kj 91707
@@ -669,7 +677,7 @@ def fn_cknum ! check for duplicate check numbers
 	check_number=ckn2
 	tr$(1)=lpad$(str$(ckn2),8)
 	goto L5410
-	! ______________________________________________________________________
+
 	L5670: ! 
 	bal=bal+val(dtr$(3))
 	delete #h_cl_trans,key=dk$: 

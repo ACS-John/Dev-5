@@ -12,12 +12,12 @@ File
 >Chart of Accounts                          ^ acspr\chartofaccounts
 Pay Period
 >Enter Time Sheets                          ^ Payroll\Enter Time Sheets
->Payroll Registers                          ^ acsPR\newprReg1
+>Payroll Registers                          ^ Payroll\Payroll Registers
 >Other Pay and Deductions Register          ^ Payroll\Other Pay and Deductions Register
 >Direct Deposits                            ^ Payroll\Direct Deposits
 >Print Payroll Checks                       ^ Payroll\Print Payroll Checks
 >YTD and QTD Register                       ^ Payroll\YTD and QTD Register
->Post to General Ledger                     ^ acsPR\newprPostGL              ^ GL
+>Post to General Ledger                     ^ Payroll\Post to General Ledger              ^ GL
 Monthly
 >Payroll Tax Deposit Summary                ^ Payroll\Payroll Tax Deposit Summary
 >Pension Report                             ^ acspr\newprmers

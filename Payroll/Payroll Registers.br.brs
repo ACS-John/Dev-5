@@ -1,16 +1,16 @@
-! Replace S:\acsPR\newprReg1
+! formerly S:\acsPR\newprReg1
 ! Payroll Register
-! ______________________________________________________________________
+
 ! r: general setup: libraries, dims, fntop,fncno,read defaults, open files, etc
 	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnpayroll_register_2,fncreg_read,fncreg_write,fnChk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
 	on error goto ERTN
-! ______________________________________________________________________
+
 	dim em$*30,cp(32),tcp(32)
 	dim tdc(10),ttdc(10)
 	dim d$*20
 	dim thc(5)
-! ______________________________________________________________________
-	fntop(program$,"Payroll Registers")
+
+	fntop(program$)
 	fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$,'True')
 	fnreg_read('prreg2.append_reg1',append_reg1$,'True')
 	! pr 'before fndednames' : pause
@@ -24,26 +24,27 @@
 	dim deduc(20)
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
-	!
+
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
 	open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr L240
 	read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
-L240: !
+	L240: !
 	open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L270
 	read #1,using 'Form POS 5,N 8': ckno
 	close #1:
-L270: !
+	L270: !
 	ckno+=1
-!
+
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
 	d1$=cnvrt$("pic(zzzzzzzz)",d1)
 	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
-L320: if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
-!
-!
+	L320: !
+	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
+
+
 	open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
 	open #h_dd=30: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
 	open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]"&',Shr',internal,input,keyed
@@ -86,7 +87,7 @@ START_REPORT: ! r:
 	end if
 	gosub HDR
 	goto LOOP_TOP
-! ______________________________________________________________________
+
 LOOP_TOP: !
 	read #1,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
@@ -157,7 +158,7 @@ L940: !
 	total_gross_pay+=tcp(31)
 	other_wh=0
 	goto LOOP_TOP ! /r
-! ______________________________________________________________________
+
 TOTALS: ! r:
 	pr #255: ''
 	pr #255: '    Total Hours: '&lpad$(str$(total_hours),26)
