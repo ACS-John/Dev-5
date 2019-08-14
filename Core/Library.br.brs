@@ -1393,6 +1393,14 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
+	def library fnPrPrintNetZeroDefault$(; ___,return$)
+		if env$('client')="Divernon" or env$('client')="Payroll Done Right" then 
+			return$='True'
+		else
+			return$='False'
+		end if
+		fnPrPrintNetZeroDefault$=return$
+	fnend
 	def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4,&d1,&d1$)
 		library 'S:\Payroll\Change Payroll Dates.br': fnGetPayrollDates
 		fnGetPayrollDates=fnGetPayrollDates(beg_date,end_date, qtr1,qtr2,qtr3,qtr4,d1,d1$)

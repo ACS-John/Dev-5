@@ -3,7 +3,7 @@
 ! r: setup stuff
 	library 'S:\Core\Library': fntop,fnxit
 	library 'S:\Core\Library': fnaddlabel,fnlabel
-	library 'S:\Core\Library': fnTos,fnLbl,fncomboa,fnChk,fnCmdSet,fnAcs,fnTxt,fncombof
+	library 'S:\Core\Library': fnTos,fnLbl,fncomboa,fnChk,fnCmdSet,fnAcs2,fnTxt,fncombof
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnAddOneC
@@ -22,7 +22,7 @@
 goto MAIN ! /r
 
 MAIN: ! r:
-	fnTos(sn$="cllabel-1")
+	fnTos
 	respc=0 : mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Print Labels For:",mylen,right)
 	fi$="cllabels" 
@@ -46,7 +46,7 @@ MAIN: ! r:
 	resp$(respc+=1)=''
 	fnLbl(8,1,'.',50,1) ! just so the right side of the comboboxes for checks can be seen
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck) 
+	fnAcs2(mat resp$,ck) 
 	if ck=5 then 
 		goto XIT 
 	else if resp$(1)=item1$(1) then 
@@ -81,13 +81,13 @@ MAIN: ! r:
 	end if
 ! /r
 ASK_VN: ! r:
-	fnTos(sn$="cllabel-2") 
+	fnTos
 	respc=0 : mylen=20
 	fnLbl(1,1,"Payee to Print:",mylen,right)
 	fncombof("Payee",1,22,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"') 
 	resp$(respc+=1)=''
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck) 
+	fnAcs2(mat resp$,ck) 
 	if ck=5 then 
 		goto Finis 
 	else 
@@ -124,7 +124,6 @@ goto Xit ! /r
 Xit: fnxit
 
 ProcessCheckRange: ! r: uses: ebc,c1,hTrmstr,hPaymstr
-
 	tr4$=cnvrt$("N 2",wbc)&str$(1)&cnvrt$("N 8",c1) 
 	restore #hTrmstr,key>=tr4$: nokey EO_OPT2
 	do
@@ -135,7 +134,6 @@ ProcessCheckRange: ! r: uses: ebc,c1,hTrmstr,hPaymstr
 		fn_payeeAddLabel(vn$,nam$,ad1$,ad2$,csz$)
 	loop
 	EO_OPT2: !
-
 return ! /r
 def fn_payeeAddLabel(vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30) ! uses local printpayeenum$
 	dim labeltext$(5)*120
@@ -157,6 +155,5 @@ def fn_payeeAddLabel(vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30) ! uses local printpa
 	! labelAddCount+=1
 	fnaddlabel(mat labeltext$)
 fnend
-
 
 include: ertn

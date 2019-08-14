@@ -3,7 +3,7 @@ Payroll - Programmer
 ! >State Withholdings ^ acsPR\StWHFM  ! <-  no longer used since tables.wh is not longer used.
 >Employee Departments ^ Payroll\Employee Departments
 >RPWork01 (Entered TimeSheet) Hamster ^ acsPR\rpwork01_hamster
->Update Checkbook From Check History ^ acsPR\update_acscl
+>Update Checkbook From Check History ^ Payroll\Fix\Update Checkbook from Check History
 >Fix WH Wages in Check History ^ acsPR\Fix_SS_Med_Wages
 Pay Period
 >Import from Time Clock System ^ acsPR\newimporttime

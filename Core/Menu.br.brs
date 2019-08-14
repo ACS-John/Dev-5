@@ -428,7 +428,7 @@ def fn_main
 				else if fkey_value=fkey_pr_enter_time  then
 					fnchain('S:\Payroll\Enter Time Sheets')
 				else if fkey_value=fkey_pr_payroll_registers  then
-					fnchain('S:\acsPR\newprReg1')
+					fnchain('S:\Payroll\Payroll Registers')
 				else if fkey_value=fkey_pr_print_checks  then
 					fnchain('S:\Payroll\Print Payroll Checks')
 				end if

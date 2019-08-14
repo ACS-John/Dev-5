@@ -16,7 +16,7 @@ Bank                                      ^ acsCL\Bank
 >Select Bank Account                      ^ acsCL\ChgBank
 >Unclear All Entries by Bank              ^ acsCL\UnClBank
 Payee                                     ^ Checkbook\Payee
->Payee Labels                             ^ acsCL\Label
+>Payee Labels                             ^ Checkbook\Payee Labels
 >Payee Listing                            ^ acsCL\PayList
 >Remove Payee Records                     ^ acsCL\PayDump
 >Payee Fund Listing                       ^ acsCL\VNFund
@@ -31,7 +31,7 @@ Print Checks                              ^ Checkbook\Print Checks
 Print
 >Accounts Payable Listing - Any Time      ^ acsCL\CPInvLst
 >Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
->Claims or Purchases Report               ^ acsCL\Claims
+>Claims or Purchases Report               ^ Checkbook\Claims or Purchases Report
 >GL Distribution Report                   ^ acsCL\PostGL2b
 >Print 1099 Forms                         ^ Checkbook\Print 1099 Forms
 Export                                    

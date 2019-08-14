@@ -26,7 +26,7 @@
 	! fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then wait_wp_close$='True'
 	save_path$=fn_save_as_path$
 	if save_path$(1:2)='@:' then save_path$(1:2)=''
-! 
+
 	dim receipt_printer$*256
 	fnureg_read('Printer.Receipt',receipt_printer$)
 	if fnclient_has('U4') then
@@ -51,6 +51,11 @@
 	end if
 	if fnclient_has('PR') then
 		fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
+		fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
+		if fnclient_has('CL') then
+			fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
+			fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+		end if
 	end if
 ! /r
 !  main loops - build and display screens, get, save, apply settings, etc
@@ -64,11 +69,11 @@ DO_SCREEN_MAIN: ! r:
 		fnLbl(lc+=1,1,"ACS Client Name:",col1_width,1)
 		fnTxt(lc,col2_pos,54,0,0,'',1,'If this is not correct contact ACS Support') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 		resp$(rc+=1)=env$('Client')
-! 
+
 		fnLbl(lc+=1,1,"BR Serial:",col1_width,1)
 		fnTxt(lc,col2_pos,54,0,0,'',1,'Serial Number assigned by Business Rules Corp license') ! fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 		resp$(rc+=1)=str$(serial)
-! 
+
 		fnLbl(lc+=1,1,"Data Folder:",col1_width,1)
 		fnTxt(lc,col2_pos,40,255,0,"",1)
 		resp$(rc+=1)=os_filename$('[Q]\')
@@ -87,32 +92,25 @@ DO_SCREEN_MAIN: ! r:
 		lc+=1
 		fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 		lc+=1
-! 
 		fnLbl(lc+=1,1,"Text Editor Executable:",col1_width,1)
 		fnTxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for editing text files.')
 		resp$(resp_text_editor:=rc+=1)=text_editor$
 		fnButton(lc,col2_pos+42+5,'Default',14) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
-! 
 		lc+=1
-! 
 		fnLbl(lc+=1,1,"Save (Company) As Folder Default:",col1_width,1)
 		fnTxt(lc,col2_pos,42,80,0,'',0,'')
 		resp$(resp_save_path:=rc+=1)=save_path$
 		fnButton(lc,col2_pos+42+5,'Default',16) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
-! 
 		lc+=1
-! 
 		fnChk(lc+=1,col2_pos,'Assume decimal place',1)
 		fnLbl(lc ,col2_pos+3,'if checked    examples:  1234= 12.34   80= 0.80  5.=5.00  4=0.04')
 		fnLbl(lc+1,col2_pos+3,'if unchecked  examples:  1234=1234.00  80=80.00  5.=5.00  4=4.00')
 		resp$(resp_decimal_assumed:=rc+=1)=decimal_assumed$
 		lc+=2
-! 
 		fnChk(lc+=1,col2_pos,'Disable multiple sessions',1)
 		fnLbl(lc,col2_pos+3,'If checked only allow one session at a time will be allowed.')
 		resp$(resp_disable_multisession:=rc+=1)=disable_multisession$
 		lc+=1
-! 
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
@@ -128,8 +126,7 @@ DO_SCREEN_MAIN: ! r:
 			! enableOpenPartial$=resp$(resp_enableOpenPartial)
 			enableBackupReportCache$=resp$(resp_enableBackupReportCache)
 		end if 
-! 
-! 
+		! 
 		if ck=>screen_ck_low and ck<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
 		else if ck=15 then 
@@ -170,7 +167,7 @@ DO_SCREEN_THEME: ! r:
 		fnLbl(lc+=1,1,"*** Colors ***",win_width,2) : rc_color=rc_color_zero=3
 		fnLbl(lc+=1,col2_pos,"Foreground",10,2)
 		fnLbl(lc,col3_pos,"Background",10,2)
-! 
+
 		fn_do_screen_theme_add_theme('Screen','#000000','#E7EDF5')
 		fnLbl(lc,col3_pos+12,'Base for all settings, including buttons that are not cancel nor default')
 		fn_do_screen_theme_add_theme('ScreenHeader','#000000','#FFFFFF')
@@ -181,8 +178,8 @@ DO_SCREEN_THEME: ! r:
 		fn_do_screen_theme_add_theme('ButtonCancel','#000000','#CD5C5C')
 		fnLbl(lc,col3_pos+12,'Cancel Button')
 		fn_do_screen_theme_add_theme('GridHeaders','#000000','#FFFFFF')
-! 
-! 
+		
+		
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
@@ -209,8 +206,8 @@ DO_SCREEN_THEME: ! r:
 			fnureg_write('color.[gridheaders].foreground',resp$(rc_color+=1))
 			fnureg_write('color.[gridheaders].background',resp$(rc_color+=1))
 		end if 
-! 
-! 
+		
+		! 
 		if ck=>screen_ck_low and ck<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
 		else if ck=11 then 
@@ -270,12 +267,12 @@ DO_SCREEN_PRINTER: ! r:
 		resp$(resp_atlantis:=dsp_rc+=1)=atlantis_exe$ ! os_filename$(atlantis_exe$)
 		fnButton(lc,col2_pos+42+5,'Default',13) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 		fnOpt(lc,col2_pos+42+5+7+2,"Use Atlantis as Default") : resp$(resp_use_atlantis:=dsp_rc+=1)=use_atlantis$
-! 
+
 		! lc+=1
 		! fnChk(lc+=1,55,"Wait for word processor to close before continuing",1)
 		! resp$(resp_wait_wp_close:=dsp_rc+=1)=wait_wp_close$
 		lc+=1
-! 
+
 		fnLbl(lc+=1,1,"Receipt Printer:",col1_width,1)
 		fncomboa('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to pr receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 		resp$(resp_receipt_printer:=dsp_rc+=1)=receipt_printer$
@@ -298,8 +295,8 @@ DO_SCREEN_PRINTER: ! r:
 			receipt_printer$=resp$(resp_receipt_printer)
 			formsFormat$			=resp$(resp_formsFormat)
 		end if 
-! 
-! 
+		
+		! 
 		if ck=>screen_ck_low and ck<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
 		else if ck=14 then 
@@ -450,6 +447,19 @@ do
 	fnChk(lc+=1,col2_pos,'Check History - enable long names when printing',1)
 	resp$(resp_pr_ckHstEnableLongNames:=gl_rc+=1)=pr_ckHstEnableLongNames$
 	lc+=1
+	fnLbl(lc+=1,1,'Print Payroll Checks',win_width,2)
+	fnChk(lc+=1,col2_pos,'Print checks which net zero',1)
+	resp$(resp_pr_prNetZeroChecks:=gl_rc+=1)=pr_prNetZeroChecks$
+	if fnclient_has('CL') then
+		lc+=1
+		fnLbl(lc+=1,1,'Post to Checkbook',win_width,2)
+		fnChk(lc+=1,col2_pos,'Populate Checkbook Payee from Payroll Employee',1)
+		resp$(resp_pr_prEmpToClPayee:=gl_rc+=1)=pr_prEmpToClPayee$
+		fnLbl(lc+=1,1,'Prefix (optional):',col1_width,1,0,0,0,'')
+		fnTxt(lc,col2_pos,3,0,0,'',0,'This would be added to the beginning of the Payroll Employee Number when setting the Checkbook Payee Key')
+		resp$(resp_pr_clPayeePrefix:=gl_rc+=1)=pr_clPayeePrefix$
+	end if
+
 	! fnLbl(lc+=1,1,"** User Settings **",win_width,2)
 	! lc+=1
 	!
@@ -461,6 +471,11 @@ do
 		goto XIT
 	else 
 		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
+		pr_prNetZeroChecks$=resp$(resp_pr_prNetZeroChecks)
+		if fnclient_has('CL') then
+			pr_prEmpToClPayee$=resp$(resp_pr_prEmpToClPayee)
+			pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
+		end if
 	end if 
 	if ck=>screen_ck_low and ck<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
@@ -528,6 +543,11 @@ def fn_save
 	end if
 	if fnclient_has('PR') then
 		fnreg_write('Check History - enable long names when printing',pr_ckHstEnableLongNames$)
+		fnreg_write('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$)
+		if fnclient_has('CL') then
+			fnreg_write('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$)
+			fnreg_write('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+		end if
 	end if
 fnend 
 def fn_nav_buttons
@@ -571,6 +591,7 @@ def fn_setup
 		library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnOpt,fnGetPp,fncopyfile
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
+		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
 		on error goto ERTN
 		dim resp$(20)*256,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256
