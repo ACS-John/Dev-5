@@ -1049,7 +1049,7 @@ def fn_ini_move(cursys$*2)
 	mat imProgramNew$(imProgramCount)
 	if cursys$='PR' then
 		fn_programMoveAdd('acsPR\newprfm','Payroll\Employee')
-		fn_programMoveAdd('acsPR\newprcalk','Payroll\Calc')
+		fn_programMoveAdd('acsPR\newprcalk','Payroll\Calculation')
 		fn_programMoveAdd('acsPR\newprRevCal','Payroll\Reverse Calculation')
 		fn_programMoveAdd('acsPR\newprchangedate','Payroll\Change Payroll Dates')
 		fn_programMoveAdd('acsPR\newprinput','Payroll\Enter Time Sheets')

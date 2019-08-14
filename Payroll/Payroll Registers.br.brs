@@ -2,12 +2,12 @@
 ! Payroll Register
 
 ! r: general setup: libraries, dims, fntop,fncno,read defaults, open files, etc
-	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnGetPayrollDates,fnerror,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnpayroll_register_2,fncreg_read,fncreg_write,fnChk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
+	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnPayPeriodEndingDate,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnpayroll_register_2,fncreg_read,fncreg_write,fnChk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
 	on error goto ERTN
 
 	dim em$*30,cp(32),tcp(32)
 	dim tdc(10),ttdc(10)
-	dim d$*20
 	dim thc(5)
 
 	fntop(program$)
@@ -37,9 +37,7 @@
 	close #1:
 	L270: !
 	ckno+=1
-
-	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
-	d1$=cnvrt$("pic(zzzzzzzz)",d1)
+	d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
 	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
 	L320: !
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
@@ -174,7 +172,6 @@ HDR: ! r:
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f201 \fs20 \b Payroll Check Register}" ! pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
 	pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
-! pr #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
 	pr #255: "\ql   "
 	pr #255: tab(29);"<----------------Hours----------------->";
 	pr #255: tab(71);"<-Pay->";

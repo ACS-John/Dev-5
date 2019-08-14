@@ -1,0 +1,11 @@
+[Q]\PRmstr\oDates.h[cno], odate_, 0
+recl=76
+===================================================
+yearStart  ,  Year Start                           ,  N    8   , !     aka=beg_date
+yearEnd    ,  Year End                             ,  N    8   , !     aka=end_date
+qtr1       ,  Quarter 1 Start                      ,  N    8   , !     aka=end_date
+qtr2       ,  Quarter 2 Start                      ,  N    8   , !     aka=end_date
+qtr3       ,  Quarter 3 Start                      ,  N    8   , !     aka=end_date
+qtr4       ,  Quarter 4 Start                      ,  N    8   , !     aka=end_date
+d1         ,  Pay Period Ending                    ,  N    8   , !     aka=end_date
+rh$        ,  Old Unused Report Heading            ,  C   20   , !     aka=end_date

@@ -245,7 +245,7 @@ def fn_setup
 		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
 		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnChk,fnCmdSet
 		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnGetPayrollDates
+		library 'S:\Core\Library': fnPayPeriodEndingDate
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnfree
 		library 'S:\Core\Library': fnCd
@@ -334,7 +334,7 @@ def fn_readSavedResponses ! basicaly all variables are local
 	end if
 	fncreg_read('Direct Deposit Federal ID Number',fedid$, fedidDefault$) ! The Federal ID number can be found on any payroll report.
 
-	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,payrollDate)
+	payrollDate=fnPayPeriodEndingDate
 
 fnend
 include: ertn

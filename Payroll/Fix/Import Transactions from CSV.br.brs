@@ -4,7 +4,6 @@ fntop(program$)
 	dim abrevname$(20)*8
 	dim newdedcode(20)
 	fnDedNames(mat dednames$,mat abrevname$,mat newdedcode)
-	! fnStatus(env$('program_caption')&' initiating.')
 	dim tran$(0)*128,tranN(0),csz$*30
 	hTran:=fn_open('PR Transaction',mat tran$,mat tranN,mat form$)
 		
@@ -349,19 +348,13 @@ def fn_setup
 
 		library 'S:\Core\Library': fntop
 		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnStatus
-		library 'S:\Core\Library': fnStatusClose
-		library 'S:\Core\Library': fnindex_it
 		library 'S:\Core\Library': fnTos,fnAcs,fnCmdKey
 		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fnFra,fnOpt,fnLbl,fnTxt
-		library 'S:\Core\Library': fnCmdSet,fncmbact,fnChk
+		library 'S:\Core\Library': fnLbl,fnTxt
+		library 'S:\Core\Library': fnCmdSet
 		library 'S:\Core\Library': fncmbemp,fncombof,fnButton
 		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fnmsgbox
 		library 'S:\Core\Library': fnDedNames
-		library 'S:\Core\Library': fnGetPayrollDates
 		library 'S:\Core\Library': fnAddOneC,fnAddOneN
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 

@@ -1,15 +1,24 @@
 ! formerly S:\acsPR\newprCkPrt
 ! pr Payroll Checks ! Nebs 9039t: Standard Check Format (Laser Stub-Check-Stub)
 ! r: library and on error
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnGetPayrollDates
-	library 'S:\Core\Library': fnopenprn,fncloseprn,fnchain,fnTos,fnLbl
-	library 'S:\Core\Library': fncomboa,fnTxt,fncombof,fnCmdSet,fnAcs,fnmsgbox
-	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnOpt,fnqgl,fnrgl$
-	library 'S:\Core\Library': fnCmdKey,fnagl$,fnButton,fnss_employee,fnss_employer
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnGetPayrollDates
+	library 'S:\Core\Library': fnPayPeriodEndingDate
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnchain
+	library 'S:\Core\Library': fnTos,fnLbl,fncomboa,fnTxt,fncombof,fnCmdSet,fnAcs,fnOpt
+	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+	library 'S:\Core\Library': fnCmdKey
+	library 'S:\Core\Library': fnButton
+	library 'S:\Core\Library': fnagl$,fnqgl,fnrgl$
+	library 'S:\Core\Library': fnmsgbox
+	library 'S:\Core\Library': fnss_employee,fnss_employer
 	library 'S:\Core\Library': fncd
 	library 'S:\Core\Library': fnreg_read,fnreg_write
 	library 'S:\Core\Library': fnclient_has
-	library 'S:\Core\Library': fngethandle,fncreg_read,fncreg_write,fnDedNames
+	library 'S:\Core\Library': fncreg_read,fncreg_write
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnDedNames
 	library 'S:\Core\Library': fnPrPrintNetZeroDefault$
 	on error goto ERTN
 ! /r
@@ -33,7 +42,7 @@
 	dim lcn$*8
 	dim tr(2)
 	dim tr$(5)*35
-	dim resp$(25)*128,d1$*20,ttc(32),ttdc(10)
+	dim resp$(25)*128,ttc(32),ttdc(10)
 	dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),ytdTotal(32)
 	dim quartertotals(32)
 	dim dedfed(20)
@@ -101,7 +110,8 @@
 	open #20: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input 
 	read #20,using 'Form POS 2,POS 5,N 5': ckno
 	close #20: 
-	fnGetPayrollDates(old_beg_date,old_end_date,read_qtr1,read_qtr2,read_qtr3,read_qtr4,d1,d1$)
+	d1=fnPayPeriodEndingDate
+	fnGetPayrollDates(old_beg_date,old_end_date,read_qtr1,read_qtr2,read_qtr3,read_qtr4)
 	fncreg_read('Prenumbered Checks',pre$)
 	fncreg_read('Post to CL',acsclcv$)
 	fncreg_read('Post Employer Portion of FiCA',ficam1$)
@@ -725,14 +735,6 @@ def fn_mgl ! WRITE BENEFITS & FICA MATCH
 	next j
 	! fn_FICA_FIX
 fnend 
-IGNORE: continue 
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
 ! r: Check pr routines
 def fn_print_check
 	if ttc(32)<=0 then 
@@ -1743,4 +1745,4 @@ def fn_getTestValues
 	tty(8) =      2
 	tty(9) =      1
 fnend
-
+include: ertn

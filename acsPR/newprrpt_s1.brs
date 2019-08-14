@@ -1,14 +1,16 @@
 00010 ! Replace acsPR\newprRpt_S1.brs,Source
 00011 ! ______________________________________________________________________
 00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
+00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto ERTN
 00020 ! ______________________________________________________________________
 00030   dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50
 00032   dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),inp(20),pp(20),dt(125)
-00033   dim gt(125),dh$*20,a$*40,d1$*20,cp(32),tdc(10),tcp(32),dc(10)
+00033   dim gt(125),dh$*20,a$*40,cp(32),tdc(10),tcp(32),dc(10)
 00039 ! ______________________________________________________________________
-00050   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
+00050   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
+00051   d1=fnPayPeriodEndingDate
 00080 ! ______________________________________________________________________
 00081   rn$=" 2"
 00082   if fnprocess=1 then goto L141
@@ -100,7 +102,7 @@
 61051   resp$(2)=str$(end_date)
 61052   fnLbl(3,1,"Report Heading Date:",mylen,1,0,0)
 61054   fnTxt(3,mypos,20,0,0,"",0,"Enter the date you want shown on the reports.",0)
-61056   resp$(3)=d1$
+61056   resp$(3)=date$("Month DD, CCYY")
 61060   fnCmdKey("Next",1,1,0,"Prints the report")
 61070   fnCmdKey("Cancel",5,0,1,"Returns to menu")
 61080   fnAcs(sn$,0,mat resp$,ckey) 
@@ -108,4 +110,4 @@
 61090   beg_date=val(resp$(1))
 61100   end_date=val(resp$(2))
 61110   dh$=resp$(3)
-61120   return ! /r
+61120 return ! /r

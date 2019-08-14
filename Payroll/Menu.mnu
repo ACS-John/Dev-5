@@ -38,12 +38,12 @@ Annual
 >Electronic 401K                            ^ acsPR\pr401k
 Print
 >Designed Reports                           ^ acsPR\newprRpt3
->Employee Review Register                   ^ acsPR\newprempRev
->Workmans Compensation Report               ^ acsPR\newprWkMCmp
->Labels                                     ^ acsPR\newLabel
+>Employee Review Register                   ^ Payroll\Employee Review Register
+>Workmans Compensation Report               ^ Payroll\Workmans Compensation Report
+>Labels                                     ^ Payroll\Labels
 >User Designed Reports Proof List           ^ acsPR\newprRpt4
->Input Worksheet                            ^ acsPR\newprInpWk
->Active Employee List                       ^ acsPR\newEmpList
+>Input Worksheet                            ^ Payroll\Input Worksheet
+>Active Employee List                       ^ Payroll\Active Employee List
 >Direct Deposit List                        ^ Payroll\Direct Deposit List
 ! removed 5/3/19 - i dont think anyone uses it anyway           	Automatic Processing
 ! removed 5/3/19 - i dont think anyone uses it anyway           	>Select Automatic Processing Programs       ^ acsPR\newSelAuto

@@ -1,7 +1,12 @@
 ! formerly S:\acsPR\NewpRInput
 ! enter time sheets
-! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnStatusClose,fncreg_write,fncreg_read,fnArrayEmpty
+
+	library 'S:\Core\Library': fntop,fnxit, fnchain,fnmsgbox,fnemployee_srch,fncmbemp,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnStatusClose,fncreg_write,fncreg_read,fnArrayEmpty
+	library 'S:\Core\Library': fnDedNames
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnhours
+	library 'S:\Core\Library': fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk
+	library 'S:\Core\Library': fnPayPeriodEndingDate
 	on error goto ERTN
 	fntop(program$)
 ! r: dims and constants
@@ -52,15 +57,13 @@
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 	read #1,using 'form pos 726,pd 3.2': mhw
 	close #1: 
-	open #11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76",internal,outIn,relative 
-	read #11,using "form pos 49,n 8",rec=1: d1 noRec ignore
-	close #11: 
+	d1=fnPayPeriodEndingDate
 ! 
 	open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr ignore
 ! 
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.H[cno]",internal,outIn,keyed ioerr ignore
 F_RPWORK: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
-! ______________________________________________________________________
+
 SCREEN_1: ! 
 	fnTos(sn$="Prinput-1")
 	rc=cf=0
@@ -166,19 +169,35 @@ L1060: !
 	else 
 		goto ASK_EMPLOYEE
 	end if 
-! ______________________________________________________________________
+
 ENTER_TIME: ! 
 	en$=lpad$(str$(eno),8)
 	read #h_rpmstr,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
 	if editmode=1 then goto READ_DEPARTMENTS
 	if prd=lpd then goto EMP_PREV_ENTERED_WARN
-L1290: ! 
-	goto DUPLICATE_DATE_TEST
-! ______________________________________________________________________
-READ_DEPARTMENTS: ! 
+	L1290: ! 
+	! goto DUPLICATE_DATE_TEST
+	! DUPLICATE_DATE_TEST: ! r: ! dont allow to calculate if reversing calculation needs to be run
+	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DUPLICATE_DATE_TEST_XIT
+	do 
+		read #2,using 'FORM POS 1,n 8,POS 42,n 6': depeno,tdt4 eof DUPLICATE_DATE_TEST_XIT
+		if depeno<>eno then goto DUPLICATE_DATE_TEST_XIT
+		if tdt4=prd then 
+			mat ml$(4)
+			ml$(1)="You have previously calculated pay using this same payroll date on employee # "&x$
+			ml$(2)="You must either use a different date or reverse the previous calculation. "
+			ml$(3)="Click OK to return to previous screen. "
+			fnmsgbox(mat ml$,resp$)
+			goto L1060
+		end if 
+	loop 
+	DUPLICATE_DATE_TEST_XIT: ! 
+	! goto READ_DEPARTMENTS ! /r
+
+	READ_DEPARTMENTS: ! 
 	tgp=0
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": 
-L1340: ! 
+	L1340: ! 
 	if goprev=0 then 
 		read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 	else if goprev=1 then 
@@ -217,9 +236,8 @@ L1340: !
 		inpX(j+9)=tdet(j+3)
 		if skipit(j)=1 then inpX(j+9)=0
 	next j
-! if env$('client')="Washington Parrish" and adr=ta(1) and em4=5 then inpX(13)=212.50 ! if employment status=5 and first dept then set tips to $212.50
-! ____________
-ASK_TIME: ! 
+	! if env$('client')="Washington Parrish" and adr=ta(1) and em4=5 then inpX(13)=212.50 ! if employment status=5 and first dept then set tips to $212.50
+	ASK_TIME: ! 
 	deptname$=""
 	if foundept=1 then 
 		read #9,using "form pos 4,c 20",key=rpad$(ltrm$(str$(dep)),3): deptname$ nokey ignore
@@ -301,7 +319,7 @@ ASK_TIME: !
 	tdet(2)=hr(1)
 	tdet(3)=hr(2)
 	rewrite #2,using 'form pos 9,n 3,pos 58,23*pd 4.2',key=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",dep): dep,mat tdet
-L2220: ! 
+	L2220: ! 
 	gpd=0
 	if em8><-2 then goto L2260
 	if inpX(3)=0 then goto L2260
@@ -309,7 +327,8 @@ L2220: !
 	ml$(1)="This employee is not eligible for Sick Leave!": ml$(2)="Click OK to return to previous screen. "
 	fnmsgbox(mat ml$,resp$)
 	goto ASK_TIME
-L2260: if em9><-2 then goto L2290
+	L2260: !
+	if em9><-2 then goto L2290
 	if inpX(4)=0 then goto L2290
 	mat ml$(2)
 	ml$(1)="This employee is not eligible for Vacation!": ml$(2)="Click OK to return to previous screen. "
@@ -431,23 +450,12 @@ L4000: !
 ! rp1=1
 	cor=editmode=0
 	goto READ_NEXT_DEPARTMENT
-! ______________________________________________________________________
-! r: unaccessed lines... delete them someday
-!       12/23/2015  these lines seem totally unaccessed     for j=1 to 20
-!       12/23/2015  these lines seem totally unaccessed       if skipit$(j)="Y" then skipit(j)=1 else skipit(j)=0
-!       12/23/2015  these lines seem totally unaccessed   ! If SKIPIT$(J)<>"Y" AND SKIPIT$(J)<>"N" Then cE=J : Goto ERR4
-!       12/23/2015  these lines seem totally unaccessed     next j
-!       12/23/2015  these lines seem totally unaccessed     close #win:
-!       12/23/2015  these lines seem totally unaccessed     return
-! /r
+
 GOCALK: ! r:
-	close #11: ioerr ignore
-	open #11: "Name=[Q]\PRmstr\Dates.h[cno],USE,RecL=76",internal,outIn,relative 
-	rewrite #11,using "form pos 49,n 8",rec=1: fndate_mmddyy_to_ccyymmdd(prd) noRec ignore
-	close #11: 
+	fnPayPeriodEndingDate(fndate_mmddyy_to_ccyymmdd(prd))
 	if jobcost=1 then close #5,free: 
-	fnchain("S:\Payroll\Calc") ! /r
-! ______________________________________________________________________
+fnchain("S:\Payroll\Calculation") ! /r
+
 EMP_PREV_ENTERED_WARN: ! r:
 	mat ml$(2)
 	ml$(1)="Employee number "&str$(eno)&" has been previously entered."
@@ -552,27 +560,10 @@ F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,
 	close #4: ioerr ignore
 	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4630 ! timecard
 	timecard=1 ! timecard files exist
-L4630: ! 
-	return  ! /r
-DUPLICATE_DATE_TEST: ! r: ! dont allow to calculate if reversing calculation needs to be run
-	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DUPLICATE_DATE_TEST_XIT
-	do 
-		read #2,using 'FORM POS 1,n 8,POS 42,n 6': depeno,tdt4 eof DUPLICATE_DATE_TEST_XIT
-		if depeno<>eno then goto DUPLICATE_DATE_TEST_XIT
-		if tdt4=prd then 
-			mat ml$(4)
-			ml$(1)="You have previously calculated pay using this same payroll date on employee # "&x$
-			ml$(2)="You must either use a different date or reverse the previous calculation. "
-			ml$(3)="Click OK to return to previous screen. "
-			fnmsgbox(mat ml$,resp$)
-			goto L1060
-		end if 
-	loop 
-DUPLICATE_DATE_TEST_XIT: ! 
-	goto READ_DEPARTMENTS
-! /r
+	L4630: ! 
+return  ! /r
+
 XIT: fnxit
-IGNORE: continue 
 XITWOCAL: ! r:
 	mat ml$(2)
 	ml$(1)="To save your changes, next time you choose to 'Enter Time Sheets'"
@@ -811,7 +802,7 @@ L3440: !
 		prX(pc,j+2)=inpX(j)
 	next j
 goto PL_READ
-! ______________________________________________________________________
+
 PL_PRINT_EMP_BLOCK: ! r:
 	if pc2=3 then pc2=0
 	pc2=pc2+1
@@ -841,7 +832,7 @@ PL_PRINT_EMP_BLOCK: ! r:
 	mat n2$=("")
 	pc=0
 return  ! /r
-! ______________________________________________________________________
+
 PL_FINIS: ! r:
 	if additional=2 then 
 		additional=1
