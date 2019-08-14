@@ -25,7 +25,7 @@
 	fntop(program$)
 	fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
 	fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
-	fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+	! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 ! r: dims and constants
 	dim em$(3)*30 ! payee name and address
 	dim tdet(17)
@@ -586,9 +586,9 @@ def fn_build_check_record
 	if pr_prEmpToClPayee$='False' then 
 		tr$(4)='' !  do not populate CL Payee Number as PR Employee number, just leave it blank instead. 5/22/19 JB - Do this for everyone.
 		! laura and john agree that it seems like this should be this way for everyone...  if we get any more compalints
-		! 8/13/19 - we got complaints, not everyone liked it - made it an option, also added prefix option
+		! 8/13/19 - we got complaints, not everyone liked it - made it an option for the one person who wanted it.
 	end if
-	tr$(4)(0:0)=trim$(pr_clPayeePrefix$)
+	! tr$(4)(0:0)=trim$(pr_clPayeePrefix$)
 	write #h_cl_trans,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
 	ytdp=ytdp+val(tr$(3)) conv ignore
