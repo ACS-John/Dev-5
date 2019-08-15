@@ -57,6 +57,19 @@
 			! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
+	if fnclient_has('EM') then
+		dim em_emailReplyTo$*128
+		dim em_smtpServer$*128
+		dim em_emailFrom$*128
+		dim em_emailFromPassword$*128
+		dim em_emailPort$*128
+		fnreg_read('email.ReplyTo',em_emailReplyTo$)
+		fnreg_read('email.smtpServer',em_smtpServer$)
+		fnreg_read('email.From',em_emailFrom$,'acs-billing@utilitybilling.us')
+		fnreg_read('email.FromPassword',em_emailFromPassword$)
+		fnreg_read('email.Port',em_emailPort$,'25')
+
+	end if
 ! /r
 !  main loops - build and display screens, get, save, apply settings, etc
 DO_SCREEN_MAIN: ! r:
@@ -83,7 +96,7 @@ DO_SCREEN_MAIN: ! r:
 		resp$(resp_enableBackupReportCache:=rc+=1)=enableBackupReportCache$
 		fnChk(lc+=1,col2_pos,'Enable Save Company As',1)
 		resp$(resp_enableSaveCompanyAs:=rc+=1)=enableSaveCompanyAs$
-		fnLbl(lc   ,col2_pos+3,'Saves Only the Current Company Number related files across all ACS systems')
+		fnLbl(lc   ,col2_pos+3,'Saves only Current Company Number')
 		fnLbl(lc+=1,col2_pos+3,'Does not save settings, reports.')
 		! fnChk(lc+=1,col2_pos,'Enable Open Partial',1)
 		! resp$(resp_enableOpenPartial:=rc+=1)=enableOpenPartial$
@@ -484,6 +497,50 @@ do
 		if ck<>2 then goto XIT
 	end if
 loop ! /r
+Do_Screen_Em: ! r:
+do
+	fnTos
+	fn_nav_buttons
+	col1_width=25 : col2_pos=col1_width+2 : lc=0 : win_width=75 : _rc=0
+	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
+	lc+=1
+	fnLbl(lc+=1,1,'Email Reply To',col1_width,1,0,0,0,'')
+	fnTxt(lc,col2_pos,40,128,0,'',0,'')
+	resp$(resp_em_emailReplyTo:=_rc+=1)=em_emailReplyTo$
+	lc+=1
+	fnLbl(lc+=1,1,"SMTP Server:",col1_width,1,0,0,0,'')
+	fnTxt(lc,col2_pos,40,128,0,'',0,'')
+	resp$(resp_em_smtpServer:=_rc+=1)=em_smtpServer$
+	fnLbl(lc+=1,1,"Email From:",col1_width,1,0,0,0,'')
+	fnTxt(lc,col2_pos,40,128,0,'',0,'')
+	resp$(resp_em_emailFrom:=_rc+=1)=em_emailFrom$
+	fnLbl(lc+=1,1,"Email From Password:",col1_width,1,0,0,0,'')
+	fnTxt(lc,col2_pos,20,64,0,'',0,'')
+	resp$(resp_em_emailPassword:=_rc+=1)=em_emailFromPassword$
+	fnLbl(lc+=1,1,"Email Port:",col1_width,1,0,0,0,'')
+	fnTxt(lc,col2_pos,5,0,0,'',0,'')
+	resp$(resp_em_emailPort:=_rc+=1)=em_emailPort$
+
+	fnCmdKey("&Save",1,1)
+	fnCmdKey("Apply",2,0)
+	fnCmdKey("&Cancel",5,0,1)
+	fnAcs('',0,mat resp$,ck)
+	if ck=5 then 
+		goto XIT
+	else 
+		em_emailReplyTo$=resp$(resp_em_emailReplyTo)
+		em_smtpServer$=resp$(resp_em_smtpServer)
+		em_emailFrom$=resp$(resp_em_emailFrom)
+		em_emailFromPassword$=resp$(resp_em_emailPassword)
+		em_emailPort$=resp$(resp_em_emailPort)
+	end if 
+	if ck=>screen_ck_low and ck<=screen_ck_high then 
+		goto SCREEN_CK_GOTO
+	else ! Save and Apply
+		fn_save
+		if ck<>2 then goto XIT
+	end if 
+loop ! /r
 SCREEN_CK_GOTO: ! r:
 	if ck=1001 then 
 		screen=screen_main : goto DO_SCREEN_MAIN
@@ -499,6 +556,8 @@ SCREEN_CK_GOTO: ! r:
 		screen=screen_gl : goto DO_SCREEN_GL
 	else if ck=1007 then 
 		screen=screen_pr : goto DO_SCREEN_PR
+	else if ck=1008 then 
+		screen=screen_em : goto Do_Screen_Em
 	else
 		pr 'SCREEN_CK_GOTO does not know how to handle ck='&str$(ck)&'.'
 		pause
@@ -549,6 +608,14 @@ def fn_save
 			! fnreg_write('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
+	if fnclient_has('EM') then
+		fnreg_write('email.ReplyTo',em_emailReplyTo$)
+		fnreg_write('email.smtpServer',em_smtpServer$)
+		fnreg_write('email.From',em_emailFrom$)
+		fnreg_write('email.FromPassword',em_emailFromPassword$)
+		fnreg_write('email.Port',em_emailPort$)
+	end if
+
 fnend 
 def fn_nav_buttons
 	if ~setup_nav_buttons then 
@@ -560,8 +627,9 @@ def fn_nav_buttons
 		screen_ub=5
 		screen_gl=6
 		screen_pr=7
+		screen_em=8
 		screen_ck_low=1001
-		screen_ck_high=1007
+		screen_ck_high=1008
 	end if 
 	if screen=0 then screen=screen_main
 	nb_lc=0 : nb_pos=110 : nb_len=15
@@ -579,8 +647,12 @@ def fn_nav_buttons
 	if fnclient_has('UB') then
 		fnbutton_or_disabled(screen<>screen_ub,nb_lc+=1,nb_pos,'Utility Billing',1005, '',nb_len)
 	end if
+
 	if fnclient_has('U4') then
 		fnbutton_or_disabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
+	end if
+	if fnclient_has('EM') then
+		fnbutton_or_disabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
 	end if
 	fnLbl(22,1,'')
 fnend 

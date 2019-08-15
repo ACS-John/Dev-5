@@ -335,6 +335,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('GL')
 			fn_add_ch_sys('PR')
 			fn_add_ch_sys('CL')
+			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_add_ch_sys('EM')  ! Alpha testing
 			!     fn_add_ch_sys('CR')
 		else if env$('client')='Blucksberg' then 
 			fn_user_limit(1)
