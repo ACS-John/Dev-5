@@ -598,7 +598,7 @@ def fn_setup
 		default_min_fontsize_height$='15' ! '14'
 		default_min_fontsize_width$='8' ! '6'
 		dim background_picture_default$*256
-		background_picture_default$=os_filename$('S:\Core\wallpaper\301H.jpg')
+		background_picture_default$=os_filename$('S:\Core\wallpaper\LauraVisitsKilimanjaro2019.jpg')
 		!
 		dim printer_list$(1)*256
 		printer_list(mat printer_list$) ! printer_count=printer_list(mat printer_list$)
