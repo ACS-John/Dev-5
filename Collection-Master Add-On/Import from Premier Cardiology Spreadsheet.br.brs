@@ -50,7 +50,7 @@ Screen1: !
 		dim csvExt$*128
 		fnGetPp(csvFile$,csvPath$,csvProg$,csvExt$)
 		dim outFile$*256
-		outFile$=csvPath$&csvProg$&'-CM_EDI'&'.csv'
+		outFile$=env$('at')&csvPath$&csvProg$&'-CM_EDI'&'.csv'
 		hOut=fnGetHandle
 include: filenamesPushMixedCase
 		open #hOut: 'name='&outFile$&',recl=1024,replace',display,output
@@ -103,7 +103,7 @@ Finis: ! r:
 		pr #hCmd: 'f:'
 		pr #hCmd: 'cd \clsinc'
 		pr #hCmd: 'set Automate=cm_edi_pcs.ini'
-		pr #hCmd: os_filename$('f:\clsinc\wbwin\br32.exe') ! brclient.exe
+		pr #hCmd: os_filename$(env$('at')&'f:\clsinc\wbwin\br32.exe') ! brclient.exe
 		close #hCmd:
 		! setenv('Automate','cm_edi_pcs.ini')
 		! /r
@@ -183,13 +183,13 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$; 
 			sourceFile$=fnOpen$(defaultFilter$)
 			goto AskScreen1_ask
 		else if pos(sourceFile$,'*')>0 or pos(sourceFile$,'?')>0 then
-			sourceFile$=fnOpen$(Trim$(sourceFile$))
+			sourceFile$=fnOpen$(env$('at')&Trim$(sourceFile$))
 			goto AskScreen1_ask
 		end if
 	end if
 	AskScreen1_testFileExist: !
 	! sourceFile$=fnBr_filename$(sourceFile$)  this forces all filenames to upper case - let us not do that unless we absolutely have to.
-	if ~exists(sourceFile$) then
+	if ~exists(env$('at')&sourceFile$) then
 		tempMessageboxResponse=fnMessageBox('The file you specified does not exist.\n'&sourceFile$, mb_exclamation+mb_ignore,env$('program_caption'))
 		if tempMessageboxResponse=Mb_Retry then
 			goto AskScreen1_testFileExist
@@ -219,7 +219,13 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		fn_pr_hOut('0[tab]H[tab]Demographics for '&item$(csv_fileNo))
 		! r: CM EDI Record 101     New placement record.
 		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_patientId)))
+			! if item$(csv_patientId)='2726414' then 
+			! 	pr 'just before fn_patientBalance call'
+			! 	pause
+			! 	pr mat list_balanceN(6:7)
+			! end if
 		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_patientId)))
+			! if pos(item$(csv_patientId),'2726414')>0 then pr 'tmpPatientBalance$=';tmpPatientBalance$ : pause
 		fn_add('FIRM_FILENO' 	,item$(csv_fileNo)          ,1	)
 		fn_add('Forw_Refno' 	,item$(csv_patientId)        	)
 		fn_add('Forw_Fileno'	,item$(csv_claimId)          	)
@@ -303,6 +309,7 @@ def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
 	fn_pr_hOut('0[tab]H[tab]Invoices for '&item$(csv_fileNo))
 	invoiceOrigAmt$=str$(fnval(item$(csv_balance))+fnval(item$(csv_insurancePaid))+fnval(item$(csv_patientPaid)))
 	! CM EDI Record 180 Invoice File
+	fn_add('FORW_REFNO'    	,item$(csv_patientId)             ,1)
 	fn_add('FORW_REFNO'    	,item$(csv_patientId)             ,1)
 	fn_add('FIRM_FILENO'   	,item$(csv_fileNo)                 	)
 	fn_add('INV_DATE'      	,item$(csv_serviceDate)           	)
@@ -441,6 +448,10 @@ def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
 	fn_origionalClaimAmount=returnN
 fnend
 
+
+
+
+
 def fn_patientBalance(patientId$; ___,returnN,x,xStart)
 	xStart=srch(mat list_patientId$,patientId$)
 	if xStart>0 then
@@ -462,7 +473,7 @@ def fn_init_csv_in(&csvFieldCount;___,returnN) ! everything here is local.
 		init_csv_in=1
 		dim Csv_Fields$(0)*128
 		dim Csv_Data$(0)*256
-		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,csvFile$,Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
+		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,env$('at')&csvFile$,Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
 		lineCount=0
 		! r: set csv_*
 		csv_facilityName      	=srch(mat Csv_Fields$,uprc$('Facility Name'        	))
@@ -599,7 +610,8 @@ def fn_readFileIntoArrays
 			fnAddOneN(mat list_insurancePaidN,fnVal(item$(csv_insurancePaid)))
 			fnAddOneN(mat list_patientPaidN,fnVal(item$(csv_patientPaid)))
 			fnAddOneN(mat list_totalPaidN,fnVal(item$(csv_totalPaid)))
-			fnAddOneN(mat list_balanceN,fnval(item$(csv_balance)))
+			fnAddOneN(mat list_balanceN,fnVal(item$(csv_balance)))
+			! if list_balanceN(udim(mat list_balanceN))=0 then pr 'fnval('&item$(csv_balance)&') returned 0' : pause
 			fnAddOneC(mat list_billPatientReason$,item$(csv_billPatientReason))
 			fnAddOneC(mat list_claimNotes$,item$(csv_claimNotes))
 			! /r
@@ -620,7 +632,6 @@ def fn_setup
 		library 'Library\clsUtil.wb': fnMessageBox
 		library 'Library\clsUtil.wb': fnOpen$
 		library 'Library\clsUtil.wb': fnString_Len_Max
-		library 'Library\clsUtil.wb': fnVal
 
 		library 'S:\Core\Library.br': fnTop
 		library 'S:\Core\Library.br': fnGetPp
@@ -638,6 +649,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnReg_read
 		library 'S:\Core\Library.br': fnReg_write
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnCptCode$
+		library 'S:\Collection-Master Add-On\fn\Library.br': fnVal
 		gosub Enum
 		! fnErase_buttons
 
