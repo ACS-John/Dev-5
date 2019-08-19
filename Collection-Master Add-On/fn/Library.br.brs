@@ -30,5 +30,20 @@ def library fnCptCode$*800(code$*5)
 	library 'Collection-Master Add-On\cpt.br': fnCptCode$
 	fnCptCode$=fnCptCode$(code$)
 fnend
-
+def library fnVal(stringToConvert$*128)
+  fnVal=fn_val(stringToConvert$)
+fnend 
+def fn_val(stringToConvert$*128; ___,returnN)
+	returnN=val(stringToConvert$) conv ValConv
+	goto ValXit
+	ValConv: ! 
+		stringToConvert$=srep$(stringToConvert$,'$','')
+		stringToConvert$=srep$(stringToConvert$,',','')
+		stringToConvert$=srep$(stringToConvert$,'"','')
+		stringToConvert$=trim$(stringToConvert$)
+		returnN=val(stringToConvert$) conv ignore
+	goto ValXit
+	ValXit: !
+	fn_val=returnN
+fnend 
 
