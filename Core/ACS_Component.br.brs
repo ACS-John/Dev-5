@@ -971,7 +971,7 @@ def fn_windowSize(; ___,index_)
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(4)) )
 		else if typ$="CHECK" or typ$="OPTION" then
-			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
+			ace_lyne_max=max(ace_lyne_max,val(control$(2))+2)
 		 ! if index_=5 then pr 'it is 5' : pause
 			ace_column_max=max( ace_column_max, val(control$(3))+len(control$(5))+4) ! max( ace_column_max, val(control$(3))+len(trim$(control$(5)))+4)
 		else if typ$="FLEX" or typ$="MULTILINE" or typ$="FRAME" or typ$="TAB" then
@@ -1616,9 +1616,9 @@ def fn_ace_rd_check
 	if trim$(uprc$(resp$(respc)))="TRUE" then resp$(respc)='^' else resp$(respc)=''
 	spec$=','&str$(lyne)&','&str$(ps+len(txt$)+1)&',check 2'
 	if align then
-		align$='CR'
+		align$='CR '
 	else
-		align$='C'
+		align$='C '
 	end if
 	if chk_disable then chk_protected$=',P' else chk_protected$=',T' ! either Protect the field or force it to be in the tab order
 	if container then
