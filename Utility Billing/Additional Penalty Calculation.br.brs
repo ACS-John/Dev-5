@@ -82,6 +82,7 @@ SCREEN1: !
 	resp$(rc+=1)=str$(penaltyamt)
 	fnChk(9,31,"Skip Customers with a "&trim$(serviceName$(10))&" Rate Code of 9",1)
 	resp$(rc+=1)=skip_s10r9$
+	fnLbl(10,50,'') ! avoids error 857 caused by check box (skip customers...) - it is a bug in acs_component - jb 2019/08/22
 	fnCmdSet(2)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then goto XIT

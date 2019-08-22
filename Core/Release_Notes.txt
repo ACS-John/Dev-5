@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________           
+4:40 PM 8/22/2019	UB	Fixed 857 bug in Additional Penalty Calculation
 3:23 PM 8/15/2019	EM	Preferences for Email Add-On added
 12:12 08/19/2019	CO	5.74182  
 12:12 PM 8/15/2019	CO	New default wallpaper from Laura's 2019 visit to Kilimanjaro 
