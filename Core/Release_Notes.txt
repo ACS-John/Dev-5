@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________    
+4:32 PM 8/23/2019	CO	Fixed a glitch in key building in fnHamster
  9:44 08/19/2019	CO	5.74184  
 11:23 AM 8/20/2019	UB	clarified active customer status with note for client 2900 
 3:23 PM 8/15/2019	EM	Preferences for Email Add-On added          

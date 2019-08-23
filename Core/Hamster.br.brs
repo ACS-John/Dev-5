@@ -322,12 +322,12 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		! spos=1
 		if menu1_opt=opt_add then
 			prec=lrec(fin)+1
-			keyForm$=fn_setKeyForm$(mat blank$,keyForm$,key$,fin)
+			keyForm$=fn_setKeyForm$(mat blank$,key$,fin)
 			write #fin,using keyForm$,reserve: mat blank$
 			! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyForm$='&keyForm$
 			read #fin,key=key$: nokey SPECIAL_NOKEY
 		else
-			keyForm$=fn_setKeyForm$(mat blank$,keyForm$,key$,fin)
+			keyForm$=fn_setKeyForm$(mat blank$,key$,fin)
 			reread #fin,using keyForm$: mat blank$
 			j=0 : key$=''
 			do while kps(fin,j+=1)>0
@@ -375,16 +375,17 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	XIT: !
 fnend
 
-def fn_setKeyForm$*1024(mat blank$,keyForm$,&key$,fin)
-	keyForm$='Form ' : key$='' : j=0
+def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
+	return$='Form ' : key$='' : j=0
 	do while kps(fin,j+=1)>0
-		keyForm$=keyForm$&'Pos '&str$(kps(fin,j))&','
-		keyForm$=keyForm$&'C '&str$(kln(fin,j))&','
+		return$(inf:inf)='Pos '&str$(kps(fin,j))&','
+		return$(inf:inf)='C '&str$(kln(fin,j))&','
 		blank$(j)=rpt$(chr$(48),kln(fin,j))
-		key$=key$&blank$(j)
+		key$(inf:inf)=blank$(j)
 	loop
-	keyForm$=keyForm$(1:len(keyForm$)-1) ! remove the trailing comma
+	return$=return$(1:len(return$)-1) ! remove the trailing comma
 	mat blank$(j-1)
-	! pr 'keyForm$='&keyForm$ ! XXX
+	! pr 'return$='&return$ ! XXX
+	fn_setKeyForm$=return$
 fnend
 include: ertn
