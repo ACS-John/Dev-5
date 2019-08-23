@@ -77,7 +77,8 @@ def library fnEmail_Invoice(email_date$;pdfname$*255,pdfline$*1000,ppos,ppos2,te
 			if days(testday$,"mmddyy")=days(email_date$,"mmddyy") then 
 				! print clientno$ : pause ! send emails
 				read #econtact,using form$(econtact),key=rpad$(clientno$,5," "): mat econtact$,mat econtact
-				let fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$))
+				let goodemail=fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$))
+				if goodemail=1 then execute "copy 's:\Time Management\Ebilling\"&trim$(pdfname$)&" 's:\Time Management\Ebilling\Sent\'"&trim$(pdfname$)
 			end if 
 		end if 
 	loop 
