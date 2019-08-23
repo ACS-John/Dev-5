@@ -6,6 +6,8 @@
 	library 'S:\Core\Library': fnAutomatedSavePoint
 	library 'S:\Core\Library': fncreg_read
 	library 'S:\Core\Library': fnEndOfMonth
+	library 'S:\Core\Library': fnCustomerHasEbilling,fnmakesurepathexists,fnsavetoasstart,fnprint_file_name$
+	library 'S:\Core\Library': fnClient_has
 	fntop(program$)
 	client_id_sage_ax=3811
 	client_id_brc=90
@@ -18,6 +20,7 @@
 	fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 	invoice_number+=1
 	if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
+	let Clientebilling=fnClient_has('EM')
 	pr newpage
 	pr f "5,2,cr 43": "Invoice Date (mmddyy):"
 	pr f "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
@@ -271,6 +274,7 @@ def fn_summary_print
 	SP_XIT: ! 
 fnend 
 def fn_print_inv ! pr INVOICE
+	dim pdf_filename_final$*255
 	fn_timesheet2(hTimeSheet)
 	if enableMinimumMonthlyBill then
 		if b3>0 and sum(mat inv_amt)<250 then 
@@ -290,9 +294,27 @@ def fn_print_inv ! pr INVOICE
 	if b3=>1 or pbal=>1 then
 		! if sum(mat inv_amt)+pbal>0 then
 		fnopenprn
-		!   if trim$(client_id$)='3811' then pause 
-		fnprint_invoice(align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
-		pr #255: newpage ! mat inv_item$=("")
+		if ClientEbilling=1 then 
+			! see if customer that we're sending the invoice for right now has ebilling selected 
+			! if client_id=2045 then pause
+			ebilling=fnCustomerHasEbilling(client_id$)
+		end if 
+		! if trim$(client_id$)='1478' then pr ebilling : pause 
+		if ebilling=0 then 
+		   fnprint_invoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+			pr #255: newpage ! mat inv_item$=("")
+		else if ebilling=1 then 
+			! open pdf 
+			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
+			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
+			! print pdf
+			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+			! close pdf 
+			close #pdfout: 
+			! move to Send folder 
+			fnmakesurepathexists("s:\Time Management\Ebilling")
+			execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
+		end if 
 		invoice_number=invoice_number+1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 		! end if
 	end if

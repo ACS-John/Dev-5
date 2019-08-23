@@ -2,6 +2,7 @@ Application_Name ACS 5
 WorkPath %Temp%
 rem WorkPath needs to be above Drive.sys, so that Drive.sys can override it in some special cases
 include Drive.sys
+include printer.sys
 rem include Core\PDF.sys
 
 

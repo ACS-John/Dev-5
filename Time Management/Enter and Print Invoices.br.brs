@@ -2,7 +2,9 @@
 	library 'S:\Core\Library': fntop,fnxit
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fncreg_read,fncreg_write
-	library 'S:\acsTM\Print_Invoice': fnprint_invoice
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnmakesurepathexists,fnsavetoasstart,fnprint_file_name$,fnCustomerHasEbilling
+	library 'S:\acsTM\Print_Invoice': fnprint_invoice,fnClient_has
 	on error goto ERTN
 	fntop(program$)
 	dim fl1$(8),io1$(60),scrid$(4)*80,inp(3),iv$*12,a1$*30
@@ -271,13 +273,31 @@ SCR_PRINT_INVOICES: ! r:
 	restore #h_tmwk1:
 	do  ! for j=1 to lrec(h_tmwk1)
 		PR_SELECTED_INVOICE: !
+		let Clientebilling=fnClient_has('EM')
 		read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF noRec L2870 ioerr ERTN
 		if inp(1)=0 then goto L2840
 		k$=lpad$(str$(inp(1)),5)
 		read #1,using L2730,key=k$: mat a$ ioerr ERTN
 		L2730: form pos 6,3*c 30
-		fnprint_invoice(align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
-		L2840: !
+		if ClientEbilling=1 then 
+			! see if customer that we're sending the invoice for right now has ebilling selected 
+			ebilling=fnCustomerHasEbilling(client_id$)
+		end if 
+		if Ebilling=0 then 
+		   fnprint_invoice(255,align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
+		else if ebilling=1 then
+			! open pdf
+			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
+			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
+			! print pdf
+			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+			! close pdf 
+			close #pdfout: 
+			! move to Send folder 
+			fnmakesurepathexists("s:\Time Management\Ebilling")
+			execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
+		end if 
+			 L2840: !
 		if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop  ! next j
 	PRI_EOF: !

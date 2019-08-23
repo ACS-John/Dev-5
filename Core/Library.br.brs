@@ -1510,4 +1510,10 @@ fnend
 		fnRead30Categories(mat dimTo30$)
 	fnend
 ! /r
+! r: Ebilling
+def library fnCustomerHasEbilling(Client_id$)
+		library 'S:\Core\GetEmail.br': fnCustomerHasEbilling
+		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
+fnend 
+! /r
 
