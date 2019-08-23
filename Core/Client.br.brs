@@ -286,6 +286,7 @@ def fn_getClientLicense(mat client_has$)
 			! fn_add_ch_sys('GL')
 			! fn_add_ch_sys('OE')
 			fn_add_ch_sys('TM')
+			fn_add_ch_sys('EM')
 		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
 		!   fn_user_limit(1)
 		!   if days(date)<=days(20151231,'ccyymmdd') then let fn_add_ch_sys('UB') : fn_set_ub_limit(500)

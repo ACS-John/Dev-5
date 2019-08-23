@@ -18,7 +18,8 @@ File
 >Time Frame (Support)                                                 ^ acsSU\TimeFrame
 >Client Labels                                                        ^ acsTM\CliLabel
 ! >Client (Support)                                                   ^ acsSU\Client
->TimeSheet                                                           ^ HamsterFio:TimeSheet
+>Email Contact                                                        ^ HamsterFio:Contact          ^EM
+>TimeSheet                                                            ^ HamsterFio:TimeSheet
 Daily
 >Enter Time and Charges                                               ^ acsTM\tminput
 >Collections                                                          ^ Time Management\Collections
@@ -31,6 +32,7 @@ Daily
 >Enter and Print Invoices                                             ^ Time Management\Enter and Print Invoices
 ! >Print Work Schedules                                               ^ acsTM\tmwrksch
 ! >Print Messages                                                     ^ acsTM\armessag
+>Email PDF Invoices                                                   ^ Time Management\Email Invoice       ^EM
 Monthly
 >Import CSV to Time Sheets                                            ^ Time Management\Import CSV to Time Sheets
 >Print Monthly Billing Summary                                        ^ acsTM\tmmobsum

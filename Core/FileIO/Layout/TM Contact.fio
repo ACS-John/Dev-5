@@ -1,0 +1,8 @@
+S:\Core\Data\acsllc\Contact.h[cno],  con_  , 0
+S:\Core\Data\acsllc\Contact-Idx.h[cno] ,  clientId
+===================================================
+
+clientId$	,Client Key                                                ,  C    5
+bemail$	,Billing Email                                             ,  C  255
+emailbilling	,Billing Option                                            ,  N    1     , ! ComboA(ignore, 0 Snail Mail, 1 Email)
+name$,           Contact Name,                                          c    50

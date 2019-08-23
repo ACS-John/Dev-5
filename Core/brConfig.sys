@@ -1,5 +1,6 @@
 Application_Name ACS 5
 include Drive.sys
+include printer.sys
 
 Editor "C:\Program Files (x86)\Notepad++\Notepad++.exe"
 
