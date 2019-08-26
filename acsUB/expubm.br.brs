@@ -1,7 +1,8 @@
 ! Replace S:\acsUB\expubm
 ! -- Export UB Master File
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnTxt,fnAcs,fnxit,fnerror,fnCmdSet,fntop,fnreg_read,fnreg_write,fncustomer_address,fnget_services
+	library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnTxt,fnAcs,fnxit,fnerror,fnCmdSet,fntop
+	library 'S:\Core\Library': fnreg_read,fnreg_write,fncustomer_address,fnget_services
 	library 'S:\Core\Library': fngethandle
 ! ______________________________________________________________________
 	on error goto ERTN
@@ -63,6 +64,9 @@ OPENS: !
 		pr #2: str$(c(1))&delim$&str$(c(2))&delim$&str$(c(3))&delim$&str$(c(4))&delim$&str$(d(1))&delim$&str$(d(2))&delim$&str$(d(3))&delim$&str$(d(4))&delim$&str$(d(5))&delim$&str$(d(6))&delim$&str$(d(7))&delim$&str$(d(8))&delim$&str$(d(9))&delim$;
 		pr #2: str$(d(10))&delim$&str$(d(11))&delim$&str$(d(12))&delim$&str$(d(13))&delim$&str$(d(14))&delim$&str$(d(15))&delim$&str$(bal)&delim$&str$(f)&delim$&str$(g(1))&delim$&str$(g(2))&delim$&str$(g(3))&delim$;
 		pr #2: str$(g(4))&delim$&str$(g(5))&delim$&str$(g(6))&delim$&str$(g(7))&delim$&str$(g(8))&delim$&str$(g(9))&delim$&str$(g(10))&delim$&str$(g(11))&delim$&str$(g(12))&delim$&alp$&delim$&f$(2)&delim$&f$(3)&delim$;
+		pr #2: extra$(3)&delim$;
+		pr #2: extra$(4)&delim$;
+		pr #2: extra$(5)&delim$;
 		pr #2: str$(bra)&delim$&str$(gb(1))&delim$&str$(gb(2))&delim$&str$(gb(3))&delim$&str$(gb(4))&delim$&str$(gb(5))&delim$&str$(gb(6))&delim$&str$(gb(7))&delim$&str$(gb(8))&delim$&str$(gb(9))&delim$&str$(gb(10))&delim$&ab$(1)&delim$&ab$(2)&delim$&ab$(3)&delim$;
 		pr #2: str$(finalBillingCode)&delim$;
 		pr #2: addr$(1)&delim$;
@@ -143,6 +147,9 @@ HEADER: ! r:
 	pr #2: 'Alpha Sort Field'&delim$; ! alp$&delim$;
 	pr #2: serviceName$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
 	pr #2: serviceName$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
+	pr #2: serviceName$(1)&' Serial Number'&delim$; ! extra$(3)&delim$;
+	pr #2: serviceName$(3)&' Serial Number'&delim$; ! extra$(4)&delim$;
+	pr #2: serviceName$(4)&' Serial Number'&delim$; ! extra$(5)&delim$;
 	pr #2: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
 	pr #2: serviceName$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
 	pr #2: serviceName$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
