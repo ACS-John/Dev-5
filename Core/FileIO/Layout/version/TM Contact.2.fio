@@ -1,7 +1,7 @@
-S:\Core\Data\acsllc\Contact.h[cno],  con_  , 2
-S:\Core\Data\acsllc\Contact-Idx.h[cno] ,  clientId
+S:\Core\Data\acsllc\oContact.h[cno], ocon_, 2
+S:\Core\Data\acsllc\oContact-Idx.h[cno] ,  clientId
 ===================================================
-
+ 
 clientId$	,Client Key      	,  C     5     , ! ComboF(ignore,S:\Core\Data\acsllc\CLmstr.h[cno],1,5,6,30,S:\Core\Data\acsllc\CLIndex.h[cno])
 bemail$	,Billing Email   	,  C   255
 emailbilling	,Billing Option  	,  N     1     , ! ComboA(ignore,0 Snail Mail,1 Email)
