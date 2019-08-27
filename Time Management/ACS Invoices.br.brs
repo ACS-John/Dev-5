@@ -6,7 +6,10 @@
 	library 'S:\Core\Library': fnAutomatedSavePoint
 	library 'S:\Core\Library': fncreg_read
 	library 'S:\Core\Library': fnEndOfMonth
-	library 'S:\Core\Library': fnCustomerHasEbilling,fnmakesurepathexists,fnsavetoasstart,fnprint_file_name$
+	library 'S:\Core\Library': fnCustomerHasEbilling
+	library 'S:\Core\Library': fnmakesurepathexists
+	library 'S:\Core\Library': fnsavetoasstart
+	library 'S:\Core\Library': fnprint_file_name$
 	library 'S:\Core\Library': fnClient_has
 	fntop(program$)
 	client_id_sage_ax=3811
