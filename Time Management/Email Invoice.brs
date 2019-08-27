@@ -82,7 +82,7 @@ def library fnEmail_Invoice(email_date$;pdfname$*255,pdfline$*1000,ppos,ppos2,te
 				do while file(econtact)=0
 					read #econtact,using form$(econtact): mat econtact$,mat econtact eof ignore
 					if rpad$(clientno$,5," ")=rpad$(econtact$(con_clientid),5," ") and econtact(con_emailbilling)=1 then 
-						let goodemail=fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$))
+						let goodemail=fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$),1)
 						! print econtact$(con_name): pr goodemail : pause
 						if goodemail=1 then 
 							execute "copy 's:\Time Management\Ebilling\"&trim$(pdfname$)&"' 's:\Time Management\Ebilling\Sent\"&trim$(pdfname$)&"'"
