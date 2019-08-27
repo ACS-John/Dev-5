@@ -296,7 +296,6 @@ def fn_print_inv ! pr INVOICE
 		fnopenprn
 		if ClientEbilling=1 then 
 			! see if customer that we're sending the invoice for right now has ebilling selected 
-			! if client_id=2045 then pause
 			ebilling=fnCustomerHasEbilling(client_id$)
 		end if 
 		! if trim$(client_id$)='1478' then pr ebilling : pause 
