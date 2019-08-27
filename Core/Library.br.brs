@@ -1509,11 +1509,12 @@ fnend
 		library 'S:\Time Management\Category.br': fnRead30Categories
 		fnRead30Categories(mat dimTo30$)
 	fnend
+	def library fnCustomerHasEbilling(Client_id$)
+		library 'S:\Time Management\fn\customerHasEbilling.br': fnCustomerHasEbilling
+		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
+	fnend 
 ! /r
 ! r: Ebilling
-def library fnCustomerHasEbilling(Client_id$)
-		library 'S:\Core\GetEmail.br': fnCustomerHasEbilling
-		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
-fnend 
+
 ! /r
 
