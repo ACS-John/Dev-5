@@ -60,25 +60,39 @@ def library fnEmail_Invoice(email_date$;pdfname$*255,pdfline$*1000,ppos,ppos2,te
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
 	fnmakesurepathexists("s:\Time Management\Ebilling\Sent\")
-	execute "dir 's:\Time Management\Ebilling' >'s:\Time Management\Ebilling\sendingnow.txt'" 
+	execute "dir 's:\Time Management\Ebilling' >'s:\Time Management\Ebilling\sendingnow.txt' -B" 
 	open #elist:=fngethandle: "name=s:\Time Management\Ebilling\sendingnow.txt",display,input
 	let econtact=fn_open("TM Contact",mat econtact$,mat econtact,mat form$,1,1)
 	!open #hcontact:=fngethandle: "Name=S:\Core\Data\acsllc\TM Contact.h[cno],KFName=S:\Core\Data\acsllc\TM Contact.h[cno],Shr",internal,input,keyed
 	do while file(elist)=0
 		linput #elist: pdfline$ eof donesend
 		! if it exists then look up customer to information
-		if pdfline$(1:6)="ACSINV" then 
-			let pdfname$=pdfline$(46:len(pdfline$))
+		! pause 
+		if pdfline$(1:7)="ACS Inv" then 
+			let pdfname$=pdfline$(1:len(pdfline$))
 			let ppos=pos(pdfname$,".")
 			let ppos2=pos(pdfname$,".",ppos+1)
 			let clientno$=trim$(pdfname$(ppos+1:ppos2-1))
-			let testday$=pdfname$(ppos2+1:pos(pdfname$,".",ppos2)-1)
+			let testday$=pdfname$(ppos2+1:pos(pdfname$,".",ppos2+1)-1)
 			! if on selected date
-			if days(testday$,"mmddyy")=days(email_date$,"mmddyy") then 
+			! print testday$ : print email_date$ : pause 
+			if days(testday$,"mmddyy")=days(email_date$,"ccyymmdd") then 
 				! print clientno$ : pause ! send emails
-				read #econtact,using form$(econtact),key=rpad$(clientno$,5," "): mat econtact$,mat econtact
-				let goodemail=fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$))
-				if goodemail=1 then execute "copy 's:\Time Management\Ebilling\"&trim$(pdfname$)&" 's:\Time Management\Ebilling\Sent\'"&trim$(pdfname$)
+				restore #econtact,key=rpad$(Clientno$,5," "): nokey skipthis
+				do while file(econtact)=0
+					read #econtact,using form$(econtact): mat econtact$,mat econtact eof ignore
+					if rpad$(clientno$,5," ")=rpad$(econtact$(con_clientid),5," ") and econtact(con_emailbilling)=1 then 
+						let goodemail=fnSendEmail(trim$(econtact$(con_bemail)),trim$(econtact$(con_name))&", please find ACS invoice attach. Thanks for opting for ebilling, from John at the ACS team!","ACS Invoice ","s:\Time Management\Ebilling\"&trim$(pdfname$))
+						! print econtact$(con_name): pr goodemail : pause
+						if goodemail=1 then 
+							execute "copy 's:\Time Management\Ebilling\"&trim$(pdfname$)&"' 's:\Time Management\Ebilling\Sent\"&trim$(pdfname$)&"'"
+							execute "free 's:\Time Management\Ebilling\"&trim$(pdfname$)&"'" ! remove from ebilling folde r
+						else
+							le msgbox("Email not sent to "&triM$(econtact$(con_name))&", Client #"&econtact$(con_clientid)&", check email on file "&trim$(econtact$(con_bemail))&". Please send manually.","Email not sent","OK","EXCL")
+						end if 
+					end if 
+				loop while rpad$(clientno$,5," ")=rpad$(econtact$(con_clientid),5," ")
+				skipthis: ! no key 
 			end if 
 		end if 
 	loop 
