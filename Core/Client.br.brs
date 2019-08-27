@@ -510,15 +510,15 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
-		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')
-		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')
+		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
+		! 	fn_user_limit(1)
+		! 	fn_add_ch_sys('PR')
+		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
+		! 	fn_user_limit(1)
+		! 	fn_add_ch_sys('PR')
 		else if env$('client')='Raymond' then 
 			fn_user_limit(2)
-			fn_add_ch_sys('PR')
+		! 	fn_add_ch_sys('PR')
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='R R Crawford' then 
@@ -835,7 +835,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Payroll Done Right",'OR')
 		fn_pcs_add("Philo",'IL')
 !   fn_pcs_add("PiattCO",'IL')
-		fn_pcs_add("Raymond",'IL')
+		! fn_pcs_add("Raymond",'IL')
 		fn_pcs_add("R R Crawford",'KY')
 !   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
 		fn_pcs_add("Sheila",'MO')
