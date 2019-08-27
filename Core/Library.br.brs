@@ -1514,7 +1514,4 @@ fnend
 		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
 	fnend 
 ! /r
-! r: Ebilling
-
-! /r
 
