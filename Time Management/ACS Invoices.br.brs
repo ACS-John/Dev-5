@@ -305,12 +305,12 @@ def fn_print_inv ! pr INVOICE
 		if ebilling=0 then 
 		   fnprint_invoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
 			pr #255: newpage ! mat inv_item$=("")
-		else if ebilling=1 then 
+		else if ebilling then 
 			! open pdf 
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
-			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
 			! close pdf 
 			close #pdfout: 
 			! move to Send folder 

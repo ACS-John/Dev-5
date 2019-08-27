@@ -285,12 +285,12 @@ SCR_PRINT_INVOICES: ! r:
 		end if 
 		if Ebilling=0 then 
 		   fnprint_invoice(255,align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
-		else if ebilling=1 then
+		else if ebilling then
 			! open pdf
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
-			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
 			! close pdf 
 			close #pdfout: 
 			! move to Send folder 
