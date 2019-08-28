@@ -177,13 +177,22 @@ def fn_companyName$*40(cno)
 	COC_FINIS: !
 	fn_companyName$=coc_return$
 fnend
-def fn_companyDelete(cno)
+def fn_companyDelete(cno;fileToDelete$*256)
 	if fnConfirmDeleteHard('company',str$(cno)&". "&fn_companyName$(cno)) then
-		fnFree(fn_dataFolder$&'\*.h'&str$(cno))
-		mat mg$(1)
-		mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
-		fnmsgbox(mat mg$,resp$,'',0)
-		companyDeleteReturn=1
+		! if env$('acsDeveloper')<>"" then pause
+		fileToDelete$=fnSrepEnv$(fn_dataFolder$)
+		if exists(fileToDelete$&'\company.h'&str$(cno)) then
+			execute 'Free "'&fileToDelete$&'\*.h'&str$(cno)&'" -n'
+			mat mg$(1)
+			mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
+			fnmsgbox(mat mg$,resp$,'',0)
+			companyDeleteReturn=1
+		else
+			mat mg$(1)
+			mg$(1)='Company Number '&str$(cno)&' failed to delete.'
+			fnmsgbox(mat mg$,resp$,'',0)
+			companyDeleteReturn=0
+		end if
 	end if
 	fn_companyDelete=companyDeleteReturn
 fnend
@@ -247,7 +256,7 @@ def fn_setup
 		library 'S:\Core\Library': fncursys$
 		library 'S:\Core\Library': fnLbl,fnCmdSet
 		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnTxt,fnCmdKey
+		library 'S:\Core\Library': fnTxt,fnCmdKey,fnSrepEnv$
 		library 'S:\Core\Library': fncheckfileversion
 		library 'S:\Core\Library': fnmsgbox,fnflexadd1,fnflexinit1
 		library 'S:\Core\Library': fnButton,fnFra
