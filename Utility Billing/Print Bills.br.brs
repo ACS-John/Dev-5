@@ -1309,9 +1309,9 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_
 	end if 
 	! 
 	if g(4)<>0 then 
-		fnpa_txt("Gas",26,lyne+=adder)
-		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(9)) ,078,lyne)
-		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(11)) ,121,lyne)
+		fnpa_txt("Ambulance Fund",26,lyne+=adder)
+		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(9)) ,078,lyne) ! left over from gas 
+		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(11)) ,121,lyne)
 		fnpa_txt(cnvrt$("pic(--------.##)",g(4)),160,lyne)
 	end if 
 	! 
