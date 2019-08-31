@@ -15,7 +15,7 @@ def library fnCustomerHasEbilling(clientId$;___,hContact,returnN)
 	restore #hContact,key=>clientId$: nokey CheFinis
 	do
 		read #hContact,using form$(hContact): mat contact$,mat contactN eof CheFinis
-		if contact$(con_clientId)=clientId$ then
+		if contact$(con_clientId)=clientId$ and contactN(con_emailbilling)=1 then
 			returnN+=1
 		end if
 	loop while contact$(con_clientId)=clientId$
