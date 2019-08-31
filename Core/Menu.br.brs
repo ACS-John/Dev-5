@@ -445,6 +445,8 @@ def fn_main
 					fnchain('S:\Time Management\Collections')
 				else if fkey_value=fkey_tm_updateSupportExpir then
 					fnchain('S:\Time Management\Update support expiration date')
+				else if fkey_value=fkey_tm_contact then
+					fn_callHamsterFio('Contact')
 				end if
 			end if
 			! /r
@@ -471,7 +473,9 @@ def fn_main
 fnend
 def fn_callHamsterFio(tmpCap$*128)
 	tmpCap$=trim$(tmpCap$)
-	tmpCap$=tmpCap$(12:len(tmpCap$))
+	if lwrc$(tmpCap$(1:11))=lwrc$('HamsterFio:') then
+		tmpCap$(1:11)=''
+	end if
 	if tmpCap$(1:3)=uprc$(tmpCap$(1:2))&' ' then !  if the first two letters are uppercase and the third is a space then assume it includes it's own system code
 		tmpCursys$=tmpCap$(1:2)
 		tmpCap$(1:3)=''
@@ -620,8 +624,9 @@ def fn_dashboard_draw
 			end if
 		else if env$('cursys')="TM" then
 			tmp_btn_width=30 : tmpBtnItem=0
+			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,1)
 			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width,1)
-			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,2)
+			fn_ddAddButton('Contact',fkey_tm_contact:=5003,tmpBtnItem+=1,tmp_btn_width,2)
 			fnLbl(5,1,'Advanced Computer Services LLC Management Menu.',0,0,0,fraDashboard)
 		end if
 		! if env$('acsDeveloper')<>'' then
