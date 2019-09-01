@@ -97,9 +97,9 @@ def library fnSpecialFolderPath$*256(folderName$*64)
 	library 'S:\Core\specialFolderPath.br': fnSpecialFolderPath$
 	fnSpecialFolderPath$=fnSpecialFolderPath$(folderName$)
 fnend
-def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFile$*1024,prompt,BCCEmail$*256,mat CCEmails$)
+def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*1024,mat ccEmails$,mat bccEmail$)
 	library 'S:\Core\email.br': fnSendEmail
-	fnSendEmail=fnSendEmail(toEmail$,emailMessage$, subject$,attachFile$,prompt,BCCEmail$,mat CCEmails$)
+	fnSendEmail=fnSendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmails$,mat bccEmail$)
 fnend
 
 ! r: ScreenIO
@@ -142,12 +142,6 @@ def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
 	library 'S:\Core\FileIO\fileio.br': fnCopyFile
 	fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
 fnend
-def library fnSendEmail(emailAddress$*255,emailMessage$*10000; subject$*255,invoiceFile$*255,noPrompt,BCCEmail$*255,mat CCEmails$,CCAsTo)
-	library 'S:\Core\FileIO\fileio.br': fnSendEmail
-	fnSendEmail=fnSendEmail(emailAddress$,emailMessage$, subject$,invoiceFile$,noPrompt,BCCEmail$,mat CCEmails$,CCAsTo)
-fnend
-
-
 
 ! /r
 ! r: Confirm
@@ -1505,9 +1499,13 @@ fnend
 	fnend
 ! /r
 ! r: Time Management
+	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling; pdfline$*255)
+		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
+		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling, pdfline$)
+	fnend
 	def library fnRead30Categories(mat dimTo30$)
 		library 'S:\Time Management\Category.br': fnRead30Categories
-		fnRead30Categories(mat dimTo30$)
+		fnRead30Categories=fnRead30Categories(mat dimTo30$)
 	fnend
 	def library fnCustomerHasEbilling(Client_id$)
 		library 'S:\Time Management\fn\customerHasEbilling.br': fnCustomerHasEbilling

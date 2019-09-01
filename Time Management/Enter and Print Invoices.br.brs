@@ -4,12 +4,22 @@
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnmakesurepathexists,fnsavetoasstart,fnprint_file_name$,fnCustomerHasEbilling
-	library 'S:\acsTM\Print_Invoice': fnprint_invoice,fnClient_has
+	library 'S:\Core\Library': fnPrintInvoice
+	library 'S:\Core\Library': fnClient_has
+	library 'S:\Core\Library': fnreport_cache_folder_current$
+	library 'S:\Core\Library': fnCopy
 	on error goto ERTN
 	fntop(program$)
-	dim fl1$(8),io1$(60),scrid$(4)*80,inp(3),iv$*12,a1$*30
-	dim pt(4),fl2$(8),scr2$(4),ot2$(4),nam$*25,bk$(20)*30
-	dim cde$(30)*6,ct(30),sc(30),id$(30)*55,da(30),gl$(30)*12,gl(3)
+	dim fl1$(8),io1$(60),scrid$(4)*80
+	dim xinp(3)
+	dim iv$*12,a1$*30
+	dim pt(4),fl2$(8),scr2$(4)
+	dim ot2$(4)
+	dim nam$*25
+	dim bk$(20)*30
+	dim cde$(30)*6,ct(30),sc(30)
+	DIM id$(30)*128
+	DIM da(30),gl$(30)*12,gl(3)
 	dim a$(3)*30,cdk$*6,des$*60,bc$(3)*18
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
@@ -59,11 +69,11 @@ L820: rinput fields "10,73,N 1,UE,N": f1 conv L820
 	on f1 goto REGULAR_ENTRY,L880 none L820
 ! /r
 REGULAR_ENTRY: ! r:
-	! close #h_tmwk1,free:
-	open #h_tmwk1:=2: "Name=S:\Core\Data\acsllc\TMWk1.h[cno],RecL=2484,Replace",internal,outIn,relative
+	! close #h_tmwk2,free:
+	open #h_tmwk2:=2: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=2484,Replace",internal,outIn,relative
 	L880: !
 	open #3: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	if f1=2 then gosub REPR_PREV_INV
 	L910: !
 	scrid$(1)="Time Management Input Of Invoices"
@@ -71,9 +81,9 @@ REGULAR_ENTRY: ! r:
 	scrid$(3)="-Code- ---------Invoice Descriptions-------------------------  --Amount-- CT SC"
 	scrid$(4)="  Press F1 when completed with this screen"
 	L950: !
-	inp3=inp(3)
-	mat inp=(0)
-	inp(3)=inp3
+	inp3=xinp(3)
+	mat xinp=(0)
+	xinp(3)=inp3
 	iv$=str$(iv1+1)
 	iv$=str$(iv1+1) conv ignore
 	mat id$=(" ")
@@ -85,12 +95,12 @@ REGULAR_ENTRY: ! r:
 	pr newpage
 	pr f mat fl1$: mat scr1$,mat scrid$
 	pr f "24,2,C 70,R,N": "  Press F1 to Continue; F5 to Stop; F6 for Search"
-	pr f mat io1$: mat inp,iv$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10)
+	pr f mat io1$: mat xinp,iv$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10)
 	pr f "1,72,C 8,R,N": date$
 	pr f "2,72,C 8,R,N": time$
 	pr f io1$(2): 2
 	L1150: !
-	input fields mat io1$,attr "R": mat inp,iv$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
+	input fields mat io1$,attr "R": mat xinp,iv$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
 	cp1=currow
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if cmdkey>0 then goto L1260 else ce=curfld
@@ -115,17 +125,17 @@ REGULAR_ENTRY: ! r:
 	de=cp1-9
 	if de<1 or de>10 then de=1
 	if cmdkey=6 then goto HELP1
-	if chg=2 and inp(1)=0 then goto L1720
-	if cmdkey=1 or inp(1)=0 then goto L1710
+	if chg=2 and xinp(1)=0 then goto L1720
+	if cmdkey=1 or xinp(1)=0 then goto L1710
 	if ce><1 then goto L1370
-	k$=lpad$(str$(inp(1)),5)
+	k$=lpad$(str$(xinp(1)),5)
 	read #1,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
 	pr f "4,35,C 40,H,N": a1$
 	goto L1200
 	L1370: !
-	if ce=2 and inp(2)<1 or inp(2)>2 then goto ERR1
-	if ce=2 then pr f "5,35,C 20,H,N": bc$(inp(2))
-	if ce=3 and inp(3)<10100 or inp(3)>123199 then goto ERR1
+	if ce=2 and xinp(2)<1 or xinp(2)>2 then goto ERR1
+	if ce=2 then pr f "5,35,C 20,H,N": bc$(xinp(2))
+	if ce=3 and xinp(3)<10100 or xinp(3)>123199 then goto ERR1
 	if ce<5 then goto L1200
 	if ce>4 and ce<15 then goto L1610
 	if ce<15 or ce>24 then goto L1450
@@ -168,11 +178,11 @@ REGULAR_ENTRY: ! r:
 	L1700: !
 	ce=ce+10 : goto CT1
 	L1710: !
-	if inp(1)=0 and chg><2 then goto SCR_FINAL
+	if xinp(1)=0 and chg><2 then goto SCR_FINAL
 	L1720: !
-	if inp(1)=0 then mat inp=(0)
-	if inp(1)=0 then goto L1900
-	pt(1)=pt(1)+inp(1)
+	if xinp(1)=0 then mat xinp=(0)
+	if xinp(1)=0 then goto L1900
+	pt(1)=pt(1)+xinp(1)
 	for j=1 to 10
 		pt(2)=pt(2)+da(j)
 		pt(3)=pt(3)+ct(j)
@@ -180,25 +190,25 @@ REGULAR_ENTRY: ! r:
 	next j
 	if chg=2 then goto L1900
 	rw=lrec(2)+1
-	write #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
+	write #h_tmwk2,using F_TMWK2: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
 	iv1=val(iv$) ! conv L1850  <--- removed conv on 5/11/18 - want it to error - why isn't my invoice number getting updated after printing invoices
 	fncreg_write('Last Invoice Number',iv1$)
 	L1850: !
 	if x9=0 then goto L950
-	inp(3)=0
-	inp(5)=0
-	inp(6)=0
+	xinp(3)=0
+	xinp(5)=0
+	xinp(6)=0
 	goto L1080
 	L1900: !
-	rewrite #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
+	rewrite #h_tmwk2,using F_TMWK2,rec=rr: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
 	SCR_ADDEDIT: !
 	pr newpage
 	pr f "10,10,c 60": "Enter ref # to correct; enter 0 when completed"
 	L1930: ! 
 	input fields "10,60,N 5,UE,N": rr conv L1930
 	if rr=0 then goto SCR_FINAL
-	read #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT ioerr ERTN
-	pt(1)=pt(1)-inp(1)
+	read #h_tmwk2,using F_TMWK2,rec=rr: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT ioerr ERTN
+	pt(1)=pt(1)-xinp(1)
 	for j=1 to 10
 		pt(2)=pt(2)-da(j)
 		pt(3)=pt(3)-ct(j)
@@ -223,10 +233,10 @@ PR_PROOF: ! r:
 	pr f "10,10,c 60,h,n": "TIME MANAGEMENT CORRECTION LISTING IN PROCESS"
 	gosub PR_PROOF_HEAD
 	for j=1 to lrec(2)
-		read #h_tmwk1,using F_TMWK1,rec=j: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ ioerr ERTN
-		if inp(1)<>0 then
+		read #h_tmwk2,using F_TMWK2,rec=j: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ ioerr ERTN
+		if xinp(1)<>0 then
 			pr #255: "Ref    Client    Billing-Code     Date      Invoice  "
-			pr #255,using 'form pos 1,n 4,n 8,n 10,n 12,x 2,c 12': j,mat inp,iv$ pageoflow PR_PROOF_PGOF
+			pr #255,using 'form pos 1,n 4,n 8,n 10,n 12,x 2,c 12': j,mat xinp,iv$ pageoflow PR_PROOF_PGOF
 			pr #255: ''
 			pr #255: "-Code-  -------Description-------------------------------------  --Amount--      Cat     Sub  -GL--Number-"
 			for j1=1 to 30
@@ -256,7 +266,7 @@ SCR_CORRECTION: ! r:
 goto SCR_ADDEDIT ! /r
 GO_MERGE: ! r:
 	close #1:
-	close #h_tmwk1:
+	close #h_tmwk2:
 chain "S:\acsTM\TMMRGINV" ! /r
 SCR_PRINT_INVOICES: ! r:
 	pr newpage
@@ -270,13 +280,13 @@ SCR_PRINT_INVOICES: ! r:
 	pr f "10,10,c 60": "Print invoices in process"
 	fnopenprn
 	align=0
-	restore #h_tmwk1:
-	do  ! for j=1 to lrec(h_tmwk1)
+	restore #h_tmwk2:
+	do  ! for j=1 to lrec(h_tmwk2)
 		PR_SELECTED_INVOICE: !
 		let Clientebilling=fnClient_has('EM')
-		read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF noRec L2870 ioerr ERTN
-		if inp(1)=0 then goto L2840
-		k$=lpad$(str$(inp(1)),5)
+		read #h_tmwk,using F_TMWK2: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF noRec L2870 ioerr ERTN
+		if xinp(1)=0 then goto L2840
+		k$=lpad$(str$(xinp(1)),5)
 		read #1,using L2730,key=k$: mat a$ ioerr ERTN
 		L2730: form pos 6,3*c 30
 		if ClientEbilling=1 then 
@@ -284,18 +294,18 @@ SCR_PRINT_INVOICES: ! r:
 			ebilling=fnCustomerHasEbilling(client_id$)
 		end if 
 		if Ebilling=0 then 
-		   fnprint_invoice(255,align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
+		   fnPrintInvoice(255,align, k$, mat a$, iv$, xinp(3),mat id$, mat da,0)
 		else if ebilling then
 			! open pdf
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
-			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
+			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
 			! close pdf 
 			close #pdfout: 
 			! move to Send folder 
-			fnmakesurepathexists("s:\Time Management\Ebilling")
-			execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
+			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
+			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 		end if 
 			 L2840: !
 		if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
@@ -315,10 +325,10 @@ SCR_SELECT_INVOICE: ! r:
 	REPR_PREV_INV: ! r:
 	mat pt=(0)
 	for rw=1 to lrec(2)
-		read #h_tmwk1,using F_TMWK1,rec=rw: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc noRec L3050 ioerr ERTN
-		F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
-		if inp(1)=0 then goto L2840
-		pt(1)=pt(1)+inp(1)
+		read #h_tmwk2,using F_TMWK2,rec=rw: mat xinp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc noRec L3050 ioerr ERTN
+		F_TMWK2: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
+		if xinp(1)=0 then goto L2840
+		pt(1)=pt(1)+xinp(1)
 		for j=1 to 10
 			pt(2)=pt(2)+da(j)
 			pt(3)=pt(3)+ct(j)
@@ -372,7 +382,7 @@ SRCH1: ! r: name search
 	input fields "24,58,C 14,RE,N": k$
 	alp=0
 	if cmdkey=5 then goto SRCHEND
-	if rtrm$(k$)><"" then inp(1)=val(k$) conv L3540 : goto SRCHEND
+	if rtrm$(k$)><"" then xinp(1)=val(k$) conv L3540 : goto SRCHEND
 	if cmdkey><2 then goto L3630
 	bk=bk-1
 	if bk<1 then goto L3650
@@ -388,7 +398,7 @@ SRCH1: ! r: name search
 	close #101: ioerr ignore
 	close #127: ioerr L3720
 	if rtrm$(k$)="" then goto L3720
-	if s1=1 then pr f io1$(1): inp(1)
+	if s1=1 then pr f io1$(1): xinp(1)
 	if s1=2 then pr f io1$(ce): k$
 	L3720: !
 return  ! /r
@@ -441,7 +451,7 @@ HELP1: ! r:
 	input fields "24,58,C 6,RE,N": k$
 	alp=0
 	if cmdkey=5 then goto SRCHEND
-	if rtrm$(k$)><"" then inp(1)=val(k$) conv L4320 : goto SRCHEND
+	if rtrm$(k$)><"" then xinp(1)=val(k$) conv L4320 : goto SRCHEND
 	if cmdkey><2 then goto L4410
 	bk=bk-1
 	if bk<1 then goto L4430

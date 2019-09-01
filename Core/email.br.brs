@@ -1,111 +1,131 @@
 	! r: test zone
-		! library 'S:\Core\Library.br': fntop
-		library program$: fnSendEmail
-		! fntop(program$)
-		dim subject$*255
-		subject$='fnSendEmail Test'
-		dim emailMessage$*10000
-		emailMessage$='This is a test<br>This is line two testing<br>'
-		dim attachFile$*255
-		attachFile$=program$
-		prompt=0
-		dim bccEmail$*256
-		bccEmail$=''
-		mat ccEmails$(0)
-		CCAsTo=0
-		fnSendEmail('john@advancedcomputer.services',emailMessage$, subject$&' with attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-		fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$&' with attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-		fnSendEmail('john@advancedcomputer.services',emailMessage$, subject$&' withOUT attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-		fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$&' withOUT attachment',attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-		! fnSendEmail('niceguywinning@gmail.com',emailMessage$, subject$,attachFile$,prompt,bccEmail$,mat ccEmails$,CCAsTo)
-	! /r
-end
-def library fnSendEmail(toEmail$*256,emailMessage$*10000; subject$*256,attachFile$*1024,prompt,BCCEmail$*256,mat CCEmails$,CCAsTo,___,hResult,success,line$*1024,item,emailAddr$*1024,returnN)
-	library 'S:\Core\Library.br': fngethandle
-	library 'S:\Core\Library.br': fnFree
-	if ~setupSendEmail then
-		setupSendEmail=1
-		dim sePathBr$*256
-		sePathBr$='S:\Core\sendEmail.exe'
-		dim sePathOs$*256
-		sePathOs$=os_filename$(sePathBr$)
-	end if
-	if exists(sePathOs$) then
-		dim userAccount$*128
-		dim fromEmail$*128
-		if env$('client')='ACS' then
-			! server$='smtp.gmail.com'
-			! fromEmail$='john@advancedcomputer.services' 
-			! userAccount$='john@advancedcomputer.services'
-			! password$='jiujitsu42!'
-			server$=' smtp.mail.com:587'
-			fromEmail$='acs.report@deliveryman.com' 
-			userAccount$='acs.report@deliveryman.com'
-			password$='ACSken1@#'
-		else if env$('client')='Brumbaugh' then ! r:
-			! server$='10.20.129.12:25' <--- that would use port 25
-			server$='10.20.129.21'
-			dim fromEmail$*128
-			fromEmail$='bqreportservices@bqlaw.com'
-			userAccount$=''
-			password$='' ! /r
-		else
-			pr 'smtp server address, fromEmail, userAccount, and password are not set up for client '&env$('client')&'.'
-			pr 'Please contact support to setup automated emails for this facility.'
-			pr 'Type GO and press Enter to skip sending of this email and continue'
-			pause
-			goto XitSendEmail
-		end if
-		fnFree('EmailLog.[WSID]')
-		if emailMessage$="" then emailMessage$=" "
-		emailMessage$=srep$(emailMessage$,hex$("0D"),hex$("0A"))
-		emailMessage$=srep$(emailMessage$,hex$("0A0A"),hex$("0A"))
-		emailMessage$=srep$(emailMessage$,hex$("0A"),"\n")
-		if len(BCCEmail$) then BCCEmail$(1:0)=" -bcc "
-		CCEmailString$=""
-		for item=1 to udim(mat CCEmails$)
-			if len(trim$(CCEmails$(item))) then
-					if len(trim$(CCEmailString$)) then CCEmailString$=CCEmailString$&" "
-					CCEmailString$=CCEmailString$&CCEmails$(item)
-			end if
-		next item
-
-		emailAddr$=toEmail$
-
-		if CCAsTo then
-			if len(trim$(emailAddr$)) then emailAddr$=emailAddr$&" "
-			emailAddr$=emailAddr$&CCEmailString$
-			CCEmailString$=""
-		end if
-
-		if len(trim$(CCEmailString$)) then CCEmailString$=" -cc "&CCEmailString$
-
+		fn_setup
+		dim tstSubject$*256
+		tstSubject$='fnSendEmail Test '&date$('month, day, ccyy')
+		dim tstBody$*10000
+		tstBody$='<html><body>This is a test<br>This is line two testing<br></body></html>'
+		dim tstBccEmail$(0)*256
+		mat tstBccEmail$(0)
+		dim tstCcEmails$(0)*128
 		
+		! mat tstCcEmails$(0)
+		! fnAddOneC(mat tstCcEmails$,'niceguywinning@gmail.com')
+		! ! fnAddOneC(mat tstCcEmails$,'john@ajjmaplewood.com')
+		! dim tstToEmail$(0)*64
+		! fnAddOneC(mat tstToEmail$,'john@advancedcomputer.services')
+		! fnAddOneC(mat tstToEmail$,'john@ajjmaplewood.com')
+		! fn_sendEmail(mat tstToEmail$,tstBody$, tstSubject$,'',mat tstCcEmails$)
 		
-		if len(trim$(attachFile$)) then
-			execute 'sy -M -s "'&sePathOs$&'" -s '&server$&' -t '&emailAddr$&' -f '&fromEmail$&' -xu '&userAccount$&' -xp '&password$&' -u "'&subject$&'" -m "'&emailMessage$&'" -a "'&os_filename$(attachFile$)&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
-		else
-			execute 'sy -M -s "'&sePathOs$&'" -s '&server$&' -t '&emailAddr$&' -f '&fromEmail$&' -xu '&userAccount$&' -xp '&password$&' -u "'&subject$&'" -m "'&emailMessage$&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
-		end if
-		execute 'type EmailLog.[WSID] >>EmailLog.txt'
-		open #(hResult:=fngethandle): "name=EmailLog.[WSID],recl=512",display,input
-		do until file(hResult)
-			linput #hResult:line$ eof IGNORE
-			if pos(line$,"Email was sent successfully!") then success=1
-		loop
-		close #hResult:
-		execute '*free EmailLog.[WSID]'
-		returnN=success
-		if prompt then 
-			if success then 
-				msgbox("Email success.","Email")
-			else
-				msgbox("Email failed.","Email")
-			end if
-		end if
-	else
-		msgbox('"'&sePathOs$&'" utility not found. Call 1-800-643-6318 for support.')
-	end if
-	XitSendEmail: !
-	fnSendEmail=returnN
+		dim tstToEmailSingle$*64
+		tstToEmailSingle$='niceguywinning@gmail.com'
+		fn_sendEmail(tstToEmailSingle$,tstBody$, tstSubject$&' with attachment',program$)
+		
+		! fn_sendEmail('john@advancedcomputer.services',tstBody$, tstSubject$&' withOUT attachment')
+		! fn_sendEmail('niceguywinning@gmail.com',tstBody$, tstSubject$&' withOUT attachment')
+		! fnSendEmail('niceguywinning@gmail.com',tstBody$, tstSubject$,program$,mat ccEmails$,mat bccEmail$)
+end ! /r
+
+def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$)
+	if ~setup then let fn_setup
+	fnSendEmail=fn_sendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmail$,mat bccEmail$)
 fnend
+def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$, ___,hResult,returnN,output$*1024,returnN)
+	if ~setup_sendEmail then ! r:
+		setup_sendEmail=1
+		dim em_emailFrom$*256
+		dim em_emailReplyTo$*256
+		dim em_smtpServer$*100
+		fnreg_read('email.ReplyTo',em_emailReplyTo$) ! ,'noreply@@utilitybilling.us')
+		fnreg_read('email.smtpServer',em_smtpServer$,'smtp.office365.com:587')
+		fnreg_read('email.From',em_emailFrom$,'acs-billing@utilitybilling.us')
+		fnreg_read('email.FromPassword',em_emailFromPassword$,'ACSbilling1224.')
+		fnreg_read('email.Port',em_emailPort$,'25')
+		if trim$(em_smtpServer$)="" or trim$(em_emailFrom$)="" or trim$(em_emailFromPassword$)="" then 
+			msgbox("Email account not configured. Please enter the appropriate information in Preferences.")
+		end if 
+		if ~exists("S:\Core\sendEmail.exe") then
+			pr os_filename$('S:\Core\sendEmail.exe')&' utility not found. Please call ACS technical support at 1-800-643-6318.'
+			pause
+		end if
+	end if ! /r
+	fnFree('EmailLog.'&session$)
+	if emailMessage$="" then emailMessage$=" "
+	emailMessage$=srep$(emailMessage$,cr$,lf$)
+	emailMessage$=srep$(emailMessage$,lf$&lf$,lf$)
+	emailMessage$=srep$(emailMessage$,lf$,"\n")
+	
+	dim toPart$*512
+	mat2str(mat toEmail$,toPart$,' ','trim')
+	toPart$=' -t '&toPart$&' '
+	
+	dim ccPart$*512
+	if fnArrayWasPassedC(mat ccEmail$) then
+		mat2str(mat ccEmail$,ccPart$,' ','trim')
+		ccPart$=' -cc '&ccPart$&' '
+	end if
+	
+	dim bccPart$*512
+	bccPart$=''
+	if fnArrayWasPassedC(mat bccEmail$) then
+		mat2str(mat bccEmail$,bccPart$,' ','trim')
+		bccPart$=' -bcc '&bccPart$&' '
+	end if
+	
+	! if trim$(em_emailReplyTo$)="" then em_emailReplyTo$=em_emailFrom$
+	dim attachFilePart$*512
+	attachFilePart$=''
+	if len(trim$(attachFile$)) then
+		attachFilePart$=' -a "'&os_filename$(attachFile$)&'"'
+	end if
+	open #hCmd:=fngethandle: 'name=sendEmail_'&session$&'.cmd,recl=2048,replace',d,o
+	pr #hCmd: 'prompt $p$g'
+	pr #hCmd: '@echo Sending Email...'
+	pr #hCmd: '"'&os_filename$('S:\Core\sendEmail.exe')&'"';
+	pr #hCmd: ' -s '&em_smtpServer$&':'&em_emailPort$;
+	pr #hCmd: toPart$;
+	pr #hCmd: ' -f '&em_emailFrom$;
+	pr #hCmd: ' -xu '&em_emailFrom$;
+	pr #hCmd: ' -xp '&em_emailFromPassword$;
+	pr #hCmd: ' -u "'&subject$&'"';
+	pr #hCmd: ' -m "'&emailMessage$&'"';
+	pr #hCmd: attachFilePart$;
+	pr #hCmd: ccPart$;
+	pr #hCmd: bccEmail$;
+	if em_emailReplyTo$<>'' then
+		pr #hCmd: ' -o reply-to='&em_emailReplyTo$;
+	end if
+	pr #hCmd: ' -v';
+	pr #hCmd: ' -q';
+	pr #hCmd: ' -l EmailLog.'&session$
+	if debug then pr #hCmd: 'pause'
+	close #hCmd:
+	execute 'sy -M -s sendEmail_'&session$&'.cmd'
+	fnCopy('EmailLog.'&session$,fnreport_cache_folder_current$&'\Emails Sent - '&date$('ccyy-mm-dd')&' '&fnsafe_filename$(time$)&'.txt')
+	! execute 'type EmailLog.'&session$&' >>EmailLog.txt'
+	open #hResult:=fngethandle: "name=EmailLog."&session$&",recl=512",display,input
+	do until file(hResult)
+		linput #hResult: output$ eof ignore
+		if pos(output$,"Email was sent successfully!") then returnN=1
+	loop
+	close #hResult,free:
+	fn_sendEmail=returnN
+	Xit: !
+fnend
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library': fnreg_read
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnCopy,fnFree
+		library 'S:\Core\Library': fnreport_cache_folder_current$
+		library 'S:\Core\Library': fnArrayWasPassedC
+		library 'S:\Core\Library': fnsafe_filename$
+		library 'S:\Core\Library': fnAddOneC
+		on error goto ERTN
+		gosub Enum
+	end if 
+fnend
+include: enum
+include: fn_open
+include: ertn
