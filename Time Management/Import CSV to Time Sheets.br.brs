@@ -3,10 +3,10 @@ fntop(program$)
 ! r: Screens
 if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : fnpause
 
+dim filter_date(2)
 filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
-
-dim label$(2)*25,filter_date(2)
+dim label$(2)*25
 label$(1)='Starting Date'
 label$(2)='Ending Date'
 dim empName$(5)*64
@@ -379,6 +379,8 @@ def fn_houryRateAcs(wo_client,the_date,wo_month; hr_category,wo_sage_code$*128) 
 		else
 			hr_return=75
 		end if
+	else if hr_category=6  and wo_month=31 then  ! support for Collection-Master is currently 100/hour without support
+		hr_return=100
 	else
 		hr_return=150
 	end if

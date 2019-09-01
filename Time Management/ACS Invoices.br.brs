@@ -1,42 +1,19 @@
 ! formerly acsTM\moInvoice
-	library "S:\acsTM\print_invoice": fnprint_invoice
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnAutomatedSavePoint
-	library 'S:\Core\Library': fncreg_read
-	library 'S:\Core\Library': fnEndOfMonth
-	library 'S:\Core\Library': fnCustomerHasEbilling
-	library 'S:\Core\Library': fnmakesurepathexists
-	library 'S:\Core\Library': fnsavetoasstart
-	library 'S:\Core\Library': fnprint_file_name$
-	library 'S:\Core\Library': fnClient_has
+fn_setup
 	fntop(program$)
 	client_id_sage_ax=3811
 	client_id_brc=90
 	enableMinimumMonthlyBill=0
 	dim sys_name$(40)*55,client_id$*5,b(8),iv$*12,skln$*80 ! co$(4)*40,
-	dim client_addr$(3)*30,cap$*128
-	dim in1$(3)
-	dim inpX(7),wo_desc$*30
+	dim client_addr$(3)*30
+	dim inpX(7)
 	fn_get_system_list(mat sys_name$)
 	fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 	invoice_number+=1
 	if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
 	let Clientebilling=fnClient_has('EM')
-	pr newpage
-	pr f "5,2,cr 43": "Invoice Date (mmddyy):"
-	pr f "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
-	pr f "6,2,cr 43": "Starting Invoice Number:"
-	pr f "7,2,Cr 43": "Starting Account Number:"
-	in1$(1)="5,46,Nz 6,U"
-	in1$(2)="6,46,N 12,U"
-	in1$(3)="7,46,N 5,U"
-	inv_date=date(fnEndOfMonth(days(date$)-15),'mmddyy')
-	pr f "10,30,c 20,,B99": "Cancel (Esc)"
-SCREEN1_ASK: ! 
-	rinput fields mat in1$: inv_date,invoice_number,starting_acct_no conv SCREEN1_ASK
-	if cmdkey=5 or fkey=99 then goto XIT
+	SCREEN1: !
+	fn_askScreen1(inv_date,invoice_number,starting_acct_no)
 	b4=date(days(inv_date,"mmddyy"),"ccyymmdd")
 	fnAutomatedSavePoint('before')
 	open #hClient:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed 
@@ -45,20 +22,20 @@ SCREEN1_ASK: !
 	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed 
 	F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 	fn_thsht_combine_entries("S:\Core\Data\acsllc\TimeSheet.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
-	restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
+	restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1
 	pr newpage
 	pr f "10,10,Cc 60": "Printing Invoices..."
-! r: process "S:\Core\Data\acsllc\TMWK1"&wsid$&".h[cno]"
-	open #h_tmwk1:=fngethandle: 'Name=S:\Core\Data\acsllc\TMWK1.h[cno],Replace,RecL=2484,Shr',internal,outIn 
-	F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
+! r: process "S:\Core\Data\acsllc\TMWK2"&wsid$&".h[cno]"
+	open #h_tmwk2:=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn 
+	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	dim cde$(30)*6
-	dim inv_item$(30)*55
+	dim inv_item$(30)*128
 	dim inv_amt(30)
 	dim inv_category(30)
 	dim inv_category(30)
 	dim inv_service_code(30)
 	dim inv_gl$(30)*12
-! restore #h_tmwk1:
+	! restore #h_tmwk2:
 	do 
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
 		client_id=val(client_id$)
@@ -111,23 +88,76 @@ EOJ: ! r:
 	rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 	close #h_ivnum: 
 	close #hClient: 
-	close #h_tmwk1: 
+	close #h_tmwk2: 
 	goto ASK_MERGE  ! /r
 	ASK_MERGE: ! r:
 	pr newpage
 	pr f "10,2,c 70": "All invoices have been printed.  Enter 1 to merge, or 2 to Stop"
 		L1260: input fields "10,72,n 1,eu,n": num conv L1260
 	if num=1 then 
-		chain "S:\acsTM\TMMRGINV"
+		fnChain("S:\acsTM\TMMRGINV")
 	else if num=2 then 
 		goto XIT
 	else 
 		goto ASK_MERGE
 	end if 
 	! /r
-	XIT: fnxit
+XIT: fnxit
 ! _____________________________________________________________________
-def fn_timesheet2(hTimeSheet) ! add charges not under maintenance to maintenance invoices
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library': fnPrintInvoice
+		library 'S:\Core\Library': fntop,fnxit
+		library 'S:\Core\Library': fnopenprn,fncloseprn
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnAutomatedSavePoint
+		library 'S:\Core\Library': fncreg_read
+		library 'S:\Core\Library': fnEndOfMonth
+		library 'S:\Core\Library': fnCustomerHasEbilling
+		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnCopy
+		library 'S:\Core\Library': fnsavetoasstart
+		library 'S:\Core\Library': fnprint_file_name$
+		library 'S:\Core\Library': fnClient_has
+		library 'S:\Core\Library': fnreport_cache_folder_current$
+		library 'S:\Core\Library': fnChain
+		library 'S:\Core\Library': fntos,fnlbl,fncmdset,fnacs2,fntxt
+	end if
+fnend
+def fn_askScreen1(&inv_date,&invoice_number,&starting_acct_no; ___,returnN)
+	if ~inv_date then inv_date=date(fnEndOfMonth(days(date$)-15),'mmddyy')
+	fntos
+	fnLbl(2,2,"Invoice Date MUST match expiration date of Annual Support contracts!")
+	fnlbl(4,2,'Invoice Date (mmddyy):'  ,24,1)
+	fnlbl(6,2,'Starting Invoice Number:',24,1)
+	! fnlbl(7,2,'Starting Account Number:',24,1)
+	dim in1$(3)
+	fntxt(4,26, 6, 0,0,'mmddyy') : resp$(1)=str$(inv_date)
+	fntxt(6,26,12, 0,0,'number') : resp$(2)=str$(invoice_number)
+	! fntxt(7,26,12, 0,0,'number') : resp$(3)=str$(starting_acct_no)
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
+		returnN=99
+	else 
+		returnN=0
+		inv_date=val(resp$(1)) ! date(days(resp$(1),'ccyymmdd'),'mmddyy')
+		invoice_number=val(resp$(2))
+		! starting_acct_no=val(resp$(3))
+	end if
+	! pause
+	in1$(1)="5,46,Nz 6,U"
+	in1$(2)="6,46,N 12,U"
+	in1$(3)="7,46,N 5,U"
+	! pr f "10,30,c 20,,B99": "Cancel (Esc)"
+	! SCREEN1_ASK: ! 
+	! rinput fields mat in1$: inv_date,invoice_number,starting_acct_no conv SCREEN1_ASK
+	! if cmdkey=5 or fkey=99 then goto XIT
+	fn_askScreen1=returnN
+fnend
+
+def fn_timesheet2(hTimeSheet; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
 	read #hTimeSheet,using F_TIME,key=client_id$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
 	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
 	do 
@@ -202,7 +232,7 @@ def fn_get_system_list(mat sys_name$)
 	sys_name$(28)=""
 	sys_name$(29)=""
 	sys_name$(30)=""
-	sys_name$(31)=""
+	sys_name$(31)="Collection-Master Add-On"
 	sys_name$(32)=""
 	sys_name$(33)=""
 	sys_name$(34)=""
@@ -213,7 +243,7 @@ def fn_get_system_list(mat sys_name$)
 	sys_name$(39)=""
 	sys_name$(40)=""
 fnend  ! fn_get_system_list
-def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256)
+def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___,wo_desc$*30)
 	dim tce_to_inp(7)
 	open #tce_h_from:=fngethandle: 'Name='&file_from$,internal,input 
 	open #tce_h_to:=fngethandle: 'Name='&file_to$&',KFName='&env$('Temp')&'\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed 
@@ -280,7 +310,7 @@ def fn_print_inv ! pr INVOICE
 	dim pdf_filename_final$*255
 	fn_timesheet2(hTimeSheet)
 	if enableMinimumMonthlyBill then
-		if b3>0 and sum(mat inv_amt)<250 then 
+		if b3>0 and sum(mat inv_amt)<100 then 
 			inv_line+=1
 			if inv_line<30 and client_id<>client_id_sage_ax and client_id<>client_id_brc and client_id<>4625 then 
 				inv_item$(inv_line)='Minimum Monthly Billing of $250.00'
@@ -292,7 +322,7 @@ def fn_print_inv ! pr INVOICE
 	end if
 	fn_summary_add ! pr all clients
 	if b3=>1 then 
-		write #h_tmwk1,using F_TMWK1: client_id$,2,inv_date,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
+		write #h_tmwk2,using F_TMWK2: client_id$,2,inv_date,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
 	end if
 	if b3=>1 or pbal=>1 then
 		! if sum(mat inv_amt)+pbal>0 then
@@ -301,23 +331,26 @@ def fn_print_inv ! pr INVOICE
 			! see if customer that we're sending the invoice for right now has ebilling selected 
 			ebilling=fnCustomerHasEbilling(client_id$)
 		end if 
+! if trim$(client_id$)='4132' then pause
 		! if trim$(client_id$)='1478' then pr ebilling : pause 
 		if ebilling=0 then 
-		   fnprint_invoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
 			pr #255: newpage ! mat inv_item$=("")
 		else if ebilling then 
 			! open pdf 
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
-			fnprint_invoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
+			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
 			! close pdf 
 			close #pdfout: 
 			! move to Send folder 
-			fnmakesurepathexists("s:\Time Management\Ebilling")
-			execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
+			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
+			! pause
+			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
+			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
 		end if 
-		invoice_number=invoice_number+1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
+		invoice_number+=1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 		! end if
 	end if
 	mat inv_item$=(" ")

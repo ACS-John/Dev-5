@@ -8,19 +8,19 @@ dim arta(2) ! ,ga(10)
 dim ca(10),sc(10)
 pr newpage
 pr f "10,20,Cc 60,h,n": "T/M Merging Invoices..."
-open #h_tmwk2:=3: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr",internal,input 
+open #h_tmwk2:=3: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr",internal,input
 F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
 dim cde$(30)*6
 dim id$(30)*128
 dim inv_amt(30)
 dim tmwk_sc(30)
 dim ct(30)
-open #h_artrans:=12: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative 
-open #h_tmtrans:=2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative 
-open #h_clmstr:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed 
-open #h_tmtraddr:=4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative 
+open #h_artrans:=12: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
+open #h_tmtrans:=2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative
+open #h_clmstr:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
+open #h_tmtraddr:=4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative
 do  ! r: main loop
-	READ_TMWK: ! 
+	READ_TMWK: !
 	read #h_tmwk2,using F_TMWK2: k$,b(7),b(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc eof FINIS
 	! pr k$ : pause
 	if rtrm$(k$)="" or rtrm$(k$)="0" then goto READ_TMWK
@@ -56,7 +56,7 @@ do  ! r: main loop
 		if ta1=0 then ta1=lta
 		rewrite #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),release: ta1,lta,fb1
 		goto NEXT_ONE
-		THAT_STEP: ! 
+		THAT_STEP: !
 		lta4=lrec(4)+1
 		mat ta=(0)
 		mat fb=(0)
@@ -69,7 +69,7 @@ do  ! r: main loop
 		L630: !
 		write #h_tmtraddr,using 'form pos 1,50*pd 3,25*n 1',rec=lta4,reserve: mat ta,mat fb duprec THAT_STEP
 		rewrite #h_tmtraddr,using 'form pos 1,pd 3',rec=1,release: lta4
-		NEXT_ONE: ! 
+		NEXT_ONE: !
 	next j
 	if abs(b(7))=3 then goto L800 ! SKIP AR IF WRITE OFF
 	L690: !
@@ -87,10 +87,10 @@ do  ! r: main loop
 loop  ! /r
 
 FINIS: ! r:
-	close #h_clmstr: 
-	close #h_tmtrans: 
-	close #h_tmwk2: 
-	close #h_tmtraddr: 
+	close #h_clmstr:
+	close #h_tmtrans:
+	close #h_tmwk2:
+	close #h_tmtraddr:
 ! close #h_armotran:
 XIT: fnxit ! /r
 include: ertn
