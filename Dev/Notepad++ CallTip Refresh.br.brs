@@ -133,7 +133,9 @@ def fn_gatherLibraryFunctions
 		posSpace1=pos(line$,' ')
 		! remove line number if present
 		! if val(line$(1:posSpace1))=40320 then pr 40320 : pause
-		if val(line$(1:posSpace1))>0 then line$(1:posSpace1)=''
+		lineVal=val(line$(1:posSpace1)) conv RemvoeLineNumberFinis
+		if lineVal>0 then line$(1:posSpace1)=''
+		RemvoeLineNumberFinis: !
 		! remove all excess spaces
 		do while pos(line$,'  ')>0 
 			line$=srep$(line$,'  ',' ')
@@ -195,6 +197,7 @@ def fn_updateNppCallTipFile
 	pr #hNpp: ''
 	close #hNpp:
 	fnCopy(env$('temp')&'\BRSource.xml','C:\ACS\Program\Notepad++\plugins\APIs\BR! Source.xml')
+	fnCopy(env$('temp')&'\BRSource.xml','C:\ACS\Program\N++ Cloud Settings\BR! Source.xml')
 fnend
 def fn_functionParse(funLine$*512,&funName$,&funReturnValue$,mat funParms$)
 	! funLine$=srep$(funLine$,'mat ','mat#')
