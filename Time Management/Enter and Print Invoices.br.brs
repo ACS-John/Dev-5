@@ -265,7 +265,7 @@ SCR_CORRECTION: ! r:
 	scrid$(4)="  Press F1 when completed with this screen"
 goto SCR_ADDEDIT ! /r
 GO_MERGE: ! r:
-	! fnEmailQueuedInvoices(email_date$)
+	! fnEmailQueuedInvoices(email_date$)  this seems like a good idea to add here, perhaps a question like int S:\Time Management\ACS Invoices.br.brs
 	close #1:
 	close #h_tmwk2:
 chain "S:\acsTM\TMMRGINV" ! /r
