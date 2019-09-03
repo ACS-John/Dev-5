@@ -220,7 +220,7 @@ SCR_FINAL: ! r:
 	pr newpage
 	scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
 	scrid$(2)="1 for listing, 2 for corrections, 3 for additional entries,"
-	scrid$(3)=" 4 to pr invoices entered, or 5 to merge."
+	scrid$(3)=" 4 to pr invoices entered, or 5 to merge and email."
 	scrid$(4)=""
 	pr f mat fl2$: mat scr2$,mat scrid$
 	pr f mat ot2$: mat pt
@@ -265,6 +265,7 @@ SCR_CORRECTION: ! r:
 	scrid$(4)="  Press F1 when completed with this screen"
 goto SCR_ADDEDIT ! /r
 GO_MERGE: ! r:
+	fnEmailQueuedInvoices(email_date$)
 	close #1:
 	close #h_tmwk2:
 chain "S:\acsTM\TMMRGINV" ! /r

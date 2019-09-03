@@ -32,7 +32,7 @@ Daily
 >Enter and Print Invoices                         ^ Time Management\Enter and Print Invoices
 ! >Print Work Schedules                           ^ acsTM\tmwrksch
 ! >Print Messages                                 ^ acsTM\armessag
->Email PDF Invoices                               ^ Time Management\Email Invoice                  ^EM
+>Email Queued Invoices                            ^ Time Management\Email Queued Invoice           ^EM
 Monthly
 >Import CSV to Time Sheets                        ^ Time Management\Import CSV to Time Sheets
 >Print Monthly Billing Summary                    ^ acsTM\tmmobsum
