@@ -89,18 +89,25 @@ EOJ: ! r:
 	close #h_ivnum: 
 	close #hClient: 
 	close #h_tmwk2: 
-	goto ASK_MERGE  ! /r
-	ASK_MERGE: ! r:
-	pr newpage
-	pr f "10,2,c 70": "All invoices have been printed.  Enter 1 to merge, or 2 to Stop"
-		L1260: input fields "10,72,n 1,eu,n": num conv L1260
-	if num=1 then 
-		fnChain("S:\acsTM\TMMRGINV")
-	else if num=2 then 
-		goto XIT
-	else 
-		goto ASK_MERGE
-	end if 
+	do
+		fntos : lc=0
+		fnOpt(lc+=1,41,'Merge Invoices and Email Queued Invoices',1)
+		resp$(1)='True'
+		fnOpt(lc+=1,1,'Merge Invoices only')
+		resp$(2)='False'
+		fnOpt(lc+=1,1,'Stop (neither merge, nor email)')
+		resp$(3)='False'
+		fnCmdSet(2)
+		fnacs2(mat resp$,ckey)
+		if ckey=5 or resp$(3)='True' then
+			goto Xit
+		else if resp$(1)='True' then
+			fnEmailQueuedInvoices(str$(b4))
+			fnChain("S:\acsTM\TMMRGINV")
+		else if resp$(2)='True' then
+			fnChain("S:\acsTM\TMMRGINV")
+		end if
+	loop
 	! /r
 XIT: fnxit
 ! _____________________________________________________________________
@@ -123,6 +130,9 @@ def fn_setup
 		library 'S:\Core\Library': fnreport_cache_folder_current$
 		library 'S:\Core\Library': fnChain
 		library 'S:\Core\Library': fntos,fnlbl,fncmdset,fnacs2,fntxt
+		library 'S:\Core\Library': fnOpt
+		library 'S:\Core\Library': fnEmailQueuedInvoices
+		dim resp$(30)*128
 	end if
 fnend
 def fn_askScreen1(&inv_date,&invoice_number,&starting_acct_no; ___,returnN)

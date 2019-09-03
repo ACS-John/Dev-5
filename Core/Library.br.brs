@@ -1498,10 +1498,14 @@ fnend
 		fnburden_srch(x$,fixgrid)
 	fnend
 ! /r
-! r: Time Management
+! r: TM Time Management
 	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling; pdfline$*255)
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling, pdfline$)
+	fnend
+	def library fnEmailQueuedInvoices(emailDate$)
+		library 'S:\Time Management\fn\Email Queued Invoices.br': fn_emailQueuedInvoices
+		fnEmailQueuedInvoices=fnEmailQueuedInvoices(emailDate$)
 	fnend
 	def library fnRead30Categories(mat dimTo30$)
 		library 'S:\Time Management\Category.br': fnRead30Categories

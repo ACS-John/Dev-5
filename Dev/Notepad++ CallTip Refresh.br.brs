@@ -129,13 +129,14 @@ def fn_gatherLibraryFunctions
 	open #hGlf:=fngethandle: 'name=S:\Core\Library.br.brs',d,i
 	do
 		linput #hGlf: line$ eof eoGlf
+		line$=lwrc$(line$)
 		! if pos(lwrc$(line$),'def library ')>0 then pr line$ : pause
-		posSpace1=pos(line$,' ')
-		! remove line number if present
-		! if val(line$(1:posSpace1))=40320 then pr 40320 : pause
-		lineVal=val(line$(1:posSpace1)) conv RemvoeLineNumberFinis
-		if lineVal>0 then line$(1:posSpace1)=''
-		RemvoeLineNumberFinis: !
+		! r: remove line number if present
+			posSpace1=pos(line$,' ')
+			! if val(line$(1:posSpace1))=40320 then pr 40320 : pause
+			lineVal=val(line$(1:posSpace1)) conv RemvoeLineNumberFinis
+			if lineVal>0 then line$(1:posSpace1)=''
+		RemvoeLineNumberFinis: ! /r
 		! remove all excess spaces
 		do while pos(line$,'  ')>0 
 			line$=srep$(line$,'  ',' ')

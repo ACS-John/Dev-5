@@ -1,12 +1,10 @@
 ! Email Invoice
-! This program emails printed invoices as attachments
+! This program emails queued pdf invoices as attachments
 fn_setup
 fntop(program$)
-fnEmailEntryScreen
-
+fn_emailEntryScreen
 XIT: fnxit
-stop ! 
-def fnEmailEntryScreen
+def fn_emailEntryScreen
 	dim resp$(1)*80
 	fnTos
 	rc=cf=pdfdate=0
@@ -28,11 +26,11 @@ def fnEmailEntryScreen
 	!
 	Tf_XIT: ! continue
 fnend
-! def library fnEmailInvoice(email_date$)
-! 	if ~setup then let fn_setup
-! 	fnEmailInvoice=fn_emailQueuedInvoices(email_date$)
-! fnend
-def library fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos2,testday$)
+def library fnEmailQueuedInvoices(email_date$)
+	if ~setup then let fn_setup
+	fnEmailQueuedInvoices=fn_emailQueuedInvoices(email_date$)
+fnend
+def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos2,testday$)
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
 	fnmakesurepathexists(fnreport_cache_folder_current$&'\Ebilling\Sent\')
@@ -41,6 +39,9 @@ def library fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,p
 	dim contact$(0)*255
 	dim contactN(0)
 	hContact=fn_open("TM Contact",mat contact$,mat contactN,mat form$, 1,1)
+	
+	! todo: implement fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
+	
 	do while file(hList)=0
 		linput #hList: pdfline$ eof EmailInvoiceFinis
 		! if it exists then look up customer to information
