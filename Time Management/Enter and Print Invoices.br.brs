@@ -265,7 +265,7 @@ SCR_CORRECTION: ! r:
 	scrid$(4)="  Press F1 when completed with this screen"
 goto SCR_ADDEDIT ! /r
 GO_MERGE: ! r:
-	fnEmailQueuedInvoices(email_date$)
+	! fnEmailQueuedInvoices(email_date$)
 	close #1:
 	close #h_tmwk2:
 chain "S:\acsTM\TMMRGINV" ! /r
