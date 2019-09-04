@@ -854,7 +854,7 @@ def fn_display_menu
 		fn_dm_add(' &Check File Versions','S:\Core\Check File Versions.br')
 		!  fn_dm_add(' PrintAce')
 		!  fn_dm_add('  -')
-		fn_dm_add(' PrintAce Install &Dependencies','S:\Core\Programs\PrintAce_Setup.br')
+		! fn_dm_add(' PrintAce Install &Dependencies','S:\Core\Programs\PrintAce_Setup.br')
 		if env$('BR_MODEL')<>'CLIENT/SERVER' then
 			fn_dm_add(' Client Server','S:\Core\Programs\Client Server.br')
 		end if
