@@ -990,8 +990,8 @@ def fn_client_is_converting
 		cic_return=1
 	! else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
 	! 	cic_return=1
-	! else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('01/15/2019','mm/dd/ccyy')  then
-	! 	cic_return=1
+	else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('11/15/2019','mm/dd/ccyy')  then
+		cic_return=1
 	end if 
 	fn_client_is_converting=cic_return
 fnend 
