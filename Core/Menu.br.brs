@@ -89,6 +89,9 @@ def fn_setup_once
 	!
 	dim cursys$*2
 	cursys$=fncursys$(cursys$)
+	library 'S:\Core\Library': fncno
+	dim cnam$*128
+	fncno(cno,cnam$)
 	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
 		dim dataFolder$*256
 		dataFolder$='S:\Core\Data\acsllc'
