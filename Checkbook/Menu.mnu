@@ -31,7 +31,7 @@ Print Checks                              ^ Checkbook\Print Checks
 Print
 >Accounts Payable Listing - Any Time      ^ acsCL\CPInvLst
 >Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
->Claims or Purchases Report               ^ Checkbook\Claims and Purchases Report
+>Claims or Purchases Report               ^ Checkbook\Claims or Purchases Report
 >GL Distribution Report                   ^ acsCL\PostGL2b
 >Print 1099 Forms                         ^ Checkbook\Print 1099 Forms
 Export                                    
