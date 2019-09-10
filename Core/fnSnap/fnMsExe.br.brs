@@ -15,9 +15,10 @@ fnend
 def fn_pathToBrRegister$*256
 	if ~setup_pathToBrRegister then
 		library 'S:\Core\Library': fncopy
+		library 'S:\Core\Start' : fnProgramDataDir$
 		dim pathToBrRegister$*256
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			pathToBrRegister$='C:\ProgramData\ACS'
+			pathToBrRegister$=fnProgramDataDir$ ! get around windows access issue 
 		else !  not client server
 			pathToBrRegister$=env$("temp")&'\ACS'
 		end if

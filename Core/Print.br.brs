@@ -51,8 +51,9 @@ fnend
 def fn_report_cache_folder_current$*512
 	dim report_cache_base$*256
 	! dim client_report_cache$*256
+	library 'Core\Start' : fnProgramDataDir$
 	if env$('BR_MODEL')='CLIENT/SERVER' then
-		report_cache_base$='C:\ProgramData\ACS\Report Cache'
+		report_cache_base$=fnProgramDataDir$&'\Report Cache'
 	else
 		report_cache_base$=os_filename$('[Q]\Report Cache')
 	end if

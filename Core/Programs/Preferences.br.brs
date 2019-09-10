@@ -664,6 +664,7 @@ def fn_setup
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
 		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
+		library 'S:\Core\Start' :fnProgramDataDir$
 		on error goto ERTN
 		dim resp$(20)*256,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256
@@ -754,7 +755,7 @@ def fn_editFile(efEditorType$,efFileToEdit$*256)
 	if clientServer then
 		dim efFilePath$*256,efFileName$*128,efFileExt$*128
 		fnGetPp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
-		efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Temp\Session'&session$&'\'&efFileName$&efFileExt$
+		efEditOnClientCopyOfFile$=env$('at')&fnProgramDataDir$&'\Temp\Session'&session$&'\'&efFileName$&efFileExt$
 		fnmakesurepathexists(efEditOnClientCopyOfFile$)
 		if exists(efFileToEdit$) then
 			fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
