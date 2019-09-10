@@ -592,7 +592,7 @@ def fncs_env
 			goto CE_MAKE_TEMP_FILE
 		else if (ce_retry_4152_count+=1)<=9 then 
 			
-			ce_os_temp_file$='C:\ProgramData\ACS\Temp\Session'&session$&'\cs.txt'
+			ce_os_temp_file$='C:\Session'&session$&'\cs.txt'
 			ce_br_temp_file$='@::'&ce_os_temp_file$
 			fnmakesurepathexists(ce_br_temp_file$)
 			goto CE_MAKE_TEMP_FILE
