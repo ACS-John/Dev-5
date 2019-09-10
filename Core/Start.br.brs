@@ -93,7 +93,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
 				setenv('programdata',env$('CsServerTemp'))
 			end if
-			setenv('Temp',env$('programdata')&'\ACS\Temp\Session'&session$)
+			setenv('Temp','C:\ACS_Data\Temp\Session'&session$)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
 		if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
@@ -108,7 +108,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
 		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
-		if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
+		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)
 		! r: set to last client selected (if appropriate)
 			if env$('enableClientSelection')='Yes' and env$('clientSelected')='' then
@@ -333,7 +333,7 @@ def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additi
 	if ~setup then let fn_setup
 	fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
 fnend 
-def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
+def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048,skipmsg)
 	rt_return=1 ! returns 1 if passed test or 0 if failed.
 	rt_folder$=trim$(rt_folder$)
 	if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then rt_folder$=rt_folder$&'\'
@@ -344,6 +344,7 @@ def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_te
 	goto RT_PASS
 	RT_FAIL: ! 
 	rt_return=0
+	if skipmsg=1 then goto RT_PASS
 	if err=4205 then 
 		msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 		rt_return=0
@@ -760,4 +761,14 @@ def fn_writeProc(procName$*64,procLine$*256)
 	pr #hEd: procLine$
 	close #hEd:
 fnend
+def library fnProgramDataDir$(;returnfolder$)
+	let fnProgramDataDir$=fn_programDataDir$
+fnend
+def fn_programDataDir$(;returnfolder$)
+	! to handle windows access to programdata folder
+	if ~fn_rights_test('C:\ProgramData\ACS\','Resetting temp file.','',1) then 
+		fnmakesurepathexists("C:\DATA_Acs\")
+		let returnfolder$="C:\DATA_Acs"
+	end if 
+fnend 
 include: ertn

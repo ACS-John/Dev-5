@@ -10,6 +10,7 @@ def fn_setup
 		library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
 		library 'S:\Core\Library': fnRename,fnGetPp
 		library 'S:\Core\Library': fnSrepEnv$
+		library 'S:\Core\Start' : fnProgramDataDir$
 		dim company_import_path$*256
 		dim resp$(5)*256
 		dim ml$(0)*1024
@@ -93,8 +94,9 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 		dim save_path$*1024,save_filename$*256,save_ext$
 		fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
-		fnmakesurepathexists('C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
-		fnRename(serverTempSaveFile$,'C:\ProgramData\ACS\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+		let GetProgramDataDir$=fnProgramDataDir$
+		fnmakesurepathexists(GetProgramDataDir$&'\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+		fnRename(serverTempSaveFile$,GetProgramDataDir$&'\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
 	else
 		execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
 	end if
