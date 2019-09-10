@@ -13,6 +13,7 @@ def fn_setup
 		library 'S:\Core\Library': fngethandle,fnStatusClose
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnSrepEnv$
+		library 'S:\Core\Library': fnProgramDataDir$
 		! library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnOpt,fnCmdSet
 		! 
 		! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
@@ -51,7 +52,6 @@ fnend
 def fn_report_cache_folder_current$*512
 	dim report_cache_base$*256
 	! dim client_report_cache$*256
-	library 'Core\Start' : fnProgramDataDir$
 	if env$('BR_MODEL')='CLIENT/SERVER' then
 		report_cache_base$=fnProgramDataDir$&'\Report Cache'
 	else

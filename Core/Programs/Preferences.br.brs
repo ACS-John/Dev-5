@@ -664,7 +664,7 @@ def fn_setup
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
 		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
-		library 'S:\Core\Start' :fnProgramDataDir$
+		library 'S:\Core\Library': fnProgramDataDir$
 		on error goto ERTN
 		dim resp$(20)*256,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256

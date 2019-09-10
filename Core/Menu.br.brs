@@ -91,7 +91,7 @@ def fn_setup_once
 	cursys$=fncursys$(cursys$)
 	library 'S:\Core\Library': fncno
 	dim cnam$*128
-	fncno(cno,cnam$)
+	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
 	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
 		dim dataFolder$*256
 		dataFolder$='S:\Core\Data\acsllc'

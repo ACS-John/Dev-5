@@ -17,11 +17,11 @@ def fn_acsSystemInitialize(; syInitMode)
 			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
 			! r: set environment variables based on login_name$ and/or BR_MODEL
 			! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
-			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then 
+			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then
 				setenv('enableClientSelection','Yes')
 			end if
-			if env$('BR_MODEL')='CLIENT/SERVER' then ! 
-				if login_name$='niceguywinning@gmail.com' then 
+			if env$('BR_MODEL')='CLIENT/SERVER' then !
+				if login_name$='niceguywinning@gmail.com' then
 					setenv('enableDataFolderByClient','Yes')
 					pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
 				end if
@@ -31,7 +31,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 		if ~setup then let fn_setup
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
-		
+
 		if syInitMode=2 then
 			fn_env_data_default(1)
 			setenv('data',os_filename$('//6')&'\ACS')
@@ -41,7 +41,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		else
 			fn_env_data_default(0)
 		end if
-		
+
 		!
 		if env$('Q')='' then
 			if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
@@ -53,10 +53,10 @@ def fn_acsSystemInitialize(; syInitMode)
 				fn_setQBase(env$('CsServerData'))
 			else if env$('enableDataFolderByClient')='Yes' then
 				if pos(env$('data'),'/')>0 then slash$='/' else slash$='\'
-				fn_setQ(rtrm$(env$('data'),slash$)&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+				fn_setQ(rtrm$(env$('data'),slash$)&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:')
 				fn_setQBase(env$('data'))
-			else 
-				fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+			else
+				fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:')
 				fn_setQBase(env$('data'))
 			end if
 		end if
@@ -73,7 +73,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			setenv('at','')
 		end if
 		!
-		if env$('acsDeveloper')<>'' then 
+		if env$('acsDeveloper')<>'' then
 			execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
 		end if
 		!
@@ -86,7 +86,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		execute 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then let fncheckcompiled ! sets the current directory to "S:" if it is not already 
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then let fncheckcompiled ! sets the current directory to "S:" if it is not already
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			execute 'config editor'
@@ -97,13 +97,13 @@ def fn_acsSystemInitialize(; syInitMode)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
 		if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
-		if pos(env$('Q'),' ')>0 then 
+		if pos(env$('Q'),' ')>0 then
 			fn_setQ(fnshortpath$(env$('Q')))
 		end if
-		if pos(env$('Qbase'),' ')>0 then 
+		if pos(env$('Qbase'),' ')>0 then
 			dim New2Qbase$*256
-			New2Qbase$=fnshortpath$(env$('Qbase')) 
-			setenv('QBase','') 
+			New2Qbase$=fnshortpath$(env$('Qbase'))
+			setenv('QBase','')
 			fn_setQbase(New2Qbase$)
 		end if
 		if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
@@ -168,7 +168,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		! fn_writeProc(''      ,'execute ''load "''&program$&''"''' )
 		! fn_writeProc(''      ,'run '                              )
 		!
-		if env$('ACSDeveloper')<>'' then 
+		if env$('ACSDeveloper')<>'' then
 			if ~exists('reload') then
 				fn_writeProc('reload','end')
 				fn_writeProc(''      ,'execute ''load "''&program$&''"''')
@@ -197,27 +197,27 @@ def fn_acsSystemInitialize(; syInitMode)
 		if ~fn_multisession_test then goto XIT
 		! setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
 		setenv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
-		version_prior$=fn_last_version_used$ 
-		version_current$=fn_acsVersion$       
+		version_prior$=fn_last_version_used$
+		version_current$=fn_acsVersion$
 		setenv('acsVersion',version_current$)
-		if fn_update_needed(version_prior$,version_current$) then 
+		if fn_update_needed(version_prior$,version_current$) then
 			fnclient$ ! this needs to be called to set client environment variables
 			fnchain('S:\Core\Programs\Update.br')
-		end if 
+		end if
 		library 'S:\Core\Library': fnSpecialFolderPath$
 		setenv('Desktop',fnSpecialFolderPath$('Desktop'))
 		! pr 'point XXX1' : pause
-		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then 
-			if  env$('cursys')<>'CM' then 
+		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then
+			if  env$('cursys')<>'CM' then
 				fn_show_release_notes(version_prior$,version_current$)
 				fn_FreeVirtualStore
 			end if
 			fn_UpdateQFileIO
 			fn_UpdateQScreenIO
 			fn_last_version_used$(version_current$)
-		else if  env$('cursys')='CM' then 
+		else if  env$('cursys')='CM' then
 			fn_UpdateQFileIO
-		end if 
+		end if
 	end if
 	!
 	! fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
@@ -225,7 +225,7 @@ def fn_acsSystemInitialize(; syInitMode)
 	!
 fnend
 def fn_uniqueComputerId_initialize
-	if env$('Unique_Computer_ID')='' then 
+	if env$('Unique_Computer_ID')='' then
 		dim uci_tmp_filename$*512
 		dim tmp_line$*128
 		dim uuid$*36
@@ -242,20 +242,20 @@ def fn_uniqueComputerId_initialize
 		tmp_line$=srep$(tmp_line$,' ','')
 		do while pos(tmp_line$,'~~')>0
 			tmp_line$=srep$(tmp_line$,'~~','~')
-		loop 
-		if tmp_line$(1:4)<>'UUID' then 
+		loop
+		if tmp_line$(1:4)<>'UUID' then
 		 ! windows server 2003
 			tmp_pos_uuid=pos(tmp_line$,'UUID~')
-			if tmp_pos_uuid>0 then 
+			if tmp_pos_uuid>0 then
 				tmp_line$(1:tmp_pos_uuid)=''
-			else 
-				pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause 
-			end if 
-		end if 
+			else
+				pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
+			end if
+		end if
 !   if tmp_line$(1:4)<>'UUID' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
 		uuid$=tmp_line$(6:len(tmp_line$)-1)
-		close #h_tmp,free: 
-		if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then 
+		close #h_tmp,free:
+		if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then
 			uuid_valid=0
 			execute 'sy -m wmic  DISKDRIVE get SerialNumber |more >'&uci_tmp_filename$ ioerr NO_WMIC
 !  execute 'sy -m wmic /output:"'&uci_tmp_filename$&'" DISKDRIVE get SerialNumber'   <--encoded in something other than ANSI, hard to read
@@ -266,32 +266,32 @@ def fn_uniqueComputerId_initialize
 			tmp_line$=srep$(tmp_line$,' ','')
 			do while pos(tmp_line$,'~~')>0
 				tmp_line$=srep$(tmp_line$,'~~','~')
-			loop 
-			if tmp_line$(1:12)<>'SerialNumber' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause 
+			loop
+			if tmp_line$(1:12)<>'SerialNumber' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause
 			hdd_serial$=tmp_line$(14:len(tmp_line$)-1)
-			close #h_tmp,free: 
-		else 
+			close #h_tmp,free:
+		else
 			uuid_valid=1
-		end if 
-		if uuid_valid then 
+		end if
+		if uuid_valid then
 			setenv('Unique_Computer_ID',uuid$)
-		else 
+		else
 			setenv('Unique_Computer_ID',hdd_serial$)
-		end if 
-	end if 
+		end if
+	end if
 	goto UcaFinis
 	NO_WMIC: ! r: ! windows XP does not support WMIC
 		setenv('Unique_Computer_ID',wsid$)
 	goto UcaFinis ! /r
-	UcaFinis: ! 
-fnend 
+	UcaFinis: !
+fnend
 def fn_AcsUserId_Initialize
 	! this function returns nothing but is used to initiate env$('acsUserId')
 	! env$('acsUserId') is a replacement for wsid$ which is a filename safe and derived from env$('Unique_Computer_ID')
 	if env$('acsUserId')='' then
 		! if env$('Unique_Computer_ID')='' then let fn_uniqueComputerId_initialize
 		fnreg_read('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
-		if acs_userid$='' then 
+		if acs_userid$='' then
 			fnreg_read('ACS UserID Number Last Assigned',acs_userid$)
 			acs_userid$=str$(val(acs_userid$)+1)
 			fnreg_write('ACS UserID Number Last Assigned',acs_userid$)
@@ -303,9 +303,9 @@ def fn_AcsUserId_Initialize
 fnend
 XIT: execute "System"
 def fn_setup
-	if ~setup then 
+	if ~setup then
 		setup=1
-		option retain 
+		option retain
 		library 'S:\Core\Library': fnchain
 		library 'S:\Core\Library': fncheckcompiled
 		library 'S:\Core\Library': fnapply_theme
@@ -316,8 +316,8 @@ def fn_setup
 		library 'S:\Core\Library': fnAcsInstallationPath$
 		library 'S:\Core\Library': fnMakeSurepathExists
 		library 'S:\Core\Library': fnclient$
-	end if 
-fnend 
+	end if
+fnend
 def library fnSpoolPath$*256(; initialize)
 	if ~setup then let fn_setup
 	fnSpoolPath$=fn_spoolPath$( initialize)
@@ -325,82 +325,82 @@ fnend
 def fn_spoolPath$*256(; initialize)
 	if initialize then
 		fnmakesurepathexists(env$('temp')&'\acs\Spool\')
-		execute 'config spoolpath '&env$('temp')&'\acs\Spool' 
+		execute 'config spoolpath '&env$('temp')&'\acs\Spool'
 	end if
 	fn_spoolPath$=env$('temp')&'\acs\Spool'
 fnend
 def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
 	if ~setup then let fn_setup
 	fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
-fnend 
+fnend
 def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048,skipmsg)
 	rt_return=1 ! returns 1 if passed test or 0 if failed.
 	rt_folder$=trim$(rt_folder$)
 	if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then rt_folder$=rt_folder$&'\'
-	! 
+	!
 	open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outIn,relative ioerr RT_FAIL
-	close #h_test: 
+	close #h_test:
 	execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
 	goto RT_PASS
-	RT_FAIL: ! 
+	RT_FAIL: !
 	rt_return=0
 	if skipmsg=1 then goto RT_PASS
-	if err=4205 then 
+	if err=4205 then
 		msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 		rt_return=0
-	else if err then 
+	else if err then
 		msgbox("Error "&str$(err)&" in rights test - making/removing a file in "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 		if env$('ACSDeveloper')<>'' then pause
 		rt_return=0
-	end if 
-	RT_PASS: ! 
+	end if
+	RT_PASS: !
 	fn_rights_test=rt_return
-fnend 
+fnend
 def fn_move_data(file_name$*256,destination_name$*256; ignore_exists)
 	md_return=0
-	if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then 
+	if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then
 		execute 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
 		execute 'Free "'&file_name$&'"' ioerr ignore
 		md_return=1
-	end if 
-	MOVE_DATA_XIT: ! 
+	end if
+	MOVE_DATA_XIT: !
 	fn_move_data=md_return
-fnend 
+fnend
 def fn_move_core_data(file_name$*256; ignore_exists)
 	fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,"[Q]\Data\"&file_name$, ignore_exists)
-fnend 
+fnend
 def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 	fnMapToVirturalDrive=fn_map_to_virtural_drive(path_to_map$,drive_id$)
 fnend
 def fn_map_to_virtural_drive(path_to_map$*256,drive_id$*2)
 	execute 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
-fnend 
+fnend
 def fn_temp_dir_validate
 	tdt_return=1
-	if lwrc$(env$('temp'))='c:\windows\temp' then 
-		if ~exists(env$('USERPROFILE')) then 
+	if lwrc$(env$('temp'))='c:\windows\temp' then
+		if ~exists(env$('USERPROFILE')) then
 			msgbox('Security Error: User Profile directory ('&env$('USERPROFILE')&') does not exist.')
 			tdt_return=0
-		else 
+		else
 			tdt_return=fn_change_temp
-		end if 
-	end if 
+		end if
+	end if
 	fn_temp_dir_validate=tdt_return
-fnend 
+fnend
 def fn_change_temp
 	ct_return=1
 	if ~exists(env$('USERPROFILE')&'\AppData') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
-	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then 
+	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then
 		msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
 		ct_return=0
-	else 
+	else
 		setenv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
 		setenv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
-	end if 
+	end if
 	fn_change_temp=ct_return
-fnend 
+fnend
 ! def fn_udf_resolve ! r: migration tool no longer used
 !   dim udf$*1024
 !   fn_get_udf(udf$)
@@ -421,32 +421,32 @@ fnend
 !         dim tmp_to$*1024,tmp_from$*1024
 !         tmp_to$='[Q]\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
 !         tmp_from$=lwrc$(filename$(f_i))
-!         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
+!         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then
 !           fnCopy(tmp_from$,'[Q]\UBmstr\*.*')
 !           execute 'free "'&tmp_from$&'"' ioerr ignore
-!         else if ~exists(tmp_to$) then 
-!           if fnCopy(tmp_from$,tmp_to$) then 
+!         else if ~exists(tmp_to$) then
+!           if fnCopy(tmp_from$,tmp_to$) then
 !             execute 'free "'&tmp_from$&'"' ioerr ignore
-!           end if 
-!         else if exists(tmp_to$) then 
+!           end if
+!         else if exists(tmp_to$) then
 !           execute 'free "'&tmp_from$&'"' ioerr ignore
-!         end if 
-!       end if 
+!         end if
+!       end if
 !     next f_i
 !     for d_i=tmp_dir_count to 1, step -1
 !       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
 !     next d_i
-!   end if 
+!   end if
 ! fnend /r
 ! def fn_get_udf(&udf$) r:
 !   dim oldudf$*256
-!   if oldudf$<>"" then 
+!   if oldudf$<>"" then
 !     udf$=oldudf$
 !   else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
 !     udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
-!   else 
+!   else
 !     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
-!   end if 
+!   end if
 !   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
 ! fnend /r
 def fn_env_data_default(; colletionMasterMode)
@@ -456,19 +456,19 @@ def fn_env_data_default(; colletionMasterMode)
 	else
 		if env$('data')='' then ! if env$('data') is blank than set it here.
 			dim edd_base$*256
-			if env$('ProgramData')='' then 
+			if env$('ProgramData')='' then
 				edd_base$=fnshortpath$(env$('appdata'))
-			else 
+			else
 				edd_base$=env$('ProgramData')
-			end if 
+			end if
 			setenv('data',edd_base$&'\ACS\')
 			fnmakesurepathexists(env$('data')&'\Data\')
 			if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
 				setenv('data',env$('data')&'\')
-			end if 
+			end if
 		end if
 	end if
-fnend 
+fnend
 def library fnSetQ(setQ$*256)
 	if ~setup then let fn_setup
 	fnSetQ=fn_setQ(setQ$)
@@ -478,7 +478,7 @@ def fn_setQ(setQ$*256)
 	if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
 	setenv('Q',setQ$)
 	execute 'config substitute [Q] "'&env$('Q')&'"'
-	if env$('acsDeveloper')='' then 
+	if env$('acsDeveloper')='' then
 		execute 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
 	end if
 	fnmakesurepathexists('[Q]\Data\')
@@ -493,52 +493,52 @@ def fn_setQBase(newQBase$*256)
 		newQBase$=rtrm$(newQBase$,'\')
 		if pos(newQBase$,' ')>0 then newQBase$=fnshortpath$(newQBase$)
 		setenv('QBase',newQBase$)
-		exe 'config substitute [QBase] '&env$('QBase') 
+		exe 'config substitute [QBase] '&env$('QBase')
 	end if
 fnend
 def fn_update_needed(acs_version_prior$,acs_version_running$)
 	un_return=0
-	if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then 
+	if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then
 		un_return=1
 		msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
-	end if 
+	end if
 	fn_update_needed=un_return
-fnend 
+fnend
 def fn_last_version_used$(; setit$*256)
 	dim lvu_line$*256
-	if setit$<>'' then 
+	if setit$<>'' then
 		lvu_line$=trim$(setit$)
 		fnreg_write('ACS last version used',setit$)
-	else 
+	else
 		fnreg_read('ACS last version used',lvu_line$)
-		if lvu_line$='' then 
+		if lvu_line$='' then
 			open #hAcsVersion:=fn_gethandle: 'Name=[Q]\Data\ACS_Version.txt,RecL=256',display,input ioerr LVU_OLD_FILE_OPEN_IOERR
 			linput #hAcsVersion: lvu_line$
-			close #hAcsVersion,free: 
+			close #hAcsVersion,free:
 			fnreg_write('ACS last version used',lvu_line$)
-		end if 
-	end if 
-	LVU_OLD_FILE_OPEN_IOERR: ! 
+		end if
+	end if
+	LVU_OLD_FILE_OPEN_IOERR: !
 	fn_last_version_used$=trim$(lvu_line$)
-fnend 
+fnend
 def fn_multisession_test
 	fnureg_read('Disable_MultiSession',disable_multisession$)
-	if val(session$(len(session$):len(session$)))=>2 and disable_multisession$='True' then 
+	if val(session$(len(session$):len(session$)))=>2 and disable_multisession$='True' then
 		msgbox('Multiple sessions have been disabled in user preferences.')
 		mt_return=0
-	else 
+	else
 		mt_return=1
-	end if 
+	end if
 	fn_multisession_test=mt_return
-fnend 
+fnend
 def fn_update_version_for_inno
-	open #h_tmp:=fn_gethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output 
+	open #h_tmp:=fn_gethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output
 	pr #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
 	pr #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
 	pr #h_tmp: 'AppVersion='&env$('acsVersion')
 	pr #h_tmp: 'AppVerName=ACS '&env$('acsVersion')
-	close #h_tmp: 
-fnend 
+	close #h_tmp:
+fnend
 def fncs_env
 	dim ce_line$*2048
 	dim ce_prefix$
@@ -567,8 +567,8 @@ def fncs_env
 	open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_FNCS_ENV
 	do
 		linput #hOsSet: ce_line$ error XIT_LOOP
-		gw_wholeline=len(rtrm$(ce_line$)) 
-		gw_addlen=1 
+		gw_wholeline=len(rtrm$(ce_line$))
+		gw_addlen=1
 		gw_posfnwp=pos(uprc$(ce_line$),"=")
 		if gw_posfnwp>0 then
 			gw_equal =pos(ce_line$,'=')
@@ -582,17 +582,17 @@ def fncs_env
 			end if
 		end if
 	loop
-	CE_DEBUG_OPEN_ERR: ! 
+	CE_DEBUG_OPEN_ERR: !
 	if err=4152 or err=4203 then
-		if (ce_retry_4152_count+=1)<=3 then 
+		if (ce_retry_4152_count+=1)<=3 then
 			goto CE_MAKE_TEMP_FILE
-		else if (ce_retry_4152_count+=1)<=6 then 
+		else if (ce_retry_4152_count+=1)<=6 then
 			if ce_br_temp_file$(1:3)<>'@::' then
 				ce_br_temp_file$(0:0)='@::'
 			end if
 			goto CE_MAKE_TEMP_FILE
-		else if (ce_retry_4152_count+=1)<=9 then 
-			
+		else if (ce_retry_4152_count+=1)<=9 then
+
 			ce_os_temp_file$='C:\Session'&session$&'\cs.txt'
 			ce_br_temp_file$='@::'&ce_os_temp_file$
 			fnmakesurepathexists(ce_br_temp_file$)
@@ -615,8 +615,8 @@ def fncs_env
 	linput #hOsCd: client_os_path$ error ignore
 	close #hOsCd,free: error ignore
 	setenv('client_os_path',client_os_path$)
-	XIT_FNCS_OS_PATH: ! 
-fnend 
+	XIT_FNCS_OS_PATH: !
+fnend
 def fn_show_release_notes(version_prior$,version_current$)
 	dim srnLine$*1024,srnItem$(0)*1024
 	open #hSrnOut:=fn_gethandle: 'name=ACS_tmp_Release_Note_Report.txt,recl=1024,replace',d,o
@@ -645,17 +645,17 @@ fnend
 def fn_gethandle
 	hMaybe=189
 	ghReturn=0
-	do 
-		if file(hMaybe)<0 and file$(hMaybe)='' then 
+	do
+		if file(hMaybe)<0 and file$(hMaybe)='' then
 			ghReturn=hMaybe
 			goto gethandleFINIS
-		end if 
+		end if
 		hMaybe-=1
 	loop until hMaybe=-1
 	pr 'fn_gethandle found no available file handles, so it is returning -1' : pause
-	gethandleFINIS: ! 
+	gethandleFINIS: !
 	fn_gethandle=ghReturn
-fnend 
+fnend
 def fn_FreeVirtualStore ! does not seem to work.
 	dim acsInstallationPath$*256
 	acsInstallationPath$=fnAcsInstallationPath$(1)
@@ -707,7 +707,7 @@ def fn_UpdateQScreenIO
 fnend
 RetryAFewTimes: ! r:
 	retryAfewTimesCount+=1
-	if retryAfewTimesCount=10 then 
+	if retryAfewTimesCount=10 then
 		pr 'error '&str$(err)&' on line '&str$(line)&'.  Retried '&str$(retryAfewTimesCount)&' times.'
 		pause
 		retryAfewTimesCount=0
@@ -761,14 +761,36 @@ def fn_writeProc(procName$*64,procLine$*256)
 	pr #hEd: procLine$
 	close #hEd:
 fnend
-def library fnProgramDataDir$(;returnfolder$)
-	let fnProgramDataDir$=fn_programDataDir$
+def library fnProgramDataDir$*256
+	fnProgramDataDir$=fn_programDataDir$
 fnend
-def fn_programDataDir$(;returnfolder$)
+def fn_programDataDir$*256(;___,return$*256,pddTryItem)
 	! to handle windows access to programdata folder
-	if ~fn_rights_test('C:\ProgramData\ACS\','Resetting temp file.','',1) then 
-		fnmakesurepathexists("C:\DATA_Acs\")
-		let returnfolder$="C:\DATA_Acs"
-	end if 
-fnend 
+	if ~setup_programDataDir then
+		setup_programDataDir=1
+		dim pddTry$(2)*256
+		pddTry$(1)='C:\ProgramData\ACS\'
+		pddTry$(2)='C:\ACS_Data\'
+		dim pddTryRetainedAnswer$*256
+		pddTryRetainedAnswer$=''
+	end if
+	if pddTryRetainedAnswer$<>'' then
+		return$=pddTryRetainedAnswer$
+	else
+		do until pddTryItem=>udim(mat pddTry$) or return$<>''
+			pddTryItem+=1
+			! fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048,skipmsg)
+			fnmakesurepathexists(pddTry$(pddTryItem))
+			if fn_rights_test(pddTry$(pddTryItem),'','', 1) then
+				return$=pddTry$(pddTryItem)
+			end if
+		loop
+		if return$='' then
+			msgbox('Insufficient rights to access local data folder. Please call ACS technical support.')
+			exe 'sy'
+		end if
+		pddTryRetainedAnswer$=return$
+	end if
+	fn_programDataDir$=return$
+fnend
 include: ertn

@@ -97,6 +97,10 @@ def library fnSpecialFolderPath$*256(folderName$*64)
 	library 'S:\Core\specialFolderPath.br': fnSpecialFolderPath$
 	fnSpecialFolderPath$=fnSpecialFolderPath$(folderName$)
 fnend
+def library fnProgramDataDir$*256
+	library 'S:\Core\Start.br': fnProgramDataDir$
+	fnProgramDataDir$=fnProgramDataDir$
+fnend
 def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*1024,mat ccEmails$,mat bccEmail$)
 	library 'S:\Core\email.br': fnSendEmail
 	fnSendEmail=fnSendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmails$,mat bccEmail$)
