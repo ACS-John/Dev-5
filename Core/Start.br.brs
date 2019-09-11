@@ -782,7 +782,7 @@ def fn_programDataDir$*256(;___,return$*256,pddTryItem)
 			pddTryItem+=1
 			! fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048,skipmsg)
 			fnmakesurepathexists(pddTry$(pddTryItem))
-			if fn_rights_test(pddTry$(pddTryItem),'','', 1) then
+			if fn_rights_test(pddTry$(pddTryItem),'','','', 1) then
 				return$=pddTry$(pddTryItem)
 			end if
 		loop
