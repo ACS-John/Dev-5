@@ -762,6 +762,7 @@ def fn_writeProc(procName$*64,procLine$*256)
 	close #hEd:
 fnend
 def library fnProgramDataDir$*256
+	if ~setup then let fn_setup
 	fnProgramDataDir$=fn_programDataDir$
 fnend
 def fn_programDataDir$*256(;___,return$*256,pddTryItem)
