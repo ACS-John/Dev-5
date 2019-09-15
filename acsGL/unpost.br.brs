@@ -1,13 +1,13 @@
 ! Replace S:\acsGL\Unpost
 ! Remove Transactions (for a date range)
 ! r: setup library and dims
-	library 'S:\Core\Library': fntop,fnxit, fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs,fnChk,fngethandle,fnStatus,fnStatusPause,fnindex_it
-	on error goto ERTN
-! 
-	dim k(10,8),p$*30,ta(2),cap$*128,t$*12
-	dim n(2),l$*12
+library 'S:\Core\Library': fntop,fnxit, fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs,fnChk,fngethandle,fnStatus,fnStatusPause,fnindex_it
+on error goto ERTN
+ 
+dim k(10,8),p$*30,ta(2),cap$*128,t$*12
+dim n(2),l$*12
 ! /r
-	fntop(program$,cap$="Remove Entries")
+fntop(program$,cap$="Remove Entries")
 MENU1: ! r:
 	fnTos(sn$='UnPost')
 	lc=0 : mylen=47 : mypos=mylen+2

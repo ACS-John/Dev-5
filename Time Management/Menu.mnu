@@ -51,36 +51,3 @@ Print
 ! >Service Production Report                      ^ acsTM\tmsrvprd
 ! >YTD Billing Summary                            ^ Time Management\YTD Billing Summary
 ! >Zero YTD Information                           ^ acsTM\tmzytd
-
->ACS Programmer
->Layouts
->>Print Layout(s)                ^ Core\Programs\PrintLay2
->>Print Several Layouts (old)    ^ Core\Programs\PrintLay1
-
->Programs
->>Locate                         ^ Core\Locate
->>KeyStat                        ^ Core\Programs\KeyStat
->>Amortization                   ^ Core\Programs\Amortiz
->>FlexDir                        ^ Core\Programs\FlexDir
-
->Core - (multiple systems)
->>Reg Hamster                    ^ Core\Reg_Hamster
->>City State Zip                 ^ HamsterFio:CO City State Zip
->>System Registry                ^ HamsterFio:CO System Registry
->>State                          ^ Core\Programs\State
->>1099 Boxes                     ^ Core\Programs\1099Box
->>1099 Type                      ^ Core\Programs\1099Type
->>Race                           ^ Core\Programs\Race
->>TM Transaction Code            ^ acsTM\Transaction_Code
-
->Test
->>N2Index                ^ Test\N2Index
->>Print 1099s            ^ Test\Print1099
->>Payment10              ^ acsEA\Payment10
->>EA Applicant Search    ^ Test\ApplicantSearch
->>Picture                ^ Test\Pic
->>ComboF                 ^ Test\ComboF
->>Fine Transaction       ^ Test\FineTransaction
->>Pay Transaction        ^ Test\PayTransaction
->>Test Disabled Text Box ^ Test\TxtDisable
->>Test Flex              ^ Test\Flex

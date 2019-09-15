@@ -1,4 +1,5 @@
 ! this program deletes transactions matching a given month from the unclosed transaction file.  it makes a backup copy of the file first
+! NOTICE: You should probably be using "Remove Entries Posted by Mistake" instead of this.
 enableDelete=1
 monthToDelete=8
 

@@ -1,3 +1,7 @@
+def library fnClaimFolder$(fileno$*8)
+	library 'Collection-Master Add-On\fn\fnClaimFolder$.br': fnClaimFolder$
+	fnClaimFolder$=fnClaimFolder$(fileno$)
+fnend
 def library fnsession_size_setup(; &session_rows,&session_cols)
 	library 'Collection-Master Add-On\fn\session_size_setup.br': fnsession_size_setup
 	! library program$(1:pos(program$,'\',-1))&'session_size_setup.br': fnsession_size_setup
