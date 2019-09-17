@@ -1,80 +1,156 @@
-! Replace S:\acsUB\expubm
-! -- Export UB Master File
-! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnTxt,fnAcs,fnxit,fnerror,fnCmdSet,fntop
-	library 'S:\Core\Library': fnreg_read,fnreg_write,fncustomer_address,fnget_services
+! formerly S:\acsUB\expubm
+! r: setup
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs2
+	library 'S:\Core\Library': fnCmdSet
+	library 'S:\Core\Library': fncustomer_address
+	library 'S:\Core\Library': fnget_services
+	library 'S:\Core\Library': fnreg_read,fnreg_write
 	library 'S:\Core\Library': fngethandle
-! ______________________________________________________________________
+	library 'S:\Core\Library': fnSpecialFolderPath$
+	library 'S:\Core\Library': fnMakeSurePathExists
+
 	on error goto ERTN
-! ______________________________________________________________________
-	dim gb(10),ab$(3)*30,flob$(5),scrb$(3)*24,inb$(3)
-	dim ri1$(20),rm$*60,rm$(20)*60,ra1(20),ra(2)
-	dim wf$(13),ws$(13)*30,iow$(16),i$(16)*70
-	dim fld$*60,nam$*30,n$*30,fm$(22)*80,ul$*186,hd$*186
-	dim hln$*78,hk$*9,inh$(20),lnh$(20)*78,hhdr$*60
-	dim x$*10,scrid$(2)*75,p$*10,o(2),txt$(3)*80
-	dim tr(4),lnadr(20),tc$(4)*12,si$*25
-	dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7
-	dim dest$*256,csz$*40,first_name$*30,last_name$*30,cap$*128
-	dim delim$*1,streetnam$*30,streetnum$*30,state$*30,city$*30,zip$*30
-	dim resp$(3)*256,extra$(11)*30
-	fntop(program$,cap$="Export UB Master File")
+
+! /r
+	fntop(program$)
 	dim serviceName$(10)*20
 	fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 MENU1: ! r:
-	fnTos(sn$="expubm")
+	dim resp$(3)*256
+	fnTos
 	fnLbl(1,1,"Destination Path and File Name:",34,1)
-	fnTxt(1,36,40,256,0,"71")
-	fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=os_filename$(env$('Desktop'))&"\ubm.txt"
+	fnTxt(1,36,40,256,0,'72')
+	fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=fnSpecialFolderPath$('Desktop')&"\ubm.txt" ! =os_filename$(env$('Desktop'))&"\ubm.txt"
 	fnLbl(2,1,"Delimiter (ASCII Code):" ,34,1)
 	fnTxt(2,36,3,0,0,"30")
 	resp$(2)="9"
 	fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto XIT
+	dim dest$*256
 	dest$=resp$(1)
 	delas=val(resp$(2))
 	fnreg_write('exp_ubm.path',dest$)
-	goto OPENS
+	goto MainLoop
 ! /r
-OP2ERR: ! r:
-	goto MENU1
-! /r
-OPENS: ! 
+MainLoop: ! r:
+	dim delim$*1
 	delim$=chr$(delas)
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative 
 	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative 
-	open #2: "Name="&br_filename$(dest$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr OP2ERR
-! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
-! form pos 287,c 10,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1
+	fnMakeSurePathExists(dest$)
+	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
+	! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
+	! form pos 287,c 10,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1
 	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
 	gosub HEADER ! work in progress
 	do 
-		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$ eof DONE
+		dim z$*10
+		dim e$(4)*30
+		dim f$(3)*12
+		dim a(7)
+		dim b(11)
+		dim c(4)
+		dim d(15)
+		dim g(12)
+		dim adr(2)
+		dim alp$*7
+		dim gb(10)
+		dim extra$(11)*30
+		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$ eof Finis
 		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1821,n 1,pos 1864,c 30,c 12,c 12,c 12,c 12,c 12,c 12,c 12,c 30,c 30,c 30
 		gosub ALT_BILL_ADR
 		dim addr$(4)*40
 		fncustomer_address(z$,mat addr$)
-		pr #2: '"'&z$&'"'&delim$;
-		pr #2: e$(1)&delim$&e$(2)&delim$&e$(3)&delim$&extra$(1)&delim$&e$(4)&delim$;
-		pr #2: f$(1)&delim$&str$(a(1))&delim$&str$(a(2))&delim$&str$(a(3))&delim$&str$(a(4))&delim$&str$(a(5))&delim$&str$(a(6))&delim$&str$(a(7))&delim$;
-		pr #2: str$(b(1))&delim$&str$(b(2))&delim$&str$(b(3))&delim$;
-		pr #2: str$(b(4))&delim$&str$(b(5))&delim$&str$(b(6))&delim$&str$(b(7))&delim$&str$(b(8))&delim$&str$(b(9))&delim$&str$(b(10))&delim$&str$(b(11))&delim$;
-		pr #2: str$(c(1))&delim$&str$(c(2))&delim$&str$(c(3))&delim$&str$(c(4))&delim$&str$(d(1))&delim$&str$(d(2))&delim$&str$(d(3))&delim$&str$(d(4))&delim$&str$(d(5))&delim$&str$(d(6))&delim$&str$(d(7))&delim$&str$(d(8))&delim$&str$(d(9))&delim$;
-		pr #2: str$(d(10))&delim$&str$(d(11))&delim$&str$(d(12))&delim$&str$(d(13))&delim$&str$(d(14))&delim$&str$(d(15))&delim$&str$(bal)&delim$&str$(f)&delim$&str$(g(1))&delim$&str$(g(2))&delim$&str$(g(3))&delim$;
-		pr #2: str$(g(4))&delim$&str$(g(5))&delim$&str$(g(6))&delim$&str$(g(7))&delim$&str$(g(8))&delim$&str$(g(9))&delim$&str$(g(10))&delim$&str$(g(11))&delim$&str$(g(12))&delim$&alp$&delim$&f$(2)&delim$&f$(3)&delim$;
-		pr #2: extra$(3)&delim$;
-		pr #2: extra$(4)&delim$;
-		pr #2: extra$(5)&delim$;
-		pr #2: str$(bra)&delim$&str$(gb(1))&delim$&str$(gb(2))&delim$&str$(gb(3))&delim$&str$(gb(4))&delim$&str$(gb(5))&delim$&str$(gb(6))&delim$&str$(gb(7))&delim$&str$(gb(8))&delim$&str$(gb(9))&delim$&str$(gb(10))&delim$&ab$(1)&delim$&ab$(2)&delim$&ab$(3)&delim$;
-		pr #2: str$(finalBillingCode)&delim$;
-		pr #2: addr$(1)&delim$;
-		pr #2: addr$(2)&delim$;
-		pr #2: addr$(3)&delim$;
-		pr #2: addr$(4)&delim$
-	loop 
-DONE: ! r:
+		! r: pr #2 delimited field values
+		pr #2: '"'&z$&'"'              	&delim$;
+		pr #2: e$(1)                    	&delim$;
+		pr #2: e$(2)                    	&delim$;
+		pr #2: e$(3)                    	&delim$;
+		pr #2: extra$(1)               	&delim$;
+		pr #2: e$(4)                    	&delim$;
+		pr #2: f$(1)                    	&delim$;
+		pr #2: str$(a(1))               	&delim$;
+		pr #2: str$(a(2))               	&delim$;
+		pr #2: str$(a(3))               	&delim$;
+		pr #2: str$(a(4))               	&delim$;
+		pr #2: str$(a(5))               	&delim$;
+		pr #2: str$(a(6))               	&delim$;
+		pr #2: str$(a(7))               	&delim$;
+		pr #2: str$(b(1))               	&delim$;
+		pr #2: str$(b(2))               	&delim$;
+		pr #2: str$(b(3))               	&delim$;
+		pr #2: str$(b(4))               	&delim$;
+		pr #2: str$(b(5))               	&delim$;
+		pr #2: str$(b(6))               	&delim$;
+		pr #2: str$(b(7))               	&delim$;
+		pr #2: str$(b(8))               	&delim$;
+		pr #2: str$(b(9))               	&delim$;
+		pr #2: str$(b(10))              	&delim$;
+		pr #2: str$(b(11))              	&delim$;
+		pr #2: str$(c(1))              	&delim$;
+		pr #2: str$(c(2))              	&delim$;
+		pr #2: str$(c(3))              	&delim$;
+		pr #2: str$(c(4))              	&delim$;
+		pr #2: str$(d(1))              	&delim$;
+		pr #2: str$(d(2))              	&delim$;
+		pr #2: str$(d(3))              	&delim$;
+		pr #2: str$(d(4))              	&delim$;
+		pr #2: str$(d(5))              	&delim$;
+		pr #2: str$(d(6))              	&delim$;
+		pr #2: str$(d(7))              	&delim$;
+		pr #2: str$(d(8))              	&delim$;
+		pr #2: str$(d(9))              	&delim$;
+		pr #2: str$(d(10))             	&delim$;
+		pr #2: str$(d(11))             	&delim$;
+		pr #2: str$(d(12))             	&delim$;
+		pr #2: str$(d(13))             	&delim$;
+		pr #2: str$(d(14))             	&delim$;
+		pr #2: str$(d(15))             	&delim$;
+		pr #2: str$(bal)               	&delim$;
+		pr #2: str$(f)                 	&delim$;
+		pr #2: str$(g(1))              	&delim$;
+		pr #2: str$(g(2))              	&delim$;
+		pr #2: str$(g(3))              	&delim$;
+		pr #2: str$(g(4))              	&delim$;
+		pr #2: str$(g(5))              	&delim$;
+		pr #2: str$(g(6))              	&delim$;
+		pr #2: str$(g(7))              	&delim$;
+		pr #2: str$(g(8))              	&delim$;
+		pr #2: str$(g(9))              	&delim$;
+		pr #2: str$(g(10))             	&delim$;
+		pr #2: str$(g(11))             	&delim$;
+		pr #2: str$(g(12))             	&delim$;
+		pr #2: alp$                     	&delim$;
+		pr #2: f$(2)                    	&delim$;
+		pr #2: f$(3)                    	&delim$;
+		pr #2: extra$(3)               	&delim$;
+		pr #2: extra$(4)               	&delim$;
+		pr #2: extra$(5)               	&delim$;
+		pr #2: str$(bra)               	&delim$;
+		pr #2: str$(gb(1))             	&delim$;
+		pr #2: str$(gb(2))             	&delim$;
+		pr #2: str$(gb(3))             	&delim$;
+		pr #2: str$(gb(4))             	&delim$;
+		pr #2: str$(gb(5))             	&delim$;
+		pr #2: str$(gb(6))             	&delim$;
+		pr #2: str$(gb(7))             	&delim$;
+		pr #2: str$(gb(8))             	&delim$;
+		pr #2: str$(gb(9))             	&delim$;
+		pr #2: str$(gb(10))            	&delim$;
+		pr #2: ab$(1)                  	&delim$;
+		pr #2: ab$(2)                  	&delim$;
+		pr #2: ab$(3)                  	&delim$;
+		pr #2: str$(finalBillingCode)	&delim$;
+		pr #2: addr$(1)                	&delim$;
+		pr #2: addr$(2)                	&delim$;
+		pr #2: addr$(3)                	&delim$;
+		pr #2: addr$(4)                	&delim$
+		! /r
+	loop ! /r
+Finis: ! r:
 	close #h_customer: ioerr ignore
 	close #2: ioerr ignore
 	close #3: ioerr ignore
@@ -82,6 +158,7 @@ goto XIT ! /r
 XIT: ! 
 	fnxit
 ALT_BILL_ADR: ! r:
+	dim ab$(3)*30
 	mat ab$=("")
 	read #3,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore
 return  ! /r

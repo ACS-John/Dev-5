@@ -90,7 +90,7 @@ Extras
 >>Reassign Deposit Change Addresses                   ^ acsUB\DepReas
 >>Change Wrong Transaction Dates                      ^ acsUB\ReDate
 >>Reverse Billing Cycle                               ^ Utility Billing\Reverse Billing Cycle
->Export UB Master File                                ^ acsUB\ExpUBM
+>Export UB Master File                                ^ Utility Billing\Export UB Master File
 >Pull Service Names for Grids                         ^ acsub\pulllay
 >Check Balance Breakdown 1                            ^ acsub\checkbalbrk
 >Check Balance Breakdowns 2                           ^ acsUB\check_balance_breakdowns
