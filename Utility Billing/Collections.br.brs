@@ -312,7 +312,7 @@ EDIT_REC: ! r:
 	if uprc$(escrow$)="Y" then transAmount+=escrow : escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
 	! 
 	fnLbl(3,1,"Amount:",25,1)
-	fnTxt(3,27,8,0,0,"10")
+	fnTxt(3,27,9,0,0,"10")
 	resp$(resp_amount:=respc+=1)=str$(transAmount)
 	! 
 	fnLbl(4,1,"Date (mmddyy):",25,1)
