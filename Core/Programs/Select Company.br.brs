@@ -5,13 +5,13 @@ fntop(program$)
 gosub IfCoTryAgain
 fncno(cno)
 MENU1: ! r:
-	fnTos(sn$:=env$('cursys')&"Companies")
+	fnTos
 	! r: add the system buttons to the screen
 	fnbutton_or_disabled(env$('enableClientSelection')=='Yes',2,2,env$('client')(1:37),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',37)
 	fnFra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
 	ch_line=1
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
-		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' then
+		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'EM' then
 			ch_line+=1
 			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 			! if env$('cursys')=client_has$(ch_item) then
@@ -59,7 +59,7 @@ MENU1: ! r:
 	if exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 		fnCmdKey("&Cancel",5,0,1)
 	end if
-	fnAcs(sn$,win,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	!
 	if ck=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
 		goto XIT
@@ -109,14 +109,14 @@ SELECT_COMPANY: ! r:
 return  ! /r
 ! ______________________________________________________________________
 COMPANY_ADD: ! r:
-	fnTos(sn$='selcno-'&env$('cursys')&'-2')
+	fnTos
 	mylen=25 : mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Company Number to add:",mylen,1)
 	fnTxt(1,mypos,5,0,0,"30")
 	resp$(respc+=1)="0"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck=5 then goto MENU1
 	cno_selected=val(resp$(1))
 	if fn_company_already_exists(cno_selected)=1 then goto MENU1
@@ -206,7 +206,7 @@ def fn_companyCopy(scno)
 	dcno=0
 	dcnam$=fn_companyName$(scno)
 	CC_SCREEN1: !
-	fnTos(sn$='CopyCNo3')
+	fnTos
 	lc=0
 	mylen=29 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Source Company:",mylen,1)
@@ -225,7 +225,7 @@ def fn_companyCopy(scno)
 	fnLbl(lc+=1,1,"If the destination company exists",80,2)
 	fnLbl(lc+=1,1,"it will be overwritten!",80,2)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck<>5 then
 		dcno=val(resp$(1))
 		dcnam$=resp$(2)
@@ -249,7 +249,9 @@ def fn_setup
 	if setup<>1 then
 		setup=1
 		library 'S:\Core\Library': fnConfirmDeleteHard
-		library 'S:\Core\Library': fnAcs,fncno,fnTos
+		library 'S:\Core\Library': fnTos
+		library 'S:\Core\Library': fnCno
+		library 'S:\Core\Library': fnAcs2
 		library 'S:\Core\Library': fnchain,fnxit
 		library 'S:\Core\Library': fnputcno
 		library 'S:\Core\Library': fngetdir2
@@ -335,7 +337,7 @@ IfCoTryAgain: ! r: if cursys=CO than just pick the first thing they are licensed
 return ! /r
 def fn_setup_on_cursys_change
 	dim cnam$*80
-	fncno(cno,cnam$)
+	fnCno(cno,cnam$)
 	if cno=0 then
 		cno=1
 		fnputcno(cno)
