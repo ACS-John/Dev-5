@@ -25,7 +25,7 @@ open   #hMopen:=fngethandle: 'Name=MASTER//6 ,KFName=MASTERX//6 ,shr',INTERNAL,I
 open #hMclosed:=fngethandle: 'Name=HISTORY//1,KFName=HISTORYX//1,shr',INTERNAL,Input,KEYED
 hActiveOpen=fnOpen_active(mat h_active_open)
 hActiveClosed=fnClosed_active(mat h_active_closed)
-	
+
 dim sourceFile$(0)*256
 transTime$=time$ 
 transDate=Date('CYMD')
@@ -99,7 +99,7 @@ def fn_setup(&table$)
 		library 'Library\SQL.wb': fnsql_setup$
 		library 'Library\CLSUTIL.wb': fnRead_oc
 		library 'Library\OPENFILE.wb': fnOpen_active,fnClosed_active
-		LIBRARY 'Library\TagUtil': FnPaper_note
+		library 'Library\TagUtil': FnPaper_note
 
 		gosub Enum
 
