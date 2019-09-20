@@ -1,5 +1,9 @@
-def library fnClaimFolder$*128(fileno$; ___,return$*8)
-	library 'Library\clsUtil': fnreport_path$
+def library fnClaimFolder$*128(fileno$; ___,return$*128)
+	if ~setup_claimFolder then
+		setup_claimFolder=1
+		library 'S:\Core\Library': fnMakeSurePathExists
+		library 'Library\clsUtil': fnreport_path$
+	end if
 	return$=srep$(rtrm$(fileno$),".","_") 
 	return$=srep$(return$,",","_") 
 	return$=srep$(return$,"\","_") 

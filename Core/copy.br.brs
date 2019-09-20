@@ -187,21 +187,27 @@ def library fnFree(fileToDelete$*256)
 	FreeXit: !
 	fnFree=freeReturn
 fnend
-def library fnRename(from$*256,to$*256)
+def library fnRename(from$*256,to$*256; ___,returnN)
 	if ~setup then let fn_setup
 	from$=fnSrepEnv$(from$)
 	to$=fnSrepEnv$(to$)
 	from$=trim$(from$,'"')
 	to$=trim$(to$,'"')
 	if (from$(1:2)='@:' and to$(1:2)<>'@:') or (from$(1:2)<>'@:' and to$(1:2)='@:') then
-		if fn_Copy(from$,to$) then
+		returnN=fn_Copy(from$,to$)
+		if returnN then
 			exec 'Free "'&from$&'"'
 		end if
 	else 
+		if exists(to$) then
+			exec 'Free "'&to$&'"'
+		end if
 include: filenamesPushMixedCase
 		execute 'Rename "'&from$&'" "'&to$&'" -n'
+		returnN=1
 include: filenamesPopUpperCase
 	end if
+	fnRename=returnN
 fnend
 def library fnRemoveDeletedRecords(from$*256)
 	if ~setup then let fn_setup
