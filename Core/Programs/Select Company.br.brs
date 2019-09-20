@@ -14,14 +14,8 @@ MENU1: ! r:
 		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'EM' then
 			ch_line+=1
 			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
-			! if env$('cursys')=client_has$(ch_item) then
-			!   fnLbl(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),37,2,0,1)
-			! else
-			!   fnButton(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item,'',1,37,1)
-			! end if
 		end if
 	next ch_item
-	! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 	! /r
 	!  r: add that company grid to the screen
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)

@@ -167,15 +167,16 @@ def fn_grid_setup
 	grid_width=80-favorite_width
 	!
 	mat column_mask$(5)
-	if env$('ACSDeveloper')<>'' then
-		mat column_mask$=('80')
-	else
+	! if env$('ACSDeveloper')<>'' then
+	! 	mat column_mask$=('80')
+	! else
 		mat column_mask$=('1080')
-	end if
+	! end if
 	!   column_mask$(2)='81'
 	column_mask$(1)='1080'
 	column_mask$(2)='81'
 	column_mask$(3)='80'
+	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
 fnend
 def fn_setup_on_cursys_change
 	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256

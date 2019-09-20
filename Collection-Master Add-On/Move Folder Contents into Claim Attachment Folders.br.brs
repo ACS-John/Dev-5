@@ -1,7 +1,10 @@
 fn_setup(table$)
 on error goto Ertn
-! pr 'table$=';table$
 fntop(program$)
+
+! enableReportSuccess=1
+
+Screen1: ! r:
 dim resp$(20)*256
 dim sourcePath$*256
 fnreg_read(env$('cap')&'.Source Path',sourcePath$,'F:\S&S SCANS\')
@@ -20,6 +23,11 @@ sourcePath$=resp$(resp_sourcePath)
 pcode$=resp$(resp_pcode)
 fnreg_write(env$('cap')&'.Source Path',sourcePath$)
 fnreg_write(env$('cap')&'.Paperless Code',pcode$)
+! /r
+! Screen2
+	fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
+	if fkey=93 or fkey=99 then goto Screen1
+!
 
 open   #hMopen:=fngethandle: 'Name=MASTER//6 ,KFName=MASTERX//6 ,shr',INTERNAL,Input,KEYED
 open #hMclosed:=fngethandle: 'Name=HISTORY//1,KFName=HISTORYX//1,shr',INTERNAL,Input,KEYED
@@ -30,21 +38,32 @@ dim sourceFile$(0)*256
 transTime$=time$ 
 transDate=Date('CYMD')
 fnGetDir2(sourcePath$,mat sourceFile$)
+moveCount=failCount=0
 for sourceItem=1 to udim(mat sourceFile$)
 	fileno$=fn_parseFileno$(sourceFile$(sourceItem))
 	if fileno$='' then
-		fn_reportRejectAdd(sourceFile$(sourceItem),'Failed to parse file number from filename.')
+		fn_reportAdd(sourceFile$(sourceItem),'Failed to parse file number from filename.')
+		failCount+=1
 	else if ~fnRead_Oc(fileno$,mat m$,mat mN,oc$,hMopen,hMclosed,'', '',mFormAll$) then
-		fn_reportRejectAdd(sourceFile$(sourceItem),'Could not find '&fileno$&' in open nor closed claims.')
+		fn_reportAdd(sourceFile$(sourceItem),'Could not find '&fileno$&' in open nor closed claims.')
+		failCount+=1
 	else
 		dim destinationFilePath$*256
 		destinationFilePath$=fnClaimFolder$(fileno$)&'\'&(sourceFile$(sourceItem)(pos(sourceFile$(sourceItem),'.')+1:inf))
-		if fnCopy(sourcePath$&'\'&sourceFile$(sourceItem),destinationFilePath$) then
+		if pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
+		renameSuccess=fnRename(rtrm$(sourcePath$,'\')&'\'&sourceFile$(sourceItem),destinationFilePath$)
+		if ~renameSuccess and pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
+		if renameSuccess then
+			moveCount+=1
 			dim pcmt$*9999
-			pcmt$
-			FnPaper_note(fileno$,oc$,transDate,transTime$,pcode$,pcmt$,tag_user,status1_code$,status1_date$,status2_code$,status2_date$,scode,s_fcode)
+			pcmt$='Attachment Imported: '&destinationFilePath$
+			fnPaper_note(fileno$,oc$,transDate,transTime$,pcode$,pcmt$,tag_user,status1_code$,status1_date$,status2_code$,status2_date$,scode,s_fcode)
+			if enableReportSuccess then
+				fn_reportAdd(sourceFile$(sourceItem),'SUCCESS. MOVED TO:  '&destinationFilePath$)
+			end if
 		else
-			fn_reportRejectAdd(sourceFile$(sourceItem),'Failed to copy.')
+			fn_reportAdd(sourceFile$(sourceItem),'Failed to copy.')
+			failCount+=1
 		end if
 	end if
 nex sourceItem
@@ -57,22 +76,32 @@ for x=1 to udim(mat h_active_open)
 nex x
 close #hMopen:
 close #hMclosed:
+fn_reportClose
 fnxit
-def fn_reportRejectAdd(theFile$*256,theReason$*256)
+def fn_reportAdd(theFile$*256,theReason$*256; ___,alignOption$)
 	if ~initReportReject then
 		initReportReject=1
-		fnopenprn
-		pr #255: '--==headers==--'
+		pr #255: '</pre>'
+		pr #255: '<table algin="Center">'
+		pr #255: '  <tr><td colspan="2" align="Center"><h2>'&env$('program_caption')&'</h2></td></tr>'
+		pr #255: '  <tr><td colspan="2" align="Center"><h3>as of '&date$('month d, ccyy')&' '&time$&'</h3></td></tr>'
 	end if
-	pr theFile$&'   -   '&theReason$
+	if theFile$(1:4)='<h4>' then
+		alignOption$=' align="Right" '
+	end if
+	pr #255: '  <tr><td'&alignOption$&'>'&theFile$&'</td><td>'&theReason$&'</td></tr>'
 fnend
-def fn_reportRejectClose
+def fn_reportClose
+	fn_reportAdd('<h4>Files Moved:</h4>',str$(moveCount)&'</h4>')
+	fn_reportAdd('<h4>Fails:<h4>',str$(failCount)&'</h4>')
+	pr #255: '</table>'
 	initReportReject=0
-	fncloseprn
+	fnClose
 fnend
 def fn_parseFileno$*8(filename$*256; ___,dpos,return$*8)
+	filename$=trim$(filename$)
 	dpos=pos(filename$,'.')
-	if dpos>8 or dpos<=0 then
+	if dpos>9 or dpos<=0 then
 		return$=''
 	else
 		return$=filename$(1:dpos-1)
@@ -91,17 +120,18 @@ def fn_setup(&table$)
 		library 'S:\Core\Library': fnXit
 		library 'S:\Core\Library': fnGetDir2
 		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnOpenPrn,fnClosePrn
+		library 'S:\Core\Library': fnRename
+		! library 'S:\Core\Library': fnOpenPrn,fnClosePrn
 		library 'S:\Core\Library': fnGetHandle
-		library 'S:\Collection-Master\fn\Library.br': fnClaimFolder$
+		library 'S:\Collection-Master Add-On\fn\Library.br': fnClaimFolder$
 
 		library 'Library\SQL.wb': fnsql_setup$
 		library 'Library\CLSUTIL.wb': fnRead_oc
 		library 'Library\OPENFILE.wb': fnOpen_active,fnClosed_active
-		library 'Library\TagUtil': FnPaper_note
+		library 'Library\TagUtil': fnPaper_note
 
 		gosub Enum
+		gosub SetupPrint
 
 		dim m$(0)*128,mN(0)
 		dim mFieldsC$(0)*20,mFieldsN$(0)*20
@@ -115,4 +145,5 @@ fnend
 include: cm\enum\common
 include: cm\enum\master
 include: fn_open
+include: cm\print
 include: ertn
