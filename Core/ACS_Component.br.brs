@@ -692,29 +692,30 @@ def fn_validateGridSelection
 	end if
 	fn_validateGridSelection=grid_selection_valid
 fnend
-def fn_processUserInput
-	goto_main_input=0
+def fn_processUserInput(; ___,returnN)
 	if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) then
 		fkey(default_button_fkey) ! activate the default button when enter is pressed
 		ckey=fkey
 	else if fkey=2501 then
 		fn_export_grid
-		fkey(-1) : goto_main_input=1
+		fkey(-1) : returnN=1
 	else if fkey=2502 then
 		fn_print_grid
-		fkey(-1) : goto_main_input=1
+		fkey(-1) : returnN=1
 		!		else if fkey=2503 then
 		!			pr f gridspec$&",sort": 1
-		!			fkey(-1) : goto_main_input=1
+		!			fkey(-1) : returnN=1
 	else if fkey > date_fkey_base and fkey < date_fkey_base+100 then
 		_date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
 		row=date_fielddata(fkey-date_fkey_base,2)
 		column=date_fielddata(fkey-date_fkey_base,3)+date_fielddata(fkey-date_fkey_base,4)+1
 		ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fnDateSelect$ (_date$,'mdy',row,column)
-		fkey(-1) : goto_main_input=1
+		fkey(-1)
+		returnN=1
 	else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then
 		fn_selectFile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
-		fkey(-1) : goto_main_input=1
+		fkey(-1)
+		returnN=1
 	else if fkey=93 then
 		if env$('ACSDeveloper')<>'' then let setenv('ExitNow','yes')
 		ckey=fkey_cancel
@@ -729,19 +730,19 @@ def fn_processUserInput
 			help_cursys$=lwrc$(env$('CurSys'))
 		end if
 		execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(trim$(cap$),' ','%20')&'.html'
-		goto_main_input=1
+		returnN=1
 	else if fkey=1505 then
 		fn_programProperties
-		goto_main_input=1
+		returnN=1
 	else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then
-		goto_main_input=1
+		returnN=1
 		if fkey=105 or fkey=124 then let setenv('current_grid_row','1')
 	else if not srch(mat return_keys,fkey)>0 or fkey=92 or fkey=208 or fkey=txtbox_fkey then ! this means user switched tabs (fkey 92) or picked a value from a combo box (fkey 208)
-		goto_main_input=1
+		returnN=1
 	else
 		ckey=fkey
 	end if
-	fn_processUserInput=goto_main_input
+	fn_processUserInput=returnN
 fnend
 def fn_reformatUserInput
 	!		if udim(resp$)<ace_io_count then mat resp$(ace_io_count)
@@ -1247,7 +1248,7 @@ def fn_ace_rd_flex(;___,index_)
 	!
 	scr_thaw
 	!
-	fn_alpha_mask_indices (mat alpha_mask_indices)
+	fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices)
 	do while file_nonempty
 		linput #grid_data: _line$ eof ignore
 		! remove this line after you figure out how to addtomask$ negative numbers to the #pic spec
@@ -1348,7 +1349,7 @@ def fn_ace_rd_flex(;___,index_)
 	! pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
 	!		pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
 fnend
-def fn_alpha_mask_indices(mat alpha_mask_indices;___,index_,mask)
+def fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices;___,index_,mask)
 	mat alpha_mask_indices(0)
 	for index_=1 to udim(mat _mask$)
 		mask=val(_mask$(index_)) conv ignore
@@ -1693,19 +1694,15 @@ def fn_ace_rd_text
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
 	end if
 fnend
-def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen)
-	dim attr$*255
-	attr$=''
-	!
+def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 	mask=0
-	mask=val(mask$) conv MASK_VAL_CONV
-	MASK_VAL_CONV: !
-	!
+	mask=val(mask$) conv ignore
+
 	if mask>1000 then mask-=1000
 	if mask>=1 and mask<=5 then
 		fn_dateTextBox(mask,lyne,ps,width,container,disable)
-		!
-		attr$="9/#PIC(--/--/--)" ! attr$="9/DATE(m/d/y)"
+
+		return$="9/#PIC(--/--/--)" ! return$="9/DATE(m/d/y)"
 		if mask=1 then
 			resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
 			date_format$='mdy'
@@ -1729,126 +1726,125 @@ def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen)
 		resp$(respc)=date$(days(trim$(resp$(respc)),date_format$),'mdy')
 		!
 	else if mask=9 then ! defaults 100 to 1.00
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 		resp$(respc)=str$(val(resp$(respc))/100)
 	else if mask=10 then ! dollars, 2 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen-4
 !			if mod(tm_char_index,4)=0 then
-!				attr$(0:0)=','
+!				return$(0:0)=','
 !			else
-			attr$(0:0)='-'
+			return$(0:0)='-'
 !			end if
 		next tm_char_index
-		if maxlen < 4 then attr$(0:0)='-'
-		attr$(0:0)=str$(width)&"/#PIC("
-		attr$(inf:inf)=".--)"
-		attr$=srep$(attr$,'/#PIC(,---.--','/#PIC(----.--')
+		if maxlen < 4 then return$(0:0)='-'
+		return$(0:0)=str$(width)&"/#PIC("
+		return$(inf:inf)=".--)"
+		return$=srep$(return$,'/#PIC(,---.--','/#PIC(----.--')
 	else if mask=12 then ! defaults 100 to 100.00, currency : American (2 decimals, commas)
 		form$=''
 		for tm_char_index=1 to maxlen-4
 			if mod(tm_char_index,4)=0 then
-				attr$(0:0)=','
+				return$(0:0)=','
 			else
-				attr$(0:0)='-'
+				return$(0:0)='-'
 			end if
 		next tm_char_index
-! pr attr$ : pause
-		attr$(0:0)=str$(width)&"/#PIC("
-		attr$(inf:inf)=".--)"
+! pr return$ : pause
+		return$(0:0)=str$(width)&"/#PIC("
+		return$(inf:inf)=".--)"
 	else if mask=20 then ! 0 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen
 			if mod(tm_char_index,4)=0 then
-				attr$(0:0)=','
+				return$(0:0)=','
 			else
-				attr$(0:0)='-'
+				return$(0:0)='-'
 			end if
 		next tm_char_index
-		attr$(0:0)=str$(width)&"/#PIC("
-		attr$(inf:inf)=")"
+		return$(0:0)=str$(width)&"/#PIC("
+		return$(inf:inf)=")"
 	else if mask=30 then ! defaults 1 to 1
 		if maxlen>15 then
-			attr$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
+			return$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
 		else
-			attr$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+			return$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
 		end if
 	else if mask=31 then ! defaults 1 to 1.0
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 	else if mask=32 then ! defaults 1 to 1.00
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 	else if mask=33 then ! defaults 1 to 1.000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
 	else if mask=34 then ! defaults 1 to 1.0000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
 	else if mask=35 then ! defaults 1 to 1.00000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
 	else if mask=36 then ! defaults 1 to 1.000000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 	else if mask=40 then ! defaults 1 to 0.1
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=41 then ! defaults 1 to 0.10
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=42 then ! defaults 1 to 0.100
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=43 then ! defaults 1 to 0.1000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=44 then ! defaults 1 to 0.10000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=45 then ! defaults 1 to 0.100000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=46 then ! defaults 1 to 0.1000000
-		attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
+		return$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 !		resp$(respc)=str$(val(resp$(respc))/10)
 	else if mask=50 then
-		attr$=str$(width)&"/#PIC(------)" ! ######
+		return$=str$(width)&"/#PIC(------)" ! ######
 	else if mask=51 then
-		attr$=str$(width)&"/#PIC(---D------)" ! ###-######
+		return$=str$(width)&"/#PIC(---D------)" ! ###-######
 	else if mask=52 then
-		attr$=str$(width)&"/#PIC(------D---)" ! ######-###
+		return$=str$(width)&"/#PIC(------D---)" ! ######-###
 	else if mask=53 then
-		attr$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
+		return$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
 	else if mask=60 then
-		attr$=str$(width)&"/#PIC(---D---D----)" ! ###-###-#### or ####-###-####
+		return$=str$(width)&"/#PIC(---D---D----)" ! ###-###-#### or ####-###-####
 	else if mask=70 or mask=71 or mask=72 then
-		fn_fileSelection(mask,lyne,ps,width,container)
+		fn_drawFileSelection(mask,lyne,ps,width,container)
 	end if
-	if attr$='' then
+	if return$='' then
 		if align=1 then
-			attr$=str$(width)&'/CR '&str$(maxlen) ! right
+			return$=str$(width)&'/CR '&str$(maxlen) ! right
 		else if align=2 then
-			attr$=str$(width)&'/CC '&str$(maxlen) ! centered
+			return$=str$(width)&'/CC '&str$(maxlen) ! centered
 		else
-			attr$=str$(width)&'/C '&str$(maxlen) ! left=default
+			return$=str$(width)&'/C '&str$(maxlen) ! left=default
 		end if
 	end if
 !
 	if disable then protected$='P' else protected$='T' ! either Protect the field or force it to be in the tab order
-	attr$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
-	attr$=srep$(attr$,'PIC(,','PIC(')
-	fn_textMask$=attr$
+	return$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
+	return$=srep$(return$,'PIC(,','PIC(')
+	fn_textMask$=return$
 fnend
-def fn_fileSelection(mask,lyne,ps,width,container)
-	dim file_select_button_spec$*255
+def fn_drawFileSelection(mask,lyne,ps,width,container; ___,fs_buttonIo$*255) ! requires local file_select_fkey_base,file_select_boxes (this may need to be reset somewhere... like fnTos)
 	file_select_boxes+=1
-	file_select_button_spec$=str$(lyne)&','&str$(ps+width+1)&',C 1,,B'&str$(file_select_fkey_base+file_select_boxes)
+	fs_buttonIo$=str$(lyne)&','&str$(ps+width+1)&',C 1,,B'&str$(file_select_fkey_base+file_select_boxes)
 	if container then
-		file_select_button_spec$(0:0)='#'&str$(frames(container,1))&','
+		fs_buttonIo$(0:0)='#'&str$(frames(container,1))&','
 	else if tabcon then
-		file_select_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
+		fs_buttonIo$(0:0)='#'&str$(tabs(tabcon,1))&','
 	else
-		file_select_button_spec$(0:0)='#'&str$(acs_win)&','
+		fs_buttonIo$(0:0)='#'&str$(acs_win)&','
 	end if
 	mat file_select_data(file_select_boxes,2)
 	file_select_data(file_select_boxes,1)=respc
 	file_select_data(file_select_boxes,2)=mask
-	pr f file_select_button_spec$: "."
+	pr f fs_buttonIo$: "."
 fnend
 def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpperCase)
 	if mask=70 or mask=71 or mask=72 then 
@@ -1859,9 +1855,10 @@ def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpper
 			openOrSave$='SAVE'
 			newOrShare$='New'
 		end if
+		filename$=rtrm$(filename$)
 		h_selectfile=fngethandle
 include: filenamesPushMixedCase
-		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,input ioerr ignore
+		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,outin ioerr ignore
 		if file(h_selectfile)=0 then
 			filename$=os_filename$(file$(h_selectfile))
 			! filename$=trim$(file$(h_selectfile)) (2:inf)
