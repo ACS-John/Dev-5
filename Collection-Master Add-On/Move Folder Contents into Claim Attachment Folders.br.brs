@@ -50,9 +50,9 @@ for sourceItem=1 to udim(mat sourceFile$)
 	else
 		dim destinationFilePath$*256
 		destinationFilePath$=fnClaimFolder$(fileno$)&'\'&(sourceFile$(sourceItem)(pos(sourceFile$(sourceItem),'.')+1:inf))
-		if pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
+		! if pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
 		renameSuccess=fnRename(rtrm$(sourcePath$,'\')&'\'&sourceFile$(sourceItem),destinationFilePath$)
-		if ~renameSuccess and pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
+		! if ~renameSuccess and pos(sourceFile$(sourceItem),'TXP12974')>0 then pr 'TXP12974' : pause
 		if renameSuccess then
 			moveCount+=1
 			dim pcmt$*9999
