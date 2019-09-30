@@ -37,7 +37,7 @@ hActiveClosed=fnClosed_active(mat h_active_closed)
 dim sourceFile$(0)*256
 transTime$=time$ 
 transDate=Date('CYMD')
-fnGetDir2(sourcePath$,mat sourceFile$)
+fnGetDir2(sourcePath$,mat sourceFile$) 
 moveCount=failCount=0
 for sourceItem=1 to udim(mat sourceFile$)
 	fileno$=fn_parseFileno$(sourceFile$(sourceItem))
