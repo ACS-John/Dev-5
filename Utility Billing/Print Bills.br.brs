@@ -1528,7 +1528,7 @@ def fn_print_bill_pennington(z$,mat mg$,mat mg2$,service_from,service_to,penalty
 	pr #255: ""
 	pr #255,using 'form pos 48,n 9.2,n 10.2': bal,bal+g(10)+g(7)
 	pr #255: ""
-	pr #255,using 'form pos 9,n 8,n 9,n 7,n 9.2,pos 45,c 30': d(2),d(1),int(d(3)/100),g(1),z$
+	pr #255,using 'form pos 9,n 9,n 9,n 7,n 9.2,pos 45,c 30': d(2),d(1),int(d(3)/100),g(1),z$
 	pbpennington_L810: form pos 45,c 30
 	pbpennington_L820: form pos 26,c 5,pos 32,n 9.2,pos 45,c 30
 	if g(2)=0 then 
