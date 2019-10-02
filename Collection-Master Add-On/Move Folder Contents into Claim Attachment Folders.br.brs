@@ -37,7 +37,7 @@ hActiveClosed=fnClosed_active(mat h_active_closed)
 dim sourceFile$(0)*256
 transTime$=time$ 
 transDate=Date('CYMD')
-fnGetDir2(sourcePath$,mat sourceFile$) 
+fnGetDirClient(sourcePath$,mat sourceFile$) 
 moveCount=failCount=0
 for sourceItem=1 to udim(mat sourceFile$)
 	fileno$=fn_parseFileno$(sourceFile$(sourceItem))
@@ -118,7 +118,7 @@ def fn_setup(&table$)
 		library 'S:\Core\Library': fnCmdSet
 		library 'S:\Core\Library': fnAcs2
 		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnGetDir2
+		library 'S:\Core\Library': fnGetDirClient
 		library 'S:\Core\Library': fnreg_read,fnreg_write
 		library 'S:\Core\Library': fnRename
 		! library 'S:\Core\Library': fnOpenPrn,fnClosePrn

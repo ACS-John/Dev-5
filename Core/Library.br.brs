@@ -517,6 +517,10 @@ fnend
 		library 'S:\Core\fn\getDir2.br': fngetdir2
 		fngetdir2=fnGetDir2(dir$,mat filename$, option$,filter$,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 	fnend
+	def library fnGetDirClient(dir$*256,mat filename$; filter$*40)
+		library 'S:\Core\fn\getDir2.br': fnGetDirClient
+		fnGetDirClient=fnGetDirClient(dir$,mat filename$, filter$)
+	fnend
 	!
 	def library fnwait(; message$*40,stopable)
 		library 'S:\Core\fn\wait.br': fnwait
