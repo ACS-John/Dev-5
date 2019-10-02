@@ -682,7 +682,10 @@ def fn_UpdateQFileIO
 		dim dLayFile$(0)*256
 		dim dLayDate$(1)*32
 		dim dLayTime$(1)*32
-		if udim(mat sLayFile$)=0 then pause
+		if udim(mat sLayFile$)=0 then 
+			pr 'fngetdir2 found no files found in: S:\Core\FileIO\Layout\'
+			pause
+		end if
 		fngetdir2('filelay\',mat dLayFile$, '','*.',mat dLayDate$,mat dLayTime$)
 		for sItem=1 to udim(mat sLayFile$)
 			if sLayFile$(sItem)(1:3)='CM ' or sLayFile$(sItem)(1:3)='CO ' then

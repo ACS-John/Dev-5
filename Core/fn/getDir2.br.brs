@@ -16,7 +16,7 @@
 	! pr 'function returns ';fngetdir2(env$('userprofile')&"\Desktop", mat fl$,'/s /tc','*.rtf',mat test_date$,mat test_time$,enable_full_path=1)
 	for x=1 to udim(mat fl$) : pr '| '&test_date$(x)&' | '&test_time$(x)&' | '&fl$(x) : next x
 	end  ! /r
-! r: originally S:\Core\GetDir2.br
+
 	! reads a directory into an array
 	! ______________________________________________________________________
 	! Dir$=Directory to Read
@@ -58,15 +58,22 @@
 	! Switches may be preset in the DIRCMD environment variable.  Override
 	! preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 ! /r
-def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
-	! r: library, on error, constants, initialize variables
+def fn_setup
+	if ~setup then
+		setup=1
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnSrepEnv$
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnArrayWasPassedC
 		library 'S:\Core\Library': fnArrayWasPassedN
+		dim tmp$*512
+		dim directory_of$*256
+	end if
+fnend
+
+def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
+		fn_setup
 		on error goto ERTN
-		dim tmp$*512,directory_of$*256
 		dir$=fnSrepEnv$(dir$)
 		filter$=fnSrepEnv$(filter$)
 		if pos(lwrc$(option$),'/s')>0 then gd2_full_path=1
@@ -91,7 +98,6 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		! if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
 		gd2_size_requested=fnArrayWasPassedN(mat gd2_size)
 
-	! /r
 		dim fileList_br$*256
 		dim fileList_os$*256
 		if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
@@ -115,12 +121,11 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 			fileList_br$=env$('client_temp')&'\GetDir'&session$&'.tmp'
 			fileList_os$=env$('client_temp')&'\GetDir'&session$&'.tmp'
 		end if
-	! r: create temp text file by redirecting a shell called DIR command to it
+
 		fnFree(csat$&fileList_br$)
 		tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList_os$&'"'
 		execute tmp$ ioerr XIT
-	! /r
-	! r: read the temp file into the dynamic-ly sizing array mat filename$
+
 		open #tf1:=fngethandle: "Name="&csat$&fileList_br$,display,input  ioerr Gd2_openReturnFailure
 		filename_count=line_count=0
 		do 
@@ -128,10 +133,7 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 			line_count+=1
 			tmp$=rtrm$(tmp$)
 			len_tmp=len(tmp$)
-			! if line_count=1 then ! " Volume in drive C is TI106348W0B"
-			! else if line_count=2 then ! " Volume Serial Number is D2FE-B614"
-			!  else if trim$(tmp$(1:1))='' then ! one of the Totals lines at the end or once of the volume things at the top or the directory of line... pretty much anything besides a file hmmm
-			! else if tmp$(1:5)='     ' then ! one of the Totals lines at the end
+
 			if tmp$(3:3)='/' and tmp$(6:6)='/' then 
 				if pos(tmp$(7:10),' ')>0 then 
 					date_format_len=8
@@ -167,12 +169,8 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 				filename$(filename_count)=rtrm$(tmp$(pos_filename:len_tmp))
 				if filename$(filename_count)=uprc$(filename$(filename_count)) then ! never all caps-anything
 					filename$(filename_count)=lwrc$(filename$(filename_count))
-				!    else 
-				!     filename$(filename_count)=filename$(filename_count)
 				end if 
 				if gd2_full_path then filename$(filename_count)=directory_of$&'\'&filename$(filename_count)
-				!  else 
-				!     pr tmp$ ! pause
 			end if 
 		loop 
 	Gd2_openReturnFailure: !
@@ -181,14 +179,8 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		pr 'failed to open dir file: error '&str$(err)&' on line '&str$(line)&' in '&program$
 		if env$('debug')<>'' or env$('acsDeveloper')<>'' then pause
 	goto EO_TF1
-	EO_TF1: ! /r
+	EO_TF1: ! 
 	gd2_return=filename_count
-	! r: close and delete the temporary text file.  Return the number of files found
-	! ______________________________________________________________________
-	! if filename$(filename_count)='' then
-	!   filename_count=filename_count-1
-	!   mat filename$(filename_count)
-	! end if
 	XIT: ! 
 	if env$('acsDebug')='Yes' then
 		close #tf1: ioerr ignore
@@ -198,5 +190,48 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 	 
 	fngetdir2=gd2_return
 fnend
+
+def library fnGetDirClient(dir$*256,mat filename$; filter$*40, ___,returnN,hGdc,gdcFileList$*256)
+	fn_setup
+	on error goto ERTN
+	dir$=fnSrepEnv$(dir$)
+	mat filename$(0)
+	filter$=trim$(filter$) : if filter$='' then filter$='*.*'
+	dir$=trim$(dir$)
+	if dir$(len(dir$):len(dir$))<>'\' then dir$=dir$&'\'
+	mat filename$(0)
+	gdcFileList$=env$('client_temp')&'\GetDir'&session$&'.tmp'
+	fnFree(env$('at')&gdcFileList$)
+	tmp$='Dir "'&env$('at')&rtrm$(dir$,'\')&'\'&filter$&'" >"'&gdcFileList$&'" -B'
+	execute tmp$ ioerr Gdc_Finis
+	open #hGdc:=fngethandle: "Name="&gdcFileList$,display,input ioerr Gdc_openReturnFailure
+	filename_count=line_count=0
+	linput #hGdc: tmp$ eof Gdc_EO_hGdc ! consume Directory of ...
+	linput #hGdc: tmp$ eof Gdc_EO_hGdc ! consume .
+	linput #hGdc: tmp$ eof Gdc_EO_hGdc ! consume ..
+	do 
+		linput #hGdc: tmp$ eof Gdc_EO_hGdc
+		line_count+=1
+		tmp$=rtrm$(tmp$)
+		mat filename$(filename_count+=1)
+		filename$(filename_count)=rtrm$(tmp$(1:len(tmp$)))
+	loop 
+	Gdc_openReturnFailure: !
+		pr 'line executed:'
+		pr 'tmp$=';tmp$
+		pr 'fnGetDirClient failed to open dir file: error '&str$(err)&' on line '&str$(line) ! &' in '&program$
+		pause ! if env$('debug')<>'' or env$('acsDeveloper')<>'' then pause
+	goto Gdc_EO_hGdc
+	Gdc_EO_hGdc: ! 
+	if filename_count>0 and pos(filename$(filename_count),'Kilobytes Used,')>0 then ! remove the "### Files, ### Kilobytes..." line from the end
+		filename_count-=1
+		mat filename$(filename_count)
+	end if
+	returnN=filename_count
+	! pause
+	Gdc_Finis: ! 
+	close #hGdc,free: ioerr ignore
+	fnGetDirClient=returnN
+fnend
+
 include: ertn
-! /r
