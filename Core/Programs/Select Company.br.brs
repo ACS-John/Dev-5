@@ -18,6 +18,27 @@ MENU1: ! r:
 	next ch_item
 	! /r
 	!  r: add that company grid to the screen
+	dim item$(0)*40
+	if env$('cursys')='PR' then
+		mat item$(3)
+		mat colhdr$(3)
+		colhdr$(1)='Number'
+		colhdr$(2)='Name'
+		colhdr$(3)='Pay Period End'
+		mat colmask$(3)
+		colmask$(1)='30'
+		colmask$(2)=''
+		colmask$(3)=''
+	else
+		mat item$(2)
+		mat colhdr$(2)
+		colhdr$(1)='Number'
+		colhdr$(2)='Name'
+		mat colmask$(2)
+		colmask$(1)="30"
+		colmask$(2)=""
+	end if
+
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 	!
 
@@ -29,6 +50,9 @@ MENU1: ! r:
 			company_count+=1
 			item$(1)=str$(tmp_cno)
 			item$(2)=fn_companyName$(tmp_cno)
+			if env$('cursys')='PR' then
+				item$(3)=date$(days(fnCompanyPayPeriodEndingDate(tmp_cno),'ccyymmdd'),'ccyy/mm/dd')
+			end if
 			fnflexadd1(mat item$)
 			if tmp_cno=cno then
 				setenv('current_grid_row',str$(company_count))
@@ -267,6 +291,7 @@ def fn_setup
 		library 'S:\Core\Library': fnOpenPartial
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnFree
+		library 'S:\Core\Library': fnCompanyPayPeriodEndingDate
 		on error goto ERTN
 		! ______________________________________________________________________
 		dim filename$(999)*40
@@ -277,15 +302,6 @@ def fn_setup
 		!  * Company files must be named Company.hxx
 	end if
 	!
-	! r: constants and variables setup for the company grid
-		mat colhdr$(2)
-		colhdr$(1)='Number'
-		colhdr$(2)='Name'
-		mat colmask$(2)
-		colmask$(1)="30"
-		colmask$(2)=""
-		dim item$(2)*40
-	! /r
 	fn_system_setup
 fnend
 def fn_dataFolder$*256(; ___,return$*256)
