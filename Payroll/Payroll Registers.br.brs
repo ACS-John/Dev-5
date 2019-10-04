@@ -28,18 +28,20 @@
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
-	open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr L240
+	open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr BankReadFinis
 	read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
-	L240: !
-	open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L270
+	BankReadFinis: !
+	
+	open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr CkNoReadFinis
 	read #1,using 'Form POS 5,N 8': ckno
 	close #1:
-	L270: !
+	CkNoReadFinis: !
+	
 	ckno+=1
 	d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
 	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
-	L320: !
+
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
 
 
@@ -47,7 +49,9 @@
 	open #h_dd=30: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
 	open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]"&',Shr',internal,input,keyed
 ! /r
-	if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
+
+if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
+
 ASK_CHECK_NO: ! r:
 	fnTos(sn$="Payrollreg1")
 	respc=0
