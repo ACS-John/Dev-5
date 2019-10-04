@@ -1,0 +1,13 @@
+SHARE\MRGCODES.INT, mc_ , 0
+SHARE\MRGCODES.FCX, code,delim
+SHARE\MRGCODES.ICX, code,noOrRelation,fieldType,relation,fieldName
+
+recl=100
+===================================================
+code$                        ,Letter Code                         ,     C    8 , ! Spos=   1
+noOrRelation$                ,Number or Relation                  ,     C   10 , ! Spos=   9
+fieldType$                   ,Field Type                          ,     C   10 , ! Spos=  19
+relation$                    ,Relation                            ,     C   10 , ! Spos=  29
+fieldName$                   ,Field Name                          ,     C   15 , ! Spos=  39
+merge_code                   ,Document Merge Code                 ,     BH   3 , ! Spos=  54
+delimiter$                   ,Document Delimiters                 ,     C   20 , ! Spos=  57

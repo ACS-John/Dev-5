@@ -545,7 +545,7 @@ def fn_readFileIntoArrays
 		dim list_totalPaidN(0)
 		dim list_balanceN(0)
 		dim list_billPatientReason$(0)*256
-		dim list_claimNotes$(0)*256
+		dim list_claimNotes$(0)*512
 		
 		mat list_facilityName$(0)
 		mat list_providerName$(0)
