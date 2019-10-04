@@ -12,11 +12,11 @@ def fn_ChangePayrollDates
 	CpdTos: !
 	fnTos
 	rc=cf=0: mylen=27: mypos=mylen+2: frameno=1
-	fnFra(1,1,2,42,"Payroll Date","Enter the payroll date.")
+	fnFra(1,1,1,42,"Payroll Date","Enter the payroll date.")
 	fnLbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 	fnTxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno) 
 	resp$(rc+=1)=str$(d1)
-	fnFra(5,1,7,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") 
+	fnFra(4,1,7,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") 
 	frameno=2 : mylen=26 : mypos=mylen+2
 	fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
 	fnTxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) 
