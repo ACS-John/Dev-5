@@ -1,0 +1,28 @@
+COMMON\USERLIST, user_ , 0
+COMMON\USERLIST.NAM, name
+
+
+! recl=256
+===================================================
+name$                        ,User Name                         , C     20  , !  SPos=   1 
+init$                        ,User Initials                     , C      3  , !  SPos=  21 
+wsid                         ,User WSID                         , N      3  , !  SPos=  24 
+password$                    ,User Password                     , C      8  , !  SPos=  27 
+home_dir$                    ,User Home Directory               , C     28  , !  SPos=  35 
+menu_startup$                ,MENU Startup String               , C     20  , !  SPos=  63 
+user_menu$                   ,User Menu                         , C      1  , !  SPos=  83 
+user_queue$                  ,User Queue                        , C      8  , !  SPos=  84 
+help_level$                  ,User Help Level                   , C      1  , !  SPos=  92 
+gui_menu$                    ,GUI Menu                          , C      1  , !  SPos=  93 
+mini_paper$                  ,User Mini Paper                   , C      2  , !  SPos=  94 
+fields3d$                    ,Menu Fields 3D                    , C      3  , !  SPos=  96 
+lines3d$                     ,Menu Lines 3D                     , C      3  , !  SPos=  99 
+mystartup$                   ,User Startup                      , C      3  , !  SPos= 102 
+mystatus$                    ,User Status                       , C      3  , !  SPos= 105 
+filler108                    ,Filler108                         , X     15  , !  SPos= 108 
+myreply$                     ,User Reply E-Mail Address         , C     60  , !  SPos= 123 
+user_no                      ,User Number                       , BH     4  , !  SPos= 183 
+myacard$                     ,User Account Card                 , C      3  , !  SPos= 187 
+gui_detail                   ,GUI Detail 1 - ??                 , BH     2  , !  SPos= 190 
+inactive_flag$               ,Flag to Indicate User is Inactive , C      1  , !  SPos= 192 
+login_name$                  ,OS Login name                     , C     32  , !  SPos= 193 

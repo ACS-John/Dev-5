@@ -10,8 +10,8 @@ if env$('cursys')='CM' then
 	pr #hProc: 'Proc Run'
 else
 	pr #hProc: 'load S:\Core\Menu.br'
+	pr #hProc: 'run'
 end if
-pr #hProc: 'run'
 close #hProc:
 ! execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
 execute 'proc fileioproc'&session$&'.$$$'
