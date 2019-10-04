@@ -57,7 +57,7 @@ XIT: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnerror,fnTos,fnFra,fnChk,fnLbl,fnTxt,fnCmdKey,fnAcs,fngethandle
+		library 'S:\Core\Library': fntop,fnxit,fnTos,fnFra,fnChk,fnLbl,fnTxt,fnCmdKey,fnAcs,fngethandle
 		on error goto ERTN
 	 end if
 fnend
@@ -123,6 +123,13 @@ def fn_payPeriodEndingDate(; setIt,hPrDates)
 		close #hPrDates: 
 	end if
 	fn_payPeriodEndingDate=setIt
+fnend
+def library fnCompanyPayPeriodEndingDate(cno; ___,returnN)
+	if ~setup then let fn_setup
+	open #hPrDates:=fngethandle: 'Name=[Q]\PRmstr\Dates.h'&str$(cno)&',Shr',internal,input,relative
+	read #hPrDates,using "form pos 1,x 48,n 8",rec=1: returnN
+	close #hPrDates: 
+	fnCompanyPayPeriodEndingDate=returnN
 fnend
 
 include: ertn

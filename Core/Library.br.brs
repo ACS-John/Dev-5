@@ -1495,6 +1495,12 @@ fnend
 		library 'S:\Payroll\Change Payroll Dates.br': fnSetPayrollDatesForYear
 		fnSetPayrollDatesForYear=fnSetPayrollDatesForYear( year)
 	fnend
+
+	def library fnCompanyPayPeriodEndingDate(cno)
+		library 'S:\Payroll\Change Payroll Dates.br': fnCompanyPayPeriodEndingDate
+		fnCompanyPayPeriodEndingDate=fnCompanyPayPeriodEndingDate(cno)
+	fnend
+
 ! /r
 ! r: Job Cost Payroll
 	def library fncmbburden(lyne,mypos;addall,c,a$*30)
