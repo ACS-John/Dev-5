@@ -1411,9 +1411,9 @@ fnend
 		library 'S:\acsPR\newprRptS1.br': fnprint_designed_report
 		fnprint_designed_report=fnprint_designed_report(rptn)
 	fnend
-	def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1)
+	def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
 		library 'S:\acsPR\newprreg2.br': fnpayroll_register_2
-		fnpayroll_register_2=fnpayroll_register_2( det,include_tips_in_other_wh,append_reg1)
+		fnpayroll_register_2=fnpayroll_register_2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	fnend
 	def library fnss_employee
 		library 'S:\acsPR\ss_emp.br': fnss_employee
