@@ -7,16 +7,22 @@ XIT: fnxit
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnDedNames,fnopenprn,fncloseprn,fnprocess,fndate_mmddyy_to_ccyymmdd,fnss_employee,fnss_employer,fnindex_it,fnStatusClose,fngethandle
+		library 'S:\Core\Library': fntop,fnxit,fnDedNames,fnprocess
+		library 'S:\Core\Library': fnopenprn,fncloseprn
+		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+		library 'S:\Core\Library': fnss_employee,fnss_employer
+		library 'S:\Core\Library': fnindex_it
+		library 'S:\Core\Library': fnStatusClose
+		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnPayPeriodEndingDate
 		on error goto ERTN
 	end if 
 fnend 
-def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1)
+def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	fn_setup
-	fnpayroll_register_2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1)
+	fnpayroll_register_2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
 fnend 
-def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1)
+def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	! DET=1 if you dont want details printed but you want department totals.
 	! DET=2 if you dont want details or department totals printed.
 
@@ -37,8 +43,12 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1)
 	open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr L220X
 	founddept=1
 	L220X: !
-	d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
-	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
+	if ppdOverride then
+		ppd=ppdOverride
+	else
+		d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
+		ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
+	end if
 	fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	
 	ssr1=fnss_employee*.01

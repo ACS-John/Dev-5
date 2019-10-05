@@ -3,7 +3,7 @@ Payroll - Programmer
 ! >State Withholdings ^ acsPR\StWHFM  ! <-  no longer used since tables.wh is not longer used.
 >Employee Departments ^ Payroll\*
 >RPWork01 (Entered TimeSheet) Hamster ^ acsPR\rpwork01_hamster
->Update Checkbook From Check History ^ Payroll\Fix\Update Checkbook from Check History
+>Update Checkbook From Check History ^ Payroll\Fix\*
 >Fix WH Wages in Check History ^ acsPR\Fix_SS_Med_Wages
 Pay Period
 >Import from Time Clock System ^ acsPR\newimporttime
@@ -14,3 +14,4 @@ Client 3393 Lost Transactions Fix
 >Import Transactions from CSV (client 3393 cno 1082)  ^ Payroll\Fix\*
 >Import Transactions from CSV (client 3393 cno 1029)  ^ Payroll\Fix\*
 >Import Transactions from CSV (client 3393 cno 1092)  ^ Payroll\Fix\*
+>Import Transactions from CSV (client 3393 cno 1078)  ^ Payroll\Fix\*

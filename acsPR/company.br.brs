@@ -1,11 +1,18 @@
 ! Company Information File
-! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnDedNames,fnclient_has
+
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnstyp
+	library 'S:\Core\Library': fnChk,fnqgl,fnrgl$,fncomboa,fnCmdKey
+	library 'S:\Core\Library': fnmsgbox
+	library 'S:\Core\Library': fnDedNames
+	library 'S:\Core\Library': fnFra,fnTos,fnLbl,fnTxt,fnAcs
+	library 'S:\Core\Library': fnagl$
+	library 'S:\Core\Library': fnclient_has
 	on error goto ERTN
-! ______________________________________________________________________
+
 	if fnclient_has('P2') then let fnstyp(11) else let fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 	fntop(program$)
-! ______________________________________________________________________
+
 	dim a$(3)*40,b$(2)*12,d$(10)*8,label1$(10)*20,m(10),r(10)
 	dim fa$(10)*26,e$(10)*12,prh$(2)*40
 	dim rpnames$(86)*20,rpnames2$(10)*6,x$(10)*20,io2$(50)*24,na$(125)*8
@@ -19,28 +26,28 @@
 	dim abrevname$(20)*8
 	dim newdedcode(20)
 	dim gl$(20)*12,fid$*12
-! 
+
 	dim opt_ded_or_add$(3)*7
 	opt_ded_or_add$(1)="Deduct"
 	opt_ded_or_add$(2)="Add"
 	opt_ded_or_add$(3)="Benefit"
-! 
+
 	dim opt_std_or_percent$(2)*8
 	opt_std_or_percent$(1)="Standard"
 	opt_std_or_percent$(2)="Percent"
-! ______________________________________________________________________
-! ______________________________________________________________________
+
+
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]"&',recl=759,version=0,use',internal,outIn,relative 
 	if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 	ficamaxw=ficamaxw*10
-L290: close #1: 
-READNAMES: ! 
+	L290: close #1: 
+	! READNAMES: ! 
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-! ______________________________________________________________________
-SCREEN_1: ! 
+goto SCREEN_1
+SCREEN_1: ! r:
 	resp=0
-	fnTos(sn$="Company-1") 
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fram1=1: fnFra(1,1,10,80,"Company Number "&env$('cno'))
 	fnLbl(1,1,"Company Name:",mylen,right,0,fram1)
@@ -95,7 +102,7 @@ SCREEN_1: !
 	fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto CONFIRMEXIT
+	if ckey=5 then goto DoCancel
 	a$(1)=resp$(1)
 	a$(2)=resp$(2)
 	a$(3)=resp$(3)
@@ -127,9 +134,9 @@ L1010: goto L1030 ! If FEDUCMAX<=0 Then Goto 1020 Else Goto 1120
 	fnmsgbox(mat ml$,resp$,'',52) 
 	if resp$="Yes" then goto SCREEN_2 else goto SCREEN_1
 L1030: if ckey=4 then goto DONE
-! ______________________________________________________________________
-SCREEN_2: ! 
-	fnTos(sn$="Company-2")
+goto SCREEN_2 ! /r
+SCREEN_2: ! r:
+	fnTos
 	mylen=32: mypos=mylen+3 : right=1
 	pos_col(1)=1 ! deduction numbers
 	pos_col(2)=5 ! deduction name
@@ -187,7 +194,7 @@ SCREEN_2: !
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto CONFIRMEXIT
+	if ckey=5 then goto DoCancel
 	resp=0
 	for j=1 to 20
 		fullname$(j)=resp$(resp+=1)
@@ -205,16 +212,17 @@ SCREEN_2: !
 	next j
 	if ckey=2 then goto SCREEN_1
 	if ckey=4 then goto DONE
-	if ckey=5 then goto CONFIRMEXIT
-	if ckey=1 then goto SCREEN_3
-! ______________________________________________________________________
-SCREEN_3: ! 
-	fnTos(sn$="Company-3") 
+	if ckey=5 then goto DoCancel
+	! if ckey=1 then goto SCREEN_3
+goto SCREEN_3 ! /r
+
+SCREEN_3: ! r:
+	fnTos
 	mylen=32: mypos=mylen+3 : right=1
 	fnLbl(1,10,"STATE CODES AND UNEMPLOYMENT INFORMATION",0,0)
 	fnLbl(3,1,"Code State Name     State ID    U/C Maximum      U/C Rate",0,0)
 	resp=0
-! 
+
 	for j=1 to 10
 		fnLbl(j+3,3,str$(j),mylen,0,0)
 		fnTxt(j+3,6,8,0,left,"",0,"Enter your state name.",0 ) 
@@ -231,7 +239,7 @@ SCREEN_3: !
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto CONFIRMEXIT
+	if ckey=5 then goto DoCancel
 	resp=0
 	for j=1 to 10
 		d$(j)=resp$(resp+=1)
@@ -241,10 +249,11 @@ SCREEN_3: !
 	next j
 	if ckey=2 then goto SCREEN_2
 	if ckey=4 then goto DONE
-	if ckey=5 then goto CONFIRMEXIT
-! ______________________________________________________________________
-SCREEN_4: ! 
-	fnTos(sn$="Company-4") 
+	if ckey=5 then goto DoCancel
+goto SCREEN_4 ! /r
+
+SCREEN_4: ! r:
+	fnTos
 	mylen=45: mypos=mylen+3 : right=1: resp=0
 	fram3=1: fnFra(1,1,6,60,"Vacation and Sick Pay Information")
 	fnLbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
@@ -287,7 +296,7 @@ SCREEN_4: !
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto CONFIRMEXIT
+	if ckey=5 then goto DoCancel
 	sck(1)=val(resp$(1))
 	sck(2)=val(resp$(2))
 	sck(3)=val(resp$(3))
@@ -301,14 +310,14 @@ SCREEN_4: !
 	wcm(4)=val(resp$(11))
 	if ckey=2 then goto SCREEN_3
 	if ckey=4 then goto DONE
-	if ckey=1 then goto SCREEN_5
-! ______________________________________________________________________
-SCREEN_5: ! 
+	! if ckey=1 then goto SCREEN_5
+goto SCREEN_5 ! /r
+
+SCREEN_5: ! r:
 	goto DONE ! will need the job cost screen someday
 	if ckey=2 then goto SCREEN_4
 	if ckey=5 then goto DONE
-! ______________________________________________________________________
-! 
+
 	close #106: ioerr ignore
 	if fnstyp=14 then win6$="SRow=14,SCol=12,ECol=67"
 	if fnstyp<>14 then win6$="SRow=09,SCol=11,ECol=69"
@@ -328,15 +337,17 @@ SCREEN_5: !
 	io6$(5)="6,47,N 6.2,UT,N"
 	io6$(6)="7,47,N 6.2,UT,N"
 	io6$(7)="8,47,N 6.2,UT,N"
-	if fnstyp=11 then goto L2640 else goto L2700 ! (skips Job Cost Questions)
-L2640: pr #106,fields "10,2,Cr 50,N": "Retain Transactions until Jobs are complete (Y/N):"
-	pr #106,fields "11,2,Cr 50,N": "Starting of Range for Non-Productive Jobs:"
-	pr #106,fields "12,2,Cr 50,N": "Ending of Range for Non-Productive Jobs:"
-	pr #106,fields "13,2,Cr 50,N": "Number of Deduction used for Union Dues (if any):"
-	io6$(8)="10,53,Cu 1,UT,N" : io6$(9)="11,53,C 6,UT,N"
-	io6$(10)="12,53,C 6,UT,N" : io6$(11)="13,53,Nz 2,UT,N"
-	if tc=1 then tc$="Y" else tc$="N"
-L2700: pr f "23,25,C 09,B,1": "Next (F1)"
+	if fnstyp=11 then 
+		! (Job Cost Questions)
+		pr #106,fields "10,2,Cr 50,N": "Retain Transactions until Jobs are complete (Y/N):"
+		pr #106,fields "11,2,Cr 50,N": "Starting of Range for Non-Productive Jobs:"
+		pr #106,fields "12,2,Cr 50,N": "Ending of Range for Non-Productive Jobs:"
+		pr #106,fields "13,2,Cr 50,N": "Number of Deduction used for Union Dues (if any):"
+		io6$(8)="10,53,Cu 1,UT,N" : io6$(9)="11,53,C 6,UT,N"
+		io6$(10)="12,53,C 6,UT,N" : io6$(11)="13,53,Nz 2,UT,N"
+		if tc=1 then tc$="Y" else tc$="N"
+	end if
+	pr f "23,25,C 09,B,1": "Next (F1)"
 	pr f "23,35,C 09,B,2": "Back (F2)"
 	pr f "23,45,C 09,B,5": "Done (F5)"
 	if gli=1 then gli$="Y" else gli$="N"
@@ -360,31 +371,26 @@ L2840: if gli$<>"Y" and gli$<>"N" then ce=1 : goto ERR7
 	if tc$="Y" then tc=1 else tc=0
 	if fnstyp=11 and tc$<>"Y" and tc$<>"N" then ce=8 : goto ERR7
 	if dc<0 or dc>10 then ce=11: goto ERR7
-L2900: if ckey=5 or ckey=1 then goto CONFIRMEXIT
+	L2900: !
+	if ckey=5 or ckey=1 then goto DoCancel
 	if ckey=2 then goto SCREEN_5
-	goto L2740
-CONFIRMEXIT: ! 
-	mat ml$(2) 
-	ml$(1)="You have chosen to exit without saving any changes." 
-	ml$(2)="Save changes now?" 
-	fnmsgbox(mat ml$,resp$,'',52) 
-	if resp$="Yes" then goto DONE else goto XIT
-! ______________________________________________________________________
-DONE: ! 
+goto L2740 ! /r
+DoCancel: ! r: 
+! 	mat ml$(2) 
+! 	ml$(1)="You have chosen to exit without saving any changes." 
+! 	ml$(2)="Save changes now?" 
+! 	fnmsgbox(mat ml$,resp$,'',52) 
+! if resp$="Yes" then goto DONE else goto XIT 
+goto XIT
+! /r
+
+DONE: ! r:
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative 
 	ficamaxw=ficamaxw*.1
 	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #1: 
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
-	goto XIT
-! ______________________________________________________________________
+goto XIT ! /r
+
 XIT: fnxit
-! ______________________________________________________________________
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
-! ______________________________________________________________________
+include: ertn

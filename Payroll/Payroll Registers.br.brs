@@ -224,14 +224,16 @@ FINIS: ! r:
 	close #h_dd: ioerr ignore
 	if append_reg1 then
 		if env$('ACSDeveloper')<>'' then
+			pr #255: ''
 			pr #255: '----newpage (ACSDeveloper Style)----'
+			pr #255: ''
 		else
 			pr #255: newpage
 		end if
 	else
 		fncloseprn
 	end if
-	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1)
+	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1,ppd)
 	goto XIT ! /r let fnchain("S:\acsPR\newprReg2")
 XIT: fnxit
 include: ertn

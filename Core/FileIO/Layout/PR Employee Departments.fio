@@ -3,11 +3,11 @@
 recl=32
 ===================================================
 code    ,  Employee Number                      ,  n    3   , ! Pos=1 
-name$   ,  Name                                 ,  c   25   , ! Pos=4 
+name    ,  Name                                 ,  c   25   , ! Pos=4 
 
 
 
-
+ru
 
 
 
