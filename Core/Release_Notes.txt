@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________          
+4:07 PM 10/5/2019	PR 	added ability to run payroll registers and part 2 any point in time instead of just most recent
 2:58 PM 10/5/2019	PR	Removed confirmation when canceling out of the Company file
 21:08 10/19/2019	CO	5.74209  
 12:12 10/19/2019	CO	5.74208   
