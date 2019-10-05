@@ -121,9 +121,9 @@ fnend
 LOOP_TOP: ! r: main loop
 	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
-
+	if lpd=ppd then goto PastEmpCheckTest
 	if ~fn_employeeHasCheckOnDate(eno,ppd) then goto LOOP_TOP ! if lpd><ppd then goto LOOP_TOP
-
+	PastEmpCheckTest: !
 	mat thc=(0) : mat tcp=(0) : mat ttdc=(0) : holdrealckno=realckno=0
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	dirdep$=rpad$(str$(eno),10)
