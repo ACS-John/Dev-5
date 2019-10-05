@@ -2,8 +2,23 @@
 ! Payroll Register
 
 ! r: general setup: libraries, dims, fntop,fncno,read defaults, open files, etc
-	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnPayPeriodEndingDate,fnprocess,fndate_mmddyy_to_ccyymmdd,fndat,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnpayroll_register_2,fncreg_read,fncreg_write,fnChk,fnreg_read,fnreg_write,fncreg_read,fnDedNames
+	library 'S:\Core\Library': fntop,fnxit
+	library 'S:\Core\Library': fnopenprn,fncloseprn
+	library 'S:\Core\Library': fnPayPeriodEndingDate
+	library 'S:\Core\Library': fndat
+	library 'S:\Core\Library': fnprocess
+	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+	library 'S:\Core\Library': fnTos
+	library 'S:\Core\Library': fnTxt
+	library 'S:\Core\Library': fnLbl
+	library 'S:\Core\Library': fnChk
+	library 'S:\Core\Library': fnCmdKey
+	library 'S:\Core\Library': fnAcs2
+	library 'S:\Core\Library': fnpayroll_register_2
+	library 'S:\Core\Library': fnreg_read,fnreg_write
+	library 'S:\Core\Library': fncreg_read,fncreg_write
+	library 'S:\Core\Library': fnDedNames
+	library 'S:\Core\Library': fnGetHandle
 	on error goto ERTN
 
 	dim em$*30,cp(32),tcp(32)
@@ -45,15 +60,16 @@
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
 
 
-	open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
-	open #h_dd=30: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
-	open #h_checks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]"&',Shr',internal,input,keyed
+	open #hEmployee:=fnGetHandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
+	open #h_dd=fnGetHandle: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
+	open #hCheck1:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,input,keyed
+	open #hCheck3:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,input,keyed
 ! /r
 
 if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
 
 ASK_CHECK_NO: ! r:
-	fnTos(sn$="Payrollreg1")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Beginning Check Number:",20,1)
 	fnTxt(1,23,8,0,1,"30",0," ")
@@ -72,7 +88,7 @@ ASK_CHECK_NO: ! r:
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed with pr the payroll register." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
+	fnAcs2(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto XIT
 	ckno=val(resp$(1))
 	ppd=val(resp$(2))
@@ -80,7 +96,7 @@ ASK_CHECK_NO: ! r:
 	include_tips_in_other_wh$=resp$(resp_include_tips_in_other_wh)
 	fncreg_write('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='True' then include_tips_in_other_wh=1 else include_tips_in_other_wh=0
 	fnreg_write('prreg2.append_reg1',append_reg1$) : if append_reg1$='True' then append_reg1=1 else append_reg1=0
-	goto START_REPORT ! /r
+goto START_REPORT ! /r
 START_REPORT: ! r:
 	if append_reg1 then
 		fnopenprn( 0,0,0,fnprocess,' (Check and Departmental Registers)')
@@ -88,12 +104,26 @@ START_REPORT: ! r:
 		fnopenprn( 0,0,0,fnprocess,' (Check Register)')
 	end if
 	gosub HDR
-	goto LOOP_TOP
+goto LOOP_TOP ! /r
 
-LOOP_TOP: !
-	read #1,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
+def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
+	theDate=date(days(theDate,'mmddyy'),'ccyymmdd')
+	ehcKey$=cnvrt$('N 8',eno)
+	ehcKey$=ehcKey$&cnvrt$('PD 6',theDate)
+	ehcKey$=ehcKey$&cnvrt$('N 3',0)
+	restore #hCheck3,key=>ehcKey$: nokey EhcFinis
+	read #hCheck3, using 'form pos 1,n 8, pos 12,pd 6': ehcEno,ehcDate
+	if ehcEno=eno and theDate=ehcDate then returnN=1
+	EhcFinis: !
+	fn_employeeHasCheckOnDate=returnN
+fnend
+
+LOOP_TOP: ! r: main loop
+	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
-	if lpd><ppd then goto LOOP_TOP
+
+	if ~fn_employeeHasCheckOnDate(eno,ppd) then goto LOOP_TOP ! if lpd><ppd then goto LOOP_TOP
+
 	mat thc=(0) : mat tcp=(0) : mat ttdc=(0) : holdrealckno=realckno=0
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	dirdep$=rpad$(str$(eno),10)
@@ -103,9 +133,9 @@ LOOP_TOP: !
 	a=pos(rtrm$(em$)," ",1) : b=pos(rtrm$(em$)," ",a+1)
 	em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
 ! L690: !
-	restore #h_checks,key>=checkkey$: nokey LOOP_TOP
+	restore #hCheck1,key>=checkkey$: nokey LOOP_TOP
 L700: !
-	read #h_checks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof L760
+	read #hCheck1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof L760
 	if heno<>eno then goto L760
 	if prd><fndate_mmddyy_to_ccyymmdd(ppd) then goto L700
 	if prd=fndate_mmddyy_to_ccyymmdd(ppd) then holdrealckno=realckno
@@ -187,9 +217,10 @@ HDR: ! r:
 	return  ! /r
 FINIS: ! r:
 	gosub TOTALS
-	close #1: ioerr ignore
-	close #2: ioerr ignore
-	close #h_checks: ioerr ignore
+	close #hEmployee: ioerr ignore
+	! close #2: ioerr ignore
+	close #hCheck1: ioerr ignore
+	close #hCheck3: ioerr ignore
 	close #h_dd: ioerr ignore
 	if append_reg1 then
 		if env$('ACSDeveloper')<>'' then
@@ -203,5 +234,4 @@ FINIS: ! r:
 	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1)
 	goto XIT ! /r let fnchain("S:\acsPR\newprReg2")
 XIT: fnxit
-IGNORE: continue
 include: ertn
