@@ -1,7 +1,7 @@
 Payroll New ^ ACS Payroll
 Payroll - Programmer
 ! >State Withholdings ^ acsPR\StWHFM  ! <-  no longer used since tables.wh is not longer used.
->Employee Departments ^ Payroll\Employee Departments
+>Employee Departments ^ Payroll\*
 >RPWork01 (Entered TimeSheet) Hamster ^ acsPR\rpwork01_hamster
 >Update Checkbook From Check History ^ Payroll\Fix\Update Checkbook from Check History
 >Fix WH Wages in Check History ^ acsPR\Fix_SS_Med_Wages
@@ -10,6 +10,7 @@ Pay Period
 
 
 Client 3393 Lost Transactions Fix
->Import Transactions from CSV                         ^ Payroll\Fix\Import Transactions from CSV
->Import Transactions from CSV (client 3393 cno 1082)  ^ Payroll\Fix\Import Transactions from CSV (client 3393 cno 1082)
->Import Transactions from CSV (client 3393 cno 1029)  ^ Payroll\Fix\Import Transactions from CSV (client 3393 cno 1029)
+>Import Transactions from CSV                         ^ Payroll\Fix\*
+>Import Transactions from CSV (client 3393 cno 1082)  ^ Payroll\Fix\*
+>Import Transactions from CSV (client 3393 cno 1029)  ^ Payroll\Fix\*
+>Import Transactions from CSV (client 3393 cno 1092)  ^ Payroll\Fix\*

@@ -1,70 +1,70 @@
 ! *** UB - Utility Billing ***
 File
->Customer                                             ^ Utility Billing\Customer
->Work Order Add                                       ^ Utility Billing\Work Order Add
->Rates                                                ^ Utility Billing\Rates
->Transactions                                         ^ Utility Billing\Transactions
+>Customer                                             ^ Utility Billing\*
+>Work Order Add                                       ^ Utility Billing\*
+>Rates                                                ^ Utility Billing\*
+>Transactions                                         ^ Utility Billing\*
 Billing                                               
->Enter Readings and Charges                           ^ Utility Billing\Enter Readings and Charges
->Add An Other Charge                                  ^ Utility Billing\Add An Other Charge
+>Enter Readings and Charges                           ^ Utility Billing\*
+>Add An Other Charge                                  ^ Utility Billing\*
 >Print Reports                                        
->>Unbilled Customer Listing                           ^ Utility Billing\Unbilled Customer Listing
->>Billing Journal                                     ^ Utility Billing\Billing Journal
->>Usage Report                                        ^ Utility Billing\Usage Report
->>Zero Usage Report                                   ^ Utility Billing\Zero Usage Report
->>Per 1000 Usage                                      ^ Utility Billing\Per 1000 Usage
->>Consumption List                                    ^ Utility Billing\Consumption List
->Print Bills                                          ^ Utility Billing\Print Bills
->Create Bank Draft File                               ^ Utility Billing\Create Bank Draft File
-Collections                                           ^ Utility Billing\Collections
+>>Unbilled Customer Listing                           ^ Utility Billing\*
+>>Billing Journal                                     ^ Utility Billing\*
+>>Usage Report                                        ^ Utility Billing\*
+>>Zero Usage Report                                   ^ Utility Billing\*
+>>Per 1000 Usage                                      ^ Utility Billing\*
+>>Consumption List                                    ^ Utility Billing\*
+>Print Bills                                          ^ Utility Billing\*
+>Create Bank Draft File                               ^ Utility Billing\*
+Collections                                           ^ Utility Billing\*
 Mid-Month                                             
 >Print                                                
->>Past Due and Turn Off List                          ^ Utility Billing\Past Due Turn Off List
->>Past Due Notices                                    ^ Utility Billing\Past Due Notices
->Penalty Calculation                                  ^ Utility Billing\Penalty Calculation
->Additional Penalty Calculation                       ^ Utility Billing\Additional Penalty Calculation
+>>Past Due and Turn Off List                          ^ Utility Billing\*
+>>Past Due Notices                                    ^ Utility Billing\*
+>Penalty Calculation                                  ^ Utility Billing\*
+>Additional Penalty Calculation                       ^ Utility Billing\*
 Month-End                                             
->Transaction Listing                                  ^ Utility Billing\Transaction Listing
->Cash Receipts Journal                                ^ Utility Billing\Cash Receipts Journal
+>Transaction Listing                                  ^ Utility Billing\*
+>Cash Receipts Journal                                ^ Utility Billing\*
 >Balance Breakdown (Aged by Month)                    ^ acsUB\ubOwed
 >Post to General Ledger                               ^ acsub\postgl                                            ^ GL
 Annual                                                
 >Print                                                
 >>Accumulated Transaction List                        ^ acsUB\ubAccTr
->>Annual Usage Report                                 ^ Utility Billing\Annual Usage Report
+>>Annual Usage Report                                 ^ Utility Billing\*
 ! >Remove Old Transactions                            ^ acsUB\ubRemove ! removed 1/18/2017 because it is just a bad idea
->Zero Year To Date Usage                              ^ Utility Billing\Zero Year to Date Usage
+>Zero Year To Date Usage                              ^ Utility Billing\*
 Print                                                 
 >Customer Listings                                    
->>Name and Number List                                ^ Utility Billing\Name and Number List
->>Labels                                              ^ Utility Billing\Labels
+>>Name and Number List                                ^ Utility Billing\*
+>>Labels                                              ^ Utility Billing\*
 >>Notes                                               ^ acsUB\ubNotes
 >>Deposit List                                        ^ acsUB\ubCustDp
->>Deposit Change List                                 ^ Utility Billing\Deposit Change List
->>Export Billing Addresses by Rate Code               ^ Utility Billing\Export Billing Addresses by Rate Code
->Rate Analysis                                        ^ Utility Billing\Rate Analysis
+>>Deposit Change List                                 ^ Utility Billing\*
+>>Export Billing Addresses by Rate Code               ^ Utility Billing\*
+>Rate Analysis                                        ^ Utility Billing\*
 >Final Billing Report                                 ^ acsUB\BillRpt
 >Past Due Balance Breakdown                           ^ acsUB\ubDelinq
 >Meter Reading Book                                   ^ acsUB\ubMetrBk
 >Route Book Pages                                     ^ acsUB\ubMetrB2
->Median Sewer Charge                                  ^ Utility Billing\Median Sewer Charge
+>Median Sewer Charge                                  ^ Utility Billing\*
 >Average Sewer Usage Report                           ^ acsUB\averagesewer
 >Secondary Water Usage Report                         ^ acsUB\billingrpt
 ! >Print Postal Permit                                ^ acsUB\permitbox
 >Bar Graph                                            ^ acsUB\ubbargraph
->Work Order List                                      ^ Utility Billing\Work Order List
+>Work Order List                                      ^ Utility Billing\*
 Utilities                                             
->Calculate Sewer Average                              ^ Utility Billing\Calculate Sewer Average
+>Calculate Sewer Average                              ^ Utility Billing\*
 >View Total Accounts Receivable                       ^ acsUB\TotalBal
->Enter Beginning Balances and Readings                ^ Utility Billing\Enter Beginning Balances and Readings
->Transfer Accounts Between Companies                  ^ Utility Billing\Transfer Accounts Between Companies
->Display Last Date Customer File Accessed             ^ Utility Billing\Display Last Date Customer File Accessed
+>Enter Beginning Balances and Readings                ^ Utility Billing\*
+>Transfer Accounts Between Companies                  ^ Utility Billing\*
+>Display Last Date Customer File Accessed             ^ Utility Billing\*
 Hand Held                                             ^                                                         ^ U4
->Create Hand Held File                                ^ Utility Billing\Hand Held\Create Hand Held File         ^ U4
->Import from Hand Held to Book                        ^ Utility Billing\Hand Held\Import from Hand Held to Book ^ U4
->Meter Type                                           ^ Utility Billing\Hand Held\Meter Type                    ^ U4
-! >Meter Information                                    ^ Utility Billing\Hand Held\Meter Information             ^ U4
-! >Meter Address                                        ^ HamsterFio:Meter Address                                ^ U4
+>Create Hand Held File                                ^ Utility Billing\Hand Held\*                             ^ U4
+>Import from Hand Held to Book                        ^ Utility Billing\Hand Held\*                             ^ U4
+>Meter Type                                           ^ Utility Billing\Hand Held\*                             ^ U4
+! >Meter Information                                    ^ Utility Billing\Hand Held\*                           ^ U4
+! >Meter Address                                        ^ HamsterFio:*                                          ^ U4
 
 External Collections Processing                       ^                                                         ^ U5
 >Export for External Collections Process              ^ acsUB\ECP_Export                                        ^ U5
@@ -79,18 +79,18 @@ Extras
 >>Print                                               
 >>>Budget Worksheet                                   ^ acsUB\BudRpt1
 >>>Budget Customer List                               ^ acsUB\ubBudLst
->>Remove Old Budget Transactions                      ^ Utility Billing\Remove Old Budget Transactions
+>>Remove Old Budget Transactions                      ^ Utility Billing\*
 >>Calculate Average Charges for Date Range            ^ acsUB\AvgChg
 >>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg
 >Error Recovery
 >>Undo Penalty Calculation                            ^ acsUB\ubUnPen
->>Change Wrong Billing Date                           ^ Utility Billing\Change Wrong Billing Date
->>Recalculate All Current Bills                       ^ Utility Billing\Recalculate All Current Bills
+>>Change Wrong Billing Date                           ^ Utility Billing\*
+>>Recalculate All Current Bills                       ^ Utility Billing\*
 >Forgot to Zero Year To Date Usage                    ^ Utility Billing\Forgot to Zero Year-To-Date
 >>Reassign Deposit Change Addresses                   ^ acsUB\DepReas
 >>Change Wrong Transaction Dates                      ^ acsUB\ReDate
->>Reverse Billing Cycle                               ^ Utility Billing\Reverse Billing Cycle
->Export UB Master File                                ^ Utility Billing\Export UB Master File
+>>Reverse Billing Cycle                               ^ Utility Billing\*
+>Export UB Master File                                ^ Utility Billing\*
 >Pull Service Names for Grids                         ^ acsub\pulllay
 >Check Balance Breakdown 1                            ^ acsub\checkbalbrk
 >Check Balance Breakdowns 2                           ^ acsUB\check_balance_breakdowns
