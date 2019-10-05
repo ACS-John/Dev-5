@@ -7,3 +7,8 @@ Payroll - Programmer
 >Fix WH Wages in Check History ^ acsPR\Fix_SS_Med_Wages
 Pay Period
 >Import from Time Clock System ^ acsPR\newimporttime
+
+
+Client 3393 Lost Transactions Fix
+>Import Transactions from CSV                         ^ Payroll\Fix\Import Transactions from CSV
+>Import Transactions from CSV (client 3393 cno 1082)  ^ Payroll\Fix\Import Transactions from CSV (client 3393 cno 1082)
