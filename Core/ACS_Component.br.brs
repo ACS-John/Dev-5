@@ -57,7 +57,7 @@ def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon
 	if mylen=0 then mylen=len(txt$)
 	setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
 fnend
-def library fnpic(lyne,ps,height,width,picture$*300;con,tabcon)
+def library fnPic(lyne,ps,height,width,picture$*300;con,tabcon)
 	! add a picture/image to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
@@ -91,7 +91,7 @@ def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,ta
 	if maxlen=0 then maxlen=width
 	setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
 fnend
-def library fnmultiline(lyne,ps,height,width;contain,tabcon,tooltip$*200)
+def library fnMultiLine(lyne,ps,height,width;contain,tabcon,tooltip$*200)
 	! add a multiline text box to a screen ace form
 	if ~setup then let fn_setup
 	setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
@@ -114,11 +114,11 @@ def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 	if align=1 then ps=ps-len(rtrm$(txt$))-2
 	setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 fnend
-def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
+def library fnComboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
 	if ~setup then let fn_setup
-	fncomboa=fn_comboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
+	fnComboA=fn_comboA(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 fnend
-def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
+def fn_comboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
 	if env$('exitnow')='yes' then goto COMBOA_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from an array) to a screen ace form
 	! sfn$			simple file name
@@ -144,7 +144,7 @@ def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	width=contain=0
 	COMBOA_COMPLETE: !
 fnend
-def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
+def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
 	if ~setup then let fn_setup
@@ -263,12 +263,12 @@ def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 	end if
 fnend
-def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,seltype,usr,con,tabcon)
+def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,seltype,usr,con,tabcon)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
 	! mat colMask$		(column mask)=(see mask chart in screen ace manual)
 	! seltype		0=editable cells,	 1=row selection,	 2=column selection
 	! usr				(use or repl)=0=replace/build new,
-	!												 >0=use previous (sorta disables fnflexadd1
+	!												 >0=use previous (sorta disables fnFlexAdd1
 	!												 =-1=append previous
 	! sfn$			(simple file name) specific file you want flexgrid stored
 	!						do not use an extension on the file name
@@ -308,11 +308,11 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	end if
 	USEPREVIOUS: !
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then
-		fnflexinit1=1 : goto WRITE_TO_ACE
+		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
 	! _______________________
 	! ***	 test validity of some stuff **********
-	fnflexinit1=555
+	fnFlexInit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
 	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output
 	for j=1 to udim(mat colMask$)
@@ -326,10 +326,10 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	! hdrfile name is expected by screen ace to be the same name as
 	! .	 ! optfile$ only with the added .hdr extenstion
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then
-		fnflexinit1=1 : goto WRITE_TO_ACE
+		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
 	! __________________________________________________
-	fnflexinit1=0
+	fnFlexInit1=0
 	! if exists(env$('temp')&'\acs\'&optfile$) then
 	! 	fnFree(env$('temp')&'\acs\'&optfile$)
 	! end if
@@ -340,7 +340,7 @@ def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	usr=0
 	FLEXINIT1_COMPLETE: !
 fnend
-def library fnflexadd1(mat item$) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
+def library fnFlexAdd1(mat item$) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
 	! add a line to a flexgrid on a screen ace form
 	if env$('exitnow')='yes' then goto FLEXADD1_COMPLETE ! special processing to increase speed for exitnow
 	if ~setup then let fn_setup
@@ -466,7 +466,7 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	if width=0 then width=len(txt$)
 	setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 fnend
-def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
+def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
 	if ~setup then let fn_setup
 	! mylen		 button.width
 	! txt$		 button.caption
@@ -2005,7 +2005,7 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgl
 	if qgllength=0 then qgllength=35
 ! _______________________________________________________________________
 ! the response$ for this - should be gotten with fnAGL
-! fnCOMBOA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
+! fnComboA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
 ! this function has an integrated fnComboA - similar to the one above
 ! _______________________________________________________________________
 	dim qglopt$*60
@@ -2101,7 +2101,7 @@ QGL_ERROR: !
 	goto QGLFINIS
 QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
 	qgloptfile$=qgl_cursys$&"GLNumber"
-	fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
+	fn_comboA(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
 	myline=mypos=con=0
 fnend
 def fn_remove_crlf(&txt$)

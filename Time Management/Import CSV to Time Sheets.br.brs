@@ -43,15 +43,21 @@ for fileItem=1 to fileNameCount
 
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
 	! if fileItem=2 then pr 'header:',line_count,line$ : pause
+	if pos(line$,chr$(9))>0 then let delim$=chr$(9) else delim$=','
 	do
 		fn_get_next_line(h_in,line$) : line_count+=1
 		the_date_prior=the_date
 		isEmptyLine=fn_lineIsEmpty(line$)
 		if ~isEmptyLine then
 			dim item$(0)*512
-			str2mat(line$,mat item$,',',"QUOTES:TRIM")
+			str2mat(line$,mat item$,delim$,"QUOTES:TRIM")
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
-			if the_date<the_date_prior and the_date_prior>20151218 then pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause
+			if the_date<the_date_prior and the_date_prior>20151218 then 
+				pr file$(h_in)
+				pr 'line '&str$(line_count)
+				pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem'
+				pause
+			end if
 			if the_date=>filter_date(1) and the_date<=filter_date(2) then
 				! if fileItem=2 then pr 'body:',line_count,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
@@ -59,6 +65,7 @@ for fileItem=1 to fileNameCount
 					client_id=val(item$(4))
 					! if client_id=970 then pause
 					hours=val(item$(7))
+					! expense=val(item$(8))
 					if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 					dim description$*512
 					description$=item$(12)
@@ -119,6 +126,13 @@ def fn_writeOutAcs(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sag
 		!   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 	end if
 	write #h_out,using FORM_OUT: mat inp,0,1,wo_month,sc,'',0,wo_desc$
+	! if expense<>0 then
+	! 	inp(3)=1
+	! 	inp(4)=expense
+	! 	sc=601
+	! 	wo_month=19
+	! 	write #h_out,using FORM_OUT: mat inp,0,1,wo_month,sc,'',0,'Expenses'
+	! end if
 fnend  ! fn_writeOutAcs
 def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	dim wo_sage_code_prior$*128
@@ -254,6 +268,8 @@ def fn_get_the_date(gtd_source$*256)
 			gtd_source$(cc19_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2019
 		else
+			pr file$(h_in)
+			pr 'line '&str$(line_count)
 			pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause
 		end if  !
 		if pos(gtd_source$,'Jan ')>0 then
@@ -302,7 +318,7 @@ def fn_get_the_date(gtd_source$*256)
 		gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
 	end if  ! gtd_source$<>''
 	fn_get_the_date=gtd_return
-fnend  ! fn_get_the_date
+fnend
 def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; ___,x)
 	fnTos(sn$="ask_"&str$(udim(mat label$))&'_dates')
 	respc=0

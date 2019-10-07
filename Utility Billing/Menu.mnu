@@ -4,10 +4,10 @@ File
 >Work Order Add                                       ^ Utility Billing\*
 >Rates                                                ^ Utility Billing\*
 >Transactions                                         ^ Utility Billing\*
-Billing                                               
+Billing
 >Enter Readings and Charges                           ^ Utility Billing\*
 >Add An Other Charge                                  ^ Utility Billing\*
->Print Reports                                        
+>Print Reports
 >>Unbilled Customer Listing                           ^ Utility Billing\*
 >>Billing Journal                                     ^ Utility Billing\*
 >>Usage Report                                        ^ Utility Billing\*
@@ -17,25 +17,25 @@ Billing
 >Print Bills                                          ^ Utility Billing\*
 >Create Bank Draft File                               ^ Utility Billing\*
 Collections                                           ^ Utility Billing\*
-Mid-Month                                             
->Print                                                
+Mid-Month
+>Print
 >>Past Due and Turn Off List                          ^ Utility Billing\*
 >>Past Due Notices                                    ^ Utility Billing\*
 >Penalty Calculation                                  ^ Utility Billing\*
 >Additional Penalty Calculation                       ^ Utility Billing\*
-Month-End                                             
+Month-End
 >Transaction Listing                                  ^ Utility Billing\*
 >Cash Receipts Journal                                ^ Utility Billing\*
 >Balance Breakdown (Aged by Month)                    ^ acsUB\ubOwed
 >Post to General Ledger                               ^ acsub\postgl                                            ^ GL
-Annual                                                
->Print                                                
+Annual
+>Print
 >>Accumulated Transaction List                        ^ acsUB\ubAccTr
 >>Annual Usage Report                                 ^ Utility Billing\*
 ! >Remove Old Transactions                            ^ acsUB\ubRemove ! removed 1/18/2017 because it is just a bad idea
 >Zero Year To Date Usage                              ^ Utility Billing\*
-Print                                                 
->Customer Listings                                    
+Print
+>Customer Listings
 >>Name and Number List                                ^ Utility Billing\*
 >>Labels                                              ^ Utility Billing\*
 >>Notes                                               ^ acsUB\ubNotes
@@ -53,7 +53,7 @@ Print
 ! >Print Postal Permit                                ^ acsUB\permitbox
 >Bar Graph                                            ^ acsUB\ubbargraph
 >Work Order List                                      ^ Utility Billing\*
-Utilities                                             
+Utilities
 >Calculate Sewer Average                              ^ Utility Billing\*
 >View Total Accounts Receivable                       ^ acsUB\TotalBal
 >Enter Beginning Balances and Readings                ^ Utility Billing\*
@@ -75,8 +75,8 @@ Extras
 >Cass                                                 
 >>Create Certification File                           ^ acsUB\ubCass1
 >>Place Certified File Back on PC                     ^ acsUB\ubCass2
->Budget                                               
->>Print                                               
+>Budget
+>>Print
 >>>Budget Worksheet                                   ^ acsUB\BudRpt1
 >>>Budget Customer List                               ^ acsUB\ubBudLst
 >>Remove Old Budget Transactions                      ^ Utility Billing\*
