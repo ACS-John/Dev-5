@@ -229,11 +229,14 @@ ERTN: fnerror(program$,err,line,act$,"xit")
   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
 ! /region
-  def fn_is_a_retained_earn_account(gl$)
+  def fn_is_a_retained_earn_account(gl$; ___,returnN)
 ! pr 'gl number passed is *'&gl$&'*'
 ! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
     gl$=trim$(fnagl$(gl$))
-    if use_dept then 
+	 if srep$(srep$(gl$,' ',''),'0','')='' then ! if GL account is 0-0-0 than it is not a retained earnings account, because it's invalid.
+		retunN=0
+		goto IareaFinis
+    else if use_dept then 
       fund_compare=val(gl$(1:3))
       fund_which=srch(mat fund_list,fund_compare)
     else 
@@ -241,14 +244,15 @@ ERTN_EXEC_ACT: execute act$ : goto ERTN
     end if 
     if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then 
 !     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
-      iarea_return=1
+      returnN=1
 !     pause
     else 
 !     pr '"'&gl$&'">"'&trim$(last_retained_earnings_acct$(fund_which))&'" so it is NOT a retained earnings account - fund:'&str$(fund_which)
-      iarea_return=0
+      returnN=0
 !     pause
     end if 
-    fn_is_a_retained_earn_account=iarea_return
+	 IareaFinis: !
+    fn_is_a_retained_earn_account=returnN
   fnend 
 def library fnGetFundList(mat fund_list)
   if ~setup then let fn_setup
