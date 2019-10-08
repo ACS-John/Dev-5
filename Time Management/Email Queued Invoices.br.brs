@@ -34,7 +34,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
 	fnmakesurepathexists(fnreport_cache_folder_current$&'\Ebilling\Sent\')
-	execute "dir '"&fnreport_cache_folder_current$&"\Ebilling' >'"&fnreport_cache_folder_current$&"Ebilling\sendingnow.txt' -B" 
+	execute "dir '"&fnreport_cache_folder_current$&"\Ebilling' >'"&fnreport_cache_folder_current$&"\Ebilling\sendingnow.txt' -B" 
 	open #hList:=fngethandle: "name="&fnreport_cache_folder_current$&"\Ebilling\sendingnow.txt",display,input
 	dim contact$(0)*255
 	dim contactN(0)
@@ -75,19 +75,21 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 						
 						dim attachment$*1024
 						attachment$=fnreport_cache_folder_current$&'\'&trim$(pdfname$)
-						if fnSendEmail(trim$(contact$(con_bemail)),emailBody$,"ACS Invoice ",attachment$,1)>0 then 
+						dim tmpTo$*512
+						tmpTo$=trim$(contact$(con_bemail))
+						if fnSendEmail(tmpTo$,emailBody$,"ACS Invoice ",attachment$)>0 then 
 							fnRename(attachment$,fnreport_cache_folder_current$&'\Sent\'&trim$(pdfname$))
 						else
 							dim mg$(0)*128
 							mat mg$(0)
-							fnAddOne$(mat mg$,'Email failed to send.')
-							fnAddOne$(mat mg$,'Contact Name:'&tab$&triM$(contact$(con_name)))
-							fnAddOne$(mat mg$,'Client ID:'&tab$&triM$(contact$(con_clientid)))
-							fnAddOne$(mat mg$,'Billing Email:'&tab$&triM$(contact$(con_bemail)))
-							fnAddOne$(mat mg$,'Attachment:')
-							fnAddOne$(mat mg$,attachment$)
-							fnAddOne$(mat mg$,'Please send manually.')
-							fnMsgBox(mat mg$, mbResp$,'',mb_ok,mb_exclamation)
+							fnAddOneC(mat mg$,'Email failed to send.')
+							fnAddOneC(mat mg$,'Contact Name:'&tab$&triM$(contact$(con_name)))
+							fnAddOneC(mat mg$,'Client ID:'&tab$&triM$(contact$(con_clientid)))
+							fnAddOneC(mat mg$,'Billing Email:'&tab$&triM$(contact$(con_bemail)))
+							fnAddOneC(mat mg$,'Attachment:')
+							fnAddOneC(mat mg$,attachment$)
+							fnAddOneC(mat mg$,'Please send manually.')
+							fnMsgBox(mat mg$, mbResp$,'',mb_ok+mb_exclamation)
 						end if 
 					end if 
 				loop while rpad$(clientno$,5," ")=rpad$(contact$(con_clientid),5," ")
@@ -105,8 +107,10 @@ def fn_setup
 		library 'S:\Core\Library': fnSendEmail
 		library 'S:\Core\Library': fntop,fngethandle,fnmakesurepathexists
 		library 'S:\Core\Library': fnTos,fnAcs2,fnCmdKey,fnFra,fnButton,fnChk,fnxit,fnlbl,fntxt
-		library 'S:\Core\Library': fnAddOne$
+		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnMsgBox
+		library 'S:\Core\Library': fnreport_cache_folder_current$
+		library 'S:\Core\Library': fnRename
 		on error goto ERTN
 		gosub Enum
 	end if 

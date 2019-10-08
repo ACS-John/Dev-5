@@ -49,7 +49,7 @@ def library fnreport_cache_folder_current$*512
 	fn_setup
 	fnreport_cache_folder_current$=fn_report_cache_folder_current$
 fnend
-def fn_report_cache_folder_current$*512
+def fn_report_cache_folder_current$*512(; ___,return$*512)
 	dim report_cache_base$*256
 	! dim client_report_cache$*256
 	if env$('BR_MODEL')='CLIENT/SERVER' then
@@ -58,11 +58,11 @@ def fn_report_cache_folder_current$*512
 		report_cache_base$=os_filename$('[Q]\Report Cache')
 	end if
 	if report_cache_base$='' then report_cache_base$=os_filename$('[Q]\Report Cache')
-	dim tmp_dir$*512
-	tmp_dir$=report_cache_base$&'\'&fnSystemName$
-	tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
-	fnmakesurepathexists(env$('at')&tmp_dir$&'\')
-	fn_report_cache_folder_current$=tmp_dir$
+	return$=report_cache_base$&'\'&fnSystemName$
+	return$=return$&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
+	return$=fnSrepEnv$(return$)
+	fnmakesurepathexists(env$('at')&return$&'\')
+	fn_report_cache_folder_current$=return$
 fnend
 def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
 	fn_setup
