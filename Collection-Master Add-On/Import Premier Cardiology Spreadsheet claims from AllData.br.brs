@@ -214,31 +214,27 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		fn_pr_hOut('0[tab]H[tab]Demographics for '&item$(csv_fileNo))
 		! r: CM EDI Record 101     New placement record.
 		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_patientId)))
-			! if item$(csv_patientId)='2726414' then 
-			! 	pr 'just before fn_patientBalance call'
-			! 	pause
-			! 	pr mat list_balanceN(6:7)
-			! end if
 		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_patientId)))
-			! if pos(item$(csv_patientId),'2726414')>0 then pr 'tmpPatientBalance$=';tmpPatientBalance$ : pause
-		fn_add('FIRM_FILENO' 	,item$(csv_fileNo)          ,1	)
-		fn_add('Forw_Refno' 	,item$(csv_patientId)        	)
-		fn_add('Forw_Fileno'	,item$(csv_claimId)          	)
-		fn_add('SENDER_ID'  	,forwNo$                      	)
-		fn_add('CRED_NAME'   	,forw$(forw_name)      	)
-		fn_add('CRED_STREET'	,forw$(forw_addr)      	)
-		fn_add('CRED_CITY'   	,cred_cs$(1)	)
-		fn_add('CRED_ST'    	,cred_cs$(2)	)
-		fn_add('CRED_ZIP'   	,forw$(forw_zip))
+		tmpOrigionalClaimAmount$=tmpPatientBalance$
+		! if trim$(item$(csv_patientId))='448658' then pause
+		fn_add('FIRM_FILENO' 	,item$(csv_fileNo)		,1	)
+		fn_add('Forw_Refno' 		,item$(csv_patientId)		)
+		fn_add('Forw_Fileno'		,item$(csv_claimId)			)
+		fn_add('SENDER_ID'  		,forwNo$							)
+		fn_add('CRED_NAME'   	,forw$(forw_name)				)
+		fn_add('CRED_STREET'		,forw$(forw_addr)				)
+		fn_add('CRED_CITY'   	,cred_cs$(1)					)
+		fn_add('CRED_ST'    		,cred_cs$(2)					)
+		fn_add('CRED_ZIP'   		,forw$(forw_zip))
 
-		fn_add('BALANCE'     	,tmpPatientBalance$          	)
-		fn_add('OPENED_AMT'  	,tmpPatientBalance$          	)
-		fn_add('DATE_DEBT'   	,item$(csv_serviceDate)     	)
-		fn_add('ORGCRD'      	,item$(csv_providerName)    	)
-		fn_add('ORIG_CLAIM'  	,tmpOrigionalClaimAmount$   	)
-		fn_add('SERVICES_AMT'	,tmpOrigionalClaimAmount$   	)
-		fn_add('ORGACT#'     	,item$(csv_patientId)        	)
-		fn_add('CRED_XLINE'  	,item$(csv_facilityName)    	)
+		fn_add('BALANCE'     	,tmpPatientBalance$      	)
+		fn_add('OPENED_AMT'  	,tmpPatientBalance$      	)
+		fn_add('DATE_DEBT'   	,item$(csv_serviceDate)  	)
+		fn_add('ORGCRD'      	,item$(csv_providerName) 	)
+		fn_add('ORIG_CLAIM'  	,tmpOrigionalClaimAmount$	)
+		fn_add('SERVICES_AMT'	,tmpOrigionalClaimAmount$	)
+		fn_add('ORGACT#'     	,item$(csv_patientId)    	)
+		fn_add('CRED_XLINE'  	,item$(csv_facilityName) 	)
 		fn_pr(101)
 		! /r
 
@@ -309,7 +305,7 @@ def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
 	fn_add('FIRM_FILENO'   	,item$(csv_fileNo)                 	)
 	fn_add('INV_DATE'      	,item$(csv_serviceDate)           	)
 	fn_add('DESCRIPTION'   	,item$(csv_providerName)          	)
-	fn_add('INV_DESC'     	,fnCptCode$(item$(csv_cpt))(1:20) 	)
+	fn_add('INV_DESC'     	,'CPT: '&item$(csv_cpt)             ) ! fnCptCode$(item$(csv_cpt))(1:20) 	)
 	fn_add('ACCT_NO'       	,item$(csv_facilityName)          	)
 	fn_add('DEBTOR_NO'     	,'1'                                	)
 	fn_add('CUR_BAL'       	,item$(csv_balance    )           	)
