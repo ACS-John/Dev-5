@@ -9,12 +9,11 @@ fntop(program$)
 		
 dim emplRegisterFile$*1024
 dim delim$*1
-delim$=','
 
 
 SCREEN1: ! r:
 fncreg_read(cap$&'.department$',department$, '1')
-fncreg_read(cap$&'.emplRegisterFile$',emplRegisterFile$, 'D:\ACS\(Client_Files)\Payroll Done Right\Thai Seasons 2019 Transaction Rebuild - Employee.csv')
+fncreg_read(cap$&'.emplRegisterFile$',emplRegisterFile$, 'D:\ACS\(Client_Files)\Payroll Done Right\MCM  2019 .txt')
 fnTos
 col1_width=24 : col2_pos=col1_width+2
 fnLbl(1,1,"Department:",col1_width,1)
@@ -55,7 +54,7 @@ fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)
 	empl_WC               	=emplEnumCount+=1
 	empl_TRANSIT         	=emplEnumCount+=1
 	empl_Draw            	=emplEnumCount+=1
-	empl_FEE              	=emplEnumCount+=1
+	empl_GARN              	=emplEnumCount+=1
 	empl_TIPS             	=emplEnumCount+=1
 	dim emplList_Emp_Name$(0)*40
 	emplRecordCount=fn_readEmplIntoArrays
@@ -84,12 +83,12 @@ for empItem=1 to emplRecordCount
 	tcp3 =emplList_Med_WH(empItem)         			! ,WH - Medicare            
 	tcp4 =emplList_State(empItem)          			! ,WH - State               
 	tcp5 =emplList_Draw(empItem)           			! ,DRAW standard deduction 1   
-	tcp6 =emplList_FEE(empitem)           			! ,standard deduction 2       
-	tcp7 =0                                			! ,GARN standard deduction 3   
+	tcp6 =0                                			! ,standard deduction 2       
+	tcp7 =emplList_GARN(empitem)                           			! ,GARN standard deduction 3   
 	tcp8 =0				! ,standard deduction 4       
 	tcp9 =0				! ,standard deduction 5       
-	tcp10=0			! ,+ TIPS standard deduction 6 
-	tcp11=0                                			! ,standard deduction 7      
+	tcp10=0				! ,+ TIPS standard deduction 6 
+	tcp11=0            			! ,standard deduction 7      
 	tcp12=emplList_WC(empItem) ! deptList_WC(deptIndex) ! round(deptList_WC(deptIndex),0)				! ,W/C standard deduction 8  
 	tcp13=emplList_TRANSIT(empItem) ! deptList_TrimetTax(deptIndex)				! ,standard deduction 9      
 	tcp14=0				! ,NO USE standard deduction 10
@@ -176,6 +175,7 @@ fnend
 
 def fn_readEmplIntoArrays ! it is all local 
 	linput #hInempl: line$ ! simply skip the headers for now
+	if pos(line$,chr$(9))>0 then delim$=chr$(9) else delim$=','
 	emplRecordCount=0
 	do
 		linput #hInempl: line$ eof ReadEmplEof
@@ -207,7 +207,7 @@ def fn_readEmplIntoArrays ! it is all local
 		emplList_WC              	(emplRecordCount)	=val(item$(empl_WC              	))
 		emplList_TRANSIT         	(emplRecordCount)	=val(item$(empl_TRANSIT         	))
 		emplList_Draw            	(emplRecordCount)	=val(item$(empl_Draw            	))
-		emplList_FEE             	(emplRecordCount)	=val(item$(empl_FEE            	))
+		emplList_GARN             	(emplRecordCount)	=val(item$(empl_GARN            	))
 		emplList_TIPS            	(emplRecordCount)	=val(item$(empl_TIPS           	))
 
 	loop
@@ -236,7 +236,7 @@ def fn_mat_emplList(newArraySize)
 	mat emplList_WC            	(newArraySize)
 	mat emplList_TRANSIT       	(newArraySize)
 	mat emplList_Draw          	(newArraySize)
-	mat emplList_FEE          	(newArraySize)
+	mat emplList_GARN          	(newArraySize)
 	mat emplList_TIPS          	(newArraySize)
 fnend
 

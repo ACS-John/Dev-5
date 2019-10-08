@@ -1,20 +1,20 @@
 ! *** TM - Time Management ***
 File
 >Client (TM - Hamster)                            ^ acsTM\client
->>Client 420                                      ^ HamsterFio:Client 420
+>>Client 420                                      ^ HamsterFio:*
 >Transactions (ARTrans - processed)               ^ acsTM\ARTrans
 >>Import Transactions from Mint CSV to Checkbook  ^ acsTM\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)          ^ acsTM\TMTrans
->Support                                          ^ acsTM\Support
->>Update Support Expiration Date                  ^ Time Management\Update Support Expiration Date
+>Support                                          ^ acsTM\*
+>>Update Support Expiration Date                  ^ Time Management\*
 >Support2                                         ^ acsTM\Support2
->Category                                         ^ Time Management\Category
+>Category                                         ^ Time Management\*
 >Service Code                                     ^ acsTM\svmaint
 >Invoice Description                              ^ acsTM\ivdmaint
 ! >Monthly Transactions                           ^ acsTM\arfmmoth
 ! >Employee                                       ^ acsTM\emaint
 ! >Company Information (Support)                  ^ acsSU\Company
->Systems                                          ^ HamsterFio:Systems
+>Systems                                          ^ HamsterFio:*
 >Time Frame (Support)                             ^ acsSU\TimeFrame
 >Client Labels                                    ^ acsTM\CliLabel
 ! >Client (Support)                               ^ acsSU\Client
@@ -22,19 +22,19 @@ File
 >TimeSheet                                        ^ HamsterFio:TimeSheet
 Daily
 >Enter Time and Charges                           ^ acsTM\tminput
->Collections                                      ^ Time Management\Collections
+>Collections                                      ^ Time Management\*
 ! >Unbilled Work In Process                       ^ acsTM\tmunblwk
 ! >Productivity Report                            
 ! >>Employee                                      ^ acsTM\tmempprd
 ! >>Summary                                       ^ acsTM\tmempdpt
 ! >Zero Current Period                            ^ acsTM\emzercur
 >Enter Pre-Printed Invoices                       ^ acsTM\tminpinv
->Enter and Print Invoices                         ^ Time Management\Enter and Print Invoices
+>Enter and Print Invoices                         ^ Time Management\*
 ! >Print Work Schedules                           ^ acsTM\tmwrksch
 ! >Print Messages                                 ^ acsTM\armessag
->Email Queued Invoices                            ^ Time Management\Email Queued Invoice           ^EM
+>Email Queued Invoices                            ^ Time Management\*           ^EM
 Monthly
->Import CSV to Time Sheets                        ^ Time Management\Import CSV to Time Sheets
+>Import CSV to Time Sheets                        ^ Time Management\*
 >Print Monthly Billing Summary                    ^ acsTM\tmmobsum
 ! >Post to General Ledger                         ^ acsTM\arpostgl                                 ^GL
 ! >Month End Closing                              ^ acsTM\tmpytd
@@ -46,8 +46,8 @@ Print
 >Statements                                       ^ acsTM\arprtbil
 ! >AR Aged Trial Balance                          ^ acsTM\artb
 ! >Journals                                       ^ acsTM\arjourn
->ACS Invoices                                     ^ Time Management\ACS Invoices
+>ACS Invoices                                     ^ Time Management\*
 ! Annually
 ! >Service Production Report                      ^ acsTM\tmsrvprd
-! >YTD Billing Summary                            ^ Time Management\YTD Billing Summary
+! >YTD Billing Summary                            ^ Time Management\*
 ! >Zero YTD Information                           ^ acsTM\tmzytd

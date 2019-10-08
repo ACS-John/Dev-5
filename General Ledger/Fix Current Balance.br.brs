@@ -1,7 +1,7 @@
 ! formerly S:\acsGL\CB
 ! fixes Current Balance, by taking Beginning Balance (or previous balance 2 yrs ago) and adding current transactions (optional a range of accumulated transactions too) to it.
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnAcs,fnChk,fnLbl,fnTxt,fnTos,fnCmdSet,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnGetFundList
-	fntop(program$,"Fix Current Balance")
+	library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnAcs2,fnChk,fnLbl,fnTxt,fnTos,fnCmdSet,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnGetFundList
+	fntop(program$)
 	on error goto ERTN
 	dim bp(13)
 	dim resp$(128)*256
@@ -28,12 +28,14 @@
 	do ! r: main loop
 
 		read #hGlMstr,using 'Form POS 1,C 12,Pos 81,2*PD 6.2,pos 327,pd 6.2,pos 171,13*pd 6.2': gln$, bb,cb,pbp,mat bp eof XIT
-
 		cbOrigional=cb
+		! debug_gl$=' 10   592  0'
+		! if gln$=debug_gl$ then pr ' found it. ' : debug=1 : pause else debug=0
 		activityCurrent=fn_currentActivity(hGlTrans,gln$)
 		if enableProcessAccumulatedTrans$='True' then
 			activityHistory=fn_accumulatedActivity(hAcTrans,gln$,dayStart,dayEnd)
 		end if
+		! if gln$=debug_gl$ then pr gln$;' activityCurrent=';activityCurrent : pause
 		if startWithBalEndOfPriorYear then 
 			isRetainedEarningsAccount=fn_is_a_retained_earn_account(gln$)
 			if isRetainedEarningsAccount then
@@ -42,7 +44,7 @@
 			else
 				cb= 0 +activityCurrent+activityHistory
 			end if
-		else
+		elseen
 			cb=bb+activityCurrent+activityHistory
 		end if
 		if debug and gln$=debug_gl$ then ! r: display debug information
@@ -93,7 +95,7 @@ def fn_theScreen ! lots of local variables
 	fncreg_read(cap$&': enableProcessAccumulatedTrans',enableProcessAccumulatedTrans$,'False')
 	fncreg_read(cap$&': dayStart',tmp$) : dayStart=val(tmp$)
 	fncreg_read(cap$&': dayEnd',tmp$) : dayEnd=val(tmp$)
-	fnTos(sn$=Cap$)
+	fnTos
 	rc=0
 
 	fnLbl(lc+=1,1,'WARNING: This program recalculates all the Current Balance files in General Ledger Accounts.')
@@ -105,14 +107,14 @@ def fn_theScreen ! lots of local variables
 	lc+=1 : mylen=14 : mypos=mylen+2 
 	fnChk(lc+=1,1,'Process History Transactions')
 	resp$(resp_enableAcTrans:=rc+=1)=enableProcessAccumulatedTrans$
-lc+=1
+	lc+=1
 	fnLbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
 	fnTxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 	resp$(resp_dateStart=rc+=1)=date$(dayStart,'ccyymmdd')
 	fnLbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
 	fnTxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 	resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
-! 
+
 		lc+=1 : col3_pos=mypos+20
 		resp_lrea_fund_1=rc+1
 		if use_dept then 
@@ -132,7 +134,7 @@ lc+=1
 			fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 		end if 
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then 
 		theScreenReturn=0
 	else
@@ -157,15 +159,7 @@ lc+=1
 	end if  ! ck<>5
 	fn_theScreen=theScreenReturn
 fnend
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
-def fn_currentActivity(hGlTrans,gln$)
-	caReturn=0
+def fn_currentActivity(hGlTrans,gln$; ___,returnN)
 	restore #hGlTrans:
 	do 
 		read #hGlTrans,using fTransBoth: trgl$,tr_date,tr_amt eof caFinis
@@ -174,13 +168,15 @@ def fn_currentActivity(hGlTrans,gln$)
 		if trgl$(10:12)="   " then trgl$(10:12)="  0"
 		if trgl$=gln$ then 
 				if debug and gln$=debug_gl$ then
-					pr 'adding $'&str$(tr_amt)&' from '&date$(dayTran,'mm/dd/ccyy')&' from Current Transactions'
+					pr 'rec=';rec(hgltrans)
+					pr 'adding $'&str$(tr_amt)&' from '&date$(days(tr_date,'mmddyy'),'mm/dd/ccyy')&' from Current Transactions'
+					pause
 				end if
-			caReturn+=tr_amt
+			returnN+=tr_amt
 		end if
 	loop 
 	caFinis: ! 
-	fn_currentActivity=caReturn
+	fn_currentActivity=returnN
 fnend 
 def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
 	aaReturn=0
@@ -204,3 +200,4 @@ def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
 	fn_accumulatedActivity=aaReturn
 fnend 
 
+include: ertn

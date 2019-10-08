@@ -15,6 +15,7 @@ dim id$(30)*128
 dim inv_amt(30)
 dim tmwk_sc(30)
 dim ct(30)
+dim tmwk2_sc(30)
 open #h_artrans:=12: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
 open #h_tmtrans:=2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative
 open #h_clmstr:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
@@ -71,15 +72,16 @@ do  ! r: main loop
 		rewrite #h_tmtraddr,using 'form pos 1,pd 3',rec=1,release: lta4
 		NEXT_ONE: !
 	next j
-	if abs(b(7))=3 then goto L800 ! SKIP AR IF WRITE OFF
-	L690: !
-	lar=lrec(h_artrans)+1
-	write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',rec=lar,reserve: k$,iv$,b(4),amt,amt,0,1,0,"CHARGE",0 duprec L690
-	if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
-	arta(2)=lar
-	if arta(1)=0 then arta(1)=lar
-	rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar
-	ar1=ar1+amt
+	if abs(b(7))<>3 then  ! SKIP AR IF WRITE OFF
+		L690: !
+		lar=lrec(h_artrans)+1
+		write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',rec=lar,reserve: k$,iv$,b(4),amt,amt,0,1,0,"CHARGE",0 duprec L690
+		if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
+		arta(2)=lar
+		if arta(1)=0 then arta(1)=lar
+		rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar
+		ar1=ar1+amt
+	end if
 	L800: !
 	if b(7)=-2 and b(5)>0 then sc(b(5))=2 ! added b(5)>0 on 2/1/2012
 	rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3',key=k$: mat sc,mat ca,ar1,mat arta

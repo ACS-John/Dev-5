@@ -1518,7 +1518,7 @@ fnend
 		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling, pdfline$)
 	fnend
 	def library fnEmailQueuedInvoices(emailDate$)
-		library 'S:\Time Management\Email Queued Invoices.br': fn_emailQueuedInvoices
+		library 'S:\Time Management\Email Queued Invoices.br': fnEmailQueuedInvoices
 		fnEmailQueuedInvoices=fnEmailQueuedInvoices(emailDate$)
 	fnend
 	def library fnRead30Categories(mat dimTo30$)
