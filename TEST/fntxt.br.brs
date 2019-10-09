@@ -1,11 +1,31 @@
-00040   library 'S:\Core\Library': fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00070   dim cap$*128,resp$(30)*50
-00210   fntop(program$,cap$="test fnTxt")
-00500   fnTos(sn$="GLInput")
-00502   mylen=5: mypos=mylen+3 : right=1
-00510 ! fnFra(1,1,4,60,"Method of Entry","Choose the method of transaction entry.")
-00580   fnLbl(4,1,"Test:",mylen,right)
-00680   fnTxt(4,mypos,8,0,right,"1001",0,"Process endings date must always be answered and will be the last day of the month or the last day of the period beding processed..",0 )
-00682   resp$(1)=date$('mm/dd/ccyy') ! =str$(contra)
-00690   fnCmdKey("mmmK",1,1,0,"Allows you to enter transactions.")
-00720   fnAcs(sn$,0,mat resp$,ckey)
+
+! gosub TestSimple
+gosub TestAcs
+end
+
+TestSimple: ! r:
+	dim filename$*512
+	dim default$*512
+	default$='' ! 'D:\CM\Stern and Stern\Premier Cardiology (AllData)\all files to date-CM_EDI - work copy.xlsx'
+	filename$=''
+	hSelect=1 ! fngethandle
+	ope #hSelect: 'Name=OPEN:'&default$&'All documents (*.*) |*.*,RecL=1,Shr',external,input ! ioerr ignore
+	if file(hSelect)=0 then
+		filename$=os_filename$(file$(hSelect))
+		close #hSelect:
+	end if
+	pr filename$
+return ! /r
+
+TestAcs: ! r:
+	library 'S:\Core\Library': fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs2
+	dim resp$(30)*512
+	fntop(program$)
+	fnTos
+	fnLbl(1,1,"File:",5,1)
+	fnTxt(1,8,40,256,right,"1070",0,"",0 )
+	resp$(1)='' ! 
+	fnCmdKey("mmmK",1,1)
+	fnAcs2(mat resp$,ckey)
+	pr resp$(1)
+return ! /r

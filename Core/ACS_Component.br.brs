@@ -1858,7 +1858,7 @@ def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpper
 		filename$=rtrm$(filename$)
 		h_selectfile=fngethandle
 include: filenamesPushMixedCase
-		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,outin ioerr ignore
+		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,input ioerr ignore
 		if file(h_selectfile)=0 then
 			filename$=os_filename$(file$(h_selectfile))
 			! filename$=trim$(file$(h_selectfile)) (2:inf)
