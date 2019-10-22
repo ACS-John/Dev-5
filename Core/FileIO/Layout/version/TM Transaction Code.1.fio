@@ -1,0 +1,8 @@
+S:\Core\Data\oTransactionCode.dat, otc_, 1
+S:\Core\Data\oTransactionCode ,  code
+recl=41
+ 
+===================================================
+code     ,Code           ,N    1
+desc     ,Description    ,c   18
+ 
