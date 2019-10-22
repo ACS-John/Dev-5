@@ -1,0 +1,15 @@
+S:\Core\Data\acsllc\oARTrans.h[cno], otr_, 0
+recl=60
+ 
+===================================================
+clientId     ,Client Id          ,c    5    , ! SPos= 1    aka=k$     ComboF(ignore,S:\Core\Data\acsllc\CLmstr.h[cno],1,5,6,40,S:\Core\Data\acsllc\CLIndex.h[cno])
+inv          ,Invoice Number     ,c   12    , ! SPos= 6    aka=iv$
+date         ,Date               ,n    6    , ! SPos=18     aka=b(4)
+amtOrigional ,Origional Amount   ,pd   5.2  , ! SPos=24     aka=amt
+amt          ,Amount             ,pd   5.2  , ! SPos=29     aka=amt
+SalesmanId   ,Salesman Id        ,pd   2    , ! SPos=34     aka=
+TransCode    ,Transaction Code   ,n    1    , ! SPos=36     aka=       ComboF(ignore,S:\Core\Data\TransactionCode.dat,1,1,2,40,S:\Core\Data\TransactionCode.idx)
+PostCode     ,Posting Code       ,n    1    , ! SPos=37     aka=
+desc         ,Inv Description    ,c   20    , ! SPos=38     aka="CHARGE"
+lar          ,Next Trans Address ,pd   3    , ! SPos=58     aka=lar
+ 

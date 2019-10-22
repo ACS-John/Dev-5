@@ -3,6 +3,8 @@ File
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
 >Transactions (ARTrans - processed)               ^ acsTM\ARTrans
+>>Delete Transaction                              ^ Time Management\*
+>>Transaction Code                                ^ HamsterFio:*
 >>Import Transactions from Mint CSV to Checkbook  ^ acsTM\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)          ^ acsTM\TMTrans
 >Support                                          ^ acsTM\*
@@ -18,7 +20,7 @@ File
 >Time Frame (Support)                             ^ acsSU\TimeFrame
 >Client Labels                                    ^ acsTM\CliLabel
 ! >Client (Support)                               ^ acsSU\Client
->Contact                                          ^ HamsterFio:Contact                             ^EM
+>Contact                                          ^ HamsterFio:Contact         ^EM
 >TimeSheet                                        ^ HamsterFio:TimeSheet
 Daily
 >Enter Time and Charges                           ^ acsTM\tminput
@@ -32,11 +34,11 @@ Daily
 >Enter and Print Invoices                         ^ Time Management\*
 ! >Print Work Schedules                           ^ acsTM\tmwrksch
 ! >Print Messages                                 ^ acsTM\armessag
->Email Queued Invoices                            ^ Time Management\*           ^EM
+>Email Queued Invoices                            ^ Time Management\*          ^EM
 Monthly
 >Import CSV to Time Sheets                        ^ Time Management\*
 >Print Monthly Billing Summary                    ^ acsTM\tmmobsum
-! >Post to General Ledger                         ^ acsTM\arpostgl                                 ^GL
+! >Post to General Ledger                         ^ acsTM\arpostgl             ^GL
 ! >Month End Closing                              ^ acsTM\tmpytd
 ! Generate
 ! >Finance Charges                                ^ acsTM\arfinchg
