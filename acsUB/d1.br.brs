@@ -6,7 +6,7 @@ def library fnLastBillingDate(&d1; get_or_put)
 		fncreg_read('Current Billing Date',d1$)
 		if d1$='' then let fnreg_read('UB.Current Billing Date.Company [cno]',d1$)
 		d1=val(d1$)
-		if d1=0 then 
+		if d1=0 and exists('[Q]\UBmstr\Company.h[cno]') then 
 			open #20: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input,relative 
 			read #20,using "Form POS 121,N 6",rec=1: d1
 			close #20: 

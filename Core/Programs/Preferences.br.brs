@@ -20,7 +20,7 @@
 	fnureg_read('Default to Use Atlantis',use_atlantis$,'False')
 	fnureg_read('Reset Word Executable persistently',resetWordExePersistently$,'False')
 	fnureg_read('Text_Editor',text_editor$,fn_text_editor_default$)
-	background_picture$=os_filename$(background_picture$)
+	! background_picture$=fnOsFilename$(background_picture$)
 	fnureg_read('Decimal',decimal_assumed$,'False')
 	fnureg_read('Disable_MultiSession',disable_multisession$) : if disable_multisession$<>'True' then disable_multisession$='False'
 	! fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then wait_wp_close$='True'
@@ -163,7 +163,7 @@ DO_SCREEN_THEME: ! r:
 		lc+=1
 		fnLbl(lc+=1,1,"Background Picture:",col1_width,1)
 		fnTxt(lc,col2_pos,42,256,0,'70',0,'Select any picture to be used as your ACS background image.')
-		resp$(resp_background_picture:=1)=os_filename$(env$('at')&background_picture$)
+		resp$(resp_background_picture:=1)=background_picture$ ! os_filename$(env$('at')&background_picture$)
 		fnButton(lc,col2_pos+42+5,'Default',11) ! fnButton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 		lc+=1
 		fnLbl(lc+=1,1,"Minimum Font Size:",col1_width,1)
@@ -570,7 +570,7 @@ def fn_save
 	! fnreg_write('Report_Cache',report_cache$)
 	fnreg_write('PrintAce.Max Pages',pa_max_pages$)
 	fnreg_write('formsFormat',formsFormat$)
-	fnureg_write('Background_Picture',br_filename$(background_picture$))
+	fnureg_write('Background_Picture',background_picture$) ! fnBrFilename$(background_picture$))
 	fnureg_write('Min_FontSize_Height',min_fontsize_height$)
 	fnureg_write('Min_FontSize_Width',min_fontsize_width$)
 	fn_apply_theme
@@ -664,14 +664,16 @@ def fn_setup
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
 		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
+		library 'S:\Core\Library': fnBrFilename$,fnOsFilename$
 		library 'S:\Core\Library': fnProgramDataDir$
 		on error goto ERTN
-		dim resp$(20)*256,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
+		dim resp$(20)*256
+		dim background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256
 		default_min_fontsize_height$='15' ! '14'
 		default_min_fontsize_width$='8' ! '6'
 		dim background_picture_default$*256
-		background_picture_default$=os_filename$('S:\Core\wallpaper\LauraVisitsKilimanjaro2019.jpg')
+		background_picture_default$=fnOsFilename$('S:\Core\wallpaper\LauraVisitsKilimanjaro2019.jpg')
 		!
 		dim printer_list$(1)*256
 		printer_list(mat printer_list$) ! printer_count=printer_list(mat printer_list$)
@@ -691,13 +693,12 @@ def library fnapply_theme(; disableConScreenOpenDflt)
 	fnapply_theme=fn_apply_theme( disableConScreenOpenDflt)
 fnend 
 def fn_apply_theme(; disableConScreenOpenDflt)
-	dim background_picture$*256
 	fnureg_read('Background_Picture',background_picture$)
+	if background_picture$='' or ~exists(background_picture$) then background_picture$=background_picture_default$
+	setenv('background_picture',background_picture$)
 	fnureg_read('Min_FontSize_Height',min_fontsize_height$)
 	fnureg_read('Min_FontSize_Width',min_fontsize_width$)
 	execute 'config Min_FontSize '&min_fontsize_height$&'x'&min_fontsize_width$ error ERR_MIN_FONTSIZE
-	if background_picture$='' or ~exists(background_picture$) then background_picture$=background_picture_default$
-	setenv('background_picture',background_picture$)
 	fn_set_color('[screen]','#000000','#E7EDF5')
 	fn_set_color('[screenheader]','#000000','#FFFFFF')
 	fn_set_color('[textboxes]','#000000','#FFFFFF')

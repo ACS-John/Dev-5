@@ -1,5 +1,21 @@
 ! test changes 
 ! r: functions that do not redirect!
+def library fnBrFilename$*512(filename$*512; return$*512)
+	if trim$(filename$)='' then
+		return$=''
+	else 
+		return$=br_filename$(filename$)
+	end if
+	fnBrFilename$=return$
+fnend
+def library fnOsFilename$*512(filename$*512; return$*512)
+	if trim$(filename$)='' then
+		return$=''
+	else 
+		return$=os_filename$(filename$)
+	end if
+	fnOsFilename$=return$
+fnend
 def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*256)
 	origionalKey$=keyToTest$
 	keyToTest$=rpad$(keyToTest$,kLn(hFile))
@@ -1143,9 +1159,9 @@ fnend
 		library 'S:\Utility Billing\Work Order List.br': fnWorkOrderList
 		fnWorkOrderList=fnWorkOrderList(z$)
 	fnend
-	def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
+	def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$; cell$)
 		library 'S:\Utility Billing\Work Order Print.br': fnWorkOrderPrint
-		fnWorkOrderPrint=fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
+		fnWorkOrderPrint=fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$, cell$)
 	fnend
 	def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
 		library 'S:\Utility Billing\fnCustomerData.br': fnCustomerData$
@@ -1513,6 +1529,11 @@ fnend
 	fnend
 ! /r
 ! r: TM Time Management
+	
+	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
+		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
+		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
+	fnend
 	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling; pdfline$*255)
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling, pdfline$)
