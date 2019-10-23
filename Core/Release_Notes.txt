@@ -1,5 +1,11 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________           
+3:51 PM 10/23/2019	GL	Prior Period Adjustments - fixed a bug where continuing with blank values would exit the program without printing totals, but cancel to get out would print the totals (totals are always printed now)
+3:44 PM 10/23/2019	CO	Invalid Dates that caused the date picker to be blank day, month, and year will now default to today's date
+2:21 PM 10/17/2019	CO	Leaving the Theme background blank will now use the system default
+9:18 AM 10/15/2019	UB	Work Orders - added Cell Phone
+8:43 AM 10/15/2019	UB	Fixed pause and error in add new company, Company 1 will now be used as the source for new companys for Rate codes and Types of Services for Added Companies (or any company that doesn't have those files yet)
+3:39 PM 10/9/2019	CO	fixed a bug that caused files already opened in an external application to not be selected due to an otherwise ignore file sharing error.
 11:08 10/19/2019	CO	5.74210  
 4:07 PM 10/5/2019	PR 	added ability to run payroll registers and part 2 any point in time instead of just most recent 
 2:58 PM 10/5/2019	PR	Removed confirmation when canceling out of the Company file 

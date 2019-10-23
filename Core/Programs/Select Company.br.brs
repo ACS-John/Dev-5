@@ -200,6 +200,10 @@ def fn_companyDelete(cno;fileToDelete$*256)
 		! if env$('acsDeveloper')<>"" then pause
 		fileToDelete$=fnSrepEnv$(fn_dataFolder$)
 		if exists(fileToDelete$&'\company.h'&str$(cno)) then
+			fnFree(fileToDelete$&'\*.h'&str$(cno))
+			if exists(fileToDelete$&'\UBData\*.h[cno]') and cno<>1 then
+				fnFree(fileToDelete$&'\UBData\*.h[cno]')
+			end if
 			execute 'Free "'&fileToDelete$&'\*.h'&str$(cno)&'" -n'
 			mat mg$(1)
 			mg$(1)='Company Number '&str$(cno)&' has been Deleted!'

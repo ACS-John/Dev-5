@@ -1,11 +1,11 @@
-	enableFavorites=1
-	fn_setup
-	fn_setup_once
-	fn_main
-	if menu$='Exit and Logout' then
-		execute "System Logoff"
-	end if
-	goto XIT
+enableFavorites=1
+fn_setup
+fn_setup_once
+fn_main
+if menu$='Exit and Logout' then
+	execute "System Logoff"
+end if
+goto XIT
 def fn_setup
 	if ~setup then
 		setup=1

@@ -51,12 +51,14 @@ fnTos(sn$="TypeOfService") ! r:
 	end if
 goto Xit ! /r
 Xit: fnxit
-include: ertn
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit, fnTxt,fnLbl,fnTos,fnAcs,fnerror,fnCmdSet,fnChk,fngethandle,fnAddOneC
+		library 'S:\Core\Library': fntop,fnxit
+		library 'S:\Core\Library': fnTxt,fnLbl,fnTos,fnAcs,fnCmdSet,fnChk
+		library 'S:\Core\Library': fngethandle,fnAddOneC
 		library 'S:\Core\Library': fnArrayWasPassedC,fnArrayWasPassedN
+		library 'S:\Core\Library': fnCopy
 		on error goto ERTN
 		!
 		dim resp$(60)*20,serviceName$(10)*20,serviceCode$(10)*2
@@ -79,10 +81,22 @@ def fn_readService
 		mat cacheePenalty$    =('')
 		mat cacheSubjectTo    =(0)
 		mat cacheOrderToApply =(0)
+		if ~exists('[Q]\UBmstr\ubData\Service.h[cno]') and exists ('[Q]\UBmstr\ubData\Service.h1') then
+			if exists('[Q]\UBmstr\ubData\RateMst.h[cno]') then 
+				! rate file exists   so   just copy the service file from  from company 1
+				fnCopy('[Q]\UBmstr\ubData\Service.h1','[Q]\UBmstr\ubData\Service.h[cno]')
+			else
+				! rate file does NOT exists   so   copy the service file, rate file and indexes from company 1
+				fnCopy('[Q]\UBmstr\UBData\*.h1','[Q]\UBmstr\UBData\*.h[cno]')
+			end if
+		else if ~exists('[Q]\UBmstr\ubData\Service.h[cno]') then
+			fnCopy('S:\Utility Billing\mstr\ubData\*.h99999','[Q]\UBmstr\UBData\*.h[cno]')
+		end if
 		open #hService:=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative
-		if lrec(hService)<1 then
+		if lrec(hService)<1 then !  this should not happen because it should be copied in from company #1 above
 			write #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
 			pr 'A new empty Type of Service file was created.  Only ACS can edit this file type.  Type GO and press Enter to continue.' : pause
+			
 		end if
 		read #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
 		F_service: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
@@ -134,3 +148,4 @@ def fn_service_other
 	end if
 	fn_service_other=so_return
 fnend
+include: ertn

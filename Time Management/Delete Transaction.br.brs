@@ -56,7 +56,8 @@ do ! main loop
 			gosub DeleteTransaction
 			needToRnta=1
 		else if ckey=ck_rnta then
-			gosub Rnta
+			fnReassignNTA('S:\Core\Data\acsllc\ARTrans.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
+			needToRnta=0
 		end if
 	end if
 loop
@@ -142,52 +143,12 @@ DeleteTransaction: ! r: requires selectedRecord
 return ! /r
 Finis: ! r:
 	if needToRnta then
-		gosub Rnta
+		fnReassignNTA('S:\Core\Data\acsllc\ARTrans.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
+		needToRnta=0
 	end if
 goto Xit ! /r
-Rnta: ! r:
-	fn_reassignNTA('S:\Core\Data\acsllc\ARTrans.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
-	needToRnta=0
-return ! /r
-def fn_reassignNTA(filename$*256,keyForm$,ntaForm$; ___,x,key$*64,formBoth$*64,nta,recCount)
-	fnCopy(filename$,filename$&'.beforeReassignTranAddr')
-	open #hRta:=fngethandle: 'name='&filename$,internal,outin,relative
-	recCount=lrec(hRta)
-	! r: gather mat keys$ and mat ntas
-	mat keys$(recCount)
-	mat ntas(recCount)
-	mat keys$=('')
-	mat ntas=(0)
-	formBoth$=keyForm$&','&(ntaForm$(6:inf))
-	for x=1 to recCount
-		read #hRta,using formBoth$,rec=x: key$,nta norec Rnta_NoRec1
-		keys$(x)=key$
-		ntas(x)=nta
-		Rnta_NoRec1: !
-	next x
-	! /r
-	! pr 'debug sample'
-	! for x=1 to 10
-	! 	pr keys$(x),ntas(x)
-	! nex x
-	! pause
-	! r: update and rewrite the ones needing correction
-	for x=1 to recCount
-		key$=keys$(x)
-		if key$<>'' then
-			nta=srch(mat keys$,key$,x+1)
-			if nta<0 then nta=0
-			if ntas(x)<>nta then
-				ntas(x)=nta
-				rewrite #hRta,using ntaForm$,rec=x: nta
-			end if
-		end if
-	nex x
-	! /r
-	close #hRta:
-fnend
-XIT: !
-fnxit
+
+Xit: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -200,6 +161,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnMsgBox
 		library 'S:\Core\Library': fnCloseFile
+		library 'S:\Core\Library': fnReassignNTA
 		gosub Enum
 	end if
 fnend

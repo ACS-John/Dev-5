@@ -35,9 +35,11 @@ def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,g
 		if format$='' then format$="mdcy"
 		_date$=date$(days(val(_date$),format$),'mdcy')
 	end if
-
-	if not row then row=1
-	if not column then column=1
+	if srep$(_date$,'0','')='' then 
+		_date$=date$('mdcy')
+	end if
+	if ~row then row=1
+	if ~column then column=1
 	dim forms$(1)*255
 	days_in_week=7
 	rows_on_grid=6
@@ -62,7 +64,7 @@ def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,g
 	loop until fkey=93 or fkey=99 or (fkey=201 and trim$(day$)<>'')
 	if fkey=93 or fkey=99 then _date$=save_date$
 	close #window:
-	if not format$='mdcy' and not (fkey=93 or fkey=99) then
+	if ~format$='mdcy' and ~(fkey=93 or fkey=99) then
 		_date$=date$(days(val(_date$),'mdcy'),format$)
 	end if
 	fkey(-1) ! reset fkey, so the calling program doesn't start reacting unexpectedly

@@ -8,7 +8,7 @@ goto ScreenGrid ! program starts with flex grid of all rates currently in file
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnLbl,fnTxt
+		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs2,fnLbl,fnTxt
 		library 'S:\Core\Library': fnmsgbox,fnopenprn,fncloseprn,fncomboa
 		library 'S:\Core\Library': fnOpt,fnTos,fnerror,fnxit,fnCmdSet,fntop,fnCmdKey
 		library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
@@ -38,7 +38,7 @@ def fn_setup
 	end if
 fnend
 ScreenGrid: ! r:
-	fnTos(sn$="rateflex")
+	fnTos
 	myline=1 : mypos=1 : height=10 : width=50
 	colhdr$(1)="Code"
 	colhdr$(2)="Description"
@@ -66,7 +66,7 @@ L1010: !
 	fnCmdKey("&Delete",4,0,0,"Deletes highlighted record")
 	fnCmdKey("&Print",3,0,0,"Prints rate file proof list")
 	fnCmdKey("&Complete",5,0,1,"Return to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
+	fnAcs2(mat resp$,ckey) ! CALL FLEXGRID
 	k$=rpad$(resp$(1),4)
 	if ckey=5 then 
 		goto XIT
@@ -90,10 +90,10 @@ DeleteRec: ! r:
 	if uprc$(resp$)(1:1)="Y" then 
 		delete #hRate1,key=k$: ! rt$(1)&rt$(2):
 	end if 
-	return  ! /r
+return  ! /r
 AddNewRecord: ! r:
 	mat rt$=("")
-	fnTos(sn$="rateadd")
+	fnTos
 	mat resp$=("")
 	fnLbl(1,1,"Service Type:",20,1)
 	fnLbl(1,29,"Rate Code:",10,1)
@@ -101,7 +101,7 @@ AddNewRecord: ! r:
 	resp$(1)=""
 	fnTxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey) ! CALL ADD NEW RECORD
+	fnAcs2(mat resp$,ckey) ! CALL ADD NEW RECORD
 	if ckey=5 then goto ScreenGrid
 	rt$=uprc$(resp$(1)) ! service type
 	if rtrm$(rt$)="" then 
@@ -110,7 +110,7 @@ AddNewRecord: ! r:
 		fnmsgbox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
 	end if 
-! 
+
 	g1=0 : g1=val(resp$(2)) conv ignore ! rate code
 	if g1=0 then 
 		mat msgline$(1)
@@ -118,7 +118,7 @@ AddNewRecord: ! r:
 		fnmsgbox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
 	end if 
-! 
+
 	rt$=rt$
 	mat rt$=("")
 	rt$(1)=rt$
@@ -129,22 +129,21 @@ AddNewRecord: ! r:
 	msgline$(1)="Invalid Service Type"
 	fnmsgbox(mat msgline$,resp$,'',16)
 	goto AddNewRecord
-ANR_SERVICE_TYPE_IS_VALID: ! 
-! 
+	ANR_SERVICE_TYPE_IS_VALID: ! 
+
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
 	read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey L470
 	goto RateEdit ! existing record
-L470: ! 
+	L470: ! 
 	write #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$
-	goto RateEdit ! create new rate record
-! /r
+goto RateEdit ! /r
 RateEdit: ! r: maintain rate file
 	read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey ignore
-	fnTos(sn$="RateEdit")
+	fnTos
 	c1=20 : c2=32 : c3=44
 	fnLbl(1,1,"Service Type:",20,1)
-! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
+	! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
 	fnTxt(1,22,2,0,0,"",1)
 	fnLbl(1,29,"Rate Code:",10,1)
 	fnTxt(1,40,2,0,0,"30",1)
@@ -172,7 +171,7 @@ RateEdit: ! r: maintain rate file
 	fnCmdSet(4)
 	mat resp$(udim(mat rt$))
 	mat resp$=rt$
-	fnAcs(sn$,0,mat resp$,ckey) !        ! CALLS RATE MAINTENANCE
+	fnAcs2(mat resp$,ckey) !        ! CALLS RATE MAINTENANCE
 	mat resp$(udim(mat rt$))
 	mat rt$=resp$
 	if ckey=5 then goto ScreenGrid
@@ -201,16 +200,15 @@ RateEdit: ! r: maintain rate file
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
 	rewrite #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$
-	goto ScreenGrid
-! /r
+goto ScreenGrid ! /r
 PrintProof: ! r:
-	fnTos(sn$="RateProof")
+	fnTos
 	fnOpt(1,14,"Code Sequence")
 	resp$(1)="True"
 	fnOpt(2,14,"Name Sequence")
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey) ! CALLS PROOF LIST
+	fnAcs2(mat resp$,ckey) ! CALLS PROOF LIST
 	if ckey=5 then goto ScreenGrid
 	ti2=hRate1 ! default to code sequence
 	if uprc$(resp$(1))=uprc$("True") then ti2=hRate1: k$="    " ! code sequence
@@ -247,8 +245,6 @@ PrintOneRate: ! r:
 	P1R_FINIS: ! 
 return  ! /r
 XIT: fnxit
-Ignore: continue 
-include: ertn
 def library fnapplyDefaultRatesFio(mat customerN)
 	if ~setup then let fn_setup
 	fnapplyDefaultRatesFio=fn_applyDefaultRatesFio(mat customerN)
@@ -322,4 +318,5 @@ def fn_applyDefaultRatesFio(mat customerN)
 	customerN(c_s09rate)=a(6)
 	customerN(c_s10rate)=a(7)
 	! /r
-fnend 
+fnend
+include: ertn
