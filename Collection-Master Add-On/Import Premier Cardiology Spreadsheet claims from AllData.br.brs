@@ -33,17 +33,13 @@ Screen1: !
 		! /r
 
 
-		! fnOpen_master(mat hClaim)
-		open #hClaim:=fnGetHandle: "name=master//6,kfname=FOFILIDX//6,shr",internal,input,keyed
-		! open #hClaim:=fnGetHandle: "name=master//6,kfname=Forwidxa//6,shr",internal,input,keyed
-
-		! csvFile$=fn_removeExcessCRLF$(csvFile$)
-
+		dim csvOrigional$*1024
+		csvOrigional$=csvFile$
 		fnCopy(csvFile$,csvFile$&'.bak')
 		csvFile$=fn_removeExcessCRLF$(csvFile$)
 		fn_readFileIntoArrays
-		pause
-		hIn=fn_init_csv_in(csvFieldCount)
+
+		hIn=fn_init_csv_in(csvFieldCount,csvFile$)
 		if csv_patientId=0 then
 			pr 'invalid file.  No "Patient ID" column.';bell
 			pause
@@ -63,7 +59,7 @@ include: filenamesPopUpperCase
 		fn_pr_hOut('0[tab]H[tab]This file is "'&os_filename$(outFile$)&'"'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made by the "'&env$('program_caption')&'" (a Collection-Master Add-On program) on '&date$('mm/dd/ccyy')&' at '&time$&'.'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made from the source file: "'&csvFile$&'".'	)
-		fn_pr_hOut('0[tab]H[tab]from "'&os_filename$(file$(hIn))&'"')
+		fn_pr_hOut('0[tab]H[tab]from "'&os_filename$(csvOrigional$)&'"')
 		lineCount=0
 		do
 			dim line$*1024
@@ -73,7 +69,12 @@ include: filenamesPopUpperCase
 				dim item$(0)*512
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
-				item$(csv_fileNo)=fn_getFileNo$(hClaim,forwNo$,item$(csv_patientId))
+				item$(csv_fileNo)=fn_getFileNo$(forwNo$,item$(csv_patientId))
+				if item$(csv_fileNo)<>list_fileNo$(lineCount) then 
+					pr 'item fileno=';item$(csv_fileNo)
+					pr 'list fileno=';list_fileNo$(lineCount)
+					pause ! 1124
+				end if
 				item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
 				item$(csv_respName)=srep$(item$(csv_respName),', ',',')
 				item$(csv_patientName)=srep$(item$(csv_patientName),',','/')
@@ -94,7 +95,7 @@ include: filenamesPopUpperCase
 ! /r
 Finis: ! r:
 	fn_pr_hOut('0[tab]H[tab]lineCount='&str$(lineCount))
-	fn_close_csv_in
+	fn_close_csv_in( 1)
 	close #hOut:
 	if enableImport then
 		! r: Generate Automation Files
@@ -118,7 +119,9 @@ Finis: ! r:
 		execute 'sy -c -M F:\clsinc\batch\cm_edi_pcs.cmd'
 	else
 		dim mbText$*2048
-		mbText$='Sucessfully created a file for CM EDI Import:'
+		mbText$='New Claims: '&tab$&str$(countNewClaim) 
+		mbText$(inf:inf)=lf$&'Claim Updates: '&tab$&str$(countUpdateClaim) 
+		mbText$(inf:inf)=lf$&'Sucessfully created a file for CM EDI Import:'
 		mbText$(inf:inf)=lf$&outFile$
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
 		! msgbox('Success on '&csvFile$)
@@ -229,26 +232,29 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_patientId)))
 		tmpOrigionalClaimAmount$=tmpPatientBalance$
 		! if trim$(item$(csv_patientId))='448658' then pause
-		fn_add('FIRM_FILENO' 	,item$(csv_fileNo)		,1	)
-		fn_add('Forw_Refno' 		,item$(csv_patientId)		)
-		fn_add('Forw_Fileno'		,item$(csv_claimId)			)
-		fn_add('SENDER_ID'  		,forwNo$							)
-		fn_add('CRED_NAME'   	,forw$(forw_name)				)
-		fn_add('CRED_STREET'		,forw$(forw_addr)				)
-		fn_add('CRED_CITY'   	,cred_cs$(1)					)
-		fn_add('CRED_ST'    		,cred_cs$(2)					)
+		fn_add('FIRM_FILENO' 		,item$(csv_fileNo)		,1	)
+		fn_add('Forw_Refno' 		,item$(csv_patientId)			)
+		fn_add('Forw_Fileno'		,item$(csv_patientId)			) ! item$(csv_claimId)			) claimId is inconsistent within patient - good for invoice, not for forwarder file number, corrected 10/24/2019
+		fn_add('SENDER_ID'  		,forwNo$									)
+		fn_add('CRED_NAME'   		,forw$(forw_name)					)
+		fn_add('CRED_STREET'		,forw$(forw_addr)					)
+		fn_add('CRED_CITY'   		,cred_cs$(1)							)
+		fn_add('CRED_ST'    		,cred_cs$(2)							)
 		fn_add('CRED_ZIP'   		,forw$(forw_zip))
-		fn_add('BALANCE'     	,tmpPatientBalance$      	)
-		fn_add('OPENED_AMT'  	,tmpPatientBalance$      	)
-		fn_add('DATE_DEBT'   	,item$(csv_serviceDate)  	)
-		fn_add('ORGCRD'      	,item$(csv_providerName) 	)
-		fn_add('ORIG_CLAIM'  	,tmpOrigionalClaimAmount$	)
-		fn_add('SERVICES_AMT'	,tmpOrigionalClaimAmount$	)
-		fn_add('ORGACT#'     	,item$(csv_patientId)    	)
-		fn_add('CRED_XLINE'  	,item$(csv_facilityName) 	)
-		if fn_existingFileNo$(hClaim,ForwNo$,item$(csv_patientId))='' then
+		fn_add('BALANCE'     		,tmpPatientBalance$      	)
+		fn_add('OPENED_AMT'  		,tmpPatientBalance$      	)
+		fn_add('DATE_DEBT'   		,item$(csv_serviceDate)  	)
+		fn_add('ORGCRD'      		,item$(csv_providerName) 	)
+		fn_add('ORIG_CLAIM'  		,tmpOrigionalClaimAmount$	)
+		fn_add('SERVICES_AMT'		,tmpOrigionalClaimAmount$	)
+		fn_add('ORGACT#'     		,item$(csv_patientId)    	)
+		fn_add('CRED_XLINE'  		,item$(csv_facilityName) 	)
+		! pr item$(csv_patientId) : pause
+		if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
+			countNewClaim+=1
 			fn_pr(101) ! new placement
 		else
+			countUpdateClaim+=1
 			fn_pr(102) ! update existing
 		end if
 		! /r
@@ -411,25 +417,48 @@ def fn_pr_hOut(x$*2048)
 	pr #hOut: x$&tab$&'#'
 fnend
 
-def fn_existingFileNo$(hClaim,ForwNo$,ForwFileNo$; ___,return$,claimKey$*64)
-	! claimKey$=rpad$(ForwNo$,kln(hClaim,1))&rpad$(ForwFileNo$,kln(hClaim,2))
-	claimKey$=rpad$(ForwFileNo$,kln(hClaim,1))
-	restore #hClaim,key>=claimKey$: nokey EfnFinis
-	do
-		mat claim$=('')
-		mat claimN=(0)
-		read #hClaim,using claimFormAll$: mat claim$,mat claimN eof EfnFinis
-		if trim$(claim$(master_forw_fileno))=trim$(ForwFileNo$) then
-			return$=claim$(master_fileno)
-		end if
-	loop until return$<>'' or trim$(claim$(master_forw_fileno))<>trim$(ForwFileNo$)
-	
-	EfnFinis: !
-	if return$<>'' the pr 'i found '&return$ : pause
+def fn_existingFileNo$(ForwNo$,forwRefNo$; ___,return$,claimKey$*64,which,hClaim)
+	if setup_efn<>val(ForwNo$) then
+		setup_efn=val(ForwNo$)
+		dim claim$(0)*60,claimN(0)
+		dim claimFieldsC$(0)*20,claimFieldsN$(0)*20
+		dim claimFormAll$*2048
+		fnsql_setup$('master',mat claim$,mat claimN,mat claimFieldsC$,mat claimFieldsN$,claimFormAll$)
+		gosub enumMaster
+
+		! open #hClaim:=fnGetHandle: "name=master//6,kfname=FOFILIDX//6,shr",internal,input,keyed
+		open #hClaim:=fnGetHandle: "name=master//6,shr",internal,input,relative
+		! restore #hClaim:
+		dim efn_fileno$    		(0)*20
+		dim efn_forwFileNo$		(0)*20
+		dim efn_forwRefNo$		(0)*20
+		
+		mat efn_fileno$    		(0)
+		mat efn_forwFileNo$		(0)
+		mat efn_forwRefNo$		(0)
+		do
+			mat claim$=('')
+			mat claimN=(0)
+			read #hClaim,using claimFormAll$: mat claim$,mat claimN eof EfnEoMaster
+			if claimN(master_forw_no)=val(ForwNo$) then
+				fnAddOneC(mat efn_fileno$    		,trim$(	claim$(master_fileno)      	))
+				fnAddOneC(mat efn_forwFileNo$		,trim$(	claim$(master_forw_fileno) 	))
+				fnAddOneC(mat efn_forwRefNo$		,trim$(	claim$(master_forw_refno)  	))
+			end if
+		loop
+		EfnEoMaster: !
+		close #hClaim:
+	end if
+	which=srch(mat efn_forwRefNo$,trim$(forwRefNo$))
+	if which<=0 then
+		return$=''
+	else
+		return$=efn_fileno$(which)
+	end if
 	fn_existingFileNo$=return$
 fnend
 
-def fn_getFileNo$(hClaim,forwNo$,uniqueIdentifier$; ___,x,return$,which)
+def fn_getFileNo$(forwNo$,uniqueIdentifier$; ___,x,return$,which)
 	if ~setup_getFileNo then
 		dim gfnKey$(0)*128
 		mat gfnKey$(0)
@@ -446,7 +475,7 @@ def fn_getFileNo$(hClaim,forwNo$,uniqueIdentifier$; ___,x,return$,which)
 		fileNumberFormat$='pic('&rpt$('#',lastNumberInSfileNo-firstNumberInSfileNo+1)&')'
 		setup_getFileNo=1
 	end if
-	return$=fn_existingFileNo$(hClaim,ForwNo$,uniqueIdentifier$)
+	return$=fn_existingFileNo$(ForwNo$,uniqueIdentifier$)
 	if return$='' then
 		uniqueIdentifier$=trim$(uniqueIdentifier$)
 		which=srch(mat gfnKey$,uniqueIdentifier$)
@@ -494,7 +523,7 @@ def fn_invoiceNumber$*128
 fnend
 
 
-def fn_init_csv_in(&csvFieldCount;___,returnN) ! everything here is local.
+def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here is local.
 	if ~init_csv_in then
 		init_csv_in=1
 		dim Csv_Fields$(0)*128
@@ -538,8 +567,12 @@ def fn_init_csv_in(&csvFieldCount;___,returnN) ! everything here is local.
 	end if
 	fn_init_csv_in=returnN
 fnend
-def fn_close_csv_in
-	close #hIn,free:
+def fn_close_csv_in(; delFileIn)
+	if delFileIn then
+		close #hIn,free:
+	else
+		close #hIn:
+	end if
 	init_csv_in=0
 fnend
 def fn_readFileIntoArrays
@@ -572,6 +605,8 @@ def fn_readFileIntoArrays
 		dim list_balanceN(0)
 		dim list_billPatientReason$(0)*256
 		dim list_claimNotes$(0)*512
+		dim list_fileNo$(0)*512
+		dim list_isNewN(0)
 		
 		mat list_facilityName$(0)
 		mat list_providerName$(0)
@@ -600,8 +635,10 @@ def fn_readFileIntoArrays
 		mat list_balanceN(0)
 		mat list_billPatientReason$(0)
 		mat list_claimNotes$(0)
+		mat list_fileNo$(0)
+		mat list_isNewN(0)
 		
-		hIn=fn_init_csv_in(csvFieldCount)
+		hIn=fn_init_csv_in(csvFieldCount,csvFile$)
 		do
 			dim line$*1024
 			linput #hIn: line$ eof Rfia_EoF
@@ -610,7 +647,7 @@ def fn_readFileIntoArrays
 				dim item$(0)*512
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
-				item$(csv_fileNo)=fn_getFileNo$(hClaim,forwNo$,item$(csv_patientId))
+				item$(csv_fileNo)=fn_getFileNo$(forwNo$,item$(csv_patientId))
 				item$(csv_invoiceNo)=fn_invoiceNumber$
 				! r: add each item into it's array
 				fnAddOneC(mat list_facilityName$,item$(csv_facilityName))
@@ -641,6 +678,13 @@ def fn_readFileIntoArrays
 				! if list_balanceN(udim(mat list_balanceN))=0 then pr 'fnval('&item$(csv_balance)&') returned 0' : pause
 				fnAddOneC(mat list_billPatientReason$,item$(csv_billPatientReason))
 				fnAddOneC(mat list_claimNotes$,item$(csv_claimNotes))
+				
+				fnAddOneC(mat list_fileNo$,item$(csv_fileNo))
+				if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
+					fnAddOneN(mat list_isNewN,1)
+				else
+					fnAddOneN(mat list_isNewN,0)
+				end if
 				! /r
 			end if
 		loop
@@ -662,9 +706,11 @@ def fn_setup
 		library 'Library\clsUtil.wb': fnString_Len_Max
 		library 'Library\openFile.wb': fnOpen_master
 
+		library 'Library\clsUtil.wb': fnGetHandle
+		! library 'S:\Core\Library.br': fnGetHandle     removed in favor of clsUtil version to avoid error 2274
+		
 		library 'S:\Core\Library.br': fnTop
 		library 'S:\Core\Library.br': fnGetPp
-		library 'S:\Core\Library.br': fnGetHandle
 		library 'S:\Core\Library.br': fnFree
 		library 'S:\Core\Library.br': fnCopy
 		library 'S:\Core\Library.br': fnXit
@@ -693,11 +739,6 @@ def fn_setup
 		fnsql_setup$('masforw',mat forw$,mat forwN,mat forwFieldsC$,mat forwFieldsN$,forwFormAll$)
 		gosub EnumForw
 
-		dim claim$(0)*60,claimN(0)
-		dim claimFieldsC$(0)*20,claimFieldsN$(0)*20
-		dim claimFormAll$*2048
-		fnsql_setup$('master',mat claim$,mat claimN,mat claimFieldsC$,mat claimFieldsN$,claimFormAll$)
-		gosub enumMaster
 		
 	end if
 fnend
@@ -710,7 +751,9 @@ def fn_removeExcessCRLF$*256(csvFile$*256; ___,return$*256,hIn,hOut,line$*1024,d
 	lineCount=0
 	close #hIn: ioerr ignore
 	open #hIn:=fnGetHandle:  'name='&env$('at')&csvFile$,display,input
+include: filenamesPushMixedCase
 	open #hOut:=fnGetHandle: 'name='&env$('at')&csvFile$&'-fixedCrLf,recl=2048,replace',display,output
+include: filenamesPopUpperCase
 		
 	do
 		linput #hIn: line$ eof Recrlf_EoF

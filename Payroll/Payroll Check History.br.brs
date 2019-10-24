@@ -557,11 +557,11 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		next j
 		form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
 		hs3=0
-		for j=1 to udim(hs1)
+		for j=1 to udim(mat hs1)
 			if j=1 and eno<>holdeno then
 				empz$=lpad$(str$(hs1(1)),8)
-				nam$=""
-				read #hEmployee,using "form pos 9,c 25",key=empz$: nam$ ! nokey ignore
+				nam$=''
+				read #hEmployee,using "form pos 9,c 25",key=empz$: nam$ nokey ignore
 			end if
 			if hf(j)<>0 then
 				hs3+=1
