@@ -20,310 +20,312 @@ I:\DATA\MASTER, master_ , 11
 ! I:\DATA\SALESIDX//6     ,
 ! I:\DATA\VENUEIDX//6     ,
 
+! SPos is off - forwarder file number 1279 is off
+
 recl-2500
 ===================================================
-fileno$                      ,File Number                         , C    8      , ! C                8      | 001 |                  |
-date_recd                    ,Date Received                       , N    8      , ! PIC(########)    8      | 005 | DATE(CCYYMMDD)   |
-forw_no                      ,Forwarder Number                    , BH   3      , ! BH               3      | 048 | LIST             |
-forw_file_12$                ,Forwarder File # {n/a} Use 1279     , C   12      , ! C               12      | 209 |                  |
-law_list$                    ,Law List                            , C    3      , ! C                3      | 027 |                  |
-comm$                        ,Commission Rate                     , C    4      , ! C                4      | 024 |                  |
-sfee$                        ,Suit Fee Rate                       , C    4      , ! C                4      | 034 |                  |
-jmt_no$                      ,Judgment Number                     , C   20      , ! C               20      | 122 |                  |
-d1_name$                     ,Debtor Name                         , C   30      , ! C               30      | 057 |                  |
-d1_street$                   ,Debtor Street Address               , C   30      , ! C               30      | 062 |                  |
-d1_cs$                       ,Debtor City  State                  , C   30      , ! C               30      | 054 |                  |
-d1_zip$                      ,Debtor Zip Code                     , C    9      , ! C                9      | 063 |                  |
-d1_phone$                    ,Debtor Phone Number                 , C   12      , ! C               12      | 058 |                  |
-cred_name$                   ,Creditor Name                       , C   40      , ! C               40      | 043 |                  |
-cred_xline$                  ,Creditor Extra Line                 , C   40      , ! C               40      | 046 |                  |
-filler_254$                  ,------------------------------------, C    4      , ! C                4      | 046 |                  |
-venue1_no                    ,Venue (Actual #)                    , BH   2      , ! BH               2      | 140 |                  |
-date_debt                    ,Date of Debt                        , N    8      , ! PIC(########)    8      | 114 | DATE(CCYYMMDD)   |
-suit_date                    ,Suit Date                           , N    8      , ! PIC(########)    8      | 139 | DATE(CCYYMMDD)   |
-jmt_date                     ,Judgment Date                       , N    8      , ! PIC(########)    8      | 121 | DATE(CCYYMMDD)   |
-docket_no$                   ,Court Case Number (Docket Number)   , C   15      , ! C               15      | 119 |                  |
-stat1_date                   ,Status 1 Date (File)                , N    8      , ! PIC(########)    8      | 036 | DATE(CCYYMMDD)   |
-stat1_code                   ,Status 1 Code (File)                , CR   3      , ! CR               3      | 035 |                  |
-plaintiff_1$                 ,Plaintiff - Line 1 (Caption)        , C   30      , ! C               30      | 125 |                  |
-plaintiff_2$                 ,Plaintiff - Line 2 (Caption)        , C   30      , ! C               30      | 126 |                  |
-defendant_1$                 ,Defendant - Line 1 (Caption)        , C   30      , ! C               30      | 115 |                  |
-defendant_2$                 ,Defendant - Line 2 (Caption)        , C   30      , ! C               30      | 116 |                  |
-defendant_3$                 ,Defendant - Line 3 (Caption)        , C   30      , ! C               30      | 117 |                  |
-defendant_4$                 ,Defendant - Line 4 (Caption)        , C   30      , ! C               30      | 118 |                  |
-d2_name$                     ,Debtor # 2 - Name                   , C   25      , ! C               25      | 077 |                  |
-d2_street$                   ,Debtor # 2 - Street                 , C   25      , ! C               25      | 081 |                  |
-d2_csz$                      ,Debtor # 2 - City  State (Zip)      , C   25      , ! C               25      | 075 |                  |
-d3_name$                     ,Debtor # 3 - Name                   , C   25      , ! C               25      | 091 |                  |
-d3_street$                   ,Debtor # 3 - Street                 , C   25      , ! C               25      | 095 |                  |
-d3_csz$                      ,Debtor # 3 - City  State (Zip)      , C   25      , ! C               25      | 089 |                  |
-misc_asset1$                 ,Defendants Assets -1 (Block 6)      , C   25      , ! C               25      | 066 |                  |
-misc_asset2$                 ,Defendants Assets -2 (Block 6)      , C   25      , ! C               25      | 067 |                  |
-misc_asset3$                 ,Defendants Assets -3 (Block 6)      , C   25      , ! C               25      | 068 |                  |
-d1_ssn$                      ,Debtor 1 SSN#                       , C   15      , ! C               15      | 060 |                  |
-filler_730$                  ,Blank Field - 730 C 2 (Part of Ssn) , C    2      , ! C                2      | 061 |                  |
-stat2_date                   ,Status 2 Date (Attorney)            , N    8      , ! PIC(########)    8      | 038 | DATE(CCYYMMDD)   |
-pre_j_rate                   ,Interest Rate - Pre Judgment        , PD   5.20   , ! PD               5.20   | 128 |                  |
-post_j_rate                  ,Interest Rate - Post Judgment       , PD   5.20   , ! PD               5.20   | 127 |                  |
-stored_int                   ,Stored Interest As of Last Review   , PD   6.20   , ! PD               6.20   | 012 |                  |
-contract_fee                 ,Contract Fee                        , PD   6.20   , ! PD               6.20   | 157 |                  |
-stat2_code                   ,Status Code 2 (Attorney)            , CR   3      , ! CR               3      | 037 |                  |
-bank_acct_no$                ,Bank Account # / Vin #              , C   17      , ! C               17      | 050 |                  |
-int_date                     ,Date Interest Was Last Calculated   , N    8      , ! PIC(########)    8      | 009 | DATE(CCYYMMDD)   |
-orig_claim                   ,Original Claim Amount               , PD   6.20   , ! PD               6.20   | 010 |                  |
-suit_amt                     ,Suit Amount                         , PD   6.20   , ! PD               6.20   | 138 |                  |
-stat_fee                     ,Statutory Attorney Fees             , PD   6.20   , ! PD               6.20   | 136 |                  |
-jmt_amt                      ,Judgment Amount                     , PD   6.20   , ! PD               6.20   | 120 |                  |
-balance                      ,Debtor Balance (Princ/Costs/Stat)   , PD   6.20   , ! PD               6.20   | 004 |                  |
-cost_bal                     ,Costs Balance                       , PD   6.20   , ! PD               6.20   | 007 |                  |
-coll_hold                    ,Collect & Hold                      , PD   6.20   , ! PD               6.20   | 006 |                  |
-prin_coll                    ,Principal Collected - Includes Other, PD   6.20   , ! PD               6.20   | 011 |                  |
-int_coll                     ,Interest Collected                  , PD   6.20   , ! PD               6.20   | 008 |                  |
-merch_bef                    ,Merchandise Returned Before to Suit , PD   6.20   , ! PD               6.20   | 170 |                  |
-merch_post                   ,Merchandise Returned Post Suit      , PD   6.20   , ! PD               6.20   | 171 |                  |
-cash_bef                     ,Cash Paid Prior to Suit             , PD   6.20   , ! PD               6.20   | 149 |                  |
-cash_post                    ,Cash Paid Post Suit                 , PD   6.20   , ! PD               6.20   | 150 |                  |
-cost_received                ,Costs Received From Forwarder       , PD   6.20   , ! PD               6.20   | 159 |                  |
-cost_ret                     ,Costs Returned to Forwarder         , PD   6.20   , ! PD               6.20   | 161 |                  |
-cost_exp                     ,Costs Expended (Billable to Debtor) , PD   6.20   , ! PD               6.20   | 158 |                  |
-cost_recovered               ,Costs Recovered From Debtor         , PD   6.20   , ! PD               6.20   | 160 |                  |
-comm_earn                    ,Commissions Received                , PD   6.20   , ! PD               6.20   | 154 |                  |
-sfee_earn                    ,Suit Fees Received                  , PD   6.20   , ! PD               6.20   | 180 |                  |
-stat_earn                    ,Statutory Atty Fees Received        , PD   6.20   , ! PD               6.20   | 181 |                  |
-sher_no                      ,Sheriff # (# Only)                  , BH   2      , ! BH               2      | 135 |                  |
-closed_yy$                   ,Year Closed (History Information)   , C    2      , ! C                2      | 023 |                  |
-closed_mm$                   ,Month Closed (History Information)  , C    2      , ! C                2      | 022 |                  |
-closed_code1$                ,Closed Code 1                       , C    4      , ! C                4      | 020 |                  |
-closed_code2$                ,Closed Code 2                       , C    2      , ! C                2      | 021 |                  |
-atty                         ,Our Attorney # (# Only)             , BH   2      , ! BH               2      | 014 |                  |
-para                         ,Our Secretary # (# Only)/Paralegal  , BH   2      , ! BH               2      | 016 |                  |
-filler_adva$                 ,Old Adversary Attorney # (# Only)   , C    2      , ! C                2      | 013 |                  |
-ll_date                      ,Last Letter (Date Sent)             , N    8      , ! PIC(########)    8      | 029 | DATE(CCYYMMDD)   |
-ll_code4$                    ,Last Letter Sent (4 Digit Code)     , C    4      , ! C                4      | 219 |                  |
-recs_01                      ,1st Transaction Code #              , BH   2      , ! BH               2      | 221 |                  |
-recs_02                      ,1st Transaction Date                , BH   3      , ! BH               3      | 222 |                  |
-recs_19                      ,1st Transaction Ta #                , BH   3      , ! BH               3      | 239 |                  |
-recs_03                      ,Amount of 1st Transaction           , PD   6.20   , ! PD               6.20   | 223 |                  |
-recs_04                      ,2nd Transaction Code #              , BH   2      , ! BH               2      | 224 |                  |
-recs_05                      ,2nd Transaction Date                , BH   3      , ! BH               3      | 225 |                  |
-recs_20                      ,2nd Transaction Ta #                , BH   3      , ! BH               3      | 240 |                  |
-recs_06                      ,Amount of 2nd Transaction           , PD   6.20   , ! PD               6.20   | 226 |                  |
-recs_07                      ,3rd Transaction Code #              , BH   2      , ! BH               2      | 227 |                  |
-recs_08                      ,3rd Transaction Date                , BH   3      , ! BH               3      | 228 |                  |
-recs_21                      ,3rd Transaction Ta #                , BH   3      , ! BH               3      | 241 |                  |
-recs_09                      ,Amount of 3rd Transaction           , PD   6.20   , ! PD               6.20   | 229 |                  |
-recs_10                      ,4th Transaction Code #              , BH   2      , ! BH               2      | 230 |                  |
-recs_11                      ,4th Transaction Date                , BH   3      , ! BH               3      | 231 |                  |
-recs_22                      ,4th Transaction Ta #                , BH   3      , ! BH               3      | 242 |                  |
-recs_12                      ,Amount of 4th Transaction           , PD   6.20   , ! PD               6.20   | 232 |                  |
-recs_13                      ,5th Transaction Code #              , BH   2      , ! BH               2      | 233 |                  |
-recs_14                      ,5th Transaction Date                , BH   3      , ! BH               3      | 234 |                  |
-recs_23                      ,5th Transaction Ta #                , BH   3      , ! BH               3      | 243 |                  |
-recs_15                      ,Amount of 5th Transaction           , PD   6.20   , ! PD               6.20   | 235 |                  |
-recs_16                      ,6th Transaction Code #              , BH   2      , ! BH               2      | 236 |                  |
-recs_17                      ,6th Transaction Date                , BH   3      , ! BH               3      | 237 |                  |
-recs_24                      ,6th Transaction Ta #                , BH   3      , ! BH               3      | 244 |                  |
-recs_18                      ,Amount of 6th Transaction           , PD   6.20   , ! PD               6.20   | 238 |                  |
-coco_fileno$                 ,Co-counsel File #                   , C   15      , ! C               15      | 110 |                  |
-filler_1040$                 ,Blank Field 1040 C 3                , C    3      , ! C                3      | 186 |                  |
-bank_no                      ,Bank Number (# Only)                , PD   3      , ! PD               3      | 051 |                  |
-coco_no                      ,Co-counsel # (# Only)               , PD   3      , ! PD               3      | 111 |                  |
-filler_1049$                 ,Blank Field 1049 C 1                , C    1      , ! C                1      | 184 |                  |
-d1_alias$                    ,Debtor Alias Name                   , C   25      , ! C               25      | 052 |                  |
-filler_cred_xline$           ,Creditor Extra Line                 , C   25      , ! C               25      | 046 |                  |
-filler_1100$                 ,Empty Field 1100 C 1                , C    1      , ! C                1      | 185 |                  |
-cost_post_judg               ,Costs Post Judgment                 , PD   6.20   , ! PD               6.20   | 113 |                  |
-affidavit                    ,Affidavit Amount                    , PD   6.20   , ! PD               6.20   | 106 |                  |
-paid_post_judg               ,Paid Post Judgment                  , PD   6.20   , ! PD               6.20   | 177 |                  |
-non_rcvrd_cost               ,Non Recoverable Costs Expended      , PD   6.20   , ! PD               6.20   | 173 |                  |
-tot_exp_cost                 ,Total Costs Expended                , PD   6.20   , ! PD               6.20   | 183 |                  |
-dp_pre_suit_nf               ,Dp Pre Suit No Fee Due              , PD   6.20   , ! PD               6.20   | 167 |                  |
-dp_post_suit_nf              ,Dp Post Suit No Fee Due             , PD   6.20   , ! PD               6.20   | 165 |                  |
-dp_post_judg_nf              ,Dp Post Judgment No Fee Due         , PD   6.20   , ! PD               6.20   | 163 |                  |
-merch_post_judg              ,Post Judgment Merchandise Returned  , PD   6.20   , ! PD               6.20   | 172 |                  |
-exp_cost                     ,Costs Expended (Firm Costs)         , PD   6.20   , ! PD               6.20   | 168 |                  |
-dp_pre_suit                  ,Pre Suit Direct Payment             , PD   6.20   , ! PD               6.20   | 166 |                  |
-dp_post_suit                 ,Post Suit Direct Payment            , PD   6.20   , ! PD               6.20   | 164 |                  |
-dp_post_judg                 ,Post Judgment Direct Payment        , PD   6.20   , ! PD               6.20   | 162 |                  |
-accr_int_bef                 ,Pre Judgment Accrued Interest       , PD   6.20   , ! PD               6.20   | 143 |                  |
-tax_rebate                   ,Costs Recovered Via Tax Rebate      , PD   6.20   , ! PD               6.20   | 182 |                  |
-agent_befscoll               ,Pre Suit Coll by Agent              , PD   6.20   , ! PD               6.20   | 144 |                  |
-agent_pscoll                 ,Post Suit Coll by Agent             , PD   6.20   , ! PD               6.20   | 147 |                  |
-agent_pjcoll                 ,Post Judgment Coll by Agent         , PD   6.20   , ! PD               6.20   | 146 |                  |
-agent_cost                   ,Costs Sent to Agent                 , PD   6.20   , ! PD               6.20   | 145 |                  |
-sales_tax                    ,Sales Tax Received                  , PD   6.20   , ! PD               6.20   | 179 |                  |
-forw_comm$                   ,Forwarder Commission Rate           , C    4      , ! C                4      | 141 |                  |
-forw_sfee$                   ,Forwarder Suit Fee Rate             , C    4      , ! C                4      | 142 |                  |
-coco_comm$                   ,Co-counsel Commission Rate          , C    4      , ! C                4      | 109 |                  |
-coco_sfee$                   ,Co-counsel Suit Fee Rate            , C    4      , ! C                4      | 112 |                  |
-rfile_no$                    ,Report File #                       , C    8      , ! C                8      | 069 |                  |
-scode_pos                    ,S-Code Rel Position In Activ        , B    4      , ! B                4      | 033 |                  |
-ll_code8$                    ,Last Letter Sent (8 Digit Code)     , C    8      , ! C                8      | 028 |                  |
-lpaymnt_date                 ,Date of Last In-House Payment       , N    8      , ! PIC(########)    8      | 031 | DATE(CCYYMMDD)   |
-lpaymnt_refno                ,Last In-House Payment Ref #         , PD   6      , ! PD               6      | 032 |                  |
-lpaymnt_amt                  ,Amount of Last In-House Payment     , PD   6.20   , ! PD               6.20   | 030 |                  |
-forw_fileno$                 ,Forwarder File Number               , C   20      , ! C               20      | 002 |                  |
-d1_fax$                      ,Debtor Fax #/2nd Phone #            , C   12      , ! C               12      | 056 |                  |
-no_debtors$                  ,Legacy Number of Debtors (5.3)      , C    1      , ! C                1      | 220 |                  |
-link_primary$                ,Primary amongst Linked Accts (Y/N)  , C    1      , ! C                1      | 207 |                  |
-d2_phone$                    ,2nd Debtors Phone #                 , C   15      , ! C               15      | 078 |                  |
-d3_phone$                    ,3rd Debtors Phone #                 , C   15      , ! C               15      | 092 |                  |
-asset_phone$                 ,Misc Asset Phone #                  , C   15      , ! C               15      | 049 |                  |
-client_no                    ,Client/Creditor #                   , N    4      , ! N                4      | 039 |                  |
-l_sfcode                     ,Last Financial S-Code               , BH   4      , ! BH               4      | 026 |                  |
-p_1st_date                   ,Payment Schedule 1st Date           , BH   4      , ! BH               4      | 208 | DATE(CCYY/MM/DD) |
-p_amort                      ,Pymnt Amort 1=Amortized -1=Princip  , B    1      , ! B                1      | 098 |                  |
-p_type$                      ,Payment Type                        , C    1      , ! C                1      | 105 |                  |
-p_period                     ,Payment Period                      , PD   6.20   , ! PD               6.20   | 104 |                  |
-p_first                      ,First Payment                       , PD   6.20   , ! PD               6.20   | 101 |                  |
-p_payment                    ,Amount of Each Payment              , PD   6.20   , ! PD               6.20   | 103 |                  |
-p_last                       ,Last Payment                        , PD   6.20   , ! PD               6.20   | 102 |                  |
-p_amount                     ,Amount Schedule is Based On         , PD   6.20   , ! PD               6.20   | 099 |                  |
-p_dcode$                     ,Diary Code Used for Schedule        , C    8      , ! C                8      | 100 |                  |
-emp_no                       ,Employer #                          , BH   3      , ! BH               3      | 064 |                  |
-c_adjust                     ,Claim Adjustment - Frec(21)         , PD   6.20   , ! PD               6.20   | 148 |                  |
-compr_amt                    ,Compromise Amount - Frec(22)        , PD   6.20   , ! PD               6.20   | 155 |                  |
-overpay_amt                  ,Overpay Amount - Frec(23)           , PD   6.20   , ! PD               6.20   | 176 |                  |
-forw_refno$                  ,Fref (Forwarder Ref #)              , C   10      , ! C               10      | 003 |                  |
-b2_accno$                    ,Bank 2 Account #                    , C   17      , ! C               17      | 070 |                  |
-b3_accno$                    ,Bank 3 Account #                    , C   17      , ! C               17      | 084 |                  |
-bank2                        ,Bank # 2                            , PD   3      , ! PD               3      | 071 |                  |
-bank3                        ,Bank # 3                            , PD   3      , ! PD               3      | 085 |                  |
-emp2                         ,Employer # 2                        , BH   3      , ! BH               3      | 082 |                  |
-emp3                         ,Employer # 3                        , BH   3      , ! BH               3      | 096 |                  |
-emp1_acc$                    ,Employer #1 Account Info            , C   17      , ! C               17      | 065 |                  |
-emp2_acc$                    ,Employer #2 Account Info            , C   17      , ! C               17      | 083 |                  |
-emp3_acc$                    ,Employer #3 Account Info            , C   17      , ! C               17      | 097 |                  |
-d2_ssn$                      ,Debtor 2 SSN #                      , C   17      , ! C               17      | 080 |                  |
-d3_ssn$                      ,Debtor 3 SSN #                      , C   17      , ! C               17      | 094 |                  |
-c_priority$                  ,Claim Priority                      , C    3      , ! C                3      | 018 |                  |
-ctype$                       ,Claim Type                          , C    4      , ! C                4      | 025 |                  |
-collector                    ,Collector #                         , BH   2      , ! BH               2      | 015 |                  |
-d2_adva                      ,Debtor 2 Adversary Attorney #       , BH   3      , ! BH               3      | 072 |                  |
-d2_adva_file$                ,D2 Adversary Attorney File #        , C   15      , ! C               15      | 073 |                  |
-d3_adva                      ,Debtor 3 Adversary Attorney #       , BH   3      , ! BH               3      | 086 |                  |
-d3_adva_file$                ,D3 Adversary Attorney File #        , C   15      , ! C               15      | 087 |                  |
-claim_time$                  ,Total Time Spent In Claim           , C    8      , ! C                8      | 019 |                  |
-d1_dl$                       ,Debtor 1 Drivers License #          , C   17      , ! C               17      | 055 |                  |
-d2_dl$                       ,Debtor 2 Drivers License #          , C   17      , ! C               17      | 076 |                  |
-d3_dl$                       ,Debtor 3 Drivers License #          , C   17      , ! C               17      | 090 |                  |
-d1_birth_date$               ,Debtor 1 Date of Birth              , C   10      , ! PIC(####/##/##  10   )  | 053 | DATE(CCYY/MM/DD) |
-d2_birth_date                ,Debtor 2 Date of Birth              , C   10      , ! PIC(####/##/##  10   )  | 074 | DATE(CCYY/MM/DD) |
-d3_birth_date$               ,Debtor 3 Date of Birth              , C   10      , ! PIC(####/##/##  10   )  | 088 | DATE(CCYY/MM/DD) |
-d1_returned$                 ,Debtor 1 Mail Returned              , C    1      , ! C                1      | 059 |                  |
-d2_returned$                 ,Debtor 2 Mail Returned              , C    1      , ! C                1      | 079 |                  |
-d3_returned$                 ,Debtor 3 Mail Returned              , C    1      , ! C                1      | 093 |                  |
-sales_no                     ,Salesperson Number                  , N    3      , ! PIC(###)         3      | 017 |                  |
-cred_phone$                  ,Creditor Phone Number               , C   15      , ! C               15      | 044 |                  |
-cred_fax$                    ,Creditor Fax Number                 , C   15      , ! C               15      | 042 |                  |
-cred_email$                  ,Creditor Email Address              , C   60      , ! C               60      | 041 |                  |
-coco_comm_earn               ,Co-counsel Commissions Earned       , PD   6.20   , ! PD               6.20   | 152 |                  |
-coco_sfee_earn               ,Co-counsel Suit Fees Earned         , PD   6.20   , ! PD               6.20   | 153 |                  |
-principal_coll               ,Principal or Placement Amount Coll  , PD   6.20   , ! PD               6.20   | 178 |                  |
-contract_coll                ,Contract Fees Recovered & Remitted  , PD   6.20   , ! PD               6.20   | 156 |                  |
-fees_coll                    ,Attorney Fees Collected [Stat Fee]  , PD   6.20   , ! PD               6.20   | 169 |                  |
-charges_coll                 ,Collection Charges Collected        , PD   6.20   , ! PD               6.20   | 151 |                  |
-other_coll                   ,Other/Additional Amounts Collected  , PD   6.20   , ! PD               6.20   | 174 |                  |
-other_fees_coll              ,Other Fees and Earnings             , PD   6.20   , ! PD               6.20   | 175 |                  |
-pend_coll                    ,Pending Costs Recovered             , PD   6.20   , ! PD               6.20   | 210 |                  |
-nr_cost_coll                 ,Non-recoverable Costs Recovered     , PD   6.20   , ! PD               6.20   | 211 |                  |
-rec_costs_coll               ,Recoverable Costs Recovered         , PD   6.20   , ! PD               6.20   | 212 |                  |
-firm_costs_coll              ,Firm Costs Recovered                , PD   6.20   , ! PD               6.20   | 213 |                  |
-other_cost_coll              ,Other Costs Recovered               , PD   6.20   , ! PD               6.20   | 214 |                  |
-frec37                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 215 |                  |
-frec38                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 216 |                  |
-frec39                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 217 |                  |
-frec40                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 218 |                  |
-opened_amt                   ,Original Account Amount             , PD   6.20   , ! PD               6.20   | 123 |                  |
-services_amt                 ,Original Services Amount            , PD   6.20   , ! PD               6.20   | 133 |                  |
-charge_off                   ,Charged Off Amount                  , PD   6.20   , ! PD               6.20   | 107 |                  |
-purchase_amt                 ,Purchase Amount                     , PD   6.20   , ! PD               6.20   | 131 |                  |
-pre_paid_amt                 ,Amount Paid Before Claim was Placed , PD   6.20   , ! PD               6.20   | 129 |                  |
-filler_1934                  ,-----------------------             , PD   6.20   , ! PD               6.20   | 187 |                  |
-filler_1940                  ,-----------------------             , PD   6.20   , ! PD               6.20   | 188 |                  |
-filler_1946                  ,-----------------------             , PD   6.20   , ! PD               6.20   | 189 |                  |
-filler_1958                  ,-----------------------             , PD   6.20   , ! PD               6.20   | 190 |                  |
-l_rpt_int_rate               ,Interest Rate Last Reported to Clnt , PD   6.40   , ! PD               6.40   | 191 |                  |
-opened_date                  ,Original Account Date               , BH   4      , ! BH               4      | 124 | DATE(CCYY/MM/DD) |
-services_date                ,Original Services Date              , BH   4      , ! BH               4      | 134 | DATE(CCYY/MM/DD) |
-charge_off_date              ,Charge Off Date                     , BH   4      , ! BH               4      | 108 | DATE(CCYY/MM/DD) |
-purchase_date                ,Purchase Date                       , BH   4      , ! BH               4      | 132 | DATE(CCYY/MM/DD) |
-pre_paid_date                ,Date of Last Payment Before Placed  , BH   4      , ! BH               4      | 130 | DATE(CCYY/MM/DD) |
-jmt_exp_date                 ,Date Judgment will Expired          , BH   4      , ! BH               4      | 192 | DATE(CCYY/MM/DD) |
-filler_1988                  ,-----------------------             , BH   4      , ! BH               4      | 193 | DATE(CCYY/MM/DD) |
-filler_1992                  ,-----------------------             , BH   4      , ! BH               4      | 194 | DATE(CCYY/MM/DD) |
-filler_1996                  ,-----------------------             , BH   4      , ! BH               4      | 195 | DATE(CCYY/MM/DD) |
-l_rpt_int_date               ,Date Interest Rate Last Reported    , BH   4      , ! BH               4      | 196 | DATE(CCYY/MM/DD) |
-statute_date                 ,Statute of Limitations Date         , BH   4      , ! BH               4      | 137 | DATE(CCYY/MM/DD) |
-rev_date                     ,Last Date Claim Reviewed            , BH   4      , ! BH               4      | 197 | DATE(CCYY/MM/DD) |
-rev_time                     ,Last Time Claim Reviewed            , BH   4      , ! BH               4      | 198 |                  |
-rev_user                     ,User Who Reviewed the Claim         , BH   4      , ! BH               4      | 199 |                  |
-edi_date                     ,Last Date EDI Update                , BH   4      , ! BH               4      | 200 | DATE(CCYY/MM/DD) |
-edi_time                     ,Last Time EDI Update                , BH   4      , ! BH               4      | 201 |                  |
-edi_user                     ,User where EDI Updated the Claim    , BH   4      , ! BH               4      | 202 |                  |
-batch_date                   ,Date Claim was Created              , BH   4      , ! BH               4      | 203 | DATE(CCYY/MM/DD) |
-batch_time                   ,Time Claim was Created              , BH   4      , ! BH               4      | 204 |                  |
-batch_user                   ,User that Created the Claim         , BH   4      , ! BH               4      | 205 |                  |
-batch_enet_no                ,E-Network Assigned to the Claim     , BH   4      , ! BH               4      | 206 |                  |
-filler_2048$                 ,-----------------------             , C    4      , ! C                4      | 207 |                  |
-def_state$                   ,Default State Claim (Legal/Int etc) , C    3      , ! C                3      | 207 |                  |
-collord$                     ,Custom Collection Order on Claim    , C   10      , ! C               10      | 208 |                  |
-edi_status_code$             ,Last Reported EDI Code              , C    8      , ! C                8      | 209 |                  |
-edi_status_date              ,EDI Status DATE                     , N    8      , ! PIC(########)    8      | 210 | DATE(CCYYMMDD)   |
-cl_status_code$              ,Closed Status Code                  , C    3      , ! C                3      | 211 |                  |
-cl_status_date               ,Closed Status Date                  , N    8      , ! PIC(########)    8      | 212 | DATE(CCYYMMDD)   |
-closed_date                  ,Date Claim Closed                   , N    8      , ! PIC(########)    8      | 213 | DATE(CCYYMMDD)   |
-per_diem_date                ,Base Date for Interest Calculation  , BH   4      , ! BH               4      | 214 | DATE(CCYY/MM/DD) |
-per_diem_amt                 ,Per Diem Amount for Interest        , L    9      , ! L                9      | 215 |                  |
-per_diem_rate                ,Interest Rate Used for Calculations , PD   6.40   , ! PD               6.40   | 216 |                  |
-per_diem_base                ,Dollar Amount Used for Per Diem Calc, L    9      , ! L                9      | 217 |                  |
-per_diem_int                 ,Amount Calc through Per_Diem_Date   , L    9      , ! L                9      | 218 |                  |
-frec46                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 219 |                  |
-frec47                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 220 |                  |
-frec48                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 221 |                  |
-frec49                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 222 |                  |
-frec50                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 223 |                  |
-exp_m_cost                   ,Costs Funded by Misc Cost Charge    , PD   6.20   , ! PD               6.20   | 224 |                  |
-exp_d_cost                   ,Costs Funded by Deposit             , PD   6.20   , ! PD               6.20   | 225 |                  |
-exp_p_cost                   ,Pending Costs Expended              , PD   6.20   , ! PD               6.20   | 226 |                  |
-exp_r_cost                   ,Recoverable Costs Expended          , PD   6.20   , ! PD               6.20   | 227 |                  |
-frec55                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 228 |                  |
-frec56                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 229 |                  |
-frec57                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 230 |                  |
-frec58                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 231 |                  |
-frec59                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 232 |                  |
-frec60                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 233 |                  |
-frec61                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 234 |                  |
-frec62                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 235 |                  |
-frec63                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 236 |                  |
-frec64                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 237 |                  |
-frec65                       ,-----------------------             , PD   6.20   , ! PD               6.20   | 238 |                  |
-i_1100_ir_j                  ,Interest % on Principal (P)      (J), PD   6.40   , ! PD               6.40   | 239 |                  |
-i_3100_ir_j                  ,Interest % on Attorney Fees(O)   (J), PD   6.40   , ! PD               6.40   | 240 |                  |
-i_4100_ir_j                  ,Interest % on Costs (C)          (J), PD   6.40   , ! PD               6.40   | 241 |                  |
-i_5100_ir_j                  ,Interest % on Firm Charges(F)    (J), PD   6.40   , ! PD               6.40   | 243 |                  |
-i_6100_ir_j                  ,Interest % on Atty Fees (S/L)    (J), PD   6.40   , ! PD               6.40   | 242 |                  |
-i_9100_ir_j                  ,Interest Rate on Other (V)       (J), PD   6.40   , ! PD               6.40   | 244 |                  |
-filler_ir_j_72               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 245 |                  |
-filler_ir_j_73               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 246 |                  |
-filler_ir_j_74               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 247 |                  |
-filler_ir_j_75               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 248 |                  |
-filler_ir_j_76               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 249 |                  |
-filler_ir_j_77               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 250 |                  |
-filler_ir_j_78               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 251 |                  |
-filler_ir_j_79               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 252 |                  |
-filler_ir_j_80               ,Filler for Additional Categories (J), PD   6.40   , ! PD               6.40   | 253 |                  |
-adva                         ,Adversary Attorney Number           , BH   3      , ! BH               3      | 254 |                  |
-filler_2350                  ,Reserved for BH 3 (RP)              , BH   3      , ! BH               3      | 255 |                  |
-filler_2353                  ,Reserved for BH 3 (RP)              , BH   3      , ! BH               3      | 256 |                  |
-pay_subcode                  ,Default Payment Sub Code            , BH   3      , ! BH               3      | 257 |                  |
-p_entry_date                 ,Date Current Pmt Sched was Entered  , BH   4      , ! BH               4      | 258 | DATE(CCYY/MM/DD) |
-filler_2363                  ,-----------------------             , BH   4      , ! BH               4      | 259 | DATE(CCYY/MM/DD) |
-filler_2367                  ,-----------------------             , BH   4      , ! BH               4      | 260 | DATE(CCYY/MM/DD) |
-filler_2371                  ,-----------------------             , BH   4      , ! BH               4      | 261 | DATE(CCYY/MM/DD) |
-filler_2375$                 ,-----------------------             , C   29      , ! C               29      | 262 |                  |
-contract_flag$               ,Contract Fee Flag                   , C    1      , ! C                1      | 263 |                  |
-jmt_flags$                   ,-----------------------             , C   20      , ! C               20      | 264 |                  |
-cred_street$                 ,Creditor Street Address             , C   35      , ! C               35      | 265 |                  |
-cred_cs$                     ,Creditor City  State                , C   30      , ! C               30      | 266 |                  |
-CRED_ZIP$                    ,Creditor Zip Code                   , C   10      , ! C               10      | 267 |                  |
+fileno$                      ,File Number                         , C    8      , !   SPos=1                    C                8      | 001 |                  |
+date_recd                    ,Date Received                       , N    8      , !   SPos=9                    PIC(########)    8      | 005 | DATE(CCYYMMDD)   |
+forw_no                      ,Forwarder Number                    , BH   3      , !   SPos=17                    BH               3      | 048 | LIST             |
+forw_file_12$                ,Forwarder File # {n/a} Use 1279     , C   12      , !   SPos=20                    C               12      | 209 |                  |
+law_list$                    ,Law List                            , C    3      , !   SPos=32                    C                3      | 027 |                  |
+comm$                        ,Commission Rate                     , C    4      , !   SPos=35                    C                4      | 024 |                  |
+sfee$                        ,Suit Fee Rate                       , C    4      , !   SPos=39                    C                4      | 034 |                  |
+jmt_no$                      ,Judgment Number                     , C   20      , !   SPos=43                    C               20      | 122 |                  |
+d1_name$                     ,Debtor Name                         , C   30      , !   SPos=63                    C               30      | 057 |                  |
+d1_street$                   ,Debtor Street Address               , C   30      , !   SPos=93                    C               30      | 062 |                  |
+d1_cs$                       ,Debtor City  State                  , C   30      , !   SPos=123                    C               30      | 054 |                  |
+d1_zip$                      ,Debtor Zip Code                     , C    9      , !   SPos=153                    C                9      | 063 |                  |
+d1_phone$                    ,Debtor Phone Number                 , C   12      , !   SPos=162                    C               12      | 058 |                  |
+cred_name$                   ,Creditor Name                       , C   40      , !   SPos=174                    C               40      | 043 |                  |
+cred_xline$                  ,Creditor Extra Line                 , C   40      , !   SPos=214                    C               40      | 046 |                  |
+filler_254$                  ,------------------------------------, C    4      , !   SPos=254                    C                4      | 046 |                  |
+venue1_no                    ,Venue (Actual #)                    , BH   2      , !   SPos=258                    BH               2      | 140 |                  |
+date_debt                    ,Date of Debt                        , N    8      , !   SPos=260                    PIC(########)    8      | 114 | DATE(CCYYMMDD)   |
+suit_date                    ,Suit Date                           , N    8      , !   SPos=268                    PIC(########)    8      | 139 | DATE(CCYYMMDD)   |
+jmt_date                     ,Judgment Date                       , N    8      , !   SPos=276                    PIC(########)    8      | 121 | DATE(CCYYMMDD)   |
+docket_no$                   ,Court Case Number (Docket Number)   , C   15      , !   SPos=284                    C               15      | 119 |                  |
+stat1_date                   ,Status 1 Date (File)                , N    8      , !   SPos=299                    PIC(########)    8      | 036 | DATE(CCYYMMDD)   |
+stat1_code                   ,Status 1 Code (File)                , CR   3      , !   SPos=307                    CR               3      | 035 |                  |
+plaintiff_1$                 ,Plaintiff - Line 1 (Caption)        , C   30      , !   SPos=310                    C               30      | 125 |                  |
+plaintiff_2$                 ,Plaintiff - Line 2 (Caption)        , C   30      , !   SPos=340                    C               30      | 126 |                  |
+defendant_1$                 ,Defendant - Line 1 (Caption)        , C   30      , !   SPos=370                    C               30      | 115 |                  |
+defendant_2$                 ,Defendant - Line 2 (Caption)        , C   30      , !   SPos=400                    C               30      | 116 |                  |
+defendant_3$                 ,Defendant - Line 3 (Caption)        , C   30      , !   SPos=430                    C               30      | 117 |                  |
+defendant_4$                 ,Defendant - Line 4 (Caption)        , C   30      , !   SPos=460                    C               30      | 118 |                  |
+d2_name$                     ,Debtor # 2 - Name                   , C   25      , !   SPos=490                    C               25      | 077 |                  |
+d2_street$                   ,Debtor # 2 - Street                 , C   25      , !   SPos=515                    C               25      | 081 |                  |
+d2_csz$                      ,Debtor # 2 - City  State (Zip)      , C   25      , !   SPos=540                    C               25      | 075 |                  |
+d3_name$                     ,Debtor # 3 - Name                   , C   25      , !   SPos=565                    C               25      | 091 |                  |
+d3_street$                   ,Debtor # 3 - Street                 , C   25      , !   SPos=590                    C               25      | 095 |                  |
+d3_csz$                      ,Debtor # 3 - City  State (Zip)      , C   25      , !   SPos=615                    C               25      | 089 |                  |
+misc_asset1$                 ,Defendants Assets -1 (Block 6)      , C   25      , !   SPos=640                    C               25      | 066 |                  |
+misc_asset2$                 ,Defendants Assets -2 (Block 6)      , C   25      , !   SPos=665                    C               25      | 067 |                  |
+misc_asset3$                 ,Defendants Assets -3 (Block 6)      , C   25      , !   SPos=690                    C               25      | 068 |                  |
+d1_ssn$                      ,Debtor 1 SSN#                       , C   15      , !   SPos=715                    C               15      | 060 |                  |
+filler_730$                  ,Blank Field - 730 C 2 (Part of Ssn) , C    2      , !   SPos=730                    C                2      | 061 |                  |
+stat2_date                   ,Status 2 Date (Attorney)            , N    8      , !   SPos=732                    PIC(########)    8      | 038 | DATE(CCYYMMDD)   |
+pre_j_rate                   ,Interest Rate - Pre Judgment        , PD   5.20   , !   SPos=740                    PD               5.20   | 128 |                  |
+post_j_rate                  ,Interest Rate - Post Judgment       , PD   5.20   , !   SPos=745                    PD               5.20   | 127 |                  |
+stored_int                   ,Stored Interest As of Last Review   , PD   6.20   , !   SPos=750                    PD               6.20   | 012 |                  |
+contract_fee                 ,Contract Fee                        , PD   6.20   , !   SPos=756                    PD               6.20   | 157 |                  |
+stat2_code                   ,Status Code 2 (Attorney)            , CR   3      , !   SPos=762                    CR               3      | 037 |                  |
+bank_acct_no$                ,Bank Account # / Vin #              , C   17      , !   SPos=765                    C               17      | 050 |                  |
+int_date                     ,Date Interest Was Last Calculated   , N    8      , !   SPos=782                    PIC(########)    8      | 009 | DATE(CCYYMMDD)   |
+orig_claim                   ,Original Claim Amount               , PD   6.20   , !   SPos=790                    PD               6.20   | 010 |                  |
+suit_amt                     ,Suit Amount                         , PD   6.20   , !   SPos=796                    PD               6.20   | 138 |                  |
+stat_fee                     ,Statutory Attorney Fees             , PD   6.20   , !   SPos=802                    PD               6.20   | 136 |                  |
+jmt_amt                      ,Judgment Amount                     , PD   6.20   , !   SPos=808                    PD               6.20   | 120 |                  |
+balance                      ,Debtor Balance (Princ/Costs/Stat)   , PD   6.20   , !   SPos=814                    PD               6.20   | 004 |                  |
+cost_bal                     ,Costs Balance                       , PD   6.20   , !   SPos=820                    PD               6.20   | 007 |                  |
+coll_hold                    ,Collect & Hold                      , PD   6.20   , !   SPos=826                    PD               6.20   | 006 |                  |
+prin_coll                    ,Principal Collected - Includes Other, PD   6.20   , !   SPos=832                    PD               6.20   | 011 |                  |
+int_coll                     ,Interest Collected                  , PD   6.20   , !   SPos=838                    PD               6.20   | 008 |                  |
+merch_bef                    ,Merchandise Returned Before to Suit , PD   6.20   , !   SPos=844                    PD               6.20   | 170 |                  |
+merch_post                   ,Merchandise Returned Post Suit      , PD   6.20   , !   SPos=850                    PD               6.20   | 171 |                  |
+cash_bef                     ,Cash Paid Prior to Suit             , PD   6.20   , !   SPos=856                    PD               6.20   | 149 |                  |
+cash_post                    ,Cash Paid Post Suit                 , PD   6.20   , !   SPos=862                    PD               6.20   | 150 |                  |
+cost_received                ,Costs Received From Forwarder       , PD   6.20   , !   SPos=868                    PD               6.20   | 159 |                  |
+cost_ret                     ,Costs Returned to Forwarder         , PD   6.20   , !   SPos=874                    PD               6.20   | 161 |                  |
+cost_exp                     ,Costs Expended (Billable to Debtor) , PD   6.20   , !   SPos=880                    PD               6.20   | 158 |                  |
+cost_recovered               ,Costs Recovered From Debtor         , PD   6.20   , !   SPos=886                    PD               6.20   | 160 |                  |
+comm_earn                    ,Commissions Received                , PD   6.20   , !   SPos=892                    PD               6.20   | 154 |                  |
+sfee_earn                    ,Suit Fees Received                  , PD   6.20   , !   SPos=898                    PD               6.20   | 180 |                  |
+stat_earn                    ,Statutory Atty Fees Received        , PD   6.20   , !   SPos=904                    PD               6.20   | 181 |                  |
+sher_no                      ,Sheriff # (# Only)                  , BH   2      , !   SPos=910                    BH               2      | 135 |                  |
+closed_yy$                   ,Year Closed (History Information)   , C    2      , !   SPos=912                    C                2      | 023 |                  |
+closed_mm$                   ,Month Closed (History Information)  , C    2      , !   SPos=914                    C                2      | 022 |                  |
+closed_code1$                ,Closed Code 1                       , C    4      , !   SPos=916                    C                4      | 020 |                  |
+closed_code2$                ,Closed Code 2                       , C    2      , !   SPos=920                    C                2      | 021 |                  |
+atty                         ,Our Attorney # (# Only)             , BH   2      , !   SPos=922                    BH               2      | 014 |                  |
+para                         ,Our Secretary # (# Only)/Paralegal  , BH   2      , !   SPos=924                    BH               2      | 016 |                  |
+filler_adva$                 ,Old Adversary Attorney # (# Only)   , C    2      , !   SPos=926                    C                2      | 013 |                  |
+ll_date                      ,Last Letter (Date Sent)             , N    8      , !   SPos=928                    PIC(########)    8      | 029 | DATE(CCYYMMDD)   |
+ll_code4$                    ,Last Letter Sent (4 Digit Code)     , C    4      , !   SPos=936                    C                4      | 219 |                  |
+recs_01                      ,1st Transaction Code #              , BH   2      , !   SPos=940                    BH               2      | 221 |                  |
+recs_02                      ,1st Transaction Date                , BH   3      , !   SPos=942                    BH               3      | 222 |                  |
+recs_19                      ,1st Transaction Ta #                , BH   3      , !   SPos=945                    BH               3      | 239 |                  |
+recs_03                      ,Amount of 1st Transaction           , PD   6.20   , !   SPos=948                    PD               6.20   | 223 |                  |
+recs_04                      ,2nd Transaction Code #              , BH   2      , !   SPos=954                    BH               2      | 224 |                  |
+recs_05                      ,2nd Transaction Date                , BH   3      , !   SPos=956                    BH               3      | 225 |                  |
+recs_20                      ,2nd Transaction Ta #                , BH   3      , !   SPos=959                    BH               3      | 240 |                  |
+recs_06                      ,Amount of 2nd Transaction           , PD   6.20   , !   SPos=962                    PD               6.20   | 226 |                  |
+recs_07                      ,3rd Transaction Code #              , BH   2      , !   SPos=968                    BH               2      | 227 |                  |
+recs_08                      ,3rd Transaction Date                , BH   3      , !   SPos=970                    BH               3      | 228 |                  |
+recs_21                      ,3rd Transaction Ta #                , BH   3      , !   SPos=973                    BH               3      | 241 |                  |
+recs_09                      ,Amount of 3rd Transaction           , PD   6.20   , !   SPos=976                    PD               6.20   | 229 |                  |
+recs_10                      ,4th Transaction Code #              , BH   2      , !   SPos=982                    BH               2      | 230 |                  |
+recs_11                      ,4th Transaction Date                , BH   3      , !   SPos=984                    BH               3      | 231 |                  |
+recs_22                      ,4th Transaction Ta #                , BH   3      , !   SPos=987                    BH               3      | 242 |                  |
+recs_12                      ,Amount of 4th Transaction           , PD   6.20   , !   SPos=990                    PD               6.20   | 232 |                  |
+recs_13                      ,5th Transaction Code #              , BH   2      , !   SPos=996                    BH               2      | 233 |                  |
+recs_14                      ,5th Transaction Date                , BH   3      , !   SPos=998                    BH               3      | 234 |                  |
+recs_23                      ,5th Transaction Ta #                , BH   3      , !   SPos=1001                    BH               3      | 243 |                  |
+recs_15                      ,Amount of 5th Transaction           , PD   6.20   , !   SPos=1004                    PD               6.20   | 235 |                  |
+recs_16                      ,6th Transaction Code #              , BH   2      , !   SPos=1010                    BH               2      | 236 |                  |
+recs_17                      ,6th Transaction Date                , BH   3      , !   SPos=1012                    BH               3      | 237 |                  |
+recs_24                      ,6th Transaction Ta #                , BH   3      , !   SPos=1015                    BH               3      | 244 |                  |
+recs_18                      ,Amount of 6th Transaction           , PD   6.20   , !   SPos=1018                    PD               6.20   | 238 |                  |
+coco_fileno$                 ,Co-counsel File #                   , C   15      , !   SPos=1024                    C               15      | 110 |                  |
+filler_1040$                 ,Blank Field 1040 C 3                , C    3      , !   SPos=1039                    C                3      | 186 |                  |
+bank_no                      ,Bank Number (# Only)                , PD   3      , !   SPos=1042                    PD               3      | 051 |                  |
+coco_no                      ,Co-counsel # (# Only)               , PD   3      , !   SPos=1045                    PD               3      | 111 |                  |
+filler_1049$                 ,Blank Field 1049 C 1                , C    1      , !   SPos=1048                    C                1      | 184 |                  |
+d1_alias$                    ,Debtor Alias Name                   , C   25      , !   SPos=1049                    C               25      | 052 |                  |
+filler_cred_xline$           ,Creditor Extra Line                 , C   25      , !   SPos=1074                    C               25      | 046 |                  |
+filler_1100$                 ,Empty Field 1100 C 1                , C    1      , !   SPos=1099                    C                1      | 185 |                  |
+cost_post_judg               ,Costs Post Judgment                 , PD   6.20   , !   SPos=1100                    PD               6.20   | 113 |                  |
+affidavit                    ,Affidavit Amount                    , PD   6.20   , !   SPos=1106                    PD               6.20   | 106 |                  |
+paid_post_judg               ,Paid Post Judgment                  , PD   6.20   , !   SPos=1112                    PD               6.20   | 177 |                  |
+non_rcvrd_cost               ,Non Recoverable Costs Expended      , PD   6.20   , !   SPos=1118                    PD               6.20   | 173 |                  |
+tot_exp_cost                 ,Total Costs Expended                , PD   6.20   , !   SPos=1124                    PD               6.20   | 183 |                  |
+dp_pre_suit_nf               ,Dp Pre Suit No Fee Due              , PD   6.20   , !   SPos=1130                    PD               6.20   | 167 |                  |
+dp_post_suit_nf              ,Dp Post Suit No Fee Due             , PD   6.20   , !   SPos=1136                    PD               6.20   | 165 |                  |
+dp_post_judg_nf              ,Dp Post Judgment No Fee Due         , PD   6.20   , !   SPos=1142                    PD               6.20   | 163 |                  |
+merch_post_judg              ,Post Judgment Merchandise Returned  , PD   6.20   , !   SPos=1148                    PD               6.20   | 172 |                  |
+exp_cost                     ,Costs Expended (Firm Costs)         , PD   6.20   , !   SPos=1154                    PD               6.20   | 168 |                  |
+dp_pre_suit                  ,Pre Suit Direct Payment             , PD   6.20   , !   SPos=1160                    PD               6.20   | 166 |                  |
+dp_post_suit                 ,Post Suit Direct Payment            , PD   6.20   , !   SPos=1166                    PD               6.20   | 164 |                  |
+dp_post_judg                 ,Post Judgment Direct Payment        , PD   6.20   , !   SPos=1172                    PD               6.20   | 162 |                  |
+accr_int_bef                 ,Pre Judgment Accrued Interest       , PD   6.20   , !   SPos=1178                    PD               6.20   | 143 |                  |
+tax_rebate                   ,Costs Recovered Via Tax Rebate      , PD   6.20   , !   SPos=1184                    PD               6.20   | 182 |                  |
+agent_befscoll               ,Pre Suit Coll by Agent              , PD   6.20   , !   SPos=1190                    PD               6.20   | 144 |                  |
+agent_pscoll                 ,Post Suit Coll by Agent             , PD   6.20   , !   SPos=1196                    PD               6.20   | 147 |                  |
+agent_pjcoll                 ,Post Judgment Coll by Agent         , PD   6.20   , !   SPos=1202                    PD               6.20   | 146 |                  |
+agent_cost                   ,Costs Sent to Agent                 , PD   6.20   , !   SPos=1208                    PD               6.20   | 145 |                  |
+sales_tax                    ,Sales Tax Received                  , PD   6.20   , !   SPos=1214                    PD               6.20   | 179 |                  |
+forw_comm$                   ,Forwarder Commission Rate           , C    4      , !   SPos=1220                    C                4      | 141 |                  |
+forw_sfee$                   ,Forwarder Suit Fee Rate             , C    4      , !   SPos=1224                    C                4      | 142 |                  |
+coco_comm$                   ,Co-counsel Commission Rate          , C    4      , !   SPos=1228                    C                4      | 109 |                  |
+coco_sfee$                   ,Co-counsel Suit Fee Rate            , C    4      , !   SPos=1232                    C                4      | 112 |                  |
+rfile_no$                    ,Report File #                       , C    8      , !   SPos=1236                    C                8      | 069 |                  |
+scode_pos                    ,S-Code Rel Position In Activ        , B    4      , !   SPos=1244                    B                4      | 033 |                  |
+ll_code8$                    ,Last Letter Sent (8 Digit Code)     , C    8      , !   SPos=1248                    C                8      | 028 |                  |
+lpaymnt_date                 ,Date of Last In-House Payment       , N    8      , !   SPos=1256                    PIC(########)    8      | 031 | DATE(CCYYMMDD)   |
+lpaymnt_refno                ,Last In-House Payment Ref #         , PD   6      , !   SPos=1264                    PD               6      | 032 |                  |
+lpaymnt_amt                  ,Amount of Last In-House Payment     , PD   6.20   , !   SPos=1270                    PD               6.20   | 030 |                  |
+forw_fileno$                 ,Forwarder File Number               , C   20      , !   SPos=1276                    C               20      | 002 |                  |
+d1_fax$                      ,Debtor Fax #/2nd Phone #            , C   12      , !   SPos=1296                    C               12      | 056 |                  |
+no_debtors$                  ,Legacy Number of Debtors (5.3)      , C    1      , !   SPos=1308                    C                1      | 220 |                  |
+link_primary$                ,Primary amongst Linked Accts (Y/N)  , C    1      , !   SPos=1309                    C                1      | 207 |                  |
+d2_phone$                    ,2nd Debtors Phone #                 , C   15      , !   SPos=1310                    C               15      | 078 |                  |
+d3_phone$                    ,3rd Debtors Phone #                 , C   15      , !   SPos=1325                    C               15      | 092 |                  |
+asset_phone$                 ,Misc Asset Phone #                  , C   15      , !   SPos=1340                    C               15      | 049 |                  |
+client_no                    ,Client/Creditor #                   , N    4      , !   SPos=1355                    N                4      | 039 |                  |
+l_sfcode                     ,Last Financial S-Code               , BH   4      , !   SPos=1359                    BH               4      | 026 |                  |
+p_1st_date                   ,Payment Schedule 1st Date           , BH   4      , !   SPos=1363                    BH               4      | 208 | DATE(CCYY/MM/DD) |
+p_amort                      ,Pymnt Amort 1=Amortized -1=Princip  , B    1      , !   SPos=1367                    B                1      | 098 |                  |
+p_type$                      ,Payment Type                        , C    1      , !   SPos=1368                    C                1      | 105 |                  |
+p_period                     ,Payment Period                      , PD   6.20   , !   SPos=1369                    PD               6.20   | 104 |                  |
+p_first                      ,First Payment                       , PD   6.20   , !   SPos=1375                    PD               6.20   | 101 |                  |
+p_payment                    ,Amount of Each Payment              , PD   6.20   , !   SPos=1381                    PD               6.20   | 103 |                  |
+p_last                       ,Last Payment                        , PD   6.20   , !   SPos=1387                    PD               6.20   | 102 |                  |
+p_amount                     ,Amount Schedule is Based On         , PD   6.20   , !   SPos=1393                    PD               6.20   | 099 |                  |
+p_dcode$                     ,Diary Code Used for Schedule        , C    8      , !   SPos=1399                    C                8      | 100 |                  |
+emp_no                       ,Employer #                          , BH   3      , !   SPos=1407                    BH               3      | 064 |                  |
+c_adjust                     ,Claim Adjustment - Frec(21)         , PD   6.20   , !   SPos=1410                    PD               6.20   | 148 |                  |
+compr_amt                    ,Compromise Amount - Frec(22)        , PD   6.20   , !   SPos=1416                    PD               6.20   | 155 |                  |
+overpay_amt                  ,Overpay Amount - Frec(23)           , PD   6.20   , !   SPos=1422                    PD               6.20   | 176 |                  |
+forw_refno$                  ,Fref (Forwarder Ref #)              , C   10      , !   SPos=1428                    C               10      | 003 |                  |
+b2_accno$                    ,Bank 2 Account #                    , C   17      , !   SPos=1438                    C               17      | 070 |                  |
+b3_accno$                    ,Bank 3 Account #                    , C   17      , !   SPos=1455                    C               17      | 084 |                  |
+bank2                        ,Bank # 2                            , PD   3      , !   SPos=1472                    PD               3      | 071 |                  |
+bank3                        ,Bank # 3                            , PD   3      , !   SPos=1475                    PD               3      | 085 |                  |
+emp2                         ,Employer # 2                        , BH   3      , !   SPos=1478                    BH               3      | 082 |                  |
+emp3                         ,Employer # 3                        , BH   3      , !   SPos=1481                    BH               3      | 096 |                  |
+emp1_acc$                    ,Employer #1 Account Info            , C   17      , !   SPos=1484                    C               17      | 065 |                  |
+emp2_acc$                    ,Employer #2 Account Info            , C   17      , !   SPos=1501                    C               17      | 083 |                  |
+emp3_acc$                    ,Employer #3 Account Info            , C   17      , !   SPos=1518                    C               17      | 097 |                  |
+d2_ssn$                      ,Debtor 2 SSN #                      , C   17      , !   SPos=1535                    C               17      | 080 |                  |
+d3_ssn$                      ,Debtor 3 SSN #                      , C   17      , !   SPos=1552                    C               17      | 094 |                  |
+c_priority$                  ,Claim Priority                      , C    3      , !   SPos=1569                    C                3      | 018 |                  |
+ctype$                       ,Claim Type                          , C    4      , !   SPos=1572                    C                4      | 025 |                  |
+collector                    ,Collector #                         , BH   2      , !   SPos=1576                    BH               2      | 015 |                  |
+d2_adva                      ,Debtor 2 Adversary Attorney #       , BH   3      , !   SPos=1578                    BH               3      | 072 |                  |
+d2_adva_file$                ,D2 Adversary Attorney File #        , C   15      , !   SPos=1581                    C               15      | 073 |                  |
+d3_adva                      ,Debtor 3 Adversary Attorney #       , BH   3      , !   SPos=1596                    BH               3      | 086 |                  |
+d3_adva_file$                ,D3 Adversary Attorney File #        , C   15      , !   SPos=1599                    C               15      | 087 |                  |
+claim_time$                  ,Total Time Spent In Claim           , C    8      , !   SPos=1614                    C                8      | 019 |                  |
+d1_dl$                       ,Debtor 1 Drivers License #          , C   17      , !   SPos=1622                    C               17      | 055 |                  |
+d2_dl$                       ,Debtor 2 Drivers License #          , C   17      , !   SPos=1639                    C               17      | 076 |                  |
+d3_dl$                       ,Debtor 3 Drivers License #          , C   17      , !   SPos=1656                    C               17      | 090 |                  |
+d1_birth_date$               ,Debtor 1 Date of Birth              , C   10      , !   SPos=1673                    PIC(####/##/##  10   )  | 053 | DATE(CCYY/MM/DD) |
+d2_birth_date                ,Debtor 2 Date of Birth              , C   10      , !   SPos=1683                    PIC(####/##/##  10   )  | 074 | DATE(CCYY/MM/DD) |
+d3_birth_date$               ,Debtor 3 Date of Birth              , C   10      , !   SPos=1693                    PIC(####/##/##  10   )  | 088 | DATE(CCYY/MM/DD) |
+d1_returned$                 ,Debtor 1 Mail Returned              , C    1      , !   SPos=1703                    C                1      | 059 |                  |
+d2_returned$                 ,Debtor 2 Mail Returned              , C    1      , !   SPos=1704                    C                1      | 079 |                  |
+d3_returned$                 ,Debtor 3 Mail Returned              , C    1      , !   SPos=1705                    C                1      | 093 |                  |
+sales_no                     ,Salesperson Number                  , N    3      , !   SPos=1706                    PIC(###)         3      | 017 |                  |
+cred_phone$                  ,Creditor Phone Number               , C   15      , !   SPos=1709                    C               15      | 044 |                  |
+cred_fax$                    ,Creditor Fax Number                 , C   15      , !   SPos=1724                    C               15      | 042 |                  |
+cred_email$                  ,Creditor Email Address              , C   60      , !   SPos=1739                    C               60      | 041 |                  |
+coco_comm_earn               ,Co-counsel Commissions Earned       , PD   6.20   , !   SPos=1799                    PD               6.20   | 152 |                  |
+coco_sfee_earn               ,Co-counsel Suit Fees Earned         , PD   6.20   , !   SPos=1805                    PD               6.20   | 153 |                  |
+principal_coll               ,Principal or Placement Amount Coll  , PD   6.20   , !   SPos=1811                    PD               6.20   | 178 |                  |
+contract_coll                ,Contract Fees Recovered & Remitted  , PD   6.20   , !   SPos=1817                    PD               6.20   | 156 |                  |
+fees_coll                    ,Attorney Fees Collected [Stat Fee]  , PD   6.20   , !   SPos=1823                    PD               6.20   | 169 |                  |
+charges_coll                 ,Collection Charges Collected        , PD   6.20   , !   SPos=1829                    PD               6.20   | 151 |                  |
+other_coll                   ,Other/Additional Amounts Collected  , PD   6.20   , !   SPos=1835                    PD               6.20   | 174 |                  |
+other_fees_coll              ,Other Fees and Earnings             , PD   6.20   , !   SPos=1841                    PD               6.20   | 175 |                  |
+pend_coll                    ,Pending Costs Recovered             , PD   6.20   , !   SPos=1847                    PD               6.20   | 210 |                  |
+nr_cost_coll                 ,Non-recoverable Costs Recovered     , PD   6.20   , !   SPos=1853                    PD               6.20   | 211 |                  |
+rec_costs_coll               ,Recoverable Costs Recovered         , PD   6.20   , !   SPos=1859                    PD               6.20   | 212 |                  |
+firm_costs_coll              ,Firm Costs Recovered                , PD   6.20   , !   SPos=1865                    PD               6.20   | 213 |                  |
+other_cost_coll              ,Other Costs Recovered               , PD   6.20   , !   SPos=1871                    PD               6.20   | 214 |                  |
+frec37                       ,-----------------------             , PD   6.20   , !   SPos=1877                    PD               6.20   | 215 |                  |
+frec38                       ,-----------------------             , PD   6.20   , !   SPos=1883                    PD               6.20   | 216 |                  |
+frec39                       ,-----------------------             , PD   6.20   , !   SPos=1889                    PD               6.20   | 217 |                  |
+frec40                       ,-----------------------             , PD   6.20   , !   SPos=1895                    PD               6.20   | 218 |                  |
+opened_amt                   ,Original Account Amount             , PD   6.20   , !   SPos=1901                    PD               6.20   | 123 |                  |
+services_amt                 ,Original Services Amount            , PD   6.20   , !   SPos=1907                    PD               6.20   | 133 |                  |
+charge_off                   ,Charged Off Amount                  , PD   6.20   , !   SPos=1913                    PD               6.20   | 107 |                  |
+purchase_amt                 ,Purchase Amount                     , PD   6.20   , !   SPos=1919                    PD               6.20   | 131 |                  |
+pre_paid_amt                 ,Amount Paid Before Claim was Placed , PD   6.20   , !   SPos=1925                    PD               6.20   | 129 |                  |
+filler_1934                  ,-----------------------             , PD   6.20   , !   SPos=1931                    PD               6.20   | 187 |                  |
+filler_1940                  ,-----------------------             , PD   6.20   , !   SPos=1937                    PD               6.20   | 188 |                  |
+filler_1946                  ,-----------------------             , PD   6.20   , !   SPos=1943                    PD               6.20   | 189 |                  |
+filler_1958                  ,-----------------------             , PD   6.20   , !   SPos=1949                    PD               6.20   | 190 |                  |
+l_rpt_int_rate               ,Interest Rate Last Reported to Clnt , PD   6.40   , !   SPos=1955                    PD               6.40   | 191 |                  |
+opened_date                  ,Original Account Date               , BH   4      , !   SPos=1961                    BH               4      | 124 | DATE(CCYY/MM/DD) |
+services_date                ,Original Services Date              , BH   4      , !   SPos=1965                    BH               4      | 134 | DATE(CCYY/MM/DD) |
+charge_off_date              ,Charge Off Date                     , BH   4      , !   SPos=1969                    BH               4      | 108 | DATE(CCYY/MM/DD) |
+purchase_date                ,Purchase Date                       , BH   4      , !   SPos=1973                    BH               4      | 132 | DATE(CCYY/MM/DD) |
+pre_paid_date                ,Date of Last Payment Before Placed  , BH   4      , !   SPos=1977                    BH               4      | 130 | DATE(CCYY/MM/DD) |
+jmt_exp_date                 ,Date Judgment will Expired          , BH   4      , !   SPos=1981                    BH               4      | 192 | DATE(CCYY/MM/DD) |
+filler_1988                  ,-----------------------             , BH   4      , !   SPos=1985                    BH               4      | 193 | DATE(CCYY/MM/DD) |
+filler_1992                  ,-----------------------             , BH   4      , !   SPos=1989                    BH               4      | 194 | DATE(CCYY/MM/DD) |
+filler_1996                  ,-----------------------             , BH   4      , !   SPos=1993                    BH               4      | 195 | DATE(CCYY/MM/DD) |
+l_rpt_int_date               ,Date Interest Rate Last Reported    , BH   4      , !   SPos=1997                    BH               4      | 196 | DATE(CCYY/MM/DD) |
+statute_date                 ,Statute of Limitations Date         , BH   4      , !   SPos=2001                    BH               4      | 137 | DATE(CCYY/MM/DD) |
+rev_date                     ,Last Date Claim Reviewed            , BH   4      , !   SPos=2005                    BH               4      | 197 | DATE(CCYY/MM/DD) |
+rev_time                     ,Last Time Claim Reviewed            , BH   4      , !   SPos=2009                    BH               4      | 198 |                  |
+rev_user                     ,User Who Reviewed the Claim         , BH   4      , !   SPos=2013                    BH               4      | 199 |                  |
+edi_date                     ,Last Date EDI Update                , BH   4      , !   SPos=2017                    BH               4      | 200 | DATE(CCYY/MM/DD) |
+edi_time                     ,Last Time EDI Update                , BH   4      , !   SPos=2021                    BH               4      | 201 |                  |
+edi_user                     ,User where EDI Updated the Claim    , BH   4      , !   SPos=2025                    BH               4      | 202 |                  |
+batch_date                   ,Date Claim was Created              , BH   4      , !   SPos=2029                    BH               4      | 203 | DATE(CCYY/MM/DD) |
+batch_time                   ,Time Claim was Created              , BH   4      , !   SPos=2033                    BH               4      | 204 |                  |
+batch_user                   ,User that Created the Claim         , BH   4      , !   SPos=2037                    BH               4      | 205 |                  |
+batch_enet_no                ,E-Network Assigned to the Claim     , BH   4      , !   SPos=2041                    BH               4      | 206 |                  |
+filler_2048$                 ,-----------------------             , C    4      , !   SPos=2045                    C                4      | 207 |                  |
+def_state$                   ,Default State Claim (Legal/Int etc) , C    3      , !   SPos=2049                    C                3      | 207 |                  |
+collord$                     ,Custom Collection Order on Claim    , C   10      , !   SPos=2052                    C               10      | 208 |                  |
+edi_status_code$             ,Last Reported EDI Code              , C    8      , !   SPos=2062                    C                8      | 209 |                  |
+edi_status_date              ,EDI Status DATE                     , N    8      , !   SPos=2070                    PIC(########)    8      | 210 | DATE(CCYYMMDD)   |
+cl_status_code$              ,Closed Status Code                  , C    3      , !   SPos=2078                    C                3      | 211 |                  |
+cl_status_date               ,Closed Status Date                  , N    8      , !   SPos=2081                    PIC(########)    8      | 212 | DATE(CCYYMMDD)   |
+closed_date                  ,Date Claim Closed                   , N    8      , !   SPos=2089                    PIC(########)    8      | 213 | DATE(CCYYMMDD)   |
+per_diem_date                ,Base Date for Interest Calculation  , BH   4      , !   SPos=2097                    BH               4      | 214 | DATE(CCYY/MM/DD) |
+per_diem_amt                 ,Per Diem Amount for Interest        , L    9      , !   SPos=2101                    L                9      | 215 |                  |
+per_diem_rate                ,Interest Rate Used for Calculations , PD   6.40   , !   SPos=2110                    PD               6.40   | 216 |                  |
+per_diem_base                ,Dollar Amount Used for Per Diem Calc, L    9      , !   SPos=2116                    L                9      | 217 |                  |
+per_diem_int                 ,Amount Calc through Per_Diem_Date   , L    9      , !   SPos=2125                    L                9      | 218 |                  |
+frec46                       ,-----------------------             , PD   6.20   , !   SPos=2134                    PD               6.20   | 219 |                  |
+frec47                       ,-----------------------             , PD   6.20   , !   SPos=2140                    PD               6.20   | 220 |                  |
+frec48                       ,-----------------------             , PD   6.20   , !   SPos=2146                    PD               6.20   | 221 |                  |
+frec49                       ,-----------------------             , PD   6.20   , !   SPos=2152                    PD               6.20   | 222 |                  |
+frec50                       ,-----------------------             , PD   6.20   , !   SPos=2158                    PD               6.20   | 223 |                  |
+exp_m_cost                   ,Costs Funded by Misc Cost Charge    , PD   6.20   , !   SPos=2164                    PD               6.20   | 224 |                  |
+exp_d_cost                   ,Costs Funded by Deposit             , PD   6.20   , !   SPos=2170                    PD               6.20   | 225 |                  |
+exp_p_cost                   ,Pending Costs Expended              , PD   6.20   , !   SPos=2176                    PD               6.20   | 226 |                  |
+exp_r_cost                   ,Recoverable Costs Expended          , PD   6.20   , !   SPos=2182                    PD               6.20   | 227 |                  |
+frec55                       ,-----------------------             , PD   6.20   , !   SPos=2188                    PD               6.20   | 228 |                  |
+frec56                       ,-----------------------             , PD   6.20   , !   SPos=2194                    PD               6.20   | 229 |                  |
+frec57                       ,-----------------------             , PD   6.20   , !   SPos=2200                    PD               6.20   | 230 |                  |
+frec58                       ,-----------------------             , PD   6.20   , !   SPos=2206                    PD               6.20   | 231 |                  |
+frec59                       ,-----------------------             , PD   6.20   , !   SPos=2212                    PD               6.20   | 232 |                  |
+frec60                       ,-----------------------             , PD   6.20   , !   SPos=2218                    PD               6.20   | 233 |                  |
+frec61                       ,-----------------------             , PD   6.20   , !   SPos=2224                    PD               6.20   | 234 |                  |
+frec62                       ,-----------------------             , PD   6.20   , !   SPos=2230                    PD               6.20   | 235 |                  |
+frec63                       ,-----------------------             , PD   6.20   , !   SPos=2236                    PD               6.20   | 236 |                  |
+frec64                       ,-----------------------             , PD   6.20   , !   SPos=2242                    PD               6.20   | 237 |                  |
+frec65                       ,-----------------------             , PD   6.20   , !   SPos=2248                    PD               6.20   | 238 |                  |
+i_1100_ir_j                  ,Interest % on Principal (P)      (J), PD   6.40   , !   SPos=2254                    PD               6.40   | 239 |                  |
+i_3100_ir_j                  ,Interest % on Attorney Fees(O)   (J), PD   6.40   , !   SPos=2260                    PD               6.40   | 240 |                  |
+i_4100_ir_j                  ,Interest % on Costs (C)          (J), PD   6.40   , !   SPos=2266                    PD               6.40   | 241 |                  |
+i_5100_ir_j                  ,Interest % on Firm Charges(F)    (J), PD   6.40   , !   SPos=2272                    PD               6.40   | 243 |                  |
+i_6100_ir_j                  ,Interest % on Atty Fees (S/L)    (J), PD   6.40   , !   SPos=2278                    PD               6.40   | 242 |                  |
+i_9100_ir_j                  ,Interest Rate on Other (V)       (J), PD   6.40   , !   SPos=2284                    PD               6.40   | 244 |                  |
+filler_ir_j_72               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2290                    PD               6.40   | 245 |                  |
+filler_ir_j_73               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2296                    PD               6.40   | 246 |                  |
+filler_ir_j_74               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2302                    PD               6.40   | 247 |                  |
+filler_ir_j_75               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2308                    PD               6.40   | 248 |                  |
+filler_ir_j_76               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2314                    PD               6.40   | 249 |                  |
+filler_ir_j_77               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2320                    PD               6.40   | 250 |                  |
+filler_ir_j_78               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2326                    PD               6.40   | 251 |                  |
+filler_ir_j_79               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2332                    PD               6.40   | 252 |                  |
+filler_ir_j_80               ,Filler for Additional Categories (J), PD   6.40   , !   SPos=2338                    PD               6.40   | 253 |                  |
+adva                         ,Adversary Attorney Number           , BH   3      , !   SPos=2344                    BH               3      | 254 |                  |
+filler_2350                  ,Reserved for BH 3 (RP)              , BH   3      , !   SPos=2347                    BH               3      | 255 |                  |
+filler_2353                  ,Reserved for BH 3 (RP)              , BH   3      , !   SPos=2350                    BH               3      | 256 |                  |
+pay_subcode                  ,Default Payment Sub Code            , BH   3      , !   SPos=2353                    BH               3      | 257 |                  |
+p_entry_date                 ,Date Current Pmt Sched was Entered  , BH   4      , !   SPos=2356                    BH               4      | 258 | DATE(CCYY/MM/DD) |
+filler_2363                  ,-----------------------             , BH   4      , !   SPos=2360                    BH               4      | 259 | DATE(CCYY/MM/DD) |
+filler_2367                  ,-----------------------             , BH   4      , !   SPos=2364                    BH               4      | 260 | DATE(CCYY/MM/DD) |
+filler_2371                  ,-----------------------             , BH   4      , !   SPos=2368                    BH               4      | 261 | DATE(CCYY/MM/DD) |
+filler_2375$                 ,-----------------------             , C   29      , !   SPos=2372                    C               29      | 262 |                  |
+contract_flag$               ,Contract Fee Flag                   , C    1      , !   SPos=2401                    C                1      | 263 |                  |
+jmt_flags$                   ,-----------------------             , C   20      , !   SPos=2402                    C               20      | 264 |                  |
+cred_street$                 ,Creditor Street Address             , C   35      , !   SPos=2422                    C               35      | 265 |                  |
+cred_cs$                     ,Creditor City  State                , C   30      , !   SPos=2457                    C               30      | 266 |                  |
+CRED_ZIP$                    ,Creditor Zip Code                   , C   10      , !   SPos=2487                    C               10      | 267 |                  |
