@@ -51,7 +51,7 @@ Screen1: !
 		dim csvExt$*128
 		fnGetPp(csvFile$,csvPath$,csvProg$,csvExt$)
 		dim outFile$*256
-		outFile$=env$('at')&csvPath$&csvProg$&'-CM_EDI'&'.csv'
+		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI'&'.csv','@::','')
 		hOut=fnGetHandle
 include: filenamesPushMixedCase
 		open #hOut: 'name='&outFile$&',recl=1024,replace',display,output
@@ -70,11 +70,11 @@ include: filenamesPopUpperCase
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
 				item$(csv_fileNo)=fn_getFileNo$(forwNo$,item$(csv_patientId))
-				if item$(csv_fileNo)<>list_fileNo$(lineCount) then 
-					pr 'item fileno=';item$(csv_fileNo)
-					pr 'list fileno=';list_fileNo$(lineCount)
-					pause ! 1124
-				end if
+				! if item$(csv_fileNo)<>list_fileNo$(lineCount) then 
+				! 	pr 'item fileno=';item$(csv_fileNo)
+				! 	pr 'list fileno=';list_fileNo$(lineCount)
+				! 	pause ! 1124
+				! end if
 				item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
 				item$(csv_respName)=srep$(item$(csv_respName),', ',',')
 				item$(csv_patientName)=srep$(item$(csv_patientName),',','/')
@@ -528,7 +528,7 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 		init_csv_in=1
 		dim Csv_Fields$(0)*128
 		dim Csv_Data$(0)*256
-		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,env$('at')&csvFile$,Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
+		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,env$('at')&srep$(csvFile$,'@::',''),Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
 		lineCount=0
 		! r: set csv_*
 		csv_facilityName      	=srch(mat Csv_Fields$,uprc$('Facility Name'        	))
@@ -605,8 +605,8 @@ def fn_readFileIntoArrays
 		dim list_balanceN(0)
 		dim list_billPatientReason$(0)*256
 		dim list_claimNotes$(0)*512
-		dim list_fileNo$(0)*512
-		dim list_isNewN(0)
+		! dim list_fileNo$(0)*512
+		! dim list_isNewN(0)
 		
 		mat list_facilityName$(0)
 		mat list_providerName$(0)
@@ -635,8 +635,8 @@ def fn_readFileIntoArrays
 		mat list_balanceN(0)
 		mat list_billPatientReason$(0)
 		mat list_claimNotes$(0)
-		mat list_fileNo$(0)
-		mat list_isNewN(0)
+		! mat list_fileNo$(0)
+		! mat list_isNewN(0)
 		
 		hIn=fn_init_csv_in(csvFieldCount,csvFile$)
 		do
@@ -679,12 +679,12 @@ def fn_readFileIntoArrays
 				fnAddOneC(mat list_billPatientReason$,item$(csv_billPatientReason))
 				fnAddOneC(mat list_claimNotes$,item$(csv_claimNotes))
 				
-				fnAddOneC(mat list_fileNo$,item$(csv_fileNo))
-				if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
-					fnAddOneN(mat list_isNewN,1)
-				else
-					fnAddOneN(mat list_isNewN,0)
-				end if
+				! fnAddOneC(mat list_fileNo$,item$(csv_fileNo))
+				! if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
+				! 	fnAddOneN(mat list_isNewN,1)
+				! else
+				! 	fnAddOneN(mat list_isNewN,0)
+				! end if
 				! /r
 			end if
 		loop
