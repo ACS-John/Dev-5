@@ -1,6 +1,6 @@
 ! REPLACE S:\acsTM\TMMRGINV
 on error goto ERTN
-library 'S:\Core\Library': fnxit
+library 'S:\Core\Library': fnxit,fngethandle
 ! fntop(program$,cap$="Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]" ")
 dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4
 dim arta(2) ! ,ga(10)
@@ -16,8 +16,8 @@ dim inv_amt(30)
 dim tmwk_sc(30)
 dim ct(30)
 dim tmwk2_sc(30)
-open #h_artrans:=12: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
-open #h_tmtrans:=2: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative
+open #h_artrans:=fngethandle: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
+open #h_tmtrans:=fngethandle: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,outIn,relative
 open #h_clmstr:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
 open #h_tmtraddr:=4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative
 do  ! r: main loop
@@ -79,7 +79,7 @@ do  ! r: main loop
 		if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
 		arta(2)=lar
 		if arta(1)=0 then arta(1)=lar
-		rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar
+		! rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar norec ignores
 		ar1=ar1+amt
 	end if
 	L800: !

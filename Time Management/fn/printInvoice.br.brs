@@ -75,7 +75,7 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 			if ebilling then
 				pr #out: "[pos(+0,+7)][PUSH][LEFT]"&desc$(j1)&"[POP][RIGHT][pos(+0,+55)]"&cnvrt$("pic(ZZZ,ZZ#.##)",amt(j1))
 			else
-				pr #out,using "Form POS 1,C 58,PIC(---,---,---.--)": desc$(j1),amt(j1)
+				pr #out,using "Form POS 1,C 58,PIC(---,---,---.--)": rtrm$(desc$(j1)),amt(j1)
 			end if
 			total_amt+=amt(j1)
 		else
