@@ -34,10 +34,10 @@ Ertn: !
 		errFieldPos$(3)=' 7,5,C 30,[E]' : errFieldText$(3)="3. Quit to MAIN MENU"
 		errFieldPos$(4)=' 8,5,C 30,[E]' : errFieldText$(4)="4. Exit"
 		errFieldPos$(5)=' 9,5,C 30,[E]' : errFieldText$(5)="5. Restart this Program"
-		errFieldPos$(6)='12,5,C 30,[E]' : errFieldText$(6)="6. BRWiki Lookup (online help)"
+		errFieldPos$(6)='10,5,C 30,[E]' : errFieldText$(6)="6. BRWiki Lookup (online help)"
 		if env$('acsDeveloper')<>'' then
-			errFieldPos$(7)='10,5,C 30,[E]' : errFieldText$(7)="7. Proc Reload"
-			errFieldPos$(8)='11,5,C 30,[E]' : errFieldText$(8)="8. Reload and Run"
+			errFieldPos$(7)='11,5,C 30,[E]' : errFieldText$(7)="7. Proc Reload"
+			errFieldPos$(8)='12,5,C 30,[E]' : errFieldText$(8)="8. Reload and Run"
 		end if
 		rinput #err_win,select mat errFieldPos$,attr '[L]': mat errFieldText$
 		errSelection=curfld
