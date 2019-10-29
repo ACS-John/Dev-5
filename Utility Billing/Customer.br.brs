@@ -132,7 +132,7 @@ def library fnCustomer(x)
 		end if 
 
 		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
-		rewrite #h_customer_1,using form$(h_customer_1),key=z$: mat customer$,mat customerN
+		rewrite #h_customer_1,using form$(h_customer_1),key=x$: mat customer$,mat customerN
 		! rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
 		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
