@@ -1,7 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________             
-14:13 10/19/2019	CO	5.74212  
-2:12 PM 10/29/2019	UB	Fixed rewrite to change account number in Customer 
+12:25 10/19/2019	CO	5.74212  
 12:23 PM 10/28/2019	UB	Fixed a misspelling that caused the Past Due and Turn Off List to not be selectable 
 8:51 AM 10/28/2019	CO	2nd user license added for client 3610 
 4:56 PM 10/23/2019	PR	Fixed potential 4272 error when printing report in Payroll Check History 
