@@ -1,12 +1,11 @@
 [Q]\UBmstr\MeterLocation.h[cno]  ,  loc_  , 1
-[Q]\UBmstr\MeterLocationIdx1.h[cno] ,  locationID
-[Q]\UBmstr\MeterLocationIdx2.h[cno] ,  name
-[Q]\UBmstr\MeterLocationIdx3.h[cno] ,  activeCustomer
-[Q]\UBmstr\MeterLocationIdx4.h[cno] ,  activeCustomer/serviceId
-[Q]\UBmstr\MeterLocationIdx5.h[cno] ,  locationID/serviceId
+[Q]\UBmstr\MeterLocationIdx1.h[cno]   ,  locationID
+[Q]\UBmstr\MeterLocationIdx2.h[cno]-u ,  name
+[Q]\UBmstr\MeterLocationIdx3.h[cno]   ,  activeCustomer
+[Q]\UBmstr\MeterLocationIdx4.h[cno]   ,  activeCustomer/serviceId
+[Q]\UBmstr\MeterLocationIdx5.h[cno]   ,  locationID/serviceId
 recl=125
 ===================================================
-! Name Index needs to be (CaseIgnored) - manually handled outside fileio for now.
 locationID         ,    Location ID         ,  N  11      , !     SPos=1   Required=True
 name$              ,    Meter Address       ,  C  30      , !     SPos=12  Required=True
 activeCustomer$    ,    Current Customer    ,  C  10      , !     SPos=42  combof(ignored,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)

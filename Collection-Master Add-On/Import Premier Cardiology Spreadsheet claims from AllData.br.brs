@@ -1,6 +1,14 @@
 on error goto Ertn
 fn_setup
 fnTop(program$)
+fn_premierCardiologyImport
+fnXit
+def library fnPremierCardiologyImport(; sourceId$)
+	if ~setup then let fn_setup
+	fnPremierCardiologyImport=fn_premierCardiologyImport( sourceId$)
+fnend
+def  fn_premierCardiologyImport(; sourceId$)
+if sourceId$='' then sourceId$='AllData'
 ! r: main flow
 Screen1: !
 	dim csvFile$*512
@@ -8,13 +16,19 @@ Screen1: !
 	fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCE01001')
 	fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
 	fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
-	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$)=99 then
-		goto Xit
+	fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$)
+	fnreg_read(env$('program_caption')&'.priorityText',priorityText$)
+	fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
+	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$,priorityColumn$,priorityText$,priorityDiaryCode$)=99 then
+		goto PciXit
 	else
 		fnreg_write(env$('program_caption')&'.csvFile',csvFile$)
 		fnreg_write(env$('program_caption')&'.starting fileno',sFileNo$)
 		fnreg_write(env$('program_caption')&'.forw no',forwNo$)
 		fnreg_write(env$('program_caption')&'.enableImport',enableImport$)
+		fnreg_write(env$('program_caption')&'.priorityColumn',priorityColumn$)
+		fnreg_write(env$('program_caption')&'.priorityText',priorityText$)
+		fnreg_write(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
 
 
 
@@ -43,7 +57,7 @@ Screen1: !
 		if csv_patientId=0 then
 			pr 'invalid file.  No "Patient ID" column.';bell
 			pause
-			goto Xit
+			goto PciXit
 		end if
 		
 		dim csvPath$*256
@@ -93,7 +107,7 @@ include: filenamesPopUpperCase
 		loop
 	end if
 ! /r
-Finis: ! r:
+Finis: ! 
 	fn_pr_hOut('0[tab]H[tab]lineCount='&str$(lineCount))
 	fn_close_csv_in( 1)
 	close #hOut:
@@ -126,11 +140,13 @@ Finis: ! r:
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
 		! msgbox('Success on '&csvFile$)
 	end if
-goto Xit ! /r
+	goto PciXit ! /r
+	PciXit: !
+fnend
 
 
 
-def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$; ___,returnN,rc,lc)
+def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&priorityColumn$,&priorityText$,&priorityDiaryCode$; ___,returnN,rc,lc)
 	! function returns 99 if Cancel
 	IF ~Ask_File1_Setup then
 		dim Af1_Data_Fil_Prior$*256

@@ -1,0 +1,8 @@
+SHARE\FORMULA.INT, formula_ , 0
+SHARE\FORMULA.IDX, letter,number
+
+recl=212
+===================================================
+letter       ,Letter Code                         ,     C    8 , ! Spos=   1
+number       ,Number                              ,     BH   4 , ! Spos=   9
+formula      ,Formula                             ,     C  200 , ! Spos=  

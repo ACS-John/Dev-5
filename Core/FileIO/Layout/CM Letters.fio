@@ -1,0 +1,10 @@
+SHARE\DIARYCDSEC.INT, dcs_ , 0
+SHARE\DIARYCDSEC.IDX, diarycdkey/groupcode
+
+recl=12
+===================================================
+diarycdkey   ,Diary Code                     , BH    3  , ! SPos=1
+groupcode    ,Group Code or User Initials    , C     3  , ! SPos=4
+add          ,Add                            , N     1  , ! SPos=7
+del          ,Delete                         , N     1  , ! SPos=8
+filler_9     ,                               , C     4  , ! SPos=9

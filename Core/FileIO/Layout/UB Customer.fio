@@ -1,12 +1,11 @@
-[Q]\UBmstr\Customer.h[cno],  c_  , 0
-[Q]\UBmstr\ubIndex.h[cno] ,  account
-[Q]\UBmstr\ubIndx2.h[cno] ,  alphaSort
-[Q]\UBmstr\ubIndx3.h[cno] ,  meterAddress
-[Q]\UBmstr\ubIndx4.h[cno] ,  name
-[Q]\UBmstr\ubIndx5.h[cno] ,  route/sequence 
+[Q]\UBmstr\Customer.h[cno]  ,  c_  , 0
+[Q]\UBmstr\ubIndex.h[cno]   ,  account
+[Q]\UBmstr\ubIndx2.h[cno]   ,  alphaSort
+[Q]\UBmstr\ubIndx3.h[cno]-u ,  meterAddress
+[Q]\UBmstr\ubIndx4.h[cno]-u ,  name
+[Q]\UBmstr\ubIndx5.h[cno]   ,  route/sequence 
 recl=2067
 ===================================================
-! meterAddress Index needs to be (CaseIgnored) - manually handled outside fileio for now.
 ! Some of the old dims:   dim extra(23)
 account           ,Account Key                                               ,  C    10    , ! SPos=   1 EPos= 10   aka=z$,x$
 meterAddress      ,Meter Address                                             ,  C    30    , ! SPos=  11 EPos= 40   aka=e$(1)

@@ -1,0 +1,34 @@
+SHARE\DIARYCD.INT, dc_ , 0
+SHARE\DIARYCD.IDX, recno
+
+recl=12
+===================================================
+diary_des        ,Description                       ,C  50 , ! SPos=  1
+document01       ,Automatic Document 01             ,C   8 , ! SPos= 51
+document02       ,Automatic Document 02             ,C   8 , ! SPos= 59
+document03       ,Automatic Document 03             ,C   8 , ! SPos= 67
+document04       ,Automatic Document 04             ,C   8 , ! SPos= 75
+document05       ,Automatic Document 05             ,C   8 , ! SPos= 83
+document06       ,Automatic Document 06             ,C   8 , ! SPos= 91
+document07       ,Automatic Document 07             ,C   8 , ! SPos= 99
+document08       ,Automatic Document 08             ,C   8 , ! SPos=107
+document09       ,Automatic Document 09             ,C   8 , ! SPos=115
+document10       ,Automatic Document 10             ,C   8 , ! SPos=123
+finan01          ,Automatic Disbursement 01         ,BH  2 , ! SPos=131
+finan02          ,Automatic Disbursement 02         ,BH  2 , ! SPos=133
+finan03          ,Automatic Disbursement 03         ,BH  2 , ! SPos=135
+finan04          ,Automatic Disbursement 04         ,BH  2 , ! SPos=137
+finan05          ,Automatic Disbursement 05         ,BH  2 , ! SPos=139
+finan06          ,Automatic Disbursement 06         ,BH  2 , ! SPos=141
+finan07          ,Automatic Disbursement 07         ,BH  2 , ! SPos=143
+finan08          ,Automatic Disbursement 08         ,BH  2 , ! SPos=145
+finan09          ,Automatic Disbursement 09         ,BH  2 , ! SPos=147
+finan10          ,Automatic Disbursement 10         ,BH  2 , ! SPos=149
+recno            ,Diary Code ###                    ,BH  3 , ! SPos=151
+autodel          ,Automatically Delete (Y/N)        ,C   1 , ! SPos=154
+queue            ,Default Queue                     ,C   8 , ! SPos=155
+protected        ,Protect from Queue Management     ,C   1 , ! SPos=163
+span             ,Span                              ,BH  3 , ! SPos=164
+holiskip         ,Skip Holidays and Weekends        ,N   1 , ! SPos=167
+category         ,Category                          ,C  30 , ! SPos=168
+filler_198       ,(Unused)                          ,C   1 , ! SPos=198

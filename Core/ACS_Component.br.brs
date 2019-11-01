@@ -1074,7 +1074,7 @@ def fn_ace_rd_multiline
 	fn_remove_crlf(resp$(respc))
 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
 fnend
-def fn_ace_rd_picbut
+def fn_ace_rd_picbut(; ___,lyne,ps,comkey,height,width,container,tabcon,default,cancel,txt$*256,path1$*300,tt$*400)
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	comkey=val(control$(4))
@@ -1088,6 +1088,16 @@ def fn_ace_rd_picbut
 	path1$=control$(12)
 	! path2$=control$(13)
 	tt$=control$(14)
+	pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
+	
+	
+		if tt$<>'' then
+			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen), help '4;'&tt$&';': trim$(txt$)
+		else
+			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
+		end if
+	
+	
 fnend
 def fn_ace_rd_cmdkey
 	dim spec$*255
