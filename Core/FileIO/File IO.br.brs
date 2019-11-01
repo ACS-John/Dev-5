@@ -1,4 +1,7 @@
 library 'S:\Core\Library.br': fnTop,fnXit,fnGetHandle
+if env$('acsdeveloper')<>'' then 
+	setenv('CM_Core_Initialized','')  !  forces File IO Layouts to update without restarting
+end if
 fnTop(program$)
 open  #hProc:=fnGetHandle: 'name=fileioproc'&session$&'.$$$,replace',display,output
 ! open  #hProc:=fnGetHandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output

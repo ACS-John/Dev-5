@@ -1,7 +1,6 @@
 [Q]\UBmstr\MeterType.h[cno]  ,  type_  , 1
-[Q]\UBmstr\MeterTypeIdx.h[cno] ,  code
+[Q]\UBmstr\MeterTypeIdx.h[cno]-u ,  code
 ===================================================
-! Name Index needs to be (CaseIgnored) - manually handled outside fileio for now.
 key                ,    Code                ,  C   5      , !     SPos=1   Required=True
 name$              ,    Description         ,  C  40      , !     SPos=6   
 readingMultiplier$ ,    Reading multiplier  ,  C   9      , !     SPos=    

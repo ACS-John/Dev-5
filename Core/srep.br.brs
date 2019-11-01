@@ -1,5 +1,6 @@
 dim tmp$*1024
-tmp$='"xx more xx", ''ad more ad'', this is more "aftd"  more more'
+! tmp$='more "xx more xx",  _____x ''ad more _____x ad'', this is more "aftd"  more more'
+tmp$='more "xx more xx", ''ad more ad'', this is more "aftd"  more more'
 pr 'before: *'&tmp$&'*'
 pr 'after:  *'&fn_srepExcludeStringLiterals$(tmp$,'more','less')&'*'
 end
@@ -39,17 +40,18 @@ def fn_srepExcludeStringLiterals$*1024(in$*1024,srepFrom$,srepTo$; ___,return$*1
 			map$(x:x)='_'
 		end if
 	nex x
+	pr ' in$=   *'&in$ &'*'
+	pr 'map$=   *'&map$&'*'
+	pause
 	posI=0
-	! pr ' in$=*'&in$ &'*'
-	! pr 'map$=*'&map$&'*'
-	! pause
-	posI=0
-	posI=srch(map$,'_',posI)
+	posI=pos(map$,'_',posI)
 	do while posI<=inLen and posI>0
 		posI=pos(map$,'_',posI+1) ! find next replaceable character
 		posX=pos(map$,'x',posI+1) ! find next end of replaceable characters
 		if posX>0 then posX-=1 else posX=inLen
 		return$(posI:posX)=srep$(in$(posI:posX),srepFrom$,srepTo$)
+		! pr posI,posX : pause
+		in$=return$
 	loop
 	fn_srepExcludeStringLiterals$=return$
 fnend

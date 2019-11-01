@@ -1,10 +1,8 @@
 [Q]\UBmstr\ubData\RateMst.h[cno],  r_  , 0
-[Q]\UBmstr\ubData\RateIdx1.h[cno] ,  service/code
-[Q]\UBmstr\ubData\RateIdx2.h[cno] ,  name
+[Q]\UBmstr\ubData\RateIdx1.h[cno],  service/code
+[Q]\UBmstr\ubData\RateIdx2.h[cno],  name
 recl=374
 ===================================================
-! meterAddress Index needs to be (CaseIgnored) - manually handled outside fileio for now.
-! Some of the old dims:   dim extra(23)
 service$                ,Service Code                                           ,  C    2    , ! SPos=   1 
 code$                   ,Rate Code                                              ,  G    2    , ! SPos=   3 
 name$                   ,Description                                            ,  C   50    , ! SPos=   6

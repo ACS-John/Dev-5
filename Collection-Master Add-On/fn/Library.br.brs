@@ -1,3 +1,7 @@
+def library fnPremierCardiologyImport(; sourceId$)
+	library 'Collection-Master Add-On\Import Premier Cardiology Spreadsheet claims from AllData.br': fnPremierCardiologyImport
+	fnPremierCardiologyImport=fnPremierCardiologyImport( sourceId$)
+fnend
 def library fnClaimFolder$*128(fileno$*128)
 	library 'Collection-Master Add-On\fn\claimFolder.br': fnClaimFolder$
 	fnClaimFolder$=fnClaimFolder$(fileno$)
