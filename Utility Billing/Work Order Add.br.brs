@@ -102,10 +102,10 @@ def library fnworkOrderAdd(z$*10)
 	resp$(respc+=1)=""
 	fnLbl(lc+=1,1,"Forwarding City St Zip:",23,1)
 	fnTxt(lc,25,30)
-	resp$(resp_comment:=respc+=1)=""
+	resp$(respc+=1)=""
 	fnLbl(lc+=1,1,"Comments:",23,1)
 	fnTxt(lc,25,50,280)
-	resp$(respc+=1)=""
+	resp$(resp_comment:=respc+=1)=""
 	fnCmdKey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
 	fnCmdKey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main customer record.")
