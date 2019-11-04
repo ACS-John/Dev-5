@@ -76,9 +76,9 @@ do  ! r: main loop
 		L690: !
 		lar=lrec(h_artrans)+1
 		write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',rec=lar,reserve: k$,iv$,b(4),amt,amt,0,1,0,"CHARGE",0 duprec L690
-		if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
-		arta(2)=lar
-		if arta(1)=0 then arta(1)=lar
+		! if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
+		! arta(2)=lar
+		! if arta(1)=0 then arta(1)=lar
 		! rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar norec ignores
 		ar1=ar1+amt
 	end if

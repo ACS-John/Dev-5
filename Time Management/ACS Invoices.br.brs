@@ -3,7 +3,7 @@ fn_setup
 	fntop(program$)
 	client_id_sage_ax=3811
 	client_id_brc=90
-	enableMinimumMonthlyBill=0
+	enableMinimumMonthlyBill=1
 	dim sys_name$(40)*55,client_id$*5,b(8),iv$*12,skln$*80 ! co$(4)*40,
 	dim client_addr$(3)*30
 	dim inpX(7)
@@ -323,8 +323,8 @@ def fn_print_inv ! pr INVOICE
 		if b3>0 and sum(mat inv_amt)<100 then 
 			inv_line+=1
 			if inv_line<30 and client_id<>client_id_sage_ax and client_id<>client_id_brc and client_id<>4625 then 
-				inv_item$(inv_line)='Minimum Monthly Billing of $250.00'
-				inv_amt(inv_line)=250-sum(mat inv_amt) : b3+=inv_amt(inv_line)
+				inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
+				inv_amt(inv_line)=100-sum(mat inv_amt) : b3+=inv_amt(inv_line)
 				inv_service_code(inv_line)=19
 				inv_gl$(inv_line)='  0  1160  0'
 			end if  ! inv_line<30
@@ -349,6 +349,7 @@ def fn_print_inv ! pr INVOICE
 		else if ebilling then 
 			! open pdf 
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
+			pr 'creating:  '&pdf_filename_final$ 
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
@@ -359,6 +360,8 @@ def fn_print_inv ! pr INVOICE
 			! pause
 			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
+			exec 'sy -c "'&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
+			pause
 		end if 
 		invoice_number+=1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 		! end if
