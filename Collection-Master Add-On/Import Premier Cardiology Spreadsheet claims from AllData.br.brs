@@ -170,6 +170,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	lc=0 ! line count
 	rc=0 ! response counter
 	dim resp$(20)*1024
+	lc+=1
 	fnLbl(lc+=1,col1pos,'Source Text (Tab delimited) File:', col1len,1)
 	fnTxt(lc,col2pos,42,80,0,'1070',0,'Save the file provided by Premier Cardiology as Text (Tab delimited) and select it here.')
 	resp$(resp_sourceFile:=rc+=1)=sourceFile$
@@ -179,10 +180,25 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	fnTxt(lc,col2pos,8,8,0,'1000',0,'Select the starting fileno.  Should be a few letters followed by several digits of numbers with leading zeros.')
 	resp$(resp_sFileNo:=rc+=1)=sFileNo$
 
-	lc+=1
 	fnLbl (lc+=1,col1pos,'Forwarder Number:', col1len,1)
 	fncombof('masforw',lc,col2pos,width,'MASFORW//8',1,3,4,10, '',1,1,'Select the Forwarder to assign to imported claims.',0,0,'BH')
 	resp$(resp_forwNo:=rc+=1)=forwNo$
+
+	lc+=1
+	
+	fnLbl (lc+=1,col1pos,'Priority Diary Code:', col1len,1)
+	! fncombof('letter',lc,col2pos,width,'SHARE\LETTERS',78,8,5,27, 'SHARE\LETTERS.Y',1,0,'Diary Code to be added if Priority Text found in Priority Column.')
+	fnTxt(lc,col2pos,8,0,0,'',0,'Diary Code to be added if Priority Text found in Priority Column.')
+	resp$(resp_priDiaryCode:=rc+=1)=priorityDiaryCode$
+
+	fnLbl (lc+=1,col1pos,'Priority Column:', col1len,1)
+	fnTxt(lc,col2pos,8,40,20,'',0,'Select the column heading of the importing file which the Text will appear in to trigger the priority diary code.')
+	resp$(resp_priDiaryColumn:=rc+=1)=priorityColumn$
+
+	fnLbl (lc+=1,col1pos,'Priority Text:', col1len,1)
+	fnTxt(lc,col2pos,8,80,40,'',0,'Select the case insensetive text that, if found in the Priority Column will trigger the addition of the Priority Diary Code.')
+	resp$(resp_priDiaryText:=rc+=1)=priorityText$
+
 
 	lc+=1
 	fnChk(lc+=1,col2pos+1,'Enable Automated Import:',1)
@@ -197,6 +213,9 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		sourceFile$	=resp$(resp_sourceFile)
 		sFileNo$   	=resp$(resp_sFileNo)
 		forwNo$    	=resp$(resp_forwNo)(1:pos(resp$(resp_forwNo),' ')-1)
+		priorityDiaryCode$	=resp$(resp_priDiaryCode)
+		priorityColumn$			=resp$(resp_priDiaryColumn)
+		priorityText$				=resp$(resp_priDiaryText)
 		enableImport$=resp$(resp_enableImport)
 		if enableImport$='True' then let enableImport=1 else enableImport=0
 		if sourceFile$(len(sourceFile$):len(sourceFile$))='\' then
