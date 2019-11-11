@@ -1,0 +1,25 @@
+SHARE\INVOICE.INT, inv_ , 0
+SHARE\INVOICE.IDX, fileno/invDate/invNo
+
+===================================================
+
+fileno        ,File number                       ,C   8      ,                , ! SPos=  1  C                               
+invDate       ,Invoice date                      ,C   8      , date(yy/mm/dd) , ! SPos=  9  PIC(##/##/##)  date(yy/mm/dd)   
+invNo         ,Invoice number                    ,C  20      ,                , ! SPos= 17  C                               
+desc          ,Invoice description               ,C  20      ,                , ! SPos= 37  C                               
+origAmt       ,Original invoice amount           ,PD  6.2    ,                , ! SPos= 57  PD                              
+curBal        ,Current invoice balance           ,PD  6.2    ,                , ! SPos= 63  PD                              
+dno           ,Debtor number                     ,N   3      ,                , ! SPos= 69  N                               
+chargeCode    ,Unit charge code 10 digit code    ,C  10      ,                , ! SPos= 72  C                               
+unitCount     ,Number of units                   ,BH  3      ,                , ! SPos= 82  BH                              
+rate          ,Rate per unit                     ,PD  6.2    ,                , ! SPos= 85  PD                              
+serviceDate   ,Service start date                ,BH  4      ,                , ! SPos= 91  BH             DATE(CCYY/MM/DD) 
+serviceEndDate,Service end date                  ,BH  4      ,                , ! SPos= 95  BH             DATE(CCYY/MM/DD) 
+description   ,Service description               ,C  60      ,                , ! SPos= 99  C                               
+cpt           ,Current procedure terminology     ,C  10      ,                , ! SPos=159  C                               
+icd           ,Diagnosis code                    ,C  10      ,                , ! SPos=169  C              [bank,emp,etc]                 
+vendorRelation,Vendor Relation                   ,N   2      ,                , ! SPos=179  N              [checking,savings]                 |
+vendorType    ,Ventor Type                       ,C  10      ,                , ! SPos=181  C                               
+vendorNumber  ,Vendor Number                     ,BH  3      ,                , ! SPos=191  BH                              
+vendorAcctNo  ,Vendor Account Number             ,C  30      ,                , ! SPos=194  C                               
+
