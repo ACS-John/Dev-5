@@ -1,7 +1,7 @@
 on error goto Ertn
 fn_setup
 fnTop(program$)
-fn_premierCardiologyImport
+fn_premierCardiologyImport('AllData')
 fnXit
 def library fnPremierCardiologyImport(; sourceId$)
 	if ~setup then let fn_setup
@@ -9,28 +9,41 @@ def library fnPremierCardiologyImport(; sourceId$)
 fnend
 def  fn_premierCardiologyImport(; sourceId$)
 if sourceId$='' then sourceId$='AllData'
-! r: main flow
+
 Screen1: !
 	dim csvFile$*512
-	fnreg_read(env$('program_caption')&'.csvFile',csvFile$, 'D:\CM\Stern and Stern\New_format_Premier_Cardiology.xlsx')
-	fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCE01001')
-	fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
-	fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
-	fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$)
-	fnreg_read(env$('program_caption')&'.priorityText',priorityText$)
-	fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
+	! r: read screen answers
+	if sourceId$='direct' then
+		fnreg_read(env$('program_caption')&'.csvFile',csvFile$, 'D:\CM\Stern and Stern\Premier Cardiology (direct)\Copy of Stern Collections sept 10 2019.txt')
+		fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCJ20001')
+		fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
+		fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
+		fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$,'PRIINSNAME')
+		fnreg_read(env$('program_caption')&'.priorityText',priorityText$,'Patient Has Check')
+		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$,'222')
+	else
+		fnreg_read(env$('program_caption')&'.csvFile',csvFile$, 'D:\CM\Stern and Stern\New_format_Premier_Cardiology.xlsx')
+		fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCE01001')
+		fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
+		fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
+		fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$)
+		fnreg_read(env$('program_caption')&'.priorityText',priorityText$)
+		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
+	end if
+	! /r
 	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$,priorityColumn$,priorityText$,priorityDiaryCode$)=99 then
 		goto PciXit
 	else
+		! r: write screen answers
 		fnreg_write(env$('program_caption')&'.csvFile',csvFile$)
 		fnreg_write(env$('program_caption')&'.starting fileno',sFileNo$)
 		fnreg_write(env$('program_caption')&'.forw no',forwNo$)
 		fnreg_write(env$('program_caption')&'.enableImport',enableImport$)
+
 		fnreg_write(env$('program_caption')&'.priorityColumn',priorityColumn$)
 		fnreg_write(env$('program_caption')&'.priorityText',priorityText$)
 		fnreg_write(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
-
-
+		! /r
 
 		! r: gather Forwarder data
 		if ~hForw or file(hForw)=-1 then
@@ -39,41 +52,57 @@ Screen1: !
 		read #hForw,using forwFormAll$,rec=val(forwNo$): mat forw$,mat forwN noRec Screen1
 		close #hForw:
 		str2mat(forw$(forw_city_state),mat cred_cs$, ',')
-		if udim(mat cred_cs$)<>2 then 
+		if udim(mat cred_cs$)<>2 then
 			pr 'udim(mat cred_cs$)<>2, udim(mat cred_cs$)=';udim(mat cred_cs$);' that is a problem.'
 			pause
 		end if
 		cred_cs$(1)=trim$(cred_cs$(1))&','
 		! /r
 
-
 		dim csvOrigional$*1024
 		csvOrigional$=csvFile$
 		fnCopy(csvFile$,csvFile$&'.bak')
 		csvFile$=fn_removeExcessCRLF$(csvFile$)
-		fn_readFileIntoArrays
+		if sourceId$='AllData' then
+			fn_alldata_readFileIntoArrays
+		else if sourceId$='direct' then
+			fn_direct_readFileIntoArrays
+		else
 
-		hIn=fn_init_csv_in(csvFieldCount,csvFile$)
-		if csv_patientId=0 then
+			pr bell;'unrecognized sourceId$='&sourceId$ : pause
+			goto PciXit
+		end if
+
+		if sourceId$='AllData' then
+			hIn=fn_alldata_init_csv_in(csvFieldCount,csvFile$)
+		else
+			hIn=fn_direct_init_csv_in(csvFieldCount,csvFile$)
+		end if
+
+		if sourceId$='AllData' and csv_KEY=0 then
 			pr 'invalid file.  No "Patient ID" column.';bell
 			pause
 			goto PciXit
+		else if sourceId$='direct' and csv_KEY=0 then
+			pr 'invalid file.  No "acctNo" column.';bell
+			pause
+			goto PciXit
 		end if
-		
+
 		dim csvPath$*256
 		dim csvProg$*256
 		dim csvExt$*128
 		fnGetPp(csvFile$,csvPath$,csvProg$,csvExt$)
 		dim outFile$*256
 		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI'&'.csv','@::','')
-		hOut=fnGetHandle
 include: filenamesPushMixedCase
-		open #hOut: 'name='&outFile$&',recl=1024,replace',display,output
+		open #hOut:=fnGetHandle: 'name='&outFile$&',recl=1024,replace',display,output
 include: filenamesPopUpperCase
 		fn_pr_hOut('0[tab]H[tab]This file is "'&os_filename$(outFile$)&'"'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made by the "'&env$('program_caption')&'" (a Collection-Master Add-On program) on '&date$('mm/dd/ccyy')&' at '&time$&'.'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made from the source file: "'&csvFile$&'".'	)
 		fn_pr_hOut('0[tab]H[tab]from "'&os_filename$(csvOrigional$)&'"')
+		fn_pr_hOut('0[tab]H[tab]Detected file layout: '&sourceId$)
 		lineCount=0
 		do
 			dim line$*1024
@@ -83,21 +112,26 @@ include: filenamesPopUpperCase
 				dim item$(0)*512
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
-				item$(csv_fileNo)=fn_getFileNo$(forwNo$,item$(csv_patientId))
-				! if item$(csv_fileNo)<>list_fileNo$(lineCount) then 
-				! 	pr 'item fileno=';item$(csv_fileNo)
+				if sourceId$='allData' then
+					item$(csv_FILENO)=fn_allData_getFileNo$(forwNo$,item$(csv_KEY))
+				else if sourceId$='direct' then
+					item$(csv_FILENO)=fn_direct_getFileNo$(forwNo$,item$(csv_KEY))
+				end if
+				! if item$(csv_FILENO)<>list_fileNo$(lineCount) then
+				! 	pr 'item fileno=';item$(csv_FILENO)
 				! 	pr 'list fileno=';list_fileNo$(lineCount)
-				! 	pause ! 1124
+				! 	pause 
 				! end if
+				fn_set_mat_demographic(sourceId$,mat item$,mat demographic$)
 				item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
 				item$(csv_respName)=srep$(item$(csv_respName),', ',',')
 				item$(csv_patientName)=srep$(item$(csv_patientName),',','/')
 				item$(csv_respName)=srep$(item$(csv_respName),',','/')
-				
-				fn_pr_hOut('0[tab]H[tab] XXX lineCount: '&str$(lineCount)	&' XXX fileNo: '&item$(csv_fileNo)&' XXX')
+
+				fn_pr_hOut('0[tab]H[tab] XXX lineCount: '&str$(lineCount)	&' XXX fileNo: '&item$(csv_FILENO)&' XXX')
 				item$(csv_invoiceNo)=item$(csv_claimId)&'-'&date$(days(item$(csv_serviceDate),'mm/dd/ccyy'),'ccyymmdd')
-	
-				fn_writeDemographics(hOut,mat item$)
+
+				fn_writeDemographics(hOut,mat item$,mat demographic$)
 				fn_writePaperless(hOut,mat item$,lineCount,csvFile$)
 				fn_writeInvoices(hOut,mat item$)
 				fn_writeInfinity(hOut,mat item$)
@@ -106,8 +140,8 @@ include: filenamesPopUpperCase
 			end if
 		loop
 	end if
-! /r
-Finis: ! 
+
+Finis: !
 	fn_pr_hOut('0[tab]H[tab]lineCount='&str$(lineCount))
 	fn_close_csv_in( 1)
 	close #hOut:
@@ -133,14 +167,14 @@ Finis: !
 		execute 'sy -c -M F:\clsinc\batch\cm_edi_pcs.cmd'
 	else
 		dim mbText$*2048
-		mbText$='New Claims: '&tab$&str$(countNewClaim) 
-		mbText$(inf:inf)=lf$&'Claim Updates: '&tab$&str$(countUpdateClaim) 
+		mbText$='New Claims: '&tab$&str$(countNewClaim)
+		mbText$(inf:inf)=lf$&'Claim Updates: '&tab$&str$(countUpdateClaim)
 		mbText$(inf:inf)=lf$&'Sucessfully created a file for CM EDI Import:'
 		mbText$(inf:inf)=lf$&outFile$
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
 		! msgbox('Success on '&csvFile$)
 	end if
-	goto PciXit ! /r
+	goto PciXit
 	PciXit: !
 fnend
 
@@ -172,7 +206,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	dim resp$(20)*1024
 	lc+=1
 	fnLbl(lc+=1,col1pos,'Source Text (Tab delimited) File:', col1len,1)
-	fnTxt(lc,col2pos,42,80,0,'1070',0,'Save the file provided by Premier Cardiology as Text (Tab delimited) and select it here.')
+	fnTxt(lc,col2pos,42,512,0,'1070',0,'Save the file provided by Premier Cardiology as Text (Tab delimited) and select it here.')
 	resp$(resp_sourceFile:=rc+=1)=sourceFile$
 
 	lc+=1
@@ -185,10 +219,10 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	resp$(resp_forwNo:=rc+=1)=forwNo$
 
 	lc+=1
-	
+
 	fnLbl (lc+=1,col1pos,'Priority Diary Code:', col1len,1)
-	! fncombof('letter',lc,col2pos,width,'SHARE\LETTERS',78,8,5,27, 'SHARE\LETTERS.Y',1,0,'Diary Code to be added if Priority Text found in Priority Column.')
-	fnTxt(lc,col2pos,8,0,0,'',0,'Diary Code to be added if Priority Text found in Priority Column.')
+	fncombof('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
+	! fnTxt(lc,col2pos,8,0,0,'',0,'Diary Code to be added if Priority Text found in Priority Column.')
 	resp$(resp_priDiaryCode:=rc+=1)=priorityDiaryCode$
 
 	fnLbl (lc+=1,col1pos,'Priority Column:', col1len,1)
@@ -213,7 +247,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		sourceFile$	=resp$(resp_sourceFile)
 		sFileNo$   	=resp$(resp_sFileNo)
 		forwNo$    	=resp$(resp_forwNo)(1:pos(resp$(resp_forwNo),' ')-1)
-		priorityDiaryCode$	=resp$(resp_priDiaryCode)
+		priorityDiaryCode$	=resp$(resp_priDiaryCode)(1:pos(resp$(resp_priDiaryCode),' ')-1)
 		priorityColumn$			=resp$(resp_priDiaryColumn)
 		priorityText$				=resp$(resp_priDiaryText)
 		enableImport$=resp$(resp_enableImport)
@@ -249,27 +283,77 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	fn_askScreen1=returnN
 fnend
 
+def fn_set_mat_demographic(sourceId$,mat demographic$,mat item$,forwNo$,mat forw$)
+	if ~setup_matDemographic then
+		setup_matDemographic=1
+		demographicCount=0
+
+		demographic_firm_fileno   	=demographicCount+=1
+		demographic_forw_refno    	=demographicCount+=1
+		demographic_forw_fileno   	=demographicCount+=1
+		demographic_sender_id     	=demographicCount+=1
+		demographic_cred_name     	=demographicCount+=1
+		demographic_cred_street   	=demographicCount+=1
+		demographic_cred_city     	=demographicCount+=1
+		demographic_cred_st       	=demographicCount+=1
+		demographic_cred_zip      	=demographicCount+=1
+		demographic_balance       	=demographicCount+=1
+		demographic_opened_amt    	=demographicCount+=1
+		demographic_date_debt     	=demographicCount+=1
+		demographic_orgcrd        	=demographicCount+=1
+		demographic_orig_claim    	=demographicCount+=1
+		demographic_services_amt  	=demographicCount+=1
+		demographic_orgact        	=demographicCount+=1
+		demographic_cred_xline    	=demographicCount+=1
+
+
+	end if
+	mat demographic$(demographicCount)
+	if sourceId$='allData' then
+		demographic$(demographic_firm_fileno   )=item$(csv_FILENO)				
+		demographic$(demographic_forw_refno    )=item$(csv_KEY)			
+		demographic$(demographic_forw_fileno   )=item$(csv_KEY)			
+		demographic$(demographic_sender_id     )=forwNo$									
+		demographic$(demographic_cred_name     )=forw$(forw_name)					
+		demographic$(demographic_cred_street   )=forw$(forw_addr)					
+		demographic$(demographic_cred_city     )=cred_cs$(1)							
+		demographic$(demographic_cred_st       )=cred_cs$(2)							
+		demographic$(demographic_cred_zip      )=forw$(forw_zip)
+		demographic$(demographic_balance       )=tmpPatientBalance$      	
+		demographic$(demographic_opened_amt    )=tmpPatientBalance$      	
+		demographic$(demographic_date_debt     )=item$(csv_serviceDate)  	
+		demographic$(demographic_orgcrd        )=item$(csv_PROVIDER) 	
+		demographic$(demographic_orig_claim    )=tmpOrigionalClaimAmount$	
+		demographic$(demographic_services_amt  )=tmpOrigionalClaimAmount$	
+		demographic$(demographic_orgact        )=item$(csv_KEY)    	
+		demographic$(demographic_cred_xline    )=item$(csv_FACILITY) 	
+	else if sourceId$='direct' then
+	else
+		pr 'unrecognized sourceId:'&sourceId$
+		pause
+	end if
+fnend
 
 ! functions that format and Write out to the CM EDI file.
-def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZip$*64) ! requires local enumerations csv_*,mat cs$,forwNo$, etc
+def fn_writeDemographics(hOut,mat item$,mat demographic$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZip$*64) ! requires local enumerations csv_*,mat cs$,forwNo$, etc
 	if ~setup_wd then
 		dim alreadyAddedDemographicsKey$(0)
 		mat alreadyAddedDemographicsKey$(0)
 		setup_wd=1
 	end if
-	
-	whichAdk=srch(mat alreadyAddedDemographicsKey$,item$(csv_fileNo))
+
+	whichAdk=srch(mat alreadyAddedDemographicsKey$,item$(csv_FILENO))
 	if whichAdk<=0 then
-		fnAddOneC(mat alreadyAddedDemographicsKey$,item$(csv_fileNo))
-		fn_pr_hOut('0[tab]H[tab]Demographics for '&item$(csv_fileNo))
+		fnAddOneC(mat alreadyAddedDemographicsKey$,item$(csv_FILENO))
+		fn_pr_hOut('0[tab]H[tab]Demographics for '&item$(csv_FILENO))
 		! r: CM EDI Record 101 / 102    New placement record. / Placement Record Update
-		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_patientId)))
-		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_patientId)))
+		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_KEY)))
+		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_KEY)))
 		tmpOrigionalClaimAmount$=tmpPatientBalance$
-		! if trim$(item$(csv_patientId))='448658' then pause
-		fn_add('FIRM_FILENO' 		,item$(csv_fileNo)		,1	)
-		fn_add('Forw_Refno' 		,item$(csv_patientId)			)
-		fn_add('Forw_Fileno'		,item$(csv_patientId)			) ! item$(csv_claimId)			) claimId is inconsistent within patient - good for invoice, not for forwarder file number, corrected 10/24/2019
+		! if trim$(item$(csv_KEY))='448658' then pause
+		fn_add('FIRM_FILENO' 		,item$(csv_FILENO)		,1	)
+		fn_add('Forw_Refno' 		,item$(csv_KEY)			)
+		fn_add('Forw_Fileno'		,item$(csv_KEY)			) ! item$(csv_claimId)			) claimId is inconsistent within patient - good for invoice, not for forwarder file number, corrected 10/24/2019
 		fn_add('SENDER_ID'  		,forwNo$									)
 		fn_add('CRED_NAME'   		,forw$(forw_name)					)
 		fn_add('CRED_STREET'		,forw$(forw_addr)					)
@@ -279,13 +363,13 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		fn_add('BALANCE'     		,tmpPatientBalance$      	)
 		fn_add('OPENED_AMT'  		,tmpPatientBalance$      	)
 		fn_add('DATE_DEBT'   		,item$(csv_serviceDate)  	)
-		fn_add('ORGCRD'      		,item$(csv_providerName) 	)
+		fn_add('ORGCRD'      		,item$(csv_PROVIDER) 	)
 		fn_add('ORIG_CLAIM'  		,tmpOrigionalClaimAmount$	)
 		fn_add('SERVICES_AMT'		,tmpOrigionalClaimAmount$	)
-		fn_add('ORGACT#'     		,item$(csv_patientId)    	)
-		fn_add('CRED_XLINE'  		,item$(csv_facilityName) 	)
-		! pr item$(csv_patientId) : pause
-		if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
+		fn_add('ORGACT#'     		,item$(csv_KEY)    	)
+		fn_add('CRED_XLINE'  		,item$(csv_FACILITY) 	)
+		! pr item$(csv_KEY) : pause
+		if fn_existingFileNo$(ForwNo$,item$(csv_KEY))='' then
 			countNewClaim+=1
 			fn_pr(101) ! new placement
 		else
@@ -298,10 +382,10 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		fncsz(item$(csv_respCsz),tmpCity$,tmpSt$,tmpZip$)
 		if item$(csv_patientName)=item$(csv_respName) then ! The Patient is Responsible for their own debt
 			! r: add Debtor 1 - the patient who is responsible to pay their own bill
-			fn_add('FIRM_FILENO' 	,item$(csv_fileNo)           ,1	)
+			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
 			fn_add('NUMBER'      	,'1'                            	)
 			fn_add('RELATION'   	,'MAIN'                         	)
-			fn_add('FORW_REFNO' 	,item$(csv_patientId)         	)
+			fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
 			fn_add('NAME'        	,item$(csv_respName)          	)
 			fn_add('STREET'      	,item$(csv_respAddress)       	)
 			fn_add('CITY'        	,tmpCity$                      	)
@@ -318,10 +402,10 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 			! /r
 		else ! The responsible person is not the same person as the patient
 			! r: add Debtor 1 - the Responsible person
-			fn_add('FIRM_FILENO' 	,item$(csv_fileNo)           ,1	)
+			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
 			fn_add('NUMBER'      	,'1'                            	)
 			fn_add('RELATION'   	,'MAIN'                         	)
-			fn_add('FORW_REFNO' 	,item$(csv_patientId)         	)
+			fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
 			fn_add('NAME'        	,item$(csv_respName)          	)
 			fn_add('STREET'      	,item$(csv_respAddress)       	)
 			fn_add('CITY'        	,tmpCity$                      	)
@@ -335,10 +419,10 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 			fn_pr(111)
 			! /r
 			! r: add Debtor 2 - the Patient
-			fn_add('FIRM_FILENO' 	,item$(csv_fileNo)           ,1	)
+			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
 			fn_add('NUMBER'      	,'2'                            	)
 			fn_add('RELATION'   	,'PATIENT'                     	)
-			fn_add('FORW_REFNO' 	,item$(csv_patientId)         	)
+			fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
 			fn_add('NAME'        	,item$(csv_patientName)       	)
 			fn_add('SSN'         	,item$(csv_social)             	)
 			fn_add('RESP_PARTY' 	,'N'                            	)
@@ -346,23 +430,23 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 			fn_pr(111, 1)
 			! /r
 		end if
-		
 
-		
+
+
 		! /r
 	end if
 fnend
 def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
-	fn_pr_hOut('0[tab]H[tab]Invoices for '&item$(csv_fileNo))
+	fn_pr_hOut('0[tab]H[tab]Invoices for '&item$(csv_FILENO))
 	invoiceOrigAmt$=str$(fnval(item$(csv_balance))+fnval(item$(csv_insurancePaid))+fnval(item$(csv_patientPaid)))
 	! CM EDI Record 180 Invoice File
-	fn_add('FORW_REFNO'    	,item$(csv_patientId)             ,1)
-	fn_add('FORW_REFNO'    	,item$(csv_patientId)             ,1)
-	fn_add('FIRM_FILENO'   	,item$(csv_fileNo)                 	)
+	fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
+	fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
+	fn_add('FIRM_FILENO'   	,item$(csv_FILENO)                 	)
 	fn_add('INV_DATE'      	,item$(csv_serviceDate)           	)
-	fn_add('DESCRIPTION'   	,item$(csv_providerName)          	)
+	fn_add('DESCRIPTION'   	,item$(csv_PROVIDER)          	)
 	fn_add('INV_DESC'     	,'CPT: '&item$(csv_cpt)             ) ! fnCptCode$(item$(csv_cpt))(1:20) 	)
-	fn_add('ACCT_NO'       	,item$(csv_facilityName)          	)
+	fn_add('ACCT_NO'       	,item$(csv_FACILITY)          	)
 	fn_add('DEBTOR_NO'     	,'1'                                	)
 	fn_add('CUR_BAL'       	,item$(csv_balance    )           	)
 	fn_add('SERVICE_DATE'  	,item$(csv_serviceDate)           	)
@@ -373,11 +457,11 @@ fnend
 def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
 	fn_writePaperlessOneLine('***From line ',str$(lineCount+1)&' of ') ! +1 to account for uncounted header line
 	fn_writePaperlessOneLine(sourceFile$(1:2),sourceFile$(3:inf))
-	fn_writePaperlessOneLine('    Facility Name:',item$(csv_facilityName     	))
-	fn_writePaperlessOneLine('    Provider Name:',item$(csv_providerName     	))
+	fn_writePaperlessOneLine('    Facility Name:',item$(csv_FACILITY     	))
+	fn_writePaperlessOneLine('    Provider Name:',item$(csv_PROVIDER     	))
 	fn_writePaperlessOneLine('    Patient Name :',item$(csv_patientName      	))
 	fn_writePaperlessOneLine('    Patient DOB  :',item$(csv_patientDOB       	))
-	fn_writePaperlessOneLine('       Patient Id:',item$(csv_patientId        	))
+	fn_writePaperlessOneLine('       Patient Id:',item$(csv_KEY        	))
 	fn_writePaperlessOneLine('     Resp Name   :',item$(csv_respName         	))
 	fn_writePaperlessOneLine('     Resp Address:',item$(csv_respAddress      	))
 	fn_writePaperlessOneLine('     Resp CSZ    :',item$(csv_respCsz           	))
@@ -400,17 +484,17 @@ def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
 	fn_writePaperlessOneLine('          Balance:',item$(csv_balance           	))
 	fn_writePaperlessOneLine('BillPatientReason:',item$(csv_billPatientReason	))
 	fn_writePaperlessOneLine('      Claim Notes:',item$(csv_claimNotes        	))
-	fn_writePaperlessOneLine('           FileNo:',item$(csv_fileNo            	))
+	fn_writePaperlessOneLine('           FileNo:',item$(csv_FILENO            	))
 	fn_writePaperlessOneLine('       Invoice No:',item$(csv_invoiceNo        	))
 fnend
 def fn_writePaperlessOneLine(comment$*256,comment2$*2048;___, which)
 	dim polWrote$(0)*2048
-	which=srch(mat polWrote$,item$(csv_patientId)&item$(csv_fileNo)&comment$&comment2$)
+	which=srch(mat polWrote$,item$(csv_KEY)&item$(csv_FILENO)&comment$&comment2$)
 	if which<=0 then
-		fnAddOneC(mat polWrote$,item$(csv_patientId)&item$(csv_fileNo)&comment$&comment2$)
+		fnAddOneC(mat polWrote$,item$(csv_KEY)&item$(csv_FILENO)&comment$&comment2$)
 		if trim$(comment2$)<>'' and comment2$<>'$0.00' then
-			fn_add('FORW_REFNO'   	,item$(csv_patientId)	        ,1)
-			fn_add('FIRM_FILENO'   	,item$(csv_fileNo)	          	)
+			fn_add('FORW_REFNO'   	,item$(csv_KEY)	        ,1)
+			fn_add('FIRM_FILENO'   	,item$(csv_FILENO)	          	)
 			fn_add('PDATE'         	,date$('mm/dd/ccyy') 	        	)
 			fn_add('PTIME'         	,time$                	        	)
 			fn_add('INITIALS'     	,''                    	        	)  ! leave blank for EDI and user id 1 as per EDI Help Manual
@@ -418,12 +502,12 @@ def fn_writePaperlessOneLine(comment$*256,comment2$*2048;___, which)
 			fn_pr(109)
 		end if
 	end if
-	
+
 fnend
 def fn_writeInfinity(hOut,mat item$)
 
-	fn_add('FORW_REFNO'    	,item$(csv_patientId)             ,1)
-	fn_add('FIRM_FILENO'   	,item$(csv_fileNo)                 	)
+	fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
+	fn_add('FIRM_FILENO'   	,item$(csv_FILENO)                 	)
 	fn_pr(134)
 fnend
 dim hLine$*2048,dLine$*2408
@@ -467,7 +551,7 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$; ___,return$,claimKey$*64,which,hClaim
 		dim efn_fileno$    		(0)*20
 		dim efn_forwFileNo$		(0)*20
 		dim efn_forwRefNo$		(0)*20
-		
+
 		mat efn_fileno$    		(0)
 		mat efn_forwFileNo$		(0)
 		mat efn_forwRefNo$		(0)
@@ -486,6 +570,13 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$; ___,return$,claimKey$*64,which,hClaim
 	end if
 	which=srch(mat efn_forwRefNo$,trim$(forwRefNo$))
 	if which<=0 then
+		which2018=srch(mat efn_forwRefNo$,trim$(forwRefNo$)&'-2018')
+		if which2018>0 then
+			which=which2018
+		end if
+	end if
+
+	if which<=0 then
 		return$=''
 	else
 		return$=efn_fileno$(which)
@@ -493,7 +584,10 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$; ___,return$,claimKey$*64,which,hClaim
 	fn_existingFileNo$=return$
 fnend
 
-def fn_getFileNo$(forwNo$,uniqueIdentifier$; ___,x,return$,which)
+def fn_direct_getFileNo$(forwNo$,uniqueIdentifier$)
+	fn_direct_getFileNo$=fn_allData_getFileNo$(forwNo$,uniqueIdentifier$)
+fnend
+def fn_allData_getFileNo$(forwNo$,uniqueIdentifier$; ___,x,return$,which,which2018)
 	if ~setup_getFileNo then
 		dim gfnKey$(0)*128
 		mat gfnKey$(0)
@@ -524,7 +618,7 @@ def fn_getFileNo$(forwNo$,uniqueIdentifier$; ___,x,return$,which)
 		end if
 		return$=gfnFileNo$(which)
 	end if
-	fn_getFileNo$=return$
+	fn_allData_getFileNo$=return$
 fnend
 def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
 	xStart=srch(mat list_patientId$,patientId$)
@@ -539,9 +633,6 @@ def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
 fnend
 
 
-
-
-
 def fn_patientBalance(patientId$; ___,returnN,x,xStart)
 	xStart=srch(mat list_patientId$,patientId$)
 	if xStart>0 then
@@ -554,23 +645,23 @@ def fn_patientBalance(patientId$; ___,returnN,x,xStart)
 	fn_patientBalance=returnN
 fnend
 def fn_invoiceNumber$*128
-	fn_invoiceNumber$=item$(csv_patientId)&'-'&item$(csv_claimId)&'-'&date$(days(item$(csv_serviceDate),'mm/dd/ccyy'),'ccyymmdd') ! XXX
+	fn_invoiceNumber$=item$(csv_KEY)&'-'&item$(csv_claimId)&'-'&date$(days(item$(csv_serviceDate),'mm/dd/ccyy'),'ccyymmdd') ! XXX
 fnend
 
 
-def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here is local.
-	if ~init_csv_in then
-		init_csv_in=1
+def fn_alldata_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here is local.
+	if ~alldata_init_csv_in then
+		alldata_init_csv_in=1
 		dim Csv_Fields$(0)*128
 		dim Csv_Data$(0)*256
 		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,env$('at')&srep$(csvFile$,'@::',''),Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
 		lineCount=0
 		! r: set csv_*
-		csv_facilityName      	=srch(mat Csv_Fields$,uprc$('Facility Name'        	))
-		csv_providerName      	=srch(mat Csv_Fields$,uprc$('Provider Name'        	))
+		csv_FACILITY      	=srch(mat Csv_Fields$,uprc$('Facility Name'        	))
+		csv_PROVIDER      	=srch(mat Csv_Fields$,uprc$('Provider Name'        	))
 		csv_patientName        	=srch(mat Csv_Fields$,uprc$('Patient Name'          	))
 		csv_patientDOB         	=srch(mat Csv_Fields$,uprc$('Patient DOB'           	))
-		csv_patientId          	=srch(mat Csv_Fields$,uprc$('Patient ID'            	))
+		csv_KEY                	=srch(mat Csv_Fields$,uprc$('Patient ID'            	))
 		csv_respName           	=srch(mat Csv_Fields$,uprc$('Resp Name'             	))
 		csv_respAddress        	=srch(mat Csv_Fields$,uprc$('Resp Address'          	))
 		csv_respCsz            	=srch(mat Csv_Fields$,uprc$('Resp City-State-Zip'  	))
@@ -593,14 +684,53 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 		csv_balance            	=srch(mat Csv_Fields$,uprc$('Balance'               	))
 		csv_billPatientReason 	=srch(mat Csv_Fields$,uprc$('Bill Patient Reason'  	))
 		csv_claimNotes         	=srch(mat Csv_Fields$,uprc$('Claim Notes'           	))
-	
+
 		! ***  Add New Invented Columns ***
-		csvFieldCount+=1 : csv_fileNo   	=fnAddOneC(mat csv_Fields$,'FileNo')
+		csvFieldCount+=1 : csv_FILENO   	=fnAddOneC(mat csv_Fields$,'FileNo')
+		csvFieldCount+=1 : csv_invoiceNo	=fnAddOneC(mat csv_Fields$,'InvoiceNo')
+		! csvFieldCount=csv_invoiceNo
+
+	end if
+	fn_alldata_init_csv_in=returnN
+fnend
+def fn_direct_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here is local.
+	if ~direct_init_csv_in then
+		direct_init_csv_in=1
+		dim Csv_Fields$(0)*128
+		dim Csv_Data$(0)*256
+		csvFieldCount=Fnopen_Csv(returnN:=fnGetHandle,env$('at')&srep$(csvFile$,'@::',''),Csv_Delimiter$,Mat Csv_Fields$,Mat Csv_Data$)
+		lineCount=0
+		! r: set csv_*
+		csv_KEY                =srch(mat Csv_Fields$,uprc$('acctNo'))
+		csv_lName              =srch(mat Csv_Fields$,uprc$('lName'))
+		csv_fName              =srch(mat Csv_Fields$,uprc$('fName'))
+		csv_mi                 =srch(mat Csv_Fields$,uprc$('mi'))
+		csv_email              =srch(mat Csv_Fields$,uprc$('email'))
+		csv_dos                =srch(mat Csv_Fields$,uprc$('dos'))
+		csv_code               =srch(mat Csv_Fields$,uprc$('code'))
+		csv_charge             =srch(mat Csv_Fields$,uprc$('charge'))
+		csv_balance            =srch(mat Csv_Fields$,uprc$('balance'))
+		csv_writeOff           =srch(mat Csv_Fields$,uprc$('writeOff'))
+		csv_receivedPrimary    =srch(mat Csv_Fields$,uprc$('receivedPrimary'))
+		csv_receivedOther      =srch(mat Csv_Fields$,uprc$('receivedOther'))
+		csv_receivedTotal      =srch(mat Csv_Fields$,uprc$('receivedTotal'))
+		csv_nonAllowed         =srch(mat Csv_Fields$,uprc$('nonAllowed'))
+		csv_appliedFromCb      =srch(mat Csv_Fields$,uprc$('appliedFromCb'))
+		csv_PROVIDER           =srch(mat Csv_Fields$,uprc$('claimPhys'))
+		csv_npi                =srch(mat Csv_Fields$,uprc$('npi'))
+		csv_claimrefphys       =srch(mat Csv_Fields$,uprc$('claimrefphys'))
+		csv_procedureGroup     =srch(mat Csv_Fields$,uprc$('procedureGroup'))
+		csv_priInsName         =srch(mat Csv_Fields$,uprc$('priInsName'))
+		csv_dueFromInsName     =srch(mat Csv_Fields$,uprc$('dueFromInsName'))
+		csv_secInsName         =srch(mat Csv_Fields$,uprc$('secInsName'))
+		csv_FACILITY            =srch(mat Csv_Fields$,uprc$('facName'))
+		! ***  Add New Invented Columns ***
+		csvFieldCount+=1 : csv_FILENO   	=fnAddOneC(mat csv_Fields$,'FileNo')
 		csvFieldCount+=1 : csv_invoiceNo	=fnAddOneC(mat csv_Fields$,'InvoiceNo')
 		! csvFieldCount=csv_invoiceNo
 		! /r
 	end if
-	fn_init_csv_in=returnN
+	fn_direct_init_csv_in=returnN
 fnend
 def fn_close_csv_in(; delFileIn)
 	if delFileIn then
@@ -608,11 +738,12 @@ def fn_close_csv_in(; delFileIn)
 	else
 		close #hIn:
 	end if
-	init_csv_in=0
+	alldata_init_csv_in=0
+	direct_init_csv_in=0
 fnend
-def fn_readFileIntoArrays
-	if ~setup_rfia then ! r:
-		setup_rfia=1
+def fn_alldata_readFileIntoArrays
+	if ~setup_arfia then ! r:
+		setup_arfia=1
 		dim list_facilityName$(0)*256
 		dim list_providerName$(0)*256
 		dim list_patientName$(0)*256
@@ -642,7 +773,7 @@ def fn_readFileIntoArrays
 		dim list_claimNotes$(0)*512
 		! dim list_fileNo$(0)*512
 		! dim list_isNewN(0)
-		
+
 		mat list_facilityName$(0)
 		mat list_providerName$(0)
 		mat list_patientName$(0)
@@ -672,24 +803,31 @@ def fn_readFileIntoArrays
 		mat list_claimNotes$(0)
 		! mat list_fileNo$(0)
 		! mat list_isNewN(0)
-		
-		hIn=fn_init_csv_in(csvFieldCount,csvFile$)
+		if sourceId$='AllData' then
+			hIn=fn_alldata_init_csv_in(csvFieldCount,csvFile$)
+		else
+			hIn=fn_direct_init_csv_in(csvFieldCount,csvFile$)
+		end if
 		do
 			dim line$*1024
-			linput #hIn: line$ eof Rfia_EoF
+			linput #hIn: line$ eof Rafia_EoF
 			lineCount+=1
 			if line$<>'' and line$<>'"' then
 				dim item$(0)*512
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
-				item$(csv_fileNo)=fn_getFileNo$(forwNo$,item$(csv_patientId))
+				if sourceId$='allData' then
+					item$(csv_FILENO)=fn_allData_getFileNo$(forwNo$,item$(csv_KEY))
+				else
+					item$(csv_FILENO)=fn_direct_getFileNo$(forwNo$,item$(csv_KEY))
+				end if
 				item$(csv_invoiceNo)=fn_invoiceNumber$
 				! r: add each item into it's array
-				fnAddOneC(mat list_facilityName$,item$(csv_facilityName))
-				fnAddOneC(mat list_providerName$,item$(csv_providerName))
+				fnAddOneC(mat list_facilityName$,item$(csv_FACILITY))
+				fnAddOneC(mat list_providerName$,item$(csv_PROVIDER))
 				fnAddOneC(mat list_patientName$,item$(csv_patientName))
 				fnAddOneC(mat list_patientDOB$,item$(csv_patientDOB))
-				fnAddOneC(mat list_patientId$,item$(csv_patientId))
+				fnAddOneC(mat list_patientId$,item$(csv_KEY))
 				fnAddOneC(mat list_respName$,item$(csv_respName))
 				fnAddOneC(mat list_respAddress$,item$(csv_respAddress))
 				fnAddOneC(mat list_respCsz$,item$(csv_respCsz))
@@ -713,9 +851,9 @@ def fn_readFileIntoArrays
 				! if list_balanceN(udim(mat list_balanceN))=0 then pr 'fnval('&item$(csv_balance)&') returned 0' : pause
 				fnAddOneC(mat list_billPatientReason$,item$(csv_billPatientReason))
 				fnAddOneC(mat list_claimNotes$,item$(csv_claimNotes))
-				
-				! fnAddOneC(mat list_fileNo$,item$(csv_fileNo))
-				! if fn_existingFileNo$(ForwNo$,item$(csv_patientId))='' then
+
+				! fnAddOneC(mat list_fileNo$,item$(csv_FILENO))
+				! if fn_existingFileNo$(ForwNo$,item$(csv_KEY))='' then
 				! 	fnAddOneN(mat list_isNewN,1)
 				! else
 				! 	fnAddOneN(mat list_isNewN,0)
@@ -723,9 +861,119 @@ def fn_readFileIntoArrays
 				! /r
 			end if
 		loop
-		Rfia_EoF: !
+		Rafia_EoF: !
 		fn_close_csv_in
-	end if ! /r
+	end if
+fnend
+def fn_direct_readFileIntoArrays
+	if ~setup_drfia then
+		setup_drfia=1
+
+		dim list_KEY$(0)*256
+		dim list_lName$(0)*256
+		dim list_fName$(0)*256
+		dim list_mi$(0)*256
+		dim list_email$(0)*256
+		dim list_dos$(0)*256
+		dim list_code$(0)*256
+		dim list_charge$(0)*256
+		dim list_balance$(0)*256
+		dim list_writeOff$(0)*256
+		dim list_receivedPrimary$(0)*256
+		dim list_receivedOther$(0)*256
+		dim list_receivedTotal$(0)*256
+		dim list_nonAllowed$(0)*256
+		dim list_appliedFromCb$(0)*256
+		dim list_PROVIDER$(0)*256
+		dim list_npi$(0)*256
+		dim list_claimrefphys$(0)*256
+		dim list_procedureGroup$(0)*256
+		dim list_priInsName$(0)*256
+		dim list_dueFromInsName$(0)*256
+		dim list_secInsName$(0)*256
+		dim list_FACILITY$(0)*256
+		! dim list_fileNo$(0)*512
+		! dim list_isNewN(0)
+
+		mat list_KEY$(0)
+		mat list_lName$(0)
+		mat list_fName$(0)
+		mat list_mi$(0)
+		mat list_email$(0)
+		mat list_dos$(0)
+		mat list_code$(0)
+		mat list_charge$(0)
+		mat list_balance$(0)
+		mat list_writeOff$(0)
+		mat list_receivedPrimary$(0)
+		mat list_receivedOther$(0)
+		mat list_receivedTotal$(0)
+		mat list_nonAllowed$(0)
+		mat list_appliedFromCb$(0)
+		mat list_PROVIDER$(0)
+		mat list_npi$(0)
+		mat list_claimrefphys$(0)
+		mat list_procedureGroup$(0)
+		mat list_priInsName$(0)
+		mat list_dueFromInsName$(0)
+		mat list_secInsName$(0)
+		mat list_FACILITY$(0)
+		! mat list_fileNo$(0)
+		! mat list_isNewN(0)
+
+		if sourceId$='AllData' then
+			hIn=fn_alldata_init_csv_in(csvFieldCount,csvFile$)
+		else
+			hIn=fn_direct_init_csv_in(csvFieldCount,csvFile$)
+		end if
+
+		do
+			dim line$*1024
+			linput #hIn: line$ eof Drfia_EoF
+			lineCount+=1
+			if line$<>'' and line$<>'"' then
+				dim item$(0)*512
+				str2mat(line$,mat item$,tab$)
+				mat item$(csvFieldCount)
+				if sourceId$='allData' then
+					item$(csv_FILENO)=fn_allData_getFileNo$(forwNo$,item$(csv_KEY))
+				else if sourceId$='direct' then
+					item$(csv_FILENO)=fn_direct_getFileNo$(forwNo$,item$(csv_KEY))
+				end if
+				item$(csv_invoiceNo)=fn_invoiceNumber$
+				! r: add each item into it's array
+
+				fnAddOneC(mat list_KEY$,item$(csv_KEY))
+				fnAddOneC(mat list_lName$,item$(csv_lName))
+				fnAddOneC(mat list_fName$,item$(csv_fName))
+				fnAddOneC(mat list_mi$,item$(csv_mi))
+				fnAddOneC(mat list_email$,item$(csv_email))
+				fnAddOneC(mat list_dos$,item$(csv_dos))
+				fnAddOneC(mat list_code$,item$(csv_code))
+				fnAddOneC(mat list_charge$,item$(csv_charge))
+				fnAddOneC(mat list_balance$,item$(csv_balance))
+				fnAddOneC(mat list_writeOff$,item$(csv_writeOff))
+				fnAddOneC(mat list_receivedPrimary$,item$(csv_receivedPrimary))
+				fnAddOneC(mat list_receivedOther$,item$(csv_receivedOther))
+				fnAddOneC(mat list_receivedTotal$,item$(csv_receivedTotal))
+				fnAddOneC(mat list_nonAllowed$,item$(csv_nonAllowed))
+				fnAddOneC(mat list_appliedFromCb$,item$(csv_appliedFromCb))
+				fnAddOneC(mat list_PROVIDER$,item$(csv_PROVIDER))
+				fnAddOneC(mat list_npi$,item$(csv_npi))
+				fnAddOneC(mat list_claimrefphys$,item$(csv_claimrefphys))
+				fnAddOneC(mat list_procedureGroup$,item$(csv_procedureGroup))
+				fnAddOneC(mat list_priInsName$,item$(csv_priInsName))
+				fnAddOneC(mat list_dueFromInsName$,item$(csv_dueFromInsName))
+				fnAddOneC(mat list_secInsName$,item$(csv_secInsName))
+				fnAddOneC(mat list_FACILITY$,item$(csv_FACILITY))
+
+
+
+			end if
+		loop
+		Drfia_EoF: !
+		fn_close_csv_in
+	end if
 fnend
 
 def fn_setup
@@ -743,7 +991,7 @@ def fn_setup
 
 		library 'Library\clsUtil.wb': fnGetHandle
 		! library 'S:\Core\Library.br': fnGetHandle     removed in favor of clsUtil version to avoid error 2274
-		
+
 		library 'S:\Core\Library.br': fnTop
 		library 'S:\Core\Library.br': fnGetPp
 		library 'S:\Core\Library.br': fnFree
@@ -760,8 +1008,6 @@ def fn_setup
 		library 'S:\Core\Library.br': fnReg_write
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnCptCode$
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnVal
-		gosub Enum
-		! fnErase_buttons
 
 		library 'Library\SQL.wb': fnsql_setup$
 
@@ -774,12 +1020,12 @@ def fn_setup
 		fnsql_setup$('masforw',mat forw$,mat forwN,mat forwFieldsC$,mat forwFieldsN$,forwFormAll$)
 		gosub EnumForw
 
-		
+
 	end if
 fnend
 
 def fn_removeExcessCRLF$*256(csvFile$*256; ___,return$*256,hIn,hOut,line$*1024,delim$,lineCount,itemsOnLine,lineCountIn,lineCountOut)
-	
+
 	dim Csv_Fields$(0)*128
 	dim Csv_Data$(0)*256
 	minItemCount=Fnopen_Csv(hIn:=fnGetHandle,env$('at')&csvFile$,delim$,Mat Csv_Fields$,Mat Csv_Data$)
@@ -789,18 +1035,18 @@ def fn_removeExcessCRLF$*256(csvFile$*256; ___,return$*256,hIn,hOut,line$*1024,d
 include: filenamesPushMixedCase
 	open #hOut:=fnGetHandle: 'name='&env$('at')&csvFile$&'-fixedCrLf,recl=2048,replace',display,output
 include: filenamesPopUpperCase
-		
+
 	do
 		linput #hIn: line$ eof Recrlf_EoF
 		lineCountIn+=1
-		
-		dim ic_item$(0)*512
-		str2mat(line$&' ',mat ic_item$,delim$)
-		itemsOnLine=udim(mat ic_item$)
-		ic_item$(itemsOnLine)=trim$(ic_item$(itemsOnLine))
+
+		dim removeExcess_item$(0)*512
+		str2mat(line$&' ',mat removeExcess_item$,delim$)
+		itemsOnLine=udim(mat removeExcess_item$)
+		removeExcess_item$(itemsOnLine)=trim$(removeExcess_item$(itemsOnLine))
 		! itemsOnLine+=fn_itemCount(line$,delim$)
-		
-		if ic_item$(itemsOnLine)(1:1)='"' and ic_item$(itemsOnLine)(len(ic_item$(itemsOnLine)):len(ic_item$(itemsOnLine)))<>'"' then
+
+		if removeExcess_item$(itemsOnLine)(1:1)='"' and removeExcess_item$(itemsOnLine)(len(removeExcess_item$(itemsOnLine)):len(removeExcess_item$(itemsOnLine)))<>'"' then
 			print #hOut: line$&'    ';
 		else
 			print #hOut: line$
@@ -824,9 +1070,9 @@ include: filenamesPopUpperCase
 	fn_removeExcessCRLF$=return$
 fnend
 def fn_itemCount(line$*2048,delim$; ___,returnN)
-	dim ic_item$(0)*512
-	str2mat(line$&' ',mat ic_item$,delim$)
-	returnN=udim(mat ic_item$)
+	dim itemCount_item$(0)*512
+	str2mat(line$&' ',mat itemCount_item$,delim$)
+	returnN=udim(mat itemCount_item$)
 	fn_itemCount=returnN
 fnend
 Xit: !
