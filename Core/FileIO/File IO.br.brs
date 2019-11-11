@@ -10,7 +10,8 @@ pr #hProc: 'cd S:'
 pr #hProc: 'Run'
 pr #hProc: 'cd '&program$(1:2)
 if env$('cursys')='CM' then
-	pr #hProc: 'Proc Run'
+	pr #hProc: 'load S:\Core\xit.br'
+	pr #hProc: 'run'
 else
 	pr #hProc: 'load S:\Core\Menu.br'
 	pr #hProc: 'run'

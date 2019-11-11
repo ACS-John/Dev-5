@@ -1,4 +1,8 @@
+fn_xit
 def library fnXit(;cursys$)
+	fnXit=fn_xit( cursys$)
+fnend
+def fn_xit(;cursys$)
 	library 'S:\Core\Library': fnchain,fnprocess
 
 	if env$('CurSys')="GL" and fnprocess=1 then 
