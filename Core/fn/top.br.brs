@@ -35,6 +35,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		end if
 	end if
 	if env$('cursys')='CM' then
+		execute 'config OPTION 48 OFF' ! make ENTER key return fkey value instead of zero
 		if force80x24 then
 			setenv('force80x24','Yes')
 		else

@@ -1,6 +1,6 @@
 SHARE\INVOICE.INT, inv_ , 0
 SHARE\INVOICE.IDX, fileno/invDate/invNo
-
+! does  not work yet - not sure why maybe ** in date columns
 ===================================================
 
 fileno        ,File number                       ,C   8      ,                , ! SPos=  1  C                               

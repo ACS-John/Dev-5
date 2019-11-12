@@ -1,5 +1,3 @@
-on error goto Ertn
-
 fn_setup
 fnTop(program$)
 fn_premierCardiologyImport('allData')
@@ -128,24 +126,29 @@ include: filenamesPopUpperCase
 				
 				item$(csv_FILENO)=list_FILENO$(lineCount)
 				item$(csv_SERVICEDAY)=list_SERVICEDAY$(lineCount)
+				oc$=list_OCN$(lineCount)
+				item$(csv_INVOICENO)=list_INVOICENO$(lineCount)
 				
 				
-				item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
-				item$(csv_respName)=srep$(item$(csv_respName),', ',',')
-				item$(csv_patientName)=srep$(item$(csv_patientName),',','/')
-				item$(csv_respName)=srep$(item$(csv_respName),',','/')
-				
+				if csv_patientName>0 then 
+					item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
+					item$(csv_patientName)=srep$(item$(csv_patientName),',','/')
+				end if
+				if csv_RESPNAME>0 then 
+					item$(csv_RESPNAME)=srep$(item$(csv_RESPNAME),', ',',')
+					item$(csv_RESPNAME)=srep$(item$(csv_RESPNAME),',','/')
+				end if
+				! pr oc$ : pause
 				if oc$='closed' then
-					masterWhich=srch(claim_fileno$,fileNo$)
+					masterWhich=srch(claim_fileno$,list_FILENO$(lineCount))
 					claim_forwRefNo$(masterWhich)
-					
-					fn_reportClosedEncounter(oc$,fileno$,str$(claim_forwNo(masterWhich)),claim_forwRefNo$(masterWhich),str$(claim_balance(masterWhich)),str$(fn_patientBalance(item$(csv_KEY))))
+					fn_reportClosedEncounter(oc$,list_FILENO$(lineCount),str$(claim_forwNo(masterWhich)),claim_forwRefNo$(masterWhich),str$(claim_balance(masterWhich)),str$(fn_patientBalance(item$(csv_KEY))))
 				else
 					
 					fn_pr_hOut('0[tab]H[tab] XXX lineCount: '&str$(lineCount)	&' XXX fileNo: '&item$(csv_FILENO)&' XXX')
-					item$(csv_INVOICENO)=item$(csv_claimId)&'-'&fn_date$(item$(csv_SERVICEDAY),'ccyymmdd')
+					! item$(csv_INVOICENO)=item$(csv_claimId)&'-'&fn_date$(item$(csv_SERVICEDAY),'ccyymmdd')
 	
-					fn_writeDemographics(hOut,mat item$)
+					fn_writeDemographics(hOut,oc$,mat item$)
 					fn_writePaperless(hOut,mat item$,lineCount,csvFile$)
 					fn_writeInvoices(hOut,mat item$)
 					fn_writeInfinity(hOut,mat item$)
@@ -160,6 +163,7 @@ include: filenamesPopUpperCase
 	fn_pr_hOut('0[tab]H[tab]lineCount='&str$(lineCount))
 	fn_close_csv_in( 1)
 	close #hOut:
+	fn_reportClosedEncounter_finis
 	if enableImport then
 		! r: Generate Automation Files
 		open #hIni:=fnGetHandle: 'name=custom\cm_edi_pcs.ini,replace',d,o
@@ -184,7 +188,7 @@ include: filenamesPopUpperCase
 		dim mbText$*2048
 		mbText$='New Claims: '&tab$&str$(countNewClaim)
 		mbText$(inf:inf)=lf$&'Claim Updates-Open: '&tab$&str$(countUpdateClaimOpen)
-		mbText$(inf:inf)=lf$&'Claim Updates-Closed: '&tab$&str$(countUpdateClaimClosed)
+		mbText$(inf:inf)=lf$&'Claim Skipped-Closed: '&tab$&str$(udim(mat alreadyReportedFileNo$))
 		mbText$(inf:inf)=lf$&'Sucessfully created a file for CM EDI Import:'
 		mbText$(inf:inf)=lf$&outFile$
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
@@ -192,7 +196,7 @@ include: filenamesPopUpperCase
 	end if
 	goto PciXit ! /r
 	PciXit: !
-	fn_reportClosedEncounter_finis
+	
 fnend
 
 
@@ -301,7 +305,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 fnend
 
 ! functions that format and Write out to the CM EDI file.
-def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZip$*64) ! requires local enumerations csv_*,mat cs$,forwNo$, etc
+def fn_writeDemographics(hOut,oc$,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZip$*64) ! requires local enumerations csv_*,mat cs$,forwNo$, etc
 	if ~setup_wd then
 		dim alreadyAddedDemographicsKey$(0)
 		mat alreadyAddedDemographicsKey$(0)
@@ -335,57 +339,67 @@ def fn_writeDemographics(hOut,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,tmpZ
 		fn_add('ORGACT#'     		,item$(csv_KEY)    	)
 		fn_add('CRED_XLINE'  		,item$(csv_FACILITY) 	)
 		! pr item$(csv_KEY) : pause
-		if fn_existingFileNo$(ForwNo$,item$(csv_KEY),oc$)<>'' then
-			if oc$='open' then
-				countUpdateClaimOpen+=1
-			else
-				countUpdateClaimClosed+=1
-			end if
+		if oc$='open' then
+			countUpdateClaimOpen+=1
 			fn_pr(102) ! update existing
-		else
+		else if oc$='new' then
 			fn_pr(101) ! new placement
 			countNewClaim+=1
+		else
+			pr 'fn_writeDemographics does not handle oc$ type '&oc$
+			pause
 		end if
 		! /r
 
 		! r: CM EDI Record 111    Debtor Demographics
-		fncsz(item$(csv_respCsz),tmpCity$,tmpSt$,tmpZip$)
-		if item$(csv_patientName)=item$(csv_respName) then ! The Patient is Responsible for their own debt
+		tmpCity$=tmpSt$=tmpZip$=''
+		if csv_respCsz>0 then
+			fncsz(item$(csv_respCsz),tmpCity$,tmpSt$,tmpZip$)
+		end if
+		if csv_patientName<=0 or item$(csv_patientName)=item$(csv_RESPNAME) then ! The Patient is Responsible for their own debt
 			! r: add Debtor 1 - the patient who is responsible to pay their own bill
 			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
-			fn_add('NUMBER'      	,'1'                            	)
-			fn_add('RELATION'   	,'MAIN'                         	)
-			fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
-			fn_add('NAME'        	,item$(csv_respName)          	)
-			fn_add('STREET'      	,item$(csv_respAddress)       	)
-			fn_add('CITY'        	,tmpCity$                      	)
-			fn_add('ST'          	,tmpSt$                         	)
-			fn_add('ZIP'         	,tmpZip$                        	)
-			fn_add('SSN'         	,item$(csv_social)             	)
-			fn_add('PHONE'       	,item$(csv_respPhone)         	)
-			fn_add('PHONE2'      	,item$(csv_respWorkPhone)     	)
-			fn_add('RESP_PARTY' 	,'Y'                            	)
-			fn_add('MOBIL_PHONE'	,item$(csv_respCellPhone)     	)
-			fn_add('EMAIL'       	,item$(csv_respEmail)         	)
-			fn_add('BIRTH_DATE' 	,item$(csv_patientDOB)         	)
+			fn_add('NUMBER'      	,'1'                          	)
+			fn_add('RELATION'   	,'MAIN'                       	)
+			fn_add('FORW_REFNO' 	,item$(csv_KEY)               	)
+			fn_add('NAME'        	,item$(csv_RESPNAME)          	)
+			fn_addItemIfValid('STREET',csv_respAddress)
+			if csv_respCsz>0 then
+				fn_add('CITY'        	,tmpCity$                   	)
+				fn_add('ST'          	,tmpSt$                     	)
+				fn_add('ZIP'         	,tmpZip$                    	)
+			end if
+			fn_addItemIfValid('SSN',csv_social)
+			fn_addItemIfValid('PHONE',csv_respPhone)
+			fn_addItemIfValid('PHONE2',csv_respWorkPhone)
+			fn_add('RESP_PARTY' 	,'Y'                          	)
+			fn_addItemIfValid('MOBIL_PHONE',csv_respCellPhone)
+			if pos(item$(csv_EMAIL),'@')>0 then
+				fn_add('EMAIL'       	,item$(csv_EMAIL)           	)
+			end if
+			fn_addItemIfValid('BIRTH_DATE',csv_patientDOB)
 			fn_pr(111)
 			! /r
 		else ! The responsible person is not the same person as the patient
 			! r: add Debtor 1 - the Responsible person
 			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
-			fn_add('NUMBER'      	,'1'                            	)
-			fn_add('RELATION'   	,'MAIN'                         	)
-			fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
-			fn_add('NAME'        	,item$(csv_respName)          	)
-			fn_add('STREET'      	,item$(csv_respAddress)       	)
-			fn_add('CITY'        	,tmpCity$                      	)
-			fn_add('ST'          	,tmpSt$                         	)
-			fn_add('ZIP'         	,tmpZip$                        	)
-			fn_add('PHONE'       	,item$(csv_respPhone)         	)
-			fn_add('PHONE2'      	,item$(csv_respWorkPhone)     	)
-			fn_add('RESP_PARTY' 	,'Y'                            	)
-			fn_add('MOBIL_PHONE'	,item$(csv_respCellPhone)     	)
-			fn_add('EMAIL'       	,item$(csv_respEmail)         	)
+			fn_add('NUMBER'      	,'1'                          	)
+			fn_add('RELATION'   	,'MAIN'                       	)
+			fn_add('FORW_REFNO' 	,item$(csv_KEY)               	)
+			fn_add('NAME'        	,item$(csv_RESPNAME)          	)
+			fn_addItemIfValid('STREET',csv_respAddress)
+			if csv_respCsz>0 then
+				fn_add('CITY'        	,tmpCity$                      	)
+				fn_add('ST'          	,tmpSt$                         	)
+				fn_add('ZIP'         	,tmpZip$                        	)
+			end if
+			fn_addItemIfValid('PHONE',csv_respPhone)         
+			fn_addItemIfValid('PHONE2',csv_respWorkPhone)  
+			fn_add('RESP_PARTY' 	,'Y')
+			fn_addItemIfValid('MOBIL_PHONE',csv_respCellPhone)  
+			if pos(item$(csv_EMAIL),'@')>0 then
+				fn_add('EMAIL'       	,item$(csv_EMAIL)         	)
+			end if
 			fn_pr(111)
 			! /r
 			! r: add Debtor 2 - the Patient
@@ -414,9 +428,14 @@ def fn_date$(day$; format$,___,return$)
 	! above lines were for backward compatability to compare vs previous alldata import which did not touch formatting and had dates like 1/1/2019
 	fn_date$=return$
 fnend
-def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
+def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt)
 	fn_pr_hOut('0[tab]H[tab]Invoices for '&item$(csv_FILENO))
-	invoiceOrigAmt$=str$(fnval(item$(csv_balance))+fnval(item$(csv_insurancePaid))+fnval(item$(csv_patientPaid)))
+	invoiceOrigAmt=0
+	if sourceId$='allData' then
+		invoiceOrigAmt=fnval(item$(csv_BALANCE))+fnval(item$(csv_insurancePaid))+fnval(item$(csv_patientPaid))
+	else if sourceId$='direct' then
+		invoiceOrigAmt=fnval(item$(csv_charge))
+	end if
 	! CM EDI Record 180 Invoice File
 	fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
 	fn_add('FIRM_FILENO'   	,item$(csv_FILENO)                 	)
@@ -432,44 +451,73 @@ def fn_writeInvoices(hOut,mat item$; ___,invoiceOrigAmt$*64)
 		fn_add('CPT'        	,item$(csv_CPT))
 	end if
 	fn_add('DEBTOR_NO'     	,'1')
-	fn_add('CUR_BAL'       	,item$(csv_balance    )           	)
+	fn_add('CUR_BAL'       	,item$(csv_BALANCE    )           	)
 	fn_add('SERVICE_DATE'  	,fn_date$(item$(csv_SERVICEDAY)))
 	fn_add('INV_NO'        	,item$(csv_INVOICENO  )           	)
-	fn_add('ORIG_AMT'      	,invoiceOrigAmt$                   	)
+	fn_add('ORIG_AMT'      	,str$(invoiceOrigAmt))
 	fn_pr(180)
 fnend
 def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
 	fn_writePaperlessOneLine('***From line ',str$(lineCount+1)&' of ') ! +1 to account for uncounted header line
 	fn_writePaperlessOneLine(sourceFile$(1:2),sourceFile$(3:inf))
-	fn_writePaperlessOneLine('    Facility Name:',item$(csv_FACILITY     	))
-	fn_writePaperlessOneLine('    Provider Name:',item$(csv_PROVIDER     	))
-	fn_writePaperlessOneLine('    Patient Name :',item$(csv_patientName      	))
-	fn_writePaperlessOneLine('    Patient DOB  :',item$(csv_patientDOB       	))
-	fn_writePaperlessOneLine('       Patient Id:',item$(csv_KEY        	))
-	fn_writePaperlessOneLine('     Resp Name   :',item$(csv_respName         	))
-	fn_writePaperlessOneLine('     Resp Address:',item$(csv_respAddress      	))
-	fn_writePaperlessOneLine('     Resp CSZ    :',item$(csv_respCsz           	))
-	fn_writePaperlessOneLine('    Patient Phone:',item$(csv_patientPhone     	))
-	fn_writePaperlessOneLine('       Resp Phone:',item$(csv_respPhone        	))
-	fn_writePaperlessOneLine('  Resp Cell Phone:',item$(csv_respCellPhone    	))
-	fn_writePaperlessOneLine('  Resp Work Phone:',item$(csv_respWorkPhone    	))
-	fn_writePaperlessOneLine('       Resp Email:',item$(csv_respEmail        	))
-	fn_writePaperlessOneLine('Social Security #:',item$(csv_social            	))
-	fn_writePaperlessOneLine('         Claim Id:',item$(csv_claimId           	))
-	fn_writePaperlessOneLine('  Primary Carrier:',item$(csv_primaryCarrier   	))
-	fn_writePaperlessOneLine(' Insurance Number:',item$(csv_insuranceN        	))
-	fn_writePaperlessOneLine('Secondary Carrier:',item$(csv_secondaryCarrier 	))
-	fn_writePaperlessOneLine('Sec Insurance Num:',item$(csv_secInsuranceN    	))
-	fn_writePaperlessOneLine('     Service Date:',fn_date$(item$(csv_SERVICEDAY)))
-	fn_writePaperlessOneLine('              CPT:',item$(csv_CPT)&': '&fnCptCode$(item$(csv_CPT)))
-	fn_writePaperlessOneLine('   Insurance Paid:',item$(csv_insurancePaid    	))
-	fn_writePaperlessOneLine('     Patient Paid:',item$(csv_patientPaid      	))
-	fn_writePaperlessOneLine('       Total Paid:',item$(csv_totalPaid        	))
-	fn_writePaperlessOneLine('          Balance:',item$(csv_balance           	))
-	fn_writePaperlessOneLine('BillPatientReason:',item$(csv_billPatientReason	))
-	fn_writePaperlessOneLine('      Claim Notes:',item$(csv_claimNotes        	))
-	fn_writePaperlessOneLine('           FileNo:',item$(csv_FILENO            	))
-	fn_writePaperlessOneLine('       Invoice No:',item$(csv_INVOICENO        	))
+	if sourceId$='allData' then
+		fn_writePaperlessOneLine('    Facility Name:',item$(csv_FACILITY     	))
+		fn_writePaperlessOneLine('    Provider Name:',item$(csv_PROVIDER     	))
+		fn_writePaperlessOneLine('    Patient Name :',item$(csv_patientName      	))
+		fn_writePaperlessOneLine('    Patient DOB  :',item$(csv_patientDOB       	))
+		fn_writePaperlessOneLine('       Patient Id:',item$(csv_KEY        	))
+		fn_writePaperlessOneLine('     Resp Name   :',item$(csv_RESPNAME         	))
+		fn_writePaperlessOneLine('     Resp Address:',item$(csv_respAddress      	))
+		fn_writePaperlessOneLine('     Resp CSZ    :',item$(csv_respCsz           	))
+		fn_writePaperlessOneLine('    Patient Phone:',item$(csv_patientPhone     	))
+		fn_writePaperlessOneLine('       Resp Phone:',item$(csv_respPhone        	))
+		fn_writePaperlessOneLine('  Resp Cell Phone:',item$(csv_respCellPhone    	))
+		fn_writePaperlessOneLine('  Resp Work Phone:',item$(csv_respWorkPhone    	))
+		fn_writePaperlessOneLine('       Resp Email:',item$(csv_EMAIL        	))
+		fn_writePaperlessOneLine('Social Security #:',item$(csv_social            	))
+		fn_writePaperlessOneLine('         Claim Id:',item$(csv_claimId           	))
+		fn_writePaperlessOneLine('  Primary Carrier:',item$(csv_primaryCarrier   	))
+		fn_writePaperlessOneLine(' Insurance Number:',item$(csv_insuranceN        	))
+		fn_writePaperlessOneLine('Secondary Carrier:',item$(csv_secondaryCarrier 	))
+		fn_writePaperlessOneLine('Sec Insurance Num:',item$(csv_secInsuranceN    	))
+		fn_writePaperlessOneLine('     Service Date:',fn_date$(item$(csv_SERVICEDAY)))
+		fn_writePaperlessOneLine('              CPT:',item$(csv_CPT)&': '&fnCptCode$(item$(csv_CPT)))
+		fn_writePaperlessOneLine('   Insurance Paid:',item$(csv_insurancePaid    	))
+		fn_writePaperlessOneLine('     Patient Paid:',item$(csv_patientPaid      	))
+		fn_writePaperlessOneLine('       Total Paid:',item$(csv_totalPaid        	))
+		fn_writePaperlessOneLine('          Balance:',item$(csv_BALANCE           	))
+		fn_writePaperlessOneLine('BillPatientReason:',item$(csv_billPatientReason	))
+		fn_writePaperlessOneLine('      Claim Notes:',item$(csv_claimNotes        	))
+	else if sourceId$='direct' then
+		fn_writePaperlessOneLine('         AcctNo:',item$(csv_KEY)                   )
+		fn_writePaperlessOneLine('          LName:',item$(csv_lName)                 )
+		fn_writePaperlessOneLine('          FName:',item$(csv_fName)                 )
+		fn_writePaperlessOneLine('             MI:',item$(csv_mi)                    )
+		fn_writePaperlessOneLine('          EMail:',item$(csv_EMAIL)                 )
+		fn_writePaperlessOneLine('            DoS:',fn_date$(item$(csv_SERVICEDAY))  )
+		fn_writePaperlessOneLine('           Code:',item$(csv_code            )      )
+		fn_writePaperlessOneLine('         Charge:',item$(csv_charge          )      )
+		fn_writePaperlessOneLine('        Balance:',item$(csv_BALANCE         )      )
+		fn_writePaperlessOneLine('       WriteOff:',item$(csv_writeOff        )      )
+		fn_writePaperlessOneLine('ReceivedPrimary:',item$(csv_receivedPrimary )      )
+		fn_writePaperlessOneLine('  ReceivedOther:',item$(csv_receivedOther   )      )
+		fn_writePaperlessOneLine('  ReceivedTotal:',item$(csv_receivedTotal   )      )
+		fn_writePaperlessOneLine('     NonAllowed:',item$(csv_nonAllowed      )      )
+		fn_writePaperlessOneLine('  AppliedFromCB:',item$(csv_appliedFromCb   )      )
+		fn_writePaperlessOneLine('      ClaimPhys:',item$(csv_PROVIDER        )      )
+		fn_writePaperlessOneLine('            NPI:',item$(csv_npi             )      )
+		fn_writePaperlessOneLine('   ClaimRefPhys:',item$(csv_claimrefphys    )      )
+		fn_writePaperlessOneLine(' ProcedureGroup:',item$(csv_procedureGroup  )      )
+		fn_writePaperlessOneLine('     PriInsName:',item$(csv_priInsName      )      )
+		fn_writePaperlessOneLine(' DueFromInsName:',item$(csv_dueFromInsName  )      )
+		fn_writePaperlessOneLine('     SecInsName:',item$(csv_secInsName      )      )
+		fn_writePaperlessOneLine('        FacName:',item$(csv_FACILITY        )      )
+		
+		fn_writePaperlessOneLine('*    Resp Name   :',item$(csv_RESPNAME      )      )
+	end if
+	fn_writePaperlessOneLine('*          FileNo:',item$(csv_FILENO        )      )
+	fn_writePaperlessOneLine('*      Invoice No:',item$(csv_INVOICENO     )      )
+
 fnend
 def fn_writePaperlessOneLine(comment$*256,comment2$*2048;___, which)
 	dim polWrote$(0)*2048
@@ -495,6 +543,11 @@ def fn_writeInfinity(hOut,mat item$)
 	fn_pr(134)
 fnend
 dim hLine$*2048,dLine$*2408
+def fn_addItemIfValid(hLineAdd$*128,enum)
+	if enum>0 then
+		fn_add(hLineAdd$,item$(enum))
+	end if
+fnend
 def fn_add(hLineAdd$*128,dLineAdd$*2048; reset)
 	if reset then
 		hLine$=hLineAdd$
@@ -525,8 +578,8 @@ dim claim_forwRefNo$		(0)*20
 dim claim_oc$						(0)*6
 dim claim_balance				(0)
 dim claim_forwNo				(0)
-def fn_existingFileNo$(ForwNo$,forwRefNo$,&oc$; ___,return$,claimKey$*64,which,hClaim,oc$*6)
-	if setup_efn<>val(ForwNo$) then
+def fn_existingFileNo$(ForwNo$,forwRefNo$,&efn_oc$; ___,return$,claimKey$*64,which,hClaim)
+	if setup_efn<>val(ForwNo$) then ! r:
 		setup_efn=val(ForwNo$)
 		dim claim$(0)*60,claimN(0)
 		dim claimFieldsC$(0)*20,claimFieldsN$(0)*20
@@ -543,10 +596,10 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&oc$; ___,return$,claimKey$*64,which,h
 		for oc=1 to 2
 			if oc=1 then
 				open #hClaim:=fnGetHandle: "name=MASTER//6,shr",internal,input,relative
-				oc$='open'
+				efn_oc$='open'
 			else
 				open #hClaim:=fnGetHandle: "name=HISTORY//1,shr",internal,input,relative
-				oc$='closed'
+				efn_oc$='closed'
 			end if
 			do
 				mat claim$=('')
@@ -556,7 +609,7 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&oc$; ___,return$,claimKey$*64,which,h
 					fnAddOneC(mat claim_fileno$    		,trim$(	claim$(master_fileno)      	))
 					fnAddOneC(mat claim_forwFileNo$		,trim$(	claim$(master_forw_fileno) 	))
 					fnAddOneC(mat claim_forwRefNo$		,trim$(	claim$(master_forw_refno)  	))
-					fnAddOneC(mat claim_oc$						,oc$)
+					fnAddOneC(mat claim_oc$						,efn_oc$)
 					fnAddOneN(mat claim_balance				,claimN(master_balance))
 					fnAddOneN(mat claim_forwNo				,claimN(master_forw_no))
 				end if
@@ -564,7 +617,8 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&oc$; ___,return$,claimKey$*64,which,h
 			EfnEoMaster: !
 			close #hClaim:
 		nex oc
-	end if
+	end if ! /r
+	
 	which=srch(mat claim_forwRefNo$,trim$(forwRefNo$))
 	if which<=0 then
 		which2018=srch(mat claim_forwRefNo$,trim$(forwRefNo$)&'-2018')
@@ -572,14 +626,16 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&oc$; ___,return$,claimKey$*64,which,h
 			which=which2018
 		end if
 	end if
-
+	
 	if which<=0 then
 		return$=''
-		oc$=''
+		efn_oc$='new'
 	else
-		oc$=claim_oc$(which)
 		return$=claim_fileno$(which)
+		efn_oc$=claim_oc$(which)
 	end if
+	! pr 'inside fn_existingFileNo$ oc/return$=';efn_oc$&'/'&return$&'/'&forwRefNo$ ! if efn_oc$='closed' then pause
+	! if forwRefNo$='3104647' or forwRefNo$='3084666' then efn_oc$='closed' : pr bell;'cheating': pause
 	fn_existingFileNo$=return$
 fnend
 def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018)
@@ -600,6 +656,7 @@ def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018)
 		setup_getFileNo=1
 	end if
 	return$=fn_existingFileNo$(ForwNo$,uniqueIdentifier$,oc$)
+	!		pr 'fileno$/forwNo/key/oc$=';return$&'/'&ForwNo$&'/'&uniqueIdentifier$&'/'&oc$ : pause
 	if return$='' then
 		uniqueIdentifier$=trim$(uniqueIdentifier$)
 		which=srch(mat gfnKey$,uniqueIdentifier$)
@@ -616,11 +673,17 @@ def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018)
 	fn_getFileNo$=return$
 fnend
 def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
-	xStart=srch(mat list_patientId$,patientId$)
+	xStart=srch(mat list_KEY$,patientId$)
 	if xStart>0 then
-		for x=xStart to udim(mat list_patientId$)
-			if list_patientId$(x)=patientId$ then
-				returnN+=list_balanceN(x)+list_totalPaidN(x)
+		for x=xStart to udim(mat list_KEY$)
+			if list_KEY$(x)=patientId$ then
+				if sourceId$='allData' then
+					returnN+=list_BALANCEN(x)+list_totalPaidN(x)
+				else if sourceId$='direct' then
+					returnN+=list_BALANCEN(x)
+					returnN+=list_receivedTotalN(x)
+					returnN+=list_writeOffN(x)
+				end if
 			end if
 		nex x
 	end if
@@ -628,18 +691,23 @@ def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
 fnend
 
 def fn_patientBalance(patientId$; ___,returnN,x,xStart)
-	xStart=srch(mat list_patientId$,patientId$)
+	xStart=srch(mat list_KEY$,patientId$)
 	if xStart>0 then
-		for x=xStart to udim(mat list_patientId$)
-			if list_patientId$(x)=patientId$ then
-				returnN+=list_balanceN(x)
+		for x=xStart to udim(mat list_KEY$)
+			if list_KEY$(x)=patientId$ then
+				returnN+=list_BALANCEN(x)
 			end if
 		nex x
 	end if
 	fn_patientBalance=returnN
 fnend
-def fn_invoiceNumber$*128
-	fn_invoiceNumber$=item$(csv_KEY)&'-'&item$(csv_claimId)&'-'&fn_date$(item$(csv_SERVICEDAY),'ccyymmdd') ! XXX
+def fn_invoiceNumber$*128(; ___,return$*128)
+	if sourceId$='allData' then
+		return$=item$(csv_KEY)&'-'&item$(csv_claimId)&'-'&fn_date$(item$(csv_SERVICEDAY),'ccyymmdd') ! XXX
+	else if sourceId$='direct' then
+		return$=item$(csv_KEY)&'-'&item$(csv_code)&'-'&fn_date$(item$(csv_SERVICEDAY),'ccyymmdd')
+	end if
+	fn_invoiceNumber$=return$
 fnend
 
 def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here is local.
@@ -658,14 +726,14 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 			csv_patientName        	=srch(mat csv_fields$,uprc$('Patient Name'          	))
 			csv_patientDOB         	=srch(mat csv_fields$,uprc$('Patient DOB'           	))
 			csv_KEY                	=srch(mat csv_fields$,uprc$('Patient ID'            	))
-			csv_respName           	=srch(mat csv_fields$,uprc$('Resp Name'             	))
+			csv_RESPNAME           	=srch(mat csv_fields$,uprc$('Resp Name'             	))
 			csv_respAddress        	=srch(mat csv_fields$,uprc$('Resp Address'          	))
 			csv_respCsz            	=srch(mat csv_fields$,uprc$('Resp City-State-Zip'  	))
 			csv_patientPhone      	=srch(mat csv_fields$,uprc$('Patient Phone'        	))
 			csv_respPhone          	=srch(mat csv_fields$,uprc$('Resp Phone'            	))
 			csv_respCellPhone     	=srch(mat csv_fields$,uprc$('Resp Cell Phone'      	))
 			csv_respWorkPhone     	=srch(mat csv_fields$,uprc$('Resp Work Phone'      	))
-			csv_respEmail          	=srch(mat csv_fields$,uprc$('Resp Email'            	))
+			csv_EMAIL             	=srch(mat csv_fields$,uprc$('Resp Email'            	))
 			csv_social             	=srch(mat csv_fields$,uprc$('Social'                	))
 			csv_claimId            	=srch(mat csv_fields$,uprc$('Claim ID'              	))
 			csv_primaryCarrier    	=srch(mat csv_fields$,uprc$('Primary Carrier'      	))
@@ -677,7 +745,7 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 			csv_insurancePaid     	=srch(mat csv_fields$,uprc$('Insurance Paid'       	))
 			csv_patientPaid        	=srch(mat csv_fields$,uprc$('Patient Paid'          	))
 			csv_totalPaid          	=srch(mat csv_fields$,uprc$('Total Paid'            	))
-			csv_balance            	=srch(mat csv_fields$,uprc$('Balance'               	))
+			csv_BALANCE            	=srch(mat csv_fields$,uprc$('Balance'               	))
 			csv_billPatientReason 	=srch(mat csv_fields$,uprc$('Bill Patient Reason'  	))
 			csv_claimNotes         	=srch(mat csv_fields$,uprc$('Claim Notes'           	))
 		else if sourceId$='direct' then
@@ -685,11 +753,11 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 			csv_lName              =srch(mat csv_fields$,uprc$('lName'))
 			csv_fName              =srch(mat csv_fields$,uprc$('fName'))
 			csv_mi                 =srch(mat csv_fields$,uprc$('mi'))
-			csv_email              =srch(mat csv_fields$,uprc$('email'))
+			csv_EMAIL              =srch(mat csv_fields$,uprc$('email'))
 			csv_SERVICEDAY         =srch(mat csv_fields$,uprc$('dos'))
 			csv_code               =srch(mat csv_fields$,uprc$('code'))
 			csv_charge             =srch(mat csv_fields$,uprc$('charge'))
-			csv_balance            =srch(mat csv_fields$,uprc$('balance'))
+			csv_BALANCE            =srch(mat csv_fields$,uprc$('balance'))
 			csv_writeOff           =srch(mat csv_fields$,uprc$('writeOff'))
 			csv_receivedPrimary    =srch(mat csv_fields$,uprc$('receivedPrimary'))
 			csv_receivedOther      =srch(mat csv_fields$,uprc$('receivedOther'))
@@ -704,6 +772,8 @@ def fn_init_csv_in(&csvFieldCount,csvFile$*1024;___,returnN) ! everything here i
 			csv_dueFromInsName     =srch(mat csv_fields$,uprc$('dueFromInsName'))
 			csv_secInsName         =srch(mat csv_fields$,uprc$('secInsName'))
 			csv_FACILITY            =srch(mat csv_fields$,uprc$('facName'))
+			
+			csvFieldCount+=1 : csv_RESPNAME   	=fnAddOneC(mat csv_fields$,'respName')
 		else 
 			pr bell;'invalid sourceId$': pause
 		end if
@@ -723,22 +793,21 @@ def fn_close_csv_in(; delFileIn)
 	end if
 	allData_init_csv_in=0
 fnend
-def fn_readFileIntoArrays(;___,oc$)
+def fn_readFileIntoArrays(;___,oc$,respName$*256)
 	! r: common and allData dims
 		dim list_KEY$(0)*256
 		dim list_FACILITY$(0)*256
 		dim list_PROVIDER$(0)*256
 		dim list_patientName$(0)*256
 		dim list_patientDOB$(0)*256
-		dim list_patientId$(0)*256
-		dim list_respName$(0)*256
+		dim list_RESPNAME$(0)*256
 		dim list_respAddress$(0)*256
 		dim list_respCsz$(0)*256
 		dim list_patientPhone$(0)*256
 		dim list_respPhone$(0)*256
 		dim list_respCellPhone$(0)*256
 		dim list_respWorkPhone$(0)*256
-		dim list_respEmail$(0)*256
+		dim list_EMAIL$(0)*256
 		dim list_social$(0)*256
 		dim list_claimId$(0)*256
 		dim list_primaryCarrier$(0)*256
@@ -750,7 +819,7 @@ def fn_readFileIntoArrays(;___,oc$)
 		dim list_insurancePaidN(0)
 		dim list_patientPaidN(0)
 		dim list_totalPaidN(0)
-		dim list_balanceN(0)
+		dim list_BALANCEN(0)
 		dim list_billPatientReason$(0)*256
 		dim list_claimNotes$(0)*512
 		dim list_INVOICENO$(0)*128
@@ -762,14 +831,13 @@ def fn_readFileIntoArrays(;___,oc$)
 		dim list_lName$(0)*256
 		dim list_fName$(0)*256
 		dim list_mi$(0)*256
-		dim list_email$(0)*256
 		dim list_code$(0)*256
 		dim list_charge$(0)*256
 		dim list_balance$(0)*256
-		dim list_writeOff$(0)*256
+		dim list_writeOffN(0)
 		dim list_receivedPrimary$(0)*256
 		dim list_receivedOther$(0)*256
-		dim list_receivedTotal$(0)*256
+		dim list_receivedTotalN(0)
 		dim list_nonAllowed$(0)*256
 		dim list_appliedFromCb$(0)*256
 		dim list_npi$(0)*256
@@ -786,15 +854,14 @@ def fn_readFileIntoArrays(;___,oc$)
 		mat list_PROVIDER$(0)
 		mat list_patientName$(0)
 		mat list_patientDOB$(0)
-		mat list_patientId$(0)
-		mat list_respName$(0)
+		mat list_RESPNAME$(0)
 		mat list_respAddress$(0)
 		mat list_respCsz$(0)
 		mat list_patientPhone$(0)
 		mat list_respPhone$(0)
 		mat list_respCellPhone$(0)
 		mat list_respWorkPhone$(0)
-		mat list_respEmail$(0)
+		mat list_EMAIL$(0)
 		mat list_social$(0)
 		mat list_claimId$(0)
 		mat list_primaryCarrier$(0)
@@ -806,7 +873,7 @@ def fn_readFileIntoArrays(;___,oc$)
 		mat list_insurancePaidN(0)
 		mat list_patientPaidN(0)
 		mat list_totalPaidN(0)
-		mat list_balanceN(0)
+		mat list_BALANCEN(0)
 		mat list_billPatientReason$(0)
 		mat list_claimNotes$(0)
 		mat list_INVOICENO$(0)
@@ -818,15 +885,15 @@ def fn_readFileIntoArrays(;___,oc$)
 		mat list_lName$(0)
 		mat list_fName$(0)
 		mat list_mi$(0)
-		mat list_email$(0)
+		mat list_EMAIL$(0)
 		mat list_SERVICEDAY$(0)
 		mat list_code$(0)
 		mat list_charge$(0)
 		mat list_balance$(0)
-		mat list_writeOff$(0)
+		mat list_writeOffN(0)
 		mat list_receivedPrimary$(0)
 		mat list_receivedOther$(0)
-		mat list_receivedTotal$(0)
+		mat list_receivedTotalN(0)
 		mat list_nonAllowed$(0)
 		mat list_appliedFromCb$(0)
 		mat list_npi$(0)
@@ -848,30 +915,39 @@ def fn_readFileIntoArrays(;___,oc$)
 			str2mat(line$,mat item$,tab$)
 			mat item$(csvFieldCount)
 			item$(csv_FILENO)=fn_getFileNo$(forwNo$,item$(csv_KEY),oc$)
-			
+			! pr 'fileno$/key/oc$=';item$(csv_FILENO)&'/'&item$(csv_KEY)&'/'&oc$ : pause
 			item$(csv_SERVICEDAY)=str$(days(item$(csv_SERVICEDAY),'mm/dd/ccyy'))
 			
-			fn_ifValidAddItemC(mat list_procedureGroup$,csv_procedureGroup)
 			fnAddOneC(mat list_FILENO$,item$(csv_FILENO))
-			if oc$='' then
-				fnAddOneC(mat list_OCN$,'new')
-			else 
-				fnAddOneC(mat list_OCN$,oc$)
-			end if
+			fnAddOneC(mat list_OCN$,oc$)
 			fnAddOneC(mat list_KEY$,item$(csv_KEY))
+			fn_ifValidAddItemC(mat list_procedureGroup$,csv_procedureGroup)
 			fnAddOneC(mat list_FACILITY$,item$(csv_FACILITY))
 			fnAddOneC(mat list_PROVIDER$,item$(csv_PROVIDER))
 			fn_ifValidAddItemC(mat list_patientName$,csv_patientName)
 			fn_ifValidAddItemC(mat list_patientDOB$,csv_patientDOB)
-			fn_ifValidAddItemC(mat list_patientId$,csv_KEY)
-			fn_ifValidAddItemC(mat list_respName$,csv_respName)
+			
+			if sourceId$='allData' then
+			fn_ifValidAddItemC(mat list_RESPNAME$,csv_RESPNAME)
+				fnAddOneC(mat list_RESPNAME$,item$(csv_RESPNAME))
+			else if sourceId$='direct' then
+				respName$=rtrm$(item$(csv_lName))
+				if trim$(item$(csv_fName))<>'' then
+					respName$=respName$&', '&rtrm$(item$(csv_fName))
+				end if
+				if trim$(item$(csv_mi))<>'' then
+					respName$=respName$&' '&rtrm$(item$(csv_mi))
+				end if
+				fnAddOneC(mat list_RESPNAME$,respName$)
+			end if
 			fn_ifValidAddItemC(mat list_respAddress$,csv_respAddress)
+			
 			fn_ifValidAddItemC(mat list_respCsz$,csv_respCsz)
 			fn_ifValidAddItemC(mat list_patientPhone$,csv_patientPhone)
 			fn_ifValidAddItemC(mat list_respPhone$,csv_respPhone)
 			fn_ifValidAddItemC(mat list_respCellPhone$,csv_respCellPhone)
 			fn_ifValidAddItemC(mat list_respWorkPhone$,csv_respWorkPhone)
-			fn_ifValidAddItemC(mat list_respEmail$,csv_respEmail)
+			fn_ifValidAddItemC(mat list_EMAIL$,csv_EMAIL)
 			fn_ifValidAddItemC(mat list_social$,csv_social)
 			fn_ifValidAddItemC(mat list_claimId$,csv_claimId)
 			fn_ifValidAddItemC(mat list_primaryCarrier$,csv_primaryCarrier)
@@ -883,23 +959,25 @@ def fn_readFileIntoArrays(;___,oc$)
 			fn_ifValidAddItemN(mat list_insurancePaidN,csv_insurancePaid)
 			fn_ifValidAddItemN(mat list_patientPaidN,csv_patientPaid)
 			fn_ifValidAddItemN(mat list_totalPaidN,csv_totalPaid)
-			fn_ifValidAddItemN(mat list_balanceN,csv_balance)
-			! if list_balanceN(udim(mat list_balanceN))=0 then pr 'fnval('&item$(csv_balance)&') returned 0' : pause
+			fn_ifValidAddItemN(mat list_BALANCEN,csv_BALANCE)
+			! if list_BALANCEN(udim(mat list_BALANCEN))=0 then pr 'fnval('&item$(csv_BALANCE)&') returned 0' : pause
 			fn_ifValidAddItemC(mat list_billPatientReason$,csv_billPatientReason)
 			fn_ifValidAddItemC(mat list_claimNotes$,csv_claimNotes)
 			fnAddOneC(mat list_INVOICENO$,fn_invoiceNumber$)
+
+			
 			
 			fn_ifValidAddItemC(mat list_lName$,csv_lName)
 			fn_ifValidAddItemC(mat list_fName$,csv_fName)
 			fn_ifValidAddItemC(mat list_mi$,csv_mi)
-			fn_ifValidAddItemC(mat list_email$,csv_email)
+			fn_ifValidAddItemC(mat list_EMAIL$,csv_EMAIL)
 			fn_ifValidAddItemC(mat list_code$,csv_code)
 			fn_ifValidAddItemC(mat list_charge$,csv_charge)
-			fn_ifValidAddItemC(mat list_balance$,csv_balance)
-			fn_ifValidAddItemC(mat list_writeOff$,csv_writeOff)
+			fn_ifValidAddItemC(mat list_balance$,csv_BALANCE)
+			fn_ifValidAddItemN(mat list_writeOffN,csv_writeOff)
 			fn_ifValidAddItemC(mat list_receivedPrimary$,csv_receivedPrimary)
 			fn_ifValidAddItemC(mat list_receivedOther$,csv_receivedOther)
-			fn_ifValidAddItemC(mat list_receivedTotal$,csv_receivedTotal)
+			fn_ifValidAddItemN(mat list_receivedTotalN,csv_receivedTotal)
 			fn_ifValidAddItemC(mat list_nonAllowed$,csv_nonAllowed)
 			fn_ifValidAddItemC(mat list_appliedFromCb$,csv_appliedFromCb)
 			fn_ifValidAddItemC(mat list_npi$,csv_npi)
@@ -928,6 +1006,7 @@ def fn_ifValidAddItemN(mat listN,csv_enum)
 fnend
 
 def fn_setup
+	on error goto Ertn
 	if ~setup then
 		setup=1
 		! library 'Library\clsUtil.wb': fnErase_buttons
@@ -1026,11 +1105,11 @@ def fn_itemCount(line$*2048,delim$; ___,returnN)
 	returnN=udim(mat itemCount_item$)
 	fn_itemCount=returnN
 fnend
-def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwRefNo$,Balance$,BalanceNew$)
+def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwRefNo$,Balance$,BalanceNew$; ___,whichFileNo)
 
 	if ~reportClosedEncounter_init then
 		reportClosedEncounter_init=1
-		fnSel(1024, 'Select Output for '&env$('cap') ,255, '','HTML',env$('cap'))
+		fnSel(1024, 'Select Output',255, '','HTML')
 		if fkey=93 or fkey=99 then pr 'unexpected cancel' : pause
 		pr #255: '</pre>'
 		pr #255: '<table algin="Center">'
@@ -1044,15 +1123,22 @@ def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwRefNo$,Balance$,BalanceNew$
 		pr #255: '    <td><h4>Balance Old</h4></td>'
 		pr #255: '    <td><h4>Balance New</h4></td>'
 		pr #255: '  </tr>'
+		dim alreadyReportedFileNo$(0)
+		mat alreadyReportedFileNo$(0)
 	end if
-	pr #255: '  <tr>'
-	pr #255: '    <td>'&oc$&'</td>'
-	pr #255: '    <td>'&fileno$&'</td>'
-	pr #255: '    <td>'&forwNo$&'</td>'
-	pr #255: '    <td>'&forwRefNo$&'</td>'
-	pr #255: '    <td>'&Balance$&'</td>'
-	pr #255: '    <td>'&BalanceNew$&'</td>'
-	pr #255: '  </tr>'
+
+	whichFileNo=srch(mat alreadyReportedFileNo$,fileno$)
+	if whichFileNo<=0 then
+		fnAddOneC(mat alreadyReportedFileNo$,fileno$)
+		pr #255: '  <tr>'
+		pr #255: '    <td>'&oc$&'</td>'
+		pr #255: '    <td>'&fileno$&'</td>'
+		pr #255: '    <td>'&forwNo$&'</td>'
+		pr #255: '    <td>'&forwRefNo$&'</td>'
+		pr #255: '    <td>'&Balance$&'</td>'
+		pr #255: '    <td>'&BalanceNew$&'</td>'
+		pr #255: '  </tr>'
+	end if
 fnend
 def fn_reportClosedEncounter_finis
 	pr #255: '</table>'

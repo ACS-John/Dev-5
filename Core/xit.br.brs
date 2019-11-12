@@ -18,6 +18,7 @@ def fn_xit(;cursys$)
 		setenv('Session_Rows',24)
 		setenv('Session_Cols',80)
 		if env$('cursys')='CM' then
+			execute 'config OPTION 48 ON' ! make ENTER key return fkey value instead of zero
 			if force80x24 then
 				setenv('force80x24','Yes')
 			else
