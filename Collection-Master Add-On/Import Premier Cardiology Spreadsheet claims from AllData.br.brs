@@ -21,7 +21,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCJ20001')
 		fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
 		fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
-		fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$,'PRIINSNAME')
+		fnreg_read(env$('program_caption')&'.priorityColumnN',priorityColumn$,'PRIINSNAME')
 		fnreg_read(env$('program_caption')&'.priorityText',priorityText$,'Patient Has Check')
 		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$,'222')
 	else
@@ -29,7 +29,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCE01001')
 		fnreg_read(env$('program_caption')&'.forw no',forwNo$,'1617')
 		fnreg_read(env$('program_caption')&'.enableImport',enableImport$) : if enableImport$='True' then enableImport=1 else enableImport=0
-		fnreg_read(env$('program_caption')&'.priorityColumn',priorityColumn$)
+		fnreg_read(env$('program_caption')&'.priorityColumnN',priorityColumn$)
 		fnreg_read(env$('program_caption')&'.priorityText',priorityText$)
 		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
 	end if
@@ -37,13 +37,16 @@ def  fn_premierCardiologyImport(; sourceId$)
 	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$,priorityColumn$,priorityText$,priorityDiaryCode$)=99 then
 		goto PciXit
 	else
+
+
+
 		! r: write screen answers
 		fnreg_write(env$('program_caption')&'.csvFile',csvFile$)
 		fnreg_write(env$('program_caption')&'.starting fileno',sFileNo$)
 		fnreg_write(env$('program_caption')&'.forw no',forwNo$)
 		fnreg_write(env$('program_caption')&'.enableImport',enableImport$)
 
-		fnreg_write(env$('program_caption')&'.priorityColumn',priorityColumn$)
+		fnreg_write(env$('program_caption')&'.priorityColumnN',priorityColumn$)
 		fnreg_write(env$('program_caption')&'.priorityText',priorityText$)
 		fnreg_write(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
 		! /r
@@ -80,7 +83,16 @@ def  fn_premierCardiologyImport(; sourceId$)
 			pause
 			goto PciXit
 		end if
-		
+		priorityColumn$=trim$(priorityColumn$)
+		if priorityColumn$<>'' then
+			priorityColumnN=fnsrch_case_insensitive(mat csv_fields$,priorityColumn$)
+			if priorityColumnN<=0 then
+				pr 'invalid priority column.';bell
+				pause
+			end if
+		end if
+
+
 		dim useDate$*10
 		useDate$=date$('mm/dd/ccyy') ! '10/25/2019'
 		dim useTime$*8
@@ -151,7 +163,12 @@ include: filenamesPopUpperCase
 					fn_writeDemographics(hOut,oc$,mat item$)
 					fn_writePaperless(hOut,mat item$,lineCount,csvFile$)
 					fn_writeInvoices(hOut,mat item$)
-					fn_writeInfinity(hOut,mat item$)
+					! fn_writeInfinity(hOut,mat item$)
+					if fn_isPriority(mat item$,priorityColumnN,priorityText$) then
+							priorityCount+=1
+							! priorityColumn$,priorityText$,priorityDiaryCode$
+						fn_writeDiary(hOut,mat item$)
+					end if
 				end if
 				! mat2str(mat item$,line$,tab$)
 				! print #hOut: line$
@@ -189,6 +206,7 @@ include: filenamesPopUpperCase
 		mbText$='New Claims: '&tab$&str$(countNewClaim)
 		mbText$(inf:inf)=lf$&'Claim Updates-Open: '&tab$&str$(countUpdateClaimOpen)
 		mbText$(inf:inf)=lf$&'Claim Skipped-Closed: '&tab$&str$(udim(mat alreadyReportedFileNo$))
+		mbText$(inf:inf)=lf$&'Claim Diaried for Priority: '&tab$&str$(priorityCount)
 		mbText$(inf:inf)=lf$&'Sucessfully created a file for CM EDI Import:'
 		mbText$(inf:inf)=lf$&outFile$
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
@@ -198,7 +216,14 @@ include: filenamesPopUpperCase
 	PciXit: !
 	
 fnend
-
+def fn_isPriority(mat item$,priorityColumnN,priorityText$)
+	if pos(lwrc$(item$(priorityColumnN)),lwrc$(trim$(priorityText$)))>0 then
+		returnN=1
+	else
+		returnN=0
+	end if
+	fn_isPriority=returnN
+fnend
 
 
 def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&priorityColumn$,&priorityText$,&priorityDiaryCode$; ___,returnN,rc,lc)
@@ -537,10 +562,25 @@ def fn_writePaperlessOneLine(comment$*256,comment2$*2048;___, which)
 
 fnend
 def fn_writeInfinity(hOut,mat item$)
-
 	fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
 	fn_add('FIRM_FILENO'   	,item$(csv_FILENO)                 	)
 	fn_pr(134)
+fnend
+def fn_writeDiary(hOut,mat item$)
+	fn_add('Date',useDate$                   ,1  )
+	fn_add('Time',useTime$                       )
+	fn_add('FORW_REFNO', item$(csv_KEY)          ) ! Forwarder or Senders internal File # C  
+	fn_add('FORW_FILENO',item$(csv_KEY)          ) ! Forwarders file #( Credit Card #) C  
+	fn_add('FIRM_FILENO',item$(csv_FILENO)       ) ! Receivers File # (Usually Left Blank) C  
+	! fn_add('SENDER_ID',                        ) ! Sender ID Code C  
+	! fn_add('RECEIVER_ID',                      ) ! Receiver ID Code C  
+	fn_add('DDATE',useDate$                      )
+	fn_add('DCODE',priorityDiaryCode$            ) ! Claim Diary Code N REQUIRED  
+	fn_add('DCMT','CSS Premier Cardiology Import') ! Claim Diary Comment C  
+	fn_add('DQUEUE'   ,'QCSSPCI'                 ) ! Claim Diary Queue C  
+	fn_add('DTIME'    ,useTime$                  ) ! Claim Diary Time ##:##  
+	fn_add('DPRIORITY','500'                     ) ! Claim Diary Priority --#  
+	fn_pr(195)
 fnend
 dim hLine$*2048,dLine$*2408
 def fn_addItemIfValid(hLineAdd$*128,enum)
@@ -1036,6 +1076,8 @@ def fn_setup
 		library 'S:\Core\Library.br': fnPosOfAny
 		library 'S:\Core\Library.br': fnReg_read
 		library 'S:\Core\Library.br': fnReg_write
+		library 'S:\Core\Library.br': fnsrch_case_insensitive
+		
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnCptCode$
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnVal
 
