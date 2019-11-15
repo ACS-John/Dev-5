@@ -5,7 +5,7 @@
 	on error goto ERTN
 ! ______________________________________________________________________
 	dim actpd$*6,cch$*20
-	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
+	dim r$*5,d$*50,te$*1,ac(9),report$*50,foot$*132,underlin$*14
 	dim accum(9,7)
 	dim actpd$*6,bm(13),bp(13),by(13),cap$*128
 ! /r
@@ -19,7 +19,6 @@
 	actpd=fnactpd
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	pr actpd,actpd$ : pause
 ! ______________________________________________________________________
 	if fnps=2 then 
 		mp1=72 
@@ -131,6 +130,7 @@ FinRecRandS: ! r:
 	if te$="R" then 
 		report$=d$
 	else if te$="S" then 
+		dim secondr$*50
 		secondr$=d$
 	end if
 	gosub PrFootnotesA
