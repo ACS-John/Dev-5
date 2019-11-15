@@ -140,7 +140,7 @@ include: filenamesPopUpperCase
 				item$(csv_SERVICEDAY)=list_SERVICEDAY$(lineCount)
 				oc$=list_OCN$(lineCount)
 				item$(csv_INVOICENO)=list_INVOICENO$(lineCount)
-				
+				item$(csv_RESPNAME)=list_RESPNAME$(lineCount)
 				
 				if csv_patientName>0 then 
 					item$(csv_patientName)=srep$(item$(csv_patientName),', ',',')
@@ -1157,6 +1157,7 @@ def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwRefNo$,Balance$,BalanceNew$
 		pr #255: '<table algin="Center">'
 		pr #255: '  <tr><td colspan="2" align="Center"><h2>'&env$('program_caption')&'</h2></td></tr>'
 		pr #255: '  <tr><td colspan="2" align="Center"><h3>as of '&date$('month d, ccyy')&' '&useTime$&'</h3></td></tr>'
+		pr #255: '  <tr><td colspan="2" align="Center"><h3>These accounts already exist in closed and were skipped. Only open accounts can be updated.</h3></td></tr>'
 		pr #255: '  <tr>'
 		pr #255: '    <td><h4>OC</h4></td>'
 		pr #255: '    <td><h4>FileNo</h4></td>'

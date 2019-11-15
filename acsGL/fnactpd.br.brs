@@ -1,17 +1,16 @@
-00010 ! Replace S:\acsGL\fnActPd
-00020 ! accounting periond from company information file
-00030 ! ______________________________________________________________________
-20000 def library fnactpd(;actpd)
-20020   library 'S:\Core\Library': fngethandle,fncno
-20040   get=1 : put=2
-20060   if actpd=0 then get_or_put=get else get_or_put=put
-20080   open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
-20100   if get_or_put=get then 
-20120     read #tmp,using "Form POS 268,N 2",rec=1: actpd noRec CLOSE_TMP
-20140   else if get_or_put=put then 
-20160     rewrite #tmp,using "Form POS 268,N 2",rec=1: actpd
-20180   end if
-20200   CLOSE_TMP: !
-20220   close #tmp: 
-20240   fnactpd=actpd
-20260 fnend 
+! Replace S:\acsGL\fnActPd
+! accounting periond from company information file
+! ______________________________________________________________________
+def library fnactpd(;actpd)
+	library 'S:\Core\Library': fngethandle
+	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
+	if actpd<=0 then 
+		actpd=0
+		read #tmp,using "Form POS 268,N 2",rec=1: actpd noRec CLOSE_TMP
+	else 
+		rewrite #tmp,using "Form POS 268,N 2",rec=1: actpd
+	end if
+	CLOSE_TMP: !
+	close #tmp: 
+	fnactpd=actpd
+fnend 

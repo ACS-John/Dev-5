@@ -37,15 +37,19 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 	else
 		fnTos(sn$="glFS-lib") 
 		lc=rc=0 : mylen=23 : mypos=mylen+3
+		
 		fnLbl(lc+=1,1,"Statement Format:",mylen,1)
 		fncomboa("ps",lc,mypos,mat formatOption$) 
 		resp$(resp_format:=rc+=1)=formatOption$(format)
+		
 		fnLbl(lc+=1,1,"Year:",mylen,1)
 		fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
 		resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
+		
 		fnLbl(lc+=1,1,"Period to Print:",mylen,1)
-		fncomboa("FSCode",lc,mypos,mat periodOption$) 
-		resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
+		fncomboa("actPd",lc,mypos,mat periodOption$) 
+		resp$(resp_actpd:=rc+=1)=str$(actpd) ! periodOption$(1)
+		
 		fnCmdSet(3)
 		fnAcs(sn$,0,mat resp$,ckey)
 		if ckey=5 then 
@@ -53,14 +57,13 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 		else
 			format=srch(mat formatOption$,resp$(resp_format))
 			priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))
-			period=srch(mat periodOption$,resp$(resp_period))
-			! pr 'format=';format 
-			! pr 'priorOrCurrent=';priorOrCurrent
-			! pr 'period=';period 
-			! pause
+			actpd=srch(mat periodOption$,resp$(resp_actpd))
+			actpd$=resp$(resp_actpd)
 			fnps(format)
 			fnpriorcd(priorOrCurrent)
-			fnfscode(period)
+			fnfscode(actpd)
+			fnactpd$(actpd$) 
+			fnactpd	(actpd )
 		end if
 	end if
 	XIT: ! 
