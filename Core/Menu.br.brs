@@ -13,7 +13,7 @@ def fn_setup
 		library 'S:\Core\Library': fntop
 		library 'S:\Core\Library': fnSystemName$
 		library 'S:\Core\Library': fncompany_name
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs,fnCmdKey,fnButton,fnLbl,fnTos,fnchk
+		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs2,fnCmdKey,fnButton,fnLbl,fnTos,fnchk
 		library 'S:\Core\Library': fnFra
 		library 'S:\Core\Library': fnbutton_or_disabled
 		library 'S:\Core\Library': fnmsgbox
@@ -52,7 +52,8 @@ def fn_setup
 		library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
 		library 'S:\Core\Library': fnClearLayoutCache
 		library 'S:\Core\Library': fnClientSelect
-		library 'S:\Core\Programs\PrintAce_Test': fnPrintAceTest
+		library 'S:\Core\Library': fnPicBut
+		library 'S:\Core\Library': fnPrintAceTest
 		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
 		dim resp$(32)*255
 
@@ -207,6 +208,7 @@ def fn_main
 	dim program_selection$*256,menu_option$*128
 	do
 		if env$('ExitNow')<>'yes' then
+			Tos: !
 			fnTos(screen_name$:='Menu') : frameCount=0
 			fnflexinit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
 	!
@@ -220,6 +222,7 @@ def fn_main
 			fnreg_read('Last Save File',last_save$)
 			dim tmp_tooltip$*2048
 			tmp_tooltip$='Last successful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
+			fnPicBut(program_grid_line,2,'',fkey_facebook:=1449,'S:\Core\Icon\facebook.png:ISOTROPIC',2,3, '','Join the conversation on facebook.')
 			fnLbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 			fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 			fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
@@ -254,7 +257,7 @@ def fn_main
 	!
 			setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 			fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
-			fnAcs(screen_name$,0,mat resp$,fkey_value,0,0,0)
+			fnAcs2(mat resp$,fkey_value,0,0,0)
 			setenv('tmp_acs_back_arrow','')
 			program_selection$=resp$(1)
 			program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
@@ -263,6 +266,13 @@ def fn_main
 			! if env$('cursys')="PR" then
 			!   if resp$(2)='True' or resp$(2)='^' then let setenv('taxYear','2018') else let setenv('taxYear','') 
 			! end if
+			if fkey_value=1449 then ! fkey_facebook then ! =1449
+				execute 'sy -M -C Start https://www.facebook.com/pg/advancedcomputerservices/community/'
+				goto Tos
+			end if
+
+			
+			
 		end if
 	!
 		if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
@@ -363,6 +373,7 @@ def fn_main
 			fkey_favorite_close=1452
 			fkey_favorite_del=1455
 			fkey_favorite_program_base=1460
+
 			if enableFavorites and fkey_value=>fkey_favorite_add and fkey_value<=fkey_favorite_add+50 then
 				if fkey_value=fkey_favorite_add then
 					! pr 'program_selection$="'&program_selection$&'"'

@@ -662,6 +662,10 @@ fnend
 	fnend
 ! /r
 ! r: PrintAce   S:\Core\printAce
+	def library fnPrintAceTest(; format$)
+		library 'S:\Core\Programs\PrintAce_Test': fnPrintAceTest
+		fnPrintAceTest=fnPrintAceTest( format$)
+	fnend
 	def library fnpa_background(background_pdf$*256)
 		library 'S:\Core\PrintAce.br': fnpa_background
 		fnpa_background=fnpa_background(background_pdf$)
