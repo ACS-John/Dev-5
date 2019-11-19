@@ -466,14 +466,29 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	if width=0 then width=len(txt$)
 	setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 fnend
-def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
+def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel,___,tmpControlX$*2048)
 	if ~setup then let fn_setup
 	! mylen		 button.width
 	! txt$		 button.caption
 	! tt$			 button.tooltiptext
 	btnh=max(btnh,1) ! button height is at least 1
 	if btnw=0 then btnw=len(txt$)
-	setenv('control'&str$(fn_control_count),"PicBut|"&str$(lyne)&"|"&str$(ps)&"|"&str$(comkey)&"|"&str$(btnh)&"|"&str$(btnw)&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(default)&"|"&str$(cancel)&"|"&txt$&"|"&pic1$&"|"&pic2$&"|"&tt$&"|")
+
+	tmpControlX$(inf:inf)='PicBut|'
+	tmpControlX$(inf:inf)=str$(lyne)&'|'
+	tmpControlX$(inf:inf)=str$(ps)&'|'
+	tmpControlX$(inf:inf)=txt$&'|'
+	tmpControlX$(inf:inf)=str$(comkey)&'|'
+	tmpControlX$(inf:inf)=pic1$&'|'
+	tmpControlX$(inf:inf)=str$(btnh)&'|'
+	tmpControlX$(inf:inf)=str$(btnw)&'|'
+	tmpControlX$(inf:inf)=pic2$&'|'
+	tmpControlX$(inf:inf)=tt$&'|'
+	tmpControlX$(inf:inf)=str$(container)&'|'
+	tmpControlX$(inf:inf)=str$(tabcon)&'|'
+	tmpControlX$(inf:inf)=str$(default)&'|'
+	tmpControlX$(inf:inf)=str$(cancel)&'|'
+	setenv('control'&str$(fn_control_count),tmpControlX$)
 fnend
 IGNORE: continue
 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$; ___,menu_string$*10000,index_)
@@ -960,7 +975,7 @@ def fn_clear_env(&tmp_combo_count_for_read,&tmp_combo_count_for_set; ___,index_,
 	tmp_combo_count_for_set=tmp_combo_count_for_read=0
 	setenv('control_count',0)
 fnend
-def fn_windowSize(; ___,index_)
+def fn_windowSize(; ___,index_,tmpLine,tmpPos,tmpHeight,tmpWidth)
 	!		frame_or_tab_present=0
 	for index_=1 to control_count
 		str2mat(env$('control'&str$(index_)),mat control$,"|")
@@ -987,11 +1002,19 @@ def fn_windowSize(; ___,index_)
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
 		else if typ$="PICTURE" then
-			ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)))
-			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(6)) )
+			tmpLine  	=val(control$(2))
+			tmpPos   	=val(control$(3))
+			tmpHeight	=val(control$(4))
+			tmpWidth 	=val(control$(5))
+			ace_lyne_max  =max(ace_lyne_max  ,tmpLine+tmpHeight)
+			ace_column_max=max(ace_column_max,tmpPos+tmpWidth  )
 		else if typ$="PICBUT" then
-			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
-			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(6)) )
+			tmpLine  	=val(control$(2))
+			tmpPos   	=val(control$(3))
+			tmpHeight	=val(control$(7))
+			tmpWidth 	=val(control$(8))
+			ace_lyne_max=max(ace_lyne_max,tmpLine+tmpHeight)
+			ace_column_max=max( ace_column_max,tmpPos+tmpWidth)
 		else if typ$="MENU" then
 			dropdown_menu_present=1
 		end if
@@ -1074,29 +1097,41 @@ def fn_ace_rd_multiline
 	fn_remove_crlf(resp$(respc))
 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
 fnend
-def fn_ace_rd_picbut(; ___,lyne,ps,comkey,height,width,container,tabcon,default,cancel,txt$*256,path1$*300,tt$*400)
-	lyne=val(control$(2))
-	ps=val(control$(3))
-	comkey=val(control$(4))
-	height=val(control$(5))
-	width=val(control$(6))
-	container=val(control$(7))
-	tabcon=val(control$(8))
-	default=val(control$(9))
-	cancel=val(control$(10))
-	txt$=control$(11)
-	path1$=control$(12)
+def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,cancel,txt$*256,path1$*300,tt$*400,tmpWin)
+	lyne$    =    control$(2)
+	pos$     =    control$(3)
+	txt$     =    control$(4) !  not used
+	comkey$  =    control$(5)
+	path1$   =    control$(6)
+	height$  =    control$(7)
+	width$   =    control$(8)
+	! pic2$  =    control$(9)  alternate depressed picture... not implemented
+	tt$      =    control$(10)
+	container=val(control$(11))
+	tabcon   =val(control$(12))
+	default  =val(control$(13))
+	cancel   =val(control$(14))
 	! path2$=control$(13)
-	tt$=control$(14)
-	pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
-	
-	
-		if tt$<>'' then
-			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen), help '4;'&tt$&';': trim$(txt$)
+	! pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
+
+		if container then
+			tmpWin=frames(container,1)
+		else if tabcon then
+			tmpWin=tabs(tabcon,1)
 		else
-			pr #lbl_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
+			tmpWin=acs_win
 		end if
 	
+		if tt$<>'' then
+	    ! pr comkey$ : pause
+			pr #tmpWin, fields lyne$&','&pos$&',P '&height$&'/'&width$&',[buttons],'&comkey$, help '4;'&tt$&';': path1$ ! ioerr ignore
+		else
+	    pr #tmpWin, fields lyne$&','&pos$&',P '&height$&'/'&width$&',[buttons],'&comkey$: path1$ ! ioerr ignore
+		end if
+		
+		mat return_keys(udim(return_keys)+1)
+		return_keys(udim(return_keys))=val(comkey$)
+
 	
 fnend
 def fn_ace_rd_cmdkey
@@ -1643,7 +1678,7 @@ def fn_ace_rd_check
 		pr #acs_win, fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
 	end if
 fnend
-def fn_ace_rd_label
+def fn_ace_rd_label(; ___,lbl_win)
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	mylen=val(control$(4))

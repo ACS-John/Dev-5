@@ -19,12 +19,15 @@ return ! /r
 
 TestAcs: ! r:
 	library 'S:\Core\Library': fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs2,fnPicBut
+	library 'S:\Core\Library': fnPic
 	dim resp$(30)*512
 	fntop(program$)
 	fnTos
-	fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\calendar_icon.png',2,2)
+	! fnPic(1,1,3,3,'S:\Core\Icon\calendar_icon.png')
+	! fnpic(1,1,4,30,"Logo.bmp")
+	! fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\calendar_icon.png',2,2)
 	! fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\blue_folder.ico',2,2)
-	! fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\facebook.svg',2,2)
+	fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\facebook.png',2,2)
 	fnLbl(6,1,"File:",5,1)
 	fnTxt(6,8,40,256,right,"1070",0,"",0 )
 	resp$(1)='' ! 
