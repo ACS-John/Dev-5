@@ -610,7 +610,12 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then x(ti1)=round(x(ti1)*.1,0)
 	if ti$="" or ti$="W" then
 		linput #h_readings: ln$ eof L5440
-		if ti$="" then x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440 else x_g$=lpad$(rtrm$(ln$(4:13)),10) conv L5440 : ti$=ln$(14:14)
+		if ti$="" then 
+			x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440 
+		else 
+			x_g$=lpad$(rtrm$(ln$(4:13)),10) conv L5440
+			ti$=ln$(14:14)
+		end if
 		if x_g$=x$ and ti$="" or ti$="G" then
 			x(2)=val(ln$(89:97))
 			last_ln$=""

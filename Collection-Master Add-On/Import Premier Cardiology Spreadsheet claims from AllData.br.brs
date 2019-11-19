@@ -13,6 +13,9 @@ def  fn_premierCardiologyImport(; sourceId$)
 		goto PciXit
 	end if
 
+	open #hClaimOpen:=fnGetHandle: "name=MASTER//6,kfname=MASTERX//6,shr",internal,input,keyed
+	open #hClaimClosed:=fnGetHandle: "name=HISTORY//1,kfname=HISTORYX//1,shr",internal,input,keyed
+
 	Screen1: !
 	dim csvFile$*512
 	! r: read screen answers
@@ -122,13 +125,13 @@ include: filenamesPopUpperCase
 				dim item$(0)*512
 				str2mat(line$,mat item$,tab$)
 				mat item$(csvFieldCount)
-				item$(csv_FILENO)=fn_getFileNo$(forwNo$,item$(csv_KEY),oc$)
+				! item$(csv_FILENO)=fn_getFileNo$(forwNo$,item$(csv_KEY),oc$)
 				
-				if item$(csv_FILENO)<>list_FILENO$(lineCount) then ! these things should always match up - we shouldn't even need to read them in again
-					pr 'item fileno=';item$(csv_FILENO)
-					pr 'list fileno=';list_FILENO$(lineCount)
-					pause 
-				end if
+				! if item$(csv_FILENO)<>list_FILENO$(lineCount) then ! these things should always match up - we shouldn't even need to read them in again
+				! 	pr 'item fileno=';item$(csv_FILENO)
+				! 	pr 'list fileno=';list_FILENO$(lineCount)
+				! 	pause 
+				! end if
 				if days(item$(csv_SERVICEDAY),'mm/dd/ccyy')<>val(list_SERVICEDAY$(lineCount)) then ! these things should always match up - we shouldn't even need to read them in again
 					pr 'item serviceday=';days(item$(csv_SERVICEDAY),'mm/dd/ccyy')
 					pr 'list serviceday=';list_SERVICEDAY$(lineCount)
@@ -177,6 +180,9 @@ include: filenamesPopUpperCase
 	end if
 
 	Finis: ! r:
+	close #hClaimOpen:
+	close #hClaimClosed:
+
 	fn_pr_hOut('0[tab]H[tab]lineCount='&str$(lineCount))
 	fn_close_csv_in( 1)
 	close #hOut:
@@ -618,7 +624,7 @@ dim claim_forwRefNo$		(0)*20
 dim claim_oc$						(0)*6
 dim claim_balance				(0)
 dim claim_forwNo				(0)
-def fn_existingFileNo$(ForwNo$,forwRefNo$,&efn_oc$; ___,return$,claimKey$*64,which,hClaim)
+def fn_existingFileNoWintinForw$(ForwNo$,forwFileNo$,&efn_oc$; ___,return$,claimKey$*64,which,hClaim)
 	if setup_efn<>val(ForwNo$) then ! r:
 		setup_efn=val(ForwNo$)
 		dim claim$(0)*60,claimN(0)
@@ -635,10 +641,10 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&efn_oc$; ___,return$,claimKey$*64,whi
 		mat claim_forwNo				(0)
 		for oc=1 to 2
 			if oc=1 then
-				open #hClaim:=fnGetHandle: "name=MASTER//6,shr",internal,input,relative
+				hClaim=hClaimOpen
 				efn_oc$='open'
 			else
-				open #hClaim:=fnGetHandle: "name=HISTORY//1,shr",internal,input,relative
+				hClaim=hClaimClosed
 				efn_oc$='closed'
 			end if
 			do
@@ -655,13 +661,12 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&efn_oc$; ___,return$,claimKey$*64,whi
 				end if
 			loop
 			EfnEoMaster: !
-			close #hClaim:
 		nex oc
 	end if ! /r
 	
-	which=srch(mat claim_forwRefNo$,trim$(forwRefNo$))
+	which=srch(mat claim_forwFileNo$,trim$(forwFileNo$))
 	if which<=0 then
-		which2018=srch(mat claim_forwRefNo$,trim$(forwRefNo$)&'-2018')
+		which2018=srch(mat claim_forwRefNo$,trim$(forwFileNo$)&'-2018')
 		if which2018>0 then
 			which=which2018
 		end if
@@ -674,12 +679,13 @@ def fn_existingFileNo$(ForwNo$,forwRefNo$,&efn_oc$; ___,return$,claimKey$*64,whi
 		return$=claim_fileno$(which)
 		efn_oc$=claim_oc$(which)
 	end if
-	! pr 'inside fn_existingFileNo$ oc/return$=';efn_oc$&'/'&return$&'/'&forwRefNo$ ! if efn_oc$='closed' then pause
-	! if forwRefNo$='3104647' or forwRefNo$='3084666' then efn_oc$='closed' : pr bell;'cheating': pause
-	fn_existingFileNo$=return$
+	! pr 'inside fn_existingFileNoWintinForw$ oc/return$=';efn_oc$&'/'&return$&'/'&forwFileNo$ ! if efn_oc$='closed' then pause
+	! if forwFileNo$='3104647' or forwFileNo$='3084666' then efn_oc$='closed' : pr bell;'cheating': pause
+	fn_existingFileNoWintinForw$=return$
 fnend
-def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018)
+def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018,newFileNo$)
 	if ~setup_getFileNo then
+		setup_getFileNo=1
 		dim gfnKey$(0)*128
 		mat gfnKey$(0)
 		dim gfnFileNo$(0)*8
@@ -693,24 +699,40 @@ def fn_getFileNo$(forwNo$,uniqueIdentifier$,&oc$; ___,x,return$,which,which2018)
 		nextFileNumber=firstFileNumber
 		dim fileNumberFormat$*64
 		fileNumberFormat$='pic('&rpt$('#',lastNumberInSfileNo-firstNumberInSfileNo+1)&')'
-		setup_getFileNo=1
 	end if
-	return$=fn_existingFileNo$(ForwNo$,uniqueIdentifier$,oc$)
+	return$=fn_existingFileNoWintinForw$(ForwNo$,uniqueIdentifier$,oc$)
 	!		pr 'fileno$/forwNo/key/oc$=';return$&'/'&ForwNo$&'/'&uniqueIdentifier$&'/'&oc$ : pause
 	if return$='' then
 		uniqueIdentifier$=trim$(uniqueIdentifier$)
 		which=srch(mat gfnKey$,uniqueIdentifier$)
 		if which<=0 then
+			do
+				newFileNo$=sFileNo$(1:firstNumberInSfileNo-1)&cnvrt$(fileNumberFormat$,nextFileNumber)
+				nextFileNumber+=1
+			loop until ~fn_fileNoExist(newFileNo$)
 			which=udim(mat gfnKey$)+1
 			mat gfnKey$(which)
 			mat gfnFileNo$(which)
 			gfnKey$(which)=uniqueIdentifier$
-			gfnFileNo$(which)=sFileNo$(1:firstNumberInSfileNo-1)&cnvrt$(fileNumberFormat$,nextFileNumber)
-			nextFileNumber+=1
+			gfnFileNo$(which)=newFileNo$
+			! pr 'returning a NEW file number of '&newFileNo$ : pause
 		end if
 		return$=gfnFileNo$(which)
 	end if
 	fn_getFileNo$=return$
+fnend
+def fn_fileNoExist(testFileNo$*8; ___,returnN)
+	read #hClaimOpen,key=rpad$(filenNo$,8): nokey Fne_notInOpen
+	returnN=1
+	goto FneFinis
+	Fne_notInOpen: !
+	read #hClaimClosed,key=rpad$(filenNo$,8): nokey Fne_notInClosed
+	returnN=2
+	goto FneFinis
+	Fne_notInClosed: !
+	goto FneFinis
+	FneFinis: !
+	fn_fileNoExist=returnN
 fnend
 def fn_origionalClaimAmount(patientId$; ___,returnN,x,xStart)
 	xStart=srch(mat list_KEY$,patientId$)
@@ -1147,7 +1169,7 @@ def fn_itemCount(line$*2048,delim$; ___,returnN)
 	returnN=udim(mat itemCount_item$)
 	fn_itemCount=returnN
 fnend
-def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwRefNo$,Balance$,BalanceNew$; ___,whichFileNo)
+def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwFileNo$,Balance$,BalanceNew$; ___,whichFileNo)
 
 	if ~reportClosedEncounter_init then
 		reportClosedEncounter_init=1
