@@ -29,8 +29,8 @@ Ertn: !
 		pr #err_win,f '1,1,Cc 60,[E]' : 'Error: '&str$(errorNumber)
 		pr #err_win,f '2,1,Cc 60,[E]' : ' Line: '&str$(lineNumber)
 		pr #err_win,f '4,1,C  60,[E]' : 'Select a course of action:'
-		errFieldPos$(1)=' 5,5,C 30,[E]' : errFieldText$(1)="1. Offline Help"
-		errFieldPos$(2)=' 6,5,C 30,[E]' : errFieldText$(2)="2. Retry"
+		errFieldPos$(2)=' 5,5,C 30,[E]' : errFieldText$(2)="1. Retry"
+		errFieldPos$(1)=' 6,5,C 30,[E]' : errFieldText$(1)="2. Offline Help"
 		errFieldPos$(3)=' 7,5,C 30,[E]' : errFieldText$(3)="3. Quit to MAIN MENU"
 		errFieldPos$(4)=' 8,5,C 30,[E]' : errFieldText$(4)="4. Exit"
 		errFieldPos$(5)=' 9,5,C 30,[E]' : errFieldText$(5)="5. Restart this Program"
@@ -56,13 +56,13 @@ Ertn: !
 		end if
 		close #err_win:
 		if errSelection=1 then
+			on error goto Ertn
+			retry
+		else if errSelection=2 then
 			dim hhelp_$*40
 			hhelp_$=("ERR"&cnvrt$("PIC(####)",errornumber)&",WBCMD.WBH")
 			if errornumber=5 then hhelp_$="HELP,WBCMD.WBH"
 			err_dummy$=help$(hhelp_$)
-		else if errSelection=2 then
-			on error goto Ertn
-			retry
 		else if errSelection=3 then
 			library 'S:\Core\Library.br': fnXit
 			fnXit

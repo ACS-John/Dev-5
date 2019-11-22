@@ -27,7 +27,7 @@ TestAcs: ! r:
 	! fnpic(1,1,4,30,"Logo.bmp")
 	! fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\calendar_icon.png',2,2)
 	! fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\blue_folder.ico',2,2)
-	fnPicBut(1,1,'Facebook',3,'S:\Core\Icon\facebook.png',2,2)
+	fnPicBut(1,1,'',3,'S:\Core\Icon\facebook.png',2,2)
 	fnLbl(6,1,"File:",5,1)
 	fnTxt(6,8,40,256,right,"1070",0,"",0 )
 	resp$(1)='' ! 
