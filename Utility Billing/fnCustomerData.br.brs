@@ -1,7 +1,6 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror
 		library 'S:\Core\Library': fnapplyDefaultRatesFio
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile
 		library 'S:\Core\Library': fnMeterInfo$
