@@ -11,7 +11,7 @@ def fn_undobilling ! main
 	fnget_services(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 	! 
 	ASK_OPTIONS: ! 
-	cont=fn_options(route,billingdate$) ! collect user options
+	cont=fn_askOptions(route,billingdate$) ! collect user options
 	if ckey=5 then goto XIT_FN_UNDOBILLING
 	if trim$(billingdate$)="0" then 
 		mat msgtext$(1)
@@ -121,7 +121,7 @@ def fn_undobilling ! main
 	XIT_FN_UNDOBILLING: ! 
 fnend  ! fn_UndoBilling
 XIT: fnxit
-def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
+def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return selections
 	dim screen_name$*100,resp$(20)*255
 	fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 	filter=0 : route=0 : cust$=''
@@ -144,7 +144,7 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 
 	fnOpt(lc+=1,1,'All') ! fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	resp_opt_all=rcnt+=1
-	if resp$(resp_opt_all)='' then resp$(resp_opt_all)='True'
+	if resp$(resp_opt_all)='' then resp$(resp_opt_all)='False'
 ! 
 	fnOpt(lc+=1,1,'Route:')
 	resp_opt_route=rcnt+=1
@@ -155,7 +155,7 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 ! 
 	fnOpt(lc+=1,1,'Individual:')
 	resp_opt_individual=rcnt+=1
-	if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='False'
+	if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='True'
 	fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
 	resp_individual=rcnt+=1
 ! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
@@ -164,7 +164,7 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 	fnAcs(screen_name$,0,mat resp$,ckey) ! run the screen
 	 ! if env$('ACSDeveloper')<>'' then pause
 	if ckey=5 then ! if user pressed Cancel
-		fn_options=0
+		fn_askOptions=0
 	else 
 		billingdate$=resp$(resp_billing_date)
 		if resp$(resp_opt_individual)='False' and resp$(resp_individual)<>'[All]' and resp$(resp_individual)<>'' t
@@ -184,9 +184,9 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 			if trim$(cust$)='' then pr bell;'please select a customer' : goto OPTIONS_TOS
 		end if 
 !     pr 'answers retreived' : pause  !
-		fn_options=1
+		fn_askOptions=1
 	end if 
-fnend  ! fn_Options
+fnend  ! fn_askOptions
 def fn_openfiles
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
 	open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed 
