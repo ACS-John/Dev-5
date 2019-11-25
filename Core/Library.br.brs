@@ -1168,7 +1168,7 @@ fnend
 		fnWorkOrderPrint=fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$, cell$)
 	fnend
 	def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
-		library 'S:\Utility Billing\fnCustomerData.br': fnCustomerData$
+		library 'S:\Utility Billing\fn\customerData.br': fnCustomerData$
 		fnCustomerData$=fnCustomerData$(account$,fieldName$, leaveOpen)
 	fnend
 	def library fncustomer_address(account$,mat addr$; ca_address_type,ca_closeFiles)
