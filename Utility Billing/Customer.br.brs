@@ -1548,7 +1548,7 @@ def fn_setup
 		! /r
 	end if
 	! r: CONSTANTS
-	fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$)
+	fncreg_read('Route Low' ,bkno1$) : bkno1=val(bkno1$)
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
 	fnget_services(mat srvnam$,mat srv$)
 	dim serviceCodeMetered$(0)*2
