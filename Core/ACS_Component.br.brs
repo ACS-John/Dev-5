@@ -16,6 +16,7 @@ def fn_setup
 		library 'S:\Core\Library': fnSystemName$
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnArrayEmpty
+		library 'S:\Core\Library': fnGetPp
 	end if
 	on error goto ERTN
 	dim _program$(1)*255
@@ -1890,6 +1891,7 @@ def fn_drawFileSelection(mask,lyne,ps,width,container; ___,fs_buttonIo$*255) ! r
 	file_select_data(file_select_boxes,1)=respc
 	file_select_data(file_select_boxes,2)=mask
 	pr f fs_buttonIo$: "."
+	! pr 'drawing the . with io of '&fs_buttonIo$
 fnend
 def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpperCase)
 	if mask=70 or mask=71 or mask=72 then 
@@ -1903,7 +1905,16 @@ def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpper
 		filename$=rtrm$(filename$)
 		h_selectfile=fngethandle
 include: filenamesPushMixedCase
-		open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,input ioerr ignore
+		if openOrSave$='SAVE' then
+			dim tmpFilename$*1048
+			dim tmpPath$*1048
+			dim tmpExt$*128
+			fnGetPp(filename$,tmpPath$,tmpFilename$,tmpExt$)
+			! open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&' All documents (*.*),RecL=1,'&newOrShare$,external,input ioerr ignore
+			open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&tmpPath$&'*.*,RecL=1,'&newOrShare$,external,output ioerr ignore
+		else
+			open #h_selectfile: 'Name='&openOrSave$&':'&env$('at')(1:2)&filename$&'All documents (*.*) |*.*,RecL=1,'&newOrShare$,external,input ioerr ignore
+		end if
 		if file(h_selectfile)=0 then
 			filename$=os_filename$(file$(h_selectfile))
 			! filename$=trim$(file$(h_selectfile)) (2:inf)

@@ -97,12 +97,12 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 	ImportFailInvalidRoute: ! r:
-		mat ml$(0)
+		mat mg$(0)
 		fnAddOneC(mat mg$,'File failed to import due to')
 		fnAddOneC(mat mg$,'an invalid route number on line '&str$(lineCount)&'.')
 		fnAddOneC(mat mg$,'Valid route numbers must be from '&bkno1$&' to '&bkno2$&')')
 		fnAddOneC(mat mg$,'This range can be changed in Company>Configuration.')
-		fnmsgbox(mat ml$,mgResp$,'',mb_stop+mb_okonly)
+		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 
 	ImportFinis: !

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________            
+5:19 PM 11/25/2019	CO	Fixed [.] Selection of files - file pop up dialog in some cases
 11:29 AM 11/25/2019	UB	Reverse Billing Cycle - made default to be Individual instead of All
 11:22 11/19/2019	CO	5.74225  
 11:19 11/19/2019	CO	5.74224   
