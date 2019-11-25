@@ -61,6 +61,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 			if route<bkno1 or route>bkno2 then 
 				goto ImportFailInvalidRoute
 			end if
+			if ~fnKeyExists(hCustomer,z$, 2) then goto ImportFailAccountKey
 			read #hCustomer,using form$(hCustomer),key=z$: mat customer$,mat customerN ! nokey ImportFail
 			customerN(c_route   )=route
 			customerN(c_sequence)=sequence
@@ -86,6 +87,11 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,'Error: '&str$(failErrorNumber)&'.')
 		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
+	ImportFailAccountKey: ! r:
+		mat mg$(0)
+		fnAddOneC(mat mg$,'File failed to import due to an invalid Account Key ('&z$&') on line '&str$(lineCount)&'.')
+		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
+	goto ImportFinis ! /r
 	ImportFailHeadings: ! r:
 		mat mg$(0)
 		fnAddOneC(mat mg$,'File failed to import due to improper formatting.')
@@ -106,6 +112,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 	goto ImportFinis ! /r
 
 	ImportFinis: !
+	close #hIn: ioerr ignore
 	fnCloseFile(hCustomer,'UB Customer')
 fnend
 def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
@@ -189,6 +196,7 @@ def fn_setup
 		library 'S:\Core\Library': fnVal
 		library 'S:\Core\Library': fncreg_read
 		library 'S:\Core\Library': fnCloseFile
+		library 'S:\Core\Library': fnKeyExists
 	
 		on error goto ERTN
 		gosub Enum

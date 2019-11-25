@@ -16,7 +16,9 @@ def library fnOsFilename$*512(filename$*512; return$*512)
 	end if
 	fnOsFilename$=return$
 fnend
-def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*256)
+def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*256,attemptFix2Count)
+	! attemptFix =1 try it: As-Is, Left-padded, Right-padded
+	!            =2 also try it: with adding 0, 00, .00 in all of the previous ways
 	origionalKey$=keyToTest$
 	keyToTest$=rpad$(keyToTest$,kLn(hFile))
 	read #hFile,key=keyToTest$,release: nokey MaeNo
@@ -38,7 +40,26 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*
 			read #hFile,key=keyToTest$,release: nokey MaeNoLpad3
 			returnN=1
 		goto MaeFinis
-		MaeNoLpad3: ! just fail
+		
+		MaeNoLpad3: ! 
+		if attemptFix=2 then
+			attemptFix2Count+=1
+			! pr 'attemptFix2Count=';attemptFix2Count 
+			if attemptFix2Count=1 then
+				keyToTest$=trim$(origionalKey$)&'0' soflow MaeJustFail
+				! pr '  keyToTest$="'&keyToTest$&'"' : pause
+				goto MaeNo
+			else if attemptFix2Count=2 then
+				keyToTest$=trim$(origionalKey$)&'00' soflow MaeJustFail
+				! pr '  keyToTest$="'&keyToTest$&'"' : pause
+				goto MaeNo
+			else if attemptFix2Count=3 then
+				keyToTest$=trim$(origionalKey$)&'.00' soflow MaeJustFail
+				! pr '  keyToTest$="'&keyToTest$&'"' : pause
+				goto MaeNo
+			end if
+		end if
+		MaeJustFail: !
 		returnN=0
 		keyToTest$=origionalKey$
 	end if
