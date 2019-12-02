@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________             
+10:23 AM 11/26/2019	UB	Collections - no longer allowed to exit the program if an error is encountered, instead they should call
 18:34 11/19/2019	CO	5.74226  
 5:19 PM 11/25/2019	CO	Fixed [.] Selection of files - file pop up dialog in some cases 
 11:29 AM 11/25/2019	UB	Reverse Billing Cycle - made default to be Individual instead of All 

@@ -1,5 +1,5 @@
 [Q]\UBmstr\MeterType.h[cno]  ,  type_  , 1
-[Q]\UBmstr\MeterTypeIdx.h[cno]-u ,  code
+[Q]\UBmstr\MeterTypeIdx.h[cno]-u ,  key
 ===================================================
 key                ,    Code                ,  C   5      , !     SPos=1   Required=True
 name$              ,    Description         ,  C  40      , !     SPos=6   

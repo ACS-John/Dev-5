@@ -66,6 +66,8 @@ def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,wh
 		if cusN(c_sequence)<>0 then return$=str$(cusN(c_sequence))
 	else if fieldName$='final billing code' then
 		if cusN(c_finalBilling)<>0 then return$=str$(cusN(c_finalBilling))
+	else if fieldName$='last reading day' then
+		if cusN(c_meterReadDatePri)<>0 then return$=str$(days(cusN(c_meterReadDatePri),'mmddyy'))
 	else if fieldName$='last billing day' then
 		if cusN(c_lastBillingDate)<>0 then return$=str$(days(cusN(c_lastBillingDate),'mmddyy'))
 	else if fieldName$='name' then
