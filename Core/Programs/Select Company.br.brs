@@ -1,5 +1,3 @@
-! formerly S:\Core\Programs\SelCNo
-! Select Company Number for the current system
 fn_setup
 fntop(program$)
 gosub IfCoTryAgain
@@ -121,7 +119,7 @@ MENU1: ! r:
 		gosub SELECT_COMPANY
 		goto XIT
 	end if
-	goto MENU1 ! /r
+goto MENU1 ! /r
 SELECT_COMPANY: ! r:
 	fnputcno(cno_selected)
 return  ! /r
@@ -180,9 +178,6 @@ def fn_company_already_exists(cae_cno)
 		if response$='Yes' then
 			if fn_companyDelete(cae_cno) then cae_return=0
 		end if
-		!  mg$(2)="Select a different company number"
-		!  mg$(3)="or exit and erase the existing company first."
-		!  fnmsgbox(mat mg$,response$,'',16)
 	end if
 	fn_company_already_exists=cae_return
 fnend
@@ -195,7 +190,7 @@ def fn_companyName$*40(cno)
 	COC_FINIS: !
 	fn_companyName$=coc_return$
 fnend
-def fn_companyDelete(cno;fileToDelete$*256)
+def fn_companyDelete(cno; fileToDelete$*256)
 	if fnConfirmDeleteHard('company',str$(cno)&". "&fn_companyName$(cno)) then
 		! if env$('acsDeveloper')<>"" then pause
 		fileToDelete$=fnSrepEnv$(fn_dataFolder$)

@@ -6,7 +6,6 @@ Enum: ! r:Common Enumerations
 		true=yes=1
 		false=no=0
 		cancel=esc=99
-		tab$=chr$(9)
 		lf$=chr$(10)
 		cr$=chr$(13)
 		crlf$=cr$&lf$
@@ -27,12 +26,12 @@ Enum: ! r:Common Enumerations
 		fkey_menu           	= 98
 		fkey_exit           	= 93
 		fkey_escape         	= 99
-		fkey_ae_field_exit 	=107
+		fkey_ae_field_exit  	=107
 		fkey_pageup         	= 90
 		fkey_pagedown       	= 91
 		fkey_tab_change     	= 92
 		fkey_click          	=200
-		fkey_click_double  	=201
+		fkey_click_double   	=201
 		! /r
 	end if
 return ! /r

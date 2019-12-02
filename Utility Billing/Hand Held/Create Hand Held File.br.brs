@@ -19,6 +19,7 @@ def fn_setup
 		library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
 		library 'S:\Core\Library': fnOpenFile,fnbuildkey$
 		library 'S:\Core\Library': fnCustomerData$
+		library 'S:\Core\Library': fnGetServiceCodesMetered
 		on error goto ERTN
 		! ______________________________________________________________________
 		dim resp$(64)*125
@@ -53,8 +54,7 @@ def fn_setup
 			drive$(21)="Y:\"
 			drive$(22)="Z:\"
 		! /r
-		crlf$=chr$(13)&chr$(10)
-		tab$=chr$(9)
+		gosub Enum
 		fnget_services(mat serviceName$, mat serviceCode$)
 		fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
 		dim devicePreference$*20
@@ -80,6 +80,9 @@ def fn_setup
 	sm_LocationId=5
 	!
 	meterDataSourceOverrideEnabled=1
+	dim serviceCodeMetered$(0)*2
+	fnGetServiceCodesMetered(mat serviceCodeMetered$)
+	
 fnend
 def fn_scr_selact
 	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
@@ -313,7 +316,10 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 		goto NextReadForAll
 	end if
 ! /r
-def fn_neptuneEquinoxV4(h_out) ! ,route,e$(3),extra$(1)
+def fn_neptuneEquinoxV4(h_out) 
+! uses local mat d
+! ,route,e$(3),extra$(1),mat serviceCodeMetered$,mat serviceCode$
+! ; ___,serviceItem,sc$*2
 	if ~nev4_company_init then	! r: Company Record
 		nev4_company_init=1
 		fn_record_init
@@ -336,7 +342,7 @@ def fn_neptuneEquinoxV4(h_out) ! ,route,e$(3),extra$(1)
 		fn_record_addc( 8,date$('ccyymmdd')) ! Read Date
 		fn_record_addc( 8,date$('ccyymmdd')) ! Deactivate Date
 		fn_record_addc( 8,date$('ccyymmdd')) ! Route Message
-		pr 'rtehd gathered' : pr rec_line$ : pause
+		! r 'rtehd gathered' : pr rec_line$ : pause
 		fn_record_write(h_out)
 	end if	! /r
 	! r: Premise Detail Record
@@ -347,12 +353,88 @@ def fn_neptuneEquinoxV4(h_out) ! ,route,e$(3),extra$(1)
 	fn_record_addc(128,''             ) !  Utility Pass Through
 	fn_record_write(h_out)
 	! /r
-	! r: Meter Detail Record
-	fn_record_init
-	fn_record_addc( 5,'MTRDT') !  Record ID
-	fn_record_addn( 6,sequence, '0') ! Read Sequence
-	fn_record_write(h_out)
-	! /r
+	
+	for serviceItem=1 to udim(mat serviceCode$)
+		sc$=serviceCode$(serviceItem)
+		if srch(mat serviceCodeMetered$,sc$)>0 then
+			! r: Meter Detail Record(s)
+			fn_record_init
+			fn_record_addC( 5,'MTRDT'                               ) !  Record ID
+			fn_record_addN( 6,sequence, '0'                         ) ! Read Sequence
+			fn_record_addC(20,''                                    ) ! Changed Read Sequence
+			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Key
+			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Number
+			fn_record_addC(20,''                                    ) ! Changed Meter Number
+			fn_record_addC( 4,sc$                                   ) ! Meter Type
+			fn_record_addC( 4,''                                    ) ! ChangedMeter Type
+			fn_record_addC( 8,''                                    ) ! Meter Size
+			fn_record_addC( 8,''                                    ) ! ChangedMeter Size
+			fn_record_addC( 3,''                                    ) ! Meter Manufacturer
+			fn_record_addC( 3,''                                    ) ! Changed Meter Manufacturer
+			fn_record_addC( 3,''                                    ) ! Meter Unit of Measure
+			fn_record_addC( 3,''                                    ) ! Changed Meter Unit of Measure
+			fn_record_addC( 4,''                                    ) ! Meter Location
+			fn_record_addC( 4,''                                    ) ! Changed Meter Location
+			fn_record_addC( 4,''                                    ) ! Meter Location 2
+			fn_record_addC( 4,''                                    ) ! Changed Meter Location 2
+			fn_record_addC( 4,''                                    ) ! Read Instruction 1
+			fn_record_addC( 4,''                                    ) ! Changed Read Instruction 1
+			fn_record_addC( 4,''                                    ) ! Read Instruction 2
+			fn_record_addC( 4,''                                    ) ! Changed Read Instruction 2
+			fn_record_addC(10,''                                    ) ! Seal Number
+			fn_record_addC(10,''                                    ) ! Changed Seal Number
+			fn_record_addC( 8,''                                    ) ! Meter Install Date (CCYYMMDD)
+			fn_record_addC(26,''                                    ) ! Meter Custom 1
+			fn_record_addC(26,''                                    ) ! Meter Custom 2
+			fn_record_addC( 4,''                                    ) ! Meter Condition Code 1
+			fn_record_addC( 4,''                                    ) ! Meter Condition Code 2
+			fn_record_addC( 1,'N'                                   ) ! Must Read Code (Y/N)
+			fn_record_addC(10,''                                    ) ! Collector Error
+			fn_record_addC( 8,date$(val(fnCustomerData$(z$,'last reading day')),'ccyymmdd')   ) ! Previous Read Date (CCYYMMDD)
+			fn_record_addC( 6,fn_meterInfo$('reading multipler',z$,sc$)                        ) ! Constant / Multiplier
+			fn_record_addC( 6,''                                    ) ! Changed Constant / Multiplier
+			fn_record_addC(12,fn_meterInfo$('longitude',z$,sc$)     ) ! Longitude
+			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! Latitude
+			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
+			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
+			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
+			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
+			fn_record_write(h_out)
+			! /r
+			! r: Read Detal Record
+			fn_record_addC( 5,'RDGDT'                                 ) !  Record ID
+			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)       ) !  Read Type
+			fn_record_addC(13,''                                      ) !  Collection ID
+			fn_record_addC( 7,''                                      ) !  For future use
+			fn_record_addC(20,''                                      ) !  Changed Collection ID
+			fn_record_addC( 2,fn_meterInfo$('number of dials',z$,sc$) ) !  Dials Req                  UB 50-51     2 NUM
+			fn_record_addN( 2,0                                       ) !  Changed Dials     Opt      HH 52-453    2 NUM
+			fn_record_addN( 2,0                                       ) !  Decimals          Req      UB 54-55     2 NUM
+			fn_record_addN( 2,0                                       ) !  Changed Decimals  Opt      HH 56-57     2 NUM
+			fn_record_addC( 2,''                                      ) !  Read Direction    Opt      UB 58        1 A/N R, L, C, or blank only
+			fn_record_addC( 2,unusual_usage_high                      ) !  Hi Limit          Req      UB 59-68    10 NUM
+			fn_record_addC( 2,unusual_usage_low                       ) !  Low Limit         Req      UB 69-78    10 NUM
+			fn_record_addN( 2,fn_serviceDataN('prior','reading',sc$)  ) !  Prev Read         Req      UB 79-88    10 NUM
+			fn_record_addN( 2,fn_serviceDataN('current','reading',sc$)) !  Reading           Req      HH 89-98    10 A/N
+			fn_record_addC( 2,''                                      ) !  Collector Reading Req      HH 99-108   10 A/N Actual reading that came from collector, before truncation
+			fn_record_addC( 2,''                                      ) !  Read Code Req              HH 109-110   2 A/N
+			fn_record_addC( 2,''                                      ) !  Re-entry Count Req         HH 111-112   2 NUM
+			fn_record_addC( 2,''                                      ) !  Water No Flow 35 Days Req  HH 113       1 NUM Number of Days
+			fn_record_addC( 2,''                                      ) !  Peak Backflow Req          HH 114       1 NUM Reverse Flow Event
+			fn_record_addC( 2,''                                      ) !  Leak 35 Days Req           HH 115       1 NUM Number of Days
+			fn_record_addC( 2,''                                      ) !  Current Leak Req           HH 116       1 NUM Leak Status
+			fn_record_addC( 2,''                                      ) !  Previous Error Count Opt   UB 117       1 NUM R900 Electric or Gas tamper. Use '8' tosuppress tamper check.
+			fn_serviceDataN('current','usage',sc$)
+			f
+			
+				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+			
+			fn_record_write(h_out)
+			! /r
+		end if
+	next serviceItem
+	
 fnend
 def fn_workabout
 	dim ft$*20
@@ -654,7 +736,7 @@ def fn_openOutFile ! open work areas based on type of Hand Held
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
 		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
 	end if
-	workopen=1
+	workopen=1 
 fnend
 def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
 	! inherrits deviceSelected$,out_filename$
@@ -679,15 +761,8 @@ def fn_unitech_ht630
 	for a_item=1 to udim(mat a)
 		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
 			if a(a_item)>0 then
-				if serviceCode$(a_item)='WA' then
-					usage_current=d(3) ! Water usage - current
-					reading_current=d(1)
-				else if serviceCode$(a_item)='GA' then
-					usage_current=d(11) ! Gas usage - curent
-					reading_current=d(9)
-				else ! if serviceCode$(a_item)='EL' then
-					pr 'developer note: add code to copy '&serviceName$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
-				end if
+				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
+				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
 				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
 				pr #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
@@ -710,15 +785,8 @@ def fn_acs_meter_reader
 	for a_item=1 to udim(mat a)
 		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
 			if a(a_item)>0 then
-				if serviceCode$(a_item)='WA' then
-					usage_current=d(3) ! Water usage - current
-					reading_current=d(1)
-				else if serviceCode$(a_item)='GA' then
-					usage_current=d(11) ! Gas usage - curent
-					reading_current=d(9)
-				else ! if serviceCode$(a_item)='EL' then
-					pr 'developer note: add code to copy '&serviceName$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
-				end if
+				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
+				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
 				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
 				pr #h_out,using FORM_ACSMR: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
@@ -834,22 +902,58 @@ def fn_itron_route_trailer
 	fn_itron_record_ctr
 	itron_rtr_count+=1
 fnend  ! fn_itron_route_trailer
+
+def fn_serviceDataN(adjetive$,noun$,sc$*2; ___,returnN) ! uses local: mat d
+! adjetive$ = current
+!           = prior
+! noun$     = usage
+!             reading
+! sc$ must be WA, GA or EL.
+	if adjetive$='current' then ! r:
+		if lwrc$(noun$)='usage' then
+			if sc$='WA' then
+				returnN=d(3) ! Water usage - current
+			else if sc$='GA' then
+				returnN=d(11) ! Gas usage - curent
+			else if sc$='EL' then
+				returnN=d(7) ! KWH usage - curent
+			end if 
+		else if lwrc$(noun$)='reading' then
+			if sc$='WA' then
+				returnN=d(1)
+			else if sc$='GA' then
+				returnN=d(9)
+			else if sc$='EL' then
+				returnN=d(5)
+			end if
+		else
+			pr 'serviceDataN: invalid noun' : pause
+		end if 
+		! /r
+	else if adjetive$='prior' then ! r:
+		if lwrc$(noun$)='usage' then
+			pr 'prior usage is not yet programmed.  it would have to be read in from their [last billing date]''s charge transaction.' : pause
+		else if lwrc$(noun$)='reading' then
+			if sc$='WA' then
+				returnN=d(2) ! Service 1 (Water) – Reading – Prior  
+			else if sc$='GA' then
+				returnN=d(10) ! Service 4 (Gas) – Reading - Prior   
+			else if sc$='EL' then
+				returnN=d(6) ! Service 3 (Electric) – Reading – Prior  
+			end if 
+			! /r
+		end if
+	else
+		pr 'serviceDataN: adjetive not expected' : pause
+	end if
+	fn_serviceDataN=returnN
+fnend
 def fn_itron
 	for a_item=1 to udim(mat a)
 		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
 			if a(a_item)>0 then
-				if serviceCode$(a_item)='WA' then
-					usage_current=d(3) ! Water usage - current
-					reading_current=d(1)
-				else if serviceCode$(a_item)='GA' then
-					usage_current=d(11) ! Gas usage - curent
-					reading_current=d(9)
-				else if serviceCode$(a_item)='EL' then
-					usage_current=d(7) ! KWH usage - curent
-					reading_current=d(5)
-				else ! if serviceCode$(a_item)='EL' then
-					pr 'developer note: add code to copy '&serviceName$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
-				end if
+				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
+				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
 				unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then unusual_usage_low=0
 				unusual_usage_high=int(usage_current+usage_current*fn_pcent)
 				if z$<>z_prior$ then
@@ -974,7 +1078,7 @@ def fn_itron_record_rtr ! route trailer - pg 6
 	fn_record_addn(2,0)
 	fn_record_addn(4,0)
 	fn_record_addc(1,'') ! field 25
-	fn_record_addx(40)
+	fn_record_addx(40) 
 			! fn_record_addc(2,crlf$)
 	fn_record_write(h_out)
 fnend  ! fn_itron_record_rtr
@@ -1076,7 +1180,7 @@ def fn_itron_record_fhd ! file header - pg 3
 	fn_record_addx(108) ! field 10
 	! fn_record_addc(2,crlf$)
 	fn_record_write(h_out)
-fnend  ! fn_itron_record_fhd
+fnend 
 def fn_itron_record_ftr ! file trailer - pg 3
 	fn_record_init
 	fn_record_addc(3,'FTR')
@@ -1420,11 +1524,11 @@ def fn_report_created_file(out_filename_report$*512)
 		mat m$(2)
 		m$(1)="Hand Held File created:"
 		m$(2)=os_filename$(out_filename_report$)
-		fnmsgbox(mat m$, response$, '',64)
+		fnmsgbox(mat m$, response$, '',mb_information+mb_okonly)
 	end if
 fnend
 def fn_cnt_of_metered_svcs_active
-	! this function should return the number of metered services the customer has that have a non 0 rate code.
+	! this function returns the number of metered services the customer has that have a non 0 rate code.
 	if env$('client')='Bethany' then ! the new way
 		nomsa_return=0
 		if a(1)<>0 then nomsa_return+=1 ! service1  WA
@@ -1617,4 +1721,5 @@ def fn_getFilterAccount(mat filterAccount$)
 	fnAddOneC(mat filterAccount$,'100114.00')
 fnend
 include: fn_open
+include: enum
 include: ertn
