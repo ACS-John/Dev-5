@@ -5,137 +5,7 @@ fntop(program$)
 open #h_customer_i1:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 open #h_customer_i5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 goto SEL_ACT
-def fn_setup
-	if ~setup then
-		setup=1
-		library 'S:\Core\Library': fnerror,fnTos,fnLbl,fncomboa,fnAcs,fncmbrt2,fnxit,fncmbact,fnButton
-		library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet
-		library 'S:\Core\Library': fntop,fnCmdKey,fnmsgbox,fnTxt
-		library 'S:\Core\Library': fngethandle,fnpause,fnOpt,fnget_services,fnhand_held_device$
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
-		library 'S:\Core\Library': fnOpenFile,fnbuildkey$
-		library 'S:\Core\Library': fnCustomerData$
-		library 'S:\Core\Library': fnGetServiceCodesMetered
-		on error goto ERTN
-		! ______________________________________________________________________
-		dim resp$(64)*125
-		dim f$(3)*12,e2$*30
-		dim z$*10,e$(4)*30,d(15),a(7)
-		dim res$*41,m$(2)*80
-		dim serviceName$(10)*20,serviceCode$(10)*2
-		dim rt$*4,extra(23)
-		dim filterAccount$(0)
-		! r: set mat drive 
-			dim drive$(22)*3
-			drive$(1)="E:\"
-			drive$(2)="F:\"
-			drive$(3)="G:\"
-			drive$(4)="H:\"
-			drive$(5)="I:\"
-			drive$(6)="J:\"
-			drive$(7)="K:\"
-			drive$(8)="L:\"
-			drive$(9)="M:\"
-			drive$(10)="N:\"
-			drive$(11)="O:\"
-			drive$(12)="P:\"
-			drive$(13)="Q:\"
-			drive$(14)="R:\"
-			drive$(15)="S:\"
-			drive$(16)="T:\"
-			drive$(17)="U:\"
-			drive$(18)="V:\"
-			drive$(19)="W:\"
-			drive$(20)="X:\"
-			drive$(21)="Y:\"
-			drive$(22)="Z:\"
-		! /r
-		gosub Enum
-		fnget_services(mat serviceName$, mat serviceCode$)
-		fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
-		dim devicePreference$*20
-		devicePreference$=fnhand_held_device$
-		dim deviceName$(0)*20,deviceNameCompleteList$(0)*20,deviceNameCompleteListOption$(0)*128
-		fn_handHeldList(mat deviceNameCompleteList$,mat deviceNameCompleteListOption$)
-		for dnclItem=1 to udim(mat deviceNameCompleteList$)
-			if pos(deviceNameCompleteListOption$(dnclItem),'ImportOnly')<=0 then
-				fnAddOneC(mat deviceName$,deviceNameCompleteList$(dnclItem))
-			end if
-		nex dnclItem
-		dim deviceSelected$*20
-		if lwrc$(devicePreference$)='[ask]' then
-			fnureg_read('Hand Held Device Asked',deviceSelected$, deviceName$(1))
-		else
-			deviceSelected$=devicePreference$
-		end if
-	end if
-	sm_allExceptFinal=1
-	sm_aRoute=2
-	sm_routeRange=3
-	sm_Individuals=4
-	sm_LocationId=5
-	!
-	meterDataSourceOverrideEnabled=1
-	dim serviceCodeMetered$(0)*2
-	fnGetServiceCodesMetered(mat serviceCodeMetered$)
-	
-fnend
-def fn_scr_selact
-	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
-	fnTos(sn$="hhto1")
-	fnLbl(2,1,"Hand Held model:",16,1)
-	if lwrc$(devicePreference$)='[ask]' then
-		fncomboa("HH-FroCBox",2,18,mat deviceName$)
-		resp$(rc_Device:=respc+=1)=deviceSelected$
-	else
-		fnLbl(2,18,deviceSelected$)
-	end if
-	fnLbl(4,1,"Select:",16,1)
-	if u4_includeFinalBilled$='True' then
-		fnOpt(4,18,"[All] (including final billed)")
-	else
-		fnOpt(4,18,"[All] (excluding final billed)")
-	end if
-	rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
-	fnOpt(5,18,"An Entire Route")
-	rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
-	fnOpt(6,18,"A Range of Accounts")
-	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
-	fnOpt(7,18,"Specific Accounts")
-	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
-	! if lrec(2)>0 then
-	!   fnCmdSet(19)
-	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
-	! else
-		fnLbl(9,1,"",46,2)
-		fnCmdSet(2)
-	! end if
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey<>5 then
-			if lwrc$(devicePreference$)='[ask]' then
-				deviceSelected$=resp$(rc_Device)
-				fnureg_write('Hand Held Device Asked',deviceSelected$)
-			else
-				deviceSelected$=devicePreference$
-			end if
-		if resp$(rc_selectionMethod1)='True' then
-			selection_method=sm_allExceptFinal
-		else if resp$(rc_selectionMethod2)='True' then
-			selection_method=sm_aRoute
-		else if resp$(rc_selectionMethod3)='True' then
-			selection_method=sm_routeRange
-		else if resp$(rc_selectionMethod4)='True' then
-			selection_method=sm_Individuals
-		end if
-		fncreg_write('hhto.selection_method',str$(selection_method))
-	end if
-	mat resp$=("")
-	if deviceSelected$='Badger Beacon' then filterNoLocationId=1 else filterNoLocationId=0
-fnend
+
 SEL_ACT: ! r:
 fn_scr_selact
 if ckey=5 then 
@@ -162,7 +32,77 @@ else ! ckey=1
 		goto NextLocationId
 	end if
 end if  ! /r
-! ______________________________________________________________________
+def fn_openOutFile ! open work areas based on type of Hand Held
+	dim out_filename$*256
+	! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
+	fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('Desktop')&'\ACS to '&deviceSelected$&'.txt'))
+	if deviceSelected$='Itron FC300' then
+		fn_itron_open ! default
+	else
+		h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT"                       ,  80)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT"                                   ,  80)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3"                            , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3"                            , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt"                           , 204)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out"                             , 200)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat"                          , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT"                           , 282,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat"                          , 578,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
+	end if
+	workopen=1 
+fnend
+def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
+	! inherrits deviceSelected$,out_filename$
+	! returns open file handle
+	if deviceTest$='' or deviceSelected$=deviceTest$ then
+		if out_filename$='' then out_filename$=defaultOut_filename$
+		fnmakesurepathexists(env$('at')&out_filename$)
+		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+	end if
+	fn_ifMatchOpenDo=hImodoReturn
+fnend
+AskRange: ! r:
+	fnTos(sn$:="AskRange")
+	fnFra(1,1,1,57,"Starting Account:")
+	fnFra(4,1,1,57,"Ending Account:")
+	fncmbact(1,1,0,1)
+	fnButton(1,48,"Search",6,blank$,0,7,1)
+	resp$(1)=resp$(2)=""
+	fncmbact(1,1,0,2)
+	fnButton(1,48,"Search",7,blank$,0,7,2)
+	fnCmdKey("&Finish",2,1,0,"Completed with all routes")
+	fnCmdSet(2)
+	fnAcs(sn$,0,mat resp$,ckey)
+	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
+	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
+	if ckey=2 then goto Finis
+	if ckey=99 or ckey=5 then mat resp$=(""): goto SEL_ACT
+	if ckey=6 then
+		fn_searchScreen(x$,resp$(1))
+		goto AskRange
+	else if ckey=7 then
+		fn_searchScreen(x$,resp$(2))
+		goto AskRange
+	end if
+	mat resp$=("")
+	! read #h_customer_i1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange ! get first and last route and sequence number to select
+	! read #h_customer_i1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange
+	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk1$,release: route,sequence ! get first and last route and sequence number to select
+	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk2$,release: last_route,last_sequence
+	restore #h_customer_i5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
+	NextReadForRange: !
+	if fn_customerRead=-54 then goto AskRange
+	! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto AskRange
+	if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto AskRange
+goto SendRecordToWorkFile ! /r
+
 AskRoute: ! r:
 	fnTos(sn$="AskRoute")
 	if hbk<>0 then
@@ -225,6 +165,8 @@ goto SendRecordToWorkFile ! /r
 END1: ! r:
 	if deviceSelected$='Itron FC300' then 
 		fn_itron_close
+	else if deviceSelected$='Neptune (Equinox v4)' then
+		fn_neptuneEquinoxV4_close
 	end if
 	!
 	if selection_method=sm_allExceptFinal then 
@@ -251,7 +193,9 @@ NextAskAccount: ! r:
 	resp$(1)=z$
 	fnCmdSet(5)
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=6 then let fncustomer_search(resp$(1))
+	if ckey=6 then 
+		fncustomer_search(resp$(1))
+	end if
 	if ckey=99 or ckey=5 or resp$(1)="          " then goto SEL_ACT
 	z$=lpad$(trim$(resp$(1)(1:10)), 10)
 	if fn_customerRead(z$)=-4272 then goto NextAskAccount
@@ -315,20 +259,335 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 		goto NextReadForAll
 	end if
 ! /r
+
+def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
+	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+	transmitterSerialNumber$=trim$(fn_meterInfo$('Transmitter Number',z$,'WA'))
+	portNumber$=''
+	posTsnDash=pos(transmitterSerialNumber$,'-')
+	if posTsnDash>0 then
+		portNumber$=transmitterSerialNumber$(posTsnDash+1:len(transmitterSerialNumber$))
+		transmitterSerialNumber$(posTsnDash:len(transmitterSerialNumber$))=''
+	end if
+	!
+	fn_record_init(chr$(9))                                      ! Aclara Name               ACS Name (if different)
+	fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
+	fn_record_addc(10,z$)                                        ! Account Number
+	fn_record_addc(30,e$(2))                                     ! Customer Name
+	fn_record_addc(12,extra$(2))                                 ! Phone Number
+	fn_record_addc(30,fn_meterInfo$('address',z$,'WA'))          ! Meter Address 1
+	fn_record_addc(30,'')                                        ! blank
+	fn_record_addc(30,tmpCity$)
+	fn_record_addc(10,tmpState$)
+	fn_record_addc(15,tmpZip$)
+	fn_record_addn(3,route)                                      ! Cycle and Route            Route Number
+	fn_record_addn(7,sequence)                                   ! Sequence                   Sequence
+	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))    ! Meter Serial Number        Meter.Meter Number
+	fn_record_addc(20,transmitterSerialNumber$)                  ! Transmitter Serial Number  Meter.Transmitter Number
+	fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))     ! Meter Model/Type
+	fn_record_addc(1,portNumber$)                                ! Port Number
+	fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
+fnend
+def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
+	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+	!
+	fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+	fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+	fn_record_addc(10,z$)                                                              ! Account Number
+	fn_record_addc(30,e$(2))                                                           ! Customer Name
+	fn_record_addc(30,e$(1))                                                           ! Meter Address
+	fn_record_addc(30,tmpCity$)
+	fn_record_addc(10,tmpState$)
+	fn_record_addc(15,tmpZip$)
+	fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+	! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+	fn_record_addc(12,f$(1)) ! fn_meterInfo$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
+	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+	aWmeterType=val(fn_meterInfo$('Meter Type',z$,'WA'))
+	if aWmeterType=1 then ! r: get aWmeterType$
+		aWmeterType$='1 inch'
+	else if aWmeterType=21 then
+		aWmeterType$='2 inch T-10'
+	else if aWmeterType=15 then
+		aWmeterType$='1.5 inch'
+	else if aWmeterType=2 then
+		aWmeterType$='2 inch Turbine'
+	else if aWmeterType=3 then
+		aWmeterType$='3 inch'
+	else if aWmeterType=4 then
+		aWmeterType$='4 inch'
+	else if aWmeterType=6 then
+		aWmeterType$='6 inch'
+	else
+		if aWmeterType<>5 then pr aWmeterType : pause
+		aWmeterType$='5/8x3/4'
+	end if ! /r
+	fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
+	fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
+! fn_record_addc(9,,fn_meterInfo$fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
+	fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+	fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+	fn_record_write(h_out)
+fnend
+def fn_acs_meter_reader
+	! FILE (from ACS to Hand Held and from Hand Held to ACS) needs to contain the following fields:
+	!   Account - 10 characters
+	!   Route and Sequence - 12 digits (this is the order for accounts to be displayed in - it might contain duplicates and/or skip large ranges of numbers)
+	!   Meter Type - 10 characters - "Gas", "Water", "Electric", etc.  Each house may have multiple meters that need to be read.  If a house has both gas and water than it would have two records in the file so that both can be ask.  The Meter Type will need to be displayed so the user will know which they should be entering.
+	!   Customer Name - 40 characters - The name of the customer who's meter is being read.  This should be displayed when the reading is ask for.
+	!   Meter Address - 40 characters - The address of the customer who's meter is being read.
+	!   This should be displayed when the reading is ask for.
+	!   Reading High - 10 digits - used to validate entry of new reading
+	!   Reading Low - 10 digits - used to validate entry of new reading
+	!   Reading - 10 digits - the new reading
+	for a_item=1 to udim(mat a)
+		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
+			if a(a_item)>0 then
+				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
+				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
+				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+				pr #h_out,using FORM_ACSMR: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
+				FORM_ACSMR: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10,n 10
+			end if  ! a(a_item)>0
+		end if  ! it is a metered service
+	next a_item
+fnend  ! fn_acs_meter_reader
+def fn_amr ! AMR software solutions  ! same as ezreader, but specifically for Albany (who no longer uses ACS UB)
+	if header=0 then
+		if alp$(1:1)<>"*" then
+			header=1 ! create header record
+			if bk1>0 then route=bk1 else route=1 ! if they selected all for route number, make route number =1 else use the actual route number
+			pr #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ 
+		end if
+	end if
+	! AMR Water
+	pr #h_out,using L3230: "M1", lpad$(rtrm$(z$),20),f$(1)(1:10),extra(2),"W",d(1)+(d(3)*2),d(1)+(d(3)*.50),"    ","    ","    ",e$(1),e$(2)(1:20),d(1),extra(8),0,0,0,0,0,0,0,0,0,0,0,0,crlf$
+	L3230: form pos 1,c 2,c 20,c 10,pic(######),c 4,2*pic(##########),3*c 4,c 40,c 20,pic(##########),n 4,pic(##),pic(#),2*pic(##########),2*pic(############),5*pic(##########),pic(########),c 2
+fnend
+def fn_badgerBeacon(account$*10,srvCode$*2)
+		if ~beaconHeaderSent then ! r:
+			beaconHeaderSent=1
+			fn_record_init(chr$(9))
+			fn_record_addc(10,'Account_ID')
+			fn_record_addc(30,'Account_Full_Name')
+			fn_record_addc(13,'Account_Phone')
+			fn_record_addc(16,'Service_Point_ID')
+			fn_record_addc(11,'Location_ID')
+			fn_record_addc(30,'Location_Address_Line1')
+			fn_record_addc(40,'Location_City')
+			fn_record_addc(14,'Location_State')
+			fn_record_addc(12,'Location_Zip')
+			fn_record_addc(18,'Location_Latitude')
+			fn_record_addc(18,'Location_Longitude')
+			fn_record_addc(19,'Service_Point_Route')
+			fn_record_addc(23,'Service_Point_Latitude')
+			fn_record_addc(23,'Service_Point_Longitude')
+			fn_record_addc(12,'Meter_ID') ! (meter number)
+			fn_record_addc(12,'Meter_SN') ! (meter number)
+			fn_record_addc(15,'Register_Number') ! (blank)
+			fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
+			fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
+			fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
+			fn_record_addc(19,'Endpoint_Type') ! meter type - read type
+			fn_record_addc(13,'Read_Sequence') ! sequence
+			fn_record_addc(15,'High_Read_Limit')
+			fn_record_addc(14,'Low_Read_Limit') 
+			fn_record_write(h_out)
+		end if ! /r
+		dim tmpCity$*64,tmpState$*64,tmpZip$*64
+		fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+		fn_record_init(tab$)                                                     ! BadgerBeacon Name      ACS Name (if different)
+		fn_record_addc(10,account$)                                              ! Account_ID             Account Number
+		fn_record_addc(30,fnCustomerData$(account$,'name', 1))                   ! Account_Full_Name      Customer Name
+		fn_record_addc(13,extra$(2))                                             ! Account_Phone          Phone Number
+		fn_record_addc(16,srvCode$)                                              ! Service_Point_ID
+		fn_record_addc(11,fn_meterInfo$('Location_ID',account$,srvCode$))        ! Location_ID
+		fn_record_addc(30,fn_meterInfo$('address',account$,srvCode$))            ! Location_Address_Line1
+		fn_record_addc(40,tmpCity$)                                              ! Location_City
+		fn_record_addc(14,tmpState$)                                             ! Location_State
+		fn_record_addc(12,tmpZip$)                                               ! Location_Zip
+		fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Location_Latitude
+		fn_record_addc(18,fn_meterInfo$('Longitude',account$,srvCode$))          ! Location_Longitude
+		fn_record_addn(19,route)                                                 ! Service_Point_Route    Route Number
+		fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Service_Point_Latitude
+		fn_record_addC(23,fn_meterInfo$('Longitude',account$,srvCode$))          ! Service_Point_Longitude
+		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_ID                  (meter number)
+		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_SN                  (meter number)
+		fn_record_addC(15,'')                                                    ! Register_Number           (blank)                  (meter number)
+		fn_record_addC(24,'GAL')                                                 ! Register_Unit_Of_Measure
+		fn_record_addC(19,fn_meterInfo$('reading multipler',account$,srvCode$))  ! Register_Resolution
+		fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+		fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
+		fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
+		fn_record_addn(15,fn_unusualUsage('high',account$,srvCode$, 1))
+		fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1)) 
+		!
+		fn_record_write(h_out)
+fnend
+def fn_badgerConnectC
+	for j=1 to len(seq$)
+		on val(seq$(j:j)) goto BadgerCcWater,BadgerCcElectric,BadgerCcDemand,BadgerCcGas none BadgerCcNextSequence
+		BadgerCcWater: !
+		if a(1)=0 then goto BadgerCcNextSequence
+		m$=ltrm$(f$(1))(1:10)
+		if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
+		if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
+		if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+		rt$=cnvrt$("pic(##)",extra(1))&"  "
+		if env$('client')='Raymond' then manual_or_dialog$="N"
+		if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
+		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		! serial # can be extra$(3) rather than f$(1)
+		! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
+		goto BadgerCcNextSequence
+		! ___________________________
+		BadgerCcElectric: !
+		if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BadgerCcNextSequence
+		m$=ltrm$(f$(2))(1:10)
+		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
+		goto BadgerCcNextSequence
+		! ___________________________
+		BadgerCcDemand: !
+		goto BadgerCcNextSequence
+		m$=""
+		pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		goto BadgerCcNextSequence
+		! ___________________________
+		BadgerCcGas: !
+		if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BadgerCcNextSequence
+		m$=ltrm$(f$(3))(1:10)
+		pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		goto BadgerCcNextSequence
+		! ___________________________
+		BadgerCcNextSequence: !
+	next j
+fnend
+def fn_boson
+	dim z_out$*14,custname$*30
+	for j=1 to len(seq$)
+		if val(seq$(j:j))=1 then
+			svc_flag$="W"
+		else if val(seq$(j:j))=2 then
+			svc_flag$="E"
+		else if val(seq$(j:j))=4 then
+			svc_flag$="G"
+		end if
+		custname$=e$(2)
+		z_out$=trim$(z$)&svc_flag$
+		on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
+		WATER_BOSON: !
+		if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
+		x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
+		if env$('client')='Kincaid' then
+			readingt$="S"
+		else if env$('client')="Moweaqua" then
+			if trim$(f$(1))="" then
+				readingt$="S"
+			else
+				readingt$="P"
+			end if
+		else if trim$(extra$(3))="" then
+			readingt$="S"
+		else
+			readingt$="P"
+		end if
+		if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
+		metertag=0: metertag=val(extra$(3)) conv ignore
+		if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
+		if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+		if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+		if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
+		! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
+		if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+		if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+		meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
+		if trim$(z_out$)='200670' then pause
+		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
+		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
+		F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
+		goto BOSON_NEXT_SEQUENCE
+		! ___________________________
+		ELECTRIC_BOSON: if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BOSON_NEXT_SEQUENCE
+		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
+		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
+		goto BOSON_NEXT_SEQUENCE
+		! ___________________________
+		DEMAND_BOSON: goto BOSON_NEXT_SEQUENCE
+		goto BOSON_NEXT_SEQUENCE
+		! ___________________________
+		GAS_BOSON: if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
+		readingt$="R"
+		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
+		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
+		goto BOSON_NEXT_SEQUENCE
+		! ___________________________
+		BOSON_NEXT_SEQUENCE: !
+	next j
+fnend
+def fn_laptop
+	! LAPTOPWATER: !
+	if a(1)=0 or trim$(serviceName$(1))<>"Water" then goto LAPTOPELECTRIC !
+	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20": z$,e$(2),e$(1),"W",watread,watusage,d(1),d(3),f$(1),ft$ : goto LAPTOP_XIT
+	LAPTOPELECTRIC: !
+	if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto LAPTOPGAS
+	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20": z$,e$(2),e$(1),"E",elecread,elecusage,d(5),d(8),f$(2),ft$ : goto LAPTOP_XIT
+	LAPTOPGAS: !
+	if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto LAPTOP_XIT
+	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20,n 3,n 7": z$,e$(2),e$(1),"G",gasread,gasusage,d(9),d(12),f$(3),ft$,route,sequence : goto LAPTOP_XIT
+	LAPTOP_XIT: !
+fnend
+def fn_masterMeter ! z$,mat e$,extra$(1-2),route
+	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+	usage_current=d(3) ! Water usage - current
+	reading_current=d(1)
+	unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+	unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+	!
+	fn_record_init(chr$(9))                                           !
+	fn_record_addc(10,z$)                                             ! Account Number
+	fn_record_addc(30,e$(2))                                          ! Customer Name
+	fn_record_addc(30,e$(1))                                          ! Meter Address
+	fn_record_addn(3,route)                                           ! Route Number
+	fn_record_addn(7,sequence)                                        ! Sequence
+	fn_record_addc(12,fn_meterInfo$('Meter Number',z$,'WA'))       ! Meter.Meter Number
+	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA')) ! Transmitter Serial Number  Meter.Transmitter Number
+	fn_record_addn(9,d(1))                                            ! Service 1 (Water) – Reading – Current
+	! pr 'AAA - '&srep$(rec_line$,chr$(9),'>') : pause
+	fn_record_addc(17,fn_meterInfo$('longitude',z$,'WA'))          ! Meter.Longitude
+	! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
+	fn_record_addc(17,fn_meterInfo$('latitude',z$,'WA'))           ! Meter.Latitude
+	fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))         ! Meter Model/Type
+	tmp$=fn_meterInfo$('reading multiplier',z$,'WA') : if tmp$='' then tmp$='1'
+	fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
+	fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
+	fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
+	fn_record_addn(10,unusual_usage_low)                              ! Unusual Usage Low Reading
+	fn_record_addn(10,unusual_usage_high)                             ! Unusual Usage High Reading
+	fn_record_write(h_out)
+fnend
 def fn_neptuneEquinoxV4(h_out) 
 ! uses local mat d
 ! z$,route,sequence,e$(3),extra$(1),mat serviceCodeMetered$,mat serviceCode$
 ! ; ___,serviceItem,sc$*2,reading_current,unusual_usage_low,unusual_usage_high
 	if ~nev4_company_init then	! r: Company Record
 		nev4_company_init=1
+
+		nev4_routePrior=0
+		nev4_routeCount=0
+
 		fn_record_init
-		! fn_record_addc(rac_field_length,rac_field_text$*256)
-		fn_record_addc( 5,'COMHD') ! Record ID
-		fn_record_addc( 4,env$('cno')) ! Company Code  ???  
-		fn_record_addc( 8,date$('ccyymmdd')) ! Create Date
-		fn_record_addc(40,env$('cnam')) ! Description
-		fn_record_addc( 1,'4') ! File Version
-		fn_record_addc( 1,'N') ! Service Orders Y or N
+		fn_record_addc( 5,'COMHD'           ) ! Record ID
+		fn_record_addc( 4,env$('cno')       ) ! Company Code  ???  
+		fn_record_addc( 8,date$('ccyymmdd') ) ! Create Date
+		fn_record_addc(40,env$('cnam')      ) ! Description
+		fn_record_addc( 1,'4'               ) ! File Version
+		fn_record_addc( 1,'N'               ) ! Service Orders Y or N
 		fn_record_write(h_out)
 	end if	! /r
 	if route<>nev4_routePrior then	! r: Route Record 
@@ -336,6 +595,7 @@ def fn_neptuneEquinoxV4(h_out)
 			gosub Nev4_RouteTrailer
 		end if
 		nev4_routePrior=route
+		nev4_routeCount+=1
 		fn_record_init
 		fn_record_addc( 5,'RTEHD') !  Record ID
 		fn_record_addc( 4,'WATE') ! Office  ???  
@@ -463,13 +723,6 @@ def fn_neptuneEquinoxV4(h_out)
 		end if
 	next serviceItem
 	gosub Nev4_RouteTrailer
-	! r: Company Trailer
-	fn_record_init
-	fn_record_addC( 5,'COMTR'            ) ! Record ID      Opt UB 1-5   5 A/N 'COMTR'
-	fn_record_addC( 4,env$('cno')        ) ! Company Code   Req UB 6-9   4 A/N
-	fn_record_addC( 5,''                 ) ! # Routes       Req UB 10-15 6 A/N One input field may be blank if total is unavailable
-	fn_record_write(h_out)                 ! CRLF           Req UB 16-17 2
-	! /r
 	goto Nev4_Finis
 	Nev4_RouteTrailer: ! r:
 		fn_record_init
@@ -482,378 +735,34 @@ def fn_neptuneEquinoxV4(h_out)
 		fn_record_write(h_out)                                     ! CRLF       Req UB 36-37  2
 	return ! /r
 
-	goto Nev4_Finis: ! 
+	Nev4_Finis: ! 
 fnend
-def fn_workabout
-	dim ft$*20
-	for j=1 to len(seq$)
-		on val(seq$(j:j)) goto WORKABOUT_WATER,WORKABOUT_ELECTRIC,WORKABOUT_DEMAND,WORKABOUT_GAS none WORKABOUT_NEXT_SEQUENCE
-		
-		FM_WORKABOUT: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 20
-		
-		WORKABOUT_WATER: !
-			if a(1)=0 then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(1))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-		
-		WORKABOUT_ELECTRIC: !
-			if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto WORKABOUT_LAWNMETER
-			m$=ltrm$(f$(2))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
-			WORKABOUT_LAWNMETER: !
-			if a(3)=0 or trim$(serviceName$(3))<>"Lawn Meter" then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(2))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-		
-		WORKABOUT_DEMAND: !
-		goto WORKABOUT_NEXT_SEQUENCE
-		
-		WORKABOUT_GAS: !
-			if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(3))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-		
-		WORKABOUT_NEXT_SEQUENCE: !
-	next j
+def fn_neptuneEquinoxV4_close
+	! Company Trailer
+	fn_record_init
+	fn_record_addC( 5,'COMTR'            ) ! Record ID      Opt UB 1-5   5 A/N 'COMTR'
+	fn_record_addC( 4,env$('cno')        ) ! Company Code   Req UB 6-9   4 A/N
+	fn_record_addN( 5,nev4_routeCount    ) ! # Routes       Req UB 10-15 6 A/N One input field may be blank if total is unavailable
+	fn_record_write(h_out)                 ! CRLF           Req UB 16-17 2
 fnend
-def fn_laptop
-	! LAPTOPWATER: !
-	if a(1)=0 or trim$(serviceName$(1))<>"Water" then goto LAPTOPELECTRIC !
-	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20": z$,e$(2),e$(1),"W",watread,watusage,d(1),d(3),f$(1),ft$ : goto LAPTOP_XIT
-	LAPTOPELECTRIC: !
-	if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto LAPTOPGAS
-	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20": z$,e$(2),e$(1),"E",elecread,elecusage,d(5),d(8),f$(2),ft$ : goto LAPTOP_XIT
-	LAPTOPGAS: !
-	if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto LAPTOP_XIT
-	write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20,n 3,n 7": z$,e$(2),e$(1),"G",gasread,gasusage,d(9),d(12),f$(3),ft$,route,sequence : goto LAPTOP_XIT
-	LAPTOP_XIT: !
+def fn_READy_Water ! z$,mat e$,extra$(1-2),route
+	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+	fn_record_init(chr$(9))                                           ! ACS Name (if different)
+	fn_record_addc(10,z$)                                             ! Account Number
+	fn_record_addc(30,e$(2))                                          ! Customer Name
+	fn_record_addc(12,extra$(2))                                      ! Phone Number
+	fn_record_addc(30,e$(1))                                          ! Meter Address (switched to 7/5/17 as per request by Sheri)
+	! fn_record_addc(30,e$(3))                                          ! Address 1 - Primary
+	fn_record_addc(30,extra$(1))                                      ! Address 2 - Primary
+	fn_record_addc(30,tmpCity$)                                       ! City
+	fn_record_addc(10,tmpState$)                                      ! State
+	fn_record_addc(15,tmpZip$)                                        ! Zip
+	fn_record_addn(3,route)                                           ! Route Number
+	fn_record_addn(7,sequence)                                        ! Sequence
+	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))         ! Meter.Meter Number
+	fn_record_write(h_out)
 fnend
-def fn_unusualUsage(highOrLow$,account$,serviceCode$; leaveOpen,___,returnN,uuServiceWhich$*2,reading_current,usage_current)
-	! requires local mat serviceCode$
-	highOrLow$=lwrc$(trim$(highOrLow$))
-	uuServiceWhich$=str$(srch(mat servicecode$,srvCode$))
-	reading_current=val(fnCustomerData$(account$,'service '&uuServiceWhich$&'.reading.current', leaveOpen))
-	usage_current  =val(fnCustomerData$(account$,'service '&uuServiceWhich$&'.usage.current'  , leaveOpen))
-
-	if highOrLow$='high' then
-		returnN=round(reading_current+usage_current+usage_current*fn_pcent,0)
-	else if highOrLow$='low' then
-		returnN=round(reading_current+usage_current*fn_pcent,0) 
-		if returnN<0 then returnN=0
-	else
-	end if
-	fn_unusualUsage=returnN
-fnend
-def fn_badgerBeacon(account$*10,srvCode$*2)
-		if ~beaconHeaderSent then ! r:
-			beaconHeaderSent=1
-			fn_record_init(chr$(9))
-			fn_record_addc(10,'Account_ID')
-			fn_record_addc(30,'Account_Full_Name')
-			fn_record_addc(13,'Account_Phone')
-			fn_record_addc(16,'Service_Point_ID')
-			fn_record_addc(11,'Location_ID')
-			fn_record_addc(30,'Location_Address_Line1')
-			fn_record_addc(40,'Location_City')
-			fn_record_addc(14,'Location_State')
-			fn_record_addc(12,'Location_Zip')
-			fn_record_addc(18,'Location_Latitude')
-			fn_record_addc(18,'Location_Longitude')
-			fn_record_addc(19,'Service_Point_Route')
-			fn_record_addc(23,'Service_Point_Latitude')
-			fn_record_addc(23,'Service_Point_Longitude')
-			fn_record_addc(12,'Meter_ID') ! (meter number)
-			fn_record_addc(12,'Meter_SN') ! (meter number)
-			fn_record_addc(15,'Register_Number') ! (blank)
-			fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
-			fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
-			fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
-			fn_record_addc(19,'Endpoint_Type') ! meter type - read type
-			fn_record_addc(13,'Read_Sequence') ! sequence
-			fn_record_addc(15,'High_Read_Limit')
-			fn_record_addc(14,'Low_Read_Limit') 
-			fn_record_write(h_out)
-		end if ! /r
-		dim tmpCity$*64,tmpState$*64,tmpZip$*64
-		fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-		fn_record_init(tab$)                                                     ! BadgerBeacon Name      ACS Name (if different)
-		fn_record_addc(10,account$)                                              ! Account_ID             Account Number
-		fn_record_addc(30,fnCustomerData$(account$,'name', 1))                   ! Account_Full_Name      Customer Name
-		fn_record_addc(13,extra$(2))                                             ! Account_Phone          Phone Number
-		fn_record_addc(16,srvCode$)                                              ! Service_Point_ID
-		fn_record_addc(11,fn_meterInfo$('Location_ID',account$,srvCode$))        ! Location_ID
-		fn_record_addc(30,fn_meterInfo$('address',account$,srvCode$))            ! Location_Address_Line1
-		fn_record_addc(40,tmpCity$)                                              ! Location_City
-		fn_record_addc(14,tmpState$)                                             ! Location_State
-		fn_record_addc(12,tmpZip$)                                               ! Location_Zip
-		fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Location_Latitude
-		fn_record_addc(18,fn_meterInfo$('Longitude',account$,srvCode$))          ! Location_Longitude
-		fn_record_addn(19,route)                                                 ! Service_Point_Route    Route Number
-		fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Service_Point_Latitude
-		fn_record_addC(23,fn_meterInfo$('Longitude',account$,srvCode$))          ! Service_Point_Longitude
-		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_ID                  (meter number)
-		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_SN                  (meter number)
-		fn_record_addC(15,'')                                                    ! Register_Number           (blank)                  (meter number)
-		fn_record_addC(24,'GAL')                                                 ! Register_Unit_Of_Measure
-		fn_record_addC(19,fn_meterInfo$('reading multipler',account$,srvCode$))  ! Register_Resolution
-		fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
-		fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
-		fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
-		fn_record_addn(15,fn_unusualUsage('high',account$,srvCode$, 1))
-		fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1)) 
-		!
-		fn_record_write(h_out)
-fnend
-def fn_badgerConnectC
-	for j=1 to len(seq$)
-		on val(seq$(j:j)) goto BadgerCcWater,BadgerCcElectric,BadgerCcDemand,BadgerCcGas none BadgerCcNextSequence
-		BadgerCcWater: !
-		if a(1)=0 then goto BadgerCcNextSequence
-		m$=ltrm$(f$(1))(1:10)
-		if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
-		if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
-		if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-		rt$=cnvrt$("pic(##)",extra(1))&"  "
-		if env$('client')='Raymond' then manual_or_dialog$="N"
-		if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
-		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-		! serial # can be extra$(3) rather than f$(1)
-		! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
-		goto BadgerCcNextSequence
-		! ___________________________
-		BadgerCcElectric: !
-		if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BadgerCcNextSequence
-		m$=ltrm$(f$(2))(1:10)
-		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-		L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
-		goto BadgerCcNextSequence
-		! ___________________________
-		BadgerCcDemand: !
-		goto BadgerCcNextSequence
-		m$=""
-		pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-		goto BadgerCcNextSequence
-		! ___________________________
-		BadgerCcGas: !
-		if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BadgerCcNextSequence
-		m$=ltrm$(f$(3))(1:10)
-		pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
-		goto BadgerCcNextSequence
-		! ___________________________
-		BadgerCcNextSequence: !
-	next j
-fnend
-def fn_legacyMultiDevice
-	! r: set cd$ - included in several records - maybe some sort of meter id - not sure
-	cd$="M"
-	if env$('client')="Oakland" or env$('client')="Lovington" then
-		if trim$(extra$(7))="1" then 
-			cd$="B"
-		end if
-	end if
-	! /r
-	! r: make c$ - a legacy customer service list for the following loop to walk through
-	c$=""
-	if a(1)>0 then c$="1"
-	if a(3)=5 then c$=c$&"5" else if a(3)>0 then c$=c$&"3"
-	if a(4)>0 then c$=c$&"4"
-	! /r
-	if rtrm$(f$)="" then f$=z$
-	for j=1 to len(c$)
-		if deviceSelected$="Green Tree" then
-			if val(c$(j:j))=1 then ! Water
-				pr #h_out,using 'form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1': z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
-			end if
-		else if deviceSelected$="Hersey" then
-			if val(c$(j:j))=1 then ! Water
-				pr #h_out,using 'form pos 1,c 10,c 4,c 6,c 1,c 25,c 21,c 20,c 1,n 10,n 10,c 100,c 2,c 1,c 5,c 12,c 52,pos 281,c 2': z$," "," ","W",e$(2)(1:25),e$(1)(1:21),f$(1),"V",d(1)+(d(3)*2),d(1)," "," "," "," ",z$," ",chr$(13)&chr$(10)
-			end if
-		else if deviceSelected$="EZReader" then
-			if val(c$(j:j))=1 then ! Water
-				pr #h_out,using 'form pos 1,c 12,c 2,c 1,c 66,c 64,c 14,c 1,2*pic(##########),pic(##),c 120,c 24,c 24,c 20,c 80,c 125,c 1,c 2': cnvrt$("pic(##)",route)&cnvrt$("pic(#######)",sequence),"  ","W",e$(2),e$(1),f$(1),extra$(3)(1:1),d(1)+(d(3)*2),d(1),0," "," "," ",z$," "," ","X",chr$(13)&chr$(10)
-			end if
-		else if deviceSelected$="Sensus" then 
-			L2520: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1,n 9
-			if val(c$(j:j))=1 then ! Water
-				pr #h_out,using L2520: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
-			else if val(c$(j:j))=3 then ! Electric
-				if d(14)<>0 then d(7)=d(7)/(d(14)*.01) ! COMPARE USAGE BEFORE MULTIPLIER
-				pr #h_out,using L2520: z$,e$(2)(1:18)&"-E",e$(1)(1:20),d(5),d(7),3,extra$(3)(1:10),cd$
-			else if val(c$(j:j))=5 then ! Demand
-				pr #h_out,using L2520: z$,e$(2)(1:18)&"-D",e$(1)(1:20),d(15),d(7),4,extra$(3)(1:9)&"D",cd$
-			end if
-		end if
-	next j
-fnend
-def fn_amr ! AMR software solutions  ! same as ezreader, but specifically for Albany (who no longer uses ACS UB)
-	if header=0 then
-		if alp$(1:1)<>"*" then
-			header=1 ! create header record
-			if bk1>0 then route=bk1 else route=1 ! if they selected all for route number, make route number =1 else use the actual route number
-			pr #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ 
-		end if
-	end if
-	! AMR Water
-	pr #h_out,using L3230: "M1", lpad$(rtrm$(z$),20),f$(1)(1:10),extra(2),"W",d(1)+(d(3)*2),d(1)+(d(3)*.50),"    ","    ","    ",e$(1),e$(2)(1:20),d(1),extra(8),0,0,0,0,0,0,0,0,0,0,0,0,crlf$
-	L3230: form pos 1,c 2,c 20,c 10,pic(######),c 4,2*pic(##########),3*c 4,c 40,c 20,pic(##########),n 4,pic(##),pic(#),2*pic(##########),2*pic(############),5*pic(##########),pic(########),c 2
-fnend
-def fn_searchScreen(x$,&res$)
-	fncustomer_search(x$)
-	if x$<>"" then
-		read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
-		res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
-	end if
-fnend
-AskRange: ! r:
-	fnTos(sn$:="AskRange")
-	fnFra(1,1,1,57,"Starting Account:")
-	fnFra(4,1,1,57,"Ending Account:")
-	fncmbact(1,1,0,1)
-	fnButton(1,48,"Search",6,blank$,0,7,1)
-	resp$(1)=resp$(2)=""
-	fncmbact(1,1,0,2)
-	fnButton(1,48,"Search",7,blank$,0,7,2)
-	fnCmdKey("&Finish",2,1,0,"Completed with all routes")
-	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
-	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
-	if ckey=2 then goto Finis
-	if ckey=99 or ckey=5 then mat resp$=(""): goto SEL_ACT
-	if ckey=6 then
-		fn_searchScreen(x$,resp$(1))
-		goto AskRange
-	else if ckey=7 then
-		fn_searchScreen(x$,resp$(2))
-		goto AskRange
-	end if
-	mat resp$=("")
-	! read #h_customer_i1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange ! get first and last route and sequence number to select
-	! read #h_customer_i1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange
-	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk1$,release: route,sequence ! get first and last route and sequence number to select
-	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk2$,release: last_route,last_sequence
-	restore #h_customer_i5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
-	NextReadForRange: !
-	if fn_customerRead=-54 then goto AskRange
-	! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto AskRange
-	if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto AskRange
-goto SendRecordToWorkFile ! /r
-!
-def fn_rmk1$*20(z$)
-	! read the footnote from the note file  (any note with * as first character
-	dim rm$*1320
-	dim notefile$*256
-	ft$="                    "
-	notefile$='[Q]\UBmstr\notes.h[cno]\'&trim$(z$)&'.txt'
-	if exists(notefile$) then 
-		open #20: "Name="&notefile$,display,input ioerr Rmk1_Finis
-		do  
-			linput #20: rm$ eof Rmk1_Finis
-			if rm$(1:1)="*" then 
-				ft$=rpad$(rm$(2:21),20)
-			end if
-		loop until rm$(1:1)="*"
-	end if
-	Rmk1_Finis: !
-	close #20: ioerr ignore
-fnend
-def fn_openOutFile ! open work areas based on type of Hand Held
-	dim out_filename$*256
-	! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
-	fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('Desktop')&'\ACS to '&deviceSelected$&'.txt'))
-	if deviceSelected$='Itron FC300' then
-		fn_itron_open ! default
-	else
-		h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT"                       ,  80)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT"                                   ,  80)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3"                            , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3"                            , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt"                           , 204)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out"                             , 200)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat"                          , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT"                           , 282,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat"                          , 578,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
-	end if
-	workopen=1 
-fnend
-def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
-	! inherrits deviceSelected$,out_filename$
-	! returns open file handle
-	if deviceTest$='' or deviceSelected$=deviceTest$ then
-		if out_filename$='' then out_filename$=defaultOut_filename$
-		fnmakesurepathexists(env$('at')&out_filename$)
-		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
-	end if
-	fn_ifMatchOpenDo=hImodoReturn
-fnend
-def fn_unitech_ht630
-	! INPUT FILE (from ACS to Hand Held) needs to contain the following fields:
-	!   Account - 10 characters
-	!   Route and Sequence - 12 digits (this is the order for accounts to be displayed in - it might contain duplicates and/or skip large ranges of numbers)
-	!   Meter Type - 10 characters - "Gas", "Water", "Electric", etc.  Each house may have multiple meters that need to be read.  If a house has both gas and water than it would have two records in the file so that both can be ask.  The Meter Type will need to be displayed so the user will know which they should be entering.
-	!   Customer Name - 40 characters - The name of the customer who's meter is being read.  This should be displayed when the reading is ask for.
-	!   Meter Address - 40 characters - The address of the customer who's meter is being read.
-	!   This should be displayed when the reading is ask for.
-	!   Reading High - 10 digits - used to validate entry of new reading
-	!   Reading Low - 10 digits - used to validate entry of new reading
-	for a_item=1 to udim(mat a)
-		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
-			if a(a_item)>0 then
-				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
-				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
-				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-				pr #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
-				FORM_UH_OUT: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10
-			end if  ! a(a_item)>0
-		end if  ! it is a metered service
-	next a_item
-fnend  ! fn_Unitech_HT630
-def fn_acs_meter_reader
-	! FILE (from ACS to Hand Held and from Hand Held to ACS) needs to contain the following fields:
-	!   Account - 10 characters
-	!   Route and Sequence - 12 digits (this is the order for accounts to be displayed in - it might contain duplicates and/or skip large ranges of numbers)
-	!   Meter Type - 10 characters - "Gas", "Water", "Electric", etc.  Each house may have multiple meters that need to be read.  If a house has both gas and water than it would have two records in the file so that both can be ask.  The Meter Type will need to be displayed so the user will know which they should be entering.
-	!   Customer Name - 40 characters - The name of the customer who's meter is being read.  This should be displayed when the reading is ask for.
-	!   Meter Address - 40 characters - The address of the customer who's meter is being read.
-	!   This should be displayed when the reading is ask for.
-	!   Reading High - 10 digits - used to validate entry of new reading
-	!   Reading Low - 10 digits - used to validate entry of new reading
-	!   Reading - 10 digits - the new reading
-	for a_item=1 to udim(mat a)
-		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
-			if a(a_item)>0 then
-				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
-				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
-				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-				pr #h_out,using FORM_ACSMR: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
-				FORM_ACSMR: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10,n 10
-			end if  ! a(a_item)>0
-		end if  ! it is a metered service
-	next a_item
-fnend  ! fn_acs_meter_reader
-def fn_pcent
-	if ~pcent_setup then
-		pcent_setup=1
-		open #h_company:=fngethandle: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
-		read #h_company,using "Form POS 130,n 4": pcent_return
-		close #h_company:
-		if pcent_return=0 then pcent_return=100
-		pcent_return=pcent_return*.01 ! convert to percent
-	end if  ! ~pcent_setup
-	fn_pcent=pcent_return
-fnend  ! fn_pcent
 ! r: itron
 def fn_itron_open
 	open #h_out:=fngethandle: "Name=[Q]\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outIn,relative
@@ -950,52 +859,6 @@ def fn_itron_route_trailer
 	fn_itron_record_ctr
 	itron_rtr_count+=1
 fnend  ! fn_itron_route_trailer
-
-def fn_serviceDataN(adjetive$,noun$,sc$*2; ___,returnN) ! uses local: mat d
-! adjetive$ = current
-!           = prior
-! noun$     = usage
-!             reading
-! sc$ must be WA, GA or EL.
-	if adjetive$='current' then ! r:
-		if lwrc$(noun$)='usage' then
-			if sc$='WA' then
-				returnN=d(3) ! Water usage - current
-			else if sc$='GA' then
-				returnN=d(11) ! Gas usage - curent
-			else if sc$='EL' then
-				returnN=d(7) ! KWH usage - curent
-			end if 
-		else if lwrc$(noun$)='reading' then
-			if sc$='WA' then
-				returnN=d(1)
-			else if sc$='GA' then
-				returnN=d(9)
-			else if sc$='EL' then
-				returnN=d(5)
-			end if
-		else
-			pr 'serviceDataN: invalid noun' : pause
-		end if 
-		! /r
-	else if adjetive$='prior' then ! r:
-		if lwrc$(noun$)='usage' then
-			pr 'prior usage is not yet programmed.  it would have to be read in from their [last billing date]''s charge transaction.' : pause
-		else if lwrc$(noun$)='reading' then
-			if sc$='WA' then
-				returnN=d(2) ! Service 1 (Water) – Reading – Prior  
-			else if sc$='GA' then
-				returnN=d(10) ! Service 4 (Gas) – Reading - Prior   
-			else if sc$='EL' then
-				returnN=d(6) ! Service 3 (Electric) – Reading – Prior  
-			end if 
-			! /r
-		end if
-	else
-		pr 'serviceDataN: adjetive not expected' : pause
-	end if
-	fn_serviceDataN=returnN
-fnend
 def fn_itron
 	for a_item=1 to udim(mat a)
 		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
@@ -1047,7 +910,12 @@ def fn_itron_record_rdg ! reading - pg 19
 	fn_record_addn(2,0) !
 	dim transmitter_number$*128
 	transmitter_number$=fn_meterInfo$('transmitter number',z$,serviceCode$(a_item))
-	if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
+	if transmitter_number$<>'' then 
+		fn_record_addc(1,'R') 
+	else 
+		fn_record_addc(1,'K')
+		skip_next_rff_record=1
+	end if
 	fn_record_addn(10,reading_current)
 	fn_record_addn(10,unusual_usage_high)
 	fn_record_addn(10,unusual_usage_low) ! field 15
@@ -1304,127 +1172,108 @@ def fn_itron_record_mtr ! meter record - pg 13
 	fn_record_write(h_out)
 fnend  ! fn_itron_record_mtr
 ! /r
-def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
-	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-	transmitterSerialNumber$=trim$(fn_meterInfo$('Transmitter Number',z$,'WA'))
-	portNumber$=''
-	posTsnDash=pos(transmitterSerialNumber$,'-')
-	if posTsnDash>0 then
-		portNumber$=transmitterSerialNumber$(posTsnDash+1:len(transmitterSerialNumber$))
-		transmitterSerialNumber$(posTsnDash:len(transmitterSerialNumber$))=''
+def fn_legacyMultiDevice
+	! r: set cd$ - included in several records - maybe some sort of meter id - not sure
+	cd$="M"
+	if env$('client')="Oakland" or env$('client')="Lovington" then
+		if trim$(extra$(7))="1" then 
+			cd$="B"
+		end if
 	end if
-	!
-	fn_record_init(chr$(9))                                      ! Aclara Name               ACS Name (if different)
-	fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
-	fn_record_addc(10,z$)                                        ! Account Number
-	fn_record_addc(30,e$(2))                                     ! Customer Name
-	fn_record_addc(12,extra$(2))                                 ! Phone Number
-	fn_record_addc(30,fn_meterInfo$('address',z$,'WA'))          ! Meter Address 1
-	fn_record_addc(30,'')                                        ! blank
-	fn_record_addc(30,tmpCity$)
-	fn_record_addc(10,tmpState$)
-	fn_record_addc(15,tmpZip$)
-	fn_record_addn(3,route)                                      ! Cycle and Route            Route Number
-	fn_record_addn(7,sequence)                                   ! Sequence                   Sequence
-	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))    ! Meter Serial Number        Meter.Meter Number
-	fn_record_addc(20,transmitterSerialNumber$)                  ! Transmitter Serial Number  Meter.Transmitter Number
-	fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))     ! Meter Model/Type
-	fn_record_addc(1,portNumber$)                                ! Port Number
-	fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
+	! /r
+	! r: make c$ - a legacy customer service list for the following loop to walk through
+	c$=""
+	if a(1)>0 then c$="1"
+	if a(3)=5 then c$=c$&"5" else if a(3)>0 then c$=c$&"3"
+	if a(4)>0 then c$=c$&"4"
+	! /r
+	if rtrm$(f$)="" then f$=z$
+	for j=1 to len(c$)
+		if deviceSelected$="Green Tree" then
+			if val(c$(j:j))=1 then ! Water
+				pr #h_out,using 'form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1': z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
+			end if
+		else if deviceSelected$="Hersey" then
+			if val(c$(j:j))=1 then ! Water
+				pr #h_out,using 'form pos 1,c 10,c 4,c 6,c 1,c 25,c 21,c 20,c 1,n 10,n 10,c 100,c 2,c 1,c 5,c 12,c 52,pos 281,c 2': z$," "," ","W",e$(2)(1:25),e$(1)(1:21),f$(1),"V",d(1)+(d(3)*2),d(1)," "," "," "," ",z$," ",chr$(13)&chr$(10)
+			end if
+		else if deviceSelected$="EZReader" then
+			if val(c$(j:j))=1 then ! Water
+				pr #h_out,using 'form pos 1,c 12,c 2,c 1,c 66,c 64,c 14,c 1,2*pic(##########),pic(##),c 120,c 24,c 24,c 20,c 80,c 125,c 1,c 2': cnvrt$("pic(##)",route)&cnvrt$("pic(#######)",sequence),"  ","W",e$(2),e$(1),f$(1),extra$(3)(1:1),d(1)+(d(3)*2),d(1),0," "," "," ",z$," "," ","X",chr$(13)&chr$(10)
+			end if
+		else if deviceSelected$="Sensus" then 
+			L2520: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1,n 9
+			if val(c$(j:j))=1 then ! Water
+				pr #h_out,using L2520: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
+			else if val(c$(j:j))=3 then ! Electric
+				if d(14)<>0 then d(7)=d(7)/(d(14)*.01) ! COMPARE USAGE BEFORE MULTIPLIER
+				pr #h_out,using L2520: z$,e$(2)(1:18)&"-E",e$(1)(1:20),d(5),d(7),3,extra$(3)(1:10),cd$
+			else if val(c$(j:j))=5 then ! Demand
+				pr #h_out,using L2520: z$,e$(2)(1:18)&"-D",e$(1)(1:20),d(15),d(7),4,extra$(3)(1:9)&"D",cd$
+			end if
+		end if
+	next j
 fnend
-def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
-	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-	!
-	fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-	fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
-	fn_record_addc(10,z$)                                                              ! Account Number
-	fn_record_addc(30,e$(2))                                                           ! Customer Name
-	fn_record_addc(30,e$(1))                                                           ! Meter Address
-	fn_record_addc(30,tmpCity$)
-	fn_record_addc(10,tmpState$)
-	fn_record_addc(15,tmpZip$)
-	fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-	! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-	fn_record_addc(12,f$(1)) ! fn_meterInfo$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
-	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
-! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
-	aWmeterType=val(fn_meterInfo$('Meter Type',z$,'WA'))
-	if aWmeterType=1 then ! r: get aWmeterType$
-		aWmeterType$='1 inch'
-	else if aWmeterType=21 then
-		aWmeterType$='2 inch T-10'
-	else if aWmeterType=15 then
-		aWmeterType$='1.5 inch'
-	else if aWmeterType=2 then
-		aWmeterType$='2 inch Turbine'
-	else if aWmeterType=3 then
-		aWmeterType$='3 inch'
-	else if aWmeterType=4 then
-		aWmeterType$='4 inch'
-	else if aWmeterType=6 then
-		aWmeterType$='6 inch'
-	else
-		if aWmeterType<>5 then pr aWmeterType : pause
-		aWmeterType$='5/8x3/4'
-	end if ! /r
-	fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
-	fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
-! fn_record_addc(9,,fn_meterInfo$fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
-	fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-	fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
-	fn_record_write(h_out)
+def fn_workabout
+	dim ft$*20
+	for j=1 to len(seq$)
+		on val(seq$(j:j)) goto WORKABOUT_WATER,WORKABOUT_ELECTRIC,WORKABOUT_DEMAND,WORKABOUT_GAS none WORKABOUT_NEXT_SEQUENCE
+		
+		FM_WORKABOUT: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 20
+		
+		WORKABOUT_WATER: !
+			if a(1)=0 then goto WORKABOUT_NEXT_SEQUENCE
+			m$=ltrm$(f$(1))(1:10)
+			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
+		goto WORKABOUT_NEXT_SEQUENCE
+		
+		WORKABOUT_ELECTRIC: !
+			if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto WORKABOUT_LAWNMETER
+			m$=ltrm$(f$(2))(1:10)
+			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+			WORKABOUT_LAWNMETER: !
+			if a(3)=0 or trim$(serviceName$(3))<>"Lawn Meter" then goto WORKABOUT_NEXT_SEQUENCE
+			m$=ltrm$(f$(2))(1:10)
+			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+		goto WORKABOUT_NEXT_SEQUENCE
+		
+		WORKABOUT_DEMAND: !
+		goto WORKABOUT_NEXT_SEQUENCE
+		
+		WORKABOUT_GAS: !
+			if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto WORKABOUT_NEXT_SEQUENCE
+			m$=ltrm$(f$(3))(1:10)
+			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
+		goto WORKABOUT_NEXT_SEQUENCE
+		
+		WORKABOUT_NEXT_SEQUENCE: !
+	next j
 fnend
-def fn_masterMeter ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
-	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-	usage_current=d(3) ! Water usage - current
-	reading_current=d(1)
-	unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-	unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-	!
-	fn_record_init(chr$(9))                                           !
-	fn_record_addc(10,z$)                                             ! Account Number
-	fn_record_addc(30,e$(2))                                          ! Customer Name
-	fn_record_addc(30,e$(1))                                          ! Meter Address
-	fn_record_addn(3,route)                                           ! Route Number
-	fn_record_addn(7,sequence)                                        ! Sequence
-	fn_record_addc(12,fn_meterInfo$('Meter Number',z$,'WA'))       ! Meter.Meter Number
-	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA')) ! Transmitter Serial Number  Meter.Transmitter Number
-	fn_record_addn(9,d(1))                                            ! Service 1 (Water) – Reading – Current
-	! pr 'AAA - '&srep$(rec_line$,chr$(9),'>') : pause
-	fn_record_addc(17,fn_meterInfo$('longitude',z$,'WA'))          ! Meter.Longitude
-	! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
-	fn_record_addc(17,fn_meterInfo$('latitude',z$,'WA'))           ! Meter.Latitude
-	fn_record_addc(40,fn_meterInfo$('Meter Type',z$,'WA'))         ! Meter Model/Type
-	tmp$=fn_meterInfo$('reading multiplier',z$,'WA') : if tmp$='' then tmp$='1'
-	fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
-	fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
-	fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
-	fn_record_addn(10,unusual_usage_low)                              ! Unusual Usage Low Reading
-	fn_record_addn(10,unusual_usage_high)                             ! Unusual Usage High Reading
-	fn_record_write(h_out)
-fnend
-!
-def fn_READy_Water ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
-	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-	fn_record_init(chr$(9))                                           ! ACS Name (if different)
-	fn_record_addc(10,z$)                                             ! Account Number
-	fn_record_addc(30,e$(2))                                          ! Customer Name
-	fn_record_addc(12,extra$(2))                                      ! Phone Number
-	fn_record_addc(30,e$(1))                                          ! Meter Address (switched to 7/5/17 as per request by Sheri)
-	! fn_record_addc(30,e$(3))                                          ! Address 1 - Primary
-	fn_record_addc(30,extra$(1))                                      ! Address 2 - Primary
-	fn_record_addc(30,tmpCity$)                                       ! City
-	fn_record_addc(10,tmpState$)                                      ! State
-	fn_record_addc(15,tmpZip$)                                        ! Zip
-	fn_record_addn(3,route)                                           ! Route Number
-	fn_record_addn(7,sequence)                                        ! Sequence
-	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))         ! Meter.Meter Number
-	fn_record_write(h_out)
-fnend
+def fn_unitech_ht630
+	! INPUT FILE (from ACS to Hand Held) needs to contain the following fields:
+	!   Account - 10 characters
+	!   Route and Sequence - 12 digits (this is the order for accounts to be displayed in - it might contain duplicates and/or skip large ranges of numbers)
+	!   Meter Type - 10 characters - "Gas", "Water", "Electric", etc.  Each house may have multiple meters that need to be read.  If a house has both gas and water than it would have two records in the file so that both can be ask.  The Meter Type will need to be displayed so the user will know which they should be entering.
+	!   Customer Name - 40 characters - The name of the customer who's meter is being read.  This should be displayed when the reading is ask for.
+	!   Meter Address - 40 characters - The address of the customer who's meter is being read.
+	!   This should be displayed when the reading is ask for.
+	!   Reading High - 10 digits - used to validate entry of new reading
+	!   Reading Low - 10 digits - used to validate entry of new reading
+	for a_item=1 to udim(mat a)
+		if serviceCode$(a_item)='WA' or serviceCode$(a_item)='GA' or serviceCode$(a_item)='EL' then ! or (demand)   it is a metered service
+			if a(a_item)>0 then
+				usage_current=fn_serviceDataN('current','usage',serviceCode$(a_item))
+				reading_current=fn_serviceDataN('current','reading',serviceCode$(a_item))
+				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+				pr #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,serviceName$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
+				FORM_UH_OUT: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10
+			end if  ! a(a_item)>0
+		end if  ! it is a metered service
+	next a_item
+fnend  ! fn_Unitech_HT630
+
+
 def fn_record_init(; setDelimiter$)
 	dim rec_line$*2048
 	rec_line$=''
@@ -1454,78 +1303,67 @@ def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 		! pr srep$(rec_line$,chr$(9),'>') : pause
 	end if
 fnend
-def fn_boson
-	dim z_out$*14,custname$*30
-	for j=1 to len(seq$)
-		if val(seq$(j:j))=1 then
-			svc_flag$="W"
-		else if val(seq$(j:j))=2 then
-			svc_flag$="E"
-		else if val(seq$(j:j))=4 then
-			svc_flag$="G"
-		end if
-		custname$=e$(2)
-		z_out$=trim$(z$)&svc_flag$
-		on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
-		WATER_BOSON: !
-		if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
-		x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
-		if env$('client')='Kincaid' then
-			readingt$="S"
-		else if env$('client')="Moweaqua" then
-			if trim$(f$(1))="" then
-				readingt$="S"
+
+
+def fn_scr_selact
+	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
+	fnTos(sn$="hhto1")
+	fnLbl(2,1,"Hand Held model:",16,1)
+	if lwrc$(devicePreference$)='[ask]' then
+		fncomboa("HH-FroCBox",2,18,mat deviceName$)
+		resp$(rc_Device:=respc+=1)=deviceSelected$
+	else
+		fnLbl(2,18,deviceSelected$)
+	end if
+	fnLbl(4,1,"Select:",16,1)
+	if u4_includeFinalBilled$='True' then
+		fnOpt(4,18,"[All] (including final billed)")
+	else
+		fnOpt(4,18,"[All] (excluding final billed)")
+	end if
+	rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
+	fnOpt(5,18,"An Entire Route")
+	rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
+	fnOpt(6,18,"A Range of Accounts")
+	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
+	fnOpt(7,18,"Specific Accounts")
+	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
+	! if lrec(2)>0 then
+	!   fnCmdSet(19)
+	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
+	! else
+		fnLbl(9,1,"",46,2)
+		fnCmdSet(2)
+	! end if
+	fnAcs(sn$,0,mat resp$,ckey)
+	if ckey<>5 then
+			if lwrc$(devicePreference$)='[ask]' then
+				deviceSelected$=resp$(rc_Device)
+				fnureg_write('Hand Held Device Asked',deviceSelected$)
 			else
-				readingt$="P"
+				deviceSelected$=devicePreference$
 			end if
-		else if trim$(extra$(3))="" then
-			readingt$="S"
-		else
-			readingt$="P"
+		if resp$(rc_selectionMethod1)='True' then
+			selection_method=sm_allExceptFinal
+		else if resp$(rc_selectionMethod2)='True' then
+			selection_method=sm_aRoute
+		else if resp$(rc_selectionMethod3)='True' then
+			selection_method=sm_routeRange
+		else if resp$(rc_selectionMethod4)='True' then
+			selection_method=sm_Individuals
 		end if
-		if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
-		metertag=0: metertag=val(extra$(3)) conv ignore
-		if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
-		if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-		if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-		if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
-		! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
-		if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-		if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-		meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
-		if trim$(z_out$)='200670' then pause
-		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
-		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
-		F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
-		goto BOSON_NEXT_SEQUENCE
-		! ___________________________
-		ELECTRIC_BOSON: if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BOSON_NEXT_SEQUENCE
-		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
-		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
-		goto BOSON_NEXT_SEQUENCE
-		! ___________________________
-		DEMAND_BOSON: goto BOSON_NEXT_SEQUENCE
-		goto BOSON_NEXT_SEQUENCE
-		! ___________________________
-		GAS_BOSON: if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
-		readingt$="R"
-		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
-		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
-		goto BOSON_NEXT_SEQUENCE
-		! ___________________________
-		BOSON_NEXT_SEQUENCE: !
-	next j
+		fncreg_write('hhto.selection_method',str$(selection_method))
+	end if
+	mat resp$=("")
+	if deviceSelected$='Badger Beacon' then filterNoLocationId=1 else filterNoLocationId=0
 fnend
-Finis: ! r: Transfer to or from Hand Held Computer
-	dim out_filename_report$*512
-	out_filename_report$=file$(h_out)
-	close #h_out: ioerr ignore
-	close #h_customer_i1: ioerr ignore
-	fn_report_created_file(out_filename_report$)
-	fn_transfer
-goto XIT ! /r
-XIT: fnxit
-IGNORE: continue
+def fn_searchScreen(x$,&res$)
+	fncustomer_search(x$)
+	if x$<>"" then
+		read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
+		res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
+	end if
+fnend
 def fn_transfer
 	if deviceSelected$="ACS Meter Reader" then
 		fnTos(sn$="ACSMR_ASK_DEST")
@@ -1574,6 +1412,106 @@ def fn_report_created_file(out_filename_report$*512)
 		m$(2)=os_filename$(out_filename_report$)
 		fnmsgbox(mat m$, response$, '',mb_information+mb_okonly)
 	end if
+fnend
+
+Finis: ! r: Transfer to or from Hand Held Computer
+	dim out_filename_report$*512
+	out_filename_report$=file$(h_out)
+	close #h_out: ioerr ignore
+	close #h_customer_i1: ioerr ignore
+	fn_report_created_file(out_filename_report$)
+	fn_transfer
+goto XIT ! /r
+Xit: fnxit
+def fn_rmk1$*20(z$)
+	! read the footnote from the note file  (any note with * as first character
+	dim rm$*1320
+	dim notefile$*256
+	ft$="                    "
+	notefile$='[Q]\UBmstr\notes.h[cno]\'&trim$(z$)&'.txt'
+	if exists(notefile$) then 
+		open #20: "Name="&notefile$,display,input ioerr Rmk1_Finis
+		do  
+			linput #20: rm$ eof Rmk1_Finis
+			if rm$(1:1)="*" then 
+				ft$=rpad$(rm$(2:21),20)
+			end if
+		loop until rm$(1:1)="*"
+	end if
+	Rmk1_Finis: !
+	close #20: ioerr ignore
+fnend
+def fn_pcent
+	if ~pcent_setup then
+		pcent_setup=1
+		open #h_company:=fngethandle: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
+		read #h_company,using "Form POS 130,n 4": pcent_return
+		close #h_company:
+		if pcent_return=0 then pcent_return=100
+		pcent_return=pcent_return*.01 ! convert to percent
+	end if  ! ~pcent_setup
+	fn_pcent=pcent_return
+fnend  ! fn_pcent
+def fn_unusualUsage(highOrLow$,account$,srvCode$; leaveOpen,___,returnN,uuServiceWhich$*2,reading_current,usage_current)
+	! requires local mat serviceCode$
+	highOrLow$=lwrc$(trim$(highOrLow$))
+	uuServiceWhich$=str$(srch(mat servicecode$,srvCode$))
+	reading_current=val(fnCustomerData$(account$,'service '&uuServiceWhich$&'.reading.current', leaveOpen))
+	usage_current  =val(fnCustomerData$(account$,'service '&uuServiceWhich$&'.usage.current'  , leaveOpen))
+
+	if highOrLow$='high' then
+		returnN=round(reading_current+usage_current+usage_current*fn_pcent,0)
+	else if highOrLow$='low' then
+		returnN=round(reading_current+usage_current*fn_pcent,0) 
+		if returnN<0 then returnN=0
+	else
+	end if
+	fn_unusualUsage=returnN
+fnend
+def fn_serviceDataN(adjetive$,noun$,sc$*2; ___,returnN) ! uses local: mat d
+! adjetive$ = current
+!           = prior
+! noun$     = usage
+!             reading
+! sc$ must be WA, GA or EL.
+	if adjetive$='current' then ! r:
+		if lwrc$(noun$)='usage' then
+			if sc$='WA' then
+				returnN=d(3) ! Water usage - current
+			else if sc$='GA' then
+				returnN=d(11) ! Gas usage - curent
+			else if sc$='EL' then
+				returnN=d(7) ! KWH usage - curent
+			end if 
+		else if lwrc$(noun$)='reading' then
+			if sc$='WA' then
+				returnN=d(1)
+			else if sc$='GA' then
+				returnN=d(9)
+			else if sc$='EL' then
+				returnN=d(5)
+			end if
+		else
+			pr 'serviceDataN: invalid noun' : pause
+		end if 
+		! /r
+	else if adjetive$='prior' then ! r:
+		if lwrc$(noun$)='usage' then
+			pr 'prior usage is not yet programmed.  it would have to be read in from their [last billing date]''s charge transaction.' : pause
+		else if lwrc$(noun$)='reading' then
+			if sc$='WA' then
+				returnN=d(2) ! Service 1 (Water) – Reading – Prior  
+			else if sc$='GA' then
+				returnN=d(10) ! Service 4 (Gas) – Reading - Prior   
+			else if sc$='EL' then
+				returnN=d(6) ! Service 3 (Electric) – Reading – Prior  
+			end if 
+			! /r
+		end if
+	else
+		pr 'serviceDataN: adjetive not expected' : pause
+	end if
+	fn_serviceDataN=returnN
 fnend
 def fn_cnt_of_metered_svcs_active
 	! this function returns the number of metered services the customer has that have a non 0 rate code.
@@ -1767,6 +1705,85 @@ def fn_getFilterAccount(mat filterAccount$)
 	fnAddOneC(mat filterAccount$,'100110.00')
 	fnAddOneC(mat filterAccount$,'100111.00')
 	fnAddOneC(mat filterAccount$,'100114.00')
+fnend
+def fn_setup
+	if ~setup then
+		setup=1
+		library 'S:\Core\Library': fnerror,fnTos,fnLbl,fncomboa,fnAcs,fncmbrt2,fnxit,fncmbact,fnButton
+		library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet
+		library 'S:\Core\Library': fntop,fnCmdKey,fnmsgbox,fnTxt
+		library 'S:\Core\Library': fngethandle,fnpause,fnOpt,fnget_services,fnhand_held_device$
+		library 'S:\Core\Library': fncreg_read,fncreg_write
+		library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
+		library 'S:\Core\Library': fnCopy
+		library 'S:\Core\Library': fnAddOneC
+		library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
+		library 'S:\Core\Library': fnOpenFile,fnbuildkey$
+		library 'S:\Core\Library': fnCustomerData$
+		library 'S:\Core\Library': fnGetServiceCodesMetered
+		on error goto ERTN
+		! ______________________________________________________________________
+		dim resp$(64)*125
+		dim f$(3)*12,e2$*30
+		dim z$*10,e$(4)*30,d(15),a(7)
+		dim res$*41,m$(2)*80
+		dim serviceName$(10)*20,serviceCode$(10)*2
+		dim rt$*4,extra(23)
+		dim filterAccount$(0)
+		! r: set mat drive 
+			dim drive$(22)*3
+			drive$(1)="E:\"
+			drive$(2)="F:\"
+			drive$(3)="G:\"
+			drive$(4)="H:\"
+			drive$(5)="I:\"
+			drive$(6)="J:\"
+			drive$(7)="K:\"
+			drive$(8)="L:\"
+			drive$(9)="M:\"
+			drive$(10)="N:\"
+			drive$(11)="O:\"
+			drive$(12)="P:\"
+			drive$(13)="Q:\"
+			drive$(14)="R:\"
+			drive$(15)="S:\"
+			drive$(16)="T:\"
+			drive$(17)="U:\"
+			drive$(18)="V:\"
+			drive$(19)="W:\"
+			drive$(20)="X:\"
+			drive$(21)="Y:\"
+			drive$(22)="Z:\"
+		! /r
+		gosub Enum
+		fnget_services(mat serviceName$, mat serviceCode$)
+		fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
+		dim devicePreference$*20
+		devicePreference$=fnhand_held_device$
+		dim deviceName$(0)*20,deviceNameCompleteList$(0)*20,deviceNameCompleteListOption$(0)*128
+		fn_handHeldList(mat deviceNameCompleteList$,mat deviceNameCompleteListOption$)
+		for dnclItem=1 to udim(mat deviceNameCompleteList$)
+			if pos(deviceNameCompleteListOption$(dnclItem),'ImportOnly')<=0 then
+				fnAddOneC(mat deviceName$,deviceNameCompleteList$(dnclItem))
+			end if
+		nex dnclItem
+		dim deviceSelected$*20
+		if lwrc$(devicePreference$)='[ask]' then
+			fnureg_read('Hand Held Device Asked',deviceSelected$, deviceName$(1))
+		else
+			deviceSelected$=devicePreference$
+		end if
+	end if
+	sm_allExceptFinal=1
+	sm_aRoute=2
+	sm_routeRange=3
+	sm_Individuals=4
+	sm_LocationId=5
+	!
+	meterDataSourceOverrideEnabled=1
+	dim serviceCodeMetered$(0)*2
+	fnGetServiceCodesMetered(mat serviceCodeMetered$)
+	
 fnend
 include: fn_open
 include: enum
