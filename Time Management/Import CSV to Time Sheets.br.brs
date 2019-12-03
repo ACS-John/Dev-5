@@ -17,7 +17,7 @@ goto MainBody ! /r
 MainBody: ! r: 
 fileNameCount=srch(mat filename$,'')-1
 for fileItem=1 to fileNameCount
-	open #h_in:=fngethandle: 'Name='&filename$(fileItem)&',RecL=100,Shr',external,input
+	open #h_in:=fngethandle: 'Name='&env$('at')&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
 	! gnl_buffer$='' ! fn_getNextLine_reset
