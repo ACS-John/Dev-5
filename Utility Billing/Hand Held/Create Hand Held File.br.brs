@@ -221,9 +221,8 @@ NextReadForAll: ! ! r:
 			goto END1
 		end if
 	end if 
-	goto SendRecordToWorkFile
-	!
-	END1: !
+goto SendRecordToWorkFile ! /r
+END1: ! r:
 	if deviceSelected$='Itron FC300' then 
 		fn_itron_close
 	end if
@@ -318,14 +317,14 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 ! /r
 def fn_neptuneEquinoxV4(h_out) 
 ! uses local mat d
-! ,route,e$(3),extra$(1),mat serviceCodeMetered$,mat serviceCode$
-! ; ___,serviceItem,sc$*2
+! z$,route,sequence,e$(3),extra$(1),mat serviceCodeMetered$,mat serviceCode$
+! ; ___,serviceItem,sc$*2,reading_current,unusual_usage_low,unusual_usage_high
 	if ~nev4_company_init then	! r: Company Record
 		nev4_company_init=1
 		fn_record_init
 		! fn_record_addc(rac_field_length,rac_field_text$*256)
 		fn_record_addc( 5,'COMHD') ! Record ID
-		fn_record_addc( 4,'WATE') ! Company Code  ???  
+		fn_record_addc( 4,env$('cno')) ! Company Code  ???  
 		fn_record_addc( 8,date$('ccyymmdd')) ! Create Date
 		fn_record_addc(40,env$('cnam')) ! Description
 		fn_record_addc( 1,'4') ! File Version
@@ -333,6 +332,9 @@ def fn_neptuneEquinoxV4(h_out)
 		fn_record_write(h_out)
 	end if	! /r
 	if route<>nev4_routePrior then	! r: Route Record 
+		if nev4_routePrior<>route and nev4_routePrior<>0 then
+			gosub Nev4_RouteTrailer
+		end if
 		nev4_routePrior=route
 		fn_record_init
 		fn_record_addc( 5,'RTEHD') !  Record ID
@@ -357,6 +359,12 @@ def fn_neptuneEquinoxV4(h_out)
 	for serviceItem=1 to udim(mat serviceCode$)
 		sc$=serviceCode$(serviceItem)
 		if srch(mat serviceCodeMetered$,sc$)>0 then
+		
+			reading_current=fn_serviceDataN('current','reading',sc$)
+			usage_current=fn_serviceDataN('current','usage',sc$)
+			unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+			unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+		
 			! r: Meter Detail Record(s)
 			fn_record_init
 			fn_record_addC( 5,'MTRDT'                               ) !  Record ID
@@ -395,46 +403,86 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC( 6,''                                    ) ! Changed Constant / Multiplier
 			fn_record_addC(12,fn_meterInfo$('longitude',z$,sc$)     ) ! Longitude
 			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! Latitude
-			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
-			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
-			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
-			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! For future use
+			fn_record_addC(12,''                                    ) ! For future use
+			fn_record_addC(12,''                                    ) ! For future use
+			fn_record_addC(12,''                                    ) ! For future use
+			fn_record_addC(12,''                                    ) ! For future use
 			fn_record_write(h_out)
 			! /r
 			! r: Read Detal Record
-			fn_record_addC( 5,'RDGDT'                                 ) !  Record ID
-			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)       ) !  Read Type
-			fn_record_addC(13,''                                      ) !  Collection ID
-			fn_record_addC( 7,''                                      ) !  For future use
-			fn_record_addC(20,''                                      ) !  Changed Collection ID
-			fn_record_addC( 2,fn_meterInfo$('number of dials',z$,sc$) ) !  Dials Req                  UB 50-51     2 NUM
-			fn_record_addN( 2,0                                       ) !  Changed Dials     Opt      HH 52-453    2 NUM
-			fn_record_addN( 2,0                                       ) !  Decimals          Req      UB 54-55     2 NUM
-			fn_record_addN( 2,0                                       ) !  Changed Decimals  Opt      HH 56-57     2 NUM
-			fn_record_addC( 2,''                                      ) !  Read Direction    Opt      UB 58        1 A/N R, L, C, or blank only
-			fn_record_addC( 2,unusual_usage_high                      ) !  Hi Limit          Req      UB 59-68    10 NUM
-			fn_record_addC( 2,unusual_usage_low                       ) !  Low Limit         Req      UB 69-78    10 NUM
-			fn_record_addN( 2,fn_serviceDataN('prior','reading',sc$)  ) !  Prev Read         Req      UB 79-88    10 NUM
-			fn_record_addN( 2,fn_serviceDataN('current','reading',sc$)) !  Reading           Req      HH 89-98    10 A/N
-			fn_record_addC( 2,''                                      ) !  Collector Reading Req      HH 99-108   10 A/N Actual reading that came from collector, before truncation
-			fn_record_addC( 2,''                                      ) !  Read Code Req              HH 109-110   2 A/N
-			fn_record_addC( 2,''                                      ) !  Re-entry Count Req         HH 111-112   2 NUM
-			fn_record_addC( 2,''                                      ) !  Water No Flow 35 Days Req  HH 113       1 NUM Number of Days
-			fn_record_addC( 2,''                                      ) !  Peak Backflow Req          HH 114       1 NUM Reverse Flow Event
-			fn_record_addC( 2,''                                      ) !  Leak 35 Days Req           HH 115       1 NUM Number of Days
-			fn_record_addC( 2,''                                      ) !  Current Leak Req           HH 116       1 NUM Leak Status
-			fn_record_addC( 2,''                                      ) !  Previous Error Count Opt   UB 117       1 NUM R900 Electric or Gas tamper. Use '8' tosuppress tamper check.
-			fn_serviceDataN('current','usage',sc$)
-			f
-			
-				unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-				unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-			
-			fn_record_write(h_out)
+			fn_record_init
+			fn_record_addC( 5,'RDGDT'                                      ) !  Record ID
+			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)            ) !  Read Type
+			fn_record_addC(13,''                                           ) !  Collection ID
+			fn_record_addC( 7,''                                           ) !  For future use
+			fn_record_addC(20,''                                           ) !  Changed Collection ID
+			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)) ) ! Dials                         Req  UB 50-51     2 NUM
+			fn_record_addN( 2,0                                            ) ! Changed Dials                 Opt  HH 52-453    2 NUM
+			fn_record_addN( 2,0                                            ) ! Decimals                      Req  UB 54-55     2 NUM
+			fn_record_addN( 2,0                                            ) ! Changed Decimals              Opt  HH 56-57     2 NUM
+			fn_record_addC( 1,''                                           ) ! Read Direction                Opt  UB 58        1 A/N R, L, C, or blank only
+			fn_record_addN(10,unusual_usage_high                           ) ! Hi Limit                      Req  UB 59-68    10 NUM
+			fn_record_addN(10,unusual_usage_low                            ) ! Low Limit                     Req  UB 69-78    10 NUM
+			fn_record_addN(10,fn_serviceDataN('prior','reading',sc$)       ) ! Prev Read                     Req  UB 79-88    10 NUM
+			fn_record_addN(10,reading_current                              ) ! Reading                       Req  HH 89-98    10 A/N
+			fn_record_addC(10,''                                           ) ! Collector Reading             Req  HH 99-108   10 A/N Actual reading that came from collector, before truncation
+			fn_record_addC( 2,''                                           ) ! Read Code                     Req  HH 109-110   2 A/N
+			fn_record_addN( 2,0                                            ) ! Re-entry Count                Req  HH 111-112   2 NUM
+			fn_record_addN( 1,0                                            ) ! Water No Flow 35 Days         Req  HH 113       1 NUM Number of Days
+			fn_record_addN( 1,0                                            ) ! Peak Backflow                 Req  HH 114       1 NUM Reverse Flow Event
+			fn_record_addN( 1,0                                            ) ! Leak 35 Days                  Req  HH 115       1 NUM Number of Days
+			fn_record_addN( 1,0                                            ) ! Current Leak                  Req  HH 116       1 NUM Leak Status
+			fn_record_addN( 1,0                                            ) ! Previous Error Count          Opt  UB 117       1 NUM R900 Electric or Gas tamper. Use '8' tosuppress tamper check.
+			fn_record_addN( 1,0                                            ) ! Current Error Count           Req HH 118        1 NUM Current error/tamper count for R900 Electric or Gas
+			fn_record_addN( 1,0                                            ) ! Fatal Error                   Req HH 119        1 NUM Fatal error flag for R900 Electric
+			fn_record_addN( 1,0                                            ) ! Non-Fatal Error/Flags         Req HH 120        1 NUM Non-fatal error flag for R900 Electric or Gas
+			fn_record_addN( 3,0                                            ) ! Voltage                       Req HH 121-123    3 NUM Operating meter voltage for R900 Electric
+			fn_record_addN( 2,0                                            ) ! MIU Type                      Req HH 124-125    2 NUM Utility meter type
+			fn_record_addN( 2,0                                            ) ! AMR Read Type                 Req HH 126-127    2 NUM AMR reading type
+			fn_record_addN( 1,0                                            ) ! High Power                    Req HH 128        1 NUM High versus low power indicator for all R900s
+			fn_record_addN( 2,0                                            ) ! R900 Format                   Req HH 129-130    2 NUM The R900 reading formal:  0 - Binary  1 - BCD  2 - "Data Stream" (not used)  3 - E-Coder  4 - Mlog
+			fn_record_addN( 1,0                                            ) ! Display Digits                Req HH 131        1 NUM Number of digits in main reading display
+			fn_record_addN( 1,0                                            ) ! Multiplier Applied            Req HH 132        1 NUM
+			fn_record_addN( 1,0                                            ) ! Gas No Flow                   Req HH 133        1 NUM Period for which there has been no gas flow
+			fn_record_addN( 1,0                                            ) ! Current Gas Backflow Tamper   Req HH 134        1 NUM
+			fn_record_addN( 1,0                                            ) ! Current Gas Removal Tamper    Req HH 135        1 NUM
+			fn_record_addN( 1,0                                            ) ! Current Gas Magnetic Tamper   Req HH 136        1 NUM
+			fn_record_addN( 1,0                                            ) ! ERT Inversion Tamper          Req HH 137        1 NUM
+			fn_record_addN( 1,0                                            ) ! ERT Reverse Tamper            Req HH 138        1 NUM
+			fn_record_addN( 1,0                                            ) ! 35-Day Gas Backflow  Tamper   Req HH 139        1 NUM
+			fn_record_addN( 1,0                                            ) ! 35-Day Gas Removal Tamper     Req HH 140        1 NUM
+			fn_record_addN( 1,0                                            ) ! 35-Day Gas Magnetic Tamper    Req HH 141        1 NUM
+			fn_record_addN( 1,0                                            ) ! 35-Day Program Flag           Req HH 142        1 NUM R900G only
+			fn_record_addN( 1,0                                            ) ! Reed Switch Failure Flag      Req HH 143        1 NUM R900G only
+			fn_record_addC(69,''                                           ) ! Additional Flags              Req HH 144-212   69 For future use
+			fn_record_addC(25,''                                           ) ! Register Manufacturer         Req HH 213-237   25 A/N
+			fn_record_addN( 8,0                                            ) ! Register Install Date         Req HH 238-245    8 NUM YYYYMMDD
+			fn_record_addC(10,''                                           ) ! Register ID                   Req HH 246-255   10 A/N
+			fn_record_write(h_out)                                           ! CRLF                          Req UB 256-257    2
 			! /r
 		end if
 	next serviceItem
-	
+	gosub Nev4_RouteTrailer
+	! r: Company Trailer
+	fn_record_init
+	fn_record_addC( 5,'COMTR'            ) ! Record ID      Opt UB 1-5   5 A/N 'COMTR'
+	fn_record_addC( 4,env$('cno')        ) ! Company Code   Req UB 6-9   4 A/N
+	fn_record_addC( 5,''                 ) ! # Routes       Req UB 10-15 6 A/N One input field may be blank if total is unavailable
+	fn_record_write(h_out)                 ! CRLF           Req UB 16-17 2
+	! /r
+	goto Nev4_Finis
+	Nev4_RouteTrailer: ! r:
+		fn_record_init
+		fn_record_addC( 5,'RTETR'                                 ) ! Record ID  Req UB 1-5    5 A/N 'RTETR'
+		fn_record_addC( 5,''                                      ) ! Office     Req UB 6-9    4 A/N
+		fn_record_addC( 5,''                                      ) ! Cycle      Req UB 10-13  4 A/N
+		fn_record_addC( 5,''                                      ) ! Route      Req UB 14-23 10 A/N
+		fn_record_addC( 5,''                                      ) ! # Premises Req UB 24-29  6 A/N One input field may be blank if total is unavailable.
+		fn_record_addC( 5,''                                      ) ! # Meters   Req UB 30-35  6 A/N One input field may be blank if total is unavailable.
+		fn_record_write(h_out)                                     ! CRLF       Req UB 36-37  2
+	return ! /r
+
+	goto Nev4_Finis: ! 
 fnend
 def fn_workabout
 	dim ft$*20
@@ -1378,7 +1426,7 @@ def fn_READy_Water ! z$,mat e$,extra$(1-2),route
 	fn_record_write(h_out)
 fnend
 def fn_record_init(; setDelimiter$)
-	dim rec_line$*512
+	dim rec_line$*2048
 	rec_line$=''
 	gRecordDelimiter$=setDelimiter$
 fnend  ! fn_record_init
