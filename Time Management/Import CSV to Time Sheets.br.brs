@@ -77,6 +77,7 @@ for fileItem=1 to fileNameCount
 						!           pr the_date,hours,description$ : pause
 					end if
 					pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),fnClientNameShort$(client_id),hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp(4),expense
+					fn_clientTimesheet
 				end if  ! item$(4)<>'#N/A' and  val(item$(7))>0
 			end if  ! the_date=>filter_date(1) and <=filter_date(2)
 		end if  ! line$<>''
@@ -88,6 +89,10 @@ fncloseprn
 close #h_out:
 goto Xit ! /r
 XIT: fnxit
+def fn_clientTimesheet
+pr str$(the_date)&'---'&line$
+pause
+fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
 	line$=srep$(line$,'#N/A','')
 	line$=srep$(line$,chr$(13),'')
