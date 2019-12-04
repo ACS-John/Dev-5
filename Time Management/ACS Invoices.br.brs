@@ -14,7 +14,7 @@ fn_setup
 	let Clientebilling=fnClient_has('EM')
 	SCREEN1: !
 	fn_askScreen1(inv_date,invoice_number,starting_acct_no)
-	b4=date(days(inv_date,"mmddyy"),"ccyymmdd")
+	invoiceDateCcyymmdd=date(days(inv_date,"mmddyy"),"ccyymmdd")
 	fnAutomatedSavePoint('before')
 	open #hClient:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed 
 ! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
@@ -48,11 +48,11 @@ fn_setup
 			if cln=client_id then 
 				!       if stm$="Mo" then goto BILL_MONTHLY_MAINT ! always bill monthly
 				if stm$="Mo" then goto NXTJ ! never bill monthly
-				!        pr "An";int(b4*.01);'=';int(sup_exp_date*.01);' !  bill annual if it expires this month'
-				if stm$="An" and int(b4*.01)=int(sup_exp_date*.01) then goto BILL_MONTHLY_MAINT ! bill annual if it expires this month
+				!        pr "An";int(invoiceDateCcyymmdd*.01);'=';int(sup_exp_date*.01);' !  bill annual if it expires this month'
+				if stm$="An" and int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then goto BILL_MONTHLY_MAINT ! bill annual if it expires this month
 				if stm$="An" then goto NXTJ ! skip annual people
 				pr 'ZZZAAABBB i did not think it could reach here 7/2/2019' : pause
-				if b4<=sup_exp_date then goto NXTJ ! on maintenance
+				if invoiceDateCcyymmdd<=sup_exp_date then goto NXTJ ! on maintenance
 				BILL_MONTHLY_MAINT: ! 
 				if scst=0 then goto NXTJ
 				b(3)=scst
@@ -102,7 +102,7 @@ EOJ: ! r:
 		if ckey=5 or resp$(3)='True' then
 			goto Xit
 		else if resp$(1)='True' then
-			fnEmailQueuedInvoices(str$(b4))
+			fnEmailQueuedInvoices(str$(invoiceDateCcyymmdd))
 			fnChain("S:\acsTM\TMMRGINV")
 		else if resp$(2)='True' then
 			fnChain("S:\acsTM\TMMRGINV")
@@ -131,6 +131,7 @@ def fn_setup
 		library 'S:\Core\Library': fntos,fnlbl,fncmdset,fnacs2,fntxt
 		library 'S:\Core\Library': fnOpt
 		library 'S:\Core\Library': fnEmailQueuedInvoices
+		library 'S:\Core\Library': fnSaveToAsStart
 		dim resp$(30)*128
 	end if
 fnend
@@ -335,6 +336,11 @@ def fn_print_inv ! pr INVOICE
 	end if
 	if b3=>1 or pbal=>1 then
 		! if sum(mat inv_amt)+pbal>0 then
+		dim saveToAsStartFile$*1024
+		saveToAsStartFile$='D:\ACS\Doc\Invoices\ACS Invoices - '
+		saveToAsStartFile$(inf:inf)=str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)
+		saveToAsStartFile$(inf:inf)='.rtf'
+		fnSaveToAsStart(saveToAsStartFile$)
 		fnopenprn
 		if ClientEbilling=1 then 
 			! see if customer that we're sending the invoice for right now has ebilling selected 

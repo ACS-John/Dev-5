@@ -7,7 +7,7 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 	if ebilling then
 		library 'S:\Core\Library': fnval
 		if fnval(actnum$)=4132 then ! Stern and Stern
-			pause
+			! pause
 			isCss=1
 		end if
 		! execute "CONFIG OPTION 31 OFF"
