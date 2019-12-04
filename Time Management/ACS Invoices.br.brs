@@ -358,7 +358,7 @@ def fn_print_inv ! pr INVOICE
 			! move to Send folder 
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
 			! pause
-			fnCopy(os_filename$(env$('at')&pdf_filename_final$),env$('at')&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
+			fnCopy(env$('at')&os_filename$(pdf_filename_final$),env$('at')&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
 			exec 'sy -c "'&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
 			pause
