@@ -1,5 +1,8 @@
 ! test changes 
 ! r: functions that do not redirect!
+def library fnsavetoasstart(filenameToCopyTo$*400)
+	setEnv('saveToAsStart',trim$(filenameToCopyTo$))
+fnend
 def library fnBrFilename$*512(filename$*512; return$*512)
 	if trim$(filename$)='' then
 		return$=''
@@ -772,10 +775,6 @@ fnend
 	def library fnpglen(&pglen)
 		library 'S:\Core\program_properties.br': fnpglen
 		fnpglen=fnpglen(pglen)
-	fnend
-	def library fnsavetoasstart(a$*400)
-		library 'S:\Core\Print\SaveTo.br': fnsavetoasstart
-		fnsavetoasstart=fnsavetoasstart(a$)
 	fnend
 	def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
 		library 'S:\Core\Print.br': fnopen_receipt_printer

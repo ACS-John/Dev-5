@@ -151,7 +151,6 @@ def library fnworkOrderAdd(z$*10)
 	next j
 
 	fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$, cell$)
-! fn_workorder_print_legacy
 
 	 ! r: write to WorkOrder History file (z$)
 		open #h_workorder:=fngethandle: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
@@ -211,79 +210,8 @@ def fn_clean_ul$*256(cu_in$*256; cu_reformat)
 		end if
 	end if
 	fn_clean_ul$=cu_in$
- fnend
+fnend
 
-
-! def fn_workorder_print_legacy
-! 	library 'S:\Core\Library': fnopenprn,fncloseprn,fnsavetoasstart
-! 	! if exists("[Q]\WorkOrder")=0 then execute "mkdir [Q]\WorkOrder -n"
-! 	fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
-! 	fnopenprn
-! 	pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
-! 	pr #255: "{\fs24 "&env$('cnam')&"}}}"
-! 	pr #255: "\qc {\fs20 "&trim$(i$(1))&"}"
-! 	if trim$(srvnam$(3))<>"Electric" or trim$(srvnam$(3))<>"Lawn Meter" or trim$(srvnam$(4))<>"Gas" then 
-! 		pr #255,using "Form POS 1,C 1,SKIP 3": " " ! extra lines at top if either gas or electric not used
-! 	end if 
-! 	pr #255: "\ql "
-! 	pr #255: "{\b "&"Date Last Reading:"&"}"&i$(3)&"       {\b "&"Taken by:"&"}"&i$(2)
-! 	pr #255: ""
-! 	pr #255: "{\b "&"Date to be Completed:"&"}"&i$(4)
-! 	pr #255: ""
-! 	pr #255: "         {\b "&"Request made by:"&"}"&i$(5)&"     {\b "&"Phone:"&"}"&i$(6)
-! 	pr #255: ""
-! 	L10730: form pos 10,c 132,skip 2
-! 	pr #255,using L10730: "{\b Service Address: }{\ul "&e$(1)&"}"
-! 	pr #255,using L10730: "{\b    Meter number: }"&i$(7)
-! 	pr #255,using L10730: "{\b        Name Out: }{\ul "&customer_name$&"}{\b           Account :}{\ul "&z$&"}"
-! 	pr #255,using "Form pos 10,C 132": "{\b         Name In: }"&i$(7)
-! 	pr #255: ""
-! 	pr #255,using "Form pos 10,C 132": "{\b         "&"Turn On:"&"}"&i$(8)(1:12)&"    {\b "&"Turn Off:"&"}"&i$(9)(1:12)&"    {\b "&"Leave On:"&"}"&i$(10)(1:12)
-! 	pr #255: ""
-! 	pr #255,using "Form pos 10,C 132": "{\b Forwarding Address:}"&i$(11)&"  "&i$(12)(1:23)
-! 	pr #255: ""
-! 	fn_pwo_service_data(srvnam$(1),d(1),f$(1),extra$(3)) ! Water
-! 	fn_pwo_service_data(srvnam$(3),d(5),f$(2),extra$(4)) ! Electric or Lawn Meter
-! 	fn_pwo_service_data(srvnam$(4),d(9),f$(3),extra$(5)) ! Gas
-! 	pr #255: "\qc ";"{\b Comments:}"
-! 	pr #255: ""
-! 	pr #255: "\ql "
-! 	for j=1 to 5
-! 		if trim$(line$(j))<>"" then 
-! 			pr #255,using "Form pos 10,C 132": line$(j)
-! 		else 
-! 			pr #255,using "Form pos 10,C 132": rpt$("_",80)
-! 		end if 
-! 		pr #255: ""
-! 	next j
-! 	for j=1 to 2
-! 		pr #255,using "Form pos 10,C 132": rpt$("_",80)
-! 		pr #255: ""
-! 	next j
-! 	if trim$(srvnam$(1))<>"" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Water Deposit:}",b(8),"{\b Water Code: }"&str$(a(1))
-! 	end if 
-! 	if trim$(srvnam$(2))<>"" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Sewer Deposit:}",b(9),"{\b Sewer Code: }"&str$(a(2))
-! 	end if 
-! 	if trim$(srvnam$(3))="Electric" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Electric Deposit:}",b(10),"{\b Electric Code:}"&str$(a(3))
-! 	end if 
-! 	if trim$(srvnam$(3))="Lawn Meter" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b  }"&str$(a(3))
-! 	end if 
-! 	if trim$(srvnam$(3))="Lawn Meter" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b }"&str$(a(3))
-! 	end if 
-! 	if trim$(srvnam$(4))="Gas" then 
-! 		pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Gas Deposit:}",b(11), "{\b Gas Code:}"&str$(a(4))
-! 	end if 
-! 	pr #255: ""
-! 	pr #255,using 'form pos 47,c 51': "{\b Date Order Completed: _____________________}"
-! 	pr #255: ""
-! 	pr #255,using 'form pos 47,c 51': "{\b By: _______________________________________}"
-! 	fncloseprn
-! fnend 
 def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$)
 	if trim$(service_name$)<>"" and reading_prior>0 then 
 		pr #255: "{\b <-------------"&trim$(service_name$)&"--------------->}"

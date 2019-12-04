@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________               
+12:11 PM 12/4/2019	UB	Fixed a bug that caused Work Orders printed to not be saved into customer notes folder
 10:14 12/19/2019	CO	5.74228  
 10:14 12/19/2019	CO	5.74227   
 10:23 AM 11/26/2019	UB	Collections - no longer allowed to exit the program if an error is encountered, instead they should call  

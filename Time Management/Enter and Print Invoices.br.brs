@@ -3,7 +3,7 @@
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnmakesurepathexists,fnsavetoasstart,fnprint_file_name$,fnCustomerHasEbilling
+	library 'S:\Core\Library': fnmakesurepathexists,fnprint_file_name$,fnCustomerHasEbilling
 	library 'S:\Core\Library': fnPrintInvoice
 	library 'S:\Core\Library': fnClient_has
 	library 'S:\Core\Library': fnreport_cache_folder_current$
