@@ -89,9 +89,35 @@ fncloseprn
 close #h_out:
 goto Xit ! /r
 XIT: fnxit
-def fn_clientTimesheet
-pr str$(the_date)&'---'&line$
-pause
+def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
+	ctFile$=fnreport_cache_folder_current$&'\Client TimeSheets\'
+	ctFile$(inf:inf)=fnClientNameShort$(client_id)&'\'
+	ctFile$(inf:inf)=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
+	fnmakesurepathexists(ctFile$)
+	if ~exists(ctFile$) then ctNew=1
+	open #hCt:=fngethandle: 'name='&ctFile$&',RecL=2048',display,output
+	if ctNew then
+		pr #hCt: 'Employee Name'&tab$;
+		pr #hCt: 'Date'&tab$;
+		pr #hCt: 'hours'&tab$;
+		pr #hCt: 'item$(9)'&tab$;
+		pr #hCt: 'item$(10)'&tab$;
+		pr #hCt: 'item$(11)'&tab$;
+		pr #hCt: 'inp(4)'&tab$;
+		pr #hCt: 'Origional Entries'&tab$;
+		pr #hCt: ''
+	end if
+  pr #hCt: empname$(fileitem)&tab$;
+  pr #hCt: str$(the_date)&tab$;
+	pr #hCt: str$(hours)&tab$;
+	pr #hCt: item$(9)&tab$;
+	pr #hCt: item$(10)&tab$;
+	pr #hCt: item$(11)&tab$;
+	pr #hCt: str$(inp(4))&tab$;
+  pr #hCt: line$&tab$;
+	pr #hCt: ''
+
+	close #hCt:
 fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
 	line$=srep$(line$,'#N/A','')
@@ -428,6 +454,8 @@ def fn_setup
 		library 'S:\Core\Library': fnopenprn,fncloseprn
 		library 'S:\Core\Library': fnureg_read,fnureg_write
 		library 'S:\Core\Library': fnClientNameShort$
+		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnreport_cache_folder_current$
 		on error goto Ertn
 		gosub Enum
 		dim sage_code$*128
