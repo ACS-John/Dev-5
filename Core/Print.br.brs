@@ -355,8 +355,7 @@ def fn_start_winxp
 	temp$='Sy -w NotePad "'&serverSendto$&'"'
 	execute temp$
 fnend 
-IGNORE: continue 
-include: ertn
+
 def library fnsafe_filename$*256(sf_in$*256)
 	fnsafe_filename$=fn_safe_filename$(sf_in$)
 fnend
@@ -402,3 +401,4 @@ def fn_safe_filename$*256(sf_in$*256)
 	loop until pos(sf_in$,'  ')<=0
 	fn_safe_filename$=trim$(sf_in$)
 fnend 
+include: ertn
