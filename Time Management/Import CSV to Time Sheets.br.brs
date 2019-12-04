@@ -90,12 +90,12 @@ close #h_out:
 goto Xit ! /r
 XIT: fnxit
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
-	ctFile$=fnreport_cache_folder_current$&'\Client TimeSheets\'
+	ctFile$=env$('at')&fnreport_cache_folder_current$&'\Client TimeSheets\'
 	ctFile$(inf:inf)=fnClientNameShort$(client_id)&'\'
 	ctFile$(inf:inf)=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)
 	if ~exists(ctFile$) then ctNew=1
-	open #hCt:=fngethandle: 'name='&env$('at')&ctFile$&',RecL=2048',display,output
+	open #hCt:=fngethandle: 'name='&ctFile$&',RecL=2048',display,output
 	if ctNew then
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
