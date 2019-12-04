@@ -95,7 +95,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
 	ctFile$(inf:inf)=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)
 	if ~exists(ctFile$) then ctNew=1
-	open #hCt:=fngethandle: 'name='&ctFile$&',RecL=2048',display,output
+	open #hCt:=fngethandle: 'name='&ctFile$&',RecL=2048,use',display,output
 	if ctNew then
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
