@@ -5,13 +5,21 @@ def fn_setup
 	on error goto ERTN
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnerror,fnread_program_print_property
-		library 'S:\Core\Library': fnCopy,fnfree
-		library 'S:\Core\Library': fnreg_read,fnureg_read,fnSystemName$,fnGetPp
-		library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe
-		library 'S:\Core\Library': fninch2twip,fnprocess
-		library 'S:\Core\Library': fngethandle,fnStatusClose
-		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnError
+		library 'S:\Core\Library': fnRead_program_print_property
+		library 'S:\Core\Library': fnCopy
+		library 'S:\Core\Library': fnFree
+		library 'S:\Core\Library': fnReg_read
+		library 'S:\Core\Library': fnUreg_read
+		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnGetPp
+		library 'S:\Core\Library': fnOsver
+		library 'S:\Core\Library': fnGet_wordprocessor_exe
+		library 'S:\Core\Library': fnProcess
+		library 'S:\Core\Library': fnInch2twip
+		library 'S:\Core\Library': fnGethandle
+		library 'S:\Core\Library': fnStatusClose
+		library 'S:\Core\Library': fnMakesurepathexists
 		library 'S:\Core\Library': fnSrepEnv$
 		library 'S:\Core\Library': fnProgramDataDir$
 		! library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnOpt,fnCmdSet
@@ -140,7 +148,7 @@ def library fncloseprn(;forceWordProcessor$)
 	end if 
 	g_prgCapForSettingsOverride$=''
 fnend 
-def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$)
+def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
 	on error goto START_ERTN
 	! ______________________________________________________________________
 	! NoDrop    = 1 = Do not delete the file when your done with it.
@@ -156,31 +164,49 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$)
 	winnt2kxp$="Microsoft Windows NT/2000/XP"
 	fnosver(osver$,1)
 	! if  start_destinationFilename$='CANCELED' then goto START_XIT
+
 	if lwrc$(start_destinationFilename$(len(start_destinationFilename$)-3:len(start_destinationFilename$)))=".rtf" then 
-		fn_start_rtf(start_destinationFilename$, forceWordProcessor$)
+		isRtf=1
+	end if
+	if env$('saveToAsStart')<>'' then
+		saveToAsStart$=env$('saveToAsStart')
+		saveToAsStart$=fnSrepEnv$(saveToAsStart$)
+		if ~isRtf then
+			fnCopy(start_destinationFilename$,env$('at')&saveToAsStart$)
+		end if
+		setenv('saveToAsStart','')
+	end if
+	
+	if isRtf then 
+		fn_start_rtf(start_destinationFilename$, forceWordProcessor$,saveToAsStart$)
 	else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then 
-		fn_start_winxp
+		! r: start_winxp
+		temp$='Sy -w NotePad "'&serverSendto$&'"'
+		execute temp$
+		! /r
 	else 
 		pr 'win 98 no longer supported.' : pause ! fn_start_win9x
 	end if 
  DROPIT: ! 
-	! if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
-	!   execute 'Drop "'&clientSendto$&'" -N' ioerr DROPIT ! empties the contents of clientSendto$
-	! end if 
-	goto START_XIT ! _______
+	goto START_XIT
 	! ______________________________________________________________________
-	START_ERTN: ! 
-	if err=4591 then let fn_start_workaround_4591 : continue  ! line added for time-outs
+	START_ERTN: ! r:
+	if err=4591 then   ! added for time-outs
+		pr newpage
+		pr f "10,10,Cc 60,N": "Press ENTER to continue"
+		input fields "11,10,C 1,N": pause$
+		continue
+	end if
 	fnerror(program$,err,line,act$,"start_xit")
 	if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
 	execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
 	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
 	START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
-	! ______________________________________________________________________
+	! /r
 	START_XIT: ! 
 	on error goto ERTN
 fnend 
-def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
+def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAsStart$*2048)
 	dim line$*32000
 	fn_start_read_properties
 	! r:  make the temp rtf file
@@ -300,6 +326,9 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
 	 !
 	fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$) 
 	wordprocessor_exe$=trim$(wordprocessor_exe$,'"')
+	if saveToAsStart$<>'' then
+		fnCopy(serverSendto$,env$('at')&saveToAsStart$)
+	end if
 	if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then 
 		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
 	else ! if print_report_nowait or fnprocess=1 then 
@@ -345,15 +374,6 @@ def fn_start_read_properties
 	fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : marg(4)=val(temp$)
 	fninch2twip(marg(4))
 	fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : fsize=val(temp$)
-fnend 
-def fn_start_workaround_4591
-	pr newpage
-	pr f "10,10,Cc 60,N": "Press ENTER to continue"
-	input fields "11,10,C 1,N": pause$
-fnend 
-def fn_start_winxp
-	temp$='Sy -w NotePad "'&serverSendto$&'"'
-	execute temp$
 fnend 
 
 def library fnsafe_filename$*256(sf_in$*256)

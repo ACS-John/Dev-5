@@ -32,6 +32,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_read(env$('program_caption')&'.priorityColumnN',priorityColumn$,'PRIINSNAME')
 		fnreg_read(env$('program_caption')&'.priorityText',priorityText$,'Patient Has Check')
 		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$,'222')
+		fnreg_read(env$('program_caption')&'.ocacDiaryCode',ocacDiaryCode$,'222')
 	else
 		fnreg_read(env$('program_caption')&'.csvFile',csvFile$, 'D:\CM\Stern and Stern\New_format_Premier_Cardiology.xlsx')
 		fnreg_read(env$('program_caption')&'.starting fileno',sFileNo$,'PCE01001')
@@ -40,9 +41,10 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_read(env$('program_caption')&'.priorityColumnN',priorityColumn$)
 		fnreg_read(env$('program_caption')&'.priorityText',priorityText$)
 		fnreg_read(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
+		fnreg_read(env$('program_caption')&'.ocacDiaryCode',ocacDiaryCode$)
 	end if
 	! /r
-	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$,priorityColumn$,priorityText$,priorityDiaryCode$)=99 then
+	if fn_askScreen1(csvFile$,sFileNo$,forwNo$,enableImport,enableImport$,priorityColumn$,priorityText$,priorityDiaryCode$,ocacDiaryCode$)=99 then
 		goto PciXit
 	else
 		! r: write screen answers
@@ -54,7 +56,13 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_write(env$('program_caption')&'.priorityColumnN',priorityColumn$)
 		fnreg_write(env$('program_caption')&'.priorityText',priorityText$)
 		fnreg_write(env$('program_caption')&'.priorityDiaryCode',priorityDiaryCode$)
+		fnreg_write(env$('program_caption')&'.ocacDiaryCode',ocacDiaryCode$)
 		! /r
+		
+		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_KEY)))
+		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_KEY)))
+		tmpOrigionalClaimAmount$=tmpPatientBalance$
+
 
 		! r: gather Forwarder data
 		if ~hForw or file(hForw)=-1 then
@@ -177,7 +185,6 @@ include: filenamesPopUpperCase
 					! fn_writeInfinity(hOut,mat item$)
 					if fn_isPriority(mat item$,priorityColumnN,priorityText$) then
 							priorityCount+=1
-							! priorityColumn$,priorityText$,priorityDiaryCode$
 						fn_writeDiary(hOut,mat item$)
 					end if
 				end if
@@ -246,7 +253,7 @@ def fn_isPriority(mat item$,priorityColumnN,priorityText$)
 fnend
 
 
-def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&priorityColumn$,&priorityText$,&priorityDiaryCode$; ___,returnN,rc,lc)
+def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&priorityColumn$,&priorityText$,&priorityDiaryCode$,&ocacDiaryCode$; ___,returnN,rc,lc)
 	! function returns 99 if Cancel
 	IF ~Ask_File1_Setup then
 		dim Af1_Data_Fil_Prior$*256
@@ -265,7 +272,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	fnTos
 	dim resp$(64)*256
 	col1pos=1
-	col1len=36
+	col1len=42 ! 36
 	col2pos=col1pos+col1len+2
 	lc=0 ! line count
 	rc=0 ! response counter
@@ -285,7 +292,6 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	resp$(resp_forwNo:=rc+=1)=forwNo$
 
 	lc+=1
-
 	fnLbl (lc+=1,col1pos,'Priority Diary Code:', col1len,1)
 	fncombof('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
 	! fnTxt(lc,col2pos,8,0,0,'',0,'Diary Code to be added if Priority Text found in Priority Column.')
@@ -299,6 +305,10 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	fnTxt(lc,col2pos,8,80,40,'',0,'Select the case insensetive text that, if found in the Priority Column will trigger the addition of the Priority Diary Code.')
 	resp$(resp_priDiaryText:=rc+=1)=priorityText$
 
+	lc+=1
+	fnLbl (lc+=1,col1pos,'Origional Claim Amount Changed Diary Code:', col1len,1)
+	fncombof('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
+	resp$(resp_ocacDiaryCode:=rc+=1)=ocacDiaryCode$
 
 	lc+=1
 	fnChk(lc+=1,col2pos+1,'Enable Automated Import:',1)
@@ -316,7 +326,8 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		priorityDiaryCode$	=resp$(resp_priDiaryCode)(1:pos(resp$(resp_priDiaryCode),' ')-1)
 		priorityColumn$			=resp$(resp_priDiaryColumn)
 		priorityText$				=resp$(resp_priDiaryText)
-		enableImport$=resp$(resp_enableImport)
+		ocacDiaryCode$			=resp$(resp_ocacDiaryCode)(1:pos(resp$(resp_ocacDiaryCode),' ')-1)
+		enableImport$				=resp$(resp_enableImport)
 		if enableImport$='True' then let enableImport=1 else enableImport=0
 		if sourceFile$(len(sourceFile$):len(sourceFile$))='\' then
 			sourceFile$(inf:inf)='*.*'

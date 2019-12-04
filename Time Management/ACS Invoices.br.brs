@@ -124,7 +124,6 @@ def fn_setup
 		library 'S:\Core\Library': fnCustomerHasEbilling
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnsavetoasstart
 		library 'S:\Core\Library': fnprint_file_name$
 		library 'S:\Core\Library': fnClient_has
 		library 'S:\Core\Library': fnreport_cache_folder_current$
