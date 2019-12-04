@@ -53,13 +53,13 @@ def fn_report_cache_folder_current$*512(; ___,return$*512)
 	dim report_cache_base$*256
 	! dim client_report_cache$*256
 	if env$('BR_MODEL')='CLIENT/SERVER' then
-		report_cache_base$=fnProgramDataDir$&'\Report Cache'
+		report_cache_base$=rtrm$(fnProgramDataDir$,'\')&'\Report Cache'
 	else
 		report_cache_base$=os_filename$('[Q]\Report Cache')
 	end if
 	if report_cache_base$='' then report_cache_base$=os_filename$('[Q]\Report Cache')
-	return$=report_cache_base$&'\'&fnSystemName$
-	return$=return$&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
+	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemName$
+	return$=rtrm$(return$,'\')&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
 	return$=fnSrepEnv$(return$)
 	fnmakesurepathexists(env$('at')&return$&'\')
 	fn_report_cache_folder_current$=return$
