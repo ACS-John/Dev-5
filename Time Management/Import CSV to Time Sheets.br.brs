@@ -114,8 +114,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
 	pr #hCt: item$(10)&tab$;
 	pr #hCt: item$(11)&tab$;
 	pr #hCt: str$(inp(4))&tab$;
-  pr #hCt: srep$(line$,crlf$,'')&tab$;
-	pr #hCt: ''
+  pr #hCt: line$
 
 	close #hCt:
 fnend
