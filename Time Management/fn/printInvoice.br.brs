@@ -1,24 +1,38 @@
-def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal,ebilling;pdfline$*255)
+def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal,ebilling; pdfline$*255,___,isCss)
 	library 'S:\Core\Library': fnopenprn
 	if file(255)=0 then let fnopenprn
 	if align<>0 and align<>1 then
 		pr #out: newpage
 	end if
 	if ebilling then
+		library 'S:\Core\Library': fnval
+		if fnval(actnum$)=4132 then ! Stern and Stern
+			pause
+			isCss=1
+		end if
 		! execute "CONFIG OPTION 31 OFF"
 		! pr #out: ""
-		pr #out,using "Form POS 1,c 100": "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Advanced Computer Services LLC [/BOLD]"
-		pr #out,using "Form POS 27,c 100" : "4 Syme Ave"
-		pr #out,using "Form POS 27,c 100" : "West Orange, NJ  07052"
-		pr #out: "[pos(+0,+67)][pic(.5,.5,s:\acsTM\bwlogo2.jpg)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+		if isCss then
+			pr #out,using "Form POS 1,c 100": "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Commercial Software Solutions LLC [/BOLD]"
+			pr #out,using "Form POS 27,c 100" : "4 Syme Ave"
+			pr #out,using "Form POS 27,c 100" : "West Orange, NJ  07052"
+			pr #out: "[pos(+0,+67)][pic(.5,.5,S:\Time Management\resource\cssLogo.png)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+		else
+			pr #out,using "Form POS 1,c 100": "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Advanced Computer Services LLC [/BOLD]"
+			pr #out,using "Form POS 27,c 100" : "4 Syme Ave"
+			pr #out,using "Form POS 27,c 100" : "West Orange, NJ  07052"
+			pr #out: "[pos(+0,+67)][pic(.5,.5,s:\acsTM\bwlogo2.jpg)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+		end if
 	else
+		if isCss then
+			pr #out,using "Form POS 1,C 50": "\ql {\f181 \b Commercial Software Solutions LLC}"
+		else
+			pr #out,using "Form POS 1,C 50": "\ql {\f181 \b Advanced Computer Services LLC}"
+		end if
 		! pr #out,using "Form POS 12,C 50": "\ql {\f181 \b Advanced Computer Services LLC}"
-		! pr #out,using "Form POS 12,C 50": "\ql {\f181 4 Syme Ave}"
-		! pr #out,using "Form POS 12,C 50": "\ql {\f181 West Orange, NJ  07052}"
+		pr #out,using "Form POS 12,C 50": "\ql {\f181 4 Syme Ave}"
+		pr #out,using "Form POS 12,C 50": "\ql {\f181 West Orange, NJ  07052}"
 		! execute "config option 32 ON"
-		pr #out,using "Form POS 1,C 50": "\ql {\f181 \b Advanced Computer Services LLC}"
-		pr #out,using "Form POS 1,C 50": "\ql {\f181 4 Syme Ave}"
-		pr #out,using "Form POS 1,C 50": "\ql {\f181 West Orange, NJ  07052}"
 		! pr #out: "*INSERT FILE:S:\acsTM\acs_logo.rtf"
 		pr #out: "*INSERT FILE:S:\Time Management\ACS_Logo2.rtf"
 	end if
