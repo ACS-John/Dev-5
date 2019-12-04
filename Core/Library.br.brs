@@ -1,5 +1,19 @@
 ! test changes 
 ! r: functions that do not redirect!
+def library fnVal(stringToConvert$*128; ___,returnN)
+	returnN=val(stringToConvert$) conv ValConv
+	goto ValXit
+	ValConv: ! 
+		stringToConvert$=srep$(stringToConvert$,'$','')
+		stringToConvert$=srep$(stringToConvert$,',','')
+		stringToConvert$=srep$(stringToConvert$,'"','')
+		stringToConvert$=trim$(stringToConvert$)
+		returnN=val(stringToConvert$) conv ignore
+	goto ValXit
+	ValXit: !
+	fnVal=returnN
+fnend 
+
 def library fnsavetoasstart(filenameToCopyTo$*400)
 	setEnv('saveToAsStart',trim$(filenameToCopyTo$))
 fnend
