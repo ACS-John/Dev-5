@@ -1,22 +1,31 @@
-def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal,ebilling; pdfline$*255,___,isCss)
+def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal; pdfFileName$*1024, ___,pdfline$*255,isCss)
+	if pdfFileName$='' then ebilling=0 else ebilling=1
 	library 'S:\Core\Library': fnopenprn
-	if file(255)=0 then let fnopenprn
-	if align<>0 and align<>1 then
-		pr #out: newpage
-	end if
 	if ebilling then
 		library 'S:\Core\Library': fnval
 		if fnval(actnum$)=4132 then ! Stern and Stern
 			! pause
 			isCss=1
 		end if
+		
+		if isCss then
+			fnpa_open
+		open #out:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
+		open #out:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
+		
+
+		
 		! execute "CONFIG OPTION 31 OFF"
 		! pr #out: ""
 		if isCss then
+			fnpa_open( 'Portrait',pa_sendto_base_name_addition$*128,'PDF')
+			fnpa_bold(1) : fnpa_fontFace('Times') : fnpa_fontSize(8)
+			
+			fnpa_txt('Commercial Software Solutions LLC',10,20)
 			pr #out: "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Commercial Software Solutions LLC [/BOLD]"
 			pr #out: "     4 Syme Ave"
 			pr #out: "     West Orange, NJ  07052"
-			pr #out: "[pos(+0,+67)][pic(.75,.75,S:\Time Management\resource\cssLogo.png)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+			pr #out: "[pos(+0,+67)][pic(1,1,S:\Time Management\resource\cssLogo.png)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
 		else
 			pr #out: "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Advanced Computer Services LLC [/BOLD]"
 			pr #out: "     4 Syme Ave"
@@ -24,6 +33,12 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 			pr #out: "[pos(+0,+67)][pic(.5,.5,s:\acsTM\bwlogo2.jpg)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
 		end if
 	else
+		if file(255)=0 then and ~ebilling and ~isCss then
+			fnopenprn
+		end if
+		if align<>0 and align<>1 then
+			pr #out: newpage
+		end if
 		if isCss then
 			pr #out: "\ql {\f181 \b Commercial Software Solutions LLC}"
 		else
@@ -108,6 +123,14 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 		pr #out: "" ! ,using "Form POS 1,c 100" : "[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]"
 		pr #out: "[pos(+0,-2)]"&pdfline$
 		! pr #out: ""
+		if isCss then
+			dim tmpFilename$*2048
+			tmpFilename$=file$(out)
+			fnpa_finis
+			fnCopy(tmpFilename$,env$('at')&pdf_filename_final$)
+		else
+			close #out:
+		end if
 	else
 		pr #out,using "Form POS 59,C 28": "{\strike             }"
 		pr #out,using "Form POS 51,Cr 13,PIC($-,---,---.##)": "{\b Total:}",total_amt
@@ -116,3 +139,10 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 	end if
 	total_amt=0
 fnend
+fnCopy
+fnpa_finis
+fnpa_open
+fnpa_bold
+fnpa_fontFace
+fnpa_fontSize
+fnpa_fontSize

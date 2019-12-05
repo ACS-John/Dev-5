@@ -349,7 +349,7 @@ def fn_print_inv ! pr INVOICE
 ! if trim$(client_id$)='4132' then pause
 		! if trim$(client_id$)='1478' then pr ebilling : pause 
 		if ebilling=0 then 
-		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,ebilling)
+		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
 			pr #255: newpage ! mat inv_item$=("")
 		else if ebilling then 
 			! open pdf 
@@ -357,9 +357,9 @@ def fn_print_inv ! pr INVOICE
 			pr 'creating:  '&pdf_filename_final$ 
 			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
 			! print pdf
-			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
+			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,pdf_filename_final$)
 			! close pdf 
-			close #pdfout: 
+			! close #pdfout: 
 			! move to Send folder 
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
 			! pause
