@@ -128,8 +128,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	pr #hCt: item$(10)&tab$;
 	pr #hCt: item$(11)&tab$;
 	pr #hCt: str$(inp(4))&tab$;
-  pr #hCt: line$
-pause
+  pr #hCt: rtrm$(srep$(srep$(line$,cr$,''),lf$,''),tab$)&'*'
 	! close #hCt:
 fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
