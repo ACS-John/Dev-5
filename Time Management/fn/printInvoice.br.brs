@@ -14,13 +14,13 @@ def library fnPrintInvoice(out,align, &actnum$, mat billto$, inv_num$, inv_date,
 		! pr #out: ""
 		if isCss then
 			pr #out: "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Commercial Software Solutions LLC [/BOLD]"
-			pr #out: "4 Syme Ave"
-			pr #out: "West Orange, NJ  07052"
-			pr #out: "[pos(+0,+67)][pic(.5,.5,S:\Time Management\resource\cssLogo.png)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+			pr #out: "     4 Syme Ave"
+			pr #out: "     West Orange, NJ  07052"
+			pr #out: "[pos(+0,+67)][pic(.75,.75,S:\Time Management\resource\cssLogo.png)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
 		else
 			pr #out: "[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]     Advanced Computer Services LLC [/BOLD]"
-			pr #out: "4 Syme Ave"
-			pr #out: "West Orange, NJ  07052"
+			pr #out: "     4 Syme Ave"
+			pr #out: "     West Orange, NJ  07052"
 			pr #out: "[pos(+0,+67)][pic(.5,.5,s:\acsTM\bwlogo2.jpg)]"   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
 		end if
 	else
