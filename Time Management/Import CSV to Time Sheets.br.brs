@@ -111,9 +111,6 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		hCt:=fngethandle
 		fnAddOneN(mat ctHandles,hCt)
 		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
-	end if
-	if ~exists(ctFile$) then ctNew=1
-	if ctNew then
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
 		pr #hCt: 'hours'&tab$;
@@ -132,7 +129,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	pr #hCt: item$(11)&tab$;
 	pr #hCt: str$(inp(4))&tab$;
   pr #hCt: line$
-
+pause
 	! close #hCt:
 fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
