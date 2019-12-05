@@ -165,7 +165,7 @@ END2: close #1:
 L1150: form pos 1,c 128
 		close #1: 
 		fnFree(env$('Temp')&"\Addr."&session$)
-		execute 'SORT "'&env$('Temp')&'\CONTROL.'&wsid$&'" -n'
+		execute 'SORT '&env$('Temp')&'\CONTROL.'&wsid$&' -n'
 		open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr ENDALL
 		open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 
 		if pr1$="N" then goto L1240
