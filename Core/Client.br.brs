@@ -629,7 +629,7 @@ def fn_user_limit(userLimit)
 fnend 
 def fn_userCount
 	ucReturn=0
-	exec 'status users >'&env$('temp')&'\acsUsers'&session$&'.tmp'
+	exec 'status users >"'&env$('temp')&'\acsUsers'&session$&'.tmp"'
 	open #hStUsers:=fngethandle: 'name='&env$('temp')&'\acsUsers'&session$&'.tmp',d,input
 	dim ucLine$*256
 	ucListStarted=0
