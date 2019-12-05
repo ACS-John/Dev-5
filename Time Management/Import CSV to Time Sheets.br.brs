@@ -19,7 +19,7 @@ mat ctHandles(0)
 mat ctFiles$(0)
 fileNameCount=srch(mat filename$,'')-1
 for fileItem=1 to fileNameCount
-	fnStatus('processing for '&empname$(fileItem)&' '&str$(fileItem)&'/'&str$(fileNameCount))
+	fnStatus('Processing for '&empname$(fileItem)&' ('&str$(fileItem)&' of '&str$(fileNameCount)&')')
 	open #h_in:=fngethandle: 'Name='&env$('at')&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
