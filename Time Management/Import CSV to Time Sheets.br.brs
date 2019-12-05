@@ -19,6 +19,7 @@ mat ctHandles(0)
 mat ctFiles$(0)
 fileNameCount=srch(mat filename$,'')-1
 for fileItem=1 to fileNameCount
+	fnStatus('processing for '&empname$(fileItem)&' '&str$(fileItem)&'/'&str$(fileNameCount))
 	open #h_in:=fngethandle: 'Name='&env$('at')&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
@@ -87,6 +88,7 @@ for fileItem=1 to fileNameCount
 	close #h_in:
 	fn_getNextLine_reset
 nex fileItem
+fnStatusClose
 fncloseprn
 close #h_out:
 for ctItem=1 to udim(mat ctHandles)
@@ -113,22 +115,32 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
-		pr #hCt: 'hours'&tab$;
-		pr #hCt: 'item$(9)'&tab$;
-		pr #hCt: 'item$(10)'&tab$;
-		pr #hCt: 'item$(11)'&tab$;
-		pr #hCt: 'inp(4)'&tab$;
-		pr #hCt: 'Origional Entries'&tab$;
-		pr #hCt: ''
+		! pr #hCt: 'hours'&tab$;
+		! pr #hCt: 'Category'&tab$;
+		! pr #hCt: 'System Code'&tab$;
+		! pr #hCt: 'System Name'&tab$;
+		pr #hCt: 'Rate'&tab$;
+		pr #hCt: 'Timesheet Date'&tab$;
+		pr #hCt: 'Timesheet Client ID'&tab$;
+		pr #hCt: 'Timesheet Client Contact'&tab$;
+		pr #hCt: 'ACS Client Key'&tab$;
+		pr #hCt: 'Start Time'&tab$;
+		pr #hCt: 'End Time'&tab$;
+		pr #hCt: 'Total Time'&tab$;
+		pr #hCt: 'Expense'&tab$;
+		pr #hCt: 'Category'&tab$;
+		pr #hCt: 'System Code'&tab$;
+		pr #hCt: 'System Name'&tab$;
+		pr #hCt: 'Notes'
 	end if
   pr #hCt: empname$(fileitem)&tab$;
   pr #hCt: str$(the_date)&tab$;
-	pr #hCt: str$(hours)&tab$;
-	pr #hCt: item$(9)&tab$;
-	pr #hCt: item$(10)&tab$;
-	pr #hCt: item$(11)&tab$;
+	! pr #hCt: str$(hours)&tab$;
+	! pr #hCt: item$(9)&tab$;
+	! pr #hCt: item$(10)&tab$;
+	! pr #hCt: item$(11)&tab$;
 	pr #hCt: str$(inp(4))&tab$;
-  pr #hCt: rtrm$(srep$(srep$(line$,cr$,''),lf$,''),tab$)&'*'
+  pr #hCt: rtrm$(srep$(srep$(line$,cr$,''),lf$,''),tab$)
 	! close #hCt:
 fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
@@ -464,6 +476,7 @@ def fn_setup
 		library 'S:\Core\Library': fnpause
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnopenprn,fncloseprn
+		library 'S:\Core\Library': fnStatus,fnStatusClose
 		library 'S:\Core\Library': fnureg_read,fnureg_write
 		library 'S:\Core\Library': fnClientNameShort$
 		library 'S:\Core\Library': fnmakesurepathexists
