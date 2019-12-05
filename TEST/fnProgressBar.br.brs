@@ -7,7 +7,7 @@ dim messageRow$*255
 caption$=env$('program_caption')
 for percent=1 to 100
 	pr f '24,10,C': str$(percent)&'%'
-	fnProgressBar(percent, color$,progressAfter,progressThreshhold,updateThreshhold,caption$,messageRow$)
+	fnProgressBar(percent/100) ! , color$,progressAfter,progressThreshhold,updateThreshhold,caption$,messageRow$)
 	sleep(.1)
 nex percent
 fnCloseBar
