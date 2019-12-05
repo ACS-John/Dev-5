@@ -365,7 +365,11 @@ def fn_print_inv ! pr INVOICE
 			! pause
 			fnCopy(env$('at')&os_filename$(pdf_filename_final$),env$('at')&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
-			exec 'sy -c "'&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
+			exec 'sy -c "'&fnreport_cache_folder_current$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
+				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnreport_cache_folder_current$)
+				! open the folder it is in
+				execute 'sy -c -w explorer "'&fnreport_cache_folder_current$&'\Ebilling"'
+
 			pause
 		end if 
 		invoice_number+=1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
