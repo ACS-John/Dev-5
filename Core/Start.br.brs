@@ -94,7 +94,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				setenv('programdata',env$('CsServerTemp'))
 			end if
 			! setenv('Temp','C:\ACS_Data\Temp\Session'&session$)
-			setenv('Temp','C:\ACS_Data\Temp\'&login_name$&'-Session'&session$)
+			setenv('Temp','C:\ACS_Data\Temp\'&srep$(login_name$,' ','_')&'-Session'&session$)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
 		if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
