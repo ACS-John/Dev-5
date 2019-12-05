@@ -15,6 +15,8 @@ fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$)
 if fkey=93 or fkey=99 then goto XIT
 goto MainBody ! /r
 MainBody: ! r: 
+mat ctHandles(0)
+mat ctFiles$(0)
 fileNameCount=srch(mat filename$,'')-1
 for fileItem=1 to fileNameCount
 	open #h_in:=fngethandle: 'Name='&env$('at')&filename$(fileItem)&',RecL=100,Shr',external,input
@@ -87,15 +89,30 @@ for fileItem=1 to fileNameCount
 nex fileItem
 fncloseprn
 close #h_out:
+for ctItem=1 to udim(mat ctHandles)
+	close #ctHandles(ctItem): ioerr ignore
+nex ctItem
+mat ctHandles(0)
+mat ctFiles$(0)
 goto Xit ! /r
 XIT: fnxit
-def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
+dim ctFiles$(0)*1024
+dim ctHandles(0)
+def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctFile$=env$('at')&fnreport_cache_folder_current$&'\Client TimeSheets\'
 	ctFile$(inf:inf)=fnClientNameShort$(client_id)&'\'
 	ctFile$(inf:inf)=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)
+	ctWhich=srch(mat ctFiles$,ctFile$)
+	if ctWhich>0 then
+		hCt=ctHandles(ctWhich)
+	else 
+		fnAddOneC(mat ctFiles$,ctFile$)
+		hCt:=fngethandle
+		fnAddOneN(mat ctHandles,hCt)
+		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
+	end if
 	if ~exists(ctFile$) then ctNew=1
-	open #hCt:=fngethandle: 'name='&ctFile$&',RecL=2048,use',display,output
 	if ctNew then
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
@@ -114,9 +131,9 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew)
 	pr #hCt: item$(10)&tab$;
 	pr #hCt: item$(11)&tab$;
 	pr #hCt: str$(inp(4))&tab$;
-  pr #hCt: line$;
+  pr #hCt: line$
 
-	close #hCt:
+	! close #hCt:
 fnend
 def fn_lineIsEmpty(line$*1024; ___,returnN)
 	line$=srep$(line$,'#N/A','')
@@ -455,6 +472,8 @@ def fn_setup
 		library 'S:\Core\Library': fnClientNameShort$
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnreport_cache_folder_current$
+		library 'S:\Core\Library': fnAddOneC
+		library 'S:\Core\Library': fnAddOneN
 		on error goto Ertn
 		gosub Enum
 		dim sage_code$*128
