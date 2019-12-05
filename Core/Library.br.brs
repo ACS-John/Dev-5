@@ -1572,9 +1572,9 @@ fnend
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
 	fnend
-	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling; pdfline$*255)
+	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; pdfFile$*1024)
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
-		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal,ebilling, pdfline$)
+		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal, pdfFile$)
 	fnend
 	def library fnEmailQueuedInvoices(emailDate$)
 		library 'S:\Time Management\Email Queued Invoices.br': fnEmailQueuedInvoices
