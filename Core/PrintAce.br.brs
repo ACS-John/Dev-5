@@ -114,6 +114,7 @@ def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatFo
 		g_pa_orientation$=pa_orientation$
 		g_pa_handle=h_printace
 	end if 
+	fn_pa_open=h_printace
 fnend 
 def library fnpa_background(background_pdf$*256)
 	fn_pa_setup

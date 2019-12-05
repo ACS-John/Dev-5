@@ -283,16 +283,12 @@ SCR_PRINT_INVOICES: ! r:
 		if ebilling and fnCustomerHasEbilling(client_id$) then
 			! open pdf
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
-			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
-			! print pdf
-			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,invoiceNumber$,inv_date,mat inv_item$,mat inv_amt,pbal,1)
-			! close pdf 
-			close #pdfout: 
+			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,invoiceNumber$,inv_date,mat inv_item$,mat inv_amt,0,pdf_filename_final$)
 			! move to Send folder 
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
 			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 		else
-		   fnPrintInvoice(255,align, k$, mat billto$, invoiceNumber$, xinp(3),mat id$, mat da,0,0)
+		   fnPrintInvoice(255,align, k$, mat billto$, invoiceNumber$, xinp(3),mat id$, mat da,0)
 		end if 
 		 L2840: !
 		! if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
