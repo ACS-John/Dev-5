@@ -707,15 +707,15 @@ fnend
 		fn_ilrt_lineParseFixedWidth=ilpfwReturn
 	fnend
 	! /r
-	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
+	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
 	! ()
 	! 
-		open #h_itron:=fngethandle: "Name="&inputFile$,display,input
-		open #h_itron_out:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-		pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
+		open #hIn:=fngethandle: "Name="&inputFile$,display,input
+		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		z$=''
 		do
-			linput #h_itron: line$ eof EO_ITRON
+			linput #hIn: line$ eof Eo_nev4
 			line_type$=line$(1:3)
 			if line_type$="CUS" then
 				if z$<>'' then 
@@ -740,7 +740,11 @@ fnend
 				!    else if itron_meter_category$="I" then ! Irrigation
 				!    else if itron_meter_category$="S" then ! Steam/sewer
 				else if itron_meter_category$="W" then ! Water
-					if env$('client')='Millry' then reading_water=itron_reading*10 else reading_water=itron_reading
+					if env$('client')='Millry' then 
+						reading_water=itron_reading*10 
+					else 
+						reading_water=itron_reading
+					end if
 					meterroll_water=meterroll
 				end if
 			else if line_type$="RFF" or line_type$="WRR" then
@@ -748,25 +752,25 @@ fnend
 				if val(tmpr$)=0 then tmpr$=line$(57:58)
 			end if
 		loop
-		EO_ITRON: !
+		Eo_nev4: !
 		! write the last one
-		fn_nev4_write(z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
-		close #h_itron:
-		close #h_itron_out:
+		fn_nev4_write(hOut,z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
+		close #hIn:
+		close #hOut:
 	fnend
-	def fn_nev4_write(z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
+	def fn_nev4_write(hOut,z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
 		! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
-			pr #h_itron_out: 'Customer.Number='&z$
+			pr #hOut: 'Customer.Number='&z$
 			if reading_water<>0 then pr #h_itron_out: 'Reading.Water='&str$(reading_water)
 			if reading_electric<>0 then pr #h_itron_out: 'Reading.Electric='&str$(reading_electric)
 			if reading_gas<>0 then pr #h_itron_out: 'Reading.Gas='&str$(reading_gas)
 			if meterroll_water<>0 then pr #h_itron_out: 'MeterRoll.Water='&str$(meterroll_water)
 			if meterroll_electric<>0 then pr #h_itron_out: 'MeterRoll.Electric='&str$(meterroll_electric)
 			if meterroll_gas<>0 then pr #h_itron_out: 'MeterRoll.Gas='&str$(meterroll_gas)
-			pr #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
+			pr #hOut: 'Meter.Tamper='&str$(val(tmpr$))
 		else
-			pr #h_itron_out: '! customer number '&z$&' has all zero readings.'
+			pr #hOut: '! customer number '&z$&' has all zero readings.'
 		end if
 	fnend
 
