@@ -355,7 +355,7 @@ def fn_print_inv ! pr INVOICE
 			! open pdf 
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			pr 'creating:  '&pdf_filename_final$ 
-			open #PdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdf_filename_final$&',Replace,RecL=5000',Display,Output
+			
 			! print pdf
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal,pdf_filename_final$)
 			! close pdf 
@@ -370,7 +370,6 @@ def fn_print_inv ! pr INVOICE
 				! open the folder it is in
 				execute 'sy -c -w explorer "'&fnreport_cache_folder_current$&'\Ebilling"'
 
-			pause
 		end if 
 		invoice_number+=1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 		! end if

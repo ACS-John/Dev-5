@@ -5,7 +5,7 @@
 !  Created: 03/28/06
 ! Modified: 02/11/19
 !
-def fnVersion=110
+def fnVersion=111
 !
 !
 ! #Autonumber# 500,1
@@ -1868,7 +1868,7 @@ def fnCSVExportDlg(&CSVPath$,&UseRecNums;&DialogType,___,Dialog,KeyP,CSVFile,Use
     end if
 
     if File(CSVFile) = 0 then
-        CSVPath$=File$(CSVFile)
+        let CSVPath$=File$(CSVFile)
         close #CSVFile:
 
         let UseRecNums$ = "Include Record Numbers"
@@ -1878,7 +1878,7 @@ def fnCSVExportDlg(&CSVPath$,&UseRecNums;&DialogType,___,Dialog,KeyP,CSVFile,Use
         if DialogType=2 then let SelectColumns$(1:0)="^"
 
         do
-            RINPUT #Dialog, fields "2,1,20/C 300,P;4,1,CHECK 30;5,1,CHECK 30" : CSVPath$,UseRecNums$,SelectColumns$
+            RINPUT #Dialog, fields "2,1,20/V 300,P;4,1,CHECK 30;5,1,CHECK 30" : CSVPath$,UseRecNums$,SelectColumns$
 
             let KeyP=FKey
 
@@ -6504,6 +6504,8 @@ BeginAudit: ! ***** This function will create an Audit Comparison folder for all
       if ~UpdateThreshhold then let UpdateThreshhold=.4      ! 4/10th of a Second
 
       if len(Caption$) then let Caption$=",Caption="&Caption$
+
+      library : fnGetFileNumber
 
       ! Save Color
       if Len(Color$) then let pb_Color$=Color$
