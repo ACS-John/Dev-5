@@ -260,6 +260,7 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 	end if
 ! /r
 
+! r: create the line by handheld type funcitons
 def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
 	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
@@ -592,29 +593,36 @@ def fn_neptuneEquinoxV4(h_out)
 	end if	! /r
 	if route<>nev4_routePrior then	! r: Route Record 
 		if nev4_routePrior<>route and nev4_routePrior<>0 then
-			gosub Nev4_RouteTrailer
+			fn_neptuneEquinoxV4_routeTrail(h_out,nev4_routePrior,nev4_routePremiseCount,nev4_routeMeterCount)
 		end if
 		nev4_routePrior=route
 		nev4_routeCount+=1
 		fn_record_init
-		fn_record_addc( 5,'RTEHD') !  Record ID
-		fn_record_addc( 4,'WATE') ! Office  ???  
-		fn_record_addc( 4,'1   ') ! Cycle  ???  
-		fn_record_addn(10,route) ! Route
-		fn_record_addc( 8,date$('ccyymmdd')) ! Read Date
-		fn_record_addc( 8,date$('ccyymmdd')) ! Deactivate Date
-		fn_record_addc( 8,date$('ccyymmdd')) ! Route Message
-		! r 'rtehd gathered' : pr rec_line$ : pause
-		fn_record_write(h_out)
+		fn_record_addC( 5,'RTEHD'             ) ! Record ID        Req UB  1- 5 5 A/N 'RTEHD'
+		fn_record_addC( 4,'WATE'              ) ! Office           Req UB  6- 9 4 A/N            = ???
+		fn_record_addN( 4,1                   ) ! Cycle            Req UB 10-13 4 A/N            = ???
+		fn_record_addN(10,route               ) ! Route            Req UB 14-23 10 A/N
+		fn_record_addN( 8,date('ccyymmdd'),'0') ! Read Date        Req UB 24-31 8 NUM YYYYMMDD; 00000000 if not used.
+		fn_record_addN( 8,date('ccyymmdd'),'0') ! Deactivate Date  Req UB 32-39 8 NUM YYYYMMDD; 00000000 if not used.
+		fn_record_addC(80,''                  ) ! Route Message    Opt UB 40-119 80 A/N
+		fn_record_write(h_out)                  ! CRLF             Req UB 120-121 2
 	end if	! /r
 	! r: Premise Detail Record
 	fn_record_init
-	fn_record_addc(  5,'PRMDT'        ) !  Record ID
-	fn_record_addc( 26,e$(3)          ) !  Address 1  =  Address 1 - Primary
-	fn_record_addc( 26,extra$(1)      ) !  Address 2  =  Address 2 - Primary
-	fn_record_addc(128,''             ) !  Utility Pass Through
-	fn_record_write(h_out)
+	fn_record_addC(  5,'PRMDT'        ) !  Record ID      Req UB   1-5  5 A/N 'PRMDT'
+	fn_record_addC( 26,e$(3)          ) !  Address 1      Req UB  6-31 26 A/N     =  Address 1 - Primary
+	fn_record_addC( 26,extra$(1)      ) !  Address 2      Opt UB 32-57 26 A/N     =  Address 2 - Primary
+	fn_record_addC(128,''             ) !  Customer Name  Req UB 58-83 26 A/N
+	fn_record_addC( 20,z$             ) !  Premise Key          Req UB 84-103   20 A/N Uniquely identifies the premise. Use account number, unless the billing system has a better key.
+										! fn_meterInfo$('location_id',z$,sc$)  Would be a good premise key EXCEPT it's tied to a service, so each user could have multiple if they had multiple metered services
+	fn_record_addC( 20,z$             ) !  Account Number       Req UB 104-123  20 A/N
+	fn_record_addC(  4,'ACTI'         ) !  Account Status       Req UB 124-127   4 A/N Account status codes     !  "I believe they are INAC for inactive accounts & ACTI for active accounts." -Keith
+	fn_record_addC( 26,''             ) !  Premise Custom 1     Opt UB 128-153  26 A/N Custom display fields for premise screen.
+	fn_record_addC( 26,''             ) !  Premise Custom 2     Opt UB 154-179  26 A/N
+	fn_record_addC(128,''             ) !  Utility Pass Through Opt UB 180-307 128 A/N Any utility-defined information.
+	fn_record_write(h_out)  !  CRLF                 Req UB 308-309   2
 	! /r
+	nev4_routePremiseCount+=1
 	
 	for serviceItem=1 to udim(mat serviceCode$)
 		sc$=serviceCode$(serviceItem)
@@ -669,6 +677,7 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC(12,''                                    ) ! For future use
 			fn_record_write(h_out)
 			! /r
+			nev4_routeMeterCount+=1
 			! r: Read Detal Record
 			fn_record_init
 			fn_record_addC( 5,'RDGDT'                                      ) !  Record ID
@@ -722,22 +731,21 @@ def fn_neptuneEquinoxV4(h_out)
 			! /r
 		end if
 	next serviceItem
-	gosub Nev4_RouteTrailer
-	goto Nev4_Finis
-	Nev4_RouteTrailer: ! r:
-		fn_record_init
-		fn_record_addC( 5,'RTETR'                                 ) ! Record ID  Req UB 1-5    5 A/N 'RTETR'
-		fn_record_addC( 5,''                                      ) ! Office     Req UB 6-9    4 A/N
-		fn_record_addC( 5,''                                      ) ! Cycle      Req UB 10-13  4 A/N
-		fn_record_addC( 5,''                                      ) ! Route      Req UB 14-23 10 A/N
-		fn_record_addC( 5,''                                      ) ! # Premises Req UB 24-29  6 A/N One input field may be blank if total is unavailable.
-		fn_record_addC( 5,''                                      ) ! # Meters   Req UB 30-35  6 A/N One input field may be blank if total is unavailable.
-		fn_record_write(h_out)                                     ! CRLF       Req UB 36-37  2
-	return ! /r
-
-	Nev4_Finis: ! 
+fnend
+def fn_neptuneEquinoxV4_routeTrail(h_out,nev4_routePrior,&nev4_routePremiseCount,&nev4_routeMeterCount)
+	fn_record_init
+	fn_record_addC( 5,'RTETR'                ) ! Record ID  Req UB 1-5    5 A/N 'RTETR'
+	fn_record_addC( 5,'WATE'                 ) ! Office     Req UB 6-9    4 A/N
+	fn_record_addN( 5,1                      ) ! Cycle      Req UB 10-13  4 A/N
+	fn_record_addN( 5,nev4_routePrior        ) ! Route      Req UB 14-23 10 A/N
+	fn_record_addN( 5,nev4_routePremiseCount ) ! # Premises Req UB 24-29  6 A/N One input field may be blank if total is unavailable.
+	fn_record_addN( 5,nev4_routeMeterCount   ) ! # Meters   Req UB 30-35  6 A/N One input field may be blank if total is unavailable.
+	fn_record_write(h_out)                     ! CRLF       Req UB 36-37  2
+	nev4_routePremiseCount=0
+	nev4_routeMeterCount=0
 fnend
 def fn_neptuneEquinoxV4_close
+	fn_neptuneEquinoxV4_routeTrail(h_out,nev4_routePrior,nev4_routePremiseCount,nev4_routeMeterCount)
 	! Company Trailer
 	fn_record_init
 	fn_record_addC( 5,'COMTR'            ) ! Record ID      Opt UB 1-5   5 A/N 'COMTR'
@@ -1273,7 +1281,8 @@ def fn_unitech_ht630
 	next a_item
 fnend  ! fn_Unitech_HT630
 
-
+! /r
+! r: local fn_record_* utilities
 def fn_record_init(; setDelimiter$)
 	dim rec_line$*2048
 	rec_line$=''
@@ -1303,7 +1312,7 @@ def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 		! pr srep$(rec_line$,chr$(9),'>') : pause
 	end if
 fnend
-
+! /r
 
 def fn_scr_selact
 	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore

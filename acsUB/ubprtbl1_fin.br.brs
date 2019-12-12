@@ -350,7 +350,7 @@
 		if havebudget=1 and bal>0 and g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$((currentcharges+budgetpb)+round((currentcharges-gas+g(4))*penalty_rate,2),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
 		if havebudget=1 and bal>0 and g(7)=0 then pr #20: 'Call Print.AddText("'&fnformnumb$((currentcharges+budgetpb),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
 	L2420: pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*27+1+ymargin)&',63,0)'
-		pr #20: 'Call Print.AddText("Office 756-8997 Fire 7911",'&str$(xmargin+1)&','&str$(lyne*28+ymargin)&')'
+		pr #20: 'Call Print.AddText("Office 756-8997 Fire 911",'&str$(xmargin+1)&','&str$(lyne*28+ymargin)&')'
 		pr #20: 'Call Print.AddText("      Police 756-3311",'&str$(xmargin+1)&','&str$(lyne*29.5+ymargin)&')'
 	! ______________________________________________________________________
 		special=28
