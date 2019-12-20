@@ -1,10 +1,9 @@
 def fn_setup
 	setup=1
-	! library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncomboa,fnFra,fntab,fnCmdKey,fnTos
 	library 'S:\Core\Library': fnerror,fnBackgroundDisable
 	library 'S:\Core\Library': fnsreg_read,fnsreg_write
 	library 'S:\Core\Library': fnreg_write,fnreg_read
-	library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnwrite_program_print_property
+	library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs2,fnwrite_program_print_property
 fnend
 def library fnprogram_properties(; forceProgramCaption$*256)
 	on error goto ERTN
@@ -51,7 +50,7 @@ def fn_localPropertiesEdit
 	fnlbl(lc+=1,1,'Left Margin:'      ,18,1) : fntxt(lc,33,10,0,0,'')
 	fnlbl(lc+=1,1,'Right Margin:'     ,18,1) : fntxt(lc,33,10,0,0,'')
 	fncmdset(2)
-	fnacs(sn$,0,mat resp$,ckey, 0,0,0,1)
+	fnacs2(mat resp$,ckey, 0,0,0,1)
 	if ckey<>5 then
 		! r: if Landscape/Portrait, than switch height and width if necessary
 		tmp_height=val(resp$(sio_txtHeight))

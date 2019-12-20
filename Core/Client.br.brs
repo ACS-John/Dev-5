@@ -178,6 +178,7 @@ def fn_setup_client ! ** set up for new clients
 		! 
 		fn_setup_client_add("Lamar" ,1,33854)
 		!   fn_setup_client_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
+		fn_setup_client_add("Allendale" ,200,0)
 		fn_setup_client_add("Ash Grove" ,286,19016)
 		!   fn_setup_client_add("Ashland" ,300,33584)
 		!   fn_setup_client_add("Battlefield" ,369,33306)
@@ -323,6 +324,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(2) ! actually licensed for 3 users, but has two separate installations
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_add_ch_sys('UB-EFT')
 			!     fn_add_ch_sys('CR')
 		else if env$('client')='Billings' and env$('Unique_Computer_Id')="BD04113D-C102-BA29-78AC-D23201FDC70C" then ! Limit to NOT UB stuff for Chris Hopkins
 			fn_user_limit(1) ! actually licensed for 3 users, but has two separate installations
@@ -336,6 +338,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('GL')
 			fn_add_ch_sys('PR')
 			fn_add_ch_sys('CL')
+			fn_add_ch_sys('UB-EFT')
 			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_add_ch_sys('EM')  ! Alpha testing
 			!     fn_add_ch_sys('CR')
 		else if env$('client')='Blucksberg' then 
@@ -351,6 +354,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('PR')
 			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_add_ch_sys('U4') : u4_device$="Badger Beacon"
+			fn_add_ch_sys('UB-EFT')
 		else if env$('client')='Carr Plumbing' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('PR')
@@ -552,6 +556,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('GL')
 			fn_add_ch_sys('PR')
 			fn_add_ch_sys('CL')
+			fn_add_ch_sys('UB-EFT')
 		else if env$('client')='Thomas Richardson' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('GL')
@@ -602,11 +607,11 @@ def fn_client_has_mat(mat c_has$)
 	mat c_has$=client_has$
 	fn_client_has_mat=client_has_system_count
 fnend 
-def library fnclient_has(ch_sys$*2)
+def library fnclient_has(ch_sys$*256)
 	fn_setup
 	fnclient_has=fn_client_has(ch_sys$)
 fnend 
-def fn_client_has(ch_sys$*2)
+def fn_client_has(ch_sys$*256)
 	fn_getClientLicense(mat client_has$)
 	ch_return=0
 	if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
@@ -658,6 +663,7 @@ def fn_add_ch_sys(ch_item$)
 	client_has_system_count=udim(mat client_has$)
 	if client_has_system_count=0 then 
 		client_has_system_count=2
+		dim client_has$(0)*256
 		mat client_has$(1)
 		client_has$(1)='CO'
 	else 
@@ -665,6 +671,11 @@ def fn_add_ch_sys(ch_item$)
 	end if 
 	mat client_has$(client_has_system_count)
 	client_has$(client_has_system_count)=ch_item$
+fnend 
+def library fnregistered_for_hh
+	fn_setup
+	fn_getClientLicense(mat client_has$)
+	fnregistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
 fnend 
 def library fnregistered_for_hh
 	fn_setup
@@ -726,7 +737,7 @@ def library fnub_printbill_program$*256
 		! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
 		fn_upp_add("Lovington","ubprtbl1_Lovington")
 		fn_upp_add("Loma Linda","ubprtbl1_ll")
-		fn_upp_add("Merriam Woods",'(basic)') ! "PrintBill_Merriam_Woods" ! "ubprtbl1_Franklinton")
+		fn_upp_add("Merriam Woods",'(basic)') ! "PrintBill_Merriam_Woods"
 		fn_upp_add("Millry","ubprtbl1_millry")
 !   fn_upp_add("Monticello","ubprtbl1_montic")
 		fn_upp_add("Moweaqua","PrintBill_Moweaqua")

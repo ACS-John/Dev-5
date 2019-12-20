@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                    
+10:03 AM 12/20/2019	UB	Configure Company now allows for new EFT settings, Create Bank Draft revised to allow for EFT settings
+1:43 PM 12/17/2019	PR	YTD and QTD Register - no longer had Report Heading Date, only Pay Period Date (it does show report run date next to page number)
 17:59 12/19/2019	CO	5.74234  
 13:03 12/19/2019	CO	5.74233   
 12:53 12/19/2019	CO	5.74232    

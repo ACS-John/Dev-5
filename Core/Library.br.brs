@@ -303,7 +303,7 @@ fnend
 		library 'S:\Core\Client.br': fnclient_has_mat
 		fnclient_has_mat=fnclient_has_mat(mat c_has$)
 	fnend
-	def library fnclient_has(ch_sys$*2)
+	def library fnclient_has(ch_sys$*256)
 		library 'S:\Core\Client.br': fnclient_has
 		fnclient_has=fnclient_has(ch_sys$)
 	fnend
@@ -1297,6 +1297,12 @@ fnend
 		library 'S:\acsUB\check_balance_breakdowns.br': fnfix_trans_breakdowns
 		fnfix_trans_breakdowns=fnfix_trans_breakdowns(do_fix,do_report)
 	fnend
+	! r: UB-EFT
+		def library fnEftData$*128(field$*128; return$*256)
+			library 'S:\Utility Billing\fn\eftData.br': fnEftData$
+			fnEftData$=fnEftData$(field$, return$)
+		fnend
+	! /r
 	! r: Hand Held
 		def library fnhand_held_device$*20
 			library 'S:\Core\Client.br': fnhand_held_device$
