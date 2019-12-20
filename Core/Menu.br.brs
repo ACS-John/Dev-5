@@ -453,7 +453,7 @@ def fn_main
 				else if fkey_value=fkey_ub_customer then
 					fnchain('S:\Utility Billing\Customer')
 				else if fkey_value=fkey_change_billing_date then
-					fnchain('S:\acsub\Company')
+					fnchain('S:\Utility Billing\Company')
 				end if
 			else if env$('cursys')='TM' and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then

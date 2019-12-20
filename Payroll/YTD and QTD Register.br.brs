@@ -19,7 +19,7 @@
 ! gosub CHECK_PASSWORD
 ! ______________________________________________________________________
 	dim tdc(10),fullname$(20)*20,abbrevname$(20)*20
-	dim dat$*20,rptemp(20),rptot(21,2)
+	dim rptemp(20),rptot(21,2)
 	dim em$*30,em(6),tot(20),message$*40
 	dim newdedcode(20),newcalcode(20)
 	dim newdedfed(20),dedfica(20),dedst(20),deduc(20)
@@ -142,11 +142,11 @@ Finis: ! r:
 goto Xit ! /.r
 ! ______________________________________________________________________
 HDR: ! r:
-	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+	pr #255,using "form pos 1,c 25": 'Page '&str$(pgno+=1)&' '&date$('mm/dd/ccyy')
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-! pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&CNVRT$("pic(zz/zz/zz)",PPD)&"}"
-	pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+	pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&date$(days(prdate,'ccyymmdd'),'month dd, ccyy')&"}"
+	! pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
 	pr #255: "\ql   "
 	pr #255: tab(32); "<--------------------Year To Date--------------------->  <-------------Quarter To Date-------------->"
 	pr #255: "  Number  Name                   Total      Taxable       SS/Med   Fed W/H    St W/H       Total        SS/Med   Fed W/H    St W/H"
@@ -159,16 +159,16 @@ ASK_DATES: ! r:
 	d1=fnPayPeriodEndingDate
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 	fnTos(sn$="YtdQtdReg-1") 
-	rc=cf=0: mylen=42: mypos=45: frameno=1
-	fnFra(1,1,4,66,"Payroll Date","Enter the payroll date.")
+	rc=cf=0 : mylen=27 : mypos=29
+	fnFra(1,1,1,44,"Payroll Date","Enter the payroll date.") : frameno=1
 	fnLbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 	fnTxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) 
 	resp$(rc+=1)=str$(d1)
-	fnLbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
-	fnTxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) 
-	resp$(rc+=1)=date$("Month DD, CCYY")
-	fnFra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") 
-	frameno=2 : mylen=26 : mypos=mylen+2
+	! fnLbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
+	! fnTxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) 
+	! resp$(rc+=1)=date$("Month DD, CCYY")
+	fnFra(4,1,7,44,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") : frameno=2 
+	! mylen=27 : mypos=mylen+2
 	fnLbl(1,1,"Starting Date:",mylen,1,0,frameno)
 	fnTxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) 
 	resp$(rc+=1)=str$(beg_date)
@@ -192,16 +192,17 @@ ASK_DATES: ! r:
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then goto XIT
 	dat=prdate=d1=val(resp$(1))
-	dat$=resp$(2)
-	beg_date=val(resp$(3)) 
-	end_date=val(resp$(4)) 
-	qtr1=val(resp$(5)) 
-	qtr2=val(resp$(6)) 
-	qtr3=val(resp$(7)) 
-	qtr4=val(resp$(8))
-	qtr5=val(resp$(9)(1:4))*10000+1231
-	begin_year=val(resp$(9)(1:4))*10000+0101
-	end_year=val(resp$(9)(1:4))*10000+1231
+	! dat$*20
+	! dat$         =resp$(2)
+	beg_date     =val(resp$(2)) 
+	end_date     =val(resp$(3)) 
+	qtr1         =val(resp$(4)) 
+	qtr2         =val(resp$(5)) 
+	qtr3         =val(resp$(6)) 
+	qtr4         =val(resp$(7))
+	qtr5         =val(resp$(8)(1:4))*10000+1231
+	begin_year   =val(resp$(8)(1:4))*10000+0101
+	end_year     =val(resp$(8)(1:4))*10000+1231
 return ! /r
 DETERMINE_EARNINGS: ! r:
 	tfd=tmd=td14=tdw=0: mat caf=(0)

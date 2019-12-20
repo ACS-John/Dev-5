@@ -15,7 +15,7 @@ Billing
 >>Per 1000 Usage                                      ^ Utility Billing\*
 >>Consumption List                                    ^ Utility Billing\*
 >Print Bills                                          ^ Utility Billing\*
->Create Bank Draft File                               ^ Utility Billing\*
+>Create Bank Draft File                               ^ Utility Billing\*                                       ^ UB-EFT
 Collections                                           ^ Utility Billing\*
 Mid-Month
 >Print
