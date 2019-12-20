@@ -558,6 +558,7 @@ SCREEN_CK_GOTO: ! r:
 		screen=screen_pr : goto DO_SCREEN_PR
 	else if ck=1008 then 
 		screen=screen_em : goto Do_Screen_Em
+
 	else
 		pr 'SCREEN_CK_GOTO does not know how to handle ck='&str$(ck)&'.'
 		pause
@@ -651,6 +652,7 @@ def fn_nav_buttons
 	if fnclient_has('U4') then
 		fnbutton_or_disabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
 	end if
+
 	if fnclient_has('EM') then
 		fnbutton_or_disabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
 	end if
