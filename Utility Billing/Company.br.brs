@@ -1,37 +1,8 @@
-! Replace S:\acsUB\Company
-! maintain UB company information
-! r: setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fnTos,fnCmdSet,fnChk,fncomboa
-	library 'S:\Core\Library': fnFra
-	library 'S:\Core\Library': fncreg_read,fncreg_write
-	library 'S:\Core\Library': fnCopy
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnLastBillingDate
-	library 'S:\Core\Library': fnbutton_or_disabled
-	library 'S:\Core\Library': fnEftData$
-	library 'S:\Core\Library': fnclient_has
-	on error goto ERTN
-
-	dim cap$*128
-	dim resp$(256)*40
-	dim at$(3)*40
-	dim serviceName$(10)*20
-	dim serviceCode$(10)*2
-	dim tax_code$(10)*1
-	dim default_rate$(10)*80
-	
-	screen_main   =1001
-	screen_Route  =1002
-	screen_Service=1003
-	screen_EFT    =1004
-	
-! /r
-	fntop(program$)
-	gosub CompanyLoad
-	gosub ServiceLoad
-	screen=screen_main
-MAIN: !
+fn_setup
+fntop(program$)
+gosub DoLoad
+screen=screen_main
+MAIN: ! r:
 	fnTos
 	lc=1
 	respc=0
@@ -46,17 +17,17 @@ MAIN: !
 		mypos=mylen+2
 		fnLbl(lc+=1,1,"Company Name:",mylen,1)
 		fnTxt(lc,mypos,40)
-		resp$(respc+=1)=at$(1)
+		resp$(respc+=1)=CompanyNameAndAddr$(1)
 		lc+=1
 		fnLbl(lc+=1,1,"Company Address:",mylen,1)
 		fnTxt(lc,mypos,40)
-		resp$(respc+=1)=at$(2)
+		resp$(respc+=1)=CompanyNameAndAddr$(2)
 		fnLbl(lc+=1,1,"Company City,State and Zip:",mylen,1)
 		fnTxt(lc,mypos,40)
-		resp$(respc+=1)=at$(3)
+		resp$(respc+=1)=CompanyNameAndAddr$(3)
 		fnLbl(lc+=1,1,"Last Billing Date:",mylen,1)
 		fnTxt(lc,mypos,8,0,1,"1")
-		resp$(resp_d1=respc+=1)=str$(d1)
+		resp$(resp_lastBillingDate=respc+=1)=str$(lastBillingDate)
 		lc+=1
 		fnChk(lc+=1,0,"Require Receipt Number on Collections")
 		resp$(resp_require_receipt=respc+=1)=rcpt$
@@ -139,15 +110,17 @@ MAIN: !
 			fn_cmb_rate(serviceCode$(service_item),service_item+2,82,'Select Default or 0 for None',fra)
 			resp$(respc+=1)=default_rate$(service_item)
 		next service_item
+		fnChk(17,2,'Enable Cost of Gas Adjustment')
+		resp$(resp_enableCostOfGas=respc+=1)=enableCostOfGas$
 		! /r
 	else if screen=screen_EFT then
-dim imd$    *10  ! immediate destination
-dim imo$    *10  ! immediate origin
-dim imoName$*23  ! immediate origin name
-dim cid$    *10  ! company identification
-dim odi$    *17  ! originating dfi identification
-dim ecc$    * 3  ! standard entry class code
-
+		! r: EFT Screen
+		dim imd$    *10  ! immediate destination
+		dim imo$    *10  ! immediate origin
+		dim imoName$*23  ! immediate origin name
+		dim cid$    *10  ! company identification
+		dim odi$    *17  ! originating dfi identification
+		dim ecc$    * 3  ! standard entry class code
 
 		fnLbl(lc+=1,1,'Immediate Destination:',mylen,1)
 		fnTxt(lc,mypos,10,0,0,'',0,'Immediate Destination (party to which delivered - routing number of ach operator)')
@@ -174,7 +147,7 @@ dim ecc$    * 3  ! standard entry class code
 		resp$(resp_ecc=respc+=1)=ecc$
 
 
-		
+		! /r
 	end if
 	fnCmdSet(4)
 	fnAcs2(mat resp$,ck)
@@ -183,19 +156,21 @@ dim ecc$    * 3  ! standard entry class code
 		goto XIT
 	else 
 		if screen=screen_main then
-			at$(1)=resp$(1)
-			at$(2)=resp$(2)
-			at$(3)=resp$(3)
-			d1=val(resp$(resp_d1))
-			rcpt$=resp$(resp_require_receipt)
+			! r: RESP$ to main screen variables
+			CompanyNameAndAddr$(1)=    resp$(1)
+			CompanyNameAndAddr$(2)=    resp$(2)
+			CompanyNameAndAddr$(3)=    resp$(3)
+			lastBillingDate       =val(resp$(resp_lastBillingDate))
+			rcpt$                 =    resp$(resp_require_receipt)
+			! /r
 		else if screen=screen_Route then
 			! r: RESP$ to Company Information variables
-			pcent=val(resp$(resp_pcent))
-			uum_water$=resp$(resp_uum_water)
-			uum_gas$=resp$(resp_uum_gas)
-			uum_electric$=resp$(resp_uum_electric)
-			bkno1=val(resp$(resp_route_low))
-			bkno2=val(resp$(resp_route_high))
+			pcent                 =val(resp$(resp_pcent       ))
+			uum_water$            =    resp$(resp_uum_water   )
+			uum_gas$              =    resp$(resp_uum_gas     )
+			uum_electric$         =    resp$(resp_uum_electric)
+			bkno1                 =val(resp$(resp_route_low   ))
+			bkno2                 =val(resp$(resp_route_high  ))
 			! /r
 		else if screen=screen_Service then
 			! r: RESP$ to Service variables
@@ -218,55 +193,31 @@ dim ecc$    * 3  ! standard entry class code
 				onlyMonth(service_item)=val(resp$(respc+=1))
 				default_rate$(service_item)=resp$(respc+=1)
 			next service_item
+			enableCostOfGas$=resp$(resp_enableCostOfGas)
 			! /r
 		else if screen=screen_EFT then
+			! r: RESP$ to EFT variables
 			imd$    =resp$(resp_imd     )
 			imo$    =resp$(resp_imo     )
 			imoName$=resp$(resp_imoName )
 			cid$    =resp$(resp_cid     )
 			odi$    =resp$(resp_odi     )
 			ecc$    =resp$(resp_ecc     )
+			! /r
 		end if
 		if ck>1000 then screen=ck : goto MAIN
 	end if
 
-	gosub CompanySave
-	gosub ServiceSave
-goto XIT
+	gosub DoSave
+goto XIT ! /r
 
 XIT: fnxit
-
-ServiceLoad: ! r: Type Of Service Open
-	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
-	F_SERVICE: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
-	read #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
-	goto ServiceLoad_Finis
-	TOS_WRITE: ! 
-	write #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
-	ServiceLoad_Finis: ! 
-	close #service: 
-	! 
-	for service_item=1 to 10
-		fncreg_read('default rate '&str$(service_item),default_rate$(service_item))
-		fncreg_read('Service '&str$(service_item)&' only month',tmp$): onlyMonth(service_item)=val(tmp$)
-	next service_item
-return  ! /r
-ServiceSave: ! r:
-	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
-	rewrite #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
-	close #service: 
-	! 
-	for service_item=1 to 10
-		fncreg_write('default rate '&str$(service_item),default_rate$(service_item))
-		fncreg_write('Service '&str$(service_item)&' only month',str$(onlyMonth(service_item)))
-	next service_item
-return  ! /r
-
-CompanyLoad: ! r:
+DoLoad: ! r:
+	! r: Company Load
 	open #h_company:=1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
-	read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent ioerr CompanyReadErr
+	read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
 	close #h_company: 
-	fnLastBillingDate(d1)
+	fnLastBillingDate(lastBillingDate)
 	if pcent=0 then pcent=100
 	if uprc$(rcpt$)=uprc$("Y") then rcpt$="True" else rcpt$="False"
 	if uprc$(escrow$)=uprc$("Y") then escrow$="True" else escrow$="False"
@@ -281,11 +232,26 @@ CompanyLoad: ! r:
 		odi$    =fnEftData$('Originating DFI Identification'  )
 		ecc$    =fnEftData$('Standard Entry Class Code'       )
 	end if 
-	
-	
-	
+	! /r
+	! r: Service Load - Type Of Service Open
+	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	F_SERVICE: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
+	read #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
+	goto ServiceLoad_Finis
+	TOS_WRITE: ! 
+	write #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
+	ServiceLoad_Finis: ! 
+	close #service: 
+
+	for service_item=1 to 10
+		fncreg_read('default rate '&str$(service_item),default_rate$(service_item))
+		fncreg_read('Service '&str$(service_item)&' only month',tmp$): onlyMonth(service_item)=val(tmp$)
+	next service_item
+	fncreg_read('enable Cost of Gas',enableCostOfGas$, 'False')
+	if fn_enableCostOfGas then enableCostOfGas$='True' else enableCostOfGas$='False'
+	! /r
 return  ! /r
-CompanyReadErr: ! r:
+DoLoadCompanyReadErr: ! r:
 	if err<>714 then goto ERTN
 	company_rln=rln(h_company)
 	if company_rln=133 then goto ERTN
@@ -293,16 +259,18 @@ CompanyReadErr: ! r:
 	pr "From Record Length "&str$(company_rln)&" to 133"
 	close #h_company: ioerr ignore
 	fnCopy("[Q]\UBmstr\Company.h[cno]","[Q]\UBmstr\Company.h[cno]", 133)
-goto CompanyLoad ! /r
-CompanySave: ! r:
+goto DoLoad ! /r
+
+DoSave: ! r:
+	! r: Company Save
 	if rcpt$="True" then rcpt$="Y" else rcpt$="N"
 	if escrow$="True" then escrow$="Y" else escrow$="N"
 	maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 	close #1,free: ioerr ignore
 	open #1: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 
-	write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent
+	write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent
 	close #1: 
-	fnLastBillingDate(d1,1)
+	fnLastBillingDate(lastBillingDate,1)
 	fncreg_write('unusual usage minimum water',uum_water$)
 	fncreg_write('unusual usage minimum gas',uum_gas$)
 	fncreg_write('unusual usage minimum electric',uum_electric$)
@@ -315,8 +283,22 @@ CompanySave: ! r:
 		fnEftData$('Company Identification'          ,cid$    )
 		fnEftData$('Originating DFI Identification'  ,odi$    )
 		fnEftData$('Standard Entry Class Code'       ,ecc$    )
-	end if 
+	end if
+	! /r
+	! r: Service Save
+	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	rewrite #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
+	close #service: 
+
+	for service_item=1 to 10
+		fncreg_write('default rate '&str$(service_item),default_rate$(service_item))
+		fncreg_write('Service '&str$(service_item)&' only month',str$(onlyMonth(service_item)))
+	next service_item
+	fn_enableCostOfGas( enableCostOfGas$)
+	! /r
 return  ! /r
+
+
 def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	! GET_CODES: ! r: get applicable rate codes
 	! search routine must be passed code for service (WA for water) in searchcode$
@@ -341,5 +323,57 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	close #h_rate1: 
 	! /r
 	fncomboa("ubfm-rates",cr_lyne,cr_pos,mat rates$,ttt$,30,fra)
-fnend 
+fnend
+def library fnEnableCostOfGas(; setIt$)
+	if ~setup then let fn_setup
+	fnEnableCostOfGas=fn_enableCostOfGas( setIt$)
+fnend
+def fn_enableCostOfGas(; setIt$, ___,returnN)
+	setIt$=trim$(lwrc$(setIt$))
+	if setIt$<>'' and setIt$<>'true' and setIt$<>'false' then
+		pr 'invalid setIt$ ('&setIt$&') passed to fn_enableCostOfGas.'
+		pause
+	else if setIt$<>'' then
+		fncreg_write('enable Cost of Gas',setIt$)
+	else
+		fncreg_read( 'enable Cost of Gas',setIt$)
+		if setIt$='' and env$('client')="Edinburg" or env$('client')="French Settlement" or env$('client')="Allendale" then
+			setIt$='True'
+		else
+			setIt$='False'
+		end if
+	end if
+	setIt$=trim$(lwrc$(setIt$))
+	if setIt$='true' then returnN=1
+	fn_enableCostOfGas=returnN
+fnend
+
+def fn_setup
+	if ~setup then 
+		setup=1
+		library 'S:\Core\Library': fntop,fnxit
+		library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fnTos,fnCmdSet,fnChk,fncomboa
+		library 'S:\Core\Library': fnFra
+		library 'S:\Core\Library': fncreg_read,fncreg_write
+		library 'S:\Core\Library': fnCopy
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnLastBillingDate
+		library 'S:\Core\Library': fnbutton_or_disabled
+		library 'S:\Core\Library': fnEftData$
+		library 'S:\Core\Library': fnclient_has
+		on error goto ERTN
+	
+		dim resp$(256)*40
+		dim CompanyNameAndAddr$(3)*40
+		dim serviceName$(10)*20
+		dim serviceCode$(10)*2
+		dim tax_code$(10)*1
+		dim default_rate$(10)*80
+		
+		screen_main   =1001
+		screen_Route  =1002
+		screen_Service=1003
+		screen_EFT    =1004
+	end if
+fnend
 include: Ertn

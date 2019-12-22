@@ -310,6 +310,12 @@ def fn_getClientLicense(mat client_has$)
 			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('PR')
 			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('GL')
 			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('CL')
+		else if env$('client')='Allendale' then 
+			if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
+				fn_user_limit(1)
+				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+				fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
+			end if
 		else if env$('client')='Bethany' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)

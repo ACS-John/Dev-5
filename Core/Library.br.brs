@@ -1153,6 +1153,14 @@ fnend
 	fnend
 ! /r
 ! r: UB   utility billing
+	def library fnEnableCostOfGas(; setIt$)
+		library 'S:\Utility Billing\Company.br': fnEnableCostOfGas
+		fnEnableCostOfGas=fnEnableCostOfGas( setIt$)
+	fnend
+	def library fnCalculateBills(goal$*11)
+		library 'S:\Utility Billing\fn\calculateBills.br': fnCalculateBills
+		fnCalculateBills=fnCalculateBills(goal$)
+	fnend
 	! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
 	!   library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
 	!   fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
