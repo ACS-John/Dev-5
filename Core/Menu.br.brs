@@ -29,7 +29,6 @@ def fn_setup
 		library 'S:\Core\Library': fncreg_read
 		library 'S:\Core\Library': fncreg_write
 		library 'S:\Core\Library': fnreg_close
-		library 'S:\Core\Library': fnerror
 		library 'S:\Core\Library': fnprogram_properties
 		library 'S:\Core\Library': fnclient_has
 		library 'S:\Core\Library': fnclient_has_mat
