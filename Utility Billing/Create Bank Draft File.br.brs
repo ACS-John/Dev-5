@@ -94,7 +94,7 @@ HDR1: ! r: ! FILE HEADER RECORD
 	odi$=fnEftData$('originating dfi identification') ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 	bn=1 !  BN=BATCH NUMBER
 	if env$('client')="Depoe Bay" then 
-		pr #hOut,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$,fcd$,"",osc$,odi$,bn
+		pr #hOut,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$    ,fcd$,"",osc$,odi$,bn
 	else 
 		pr #hOut,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn
 	end if 
@@ -253,19 +253,19 @@ return  ! /r
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
+		library 'S:\Core\Library': fnTop,fnxit
 		library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnCmdSet,fnChk
 		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnureg_write,fnureg_read
-		library 'S:\Core\Library': fncreg_write,fncreg_read
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fncd
+		library 'S:\Core\Library': fnOpenprn,fncloseprn
+		library 'S:\Core\Library': fnMsgbox
+		library 'S:\Core\Library': fnUreg_write,fnureg_read
+		library 'S:\Core\Library': fnCreg_write,fncreg_read
+		library 'S:\Core\Library': fnGet_services
+		library 'S:\Core\Library': fnDate_mmddyy_to_ccyymmdd
+		library 'S:\Core\Library': fnCd
 		library 'S:\Core\Library': fnRename
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnclient_has
+		library 'S:\Core\Library': fnGethandle
+		library 'S:\Core\Library': fnClient_has
 		library 'S:\Core\Library': fnEftData$
 		dim ml$(0)*128
 		dim alloc(10)
