@@ -351,6 +351,7 @@ def fn_bud2
 	rewrite #budmstr,using FORM_BUDMSTR,key=x$: x$,mat ba,mat badr
 	L7110: ! 
 fnend 
+
 def fn_usage(usage_service_number)
 	! requires local variables: d1, f, mat x, mat d
 	usage_return=0
@@ -506,6 +507,7 @@ def fn_ask_billing_date
 		end if 
 	end if 
 fnend 
+
 def fn_setup
 	if ~setup then
 		setup=1
