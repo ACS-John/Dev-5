@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                      
+1:40 PM 12/27/2019	UB	Customer - change account number got an error 4272 - fixed
 12:40 12/19/2019	CO	5.74236  
 11:00 12/19/2019	CO	5.74235   
 10:03 AM 12/20/2019	UB	Configure Company now allows for new EFT settings, Create Bank Draft revised to allow for EFT settings  
