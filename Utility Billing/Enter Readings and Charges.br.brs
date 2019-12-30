@@ -1129,7 +1129,7 @@ MENU1: ! r:
 		fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
 		fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
 		fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
-		fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
+		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
 	end if  ! fnregistered_for_hh
 ! r: add the grid
 !
