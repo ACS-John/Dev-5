@@ -5,18 +5,31 @@ goto MENU1
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnmsgbox,fnchain,fnLastBillingDate,fnxit,fntop
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncomboa
-		library 'S:\Core\Library': fncustomer,fnhand_held_device$
-		library 'S:\Core\Library': fngethandle,fnButton,fnregistered_for_hh
-		library 'S:\Core\Library': fnRetrieveHandHeldFile,fnask_account
-		library 'S:\Core\Library': fnLbl,fnTxt,fnAcs,fnTos
+		library 'S:\Core\Library': fnopenprn,fncloseprn
+		library 'S:\Core\Library': fnLastBillingDate
+		library 'S:\Core\Library': fnmsgbox,fnxit,fntop
+		library 'S:\Core\Library': fnchain
+		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+		library 'S:\Core\Library': fncomboa
+		library 'S:\Core\Library': fnhand_held_device$
+		library 'S:\Core\Library': fnget_services
+		library 'S:\Core\Library': fncustomer
+		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnButton
+		library 'S:\Core\Library': fnregistered_for_hh
+		library 'S:\Core\Library': fnRetrieveHandHeldFile
+		library 'S:\Core\Library': fnask_account
+		library 'S:\Core\Library': fnTos
+		library 'S:\Core\Library': fnLbl,fnTxt
+		library 'S:\Core\Library': fnAcs2
 		library 'S:\Core\Library': fnOpt,fnChk,fnflexinit1,fnflexadd1
 		library 'S:\Core\Library': fncmbact,fncmbrt2,fnFra,fnCmdSet,fnCmdKey
-		library 'S:\Core\Library': fncreg_read,fncreg_write,fngetdir2,fnfree
-		library 'S:\Core\Library': fnapply_default_rates,fnget_services
-		library 'S:\Core\Library': fnStatusClose,fnindex_it
+		library 'S:\Core\Library': fncreg_read,fncreg_write
+		library 'S:\Core\Library': fnfree
+		library 'S:\Core\Library': fngetdir2
+		library 'S:\Core\Library': fnapply_default_rates
+		library 'S:\Core\Library': fnStatusClose
+		library 'S:\Core\Library': fnindex_it
 		library 'S:\Core\Library': fnAccountFromLocationId$
 		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
@@ -24,18 +37,40 @@ def fn_setup
 		on error goto ERTN
 	! dims, constants, top, etc
 		dim resp$(40)*256
-		dim aname$*30,d(15),alp$*1
-		dim workFile$*256,workFileIndex$*256
-		dim t(16),message$(1)*128,a$*256
-		dim txt$*80,txt$(6)*70
-		dim extra(23),item$(30)*20,extra$(11)*30
-		dim x$*10,px$*10,x(15),ln$*256,last_ln$*256
-		dim ft$*21,rm$*60,ra(2),colhdr$(30)*40,cm$(30)
-		dim est1(3,3),e1$*30,e2$*30,a(7),tg(11)
+		dim aname$*30
+		dim d(15)
+		dim alp$*1
+		dim workFile$*256
+		dim workFileIndex$*256
+		dim t(16)
+		dim message$(1)*128
+		dim txt$*80
+		dim txt$(6)*70
+		dim extra(23)
+		dim item$(30)*20
+		dim extra$(11)*30
+		dim x$*10
+		dim px$*10
+		dim x(15)
+		dim ln$*256
+		dim ft$*21
+		dim rm$*60
+		dim ra(2)
+		dim colhdr$(30)*40
+		dim cm$(30)
+		dim est1(3,3)
+		dim e1$*30
+		dim e2$*30
+		dim a(7)
+		dim tg(11)
 		dim cd1(8)
-		dim penalty$(10)*1,reporth$*300,form$*300
+		dim penalty$(10)*1
+		dim reporth$*300
+		dim form$*300
 		dim mroll(3) ! meter roll code from hand held file
-		dim serviceoption$(10)*25,srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
+		dim serviceoption$(10)*25
+		dim srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
+		
 		dim opt_final_billing$(5)*33
 		opt_final_billing$(1)="0 = Not Finaled"
 		opt_final_billing$(2)="1 = Final Bill"
@@ -62,10 +97,14 @@ def fn_setup
 		cancel=5
 		workFile$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
 		workFileIndex$="[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]"
-	! synchronize these settings with S:\Utility Billing\Calculate Bills
-		from_holding_file=3 ! enumerations for addmethod
-		from_hh_file=5
-	! ______________________________________________________________________
+	! r: addmethod enumerations
+		am_customersInSequence=1
+		am_askAndEnterIndviduals=2
+		am_loadHoldingFile=3
+		am_estimateReadings=4
+		am_fromHhFile=5
+		am_importTabDelimited=6
+	! /r
 	! Open_Stuff: !
 		fn_setup_service(mat service_enabled)
 		open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
@@ -204,12 +243,12 @@ def fn_setup_service(mat service_enabled)
 fnend
 AUTO_REC: ! r:
 	done_with_readings=0
-	fnTos(sn$="ubipchg-3")
+	fnTos
 	fnLbl(1,1,"Starting Account:" ,24,1)
 	fncmbact(1,26,1)
 	resp$(1)="[All]"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck=cancel then
 		done_with_readings=1
 		goto MENU1
@@ -219,18 +258,20 @@ AUTO_REC: ! r:
 	px$=x$
 	if trim$(x$)="" then goto SEL_ACC
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey AUTO_REC
-	if addmethod=1 and env$('client')<>"Choctaw" then
+	if addmethod=am_customersInSequence and env$('client')<>"Choctaw" then
 		seq$=cnvrt$("pic(zz)",extra(1))&cnvrt$("pic(zzzzzzz)",extra(2))
 		read #hCustomer5,using F_CUSTOMER_C,key=seq$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(7),extra$(3) nokey AUTO_REC
 	end if
 	fnapply_default_rates(mat extra, mat a)
 	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE ! ken  ! john -- this is so users can select an account without being pushed to the incorrect account with the same rt/seq
 	px$=""
-	goto ENTER_READING
+	goto EnterReadings
 ! /r
 SEL_ACC: ! r:
 ! passcheckwater=passcheckgas=passcheckelec=0
-	if addmethod=1 then goto READ_ROUTE_SEQUENCE
+	if addmethod=am_customersInSequence then 
+		goto READ_ROUTE_SEQUENCE
+	end if
 	x$=""
 SEL_ACT_TOS: !
 	ck=fnask_account('ubipchg',x$,hCustomer1)
@@ -238,12 +279,12 @@ SEL_ACT_TOS: !
 		addmethod=0
 		goto MENU1
 	end if
-	if addmethod=1 then
+	if addmethod=am_customersInSequence then
 		goto READ_ROUTE_SEQUENCE
 	else
 		read #hCustomer1,using 'form pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5',key=x$,release: aname$,mat a,final,mat d nokey SEL_ACT_TOS
 		fnapply_default_rates(mat extra, mat a)
-		goto ENTER_READING2
+		goto EnterReadings2
 	end if
 ! /r
 READ_ROUTE_SEQUENCE: ! r:
@@ -255,7 +296,7 @@ READ_ROUTE_SEQUENCE: ! r:
 	fnapply_default_rates(mat extra, mat a)
 	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE
 	px$=""
-	goto ENTER_READING ! /r
+	goto EnterReadings ! /r
 def fn_meter_roll
 	mat txt$(4)
 	txt$(1)="Reading: "&str$(cur_read)&"   Prior: "&str$(prior_read)&"   Usage: "&str$(x0)
@@ -306,7 +347,7 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 	fn_printReadings_Heading( printReadings_altHeading$)
 	restore #hWork: ! ,search>="": nokey PR_TOTALS    <-- needs to work with or without an index
 	do
-		
+
 		read #hWork,using F_WORK: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
 		e1$=e2$=""
@@ -376,7 +417,7 @@ MAKE_CORRECTIONS: ! r:
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 	fnapply_default_rates(mat extra, mat a)
 	editmode=1
-	goto ENTER_READING3 ! /r
+	goto EnterReadings3 ! /r
 REWRITE_WORK: ! r:
 	rewrite #hWork,using F_WORK,key=x$: trim$(x$),mat x nokey L3900
 	goto L3910
@@ -386,13 +427,13 @@ L3910: if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
 	if editmode=1 then return
 	goto MENU1 ! /r MAKE_CORRECTIONS
 CHANGE_ACT_NUM: ! r:
-	fnTos(sn$="new_act_num")
+	fnTos
 	mylen=19 : mypos=mylen+2
 	fnLbl(1,1,"New Account:",mylen)
 	fnTxt(1,mypos,10)
 	resp$(1)=""
 	fnCmdSet(1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	x$=trim$(resp$(1))
 	read #hCustomer1,using "Form POS 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
 	goto REWRITE_WORK ! /r
@@ -495,7 +536,7 @@ def fn_checkgas
 	fn_checkend
 fnend
 def fn_checkend
-	if addmethod=from_holding_file and passcheck=ckfail then
+	if addmethod=am_loadHoldingFile and passcheck=ckfail then
 		fn_print_unusual
 		goto CHECKEND_XIT
 	end if
@@ -591,28 +632,48 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	goto HH_CONTINUE ! /r
 	!
 	HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
+	dim last_ln$*256
 	last_ln$=""
 	if listonly=1 then let fnopenprn
 	close #h_readings: ioerr ignore
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
-	HH_BOSON_READ: if last_ln$="" then linput #h_readings: ln$ eof HH_W_END else ln$=last_ln$ : last_ln$=''
+	HH_BOSON_READ: !
+	if last_ln$="" then
+		linput #h_readings: ln$ eof HH_W_END
+	else
+		ln$=last_ln$
+		last_ln$=''
+	end if
 	if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BOSON_READ
 	mat x=(0)
-	if env$('client')="Monticello" then x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_BOSON_READ ! Account Key :goto 5150
+	if env$('client')="Monticello" then
+		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_BOSON_READ ! Account Key :goto 5150
+	end if
 	ti$=ln$(14:14)
-	if ti$="W" or ti$="G" or ti$="E" then x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ else x$=lpad$(rtrm$(ln$(5:14)),10) conv HH_BOSON_READ : ti$="" : ti1=1
-	if env$('client')="Monticello" then ti1=1: goto L5420
-	if uprc$(ti$)="W" then ti1=1
-	if uprc$(ti$)="G" then ti1=2
-	if uprc$(ti$)="E" then ti1=3
+	if ti$="W" or ti$="G" or ti$="E" then 
+		x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ 
+	else 
+		x$=lpad$(rtrm$(ln$(5:14)),10) conv HH_BOSON_READ
+		ti$=""
+		ti1=1
+	end if
+	if uprc$(ti$)="W" or env$('client')="Monticello" then
+		ti1=1
+	else if uprc$(ti$)="G" then
+		ti1=2
+	else if uprc$(ti$)="E" then
+		ti1=3
+	end if
 	L5420: x(ti1)=0: x(ti1)=val(ln$(89:97)) conv L5440 ! kj 120308 allow boson to place codes in field if cant read meter
 	! if env$('client')="Billings" and ln$(91:91)=" " then x(ti1)=val("1"&ln$(92:97))
-	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then x(ti1)=round(x(ti1)*.1,0)
+	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then 
+		x(ti1)=round(x(ti1)*.1,0)
+	end if
 	if ti$="" or ti$="W" then
 		linput #h_readings: ln$ eof L5440
-		if ti$="" then 
-			x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440 
-		else 
+		if ti$="" then
+			x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440
+		else
 			x_g$=lpad$(rtrm$(ln$(4:13)),10) conv L5440
 			ti$=ln$(14:14)
 		end if
@@ -670,9 +731,9 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_OTHER_TYPE1_READ ! Account Key
 	ti1=1 ! water
 	x(ti1)=0
-	if device$='READy Water' then 
+	if device$='READy Water' then
 		x(ti1)=val(ln$(11:len(ln$))) conv ignore
-	else if env$('client')="Lovington" then 
+	else if env$('client')="Lovington" then
 		x(ti1)=val(ln$(11:19)) conv ignore
 	else
 		x(ti1)=val(ln$(11:20)) conv ignore
@@ -714,15 +775,15 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	! ___________________________
 	HH_W_END: !
 	fncloseprn
-	addmethod=2 ! set back to regular readings
+	addmethod=am_askAndEnterIndviduals ! set back to regular readings
 	close #h_readings:
-fnend  ! goto MENU1
+fnend
 EST1: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
 	open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 	ASK_EST: !
-	fnTos(sn$="ubipchg-ask_est")
+	fnTos
 	! services=0
 	if srvnam$(1)="Water" then srvest$(1)=srvnam$(1) else srvest$(1)="Unused"
 	if service_enabled(3) then srvest$(2)=srvnam$(3) else srvest$(2)="Unused"
@@ -745,7 +806,7 @@ EST1: ! r: ESTIMATEING ROUTINE
 	fnOpt(2,1,"Route",0,2)
 	resp$(8)="True"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck=cancel then goto MENU1
 	for j=1 to 3
 		if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
@@ -775,7 +836,7 @@ EST1: ! r: ESTIMATEING ROUTINE
 	if est1=2 then goto ASK_ROUTE
 goto ASK_EST ! /r
 EST3: ! r:
-	fnTos(sn$="ubipchg-est3")
+	fnTos
 	mylen=27 : mypos=mylen+2
 	fnLbl(1,1,"Account to Estimate:",mylen,1)
 	fncmbact(1,mypos)
@@ -786,7 +847,7 @@ EST3: ! r:
 		resp$(2)=ex$
 	end if
 	fnCmdSet(11)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
 	if ck=cancel or trim$(x$)="" then goto MENU1
 	x$=lpad$(trim$(x$),10) conv EST3
@@ -797,7 +858,7 @@ EST3: ! r:
 	ex$=x$
 	goto EST3 ! /r
 ASK_ROUTE: ! r:
-	fnTos(sn$="ubipchg-ask_Route")
+	fnTos
 	mylen=21 : mypos=mylen+2 : respc=0
 	fnLbl(1,1,"Route to Estimate:",mylen,1)
 	fncmbrt2(1,mypos,0)
@@ -808,22 +869,22 @@ ASK_ROUTE: ! r:
 		resp$(respc+=1)=str$(eb2)
 	end if
 	fnCmdSet(11)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if resp$(1)="[All]" then eb1=0 : goto L6890
 	eb1=val(resp$(1))
-L6890: !
+	L6890: !
 	if ck=cancel then goto MENU1 ! finish
 	restore #hCustomer1:
-READ_CUSTOMER: !
+	READ_CUSTOMER: !
 	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) eof ASK_ROUTE
 	if final=1 or final=2 or final=3 then goto READ_CUSTOMER
 	fnapply_default_rates(mat extra, mat a)
-! fn_US1
+	! fn_US1
 	if eb1>0 and extra(1)><eb1 then goto READ_CUSTOMER ! if route selected and does not match route
 	if final=1 or final=3 then goto READ_CUSTOMER ! SKIP FINAL BILLED
 	gosub EST2
 	eb2=eb1
-	goto READ_CUSTOMER ! /r
+goto READ_CUSTOMER ! /r
 EST2: ! r:
 	mat x=(0) ! actually calculate the estimated usage
 	EST2B: !
@@ -857,7 +918,7 @@ EST2: ! r:
 	next j
 	! If A(2)>0 AND EST1(1,1)=1 Then eST4=1 ! Sewer
 	if est4=0 then goto L7220
-	if addmethod=from_holding_file then goto L7220 ! FROM Hand Held
+	if addmethod=am_loadHoldingFile then goto L7220 ! FROM Hand Held
 	if a1=1 then
 		rewrite #hWork,using F_WORK: trim$(x$),mat x
 		goto L7210
@@ -909,7 +970,7 @@ def fn_rmk1
 fnend
 def fn_est_dates
 	EST_DATES: !
-	fnTos(sn$="estimate-1")
+	fnTos
 	mylen=51 : mypos=mylen+2
 	fnLbl(2,70,"",0,1)
 	fnLbl(1,1,"Billing Dates of Months to be Averaged:",mylen,1)
@@ -918,7 +979,7 @@ def fn_est_dates
 		resp$(j)=""
 	next j
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=cancel then goto XIT
 	for j=1 to 8
 		cd1(j)=val(resp$(j)) conv EST_DATES
@@ -964,13 +1025,14 @@ def fn_write_tamper(custno$*10,tval)
 	TMPFORM: form pos 438,c 2
 	WT_XIT: !
 fnend
-INPUT_TEXT: ! r:
-! r: phase 1 - import from text file into readings.tmp file
+ImportTabDelimited: ! r:
+	! r: phase 1 - import from text file into readings.tmp file
 	open #h_tmp:=fngethandle: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
-!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
+	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
 	open #h_readings_tmp:=fngethandle: "Name="&env$('Temp')&"\readings.tmp,RecL=30,replace",display,output
+	dim a$*256
 	do
-IT_TEXT_READ: !
+		IT_TEXT_READ: !
 		linput #h_tmp: a$ eof IT_TEXT_EOF
 		x=val(a$(1:3)) conv IT_TEXT_READ
 		z$=""
@@ -978,22 +1040,22 @@ IT_TEXT_READ: !
 			x=val(a$(j:j)) conv IT_L1060
 			z$=z$&a$(j:j)
 		next j
-IT_L1060: !
+		IT_L1060: !
 		z=val(z$)
 		z$=cnvrt$("pic(zzzzzzz.##",z)
 		reading$=""
 		for j1=1 to 20
 			x=val(a$(j1+j:j1+j)) conv IT_L1120
 			reading$=reading$&a$(j1+j:j1+j)
-IT_L1120: !
+			IT_L1120: !
 		next j1
 		pr #h_readings_tmp,using "form pos 1,c 10,c 9": z$,trim$(reading$)
 	loop
-IT_TEXT_EOF: !
+	IT_TEXT_EOF: !
 	close #h_tmp: ioerr ignore
 	close #h_readings_tmp: ioerr ignore
-! /r
-! r: phase 2 - from readings.tmp file
+	! /r
+	! r: phase 2 - from readings.tmp file
 	close #h_readings: ioerr ignore
 	open #h_readings:=13: "Name="&env$('temp')&"\Readings.tmp,RecL=30",display,input
 	do
@@ -1001,13 +1063,16 @@ IT_TEXT_EOF: !
 		mat x=(0)
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv IT_W_NEXT ! Account Key
 		ti1=1 ! water
-		if env$('client')="Lovington" then x(ti1)=0: x(ti1)=val(ln$(11:19)) conv IT_L5870 : goto IT_L5870
-		x(ti1)=0: x(ti1)=val(ln$(11:20)) conv ignore
-IT_L5870: !
+		x(ti1)=0
+		if env$('client')="Lovington" then
+			x(ti1)=val(ln$(11:19)) conv ignore
+		else
+			x(ti1)=val(ln$(11:20)) conv ignore
+		end if
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
-!       goto HH_CONTINUE
-!   ! ______________________________________________________________________
-!   HH_CONTINUE: ! Continue with standard Hand Held routine
+		!       goto HH_CONTINUE
+
+		!   HH_CONTINUE: ! Continue with standard Hand Held routine
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey IT_W_NEXT
 		fnapply_default_rates(mat extra, mat a)
 		fn_us1
@@ -1024,20 +1089,20 @@ IT_L5870: !
 		fn_writeWork(hWork,x$,mat x)
 		fn_accumulateprooftotals
 		fn_rmk1
-IT_W_NEXT: !
+		IT_W_NEXT: !
 	loop
-! /r
-IT_FINIS: !
+	! /r
+	IT_FINIS: !
 	fncloseprn
-	addmethod=2 ! set back to regular readings
+	addmethod=am_askAndEnterIndviduals ! set back to regular readings
 	close #h_readings,free:
 	fnFree(workFileIndex$)
-IT_XIT: !
-	goto MENU1 ! /r
+	IT_XIT: !
+goto MENU1 ! /r
 MENU1: ! r:
 	editmode=0
 	addmethod=0
-	fnTos(sn$="readings-1b")
+	fnTos
 	mylen=28 : mypos=mylen+3
 	frame_bd_witdh=42
 	fnFra(1,1,5,frame_bd_witdh,"Batch Data")
@@ -1048,22 +1113,23 @@ MENU1: ! r:
 	fnLbl(4,2,"Meter Reading Date:",mylen,1,0,1)
 	fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
 	resp$(2)=str$(d2)
-!
+
 	moe_button_width=frame_bd_witdh-1
 	fnFra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
 	fnLbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Display customers in route sequence",2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Ask Account, then enter Reading",2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
-!
+	fnButton(frame_line+=1,1,"Display customers in route sequence",fky_askCustomersInSequence:=2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Ask Account, then enter Reading",fky_askAndEnterIndviduals:=2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
+
 	fnLbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Load Holding File",2003,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Estimate Readings",2004,'',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",2006,'',0,moe_button_width,frame_current)
-!
+	fnButton(frame_line+=1,1,"Load Holding File",fky_loadHoldingFile:=2003 ,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Estimate Readings",fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
+
 	if fnregistered_for_hh then
 		fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
-		fnButton(frame_line+=1,1,"Import from Hand Held to Book",2007,'Retrieve Hand Held File',0,moe_button_width,frame_current)
-		fnButton(frame_line+=1,1,"Load Hand Held Book",2005,'Generally for use after "Retreive (Import) from Hand Held to Book"',0,moe_button_width,frame_current)
+		fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
+		fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
 	end if  ! fnregistered_for_hh
 ! r: add the grid
 !
@@ -1257,7 +1323,7 @@ MENU1READWORKEOF: ! /r
 		fnCmdKey("&Close",5,0,1)
 		! fnCmdSet(1)
 	end if
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck=cancel then
 		goto XIT
 	end if
@@ -1276,32 +1342,32 @@ MENU1READWORKEOF: ! /r
 	else if ck=8 then
 		delete #hWork,key=x$:
 	else if ck=9 then
-		if fn_meter_change_out=3 then goto ENTER_READING3
+		if fn_meter_change_out=3 then goto EnterReadings3
 	else if ck=10 then
-		if days(d1,"mmddyy")<days(date$)-25 then 
+		if days(d1,"mmddyy")<days(date$)-25 then
 			let ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
-			end if 
+			end if
 		fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
-	else if ck=2001 then
-		addmethod=1
+	else if ck=fky_askCustomersInSequence then
+		addmethod=am_customersInSequence
 		goto AUTO_REC
-	else if ck=1 or ck=2002 then
-		addmethod=2
+	else if ck=1 or (fky_askAndEnterIndviduals and ck=fky_askAndEnterIndviduals) then
+		addmethod=am_askAndEnterIndviduals
 		goto SEL_ACC
-	else if ck=2003 then
-		addmethod=3
+	else if fky_loadHoldingFile and ck=fky_loadHoldingFile then
+		addmethod=am_loadHoldingFile
 		fn_loadBookOrHoldingFile(addmethod)
-	else if ck=2004 then
-		addmethod=4
+	else if fky_estimateReadings and ck=fky_estimateReadings then
+		addmethod=am_estimateReadings
 		goto EST1
-	else if ck=2005 then
-		addmethod=from_hh_file
+	else if ck=fky_loadBook then
+		addmethod=am_fromHhFile
 		fn_loadBookOrHoldingFile(addmethod)
-	else if ck=2006 then
-		addmethod=6
-		goto INPUT_TEXT
-	else if ck=2007 then
+	else if fky_importTabDelimited and ck=fky_importTabDelimited then
+		addmethod=am_importTabDelimited
+		goto ImportTabDelimited
+	else if fky_importHHtoBook and ck=fky_importHHtoBook then
 		fnRetrieveHandHeldFile
 		fntop(program$)
 	else if fky_clearAll and ck=fky_clearAll then
@@ -1309,9 +1375,14 @@ MENU1READWORKEOF: ! /r
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
 		open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+	else if fky_importAndLoad and ck=fky_importAndLoad then
+		fnRetrieveHandHeldFile
+		fntop(program$)
+		addmethod=am_fromHhFile
+		fn_loadBookOrHoldingFile(addmethod)
+
 	end if
-	goto MENU1
-! /r MENU1
+goto MENU1 ! /r
 
 def fn_holdingFileLoad
 	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
@@ -1324,12 +1395,12 @@ def fn_holdingFileLoad
 	IPHOLD_EO_HLD9: !
 	close #hld9:
 	L7460: !
-	addmethod=1 ! set addmethod back to 1 once holding file read in
+	addmethod=am_customersInSequence ! set addmethod back to 1 once holding file read in
 fnend
 def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	holdingFileSaveReturn=0
 	HoldingFileSave: !
-	fnTos(sn$="holding")
+	fnTos
 	mylen=19 : mypos=mylen+2
 	fnLbl(1,1,"Holding File Number:",mylen)
 	fnTxt(1,mypos,3,0,0,"30")
@@ -1341,7 +1412,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	resp$(3)="True"
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck<>cancel then
 		holdingFileSaveReturn=1
 		bk1=val(resp$(1)) conv HoldingFileSave
@@ -1373,17 +1444,17 @@ fnend
 def fn_loadBookOrHoldingFile(&addmethod)
 	dim ihDirFileMask$*64
 	!
-	if addmethod=from_hh_file then
+	if addmethod=am_fromHhFile then
 		book_or_holding_file$='Book'
 		ihDirFileMask$='Readings.*'
-	else if addmethod=from_holding_file then
+	else if addmethod=am_loadHoldingFile then
 		book_or_holding_file$='Holding File'
 		ihDirFileMask$='IPHold*.h[cno]'
 	else
 		pr bell;'addmethod not recognized by INPUT_HAND routine.' : goto IH_XIT
 	end if
 	INPUT_HAND: !
-	fnTos(sn$="ubipchg-inh")
+	fnTos
 	txt$="Select "&book_or_holding_file$&" for Input:"
 	mylen=len(txt$)+1 : mypos=mylen+2
 	fnLbl(1,1,txt$,mylen,1)
@@ -1422,7 +1493,7 @@ def fn_loadBookOrHoldingFile(&addmethod)
 	fnCmdKey("&Delete",4)
 	fnCmdKey("&Print",6)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	holdingFile$=""
 	ip1$=resp$(1)
 	if ck=cancel or ip1$='' then
@@ -1442,26 +1513,26 @@ def fn_loadBookOrHoldingFile(&addmethod)
 		txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
 		fnmsgbox(mat txt$,resp$,'',36)
 		if resp$="Yes" then
-			if addmethod=from_hh_file then
+			if addmethod=am_fromHhFile then
 				fnFree("[Q]\UBmstr\Readings."&ip1$)
-			else if addmethod=from_holding_file then
+			else if addmethod=am_loadHoldingFile then
 				fnFree("[Q]\UBmstr\IPHold"&ip1$&".h[cno]")
 			end if
 		end if
 		goto INPUT_HAND
-	else if addmethod=from_holding_file then
+	else if addmethod=am_loadHoldingFile then
 		fn_holdingFileLoad
 	else
 		fn_hh_readings(ip1$)
 	end if
 	IH_XIT: !
 fnend
-ENTER_READING: ! r:
+EnterReadings: ! r:
 	if alp$="*" then goto READ_ROUTE_SEQUENCE
-	ENTER_READING2: !
+	EnterReadings2: !
 	fn_us1
-	ENTER_READING3: !
-	fnTos(sn$="enter_reading")
+	EnterReadings3: !
+	fnTos
 	rc=0 : frac=0
 	!
 	fnFra(1,1,3,39,"Account Data")
@@ -1684,12 +1755,12 @@ ENTER_READING: ! r:
 	fn_flexRead(1,mypos5+2,hTrans,x$,begdate,0,fraro) ! beginning date=billing date less one year
 	fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
 	fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
-	if addmethod=1 or addmethod=from_hh_file then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
-	fnAcs(sn$,0,mat resp$,ck)
+	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
+	fnAcs2(mat resp$,ck)
 	if ck=8 then
 		fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
-		goto ENTER_READING3
+		goto EnterReadings3
 	end if
 	rc=first_read_rc
 	! If PASSCHECK=CKFAIL Then eDITMODE=0 ! xxx Ken
@@ -1741,10 +1812,10 @@ ENTER_READING: ! r:
 	! pause
 	rc+=1
 	x(15)=val(resp$(resp_fianl_billing_code)(1:1)) ! final billing code
-	if ck=2 and addmethod=from_hh_file then
+	if ck=2 and addmethod=am_fromHhFile then
 		skiprec=1
 		goto L2910 ! if choose skip on pulling from hh file, then skip writing the record   ! kj 3/24/06
-	else if addmethod=from_holding_file then
+	else if addmethod=am_loadHoldingFile then
 		goto CHECK_UNUSUAL
 	else if ck=2 and editmode=0 then
 		goto SEL_ACC
@@ -1754,50 +1825,58 @@ ENTER_READING: ! r:
 		addmethod=0
 		goto MENU1
 	else if ck=9 then
-		if fn_meter_change_out=3 then goto ENTER_READING3
+		if fn_meter_change_out=3 then goto EnterReadings3
 		goto MENU1
 	end if
 	CHECK_UNUSUAL: !
-	if addmethod<>3 then mat mroll=(0)
+	if addmethod<>am_loadHoldingFile then mat mroll=(0)
 	passcheck=ckpass=0 : ckfail=1 : ckcancel=2
 	!
 	fn_checkwater
 	if passcheck=ckfail then
 		editmode=1
-		goto ENTER_READING3
+		goto EnterReadings3
 	else if passcheck=ckcancel then
-		goto ERXIT
+		goto EnterReadings_Finis
 	end if
 	!
 	fn_checkgas
 	if passcheck=ckfail then
 		editmode=1
-		goto ENTER_READING3
+		goto EnterReadings3
 	else if passcheck=ckcancel then
 		editmode=1
-		goto ENTER_READING3 ! Then Goto ERXIT
+		goto EnterReadings3 ! Then Goto EnterReadings_Finis
 	end if
 	!
 	fn_checkelec
 	if passcheck=ckfail then
 		editmode=1
-		goto ENTER_READING3
+		goto EnterReadings3
 	else if passcheck=ckcancel then
-		goto ERXIT
+		goto EnterReadings_Finis
 	end if
+	
 	L2910: !
-	if addmethod=from_hh_file or addmethod=6 then return  ! Hand Held or input_text
-	!
-	if editmode=0 and unusual<>2 then let fn_writeWork(hWork,x$,mat x)
-	if editmode=1 and unusual<>2 then gosub REWRITE_WORK
-	ERXIT: !
+	if addmethod=am_fromHhFile or addmethod=am_importTabDelimited then 
+		return  ! Hand Held or ImportTabDelimited
+	end if
+
+	if unusual<>2 then
+		if editmode=0 then 
+			fn_writeWork(hWork,x$,mat x)
+		else if editmode=1 then 
+			gosub REWRITE_WORK
+		end if
+	end if
+	EnterReadings_Finis: !
 	if addmethod=0 then goto MENU1
-	if addmethod=1 and done_with_readings=0 then editmode=0 ! set editmode back after any corrections during the addmethod 1
-	if addmethod=1 and editmode=0 then goto READ_ROUTE_SEQUENCE
-	if addmethod=1 and editmode=1 then goto MENU1
-	! If ADDMETHOD=1 AND EDITMODE=1 Then Goto READ_ROUTE_SEQUENCE ! MENU1
-	if addmethod=2 and (editmode=0 or editmode=1) then mat x=(0): goto SEL_ACC ! kj 92407
-	! If ADDMETHOD=2 AND EDITMODE=1 Then Goto MENU1 ! kj 92407
+	if addmethod=am_customersInSequence and done_with_readings=0 then editmode=0 ! set editmode back after any corrections during the addmethod (am_customersInSequence)
+	if addmethod=am_customersInSequence and editmode=0 then goto READ_ROUTE_SEQUENCE
+	if addmethod=am_customersInSequence and editmode=1 then goto MENU1
+	! If ADDMETHOD=am_customersInSequence AND EDITMODE=1 Then Goto READ_ROUTE_SEQUENCE ! MENU1
+	if addmethod=am_askAndEnterIndviduals and (editmode=0 or editmode=1) then mat x=(0): goto SEL_ACC ! kj 92407
+	! If ADDMETHOD=am_askAndEnterIndviduals AND EDITMODE=1 Then Goto MENU1 ! kj 92407
 goto MENU1 ! /r
 def fn_setupFlexRead
 	if ~setupFlexRead then
@@ -1895,7 +1974,7 @@ fnend
 def fn_meter_change_out
 	mco_return=0
 	do
-		fnTos(sn$="Method")
+		fnTos
 		rc=0 : lc=0
 		fnFra(1,1,2,49,"Method of Change Out")
 		fnOpt(1,1,"Current customer only",0,1)
@@ -1909,7 +1988,7 @@ def fn_meter_change_out
 		fncmbact(6,20,1)
 		resp$(4)="[All]"
 		fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=5 then goto Mco_Xit
 		servicetype$=resp$(3)(1:2)
 		begx$=resp$(4)(1:10)
@@ -1917,7 +1996,7 @@ def fn_meter_change_out
 		if resp$(1)="True" then method$="Customer" : goto MCO_RECORD_READINGS
 	loop
 	MCO_RECORD_READINGS: !
-	fnTos(sn$="Meter_Change")
+	fnTos
 	rc=0 : lc=0: resprc=0
 	fnLbl(lc+=1,1,x$&"  "&aname$,50,0)
 	fnLbl(lc+=2,32,"Old Meter",10,2)
@@ -1959,7 +2038,7 @@ def fn_meter_change_out
 	end if
 	fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
 	fnCmdKey("&Finish",10)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Mco_Xit
 	if ckey=10 then goto Mco_Xit
 	oldmeterprior=val(resp$(1))
@@ -1979,7 +2058,7 @@ def fn_meter_change_out
 	if method$="Customer" and servicetype$="WA" then x(1)=newmetercurrent: x(12)=usage
 	if method$="Customer" and servicetype$="GA" then x(2)=newmetercurrent: x(14)=usage
 	if method$="Customer" and servicetype$="EL" then x(3)=newmetercurrent: x(13)=usage
-	if method$="Customer" then passcheck=ckfail: editmode=1 : goto mco_ENTER_READING3
+	if method$="Customer" then passcheck=ckfail: editmode=1 : goto mco_EnterReadings3
 	! goto somewhere
 	MCO_UPDATE_FULL_FILE: ! meter change over - update full file
 	close #hWork: ioerr ignore
@@ -1999,7 +2078,7 @@ def fn_meter_change_out
 	close #hWork: ioerr ignore
 	open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 	goto Mco_Xit
-	mco_ENTER_READING3: !
+	mco_EnterReadings3: !
 	mco_return=3
 	Mco_Xit: !
 	fn_meter_change_out=mco_return
@@ -2030,9 +2109,9 @@ def fn_hh_other_type2(listonly)
 					! pr 'after ' : pause
 			 end if
 			loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-			! if trim$(hot_z_prior$)='100020.03' then 
-			! 	debug=1 
-			! ! if debug then 
+			! if trim$(hot_z_prior$)='100020.03' then
+			! 	debug=1
+			! ! if debug then
 			! 	pr 'after loop'
 			! 	pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
 			! 	pr 'Reading.Water=';x(1);'  Usage=';x(12)
@@ -2043,7 +2122,7 @@ def fn_hh_other_type2(listonly)
 			! 	! nex x
 			! 	pr ''
 			! 	pause
-			! else 
+			! else
 			! 	debug=0
 			! end if
 			fn_hot_calcMeterChangeOut(hot_z_prior$,mat x,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
@@ -2077,7 +2156,7 @@ def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDat
 	hpValueN=val(hpValue$) conv ignore
 	hpField$=lwrc$(trim$(hpField$))
 	str2mat(hpField$,mat lfItem$,'.')
-	if lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then 
+	if lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then
 		! do nothing     goto hpFinis
 	else
 		if lfItem$(2)='kwh' then lfItem$(2)="electric"
@@ -2158,7 +2237,7 @@ def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDat
 			end if
 		else
 			HpDidNotCodeItYet: !
-			! pr 'code needed for lines like: "'&line$&'"' 
+			! pr 'code needed for lines like: "'&line$&'"'
 			! if env$('acsDeveloper')<>'' then pause
 		end if
 	end if
@@ -2171,7 +2250,7 @@ def fn_hot_calcMeterChangeOut(hcmcoAccount$,mat x,hotWaterMeterChangeBefore,hotW
 			read #hcustomer1,using 'form pos 217,pd 5',key=lpad$(trim$(hcmcoaccount$),10),release: hotwaterreadingprior
 			! pr ' need to read customers water reading here' : pause
 			! usage=oldmetercurrent-oldmeterprior+newmetercurrent-newmeterprior
-			if debug then 
+			if debug then
 				pr 'hcmcoaccount$='&hcmcoaccount$
 				pr '  oldMeterCurrent=';hotWaterMeterChangeBefore
 				pr '  oldMeterCurrent=';hotWaterMeterChangeBefore
@@ -2183,7 +2262,7 @@ def fn_hot_calcMeterChangeOut(hcmcoAccount$,mat x,hotWaterMeterChangeBefore,hotW
 				pause
 			end if
 			x(12)=hotWaterMeterChangeBefore-hotWaterReadingPrior+x(1)-hotWaterMeterChangeAfter
-			! if  x(12)<0 then 
+			! if  x(12)<0 then
 			!   pr 'negative usage ('&str$(x(12))&') calculated on '&hcmcoAccount$
 			!   pr '  Water MeterChange Before= ';hotWaterMeterChangeBefore
 			!   pr '  Water MeterChange  After= ';hotWaterMeterChangeAfter

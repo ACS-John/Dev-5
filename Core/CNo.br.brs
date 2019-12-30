@@ -57,7 +57,7 @@ def fn_putcno(cno)
 	setenv('cno',str$(cno))
 	execute 'config substitute [cno] '&str$(cno)
 fnend 
-def library fnget_company_number_list(mat cno_list; sysid$*2)
+def library fnget_company_number_list(mat cno_list; sysid$*256)
 	if ~setup then let fn_setup
 	if sysid$='' then sysid$=env$('cursys')
 	fngetdir2('[Q]\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
@@ -191,12 +191,29 @@ def library fnprg(&curprg$; g_p)
 	else ! Get
 		curprg$=env$('Core_Program_Current')
 	end if 
-fnend 
-def library fnSystemName$*40(; as2n_abbr$*2)
+fnend
+def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN) 
+	sia_systemAbbr$=lwrc$(trim$(sia_systemAbbr$))
+	if sia_systemAbbr$='u4' then
+		returnN=1
+	else if sia_systemAbbr$='p4' then
+		returnN=1
+	else if sia_systemAbbr$='u5' then
+		returnN=1
+	else if sia_systemAbbr$='g2' then
+		returnN=1
+	else if sia_systemAbbr$='em' then
+		returnN=1
+	else if sia_systemAbbr$(3:3)='-' then
+		returnN=1
+	end if
+	fnSystemIsAddOn=returnN
+fnend
+def library fnSystemName$*40(; as2n_abbr$*256)
 	if ~setup then let fn_setup
 	fnSystemName$=fn_systemName$( as2n_abbr$)
 fnend
-def fn_systemName$*40(; as2n_abbr$*2)
+def fn_systemName$*40(; as2n_abbr$*256)
 	dim as2n_return$*40
 	if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
 	as2n_abbr$=lwrc$(as2n_abbr$)
@@ -238,6 +255,8 @@ def fn_systemName$*40(; as2n_abbr$*2)
 		as2n_return$='Utility Billing'
 	else if as2n_abbr$='u4' then 
 		as2n_return$='Utility Billing - Hand Held Add-On'
+	else if as2n_abbr$='ub-eft' then 
+		as2n_return$='Utility Billing - EFT Add-On'
 	else if as2n_abbr$='tm' then 
 		as2n_return$='Time Management'
 	else if as2n_abbr$='oe' then 
@@ -247,7 +266,7 @@ def fn_systemName$*40(; as2n_abbr$*2)
 	end if 
 	fn_systemName$=as2n_return$
 fnend 
-def library fncursys$(; cursys_set$*2,resetCache)
+def library fncursys$(; cursys_set$*256,resetCache)
 	if ~setup then let fn_setup
 	if cursys_set$<>'' then 
 		cursys_cache$=uprc$(cursys_set$)

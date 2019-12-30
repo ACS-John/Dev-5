@@ -11,58 +11,20 @@ fn_setup
 	end if  ! ~fnregistered_for_hh
 fnRetrieveHandHeldFile
 fnxit
-def fn_setup
-	library 'S:\Core\Library': fnxit,fnureg_read
-	library 'S:\Core\Library': fntop,fnerror,fngethandle
-	library 'S:\Core\Library': fnregistered_for_hh,fnhand_held_Device$,fnHandHeldList
-	library 'S:\Core\Library': fnTos,fnLbl,fnAcs,fnTxt,fnCmdSet,fnChk,fncomboa
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnureg_write
-	library 'S:\Core\Library': fnCopy,fnRename
-	library 'S:\Core\Library': fnaddonec,fnFileTo2Arrays
-	library 'S:\Core\Library': fnAccountFromLocationId$
-	library 'S:\Core\Library': fnsrch_case_insensitive
-	library 'S:\Core\Library': fnmakesurepathexists
-	on error goto ERTN
-	dim preferenceHandHeldFromFile$*128
-	fnureg_read('Hand Held From File',preferenceHandHeldFromFile$, '[ask]')
-	if deviceSelected$="EZReader" then preferenceHandHeldFromFile$='[ask]'
-	! if deviceSelected$="Green Tree" then preferenceHandHeldFromFile$='[ask]'
-	! if deviceSelected$="Hersey" then preferenceHandHeldFromFile$='[ask]'
-	dim ml$(2)*256
-	dim resp$(32)*256
-	dim amr$*619
-	dim hersey$*290
-	dim askPath$*128
-	dim line$*2048 ! temp variable for reading in lines before they are parsed.
-	dim lineItem$(0)*256 ! temp variable for reading in lines before they are parsed.
-	tab$=chr$(9)
-	dim devicePreference$*20
-	devicePreference$=fnhand_held_Device$ ! fn_ctext_setup
-
-	if fn_hh_input_filename$='' then
-		preferenceHandHeldFromFile$='[ask]'
-		! fnureg_write('Hand Held From File','[ask]')
-	end if
-
-
-	if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
-		fnureg_read('Hand Held From File Asked',askPath$)
-	end if
-		fnureg_read('Hand Held From File Asked',askPath$)
-	dim deviceSelected$*20
-	if lwrc$(devicePreference$)='[ask]' then
-		fnureg_read('Hand Held Device Asked',deviceSelected$)
-		dim deviceOption$(0)*20
-		fnHandHeldList(mat deviceOption$)
-	end if
-fnend
-def library fnRetrieveHandHeldFile
+def library fnRetrieveHandHeldFile(; automationBookNumber)
 	if ~setup then let fn_setup
 	fntop(program$)
+	if automationBookNumber>0 and lwrc$(devicePreference$)<>'[ask]' and lwrc$(preferenceHandHeldFromFile$)<>'[ask]' then
+		respc=0
+		resp$(rc_book:=respc+=1)=str$(automationBookNumber)
+		resp$(rc_merge:=respc+=1)='False'
+		automationBookNumber=0
+		ckey=0
+		goto Screen1ProcessResponse
+	end if
 	SCREEN1: ! r:
 		respc=0 : lc=0
-		fnTos(sn$="hh_fro")
+		fnTos
 		lc+=1
 		fnLbl(lc+=1,1,"Book Number to store readings:",30,1)
 		fnTxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
@@ -89,7 +51,8 @@ def library fnRetrieveHandHeldFile
 			fnLbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
 		end if
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
+		Screen1ProcessResponse: !
 		if ckey<>5 then
 			bk$=resp$(rc_book)
 			if lwrc$(devicePreference$)='[ask]' then
@@ -112,7 +75,7 @@ def library fnRetrieveHandHeldFile
 			if fn_transfer(bk$,enableMerge$,env$('at')&askPath$)=-1 then goto SCREEN1
 		end if
 	goto XIT ! /r
-	XIT: ! target of ERTN exits
+	XIT: ! target of Ertn exits
 fnend
 def fn_transfer(bk$,enableMerge$,askPath$*128)
 	transferReturn=0
@@ -121,7 +84,7 @@ def fn_transfer(bk$,enableMerge$,askPath$*128)
 	if enableMerge$='True' and exists(bookFile$) then
 		dim mergeFileOrigional$*512
 		mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
-		fnmakesurepathexists(mergeFileOrigional$)
+		fnMakesurePathExists(mergeFileOrigional$)
 		fnCopy(bookFile$,mergeFileOrigional$)
 	else
 		enableMerge$='False'
@@ -222,7 +185,7 @@ def fn_hh_input_filename$*256
 	if hif_return$(1:2)='@:' then let hif_return$(1:2)='' ! take it off if it is already there before putting it back on.
 	fn_hh_input_filename$=env$('at')&hif_return$
 fnend
-IGNORE: continue
+
 def fn_readingsFileVersion$*128(bookFile$*512)
 	dim rfvLine$*512,rfvReturn$*128
 	open #hRfv:=fngethandle: "Name="&bookFile$,display,input
@@ -585,13 +548,13 @@ fnend
 	def fn_laptop(bookFile$*512)
 		route=val(bk$)
 		L1420: !
-		fnTos(sn$="Retrieve")
+		fnTos
 		mat resp$=("")
 		fnLbl(1,1,"Source Drive:",20,1)
 		fnTxt(1,23,20,100,0,"",0,"Source drive should be drive designation for the usb drive, including a : and a \ ")
 		if resp$(1)="" then resp$(1)="F:\"
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey) !
+		fnAcs2(mat resp$,ckey)
 		if ckey=5 then goto XIT
 		source$=resp$(1)
 		if len(source$)=0 then goto L1420
@@ -775,7 +738,6 @@ fnend
 	fnend
 
 ! /r
-include: ertn
 def fn_readings_backup(bookFile$*512)
 	if exists(bookFile$) then
 		fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bk$&'.bak')
@@ -813,7 +775,7 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 	fnFileTo2Arrays(mbFile2$,mat mbF2Label$,mat mbF2Value$, 1)
 	dim mbTmpNewFile$*512
 	mbTmpNewFile$=env$('temp')&'\acs\mergeTmpNew-session'&session$&'.txt'
-	fnmakesurepathexists(mbTmpNewFile$)
+	fnMakesurePathExists(mbTmpNewFile$)
 	open #hMergeNew:=fngethandle: 'name='&mbTmpNewFile$&",RecL=512,Replace",d,o
 	pr #hMergeNew: '[ACS Hand Held File Generic Version 2]'
 	fn_getCustomerNumbers(mat mbF1Label$,mat mbF1Value$,mat mbF1CustomerNumbers$)
@@ -916,3 +878,61 @@ def fn_getCustomerGroup(mat gcgFromLabel$,mat gcgFromValue$,gcgCustomerNumbers$,
 	end if
 	fn_getCustomerGroup=gcgReturn
 fnend
+def fn_setup
+	library 'S:\Core\Library': fnXit
+	library 'S:\Core\Library': fnUreg_read
+	library 'S:\Core\Library': fnTop
+	library 'S:\Core\Library': fnRegistered_for_hh
+	library 'S:\Core\Library': fnHand_held_Device$
+	library 'S:\Core\Library': fnHandHeldList
+	library 'S:\Core\Library': fnTos
+	library 'S:\Core\Library': fnTxt
+	library 'S:\Core\Library': fnCmdSet
+	library 'S:\Core\Library': fnChk
+	library 'S:\Core\Library': fnComboA
+	library 'S:\Core\Library': fnAcs2
+	library 'S:\Core\Library': fnLbl
+	library 'S:\Core\Library': fnGethandle
+	library 'S:\Core\Library': fnMsgbox
+	library 'S:\Core\Library': fnUreg_write
+	library 'S:\Core\Library': fnCopy
+	library 'S:\Core\Library': fnRename
+	library 'S:\Core\Library': fnAddonecfnFileTo2Arrays
+	library 'S:\Core\Library': fnFileTo2Arrays
+	library 'S:\Core\Library': fnAccountFromLocationId$
+	library 'S:\Core\Library': fnSrch_case_insensitive
+	library 'S:\Core\Library': fnMakesurePathExists
+	library 'S:\Core\Library': fnAddOneC
+	on error goto Ertn
+	dim preferenceHandHeldFromFile$*128
+	fnureg_read('Hand Held From File',preferenceHandHeldFromFile$, '[ask]')
+	if deviceSelected$="EZReader" then preferenceHandHeldFromFile$='[ask]'
+	dim ml$(2)*256
+	dim resp$(32)*256
+	dim amr$*619
+	dim hersey$*290
+	dim askPath$*128
+	dim line$*2048       ! temp variable for reading in lines before they are parsed.
+	dim lineItem$(0)*256 ! temp variable for reading in lines before they are parsed.
+	tab$=chr$(9)
+	dim devicePreference$*20
+	devicePreference$=fnhand_held_Device$ ! fn_ctext_setup
+
+	if fn_hh_input_filename$='' then
+		preferenceHandHeldFromFile$='[ask]'
+		! fnureg_write('Hand Held From File','[ask]')
+	end if
+
+
+	if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
+		fnureg_read('Hand Held From File Asked',askPath$)
+	end if
+		fnureg_read('Hand Held From File Asked',askPath$)
+	dim deviceSelected$*20
+	if lwrc$(devicePreference$)='[ask]' then
+		fnureg_read('Hand Held Device Asked',deviceSelected$)
+		dim deviceOption$(0)*20
+		fnHandHeldList(mat deviceOption$)
+	end if
+fnend
+include: Ertn
