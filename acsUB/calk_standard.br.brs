@@ -42,7 +42,7 @@ def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,ma
 	! you can use either gas or electric for some other meter reading by giving it the correct service code name, but using EL or GA as the codes.
 	! don't ever change an existing routine for any service.  Add a new routine  for any service that cannot go thru an existing routine.  This will allow the calculation program to become standard.
 	! 
-	! (it is set in company configure)    if service$(6)='IF' and env$('client')="French Settlement" and extra(11)=0 then extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
+
 	!   if service$(6)='SF' and env$('client')="Pennington" and extra(11)=0 then extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
 	! 
 	first_non_metered_service=5

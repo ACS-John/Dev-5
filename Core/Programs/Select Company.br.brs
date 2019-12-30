@@ -9,7 +9,7 @@ MENU1: ! r:
 	fnFra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
 	ch_line=1
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
-		if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'EM' then
+		if ~fnSystemIsAddOn(client_has$(ch_item)) then
 			ch_line+=1
 			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 		end if
@@ -291,6 +291,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnCompanyPayPeriodEndingDate
+		library 'S:\Core\Library': fnSystemIsAddOn
 		on error goto ERTN
 		! ______________________________________________________________________
 		dim filename$(999)*40

@@ -433,10 +433,6 @@ fnend
 		library 'S:\Core\fn\windowsStart.br': fnWindowsStart
 		fnWindowsStart=fnWindowsStart(wsFile$)
 	fnend
-	def library fnSystemName$*40(; systemAbbreviation$*2)
-		library 'S:\Core\CNo.br': fnSystemName$
-		fnSystemName$=fnSystemName$( systemAbbreviation$)
-	fnend
 	def library fncheckcompiled
 		library 'S:\Core\checkcompiled.br': fncheckcompiled
 		fncheckcompiled=fncheckcompiled
@@ -477,7 +473,7 @@ fnend
 		library 'S:\Core\Index.br': fnindex_it
 		fnindex_it=fnindex_it(data_file$,index_statement$, index_parameters$)
 	fnend
-	def library fnindex_sys(; only_cno,system_id$*2)
+	def library fnindex_sys(; only_cno,system_id$*256)
 		library 'S:\Core\Index.br': fnindex_sys
 		fnindex_sys=fnindex_sys( only_cno,system_id$)
 	fnend
@@ -621,60 +617,7 @@ fnend
 		fnGetProgramList=fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	fnend
 ! /r
-! r: cno   S:\Core\CNo\   -   use cno or similar
-	def library fncno(&cno;&cnam$)
-		library 'S:\Core\CNo.br': fncno
-		fncno=fncno(cno,cnam$)
-	fnend
-	def library fnget_company_number_list(mat cno_list; sysid$*2)
-		library 'S:\Core\CNo.br': fnget_company_number_list
-		fnget_company_number_list=fnget_company_number_list(mat cno_list, sysid$)
-	fnend
-	def library fnpgnum(;pgnum)
-		library 'S:\Core\CNo.br': fnpgnum
-		fnpgnum=fnpgnum(pgnum)
-	fnend
-	def library fnrx(;rx)
-		library 'S:\Core\CNo.br': fnrx
-		fnrx=fnrx(rx)
-	fnend
-	def library fnstyp(;styp)
-		library 'S:\Core\CNo.br': fnstyp
-		fnstyp=fnstyp(styp)
-	fnend
-	def library fnps(;ps)
-		library 'S:\Core\CNo.br': fnps
-		fnps=fnps(ps)
-	fnend
-	def library fnfscode(;a)
-		library 'S:\Core\CNo.br': fnfscode
-		fnfscode=fnfscode(a)
-	fnend
-	def library fnpedat$*20(;a$*20)
-		library 'S:\Core\CNo.br': fnpedat$
-		fnpedat$=fnpedat$(a$)
-	fnend
-	def library fnpriorcd(;a)
-		library 'S:\Core\CNo.br': fnpriorcd
-		fnpriorcd=fnpriorcd(a)
-	fnend
-	def library fnputcno(cno)
-		library 'S:\Core\CNo.br': fnputcno
-		fnputcno=fnputcno(cno)
-	fnend
-	def library fndat(&dat$; get_or_put)
-		library 'S:\Core\CNo.br': fndat
-		fndat=fndat(dat$,get_or_put)
-	fnend
-	def library fncursys$(; cursys_set$*2,resetCache)
-		library 'S:\Core\CNo.br': fncursys$
-		fncursys$=fncursys$( cursys_set$,resetCache)
-	fnend
-	def library fnprg(&prg$; g_p)
-		library 'S:\Core\CNo.br': fnprg
-		fnprg=fnprg(prg$,g_p)
-	fnend
-! /r
+
 ! r: parse   S:\Core\parse\
 	def library fnremove2(&and$,&word$)
 		library 'S:\Core\parse\remove2.br': fnremove2
@@ -1146,10 +1089,72 @@ fnend
 		library 'S:\Core\Ace\fnShortPath.br': fnshortpath$
 		fnshortpath$=fnshortpath$(longpath$)
 	fnend
-! r: S:\Core\CNo.br
+! r: S:\Core\CNo.br - SYSTEM
+	def library fnSystemIsAddOn( sia_systemAbbr$*256)
+		library 'S:\Core\CNo.br': fnSystemIsAddOn
+		fnSystemIsAddOn=fnSystemIsAddOn( sia_systemAbbr$)
+	fnend
 	def library fnUseDeptNo
 		library 'S:\Core\CNo.br': fnUseDeptNo
 		fnUseDeptNo=fnUseDeptNo
+	fnend
+	def library fnSystemName$*40(; systemAbbreviation$*256)
+		library 'S:\Core\CNo.br': fnSystemName$
+		fnSystemName$=fnSystemName$( systemAbbreviation$)
+	fnend
+! /r
+! r: cno   S:\Core\CNo.br - COMPANY NUMBER (and misc)
+	def library fncno(&cno;&cnam$)
+		library 'S:\Core\CNo.br': fncno
+		fncno=fncno(cno,cnam$)
+	fnend
+	def library fnget_company_number_list(mat cno_list; sysid$*256)
+		library 'S:\Core\CNo.br': fnget_company_number_list
+		fnget_company_number_list=fnget_company_number_list(mat cno_list, sysid$)
+	fnend
+	def library fnpgnum(;pgnum)
+		library 'S:\Core\CNo.br': fnpgnum
+		fnpgnum=fnpgnum(pgnum)
+	fnend
+	def library fnrx(;rx)
+		library 'S:\Core\CNo.br': fnrx
+		fnrx=fnrx(rx)
+	fnend
+	def library fnstyp(;styp)
+		library 'S:\Core\CNo.br': fnstyp
+		fnstyp=fnstyp(styp)
+	fnend
+	def library fnps(;ps)
+		library 'S:\Core\CNo.br': fnps
+		fnps=fnps(ps)
+	fnend
+	def library fnfscode(;a)
+		library 'S:\Core\CNo.br': fnfscode
+		fnfscode=fnfscode(a)
+	fnend
+	def library fnpedat$*20(;a$*20)
+		library 'S:\Core\CNo.br': fnpedat$
+		fnpedat$=fnpedat$(a$)
+	fnend
+	def library fnpriorcd(;a)
+		library 'S:\Core\CNo.br': fnpriorcd
+		fnpriorcd=fnpriorcd(a)
+	fnend
+	def library fnputcno(cno)
+		library 'S:\Core\CNo.br': fnputcno
+		fnputcno=fnputcno(cno)
+	fnend
+	def library fndat(&dat$; get_or_put)
+		library 'S:\Core\CNo.br': fndat
+		fndat=fndat(dat$,get_or_put)
+	fnend
+	def library fncursys$(; cursys_set$*256,resetCache)
+		library 'S:\Core\CNo.br': fncursys$
+		fncursys$=fncursys$( cursys_set$,resetCache)
+	fnend
+	def library fnprg(&prg$; g_p)
+		library 'S:\Core\CNo.br': fnprg
+		fnprg=fnprg(prg$,g_p)
 	fnend
 ! /r
 ! r: UB   utility billing
@@ -1320,9 +1325,9 @@ fnend
 			library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnHandHeldList
 			fnHandHeldList=fnHandHeldList(mat device$, mat deviceOption$)
 		fnend
-		def library fnRetrieveHandHeldFile
+		def library fnRetrieveHandHeldFile(; automationBookNumber)
 			library 'S:\Utility Billing\Hand Held\Import from Hand Held to Book.br': fnRetrieveHandHeldFile
-		 fnRetrieveHandHeldFile=fnRetrieveHandHeldFile
+		 fnRetrieveHandHeldFile=fnRetrieveHandHeldFile( automationBookNumber)
 		fnend
 		def library fnMeterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 			library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnMeterInfo$
@@ -1568,20 +1573,18 @@ fnend
 		library 'S:\Payroll\Change Payroll Dates.br': fnCompanyPayPeriodEndingDate
 		fnCompanyPayPeriodEndingDate=fnCompanyPayPeriodEndingDate(cno)
 	fnend
-
-! /r
-! r: Job Cost Payroll
-	def library fncmbburden(lyne,mypos;addall,c,a$*30)
-		library 'S:\Payroll\Job Cost\fnCmbBurden.br': fncmbburden
-		fncmbburden(lyne,mypos,addall,c,a$)
-	fnend
-	def library fnburden_srch(&x$;fixgrid)
-		library 'S:\Payroll\Job Cost\fnBurden_srch.br': fnburden_srch
-		fnburden_srch(x$,fixgrid)
-	fnend
+	! r: Job Cost Payroll
+		def library fncmbburden(lyne,mypos;addall,c,a$*30)
+			library 'S:\Payroll\Job Cost\fnCmbBurden.br': fncmbburden
+			fncmbburden(lyne,mypos,addall,c,a$)
+		fnend
+		def library fnburden_srch(&x$;fixgrid)
+			library 'S:\Payroll\Job Cost\fnBurden_srch.br': fnburden_srch
+			fnburden_srch(x$,fixgrid)
+		fnend
+	! /r
 ! /r
 ! r: TM Time Management
-	
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)

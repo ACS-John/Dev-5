@@ -665,7 +665,7 @@ fnend
 ! fn_getClientLicense(mat client_has$)
 !   fnuser_limit_exceeded=user_limit_exceeded
 ! /r fnend
-def fn_add_ch_sys(ch_item$)
+def fn_add_ch_sys(ch_item$*256)
 	client_has_system_count=udim(mat client_has$)
 	if client_has_system_count=0 then 
 		client_has_system_count=2
