@@ -1,17 +1,17 @@
 ! Replace S:\acsPR\newprInpWk
 library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn
-on error goto ERTN
+on error goto Ertn
 dim em$*30,em(3),tdt(4),tdy(6),ta(2)
 dim message$*40
 dim gl$*12,tdt(4),tcd(3),tdet(23)
 fntop(program$)
-open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 open #2: "Name=[Q]\PRmstr\Department.h[cno], KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 fnopenprn
 gosub HDR
 READ_EMPLOYEE: ! r: main loop
 	read #1,using L220: eno,em$,em4,mat em eof DONE
-	L220: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173,2*pd 3
+	L220: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6
 	if em4=9 then goto READ_EMPLOYEE
 	fsttrl=1
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey READ_EMPLOYEE
@@ -51,4 +51,4 @@ HDR: ! r:
 	pr #255: "________  ______________________________  ____    ______  __________  __________  __________"
 return ! /r
 
-include: ertn
+include: Ertn

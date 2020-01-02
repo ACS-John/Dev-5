@@ -6,7 +6,7 @@
 	dim vn$*8,nam$*30,empAddr$(3)*30,ss$*11,box(11)
 	dim tcp(32),tdc(10)
 	fntop(program$)
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! /r
 	if ~fnask_1099_info (seltp,type,min1,beg_date,end_date) then goto XIT

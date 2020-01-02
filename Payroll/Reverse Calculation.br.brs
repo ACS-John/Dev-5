@@ -48,7 +48,7 @@
 	close #20: 
 	cli=1
 	L330: ! 
-	open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
 	open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 
@@ -61,7 +61,7 @@ ASK_EMPLOYEE_NO: !
 	fnTos(sn$="Prrevcal")
 	respc=0
 	fnLbl(1,1,"Employee to Reverse:",25,1)
-	fncombof("Employee",1,28,0,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",2,0, "Select the employee to reverse.")
+	fncombof("Employee",1,28,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,0, "Select the employee to reverse.")
 	resp$(respc+=1)="[All]"
 	fnLbl(2,1,"Payroll Date:",25,1)
 	fnTxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")

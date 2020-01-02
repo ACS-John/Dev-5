@@ -172,7 +172,7 @@ L1060: !
 
 ENTER_TIME: ! 
 	en$=lpad$(str$(eno),8)
-	read #h_rpmstr,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
+	read #hEmployee,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
 	if editmode=1 then goto READ_DEPARTMENTS
 	if prd=lpd then goto EMP_PREV_ENTERED_WARN
 	L1290: ! 
@@ -236,7 +236,6 @@ ENTER_TIME: !
 		inpX(j+9)=tdet(j+3)
 		if skipit(j)=1 then inpX(j+9)=0
 	next j
-	! if env$('client')="Washington Parrish" and adr=ta(1) and em4=5 then inpX(13)=212.50 ! if employment status=5 and first dept then set tips to $212.50
 	ASK_TIME: ! 
 	deptname$=""
 	if foundept=1 then 
@@ -357,7 +356,7 @@ L2330: !
 	L2430: ! 
 	if estat>0 then goto L4300 ! pulling from time card system
 	if tgp=0 then ped=0 else ped=prd
-	rewrite #h_rpmstr,using F_RPMSTR_2,key=en$: ped,tgp
+	rewrite #hEmployee,using F_RPMSTR_2,key=en$: ped,tgp
 	if heno=eno then goto L2490
 	if tgp>0 then ent1=ent1+1
 	L2490: ! 
@@ -365,7 +364,7 @@ L2330: !
 goto L1340 ! If ADR>0 Then Goto 1050 Else Goto 820
 ! ______________________________________________________________________
 FINISH: ! 
-	close #h_rpmstr: ioerr ignore
+	close #hEmployee: ioerr ignore
 	close #2: ioerr ignore
 	close #h_rpwork: ioerr ignore
 	close #11: ioerr ignore
@@ -445,7 +444,7 @@ L3960: !
 L3990: ! 
 	if tgp=0 then ped=0 else ped=prd
 L4000: ! 
-	rewrite #h_rpmstr,using F_RPMSTR_2,key=en$: ped,tgp
+	rewrite #hEmployee,using F_RPMSTR_2,key=en$: ped,tgp
 	goto READ_NEXT_DEPARTMENT
 ! rp1=1
 	cor=editmode=0
@@ -468,7 +467,7 @@ L4180: !
 	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4200 ! timecard
 	timecard=1 ! timecard files exist
 L4200: ! 
-	read #h_rpmstr,using F_RPMSTR_3: en$,em$,em4,em8,em9,lpd,tgp,mat ta eof FINISH
+	read #hEmployee,using F_RPMSTR_3: en$,em$,em4,em8,em9,lpd,tgp eof FINISH
 	if em4=9 then goto L4200 ! must use employment status code = 9 for terminated
 	! if env$('client')="West Rest Haven" and em4=2 then goto L4200 ! wrh uses code 2 for terminated
 	tgp=0
@@ -539,7 +538,7 @@ L4840: !
 	if depeno<>eno then goto CORRECTIONS
 	em$=""
 	en$=lpad$(str$(eno),8)
-	read #h_rpmstr,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
+	read #hEmployee,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
 	teno=teno-eno ! remove from proof totals
 	mat tinp=tinp-inpX
 	dep=dep2 ! fix dept # on correction screen
@@ -547,12 +546,12 @@ L4840: !
 	goto ASK_TIME
 ! /r
 OFILE: ! r: OPEN FILES
-	open #h_rpmstr:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,outIn,keyed 
-F_RPMSTR_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
+F_RPMSTR_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 F_RPMSTR_2: form pos 162,n 6,pd 5.2
-F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2,2*pd 3
+F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	close #11: ioerr ignore
-	open #11: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDX2.h[cno],Shr",internal,outIn,keyed 
+	open #11: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed 
 	close #2: ioerr ignore
 	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 	close #h_rpwork:=3: ioerr ignore
@@ -600,10 +599,10 @@ PULL_FROM_JOBCOST: ! r:
 	close #h_rpwork: 
 	execute "Index [Q]\PRmstr\rpwork"&wsid$&".h[cno]"&' '&"[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno] 1,11 replace,DupKeys -N"
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]",internal,outIn,keyed 
-! Restore #h_rpmstr:
-! Read #h_rpmstr,Using 5480: EN$ Eof 5520
+! Restore #hEmployee:
+! Read #hEmployee,Using 5480: EN$ Eof 5520
 ! Form POS 1,C 8
-! Rewrite #h_rpmstr,Using 5500,Key=EN$: 0
+! Rewrite #hEmployee,Using 5500,Key=EN$: 0
 ! Form POS 168,PD 5.2
 ! Goto 5470
 	holdeno=eno=holddep=dep=0
@@ -628,7 +627,7 @@ L5660: !
 	if h(7)=21 and h(6)>0 then inpX(7)=inpX(7)+h(6)
 	if eno=0 then goto L5520
 	en$=lpad$(str$(eno),8)
-	read #h_rpmstr,using 'form pos 9,c 30,pos 126,2*pd 3.3,pos 168,pd 5.2',key=en$: em$,em8,em9,tgp nokey L5710
+	read #hEmployee,using 'form pos 9,c 30,pos 126,2*pd 3.3,pos 168,pd 5.2',key=en$: em$,em8,em9,tgp nokey L5710
 	goto L5720
 L5710: ! 
 	mat ml$(2)
@@ -663,7 +662,7 @@ L5820: !
 	tgp=tgp+gpd
 	gpd=0
 	if tgp=0 then ped=0 else ped=prd
-	rewrite #h_rpmstr,using 'form pos 162,n 6,pd 5.2',key=en$: ped,tgp
+	rewrite #hEmployee,using 'form pos 162,n 6,pd 5.2',key=en$: ped,tgp
 	if holdeno=eno then goto L5960
 	if tgp>0 then ent1=ent1+1
 L5960: ! 
@@ -781,7 +780,7 @@ L3290: !
 	if additional=2 then goto PL_READ
 	if pc=9 then gosub PL_PRINT_EMP_BLOCK
 	pc=pc+1
-	read #h_rpmstr,using F_RPMSTR_1,key=lpad$(str$(eno),8),release: em$ nokey L3440
+	read #hEmployee,using F_RPMSTR_1,key=lpad$(str$(eno),8),release: em$ nokey L3440
 	em$=rtrm$(em$)
 	for j1=len(em$) to 1 step -1
 		if em$(j1:j1)=" " then goto L3410

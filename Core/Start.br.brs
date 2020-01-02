@@ -787,6 +787,10 @@ def fn_acsVersion$
 	 setenv('acsVersion','5.'&rtrm$(build$))
 	fn_acsVersion$=env$('acsVersion')
 fnend
+def library fnWriteProc(procName$*64,procLine$*256)
+	if ~setup then let fn_setup
+	fnWriteProc=fn_writeProc(procName$,procLine$)
+fnend
 def fn_writeProc(procName$*64,procLine$*256)
 	dim procNameHold$*64
 	if procName$='' then ! append last one

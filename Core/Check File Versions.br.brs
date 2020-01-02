@@ -25,6 +25,7 @@ def fn_setup
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile
 		library 'S:\Core\Library': fnStatus,fnStatusPause
 		library 'S:\Core\Library': fnInitialializeMeterLocation
+		library 'S:\Core\Library': fnAutomatedSavePoint
 		on error goto ERTN
 		dim form$(0)*512
 	end if
@@ -711,6 +712,38 @@ def fn_cfv_payroll
 		open #h_pr_emp_status:=fngethandle: "Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 	end if 
+	if exists('[Q]\PRmstr\RPMstr.h[cno]') then
+		fnAutomatedSavePoint('before RPMstr to Employee')  ! let's remove this after the first few rounds of testing...
+		! r: Convert from RPMstr.h[cno] to Employee.h[cno]
+		! only significant difference is that mat ta(2) has been removed to make room for w4step2 (initialized to 0 here)
+		open #hIn  :=fngethandle: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',internal,outIn,relative
+		open #hOut :=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=1,KLn=8,Shr',internal,outIn,keyed
+		open #hOut2:=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=9,KLn=30,Shr',internal,outIn,keyed
+		
+		dim em$(3)*30
+		dim rs(2)
+		dim em(16)
+		dim ta(2)
+		do
+			read #hIn,using F_rpmstr: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EoRpmstr
+			F_rpmstr: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
+			write #hOut,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,0,'',ph$,bd
+			F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,N 1,C 5,c 12,n 6
+		loop
+		EoRpmstr: !
+		close #hIn:
+		close #hOut:
+		close #hOut2:
+		if exists('[Q]\PRmstr\RPMstr-Old.h[cno]') then 
+			pr 'something is wrong - please keep this window open and call support.'
+			pause
+		end if
+		fnRename('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPMstr-Old-'&date$('ccyymmdd')&'-'&srep$(time$,':','')&'.h[cno]')
+		fnFree('[Q]\PRmstr\RPIndex.h[cno]')
+		fnFree('[Q]\PRmstr\RPIndx2.h[cno]')
+
+		! /r
+	end if
 fnend 
 Check4124OnPrGlindex: ! r:
  if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then

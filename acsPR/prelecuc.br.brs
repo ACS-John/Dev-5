@@ -123,7 +123,7 @@
 01140   message$=""
 01150   stopable=1: gosub L3370 ! fnwait(MESSAGE$,1)
 01160 ! ______________________________________________________________________
-01170   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+01170   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 01180   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
 01190 L1190: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output 
 01200 ! ______________________________________________________________________

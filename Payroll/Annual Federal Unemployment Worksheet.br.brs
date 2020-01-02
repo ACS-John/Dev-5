@@ -11,6 +11,7 @@ library 'S:\Core\Library': fnGetPayrollDates
 library 'S:\Core\Library': fnDedNames
 library 'S:\Core\Library': fnopenprn,fncloseprn
 library 'S:\Core\Library': fnCsz
+library 'S:\Core\Library': fngethandle
 on error goto ERTN
 
 dim a$(3)*40
@@ -91,12 +92,12 @@ if resp$(resp_OptFillIn)="True" then fullform=2 ! fill in blanks
 
 fnopenprn
 on pageoflow goto PGOF
-open #2: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ! was #2
 gosub HDR
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 do
-	read #2,using L730: eno,mat em$,ss$,em5,em6 eof EOF2
+	read #hEmployee,using L730: eno,mat em$,ss$,em5,em6 eof EOF2
 	L730: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
 	m2=dedytdfeduc=0
 	mat ytdtotal=(0)
@@ -135,7 +136,7 @@ return ! /r
 EOF2: ! 
 	gosub TOTALS
 	fncloseprn
-	close #2: ioerr ignore
+	close #hEmployee: ioerr ignore
 	close #3: ioerr ignore
 	gosub PRINT_940
 	

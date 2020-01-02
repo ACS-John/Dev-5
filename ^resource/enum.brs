@@ -33,5 +33,18 @@ Enum: ! r:Common Enumerations
 		fkey_click          	=200
 		fkey_click_double   	=201
 		! /r
+		! r: fnHamster2 Enumerations
+		mask_pointtwo=32
+		mask_number=30
+		mask_ccyymmdd=3
+		mask_mmddyy=1
+		mask_glnumber=53
+		
+		textlen_mmddyy=8
+		textlen_ccyymmdd=10
+
+		storage_len_mmddyy=6
+		storage_len_ccyymmdd=8
+		! /r
 	end if
 return ! /r

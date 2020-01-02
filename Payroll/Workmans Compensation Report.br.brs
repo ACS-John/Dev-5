@@ -26,7 +26,7 @@ MENU1: !
   beg_date=val(resp$(1)) ! beginning of year
   end_date=val(resp$(2)) ! ending day of year
   fnGetPayrollDates(beg_date,end_date)
-  open #h_rpmstr:=1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+  open #hEmployee:=1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
   execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx4.h[cno] 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
   open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx4.h[cno],Shr",internal,input,keyed  ! open in workmans comp code sequence
   open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx.h[cno],Shr",internal,input,keyed 
@@ -78,10 +78,10 @@ EO_DEPARTMENT: !
   if sum(subtot)>(0) then let fn_sub_total
   pr #255,using F_TOTAL: "Total",tottot(1),tottot(2)
 FINIS: ! 
-  close #h_rpmstr: ioerr L900
-L900: close #h_department: ioerr L910
-L910: close #3: ioerr L920
-L920: pr #255: newpage
+  close #hEmployee: ioerr ignore
+	close #h_department: ioerr ignore
+	close #3: ioerr ignore
+	pr #255: newpage
   close #h_payrollchecks: 
   fncloseprn
 XIT: ! 
@@ -99,7 +99,7 @@ PGOFLOW: !
     form pos 1,n 8
     if totwage=0 and wcwage=0 then goto SET_NEXT
     ename$=''
-    read #h_rpmstr,using 'form pos 9,c 30',key=pe_eno$: ename$ nokey PA_CONTINUE
+    read #hEmployee,using 'form pos 9,c 30',key=pe_eno$: ename$ nokey PA_CONTINUE
 PA_CONTINUE: ! 
     pr #255,using L620: ename$,tdept,prev_comp,totwage,wcwage pageoflow PGOFLOW
 L620: form pos 1,c 30,pos 31,pic(zz#),pos 36,pic(zz),pos 38,pic(--,---,---.##),pos 52,pic(--,---,---.##)

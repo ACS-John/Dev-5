@@ -1,4 +1,5 @@
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncomboa,fncombof,fnGetPayrollDates
+	library 'S:\Core\Library': fngethandle
 	on error goto ERTN
 
 	dim a$*40,em$(1)*30,ta(2),cp(22),tcp(22),hc(5),thc(5),whc(10)
@@ -11,14 +12,14 @@
 	fnGetPayrollDates(beg_date,end_date)
 	gosub ASKFORMAT
 
-	open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
+	F_employee: form pos 1,n 8,c 30,pos 162,n 6,pos 118,n 2
 	open #5: "Name="&env$('Temp')&"\Temp1."&session$&",RecL=66,Replace",internal,output 
 	fnopenprn
 
 TOPOFLOOP: ! 
-	read #1,using L280: eno,em$(1),lpd,em4 eof L340
+	read #hEmployee,using F_employee: eno,em$(1),lpd,em4 eof L340
 	gosub L770
-	L280: form pos 1,n 8,c 30,pos 162,n 6,pos 118,n 2
 	if status=0 then goto L300 ! allow all to print
 	if em4=status then goto TOPOFLOOP ! skip terminated employees
 	L300: ! If fndate_mmddyy_to_ccyymmdd(LPD)><fnPayPeriodEndingDate Then Goto 260

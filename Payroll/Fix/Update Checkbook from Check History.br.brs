@@ -1,17 +1,17 @@
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnss_employee,fnss_employer,fnDedNames
-	on error goto ERTN
-! ______________________________________________________________________
+	library 'S:\Core\Library': fntop,fnxit, fnss_employee,fnss_employer,fnDedNames
+	on error goto Ertn
+
 	dim em$(3)*30,tdc(10),tcp(32)
 	dim a$(3)*40,d$(10)*8,io1$(11),i$*62,j$*70,gln$(15)*12 ! old S(7,8),
 	dim tad(29),tradesc$*30,lcn$*8,tr$(5)*35
 	dim rpnames2$(10)*6,dept(6),dedcode(10),bankgl$*12,gl$*12,bn$*30
 	fntop(program$)
-! 
+
 	gosub READ_COMPANY_INFO
 	mcr=mcr*.01
 	ssrate1=fnss_employee*.01
 	ssrate2=fnss_employer*.01
-	open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
 	open #3: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed 
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
 	open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed 
@@ -37,7 +37,7 @@ L3870: return  ! /r
 BUILD_CHECK_RECORD: ! 
 	eno$=lpad$(str$(heno),8)
 	em$(1)=''
-	read #1,using FM_PRMSTR,key=eno$: em$(1) nokey FM_PRMSTR
+	read #1,using FM_PRMSTR,key=eno$: em$(1) nokey ignore
 FM_PRMSTR: form pos 9,c 30
 	tr$(1)=cnvrt$("n 8",ckno)
 	dat$=str$(prd)
@@ -105,4 +105,4 @@ FM_DNAM: form pos 1,20*c 20,20*c 8,120*n 1,20*c 12
 return 
 END_HIST: stop 
 XIT: stop  ! fnxit
-include: ertn
+include: Ertn

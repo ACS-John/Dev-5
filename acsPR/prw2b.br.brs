@@ -18,7 +18,7 @@
 00180   pr f "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
 00190   pr f "12,15,C 60": "PRESS ENTER TO CONTINUE:"
 00200   input fields "12,40,C 1,I,N": pause$
-00210   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00210   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 00220   open #2: "Name=[Q]\PRmstr\PRW2ADDR.h[cno],NoShr",internal,input 
 00230   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input,relative 
 00240   read #hAddr,using 'form pos 1,n 10.2,n 1',rec=1: ficamax,w1

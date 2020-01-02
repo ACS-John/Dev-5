@@ -1,207 +1,205 @@
-00010 ! Replace S:\acsPR\JCCPR2
-00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror
-00040   on error goto ERTN
-00050 ! ______________________________________________________________________
-00060   dim em$(3)*30,ss$*11,jn$*6,tr(9),en$*8,tdet(3),n$*40,tcp(22)
-00070   dim tded(6),tdc(5),cnam$*40,dedcode(10),a2$*70,cap$*128,message$*40
-00080   dim jn1$*6,tr1(9),en1$*8,pl1$(6)*30,pl2$(6)*6,dr(7),hr1(8),hr2(8),ded(6)
-00090 ! ______________________________________________________________________
-00100   fncno(cno,cnam$)
-00110 ! 
-00120   cap$="Certified Payroll Register"
-00130 ! ______________________________________________________________________
-00140   pr newpage
-00150   on fkey 5 goto L1930
-00160   message$="Printing: please wait..."
-00170   fnwait(message$,1)
-00180   fnopenprn(cp,58,220,process)
-00190   if file$(255)(1:3)<>"PRN" then jbskip=1
-00200 ! ______________________________________________________________________
-00210   pl2$(1)="FICA"
-00220   pl2$(2)="Fed"
-00230   pl2$(3)="State"
-00240   pl2$(4)="Union"
-00250   pl2$(5)="Other"
-00260 ! ______________________________________________________________________
-00270   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  !:
-        read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un !:
-        close #1: 
-00280 ! ______________________________________________________________________
-00290   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
-00300   open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
-00310   open #3: "Name=Work."&session$,internal,input,relative 
-00320   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
-00330   open #5: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
-00340   read #3,using L350,rec=1: df,dt,mat dr
-00350 L350: form pos 1,2*n 6,7*pd 3
-00360 L360: read #4,using L370: r4 eof L1890
-00370 L370: form pos 1,pd 3
-00380   if r4=1 then goto L360
-00390   read #3,using L400,rec=r4: en1$,jn1$,mat tr1
-00400 L400: form pos 5,c 8,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
-00410   if jn1$><jn$ then goto L580
-00420   if en1$><en$ then goto L700
-00430   if tr1(3)><tr(3) then goto L750
-00440 L440: for j=1 to 7
-00450     if int(tr1(4)*.01)=dr(j) then goto L490
-00460   next j
-00470   goto L360
-00480 ! ______________________________________________________________________
-00490 L490: hr1(j)=hr1(j)+tr1(5)
-00500   hr1(8)=hr1(8)+tr1(5)
-00510   hr2(j)=hr2(j)+tr1(6)
-00520   hr2(8)=hr2(8)+tr1(6)
-00530   gp1=gp1+tr1(5)*tdet2
-00540   gp2=gp2+tr1(6)*tdet3
-00550   tr(3)=tr1(3)
-00560   goto L360
-00570 ! ______________________________________________________________________
-00580 L580: if rtrm$(jn$)="" then goto L620
-00590   gosub L1550
-00600   gosub TOTALS
-00610   pr #255: newpage
-00620 L620: en$=en1$
-00630   jn$=jn1$
-00640   n$=""
-00650   read #2,using L660,key=jn$: n$ nokey L670
-00660 L660: form pos 7,c 40
-00670 L670: if end4=0 then gosub L1240
-00680   goto L780
-00690 ! ______________________________________________________________________
-00700 L700: if val(en$)=0 then goto MOVEINFO
-00710   gosub L1550
-00720   en$=en1$
-00730   goto L780
-00740 ! ______________________________________________________________________
-00750 L750: gosub L1390
-00760   goto L800
-00770 ! ______________________________________________________________________
-00780 L780: read #1,using L790,key=en$: mat em$,ss$,em2,lpd,tgp,ta1 nokey L1060
-00790 L790: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
-00800 L800: adr=ta1
-00810   mat ded=(0)
-00820   tdet2=0
-00830   tgp=tdet3=0
-00840 L840: if adr=0 then goto MOVEINFO
-00850   read #5,using L860,rec=adr: tdn,tdt4,mat tdet,mat tdc,mat tcp,adr
-00860 L860: form pos 9,n 3,pos 42,n 6,pos 58,3*pd 4.2,pos 150,5*pd 3.2,pos 358,22*pd 5.2,pd 3
-00870   if tdn><tr1(3) then goto L900
-00880   tdet2=tdet(2)
-00890   tdet3=tdet(3)
-00900 L900: if lpd><tdt4 then goto L1040
-00910   tgp=tgp+tcp(21)
-00920   for j=1 to 5
-00930     tcd1=tcd1+tdc(j)
-00940   next j
-00950   ded(1)=ded(1)+tcp(2)+tcp(15)
-00960   ded(2)=ded(2)+tcp(1)
-00970   ded(3)=ded(3)+tcp(3)
-00980   if un>0 and un<11 then ded(4)=ded(4)+tcp(un+3)
-00990   for j=1 to 10
-01000     if j=un then goto L1020
-01010     if dedcode(j)=2 then ded(5)=ded(5)-tcp(j+3) else ded(5)=ded(5)+tcp(j+3)
-01020 L1020: next j
-01030   tcp22=tcp22+tcp(22)
-01040 L1040: goto L840
-01050 ! ______________________________________________________________________
-01060 L1060: mat em$=("")
-01070   ss$=""
-01080   em2=0
-01090   ta1=0
-01100 MOVEINFO: ! 
-01110   pl1$(1)=em$(1)
-01120   pl1$(2)=em$(2)
-01130   pl1$(3)=em$(3)
-01140   pl1$(4)=ss$
-01150 ! pL1$(5)=LPAD$(STR$(TDN),6)
-01160   pl1$(5)=lpad$(str$(em2),6)
-01170   goto L440
-01180 ! ______________________________________________________________________
-01190 PGOF: ! 
-01200   pr #255: newpage
-01210   gosub L1240
-01220   continue 
-01230 ! ______________________________________________________________________
-01240 L1240: p1=59-int(len(rtrm$(cnam$)))/2
-01250   a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
-01260   p2=59-int(len(rtrm$(a2$)))/2
-01270   pr #255,using L1280: cnam$,a2$
-01280 L1280: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
-01290   pr #255: tab(40);"****  Certified Payroll Register  ****"
-01300   pr #255,using L1310: "Period Ending",dt
-01310 L1310: form pos 48,c 14,pic(zz/zz/zz),skip 1
-01320   pr #255: "Name  &  Address"
-01330   pr #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
-01340   pr #255,using L1350: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
-01350 L1350: form pos 1,c 30,pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),x 1,c 59,skip jbskip
-01360   pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
-01370   return 
-01380 ! ______________________________________________________________________
-01390 L1390: if tgp=0 then x3=0 else x3=(gp1+gp2)/tgp
-01400   if hr1(8)=0 then goto L1450
-01410   lnp=lnp+1
-01420   if lnp>5 then lnp=6
-01430   pr #255,using L1440: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
-01440 L1440: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
-01450 L1450: if hr2(8)=0 then goto L1500
-01460   lnp=lnp+1
-01470   if lnp>5 then lnp=6
-01480   if hr1(8)=0 then pr #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
-01490 L1490: form pos 1,c 30,9*n 6.2,c 6
-01500 L1500: hr8=hr8+hr1(8)+hr2(8)
-01510   mat hr1=(0)
-01520   mat hr2=(0)
-01530   return 
-01540 ! ______________________________________________________________________
-01550 L1550: gosub L1390
-01560   lnp=lnp+1
-01570   if lnp>5 then goto L1620
-01580   for j=lnp to 5
-01590     pr #255,using L1600: pl1$(j) pageoflow PGOF
-01600 L1600: form pos 1,c 30,skip 1
-01610   next j
-01620 L1620: gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
-01630   jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
-01640   mat tded=tded+ded ! TOTAL DEDUCTION
-01650   tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
-01660   thr=thr+hr8 ! TOTAL HOURS FOR JOB
-01670   tgp=0
-01680   gp1=0
-01690   gp2=0
-01700   mat ded=(0)
-01710   tcd1=0
-01720   hr8=0
-01730   tcp22=0
-01740   lnp=0
-01750   return 
-01760 ! ______________________________________________________________________
-01770 TOTALS: ! 
-01780   pr #255,using L1790: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
-01790 L1790: form pos 10,c 26,c 7,c 8,skip 1
-01800   pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
-01810   pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
-01820   pr #255,using L1830: thr,jgp,gded,jgp-gded pageoflow PGOF
-01830 L1830: form pos 5,4*n 12.2,skip 2
-01840   thr=0
-01850   jgp=0
-01860   gded=0
-01870   return 
-01880 ! ______________________________________________________________________
-01890 L1890: gosub L1550
-01900   gosub TOTALS
-01910   close #1: 
-01920   close #5: 
-01930 L1930: fncloseprn
-01940   goto XIT
-01950 ! ______________________________________________________________________
-01960 ! <Updateable Region: ERTN>
-01970 ERTN: fnerror(program$,err,line,act$,"xit")
-01980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-01990   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-02010 ERTN_EXEC_ACT: execute act$ : goto ERTN
-02020 ! /region
-02030 ! ______________________________________________________________________
-02040 XIT: fnxit
-02050 ! ______________________________________________________________________
+! Replace S:\acsPR\JCCPR2
+
+	library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn
+	on error goto ERTN
+
+	dim em$(3)*30,ss$*11,jn$*6,tr(9),en$*8,tdet(3),n$*40,tcp(22)
+	dim tded(6),tdc(5),dedcode(10),a2$*70,cap$*128,message$*40
+	dim jn1$*6,tr1(9),en1$*8,pl1$(6)*30,pl2$(6)*6,dr(7),hr1(8),hr2(8),ded(6)
+	fntop(program$,"Certified Payroll Register")
+
+	pr newpage
+	message$="Printing: please wait..."
+	fnwait(message$,1)
+	fnopenprn(cp,58,220,process)
+	if file$(255)(1:3)<>"PRN" then jbskip=1
+
+	pl2$(1)="FICA"
+	pl2$(2)="Fed"
+	pl2$(3)="State"
+	pl2$(4)="Union"
+	pl2$(5)="Other"
+
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  
+	read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un 
+	close #1: 
+
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+	open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
+	open #3: "Name=Work."&session$,internal,input,relative 
+	open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
+	open #5: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
+	read #3,using L350,rec=1: df,dt,mat dr
+L350: form pos 1,2*n 6,7*pd 3
+L360: read #4,using L370: r4 eof L1890
+L370: form pos 1,pd 3
+	if r4=1 then goto L360
+	read #3,using L400,rec=r4: en1$,jn1$,mat tr1
+L400: form pos 5,c 8,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
+	if jn1$><jn$ then goto L580
+	if en1$><en$ then goto L700
+	if tr1(3)><tr(3) then 
+		gosub L1390
+		goto L800
+	end if
+		
+		
+	end if
+L440: for j=1 to 7
+		if int(tr1(4)*.01)=dr(j) then goto L490
+	next j
+	goto L360
+
+L490: hr1(j)=hr1(j)+tr1(5)
+	hr1(8)=hr1(8)+tr1(5)
+	hr2(j)=hr2(j)+tr1(6)
+	hr2(8)=hr2(8)+tr1(6)
+	gp1=gp1+tr1(5)*tdet2
+	gp2=gp2+tr1(6)*tdet3
+	tr(3)=tr1(3)
+	goto L360
+
+L580: if rtrm$(jn$)="" then goto L620
+	gosub L1550
+	gosub TOTALS
+	pr #255: newpage
+L620: en$=en1$
+	jn$=jn1$
+	n$=""
+	read #2,using L660,key=jn$: n$ nokey L670
+L660: form pos 7,c 40
+L670: if end4=0 then gosub L1240
+	goto L780
+
+L700: if val(en$)=0 then goto MOVEINFO
+	gosub L1550
+	en$=en1$
+	goto L780
+
+
+L780: read #1,using L790,key=en$: mat em$,ss$,em2,lpd,tgp,ta1 nokey L1060
+L790: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
+L800: adr=ta1
+	mat ded=(0)
+	tdet2=0
+	tgp=tdet3=0
+L840: if adr=0 then goto MOVEINFO
+	read #5,using L860,rec=adr: tdn,tdt4,mat tdet,mat tdc,mat tcp,adr
+L860: form pos 9,n 3,pos 42,n 6,pos 58,3*pd 4.2,pos 150,5*pd 3.2,pos 358,22*pd 5.2,pd 3
+	if tdn><tr1(3) then goto L900
+	tdet2=tdet(2)
+	tdet3=tdet(3)
+L900: if lpd><tdt4 then goto L1040
+	tgp=tgp+tcp(21)
+	for j=1 to 5
+		tcd1=tcd1+tdc(j)
+	next j
+	ded(1)=ded(1)+tcp(2)+tcp(15)
+	ded(2)=ded(2)+tcp(1)
+	ded(3)=ded(3)+tcp(3)
+	if un>0 and un<11 then ded(4)=ded(4)+tcp(un+3)
+	for j=1 to 10
+		if j=un then goto L1020
+		if dedcode(j)=2 then ded(5)=ded(5)-tcp(j+3) else ded(5)=ded(5)+tcp(j+3)
+L1020: next j
+	tcp22=tcp22+tcp(22)
+L1040: goto L840
+
+L1060: mat em$=("")
+	ss$=""
+	em2=0
+	ta1=0
+MOVEINFO: ! 
+	pl1$(1)=em$(1)
+	pl1$(2)=em$(2)
+	pl1$(3)=em$(3)
+	pl1$(4)=ss$
+! pL1$(5)=LPAD$(STR$(TDN),6)
+	pl1$(5)=lpad$(str$(em2),6)
+	goto L440
+
+PGOF: ! 
+	pr #255: newpage
+	gosub L1240
+continue 
+
+L1240: ! r:
+	p1=59-int(len(rtrm$(env$('program_capiton'))))/2
+	a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
+	p2=59-int(len(rtrm$(a2$)))/2
+	pr #255,using L1280: env$('program_capiton'),a2$
+	L1280: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
+	pr #255: tab(40);"****  Certified Payroll Register  ****"
+	pr #255,using L1310: "Period Ending",dt
+	L1310: form pos 48,c 14,pic(zz/zz/zz),skip 1
+	pr #255: "Name  &  Address"
+	pr #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
+	pr #255,using L1350: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
+	L1350: form pos 1,c 30,pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),x 1,c 59,skip jbskip
+	pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
+return ! /r
+
+L1390: ! r:
+	if tgp=0 then x3=0 else x3=(gp1+gp2)/tgp
+	if hr1(8)=0 then goto L1450
+	lnp=lnp+1
+	if lnp>5 then lnp=6
+	pr #255,using L1440: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
+	L1440: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
+	L1450: !
+	if hr2(8)=0 then goto L1500
+	lnp=lnp+1
+	if lnp>5 then lnp=6
+	if hr1(8)=0 then pr #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
+	L1490: form pos 1,c 30,9*n 6.2,c 6
+	L1500: !
+	hr8=hr8+hr1(8)+hr2(8)
+	mat hr1=(0)
+	mat hr2=(0)
+return ! /r
+
+L1550: ! r:
+	gosub L1390
+	lnp=lnp+1
+	if lnp>5 then goto L1620
+	for j=lnp to 5
+		pr #255,using L1600: pl1$(j) pageoflow PGOF
+		L1600: form pos 1,c 30,skip 1
+	next j
+	L1620: !
+	gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
+	jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
+	mat tded=tded+ded ! TOTAL DEDUCTION
+	tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
+	thr=thr+hr8 ! TOTAL HOURS FOR JOB
+	tgp=0
+	gp1=0
+	gp2=0
+	mat ded=(0)
+	tcd1=0
+	hr8=0
+	tcp22=0
+	lnp=0
+return ! /r
+
+TOTALS: ! r:
+	pr #255,using L1790: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
+	L1790: form pos 10,c 26,c 7,c 8,skip 1
+	pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
+	pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
+	pr #255,using L1830: thr,jgp,gded,jgp-gded pageoflow PGOF
+	L1830: form pos 5,4*n 12.2,skip 2
+	thr=0
+	jgp=0
+	gded=0
+return ! /r
+
+L1890: gosub L1550
+	gosub TOTALS
+	close #1: 
+	close #5: 
+	fncloseprn
+goto XIT
+XIT: fnxit
+include: Ertn
+

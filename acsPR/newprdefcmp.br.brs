@@ -14,7 +14,7 @@
 00160   dim sel_ded(20),sel_pen(20),cap$*128
 00170   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00190   gosub L710
-00200   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
+00200   open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
 00210   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 00220   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
 00230   fnopenprn

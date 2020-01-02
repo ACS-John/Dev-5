@@ -15,7 +15,7 @@
 00162   fncreg_read('calculation date text',d$)
 00170   open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  !:
         read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1: 
-00180   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
+00180   open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
 00190   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
 00200   open #3: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input 
 00210   open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 

@@ -33,19 +33,21 @@ MENU1: !
 	fnopenprn
 
 	gosub HDR
-	open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+	F_employee: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173
 	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-L390: read #1,using L430: eno,em$,em4,mat em eof DONE
+	L390: !
+	read #1,using F_employee: eno,em$,em4,mat em eof DONE
 	a=pos (rtrm$(em$)," ",1)
 	b=pos (rtrm$(em$)," ",a+1)
 	em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
-L430: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173
 	fsttrl=1
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L390
 	L480: !
 	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L390
 	if teno<>eno then goto L390
+	
 	if tdet(1)> 0 then payrate=tdet(1) else payrate=tdet(2) ! set payrate as salary or hourly
 	mat ytdtotal=(0) : mat ytdtdc=(0)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date

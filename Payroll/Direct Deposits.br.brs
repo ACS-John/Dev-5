@@ -3,7 +3,7 @@
 fn_setup
 fn_readSavedResponses
 fntop(program$)
-open #hEmployee=fngethandle: "Name=[Q]\PRmstr\RPmstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
+open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 dim dd$(0)*32, ddN(0)
 dd=fn_open('PR Direct Deposit',mat dd$,mat ddN,mat form$)
 open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
@@ -251,7 +251,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCd
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 		library 'S:\Core\Library': fnSpecialFolderPath$
-		on error goto ERTN
+		on error goto Ertn
 
 		dim ml$(0)*256
 		dim tcp(32)
@@ -337,5 +337,5 @@ def fn_readSavedResponses ! basicaly all variables are local
 	payrollDate=fnPayPeriodEndingDate
 
 fnend
-include: ertn
+include: Ertn
 include: fn_open
