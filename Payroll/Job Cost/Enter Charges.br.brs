@@ -1,31 +1,33 @@
-! Replace S:\acsPR\newjcInptC
-! Enter (Job Cost) Time
+! formerly S:\acsPR\newjcInptC
 
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnchain,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs2,fncmbjob,fncmbcat,fncmbsubcat,fnflexinit1,fnflexadd1,fncmbcategory
-	on error goto ERTN
+	on error goto Ertn
 
-	dim cap$*128,em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
+	dim em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
 	dim cn$*11,k$*6,n$*40,en$*8,hr(2),empnam$*30,io2b$(2)*20
 	dim jn2$*6,ji2(3),ch2$(8),cm2$(8),d$*30,item2$(8)*30
 	dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,b(4),a$(3)*30,sc$(20)*80
 	dim message$*40,ml$(3)*80,resp$(30)*60,fullname$(20)*20,comboname$(21)*23
 
-	fntop(program$,cap$="Enter Charges")
-! 
+	fntop(program$)
 
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	open #5: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,input,keyed 
 	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
-	if exists("jccharges."&wsid$) >0 then goto L220 else goto L240
-L220: mat ml$(2) 
-	ml$(1)="An unposted file appears to exist! " 
-	ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." 
-	fnmsgbox(mat ml$,resp$,cap$,52)
-	if resp$="Yes" then goto L260 else goto L240
-L240: open #3: "Name=jccharges."&wsid$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
+	if exists("jccharges."&wsid$) >0 then 
+		mat ml$(2) 
+		ml$(1)="An unposted file appears to exist! " 
+		ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." 
+		fnmsgbox(mat ml$,resp$,'',52)
+		if resp$="Yes" then goto L260
+	end if
+	L240: !
+	open #3: "Name=jccharges."&wsid$&",SIZE=0,RecL=84,Replace",internal,outIn,relative 
 	goto L270
-L260: open #3: "Name=jccharges."&wsid$,internal,outIn,relative 
-L270: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
+	L260: !
+	open #3: "Name=jccharges."&wsid$,internal,outIn,relative 
+	L270: !
+	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,input,keyed 
 	open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
 	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed 
@@ -34,7 +36,8 @@ L270: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],S
 
 TRANSACTION_ENTRY: ! 
 	if addone=1 then ji2(3)=0
-L360: fnTos
+L360: !
+	fnTos
 	respc=0 : frac=0 
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Reference #:",mylen,1)
@@ -69,7 +72,7 @@ L360: fnTos
 L590: mat ml$(2) 
 	ml$(1)="You have chosen to cancel without postng these entries!  " 
 	ml$(2)="Take Yes to Exit, else take No to return to the entry screens." 
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto XIT else goto TRANSACTION_ENTRY
 L610: if ckey=7 then goto CORRECTIONS
 	if ckey=8 then goto POSTTOJOBS
@@ -81,23 +84,29 @@ L610: if ckey=7 then goto CORRECTIONS
 L690: mat ml$(2) 
 	ml$(1)="You failed to enter a job number. Take Yes to continue;" 
 	ml$(2)="else take No to return to previous screen and enter the job number." 
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L710 else goto L740
 L710: ji2(1)=val(resp$(4)(1:5)) ! category
 	if ji2(1)=0 and dontwarnsubcat=0 then goto L730 else goto L750
 L730: mat ml$(2) 
 	ml$(1)="You failed to enter a category number. Take Yes to continue;" 
 	ml$(2)="else take No to return to previous screen and enter the category number." 
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnmsgbox(mat ml$,resp$,'',52)
 L740: if resp$="Yes" then dontwarnsubcat=1: goto L750 else goto L360
 L750: ji2(2)=val(resp$(5)(1:3)) ! sub-category
-	if ji2(2)=0 and dontwarnsubcat=0 then goto L770 else goto L790
-L770: mat ml$(2) 
+	if ji2(2)=0 and dontwarnsubcat=0 then 
+		goto L770 
+	else 
+		goto L790
+	end if
+	L770: !
+	mat ml$(2) 
 	ml$(1)="You failed to enter a sub-category number. Take Yes to continue;" 
 	ml$(2)="else take No to return to previous screen and enter the sub-category number." 
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then dontwarnsubcat=1 : goto L790 else goto L360
-L790: ji2(3)=val(resp$(6)) ! amount
+	L790: !
+	ji2(3)=val(resp$(6)) ! amount
 	d$=resp$(7) ! description
 	if addone=1 then goto L820 else goto L850
 L820: write #3,using L840: rn$,dat,jn2$, mat ji2,d$
@@ -111,27 +120,30 @@ PRINTPROOFLIST: !
 	fnopenprn
 goto L1010
 
-PROOF_LIST_HDR: ! 
+PROOF_LIST_HDR: ! r:
 	pr #255,using L970: env$('cnam')
 	pr #255,using L970: "Charges Proof List"
 	pr #255,using L970: "Date: "&date$&"      Time: "&time$
-L970: form pos 1,cc 113,skip 1
+	L970: form pos 1,cc 113,skip 1
 	pr #255: "Ref #      Date     Job #  Category  Sub-Cat Amount  Description"
-return 
+return ! /r
 
-L1010: gosub PROOF_LIST_HDR
+L1010: ! r:
+	gosub PROOF_LIST_HDR
 	for j=1 to lrec(3)
 		read #3,using L840,rec=j: rn$,dat,jn2$, mat ji2,d$
-		if j=1 then goto L1080
-		if ji1(1)=en then goto L1120
-		pr #255,using L1070: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
-L1070: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
-L1080: en=ji1(1)
+		if j<>1 then
+			if ji1(1)=en then goto L1120
+			pr #255,using L1070: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
+			L1070: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
+		end if
+		en=ji1(1)
 		t5=0
 		t6=0
 		t10=0
-L1120: pr #255,using L1130: rn$,dat,jn2$,mat ji2 pageoflow PROOF_LIST_NWPG
-L1130: form pos 1,c 12,x 1,n 8,x 1,n 5,x 1,pic(---,---.##),x 2,c 30,skip 1
+		L1120: !
+		pr #255,using L1130: rn$,dat,jn2$,mat ji2 pageoflow PROOF_LIST_NWPG
+		L1130: form pos 1,c 12,x 1,n 8,x 1,n 5,x 1,pic(---,---.##),x 2,c 30,skip 1
 		t5=t5+ji1(5)
 		t6=t6+ji1(6)
 		t10=t10+ji2(3)
@@ -145,21 +157,21 @@ L1230: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 
 PROOF_LIST_DONE: ! 
 	gt5=gt6=gt10=0
 	fncloseprn
-goto TRANSACTION_ENTRY
+goto TRANSACTION_ENTRY ! /r
 
-POSTTOJOBS: ! 
+POSTTOJOBS: ! r:
 	close #1: 
 	close #2: 
 	close #3: 
 	close #11: 
 	close #12: 
 	close #13: 
-fnchain("S:\acsPR\NEWJCMRGC")
+fnchain("S:\acsPR\NEWJCMRGC") ! /r
 
-PROOF_LIST_NWPG: ! 
+PROOF_LIST_NWPG: ! r:
 	pr #255: newpage
 	gosub PROOF_LIST_HDR
-continue 
+continue ! /r
 
 XIT: fnxit
 
@@ -179,19 +191,20 @@ CORRECTIONS: !
 	cm2$(8): ch2$(8): item2$(8)
 	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3: 
-READ_FILE: ! 
-	read #3,using L840: rn$,dat,jn2$, mat ji2,d$ eof L1690
-	item2$(1)=str$(rec(3)): item2$(2)=rn$ 
-	item2$(3)=str$(dat): item2$(4)=jn2$ 
-	item2$(5)=str$(ji2(1)): item2$(6)=str$(ji2(2)) 
-	item2$(7)=str$(ji2(3)) : item2$(8)=d$
-	fnflexadd1(mat item2$)
-	goto READ_FILE
-L1690: fnCmdKey("&Add",1,0,0,"Add a new transaction." ) 
-	fnCmdKey("E&dit",2,1,0,"Edit the highlited record") 
-	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") 
+	do
+		read #3,using L840: rn$,dat,jn2$, mat ji2,d$ eof L1690
+		item2$(1)=str$(rec(3)): item2$(2)=rn$ 
+		item2$(3)=str$(dat): item2$(4)=jn2$ 
+		item2$(5)=str$(ji2(1)): item2$(6)=str$(ji2(2)) 
+		item2$(7)=str$(ji2(3)) : item2$(8)=d$
+		fnflexadd1(mat item2$)
+	loop
+	L1690: !
+	fnCmdKey("&Add"    ,1,0,0,"Add a new transaction." ) 
+	fnCmdKey("E&dit"   ,2,1,0,"Edit the highlited record") 
+	fnCmdKey("&Delete" ,4,0,0,"Deletes the highlited record") 
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") 
-	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
+	fnCmdKey("E&xit"   ,5,0,1,"Returns to main screen.")
 	fnAcs2(mat resp$,ckey) ! review_details  grid of transactions
 	if ckey=5 then goto TRANSACTION_ENTRY
 	editrec=val(resp$(1))

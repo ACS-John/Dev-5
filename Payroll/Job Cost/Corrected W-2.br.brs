@@ -1,27 +1,36 @@
-!  REPLACE S:\acsPR\newcorrectedPRW2A
+!  formerly S:\acsPR\newcorrectedPRW2A
 ! used to file a corrected w2 using prace.exe
-! ___________________
-	library 'S:\Core\Library': fntop,fnxit,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fncombof,fnmsgbox,fnChk,fncmbemp,fnpa_finis,fnpa_open,fnpa_newpage,fnDedNames,fnFree
-	fntop(program$,cap$="Corrected W2 Forms")
-	on error goto L4300
 
-	on fkey 5 goto XIT
-	dim ss$*11,d(14),ty(21),s(13),t(13),z$*8,desc$(6)*15,amt(6),io1$(12)
-	dim tcp(32),tdc(10),resp$(70)*50
-	dim w(13),a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12,cap$*128
-	dim oldw(13),heading$*50
-	dim fa$(2),fb$(1),fc$(1),fd$(1),l$(10),newdedfed(20),newdedcode(20)
-	dim newcalcode(20),dedfica(20),dedst(20),deduc(20),fullname$(20)*20
-	dim abrevname$(20)*8
-	dim fm4$*255,in4$(30),sel$(4)*40,io6$(4),dedcode$(20)*2,dedyn$(20)*1
-	dim miscded(20),box12(20),txt$*80,totalbox12(20)
-	fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
-	read #1,using L240: mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
-L240: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1
-	for j=1 to 3: a$(j)=a$(j)(1:30): next j
-	close #1: 
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+library 'S:\Core\Library': fntop,fnxit
+library 'S:\Core\Library': fnDedNames
+library 'S:\Core\Library': fnChk,fncmbemp
+library 'S:\Core\Library': fnAcs2,fnFra,fnTos,fnLbl,fnTxt,fnCmdKey,fnOpt,fncombof
+library 'S:\Core\Library': fnpa_open,fnpa_newpage,fnpa_finis
+library 'S:\Core\Library': fnFree
+fntop(program$)
+on error goto Ertn
+
+dim ss$*11,d(14),ty(21),s(13),t(13),z$*8
+dim desc$(6)*15,amt(6),io1$(12)
+dim tcp(32),tdc(10),resp$(70)*50
+dim w(13),a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12
+dim oldw(13)
+dim heading$*50
+dim fa$(2),fb$(1),fc$(1),fd$(1),l$(10),newdedfed(20),newdedcode(20)
+dim abrevname$(20)*8
+dim in4$(30)
+dim dedcode$(20)*2
+dim dedyn$(20)*1
+dim miscded(20),box12(20),txt$*80,totalbox12(20)
+dim fm4$*255
+fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+read #1,using 'form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
+for j=1 to 3: a$(j)=a$(j)(1:30): next j
+close #1: 
+dim fullname$(20)*20,newcalcode(20)
+dim dedfica(20),dedst(20),deduc(20)
+fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 DATE_SCREEN: ! 
 L290: fnTos
 	rc=cf=0: mylen=25 : mypos=mylen+3
@@ -35,8 +44,8 @@ L290: fnTos
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
 	taxyear=val(resp$(2)(1:4))
@@ -51,7 +60,7 @@ L290: fnTos
 	bottom=141 
 	posx=130
 ASK_INFO: ! 
-	fnTos(sn$="Prw2-2") 
+	fnTos
 	rc=cf=0: mylen=46: mypos=mylen+3
 	fnFra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) 
 	cf+=1 : franum=cf
@@ -97,8 +106,8 @@ ASK_INFO: !
 	resp$(rc+=1)=str$(posx)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey) 
+	if ckey=5 then goto Xit
 	ssrate=val(resp$(1))
 	ssmax=val(resp$(2))
 	mcrate=val(resp$(3))
@@ -112,7 +121,7 @@ ASK_INFO: !
 	bottom=val(resp$(11))
 	posx=val(resp$(12))
 	med$="Y"
-	gosub L5540
+	gosub ASK_DEDUCTIONS
 	gosub VBOPENPRINT
 	goproc=0
 	if w1=2 then gosub L5930
@@ -128,17 +137,17 @@ L990: form pos 1,n 10.2,2*n 1
 	open #14: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr L1030
 	z$="NO" ! 1/12/90
 	box16=1
-L1030: if loccode=0 then goto ASK_STARTING else goto L2310
-L1040: read #1,using L1130: eno,mat k$,ss$,em6,ta eof L2090
+L1030: if loccode=0 then goto ASK_STARTING else goto AskDefaultLocality
+L1040: read #1,using F_employee: eno,mat k$,ss$,em6 eof L2090
 	if endnum>0 and eno>endnum then goto L2090 ! ending employee number entered
-	gosub L5770
+	gosub EXTRACT_NAME
 	kz$=lpad$(rtrm$(str$(eno)),8)
 	px$=""
 	mat desc$=(" ")
 	mat amt=(0)
 	mat miscded=(0)
 	tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
-L1130: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
+F_employee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2
 	if numb=0 then goto L1160
 	if eno<empno then goto L1040
 L1160: first=1
@@ -187,7 +196,6 @@ L1580: if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 L1600: form pos 1,n 8,n 2,3*pd 5.2,c 8
 	goproc=1
 L1620: first=0
-! If TA>0 Then Goto 1120
 	goto L1190 ! read next check record
 L1650: if box16=1 then gosub L4120
 	if tdedret=0 then goto L1720
@@ -213,27 +221,32 @@ L1790: next j
 	if uprc$(med$)="N" and em6=2 then w(3)=0 : w(12)=w3 ! NO SS ALL MC ! change to seperate medicare
 	if em6=9 then w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
 	if w(8)=0 then pf$="" : goto L1920
-	if z$="YES" then gosub L2690
+	if z$="YES" then gosub ASK_LOCALITY
 	pf$=f$
 L1920: g$=str$(eno)
 	if w(2)=0 and w(5)=0 then goto L2060 ! skip w2 if no wages
 	gosub PRINTW2
 	mat s=s+w
 	wctr=wctr+1
-	if w1=3 then goto L2060
-	goto L2060 ! IF WCTR<41 THEN GOTO 1310
-	desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
-	mat w=s: g$="SUB TOTAL": gosub TOT1
-	nosub=1
-	desc$(3)=""
-	wctr=0
-	mat t=t+s
-	mat s=(0)
-L2060: mat w=(0)
+	! if w1=3 then goto L2060
+goto L2060 ! IF WCTR<41 THEN GOTO 1310
+! 	desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
+! 	mat w=s
+! 	g$="SUB TOTAL"
+! 	gosub TOT1
+! 	nosub=1
+! 	desc$(3)=""
+! 	wctr=0
+! 	mat t=t+s
+! 	mat s=(0)
+L2060: !
+	mat w=(0)
 	nqp=dcb=w3=0
-	goto L1040
-L2090: if w1=3 then goto L2230
-	goto ASK_STARTING
+goto L1040
+L2090: !
+	if w1=3 then goto L2230
+goto ASK_STARTING
+
 	if wctr=0 or nosub=0 then goto L2140
 	desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
 L2130: mat w=s: g$="SUB TOTAL" : gosub TOT1
@@ -245,17 +258,23 @@ L2140: mat t=t+s
 		misc=misc+1
 		if misc>7 then goto L2220 ! only allow 4 different deductions
 L2210: next j
-L2220: mat w=t: g$="Final Total" : first$=mid$=last$="" : gosub TOT1
-L2230: close #1: 
+L2220: !
+	mat w=t
+	g$="Final Total"
+	first$=mid$=last$=""
+	gosub TOT1
+L2230: !
+	close #1: 
 	close #2: 
 	close #3: 
-	if w1=3 then close #5: : goto XIT
-L2270: gosub RELEASE_PRINT
+	if w1=3 then close #5: : goto Xit
+	L2270: !
+	fnpa_finis
 	if goproc=1 then goto PRW2B
-XIT: fnxit
+goto Xit
 
-L2310: !
-	fnTos(sn$="Prw2-6") 
+AskDefaultLocality: ! r: 
+	fnTos
 	rc=cf=0: mylen=20: mypos=mylen+3
 	fnLbl(1,1,"Locality Name:",mylen,1,0,0)
 	fnTxt(1,mypos,12,0,1,"",0,"If you have answered that you have local withholdings in the company information file, you must enter the locality name") 
@@ -265,16 +284,17 @@ L2310: !
 	fnLbl(5,5,"but not he same on all employees.)",60,0,0,0)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey) 
+	if ckey=5 then goto Xit
 	z$=resp$(1)
 	z$=uprc$(rtrm$(z$))
 	if rtrm$(z$)="" then z$="NO"
 	if z$="YES" or z$="NO" then goto ASK_STARTING
 	f$=z$
-	if z$="" then goto L2310
-ASK_STARTING: ! 
-	fnTos(sn$="Prw2-3") 
+	if z$="" then goto AskDefaultLocality
+goto ASK_STARTING ! /r
+ASK_STARTING: ! r:
+	fnTos
 	respc=cf=0: mylen=40: mypos=mylen+3 : mylen2=62: mypos2=20
 	fnLbl(1,1,"Starting Employee Number:",mylen,1,0,0)
 	fncmbemp(1,mypos) 
@@ -286,17 +306,17 @@ ASK_STARTING: !
 	fnLbl(9,mypos2," ",mylen2,0,0,0)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then totalcode=1 : goto L2130
 	restore #1: 
 	numb=val(resp$(1)(1:8))
 	endnum=val(resp$(2)(1:8))
 	if numb=0 then goto L1040
 	empno=numb
-	goto L1040
+goto L1040 ! /r
 
-ASK_LOCALITY: ! 
-L2690: fnTos(sn$="Prw2-5") 
+ASK_LOCALITY: ! r:
+	fnTos
 	rc=cf=0: mylen=30: mypos=mylen+3
 	fnLbl(1,1,k$(1),mylen,1,0,0)
 	fnLbl(2,1,"Locality Name:",mylen,1,0,0)
@@ -304,27 +324,32 @@ L2690: fnTos(sn$="Prw2-5")
 	resp$(rc+=1)=f$
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey) 
+	if ckey=5 then goto Xit
 	f$=resp$(1)
 	g$=rtrm$(g$)
 	if g$="1" then goto L2790
 	f$=g$
-L2790: return 
+	L2790: !
+return ! /r
 
-PRW2B: open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
+PRW2B: ! r:
+	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
 	restore #1: 
-L2830: form pos 1,c 128
+	L2830: form pos 1,c 128
 	write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
 	close #1: 
-	fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
-L2880: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-	fnxit ! stop  ! fnCHAIN("S:\acsPR\prw2b")
+		fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
+	execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
+goto Xit ! /r
+Xit: fnxit
 
-TOT1: mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: k$(1)="Total Sheet"
+TOT1: ! r:
+	mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: k$(1)="Total Sheet"
 	x$=" ": p1=58: p2=126
-PRINTW2: ! pr W2 FORM
+goto PRINTW2 ! /r
+PRINTW2: ! r: pr W2 FORM
 	gosub ASK_OLD_INFO
 	column1=15 
 	column2=60 
@@ -340,9 +365,11 @@ PRINTW2: ! pr W2 FORM
 	txt$=a$(3)
 	lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 	if trim$(oldss$)<>trim$(ss$) then goto L3090 else goto L3110
-L3090: txt$=oldss$
+	L3090: !
+	txt$=oldss$
 	lyne+=3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
-L3110: txt$=b$
+	L3110: !
+	txt$=b$
 	lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 	txt$= trim$(first$)&" "&trim$(mid$)(1:1)
 	lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
@@ -401,7 +428,8 @@ L3110: txt$=b$
 	if posx<51 then goto L3700
 	txt$=px$
 	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx-50)&','&str$(lyne)&')'
-L3700: txt$=desc$(4)
+	L3700: !
+	txt$=desc$(4)
 	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 	txt$=box3c$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box3)
 	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
@@ -409,8 +437,8 @@ L3700: txt$=desc$(4)
 	lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 	txt$=box4d$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box4)
 	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
-! tXT$=DESC$(6)
-! lYNE=LYNE+8.5: pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
+	! tXT$=DESC$(6)
+	! lYNE=LYNE+8.5: pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
 	txt$=state$
 	lyne=lyne+21: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 	txt$=state$
@@ -442,63 +470,60 @@ L3700: txt$=desc$(4)
 	fnpa_newpage : lyne=topmargin: count=0
 	goto L4110
 L4100: x$=""
-L4110: return 
-L4120: read #14,using fm4$,key=kz$: kz$,mat in4$ nokey L4290
+L4110: !
+return ! /r
+L4120: ! r:
+	read #14,using fm4$,key=kz$: kz$,mat in4$ nokey L4290
 	for j=1 to 6
 		amt(j)=val(in4$(j*5-3))
-		if in4$(j*5-2)="1" then w(2)=w(2)+amt(j)
-		if in4$(j*5-1)="1" then w(5)=w(5)+amt(j)
-		if in4$(j*5-1)="1" then w(11)=w(11)+amt(j)
-L4190: if in4$(j*5-0)="1" then w(9)=w(9)+amt(j)
-		if in4$(j*5-2)="2" then w(2)=w(2)-amt(j)
-		if in4$(j*5-1)="2" then w(5)=w(5)-amt(j)
-		if in4$(j*5-1)="2" then w(11)=w(11)-amt(j)
-L4240: if in4$(j*5-0)="2" then w(9)=w(9)-amt(j)
+		if in4$(j*5-2)="1" then w(2)+=amt(j)
+		if in4$(j*5-1)="1" then w(5)+=amt(j)
+		if in4$(j*5-1)="1" then w(11)+=amt(j)
+		if in4$(j*5-0)="1" then w(9)+=amt(j)
+		if in4$(j*5-2)="2" then w(2)-=amt(j)
+		if in4$(j*5-1)="2" then w(5)-=amt(j)
+		if in4$(j*5-1)="2" then w(11)-=amt(j)
+		if in4$(j*5-0)="2" then w(9)-=amt(j)
 		if j>1 then desc$(j)=lpad$(in4$(j*5-4)(1:1)&"  "&cnvrt$("Nz 10.2",amt(j)),15)
 		if j=1 then desc$(j)=lpad$(in4$(j*5-4)(1:1)&"  "&ltrm$(cnvrt$("Nz 10.2",amt(j))),15)
-! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then w(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
+	! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then w(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 	next j
-L4290: return 
-L4300: if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
-	goto L4360
-L4320: pr newpage
-	if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
-	goto L4360
-L4350: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-L4360: pr f "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
-	input fields "24,60,C 1,N": quitcode$
-	if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-	pr f "23,1,C 80,N": ""
-	pr f "24,1,C 80,N": ""
-	retry 
-	goto XIT
-L4430: dim fl$*40
-! pr NEWPAGE
-	close #101: ioerr L4460
-L4460: open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outIn 
+	L4290: !
+return ! /r
+L4430: ! r:
+	dim fl$*40
+	! pr NEWPAGE
+	close #101: ioerr ignore
+	open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outIn 
 	pr f "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
 	pr f "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
 	pr f "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
 	pr f "8,8,C 16,R,N": "PRESS F5 TO STOP"
-L4510: input fields "6,30,N 1,UET,N": sw1 conv L4510
-	if cmdkey=5 then goto XIT
-	on sw1 goto L4540,L4550 none L4510
+	L4510: !
+	input fields "6,30,N 1,UET,N": sw1 conv L4510
+	if cmdkey=5 then goto Xit
+on sw1 goto L4540,L4550 none L4510 ! /r
 L4540: fl$="\1099ETC.W04\W2DATA\W2DAT.PRN" : goto L4560
 L4550: fl$="\CPS04\ASCIIW2.TXT" : goto L4560
-L4560: pr #101: newpage
+L4560: ! r:
+	pr #101: newpage
 	pr f "3,5,C 30,R,N": "ENTER OUTPUT PATH & FILE NAME"
-L4580: rinput fields "5,5,C 30,UT,N": fl$
-	if cmdkey=5 then goto XIT
+	L4580: !
+	rinput fields "5,5,C 30,UT,N": fl$
+	if cmdkey=5 then goto Xit
 	on sw1 goto L4620,L4640
 	fl$=rtrm$(fl$)
-L4620: open #5: "Name="&fl$&",REPLACE",display,output ioerr L4580
+	L4620: !
+	open #5: "Name="&fl$&",REPLACE",display,output ioerr L4580
 	goto L4650
-L4640: open #5: "Name="&fl$&",RecL=470,REPLACE",display,output ioerr L4580
-L4650: close #101: 
-	return 
+	L4640: !
+	open #5: "Name="&fl$&",RecL=470,REPLACE",display,output ioerr L4580
+	L4650: !
+	close #101: 
+return ! /r
 W2LASER: ! GENERATE FILE FOR LAZER W2
 	on sw1 goto L4690,L5400
-L4690: ! LASER W2 FOR ADVANCED MICRO SOLUTIONS
+L4690: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
 	p1=0
 	for j=1 to 11
 		p1=pos(ss$," ",1)
@@ -568,8 +593,8 @@ L4690: ! LASER W2 FOR ADVANCED MICRO SOLUTIONS
 	pr #5: "EBAT=";" "
 	pr #5: "PHONE=";" "
 	pr #5: "*"
-	goto L4100
-L5400: ! LAZER W2 FOR CENTER PIECE SOFTWARE
+goto L4100 ! /r
+L5400: ! r: LAZER W2 FOR CENTER PIECE SOFTWARE
 	p1=pos(k$(1)," ",1)
 	if p1=0 then p1=len(k$(1))+1
 	q1$='","'
@@ -580,12 +605,12 @@ L5400: ! LAZER W2 FOR CENTER PIECE SOFTWARE
 	n2$=k$(1)(p1+1:p1+16)
 	c1$=k$(3)(1:p3-1): c2$=k$(3)(p3+a3:p3+a3+1): c3$=k$(3)(p3+a3+3:p3+a3+12)
 	pr #5,using L5510: n1$,n2$,k$(2),"",c1$,c2$,c3$,"",ss$,f$,state$,0,w(4),w(1),w(2),w(3),w(5),w(6),w(11),w(12),nqp,dcb,0,amt(1),"",amt(2),"",amt(3),"",0,"",0,0,0,0,0,w(7),w(9),w(8),w(10),0,0,0,0,"",""
-L5510: form pos 1,c 13,c 16,2*c 30,c 15,c 2,2*c 10,c 11,c 15,c 2,13*n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,13*n 10.2,c 2,c 15
+	L5510: form pos 1,c 13,c 16,2*c 30,c 15,c 2,2*c 10,c 11,c 15,c 2,13*n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,13*n 10.2,c 2,c 15
 	c$=','
-	goto L4100
-L5540: ! ask if any misecllaneous deductions should pr in box 12
-ASK_DEDUCTIONS: ! 
-	fnTos(sn$="Prw2-4") 
+goto L4100 ! /r
+
+ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
+	fnTos
 	rc=cf=0: mylen=20: mypos=mylen+3
 	fnLbl(1,1,"Indicate if any of the 20 miscellaneous deductions",50,1,0,0)
 	fnLbl(2,1,"should appear in any boxes on the W-2.",44,1,0,0)
@@ -601,17 +626,17 @@ ASK_DEDUCTIONS: !
 	next j
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey) 
+	if ckey=5 then goto Xit
 	x=0
 	for j=1 to 20
 		x+=1: if resp$(x)="True" then dedyn$(j)="Y"
 		x+=1: box12(j)=val(resp$(x))
 		x+=1: dedcode$(j)=resp$(x)
 	next j
-	return 
-EXTRACT_NAME: ! 
-L5770: dim first$*15,mid$*15,last$*20,k$(3)*30,k$(3)*30
+return ! /r
+EXTRACT_NAME: ! r:
+	dim first$*15,mid$*15,last$*20,k$(3)*30,k$(3)*30
 	k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
 	x1=pos(k$(1)," ",1)
 	x2=pos(k$(1)," ",x1+1)
@@ -620,22 +645,22 @@ L5770: dim first$*15,mid$*15,last$*20,k$(3)*30,k$(3)*30
 	first$=k$(1)(1:max(min(15,x1-1),1))
 	if x2>0 then mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
 	if x2=0 then last$=k$(1)(x1+1:len(k$(1))): mid$=""
-	goto L5910
-L5870: ! last name first
+goto L5910 ! /r
+L5870: ! r: last name first
 	if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
 	if x2>0 then first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
 	if x2=0 then first$=k$(1)(x1+1:len(k$(1))): mid$=""
-L5910: ! pr FIRST$,MID$,LAST$
-	return 
+	L5910: ! pr FIRST$,MID$,LAST$
+return ! /r
 L5930: ! r: left or right stub
-	pr newpage ! 
+	pr newpage 
 	close #101: ioerr ignore
-	open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&cap$&" - Right or Left Stub",display,outIn 
+	open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&env$('program_caption')&" - Right or Left Stub",display,outIn 
 	pr f "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
 	pr f "7,28,C 9,B,1": "Next (F1)"
 	pr f "7,39,C 11,B,5": "Cancel (F5)"
 	input fields "5,56,Cu 1,UT,N": left$
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 return ! /r
 VBOPENPRINT: ! r:
 	if file(20)=-1 then 
@@ -644,12 +669,8 @@ VBOPENPRINT: ! r:
 		character=1.5
 	end if 
 return ! /r
-RELEASE_PRINT: ! 
-! 
-	fnpa_finis
-	return 
 ASK_OLD_INFO: ! r:
-	fnTos(sn$="Ask_old") 
+	fnTos
 	lc=rc=0 : mylen=20 : mypos=mylen+3
 	if totalcode=0 then heading$="Enter Information from Incorrect W-2" else heading$="Total Screen for Corrected W-2s"
 	fnLbl(lc+=1,1,heading$,40,0)
@@ -707,7 +728,7 @@ ASK_OLD_INFO: ! r:
 	resp$(rc+=1)=str$(box4)
 	fnCmdKey('&Next',1,1,0) 
 	fnCmdKey('&Cancel',5,0,1)
-	fnAcs(sn$,0,mat resp$,ckey) ! old amounts
+	fnAcs2(mat resp$,ckey) ! old amounts
 	if totalcode=1 then goto L2270
 	if ckey=5 then goto ASK_STARTING
 	oldss$=resp$(1) ! ss#
@@ -728,3 +749,4 @@ ASK_OLD_INFO: ! r:
 	box4d$=resp$(16)       ! box 12d code
 	box4=val(resp$(17))    ! box 12d amount
 return ! /r
+include: Ertn

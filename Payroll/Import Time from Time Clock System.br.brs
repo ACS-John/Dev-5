@@ -83,7 +83,7 @@ MESSAGE1: ! r: bad data
 goto XIT ! /r
 MESSAGE2: ! r: bad employee number
 	mat ml$(4) 
-	ml$(1)="Employee # "&str$(eno)&" has time imported" 
+	ml$(1)="Employee "&str$(eno)&" has time imported" 
 	ml$(2)="from the time clock, but does not have a matching" 
 	ml$(3)="employee number in the payroll system.  This" 
 	ml$(4)="person will be skipped.   "&name$ 
