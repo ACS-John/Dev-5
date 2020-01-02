@@ -20,10 +20,10 @@ Pay Period
 >Post to General Ledger                     ^ Payroll\*              ^ GL
 Monthly
 >Payroll Tax Deposit Summary                ^ Payroll\*
->Pension Report                             ^ acspr\newprmers
->Deferred Compensation Report               ^ acspr\newprdefcmp
+>Pension Report                             ^ Payroll\*
+>Deferred Compensation Report               ^ Payroll\*
 Quarterly
->State UnEmp Report                         ^ acsPR\newprUC1
+>State UnEmp Report                         ^ Payroll\*
 >941 Summary                                ^ acsPR\newPR941
 >Quarterly Federal Unemployment Worksheet   ^ acsPR\newQtrFedUC
 >State UnEmp.-Electronic Submission         ^ acsPR\prelecuc
@@ -31,11 +31,11 @@ Annual
 >Annual Federal Unemployment Worksheet      ^ Payroll\*
 >YTD Deductions Register                    ^ Payroll\*
 >Print W-2 Forms                            ^ Payroll\*
->Corrected W-2                              ^ acspr\newcorrectedprw2a
->Electronic W-2                             ^ acsPR\newprElecW2
->Corrected Electronic W-2                   ^ acsPR\newprElecW2correction
+>Corrected W-2                              ^ Payroll\Job Cost\*
+>Electronic W-2                             ^ Payroll\*
+>Corrected Electronic W-2                   ^ Payroll\*
 >Print 1099 Forms                           ^ Payroll\*
->Electronic 401K                            ^ acsPR\pr401k
+>Electronic 401K                            ^ Payroll\*
 Print
 >Designed Reports                           ^ acsPR\newprRpt3
 >Employee Review Register                   ^ Payroll\*
@@ -64,12 +64,12 @@ Payroll Job Cost Add-On                    ^                                    
 >>User Designed Reports - JC               ^ acsPR\NewJCRPTFM                           ^ P2
 >>Personnel Burden                         ^ Payroll\Job Cost\*                         ^ P2
 >Daily                                     ^                                            ^ P2
->>Enter Time                               ^ acsPR\NewJcinput                           ^ P2
->>Enter Charges                            ^ acsPR\NewJCINPTC                           ^ P2
+>>Enter (Job Cost) Time                    ^ Payroll\Job Cost\*                         ^ P2
+>>Enter Charges                            ^ Payroll\Job Cost\*                         ^ P2
 >>Enter Billings                           ^ acsPR\NewJCIPBIL                           ^ P2
 >>Enter Percent Complete                   ^ acsPR\NewJCPCTCMP                          ^ P2
 >Print                                     ^                                            ^ P2
->>Certified Payroll Register               ^ acsPR\NewJCcpR1                            ^ P2
+>>Certified Payroll Register               ^ Payroll\Job Cost\*                         ^ P2
 >>Job Status Worksheet                     ^ acsPR\NewJCStWksh                          ^ P2
 >>Job Cost Report                          ^ acsPR\NewJCPrtDET                          ^ P2
 >>User Designed Reports (2)                ^ acsPR\NewPrUsrDR                           ^ P2

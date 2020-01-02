@@ -5,11 +5,11 @@
 ! had to follow with an RT record -  
 ! Right now this program will not create an RO record
 ! "
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fnLbl,fnTxt,fnTos,fnCmdKey,fnureg_read,fnureg_write,fngethandle,fnDedNames,fncreg_read,fncreg_write,fncomboa
-	on error goto ERTN
-	fntop(program$,cap$="Electronic W-2")
-! ______________________________________________________________________
-	dim em$(3)*30,ss$*11,tcp(32),cap$*128,tmp$*128
+library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fnLbl,fnTxt,fnTos,fnCmdKey,fnureg_read,fnureg_write,fngethandle,fnDedNames,fncreg_read,fncreg_write,fncomboa
+on error goto ERTN
+fntop(program$)
+
+	dim em$(3)*30,ss$*11,tcp(32),tmp$*128
 	dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
 	dim a$(3)*40,federal_id$*12,s2(2)
@@ -275,8 +275,8 @@ SCREEN1_NEW: ! r:
 	gosub RecRE ! kj 22610  was commented
 NEXT_EMPLOYEE: ! r: main loop
 ! pr f "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
-	read #hEmployee,using fEmployee: eno,mat em$,ss$,em6,ta eof FINIS
-	fEmployee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
+	read #hEmployee,using F_employee: eno,mat em$,ss$,em6 eof FINIS
+	F_employee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2
 	gosub NameParse
 	p1=pos(em$(3),",",1) : comma=1
 	if p1=0 then p1=pos(em$(3)," ",1): comma=0
@@ -350,7 +350,7 @@ L2480: !
 		! tW2=0  kj 22610
 	end if
 goto NEXT_EMPLOYEE ! /r
-! ______________________________________________________________________
+
 RecRA: ! r:
 	pr #hOut,using fRecRA: "RA",federal_id_val,emppin$(1:8),"",resub$,tlcn$,"98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L",""
 	fRecRA: form pos 1,c 2,pic(#########),c 8,c 9,c 1,c 6,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 12
@@ -483,4 +483,4 @@ EXTRACT_STATE: ! r: extract state name
 		holdst$=ltrm$(holdst$)(1:2)
 	if holdst$="TE" then holdst$="TX"
 return ! /r
-include: ertn
+include: Ertn

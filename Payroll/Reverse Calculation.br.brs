@@ -226,7 +226,9 @@ POSTGL1: ! r:
 		dat1=val(resp$(1))
 		if glb=2 then glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H[cno]"
 		if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
-		if glb=2 and uprc$(rtrm$(accrue$))="Y" then open #11: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H[cno],RecL=104,USE",internal,output 
+		if glb=2 and uprc$(rtrm$(accrue$))="Y" then 
+			open #11: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H[cno],RecL=104,USE",internal,output 
+		end if
 		open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
 		read #1,using 'form pos 1,c 40,pos 437,15*c 12': a$,mat prgl$
 		close #1: 

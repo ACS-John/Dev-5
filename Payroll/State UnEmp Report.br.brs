@@ -1,5 +1,5 @@
 ! State U/C Report
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
+	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
 	on error goto ERTN
 ! r: setup
 	dim ss$*11,em$(3)*30,department$*128
@@ -49,7 +49,7 @@
 	heading_1$(4)="     State   "
 	heading_2$(4)="      W/H    "
 	heading_3$(4)="  ___________"
-! ______________________________________________________________________
+
 	fntop(program$,cap$="State UnEmp Report")
 	fncreg_read('calculation date text',quarter_ending_date$)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
@@ -65,10 +65,10 @@
 		end if 
 	next j
 	mat option1$(max(1,x))
-	fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then quarter$='1'
-	fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then column$(1)='True'
-	fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then column$(2)='True'
-	fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then column$(3)='True'
+	fncreg_read('uc1 - quarter'                ,quarter$  ) : if quarter$  ='' then quarter$  ='1'
+	fncreg_read('uc1 - show total wage'        ,column$(1)) : if column$(1)='' then column$(1)='True'
+	fncreg_read('uc1 - show excess wage'       ,column$(2)) : if column$(2)='' then column$(2)='True'
+	fncreg_read('uc1 - show taxable wage'      ,column$(3)) : if column$(3)='' then column$(3)='True'
 	fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then column$(1)='True'
 ! /r
 ! r: main screen (falls through to next section)
@@ -123,7 +123,7 @@
 	on fkey 5 goto FINIS
 	fnopenprn
 	if file$(255)(1:3)="PRN" then redir=0 else redir=1
-! ______________________________________________________________________
+
 	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	open #h_department:=3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
@@ -293,4 +293,4 @@ def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
 	next pl_item
 	pr #255,using 'form pos pl_pos,c': pl_line$
 fnend 
-include: ertn
+include: Ertn

@@ -17,7 +17,7 @@ dim qtr4tcp(32)
 dim ytdtotal(32)
 dim quartertotals(32)
 
-fntop(program$,"Certified Payroll Register")
+fntop(program$)
 
 fnopenprn
 if file$(255)(1:3)<>"PRN" then jbskip=1
@@ -94,8 +94,8 @@ L780: ! r:
 goto L860 ! /r
 
 L860: ! r:
-	read #1,using L870,key=en$: mat em$,ss$,em2,lpd,tgp nokey L1120
-	L870: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
+	read #1,using F_employee,key=en$: mat em$,ss$,em2,lpd,tgp nokey L1120
+	F_employee: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2
 	L880: !
 	mat ded=(0)
 	tdet2=0

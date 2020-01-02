@@ -1,17 +1,33 @@
-! Replace S:\acsPR\newJCInput
+! formerly S:\acsPR\newJCInput
 ! Enter (Job Cost) Time
 
-	library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox, fnopenprn,fncloseprn,fnerror,fnchain,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncmbemp,fncomboa,fncombof,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1,fncmbcategory,fnDedNames
+	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnchain,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey
+	library 'S:\Core\Library': fnAcs2
+	library 'S:\Core\Library': fncmbemp,fncomboa,fncombof,fncmbjob
+	library 'S:\Core\Library': fncmbsubcat,fnflexadd1,fncmbcategory,fnDedNames
+	library 'S:\Core\Library': fnflexinit1
 	on error goto ERTN
 
-	dim em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
-	dim cn$*11,k$*6,n$*40,en$*8,hr(2),empnam$*30,io2b$(2)*20
-	dim ji1(6),jn$*6,ji2(5),ch2$(14),cm2$(14),itme2$(14)
-	dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,b(4),a$(3)*30,sc$(20)*80
-	dim message$*40,ml$(3)*80,resp$(30)*60,fullname$(20)*20,comboname$(22)*23
-	dim item2$(14)*20,tdt(4),tcd(3),tdet(23)
+	dim sub$*30
+	dim cn$*11
+	dim n$*40
+	dim empnam$*30
+	dim ji1(6)
+	dim jn$*6
+	dim ji2(5)
+	dim ch2$(14)
+	dim cm2$(14)
+	dim bk$(20)*28
+	dim resp$(30)*60
+	dim ml$(3)*80
+	dim fullname$(20)*20
+	dim comboname$(22)*23
+	dim item2$(14)*20
+	dim tdt(4)
+	dim tcd(3)
+	dim tdet(23)
 
-	fntop(program$,"Enter Time")
+	fntop(program$)
 
 	fnDedNames(mat fullname$)
 	for j=1 to 20: comboname$(j+1)=cnvrt$("pic(zz)",j)&" "&fullname$(j): next j
@@ -94,7 +110,7 @@ L700: fnLbl(12,1,"Units:",mylen,1)
 	fnCmdKey("De&lete",4,0,0,"Deletes this job.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
 	fnCmdKey("&Post",8,0,1,"Post these entries to the job files.")
-	fnAcs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+	fnAcs2(mat resp$,ckey) ! detail job screen     editrec
 	if ckey=5 then goto L830 else goto L850
 L830: mat ml$(2) 
 	ml$(1)="You have chosen to cancel without postng these entries!  " 
@@ -136,7 +152,8 @@ L1060: ji2(3)=val(resp$(10)) ! amount
 	ji2(5)=val(resp$(12)) ! units
 	pt=val(resp$(13)) ! personnel burden
 	gosub UPDATE_AMOUNT
-	empnam$="": read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
+	empnam$=""
+	read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
 L1110: if addone=1 then goto L1120 else goto L1150
 L1120: write #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal
 	goto L1160
@@ -183,16 +200,16 @@ L1700: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 
 PROOF_LIST_DONE: ! 
 	gt5=gt6=gt10=0
 	fncloseprn
-	goto TRANSACTION_ENTRY
+goto TRANSACTION_ENTRY
 
 POSTTOJOBS: ! 
-	close #1: 
-L1780: close #2: 
+	close #1: ioerr ignore
+	close #2: 
 	close #3: 
 	close #11: 
 	close #12: 
 	close #13: 
-	fnchain("S:\acsPR\newJCMerge")
+fnchain("S:\acsPR\newJCMerge")
 
 PROOF_LIST_NWPG: ! 
 	pr #255: newpage
@@ -205,12 +222,20 @@ XIT: fnxit
 
 CORRECTIONS: ! 
 	addone=0: editone=0
-	fnTos(sn$="EntryCorrection")
-	ch2$(1)="Rec #": ch2$(2)="Employee #": ch2$(3)="MOP" 
-	ch2$(4)="Date" 
-	ch2$(5)="Dept #": ch2$(6)="RegHrs": ch2$(7)="OTHrs" 
-	ch2$(8)="Job #": ch2$(9)="Cat #": ch2$(10)="Su-Cat" 
-	ch2$(11)="Amount": ch2$(12)="Ded #": ch2$(13)="Units" 
+	fnTos
+	ch2$( 1)="Rec #"
+	ch2$( 2)="Employee #"
+	ch2$( 3)="MOP" 
+	ch2$( 4)="Date" 
+	ch2$( 5)="Dept #"
+	ch2$( 6)="RegHrs"
+	ch2$( 7)="OTHrs" 
+	ch2$( 8)="Job #"
+	ch2$( 9)="Cat #"
+	ch2$(10)="Su-Cat" 
+	ch2$(11)="Amount"
+	ch2$(12)="Ded #"
+	ch2$(13)="Units" 
 	ch2$(14)="Burden" 
 	mat ch2$(14) ! : Mat CM2$(14) : Mat ITEM2$(14)
 	cm2$(1)="30": cm2$(2)="30": cm2$(3)="30" 
@@ -220,77 +245,88 @@ CORRECTIONS: !
 	cm2$(11)="10": cm2$(12)="30": cm2$(13)="30": cm2$(14)="10"
 	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3: 
-READ_FILE: ! 
-	read #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal eof L2160
-	item2$(1)=str$(rec(3)): item2$(2)=str$(ji1(1)) 
-	item2$(3)=str$(ji1(2)): item2$(4)=str$(ji1(3)) 
-	item2$(5)=str$(ji1(4)): item2$(6)=str$(ji1(5)) 
-	item2$(7)=str$(ji1(6)) : item2$(8)=jn$ 
-	item2$(9)=str$(ji2(1)): item2$(10)=str$(ji2(2)) 
-	item2$(11)=str$(ji2(3)) : item2$(12)=str$(ji2(4)) 
-	item2$(13)=str$(ji2(5)): item2$(14)=str$(pt)
-	fnflexadd1(mat item2$)
-	goto READ_FILE
-L2160: fnCmdKey("&Add",1,0,0,"Add a new transaction." ) 
+	do
+		read #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal eof L2160
+		item2$(1)=str$(rec(3)): item2$(2)=str$(ji1(1)) 
+		item2$(3)=str$(ji1(2)): item2$(4)=str$(ji1(3)) 
+		item2$(5)=str$(ji1(4)): item2$(6)=str$(ji1(5)) 
+		item2$(7)=str$(ji1(6)) : item2$(8)=jn$ 
+		item2$(9)=str$(ji2(1)): item2$(10)=str$(ji2(2)) 
+		item2$(11)=str$(ji2(3)) : item2$(12)=str$(ji2(4)) 
+		item2$(13)=str$(ji2(5)): item2$(14)=str$(pt)
+		fnflexadd1(mat item2$)
+	loop
+	L2160: !
+	fnCmdKey("&Add",1,0,0,"Add a new transaction." ) 
 	fnCmdKey("E&dit",2,1,0,"Edit the highlited record") 
 	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") 
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") 
 	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
-	fnAcs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+	fnAcs2(mat resp$,ckey) ! review_details  grid of transactions
 	if ckey=5 then goto TRANSACTION_ENTRY
 	editrec=val(resp$(1))
 	if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): jn$="": goto TRANSACTION_ENTRY
 	if ckey=2 then read #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal: editone=1 : goto TRANSACTION_ENTRY
 	if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
-	goto CORRECTIONS
+goto CORRECTIONS
 UPDATE_AMOUNT: ! 
 	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=cnvrt$("pic(ZZZZZZZ#)",ji1(1))&cnvrt$("pic(ZZ#)",ji1(4)): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet nokey L2270
-	goto L2280
-L2270: mat ml$(2) 
+goto L2280
+L2270: !
+	mat ml$(2) 
 	ml$(1)="There is no department number "&str$(ji1(4))&" on employee number "&str$(ji1(1))&"!" 
 	ml$(2)="Take OK to correct." 
 	fnmsgbox(mat ml$,resp$,'',0) 
-	goto L420
-L2280: if ji2(3)=0 then ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
+goto L420
+L2280: !
+	if ji2(3)=0 then ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
 	if rtrm$(jn$)="" and ji2(1)=0 then goto L2390
 	read #11,using L2310,key=lpad$(rtrm$(jn$),6): n$ nokey L2330
-L2310: form pos 7,c 40
-	goto L2340
-L2330: mat ml$(2) 
+	L2310: form pos 7,c 40
+goto L2340
+L2330: !
+	mat ml$(2) 
 	ml$(1)="The job # number appears to be an incorrect number!  " 
 	ml$(2)="Take OK to correct." 
 	fnmsgbox(mat ml$,resp$,'',0) 
-	goto L420
-L2340: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
-! Read #12,Using 2360,Key=CN$: KC$ Nokey 2380     ! dont verify this kj
+goto L420
+L2340: !
+	cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
+	! Read #12,Using 2360,Key=CN$: KC$ Nokey 2380     ! dont verify this kj
 	form pos 1,c 11
 	goto L2390
 	mat ml$(2) 
 	ml$(1)="Category # "&str$(ji2(1))&" has never been used on this job before!  " 
 	ml$(2)="Do you wish to use this number or select a different one?" 
 	fnmsgbox(mat ml$,resp$,'',36)
-	if resp$="Yes" then goto L2390 else goto L420
-L2390: if ji2(2)=0 then goto L2450
+if resp$="Yes" then goto L2390 else goto L420
+L2390: !
+	if ji2(2)=0 then goto L2450
 	read #13,using L2420,key=lpad$(str$(ji2(2)),3): sub$ nokey L2440
-L2420: form pos 4,c 30
-	goto L2450
-L2440: mat ml$(2) 
+	L2420: form pos 4,c 30
+goto L2450
+L2440: !
+	mat ml$(2) 
 	ml$(1)="The subcategory # number appears to be an incorrect number!  " 
 	ml$(2)="Take OK to correct." 
 	fnmsgbox(mat ml$,resp$,'',0) 
-	goto L420
-L2450: if lrec(13)=0 then goto L2480 ! if they are not using subcategory, skip warning
+goto L420
+L2450: !
+	if lrec(13)=0 then goto L2480 ! if they are not using subcategory, skip warning
 	if ji2(2)=0 then goto L2470
-	goto L2480
-L2470: mat ml$(2) 
+goto L2480
+L2470: !
+	mat ml$(2) 
 	ml$(1)="The subcategory # number cannot be zero.!  " 
 	ml$(2)="Take OK to correct." 
 	fnmsgbox(mat ml$,resp$,'',0) 
-	goto L420
-L2480: if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
+goto L420
+L2480: !
+if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
 	eno$=cnvrt$("n 8",ji1(1)) : ptp=0
 	read #7,using "form pos 39,n 6.3",key=eno$: ptp nokey L2510
-L2510: if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
-	if c1=2 then goto L1780
+	L2510: !
+	if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
+	if c1=2 then goto POSTTOJOBS
 return 
 include: Ertn
