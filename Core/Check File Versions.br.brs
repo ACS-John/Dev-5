@@ -712,13 +712,13 @@ def fn_cfv_payroll
 		open #h_pr_emp_status:=fngethandle: "Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 	end if 
-	if exists('[Q]\PRmstr\RPMstr.h[cno]') then
+	if exists('[Q]\PRmstr\RPMstr.h[cno]') and ~exists('[Q]\PRmstr\Employee.h[cno]') then
 		fnAutomatedSavePoint('before RPMstr to Employee')  ! let's remove this after the first few rounds of testing...
 		! r: Convert from RPMstr.h[cno] to Employee.h[cno]
 		! only significant difference is that mat ta(2) has been removed to make room for w4step2 (initialized to 0 here)
 		open #hIn  :=fngethandle: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',internal,outIn,relative
 		open #hOut :=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=1,KLn=8,Shr',internal,outIn,keyed
-		open #hOut2:=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=9,KLn=30,Shr',internal,outIn,keyed
+		open #hOut2:=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Use,RecL=196,KPs=9,KLn=30,Shr',internal,outIn,keyed
 		
 		dim em$(3)*30
 		dim rs(2)
