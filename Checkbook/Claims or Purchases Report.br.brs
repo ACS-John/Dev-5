@@ -62,7 +62,7 @@ ASK_SORT: !
 	execute "Sort "&env$('temp')&"\Control -n"
 	open #addr:=9: "Name="&env$('temp')&"\Addr",internal,input 
 	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed 
-	open #rpmstr:=23: "Name=[Q]\PRmstr\rpMstr.H[cno],KFName=[Q]\PRmstr\rpIndex.H[cno],Shr",internal,input,keyed ioerr L550
+	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.H[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ioerr L550
 	prcode=1
 	L550: !
 	open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".H[cno],Shr",internal,input,relative 

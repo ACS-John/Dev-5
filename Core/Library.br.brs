@@ -122,6 +122,11 @@ fnend
 
 ! /r
 ! r: S:\Core\Start.br
+
+	def library fnWriteProc(procName$*64,procLine$*256)
+		library 'S:\Core\Start.br': fnWriteProc
+		fnWriteProc=fnWriteProc(procName$,procLine$)
+	fnend
 	def library fnSetQ(setQ$*256)
 		library 'S:\Core\Start.br': fnSetQ
 		fnSetQ=fnSetQ(setQ$)
@@ -551,9 +556,9 @@ fnend
 		library 'S:\Core\fn\chain.br': fnChain
 		fnChain=fnChain(prg$, no_fnprg_setting,noLog)
 	fnend
-	def library fnerror(callingProgram$*256,errornumber,linenumber,&act$,stopable$)
+	def library fnerror(callingProgram$*256,errornumber,linenumber,&ertnAct$,stopable$)
 		library 'S:\Core\fnerror': fnerror
-		fnerror=fnerror(callingProgram$,errornumber,linenumber,act$,stopable$)
+		fnerror=fnerror(callingProgram$,errornumber,linenumber,ertnAct$,stopable$)
 	fnend
 	def library fnlog(log$*512;x)
 		library 'S:\Core\Log.br': fnlog
@@ -955,6 +960,10 @@ fnend
 	fnend
 ! /r
 ! r: Array stuff
+	def library fnSetForCombo$*256(mat option$,key$; kpos,klen)
+		library 'S:\Core\Array.br': fnSetForCombo$
+		fnSetForCombo$=fnSetForCombo$(mat option$,key$, kpos,klen)
+	fnend
 	def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd)
 		library 'S:\Core\Array.br': fnPosOfAny
 		fnPosOfAny=fnPosOfAny(textToSearch$,mat searchFor$, fromEnd)

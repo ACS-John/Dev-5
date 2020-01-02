@@ -361,3 +361,15 @@ def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd,___,returnN,ho
 	! pr 'at end - returning';returnN : pause
 	fnPosOfAny=returnN
 fnend
+def library fnSetForCombo$*256(mat option$,key$; kpos,klen, ___,return$*256,item)
+	if kpos<=0 then kpos=1
+	if klen<=0 then klen=1
+	for item=1 to udim(mat option$)
+		if trim$(option$(item)(kpos:(kpos+klen-1)))=trim$(key$) then
+			return$=option$(item)
+			goto SetForComboFinis
+		end if
+	next item
+	SetForComboFinis: !
+	fnSetForCombo$=return$
+fnend

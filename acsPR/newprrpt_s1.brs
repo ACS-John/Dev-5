@@ -4,7 +4,7 @@
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto ERTN
 00020 ! ______________________________________________________________________
-00030   dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tdt(4),tcd(3),tdet(20),tdy(6)
+00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,unuse174$*5,tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50
 00032   dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),inp(20),pp(20),dt(125)
 00033   dim gt(125),dh$*20,a$*40,cp(32),tdc(10),tcp(32),dc(10)
@@ -22,10 +22,10 @@
 00143 ! ______________________________________________________________________
 00190   open #1: "Name=[Q]\PRmstr\PRREPORT.h[cno],KFName=[Q]\PRmstr\PRRPTIDX.h[cno],shr",internal,input,keyed 
 00200   read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
-00210 L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
+00210   L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 00220   close #1: 
 00221 ! ______________________________________________________________________
-00300   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+00300   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 00301   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
 00302   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
 00320   gosub HDR
@@ -53,7 +53,7 @@
 00469 XIT: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
-19801 read #1,using "Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,2*PD 3,C 12,N 6": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EOF1 ! fnStatus(str$(eno))
+19801 read #1,using "Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,n 1,c 5,C 12,N 6": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd eof EOF1 ! fnStatus(str$(eno))
 19802   ipsw=0
 19803   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey PRTRPT
 19804   mat tcp=(0): mat tdc=(0)
@@ -61,22 +61,22 @@
 19806   if teno<>eno then goto L20000
 19807   gosub ADD_EARNINGS
 19808   if ips=0 then goto L19899
-19899 L19899: if tdep=1 then goto F_PR_OUT
+19899   L19899: if tdep=1 then goto F_PR_OUT
 19900   pr #255, using F_PR_OUT: ss$,em$(1),tcp(9),tcp(10),tcp(11) pageoflow PGOF
-19910 F_PR_OUT: form pos 1,c 11,pos 15,c 30,pos 30,pic(--,---,---.##),pos 45,pic(--,---,---.##),pos 57,pic(--,---,---.##)
-19989 ! If TDEP=0 Then Mat TCP=(0): Mat TDC=(0)
-19990   goto L19804
+19910   F_PR_OUT: form pos 1,c 11,pos 15,c 30,pos 30,pic(--,---,---.##),pos 45,pic(--,---,---.##),pos 57,pic(--,---,---.##)
+19989   ! If TDEP=0 Then Mat TCP=(0): Mat TDC=(0)
+19990 goto L19804
 20000 L20000: ! 
 20099   goto PRTRPT ! /r
 20100 L20100: ! r: Check for Totals to pr ______________
-21200   goto EOF1 ! /r
+21200 goto EOF1 ! /r
 50000 ERTN: ! r:
 50001   fnerror(program$,err,line,act$,"xit") 
 50010   if uprc$(act$)<>"PAUSE" then goto L50040
 50020   execute "list "&str$(line) : pause : goto L50040
 50030   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
-50040 L50040: execute act$
-50050   goto ERTN
+50040   L50040: execute act$
+50050 goto ERTN
 50060 ! /r
 60000 ADD_EARNINGS: ! r:
 60001   mat tcp=(0): mat tdc=(0)

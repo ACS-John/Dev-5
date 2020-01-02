@@ -7,8 +7,9 @@ end
 ! ertn
 Ertn: !
 	library 'S:\Core\Library': fnerror
-	fnerror(program$,err,line,act$,'NO')
-	if lwrc$(act$)='pause' then
+	dim ertnAct$*256
+	fnerror(program$,err,line,ertnAct$,'NO')
+	if lwrc$(ertnAct$)='pause' then
 		if env$('ACSDeveloper')<>'' then
 			execute 'List '&str$(line)
 		else
@@ -19,5 +20,5 @@ Ertn: !
 	en if
 	goto Ertn_executeAct
 Ertn_executeAct: !
-	execute act$
+	execute ertnAct$
 goto Ertn

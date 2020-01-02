@@ -95,7 +95,7 @@ ASK_DATE: !
 	prgl(j,3)=val(prgl$(15)(10:12)) ! cash
 	nametab=36-len(rtrm$(a$))/2
 	close #1:
-	open #2: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #6: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptId4.h[cno],Shr",internal,outIn,keyed
 	fn_pr_hdr
 	do

@@ -86,13 +86,13 @@ SUBROUTINE2: ! r: (reallocate state taxes based on earnings by dept and state
 	rewrite #h_department,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
 	goto L670
 	L960: ! 
-	rewrite #hEmployee,using F_RPMSTR,key=n$: mat em,d1,tgp
+	rewrite #hEmployee,using F_RPMSTR,key=n$: mat em,d1,tgp,w4step2
 	if fp(d1*.01)>.9 then hd1=19000000+fncd(d1) else hd1=20000000+fncd(d1)
 	mat stwh=(0)
 return ! /r
 L1010: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
-	read #hEmployee,using F_RPMSTR,key=x$: mat em,lpd,tgp nokey EMPLOYEE_NOT_FOUND
-	F_RPMSTR: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2
+	read #hEmployee,using F_RPMSTR,key=x$: mat em,lpd,tgp,w4step2 nokey EMPLOYEE_NOT_FOUND
+	F_RPMSTR: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1
 	gosub CALK_ALL_DEDUCTIONS_ALL_DEPT
 	n$=x$
 	if d3$><"Y" then goto L1170 ! Accrue Sick and Vacation
@@ -407,7 +407,6 @@ EO_RPWORK: ! r:
 	fnFree("[Q]\PRmstr\jcprh1.h[cno]") ! get rid of jobcost time entry file if exists
 	goto XIT ! /r
 XIT: fnxit
-IGNORE: continue 
 CALK_ALL_DEDUCTIONS_ALL_DEPT: ! r:
 	! Calculate all deduct for federal for all departments
 	tgp=t3=ded=0
@@ -548,7 +547,7 @@ ASKDATES_SCREEN: !
 		d1$=resp$(2)
 		if resp$(3)(1:1)="T" then d3$="Y" else d3$="N"
 
-		taxYear=val(str$(d1)(1:4)) ! =2018   ! changed 8/14/19, because we were still caculating 2019 payrolls on 2018 federal w/h table
+		taxYear=2019 ! val(str$(d1)(1:4)) ! =2018   ! changed 8/14/19, because we were still caculating 2019 payrolls on 2018 federal w/h table
 		fnPayPeriodEndingDate(d1)
 		fnSetPayrollDatesForYear(taxYear)
 		fnGetPayrollDates(beg_date,end_date)
@@ -624,7 +623,7 @@ def fn_setup
 fnend 
 def fn_setupOpenFiles
 	open #breakdown=fngethandle: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno]",internal,outIn,keyed  ! formerly file #1
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]",internal,outIn,keyed  ! formerly file #1
 	open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
 	open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
@@ -694,8 +693,8 @@ ST09: s3=0 : return
 ST10: s3=0 : return
 def fn_setupFederalTables(taxYear,mat ft,&fed_annual_wh_allowance)
 	dim ft(8,6)
-	! r: Federal - SINGLE person (including head of household)
-	if taxYear<=2017 then
+	! r: Federal - SINGLE person
+	if taxYear<=2017 then !  (includes head of household)
 		fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
 		! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
 		ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
@@ -706,7 +705,7 @@ def fn_setupFederalTables(taxYear,mat ft,&fed_annual_wh_allowance)
 		ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33 
 		ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35 
 		ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
-	else if taxYear=2018 then
+	else if taxYear=2018 then !  (includes head of household)
 		fed_annual_wh_allowance=4150
 		ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
 		ft(2,1)=  3700 : ft(2,2)=     0    : ft(2,3)=0.1  
@@ -716,7 +715,17 @@ def fn_setupFederalTables(taxYear,mat ft,&fed_annual_wh_allowance)
 		ft(6,1)=161200 : ft(6,2)= 32089.5  : ft(6,3)=0.32 
 		ft(7,1)=203700 : ft(7,2)= 45689.5  : ft(7,3)=0.35 
 		ft(8,1)=503700 : ft(8,2)=150689.5  : ft(8,3)=0.37 
-	else if taxYear=2019 then
+	else if taxYear=2019 then !  (includes head of household)
+		fed_annual_wh_allowance=4200
+		ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
+		ft(2,1)=  3800 : ft(2,2)=     0    : ft(2,3)=0.1  
+		ft(3,1)= 13500 : ft(3,2)=   970    : ft(3,3)=0.12 
+		ft(4,1)= 43275 : ft(4,2)=  4543    : ft(4,3)=0.22 
+		ft(5,1)= 88000 : ft(5,2)= 14382.5  : ft(5,3)=0.24 
+		ft(6,1)=164525 : ft(6,2)= 32748.5  : ft(6,3)=0.32 
+		ft(7,1)=207900 : ft(7,2)= 46628.5  : ft(7,3)=0.35 
+		ft(8,1)=514100 : ft(8,2)=153798.5  : ft(8,3)=0.37 
+	else if taxYear=2020 then ! Single or Married Filing Separately (NO LONGER includes head of household)
 		fed_annual_wh_allowance=4200
 		ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0    
 		ft(2,1)=  3800 : ft(2,2)=     0    : ft(2,3)=0.1  

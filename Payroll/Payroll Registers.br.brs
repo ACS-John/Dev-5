@@ -60,7 +60,7 @@
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
 
 
-	open #hEmployee:=fnGetHandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed
+	open #hEmployee:=fnGetHandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #h_dd=fnGetHandle: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
 	open #hCheck1:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,input,keyed
 	open #hCheck3:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,input,keyed
@@ -119,7 +119,7 @@ def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
 fnend
 
 LOOP_TOP: ! r: main loop
-	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
+	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6': eno,em$,lpd eof FINIS
 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
 	if lpd=ppd then goto PastEmpCheckTest
 	if ~fn_employeeHasCheckOnDate(eno,ppd) then goto LOOP_TOP ! if lpd><ppd then goto LOOP_TOP

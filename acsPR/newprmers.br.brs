@@ -8,7 +8,7 @@
 12160   dim abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 12180   dim sel_ded(20),sel_pen(20)
 12200   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
-12260   open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],Shr",internal,input,relative 
+12260   open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
 12280   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed 
 12300   open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
 12320 ! /r

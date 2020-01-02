@@ -1,18 +1,18 @@
 ! formerly S:\acsPR\newprFM
 ! Payroll Employee File
 ! r: setup and open files
-	fn_setup
-	fntop(program$)
+fn_setup
+fntop(program$)
 fn_openFiles
-goto MENU1 ! /r
+goto Menu1 ! /r
 
 
-MENU1: !
+Menu1: !
 goto AskEmployee
 AskEmployee: ! r:
-	departmentAddMode=0  !  this used to be in MENU1, but I moved it here because it shouldn't matter and I'd like to remove the MENU1 in favor of AskEmployee
+	departmentAddMode=0  !  this used to be in Menu1, but I moved it here because it shouldn't matter and I'd like to remove the Menu1 in favor of AskEmployee
 	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
-	fnTos(sn$="Employee-ask")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Employee Number:",16,right)
 	fncmbemp(1,18)
@@ -27,7 +27,7 @@ AskEmployee: ! r:
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
+	fnAcs2(mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
@@ -36,7 +36,7 @@ AskEmployee: ! r:
 	else if ckey=2 then
 		goto EditEmployee
 	else if ckey=3 then
-		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof EmpNotFound
+		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd eof EmpNotFound
 		holdeno=eno
 		ent$=lpad$(str$(eno),8)
 		goto ScrEmployee
@@ -54,7 +54,7 @@ AskEmployee: ! r:
 	end if
 goto AddEmployee ! /r
 AddEmployee: ! r:
-	fnTos(sn$="Employeefm")
+	fnTos
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Employee Number:",mylen,1)
@@ -62,7 +62,7 @@ AddEmployee: ! r:
 	resp$(respc+=1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screem.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	add1=1
 	ent=val(resp$(1))
@@ -81,7 +81,7 @@ AddEmployee: ! r:
 	mat rs=(0)
 	mat em=(0)
 	lpd=tgp=0
-	mat ta=(0)
+	w4step2=0 : unuse174$=''
 	mat ty=(0)
 	mat tqm=(0)
 	mat tcp=(0)
@@ -98,7 +98,7 @@ EditEmployee: ! r:
 	if ent=0 then goto AskEmployee
 	teno=eno=ent ! hdar=0
 	ent$=lpad$(str$(ent),8)
-	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd nokey EmpNotFound
+	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd nokey EmpNotFound
 	holdeno=eno
 goto ScrEmployee ! /r
 EmpNotFound: ! r:
@@ -108,105 +108,128 @@ EmpNotFound: ! r:
 	fnmsgbox(mat ml$,resp$,'',48)
 goto AskEmployee ! /r
 ScrEmployee: ! r:
-	fnTos(sn$="Employeeedit")
-	respc=0 : frac=0 !
+	fnTos
+	respc=0 : frac=0 : lc=0
 	mylen=28 : mypos=mylen+2
-	fnLbl(1,1,"Employee Number:",mylen,1)
-	fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
-	resp$(respc+=1)=str$(eno)
-	fnLbl(2,1,"Name:",mylen,1)
-	fnTxt(2,mylen+3,30,30,0,"",0,"Name can be entered first name first or last name first.")
-	resp$(respc+=1)=em$(1)
-	fnLbl(3,1,"Address:",mylen,1)
-	fnTxt(3,mylen+3,30,30,0,"",0,"")
-	resp$(respc+=1)=em$(2)
-	fnLbl(4,1,"City, State Zip:",mylen,1)
-	fnTxt(4,mylen+3,30,30,0,"",0,"")
-	resp$(respc+=1)=em$(3)
-	fnLbl(5,1,"Social Security #:",mylen,1)
-	fnTxt(5,mylen+3,11,11,0,"",0,"")
-	resp$(respc+=1)=ss$
-	fnLbl(6,1,"Race:",mylen,1)
-	respc+=1: for j=1 to udim(race_option$)
-		if rs(1)=val(race_option$(j)(1:1)) then resp$(respc)=race_option$(j)
-	next j
-	fncomboa("Race",6,mylen+3,mat race_option$,"",16)
-	fnLbl(7,1,"Sex:",mylen,1)
-	respc+=1: for j=1 to udim(gender_option$)
-		if rs(2)=val(gender_option$(j)(1:1)) then resp$(respc)=gender_option$(j)
-	next j
-	fncomboa("Sex",7,mylen+3,mat gender_option$,"",10)
-	fnLbl(8,1,"Marital Status:",mylen,1)
-	respc+=1: for j=1 to udim(married_option$)
-		if em(1)=val(married_option$(j)(1:1)) then resp$(respc)=married_option$(j)
-	next j
-	fncomboa("Marital",8,mylen+3,mat married_option$) ! ,"",11)
-	fnLbl(9,1,"Federal Exemptions:",mylen,1)
-	respc+=1
-	for j=1 to udim(fed_exemption_option$)
-		if em(2)=val(fed_exemption_option$(j)(1:2)) then resp$(respc)=fed_exemption_option$(j)
-	next j
-	fncomboa("FedEx",9,mylen+3,mat fed_exemption_option$,"",3)
-	fnLbl(10,1,"State Exemptions:",mylen,1)
-	respc+=1
-	for j=1 to udim(fed_exemption_option$)
-		if em(3)=val(fed_exemption_option$(j)(1:2)) then resp$(respc)=fed_exemption_option$(j)
-	next j
-	fncomboa("StateEx",10,mylen+3,mat fed_exemption_option$,"",3)
-	fnLbl(11,1,"Employment Status:",mylen,1)
-	fncombof("EmpStatus",11,mylen+3,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
-	resp$(respc+=1)=str$(em(4))
-	fnLbl(12,1,"Pay Code:",mylen,1)
-	respc+=1
-	for j=1 to udim(payperiod_option$)
-		if em(5)=val(payperiod_option$(j)(1:1)) then resp$(respc)=payperiod_option$(j)
-	next j
-	fncomboa("PayCode",12,mylen+3,mat payperiod_option$,"",16)
-	fnLbl(13,1,"FICA Code:",mylen,1)
-	respc+=1: for j=1 to udim(code6$)
-		if em(6)=val(code6$(j)(1:1)) then resp$(respc)=code6$(j)
-	next j
-	fncomboa("FICACode",13,mylen+3,mat code6$,"",32)
-	fnLbl(14,1,"EIC Code:",mylen,1)
-	fncomboa("EICCode",14,mylen+3,mat code7$,"",31)
-	resp$(respc+=1)=code7$(em(7)+1)
-	fnLbl(15,1,"Sick Pay Code:",mylen,1)
-	fnTxt(15,mylen+3,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
-	resp$(respc+=1)=str$(em(8))
-	fnLbl(16,1,"Vacation Pay Code:",mylen,1)
-	fnTxt(16,mylen+3,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
-	resp$(respc+=1)=str$(em(9))
-	fnLbl(17,1,"Sick Hours Accrued:",mylen,1)
-	fnTxt(17,mylen+3,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
-	resp$(respc+=1)=str$(em(10))
-	fnLbl(18,1,"Vacation Hours Accrued:",mylen,1)
-	fnTxt(18,mylen+3,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
-	resp$(respc+=1)=str$(em(11))
-	fnLbl(19,1,"Standard Federal W/H:",mylen,1)
-	fnTxt(19,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
-	resp$(respc+=1)=str$(em(12))
-	col3_pos=51 : col3_len=20
-	fnLbl(19,col3_pos,"Federal Tax Add-On:",col3_len,1)
-	fnTxt(19,73,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
-	resp$(respc+=1)=str$(em(13))
-	fnLbl(20,1,"Standard State W/H:",mylen,1)
-	fnTxt(20,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
-	resp$(respc+=1)=str$(em(14))
-	fnLbl(20,col3_pos,"State Tax Add-On:",col3_len,1)
-	fnTxt(20,73,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
-	resp$(respc+=1)=str$(em(15))
-	fnLbl(21,1,"Date Hired:",mylen,1)
-	fnTxt(21,mylen+3,10,10,0,"1",0,"The date hired is only used for information purposes only.")
-	resp$(respc+=1)=str$(em(16))
-	fnLbl(21,col3_pos,"Last Payroll Date:",col3_len,1)
-	fnTxt(21,73,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
-	resp$(respc+=1)=str$(lpd)
-	fnLbl(22,1,"Birth Date:",mylen,1)
-	fnTxt(22,mylen+3,10,10,0,"1",0,"The birth date is not required.")
-	resp$(respc+=1)=str$(bd)
-	fnLbl(22,col3_pos,"Phone Number:",col3_len,1)
-	fnTxt(22,73,12,12,0,"",0,"")
-	resp$(respc+=1)=ph$
+	col1_pos=1 : col1_len=mylen
+	col2_pos=col1_pos+col1_len+2
+	col3_pos=51 : col3_len=40 ! 20
+	col4_pos=col3_pos+col3_len+2 ! 73
+	fnLbl(lc+=1,1,'Employee Number:',mylen,1)
+	fnTxt(lc   ,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+	resp$(resp_eno=respc+=1)=str$(eno)
+
+	! r: col 1 top section
+	lc=2
+
+	fnLbl(lc+=1,1,'Name:',mylen,1)
+	fnTxt(lc   ,mylen+3,30,30,0,'',0,'Name can be entered first name first or last name first.')
+	resp$(resp_name=respc+=1)=em$(1)
+
+	fnLbl(lc+=1,1,"Address:",mylen,1)
+	fnTxt(lc   ,mylen+3,30,30,0,"",0,"")
+	resp$(resp_addr=respc+=1)=em$(2)
+	fnLbl(lc+=1,1,"City, State Zip:",mylen,1)
+	fnTxt(lc   ,mylen+3,30,30,0,"",0,"")
+	resp$(resp_csz=respc+=1)=em$(3)
+	lc+=1
+
+	fnLbl(lc+=1,1,"Social Security Number:",mylen,1)
+	fnTxt(lc   ,mylen+3,11,11,0,"",0,"")
+	resp$(resp_ssn=respc+=1)=ss$
+	! /r
+	! r: col 2 top section
+	lc=2
+	
+	fnLbl(lc+=1,col3_pos,'Birth Date:',col3_len,1)
+	fnTxt(lc   ,col4_pos,10,10,0,"1",0,"The birth date is not required.")
+	resp$(resp_birthDate=respc+=1)=str$(bd)
+	
+	fnLbl(lc+=1,col3_pos,'Phone Number:',col3_len,1)
+	fnTxt(lc   ,col4_pos,12)
+	resp$(resp_phone=respc+=1)=ph$
+
+	fnLbl(          lc+=1,col3_pos,"Race:",col3_len,1)
+	fncomboa("Race",lc   ,col4_pos,mat race_option$,"",16)
+	resp$(resp_race=respc+=1)=fnSetForCombo$(mat race_option$,str$(rs(1)))
+
+	fnLbl(         lc+=1,col3_pos,'Sex:',col3_len,1)
+	fncomboa('Sex',lc   ,col4_pos,mat gender_option$,'',10)
+	resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
+	
+	fnLbl(             lc+=1,col3_pos,'Marital Status:',col3_len,1)
+	fncomboa('Marital',lc   ,col4_pos,mat married_option$) ! ,'',11)
+	resp$(resp_married=respc+=1)=fnSetForCombo$(mat married_option$,str$(em(1)))
+
+	! /r
+	! r: col 2 - state and federal section
+	lc=9
+	
+	fnLbl(             lc+=1,col3_pos,"Federal Exemptions:",col3_len,1)
+	fncomboa("FedEx",  lc   ,col4_pos,mat fed_exemption_option$,"",3)
+	resp$(resp_fedExepmtions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(2)),1,2)
+	fnLbl(lc+=1,col3_pos,"Federal Tax Add-On:",col3_len,1)
+	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
+	resp$(resp_fedAddOn=respc+=1)=str$(em(13))
+	fnLbl(lc+=1,col3_pos,"Standard Federal W/H:",col3_len,1)
+	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
+	resp$(resp_stdFed=respc+=1)=str$(em(12))
+	lc+=1
+	fnLbl(             lc+=1,col3_pos,"State Exemptions:",col3_len,1)
+	fncomboa("StateEx",lc   ,col4_pos,mat fed_exemption_option$,"",3)
+	resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(3)),1,2)
+	fnLbl(lc+=1,col3_pos,"State Tax Add-On:",col3_len,1)
+	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
+	resp$(resp_StateAddOn=respc+=1)=str$(em(15))
+	fnLbl(lc+=1,col3_pos,"Standard State W/H:",col3_len,1)
+	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
+	resp$(resp_stdState=respc+=1)=str$(em(14))
+	! /r
+	
+	lc=9
+	fnLbl(lc+=1,col1_pos,"Date Hired:",col1_len,1)
+	fnTxt(lc   ,col2_pos,10,10,0,"1",0,"The date hired is only used for information purposes only.")
+	resp$(resp_hireDate=respc+=1)=str$(em(16))
+	fnLbl(lc+=1,col1_pos,"Last Payroll Date:",col1_len,1)
+	fnTxt(lc   ,col2_pos,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
+	resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
+	! 
+	fnLbl(               lc+=1,1,"Employment Status:",mylen,1)
+	fncombof("EmpStatus",lc   ,col2_pos,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
+	resp$(resp_empStatus=respc+=1)=str$(em(4))
+	fnLbl(              lc+=1,col1_pos,"Pay Code:",col1_len,1)
+	fncomboa("PayCode", lc    ,col2_pos,mat payperiod_option$,"",16)
+	resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payperiod_option$,str$(em(5)))
+	lc+=1
+	fnLbl(lc+=1,col1_pos,"Vacation Pay Code:",col1_len,1)
+	fnTxt(lc   ,col2_pos,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
+	resp$(resp_vacationPay=respc+=1)=str$(em(9))
+	fnLbl(lc+=1,col1_pos,"Vacation Hours Accrued:",col1_len,1)
+	fnTxt(lc   ,col2_pos,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
+	resp$(resp_vacationAccrued=respc+=1)=str$(em(11))
+
+	
+	lc=17
+	fnLbl(lc+=1,1,"Sick Pay Code:",col1_len,1)
+	fnTxt(lc   ,col2_pos,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
+	resp$(resp_sickPay=respc+=1)=str$(em(8))
+	fnLbl(lc+=1,1,"Sick Hours Accrued:",col1_len,1)
+	fnTxt(lc   ,col2_pos,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
+	resp$(resp_sickAccrued=respc+=1)=str$(em(10))
+	lc=17
+	fnLbl(              lc+=1,col3_pos,"FICA Code:",col3_len,1)
+	fncomboa("FICACode",lc    ,col4_pos,mat code6$,"",32)
+	resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
+	fnLbl(              lc+=1,col3_pos,"EIC Code:",col3_len,1)
+	fncomboa("EICCode", lc    ,col4_pos,mat code7$,"",31)
+	resp$(resp_EicCode=respc+=1)=code7$(em(7)+1)
+	
+	
+	lc+=1
+	
+	fnChk(lc+=1,col4_pos,'W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
+	resp_w4step2=respc+=1 : if w4step2 then resp$(resp_w4step2)='True' else resp$(resp_w4step2)='False'
+
 	! picture=0
 	fnCmdKey('&Departments ('&str$(fn_EmployeeDepartmentCount(eno))&')',2,0,0,"Review this employee's departmental information.")
 	fnCmdKey("Direct D&eposit",7,0,0,"Review direct deposit information.")
@@ -218,34 +241,35 @@ ScrEmployee: ! r:
 	end if
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
-	eno=val(resp$(1)(1:8))
-	em$(1)=resp$(2) ! name
-	em$(2)=resp$(3)
-	em$(3)=resp$(4)
-	ss$=resp$(5)
-	rs(1)=val(resp$(6)(1:1))
-	rs(2)=val(resp$(7)(1:1)) ! sex
-	em(1)=val(resp$(8)(1:1)) ! marital status
-	em(2)=val(resp$(9)(1:2)) ! fed ex
-	em(3)=val(resp$(10)(1:2)) ! state ex
-	em(4)=val(resp$(11)(1:2)) ! emp status
-	em(5)=val(resp$(12)(1:2)) ! pay code
-	em(6)=val(resp$(13)(1:2)) ! fica code
-	em(7)=val(resp$(14)(1:2)) ! eic code
-	em(8)=val(resp$(15)(1:5)) ! sick pay
-	em(9)=val(resp$(16)) ! vacation Pay code
-	em(10)=val(resp$(17)) ! sick accrued
-	em(11)=val(resp$(18)) ! vac accrued
-	em(12)=val(resp$(19)) ! std fed
-	em(13)=val(resp$(20)) ! fed addon
-	em(14)=val(resp$(21)) ! std state
-	em(15)=val(resp$(22)) ! state addon
-	em(16)=val(resp$(23)) ! date hired
-	lpd=val(resp$(24)) ! last payroll date
-	bd=val(resp$(25)) ! birth date
-	ph$=resp$(26) ! phone
+	eno    =val(resp$(resp_eno            )(1:8))
+	em$(1) =    resp$(resp_name           )       ! name
+	em$(2) =    resp$(resp_addr           )
+	em$(3) =    resp$(resp_csz            )
+	ss$    =    resp$(resp_ssn            )
+	rs(1)  =val(resp$(resp_race           )(1:1))
+	rs(2)  =val(resp$(resp_sex            )(1:1)) ! sex
+	em(1)  =val(resp$(resp_married        )(1:1)) ! marital status
+	em(2)  =val(resp$(resp_fedExepmtions  )(1:2)) ! fed ex
+	em(3)  =val(resp$(resp_stExeptions    )(1:2)) ! state ex
+	em(4)  =val(resp$(resp_empStatus      )(1:2)) ! emp status
+	em(5)  =val(resp$(resp_payCode        )(1:2)) ! pay code
+	em(6)  =val(resp$(resp_ficaCode       )(1:2)) ! fica code
+	em(7)  =val(resp$(resp_EicCode        )(1:2)) ! eic code
+	em(8)  =val(resp$(resp_sickPay        )(1:5)) ! sick pay
+	em(9)  =val(resp$(resp_vacationPay    )     ) ! vacation Pay code
+	em(10) =val(resp$(resp_sickAccrued    )     ) ! sick accrued
+	em(11) =val(resp$(resp_vacationAccrued)     ) ! vac accrued
+	em(12) =val(resp$(resp_stdFed         )     ) ! std fed
+	em(13) =val(resp$(resp_fedAddOn       )     ) ! fed addon
+	em(14) =val(resp$(resp_stdState       )     ) ! std state
+	em(15) =val(resp$(resp_StateAddOn     )     ) ! state addon
+	em(16) =val(resp$(resp_hireDate       )     ) ! date hired
+	lpd    =val(resp$(resp_lastPayrollDate)     ) ! last payroll date
+	bd     =val(resp$(resp_birthDate      )     ) ! birth date
+	ph$    =    resp$(resp_phone          )       ! phone
+	if resp$(resp_w4step2)='True' then w4step2=1 else w4step2=0
 	! if ckey=6 then goto PICTURE
 	if ckey=8 then
 		fnhours(eno)
@@ -266,13 +290,12 @@ ScrEmployee: ! r:
 		if ckey=2 then 
 			goto FirstDepartment
 		else 
-			goto MENU1
+			goto Menu1
 		end if
 	else if ckey=4 then
 		goto DeleteEmployee
 	end if
-goto FirstDepartment
-! /r
+goto FirstDepartment ! /r
 EndOfDepartments: !
 goto ScrEmployee
 FirstDepartment: ! r:
@@ -286,7 +309,7 @@ NextDepartment: ! r:
 	if firstread=1 and teno<>eno then goto DepartmentAdd
 	if teno<>eno then goto EndOfDepartments
 ScrDepartment: !
-	fnTos(sn$="EmployeeDep")
+	fnTos
 	respc=0 : fram1=1
 	mylen=20 : mypos=mylen+2 : mat resp$=("")
 	dim departmentCap$*128
@@ -361,7 +384,7 @@ ScrDepartment: !
 	fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
 	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
@@ -398,7 +421,7 @@ ScrDepartment: !
 	if departmentAddMode then
 		write #hDepartment,using 'Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
 	else
-		if eno<>ent then goto CHGENO
+		if eno<>ent then goto ChangeEmployeeNo
 		rewrite #hDepartment,using "Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2": teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 	end if
 	firstread=0
@@ -413,8 +436,7 @@ ScrDepartment: !
 		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EditEmployee
 	end if
-	goto AskEmployee
-! /r
+goto AskEmployee ! /r
 DepartmentAdd: ! r: new department
 	departmentAddMode=1
 	tdn=0
@@ -428,12 +450,12 @@ goto ScrDepartment ! /r
 
 SaveEmployee: ! r:
 	if add1=1 then 
-		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd
 		add1=0
 	else if holdeno<>eno then 
-		goto CHGENO
+		goto ChangeEmployeeNo
 	else
-		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd
 	end if
 return ! /r
 
@@ -451,18 +473,12 @@ DeleteEmployee: ! r:
 		! delete check transactions
 		heno$=lpad$(str$(eno),8)
 		fnKeyDelete(hCheckIdx1,'Form POS 1,N 8',heno$)
-		! restore #hCheckIdx1,key>=heno$&"         ": nokey DeleteEmployeeFinis
-		! do
-		! 	read #hCheckIdx1,using 'form pos 1,n 8': histeno eof DeleteEmployeeFinis
-		! 	if histeno<>eno then goto DeleteEmployeeFinis
-		! 	delete #hCheckIdx1:
-		! loop
 	else
 		goto DeleteEmployeeFinis
 	end if
 	DeleteEmployeeFinis: !
-goto MENU1 ! /r
-CHGENO: ! r:
+goto Menu1 ! /r
+ChangeEmployeeNo: ! r:
 	mat ml$(3)
 	ml$(1)="You have chosen to change the employee number"
 	ml$(2)="from "&str$(holdeno)&" to "&str$(eno)&"."
@@ -500,17 +516,17 @@ CHGENO: ! r:
 		end if
 	next wsid_item
 	! /r
-	! L3980: ! change main employee record
+	! change main employee record
 	delete #hEmployee,key=ent$:
-	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
+	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd
 	ent$=lpad$(str$(eno),8)
 	hact$=ent$
 	CHGENO_XIT: !
-goto MENU1 ! /r
+goto Menu1 ! /r
 def fn_openFiles
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
-	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
-	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPIndx2.h[cno],Shr",internal,outIn,keyed
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,c 5,c 12,n 6
+	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
 	open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
@@ -531,7 +547,13 @@ fnend
 def fn_setup
 	library 'S:\Core\Library': fntop,fnxit
 	library 'S:\Core\Library': fnhours
-	library 'S:\Core\Library': fnTos,fnLbl,fnCmdKey,fnAcs,fncombof,fnTxt
+	library 'S:\Core\Library': fnTos
+	library 'S:\Core\Library': fnLbl
+	library 'S:\Core\Library': fnCmdKey
+	library 'S:\Core\Library': fnAcs2
+	library 'S:\Core\Library': fncombof
+	library 'S:\Core\Library': fnTxt
+	library 'S:\Core\Library': fnChk
 	library 'S:\Core\Library': fncmbemp
 	library 'S:\Core\Library': fncomboa,fnpic
 	library 'S:\Core\Library': fnFra
@@ -543,22 +565,23 @@ def fn_setup
 	library 'S:\Core\Library': fnDedNames
 	library 'S:\Core\Library': fnaddonec
 	library 'S:\Core\Library': fnmsgbox
-	on error goto ERTN
-	! ______________________________________________________________________
+	library 'S:\Core\Library': fnSetForCombo$
+	on error goto Ertn
+	
 	dim ph$*12
 	dim resp$(50)*128
 	dim ty(21)
 	dim tqm(17)
 	dim tcp(22)
 	dim em(16)
-	dim ta(2)
+	dim w4step2,unuse174$*5
 	dim tdt(4),tcd(3)
 	dim tdet(23)
 	dim ss$*11
 	dim rs(2)
 	dim em$(3)*30
 	dim ml$(2)*80
-	!
+	
 	dim race_option$(7)*15
 	race_option$(1)="0 - Unknown"
 	race_option$(2)="1 - Caucasian"
@@ -567,12 +590,12 @@ def fn_setup
 	race_option$(5)="4 - Oriental"
 	race_option$(6)="5 - AmIndian"
 	race_option$(7)="6 - Indochines"
-	!
+	
 	dim gender_option$(3)*11
 	gender_option$(1)="0 - Unknown"
 	gender_option$(2)="1 - Male"
 	gender_option$(3)="2 - Female"
-	!
+	
 	dim married_option$(0)*58
 	mat married_option$(0)
 	fnaddonec(mat married_option$,"0 - Single")
@@ -626,7 +649,6 @@ Finis: ! ! r:
 	close #hDepartment:
 goto XIT ! /r
 XIT: fnxit
-IGNORE: continue
 
 
 DD: ! r:
@@ -644,7 +666,7 @@ ASKDD: !
 		optEnableDirectDeposit$(2)="N = Direct Deposit not activated."
 	end if
 
-	fnTos(sn$="DirectDeposit")
+	fnTos
 	respc=0: mylen=35 : right=1
 	fnLbl(1,1,"Employee Number:",mylen,right)
 	fnTxt(1,mylen+3,8,8,1,"",1,"")
@@ -673,13 +695,13 @@ ASKDD: !
 	fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
 	fnCmdKey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto DdFinis
-	key$=resp$(1)
-	dd$=resp$(2)(1:1)
-	rtn=val(resp$(3)) !  banks routing #
-	acc=val(resp$(4)(1:2)) ! checking or savings
-	acn$=resp$(5) ! employee bank acct #
+	key$ =    resp$(1)
+	dd$  =    resp$(2)(1:1)
+	rtn  =val(resp$(3)     ) !  banks routing #
+	acc  =val(resp$(4)(1:2)) ! checking or savings
+	acn$ =    resp$(5)       ! employee bank acct #
 	if ckey=4 then
 		dd$="N"
 		rtn=acc=0 : acn$=''
@@ -730,4 +752,4 @@ def fn_DirectDepositKeyChange(from$,to$)
 	fnKeyChange(hDd,'form pos 1,C 10',from$,to$)
 	fn_dDclose
 fnend
-include: ertn
+include: Ertn

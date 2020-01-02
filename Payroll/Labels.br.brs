@@ -1,10 +1,9 @@
-! Replace S:\acsPR\newLabel
 ! Payroll Labels
 ! r: setup
 	library 'S:\Core\Library': fntop,fnxit,fnwait,fnaddlabel,fnlabel,fncomboa,fnTos,fnLbl,fnChk,fncombof,fnCmdSet,fnAcs,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdKey
 	library 'S:\Core\Library': fnPayPeriodEndingDate
 	on error goto ERTN
-	! ______________________________________________________________________
+
 	dim in1(9),io1$(8),lb$(6,6)*40,ln$*260,msgline$(2)*60,response$(5)*1
 	dim resp$(10)*40
 	dim em$(3)*30,ss$*11,in$*1,cap$*128,log$*128
@@ -12,16 +11,16 @@
 	dim item1$(4)*40
 	dim rs(2) ! RS(1)=Race RS(2)=Sex
 	dim em(17) ! see PR Master File Layout  em(4)=employment status
-	! ______________________________________________________________________
+
 	fntop(program$,cap$="Labels")
 	d1=fnPayPeriodEndingDate
 ! /r
 	gosub SCR1
 	gosub OPEN_KEYED
 	goto GET_STARTED
-! ______________________________________________________________________
+	
 OPEN_KEYED: ! r:
-	open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	L270: form pos 1,n 8,3*c 30,c 11,pos 110,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
 return ! /r
@@ -77,7 +76,7 @@ ASK_EMP: ! r:
 	respc=0
 	fnTos(sn$="prlabel-2")
 	fnLbl(1,1,"Employee Number to Print:",25,1)
-	fncombof("Employee",1,28,20,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",1,0, "Select any employee number you wish printed") 
+	fncombof("Employee",1,28,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select any employee number you wish printed") 
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
 	fnCmdKey("&Complete",2,0,0,"Print selected labels.")
@@ -114,7 +113,7 @@ SCR1: ! r:
 	fnTxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! 
 	resp$(respc+=1)=""
 	fnLbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
-	fncombof("Employee",13,mypos,20,"[Q]\PRmstr\rpmstr.h[cno]",1,8,9,20,"[Q]\PRmstr\Rpindex.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") 
+	fncombof("Employee",13,mypos,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") 
 	resp$(respc+=1)=""
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ck) 
@@ -148,4 +147,4 @@ PRINT_LABEL: ! r:
 	fnaddlabel(mat labeltext$)
 	lb1=0 : mat lb$=("")
 return ! /r
-include: ertn
+include: Ertn

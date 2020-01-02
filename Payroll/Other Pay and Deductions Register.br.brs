@@ -54,7 +54,7 @@ START_REPORT: !  r: main report loop
   on fkey 5 goto DONE
   fnopenprn
   gosub HDR
-  open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
+  open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
   do
     ReadEmployee: !
     read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS

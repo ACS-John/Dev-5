@@ -42,7 +42,7 @@
 L240: fnopenprn
 ! r: main loop
 	gosub HDR
-	open #1: "Name=[Q]\PRmstr\RPMSTR.h[cno],KFName=[Q]\PRmstr\RPINDEX.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	do
 		read #1,using L290: eno,em$,mat em eof Finis
 		L290: form pos 1,n 8,c 30,pos 112,6*n 2

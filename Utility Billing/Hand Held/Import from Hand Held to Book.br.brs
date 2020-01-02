@@ -898,7 +898,6 @@ def fn_setup
 	library 'S:\Core\Library': fnCopy
 	library 'S:\Core\Library': fnRename
 	library 'S:\Core\Library': fnFileTo2Arrays
-	library 'S:\Core\Library': fnFileTo2Arrays
 	library 'S:\Core\Library': fnAccountFromLocationId$
 	library 'S:\Core\Library': fnSrch_case_insensitive
 	library 'S:\Core\Library': fnMakesurePathExists
