@@ -94,29 +94,34 @@ L900: if lpd><tdt4 then goto L1040
 	for j=1 to 5
 		tcd1=tcd1+tdc(j)
 	next j
-	ded(1)=ded(1)+tcp(2)+tcp(15)
-	ded(2)=ded(2)+tcp(1)
-	ded(3)=ded(3)+tcp(3)
+	ded(1)+=tcp(2)+tcp(15)
+	ded(2)+=tcp(1)
+	ded(3)+=tcp(3)
 	if un>0 and un<11 then ded(4)=ded(4)+tcp(un+3)
 	for j=1 to 10
 		if j=un then goto L1020
-		if dedcode(j)=2 then ded(5)=ded(5)-tcp(j+3) else ded(5)=ded(5)+tcp(j+3)
-L1020: next j
-	tcp22=tcp22+tcp(22)
-L1040: goto L840
+		if dedcode(j)=2 then ded(5)-=tcp(j+3) else ded(5)+=tcp(j+3)
+		L1020: !
+	next j
+	tcp22+=tcp(22)
+L1040: !
+goto L840
 
-L1060: mat em$=("")
+L1060: !
+	mat em$=("")
 	ss$=""
 	em2=0
 	ta1=0
-MOVEINFO: ! 
+goto MOVEINFO
+
+MOVEINFO: ! r:
 	pl1$(1)=em$(1)
 	pl1$(2)=em$(2)
 	pl1$(3)=em$(3)
 	pl1$(4)=ss$
-! pL1$(5)=LPAD$(STR$(TDN),6)
+	! pL1$(5)=LPAD$(STR$(TDN),6)
 	pl1$(5)=lpad$(str$(em2),6)
-	goto L440
+goto L440 ! /r
 
 PGOF: ! 
 	pr #255: newpage
