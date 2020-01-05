@@ -2,7 +2,7 @@
 00020 ! pr Job Cost Report
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncno,fnerror,fnopenprn,fncloseprn,fnprocess,fnTos,fnLbl,fnTxt,fnChk,fnFra,fnOpt,fnCmdSet,fnAcs,fncmbjob
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,holdjn$*6,n$*40,a$(3)*30,b(4),totall(7)
 00080   dim sc1$(6),sd1$(6),se1$(6)*50,prtj$(100)*6,cnam$*40,npj$(2)*6

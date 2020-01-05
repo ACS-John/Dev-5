@@ -1,7 +1,7 @@
 00010 ! Replace S:\Core\Programs\PrintTest
 00020 ! ___________
 00030   library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnerror,fnAcs,fnCmdSet,fnxit,fnwait
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! __________________
 00051   dim prg$*256,cap$*128,ln$*900
 00052 ! ___________________

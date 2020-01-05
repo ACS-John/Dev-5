@@ -2,7 +2,7 @@ def fn_setup
 	setup=1
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnSrepEnv$
-	on error goto ERTN
+	on error goto Ertn
 fnend
 def library fnStatus(text$*512)
 	if ~setup then let fn_setup

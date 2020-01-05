@@ -2,7 +2,7 @@
 00020 ! -- pr Billing Journal
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fnFra,fnOpt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnStatusPause
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,g(12)
 00090   dim a(7),t1(10,200,3),st$(10)

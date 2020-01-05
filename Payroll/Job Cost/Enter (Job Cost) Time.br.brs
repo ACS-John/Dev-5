@@ -6,7 +6,7 @@
 	library 'S:\Core\Library': fncmbemp,fncomboa,fncombof,fncmbjob
 	library 'S:\Core\Library': fncmbsubcat,fnflexadd1,fncmbcategory,fnDedNames
 	library 'S:\Core\Library': fnflexinit1
-	on error goto ERTN
+	on error goto Ertn
 
 	dim sub$*30
 	dim cn$*11

@@ -5,17 +5,17 @@ recl=149
 eno   	, Employee Number    	,  N    8  	, ! SPos=1        aka=teno
 dept  	, Department Number  	,  n    3  	, ! SPos=9        aka=tdet
 gl    	, General Ledger     	,  c   12  	, ! SPos=12       aka=gl$
-tdt1  	, tdt1               	,  N    6  	, ! SPos=24       aka=tdt(1)
-tdt2  	, tdt2               	,  N    6  	, ! SPos=30       aka=tdt(2)
-tdt3  	, tdt3               	,  N    6  	, ! SPos=36       aka=tdt(3)
-tdt4  	, tdt4               	,  N    6  	, ! SPos=42       aka=tdt(4)
-tdc1  	, tdc1               	,  N    2  	, ! SPos=48       aka=tdc(1)
-tdc2  	, tdc2               	,  N    2  	, ! SPos=50       aka=tdc(2)
-tdc3  	, tdc3               	,  N    2  	, ! SPos=52       aka=tdc(3)
-tli   	, tli                	,  pd   4.2	, ! SPos=54       aka=tli
-tdet01	, tdet01             	,  PD   4.2	, ! SPos=58       aka=tdet(1)
-tdet02	, tdet02             	,  PD   4.2	, ! SPos=62       aka=tdet(2)
-tdet03	, tdet03             	,  PD   4.2	, ! SPos=66       aka=tdet(3)
+tdt1  	, Last Review Date   	,  N    6  	, ! SPos=24       aka=tdt(1)
+tdt2  	, Next Review Date   	,  N    6  	, ! SPos=30       aka=tdt(2)
+tdt3  	, Last Increase Date 	,  N    6  	, ! SPos=36       aka=tdt(3)
+tdt4  	, Last Payroll Date  	,  N    6  	, ! SPos=42       aka=tdt(4)
+tdc1  	, State Code         	,  N    2  	, ! SPos=48       aka=tdc(1),tcd(1)
+tdc2  	, Workmans Code      	,  N    2  	, ! SPos=50       aka=tdc(2),tcd(2)
+tdc3  	, Union Code         	,  N    2  	, ! SPos=52       aka=tdc(3),tcd(3)
+tli   	, Last Increase Amt  	,  pd   4.2	, ! SPos=54       aka=tli
+tdet01	, Salary             	,  PD   4.2	, ! SPos=58       aka=tdet(1)
+tdet02	, Regular Hourly Rate	,  PD   4.2	, ! SPos=62       aka=tdet(2)
+tdet03	, O/T Hourly Rate    	,  PD   4.2	, ! SPos=66       aka=tdet(3)
 tdet04	, tdet04             	,  PD   4.2	, ! SPos=70       aka=tdet(4)
 tdet05	, tdet05             	,  PD   4.2	, ! SPos=74       aka=tdet(5)
 tdet06	, tdet06             	,  PD   4.2	, ! SPos=78       aka=tdet(6)

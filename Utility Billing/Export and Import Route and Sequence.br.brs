@@ -198,7 +198,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCloseFile
 		library 'S:\Core\Library': fnKeyExists
 	
-		on error goto ERTN
+		on error goto Ertn
 		gosub Enum
 		
 		dim serviceName$(10)*20

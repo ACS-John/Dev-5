@@ -3,7 +3,7 @@
 	def library fncmbburden(myline,mypos; addall,container,indexfile$*200)
 ! ______________________________________________________________________
 		library 'S:\Core\Library': fncno,fncombof,fnerror
-		on error goto ERTN
+		on error goto Ertn
 ! ______________________________________________________________________
 		dim df$*200,if$*200
 ! ______________________________________________________________________

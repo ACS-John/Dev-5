@@ -2,7 +2,7 @@
 00020 ! Past Due Balance Breakdown
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fnopenprn,fncloseprn,fnerror,fnwait,fnChk,fnxit,fncno,fnLastBillingDate,fnCmdSet,fntop,fncreg_read,fnget_services
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$*30,g(12),cap$*128,resp$(10)*60
 00080   dim serviceName$(10)*20,hdr$*230,detail(11),t(11),gb(10),a$*20

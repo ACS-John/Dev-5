@@ -2,7 +2,7 @@
 00020 ! ReNUMBER A SERIES OF CHECKS
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
 00080 ! ______________________________________________________________________

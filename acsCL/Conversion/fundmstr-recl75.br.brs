@@ -3,7 +3,7 @@
         ! okay to use on RecL of 63
 00030   def library fnglcontrol
 00040     library 'S:\Core\Library': fnerror,fncno
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070 ! dim
 00080 ! ______________________________________________________________________

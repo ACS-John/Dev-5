@@ -2,7 +2,7 @@
 ! maintain company information file for checkbook management
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fncursys$,fnTos,fnLbl,fnAcs,fnCmdSet,fnTxt,fncombof,fnChk,fnButton,fnFra
-	on error goto ERTN
+	on error goto Ertn
 	dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,tb$*30
 	dim miscname$(10)*20,dedcode(10),dedfed(10),dedfica(10),dedst(10)
 	dim prgl(5,3)

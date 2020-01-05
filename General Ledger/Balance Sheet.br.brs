@@ -24,7 +24,7 @@ def fn_setup
 		library 'S:\Core\Library': fnindex_it
 		library 'S:\Core\Library': fngethandle
 	
-		on error goto ERTN
+		on error goto Ertn
 	
 		dim foot$*132
 	end if

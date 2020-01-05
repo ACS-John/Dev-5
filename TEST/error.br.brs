@@ -2,7 +2,7 @@
 00020 ! test the error routine
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnerror ! fnmsgbox,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070 ! dim message$(4)*40,cap$*128
 00080 ! note message$(4) is not dimmed long enough

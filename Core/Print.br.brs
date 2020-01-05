@@ -2,7 +2,7 @@
 ! open the report, printer, etc...
 ! ______________________________________________________________________
 def fn_setup
-	on error goto ERTN
+	on error goto Ertn
 	if ~setup then 
 		setup=1
 		library 'S:\Core\Library': fnError
@@ -204,7 +204,7 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
 	! /r
 	START_XIT: ! 
-	on error goto ERTN
+	on error goto Ertn
 fnend 
 def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAsStart$*2048)
 	dim line$*32000

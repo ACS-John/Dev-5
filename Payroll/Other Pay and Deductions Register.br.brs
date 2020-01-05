@@ -2,7 +2,7 @@
 ! Other Pay and Deductions Register
 ! r: setup library, on error, dims, open files, etc
   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnDedNames,fnPayPeriodEndingDate
-  on error goto ERTN
+  on error goto Ertn
 ! 
   dim em$*30,tdc(10),tcp(32),rpTemp(25),rptot(25),message$*40
   dim dat$*20

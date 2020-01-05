@@ -2,7 +2,7 @@
 00020 ! -- pr Cover Letter
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
 00080 ! ______________________________________________________________________

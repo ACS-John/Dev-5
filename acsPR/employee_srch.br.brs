@@ -5,7 +5,7 @@ def library fnemployee_srch(&x$; fixgrid)
 	! x$=account #     
 	! to extract the flexgrid information (master file)
 	library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs2,fnCmdSet,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 	dim item$(6)*30
 	dim resp$(30)*80
 

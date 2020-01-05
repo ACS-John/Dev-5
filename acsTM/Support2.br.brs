@@ -1,6 +1,6 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	fntop(program$)
 	fn_setup_hamster

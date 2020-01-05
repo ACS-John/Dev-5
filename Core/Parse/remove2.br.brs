@@ -5,7 +5,7 @@
 00030   def library fnremove2(&and$,&word$)
 00040 ! ______________________________________________________________________
 00050     library 'S:\Core\Library': fnerror
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     and$=trim$(and$)
 00090     x=pos(word$,and$,1)

@@ -1,6 +1,6 @@
 ! r: setup
 	library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnCmdSet,fngethandle,fnOpenFile,fnFree
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim Comp$(0)*128,CompN(0),form$(0)*256
 ! /r

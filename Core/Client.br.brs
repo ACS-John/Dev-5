@@ -97,7 +97,7 @@ def library fnclient$*18
 fnend 
 def fn_client$*18
 	! if env$('ACSDeveloper')<>'' then pr 'on the way in env client$ is '&env$('client')
-	on error goto ERTN
+	on error goto Ertn
 	dim clientReturn$*18
 	! r: derive client
 	loginNameWhich=fnsrch_case_insensitive(mat client_name$,login_name$)

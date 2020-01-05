@@ -19,6 +19,6 @@ def fn_setup
 	library 'S:\Core\Library': fnUpdateLicense
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnxit
-	on error goto ERTN
+	on error goto Ertn
 fnend
 include: ertn

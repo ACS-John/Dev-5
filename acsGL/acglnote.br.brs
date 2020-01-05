@@ -2,7 +2,7 @@
 00020 ! -- Foot Notes
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fnTos,fncomboa,fnCmdKey,fnAcs,fnget_wordprocessor_exe
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,fl2$(2),sc2$(2)*46,ln$*8000,cnam$*40,dat$*20,cap$*128
 00080   dim option$(2)*42,resp$(1)*50,atlantis$*80

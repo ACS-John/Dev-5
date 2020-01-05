@@ -6,7 +6,7 @@
 def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	! r: setup
 	library 'S:\Core\Library': fnerror,fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim sln2(199)
 	dim fltyp2$(199)*2

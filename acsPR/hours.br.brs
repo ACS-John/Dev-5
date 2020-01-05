@@ -2,7 +2,7 @@
 00020 ! access breakdown of hours by diffenent classifications
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnhours,fnxit,fnerror,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   fntop("S:\acsPR\hours","Breakdown of Hours")
 00080   fnhours(eno)

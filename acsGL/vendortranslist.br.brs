@@ -2,7 +2,7 @@
 00020 ! Vendor(Payee)  File - Transaction List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnconsole,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,holdvn$*8,vcode$*8
 00080   dim cnam$*40,dat$*20,adr(2),id1$*25

@@ -2,7 +2,7 @@
 00020 ! checkbook Accounts Payable Listing (Any Time)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fnFree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
 00080 ! ______________________________________________________________________

@@ -2,7 +2,7 @@
 ! pr bills for Village of Moweaqua
 
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpa_txt,fnpa_finis,fnpa_open,fnpa_font,fnpa_fontbold,fnpa_fontsize,fnpa_newpage,fnpa_line
-	on error goto ERTN
+	on error goto Ertn
 
 	dim resp$(10)*40,txt$*45,mg$(3)*30,cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),b(11),extra1$*30

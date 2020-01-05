@@ -4,7 +4,7 @@
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacglbld
 00050 ! ______________________________________________________________________
 00060     fntop(program$,"CHANGE_ME")
-00070     on error goto ERTN
+00070     on error goto Ertn
 00080 ! ______________________________________________________________________
 00090     dim a$(23)*20,floa$(23),io1$(23)
 00100     dim b$(14)*20,flob$(14),io2$(14)

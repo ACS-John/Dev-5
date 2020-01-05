@@ -2,7 +2,7 @@
 00020 ! Bank Reconciliation File  (maintains the bank rec file)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror, fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnchain,fnindex_it
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl2$(7),sc2$(7)*38
 00080   dim flo2$(3),sa$(2),sb$(3),sc$(9),sd$(7),se$(7)*20,sf$(4)

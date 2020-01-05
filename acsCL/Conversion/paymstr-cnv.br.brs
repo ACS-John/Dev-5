@@ -2,7 +2,7 @@
 00020 ! it's old
 00030 ! ________
 00040   library 'S:\Core\Library': fncno,fnerror,fnxit
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! _____________________________________
 00070 ! fntop
 00080   fncno(cno)

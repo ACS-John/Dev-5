@@ -2,7 +2,7 @@
 00011 ! convert [Q]\GLmstr from RECL 338 to RECL 416 Format
 10000   def library fnglmstr_338_416
 10020     library 'S:\Core\Library': fntop, fnerror,fncno,fnacglblds,fnStatus,fnCopy,fnindex_it
-10040     on error goto ERTN
+10040     on error goto Ertn
 10060 ! ______________________________________________________________________
 10080     dim cnam$*40,cap$*128,ml$(6)*48,resp$(5)*1,revb(13)
 10100 ! ______________________________________________________________________

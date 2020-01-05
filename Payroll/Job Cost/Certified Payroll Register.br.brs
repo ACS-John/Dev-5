@@ -8,7 +8,7 @@ library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet
 library 'S:\Core\Library': fnAcs2
 library 'S:\Core\Library': fncmbjob
 library 'S:\Core\Library': fnCmdKey
-on error goto ERTN
+on error goto Ertn
 
 dim jn$*6,cn$*11,ta(2),tr(9),io1$(2),n$*40,tn$*6,dr(7),en$*12
 dim resp$(3)*50,ml$(2)*60

@@ -2,7 +2,7 @@
 00020 ! GL Payroll File Menu
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnemployee_search,fnTxt,fnCmdSet,fnmsgbox,fnFree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl2$(5),sc2$(5)*38
 00080   dim sc1$(26),fl1$(26),io1$(41),hd$(2)*78,pr1(21),miscname$(10)*20

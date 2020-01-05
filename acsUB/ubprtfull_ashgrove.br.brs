@@ -2,7 +2,7 @@
 00020 ! pr bills for Ash Grove (full page)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnmsgbox,fnCmdKey,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(20)*160,txt$*80,mg$(13)*160,rw(22,13),cap$*128
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30

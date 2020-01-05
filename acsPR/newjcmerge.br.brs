@@ -2,7 +2,7 @@
 00020 ! Posting to Jobs...
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fntop,fnxit
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim h(7),ji1(6),jn$*6,ji2(6),cn$*11,l(13),ta(2),tr(9),empnum$*12
 00080   dim empnam$*30,cap$*128,message$*40,k$*25

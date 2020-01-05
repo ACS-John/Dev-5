@@ -2,7 +2,7 @@
 00020 ! Create Job Cost Report Program
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnerror,fntop, fnxit, fnrx
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim rn$*2,rt$*51,ch$(2)*132,psc(100),cap$*128,message$*40
 00080   dim f$(20)*50,pp(20),ppr(20),dp(20),fc(20),tcj(20),tcs(20),ty$(24)*8

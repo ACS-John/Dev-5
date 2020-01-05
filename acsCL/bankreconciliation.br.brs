@@ -2,7 +2,7 @@
 00020 ! Bank reconciliation routines
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fncomboa,fnCmdSet,fnAcs,fnchain,fnTxt,fnButton,fnFra,fnOpt,fnflexinit1,fnflexadd1,fnCmdKey,fnChk,fncombof,fnmsgbox,fncd,fnFree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,adr(2)
 00080   dim ck$(22),cap$*128,aa(2)

@@ -2,7 +2,7 @@
 00020 ! GL Merge program, chained to from other systems, like Checkbook-post to GL
 00030   def library fnglmerge
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fnTos,fnAcs,fnCmdSet,fncmbcno,fncursys$,fnLbl,fnTxt,fnCmdKey,fncombof,fnindex_it,fnfree
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim adr(2),ta(2),prg$*20,k(10,8),gl$(5)*12,gl1(5)
 00080     dim t$*12,n(2),l$*12,p$*30,ven$*8,zo(50),d$*50

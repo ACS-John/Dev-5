@@ -2,7 +2,7 @@
 00020 ! Texas Unemployment Compensation Report (Not on a menu, but can leave in)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnwait,fnwin3b,fnopenprn,fncloseprn,fnprocess,fnchain,fncno,fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(20),n(2),m$*5
 00080   dim cap$*128,message$*40,cnam$*40

@@ -1,5 +1,5 @@
 10000 ! r: test zone
-10010   ! on error goto ERTN
+10010   ! on error goto Ertn
 10020   fn_setup
 10100   library program$: fnIniOpen,fnIniRead$,fnIniSet,fnIniWrite
 10200   fnIniOpen('acs.ini')

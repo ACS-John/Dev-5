@@ -1,6 +1,6 @@
 !  Replace S:\acsPR\Conversion\Med-Cnv
 ! Split out Medicare if converted to new payroll in 2000
-	on error goto ERTN
+	on error goto Ertn
 
 	dim em$(3)*30
 	dim ss$*11

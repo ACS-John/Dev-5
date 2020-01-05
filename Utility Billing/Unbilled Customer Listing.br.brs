@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\ubUnBill
 ! r: setup 
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fnCmdSet,fntop,fnChk
-	on error goto ERTN
+	on error goto Ertn
 
 	dim z$*10,e$(4)*30,resp$(10)*40
 

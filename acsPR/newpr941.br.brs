@@ -3,7 +3,7 @@
 
 	library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnGetPayrollDates,fnerror,fnopenprn,fncloseprn,fnTxt,fnChk,fnCmdSet,fnAcs,fncomboa,fnFra,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fncreg_read,fnpa_txt,fnpa_pic,fnpa_fontsize,fnDedNames
 	fntop(program$,cap$="941 Summary")
-	on error goto ERTN
+	on error goto Ertn
 
 	dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
 	dim fullname$(20)*20,abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)

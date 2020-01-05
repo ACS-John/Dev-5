@@ -729,7 +729,7 @@ def fn_setup
 		library 'S:\Core\Library': fnbuildkey$
 		library 'S:\Core\Library': fnKeyExists
 		library 'S:\Core\Library': fnapply_default_rates
-		on error goto ERTN
+		on error goto Ertn
 
 		possibleServiceCount=10
 		dim z$*10

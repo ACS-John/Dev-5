@@ -2,7 +2,7 @@
 00020 ! this program calls fnacglblds to builds the file    [Q]\GLmstr\ACGLScr.h
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacglblds,fntop,fnerror,fnxit
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
 00080 ! ______________________________________________________________________

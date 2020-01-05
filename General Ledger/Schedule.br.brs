@@ -2,7 +2,7 @@
 00020 ! Schedule File  (Maintenance routines) was Form POS 1,N 2,2*C 78,3*N  1,80*c 12  now Form POS 1,N 3,2*C 78,3*N  1  Breakdowns in seperate file
 32000 ! r: setup, open files, library, set constants, on err, etc
 32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fncomboa,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnFree
-32040   on error goto ERTN
+32040   on error goto Ertn
 32060 ! ______________________________________________________________________
 32080   dim gl$(80)*12
 32100   dim sn$*78,ft$*78

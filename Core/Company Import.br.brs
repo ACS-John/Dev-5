@@ -15,7 +15,7 @@ library 'S:\Core\Library': fnub_cnv_note
 library 'S:\Core\Library': fnub_cnv_ubmstr_vb
 library 'S:\Core\Library': fnub_index_customer
 library 'S:\Core\Library': fnfix_trans_breakdowns
-! on error goto ERTN
+! on error goto Ertn
 ! ______________________________________________________________________
 dim cap$*128
 dim message$(1)*256

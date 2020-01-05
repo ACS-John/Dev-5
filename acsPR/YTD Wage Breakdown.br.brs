@@ -3,7 +3,7 @@
 
 	library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnopenprn,fncloseprn,fndat
 	fntop("S:\acsPR\prytdpay",cap$="YTD Wage Breakdown")
-	on error goto ERTN
+	on error goto Ertn
 
 	dim dat$*20
 	dim em1$*30

@@ -2,7 +2,7 @@
 00020 ! test the functions that send GLNumber comboboxes to the screen and pull and format the response from it.
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnCmdSet,fnagl$,fnqgl,fnrgl$,fnpause
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070 ! Dim GL$*12,C$*12,P$*30,S$*2,A(3),DCODE$*24,GLC$*24
 00080   dim cap$*128,resp$(10)*50

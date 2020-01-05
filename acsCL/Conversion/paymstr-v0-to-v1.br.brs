@@ -2,7 +2,7 @@
 00020 ! converts the CL TRmstr file from version 1 to Version 2
 00030   def library fnpaymstr_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnwait,fngethandle,fnCopy,fnStatus,fnindex_it
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080     dim gl$*12,gl$(10)*12,percent(10),de$*30,desc$(10)*30

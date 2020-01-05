@@ -2,7 +2,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndat,fnpedat$,fncch$,fnactpd,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs
 00050   fntop(program$,cap$="Period Ending Dates")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,pedat$*20,cch$*20,iom$(2),scm$(2),cap$*128
 00090   dim periodOption$(13)*2,resp$(10)*200

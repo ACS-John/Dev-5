@@ -3,7 +3,7 @@
 00012 ! uses the calculated water usage to calculate and store a  standard sewer charge
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fnxit,fnCmdSet,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00070   dim cap$*128,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11),ttg(11),e2$*30,rt(10,3)
 00100   fntop(program$,cap$="Set Sewer Standard Charges from Average Water Usage")
 00102   open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 

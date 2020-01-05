@@ -15,7 +15,7 @@
 	library 'S:\Core\Library': fnprocess
 	library 'S:\Core\Library': fnGetPayrollDates,fnPayPeriodEndingDate
 	library 'S:\Core\Library': fnDedNames
-	on error goto ERTN
+	on error goto Ertn
 ! gosub CHECK_PASSWORD
 ! ______________________________________________________________________
 	dim tdc(10),fullname$(20)*20,abbrevname$(20)*20

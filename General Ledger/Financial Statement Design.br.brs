@@ -322,7 +322,7 @@ def fn_setup
 		setup=1
 		library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fndat,fnflexinit1,fnflexadd1,fnLbl,fnTxt,fnChk,fncomboa,fnmsgbox
 		library 'S:\Core\Library': fnAddOneC
-		on error goto ERTN
+		on error goto Ertn
 
 		dim ac(9)
 		dim ml$(4)*80

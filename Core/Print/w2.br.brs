@@ -303,7 +303,7 @@ def fn_setup
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fncomboa,fnAddOneC
-		on error goto ERTN
+		on error goto Ertn
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
 		optNameFormat$(2)='Last Name First'

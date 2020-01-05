@@ -2,7 +2,7 @@
 ! this program converts a field from ALL CAPITAL LETTERS  to Book Title Capitalization
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fnxit,fnbooktitle$
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim nam$*30,ab$(4)*40
 	cno=val(env$('cno'))

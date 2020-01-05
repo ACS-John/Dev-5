@@ -2,7 +2,7 @@
 00020 ! Build Range of Accounts
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror, fnchain,fnTos,fnLbl,fnqgl,fnrgl$,fnTxt,fnFra,fncombof,fnCmdKey,fnAcs,fnagl$,fnCmdSet,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),glk$*12,fsk$*5,resp$(20)*50

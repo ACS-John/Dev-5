@@ -494,7 +494,7 @@ IGNORE: continue
 def fn_setup
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
 	library 'S:\Core\Library': fnAddOneC
-	on error goto ERTN
+	on error goto Ertn
 ! r: constants and dims
 	on fkey 5 goto DONE
 	dim filter_option_enabled$(7)*50,e$(4)*30

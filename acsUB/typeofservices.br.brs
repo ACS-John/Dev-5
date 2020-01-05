@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\TypeOfServices   !   Type of Services (All Companies)
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit,fnLbl,fnTos,fnAcs,fnerror,fnCmdSet,fnflexinit1,fnflexadd1,fngetdir2
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim resp$(60)*20
 00070   dim cap$*128

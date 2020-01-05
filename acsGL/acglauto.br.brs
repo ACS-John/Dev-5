@@ -2,7 +2,7 @@
 00020 ! automatic processing - chain program
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox,fnFree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim prg$*35,a$*40,cnam$*40,ml$(3)*80
 00080 ! ______________________________________________________________________

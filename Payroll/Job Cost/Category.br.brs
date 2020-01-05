@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnmsgbox,fnxit,fndat,fntop,fnTos,fnLbl,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnflexinit1,fnflexadd1,fncmbcategory,fncategory_srch
 00050   fntop(program$)
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070   dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*60
 00080   dim holdcategory$*5,category$*5
 00090   dim df$*256,if$*256

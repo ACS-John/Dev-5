@@ -4,7 +4,7 @@
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   fntop(program$,cap$="Comparative Income Statement")
 00060 ! ______________________________________________________________________
-00070   on error goto ERTN
+00070   on error goto Ertn
 00090 ! ______________________________________________________________________
 00100   dim fl1$*256,p$(20)*50,cap$*128
 00110   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22

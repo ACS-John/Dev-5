@@ -16,7 +16,7 @@
 	library 'S:\Core\Library': fnCmdSet,fntop,fnFra,fnOpt,fnChk
 	library 'S:\Core\Library': fnmsgbox,fnxit
 	library 'S:\Core\Library': fnreg_read,fnreg_write
-	on error goto ERTN
+	on error goto Ertn
 	dim p$*10,foot$*16,gb(10),tgb(10),ggb(10),dat$*20
 	dim subtotal_gb(10)
 	dim tg(11)

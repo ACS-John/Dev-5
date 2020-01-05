@@ -2,7 +2,7 @@
 ! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fndat,fnprocess,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnqgl,fnrgl$,fnagl$
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim gln(80,3),k4$*2,message$*40
 	dim gl$(80)*12,dat$*20,hac$*3,na$*40

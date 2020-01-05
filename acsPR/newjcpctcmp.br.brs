@@ -2,7 +2,7 @@
 00020 ! Enter Percent Complete
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnmsgbox,fnTos,fnLbl,fnTxt,fncmbjob,fncmbcategory,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,ml$(2)*60,resp$(5)*30
 00080   dim jn$*6,jno$*6,n$*40,cn$*11,k$*25

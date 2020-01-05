@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror,fnindex_it,fnfree
 00050   fntop(program$,"CHANGE_ME")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim d$*50,rf(6),bc(12),bp(12),bm(12),ta(2),tr(7),tr$*12,td$*30
 00090   dim k$(3)*25,ss$*11,m(18)

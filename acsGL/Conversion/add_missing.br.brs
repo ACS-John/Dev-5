@@ -1,5 +1,5 @@
 00040   library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fncno,fnerror,fnchain,fnprocess,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fnconsole,fngetdir2,fnputcno,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! r: dims
 00070   dim a$*40,em$*30,ta(2),cp(32),tcp(22),hc(5),thc(5),d$*20,whc(10)
 00080   dim dedcode(10),calcode(10),dedfed(10),message$*40,cnam$*40,cap$*128

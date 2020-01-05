@@ -241,7 +241,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		on error goto ERTN
+		on error goto Ertn
 
 		dim line$*1024
 		dim item$(0)*256

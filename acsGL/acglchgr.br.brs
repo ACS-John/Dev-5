@@ -3,7 +3,7 @@
         ! for Letter size paper
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnwait,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
@@ -178,10 +178,10 @@
 01710   b=val(rtrm$(pedat$(a-4:a)))
 01720   pr #255,using L1730: b
 01730 L1730: form pos 72,pic(zzzz),skip 2
-01740   on error goto ERTN
+01740   on error goto Ertn
 01750   goto L1790
 01760 L1760: pr #255: tab(68);"Current Year"
-01770   on error goto ERTN
+01770   on error goto Ertn
 01780   pr #255: 
 01790 L1790: return 
 01800 ! ______________________________________________________________________

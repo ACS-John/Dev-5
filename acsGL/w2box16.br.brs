@@ -25,7 +25,7 @@
 12020   if ~w2supSetup then
 12040     w2supSetup=1
 12060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnopenprn,fncloseprn,fnAcs,fnCmdSet,fnflexadd1,fnflexinit1,fnTos,fngethandle,fnLbl,fncombof,fncomboa,fnTxt
-12080     on error goto ERTN
+12080     on error goto Ertn
 12100     dim resp$(64)*128
 12120     dim t$*8
 12180     open #hw2box16:=fngethandle: "Name=[Q]\GLmstr\W2Box16.h[cno],Version=0,KFName=[Q]\GLmstr\W2Index.h[cno],Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed

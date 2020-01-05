@@ -18,7 +18,7 @@ library 'S:\Core\Library': fnPa_open
 library 'S:\Core\Library': fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line
 library 'S:\Core\Library': fnPa_finis
 library 'S:\Core\Library': fnFree,fnEditFile,fncopy
-on error goto ERTN
+on error goto Ertn
 ! r: dims
 	dim z$*10
 	dim meter_address$*30

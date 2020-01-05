@@ -1,6 +1,6 @@
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fncomboa,fncombof,fnGetPayrollDates
 	library 'S:\Core\Library': fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim a$*40,em$(1)*30,ta(2),cp(22),tcp(22),hc(5),thc(5),whc(10)
 	dim dedcode(10),calcode(10),dedfed(10),message$*40

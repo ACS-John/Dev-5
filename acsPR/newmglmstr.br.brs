@@ -1,7 +1,7 @@
 00020 ! Maintain Department Matching GL Numbers
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncloseprn,fnopenprn,fncno,fntop,fnxit,fnTos,fnLbl,fnCmdKey,fnAcs,fnqgl,fnrgl$,fncombof,fnagl$,fnmsgbox,fnTxt,fnDedNames
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim label1$(22)*20,io2$(34),mgl$(11)*12
 00080   dim rpnames$(86)*20,label1p$(12)*14,io1$(6),wrd1$(6)*40,err$(2)*65

@@ -8,7 +8,7 @@
 library 'S:\Core\Library': fnXit,fnTop,fnEndOfMonth
 dim t$(0)*128,tN(0)
 hTrans=fn_open('CL Transaction',mat t$,mat tN,mat form$)
-on error goto ERTN
+on error goto Ertn
 fnTop(program$)
 matchClearDay=days('07/31/2018','mm/dd/ccyy')
 olderThanTransDay=days('07/31/2018','mm/dd/ccyy')

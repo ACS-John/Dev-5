@@ -7,7 +7,7 @@ def library fnhours(eno)
 	library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton
 	library 'S:\Core\Library': fnAcs2,fnmsgbox,fnCmdSet,fncombof,fnCmdKey
 	library 'S:\Core\Library': fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim message$*40,resp$(10)*40
 	dim oldclass$*5,class$*5,classification$*30

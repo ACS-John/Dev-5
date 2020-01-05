@@ -2,7 +2,7 @@
 library 'S:\Core\Library': fntop,fnxit,fnH2Init,fnH2AddText,fnHamster2
 fntop(program$)
 gosub Enum
-on Error goto Ertn
+on error goto Ertn
 fnH2Init
 fnH2AddText("Account"           ,12                          )
 fnH2AddText("Description"       ,50,"C" ,50,0            , 13)

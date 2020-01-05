@@ -2,7 +2,7 @@
 10200 ! -- PAYROLL REGISTER
 10400 ! ______________________________________________________________________
 10600   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnpedat$,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
-10800   on error goto ERTN
+10800   on error goto Ertn
 11000 ! ______________________________________________________________________
 11200   dim cnam$*40,cap$*128
 11400   dim k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20

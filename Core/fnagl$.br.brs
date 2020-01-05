@@ -2,7 +2,7 @@
 00020 ! format the answer to fnQgl -
 00030   def library fnagl$*12(&x$)
 00040     library 'S:\Core\Library': fngethandle,fnerror,fnpause
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! _______________________________________________________________________
 00070     if x$="[All]" or x$='' then let fnagl$="  0     0  0" : goto XIT
 00080     tmp_cursys$=env$('CurSys')

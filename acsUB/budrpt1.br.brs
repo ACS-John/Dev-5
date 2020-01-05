@@ -2,7 +2,7 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnget_services
 	library 'S:\Core\Library': fnopenprn,fncloseprn, fndate_mmddyy_to_ccyymmdd, fnxit,fnAcs,fnTos,fnLbl,fnTxt,fnCmdSet
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
 	dim t1(11),t2(11),t3(11),cap$*128,message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255

@@ -2,7 +2,7 @@
 00020 ! pr Job Status Worksheet
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fncmbjob,fnmsgbox,fnCmdKey
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,resp$(3)*40,cnam$*40
 00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20

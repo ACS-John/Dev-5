@@ -2,7 +2,7 @@
 00020 ! ACCOUNTANTS P/R MERGE (Posts payroll checks entered directly from G/L to the after-the-fact payroll records in G/L)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnprocess,fncno,fnerror,fnTos,fnLbl,fnOpt,fnCmdKey,fnAcs,fnCmdSet,fnTxt,fncombof
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim k$(3)*25,ss$*11,d(22),m(36),adr(2),n(2),fb$(4),en$*4,cap$*128,tr(7)
 00080 L80: dim tr$*12,td$*30,jv$(3)*6,resp$(10)*80

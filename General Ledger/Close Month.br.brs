@@ -1,7 +1,7 @@
 ! Formerly S:\acsGL\CloseMonth
 ! GL Month End Closing
 library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnactpd, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fngethandle,fnindex_it,fnRemoveDeletedRecords,fnAutomatedSavePoint
-on error goto ERTN
+on error goto Ertn
 dim bc(13)
 dim tr(7)
 dim tr$*12

@@ -5,7 +5,7 @@
         ! create an RO record
 00030 ! ______________________________________________________________________
 00040   library "S:\Core\Library": fntop,fnxit, fnerror,fnoldmsgbox,fntop,fnxit,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
 00080   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)

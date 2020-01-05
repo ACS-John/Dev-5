@@ -2,7 +2,7 @@
 ! Quarterly Federal U/C Worksheet
 
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fncreg_read,fnDedNames,fnGetPayrollDates
-	on error goto ERTN
+	on error goto Ertn
 
 	dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
 	dim fullname$(20)*20,abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)

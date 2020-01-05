@@ -10,7 +10,7 @@
 	library 'S:\Core\Library': fnSpecialFolderPath$
 	library 'S:\Core\Library': fnMakeSurePathExists
 
-	on error goto ERTN
+	on error goto Ertn
 
 ! /r
 	fntop(program$)

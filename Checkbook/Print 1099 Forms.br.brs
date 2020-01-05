@@ -4,7 +4,7 @@
 00050   fntop(program$,cap$="Print 1099 Forms")
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
 00100   dim cap$*128,key$*19,tr$(5)*35
-00060   on error goto ERTN
+00060   on error goto Ertn
 00290 ! /r
 32000 ! r: body of program
 32020   if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then 

@@ -2,7 +2,7 @@
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,tp1(4),by(13),cap$*128
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),bp(13),udf$*256

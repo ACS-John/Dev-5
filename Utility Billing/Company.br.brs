@@ -361,7 +361,7 @@ def fn_setup
 		library 'S:\Core\Library': fnbutton_or_disabled
 		library 'S:\Core\Library': fnEftData$
 		library 'S:\Core\Library': fnclient_has
-		on error goto ERTN
+		on error goto Ertn
 	
 		dim resp$(256)*40
 		dim CompanyNameAndAddr$(3)*40

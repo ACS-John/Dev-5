@@ -2,7 +2,7 @@
 00020 ! Job Cost User-Designed Report File
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fnoldmsgbox,fnfkey, fnopenprn,fncloseprn, fncno,fnerror,fnchain,fnrx,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,message$*40,msgline$(2)*60,response$(5)*1
 00080   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,iom$(3),scm$(3)*40

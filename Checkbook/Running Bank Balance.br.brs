@@ -2,7 +2,7 @@
 00020 ! Running Bank Balance
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd,fnmsgbox
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,de$*35,bn$*30,ml$(0)*100
 00080 ! ______________________________________________________________________

@@ -4,7 +4,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnerror
 00050   fntop(program$,"Special Reversing")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim adr(2),ta(2),prg$*20
 00090   dim t$*12,n(2),l$*12,p$*30

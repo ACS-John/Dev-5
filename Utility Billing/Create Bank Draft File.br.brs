@@ -276,7 +276,7 @@ def fn_setup
 		for j=1 to 10
 			if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 		next j
-		on error goto ERTN
+		on error goto Ertn
 	end if
 fnend
 

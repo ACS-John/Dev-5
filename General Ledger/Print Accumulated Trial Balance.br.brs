@@ -2,7 +2,7 @@
 ! pr Accumulated Trial Balance
 ! r: setup library, on error, dims, and constants
   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnTos,fnFra,fnOpt,fnLbl,fnqgl,fnCmdSet,fnAcs,fnagl$,fnChk,fnTxt,fngethandle,fncreg_read,fncreg_write
-  on error goto ERTN
+  on error goto Ertn
 ! ______________________________________________________________________
   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3,cap$*128
   dim resp$(20)*128,bp(13)

@@ -2,7 +2,7 @@
 00020 ! this program wipes CSZs from the UB customer file and replaces them with whatever you tell it to
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fnerror,fncno
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim csz$*30
 00080 ! ______________________________________________________________________

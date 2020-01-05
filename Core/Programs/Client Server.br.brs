@@ -123,7 +123,7 @@ def fn_setup
 		setup=1
 		library 'S:\Core\Library': fntop,fnxit,fnerror,fnbutton_or_disabled,fnAcs,fnCmdKey,fnButton,fnCopy,fnureg_read,fnureg_write,fnTos,fnGetPp,fnStatus,fngethandle,fnLbl,fnTxt,fnStatusClose
 		library 'S:\Core\Library': fnMakeSurePathExists
-		on error goto ERTN
+		on error goto Ertn
 		dim resp$(10)*256
 		dim server_name$*128
 		dim anon_user$*128

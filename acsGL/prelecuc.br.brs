@@ -6,7 +6,7 @@
 00030 ! ______________________________________________________________________
 00032   library 'S:\Core\Library': fntop,fnxit,fnerror,fndate_mmddyy_to_ccyymmdd
 00034   fntop(program$,cap$="PR ELEC UC")
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
 00070   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)

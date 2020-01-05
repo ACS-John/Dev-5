@@ -2,13 +2,13 @@
 ! GL Distribution Report (fnpostgl2(2)   AND/OR     Post to General Ledger (fnpostgl2(1) - or run directly)
 
 	library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
-! on error goto ERTN
+! on error goto Ertn
 	fntop(program$,"Post to General Ledger")
 	fnpostgl2(1)
 	fnxit
 	def library fnpostgl2(glt)
 		library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnmsgbox,fnfree
-		on error goto ERTN
+		on error goto Ertn
 ! ______________________________________________________________________
 ! GLT: 1=Post  2=Print Only
 		glt_post=1

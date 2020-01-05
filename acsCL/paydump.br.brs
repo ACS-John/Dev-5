@@ -2,7 +2,7 @@
 00020 ! Remove Payee Records
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
 00080 ! ______________________________________________________________________

@@ -3,7 +3,7 @@
 10040 ! and Purchases Journals a.k.a. Transaction Journals
 10060 ! ______________________________________________________________________
 10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnps,fnpedat$,fnOpt,fnTos,fnCmdSet,fnAcs,fnFra,fnChk,fnLbl,fnTxt,fnconsole
-10100   on error goto ERTN
+10100   on error goto Ertn
 10120 ! ______________________________________________________________________
 10140   dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
 10160   dim sc1$(2)*20,cap$*128,wrd1$(2)*30,resp$(50)*50

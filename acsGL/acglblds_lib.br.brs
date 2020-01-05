@@ -2,7 +2,7 @@
 00020 ! this -library function- builds the file    [Q]\GLmstr\ACGLScr.h
 00030   def library fnacglblds
 00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr,fnFree
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
 00080 ! ______________________________________________________________________

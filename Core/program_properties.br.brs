@@ -6,7 +6,7 @@ def fn_setup
 	library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs2,fnwrite_program_print_property
 fnend
 def library fnprogram_properties(; forceProgramCaption$*256)
-	on error goto ERTN
+	on error goto Ertn
 	if ~setup then let fn_setup
 	if forceProgramCaption$<>'' then
 		dim oldCap$*256
@@ -91,7 +91,7 @@ def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOver
 	fnread_program_print_property=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
 fnend
 def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
-	on error goto ERTN
+	on error goto Ertn
 	dim prg$*256
 	if prgCapForSettingsOverride$='' then
 		prg$=env$('Program_Caption')
@@ -130,7 +130,7 @@ def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
 fnend
 def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
 	if ~setup then let fn_setup
-	on error goto ERTN
+	on error goto Ertn
 	dim prg$*256
 	if prgCapForSettingsOverride$='' then
 		prg$=env$('Program_Caption')

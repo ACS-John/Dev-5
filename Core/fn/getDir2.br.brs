@@ -73,7 +73,7 @@ fnend
 
 def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
 		fn_setup
-		on error goto ERTN
+		on error goto Ertn
 		dir$=fnSrepEnv$(dir$)
 		filter$=fnSrepEnv$(filter$)
 		if pos(lwrc$(option$),'/s')>0 then gd2_full_path=1
@@ -193,7 +193,7 @@ fnend
 
 def library fnGetDirClient(dir$*256,mat filename$; filter$*40, ___,returnN,hGdc,gdcFileList$*256)
 	fn_setup
-	on error goto ERTN
+	on error goto Ertn
 	dir$=fnSrepEnv$(dir$)
 	mat filename$(0)
 	filter$=trim$(filter$) : if filter$='' then filter$='*.*'

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\UBRevCaldouble
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnLbl, fnTxt,fncmbact,fncmbrt2,fnAcs, fnTos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fntop
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim x$*10,p$*10,reqz$*10,reqz12$*2,sr$*1,gb(10)
 00070   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7

@@ -1,6 +1,6 @@
 forceRollBackNotMostRecentRec=0
 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnLastBillingDate,fngethandle,fntop,fnTos,fnLbl,fnTxt,fncmbact,fncmbrt2,fnCmdSet,fnAcs,fnmsgbox,fnOpt,fnget_services,fnAutomatedSavePoint
-on error goto ERTN
+on error goto Ertn
 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 fn_undobilling
 goto XIT

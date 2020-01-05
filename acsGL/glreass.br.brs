@@ -2,7 +2,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnerror,fnTos,fnLbl,fnCmdKey,fnAcs
 00050   fntop(program$,"Reassign Transaction Addresses")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00080   dim ta(2),tr1$*70,wrd1$(2)*35,fil$(12,4)
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 

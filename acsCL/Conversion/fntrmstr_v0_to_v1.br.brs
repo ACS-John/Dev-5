@@ -3,7 +3,7 @@
         ! meainging the amount changes from G 10.2 to PD 10.2
 00030   def library fntrmstr_v0_to_v1
 00040     library 'S:\Core\Library': fnerror,fnmsgbox,fnwait,fnStatus
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________

@@ -2,7 +2,7 @@
 ! -- Four Column Budget Income Statement 
 ! r: library, on error and dims
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fnactpd,fncch$,fnGlAskFormatPriorCdPeriod,fnindex_it,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim actpd$*6,cch$*20
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,foot$*132,underlin$*14

@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnchain,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   fntop(program$,cap$="Zero Year To Date Purchases")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim adr(2),cnam$*40,cap$*128,de$*30,re$*12
 00090 ! ______________________________________________________________________

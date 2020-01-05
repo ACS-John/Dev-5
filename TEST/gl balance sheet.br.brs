@@ -15,7 +15,7 @@
 	library 'S:\Core\Library': fnactpd,fnactpd$
 	library 'S:\Core\Library': fnindex_it
 	library 'S:\Core\Library': fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim b$*3
 	dim a$(8)*30

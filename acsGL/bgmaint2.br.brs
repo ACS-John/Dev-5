@@ -2,7 +2,7 @@
 ! Budget File (2nd screen of budget management system; range of gl #)
 ! r: setup
 	library 'S:\Core\Library': fntop,fnxit,fnerror,fnopenprn,fncloseprn,fnTos,fnLbl,fnCmdKey,fnAcs,fncmbbud,fncomboa,fnTxt,fnCmdSet,fnrgl$,fnqgl,fnagl$,fnflexinit1,fnflexadd1,fnChk,fnmsgbox,fndat,fndate_mmddyy_to_ccyymmdd
-	on error goto ERTN
+	on error goto Ertn
 
 	dim dat$*20,bg(6),bm(13),io1$(3),g1(3),aa(2),gld$*30,ln$*132
 	dim chdr$(23)*20,cmask$(23)*20,option2$(6)*18,item$(23)*20,holdcmask$(23)*20

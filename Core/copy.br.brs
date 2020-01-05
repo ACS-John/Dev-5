@@ -8,7 +8,7 @@ def fn_setup
 		library 'S:\Core\Library': fnMakeSurePathExists
 		library 'S:\Core\Library': fnGetPp
 		library 'S:\Core\Library': fnSrepEnv$
-		on error goto ERTN
+		on error goto Ertn
 	end if
 fnend
 def library fnCopy(from$*256,to$*256; new_record_length,options$)

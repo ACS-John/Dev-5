@@ -23,7 +23,7 @@
 12060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fngethandle,fnhand_held_device$,fnget_services
 12080     library 'S:\Core\Library': fnH2Init,fnH2AddText,fnH2AddComboA,fnH2AddComboF,fnHamster2
 12080     library 'S:\Core\Library': fnHamsterFio
-12100     on error goto ERTN
+12100     on error goto Ertn
 12120   end if
 12140 fnend 
 14000 ! def library fnopen_meter

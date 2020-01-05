@@ -3,7 +3,7 @@
 def library fnub_cnv_ubmstr_vb
 	library 'S:\Core\Library': fnxit,fnerror,fnpause,fnCopy,fnindex_it,fnub_index_customer,fnStatus,fnFree
 	library 'S:\Core\Library': fnGetHandle
-	on error goto ERTN
+	on error goto Ertn
 	dim b(11),a(7),d(15),alpha$*7,f2$*12,extra(23),extra$(11)*30,ba(12)
 	dim custname$*30,badr(2)
 	dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)

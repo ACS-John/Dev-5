@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   def library fnaccount_search(&x$;fixgrid)
 00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     dim item$(10)*50,resp$(30)*80,rf(6)
 00090 ! ______________________________________________________________________

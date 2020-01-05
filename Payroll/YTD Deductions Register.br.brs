@@ -2,7 +2,7 @@
 ! Miscellaneous Deductions Register - YTD
 ! ______________________________________________________________________
 library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates,fnDedNames
-on error goto ERTN
+on error goto Ertn
 
 dim em$*30,em(6),message$*40
 dim dat$*20,t1(20),t2(20)

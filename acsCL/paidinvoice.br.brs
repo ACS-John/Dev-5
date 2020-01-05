@@ -2,7 +2,7 @@
 00020 ! Checkbook PaidInvoice File
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070 ! Dimension Ony the Arrays you need (this is important for Hamster) !:
         ! Additionally Never use exactaly 10 items in a file.

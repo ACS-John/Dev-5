@@ -2,7 +2,7 @@
 00020 ! puts a flex grid with a directory inside... kinda a file explorer
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fngetcd,fnremove2,fnGetPp,fnLbl,fnTxt,fnCmdSet,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*255,cap$*128
 00080   dim path$(2,1000)*255,prog$(2,1000)*100,ext$(2,1000)*100

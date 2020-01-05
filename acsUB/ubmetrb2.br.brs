@@ -2,7 +2,7 @@
 00020 ! pr Complete Route Sheets
 00030 ! ______________________________________________________________________
 00040   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnFra,fnOpt,fnChk,fncmbact,fnCmdKey,fnchain,fnpa_finis,fnpa_newpage,fnpa_open
-00050   on error goto ERTN
+00050   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20
 00090   dim z2$*10,e2$(4)*30,f12$*12,f32$(12),f22$(12),a(7),a2(7)

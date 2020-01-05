@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnxit,fntop, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnchain
 00050   fntop(program$,cap$="Cover Leter")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim tb$*32,cap$*128,p$(20)*50
 00090   dim ln1$*78,ln$*78,shd$*60,fli$(20),cnam$*40,dat$*20,fl2$(2),sc2$(2)*46

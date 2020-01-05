@@ -2,7 +2,7 @@
 00020 ! General Ledger Financial Statement Layout - Hamster
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fncno
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(21)*38,tln(21),p$(21)*160,fltyp$(21),sln(21),mask(21),sp(21),c$(21,8)*40
 00080   dim fil$(6)*18,idx$(6)*18,id$(6)*40

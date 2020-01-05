@@ -1,7 +1,7 @@
 ! Replace S:\acsTM\Support
 
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
-	on error goto ERTN
+	on error goto Ertn
 
 	dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
 	

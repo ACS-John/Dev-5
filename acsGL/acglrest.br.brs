@@ -2,7 +2,7 @@
 00020 ! pr Retained Earnings Statement
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnGlAskFormatPriorCdPeriod
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
 00080   dim sc2$(2),dat$*20,cap$*128

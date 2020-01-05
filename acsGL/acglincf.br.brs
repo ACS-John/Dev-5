@@ -2,7 +2,7 @@
 00020 ! -- INCOME STATEMENT COMPARING UP TO 10 FUNDS  - USES 2ND I/C DESIGN
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd$,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14

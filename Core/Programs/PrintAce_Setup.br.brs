@@ -7,7 +7,7 @@
 70020     if ~setup then 
 70040       setup=1
 70080       library 'S:\Core\Library': fntop,fnxit,fnerror
-70100       on error goto ERTN
+70100       on error goto Ertn
 70120       dim cap$*128
 70140     end if 
 70990   fnend 

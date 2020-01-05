@@ -3,7 +3,7 @@
 00030 ! ----------------------------------------------------------------------
 00040 ! if the collections ever exceed 100,000 then sort wont work for the monthly receipts journal  ( one clue is the address is -2020202 instead of a real address
 00050   library 'S:\Core\Library': fntop,fnxit, fnAcs,fntop,fnLbl,fnTxt,fnwait,fnopenprn,fncloseprn,fnwait,fnTos,fnerror,fncno,fnxit,fnerror,fnCmdSet
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ----------------------------------------------------------------------
 00080   dim alloc(10),o(2),cnam$*40,txt$*40,cap$*128
 00090 ! ----------------------------------------------------------------------

@@ -1,7 +1,7 @@
 10000 ! S:\acsGL\adjustaccounts
 10010 ! ______________________________________________________________________
 10020   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fncursys$,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnagl$,fnqglbig,fnrglbig$,fngethandle,fnmsgbox,fnCmdKey
-10030   on error goto ERTN
+10030   on error goto Ertn
 10040 ! ______________________________________________________________________
 10050   dim cap$*128,resp$(3)*255,ymbal(13),priorym(13)
 10060   fntop(program$,cap$="Adjust Account Balances")

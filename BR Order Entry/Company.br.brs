@@ -1,6 +1,6 @@
 10040 ! r: setup
 10060   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnCmdSet,fngethandle,fnOpenFile,fnFree
-10080   on error goto ERTN
+10080   on error goto Ertn
 10100 ! ______________________________________________________________________
 10110   dim Comp$(0)*128,CompN(0),form$(0)*256
 10120   dim cap$*128

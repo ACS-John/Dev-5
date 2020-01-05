@@ -2,7 +2,7 @@
 00020 ! Zero Quarterly Information (After-Fact-Payroll)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim n(2),k$(3)*25,ss$*11,m(36),adr(2),cnam$*40,cap$*128,ml$(3)*80
 00080 ! ______________________________________________________________________

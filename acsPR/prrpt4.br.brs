@@ -2,7 +2,7 @@
 00020 ! Report File - Proof List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20),cnam$*40
 00080   dim message$*40,cap$*128

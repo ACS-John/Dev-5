@@ -2,7 +2,7 @@
 00020 ! Cash Flow with YTD Budget Comparison
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13)
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),fl1$*256,cap$*128

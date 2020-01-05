@@ -12,7 +12,7 @@ library 'S:\Core\Library': fnopenprn,fncloseprn
 library 'S:\Core\Library': fnconsole
 library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
 library 'S:\Core\Library': fnOldMsgBox
-on error goto ERTN
+on error goto Ertn
 
 dim em$(3)*30
 dim ss$*11

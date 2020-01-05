@@ -2,7 +2,7 @@
 00020 ! Bank Reconciliation Report  (prints the actual bank reconciliation form the general ledger system
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fndate_mmddyy_to_ccyymmdd,fnwait,fnTos,fnLbl,fnAcs,fnCmdSet,fnqgl,fnagl$,fnTxt,fnrgl$,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim flo2$(3),io1$(6),sc$(9),sd$(7),se$(7)*30,sf$(4),cnam$*40,dat$*20
 00080   dim gl$*12,c$*12,p$*30,s$*2,a(3),dcode$*24,glc$*24,holdgc$*24,currgl$*12

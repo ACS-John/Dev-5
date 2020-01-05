@@ -5,7 +5,7 @@ def fn_setup
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnclient_has
 		
-		on error goto ERTN
+		on error goto Ertn
 	end if
 fnend
 def library fnEftData$*128(field$*128; return$*256)

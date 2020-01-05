@@ -2,7 +2,7 @@
 00020 ! -- Place Certified File Back on PC
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fnwait,fnLbl,fnTos,fncomboa,fnAcs,fnCmdSet,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
 00071   dim a$*5,b$*4,c$*3,bc$*12,cr$*4,d$(2)

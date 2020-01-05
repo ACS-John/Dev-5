@@ -3,7 +3,7 @@
 
 def library fnburden_srch(&x$;fixgrid)
 	library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle,fnCmdKey
-	on error goto ERTN
+	on error goto Ertn
 
 	dim item$(6)*30,resp$(30)*80
 

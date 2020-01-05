@@ -304,6 +304,13 @@ FirstDepartment: ! r:
 	whichDepartment=0
 goto NextDepartment ! /r
 NextDepartment: ! r:
+	! POS 1   N  8   teno
+	!         n  3   tdn
+	!         c 12   gl$
+	!       4*N  6   mat tdt(1-4)
+	!       3*N  2   mat tcd(1-3)
+	!         pd 4.2 tli
+	!      23*PD 4.2 mat tdet(1-23)
 	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
 	whichDepartment+=1
 	if firstread=1 and teno<>eno then goto DepartmentAdd

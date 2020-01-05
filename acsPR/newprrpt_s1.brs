@@ -2,7 +2,7 @@
 00011 ! ______________________________________________________________________
 00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
-00014   on error goto ERTN
+00014   on error goto Ertn
 00020 ! ______________________________________________________________________
 00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,unuse174$*5,tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50

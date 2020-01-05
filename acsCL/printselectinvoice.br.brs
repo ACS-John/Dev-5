@@ -2,7 +2,7 @@
 00020 ! unpaid invoice file
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnchain,fnerror,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,cnam$*40,newkey$*20
 00080   dim de$*30,gl(3),t1(5),sc3$(5)*55,up$(4),d(2),nam$*30

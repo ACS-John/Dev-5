@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\conversion\assign_sequence
 00020 ! used to assign new sequence numbers if not enough room between numbers on standard conversion
 00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnxit,fnerror,fnCmdSet,fntop
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim z$*10,text$*45,cap$*128
 00070 ! ______________________________________________________________________

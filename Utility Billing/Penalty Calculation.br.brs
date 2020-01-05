@@ -2,7 +2,7 @@
 20020 ! Penalty Calculation
 20040 ! ______________________________________________________________________
 20060   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fnCmdSet,fntop,fnChk,fnFra,fnOpt,fnget_services,fnAutomatedSavePoint
-20080   on error goto ERTN
+20080   on error goto Ertn
 20100 ! ______________________________________________________________________
 20120   dim resp$(8)*40,msgline$(1)*80,oldtg(11)
 20140   dim z$*10,g(12),dat$*20,e$(4)*30,rt(10,3),transkey$*19

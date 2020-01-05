@@ -2,7 +2,7 @@
 00020 ! BUILD PAYROLL CHECK HISTORY FILE
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070 L70: pr newpage
 00080   pr f "08,08,C 34,R,N": " BUILD PAYROLL CHECK HISTORY FILE"

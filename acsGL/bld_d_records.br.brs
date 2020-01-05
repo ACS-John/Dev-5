@@ -3,7 +3,7 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnerror,fnchain
 	fntop(program$,cap$="Financial Statement")
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim cnam$*40,dat$*20,io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 	dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5

@@ -2,7 +2,7 @@
 00020 ! pr Vendor Fund Listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,p$(20)*50
 00080   dim tr$(5)*35,tr(2),p1$*30,gl(3),f1(1000),in1(3),f2(1000)

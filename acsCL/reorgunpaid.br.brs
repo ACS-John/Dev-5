@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnCopy,fnindex_it
 00050   fntop(program$,cap$="Reorganize Unpaid File")
-00070   on error goto ERTN
+00070   on error goto Ertn
 00080 ! ______________________________________________________________________
 00090   dim cap$*128
 00130   dim gldesc$*30

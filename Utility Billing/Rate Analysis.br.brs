@@ -12,7 +12,7 @@
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnCustomerData$
 	library 'S:\Core\Library': fnCloseFile
-	on error goto ERTN
+	on error goto Ertn
 
 	dim resp$(40)*80
 

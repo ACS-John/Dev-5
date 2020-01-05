@@ -1,6 +1,6 @@
 def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
 	library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnCmdKey,fnAcs
-	on error goto ERTN
+	on error goto Ertn
 	if env$('exitnow')='yes' then let setenv('exitnow','cancelled by fnmsgbox')
 	if cap$='' then cap$=env$('Program_Caption')
 	!   if env$('ACSDeveloper')<>'' then

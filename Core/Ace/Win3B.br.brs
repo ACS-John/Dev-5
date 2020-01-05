@@ -1,7 +1,7 @@
 20140 ! Replace S:\Core\Ace\Win3B.br
 50000   def library fnwin3b(win,&cap$,win_height,win_width;display_cnam,button_option,win_align,pr_newpg)
 50020     library 'S:\Core\Library': fnerror,fnfkey
-50040     on error goto ERTN
+50040     on error goto Ertn
 50060     dim temp_file$*80
 50080 ! Win= Window number to be opened 
 50100     ! if 0 win will default to 101
@@ -119,7 +119,7 @@
 60060   def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 60080 ! ______________________________________________________________________
 60100     library 'S:\Core\Library': fnerror,fngethandle
-60120     on error goto ERTN
+60120     on error goto Ertn
 60140 ! ______________________________________________________________________
 60160     dim temp_file$*80
 60180 ! ______________________________________________________________________

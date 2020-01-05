@@ -3,7 +3,7 @@
         ! from recl=79 to recl=83 and version 1
 00030   def library fnfinstmt_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnStatus,fnindex_it
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     dim cap$*128
 00090     dim fil$(6),idx$(6)

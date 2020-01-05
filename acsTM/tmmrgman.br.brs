@@ -1,5 +1,5 @@
 ! chained to from S:\acstm\tminpinv 
-	on error goto ERTN
+	on error goto Ertn
 	library 'S:\Core\Library': fnxit
 	dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,ivr(6),arta(2),ga(10),pgl$*12
 	dim cde$(10)*6,gl$*12,des$*20

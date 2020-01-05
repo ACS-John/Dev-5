@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\UBRECRTR
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fncno,fnxit,fnerror,fnwait,fnAcs,fnTos,fnLbl,fnTxt,fnCmdSet,fntop
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim p$*10,z$*10,o(2),adr(2),cap$*128,txt$*40,gb(10),tg(11),d(15)
 00070 ! ______________________________________________________________________

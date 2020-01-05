@@ -14,7 +14,7 @@
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnchain
 	library 'S:\Core\Library': fnIndex
-	on error goto ERTN
+	on error goto Ertn
 ! r: dim
 	dim tr$(5)*35,de$*30,bn$*40,aa(2)
 	dim ml$(10)*80 ! message box message lines

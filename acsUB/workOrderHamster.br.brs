@@ -1,6 +1,6 @@
 
 	library 'S:\Core\Library': fntop,fnxit, fnH2Init,fnH2AddText,fnH2AddComboF,fnHamster2
-	on error goto ERTN
+	on error goto Ertn
 	gosub Enum
 	fntop(program$)
 	fnH2Init

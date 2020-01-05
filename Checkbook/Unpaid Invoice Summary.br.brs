@@ -2,7 +2,7 @@
 00020 ! Unpaid Invoice Summary
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fndat,fnerror,fntop,fnxit,fnwait
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,vnam$*30,de$*31,gl(3),ade$*50
 00080   dim gl$*12,gd$*50

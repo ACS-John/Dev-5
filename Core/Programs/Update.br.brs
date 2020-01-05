@@ -33,7 +33,7 @@ def fn_setup
 	library 'S:\Core\Library': fnFree
 	library 'S:\Core\Library': fnSrepEnv$
 	library 'S:\Core\Library': fnStatus,fnStatusPause
-	on error goto ERTN
+	on error goto Ertn
 fnend
 
 def fn_simple_connectivity_test

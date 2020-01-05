@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\Escrow1
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntop,fnTos,fnAcs,fnLbl,fnTxt,fndat,fnxit,fncomboa,fnCmdSet,fnopenprn,fncloseprn
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
 00070 ! ______________________________________________________________________

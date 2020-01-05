@@ -9,7 +9,7 @@ library 'S:\Core\Library': fnchain
 library 'S:\Core\Library': fnmsgbox
 library 'S:\Core\Library': fnindex_sys
 library 'S:\Core\Library': fncreg_write
-on error goto ERTN
+on error goto Ertn
 dim ml$(10)*80,resp$(40)*128,cap$*128
 ! ______________________________________________________________________
 fntop(program$,cap$="Add New "&env$('cursys')&" Company [cno]")

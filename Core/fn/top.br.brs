@@ -6,7 +6,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		library 'S:\Core\Library': fnprg
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnBookTitle$
-		on error goto ERTN
+		on error goto Ertn
 	end if
 	pr newpage
 	cap$=trim$(cap$)

@@ -2,7 +2,7 @@
 00020 ! -- pr Retained Earnings Statement
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$
-20000   on error goto ERTN
+20000   on error goto Ertn
 20020 ! ______________________________________________________________________
 20040   dim cap$*128,ln1$*8800,ln$*8800,dat$*20
 20060 ! ______________________________________________________________________

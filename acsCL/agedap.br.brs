@@ -2,7 +2,7 @@
 00020 ! pr Aged AP Listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*50,fd$*30,ft(3)
 00080   dim io1$(7)*30,bk(3,2),t1(5),t2(5),cap$*128

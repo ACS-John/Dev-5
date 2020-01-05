@@ -1,6 +1,6 @@
 ! State U/C Report
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
-	on error goto ERTN
+	on error goto Ertn
 ! r: setup
 	dim ss$*11,em$(3)*30,department$*128
 	dim a$(3)*40,b$(2)*12,d$(10)*8

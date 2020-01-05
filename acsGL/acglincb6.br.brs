@@ -2,7 +2,7 @@
 00020 ! -- INCOME STATEMENT WITH BUDGET (six columns)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnGlAskFormatPriorCdPeriod,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14

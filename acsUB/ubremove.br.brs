@@ -1,7 +1,7 @@
 20000 ! Replace S:\acsUB\ubRemove
 20020 ! remove old transactions
 20040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnerror,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnFra
-20060   on error goto ERTN
+20060   on error goto Ertn
 20080 ! ______________________________________________________________________
 20100   dim cap$*128
 20120 ! ______________________________________________________________________

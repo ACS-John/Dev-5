@@ -3,7 +3,7 @@
 20040 ! ______________________________________________________________________
 20060   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 20080   fntop(program$,cap$="Vendor")
-20100   on error goto ERTN
+20100   on error goto Ertn
 20120 ! ______________________________________________________________________
 20140   dim cap$*128,fltyp$(08),fln(08),mask(08),p$(08)*65,lbl$(08)*22,sln(08)
 20160   dim c$(8,8)*40

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Department
 00020 ! __Departmental breakdown file for monticello and others for claims report
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050   fntop(program$,cap$="Department Breakdown")
 00060 ! ______________________________________________________________________
 00070   dim lbl$(3)*24,tln(3),p$(3)*160,fltyp$(3),sln(3),mask(3)

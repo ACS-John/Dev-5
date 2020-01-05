@@ -1,7 +1,7 @@
 10000 ! Formerly S:\acsUB\ubUsage2
 10040 ! ______________________________________________________________________
 10060   library 'S:\Core\Library': fnAcs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnLbl,fnTxt,fnTos,fnxit,fncomboa,fnCmdSet,fntop,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnreg_read,fnreg_write,fngethandle,fnget_services
-10080   on error goto ERTN
+10080   on error goto Ertn
 12000   fntop(program$)
 12020 ! r: set constants, dims, etc
 12040   dim cd1(12),e$*30,u1(13)

@@ -2,7 +2,7 @@
 00020 ! Post Entries from Holding File
 00030 ! ______________________________________________________________________,
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnLbl,fnTos,fnTxt,fnCmdKey,fnAcs,fnflexadd1,fnflexinit1,fnHamster,fnmsgbox,fnCmdSet,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2,fnFree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim ta(2)
 00080   dim t$*12,n(2),l$*12,p$*30,ven$*8,zo(50),d$*50,cap$*128

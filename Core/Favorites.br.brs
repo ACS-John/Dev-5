@@ -6,7 +6,7 @@ def fn_setup
 	if ~setup then
 		setup=1
 		library 'S:\Core\Library': fntop,fnxit,fnHamsterFio,fnCloseFile,fnAddOneC,fnBuildKey$
-		on error goto ERTN
+		on error goto Ertn
 		dim form$(0)*256
 		dim favData$(0)*128,favDataN(0)
 	end if

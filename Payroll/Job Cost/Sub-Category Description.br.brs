@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnsubcat_srch
 	library 'S:\Core\Library': fncmbsubcat
-	on error goto ERTN
+	on error goto Ertn
 
 	dim iom$(4),scm$(4)*27,resp$(5)*50
 	dim cde$*3,des$*30,sc$*3,cnt$*25,message$*40

@@ -4,7 +4,7 @@ library 'S:\Core\Library': fnTxt
 library 'S:\Core\Library': fnAcs
 library 'S:\Core\Library': fnTos,fnxit
 library 'S:\Core\Library': fnCmdSet,fntop
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 SCREEN1: ! 
 fnTos(sn$:="ubZeroYt")

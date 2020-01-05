@@ -1,6 +1,6 @@
 00100 ! ______________________________________________________________________
 00220   library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
-00300   on error goto ERTN
+00300   on error goto Ertn
 00400 ! ______________________________________________________________________
 00500   dim cap$*128
 00600 ! ______________________________________________________________________

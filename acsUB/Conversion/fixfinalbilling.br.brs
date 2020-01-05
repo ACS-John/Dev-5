@@ -2,7 +2,7 @@
 00020 ! this program will createa final billiing core based on the * in front of the alpha sort name.
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fnerror,fnpause
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060   dim b(11),a(7),d(15),alpha$*7,f2$*12,extra(23),extra$(11)*30,ba(12)
 00070   dim custname$*30,badr(2)
 00080   dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)

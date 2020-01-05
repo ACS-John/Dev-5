@@ -2,7 +2,7 @@
 00020 ! pr bills for Carrizo Springs   3 per page prace
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage,fnget_services
 00030 ! ______________________________________________________________________
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30

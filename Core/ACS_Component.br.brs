@@ -18,7 +18,7 @@ def fn_setup
 		library 'S:\Core\Library': fnArrayEmpty
 		library 'S:\Core\Library': fnGetPp
 	end if
-	on error goto ERTN
+	on error goto Ertn
 	dim _program$(1)*255
 	dim _menu$(1)*255
 	dim combooptionsetlist$(0)*256

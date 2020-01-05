@@ -3,7 +3,7 @@
         ! pretty useless to the end user - but quite usefull to the programmer
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2)
 00080 ! ______________________________________________________________________

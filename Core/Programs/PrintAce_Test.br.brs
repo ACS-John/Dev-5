@@ -33,7 +33,7 @@ def library fnPrintAceTest(;format$)
   enablePieChart=0
   enablePicture=1
   enableBox=1
-  on error goto ERTN
+  on error goto Ertn
 ! /r
   fnPa_open('landscape','PrintAce Test ('&format$&')',format$)
   if enablePicture then let fnpa_pic('S:\startup.bmp',120,35, 55,55)

@@ -11,7 +11,7 @@
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fnAutomatedSavePoint
 	library 'S:\Core\Library': fnget_services
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim resp$(20)*128
 	dim msgline$(1)*80

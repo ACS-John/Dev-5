@@ -2,7 +2,7 @@
 20020 ! format the answer to fnQgl -
 28000   def library fnrgl$*60(x$; ReturnMaxLength)
 28020     library 'S:\Core\Library': fngethandle,fnerror,fnpause
-28040     on error goto ERTN
+28040     on error goto Ertn
 28060     if ReturnMaxLength=0 then returnMaxLength=35
 28080 ! _______________________________________________________________________
 28100 ! X$ should be formatted as though it were just read in and is ready 

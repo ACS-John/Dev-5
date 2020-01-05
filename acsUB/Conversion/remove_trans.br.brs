@@ -2,7 +2,7 @@
 00020 ! programmers tool to remove transactions (not for use on real data)
 00030 ! _______________
 00040 ! library
-00050 ! on error goto ertn
+00050 ! on error goto Ertn
 00060 ! ____________
 00070   cno=2
 00080   open #trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno]",internal,outIn 

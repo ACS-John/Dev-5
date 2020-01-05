@@ -111,7 +111,7 @@ def fn_setup
 		library 'S:\Core\Library': fnMsgBox
 		library 'S:\Core\Library': fnreport_cache_folder_current$
 		library 'S:\Core\Library': fnRename
-		on error goto ERTN
+		on error goto Ertn
 		gosub Enum
 	end if 
 fnend

@@ -3,7 +3,7 @@
         ! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cch$*20,by(13),bp(13),cap$*128,form$*200
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132

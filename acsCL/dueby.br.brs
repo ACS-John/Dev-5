@@ -2,7 +2,7 @@
 00020 ! pr Report of Invoices Due By Selected Dates
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnTos,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ade$*50
 00080   dim t2(10),d2(10),cap$*128

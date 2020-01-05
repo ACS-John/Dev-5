@@ -5,7 +5,7 @@
 	dim p$(20)*50,wrd2$(2)*35,message$*40
 
 	library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncloseprn,fnopenprn,fntop,fnxit,fnconsole
-	on error goto ERTN
+	on error goto Ertn
 
 	fntop("S:\acsPR\TimeCard","Extend Time Card")
 	fnconsole(1)

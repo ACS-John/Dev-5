@@ -1,7 +1,7 @@
 00010 !  Replace S:\Core\Locate
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fnAcsInstallationPath$,fnTxt,fnLbl,fnChk,fnxit,fnCmdSet,fntop,fnpause,fnfree
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim a$*132,prg$*40,lc$*80,dur$*40,rep$*40,resp$(20)*100,txt$*100
 00070   dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
