@@ -1,7 +1,7 @@
 
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fncombof,fnFra,fnmsgbox,fnButton,fnOpt,fnCmdKey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write
 	library 'S:\Core\Library': fnIndex_it,fnRemoveDeletedRecords
-	on error goto ERTN
+	on error goto Ertn
 
 	dim vn$*8,holdvn$*8,up$(4),amt(15,3),iv$(15,3),de$(15,3)*13,ivdate(15,3)
 	dim cnam$*40,tr(2),misc$(10)*20,miscgl$(10)*12

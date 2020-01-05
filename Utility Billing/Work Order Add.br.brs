@@ -19,7 +19,7 @@ def library fnworkOrderAdd(z$*10)
 		library 'S:\Core\Library': fnAcs,fnTos,fnLbl,fnTxt
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnNoteDir$,fnCmdKey,fnWorkOrderList,fnerror
-		on error goto ERTN
+		on error goto Ertn
 		dim resp$(128)*512
 		dim i$(16)*320
 		dim line$(5)*100

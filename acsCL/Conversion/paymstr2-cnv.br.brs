@@ -2,7 +2,7 @@
 00020 ! it's old
 00030 ! ________________________
 00040   library 'S:\Core\Library': fncno,fnxit,fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ________________________
 00070   dim gl(3),ta(2)
 00080 ! ________________________

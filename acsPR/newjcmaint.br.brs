@@ -2,7 +2,7 @@
 00020 ! Job Cost Master File
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnprocess,fnTos,fnLbl,fnCmdKey,fnAcs,fnTxt,fnmsgbox,fncombof,fnjob_srch,fncmbjob ,fncategory_srch,fncat_srch2,fncategory_srch,fncmbcat,fnflexinit1,fnflexadd1,fncmbcategory
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$(9),sc1$(9)*20,io1$(9),hd$(2)*78,msgline$(2)*60,response$(5)*1
 00080   dim sc2$(15)*20,fl2$(15),io2$(15),sc3$(12),fl3$(13),io3$(12),dup$*11

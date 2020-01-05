@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\ubPDTnOf
 ! r: initial stuff
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnxit,fncomboa,fnFra,fnLastBillingDate,fnCmdSet,fntop,fnChk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 ! 
 	dim resp$(20)*80
 	dim z$*10,e$*30,g(12),metradr$*30

@@ -2,7 +2,7 @@
 00011 ! Change Wrong Transaction Dates
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnTos,fnLbl,fnAcs,fnwait,fnTxt,fnCmdSet,fngethandle,fndate_mmddyy_to_ccyymmdd
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 10000   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
 10600   fntop(program$,cap$="Change Wrong Transaction Dates")

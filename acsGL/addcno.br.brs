@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntop,fnxit,fnchain,fnTos,fnLbl,fncmbcno,fnCmdSet,fnAcs,fnCopy,fnFree
 00050   fntop(program$,cap$="Add Company")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim zer(57),resp$(10)*80
 00090 ! ___________________________

@@ -2,7 +2,7 @@
 00020 ! remove blank alternate billing addresses (still get key= after conversion and causes blank addresses  ( on old system the addresses were just set to blank when deleted, but not the customer #
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnCmdKey
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   fncno(cno)
 00080 ! 

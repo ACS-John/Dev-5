@@ -2,7 +2,7 @@
 00020 ! Cash Flow Statement
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnactpd$,fnpedat$,fnactpd,fnps,fnfscode,fnUseDeptNo,fnpriorcd,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,pedat$*20,cch$*20 ,in3$(4)
 00080   dim pedat$*20,actpd$*6,bm(13),bp(13),by(13)

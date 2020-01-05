@@ -2,7 +2,7 @@
 00020 ! pr Schedules  (once used to pr schedules; now called glschprt)
 00030 ! ________________Needs fncmo and others to run _____________________
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnopenprn,fncloseprn
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,dollar$*1,k$*2,by(13),bp(13)
 00080   dim gl2$*12,d2$*50,by2(13),bp2(13)

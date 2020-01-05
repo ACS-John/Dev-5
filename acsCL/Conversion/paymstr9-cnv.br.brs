@@ -2,7 +2,7 @@
 00020 ! converts any length PayMstr file to 189 length and recreateing indexes
 00030 ! ________________________________________________________________
 00040   library 'S:\Core\Library': fnerror,fncno,fnxit
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ________________________________________________________________
 00070   dim gl(3),ta(2)
 00080 ! ________________________________________________________________

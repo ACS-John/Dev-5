@@ -2,7 +2,7 @@
 00020 ! trying to place income statement reference numbers back into a chart of accounts, might be handy, but don't need on menu
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5

@@ -8,7 +8,7 @@ library 'S:\Core\Library': fnNameParse
 library 'S:\Core\Library': fnmsgbox
 library 'S:\Core\Library': fnw3
 library 'S:\Core\Library': fnask_w2_info,fnw2_text
-on error goto ERTN
+on error goto Ertn
 
 dim ss$*11,s(13),t(13)
 dim state$*2,a$(3)*40,b$(2)*12,controlNumber$*12,desc$(6)*15

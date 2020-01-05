@@ -34,7 +34,7 @@ def fn_setup
 		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
 		library 'S:\Core\Library': fnCustomerData$
-		on error goto ERTN
+		on error goto Ertn
 	! dims, constants, top, etc
 		dim resp$(40)*256
 		dim aname$*30

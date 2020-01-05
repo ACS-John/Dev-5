@@ -3,7 +3,7 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_txt,fnpa_newpage
 	fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim resp$(10)*80,txt$*40,mg$(3)*30,rw(22,13),cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)

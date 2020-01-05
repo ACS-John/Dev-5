@@ -2,7 +2,7 @@
 ! Select Automatic Processing Programs
 
 	library 'S:\Core\Library': fntop,fnxit, fnTos,fnflexinit1,fnflexadd1,fnCmdKey,fnAcs,fnTxt,fnLbl,fnclient_has,fnfree
-	on error goto ERTN
+	on error goto Ertn
 
 	dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
 	dim mx$(200)*80,pgmx$(200)*22,statusx$(200),pgm(200),mo$(12)*10

@@ -2,7 +2,7 @@
 00020 ! create layout for grid program
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnCmdSet,fnerror,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
 00080 ! ______________________________________________________________________

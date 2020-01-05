@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fnTos,fnLbl,fnAcs,fnTxt,fnCmdKey
 00050   fntop(program$,"Endorse Checks")
-00080   on error goto ERTN
+00080   on error goto Ertn
 00090 ENDORSE_CHECKS: ! 
 00100   fnTos(sn$="Endorse")
 00110   fnLbl(1,1,"Number of Endorsements:",25,1,0)

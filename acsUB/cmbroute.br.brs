@@ -3,7 +3,7 @@
 00030   def library fncmbroute(myline,mypos; addall,container,indexfile$*25)
 00040 ! ______________________________________________________________________
 00050     library 'S:\Core\Library': fncno,fncombof,fnerror,fnpause
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     dim df$*256,if$*256
 00090 ! ______________________________________________________________________

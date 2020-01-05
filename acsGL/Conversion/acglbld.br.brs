@@ -2,7 +2,7 @@
 00020 ! build something
 00030   def library fnacglbld
 00040     library 'S:\Core\Library': fntop,fnxit, fnxit,fntop, fncno,fnerror,fnchain,fnindex_it
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40
 00080 ! ______________________________________________________________________

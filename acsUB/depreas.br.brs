@@ -2,7 +2,7 @@
 00020 ! -- Reassign Deposit Change Addresses
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnmsgbox,fnwait,fnerror,fnxit,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim msgline$(3)*60,cap$*128,ta(2),message$*40
 00080   fncno(cno)

@@ -2,7 +2,7 @@
 ! -- Tranfer Data From Computer to Hand Held
 ! r: setup
 	library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnAcs,fnxit,fncno,fnCmdSet,fntop,fnmsgbox,fnTxt,fngethandle,fnclient_has,fnureg_read,fnureg_write,fnget_services
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim gb(10),ab$(3)*30
 	dim z$*10

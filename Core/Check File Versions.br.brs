@@ -26,7 +26,7 @@ def fn_setup
 		library 'S:\Core\Library': fnStatus,fnStatusPause
 		library 'S:\Core\Library': fnInitialializeMeterLocation
 		library 'S:\Core\Library': fnAutomatedSavePoint
-		on error goto ERTN
+		on error goto Ertn
 		dim form$(0)*512
 	end if
 fnend

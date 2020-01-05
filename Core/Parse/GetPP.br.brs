@@ -1,5 +1,5 @@
 def library fnGetPp(&input$,&path$,&prog$,&ext$)
-	on error goto ERTN
+	on error goto Ertn
 	! ______________________________________________________________________
 	! Dim Note: Please Dim you Path$ and Prog$ as long as your Input$
 	! Input$: this is what you want parsed...

@@ -3,7 +3,7 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
 	fntop(program$)
-	on error goto ERTN
+	on error goto Ertn
 	dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*256
 	dim name$*30
 	dim holdeno$*8,vcode$*6,de$*30,eno$*8,search$(22),ic$*2,pc$*1

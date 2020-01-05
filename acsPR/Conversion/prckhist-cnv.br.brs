@@ -2,7 +2,7 @@
 00020 ! CONVERT FOR CC CHG
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00150   pr newpage
 00160   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"

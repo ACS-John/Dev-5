@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fncno,fnopenprn,fncloseprn,fnputcno,fnprocess,fnpgnum,fncursys$,fnTos,fnLbl,fncomboa,fnCmdKey,fnAcs,fngetdir,fnflexinit1,fnflexadd1,fnFra,fnOpt
 00050   fntop(program$,cap$="Begin Automatic Processing")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim clnum(20),clnam$(20)*40,cnam$*40,io1$(2)*18 ,a$*40,cap$*128,oldcnam$*40
 00090   dim filename$(100)*40,opt$(100)*40,sys$*100,item$(2)*40,resp$(10)*100

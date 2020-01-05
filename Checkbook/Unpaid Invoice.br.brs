@@ -3,7 +3,7 @@
 	library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fnTos,fnFra,fnLbl,fnTxt,fncombof,fncomboa,fnButton,fnCmdKey,fnAcs,fnmsgbox,fnflexadd1,fnflexinit1,fnChk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
 	library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fnCmdSet,fnrglbig$,fnqglbig
 	fntop(program$,cap$="Unpaid Invoice")
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim cap$*128
 	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30

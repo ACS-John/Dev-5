@@ -2,7 +2,7 @@
 00020 ! Post Standard Adjusting Entries
 00030 ! r: setup library, dims, fntop, on error
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnqgl,fnrgl$,fnagl$
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim ref$*12,des$*30,glan$(10)*12,glam(10),ml$(3)*80
 24000   fntop(program$)

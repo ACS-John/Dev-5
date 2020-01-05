@@ -2,7 +2,7 @@
 00020 ! pr Name and Number List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fncno,fnerror,fndat,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
 00080   dim cnam$*40,message$*40

@@ -2,7 +2,7 @@
 ! Balance Sheet - Standard 8.5x11
 ! ______________________________________________________________________
   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnread_program_print_property
-  on error goto ERTN
+  on error goto Ertn
 ! ______________________________________________________________________
   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14

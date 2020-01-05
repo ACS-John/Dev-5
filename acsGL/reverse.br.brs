@@ -2,7 +2,7 @@
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnLbl,fnTxt,fnAcs,fnCmdKey,fnTos,fnChk
 00040   fntop(program$,cap$="Generate Reversing Entries")
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,wait_message$*40
 00080   dim t$*12,n(2),l$*12,adr(2),ta(2),p$*30,my_p$*30,test_p$*30,io1$(7)*25

@@ -6,7 +6,7 @@
 ! Right now this program will not create an RO record
 ! "
 library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fnLbl,fnTxt,fnTos,fnCmdKey,fnureg_read,fnureg_write,fngethandle,fnDedNames,fncreg_read,fncreg_write,fncomboa
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 
 	dim em$(3)*30,ss$*11,tcp(32),tmp$*128

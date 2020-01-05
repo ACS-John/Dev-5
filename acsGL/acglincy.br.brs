@@ -2,7 +2,7 @@
 00020 ! -- INCOME STATEMENT FOR THIRTEEN PERIODS
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnTxt,fnCmdKey,fnAcs,fnLbl
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim p$(20)*50
 00080   dim fl1$*256,actpd$*6,pedat$*20,m1$(13)*9,m2$(13)*8,total(13)

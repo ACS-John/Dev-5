@@ -2,7 +2,7 @@
 00020 ! Remove Job Cost Payroll Jobs
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox,fnopenwin,fncno,fnerror,fnxit,fntop,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
 00080   dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,message$*40,msgline$(2)*60

@@ -1,7 +1,7 @@
 00010 ! Replace S:\Core\Programs\Amortiz
 00020 ! Amortization Program
 00030   library 'S:\Core\Library': fnerror,fnxit,fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   dim eX(50,2),io2$(6),io3$(2),io4$(2),wd4$(2),pfm$*200
 00070   dim lor$*30,ln$*12,lee$*30,pfm2$*200,text$*60, mask$*25, dv$*40

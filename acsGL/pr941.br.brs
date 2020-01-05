@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnerror,fnoldmsgbox,fnopenprn,fncloseprn,fnprocess,fntop,fnchain,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fncomboa,fnFra,fnconsole,fnpa_finis,fnpa_newpage
 00050   fntop(program$,cap$="Print 941 Report")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim io1$(2),ss$*11,em$(3)*30,ty(21),tqm(17),frm_wrd$(2)*11
 00090   dim dedcode(10),calcode(10),dedfed(10),option1$(4)*20

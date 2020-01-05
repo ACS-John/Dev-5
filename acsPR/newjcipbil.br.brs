@@ -2,7 +2,7 @@
 00020 ! Enter (Job Cost) billings
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnmsgbox,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnemployee_srch,fncmbjob,fncmbsubcat,fnflexinit1,fnflexadd1
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,em$(3)*30,sub$*30,nam$*28,wrd1$(2)*38,wrd3$(4)*38,ln$*132
 00080   dim cn$*11,k$*6,n$*40,en$*8,hr(2),empnam$*30,cnam$*40,io2b$(2)*20

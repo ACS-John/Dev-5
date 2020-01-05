@@ -3,7 +3,7 @@
 	library 'S:\Core\Library': fntop,fnxit, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnOpt,fnFra,fncomboa
 	library 'S:\Core\Library': fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
 	fntop(program$,"Bar Graph")
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)

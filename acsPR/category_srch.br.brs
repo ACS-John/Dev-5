@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   def library fncategory_srch(&cn$;fixgrid)
 00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*30,resp$(30)*80
 00090 ! ______________________________________________________________________

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Bank
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050   fntop(program$,cap$="Bank")
 00060 ! ______________________________________________________________________
 00070   dim lbl$(6)*24,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6)

@@ -2,7 +2,7 @@
 ! fixes Current Balance, by taking Beginning Balance (or previous balance 2 yrs ago) and adding current transactions (optional a range of accumulated transactions too) to it.
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnAcs2,fnChk,fnLbl,fnTxt,fnTos,fnCmdSet,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnGetFundList
 	fntop(program$)
-	on error goto ERTN
+	on error goto Ertn
 	dim bp(13)
 	dim resp$(128)*256
 	open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 

@@ -8,7 +8,7 @@
 	library 'S:\Core\Library': fnClient_has
 	library 'S:\Core\Library': fnreport_cache_folder_current$
 	library 'S:\Core\Library': fnCopy
-	on error goto ERTN
+	on error goto Ertn
 	fntop(program$)
 	dim fl1$(8),io1$(60),scrid$(4)*80
 	dim xinp(3)

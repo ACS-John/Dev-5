@@ -3,7 +3,7 @@
 20020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster,fnOpenFile
 20040   dim cap$*128
 20060   fntop(program$,cap$="State")
-20080   on error goto ERTN
+20080   on error goto Ertn
 20100   layoutName$='CO State'
 20120 ! /r
 

@@ -2,7 +2,7 @@
 00020 ! ??? department
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnfree
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim hd$(2)*60,cnam$*40,dat$*20,ots$(5),ins$(22),ink$(22)*42
 00080   dim pdate$(2)*20,de$*50,sm1$(6)*37,sf1$(6),d(2)

@@ -1,6 +1,6 @@
 00012 ! ______________________________________________________________________
 00020   library 'S:\Core\Library': fnmsgbox,fntop,fnerror
-00025   on error goto ERTN
+00025   on error goto Ertn
 00029 ! ______________________________________________________________________
 00030   dim message$(4)*400,cap$*128
 00031 ! note message$(4) is not dimmed long enough

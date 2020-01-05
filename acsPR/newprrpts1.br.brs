@@ -167,7 +167,7 @@
 02520   fnchain("S:\acsPR\newprRpt3") ! /r
 22000   def fn_setup
 22020     library 'S:\Core\Library': fntop,fnxit, fnerror,fnchain,fncno,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnmsgbox,fngethandle,fnCopy
-22040     on error goto ERTN
+22040     on error goto Ertn
 22060 ! ______________________________________________________________________
 22080     dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),ty$(104,5)*20,a$*255
 22100     dim a$(20)*32,a(20),pp(20)

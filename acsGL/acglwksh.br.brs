@@ -2,7 +2,7 @@
 00020 ! pr Trial Balance Worksheet
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnpedat$, fnconsole,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim a$(9)*3,glsum$(2)*12,u$*12,address$(2)*40,b$(2)*12,c$*5,d(2),p$*62
 00080   dim cnam$*40,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3

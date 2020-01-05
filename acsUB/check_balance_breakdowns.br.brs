@@ -41,7 +41,7 @@ def fn_setup
 		library 'S:\Core\Library': fnopenprn,fncloseprn
 		library 'S:\Core\Library': fnAcs,fnChk,fnCmdSet,fnLbl,fnTos
 		library 'S:\Core\Library': fnservice_other
-		on error goto ERTN
+		on error goto Ertn
 		! ______________________________________________________________________
 		dim cap$*128
 		dim serviceName$(10)*20,srv$(10)*2

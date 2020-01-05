@@ -2,7 +2,7 @@
 00020 ! pr schedules
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnChk,fnAcs,fnCmdKey,fnLbl,fnpglen,fnactpd,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dollar$*1,k$*3,by(13),bp(13),byt(13)
 00080   dim gl2$*12,d2$*50,by2(13),bp2(13)

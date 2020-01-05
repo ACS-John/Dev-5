@@ -2,7 +2,7 @@
 ! pr Budget Worksheet
 ! ______________________________________________________________________
   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnqgl,fnChk,fnCmdSet,fnAcs,fnagl$,fnrgl$,fnconsole
-  on error goto ERTN
+  on error goto Ertn
 ! ______________________________________________________________________
   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
   dim cap$*128,resp$(10)*80,revb(13)

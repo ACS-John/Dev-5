@@ -2,7 +2,7 @@
 00020 ! converts adrbil as well as ask cno and write it so other conversion programs don't have to ask it.
 00030   def library fnub_cnv_adrbil
 00040     library 'S:\Core\Library': fncno,fnerror,fnStatus,fnCopy,fnindex_it
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060     fnStatus('Converting Alternate Billing Address file (S:\acsUB\conversion\ubadrbil-cnv)')
 00070     dim a$(4)*30,cap$*128,z$*10,ab$(4)*30
 00080 ! ______________________________________________________________________

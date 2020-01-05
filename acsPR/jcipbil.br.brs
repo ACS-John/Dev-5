@@ -2,7 +2,7 @@
 00020 ! Enter Billings
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fnoldmsgbox,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38,wrds$(2)*20,n$*40
 00080   dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),cap$*128,message$*40

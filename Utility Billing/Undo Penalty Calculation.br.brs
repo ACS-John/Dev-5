@@ -2,7 +2,7 @@
 library 'S:\Core\Library': fnAcs2
 library 'S:\Core\Library': fnLbl,fnxit,fnTxt,fnTos,fnCmdSet,fntop
 library 'S:\Core\Library': fnAutomatedSavePoint,fnget_services
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 dim z$*10
 dim g(12)

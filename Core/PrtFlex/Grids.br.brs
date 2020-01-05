@@ -6,7 +6,7 @@
 	library 'S:\Core\Library': fntop,fngetdir2,fnCopy,fnfree
 	library 'S:\Core\Library': fnxit
 	library 'S:\Core\Library': fngetdir,fnCmdSet
-	on error goto ERTN
+	on error goto Ertn
 	fntop(program$)
 ! r: dims
 	dim gridname$*40,gridindx$*40,filename$*60

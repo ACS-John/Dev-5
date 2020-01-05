@@ -2,7 +2,7 @@
 ! Close Books at Year End
 ! r: setup and read constants
 	library 'S:\Core\Library': fntop,fnxit,fnUseDeptNo,fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt,fnqgl,fnagl$,fnOpt,fnFra,fncreg_read,fncreg_write,fngethandle,fnGetFundList,fnrgl$
-	on error goto ERTN
+	on error goto Ertn
 
 	dim acno$*12,bc(13),bp(13),bud(13)
 	dim resp$(10)*80

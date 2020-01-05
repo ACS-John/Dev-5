@@ -2,7 +2,7 @@
 00020 ! -- Enter Beginning Balances and Readings
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit, fnerror,fnLbl,fnTos,fnTxt, fnAcs,fncmbact,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnCmdKey,fnget_services
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim z$*10,d(15),adr(2),p$*10,txt$*80,resp$(20)*80,txt$(6)*80
 00080   dim o(2),srv$(10)*20,in1(19),gb(10),e$*30,tg(11),g(12)

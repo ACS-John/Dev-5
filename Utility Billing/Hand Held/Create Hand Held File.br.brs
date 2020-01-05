@@ -1639,7 +1639,7 @@ def fn_handHeldList(mat deviceName$; mat deviceOption$)
 	on error goto HhlContinue
 	mat deviceOption$(1) 
 	deviceOption$(1)=rpt$('*',128)
-	on error goto ERTN
+	on error goto Ertn
 	DeviceOptionArrayPassed=1
 	HhlContinue: !
 	if DeviceOptionArrayPassed then
@@ -1730,7 +1730,7 @@ def fn_setup
 		library 'S:\Core\Library': fnOpenFile,fnbuildkey$
 		library 'S:\Core\Library': fnCustomerData$
 		library 'S:\Core\Library': fnGetServiceCodesMetered
-		on error goto ERTN
+		on error goto Ertn
 		! ______________________________________________________________________
 		dim resp$(64)*125
 		dim f$(3)*12,e2$*30

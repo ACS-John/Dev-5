@@ -1,6 +1,6 @@
 ! Replace S:\acsPR\Conversion\pr-Fix
 ! beats me...
-on error goto ERTN
+on error goto Ertn
 dim ta(2)
 open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno]",internal,outIn,keyed 
 open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,outIn,relative 

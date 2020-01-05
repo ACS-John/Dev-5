@@ -15,7 +15,7 @@ def fn_setup
 		library 'S:\Core\Library': fnStatusClose
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnPayPeriodEndingDate
-		on error goto ERTN
+		on error goto Ertn
 	end if 
 fnend 
 def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)

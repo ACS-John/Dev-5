@@ -2,7 +2,7 @@
 00020 ! Client File
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(9)*38,tln(9),p$(9)*160,fltyp$(9),mask(9)
 00080 ! dim sln(9)

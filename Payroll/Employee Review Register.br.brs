@@ -3,7 +3,7 @@
 
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror
 	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates
-	on error goto ERTN
+	on error goto Ertn
 ! gosub CHECK_PASSWORD
 
 	dim em$*30,em(3),tdt(4),tdy(6),tcd(3)

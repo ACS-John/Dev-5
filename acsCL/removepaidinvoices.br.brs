@@ -2,7 +2,7 @@
 00020 ! Remove Paid Invoices
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fnfree,fnrename
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
 00080 ! ______________________________________________________________________

@@ -2,7 +2,7 @@
 00020 ! pr Transaction Journals
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
 00080   dim t1(3),glt(3),glts(3),bn$*30,cap$*128,des$*30,sltyn$(3)*1

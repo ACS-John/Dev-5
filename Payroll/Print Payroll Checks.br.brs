@@ -20,7 +20,7 @@
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnDedNames
 	library 'S:\Core\Library': fnPrPrintNetZeroDefault$
-	on error goto ERTN
+	on error goto Ertn
 ! /r
 	fntop(program$)
 	fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
@@ -315,7 +315,7 @@ L1300: ! /r
 			fn_getTestValues
 			goto L1570
 		else
-			read #hEmployee,using 'form pos 1,n 8,3*c 30,pos 132,2*pd 4.2,pos 162,n 6': eno,mat em$,em10,em11,lpd eof EO_RPMSTR
+			read #hEmployee,using 'form pos 1,n 8,3*c 30,pos 132,2*pd 4.2,pos 162,n 6': eno,mat em$,em10,em11,lpd eof EoEmployee
 		end if
 		mat v=(0) : v1=1
 		! If env$('client')="WashingtonParrish" Then Goto 1110
@@ -502,7 +502,7 @@ def fn_engDol_hundred
 	eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 	L3920: ! 
 fnend 
-EO_RPMSTR: ! r:
+EoEmployee: ! r:
 	close #hEmployee: 
 	close #3: 
 	if gl_installed=1 then close #h_gl_glbrec: 

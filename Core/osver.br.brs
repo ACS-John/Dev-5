@@ -3,7 +3,7 @@
 00080   library 'S:\Core\Library': fnerror,fngethandle
 00100   dim osv_temp$*500,osv_file$*500,udf$*256
 00120   if get_or_put=0 then get_or_put=1
-00130   on error goto ERTN
+00130   on error goto Ertn
 00140   if get_or_put<>2 then get_or_put=1
 00152   osv_file$=env$('temp')&"\osVer-"&wsid$
 00160   on get_or_put gosub OSV_READ, OSV_BUILD_AND_READ

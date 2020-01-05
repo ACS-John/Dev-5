@@ -3,7 +3,7 @@
 00030 ! DO NOT RENUMBER !!!
 00040 ! ______________________________________________________________________
 00050   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fndat,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),t(20),s(20),c(20)
 00090   dim rn$*2,rt$*78,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20)

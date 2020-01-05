@@ -2,7 +2,7 @@
 	library 'S:\Core\Library': fnxit,fntop,fncloseprn,fnopenprn,fnRead30Categories
 	fntop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
 	on fkey 5 goto L450
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim cxno$*5,cna$*30,en$*9,e$*25,l$(50)*9,d(8),l(50,6),t(6)
 	dim cat$(30)*30,cap$*128

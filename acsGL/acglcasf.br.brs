@@ -2,7 +2,7 @@
 00020 ! Cash Flow Statement with Fund Comparisons
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd, fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
 00080   dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140

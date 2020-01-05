@@ -2,7 +2,7 @@
 00020 ! G/L BALANCE SHEET with comparison on months
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnUseDeptNo,fnps,fnpedat$,fnactpd,fnpriorcd,fnGlAskFormatPriorCdPeriod,fnactpd$,fnfscode
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,pedat$*20,m1$(13)*9,m2$(13)*8,total(13),p$(20)*50
 00080   dim cch$*20,by(13),bp(13),sc1$(2)*20

@@ -12,7 +12,7 @@ def library fnlabel(mat linestyle$)
 	library 'S:\Core\Library': fnpa_fontsize
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnfree
-	on error goto ERTN
+	on error goto Ertn
 
 	dim labeltext$(5)*120,wabel$(10,3,5)*120
 	dim opt$(3)*43

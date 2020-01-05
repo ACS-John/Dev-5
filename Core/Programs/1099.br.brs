@@ -4,12 +4,12 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_FontSize
+		library 'S:\Core\Library': fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_FontSize
 		library 'S:\Core\Library': fnFormCopyAwithBackgroundWarn,fnButton,fncombof
 		library 'S:\Core\Library': fnAcs,fnCmdKey,fnCmdSet,fncomboa
 		library 'S:\Core\Library': fncreg_read,fncreg_write,fnLbl,fndednames,fnmsgbox
 		library 'S:\Core\Library': fnpa_background,fnreg_read,fnreg_write,fnureg_read,fnureg_write,fnOpt,fnTxt,fnTos,fngethandle,fnChk
-		on error goto ERTN
+		on error goto Ertn
 		! r: constants
 		dim ml$(0)*128
 		dim resp$(128)*256
@@ -31,13 +31,6 @@ def fn_setup
 		! /r
 	end if
 fnend
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
 def library fn1099print_close
 		if ten99Export$='True' then
 			close #hExport:
@@ -369,3 +362,4 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	end if
 	fnask_1099_info=awiReturn
 fnend
+include: Ertn

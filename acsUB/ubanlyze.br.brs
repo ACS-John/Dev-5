@@ -1,7 +1,7 @@
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnOpt,fnmsgbox,fncomboa,fnButton,fnpic,fnFra,fnChk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnCmdSet,fnCmdKey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 00040   library 'S:\Core\Library': fndat
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
 00080   dim usagtot(18,20),ratetot(18,20),customer(18,20),cap$*128

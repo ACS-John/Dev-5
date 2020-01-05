@@ -5,7 +5,7 @@ def fn_setup
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile
 		library 'S:\Core\Library': fnMeterInfo$
 		library 'S:\Core\Library': fncustomer_address
-		on error goto ERTN
+		on error goto Ertn
 		
 		library 'S:\Core\Library': fnget_services
 		dim serviceName$(0)*20

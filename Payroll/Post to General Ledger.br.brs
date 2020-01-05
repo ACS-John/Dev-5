@@ -11,7 +11,7 @@
 	library 'S:\Core\Library': fnIndex_it
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
 	library 'S:\Core\Library': fnchain
-	on error goto ERTN
+	on error goto Ertn
 
 	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3),oldtgl(3)
 	dim tr(7),tr$*12,td$*30,dat$*20,a(100),i$*21,glwk$*30,desc$*50

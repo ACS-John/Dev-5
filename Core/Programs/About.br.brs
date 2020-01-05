@@ -1,5 +1,5 @@
 library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
-on error goto ERTN
+on error goto Ertn
 dim txt$(1)*256
 fntop(program$, cap$="About ACS")
 c_has_count=fnclient_has_mat(mat c_has$)

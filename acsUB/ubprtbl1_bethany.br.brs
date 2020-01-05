@@ -4,7 +4,7 @@
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact
 	library 'S:\Core\Library': fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnCmdKey
 	library 'S:\Core\Library': fnpa_finis,fnpa_txt,fnpa_newpage,fnpa_open
-	on error goto ERTN
+	on error goto Ertn
 
 	dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30

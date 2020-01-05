@@ -19,7 +19,7 @@
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fnDedNames
 	library 'S:\Core\Library': fnGetHandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim em$*30,cp(32),tcp(32)
 	dim tdc(10),ttdc(10)

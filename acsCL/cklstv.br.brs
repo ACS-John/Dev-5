@@ -2,7 +2,7 @@
 00020 ! Check Listing by Vendor (Transaction List: sort by Vendor)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ________Dim(s) by file________________________________________________
 00070   dim cnam$*40,dat$*20 ! CNO
 00080   dim tr$(5)*35 ! TRMstr

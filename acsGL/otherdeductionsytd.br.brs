@@ -2,7 +2,7 @@
 00020 ! -- Other deductions Ytd/Qtd
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,totalytd(10)
 00080   dim totalqtd(10)

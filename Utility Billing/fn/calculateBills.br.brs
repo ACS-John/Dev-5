@@ -533,7 +533,7 @@ def fn_setup
 		else 
 			library "S:\acsUB\calk_standard": fncalk
 		end if 
-		on error goto ERTN
+		on error goto Ertn
 		! r: dims
 		dim resp$(10)*128
 		dim w(5)            ! only dimmed and reset locally - it is used and set in fncalk

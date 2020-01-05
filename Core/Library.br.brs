@@ -106,23 +106,18 @@ def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
 	nex fpItem
 	fnFixPd=fpReturn
 fnend
-
 def library fncd(x)
 	fncd=(x-int(x*.01)*100)*10000+int(x*.01)
 fnend
-
 def library fnformnumb$(numb,decimals,size)
 	fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
 fnend
 def library fnpause(;unused)
-	if env$("ACSDeveloper")<>"" then 
-		pause
-	end if 
-fnend 
+	if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
+XITPAUSE: fnend 
 
 ! /r
 ! r: S:\Core\Start.br
-
 	def library fnWriteProc(procName$*64,procLine$*256)
 		library 'S:\Core\Start.br': fnWriteProc
 		fnWriteProc=fnWriteProc(procName$,procLine$)
@@ -1533,9 +1528,9 @@ fnend
 		library 'S:\acsPR\CmbCategory.br': fncmbcategory
 		fncmbcategory(lyne,mypos,addall,c,a$)
 	fnend
-	def library fncheckfile(hact$,filnum,h_checkhistory,hRpMstr)
-		library 'S:\Payroll\Payroll Check History.br': fncheckfile
-		fncheckfile=fncheckfile(hact$,filnum,h_checkhistory,hRpMstr)
+	def library fnCheckFile(hact$,filnum,hCheckHistory,hEmployee)
+		library 'S:\Payroll\Payroll Check History.br': fnCheckFile
+		fnCheckFile=fnCheckFile(hact$,filnum,hCheckHistory,hEmployee)
 	fnend
 	def library fnhours(eno)
 		library 'S:\acsPR\hours_lib.br': fnhours

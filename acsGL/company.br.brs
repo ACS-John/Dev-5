@@ -2,7 +2,7 @@
 ! GL Company Information File Editor
 
 library 'S:\Core\Library': fnxit,fntop, fnerror,fnwin3b,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnqgl,fnagl$,fnAcs,fnCmdKey,fnChk,fnrgl$,fncomboa
-on error goto ERTN
+on error goto Ertn
 
 dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30
 dim miscname$(10)*20

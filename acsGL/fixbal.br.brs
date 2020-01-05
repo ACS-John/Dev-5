@@ -2,7 +2,7 @@
 00020 ! we have a new menu option that does a better job - could be deleted
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060   fntop(program$,"CHANGE_ME")
 00070 ! ______________________________________________________________________
 00080   dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1

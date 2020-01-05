@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fnCustomerData$
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnGetHandle
-	on error goto ERTN
+	on error goto Ertn
 
 	dim resp$(10)*256
 	fntop(program$)

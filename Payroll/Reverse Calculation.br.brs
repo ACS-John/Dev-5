@@ -9,7 +9,7 @@
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnPayPeriodEndingDate
-	on error goto ERTN
+	on error goto Ertn
 
 	dim x$*8,tdc(6)
 	dim bankgl$*12,bk$*24,glwk$*256

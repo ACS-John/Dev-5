@@ -1,5 +1,5 @@
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fntop,fnChk,fnerror,fnTos,fncno,fnxit,fnCmdSet,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*80
 00080   dim cap$*128

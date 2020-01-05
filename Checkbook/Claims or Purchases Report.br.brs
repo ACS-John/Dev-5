@@ -4,7 +4,7 @@
 	library 'S:\Core\Library': fnAcs,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet
 	library 'S:\Core\Library': fndat
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-	on error goto ERTN
+	on error goto Ertn
 
 	dim vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
 	dim ft2(1000)

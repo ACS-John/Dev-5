@@ -2,7 +2,7 @@ library 'S:\Core\Library': fntop,fnxit
 library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
 library 'S:\Core\Library': fnTos,fnLbl,fnAcs2,fnTxt
 library 'S:\Core\Library': fnCmdSet
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 dim srv$(3)*1
 dim tg(11)

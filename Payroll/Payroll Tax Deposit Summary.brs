@@ -2,7 +2,7 @@
 ! beginning with 4.0 the tax deposit reads from the checkhistory file
 
 library 'S:\Core\Library': fntop,fnxit, fnerror,fnDedNames,fnopenprn,fncloseprn,fngethandle,fnTos,fnFra,fnTxt,fnLbl,fnCmdKey,fnAcs,fnss_employee,fnss_employer,fnGetPayrollDates
-on error goto ERTN
+on error goto Ertn
 
 dim deptot(999,2),t(36)
 dim fullname$(20)*20,ab$(20)*8,cp(32),tdc(10)

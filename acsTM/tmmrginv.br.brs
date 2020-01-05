@@ -1,5 +1,5 @@
 ! REPLACE S:\acsTM\TMMRGINV
-on error goto ERTN
+on error goto Ertn
 library 'S:\Core\Library': fnxit,fngethandle
 ! fntop(program$,cap$="Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]" ")
 dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4

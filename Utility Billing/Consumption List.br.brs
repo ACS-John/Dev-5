@@ -6,7 +6,7 @@
 	library 'S:\Core\Library': fnLastBillingDate,fnCmdSet,fnCmdKey,fntop
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 	library 'S:\Core\Library': fnLastBillingDate
-	on error goto ERTN
+	on error goto Ertn
 
 	dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
 	dim usagtot(18,20),ratetot(18,20),customer(18,20)

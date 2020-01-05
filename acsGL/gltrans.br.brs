@@ -1,6 +1,6 @@
 
 library 'S:\Core\Library': fntop,fnxit,fnHamster
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 fn_setup_hamster
 

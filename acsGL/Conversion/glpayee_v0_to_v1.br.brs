@@ -3,7 +3,7 @@
 00022 ! from recl=127 to recl=276 and version 1
 00030   def library fnglpayee_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fngethandle,fnStatus,fnindex_it,fncopy
-00050     on error goto ERTN
+00050     on error goto Ertn
 00060 ! ______________________________________________________________________
 00070     dim cap$*128
 00080     dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,ph$*12,contact$*30,email$*50

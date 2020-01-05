@@ -2,7 +2,7 @@
 ! r: setup
 	library 'S:\Core\Library': fntop,fnxit,fnwait,fnaddlabel,fnlabel,fncomboa,fnTos,fnLbl,fnChk,fncombof,fnCmdSet,fnAcs,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdKey
 	library 'S:\Core\Library': fnPayPeriodEndingDate
-	on error goto ERTN
+	on error goto Ertn
 
 	dim in1(9),io1$(8),lb$(6,6)*40,ln$*260,msgline$(2)*60,response$(5)*1
 	dim resp$(10)*40

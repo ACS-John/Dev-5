@@ -1,6 +1,6 @@
 ! Replace S:\acsPR\Conversion\PRmstr-Fix
 ! not sure
-on error goto ERTN
+on error goto Ertn
 dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tr$*467
 
 open #10: "Name=[Q]\PRmstr\RPMstr.h[cno]",internal,input,relative 

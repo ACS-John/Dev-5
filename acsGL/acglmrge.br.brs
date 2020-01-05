@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fnTos,fnLbl,fnCmdKey,fnAcs,fnagl$,fnTxt,fnCmdSet,fnOpt
 	library 'S:\Core\Library': fnqglbig,fnrglbig$,fnindex_it,fnFree
 	fntop(program$,"General Ledger Merge")
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim adr(2),ta(2),prg$*256,k(10,8),gl$(5)*12,gl1(5),tr$(5)*35
 	dim t$*12,n(2),l$*12,p$*30,ven$*8

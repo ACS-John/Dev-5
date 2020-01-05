@@ -3,7 +3,7 @@
 00030   def library fncmbcat(myline,mypos; addall,container,indexfile$*200)
 00040 ! ______________________________________________________________________
 00050     library 'S:\Core\Library': fncno,fncombof,fnerror
-00060     on error goto ERTN
+00060     on error goto Ertn
 00070 ! ______________________________________________________________________
 00080     dim df$*200,if$*200
 00090 ! ______________________________________________________________________

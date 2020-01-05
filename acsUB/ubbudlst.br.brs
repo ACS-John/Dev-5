@@ -2,7 +2,7 @@
 00020 ! -- Budget Customer List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnwait,fnerror,fnopenprn,fncloseprn,fnxit,fnAcs,fnTxt,fncomboa,fnLbl,fnTos,fnCmdSet,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,dat$*20,idx$(3)*20,wrd2$(3)
 00080   dim sel$(3)*38,cap$*128,txt$*40,resp$(10)*20

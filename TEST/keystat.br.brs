@@ -1,7 +1,7 @@
 00010 ! Replace S:\Core\KeyStat
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fnerror
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   close #101: ioerr L70
 00070 L70: open #101: "SRow=2,SCol=5,ERow=22,ECol=37,Border=ss,Caption=KeyStat",display,outIn 

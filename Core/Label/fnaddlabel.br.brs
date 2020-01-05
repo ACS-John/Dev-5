@@ -2,7 +2,7 @@
 ! add a label to a queue that will be printed when fnLabel is called
 def library fnaddlabel(mat in_labeltext$)
 	library 'S:\Core\Library': fngethandle
-	on error goto ERTN
+	on error goto Ertn
 	dim labeltext$(5)*120
 	
 	if udim(in_labeltext$)<>5 then 

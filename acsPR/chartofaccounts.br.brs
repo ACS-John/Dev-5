@@ -3,7 +3,7 @@
 	! pretty useless to the end user - but quite usefull to the programmer
 
 	library 'S:\Core\Library': fntop,fnxit, fnHamster
-	on error goto ERTN
+	on error goto Ertn
 
 	dim cap$*128
 	dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)

@@ -2,7 +2,7 @@
 ! User Designed Reports
 
 	library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnerror,fnTos,fnLbl,fnCmdKey,fnAcs,fncombof,fnmsgbox,fnChk,fnTxt,fnFra,fncomboa,fnindex_it,fngethandle,fnStatusClose,fnprint_designed_report
-	on error goto ERTN
+	on error goto Ertn
 
 	dim rt$*78,ch$(2)*132,psc(100)
 	dim inp(20),pp(20),ti(20),rt40$*40

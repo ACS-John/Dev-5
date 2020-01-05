@@ -1,6 +1,6 @@
 
 library 'S:\Core\Library': fntop,fnxit, fnget_services,fnerror,fnHamster
-on error goto ERTN
+on error goto Ertn
 
 fntop(program$,'Customer Hamster')
 dim srvnam$(10)*20,srv$(10)*2

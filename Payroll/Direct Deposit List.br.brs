@@ -8,7 +8,7 @@
 	library 'S:\Core\Library': fnCmdKey
 	library 'S:\Core\Library': fnAcs2
 	library 'S:\Core\Library': fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 
 	! em17  = Last Payroll Date (from first screen of employee record, not departmental record)

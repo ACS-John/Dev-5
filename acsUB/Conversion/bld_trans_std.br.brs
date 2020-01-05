@@ -12,7 +12,7 @@
         ! Service 8 is Other
 00040 ! ______________________________________________________________________
 00050   library 'S:\Core\Library': fnerror,fncno,fntop,fnTos,fnAcs,fnCmdSet,fncmbcno,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnindex_it
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
 00090 ! ______________________________________________________________________

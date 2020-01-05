@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\ubNamLst
 ! r: setup library, dims, constants, fntop, etc
 	library 'S:\Core\Library': fnAcs, fnopenprn,fncloseprn,fnerror,fnLbl,fnTxt,fnChk,fnTos,fncomboa,fnxit,fnCmdSet,fntop,fnget_services
-	on error goto ERTN
+	on error goto Ertn
 
 	dim z$*10,e$(4)*30,dat$*20,idx$(5)*40,resp$(10)*80
 	dim item1$(6)*22,item2$(6)*32,x$*512,text$*50

@@ -1,7 +1,7 @@
 ! Replace S:\acsPR\newpr1099 (formerly)
 ! r: setup, fntop, open files, on error, etc
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fn1099print,fngethandle,fn1099print_close,fnask_1099_info
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim vn$*8,nam$*30,empAddr$(3)*30,ss$*11,box(11)
 	dim tcp(32),tdc(10)

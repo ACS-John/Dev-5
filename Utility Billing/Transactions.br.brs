@@ -19,7 +19,7 @@ def fn_setup
 		library 'S:\Core\Library': fnget_services
 		library 'S:\Core\Library': fnclosefile
 		library 'S:\Core\Library': fnCustomerData$
-		on error goto ERTN
+		on error goto Ertn
 		
 		tcode_charge      	=1
 		tcode_penalty     	=2

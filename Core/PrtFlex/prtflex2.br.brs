@@ -1,24 +1,32 @@
 ! Prtflex2 ! DO NOT RENUMBER
 ! Replace S:\Core\PrtFlex\PrtFlex2
-! ______________________________________________________________________
-! ______________________________________________________________________
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnflexadd1,fnflexinit1,fnButton,fnxit,fnCmdSet,fntop,fnFra,fnOpt,fncmbact,fnCmdKey
-	on error goto ERTN
+! r: libraries
+	library 'S:\Core\Library': fnAcs
+	library 'S:\Core\Library': fncmbact
+	library 'S:\Core\Library': fnCmdKey
+	library 'S:\Core\Library': fnOpt
+	library 'S:\Core\Library': fnflexadd1
+	library 'S:\Core\Library': fnflexinit1
+	library 'S:\Core\Library': fnButton
+	library 'S:\Core\Library': fnTxt
+	library 'S:\Core\Library': fnTos
+	library 'S:\Core\Library': fnCmdSet
+	library 'S:\Core\Library': fnxit
+	library 'S:\Core\Library': fntop
+	library 'S:\Core\Library': fnFra
+	library 'S:\Core\Library': fnLbl
+! /r
+	on error goto Ertn
 ! r: dims
 	dim programfolder$*60,datafolder$*256,gridname$*40
 	dim name$*30,colmask$*3,tt$*200,colhdr$(80)*30,colmask$(80)*3
-	dim response$(87)*80,text$*40, cap$*128,lastgridresponse$*87,resp$(10)*60
+	dim response$(87)*80,text$*40, lastgridresponse$*87,resp$(10)*60
 	dim options$(300)*87,ln$*132,item$(80)*80,abbrev$*20,open_read$*80,tg(11)
 	dim z$*8,rp$*3,py$(8)*25,ss$*11,pb$(10)*2,pl$(5)*13,pf$(7)*6,pa$(8)*1
 	dim pm(40),adr(2)
 	dim dg$(6)*6,pc$(5)*5,pcd(5),oc$(5)*2,ocd(5),va$(5)*2,vaa(5)
 	dim df$*1,dr$*9,dc$*2,da$*17,extra(23),extra$(11)*30,item$(80)*50
 	dim abbrev$*20,open_read$*80,tg(11)
-! /r
-	fntop(program$,cap$="Print Flex")
-	programfolder$=env$('cursys')&"mstr"
-	datafolder$='[Q]\'&env$('cursys')&"mstr"
-	dataext$='.h[cno]'
 	dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 	dim tg(11),p$*10
 	dim ck1$*1,ck2$*1,ck3$*1,ck4$*1,ck5$*1,ck5d$*60,amt(7),amt2(5),cksa$*1,eshome$*1,esstreet$*30,weather$*1,sign$*1,signhelp$*30,witname$*30
@@ -27,14 +35,20 @@
 	dim vod$*80,chk4d1$*1,chk4d2$*1,chk4d3$*1,chk4d4$*1,existingss$*12
 	dim chk4d5$*1,chk4d6$*1,chk4d7$*1,chk4d8$*1,otherspec$*40,chk4d9$*1
 	dim heap$*1,chk4d21$*1,comment2$*150,votime$*8,holdname$(3)*30
-! ______________________________________________________________________
+! /r
+	fntop(program$,"Print Flex")
+	programfolder$=env$('cursys')&"mstr"
+	datafolder$='[Q]\'&env$('cursys')&"mstr"
+	dataext$='.h[cno]'
 	columns=1
-	gosub OPENFILES
+! r: OPENFILES: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
+!               remove the old reads in case they dont match
+	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+! /r
 	open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative 
 	read #11,using 'Form POS 1,C 40',rec=1: gridname$
 	close #11: 
 	if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET
-! __________________ this is 3999 next is 4000 _________________________
 PRINTGRID: ! r: Prints the grid
 	mat item$(columns)
 	mat item$=("")
@@ -64,35 +78,20 @@ READ_NEXT: gosub READDATAFILES ! reads the database for the grid information    
 	if ckey=5 then chain "S:\Core\prtflex\Grids",programfolder$,datafolder$
 ! fnXIT(CURSYS$)
 ! /r
-! __________________ this is 7999 next is 8000 _________________________
-OPENFILES: ! r: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
-!             remove the old reads in case they dont match
-	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
-	return  ! /r
-! __________________ this is 8999 next is 9000 _________________________
+
 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info
 L9010: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	read #1,using L9010: p$,tdate,tcode,tamount,mat tg,we,wu,er,eu,gr,gu,tbal,pcode eof EOFONREAD
 	return  ! /r
-! __________________ this is 9999 next is 10000 ________________________
 GRIDHEADING: ! r: The following lines will be generated each time a grid is                        printed.  Don't ever renumber this program unless you are                       prepared to spend some time figuring out where lines are!
 	colhdr$(1)="Name" : colmask$(1)="80"
 	return  ! /r
 GRIDDETAILS: ! r: The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
 	item$(1)=e$(2)
 	return  ! /r
-! __________________ this is 10999 next is 11000 ________________________
 DONE: close #1: ioerr ignore
 XIT: fnxit
-IGNORE: continue 
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
-! _______________________________________________________________________
+
 ASKTRANSET: ! r:
 	transtype$(1)="Charge"
 	transtype$(2)="Penalty"
@@ -178,3 +177,4 @@ ASKTRANSET: ! r:
 	end_date=val(resp$(8))
 	c$=resp$(9)(1:10)
 XIT_ASKTRANSET: return  ! /r
+include: Ertn

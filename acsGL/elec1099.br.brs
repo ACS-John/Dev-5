@@ -4,7 +4,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnCmdKey,fnChk
 00050   fntop(program$,cap$="Create Electronic 1099s")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,cap$*128
 00090   dim a$(3)*40,b$*12,knp(51),st$(51)*22,wrd2$(13),io2$(13)

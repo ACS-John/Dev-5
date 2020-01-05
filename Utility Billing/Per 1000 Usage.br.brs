@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fnGetServiceCodesMetered
 	library 'S:\Core\Library': fnCustomerData$
 	library 'S:\Core\Library': fnAddOneC,fnAddOneN
-	on error goto ERTN
+	on error goto Ertn
 	! 
 	dim range(16),cust(16)
 	dim resp$(20)*40

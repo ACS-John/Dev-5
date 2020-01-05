@@ -2,7 +2,7 @@
 00020 ! pr bills (new format)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnget_services
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*60,txt$*40,mg$(3)*30,rw(22,13),indexfile$*256
 00080   dim cap$*128,datafile$*256

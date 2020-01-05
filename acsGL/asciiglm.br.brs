@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnTos,fnLbl,fnCmdKey,fnxit,fnTxt,fnAcs
 00050   fntop(program$,cap$="Create ASCII File")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim de$*50,fl$*50
 00090 ! ______________________________________________________________________

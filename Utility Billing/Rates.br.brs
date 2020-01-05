@@ -18,7 +18,7 @@ def fn_setup
 		dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
 		dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
 		! 
-		on error goto ERTN
+		on error goto Ertn
 		!
 		fnget_services(mat snm$,mat srv$)
 		dim serviceCodeMetered$(0)*2

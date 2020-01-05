@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fncno,fnerror
 00045   fntop("S:\acsPR\prRpt2",cap$="Design Reports")
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
 00080   dim io1$(9),fb$(20),io2$(60),rptemp(20),tempch$(4)*256

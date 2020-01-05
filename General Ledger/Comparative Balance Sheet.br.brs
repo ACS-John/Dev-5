@@ -2,7 +2,7 @@
 12020 ! Comparative Balance Sheet
 14000 ! r: setup library, on error, dims, fntop
 14020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnpedat$,fnps,fnpriorcd,fnfscode,fnUseDeptNo,fnactpd,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
-14040   on error goto ERTN
+14040   on error goto Ertn
 14060 ! 
 14080   dim fl1$*256,cogl$(3)*12,accum(9,2),bp(13),by(13)
 14100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*56

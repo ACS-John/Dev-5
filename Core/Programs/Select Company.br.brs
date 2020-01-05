@@ -292,7 +292,7 @@ def fn_setup
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnCompanyPayPeriodEndingDate
 		library 'S:\Core\Library': fnSystemIsAddOn
-		on error goto ERTN
+		on error goto Ertn
 		! ______________________________________________________________________
 		dim filename$(999)*40
 		dim resp$(10)*50,txt$*40 ! ,temp$*256

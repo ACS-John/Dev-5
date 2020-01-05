@@ -2,7 +2,7 @@
 10200 ! -- reset current or prior reading to what it was on a given transaction date.
 10400 ! ______________________________________________________________________
 10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnget_services,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnwait,fnCmdSet,fntop,fnpause,fnOpt,fngethandle,fnChk
-10800   on error goto ERTN
+10800   on error goto Ertn
 11000 ! ______________________________________________________________________
 11200   dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
 11400   dim a(7),b(11),c(4),d(15),g(12),rw(22,13),d$*6,dat$*20,bt1(14,2)

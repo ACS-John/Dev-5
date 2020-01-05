@@ -3,7 +3,7 @@
         ! FOR 8 1/2 * 11
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnpedat$,fnactpd$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnactpd,fnfscode,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,p$(20)*50,cap$*128
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
@@ -185,10 +185,10 @@
 01730   c=b-1
 01740   pr #255,using L1750: b,c
 01750 L1750: form pos 52,pic(-----),pos 71,pic(-----),skip 2
-01760   on error goto ERTN
+01760   on error goto Ertn
 01770   goto L1810
 01780 L1780: pr #255: tab(49);"CURRENT YEAR";tab(68);"PRIOR YEAR"
-01790   on error goto ERTN
+01790   on error goto Ertn
 01800   pr #255: 
 01810 L1810: return 
 01820 ! ______________________________________________________________________

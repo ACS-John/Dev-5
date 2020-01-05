@@ -3,7 +3,7 @@
 
 library 'S:\Core\Library': fntop,fnxit, fnerror,fnTos,fnAcs,fnTxt,fnLbl
 library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnCmdSet
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 
 dim ba(13),bt1(14,2)

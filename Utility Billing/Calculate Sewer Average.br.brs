@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\Sewer ! dont forget to change lines 510 &  640
 library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fngethandle,fncreg_read,fncreg_write,fnCmdKey,fnapply_default_rates
 dim cd1(8),x(13),message$(5)*80,message$*60,tg(11),extra(23)
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 
 open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 

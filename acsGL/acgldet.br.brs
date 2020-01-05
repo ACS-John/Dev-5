@@ -2,7 +2,7 @@
 00020 ! -- Modified Cash Flow Statement (Detailed Transactions, Not Balances)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnGlAskFormatPriorCdPeriod
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,in3$(4)
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14

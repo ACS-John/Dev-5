@@ -2,7 +2,7 @@
 00020 ! General Ledger Chart of Accounts
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnLbl,fnqgl,fnagl$
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim gl(2,3),io2$(6),io1$(2),wrd1$(2)*46,cap$*128,p$(20)*50
 00080   dim d$*50,dat$*20,cnam$*40,cap$*128,resp$(10)*50

@@ -2,7 +2,7 @@
 ! special program to fix medicare wh
 
 	library 'S:\Core\Library': fntop,fnxit
-	on error goto ERTN
+	on error goto Ertn
 
 	dim tcp(32)
 	dim tdc(10)

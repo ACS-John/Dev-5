@@ -1,5 +1,5 @@
 def fn_pa_setup
-	on error goto ERTN
+	on error goto Ertn
 	if ~pa_setup then 
 		pa_setup=1
 		!

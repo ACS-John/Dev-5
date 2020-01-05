@@ -18,7 +18,7 @@ def fn_index_it_setup
 	library 'S:\Core\Library': fnxit,fnerror,fnStatus,fnget_company_number_list,fngethandle,fnshortpath$
 	if ~setup_index_it then 
 		setup_index_it=1
-		on error goto ERTN
+		on error goto Ertn
 		option retain 
 		!     working_dir_rights=fnrights_test('',"Try Run As Administrator.",'Program','Indexes are unable to process without this access and will be skipped for the remainder of this session.')
 	end if 

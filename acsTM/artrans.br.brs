@@ -1,7 +1,7 @@
 library 'S:\Core\Library': fntop,fnxit
 library 'S:\Core\Library': fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2
 
-on error goto ERTN
+on error goto Ertn
 
 fntop(program$)
 fn_setup_hamster

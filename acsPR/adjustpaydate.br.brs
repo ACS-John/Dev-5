@@ -3,7 +3,7 @@
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit,fnerror,fncno,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fngethandle
 	fntop("S:\acsPR\adjustpaydate","Adjust Historical Pay Date")
-	on error goto ERTN
+	on error goto Ertn
 	fn_adjustpaydate
 ! ______________________________________________________________________
 	def fn_adjustpaydate

@@ -2,7 +2,7 @@
 ! pr bar graph of earnings by month for current year of prior year.
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnget_services, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt,fnOpt,fnFra,fncomboa,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)

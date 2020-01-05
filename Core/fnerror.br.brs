@@ -1,5 +1,5 @@
 library 'S:\Core\Library': fnxit
-on error goto ERTN
+on error goto Ertn
 pr 1/0
 XIT: fnxit
 ! 

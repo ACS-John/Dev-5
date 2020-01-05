@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\UBUsage
 ! r: setup library, on err, dims, constants, etc
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fnOpt,fnget_services,fnapply_default_rates,fnapplyDefaultRatesFio,fnChk
-	on error goto ERTN
+	on error goto Ertn
 	fntop(program$)
 ! ______________________________________________________________________
 	dim z$*10,name$*30,dx(15)

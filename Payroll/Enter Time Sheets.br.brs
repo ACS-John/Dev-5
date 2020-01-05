@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fnhours
 	library 'S:\Core\Library': fnTos,fnFra,fnOpt,fnLbl,fnTxt,fnCmdKey,fnAcs,fncombof,fnChk
 	library 'S:\Core\Library': fnPayPeriodEndingDate
-	on error goto ERTN
+	on error goto Ertn
 	fntop(program$)
 ! r: dims and constants
 	dim inpX(29)
@@ -172,7 +172,7 @@ L1060: !
 
 ENTER_TIME: ! 
 	en$=lpad$(str$(eno),8)
-	read #hEmployee,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
+	read #hEmployee,using F_employee_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
 	if editmode=1 then goto READ_DEPARTMENTS
 	if prd=lpd then goto EMP_PREV_ENTERED_WARN
 	L1290: ! 
@@ -356,7 +356,7 @@ L2330: !
 	L2430: ! 
 	if estat>0 then goto L4300 ! pulling from time card system
 	if tgp=0 then ped=0 else ped=prd
-	rewrite #hEmployee,using F_RPMSTR_2,key=en$: ped,tgp
+	rewrite #hEmployee,using F_employee_2,key=en$: ped,tgp
 	if heno=eno then goto L2490
 	if tgp>0 then ent1=ent1+1
 	L2490: ! 
@@ -444,7 +444,7 @@ L3960: !
 L3990: ! 
 	if tgp=0 then ped=0 else ped=prd
 L4000: ! 
-	rewrite #hEmployee,using F_RPMSTR_2,key=en$: ped,tgp
+	rewrite #hEmployee,using F_employee_2,key=en$: ped,tgp
 	goto READ_NEXT_DEPARTMENT
 ! rp1=1
 	cor=editmode=0
@@ -467,7 +467,7 @@ L4180: !
 	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4200 ! timecard
 	timecard=1 ! timecard files exist
 L4200: ! 
-	read #hEmployee,using F_RPMSTR_3: en$,em$,em4,em8,em9,lpd,tgp eof FINISH
+	read #hEmployee,using F_employee_3: en$,em$,em4,em8,em9,lpd,tgp eof FINISH
 	if em4=9 then goto L4200 ! must use employment status code = 9 for terminated
 	! if env$('client')="West Rest Haven" and em4=2 then goto L4200 ! wrh uses code 2 for terminated
 	tgp=0
@@ -538,7 +538,7 @@ L4840: !
 	if depeno<>eno then goto CORRECTIONS
 	em$=""
 	en$=lpad$(str$(eno),8)
-	read #hEmployee,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
+	read #hEmployee,using F_employee_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
 	teno=teno-eno ! remove from proof totals
 	mat tinp=tinp-inpX
 	dep=dep2 ! fix dept # on correction screen
@@ -547,9 +547,9 @@ L4840: !
 ! /r
 OFILE: ! r: OPEN FILES
 	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
-F_RPMSTR_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
-F_RPMSTR_2: form pos 162,n 6,pd 5.2
-F_RPMSTR_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
+	F_employee_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
+	F_employee_2: form pos 162,n 6,pd 5.2
+	F_employee_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	close #11: ioerr ignore
 	open #11: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed 
 	close #2: ioerr ignore
@@ -780,7 +780,7 @@ L3290: !
 	if additional=2 then goto PL_READ
 	if pc=9 then gosub PL_PRINT_EMP_BLOCK
 	pc=pc+1
-	read #hEmployee,using F_RPMSTR_1,key=lpad$(str$(eno),8),release: em$ nokey L3440
+	read #hEmployee,using F_employee_1,key=lpad$(str$(eno),8),release: em$ nokey L3440
 	em$=rtrm$(em$)
 	for j1=len(em$) to 1 step -1
 		if em$(j1:j1)=" " then goto L3410

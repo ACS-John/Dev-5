@@ -2,7 +2,7 @@
 ! Transfer to Accountant
 
 	library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnprg,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fnwait,fncomboa,fnmsgbox,fnchain
-	on error goto ERTN
+	on error goto Ertn
 
 	dim dat$*20
 	dim de$*35,ta(2)

@@ -668,7 +668,7 @@ def fn_setup
 		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
 		library 'S:\Core\Library': fnBrFilename$,fnOsFilename$
 		library 'S:\Core\Library': fnProgramDataDir$
-		on error goto ERTN
+		on error goto Ertn
 		dim resp$(20)*256
 		dim background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 		dim text_editor$*256

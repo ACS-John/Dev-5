@@ -2,7 +2,7 @@
 00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fngethandle,fnreg_read,fnreg_write
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
 00080   dim fa$(3),sa$(3)*40,cnam$*40

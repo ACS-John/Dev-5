@@ -2,7 +2,7 @@
 00020 ! Standard Adjustments - Hamster (will need a conversion pgm. now only one adjustment per entry - was 10!)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4),sp(4),c$(4,8)*40
 00080 ! ______________________________________________________________________

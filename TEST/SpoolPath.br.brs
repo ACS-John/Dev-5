@@ -1,6 +1,6 @@
 20020 Execute "config gui off"
 20040 library 'S:\Core\Library': fnspoolpath$,fnfree
-20060 on error goto ERTN
+20060 on error goto Ertn
 20080 a=1
 20100 do
 20120   Open #20: "name=pdf:/,recl=512,replace",display,output

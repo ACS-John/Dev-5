@@ -1,5 +1,5 @@
 00010   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnpause,fnLastBillingDate,fngethandle,fntop,fnTos,fnLbl,fnTxt,fncmbact,fncmbrt2,fnChk,fnCmdSet,fnAcs,fnmsgbox ! fncombof
-00030   on error goto ERTN
+00030   on error goto Ertn
 00040   fncno(cno) ! get account first
 00050   fn_main_loop
 01010   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections

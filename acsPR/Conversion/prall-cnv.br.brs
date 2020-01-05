@@ -2,7 +2,7 @@
 ! not sure, but with a name like prAll, I bet it does alot.
 
 library 'S:\Core\Library': fntop,fnxit, fndate_mmddyy_to_ccyymmdd
-on error goto ERTN
+on error goto Ertn
 
 execute "Copy [Q]\PRmstr\RPMstr.h[cno] X -196 -n"
 execute "Copy X [Q]\PRmstr\RPMstr.h[cno] -D -n"

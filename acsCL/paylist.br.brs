@@ -2,7 +2,7 @@
 00020 ! payee listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fncomboa,fnTxt,fnCmdSet,fnAcs,fnChk,fndate_mmddyy_to_ccyymmdd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
 00080   dim cnam$*40,dat$*20,de$*30,io1$(2),text$*25,item1$(2)*20

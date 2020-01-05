@@ -2,7 +2,7 @@
 ! Remove Transactions (for a date range)
 ! r: setup library and dims
 library 'S:\Core\Library': fntop,fnxit, fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs,fnChk,fngethandle,fnStatus,fnStatusPause,fnindex_it
-on error goto ERTN
+on error goto Ertn
  
 dim k(10,8),p$*30,ta(2),cap$*128,t$*12
 dim n(2),l$*12

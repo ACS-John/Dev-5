@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnAcs,fnCmdKey,fngethandle
 00050   fntop(program$,cap$="Create Checkbook System Files")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,de$*50,vn$(4)*30 ,ta(2),cap$*128,io2$(2),wrd2$(2)*38
 00090   dim resp$(4)*50,option$(2)*25,contact$*30,email$*50,myact$*20

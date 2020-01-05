@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsGL\actrans_change_glnumber
 10200 ! ______________________________________________________________________
 10400   library 'S:\Core\Library': fntop,fnxit,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnmsgbox,fnCmdSet,fnChk,fncd,fnactpd,fnopenprn,fncloseprn
-10600   on error goto ERTN
+10600   on error goto Ertn
 10800 ! ______________________________________________________________________
 11000   dim cnam$*40,cap$*128,resp$(100)*60
 11200   dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)

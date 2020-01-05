@@ -2,7 +2,7 @@
 00020 ! Input (Job Cost) Charges
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnoldmsgbox,fnwait,fnwin3b,fnopenprn,fncloseprn,fncno,fnerror,fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cn$*11,k$*11,n$*40,en$*8,hr(2),empnam$*30,ds$*30,a$(3)*30,b(4)
 00080   dim rn$*12,jn$*6,ji2(3),d$*30,label1$(7)*24,iolabel1$(7),io1$(7)

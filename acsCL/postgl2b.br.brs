@@ -2,7 +2,7 @@
 00020 ! pr GL Distribution Listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   fntop(program$,"GL Distribution Report")
 00080   fnpostgl2(2)

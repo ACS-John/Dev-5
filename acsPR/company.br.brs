@@ -8,7 +8,7 @@
 	library 'S:\Core\Library': fnFra,fnTos,fnLbl,fnTxt,fnAcs
 	library 'S:\Core\Library': fnagl$
 	library 'S:\Core\Library': fnclient_has
-	on error goto ERTN
+	on error goto Ertn
 
 	if fnclient_has('P2') then let fnstyp(11) else let fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 	fntop(program$)

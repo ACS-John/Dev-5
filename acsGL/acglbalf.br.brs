@@ -1,7 +1,7 @@
 00020 ! G/L BALANCE SHEET -  STANDARD FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$,fnactpd
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim sc1$(2)*20,bigul$*140,heading$*140,cch$*20,by(13),bp(13)
 00080   dim p$(20)*50,accum(10,9,2),total(10),fl1$*256,pedat$*20,cap$*128,udf$*256

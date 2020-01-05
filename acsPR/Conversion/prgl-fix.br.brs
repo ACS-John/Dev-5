@@ -2,7 +2,7 @@
 ! CREATE GL ENTRIEX
 
 	library 'S:\Core\Library': fntop,fnxit,fncd
-	on error goto ERTN
+	on error goto Ertn
 
 	dim tdc(6),tcp(22),em$*30,tgl(3),tdet(3)
 

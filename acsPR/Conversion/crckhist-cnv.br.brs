@@ -2,7 +2,7 @@
 00020 ! does something to prCkHist
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   pr newpage
 00080   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"

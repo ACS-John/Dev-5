@@ -29,7 +29,7 @@ def fn_setup
 	library 'S:\Core\Library': fntop
 	library 'S:\Core\Library': fnchain
 	library 'S:\Core\Library': fnub_printbill_program$
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim resp$(60)*128
 	dim mg$(4)*128

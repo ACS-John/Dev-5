@@ -2,7 +2,7 @@
 00020 ! pr utility billing reports based on bills
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnChk,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnLastBillingDate,fnCmdSet,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,cnam$*40,dat$*20
 00080 ! ______________________________________________________________________

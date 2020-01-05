@@ -102,7 +102,7 @@ def fn_setup
   library 'S:\Core\Library': fnagl$
   library 'S:\Core\Library': fnindex_it
   library 'S:\Core\Library': fnrgl$
-  on error goto ERTN
+  on error goto Ertn
 
   dim resp$(100)*60
   dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)

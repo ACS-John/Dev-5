@@ -1,6 +1,6 @@
 00030   ! ______________________________________________________________________
 00040   if ~setup_library then let fn_setup_library
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060   ! ______________________________________________________________________
 00070   dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
 00090   fntop(program$,cap$="Duplicate Transaction Report")

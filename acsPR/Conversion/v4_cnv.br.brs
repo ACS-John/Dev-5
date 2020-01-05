@@ -26,7 +26,7 @@ def fn_setup
 	library 'S:\Core\Library': fntop, fnerror,fndate_mmddyy_to_ccyymmdd
 	library 'S:\Core\Library': fngetdir2,fnStatus,fnindex_it,fncursys$
 	library 'S:\Core\Library': fnStatusPause,fnCopy,fngethandle,fnDedNames
-	on error goto ERTN
+	on error goto Ertn
 
 	dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40
 	dim dedcode(10),calcode(10),dedfed(10),cap$*128
@@ -39,7 +39,7 @@ def library fnpr_conversion_department(cno; medicare_is_seperated)
 fnend 
 def fn_pr_conversion_department(cno; medicare_is_seperated)
 	!  pr 'all files should be closed now' : pause
-	on error goto ERTN
+	on error goto Ertn
 	fnStatus('Department Conversion(v4_cnv) for Company [cno]')
 	payrollcheck_write_count=0
 	!      fnStatusPause

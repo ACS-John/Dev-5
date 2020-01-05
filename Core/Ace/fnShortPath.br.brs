@@ -3,7 +3,7 @@
 def library fnshortpath$*256(longpath$*256)
 	if env$('acsDebugShortPath')<>'' then do_debug=1
 	library 'S:\Core\Library': fngethandle,fnmakesurepathexists
-	on error goto ERTN
+	on error goto Ertn
 	option retain 
 	!
 	dim sp_return$*256

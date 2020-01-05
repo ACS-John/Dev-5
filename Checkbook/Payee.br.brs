@@ -16,7 +16,7 @@
 12040     setup=1
 12060     library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnTxt,fncombof,fnCmdSet,fnAcs,fnmsgbox,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
 12080     library 'S:\Core\Library': fntop,fnxit,fnerror
-12100     on error goto ERTN
+12100     on error goto Ertn
 12120   end if
 12140 fnend
 14000 def library fnaddpayee

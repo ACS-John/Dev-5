@@ -916,7 +916,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		on error goto ERTN
+		on error goto Ertn
 
 		library 'S:\Core\Library': fntop
 		library 'S:\Core\Library': fngethandle

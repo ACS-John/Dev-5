@@ -31,7 +31,7 @@ def fn_setup
 		library 'S:\Core\Library': fnAcs2
 		library 'S:\Core\Library': fnCreg_read
 		library 'S:\Core\Library': fnCreg_write
-		on error goto ERTN
+		on error goto Ertn
 	end if 
 	fnLastBillingDate(lastBillingDate)
 	fncreg_read(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$, 'False')

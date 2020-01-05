@@ -122,7 +122,7 @@ def fn_setup
 		library 'S:\Core\Library': fnArrayWasPassedC
 		library 'S:\Core\Library': fnsafe_filename$
 		library 'S:\Core\Library': fnAddOneC
-		on error goto ERTN
+		on error goto Ertn
 		gosub Enum
 	end if 
 fnend

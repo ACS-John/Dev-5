@@ -3,7 +3,7 @@
 
 def library fncmbcno(myline,mypos; mysys$)
 	library 'S:\Core\Library': fngetdir,fncomboa,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 
 	! the response$ for this has the company number in pos 43:47
 	!   will change with 5 digit company numbers

@@ -2,7 +2,7 @@
 00020 ! -- Accumulated Transaction Listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnTos, fnopenprn,fncloseprn, fndat,fncno,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnpause
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cap$*128,resp$(3)*20,pe2$*30,e2$*30,cnam$*40,text$*80
 00080 ! ______________________________________________________________________

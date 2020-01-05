@@ -2,7 +2,7 @@
 ! Income Statement with Year Comparison
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22

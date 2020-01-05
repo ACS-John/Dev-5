@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglBld
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacglbld
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050 ! ______________________________________________________________________
 00060   fntop(program$,"Build Screens")
 00070   fnacglbld

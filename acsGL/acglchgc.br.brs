@@ -2,7 +2,7 @@
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION FOR 8 1/2 * 11 PAPER WITH            COMPARSION
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cogl$(3)*12,acct$*12,bp(13),by(13),udf$*256
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
@@ -209,11 +209,11 @@
 01950   c=b-1
 01960   pr #255,using L1970: b,c
 01970 L1970: form pos 52,pic(-----),pos 71,pic(-----),skip 2
-01980   on error goto ERTN
+01980   on error goto Ertn
 01990   goto L2040
 02000 ! ______________________________________________________________________
 02010 L2010: pr #255: tab(49);"Current Year";tab(68);"Prior Year"
-02020   on error goto ERTN
+02020   on error goto Ertn
 02030   pr #255: 
 02040 L2040: return 
 02050 ! ______________________________________________________________________

@@ -2,7 +2,7 @@
 00020 ! -- Clear Accumulated Transactions
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd, fnTos,fnLbl,fnCmdSet,fnTxt,fnAcs, fnconsole
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
 00080 ! ______________________________________________________________________

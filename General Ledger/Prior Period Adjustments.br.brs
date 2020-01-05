@@ -8,7 +8,7 @@ library 'S:\Core\Library': fnTos,fnLbl,fnCmdSet,fnAcs2,fnTxt,fnComboF
 library 'S:\Core\Library': fnqgl,fnagl$
 library 'S:\Core\Library': fnindex_it
 library 'S:\Core\Library': fngethandle
-on error goto ERTN
+on error goto Ertn
 fntop(program$)
 dim dat$*20
 fndat(dat$)

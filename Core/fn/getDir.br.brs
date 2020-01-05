@@ -4,7 +4,7 @@
 20060   def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 20080 ! ______________________________________________________________________
 20100     library 'S:\Core\Library': fngethandle,fnerror,fnpause
-20120     on error goto ERTN
+20120     on error goto Ertn
 20140 ! ______________________________________________________________________
 20160 ! Dir$=Directory to Read
 20180 ! .            does not require but will accept a \ on the end

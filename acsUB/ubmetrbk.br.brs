@@ -2,7 +2,7 @@
 00020 ! pr Meter Reading Routes
 02000 ! ______________________________________________________________________
 02020   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnChk,fnTxt,fnFra,fnOpt,fnreg_write,fnreg_read,fnpa_finis,fnget_services,fngethandle
-02040   on error goto ERTN
+02040   on error goto Ertn
 02060 ! ______________________________________________________________________
 02080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20,service$(1)*2,bulksort$*12
 02100   dim a(7),option$(4)*25,extra(17),x_service$(3)*62,rm$*132,ft$*60

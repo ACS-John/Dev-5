@@ -2,7 +2,7 @@
 00020 ! Select Bank Account program - just updates the Company file
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fntop,fnxit,fncno,fnchain,fnerror,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,resp$(1)*60
 00080 ! ______________________________________________________________________

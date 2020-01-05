@@ -7,7 +7,7 @@
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnAddOneC
-	on error goto ERTN
+	on error goto Ertn
 
 	dim resp$(64)*256
 

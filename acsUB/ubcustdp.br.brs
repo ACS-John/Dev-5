@@ -2,7 +2,7 @@
 00020 ! -- Customer Deposit List
 18000 ! r: setup stuff
 18020   library 'S:\Core\Library': fnAcs,fnTos,fnTxt,fnLbl,fnopenprn,fncloseprn, fnerror,fndat,fnwait,fncno,fnwin3,fnxit,fnCmdSet,fntop,fnChk,fnOpt,fnget_services,fncomboa,fncreg_read,fncreg_write
-18040   on error goto ERTN
+18040   on error goto Ertn
 18060   dim z$*10,e$(2)*30,b(11),c(4),cnam$*40,dat$*20,t(4),r(4),deposit$(4)*18
 18080   dim totalb(11),s(4)
 18100   dim cap$*128,message$*40,services$(4)*16,date_amount$*60

@@ -4,7 +4,7 @@
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacprscr
 00050 ! ______________________________________________________________________
 00060   fntop(program$,cap$="Payroll Screens")
-00070   on error goto ERTN
+00070   on error goto Ertn
 00080 ! ______________________________________________________________________
 00090   fnacprscr
 00830   goto XIT

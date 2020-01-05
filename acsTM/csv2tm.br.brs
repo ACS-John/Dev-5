@@ -1,6 +1,6 @@
 ! r: setup
 	library 'S:\Core\Library': fnAcs,fnCmdSet,fnLbl,fnTxt,fnerror,fnTos,fncno,fnxit,fntop,fnpause,fngethandle,fnopenprn,fncloseprn
-	on error goto ERTN
+	on error goto Ertn
 	dim cap$*128
 	dim line$*512,item$(1)*512
 	dim cnam$*40

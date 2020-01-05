@@ -2,7 +2,7 @@
 ! used to enter new budget figures at beginning of new year
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fntop,fnxit, fnrgl$,fnopenprn,fncloseprn,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnagl$,fnLbl,fnqgl,fnTxt
-	on error goto ERTN
+	on error goto Ertn
 	fntop(program$,"Budget Amounts")
 ! ______________________________________________________________________
 	dim dat$*20,bm(13),io1$(4),in1(4),fl2$(2),sc2$(2)*50

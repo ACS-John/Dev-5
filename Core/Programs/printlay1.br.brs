@@ -2,7 +2,7 @@
 00020 ! pr Several Layouts
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim a$(200,3)*80,h1$*55,rm$(4)*100,filename$*50,fil$(50)*80,ln$*120
 00072   dim ev$*50

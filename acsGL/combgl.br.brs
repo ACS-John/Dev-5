@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnputcno,fnTos,fnLbl,fncmbcno,fnTxt,fnCmdSet,fnAcs,fnCmdKey
 00050   fntop(program$,cap$="Consolidate Master Files")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim a$*416,n$*40,cap$*128,resp$(2)*80
 00090 ! ______________________________________________________________________

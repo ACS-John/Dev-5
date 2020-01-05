@@ -4,7 +4,7 @@
 20060   def library fncustomer_search(&x$;fixgrid)
 20080 ! x$=account   to extract the flexgrid information (master file)
 20100     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle
-20120     on error goto ERTN
+20120     on error goto Ertn
 20140     dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
 20160     fnTos(sn$="CustomerSrch")
 20180     open #file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN

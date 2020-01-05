@@ -2,7 +2,7 @@
 00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnxit,fnCmdSet,fntop
 00030   dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
 00040 ! ______________________________________________________________________
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060   fntop(program$,"Grid Layout")
 00070 ! ______________________________________________________________________
 00080 L80: fnTos(sn$="file_layout")

@@ -2,7 +2,7 @@
 00020 ! GENERAL LEDGER Payroll Only Month End Closing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   fntop(program$,"Payroll Only Month End Closing")
 00080 ! fnwait - "GENERAL LEDGER Payroll Only Month End Closing IN PROCESS"

@@ -2,7 +2,7 @@
 00020 ! Convert Job Cost and Category Files
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2)
 00075   dim contact$*30,ph$*12,email$*60

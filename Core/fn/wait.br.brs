@@ -5,7 +5,7 @@
 10080 ! win = window number
 10100 ! ______________________________________________________________________
 10120     library 'S:\Core\Library': fnStatus,fnerror ! ,fncno
-10140     on error goto ERTN
+10140     on error goto Ertn
 10160     if trim$(message$)="" then message$="Please wait..."
 10300     fnStatus(message$)
 10320 ! if stopable=1 then

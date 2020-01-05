@@ -2,7 +2,7 @@
 ! -- for all billing dates that match - put the lower of prior/current water readings into prior and the higher into current
 ! ______________________________________________________________________
 	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnget_services,fnLastBillingDate,fnxit,fnerror,fnTos,fnLbl,fnAcs,fnTxt,fnmsgbox,fnCmdSet,fntop,fngethandle
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
 	dim a(7),b(11),c(4),d(15),g(12),rw(22,13),d$*6,dat$*20,bt1(14,2)

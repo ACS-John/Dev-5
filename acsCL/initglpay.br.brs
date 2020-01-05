@@ -2,7 +2,7 @@
 00020 ! Import General Ledger Payee Records
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fngethandle
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________

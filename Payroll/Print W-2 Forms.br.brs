@@ -28,7 +28,7 @@
 	library 'S:\Core\Library': fnask_w2_info
 	library 'S:\Core\Library': fnw2_text
 	library 'S:\Core\Library': fnFree
-	on error goto ERTN
+	on error goto Ertn
 
 	dim fw2box16$*255
 	dim ss$*11

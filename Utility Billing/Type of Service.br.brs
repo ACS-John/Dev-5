@@ -59,7 +59,7 @@ def fn_setup
 		library 'S:\Core\Library': fngethandle,fnAddOneC
 		library 'S:\Core\Library': fnArrayWasPassedC,fnArrayWasPassedN
 		library 'S:\Core\Library': fnCopy
-		on error goto ERTN
+		on error goto Ertn
 		!
 		dim resp$(60)*20,serviceName$(10)*20,serviceCode$(10)*2
 		dim taxCode$(10)*1

@@ -1498,7 +1498,7 @@ def fn_setup
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnFixPd
 		library 'S:\Core\Library': fnConfirmDeleteHard
-		on error goto ERTN
+		on error goto Ertn
 		! r: dims
 		dim z$*10
 		dim e$(4)*30

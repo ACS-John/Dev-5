@@ -2,7 +2,7 @@
 00020 ! Create Electronic W-2s
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fndat,fnprocess
-00050   on error goto ERTN
+00050   on error goto Ertn
 00060 ! ______________________________________________________________________
 00070   dim em$(3)*30,ss$*11,d(14),m(36),s(9),t(9),z$*8
 00080   dim a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12,s2(2)

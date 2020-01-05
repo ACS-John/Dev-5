@@ -12,7 +12,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCmdSet,fngethandle
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 		library 'S:\Core\Library': fnureg_write,fnureg_read
-		on error goto ERTN
+		on error goto Ertn
 		! r: dims
 		dim resp$(50)*320
 		dim nam$*30,line$(5)*100

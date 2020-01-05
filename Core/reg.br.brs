@@ -10,7 +10,7 @@ def fn_sreg_setup
 		sreg_setup_return=2
 	end if
 	fn_sreg_setup=sreg_setup_return
-	on error goto ERTN
+	on error goto Ertn
 fnend
 def fn_sreg_close
 	close #sreg_h: ioerr ignore
@@ -109,7 +109,7 @@ def fn_reg_setup
 	fnmakesurepathexists('[Q]\Data\')
 	open #reg_h:=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	fn_reg_setup=1
-	on error goto ERTN
+	on error goto Ertn
 fnend
 ! /r
 ! r: GLOBAL - affects ALL registries
@@ -171,7 +171,7 @@ def fn_mcreg_setup
 		mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
 		open #mcreg_h:=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	end if
-	on error goto ERTN
+	on error goto Ertn
 fnend
 def fn_mcreg_close
 	close #mcreg_h: ioerr ignore
@@ -236,7 +236,7 @@ def fn_creg_setup
 		fn_creg_setup=val(env$('CNo'))
 		creg_setup=val(env$('CNo'))
 	end if
-	on error goto ERTN
+	on error goto Ertn
 fnend
 ! /r
 ! r: User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)

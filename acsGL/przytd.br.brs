@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnprocess,fnconsole,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox
 00050   fntop(program$,cap$="Zero YTD Payroll Information")
-00060   on error goto ERTN
+00060   on error goto Ertn
 00070 ! ______________________________________________________________________
 00080   dim k$(3)*25,ss$*11,m(36),adr(2),n(2),d(14),cnam$*40,cap$*128,ml$(3)*80
 00090 ! ______________________________________________________________________

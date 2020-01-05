@@ -1,5 +1,5 @@
 00030   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnwait,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fndat,fnCmdSet,fntop,fngethandle
-00040   on error goto ERTN
+00040   on error goto Ertn
 00050   dim cap$*128
 00060 ! 
 00070   dim e$(4)*30

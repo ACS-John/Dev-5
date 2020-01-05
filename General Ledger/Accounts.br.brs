@@ -11,7 +11,7 @@
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fngethandle
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
-	on error goto ERTN
+	on error goto Ertn
 ! ______________________________________________________________________
 	dim tr(7),tr$*12,td$*30
 	dim d$*50,bc(13),bp(13)
