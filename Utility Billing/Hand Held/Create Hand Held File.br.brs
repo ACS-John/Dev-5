@@ -637,7 +637,7 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_init
 			fn_record_addC( 5,'MTRDT'                               ) !  Record ID
 			fn_record_addN( 6,sequence, '0'                         ) ! Read Sequence
-			fn_record_addC(20,''                                    ) ! Changed Read Sequence
+			fn_record_addC( 6,''                                    ) ! Changed Read Sequence
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Key
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Number
 			fn_record_addC(20,''                                    ) ! Changed Meter Number
