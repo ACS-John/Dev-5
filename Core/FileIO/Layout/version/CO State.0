@@ -1,7 +1,0 @@
-S:\Core\Data\oState.dat, ostate, 0
-S:\Core\Data\oState.idx, abr
-RecL=29
-===================================================
-abr$,       Abreviation ,             C  2 , Pos=1   Mask=2000
-name$,      Name        ,             C 25 , Pos=3   Mask=
-code,       Code        ,             N  2 , Pos=28  Mask=30
