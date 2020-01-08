@@ -192,7 +192,7 @@ def fn_setup_client ! ** set up for new clients
 		fn_setup_client_add("Campbell" ,700,33942)
 		fn_setup_client_add("Carr Plumbing" ,780,34610)
 		! fn_setup_client_add("Carrizo" ,800,34416)
-		fn_setup_client_add("Cerro Gordo" ,850,34508) ! 33994)
+		fn_setup_client_add("Cerro Gordo V" ,850,34508) ! 33994)
 		fn_setup_client_add("Cerro Gordo T" ,970,34508)
 		fn_setup_client_add("Chatom" ,911,15678)
 		fn_setup_client_add("Choctaw" ,918,34214)
@@ -368,7 +368,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Cerro Gordo' then 
+		else if env$('client')='Cerro Gordo V' then 
 			fn_user_limit(2)
 			fn_add_ch_sys('GL')
 			fn_add_ch_sys('PR')
@@ -825,7 +825,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Billings",'MO')
 		fn_pcs_add("Campbell",'MO')
 		fn_pcs_add("Carr Plumbing",'AR')
-		fn_pcs_add("Cerro Gordo",'IL')
+		fn_pcs_add("Cerro Gordo V",'IL')
 		fn_pcs_add("Cerro Gordo T",'IL')
 		!   fn_pcs_add("Community Dev",'TN')
 		fn_pcs_add("Crockett County",'TX')

@@ -171,13 +171,7 @@ def fn_hh_input_filename$*256
 		else if deviceSelected$="Unisys" then
 			hif_return$="[Q]\UBmstr\ReadOut.dat"
 		else if deviceSelected$="Boson" then
-			if env$('client')="Monticello" then
-				hif_return$="[Q]\UBmstr\outpalm.txt"
-			! else if env$('client')="Cerro Gordo" then
-			!   hif_return$=env$('at')&'C:\ProgramData\ACS\UBmstr\outofpalm.txt'
-			else
-				hif_return$="[Q]\UBmstr\outofpalm.txt"
-			end if
+			hif_return$="[Q]\UBmstr\outofpalm.txt"
 		else if deviceSelected$="Other" and env$('client')="Brier Lake" then
 			hif_return$="L:\readings.txt"
 		end if

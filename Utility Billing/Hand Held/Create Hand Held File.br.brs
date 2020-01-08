@@ -497,7 +497,7 @@ def fn_boson
 		else
 			readingt$="P"
 		end if
-		if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
+		if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo V" then readingt$="S"
 		metertag=0: metertag=val(extra$(3)) conv ignore
 		if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
 		if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)

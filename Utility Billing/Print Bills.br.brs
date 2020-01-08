@@ -74,7 +74,7 @@ PrintBill_Basic: !
 		include_zero_bal=include_credit_bal=1
 		enable_service_from=1
 		enable_service_to=1
-	else if env$('client')='Cerro Gordo' then 
+	else if env$('client')='Cerro Gordo V' then 
 		message1_line_count=3
 		message1_max_len=30
 		enable_bulksort=1
@@ -399,7 +399,7 @@ AfterCustomerRead: !
 		fn_print_bill_campbell(z$,mat mg$,d2,d3)
 	else if env$('client')='Raymond' then 
 		fn_print_bill_raymond(z$,mat mg$, "Mailing Address: P O Box 87")
-	else if env$('client')='Cerro Gordo' then 
+	else if env$('client')='Cerro Gordo V' then 
 		fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2,d3)
 	else if env$('client')='Merriam Woods' then 
 		fn_print_bill_merriam(z$,mat mg$,d2,d3)

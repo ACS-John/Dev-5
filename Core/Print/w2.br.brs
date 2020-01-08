@@ -451,7 +451,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 		fnpa_txt(ss$,left+44,fn_line(1))
 	end if
 	! if env$('acsdeveloper')<>'' then let specialform2018=1
-	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
+	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
 	fnpa_txt(empId$,w2Col1,fn_line(2))
 	fnpa_txt(cnvrt$("pic(--,---,---.##",w(2)),w2Col2,fn_line(2))
 	fnpa_txt(cnvrt$("pic(--,---,---.##",w(1)),w2Col3,fn_line(2))
