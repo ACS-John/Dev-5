@@ -13,36 +13,36 @@ def fn_setup
 		library 'S:\Core\Library': fntop
 		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fncompany_name
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs2,fnCmdKey,fnButton,fnLbl,fnTos,fnchk
+		library 'S:\Core\Library': fnTos
+		library 'S:\Core\Library': fnflexinit1,fnflexadd1
+		library 'S:\Core\Library': fnLbl,fnchk
 		library 'S:\Core\Library': fnFra
 		library 'S:\Core\Library': fnbutton_or_disabled
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fncursys$
-		library 'S:\Core\Library': fncno
-		library 'S:\Core\Library': fnputcno
-		library 'S:\Core\Library': fnchain
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnreg_read
-		library 'S:\Core\Library': fnreg_write
-		library 'S:\Core\Library': fnureg_read
-		library 'S:\Core\Library': fnureg_write
-		library 'S:\Core\Library': fncreg_read
-		library 'S:\Core\Library': fncreg_write
-		library 'S:\Core\Library': fnreg_close
-		library 'S:\Core\Library': fnprogram_properties
-		library 'S:\Core\Library': fnclient_has
-		library 'S:\Core\Library': fnclient_has_mat
-		library 'S:\Core\Library': fnpayroll_client_state$
-		library 'S:\Core\Library': fndat
+		library 'S:\Core\Library': fnAcs2,fnCmdKey,fnButton
+		library 'S:\Core\Library': fnMsgbox
+		library 'S:\Core\Library': fnCursys$
+		library 'S:\Core\Library': fnCno
+		library 'S:\Core\Library': fnPutCNo
+		library 'S:\Core\Library': fnChain
+		library 'S:\Core\Library': fnGetHandle
+		library 'S:\Core\Library': fnReg_read,fnReg_write
+		library 'S:\Core\Library': fnUreg_read,fnUreg_write
+		library 'S:\Core\Library': fnCreg_read,fnCreg_write
+		library 'S:\Core\Library': fnReg_close
+		library 'S:\Core\Library': fnProgram_properties
+		library 'S:\Core\Library': fnClient_has
+		library 'S:\Core\Library': fnClient_has_mat
+		library 'S:\Core\Library': fnPayroll_client_state$
+		library 'S:\Core\Library': fnDat
 		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnclient_is_converting
-		library 'S:\Core\Library': fnclear_menu
-		library 'S:\Core\Library': fndisplay_menu
-		library 'S:\Core\Library': fndecimal_assumed
-		library 'S:\Core\Library': fntotal_ar
-		library 'S:\Core\Library': fnindex_sys
-		library 'S:\Core\Library': fncheckfileversion
-		library 'S:\Core\Library': fnreport_cache_folder_current$
+		library 'S:\Core\Library': fnClient_is_converting
+		library 'S:\Core\Library': fnClear_menu
+		library 'S:\Core\Library': fnDisplay_menu
+		library 'S:\Core\Library': fnDecimal_assumed
+		library 'S:\Core\Library': fnTotal_ar
+		library 'S:\Core\Library': fnIndex_sys
+		library 'S:\Core\Library': fnCheckfileversion
+		library 'S:\Core\Library': fnReport_cache_folder_current$
 		library 'S:\Core\Library': fnAddOneC
 		! library 'S:\Core\Library': fnFM
 		library 'S:\Core\Library': fnHamsterFio,fnEditFile
@@ -53,6 +53,7 @@ def fn_setup
 		library 'S:\Core\Library': fnClientSelect
 		library 'S:\Core\Library': fnPicBut
 		library 'S:\Core\Library': fnPrintAceTest
+		library 'S:\Core\Library': fnSystemIsAddOn
 		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
 		dim resp$(32)*255
 
@@ -667,11 +668,6 @@ def fn_get_system_abbr_list(mat system_abbr_list$)
 	dim system_name$(0)*40
 	mat system_name$(0)
 	mat system_abbr_list$(0)
-
-	! if env$('ACSDeveloper')<>'' and exists('S:\Time Management\Menu.mnu') then
-	!   fnAddOneC(mat system_abbr_list$,'TM')
-	!   fnAddOneC(mat system_name$,fnSystemNameFromAbbr$('TM'))
-	! end if
 	fn_add_if_licensed('CM')
 	fn_add_if_licensed('TM')
 	fn_add_if_licensed('OE')
@@ -837,7 +833,8 @@ def fn_display_menu
 		if udim(mat system_name$)>1 then
 			fn_dm_add('&System',str$(x+=1))
 			for system_abbr_list_item=1 to udim(mat system_abbr_list$)
-				if system_abbr_list$(system_abbr_list_item)<>'P2' and system_abbr_list$(system_abbr_list_item)<>'G2' then
+				! if system_abbr_list$(system_abbr_list_item)<>'P2' and system_abbr_list$(system_abbr_list_item)<>'G2' then
+				if ~fnSystemIsAddOn(system_abbr_list$(system_abbr_list_item)) then
 					fn_dm_add(' '&system_name$(system_abbr_list_item),'[cursys='&system_abbr_list$(system_abbr_list_item)&']')
 				end if
 			next system_abbr_list_item
