@@ -20,7 +20,7 @@ def fn_setup
 		library 'S:\Core\Library': fncreg_write
 		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnKeyChange
-		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fnIniToReg
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile
 		library 'S:\Core\Library': fnStatus,fnStatusPause
@@ -64,12 +64,12 @@ fnend
 def fn_cfv_add_missing_files
 	dim camf_filename$(0)*256
 	dim camf_path$*256,camf_prog$*256,camf_ext$*128
-	fngetdir2('S:\'&fnSystemName$&'\mstr\',mat camf_filename$, '','*.h99999')
+	fngetdir2('S:\'&fnSystemNameFromAbbr$&'\mstr\',mat camf_filename$, '','*.h99999')
 	for camf_item=1 to udim(mat camf_filename$)
 		fnGetPp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
 		! if lwrc$(camf_filename$(camf_item))='department' then pause
 		if ~exists('[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]') then 
-			fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),'[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]')
+			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\'&camf_filename$(camf_item),'[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]')
 		end if 
 	next camf_item
 fnend 

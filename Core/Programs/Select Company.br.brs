@@ -11,7 +11,7 @@ MENU1: ! r:
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 		if ~fnSystemIsAddOn(client_has$(ch_item)) then
 			ch_line+=1
-			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
+			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameFromAbbr$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 		end if
 	next ch_item
 	! /r
@@ -78,7 +78,7 @@ MENU1: ! r:
 	fnAcs2(mat resp$,ck)
 	!
 	if ck=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
-		goto XIT
+		goto Xit
 	else if ck=2 then
 		goto COMPANY_ADD
 	else if ck=17 then ! Open...
@@ -117,7 +117,7 @@ MENU1: ! r:
 		end if
 	else if ck=15 then ! SAVE
 		gosub SELECT_COMPANY
-		goto XIT
+		goto Xit
 	end if
 goto MENU1 ! /r
 SELECT_COMPANY: ! r:
@@ -139,8 +139,8 @@ COMPANY_ADD: ! r:
 	fnputcno(cno_selected)
 	fncheckfileversion
 	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursys')='TM' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
-		if exists('S:\'&fnSystemName$&'\mstr\*.h99999') then
-			fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
+		if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
+			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
 		else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
 			fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
 		end if
@@ -158,14 +158,13 @@ COMPANY_ADD: ! r:
 		fnchain("S:\acs"&env$('cursys')&"\Company")
 	else if env$('cursys')='UB' then
 		fnchain(txt$="S:\Core\AddCNo")
-	else if exists('S:\'&fnSystemName$(env$('cursys'))&'\Company.br') then
-		fnchain('S:\'&fnSystemName$(env$('cursys'))&'\Company.br')
+	else if exists('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
+		fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
 	else
 		fnchain(txt$="S:\acs"&env$('cursys')&"\AddCNo")
 	end if
 ! /r
-XIT: fnxit
-IGNORE: continue
+Xit: fnXit
 def fn_company_already_exists(cae_cno)
 	cae_return=0
 	if exists(fn_dataFolder$&'\Company.h'&str$(cae_cno)) then
@@ -269,7 +268,7 @@ def fn_setup
 		library 'S:\Core\Library': fnTos
 		library 'S:\Core\Library': fnCno
 		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fnchain,fnxit
+		library 'S:\Core\Library': fnchain,fnXit
 		library 'S:\Core\Library': fnputcno
 		library 'S:\Core\Library': fngetdir2
 		library 'S:\Core\Library': fncursys$
@@ -283,7 +282,7 @@ def fn_setup
 		library 'S:\Core\Library': fnclient_is_converting
 		library 'S:\Core\Library': fnclient_has_mat
 		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fnApMstrConversion
 		library 'S:\Core\Library': fnbutton_or_disabled
 		library 'S:\Core\Library': fnClientSelect
@@ -324,7 +323,7 @@ def fn_system_setup
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else
-			goto XIT
+			goto Xit
 		end if
 	end if
 

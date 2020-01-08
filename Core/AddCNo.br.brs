@@ -4,7 +4,7 @@
 library 'S:\Core\Library': fntop
 library 'S:\Core\Library': fnTos,fnLbl,fnAcs2,fnTxt,fnCmdKey,fncmbcno,fnCmdSet
 library 'S:\Core\Library': fnCopy
-library 'S:\Core\Library': fnSystemName$
+library 'S:\Core\Library': fnSystemNameFromAbbr$
 library 'S:\Core\Library': fnchain
 library 'S:\Core\Library': fnmsgbox
 library 'S:\Core\Library': fnindex_sys
@@ -13,8 +13,8 @@ on error goto Ertn
 dim ml$(10)*80,resp$(40)*128,cap$*128
 ! ______________________________________________________________________
 fntop(program$,cap$="Add New "&env$('cursys')&" Company [cno]")
-if exists('S:\'&fnSystemName$&'\mstr\*.h99999') then
-	fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
+if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
+	fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
 else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
 	fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
 end if
@@ -96,8 +96,8 @@ EO_GLMSTR: close #20:
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output 
 	close #1: 
 end if  ! /r
-if exists('S:\'&fnSystemName$&'\Company.br') then
-	fnchain('S:\'&fnSystemName$&'\Company.br') 
+if exists('S:\'&fnSystemNameFromAbbr$&'\Company.br') then
+	fnchain('S:\'&fnSystemNameFromAbbr$&'\Company.br') 
 else
 	fnchain('S:\acs'&env$('cursys')&'\Company')
 end if

@@ -7,7 +7,7 @@ rem include Core\PDF.sys
 
 
 Rem Editor "c:\Program Files\Notepad++\Notepad++.exe"
-Editor "c:\ACS\Dev-5\brEdit.cmd"
+Rem Editor "c:\ACS\Dev-5\brEdit.cmd"
 
 PrintScreen gui Win:/Select
 

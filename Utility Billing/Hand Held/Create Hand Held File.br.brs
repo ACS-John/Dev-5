@@ -725,7 +725,7 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addN( 1,0                                            ) ! Reed Switch Failure Flag      Req HH 143        1 NUM R900G only
 			fn_record_addC(69,''                                           ) ! Additional Flags              Req HH 144-212   69 For future use
 			fn_record_addC(25,''                                           ) ! Register Manufacturer         Req HH 213-237   25 A/N
-			fn_record_addN( 8,0                                            ) ! Register Install Date         Req HH 238-245    8 NUM YYYYMMDD
+			fn_record_addc( 8,''                                           ) ! Register Install Date         Req HH 238-245    8 NUM YYYYMMDD
 			fn_record_addC(10,''                                           ) ! Register ID                   Req HH 246-255   10 A/N
 			fn_record_write(h_out)                                           ! CRLF                          Req UB 256-257    2
 			! /r

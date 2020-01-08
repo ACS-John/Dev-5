@@ -291,6 +291,7 @@ def fn_get_the_date(gtd_source$*256)
 		cc17_pos=pos(gtd_source$,', 17')
 		cc18_pos=pos(gtd_source$,', 18')
 		cc19_pos=pos(gtd_source$,', 19')
+		cc20_pos=pos(gtd_source$,', 20')
 		if cc13_pos<=0 then cc13_pos=pos(gtd_source$,', 2013')
 		if cc14_pos<=0 then cc14_pos=pos(gtd_source$,', 2014')
 		if cc15_pos<=0 then cc15_pos=pos(gtd_source$,', 2015')
@@ -298,6 +299,7 @@ def fn_get_the_date(gtd_source$*256)
 		if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
 		if cc18_pos<=0 then cc18_pos=pos(gtd_source$,', 2018')
 		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 2019')
+		if cc20_pos<=0 then cc20_pos=pos(gtd_source$,', 2020')
 		if cc12_pos>0 then
 			gtd_source$(cc12_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2012
@@ -322,6 +324,9 @@ def fn_get_the_date(gtd_source$*256)
 		else if cc19_pos>0 then
 			gtd_source$(cc19_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2019
+		else if cc20_pos>0 then
+			gtd_source$(cc20_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2020
 		else
 			pr file$(h_in)
 			pr 'line '&str$(line_count)

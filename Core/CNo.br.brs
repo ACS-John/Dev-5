@@ -2,10 +2,11 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngetdir2,fnerror
+		library 'S:\Core\Library': fngetdir2
 		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnreg_read,fnreg_write
 		library 'S:\Core\Library': fncreg_read,fncreg_write
+		library 'S:\Core\Library': fnAddOneC,fnAddOneN
 	end if
 fnend
 
@@ -192,79 +193,69 @@ def library fnprg(&curprg$; g_p)
 		curprg$=env$('Core_Program_Current')
 	end if 
 fnend
+
+def fn_setup_systemCache
+	if ~setup_systemCache then
+		setup_systemCache=1
+		dim s$(0)*128,sN(0)
+		hS=fn_open('TM Systems',mat s$,mat sN,mat form$, 1)
+		dim sAbbr$(0)*256
+		mat sAbbr$(0)
+		dim sName$(0)*256
+		mat sName$(0)
+		dim sNumber(0)
+		mat sNumber(0)
+		dim sIsAddOnN(0)
+		mat sIsAddOnN(0)
+		do
+			read #hS,using form$(hS): mat s$,mat sN eof EoS
+			fnAddOneC(mat sAbbr$    ,trim$(lwrc$(s$(sys_id     )))   )
+			fnAddOneC(mat sName$    ,trim$(      s$(sys_name   ))    )
+			fnAddOneN(mat sNumber   ,            sN(sys_number )     )
+			fnAddOneN(mat sIsAddOnN ,            sN(sys_isAddOn)     )
+		loop
+		EoS: !
+		close #hS:
+	end if
+fnend
 def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN) 
+	if ~setup then let fn_setup
+	fn_setup_systemCache
 	sia_systemAbbr$=lwrc$(trim$(sia_systemAbbr$))
-	if sia_systemAbbr$='u4' then
-		returnN=1
-	else if sia_systemAbbr$='p4' then
-		returnN=1
-	else if sia_systemAbbr$='u5' then
-		returnN=1
-	else if sia_systemAbbr$='g2' then
-		returnN=1
-	else if sia_systemAbbr$='em' then
-		returnN=1
+	sia_which=srch(mat sAbbr$,sia_systemAbbr$)
+	if sia_which>0 then
+		returnN=sIsAddOnN(sia_which)
+		if returnN<>1 and returnN<>0 then 
+			pr bell;'invalid boolean'
+			pr '  sia_systemAbbr$='&sia_systemAbbr$
+			pr '  IsAnAddOn=';returnN 
+			pause
+		end if
 	else if sia_systemAbbr$(3:3)='-' then
 		returnN=1
 	end if
 	fnSystemIsAddOn=returnN
 fnend
-def library fnSystemName$*40(; as2n_abbr$*256)
+def library fnSystemNameFromId$*256(sysno; ___,return$*256)
 	if ~setup then let fn_setup
-	fnSystemName$=fn_systemName$( as2n_abbr$)
+	fn_setup_systemCache
+	sWhich=srch(mat sNumber,sysno)
+	if sWhich>0 then
+		return$=sName$(sWhich)
+	end if
+	fnSystemNameFromId$=return$
 fnend
-def fn_systemName$*40(; as2n_abbr$*256)
-	dim as2n_return$*40
+def library fnSystemNameFromAbbr$*40(; as2n_abbr$*256,___,return$*40)
+	if ~setup then let fn_setup
+	fn_setup_systemCache
 	if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
 	as2n_abbr$=lwrc$(as2n_abbr$)
-	!   if as2n_abbr$='aa' then
-	!     as2n_return$='ACS Programmer'
-	if as2n_abbr$='ar' then 
-		as2n_return$='Accounts Receivable'
-	else if as2n_abbr$='bl' then 
-		as2n_return$='Business License'
-	else if as2n_abbr$='cl' then 
-		as2n_return$='Checkbook'
-	else if as2n_abbr$='co' then 
-		as2n_return$='ACS Core'
-	else if as2n_abbr$='cr' then 
-		as2n_return$='Cash Register'
-	else if as2n_abbr$='ea' then 
-		as2n_return$='Home Energy Assistance'
-	else if as2n_abbr$='fa' then 
-		as2n_return$='Fixed Asset'
-	else if as2n_abbr$='gl' or as2n_abbr$='g1' then 
-		as2n_return$='General Ledger'
-	else if as2n_abbr$='g2' then 
-		as2n_return$='General Ledger - Accountants Add-On'
-	else if as2n_abbr$='hh' then 
-		as2n_return$='LapTop Meter Reading'
-	else if as2n_abbr$='mc' then 
-		as2n_return$='Municipal Court'
-	else if as2n_abbr$='po' then 
-		as2n_return$='Purchase Order'
-	!   else if as2n_abbr$='p1' then
-	!     as2n_return$='Payroll (Legacy)'
-	else if as2n_abbr$='p2' then 
-		as2n_return$='Payroll - Job Cost Add-On'
-	else if as2n_abbr$='pr' or as2n_abbr$='p4' then 
-		as2n_return$='Payroll'
-	else if as2n_abbr$='su' then 
-		as2n_return$='Support Tracking'
-	else if as2n_abbr$='ub' then 
-		as2n_return$='Utility Billing'
-	else if as2n_abbr$='u4' then 
-		as2n_return$='Utility Billing - Hand Held Add-On'
-	else if as2n_abbr$='ub-eft' then 
-		as2n_return$='Utility Billing - EFT Add-On'
-	else if as2n_abbr$='tm' then 
-		as2n_return$='Time Management'
-	else if as2n_abbr$='oe' then 
-		as2n_return$='BR Order Entry'
-	else if as2n_abbr$='cm' then 
-		as2n_return$='Collection-Master Add-On'
-	end if 
-	fn_systemName$=as2n_return$
+	
+	sWhich=srch(mat sAbbr$,as2n_abbr$)
+	if sWhich>0 then
+		return$=sName$(sWhich)(1:40)
+	end if
+	fnSystemNameFromAbbr$=return$
 fnend 
 def library fncursys$(; cursys_set$*256,resetCache)
 	if ~setup then let fn_setup
@@ -296,9 +287,10 @@ def library fncursys$(; cursys_set$*256,resetCache)
 	if uprc$(cursys_cache$)="G3" then cursys_cache$="GL" ! Budget Management
 	if env$('CurSys')<>cursys_cache$ then
 		setenv('CurSys',cursys_cache$)
-		! just fnSystemName$ instead       --->      setenv('CurSystem',fn_systemName$(cursys_cache$))
+		! just fnSystemNameFromAbbr$ instead       --->      setenv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
 		execute 'config substitute [CurSys] '&cursys_cache$
 	end if
 	fncursys$=cursys_cache$
 fnend 
-include: ertn
+include: fn_open
+include: Ertn

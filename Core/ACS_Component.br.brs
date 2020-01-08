@@ -13,7 +13,7 @@ def fn_setup
 		library 'S:\Core\Library': fnListPrint
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnMakeSurePathExists
-		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnArrayEmpty
 		library 'S:\Core\Library': fnGetPp
@@ -580,7 +580,7 @@ def fn_draw_windows
 		borderText$(inf:inf)='(Session '&session$(len(session$):len(session$))&') '
 	end if
 	dim systemName$*128
-	systemName$=fnSystemName$(env$('cursys'))
+	systemName$=fnSystemNameFromAbbr$(env$('cursys'))
 	if systemName$=cap$ then ! pr border:
 		borderText$(inf:inf)='- '&systemName$
 	else
@@ -590,7 +590,7 @@ def fn_draw_windows
 		pr #0, border: borderText$
 	end if
 		!
-	fn_company_name(0,Session_Cols) ! fn_company_name(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
+	fn_company_name(0,Session_Cols) ! fn_company_name(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
 		!
 	if not grid_present then
 		row=ceil((Session_Rows-ace_lyne_max)/2 )

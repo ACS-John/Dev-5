@@ -11,7 +11,7 @@ def fn_setup
 		library 'S:\Core\Library': fnFree
 		library 'S:\Core\Library': fnReg_read
 		library 'S:\Core\Library': fnUreg_read
-		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fnGetPp
 		library 'S:\Core\Library': fnOsver
 		library 'S:\Core\Library': fnGet_wordprocessor_exe
@@ -66,7 +66,7 @@ def fn_report_cache_folder_current$*512(; ___,return$*512)
 		report_cache_base$=os_filename$('[Q]\Report Cache')
 	end if
 	if report_cache_base$='' then report_cache_base$=os_filename$('[Q]\Report Cache')
-	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemName$
+	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemNameFromAbbr$
 	return$=rtrm$(return$,'\')&'\'&fn_safe_filename$(env$('cnam'))&' ([cno])'
 	return$=fnSrepEnv$(return$)
 	fnmakesurepathexists(env$('at')&return$&'\')

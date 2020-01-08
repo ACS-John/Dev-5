@@ -252,7 +252,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnAddOneC,fncursys$,fniniopen,fniniread$,fnGetProgramList,fnSystemName$
+		library 'S:\Core\Library': fnAddOneC,fncursys$,fniniopen,fniniread$,fnGetProgramList
 		dim property$(0)*128,default$(0)*128
 		mat property$(0) : mat default$(0)
 		fnAddOneC(mat property$,'Orientation' ) : fnAddOneC(mat default$,'Portrait')
@@ -307,7 +307,7 @@ for sysItem=1 to udim(mat acsSys$)
 	fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	for programItem=1 to udim(mat program_name$)
 		if program_file$(programItem)<>'' then
-			fniniopen('S:\Core\Data\ini_default\'&trim$(program_file$(programItem))&'.ini') ! fnSystemName$(acsSys$(sysItem))&'\'
+			fniniopen('S:\Core\Data\ini_default\'&trim$(program_file$(programItem))&'.ini')
 			! if pos(program_name$(programItem),'Print Payroll Checks')>0 then pause
 			for propertyItem=1 to udim(mat property$)
 				dim iniData$*128
