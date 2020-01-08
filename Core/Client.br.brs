@@ -763,7 +763,7 @@ def library fnub_printbill_program$*256
 !   fn_upp_add("Albany","ubprtthree_Albany")
 		fn_upp_add("Brier Lake","ubprtthree_Brier")
 		fn_upp_add("Billings",'(basic)') ! ubprtthree_bill
-		fn_upp_add("Cerro Gordo","ubprtlas_cerro")
+		fn_upp_add("Cerro Gordo V","ubprtlas_cerro")
 		fn_upp_add("Choctaw",'(basic)') ! "ubprtlas_choctaw"
 		! fn_upp_add("Colyell","ubprtlas_colyell")
 		! fn_upp_add("Carrizo","ubprtthree_Carrizo")
