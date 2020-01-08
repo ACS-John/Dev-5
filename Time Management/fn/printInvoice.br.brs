@@ -1,4 +1,7 @@
-def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; pdfFileName$*1024, ___,isCss,total_amt)
+library 'S:\Core\Library': fnPrintInvoice
+fnPrintInvoice
+
+def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$, ___,isCss,total_amt)
 	if ~setup then let fn_setup
 	if pdfFileName$='' then ebilling=0 else ebilling=1
 	forcePrintAcePdf=0
@@ -18,7 +21,7 @@ def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat 
 		
 		if forcePrintAcePdf then ! r: incomplete.
 			out=fnpa_open( 'Portrait',' - inv no '&inv_num$&' - acct '&actnum$,'PDF')
-			! open #out:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdfFileName$&',Replace,RecL=5000',Display,Output
+			! pr 'just after fnpa_open' : pause
 			lh=7 ! rough line height
 			lc=20 ! lineCount (X corrdionates in milimeters)
 			ml=30 !  margin left
@@ -72,13 +75,15 @@ def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat 
 			pr #out: '' ! ,using "Form POS 1,c 100" : "[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]"
 			pr #out: "[pos(+0,-2)]"&pdfline$
 			! pr #out: ''
-			
 			dim tmpFilename$*2048
 			tmpFilename$=file$(out)
 			fnpa_finis
-			fnCopy(tmpFilename$,env$('at')&pdfFileName$) ! /r
+			fnCopy(tmpFilename$,env$('at')&pdfFileName$) 
+
+			! /r
 		else
 			! r: Laura style PDF
+			open #out:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&pdfFileName$&',Replace,RecL=5000',Display,Output
 			pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI]';
 			pr #out: '     '&cnam$;
 			pr #out: '[/BOLD]'
@@ -127,12 +132,15 @@ def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat 
 			pr #out: '' ! ,using "Form POS 1,c 100" : "[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]"
 			pr #out: "[pos(+0,-2)]"&pdfline$
 			! pr #out: ''
-			
+			pr 'out='
+			pr file$(out)
 			close #out:
+			! pause
 			
 			! /r
 		end if
 
+		! pause
 		! /r
 	else
 		! r: create regular RTF invoice
@@ -166,7 +174,7 @@ def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat 
 		pr #out: "*INSERT FILE:S:\acsTM\black line - six inch.rtf.txt"
 		for j1=1 to udim(mat desc$)
 			if amt(j1) then
-				pr #out,using "Form POS 1,C 58,PIC(---,---,---.--)": rtrm$(desc$(j1)),amt(j1)
+				pr #out,using "Form POS 1,C 58,PIC(---,---,---.--)": rtrm$(desc$(j1))(1:58),amt(j1)
 				total_amt+=amt(j1)
 			else
 				pr #out: ''
@@ -187,6 +195,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
+		library 'S:\Core\Library': fngethandle
 		library 'S:\Core\Library': fnopenprn
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnpa_finis

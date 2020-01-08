@@ -4,10 +4,11 @@ fn_setup
 	client_id_sage_ax=3811
 	client_id_brc=90
 	enableMinimumMonthlyBill=1
-	dim sys_name$(40)*55,client_id$*5,b(8),iv$*12,skln$*80 ! co$(4)*40,
-	dim client_addr$(3)*30
+	
+	dim b(8)
+	dim iv$*12
+
 	dim inpX(7)
-	fn_get_system_list(mat sys_name$)
 	fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 	invoice_number+=1
 	if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
@@ -36,6 +37,8 @@ fn_setup
 	dim inv_service_code(30)
 	dim inv_gl$(30)*12
 	! restore #h_tmwk2:
+	dim client_id$*5
+	dim client_addr$(3)*30
 	do 
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
 		client_id=val(client_id$)
@@ -67,8 +70,12 @@ fn_setup
 				if scode$='U4' then 
 					inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for (UB) Hand Held Add-On"
 				else 
-					inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for "&trim$(sys_name$(scode))
-					if trim$(sys_name$(scode))='' then pr ' sending blank system name  scode='&str$(scode) : pause 
+					inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for "&trim$(fnSystemNameFromId$(scode))
+					if trim$(fnSystemNameFromId$(scode))='' then 
+						pr ' sending blank system name  scode='&str$(scode)
+						pr '   client_id=';client_id
+						pause 
+					end if
 				end if 
 				inv_amt(inv_line)=scst
 				inv_category(inv_line)=6
@@ -114,6 +121,7 @@ XIT: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
+		library 'S:\Core\Library': fnSystemNameFromId$
 		library 'S:\Core\Library': fnPrintInvoice
 		library 'S:\Core\Library': fntop,fnxit
 		library 'S:\Core\Library': fnopenprn,fncloseprn
@@ -199,9 +207,9 @@ def fn_bld_rec(client_id$)
 		!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inpX(6))
 		inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
 	else if inpX(7)=2 then 
-		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
+		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
 	else 
-		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(sys_name$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
+		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
 	end if 
 	
 	inv_amt(inv_line)=inpX(5)
@@ -304,6 +312,7 @@ def fn_summary_print
 	close #22: ioerr SP_XIT
 	open #22: "Name=skip_prn",display,input 
 	pr #255: "\ql"
+	dim skln$*80
 	do 
 		linput #22: skln$ eof SP_FINIS
 		pr #255: skln$

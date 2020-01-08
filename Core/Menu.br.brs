@@ -5,13 +5,13 @@ fn_main
 if menu$='Exit and Logout' then
 	execute "System Logoff"
 end if
-goto XIT
+goto Xit
 def fn_setup
 	if ~setup then
 		setup=1
 		! {coreLibrary}
 		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnSystemName$
+		library 'S:\Core\Library': fnSystemNameFromAbbr$
 		library 'S:\Core\Library': fncompany_name
 		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs2,fnCmdKey,fnButton,fnLbl,fnTos,fnchk
 		library 'S:\Core\Library': fnFra
@@ -46,7 +46,7 @@ def fn_setup
 		library 'S:\Core\Library': fnAddOneC
 		! library 'S:\Core\Library': fnFM
 		library 'S:\Core\Library': fnHamsterFio,fnEditFile
-		library 'S:\Core\Library': fnxit
+		library 'S:\Core\Library': fnXit
 		library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
 		library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
 		library 'S:\Core\Library': fnClearLayoutCache
@@ -68,7 +68,7 @@ def fn_setup_once
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else
-			goto XIT
+			goto Xit
 		end if
 	end if
 	fn_get_system_abbr_list(mat system_abbr_list$)
@@ -83,7 +83,7 @@ def fn_setup_once
 			chain 'S:\Core\Programs\Update'
 		else
 			if env$('acsDebug')<>'' then pause
-			goto XIT
+			goto Xit
 		end if
 	end if
 	!
@@ -200,7 +200,7 @@ def fn_setup_on_cursys_change
 	end if
 fnend
 def fn_caption_update
-	setenv('Program_Caption',fnSystemName$(env$('cursys')))
+	setenv('Program_Caption',fnSystemNameFromAbbr$(env$('cursys')))
 	fncompany_name(0,screen_width)
 fnend
 def fn_main
@@ -278,7 +278,7 @@ def fn_main
 	!  removed 1/21/2017 -  does not seem necessary - it does it when it is selected       fncursys$(env$('cursys'))
 	!       fn_put_plus(env$('cursys'),mat program_file$,mat program_plus$)
 			fnureg_write('FavoritesOpen',env$('FavoritesOpen'))
-			goto XIT_MAIN
+			goto Xit_MAIN
 		else
 			fn_session_reg_write(env$('cursys')&'.CurProg',str$(program_selection_id))
 		end if
@@ -483,7 +483,7 @@ def fn_main
 		end if
 !
 	loop
-	XIT_MAIN: !
+	Xit_MAIN: !
 fnend
 def fn_callHamsterFio(tmpCap$*128)
 	tmpCap$=trim$(tmpCap$)
@@ -496,9 +496,9 @@ def fn_callHamsterFio(tmpCap$*128)
 	else
 		tmpCursys$=env$('cursys')
 	end if
-	fntop('S:\'&fnSystemName$&'\'&tmpCap$&'.br',tmpCap$)
+	fntop('S:\'&fnSystemNameFromAbbr$&'\'&tmpCap$&'.br',tmpCap$)
 	fnHamsterFio(tmpCursys$&' '&tmpCap$)
-	fnxit
+	fnXit
 fnend
 def fn_callEditInWordProcessor(programSelection$*256)
 	programSelection$=trim$(programSelection$)
@@ -602,7 +602,7 @@ def fn_dashboard_draw
 			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 		else if env$('cursys')="GL" then
 			library 'S:\Core\Library': fnpedat$
-			open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_XIT
+			open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_Xit
 			read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
 			close #h_tmp:
 			fnLbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
@@ -612,7 +612,7 @@ def fn_dashboard_draw
 			pedat$=fnpedat$
 			if pedat$='' then pedat$='(not set)'
 			fnButton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnLbl(1,47,fnpedat$,4,0,0,1)
-		DD_GL_XIT: !
+		DD_GL_Xit: !
 			tmp_btn_width=10 : tmpBtnItem=0
 			fn_ddAddButton('Accounts',fkey_gl_accounts:=5001,tmpBtnItem+=1,tmp_btn_width,1,'General Ledger Master')
 			fn_ddAddButton('Transactions',fkey_gl_Transactions:=5002,tmpBtnItem+=1,tmp_btn_width,1,'Enter Transactions')
@@ -670,7 +670,7 @@ def fn_get_system_abbr_list(mat system_abbr_list$)
 
 	! if env$('ACSDeveloper')<>'' and exists('S:\Time Management\Menu.mnu') then
 	!   fnAddOneC(mat system_abbr_list$,'TM')
-	!   fnAddOneC(mat system_name$,fnSystemName$('TM'))
+	!   fnAddOneC(mat system_name$,fnSystemNameFromAbbr$('TM'))
 	! end if
 	fn_add_if_licensed('CM')
 	fn_add_if_licensed('TM')
@@ -682,9 +682,9 @@ def fn_get_system_abbr_list(mat system_abbr_list$)
 	fn_add_if_licensed('UB')
 fnend
 def fn_add_if_licensed(sysCode$)
-	if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
+	if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
+		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
 	end if
 fnend
 def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
@@ -694,16 +694,16 @@ fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 	glpa_program_count=0
-	fn_getProgramList_add('S:\'&fnSystemName$&'\Menu.mnu')
+	fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Menu.mnu')
 	if env$("ACSDeveloper")<>"" then
-		fn_getProgramList_add('S:\'&fnSystemName$&'\Programmer.mnu')
+		fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Programmer.mnu')
 	end if  ! serial=env$('ACSDeveloper')<>''
 fnend
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	dim ss_category$(1)*80
 	dim program_item$(1)*512
 	!
-	open #1: 'Name='&gpla_file$,display,input ioerr GPLA_XIT
+	open #1: 'Name='&gpla_file$,display,input ioerr GPLA_Xit
 	linput #1: temp$ eof GPLA_EOF ! just consume first line
 	do
 		linput #1: temp$ eof GPLA_EOF
@@ -754,7 +754,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	loop
 	GPLA_EOF: !
 	close #1: ioerr ignore
-	GPLA_XIT: !
+	GPLA_Xit: !
 fnend
 def fn_program_level(tmp$*512) !
 	chr_pos=0
@@ -844,8 +844,8 @@ def fn_display_menu
 		end if
 		fn_dm_add('&Company',str$(x+=1))
 		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
-		if exists('S:\'&fnSystemName$&'\Company.br') then
-			fn_dm_add(' Configure','S:\'&fnSystemName$&'\Company.br')
+		if exists('S:\'&fnSystemNameFromAbbr$&'\Company.br') then
+			fn_dm_add(' Configure','S:\'&fnSystemNameFromAbbr$&'\Company.br')
 		else
 			fn_dm_add(' Configure','S:\acs[cursys]\Company.br')
 		end if
@@ -927,6 +927,5 @@ def fn_chain(c_program$*128)
 	pr newpage
 	fnchain(c_program$)
 fnend
-XIT: execute "System"
-IGNORE: continue
-include: ertn
+Xit: execute "System"
+include: Ertn

@@ -1,4 +1,4 @@
-library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemName$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
+library 'S:\Core\Library': fntop,fnxit,fnclient_has_mat,fnSystemNameFromAbbr$,fnmsgbox,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnCmdSet,fnChk,fncd,fnactpd,fnStatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
 on error goto Ertn
 dim txt$(1)*256
 fntop(program$, cap$="About ACS")
@@ -15,7 +15,7 @@ end if
 mat txt$(txt_item+=1) : txt$(txt_item)='Licensed Systems:'
 for c_has_item=1 to c_has_count
 	mat txt$(txt_item+=1) : txt$(txt_item)
-	txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item)),40)
+	txt$(txt_item)=chr$(9)&rpad$(fnSystemNameFromAbbr$(c_has$(c_has_item)),40)
 	! r: add support information
 	which=srch(mat system_id$,c_has$(c_has_item))
 	mat txt$(txt_item+=1) : txt$(txt_item)

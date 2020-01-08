@@ -29,7 +29,7 @@ XIT: fnxit
 def fn_setup
 	setup=1
 	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle
-	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
+	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemNameFromAbbr$,fnclient_support,fnerror
 	library 'S:\Core\Library': fnFree
 	library 'S:\Core\Library': fnSrepEnv$
 	library 'S:\Core\Library': fnStatus,fnStatusPause
@@ -156,7 +156,7 @@ def fn_update
 	else
 		fnStatus('Systems on Support:')
 		for client_has_item=1 to client_has_count
-			fnStatus('   '&fnSystemName$(client_has$(client_has_item)))
+			fnStatus('   '&fnSystemNameFromAbbr$(client_has$(client_has_item)))
 			dim support_text$*256
 			u_which=srch(mat system_id$,client_has$(client_has_item))
 			if u_which>0 then

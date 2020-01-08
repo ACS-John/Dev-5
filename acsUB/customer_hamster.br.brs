@@ -1,14 +1,13 @@
 
-library 'S:\Core\Library': fntop,fnxit, fnget_services,fnerror,fnHamster
+library 'S:\Core\Library': fntop,fnxit, fnget_services,fnHamster
 on error goto Ertn
 
-fntop(program$,'Customer Hamster')
+fntop(program$)
 dim srvnam$(10)*20,srv$(10)*2
 fnget_services(mat srvnam$, mat srv$)
 fn_setup_hamster
-fn_build_layout
 fn_open_file : fn_close_file : fn_open_file
-gosub HAMSTER
+fnHamster("Customer_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 fn_close_file
 goto XIT
 
@@ -22,42 +21,7 @@ def fn_open_file
 fnend 
 def fn_close_file
 	for j=1 to open_file_count : close #j: : next j
-fnend  ! fn_close_file
-def fn_build_layout
-	! 
-	! ** Combo Boxes **
-	! CL=Field Number  : C$(CL,1)='ComboF'
-	! C$(CL,2)=Linked File Name
-	! C$(CL,3)=Key Position         : C$(CL,4)=Key Length
-	! C$(CL,5)=Description Position : C$(CL,6)=Description Length
-	! C$(CL,7)=Index File
-	! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-		limit_to_list$='1'
-	! 
-	! cl=1 : c$(cl,1)='ComboF'
-	! c$(cl,2)='S:\Core\Data\acsllc\Client.h[cno]'
-	! c$(cl,3)='1' : c$(cl,4)='6'
-	! c$(cl,5)='7' : c$(cl,6)='50'
-	! c$(cl,7)='S:\Core\Data\acsllc\Client-Idx.h[cno]'
-	! c$(cl,8)=limit_to_list$
-	! cl=3 : c$(cl,1)='ComboF'
-	! c$(cl,2)='S:\Core\Data\acsllc\Systems.h[cno]'
-	! c$(cl,3)='1' : c$(cl,4)='2'
-	! c$(cl,5)='3' : c$(cl,6)='50'
-	! c$(cl,7)='S:\Core\Data\acsllc\Systems-Idx.h[cno]'
-	! c$(cl,8)=limit_to_list$
-	! cl=5 : c$(cl,1)='ComboF'
-	! c$(cl,2)='S:\Core\Data\acsllc\TimeFrame.h[cno]'
-	! c$(cl,3)='1' : c$(cl,4)='2'
-	! c$(cl,5)='3' : c$(cl,6)='50'
-	! c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]'
-	! c$(cl,8)=limit_to_list$
-fnend 
-
-HAMSTER: ! 
-	fnHamster("Customer_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-return 
-
+fnend
 XIT: fnxit
 
 def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
@@ -127,5 +91,4 @@ def fn_setup_hamster
 	fn_add_rec('Demand Multiplier',12,'PD',5,mask_number,282)
 	fn_add_rec("Demand Reading",12,'PD',5,mask_number,287)
 fnend  ! fn_setup_hamster
-
-include: ertn
+include: Ertn

@@ -1102,10 +1102,15 @@ fnend
 		library 'S:\Core\CNo.br': fnUseDeptNo
 		fnUseDeptNo=fnUseDeptNo
 	fnend
-	def library fnSystemName$*40(; systemAbbreviation$*256)
-		library 'S:\Core\CNo.br': fnSystemName$
-		fnSystemName$=fnSystemName$( systemAbbreviation$)
+	def library fnSystemNameFromAbbr$*40(; systemAbbreviation$*256)
+		library 'S:\Core\CNo.br': fnSystemNameFromAbbr$
+		fnSystemNameFromAbbr$=fnSystemNameFromAbbr$( systemAbbreviation$)
 	fnend
+	def library fnSystemNameFromId$*256(sysno)
+		library 'S:\Core\CNo.br': fnSystemNameFromId$
+		fnSystemNameFromId$=fnSystemNameFromId$(sysno)
+	fnend
+
 ! /r
 ! r: cno   S:\Core\CNo.br - COMPANY NUMBER (and misc)
 	def library fncno(&cno;&cnam$)
@@ -1590,10 +1595,10 @@ fnend
 ! /r
 ! r: TM Time Management
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
-		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
+		library 'S:\Time Management\fn\printInvoice.br': fnReassignNTA
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
 	fnend
-	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; pdfFile$*1024)
+	def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFile$)
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnPrintInvoice=fnPrintInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal, pdfFile$)
 	fnend

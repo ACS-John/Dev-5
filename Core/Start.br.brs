@@ -89,7 +89,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then let fncheckcompiled ! sets the current directory to "S:" if it is not already
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			execute 'config editor'
+			! execute 'config editor'   !  editor setting removed from brconfig.sys - not necessary
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
 				setenv('programdata',env$('CsServerTemp'))
 			end if
