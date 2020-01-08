@@ -883,7 +883,7 @@ def fn_portion_check
 		fn_portion_check_billings(amt)
 	else if env$('client')="Campbell" then 
 		fn_portion_check_generic(amt, 28,57)
-	else if env$('client')="Cerro Gordo" then 
+	else if env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo" then 
 		fn_portion_check_cerrogordo(amt)
 	else if env$('client')="Cerro Gordo T" then 
 		fn_portion_check_generic(amt, 28,55)

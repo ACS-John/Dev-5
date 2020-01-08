@@ -786,7 +786,7 @@ def fn_print_check
 		line_nameOnly         =  7
 		pos_nameOnly=0 ! default to 12
 		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly) ! /r
-	else if env$('client')="Cerro Gordo" then 
+	else if env$('client')="Cerro Gordo V" then 
 		fn_check_cerrogordo
 	else if env$('client')="Cerro Gordo T" then ! r:
 		length                = 27

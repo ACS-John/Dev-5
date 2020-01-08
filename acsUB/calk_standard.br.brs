@@ -408,7 +408,7 @@ def fn_calk_penalty ! penalty calculation
 		if subjectto(j)>0 then  ! accumulate all charges by the penalty they are subject to
 			basepenalty(subjectto(j))=basepenalty(subjectto(j))+g(j)
 			 !     else if env$('client')="Cerro Gordo" and subjectto(j)>0 then 
-			 !       basepenalty(subjectto(j))=basepenalty(subjectto(j))+gb(j) ! Cerro Gordo bases penalties on balance
+			 !       basepenalty(subjectto(j))=basepenalty(subjectto(j))+gb(j) ! Cerro Gordo V bases penalties on balance
 		end if
 	next j
 	for j=1 to 10
