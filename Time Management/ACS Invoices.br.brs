@@ -325,7 +325,7 @@ def fn_summary_print
 	close #22,free: 
 	SP_XIT: ! 
 fnend 
-def fn_print_inv ! pr INVOICE
+def fn_print_inv
 	dim pdf_filename_final$*255
 	fn_timesheet2(hTimeSheet)
 	if enableMinimumMonthlyBill then
@@ -355,7 +355,7 @@ def fn_print_inv ! pr INVOICE
 			! see if customer that we're sending the invoice for right now has ebilling selected 
 			ebilling=fnCustomerHasEbilling(client_id$)
 		end if 
-! if trim$(client_id$)='4132' then pause
+		! if trim$(client_id$)='4132' then pause
 		! if trim$(client_id$)='1478' then pr ebilling : pause 
 		if ebilling=0 then 
 		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
