@@ -224,7 +224,7 @@ L1660: if g(3)=0 then t$="" else t$=service$(3)
 	if c4>0 then final$="FINAL BILL" else final$=""
 	if df$="Y" then final$="DRAFTED"
 	if bal<=0 then penalty=0
-	if ( env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo" ) and bal<0 then g(5)=0
+	if env$('client')="Cerro Gordo V" and bal<0 then g(5)=0
 	pr #255: ""
 	pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
 	pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)

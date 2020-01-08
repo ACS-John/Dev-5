@@ -883,8 +883,8 @@ def fn_portion_check
 		fn_portion_check_billings(amt)
 	else if env$('client')="Campbell" then 
 		fn_portion_check_generic(amt, 28,57)
-	else if env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo" then 
-		fn_portion_check_cerrogordo(amt)
+	else if env$('client')="Cerro Gordo V" then 
+		fn_portion_check_cerroGordoV(amt)
 	else if env$('client')="Cerro Gordo T" then 
 		fn_portion_check_generic(amt, 28,55)
 	else if env$('client')="Crockett County" then 
@@ -1128,7 +1128,7 @@ def fn_portion_check_acs(dolamt)
 		pr #255: ""
 	next j
 fnend 
-def fn_portion_check_cerrogordo(dolamt)
+def fn_portion_check_cerroGordoV(dolamt)
 	mat b$=("")
 	read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 	fn_englishdollar(dolamt)
