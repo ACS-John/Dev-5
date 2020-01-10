@@ -23,7 +23,7 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		dim cache_dedst(20)
 		dim cache_deduc(20)
 		dim cache_gl$(20)
-		!
+
 		mat cache_fullname$  =('')
 		mat cache_abrevname$ =('')
 		mat cache_dedcode    =(0)
@@ -34,26 +34,26 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		mat cache_deduc      =(0)
 		mat cache_deduc      =(0)
 		mat cache_gl$        =('')
-		!
-		if exists("[Q]\PRmstr\dednames.h[cno]") then 
+
+		if exists("[Q]\PRmstr\DedNames.h[cno]") then 
 			open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno]",internal,input,relative 
 			read #hdednames,using fDedNames,rec=1: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 			fDedNames: Form POS 1,20*C 20,20*C 8,120*N 1,20*C 12
 		else
-			open #hdednames:=fngethandle: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",internal,outIn,relative 
+			open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative 
 			write #hdednames,using fDedNames: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 		end if 
 		close #hdednames:
 	end if
-	!
+
 	if doWrite then
-		open #hdednames:=fngethandle: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",internal,outIn,relative
+		open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative
 		rewrite #hdednames,using fDedNames,rec=1: mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$
 		close #hdednames:
 		doWrite=0
 		goto RESTART
 	end if
-	!
+
 	mat fullname$(udim(mat cache_fullname$))
 	for fullnameItem=1 to udim(mat fullname$)
 		fullname$(fullnameItem)=cache_fullname$(fullnameItem) soflow ignore
@@ -68,34 +68,12 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 	! else
 	! 	pr 'not passed abrevname$'
 	end if
-	if fnArrayWasPassedN(mat dedcode) then
-		mat dedcode(udim(mat cache_dedcode))
-		mat dedcode=cache_dedcode
-	end if
-	
-	if fnArrayWasPassedN(mat calcode) then
-		mat calcode(udim(mat cache_calcode))
-		mat calcode=cache_calcode
-	end if
-	if fnArrayWasPassedN(mat dedfed) then
-		mat dedfed(udim(mat cache_dedfed))
-		mat dedfed=cache_dedfed
-	end if
-	if fnArrayWasPassedN(mat dedfica) then
-		mat dedfica(udim(mat cache_dedfica))
-		mat dedfica=cache_dedfica
-	end if
-	if fnArrayWasPassedN(mat dedst) then
-		mat dedst(udim(mat cache_dedst))
-		mat dedst=cache_dedst
-	end if
-	if fnArrayWasPassedN(mat deduc) then
-		mat deduc(udim(mat cache_deduc))
-		mat deduc=cache_deduc
-	end if
-	if fnArrayWasPassedC(mat gl$) then
-		mat gl$(udim(mat cache_gl$))
-		mat gl$=cache_gl$
-	end if
+	if fnArrayWasPassedN(mat dedcode) then mat dedcode(udim(mat cache_dedcode)) : mat dedcode=cache_dedcode
+	if fnArrayWasPassedN(mat calcode) then mat calcode(udim(mat cache_calcode)) : mat calcode=cache_calcode
+	if fnArrayWasPassedN(mat dedfed ) then mat dedfed(udim(mat cache_dedfed))   : mat dedfed=cache_dedfed
+	if fnArrayWasPassedN(mat dedfica) then mat dedfica(udim(mat cache_dedfica)) : mat dedfica=cache_dedfica
+	if fnArrayWasPassedN(mat dedst  ) then mat dedst(udim(mat cache_dedst))     : mat dedst=cache_dedst
+	if fnArrayWasPassedN(mat deduc  ) then mat deduc(udim(mat cache_deduc))     : mat deduc=cache_deduc
+	if fnArrayWasPassedC(mat gl$    ) then mat gl$(udim(mat cache_gl$))         : mat gl$=cache_gl$
 	dnFINIS: !
 fnend

@@ -8,7 +8,9 @@ File
 >Time Classifications                       ^ acspr\hourclassification
 >Breakdown of Hours                         ^ acspr\hours
 >Employment Status                          ^ acspr\Empstatus
+>Employment Status                          ^ HamsterFio:*
 >Department Names                           ^ Payroll\*
+>Department Names                           ^ HamsterFio:*
 >Chart of Accounts                          ^ acspr\chartofaccounts
 Pay Period
 >Enter Time Sheets                          ^ Payroll\*

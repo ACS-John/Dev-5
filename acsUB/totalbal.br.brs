@@ -13,7 +13,7 @@ do
 	fnCmdKey('Refresh',1,1,0,'Recalculate')
 	fnAcs2(mat resp$,ck)
 	excludeFinalBilled$=resp$(2)
-	fncreg_write(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$)
+	fncreg_write(env$('program_caption')&' - Exclude Final Billed',excludeFinalBilled$)
 loop until ck=5
 XIT: fnxit
 def fn_setup
@@ -34,7 +34,7 @@ def fn_setup
 		on error goto Ertn
 	end if 
 	fnLastBillingDate(lastBillingDate)
-	fncreg_read(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$, 'False')
+	fncreg_read(env$('program_caption')&' - Exclude Final Billed',excludeFinalBilled$, 'False')
 	! if env$('client')='French Settlement' then filterByBillingDate=1 else filterByBillingDate=0
 fnend 
 def library fntotal_ar

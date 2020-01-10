@@ -1,0 +1,6 @@
+[Q]\PRmstr\oDeptName.h[cno], odept_, 0
+[Q]\PRmstr\oDeptNameIdx.h[cno]     , eno/dept
+recl=32
+===================================================
+eno   	, Code               	,  N    3  	, ! SPos=1        aka=teno
+dept  	, Name               	,  c   25  	, ! SPos=9        aka=tdet

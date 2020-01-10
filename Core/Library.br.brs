@@ -1477,6 +1477,11 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
+	def library fnDeptName$*25(departmentCode)
+		library 'S:\Payroll\fn\deptName.br': fnDeptName$
+		fnDeptName$=fnDeptName$(departmentCode)
+	fnend
+
 	def library fnPrPrintNetZeroDefault$(; ___,return$)
 		if env$('client')="Divernon" or env$('client')="Payroll Done Right" then 
 			return$='True'
@@ -1486,7 +1491,7 @@ fnend
 		fnPrPrintNetZeroDefault$=return$
 	fnend
 	def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$,doWrite)
-		library 'S:\acsPR\fnDedNames.br': fnDedNames
+		library 'S:\Payroll\fn\dedNames.br': fnDedNames
 		fnDedNames=fnDedNames(mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$,doWrite)
 	fnend
 	def library fnprint_designed_report(rptn)

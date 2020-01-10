@@ -38,10 +38,10 @@
 00370 HDR: ! r:
 00371   pr #255: 
 00372   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00373   pr #255: "\qc "&" {\f221 \fs22 \b "&env$('cnam')&"}"
-00374   pr #255: "\qc "&" {\f201 \fs20 \b "&trim$(rt$)&"}"
-00375   pr #255: "\qc "&" {\f181 \fs16 "&"From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-00376   pr #255: "\qc "&" {\f181 \fs16 "&trim$(dh$)&"}"
+00373   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00374   pr #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
+00375   pr #255: "\qc  {\f181 \fs16 From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+00376   pr #255: "\qc  {\f181 \fs16 "&trim$(dh$)&"}"
 00377   pr #255: "\ql   "
 00400   pr #255: ch$(1)
 00410   pr #255: ch$(2)

@@ -513,15 +513,28 @@ ChangeEmployeeNo: ! r:
 	L3890: ! pause
 	fnKeyChange(hCheckIdx1,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 	! r: change employee number in any and all rpwork files.
-	for wsid_item=1 to 99
-		wsid_item$=cnvrt$('pic(##)',wsid_item)
-		if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
-			open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
+
+		! the old way 1/9/20   ! for wsid_item=1 to 99
+		! the old way 1/9/20   ! 	wsid_item$=cnvrt$('pic(##)',wsid_item)
+		! the old way 1/9/20   ! 	if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
+		! the old way 1/9/20   ! 		open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
+		! the old way 1/9/20   ! 		fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
+		! the old way 1/9/20   ! 		close #h_rpwork:
+		! the old way 1/9/20   ! 		RPWORK_OPEN_ERR: !
+		! the old way 1/9/20   ! 	end if
+		! the old way 1/9/20   ! next wsid_item
+	dim filename$(0)*256
+	dim kfname$*256
+	fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h[cno]')
+	for fileItem=1 to udim(mat filename$)
+		if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
+			kfname$=srep$(filename$(fileItem),'.','Idx.')
+			open #h_rpwork:=fngethandle: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',internal,outIn,keyed ioerr RpworkOpenErr
 			fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 			close #h_rpwork:
-			RPWORK_OPEN_ERR: !
 		end if
-	next wsid_item
+		RpworkOpenErr: !
+	nex fileItem
 	! /r
 	! change main employee record
 	delete #hEmployee,key=ent$:
@@ -573,6 +586,7 @@ def fn_setup
 	library 'S:\Core\Library': fnaddonec
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnSetForCombo$
+	library 'S:\Core\Library': fnGetDir2
 	on error goto Ertn
 	
 	dim ph$*12

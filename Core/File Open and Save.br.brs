@@ -148,7 +148,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 	ARC_EO_COMPRESSLOG: ! 
 	close #h_compresslog: 
 	if failure then 
-		fnlog(save_name$&': '&'FAILURE: '&success_text_line1$)
+		fnlog(save_name$&': FAILURE: '&success_text_line1$)
 		if suppressErrorLog then
 			fnCopy(arc_filename$,save_name$&'(failureLog).txt')
 			fnStatus('Automated Save Point encountered had errors.')

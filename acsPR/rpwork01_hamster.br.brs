@@ -1,7 +1,7 @@
 library 'S:\Core\Library': fntop,fnxit, fnH2Init,fnH2AddText,fnH2AddComboA,fnHamster2
 on error goto Ertn
 gosub Enum
-fntop(program$,'RPWork01 Hamster')
+fntop(program$)
 fnH2Init
 fnH2AddText("eno"                   ,8                           )
 fnH2AddText("dep"                   ,3                           )
@@ -49,7 +49,7 @@ def fn_open_file
 fnend 
 def fn_close_file
 	for j=1 to open_file_count : close #j: : next j
-fnend  ! fn_close_file
+fnend
 XIT: fnxit
 include: Enum
 include: Ertn
