@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                   
+3:26 PM 1/9/2020	PR	Temporary Time Sheet file no longer tied to WSID$ which was fluid, but instead to Unique_Computer_ID, which will remain constant between sessions and they are all now indexed with the company.
 17:19 01/20/2020	CO	5.74249  
 16:17 01/20/2020	CO	5.74248   
 11:54 01/20/2020	CO	5.74247    

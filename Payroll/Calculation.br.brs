@@ -459,8 +459,7 @@ Screen1: ! r:
 		d1$=resp$(resp_d1S)
 		if resp$(3)(1:1)="T" then accrueVacaAndSick=1 else accrueVacaAndSick=0
 
-		! taxYear=2019 ! val(str$(d1)(1:4)) ! =2018   ! changed 8/14/19, because we were still caculating 2019 payrolls on 2018 federal w/h table
-		taxYear=val(str$(d1)(1:4)) ! =2018   ! changed 8/14/19, because we were still caculating 2019 payrolls on 2018 federal w/h table
+		taxYear=2019 ! val(str$(d1)(1:4)) ! =2018   ! changed 8/14/19, because we were still caculating 2019 payrolls on 2018 federal w/h table
 		fnPayPeriodEndingDate(d1)
 		fnSetPayrollDatesForYear(taxYear)
 		fnGetPayrollDates(beg_date,end_date)
@@ -480,11 +479,11 @@ Screen1: ! r:
 	end if
 return  ! /r
 
-def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,g_pay_periods_per_year; ___,returnN,t2)
+def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,&g_pay_periods_per_year; ___,returnN,t2)
 	! retains: setupFederalTables,fed_annual_wh_allowance,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
 	if ~setupFederalTables then 
 		setupFederalTables=1
-		! r: Federal Withholding
+
 		! def fn_setupFederalTables(taxYear,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft,&fed_annual_wh_allowance)
 		dim ft(8,6)
 		! r: (2017-2019) Federal - SINGLE person (mat ft(1-8,1-3))
@@ -521,7 +520,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,g_
 			ft(8,1)=514100 : ft(8,2)=153798.5  : ft(8,3)=0.37 
 		end if
 		! /r
-		! r: (2017-2019) Federal - MARRIED person (mat ft(1-8,4,6)
+		! r: (2017-2019) Federal - MARRIED person (mat ft(1-8,4,6))
 		if taxYear<=2017 then
 			! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
 			fed_annual_wh_allowance=4050
@@ -554,6 +553,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,g_
 			ft(7,4)=420000  : ft(7,5)= 93257    : ft(7,6)=0.35
 			ft(8,4)=624150  : ft(8,5)=164709.5  : ft(8,6)=0.37
 		end if
+		! /r
 		! r: 2020 Federal Tables
 		! Page 6 from   https://www.irs.gov/pub/irs-pdf/p15t.pdf
 		! fjs=federal  joint              standard     fjc=federal  joint              W-4 Step 2 checked
@@ -629,7 +629,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,g_
 			! /r
 		end if
 		! /r
-		! /r
+
 	end if
 
 	! IF enableSkipWithholdingN(esw_federal) then goto 1420
@@ -708,6 +708,10 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,g_
 		g2=round(g2*g_pay_periods_per_year,2) ! g2 - becomes estimated annual net pay
 		tableRow=fn_table_line(mat fedTable,g2, j2)
 		returnN=round(fedTable(tableRow,j2+1)+(g2-fedTable(tableRow,j2))*fedTable(tableRow,j2+2),2)
+		pr 'estimated annual net pay (g2)=';g2
+		pr 'g_pay_periods_per_year=';g_pay_periods_per_year
+		pr 'j2=';j2
+		pr 'tableRow=';tableRow
 		fnpause ! table total federal w/h used in some state routines
 		returnN=round(fed_wh_annual_estimate/g_pay_periods_per_year,2)
 	else 
@@ -940,7 +944,7 @@ def fn_setupOpenFiles
 	open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
 	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
 	open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
-	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork"&wsid$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid$&"Idx.h[cno]",internal,outIn,keyed 
+	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id]"&".h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]"&"Idx.h[cno]",internal,outIn,keyed 
 	F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 fnend
 def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)

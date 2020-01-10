@@ -1,5 +1,7 @@
 enableFavorites=1
+
 fn_setup
+
 fn_setup_once
 fn_main
 if menu$='Exit and Logout' then
@@ -60,6 +62,9 @@ def fn_setup
 	end if
 fnend
 def fn_setup_once
+	setenv('Session_Rows', '35')
+	setenv('Session_Cols','115')
+
 	if ~fnclient_has_mat(mat client_has$) then
 		mat ml$(3)
 		ml$(1)='Client '&env$('client')&' has nothing licensed.'
@@ -678,7 +683,8 @@ def fn_get_system_abbr_list(mat system_abbr_list$)
 	fn_add_if_licensed('UB')
 fnend
 def fn_add_if_licensed(sysCode$)
-	if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	! if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	if fnclient_has(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
 		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
 	end if

@@ -1,4 +1,4 @@
-fn_index_it_setup
+fn_setup
 fn_index_it("[Q]\UBmstr\UBTransVB.h"&env$('cno'), "[Q]\UBmstr\UBTrdt.h"&env$('cno'),"11/1 8/10")
 stop
 ! r: reindex the *new* add company files
@@ -14,8 +14,13 @@ for sysitem=1 to udim(mat syslist$)
 next sysitem
 end
 ! /r
-def fn_index_it_setup
-	library 'S:\Core\Library': fnxit,fnerror,fnStatus,fnget_company_number_list,fngethandle,fnshortpath$
+def fn_setup
+	library 'S:\Core\Library': fnxit
+	library 'S:\Core\Library': fnStatus
+	library 'S:\Core\Library': fnget_company_number_list
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnshortpath$
+	library 'S:\Core\Library': fnGetDir2
 	if ~setup_index_it then 
 		setup_index_it=1
 		on error goto Ertn
@@ -24,12 +29,12 @@ def fn_index_it_setup
 	end if 
 fnend 
 def library fnindex_it(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
-	fn_index_it_setup
+	fn_setup
 	fnindex_it=fn_index_it(data_file$,index_statement_or_file$, index_parameters$)
 fnend 
 def fn_index_it(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
 	! r: constants, dims, library, on error, etc
-	fn_index_it_setup
+	fn_setup
 	dim cap$*128
 	dim index_execute_text$*512
 	data_file$=trim$(data_file$)
@@ -91,7 +96,7 @@ def fn_index_it(data_file$*256,index_statement_or_file$*512; index_parameters$*2
 	fn_index_it=index_it_return
 fnend
 def library fnindex_sys(; only_cno,system_id$*2)
-	fn_index_it_setup
+	fn_setup
 	fnindex_sys=fn_index_sys( only_cno,system_id$)
 fnend 
 def fn_index_sys(; only_cno,system_id$*2)
@@ -219,8 +224,21 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index_it("[Q]\PRmstr\PRCkHist.h"&str$(cno), "[Q]\PRmstr\PRCKINDX.h"&str$(cno),"1 14")
 		fn_index_it("[Q]\PRmstr\PRReport.h"&str$(cno), "[Q]\PRmstr\prrptidx.h"&str$(cno),"1 2")
 		fn_index_it("[Q]\PRmstr\prTot.h"&str$(cno), "[Q]\PRmstr\PRTotIdx.h"&str$(cno),"1 9")
-		fn_index_it("[Q]\PRmstr\rpwork"&wsid$&".h"&str$(cno), "[Q]\PRmstr\rpwork"&wsid$&"Idx.h"&str$(cno),"1 11")
-		fn_index_it("[Q]\PRmstr\rpwork"&wsid$&".h"&str$(cno), "[Q]\PRmstr\rpwork"&wsid$&"Idx2.h"&str$(cno),"1/27 8/14")
+
+		! fn_index_it("[Q]\PRmstr\rpwork[unique_computer_id]"&".h"&str$(cno), "[Q]\PRmstr\rpwork[unique_computer_id]"&"Idx.h"&str$(cno),"1 11")
+		! fn_index_it("[Q]\PRmstr\rpwork[unique_computer_id]"&".h"&str$(cno), "[Q]\PRmstr\rpwork[unique_computer_id]"&"Idx2.h"&str$(cno),"1/27 8/14")
+		dim filename$(0)*256
+		dim kfname$(2)*256
+		fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h[cno]')
+		for fileItem=1 to udim(mat filename$)
+			if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
+				kfname$(1)=srep$(filename$(fileItem),'.','Idx.')
+				kfname$(2)=srep$(filename$(fileItem),'.','Idx2.')
+				fn_index_it('[Q]\PRmstr\'&filename$(fileItem), '[Q]\PRmstr\'&kfname$(1),'1 11')
+				fn_index_it('[Q]\PRmstr\'&filename$(fileItem), '[Q]\PRmstr\'&kfname$(2),'1/27 8/14')
+			end if
+		nex fileItem
+		
 		fn_index_it("[Q]\PRmstr\DeptName.h"&str$(cno),"[Q]\PRmstr\DepNameIdx.h"&str$(cno),"1 3")
 	! /r
 	else if system_id$='CL' then ! r:
@@ -245,7 +263,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 	end if 
 fnend 
 def library fnub_index_customer(; cno)
-	fn_index_it_setup
+	fn_setup
 	if cno=0 then cno=val(env$('cno'))
 	fnub_index_customer=fn_ub_index_customer(cno)
 fnend 
@@ -257,4 +275,4 @@ def fn_ub_index_customer(cno)
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
 fnend
 XIT: fnxit
-include: ertn
+include: Ertn

@@ -1,5 +1,5 @@
 
-Enum: ! r:Common Enumerations
+Enum: ! r: Common Enumerations
 	if ~setupEnum then
 		setupEnum=1
 		tab$=chr$(9)
