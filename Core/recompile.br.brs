@@ -18,7 +18,7 @@ def fn_updateSource
 				pr #proc_file: 'Save "'&filename$(1:len(filename$)-4)&'"'&parameter$
 			end if
 		else
-			pr #proc_file:  'sy ""C:\ACS\Util\Sad Panda\Compile.cmd" "'&filename$&'""'
+			pr #proc_file:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&filename$&'""'
 			! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&filename$&'""'
 		end if
 		pr #proc_file: ''

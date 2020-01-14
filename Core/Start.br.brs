@@ -184,7 +184,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				fn_writeProc('in' ,'end')
 				fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
 				fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
-				fn_writeProc(''   ,"exec 'sy """"C:\ACS\Util\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
+				fn_writeProc(''   ,"exec 'sy """"C:\ACS\Dev-5\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
 				fn_writeProc(''   ,'execute ''load "''&program$&''"''')
 			end if
 		end if

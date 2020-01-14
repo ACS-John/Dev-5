@@ -1,7 +1,7 @@
 ! we use this library to tell programs which client is using the system
 if env$('enableClientSelection')='Yes' then goto ClientSelect
 !   ! r: sandbox for testing local functions
-!     if env$('ACSDeveloper')<>'' then let setenv('acsclient','BRCorp')
+!     if env$('ACSDeveloper')<>'' then setenv('acsclient','BRCorp')
 !     fn_setup
 !     pr 'fn_client_has_mat returns ';fn_client_has_mat(mat tmp$)
 !     pr mat tmp$
@@ -55,7 +55,7 @@ def fn_clientSelect
 	end if ! /r 
 fnend
 def library fnSetClient(scClient$*128)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSetClient=fn_setClient(scClient$)
 fnend
 def fn_setClient(scClient$*128)
@@ -77,7 +77,7 @@ fnend
 def fn_setup
 	if ~setup_library then 
 		setup_library=1
-		library 'S:\Core\Library': fnerror,fngethandle,fnreg_read
+		library 'S:\Core\Library': fngethandle,fnreg_read
 		library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnCmdSet,fntop,fnAcs
 		library 'S:\Core\Library': fnXit
 		library 'S:\Core\Library': fnreg_close
@@ -137,16 +137,9 @@ def fn_client$*18
 	! if env$('ACSDeveloper')<>'' then pr 'clientReturn$='&clientReturn$ : pause
 	fn_client$=clientReturn$
 fnend 
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"NO")
-	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
 def library fnClientNameShort$*18(; clientId,___,return$*18,which)
-	if ~setup then let fn_setup
-	if ~setup_client then let fn_setup_client
+	if ~setup then fn_setup
+	if ~setup_client then fn_setup_client
 	if clientId<=0 then
 		return$=env$('client')
 	else
@@ -290,8 +283,8 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('EM')
 		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
 		!   fn_user_limit(1)
-		!   if days(date)<=days(20151231,'ccyymmdd') then let fn_add_ch_sys('UB') : fn_set_ub_limit(500)
-		!   if days(date)<=days(20151231,'ccyymmdd') then let fn_add_ch_sys('U4')
+		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_add_ch_sys('UB') : fn_set_ub_limit(500)
+		!   if days(date)<=days(20151231,'ccyymmdd') then fn_add_ch_sys('U4')
 		else if env$('client')='BRCorp' then 
 			fn_user_limit(99)
 			fn_add_ch_sys('OE') 
@@ -514,7 +507,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Omaha' then 
-			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then let fn_user_limit(3) else let fn_user_limit(1) ! 2 user bonus for 60 days
+			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_user_limit(3) else fn_user_limit(1) ! 2 user bonus for 60 days
 			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
 		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
 			fn_user_limit(1)
@@ -540,7 +533,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 		else if env$('client')='Starr County Gas' then 
 			fn_user_limit(1)
-			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then let fn_add_ch_sys('UB') : fn_set_ub_limit(9999)
+			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_add_ch_sys('UB') : fn_set_ub_limit(9999)
 		else if env$('client')='Sheila' then 
 			fn_user_limit(1)
 			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
@@ -1012,3 +1005,4 @@ def fn_client_is_converting
 	end if 
 	fn_client_is_converting=cic_return
 fnend 
+include: Ertn No
