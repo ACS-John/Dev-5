@@ -1,7 +1,7 @@
-! Replace  S:\acsPR\burden
+! formerly  S:\acsPR\burden
 ! Service Code File
 ! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
+	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnmsgbox,fnxit,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
 	fntop(program$)
 	on error goto Ertn
 	dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*256
@@ -11,8 +11,7 @@
 	dim code$(2),item2$(4)*30,breakdownde$*30,ml$(3)*80,code2$(3)
 ! ______________________________________________________________________
 	fndat(dat$,1)
-	def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
-! 
+
 	if exists("[Q]\PRmstr\Burden.H[cno]")=0 then goto SETUP_FILES
 L180: open #1: "Name=[Q]\PRmstr\Burden.H[cno],KFName=[Q]\PRmstr\BurdenIdx.H[cno],Shr",internal,outIn,keyed 
 L190: form pos 1,n 8,c 30,3*n 6.3
@@ -164,4 +163,4 @@ POF2: !
 continue
 ! ______________________________________________________________________
 XIT: fnxit
-include: ertn
+include: Ertn

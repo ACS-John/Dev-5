@@ -475,27 +475,27 @@ def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 	btnh=max(btnh,1) ! button height is at least 1
 	if btnw=0 then btnw=len(txt$)
 
-	tmpControlX$(inf:inf)='PicBut|'
-	tmpControlX$(inf:inf)=str$(lyne)&'|'
-	tmpControlX$(inf:inf)=str$(ps)&'|'
-	tmpControlX$(inf:inf)=txt$&'|'
-	tmpControlX$(inf:inf)=str$(comkey)&'|'
-	tmpControlX$(inf:inf)=pic1$&'|'
-	tmpControlX$(inf:inf)=str$(btnh)&'|'
-	tmpControlX$(inf:inf)=str$(btnw)&'|'
-	tmpControlX$(inf:inf)=pic2$&'|'
-	tmpControlX$(inf:inf)=tt$&'|'
-	tmpControlX$(inf:inf)=str$(container)&'|'
-	tmpControlX$(inf:inf)=str$(tabcon)&'|'
-	tmpControlX$(inf:inf)=str$(default)&'|'
-	tmpControlX$(inf:inf)=str$(cancel)&'|'
+	tmpControlX$&='PicBut|'
+	tmpControlX$&=str$(lyne)&'|'
+	tmpControlX$&=str$(ps)&'|'
+	tmpControlX$&=txt$&'|'
+	tmpControlX$&=str$(comkey)&'|'
+	tmpControlX$&=pic1$&'|'
+	tmpControlX$&=str$(btnh)&'|'
+	tmpControlX$&=str$(btnw)&'|'
+	tmpControlX$&=pic2$&'|'
+	tmpControlX$&=tt$&'|'
+	tmpControlX$&=str$(container)&'|'
+	tmpControlX$&=str$(tabcon)&'|'
+	tmpControlX$&=str$(default)&'|'
+	tmpControlX$&=str$(cancel)&'|'
 	setenv('control'&str$(fn_control_count),tmpControlX$)
 fnend
 IGNORE: continue
 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$; ___,menu_string$*10000,index_)
 	if ~setup then let fn_setup
 	for index_=1 to udim(mat _menu$)
-		menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
+		menu_string$&=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
 	next index_
 	setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
 fnend
@@ -574,17 +574,17 @@ def fn_draw_windows
 	end if
 	dim borderText$*256
 	if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
-	if env$('enableClientSelection')='Yes' then borderText$(inf:inf)='- '&env$('client')&' '
+	if env$('enableClientSelection')='Yes' then borderText$&='- '&env$('client')&' '
 	!
 	if session$(3:3)<>'1' then
-		borderText$(inf:inf)='(Session '&session$(len(session$):len(session$))&') '
+		borderText$&='(Session '&session$(len(session$):len(session$))&') '
 	end if
 	dim systemName$*128
 	systemName$=fnSystemNameFromAbbr$(env$('cursys'))
 	if systemName$=cap$ then ! pr border:
-		borderText$(inf:inf)='- '&systemName$
+		borderText$&='- '&systemName$
 	else
-		borderText$(inf:inf)='- '&systemName$&' - '&cap$
+		borderText$&='- '&systemName$&' - '&cap$
 	end if
 	if env$('cursys')<>'CM' then
 		pr #0, border: borderText$
@@ -1169,15 +1169,15 @@ def fn_ace_rd_cmdkey
 	if tt$='' then
 		_help$="1;Press ["
 		if default then
-			_help$(inf:inf)="Enter"
+			_help$&="Enter"
 		else if cancel then
-			_help$(inf:inf)="Esc"
+			_help$&="Esc"
 		else if returnkey >=2 and returnkey<=12 then ! because F1 will be used for Help
-			_help$(inf:inf)="F"&str$(returnkey)
+			_help$&="F"&str$(returnkey)
 		else
 			_help$=''
 		end if
-		if _help$<>'' then _help$(inf:inf)="] to "&txt$&";"
+		if _help$<>'' then _help$&="] to "&txt$&";"
 	else
 		_help$='1;'&tt$&';'
 	end if
@@ -1470,7 +1470,7 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 		next tm_char_index
 		if form$(1:1)=',' then form$(0:0)='-'
 		form$(0:0)=str$(width)&"/#PIC("
-		form$(inf:inf)=".--)"
+		form$&=".--)"
 	else if mask=20 then ! 0 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen
@@ -1482,7 +1482,7 @@ def fn_column_mask(&form$,&width,mask$;___,invisible)
 		next tm_char_index
 		if form$(1:1)=',' then form$(0:0)='-'
 		form$(0:0)=str$(width)&"/#PIC("
-		form$(inf:inf)=")"
+		form$&=")"
 	else if mask=30 then ! defaults 1 to 1
 		if maxlen>15 then
 			form$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
@@ -1613,15 +1613,15 @@ def fn_ace_rd_button
 	if tt$='' then
 		_help$="1;Press ["
 		if default then
-			_help$(inf:inf)="Enter"
+			_help$&="Enter"
 		else if cancel then
-			_help$(inf:inf)="Esc"
+			_help$&="Esc"
 		else if returnkey >=2 and returnkey<=12 then
-			_help$(inf:inf)="F"&str$(returnkey)
+			_help$&="F"&str$(returnkey)
 		else
 			_help$=''
 		end if
-		if not _help$='' then _help$(inf:inf)="] to "&txt$&";"
+		if not _help$='' then _help$&="] to "&txt$&";"
 	else
 		_help$='1;'&tt$&';'
 	end if
@@ -1785,7 +1785,7 @@ def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 		next tm_char_index
 		if maxlen < 4 then return$(0:0)='-'
 		return$(0:0)=str$(width)&"/#PIC("
-		return$(inf:inf)=".--)"
+		return$&=".--)"
 		return$=srep$(return$,'/#PIC(,---.--','/#PIC(----.--')
 	else if mask=12 then ! defaults 100 to 100.00, currency : American (2 decimals, commas)
 		form$=''
@@ -1798,7 +1798,7 @@ def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 		next tm_char_index
 ! pr return$ : pause
 		return$(0:0)=str$(width)&"/#PIC("
-		return$(inf:inf)=".--)"
+		return$&=".--)"
 	else if mask=20 then ! 0 decimals, commas
 		form$=''
 		for tm_char_index=1 to maxlen
@@ -1809,7 +1809,7 @@ def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 			end if
 		next tm_char_index
 		return$(0:0)=str$(width)&"/#PIC("
-		return$(inf:inf)=")"
+		return$&=")"
 	else if mask=30 then ! defaults 1 to 1
 		if maxlen>15 then
 			return$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
@@ -1873,7 +1873,7 @@ def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 	end if
 !
 	if disable then protected$='P' else protected$='T' ! either Protect the field or force it to be in the tab order
-	return$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
+	return$&= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
 	return$=srep$(return$,'PIC(,','PIC(')
 	fn_textMask$=return$
 fnend

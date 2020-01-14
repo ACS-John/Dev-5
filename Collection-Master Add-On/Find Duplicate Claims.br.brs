@@ -154,10 +154,10 @@ close #h_internal:
 timeStop=fnStime(time$)
 dim message$*2048
 message$='readCount='&str$(readCount)&'\n'
-message$(inf:inf)='dupeCount='&str$(dupeCount)&'\n'
-message$(inf:inf)='elapsed time='&fnStime$(timeStop-timeStart)&'\n'
-message$(inf:inf)='Output File Created:\n'
-message$(inf:inf)=reportFile$
+message$&='dupeCount='&str$(dupeCount)&'\n'
+message$&='elapsed time='&fnStime$(timeStop-timeStart)&'\n'
+message$&='Output File Created:\n'
+message$&=reportFile$
 fnMessageBox(message$, Mbx_Type,env$('program_caption'))
 fnXit
 SAVE_AS_OPEN_ERR: ! r: there was a problem opening the file.

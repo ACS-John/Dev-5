@@ -143,8 +143,8 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 							serviceCsv$=''
 							for scItem=1 to udim(mat serviceCode$)
 								if trim$(serviceCode$(scItem))<>'' then
-									if scItem>1 then serviceCsv$(inf:inf)=','
-									serviceCsv$(inf:inf)=serviceCode$(scItem)
+									if scItem>1 then serviceCsv$&=','
+									serviceCsv$&=serviceCode$(scItem)
 								end if
 							nex scItem
 							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes*',serviceCsv$)

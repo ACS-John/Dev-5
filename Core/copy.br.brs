@@ -55,7 +55,8 @@ include: filenamesPopUpperCase
 		nex cfi
 	else
 		if new_record_length then 
-			if new_record_length and uprc$(from$)=uprc$(to$) then 
+			if new_record_length and (uprc$(from$)=uprc$(to$) or to$='') then 
+				if to$='' then to$=from$
 include: filenamesPushMixedCase
 				execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
 				execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL

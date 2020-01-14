@@ -102,8 +102,8 @@ dim ctFiles$(0)*1024
 dim ctHandles(0)
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctFile$=env$('at')&fnreport_cache_folder_current$&'\Client TimeSheets\'
-	ctFile$(inf:inf)=fnClientNameShort$(client_id)&'\'
-	ctFile$(inf:inf)=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
+	ctFile$&=fnClientNameShort$(client_id)&'\'
+	ctFile$&=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)
 	ctWhich=srch(mat ctFiles$,ctFile$)
 	if ctWhich>0 then
@@ -222,10 +222,10 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	wo_sage_code_prior$=wo_sage_code$
 	dim sawo_line$*512
 	sawo_line$=''
-	sawo_line$(inf:inf)=date$(days(wo_date,'ccyymmdd'),'ccyy/mm/dd')&tab$
-	sawo_line$(inf:inf)=str$(wo_time)&tab$
-	sawo_line$(inf:inf)=wo_sage_code$&tab$
-	sawo_line$(inf:inf)=wo_desc$
+	sawo_line$&=date$(days(wo_date,'ccyymmdd'),'ccyy/mm/dd')&tab$
+	sawo_line$&=str$(wo_time)&tab$
+	sawo_line$&=wo_sage_code$&tab$
+	sawo_line$&=wo_desc$
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_writeOutAcs
 

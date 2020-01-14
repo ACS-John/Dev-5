@@ -63,15 +63,15 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 					
 						dim emailBody$*1024
 						emailBody$='<p>'
-						emailBody$(inf:inf)=trim$(contact$(con_name))&",<br>Your invoice is attached to this email.</p>"
-						emailBody$(inf:inf)='<p>Thanks for choosing for ebilling.  If you have any problems accessing or viewing your invoice, please call us.</p>'
-						emailBody$(inf:inf)='<p>'
-						emailBody$(inf:inf)='Sincerely,<br>'
-						emailBody$(inf:inf)='Your ACS team!<br>'
-						emailBody$(inf:inf)='<a href="http://advancedcomputer.services">Advanced Computer Services LLC</a><br>'
-						emailBody$(inf:inf)='4 Syme Ave<br>'
-						emailBody$(inf:inf)='West Orange, NJ 07052<br>'
-						emailBody$(inf:inf)='1-800-643-6318</p>'
+						emailBody$&=trim$(contact$(con_name))&",<br>Your invoice is attached to this email.</p>"
+						emailBody$&='<p>Thanks for choosing for ebilling.  If you have any problems accessing or viewing your invoice, please call us.</p>'
+						emailBody$&='<p>'
+						emailBody$&='Sincerely,<br>'
+						emailBody$&='Your ACS team!<br>'
+						emailBody$&='<a href="http://advancedcomputer.services">Advanced Computer Services LLC</a><br>'
+						emailBody$&='4 Syme Ave<br>'
+						emailBody$&='West Orange, NJ 07052<br>'
+						emailBody$&='1-800-643-6318</p>'
 						
 						dim attachment$*1024
 						attachment$=fnreport_cache_folder_current$&'\'&trim$(pdfname$)

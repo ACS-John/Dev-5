@@ -76,6 +76,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
 			pr #win,f "16,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
+			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
 		
 		
@@ -102,7 +103,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			log$="action taken = Program Pause" : fnlog(log$,2)
 			goto ERROR_XIT
 	
-		else if cmdkey=21 then 
+		else if cmdkey=21 or fkey=120 then 
 			! if ~enableBigErtnAct then 
 			! 	pr 'NO enableBigErtnAct.   this might not work. G to try.'
 			! 	pause
@@ -161,13 +162,13 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			goto MENU1
 		end if 
 		ertnAct$="go "&stopable$
-		goto ERROR_XIT ! /r
+	goto ERROR_XIT ! /r
 	NEVER: ! r:
 		pr "The Error routine had an error!"
 		pr "error "&str$(err)&" on line "&str$(line)
 		pr "Please call ACS support."
 		pause  ! input fields "1,1,C 1,AEN": pause$
-		retry  ! /r
+	retry  ! /r
 	ERROR_XIT: ! 
 		if file(win)<>-1 then close #win: 
 fnend 

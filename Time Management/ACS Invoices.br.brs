@@ -347,8 +347,8 @@ def fn_print_inv
 		! if sum(mat inv_amt)+pbal>0 then
 		dim saveToAsStartFile$*1024
 		saveToAsStartFile$='D:\ACS\Doc\Invoices\ACS Invoices - '
-		saveToAsStartFile$(inf:inf)=str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)
-		saveToAsStartFile$(inf:inf)='.rtf'
+		saveToAsStartFile$&=str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)
+		saveToAsStartFile$&='.rtf'
 		fnSaveToAsStart(saveToAsStartFile$)
 		fnopenprn
 		if ClientEbilling=1 then 

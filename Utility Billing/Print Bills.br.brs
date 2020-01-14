@@ -195,9 +195,9 @@ PrintBill_Basic: !
 	if days(d4,'mmddyy')<days(d1,'mmddyy') then 
 		if d4<>0 then
 			d4$=''
-			d4$(inf:inf)=date$(days(d1,'mmddyy'),'mm') ! get MM date from d1
-			d4$(inf:inf)=date$(days(d4,'mmddyy'),'dd') ! get DD date from d4
-			d4$(inf:inf)=date$(days(d1,'mmddyy'),'yy') ! get YY date from d1
+			d4$&=date$(days(d1,'mmddyy'),'mm') ! get MM date from d1
+			d4$&=date$(days(d4,'mmddyy'),'dd') ! get DD date from d4
+			d4$&=date$(days(d1,'mmddyy'),'yy') ! get YY date from d1
 			d4=val(d4$)
 		end if
 	end if

@@ -744,7 +744,31 @@ def fn_cfv_payroll
 
 		! /r
 	end if
+	if fn_version('[Q]\PRmstr\Employee.h[cno]')<1 then
+		if fnCopy('[Q]\PRmstr\Employee.h[cno]','', 200)>0 then
+			! pause
+			open #hEmployee:=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],Shr',internal,outin
+			version(hEmployee,1)
+			do
+				read #hEmployee: eof EoEmployeeV0
+				rewrite #hEmployee,using 'form pos 197,n 2,n 2': 0,0
+			loop
+			EoEmployeeV0: !
+			close #hEmployee:
+			fnindex_it('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-no.h[cno]'  ,'1 8')
+			fnindex_it('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-name.h[cno]','9 30')
+		else
+			pr bell;'Employee record length change failed.  Payroll system unusable until fixed.'
+			pause
+		end if
+	end if
 fnend 
+def fn_version(filename$*256; ___,returnN,hTmp)
+	open #hTmp:=fngethandle: 'Name='&filename$&',Shr',internal,input
+	returnN=version(hTmp)
+	close #hTmp:
+	fn_version=returnN
+fnend
 Check4124OnPrGlindex: ! r:
  if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
 	 fnindex_it('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')

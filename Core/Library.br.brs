@@ -1532,7 +1532,7 @@ fnend
 	fnend
 	def library fncmbemp(lyne,mypos; addall,container)
 		library 'S:\acsPR\CmbEmp.br': fncmbemp
-		fncmbemp(lyne,mypos, addall,container)
+		fncmbemp=fncmbemp(lyne,mypos, addall,container)
 	fnend
 	def library fncmbcategory(lyne,mypos;addall,c,a$*30)
 		library 'S:\acsPR\CmbCategory.br': fncmbcategory
@@ -1554,9 +1554,9 @@ fnend
 		library 'S:\acsPR\CmbCat.br': fncmbcat
 		fncmbcat(lyne,mypos,addall,c,a$)
 	fnend
-	def library fncmbsubcat(lyne,mypos;addall,c,a$*30)
+	def library fncmbsubcat(lyne,mypos;addall,c)
 		library 'S:\acsPR\CmbSubCat.br': fncmbsubcat
-		fncmbsubcat(lyne,mypos,addall,c,a$)
+		fncmbsubcat(lyne,mypos,addall,c)
 	fnend
 	def library fnpr_conversion_department(cno; medicare_is_seperated)
 		library 'S:\acsPR\Conversion\v4_cnv.br': fnpr_conversion_department
