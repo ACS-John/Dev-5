@@ -118,7 +118,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 				fnWriteProc('in','end')
 				fnWriteProc(''  ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
 				fnWriteProc(''  ,"setenv('source',os_filename$(env$('source')))")
-				fnWriteProc(''  ,"exec 'sy """"C:\ACS\Util\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
+				fnWriteProc(''  ,"exec 'sy """"C:\ACS\Dev-5\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
 				fnWriteProc(''  ,'execute ''load "''&program$&''"''')
 			end if
 			! fnWriteProc('Recompile Reload and Run.prc','subproc in')

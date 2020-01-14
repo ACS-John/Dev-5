@@ -576,7 +576,7 @@ def fn_neptuneEquinoxV4(h_out)
 ! uses local mat d
 ! z$,route,sequence,e$(3),extra$(1),mat serviceCodeMetered$,mat serviceCode$
 ! ; ___,serviceItem,sc$*2,reading_current,unusual_usage_low,unusual_usage_high
-	if ~nev4_company_init then	! r: Company Record
+	if ~nev4_company_init then	! r: Company Record (COMHD)
 		nev4_company_init=1
 
 		nev4_routePrior=0
@@ -591,7 +591,7 @@ def fn_neptuneEquinoxV4(h_out)
 		fn_record_addc( 1,'N'               ) ! Service Orders Y or N
 		fn_record_write(h_out)
 	end if	! /r
-	if route<>nev4_routePrior then	! r: Route Record 
+	if route<>nev4_routePrior then	! r: Route Record (RTEHD)
 		if nev4_routePrior<>route and nev4_routePrior<>0 then
 			fn_neptuneEquinoxV4_routeTrail(h_out,nev4_routePrior,nev4_routePremiseCount,nev4_routeMeterCount)
 		end if
@@ -607,12 +607,12 @@ def fn_neptuneEquinoxV4(h_out)
 		fn_record_addC(80,''                  ) ! Route Message    Opt UB 40-119 80 A/N
 		fn_record_write(h_out)                  ! CRLF             Req UB 120-121 2
 	end if	! /r
-	! r: Premise Detail Record
+	! r: Premise Detail Record (PRMDT)
 	fn_record_init
 	fn_record_addC(  5,'PRMDT'        ) !  Record ID      Req UB   1-5  5 A/N 'PRMDT'
 	fn_record_addC( 26,e$(3)          ) !  Address 1      Req UB  6-31 26 A/N     =  Address 1 - Primary
 	fn_record_addC( 26,extra$(1)      ) !  Address 2      Opt UB 32-57 26 A/N     =  Address 2 - Primary
-	fn_record_addC(128,''             ) !  Customer Name  Req UB 58-83 26 A/N
+	fn_record_addC( 26,e$(2)          ) !  Customer Name  Req UB 58-83 26 A/N
 	fn_record_addC( 20,z$             ) !  Premise Key          Req UB 84-103   20 A/N Uniquely identifies the premise. Use account number, unless the billing system has a better key.
 										! fn_meterInfo$('location_id',z$,sc$)  Would be a good premise key EXCEPT it's tied to a service, so each user could have multiple if they had multiple metered services
 	fn_record_addC( 20,z$             ) !  Account Number       Req UB 104-123  20 A/N
