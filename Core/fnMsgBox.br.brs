@@ -17,7 +17,7 @@ def fn_br_messagebox(&mat mg$, &response$; cap$*128, mt)
 	bm_type=mt
 
 	for mg_item=1 to udim(mat mg$)
-		bm_text$(inf:inf)=mg$(mg_item)&chr$(13)
+		bm_text$&=mg$(mg_item)&chr$(13)
 	next mg_item
 	bm_text$=rtrm$(bm_text$,chr$(13))
 

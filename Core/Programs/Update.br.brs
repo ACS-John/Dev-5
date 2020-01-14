@@ -162,12 +162,12 @@ def fn_update
 			if u_which>0 then
 				if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(u_which),'ccyymmdd') then
 					support_text$='      active until '
-					support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
+					support_text$&=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
 				else
 					support_text$='      Support expired on '
-					support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
+					support_text$&=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
 					if on_support(u_which) then
-						support_text$(inf:inf)=' but update is allowed during '&str$(grace_days)&' day grace period.'
+						support_text$&=' but update is allowed during '&str$(grace_days)&' day grace period.'
 					end if
 				end if
 				fnStatus(support_text$)

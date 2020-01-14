@@ -228,14 +228,14 @@ include: filenamesPopUpperCase
 	else
 		dim mbText$*2048
 		mbText$='New Claims: '&tab$&str$(countNewClaim)
-		mbText$(inf:inf)=lf$&'Claim Updates-Open: '&tab$&str$(countUpdateClaimOpen)
-		mbText$(inf:inf)=lf$&'Claim Skipped-Closed: '&tab$&str$(udim(mat alreadyReportedFileNo$))
-		mbText$(inf:inf)=lf$&'Claim Diaried for Priority: '&tab$&str$(priorityCount)
+		mbText$&=lf$&'Claim Updates-Open: '&tab$&str$(countUpdateClaimOpen)
+		mbText$&=lf$&'Claim Skipped-Closed: '&tab$&str$(udim(mat alreadyReportedFileNo$))
+		mbText$&=lf$&'Claim Diaried for Priority: '&tab$&str$(priorityCount)
 		if cssDebug then
-			mbText$(inf:inf)=lf$&'lineCount: '&tab$&str$(lineCount)
+			mbText$&=lf$&'lineCount: '&tab$&str$(lineCount)
 		end if
-		mbText$(inf:inf)=lf$&'Sucessfully created a file for CM EDI Import:'
-		mbText$(inf:inf)=lf$&outFile$
+		mbText$&=lf$&'Sucessfully created a file for CM EDI Import:'
+		mbText$&=lf$&outFile$
 		fnMessageBox(mbText$,mb_information+mb_okonly,env$('program_caption'))
 		! msgbox('Success on '&csvFile$)
 	end if
@@ -330,7 +330,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		enableImport$				=resp$(resp_enableImport)
 		if enableImport$='True' then let enableImport=1 else enableImport=0
 		if sourceFile$(len(sourceFile$):len(sourceFile$))='\' then
-			sourceFile$(inf:inf)='*.*'
+			sourceFile$&='*.*'
 		end if
 		if exists(sourceFile$)=1 then ! note EXISTS=1 if it does exist and it is a Directory
 			sourceFile$=sourceFile$&'\*.*'
@@ -629,8 +629,8 @@ def fn_add(hLineAdd$*128,dLineAdd$*2048; reset)
 		hLine$=hLineAdd$
 		dLine$=dLineAdd$
 	else
-		hLine$(inf:inf)=tab$&hLineAdd$
-		dLine$(inf:inf)=tab$&dLineAdd$
+		hLine$&=tab$&hLineAdd$
+		dLine$&=tab$&dLineAdd$
 	end if
 fnend
 def fn_pr(num; forceHeader)

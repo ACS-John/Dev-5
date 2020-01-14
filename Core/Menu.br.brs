@@ -253,7 +253,7 @@ def fn_main
 			end if 
 			fnLbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
 			fn_dashboard_draw
-			if enableFavorites then let fn_favoritesDraw
+			if enableFavorites then fn_favoritesDraw
 			fn_display_menu
 			! if env$('cursys')="PR" then
 			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard) 
@@ -269,7 +269,7 @@ def fn_main
 			program_selection$(1:pos(program_selection$,']'))=''
 			curfld_value=curfld
 			! if env$('cursys')="PR" then
-			!   if resp$(2)='True' or resp$(2)='^' then let setenv('taxYear','2018') else let setenv('taxYear','') 
+			!   if resp$(2)='True' or resp$(2)='^' then setenv('taxYear','2018') else setenv('taxYear','') 
 			! end if
 			if fkey_value=1449 then ! fkey_facebook then ! =1449
 				execute 'sy -M -C Start https://www.facebook.com/pg/advancedcomputerservices/community/'
@@ -690,7 +690,7 @@ def fn_add_if_licensed(sysCode$)
 	end if
 fnend
 def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)

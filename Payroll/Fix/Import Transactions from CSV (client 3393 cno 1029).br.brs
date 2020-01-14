@@ -253,7 +253,7 @@ def fn_setup
 		library 'S:\Core\Library': fnxit
 		library 'S:\Core\Library': fnLbl,fnTxt
 		library 'S:\Core\Library': fnCmdSet
-		library 'S:\Core\Library': fncmbemp,fncombof,fnButton
+		library 'S:\Core\Library': fncombof,fnButton
 		library 'S:\Core\Library': fnopenprn,fncloseprn
 		library 'S:\Core\Library': fnDedNames
 		library 'S:\Core\Library': fnAddOneC,fnAddOneN

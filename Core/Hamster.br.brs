@@ -378,10 +378,10 @@ fnend
 def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
 	return$='Form ' : key$='' : j=0
 	do while kps(fin,j+=1)>0
-		return$(inf:inf)='Pos '&str$(kps(fin,j))&','
-		return$(inf:inf)='C '&str$(kln(fin,j))&','
+		return$&='Pos '&str$(kps(fin,j))&','
+		return$&='C '&str$(kln(fin,j))&','
 		blank$(j)=rpt$(chr$(48),kln(fin,j))
-		key$(inf:inf)=blank$(j)
+		key$&=blank$(j)
 	loop
 	return$=return$(1:len(return$)-1) ! remove the trailing comma
 	mat blank$(j-1)

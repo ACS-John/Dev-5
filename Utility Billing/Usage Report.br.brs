@@ -122,18 +122,18 @@ HDR: ! r:
 		heading2$=''
 		reportWidth=32
 		if service1enabled then 
-			heading$(inf:inf)=" {\ul            Water           }"
-			heading2$(inf:inf)=" {\ul   Reading   Current       YTD}"
+			heading$&=" {\ul            Water           }"
+			heading2$&=" {\ul   Reading   Current       YTD}"
 			reportWidth+=30
 		end if 
 		if service3enabled then 
-			heading$(inf:inf)="   {\ul       "&serviceName$(3)(1:12)&"         }"
-			heading2$(inf:inf)=" {\ul   Reading   Current       YTD}"
+			heading$&="   {\ul       "&serviceName$(3)(1:12)&"         }"
+			heading2$&=" {\ul   Reading   Current       YTD}"
 			reportWidth+=30
 		end if 
 		if service4enabled then 
-			heading$(inf:inf)="   {\ul       "&serviceName$(4)(1:12)&"         }"
-			heading2$(inf:inf)=" {\ul   Reading   Current       YTD}" ! gas used for something other than gas
+			heading$&="   {\ul       "&serviceName$(4)(1:12)&"         }"
+			heading2$&=" {\ul   Reading   Current       YTD}" ! gas used for something other than gas
 			reportWidth+=30
 		end if 
 		! /r
@@ -150,13 +150,13 @@ PRINT_DETAILS: ! r:
 	if sum(mat dx(3:12))<>0 and days(CustomerLastBillingDate,'mmddyy')=>days(filterBillingDate,'mmddyy') then
 		line$=z$&' '&name$(1:21)
 		if service1enabled then 
-			line$(inf:inf)=cnvrt$("n 10",dx(1))&cnvrt$("n 10",dx(3))&cnvrt$("n 10",dx(4))
+			line$&=cnvrt$("n 10",dx(1))&cnvrt$("n 10",dx(3))&cnvrt$("n 10",dx(4))
 		end if 
 		if service3enabled then 
-			line$(inf:inf)=cnvrt$("n 10",dx(5))&cnvrt$("n 10",dx(7))&cnvrt$("n 10",dx(8))
+			line$&=cnvrt$("n 10",dx(5))&cnvrt$("n 10",dx(7))&cnvrt$("n 10",dx(8))
 		end if 
 		if service4enabled then 
-			line$(inf:inf)=cnvrt$("n 10",dx(9))&cnvrt$("n 10",dx(11))&cnvrt$("n 10",dx(12))
+			line$&=cnvrt$("n 10",dx(9))&cnvrt$("n 10",dx(11))&cnvrt$("n 10",dx(12))
 		end if 
 		pr #255: line$ pageoflow NEWPGE
 		oldroute=route
@@ -187,7 +187,7 @@ def fn_printTotals(totalRoute)
 		if trim$(serviceName$(1))<>'' then 
 			line$=serviceName$(1)(1:11)&line$&cnvrt$("n 10",totalRoute(1,1))&"      "&cnvrt$("n 10",totalRoute(1,2))
 			if ~totalRoute then 
-				line$(inf:inf)="    "&cnvrt$("n 10",totalGrand(1,1))&"      "&cnvrt$("n 10",totalGrand(1,2))
+				line$&="    "&cnvrt$("n 10",totalGrand(1,1))&"      "&cnvrt$("n 10",totalGrand(1,2))
 			end if 
 			pr #255,using "Form POS 25,C 120": line$
 		end if
@@ -197,7 +197,7 @@ def fn_printTotals(totalRoute)
 			line$=serviceName$(3)(1:12)&line$&cnvrt$("n 10",totalRoute(2,1))&"      "&cnvrt$("n 10",totalRoute(2,2))
 		end if 
 		if ~totalRoute then 
-			line$(inf:inf)="    "&cnvrt$("n 10",totalGrand(2,1))&"      "&cnvrt$("n 10",totalGrand(2,2))
+			line$&="    "&cnvrt$("n 10",totalGrand(2,1))&"      "&cnvrt$("n 10",totalGrand(2,2))
 		end if 
 		pr #255,using "Form POS 25,C 120": line$
 		!
@@ -206,7 +206,7 @@ def fn_printTotals(totalRoute)
 			line$=serviceName$(4)(1:11)&line$&cnvrt$("n 10",totalRoute(3,1))&"      "&cnvrt$("n 10",totalRoute(3,2))
 		end if 
 		if ~totalRoute then 
-			line$(inf:inf)="    "&cnvrt$("n 10",totalGrand(3,1))&"      "&cnvrt$("n 10",totalGrand(3,2))
+			line$&="    "&cnvrt$("n 10",totalGrand(3,1))&"      "&cnvrt$("n 10",totalGrand(3,2))
 		end if 
 		pr #255,using "Form POS 25,C 120": line$
 		!

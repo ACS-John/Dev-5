@@ -25,9 +25,9 @@ for c_has_item=1 to c_has_count
 		else 
 			txt$(txt_item)=chr$(9)&chr$(9)&'Support expired on '
 		end if 
-		txt$(txt_item)(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(which))
+		txt$(txt_item)&=cnvrt$('pic(####/##/##)',system_support_end_date(which))
 	else 
-		txt$(txt_item)(inf:inf)=chr$(9)&chr$(9)&'(no support data)'
+		txt$(txt_item)&=chr$(9)&chr$(9)&'(no support data)'
 	end if 
 	! /r
 next c_has_item

@@ -1,8 +1,9 @@
 [Q]\PRmstr\Employee.h[cno]  ,  emp_          , 0
 [Q]\PRmstr\EmployeeIdx-no.h[cno]   ,  no
 [Q]\PRmstr\EmployeeIdx-name.h[cno] ,  name
-recl=196
-! increase actual br file version to 1 on 12/31/2019 which changed pos 173,2*PD 3 (ta1,ta2 First and Last Trailer Address) to pos 173,N 1,C 5 w4step2,unused174)
+recl=200
+! renamed from rpwork on 12/31/2019 which changed pos 173,2*PD 3 (ta1,ta2 First and Last Trailer Address) to pos 173,N 1,C 5 w4step2,unused174)
+! increase actual br vile version to 1 on 1/13/2020 - to add Minor Dependents and Other Dependents  and recl increased from 196 to 200
 ===================================================
 no             ,  Employee Number                      ,  n    8   , ! Pos=1         eno     
 name           ,  Name                                 ,  c   30   , ! Pos=9         em$(1)  
@@ -57,6 +58,8 @@ unuse174        ,  unused                               ,  c    5   ,           
 
 ph              ,  Telephone Number                     ,  c   12   ,             , ! Pos=179       ph$     
 bd              ,  Birth Date                           ,  n    6   , date(mmddyy), ! Pos=191       bd      
+depMinor        ,  Dependents - Under 17                ,  n    2   ,             , ! Pos=196
+depOther        ,  Dependents - Other                   ,  n    2   ,             , ! 
 #eof#
 
 

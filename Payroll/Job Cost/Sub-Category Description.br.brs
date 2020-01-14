@@ -6,7 +6,6 @@
 	library 'S:\Core\Library': fnTxt
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnsubcat_srch
-	library 'S:\Core\Library': fncmbsubcat
 	on error goto Ertn
 
 	dim iom$(4),scm$(4)*27,resp$(5)*50
