@@ -8,13 +8,6 @@ def library fncheckcompiled
 		execute 'CD S:'
 		if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
 		execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr DONE
-		!     open #htmpcmd:=20: 'name=S:\(import)\Tmp'&session$&'.cmd,RecL=256,replace',display,output
-		!     pr #htmpcmd: 'prompt $p$g'
-		!     pr #htmpcmd: '"'&os_filename$('S:\sortfiles.exe')&'" -D . -C ".br.brs|.br"'
-		!     close #htmpcmd:
-		!     execute 'sy "'&os_filename$('S:\(import)\Tmp'&session$&'.cmd')&'"' ! ioerr DONE
-		!        execute 'free S:\(import)\Tmp'&session$&'.cmd'
-		! execute 'sy -M "'&os_filename$('S:\sortfiles.exe')&'" -D . -C ".br.brs|.br"' ioerr DONE
 		open #hBrsFileList:=20: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
 		linput #hBrsFileList: filename$ eof DONE
 		! pr filename$ : pause

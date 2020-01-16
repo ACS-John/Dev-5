@@ -1,10 +1,10 @@
 00010 ! Replace acsPR\newprRpt_S1.brs,Source
 00011 ! ______________________________________________________________________
-00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
+00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs2,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto Ertn
 00020 ! ______________________________________________________________________
-00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,unuse174$*5,tdt(4),tcd(3),tdet(20),tdy(6)
+00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,W4Year,W4Step3,tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50
 00032   dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),inp(20),pp(20),dt(125)
 00033   dim gt(125),dh$*20,a$*40,cp(32),tdc(10),tcp(32),dc(10)
@@ -18,23 +18,23 @@
 00090   gosub ASK_DATES
 00124 ! ______________________________________________________________________
 00141 L141: ! On Fnkey 5 Goto EOF1
-00142   fnopenprn
+00142 fnopenprn
 00143 ! ______________________________________________________________________
-00190   open #1: "Name=[Q]\PRmstr\PRREPORT.h[cno],KFName=[Q]\PRmstr\PRRPTIDX.h[cno],shr",internal,input,keyed 
-00200   read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
-00210   L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
-00220   close #1: 
+00190 open #1: "Name=[Q]\PRmstr\PRREPORT.h[cno],KFName=[Q]\PRmstr\PRRPTIDX.h[cno],shr",internal,input,keyed 
+00200 read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
+00210 L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
+00220 close #1: 
 00221 ! ______________________________________________________________________
-00300   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-00301   open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
-00302   open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
-00320   gosub HDR
-00330   goto PRTRPT
+00300 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+00301 open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
+00302 open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
+00320 gosub HDR
+00330 goto PRTRPT
 00331 ! ______________________________________________________________________
 00340 PGOF: ! r:
 00342   pr #255: newpage
 00350   gosub HDR
-00360   continue  ! /r
+00360 continue  ! /r
 00370 HDR: ! r:
 00371   pr #255: 
 00372   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -45,7 +45,7 @@
 00377   pr #255: "\ql   "
 00400   pr #255: ch$(1)
 00410   pr #255: ch$(2)
-00420   return ! /r
+00420 return ! /r
 00430 EOF1: ! r:
 00450   close #1: ioerr ignore
 00460   close #2: ioerr ignore
@@ -53,7 +53,7 @@
 00469 XIT: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
-19801 read #1,using "Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,n 1,c 5,C 12,N 6": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd eof EOF1 ! fnStatus(str$(eno))
+19801 read #1,using "Form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,x 1,c 12,n 6,n 12.2": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,W4Year,ph$,bd,W4Step3 eof EOF1 ! fnStatus(str$(eno))
 19802   ipsw=0
 19803   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey PRTRPT
 19804   mat tcp=(0): mat tdc=(0)
@@ -92,7 +92,7 @@
 60070   goto L60020
 60080 L60080: return ! /r
 61000 ASK_DATES: ! r:
-61005   fnTos(sn$="UserRpt-1")
+61005   fnTos
 61006   mylen=30: mypos=mylen+3
 61020   fnLbl(1,1,"Starting Date (ccyymmdd):",mylen,1,0,fradate)
 61030   fnTxt(1,mypos,10,0,1,"3",0,"The report can be run for any date range.  Enter the first date to be used.",0) 
@@ -105,7 +105,7 @@
 61056   resp$(3)=date$("Month DD, CCYY")
 61060   fnCmdKey("Next",1,1,0,"Prints the report")
 61070   fnCmdKey("Cancel",5,0,1,"Returns to menu")
-61080   fnAcs(sn$,0,mat resp$,ckey) 
+61080   fnAcs2(mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
 61090   beg_date=val(resp$(1))
 61100   end_date=val(resp$(2))

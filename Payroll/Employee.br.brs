@@ -1,4 +1,5 @@
-enableEasyDeptNavigation=1
+enableEasyDeptNavigation=0 ! if env$('acsDeveloper')<>'' then enableEasyDeptNavigation=1
+
 ! formerly S:\acsPR\newprFM
 ! Payroll Employee File
 ! r: setup and open files
@@ -37,7 +38,7 @@ AskEmployee: ! r:
 	else if ckey=2 then
 		goto EditEmployee
 	else if ckey=3 then
-		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd,dependentsMinor,dependentsOther eof EmpNotFound
+		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
 		holdeno=eno
 		ent$=lpad$(str$(eno),8)
 		goto ScrEmployee
@@ -82,7 +83,7 @@ AddEmployee: ! r:
 	mat rs=(0)
 	mat em=(0)
 	lpd=tgp=0
-	w4step2=0 : unuse174$=''
+	w4Step2=0 : W4Year=2020
 	mat ty=(0)
 	mat tqm=(0)
 	mat tcp=(0)
@@ -99,7 +100,7 @@ EditEmployee: ! r:
 	if ent=0 then goto AskEmployee
 	teno=eno=ent ! hdar=0
 	ent$=lpad$(str$(ent),8)
-	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd,dependentsMinor,dependentsOther nokey EmpNotFound
+	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c nokey EmpNotFound
 	holdeno=eno
 goto ScrEmployee ! /r
 EmpNotFound: ! r:
@@ -139,7 +140,8 @@ ScrEmployee: ! r:
 	mylen=28 : mypos=mylen+2
 	col1_pos=1 : col1_len=mylen
 	col2_pos=col1_pos+col1_len+2
-	col3_pos=51 : col3_len=40 ! 20
+	
+	col3_pos=58 : col3_len=21 ! 20
 	col4_pos=col3_pos+col3_len+2 ! 73
 	fn_deptButtons(lc,deptCount)
 	lc+=1
@@ -149,14 +151,14 @@ ScrEmployee: ! r:
 	! r: col 1 top section
 	lc+=1
 	fnLbl(lc+=1,1,'Name:',mylen,1)
-	fnTxt(lc   ,mylen+3,30,30,0,'',0,'Name can be entered first name first or last name first.')
+	fnTxt(lc   ,mylen+3,col2_len,30,0,'',0,'Name can be entered first name first or last name first.')
 	resp$(resp_name=respc+=1)=em$(1)
 
 	fnLbl(lc+=1,1,"Address:",mylen,1)
-	fnTxt(lc   ,mylen+3,30,30,0,"",0,"")
+	fnTxt(lc   ,mylen+3,col2_len,30,0,"",0,"")
 	resp$(resp_addr=respc+=1)=em$(2)
 	fnLbl(lc+=1,1,"City, State Zip:",mylen,1)
-	fnTxt(lc   ,mylen+3,30,30,0,"",0,"")
+	fnTxt(lc   ,mylen+3,col2_len,30,0,"",0,"")
 	resp$(resp_csz=respc+=1)=em$(3)
 	lc+=1
 
@@ -184,16 +186,16 @@ ScrEmployee: ! r:
 	resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
 	
 	fnLbl(             lc+=1,col3_pos,'Marital Status:',col3_len,1)
-	fncomboa('Marital',lc   ,col4_pos,mat married_option$) ! ,'',11)
+	fncomboa('Marital',lc   ,col4_pos,mat married_option$,'',25) ! ,'',11)
 	resp$(resp_married=respc+=1)=fnSetForCombo$(mat married_option$,str$(em(1)))
 
-	lc+=1
-	fnLbl(             lc+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
-	fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
-	resp$(resp_dependentsMinor=respc+=1)=str$(dependentsMinor)
-	fnLbl(             lc+=1,col3_pos,'Dependants - Other:',col3_len,1)
-	fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
-	resp$(resp_dependentsOther=respc+=1)=str$(dependentsOther)
+	! lc+=1
+	! fnLbl(             lc+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
+	! fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+	! resp$(resp_dependentsMinor=respc+=1)=str$(dependentsMinor)
+	! fnLbl(             lc+=1,col3_pos,'Dependants - Other:',col3_len,1)
+	! fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+	! resp$(resp_dependentsOther=respc+=1)=str$(dependentsOther)
 
 	! /r
 	! r: col 2 - state and federal section
@@ -229,7 +231,7 @@ ScrEmployee: ! r:
 	resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
 	! 
 	fnLbl(               lc+=1,1,"Employment Status:",mylen,1)
-	fncombof("EmpStatus",lc   ,col2_pos,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
+	fncombof("EmpStatus",lc   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 	resp$(resp_empStatus=respc+=1)=str$(em(4))
 	fnLbl(              lc+=1,col1_pos,"Pay Code:",col1_len,1)
 	fncomboa("PayCode", lc    ,col2_pos,mat payperiod_option$,"",16)
@@ -254,17 +256,36 @@ ScrEmployee: ! r:
 	lc-=2   !  go back up two lines and do the right side
 	
 	fnLbl(              lc+=1,col3_pos,"FICA Code:",col3_len,1)
-	fncomboa("FICACode",lc    ,col4_pos,mat code6$,"",32)
+	fncomboa("FICACode",lc    ,col4_pos,mat code6$,"",25)
 	resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
 	fnLbl(              lc+=1,col3_pos,"EIC Code:",col3_len,1)
-	fncomboa("EICCode", lc    ,col4_pos,mat code7$,"",31)
+	fncomboa("EICCode", lc    ,col4_pos,mat code7$,"",25)
 	resp$(resp_EicCode=respc+=1)=code7$(em(7)+1)
 	
 	
 	lc+=1
 	
-	fnChk(lc+=1,col4_pos,'W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
-	resp_w4step2=respc+=1 : if w4step2 then resp$(resp_w4step2)='True' else resp$(resp_w4step2)='False'
+	fnLbl(             lc+=1,col1_pos,"W-4 Year:",col1_len,1)
+	fncomboa("w4year", lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+	resp$(resp_w4year=respc+=1)=str$(w4year)
+	
+	fnChk(lc+=1,col2_pos+1,'W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
+	resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
+	
+	fnLbl(             lc+=1,col1_pos,"W-4 Step 3:",col1_len,1)
+	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	resp$(resp_w4Step3=respc+=1)=str$(w4Step3)
+	fnLbl(             lc+=1,col1_pos,"W-4 Step 4a:",col1_len,1)
+	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	resp$(resp_w4Step4a=respc+=1)=str$(w4Step4a)
+	fnLbl(             lc+=1,col1_pos,"W-4 Step 4b:",col1_len,1)
+	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	resp$(resp_w4Step4b=respc+=1)=str$(w4Step4b)
+	fnLbl(             lc+=1,col1_pos,"W-4 Step 4c:",col1_len,1)
+	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	resp$(resp_w4Step4c=respc+=1)=str$(w4Step4c)
+
+
 
 	! picture=0
 	fnCmdKey('&Departments ('&str$(deptCount)&')',2,0,0,"Review this employee's departmental information.")
@@ -305,10 +326,12 @@ ScrEmployee: ! r:
 	lpd             =val(resp$(resp_lastPayrollDate)     ) ! last payroll date
 	bd              =val(resp$(resp_birthDate      )     ) ! birth date
 	ph$             =    resp$(resp_phone          )       ! phone
-	dependentsMinor=val(resp$(resp_dependentsMinor))
-	dependentsOther=val(resp$(resp_dependentsOther))
-
-	if resp$(resp_w4step2)='True' then w4step2=1 else w4step2=0
+	w4year         =val(resp$(resp_w4year          )     )
+	if resp$(resp_w4Step2)='True' then w4Step2=1 else w4Step2=0
+	w4Step3        =val(resp$(resp_w4Step3         )     )
+	w4Step4a       =val(resp$(resp_w4Step4a        )     )
+	w4Step4b       =val(resp$(resp_w4Step4b        )     )
+	w4Step4c       =val(resp$(resp_w4Step4c        )     )
 	! if ckey=6 then goto PICTURE
 	if ckey=8 then
 		fnhours(eno)
@@ -496,13 +519,13 @@ goto ScrDepartment ! /r
 
 SaveEmployee: ! r:
 	if add1=1 then 
-		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd,dependentsMinor,dependentsOther
+		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 		
 		add1=0
 	else if holdeno<>eno then 
 		goto ChangeEmployeeNo
 	else
-		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd,dependentsMinor,dependentsOther
+		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 	end if
 return ! /r
 
@@ -578,14 +601,14 @@ ChangeEmployeeNo: ! r:
 	! /r
 	! change main employee record
 	delete #hEmployee,key=ent$:
-	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,unuse174$,ph$,bd,dependentsMinor,dependentsOther
+	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 	ent$=lpad$(str$(eno),8)
 	hact$=ent$
 	CHGENO_XIT: !
 goto Menu1 ! /r
 def fn_openFiles
 	open #hEmployee:=fngethandle: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,c 5,c 12,n 6,n 2,n 2
+	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,x 1,c 12,n 6,4*n 12.2
 	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
@@ -641,7 +664,8 @@ def fn_setup
 	dim tqm(17)
 	dim tcp(22)
 	dim em(16)
-	dim w4step2,unuse174$*5
+	dim w4Step2
+	dim W4Year
 	dim tdt(4),tcd(3)
 	dim tdet(23)
 	dim ss$*11
@@ -665,12 +689,12 @@ def fn_setup
 	
 	dim married_option$(0)*58
 	mat married_option$(0)
-	fnaddonec(mat married_option$,"0 - Single")
-	fnaddonec(mat married_option$,"1 - Married")
-	fnaddonec(mat married_option$,'2 - Single - Head of Household')
-	fnaddonec(mat married_option$,'3 - Married - filing joint - only one working')
-	fnaddonec(mat married_option$,'4 - Married - filing joint - both working')
-	fnaddonec(mat married_option$,'5 - Married - filing seperate - both working')
+	fnAddOneC(mat married_option$,"0 - Single")
+	fnAddOneC(mat married_option$,"1 - Married - filing jointly")
+	fnAddOneC(mat married_option$,'2 - Single - Head of Household')
+	fnAddOneC(mat married_option$,'3 - Married - filing joint - only one working')
+	fnAddOneC(mat married_option$,'4 - Married - filing joint - both working')
+	fnAddOneC(mat married_option$,'5 - Married - filing seperate - both working')
 
 	dim fed_exemption_option$(22)
 	for j=1 to 21
@@ -717,6 +741,10 @@ def fn_setup
 		scrDept(deptItem)=(deptItem+1)
 		fkey_scrDept(deptItem)=5201+deptItem
 	nex deptItem
+
+	dim w4yearOption$(2)*4
+	w4yearOption$(1)='2019'
+	w4yearOption$(2)='2020'
 
 fnend
 Finis: ! ! r:

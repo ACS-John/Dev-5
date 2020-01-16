@@ -146,10 +146,10 @@ return ! /r
 ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
 	dim em(16)
 	dim hr(2)
-	read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,depMinor,depOther nokey EmployeeNotFound
+	read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,w4year,W4Step3 nokey EmployeeNotFound
 	gosub EmployeeRecordToLocal
 	
-	F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,pos 196,2*n 2
+	F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,pos 196,n 12.2
 	gosub CalculateAllDeductionsAllDept
 	n$=x$
 	! r: Accrue Sick and Vacation
@@ -480,7 +480,7 @@ Screen1: ! r:
 		d1$=resp$(resp_d1S)
 		if resp$(3)(1:1)="T" then accrueVacaAndSick=1 else accrueVacaAndSick=0
 
-		taxYear=val(str$(d1)(1:4)) ! =2019
+		taxYear=2019 ! val(str$(d1)(1:4)) ! =2019
 
 		fnPayPeriodEndingDate(d1)
 		fnSetPayrollDatesForYear(taxYear)
@@ -681,7 +681,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 			mat fedTable(8,3)
 			mat fedTable=(0)
 			if maritial=1 or maritial=3 or maritial=4 then 
-				! 1 - Married    (assume filing jointly)
+				! 1 - Married - filing jointly
 				! 3 - Married - filing joint return - only one working
 				! 4 - Married - filing joint - both working
 				if w4step2 then mat fedTable=fjc else mat fedTable=fjs
@@ -734,14 +734,16 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 			! fedTaxesAnnualEstimate=((estAnnualNetPay-previousBreak)*withholdingPercentage)+priorLevelWhMax
 			returnN=fedTaxesAnnualEstimate/payPeriodsPerYear
 			returnN=round(returnN,2)
-			pr 'taxyear=';taxYear
-			pr 'payCode / pay periods per year=';payCode;'/';payPeriodsPerYear
-			pr 'maritial=';maritial;' 1,3,4 - married, filing jointly     else    use single table'
-			pr 'tableRow/j2=';tableRow;'/';j2
-			pr 'estimated annual net pay:';estAnnualNetPay
-			pr 'fedTaxesAnnualEstimate=';fedTaxesAnnualEstimate
-			pr ' federal tax esimate:';returnN
-			fnpause ! table total federal w/h used in some state routines
+			
+			! pr 'taxyear=';taxYear
+			! pr 'payCode / pay periods per year=';payCode;'/';payPeriodsPerYear
+			! pr 'maritial=';maritial;' 1,3,4 - married, filing jointly     else    use single table'
+			! pr 'tableRow/j2=';tableRow;'/';j2
+			! pr 'estimated annual net pay:';estAnnualNetPay
+			! pr 'fedTaxesAnnualEstimate=';fedTaxesAnnualEstimate
+			! pr ' federal tax esimate:';returnN
+			! fnpause ! table total federal w/h used in some state routines
+			
 		else 
 			g2=0
 		end if 
