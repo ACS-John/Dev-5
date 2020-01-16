@@ -880,7 +880,7 @@ def library fnclient_has_on_support_list(mat chosl_list$; chosl_grace_days)
 	fnclient_has_on_support_list=fn_client_has_on_support_list(mat chosl_list$, chosl_grace_days)
 fnend 
 def fn_client_has_on_support_list(mat chosl_list$; chosl_grace_days)
-	dim chosl_owns_list$(0)*2
+	dim chosl_owns_list$(0)*256
 	chosl_count=0
 	chosl_owns_count=fn_client_has_mat(mat chosl_owns_list$)
 	for chosl_item=1 to chosl_owns_count
@@ -892,11 +892,11 @@ def fn_client_has_on_support_list(mat chosl_list$; chosl_grace_days)
 	next chosl_item
 	fn_client_has_on_support_list=chosl_count
 fnend 
-def library fnclient_has_on_support_item(chosi_item$*2; days_grace)
+def library fnclient_has_on_support_item(chosi_item$*256; days_grace)
 	fn_setup
 	fnclient_has_on_support_item=fn_client_has_on_support_item(chosi_item$, days_grace)
 fnend 
-def fn_client_has_on_support_item(chosi_item$*2; days_grace)
+def fn_client_has_on_support_item(chosi_item$*256; days_grace)
 	client_id=val(env$('Client_ID'))
 	fn_client_support_setup(client_id,mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
 	chosi_retun=0
@@ -966,11 +966,11 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		next css_item
 	! /r
 fnend
-def library fnsystem_code_standardize$(st_code$*2)
+def library fnsystem_code_standardize$(st_code$*256)
 	fn_setup
 	fnsystem_code_standardize$=fn_system_code_standardize$(st_code$)
 fnend 
-def fn_system_code_standardize$(st_code$*2)
+def fn_system_code_standardize$(st_code$*256)
 	! this function is to translate from systems.h420 to
 	! cursys type codes
 	! 

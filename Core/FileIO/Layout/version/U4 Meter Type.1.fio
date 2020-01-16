@@ -1,0 +1,8 @@
+[Q]\UBmstr\oMeterType.h[cno], otype_, 1
+[Q]\UBmstr\oMeterTypeIdx.h[cno]-u ,  key
+===================================================
+key                ,    Code                ,  C   5      , !     SPos=1   Required=True
+name$              ,    Description         ,  C  40      , !     SPos=6
+readingMultiplier$ ,    Reading multiplier  ,  C   9      , !     SPos=
+dialCount          ,    Number of Dials     ,  N   2      , !     SPos=
+readType           ,    Read Type           ,  N   2      , !     SPos=

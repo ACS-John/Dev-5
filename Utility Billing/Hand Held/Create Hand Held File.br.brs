@@ -638,6 +638,9 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC( 5,'MTRDT'                               ) !  Record ID
 			fn_record_addN( 6,sequence, '0'                         ) ! Read Sequence
 			fn_record_addC( 6,''                                    ) ! Changed Read Sequence
+
+! if trim$(z$)='100353.50' then pause
+
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Key
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Number
 			fn_record_addC(20,''                                    ) ! Changed Meter Number
@@ -735,11 +738,11 @@ fnend
 def fn_neptuneEquinoxV4_routeTrail(h_out,nev4_routePrior,&nev4_routePremiseCount,&nev4_routeMeterCount)
 	fn_record_init
 	fn_record_addC( 5,'RTETR'                ) ! Record ID  Req UB 1-5    5 A/N 'RTETR'
-	fn_record_addC( 5,'WATE'                 ) ! Office     Req UB 6-9    4 A/N
-	fn_record_addN( 5,1                      ) ! Cycle      Req UB 10-13  4 A/N
-	fn_record_addN( 5,nev4_routePrior        ) ! Route      Req UB 14-23 10 A/N
-	fn_record_addN( 5,nev4_routePremiseCount ) ! # Premises Req UB 24-29  6 A/N One input field may be blank if total is unavailable.
-	fn_record_addN( 5,nev4_routeMeterCount   ) ! # Meters   Req UB 30-35  6 A/N One input field may be blank if total is unavailable.
+	fn_record_addC( 4,'WATE'                 ) ! Office     Req UB 6-9    4 A/N
+	fn_record_addN( 4,1                      ) ! Cycle      Req UB 10-13  4 A/N
+	fn_record_addN(10,nev4_routePrior        ) ! Route      Req UB 14-23 10 A/N
+	fn_record_addN( 6,nev4_routePremiseCount ) ! # Premises Req UB 24-29  6 A/N One input field may be blank if total is unavailable.
+	fn_record_addN( 6,nev4_routeMeterCount   ) ! # Meters   Req UB 30-35  6 A/N One input field may be blank if total is unavailable.
 	fn_record_write(h_out)                     ! CRLF       Req UB 36-37  2
 	nev4_routePremiseCount=0
 	nev4_routeMeterCount=0
