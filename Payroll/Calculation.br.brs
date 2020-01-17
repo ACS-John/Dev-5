@@ -453,7 +453,7 @@ Screen1: ! r:
 	rc=lc=0: mylen=42: mypos=45
 	lc+=1
 	fnLbl(lc+=1,1,"Pay Period Ending Date:",mylen,1)
-	fnTxt(lc   ,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ")
+	fnTxt(lc   ,mypos,10,0,1,"1003",0,"Enter the date which you want used for your earnings records. ")
 	resp$(resp_d1N=rc+=1)=str$(d1)
 	lc+=1
 	fnLbl(lc+=1,1,"Report Heading Date:",mylen,1)

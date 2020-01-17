@@ -31,6 +31,7 @@ SCREEN_1: !
 		
 		fnFra(18,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
 		franum+=1
+		linecnt=0
 		resp_skipDedAdd=rc
 		for j=1 to 19 step 2
 			if trim$(dednames$(j))<>"" then x$=":" else x$=""
