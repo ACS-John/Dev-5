@@ -281,6 +281,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			testNet=tcp(32)
 			testGross=tcp(31)
 			testNetCalculated=testGross
+			testnetcalculated-=sum(mat tcp(1:4)) 
 			for testDeductionItem=1 to udim(mat dednames$)
 				if newdedcode(testDeductionItem)=1 then ! deduction
 					testNetCalculated-=tcp(testDeductionItem+4)
