@@ -91,8 +91,8 @@ def fn_transfer(bk$,enableMerge$,askPath$*128)
 	end if
 	if deviceSelected$='Aclara' then
 		transferReturn=fn_aclara(bookFile$,enableMerge$)
-	else if deviceSelected$="Aclara Work Order" then
-		transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
+	! else if deviceSelected$="Aclara Work Order" then
+	! 	transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
 	else if deviceSelected$="ACS Meter Reader" then
 		fn_acsmr(bookFile$)
 	else if deviceSelected$="AMR" then
@@ -367,50 +367,50 @@ fnend
 		! fn_addTmpData('Reading.Water.Date'  ,lineItem$(8))
 	fnend
 	! r: aclara work order
-	def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
-		dataIncludesHeaders=1
-		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
-		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-		pr #hOut: '[ACS Hand Held File Generic Version 2]'
-		pr #hOut: 'Source File='&fn_hh_input_filename$
-		if dataIncludesHeaders then
-			linput #hIn: line$ eof EO_AW ! just consume the headers
-		end if
-		do
-			z$=''
-			linput #hIn: line$ eof EO_AW
-			fn_awoParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
-			for awoX=1 to udim(mat tmpDataName$)
-				pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
-			nex awoX
-			pr #hOut: ''
-			aclaraWorkOrderReturn+=1
-		loop
-		EO_AW: !
-		close #hIn:
-		close #hOut:
-		if enableMerge$='True' then
-			fn_mergeBooks(mergeFileOrigional$,bookFile$)
-		end if
-		fn_aclaraWorkOrder=aclaraWorkOrderReturn
-	fnend
-	def fn_awoParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
-			reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-			str2mat(line$,mat lineItem$,chr$(9))
-			for x=1 to udim(mat lineItem$) : lineItem$(x)=trim$(lineItem$(x),'"') : next x
-			mat tmpDataName$(0)
-			mat tmpDataValue$(0)
-			! fn_addTmpData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
-			fn_addTmpData('Customer.Number'                              ,fnAccountFromLocationId$(val(lineItem$(1))) )
-			fn_addTmpData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
-			fn_addTmpData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
-			fn_addTmpData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
-			fn_addTmpData('Meter.Transmitter.Water'                      ,lineItem$(10)&'-'&lineItem$(17)                ) !
-			fn_addTmpData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
-			fn_addTmpData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
-			fn_addTmpData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
-	fnend
+	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
+	! 	dataIncludesHeaders=1
+	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
+	! 	open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+	! 	open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+	! 	pr #hOut: '[ACS Hand Held File Generic Version 2]'
+	! 	pr #hOut: 'Source File='&fn_hh_input_filename$
+	! 	if dataIncludesHeaders then
+	! 		linput #hIn: line$ eof EO_AW ! just consume the headers
+	! 	end if
+	! 	do
+	! 		z$=''
+	! 		linput #hIn: line$ eof EO_AW
+	! 		fn_awoParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
+	! 		for awoX=1 to udim(mat tmpDataName$)
+	! 			pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
+	! 		nex awoX
+	! 		pr #hOut: ''
+	! 		aclaraWorkOrderReturn+=1
+	! 	loop
+	! 	EO_AW: !
+	! 	close #hIn:
+	! 	close #hOut:
+	! 	if enableMerge$='True' then
+	! 		fn_mergeBooks(mergeFileOrigional$,bookFile$)
+	! 	end if
+	! 	fn_aclaraWorkOrder=aclaraWorkOrderReturn
+	! fnend
+	! def fn_awoParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
+	! 		reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
+	! 		str2mat(line$,mat lineItem$,chr$(9))
+	! 		for x=1 to udim(mat lineItem$) : lineItem$(x)=trim$(lineItem$(x),'"') : next x
+	! 		mat tmpDataName$(0)
+	! 		mat tmpDataValue$(0)
+	! 		! fn_addTmpData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
+	! 		fn_addTmpData('Customer.Number'                              ,fnAccountFromLocationId$(val(lineItem$(1))) )
+	! 		fn_addTmpData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
+	! 		fn_addTmpData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
+	! 		fn_addTmpData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
+	! 		fn_addTmpData('Meter.Transmitter.Water'                      ,lineItem$(10)&'-'&lineItem$(17)                ) !
+	! 		fn_addTmpData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
+	! 		fn_addTmpData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
+	! 		fn_addTmpData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
+	! fnend
 	def fn_addTmpData(name$*128,value$*128)
 		dim tmpDataName$(0)*128
 		dim tmpDataValue$(0)*128

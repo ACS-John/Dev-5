@@ -551,9 +551,9 @@ fnend
 		library 'S:\Core\fn\chain.br': fnChain
 		fnChain=fnChain(prg$, no_fnprg_setting,noLog)
 	fnend
-	def library fnerror(callingProgram$*256,errornumber,linenumber,&ertnAct$,stopable$)
-		library 'S:\Core\fnerror': fnerror
-		fnerror=fnerror(callingProgram$,errornumber,linenumber,ertnAct$,stopable$)
+	def library fnError(callingProgram$*256,errornumber,linenumber,&ertnAct$,stopable$)
+		library 'S:\Core\fn\error.br': fnError
+		fnError=fnError(callingProgram$,errornumber,linenumber,ertnAct$,stopable$)
 	fnend
 	def library fnlog(log$*512;x)
 		library 'S:\Core\Log.br': fnlog
@@ -1259,12 +1259,8 @@ fnend
 		library 'S:\acsUB\CmbAct.br': fncmbact
 		fncmbact=fncmbact(lyne,mypos, addall,container,indexfile$)
 	fnend
-	def library fncmbroute(lyne,mypos; addall,c,a$*25)
-		library 'S:\acsUB\CmbRoute.br': fncmbroute
-		fncmbroute=fncmbroute(lyne,mypos,addall,c,a$)
-	fnend
 	def library fnLastBillingDate(&d1;get_or_put)
-		library 'S:\acsUB\D1.br': fnLastBillingDate
+		library 'S:\Utility Billing\fn\lastBillingDate.br': fnLastBillingDate
 		fnLastBillingDate=fnLastBillingDate(d1,get_or_put)
 	fnend
 	def library fncustomer_search(&x$;fixgrid)
@@ -1279,9 +1275,9 @@ fnend
 		library 'S:\Utility Billing\Customer.br': fnask_account
 		fnask_account=fnask_account(prev_list_id$,x$,h_customer, select_button_text$,aa_button_enable_add)
 	fnend
-	def library fncmbrt2(lyne,mypos;all)
-		library 'S:\acsUB\CmbRt2.br': fncmbrt2
-		fncmbrt2=fncmbrt2(lyne,mypos,all)
+	def library fncmbrt2(lyne,mypos; all)
+		library 'S:\Utility Billing\fn\cmbRt2.br': fncmbrt2
+		fncmbrt2=fncmbrt2(lyne,mypos, all)
 	fnend
 	def library fntransfile(hact$*81,&bal,mat gb)
 		library 'S:\Utility Billing\Transactions.br': fntransfile

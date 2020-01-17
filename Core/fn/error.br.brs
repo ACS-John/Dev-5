@@ -4,7 +4,10 @@ pr 1/0
 XIT: fnxit
 ! 
 def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, stopable$)
-	library 'S:\Core\Library': fnmsgbox,fnlog,fngethandle
+	library 'S:\Core\Library': fngethandle
+	library 'S:\Core\Library': fnmsgbox
+	library 'S:\Core\Library': fnlog
+	library 'S:\Core\Library': fnWriteProc
 	on error goto NEVER
 	xcnt=cnt
 
@@ -19,8 +22,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	! ertnAct$=ertnActHold$
 	! ! /r
 
-	dim response$(5)*80,msgline$(2)*60,log$*128,acshelp$*200
-	dim caption$*42
+	dim response$(5)*80
 	! ertnAct$  =  the returning action to be executed
 	! stopable$ =  if it is "no" or "NO" etc it'll not allow them to stop
 	!              otherwise it should be the paragraph heading of where to goto on
@@ -28,14 +30,12 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	
 	!   pr border: "Error "&str$(errornumber)&" on line "&str$(linenumber)
 	pr fields "1,73,C 7,N": bell$
-	log$="Error "&str$(errornumber)&" at line "&str$(linenumber)
-	log$=log$&" of "&callingprogram$(1:100)
-	fnlog(log$,2)
+	fnlog("Error "&str$(errornumber)&" at line "&str$(linenumber)&" of "&callingprogram$(1:100),2)
 	ertnAct$="Go "&str$(linenumber)
-	acshelp$="Help\co\error\br\"
-	acshelp$=acshelp$&"Err"&cnvrt$("Pic(####)",errornumber)&".html"
+	! dim acshelp$*200
+	! acshelp$="Help\co\error\br\Err"&cnvrt$("Pic(####)",errornumber)&".html"
 	MENU1: ! 
-		open #win:=fngethandle: "SRow=4,SCol=4,Rows=17,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...
+		open #win:=fngethandle: "SRow=3,SCol=4,Rows=19,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...
 		if errornumber=61 then 
 			pr #win,f "1,1,Cc 69,N": "A record is needed but is locked by another user."
 			pr #win,f "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
@@ -76,6 +76,8 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
 			pr #win,f "16,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
+			pr #win,f "17,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)' ! 1,19,12/CC 12,,B1000
+			pr #win,f "18,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
 			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
 		
@@ -83,37 +85,29 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	ERR_INP: ! 
 		in #0,f "4,4,C 1,AE,N": pause$
 		if cmdkey=0 then 
-			log$="action taken = Retry" : fnlog(log$,2)
+			fnlog("action taken = Retry",2)
 			ertnAct$="Go "&str$(linenumber)
 			goto ERROR_XIT
 		else if cmdkey=5 or cmdkey=99 then 
-			log$="action taken = Quit" : fnlog(log$,2)
+			fnlog("action taken = Quit",2)
 			goto ERR_QUITER
 		else if cmdkey=8 then 
-			log$="action taken = BRWiki Help" : fnlog(log$,2)
+			fnlog("action taken = BRWiki Help",2)
 			gosub BRWIKIHELP
 	!   else if cmdkey=9 then
-	!     log$="action taken = ACS Help" : fnlog(log$,2)
+	!     fnlog("action taken = ACS Help",2)
 	!     gosub ACSHELP
 	!   else if cmdkey=10 then
-	!     log$="action taken = WB Help" : fnlog(log$,2)
+	!     fnlog("action taken = WB Help",2)
 	!     gosub ERR_WBHELP
 		else if cmdkey=12 then 
 			ertnAct$="PAUSE"
-			log$="action taken = Program Pause" : fnlog(log$,2)
+			fnlog("action taken = Program Pause",2)
 			goto ERROR_XIT
 	
 		else if cmdkey=21 or fkey=120 then 
-			! if ~enableBigErtnAct then 
-			! 	pr 'NO enableBigErtnAct.   this might not work. G to try.'
-			! 	pause
-			! end if
 			ertnAct$='Proc r3.prc'
-			! ertnAct$='Proc "Recompile Reload and Run.prc"'
-			library 'S:\Core\Library': fnWriteProc
-			log$='action taken = '&ertnAct$ : fnlog(log$,2)
-			
-			
+			fnlog('action taken = '&ertnAct$,2)
 			if ~exists('in') then
 				fnWriteProc('in','end')
 				fnWriteProc(''  ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
@@ -124,10 +118,20 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			! fnWriteProc('Recompile Reload and Run.prc','subproc in')
 			fnWriteProc('r3.prc','subproc in')
 			fnWriteProc(''      ,'run')
-			
-			
 			goto ERROR_XIT
-	
+		else if cmdkey=22 then
+			ertnAct$='Proc rr.prc'
+			fnlog('action taken = '&ertnAct$,2)
+			fnWriteProc('rr.prc','end')
+			fnWriteProc(''      ,'execute ''load "''&program$&''"''')
+			fnWriteProc(''      ,'run')
+			goto ERROR_XIT
+		else if cmdkey=23 then
+			ertnAct$='Proc errEdit.prc'
+			fnlog('action taken = '&ertnAct$,2)
+			fnWriteProc('errEdit' ,'end')
+			fnWriteProc(''   ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+			goto ERROR_XIT
 		end if 
 	goto ERR_INP
 	
@@ -154,6 +158,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	ERR_QUITER: ! r:
 		if uprc$(rtrm$(stopable$))="NO" then 
 			setenv('ExitNow','no')
+			dim msgline$(0)*128
 			mat msgline$(2)
 			msgline$(1)="Do not stop the processing of this program."
 			msgline$(2)="Please contact ACS Technical Support."

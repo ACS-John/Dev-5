@@ -30,6 +30,8 @@ else ! ckey=1
 		goto NextAskAccount
 	else if selection_method=sm_LocationId then
 		goto NextLocationId
+	else if selection_method=sm_meterTypes then
+		goto AskMeterType
 	end if
 end if  ! /r
 def fn_openOutFile ! open work areas based on type of Hand Held
@@ -52,7 +54,7 @@ def fn_openOutFile ! open work areas based on type of Hand Held
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
+		! if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
 		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
 	end if
@@ -69,7 +71,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	fn_ifMatchOpenDo=hImodoReturn
 fnend
 AskRange: ! r:
-	fnTos(sn$:="AskRange")
+	fnTos
 	fnFra(1,1,1,57,"Starting Account:")
 	fnFra(4,1,1,57,"Ending Account:")
 	fncmbact(1,1,0,1)
@@ -79,7 +81,7 @@ AskRange: ! r:
 	fnButton(1,48,"Search",7,blank$,0,7,2)
 	fnCmdKey("&Finish",2,1,0,"Completed with all routes")
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 	if ckey=2 then goto Finis
@@ -104,7 +106,7 @@ AskRange: ! r:
 goto SendRecordToWorkFile ! /r
 
 AskRoute: ! r:
-	fnTos(sn$="AskRoute")
+	fnTos
 	if hbk<>0 then
 		fnLbl(1,1,"Last Route Number Selected: "&str$(hbk))
 		myline=3
@@ -117,11 +119,42 @@ AskRoute: ! r:
 	fnCmdKey("&Next",1,1,0,"Add the selected route" )
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
 	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
-	fnAcs(sn$,0,mat resp$, ckey)
+	fnAcs2(mat resp$, ckey)
 	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 	bk1=val(resp$(1)) conv L850
 	resp$(1)=""
 L850: !
+	if ckey=1 then
+		goto SELECT_ALL
+	else if ckey=2 then
+		goto Finis
+	else if ckey=5 then
+		goto SEL_ACT
+	else
+		goto SELECT_ALL
+	end if
+!
+! /r
+AskMeterType: ! r:
+	fnTos
+	if lastMeterType$<>'' then
+		fnLbl(1,1,"Last Meter Type Selected: "&lastMeterType$)
+		myline=3
+	else
+		myline=1
+	end if
+	fnLbl(myline,1,"Meter Type:")
+	fncombof('cmbMeterType',myline,13,width,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40, '[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+	resp$(1)=""
+	fnCmdKey("&Next",1,1,0,"Add the selected route" )
+	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
+	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
+	fnAcs2(mat resp$, ckey)
+	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+	bk1=val(resp$(1)) conv ignore
+	lastMeterType$=resp$(1)
+	resp$(1)=''
+
 	if ckey=1 then
 		goto SELECT_ALL
 	else if ckey=2 then
@@ -145,9 +178,9 @@ NextLocationId: ! r:
 	end if
 goto SendRecordToWorkFile ! /r
 SELECT_ALL: ! r:
-	if deviceSelected$='Aclara Work Order' then
-		fn_getFilterAccount(mat filterAccount$)
-	end if
+	! if deviceSelected$='Aclara Work Order' then
+	! 	fn_getFilterAccount(mat filterAccount$)
+	! end if
 	if bk1=0 then bk1=1
 	restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
 goto NextReadForAll ! /r
@@ -181,7 +214,7 @@ END1: ! r:
 	end if
 goto NextAskAccount ! /r
 NextAskAccount: ! r:
-	fnTos(sn$="NextAskAccount")
+	fnTos
 	if z$<>"" then
 		fnLbl(1,1,"Last Account Selected: "&z$,40,2)
 		myline=3
@@ -192,7 +225,7 @@ NextAskAccount: ! r:
 	fncmbact(myline,16)
 	resp$(1)=z$
 	fnCmdSet(5)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=6 then 
 		fncustomer_search(resp$(1))
 	end if
@@ -211,8 +244,8 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 			seq$=str$(sq1)
 			if deviceSelected$="Aclara" then 
 				fn_aclara(readLocationId)
-			else if deviceSelected$="Aclara Work Order" then 
-				fn_aclaraWorkOrder
+			! else if deviceSelected$="Aclara Work Order" then 
+			! 	fn_aclaraWorkOrder
 			else if deviceSelected$="ACS Meter Reader" then 
 				fn_acs_meter_reader
 			else if deviceSelected$="AMR" then 
@@ -290,49 +323,49 @@ def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 	fn_record_addc(1,portNumber$)                                ! Port Number
 	fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
 fnend
-def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
-	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-	!
-	fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-	fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
-	fn_record_addc(10,z$)                                                              ! Account Number
-	fn_record_addc(30,e$(2))                                                           ! Customer Name
-	fn_record_addc(30,e$(1))                                                           ! Meter Address
-	fn_record_addc(30,tmpCity$)
-	fn_record_addc(10,tmpState$)
-	fn_record_addc(15,tmpZip$)
-	fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-	! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-	fn_record_addc(12,f$(1)) ! fn_meterInfo$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
-	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
-! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
-	aWmeterType=val(fn_meterInfo$('Meter Type',z$,'WA'))
-	if aWmeterType=1 then ! r: get aWmeterType$
-		aWmeterType$='1 inch'
-	else if aWmeterType=21 then
-		aWmeterType$='2 inch T-10'
-	else if aWmeterType=15 then
-		aWmeterType$='1.5 inch'
-	else if aWmeterType=2 then
-		aWmeterType$='2 inch Turbine'
-	else if aWmeterType=3 then
-		aWmeterType$='3 inch'
-	else if aWmeterType=4 then
-		aWmeterType$='4 inch'
-	else if aWmeterType=6 then
-		aWmeterType$='6 inch'
-	else
-		if aWmeterType<>5 then pr aWmeterType : pause
-		aWmeterType$='5/8x3/4'
-	end if ! /r
-	fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
-	fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
-! fn_record_addc(9,,fn_meterInfo$fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
-	fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-	fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
-	fn_record_write(h_out)
-fnend
+! def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
+! 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+! 	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+! 	!
+! 	fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+! 	fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+! 	fn_record_addc(10,z$)                                                              ! Account Number
+! 	fn_record_addc(30,e$(2))                                                           ! Customer Name
+! 	fn_record_addc(30,e$(1))                                                           ! Meter Address
+! 	fn_record_addc(30,tmpCity$)
+! 	fn_record_addc(10,tmpState$)
+! 	fn_record_addc(15,tmpZip$)
+! 	fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+! 	! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+! 	fn_record_addc(12,f$(1)) ! fn_meterInfo$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
+! 	fn_record_addc(20,fn_meterInfo$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+! ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+! 	aWmeterType=val(fn_meterInfo$('Meter Type',z$,'WA'))
+! 	if aWmeterType=1 then ! r: get aWmeterType$
+! 		aWmeterType$='1 inch'
+! 	else if aWmeterType=21 then
+! 		aWmeterType$='2 inch T-10'
+! 	else if aWmeterType=15 then
+! 		aWmeterType$='1.5 inch'
+! 	else if aWmeterType=2 then
+! 		aWmeterType$='2 inch Turbine'
+! 	else if aWmeterType=3 then
+! 		aWmeterType$='3 inch'
+! 	else if aWmeterType=4 then
+! 		aWmeterType$='4 inch'
+! 	else if aWmeterType=6 then
+! 		aWmeterType$='6 inch'
+! 	else
+! 		if aWmeterType<>5 then pr aWmeterType : pause
+! 		aWmeterType$='5/8x3/4'
+! 	end if ! /r
+! 	fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
+! 	fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
+! ! fn_record_addc(9,,fn_meterInfo$fn_meterInfo$('reading multiplier',z$,'WA'))                       ! Meter Size
+! 	fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+! 	fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+! 	fn_record_write(h_out)
+! fnend
 def fn_acs_meter_reader
 	! FILE (from ACS to Hand Held and from Hand Held to ACS) needs to contain the following fields:
 	!   Account - 10 characters
@@ -672,8 +705,8 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC( 8,date$(val(fnCustomerData$(z$,'last reading day')),'ccyymmdd')   ) ! Previous Read Date (CCYYMMDD)
 			fn_record_addC( 6,fn_meterInfo$('reading multipler',z$,sc$)                        ) ! Constant / Multiplier
 			fn_record_addC( 6,''                                    ) ! Changed Constant / Multiplier
-			fn_record_addC(12,fn_meterInfo$('longitude',z$,sc$)     ) ! Longitude
-			fn_record_addC(12,fn_meterInfo$('latitude',z$,sc$)      ) ! Latitude
+			fn_record_addC(12,''     ) ! Longitude   !  fn_meterInfo$('longitude',z$,sc$)   they didn't like the values when i sent them
+			fn_record_addC(12,''     ) ! Latitude    !  fn_meterInfo$('latitude',z$,sc$)    they didn't like the values when i sent them
 			fn_record_addC(12,''                                    ) ! For future use
 			fn_record_addC(12,''                                    ) ! For future use
 			fn_record_addC(12,''                                    ) ! For future use
@@ -709,7 +742,7 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addN( 1,0                                            ) ! Fatal Error                   Req HH 119        1 NUM Fatal error flag for R900 Electric
 			fn_record_addN( 1,0                                            ) ! Non-Fatal Error/Flags         Req HH 120        1 NUM Non-fatal error flag for R900 Electric or Gas
 			fn_record_addN( 3,0                                            ) ! Voltage                       Req HH 121-123    3 NUM Operating meter voltage for R900 Electric
-			fn_record_addN( 2,0                                            ) ! MIU Type                      Req HH 124-125    2 NUM Utility meter type
+			fn_record_addC( 2,''                                           ) ! MIU Type                      Req HH 124-125    2 NUM Utility meter type
 			fn_record_addN( 2,0                                            ) ! AMR Read Type                 Req HH 126-127    2 NUM AMR reading type
 			fn_record_addN( 1,0                                            ) ! High Power                    Req HH 128        1 NUM High versus low power indicator for all R900s
 			fn_record_addN( 2,0                                            ) ! R900 Format                   Req HH 129-130    2 NUM The R900 reading formal:  0 - Binary  1 - BCD  2 - "Data Stream" (not used)  3 - E-Coder  4 - Mlog
@@ -1319,7 +1352,7 @@ fnend
 
 def fn_scr_selact
 	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
-	fnTos(sn$="hhto1")
+	fnTos
 	fnLbl(2,1,"Hand Held model:",16,1)
 	if lwrc$(devicePreference$)='[ask]' then
 		fncomboa("HH-FroCBox",2,18,mat deviceName$)
@@ -1340,6 +1373,11 @@ def fn_scr_selact
 	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
 	fnOpt(7,18,"Specific Accounts")
 	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
+
+	fnOpt(8,18,"Specific Meter Type(s)")
+	rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod4)='False'
+
+
 	! if lrec(2)>0 then
 	!   fnCmdSet(19)
 	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
@@ -1347,7 +1385,7 @@ def fn_scr_selact
 		fnLbl(9,1,"",46,2)
 		fnCmdSet(2)
 	! end if
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey<>5 then
 			if lwrc$(devicePreference$)='[ask]' then
 				deviceSelected$=resp$(rc_Device)
@@ -1378,12 +1416,12 @@ def fn_searchScreen(x$,&res$)
 fnend
 def fn_transfer
 	if deviceSelected$="ACS Meter Reader" then
-		fnTos(sn$="ACSMR_ASK_DEST")
+		fnTos
 		mat resp$=("")
 		fnLbl(1,1,"Android Drive:",20,1)
 		fncomboa("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey<>5 then
 			dest$=resp$(1)
 			execute "copy "&out_filename$&" "&trim$(dest$)&"acs_meter_data.txt"
@@ -1401,13 +1439,13 @@ def fn_transfer
 	end if
 	goto TRANSFER_XIT
 	TRANSFER_TO_LAPTOP: ! r: transfer files for laptop
-		fnTos(sn$="trtolaptop")
+		fnTos
 		mat resp$=("")
 		fnLbl(1,1,"Destination Drive:",20,1)
 		fnTxt(1,23,20,100,0,"",0,"Destination can be a drive designation including folders")
 		if resp$(1)="" then resp$(1)="A:\"
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=5 then goto TRANSFER_XIT
 		dest$=resp$(1)
 		if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
@@ -1538,7 +1576,7 @@ def fn_cnt_of_metered_svcs_active
 	fn_cnt_of_metered_svcs_active=nomsa_return
 fnend
 def library fnMeterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnMeterInfo$=fn_meterInfo$(mi_field$,z$,serviceCode$, closeHandle)
 fnend
 def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
@@ -1549,8 +1587,8 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 		dim location$(0)*128
 		dim locationN(0)
 		hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1,4)
-		open #mi_h_metertype:=fngethandle: "Name=[Q]\UBmstr\MeterType.h[cno],Version=1,KFName=[Q]\UBmstr\MeterTypeIdx.h[cno],Shr",internal,input,keyed
-		F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 2
+		open #mi_h_metertype:=fngethandle: "Name=[Q]\UBmstr\MeterType.h[cno],Version=2,KFName=[Q]\UBmstr\MeterTypeIdx.h[cno],Shr",internal,input,keyed
+		F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 4
 		!
 	end if  ! ~mi_setup
 	mi_return$=''
@@ -1602,7 +1640,7 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 	fn_meterInfo$=mi_return$
 fnend
 def library fnHandHeldList(mat deviceName$; mat deviceOption$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnHandHeldList=fn_handHeldList(mat deviceName$)
 fnend
 def fn_handHeldList(mat deviceName$; mat deviceOption$)
@@ -1613,7 +1651,7 @@ def fn_handHeldList(mat deviceName$; mat deviceOption$)
 		mat deviceNameCache$(0)
 		mat deviceOptionCache$(0)
 		fnAddOneC(mat deviceNameCache$,'Aclara'              ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Aclara Work Order'   ) : fnAddOneC(mat deviceOptionCache$,'')
+		! fnAddOneC(mat deviceNameCache$,'Aclara Work Order'   ) : fnAddOneC(mat deviceOptionCache$,'')
 		fnAddOneC(mat deviceNameCache$,'ACS Meter Reader'    ) : fnAddOneC(mat deviceOptionCache$,'')
 		fnAddOneC(mat deviceNameCache$,'Badger'              ) : fnAddOneC(mat deviceOptionCache$,'')
 		fnAddOneC(mat deviceNameCache$,'Badger Connect C'    ) : fnAddOneC(mat deviceOptionCache$,'')
@@ -1711,26 +1749,33 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 	CrFinis: !
 	fn_customerRead=crReturn
 fnend
-def fn_getFilterAccount(mat filterAccount$)
-	mat filterAccount$(0)
-	fnAddOneC(mat filterAccount$,'100050.05')
-	fnAddOneC(mat filterAccount$,'100110.00')
-	fnAddOneC(mat filterAccount$,'100111.00')
-	fnAddOneC(mat filterAccount$,'100114.00')
-fnend
+! def fn_getFilterAccount(mat filterAccount$)
+! 	mat filterAccount$(0)
+! 	fnAddOneC(mat filterAccount$,'100050.05')
+! 	fnAddOneC(mat filterAccount$,'100110.00')
+! 	fnAddOneC(mat filterAccount$,'100111.00')
+! 	fnAddOneC(mat filterAccount$,'100114.00')
+! fnend
+
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror,fnTos,fnLbl,fncomboa,fnAcs,fncmbrt2,fnxit,fncmbact,fnButton
-		library 'S:\Core\Library': fncustomer_search,fnFra,fnCmdSet
-		library 'S:\Core\Library': fntop,fnCmdKey,fnmsgbox,fnTxt
-		library 'S:\Core\Library': fngethandle,fnpause,fnOpt,fnget_services,fnhand_held_device$
+		library 'S:\Core\Library': fntop
+		library 'S:\Core\Library': fnTos,fnLbl,fncomboa,fnAcs2,fncmbrt2,fnxit,fncmbact,fnButton
+		library 'S:\Core\Library': fnFra,fnCmdSet,fnCmdKey,fnmsgbox,fnTxt
+		library 'S:\Core\Library': fngethandle,fnpause,fnOpt
+		library 'S:\Core\Library': fncustomer_search
+		library 'S:\Core\Library': fnComboF
+		library 'S:\Core\Library': fnget_services
+		library 'S:\Core\Library': fnhand_held_device$
 		library 'S:\Core\Library': fncreg_read,fncreg_write
 		library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
-		library 'S:\Core\Library': fnOpenFile,fnbuildkey$
+		library 'S:\Core\Library': fnMeterAddressLocationID,fnAccountFromLocationId$
+		library 'S:\Core\Library': fncsz
+		library 'S:\Core\Library': fnmakesurepathexists
+		library 'S:\Core\Library': fnbuildkey$
 		library 'S:\Core\Library': fnCustomerData$
 		library 'S:\Core\Library': fnGetServiceCodesMetered
 		on error goto Ertn
@@ -1791,6 +1836,7 @@ def fn_setup
 	sm_routeRange=3
 	sm_Individuals=4
 	sm_LocationId=5
+	sm_meterTypes=6
 	!
 	meterDataSourceOverrideEnabled=1
 	dim serviceCodeMetered$(0)*2

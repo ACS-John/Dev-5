@@ -283,9 +283,9 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			testNetCalculated=testGross
 			for testDeductionItem=1 to udim(mat dednames$)
 				if newdedcode(testDeductionItem)=1 then ! deduction
-					testNetCalculated-=tcp(testDeductionItem)
+					testNetCalculated-=tcp(testDeductionItem+4)
 				else if newdedcode(testDeductionItem)=2 then ! addition
-					testNetCalculated+=tcp(testDeductionItem)
+					testNetCalculated+=tcp(testDeductionItem+4)
 				else if newdedcode(testDeductionItem)=3 then ! benefit
 					! no change
 				end if
