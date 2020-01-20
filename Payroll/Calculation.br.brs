@@ -146,10 +146,10 @@ return ! /r
 ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
 	dim em(16)
 	dim hr(2)
-	read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,w4year,W4Step3 nokey EmployeeNotFound
+	read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,w4year,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNotFound
 	gosub EmployeeRecordToLocal
 	
-	F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,pos 196,n 12.2
+	F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,pos 197,4*n 12.2
 	gosub CalculateAllDeductionsAllDept
 	n$=x$
 	! r: Accrue Sick and Vacation
@@ -195,7 +195,7 @@ ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning o
 	! /r
 	
 	if ~enableSkipWithholdingN(esw_federal) then 
-		fed_wh=fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial)
+		fed_wh=fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4year,w4Step3,w4step4a,w4step4b,w4step4c)
 	end if
 	! cafeteria plan - maybe???
 	totalWagesYtd=0
@@ -214,7 +214,9 @@ ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning o
 	cafd=0
 goto L1540 ! /r
 
-L1540: ! r:
+L1540: ! r:  Where Federal Withholdings are divided out into each department.
+	! gpd = gross pay per department
+	! pog = percent of gross
 	read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
@@ -480,7 +482,7 @@ Screen1: ! r:
 		d1$=resp$(resp_d1S)
 		if resp$(3)(1:1)="T" then accrueVacaAndSick=1 else accrueVacaAndSick=0
 
-		taxYear=2019 ! val(str$(d1)(1:4)) ! =2019
+		taxYear=val(str$(d1)(1:4)) ! =2019
 
 		fnPayPeriodEndingDate(d1)
 		fnSetPayrollDatesForYear(taxYear)
@@ -501,9 +503,12 @@ Screen1: ! r:
 	end if
 return  ! /r
 
-def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial; ___,returnN,t2,j2,previousBreak,withholdingPercentage)
+def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4year,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak,withholdingPercentage,atLeast,baseAmt)
+
+
+
 	! retains: setupFederalTables,fed_annual_wh_allowance,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
-	! ded = federal deduction addition for all departments 
+	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
 	if ~setupFederalTables then 
 		setupFederalTables=1
 		! r: (2017-2019) Federal - SINGLE person (mat ft(1-8,1-3))
@@ -581,7 +586,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 		! fss=federal  single             standard     fsc=federal  single             W-4 Step 2 checked
 		! fhs=federal  head of household  standard     fhc=federal  head of household  W-4 Step 2 checked
 		if taxYear=2020 then
-			fed_annual_wh_allowance=4200
+			fed_annual_wh_allowance=2000
 			! r: fjs=federal  joint              standard
 			dim fjs(8,3)
 			fjs(1,1)=     0 : fjs(1,2)=     0     : fjs(1,3)=0     !      0    11900         0    0         0
@@ -592,15 +597,6 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 			fjs(6,1)=338500 : fjs(6,2)= 66543     : fjs(6,3)=0.32  ! 338500   426600     66543    0.32   338500
 			fjs(7,1)=426600 : fjs(7,2)= 94735     : fjs(7,3)=0.35  ! 426600   633950     94735    0.35   426600
 			fjs(8,1)=633950 : fjs(8,2)=167307.5   : fjs(8,3)=0.37  ! 633950             167307.5  0.37   633950
-																														 !   (a)      (b)       (c)      (d)      (e) 
-																	
-																	
-											! 	for annual salary over number in column (a) but less than next number in column (a)
-											! 		sets the_row
-											! 									annualTaxes=	annualSalary-
-																	
-																	
-			
 			! /r
 			! r: fjc=federal  joint              W-4 Step 2 checked
 			dim fjc(8,3)
@@ -677,7 +673,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 				j2=4
 			end if
 		else ! taxyear=>2020
-			j2=1
+			j2=0 !  not used
 			mat fedTable(8,3)
 			mat fedTable=(0)
 			if maritial=1 or maritial=3 or maritial=4 then 
@@ -700,58 +696,36 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 
 	if fedpct>0 then 
 		returnN=round((totalGrossPay-ded)*fedpct,2)
-		goto FwhFinis
-	else if stdWhFed=-1 then ! no federal withholding
+	else if stdWhFed=-1 or enableSkipWithholdingN(esw_federal) then ! no federal withholding
 		returnN=0
 	else if stdWhFed then
 		returnN=stdWhFed
 	else
-		! t2 = a rough estimate of what our federal taxes will be this pay period
-		! ???    t2=round(fedExempt*(fed_annual_wh_allowance/payPeriodsPerYear),2) ! this is one of the lines that change every year (line 1240)
-		! ???    estPayPeriodNetPay=totalGrossPay-t2-ded
-		estPayPeriodNetPay=totalGrossPay-ded
-		if estPayPeriodNetPay>0 then 
-			estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2) ! estAnnualNetPay (previously g2) - estimated annual net pay
-			tableRow=fn_table_line(mat fedTable,estAnnualNetPay, j2)
+		estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
+		if estPayPeriodNetPay<=0 then 
+			estAnnualNetPay=withholdingPercentage=fedTaxesAnnualEstimate=returnN=0
+		else
 			! tableRow was j1
-			! returnN=round(fedTable(tableRow,j2+1)+(estAnnualNetPay-fedTable(tableRow,j2))*fedTable(tableRow,j2+2),2)
-			if tableRow-1<=0 then
-				previousBreak=0
-			else 
-				previousBreak=fedTable(tableRow-1,j2+1)
+			estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! estAnnualNetPay (previously g2) - estimated annual net pay
+			if w4year=2019 then
+				estAnnualNetPay-=fedExempt*fed_annual_wh_allowance
+			else ! w4year=2020 then
+				estAnnualNetPay-=w4step3
 			end if
-			withholdingPercentage=fedTable(tableRow,j2+2)
-			! priorLevelWhMax=
-			! fnpause
+			tableRow=fn_table_line(mat fedTable,estAnnualNetPay)
+			atLeast=fedTable(tableRow,1)
+			baseAmt=fedTable(tableRow,2)
+			withholdingPercentage=fedTable(tableRow,3)
 			
-			! tf4=fna(ft(j1,2)+(g2-ft(j1,1))*ft(j1,3))
-			! fedTaxesAnnualEstimate=fedTable(tableRow,j2+1)+(estAnnualNetPay-fedTable(tableRow,j2))*fedTable(tableRow,j2+2)
-			! returnN=fedTaxesAnnualEstimate/payPeriodsPerYear
-			! returnN=round(returnN,2)
-			
-			
-			fedTaxesAnnualEstimate=fedTable(tableRow,j2+1)+(estAnnualNetPay-fedTable(tableRow,j2))*withholdingPercentage
-			! fedTaxesAnnualEstimate=((estAnnualNetPay-previousBreak)*withholdingPercentage)+priorLevelWhMax
-			returnN=fedTaxesAnnualEstimate/payPeriodsPerYear
+			returnN=baseAmt+(estAnnualNetPay-atLeast)*withholdingPercentage
+			returnN=returnN/payPeriodsPerYear
 			returnN=round(returnN,2)
-			
-			! pr 'taxyear=';taxYear
-			! pr 'payCode / pay periods per year=';payCode;'/';payPeriodsPerYear
-			! pr 'maritial=';maritial;' 1,3,4 - married, filing jointly     else    use single table'
-			! pr 'tableRow/j2=';tableRow;'/';j2
-			! pr 'estimated annual net pay:';estAnnualNetPay
-			! pr 'fedTaxesAnnualEstimate=';fedTaxesAnnualEstimate
-			! pr ' federal tax esimate:';returnN
-			! fnpause ! table total federal w/h used in some state routines
-			
-		else 
-			g2=0
+
+			returnN+=addOnFed+w4step4c
 		end if 
-		if ~enableSkipWithholdingN(esw_federal) then 
-			returnN+=addOnFed
-		end if
 	end if
 	FwhFinis: !
+	pr 'federal withholding is ';returnN : pause
 	fn_federalWithholding=returnN
 fnend
 FicaUnEmp: ! r: FICA

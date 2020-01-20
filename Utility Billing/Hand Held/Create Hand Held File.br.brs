@@ -31,7 +31,7 @@ else ! ckey=1
 	else if selection_method=sm_LocationId then
 		goto NextLocationId
 	else if selection_method=sm_meterTypes then
-		goto AskMeterType
+		goto SELECT_ALL
 	end if
 end if  ! /r
 def fn_openOutFile ! open work areas based on type of Hand Held
@@ -238,6 +238,8 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 	! if trim$(z$)='100100.99' then pause
 
 	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
+		if selection_method=sm_meterTypes 
+		
 		if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
 			ft$=fn_rmk1$(z$)
 			if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
@@ -323,7 +325,7 @@ def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 	fn_record_addc(1,portNumber$)                                ! Port Number
 	fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
 fnend
-! def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
+! r: def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
 ! 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
 ! 	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 ! 	!
@@ -365,7 +367,7 @@ fnend
 ! 	fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
 ! 	fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
 ! 	fn_record_write(h_out)
-! fnend
+! /r fnend
 def fn_acs_meter_reader
 	! FILE (from ACS to Hand Held and from Hand Held to ACS) needs to contain the following fields:
 	!   Account - 10 characters
@@ -1375,7 +1377,7 @@ def fn_scr_selact
 	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
 
 	fnOpt(8,18,"Specific Meter Type(s)")
-	rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod4)='False'
+	rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
 
 
 	! if lrec(2)>0 then
@@ -1401,6 +1403,8 @@ def fn_scr_selact
 			selection_method=sm_routeRange
 		else if resp$(rc_selectionMethod4)='True' then
 			selection_method=sm_Individuals
+		else if resp$(rc_selectionMethod5)='True' then
+			selection_method=sm_meterTypes
 		end if
 		fncreg_write('hhto.selection_method',str$(selection_method))
 	end if
@@ -1424,7 +1428,7 @@ def fn_transfer
 		fnAcs2(mat resp$,ckey)
 		if ckey<>5 then
 			dest$=resp$(1)
-			execute "copy "&out_filename$&" "&trim$(dest$)&"acs_meter_data.txt"
+			fnCopy(out_filename$,trim$(dest$)&"acs_meter_data.txt")
 		end if  ! ckey<>5
 		goto TRANSFER_XIT
 	end if  ! deviceSelected$="ACS Meter Reader"
@@ -1749,13 +1753,13 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 	CrFinis: !
 	fn_customerRead=crReturn
 fnend
-! def fn_getFilterAccount(mat filterAccount$)
+! r: def fn_getFilterAccount(mat filterAccount$)
 ! 	mat filterAccount$(0)
 ! 	fnAddOneC(mat filterAccount$,'100050.05')
 ! 	fnAddOneC(mat filterAccount$,'100110.00')
 ! 	fnAddOneC(mat filterAccount$,'100111.00')
 ! 	fnAddOneC(mat filterAccount$,'100114.00')
-! fnend
+! /r fnend
 
 def fn_setup
 	if ~setup then
