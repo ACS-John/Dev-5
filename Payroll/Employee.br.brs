@@ -269,19 +269,19 @@ ScrEmployee: ! r:
 	fncomboa("w4year", lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 	resp$(resp_w4year=respc+=1)=str$(w4year)
 	
-	fnChk(lc+=1,col2_pos+1,'W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
+	fnChk(lc+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
 	resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
 	
-	fnLbl(             lc+=1,col1_pos,"W-4 Step 3:",col1_len,1)
+	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 3:",col1_len,1)
 	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step3=respc+=1)=str$(w4Step3)
-	fnLbl(             lc+=1,col1_pos,"W-4 Step 4a:",col1_len,1)
+	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4a:",col1_len,1)
 	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4a=respc+=1)=str$(w4Step4a)
-	fnLbl(             lc+=1,col1_pos,"W-4 Step 4b:",col1_len,1)
+	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4b:",col1_len,1)
 	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4b=respc+=1)=str$(w4Step4b)
-	fnLbl(             lc+=1,col1_pos,"W-4 Step 4c:",col1_len,1)
+	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4c:",col1_len,1)
 	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4c=respc+=1)=str$(w4Step4c)
 
