@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                      
+11:25 AM 1/20/2020	PR	2020 Federal Taxes are ready.
 1:16 PM 1/16/2020	PR	Fixed a minor glitch in Enter Time Sheets that caused a blank date to give an error instead of returning to screen to ask it again
  7:40 01/20/2020	CO	5.74252  
 7:38 AM 1/16/2020	PR	Employee - added new fields for 2020 federal taxes, so users may begin collecting information, but 2020 federal tables are not yet implemented.  Still calculating with 2019 rates. 
