@@ -725,7 +725,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 		end if 
 	end if
 	FwhFinis: !
-	pr 'federal withholding is ';returnN : pause
+	! pr 'federal withholding is ';returnN : pause
 	fn_federalWithholding=returnN
 fnend
 FicaUnEmp: ! r: FICA
