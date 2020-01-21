@@ -22,22 +22,22 @@ MENU1: ! r:
 	fnLbl(1,1,"Destination Path and File Name:",34,1)
 	fnTxt(1,36,40,256,0,'72')
 	fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=fnSpecialFolderPath$('Desktop')&"\ubm.txt" ! =os_filename$(env$('Desktop'))&"\ubm.txt"
-	fnLbl(2,1,"Delimiter (ASCII Code):" ,34,1)
-	fnTxt(2,36,3,0,0,"30")
-	resp$(2)="9"
+	! fnLbl(2,1,"Delimiter (ASCII Code):" ,34,1)
+	! fnTxt(2,36,3,0,0,"30")
+	! resp$(2)="9"
 	fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto XIT
 	dim dest$*256
 	dest$=resp$(1)
-	delas=val(resp$(2))
+	! delas=val(resp$(2))
 	fnreg_write('exp_ubm.path',dest$)
 	goto MainLoop
 ! /r
 MainLoop: ! r:
 	dim delim$*1
-	delim$=chr$(delas)
+	delim$=chr$(9)
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative 
 	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative 
 	fnMakeSurePathExists(dest$)
@@ -59,8 +59,9 @@ MainLoop: ! r:
 		dim alp$*7
 		dim gb(10)
 		dim extra$(11)*30
-		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$ eof Finis
-		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1821,n 1,pos 1864,c 30,c 12,c 12,c 12,c 12,c 12,c 12,c 12,c 30,c 30,c 30
+		dim email$*30
+		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$,email$ eof Finis
+		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1821,n 1,pos 1864,c 30,c 12,c 12,c 12,c 12,c 12,c 12,c 12,c 30,c 30,c 30,pos 1978,c 30
 		gosub ALT_BILL_ADR
 		dim addr$(4)*40
 		fncustomer_address(z$,mat addr$)
@@ -118,14 +119,14 @@ MainLoop: ! r:
 		pr #2: str$(g(5))              	&delim$;
 		pr #2: str$(g(6))              	&delim$;
 		pr #2: str$(g(7))              	&delim$;
-		pr #2: str$(g(8))              	&delim$;
-		pr #2: str$(g(9))              	&delim$;
-		pr #2: str$(g(10))             	&delim$;
-		pr #2: str$(g(11))             	&delim$;
-		pr #2: str$(g(12))             	&delim$;
-		pr #2: alp$                     	&delim$;
-		pr #2: f$(2)                    	&delim$;
-		pr #2: f$(3)                    	&delim$;
+		pr #2: str$(g(8))             	&delim$;
+		pr #2: str$(g(9))             	&delim$;
+		pr #2: str$(g(10))            	&delim$;
+		pr #2: str$(g(11))            	&delim$;
+		pr #2: str$(g(12))            	&delim$;
+		pr #2: alp$                   	&delim$;
+		pr #2: f$(2)                  	&delim$;
+		pr #2: f$(3)                  	&delim$;
 		pr #2: extra$(3)               	&delim$;
 		pr #2: extra$(4)               	&delim$;
 		pr #2: extra$(5)               	&delim$;
@@ -147,7 +148,8 @@ MainLoop: ! r:
 		pr #2: addr$(1)                	&delim$;
 		pr #2: addr$(2)                	&delim$;
 		pr #2: addr$(3)                	&delim$;
-		pr #2: addr$(4)                	&delim$
+		pr #2: addr$(4)                	&delim$;
+		pr #2: email$                 	&delim$
 		! /r
 	loop ! /r
 Finis: ! r:
@@ -241,10 +243,11 @@ HEADER: ! r:
 	pr #2: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
 	pr #2: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
 	pr #2: 'CSZ - Alternate Billing'&delim$; ! ab$(3)
-	pr #2: 'Final Billing Code'&delim$; ! ab$(3)
-	pr #2: 'Billing Address 1'&delim$; ! ab$(3)
-	pr #2: 'Billing Address 2'&delim$; ! ab$(3)
-	pr #2: 'Billing Address 3'&delim$;! ab$(3)
-	pr #2: 'Billing Address 4'&delim$ ! ab$(3)
+	pr #2: 'Final Billing Code'&delim$;
+	pr #2: 'Billing Address 1'&delim$;
+	pr #2: 'Billing Address 2'&delim$;
+	pr #2: 'Billing Address 3'&delim$;
+	pr #2: 'Billing Address 4'&delim$;
+	pr #2: 'Email'
 return  ! /r
 include: ertn
