@@ -248,6 +248,6 @@ HEADER: ! r:
 	pr #2: 'Billing Address 2'&delim$;
 	pr #2: 'Billing Address 3'&delim$;
 	pr #2: 'Billing Address 4'&delim$;
-	pr #2: 'Email'
+	pr #2: 'Email'&delim$
 return  ! /r
 include: ertn
