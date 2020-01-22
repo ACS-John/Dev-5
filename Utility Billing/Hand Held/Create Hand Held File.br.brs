@@ -20,7 +20,7 @@ else ! ckey=1
 		! u4_includeFinalBilled$='True'
 		selection_method=sm_LocationId ! all Location IDs
 	end if
-	if selection_method=sm_allExceptFinal then
+	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
 		goto SELECT_ALL
 	else if selection_method=sm_aRoute then
 		goto AskRoute
@@ -30,8 +30,6 @@ else ! ckey=1
 		goto NextAskAccount
 	else if selection_method=sm_LocationId then
 		goto NextLocationId
-	else if selection_method=sm_meterTypes then
-		goto SELECT_ALL
 	end if
 end if  ! /r
 def fn_openOutFile ! open work areas based on type of Hand Held
@@ -673,9 +671,6 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC( 5,'MTRDT'                               ) !  Record ID
 			fn_record_addN( 6,sequence, '0'                         ) ! Read Sequence
 			fn_record_addC( 6,''                                    ) ! Changed Read Sequence
-
-! if trim$(z$)='100353.50' then pause
-
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Key
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)  ) ! Meter Number
 			fn_record_addC(20,''                                    ) ! Changed Meter Number
@@ -718,54 +713,54 @@ def fn_neptuneEquinoxV4(h_out)
 			nev4_routeMeterCount+=1
 			! r: Read Detal Record
 			fn_record_init
-			fn_record_addC( 5,'RDGDT'                                      ) !  Record ID
-			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)            ) !  Read Type
-			fn_record_addC(13,''                                           ) !  Collection ID
-			fn_record_addC( 7,''                                           ) !  For future use
-			fn_record_addC(20,''                                           ) !  Changed Collection ID
-			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)) ) ! Dials                         Req  UB 50-51     2 NUM
-			fn_record_addN( 2,0                                            ) ! Changed Dials                 Opt  HH 52-453    2 NUM
-			fn_record_addN( 2,0                                            ) ! Decimals                      Req  UB 54-55     2 NUM
-			fn_record_addN( 2,0                                            ) ! Changed Decimals              Opt  HH 56-57     2 NUM
-			fn_record_addC( 1,''                                           ) ! Read Direction                Opt  UB 58        1 A/N R, L, C, or blank only
-			fn_record_addN(10,unusual_usage_high                           ) ! Hi Limit                      Req  UB 59-68    10 NUM
-			fn_record_addN(10,unusual_usage_low                            ) ! Low Limit                     Req  UB 69-78    10 NUM
-			fn_record_addN(10,fn_serviceDataN('prior','reading',sc$)       ) ! Prev Read                     Req  UB 79-88    10 NUM
-			fn_record_addN(10,reading_current                              ) ! Reading                       Req  HH 89-98    10 A/N
-			fn_record_addC(10,''                                           ) ! Collector Reading             Req  HH 99-108   10 A/N Actual reading that came from collector, before truncation
-			fn_record_addC( 2,''                                           ) ! Read Code                     Req  HH 109-110   2 A/N
-			fn_record_addN( 2,0                                            ) ! Re-entry Count                Req  HH 111-112   2 NUM
-			fn_record_addN( 1,0                                            ) ! Water No Flow 35 Days         Req  HH 113       1 NUM Number of Days
-			fn_record_addN( 1,0                                            ) ! Peak Backflow                 Req  HH 114       1 NUM Reverse Flow Event
-			fn_record_addN( 1,0                                            ) ! Leak 35 Days                  Req  HH 115       1 NUM Number of Days
-			fn_record_addN( 1,0                                            ) ! Current Leak                  Req  HH 116       1 NUM Leak Status
-			fn_record_addN( 1,0                                            ) ! Previous Error Count          Opt  UB 117       1 NUM R900 Electric or Gas tamper. Use '8' tosuppress tamper check.
-			fn_record_addN( 1,0                                            ) ! Current Error Count           Req HH 118        1 NUM Current error/tamper count for R900 Electric or Gas
-			fn_record_addN( 1,0                                            ) ! Fatal Error                   Req HH 119        1 NUM Fatal error flag for R900 Electric
-			fn_record_addN( 1,0                                            ) ! Non-Fatal Error/Flags         Req HH 120        1 NUM Non-fatal error flag for R900 Electric or Gas
-			fn_record_addN( 3,0                                            ) ! Voltage                       Req HH 121-123    3 NUM Operating meter voltage for R900 Electric
-			fn_record_addC( 2,''                                           ) ! MIU Type                      Req HH 124-125    2 NUM Utility meter type
-			fn_record_addN( 2,0                                            ) ! AMR Read Type                 Req HH 126-127    2 NUM AMR reading type
-			fn_record_addN( 1,0                                            ) ! High Power                    Req HH 128        1 NUM High versus low power indicator for all R900s
-			fn_record_addN( 2,0                                            ) ! R900 Format                   Req HH 129-130    2 NUM The R900 reading formal:  0 - Binary  1 - BCD  2 - "Data Stream" (not used)  3 - E-Coder  4 - Mlog
-			fn_record_addN( 1,0                                            ) ! Display Digits                Req HH 131        1 NUM Number of digits in main reading display
-			fn_record_addN( 1,0                                            ) ! Multiplier Applied            Req HH 132        1 NUM
-			fn_record_addN( 1,0                                            ) ! Gas No Flow                   Req HH 133        1 NUM Period for which there has been no gas flow
-			fn_record_addN( 1,0                                            ) ! Current Gas Backflow Tamper   Req HH 134        1 NUM
-			fn_record_addN( 1,0                                            ) ! Current Gas Removal Tamper    Req HH 135        1 NUM
-			fn_record_addN( 1,0                                            ) ! Current Gas Magnetic Tamper   Req HH 136        1 NUM
-			fn_record_addN( 1,0                                            ) ! ERT Inversion Tamper          Req HH 137        1 NUM
-			fn_record_addN( 1,0                                            ) ! ERT Reverse Tamper            Req HH 138        1 NUM
-			fn_record_addN( 1,0                                            ) ! 35-Day Gas Backflow  Tamper   Req HH 139        1 NUM
-			fn_record_addN( 1,0                                            ) ! 35-Day Gas Removal Tamper     Req HH 140        1 NUM
-			fn_record_addN( 1,0                                            ) ! 35-Day Gas Magnetic Tamper    Req HH 141        1 NUM
-			fn_record_addN( 1,0                                            ) ! 35-Day Program Flag           Req HH 142        1 NUM R900G only
-			fn_record_addN( 1,0                                            ) ! Reed Switch Failure Flag      Req HH 143        1 NUM R900G only
-			fn_record_addC(69,''                                           ) ! Additional Flags              Req HH 144-212   69 For future use
-			fn_record_addC(25,''                                           ) ! Register Manufacturer         Req HH 213-237   25 A/N
-			fn_record_addc( 8,''                                           ) ! Register Install Date         Req HH 238-245    8 NUM YYYYMMDD
-			fn_record_addC(10,''                                           ) ! Register ID                   Req HH 246-255   10 A/N
-			fn_record_write(h_out)                                           ! CRLF                          Req UB 256-257    2
+			fn_record_addC( 5,'RDGDT'                                          ) !  Record ID
+			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)                ) !  Read Type
+			fn_record_addC(13,''                                               ) !  Collection ID
+			fn_record_addC( 7,''                                               ) !  For future use
+			fn_record_addC(20,''                                               ) !  Changed Collection ID
+			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)),'0' ) ! Dials                         Req  UB 50-51     2 NUM
+			fn_record_addN( 2,0                                                ) ! Changed Dials                 Opt  HH 52-453    2 NUM
+			fn_record_addN( 2,0                                                ) ! Decimals                      Req  UB 54-55     2 NUM
+			fn_record_addN( 2,0                                                ) ! Changed Decimals              Opt  HH 56-57     2 NUM
+			fn_record_addC( 1,''                                               ) ! Read Direction                Opt  UB 58        1 A/N R, L, C, or blank only
+			fn_record_addN(10,unusual_usage_high                               ) ! Hi Limit                      Req  UB 59-68    10 NUM
+			fn_record_addN(10,unusual_usage_low                                ) ! Low Limit                     Req  UB 69-78    10 NUM
+			fn_record_addN(10,fn_serviceDataN('prior','reading',sc$)           ) ! Prev Read                     Req  UB 79-88    10 NUM
+			fn_record_addN(10,reading_current                                  ) ! Reading                       Req  HH 89-98    10 A/N
+			fn_record_addC(10,''                                               ) ! Collector Reading             Req  HH 99-108   10 A/N Actual reading that came from collector, before truncation
+			fn_record_addC( 2,''                                               ) ! Read Code                     Req  HH 109-110   2 A/N
+			fn_record_addN( 2,0                                                ) ! Re-entry Count                Req  HH 111-112   2 NUM
+			fn_record_addN( 1,0                                                ) ! Water No Flow 35 Days         Req  HH 113       1 NUM Number of Days
+			fn_record_addN( 1,0                                                ) ! Peak Backflow                 Req  HH 114       1 NUM Reverse Flow Event
+			fn_record_addN( 1,0                                                ) ! Leak 35 Days                  Req  HH 115       1 NUM Number of Days
+			fn_record_addN( 1,0                                                ) ! Current Leak                  Req  HH 116       1 NUM Leak Status
+			fn_record_addN( 1,0                                                ) ! Previous Error Count          Opt  UB 117       1 NUM R900 Electric or Gas tamper. Use '8' tosuppress tamper check.
+			fn_record_addN( 1,0                                                ) ! Current Error Count           Req HH 118        1 NUM Current error/tamper count for R900 Electric or Gas
+			fn_record_addN( 1,0                                                ) ! Fatal Error                   Req HH 119        1 NUM Fatal error flag for R900 Electric
+			fn_record_addN( 1,0                                                ) ! Non-Fatal Error/Flags         Req HH 120        1 NUM Non-fatal error flag for R900 Electric or Gas
+			fn_record_addN( 3,0                                                ) ! Voltage                       Req HH 121-123    3 NUM Operating meter voltage for R900 Electric
+			fn_record_addC( 2,''                                               ) ! MIU Type                      Req HH 124-125    2 NUM Utility meter type
+			fn_record_addN( 2,0                                                ) ! AMR Read Type                 Req HH 126-127    2 NUM AMR reading type
+			fn_record_addN( 1,0                                                ) ! High Power                    Req HH 128        1 NUM High versus low power indicator for all R900s
+			fn_record_addN( 2,0                                                ) ! R900 Format                   Req HH 129-130    2 NUM The R900 reading formal:  0 - Binary  1 - BCD  2 - "Data Stream" (not used)  3 - E-Coder  4 - Mlog
+			fn_record_addN( 1,0                                                ) ! Display Digits                Req HH 131        1 NUM Number of digits in main reading display
+			fn_record_addN( 1,0                                                ) ! Multiplier Applied            Req HH 132        1 NUM
+			fn_record_addN( 1,0                                                ) ! Gas No Flow                   Req HH 133        1 NUM Period for which there has been no gas flow
+			fn_record_addN( 1,0                                                ) ! Current Gas Backflow Tamper   Req HH 134        1 NUM
+			fn_record_addN( 1,0                                                ) ! Current Gas Removal Tamper    Req HH 135        1 NUM
+			fn_record_addN( 1,0                                                ) ! Current Gas Magnetic Tamper   Req HH 136        1 NUM
+			fn_record_addN( 1,0                                                ) ! ERT Inversion Tamper          Req HH 137        1 NUM
+			fn_record_addN( 1,0                                                ) ! ERT Reverse Tamper            Req HH 138        1 NUM
+			fn_record_addN( 1,0                                                ) ! 35-Day Gas Backflow  Tamper   Req HH 139        1 NUM
+			fn_record_addN( 1,0                                                ) ! 35-Day Gas Removal Tamper     Req HH 140        1 NUM
+			fn_record_addN( 1,0                                                ) ! 35-Day Gas Magnetic Tamper    Req HH 141        1 NUM
+			fn_record_addN( 1,0                                                ) ! 35-Day Program Flag           Req HH 142        1 NUM R900G only
+			fn_record_addN( 1,0                                                ) ! Reed Switch Failure Flag      Req HH 143        1 NUM R900G only
+			fn_record_addC(69,''                                               ) ! Additional Flags              Req HH 144-212   69 For future use
+			fn_record_addC(25,''                                               ) ! Register Manufacturer         Req HH 213-237   25 A/N
+			fn_record_addc( 8,''                                               ) ! Register Install Date         Req HH 238-245    8 NUM YYYYMMDD
+			fn_record_addC(10,''                                               ) ! Register ID                   Req HH 246-255   10 A/N
+			fn_record_write(h_out)                                               ! CRLF                          Req UB 256-257    2
 			! /r
 		end if
 	next serviceItem
@@ -1588,20 +1583,17 @@ def library fnMeterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 	if ~setup then fn_setup
 	fnMeterInfo$=fn_meterInfo$(mi_field$,z$,serviceCode$, closeHandle)
 fnend
-def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
+def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle,___,return$*30)
 	if ~mi_setup then
 		mi_setup=1
-		dim mt_data$(5)*40
-		dim mt_dataN(0)
-		dim mi_return$*30
 		dim location$(0)*128
 		dim locationN(0)
 		hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1,4)
+		dim mt_data$(5)*40
+		dim mt_dataN(0)
 		mi_h_metertype=fn_open('U4 Meter Type',mat mt_data$,mat mt_dataN,mat form$, 1)
-		F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 4
-		!
-	end if  ! ~mi_setup
-	mi_return$=''
+	end if
+	return$=''
 	location$(loc_activeCustomer)=trim$(z$)
 	location$(loc_serviceId)=serviceCode$
 	locationKey$=fnbuildkey$('U4 Meter Location',mat location$,mat locationN, 4) ! pr locationKey$ : pause
@@ -1613,38 +1605,39 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 	end if
 	mi_field$=lwrc$(trim$(mi_field$))
 	if mi_field$='location_id' then
-		mi_return$=str$(locationN(loc_locationId))
+		return$=str$(locationN(loc_locationId))
 	else if mi_field$='address' or mi_field$='name' then
-		mi_return$=location$(loc_name)
+		return$=location$(loc_name)
 	else if mi_field$='longitude' then
-		mi_return$=location$(loc_longitude)
+		return$=location$(loc_longitude)
 	else if mi_field$='latitude' then
-		mi_return$=location$(loc_latitude)
+		return$=location$(loc_latitude)
 	else if mi_field$='meter number' then
-		mi_return$=location$(loc_meterNumber)
+		return$=location$(loc_meterNumber)
 	else if mi_field$='transmitter number' then
-		mi_return$=location$(loc_transmitter)
+		return$=location$(loc_transmitter)
 	else if mi_field$='meter type' then
-		mi_return$=location$(loc_meterType)
+		return$=location$(loc_meterType)
 	else ! it's probably a MeterType field
 		mt_key$=location$(loc_meterType)
 		if mt_key_prior$<>mt_key$ then
 			mt_key_prior$=mt_key$
 			mat mt_data$=("")
+			mat mt_dataN=(0)
 			read #mi_h_metertype,using form$(mi_h_metertype),key=rpad$(trim$(mt_key$),kln(mi_h_metertype)): mat mt_data$,mat mt_dataN nokey MI_FINIS
 		end if
 		if mi_field$='key' then
-			mi_return$=rtrm$(mt_data$(type_key))
+			return$=rtrm$(mt_data$(type_key))
 		else if mi_field$='name' then
-			mi_return$=rtrm$(mt_data$(type_name))
+			return$=rtrm$(mt_data$(type_name))
 		else if mi_field$='reading multipler' or mi_field$='reading multiplier' then
-			mi_return$=rtrm$(mt_data$(type_readingMultiplier))
+			return$=rtrm$(mt_data$(type_readingMultiplier))
 		else if mi_field$='number of dials' then
-			mi_return$=str$(mt_dataN(type_dialCount))
+			return$=str$(mt_dataN(type_dialCount))
 		else if mi_field$='read type' then
-			mi_return$=rtrm$(mt_data$(type_readType))
+			return$=rtrm$(mt_data$(type_readType))
 		else if mi_field$='device' then
-			mi_return$=rtrm$(mt_data$(type_deviceType))
+			return$=rtrm$(mt_data$(type_deviceType))
 		end if
 	end if
 	MI_FINIS: !
@@ -1653,7 +1646,7 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 		close #mi_h_meter: ioerr ignore
 		close #mi_h_metertype: ioerr ignore
 	end if
-	fn_meterInfo$=mi_return$
+	fn_meterInfo$=return$
 fnend
 def library fnHandHeldList(mat deviceName$; mat deviceOption$)
 	if ~setup then fn_setup
