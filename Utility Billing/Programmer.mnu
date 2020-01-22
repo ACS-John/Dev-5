@@ -1,9 +1,10 @@
 Utility Billing Programmer ^ ACS Utility Billing
 Programmer
 >Transaction Hamster                       ^ HamsterFio:UB Transaction
->Meter Location                            ^ Utility Billing\Hand Held\Meter Location                ^ U4
->Meter Information                         ^ Utility Billing\Hand Held\Meter Information             ^ U4
->Meter Address                             ^ HamsterFio:UB Meter Address                             ^ U4
+>Meter Location                            ^ Utility Billing\Hand Held\*             ^ U4
+>Meter Information                         ^ Utility Billing\Hand Held\*             ^ U4
+>Meter Address                             ^ HamsterFio:UB Meter Address             ^ U4
+>Hand Held Device                          ^ HamsterFio:U4 Device                    ^ U4
 
 >Customer Hamster                          ^ HamsterFio:Customer
 >WorkOrder Hamster                         ^ acsUB\workorderHamster

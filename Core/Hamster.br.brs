@@ -5,7 +5,7 @@
 ! mat p$      array of
 def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	! r: setup
-	library 'S:\Core\Library': fnerror,fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
+	library 'S:\Core\Library': fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
 	on error goto Ertn
 
 	dim sln2(199)
@@ -168,7 +168,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		fnCmdKey("E&xit",opt_cancel,0,1)
 		fnAcs2(mat resp$,menu1_opt)
 		prec=val(resp$(1)) conv MENU1
-		if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
+		if prec=0 and menu1_opt=opt_edit then menu1_opt=opt_add
 		if menu1_opt=opt_cancel then
 			goto XIT
 		else if menu1_opt=opt_add then

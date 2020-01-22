@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                        
+1:36 PM 1/22/2020	U4	Create Hand Held File now allows you to filter by Device Type, which is now available in the Meter Type file
+1:36 PM 1/22/2020	U4	New option to Run Command after Create Hand Held File
 11:05 01/20/2020	CO	5.74254  
 11:04 AM 1/21/2020	UB	Added Email address to UB Master Export 
 12:03 01/20/2020	CO	5.74253   

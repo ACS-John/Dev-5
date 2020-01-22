@@ -202,7 +202,7 @@ END1: ! r:
 		fn_neptuneEquinoxV4_close
 	end if
 	!
-	if selection_method=sm_allExceptFinal then 
+	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then 
 		goto Finis
 	else if selection_method=sm_aRoute then 
 		hbk=bk1 
@@ -238,49 +238,49 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 	! if trim$(z$)='100100.99' then pause
 
 	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
-		if selection_method=sm_meterTypes 
-		
-		if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
-			ft$=fn_rmk1$(z$)
-			if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
-			seq$=str$(sq1)
-			if deviceSelected$="Aclara" then 
-				fn_aclara(readLocationId)
-			! else if deviceSelected$="Aclara Work Order" then 
-			! 	fn_aclaraWorkOrder
-			else if deviceSelected$="ACS Meter Reader" then 
-				fn_acs_meter_reader
-			else if deviceSelected$="AMR" then 
-				fn_amr
-			else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then 
-				fn_badgerConnectC
-			else if deviceSelected$="Badger Beacon" then 
-				fn_badgerBeacon(z$,'WA')   ! newest/current interface as of 2/2/2018
-			else if deviceSelected$="Boson" then 
-				fn_boson
-			else if deviceSelected$="EZReader" or deviceSelected$="Green Tree" or deviceSelected$="Hersey" or deviceSelected$="Sensus" then 
-				fn_legacyMultiDevice
-			else if deviceSelected$="Itron FC300" then 
-				fn_itron
-			else if deviceSelected$="LapTop" then 
-				fn_laptop
-			else if deviceSelected$="Master Meter" then 
-				fn_masterMeter
-			else if deviceSelected$="Neptune (Equinox v4)" then 
-				fn_neptuneEquinoxV4(h_out)
-			else if deviceSelected$="Psion Workabout" then 
-				fn_workabout
-			else if deviceSelected$="READy Water" then 
-				fn_READy_Water
-			else if deviceSelected$="Unitech HT630" then 
-				fn_unitech_ht630
-			else
-				goto SEL_ACT ! go back if Hand Held information is not available for their selection
+		if ~(selection_method=sm_meterTypes) or deviceSelected$=fn_meterInfo$('Device',z$,serviceCodeMetered$(1)) then
+			if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
+				ft$=fn_rmk1$(z$)
+				if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
+				seq$=str$(sq1)
+				if deviceSelected$="Aclara" then 
+					fn_aclara(readLocationId)
+				! else if deviceSelected$="Aclara Work Order" then 
+				! 	fn_aclaraWorkOrder
+				else if deviceSelected$="ACS Meter Reader" then 
+					fn_acs_meter_reader
+				else if deviceSelected$="AMR" then 
+					fn_amr
+				else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then 
+					fn_badgerConnectC
+				else if deviceSelected$="Badger Beacon" then 
+					fn_badgerBeacon(z$,'WA')   ! newest/current interface as of 2/2/2018
+				else if deviceSelected$="Boson" then 
+					fn_boson
+				else if deviceSelected$="EZReader" or deviceSelected$="Green Tree" or deviceSelected$="Hersey" or deviceSelected$="Sensus" then 
+					fn_legacyMultiDevice
+				else if deviceSelected$="Itron FC300" then 
+					fn_itron
+				else if deviceSelected$="LapTop" then 
+					fn_laptop
+				else if deviceSelected$="Master Meter" then 
+					fn_masterMeter
+				else if deviceSelected$="Neptune (Equinox v4)" then 
+					fn_neptuneEquinoxV4(h_out)
+				else if deviceSelected$="Psion Workabout" then 
+					fn_workabout
+				else if deviceSelected$="READy Water" then 
+					fn_READy_Water
+				else if deviceSelected$="Unitech HT630" then 
+					fn_unitech_ht630
+				else
+					goto SEL_ACT ! go back if Hand Held information is not available for their selection
+				end if
 			end if
 		end if
 	end if
 	SendRecordToWorkFileFinis: !
-	if selection_method=sm_allExceptFinal then
+	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
 		goto NextReadForAll
 	else if selection_method=sm_aRoute then
 		goto NextReadForAll
@@ -1354,7 +1354,7 @@ fnend
 
 def fn_scr_selact
 	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
-	fnTos
+	fnTos : respc=0
 	fnLbl(2,1,"Hand Held model:",16,1)
 	if lwrc$(devicePreference$)='[ask]' then
 		fncomboa("HH-FroCBox",2,18,mat deviceName$)
@@ -1364,9 +1364,9 @@ def fn_scr_selact
 	end if
 	fnLbl(4,1,"Select:",16,1)
 	if u4_includeFinalBilled$='True' then
-		fnOpt(4,18,"[All] (including final billed)")
+		fnOpt(4,18,"[All] Active Accounts")
 	else
-		fnOpt(4,18,"[All] (excluding final billed)")
+		fnOpt(4,18,"[All] (including inactive)")
 	end if
 	rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
 	fnOpt(5,18,"An Entire Route")
@@ -1375,9 +1375,10 @@ def fn_scr_selact
 	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
 	fnOpt(7,18,"Specific Accounts")
 	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
-
-	fnOpt(8,18,"Specific Meter Type(s)")
-	rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
+	if udim(mat serviceCodeMetered$) then
+		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of "&deviceSelected$)
+		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
+	end if
 
 
 	! if lrec(2)>0 then
@@ -1403,7 +1404,7 @@ def fn_scr_selact
 			selection_method=sm_routeRange
 		else if resp$(rc_selectionMethod4)='True' then
 			selection_method=sm_Individuals
-		else if resp$(rc_selectionMethod5)='True' then
+		else if rc_selectionMethod5 and resp$(rc_selectionMethod5)='True' then
 			selection_method=sm_meterTypes
 		end if
 		fncreg_write('hhto.selection_method',str$(selection_method))
@@ -1473,6 +1474,10 @@ Finis: ! r: Transfer to or from Hand Held Computer
 	out_filename_report$=file$(h_out)
 	close #h_out: ioerr ignore
 	close #h_customer_i1: ioerr ignore
+	if hhrun$<>'' then 
+		hhrun$=srep$(hhrun$,'[file]',out_filename_report$)
+		exec 'sy -C "'&hhrun$&'"'
+	end if
 	fn_report_created_file(out_filename_report$)
 	fn_transfer
 goto XIT ! /r
@@ -1587,11 +1592,12 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 	if ~mi_setup then
 		mi_setup=1
 		dim mt_data$(5)*40
+		dim mt_dataN(0)
 		dim mi_return$*30
 		dim location$(0)*128
 		dim locationN(0)
 		hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1,4)
-		open #mi_h_metertype:=fngethandle: "Name=[Q]\UBmstr\MeterType.h[cno],Version=2,KFName=[Q]\UBmstr\MeterTypeIdx.h[cno],Shr",internal,input,keyed
+		mi_h_metertype=fn_open('U4 Meter Type',mat mt_data$,mat mt_dataN,mat form$, 1)
 		F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 4
 		!
 	end if  ! ~mi_setup
@@ -1625,14 +1631,20 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle)
 		if mt_key_prior$<>mt_key$ then
 			mt_key_prior$=mt_key$
 			mat mt_data$=("")
-			read #mi_h_metertype,using F_METER_TYPE,key=rpad$(trim$(mt_key$),kln(mi_h_metertype)): mat mt_data$ nokey MI_FINIS
+			read #mi_h_metertype,using form$(mi_h_metertype),key=rpad$(trim$(mt_key$),kln(mi_h_metertype)): mat mt_data$,mat mt_dataN nokey MI_FINIS
 		end if
-		if mi_field$='reading multipler' or mi_field$='reading multiplier' then
-			mi_return$=rtrm$(mt_data$(3))
+		if mi_field$='key' then
+			mi_return$=rtrm$(mt_data$(type_key))
+		else if mi_field$='name' then
+			mi_return$=rtrm$(mt_data$(type_name))
+		else if mi_field$='reading multipler' or mi_field$='reading multiplier' then
+			mi_return$=rtrm$(mt_data$(type_readingMultiplier))
 		else if mi_field$='number of dials' then
-			mi_return$=rtrm$(mt_data$(4))
+			mi_return$=str$(mt_dataN(type_dialCount))
 		else if mi_field$='read type' then
-			mi_return$=rtrm$(mt_data$(5))
+			mi_return$=rtrm$(mt_data$(type_readType))
+		else if mi_field$='device' then
+			mi_return$=rtrm$(mt_data$(type_deviceType))
 		end if
 	end if
 	MI_FINIS: !
@@ -1654,40 +1666,43 @@ def fn_handHeldList(mat deviceName$; mat deviceOption$)
 		dim deviceOptionCache$(0)*128
 		mat deviceNameCache$(0)
 		mat deviceOptionCache$(0)
-		fnAddOneC(mat deviceNameCache$,'Aclara'              ) : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,'Aclara Work Order'   ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'ACS Meter Reader'    ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Badger'              ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Badger Connect C'    ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Badger Beacon'       ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Boson'               ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'CSV by LocationID'   ) : fnAddOneC(mat deviceOptionCache$,'ImportOnly')
-		fnAddOneC(mat deviceNameCache$,'Itron FC300'         ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Master Meter'        ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Neptune (Equinox v4)') : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'READy Water'         ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,'Sensus'              ) : fnAddOneC(mat deviceOptionCache$,'')
-		! r: developed but currently unused
-		! fnAddOneC(mat deviceNameCache$,"Psion Workabout") : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,"LapTop"         ) : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,"Green Tree"     ) : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,"Hersey"         ) : fnAddOneC(mat deviceOptionCache$,'')
-		fnAddOneC(mat deviceNameCache$,"EZReader"       ) : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,"AMR"            ) : fnAddOneC(mat deviceOptionCache$,'')
-		! fnAddOneC(mat deviceNameCache$,"Unitech HT630"  ) : fnAddOneC(mat deviceOptionCache$,'')
-		! /r
+		dim hd$(0)*256,hdN(0)
+		hU4Device=fn_open('U4 Device', mat hd$,mat hdN,mat form$, 1)
+		do
+			read #hU4Device,using form$(hU4Device): mat hd$,mat hdN eof EoU4Device
+			if hdN(device_disable)<>1 then
+				fnAddOneC(mat deviceNameCache$  ,rtrm$(hd$(device_name)       ))
+				fnAddOneC(mat deviceOptionCache$,rtrm$(hd$(device_optionList) ))
+			end if
+		loop
+		EoU4Device: !
+		close #hU4Device: 
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Aclara'              ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,'Aclara Work Order'   ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'ACS Meter Reader'    ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Badger'              ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Badger Connect C'    ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Badger Beacon'       ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Boson'               ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'CSV by LocationID'   ) : fnAddOneC(mat deviceOptionCache$,'ImportOnly')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Itron FC300'         ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Master Meter'        ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Neptune (Equinox v4)') : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'READy Water'         ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,'Sensus'              ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! r: developed but currently unused
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"Psion Workabout") : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"LapTop"         ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"Green Tree"     ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"Hersey"         ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      fnAddOneC(mat deviceNameCache$,"EZReader"       ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"AMR"            ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! fnAddOneC(mat deviceNameCache$,"Unitech HT630"  ) : fnAddOneC(mat deviceOptionCache$,'')
+		!  moved to a file      ! /r
 	end if
 	mat deviceName$(udim(mat deviceNameCache$))
 	mat deviceName$=deviceNameCache$
-	!
-	DeviceOptionArrayPassed=0
-	on error goto HhlContinue
-	mat deviceOption$(1) 
-	deviceOption$(1)=rpt$('*',128)
-	on error goto Ertn
-	DeviceOptionArrayPassed=1
-	HhlContinue: !
-	if DeviceOptionArrayPassed then
+	if fnArrayWasPassedC(mat deviceOption$) then
 		mat deviceOption$(udim(mat deviceOptionCache$))
 		mat deviceOption$=deviceOptionCache$
 	end if
@@ -1776,12 +1791,14 @@ def fn_setup
 		library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
 		library 'S:\Core\Library': fnCopy
 		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnMeterAddressLocationID,fnAccountFromLocationId$
+		library 'S:\Core\Library': fnMeterAddressLocationID
+		library 'S:\Core\Library': fnAccountFromLocationId$
 		library 'S:\Core\Library': fncsz
 		library 'S:\Core\Library': fnmakesurepathexists
 		library 'S:\Core\Library': fnbuildkey$
 		library 'S:\Core\Library': fnCustomerData$
 		library 'S:\Core\Library': fnGetServiceCodesMetered
+		library 'S:\Core\Library': fnArrayWasPassedC
 		on error goto Ertn
 		! ______________________________________________________________________
 		dim resp$(64)*125
@@ -1846,6 +1863,8 @@ def fn_setup
 	dim serviceCodeMetered$(0)*2
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)
 	
+	dim hhrun$*256
+	fnureg_read('Hand Held Run File',hhrun$)
 fnend
 include: fn_open
 include: enum

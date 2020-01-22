@@ -26,6 +26,7 @@ def fn_setup
 		library 'S:\Core\Library': fnStatus,fnStatusPause
 		library 'S:\Core\Library': fnInitialializeMeterLocation
 		library 'S:\Core\Library': fnAutomatedSavePoint
+		library 'S:\Core\Library': fnreg_read
 		on error goto Ertn
 		dim form$(0)*512
 	end if
@@ -249,25 +250,36 @@ def fn_cfv_utility_billing
 	!
 	fn_file_setup_data("[Q]\UBmstr\MeterType.h[cno]",128,1)
 	fn_file_setup_index("[Q]\UBmstr\MeterTypeIdx.h[cno]",'1','5')
-	if fn_version('[Q]\UBmstr\MeterType.h[cno]')=1 then
-		! if fnCopy('[Q]\UBmstr\MeterType.h[cno]','', 60)>0 then      ! record length does not need to be changed
-			open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
-			F_meterType_v1: form pos 1,c 5,c 40,c 9,n 2,n 2
-			F_meterType_v2: form pos 1,c 5,c 40,c 9,n 2,c 4
-			dim name$*40
-			do
-				read #hMeterType,using F_meterType_v1: key$,name$,readingMultiplier$,dialCount,readType eof EoMeterTypeV1
-				readType$=str$(readType)
-				rewrite #hMeterType,using F_meterType_v2: key$,name$,readingMultiplier$,dialCount,readType$
-			loop
-			EoMeterTypeV1: !
-			version(hMeterType,2)
-			close #hMeterType:
-			fnindex_it('[Q]\UBmstr\MeterType.h[cno]','[Q]\UBmstr\MeterTypeIdx.h[cno]','1 5u')
-		! else
-		! 	pr bell;'MeterType record length change failed.'
-		! 	pause
-		! end if
+	version_meterType=fn_version('[Q]\UBmstr\MeterType.h[cno]')
+	if version_meterType=1 then
+		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
+		F_meterType_v1: form pos 1,c 5,c 40,c 9,n 2,n 2
+		F_meterType_v2: form pos 1,c 5,c 40,c 9,n 2,c 4
+		dim name$*40
+		do
+			read #hMeterType,using F_meterType_v1: key$,name$,readingMultiplier$,dialCount,readType eof EoMeterTypeV1
+			readType$=str$(readType)
+			rewrite #hMeterType,using F_meterType_v2: key$,name$,readingMultiplier$,dialCount,readType$
+		loop
+		EoMeterTypeV1: !
+		version(hMeterType,version_meterType:=2)
+		close #hMeterType:
+		fnindex_it('[Q]\UBmstr\MeterType.h[cno]','[Q]\UBmstr\MeterTypeIdx.h[cno]','1 5u')
+	end if
+	if version_meterType=2 then
+		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
+		! F_meterType_v3: form pos 1,c 5,c 40,c 9,n 2,c 4,c 20
+		dim u4_device$*40
+		library 'S:\Core\Library': fnhand_held_device$
+		fnreg_read('Hand Held Device',u4_device$, fnhand_held_device$)
+		if trim$(u4_device$)='[Ask]' then u4_device$='[All]'
+		do
+			read #hMeterType: eof EoMeterTypeV2
+			rewrite #hMeterType,using 'form pos 61,c 20': u4_device$
+		loop
+		EoMeterTypeV2: !
+		version(hMeterType,version_meterType:=3)
+		close #hMeterType:
 	end if
 
 

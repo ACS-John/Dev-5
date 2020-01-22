@@ -34,6 +34,8 @@
 		fnureg_read('Hand Held To File',hhto$)
 		dim hhfro$*256
 		fnureg_read('Hand Held From File',hhfro$)
+		dim hhrun$*256
+		fnureg_read('Hand Held Run File',hhrun$)
 		dim u4_deviceOption$(0)*20,u4_device$*20
 		fnHandHeldList(mat u4_deviceOption$)
 		fnaddonec(mat u4_deviceOption$,'[Ask]')
@@ -360,8 +362,14 @@ do
 	resp$(resp_hhto:=dsh_rc+=1)=hhto$
 	fnLbl(lc+=1,1,"File to Retrieve:",col1_width,1,0,0,0,'Select a path and file for ACS to read input files from hand helds.')
 	fnTxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
-	resp$(resp_hhfro:=dsh_rc+=1)=hhfro$ 
+	resp$(resp_hhfro:=dsh_rc+=1)=hhfro$
 	fnLbl(lc,col2_pos+45,"(set to [Ask] to ask every time)")
+	lc+=1
+	fnLbl(lc+=1,1,"Command to run afterward:",col1_width,1,0,0,0,'Select a command to run after the hand held file is made.')
+	fnTxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
+	fnLbl(lc,col2_pos+45,"(use [file] to indicate the created file)")
+	resp$(resp_hhrun:=dsh_rc+=1)=hhrun$ 
+
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
@@ -374,6 +382,7 @@ do
 		u4_includeFinalBilled$=resp$(resp_u4_uncludeFinalBilled)
 		hhto$=resp$(resp_hhto)
 		hhfro$=resp$(resp_hhfro)
+		hhrun$=resp$(resp_hhrun)
 	end if 
 	if ck=>screen_ck_low and ck<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
@@ -592,6 +601,7 @@ def fn_save
 		fnreg_write('Hand Held includeFinalBilled',u4_includeFinalBilled$)
 		fnureg_write('Hand Held To File',hhto$)
 		fnureg_write('Hand Held From File',hhfro$)
+		fnureg_write('Hand Held Run File',hhrun$)
 	end if
 	if fnclient_has('UB') then
 		fnreg_write('Collections pr in Account Order',ub_collPrintInAccountOrder$)

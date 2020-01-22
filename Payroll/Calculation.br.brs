@@ -504,8 +504,9 @@ Screen1: ! r:
 return  ! /r
 
 def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4year,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak,withholdingPercentage,atLeast,baseAmt)
-
-
+	! https://www.irs.gov/pub/irs-pdf/p15t.pdf
+	! https://www.irs.gov/pub/irs-pdf/fw4.pdf
+	! https://www.irs.gov/pub/irs-pdf/p15.pdf
 
 	! retains: setupFederalTables,fed_annual_wh_allowance,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
 	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
