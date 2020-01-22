@@ -139,20 +139,27 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 							dim serviceName$(10)*20
 							dim serviceCode$(10)*2
 							fnget_services(mat serviceName$,mat serviceCode$)
-							dim serviceCsv$*256
-							serviceCsv$=''
+							dim tmpList$*256
+							tmpList$=''
 							for scItem=1 to udim(mat serviceCode$)
 								if trim$(serviceCode$(scItem))<>'' then
-									if scItem>1 then serviceCsv$&=','
-									serviceCsv$&=serviceCode$(scItem)
+									if scItem>1 then tmpList$&=','
+									tmpList$&=serviceCode$(scItem)
 								end if
 							nex scItem
-							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes*',serviceCsv$)
+							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes*',tmpList$)
 						else if pos(cfItem$(cbIndex),'*custom:UB ServiceCodes Metered*')>0 then
 							library 'S:\Core\Library': fnGetServiceCodesMetered
 							fnGetServiceCodesMetered(mat serviceCodeMetered$)
-							mat2str(mat serviceCodeMetered$,serviceCsv$,',')
-							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes Metered*',serviceCsv$)
+							mat2str(mat serviceCodeMetered$,tmpList$,',')
+							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes Metered*',tmpList$)
+						else if pos(cfItem$(cbIndex),'*custom:U4 Devices Enabled*')>0 then
+							library 'S:\Core\Library': fnHandHeldList
+							dim deviceName$(0)*20
+							fnHandHeldList(mat deviceName$)
+							mat2str(mat deviceName$,tmpList$,',')
+							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:U4 Devices Enabled*',tmpList$)
+							
 						end if
 						comboBox$(hfItem,cbIndex)=cfItem$(cbIndex) 
 						if debugCombo then pr 'comboBox$(';hfItem;',';cbIndex;') to "'&cfItem$(cbIndex)&'"'

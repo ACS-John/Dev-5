@@ -1,6 +1,0 @@
-[Q]\PRmstr\oEmpStatus.dat, oemst_, 0
-[Q]\PRmstr\oEmpstatus.idx     , code
-recl=32
-===================================================
-code   	, Code               	,  N    2  	, !
-name  	, Name               	,  c   25  	, !
