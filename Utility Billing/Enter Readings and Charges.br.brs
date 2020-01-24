@@ -5,31 +5,35 @@ goto MENU1
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnopenprn,fncloseprn
+		library 'S:\Core\Library': fnTop
+		library 'S:\Core\Library': fnPause
+		library 'S:\Core\Library': fnConfirmDelete
+		library 'S:\Core\Library': fnOpenprn,fncloseprn
 		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnmsgbox,fnxit,fntop
-		library 'S:\Core\Library': fnchain
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fncomboa
-		library 'S:\Core\Library': fnhand_held_device$
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fncustomer
-		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnMsgbox
+		library 'S:\Core\Library': fnXit
+		library 'S:\Core\Library': fnChain
+		library 'S:\Core\Library': fnDate_mmddyy_to_ccyymmdd
+		library 'S:\Core\Library': fnComboa
+		library 'S:\Core\Library': fnHand_held_device$
+		library 'S:\Core\Library': fnGet_services
+		library 'S:\Core\Library': fnCustomer
+		library 'S:\Core\Library': fnGethandle
 		library 'S:\Core\Library': fnButton
-		library 'S:\Core\Library': fnregistered_for_hh
+		library 'S:\Core\Library': fnRegistered_for_hh
 		library 'S:\Core\Library': fnRetrieveHandHeldFile
-		library 'S:\Core\Library': fnask_account
+		library 'S:\Core\Library': fnAsk_account
 		library 'S:\Core\Library': fnTos
 		library 'S:\Core\Library': fnLbl,fnTxt
 		library 'S:\Core\Library': fnAcs2
 		library 'S:\Core\Library': fnOpt,fnChk,fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fncmbact,fncmbrt2,fnFra,fnCmdSet,fnCmdKey
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnfree
-		library 'S:\Core\Library': fngetdir2
-		library 'S:\Core\Library': fnapply_default_rates
+		library 'S:\Core\Library': fnCmbact,fncmbrt2,fnFra,fnCmdSet,fnCmdKey
+		library 'S:\Core\Library': fnCreg_read,fncreg_write
+		library 'S:\Core\Library': fnFree
+		library 'S:\Core\Library': fnGetdir2
+		library 'S:\Core\Library': fnApply_default_rates
 		library 'S:\Core\Library': fnStatusClose
-		library 'S:\Core\Library': fnindex_it
+		library 'S:\Core\Library': fnIndex_it
 		library 'S:\Core\Library': fnAccountFromLocationId$
 		library 'S:\Core\Library': fnAddOneC
 		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
@@ -574,6 +578,7 @@ def fn_print_unusual
 	pr #255,using fmun$: x$,e2$(1:20),prior_read,cur_read,x0,sn$
 fnend
 def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
+	dim device$*20
 	device$=fnhand_held_device$
 	if device$="Psion Workabout" then
 		goto HH_WORKABOUT
@@ -1441,9 +1446,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	end if
 	fn_holdingFileSave=holdingFileSaveReturn
 fnend
-def fn_loadBookOrHoldingFile(&addmethod)
-	dim ihDirFileMask$*64
-	!
+def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask$*64)
 	if addmethod=am_fromHhFile then
 		book_or_holding_file$='Book'
 		ihDirFileMask$='Readings.*'
@@ -1451,7 +1454,7 @@ def fn_loadBookOrHoldingFile(&addmethod)
 		book_or_holding_file$='Holding File'
 		ihDirFileMask$='IPHold*.h[cno]'
 	else
-		pr bell;'addmethod not recognized by INPUT_HAND routine.' : goto IH_XIT
+		pr bell;'addmethod not recognized by INPUT_HAND routine.' : fnpause : goto IH_XIT
 	end if
 	INPUT_HAND: !
 	fnTos
@@ -1489,30 +1492,31 @@ def fn_loadBookOrHoldingFile(&addmethod)
 		ihInvalidFile: !
 	next ihFileItem
 	fnLbl(11,1," ",15,1)
+	! /r
 	fnCmdKey("&Next",1,1)
-	fnCmdKey("&Delete",4)
-	fnCmdKey("&Print",6)
-	fnCmdKey("&Cancel",5,0,1)
+	fnCmdKey("&Delete",ck_delete=4)
+	fnCmdKey("&Print",ck_print=6)
+	fnCmdKey("&Cancel",cancel,0,1)
 	fnAcs2(mat resp$,ck)
 	holdingFile$=""
 	ip1$=resp$(1)
 	if ck=cancel or ip1$='' then
 		goto IH_XIT
-	else if ck=6 then
+	else if ck=ck_print then
 		if book_or_holding_file$='Holding File' then
 			open #hpHoldingFile:=fngethandle: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 			close #hpHoldingFile:
-			! fn_holdingFilePrint(ip1$) ! pr for Holding Files
 		else
 			fn_hh_readings(ip1$, 1) ! pr for Books
 		end if
 		goto INPUT_HAND
-	else if ck=4 then
-		mat txt$(1)
-		txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
-		fnmsgbox(mat txt$,resp$,'',36)
-		if resp$="Yes" then
+	else if ck=ck_delete then
+		
+		! mat txt$(1)
+		! txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
+		! fnmsgbox(mat txt$,resp$,'',36)
+		if fnConfirmDelete(book_or_holding_file$&' '&ip1$,'confirmDeleteBook') then ! resp$="Yes" then
 			if addmethod=am_fromHhFile then
 				fnFree("[Q]\UBmstr\Readings."&ip1$)
 			else if addmethod=am_loadHoldingFile then

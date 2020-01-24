@@ -20,7 +20,7 @@ def fn_confirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,r
 		confirmButtonAdd=mb_button1_default
 	end if
 
-	dim confirmText$(0)
+	dim confirmText$(0)*2048
 	mat confirmText$(0)
 	fnAddOneC(mat confirmText$,'Do you really want to '&Lwrc$(Verb$)&'?')
 	if textAddition$<>'' then

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                          
+11:30 AM 1/24/2020	CL	Print 1099s now have 2019 pdf backgrounds
 16:11 01/20/2020	CO	5.74256  
 13:38 01/20/2020	CO	5.74255   
 1:36 PM 1/22/2020	U4	Create Hand Held File now allows you to filter by Device Type, which is now available in the Meter Type file  
