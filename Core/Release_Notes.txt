@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                           
+3:07 PM 1/24/2020	UB	Enter Readings and Charges - now Load Book screen has it's own Import from Hand Held button so you can do it all from that one screen.
 11:31 01/20/2020	CO	5.74257  
 11:30 AM 1/24/2020	CL	Print 1099s now have 2019 pdf backgrounds 
 16:11 01/20/2020	CO	5.74256   

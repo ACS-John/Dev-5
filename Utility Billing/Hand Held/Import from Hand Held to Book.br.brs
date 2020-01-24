@@ -2,13 +2,13 @@
 ! -- Transfer Data From Hand Held to Computer
 library program$: fnRetrieveHandHeldFile
 fn_setup
-	if ~fnregistered_for_hh then
-		mat ml$(2)
-		ml$(1)="You must purchase the ACS Utility Billing Hand Held"
-		ml$(2)="module to access these features"
-		fnmsgbox(mat ml$, response$, '',64)
-		goto XIT
-	end if  ! ~fnregistered_for_hh
+if ~fnregistered_for_hh then ! r:
+	mat ml$(2) 
+	ml$(1)="You must purchase the ACS Utility Billing Hand Held"
+	ml$(2)="module to access these features"
+	fnmsgbox(mat ml$, response$, '',64)
+	goto XIT
+end if  ! /r
 fnRetrieveHandHeldFile
 fnxit
 def library fnRetrieveHandHeldFile(; automationBookNumber)
@@ -24,11 +24,12 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 	end if
 	SCREEN1: ! r:
 		respc=0 : lc=0
+		fnUreg_read('bookNumberToStoreReadings',bookNumberToStoreReadings$)
 		fnTos
 		lc+=1
 		fnLbl(lc+=1,1,"Book Number to store readings:",30,1)
 		fnTxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
-		resp$(rc_book:=respc+=1)=''
+		resp$(rc_book:=respc+=1)=bookNumberToStoreReadings$
 		lc+=1
 		fnChk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
 		fnLbl(lc,35,'(only supported by some devices)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
@@ -54,7 +55,9 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 		fnAcs2(mat resp$,ckey)
 		Screen1ProcessResponse: !
 		if ckey<>5 then
-			bk$=resp$(rc_book)
+			bookNumberToStoreReadings$=resp$(rc_book)
+			bookNumberToStoreReadings$
+			fnUreg_write('bookNumberToStoreReadings',bookNumberToStoreReadings$)
 			if lwrc$(devicePreference$)='[ask]' then
 				deviceSelected$=resp$(rc_Device)
 				fnureg_write('Hand Held Device Asked',deviceSelected$)
@@ -72,18 +75,18 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 					goto SCREEN1
 				end if
 			end if
-			if fn_transfer(bk$,enableMerge$,env$('at')&askPath$)=-1 then goto SCREEN1
+			if fn_transfer(bookNumberToStoreReadings$,enableMerge$,env$('at')&askPath$)=-1 then goto SCREEN1
 		end if
 	goto XIT ! /r
 	XIT: ! target of Ertn exits
 fnend
-def fn_transfer(bk$,enableMerge$,askPath$*128)
+def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 	transferReturn=0
 	dim bookFile$*512
-	bookFile$="[Q]\UBmstr\Readings."&ltrm$(bk$)
+	bookFile$="[Q]\UBmstr\Readings."&ltrm$(bookNumberToStoreReadings$)
 	if enableMerge$='True' and exists(bookFile$) then
 		dim mergeFileOrigional$*512
-		mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
+		mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bookNumberToStoreReadings$&'-session'&session$&'.txt'
 		fnMakesurePathExists(mergeFileOrigional$)
 		fnCopy(bookFile$,mergeFileOrigional$)
 	else
@@ -138,7 +141,7 @@ def fn_transfer(bk$,enableMerge$,askPath$*128)
 	end if
 	if transferReturn>0 then
 		mat ml$(1)
-		ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
+		ml$(1)=str$(transferReturn)&' records imported to book '&bookNumberToStoreReadings$&'.'
 		fnmsgbox(mat ml$)
 	end if
 	fn_transfer=transferReturn
@@ -189,7 +192,7 @@ def fn_readingsFileVersion$*128(bookFile$*512)
 		rfvReturn$='[ACS Hand Held File Generic Version 2]'
 	else
 		rfvReturn$='legacy'
-		if env$('acsDeveloper')<>'' then pause
+		fnPause
 	end if
 	fn_readingsFileVersion$=rfvReturn$
 fnend
@@ -448,11 +451,11 @@ fnend
 			fnmsgbox(mat ml$, response$, '',0)
 		else
 			fnCopy(fn_hh_input_filename$,bookFile$)
-			fnRename(fn_hh_input_filename$,"[Q]\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
+			fnRename(fn_hh_input_filename$,"[Q]\UBmstr\outofpalm."&ltrm$(bookNumberToStoreReadings$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
 		end if
 	fnend
 	def fn_ezreader(bookFile$*512)
-		fn_readings_backup(bookFile$)
+		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
 		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
 		open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input
 		do
@@ -469,7 +472,7 @@ fnend
 		close #h_out: ioerr ignore
 	fnend
 	def fn_hersey(bookFile$*512)
-		fn_readings_backup(bookFile$)
+		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
 		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
 		open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input
 		do
@@ -526,21 +529,24 @@ fnend
 	fnend
 	def fn_itron_write
 		! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
-		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
-			pr #h_itron_out: 'Customer.Number='&z$
-			if reading_water<>0 then pr #h_itron_out: 'Reading.Water='&str$(reading_water)
-			if reading_electric<>0 then pr #h_itron_out: 'Reading.Electric='&str$(reading_electric)
-			if reading_gas<>0 then pr #h_itron_out: 'Reading.Gas='&str$(reading_gas)
-			if meterroll_water<>0 then pr #h_itron_out: 'MeterRoll.Water='&str$(meterroll_water)
-			if meterroll_electric<>0 then pr #h_itron_out: 'MeterRoll.Electric='&str$(meterroll_electric)
-			if meterroll_gas<>0 then pr #h_itron_out: 'MeterRoll.Gas='&str$(meterroll_gas)
-			pr #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
+		if reading_water=0 then
+			pr #h_itron_out: '! customer number '&z$&' has zero reading.'
 		else
-			pr #h_itron_out: '! customer number '&z$&' has all zero readings.'
+			pr #h_itron_out: 'Customer.Number='&z$
+			fn_inz
+			
+			fn_inz(reading_water     ,'Reading.Water'       )
+			fn_inz(reading_electric  ,'Reading.Electric'    )
+			fn_inz(reading_gas       ,'Reading.Gas'         )
+			fn_inz(meterroll_water   ,'MeterRoll.Water'     )
+			fn_inz(meterroll_electric,'MeterRoll.Electric'  )
+			fn_inz(meterroll_gas     ,'MeterRoll.Gas'       )
+			fn_inz(customer_sequence ,'customer.sequence'   )
+			pr #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
 		end if
 	fnend
 	def fn_laptop(bookFile$*512)
-		route=val(bk$)
+		route=val(bookNumberToStoreReadings$)
 		L1420: !
 		fnTos
 		mat resp$=("")
@@ -580,162 +586,227 @@ fnend
 	close #h_readings: ioerr ignore
 fnend
 	! r: legacy multi-device hand held type
-	def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
-		fn_readings_backup(bookFile$)
-		open #hReadingsOut:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
-		! if inFileRecordLen=0 then inFileRecordLen=129
-		open #hHandHeld:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-		do
-			linput #hHandHeld: line$ eof ilrt_EO_L_READINGS_TXT
-			if deviceSelected$="Other" and env$('client')="Brier Lake" then
-				parseResponse=fn_ilrt_lineParse_BrierLake(line$,z$,reading$)
-			else if deviceSelected$='READy Water' then
-				! parseResponse=fn_ilrt_lineParse_READy_Water(line$,z$,reading$)
-				parseResponse=fn_ilrt_lineParseDelimited(line$,z$,1,reading$,3)
-			else if deviceSelected$='Master Meter' then
-				parseResponse=fn_ilrt_lineParseFixedWidth(line$,z$,1,10,reading$,14,14, readingDate$,35,8)
-			else
-				pr 'deviceSelected$ ('&deviceSelected$&') is not recognized in the parse import routines.'
-				pause
+		def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
+			fn_readings_backup(bookFile$)
+			open #hReadingsOut:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
+			! if inFileRecordLen=0 then inFileRecordLen=129
+			open #hHandHeld:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+			do
+				linput #hHandHeld: line$ eof ilrt_EO_L_READINGS_TXT
+				if deviceSelected$="Other" and env$('client')="Brier Lake" then
+					parseResponse=fn_ilrt_lineParse_BrierLake(line$,z$,reading$)
+				else if deviceSelected$='READy Water' then
+					! parseResponse=fn_ilrt_lineParse_READy_Water(line$,z$,reading$)
+					parseResponse=fn_ilrt_lineParseDelimited(line$,z$,1,reading$,3)
+				else if deviceSelected$='Master Meter' then
+					parseResponse=fn_ilrt_lineParseFixedWidth(line$,z$,1,10,reading$,14,14, readingDate$,35,8)
+				else
+					pr 'deviceSelected$ ('&deviceSelected$&') is not recognized in the parse import routines.'
+					pause
+				end if
+				if parseResponse then
+					pr #hReadingsOut,using "form pos 1,c 10,c 9": z$,trim$(reading$)
+				end if
+			loop
+			ilrt_EO_L_READINGS_TXT: !
+			close #hHandHeld: ioerr ignore
+			close #hReadingsOut: ioerr ignore
+		fnend
+		def fn_ilrt_lineParse_BrierLake(line$*150,&z$,&reading$)
+			ilpblReturn=0
+			x=val(line$(1:3)) conv ilpbl_finis
+			z$=""
+			for j=1 to 8
+				x=val(line$(j:j)) conv ilrt_L1060
+				z$=z$&line$(j:j)
+			next j
+			ilrt_L1060: !
+			z=val(z$)
+			z$=cnvrt$("pic(zzzzzzz.##",z)
+			reading$=""
+			for j1=1 to 20
+				x=val(line$(j1+j:j1+j)) conv ilrt_L1120
+				reading$=reading$&line$(j1+j:j1+j)
+				ilrt_L1120: !
+			next j1
+			ilpblReturn=1
+			ilpbl_finis: !
+			fn_ilrt_lineParse_BrierLake=ilpblReturn
+		fnend
+		def fn_ilrt_lineParse_READy_Water(line$*150,&z$,&reading$)
+			ilprwReturn=0
+			z$=reading$=""
+			str2mat(line$,mat ilprwItem$, chr$(9))
+			! ilprwItem$(1)=account number
+			! ilprwItem$(2)=meter serial number (from 'U4 Meter Location' table     formerly from meter information file)
+			! ilprwItem$(3)=water reading
+			! ilprwItem$(4)=reading date
+			z$=lpad$(ilprwItem$(1),10)
+			reading$=ilprwItem$(3)
+			ilprwReturn=1
+			fn_ilrt_lineParse_READy_Water=ilprwReturn
+		fnend
+		def fn_ilrt_lineParseDelimited(line$*512,&key$,item_key,&reading$,item_reading; &readingDate$,item_readingDate)
+			dim ilpdItem$(0)*512
+			ilprwReturn=0
+			z$=reading$=""
+			str2mat(line$,mat ilpdItem$, chr$(9))
+			key$=lpad$(ilpdItem$(item_key),10)
+			reading$=ilpdItem$(item_reading)
+			if item_readingDate then
+				readingDate$=ilpdItem$(item_readingDate)
 			end if
-			if parseResponse then
-				pr #hReadingsOut,using "form pos 1,c 10,c 9": z$,trim$(reading$)
-			end if
-		loop
-		ilrt_EO_L_READINGS_TXT: !
-		close #hHandHeld: ioerr ignore
-		close #hReadingsOut: ioerr ignore
-	fnend
-	def fn_ilrt_lineParse_BrierLake(line$*150,&z$,&reading$)
-		ilpblReturn=0
-		x=val(line$(1:3)) conv ilpbl_finis
-		z$=""
-		for j=1 to 8
-			x=val(line$(j:j)) conv ilrt_L1060
-			z$=z$&line$(j:j)
-		next j
-		ilrt_L1060: !
-		z=val(z$)
-		z$=cnvrt$("pic(zzzzzzz.##",z)
-		reading$=""
-		for j1=1 to 20
-			x=val(line$(j1+j:j1+j)) conv ilrt_L1120
-			reading$=reading$&line$(j1+j:j1+j)
-			ilrt_L1120: !
-		next j1
-		ilpblReturn=1
-		ilpbl_finis: !
-		fn_ilrt_lineParse_BrierLake=ilpblReturn
-	fnend
-	def fn_ilrt_lineParse_READy_Water(line$*150,&z$,&reading$)
-		ilprwReturn=0
-		z$=reading$=""
-		str2mat(line$,mat ilprwItem$, chr$(9))
-		! ilprwItem$(1)=account number
-		! ilprwItem$(2)=meter serial number (from 'U4 Meter Location' table     formerly from meter information file)
-		! ilprwItem$(3)=water reading
-		! ilprwItem$(4)=reading date
-		z$=lpad$(ilprwItem$(1),10)
-		reading$=ilprwItem$(3)
-		ilprwReturn=1
-		fn_ilrt_lineParse_READy_Water=ilprwReturn
-	fnend
-	def fn_ilrt_lineParseDelimited(line$*512,&key$,item_key,&reading$,item_reading; &readingDate$,item_readingDate)
-		dim ilpdItem$(0)*512
-		ilprwReturn=0
-		z$=reading$=""
-		str2mat(line$,mat ilpdItem$, chr$(9))
-		key$=lpad$(ilpdItem$(item_key),10)
-		reading$=ilpdItem$(item_reading)
-		if item_readingDate then
-			readingDate$=ilpdItem$(item_readingDate)
-		end if
-		ilprwReturn=1
-		fn_ilrt_lineParseDelimited=ilprwReturn
-	fnend
-	def fn_ilrt_lineParseFixedWidth(line$*512,&key$,pos_key,len_key,&reading$,pos_reading,len_reading; &readingDate$,pos_date,len_date)
-		ilpfwReturn=0
-		key$=reading$=readingDate$=''
-		key$=line$(pos_key:pos_key+len_key-1)
-		reading$=line$(pos_reading:pos_reading+len_reading-1)
-		readingDate$=line$(pos_date:pos_date+len_date-1)
-		! pr key$,reading$ : pause
-		ilpfwReturn=1
-		fn_ilrt_lineParseFixedWidth=ilpfwReturn
-	fnend
+			ilprwReturn=1
+			fn_ilrt_lineParseDelimited=ilprwReturn
+		fnend
+		def fn_ilrt_lineParseFixedWidth(line$*512,&key$,pos_key,len_key,&reading$,pos_reading,len_reading; &readingDate$,pos_date,len_date)
+			ilpfwReturn=0
+			key$=reading$=readingDate$=''
+			key$=line$(pos_key:pos_key+len_key-1)
+			reading$=line$(pos_reading:pos_reading+len_reading-1)
+			readingDate$=line$(pos_date:pos_date+len_date-1)
+			! pr key$,reading$ : pause
+			ilpfwReturn=1
+			fn_ilrt_lineParseFixedWidth=ilpfwReturn
+		fnend
 	! /r
+def fn_prHout(what$*512)
+	pr #hOut: what$
+	pr what$ !  print to console also :)
+fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
-	! ()
-	! 
 		open #hIn:=fngethandle: "Name="&inputFile$,display,input
 		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-		pr #hOut: '[ACS Hand Held File Generic Version 2]'
+		fn_prHout('[ACS Hand Held File Generic Version 2]')
 		z$=''
 		do
 			linput #hIn: line$ eof Eo_nev4
-			line_type$=line$(1:3)
-			if line_type$="CUS" then
+			line_type$=lwrc$(line$(1:5))
+			if line_type$="prmdt" then ! r: Premises Detail
 				if z$<>'' then 
 					! write the previous one
-					fn_nev4_write(z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
+					br: fn_nev4_write(hOut,z$,reading_water) 
 				end if
-				reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-				z$=trim$(line$(15:34))(1:10)
-			else if line_type$="MTR" then
-				itron_meter_category$=line$(94:94)
-			else if line_type$="RDG" then
-				itron_reading=val(line$(34:43))
-								!    itron_read_date$=line$(48:55)
-				itron_meter_chenge_out$=line$(92:92)
-				if itron_meter_chenge_out$="Y" then meterroll=1 else meterroll=0
-				if itron_meter_category$="E" then ! Electric
-					reading_electric=itron_reading
-					meterroll_electric=meterroll
-				else if itron_meter_category$="G" then ! Gas
-					reading_gas=itron_reading
-					meterroll_gas=meterroll
-				!    else if itron_meter_category$="I" then ! Irrigation
-				!    else if itron_meter_category$="S" then ! Steam/sewer
-				else if itron_meter_category$="W" then ! Water
-					if env$('client')='Millry' then 
-						reading_water=itron_reading*10 
-					else 
-						reading_water=itron_reading
-					end if
-					meterroll_water=meterroll
+				reading_water=0
+				z$=line$(104:123) soflow Sub_soFlowAccountNo
+				pr 'z$="'&z$&'"' 
+				pr '*TODO: complete this account number code' : pr line$ : fnPause
+				z$=trim$(z$)(1:10)
+				! /r
+			else if line_type$="" then 
+			else if line_type$="rdgdt" then ! r: Reading Detail
+				! Record ID                    Req UB  1 - 5 5 A / N RDGDT.
+				! Read Type                    Req UB  6 - 9 4 A / N Details of a particular register. For Example: HIGH,LOW,GAL,CFT,WTR,GAS
+				! Collection ID                Req UB 10 - 22 13 NUM Indicates the MIU serial number. Use spaces if device provides no ID value.
+				! For Future Use                   UB 23 - 29 7 A / N
+				! Changed Collection ID        Opt HH 30 - 49 20 NUM
+				! Dials                        Req UB 50 - 51 2   NUM Range for dials is 01 to 08, inclusive.
+				! Changed Dials                Opt HH 52 - 53 2 NUM Range for dials is 01 to 08, inclusive. 
+				! Decimals                     Req UB 54 - 55 2 NUM Range for decimals is 00 to 08, inclusive.
+				! Changed Decimals             Opt HH 56 - 57 2 NUM Range for decimals is 00 to 08, inclusive.
+				! Read Direction               Opt UB 58 1 A / N R, L, C, or blank only.
+				! Hi Limit                     Req UB 59 - 68 10 NUM
+				! Low Limit                    Req UB 69 - 78 10 NUM
+				! Prev Read                    Req UB 79 - 88 10 NUM
+				! Reading                      Req HH 89 - 98 10 A / N
+				! Collector Reading            Req HH 99 - 108 10 A / N Raw unadjusted reading from the MIU.
+				! Read Code                    Req HH 109 - 110 2 A / N
+				! Re-entry Count               Req HH 111 - 112 2 NUM
+				! Water No Flow 35 Days        Req HH 113 1 NUM Number of days.
+				! Peak Backflow                Req HH 114 1 NUM Reverse flow.
+				! Leak 35 Days                 Req HH 115 1 NUM Number of days.
+				! Current Leak                 Req HH 116 1 NUM Leak status. 
+				! Previous Error Count         Opt UB 117 1 NUM Gas tamper. Use 8 to suppress tamper check. 
+				! Current Error Count          Req HH 118 1 NUM Current error / tamper count for R900G. 
+				! Fatal Error                  Req HH 119 1 NUM Fatal error flag for R900G. 
+				! Non-Fatal Error / Flag       Req HH 120 1 NUM Non-fatal error flag for R900G. 
+				! Voltage                      Req HH 121 - 123 3 NUM Operating meter voltage for R900.
+				! MIU Type                     Req HH 124 - 125 2 NUM Utility meter type.
+				! AMR Read Type                Req HH 126 - 127 2 NUM AMR reading type.
+				! High Power                   Req HH 128 1 NUM High versus low power indicator for all R900.
+				! R900 Format                  Req HH 129 - 130 2 NUM The R900 reading format: 0 = Binary,2 = Data Stream (not used),3 = E-CODER,4 = Mlog
+				! Display Digits               Req HH 131 1 NUM Number of digits in main reading display. Multiplier Applied            Req HH 132 1 NUM
+				! Gas No Flow                  Req HH 133 1 NUM Period for which there has been no gas flow. 
+				! Current Gas Backflow Tamper  Req HH 134 1 NUM
+				! Current Gas Removal Tamper   Req HH 135 1 NUM
+				! Current Gas Magnetic Tamper  Req HH 136 1 NUM
+				! ERT Inversion Tamper         Req HH 137 1 NUM
+				! ERT Reverse Tamper           Req HH 138 1 NUM
+				! 35-Day Gas Backflow Tamper   Req HH 139 1 NUM
+				! 35-Day Gas Removal Tamper    Req HH 140 1 NUM
+				! 35-Day Gas Magnetic Tamper   Req HH 141 1 NUM
+				! 35-Day Program Flag          Req HH 142 1 NUM R900G only.
+				! Reed Switch Failure Flag     Req HH 143 1 NUM R900G only.
+				! Additional Flags             Req HH 144 - 212 69 For future use.
+				! Register Manufacturer        Req HH 213 - 237 25 A / N
+				! Register Install Date        Req HH 238 - 245 8 NUM YYYYMMDD.
+				! Register ID                  Req HH 246 - 255 10 A / N
+				! CRLF                         Req UB 256 - 257 2 Carriage return, line feed.
+
+				if sc$='WA' and line$(6:9)='WTR' then
+					reading_water=8675309
 				end if
-			else if line_type$="RFF" or line_type$="WRR" then
-				tmpr$=line$(55:56)
-				if val(tmpr$)=0 then tmpr$=line$(57:58)
+
+				pr line_type$ 
+				pr '*TODO: complete this Reading Detail code' : pr line$ : fnPause
+				
+				! /r
+			else if line_type$="ordst" then ! r: Order Status  
+				pr """Unfortunately, the .exp doesn't have readings but you'll see where the Order Status Record is created & "
+				pr " this is where the readings will be placed."" -Kieth"
+				pr line_type$ 
+				pr '*TODO: complete this code Order Status' : pr line$ : fnPause
+				! /r
+			else if line_type$="mtrdt" then ! r: Meter Detail
+				! Record ID             Req UB 1 - 5 5 A / N MTRDT.
+				! Read Sequence         Req UB 6 - 11 6 NUM Right-justify, zero-fill.
+				! Changed Read Sequence Opt HH 12 - 17 6 NUM Changed value coming back from field.
+				! Meter Key             Req UB 18 - 37 20 NUM Key to identify the meter within the premises key. Use meter number for this unless the CIS utility billing system vendor has a better key. Meter Number          Req UB 38 - 57 20 A / N Meter serial number.
+				! Changed Meter Number  Opt HH 58 - 77 20 A / N Actual meter number found in the field.
+				! Meter Type            Req UB 78 - 81 4 A / N
+				! Changed Meter Type    Opt HH 82 - 85 4 A / N
+				! Meter Size            Req UB 86 - 93 8 A / N See field description "Meter Size" on page 34.
+				! Changed Meter Size    Opt HH 94 - 101 8 A / N
+				
+				customer_sequence=val(line$(12:17)) ! Changed Read Sequence
+				
+				
+				pr line_type$ 
+				pr '*TODO: complete this Meter Detail code' : pr line$ : fnPause
+				
+				! /r
 			end if
 		loop
 		Eo_nev4: !
 		! write the last one
-		fn_nev4_write(hOut,z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
+		fn_nev4_write(hOut,z$,reading_water)
 		close #hIn:
 		close #hOut:
+		pr 'nev4 complete' : fnPause
 	fnend
-	def fn_nev4_write(hOut,z$,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas)
-		! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
+		Sub_soFlowAccountNo: ! r:
+			z$='*invalid*'
+			pr bell;'account number too long: ';line$(194:123)
+		continue ! /r
+	def fn_nev4_write(hOut,z$,reading_water)
+		! pr #hOut,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
-			pr #hOut: 'Customer.Number='&z$
-			if reading_water<>0 then pr #h_itron_out: 'Reading.Water='&str$(reading_water)
-			if reading_electric<>0 then pr #h_itron_out: 'Reading.Electric='&str$(reading_electric)
-			if reading_gas<>0 then pr #h_itron_out: 'Reading.Gas='&str$(reading_gas)
-			if meterroll_water<>0 then pr #h_itron_out: 'MeterRoll.Water='&str$(meterroll_water)
-			if meterroll_electric<>0 then pr #h_itron_out: 'MeterRoll.Electric='&str$(meterroll_electric)
-			if meterroll_gas<>0 then pr #h_itron_out: 'MeterRoll.Gas='&str$(meterroll_gas)
-			pr #hOut: 'Meter.Tamper='&str$(val(tmpr$))
+			fn_prHout('Customer.Number='&z$)
+			fn_inz(reading_water     ,'Reading.Water'       )
+			fn_inz(customer_sequence ,'customer.sequence'   )
 		else
-			pr #hOut: '! customer number '&z$&' has all zero readings.'
+			fn_prHout('! customer number '&z$&' has all zero readings.')
 		end if
+	fnend
+	def fn_inz(notZeroAmt,what$*512) ! ifNotZeroPrHoutEqualsNotZeroAmt
+		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt))
 	fnend
 
 ! /r
 def fn_readings_backup(bookFile$*512)
 	if exists(bookFile$) then
-		fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bk$&'.bak')
-	end if  ! exists UBmstr\readings.[bk$]
+		fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bookNumberToStoreReadings$&'.bak')
+	end if
 fnend
 
 def fn_findFirstMatch(mat ffmItemsToSearch$,ffmCriteria1$*256; ffmCriteria2$*256,ffmCriteria3$*256,ffmCriteria4$*256)
@@ -748,7 +819,7 @@ fnend
 def fn_okToMerge(bookFile$*512,requiredFormat$*128)
 	if fn_readingsFileVersion$(bookFile$)<>requiredFormat$ then
 		mat ml$(2)
-		ml$(1)='The existing book (number '&bk$&') is not in a format that permits'
+		ml$(1)='The existing book (number '&bookNumberToStoreReadings$&') is not in a format that permits'
 		ml$(2)='merging with the '&deviceSelected$&' format.'
 		fnmsgbox(mat ml$)
 		aclaraWorkOrderReturn=-1
@@ -798,11 +869,11 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 						! pr '  file 2: "'&mbCg2Value$(mb2Match)&'"'
 						! pr '  The value from File 2 will override the value from File 1.'
 						! pr '  type GO and press Enter to continue'
-						! pause
+						! fnPause
 					end if
 					mbCg1Label$(mb1x)=''
 				end if
-				! pause
+				! fnPause
 			nex mb1x
 			for mb2x=2 to udim(mbCg2Label$)
 				if trim$(mbCg2Label$(mb2x))<>'' then
@@ -819,13 +890,13 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 					! pr 'd>>';mbCg1Label$(mb1x)&'='&mbCg1Value$(mb1x)
 			nex mb1x
 		end if
-		! pause
+		! fnPause
 		pr #hMergeNew: ''
 	nex mbX
 	for mbX=1 to udim(mat mbF2CustomerNumbers$)
 		if mbF2CustomerNumbers$(mbX)<>'' then
 			pr 'adding '&mbF2CustomerNumbers$(mbX)&' from the second file that was not in the first file.'
-			! pause
+			! fnPause
 			cg2Count=fn_getCustomerGroup(mat mbF2Label$,mat mbF2Value$,mbF2CustomerNumbers$(mbX),mat mbCg2Label$,mat mbCg2Value$)
 			pr #hMergeNew: 'Customer.Number='&mbF2CustomerNumbers$(mbX)
 			for mb1x=2 to udim(mat mbCg2Label$)
@@ -860,7 +931,7 @@ def fn_getCustomerGroup(mat gcgFromLabel$,mat gcgFromValue$,gcgCustomerNumbers$,
 	if gcgIndex<=0 then
 		pr 'could not find gcgCustomerNumbers$="'&gcgCustomerNumbers$&'"'
 		! for x=1 to udim(mat gcgFromValue$) : if gcgFromValue$(x)<>'' then pr x;gcgFromValue$(x) : nex x
-		! pause
+		! fnPause
 	else
 		if gcgFromLabel$(gcgIndex)<>'Customer.Number' then goto gcgTop
 		do
@@ -873,6 +944,7 @@ def fn_getCustomerGroup(mat gcgFromLabel$,mat gcgFromValue$,gcgCustomerNumbers$,
 	fn_getCustomerGroup=gcgReturn
 fnend
 def fn_setup
+	library 'S:\Core\Library': fnPause
 	library 'S:\Core\Library': fnXit
 	library 'S:\Core\Library': fnUreg_read
 	library 'S:\Core\Library': fnTop

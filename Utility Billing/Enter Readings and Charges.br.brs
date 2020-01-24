@@ -1494,6 +1494,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	fnLbl(11,1," ",15,1)
 	! /r
 	fnCmdKey("&Next",1,1)
+	fnCmdKey("I&mport from Hand Held",ck_importHHtoBook=3)
 	fnCmdKey("&Delete",ck_delete=4)
 	fnCmdKey("&Print",ck_print=6)
 	fnCmdKey("&Cancel",cancel,0,1)
@@ -1510,6 +1511,10 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		else
 			fn_hh_readings(ip1$, 1) ! pr for Books
 		end if
+		goto INPUT_HAND
+	else if ck=ck_importHHtoBook then
+		fnRetrieveHandHeldFile
+		fntop(program$)
 		goto INPUT_HAND
 	else if ck=ck_delete then
 		
@@ -2183,7 +2188,7 @@ def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDat
 				end if
 			end if
 		else if lfItem$(1)="reading" and udim(mat lfItem$)=2 then
-			if lfItem$(2)="water" then
+			if lfItem$(2)="water" or lfItem$(2)="wa" then
 				x(1)=hpValueN
 			else if lfItem$(2)="gas" then
 				x(2)=hpValueN
@@ -2324,6 +2329,10 @@ def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImport
 					read #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
 					location$(loc_latitude)=hotImportDataValue$(hotIdX)
 					rewrite #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
+				else if hotImportDataField$(hotIdX)='customer.sequence' then
+					! *TODO: rewtite for customer.sequence " 
+					pr "rewrite #hCustomer1,using 'form',key=x$: " 
+					pause
 				else
 					pr ' add code to update '&hotImportDataField$(hotIdX)
 					pause
