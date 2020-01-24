@@ -59,9 +59,9 @@ unuse174        ,  unused                              ,  c    1   ,            
 ph              ,  Telephone Number                    ,  c   12   ,             , ! Pos=179       ph$     
 bd              ,  Birth Date                          ,  n    6   , date(mmddyy), ! Pos=191       bd      
 W4Step3         ,  W-4 Step 3                          ,  n   12.2 ,             , ! Pos=197
-W4Step4a        ,  W-4 Step 3                          ,  n   12.2 ,             , ! Pos=209
-W4Step4b        ,  W-4 Step 3                          ,  n   12.2 ,             , ! Pos=221
-W4Step4c        ,  W-4 Step 3                          ,  n   12.2 ,             , ! Pos=233
+W4Step4a        ,  W-4 Step 4a                         ,  n   12.2 ,             , ! Pos=209
+W4Step4b        ,  W-4 Step 4b                         ,  n   12.2 ,             , ! Pos=221
+W4Step4c        ,  W-4 Step 4c                         ,  n   12.2 ,             , ! Pos=233
 
 
 #eof#
