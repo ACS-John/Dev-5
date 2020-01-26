@@ -1,0 +1,8 @@
+S:\Core\Data\acsllc\oSystems.h420, osys_, 0
+S:\Core\Data\acsllc\oSystems-Idx.h420 ,  id
+recl=90
+===================================================
+id       ,Id         	,C   2
+name     ,Name       	,C  50
+number   ,Number     	,N   3
+isAddOn  ,Is an Add-On	,N   1    , !  1=yes (it is an add-on)  else no
