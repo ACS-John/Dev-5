@@ -592,16 +592,16 @@ def fn_draw_windows
 		!
 	fn_company_name(0,Session_Cols) ! fn_company_name(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
 		!
-	if not grid_present then
+	if grid_present then
+		row= 3
+		col= 4
+		rows=Session_Rows-6
+		cols=Session_Cols-2
+	else
 		row=ceil((Session_Rows-ace_lyne_max)/2 )
 		col=ceil((Session_Cols-ace_column_max)/2 )
 		rows=ace_lyne_max
 		cols=max(ace_column_max+2,button_win_width+2)
-	else
-		row= 3
-		col= 2
-		rows=Session_Rows-6
-		cols=Session_Cols-2
 	end if
 	if parent_none then
 		!			if disabled_background then open #disable_win=fngethandle: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",display,output
@@ -634,36 +634,36 @@ def fn_set_controls
 	dim control$(1)*5095
 	for index_=1 to control_count
 		str2mat(env$('control'&str$(index_)),mat control$,"|")
-		ace_typ$(index_)=typ$=uprc$(control$(1))
-		if typ$="LABEL" then
+		ace_typ$(index_)=typ$=lwrc$(control$(1))
+		if typ$="label" then
 			fn_ace_rd_label
-		else if typ$="TEXT" then
+		else if typ$="text" then
 			fn_ace_rd_text
-		else if typ$="COMBOA" then
+		else if typ$="comboa" then
 			fn_ace_rd_combo('A')
-		else if typ$="COMBOF" then
+		else if typ$="combof" then
 			fn_ace_rd_combo('F')
-		else if typ$="CHECK" then
+		else if typ$="check" then
 			fn_ace_rd_check
-		else if typ$="OPTION" then
+		else if typ$="option" then
 			fn_ace_rd_option
-		else if typ$="FLEX" then
+		else if typ$="flex" then
 			fn_ace_rd_flex
-		else if typ$="BUTTON" then
+		else if typ$="button" then
 			fn_ace_rd_button
-		else if typ$="PICTURE" then
+		else if typ$="picture" then
 			fn_ace_rd_pic
-		else if typ$="CMDKEY" then
+		else if typ$="cmdkey" then
 			fn_ace_rd_cmdkey
-		else if typ$="PICBUT" then
+		else if typ$="picbut" then
 			fn_ace_rd_picbut
-		else if typ$="MULTILINE" then
+		else if typ$="multiline" then
 			fn_ace_rd_multiline
-		else if typ$="FRAME" then
+		else if typ$="frame" then
 			fn_ace_rd_frame
-		else if typ$="TAB" then
+		else if typ$="tab" then
 			fn_ace_rd_tab
-		else if typ$='MENU' then
+		else if typ$='menu' then
 			fn_ace_rd_menu
 		end if
 	next index_
@@ -980,43 +980,43 @@ def fn_windowSize(; ___,index_,tmpLine,tmpPos,tmpHeight,tmpWidth)
 	!		frame_or_tab_present=0
 	for index_=1 to control_count
 		str2mat(env$('control'&str$(index_)),mat control$,"|")
-		ace_typ$(index_)=typ$=uprc$(control$(1))
-		if typ$="LABEL" then
+		ace_typ$(index_)=typ$=lwrc$(control$(1))
+		if typ$="label" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max(ace_column_max, val(control$(3))+max(val(control$(4)),len(control$(6))))
-		else if typ$="TEXT" or typ$="COMBOA" or typ$="COMBOF" then
+		else if typ$="text" or typ$="comboa" or typ$="combof" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(4)) )
-		else if typ$="CHECK" or typ$="OPTION" then
+		else if typ$="check" or typ$="option" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2))+2)
 		 ! if index_=5 then pr 'it is 5' : pause
 			ace_column_max=max( ace_column_max, val(control$(3))+len(control$(5))+4) ! max( ace_column_max, val(control$(3))+len(trim$(control$(5)))+4)
-		else if typ$="FLEX" or typ$="MULTILINE" or typ$="FRAME" or typ$="TAB" then
-			if typ$="FLEX" then grid_present=1
+		else if typ$="flex" or typ$="multiline" or typ$="frame" or typ$="tab" then
+			if typ$="flex" then grid_present=1
 			ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)) )
-			if typ$="FRAME" or typ$="TAB" and (not save_bottom or val(control$(2))+val(control$(4))>save_bottom) then ace_lyne_max += 1
+			if typ$="frame" or typ$="tab" and (not save_bottom or val(control$(2))+val(control$(4))>save_bottom) then ace_lyne_max += 1
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5))    )
 			save_bottom=val(control$(2))+val(control$(4))
-		else if typ$="CMDKEY" then
+		else if typ$="cmdkey" then
 			button_win_width +=(len(control$(2))+1)
-		else if typ$="BUTTON" then
+		else if typ$="button" then
 			ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 			ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
-		else if typ$="PICTURE" then
-			tmpLine  	=val(control$(2))
-			tmpPos   	=val(control$(3))
-			tmpHeight	=val(control$(4))
-			tmpWidth 	=val(control$(5))
-			ace_lyne_max  =max(ace_lyne_max  ,tmpLine+tmpHeight)
-			ace_column_max=max(ace_column_max,tmpPos+tmpWidth  )
-		else if typ$="PICBUT" then
-			tmpLine  	=val(control$(2))
-			tmpPos   	=val(control$(3))
-			tmpHeight	=val(control$(7))
-			tmpWidth 	=val(control$(8))
-			ace_lyne_max=max(ace_lyne_max,tmpLine+tmpHeight)
-			ace_column_max=max( ace_column_max,tmpPos+tmpWidth)
-		else if typ$="MENU" then
+		else if typ$="picture" then
+			tmpline  	=val(control$(2))
+			tmppos   	=val(control$(3))
+			tmpheight	=val(control$(4))
+			tmpwidth 	=val(control$(5))
+			ace_lyne_max  =max(ace_lyne_max  ,tmpline+tmpheight)
+			ace_column_max=max(ace_column_max,tmppos+tmpwidth  )
+		else if typ$="picbut" then
+			tmpline  	=val(control$(2))
+			tmppos   	=val(control$(3))
+			tmpheight	=val(control$(7))
+			tmpwidth 	=val(control$(8))
+			ace_lyne_max=max(ace_lyne_max,tmpline+tmpheight)
+			ace_column_max=max( ace_column_max,tmppos+tmpwidth)
+		else if typ$="menu" then
 			dropdown_menu_present=1
 		end if
 	next index_

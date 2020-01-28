@@ -108,10 +108,10 @@ BUILD_LAYOUT: !
   c$(cl,7)="[Q]\CLmstr\BankIdx1.h[cno]" 
   c$(cl,8)=limit_to_list$
   cl=2 : c$(cl,1)='ComboF' 
-  c$(cl,2)="[Q]\CLmstr\TransactionType.dat" 
+  c$(cl,2)="S:\Core\Data\TransactionType.dat" 
   c$(cl,3)='1' : c$(cl,4)='1' 
   c$(cl,5)='2' : c$(cl,6)='25' 
-  c$(cl,7)="[Q]\CLmstr\TransactionType.idx" 
+  c$(cl,7)="S:\Core\Data\TransactionType.idx" 
   c$(cl,8)=limit_to_list$
   cl=6 : c$(cl,1)='ComboF' 
   c$(cl,2)="[Q]\CLmstr\PayMstr.h[cno]" 

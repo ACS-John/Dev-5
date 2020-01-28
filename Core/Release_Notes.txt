@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                           
+12:21 PM 1/28/2020	UB	FIXED: Billing Journal - if running under some conditions (i.e. past dates) certain sort orders caused a blank (headers and empty totals) first page to be shown. 
+5:03 PM 1/27/2020	CO	Centralized Checkbooks TransactionType table so corruption is fixed with updates as auto generation of the table was missing 3 Adjustments
 3:07 PM 1/24/2020	UB	Enter Readings and Charges - now Load Book screen has it's own Import from Hand Held button so you can do it all from that one screen.
 11:31 01/20/2020	CO	5.74257  
 11:30 AM 1/24/2020	CL	Print 1099s now have 2019 pdf backgrounds 

@@ -1,5 +1,5 @@
-[Q]\GLmstr\TransactionType.dat  ,  TranType_  , 1
-[Q]\GLmstr\TransactionType.Idx  ,  key
+S:\Core\Data\TransactionType.dat  ,  TranType_  , 1
+S:\Core\Data\TransactionType.Idx  ,  key
 recl=26
 ===================================================
 key     ,    Transaction Type  ,  N  1       , !  Pos=1  Required=True  Mask=1030

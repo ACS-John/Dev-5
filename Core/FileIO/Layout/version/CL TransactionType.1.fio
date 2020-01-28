@@ -1,5 +1,5 @@
-[Q]\CLmstr\TransactionType.dat  ,  TranType_  , 1
-[Q]\CLmstr\TransactionType.Idx  ,  key
+S:\Core\Data\oTransactionType.dat, oTranType_, 1
+S:\Core\Data\oTransactionType.Idx  ,  key
 recl=26
 ===================================================
 key     ,    Transaction Type  ,  N  1       , !  Pos=1  Required=True  Mask=1030
