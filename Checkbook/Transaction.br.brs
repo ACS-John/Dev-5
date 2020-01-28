@@ -33,13 +33,14 @@
 	pointtwo$='32' : disable=1 : add_all=2 : false=0
 ! defaults
 	addloop$='True'
-	d1=val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
+	d1=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 	if d1<19999 then d1=d1+110000 : rollback=1 else d1=d1-10000 : rollback=0
 	begd=(int(d1/10000)*10000)+100+val(date$('yy'))-rollback
-	endd=begd+3000
+	endd=begd+3000 
 	transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 	transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr CHAIN_SELCNO: read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20: 
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr CHAIN_SELCNO
+	read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20: 
 	gosub OPEN_TRANSACTION_FILES
 	open #h_tralloc=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed 
 ! /r
@@ -53,7 +54,7 @@ SCREEN1: ! r:
 	fncombof('BankAll',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",add_all)
 	if wbc=0 then resp$(1)='[All]' else resp$(1)=str$(wbc)
 	fnLbl(lc+=1,1,"Working Transaction Type:",mylen,right)
-	fncombof('TransactionTypeall',lc,mypos,0,"[Q]\CLmstr\TransactionType.dat",1,1,2,25,"[Q]\CLmstr\TransactionType.idx",add_all)
+	fncombof('TransactionTypeall',lc,mypos,0,"S:\Core\Data\TransactionType.dat",1,1,2,25,"S:\Core\Data\TransactionType.idx",add_all)
 	if wtt=0 then resp$(2)='[All]' else resp$(2)=str$(wtt)
 	fnLbl(lc+=1,1,"Payee:",mylen,right)
 	fncombof('Payeeall',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",add_all)
@@ -113,7 +114,7 @@ OPEN_TRANSACTION_FILES: ! r:
 	open #h_trmstr(2)=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 return  ! /r
 MENU1: ! r:
-	fnTos(sn$='Transaction-Menu1')
+	fnTos
 	lc=0 : mylen=30 : mypos=mylen+2
 	fc=0 ! frame count
 	fnFra(1,1,10,100,'Transaction Grid Selection Criteria')
@@ -129,6 +130,7 @@ MENU1: ! r:
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 	fnTxt(lc,mypos,1,0,left,'',disable,'',frame)
 	resp$(4)=str$(wtt)
+	! fncombof('TransactionTypeall',lc,mypos,0,"S:\Core\Data\TransactionType.dat",1,1,2,25,"S:\Core\Data\TransactionType.idx",add_all)
 	fnTxt(lc,mypos+4,25,0,left,'',disable,'',frame)
 	resp$(5)=tcde$
 	lc+=1
@@ -460,7 +462,7 @@ VOID_TRANSACTION: ! r:
 	VOID_EO_TRALLOC: ! 
 return  ! /r
 DELETE_TRANSACTION: ! r:
-	fnTos(sn$='Trans-Delete')
+	fnTos
 	lc=0 : width=50
 	fnLbl(lc+=1,1,'Delete Transaction Options',width,center)
 	ln+=1
@@ -513,7 +515,7 @@ READ_ALLOCATION: ! r: uses allocrec and returns ???
 return  ! /r
 FM_ALLOCATION: ! r:
 	allocations_messed_with=1
-	fnTos(sn$='Trans-TrAlloc')
+	fnTos
 	lc=0 : mylen=22 : mypos=mylen+2
 	fnLbl(lc+=1,1,'Bank:',mylen,right)
 	fnTxt(lc,mypos,2,0,left,number$,disable)
@@ -602,7 +604,7 @@ FM_SCREEN: ! r: requires typeofentry, scd, and many more
 	fncombof('Bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
 	resp$(1)=str$(bank_code)
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
-! fncombof('TransactionType',lc,mypos,0,'[Q]\CLmstr\TransactionType.dat',1,1,2,25,'[Q]\CLmstr\TransactionType.idx',limit_to_list,0,'',frame)
+! fncombof('TransactionType',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',limit_to_list,0,'',frame)
 ! resp$(2)=str$(tcde)
 	fnTxt(lc,mypos,28,0,left,'',disable,'',frame)
 	resp$(2)=str$(tcde)

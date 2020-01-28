@@ -631,13 +631,6 @@ def fn_cfv_checkbook
 	!
 	fn_file_setup_data("[Q]\CLmstr\BankMstr.h[cno]",64,1)
 	fn_file_setup_index("[Q]\CLmstr\BankIdx1.h[cno]",'1','2')
-	!
-	if ~exists('[Q]\CLmstr\TransactionType.dat') then
-		open #hTransactionType:=fngethandle: "Name=[Q]\CLmstr\TransactionType.dat,Version=1,KFName=[Q]\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed
-		write #hTransactionType,using 'form pos 1,n 1,C 25': 1,'Check (Disbursment)'
-		write #hTransactionType,using 'form pos 1,n 1,C 25': 2,'Deposit   (Receipt)'
-		close #hTransactionType:
-	end if
 	if ~exists('[Q]\CLmstr\PayeeType.dat') then
 		open #hPayeeType:=fngethandle: "Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
