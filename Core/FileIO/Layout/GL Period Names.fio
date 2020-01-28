@@ -1,5 +1,5 @@
 [Q]\GLmstr\Period.h[cno]       ,  period_  , 1
-[Q]\GLmstr\Period-Idx.h[cno]-u ,  Code
+[Q]\GLmstr\Period-Idx.h[cno]   ,  Code-u
 recl=35
 ===================================================
 Code   ,    Code        ,  N  2       , !  Pos=1   Required=True mask=30

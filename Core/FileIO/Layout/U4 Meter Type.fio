@@ -1,5 +1,5 @@
 [Q]\UBmstr\MeterType.h[cno]  ,  type_  , 0
-[Q]\UBmstr\MeterTypeIdx.h[cno]-u ,  key
+[Q]\UBmstr\MeterTypeIdx.h[cno] ,  key-u
 
 ! actual BR Version changed from 1 to 2 on 1/14/20 to cange the readType field from an N 2 to a C 4 and rln remained 128
 ! RecL=128

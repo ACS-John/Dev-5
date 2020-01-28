@@ -1,8 +1,8 @@
 [Q]\UBmstr\Customer.h[cno]  ,  c_  , 0
 [Q]\UBmstr\ubIndex.h[cno]   ,  account
 [Q]\UBmstr\ubIndx2.h[cno]   ,  alphaSort
-[Q]\UBmstr\ubIndx3.h[cno]-u ,  meterAddress
-[Q]\UBmstr\ubIndx4.h[cno]-u ,  name
+[Q]\UBmstr\ubIndx3.h[cno]   ,  meterAddress-u
+[Q]\UBmstr\ubIndx4.h[cno]   ,  name-u
 [Q]\UBmstr\ubIndx5.h[cno]   ,  route/sequence 
 recl=2067
 ===================================================
