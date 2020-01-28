@@ -1,6 +1,6 @@
 [Q]\UBmstr\MeterLocation.h[cno]  ,  loc_  , 1
 [Q]\UBmstr\MeterLocationIdx1.h[cno]   ,  locationID
-[Q]\UBmstr\MeterLocationIdx2.h[cno]-u ,  name
+[Q]\UBmstr\MeterLocationIdx2.h[cno]   ,  name-u
 [Q]\UBmstr\MeterLocationIdx3.h[cno]   ,  activeCustomer
 [Q]\UBmstr\MeterLocationIdx4.h[cno]   ,  activeCustomer/serviceId
 [Q]\UBmstr\MeterLocationIdx5.h[cno]   ,  locationID/serviceId
