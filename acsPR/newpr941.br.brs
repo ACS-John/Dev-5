@@ -171,8 +171,8 @@ def fn_start_print
 	WK_HEADER: ! 
 	p2=p2+1
 	pr #255,using L1600: "Page ",p2
-	pr #255: ""
 	L1600: form pos 70,c 5,pic(zzz)
+	pr #255: '                                 941 Summary'
 	pr #255: tab(15);"Employer's Quarterly Federal Tax Return Worksheet"
 	pr #255,using L1630: "For quarter ended "&m$&", "&str$(taxyear)
 	L1630: form pos 20,cc 40

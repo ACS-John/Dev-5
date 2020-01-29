@@ -727,6 +727,7 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 	end if
 	FwhFinis: !
 	! pr 'federal withholding is ';returnN : pause
+	if returnN<=0 then returnN=0 ! we should never have negative federal withholding.
 	fn_federalWithholding=returnN
 fnend
 FicaUnEmp: ! r: FICA

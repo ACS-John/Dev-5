@@ -42,7 +42,7 @@ tcp21        ,standard deduction 17      , PD 5.2,                ,! SPos=165 ak
 tcp22        ,standard deduction 18      , PD 5.2,                ,! SPos=170 aka=tcp(22)
 tcp23        ,standard deduction 19      , PD 5.2,                ,! SPos=175 aka=tcp(23)
 tcp24        ,standard deduction 20      , PD 5.2,                ,! SPos=180 aka=tcp(24)
-tcp25        ,tcp25                      , PD 5.2,                ,! SPos=185 aka=tcp(25)
+tcp25        ,Earned Income Credit       , PD 5.2,                ,! SPos=185 aka=tcp(25)   most peope do not use this
 tcp26        ,Pay - Regular              , PD 5.2,                ,! SPos=190 aka=tcp(26)
 tcp27        ,Pay - OverTime             , PD 5.2,                ,! SPos=195 aka=tcp(27)
 tcp28        ,Other Compensation         , PD 5.2,                ,! SPos=200 aka=tcp(28)
