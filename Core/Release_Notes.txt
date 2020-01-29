@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                             
+1:33 PM 1/29/2020	PR	Bullet proof against negative federal withholdings for extreme situations
 12:31 01/20/2020	CO	5.74259  
 12:23 01/20/2020	CO	5.74258   
 12:21 PM 1/28/2020	UB	FIXED: Billing Journal - if running under some conditions (i.e. past dates) certain sort orders caused a blank (headers and empty totals) first page to be shown.   
