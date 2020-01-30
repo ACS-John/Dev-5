@@ -3,18 +3,18 @@ def fn_setup
 		setup=1
 		library 'S:\Core\Library': fnMsgBox
 		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
+		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs2
 		gosub Enum
 	end if
 fnend
-def library fnConfirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
-	if ~setup then let fn_setup
-	fnConfirm=fn_confirm(Verb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
+def library fnConfirm(cVerb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
+	if ~setup then fn_setup
+	fnConfirm=fn_confirm(cVerb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
 fnend
 def fn_confirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,returnN,confirmButtonAdd,confirmResponse$)
-	! Verb$ - something like "confirm" or "cancel" or "delete" or "complete"
+	! cVerb$ - something like "confirm" or "cancel" or "delete" or "complete"
 	confirmFkeyPrior=Fkey
-	if verb$='delete' then
+	if cVerb$='delete' then
 		confirmButtonAdd=mb_button2_default
 	else
 		confirmButtonAdd=mb_button1_default
@@ -22,7 +22,7 @@ def fn_confirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,r
 
 	dim confirmText$(0)*2048
 	mat confirmText$(0)
-	fnAddOneC(mat confirmText$,'Do you really want to '&Lwrc$(Verb$)&'?')
+	fnAddOneC(mat confirmText$,'Do you really want to '&Lwrc$(cVerb$)&'?')
 	if textAddition$<>'' then
 		fnAddOneC(mat confirmText$,'')
 		fnAddOneC(mat confirmText$,textAddition$)
@@ -37,26 +37,37 @@ def fn_confirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,r
 	fn_confirm=returnN
 fnend
 def library fnConfirmDelete(What_You_Deleting$*60; Confirm_Dont_Ask_Again_Key$*28)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnConfirmDelete=fn_confirm('delete',What_You_Deleting$,Confirm_Dont_Ask_Again_Key$)
 fnend
 def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60; ___,returnN)
-	if ~setup then let fn_setup
-	companyDeleteReturn=0
+	if ~setup then fn_setup
+	fnConfirmDeleteHard=fn_confirmHard('delete',whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
+fnend
+def library fnConfirmHard(chVerb$,whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
+	if ~setup then fn_setup
+	fnConfirmHard=fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$,whatYouAreVerbingSpecific$)
+fnend
+def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
 	fnTos
-	fnLbl(1,1,"**** WARNING ****",40,1,5)
-	fnLbl(3,1,"You have chosen to delete "&whatYouAreDeletingGeneral$&":",60,2)
-	fnLbl(4,1,whatYouAreDeletingSpecific$,60,2)
+	fnLbl(1,1,"**** WARNING ****",40,1,+455)
+	fnLbl(3,1,'You have '&chVerb$&' '&whatYouAreVerbingGeneral$&":",60,2)
+	fnLbl(4,1,whatYouAreVerbingSpecific$,60,2)
 	fnLbl(6,1,"This action is irreversable.",60,2)
-	fnLbl(9,11,"Enter ERASE to continue:",24,1)
-	fnTxt(9,36,5)
+	if chVerb$='delete' then typeWord$='ERASE' else typeWord$=uprc$(chVerb$)
+	col1_pos=11
+	col1_len=len('Enter '&typeWord$&' to continue:')
+	col2_pos=col1_pos+col1_len+1
+	col2_len=len(typeWord$)
+	fnLbl(9,col1_pos,'Enter '&typeWord$&' to continue:',col1_len,1)
+	fnTxt(9,col2_pos,col2_len)
 	resp$(1)=''
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	e$=uprc$(trim$(resp$(1)))
-	if ckey<>5 and uprc$(trim$(resp$(1)))="ERASE" then
+	if ckey<>5 and uprc$(trim$(resp$(1)))=typeWord$ then
 		returnN=1
 	end if
-	fnConfirmDeleteHard=returnN
+	fn_confirmHard=returnN
 fnend
 include: enum

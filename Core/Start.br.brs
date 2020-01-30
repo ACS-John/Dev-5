@@ -620,14 +620,15 @@ def fncs_env
 	setenv('client_os_path',client_os_path$)
 	XIT_FNCS_OS_PATH: !
 fnend
-def fn_show_release_notes(version_prior$,version_current$)
+def fn_show_release_notes(version_prior$,version_current$; ___,didOpen)
 	dim srnLine$*1024,srnItem$(0)*1024
 	open #hSrnOut:=fn_gethandle: 'name=ACS_tmp_Release_Note_Report.txt,recl=1024,replace',d,o
-	open #hReleaseNotes:=fn_gethandle: 'name=S:\Core\Release_Notes.txt',d,i
+	open #hReleaseNotes:=fn_gethandle: 'name=S:\Core\Release_Notes.txt',d,i ioerr SrnReleaseNotesEof
+	didOpen=1
 	pr #hSrnOut: 'You just updated from '&version_prior$&' to '&version_current$&'.'
 	pr #hSrnOut: ''
 	do
-	linput #hReleaseNotes: srnLine$ eof srnReleaseNotesEof
+	linput #hReleaseNotes: srnLine$ eof SrnReleaseNotesEof
 		str2mat(srnLine$,mat srnItem$,chr$(9))
 		if udim(mat srnItem$)=>3 then
 			srnItem3Value=val(srnItem$(3)) conv ignore
@@ -638,9 +639,11 @@ def fn_show_release_notes(version_prior$,version_current$)
 			pr #hSrnOut: srnLine$
 		end if
 	loop until srnItem3Value<>0 and (udim(srnItem$)=>3 and srnItem$(3)<=version_prior$)
-	srnReleaseNotesEof: !
+	SrnReleaseNotesEof: !
 	close #hSrnOut:
-	exec 'sy -c -m'&os_filename$('ACS_tmp_Release_Note_Report.txt')&'"'
+	if didOpen then
+		exec 'sy -c -m'&os_filename$('ACS_tmp_Release_Note_Report.txt')&'"'
+	end if
 fnend
 def library fngethandle
 	fngethandle=fn_gethandle
