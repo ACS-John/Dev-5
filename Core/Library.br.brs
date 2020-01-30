@@ -207,6 +207,12 @@ def library fnConfirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*2
 	library 'S:\Core\Confirm.br': fnConfirm
 	fnConfirm=fnConfirm(Verb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
 fnend
+
+def library fnConfirmHard(chVerb$; whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60)
+	library 'S:\Core\Confirm.br': fnConfirmHard
+	fnConfirmHard=fnConfirmHard(chVerb$, whatYouAreVerbingGeneral$,whatYouAreVerbingSpecific$)
+fnend
+
 def library fnConfirmDelete(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
 	library 'S:\Core\Confirm.br': fnConfirmDelete
 	fnConfirmDelete=fnConfirmDelete(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
