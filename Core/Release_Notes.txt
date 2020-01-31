@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                  
+5:35 PM 1/31/2020	PR	Employee - Added checkboxes to disable state and/or federal taxes on any amployee.  it's puts a -1 in the XX standard deduction for you, as was the older method.
 13:27 01/20/2020	CO	5.74264  
 9:03 01/20/2020	CO	5.74263   
 8:59 AM 1/31/2020	UB	fixed Forgot to Zero YTD usage calculation   
