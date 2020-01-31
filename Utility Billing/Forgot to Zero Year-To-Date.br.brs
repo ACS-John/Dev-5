@@ -25,7 +25,7 @@ do
 	restore #2,key>=z$&"         ": nokey Eo2
 	do
 		read #2,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof Eo2
-		if p$=z$ and tcode=1 and tdate<x then ! only charge transactions 
+		if p$=z$ and tcode=1 and tdate>=x then ! only charge transactions 
 			watuse+=wu
 			eleuse+=eu
 			gasuse+=gu
