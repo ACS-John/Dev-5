@@ -136,153 +136,158 @@ fnend
 
 ScrEmployee: ! r:
 	fnTos : screen=scrEmployee
-	respc=0 : frac=0 : lc=0
+	respc=0 : frac=0 : mat lc=(0)
 	mylen=28 : mypos=mylen+2
 	col1_pos=1 : col1_len=mylen
 	col2_pos=col1_pos+col1_len+2
 	
 	col3_pos=58 : col3_len=21 ! 20
 	col4_pos=col3_pos+col3_len+2 ! 73
-	fn_deptButtons(lc,deptCount)
-	lc+=1
-	fnLbl(lc+=1,1,'Employee Number:',mylen,1)
-	fnTxt(lc   ,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+	fn_deptButtons(lc(1),deptCount)
+	lc(1)+=1 : lc(2)=lc(1)
+	fnLbl(lc(1)+=1,1,'Employee Number:',mylen,1)
+	fnTxt(lc(1)   ,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
 	resp$(resp_eno=respc+=1)=str$(eno)
 	! r: col 1 top section
-	lc+=1
-	fnLbl(lc+=1,1,'Name:',mylen,1)
-	fnTxt(lc   ,mylen+3,col2_len,30,0,'',0,'Name can be entered first name first or last name first.')
+	lc(1)+=1
+	fnLbl(lc(1)+=1,1,'Name:',mylen,1)
+	fnTxt(lc(1)   ,mylen+3,col2_len,30,0,'',0,'Name can be entered first name first or last name first.')
 	resp$(resp_name=respc+=1)=em$(1)
 
-	fnLbl(lc+=1,1,"Address:",mylen,1)
-	fnTxt(lc   ,mylen+3,col2_len,30,0,"",0,"")
+	fnLbl(lc(1)+=1,1,"Address:",mylen,1)
+	fnTxt(lc(1)   ,mylen+3,col2_len,30,0,"",0,"")
 	resp$(resp_addr=respc+=1)=em$(2)
-	fnLbl(lc+=1,1,"City, State Zip:",mylen,1)
-	fnTxt(lc   ,mylen+3,col2_len,30,0,"",0,"")
+	fnLbl(lc(1)+=1,1,"City, State Zip:",mylen,1)
+	fnTxt(lc(1)   ,mylen+3,col2_len,30,0,"",0,"")
 	resp$(resp_csz=respc+=1)=em$(3)
-	lc+=1
+	lc(1)+=1
 
-	fnLbl(lc+=1,1,"Social Security Number:",mylen,1)
-	fnTxt(lc   ,mylen+3,11,11,0,"",0,"")
+	fnLbl(lc(1)+=1,1,"Social Security Number:",mylen,1)
+	fnTxt(lc(1)   ,mylen+3,11,11,0,"",0,"")
 	resp$(resp_ssn=respc+=1)=ss$
 	! /r
 	! r: col 2 top section
-	lc=2
+	lc(2)=2
 	
-	fnLbl(lc+=1,col3_pos,'Birth Date:',col3_len,1)
-	fnTxt(lc   ,col4_pos,10,10,0,"1",0,"The birth date is not required.")
+	fnLbl(lc(2)+=1,col3_pos,'Birth Date:',col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,10,10,0,"1",0,"The birth date is not required.")
 	resp$(resp_birthDate=respc+=1)=str$(bd)
 	
-	fnLbl(lc+=1,col3_pos,'Phone Number:',col3_len,1)
-	fnTxt(lc   ,col4_pos,12)
+	fnLbl(lc(2)+=1,col3_pos,'Phone Number:',col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,12)
 	resp$(resp_phone=respc+=1)=ph$
 
-	fnLbl(          lc+=1,col3_pos,"Race:",col3_len,1)
-	fncomboa("Race",lc   ,col4_pos,mat race_option$,"",16)
+	fnLbl(          lc(2)+=1,col3_pos,"Race:",col3_len,1)
+	fncomboa("Race",lc(2)   ,col4_pos,mat race_option$,"",16)
 	resp$(resp_race=respc+=1)=fnSetForCombo$(mat race_option$,str$(rs(1)))
 
-	fnLbl(         lc+=1,col3_pos,'Sex:',col3_len,1)
-	fncomboa('Sex',lc   ,col4_pos,mat gender_option$,'',10)
+	fnLbl(         lc(2)+=1,col3_pos,'Sex:',col3_len,1)
+	fncomboa('Sex',lc(2)   ,col4_pos,mat gender_option$,'',10)
 	resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
 	
-	fnLbl(             lc+=1,col3_pos,'Marital Status:',col3_len,1)
-	fncomboa('Marital',lc   ,col4_pos,mat married_option$,'',25) ! ,'',11)
+	fnLbl(             lc(2)+=1,col3_pos,'Marital Status:',col3_len,1)
+	fncomboa('Marital',lc(2)   ,col4_pos,mat married_option$,'',25) ! ,'',11)
 	resp$(resp_married=respc+=1)=fnSetForCombo$(mat married_option$,str$(em(1)))
 
-	! lc+=1
-	! fnLbl(             lc+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
-	! fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+	! lc(2)+=1
+	! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
+	! fnTxt(             lc(2)   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
 	! resp$(resp_dependentsMinor=respc+=1)=str$(dependentsMinor)
-	! fnLbl(             lc+=1,col3_pos,'Dependants - Other:',col3_len,1)
-	! fnTxt(             lc   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+	! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Other:',col3_len,1)
+	! fnTxt(             lc(2)   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
 	! resp$(resp_dependentsOther=respc+=1)=str$(dependentsOther)
 
 	! /r
 	! r: col 2 - state and federal section
-	lcTmp=lc+=2
+	lcTmp=lc(2)+=2
 	
-	fnLbl(             lc+=1,col3_pos,"Federal Exemptions:",col3_len,1)
-	fncomboa("FedEx",  lc   ,col4_pos,mat fed_exemption_option$,"",3)
+	fnChk(lc(2)+=1,col4_pos+1,'Disable Federal Taxes',1) ! , align,contain,tabcon,chk_disable)
+	resp_disableFedTax=respc+=1 : if em(12)=-1 then resp$(resp_disableFedTax)='True' else resp$(resp_disableFedTax)='False'
+	
+	fnLbl(             lc(2)+=1,col3_pos,"Federal Exemptions:",col3_len,1)
+	fncomboa("FedEx",  lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
 	resp$(resp_fedExepmtions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(2)),1,2)
-	fnLbl(lc+=1,col3_pos,"Federal Tax Add-On:",col3_len,1)
-	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
+	fnLbl(lc(2)+=1,col3_pos,"Federal Tax Add-On:",col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
 	resp$(resp_fedAddOn=respc+=1)=str$(em(13))
-	fnLbl(lc+=1,col3_pos,"Standard Federal W/H:",col3_len,1)
-	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
+	fnLbl(lc(2)+=1,col3_pos,"Standard Federal W/H:",col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
 	resp$(resp_stdFed=respc+=1)=str$(em(12))
-	lc+=1
-	fnLbl(             lc+=1,col3_pos,"State Exemptions:",col3_len,1)
-	fncomboa("StateEx",lc   ,col4_pos,mat fed_exemption_option$,"",3)
+	lc(2)+=1
+	fnChk(lc(2)+=1,col4_pos+1,'Disable State Taxes',1) ! , align,contain,tabcon,chk_disable)
+	resp_disableStTax=respc+=1 : if em(14)=-1 then resp$(resp_disableStTax)='True' else resp$(resp_disableStTax)='False'
+	fnLbl(             lc(2)+=1,col3_pos,"State Exemptions:",col3_len,1)
+	fncomboa("StateEx",lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
 	resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(3)),1,2)
-	fnLbl(lc+=1,col3_pos,"State Tax Add-On:",col3_len,1)
-	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
+	fnLbl(lc(2)+=1,col3_pos,"State Tax Add-On:",col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
 	resp$(resp_StateAddOn=respc+=1)=str$(em(15))
-	fnLbl(lc+=1,col3_pos,"Standard State W/H:",col3_len,1)
-	fnTxt(lc   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
+	fnLbl(lc(2)+=1,col3_pos,"Standard State W/H:",col3_len,1)
+	fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
 	resp$(resp_stdState=respc+=1)=str$(em(14))
 	! /r
 	
-	lc=lcTmp
-	fnLbl(lc+=1,col1_pos,"Date Hired:",col1_len,1)
-	fnTxt(lc   ,col2_pos,10,10,0,"1",0,"The date hired is only used for information purposes only.")
+	! lc(1)=lcTmp
+	fnLbl(lc(1)+=1,col1_pos,"Date Hired:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,10,10,0,"1",0,"The date hired is only used for information purposes only.")
 	resp$(resp_hireDate=respc+=1)=str$(em(16))
-	fnLbl(lc+=1,col1_pos,"Last Payroll Date:",col1_len,1)
-	fnTxt(lc   ,col2_pos,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
+	fnLbl(lc(1)+=1,col1_pos,"Last Payroll Date:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
 	resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
 	! 
-	fnLbl(               lc+=1,1,"Employment Status:",mylen,1)
-	fncombof("EmpStatus",lc   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
+	fnLbl(               lc(1)+=1,1,"Employment Status:",mylen,1)
+	fncombof("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 	resp$(resp_empStatus=respc+=1)=str$(em(4))
-	fnLbl(              lc+=1,col1_pos,"Pay Code:",col1_len,1)
-	fncomboa("PayCode", lc    ,col2_pos,mat payperiod_option$,"",16)
+	fnLbl(              lc(1)+=1,col1_pos,"Pay Code:",col1_len,1)
+	fncomboa("PayCode", lc(1)    ,col2_pos,mat payperiod_option$,"",16)
 	resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payperiod_option$,str$(em(5)))
-	lc+=1
-	fnLbl(lc+=1,col1_pos,"Vacation Pay Code:",col1_len,1)
-	fnTxt(lc   ,col2_pos,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
+	lc(1)+=1
+	fnLbl(lc(1)+=1,col1_pos,"Vacation Pay Code:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
 	resp$(resp_vacationPay=respc+=1)=str$(em(9))
-	fnLbl(lc+=1,col1_pos,"Vacation Hours Accrued:",col1_len,1)
-	fnTxt(lc   ,col2_pos,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
+	fnLbl(lc(1)+=1,col1_pos,"Vacation Hours Accrued:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
 	resp$(resp_vacationAccrued=respc+=1)=str$(em(11))
 	
 	
-	lc+=2
-	fnLbl(lc+=1,1,"Sick Pay Code:",col1_len,1)
-	fnTxt(lc   ,col2_pos,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
+	lc(1)+=2
+	fnLbl(lc(1)+=1,1,"Sick Pay Code:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
 	resp$(resp_sickPay=respc+=1)=str$(em(8))
-	fnLbl(lc+=1,1,"Sick Hours Accrued:",col1_len,1)
-	fnTxt(lc   ,col2_pos,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
+	fnLbl(lc(1)+=1,1,"Sick Hours Accrued:",col1_len,1)
+	fnTxt(lc(1)   ,col2_pos,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
 	resp$(resp_sickAccrued=respc+=1)=str$(em(10))
 	
-	lc-=2   !  go back up two lines and do the right side
+	! lc(2)-=2   !  go back up two lines and do the right side
 	
-	fnLbl(              lc+=1,col3_pos,"FICA Code:",col3_len,1)
-	fncomboa("FICACode",lc    ,col4_pos,mat code6$,"",25)
+	fnLbl(              lc(2)+=1,col3_pos,"FICA Code:",col3_len,1)
+	fncomboa("FICACode",lc(2)    ,col4_pos,mat code6$,"",25)
 	resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
-	fnLbl(              lc+=1,col3_pos,"EIC Code:",col3_len,1)
-	fncomboa("EICCode", lc    ,col4_pos,mat code7$,"",25)
+	fnLbl(              lc(2)+=1,col3_pos,"EIC Code:",col3_len,1)
+	fncomboa("EICCode", lc(2)    ,col4_pos,mat code7$,"",25)
 	resp$(resp_EicCode=respc+=1)=code7$(em(7)+1)
 	
 	
-	lc+=1
+	lc(1)+=1
 	
-	fnLbl(             lc+=1,col1_pos,"W-4 Year:",col1_len,1)
-	fncomboa("w4year", lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+	fnLbl(             lc(1)+=1,col1_pos,"W-4 Year:",col1_len,1)
+	fncomboa("w4year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 	resp$(resp_w4year=respc+=1)=str$(w4year)
 	
-	fnChk(lc+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
+	fnChk(lc(1)+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
 	resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
 	
-	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 3:",col1_len,1)
-	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	fnLbl(             lc(1)+=1,col1_pos,"2020 W-4 Step 3:",col1_len,1)
+	fnTxt(             lc(1)   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step3=respc+=1)=str$(w4Step3)
-	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4a:",col1_len,1)
-	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	fnLbl(             lc(1)+=1,col1_pos,"2020 W-4 Step 4a:",col1_len,1)
+	fnTxt(             lc(1)   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4a=respc+=1)=str$(w4Step4a)
-	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4b:",col1_len,1)
-	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	fnLbl(             lc(1)+=1,col1_pos,"2020 W-4 Step 4b:",col1_len,1)
+	fnTxt(             lc(1)   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4b=respc+=1)=str$(w4Step4b)
-	fnLbl(             lc+=1,col1_pos,"2020 W-4 Step 4c:",col1_len,1)
-	fnTxt(             lc   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
+	fnLbl(             lc(1)+=1,col1_pos,"2020 W-4 Step 4c:",col1_len,1)
+	fnTxt(             lc(1)   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step4c=respc+=1)=str$(w4Step4c)
 
 
@@ -332,6 +337,10 @@ ScrEmployee: ! r:
 	w4Step4a       =val(resp$(resp_w4Step4a        )     )
 	w4Step4b       =val(resp$(resp_w4Step4b        )     )
 	w4Step4c       =val(resp$(resp_w4Step4c        )     )
+	if resp$(resp_disableStTax)='True' then disableStTax=-1 else disableStTax=0
+	if resp$(resp_disableFedTax)='True' then disableFedTax=-1 else disableFedTax=0
+	if disableFedTax then em(12)=-1
+	if disableStTax then em(14)=-1
 	! if ckey=6 then goto PICTURE
 	if ckey=8 then
 		fnhours(eno)
