@@ -1,0 +1,17 @@
+S:\Core\Data\oHand Held Device.dat, odevice_, 0
+S:\Core\Data\oHand Held Device.idx   ,  name
+===================================================
+name       ,Device Name                ,  C  20      , !     SPos= 1   Required=True
+optionList ,Option List                ,  C 128      , !
+disable    ,Disable                    ,  N   1      , ! 1=Disable
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
