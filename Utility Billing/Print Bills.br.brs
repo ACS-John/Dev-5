@@ -4,7 +4,6 @@
 ! r: Direct clients to the (basic) PrintBill_Basic routine (below) or their custom bill program
 	dim alternate_printbill_program$*256
 	alternate_printbill_program$=fnub_printbill_program$
-	! if env$('client')='Findlay' and env$('acsDeveloper')<>'' then alternate_printbill_program$='(basic)' ! fnub_printbill_program$
 	if alternate_printbill_program$='(basic)' then
 		goto PrintBill_Basic
 	else
@@ -130,7 +129,7 @@ PrintBill_Basic: !
 		include_zero_bal=include_credit_bal=1
 		! pause : pa_enabled=0
 		forceWordProcessor$='atlantis'
-	else if env$('client')='Exeter' then 
+	else if env$('client')='Exeter' then ! or env$('client')='GreenCo'  then 
 		basePenaltyOnCurrentBillOnly=1
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
