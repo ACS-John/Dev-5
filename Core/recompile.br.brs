@@ -1,10 +1,15 @@
 pr border: 'Import Source'
 execute 'con gui off'
-fn_updateSource
-def fn_updateSource
+library program$: fnReCompile
+fnReCompile
+def library fnReCompile(; disableRebuildCache)
 	dim filename$*255,msr_file$*255
-	fn_initUpdate(lastcompile)
-	execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr DONE
+	if ~exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
+	open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
+
+	if ~disableRebuildCache then
+		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr DONE
+	end if
 	open #dirfile:=20: "Name=S:\(import)\brsfiles",display,input
 	pr #proc_file: 'Scr_Freeze'
 	do
@@ -37,38 +42,6 @@ def fn_updateSource
 	close #proc_file:
 	execute "subproc "&msr_file$
 fnend
-def fn_dateTime
-	dim tm$*8
-	tm$=time$
-	fn_dateTime=val(date$("CCYYMMDD")&tm$(1:2)&tm$(4:5))
-fnend
-def fn_fileDateTime(filename$*255)
-	dim infoline$*255,hh$*2
-	execute "sy -M dir /N "&filename$&" >"&os_filename$('S:\(import)\fileinfo')
-	open #fileinfo:=21: "Name=S:\(import)\fileinfo",display,input
-	do
-		linput #fileinfo: infoline$ eof NODATE
-		if infoline$(3:3)="/" then goto PARSEDATE
-	loop
-	PARSEDATE: !
-	hh=val(infoline$(13:14))
-	if infoline$(19:20)="PM" then hh+=12
-	if hh<10 then hh$="0"&str$(hh) else hh$=str$(hh)
-	fn_fileDateTime=val(infoline$(7:10)&infoline$(1:2)&infoline$(4:5)&hh$&infoline$(16:17))
-	goto GOTDATE
-	NODATE: !
-	fn_fileDateTime=190001010800
-	GOTDATE: !
-	close #fileinfo,free: ioerr ignore
-fnend
-def fn_initUpdate(&lastcompile)
-	dim lasttime$*256
-	if lasttime$="" then lastcompile=190001010800 else lastcompile=val(lasttime$)
-	curtime=fn_dateTime
-	if ~exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
-	open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
-fnend
-
 def fn_build_parameter$(filename$*256)
 	bp_gets_object=0
 	filename$=lwrc$(filename$)

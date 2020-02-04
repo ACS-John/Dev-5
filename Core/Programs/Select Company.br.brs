@@ -33,8 +33,8 @@ MENU1: ! r:
 		colhdr$(1)='Number'
 		colhdr$(2)='Name'
 		mat colmask$(2)
-		colmask$(1)="30"
-		colmask$(2)=""
+		colmask$(1)='30'
+		colmask$(2)=''
 	end if
 
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)

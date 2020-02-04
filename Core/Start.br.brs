@@ -2,7 +2,7 @@ fn_acsSystemInitialize
 fn_setup
 fnChain('S:\Core\Menu.br', 0,1)
 def library fnAcsSystemInitialize(; syInitMode)
-	 if ~setup then let fn_setup
+	 if ~setup then fn_setup
 	 fnAcsSystemInitialize=fn_acsSystemInitialize( syInitMode)
 fnend
 def fn_acsSystemInitialize(; syInitMode)
@@ -16,7 +16,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_startStatus("Loading ACS System..." )
 			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
 			! r: set environment variables based on login_name$ and/or BR_MODEL
-			! if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
+			! if env$('ACSDeveloper')<>'' then setenv('disableAutomatedSavePoints','Yes') else setenv('disableAutomatedSavePoints','')
 			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then
 				setenv('enableClientSelection','Yes')
 			end if
@@ -29,7 +29,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			! /r
 		end if
 		execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 
 		if syInitMode=2 then
@@ -65,7 +65,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			setenv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
 			fn_startStatus('Collecting local environment variables...')
 			fncs_env
-			if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
+			if env$('client_acsDeveloper')<>'' then setenv('acsDeveloper',env$('client_acsDeveloper'))
 			setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
 			setenv('userprofile','@::'&env$('client_userprofile'))
 		else
@@ -86,8 +86,8 @@ def fn_acsSystemInitialize(; syInitMode)
 		execute 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then let fncheckcompiled ! sets the current directory to "S:" if it is not already
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then fncheckcompiled ! sets the current directory to "S:" if it is not already
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			! execute 'config editor'   !  editor setting removed from brconfig.sys - not necessary
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
@@ -109,7 +109,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			setenv('QBase','')
 			fn_setQbase(New2Qbase$)
 		end if
-		if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
+		if env$('client_temp')='' then setenv('Client_TEMP',env$('Temp'))
 		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
 		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)
@@ -130,8 +130,8 @@ def fn_acsSystemInitialize(; syInitMode)
 			end if
 			fnMakeSurepathExists("[Q]\Data\")
 			fnMakeSurepathExists('[Q]\Report Cache\')
-			if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
-			if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
+			if fn_move_core_data('CityStZip.dat') then fn_move_core_data('CityStZip.idx',1)
+			if fn_move_core_data('1099Box.dat') then fn_move_core_data('1099Box.idx',1)
 			! fn_udf_resolve
 			! if exists(udf$&"Reads_and_Chgs.h1") then
 			!   fn_move_data(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
@@ -292,7 +292,7 @@ def fn_AcsUserId_Initialize
 	! this function returns nothing but is used to initiate env$('acsUserId')
 	! env$('acsUserId') is a replacement for wsid$ which is a filename safe and derived from env$('Unique_Computer_ID')
 	if env$('acsUserId')='' then
-		! if env$('Unique_Computer_ID')='' then let fn_uniqueComputerId_initialize
+		! if env$('Unique_Computer_ID')='' then fn_uniqueComputerId_initialize
 		fnreg_read('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
 		if acs_userid$='' then
 			fnreg_read('ACS UserID Number Last Assigned',acs_userid$)
@@ -322,7 +322,7 @@ def fn_setup
 	end if
 fnend
 def library fnSpoolPath$*256(; initialize)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSpoolPath$=fn_spoolPath$( initialize)
 fnend
 def fn_spoolPath$*256(; initialize)
@@ -333,7 +333,7 @@ def fn_spoolPath$*256(; initialize)
 	fn_spoolPath$=env$('temp')&'\acs\Spool'
 fnend
 def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
 fnend
 def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048,skipmsg)
@@ -473,7 +473,7 @@ def fn_env_data_default(; colletionMasterMode)
 	end if
 fnend
 def library fnSetQ(setQ$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSetQ=fn_setQ(setQ$)
 fnend
 def fn_setQ(setQ$*256)
@@ -783,7 +783,7 @@ def fn_startStatus(text$*128)
 	pr f str$(startStatusLine+=1)&',1,C': text$
 fnend
 def fn_acsVersion$
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	open #hBuild:=fn_gethandle: 'name=S:\Core\Build.txt',d,i
 	linput #hBuild: build$
 	close #hBuild:
@@ -791,7 +791,7 @@ def fn_acsVersion$
 	fn_acsVersion$=env$('acsVersion')
 fnend
 def library fnWriteProc(procName$*64,procLine$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnWriteProc=fn_writeProc(procName$,procLine$)
 fnend
 def fn_writeProc(procName$*64,procLine$*256)
@@ -806,7 +806,7 @@ def fn_writeProc(procName$*64,procLine$*256)
 	close #hEd:
 fnend
 def library fnProgramDataDir$*256
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnProgramDataDir$=fn_programDataDir$
 fnend
 def fn_programDataDir$*256(;___,return$*256,pddTryItem)

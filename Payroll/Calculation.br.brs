@@ -157,13 +157,13 @@ ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning o
 		if sickCode=-1 then ! Check for elgibility
 			if hireDate=>10100 and hireDate<=123199 then 
 				dat$=lpad$(str$(hireDate),6)
-				mo=val(dat$(1:2))
-				da=val(dat$(3:4))
-				yr=val(dat$(5:6))
-				dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
+				mo  =val(dat$(1:2))
+				da  =val(dat$(3:4))
+				yr  =val(dat$(5:6))
+				dh  =round(yr*365+int(yr/4)+motab(mo)+da,2)
 				if ppd-dh=>sck(1) then 
 					sickCode=sck(3)
-					hrsSick=sck(2)
+					hrsSick =sck(2)
 				end if
 			end if
 		end if
