@@ -155,6 +155,7 @@ include: filenamesPopUpperCase
 				oc$                  =list_OCN$(lineCount)
 				invoiceExist$        =list_INVOICEEXIST$(lineCount)
 				invoiceOrigAmt       =list_INVOICEORIGAMTN(lineCount)
+				invoiceRateN         =list_InvoiceRateN(lineCount)
 				item$(csv_INVOICENO) =list_INVOICENO$(lineCount)
 				item$(csv_RESPNAME)  =list_RESPNAME$(lineCount)
 				item$(csv_EMAIL)     =list_EMAIL$(lineCount)
@@ -181,7 +182,7 @@ include: filenamesPopUpperCase
 	
 					fn_writeDemographics(hOut,oc$,mat item$)
 					fn_writePaperless(hOut,mat item$,lineCount,csvFile$)
-					fn_writeInvoice(hOut,mat item$,invoiceOrigAmt)
+					fn_writeInvoice(hOut,mat item$,invoiceOrigAmt,invoiceRateN)
 					! fn_writeInfinity(hOut,mat item$)
 					if fn_isPriority(mat item$,priorityColumnN,priorityText$) then
 							priorityCount+=1
@@ -484,7 +485,7 @@ def fn_date$(day$; inputFormat$,___,return$)
 	! above lines were for backward compatability to compare vs previous alldata import which did not touch formatting and had dates like 1/1/2019
 	fn_date$=return$
 fnend
-def fn_writeInvoice(hOut,mat item$,invoiceOrigAmt; ___)
+def fn_writeInvoice(hOut,mat item$,invoiceOrigAmt,invoiceRateN; ___)
 	fn_pr_hOut('0[tab]H[tab]Invoices for '&item$(csv_FILENO))
 	! CM EDI Record 180 Invoice File
 	! fn_add('FORW_REFNO'    	,item$(csv_KEY)             ,1)
@@ -507,6 +508,8 @@ def fn_writeInvoice(hOut,mat item$,invoiceOrigAmt; ___)
 	fn_add('SERVICE_DATE'  	,fn_date$(item$(csv_SERVICEDAY)))
 	fn_add('INV_NO'        	,item$(csv_INVOICENO  )           	)
 	fn_add('ORIG_AMT'      	,str$(invoiceOrigAmt))
+	fn_add('RATES'         	,str$(invoiceRateN  ))
+	
 	fn_pr(180)
 fnend
 def fn_writePaperless(hOut,mat item$,lineCount,sourceFile$*512)
@@ -1092,6 +1095,7 @@ def fn_readFileIntoArrays(;___,oc$,respName$*256,tmpServiceDay,invoiceOrigAmt)
 		dim list_OCN$(0)
 		dim list_INVOICEEXIST$(0)
 		dim list_INVOICEORIGAMTN(0)
+		dim list_InvoiceRateN(0)
 	! /r
 	
 	! r: direct only dims
@@ -1148,6 +1152,7 @@ def fn_readFileIntoArrays(;___,oc$,respName$*256,tmpServiceDay,invoiceOrigAmt)
 		mat list_OCN$(0)
 		mat list_INVOICEEXIST$(0)
 		mat list_INVOICEORIGAMTN(0)
+		mat list_InvoiceRateN(0)
 	! /r
 	
 	! r: direct mat (0)s
@@ -1203,6 +1208,7 @@ def fn_readFileIntoArrays(;___,oc$,respName$*256,tmpServiceDay,invoiceOrigAmt)
 		invoiceOrigAmt=fnval(item$(csv_charge))
 	end if
 	fnAddOneN(mat list_INVOICEORIGAMTN,invoiceOrigAmt)
+	fnAddOneN(mat list_InvoiceRateN,invoiceOrigAmt-fnval(item$(csv_BALANCE)))
 		! if csv_code>0 then
 		! 	item$(csv_code)=srep$(item$(csv_code),'"','')
 		! end if
@@ -1316,6 +1322,7 @@ include: filenamesPopUpperCase
 	fn_ifUsedPrintHeaderC('Open/Closed/New   ',hOut,mat list_OCN$                )
 	fn_ifUsedPrintHeaderC('INVOICEEXIST$     ',hOut,mat list_INVOICEEXIST$       )
 	fn_ifUsedPrintHeaderN('INVOICEORIGAMTN   ',hOut,mat list_INVOICEORIGAMTN     )
+	fn_ifUsedPrintHeaderN('list_InvoiceRateN ',hOut,mat list_InvoiceRateN     )
 	fn_ifUsedPrintHeaderC('KEY$              ',hOut,mat list_KEY$                )
 	fn_ifUsedPrintHeaderC('INVOICENO$        ',hOut,mat list_INVOICENO$          )
 	fn_ifUsedPrintHeaderC('FACILITY$         ',hOut,mat list_FACILITY$           )
@@ -1372,6 +1379,7 @@ include: filenamesPopUpperCase
 		fn_ifUsedPrintItC(mat list_OCN$                 ,x,hOut)
 		fn_ifUsedPrintItC(mat list_INVOICEEXIST$        ,x,hOut)
 		fn_ifUsedPrintItN(mat list_INVOICEORIGAMTN      ,x,hOut)
+		fn_ifUsedPrintItN(mat list_InvoiceRateN         ,x,hOut)
 		fn_ifUsedPrintItC(mat list_KEY$                 ,x,hOut)
 		fn_ifUsedPrintItC(mat list_INVOICENO$           ,x,hOut)
 		fn_ifUsedPrintItC(mat list_FACILITY$            ,x,hOut)
