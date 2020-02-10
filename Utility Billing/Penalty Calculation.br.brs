@@ -159,7 +159,7 @@ def fn_pencal ! penalty calculation
 		goto GOT_BASEPENALTY ! lovington
 	end if 
 ! if debug_this_account then pause
-	if env$('client')="Franklinton" then let fn_franklinton : goto L1370
+	if env$('client')="Franklinton" then fn_franklinton : goto L1370
 	if penaltybase$="Bill" and bal<g(11) then ! use the balance to calculate penalty if balance less than last bill
 		if show_math then pr #255: '     *** use the balance ('&str$(bal)&') to calculate penalty if balance less than last bill ('&str$(g(11))&')( usebalance=1 )'
 		usebalance=1
@@ -211,7 +211,7 @@ def fn_pencal ! penalty calculation
 	next j
 	if env$('client')="Kimberling" and g(2)>0 then basepenalty(10)-=g(1) ! no penalty on water if they have swewer
 	if show_math and negatives then pr #255: '     negatives='&str$(negatives)&' doing fn_worryabout'
-	if negatives<>0 then let fn_worryabout
+	if negatives<>0 then fn_worryabout
 	GOT_BASEPENALTY: ! 
 	if show_math then 
 		for j=1 to 10
@@ -273,12 +273,12 @@ def fn_pencal ! penalty calculation
 			coltot(column)=coltot(column)+tg(j) ! place first penalty in first column, column totals, etc
 		end if 
 	next j
-	! if env$('client')="Kimberling" then let fn_flat_percent_on_priorbal(.75) ! add .75% of previous balance
-	! if env$('client')="Thayer" or env$('client')='Exeter' then let fn_flat_percent_on_lastbill(10) ! add 10% of last month's bill
-	if env$('client')="Thayer" then let fn_flat_percent_on_lastbill(10) ! add 10% of last month's bill
-	if env$('client')='Edison' then let fn_flat_amt(5)
+	! if env$('client')="Kimberling" then fn_flat_percent_on_priorbal(.75) ! add .75% of previous balance
+	! if env$('client')="Thayer" or env$('client')='Exeter' then fn_flat_percent_on_lastbill(10) ! add 10% of last month's bill
+	if env$('client')="Thayer" then fn_flat_percent_on_lastbill(10) ! add 10% of last month's bill
+	if env$('client')='Edison' then fn_flat_amt(5)
 	if sum(mat tg)=0 then goto XIT_PENCAL ! skip if no penalty calculated prb 10/13/11
-	if penaltybase$="Balance" then let fn_check_rounding ! some times the penalty calculated at the time of the bill is off a penny because this program rounds each calculation for each service. Not always same as calculating on total!
+	if penaltybase$="Balance" then fn_check_rounding ! some times the penalty calculated at the time of the bill is off a penny because this program rounds each calculation for each service. Not always same as calculating on total!
 	L1330: ! 
 	bal+=sum(mat tg)
 	tot+=sum(mat tg)

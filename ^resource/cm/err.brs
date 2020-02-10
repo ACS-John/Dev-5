@@ -3,9 +3,8 @@ on error goto Ertn
 pr 1/0
 Xit: end
 ! /r doNotInclude
-! r: Updateable Region . Error Handler . Top
-	! This region was last updated on 2019.07.22
-Ertn: !
+! r: doNotInclude
+! *** old way ***
 	on error system
 	dim err_dummy$*80
 	print bell;
@@ -87,4 +86,9 @@ Ertn: !
 			execute 'proc rerun'
 		end if
 	loop
+! *** /old way ***
+! /r doNotInclude
+! r: Updateable Region . Error Handler . Top
+	! This region was last updated on 2019.07.22
+include: Ertn
 ! /r Updateable Region . Error Handler . End

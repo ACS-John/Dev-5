@@ -3,7 +3,7 @@ on error goto Ertn
 pr 1/0
 XIT: fnxit
 ! 
-def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, stopable$)
+def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, stopable$; ___,sourceFile$*300,line$*512)
 	library 'S:\Core\Library': fngethandle
 	library 'S:\Core\Library': fnmsgbox
 	library 'S:\Core\Library': fnlog
@@ -30,6 +30,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	
 	!   pr border: "Error "&str$(errornumber)&" on line "&str$(linenumber)
 	pr fields "1,73,C 7,N": bell$
+	if callingprogram$=uprC$(callingprogram$) then callingprogram$=lwrc$(callingprogram$)
 	fnlog("Error "&str$(errornumber)&" at line "&str$(linenumber)&" of "&callingprogram$(1:100),2)
 	ertnAct$="Go "&str$(linenumber)
 	! dim acshelp$*200
@@ -49,20 +50,20 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		end if 
 
 		lc=7
-		pr #win,f str$(lc)&",2,Cr 13,N": "Program:"
-		pr #win,f str$(lc)&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
+		pr #win,f str$(lc   )&",2,Cr 13,N": "Program:"
+		pr #win,f str$(lc   )&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
 		pr #win,f str$(lc+=1)&",2,Cr 13,N": "File:"
-		pr #win,f str$(lc)&",16,C 53,P[textboxes]": callingprogram$(1:53)
+		pr #win,f str$(lc   )&",16,C 53,P[textboxes]": callingprogram$(1:53)
 		lc+=1
-		pr #win,f str$(lc+=1)&",2,Cr 13,[screen]": "Error Number:"
-		pr #win,f str$(lc)&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Error Number:"
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
 		lc+=1
-		pr #win,f str$(lc+=1)&",2,Cr 13,[screen]": "Line Number:"
-		pr #win,f str$(lc)&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
-		pr #win,f str$(lc+=1)&",2,Cr 13,N": "Count+1:"
-		pr #win,f str$(lc)&",16,C 5,P[textboxes]": str$(xcnt+1) ! ,r,n
-		pr #win,f str$(lc+=1)&",2,Cr 13,N": "Session:"
-		pr #win,f str$(lc)&",16,C 5,P[textboxes]": session$ ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Line Number:"
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Count+1:"
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(xcnt+1) ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Session:"
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": session$ ! ,r,n
 		button_pos$='47'
 		pr #win,f "9,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
 		pr #win,f "10,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
@@ -75,9 +76,10 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
-			pr #win,f "16,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
-			pr #win,f "17,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)' ! 1,19,12/CC 12,,B1000
-			pr #win,f "18,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
+		  pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" ! 1,19,12/CC 12,,B1000
+			pr #win,f "17,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
+			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)' ! 1,19,12/CC 12,,B1000
+			pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
 			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
 		
@@ -100,11 +102,24 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	!   else if cmdkey=10 then
 	!     fnlog("action taken = WB Help",2)
 	!     gosub ERR_WBHELP
-		else if cmdkey=12 then 
+		else if cmdkey=12 then
 			ertnAct$="PAUSE"
 			fnlog("action taken = Program Pause",2)
 			goto ERROR_XIT
 	
+		else if fkey=11 then 
+			sourceFile$=srep$(os_filename$(callingprogram$),'F:\CLSINC\','C:\ACS\Dev-5\')
+			sourceFile$=srep$(sourceFile$,'COLLECTION-MASTER ADD-ON','Collection-Master Add-On')
+			exe 'dir "'&sourceFile$&'" -l -b >acsErrTmp'&session$&'.txt'
+			open #hTmp:=fngethandle: 'name=acsErrTmp[session].txt',display,input
+			linput #hTmp: line$ !  consume "Directory of" line
+			linput #hTmp: line$ !  consume "Directory of" line
+			sourceFile$=srep$(sourceFile$,uprc$(line$(1:len(line$))),line$(1:len(line$)))
+			sourceFile$&='.brs'
+			close #hTmp:
+			exe '*Free acsErrTmp[session].txt -n'
+			execute '"'&os_filename$('S:\brEdit.cmd')
+			execute 'sy ""C:\ACS\Program\Notepad++\notepad++.exe" "'&sourceFile$&'" -n'&str$(linenumber)&'"'
 		else if cmdkey=21 or fkey=120 then 
 			ertnAct$='Proc r3.prc'
 			fnlog('action taken = '&ertnAct$,2)
