@@ -680,30 +680,6 @@ def fn_UpdateQFileIO
 		fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
 		fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 	else if env$('cursys')='CM' then
-		! library 'S:\Core\Library': fngetdir2
-		! dim sLayFile$(0)*256
-		! dim sLayDate$(1)*32
-		! dim sLayTime$(1)*32
-		! fngetdir2('S:\Core\FileIO\Layout\',mat sLayFile$, '','*.fio',mat sLayDate$,mat sLayTime$)
-		! dim dLayFile$(0)*256
-		! dim dLayDate$(1)*32
-		! dim dLayTime$(1)*32
-		! if udim(mat sLayFile$)=0 then 
-		! 	pr 'fngetdir2 found no files found in: S:\Core\FileIO\Layout\'
-		! 	pause
-		! end if
-		! fngetdir2('filelay\',mat dLayFile$, '','*.',mat dLayDate$,mat dLayTime$)
-		! for sItem=1 to udim(mat sLayFile$)
-		! 	if sLayFile$(sItem)(1:3)='CM ' or sLayFile$(sItem)(1:3)='CO ' then
-		! 		dWhich=srch(mat dLayFile$,sLayFile$(sItem)(1:pos(sLayFile$(sItem),'.',-1)-1))
-		! 		dDay=sDay=0
-		! 		sDay=days(slaydate$(sitem),'mm/dd/ccyy')
-		! 		if dWhich=>0 then dDay=days(dlaydate$(dWhich),'mm/dd/ccyy')
-		! 		if dDay<=sDay then
-		! 			fnCopy('S:\Core\FileIO\Layout\'&sLayFile$(sItem)        ,'filelay\*'        )
-		! 		end if
-		! 	end if
-		! nex sItem
 		fn_updateAlienFolder('filelay','S:\Core\FileIO\Layout','*.fio','*.')
 		fn_updateAlienFolder('filelay\version','S:\Core\FileIO\Layout\version','*.*','*.*')
 		! pause

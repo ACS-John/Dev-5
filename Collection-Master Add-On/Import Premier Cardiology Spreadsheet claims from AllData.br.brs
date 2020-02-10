@@ -1271,7 +1271,7 @@ def fn_readFileIntoArrays(;___,oc$,respName$*256,tmpServiceDay,invoiceOrigAmt)
 			invDay          = tmpServiceDay
 		end if
 		dim tmpInvoiceNo$*20
-		tmpInvoiceNo$=fn_invoiceNumber$(fileno$,invNoSugPt1$,invNoSugPt2$,invNoSugPt3$,item$(csv_PROVIDER),invDay,invoiceOrigAmt,invoiceExist$) ! /r
+		tmpInvoiceNo$=fn_invoiceNumber$(fileno$,invNoSugPt1$,invNoSugPt2$,invNoSugPt3$,item$(csv_PROVIDER),invDay,invoiceOrigAmt,invoiceExist$)
 		fnAddOneC(mat list_INVOICENO$,tmpInvoiceNo$)
 		list_INVOICEEXIST$(udim(mat list_INVOICEEXIST$))=invoiceExist$
 		
