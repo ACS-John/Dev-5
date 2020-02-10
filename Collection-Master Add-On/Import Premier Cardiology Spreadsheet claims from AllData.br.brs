@@ -59,9 +59,9 @@ def  fn_premierCardiologyImport(; sourceId$)
 		fnreg_write(env$('program_caption')&'.ocacDiaryCode',ocacDiaryCode$)
 		! /r
 		
-		tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_KEY)))
-		tmpPatientBalance$=str$(fn_patientBalance(item$(csv_KEY)))
-		tmpOrigionalClaimAmount$=tmpPatientBalance$
+		! not sure why these were here csv_KEY is not even intiailized yet          tmpOrigionalClaimAmount$=str$(fn_origionalClaimAmount(item$(csv_KEY)))
+		! not sure why these were here csv_KEY is not even intiailized yet          tmpPatientBalance$=str$(fn_patientBalance(item$(csv_KEY)))
+		! not sure why these were here csv_KEY is not even intiailized yet          tmpOrigionalClaimAmount$=tmpPatientBalance$
 
 
 		! r: gather Forwarder data

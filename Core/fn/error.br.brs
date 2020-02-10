@@ -118,7 +118,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			sourceFile$&='.brs'
 			close #hTmp:
 			exe '*Free acsErrTmp[session].txt -n'
-			execute '"'&os_filename$('S:\brEdit.cmd')
+			execute '"'&os_filename$('S:\brEdit.cmd')&'"'
 			execute 'sy ""C:\ACS\Program\Notepad++\notepad++.exe" "'&sourceFile$&'" -n'&str$(linenumber)&'"'
 		else if cmdkey=21 or fkey=120 then 
 			ertnAct$='Proc r3.prc'
