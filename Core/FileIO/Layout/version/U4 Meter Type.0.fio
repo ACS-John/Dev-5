@@ -1,0 +1,26 @@
+[Q]\UBmstr\oMeterType.h[cno], otype_, 0
+[Q]\UBmstr\oMeterTypeIdx.h[cno] ,  key-u
+o
+o! actual BR Version changed from 1 to 2 on 1/14/20 to cange the readType field from an N 2 to a C 4 and rln remained 128
+o! RecL=128
+o! actual BR Version changed from 2 to 3 on 1/21/20 to add Device Type
+===================================================
+key                ,    Code                ,  C   5      , !     SPos= 1   Required=True
+name               ,    Description         ,  C  40      , !     SPos= 6
+readingMultiplier  ,    Reading multiplier  ,  C   9      , !     SPos=46
+dialCount          ,    Number of Dials     ,  N   2      , !     SPos=55
+readType           ,    Read Type           ,  C   4      , !     SPos=57
+deviceType         ,    Device Type         ,  C  20      , !     SPos=61  combof(ignored,S:\Core\Data\Hand Held Device.dat,1,20,0,0,S:\Core\Data\Hand Held Device.idx,1)
+! comboa(ignored,*custom:UB ServiceCodes Metered*)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
