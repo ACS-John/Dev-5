@@ -1,6 +1,7 @@
 ! *** TM - Time Management PROGRAMMER ***
 Programmer
->Billing Method                                  ^ HamsterFio:Billing Method
+>Billing Method                                  ^ HamsterFio:CO *
+>Billing Frequency                               ^ HamsterFio:CO *
 
 >ACS Programmer
 >Layouts
