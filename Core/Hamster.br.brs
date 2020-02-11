@@ -259,7 +259,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		! Read 1st Item
 		j=1
 		dim tmp$*512
-		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
+		if fltyp2$(j)="c" or fltyp2$(j)="cr" or fltyp2$(j)="cu" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
 			read #fin,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="g" then
