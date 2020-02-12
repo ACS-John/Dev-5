@@ -533,13 +533,13 @@ fnend
 			pr #h_itron_out: '! customer number '&z$&' has zero reading.'
 		else
 			pr #h_itron_out: 'Customer.Number='&z$
-			fn_inz(reading_water     ,'Reading.Water'       )
-			fn_inz(reading_electric  ,'Reading.Electric'    )
-			fn_inz(reading_gas       ,'Reading.Gas'         )
-			fn_inz(meterroll_water   ,'MeterRoll.Water'     )
-			fn_inz(meterroll_electric,'MeterRoll.Electric'  )
-			fn_inz(meterroll_gas     ,'MeterRoll.Gas'       )
-			fn_inz(customer_sequence ,'customer.sequence'   )
+			fn_inz(reading_water     ,'Reading.Water'       ,h_itron_out)
+			fn_inz(reading_electric  ,'Reading.Electric'    ,h_itron_out)
+			fn_inz(reading_gas       ,'Reading.Gas'         ,h_itron_out)
+			fn_inz(meterroll_water   ,'MeterRoll.Water'     ,h_itron_out)
+			fn_inz(meterroll_electric,'MeterRoll.Electric'  ,h_itron_out)
+			fn_inz(meterroll_gas     ,'MeterRoll.Gas'       ,h_itron_out)
+			fn_inz(customer_sequence ,'customer.sequence'   ,h_itron_out)
 			pr #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
 		end if
 	fnend
@@ -668,8 +668,9 @@ fnend
 			fn_ilrt_lineParseFixedWidth=ilpfwReturn
 		fnend
 	! /r
-def fn_prHout(what$*512)
-	pr #hOut: what$
+def fn_prHout(what$*512; hOverride,___,hPrOut)
+	if hOverride>0 then hPrOut=hOverride else hPrOut=hOut
+	pr #hPrOut: what$
 	pr what$ !  print to console also :)
 fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
@@ -796,8 +797,8 @@ fnend
 			fn_prHout('! customer number '&z$&' has all zero readings.')
 		end if
 	fnend
-	def fn_inz(notZeroAmt,what$*512) ! ifNotZeroPrHoutEqualsNotZeroAmt
-		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt))
+	def fn_inz(notZeroAmt,what$*512; hOverride) ! ifNotZeroPrHoutEqualsNotZeroAmt
+		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt), hOverride)
 	fnend
 
 ! /r
