@@ -533,8 +533,6 @@ fnend
 			pr #h_itron_out: '! customer number '&z$&' has zero reading.'
 		else
 			pr #h_itron_out: 'Customer.Number='&z$
-			fn_inz
-			
 			fn_inz(reading_water     ,'Reading.Water'       )
 			fn_inz(reading_electric  ,'Reading.Electric'    )
 			fn_inz(reading_gas       ,'Reading.Gas'         )
