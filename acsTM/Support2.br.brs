@@ -1,7 +1,7 @@
-! ______________________________________________________________________
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
+
+	library 'S:\Core\Library': fntop,fnxit, fnmsgbox,fnHamster,fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2,fnhand_held_device$
 	on error goto Ertn
-! ______________________________________________________________________
+
 	fntop(program$)
 	fn_setup_hamster
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
@@ -9,16 +9,16 @@
 	fnHamster2("ARTrans")
 	gosub CLOSE_FILE
 	goto XIT
-! ______________________________________________________________________
+
 OPEN_FILE: !
 	open_file_count=0 ! this value is used in the close_file sub routine
 	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 return
-! ______________________________________________________________________
+
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
-! ______________________________________________________________________
+
 XIT: fnxit
-! ______________________________________________________________________
+
 def fn_setup_hamster
 	mask_pointtwo=32 : mask_number=30
 	mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
