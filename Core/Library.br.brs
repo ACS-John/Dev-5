@@ -831,7 +831,7 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnflexinit1
 		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
 	fnend
-	def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
+	def library fncomboa(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
 		library 'S:\Core\ACS_Component.br': fncomboa
 		fncomboa=fncomboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 	fnend

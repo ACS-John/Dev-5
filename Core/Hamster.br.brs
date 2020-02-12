@@ -25,7 +25,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		mat mask2(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
 		row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
 		opt_delete=7 : right=1
-		itemCount=udim(p$)
+		itemCount=udim(mat p$)
 		mat hComboF(itemCount)
 		!
 		if udim(incontrol$,1)<>0 then
@@ -113,7 +113,6 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		mat flxhdr$(fhc) : mat flxItem$(fhc) : mat cmask$(fhc)
 		! /r
 	! /r
-	! /r
 	goto MENU1
 
 
@@ -194,7 +193,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			for j=1 to itemCount
 				mylen=max(mylen,len(lbl$(j)))
 			next j
-			mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
+			mat p2$(alana=udim(mat p$)+1) : mat p2$(1:udim(mat p$))=p$(1:udim(mat p$))
 			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
 			for j=1 to itemCount
@@ -245,7 +244,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			fnCmdKey("&Cancel",opt_cancel,0,1)
 			!
 			fnAcs2(mat p2$,ck)
-			mat p$(1:udim(p$))=p2$(1:udim(p$))
+			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
 			if ck<>opt_cancel then gosub REWR_P
 			addloop$=p2$(alana)
 			if lwrc$(addloop$)=lwrc$('True') then goto TO_ADD else goto MENU1
@@ -259,7 +258,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		! Read 1st Item
 		j=1
 		dim tmp$*512
-		if fltyp2$(j)="c" or fltyp2$(j)="cr" or fltyp2$(j)="cu" then
+		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
 			read #fin,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="g" then
