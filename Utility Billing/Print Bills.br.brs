@@ -2214,8 +2214,8 @@ def fn_print_bill_galena
 		fnpa_txt(fnformnumb$(g(8),2,9),lsColCharges,lyne*meter+ymargin)
 	end if
 	if g(9) then 
-		! fnpa_txt("TX",lsColService,lyne*(meter+=1)+ymargin) ! this hasn't been printing anyways
-		! fnpa_txt(fnformnumb$(g(9),2,9),lsColCharges,lyne*meter+ymargin)
+		fnpa_txt("TX",lsColService,lyne*(meter+=1)+ymargin) 
+		fnpa_txt(fnformnumb$(g(9),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if pb then 
 		fnpa_txt("PB",lsColService,lyne*(meter+=1)+ymargin)
