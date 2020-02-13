@@ -529,7 +529,7 @@ fnend
 	fnend
 	def fn_itron_write
 		! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
-		if reading_water=0 then
+		if reading_water+reading_electric+reading_gas+meterroll_water+meterroll_electric+meterroll_gas=0 then
 			pr #h_itron_out: '! customer number '&z$&' has zero reading.'
 		else
 			pr #h_itron_out: 'Customer.Number='&z$
