@@ -2212,10 +2212,10 @@ def fn_print_bill_galena
 	if g(8) then 
 		fnpa_txt("OC",lsColService,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(8),2,9),lsColCharges,lyne*meter+ymargin)
+	end if
 	if g(9) then 
-	end if 
-		fnpa_txt("TX",lsColService,lyne*(meter+=1)+ymargin)
-		fnpa_txt(fnformnumb$(g(9),2,9),lsColCharges,lyne*meter+ymargin)
+		! fnpa_txt("TX",lsColService,lyne*(meter+=1)+ymargin) ! this hasn't been printing anyways
+		! fnpa_txt(fnformnumb$(g(9),2,9),lsColCharges,lyne*meter+ymargin)
 	end if 
 	if pb then 
 		fnpa_txt("PB",lsColService,lyne*(meter+=1)+ymargin)
@@ -2235,14 +2235,14 @@ def fn_print_bill_galena
 	else 
 		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColPrevious ,ymargin+lyne*23)
 		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColCharges  ,ymargin+lyne*23)
-	end if 
-	if bal>0 then 
+	end if  
+	if bal<>0 then 
 		if g(9)>0 then 
 			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColPrevious ,ymargin+lyne*25) ! *xx   was *25.4
 			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColCharges  ,ymargin+lyne*25) ! *xx   was *25.4
 		end if 
 	fnpa_txt(fnformnumb$(bal,2,9)             ,lsColPrevious ,ymargin+lyne*29.5)  ! *xx was *29.2   note: 29.6 pushes numbers off page on second bill
-	fnpa_txt(fnformnumb$(bal+g(10),2,9)       ,lsColCharges  ,ymargin+lyne*29.5)  ! *xx was *29.2   note: 29.6 pushes numbers off page on second bill
+	if bal>0 then fnpa_txt(fnformnumb$(bal+g(10),2,9)       ,lsColCharges  ,ymargin+lyne*29.5)  ! *xx was *29.2   note: 29.6 pushes numbers off page on second bill
 	end if
 		! /r
 	! /r
