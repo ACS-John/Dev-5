@@ -127,11 +127,11 @@ MainLoopTop: !
 		matchFound=0
 		read #hCustomer,using F_Customer: z$,mat e$,mat a,mat d,bal,f,mat g,route,estimatedate,mat extra eof EoCustomer
 		F_Customer: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 217,15*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1831,n 9,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
-		if f=billing_date then 
-			matchFound=1
-		else ! if f><billing_date then 
+		! if f=billing_date then 
+		! 	matchFound=1
+		! else ! if f><billing_date then 
 			matchFound=fn_readFromHistory 
-		end if
+		! end if
 	loop until matchFound
 	if seq=1 then  !  route subtotals 
 		if startcd=1 and prtbkno<>route then 
