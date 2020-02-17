@@ -63,9 +63,9 @@ def fn_sreg_rename(field_name_old$*128,fieldNameNew$*128)
 fnend
 ! /r
 ! r: Regurlar Registry - tied to Client only - saves their settings
-def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
+def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
 	if ~reg_setup then reg_setup=fn_reg_setup
-	fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$)
+	fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$,alsoUseDefaultIfReadBlank)
 fnend
 def library fnreg_write(rw_field_name$*128,rw_field_value$*256)
 	if ~reg_setup then reg_setup=fn_reg_setup
@@ -75,7 +75,7 @@ def library fnreg_rename(field_name_old$*128,fieldNameNew$*128)
 	if ~reg_setup then reg_setup=fn_reg_setup
 	fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
 fnend
-def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
+def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
 	dim rr_tmpfield_value$*256,rr_key_compare$*128
 	rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
 	rr_tmpfield_value$=rr_field_value$=''
@@ -87,7 +87,10 @@ def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128
 	else
 		rr_field_value$=rr_default_if_not_read$ ! ''
 	end if
-	! pr 'load ';trim$(rr_field_name$);'=';rr_field_value$
+
+	if alsoUseDefaultIfReadBlank and trim$(rr_field_value$)='' then
+		rr_field_value$=rr_default_if_not_read$
+	end if
 fnend
 def fn_reg_write(rw_field_name$*128,rw_field_value$*256)
 	rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)

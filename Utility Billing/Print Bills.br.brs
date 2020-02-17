@@ -12,7 +12,9 @@
 ! /r
 ! PrintBill_Basic - dynamic pr bill program that works for multiple clients
 def fn_setup
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof
+	library 'S:\Core\Library': fnreg_write,fnreg_read
+	library 'S:\Core\Library': fnCmdKey
+	library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fncmbrt2,fncombof
 	library 'S:\Core\Library': fnOpt,fnTos
 	library 'S:\Core\Library': fncmbact
 	library 'S:\Core\Library': fnLastBillingDate
@@ -88,6 +90,7 @@ PrintBill_Basic: !
 		pa_orientation$='Landscape'
 		enable_bulksort=1
 		include_zero_bal=include_credit_bal=1
+		enable_customMargins=1 ! added 2/17/2020
 	else if env$('client')='Omaha' then ! 8/10/2016
 		message1_line_count=3
 		message1_max_len=30
@@ -171,6 +174,7 @@ PrintBill_Basic: !
 		enable_service_from=1
 		enable_service_to=1
 		! usPostagePermitNumber=0
+		enable_customMargins=0
 	end if 
 	! r: use the default settings but add a little extra to it
 	if env$('client')='Findlay' then 
@@ -284,9 +288,10 @@ SCREEN1: ! r:
 		fncreg_read('bill message2 '&str$(mg2_item),resp$(respc_mg2(mg2_item)))
 		resp$(respc_mg2(mg2_item))=resp$(respc_mg2(mg2_item))(1:message2_max_len)
 	next mg2_item
-! 
-	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
+	fnCmdKey("&Print",1,1)
+	fnCmdKey("&Cancel",5,0,1)
+	fnAcs2(mat resp$,ck)
 	if ck=5 then goto XIT
 	d1=val(resp$(respc_billing_date))
 	d4=val(resp$(respc_penalty_due_date))
@@ -327,6 +332,10 @@ SCREEN1: ! r:
 		fncreg_write('bill message2 '&str$(mg2_item),mg2$(mg2_item))
 	next mg2_item
 	fncreg_write('Penalty Due Date',str$(d4))
+	if enable_customMargins and ck=ckey_margins then
+		fn_ask_margins
+		goto SCREEN1
+	end if
 ! /r
 ! r: initalize and open things
 	if trim$(starting_key$)="" and route_filter=0 then ! if no beginning account or starting route #, start at beginning of file
@@ -431,6 +440,42 @@ AfterCustomerRead: !
 		msgbox('UB_Limit exceeded: You are currently printing bills for more customers than you are licensed for.  Please enhance your license before limitations become enforced.') : ubLimitExceedAlreadyNotified=1
 	end if
 	goto NEXT_ACCOUNT ! /r
+
+def fn_ask_margins
+	dim ub4upBill_data$(4)
+	AskMarginsReadBeforeScreen: !
+	fnreg_read('ub4upBill Margin Top 1' ,ub4upBill_data$(1),  '5',1) ! bills 1 and 2
+	fnreg_read('ub4upBill Margin Top 2' ,ub4upBill_data$(2),'113',1) ! bills 3 and 4      ymargin was 108
+	fnreg_read('ub4upBill Margin Left 1',ub4upBill_data$(3),  '0',1) ! bills 1 and 3
+	fnreg_read('ub4upBill Margin Left 2',ub4upBill_data$(4),'142',1) ! bills 2 and 4      xmargin was 137
+	fnTos : lc=0
+	mylen=39 : mypos=mylen+2
+	fnLbl(lc+=1,1,"Bill 1 and 2 - Distance from Top (mm):",mylen,1)
+	fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,"Bill 3 and 4 - Distance from Top (mm):",mylen,1)
+	fnTxt(lc,mypos,3,0,1,'30')
+	lc+=1
+	fnLbl(lc+=1,1,"Bill 1 and 3 - Distance from Left (mm):",mylen,1)
+	fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,"Bill 2 and 4 - Distance from Left (mm):",mylen,1)
+	fnTxt(lc,mypos,3,0,1,'30')
+	fnCmdKey("&Save",1,1)
+	fnCmdKey("Default",ckey_default:=1022)
+	fnCmdKey("&Cancel",5,0,1)
+	fnAcs2(mat ub4upBill_data$,ckey)
+	if ckey=ckey_default then
+		fnreg_write('ub4upBill Margin Top 1' ,'')
+		fnreg_write('ub4upBill Margin Top 2' ,'')
+		fnreg_write('ub4upBill Margin Left 1','')
+		fnreg_write('ub4upBill Margin Left 2','')
+		goto AskMarginsReadBeforeScreen
+	else if ckey<>5 then
+		fnreg_write('ub4upBill Margin Top 1' ,ub4upBill_data$(1))
+		fnreg_write('ub4upBill Margin Top 2' ,ub4upBill_data$(2))
+		fnreg_write('ub4upBill Margin Left 1',ub4upBill_data$(3))
+		fnreg_write('ub4upBill Margin Left 2',ub4upBill_data$(4))
+	end if
+fnend
 def fn_mg2$*80(; m2forcecnt)
 	if m2forcecnt then 
 		m2item=m2forcecnt
@@ -473,7 +518,7 @@ ScrAskIndividual: ! r: account selection screen
 	fncmbact(1,17)
 	resp$(1)=starting_key$
 	fnCmdSet(11)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	if ck=5 or trim$(resp$(1))='' then goto RELEASE_PRINT
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
@@ -487,7 +532,7 @@ ENDSCR: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 	fnCmdSet(52)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	goto XIT ! /r
 XIT: fnxit
 IGNORE: continue 
@@ -970,17 +1015,27 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 		addr_indent=8
 		addr_down=3
 		fn_get_mat_at(mat at$)
-	! 
+		! r: read custom margins
+		dim ub4upBill_data$(4)
+		fnreg_read('ub4upBill Margin Top 1' ,ub4upBill_data$(1),  '5') ! bills 1 and 2
+		fnreg_read('ub4upBill Margin Top 2' ,ub4upBill_data$(2),'113') ! bills 3 and 4      ymargin was 108
+		fnreg_read('ub4upBill Margin Left 1',ub4upBill_data$(3),  '0') ! bills 1 and 3
+		fnreg_read('ub4upBill Margin Left 2',ub4upBill_data$(4),'142') ! bills 2 and 4      xmargin was 137
+		bill1y=bill2y=val(ub4upBill_data$(1))
+		bill3y=bill4y=val(ub4upBill_data$(2))
+		bill1x=bill3x=val(ub4upBill_data$(3))
+		bill2x=bill4x=val(ub4upBill_data$(4))
+		! /r
 	end if  ! /r
 	pb=bal-g(11)
 	net_bill=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
 	fn_override_service_date(service_from,service_to,extra_3,extra_4)
 	! -- Standard 4 Per Page Even Perforated Card Stock Bills
 	billOnPageCount+=1
-	if billOnPageCount=1 then xmargin=0 : ymargin=5
-	if billOnPageCount=2 then xmargin=142 : ymargin=5 ! xmargin was 137
-	if billOnPageCount=3 then xmargin=0 : ymargin=113 ! ymargin was 108
-	if billOnPageCount=4 then xmargin=142 : ymargin=113 : billOnPageCount=0
+	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      ! 0 5
+	if billOnPageCount=2 then xmargin=bill2x : ymargin=bill2y                      ! 142   5  
+	if billOnPageCount=3 then xmargin=bill3x : ymargin=bill3y                      !   0 113
+	if billOnPageCount=4 then xmargin=bill4x : ymargin=bill4y : billOnPageCount=0  ! 142 113
 	! move page down 1/2 inch
 	! 
 	! ______________________________________________________________________

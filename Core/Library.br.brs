@@ -911,9 +911,9 @@ fnend
 		library 'S:\Core\Reg.br': fncreg_write
 		fncreg_write=fncreg_write(reg_field_name$,reg_field_value$)
 	fnend
-	def library fnreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
+	def library fnreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,alsoUseDefaultIfReadBlank)
 		library 'S:\Core\Reg.br': fnreg_read
-		fnreg_read=fnreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
+		fnreg_read=fnreg_read(reg_field_name$,reg_field_value$, reg_field_default$,alsoUseDefaultIfReadBlank)
 	fnend
 	def library fnreg_write(reg_field_name$*128,reg_field_value$*256)
 		library 'S:\Core\Reg.br': fnreg_write
