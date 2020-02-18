@@ -290,15 +290,15 @@ Screen1: ! r:
 		resp$(respc_mg2(mg2_item))=resp$(respc_mg2(mg2_item))(1:message2_max_len)
 	next mg2_item
 	fnCmdKey('&Margins',ckey_margins:=1021,0,0,'Manually adjust margins for hitting forms')
-	fnCmdKey('&Test',ckey_test:=1023,0,0,'Prints 4 Bills and then stops.')
-	fnCmdKey('&Print',1,1)
-	fnCmdKey('&Cancel',5,0,1)
+	fnCmdKey('&Test'   ,ckey_test:=1023   ,0,0,'Prints 4 Bills and then stops.')
+	fnCmdKey('&Print'  ,ckey_print:=1     ,1)
+	fnCmdKey('&Cancel' ,5,0,1)
 	fnAcs2(mat resp$,ck)
 	if ck=5 then goto Xit
 	if ckey_test and ck=ckey_test then
 		testMode=1
-		ck=1
-	else 
+		ck=ckey_print
+	end if 
 	d1=val(resp$(respc_billing_date))
 	d4=val(resp$(respc_penalty_due_date))
 	if enablePriorBillingDate then 
@@ -344,6 +344,17 @@ Screen1: ! r:
 	end if
 ! /r
 ! r: initalize and open things
+
+	if enable_bulksort=1 then
+		restore #hAddr: 
+	else if enable_bulksort=2 then
+		restore #hBulk2: 
+	else if enable_cass_sort then
+		restore #hAddr:
+	else 
+		restore #h_customer_2:
+	end if
+
 	if trim$(starting_key$)="" and route_filter=0 then ! if no beginning account or starting route #, start at beginning of file
 		restore #h_customer_2,key>="         ": 
 	else if trim$(starting_key$)<>"" then 
@@ -362,6 +373,7 @@ Screen1: ! r:
 	end if 
 	! IF filter_selected_only=0 THEN GOSUB SORT1
 ! /r
+
 MainLoop: ! r: main loop
 	if filter_selected_only=1 then goto ScrAskIndividual
 	if enable_bulksort=1 then 
@@ -447,7 +459,13 @@ MainLoop: ! r: main loop
 		msgbox('UB_Limit exceeded: One or more bills have not been generated because your license limits you to '&env$('UB_Limit')&' bills.') : ubLimitExceedAlreadyNotified=1
 		goto Finis
 	end if
-	if testMode and billsPrintedCount(2)=>4 then goto Screen1
+	if testMode and billsPrintedCount(2)=>4 then 
+		fn_closeBillPrinter
+		restore #h_customer_1:
+		mat billsPrintedCount=(0)
+		goto Screen1
+	end if
+	! pr 'billsPrintedCount(2)=';billsPrintedCount(2) : pause ! if testMode and billsPrintedCount(2)=>4 then goto Screen1
 goto MainLoop ! /r
 
 def fn_ask_margins
@@ -485,17 +503,17 @@ def fn_ask_margins
 		fnreg_write('ub4upBill Margin Left 2',ub4upBill_data$(4))
 	end if
 fnend
-def fn_mg2$*80(; m2forcecnt)
+def fn_mg2$*80(; m2forcecnt,return$*80)
 	if m2forcecnt then 
 		m2item=m2forcecnt
 	else 
 		m2item+=1
 	end if 
-	if m2item=>udim(mat mg2$) then 
-		fn_mg2$=''
-	else 
-		fn_mg2$=mg2$(m2item)
+	return$=''
+	if m2item<=udim(mat mg2$) then 
+		return$=mg2$(m2item)
 	end if 
+	fn_mg2$=return$
 fnend 
 ScrAskIndividual: ! r: account selection screen
 	fnTos
@@ -515,6 +533,14 @@ ScrAskIndividual: ! r: account selection screen
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
 goto AfterCustomerRead ! /r
+
+def fn_closeBillPrinter
+	if pa_enabled then 
+		fnpa_finis
+	else if sum(billsPrintedCount)>0 then
+		fncloseprn( forceWordProcessor$)
+	end if 
+fnend
 Finis: ! r:
 	close #h_customer_1: ioerr ignore
 	h_customer_1=0
@@ -526,12 +552,7 @@ Finis: ! r:
 	hAddr=0
 	close #hBulk2: ioerr ignore
 	hBulk2=0
-	if pa_enabled then 
-		fnpa_finis
-	else if sum(billsPrintedCount)>0 then
-		fncloseprn( forceWordProcessor$)
-	end if 
-
+	fn_closeBillPrinter
 	! if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
 	fnTos : respc=0
 	mylen=23 : mypos=mylen+2
@@ -602,8 +623,9 @@ def fn_override_service_date(&osd_service_from,&osd_service_to,osd_extra_3,osd_e
 	if osd_service_from=0 then osd_service_from=osd_extra_4
 	if osd_service_to=0 then osd_service_to=osd_extra_3
 fnend 
-def fn_pay_after_amt
-	if bal<=0 then let fn_pay_after_amt=round(bal,2) else let fn_pay_after_amt=bal+g(10) ! Penalties at Merriam Woods are flat
+def fn_pay_after_amt(; returnN)
+	if bal<=0 then returnN=round(bal,2) else returnN=bal+g(10) ! Penalties at Merriam Woods are flat
+	fn_pay_after_amt=returnN
 fnend  ! fn_pay_after_amt
 def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budget,serviceFromDate,serviceToDate) ! french settlement gas
 	! ______________pre-print calculations__________________________________
@@ -619,7 +641,7 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 		t8$=""
 	else if g(8)<0 and final>0 then 
 		t8$="Deposit Ref"
-		if g(8) and g(3) then let t8$="Dep Ref"
+		if g(8) and g(3) then t8$="Dep Ref"
 	else 
 		t8$="Other"
 	end if 
@@ -814,7 +836,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	end if 
 	fnpa_fontsize
 	! ______________________________________________________________________
-	if estimatedate=d1 then let fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 	fnpa_txt("Pay By "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+42,lyne*24+ymargin)
@@ -878,7 +900,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
 	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
 	bc$=""
-	if trim$(bc$)<>"" then let fnpa_barcode(checkx,checky,bc$)
+	if trim$(bc$)<>"" then fnpa_barcode(checkx,checky,bc$)
 	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
@@ -1150,7 +1172,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	end if  ! pb
 	fnpa_fontsize : lyne=3
 	! 
-	if estimatedate=d1 then let fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin+10,63,0)
 	if budget>0 then 
 		pr #20: 'Call Print.AddText("Actual Balance",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
@@ -1293,7 +1315,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_
 	fnpa_txt("Account:      "&lpad$(trim$(z$),19),tmp_box_left_pos+5,tmp_box_top+8)
 	fnpa_txt('Due Date:                '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),tmp_box_left_pos+5,tmp_box_top+12)
 	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
-	if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
+	if final>0 then fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
 
 	lyne=65 : adder=4
 	fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
@@ -1402,7 +1424,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_
 	fnpa_line(162,lyne+=adder+1,22)
 	fnpa_line(162,lyne+=1,22)
 	fnpa_fontsize
-	if uprc$(df$)="Y" then let fnpa_txt("Your bill has been scheduled for automatic withdrawal",85,lyne+=adder)
+	if uprc$(df$)="Y" then fnpa_txt("Your bill has been scheduled for automatic withdrawal",85,lyne+=adder)
 	fnpa_fontsize
 	fnpa_fontbold
 	if g(3)>0 then 
@@ -1894,7 +1916,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	end if 
 	fnpa_fontsize
 	! ______________________________________________________________________
-	if estimatedate=d1 then let fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 	fnpa_txt('   Pay By  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
 ! fnpa_txt("Pay By "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
@@ -1969,7 +1991,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
 	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
 	bc$=""
-	if trim$(bc$)<>"" then let fnpa_barcode(checkx,checky,bc$)
+	if trim$(bc$)<>"" then fnpa_barcode(checkx,checky,bc$)
 	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
@@ -2106,7 +2128,7 @@ def fn_print_bill_greenCo
 		setup_greenco=1
 		lyne=3
 	end if
-	let billOnPageCount+=1
+	billOnPageCount+=1
 	if billOnPageCount=1 then xmargin=  0 : ymargin=  0
 	if billOnPageCount=2 then xmargin=139 : ymargin=  0
 	if billOnPageCount=3 then xmargin=  0 : ymargin=107                   ! 104
@@ -2155,14 +2177,14 @@ def fn_print_bill_greenCo
 	fnpa_txt(z$,xmargin+5,52+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+100,58+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+5,66+ymargin)
-	! If G(9)=0 AND G(10)=0 Then Let PENALTY=0: Goto 2520
-	! If BAL>14.99 Then Let PENALTY=ROUND(BAL*.10,2) Else Let PENALTY=0
+	! If G(9)=0 AND G(10)=0 Then PENALTY=0: Goto 2520
+	! If BAL>14.99 Then PENALTY=ROUND(BAL*.10,2) Else PENALTY=0
 	fnpa_fontsize(9)
-	let addy=14
+	addy=14
 	fnpa_txt(mg$(1),xmargin+35,63+ymargin)
 	fnpa_txt(mg$(2),xmargin+35,66+ymargin)
 	fnpa_txt(mg$(3),xmargin+35,69+ymargin)
-	let addy+=1
+	addy+=1
 	fnpa_fontsize
 	if df$="Y" then 
 		fnpa_txt("Drafted",xmargin+1,71+ymargin)
@@ -2170,7 +2192,7 @@ def fn_print_bill_greenCo
 	if final>0 then 
 		fnpa_txt("Final Bill",xmargin+1,71+ymargin)
 	end if
-	let addy+=10
+	addy+=10
 	if pe$(1)<>"" then 
 		fnpa_txt(pe$(1),xmargin+60,lyne*(addy+=1)+ymargin)
 	end if
@@ -2187,10 +2209,10 @@ def fn_print_bill_greenCo
 	if billOnPageCount=2 then checkx=6.75  : checky=3.6875
 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
 	if billOnPageCount=0 then checkx=6.75  : checky=7.9375
-	! let bc$=""
+	! bc$=""
 	! if trim$(bc$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
 	if billOnPageCount=0 then 
-		let fnpa_newpage
+		fnpa_newpage
 	end if
 fnend
 
