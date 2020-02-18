@@ -18,7 +18,7 @@ def fn_setup
 	library 'S:\Core\Library': fnOpt,fnTos
 	library 'S:\Core\Library': fncmbact
 	library 'S:\Core\Library': fnLastBillingDate
-	library 'S:\Core\Library': fnxit,fnCmdSet
+	library 'S:\Core\Library': fnXit,fnCmdSet
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fncreg_read,fncreg_write
 	library 'S:\Core\Library': fngethandle
@@ -211,9 +211,9 @@ PrintBill_Basic: !
 	open #h_ubtransvb:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,Input,keyed 
 	if enable_cass_sort then gosub SORT1
 ! /r
-SCREEN1: ! r:
-	starting_key$="" : route_filter=0 : respc=0
-	fnTos(sn$="UBPrtBl1-1")
+Screen1: ! r:
+	starting_key$="" : route_filter=testMode=0 : respc=0
+	fnTos
 	pf=27 : lc=0
 	fnLbl(lc+=1,1,"Payment Due Date:",25,1) : fnLbl(lc,35,"(Penalty Date)",25,1)
 	fnTxt(lc,pf,8,8,1,"1",0,tt$)
@@ -244,7 +244,8 @@ SCREEN1: ! r:
 	end if 
 	lc+=1
 	fnLbl(lc+=1,1,"Starting Route/Sequence:",25,1)
-	fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,1,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	! fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 	resp$(respc_start_place:=respc+=1)="[All]"
 	lc+=1
 	fnLbl(lc+=1,1,"Route Number:",25,1)
@@ -288,11 +289,16 @@ SCREEN1: ! r:
 		fncreg_read('bill message2 '&str$(mg2_item),resp$(respc_mg2(mg2_item)))
 		resp$(respc_mg2(mg2_item))=resp$(respc_mg2(mg2_item))(1:message2_max_len)
 	next mg2_item
-	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
-	fnCmdKey("&Print",1,1)
-	fnCmdKey("&Cancel",5,0,1)
+	fnCmdKey('&Margins',ckey_margins:=1021,0,0,'Manually adjust margins for hitting forms')
+	fnCmdKey('&Test',ckey_test:=1023,0,0,'Prints 4 Bills and then stops.')
+	fnCmdKey('&Print',1,1)
+	fnCmdKey('&Cancel',5,0,1)
 	fnAcs2(mat resp$,ck)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
+	if ckey_test and ck=ckey_test then
+		testMode=1
+		ck=1
+	else 
 	d1=val(resp$(respc_billing_date))
 	d4=val(resp$(respc_penalty_due_date))
 	if enablePriorBillingDate then 
@@ -310,8 +316,8 @@ SCREEN1: ! r:
 	else 
 		starting_key$=lpad$(trim$(resp$(6)(1:10)),10)
 		if trim$(starting_key$)<>"" then 
-			read #h_customer_1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=starting_key$,release: z$,route,sequence nokey SCREEN1
-!    starting_place_enabled=1
+			read #h_customer_1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=starting_key$,release: z$,route,sequence nokey Screen1
+			!    starting_place_enabled=1
 		end if 
 	end if 
 	if resp$(respc_route)="[All]" then 
@@ -334,18 +340,18 @@ SCREEN1: ! r:
 	fncreg_write('Penalty Due Date',str$(d4))
 	if enable_customMargins and ck=ckey_margins then
 		fn_ask_margins
-		goto SCREEN1
+		goto Screen1
 	end if
 ! /r
 ! r: initalize and open things
 	if trim$(starting_key$)="" and route_filter=0 then ! if no beginning account or starting route #, start at beginning of file
 		restore #h_customer_2,key>="         ": 
 	else if trim$(starting_key$)<>"" then 
-		restore #h_customer_2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
+		restore #h_customer_2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey Screen1
 	else if trim$(starting_key$)="" and route_filter>0 then ! selected a route and no beginning Account
 		restore #h_customer_2,key>=cnvrt$("pic(zz)",route_filter)&"       ": 
 	end if 
-! 
+
 	gosub BUD1
 	if pa_enabled=1 then 
 		fnpa_open(pa_orientation$)
@@ -354,53 +360,54 @@ SCREEN1: ! r:
 	else 
 		fnopenprn
 	end if 
-! IF filter_selected_only=0 THEN GOSUB SORT1
+	! IF filter_selected_only=0 THEN GOSUB SORT1
 ! /r
-NEXT_ACCOUNT: ! r: main loop
+MainLoop: ! r: main loop
 	if filter_selected_only=1 then goto ScrAskIndividual
 	if enable_bulksort=1 then 
 		! READ_BULKSORT: ! 
-		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est noRec NEXT_ACCOUNT ! READ_BULKSORT
+		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
+		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est noRec MainLoop ! READ_BULKSORT
 	else if enable_bulksort=2 then 
 		L680: ! 
-		read #hBulk2,using 'form pos 22,c 10': z$ eof RELEASE_PRINT
+		read #hBulk2,using 'form pos 22,c 10': z$ eof Finis
 		! if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L680 ! start with
 		! begin=0 ! cancel starting account
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
+		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey MainLoop ! READ_CASSSORT
 	else if enable_cass_sort then 
 		! READ_CASSSORT: ! 
-		read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec NEXT_ACCOUNT ! READ_CASSSORT
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
+		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
+		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec MainLoop ! READ_CASSSORT
+		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey MainLoop ! READ_CASSSORT
 	else 
-		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof RELEASE_PRINT
+		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof Finis
 	end if 
-! if trim$(z$)='100100.00'  then pr g(8) : pause
-F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1831,n 9
+	! if trim$(z$)='100100.00'  then pr g(8) : pause
+	F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1831,n 9
 	! if z$=" 201700.00" and env$('acsDeveloper')="Laura" then pause
-	if route_filter<>0 and route_filter><route and enable_bulksort=0 then goto RELEASE_PRINT
-	if enable_bulksort and route_filter and route_filter<>route then goto NEXT_ACCOUNT
-! if trim$(z$)='106700.00' then pr z$,f,d1 : pause
+	if route_filter<>0 and route_filter><route and enable_bulksort=0 then goto Finis
+	if enable_bulksort and route_filter and route_filter<>route then goto MainLoop
+	! if trim$(z$)='106700.00' then pr z$,f,d1 : pause
 
-	if f><d1 then goto NEXT_ACCOUNT
-	if bal=0 and ~include_zero_bal then goto NEXT_ACCOUNT
-	if bal<0 and ~include_credit_bal then goto NEXT_ACCOUNT
+	if f><d1 then goto MainLoop
+	if bal=0 and ~include_zero_bal then goto MainLoop
+	if bal<0 and ~include_credit_bal then goto MainLoop
 	gosub BUD2 ! determine if budget customer
-! if ~starting_place_enabled then
-!   if st1$=z$ then
-!     starting_place_enabled=0  ! starting_place_enabled used to be st1
-!   else 
-!     goto NEXT_ACCOUNT
-!   end if
-! end if
-AfterCustomerRead: ! 
+	! if ~starting_place_enabled then
+	!   if st1$=z$ then
+	!     starting_place_enabled=0  ! starting_place_enabled used to be st1
+	!   else 
+	!     goto MainLoop
+	!   end if
+	! end if
+	
+	AfterCustomerRead: ! 
 	pb=bal-g(11)
-	if filter_past_due_only and pb<=0 then goto NEXT_ACCOUNT
-	if filter_no_past_due and pb>0 then goto NEXT_ACCOUNT
+	if filter_past_due_only and pb<=0 then goto MainLoop
+	if filter_no_past_due and pb>0 then goto MainLoop
 	fncustomer_address(z$,mat pe$) ! read alternate billing address
 	fn_override_service_date(d2,d3,extra_3,extra_4)
-! r: pr bill routine
+	! r: pr bill routine
 	if env$('client')='French Settlement' then 
 		fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budgetpb,d2,d3)
 	else if env$('client')='Campbell' then 
@@ -434,12 +441,14 @@ AfterCustomerRead: !
 		if enableIsDueNowAndPayable=>0 then enableIsDueNowAndPayable=1
 		fn_print_bill_standard_pdf_a(z$,mat mg$,mat mg2$,enableIsDueNowAndPayable,enableReturnServiceRequested)
 	end if 
-! /r
-	billsPrintedCount(2)=billsPrintedCount(2)+1 ! accumulate totals
+	! /r
+	billsPrintedCount(2)+=1 ! accumulate totals
 	if env$('acsDeveloper')<>'' and sum(mat billsPrintedCount)>val(env$('UB_Limit')) and ~ubLimitExceedAlreadyNotified then 
-		msgbox('UB_Limit exceeded: You are currently printing bills for more customers than you are licensed for.  Please enhance your license before limitations become enforced.') : ubLimitExceedAlreadyNotified=1
+		msgbox('UB_Limit exceeded: One or more bills have not been generated because your license limits you to '&env$('UB_Limit')&' bills.') : ubLimitExceedAlreadyNotified=1
+		goto Finis
 	end if
-	goto NEXT_ACCOUNT ! /r
+	if testMode and billsPrintedCount(2)=>4 then goto Screen1
+goto MainLoop ! /r
 
 def fn_ask_margins
 	dim ub4upBill_data$(4)
@@ -488,7 +497,25 @@ def fn_mg2$*80(; m2forcecnt)
 		fn_mg2$=mg2$(m2item)
 	end if 
 fnend 
-RELEASE_PRINT: ! r:
+ScrAskIndividual: ! r: account selection screen
+	fnTos
+	fnLbl(1,1,"Account (blank to stop)",31,1)
+	if trim$(starting_key$)="" then 
+		if z$<>"" then 
+			fnLbl(3,1,"Last Account entered was "&z$,44,1)
+		else 
+			fnLbl(3,1,'',44,1)
+		end if 
+	end if 
+	fncmbact(1,17)
+	resp$(1)=starting_key$
+	fnCmdSet(11)
+	fnAcs2(mat resp$,ck)
+	if ck=5 or trim$(resp$(1))='' then goto Finis
+	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
+	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
+goto AfterCustomerRead ! /r
+Finis: ! r:
 	close #h_customer_1: ioerr ignore
 	h_customer_1=0
 	close #h_customer_2: ioerr ignore
@@ -504,39 +531,18 @@ RELEASE_PRINT: ! r:
 	else if sum(billsPrintedCount)>0 then
 		fncloseprn( forceWordProcessor$)
 	end if 
-goto ENDSCR ! /r
-ScrAskIndividual: ! r: account selection screen
-	fnTos(sn$:="UBPrtBl1-FS3")
-	fnLbl(1,1,"Account (blank to stop)",31,1)
-	if trim$(starting_key$)="" then 
-		if z$<>"" then 
-			fnLbl(3,1,"Last Account entered was "&z$,44,1)
-		else 
-			fnLbl(3,1,'',44,1)
-		end if 
-	end if 
-	fncmbact(1,17)
-	resp$(1)=starting_key$
-	fnCmdSet(11)
-	fnAcs2(mat resp$,ck)
-	if ck=5 or trim$(resp$(1))='' then goto RELEASE_PRINT
-	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
-	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
-goto AfterCustomerRead ! /r
-ENDSCR: ! r: pr totals screen
-	if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
-	fnTos(sn$="Bills-Total")
+
+	! if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
+	fnTos : respc=0
 	mylen=23 : mypos=mylen+2
-	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 	fnCmdSet(52)
 	fnAcs2(mat resp$,ck)
-	goto XIT ! /r
-XIT: fnxit
-IGNORE: continue 
-BUD1: ! r:
+goto Xit ! /r
+Xit: fnXit
+BUD1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5)
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EO_BUD1
@@ -544,32 +550,30 @@ BUD1: ! r:
 	bud1=1
 	EO_BUD1: ! 
 return  ! /r
-BUD2: ! r:
+BUD2: ! r: the heart of it...
 	totba=bd1=bd2=budgetpb=havebudget=00
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 	if bud1=0 then goto EO_BUD2
-	read #81,using L3230,key=z$: z$,mat ba,mat badr nokey EO_BUD2
+	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EO_BUD2
 	havebudget=1
 	for j=2 to 12
 		totba=totba+ba(j)
 	next j
-	L3230: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	if totba=0 then havebudget=0: goto EO_BUD2
 	ta1=badr(1)
-	L3260: !
-	if ta1=0 then goto EO_BUD2
-	read #82,using L3280,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
-	L3280: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	if bt1(14,1)>0 then goto L3340
-	! IF BT1(1,2)=F THEN GOTO 3350 ! ignore current budget billing record
-	budgetpb=budgetpb+bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not counting current bill
-	bd1=bd1+1
-	if bd1>5 then 
-		goto EO_BUD2
-	end if
-	L3340: !
-	ta1=nba 
-	goto L3260
+	do
+		if ta1=0 then goto EO_BUD2
+		read #82,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
+		if bt1(14,1)<=0 then ! if bt1(14,1)>0 then goto L3340
+			! if bt1(1,2)=f then goto 3350 ! ignore current budget billing record
+			budgetpb=budgetpb+bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not counting current bill
+			bd1=bd1+1
+			if bd1>5 then 
+				goto EO_BUD2
+			end if
+		end if ! L3340: !
+		ta1=nba 
+	loop
 	EO_BUD2: ! 
 return  ! /r
 def fn_get_mat_at(mat at$)
@@ -910,7 +914,7 @@ BULKSORT: ! r: sort in bulk sort code sequence
 return  ! /r
 SORT1: ! r: SELECT & SORT - sorts Cass1 file    requires: (h_customer_2,&enable_cass_sort,&hSort1Sequence,&hAddr,d1,route_filter,... ;  ___,z$*10,customerLastBillingDate,route
 	enable_cass_sort=0 ! replaces old s5 variable
-	open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr XIT_SORT1
+	open #h_cass1:=fngethandle: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr Xit_SORT1
 	open #hSort1Sequence:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
 	enable_cass_sort=1
 	if route_filter=0 then routekey$="" else routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -939,7 +943,7 @@ SORT1: ! r: SELECT & SORT - sorts Cass1 file    requires: (h_customer_2,&enable_
 	execute "Sort "&env$('Temp')&"\Control."&session$
 	open #hSort1Sequence:=fngethandle: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative 
 	open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
-	XIT_SORT1: ! 
+	Xit_SORT1: ! 
 return  ! /r
 def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
 	! r: any and all necessary setup (except opening the printer) to pr one bill
@@ -1032,7 +1036,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	fn_override_service_date(service_from,service_to,extra_3,extra_4)
 	! -- Standard 4 Per Page Even Perforated Card Stock Bills
 	billOnPageCount+=1
-	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      ! 0 5
+	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      !   0   5
 	if billOnPageCount=2 then xmargin=bill2x : ymargin=bill2y                      ! 142   5  
 	if billOnPageCount=3 then xmargin=bill3x : ymargin=bill3y                      !   0 113
 	if billOnPageCount=4 then xmargin=bill4x : ymargin=bill4y : billOnPageCount=0  ! 142 113
@@ -1216,7 +1220,6 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	if billOnPageCount=0 then 
 		fnpa_newpage
 	end if 
-	! /r
 fnend 
 def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_to) ! inherrits all those local customer variables too
 	if ~setup_blucksberg then ! r:
@@ -1536,7 +1539,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		pr #255: newpage
 	else 
 		if allign<>1 then ! it isn't a REPRINT so SKIP TOTALS
-			billsPrintedCount(3)=billsPrintedCount(3)+1
+			billsPrintedCount(3)+=1
 		end if 
 	end if 
 fnend 
@@ -1549,17 +1552,17 @@ def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_ove
 fnend 
 PRIOR_USAGES: ! r: Blucksberg's prior usages gathering
 	mat usage=(0): mat billdate=(0) : mat reads=(0)
-	restore #h_ubtransvb,key>=z$&"         ": nokey PU_XIT ! no average but active customer (use 0 usage)
+	restore #h_ubtransvb,key>=z$&"         ": nokey PU_Xit ! no average but active customer (use 0 usage)
 	L3160: !
-	read #h_ubtransvb,using L3170: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PU_XIT
+	read #h_ubtransvb,using L3170: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PU_Xit
 	L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	if p$<>z$ then goto PU_XIT
+	if p$<>z$ then goto PU_Xit
 	if tcode<>1 then goto L3160 ! only charge transactions
 	usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
 	usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
 	usage(1)=wu: billdate(1)=tdate : reads(1)=wr
 	goto L3160
-	PU_XIT: ! 
+	PU_Xit: ! 
 return  ! /r
 def fn_print_bill_pennington(z$,mat mg$,mat mg2$,service_from,service_to,penaltyDueDate)
 	! correct margins are top:.7, bottom:.25, left:.63, right:.25

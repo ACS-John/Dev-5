@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                          
+5:39 PM 2/17/2020	UB	(unified) Print Bill program got a new Test button that just prints the first 4 bills and then stops
 12:49 02/20/2020	CO	5.74272  
 14:04 02/20/2020	CO	5.74271   
 2:03 PM 2/13/2020	UB	fixed printing tax on print bills for affected customers  
