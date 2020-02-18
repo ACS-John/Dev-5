@@ -62,72 +62,6 @@ def fn_sreg_rename(field_name_old$*128,fieldNameNew$*128)
 	 end if
 fnend
 ! /r
-! r: Regurlar Registry - tied to Client only - saves their settings
-def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
-	if ~reg_setup then reg_setup=fn_reg_setup
-	fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$,alsoUseDefaultIfReadBlank)
-fnend
-def library fnreg_write(rw_field_name$*128,rw_field_value$*256)
-	if ~reg_setup then reg_setup=fn_reg_setup
-	fnreg_write=fn_reg_write(rw_field_name$,rw_field_value$)
-fnend
-def library fnreg_rename(field_name_old$*128,fieldNameNew$*128)
-	if ~reg_setup then reg_setup=fn_reg_setup
-	fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
-fnend
-def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
-	dim rr_tmpfield_value$*256,rr_key_compare$*128
-	rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
-	rr_tmpfield_value$=rr_field_value$=''
-	! pr 'read #reg_h'
-	read #reg_h,using 'form pos 1,C 128,v 256',key=rr_field_name$,release: rr_key_compare$,rr_tmpfield_value$ ioerr REG_LOAD_IOERR ! XXX
-	REG_LOAD_IOERR: !
-	if rr_key_compare$=rr_field_name$ then
-		rr_field_value$=rtrm$(rr_tmpfield_value$)
-	else
-		rr_field_value$=rr_default_if_not_read$ ! ''
-	end if
-
-	if alsoUseDefaultIfReadBlank and trim$(rr_field_value$)='' then
-		rr_field_value$=rr_default_if_not_read$
-	end if
-fnend
-def fn_reg_write(rw_field_name$*128,rw_field_value$*256)
-	rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)
-	rewrite #reg_h,using 'form pos 1,c 128,c 256',key=rw_field_name$: rw_field_name$,rw_field_value$ nokey REG_WRITE ! XXX
-	! pr 'rewrite #reg_h'
-	goto REG_SAVE_XIT
-	REG_WRITE: !
-	write #reg_h,using 'form pos 1,c 128,c 256': rw_field_name$,rw_field_value$
-	! pr 'write #reg_h'
-	REG_SAVE_XIT: !
-	! pr 'save ';trim$(rw_field_name$);'=';rw_field_value$
-fnend
-def fn_reg_rename(field_name_old$*128,fieldNameNew$*128)
-	field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
-	rewrite #reg_h,using 'form pos 1,c 128',key=field_name_old$: fieldNameNew$ nokey ignore
-fnend
-def fn_reg_setup
-	library 'S:\Core\Library': fngethandle,fnerror,fnmakesurepathexists
-	fnmakesurepathexists('[Q]\Data\')
-	open #reg_h:=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
-	fn_reg_setup=1
-	on error goto Ertn
-fnend
-! /r
-! r: GLOBAL - affects ALL registries
-def library fnreg_close ! closes all registries (sreg, creg and reg)
-	close #reg_h: ioerr ignore
-	reg_setup=0
-	fn_mcreg_close
-	fn_creg_close
-	fn_sreg_close
-	XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
-fnend
-def fn_creg_close
-	close #creg_h: ioerr ignore
-	creg_setup=0
-fnend
 ! r: Multi-Client Registry - tied to nothing
 def library fnmcreg_read(mcr_field_name$*128,&mcr_field_value$; mcr_default_if_not_read$*128)
 	fn_mcreg_setup
@@ -179,6 +113,60 @@ fnend
 def fn_mcreg_close
 	close #mcreg_h: ioerr ignore
 	mcreg_setup=0
+fnend
+! /r
+
+! r: Regurlar Registry - tied to Client only - saves their settings
+def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
+	if ~reg_setup then reg_setup=fn_reg_setup
+	fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$,alsoUseDefaultIfReadBlank)
+fnend
+def library fnreg_write(rw_field_name$*128,rw_field_value$*256)
+	if ~reg_setup then reg_setup=fn_reg_setup
+	fnreg_write=fn_reg_write(rw_field_name$,rw_field_value$)
+fnend
+def library fnreg_rename(field_name_old$*128,fieldNameNew$*128)
+	if ~reg_setup then reg_setup=fn_reg_setup
+	fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
+fnend
+def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128,alsoUseDefaultIfReadBlank)
+	dim rr_tmpfield_value$*256,rr_key_compare$*128
+	rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
+	rr_tmpfield_value$=rr_field_value$=''
+	! pr 'read #reg_h'
+	read #reg_h,using 'form pos 1,C 128,v 256',key=rr_field_name$,release: rr_key_compare$,rr_tmpfield_value$ ioerr REG_LOAD_IOERR ! XXX
+	REG_LOAD_IOERR: !
+	if rr_key_compare$=rr_field_name$ then
+		rr_field_value$=rtrm$(rr_tmpfield_value$)
+	else
+		rr_field_value$=rr_default_if_not_read$ ! ''
+	end if
+
+	if alsoUseDefaultIfReadBlank and trim$(rr_field_value$)='' then
+		rr_field_value$=rr_default_if_not_read$
+	end if
+fnend
+def fn_reg_write(rw_field_name$*128,rw_field_value$*256)
+	rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)
+	rewrite #reg_h,using 'form pos 1,c 128,c 256',key=rw_field_name$: rw_field_name$,rw_field_value$ nokey REG_WRITE ! XXX
+	! pr 'rewrite #reg_h'
+	goto REG_SAVE_XIT
+	REG_WRITE: !
+	write #reg_h,using 'form pos 1,c 128,c 256': rw_field_name$,rw_field_value$
+	! pr 'write #reg_h'
+	REG_SAVE_XIT: !
+	! pr 'save ';trim$(rw_field_name$);'=';rw_field_value$
+fnend
+def fn_reg_rename(field_name_old$*128,fieldNameNew$*128)
+	field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
+	rewrite #reg_h,using 'form pos 1,c 128',key=field_name_old$: fieldNameNew$ nokey ignore
+fnend
+def fn_reg_setup
+	library 'S:\Core\Library': fngethandle,fnerror,fnmakesurepathexists
+	fnmakesurepathexists('[Q]\Data\')
+	open #reg_h:=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+	fn_reg_setup=1
+	on error goto Ertn
 fnend
 ! /r
 ! r: Company Registry - tied to Client, System and Company Number
@@ -252,6 +240,21 @@ def library fnureg_write(uw_field_name$*128,uw_field_value$*256)
 	fnureg_write=fn_reg_write(env$('Unique_Computer_Id')&'.'&uw_field_name$,uw_field_value$)
 fnend
 ! /r
+
+! r: GLOBAL - affects ALL registries
+def library fnreg_close ! closes all registries (sreg, creg and reg)
+	close #reg_h: ioerr ignore
+	reg_setup=0
+	fn_mcreg_close
+	fn_creg_close
+	fn_sreg_close
+	XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
+fnend
+def fn_creg_close
+	close #creg_h: ioerr ignore
+	creg_setup=0
+fnend
+
 def fn_setup
 	if ~setup then
 		setup=1
