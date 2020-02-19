@@ -32,8 +32,8 @@ MENU1B: ! r:
 			m1_item$(3)=str$(transAmount)               ! amount
 			m1_item$(4)=str$(transDate)               ! date
 			m1_item$(5)=fn_collType$(transType)
-			if env$('acsDeveloper')<>'' then m1_item$(5)=m1_item$(5)&' ('&str$(transType)&')'
-			m1_item$(6)=str$(postingCodeUnused)            ! 
+			! if env$('acsDeveloper')<>'' then m1_item$(5)=m1_item$(5)&' ('&str$(transType)&')'
+			m1_item$(6)=rcpt$ ! str$(postingCodeUnused)            ! 
 			fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			! m1_item$(7)=rcpt$
 			cHdrItem=cHdrItemFirstService=6
@@ -850,8 +850,8 @@ def fn_setup
 		cm$(2)="32"
 		cm$(3)="10"
 		cm$(4)="1"
-		cm$(5)="" ! "30" 
-		cm$(6)="30" 
+		cm$(5)=""
+		cm$(6)=""
 		! cm$(7)=""
 		for j=7 to max(9,udim(chdr$)) 
 			cm$(j)="10" 
