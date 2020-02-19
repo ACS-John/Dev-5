@@ -231,9 +231,9 @@ def fn_creg_setup
 fnend
 ! /r
 ! r: User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)
-def library fnureg_read(ur_field_name$*128,&ur_field_value$; ur_default_if_not_read$*256)
+def library fnureg_read(ur_field_name$*128,&ur_field_value$; ur_default_if_not_read$*256,alsoUseDefaultIfReadBlank)
 	if ~reg_setup then reg_setup=fn_reg_setup
-	fnureg_read=fn_reg_read(env$('Unique_Computer_Id')&'.'&ur_field_name$,ur_field_value$, ur_default_if_not_read$)
+	fnureg_read=fn_reg_read(env$('Unique_Computer_Id')&'.'&ur_field_name$,ur_field_value$, ur_default_if_not_read$,alsoUseDefaultIfReadBlank)
 fnend
 def library fnureg_write(uw_field_name$*128,uw_field_value$*256)
 	if ~reg_setup then reg_setup=fn_reg_setup
