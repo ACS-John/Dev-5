@@ -1,25 +1,21 @@
 ! Replace S:\acsTM\Support
 
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
+	library 'S:\Core\Library': fntop,fnxit, fnHamster
 	on error goto Ertn
 
 	dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
 	
 	fntop(program$,'Support 420')
-	dim dataPath$*128
-	dataPath$='S:\Core\Data\acsllc'
-
-	! dataPath$='C:\ACS\STABLE-5\Core\Data\acsllc'   ! <--- just for deep debugging
 
 	gosub BUILD_LAYOUT
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 	gosub HAMSTER: gosub CLOSE_FILE
-	execute 'Index '&dataPath$&'\support.h420  '&dataPath$&'\support-idx.h420 1/7,6/2,replace,DupKeys'
+	execute 'Index S:\Core\Data\acsllc\support.h420  S:\Core\Data\acsllc\support-idx.h420 1/7,6/2,replace,DupKeys'
 	goto XIT
 
 OPEN_FILE: !
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: 'Name='&dataPath$&'\Support.h420,Version=2,KFName='&dataPath$&'\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',internal,outIn,keyed
+	open #open_file_count+=1: 'Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',internal,outIn,keyed
 return
 
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
@@ -104,24 +100,24 @@ BUILD_LAYOUT: !
 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 	limit_to_list$='1'
 	cl=1 : c$(cl,1)='ComboF'
-	c$(cl,2)=dataPath$&'\Clmstr.h420'
+	c$(cl,2)='S:\Core\Data\acsllc\Clmstr.h420'
 	c$(cl,3)='1' : c$(cl,4)='5'
 ! c$(cl,3)='1' : c$(cl,4)='6'
 	c$(cl,5)='6' : c$(cl,6)='30'
 ! c$(cl,5)='7' : c$(cl,6)='50'
-	c$(cl,7)=dataPath$&'\CLIndex.h420'
+	c$(cl,7)='S:\Core\Data\acsllc\CLIndex.h420'
 	c$(cl,8)=limit_to_list$
 	cl=3 : c$(cl,1)='ComboF'
-	c$(cl,2)=dataPath$&'\Systems.h420'
+	c$(cl,2)='S:\Core\Data\acsllc\Systems.h420'
 	c$(cl,3)='1' : c$(cl,4)='2'
 	c$(cl,5)='3' : c$(cl,6)='50'
-	c$(cl,7)=dataPath$&'\Systems-Idx.h420'
+	c$(cl,7)='S:\Core\Data\acsllc\Systems-Idx.h420'
 	c$(cl,8)=limit_to_list$
 	cl=5 : c$(cl,1)='ComboF'
-	c$(cl,2)=dataPath$&'\TimeFrame.h420'
+	c$(cl,2)='S:\Core\Data\acsllc\TimeFrame.h420'
 	c$(cl,3)='1' : c$(cl,4)='2'
 	c$(cl,5)='3' : c$(cl,6)='50'
-	c$(cl,7)=dataPath$&'\TimeFrame-Idx.h420'
+	c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h420'
 	c$(cl,8)=limit_to_list$
 return
 
