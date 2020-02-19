@@ -1,5 +1,5 @@
 ! Replace S:\Core\PrtFlex\prtflex1
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos
 	library 'S:\Core\Library': fncomboa
 	library 'S:\Core\Library': fnflexadd1,fnflexinit1,fnCmdKey
@@ -68,7 +68,7 @@ SelectDataBase: !
 	fnAcs('',0,mat resp$,ckey)
 	if ckey=5 then goto XIT
 	database$=resp$(1)
-! ______________________________________________________________________
+!
 GRIDSELECTION: ! r:
 ! Allows you to select any grid that previously been created
 ! or allows you to create a new one.  All grids end with
@@ -110,7 +110,7 @@ GRIDSELECTION: ! r:
 ! If CKEY=4 Then Goto DisplayGrid
 	if ckey=5 then goto XIT
 	goto SelectDataBase ! /r
-! ______________________________________________________________________
+!
 GridColumns: !  r: Displays all vaiables in the data base and allows you to                        choose the ones you want in your grid
 	mat item$(2)
 	close #hgridfile: ioerr ignore
@@ -255,7 +255,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 	columns=0
 	specline=10010
 	dataline=10510
-	! ____________________________________________________________________
+	!____
 	! This section generates the program lines needed to create the column            headings and column masks
 	close #hgridfile: ioerr ignore
 	open #hgridfile:=15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outIn,keyed ioerr SelectDataBase

@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsCL\InitGLPay
 00020 ! Import General Ledger Payee Records
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fngethandle
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$="Import GL Payee Records")
 00100   cancel=99 : right=1 : left=0 : center=2 : number$='30'
 00110   fncno(cno,cnam$) !:
@@ -38,7 +38,7 @@
 00257   close #paymstr: 
 00258   close #payeegl: 
 00260 XIT: fnxit
-00270 ! ______________________________________________________________________
+00270 !
 00280 ! <Updateable Region: ERTN>
 00290 ERTN: fnerror(program$,err,line,act$,"xit")
 00300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -46,7 +46,7 @@
 00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00340 ! /region
-00350 ! ______________________________________________________________________
+00350 !
 00360 MSGBOX1: ! 
 00370   mat ml$(2) !:
         ml$(1)="A general ledger chart of accounts has not been set up" !:

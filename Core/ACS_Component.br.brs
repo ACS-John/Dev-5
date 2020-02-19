@@ -2059,11 +2059,11 @@ fnend
 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
 	if ~setup then let fn_setup
 	if qgllength=0 then qgllength=35
-! _______________________________________________________________________
+!_
 ! the response$ for this - should be gotten with fnAGL
 ! fnComboA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
 ! this function has an integrated fnComboA - similar to the one above
-! _______________________________________________________________________
+!_
 	dim qglopt$*60
 	dim glmstr_form$*80
 	dim qgloption$(1)*255

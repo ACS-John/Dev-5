@@ -1,17 +1,17 @@
 00010 ! Replace S:\acsGL\fixytdqtd
 00020 ! -- PAYROLL REGISTER
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,empd(22)
 00080   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 00090   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Fix YTD - QTD Earnings")
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
-00130 ! ______________________________________________________________________
+00130 !
 00140   fnTos(sn$="FixYTDQTD") !:
         rc=cf=0: mylen=28: mypos=mylen+3: frameno=1
 00150   fnFra(1,1,3,45,"Date Range to Fix Quarter To Date Earnings","Enter the date range for the payrolls to be included in this quarter. Leave blank to skip quarter.")
@@ -74,7 +74,7 @@
 00650   rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m
 00660   goto L380
 00670 XIT: fnxit
-00680 ! ______________________________________________________________________
+00680 !
 00690 ! <updateable region: ertn>
 00700 ERTN: fnerror(program$,err,line,act$,"xit")
 00710   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

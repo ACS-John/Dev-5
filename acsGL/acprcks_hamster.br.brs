@@ -1,11 +1,11 @@
 10000 ! "Replace "&program$
 10200 ! another Hamster
-10400 ! ______________________________________________________________________
+10400 !
 10600   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
 10800   on error goto Ertn
-11000 ! ______________________________________________________________________
+11000 !
 11200   dim cap$*128
-11400 ! ______________________________________________________________________
+11400 !
 11600   fntop(program$,cap$='AcPrCks Hamster')
 12000   fn_setup_hamster
 12400   fn_open_file
@@ -13,7 +13,7 @@
 12800   fnHamster("AcPrCks",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 13000   fn_close_file
 13200   goto XIT
-13400 ! ______________________________________________________________________
+13400 !
 13600   def fn_open_file
 13800     open_file_count=0 ! this value is used in the close_file sub routine
 14000     open #open_file_count+=1: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",internal,outIn,relative 
@@ -22,7 +22,7 @@
 14600     for j=1 to open_file_count : close #j: : next j
 14800   fnend  ! fn_close_file
 15000 XIT: fnxit
-15200 ! ______________________________________________________________________
+15200 !
 15400 ! <Updateable Region: ERTN>
 15600 ERTN: fnerror(program$,err,line,act$,"xit")
 15800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -30,7 +30,7 @@
 16200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 16400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16600 ! /region
-16800 ! ______________________________________________________________________
+16800 !
 17000   def fn_setup_hamster
 17200     mask_pointtwo=32 : mask_number=30
 17400     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53

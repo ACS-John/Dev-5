@@ -1,16 +1,16 @@
 00010 ! replace S:\acsPR\CAT_SRCH2.br
 00020 ! search for an valid caterories for this job
-00030 ! ______________________________________________________________________
+00030 !
 00040   def library fncat_srch2(&cn$,&ckey;fixgrid)
 00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
 00060     on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080     dim item$(2)*40,resp$(30)*80
-00090 ! ______________________________________________________________________
+00090 !
 00100     jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
 00110     fncno(cno)
 00120     category=16 ! category file in jcmaint
-00130 ! ______________________________________________________________________
+00130 !
 00140     fnTos(sn$="CatSrch")
 00150     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
@@ -20,14 +20,14 @@
 00190     read #category,using 'Form POS 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
 00200     fnflexadd1(mat item$)
 00210     goto READ_FILE
-00220 ! ______________________________________________________________________
+00220 !
 00230 ERR_READ: ! 
 00240     if err<>61 then goto ERTN
 00250     pr 'Record locked during cat_search flexgrid creation' !:
           pr 'It was skipped' !:
           read #category,release: !:
           goto READ_FILE
-00260 ! ______________________________________________________________________
+00260 !
 00270 L270: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 00280     fnCmdKey("&Add",97,0,0,"Add a new category record." ) !:
           fnCmdKey("&Edit",98,0,0,"Review or change category breakdown record." ) !:
@@ -41,7 +41,7 @@
 00300     cn$=lpad$(resp$(1),11)
 00310     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected
 00320     goto XIT
-00330 ! ______________________________________________________________________
+00330 !
 00340 ! <Updateable Region: ERTN>
 00350 ERTN: fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -49,6 +49,6 @@
 00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00400 ! /region
-00410 ! ______________________________________________________________________
+00410 !
 00420 XIT: fnend 
-00430 ! ______________________________________________________________________
+00430 !

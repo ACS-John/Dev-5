@@ -1,12 +1,12 @@
 10000 ! formerly S:\acsPR\Department
 10200 ! Department names for payroll
-10400 ! ______________________________________________________________________
+10400 !
 10600   library 'S:\Core\Library': fntop,fnxit,fnerror,fnHamster
 10800   fntop(program$)
 11000   on error goto Ertn
-11200 ! ______________________________________________________________________
+11200 !
 11400   dim mask(1),p$(1)*25,lbl$(1)*40
-11600 ! ______________________________________________________________________
+11600 !
 12000   add_count=0
 12200   fn_add('Emp',8, '',0,30)       ! used
 12400   fn_add('Dept',3)                ! used
@@ -62,7 +62,7 @@
 22400     sln(add_count)=storage_length
 22600     mask(add_count)=mask
 22800   fnend 
-80000 ! ______________________________________________________________________
+80000 !
 80190 ! <Updateable Region: ERTN>
 80200 ERTN: fnerror(program$,err,line,act$,"xit")
 80210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -70,4 +70,4 @@
 80230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80250 ! /region
-80260 ! ______________________________________________________________________
+80260 !

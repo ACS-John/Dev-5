@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsGL\Conversion\add-h.wb
 00020 ! this program renames [Q]\GLmstr\*.[cno] to [Q]\GLmstr\*.H[cno]
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   fntop(program$,"CHANGE_ME")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   fncno(cno)
 00090   pr newpage
 00100 MENU1: ! 
@@ -15,18 +15,18 @@
 00150 L150: rinput fields "10,57,N 5,UT,N": cno conv L150
 00160   if cmdkey=5 then goto XIT
 00170   goto START
-00180 ! ______________________________________________________________________
+00180 !
 00190 XIT: stop 
-00200 ! ______________________________________________________________________
+00200 !
 00210 START: ! 
 00220   execute "Rename [Q]\GLmstr\*.[cno]"&' '&"[Q]\GLmstr\*.h[cno] -n" ioerr RER
 00230   pr 'company [cno] completed.'
 00240   goto MENU1
-00250 ! ______________________________________________________________________
+00250 !
 00260 RER: ! 
 00270   pr 'company [cno] had problems.'
 00280   goto MENU1
-00290 ! ______________________________________________________________________
+00290 !
 00300 ! <Updateable Region: ERTN>
 00310 ERTN: fnerror(program$,err,line,act$,"xit")
 00320   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

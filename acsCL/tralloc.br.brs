@@ -1,7 +1,7 @@
 ! Replace S:\acsCL\TrAlloc
 ! Checkbook Transaction Allocation File - Hamster 
 ! pretty useless to the end user - but quite usefull to the programmer
-! ______________________________________________________________________
+!
 library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 on error goto Ertn
 

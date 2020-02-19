@@ -1,12 +1,12 @@
 ! Replace S:\acsPR\newprWkMCmp
 ! Workmans Compensation Report
-! ______________________________________________________________________
+!
   library 'S:\Core\Library': fntop,fnxit, fncloseprn,fnopenprn,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates
   on error goto Ertn
-! ______________________________________________________________________
+!
   dim ename$*30,subtot(2),tottot(2),tqm(17),message$*40
   dim tdet(17),tdc(6),tcp(31),tdc(10)
-! ______________________________________________________________________
+!
   fntop(program$)
   fnGetPayrollDates(beg_date,end_date)
 

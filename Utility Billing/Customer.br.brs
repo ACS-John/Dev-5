@@ -33,7 +33,7 @@ def library fnCustomer(x)
 	! /r
 	! 
 	goto AskAcct
-	! ______________________________________________________________________
+	!
 	ACCOUNT_X_NOKEY: ! r:
 		mat ml$(2)
 		ml$(1)="Account "&x$&' could not be found.'
@@ -65,13 +65,13 @@ def library fnCustomer(x)
 		! pb=bal
 		odp=b(8)+b(9)+b(11)
 	goto NameScreen ! /r
-	! ______________________________________________________________________
+	!
 	CHECK_BALANCE_BREAKDOWN: ! r:
 		gosub TGB_SET
 		! Gosub DRAFT1
 		if tgb=bal then goto REWRITE_RECORD
 	goto BREAKDOWN_NOT_EQUAL ! /r
-	! ______________________________________________________________________
+	!
 	REWRITE_RECORD: ! r:
 		gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 		if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
@@ -101,7 +101,7 @@ def library fnCustomer(x)
 	PAST_CASS_DELETE: ! 
 	! probably change customer in ubtrans-vb here !Gosub 5130
 	if ad1=1 then goto ADD_RECORD else goto AskAcct ! /r
-	! ______________________________________________________________________
+	!
 	ASK_CONFIRM_KEY_CHANGE: ! r:
 		mat ml$(2)
 		ml$(1)="Do you wish to change account"
@@ -150,7 +150,7 @@ def library fnCustomer(x)
 		noteFileNew$=fn_notedir$&"\"&trim$(z$)&".txt" ! new notes
 		if exists(noteFile$)<>0 then execute "rename "&noteFile$&" "&noteFileNew$&" -d -n"
 	goto AskAcct ! /r
-	! ______________________________________________________________________
+	!
 	DeleteCustomer: ! r:
 	if bal<>0 then 
 			mat ml$(3)
@@ -169,7 +169,7 @@ def library fnCustomer(x)
 			hact$=""
 		end if
 	goto AskAcct ! /r
-	! ______________________________________________________________________
+	!
 	ALT_ADDRESS_SAVE: ! r: write or rewrite alternate billing address
 		rewrite #h_ubadrbil,using F_ADRBIL,key=z$: z$,mat ab$ nokey AAS_WRITE
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))="" then 
@@ -1239,13 +1239,13 @@ def fn_customer_grid(cg_line,cg_pos)
 		read #cg_file_num,using 'Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7': mat cg_item$ eof CG_EO_CUSTOMER ioerr CG_ERR_READ
 		fnflexadd1(mat cg_item$)
 	loop 
-	! ______________________________________________________________________
+	!
 	CG_ERR_READ: ! 
 	if err<>61 then goto ERTN
 	! pr 'Record locked during Customer_Search flexgrid creation - skipped'
 	read #file_num,release: 
 	goto CG_READ_FILE
-	! ______________________________________________________________________
+	!
 	CG_EO_CUSTOMER: ! 
 	close #cg_file_num: 
 fnend 

@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsUB\conversion\booktitle
 00020 ! this program converts a field from ALL CAPITAL LETTERS !:
         ! to Book Title Capitalization
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fnerror,fncno
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim nam$*30
-00080 ! ______________________________________________________________________
+00080 !
 00090   def fnbooktitle$*80(x$*80)
 00100     x$=lwrc$(trim$(x$)) : olda=0
 00110     x$(1:1)=uprc$(x$(1:1))
@@ -32,7 +32,7 @@
             a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L210
 00220     fnbooktitle$=x$
 00230   fnend 
-00240 ! ______________________________________________________________________
+00240 !
 00250   fncno(cno)
 00260   pr newpage
 00270 L270: pr f "8,20,C 30,R,N": "Book Title Capital"
@@ -49,12 +49,12 @@
 00380     rewrite #1,using "Form Pos 71,c 30",rec=j: nam$ noRec L390
 00390 L390: next j
 00400   goto DONE
-00410 ! ______________________________________________________________________
+00410 !
 00420 DONE: close #1: 
 00430   pr "company number [cno] completed successfully"
 00440   goto L270
 00450 XIT: stop 
-00460 ! ______________________________________________________________________
+00460 !
 00470 ! <Updateable Region: ERTN>
 00480 ERTN: fnerror(program$,err,line,act$,"xit")
 00490   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -62,4 +62,4 @@
 00510   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00520 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00530 ! /region
-00540 ! ______________________________________________________________________
+00540 !

@@ -446,7 +446,7 @@ F_DPTYPES: form pos 1,3*n 1
 	goto L3710
 L3700: write #93,using F_DPTYPES,rec=1: mat dpt
 L3710: cda=1
-! __________________________________________
+
 DPAMENU: ! 
 	fnTos
 	respc=0

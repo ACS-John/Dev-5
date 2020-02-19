@@ -1,6 +1,6 @@
 ! Replace S:\Core\Print.br
 ! open the report, printer, etc...
-! ______________________________________________________________________
+!
 def fn_setup
 	on error goto Ertn
 	if ~setup then 
@@ -150,14 +150,14 @@ def library fncloseprn(;forceWordProcessor$)
 fnend 
 def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
 	on error goto START_ERTN
-	! ______________________________________________________________________
+	!
 	! NoDrop    = 1 = Do not delete the file when your done with it.
-	! ______________________________________________________________________
+	!
 	dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
 	dim landscape$*1
 	dim marg(4)
 	dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
-	! ______________________________________________________________________
+	!
 	start_destinationFilename$=trim$(start_destinationFilename$)
 	winxp$="Microsoft Windows XP"
 	win2k$="Microsoft Windows 2000"
@@ -189,7 +189,7 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	end if 
  DROPIT: ! 
 	goto START_XIT
-	! ______________________________________________________________________
+	!
 	START_ERTN: ! r:
 	if err=4591 then   ! added for time-outs
 		pr newpage
@@ -300,7 +300,7 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToA
 	end if 
 	pr #21: line$&"\par"
 	goto L640
-	! ______________________________________________________________________
+	!
 	END_OF_FILE: ! 
 	pr #21: "}"
 	close #21: 

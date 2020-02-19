@@ -1,13 +1,13 @@
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnOpt,fnmsgbox,fncomboa,fnButton,fnpic,fnFra,fnChk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnCmdSet,fnCmdKey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 00040   library 'S:\Core\Library': fnLastBillingDate
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
 00080   dim usagtot(18,20),ratetot(18,20),customer(18,20),cap$*128
 00090   dim fa$(5),sa$(4),fb$(1),fc$(1),sb$(1)*38,fd$(1),z$(4)*11,srvc$*11
 00100   dim io2$(38),cnam$*40,code$(4),a(7),d(15),g(10),e$(4)*30,f$(3)*12
-00110 ! ______________________________________________________________________
+00110 !
 00120   fncno(cno,cnam$)
 00130   fnLastBillingDate(bdate)
 00140   fntop(program$,cap$="Analyze Charges")
@@ -52,7 +52,7 @@
 00410 DONE: close #1: ioerr L420
 00420 L420: fncloseprn
 00430 XIT: fnxit
-00440 ! ______________________________________________________________________
+00440 !
 00450 ERTN: fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto L490
 00470   execute "list -"&str$(line) !:
@@ -61,7 +61,7 @@
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 00490 L490: execute act$
 00500   goto ERTN
-00510 ! ______________________________________________________________________
+00510 !
 00520 PRINTIT: ! 
 00530   gosub HDR
 00540 L540: read #1,using L610: z$,mat e$,mat a,mat f$,mat d,mat g eof L810 ! READ MASTER RECORD
@@ -78,11 +78,11 @@
 00650   totamount=totamount+amount
 00660 L660: form x 5,c 10,x 5,c 30,x 7,c 30,x 2,c 12,x 2,pic(zzzzzzzzz),x 2,n 12.2,skip 2
 00670   goto L540
-00680 ! ______________________________________________________________________
+00680 !
 00690 PGOF: pr #255: newpage
 00700   gosub HDR
 00710   continue 
-00720 ! ______________________________________________________________________
+00720 !
 00730 HDR: ! 
 00740   p2=p2+1
 00750   pr #255,using "Form POS 1,CC 80": cnam$ !:

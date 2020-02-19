@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsGL\AddCNo
 00020 ! was GLCopy - but the functionality needed to be in addFRO_C_N_O, which there wasn't one of so I just renamed it to that for the time being and we need to fix and test addCno later.
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntop,fnxit,fnchain,fnTos,fnLbl,fncmbcno,fnCmdSet,fnAcs,fnCopy,fnFree
 00050   fntop(program$,cap$="Add Company")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim zer(57),resp$(10)*80
 00090 ! ___________________________
 00100   right=1
@@ -42,4 +42,4 @@
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00450 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00460 ! /region
-00470 ! ______________________________________________________________________
+00470 !

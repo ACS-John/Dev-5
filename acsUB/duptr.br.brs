@@ -1,10 +1,10 @@
-00030   ! ______________________________________________________________________
+00030   !
 00040   if ~setup_library then let fn_setup_library
 00050   on error goto Ertn
-00060   ! ______________________________________________________________________
+00060   !
 00070   dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
 00090   fntop(program$,cap$="Duplicate Transaction Report")
-00100   ! ______________________________________________________________________
+00100   !
 00110   open #fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
 00120   open #h_trans1:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative 
 00130   open #h_trans2:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 
@@ -50,13 +50,13 @@
 00540       FORM_OUT: form n 8,x 1,c 10,x 1,x 1,pic(zzzz/zz/zz),n 11.2
 00550     end if  ! fn_has_dupe(z$)
 00560   loop 
-00570 ! ______________________________________________________________________
+00570 !
 00580 FINIS: ! 
 00590   fncloseprn
 00600   close #h_trans1: 
 00610 XIT: ! 
 00620   fnxit
-00630 ! ______________________________________________________________________
+00630 !
 00640 PGOF: ! r:
 00650   pr #255: newpage
 00660   fn_header

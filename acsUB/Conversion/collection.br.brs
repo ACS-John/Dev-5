@@ -1,22 +1,22 @@
 00010 ! Replace S:\acsUB\conversion\collection
 00020 ! try converting colletion for 402 when they do not have allocations on them in the transaction history.
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fncno,fndat,fnxit,fntop,fnindex_it
 00050   fntop("S:\acsUB\conversion\collection",cap$="Convert Collections")
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,dat$*20,a$(61)*30,u(61),scr1$(10)*30,alloc(10),nam$*30,o(2)
 00080   dim r(20,4),hd1$*190,hd2$*190,cap$*128,message$*40
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno,cnam$)
 00110 ! 
 00120   cap$="Convert Collections"
-00130 ! ______________________________________________________________________
+00130 !
 00140   def fndate_mmddyy_to_ccyymmdd(x)
 00150     x2=(x-int(x*.01)*100)*10000+int(x*.01)
 00160     if int(x2*.0001)<90 then x2=x2+20000000 else x2=x2+19000000
 00170     fndate_mmddyy_to_ccyymmdd=x2
 00180   fnend 
-00190 ! ______________________________________________________________________
+00190 !
 00210   open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,outIn,relative 
 00220   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 00230 L230: ! 

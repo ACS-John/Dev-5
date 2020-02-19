@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsUB\ubCass2
 00020 ! -- Place Certified File Back on PC
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fnwait,fnLbl,fnTos,fncomboa,fnAcs,fnCmdSet,fntop
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
 00071   dim a$*5,b$*4,c$*3,bc$*12,cr$*4,d$(2)
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno) !:
         ! 
 00100   fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
-00110 ! ______________________________________________________________________
+00110 !
 00120   sn$="ubCass2" !:
         fnTos(sn$) !:
         respc = 0
@@ -27,7 +27,7 @@
 00180 L180: fnAcs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   dv$=resp$(1)
-00210 ! ______________________________________________________________________
+00210 !
 00220 ! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
 00221   open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
 00230   open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output 
@@ -54,14 +54,14 @@
 00350 L350: form pos 1,c 10,2*c 30,c 23,c 2,c 12,c 4
 00360   gosub L580
 00370   goto READ_A
-00380 ! ______________________________________________________________________
+00380 !
 00390 END1: ! 
 00400   close #1: 
 00410   close #2: 
 00420   execute "Index [Q]\UBmstr\Cass1.h[cno],[Q]\UBmstr\Cass1Idx.h[cno],1,10,Replace,DupKeys -n"
 00430   fncloseprn
 00440 XIT: fnxit
-00450 ! ______________________________________________________________________
+00450 !
 00460 CREATE_CHECK_DIGIT: ! 
 00470   bc$=rtrm$(bc$)
 00480   if bc$="" then goto L560
@@ -75,7 +75,7 @@
 00540   if c2=0 then cd$="0" else cd$=str$(10-c2)
 00550   bc$=bc$&cd$
 00560 L560: return 
-00570 ! ______________________________________________________________________
+00570 !
 00580 L580: csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
 00585   goto L640 ! don't update any addresses
 00590   read #3,using "Form POS 385,PD 3",key=z$: aba nokey L640
@@ -84,7 +84,7 @@
 00620   goto L640
 00630 L630: rewrite #3,using "Form POS 71,2*C 30",key=z$: sta$,csz$
 00640 L640: return 
-00650 ! ______________________________________________________________________
+00650 !
 00660 ! <Updateable Region: ERTN>
 00670 ERTN: fnerror(program$,err,line,act$,"xit")
 00680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

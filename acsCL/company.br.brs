@@ -1,9 +1,9 @@
 ! Replace S:\acsCL\Company
 ! maintain company information file for checkbook management
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit,fnerror,fncursys$,fnTos,fnLbl,fnAcs,fnCmdSet,fnTxt,fncombof,fnChk,fnButton,fnFra,fncomboa,fnqgl,fnrgl$,fnagl$
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim a$(3)*40
 	dim b$(2)*12
 	dim c$*5
@@ -23,7 +23,7 @@
 	dim actr$*1
 	dim reccode$*1
 	dim resp$(150)*40
-! ______________________________________________________________________
+!
 	fntop(program$)
 	right=1 : center=2 : left=0 
 	cancel=5 : save=1 : pointtwo$='32' 
@@ -31,7 +31,7 @@
 	open #glmstr=11: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore
 	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr BUILD_COMPANY
 	goto READ_COMPANY
-! ______________________________________________________________________
+!
 READ_COMPANY: ! r:
 	read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 	if actr$="0" or actr$="1" then actr=val(actr$)
@@ -58,7 +58,7 @@ READ_COMPANY: ! r:
 		pr 'unhandled ckey value' : pause
 	end if
 ! /r
-! ______________________________________________________________________
+!
 NEWSCREEN: ! r:
 	fnTos(sn$='Company-Pg'&str$(page)) 
 	lc=0

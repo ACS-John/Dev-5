@@ -126,7 +126,7 @@ SCR2: !
 	if (filter_selection=1 or filter_selection=2 or filter_selection=3 or filter_selection=7) and annbc=sequence_account then goto SELSTART
 	! if (filter_selection=1 or filter_selection=7) and annbc=sequence_name then goto SCR4F3 ! all customers in name sequence
 	goto TOP ! /r
-! ___________________________________________________________________
+!___
 TOP: ! r:
 	if annbc=sequence_bar_code then 
 BARCODE_READ_ADDR: ! 
@@ -303,7 +303,7 @@ SCR4F3: ! r: select starting account name
 	if lpad$(resp$(1),10)<>z$ then goto SCR4F3_READ_CUSTOMER
 	SCR4F3_FINIS: ! 
 goto PAST_READ
-! ______________________________________________________________________
+!
 SCR4F3_NO_MATCH: ! r:
 	mat msgline$(1)
 	msgline$(1)="No matching name found!"

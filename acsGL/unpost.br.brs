@@ -75,7 +75,7 @@ DEL_H_TRANS: !
 		delete #h_trans: ioerr ignore
 	end if  ! ~del_dupe_only or fn_has_dupe
 	goto READ_H_TRANS
-! _____________________________________________________________________
+!_____
 EO_H_TRANS: ! /r
 	fnStatus('Reassigning Transaction Addresses...') ! r:
 	restore #1,key>="            ": eof ignore

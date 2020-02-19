@@ -2,15 +2,15 @@
 00020 ! job cost screens???
 00030   def library fnacprscr
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacglbld
-00050 ! ______________________________________________________________________
+00050 !
 00060     fntop(program$,"CHANGE_ME")
 00070     on error goto Ertn
-00080 ! ______________________________________________________________________
+00080 !
 00090     dim a$(23)*20,floa$(23),io1$(23)
 00100     dim b$(14)*20,flob$(14),io2$(14)
-00110 ! ______________________________________________________________________
+00110 !
 00120     fncno(cno)
-00130 ! ______________________________________________________________________
+00130 !
 00140     data "Employee #"
 00150     data "Name: F/M/L"
 00160     data "Address"
@@ -83,7 +83,7 @@
 00820     goto XIT
 00830 L830: fnacglbld
 00840     goto XIT
-00850 ! ______________________________________________________________________
+00850 !
 00860 ! <updateable region: ertn>
 00870 ERTN: fnerror(program$,err,line,act$,"xit")
 00880     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -91,5 +91,5 @@
 00900     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00910 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00920 ! /region
-00930 ! ______________________________________________________________________
+00930 !
 00940 XIT: fnend 

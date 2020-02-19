@@ -1,16 +1,16 @@
 00020 ! Replace S:\Core\Programs\PrintLay2
 00040 ! pr Layout(s)
-00060 ! ______________________________________________________________________
+00060 !
 00080   library 'S:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop,fngetdir2
 00100   on error goto Ertn
-00120 ! ______________________________________________________________________
+00120 !
 00140   dim a$(200,3)*80,h1$*55,rm$(4)*128,filename$*50,ln$*120
 00160   dim a(200,6),a$*132,prg$*20,mo$(12),cap$*128,source_path$*150
-00180 ! ______________________________________________________________________
+00180 !
 00200   fntop("S:\Core\PrintLay",cap$="Print Layout(s)")
 00220   data January,February,March,April,May,June,July,August,September,October,November,December
 00240   read mat mo$
-00260 ! ______________________________________________________________________
+00260 !
 00280   fnconsole(on=1)
 00300   dat$=mo$(val(date$("MM")))&" "&date$("DD")&", "&date$("CCYY")
 00320   fnwin3b(win=101,cap$,4,65,0,2)
@@ -50,7 +50,7 @@
 01240     p2=pos(ln$,",",p1)
 01260     prg$=ln$(p1:p2-1)
 01280 L690: goto OLD_READ_LINE
-01300 ! ______________________________________________________________________
+01300 !
 01320 LETLN: p2=len(rtrm$(ln$))-1
 01340     p1=pos(ln$,"H1$",1)
 01360     if p1>0 then h1$=ln$(p1+5:p2) : goto OLD_READ_LINE
@@ -65,7 +65,7 @@
 01540     rm=val(ln$(p1+4:p1+4))
 01560     rm$(rm)=ln$(p1+8:p2)
 01580 L840: goto OLD_READ_LINE
-01600 ! ______________________________________________________________________
+01600 !
 01620 DATALN: ! 
 01630     j3=j3+1
 01640     p1=11
@@ -100,7 +100,7 @@
 02220     a=col_6
 02240     rl=rl+int(val(a$(j3,3)(p1:pos(srep$(a$(j3,3),'^','~'),'~')-1)))*m1 ! pos(srep$(a$(j3,3),'^','~'),'~')-1      was    P3
 02260 L1160: goto OLD_READ_LINE
-02280 ! ______________________________________________________________________
+02280 !
 02300 L1180: pgo=ceil(j3/24)
 02320     gosub HDR
 02340     for j=1 to j3
@@ -122,9 +122,9 @@
 02680 L1380: close #2,free: 
 02700     fncloseprn
 02720     goto XIT
-02740 ! ______________________________________________________________________
+02740 !
 02760 XIT: fnxit
-02780 ! ______________________________________________________________________
+02780 !
 02900 HDR: ! 
 02920     pg=pg+1
 02940     pr #255,using L1520: h1$
@@ -145,7 +145,7 @@
 03240     pr #255: "   ______   ________________________________________   __________________    ______    ________   _______    _______    _____    _____"
 03260     return 
 03280   fnend 
-03300 ! ______________________________________________________________________
+03300 !
 03320 ! <Updateable Region: ERTN>
 03340 ERTN: fnerror(program$,err,line,act$,"xit")
 03360   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -153,7 +153,7 @@
 03400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03440 ! /region
-03460 ! ______________________________________________________________________
+03460 !
 03480   def fn_file_to_array(fta_file$*256,mat fta_line$)
 03500     open #1: 'Name='&fta_file$,display,input 
 03520     fta_line_item=0

@@ -1,6 +1,6 @@
 ! formerly S:\acsPR\newprYTDMis
 ! Miscellaneous Deductions Register - YTD
-! ______________________________________________________________________
+!
 library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates,fnDedNames
 on error goto Ertn
 
@@ -11,7 +11,7 @@ dim fullname$(20)*20,abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10)
 dim e$(10)*12,tpt(32),resp$(15)*30
 dim tcp(32),tdc(10),ytdtotal(32),ss$*11
-! ______________________________________________________________________
+!
 	fntop(program$)
 
 	fnGetPayrollDates(beg_date,end_date)
@@ -76,7 +76,7 @@ MENU1: !
 	L690: !
 	mat t2=t2+t1
 loop ! /r
-! ______________________________________________________________________
+!
 EOJ: ! r:
 	pr #255,using L740: rpt$("  ________",10)
 	L740: form pos 29,c 100,skip 1
@@ -92,9 +92,9 @@ fncloseprn
 close #1: ioerr ignore
 close #2: ioerr ignore
 goto Xit ! /r
-! ______________________________________________________________________
+!
 NEWPGE: pr #255: newpage : gosub HDR : continue 
-! ______________________________________________________________________
+!
 HDR: ! r:
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"

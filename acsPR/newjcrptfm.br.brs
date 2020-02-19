@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsPR\newJCRptFM
 00020 ! Job Cost User-Designed Report File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fnchain,fnrx,fnTos,fncombof,fnCmdSet,fnAcs,fnCmdKey,fnLbl,fnTxt,fnChk,fnmsgbox,fncomboa,fnFra,fnDedNames
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,message$*40,msgline$(2)*60,resp$(102)*150
 00080   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,iom$(3),scm$(3)*40
 00090   dim io1$(10),io2$(7),fd$(20),rptemp(20),tempch$(4)*256,rptn$*6,rnew$*6
@@ -11,13 +11,13 @@
 00110   dim tcj(20),tcs(20),rno$(50)*2,em$*40,wrd3$(2)*23,io3$(2),code1$(4)*30
 00120   dim rt40$*51
 00130   dim abbrevanme$(20)*8,fullname$(20)*20,ml$(3)*90,ty$(24)*50,ty2$(25)*30
-00140 ! ______________________________________________________________________
+00140 !
 00150   fntop(program$,cap$="User Designed Reports - JC")
 00170   pg=3
-00180 ! ______________________________________________________________________
+00180 !
 00190   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outIn,keyed 
 00210   fnDedNames(mat fullname$,mat abbrevname$)
-00220 ! ______________________________________________________________________
+00220 !
 00230   gosub DATA_FOR_COLUMNS
 00240 SCR1: ! ask report #
 00250 ASKREPORT: ! 
@@ -41,7 +41,7 @@
 00360   if ckey=1 then addone=1: rptn=0: goto ADD_EDIT
 00370   if ckey=2 then editrec=1: goto ADD_EDIT
 00380 RECREATE_GRID: ! 
-00390 ! ______________________________________________________________________
+00390 !
 00400 ADD_EDIT: ! 
 00410   rptn$=lpad$(str$(rptn),2)
 00420   if addone=1 then rn=0: rt$="": mat ch$=(""): mat tempch$=(""): ips=0: sd$="": sd=cp=0: mat psc=(0): mat pp=(0) : mat ti=(0): holdrn=0 : goto SCR2
@@ -54,7 +54,7 @@
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ASKREPORT
 00470 L470: holdrn=rn
-00480 ! ______________________________________________________________________
+00480 !
 00490 SCR2: ! add/edit first screen of report
 00500   fnTos(sn$="Report-add") !:
         respc=0: mylen=15: mypos=mylen+3
@@ -122,7 +122,7 @@
 00910   if ckey=1 then rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 00920   if ips>0 then goto SCR5 else : goto SCR3 ! ask criteris for pr selection
 00930   goto SCR3
-00940 ! ______________________________________________________________________
+00940 !
 00950 DELETEIT: ! 
 00960   mat ml$(2) !:
         ml$(1)="You have chosen to delete report # "&rptn$ !:
@@ -191,7 +191,7 @@
 01440   if ckey=3 then goto L1790
 01450   if ckey=2 then goto REVIEW_VARIABLES
 01460   goto SCR1
-01470 ! ______________________________________________________________________
+01470 !
 01480 CHANGETHENUMBER: ! 
 01490   write #1,using L1780: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 01500   delete #1,key=rptn$: nokey L1510
@@ -217,7 +217,7 @@
           mat tcj=(0) : mat tcs=(0): goto EDIT_ADD_REPORT
 01640   if ckey=2 then rptn$=lpad$(str$(rno),2) !:
           read #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey MAIN_SCREEN : goto EDIT_ADD_REPORT
-01650 ! ______________________________________________________________________
+01650 !
 01660 EDIT_ADD_REPORT: ! 
 01670   fnTos(sn$="namlst1") !:
         mylen=25 : mypos=mylen+2: respc=0: left=1
@@ -240,7 +240,7 @@
 01800   fnrx(rn)
 01810   execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
 01820   fnchain('S:\acsPR\newjcRptS1')
-01830 ! ______________________________________________________________________
+01830 !
 01850   restore #1,key>="  ": nokey L2490
 01860   fnopenwin(win=102,10,28,15,52,cap$)
 01870   wrd3$(1)="Print All Report Files"
@@ -304,17 +304,17 @@
 02450   next j
 02460   pr #255: newpage
 02470   goto L2090
-02480 ! ______________________________________________________________________
+02480 !
 02490 L2490: fncloseprn
 02500   on fkey 5 ignore 
 02510   goto SCR1
-02520 ! ______________________________________________________________________
-02530 ! ______________________________________________________________________
+02520 !
+02530 !
 02540 SRCH: ! 
 02550   bk=0
-02560 ! ______________________________________________________________________
+02560 !
 02570 XIT: fnxit
-02580 ! ______________________________________________________________________
+02580 !
 02590 ! <Updateable Region: ERTN>
 02600 ERTN: fnerror(program$,err,line,act$,"xit")
 02610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -322,7 +322,7 @@
 02630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02650 ! /region
-02660 ! ______________________________________________________________________
+02660 !
 02670 SCR5: ! selection criteria
 02680   if ips=0 then goto SCR4
 02690   fnTos(sn$="Report-sel") !:

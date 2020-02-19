@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsPR\newjcStWkSh
 00020 ! pr Job Status Worksheet
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fncmbjob,fnmsgbox,fnCmdKey
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,resp$(3)*40,cnam$*40
 00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20
 00090   dim ml$(1)*80
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Job Status Worksheet")
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -15,7 +15,7 @@
 00140   prtjob$="N" : perpag$="N"
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00160   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
-00170 ! ______________________________________________________________________
+00170 !
 00180   if fnprocess=1 then goto ASKJOB
 00190 MAIN_SCREEN: ! 
 00200   fnTos(sn$="namlst1") !:
@@ -33,11 +33,11 @@
 00280   dat$=resp$(1) ! heading date
 00290   if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
 00300   if resp$(3)="True" then perpag$="Y" else perpad$="N"
-00310 ! ______________________________________________________________________
+00310 !
 00320   fndat(dat$,2)
 00330   if prtjob$="N" then goto ASKJOB
 00340   if fnprocess=1 then goto L510
-00350 ! ______________________________________________________________________
+00350 !
 00360   mat ml$(1) !:
         ml$(1)="Do you wish to skip all completed jobs?" !:
         fnmsgbox(mat ml$,resp$,cap$,4)
@@ -59,7 +59,7 @@
 00470   next j
 00480   goto L510
 00490 L490: j=j-1
-00500 ! ______________________________________________________________________
+00500 !
 00510 L510: on fkey 5 goto DONE
 00520   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then jbskip=1
@@ -79,12 +79,12 @@
 00660   gosub L960
 00670   cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
 00680   goto L630
-00690 ! ______________________________________________________________________
+00690 !
 00700 DONE: close #1: 
 00710   close #2: 
 00720   fncloseprn
 00730   goto XIT
-00740 ! ______________________________________________________________________
+00740 !
 00750 HDR: ! 
 00760   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 00770   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
@@ -96,7 +96,7 @@
 00830   pr #255: "{\b Number                                         Number                               Complete Complete  Complete}"
 00840   pr #255: "\ql   "
 00850   return 
-00860 ! ______________________________________________________________________
+00860 !
 00870 L870: if fst=1 then goto L880 else goto L910
 00880 L880: if perpag$="N" then goto L920
 00890   pr #255: newpage
@@ -105,7 +105,7 @@
 00920 L920: pr #255,using L930: jn$,n$
 00930 L930: form pos 1,c 6,pos 8,c 40,skip jbskip
 00940   return 
-00950 ! ______________________________________________________________________
+00950 !
 00960 L960: pr #255,using L1000: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L980
 00970   goto L1010
 00980 L980: pr #255: newpage
@@ -117,9 +117,9 @@
 01040 L1040: pr #255: newpage
 01050   gosub HDR
 01060 L1060: return 
-01070 ! ______________________________________________________________________
+01070 !
 01080 XIT: fnxit
-01090 ! ______________________________________________________________________
+01090 !
 01100 ! <Updateable Region: ERTN>
 01110 ERTN: fnerror(program$,err,line,act$,"xit")
 01120   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -127,4 +127,4 @@
 01140   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01150 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01160 ! /region
-01170 ! ______________________________________________________________________
+01170 !

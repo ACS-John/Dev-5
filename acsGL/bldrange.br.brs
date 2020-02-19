@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\BldRange
 00020 ! Build Range of Accounts
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror, fnchain,fnTos,fnLbl,fnqgl,fnrgl$,fnTxt,fnFra,fncombof,fnCmdKey,fnAcs,fnagl$,fnCmdSet,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),glk$*12,fsk$*5,resp$(20)*50
-00090 ! ______________________________________________________________________
+00090 !
 00100   ! fnconsole(off=0)
 00110   fntop(program$,"Duplicate Range of Accounts")
 00130   open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
@@ -15,7 +15,7 @@
 00160   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00170   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00180   fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
-00190 ! ______________________________________________________________________
+00190 !
 00210 MAIN: ! 
 00230   fnTos(sn$="Bldrange") 
 00232   mylen=40: mypos=mylen+3 : right=1: rc=0
@@ -84,7 +84,7 @@
 00770   if fin(1)=0 then goto L990
 00780   if fin(2)=0 then goto MAIN
 00790   if fin(3)=0 then goto MAIN
-00800 ! ______________________________________________________________________
+00800 !
 00810   ff=fin(3)-fin(1)
 00820   restore #1,key=glk$: nokey MAIN
 00830 L830: read #1,using L1030: dno,ano,sno,d$,mat rf eof MAIN
@@ -119,16 +119,16 @@
 01120   if fln=2 then rf(3)=rf(3)+ff
 01130   write #1,using L1030: dno,ano,sno,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta
 01140   goto L1020
-01150 ! ______________________________________________________________________
+01150 !
 01160 END1: !
 01162   close #1: 
 01170   close #2: ioerr ignore
 01180   ! Execute "Index [Q]\GLmstr\GLmstr.h[cno],[Q]\GLmstr\GLIndex.h[cno],1,12,Replace,DupKeys -n"
 01190   if fln>0 then execute "Index [Q]\GLmstr\"&fil$(fln)&".h[cno],[Q]\GLmstr\"&idx$(fln)&".h[cno],1,5,Replace,DupKeys -n"
 01200   goto MAIN
-01210 ! ______________________________________________________________________
+01210 !
 01220 XIT: fnxit
-01230 ! ______________________________________________________________________
+01230 !
 01240 ! <Updateable Region: ERTN>
 01250 ERTN: fnerror(program$,err,line,act$,"xit")
 01260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

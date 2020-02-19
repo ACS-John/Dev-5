@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\ASCIIGLm
 00020 ! create Ascii oputput file
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnTos,fnLbl,fnCmdKey,fnxit,fnTxt,fnAcs
 00050   fntop(program$,cap$="Create ASCII File")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim de$*50,fl$*50
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno,cnam$)
-00110 ! ______________________________________________________________________
+00110 !
 00120   crlf$=chr$(13)&chr$(10)
 00130   fl$="C:\ASCIIGLM.txt"
 00140   fnTos(sn$="GLascii") !:

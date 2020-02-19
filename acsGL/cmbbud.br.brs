@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\CmbBud.br
 00020 ! creates a screen ace combobox for budget files
 00030   def library fncmbbud(indexfile$*200)
-00040 ! ______________________________________________________________________
+00040 !
 00050     library 'S:\Core\Library': fncno,fncombof,fnerror,fncomboa
 00060     on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080     dim ln$*200,options$(50)*200
-00090 ! ______________________________________________________________________
+00090 !
 00100     fncno(cno)
 00110     execute "Dir [Q]\GLmstr\budget*.H[cno] >FlexWork.tmp" ! Ioerr 271
 00120 L120: linput #13: ln$ eof L170
@@ -21,7 +21,7 @@
 00210     fen$="CBud.h[cno]"
 00220     fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
 00230     goto XIT
-00240 ! ______________________________________________________________________
+00240 !
 00250 ! <Updateable Region: ERTN>
 00260 ERTN: fnerror(program$,err,line,act$,"xit")
 00270     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -29,6 +29,6 @@
 00290     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00300 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00310 ! /region
-00320 ! ______________________________________________________________________
+00320 !
 00330 XIT: fnend 
-00340 ! ______________________________________________________________________
+00340 !

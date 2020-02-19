@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\Ace\Console.br
 00020 ! function to hide/show the BR Console
-00030 ! ______________________________________________________________________
+00030 !
 00040   def library fnconsole(;on_off)
 00050     option retain 
 00070     dim cap$*128
@@ -12,6 +12,6 @@
 00140       execute 'Config GUI off'
 00150     end if 
 00320     goto XIT
-00330 ! ______________________________________________________________________
+00330 !
 00340 XIT: windowstate=on_off
 00350   fnend 

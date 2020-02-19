@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsCL\RENUMCK
 00020 ! ReNUMBER A SERIES OF CHECKS
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim de$*30,cap$*128,tr$(5)*35
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno)
 00100   fntop(program$,"Renumber Checks")
 00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
@@ -56,7 +56,7 @@
 00430 EO_TRALLOC: ! 
 00440   newnumber+=1
 00450   goto READ_TRMSTR
-00460 ! ______________________________________________________________________
+00460 !
 00470 END1: ! 
 00480   close #trmstr: 
 00490   close #tralloc: 
@@ -65,9 +65,9 @@
 00520   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n"
 00530   execute "Index [Q]\CLmstr\TrAlloc.H[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.H[cno] 1 11 Replace DupKeys -n"
 00540   goto XIT
-00550 ! ______________________________________________________________________
+00550 !
 00560 XIT: fnxit
-00570 ! ______________________________________________________________________
+00570 !
 00580 ! <Updateable Region: ERTN>
 00590 ERTN: fnerror(program$,err,line,act$,"xit")
 00600   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -75,4 +75,4 @@
 00620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00630 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00640 ! /region
-00650 ! ______________________________________________________________________
+00650 !

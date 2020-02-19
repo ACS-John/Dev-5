@@ -1,29 +1,29 @@
 00010 ! Replace S:\acsPR\newAutoProc
 00020 ! PR - Begin Atomatic Processing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fncno,fnopenprn,fncloseprn,fnputcno,fnprocess,fnpgnum,fncursys$,fnTos,fnLbl,fncomboa,fnCmdKey,fnAcs,fngetdir,fnflexinit1,fnflexadd1,fnFra,fnOpt
 00050   fntop(program$,cap$="Begin Automatic Processing")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim clnum(20),clnam$(20)*40,cnam$*40,io1$(2)*18 ,a$*40,cap$*128,oldcnam$*40
 00090   dim filename$(100)*40,opt$(100)*40,sys$*100,item$(2)*40,resp$(10)*100
 00100   dim wk(20),mo(20),qt(20)
-00110 ! ______________________________________________________________________
+00110 !
 00120   cap$="Begin Automatic Processing"
 00130   fncno(cno,oldcnam$)
-00170 ! ______________________________________________________________________
+00170 !
 00180 BUILD_PRCLNT: ! 
 00190   open #prclnt=1: "Name=[Q]\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outIn,relative 
 00200   for j=1 to 20 !:
           write #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0 !:
         next j
-00210 ! ______________________________________________________________________
+00210 !
 00220   if trim$(mysys$)='' then !:
           sys$=fncursys$&"mstr" else !:
           sys$=mysys$&"mstr"
-00230 ! ______________________________________________________________________
+00230 !
 00240   gosub BLD_ACNO
-00250 ! ______________________________________________________________________
+00250 !
 00260 MAIN: ! 
 00270   fnTos(sn$="autoproc") !:
         respc=0
@@ -66,7 +66,7 @@
 00530   if resp$(5)="True" then qt(count)=1: wmq=3
 00540   if ckey=1 then goto MAIN
 00550 L550: goto WRITE_EM
-00560 ! ______________________________________________________________________
+00560 !
 00570 BLD_ACNO: ! 
 00580   dir$='[Q]\&'&fncursys$&"mstr"
 00582   filter$="Company.*"
@@ -89,7 +89,7 @@
 00702     rewrite #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: clnum(j),clnam$(j),wk(j),mo(j),qt(j)
 00704   next j
 00710   goto BEGIN_AUTO
-00720 ! ______________________________________________________________________
+00720 !
 00730 BEGIN_AUTO: ! 
 00740   close #prclnt: 
 00750   execute "Load S:\Core\Process.br,RESIDENT"
@@ -97,7 +97,7 @@
 00770   fnputcno(clnum(1))
 00774   fnpgnum(-1) ! resets the last program processed back to 0 befor going to NEWPRauto
 00800 XIT: fnxit
-00810 ! ______________________________________________________________________
+00810 !
 00820 ! <Updateable Region: ERTN>
 00830 ERTN: fnerror(program$,err,line,act$,"xit")
 00840   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -105,4 +105,4 @@
 00860   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00870 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00880 ! /region
-00890 ! ______________________________________________________________________
+00890 !

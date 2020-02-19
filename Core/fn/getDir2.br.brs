@@ -18,7 +18,7 @@
 	end  ! /r
 
 	! reads a directory into an array
-	! ______________________________________________________________________
+	!
 	! Dir$=Directory to Read
 	! .            does not require but will accept a \ on the end
 	! filename$(x)=file names (includes path if /s option is used)

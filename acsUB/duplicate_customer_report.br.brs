@@ -1,12 +1,12 @@
 20000 ! Replace S:\acsUB\duplicate_customer_report
-20200 ! ______________________________________________________________________
+20200 !
 20400   library 'S:\Core\Library': fnAcs,fnwait, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnChk,fnTos,fnxit,fnCmdSet,fntop
 20600   on error goto Ertn
-20800 ! ______________________________________________________________________
+20800 !
 21000   dim z$*10,e$(4)*30,cnam$*40,dat$*20,idx$(5)*40
 21200   dim item1$(6)*22,cap$*128
 21400   dim a2(10),a1(10),a(10),tt$*200,ab$(4)*30,extra$(11)*30
-21600 ! ______________________________________________________________________
+21600 !
 21800   fntop(program$,cap$="Duplicate Customer List")
 22000   fncno(cno,cnam$)
 22200   fndat(dat$,1)
@@ -27,12 +27,12 @@
 26400   fncloseprn
 26600 XIT: ! 
 26800   fnxit
-27000 ! ______________________________________________________________________
+27000 !
 27200 PGOF: ! 
 27400   pr #255: newpage
 27600   fn_header
 27800   continue 
-28000 ! ______________________________________________________________________
+28000 !
 28200   def fn_has_dupe(z$)
 28400     hd_return=0
 28600     z_one$=z_two$=''
@@ -51,7 +51,7 @@
 31000     pr #255: ""
 31200     pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul}"
 31400   fnend 
-50970 ! ______________________________________________________________________
+50970 !
 50980 ! <Updateable Region: ERTN>
 50990 ERTN: fnerror(program$,err,line,act$,"xit")
 51000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -59,4 +59,4 @@
 51020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 51030 ERTN_EXEC_ACT: execute act$ : goto ERTN
 51040 ! /region
-51050 ! ______________________________________________________________________
+51050 !

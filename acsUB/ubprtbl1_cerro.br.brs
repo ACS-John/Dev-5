@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsUB\ubprtbl1_cerro
 00020 ! pr bills (new format)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnCmdKey
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(10)*40,txt$*40,mg$(3)*30,rw(22,13),cap$*128,datafile$*256,indexfile$*256
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,cd$(13),ba(12)
 00100   data RW,CW,BW,SW,RG,CG,AF,TX,ST,P,ARR,OC,TT
 00110   read mat cd$
-00120 ! ______________________________________________________________________
+00120 !
 00130   fncno(cno,cnam$) !:
         fnLastBillingDate(d1)
 00150 ! 
@@ -32,7 +32,7 @@
 00210   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 00220   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed 
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
-00240 ! ______________________________________________________________________
+00240 !
 00250 SCREEN1: ! 
 00260   a$="" : prtbkno=0
 00270   fnTos(sn$="UBPrtBl1-1") !:
@@ -96,10 +96,10 @@
 00550   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00560   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00570   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-00580 ! ______________________________________________________________________
+00580 !
 00590   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00600   fnopenprn
-00610 ! ______________________________________________________________________
+00610 !
 00620   on fkey 5 goto F5_CANCEL
 00630   gosub BULKSORT
 00640 L640: if sl1=1 then goto SCREEN3 ! select accounts
@@ -132,20 +132,20 @@
             pe$(e1+=1)=ba$(j)
 00910   next j
 00920   goto L1060
-00930 ! ______________________________________________________________________
+00930 !
 00940 L940: e1=0 : mat pe$=("")
 00950   for j=2 to 4
 00960     if rtrm$(e$(j))<>"" then !:
             e1=e1+1 : pe$(e1)=e$(j)
 00970   next j
 00980   goto L1060
-00990 ! ______________________________________________________________________
+00990 !
 01000 F5_CANCEL: ! 
 01010   close #1: ioerr L1020
 01020 L1020: close #3: ioerr L1030
 01030 L1030: fncloseprn
 01040   goto ENDSCR
-01050 ! ______________________________________________________________________
+01050 !
 01060 L1060: ! 
 01070   pb=bal-g(11)
 01080 ! ______________print bill routine______________________________________
@@ -154,7 +154,7 @@
 01110   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01120   goto L640
-01130 ! ______________________________________________________________________
+01130 !
 01140 SCREEN3: ! 
 01150   fnTos(sn$="ubprtbl1-2")
 01160   txt$="Account (blank to stop)" !:
@@ -171,7 +171,7 @@
         if trim$(a$)="" then goto ENDSCR
 01230   read #1,using L710,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3 nokey SCREEN3
 01240   goto HERE
-01250 ! ______________________________________________________________________
+01250 !
 01260 BULKSORT: ! sort in bulk sort code sequence
 01270   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01280 L1280: form pos 1,c 128
@@ -183,7 +183,7 @@
 01340 L1340: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 01350   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01360   return 
-01370 ! ______________________________________________________________________
+01370 !
 01380 ENDSCR: ! pr totals screen
 01390   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01400   fnTos(sn$="Bills-Total") !:
@@ -195,7 +195,7 @@
 01430   fnCmdSet(52) !:
         fnAcs(sn$,0,mat resp$,ck)
 01440 XIT: fnxit
-01450 ! ______________________________________________________________________
+01450 !
 01460 ERTN: fnerror(program$,err,line,act$,"xit")
 01470   if uprc$(act$)<>"PAUSE" then goto L1500
 01480   execute "list -"&str$(line) !:
@@ -204,7 +204,7 @@
 01490   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01500 L1500: execute act$
 01510   goto ERTN
-01520 ! ______________________________________________________________________
+01520 !
 01530 PRINTBILL: ! 
 01540   if final=2 then g(8)=g(8)-b(8): g(11)=g(12)+g(8): bal=bal +g(8)
 01550   pb=bal-g(11)
@@ -240,4 +240,4 @@
 01830   pr #255,using L1840: z$,z$
 01840 L1840: form pos 1,c 10,pos 47,c 10,skip 1
 01850   return  ! read next record
-01860 ! ______________________________________________________________________
+01860 !

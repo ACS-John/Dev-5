@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsGL\Reverse
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnLbl,fnTxt,fnAcs,fnCmdKey,fnTos,fnChk
 00040   fntop(program$,cap$="Generate Reversing Entries")
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,cap$*128,wait_message$*40
 00080   dim t$*12,n(2),l$*12,adr(2),ta(2),p$*30,my_p$*30,test_p$*30,io1$(7)*25
-00090 ! ______________________________________________________________________
+00090 !
 00110   wait_message$="Generating Reversing Entries"
 00120 ! 
 00130   my_p$="Generated Reversing Entry"
-00140 ! ______________________________________________________________________
+00140 !
 00150 MENU1: ! 
 00160   fnTos(sn$="Reverse") !:
         mylen=20: mypos=mylen+3 : right=1
@@ -47,7 +47,7 @@
 00400   r_rn$=resp$(6)
 00410   if resp$(7)="True" then re$="Y" else re$="N"
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
-00430 ! ______________________________________________________________________
+00430 !
 00440   glmstr=1 !:
         open #glmstr: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 00450   gltrans=2 !:
@@ -74,7 +74,7 @@
 00630     rewrite #glmstr,using L560,key=t$: cb,mat ta
 00640 L640: form pos 71,pd 3
 00650 NEXT_GLTRANS: next j
-00660 ! ______________________________________________________________________
+00660 !
 00670 HIST: if sh$="N" then goto DONE
 00680 READ_ACTRANS: read #actrans,using L520: t$,s,k,mat n,l$,p$ eof DONE
 00690   gosub SEARCH_FOR : if s_pass=0 then goto NXT_HIST
@@ -88,13 +88,13 @@
 00770   cb=cb+k
 00780   rewrite #glmstr,using L560,key=t$: cb,mat ta
 00790 NXT_HIST: goto READ_ACTRANS
-00800 ! ______________________________________________________________________
+00800 !
 00810 DONE: ! 
 00820   close #win: ioerr L830
 00830 L830: goto XIT
-00840 ! ______________________________________________________________________
+00840 !
 00850 XIT: fnxit
-00860 ! ______________________________________________________________________
+00860 !
 00870 ! <Updateable Region: ERTN>
 00880 ERTN: fnerror(program$,err,line,act$,"xit")
 00890   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -102,7 +102,7 @@
 00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00930 ! /region
-00940 ! ______________________________________________________________________
+00940 !
 00950 SEARCH_FOR: ! 
 00960 ! 
 00970   test_p$=uprc$(rtrm$(ltrm$(p$)))
@@ -123,7 +123,7 @@
           s_pass=1 !      Pass                            !:
         else s_pass=0 ! Fail
 01120   return 
-01130 ! ______________________________________________________________________
+01130 !
 01140 REVERSE_WITH: ! 
 01150   if re$="Y" then k=-k
 01160   if r_ad<>0 then s=r_ad
@@ -131,4 +131,4 @@
 01180   if t$(3:3)=" " then t$(3:3)="0"
 01190   if t$(12:12)=" " then t$(12:12)="0"
 01200   return 
-01210 ! ______________________________________________________________________
+01210 !

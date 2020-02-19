@@ -10,12 +10,12 @@
         ! Service 6 is Fire Protection !:
         ! Service 7 is Merchandise !:
         ! Service 8 is Other
-00040 ! ______________________________________________________________________
+00040 !
 00050   library 'S:\Core\Library': fnerror,fncno,fntop,fnTos,fnAcs,fnCmdSet,fncmbcno,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnindex_it
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
 00110   fncno(cno)
 00115   pr newpage
@@ -24,7 +24,7 @@
 00140   gosub CONVERT_CNO !:
         goto XIT !:
         ! If CNO<>0 Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else Goto XIT
-00150 ! ______________________________________________________________________
+00150 !
 00160 ! <Updateable Region: ERTN>
 00170 ERTN: fnerror(program$,err,line,act$,"xit")
 00180   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -32,9 +32,9 @@
 00200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00210 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00220 ! /region
-00230 ! ______________________________________________________________________
+00230 !
 00240 XIT: chain "S:\acsUB\conversion\UBmstr-vb"
-00250 ! ______________________________________________________________________
+00250 !
 00260 MENU1: ! 
 00270   fnTos(sn$="bldtrans")
 00280   fnLbl(1,1,"Convert Transactions")
@@ -49,7 +49,7 @@
 00340   if ck=5 then cno=0
 00350 ! 
 00360   return 
-00370 ! ______________________________________________________________________
+00370 !
 00380 CONVERT_CNO: ! 
 00390   pr "conversion of cno=[cno] has begun."
 00400 ! 
@@ -136,7 +136,7 @@
 01040   pr ""
 01050   if removebaddates$="True" then gosub REMOVEBADDATES
 01060   return 
-01070 ! ______________________________________________________________________
+01070 !
 01080 TRANSLATE_TRANSCODE: ! 
 01090   if transcode=1 and postcode=4 then transcode=5 : goto EOTT !:
           ! Debit Memo
@@ -145,7 +145,7 @@
 01120   if transcode=3 then transcode=3 : goto EOTT ! collection
 01130   if transcode=4 then transcode=4 : goto EOTT ! Credit Memo
 01140 EOTT: return  ! end of translate transcode
-01150 ! ______________________________________________________________________
+01150 !
 01160 R68F: ! 
 01170   if rln(acctrn)<>68 then goto ERTN
 01180   if r68f=0 then !:
@@ -154,7 +154,7 @@
           acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
 01190   if r68f=1 then r68f=0 else r68f=1
 01200   continue 
-01210 ! ______________________________________________________________________
+01210 !
 01220 REMOVEBADDATES: ! 
 01230   open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed 
 01240 L1240: read #transvb,using "Form Pos 11,N 8": tdate eof L1270

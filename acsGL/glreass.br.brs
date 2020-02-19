@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsGL\glreass
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnerror,fnTos,fnLbl,fnCmdKey,fnAcs
 00050   fntop(program$,"Reassign Transaction Addresses")
 00060   on error goto Ertn
 00080   dim ta(2),tr1$*70,wrd1$(2)*35,fil$(12,4)
-00150 ! ______________________________________________________________________
+00150 !
 00160 MENU1: ! 
 00170   fnTos(sn$="glreorg") !:
         mylen=20: mypos=mylen+3 : right=1
@@ -41,9 +41,9 @@
 00480     L480: !
 00485   next j
 00490 return ! /r
-00500 ! ______________________________________________________________________
+00500 !
 00510 XIT: fnxit
-00520 ! ______________________________________________________________________
+00520 !
 00530 ! 
 00540 ERTN: fnerror(program$,err,line,act$,er_out$)
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

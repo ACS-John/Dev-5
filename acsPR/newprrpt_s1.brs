@@ -1,36 +1,36 @@
 00010 ! Replace acsPR\newprRpt_S1.brs,Source
-00011 ! ______________________________________________________________________
+00011 !
 00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs2,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto Ertn
-00020 ! ______________________________________________________________________
+00020 !
 00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,W4Year,W4Step3,tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50
 00032   dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),inp(20),pp(20),dt(125)
 00033   dim gt(125),dh$*20,a$*40,cp(32),tdc(10),tcp(32),dc(10)
-00039 ! ______________________________________________________________________
+00039 !
 00050   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 00051   d1=fnPayPeriodEndingDate
-00080 ! ______________________________________________________________________
+00080 !
 00081   rn$=" 2"
 00082   if fnprocess=1 then goto L141
-00089 ! ______________________________________________________________________
+00089 !
 00090   gosub ASK_DATES
-00124 ! ______________________________________________________________________
+00124 !
 00141 L141: ! On Fnkey 5 Goto EOF1
 00142 fnopenprn
-00143 ! ______________________________________________________________________
+00143 !
 00190 open #1: "Name=[Q]\PRmstr\PRREPORT.h[cno],KFName=[Q]\PRmstr\PRRPTIDX.h[cno],shr",internal,input,keyed 
 00200 read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
 00210 L210: form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 00220 close #1: 
-00221 ! ______________________________________________________________________
+00221 !
 00300 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 00301 open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
 00302 open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
 00320 gosub HDR
 00330 goto PRTRPT
-00331 ! ______________________________________________________________________
+00331 !
 00340 PGOF: ! r:
 00342   pr #255: newpage
 00350   gosub HDR

@@ -1,15 +1,15 @@
 ! formerly S:\acsUB\ubCoTr
 ! -- Transfer Accounts Between Companies
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fnerror,fncmbact,fnxit,fnCmdSet,fntop,fncmbcno,fnindex_sys,fngethandle
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),ta(2),alp$*7
 	dim ubstd$*200,ubextra$*100,mstrform$*300,extra(23),extra$(11)*30
 	dim rw4(22,13),ab$(4)*30,cap$*128
 	dim df$*256
 	dim rm$*60,rm$(20)*60,ra(2),resp$(10)*50,tg(11)
-! ______________________________________________________________________
+!
 	cno=val(env$('cno'))
 	fntop(program$)
 	ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
@@ -85,7 +85,7 @@ MENU3: !
 	if z2=0 then goto MENU2
 	z2$=cnvrt$("N 10.2",z2)
 	goto L820
-! ______________________________________________________________________
+!
 L960: restore #2,key>=z$&"         ": nokey L1040
 L970: read #2,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1040
 L980: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
@@ -93,13 +93,13 @@ L980: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	write #hUbTranVb,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 	delete #2: 
 	goto L970
-! ______________________________________________________________________
+!
 L1040: gosub ALTBILLADDR
 	write #26,using mstrform$: z2$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 	pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
 	delete #1,key=z$: 
 	goto MENU2
-! ______________________________________________________________________
+!
 	close #1: 
 	close #2: 
 	close #3: 

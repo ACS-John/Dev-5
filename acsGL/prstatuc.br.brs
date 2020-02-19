@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\PRSTATUC
 00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
 00080   dim fa$(3),sa$(3)*40,cnam$*40
 00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*20
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Print State UC Report")
 00120   fncno(cno,cnam$)
 00140   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
@@ -47,7 +47,7 @@
 00510   t3=t3+h2
 00520   t4=t4+m(34)
 00530 L530: goto L340
-00540 ! ______________________________________________________________________
+00540 !
 00550 HDR: ! 
 00560   pr #255,using L570: "PAGE ",p2+=1
 00570 L570: form pos 70,c 5,pic(zzz),skip 2
@@ -64,14 +64,14 @@
 00680 L680: form pos 1,c 68,pos 69,c 18
 00690   p1=16
 00700   return 
-00710 ! ______________________________________________________________________
+00710 !
 00720 L720: gosub L920
 00730   close #2: 
 00740   fncloseprn
 00750   goto XIT
-00760 ! ______________________________________________________________________
+00760 !
 00770 XIT: fnxit
-00780 ! ______________________________________________________________________
+00780 !
 00790 L790: p3=p3+1
 00800   if m(1)<ucm then goto L860
 00810   if m(1)-m(2)>ucm then goto L840
@@ -96,7 +96,7 @@
 01000   t3=0
 01010   t4=0
 01020   return 
-01030 ! ______________________________________________________________________
+01030 !
 01040 ! <Updateable Region: ERTN>
 01050 ERTN: fnerror(program$,err,line,act$,"xit")
 01060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -104,4 +104,4 @@
 01080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01090 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01100 ! /region
-01110 ! ______________________________________________________________________
+01110 !

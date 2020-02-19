@@ -1,6 +1,6 @@
 ! formerly S:\acsUB\ubPdNot
 ! Past Due Notices
-! _______________________________________________________________________
+!_
 library 'S:\Core\Library': fnOpenprn,fncloseprn
 library 'S:\Core\Library': fnXit
 library 'S:\Core\Library': fnComboA,fnFra,fncmbrt2
@@ -125,7 +125,7 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	if deltype=5 and bal>0 then goto READ_ADRBIL
 	if deltype=6 and f=d1 then goto READ_ADRBIL ! pr all customers who were billed last billing cycle
 	goto PRINT_NEXT
-! ______________________________________________________________________
+!
 READ_ADRBIL: ! r:
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
@@ -215,7 +215,7 @@ def fn_prnt1
 	l2$=l2$&ln$(p1:p3)
 	pr #h_prnt1: l2$&chr$(13)
 	goto P1_NEXT_LN
-	! _____________________________________________________________________
+	!_____
 	P1_END1: ! 
 	restore #h_template: 
 	pr #h_prnt1: "\page"
@@ -706,7 +706,7 @@ ASK_NEXT_ACT: ! r:
 		sz$=lpad$(trim$(resp$(1)(1:10)),10)
 		goto READ_CUSTOMER ! if ckey=1
 	end if 
-! ______________________________________________________________________
+!
 READ_CUSTOMER: ! 
 	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
 	goto READ_ADRBIL ! /r

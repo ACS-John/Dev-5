@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsUB\conversion\csz-wipe
 00020 ! this program wipes CSZs from the UB customer file and replaces them with whatever you tell it to
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fnerror,fncno
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim csz$*30
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno)
 00100   pr newpage
 00110 L110: pr f "8,20,C 30,R,N": "Mask Cisty State Zip"
@@ -20,12 +20,12 @@
 00200     pr f "1,1,N 10,R,N": j
 00210 L210: next j
 00220   goto DONE
-00230 ! ______________________________________________________________________
+00230 !
 00240 DONE: close #1: 
 00250   pr "company number [cno] completed successfully"
 00260   goto L110
 00270 XIT: stop 
-00280 ! ______________________________________________________________________
+00280 !
 00290 ! <Updateable Region: ERTN>
 00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -33,4 +33,4 @@
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00340 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00350 ! /region
-00360 ! ______________________________________________________________________
+00360 !

@@ -1,6 +1,6 @@
 00010 ! REPLACE S:\acsCL\Endorsment
 00020 ! pr endorsment on back of check
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fnTos,fnLbl,fnAcs,fnTxt,fnCmdKey
 00050   fntop(program$,"Endorse Checks")
 00080   on error goto Ertn

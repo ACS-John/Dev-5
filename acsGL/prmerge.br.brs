@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\PRMerge
 00020 ! ACCOUNTANTS P/R MERGE (Posts payroll checks entered directly from G/L to the after-the-fact payroll records in G/L)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnprocess,fncno,fnerror,fnTos,fnLbl,fnOpt,fnCmdKey,fnAcs,fnCmdSet,fnTxt,fncombof
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim k$(3)*25,ss$*11,d(22),m(36),adr(2),n(2),fb$(4),en$*4,cap$*128,tr(7)
 00080 L80: dim tr$*12,td$*30,jv$(3)*6,resp$(10)*80
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Post Payroll Checks")
 00110   fncno(cno)
 00120   if exists("[Q]\glmstr\PRmstr.h[cno]")=0 then goto XIT
@@ -57,7 +57,7 @@
 00540   close #3: 
 00550   if print1=1 then let fncloseprn
 00560   goto XIT
-00570 ! ______________________________________________________________________
+00570 !
 00580   if fnprocess=1 then goto L800
 00590   pr newpage
 00600   pr f "4,10,c 60": "The Following Employee is not on File."
@@ -84,8 +84,8 @@
 00750   write #1,using L760: d(1),mat k$,ss$,mat m,mat adr
 00760 L760: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 00770   goto L220
-00780 ! ______________________________________________________________________
-00790 ! ______________________________________________________________________
+00780 !
+00790 !
 00800 L800: fnopenprn
 00810   if print1=0 then pr #255: "The Employees listed here were not previously on file." !:
           pr #255: "Use Payroll Employee File maintenance to enter" !:
@@ -112,7 +112,7 @@
 00970   if resp$(1)="True" then gosub ADD : goto L220
 00980   if resp$(2)="True" then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
 00990   goto L80
-01000 ! ______________________________________________________________________
+01000 !
 01010 ADD: ! 
 01020   fnTos(sn$="prmerge3") !:
         mylen=15: mypos=mylen+3 : right=1: rc=0
@@ -152,9 +152,9 @@
 01270   if ckey=5 then goto L220
 01280   en$=lpad$(rtrm$(resp$(1)(1:4)),4)
 01290   goto L220
-01300 ! ______________________________________________________________________
+01300 !
 01310 XIT: fnxit
-01320 ! ______________________________________________________________________
+01320 !
 01330 ! <Updateable Region: ERTN>
 01340 ERTN: fnerror(program$,err,line,act$,"xit")
 01350   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -162,4 +162,4 @@
 01370   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01380 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01390 ! /region
-01400 ! ______________________________________________________________________
+01400 !

@@ -128,7 +128,7 @@
 01290   if cmdkey=5 then goto XIT
 01300   fnopenprn(cp,58,220,process)
 01310   on align goto L500,L1330,L1330 none L1280
-01320 ! ______________________________________________________________________
+01320 !
 01330 L1330: p=0
 01340   pr newpage
 01350   pr f "10,20,c 40,h,n": "STATEMENT pr IN PROCESS"
@@ -136,7 +136,7 @@
 01370   bal=0
 01380   if ta=0 then goto L450
 01390   return 
-01400 ! ______________________________________________________________________
+01400 !
 01410 L1410: read #1,using L460,key=lpad$(rtrm$(st1$),5): z$,mat e$,mat ar,mat ta nokey L370 ioerr L2020
 01420   goto L470
 01430 L1430: tam1=tam1+am1

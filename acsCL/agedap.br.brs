@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsCL\AgedAP
 00020 ! pr Aged AP Listing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,vnam$*30,de$*50,fd$*30,ft(3)
 00080   dim io1$(7)*30,bk(3,2),t1(5),t2(5),cap$*128
 00090   dim mo(13)
-00100 ! ______________________________________________________________________
+00100 !
 00110   fncno(cno,cnam$)
 00120   fntop(program$,cap$="Accounts Payable Listing (Aged)")
 00130   cancel=99
@@ -15,13 +15,13 @@
         mo(05)=120 : mo(06)=151 : mo(07)=181 : mo(08)=212 !:
         mo(09)=243 : mo(10)=273 : mo(11)=304 : mo(12)=334 !:
         mo(13)=365
-00150 ! ______________________________________________________________________
+00150 !
 00160   def fnjd(x)
 00170     jd0=mo(int(x*.0001))+(int(x*.01)-int(x*.0001)*100)+int(fndate_mmddyy_to_ccyymmdd(x)*.0001)*365+int(int(fndate_mmddyy_to_ccyymmdd(x)*.0001)/4)
 00180     if int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4=int(int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4) and int(x*.0001)<3 then jd0=jd0-1
 00190     fnjd=jd0
 00200   fnend 
-00210 ! ______________________________________________________________________
+00210 !
 00220   fnTos(sn$="agedap") !:
         respc=0
 00230   fnLbl(1,38,"",1,1)
@@ -58,9 +58,9 @@
 00500   gosub AGE2
 00510   pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS P1,N 12.2,POS 111,N 12.2': vn$,iv$,ivd,dd,de$,upa,upa pageoflow NEWPGE
 00520   goto READ_PAYTRANS
-00530 ! ______________________________________________________________________
+00530 !
 00540 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00550 ! ______________________________________________________________________
+00550 !
 00560 HDR: f1=1
 00570   pr #255,using 'Form POS 1,C 8,Cc 86': date$,cnam$
 00580   pr #255,using 'Form POS 1,C 8,Cc 86': time$,cap$
@@ -69,23 +69,23 @@
 00600   pr #255,using 'Form POS 1,C 62,N 8,"-",N 3,N 8,"-",N 3,N 8,"-",N 3,2*C 12': "Payee  #  Invoice Numb    Date      Date    Description       ",mat bk,"    Over "&str$(bk(3,2)),"     Total"
 00610   gosub PRINT_
 00620   return 
-00630 ! ______________________________________________________________________
+00630 !
 00640 PRINT_: ! 
 00650   pr #255: "________  ____________  ________  ________  __________________  __________  __________  __________  __________  __________" pageoflow NEWPGE
 00660   return 
 00670 PRINT2_: ! 
 00680   pr #255: "                                                                __________  __________  __________  __________  __________" pageoflow NEWPGE
 00690   return 
-00700 ! ______________________________________________________________________
+00700 !
 00710 END1: ! 
 00720   gosub VNTOT
 00730   pr #255,using 'Form POS 33,C 30,5*N 12.2': "Final Total",mat t2
 00740   pr #255: tab(63);rpt$("  ==========",5)
 00750   fncloseprn
 00760   goto XIT
-00770 ! ______________________________________________________________________
+00770 !
 00780 XIT: fnxit
-00790 ! ______________________________________________________________________
+00790 !
 00800 VNTOT: ! 
 00810   vnam$=""
 00820   if hvn$<>"" then !:
@@ -95,7 +95,7 @@
 00850   gosub PRINT2_
 00860   mat t2=t2+t1 : mat t1=(0)
 00870   return 
-00880 ! ______________________________________________________________________
+00880 !
 00890 AGE2: ! 
 00895   if ivd=0 then goto L950
 00900   das=max(0,int(fnjd(d1)-fnjd(ivd)))
@@ -104,7 +104,7 @@
 00930   next j
 00940 L940: p1=j*12+51 : t1(j)+=upa : t1(5)+=upa
 00950 L950: return 
-00960 ! ______________________________________________________________________
+00960 !
 00970 ! <Updateable Region: ERTN>
 00980 ERTN: fnerror(program$,err,line,act$,"xit")
 00990   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -112,4 +112,4 @@
 01010   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01020 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01030 ! /region
-01040 ! ______________________________________________________________________
+01040 !

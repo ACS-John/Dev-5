@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsUB\TypeOfServices   !   Type of Services (All Companies)
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit,fnLbl,fnTos,fnAcs,fnerror,fnCmdSet,fnflexinit1,fnflexadd1,fngetdir2
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim resp$(60)*20
 00070   dim cap$*128
 00080   dim item$(61)*20,colhdr$(61)
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Type of Services (All Companies)")
 00110   fnTos(sn$:="TypeOServices")
 00120   fnLbl(1,1,sn$&'1',20,2,3)
@@ -34,7 +34,7 @@
 00340   fnCmdSet(4)
 00350   fnAcs(sn$,win,mat resp$,ckey)
 00360   fnxit
-00370 ! ______________________________________________________________________
+00370 !
 00380 ! <Updateable Region: ERTN>
 00390 ERTN: fnerror(program$,err,line,act$,"xit")
 00400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -42,4 +42,4 @@
 00420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00440 ! /region
-00450 ! ______________________________________________________________________
+00450 !

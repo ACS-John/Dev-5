@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\AcGlIncV
 00020 ! COMPARATIVE INCOME STATEMENT WITH PERCENTAGES & VARIANCES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,6)
 00100   dim bp(13),by(13),cap$*128,udf$*256
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Income Statement with Varience")
 00130   on fkey 5 goto L2500
 00140   fncno(cno,cnam$)
@@ -24,7 +24,7 @@
 00190   actpd$=fnactpd$
 00200   actpd=fnactpd
 00210   priorcd=fnpriorcd
-00220 ! ______________________________________________________________________
+00220 !
 00230   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00240   mp1=69
@@ -57,7 +57,7 @@
 00480 L480: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 72 3 Replace DupKeys -N"
 00490 L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed 
 00500   goto TOP_OF_LOOP
-00510 ! ______________________________________________________________________
+00510 !
 00520 TOP_OF_LOOP: ! 
 00530   if ic><2 then goto L550
 00540   percent1=percent2=percent3=percent4=percent5=percent6=0 !:
@@ -158,7 +158,7 @@
 01470   gosub L2160
 01480 L1480: gosub EOPAGE
 01490   goto TOP_OF_LOOP
-01500 ! ______________________________________________________________________
+01500 !
 01510 L1510: if ap=0 then ap=1
 01520   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01530   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
@@ -197,21 +197,21 @@
 01845   if ul=1 then goto L1860
 01850   gosub L2160
 01860 L1860: gosub EOPAGE : goto TOP_OF_LOOP
-01870 ! ______________________________________________________________________
+01870 !
 01880 L1880: if te$="R" then report$=d$ else !:
           if te$="S" then secondr$=d$
 01890   gosub EOPAGE : goto TOP_OF_LOOP
-01900 ! ______________________________________________________________________
+01900 !
 01910 L1910: if foot1=1 then foot$=rtrm$(foot$)&d$ else !:
           tabnote=sp : foot1=1 : foot$=d$
 01920   goto TOP_OF_LOOP
-01930 ! ______________________________________________________________________
+01930 !
 01940 L1940: for j=1 to 9
 01950     if ac(j)<>0 and ac(j)<>9 then !:
             accum(j,1)=accum(j,2)=accum(j,3)=accum(j,4)=0
 01960   next j
 01970   return 
-01980 ! ______________________________________________________________________
+01980 !
 01990 EOPAGE: ! i think that's what this is... could be wrong
 02000   if percent=0 then goto L2130
 02010   if ls=0 then goto L2130
@@ -227,7 +227,7 @@
 02110   pr #255: newpage
 02120   gosub L2290
 02130 L2130: return 
-02140 ! ______________________________________________________________________
+02140 !
 02150 PGOF: gosub FOOTER: continue 
 02160 L2160: if percent=0 then goto L2280
 02170   if ul=0 then goto L2260
@@ -257,19 +257,19 @@
 02410   pr #255,using L2400: "______________________","______________________","______________________","______________________","______________________","_____________________"
 02420   pr #255: 
 02430   return 
-02440 ! ______________________________________________________________________
+02440 !
 02450 L2450: if percent><0 then goto L2500
 02460   percent=1
 02470   percent1=percent2=percent3=percent4=percent5=percent6=0
 02480   goto L570
-02490 ! ______________________________________________________________________
+02490 !
 02500 L2500: eofcode=1
 02510   gosub FOOTER
 02520   fncloseprn
 02525   fnfscode(actpd)
 02526   fnpriorcd(1)
 02530 L2530: goto XIT
-02540 ! ______________________________________________________________________
+02540 !
 02550 L2550: percent=1
 02560 L2560: percent1=total
 02570   percent2=total2
@@ -299,9 +299,9 @@
 02810   foot$=" "
 02820   ir=0
 02830   goto L330
-02840 ! ______________________________________________________________________
+02840 !
 02850 XIT: fnxit
-02860 ! ______________________________________________________________________
+02860 !
 02870 ! <updateable region: ertn>
 02880 ERTN: fnerror(program$,err,line,act$,"xit")
 02890   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

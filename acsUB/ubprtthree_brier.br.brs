@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\ubprtthree_Brier
 00020 ! pr bills for Village of Monticello (full page)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_fontsize
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,fb$(3)*60
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
 00100   dim prebal$*30
-00110 ! ______________________________________________________________________
+00110 !
 00120   fnLastBillingDate(d1)
 00130   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
@@ -31,7 +31,7 @@
 00210   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 00220   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 00230   open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
-00250 ! ______________________________________________________________________
+00250 !
 00260   prebal$="10:00 AM, xxxxxxx  xx"
 00270 SCREEN1: ! 
 00280   a$="" : prtbkno=0
@@ -89,10 +89,10 @@
 00550   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00560   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00570   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-00580 ! ______________________________________________________________________
+00580 !
 00590   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00600   fnpa_open
-00610 ! ______________________________________________________________________
+00610 !
 00620   on fkey 5 goto RELEASE_PRINT
 00630 L630: if sl1=1 then goto SCREEN3
 00640 L640: read #6,using L670: z$ eof RELEASE_PRINT
@@ -124,17 +124,17 @@
 00870   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
 00880   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 00890   goto L1030
-00900 ! ______________________________________________________________________
+00900 !
 00910 L910: ! 
 00920   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00930   goto L1030
-00940 ! ______________________________________________________________________
+00940 !
 00950 RELEASE_PRINT: ! 
 00960   close #1: ioerr ignore
 00970   close #3: ioerr ignore
 00980   fnpa_finis
 01010   goto ENDSCR
-01020 ! ______________________________________________________________________
+01020 !
 01030 L1030: ! 
 01040   pb=bal-g(11)
 01050   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
@@ -148,7 +148,7 @@
 01130   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01140   goto L630
-01150 ! ______________________________________________________________________
+01150 !
 01160 SCREEN3: ! 
 01170   fnTos(sn$:= "UBPrtBl1-2")
 01180   fnLbl(1,1,"Account (blank to stop)",31,1)
@@ -162,7 +162,7 @@
 01240   if ck=5 then goto RELEASE_PRINT
 01250   read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final nokey SCREEN3
 01260   goto L730
-01550 ! ______________________________________________________________________
+01550 !
 01560 ENDSCR: ! pr totals screen
 01570   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01580   fnTos(sn$="Bills-Total") !:
@@ -181,7 +181,7 @@
 01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01740 L1740: execute act$
 01750   goto ERTN
-01760 ! ______________________________________________________________________
+01760 !
 01860 VBPRINT: ! r: Brier Lake - 3 per page  Utility Bills  requires: (z$,fb$(1),mat d, mat g,mat pe$,d2,d3,pb)
 01890   fnpa_fontsize
 01900   fnpa_txt(trim$(z$),62,lyne+7)

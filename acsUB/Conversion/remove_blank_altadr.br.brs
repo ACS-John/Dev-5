@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsUB\conversion\remove_blank_altadr
 00020 ! remove blank alternate billing addresses (still get key= after conversion and causes blank addresses  ( on old system the addresses were just set to blank when deleted, but not the customer #
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnCmdKey
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   fncno(cno)
 00080 ! 
 00090   dim ba$(4)*30
@@ -22,7 +22,7 @@
 00220 L220: delete #3,key=z$: 
 00230   goto L130
 00240 XIT: fnxit
-00250 ! ______________________________________________________________________
+00250 !
 00260 ERTN: fnerror(program$,err,line,act$,"xit")
 00270   if uprc$(act$)<>"PAUSE" then goto L300
 00280   execute "list -"&str$(line) !:
@@ -31,4 +31,4 @@
 00290   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 00300 L300: execute act$
 00310   goto ERTN
-00320 ! ______________________________________________________________________
+00320 !

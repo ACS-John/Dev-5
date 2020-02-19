@@ -1,12 +1,12 @@
 00010 ! formerly S:\acsCL\UnPdInv
 00020 ! Unpaid Invoice Listing (Current)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fnTos,fnLbl,fncomboa,fnCmdSet,fnAcs,fnwait,fnfree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
 00080   dim io1$(2),wrd1$(2),item1$(2)*15
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$)
 00130   cancel=99
 00140   fndat (dat$)
@@ -101,7 +101,7 @@
 00940   goto L960
 00950 L950: write #work,using 'FORM POS 1,C 12,N 10.2': gl$,amt
 00960 L960: return 
-00970 ! ______________________________________________________________________
+00970 !
 00980 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00990 L990: fd$=""
 01000   fund$=gl$(1:3)
@@ -117,7 +117,7 @@
 01100   pr #255: "________  ____________________  ____________  ________  ________  ________  __________________  __________  __________  __________"
 01110   f1=1
 01120   return 
-01130 ! ______________________________________________________________________
+01130 !
 01140 END1: ! 
 01150   if r4=0 then goto XIT
 01160   endcode=1
@@ -146,19 +146,19 @@
 01390   pr #255: pageoflow NEWPGE
 01400   tf1=0
 01410   return 
-01420 ! ______________________________________________________________________
+01420 !
 01430 EO_WORK: gosub TOTF1
 01440   fncloseprn
 01450   close #work,free: ioerr XIT
 01460 XIT: fnxit
-01470 ! ______________________________________________________________________
+01470 !
 01480 TOTALS: ! 
 01490   if fund=2 then !:
           pr #255: tab(97);"__________  __________  __________" !:
           pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Fund   Total",mat ft
 01500   mat ft=(0)
 01510   return 
-01520 ! ______________________________________________________________________
+01520 !
 01530 ! <Updateable Region: ERTN>
 01540 ERTN: fnerror(program$,err,line,act$,"xit")
 01550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -166,4 +166,4 @@
 01570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01590 ! /region
-01600 ! ______________________________________________________________________
+01600 !

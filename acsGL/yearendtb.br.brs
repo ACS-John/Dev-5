@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\YearendTB
 00020 ! reprint trial balance for last year end
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
 00080   dim a$(9)*3,cogl$(2)*12,u$*12,c$*5,d(2),ta(2)
 00090   dim wrddetail$(2),p$(20)*50,resp$(10)*80,bp(13),cap$*128
-00100 ! ______________________________________________________________________
+00100 !
 00110   right=1
 00120   fntop(program$,cap$="Reprint Year End Trial Balance")
 00140   fncno(cno,cnam$)
@@ -79,7 +79,7 @@
 00660 L660: fncloseprn
 00670 ! 
 00680   goto XIT
-00690 ! ______________________________________________________________________
+00690 !
 00700 HDR2: ! 
 00710   pr #255,using L730: date$('mm/dd/yy'),cnam$
 00720   pr #255,using L730: time$,cap$
@@ -93,18 +93,18 @@
 00800   pr #255,using L810: "__________","____________________________________","____","______","___________","_________"
 00810 L810: form pos 4,c 10,pos 17,c 36,pos 54,c 4,pos 60,c 6,pos 69,c 11,pos 84,c 10,skip 2
 00820   return 
-00830 ! ______________________________________________________________________
+00830 !
 00840 L840: ! 
 00850   pr #255,using L860: dno,ano,sno,d$,bp(12) pageoflow L890
 00860 L860: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 50,pos 80,pic(nz,zzz,zzz.## cr),skip 2
 00870   return 
-00880 ! ______________________________________________________________________
+00880 !
 00890 L890: pr #255: newpage
 00900   gosub HDR2
 00910   continue 
-00920 ! ______________________________________________________________________
+00920 !
 00930 XIT: fnxit
-00940 ! ______________________________________________________________________
+00940 !
 00950 ! <Updateable Region: ERTN>
 00960 ERTN: fnerror(program$,err,line,act$,"xit")
 00970   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -112,4 +112,4 @@
 00990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01010 ! /region
-01020 ! ______________________________________________________________________
+01020 !

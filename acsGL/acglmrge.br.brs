@@ -1,14 +1,14 @@
 ! Replace S:\acsGL\ACGLMrge
 ! GL Merge program, chained to from other systems, 
 	! like Checkbook-post to GL; also used to merge entries entered directly
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnprocess,fnchain,fnprg
 	library 'S:\Core\Library': fnstyp,fnmsgbox,fnaddglpayee
 	library 'S:\Core\Library': fnTos,fnLbl,fnCmdKey,fnAcs,fnagl$,fnTxt,fnCmdSet,fnOpt
 	library 'S:\Core\Library': fnqglbig,fnrglbig$,fnindex_it,fnFree
 	fntop(program$,"General Ledger Merge")
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim adr(2),ta(2),prg$*256,k(10,8),gl$(5)*12,gl1(5),tr$(5)*35
 	dim t$*12,n(2),l$*12,p$*30,ven$*8
 	dim zo(50),d$*50
@@ -17,7 +17,7 @@
 	dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11
 	dim fl1$(6)
 	dim resp$(40)*256
-! ______________________________________________________________________
+!
 	dim prg$*256
 	fnprg(prg$)
 	if fnstyp<>99 then 
@@ -101,7 +101,7 @@ VENDOR_FILE: !
 	write #5,using L810,rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L790
 	L810: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 goto L360
-! ______________________________________________________________________
+!
 L840: ! 
 	fnTos(sn$="GLmerge") 
 	mylen=40: mypos=mylen+3 : right=1
@@ -120,7 +120,7 @@ L840: !
 	if resp$(1)="True" then goto ADD
 	if resp$(2)="True" then goto CHANGE_ACCOUNTS
 	goto L840
-! ______________________________________________________________________
+!
 ADD: ! 
 	dno=val(t$(1:3)) conv ignore
 	ano=val(t$(4:9)) conv ignore
@@ -165,7 +165,7 @@ L1300: mat ta=(0)
 	write #1,using L1330: t$,d$,mat zo
 L1330: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
 	goto L460
-! ______________________________________________________________________
+!
 CHANGE_ACCOUNTS: ! 
 	fnTos(sn$="GLmerge4") 
 	mylen=23: mypos=mylen+3 : right=1
@@ -176,7 +176,7 @@ CHANGE_ACCOUNTS: !
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then goto L440
 	gl$=fnagl$(resp$(1)) : t$=gl$ : goto L440
-! ______________________________________________________________________
+!
 L1450: if fnstyp><92 then goto L1620
 	open #20: "Name=CNo.H"&wsid$,internal,outIn,relative  
 	read #20,using "Form POS 239,5*C 12,5*N 10.2",rec=1: mat gl$,mat gl1 conv L1620 
@@ -215,6 +215,6 @@ L1660: !
 	close #30: 
 	if process=1 or process=4 then let fnchain("S:\acsGL\prMerge")
 L1760: goto XIT
-! ______________________________________________________________________
+!
 XIT: fnxit
 include: ertn

@@ -1,10 +1,10 @@
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fntop,fnChk,fnerror,fnTos,fncno,fnxit,fnCmdSet,fngethandle
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(10)*80
 00080   dim cap$*128
 00090   dim z$*10,e$(4)*30,ba$(4)*30
-00150 ! ______________________________________________________________________
+00150 !
 20000   fntop(program$,cap$='Fix Use Alternate Billing Address')
 20020   fncno(cno,cnam$)
 30000 ! r: SCREEN1:
@@ -51,7 +51,7 @@
 60180   fnCmdSet(52) 
 60200   fnAcs(sn$,0,mat resp$,ck) ! /r
 60220 XIT: fnxit
-60240 ! ______________________________________________________________________
+60240 !
 76020 ! <updateable region: ertn>
 76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

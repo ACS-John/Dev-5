@@ -3,13 +3,13 @@
 32000 ! r: setup, open files, library, set constants, on err, etc
 32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fncomboa,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnFree
 32040   on error goto Ertn
-32060 ! ______________________________________________________________________
+32060 !
 32080   dim gl$(80)*12
 32100   dim sn$*78,ft$*78
 32120   dim schnam$*78,ml$(3)*80
 32140   dim option$(6)*60,item$(7)*80
 32160   dim resp$(7)*80
-32180 ! ______________________________________________________________________
+32180 !
 32200   fntop(program$)
 32220   gosub BUILD_LAYOUT
 32240   if exists("[Q]\GLmstr\acglschs.h[cno]")=0 then 
@@ -189,7 +189,7 @@
 58720 !     j1=0
 58740 !     pr #255: newpage
 58760 !   loop
-58780 ! ! ______________________________________________________________________
+58780 ! !
 58800 !   L1530: !
 58820 !   fncloseprn
 58840 !   on fkey 5 ignore 
@@ -206,9 +206,9 @@
 66120 ! /region
 68000 SCHEDULE_BREAKDOWN: ! r:
 68020   ! general ledger breakdowns for each schedule
-68040   ! ______________________________________________________________________
+68040   !
 68060   dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),sp(1),c$(1,8)*40
-68080   ! ______________________________________________________________________
+68080   !
 68100   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE 
 68120   fnHamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 68140   gosub FIXGLACCOUNTS

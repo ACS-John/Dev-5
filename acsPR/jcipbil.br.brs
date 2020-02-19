@@ -1,18 +1,18 @@
 00010 ! Replace S:\acsPR\jcIpBil
 00020 ! Enter Billings
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fnoldmsgbox,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38,wrds$(2)*20,n$*40
 00080   dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),cap$*128,message$*40
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsPR\jcIpBil",cap$="Enter Billings")
 00110   fncno(cno)
 00120 ! 
 00130   c1=3
 00135   fnconsole(1)
-00140 ! ______________________________________________________________________
+00140 !
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed 
 00160   open #2: "Name="&env$('temp')&"\Work."&session$,internal,output ioerr L180
 00170   close #2,free: 
@@ -61,20 +61,20 @@
 00560   jn$=lpad$(rtrm$(jn$),6)
 00570   read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3 nokey L600
 00580   goto L660
-00590 ! ______________________________________________________________________
+00590 !
 00600 L600: msgline$(1)="Job Number not found."
 00610   msgline$(2)="Please reselect."
 00620   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00630   ce=1
 00640   goto ERR1
-00650 ! ______________________________________________________________________
+00650 !
 00660 L660: ta=ta+inp(1)
 00670   if c1=2 then goto L1120
 00680 L680: rw=lrec(2)+1
 00690   write #2,using L700,rec=rw: jn$,mat inp duprec L680
 00700 L700: form pos 1,c 6,pd 5.2,pd 4,n 2
 00710   goto L200
-00720 ! ______________________________________________________________________
+00720 !
 00730 L730: pr newpage
 00740   win=102
 00750   fnopenwin(win,07,20,15,59,cap$)
@@ -92,7 +92,7 @@
 00870   c1=curfld
 00880   if cmdkey=5 then goto XIT
 00890   on c1 goto PROOFLIST,L1160,L190,L1300 none L860
-00900 ! ______________________________________________________________________
+00900 !
 00910 PROOFLIST: ! 
 00920   pr newpage
 00930   message$="Printing Proof List..."
@@ -113,10 +113,10 @@
 01080 L1080: fncloseprn
 01090   on fkey 5 ignore 
 01100 L1100: goto L730
-01110 ! ______________________________________________________________________
+01110 !
 01120 L1120: rewrite #2,using L700,rec=rr: jn$,mat inp
 01130   goto L1160
-01140 ! ______________________________________________________________________
+01140 !
 01150 L1150: rewrite #2,using L700,rec=rr: "",0,0,0
 01160 L1160: pr newpage
 01170   win=103
@@ -131,7 +131,7 @@
 01260   ta=ta-inp(1)
 01270   shoption=2
 01280   goto L200
-01290 ! ______________________________________________________________________
+01290 !
 01300 L1300: for j=1 to rw
 01310     read #2,using L700,rec=j: jn$,mat inp noRec XIT
 01320     if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1370
@@ -141,9 +141,9 @@
 01360     rewrite #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4
 01370 L1370: next j
 01380   goto XIT
-01390 ! ______________________________________________________________________
+01390 !
 01400 XIT: fnxit
-01410 ! ______________________________________________________________________
+01410 !
 01420 SRCH: ! 
 01430   bk=0
 01440   hce=ce
@@ -201,13 +201,13 @@
 01960   bk=bk-1
 01970 L1970: selclp=1
 01980   goto L1590
-01990 ! ______________________________________________________________________
+01990 !
 02000 L2000: selclp=0
 02010   goto L1480
-02020 ! ______________________________________________________________________
+02020 !
 02030 SEARCHEND: close #103: ioerr L2040
 02040 L2040: return 
-02050 ! ______________________________________________________________________
+02050 !
 02060 ! <Updateable Region: ERTN>
 02070 ERTN: fnerror(program$,err,line,act$,"xit")
 02080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -215,4 +215,4 @@
 02100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02110 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02120 ! /region
-02130 ! ______________________________________________________________________
+02130 !

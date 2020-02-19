@@ -39,7 +39,7 @@ def library fncheckfileversion
 	! current system are up to date - and runs the appropriate conversion  function if not
 	if ~setup then let fn_setup
 	! there are other Library statements in this program - but they are placed in the section for which system they really belong to.
-	! _______________________________________________________________________
+	!_
 	dim tmpfile$*512,tmpkps(10),tmpkln(10),name$*512,kfname$*512
 	dim kfnames$(1)*512
 	! ____________

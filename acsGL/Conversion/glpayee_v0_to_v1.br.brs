@@ -4,12 +4,12 @@
 00030   def library fnglpayee_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fngethandle,fnStatus,fnindex_it,fncopy
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim cap$*128
 00080     dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,ph$*12,contact$*30,email$*50
 00090     dim fax$*12,myact$*20
 00150 ! 
-00160 ! ______________________________________________________________________
+00160 !
 00171     fnStatus('updating Payee file format.')
 00210     open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",internal,outIn,keyed ioerr ignore
 00215     if exists("[Q]\GLmstr\paymstr.h[cno]")=0 then open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",internal,outIn,keyed: version(2,1): close #2: 
@@ -34,7 +34,7 @@
 00314     if ~exists("[Q]\GLmstr\gltr1099.h[cno]") then let fnCopy("S:\General Ledger\mstr\gltr1099.h99999","[Q]\GLmstr\gltr1099.h[cno]")
 00316     fnindex_it("[Q]\GLmstr\gltr1099.h[cno]","[Q]\GLmstr\gltridx.h[cno]","1 8")
 00320     goto XIT
-00330 ! ______________________________________________________________________
+00330 !
 00340 ! <Updateable Region: ERTN>
 00350 ERTN: fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -42,7 +42,7 @@
 00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00400 ! /region
-00410 ! ______________________________________________________________________
+00410 !
 00420 XIT: fnend 
 00422 IGNORE: continue 
-00430 ! ______________________________________________________________________
+00430 !

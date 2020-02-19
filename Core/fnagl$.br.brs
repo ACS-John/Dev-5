@@ -3,7 +3,7 @@
 00030   def library fnagl$*12(&x$)
 00040     library 'S:\Core\Library': fngethandle,fnerror,fnpause
 00050     on error goto Ertn
-00060 ! _______________________________________________________________________
+00060 !_
 00070     if x$="[All]" or x$='' then let fnagl$="  0     0  0" : goto XIT
 00080     tmp_cursys$=env$('CurSys')
 00090     if env$('CurSys')='UB' and exists("[Q]\GLmstr\Company.h[cno]") then tmp_cursys$="GL": goto COMPANY_OPEN
@@ -53,7 +53,7 @@
 00450 COMPANY_OPEN_IOERR: ! r:
 00452     x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3) ! default if gl or cl not installed
 00460     goto FINIS ! /r
-00470 ! _______________________________________________________________________
+00470 !_
 00480 ! <Updateable Region: ERTN>
 00490 ERTN: fnerror(program$,err,line,act$,"xit")
 00500     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -63,4 +63,4 @@
 00540 ! /region
 00550 IGNORE: continue 
 00560 XIT: fnend 
-00570 ! _______________________________________________________________________
+00570 !_

@@ -7,7 +7,7 @@ def library fnprocess(; putpro)
 	if putpro>0 then process=oldpro=putpro else process=oldpro
 	fnprocess=process
 fnend 
-! ______________________________________________________________________
+!
 def library fnkillauto
 	! Kills automatic processing - turns it off (used for payroll and general ledger automatic processing)
 	library 'S:\Core\Library': fnprocess

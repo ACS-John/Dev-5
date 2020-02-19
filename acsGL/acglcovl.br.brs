@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\AcGlCovl
 00020 ! -- Edit/Print Cover Letter
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnxit,fntop, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnchain
 00050   fntop(program$,cap$="Cover Leter")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim tb$*32,cap$*128,p$(20)*50
 00090   dim ln1$*78,ln$*78,shd$*60,fli$(20),cnam$*40,dat$*20,fl2$(2),sc2$(2)*46
-00100 ! ______________________________________________________________________
+00100 !
 00120   fncno(cno,cnam$)
 00130   fndat(dat$)
 00140   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  !:
@@ -32,7 +32,7 @@
 00190 L190: sh$="1,10,C 60,H,N"
 00200   for j=1 to 20 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 00210   if fnprocess=1 then t=2 : goto L320 else goto MENU1
-00220 ! _____________________________________________________________________
+00220 !_____
 00230 MENU1: pr newpage
 00240   close #101: ioerr L250
 00250 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outIn 
@@ -46,7 +46,7 @@
         t=curfld
 00310   if cmdkey=5 then goto XIT
 00320 L320: on t goto L370,L390 none L300
-00330 ! _____________________________________________________________________
+00330 !_____
 00340   close #101: ioerr L350
 00350 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outIn 
 00360   pr #101,fields "1,1,Cc 52,R,N": cnam$
@@ -79,7 +79,7 @@
 00555   pr newpage
 00560   fncloseprn
 00570 XIT: fnchain("S:\acsGL\acglAuto")
-00580 ! ______________________________________________________________________
+00580 !
 00590 ! <Updateable Region: ERTN>
 00600 ERTN: fnerror(program$,err,line,act$,"xit")
 00610   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

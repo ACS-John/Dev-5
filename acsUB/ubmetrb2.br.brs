@@ -1,19 +1,19 @@
 00010 ! Replace S:\acsUB\ubMetRB2
 00020 ! pr Complete Route Sheets
-00030 ! ______________________________________________________________________
+00030 !
 00040   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnFra,fnOpt,fnChk,fncmbact,fnCmdKey,fnchain,fnpa_finis,fnpa_newpage,fnpa_open
 00050   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20
 00090   dim z2$*10,e2$(4)*30,f12$*12,f32$(12),f22$(12),a(7),a2(7)
 00100   dim snm$(10)*20,a(7),option$(5),extra(13),service$(3)*26,ms$(13)*3
 00110   dim txt$*50,resp$(9)*50
-00120 ! ______________________________________________________________________
+00120 !
 00140   fntop("S:\acsUB\ubMetrB2",cap$="Route Book Pages")
 00150   fndat(dat$,1)
 00160   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 00170   open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
-00180 ! ______________________________________________________________________
+00180 !
 00190 ! this section+the comboA on the first screen is just what you need !:
         ! for a fnCurrently availableServiceTypeComboBox
 00200   ms$(1)="DEC"
@@ -45,7 +45,7 @@
 00420   mat option$(x)
 00430   mat service$(service)
 00440   service =udim(service$)
-00450 ! ______________________________________________________________________
+00450 !
 00460 MENU1: ! 
 00470   fnTos(sn$="ubMetrRt") !:
         mylen=35 : mypos=mylen+3 : respc=lc=0
@@ -91,7 +91,7 @@
 00760     if svt$=trim$(srv$(j)) then service$=snm$(j)(1:10)
 00770     if svt2$=trim$(srv$(j)) then service2$=snm$(j)(1:10)
 00780   next j
-00790 ! ______________________________________________________________________
+00790 !
 00800   on fkey 5 goto DONE
 00810   if formoption=2 then let fnpa_open : goto L830
 00820   fnopenprn
@@ -184,7 +184,7 @@
 01690   pr #255: newpage
 01700 L1700: if selectone=1 then goto SELECTONE
 01710   goto LOOP_TOP
-01720 ! ______________________________________________________________________
+01720 !
 01730 SELECTONE: ! 
 01740   sn$ = "Selectone" !:
         fnTos(sn$)
@@ -208,15 +208,15 @@
 01840   read #11,using L1060,key=a$: z$,mat e$,f1$,d1,d3,f3$,c4,f2$,d5,d7,d9,d11,book1,mat a,d13,extra16,b2,b5 nokey SELECTONE
 01850   form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9
 01860   goto L920
-01870 ! ______________________________________________________________________
-01880 ! ______________________________________________________________________
+01870 !
+01880 !
 01890 DONE: ! 
 01900   close #1: ioerr L1910
 01905   if formoption=2 then gosub RELEASE_PRINT: goto XIT
 01910 L1910: fncloseprn
 01920 XIT: ! 
 01930   fnxit
-01940 ! ______________________________________________________________________
+01940 !
 01950 ! <Updateable Region: ERTN>
 01960 ERTN: fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -224,7 +224,7 @@
 01990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02010 ! /region
-02020 ! ______________________________________________________________________
+02020 !
 02120 RELEASE_PRINT: ! 
 02130   close #1: ioerr ignore
 02140   close #3: ioerr ignore

@@ -1,13 +1,13 @@
 00010 !  Replace S:\Core\FlexDir
 00020 ! puts a flex grid with a directory inside... kinda a file explorer
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fngetcd,fnremove2,fnGetPp,fnLbl,fnTxt,fnCmdSet,fntop
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(10)*255,cap$*128
 00080   dim path$(2,1000)*255,prog$(2,1000)*100,ext$(2,1000)*100
 00090   dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop("S:\Core\FlexDir",cap$="Flex Dir")
 00120   fngetcd(dur$)
 00130 REFREASH: ! 
@@ -45,11 +45,11 @@
 00380   if ck=6 then goto REFREASH
 00390 ! 
 00400   goto L350
-00410 ! ______________________________________________________________________
+00410 !
 00420 DONE: ! 
 00430 ! 
 00440   stop 
-00450 ! ______________________________________________________________________
+00450 !
 00460 ! <Updateable Region: ERTN>
 00470 ERTN: fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -57,4 +57,4 @@
 00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00510 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00520 ! /region
-00530 ! ______________________________________________________________________
+00530 !

@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsPR\Conversion\JCmstr-Cnv
 00020 ! Convert Job Cost and Category Files
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2)
 00075   dim contact$*30,ph$*12,email$*60
 00080 L80: pr newpage
@@ -43,7 +43,7 @@
 00420   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00430   input fields "13,40,C 1,IAE,N": pause$
 00440   goto L80
-00450 ! ______________________________________________________________________
+00450 !
 00460 ! <updateable region: ertn>
 00470 ERTN: fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -51,6 +51,6 @@
 00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00510 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00520 ! /region
-00530 ! ______________________________________________________________________
+00530 !
 00540 XIT: fnxit
-00550 ! ______________________________________________________________________
+00550 !

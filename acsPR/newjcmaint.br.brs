@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsPR\newJCMaint
 00020 ! Job Cost Master File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnprocess,fnTos,fnLbl,fnCmdKey,fnAcs,fnTxt,fnmsgbox,fncombof,fnjob_srch,fncmbjob ,fncategory_srch,fncat_srch2,fncategory_srch,fncmbcat,fnflexinit1,fnflexadd1,fncmbcategory
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$(9),sc1$(9)*20,io1$(9),hd$(2)*78,msgline$(2)*60,response$(5)*1
 00080   dim sc2$(15)*20,fl2$(15),io2$(15),sc3$(12),fl3$(13),io3$(12),dup$*11
 00090   dim dat$*20,cnam$*40,jn$*6,hjn$*6,n$*40,a$(3)*30,b(4)
@@ -12,18 +12,18 @@
 00120   dim eno$*12,jno$*6,tr(9),pd$*30,ln$(2,3)*30,ln(13,3),dup$*11
 00130   dim hlp$(20)*78,flh$(22)*18,hhd$*60,ch2$(13),cm2$(13),item2$(13)*30
 00140   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,df$*256,if$*256
-00150 ! ______________________________________________________________________
+00150 !
 00160   fntop("S:\acsPR\nEWJCMaint",cap$="Job Cost")
 00170   fncno(cno,cnam$) !:
         fndat(dat$)
 00180 ! 
-00190 ! ______________________________________________________________________
+00190 !
 00200   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr L4890
 00210   open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,outIn,keyed ioerr L220
 00220 L220: open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr L230
 00230 L230: open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative ioerr L240
 00240 L240: open #16: "Name=[Q]\PRmstr\Category.H[cno],KFName=[Q]\PRmstr\categoryIDX.H[cno],Shr",internal,outIn,keyed ioerr L250
-00250 L250: ! ______________________________________________________________________
+00250 L250: !
 00260 MENU1: ! 
 00270   ndep=0
 00280 ASKJOB: ! 
@@ -56,7 +56,7 @@
               goto ASKJOB
 00400   if ckey=11 then goto JOB_LISTING
 00410   goto ASKJOB
-00420 ! ______________________________________________________________________
+00420 !
 00430 ADDREC: ! 
 00440   addjob=1: mat ta=(0): dup=0: jn$="": n$="": mat a$=(''): mat b=(0) !:
         contact$="": ph$="": email$=""
@@ -168,20 +168,20 @@
 01240   if ckey=6 then goto EDITREC
 01250 L1250: goto ASKJOB
 01260 ! wRD1$(5)="5. Reassign Transaction Addresses"  KJ  what to do with this
-01270 ! ______________________________________________________________________
+01270 !
 01280 DONE: ! 
 01290   close #1: ioerr L1300
 01300 L1300: close #4: ioerr L1310
 01310 L1310: close #2: ioerr L1320
 01320 L1320: if addjob=1 or cont=1 then goto L1820
 01330   goto XIT
-01340 ! ______________________________________________________________________
+01340 !
 01350 L1350: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2,c 30,c 12,c 60
 01360 L1360: form pos 118,2*pd 3
 01370 L1370: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
 01380 L1380: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 01390 L1390: form pos 86,pd 3
-01400 ! ______________________________________________________________________
+01400 !
 01410 DELETE_ENTIRE_JOB: ! 
 01420   mat ml$(2) !:
         ml$(1)="You chosen to Delete job # "&jn$ !:
@@ -203,7 +203,7 @@
 01560   adr=nta
 01570   goto L1520
 01580 L1580: return 
-01590 ! ______________________________________________________________________
+01590 !
 01600   close #1: ioerr L1610
 01610 L1610: close #4: ioerr L1620
 01620 L1620: open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,input ioerr L1640
@@ -229,7 +229,7 @@
 01830   execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCINDX2.H[cno],7,25,Replace,DupKeys -N"
 01840   execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -N"
 01850   goto XIT
-01860 ! ______________________________________________________________________
+01860 !
 01870 JOB_LISTING: ! 
 01880   fst=0
 01890   fnopenprn
@@ -268,7 +268,7 @@
 02220   mat ln$=("")
 02230   mat ln=(0)
 02240   return 
-02250 ! ______________________________________________________________________
+02250 !
 02260 L2260: if x2<3 then goto L2310
 02270   pr #255: newpage
 02280   x2=0
@@ -293,7 +293,7 @@
 02470   pr #255: 
 02480   pr #255: 
 02490 L2490: return 
-02500 ! ______________________________________________________________________
+02500 !
 02510 L2510: fnTos(sn$="startprint") !:
         respc=0
 02520   fnLbl(1,1,"Job # to Start:",16,right)
@@ -310,12 +310,12 @@
 02580   jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 02590   restore #1,key>=jn$: nokey L2510
 02600   goto JOB_LISTING
-02610 ! ______________________________________________________________________
+02610 !
 02620 L2620: if x1>0 then gosub L2110
 02630   on fkey 5 ignore 
 02640   fncloseprn
 02650   if fnprocess=1 then goto XIT else goto MENU1
-02660 ! ______________________________________________________________________
+02660 !
 02670 HDR: ! 
 02680   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 02690   pr #255: "\qc  {\f201 \fs24 \b "&env$('cnam')&"}"
@@ -323,7 +323,7 @@
 02710   pr #255: "\qc  {\f181 \fs16 \b "&cnvrt$("pic(zzzz/zz/zz)",dat)&"}"
 02720   pr #255: "\ql   "
 02730   return 
-02740 ! ______________________________________________________________________
+02740 !
 02750 REASSIGN: ! pr NEWPAGE
 02760   restore #2,key>="           ": eof L2770
 02770 L2770: read #2,using L1360: mat ta eof L2800
@@ -342,7 +342,7 @@
 02900     rewrite #3,using L1390,rec=j: 0
 02910 L2910: next j
 02920   goto MENU1
-02930 ! ______________________________________________________________________
+02930 !
 02940 DUPLICATE_CATEGORIES: ! 
 02950   fnTos(sn$="duplicate") !:
         respc=0
@@ -368,7 +368,7 @@
 03100   goto L3120
 03110 L3110: write #2,using L1370: cn$,k$,mat l,mat ta
 03120 L3120: goto L3050
-03130 ! ______________________________________________________________________
+03130 !
 03140 EDITCAT: ! 
 03150   addcat=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a category record.
@@ -500,7 +500,7 @@
 04020   if holdckey=99 then holdckey=0: goto GET_CATEGORY_LISTING
 04030   if addcat=1 then goto ADDCAT
 04040   goto ASKJOB
-04050 ! ______________________________________________________________________
+04050 !
 04060 REVIEW_DETAILS: ! 
 04070   fnTos(sn$="DetailSrch")
 04080   ch2$(1)="Rec #": ch2$(2)="Reference #": ch2$(3)="Job #" !:
@@ -538,7 +538,7 @@
         item2$(13)=pd$
 04210   fnflexadd1(mat item2$)
 04220   goto L4180
-04230 ! ______________________________________________________________________
+04230 !
 04240 L4240: fnCmdKey("&Add",1,0,0,"Add a new category record." ) !:
         fnCmdKey("&Delete",4,0,0,"Deletes the highlited record") !:
         fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
@@ -623,13 +623,13 @@
 04850   adddetails=0: goto REVIEW_DETAILS
 04860 L4860: ! 
 04870   goto REVIEW_DETAILS
-04880 ! ______________________________________________________________________
+04880 !
 04890 L4890: if err=4152 then goto L1640 else goto ERTN
 04900   if err=4152 then goto L1690 else goto ERTN
 04910   if err=4152 then goto L1750 else goto ERTN
 04920   if err=4152 then goto L1800 else goto ERTN
 04930   if err=4152 then goto L1820 else goto ERTN
-04940 ! ______________________________________________________________________
+04940 !
 04950 ! <Updateable Region: ERTN>
 04960 ERTN: fnerror(program$,err,line,act$,"xit")
 04970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -637,11 +637,11 @@
 04990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 05000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 05010 ! /region
-05020 ! ______________________________________________________________________
+05020 !
 05030 XIT: fnxit
-05040 ! ______________________________________________________________________
-05050 ! ______________________________________________________________________
-05060 ! ______________________________________________________________________
+05040 !
+05050 !
+05060 !
 05070 RECREATE_GRID: ! 
 05080   close #1: ioerr L5090
 05090 L5090: close #4: ioerr L5100

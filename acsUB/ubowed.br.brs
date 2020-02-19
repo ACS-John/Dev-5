@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsUB\UBowed
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fndat,fncno,fnwin3,fnwait,fnAcs,fnTxt,fnLbl,fnTos,fnFra,fnxit,fnCmdSet,fntop,fnChk
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim dat$*20,message$*40,resp$(5)*20
 00070   dim z$*10,e$*30,g(12),adr(2),o(2),e(5),rt(10,3)
 00080   dim cap$*128,firstday(3),lastday(3),month(4)
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Balance Breakdown Aged by Month")
 00130   fndat(dat$,1)
 00140 ! 
-00150 ! ______________________________________________________________________
+00150 !
 00160   fnTos(sn$="ubowed")
 00162   respc=0 : mylen=29 : mypos=mylen+2 : frac=0
 00170   fnFra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : fraaging=frac+=1
@@ -40,7 +40,7 @@
 00350   dat$=resp$(4) !:
         fndat(dat$,2)
 00360   if resp$(5)="True" then skipcr=1
-00370 ! ______________________________________________________________________
+00370 !
 00380 PRINTING: ! 
 00390   on fkey 5 goto DONE
 00400   fnopenprn
@@ -58,7 +58,7 @@
 00530   totcolumn1+=month(1) : totcolumn2+=month(2) !:
         totcolumn3+=month(3) : totcolumn4+=month(4) : totbal+=bal
 00540   goto READ_CUSTOMER
-00550 ! ______________________________________________________________________
+00550 !
 00560 HEADER: ! 
 00570   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 00580   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
@@ -66,7 +66,7 @@
 00600   pr #255,using 'Form POS 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
 00610   pr #255: "{\ul Account No}  {\ul Customer Name}        {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(1)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(2)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(3)))(1:10)&"} {\ul      Older} {\ul    Balance}"
 00620   return 
-00630 ! ______________________________________________________________________
+00630 !
 00640 L640: pr #255: "                                 __________ __________ __________ __________ __________"
 00650   pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PGOF
 00660   pr #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
@@ -74,11 +74,11 @@
 00680 L680: close #2: ioerr L690
 00690 L690: fncloseprn
 00700 XIT: fnxit
-00710 ! ______________________________________________________________________
+00710 !
 00720 PGOF: pr #255: newpage
 00730   gosub HEADER
 00740   continue 
-00750 ! ______________________________________________________________________
+00750 !
 00760 READ_TRANS: ! 
 00770   sortreq=0 : mat month=(0)
 00780   restore #2,key>=z$&"         ": nokey L990
@@ -107,7 +107,7 @@
 00970   if month(3)>tempbal then month(3)=tempbal: month(4)=0: goto L990
 00980 L980: month(4)=tempbal
 00990 L990: return 
-01000 ! ______________________________________________________________________
+01000 !
 01010 ! <Updateable Region: ERTN>
 01020 ERTN: fnerror(program$,err,line,act$,"xit")
 01030   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -115,4 +115,4 @@
 01050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01060 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01070 ! /region
-01080 ! ______________________________________________________________________
+01080 !

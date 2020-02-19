@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsCL\ckLstV
 00020 ! Check Listing by Vendor (Transaction List: sort by Vendor)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
 00060 ! ________Dim(s) by file________________________________________________
@@ -14,7 +14,7 @@
 00140   right=1
 00150   open #trmstr=22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 00160   open #paymstr:=1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-00170 ! ______________________________________________________________________
+00170 !
 00180   fnTos(sn$="cklstv") !:
         respc=0 : mylen=25 : mypos=mylen+2
 00190   fnLbl(1,40,"",1,1)
@@ -32,7 +32,7 @@
 00280   fnopenprn
 00290   gosub HDR
 00300   goto BODY
-00310 ! ______________________________________________________________________
+00310 !
 00320 HDR: ! Page Heading
 00330   pr #255,using 'Form POS 1,CC 80': cnam$
 00340   pr #255,using 'Form POS 1,CC 80': "Company Number [cno]"
@@ -42,12 +42,12 @@
 00380   pr #255,using 'Form Pos 1,C 80': "Chk/Ref# Date   Amount      Payee No Name/Description"
 00390   pr #255,using 'Form Pos 1,C 80': "________ ______ ___________ ________ ___________________________________"
 00400   return 
-00410 ! ______________________________________________________________________
+00410 !
 00420 PGOF: ! 
 00430   pr #255: newpage
 00440   gosub HDR
 00450   continue 
-00460 ! ______________________________________________________________________
+00460 !
 00470 BODY: ! 
 00480   read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof LAS !:
         tr$(3)=str$(tr3)
@@ -59,7 +59,7 @@
 00540   pr #255,using 'Form POS 1,C 8,X 1,C 6,N 12.2,X 1,C 8,X 1,C 35': tr$(1),tr$(2),val(tr$(3)),tr$(4) pageoflow PGOF
 00550   total1+=val(tr$(3))
 00560   goto BODY
-00570 ! ______________________________________________________________________
+00570 !
 00580 SUBHEADING: ! 
 00590   ytdp=typ=ta(1)=ta(2)=0 : vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=""
 00600   read #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',key=tr$(4): vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$ nokey PR_NOKEY
@@ -69,20 +69,20 @@
 00640 PAST_PR_NOKEY: ! 
 00650   total1=0
 00660   return 
-00670 ! ______________________________________________________________________
+00670 !
 00680 TOTALS: ! 
 00690   pr #255,using 'Form POS 1,C 10,N 17.2': "Totals:",total1 !:
         pr #255: ""
 00700   total1=0
 00710   return 
-00720 ! ______________________________________________________________________
+00720 !
 00730 LAS: ! 
 00740   gosub TOTALS
 00750   fncloseprn
 00760   goto XIT
-00770 ! ______________________________________________________________________
+00770 !
 00780 XIT: fnxit
-00790 ! ______________________________________________________________________
+00790 !
 00800 ! <Updateable Region: ERTN>
 00810 ERTN: fnerror(program$,err,line,act$,"xit")
 00820   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -90,4 +90,4 @@
 00840   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00850 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00860 ! /region
-00870 ! ______________________________________________________________________
+00870 !

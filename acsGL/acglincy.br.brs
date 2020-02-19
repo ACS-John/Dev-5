@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsGL\AcGlIncY
 00020 ! -- INCOME STATEMENT FOR THIRTEEN PERIODS
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnTxt,fnCmdKey,fnAcs,fnLbl
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim p$(20)*50
 00080   dim fl1$*256,actpd$*6,pedat$*20,m1$(13)*9,m2$(13)*8,total(13)
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
 00100   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
 00110   dim by(13),bp(13),cap$*128,udf$*256
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop(program$,cap$="Income Statement with Period Comparison")
 00140   on fkey 5 goto L2360
 00150   fncno(cno,cnam$)
@@ -27,7 +27,7 @@
 00260   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00270   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
-00280 ! ______________________________________________________________________
+00280 !
 00290   pors=1
 00300   mp1=69
 00310   if fnps=2 then mp1=mp1+3
@@ -216,7 +216,7 @@
 02120 L2120: if redir=0 then pr #255,using L2130: " "
 02130 L2130: form skip 1,c 1,skip 0
 02140   return 
-02150 ! ______________________________________________________________________
+02150 !
 02160 L2160: heading=1
 02170   pr #255,using L2180: cnam$
 02180 L2180: form skip 2,pos 10,cc 70,skip 1
@@ -236,7 +236,7 @@
 02320 L2320: pr #255,using L2330: "YTD-TOTAL",mat m2$
 02330 L2330: form pos 42,14*c 12,skip 2
 02340 L2340: return 
-02350 ! ______________________________________________________________________
+02350 !
 02360 L2360: eofcode=1
 02370   gosub L1860
 02380 L2380: ! 
@@ -244,9 +244,9 @@
 02400   fncloseprn
 02410 ! 
 02420   goto XIT
-02430 ! ______________________________________________________________________
+02430 !
 02440 XIT: fnxit
-02450 ! ______________________________________________________________________
+02450 !
 02460 ! <updateable region: ertn>
 02470 ERTN: fnerror(program$,err,line,act$,"xit")
 02480   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

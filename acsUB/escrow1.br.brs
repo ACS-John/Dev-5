@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsUB\Escrow1
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntop,fnTos,fnAcs,fnLbl,fnTxt,fndat,fnxit,fncomboa,fnCmdSet,fnopenprn,fncloseprn
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
-00070 ! ______________________________________________________________________
+00070 !
 00080   fntop("S:\acsUB\escrow1",cap$="Escrow Balance Report")
 00090   fncno(cno,cnam$)
 00100   fndat(resp$(1))
@@ -35,9 +35,9 @@
 00280   pr #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
 00290   total_escrow+=escrow_bal
 00300   goto READ_CUSTOMER
-00310 ! ______________________________________________________________________
+00310 !
 00320 PGOF: pr #255: newpage : gosub HDR : continue 
-00330 ! ______________________________________________________________________
+00330 !
 00340 HDR: ! 
 00350   pr #255,using 'Form POS 20,Cc 40': "",cnam$
 00360   pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': "Page "&str$(pg+=1),cap$
@@ -46,15 +46,15 @@
 00390   pr #255: "Account No  Customer Name                   Escrow Bal"
 00400   pr #255: "__________  ______________________________  __________"
 00410   return 
-00420 ! ______________________________________________________________________
+00420 !
 00430 DONE: ! 
 00440   pr #255: tab(43);"  __________"
 00450   pr #255,using 'Form POS 43,N 12.2': total_escrow
 00460   fncloseprn
 00470   goto XIT
-00480 ! ______________________________________________________________________
+00480 !
 00490 XIT: fnxit
-00500 ! ______________________________________________________________________
+00500 !
 00510 ! <Updateable Region: ERTN>
 00520 ERTN: fnerror(program$,err,line,act$,"xit")
 00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -62,4 +62,4 @@
 00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00560 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00570 ! /region
-00580 ! ______________________________________________________________________
+00580 !

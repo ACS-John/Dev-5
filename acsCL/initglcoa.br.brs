@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsCL\InitGLCoA
 00020 ! Import General Ledger Chart of Accounts
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fnFree
 00042   library 'S:\Core\Library': fncopy,fnrename,fnindex_it
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$="Import GL Chart of Accounts")
 00100   cancel=99 : right=1 : left=0 : center=2 : number$='30'
 00120 L120: open #1: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLINDEX.H[cno],Shr",internal,outIn,keyed 
@@ -42,16 +42,16 @@
 00350   close #2: 
 00355   execute "Index [Q]\CLmstr\GLmstr.H[cno]"&' '&"[Q]\CLmstr\GLINDEX.H[cno] 1 12 Replace DupKeys"
 00360   goto XIT
-00370 ! ______________________________________________________________________
+00370 !
 00380   execute "Index [Q]\CLmstr\GLmstr.H[cno]"&' '&"[Q]\CLmstr\GLINDEX.H[cno] 1 12 Replace DupKeys"
 00390   goto XIT
-00400 ! ______________________________________________________________________
+00400 !
 00410   restore #1,key>="            ": nokey MENU1
 00420 L420: ln=eof1=0
 00430   pr newpage
 00440   if ck=5 or eof1=1 then goto MENU1
 00450   goto L420
-00460 ! ______________________________________________________________________
+00460 !
 00470 XIT: fnxit
 00480 ! r: unreferenced stuff
 00490   close #1: ioerr ignore
@@ -68,7 +68,7 @@
 00600   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00610 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00620 ! /region
-00630 ! ______________________________________________________________________
+00630 !
 00640 MSGBOX1: ! 
 00650   mat ml$(2) !:
         ml$(1)="A general ledger chart of accounts has not been set up" !:

@@ -3,12 +3,12 @@
 00030 def library fnApMstrConversion
 00040   library 'S:\Core\Library': fntop,fnxit, fnchain,fnerror,fncno,fnTos,fnCmdSet,fnLbl,fnTxt,fnAcs,fnindex_it,fnCopy,fngethandle,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,ph$*12,a(9),dt(5),cd(4)
 00080   dim gl(3),ta(2),aa(2),gl$(5)*12,gld$(5)*20,gla(5),id$*20
 00090   dim cap$*128,up$(4)*18
 00100   dim resp$(20)*80
-00110 ! ______________________________________________________________________
+00110 !
 00130   fntop(program$,cap$="Import from old AP")
 44000 SCR1: ! 
 44020   fnTos(sn$='AP-Import')

@@ -3,9 +3,9 @@
         ! fnAdd1099 - adds a 1099 to be printed/exported !:
         ! fnPrint1099 - Prints all added 1099s !:
         ! Chain to this program - does the same as fnPrint1099
-00030 ! _______________________________________________________________________
-00040 ! _______________________________________________________________________
-00050 ! ______________________________________________________________________
+00030 !_
+00040 !_
+00050 !
 00060 ! this is the part of the program that tells it what to do when you !:
         ! chain to i - or just load and run it.
 00070   library 'S:\Core\Library': fnprint1099,fnxit,fntop
@@ -13,9 +13,9 @@
 00090   fntop("S:\Core\Print1099",cap$="Print 1099s")
 00100   fnprint1099(lz1$)
 00110   fnxit
-00120 ! _______________________________________________________________________
-00130 ! _______________________________________________________________________
-00140 ! _______________________________________________________________________
+00120 !_
+00130 !_
+00140 !_
 00150   def library fnadd1099(mat cinfo$, mat einfo$, mat box)
 00160     dim oldbox(22)
 00170     library 'S:\Core\Library': fngethandle,fnpause
@@ -38,9 +38,9 @@
           mat einfo$=('') : mat box=(0) : dave=0 : mat oldbox=(0) !:
           ! don't reset Mat cInfo$, because it's annoying to loose these values
 00300   fnend 
-00310 ! _______________________________________________________________________
-00320 ! _______________________________________________________________________
-00330 ! _______________________________________________________________________
+00310 !_
+00320 !_
+00330 !_
 00340   def library fnprint1099(; lz1$)
 00350     library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fncursys$,fngethandle
 00360     on error goto PRINT1099ERTN
@@ -76,7 +76,7 @@
 00571     pr str$(lrec(dave))&' 1099s should have been printed.'
 00580     close #dave,free: 
 00590     goto XIT
-00600 ! ______________________________________________________________________
+00600 !
 00610 PRINT1099DOT: ! Dot Matrix 1099
 00620     pr #255: '' !:
           pr #255: '' !:
@@ -109,7 +109,7 @@
             pr #255: '' !:
           next j
 00810     return 
-00820 ! ______________________________________________________________________
+00820 !
 00830 PRINT1099LASER: ! Laser 1099
 00840     pr #255: ''
 00850     pr #255,using 'Form POS 7,C 30,N 11.2': cinfo$(1)(1:30),box(1)
@@ -139,7 +139,7 @@
             pr #255: newpage : x=0 else !:
             for j=1 to 10 : pr #255: '' : next j
 01020     return 
-01030 ! ______________________________________________________________________
+01030 !
 01040 EXPORT1099: ! 
 01050     pr #exportfile: "01 ";" "
 01060     pr #exportfile: "02 ";cinfo$(5)
@@ -175,15 +175,15 @@
 01360 ! pr #exportfile: "32 ";0
 01370     pr #exportfile: "*"
 01380     return 
-01390 ! ______________________________________________________________________
+01390 !
 01400 PRINT1099ERTN: fnerror(program$,err,line,act$,"xit")
 01410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01440 ERTN_EXEC_ACT: execute act$ : goto PRINT1099ERTN
-01450 ! ______________________________________________________________________
+01450 !
 01460 XIT: ! 
 01470   fnend 
-01480 ! ______________________________________________________________________
-01490 ! ______________________________________________________________________
-01500 ! ______________________________________________________________________
+01480 !
+01490 !
+01500 !

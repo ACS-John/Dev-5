@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsPR\Conversion\prCkHist-Cnv
 00020 ! CONVERT FOR CC CHG
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00150   pr newpage
 00160   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00170 L170: input fields "10,55,N 2,UE,N": cno conv L170
@@ -18,11 +18,11 @@
 00270 ! 
 00280 L280: read #4,using 'form pos 9,pd 6': d1 eof L310
 00290   goto L210
-00300 ! ______________________________________________________________________
+00300 !
 00310 L310: close #4: 
 00320   execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 00330 XIT: stop 
-00340 ! ______________________________________________________________________
+00340 !
 00350 ! <updateable region: ertn>
 00360 ERTN: fnerror(program$,err,line,act$,"xit")
 00370   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -30,4 +30,4 @@
 00390   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00410 ! /region
-00420 ! ______________________________________________________________________
+00420 !

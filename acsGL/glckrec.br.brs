@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\glCkRec
 00020 ! Bank Reconciliation Report  (prints the actual bank reconciliation form the general ledger system
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fndate_mmddyy_to_ccyymmdd,fnwait,fnTos,fnLbl,fnAcs,fnCmdSet,fnqgl,fnagl$,fnTxt,fnrgl$,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim flo2$(3),io1$(6),sc$(9),sd$(7),se$(7)*30,sf$(4),cnam$*40,dat$*20
 00080   dim gl$*12,c$*12,p$*30,s$*2,a(3),dcode$*24,glc$*24,holdgc$*24,currgl$*12
 00090   dim cap$*128,resp$(10)*80
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Bank Reconciliation Report")
 00120   fnconsole(off=0)
 00130   fncno(cno,cnam$)
@@ -54,7 +54,7 @@
         pr #255,using 'Form POS 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal !:
         pr #255: ""
 00380   goto RD_NXT
-00390 ! ______________________________________________________________________
+00390 !
 00400 READ_GLBREC: ! 
 00410   read #glbrec,using 'Form POS 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1': gl$,c$,p$,s$,mat a eof TOTAL
 00420   if currgl$<>gl$ then goto TOTAL
@@ -64,17 +64,17 @@
 00460   pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PGOF
 00470   tot+=a(2)
 00480   goto READ_GLBREC
-00490 ! ______________________________________________________________________
+00490 !
 00500 PGOF: pr #255: newpage !:
         gosub HDR !:
         continue 
-00510 ! ______________________________________________________________________
+00510 !
 00520 TOTAL: ! 
 00530   pr #255,using 'Form POS 59,C 12': "------------" !:
         pr #255,using 'Form POS 57,N 14.2': bankbal-tot !:
         pr #255,using 'Form POS 59,C 12': "============"
 00540   goto DONE
-00550 ! ______________________________________________________________________
+00550 !
 00560 HDR: ! 
 00570   pr #255,using 'Form POS 1,C 8,Cc 56': date$('mm/dd/yy'),cnam$
 00580   pr #255,using 'Form POS 1,C 8,Cc 56': time$,cap$
@@ -84,11 +84,11 @@
 00620   pr #255,using 'Form POS 1,C 12,POS 15,C 5,POS 50,C 4,POS 65,C 6': "Check Number","Payee","Date","Amount"
 00630   pr #255: ""
 00640   return 
-00650 ! ______________________________________________________________________
+00650 !
 00660 DONE: fncloseprn
 00670   close #glbrec: 
 00680 XIT: fnxit
-00690 ! ______________________________________________________________________
+00690 !
 00700 ! <Updateable Region: ERTN>
 00710 ERTN: fnerror(program$,err,line,act$,"xit")
 00720   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -96,4 +96,4 @@
 00740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00750 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00760 ! /region
-00770 ! ______________________________________________________________________
+00770 !

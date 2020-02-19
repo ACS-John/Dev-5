@@ -9,7 +9,7 @@
 	def library fnpostgl2(glt)
 		library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnmsgbox,fnfree
 		on error goto Ertn
-! ______________________________________________________________________
+!
 ! GLT: 1=Post  2=Print Only
 		glt_post=1
 		glt_print_only=2
@@ -19,7 +19,7 @@
 ! 
 		opt_cash_or_accrual$(1)="Cash"
 		opt_cash_or_accrual$(2)="Accrual"
-! ______________________________________________________________________
+!
 		if glt=glt_print_only then 
 			cap$="GL Distribution Report"
 			xitable$='YES'

@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\AcGlInc6b
 00020 ! -- INCOME STATEMENT WITH BUDGET (month compared to month and year compared to year to date
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnGlAskFormatPriorCdPeriod,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnTos,fnprocess,fnLbl,fnTxt,fnCmdKey,fnAcs,fnps
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,p$(20)*50
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,6)
 00100   dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128,udf$*256
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Income Statement-Monthly & Year Budgets")
 00130   on fkey 5 goto L2160
 00140   fncno(cno,cnam$)
@@ -17,7 +17,7 @@
 00170   actpd$=fnactpd$
 00180   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00190 ! ______________________________________________________________________
+00190 !
 00200   pr newpage
 00210   pors=1
 00220   mp1=69
@@ -191,7 +191,7 @@
 01850   pr #255: newpage
 01860   gosub L2030
 01870 L1870: return 
-01880 ! ______________________________________________________________________
+01880 !
 01890 L1890: gosub L1760: continue 
 01900 L1900: if ul=0 then goto L1990
 01910   if ul=1 then goto L1960
@@ -204,7 +204,7 @@
 01990 L1990: if redir=0 then pr #255,using L2000: " " pageoflow L1890
 02000 L2000: form c 1
 02010   return 
-02020 ! ______________________________________________________________________
+02020 !
 02030 L2030: heading=1
 02040   pt1+=1
 02050   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -217,7 +217,7 @@
 02120   pr #255: tab(34);"BUDGET";tab(45);"ACTIVITY";tab(57);"OVER/UNDER";tab(75);"BUDGET";tab(87);"ACTIVITY";tab(101);"OVER/UNDER"
 02130   pr #255: 
 02140   return 
-02150 ! ______________________________________________________________________
+02150 !
 02160 L2160: eofcode=1
 02170   gosub L1760
 02180 ! 
@@ -225,7 +225,7 @@
 02200   fncloseprn
 02210 ! 
 02220 XIT: fnxit
-02230 ! ______________________________________________________________________
+02230 !
 02240 ! <updateable region: ertn>
 02250 ERTN: fnerror(program$,err,line,act$,"xit")
 02260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

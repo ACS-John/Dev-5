@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\cch$.br
-00020 ! ______________________________________________________________________
+00020 !
 00030   def library fncch$*20(;cch$*20)
 00040     library 'S:\Core\Library': fncno,fngethandle
 00050     dim cch$*20

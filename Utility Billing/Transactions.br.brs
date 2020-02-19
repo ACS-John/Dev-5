@@ -560,7 +560,7 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 	! ___________________________________________
 	dim colmask$(30),colhdr$(30)*20,item$(25)*70,tg(11)
 	dim srv$(10)*2,serviceName$(10)*20
-	! ______________________________________________________________________
+	!
 	if hTrans=0 then 
 		close_hTrans=1
 		open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 

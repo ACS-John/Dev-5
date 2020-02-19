@@ -1,11 +1,11 @@
 ! Replace S:\acsPR\adjustpaydate.br
 ! This program corrects a pay date in history even after later payrolls have been processed
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit,fnerror,fncno,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fngethandle
 	fntop("S:\acsPR\adjustpaydate","Adjust Historical Pay Date")
 	on error goto Ertn
 	fn_adjustpaydate
-! ______________________________________________________________________
+!
 	def fn_adjustpaydate
 ! main routine
 		if fn_getdates then 

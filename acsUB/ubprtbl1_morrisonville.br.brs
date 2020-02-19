@@ -1,14 +1,14 @@
 10000 ! Replace S:\acsUB\ubprtbl1
 10010 ! pr bills (new format)
-10020 ! ______________________________________________________________________
+10020 !
 10030   library "S:\Core\Library": fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt
 10040   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 10050   on error goto Ertn
-10060 ! ______________________________________________________________________
+10060 !
 10070   dim resp$(10)*40,txt$*40,mg$(3)*30,rw(22,13),cap$*128
 10080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 10090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,billstart$*5,billend$*5
-10100 ! ______________________________________________________________________
+10100 !
 10110   fncno(cno,cnam$)
 10120   fnLastBillingDate(d1)
 10130   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
@@ -28,7 +28,7 @@
 10270   linelength=62
 10280   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in account order
 10290   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
-10300 ! ______________________________________________________________________
+10300 !
 10310 SCREEN1: ! 
 10320   a$="" : prtbkno=0
 10330   fnTos(sn$="UBPrtBl1-1")
@@ -95,10 +95,10 @@
 10940   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 10950   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 10960   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-10970 ! ______________________________________________________________________
+10970 !
 10980   open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
 10990   fnPa_open("Landscape")
-11010 ! ______________________________________________________________________
+11010 !
 11020 ! IF SL1=0 THEN GOSUB SORT1
 11030 L570: if sl1=1 then goto SCREEN3
 11040   if s5=0 then goto L640
@@ -126,7 +126,7 @@
 11260     end if 
 11270   next j
 11280   goto L950
-11290 ! ______________________________________________________________________
+11290 !
 11300 L810: e1=0 : mat pe$=("")
 11310   for j=2 to 4
 11320     if rtrm$(e$(j))<>"" then 
@@ -135,7 +135,7 @@
 11350     end if 
 11360   next j
 11370   goto L950
-11380 ! ______________________________________________________________________
+11380 !
 11390 F5_CANCEL: ! 
 11400   close #1: ioerr L890
 11410 L890: close #3: ioerr L900
@@ -143,7 +143,7 @@
 11430 ! close #20: ioerr L920
 11440 L920: fnpa_finis
 11450   goto ENDSCR
-11460 ! ______________________________________________________________________
+11460 !
 11470 L950: ! 
 11480   pb=bal-g(11)
 11490 ! ______________print bill routine______________________________________
@@ -152,7 +152,7 @@
 11520   bct(2)=bct(2)+1
 11530 ! accumulate totals
 11540   goto L570
-11550 ! ______________________________________________________________________
+11550 !
 11560 SCREEN3: ! 
 11570   sn$="UBPrtBl1-2"
 11580   fnTos(sn$)
@@ -174,7 +174,7 @@
 11740   if trim$(a$)="" then goto F5_CANCEL
 11750   read #1,using L650,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route nokey SCREEN3
 11760   goto HERE
-11770 ! ______________________________________________________________________
+11770 !
 11780 SORT1: ! SELECT & SORT
 11790   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1410
 11800   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
@@ -190,7 +190,7 @@
 11900   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1280
 11910 L1280: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 11920   goto L1210
-11930 ! ______________________________________________________________________
+11930 !
 11940 END5: close #6: 
 11950   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 11960 L1330: form pos 1,c 128
@@ -202,7 +202,7 @@
 12020   open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
 12030   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 12040 L1410: return 
-12050 ! ______________________________________________________________________
+12050 !
 12060 ENDSCR: ! pr totals screen
 12070   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 12080   fnTos(sn$="Bills-Total")
@@ -214,14 +214,14 @@
 12160   fnCmdSet(52)
 12170   fnAcs(sn$,0,mat resp$,ck)
 12180 XIT: fnxit
-12190 ! ______________________________________________________________________
+12190 !
 12200 ERTN: fnerror(program$,err,line,act$,"xit")
 12210   if uprc$(act$)<>"PAUSE" then goto L1550
 12220   execute "List -"&str$(line) : pause : goto L1550
 12230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 12240 L1550: execute act$
 12250   goto ERTN
-12260 ! ______________________________________________________________________
+12260 !
 12270   def fn_vbprint
 12280 ! -- Printer Program for New Laser Utility Bills
 12290     checkcounter+=1
@@ -351,4 +351,4 @@
 13520       fnpa_newpage
 13530     end if 
 13540   fnend 
-13550 ! ______________________________________________________________________
+13550 !

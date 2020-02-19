@@ -4,12 +4,12 @@
 28020     library 'S:\Core\Library': fngethandle,fnerror,fnpause
 28040     on error goto Ertn
 28060     if ReturnMaxLength=0 then returnMaxLength=35
-28080 ! _______________________________________________________________________
+28080 !_
 28100 ! X$ should be formatted as though it were just read in and is ready 
 28120 !    for a read Key=...   ie "  0   100  0"
-28140 ! _______________________________________________________________________
+28140 !_
 28160     dim desc$*50
-28180 ! _______________________________________________________________________
+28180 !_
 28200     if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
 28220     if env$('CurSys')="UB" and exists("[Q]\UBmstr\GLmstr.h[cno]") then cursys$="UB": goto L180
 28240     if env$('CurSys')="PR" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
@@ -49,7 +49,7 @@
 32020 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
 32040     fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
 32060     goto XIT
-32080 ! _______________________________________________________________________
+32080 !_
 34000 NOKEYGLMSTR: ! 
 34020     close #glmstr: 
 34040     x$="": desc$=""

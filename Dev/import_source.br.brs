@@ -83,15 +83,15 @@
 11620     execute 'Copy "'&cts_item$&'" "'&srep$(cts_item$,dir_source$,dir_destination$)&'" -n'
 11640   fnend  ! fn_copy_to_destination
 11660   def fn_getdir2(dir$*256,mat filename$; option$,filter$*40)
-11680 ! ______________________________________________________________________
+11680 !
 11700 ! Dir$=Directory to Read
 11720 ! .            does not require but will accept a \ on the end
 11740 ! filename$(x)=file names (includes path if /s option is used)
 11760 ! option$: /s or /o-g or what ever you want use "dir /?"
 11780 ! .        at dos prompt for complete list of options.
-11800 ! ______________________________________________________________________
+11800 !
 11820     dim tmp$*255
-11840 ! ______________________________________________________________________
+11840 !
 11860     mat filename$(0)
 11880     filter$=trim$(filter$) : if filter$="" then filter$="*.*"
 11900     option$=trim$(option$)
@@ -112,7 +112,7 @@
 12200       end if  ! filename$(filename_count)=uprc$(filename$(filename_count))
 12220     loop  ! next filename_count
 12240     goto XIT
-12260 ! ______________________________________________________________________
+12260 !
 12280 IGNORE: continue 
 12300 XIT: ! 
 12320     close #tf1,free: ioerr ignore

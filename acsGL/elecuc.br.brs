@@ -3,17 +3,17 @@
         ! RO record i had to put an RE record in front of every RW record and !:
         ! had to follow with an RT record - Right now this program will not !:
         ! create an RO record
-00030 ! ______________________________________________________________________
+00030 !
 00040   library "S:\Core\Library": fntop,fnxit, fnerror,fnoldmsgbox,fntop,fnxit,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
 00080   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
 00090   dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),w3(2),i2(2),t2(2)
 00100   dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
-00130 ! ______________________________________________________________________
+00130 !
 00140   fntop(program$,cap$="Electronic U/C")
 00220   on fkey 5 goto XIT
 00230 ! 
@@ -21,7 +21,7 @@
 00260   read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 00270 L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 00280   close #1: 
-00290 ! ______________________________________________________________________
+00290 !
 00300 L300: p1=pos(b$,"-",1)
 00310   if p1=0 then goto L340
 00320   b$(p1:p1)=""
@@ -52,7 +52,7 @@
 00570   io1$(15)="20,49,c 1,UT,N"
 00580   namcde$="F"
 00590   typemp$="R"
-00600 ! ______________________________________________________________________
+00600 !
 00610 SCR1: ! 
 00620   pr newpage
 00630   close #101: ioerr L640
@@ -103,24 +103,24 @@
 01070 L1070: if pension$="Y" or pension$="N" then goto L1080 else ce=15: goto ERR1
 01080 L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
 01090   yr=endingdate-(int(endingdate/100)*100)+2000
-01100 ! ______________________________________________________________________
+01100 !
 01110   gosub SCR2
 01120   pr newpage
 01130   win=101
 01140   message$=""
 01150   stopable=1: gosub L3370 ! fnWAIT(MESSAGE$,1)
-01160 ! ______________________________________________________________________
+01160 !
 01170   open #1: "Name=[Q]\GLmstr\RPMSTR.h[cno],KFName=[Q]\GLmstr\RPIndex.h[cno],SHR",internal,input,keyed 
 01180   open #2: "Name=[Q]\GLmstr\RPTrail.h[cno],SHR",internal,input,relative 
 01190 L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",display,output 
-01200 ! ______________________________________________________________________
+01200 !
 01210   goto BEGINNING_OF_FILE
 01220   pr newpage
 01230   msgline$(1)="Insert Diskette"
 01240   mtype=1
 01250   if err=4221 then gosub L3020
 01260   goto L1190
-01270 ! ______________________________________________________________________
+01270 !
 01280 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnopenprn
 01290   pr #255,using "form pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 01300 READ_EMPLOYEE: read #1,using L1330: eno,mat em$,ss$,em6,em16,ta eof END1
@@ -147,20 +147,20 @@
 01530   gosub RECRS
 01540   tw1=tw1+1 ! counter
 01550   goto READ_EMPLOYEE
-01560 ! ______________________________________________________________________
+01560 !
 01570 RECRA: pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 01580 L1580: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
 01590   return 
-01600 ! ______________________________________________________________________
+01600 !
 01610 RECRE: pr #22,using L1620: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
 01620 L1620: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 126,c 9,c 6,c 1,n 5.4,c 1,c 6,c 185
 01630   return 
-01640 ! ______________________________________________________________________
+01640 !
 01650   form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 01660   pr #22,using L1670: "2E",ct$,st$,"",zip$,namcde$,typemp$,"","","",""
 01670 L1670: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
 01680   return 
-01690 ! ______________________________________________________________________
+01690 !
 01700 RECRS: ! STATE RECORD
 01710   if sr1=0 then goto L1790 ! NO STATE SELECTED
 01720   if m1=0 then goto L1790 ! NO quarterly wages
@@ -183,18 +183,18 @@
 01890   mat w3=(0)
 01900   mat s2=(0)
 01910   return 
-01920 ! ______________________________________________________________________
+01920 !
 01930 RECRF: pr #22,using L1940: "RF"," ",tw1,""
 01940 L1940: form pos 1,c 2,c 5,pic(#########),c 496
 01950   return 
-01960 ! ______________________________________________________________________
+01960 !
 01970 END1: ! 
 01980   pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 01990   pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 02000   fncloseprn
 02010   gosub L2040
 02020 XIT: fnxit
-02030 ! ______________________________________________________________________
+02030 !
 02040 L2040: close #24: ioerr L2060
 02050   dim a$*512
 02060 L2060: close #22: ioerr L2070
@@ -258,7 +258,7 @@
 02410 L2410: close #win: 
 02420   if cmdkey=5 then goto SCR1
 02430   return 
-02440 ! ______________________________________________________________________
+02440 !
 02450 NAME_BREAKDOWN: ! 
 02460   dim first$*15,mid$*15,last$*20,em$(3)*30
 02470   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
@@ -422,7 +422,7 @@
 04000 L4000: holdst$=ltrm$(holdst$)(1:2)
 04010   if holdst$="TE" then holdst$="TX"
 04020   return 
-04030 ! ______________________________________________________________________
+04030 !
 04040 ! <Updateable Region: ERTN>
 04050 ERTN: fnerror(program$,err,line,act$,"xit")
 04060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -430,7 +430,7 @@
 04080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 04090 ERTN_EXEC_ACT: execute act$ : goto ERTN
 04100 ! /region
-04110 ! ______________________________________________________________________
+04110 !
 04120 CALCULATEUC: ! determine quarterly wages
 04122   dcy=dcq=0
 04130   for j=1 to 10

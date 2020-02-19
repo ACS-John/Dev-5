@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsGL\PR941  ! fix the count (box 1; needs logic to look thru history and count the active employees on a certain date)
 00020 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnerror,fnoldmsgbox,fnopenprn,fncloseprn,fnprocess,fntop,fnchain,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fncomboa,fnFra,fnconsole,fnpa_finis,fnpa_newpage
 00050   fntop(program$,cap$="Print 941 Report")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim io1$(2),ss$*11,em$(3)*30,ty(21),tqm(17),frm_wrd$(2)*11
 00090   dim dedcode(10),calcode(10),dedfed(10),option1$(4)*20
 00100   dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10),msgline$(2)*60
@@ -12,17 +12,17 @@
 00120   dim d(2),e$(2)*12,prgl(5,3),miscname$(10)*20,dedfica(10),dedst(10),deduc(10),miscgl$(10)*12
 00130   dim tb$*30,m(36),k(1),l$(1)*11,k$(3)*30
 00140   dim city$*15,state$*2,zip$*9,csz$*40,x$*40
-00150 ! ______________________________________________________________________
+00150 !
 00170   fnconsole(off=1)
-00180 ! ______________________________________________________________________
+00180 !
 00190   def fna(r)=int(r*100+.5)/100 ! /r
-00200 ! ______________________________________________________________________
+00200 !
 00280   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 00290   read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 00300   ficarate=ficarate/100
 00310   mcr=mcr*.01
 00320 ! Close #20:
-00330 ! ______________________________________________________________________
+00330 !
 00340 MENU1: ! 
 00350   fnTos(sn$="pr941") !:
         respc=0
@@ -105,7 +105,7 @@
 00960   gosub BUILD_941
 00970   gosub LASER_941
 00980   goto DONE
-00990 ! ______________________________________________________________________
+00990 !
 01000 START_PRINT: ! 
 01010   if frm=1 then goto L1070
 01020   message$="Printing: please wait..."
@@ -150,7 +150,7 @@
 01400 ! If DEPENO=ENO Then bOX1+=1 ! count employees who worked the twelfth day of the first month of the quarter
 01410   gosub PRINT_DETAILS
 01420   goto L1090
-01430 ! ______________________________________________________________________
+01430 !
 01440 WK_HEADER: ! 
 01450   p2=p2+1
 01460   pr #255,using L1480: "Page ",p2
@@ -175,7 +175,7 @@
 01650   pr #255: "___________  __________________________";
 01660   pr #255: tab(41);"___________   ____________  ____________"
 01670 L1670: return 
-01680 ! ______________________________________________________________________
+01680 !
 01690 WK_END: ! 
 01700   gosub TOTALS
 01710   if frm=1 then goto L1730
@@ -183,7 +183,7 @@
 01730 L1730: return 
 01740 DONE: ! 
 01750 XIT: fnxit
-01760 ! ______________________________________________________________________
+01760 !
 01770 PRINT_DETAILS: ! detailed listing
 01780   if m1=0 then goto L2030
 01790   p3=p3+1
@@ -211,7 +211,7 @@
 02010   t2=t2+h2
 02020   p1=p1+2
 02030 L2030: return 
-02040 ! ______________________________________________________________________
+02040 !
 02050 TOTALS: ! 
 02060   if frm=1 then goto L2130
 02070   pr #255,using L2080: "___________    ___________  ____________"
@@ -227,12 +227,12 @@
 02180   gt4=gt4+t4
 02190   t1=t2=t3=t4=t5=0
 02200   return 
-02210 ! ______________________________________________________________________
+02210 !
 02220 PGOF: ! 
 02230   pr #255: newpage
 02240   gosub WK_HEADER
 02250   continue 
-02260 ! ______________________________________________________________________
+02260 !
 02270 SUMMARY: ! 
 02280   fnopenprn
 02290   eof=1: gosub WK_HEADER
@@ -261,7 +261,7 @@
           pr #255: "" !:
         next j
 02490   return 
-02500 ! ______________________________________________________________________
+02500 !
 02510 GET_MAT_TPT: ! 
 02520   open #19: "Name=[Q]\GLmstr\PRTOT.H[cno],KFName=[Q]\GLmstr\PRTOTIDX.H[cno],Shr",internal,input,keyed 
 02530 L2530: read #19,using L2540: mo,mat pt eof L2600
@@ -273,7 +273,7 @@
 02590   goto L2530
 02600 L2600: close #19: 
 02610   return 
-02620 ! ______________________________________________________________________
+02620 !
 02630 BUILD_941: ! 
 02640   wagefica=fna((gt2-tpt(20))*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 02650   taxfica=fna(tpt(20)*(ficarate+ficarate+.02)) ! FICARATE*2) 2011
@@ -299,13 +299,13 @@
 02860   if box10-box11<0 then box13=abs(box10-box11) : box12=0 else box13=0 ! overpayment if any
 02870   box15d=box15a+box15b+box15c ! total deposits for quarter
 02880   return 
-02890 ! ______________________________________________________________________
+02890 !
 02900 LASER_941: ! 
 02910   gosub OPEN_PRINTER
 02920   gosub PRINT941
 02930   gosub RELEASE_PRINT
 02940   return 
-02950 ! ______________________________________________________________________
+02950 !
 02960 ! <Updateable Region: ERTN>
 02970 ERTN: fnerror(program$,err,line,act$,"xit")
 02980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -313,14 +313,14 @@
 03000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03010 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03020 ! /region
-03030 ! ______________________________________________________________________
+03030 !
 03040 OPEN_PRINTER: ! 
 03050   if file(20)=-1 then 
 03060     open #20: "Name=[Q]\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output 
 03070     pr #20: 'Call Print.MyOrientation("Portrait")'
 03080   end if 
 03090   return 
-03100 ! ______________________________________________________________________
+03100 !
 03110 PRINT941: ! 
 03120   pr #20: 'Call Print.MyFontSize(12)'
 03130   pr #20: 'Call Print.addPicture("S:\acsGL\941.bmp",1,1)'

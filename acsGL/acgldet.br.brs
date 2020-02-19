@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\AcGlDet
 00020 ! -- Modified Cash Flow Statement (Detailed Transactions, Not Balances)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnGlAskFormatPriorCdPeriod
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,in3$(4)
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),tr(7),cap$*128
 00100   dim bm(13),bp(13),by(13),tr$*12,td$*30,ta(2)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Cash Flow Statement - Detail") ! not on menu
 00130   report$=cap$
 00140   fncno(cno,cnam$)
@@ -151,7 +151,7 @@
 01410     accum(j,2)=0
 01420 L1420: next j
 01430   return 
-01440 ! ______________________________________________________________________
+01440 !
 01450 L1450: if ls=0 then goto L1580
 01460   if ls=99 then goto L1500
 01470   pr #255,using L1480: " "
@@ -166,7 +166,7 @@
 01560   pr #255: newpage
 01570   gosub L1740
 01580 L1580: return 
-01590 ! ______________________________________________________________________
+01590 !
 01600 L1600: gosub L1500: continue 
 01610 L1610: if ul=0 then goto L1700
 01620   if ul=1 then goto L1670
@@ -180,7 +180,7 @@
 01700 L1700: ! f REDIR=0 Then pr #255,Using 1560: " "
 01710   form skip 1,c 1,skip 0
 01720   return 
-01730 ! ______________________________________________________________________
+01730 !
 01740 L1740: heading=1
 01750   pt1+=1
 01760   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -193,7 +193,7 @@
 01830   pr #255: tab(56);"       "
 01840   pr #255: 
 01850   return 
-01860 ! ______________________________________________________________________
+01860 !
 01870 L1870: eofcode=1
 01880   gosub L1500
 01890   fnfscode(actpd)
@@ -207,9 +207,9 @@
 01970   pr f "7,5,C 70,N": "                     MONTH       "
 01980 L1980: input fields mat in3$: total conv L1980
 01990   goto L950
-02000 ! ______________________________________________________________________
+02000 !
 02010 XIT: fnxit
-02020 ! ______________________________________________________________________
+02020 !
 02030 ! <updateable region: ertn>
 02040 ERTN: fnerror(program$,err,line,act$,"xit")
 02050   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -217,4 +217,4 @@
 02070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02090 ! /region
-02100 ! ______________________________________________________________________
+02100 !

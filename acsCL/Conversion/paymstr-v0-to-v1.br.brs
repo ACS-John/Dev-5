@@ -3,13 +3,13 @@
 00030   def library fnpaymstr_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnwait,fngethandle,fnCopy,fnStatus,fnindex_it
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080     dim gl$*12,gl$(10)*12,percent(10),de$*30,desc$(10)*30
-00090 ! ______________________________________________________________________
+00090 !
 00100     fncno(cno,cnam$)
 00110     cap$="Checkbook update Payees from v0 to v1"
-00120 ! ______________________________________________________________________
+00120 !
 00130     fnStatus('updating payee file.')
 00180     open #paymstr:=fngethandle: "Name=[Q]\CLmstr\Paymstr.h[cno]",internal,outIn,relative 
 00190     if version(paymstr)=1 then !:
@@ -30,7 +30,7 @@
 00280     read #payalloc,using 'Form POS 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC
 00290     write #payeegl,using 'Form POS 1,C 8,C 12,n 6.2,C 30': vn$,gl$,pct,de$
 00370     goto READ_PAYALLOC
-00380 ! ______________________________________________________________________
+00380 !
 00390 EO_PAYALLOC: ! 
 00400     version(paymstr1,1)
 00410     close #paymstr1: ioerr ignore
@@ -41,7 +41,7 @@
           execute "Index [Q]\CLmstr\PayMstr.H[cno]"&' '&"[Q]\CLmstr\PayIdx2.H[cno] 9 30 Replace DupKeys -n" !:
           execute "Index [Q]\CLmstr\payeeglbreakdown.h[cno]"&' '&"[Q]\CLmstr\payeeglbkdidx.H[cno] 1 8 Replace DupKeys -n"
 00450     goto XIT
-00460 ! ______________________________________________________________________
+00460 !
 00470 ! <Updateable Region: ERTN>
 00480 ERTN: fnerror(program$,err,line,act$,"NO")
 00490     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -49,7 +49,7 @@
 00510     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00520 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00530 ! /region
-00540 ! ______________________________________________________________________
+00540 !
 00550 XIT: ! 
 00560   fnend 
-00570 ! ______________________________________________________________________
+00570 !

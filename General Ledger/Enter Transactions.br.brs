@@ -3,7 +3,7 @@
 ! r: setup library, dims, constants, fntop
 	library 'S:\Core\Library': fntop,fnxit, fncloseprn,fnopenprn,fnchain,fnprocess,fnfscode,fnstyp,fnTos,fnLbl,fnqgl,fnrgl$,fnTxt,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fncomboa,fncombof,fnButton,fnflexinit1,fnflexadd1,fngethandle,fnaddglpayee,fnCmdSet,fnFra,fnOpt,fnreg_read,fncopy
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim cap$*128,resp$(30)*128
 	dim tr(7),tr$*12,td$*30,tcde(10,2),dedcode(10),empname$*30
 	dim miscname$(10)*20
@@ -17,7 +17,7 @@
 	dim typeofentry_option$(6)*18,message$*100,glitem$(4)*30
 	dim glitem2$(7)*30,ml$(4)*100,text$*80,bankname$*40,k_list$(30)*12
 	dim pr(19)
-! ______________________________________________________________________
+!
 	fntop(program$,cap$="Enter Transactions")
 	gltyp=7
 	fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
@@ -78,7 +78,7 @@
 	close #1: 
 ! /r
 	open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
-! ______________________________________________________________________
+!
 	if gltyp<>1 then 
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
@@ -252,7 +252,7 @@ POSTING_OPTIONS: ! r:
 	if resp$(2)="True" then let fnchain("S:\acsGL\autoproc")
 	goto XIT ! /r
 XIT: fnxit
-! ______________________________________________________________________
+!
 RECORD_TRANSACTIONS: ! r:
 	if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales
 	if transadr>0 then 

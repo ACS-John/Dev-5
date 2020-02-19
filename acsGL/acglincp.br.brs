@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\ACGLIncP
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITH PERCENTAGES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,tp1(4),by(13),cap$*128
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),bp(13),udf$*256
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*25
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Income Statement with Percents")
 00120   fncno(cno,cnam$)
 00130   udf$=env$('temp')&'\'
@@ -136,19 +136,19 @@
 01210   gosub L1600
 01220 L1220: gosub L1420
 01230   goto READ_ACGLFNSI
-01240 ! ______________________________________________________________________
+01240 !
 01250 L1250: if te$="R" then report$=d$
 01260   if te$="S" then secondr$=d$
 01270   gosub L1420
 01280   goto READ_ACGLFNSI
-01290 ! ______________________________________________________________________
+01290 !
 01300 L1300: if foot1=1 then goto L1340
 01310   tabnote=sp : foot1=1 : foot$=d$
 01320   goto READ_ACGLFNSI
-01330 ! ______________________________________________________________________
+01330 !
 01340 L1340: foot$=rtrm$(foot$)&d$
 01350   goto READ_ACGLFNSI
-01360 ! ______________________________________________________________________
+01360 !
 01370 L1370: ! r:
 01372   for j=1 to 9
 01380     if ac(j)=0 or ac(j)=9 then 
@@ -159,7 +159,7 @@
 01390 L1390: !
 01392     next j
 01400   return ! /r
-01410 ! ______________________________________________________________________
+01410 !
 01420 L1420: !
 01422   if percent=0 then goto L1570
 01430   if ls=0 then goto L1570
@@ -178,7 +178,7 @@
 01560   gosub L1730
 01570 L1570: !
 01572 return 
-01580 ! ______________________________________________________________________
+01580 !
 01590 L1590: gosub L1480: continue 
 01600 L1600: if percent=0 then goto L1710
 01610   if ul=0 then goto L1700
@@ -192,7 +192,7 @@
 01690 L1690: form skip redir,pos 31,c 25,pos 61,c 25,skip redir
 01700 L1700: if redir=0 then pr #255: ""
 01710 L1710: return 
-01720 ! ______________________________________________________________________
+01720 !
 01730 L1730: heading=1
 01740   pt1+=1
 01750   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -207,18 +207,18 @@
 01840 L1840: form pos 38,c 20,pos 61,c 25,skip redir
 01850   pr #255: 
 01860   return 
-01870 ! ______________________________________________________________________
+01870 !
 01880 L1880: if pas=2 then goto L1910
 01890   pas=2 : percent=1 : percent1=percent2=0
 01900   goto L1970
 01910 L1910: eofcode=1
 01920   gosub L1480
-01930 ! ______________________________________________________________________
+01930 !
 01940   fncloseprn
 01945   fnfscode(actpd)
 01946   fnpriorcd(1)
 01950   goto XIT
-01960 ! ______________________________________________________________________
+01960 !
 01970 L1970: close #acglfnsi: 
 01980   close #3: 
 01990   total=total2=0
@@ -227,11 +227,11 @@
 02020   foot$=" "
 02030   ir=notrans=0
 02040   goto L210
-02050 ! ______________________________________________________________________
+02050 !
 02060 L2060: read #acglfnsi,using 'Form Pos 1,C 5': r$
 02070   delete #acglfnsi: 
 02080   goto L420
-02090 ! ______________________________________________________________________
+02090 !
 02100 PAS1: if rnp=0 then goto L2170
 02110   read #hwork,using L2120,key=r$: k4$,mat tp1 nokey L2160
 02120 L2120: form pos 1,g 5,4*pd 7.2
@@ -240,7 +240,7 @@
 02150   goto L2170
 02160 L2160: write #hwork,using L2120: r$,tp1,tp2,0,0
 02170 L2170: return 
-02180 ! ______________________________________________________________________
+02180 !
 02190 PAS2: mat tp1=(0)
 02200   if rnp=0 then goto L2250
 02210   k4$=lpad$(str$(rnp),5)
@@ -248,9 +248,9 @@
 02230 L2230: percent1=tp1(1)
 02240   percent2=tp1(2)
 02250 L2250: return 
-02260 ! ______________________________________________________________________
+02260 !
 02270 XIT: fnxit
-02280 ! ______________________________________________________________________
+02280 !
 02290 ! <updateable region: ertn>
 02300 ERTN: fnerror(program$,err,line,act$,"xit")
 02310   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

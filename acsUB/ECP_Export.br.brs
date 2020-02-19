@@ -3,7 +3,7 @@
 ! r: setup
 	library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnAcs,fnxit,fncno,fnCmdSet,fntop,fnmsgbox,fnTxt,fngethandle,fnclient_has,fnureg_read,fnureg_write,fnget_services
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim gb(10),ab$(3)*30
 	dim z$*10
 	dim rw4(22,13)
@@ -14,7 +14,7 @@
 	dim serviceName$(10)*20
 	dim extra(23),extra$(11)*30
 	dim exp_filename$*256
-! ______________________________________________________________________
+!
 	fncno(cno)
 	fntop(program$,cap$="Export for External Collections Process")
 ! 

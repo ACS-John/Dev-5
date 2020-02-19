@@ -1,21 +1,21 @@
 00010 !  Replace S:\acsGL\Elec1099
 00020 ! Create Electronic 1099s !:
         ! modified for new 750 recl for 1998 (this change not made until 2/26/99          so everybodys will be wrong! must do conversion pgm to change to new            format when disketts returned
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnCmdKey,fnChk
 00050   fntop(program$,cap$="Create Electronic 1099s")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,cap$*128
 00090   dim a$(3)*40,b$*12,knp(51),st$(51)*22,wrd2$(13),io2$(13)
 00100   dim io1$(51),pnc$*4,cfs$*1,ti$*1,ai$*9,spn$*40,dsc$*2,ln4$*4,tin$*1
 00110   dim amt(12),c$*29,s$*2,z$*9,ps$*2,camt(12),kamt(51,12),stu(51)
 00120   dim ti2(12),cn$*40,orc$*1,de$*30,resp$(60)*40
 00130   dim amt$(13,9)*70,tr$(13)*12
-00140 ! ______________________________________________________________________
+00140 !
 00170 ! 
 00180   on fkey 5 goto L5370
-00190 ! ______________________________________________________________________
+00190 !
 00200   data AL-01-Alabama
 00210   data AK-  -Alaska
 00220   data AZ-04-Arizona
@@ -200,7 +200,7 @@
 02010   data 8
 02020   data 9
 02030   read mat amt$
-02040 ! ______________________________________________________________________
+02040 !
 02050   tr$(1)="3 1098"
 02060   tr$(2)="4 1099-A"
 02070   tr$(3)="B 1099-B"
@@ -213,11 +213,11 @@
 02140   tr$(10)="9 1099-R"
 02150   tr$(11)="L 5498"
 02160   tr$(12)="W W-2G"
-02170 ! ______________________________________________________________________
+02170 !
 02180   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$ !:
         close #20: 
-02190 ! ______________________________________________________________________
+02190 !
 02200   ficamax=oldmax
 02210 L2210: p1=pos(b$,"-",1)
 02220   if p1=0 then goto L2250
@@ -331,7 +331,7 @@
 03130   for j=1 to 51
 03140     if resp$(j)="True" then stu(j)=1
 03150   next j
-03170 ! ______________________________________________________________________
+03170 !
 03180 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing
 03190   close #102: ioerr L3200
 03200 L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn 
@@ -434,7 +434,7 @@
 04140   if len(ss$)><9 then goto L4180
 04150   ssn=val(ss$)
 04160   if tin$><" " then goto L4460
-04170 ! ______________________________________________________________________
+04170 !
 04180 L4180: pr newpage
 04190   close #103: ioerr L4200
 04200 L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outIn 
@@ -495,17 +495,17 @@
 04750 L4750: if orc$="C" then cri$="G" else cri$=""
 04760   gosub RECB
 04770   goto L3790
-04780 ! ______________________________________________________________________
+04780 !
 04790 RECT: ! 
 04800   seq=seq+1: pr #22,using L4810: "T",yr,"",b1,tcc$," "," "," ",fic$,a$(1)," ",a$(1)," ",a$(2),city$,st$,zip$," ",1,cn$,cpn," "," "," "," "," ",seq," ","V","Advanced Computer Services, Inc.","P O Box 758","Harrison","AR","72601","Ken Johnson","8707415447","acs1@alltel.net"," "," "
 04810 L4810: form pos 1,c 1,n 4,c 1,n 9,c 5,c 2,c 5,c 1,c 1,6*c 40,c 2,c 9,c 15,pic(########),c 40,n 15,c 35,c 2,c 15,c 6,c 83,pic(########),c 10,c 1,c 40,c 40,c 40,c 2,c 9,c 40,c 15,c 35,c 9,c 2
 04820   return 
-04830 ! ______________________________________________________________________
+04830 !
 04840 RECA: ! 
 04850   seq=seq+1: pr #22,using L4860: "A",yr," ",b1,pnc$," ",cfs$,ti$,ai$," ",orc2$," ",fci$,a$(1)," ",tai,a$(2),city$,st$,zip$,ppn," ",seq," "," "
 04860 L4860: form pos 1,c 1,n 4,c 6,g 9,c 4,3*c 1,c 12,c 8,c 3,c 1,c 1,2*c 40,n 1,2*c 40,c 2,c 9,n 15,pos 240,c 260,pos 500,pic(########),c 231,c 2
 04870   return 
-04880 ! ______________________________________________________________________
+04880 !
 04890 RECB: ! 
 04900   totalb=totalb+1
 04910   seq=seq+1: pr #22,using L4920: "B",yr,cri$," ",tin$,ss$,vn$," "," ",mat amt,"",fci$,nam$,"","",ad1$,"",c$,s$,z$,"",seq,"","","",0,0,"",""
@@ -515,14 +515,14 @@
 04950   tnp=tnp+1
 04960   mat amt=(0)
 04970   return 
-04980 ! ______________________________________________________________________
+04980 !
 04990 RECC: ! 
 05000   seq=seq+1: pr #22,using L5010: "C",cnp,"",mat camt,"",seq," "," "
 05010 L5010: form pos 1,c 1,pic(########),c 6,12*pic(##################),c 268,pic(########),c 231,c 2
 05020   mat camt=(0)
 05030   cnp=0
 05040   return 
-05050 ! ______________________________________________________________________
+05050 !
 05060 RECK: ! 
 05070   for j=1 to 51
 05080     if knp(j)=0 or stu(j)=0 then goto L5110
@@ -532,12 +532,12 @@
 05120   mat kamt=(0)
 05130   mat knp=(0)
 05140   return 
-05150 ! ______________________________________________________________________
+05150 !
 05160 RECF: ! 
 05170   seq=seq+1: pr #22,using L5180: "F",tnp,"",totalb,"",seq," "
 05180 L5180: form pos 1,c 1,pic(########),"000000000000000000000",c 19,pic(########),c 442,pic(########),c 241,c 2
 05190   return 
-05200 ! ______________________________________________________________________
+05200 !
 05210 END1: gosub RECC
 05220   gosub RECK
 05230   close #1: 
@@ -555,9 +555,9 @@
 05350   close #22: ioerr L5370
 05360   gosub L5600
 05370 L5370: goto XIT
-05380 ! ______________________________________________________________________
+05380 !
 05390 XIT: fnxit
-05400 ! ______________________________________________________________________
+05400 !
 05410 PROCESS: pr newpage
 05420   close #101: ioerr L5430
 05430 L5430: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outIn 
@@ -565,7 +565,7 @@
 05450   pr f "13,34,C 11,B,5": "Cancel (F5)"
 05460   pr f "12,32,C 20": "  0% COMPLETED"
 05470   return 
-05480 ! ______________________________________________________________________
+05480 !
 05490 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 05500 L5500: p1=pos(csz$,".",1)
 05510   if p1>0 then csz$(p1:p1)="": goto L5500
@@ -576,7 +576,7 @@
 05560   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 05570   zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
 05580   return 
-05590 ! ______________________________________________________________________
+05590 !
 05600 L5600: close #24: ioerr L5620
 05610   dim a$*750
 05620 L5620: close #25: ioerr L5630
@@ -591,7 +591,7 @@
 05710   close #25: 
 05720   execute "COPY x a:irstax"
 05730   return 
-05740 ! ______________________________________________________________________
+05740 !
 05750 ! <Updateable Region: ERTN>
 05760 ERTN: fnerror(program$,err,line,act$,"xit")
 05770   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -599,4 +599,4 @@
 05790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 05800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 05810 ! /region
-05820 ! ______________________________________________________________________
+05820 !

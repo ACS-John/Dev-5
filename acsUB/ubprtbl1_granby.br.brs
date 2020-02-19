@@ -1,16 +1,16 @@
 00010 ! Replace acsUB\ubprtbl1_Granby
 00020 ! pr bills (new format) 3 1/2" x 7.5" - for Granby
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnpause,fnopenprn,fncloseprn,fnCmdKey
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(10)*40,mg$(3)*50,cap$*128
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,cd$(13),ba(12)
-00100 ! ______________________________________________________________________
+00100 !
 00110   data RW,CW,BW,SW,RG,CG,AF,TX,ST,P,ARR,OC,TT
 00120   read mat cd$
-00130 ! ______________________________________________________________________
+00130 !
 00140   fntop("acsUB\Bill35X75",cap$="Bills-Dot Matrix 3.5x7.5") !:
         ! don't use  PROGRAM$(4:POS(PROGRAM$,'.',-1)-1)   !:
         ! - it needs to think it is the program that chained to it
@@ -130,20 +130,20 @@
             pe$(e1+=1)=ba$(j)
 00880   next j
 00890   goto L1030
-00900 ! ______________________________________________________________________
+00900 !
 00910 L910: e1=0 : mat pe$=("")
 00920   for j=2 to 4
 00930     if rtrm$(e$(j))<>"" then !:
             e1=e1+1 : pe$(e1)=e$(j)
 00940   next j
 00950   goto L1030
-00960 ! ______________________________________________________________________
+00960 !
 00970 F5_CANCEL: ! 
 00980   close #1: ioerr L990
 00990 L990: close #3: ioerr L1000
 01000 L1000: fncloseprn
 01010   goto ENDSCR
-01020 ! ______________________________________________________________________
+01020 !
 01030 L1030: ! 
 01040   pb=bal-g(11)
 01050 ! ______________print bill routine______________________________________
@@ -152,7 +152,7 @@
 01080   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01090   goto L620
-01100 ! ______________________________________________________________________
+01100 !
 01110 SCREEN3: ! 
 01120   fnTos(sn$="Pennington-Bill")
 01130   fnLbl(1,1,"Account (blank to stop)",31,1)
@@ -168,7 +168,7 @@
         if trim$(a$)="" then goto ENDSCR
 01200   read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3 nokey SCREEN3
 01210   goto HERE
-01220 ! ______________________________________________________________________
+01220 !
 01230 BULKSORT: ! sort in bulk sort code sequence
 01240   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01250 L1250: form pos 1,c 128
@@ -181,7 +181,7 @@
 01310 L1310: execute "Sort "&env$('Temp')&"\Control."&session$
 01320   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01330   return 
-01340 ! ______________________________________________________________________
+01340 !
 01350 ENDSCR: ! pr totals screen
 01360   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01370   fnTos(sn$="Bills-Total") !:
@@ -193,9 +193,9 @@
 01400   fnCmdSet(52) !:
         fnAcs(sn$,0,mat resp$,ck)
 01410   goto XIT
-01420 ! ______________________________________________________________________
+01420 !
 01430 XIT: fnxit
-01440 ! ______________________________________________________________________
+01440 !
 01450 ! <Updateable Region: ERTN>
 01460 ERTN: fnerror(program$,err,line,act$,"xit")
 01470   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -203,7 +203,7 @@
 01490   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01500 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01510 ! /region
-01520 ! ______________________________________________________________________
+01520 !
 01530 PRINTBILL: ! 
 01540   pb=bal-g(11)
 01550   pr #255: ""
@@ -241,4 +241,4 @@
 01710   pr #255,using "Form pos 1,c 60,skip 1,pos 1,c 60,skip 1,pos 1,c 60": mg$(1),mg$(2)
 01720   pr #255: newpage
 01730   return  ! read next record
-01740 ! ______________________________________________________________________
+01740 !

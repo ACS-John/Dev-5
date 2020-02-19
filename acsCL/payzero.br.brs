@@ -1,12 +1,12 @@
 00020 ! ???
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
 00080   dim gl(3),sf1$*28,sn$*30,de$*30,rn$*12,de$*30,ta(2),tvn$*8
 00090   dim flit$(4)*16,scrt$(4)*20,scid$*79,desc$(6)*14
-00100 ! ______________________________________________________________________
+00100 !
 00110   fncno(cno)
 00120 ! 
 00130   open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
@@ -15,7 +15,7 @@
 00160   rewrite #1,using 'Form POS 129,PD 5.2': 0
 00170   goto L150
 00180 XIT: stop 
-00190 ! ______________________________________________________________________
+00190 !
 00200 ! <Updateable Region: ERTN>
 00210 ERTN: fnerror(program$,err,line,act$,"xit")
 00220   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

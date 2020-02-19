@@ -3,11 +3,11 @@
         ! RO record i had to put an RE record in front of every RW record and !:
         ! had to follow with an RT record - Right now this program will not !:
         ! create an RO record
-00030 ! ______________________________________________________________________
+00030 !
 00032   library 'S:\Core\Library': fntop,fnxit,fnerror,fndate_mmddyy_to_ccyymmdd
 00034   fntop(program$,cap$="PR ELEC UC")
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
 00070   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
 00080   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2)
@@ -15,7 +15,7 @@
 00100   dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
-00130 ! ______________________________________________________________________
+00130 !
 00260   on fkey 5 goto XIT
 00270   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
 00290   read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
@@ -53,7 +53,7 @@
 00610   io1$(15)="20,49,c 1,UT,N"
 00620   namcde$="F"
 00630   typemp$="R"
-00640 ! ______________________________________________________________________
+00640 !
 00650 SCR1: ! 
 00660   pr newpage
 00670   close #101: ioerr L680
@@ -104,23 +104,23 @@
 01120 L1120: if pension$="Y" or pension$="N" then goto L1130 else ce=15: goto ERR1
 01130 L1130: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
 01140   yr=endingdate-(int(endingdate/100)*100)+2000
-01150 ! ______________________________________________________________________
+01150 !
 01160   gosub SCR2
 01170   pr newpage
 01180   win=101
 01190   message$=""
 01200   stopable=1: gosub L3390 ! fnWAIT(MESSAGE$,1)
-01210 ! ______________________________________________________________________
+01210 !
 01220   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
 01230 L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output 
-01240 ! ______________________________________________________________________
+01240 !
 01250   goto BEGINNING_OF_FILE
 01260   pr newpage
 01270   msgline$(1)="Insert Diskette"
 01280   mtype=1
 01290   if err=4221 then gosub L3040
 01300   goto L1230
-01310 ! ______________________________________________________________________
+01310 !
 01320 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE
 01325   open #255: "Name=PRN:/SELECT,PAGEOFLOW=58,RecL=220",display,output 
 01330   pr #255,using "form SKIP 2,pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
@@ -150,20 +150,20 @@
 01570   gosub RECRS
 01580   tw1=tw1+1 ! counter
 01590   goto READ_EMPLOYEE
-01600 ! ______________________________________________________________________
+01600 !
 01610 RECRA: pr #22,using L1620: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 01620 L1620: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
 01630   return 
-01640 ! ______________________________________________________________________
+01640 !
 01650 RECRE: pr #22,using L1660: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
 01660 L1660: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 126,c 9,c 6,c 1,n 5.4,c 1,c 6,c 185
 01670   return 
-01680 ! ______________________________________________________________________
+01680 !
 01690   form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 01700   pr #22,using L1710: "2E",ct$,st$,"",zip$,namcde$,typemp$,"","","",""
 01710 L1710: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
 01720   return 
-01730 ! ______________________________________________________________________
+01730 !
 01740 RECRS: ! STATE RECORD
 01750   if sr1=0 then goto L1830 ! NO STATE SELECTED
 01760   if m1=0 then goto L1830 ! NO quarterly wages
@@ -186,17 +186,17 @@
 01930   mat w3=(0)
 01940   mat s2=(0)
 01950   return 
-01960 ! ______________________________________________________________________
+01960 !
 01970 RECRF: pr #22,using L1980: "RF"," ",tw1,""
 01980 L1980: form pos 1,c 2,c 5,pic(#########),c 496
 01990   return 
-02000 ! ______________________________________________________________________
+02000 !
 02010 END1: ! 
 02020   pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 02030   pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 02040   gosub L2070
 02050 XIT: fnxit
-02060 ! ______________________________________________________________________
+02060 !
 02070 L2070: close #24: ioerr L2090
 02080   dim a$*512
 02090 L2090: close #22: ioerr L2100
@@ -256,7 +256,7 @@
 02440 L2440: close #win: 
 02450   if cmdkey=5 then goto SCR1
 02460   return 
-02470 ! ______________________________________________________________________
+02470 !
 02480 NAME_BREAKDOWN: ! 
 02490   dim first$*15,mid$*15,last$*20,em$(3)*30
 02500   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
@@ -420,9 +420,9 @@
 04000 L4000: holdst$=ltrm$(holdst$)(1:2)
 04010   if holdst$="TE" then holdst$="TX"
 04020   return 
-04030 ! ______________________________________________________________________
+04030 !
 04040 ! <Updateable Region: ERTN>
-04050 ! ______________________________________________________________________
+04050 !
 04060 CALCULATEUC: ! determine quarterly wages
 04070   dcy=dcq=0
 04080   for j=1 to 10

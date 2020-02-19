@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsGL\CoverLetterPrint
 00020 ! -- pr Cover Letter
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop("S:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
 00100   fnconsole(off=0)
 00110   fncno(cno)
@@ -50,13 +50,13 @@
 00320 L320: next j2
 00330   pr #255: tab(10);ln$
 00340   goto READ_ACGLCOVF
-00350 ! ______________________________________________________________________
+00350 !
 00360 DONE: close #1: 
 00370   fncloseprn
 00380   goto XIT
-00390 ! ______________________________________________________________________
+00390 !
 00400 XIT: fnxit
-00410 ! ______________________________________________________________________
+00410 !
 00420 ! <Updateable Region: ERTN>
 00430 ERTN: fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -64,4 +64,4 @@
 00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
-00490 ! ______________________________________________________________________
+00490 !

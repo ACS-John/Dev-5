@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsUB\usagedol
 00020 ! -- Accumulated Transaction Listing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos, fnopenprn,fncloseprn, fndat,fnget_services,fnerror,fnwait,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnpause,fncombof
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,cap$*128,resp$(4)*20,pe2$*30,e2$*30,text$*80
 00080   dim svce$*11,srvnam$(10)*20,srv$(10),data$*256,idx$*256
-00090 ! ______________________________________________________________________
+00090 !
 00120   fntop(program$,cap$="Usage and Dollar Report")
 00130   fnget_services(mat srvnam$,mat srv$)
 00132   fndat(dat$)
-00140 ! ______________________________________________________________________
+00140 !
 00150 SCREEN1: ! 
 00160   sn$ = "ubAccTr" !:
         fnTos(sn$) !:
@@ -64,14 +64,14 @@
 00500   gosub PRINT_TRANS
 00510   first_trans_per_act=0 ! false
 00520   goto READ_TRANS
-00530 ! ______________________________________________________________________
+00530 !
 00540 DONE: ! 
 00550   close #1: ioerr L560
 00560 L560: close #2: ioerr L570
 00570 L570: close #3: ioerr L580
 00580 L580: fncloseprn
 00590   goto XIT
-00600 ! ______________________________________________________________________
+00600 !
 00610 HDR: ! 
 00620   p2=p2+1
 00630   pr #255: "\qc {\b "&env$('cnam') !:
@@ -84,7 +84,7 @@
 00660   pr #255: "\qr Page "&str$(p2)
 00670   pr #255: "\qc {\ul Act.Number} {\ul Account Name                } {\ul Trans. Type} {\ul   Date  } {\ul       Amount} {\ul       Balance}}"
 00680   return 
-00690 ! ______________________________________________________________________
+00690 !
 00700 PRINT_TRANS: ! 
 00710   if tcode<1 or tcode>5 then tcode=6
 00720   if first_trans_per_act=1 then !:
@@ -93,14 +93,14 @@
 00730   pr #255,using L740: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
 00740 L740: form pos 1,c 10,x 1,c 30,cr 11,nz 9,n 13.2,n 14.2
 00750   return 
-00760 ! ______________________________________________________________________
+00760 !
 00770 PGOF: ! !:
         pr #255: newpage !:
         gosub HDR !:
         continue 
-00780 ! ______________________________________________________________________
+00780 !
 00790 XIT: fnxit
-00800 ! ______________________________________________________________________
+00800 !
 00810 ! <Updateable Region: ERTN>
 00820 ERTN: fnerror(program$,err,line,act$,"xit")
 00830   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -108,4 +108,4 @@
 00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00860 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00870 ! /region
-00880 ! ______________________________________________________________________
+00880 !

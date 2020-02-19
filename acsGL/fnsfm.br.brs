@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\fnsfm
 00020 ! General Ledger Financial Statement Layout - Hamster
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fncno
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,lbl$(21)*38,tln(21),p$(21)*160,fltyp$(21),sln(21),mask(21),sp(21),c$(21,8)*40
 00080   dim fil$(6)*18,idx$(6)*18,id$(6)*40
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$='Financial Statement Design')
 00110   fncno(cno)
 00120   id$(1)=" 1. Balance Sheet File" !:
@@ -53,18 +53,18 @@
         gosub CLOSE_FILE !:
         gosub INDEX
 00390   goto MAIN
-00400 ! ______________________________________________________________________
+00400 !
 00410 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
 00420   open #open_file_count+=1: "Name=[Q]\GLmstr\"&fil$(selection)&",KFName=[Q]\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outIn,keyed 
 00430   return 
-00440 ! ______________________________________________________________________
+00440 !
 00450 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-00460 ! ______________________________________________________________________
+00460 !
 00470 INDEX: ! 
 00480   execute "Index [Q]\GLmstr\"&fil$(selection)&' '&"[Q]\GLmstr\"&idx$(selection)&" 1 5 Replace DupKeys"
 00490   return 
-00500 ! ______________________________________________________________________
+00500 !
 00510 BUILD_LAYOUT: ! 
 00520   fncno(cno)
 00530 ! ** Field Labels    ** !:
@@ -212,13 +212,13 @@
         sp(ic+=1)=75
 00940   sp(ic+=1)=78
 00950   return 
-00960 ! ______________________________________________________________________
+00960 !
 00970 HAMSTER: ! 
 00980   fnHamster("Acglfnsb",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00990   return 
-01000 ! ______________________________________________________________________
+01000 !
 01010 XIT: fnxit
-01020 ! ______________________________________________________________________
+01020 !
 01030 ! <Updateable Region: ERTN>
 01040 ERTN: fnerror(program$,err,line,act$,"xit")
 01050   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -226,4 +226,4 @@
 01070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01090 ! /region
-01100 ! ______________________________________________________________________
+01100 !

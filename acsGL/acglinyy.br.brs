@@ -1,14 +1,14 @@
 ! Replace S:\acsGL\AcGlinyy
 ! Income Statement with Year Comparison
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4)
 	dim bp(13),d(2),by(13),tp1(4)
-! ______________________________________________________________________
+!
 	fntop(program$,"Income Statement with Year Comparison")
 	on fkey 5 goto L2590
 	
@@ -21,7 +21,7 @@
 	actpd$=fnactpd$
 	fscode=fnfscode
 	priorcd=fnpriorcd
-! ______________________________________________________________________
+!
 	pors=1
 	fnopenprn(cp,58,220,process)
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
@@ -249,7 +249,7 @@ L2460: form pos 31,c 22,pos 55,c 22,skip 1
 	pr #255,using L2460: "_____________________","______________________"
 	pr #255: 
 	return 
-! ______________________________________________________________________
+!
 L2510: if pas=2 then goto L2590
 	pas=2
 	percent=1
@@ -267,7 +267,7 @@ L2610: !
 	fncloseprn
 ! 
 	goto XIT
-! ______________________________________________________________________
+!
 L2670: close #1: ioerr L2680
 L2680: close #3: ioerr L2690
 L2690: total=0

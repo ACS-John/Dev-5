@@ -3,13 +3,13 @@
 00030   def library fnglmerge
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fnTos,fnAcs,fnCmdSet,fncmbcno,fncursys$,fnLbl,fnTxt,fnCmdKey,fncombof,fnindex_it,fnfree
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim adr(2),ta(2),prg$*20,k(10,8),gl$(5)*12,gl1(5)
 00080     dim t$*12,n(2),l$*12,p$*30,ven$*8,zo(50),d$*50
 00090     dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,fl1$(6),cap$*128
 00100     dim ml$(10)*80 ! for fnMsgBox
 00110     dim resp$(10)*80 ! for Screen Ace
-00120 ! ______________________________________________________________________
+00120 !
 00130     on=1 : off=0 : cancel=5 : delete=4 : selbyrow=1 !:
           limit_to_list=1 : add_all=2 : right=1 : disable=1 !:
           center=2 : pointtwo$='32' : mmddyy$='1'
@@ -59,7 +59,7 @@
 00530     adr(2)=lr5
 00540     rewrite #gl1099,using 'Form POS 104,PD 5.2,POS 122,2*PD 3',key=ven$: ytdp,mat adr
 00550     goto READ_GLWK1
-00560 ! ______________________________________________________________________
+00560 !
 00570 REJECT_GL: ! 
 00580     fnTos(sn$='GLMerge-Reject_GL') !:
           lc=0 : mylen=20 : mypos=mylen+2
@@ -86,7 +86,7 @@
 00720     fnAcs(sn$,0,mat resp$,ckey) !:
           if ckey=1 then in1$='Yes' else if ckey=5 then in1$='No'
 00730   if in1$="Yes" then goto ADD_GL else goto CORRECT_GL
-00740 ! ______________________________________________________________________
+00740 !
 00750 CORRECT_GL: ! 
 00760   fnTos(sn$='GLMerge-Correct_GL') !:
         lc=0 : mylen=31 : mypos=mylen+2
@@ -98,7 +98,7 @@
 00810   fnAcs(sn$,0,mat resp$,ckey)
 00820   t$=resp$(1)(22:33)
 00830   goto HERE_A
-00840 ! ______________________________________________________________________
+00840 !
 00850 ADD_GL: ! 
 00860   fnTos(sn$='GLMerge-Add_GL') !:
         lc=0 : mylen=32 : mypos=mylen+2
@@ -113,7 +113,7 @@
 00940   write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
 00950   new1=1
 00960   goto READ_GLTRANS
-00970 ! ______________________________________________________________________
+00970 !
 00980 EO_GLWK1: ! 
 00990   if fnstyp><92 then goto DONE
 01000   open #20: "Name=CNo.H"&wsid$,internal,outIn,relative  !:
@@ -132,7 +132,7 @@
 01110   pr f "24,35,Cc 10,B,1": "Next  (F1)"
 01120 L1120: input fields "24,2,C 1,AE,N": pause$
 01130   if cmdkey=1 then goto DONE else goto L1120
-01139 ! ______________________________________________________________________
+01139 !
 01140 DONE: close #glmstr: 
 01150   close #gltrans: 
 01160   close #glwk1: 
@@ -149,7 +149,7 @@
           if fnprocess=2 then let fnchain("S:\acsGL\glMenu") else !:
             if fnprocess=4 then let fnchain("S:\acsGL\prMerge") else !:
               goto XIT
-01240 ! ______________________________________________________________________
+01240 !
 01250 L1250: cap$="GL Account Reject" !:
         fnwin3(win=101,cap$,15,70,1,0,5)
 01260   pr #win,fields "4,2,C 50,N": "    Account Number: "&t$ !:
@@ -164,7 +164,7 @@
 01300   close #win: 
 01310   if in2$="Y" then goto L1420
 01320   if in2$<>"N" then goto L1250 else goto ASK_CORRECT_VN
-01330 ! ______________________________________________________________________
+01330 !
 01340 ASK_CORRECT_VN: ! 
 01350   cap$="GL Account Reject" !:
         fnwin3(win=101,cap$,5,33,1,0,5)
@@ -173,7 +173,7 @@
 01380   close #win: 
 01390   ven$=lpad$(trim$(ven$),8)
 01400   goto L460
-01410 ! ______________________________________________________________________
+01410 !
 01420 L1420: cap$="Vendor Information" !:
         fnwin3(win=101,cap$,10,56,1,0,5)
 01430   pr #win,fields "4,2,Cr 18,N": "Vendor Name:" !:
@@ -206,7 +206,7 @@
 01630 L1630: write #gl1099,using 'Form POS 1,C 8,C 35,3*C 20,PD 5.2,N 2,C 11,2*PD 3': ven$,nam$,ad1$,ad2$,csz$,k,typ,ss$,mat adr
 01640   new2=1
 01650   goto READ_GLWK1
-01660 ! ______________________________________________________________________
+01660 !
 01670 GLMSTR_OPEN_ERR: ! 
 01690   mat ml$(3) !:
         ml$(1)='Company Number [cno] does not exists!' !:
@@ -214,7 +214,7 @@
         ml$(3)='Nothing Posted.' !:
         fnmsgbox(mat ml$,ok$,cap$,16)
 01700   goto XIT
-01710 ! ______________________________________________________________________
+01710 !
 01720 ! <updateable region: ertn>
 01730 ERTN: fnerror(program$,err,line,act$,"xit")
 01740   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -222,7 +222,7 @@
 01760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01780 ! /region
-01790 ! ______________________________________________________________________
+01790 !
 01800 ASK_GLCNO: ! 
 01810   fnTos(sn$='GLMerge_ask_glcno') !:
         lc=0
@@ -233,6 +233,6 @@
 01860   cno=val(resp$(1)(43:47))
 01870 ! 
 01880   return 
-01890 ! ______________________________________________________________________
+01890 !
 01900 XIT: fnend 
-01910 ! ______________________________________________________________________
+01910 !

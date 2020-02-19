@@ -41,7 +41,7 @@ END1: !
 	fncloseprn
 	close #25: ioerr XIT
 XIT: fnxit
-! ______________________________________________________________________
+!
 L560: !
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	form pos 9,c 30

@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\AcGlInc4p
 00020 ! -- pr INCOME STATEMENT WITH BUDGET and percent remaining
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),cap$*128,udf$*256
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Four Column Budget With Percent")
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
@@ -22,7 +22,7 @@
 00190   actpd=fnactpd
 00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
-00220 ! ______________________________________________________________________
+00220 !
 00230   pors=1
 00240   if fnps=2 then mp1=72 !:
           fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr" else !:
@@ -53,7 +53,7 @@
 00460   gosub L1230
 00470   gosub L1170
 00480   goto L350
-00490 ! ______________________________________________________________________
+00490 !
 00500 L500: if notrans=1 then goto L720
 00510   if ir>=val(r$) and val(r$)><0 then goto L630
 00520 L520: ! read amounts for gl master file
@@ -117,33 +117,33 @@
 00990   gosub L1410
 01000 L1000: gosub L1230
 01010   goto L350
-01020 ! ______________________________________________________________________
+01020 !
 01030 L1030: if te$="R" then report$=d$
 01040   if te$="S" then secondr$=d$
 01050   gosub L1230
 01060   goto L350
-01070 ! ______________________________________________________________________
+01070 !
 01080 L1080: if foot1=1 then goto L1140
 01090   tabnote=sp
 01100   foot1=1
 01110   foot$=d$
 01120   goto L350
-01130 ! ______________________________________________________________________
+01130 !
 01140 L1140: foot$=rtrm$(foot$)&d$
 01150   goto L350
-01160 ! ______________________________________________________________________
+01160 !
 01170 L1170: for j=1 to 9
 01180     if ac(j)=0 or ac(j)=9 then goto L1200 ! 10/14/87
 01190     accum(j,1)=accum(j,2)=accum(j,3)=accum(j,4)=0
 01200 L1200: next j
 01210   return 
-01220 ! ______________________________________________________________________
+01220 !
 01230 L1230: if ls=0 then goto L1380
 01240   if ls=99 then goto L1290
 01250   pr #255,using L1260: " "
 01260 L1260: form pos 1,c 1,skip ls
 01270   goto L1380
-01280 ! ______________________________________________________________________
+01280 !
 01290 L1290: fnpglen(pglen)
 01300 ! If PGLEN<>42 Then pGLEN=58
 01310   sk=pglen-krec(255): fl=len(rtrm$(foot$))
@@ -154,20 +154,20 @@
 01360   pr #255: newpage
 01370   gosub HDR
 01380 L1380: return 
-01390 ! ______________________________________________________________________
+01390 !
 01400 L1400: gosub L1290: continue 
 01410 L1410: if ul=0 then goto L1500
 01420   if ul=1 then goto L1470
 01430   underlin$="=============="
 01440   pr #255: 
 01450   goto L1480
-01460 ! ______________________________________________________________________
+01460 !
 01470 L1470: underlin$="______________"
 01480 L1480: pr #255,using L1490: underlin$,underlin$,underlin$,underlin$ ! ,UNDERLIN$(1:10)
 01490 L1490: form pos 22,3*c 15,x 1,c 15,c 15,skip redir
 01500 L1500: if redir=0 then pr #255: ""
 01510   return 
-01520 ! ______________________________________________________________________
+01520 !
 01530 HDR: heading=1
 01540   pt1+=1
 01550   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -181,7 +181,7 @@
 01630   pr #255: tab(29);"Budget";tab(41);"Balance";tab(56);"  Balance";tab(72);"Over/Under";tab(83);"Remaining"
 01640   pr #255: 
 01650   return 
-01660 ! ______________________________________________________________________
+01660 !
 01670 L1670: eofcode=1
 01680   gosub L1290
 01690 ! 
@@ -189,9 +189,9 @@
 01705   fnfscode(actpd)
 01706   fnpriorcd(1)
 01710   goto XIT
-01720 ! ______________________________________________________________________
+01720 !
 01730 XIT: fnxit
-01740 ! ______________________________________________________________________
+01740 !
 01750 ! <updateable region: ertn>
 01760 ERTN: fnerror(program$,err,line,act$,"xit")
 01770   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

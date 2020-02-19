@@ -1,17 +1,17 @@
 00010 ! formerly S:\acsGL\bldstdaJ
 00020 ! Standard Adjustments - Hamster (will need a conversion pgm. now only one adjustment per entry - was 10!)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4),sp(4),c$(4,8)*40
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$)
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE    : gosub OPEN_FILE 
 00112   gosub HAMSTER   : gosub FIXGLACCOUNTS : gosub CLOSE_FILE : gosub INDEX
 00120   goto XIT
-00130 ! ______________________________________________________________________
+00130 !
 00140 OPEN_FILE: !
 00142   open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists("[Q]\GLmstr\GLSTdad.H[cno]")=0 then goto L190
@@ -22,11 +22,11 @@
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
-00230 ! ______________________________________________________________________
+00230 !
 00240 INDEX: ! 
 00250   execute "Index [Q]\GLmstr\glstdad.H[cno]"&' '&"[Q]\GLmstr\glstdidx.h[cno]" &" 1 12 Replace,DupKeys"
 00260 return 
-00270 ! ______________________________________________________________________
+00270 !
 00280 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number
 00290   restore #open_file_count: 
 00300   do
@@ -36,13 +36,13 @@
 00330   loop
 00340 L340: !
 00342 return ! /r
-00350 ! ______________________________________________________________________
+00350 !
 00360 CLOSE_FILE: ! r:
 00362   for j=1 to open_file_count
 00370     close #j: ioerr ignore
 00380   next j
 00390 return ! /r
-00400 ! ______________________________________________________________________
+00400 !
 00410 BUILD_LAYOUT: ! 
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
@@ -96,13 +96,13 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00670 return 
-00680 ! ______________________________________________________________________
+00680 !
 00690 HAMSTER: ! 
 00700   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00710   return 
-00720 ! ______________________________________________________________________
+00720 !
 00730 XIT: fnxit
-00740 ! ______________________________________________________________________
+00740 !
 00750 ! <Updateable Region: ERTN>
 00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -110,5 +110,5 @@
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region
-00820 ! ______________________________________________________________________
+00820 !
 00830   fltyp$(ic+=1)='N'

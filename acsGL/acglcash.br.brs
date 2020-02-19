@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\acglCash
 00020 ! Cash Flow Statement
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnactpd$,fnpedat$,fnactpd,fnps,fnfscode,fnUseDeptNo,fnpriorcd,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,pedat$*20,cch$*20 ,in3$(4)
 00080   dim pedat$*20,actpd$*6,bm(13),bp(13),by(13)
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),cap$*128
 00100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Cash Flow Statement")
 00130   report$=cap$
 00140   fncno(cno,cnam$)
@@ -23,7 +23,7 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00175   fscode=fnfscode
 00176   priorcd=fnpriorcd
-00180 ! ______________________________________________________________________
+00180 !
 00190   pors=1
 00200   in3$(1)="8,25,N 12.2,UT,N" : in3$(2)="8,45,N 12.2,UT,N"
 00210   mp1=75
@@ -65,7 +65,7 @@
 00520   gosub L1390
 00530   gosub L1320
 00540   goto L420
-00550 ! ______________________________________________________________________
+00550 !
 00560 L560: if te$="B" and ap>0 then accum1=-accum1: accum2=-accum2: goto L1080 ! ENDING BANK BALANCE
 00570   if notrans=1 then goto L870
 00580   if ir>=val(r$) and val(r$)><0 then goto L700
@@ -124,7 +124,7 @@
 01040   gosub L1560
 01050 L1050: gosub L1390
 01060   goto L420
-01070 ! ______________________________________________________________________
+01070 !
 01080 L1080: if ap=0 then ap=1
 01090   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01100   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
@@ -138,12 +138,12 @@
 01150   gosub L1560
 01160 L1160: gosub L1390
 01170   goto L420
-01180 ! ______________________________________________________________________
+01180 !
 01190 L1190: if te$="R" then report$=d$
 01200   if te$="S" then secondr$=d$
 01210   gosub L1390
 01220   goto L420
-01230 ! ______________________________________________________________________
+01230 !
 01240 L1240: if foot1=1 then goto L1290
 01250   tabnote=sp
 01260   foot1=1
@@ -151,14 +151,14 @@
 01280   goto L420
 01290 L1290: foot$=rtrm$(foot$)&d$
 01300   goto L420
-01310 ! ______________________________________________________________________
+01310 !
 01320 L1320: for j=1 to 9
 01330     if ac(j)=0 or ac(j)=9 then goto L1360
 01340     accum(j,1)=0
 01350     accum(j,2)=0
 01360 L1360: next j
 01370   return 
-01380 ! ______________________________________________________________________
+01380 !
 01390 L1390: if ls=0 then goto L1530
 01400   if ls=99 then goto L1440
 01410   pr #255,using L1420: " "
@@ -174,7 +174,7 @@
 01510   pr #255: newpage
 01520   gosub HDR
 01530 L1530: return 
-01540 ! ______________________________________________________________________
+01540 !
 01550 L1550: gosub L1440: continue 
 01560 L1560: if ul=0 then goto L1650
 01570   if ul=1 then goto L1620
@@ -187,7 +187,7 @@
 01650 L1650: if redir=0 then pr #255,using L1660: " "
 01660 L1660: form c 1,skip 1
 01670   return 
-01680 ! ______________________________________________________________________
+01680 !
 01690 HDR: heading=1
 01700   pt1+=1
 01710   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -200,14 +200,14 @@
 01780   pr #255: tab(56);"       ";tab(75);"Date"
 01790   pr #255: ""
 01800   return 
-01810 ! ______________________________________________________________________
+01810 !
 01820 L1820: eofcode=1
 01830   gosub L1440
 01840   fnfscode(pedat)
 01841   fnpriorcd(1)
 01850   fncloseprn
 01860   goto XIT
-01870 ! ______________________________________________________________________
+01870 !
 01880 L1880: fnTos(sn$="ACglcash2") !:
         mylen=25: mypos=mylen+3 : right=1
 01890   fnLbl(1,1,"Total Current Month:",mylen,right)
@@ -224,7 +224,7 @@
 01980   total2=val(resp$(2))
 01990   if ckey=5 then goto XIT
 02000 XIT: fnxit
-02010 ! ______________________________________________________________________
+02010 !
 02020 ! <Updateable Region: ERTN>
 02030 ERTN: fnerror(program$,err,line,act$,"xit")
 02040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

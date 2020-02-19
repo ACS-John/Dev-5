@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\ACGLINCQ
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fncch$,fnpedat$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnactpd$,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,bp(13)
 00080   dim sc1$(2)*20,cap$*128,udf$*256
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Quarterly Income Statement")
 00130   on fkey 5 goto L1720
 00140   fncno(cno,cnam$)
@@ -16,7 +16,7 @@
 00160   actpd$=fnactpd$
 00170   if fnGlAskFormatPriorCdPeriod=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00180 ! ______________________________________________________________________
+00180 !
 00190 ! pr NEWPAGE
 00200   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1: goto L210
 00210 L210: if fnps=2 then mp1=72 else mp1=69
@@ -164,7 +164,7 @@
 01560 L1560: if redir=0 then pr #255,using L1570: " "
 01570 L1570: form skip 1,c 1,skip 0
 01580   return 
-01590 ! ______________________________________________________________________
+01590 !
 01600 L1600: heading=1
 01610   if pt1=0 then pt1=1 else pt1=pt1+1
 01620   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -176,14 +176,14 @@
 01680   pr #255,using L1690: lpad$(rtrm$(fncch$),20),"Year To DATE"
 01690 L1690: form pos 43,c 20,pos 69,c 12,skip 2
 01700   return 
-01710 ! ______________________________________________________________________
+01710 !
 01720 L1720: eofcode=1
 01730   gosub L1350
 01740   fncloseprn
 01742   fnfscode(actpd)
 01750   fnpriorcd(1)
 01760   goto XIT
-01770 ! ______________________________________________________________________
+01770 !
 01780 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 01790   for j=1 to lrec(3)
 01800     read #3,using L1810,rec=j: pc1,bb,cb noRec L1900
@@ -199,7 +199,7 @@
 01900 L1900: next j
 01910   pc0=1
 01920   return 
-01930 ! ______________________________________________________________________
+01930 !
 01940 BLDPCT2: ! 
 01950   pc3=pc4=0
 01960   if val(k$)=0 then goto L2040
@@ -211,9 +211,9 @@
 02020   pc4=round(((total2-yt2)/total2)*100,0)
 02030   if pc4<-999 or pc4>9999 then pc4=0
 02040 L2040: return 
-02050 ! ______________________________________________________________________
+02050 !
 02060 XIT: fnxit
-02070 ! ______________________________________________________________________
+02070 !
 02080 ! <updateable region: ertn>
 02090 ERTN: fnerror(program$,err,line,act$,"xit")
 02100   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -221,4 +221,4 @@
 02120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02130 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02140 ! /region
-02150 ! ______________________________________________________________________
+02150 !

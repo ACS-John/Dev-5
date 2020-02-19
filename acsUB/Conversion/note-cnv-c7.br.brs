@@ -24,7 +24,7 @@ def library fnub_cnv_note_phase_1
   read #note1,using 'Form POS 1,C 7,2*PD 3': z$,a1,a2 eof EO1
   write #work,using 'Form POS 1,C 7,C 3,2*PD 3': z$,".00",a1,a2
   goto READ_NOTE1_PHASE1
-  ! ______________________________________________________________________
+  !
   EO1: ! 
   close #note1: 
   close #work: 
@@ -37,7 +37,7 @@ def library fnub_cnv_note_phase_1
   close #note1: ioerr ignore
   fnStatus("[Q]\UBmstr\Note1.h[cno] converted successfully to version 1.")
   goto EOPHASE1
-  ! ______________________________________________________________________
+  !
 	EOPHASE1: ! /r
 	! r: *** Phase 2 ***" 
 	open #note1=fngethandle: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed 
@@ -59,7 +59,7 @@ def library fnub_cnv_note_phase_1
 		rewrite #note2,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,n32
 		r32=n32
 	loop
-	! ______________________________________________________________________
+	!
 	EO3: ! /r
 	version(note1,1)
 	version(note2,1)
@@ -67,7 +67,7 @@ def library fnub_cnv_note_phase_1
 	close #note2: ioerr ignore
 	fnStatus("[Q]\UBmstr\Note2.h[cno] converted successfully to version 1")
 	goto EOPHASE2
-	! ______________________________________________________________________
+	!
 	EOPHASE2: ! 
 	! ** Phase 3 **
 	! Note conversion program

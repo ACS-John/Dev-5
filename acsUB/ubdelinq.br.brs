@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\UBdelinq
 00020 ! Past Due Balance Breakdown
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fnopenprn,fncloseprn,fnerror,fnwait,fnChk,fnxit,fncno,fnLastBillingDate,fnCmdSet,fntop,fncreg_read,fnget_services
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim z$*10,e$*30,g(12),cap$*128,resp$(10)*60
 00080   dim serviceName$(10)*20,hdr$*230,detail(11),t(11),gb(10),a$*20
 00090   dim service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 00095   dim srv$(10)*2
-00100 ! ______________________________________________________________________
+00100 !
 00120   fnLastBillingDate(lbill)
 00130   fntop(program$,cap$="Past Due Balance Breakdown")
 00140 ! need to build headings from this information
@@ -28,7 +28,7 @@
 00200 L200: next j
 00210   mat detail(services+1)
 00220   mat t(services+1)
-00230 ! ______________________________________________________________________
+00230 !
 00240 MENU1: ! 
 00250   fnTos(sn$="ubdelinq")
 00260   fnLbl(1,1,"As of Date:",19,1)
@@ -62,7 +62,7 @@
 00470   d8=d1-(d7*10000+d5*100)
 00480   if d7<1 or d7>12 then goto L350
 00490   if d5<1 or d5>31 then goto L350
-00500 ! ______________________________________________________________________
+00500 !
 00510   on fkey 5 goto DONE
 00520   fnopenprn
 00530   gosub HEADER
@@ -95,7 +95,7 @@
 00760 L760: form pos 1,c 12,c 21,11*n 10.2
 00770   mat t=t+detail
 00780   goto L570
-00790 ! ______________________________________________________________________
+00790 !
 00800 HEADER: ! 
 00810   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 00820   pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
@@ -105,22 +105,22 @@
 00860 L860: form pos 1,c 20,pos pagetab,c 10
 00870   pr #255: hdr$&" {\ul     Total}"
 00880   return 
-00890 ! ______________________________________________________________________
+00890 !
 00900 PRINT_TOTALS: ! 
 00910   pr #255: "" !:
         pr #255: "" !:
         pr #255,using L760: "","****** Grand Totals",mat t
 00920   return 
-00930 ! ______________________________________________________________________
+00930 !
 00940 DONE: close #1: ioerr L960
 00950   gosub PRINT_TOTALS
 00960 L960: fncloseprn
 00970 XIT: fnxit
-00980 ! ______________________________________________________________________
+00980 !
 00990 L990: pr #255: newpage
 01000   gosub HEADER
 01010   continue 
-01020 ! ______________________________________________________________________
+01020 !
 01030 ! <Updateable Region: ERTN>
 01040 ERTN: fnerror(program$,err,line,act$,"xit")
 01050   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -128,4 +128,4 @@
 01070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01090 ! /region
-01100 ! ______________________________________________________________________
+01100 !

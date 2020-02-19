@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsPR\newprRpt4
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit
 00050   on error goto Ertn
 00060 ! 
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20),cnam$*40
 00080   dim message$*40,cap$*128
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="User Designed Reports Proof List")
 00110   fncno(cno,cnam$)
 00120   open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",internal,input,keyed 
 00130   fnopenprn
-00160 ! ______________________________________________________________________
+00160 !
 00170   do 
 00180     read #1,using 'form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1': rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti eof L560
 00190     pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -62,4 +62,4 @@
 00650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00660 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00670 ! /region
-00680 ! ______________________________________________________________________
+00680 !

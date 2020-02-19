@@ -3,9 +3,9 @@
 10000   def library fnglmstr_338_416
 10020     library 'S:\Core\Library': fntop, fnerror,fncno,fnacglblds,fnStatus,fnCopy,fnindex_it
 10040     on error goto Ertn
-10060 ! ______________________________________________________________________
+10060 !
 10080     dim cnam$*40,cap$*128,ml$(6)*48,resp$(5)*1,revb(13)
-10100 ! ______________________________________________________________________
+10100 !
 10120     fntop(program$,cap$="GLmstr 338-416 Conversion")
 10140     fncno(cno,cnam$)
 10160     stopable$="xit"
@@ -24,7 +24,7 @@
 10700     fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\glIndex.h[cno]","1 12")
 10720     fnacglblds
 10740     goto XIT
-10760 ! ______________________________________________________________________
+10760 !
 10780 ! r: ertn - just uses stopable$ variable - otherwise standard
 10800 ERTN: fnerror(program$,err,line,act$,stopable$)
 10820     if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -32,5 +32,5 @@
 10860     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 10880 ERTN_EXEC_ACT: execute act$ : goto ERTN
 10900 ! /r
-10920 ! ______________________________________________________________________
+10920 !
 10940 XIT: fnend 

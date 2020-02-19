@@ -3,12 +3,12 @@
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fnCmdSet,fntop,fngethandle,fnOpt,fnget_services,fnapply_default_rates,fnapplyDefaultRatesFio,fnChk
 	on error goto Ertn
 	fntop(program$)
-! ______________________________________________________________________
+!
 	dim z$*10,name$*30,dx(15)
 	dim totalRoute(3,2),line$*212
 	dim serviceName$(10)*20,srv$(10)*2
 	dim resp$(11)*128
-! ______________________________________________________________________
+!
 	fnLastBillingDate(filterBillingDate)
 	fnget_services(mat serviceName$,mat srv$)
 	if trim$(serviceName$(1))<>'' then service1enabled=1

@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\AcGlNote
 00020 ! -- Foot Notes
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fnTos,fncomboa,fnCmdKey,fnAcs,fnget_wordprocessor_exe
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim tb$*32,fl2$(2),sc2$(2)*46,ln$*8000,cnam$*40,dat$*20,cap$*128
 00080   dim option$(2)*42,resp$(1)*50,atlantis$*80
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Financial Statements Notes")
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -74,9 +74,9 @@
 00480 on fkey 5 ignore 
 00490 if fnprocess=1 then goto XIT else goto MENU1
 00500 goto XIT
-00510 ! ______________________________________________________________________
+00510 !
 00520 XIT: fnxit
-00530 ! ______________________________________________________________________
+00530 !
 00540 ! <updateable region: ertn>
 00550 ERTN: fnerror(program$,err,line,act$,"xit")
 00560 if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -86,5 +86,5 @@
       pr "" : pause : goto ERTN_EXEC_ACT
 00590 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00600 ! /region
-00610 ! ______________________________________________________________________
+00610 !
 80070 dim tb$*32,fl2$(2),sc2$(2)*46,ln1$*8000,ln$*8000,cnam$*40,dat$*20,cap$*128

@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\FundBal
 00020 ! Fund Balance Report
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror
 00050   fntop(program$,"CHANGE_ME")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim cnam$*40,pedat$*20,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
 00090   dim a$(9)*3,cogl$(2)*12,u$*12,address$(2)*40,b$(2)*12,c$*5,d(2),ta(2)
 00100   dim desc$(10)*20,beg(10),inc(10),disb(10),end(10),bank$(90)*25,begb(90),endb(90),bankdr(90),bankcr(90),tr$*12,td$*30,tr(7)
-00110 ! ______________________________________________________________________
+00110 !
 00120   open #20: "Name=CNO.H"&wsid$,internal,input,relative  !:
         read #20,using 'Form POS 145,2*N 1,POS 159,2*C 12,POS 195,C 20',rec=1: mat d,mat cogl$,pedat$ !:
         close #20: 
@@ -44,24 +44,24 @@
 00420   if tr(5)>0 then bankdr(acct)=bankdr(acct)+tr(5)
 00430   if tr(5)<0 then bankcr(acct)=bankcr(acct)+tr(5)
 00440   goto L390
-00450 ! ______________________________________________________________________
+00450 !
 00460 L460: if fund=0 then goto L310
 00470   if fund<>1 then goto L510
 00480   if acct<140 then inc(fund)=inc(fund)+cb-bb else !:
           disb(fund)=disb(fund)+cb-bb
 00490   goto L530
-00500 ! ______________________________________________________________________
+00500 !
 00510 L510: if fp(acct*.01)*100<20 then inc(fund)=inc(fund)+cb-bb else !:
           disb(fund)=disb(fund)+cb-bb
 00520 L520: form pos 1,c 12,c 50,pos 81,2*pd 6.2,pos 333,2*pd 3
 00530 L530: goto L310
-00540 ! ______________________________________________________________________
+00540 !
 00550 L550: ! EOF pr INFO
 00560   pr newpage
 00570   gosub L1020
 00580   gosub L750
 00590 XIT: fnxit
-00600 ! ______________________________________________________________________
+00600 !
 00610   pr #255: newpage
 00620 L620: pr #255,using L630: date$('mm/dd/yy'),cnam$
 00630 L630: form pos 1,c 8,cc 74
@@ -98,11 +98,11 @@
 00940   pr #255,using L700: "============","============","============","============"
 00950   fncloseprn
 00960   return 
-00970 ! ______________________________________________________________________
+00970 !
 00980   pr #255: newpage
 00990   gosub L620
 01000   return 
-01010 ! ______________________________________________________________________
+01010 !
 01020 L1020: pr newpage
 01030   close #101: ioerr L1040
 01040 L1040: open #101: "SROW=4,SCOL=18,EROW=17,ECOL=64,BORDER=DR,CAPTION=ENTER FUND BALANCES",display,outIn 
@@ -125,7 +125,7 @@
 01190 L1190: ! 
 01200   pr newpage
 01210   return 
-01220 ! ______________________________________________________________________
+01220 !
 01230 ! <Updateable Region: ERTN>
 01240 ERTN: fnerror(program$,err,line,act$,"xit")
 01250   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

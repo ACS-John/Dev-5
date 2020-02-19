@@ -126,7 +126,7 @@ def fn_calk_water
 		mu2=rt(j,2)
 	next j
 	goto WATER_COMPLETED
-	! ______________________________________________________________________
+	!
 	STANDARD_WATER_CHARGE: !
 		w(1)=b(1)
 	goto WATER_COMPLETED
@@ -172,7 +172,7 @@ def fn_calk_sewer
 	next j
 	L3300: ! 
 	goto SEWER_COMPLETED
-	! ______________________________________________________________________
+	!
 	STANDARD_SEWER_CHARGE: ! 
 	w(2)=b(2)
 	SEWER_COMPLETED: ! 

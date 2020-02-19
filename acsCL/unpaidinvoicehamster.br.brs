@@ -1,26 +1,26 @@
 00010 ! Replace S:\acsCL\UnpaidInvoiceHamster
 00020 ! Checkbook UnpaidInvoice File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070 ! Dimension Ony the Arrays you need (this is important for Hamster) !:
         ! Additionally Never use exactaly 10 items in a file.
 00080   dim cap$*128,lbl$(15)*38,tln(15),p$(15)*160,fltyp$(15),mask(15),sln(15)
 00090   dim c$(15,8)*40
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Unpaid Invoice (Hamster)")
 00120   fncno(cno)
 00130   gosub BUILD_LAYOUT
 00140   gosub OPEN_AND_CALL_HAMSTER
 00150   goto XIT
-00160 ! ______________________________________________________________________
+00160 !
 00170 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
 00180   open #first_file=open_file_count+=1: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Use,RecL=114,KPs=1,KLn=20,Shr",internal,outIn,keyed 
 00190   open #open_file_count+=1: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx2.h[cno],Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outIn,keyed 
 00200   return 
-00210 ! ______________________________________________________________________
+00210 !
 00220 BUILD_LAYOUT: ! 
 00230 ! ** Field Labels **
 00240   lbl$(1)="Vendor Key" !:
@@ -139,7 +139,7 @@
         c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='25' !:
         c$(cl,7)="S:\acsCL\PostingCode.idx" : c$(cl,8)=limit_to_list$
 00480   return 
-00490 ! ______________________________________________________________________
+00490 !
 00500 OPEN_AND_CALL_HAMSTER: ! 
 00510 ! if the file is created and you open it, indexs do not get updated correctly, until you close it and reopen it.
 00520   gosub OPEN_FILE
@@ -149,9 +149,9 @@
 00540   gosub OPEN_FILE
 00550   fnHamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00560   return 
-00570 ! ______________________________________________________________________
+00570 !
 00580 XIT: fnxit
-00590 ! ______________________________________________________________________
+00590 !
 00600 ! <Updateable Region: ERTN>
 00610 ERTN: fnerror(program$,err,line,act$,"xit")
 00620   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -159,4 +159,4 @@
 00640   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00650 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00660 ! /region
-00670 ! ______________________________________________________________________
+00670 !

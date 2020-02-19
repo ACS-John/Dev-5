@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsCL\RemovePaidInvoices
 00020 ! Remove Paid Invoices
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fnfree,fnrename
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$="Remove Paid Invoices")
 00100   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
 00110   fncno(cno)
-00120 ! ______________________________________________________________________
+00120 !
 00130   fnTos(sn$='RmvPdInv') !:
         lc=0 : mylen=13 : mypos=mylen+2 !:
         mywidth=42
@@ -32,16 +32,16 @@
 00270   if fndate_mmddyy_to_ccyymmdd(dp)<=rd1 then goto READ_IVPAID
 00280   write #work,using 'Form POS 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn
 00290   goto READ_IVPAID
-00300 ! ______________________________________________________________________
+00300 !
 00310 EO_IVPAID: ! 
 00320   close #ivpaid: 
 00330   close #work: 
 00340   fnFree("[Q]\CLmstr\IvPaid.H[cno]")
 00350   fnRename("[Q]\CLmstr\Work."&session$,"[Q]\CLmstr\IvPaid.H[cno]")
 00360   goto XIT
-00370 ! ______________________________________________________________________
+00370 !
 00380 XIT: fnxit
-00390 ! ______________________________________________________________________
+00390 !
 00400 ! <Updateable Region: ERTN>
 00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -49,4 +49,4 @@
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00450 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00460 ! /region
-00470 ! ______________________________________________________________________
+00470 !

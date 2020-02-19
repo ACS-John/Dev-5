@@ -1,12 +1,12 @@
 ! Replace S:\acsGL\BudWksh
 ! pr Budget Worksheet
-! ______________________________________________________________________
+!
   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnqgl,fnChk,fnCmdSet,fnAcs,fnagl$,fnrgl$,fnconsole
   on error goto Ertn
-! ______________________________________________________________________
+!
   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
   dim cap$*128,resp$(10)*80,revb(13)
-! ______________________________________________________________________
+!
   right=1 : center=2 : left=0
   fntop(program$,cap$="Budget Worksheet")
   fnconsole(off=0)
@@ -103,7 +103,7 @@ L820: form pos 25,c 6,pos 34,7*pic(----,---,---.##),skip 1
   fncloseprn
   goto SCREEN1
   goto XIT
-! ______________________________________________________________________
+!
 HEADING: ! pr PAGE HEADING
   pr #255: 
   pr #255,using L950: rtrm$(cnam$)
@@ -133,7 +133,7 @@ L1170: pr #255,using L1180: "Number","Description","        Balance","         B
 L1180: form pos 4,c 6,pos 22,c 11,pos 34,7*c 15
 L1190: form pos 4,c 6,pos 22,c 11,pos 44,c 18,pos 74,c 15,pos 101,c 19,pos 123,c 15
 L1200: return 
-! ______________________________________________________________________
+!
 PRINT_MASTER_RECORD: ! 
   if pba$="True" then 
     fnTos(sn$='Budwksh-add-ba') 
@@ -173,14 +173,14 @@ L1540: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(--
 L1560: pr #255,using L1570: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb," ______________" pageoflow NWPGE
 L1570: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(----,---,---.##),c 15,skip 2
 L1580: return 
-! ______________________________________________________________________
+!
 NWPGE: ! SPACE TO NEWPAGE
   pr #255: newpage
   gosub HEADING
   continue 
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 ! <Updateable Region: ERTN>
 ERTN: fnerror(program$,err,line,act$,"xit")
   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -188,7 +188,7 @@ ERTN: fnerror(program$,err,line,act$,"xit")
   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
 ! /region
-! ______________________________________________________________________
+!
 DETERMINE_DATE: ! 
   endingdate$=rtrm$(fnpedat$)
   x=pos(endingdate$," ",1)

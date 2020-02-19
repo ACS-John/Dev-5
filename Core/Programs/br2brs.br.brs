@@ -1,11 +1,11 @@
 00010 ! Replace S:\Core\br2brs
 00020 ! creates a brs file for every br file
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fngetdir,fnerror
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dir$*255,filename$(999)*255
-00080 ! ______________________________________________________________________
+00080 !
 00090   if dir$="" then !:
           dir$="\\DISKSTATION\public\ACS\acs.402" !:
           pr "Directory not set default used (Default Dir: "&dir$&" )"
@@ -47,9 +47,9 @@
 00390   pr #20: " ! 'Now all your *.br files have little *.brs parallels'"
 00400   close #20: 
 00410   chain "proc=proc."&wsid$
-00420 ! ______________________________________________________________________
+00420 !
 00430 XIT: stop 
-00440 ! ______________________________________________________________________
+00440 !
 00450 ! <Updateable Region: ERTN>
 00460 ERTN: fnerror(program$,err,line,act$,"xit")
 00470   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -57,4 +57,4 @@
 00490   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00500 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00510 ! /region
-00520 ! ______________________________________________________________________
+00520 !

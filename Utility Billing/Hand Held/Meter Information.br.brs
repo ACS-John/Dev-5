@@ -16,7 +16,7 @@
 00260   fnHamsterFio("UB Meter Info")
 00280   goto XIT
 00290 XIT: fnxit
-10000 ! ______________________________________________________________________
+10000 !
 12000 def fn_setup
 12020   if ~setup then
 12040     setup=1

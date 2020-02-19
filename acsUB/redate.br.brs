@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsUB\reDate
 00011 ! Change Wrong Transaction Dates
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnTos,fnLbl,fnAcs,fnwait,fnTxt,fnCmdSet,fngethandle,fndate_mmddyy_to_ccyymmdd
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 10000   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
 10600   fntop(program$,cap$="Change Wrong Transaction Dates")
 10800 MAIN: ! 
@@ -36,11 +36,11 @@
 16400 EO_TRANS: ! 
 16600   close #h_trans: 
 16800   goto XIT
-17000 ! ______________________________________________________________________
+17000 !
 17200 XIT: ! 
 20000 ! pr 'chg_count=';chg_count : end
 30000   fnxit
-80380 ! ______________________________________________________________________
+80380 !
 80390 ! <Updateable Region: ERTN>
 80400 ERTN: fnerror(program$,err,line,act$,"xit")
 80410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

@@ -1,6 +1,6 @@
 ! formerly  S:\acsPR\burden
 ! Service Code File
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnmsgbox,fnxit,fndat,fntop,fncode_search,fnTos,fnLbl,fncmbcode,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnrgl$,fnqgl,fnagl$,fnChk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
 	fntop(program$)
 	on error goto Ertn
@@ -9,7 +9,7 @@
 	dim holdeno$*8,vcode$*6,de$*30,eno$*8,search$(22),ic$*2,pc$*1
 	dim df$*256,if$*256
 	dim code$(2),item2$(4)*30,breakdownde$*30,ml$(3)*80,code2$(3)
-! ______________________________________________________________________
+!
 	fndat(dat$,1)
 
 	if exists("[Q]\PRmstr\Burden.H[cno]")=0 then goto SETUP_FILES
@@ -84,7 +84,7 @@ L600: if ckey=4 then delete #1,key=eno$: : gosub RECREATE_GRID: goto ASKEMPLOYEE
 L640: rewrite #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey L650
 L650: if ckey=1 then goto ASKEMPLOYEE
 	goto ASKEMPLOYEE
-! ______________________________________________________________________
+!
 RECREATE_GRID: ! 
 	fnburden_srch(x$,99) 
 	df$="[Q]\PRmstr\Burden.h[cno]" : if$="[Q]\PRmstr\Burdenidx.h[cno]" 
@@ -147,12 +147,12 @@ L1150: form pos 1,c 10,pos 20,cc 40,skip 1
 	pr #255: " __________  ____________________         ________"
 	return 
 	form pos 1,c 6,c 12,c 30,pd 3
-! ______________________________________________________________________
+!
 POF1: pr #255: newpage
 	pr #255,using L1300: date$('mm/dd/yy'),env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
 	pcnt=4
 	continue 
-! ______________________________________________________________________
+!
 POF2: !
 	pr #255: newpage
 	pr #255,using L1300: date$('mm/dd/yy'),env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
@@ -161,6 +161,6 @@ POF2: !
 	L1320: form pos 20,2*c 50,skip 1
 	pcnt=5
 continue
-! ______________________________________________________________________
+!
 XIT: fnxit
 include: Ertn

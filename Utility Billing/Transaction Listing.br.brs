@@ -9,7 +9,7 @@
 ! firstone=0   lastone=1   ! more than one trans and this is last one
 ! firstone=1   lastone=1   ! just one transaction
 ! firstone=0   lastone=0   ! not first and not last
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnget_services,fndat
 	library 'S:\Core\Library': fnTos,fnLbl,fnTxt

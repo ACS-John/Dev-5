@@ -3,10 +3,10 @@
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00040   on error goto Ertn
 00050   fntop(program$,cap$="Department Breakdown")
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim lbl$(3)*24,tln(3),p$(3)*160,fltyp$(3),sln(3),mask(3)
 00080   dim c$(6,8)*40,cap$*128
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno)
 00110   lbl$(1)="Fund Number" : lbl$(2)="Department Number" !:
         lbl$(3)="Description"
@@ -20,7 +20,7 @@
 00190   close #1: 
 00200   execute "Index [Q]\CLmstr\DPTMSTR.h[cno]"&' '&"[Q]\CLmstr\DPTIDX1.h[cno] 1 5 Replace DupKeys -n"
 00210 XIT: fnxit
-00220 ! ______________________________________________________________________
+00220 !
 00230 ! <Updateable Region: ERTN>
 00240 ERTN: fnerror(program$,err,line,act$,"xit")
 00250   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -28,4 +28,4 @@
 00270   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00280 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00290 ! /region
-00300 ! ______________________________________________________________________
+00300 !

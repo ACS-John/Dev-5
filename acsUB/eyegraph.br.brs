@@ -1,10 +1,10 @@
 ! pr bar graph of eye improvement
-! ______________________________________________________________________Designated SPEC file does not exist.
+!Designated SPEC file does not exist.
 	library 'S:\Core\Library': fntop,fnxit, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnOpt,fnFra,fncomboa
 	library 'S:\Core\Library': fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
 	fntop(program$,"Bar Graph")
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)
 	dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
@@ -31,7 +31,7 @@ L290: read #2,using L1100: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,
 	resp$(j)=str$(tdate)
 	goto L290
 L360: if resp$(12)="" then goto L260 ! try another customer
-! ______________________________________________________________________
+!
 SCREEN1: ! 
 ! add dates here kj
 	mat resp$=("")
@@ -141,7 +141,7 @@ L1070: read #2,using L1100: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal
 	if p$<>z$ then goto L1040 ! history record must belong to this customer
 	if tcode<>1 then goto L1070 ! charge transactions only
 L1100: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-! ______________________________________________________________________
+!
 	if service=1 and baseon=1 then usage=wu ! analyzing water
 	if service=1 and baseon=2 then usage=tg(1) ! analyzing water dollars
 	if service=3 and baseon=1 then usage=eu ! analyzing electric
@@ -235,9 +235,9 @@ DETERMINE_BOTTOM_LINE: !
 	gosub RELEASE_PRINT
 	close #1: 
 	goto XIT
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 VBOPENPRINT: ! r:
 	if file(20)=-1 then 
 		open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 

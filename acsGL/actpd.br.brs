@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsGL\ActPd.br
 00020 ! accounting periond from company information file
-00030 ! ______________________________________________________________________
+00030 !
 00040   def library fnactpd(;actpd)
 00050     library 'S:\Core\Library': fngethandle,fncno
 00060     get=1 : put=2

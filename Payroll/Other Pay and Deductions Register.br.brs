@@ -11,7 +11,7 @@
 	dim printline1(20)
   dim printline1(20),printline2(20),dedname$(20)*8
   dim fullname$(20)*20,abbrevname$(20)*8, newdedcode(20)
-! ______________________________________________________________________
+!
   fntop(program$)
   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 	d1=fnPayPeriodEndingDate

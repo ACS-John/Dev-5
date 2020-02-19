@@ -1,14 +1,14 @@
 00010 ! formerly S:\acsGL\glSchPrt
 00020 ! pr schedules
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnChk,fnAcs,fnCmdKey,fnLbl,fnpglen,fnactpd,fngethandle
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dollar$*1,k$*3,by(13),bp(13),byt(13)
 00080   dim gl2$*12,d2$*50,by2(13),bp2(13)
 00090   dim sn$*78,ft$*78,gl$(80)*12,prtsch(0),d$*50,dol$*80,scheduleno(50)
 00100   dim text$*45,resp$(45)*50
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$)
 00124   pedat=fnactpd
 00125   fnfscode
@@ -228,4 +228,4 @@
 64080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 64100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 64120 ! /region
-64140 ! ______________________________________________________________________
+64140 !

@@ -1,11 +1,11 @@
 00010 ! formerly S:\acsCL\BankBal
 00020 ! Running Bank Balance
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs, fndate_mmddyy_to_ccyymmdd,fnmsgbox
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,de$*35,bn$*30,ml$(0)*100
-00080 ! ______________________________________________________________________
+00080 !
 00100   fntop(program$)
 00120   fndat(dat$,1)
 00130   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
@@ -30,19 +30,19 @@
 00250   d1=val(resp$(1))
 00260   b1=val(resp$(2))
 00270   bank_code=val(resp$(3))
-00280 ! ______________________________________________________________________
+00280 !
 00290   open #20: "Name=[Q]\CLmstr\BankMstr.H[cno], KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr", internal, outin, keyed  
 00292   read #20,using 'Form POS 3,C 30',key=lpad$(str$(bank_code),2),release: bn$ nokey MAIN
 00300   close #20: 
-00310 ! ______________________________________________________________________
+00310 !
 00320   close #trmstr: ioerr ignore
 00330   execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\Tridx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
-00340 ! ______________________________________________________________________
+00340 !
 00350   open #trmstr=5: "Name=[Q]\CLmstr\TrMstr.H[cno], KFName=[Q]\CLmstr\Tridx3.H[cno],Shr", internal, outin, keyed ioerr ignore
 00360   fnopenprn
 00370   gosub HDR
 00380   goto READ_1
-00390 ! ______________________________________________________________________
+00390 !
 00400 READ_1: ! 
 00410   key$=cnvrt$("pic(########)",d1)(3:8): key$=key$&"        " ! kEY$=KEY$(3:6)&KEY$(1:2)&"        "
 00420 ! Restore #TRMSTR,Key>=KEY$: Ioerr 440 ! need message box   (no dates in this range)
@@ -61,9 +61,9 @@
 00500   if tcde=2 or tcde=3 then b1=b1+amt else b1=b1-amt
 00510   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 12.2,POS 80,N 12.2': ck$,d2,de$,amt,b1 pageoflow NEWPGE
 00520 goto READ_2
-00530 ! ______________________________________________________________________
+00530 !
 00540 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00550 ! ______________________________________________________________________
+00550 !
 00560 HDR: ! r:
 00570   pr #255,using 'Form POS 1,C 8,Cc 76': date$,env$('cnam')
 00580   pr #255,using 'Form POS 1,C 8,POS 36,C 40': time$,"Running Bank Balance"

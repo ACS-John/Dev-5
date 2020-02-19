@@ -1,9 +1,9 @@
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnxit,fntop,fncloseprn,fnopenprn,fnRead30Categories
 	fntop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
 	on fkey 5 goto L450
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim cxno$*5,cna$*30,en$*9,e$*25,l$(50)*9,d(8),l(50,6),t(6)
 	dim cat$(30)*30,cap$*128
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
@@ -33,7 +33,7 @@ L360: form pos 36,c 65,skip 1
 L380: form x 20,"Total",pos 34,n 11.2,x 1,5*n 11.2,skip 1
 	pr #255,using L360: "=========   =========  =========  =========  =========  ========="
 	return
-! ______________________________________________________________________
+!
 L420: gosub L640
 	gosub L980
 	gosub L350
@@ -42,7 +42,7 @@ L460: close #2: ioerr L470
 L470: close #6: ioerr L480
 L480: fncloseprn
 XIT: fnxit
-! ______________________________________________________________________
+!
 L510: pr #255: newpage
 L520: pr #255,using L530: date$,env$('cnam')
 L530: form skip 2,pos 1,c 8,pos namtab,c 40,skip 1
@@ -55,7 +55,7 @@ L590: form pos 3,c 18,pos 43,c 11,pos 61,c 7,pos 72,c 7,pos 82,c 8,pos 93,c 8,po
 	pr #255,using L610: "Number      Name","Hours      Amount","Days","Days","Days","Item"
 L610: form pos 3,c 16,pos 40,c 17,pos 74,c 4,pos 84,c 4,pos 95,c 4,pos 104,c 4,skip 2
 	return
-! ______________________________________________________________________
+!
 L640: !
 	pr #255: newpage
 	pr #255,using L660: env$('cnam'),"Unbilled Work in Process Summarized by Partner in Charge"
@@ -67,7 +67,7 @@ L640: !
 	L710: form pos 40,c 17,pos 74,c 4,pos 84,c 4,pos 95,c 4,skip 2
 	pr #255:
 return
-! ______________________________________________________________________
+!
 L750: d7=int(d(2)/10000)
 	d8=int((d(2)-d7*10000)/100)
 	d9=d(2)-d7*10000-d8*100
@@ -80,7 +80,7 @@ L820: for j=1 to 6
 		t(j)=t(j)+d(j+2)
 	next j
 	return
-! ______________________________________________________________________
+!
 L870: for j=1 to 50
 		if l$(j)=en$ then goto L930
 		if rtrm$(l$(j))="" then goto L920
@@ -91,7 +91,7 @@ L930: for k=1 to 6
 		l(j,k)=l(j,k)+d(k+2)
 	next k
 	return
-! ______________________________________________________________________
+!
 L980: mat t=(0)
 	for j=1 to 50
 		if rtrm$(l$(j))="" then goto L1110

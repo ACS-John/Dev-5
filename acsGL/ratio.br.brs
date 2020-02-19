@@ -1,14 +1,14 @@
 ! Replace S:\acsGL\ratio
 ! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fndat,fnprocess,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnqgl,fnrgl$,fnagl$
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim gln(80,3),k4$*2,message$*40
 	dim gl$(80)*12,dat$*20,hac$*3,na$*40
 	dim e$(2)*12,option$(6)*60,item$(7)*80
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70,resp$(90)*50
-! ______________________________________________________________________
+!
 	fntop(program$)
 	fndat(dat$)
 	ratiomst=10
@@ -89,7 +89,7 @@ ADD_EDIT_RATIOMST: !
 	if edit=1 then goto REWRITE_EXISTING_RATIOMST
 	if add=1 then goto WRITE_NEW_RATIOMST
 	pause 
-! ______________________________________________________________________
+!
 REWRITE_EXISTING_RATIOMST: ! 
 	if hac$="" or trim$(hac$)="0" then goto ADD_EDIT_RATIOMST
 	if holdhac$<>hac$ and holdhac$<>"" then goto MSGBOX1 else goto L780
@@ -102,15 +102,15 @@ MSGBOX1: !
 	if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
 L780: rewrite #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	goto L830
-! ______________________________________________________________________
+!
 WRITE_NEW_RATIOMST: write #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	new1=1
 L830: goto RATIOMSTGRID
-! ______________________________________________________________________
+!
 	close #ratiomst: 
 	if new1=1 then gosub L940
 	goto XIT
-! ______________________________________________________________________
+!
 CREATE_FILES: ! 
 	close #ratiomst: ioerr L910
 L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",internal,outIn,keyed ioerr L930
@@ -121,7 +121,7 @@ L950: close #11: ioerr L970
 INDEX: ! (main Ratio files)
 L970: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\RatioIDX.h[cno] 1 3 Replace DupKeys -n"
 	return 
-! ______________________________________________________________________
+!
 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID
 L1010: on fkey 5 goto L1330
 	fnopenprn
@@ -154,16 +154,16 @@ L1270: j1=j1+1
 	j1=0
 	pr #255: newpage
 	goto L1030
-! ______________________________________________________________________
+!
 L1330: fncloseprn
 	on fkey 5 ignore 
 	if fnprocess=1 then goto XIT
 	goto ADD_EDIT_RATIOMST
-! ______________________________________________________________________
+!
 L1380: if err=4152 then goto L930 else goto ERTN
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 
 GL_NUMBERS: ! r:
 LEFT_SIDE: ! 

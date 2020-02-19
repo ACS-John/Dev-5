@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsCL\Bank
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00040   on error goto Ertn
 00050   fntop(program$,cap$="Bank")
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim lbl$(6)*24,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6)
 00080   dim c$(6,8)*256
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno)
 00110   lbl$(1)="Bank Code" : lbl$(2)="Bank Name" !:
         lbl$(3)="General Ledger Number" : lbl$(4)="Bank Balance" !:
@@ -31,7 +31,7 @@
 00220   execute "Index [Q]\CLmstr\BankMstr.h[cno]"&' '&"[Q]\CLmstr\BankIdx1.h[cno] 1 2 DupKeys Replace Shr -n" ioerr XIT
 00230   gosub FIX_GL_NUMBERS
 00240 XIT: fnxit
-00250 ! ______________________________________________________________________
+00250 !
 00260 ! <Updateable Region: Ertn>
 00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -39,7 +39,7 @@
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00310 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00320 ! /region
-00330 ! ______________________________________________________________________
+00330 !
 00340 FIX_GL_NUMBERS: ! 
 00350   open #1: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
 00360 L360: read #1,using "form pos 33,c 12": gl$ eof L410

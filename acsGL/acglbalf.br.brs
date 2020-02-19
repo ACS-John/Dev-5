@@ -1,15 +1,15 @@
 00020 ! G/L BALANCE SHEET -  STANDARD FOR 8 1/2 * 11 PAPER
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnactpd$,fnactpd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim sc1$(2)*20,bigul$*140,heading$*140,cch$*20,by(13),bp(13)
 00080   dim p$(20)*50,accum(10,9,2),total(10),fl1$*256,pedat$*20,cap$*128,udf$*256
 00090   dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*300,accumcol$*300
 00100   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8)
 00110   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00115   dim resp$(80)*50
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop(program$,cap$="Fund Comparison Balance Sheet")
 00140   fncno(cno,cnam$)
 00150   udf$=env$('temp')&'\'
@@ -118,7 +118,7 @@
 01040   gosub L1670
 01050 L1050: gosub L1480
 01060   goto L440
-01070 ! ______________________________________________________________________
+01070 !
 01080 L1080: if ap=0 then ap=1
 01090   accumcol$=""
 01100   for j=1 to totcol
@@ -142,12 +142,12 @@
 01250     next j2
 01260   next j
 01270 L1270: goto L440
-01280 ! ______________________________________________________________________
+01280 !
 01290 L1290: if te$="R" then report$=d$
 01300   if te$="S" then secondr$=d$
 01310   gosub L1480
 01320   goto L440
-01330 ! ______________________________________________________________________
+01330 !
 01340 L1340: if foot1=1 then goto L1390
 01350   tabnote=sp
 01360   foot1=1
@@ -167,7 +167,7 @@
 01500   pr #255,using L1510: " "
 01510 L1510: form pos 1,c 1,skip ls
 01520   goto L1630
-01530 ! ______________________________________________________________________
+01530 !
 01540 L1540: fnpglen(pglen)
 01550 ! If PGLEN<>42 Then pGLEN=58
 01560   sk=pglen-krec(255): fl=len(rtrm$(foot$))
@@ -180,7 +180,7 @@
 01630 L1630: return 
 01640 L1640: gosub L1540
 01650   continue 
-01660 ! ______________________________________________________________________
+01660 !
 01670 L1670: if ul=0 then goto L1800
 01680   if ul=1 then goto L1710
 01690   underlin$="  ============"
@@ -195,7 +195,7 @@
 01780   if redir=0 then pr #255,using L1790: " "
 01790 L1790: form skip 1,c 1,skip redir
 01800 L1800: return 
-01810 ! ______________________________________________________________________
+01810 !
 01820 L1820: heading=1
 01830   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01840   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
@@ -207,7 +207,7 @@
 01900   pr #255,using L1910: heading$
 01910 L1910: form pos 49,c big,skip 2
 01920   return 
-01930 ! ______________________________________________________________________
+01930 !
 01940 L1940: eofcode=1
 01950   gosub L1540
 01960   if pors=2 then goto XIT else goto DONE
@@ -217,7 +217,7 @@
 01983   fnpriorcd(1)
 01984   fncloseprn
 01990   goto XIT
-02000 ! ______________________________________________________________________
+02000 !
 02010 L2010: pr newpage ! determine fund #s
 02020   for j=1 to 10
 02030     io1$(j*2-1)=str$(j+4)&",22,NZ 3,UT,n" !:
@@ -254,7 +254,7 @@
 02280   next j
 02290   big=totcol*14
 02300   return 
-02310 ! ______________________________________________________________________
+02310 !
 02320 ! <Updateable Region: ERTN>
 02330 ERTN: fnerror(program$,err,line,act$,"xit")
 02340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -262,4 +262,4 @@
 02360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02380 ! /region
-02390 ! ______________________________________________________________________
+02390 !

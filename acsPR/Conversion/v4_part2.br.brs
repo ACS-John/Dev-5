@@ -1,6 +1,6 @@
 10000 ! Replace S:\acsPR\conversion\v4_part2
 10020   fn_setup
-10180 ! ______________________________________________________________________
+10180 !
 10200   fntop("S:\acsPR\conversion\v4_part2",cap$="add missing files and indexes")
 10220 ! r: do every company - loop top
 10240   fngetdir2('[Q]\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
@@ -23,7 +23,7 @@
 20000   def fn_setup
 20020     library 'S:\Core\Library': fntop,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fntop,fngetdir2,fnputcno,fnStatus,fncursys$,fnindex_it,fnindex_sys
 20040     on error goto Ertn
-20060 ! ______________________________________________________________________
+20060 !
 20080     dim a$*40,em$*30,ta(2),cp(32),tcp(22),hc(5),thc(5),d$*20,whc(10)
 20100     dim dedcode(10),calcode(10),dedfed(10),message$*40,cap$*128
 20120     dim tcp(32),newtdc(10),newtdet(23),tdt(4),tcd(3),tdet(17),tdy(6),tdc(6)

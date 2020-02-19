@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsUB\conversion\fixfinalbilling
 00020 ! this program will createa final billiing core based on the * in front of the alpha sort name.
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fnerror,fnpause
 00050   on error goto Ertn
 00060   dim b(11),a(7),d(15),alpha$*7,f2$*12,extra(23),extra$(11)*30,ba(12)
 00070   dim custname$*30,badr(2)
 00080   dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)
 00090   dim x$*10,p$*10
-00100 ! ______________________________________________________________________
+00100 !
 00120   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\uBIndex.h[cno]",internal,outIn,keyed 
 00130 L130: read #1,using L140: alp$,final eof L190
 00140 L140: form pos 354,c 7,pos 1821,n 1

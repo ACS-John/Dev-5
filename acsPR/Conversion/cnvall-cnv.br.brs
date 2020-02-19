@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsPR\Conversion\CnvAll-Cnv
 00020 ! CONVERT MASTER FILES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim gl(3),ta(2),k$*20,de$*30,fgl$(3)
-00080 ! ______________________________________________________________________
+00080 !
 00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=9,EROW=11,ECOL=59,BORDER=DR,CAPTION=CONVERT MASTER FILES",display,outIn 
@@ -41,7 +41,7 @@
 00420   rewrite #1,using L430: "",mat ta
 00430 L430: form pos 33,c 12,pos 90,2*pd 3
 00440   goto L350
-00450 ! ______________________________________________________________________
+00450 !
 00460 L460: close #1: 
 00470   close #2: 
 00480   open #1: "Name=[Q]\CLmstr\FUNDMSTR.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno]",internal,outIn,keyed ioerr NF1
@@ -51,30 +51,30 @@
 00520   write #2,using L530: dn$,de$,fgl$(1),fgl$(2),0,fgl$(3)
 00530 L530: form pos 1,c 3,c 30,2*c 9,n 3,c 9
 00540   goto L500
-00550 ! ______________________________________________________________________
+00550 !
 00560 L560: close #1: 
 00570 L570: close #2: 
 00580   execute "COPY X,[Q]\CLmstr\FUNDMSTR.h[cno] -n"
 00590   execute "Index [Q]\CLmstr\FUNDMSTR.h[cno],[Q]\CLmstr\FundIdx1.h[cno],1,3,Replace,DupKeys -n"
 00600   execute "Index [Q]\CLmstr\FUNDMSTR.h[cno],[Q]\CLmstr\FundIdx2.h[cno],4,28,Replace,DupKeys -n"
 00610   goto L730
-00620 ! ______________________________________________________________________
+00620 !
 00630 L630: pr newpage
 00640   pr f "12,5,C 60": "COMPLETED CONVERTING FILES FOR COMPANY #: [cno]"
 00650   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00660   input fields "13,40,C 1,IAE,N": pause$
 00670   goto L90
-00680 ! ______________________________________________________________________
+00680 !
 00690 NF1: open #2: "Name=X,RecL=63,Replace",internal,output 
 00700   write #2,using L530: "  0","GENERAL FUND","","",0,""
 00710   goto L570
-00720 ! ______________________________________________________________________
+00720 !
 00730 L730: ! Replace S:\acsCL\TRALLOC.CNV
 00740   execute "Copy [Q]\CLmstr\TRALLOC.h[cno] X -79 -n"
 00750   fnFree("[Q]\CLmstr\TRALLOC.h[cno]")
 00760   execute "Rename X [Q]\CLmstr\TRALLOC.h[cno] -n"
 00770   goto L630
-00780 ! ______________________________________________________________________
+00780 !
 00790 ! <Updateable Region: ERTN>
 00800 ERTN: fnerror(program$,err,line,act$,"xit")
 00810   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -82,6 +82,6 @@
 00830   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00840 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00850 ! /region
-00860 ! ______________________________________________________________________
+00860 !
 00870 XIT: stop 
-00880 ! ______________________________________________________________________
+00880 !

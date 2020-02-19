@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\parse\CSZ.br
 00015   dim ml$(2)*80
-00020 ! ______________________________________________________________________
+00020 !
 00030 FNCSZ: ! extract  CITY$,STATE$,ZIP$ from CSZ$
 00040   def library fncsz(&csz$,&city$,&state$,&zip$)
 00050     library 'S:\Core\Library': fnerror,fnmsgbox
@@ -44,7 +44,7 @@
 00178     goto XIT
 00180 L180: ! pr STATE$ ! XXX
 00190     goto XIT
-00200 ! ______________________________________________________________________
+00200 !
 00210 ! <Updateable Region: ERTN>
 00220 ERTN: fnerror(program$,err,line,act$,"xit")
 00230     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -52,6 +52,6 @@
 00250     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00260 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00270 ! /region
-00280 ! ______________________________________________________________________
+00280 !
 00290 XIT: fnend 
-00300 ! ______________________________________________________________________
+00300 !

@@ -26,4 +26,4 @@ def fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,su
 fnend
 FORM_FNSEL: Form pos 1,C ,Skip 0
 ! Updateable Region . Printer Selection . End 
-! ________________________________________________________________________
+!__

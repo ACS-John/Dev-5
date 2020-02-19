@@ -1,20 +1,20 @@
 00010 ! Replace S:\acsUB\UBRevCaldouble
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnLbl, fnTxt,fncmbact,fncmbrt2,fnAcs, fnTos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fntop
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim x$*10,p$*10,reqz$*10,reqz12$*2,sr$*1,gb(10)
 00070   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7
 00080   dim cap$*128,txt$*200,tg(11),key$*19
 00090   dim bt1(14,2),badr(2),resp$(5)*60
-00100 ! ______________________________________________________________________
+00100 !
 00110   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00120   fncno(cno) !:
         ! 
 00130   fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
 00140   fnLastBillingDate(d1)
 00150   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
-00160 ! ______________________________________________________________________
+00160 !
 00170   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00180   open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed 
 00190   open #12: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr",internal,outIn,keyed 
@@ -122,12 +122,12 @@
           reqz$="" !:
           goto ASK1 else !:
           goto L510
-01010 ! ______________________________________________________________________
+01010 !
 01020 XIT: ! 
 01030   if sr$<>"Y" then goto L1050
 01040   fncloseprn
 01050 L1050: fnxit
-01060 ! ______________________________________________________________________
+01060 !
 01070 SRHDR: ! 
 01080   pg+=1
 01090   pr #255: "Reverse Calculation Status Report"
@@ -138,7 +138,7 @@
 01140   pr #255: "Account           Billing Date"
 01150   pr #255: "_______________   ____________"
 01160   return 
-01170 ! ______________________________________________________________________
+01170 !
 01180 SRPGOF: ! 
 01190   pr #255: newpage
 01200   gosub SRHDR
@@ -148,7 +148,7 @@
 01240   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 01250   bud1=1
 01260 L1260: return 
-01270 ! ______________________________________________________________________
+01270 !
 01280 BUD2: ! 
 01290   bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
 01300   if bud1=0 then goto L1400
@@ -164,7 +164,7 @@
 01380 L1380: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 01390   ta1=nba: goto L1340
 01400 L1400: return 
-01410 ! ______________________________________________________________________
+01410 !
 01420 ! <Updateable Region: ERTN>
 01430 ERTN: fnerror(program$,err,line,act$,"NO")
 01440   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

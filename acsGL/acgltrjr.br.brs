@@ -1,14 +1,14 @@
 10000 ! Replace S:\acsGL\acglTrJr
 10020 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 10040 ! and Purchases Journals a.k.a. Transaction Journals
-10060 ! ______________________________________________________________________
+10060 !
 10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnps,fnpedat$,fnOpt,fnTos,fnCmdSet,fnAcs,fnFra,fnChk,fnLbl,fnTxt,fnconsole
 10100   on error goto Ertn
-10120 ! ______________________________________________________________________
+10120 !
 10140   dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
 10160   dim sc1$(2)*20,cap$*128,wrd1$(2)*30,resp$(50)*50
 10180   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*21,journal_to_print(8),tgl(200,4)
-10200 ! ______________________________________________________________________
+10200 !
 10220   fntop(program$,cap$="Transactions Journal")
 10240   fncno(cno,cnam$)
 10260   fnconsole(off=0) ! temporary-take out
@@ -21,10 +21,10 @@
 10400   a$(7)="Sales Journal"
 10420   a$(8)="Purchases Journal"
 10440   mat journal_to_print=(1)
-16000 ! ______________________________________________________________________
+16000 !
 16020   if fnprocess=1 then cur_prior=1 : mat journal_to_print=(1) : goto PR_JOURNAL
 16040   gosub ASK_PERIOD
-16060 ! ______________________________________________________________________
+16060 !
 18000 PR_JOURNAL: ! 
 18020   fnopenprn
 18040   if cur_prior=1 then 
@@ -170,7 +170,7 @@
 36020   pr #255: newpage
 36040   gosub HDR
 36060   continue  ! /r
-38000 ! ______________________________________________________________________
+38000 !
 38020 !       pr #255: newpage
 38040 !       p1=p1+1
 38060 !       pr #255,using L890: date$('mm/dd/yy'),cnam$,time$
@@ -185,7 +185,7 @@
 38240 !       mat tgl=(0)
 38260 !       tg1=0
 38280 !       return
-38300 ! ______________________________________________________________________
+38300 !
 38320 ! <Updateable Region: ERTN>
 38340 ERTN: fnerror(program$,err,line,act$,"xit")
 38360   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -193,9 +193,9 @@
 38400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38440 ! /region
-38460 ! ______________________________________________________________________
+38460 !
 38480 XIT: fnxit
-38500 ! ______________________________________________________________________
+38500 !
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
 40040   fnTos(sn$="TRJR")

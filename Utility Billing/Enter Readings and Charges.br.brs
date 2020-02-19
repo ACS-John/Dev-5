@@ -746,7 +746,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
 	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
-	! ______________________________________________________________________
+	!
 	HH_CONTINUE: ! Continue with standard Hand Held routine
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey HH_W_NXT
 	fn_us1
@@ -1959,7 +1959,7 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 		end if
 		fnflexadd1(mat item$)
 	loop
-	! ______________________________________________________________________
+	!
 	NO_RECORDS_FOUND: !
 		if items=0 then mat item$=("")
 		fnflexadd1(mat item$)

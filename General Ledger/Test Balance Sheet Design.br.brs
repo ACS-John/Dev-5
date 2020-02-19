@@ -1,12 +1,12 @@
 ! formerly S:\acsGL\BalanceSheetTest
 ! Balance Sheet - Standard 8.5x11
-! ______________________________________________________________________
+!
   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnread_program_print_property
   on error goto Ertn
-! ______________________________________________________________________
+!
   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-! ______________________________________________________________________
+!
   fntop(program$)
   if fnGlAskFormatPriorCdPeriod=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
   if fnps=2 then 
@@ -17,7 +17,7 @@
     open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed 
   end if
   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
-! ______________________________________________________________________
+!
 Screen1: ! r:
   fnTos(sn$="GLInput") 
   mylen=30: mypos=mylen+3 : right=1
@@ -48,13 +48,13 @@ L380: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
 L420: if te$="S" or te$="F" then goto L440
   if heading=0 and te$><"R" then gosub HEADER
 L440: on pos ("RFHDTSPE",te$,1) goto L970,L1010,L460,L520,L840,L970,L840,L520 none READ_TOP
-! ______________________________________________________________________
+!
 L460: pr #255,using L470: d$
 L470: form pos sp,c 50,skip 1
   gosub FOOTER
   gosub SET_ACCUM
   goto READ_TOP
-! ______________________________________________________________________
+!
 L520: if notrans=1 then goto L660
   if br>=val(r$) and val(r$)><0 then goto L610
 L540: ! read general ledger master file for amounts
@@ -90,7 +90,7 @@ L770: form pos sp,c sp2,pos dollar,c 1,pic(---,---,---.##),skip redir
   gosub UNDERLINE
 L810: gosub FOOTER
   goto READ_TOP
-! ______________________________________________________________________
+!
 L840: if ap=0 then ap=1
   if rs=1 then accum1=-accum(ap) else accum1=accum(ap)
   if ds=1 then dollar$="$" else dollar$=" "
@@ -107,7 +107,7 @@ L920: gosub FOOTER
     accum(j)=accum(j)-accum(ap) 
   next j
 L950: goto READ_TOP
-! ______________________________________________________________________
+!
 L970: if te$="R" then report$=d$
   if te$="S" then secondr$=d$
   gosub FOOTER
@@ -117,16 +117,16 @@ L1010: if foot1=1 then goto L1070
   foot1=1
   foot$=d$
   goto READ_TOP
-! ______________________________________________________________________
+!
 L1070: foot$=rtrm$(foot$)&d$
   goto READ_TOP
-! ______________________________________________________________________
+!
 SET_ACCUM: ! 
   for j=1 to 9
     if ac(j)=0 or ac(j)=9 then goto L1130 else accum(j)=0
 L1130: next j
   return 
-! ______________________________________________________________________
+!
 FOOTER: ! 
   if ls=0 then goto EO_FOOTER
   if ls=99 then goto L1220
@@ -143,11 +143,11 @@ L1270: form skip sk,pos tabnote,c fl,skip 1
   pr #255: newpage
   gosub HEADER
 EO_FOOTER: return 
-! ______________________________________________________________________
+!
 PGOF: ! 
   gosub L1220
   continue 
-! ______________________________________________________________________
+!
 UNDERLINE: ! 
   if ul=0 then goto L1480
   underlin=25+14*bc ! if CP=1 Then uNDERLIN=51+14*BC Else uNDERLIN=25+14*BC
@@ -162,7 +162,7 @@ L1470: form pos underlin,c 14,skip redir
 L1480: if redir=0 then pr #255,using L1490: " "
 L1490: form skip 1,c 1,skip 0
   return 
-! ______________________________________________________________________
+!
 HEADER: ! r:
   heading=1
   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -171,13 +171,13 @@ HEADER: ! r:
   pr #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
   pr #255: "\ql "
   return ! /r
-! ______________________________________________________________________
+!
 DONE: ! 
   eofcode=1
   gosub L1220
   if pors<>2 then let fncloseprn
   goto XIT
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 include: ertn

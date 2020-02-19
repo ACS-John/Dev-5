@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\acglAuto
 00020 ! automatic processing - chain program
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim prg$*35,a$*40,cnam$*40,ml$(3)*80
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno)
 00100 L100: if fnprocess=0 then goto XIT
-00110 ! ______________________________________________________________________
+00110 !
 00120   pgnum=fnpgnum
 00130   open #20: "Name=[Q]\GLmstr\ACGLPGMN.h[cno],Shr",internal,input,relative ioerr MSGBOX1 !:
         read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,noRec XIT !:
@@ -24,7 +24,7 @@
         ml$(3)="Click OK to skip this company." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00200   goto L220
-00210 ! ______________________________________________________________________
+00210 !
 00220 L220: fnkillauto : fnpgnum(-1) !:
         ! ! CHECK FOR ADDITIONAL COMPANIES
 00230   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,NoShr",internal,outIn,relative ioerr XIT
@@ -33,17 +33,17 @@
 00260     if cno<>0 then goto L300
 00270   next j
 00280   goto XIT
-00290 ! ______________________________________________________________________
+00290 !
 00300 L300: fnputcno(cno) : fnprocess(process=1)
 00310   rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," "
 00320   close #glclnt: 
 00330   goto L100
-00340 ! ______________________________________________________________________
+00340 !
 00350 XIT: ! 
 00360   fnFree("AutoPrn."&wsid$)
 00370 L370: fnxit
 00380 CHAIN_PRG: fnchain(prg$)
-00390 ! ______________________________________________________________________
+00390 !
 00400 ! <Updateable Region: ERTN>
 00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

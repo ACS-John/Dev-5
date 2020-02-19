@@ -1,17 +1,17 @@
 00010 ! Replace S:\acsCL\fixalloc
 00020 ! readd check amount using allocations
 00030 ! GLT: 1=Post  2=Print Only
-00040 ! ______________________________________________________________________
+00040 !
 00050   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*30,tr(2),tbc(99,2),io1$(8),pde$*30
 00080   dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*20,item1$(2)*12
-00090 ! ______________________________________________________________________
+00090 !
 00100   if glt=2 then !:
           cap$="Fix check amounts"
 00110   fncno(cno,cnam$)
 00120   cancel=99
-00130 ! ______________________________________________________________________
+00130 !
 00140   open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
 00150   open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
 00160   open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 

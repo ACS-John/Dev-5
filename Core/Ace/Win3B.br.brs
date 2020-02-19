@@ -103,7 +103,7 @@
 52040     if button_option=52 then fkey$(5)="Finish"
 52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es)
 52080     goto XIT
-52100 ! ______________________________________________________________________
+52100 !
 52120 ! <Updateable Region: ERTN>
 52140 ERTN: fnerror(program$,err,line,act$,"xit")
 52160     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -111,18 +111,18 @@
 52200     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 52220 ERTN_EXEC_ACT: execute act$ : goto ERTN
 52240 ! /region
-52260 ! ______________________________________________________________________
+52260 !
 52280 XIT: fnend 
 60000 ! Replace S:\Core\fkey2.br
 60020 ! puts buttons at the bottom of a console window
-60040 ! ______________________________________________________________________
+60040 !
 60060   def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
-60080 ! ______________________________________________________________________
+60080 !
 60100     library 'S:\Core\Library': fnerror,fngethandle
 60120     on error goto Ertn
-60140 ! ______________________________________________________________________
+60140 !
 60160     dim temp_file$*80
-60180 ! ______________________________________________________________________
+60180 !
 60200     totallen=startpos=0
 60220     for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 60240       if fkey$(j)<>"" then 

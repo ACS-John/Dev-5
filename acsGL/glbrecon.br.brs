@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\glBRecon
 00020 ! Bank Reconciliation File  (maintains the bank rec file)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror, fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnchain,fnindex_it
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl2$(7),sc2$(7)*38
 00080   dim flo2$(3),sa$(2),sb$(3),sc$(9),sd$(7),se$(7)*20,sf$(4)
 00090   dim cnam$*40,dat$*20,cap$*128
 00100   dim gl$*12,c$*12,p$*30,s$*2,a(3),dcode$*24,glc$*24,holdgc$*24,currgl$*12
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Bank Reconciliation")
 00130   fntop("S:\acsGL\glBRecon",cap$="Bank Reconciliation")
 00140   fncno(cno,cnam$)
@@ -55,7 +55,7 @@
 00550   scode=curfld
 00560   if cmdkey=5 then goto L2610
 00570 L570: on scode goto L590,L770,L810,L1460,L1760,L1770,L2390
-00580 ! ______________________________________________________________________
+00580 !
 00590 L590: pr newpage
 00600   close #101: ioerr L610
 00610 L610: open #101: "SROW=5,SCOL=20,EROW=15,ECOL=59,BORDeR=SR,CAPTION=Initial File Preparation",display,outIn 
@@ -76,7 +76,7 @@
 00760 L760: form pos 1,n 3,n 6,n 3,c 12,c 30,c 2,n 6,pd 5.2,n 1
 00770 L770: new1=1
 00780   goto L1000
-00790 ! ______________________________________________________________________
+00790 !
 00800 L800: form pos 1,c 12,c 12
 00810 L810: sf$(1)="11,10,N 3,UT,N"
 00820   sf$(2)="11,14,N 6,UT,N"
@@ -221,17 +221,17 @@
 02210 L2210: pr #255: newpage
 02220   gosub L2290
 02230   goto L2190
-02240 ! ______________________________________________________________________
+02240 !
 02250 L2250: pr #255,using L2260: "------------",tot,"============"
 02260 L2260: form pos 47,c 12,skip 1,pos 47,n 12.2,skip 1,pos 47,c 12,skip 1
 02270   goto L2350
-02280 ! ______________________________________________________________________
+02280 !
 02290 L2290: pr #255,using L2300: cnam$,"Report of Checks Written",currgl$(1:3),currgl$(4:9),currgl$(10:12),dat$
 02300 L2300: form pos namtab,c 40,skip 1,pos 54,c 24,skip 1,pos 59,c 3,x 1,c 6,x 1,c 3,skip 1,pos dattab,c 20,skip 2
 02310   pr #255,using L2320: "Check Number","Payee","Amount","Date","Source","Cleared"
 02320 L2320: form pos 1,c 12,pos 15,c 5,pos 53,c 6,pos 67,c 4,pos 73,c 6,pos 81,c 7,skip 2
 02330   return 
-02340 ! ______________________________________________________________________
+02340 !
 02350 L2350: fncloseprn
 02360   on fkey 5 ignore 
 02370 L2370: tot=0
@@ -262,11 +262,11 @@
 02620 L2620: close #1: 
 02630   fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 02640   if z1=1 then goto OPEN_FILES else goto XIT
-02650 ! ______________________________________________________________________
+02650 !
 02660 L2660: if err=4152 then goto L740 else goto ERTN
-02670 ! ______________________________________________________________________
+02670 !
 02680 XIT: fnxit
-02690 ! ______________________________________________________________________
+02690 !
 02700 ! <Updateable Region: ERTN>
 02710 ERTN: fnerror(program$,err,line,act$,"xit")
 02720   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

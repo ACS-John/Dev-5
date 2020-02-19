@@ -1,6 +1,6 @@
 ! Replace S:\acsUB\postgl
 ! Company Information File
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl25,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnOpt,fnCmdSet,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
 	on error goto Ertn
 	dim cap$*128,resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
@@ -26,11 +26,11 @@
 L270: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed 
 	close #15: 
 L290: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed 
-! ______________________________________________________________________
+!
 	fnstyp(14)
 	!  styp=11 for jobcost; styp=14 for regular payroll
 	goto SCREEN1
-! ______________________________________________________________________
+!
 SCREEN2: ! 
 	respc=x=0
 	fnTos(sn$="Postgl-2")
@@ -107,7 +107,7 @@ SCREEN1: !
 	fnopenprn
 	gosub HDR
 	goto ACCUMULATE_TOTALS
-! ______________________________________________________________________
+!
 	restore #15: 
 L940: read #15,using "form pos 60,3*n 10.2": mat dollar eof ACCUMULATE_TOTALS ! clear totals on end of each allocation record
 	mat dollar=(0)
@@ -216,7 +216,7 @@ PAGE_OVER_FLOW: ! r:
 	pr #255: newpage
 gosub HDR ! /r
 	continue 
-! ______________________________________________________________________
+!
 GL_INFORMATION: ! 
 	fnTos(sn$="Breakdown") 
 	respc=0
@@ -261,7 +261,7 @@ if ck=2 or ck=3 then
 end if
 if ck=2 then edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
 if ck=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
-! ______________________________________________________________________
+!
 DELETE_GLINFO: ! 
 mat msgline$(2): msgline$(1)="You have chosen to delete a record." 
 msgline$(2)="Take OK to delete, Cancel to retain." 

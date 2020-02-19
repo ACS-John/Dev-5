@@ -1,16 +1,16 @@
 00010 ! replace S:\acsPR\Category_Srch.br
 00020 ! search for a Category record
-00030 ! ______________________________________________________________________
+00030 !
 00040   def library fncategory_srch(&cn$;fixgrid)
 00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
 00060     on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080     dim item$(2)*30,resp$(30)*80
-00090 ! ______________________________________________________________________
+00090 !
 00100 ! cn$=account #     ! to extract the flexgrid information (Cagegory)
 00110     fncno(cno)
 00120     open #file_num:=fngethandle: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\Categoryidx.h[cno],Shr",internal,input,keyed ioerr ERTN
-00130 ! ______________________________________________________________________
+00130 !
 00140     restore #file_num: 
 00150     fnTos(sn$="CategorySrch")
 00160     ch$(1)="Category" : ch$(2)="Name" 
@@ -21,7 +21,7 @@
 00210     read #file_num,using 'Form POS 1,c 5,c 30': item$(1),item$(2) eof L300 ioerr ERR_READ
 00230     fnflexadd1(mat item$)
 00240     goto READ_FILE
-00250 ! ______________________________________________________________________
+00250 !
 00260 ERR_READ: ! r:
 00270     if err<>61 then goto ERTN
 00280     pr 'Record locked during Category_search flexgrid creation' 

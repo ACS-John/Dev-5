@@ -8,7 +8,7 @@
 01250   if lrec(3)=0 then goto NO_PRREPORT
 01252   close #3: 
 01260   goto MENU1
-01270 ! ______________________________________________________________________
+01270 !
 01280 MENU1: ! 
 01290   fnTos(sn$="PrintReport-ask")
 01292   respc=0
@@ -138,7 +138,7 @@
 02270     chain "PROC="&env$('temp')&"\PROC."&session$
 02272 PDR_XIT: ! 
 02274   fnend 
-02280 ! ______________________________________________________________________
+02280 !
 02290 NORECORDSONFILE: ! r: no records on file
 02300 ! if rn=0 then goto XIT_PRAUTO
 02310   mat ml$(2)
@@ -146,9 +146,9 @@
 02314   ml$(2)="Click OK to contine."
 02318   fnmsgbox(mat ml$,resp$,cap$,48)
 02320   goto PDR_XIT ! /r
-02330 ! ______________________________________________________________________
+02330 !
 02340 ! XIT_PRAUTO: fnxit
-02350 ! ______________________________________________________________________
+02350 !
 02360 XIT: fnxit
 02370 IGNORE: continue 
 02380 ! <Updateable Region: ERTN>
@@ -158,7 +158,7 @@
 02420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02440 ! /region
-02450 ! ______________________________________________________________________
+02450 !
 02500 NO_PRREPORT: ! r:
 02510   mat ml$(2)
 02512   ml$(1)="No reports have been designed in the User Designed"
@@ -168,13 +168,13 @@
 22000   def fn_setup
 22020     library 'S:\Core\Library': fntop,fnxit, fnerror,fnchain,fncno,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnmsgbox,fngethandle,fnCopy
 22040     on error goto Ertn
-22060 ! ______________________________________________________________________
+22060 !
 22080     dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),ty$(104,5)*20,a$*255
 22100     dim a$(20)*32,a(20),pp(20)
 22120     dim rf1$*255,pf$*255,af$*255,gpf$*255,pfd$*255
 22140     dim gaf$*255,cap$*128,ml$(3)*70
 22160     dim resp$(10)*132 ! iom$(20),af1$*255,af2$*255,af1$*255,af2$*255,msgline$(2)*60,t(104),tt(104),e$(7)*30,e(17),ansm(20),wrdm$(20)*65,rf2$*255,message$*40,
-22180 ! ______________________________________________________________________
+22180 !
 22200     execute "clear proc only"
 22220     fncno(cno)
 22240 ! r: set mat ty$

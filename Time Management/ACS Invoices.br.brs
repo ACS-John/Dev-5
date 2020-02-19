@@ -93,8 +93,8 @@ fn_setup
 EOJ: ! r:
 	fn_summary_print
 	fnClosePrn
-	open #h_ivnum:=fngethandle: "Name=S:\Core\Data\acsllc\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
-	rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
+	! open #h_ivnum:=fngethandle: "Name=S:\Core\Data\acsllc\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
+	! rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 	close #h_ivnum: 
 	close #hClient: 
 	close #h_tmwk2: 
@@ -119,7 +119,7 @@ EOJ: ! r:
 	loop
 	! /r
 XIT: fnxit
-! _____________________________________________________________________
+!_____
 def fn_setup
 	if ~setup then
 		setup=1

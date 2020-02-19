@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\ubMetrBk
 00020 ! pr Meter Reading Routes
-02000 ! ______________________________________________________________________
+02000 !
 02020   library "S:\Core\Library": fnAcs,fnLbl,fnwait,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fnxit,fndat,fnCmdSet,fntop,fncomboa,fnpause,fnChk,fnTxt,fnFra,fnOpt,fnreg_write,fnreg_read,fnpa_finis,fnget_services,fngethandle
 02040   on error goto Ertn
-02060 ! ______________________________________________________________________
+02060 !
 02080   dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,cap$*128,dat$*20,service$(1)*2,bulksort$*12
 02100   dim a(7),option$(4)*25,extra(17),x_service$(3)*62,rm$*132,ft$*60
 02120   dim resp$(11)*40
 02140   dim notefile$*100,notedir$*100,ul$*60,d(15),snm$(10)*20,srv$(10)*2
-02160 ! ______________________________________________________________________
+02160 !
 02180   fntop(program$,cap$="Meter Reading Book")
 02240   fndat(dat$,1)
 02280 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
@@ -102,7 +102,7 @@
 10540   else 
 10560     open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 10580   end if 
-10600 ! ______________________________________________________________________
+10600 !
 12000 ! on fkey 5 goto DONE
 12020   fnopenprn
 12040   on pageoflow goto PGOF
@@ -209,7 +209,7 @@
 22020   close #h_customer: ioerr ignore
 22040   fncloseprn ! /r
 22060 XIT: fnxit
-22080 ! ______________________________________________________________________
+22080 !
 24000   def fn_reg_try$*256(field_name$*128,default_value$*256)
 24020     dim rt_return$*256
 24040     fnreg_read(field_name$,rt_return$)

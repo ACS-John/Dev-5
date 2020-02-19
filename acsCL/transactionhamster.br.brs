@@ -1,26 +1,26 @@
 ! Replace S:\acsCL\TransactionHamster
 ! Checkbook Transaction File
-! ______________________________________________________________________
+!
   library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster
   on error goto Ertn
-! ______________________________________________________________________
+!
   dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*256
-! ______________________________________________________________________
+!
   fntop(program$,cap$='Transaction (Hamster)')
   gosub BUILD_LAYOUT
   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE 
   fnHamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
   goto XIT
-! ______________________________________________________________________
+!
 OPEN_FILE: ! 
   open_file_count=0 ! this value is used in the close_file sub routine
   open #open_file_count+=1: "Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=78,KPs=1,KLn=11,Shr",internal,outIn,keyed 
   open #open_file_count+=1: "Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outIn,keyed 
   open #open_file_count+=1: "Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outIn,keyed 
   return 
-! ______________________________________________________________________
+!
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-! ______________________________________________________________________
+!
 BUILD_LAYOUT: ! 
   lbl$(1)="Bank" 
   lbl$(2)="Transaction Code" 
@@ -132,6 +132,6 @@ BUILD_LAYOUT: !
   c$(cl,7)="S:\acsCL\SourceCode.idx" 
   c$(cl,8)=limit_to_list$
   return 
-! ______________________________________________________________________
+!
 XIT: fnxit
 include: ertn

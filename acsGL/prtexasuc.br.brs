@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\PRTexasUC
 00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fngethandle,fnreg_read,fnreg_write
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
 00080   dim fa$(3),sa$(3)*40,cnam$*40
 00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*5
 00100   dim resp$(3)*255,csvpath$*255
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Print Texas Unemployment Report")
 00130   fncno(cno,cnam$)
 00150   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
@@ -60,7 +60,7 @@
 00480   t3=t3+h2
 00490   t4=t4+m(34)
 00500 L500: goto L310
-00510 ! ______________________________________________________________________
+00510 !
 00520 HDR: ! 
 00530   pr #255,using L540: b$(2),b$(1),pedat$
 00540 L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
@@ -68,16 +68,16 @@
 00560 L560: form pos 22,c 40,skip 1,pos 22,c 40,skip 1,pos 22,c 40,skip 6
 00570   p1=16
 00580   return 
-00590 ! ______________________________________________________________________
+00590 !
 00600 L600: gosub L820
 00610   close #2: 
 00620   fncloseprn
 00630   fnreg_write("TexasUCFile",csvpath$)
 00640   close #h_csv: 
 00650   goto XIT
-00660 ! ______________________________________________________________________
+00660 !
 00670 XIT: fnxit
-00680 ! ______________________________________________________________________
+00680 !
 00685 L670: p3=p3+1
 00690   if m(1)<ucm then goto L740
 00695   if m(1)-m(2)>ucm then goto L720
@@ -103,7 +103,7 @@
 00880   t3=0
 00890   t4=0
 00900   return 
-00910 ! ______________________________________________________________________
+00910 !
 00920 ! <Updateable Region: ERTN>
 00930 ERTN: fnerror(program$,err,line,act$,"xit")
 00940   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -111,7 +111,7 @@
 00960   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00970 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00980 ! /region
-00990 ! ______________________________________________________________________
+00990 !
 01000 L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
 01010   k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
 01020   x1=pos(k$(1)," ",1)

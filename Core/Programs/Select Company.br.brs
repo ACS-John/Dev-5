@@ -123,7 +123,7 @@ goto MENU1 ! /r
 SELECT_COMPANY: ! r:
 	fnputcno(cno_selected)
 return  ! /r
-! ______________________________________________________________________
+!
 COMPANY_ADD: ! r:
 	fnTos
 	mylen=25 : mypos=mylen+2
@@ -292,7 +292,7 @@ def fn_setup
 		library 'S:\Core\Library': fnCompanyPayPeriodEndingDate
 		library 'S:\Core\Library': fnSystemIsAddOn
 		on error goto Ertn
-		! ______________________________________________________________________
+		!
 		dim filename$(999)*40
 		dim resp$(10)*50,txt$*40 ! ,temp$*256
 		dim mg$(3)*128

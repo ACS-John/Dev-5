@@ -1,25 +1,25 @@
 00010 ! Replace S:\acsPR\jcRemove
 00020 ! Remove Job Cost Payroll Jobs
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnoldmsgbox,fnopenwin,fncno,fnerror,fnxit,fntop,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
 00080   dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,message$*40,msgline$(2)*60
 00090   dim response$(5)*1
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop("S:\acsPR\jcRemove",cap$="Remove Completed Jobs")
 00120   fncno(cno)
 00130 ! 
 00135   fnconsole(1)
 00140   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,outIn: close #1: 
-00150 ! ______________________________________________________________________
+00150 !
 00160   execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
 00170   execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
 00180   execute "Copy [Q]\PRmstr\JCCAT.H[cno] JCCAT.X -n"
-00190 ! ______________________________________________________________________
+00190 !
 00200   open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",internal,outIn,keyed 
-00210 ! ______________________________________________________________________
+00210 !
 00220 L220: pr newpage
 00230   fnopenwin(win=101,10,20,14,59,cap$)
 00240   pr #101,fields "4,2,C 21,N": "Job Number to Remove:"
@@ -36,7 +36,7 @@
 00350   if response$(1)="Y" then goto L360 else goto L220
 00360 L360: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey L220
 00370   goto L220
-00380 ! ______________________________________________________________________
+00380 !
 00390 L390: pr newpage
 00400   message$="Removeing completed Jobs..."
 00410   fnwait(message$,0)
@@ -82,7 +82,7 @@
 00810   goto L640
 00820 L820: write #11,using L580: jn$,n$,mat a$,mat b
 00830   goto L570
-00840 ! ______________________________________________________________________
+00840 !
 00850 EOF1: close #1,free: 
 00860   close #2,free: 
 00870   close #3,free: 
@@ -92,9 +92,9 @@
 00910   execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
 00920   execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -n"
 00930   goto XIT
-00940 ! ______________________________________________________________________
+00940 !
 00950 XIT: fnxit
-00960 ! ______________________________________________________________________
+00960 !
 00970 ! <Updateable Region: ERTN>
 00980 ERTN: fnerror(program$,err,line,act$,"xit")
 00990   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -102,4 +102,4 @@
 01010   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01020 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01030 ! /region
-01040 ! ______________________________________________________________________
+01040 !

@@ -9,12 +9,12 @@
 00100 ! Service 6 is Fire Protection
 00110 ! Service 7 is Merchandise
 00120 ! Service 8 is Other
-00130 ! ______________________________________________________________________
+00130 !
 00140   library 'S:\Core\Library': fnerror,fntop,fnTos,fnAcs,fnCmdSet,fnLbl,fndate_mmddyy_to_ccyymmdd,fnChk,fnxit,fnpause,fngethandle,fnub_index_customer,fnStatus
 00150   on error goto Ertn
-00160 ! ______________________________________________________________________
+00160 !
 00170   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
-00180 ! ______________________________________________________________________
+00180 !
 00190   fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
 00210 LOOP_STEP_1: ! 
 00220   delubtransvb$="True"

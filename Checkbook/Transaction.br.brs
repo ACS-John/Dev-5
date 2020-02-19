@@ -1,6 +1,6 @@
 ! replace S:\Checkbook\Transaction
 ! Checkbook transaction file editor
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnmsgbox

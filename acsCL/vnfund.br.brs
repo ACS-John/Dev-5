@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsCL\VnFund
 00020 ! pr Vendor Fund Listing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,cap$*128,p$(20)*50
 00080   dim tr$(5)*35,tr(2),p1$*30,gl(3),f1(1000),in1(3),f2(1000)
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno,cnam$)
 00110   fntop(program$, cap$="Payee Fund Listing")
 00120   cancel=99
-00130 ! ______________________________________________________________________
+00130 !
 00140   fnTos(sn$="vnfund") !:
         respc=0
 00150   fnLbl(1,40,"",1,1)
@@ -57,7 +57,7 @@
           f1(1000)+=amt else !:
           f1(gl(1))+=amt
 00470   goto READ_TRALLOC
-00480 ! ______________________________________________________________________
+00480 !
 00490 PRINTARRAY: ! pr ARRAY
 00500   if sum(f1)<in1(3) then goto RESET_F1
 00510   if trim$(vn$)<>'' then !:
@@ -73,28 +73,28 @@
 00590   mat f2=f2+f1
 00600 RESET_F1: mat f1=(0)
 00610   return 
-00620 ! ______________________________________________________________________
+00620 !
 00630 NEWPGE: ! 
 00640   pr #255: newpage
 00650   gosub HDR
 00660   continue 
-00670 ! ______________________________________________________________________
+00670 !
 00680 HDR: ! 
 00690   pr #255,using 'Form POS 1,C 4,N 4,Cc 72': "Page",pg+=1,cnam$
 00700   pr #255,using 'Form POS 1,c 8,Cc 72': date$,"Date From: "&cnvrt$("pic(zz/zz/zz)",in1(1))&" To: "&cnvrt$("pic(zz/zz/zz)",in1(2))
 00710   pr #255,using 'Form POS 9,Cc 72': "Vendor Fund Listing (Minimum Amount: "&ltrm$(cnvrt$("PIC($$$$,$$$,$$$.##BCR)",in1(3)))&")" !:
         pr #255: ""
 00720   return 
-00730 ! ______________________________________________________________________
+00730 !
 00740 END1: gosub PRINTARRAY
 00750   pr #255,using 'Form POS 1,C 10,C 30': "  Grand","Total"
 00760   mat f1=f2
 00770   gosub PRINTARRAY_2
 00780   fncloseprn
 00790   goto XIT
-00800 ! ______________________________________________________________________
+00800 !
 00810 XIT: fnxit
-00820 ! ______________________________________________________________________
+00820 !
 00830 ! <Updateable Region: ERTN>
 00840 ERTN: fnerror(program$,err,line,act$,"xit")
 00850   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -102,4 +102,4 @@
 00870   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00880 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00890 ! /region
-00900 ! ______________________________________________________________________
+00900 !

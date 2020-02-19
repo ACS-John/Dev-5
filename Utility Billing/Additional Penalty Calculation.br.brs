@@ -1,6 +1,6 @@
 ! formerly S:\acsUB\ubPenCa2
 ! Additional Penalty Calculation ( calculates a standard dollar amount of penalty of each penalty charge in their system
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnmsgbox
@@ -12,7 +12,7 @@
 	library 'S:\Core\Library': fnAutomatedSavePoint
 	library 'S:\Core\Library': fnget_services
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim resp$(20)*128
 	dim msgline$(1)*80
 	dim oldtg(11)  ! read but otherwise unused
@@ -34,7 +34,7 @@
 	dim columnhead$(10)*13
 	dim tmp$*220
 	dim coltot(10)
-! ______________________________________________________________________
+!
 	fntop(program$)
 	fnLastBillingDate(bildat)
 ! 
