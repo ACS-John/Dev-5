@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                           
+10:28 AM 2/19/2020	UB	Deposit List - no longer prints lines for people with 0 deposited.
+9:48 AM 2/19/2020	UB	Collections - fixed Receipt text not showing in receipt number column - now you can see which are CAsh again.
 11:45 02/20/2020	CO	5.74273  
 5:39 PM 2/17/2020	UB	(unified) Print Bill program got a new Test button that just prints the first 4 bills and then stops 
 12:49 02/20/2020	CO	5.74272   
