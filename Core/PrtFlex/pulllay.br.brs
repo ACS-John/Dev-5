@@ -1,5 +1,5 @@
 ! Replace S:\Core\PrtFlex\PullLay
-! ______________________________________________________________________
+!
 library 'S:\Core\Library': fnerror,fnsetmonth,fnxit,fnget_services,fnbooktitle$
 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 ! to create your own file instead of using this program, store the description,variable name,field length,# of deciaml points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
@@ -96,14 +96,14 @@ pause
 L840: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
 L850: !
 goto L340
-! ______________________________________________________________________
+!
 L870: !
 	close #2: ioerr ignore
 	close #15: ioerr ignore
 	gosub MoveItToText
 	pr f "24,1,C 7,UT,N": "Done..."
 stop
-! ______________________________________________________________________
+!
 MoveItToText: ! r:
 	open #10: "Name="&outputfile$&",RecL=87,Replace",display,output
 	open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed

@@ -1,12 +1,12 @@
 00010 ! Replace S:\Core\Programs\1099Type
 00020 ! 1099Type file
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   fntop(program$,cap$="1099Type")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim cap$*128,fltyp$(2),p$(2)*25
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno)
 00110   lbl$(1)="Key" : lbl$(2)="Desc"
 00120   fln(1)=1 : fln(2)=25
@@ -15,7 +15,7 @@
 00132   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
 00140   fnHamster("1099Type",mat lbl$,mat fln,1,mat p$)
 00150 XIT: fnxit
-00160 ! ______________________________________________________________________
+00160 !
 00170 ! <Updateable Region: ERTN>
 00180 ERTN: fnerror(program$,err,line,act$,"xit")
 00190   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -23,4 +23,4 @@
 00210   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00220 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00230 ! /region
-00240 ! ______________________________________________________________________
+00240 !

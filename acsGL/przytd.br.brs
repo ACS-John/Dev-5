@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\PRZYTD
 00020 ! Zero Year To Date and Quarter To Date Information
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnprocess,fnconsole,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox
 00050   fntop(program$,cap$="Zero YTD Payroll Information")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim k$(3)*25,ss$*11,m(36),adr(2),n(2),d(14),cnam$*40,cap$*128,ml$(3)*80
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno,cnam$)
 00110   if fnprocess=1 then goto L300
 00120 L120: fnTos(sn$="PrZqtr") !:
@@ -31,7 +31,7 @@
         ml$(2)="Click OK to try again; else Cancel to stop." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00280   if resp$="OK" then goto L120 else goto XIT
-00290 ! ______________________________________________________________________
+00290 !
 00300 L300: open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed 
 00310 L310: read #1,using L320: x eof L350
 00320 L320: form pos 91,36*pd 5.2,2*n 5
@@ -42,7 +42,7 @@
 00370   open #1: "Name=[Q]\GLmstr\ACPRCKS.h[cno],size=0,RecL=110,Replace",internal,output 
 00380   close #1: 
 00390   goto XIT
-00400 ! ______________________________________________________________________
+00400 !
 00410 ! <Updateable Region: ERTN>
 00420 ERTN: fnerror(program$,err,line,act$,"xit")
 00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -50,6 +50,6 @@
 00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
-00480 ! ______________________________________________________________________
+00480 !
 00490 XIT: fnxit
-00500 ! ______________________________________________________________________
+00500 !

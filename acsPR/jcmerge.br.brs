@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsPR\jcMerge
 00020 ! Posting to Jobs...
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fntop,fnxit
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim h(7),ji1(6),jn$*6,ji2(6),cn$*11,l(13),ta(2),tr(9),empnum$*12
 00080   dim empnam$*30,cap$*128,message$*40
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsPR\jcMerge",cap$="Job Cost Merge")
 00110   fncno(cno)
 00120 ! 
-00170 ! ______________________________________________________________________
+00170 !
 00180   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed 
 00190   open #3: "Name="&env$('temp')&"\Work."&session$,internal,input 
 00200   open #4: "Name=[Q]\PRmstr\JCPRH1.H[cno],Shr",internal,output 
@@ -64,11 +64,11 @@
 00680   ta(2)=ot5
 00690   rewrite #2,using L470,key=cn$: mat l,mat ta
 00700   goto L220
-00710 ! ______________________________________________________________________
+00710 !
 00720 L720: dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
 00730   if h(1)><0 then write #4,using L350: mat h,dt2,jn$
 00740   goto XIT
-00750 ! ______________________________________________________________________
+00750 !
 00760 ! <Updateable Region: ERTN>
 00770 ERTN: fnerror(program$,err,line,act$,"xit")
 00780   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -76,8 +76,8 @@
 00800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00810 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00820 ! /region
-00830 ! ______________________________________________________________________
+00830 !
 00840 XIT: ! fnXIT
 00841   close #3,free: 
 00842   fnxit
-00850 ! ______________________________________________________________________
+00850 !

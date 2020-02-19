@@ -3,9 +3,9 @@
 00030   def library fnacglbld
 00040     library 'S:\Core\Library': fntop,fnxit, fnxit,fntop, fncno,fnerror,fnchain,fnindex_it
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim cnam$*40
-00080 ! ______________________________________________________________________
+00080 !
 00090 ! fntop(program$,"CHANGE_ME")
 00100     fncno(cno,cnam$)
 00110     close #102: ioerr L120
@@ -21,7 +21,7 @@
 00190 L190: input #102,fields "9,29,Cu 5,UT,N": pas$
 00200     if cmdkey=5 then goto XIT
 00210     if pas$><"ERASE" then goto L190
-00220 ! ______________________________________________________________________
+00220 !
 00230     open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],Size=0,RecL=416,Replace",internal,output 
 00240     close #1: 
 00250     open #1: "Name=[Q]\GLmstr\glTrans.h[cno],Size=0,RecL=73,Replace",internal,output 
@@ -67,9 +67,9 @@
 00630     execute "Index [Q]\GLmstr\PRmstr.h[cno]"&' '&"[Q]\GLmstr\PRINDEX.h[cno] 1 4 Replace DupKeys -n"
 00640     execute "Index [Q]\GLmstr\AcTrans.h[cno]"&' '&"[Q]\GLmstr\AcTrIdx.h[cno] 1/71/17/13 12/2/2/4 Replace DupKeys -n"
 00650     fnchain("S:\General Ledger\Accounts")
-00660 ! ______________________________________________________________________
+00660 !
 00670     goto XIT
-00680 ! ______________________________________________________________________
+00680 !
 00690 ! <Updateable Region: ERTN>
 00700 ERTN: fnerror(program$,err,line,act$,"xit")
 00710     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -77,5 +77,5 @@
 00730     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00750 ! /region
-00760 ! ______________________________________________________________________
+00760 !
 00770 XIT: fnend 

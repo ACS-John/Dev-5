@@ -1,18 +1,18 @@
 ! Replace S:\acsGL\bargraph
 ! pr bar graph of earnings by month for current year of prior year.
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnUseDeptNo, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt, fnqgl,fnagl$,fnOpt,fnFra,fnpa_finis
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
 	dim resp$(10)*80,profit(12),txt$*80
 	dim month(13), month$(13)*25,month$*25
-! ______________________________________________________________________
+!
 	right=1 : center=2
 	fntop(program$,cap$="Print Bar Graph of Earnings")
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
 	read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
-! ______________________________________________________________________
+!
 	open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed 
 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 	if month<1 or month>13 then goto L170
@@ -20,7 +20,7 @@ L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 	month$(month)=month$
 	goto L170
 L210: close #1: 
-! ______________________________________________________________________
+!
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
 	open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
 	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
@@ -48,7 +48,7 @@ SCR1: !
 	read #1,using L430,key=glnumber$: dno$,ano$,sno$ nokey SCR1
 L430: form pos 1,c 3,c 6,c 3
 	acno$=glnumber$(1:3)&"         "
-! ______________________________________________________________________
+!
 	read #1,using L480,key>=glnumber$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR1
 L470: read #1,using L480: acno$,bb,cb,mat bc,mat bp, mat bud eof PRINT_CHART
 L480: form pos 1,c 12,pos 81,41*pd 6.2
@@ -176,9 +176,9 @@ L1140: ! zero line starts right here
 	gosub RELEASE_PRINT
 	close #1: 
 	goto XIT
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 ! <Updateable Region: ERTN>
 ERTN: fnerror(program$,err,line,act$,"xit")
 	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -186,7 +186,7 @@ ERTN: fnerror(program$,err,line,act$,"xit")
 	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
 ! /region
-! ______________________________________________________________________
+!
 VBOPENPRINT: ! 
 	if file(20)=-1 then 
 		open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 

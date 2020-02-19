@@ -1,5 +1,5 @@
 00010 ! Replace S:\Core\OldMsgBox.br
-00020 ! ______________________________________________________________________
+00020 !
 00030   def library fnoldmsgbox(mat response$,&cap$,mat msgline$,mtype)
 00040     library 'S:\Core\Library': fnwin3b
 00050 ! mtype=0 means splash    - returns no response                                 ! mostly for "please wait..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
@@ -59,4 +59,4 @@
 00340 PRNBELL: ! pr bell
 00350   pr f "24,1,C 7,N": bell$
 00360   return 
-00370 ! ______________________________________________________________________
+00370 !

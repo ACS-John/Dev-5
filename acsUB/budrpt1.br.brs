@@ -1,13 +1,13 @@
 ! Replace S:\acsUB\BudRpt1
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnget_services
 	library 'S:\Core\Library': fnopenprn,fncloseprn, fndate_mmddyy_to_ccyymmdd, fnxit,fnAcs,fnTos,fnLbl,fnTxt,fnCmdSet
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
 	dim t1(11),t2(11),t3(11),cap$*128,message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
 	fntop(program$, cap$="Worksheet")
-! ______________________________________________________________________
+!
 	fnget_services(mat serviceName$,mat service$)
 	hdr$="{\ul  Date   }"
 	underline$="          "
@@ -22,7 +22,7 @@
 	underline$=underline$&"{\ul         }  " 
 	totserv1=totserv+2 
 	mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
-! ______________________________________________________________________
+!
 BUD1: ! INITILIZE BUDGET FILE
 	bud1=bg1=bg2=0
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
@@ -45,13 +45,13 @@ BUD1: ! INITILIZE BUDGET FILE
 	if ckey=5 then goto XIT
 	d1=val(resp$(1)) conv L350
 L350: d2=val(resp$(2)) conv L360
-L360: ! ______________________________________________________________________
+L360: !
 	on fkey 5 goto XIT
 ! On Pageoflow Goto NEWPGE
 	fnopenprn
 	gosub HEADING
 goto READ_BUDMSTR
-! ______________________________________________________________________
+!
 READ_BUDMSTR: ! 
 	read #81,using L490: z$,mat ba,mat badr eof DONE
 	if env$('client')="Findlay" then ba(8)=0 ! don't show the penalty budget on form

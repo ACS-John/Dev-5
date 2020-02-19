@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\ACGLCHGC
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION FOR 8 1/2 * 11 PAPER WITH            COMPARSION
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,cogl$(3)*12,acct$*12,bp(13),by(13),udf$*256
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13),cap$*128
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Comparative Change Amount")
 00120   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00130   udf$=env$('temp')&'\'
@@ -141,18 +141,18 @@
 01270   gosub L1700
 01280   gosub L1510
 01290   goto L550
-01300 ! ______________________________________________________________________
+01300 !
 01310 L1310: if te$="R" then report$=d$
 01320   if te$="S" then secondr$=d$
 01330   gosub L1510
 01340   goto L550
-01350 ! ______________________________________________________________________
+01350 !
 01360 L1360: if foot1=1 then goto L1420
 01370   tabnote=sp
 01380   foot1=1
 01390   foot$=d$
 01400   goto L550
-01410 ! ______________________________________________________________________
+01410 !
 01420 L1420: foot$=rtrm$(foot$)&d$
 01430   goto L550
 01440 L1440: for j=1 to 9
@@ -161,13 +161,13 @@
 01470     accum(j,2)=0
 01480 L1480: next j
 01490   return 
-01500 ! ______________________________________________________________________
+01500 !
 01510 L1510: if ls=0 then goto L1660
 01520   if ls=99 then goto L1570
 01530   pr #255,using L1540: " "
 01540 L1540: form pos 1,c 1,skip ls
 01550   goto L1660
-01560 ! ______________________________________________________________________
+01560 !
 01570 L1570: fnpglen(pglen)
 01580 ! If PGLEN<>42 Then pGLEN=58
 01590   sk=pglen-krec(255): fl=len(rtrm$(foot$))
@@ -178,23 +178,23 @@
 01640   pr #255: newpage
 01650   gosub L1840
 01660 L1660: return 
-01670 ! ______________________________________________________________________
+01670 !
 01680 L1680: gosub L1570: continue 
-01690 ! ______________________________________________________________________
+01690 !
 01700 L1700: if ul=0 then goto L1800
 01710   if ul=1 then goto L1770
 01720   underlin$="=============="
 01730   pr #255,using L1740: underlin$,underlin$
 01740 L1740: form skip 1,pos 49,c 14,pos 67,c 14,skip redir
 01750   goto L1800
-01760 ! ______________________________________________________________________
+01760 !
 01770 L1770: underlin$="______________"
 01780   pr #255,using L1790: underlin$,underlin$
 01790 L1790: form pos 49,c 14,pos 67,c 14,skip redir
 01800 L1800: if redir=0 then pr #255,using L1810: " "
 01810 L1810: form skip 1,c 1,skip 0
 01820   return 
-01830 ! ______________________________________________________________________
+01830 !
 01840 L1840: heading=1
 01850   pt1+=1
 01860   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -211,23 +211,23 @@
 01970 L1970: form pos 52,pic(-----),pos 71,pic(-----),skip 2
 01980   on error goto Ertn
 01990   goto L2040
-02000 ! ______________________________________________________________________
+02000 !
 02010 L2010: pr #255: tab(49);"Current Year";tab(68);"Prior Year"
 02020   on error goto Ertn
 02030   pr #255: 
 02040 L2040: return 
-02050 ! ______________________________________________________________________
+02050 !
 02060 L2060: eofcode=1
 02070   gosub L1570
 02080   fncloseprn
 02090   goto XIT
-02100 ! ______________________________________________________________________
+02100 !
 02110 L2110: total=income
 02120   total2=pincome
 02130   goto L1020
-02140 ! ______________________________________________________________________
+02140 !
 02150 XIT: fnxit
-02160 ! ______________________________________________________________________
+02160 !
 02170 ERTN: fnerror(program$,err,line,act$,"xit")
 02180   if lwrc$(act$)<>"pause" then goto L2210
 02190   execute "list -"&str$(line) !:

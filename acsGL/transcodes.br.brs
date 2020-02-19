@@ -1,17 +1,17 @@
 00010 ! Replace S:\acsGL\transcodes
 00020 ! Special transactions type file - Hamster
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2),mask(2),sp(2),c$(2,8)*40
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$='Transaction Codes')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE: gosub INDEX
 00120   goto XIT
-00130 ! ______________________________________________________________________
+00130 !
 00140 OPEN_FILE: ! !:
         open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists("[Q]\GLmstr\transcodes.h[cno]")=0 then goto L190
@@ -22,16 +22,16 @@
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
-00230 ! ______________________________________________________________________
+00230 !
 00240 INDEX: ! 
 00250   execute "Index [Q]\GLmstr\transcodes.h[cno]"&' '&"[Q]\GLmstr\transcodes-idx.h[cno]" &" 1 2 Replace,DupKeys"
 00260   return 
-00270 ! ______________________________________________________________________
+00270 !
 00280 CLOSE_FILE: for j=1 to open_file_count
 00290     close #j: ioerr L300
 00300 L300: next j
 00310   return 
-00320 ! ______________________________________________________________________
+00320 !
 00330 BUILD_LAYOUT: ! 
 00340   fncno(cno)
 00350 ! ** Field Labels    ** !:
@@ -72,13 +72,13 @@
         ! c$(CL,7)='[Q]\CLmstr\PayIdx1.h[cno]' !:
         ! c$(CL,8)=LIMIT_TO_LIST$
 00490   return 
-00500 ! ______________________________________________________________________
+00500 !
 00510 HAMSTER: ! 
 00520   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00530   return 
-00540 ! ______________________________________________________________________
+00540 !
 00550 XIT: fnxit
-00560 ! ______________________________________________________________________
+00560 !
 00570 ! <Updateable Region: ERTN>
 00580 ERTN: fnerror(program$,err,line,act$,"xit")
 00590   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -86,5 +86,5 @@
 00610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00620 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00630 ! /region
-00640 ! ______________________________________________________________________
+00640 !
 00650   fltyp$(ic+=1)='N'

@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsPR\PrUsrDR
 00020 ! pr User-Designed Reports
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnerror,fnconsole
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim jcs$(40),cap$*128,rn(20),rn$(20)*74
-00070 ! ______________________________________________________________________
+00070 !
 00075   fnconsole(1)
 00080   fntop(program$,cap$="User Designed Report (2)")
 00090   open #1: "Name=S:\acsPR\JCReport.mst,KFName=S:\acsPR\JCReport.idx,Shr",internal,input,keyed 
@@ -28,11 +28,11 @@
 00210     if rno=rn(j) then goto JCPRNT
 00220   next j
 00230   goto L120
-00240 ! ______________________________________________________________________
+00240 !
 00250 JCPRNT: chain "S:\acsPR\jcPrnt"&str$(rno)
-00260 ! ______________________________________________________________________
+00260 !
 00270 XIT: fnxit
-00280 ! ______________________________________________________________________
+00280 !
 00290 ! <Updateable Region: ERTN>
 00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -40,4 +40,4 @@
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00340 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00350 ! /region
-00360 ! ______________________________________________________________________
+00360 !

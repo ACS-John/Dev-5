@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsGL\AcGlIncF
 00020 ! -- INCOME STATEMENT COMPARING UP TO 10 FUNDS  - USES 2ND I/C DESIGN
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd$,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,2)
@@ -11,7 +11,7 @@
 00110   dim sendto$*80,bigul$*140,heading$*140,cap$*128,udf$*256
 00120   dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
 00130   dim choices$(2)*21,io5$(2)
-00140 ! ______________________________________________________________________
+00140 !
 00150   fntop(program$,cap$="Income Statemet - Fund Comparison")
 00160   on fkey 5 goto L2170
 00170   fncno(cno,cnam$)
@@ -24,7 +24,7 @@
 00230   actpd=fnactpd
 00240   fscode=fnfscode
 00250   priorcd=fnpriorcd
-00260 ! ______________________________________________________________________
+00260 !
 00270   monthly=1 ! use 2 for ytd figures (set default for automatic processing to monthly information
 00280   gosub L2510
 00290   pors=1
@@ -216,16 +216,16 @@
 02130   pr #255,using L2140: heading$
 02140 L2140: form pos 49,c big,skip 2
 02150   return 
-02160 ! ______________________________________________________________________
+02160 !
 02170 L2170: eofcode=1
 02180   gosub L1690
 02190 ! 
 02200 ! 
 02210   fncloseprn
 02220   goto XIT
-02230 ! ______________________________________________________________________
+02230 !
 02240 XIT: fnxit
-02250 ! ______________________________________________________________________
+02250 !
 02260 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 02270   for j=1 to lrec(3)
 02280     read #3,using L2290,rec=j: pc1,bb,cb noRec L2380
@@ -294,7 +294,7 @@
 02850   if resp$(1)="True" then monthly=1
 02860   if resp$(2)="True" then monthly=2
 02870   return 
-02880 ! ______________________________________________________________________
+02880 !
 02890 ! <updateable region: ertn>
 02900 ERTN: fnerror(program$,err,line,act$,"xit")
 02910   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

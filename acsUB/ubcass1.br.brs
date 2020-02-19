@@ -1,15 +1,15 @@
 20000 ! Replace S:\acsUB\ubCass1
 20020 ! -- Creates Address Certification File:
-20040 ! ______________________________________________________________________
-20060 ! ______________________________________________________________________
+20040 !
+20060 !
 20080   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnxit,fnTos,fnAcs,fnLbl,fnwait,fncsz,fnCmdSet,fntop,fngethandle
 20100   on error goto Ertn
-20120 ! ______________________________________________________________________
+20120 !
 20140   dim z$,nam$*30,sta$*30,sta2$*30,csz$*30,opt1$(7),txt$*80,cap$*128
-20160 ! ______________________________________________________________________
+20160 !
 20180   fntop("S:\acsUB\ubCass1",cap$="Create Certification File")
 20200   fncno(cno)
-20220 ! ______________________________________________________________________
+20220 !
 20240 ! r: a screen
 20260 ! fnTos(sn$:="ubCass1")
 20280 ! respc=0

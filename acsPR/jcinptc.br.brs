@@ -1,20 +1,20 @@
 00010 ! Replace S:\acsPR\jcInptC
 00020 ! Input (Job Cost) Charges
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnoldmsgbox,fnwait,fnwin3b,fnopenprn,fncloseprn,fncno,fnerror,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cn$*11,k$*11,n$*40,en$*8,hr(2),empnam$*30,ds$*30,a$(3)*30,b(4)
 00080   dim rn$*12,jn$*6,ji2(3),d$*30,label1$(7)*24,iolabel1$(7),io1$(7)
 00090   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,cnt$*25,cap$*128
 00100   dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38
-00110 ! ______________________________________________________________________
+00110 !
 00120   fncno(cno)
 00130 ! 
 00140   cap$="Input (Job Cost) Charges"
 00145   fntop("S:\acsPR\jcInptC", "Enter Charges")
 00146   fnconsole(1)
-00150 ! ______________________________________________________________________
+00150 !
 00160   data "Reference Number:"
 00170   data "Date (mmddyy):"
 00180   data "Job Number:"
@@ -23,7 +23,7 @@
 00210   data "Amount:"
 00220   data "Description:"
 00230   read mat label1$
-00240 ! ______________________________________________________________________
+00240 !
 00250   io1$(1)="4,20,C 12,UT,N"
 00260   io1$(2)="5,20,Nz 6,UT,N"
 00270   io1$(3)="6,20,c 6,UT,N"
@@ -31,16 +31,16 @@
 00290   io1$(5)="08,20,N 2,UT,N"
 00300   io1$(6)="09,20,n 10.2,UT,N"
 00310   io1$(7)="10,20,C 30,UT,N"
-00320 ! ______________________________________________________________________
+00320 !
 00330   for j=1 to 7
 00340     iolabel1$(j)=str$(j+3)&",2,Cr 17,N"
 00350   next j
-00360 ! ______________________________________________________________________
+00360 !
 00370   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outIn,relative 
 00380   open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00390   open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
 00400   open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed 
-00410 ! ______________________________________________________________________
+00410 !
 00420 INPUTSCREEN1: ! 
 00430   shoption=1
 00440 INPUTSCREEN2: ! 
@@ -103,7 +103,7 @@
 00810   on ce-2 gosub SRCH,CATEGORY_SEARCH,SRCH3 none L620
 00820   if ce=3 then pr #win,fields io1$(3): jn$
 00830   goto L620
-00840 ! ______________________________________________________________________
+00840 !
 00850 L850: if cmdkey=4 and c1=2 then goto DEL
 00860   if ltrm$(rtrm$(rn$))="-1" then ce=1 : goto ERR1
 00870   if dat<10100 or dat>123199 then ce=2: goto ERR1
@@ -133,11 +133,11 @@
 01110   goto INPUTSCREEN2
 01120 L1120: rewrite #3,using L1100,rec=rr: rn$,dat,jn$,mat ji2,d$
 01130   goto L1210
-01140 ! ______________________________________________________________________
+01140 !
 01150 DEL: ! 
 01160   rewrite #3,using L1100,rec=rr: "-1",0,"",0,0,0,""
 01170   goto L1210
-01180 ! ______________________________________________________________________
+01180 !
 01190 ADDITIONALENTRIES: ! 
 01200   shoption=2
 01210 L1210: pr newpage
@@ -150,7 +150,7 @@
 01280   close #win: ioerr L1290
 01290 L1290: read #3,using L1100,rec=rr: rn$,dat,jn$,mat ji2,d$
 01300   goto INPUTSCREEN2
-01310 ! ______________________________________________________________________
+01310 !
 01320 WHATNEXT: ! 
 01330   pr newpage
 01340   fnopenwin(win=102,09,20,16,59,cap$)
@@ -166,7 +166,7 @@
 01440   c1=curfld
 01450   if cmdkey=5 then goto XIT
 01460   on c1 goto PRINTPROOFLIST,ADDITIONALENTRIES,INPUTSCREEN1,POSTTOJOB none L1430
-01470 ! ______________________________________________________________________
+01470 !
 01480 PRINTPROOFLIST: ! 
 01490   pr newpage
 01500   fnwait(message$,1)
@@ -186,16 +186,16 @@
 01640   ta=0
 01650   fncloseprn
 01660   goto WHATNEXT
-01670 ! ______________________________________________________________________
+01670 !
 01680 POSTTOJOB: ! 
 01690   close #3: 
 01700   close #11: 
 01710   close #12: 
 01720   close #13: 
 01730   chain "S:\acsPR\JCMRGC"
-01740 ! ______________________________________________________________________
+01740 !
 01750 XIT: fnxit
-01760 ! ______________________________________________________________________
+01760 !
 01770 L1770: if ce>0 then io1$(ce)(ce1:ce2)="U"
 01780   ce=cnt+1
 01790 L1790: pr f "24,1,C 7,N": bell
@@ -204,7 +204,7 @@
 01820   ce2=ce1+1
 01830   io1$(ce)(ce1:ce1)="UC"
 01840   goto L580
-01850 ! ______________________________________________________________________
+01850 !
 01860 SRCH: bk=0 : hce=ce
 01870   close #103: ioerr L1880
 01880 L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output 
@@ -269,13 +269,13 @@
 02460   bk=bk-1
 02470 L2470: selclp=1
 02480   goto L2120
-02490 ! ______________________________________________________________________
+02490 !
 02500 L2500: selclp=0
 02510   goto L2020
-02520 ! ______________________________________________________________________
+02520 !
 02530 SRCHEND: close #103: ioerr L2540
 02540 L2540: return 
-02550 ! ______________________________________________________________________
+02550 !
 02560 CATEGORY_SEARCH: ! 
 02570   bk=0
 02580   close #103: ioerr L2590
@@ -304,7 +304,7 @@
 02810 L2810: if rtrm$(k$)><"" then goto SRCHEND
 02820   if ln<20 then goto SRCHEND
 02830   goto L2650
-02840 ! ______________________________________________________________________
+02840 !
 02850 SRCH3: bk=0
 02860   close #103: ioerr L2870
 02870 L2870: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",display,output 
@@ -326,7 +326,7 @@
 03030 L3030: if rtrm$(k$)><"" then goto SRCHEND
 03040   if ln<20 then goto SRCHEND
 03050   goto L2880
-03060 ! ______________________________________________________________________
+03060 !
 03070 ! <Updateable Region: ERTN>
 03080 ERTN: fnerror(program$,err,line,act$,"xit")
 03090   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -334,4 +334,4 @@
 03110   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03130 ! /region
-03140 ! ______________________________________________________________________
+03140 !

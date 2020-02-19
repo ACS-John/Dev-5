@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsUB\ubprtfull_ashgrove
 00020 ! pr bills for Ash Grove (full page)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnmsgbox,fnCmdKey,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(20)*160,txt$*80,mg$(13)*160,rw(22,13),cap$*128
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
 00100   dim dueby$*30,prebal$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fncno(cno,cnam$) !:
         fnLastBillingDate(d1)
 00130   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
@@ -38,7 +38,7 @@
 00227     read #16,using "form pos 1,c 60",rec=j: mg$(j) noRec L228
 00228 L228: next j
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
-00240 ! ______________________________________________________________________
+00240 !
 00250   prebal$="10:00 AM, xxxxxxx  xx"
 00260 SCREEN1: ! 
 00270   a$="" : prtbkno=0
@@ -145,10 +145,10 @@
 00660   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00670   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00680   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-00690 ! ______________________________________________________________________
+00690 !
 00700   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00710   gosub VBOPENPRINT
-00720 ! ______________________________________________________________________
+00720 !
 00730   on fkey 5 goto RELEASE_PRINT
 00740 L740: if sl1=1 then goto SCREEN3
 00750 ! Read #6,Using 780: Z$ Eof 1040
@@ -173,7 +173,7 @@
 00930   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
 00940   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 00950   goto L1120
-00960 ! ______________________________________________________________________
+00960 !
 00970 L970: e1=0 : mat pe$=("")
 00980   for j=2 to 4
 00990     if rtrm$(e$(j))<>"" then !:
@@ -181,13 +181,13 @@
 01000   next j
 01010   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 01020   goto L1120
-01030 ! ______________________________________________________________________
+01030 !
 01040 RELEASE_PRINT: ! 
 01050   close #1: ioerr L1060
 01060 L1060: close #3: ioerr L1070
 01070 L1070: fnpa_finis
 01100   goto ENDSCR
-01110 ! ______________________________________________________________________
+01110 !
 01120 L1120: ! 
 01130   pb=bal-g(11)
 01140   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
@@ -197,7 +197,7 @@
 01180   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01190   goto L740
-01200 ! ______________________________________________________________________
+01200 !
 01210 SCREEN3: ! 
 01220   sn$ = "UBPrtBl1-2" !:
         fnTos(sn$)
@@ -219,7 +219,7 @@
 01300   if ck=5 then goto RELEASE_PRINT
 01310   read #1,using L800,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey SCREEN3
 01320   goto READALTADR
-01330 ! ______________________________________________________________________
+01330 !
 01340 SORT1: ! SELECT & SORT
 01350   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1600
 01360   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
@@ -237,7 +237,7 @@
 01460   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1470
 01470 L1470: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01480   goto L1400
-01490 ! ______________________________________________________________________
+01490 !
 01500 END5: close #6: 
 01510   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01520 L1520: form pos 1,c 128
@@ -249,7 +249,7 @@
 01580   open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
 01590   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01600 L1600: return 
-01610 ! ______________________________________________________________________
+01610 !
 01620 ENDSCR: ! pr totals screen
 01630   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01640   fnTos(sn$="Bills-Total") !:
@@ -270,7 +270,7 @@
 01730   fnCmdSet(52) !:
         fnAcs(sn$,0,mat resp$,ck)
 01740 XIT: fnxit
-01750 ! ______________________________________________________________________
+01750 !
 01760 ERTN: fnerror(program$,err,line,act$,"xit")
 01770   if uprc$(act$)<>"PAUSE" then goto L1800
 01780   execute "list -"&str$(line) !:
@@ -279,15 +279,15 @@
 01790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01800 L1800: execute act$
 01810   goto ERTN
-01820 ! ______________________________________________________________________
+01820 !
 01830 VBOPENPRINT: ! 
 01850     fnpa_open
 01880     lyne=3
 01910   return 
-01920 ! ______________________________________________________________________
+01920 !
 01930 VBPRINT: ! 
 01940 ! -- Printer Program for Laser 1-Per Page Utility Bills
-01950 ! ______________________________________________________________________
+01950 !
 01960 ! pr #20: 'Call Print.AddPicture("Ash Grove.jpg",20,1)'
 01970   addy=20
 01980   pr #20: 'Call Print.MyFontSize(12)'

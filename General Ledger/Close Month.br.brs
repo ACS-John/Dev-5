@@ -64,7 +64,7 @@ goto XIT
 GLBREC_DROP: ! 
 	open #h_glbrec:=1: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn 
 goto FINIS
-! ______________________________________________________________________
+!
 def fn_current_to_accumlated_trans
 	! fnwait - "Transferring Current Transactions to Accumulated Trans..."
 	open #hTransAccumulated:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
@@ -80,6 +80,6 @@ def fn_current_to_accumlated_trans
 	close #hTransCurrent: 
 	fnindex_it("[Q]\GLmstr\ACTRANS.h[cno]","[Q]\GLmstr\ACTRIDX.h[cno]","1/71/17/13 12/2/2/4")
 fnend 
-! ______________________________________________________________________
+!
 XIT: fnxit
 include: ertn

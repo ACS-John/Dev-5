@@ -1,12 +1,12 @@
 00010 ! formerly S:\acsCL\UnPdInv2
 00020 ! Unpaid Invoice Summary
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fndat,fnerror,fntop,fnxit,fnwait
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,vnam$*30,de$*31,gl(3),ade$*50
 00080   dim gl$*12,gd$*50
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$)
 00110   fndat(dat$)
 00120   fnwait
@@ -33,7 +33,7 @@
 00320   ga+=amt
 00330   rewrite #work,using 'FORM POS 63,PD 6.2',key=gl$: ga
 00340   goto READ_UNPDALOC
-00350 ! ______________________________________________________________________
+00350 !
 00360 L360: gd$="" !:
         read #glmstr,using 'Form Pos 13,C 50',key=gl$: gd$ nokey L370
 00370 L370: write #work,using 'FORM POS 1,C 12,C 50,PD 6.2': gl$,gd$,amt
@@ -48,7 +48,7 @@
 00460   pr #255: "Payee Name                      Description                    Ck-Amount  GL-Amount    GL-Number"
 00470 L470: pr #255: "______________________________ ______________________________ __________ __________ ____________"
 00480   return 
-00490 ! ______________________________________________________________________
+00490 !
 00500 END1: ! 
 00510   gosub L470
 00520   pr #255,using 'FORM POS 50,C 10,N 12.2': "Total",t1 !:
@@ -62,9 +62,9 @@
 00590   goto READ_WORK
 00600 L600: fncloseprn
 00610   goto XIT
-00620 ! ______________________________________________________________________
+00620 !
 00630 XIT: fnxit
-00640 ! ______________________________________________________________________
+00640 !
 00650 ! <Updateable Region: ERTN>
 00660 ERTN: fnerror(program$,err,line,act$,"xit")
 00670   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -72,4 +72,4 @@
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00700 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00710 ! /region
-00720 ! ______________________________________________________________________
+00720 !

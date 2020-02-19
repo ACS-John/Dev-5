@@ -5,7 +5,7 @@
 00060   fntop("S:\Utility Billing\Billing Journal",cap$="Secondary Water Usage Report")
 00065   fnLastBillingDate(d1)
 00070   fncno(cno,cnam$)
-00090 ! ______________________________________________________________________
+00090 !
 00100   fnTos(sn$="billingrpt")
 00110   fnLbl(1,1,"First Account:",25,1)
 00120   fncmbact(1,28) !:
@@ -29,11 +29,11 @@
 00270   if resp$(4)="True" then print_details$="Y"
 00280   d1=val(resp$(5))
 00290   goto STARTREPORT
-00300 ! ______________________________________________________________________
+00300 !
 00310 DONE: ! 
 00320   fncloseprn
 00330 XIT: fnxit
-00340 ! ______________________________________________________________________
+00340 !
 00350 STARTREPORT: ! 
 00370   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00380 L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
@@ -60,7 +60,7 @@
 00590   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 00600   gosub HEADER_PAGE
 00610   goto REPORT
-00620 ! ______________________________________________________________________
+00620 !
 00630 HEADER_PAGE: ! 
 00640   pg=pg+1
 00650   if print_details$="N" then temp$(1)="No Details"
@@ -76,19 +76,19 @@
 00750   pr #255: ""
 00760   gosub HEADER_COLUMN
 00770   return 
-00780 ! ______________________________________________________________________
+00780 !
 00790 HEADER_COLUMN: ! 
 00800   if print_details$="N" then goto L830
 00810   pr #255,using L690: "Act.Number","Customer Name","WaterUsage"
 00820   pr #255,using L690: "__________","______________________________","__________"
 00830 L830: return 
-00840 ! ______________________________________________________________________
+00840 !
 00850 PGOF: ! 
 00860   pr #255: newpage
 00870   if no_more_header=0 then gosub HEADER_PAGE
 00880   no_more_header=0
 00890   continue 
-00900 ! ______________________________________________________________________
+00900 !
 00910 REPORT: ! 
 00920   read #7,using L930: r6 eof GRANDTOTAL
 00930 L930: form pos 1,pd 3
@@ -100,14 +100,14 @@
 00990   subtotal_break_check=d3 ! vaL(Z$(1:2))
 01000   not_first_rec=1
 01010   goto REPORT
-01020 ! ______________________________________________________________________
+01020 !
 01030 DETAILS: ! 
 01040   pr #255,using L1050: z$,e2$,d3 pageoflow PGOF
 01050 L1050: form pos 1,c 10,x 1,c 30,x 1,n 10
 01060   return 
-01070 ! ______________________________________________________________________
+01070 !
 01080   return 
-01090 ! ______________________________________________________________________
+01090 !
 01100 SUBTOTAL: ! 
 01110   if print_details$="N" then pr #255,using L1120: "SubTotals (for usage of "&str$(subtotal_break_check)&")","Customer Count: "&str$(subtotal_count),"Water Usage: "&str$(subtotal_d3) pageoflow PGOF: goto L1180
 01120 L1120: form pos 1,c 32,x 3,c 22,x 3,c 26,skip 1
@@ -122,7 +122,7 @@
 01210   subtotal_count=subtotal_d3=0
 01220   if no_more_header=0 then gosub HEADER_COLUMN
 01230   return 
-01240 ! ______________________________________________________________________
+01240 !
 01250 GRANDTOTAL: ! 
 01260   no_more_header=1
 01270   gosub SUBTOTAL
@@ -133,4 +133,4 @@
 01320   pr #255,using L1150: "Water Usage: "&str$(grandtotal_d3) pageoflow PGOF
 01330   pr #255,using L1150: "____________________________________________________" pageoflow PGOF
 01340 L1340: goto DONE
-01350 ! ______________________________________________________________________
+01350 !

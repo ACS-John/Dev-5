@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsGL\Payroll
 00020 ! GL Payroll File Menu
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnemployee_search,fnTxt,fnCmdSet,fnmsgbox,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl2$(5),sc2$(5)*38
 00080   dim sc1$(26),fl1$(26),io1$(41),hd$(2)*78,pr1(21),miscname$(10)*20
 00090   dim l1(4),l2$(4)*25,l3$(4)*25,sc3$(21)*13,fl3$(21),io3$(21),prd(21)
@@ -12,7 +12,7 @@
 00120   dim sr$(16),en$(16),resp$(50)*35,ml$(4)*80
 00130   dim iocr$(3),wrdcr$(3)*23
 00140   dim p$(20)*50,cap$*128,dedcode(10)
-00150 ! ______________________________________________________________________
+00150 !
 00160   fntop(program$,cap$="Payroll")
 00170   fncno(cno,cnam$)
 00180   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
@@ -43,13 +43,13 @@
 00280   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr L2900
 00290   open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative 
 00300   goto MAIN
-00310 ! ______________________________________________________________________
+00310 !
 00320 DONE: ! 
 00330   close #1: 
 00340   close #2: 
 00350   if new1=1 or cont=1 then goto L1410
 00360   goto XIT
-00370 ! ______________________________________________________________________
+00370 !
 00380 MAIN: ! 
 00390   fnTos(sn$="Payroll") !:
         mylen=20: mypos=mylen+3 : right=1
@@ -165,7 +165,7 @@
 01270   eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
 01280 L1280: if ckey=1 then rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
 01290 L1290: eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
-01300 ! ______________________________________________________________________
+01300 !
 01310 INITIAL_BUILD: ! 
 01320   open #1: "Name=[Q]\GLmstr\PRmstr.h[cno]",internal,output ioerr L1330
 01330 L1330: close #1,free: ioerr L1340
@@ -179,7 +179,7 @@
 01410 L1410: close #1: ioerr L1420
 01420 L1420: execute "Index [Q]\GLmstr\PRmstr.h[cno]"&' '&"[Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n"
 01430   goto MAIN
-01440 ! ______________________________________________________________________
+01440 !
 01450 PROOF_LIST: ! 
 01460   restore #1,key>="    ": eof L1470, nokey L1470
 01470 L1470: fnopenprn
@@ -200,7 +200,7 @@
 01620   on fkey 5 ignore 
 01630   fncloseprn
 01640   if fnprocess=1 then goto XIT else goto MAIN
-01650 ! ______________________________________________________________________
+01650 !
 01660 L1660: pr #255,using L1670: sc1$(4),mat l1
 01670 L1670: form pos 1,c 21,x 7,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),skip 1
 01680   pr #255,using L1690: sc1$(5),mat l2$
@@ -231,14 +231,14 @@
 01930   gosub HDR
 01940 L1940: pl=0
 01950   return 
-01960 ! ______________________________________________________________________
+01960 !
 01970 HDR: ! 
 01980   pr #255,using L1990: date$('mm/dd/yy'),cnam$
 01990 L1990: form skip 2,pos 1,c 8,pos 1,cc 108,skip 1
 02000   pr #255,using L2010: time$,"Payroll Proof List",dat$
 02010 L2010: form pos 1,c 8,pos 45,c 20,skip 1,pos 1,cc 108,skip 2
 02020   return 
-02030 ! ______________________________________________________________________
+02030 !
 02040   pr newpage
 02050   pr f "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
 02060   restore #1,key>="    ": eof L2070
@@ -258,7 +258,7 @@
 02200 L2200: form pos 108,pd 3
 02210 L2210: next j
 02220   goto MAIN
-02230 ! ______________________________________________________________________
+02230 !
 02240 REVIEW_CHECKS: ! 
 02250   if ta(1)=0 then goto MSGBOX5 else goto L2290
 02260 MSGBOX5: ! 
@@ -337,11 +337,11 @@
 02870   adr=nca
 02875   if add=1 then mat pr1=(0): mat prd=(0): goto L2330
 02880   if add=0 then goto L2300
-02890 ! ______________________________________________________________________
+02890 !
 02900 L2900: if err=4152 then goto INITIAL_BUILD else goto ERTN
 02910 XIT: fnxit
-02920 ! ______________________________________________________________________
-02930 ! ______________________________________________________________________
+02920 !
+02930 !
 02940 ! <Updateable Region: ERTN>
 02950 ERTN: fnerror(program$,err,line,act$,"xit")
 02960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

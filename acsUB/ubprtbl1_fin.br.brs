@@ -1,13 +1,13 @@
 ! Replace S:\acsUB\ubprtbl1_fin
 ! pr bills for Village of Findlay
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt
 		on error goto Ertn
 !______________________________________________________________________
 		dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128,a(7)
 		dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 		dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
-! ______________________________________________________________________
+!
 	fnLastBillingDate(d1)
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  
 	read #21,using "Form POS 41,2*C 40": at$(2),at$(3) 
@@ -29,7 +29,7 @@
 		gosub BULKSORT
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 		open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
-	! ______________________________________________________________________
+	!
 	SCREEN1: ! 
 		a$="" : prtbkno=0
 		fnTos(sn$="UBPrtBl1-1") 
@@ -85,11 +85,11 @@
 		if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 		if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 		if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-	! ______________________________________________________________________
+	!
 		open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 		gosub BUD1
 		gosub VBOPENPRINT
-	! ______________________________________________________________________
+	!
 		on fkey 5 goto RELEASE_PRINT
 	L560: if sl1=1 then goto SCREEN3
 	L570: read #6,using L600: z$ eof RELEASE_PRINT
@@ -117,21 +117,21 @@
 				end if
 		next j
 		goto L960
-	! ______________________________________________________________________
+	!
 	L810: e1=0 : mat pe$=("")
 		for j=2 to 4
 			if rtrm$(e$(j))<>"" then e1=e1+1 : pe$(e1)=e$(j)
 		next j
 		if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 		goto L960
-	! ______________________________________________________________________
+	!
 	RELEASE_PRINT: ! 
 		close #1: ioerr L900
 	L900: close #3: ioerr L910
 	L910: ! 
 		fnpa_finis
 		goto ENDSCR
-	! ______________________________________________________________________
+	!
 	L960: ! 
 		pb=bal-g(11)
 		if bal<=0 then g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
@@ -143,7 +143,7 @@
 		bct(2)=bct(2)+1 
 		! accumulate totals
 		goto L560
-	! ______________________________________________________________________
+	!
 	SCREEN3: ! 
 		sn$ = "UBPrtBl1-2" 
 		fnTos(sn$)
@@ -165,7 +165,7 @@
 		if ck=5 then goto RELEASE_PRINT
 		read #1,using L620,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,energy$,mat a,extra11,extra12 nokey SCREEN3
 		goto L660
-	! ______________________________________________________________________
+	!
 	SORT1: ! SELECT & SORT
 		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1430
 		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
@@ -182,7 +182,7 @@
 		read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1300
 	L1300: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 		goto L1230
-	! ______________________________________________________________________
+	!
 	END5: close #6: 
 		open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 	L1350: form pos 1,c 128
@@ -194,7 +194,7 @@
 		open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
 		open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 	L1430: return 
-	! ______________________________________________________________________
+	!
 	ENDSCR: ! pr totals screen
 		if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 		fnTos(sn$="Bills-Total") 
@@ -206,7 +206,7 @@
 		fnCmdSet(52) 
 		fnAcs(sn$,0,mat resp$,ck)
 	XIT: fnxit
-	! ______________________________________________________________________
+	!
 	ERTN: fnerror(program$,err,line,act$,"xit")
 		if uprc$(act$)<>"PAUSE" then goto L1630
 		execute "list -"&str$(line) 
@@ -215,12 +215,12 @@
 		pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 	L1630: execute act$
 		goto ERTN
-	! ______________________________________________________________________
+	!
 	VBOPENPRINT: ! 
 		fnPa_open("Landscape")
 		lyne=3
 		return 
-	! ______________________________________________________________________
+	!
 	VBPRINT: ! 
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 		checkcounter+=1
@@ -232,7 +232,7 @@
 			ymargin=108 
 			checkcounter=0
 		end if
-	! ______________________________________________________________________
+	!
 		pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 		pr #20: "Call Print.MyFontBold(True)"
 		pr #20: 'Call Print.MyFontSize(12)'
@@ -252,7 +252,7 @@
 		pr #20: 'Call Print.AddText("Reading",'&str$(xmargin+10)&','&str$(lyne*13+ymargin)&')'
 		pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 		pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
-	! ______________________________________________________________________
+	!
 	PRINTGRID: meter=14 
 		pr #20: 'Call Print.MyFontSize(8)'
 		if havebudget=1 then payby=bal-gb(4)+budgetpb
@@ -335,7 +335,7 @@
 		end if 
 		L2250: ! If PB><0 Then pr #20: 'Call Print.AddLine('&STR$(XMARGIN+46)&','&STR$(LYNE*(METER+=1)+YMARGIN)&',15,0)'
 		pr #20: 'Call Print.MyFontSize(10)'
-	! ______________________________________________________________________
+	!
 		if estimatedate=d1 then pr #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
 		pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*24+1+ymargin)&',63,0)'
 		pr #20: 'Call Print.AddText("   Pay By  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin)&')'
@@ -352,9 +352,9 @@
 	L2420: pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*27+1+ymargin)&',63,0)'
 		pr #20: 'Call Print.AddText("Office 756-8997 Fire 911",'&str$(xmargin+1)&','&str$(lyne*28+ymargin)&')'
 		pr #20: 'Call Print.AddText("      Police 756-3311",'&str$(xmargin+1)&','&str$(lyne*29.5+ymargin)&')'
-	! ______________________________________________________________________
+	!
 		special=28
-	! ______________________________________________________________________
+	!
 		fnpa_fontsize(7)
 		pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
 		pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
@@ -408,7 +408,7 @@
 			fnpa_newpage
 		end if
 		return 
-	! ______________________________________________________________________
+	!
 	BULKSORT: ! bulk sort order
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
@@ -428,7 +428,7 @@
 		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 		bud1=1
 	EO_BUD1: return 
-	! ______________________________________________________________________
+	!
 	BUD2: ! 
 		totba=bd1=bd2=budgetpb=havebudget=00
 		mat bd1(5) : mat bd1=(0) : mat bd2=(0)

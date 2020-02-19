@@ -1,6 +1,6 @@
 ! Formerly S:\acsGL\glMaint
 ! General Ledger Master File editor
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnxit,fntop
 	library 'S:\Core\Library': fnTos,fnOpt,fnLbl,fnCmdSet,fnAcs
 	library 'S:\Core\Library': fnagl$,fnFra,fnTxt,fncombof,fnCmdKey
@@ -12,7 +12,7 @@
 	library 'S:\Core\Library': fngethandle
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim tr(7),tr$*12,td$*30
 	dim d$*50,bc(13),bp(13)
 	dim bm(13)
@@ -24,7 +24,7 @@
 	dim resp$(100)*60
 	dim ml$(3)*128
 	dim item$(9)*30
-! ______________________________________________________________________
+!
 	fntop(program$)
 	fixgrid=99
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
@@ -148,10 +148,10 @@ L960: !
 	if ckey=8 then goto SEARCH_GRID
 	if ckey=9 then goto CHANGE_ACCT_NUM
 	goto MAIN
-! ______________________________________________________________________
+!
 ! BLDRANGE: fnchain("S:\acsGL\BldRange")
 XIT: fnxit
-! ______________________________________________________________________
+!
 ADD: !
 	fnTos(sn$="GLAdd")
 	mylen=23: mypos=mylen+3 : right=1: rc=0
@@ -194,7 +194,7 @@ ADD: !
 		write #8,using L1740: gl$,d$
 	end if
 	goto MAIN
-! ______________________________________________________________________
+!
 DO_EDIT: ! r:
 	pr newpage
 	read #hAccount,using L1740,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
@@ -282,7 +282,7 @@ REVIEW_TRANS: ! r:
 	if ckey=5 then goto MAIN
 	if resp$(1)="True" then currentOrHistory=1
 	if resp$(2)="True" then currentOrHistory=2
-! ______________________________________________________________________
+!
 TRANSACTION_GRID: !
 	mat chdr$(9) : mat cmask$(9) : mat item$(9)
 	chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date'

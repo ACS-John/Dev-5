@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\glZer109
 00020 ! Zero Year To Date Purchases
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnchain,fnprocess,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   fntop(program$,cap$="Zero Year To Date Purchases")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim adr(2),cnam$*40,cap$*128,de$*30,re$*12
-00090 ! ______________________________________________________________________
+00090 !
 00100   fncno(cno,cnam$)
 00110 ! 
 00120   open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno],Shr",internal,outIn,keyed ioerr L440
@@ -48,7 +48,7 @@
 00430   execute "Index [Q]\GLmstr\gltr1099.H[cno]"&' '&"[Q]\GLmstr\gltridx1.H[cno] 1 8 Replace DupKeys -N"
 00440 L440: if fnprocess=1 then let fnchain("S:\acsGL\acglAuto")
 00450 XIT: fnxit
-00460 ! ______________________________________________________________________
+00460 !
 00470 ! <Updateable Region: ERTN>
 00480 ERTN: fnerror(program$,err,line,act$,"xit")
 00490   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

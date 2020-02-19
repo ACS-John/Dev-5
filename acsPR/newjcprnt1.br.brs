@@ -1,22 +1,22 @@
 00010 ! Replace S:\acsPR\newJCPrnt1
 00020 ! JCRpt-MOD will be modified by S:\acsPR\jcRptS1 to make used designed JCPrntXX
 00030 ! DO NOT RENUMBER !!!
-00040 ! ______________________________________________________________________
+00040 !
 00050   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenwin,fnopenprn,fncloseprn,fnerror,fnprocess,fndat,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),t(20),s(20),c(20)
 00090   dim rn$*2,rt$*78,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20)
 00100   dim fc(20),tcj(20),tcs(20),dt(125),gt(125),dh$*20,jn1$*6
 00110   dim message$*40
-00120 ! ______________________________________________________________________
+00120 !
 00130 ! fnTOP("S:\acsPR\jcRpt-MOD",CAP$="User Designed Reports (2)")
 00140   fndat(dh$)
 00150 ! 
-00160 ! ______________________________________________________________________
+00160 !
 00170   rn$=" 1"
 00180   if fnprocess=1 then goto L300
-00190 ! ______________________________________________________________________
+00190 !
 00200 MAIN_SCREEN: ! 
 00210   fnTos(sn$="jcprnt1") !:
         mylen=25 : mypos=mylen+2: resp=0: left=1
@@ -28,22 +28,22 @@
 00260   if ck=5 then goto XIT
 00270   dh$=resp$(1) ! heading date
 00280   fndat(dh$,put=2)
-00290 ! ______________________________________________________________________
+00290 !
 00300 L300: fnopenprn
-00310 ! ______________________________________________________________________
-00330 ! ______________________________________________________________________
+00310 !
+00330 !
 00340   open #1: "Name=S:\acsPR\JCReport.MST,KFName=S:\acsPR\jcReport.Idx,Shr",internal,input,keyed 
 00350   read #1,using L360,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 00360 L360: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 00370   close #1: 
-00380 ! ______________________________________________________________________
+00380 !
 00390   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00400   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
 00410   gosub HDR
 00420   goto PRTRPT
-00430 ! ______________________________________________________________________
+00430 !
 00440 PGOF: pr #255: newpage : gosub HDR : continue 
-00450 ! ______________________________________________________________________
+00450 !
 00460 HDR: ! r:
 00470   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 00480   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
@@ -53,13 +53,13 @@
 00520   pr #255: ch$(1)
 00530   pr #255: ch$(2)
 00540   return ! /r
-00550 ! ______________________________________________________________________
+00550 !
 00560 EOF1: ! 
 00570   fncloseprn
 00580   close #1: 
 00590   close #2: 
 00600   fnxit
-00610 ! ______________________________________________________________________
+00610 !
 00620 PRTRPT: read #1,using L660: jn$,n$,mat a$,x6,x7,x8,x9 eof SND
 00630   jn1$=jn$
 00640   on conv goto L1240
@@ -79,7 +79,7 @@
 00780     if x12= psc(j) then goto L820
 00790   next j
 00800   goto L720
-00810 ! ______________________________________________________________________
+00810 !
 00820 L820: on zdiv goto L1220
 00830   on uflow goto L1220
 00840   on oflow goto L1220
@@ -121,15 +121,15 @@
 01200 L1200: form skip 2,"Grand Totals",pos 79,n 8.2,pos 106,n 8.2,pos 119,n 8.2,skip 1
 01210   goto EOF1
 01220 L1220: continue 
-01230 ! ______________________________________________________________________
+01230 !
 01240 L1240: jn=0
 01250   cn=0
 01260   continue 
-01270 ! ______________________________________________________________________
+01270 !
 01280 L1280: cn$=""
 01290   continue 
-01300 ! ______________________________________________________________________
-01310 ! ______________________________________________________________________
+01300 !
+01310 !
 01320 ! <Updateable Region: ERTN>
 01330 ERTN: fnerror(program$,err,line,act$,"xit")
 01340   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -137,6 +137,6 @@
 01360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01380 ! /region
-01390 ! ______________________________________________________________________
+01390 !
 01400 XIT: fnxit
-01410 ! ______________________________________________________________________
+01410 !

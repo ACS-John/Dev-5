@@ -1,9 +1,9 @@
 ! Replace S:\acsUB\ubbargraph
 ! pr bar graph of earnings by month for current year of prior year.
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnget_services, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt,fnOpt,fnFra,fncomboa,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)
 	right=1 : center=2
@@ -12,7 +12,7 @@
 	dim n2(24),n3(24,13),resp$(27),txt$*80
 	dim serviceName$(10)*20,msgline$(2)*40,tg(11),opt$(3)*20
 	dim srv$(10)*2,dollars(24)
-! ______________________________________________________________________
+!
 
 	open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
 	read #1,using "Form POS 121,N 6": d1 ioerr L230
@@ -33,7 +33,7 @@ L280: read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,
 	resp$(j)=str$(tdate)
 	goto L280
 L350: if resp$(12)="" then goto L260 ! try another customer
-! ______________________________________________________________________
+!
 SCREEN1: !
 	restore #1:
 	fnTos(sn$="ubbargraph")
@@ -133,7 +133,7 @@ L1010: read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal
 	if p$<>z$ then goto L980 ! history record must belong to this customer
 	if tcode<>1 then goto L1010 ! charge transactions only
 L1040: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-! ______________________________________________________________________
+!
 	if service=1 and baseon=1 then usage=wu ! analyzing water
 	if service=1 and baseon=2 then usage=tg(1) ! analyzing water dollars
 	if service=3 and baseon=1 then usage=eu ! analyzing electric
@@ -225,9 +225,9 @@ DETERMINE_BOTTOM_LINE: !
 	gosub RELEASE_PRINT
 	close #1:
 	goto XIT
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 VBOPENPRINT: !
 	if file(20)=-1 then
 		open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output

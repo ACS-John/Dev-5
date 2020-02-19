@@ -1,13 +1,13 @@
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnOpt,fnmsgbox,fncomboa,fnButton,fnpic,fnFra,fnChk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnCmdSet,fnCmdKey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
 00040   library 'S:\Core\Library': fndat
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
 00080   dim usagtot(18,20),ratetot(18,20),customer(18,20),cap$*128
 00090   dim fa$(5),sa$(4),fb$(1),fc$(1),sb$(1)*38,fd$(1),z$(4)*11,svce$*11
 00100   dim io2$(38),cnam$*40,code$(4)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fncno(cno,cnam$)
 00130   fndat(bdate)
 00140   fntop("S:\acsUB\ubanlyze",cap$="Analyze Charges")
@@ -117,7 +117,7 @@
 01210   usagtot(k7,k9)=usagtot(k7,k9)+ds9
 01220 L1220: customer(k7,k9)=customer(k7,k9)+1
 01230   goto L960
-01240 ! ______________________________________________________________________
+01240 !
 01250 L1250: for k5=1 to 18
 01260     for k3=1 to 20
 01270       ratetot(k5,k3)=usagtot(k5,k3)*rate(k5,k3)
@@ -162,7 +162,7 @@
 01580 DONE: close #1: ioerr L1590
 01590 L1590: fncloseprn
 01600 XIT: fnxit
-01610 ! ______________________________________________________________________
+01610 !
 01620 ERTN: fnerror(program$,err,line,act$,"xit")
 01630   if uprc$(act$)<>"PAUSE" then goto L1660
 01640   execute "list -"&str$(line) !:
@@ -171,4 +171,4 @@
 01650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01660 L1660: execute act$
 01670   goto ERTN
-01680 ! ______________________________________________________________________
+01680 !

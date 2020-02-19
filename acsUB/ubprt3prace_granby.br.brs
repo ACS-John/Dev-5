@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsUB\ubprt3prace_granby
 00020 ! pr bills for Carrizo Springs   3 per page prace
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage,fnget_services
-00030 ! ______________________________________________________________________
+00030 !
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 00100   dim serviceName$(10)*20,service$(10)*2
 00110   dim dueby$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
-00120 ! ______________________________________________________________________
+00120 !
 00140   fnLastBillingDate(d1)
 00150   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
@@ -104,10 +104,10 @@
 01045   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 01050   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 01055   if exists("[Q]\UBmstr\Cass1.h[cno]") then let fn_sort1 else let fn_bulksort
-01060 ! ______________________________________________________________________
+01060 !
 01065   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 01070   fnpa_open
-01075 ! ______________________________________________________________________
+01075 !
 01080 ! on fkey 5 goto RELEASE_PRINT
 01082 L650: if sl1=1 then goto SCREEN3
 01084 L660: read #h_temp,using L690: bc$,z$ eof RELEASE_PRINT
@@ -145,18 +145,18 @@
 01148   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
 01150   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 01152   goto L1070
-01154 ! ______________________________________________________________________
+01154 !
 01156 L950: ! 
 01158   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 01160   goto L1070
-01162 ! ______________________________________________________________________
+01162 !
 01164 RELEASE_PRINT: ! 
 01166   close #1: ioerr L1010
 01168 L1010: close #3: ioerr L1020
 01170 L1020: ! 
 01172   fnpa_finis
 01174   goto ENDSCR
-01176 ! ______________________________________________________________________
+01176 !
 01178 L1070: ! 
 01180   pb=bal-g(11)
 01182 ! if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
@@ -170,7 +170,7 @@
 01198   bct(2)=bct(2)+1
 01200 ! .   ! accumulate totals
 01202   goto L650
-01204 ! ______________________________________________________________________
+01204 !
 01206 SCREEN3: ! r:
 01208   fnTos(sn$:="UBPrtBl1-2")
 01210   txt$="Account (blank to stop)"
@@ -190,18 +190,18 @@
 01238   if ck=5 then goto RELEASE_PRINT
 01240   read #1,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey SCREEN3
 01242   goto L760 ! /r
-01244 ! ______________________________________________________________________
+01244 !
 01246 ENDSCR: ! 
 01248   fn_screen_totals
 01250   : fnxit
-01252 ! ______________________________________________________________________
+01252 !
 01254 ERTN: fnerror(program$,err,line,act$,"xit")
 01256   if uprc$(act$)<>"PAUSE" then goto L1780
 01258   execute "List -"&str$(line) : pause : goto L1780
 01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01780 L1780: execute act$
 01790   goto ERTN
-01800 ! ______________________________________________________________________
+01800 !
 01810   def fn_screen_totals
 01820     if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01830     fnTos(sn$="Bills-Total")

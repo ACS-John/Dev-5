@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsCL\PaymentCode
 00020 ! Checkbook PaymentCode File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128
 00080   dim lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),mask(2),sln(2)
 00090   dim c$(2,8)*40
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Payment Code")
 00120   fncno(cno)
 00130   lbl$(1)="Payment Code" !:
@@ -21,7 +21,7 @@
 00200   open #1: "Name=[Q]\CLmstr\PaymentCode.dat,Version=1,KFName=[Q]\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outIn,keyed 
 00210   fnHamster("PaymentCode",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00220 XIT: fnxit
-00230 ! ______________________________________________________________________
+00230 !
 00240 ! <Updateable Region: ERTN>
 00250 ERTN: fnerror(program$,err,line,act$,"xit")
 00260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -29,4 +29,4 @@
 00280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00290 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00300 ! /region
-00310 ! ______________________________________________________________________
+00310 !

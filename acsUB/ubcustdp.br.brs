@@ -14,7 +14,7 @@
 18220   filter_option$(4)="2 - Inactive / Deposit Refunded"
 18240   filter_option$(5)="3 - Active / but Do Not Bill"
 18260   filter_option$(6)="4 - Finaled / but Not Billed"
-18280 ! ______________________________________________________________________
+18280 !
 19000   fntop(program$,cap$="Deposit List")
 19020   fncno(cno,cnam$)
 19040   fnget_services(mat serviceName$ )
@@ -88,7 +88,7 @@
 56080     end if 
 56100     gosub PRINT_DETAILS
 56120   loop 
-56140 ! ______________________________________________________________________
+56140 !
 58000 HEADER: ! r:
 58020   p2=p2+1
 58040   lnpg=0
@@ -149,7 +149,7 @@
 64100   next j
 64120   mat s=(0)
 64140   return  ! /r
-64160 ! ______________________________________________________________________
+64160 !
 66000 PRINT_GRAND_TOTALS: ! r:
 66020   pr #255: "{\b Totals:}"
 66040   for j=1 to 4
@@ -160,12 +160,12 @@
 66140   fncloseprn
 66160   goto XIT ! /r
 66180 XIT: fnxit
-66200 ! ______________________________________________________________________
+66200 !
 68000 NEWPGE: ! r:
 68020   pr #255: newpage
 68040   gosub HEADER
 68060   continue  ! /r
-68080 ! ______________________________________________________________________
+68080 !
 70000 ! <Updateable Region: ERTN>
 70020 ERTN: fnerror(program$,err,line,act$,"xit")
 70040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

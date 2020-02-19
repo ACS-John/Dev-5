@@ -1,12 +1,12 @@
 ! Replace Work\PrintLay
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 	dim a(200,6),a$*132,prg$*20,mo$(12)
 	data JANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER
-! ______________________________________________________________________
+!
 	read mat mo$
 	dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",20"&date$(1:2)
 	io1$(1)="10,65,N 1,UT,N"

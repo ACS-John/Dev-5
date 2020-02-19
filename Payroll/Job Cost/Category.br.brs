@@ -1,6 +1,6 @@
 00010 ! (formerly)  S:\acsPR\category
 00020 ! Service Code File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnmsgbox,fnxit,fndat,fntop,fnTos,fnLbl,fnCmdKey,fnAcs,fnTxt,fnCmdSet,fncombof,fnflexinit1,fnflexadd1,fncmbcategory,fncategory_srch
 00050   fntop(program$)
 00060   on error goto Ertn
@@ -8,7 +8,7 @@
 00080   dim holdcategory$*5,category$*5
 00090   dim df$*256,if$*256
 00100   dim item2$(4)*30,name$*30,ml$(3)*80
-00110 ! ______________________________________________________________________
+00110 !
 00130   fndat(dat$,1)
 00140   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00150 ! 
@@ -72,7 +72,7 @@
 00570 L570: rewrite #1,using L180,key=category$: category,name$ nokey L580
 00580 L580: if ckey=1 then goto ASKCATEGORY
 00590   goto ASKCATEGORY
-00600 ! ______________________________________________________________________
+00600 !
 00610 RECREATE_GRID: ! 
 00620   fncategory_srch(x$,99) !:
         df$="[Q]\PRmstr\category.h[cno]" : if$="[Q]\PRmstr\categoryidx.h[cno]" !:
@@ -134,18 +134,18 @@
 01100   pr #255: " Category #  Name          "
 01110   pr #255: " __________  ____________________  "
 01120   return 
-01130 ! ______________________________________________________________________
+01130 !
 01140 POF1: pr #255: newpage
 01150   pr #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGORY LISTING",dat$
 01160   continue 
-01170 ! ______________________________________________________________________
+01170 !
 01180 POF2: pr #255: newpage
 01190   pr #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGPRU LISTING",dat$
 01200 L1200: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1,pos dattab,c 20,skip 2
 01210   continue 
-01220 ! ______________________________________________________________________
+01220 !
 01230 XIT: fnxit
-01240 ! ______________________________________________________________________
+01240 !
 01250 ERTN: fnerror(program$,err,line,act$,"xit")
 01260   if uprc$(act$)<>"PAUSE" then goto L1290
 01270   if trim$(env$("ACSDeveloper"))<>"" then !:

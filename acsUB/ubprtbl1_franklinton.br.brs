@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsUB\ubprtbl1_Franklinton
 00020 ! pr bills for Town of Franklinton
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnCmdKey,fnbarcode,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
-00100 ! ______________________________________________________________________
+00100 !
 00110   fncno(cno,cnam$) !:
         fnLastBillingDate(d1)
 00120   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
@@ -31,7 +31,7 @@
 00190   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 00200   open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 00210   def fnc(x)=int(100*(x+sgn(x)*.0001))
-00220 ! ______________________________________________________________________
+00220 !
 00230 SCREEN1: ! 
 00240   a$="" : prtbkno=0
 00250   fnTos(sn$="UBPrtBl1-1") !:
@@ -92,11 +92,11 @@
 00510   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00520   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00530   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-00540 ! ______________________________________________________________________
+00540 !
 00550   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00560   gosub BUD1
 00570   gosub VBOPENPRINT
-00580 ! ______________________________________________________________________
+00580 !
 00590   on fkey 5 goto RELEASE_PRINT
 00600 L600: if sl1=1 then goto SCREEN3
 00610 L610: ! Read #6,Using 640: Z$ Eof 910
@@ -123,7 +123,7 @@
             e1=e1+1 : pe$(e1)=ba$(j)
 00820   next j
 00830   goto L1010
-00840 ! ______________________________________________________________________
+00840 !
 00850 L850: e1=0 : mat pe$=("")
 00860   for j=2 to 4
 00870     if rtrm$(e$(j))<>"" then !:
@@ -131,13 +131,13 @@
 00880   next j
 00890   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00900   goto L1010
-00910 ! ______________________________________________________________________
+00910 !
 00920 RELEASE_PRINT: ! 
 00930   close #1: ioerr L940
 00940 L940: close #3: ioerr L950
 00950 L950: fnpa_finis
 00990   goto ENDSCR
-01000 ! ______________________________________________________________________
+01000 !
 01010 L1010: ! 
 01020   if bud1=1 then gosub BUD2
 01030   pb=bal-g(11)
@@ -148,7 +148,7 @@
 01080   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01090   goto L600
-01100 ! ______________________________________________________________________
+01100 !
 01110 SCREEN3: ! 
 01120   sn$ = "UBPrtBl1-2" !:
         fnTos(sn$)
@@ -172,7 +172,7 @@
 01220   if d3=0 then d3=newd3
 01230   if d2=0 then d2=newd2
 01240   goto READALTADR
-01250 ! ______________________________________________________________________
+01250 !
 01260 SORT1: ! SELECT & SORT
 01270   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1520
 01280   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
@@ -190,7 +190,7 @@
 01380   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1390
 01390 L1390: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01400   goto L1320
-01410 ! ______________________________________________________________________
+01410 !
 01420 END5: close #6: 
 01430   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01440 L1440: form pos 1,c 128
@@ -202,7 +202,7 @@
 01500   open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
 01510   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01520 L1520: return 
-01530 ! ______________________________________________________________________
+01530 !
 01540 ENDSCR: ! pr totals screen
 01550   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01560   fnTos(sn$="Bills-Total") !:
@@ -223,7 +223,7 @@
 01650   fnCmdSet(52) !:
         fnAcs(sn$,0,mat resp$,ck)
 01660 XIT: fnxit
-01670 ! ______________________________________________________________________
+01670 !
 01680 ERTN: fnerror(program$,err,line,act$,"xit")
 01690   if uprc$(act$)<>"PAUSE" then goto L1720
 01700   execute "list -"&str$(line) !:
@@ -232,12 +232,12 @@
 01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01720 L1720: execute act$
 01730   goto ERTN
-01740 ! ______________________________________________________________________
+01740 !
 01750 VBOPENPRINT: ! 
 01770   fnPa_open("Landscape")
 01800   lyne=3
 01830   return 
-01840 ! ______________________________________________________________________
+01840 !
 01850 VBPRINT: ! 
 01860 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01870   checkcounter+=1
@@ -246,7 +246,7 @@
 01900   if checkcounter=3 then xmargin=20: ymargin=108
 01910   if checkcounter=4 then xmargin=174 : ymargin=108 !:
           checkcounter=0
-01920 ! ______________________________________________________________________
+01920 !
 01930   pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 01940   pr #20: "Call Print.MyFontBold(True)"
 01950   pr #20: 'Call Print.MyFontSize(12)'
@@ -266,7 +266,7 @@
 02090   pr #20: 'Call Print.AddText("Reading",'&str$(xmargin+10)&','&str$(lyne*13+ymargin)&')'
 02100   pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 02110   pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
-02120 ! ______________________________________________________________________
+02120 !
 02130 PRINTGRID: meter=14 !:
         pr #20: 'Call Print.MyFontSize(8)'
 02140   if g(1)=0 then goto L2150 else !:
@@ -312,7 +312,7 @@
           pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin+2)&')' !:
           pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin+2)&')'
 02290 L2290: pr #20: 'Call Print.MyFontSize(10)'
-02300 ! ______________________________________________________________________
+02300 !
 02310   if estimatedate=d1 then pr #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
 02320   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin+10)&',63,0)'
 02330 ! pr #20: 'Call Print.AddText("Budget Payment",'&STR$(XMARGIN+99)&','&STR$(LYNE*12+YMARGIN)&')'
@@ -331,9 +331,9 @@
 02460 L2460: pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
 02470   pr #20: 'Call Print.AddText("Phone: 985-839-3569",'&str$(xmargin+1)&','&str$(lyne*31+ymargin)&')'
 02480 ! pr #20: 'Call Print.AddText("Re-connect fee $??.00",'&STR$(XMARGIN+1)&','&STR$(LYNE*28+YMARGIN)&')'
-02490 ! ______________________________________________________________________
+02490 !
 02500   special=28
-02510 ! ______________________________________________________________________
+02510 !
 02520   pr #20: 'Call Print.MyFontSize(7)'
 02530   pr #20: 'Call Print.AddLine('&str$(xmargin+112)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
 02540   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+0)&',7,0)'
@@ -395,7 +395,7 @@
 03010   if checkcounter=0 then !:
           fnpa_newpage
 03020   return 
-03030 ! ______________________________________________________________________
+03030 !
 03040 BULKSORT: ! bulk sort order
 03050   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 03060   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 

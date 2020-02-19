@@ -3,12 +3,12 @@
 00030   def library fnpaytrans_v1_to_v2
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnwait,fnStatus,fnindex_it,fnCopy
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
-00080 ! ______________________________________________________________________
+00080 !
 00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update PayTrans from v1 to v2"
-00110 ! ______________________________________________________________________
+00110 !
 00120     fnStatus('updating Unpaid Invoice file')
 00160 ! fnwait(message$="Converting: please wait...",0)
 00170 ! 
@@ -33,7 +33,7 @@
 00340     fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.H[cno]","1 20")
 00350     fnindex_it("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
 00360     goto XIT
-00370 ! ______________________________________________________________________
+00370 !
 00380 ! <Updateable Region: ERTN>
 00390 ERTN: fnerror(program$,err,line,act$,"xit")
 00400     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -41,7 +41,7 @@
 00420     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00440 ! /region
-00450 ! ______________________________________________________________________
+00450 !
 00460 XIT: ! 
 00470   fnend 
-00480 ! ______________________________________________________________________
+00480 !

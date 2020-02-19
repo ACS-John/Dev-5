@@ -1,12 +1,12 @@
 00010 !  Replace S:\acsGL\CombGL
 00020 ! Consolidate Companies
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnputcno,fnTos,fnLbl,fncmbcno,fnTxt,fnCmdSet,fnAcs,fnCmdKey
 00050   fntop(program$,cap$="Consolidate Master Files")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim a$*416,n$*40,cap$*128,resp$(2)*80
-00090 ! ______________________________________________________________________
+00090 !
 00100   cap$="Consolidate Companies"
 00110   dcno=99
 00120 MAIN: ! 
@@ -49,20 +49,20 @@
         close #1: 
 00360   open #1: "Name=[Q]\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output 
 00370   goto MAIN
-00380 ! ______________________________________________________________________
+00380 !
 00390 L390: open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,input,keyed ioerr MAIN
 00400 L400: read #2,using 'Form POS 1,C 416': a$ eof L430
 00410   write #1,using 'Form POS 1,C 416': a$
 00420   goto L400
 00430 L430: close #2: 
 00440   goto MAIN
-00450 ! ______________________________________________________________________
+00450 !
 00460 END1: close #1: ioerr L470
 00470 L470: execute "Index [Q]\GLmstr\GLmstr.H"&str$(dcno)&' '&"[Q]\GLmstr\GLIndex.H"&str$(dcno)&" 1 12 Replace DupKeys" ioerr XIT
 00480   execute "Index [Q]\GLmstr\GLmstr.H"&str$(dcno)&' '&"[Q]\GLmstr\glIndx2.H"&str$(dcno)&" 13 30 Replace DupKeys"
 00490   fnputcno(cno=dcno)
 00500 XIT: fnxit
-00510 ! ______________________________________________________________________
+00510 !
 00520 ! <Updateable Region: ERTN>
 00530 ERTN: fnerror(program$,err,line,act$,"xit")
 00540   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -70,4 +70,4 @@
 00560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00570 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00580 ! /region
-00590 ! ______________________________________________________________________
+00590 !

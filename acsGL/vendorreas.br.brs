@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsGL\VendorReas
 00020 ! Vendor File - Transaction List
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,holdvn$*8,vcode$*8
 00080   dim cnam$*40,dat$*20,adr(2),id1$*25,cap$*128
 00090   dim rn$*12,de$*30,adr(2),tvn$*8
 00100   dim flit$(4)*16,scrt$(4)*20,scid$*79,desc$(6)*14
 00110   dim sc$(8),sd$(8),se$(8)*30,pl$(8,2)*35,fl2$(7),sc2$(7)*38
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop("S:\acsGL\VendorReas",cap$="Reassign Vendor Transaction Addresses")
 00140   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -54,7 +54,7 @@
 00530 L530: pr newpage
 00540   if fnprocess=1 then ti=4 else goto MENU1
 00550   goto L600
-00560 ! ______________________________________________________________________
+00560 !
 00570 MENU1: ! 
 00580   ti=6
 00590   if ti>3 then restore #1,key>="        ",release: nokey L600 eof L600
@@ -191,7 +191,7 @@
 01900   if oldti=2 then ti=2
 01910   oldti=0
 01920   goto L600
-01930 ! ______________________________________________________________________
+01930 !
 01940   pr newpage
 01950   namtab=66-int(len(rtrm$(cnam$))/2)
 01960   dattab=66-int(len(rtrm$(dat$))/2)
@@ -210,7 +210,7 @@
 02090   dattab=66-int(len(rtrm$(dat$))/2)
 02100   close #102: ioerr L2120
 02110   return 
-02120 L2120: ! ______________________________________________________________________
+02120 L2120: !
 02130 L2130: pr newpage
 02140   close #101: ioerr L2150
 02150 L2150: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn 
@@ -475,7 +475,7 @@
 04740   goto L4480
 04750 L4750: if err=4152 then goto L790
 04760 XIT: fnxit
-04770 ! ______________________________________________________________________
+04770 !
 04780 ! <Updateable Region: ERTN>
 04790 ERTN: fnerror(program$,err,line,act$,"xit")
 04800   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -483,4 +483,4 @@
 04820   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 04830 ERTN_EXEC_ACT: execute act$ : goto ERTN
 04840 ! /region
-04850 ! ______________________________________________________________________
+04850 !

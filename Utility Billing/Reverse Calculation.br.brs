@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsUB\UBRevCal
-00015 ! ______________________________________________________________________
+00015 !
 00020   library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnLbl,fnTxt,fncmbact,fncmbrt2,fnAcs, fnTos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnCmdSet,fnChk,fntop,fnmsgbox
 00025   on error goto Ertn
-00030 ! ______________________________________________________________________
+00030 !
 00035   dim x$*10,p$*10,reqz$*10,reqz12$*5,sr$*1,gb(10)
 00040   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7
 00045   dim cap$*128,txt$*200,tg(11),key$*19
 00050   dim bt1(14,2),badr(2),resp$(5)*60
-00055 ! ______________________________________________________________________
+00055 !
 00070   fntop(program$,cap$="Reverse Calculation")
-00075 ! ______________________________________________________________________
+00075 !
 00080   goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 00085   dim _msg$(4)*80
 00095   _msg$(1)="This program has been removed due to heavy misuse."
@@ -19,10 +19,10 @@
 00115   fnmsgbox(mat _msg$,resp$(1),'',16)
 00120   goto XIT
 00125 ALLOW_PROGRAM: ! 
-00130 ! ______________________________________________________________________
+00130 !
 00135   fnLastBillingDate(d1)
 00140   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
-00145 ! ______________________________________________________________________
+00145 !
 00170   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00180   open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed 
 00190   open #12: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr",internal,outIn,keyed 
@@ -119,12 +119,12 @@
 00864   else 
 00866     goto L480
 00869   end if 
-00870 ! ______________________________________________________________________
+00870 !
 00880 FINIS: ! 
 00890   if sr$<>"Y" then goto XIT
 00900   fncloseprn
 00910 XIT: fnxit
-00920 ! ______________________________________________________________________
+00920 !
 00930   def fn_srhdr
 00940     pg+=1
 00950     pr #255: "Reverse Calculation Status Report"
@@ -135,7 +135,7 @@
 01000     pr #255: "Account           Billing Date"
 01010     pr #255: "_______________   ____________"
 01020   fnend 
-01030 ! ______________________________________________________________________
+01030 !
 01040 SRPGOF: ! 
 01050   pr #255: newpage
 01060   fn_srhdr
@@ -147,7 +147,7 @@
 01110     bud1=1
 01120 L1120: ! 
 01122   fnend 
-01130 ! ______________________________________________________________________
+01130 !
 01140   def fn_bud2
 01150     bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
 01160     if bud1=0 then goto L1260
@@ -165,7 +165,7 @@
 01250     ta1=nba: goto L1200
 01260 L1260: ! 
 01262   fnend 
-01270 ! ______________________________________________________________________
+01270 !
 01280 ! <Updateable Region: ERTN>
 01290 ERTN: fnerror(program$,err,line,act$,"NO")
 01300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

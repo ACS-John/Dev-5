@@ -41,9 +41,9 @@
 	open #5: "Name=[Q]\GLmstr\BudInfo.H[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.H[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed 
 	read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
 	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
-! ______________________________________________________________________
+!
 	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
-! ______________________________________________________________________
+!
 	mat ml$(2) 
 	ml$(1)="Budget Management is a separately licensed product. " 
 	ml$(2)="Contact your representative or ACS to license the product. " 
@@ -51,7 +51,7 @@
 	goto XIT
 L470: gosub DATE_SCREEN
 ! /r
-! ______________________________________________________________________
+!
 MENU1: ! r:
 	fnTos(sn$="Budget_File") 
 	respc=0
@@ -102,7 +102,7 @@ L690: if j<=0 then j=1
 		goto XIT 
 	end if
 goto MENU1 ! /r
-! ______________________________________________________________________
+!
 DATE_SCREEN: ! r:
 fd1=0101*100+val(date$(1:2))
 fd2=1231*100+val(date$(1:2))
@@ -153,7 +153,7 @@ L1210: bg(1)=sum(bm) : bg(2)=cb : bg(3)=0
 bg(5)=bg(1)+bg(4) : gd$=gd$ : cd$="B"
 L1220: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 goto L1100
-! ______________________________________________________________________
+!
 END1: ! end on g/l
 cd$="X": mat bg=(0): gd$=ex$="" ! write one blank line at end of file
 g1$="999999999999"
@@ -178,7 +178,7 @@ read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,
 bg(2)=bg(2)+amt
 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
 goto L1410
-! ______________________________________________________________________
+!
 L1500: close #4: 
 goto L1350
 ! from unpaid invoice file _____________________________________________
@@ -264,7 +264,7 @@ end if
 goto L2190
 L2240: restore #2: 
 goto DISPLAY_GRID ! /r (end of updating balances)
-! ______________________________________________________________________
+!
 ASK_BEGINNING_ITEM: ! r:
 goto DISPLAY_GRID 
 ! r: skip this screen
@@ -524,7 +524,7 @@ L3880: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,
 add=0
 L3900: restore #2: 
 goto DISPLAY_GRID ! /r
-! ______________________________________________________________________
+!
 PRNT1: ! r: John's pr Routine ... yeah, i made this mess
 header$="" : opr=255 : ps$="############" 
 screen=cp=page=bob1=bob2=bob3=bob4=lyne=0
@@ -669,24 +669,24 @@ goto L4700 ! /r
 L4970: ! r:
 fncloseprn
 goto DISPLAY_GRID ! /r
-! ______________________________________________________________________
+!
 NWPGE: ! r:
 pr #255: newpage
 gosub HDR
 continue ! /r
-! ______________________________________________________________________
+!
 HDR: ! r:
 page=page+1
 pr #255,using L5080: "Page: ",page,env$('cnam'),rdate$,bud$
 L5080: form pos bob1,c 6,n 4,skip 1,pos bob2,c 40,skip 1,pos bob3,c 40,skip 1,pos bob4,c 50,skip 2
 pr #255,using L4710: header$,uline2$(1:lhdr-2)
 return ! /r
-! ______________________________________________________________________
+!
 L5120: form pos 1,c 80,skip 1
 L5130: form pos 1,c bobtom,skip 1
 L5140: form pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1
 L5150: form pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 2
-! ______________________________________________________________________
+!
 MAINTAIN_RANGE_FILE: ! r:
 if ad1=1 then bud=0: bud$="": mat gl$=("")
 fnTos(sn$="bgmaintrange") 
@@ -733,9 +733,9 @@ write #5,using L5490: bud,bud$,mat gl$
 L5490: form pos 1,n 2,c 50,40*c 12
 ! mat GL$=("  0     0  0")
 L5510: goto READD_TOTALS ! /r
-! ______________________________________________________________________
+!
 XIT: fnxit
-! ______________________________________________________________________
+!
 INCLUDE_CHANGES: ! r:
 fnTos(sn$="Include_Changes") 
 respc=0: mylen=40: mypos=mylen+3 : lyne=0
@@ -748,7 +748,7 @@ if ck=5 then goto MENU1
 if resp$(1)="True" then ti3=1 else ti3=2
 chg=1
 goto READD_TOTALS ! /r
-! ______________________________________________________________________
+!
 ASK_ABOUT_HISTORY: ! r:
 fnTos(sn$="Ask_about") 
 respc=0: mylen=40: mypos=mylen+3 : lyne=0

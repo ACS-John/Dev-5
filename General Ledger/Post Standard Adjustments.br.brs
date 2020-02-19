@@ -3,7 +3,7 @@
 00030 ! r: setup library, dims, fntop, on error
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnqgl,fnrgl$,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim ref$*12,des$*30,glan$(10)*12,glam(10),ml$(3)*80
 24000   fntop(program$)
 24020   dat=date("mmddyy")
@@ -17,7 +17,7 @@
 24210   fnAcs(sn$,0,mat resp$,ckey)
 24220   if ckey=5 then goto XIT
 24240   dat=val(resp$(1))
-24260 ! ______________________________________________________________________
+24260 !
 36000   open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,output ioerr L240
 36020   close #2,free: 
 36040   L240: !
@@ -48,7 +48,7 @@
 38080   ml$(3)="The entry will be posted, but it may need to be corrected!" 
 38100   fnmsgbox(mat ml$,resp$)
 38120 return ! /r
-38140 ! ______________________________________________________________________
+38140 !
 40000 ChainToAcGlMrge: !
 40020   if totaldr+totalcr<>0 then gosub MSGBOX1
 40040   close #2: 

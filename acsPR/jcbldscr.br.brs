@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsPR\jcBldScr
 00020 ! builds the jcScrn file and then chains to S:\acsPR\rpNames
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$(9),io1$(9),fl2$(15),io2$(15),sc3$(12),fl3$(13),io3$(12)
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno)
 00100 ! 
-00110 ! ______________________________________________________________________
+00110 !
 00120   for j=1 to 9
 00130     fl1$(j)=str$(j+2)&",2,cr 20,n"
 00140     if j<=1 then io1$(1)=str$(j+2)&",23,C 6,UT,N" : goto L240
@@ -65,7 +65,7 @@
 00650 L650: form pos 1,85*c 18
 00660   close #1: 
 00670   chain "S:\acsPR\rpNames"
-00680 ! ______________________________________________________________________
+00680 !
 00690 ! <Updateable Region: ERTN>
 00700 ERTN: fnerror(program$,err,line,act$,"xit")
 00710   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -73,5 +73,5 @@
 00730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00750 ! /region
-00760 ! ______________________________________________________________________
+00760 !
 00770 XIT: chain "Menu"

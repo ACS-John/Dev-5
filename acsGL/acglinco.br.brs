@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\AcGlIncO
 00020 ! -- gasb 4 column budget statement with original and final budget
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13),cap$*128,udf$*256
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Income Statement with GASB Budget")
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
@@ -20,7 +20,7 @@
 00190   actpd$=fnactpd$
 00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
-00220 ! ______________________________________________________________________
+00220 !
 00230   pors=1
 00240   if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr" : mp1=72 else !:
           fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr" : mp1=69
@@ -198,7 +198,7 @@
 01880   pr #255: tab(24);"____________   ____________  _____________   ____________"
 01890   pr #255: 
 01900   return 
-01910 ! ______________________________________________________________________
+01910 !
 01920 L1920: eofcode=1
 01930   gosub L1520
 01940 ! 
@@ -206,9 +206,9 @@
 01949   fnpriorcd(1)
 01950   fncloseprn
 01960   goto XIT
-01970 ! ______________________________________________________________________
+01970 !
 01980 XIT: fnxit
-01990 ! ______________________________________________________________________
+01990 !
 02000 ! <updateable region: ertn>
 02010 ERTN: fnerror(program$,err,line,act$,"xit")
 02020   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

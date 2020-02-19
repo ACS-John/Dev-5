@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\acglWkSh
 00020 ! pr Trial Balance Worksheet
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnpedat$, fnconsole,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim a$(9)*3,glsum$(2)*12,u$*12,address$(2)*40,b$(2)*12,c$*5,d(2),p$*62
 00080   dim cnam$*40,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
 00090   dim cogl$*12,pedat$*20,cap$*128
-00100 ! ______________________________________________________________________
+00100 !
 00110   right=1
 00120   fntop(program$,cap$="Trial Balance Worksheet")
 00130   fnconsole(off=0)
@@ -52,7 +52,7 @@
 00400   fnopenprn
 00410   gosub HDR
 00420   if fnprocess=1 or d(1)=0 then goto READ_GLMSTR else goto L500
-00430 ! ______________________________________________________________________
+00430 !
 00440 READ_GLMSTR: ! 
 00450   read #glmstr,using 'Form POS 1,C 12,C 50,POS 81,2*PD 6.2': n$,d$,bb,cb eof END1
 00460   if first=0 and n$(1:3)<>oldn$(1:3) then gosub TOTALS
@@ -65,7 +65,7 @@
 00530   pr #255,using L540: "**Net Income or Loss",drtotal+crtotal
 00540 L540: form pos 17,c 20,pos 38,pic(---,---,---.##),skip 2
 00550   goto READ_GLMSTR
-00560 ! ______________________________________________________________________
+00560 !
 00570 TOTALS: pr #255: 
 00580   pr #255: tab(13);"Worksheet Proof Totals";
 00590   oldn$=n$
@@ -77,13 +77,13 @@
 00640   pr #255: newpage
 00650   gosub HDR
 00660   return 
-00670 ! ______________________________________________________________________
+00670 !
 00680 END1: end1=1
 00690   gosub TOTALS
 00700   close #glmstr: 
 00710   fncloseprn
 00720   goto XIT
-00730 ! ______________________________________________________________________
+00730 !
 00740 HDR: ! 
 00750   pr #255,using "Form pos 1,C 20,Cc 72": date$("mm/dd/yy"),cnam$
 00760   pr #255,using "form pos 1,c 20,cc 72": time$,cap$
@@ -97,7 +97,7 @@
         pr #255: "" !:
         pr #255: ""
 00840   return 
-00850 ! ______________________________________________________________________
+00850 !
 00860 SOMETHING: ! 
 00870   if cb<0 then !:
           crtotal+=cb : p1=54 else !:
@@ -105,11 +105,11 @@
 00880   pr #255,using 'Form Pos 1,pic(ZZZ),X 1,pic(ZZZZZZ),X 1,pic(ZZZ),X 2,C 22,POS P1,N 12.2,POS 68,C 62': dno,ano,sno,d$(1:22),cb,p$ pageoflow PGOF !:
         pr #255,using "Form Pos 68,C 62": p$ pageoflow PGOF
 00890   return 
-00900 ! ______________________________________________________________________
+00900 !
 00910 PGOF: pr #255: newpage : gosub HDR : continue 
-00920 ! ______________________________________________________________________
+00920 !
 00930 XIT: fnxit
-00940 ! ______________________________________________________________________
+00940 !
 00950 ! <Updateable Region: ERTN>
 00960 ERTN: fnerror(program$,err,line,act$,"xit")
 00970   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -117,4 +117,4 @@
 00990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01010 ! /region
-01020 ! ______________________________________________________________________
+01020 !

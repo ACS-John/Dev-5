@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsGL\acglRev
 00020 ! Used to reverse specific entries !:
         ! enter the date and reference under "youref' and 'yourdate'
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnerror
 00050   fntop(program$,"Special Reversing")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim adr(2),ta(2),prg$*20
 00090   dim t$*12,n(2),l$*12,p$*30
 00100   dim cnam$*40
-00110 ! ______________________________________________________________________
+00110 !
 00120   fncno(cno,cnam$)
 00130   open #20: "Name=CNo.H"&wsid$,internal,outIn,relative  !:
         read #20,using 'form POS 43,C 20,POS 137,N 2,POS 141,N 1',rec=1: prg$,systype,process !:
@@ -65,7 +65,7 @@
 00620 L620: form pos 71,pd 3
 00630 L630: goto L430
 00640 XIT: fnxit
-00650 ! ______________________________________________________________________
+00650 !
 00660 ERTN: fnerror(program$,err,line,act$,"NO")
 00670   if lwrc$(act$)<>"pause" then goto L700
 00680   execute "list -"&str$(line) !:
@@ -74,4 +74,4 @@
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 00700 L700: execute act$
 00710   goto ERTN
-00720 ! ______________________________________________________________________
+00720 !

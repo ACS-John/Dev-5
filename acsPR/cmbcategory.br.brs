@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsPR\CmbCategory.br
 00020 ! creates a screen ace combobox for Category
 12000 def library fncmbcategory(myline,mypos; addall,container,indexfile$*200)
-12020   ! ____________________________________________________________________
+12020   !
 12040   library 'S:\Core\Library': fncombof
 12060   dim df$*200,if$*200
-12080   ! ____________________________________________________________________
+12080   !
 12100   if addall<>1 then addall=0
 12120   if addall=0 then 
 12140     fen$="Ccategory.h[cno]" 

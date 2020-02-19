@@ -3,15 +3,15 @@
 00030   def library fnacglblds
 00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr,fnFree
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
-00080 ! ______________________________________________________________________
+00080 !
 00090     fncno(cno)
 00100     fntop(program$,"CHANGE_ME")
 00110     open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
           read #20,using 'Form POS 150,2*N 1': mat d !:
           close #20: 
-00120 ! ______________________________________________________________________
+00120 !
 00130     flo$(1)="1,5,C 60,R,N"
 00140     if d(1)=1 then !:
             scr$(1)="Department #:" : scr$(2)="Account #:" !:
@@ -94,7 +94,7 @@
           close #20: 
 00390     fnacprscr
 00400     goto XIT
-00410 ! ______________________________________________________________________
+00410 !
 00420 ERTN: ! <Updateable Region: ERTN>
 00430     fnerror(program$,err,line,act$,"xit")
 00440     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -102,6 +102,6 @@
 00460     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
-00490 ! ______________________________________________________________________
+00490 !
 00500 XIT: fnend 
-00510 ! ______________________________________________________________________
+00510 !

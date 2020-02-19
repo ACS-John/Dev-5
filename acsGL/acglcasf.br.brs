@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsGL\acglCasF
 00020 ! Cash Flow Statement with Fund Comparisons
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd, fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
 00080   dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
 00090   dim bm(13),bp(13),by(13),cap$*128,fl1$*256,in3$(4),sc1$(2)*20,udf$*256
 00100   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,7),resp$(30)*50
 00110   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop(program$,cap$="Cash Flow with Fund Comparison")
 00131   report$=cap$
 00132   actpd$=fnactpd$ !:
@@ -68,7 +68,7 @@
 00580   gosub L1780
 00590   gosub L1690
 00600   goto L480
-00610 ! ______________________________________________________________________
+00610 !
 00620 L620: if te$="B" and ap>0 then goto L1390 ! ENDING BANK BALANCE
 00630   if notrans=1 then goto L1040
 00640   if ir>=val(r$) and val(r$)><0 then goto L770
@@ -108,7 +108,7 @@
 00970     ytdb=ytdb+bm(j)
 00980   next j
 00990   goto L650
-01000 ! ______________________________________________________________________
+01000 !
 01010 L1010: if ir<val(r$) then goto L650
 01020   if ir>val(r$) then goto L1040
 01030 L1030: notrans=1
@@ -146,7 +146,7 @@
 01350   gosub L1960
 01360   gosub L1780
 01370   goto L480
-01380 ! ______________________________________________________________________
+01380 !
 01390 L1390: accumcol$=""
 01400   for j=1 to totcol
 01410     if ap=0 then ap=1
@@ -162,21 +162,21 @@
 01510   gosub L1960
 01520   gosub L1780
 01530   goto L480
-01540 ! ______________________________________________________________________
+01540 !
 01550 L1550: if te$="R" then report$=d$
 01560   if te$="S" then secondr$=d$
 01570   gosub L1780
 01580   goto L480
-01590 ! ______________________________________________________________________
+01590 !
 01600 L1600: if foot1=1 then goto L1660
 01610   tabnote=sp
 01620   foot1=1
 01630   foot$=d$
 01640   goto L480
-01650 ! ______________________________________________________________________
+01650 !
 01660 L1660: foot$=rtrm$(foot$)&d$
 01670   goto L480
-01680 ! ______________________________________________________________________
+01680 !
 01690 L1690: for j=1 to 9
 01700     if ac(j)=0 or ac(j)=9 then goto L1750
 01710     for j2=1 to 10
@@ -185,7 +185,7 @@
 01740     next j2
 01750 L1750: next j
 01760   return 
-01770 ! ______________________________________________________________________
+01770 !
 01780 L1780: if ls=0 then goto L1920
 01790   if ls=99 then goto L1830
 01800   pr #255,using L1810: " "
@@ -201,9 +201,9 @@
 01900   pr #255: newpage
 01910   gosub L2130
 01920 L1920: return 
-01930 ! ______________________________________________________________________
+01930 !
 01940 L1940: gosub L1830: continue 
-01950 ! ______________________________________________________________________
+01950 !
 01960 L1960: if ul=0 then goto L2090
 01970   if ul=1 then goto L2000
 01980   underlin$="  ============"
@@ -220,7 +220,7 @@
 02090 L2090: if redir=0 then pr #255,using L2100: " "
 02100 L2100: form skip 1,c 1,skip 0
 02110   return 
-02120 ! ______________________________________________________________________
+02120 !
 02130 L2130: heading=1
 02140   pt1+=1
 02150   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -232,7 +232,7 @@
 02210   pr #255,using L2220: heading$
 02220 L2220: form pos 49,c big,skip 2
 02230   return 
-02240 ! ______________________________________________________________________
+02240 !
 02250 L2250: eofcode=1
 02260   gosub L1830
 02270   fnfscode(actpd)
@@ -242,9 +242,9 @@
 02310 ! 
 02320 ! 
 02330 ! need total,total2  current month, year to date
-02340 ! ______________________________________________________________________
+02340 !
 02350 XIT: fnxit
-02360 ! ______________________________________________________________________
+02360 !
 02370 L2370: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative 
 02380   read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 02390 L2390: form pos 1,10*n 3,10*c 20
@@ -278,7 +278,7 @@
 02610   next j
 02620   big=totcol*14
 02630   return 
-02640 ! ______________________________________________________________________
+02640 !
 02650 ASK_MONTHLY: ! ask monthly info or ytd info
 02660   fnTos(sn$="ACglcasf2") !:
         mylen=30: mypos=mylen+3 : right=1
@@ -293,7 +293,7 @@
 02730   if resp$(1)="True" then monthly=1
 02740   if resp$(2)="True" then monthly=2
 02750   return 
-02760 ! ______________________________________________________________________
+02760 !
 02770 ! <Updateable Region: ERTN>
 02780 ERTN: fnerror(program$,err,line,act$,"xit")
 02790   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

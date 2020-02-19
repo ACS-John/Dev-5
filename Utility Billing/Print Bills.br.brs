@@ -31,7 +31,7 @@ def fn_setup
 	library 'S:\Core\Library': fnchain
 	library 'S:\Core\Library': fnub_printbill_program$
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim resp$(60)*128
 	dim mg$(4)*128
 	dim mg2$(30)*128
@@ -49,7 +49,7 @@ def fn_setup
 	dim serviceCode$(10)*2
 	dim tax_code$(10)*1
 	dim penalty$(10)*1
-! ______________________________________________________________________
+!
 	fnget_services(mat serviceName$, mat serviceCode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
 fnend
 PrintBill_Basic: !
@@ -132,7 +132,7 @@ PrintBill_Basic: !
 		include_zero_bal=include_credit_bal=1
 		! pause : pa_enabled=0
 		forceWordProcessor$='atlantis'
-	else if env$('client')='Exeter' then ! or env$('client')='GreenCo'  then 
+	else if env$('client')='Exeter' then
 		basePenaltyOnCurrentBillOnly=1
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
@@ -150,12 +150,22 @@ PrintBill_Basic: !
 		include_zero_bal=include_credit_bal=1
 		enable_bulksort=1
 	else if env$('client')='GreenCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
-		message1_line_count=3
-		message2_line_count=0
-		message1_max_len=52
-		pa_enabled=1 ! PrintAce
-		pa_orientation$='Landscape'
-		include_zero_bal=include_credit_bal=1
+		enableNewGreenCoBill=0
+		if enableNewGreenCoBill then
+			message1_line_count=3
+			pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
+			pa_orientation$='Landscape'
+			include_zero_bal=include_credit_bal=1
+			message2_line_count=2
+			message2_max_len=30
+		else
+			message1_line_count=3
+			message2_line_count=0
+			message1_max_len=52
+			pa_enabled=1 ! PrintAce
+			pa_orientation$='Landscape'
+			include_zero_bal=include_credit_bal=1
+		end if
 	else if env$('client')='Galena' then ! 11/29/2018 Portrait two per page - hit pre-printed form
 		message1_line_count=3
 		message2_line_count=0
@@ -438,13 +448,13 @@ MainLoop: ! r: main loop
 		fn_print_bill_pennington(z$,mat mg$,mat mg2$,d2,d3,d4)
 		! fn_print_bill_Exeter(z$,mat mg$,d2,d3,d4)
 	else if env$('client')='Edinburg' then
-		fn_print_bill_edinburg(z$,mat mg$,d1,d2,d3,d4)
+		fn_print_bill_edinburg(z$,mat mg$,d1,d2,~and)
 	else if env$('client')='Billings' then
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2,d3,d4,mat pe$,final$,z$) ! 
 	else if env$('client')='Choctaw' then
 		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat e$,final)
 		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat pe$,final)
-	else if env$('client')='GreenCo' then
+	else if env$('client')='GreenCo' and ~enableNewGreenCoBill then
 		fn_print_bill_greenCo
 	else if env$('client')='Galena' then
 		fn_print_bill_galena
@@ -779,7 +789,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	if billOnPageCount=2 then xmargin=139 : ymargin=0
 	if billOnPageCount=3 then xmargin=0 : ymargin=108
 	if billOnPageCount=4 then xmargin=139 : ymargin=108 : billOnPageCount=0
-	! ______________________________________________________________________
+	!
 	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 	fnpa_fontbold(1)
 	fnpa_fontsize(12)
@@ -799,7 +809,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
 	fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
-	! ______________________________________________________________________
+	!
 	! PRINTGRID: !
 	meter=14
 	fnpa_fontsize(8)
@@ -835,7 +845,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 		fnpa_txt(fnformnumb$(pb,2,9),xmargin+45,lyne*meter+ymargin)
 	end if 
 	fnpa_fontsize
-	! ______________________________________________________________________
+	!
 	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 	fnpa_txt("Pay By "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
@@ -1064,7 +1074,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	if billOnPageCount=4 then xmargin=bill4x : ymargin=bill4y : billOnPageCount=0  ! 142 113
 	! move page down 1/2 inch
 	! 
-	! ______________________________________________________________________
+	!
 	if billOnPageCount=1 then ! it's about to pr the first bill on the page
 		fnpa_line(70,1,0,1100) ! line down the middle of the page
 		fnpa_line(140,1,0,1100) ! line down the middle of the page
@@ -1093,7 +1103,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	pr #20: 'Call Print.AddText("Current",'&str$(xmargin+12+5)&','&str$(lyne*13+ymargin)&')'
 	pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+35+5)&','&str$(lyne*13+ymargin)&')'
 	pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+52+5)&','&str$(lyne*13+ymargin)&')'
-	! ______________________________________________________________________
+	!
 	! PRINTGRID: !
 	meter=14 ! 02114   meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
 	fnpa_fontsize ! line_top(1)
@@ -1688,7 +1698,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
 	fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
-! ______________________________________________________________________
+!
 ! PRINTGRID: !
 	meter=14 
 	fnpa_fontsize(8)
@@ -1738,7 +1748,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
 	fnpa_fontsize
-! ______________________________________________________________________
+!
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin)&',63,0)'
 	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",penaltyDueDate)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin)&')'
@@ -1747,9 +1757,9 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal+penalty,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin)&')'
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin)&',63,0)'
 	pr #20: 'Call Print.AddText("Phone: 217-623-5542",'&str$(xmargin+1)&','&str$(lyne*27+ymargin)&')'
-! ______________________________________________________________________
+!
 ! special=28
-! ______________________________________________________________________
+!
 	fnpa_fontsize(7)
 	pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
 	pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
@@ -1833,7 +1843,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	if billOnPageCount=2 then xmargin=139 : ymargin=0
 	if billOnPageCount=3 then xmargin=0 : ymargin=108
 	if billOnPageCount=4 then xmargin=139 : ymargin=108 : billOnPageCount=0
-	! ______________________________________________________________________
+	!
 	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 	fnpa_fontbold(1)
 	fnpa_fontsize(12)
@@ -1855,7 +1865,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
 	fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
-	! ______________________________________________________________________
+	!
 	! PRINTGRID: !
 	meter=14
 	fnpa_fontsize(8)
@@ -1915,7 +1925,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 		fnpa_txt(fnformnumb$(pb,2,9),xmargin+45,lyne*meter+ymargin)
 	end if 
 	fnpa_fontsize
-	! ______________________________________________________________________
+	!
 	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 	fnpa_txt('   Pay By  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)

@@ -1,7 +1,7 @@
 00010 ! calculates average sewer charges
 00011 ! calculates average water usage for selected date range
 00012 ! uses the calculated water usage to calculate and store a  standard sewer charge
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fnxit,fnCmdSet,fntop
 00050   on error goto Ertn
 00070   dim cap$*128,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11),ttg(11),e2$*30,rt(10,3)
@@ -39,7 +39,7 @@
 00296   read #ratemst,using L298,key="SW"&lpad$(str$(swcde),2): mc1,mu1,mat rt nokey SCR1
 00298 L298: form pos 55,32*g 10
 00299   close #ratemst: 
-00300 ! ______________________________________________________________________
+00300 !
 00310   fnopenprn
 00330   gosub HDR
 00340 L340: read #1,using L350: x$,e2$,a2,oldavg,extra14,fbc eof DONE
@@ -88,12 +88,12 @@
 00700   close #1: 
 00710   fncloseprn
 00720 XIT: fnxit
-00730 ! ______________________________________________________________________
+00730 !
 00740 NEWPGE: ! 
 00742   pr #255: newpage
 00750   gosub HDR
 00760   continue 
-00770 ! ______________________________________________________________________
+00770 !
 00780 HDR: ! 
 00790   p1=p1+1
 00800   pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
@@ -102,7 +102,7 @@
 00830   pr #255: "Account    Customer Name             water    sewer    usage    std chg"
 00840   pr #255: "__________ ________________________ ________ ________ ________ ________"
 00850   return 
-00860 ! ______________________________________________________________________
+00860 !
 00870 ! <Updateable Region: ERTN>
 00880 ERTN: fnerror(program$,err,line,act$,"NO")
 00890   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -110,7 +110,7 @@
 00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00930 ! /region
-00940 ! ______________________________________________________________________
+00940 !
 00950   dim hd1$*400,hd2$*400,g1(11),g2(11)
 00960   dim serviceName$(10)*20,services$(10)*2,tax_code$(10)*1,tg(11),usages(3)
 01090 SEWER_CALK: ! calculate standard sewer charge

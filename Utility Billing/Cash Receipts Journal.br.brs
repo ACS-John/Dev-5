@@ -1,10 +1,10 @@
 ! formerly S:\acsUB\UBColPrn
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnLbl,fnTxt,fnTos
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnget_services
 	library 'S:\Core\Library': fnChk,fnAcs2,fnCmdSet,fnmsgbox,fngethandle
-! ______________________________________________________________________
+!
 	dim scr1$(10)*30
 	dim alloc(10)
 	dim nam$*30
@@ -15,7 +15,7 @@
 	dim tg(11)
 	dim resp$(7)*40
 	dim ml$(3)*90
-! ______________________________________________________________________
+!
 	fntop(program$)
 ! skip_header=1 ! <--  this is really a developer only option.
 	fnget_services(mat serviceName$)
@@ -34,7 +34,7 @@
 	mat alloc(sz1)
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 	open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-! ______________________________________________________________________
+!
 	fnopenprn
 	gosub HDR
 !
@@ -81,7 +81,7 @@ READ_TRANS: !
 	route(extra1)+=tamount
 	if resp$="Cancel" then goto XIT
 	goto READ_TRANS
-! ______________________________________________________________________
+!
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR

@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsCL\PayList
 00020 ! payee listing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fnTos,fnLbl,fncomboa,fnTxt,fnCmdSet,fnAcs,fnChk,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
 00080   dim cnam$*40,dat$*20,de$*30,io1$(2),text$*25,item1$(2)*20
 00090   dim contact$*30,email$*50,fax$*12,myact$*20
 00100   dim gl$*12,gldesc$*30,key$*19,tr$(5)*35,payeegl$*12,payeekey$*12
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Payee Listing")
 00130   fndat(dat$)
 00140   fncno(cno,cnam$)
@@ -88,9 +88,9 @@
 00780   return 
 00790 L790: fncloseprn
 00800   goto XIT
-00810 ! ______________________________________________________________________
+00810 !
 00820 XIT: fnxit
-00830 ! ______________________________________________________________________
+00830 !
 00840 ! <Updateable Region: ERTN>
 00850 ERTN: fnerror(program$,err,line,act$,"xit")
 00860   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

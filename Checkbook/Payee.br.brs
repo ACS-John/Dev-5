@@ -31,7 +31,7 @@
 16110   dim cap$*128,key$*19
 16120   dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 16130   dim gldesc$*30,resp$(60)*50
-16140   ! ______________________________________________________________________
+16140   !
 18020   left=0: right=1
 18040   open #trmstr2:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 18060   open #paymstr:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
@@ -97,7 +97,7 @@
 24340   end if
 24360   if ck=2 then edit=1 : holdvn$=vn$: goto EDIT_PAYEE
 24380   if ck=3 then gosub DELETE_PAYEE : goto MENU1
-24400   ! ______________________________________________________________________
+24400   !
 26000   DELETE_PAYEE: ! r:
 26020   ! check for Linked Unpaid Invoices 
 26040   ! if there are any - than tell them, and don't delete.
@@ -134,7 +134,7 @@
 26660   close #trans: 
 26680   EO_DELETE: !
 26700   return ! /r
-26720   ! ______________________________________________________________________
+26720   !
 28000   ADD_NEW_PAYEE: ! r:
 28020   vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=contact$=email$=fax$=myact$="" 
 28040   typ=0
@@ -402,7 +402,7 @@
 59220   EO_CHECK_HISTORY: ! 
 59240   close #trans: 
 59260   return 
-59280   ! ______________________________________________________________________
+59280   !
 62000   GL_BREAKDOWNS: ! r:
 62020   fnTos(sn$='payee_gl_dist') 
 62040   respc=0 : mylen=28 : mypos=mylen+2
@@ -432,7 +432,7 @@
 62540   end if
 62560   goto EDIT_PAYEE ! /r
 62580   ! execute "Index [Q]\CLmstr\payeeglbreakdown.H[cno]"&' '&"[Q]\CLmstr\Payeeglbkdidx.H[cno] 1 8 Replace DupKeys -n"
-62600   ! ______________________________________________________________________
+62600   !
 64000   PayeeXIT: ! 
 64020   close #trmstr2: ioerr ignore
 64040   close #paymstr: ioerr ignore

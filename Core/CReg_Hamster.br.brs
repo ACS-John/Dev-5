@@ -1,9 +1,9 @@
-20000 ! ______________________________________________________________________
+20000 !
 20200   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 20400   on error goto Ertn
-20600 ! ______________________________________________________________________
+20600 !
 20800   dim cap$*128
-21000 ! ______________________________________________________________________
+21000 !
 21200   fntop(program$,cap$='CReg Hamster for '&env$('CurSys')&' Company [cno]')
 21400   fncno(cno)
 21600   fn_setup_hamster
@@ -11,7 +11,7 @@
 22000   gosub HAMSTER
 22200   fn_close_file
 22400   goto XIT
-22600 ! ______________________________________________________________________
+22600 !
 22800   def fn_open_file
 23000     open_file_count=0 ! this value is used in the close_file sub routine
 23200     open #open_file_count+=1: 'Name=[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h[cno],Version=1,KFName=[Q]\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h[cno],Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed 
@@ -21,13 +21,13 @@
 24000   def fn_close_file
 24200     for j=1 to open_file_count : close #j: : next j
 24400   fnend  ! fn_close_file
-24600 ! ______________________________________________________________________
+24600 !
 24800 HAMSTER: ! 
 25000   fnHamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 25200   return 
-25400 ! ______________________________________________________________________
+25400 !
 25600 XIT: fnxit
-25800 ! ______________________________________________________________________
+25800 !
 26000 ! <Updateable Region: ERTN>
 26200 ERTN: fnerror(program$,err,line,act$,"xit")
 26400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -35,7 +35,7 @@
 26800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 27000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 27200 ! /region
-27400 ! ______________________________________________________________________
+27400 !
 27600   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 27800     if field_type$='' then field_type$='C'
 28000     if storage_length=0 then storage_length=textbox_len

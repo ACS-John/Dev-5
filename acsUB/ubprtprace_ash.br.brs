@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsUB\ubprtprace_Ash
 00020 ! pr bills for Village of Monticello (full page)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fnget_services
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
 00100   dim serviceName$(10)*20,service$(10)*2
 00110   dim dueby$*30,prebal$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
-00120 ! ______________________________________________________________________
+00120 !
 00130   fncno(cno,cnam$) !:
         fnLastBillingDate(d1)
 00140   open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  !:
@@ -35,7 +35,7 @@
 00230   open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
 00240   fnget_services(mat serviceName$,mat service$)
 00260   def fnc(x)=int(100*(x+sgn(x)*.0001))
-00270 ! ______________________________________________________________________
+00270 !
 00280   prebal$="10:00 AM, xxxxxxx  xx"
 00290 SCREEN1: ! 
 00300   a$="" : prtbkno=0
@@ -98,10 +98,10 @@
 00580   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00590   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 00595   gosub SORT1
-00600 ! ______________________________________________________________________
+00600 !
 00610   open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 00620   fnPa_open("Landscape")
-00630 ! ______________________________________________________________________
+00630 !
 00640   on fkey 5 goto RELEASE_PRINT
 00650 L650: if sl1=1 then goto SCREEN3
 00660 L660: read #6,using L690: bc$,z$ eof RELEASE_PRINT
@@ -134,17 +134,17 @@
 00910   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
 00920   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 00930   goto L1070
-00940 ! ______________________________________________________________________
+00940 !
 00950 L950: ! 
 00960   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00970   goto L1070
-00980 ! ______________________________________________________________________
+00980 !
 00990 RELEASE_PRINT: ! 
 01000   close #1: ioerr L1010
 01010 L1010: close #3: ioerr L1020
 01020 L1020: fnpa_finis
 01050   goto ENDSCR
-01060 ! ______________________________________________________________________
+01060 !
 01070 L1070: ! 
 01080   pb=bal-g(11)
 01090   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
@@ -158,7 +158,7 @@
 01170   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01180   goto L650
-01190 ! ______________________________________________________________________
+01190 !
 01200 SCREEN3: ! 
 01210   sn$ = "UBPrtBl1-2" !:
         fnTos(sn$)
@@ -178,7 +178,7 @@
 01280   if ck=5 then goto RELEASE_PRINT
 01290   read #1,using L720,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey SCREEN3
 01300   goto L760
-01310 ! ______________________________________________________________________
+01310 !
 01320 SORT1: ! SELECT & SORT
 01330   open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1580
 01340   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
@@ -196,7 +196,7 @@
 01440   read #5,using "Form POS 96,C 12",key=z$: cr$ nokey L1450
 01450 L1450: write #6,using "Form POS 1,C 12,C 10": cr$,z$
 01460   goto L1380
-01470 ! ______________________________________________________________________
+01470 !
 01480 END5: close #6: 
 01490   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01500 L1500: form pos 1,c 128
@@ -208,7 +208,7 @@
 01560   open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
 01570   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01580 L1580: return 
-01590 ! ______________________________________________________________________
+01590 !
 01600 ENDSCR: ! pr totals screen
 01610   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01620   fnTos(sn$="Bills-Total") !:
@@ -229,7 +229,7 @@
 01710   fnCmdSet(52) !:
         fnAcs(sn$,0,mat resp$,ck)
 01720 XIT: fnxit
-01730 ! ______________________________________________________________________
+01730 !
 01740 ERTN: fnerror(program$,err,line,act$,"xit")
 01750   if uprc$(act$)<>"PAUSE" then goto L1780
 01760   execute "list -"&str$(line) !:
@@ -238,7 +238,7 @@
 01770   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01780 L1780: execute act$
 01790   goto ERTN
-01800 ! ______________________________________________________________________
+01800 !
 01900 VBPRINT: ! 
 01910 ! -- Printer Program for three per page  Utility Bills
 01920   if d2=0 then d2=d3x

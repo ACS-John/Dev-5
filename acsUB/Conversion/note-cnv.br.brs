@@ -42,5 +42,5 @@ def library fnub_cnv_note
 	end if
 	XIT: !
 fnend
-! ______________________________________________________________________
+!
 include: ertn

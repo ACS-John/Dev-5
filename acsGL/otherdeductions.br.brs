@@ -1,17 +1,17 @@
 00010 ! Replace S:\acsGL\OtherDeductioins
 00020 ! -- Other deductions
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnTos,fnFra,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fnLbl
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,totalded(10)
 00080   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20,empd(22)
 00090   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Other Deductions Registers")
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
-00130 ! ______________________________________________________________________
+00130 !
 00140   fnTos(sn$="OtherDed") !:
         rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 00150   fnFra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
@@ -54,7 +54,7 @@
 00480 L480: if nca=0 then goto L350
 00490   ca=nca
 00500   goto L440
-00510 ! ______________________________________________________________________
+00510 !
 00520 HEADER: ! 
 00530   pr #255,using L540: date$('mm/dd/yy'),time$,cnam$
 00540 L540: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
@@ -64,7 +64,7 @@
 00580   p1=66-int(len(rtrm$(dat$))/2)
 00590   pr #255,using L570: rtrm$(fnpedat$)
 00600   return 
-00610 ! ______________________________________________________________________
+00610 !
 00620 L620: gosub HEADER
 00630   pr #255: 
 00640   pr #255,using L650: "Emp #","Name",miscname$(1)(1:9) ,miscname$(2)(1:9),miscname$(3)(1:9),miscname$(4)(1:9),miscname$(5)(1:9),miscname$(6)(1:9),miscname$(7)(1:9),miscname$(8)(1:9),miscname$(9)(1:9),miscname$(10)(1:9)
@@ -91,7 +91,7 @@
 00850   gosub L620
 00860   continue 
 00870 XIT: fnxit
-00880 ! ______________________________________________________________________
+00880 !
 00890 ! <updateable region: ertn>
 00900 ERTN: fnerror(program$,err,line,act$,"xit")
 00910   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

@@ -3,9 +3,9 @@
 00030   def library fnunpdaloc_v1_to_v2
 00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnCopy,fnindex_it,fnStatus
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
-00080 ! ______________________________________________________________________
+00080 !
 00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update UnPdAloc from v1 to v2"
 00120     fnStatus("Payment Allocation file until it is updating from v1 to v2")
@@ -29,7 +29,7 @@
 00350     fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")
 00360     fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
 00370     goto XIT
-00380 ! ______________________________________________________________________
+00380 !
 00390 ! <Updateable Region: ERTN>
 00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -37,6 +37,6 @@
 00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
-00460 ! ______________________________________________________________________
+00460 !
 00470 XIT: fnend 
-00480 ! ______________________________________________________________________
+00480 !

@@ -1,25 +1,25 @@
 00010 ! Replace S:\Core\GLControl
 00020 ! Checkbook Transaction Allocation File - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6),c$(6,8)*40
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$='General Ledger Control File')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
 00120   goto XIT
-00130 ! ______________________________________________________________________
+00130 !
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Use,RecL=75,KPs=1,KLn=3,Shr",internal,outIn,keyed 
 00160   return 
-00170 ! ______________________________________________________________________
+00170 !
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-00190 ! ______________________________________________________________________
+00190 !
 00200 BUILD_LAYOUT: ! 
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
@@ -96,13 +96,13 @@
         c$(cl,5)='13' : c$(cl,6)='50' !:
         c$(cl,7)="[Q]\CLmstr\GLIndex.h[cno]" : c$(cl,8)='1'
 00360   return 
-00370 ! ______________________________________________________________________
+00370 !
 00380 HAMSTER: ! 
 00390   fnHamster("GLControl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00400   return 
-00410 ! ______________________________________________________________________
+00410 !
 00420 XIT: fnxit
-00430 ! ______________________________________________________________________
+00430 !
 00440 ! <Updateable Region: ERTN>
 00450 ERTN: fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -110,4 +110,4 @@
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00500 ! /region
-00510 ! ______________________________________________________________________
+00510 !

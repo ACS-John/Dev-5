@@ -330,7 +330,7 @@ L2330: !
 	L2490: ! 
 	heno=eno
 goto L1340 ! If ADR>0 Then Goto 1050 Else Goto 820
-! ______________________________________________________________________
+!
 FINISH: ! 
 	close #hEmployee: ioerr ignore
 	close #2: ioerr ignore
@@ -395,7 +395,7 @@ PROOF_TOTALS: !
 	if ckey=5 then goto XITWOCAL
 	if ckey=1 or ckey=2 or ckey=4 then gosub OpenFiles
 	on ckey goto CORRECTIONS,PRINT_LISTING,GOCALK,ASK_EMPLOYEE none PROOF_TOTALS
-! ______________________________________________________________________
+!
 DELETE_IT: ! 
 ! eNO=0
 ! dEP=0

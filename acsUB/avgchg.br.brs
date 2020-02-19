@@ -1,13 +1,13 @@
 00010 ! calculates average charges for date range
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fnCmdSet,fnget_services
-00040 ! ______________________________________________________________________
+00040 !
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11),ttg(11),e2$*30
-00080 ! ______________________________________________________________________
+00080 !
 00100   fntop("S:\acsUB\ubSewer",cap$="Calculate Average Charges for Date Range")
-00110 ! ______________________________________________________________________
+00110 !
 00120   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 00130   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 00140   gosub BLDHDR
@@ -33,7 +33,7 @@
 00270   next j
 00280   sd1=val(resp$(1)) : sd2=val(resp$(2))
 00290   if sd1=0 or sd2=0 or sd2<sd1 then goto SCR1
-00300 ! ______________________________________________________________________
+00300 !
 00310   fnopenprn
 00320   message$="Calculating: please wait..." !:
         fnwait(message$,1)
@@ -77,11 +77,11 @@
 00700   close #1: 
 00710   fncloseprn
 00720 XIT: fnxit
-00730 ! ______________________________________________________________________
+00730 !
 00740 NEWPGE: pr #255: newpage
 00750   gosub HDR
 00760 continue 
-00770 ! ______________________________________________________________________
+00770 !
 00780 HDR: ! r:
 00790   p1=p1+1
 00800   pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
@@ -90,7 +90,7 @@
 00830   pr #255: hd1$
 00840   pr #255: hd2$
 00850 return ! /r
-00860 ! ______________________________________________________________________
+00860 !
 00870 ! <Updateable Region: ERTN>
 00880 ERTN: fnerror(program$,err,line,act$,"NO")
 00890   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -98,7 +98,7 @@
 00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00930 ! /region
-00940 ! ______________________________________________________________________
+00940 !
 00950   dim hd1$*400,hd2$*400,g1(11),g2(11)
 00960   dim serviceName$(10)*20,services$(10)*2,tax_code$(10)*1,tg(11),usages(3)
 00970 BLDHDR: ! r: build pr headings

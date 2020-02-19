@@ -1,6 +1,6 @@
 def library fnGetPp(&input$,&path$,&prog$,&ext$)
 	on error goto Ertn
-	! ______________________________________________________________________
+	!
 	! Dim Note: Please Dim you Path$ and Prog$ as long as your Input$
 	! Input$: this is what you want parsed...
 	!         supported formats:  progam/dir 
@@ -12,7 +12,7 @@ def library fnGetPp(&input$,&path$,&prog$,&ext$)
 	! prog$:  the file name (without it's extension) (i.e. "ubmenu")
 	! ext$:   the input progams extension (period included) (i.e. ".wb")
 	! The -1 in pos(x,y,-1) causes search to run backwards from end to front
-	! ______________________________________________________________________
+	!
 	input$=trim$(input$) : path$=prog$=ext$=""
 	fslash_pos=pos(input$,"/",1) : bslash_pos=pos(input$,"\",-1)
 	if fslash_pos>0 then gosub FSLASH_PARSE

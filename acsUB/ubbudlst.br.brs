@@ -1,18 +1,18 @@
 00010 ! Replace S:\acsUB\ubBudLst
 00020 ! -- Budget Customer List
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnwait,fnerror,fnopenprn,fncloseprn,fnxit,fnAcs,fnTxt,fncomboa,fnLbl,fnTos,fnCmdSet,fntop
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim z$*10,e$(4)*30,dat$*20,idx$(3)*20,wrd2$(3)
 00080   dim sel$(3)*38,cap$*128,txt$*40,resp$(10)*20
-00090 ! ______________________________________________________________________
+00090 !
 00120   fndat(dat$)
 00130   fntop(program$,cap$="Customer List")
 00140   idx$(1)="ubIndex" !:
         idx$(2)="ubIndx2" !:
         idx$(3)="ubIndx3"
-00150 ! ______________________________________________________________________
+00150 !
 00160 SCR1: ! 
 00170   sn$="ubBudLst" !:
         fnTos(sn$) !:
@@ -45,14 +45,14 @@
 00300   if resp$(3)=sel$(1) then ti2=1 else !:
           if resp$(3)=sel$(2) then ti2=2 else !:
             if resp$(3)=sel$(3) then ti2=3 ! active, inactive, etc...
-00310 ! ______________________________________________________________________
+00310 !
 00320   on fkey 5 goto DONE
 00330   fnopenprn(cp,0,0,process)
 00340   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\"&idx$(q0)&".h[cno],Shr",internal,input,keyed 
 00350   gosub BUD1
 00360   gosub HEADER
 00370   goto READ_CUSTOMER
-00380 ! ______________________________________________________________________
+00380 !
 00390 READ_CUSTOMER: ! 
 00400   read #1,using L430: z$,mat e$,final,bal eof DONE
 00410   if bud1=1 then gosub BUD2
@@ -64,12 +64,12 @@
 00470 L470: pr #255,using L480: z$,e$(2),e$(1)(1:25),totba pageoflow PGOF
 00480 L480: form x 5,c 10,x 5,c 30,x 7,c 25,n 11.2,skip 2
 00490   goto READ_CUSTOMER
-00500 ! ______________________________________________________________________
+00500 !
 00510 PGOF: ! 
 00520   pr #255: newpage
 00530   gosub HEADER
 00540   goto READ_CUSTOMER
-00550 ! ______________________________________________________________________
+00550 !
 00560 HEADER: ! 
 00570   p2=p2+1
 00580   pr #255: "\qc {\fs24 "&env$('cnam')&"}"
@@ -80,18 +80,18 @@
 00630   pr #255: ""
 00640   pr #255: tab(7);"Account No";tab(21);"Name";tab(58);"Meter Address";tab(81);"Budget Amount"
 00650   return 
-00660 ! ______________________________________________________________________
+00660 !
 00670 DONE: close #1: ioerr L680
 00680 L680: fncloseprn
 00690 XIT: fnxit
-00700 ! ______________________________________________________________________
+00700 !
 00710 BUD1: bud1=0
 00720   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
 00730   open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L760
 00740   open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
 00750   bud1=1
 00760 L760: return 
-00770 ! ______________________________________________________________________
+00770 !
 00780 BUD2: ! 
 00790   totba=0
 00800   if bud1=0 then goto L860
@@ -101,7 +101,7 @@
 00840   for j=2 to 12: totba=totba+ba(j): next j
 00850   if env$('client')="Findlay" then totba=totba-ba(8) ! don't add the penalty
 00860 L860: return 
-00870 ! ______________________________________________________________________
+00870 !
 00880 ! <Updateable Region: ERTN>
 00890 ERTN: fnerror(program$,err,line,act$,"xit")
 00900   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -109,4 +109,4 @@
 00920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00930 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00940 ! /region
-00950 ! ______________________________________________________________________
+00950 !

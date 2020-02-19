@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsPR\prRpt2
 00020 ! Payroll Report File - Add Records
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fncno,fnerror
 00045   fntop("S:\acsPR\prRpt2",cap$="Design Reports")
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
 00080   dim io1$(9),fb$(20),io2$(60),rptemp(20),tempch$(4)*256
 00090   dim temp(20,3),cnam$*40,cap$*128,response$(5)*1,cap$*128,msgline$(2)*60
-00100 ! ______________________________________________________________________
+00100 !
 00120   fncno(cno,cnam$)
 00130   for z=1 to 20
 00140     z$=str$(z+1)
@@ -19,7 +19,7 @@
 00190     io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 00200   next z
 00210   open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",internal,outIn,keyed 
-00220 ! ______________________________________________________________________
+00220 !
 00230 SCR1: pr newpage
 00240   close #101: ioerr L250
 00250 L250: open #101: "SRow=4,SCol=6,ERow=22,ECol=74,Border=Dr,Caption=<"&cap$,display,outIn 
@@ -133,9 +133,9 @@
 01330   pr #99,using L1290: "PROC S:\acsPR\PRMENU"
 01340   close #99: 
 01350   chain "proc=PROC."&wsid$&""
-01360 ! ______________________________________________________________________
+01360 !
 01370 XIT: fnxit
-01380 ! ______________________________________________________________________
+01380 !
 01390 ! <Updateable Region: ERTN>
 01400 ERTN: fnerror(program$,err,line,act$,"xit")
 01410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -143,4 +143,4 @@
 01430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01450 ! /region
-01460 ! ______________________________________________________________________
+01460 !

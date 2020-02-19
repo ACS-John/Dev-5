@@ -2,9 +2,9 @@
 20020 ! remove old transactions
 20040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fncno,fnerror,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fnFra
 20060   on error goto Ertn
-20080 ! ______________________________________________________________________
+20080 !
 20100   dim cap$*128
-20120 ! ______________________________________________________________________
+20120 !
 20140   fntop("S:\acsUB\ubRemove",cap$="Remove Old Transactions")
 20160   cancel=5 : left=0 : right=1 : center=2
 20180   fncno(cno)
@@ -35,9 +35,9 @@
 20680   close #h_trans: 
 20700   execute "Index [Q]\UBmstr\UBTransVB.h[cno]"&' '&"[Q]\UBmstr\UBTrIndx.h[cno] 1 19 Replace DupKeys -n"
 20720   goto XIT
-20740 ! ______________________________________________________________________
+20740 !
 20760 XIT: fnxit
-20780 ! ______________________________________________________________________
+20780 !
 20800 ! <Updateable Region: ERTN>
 20820 ERTN: fnerror(program$,err,line,act$,"xit")
 20840   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -45,4 +45,4 @@
 20880   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20920 ! /region
-20940 ! ______________________________________________________________________
+20940 !

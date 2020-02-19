@@ -4,7 +4,7 @@
 	library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fnCmdSet,fnrglbig$,fnqglbig
 	fntop(program$,cap$="Unpaid Invoice")
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim cap$*128
 	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
 	dim in1$(9),de$*30,ta(2)
@@ -15,9 +15,9 @@
 	dim chdr$(16),cmask$(16),item$(16)*21 ! used with flex grid
 	dim gldesc$*30,ml$(3)*80
 	dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*128
-! ______________________________________________________________________
+!
 ! screen_last=5
-! ______________________________________________________________________
+!
 	right=1
 	fncno(cno)
 	open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Shr,Use,RecL=12",internal,outIn,relative 
@@ -163,7 +163,7 @@ HDR: ! r:
 	pr #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
 	pr #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 	return  ! /r
-! ______________________________________________________________________
+!
 FINIS: ! r:
 	if havejc=1 and lrec(jcbreakdown)>0 then 
 		mat ml$(3)=("")
@@ -175,7 +175,7 @@ FINIS: ! r:
 	end if
 goto XIT ! /r
 XIT: fnxit
-! ______________________________________________________________________
+!
 JCBLD: ! r: Open JC Files
 	mat chdr3$(6) : mat cmask3$(6) : mat jobitem$(6)
 	chdr3$(1)='Refenence'
@@ -193,7 +193,7 @@ JCBLD: ! r: Open JC Files
 	open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=[Q]\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
 JCBLD_FINIS: ! 
 	return  ! /r
-! ______________________________________________________________________
+!
 CODE_FOR_PAYMENT: ! r:
 	lastrec=nextrec=total=0
 	displayattop$="True"
@@ -527,7 +527,7 @@ pr #255: ""
 pr #255: " Payee #    Invoice #    Job #    Cat #  Sub-Cat   Amount  Descripton"
 pr #255: " _______    _________    _____    _____  _______   ______  __________"
 return ! /r
-! ______________________________________________________________________
+!
 PRINT_JOB_COST_ENTRIES: ! r:
 	letotal_allocations=0
 	gosub HDR2

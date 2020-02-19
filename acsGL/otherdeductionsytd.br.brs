@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\OtherDeductionsYTD
 00020 ! -- Other deductions Ytd/Qtd
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,totalytd(10)
 00080   dim totalqtd(10)
 00090   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 00100   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Other Deductions Registers-YTD QTD")
 00130   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -27,7 +27,7 @@
 00250   gosub L440
 00260   gosub L570
 00270   goto L240
-00280 ! ______________________________________________________________________
+00280 !
 00290 HEADER: ! 
 00300   pr #255,using L310: date$('mm/dd/yy'),time$,cnam$
 00310 L310: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
@@ -37,7 +37,7 @@
 00350   p1=66-int(len(rtrm$(dat$))/2)
 00360   pr #255,using L340: rtrm$(fnpedat$)
 00370   return 
-00380 ! ______________________________________________________________________
+00380 !
 00390 L390: gosub HEADER
 00400   pr #255: 
 00410   pr #255,using L420: "Emp #","Name",miscname$(1)(1:9) ,miscname$(2)(1:9),miscname$(3)(1:9),miscname$(4)(1:9),miscname$(5)(1:9),miscname$(6)(1:9),miscname$(7)(1:9),miscname$(8)(1:9),miscname$(9)(1:9),miscname$(10)(1:9)
@@ -66,7 +66,7 @@
 00640   gosub L390
 00650   continue 
 00660 XIT: fnxit
-00670 ! ______________________________________________________________________
+00670 !
 00680 ! <updateable region: ertn>
 00690 ERTN: fnerror(program$,err,line,act$,"xit")
 00700   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

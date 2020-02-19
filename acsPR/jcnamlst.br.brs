@@ -1,24 +1,24 @@
 00010 ! Replace S:\acsPR\jcNamLst
 00020 ! pr Name and Number List
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fncno,fnerror,fndat,fnprocess,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
 00080   dim cnam$*40,message$*40
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Name and Number List")
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 ! 
 00125   fnconsole(1)
-00130 ! ______________________________________________________________________
-00140 ! ______________________________________________________________________
+00130 !
+00140 !
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00160   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
 00170   prtcat$="N"
 00180   if fnprocess=1 then goto L460
-00190 ! ______________________________________________________________________
+00190 !
 00200   pr newpage
 00210   close #101: ioerr L220
 00220 L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&cap$,display,outIn 
@@ -45,7 +45,7 @@
 00420   if prtcat$<>"Y" and prtcat$<>"N" then ce=2: goto ERR1
 00430   dattab=60-len(rtrm$(dat$))/2
 00440   fndat(dat$,2)
-00450 ! ______________________________________________________________________
+00450 !
 00460 L460: pr newpage
 00470   message$="Printing: please wait"
 00480   fnwait(message$,1)
@@ -73,7 +73,7 @@
 00700   close #2: 
 00710 L710: fncloseprn
 00720   goto XIT
-00730 ! ______________________________________________________________________
+00730 !
 00740 HDR: ! 
 00750   pr #255,using L760: "Job Name and Number Listing",dat$
 00760 L760: form skip 3,pos 47,c 34,skip 1,pos dattab,c 20,skip 1
@@ -83,7 +83,7 @@
 00800 L800: form pos 1,c 50,pos 47,c 50,skip skh
 00810   skh=1
 00820   return 
-00830 ! ______________________________________________________________________
+00830 !
 00840 L840: if first=0 then pr #255,using L842: jn$,n$,cn$(7:11),k$ pageoflow L870: first =1: goto L860
 00842 L842: form skip 2,pos 1,c 6,pos 10,c 40,x 1,c 5,pos 60,c 25,skip 1
 00845   pr #255,using L850: cn$(7:11),k$ pageoflow L870
@@ -92,9 +92,9 @@
 00870 L870: pr #255: newpage
 00880   gosub HDR
 00890 L890: return 
-00900 ! ______________________________________________________________________
+00900 !
 00910 XIT: fnxit
-00920 ! ______________________________________________________________________
+00920 !
 00930 ! <Updateable Region: ERTN>
 00940 ERTN: fnerror(program$,err,line,act$,"xit")
 00950   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -102,4 +102,4 @@
 00970   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00980 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00990 ! /region
-01000 ! ______________________________________________________________________
+01000 !

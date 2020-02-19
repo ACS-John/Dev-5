@@ -5,7 +5,7 @@
 00050     on error goto Ertn
 00060     fnStatus('Converting Alternate Billing Address file (S:\acsUB\conversion\ubadrbil-cnv)')
 00070     dim a$(4)*30,cap$*128,z$*10,ab$(4)*30
-00080 ! ______________________________________________________________________
+00080 !
 00090 ! fntop("S:\acsUB\conversion\ubadrbil-cnv",cap$="adrbil-cnv")
 00100     fncno(cno)
 00110 ! note!!!!   may have to change a$(3) to a$(4), etc and form on line 220
@@ -32,7 +32,7 @@
 00240 L240: if trim$(a$(1))="" and trim$(a$(2))="" and trim$(a$(3))="" and trim$(a$(4))="" then goto L180
 00250     write #2,using 'Form POS 1,C 10,4*C 30,': z$,mat a$
 00260     goto L180
-00270 ! ______________________________________________________________________
+00270 !
 00280 END1: close #1: 
 00290     close #2: 
 00300     fnCopy(env$('temp')&"\tmp_x_"&session$,"[Q]\UBmstr\UBAdrBil.h[cno]")

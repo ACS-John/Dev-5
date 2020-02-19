@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\actpd$.br
-00020 ! ______________________________________________________________________
+00020 !
 00030   def library fnactpd$(;actpd$)
 00040     library 'S:\Core\Library': fncno,fngethandle
 00050     get=1 : put=2

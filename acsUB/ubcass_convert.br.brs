@@ -1,10 +1,10 @@
 00010 ! Replace S:\acsUB\ubcass_convert
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim a$*111
-00070 ! ______________________________________________________________________
+00070 !
 00080   close #24: ioerr L90
 00090 L90: close #22: ioerr L100
 00100 L100: open #24: "Name=X,RecL=112,EOL=NONE,Replace",external,output 
@@ -12,13 +12,13 @@
 00120 L120: read #22,using "Form pos 1,C 111": a$ eof L160
 00130   write #24,using "Form POS 1,C 111,C 1": a$,chr$(10)
 00140   goto L120
-00150 ! ______________________________________________________________________
+00150 !
 00160 L160: close #24: 
 00170   close #22: 
 00180   execute "COPY x a:ubcass2.dat -n"
-00190 ! ______________________________________________________________________
+00190 !
 00200 XIT: stop 
-00210 ! ______________________________________________________________________
+00210 !
 00220 ! <Updateable Region: ERTN>
 00230 ERTN: fnerror(program$,err,line,act$,"xit")
 00240   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -26,4 +26,4 @@
 00260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00270 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00280 ! /region
-00290 ! ______________________________________________________________________
+00290 !

@@ -1,25 +1,25 @@
 00010 ! Replace S:\acsPR\newjcRemove
 00020 ! Remove Job Cost Payroll Jobs
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnTos,fnLbl,fncmbjob,fnCmdKey,fnAcs,fnmsgbox,fncombof
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
 00080   dim contact$*30,ph$*12,email$*60
 00090   dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,ml$(1)*70
 00100   dim resp$(1)*60
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
 00130   fncno(cno)
 00140 ! 
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,outIn: close #1: 
-00160 ! ______________________________________________________________________
+00160 !
 00170   execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
 00180   execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
 00190   execute "Copy [Q]\PRmstr\JCCAT.H[cno] JCCAT.X -n"
-00200 ! ______________________________________________________________________
+00200 !
 00210   open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",internal,outIn,keyed 
-00220 ! ______________________________________________________________________
+00220 !
 00230 ASKJOB: ! 
 00240   fnTos(sn$="jccpr1J") !:
         respc=0
@@ -40,7 +40,7 @@
 00340   if resp$="Yes" then goto L350 else goto ASKJOB
 00350 L350: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey ASKJOB
 00360   goto ASKJOB
-00370 ! ______________________________________________________________________
+00370 !
 00380 DELETE_THEM: ! 
 00390   restore #1: 
 00400   open #2: "Name=JCCAT.X,KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,input,keyed 
@@ -84,7 +84,7 @@
 00780   goto L610
 00790 L790: write #11,using "Form POS 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$
 00800   goto L540
-00810 ! ______________________________________________________________________
+00810 !
 00820 EOF1: close #1,free: 
 00830   close #2,free: 
 00840   close #3,free: 
@@ -96,9 +96,9 @@
 00895   df$="[Q]\PRmstr\jcmstr.h[cno]" : if$="[Q]\PRmstr\jcindx.h[cno]" !:
         fncombof("CJob.h[cno]",lyne,mypos,43,df$,1,6,7,25,if$,1)
 00900   goto XIT
-00910 ! ______________________________________________________________________
+00910 !
 00920 XIT: fnxit
-00930 ! ______________________________________________________________________
+00930 !
 00940 ! <Updateable Region: ERTN>
 00950 ERTN: fnerror(program$,err,line,act$,"xit")
 00960   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -106,4 +106,4 @@
 00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00990 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01000 ! /region
-01010 ! ______________________________________________________________________
+01010 !

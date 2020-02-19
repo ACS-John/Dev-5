@@ -26,7 +26,7 @@
 00230   if n2<ld1 then goto READ_COLLECT
 00240   write #7,using L200: x$,m,n,mat o,adrnxt,rcpt$,mat alloc
 00250   goto READ_COLLECT
-00260 ! ______________________________________________________________________
+00260 !
 00270 ASKDATE: ! 
 00280   sn$="ubcoldel" !:
         fnTos(sn$) !:
@@ -43,12 +43,12 @@
         ld1=fncd2(ld1) !:
         cutoff$=str$(ld1)
 00350   return 
-00360 ! ______________________________________________________________________
+00360 !
 00370 END1: close #7: 
 00380   close #6,free: 
 00390   execute "Rename "&env$('temp')&"\Work."&session$&' '&"[Q]\UBmstr\Collect.h[cno] -n"
 00400 XIT: fnxit
-00410 ! ______________________________________________________________________
+00410 !
 00420 ! <Updateable Region: ERTN>
 00430 ERTN: fnerror(program$,err,line,act$,"xit")
 00440   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -56,4 +56,4 @@
 00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
-00490 ! ______________________________________________________________________
+00490 !

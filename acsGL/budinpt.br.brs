@@ -1,14 +1,14 @@
 ! Replace S:\acsGL\BudInpt
 ! used to enter new budget figures at beginning of new year
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnrgl$,fnopenprn,fncloseprn,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnagl$,fnLbl,fnqgl,fnTxt
 	on error goto Ertn
 	fntop(program$,"Budget Amounts")
-! ______________________________________________________________________
+!
 	dim dat$*20,bm(13),io1$(4),in1(4),fl2$(2),sc2$(2)*50
 	dim revb(13),resp$(10)*256
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70
-! ______________________________________________________________________
+!
 ! 
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  
 	read #1,using 'Form Pos 384,N 2',rec=1: nap 
@@ -78,13 +78,13 @@ L670: form pos 1,pic(zzz),n 7,pic(zzzz),2*n 12.2,skip 1
 L690: form pos 339,13*pd 6.2
 	rewrite #1,using L550,key=k$: mat bm,mat revb
 L710: goto ENTER_BUDGET
-! ______________________________________________________________________
+!
 EOF2: ! 
 	fncloseprn
 ! 
 ! 
 XIT: fnxit
-! ______________________________________________________________________
+!
 L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 ! 
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  
@@ -106,7 +106,7 @@ L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 	if resp$(1)="True" then budyear=1 else budyear=2
 	if budyear=1 then p1=37 else p1=43 ! CURRENT YEARS BUDGET OR NEXT YEARS BUDGET
 	return 
-! ______________________________________________________________________
+!
 BUDGET_FILE_NUM: ! r:
 	fnTos(sn$="BudgetAmount4") 
 	mylen=50: mypos=mylen+3 : right=1
@@ -119,7 +119,7 @@ BUDGET_FILE_NUM: ! r:
 	bud=val(resp$(1)) ! budget file number to pull
 	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr BUDGET_FILE_NUM
 return ! /r
-! ______________________________________________________________________
+!
 L1090: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 L1100: read #2,using 'Form POS 1,N 3,N 6,N 3,POS P1,PD 6.2,POS 149,C 1': mat in1,cd$ eof EOF2
 	if cd$<>"B" then goto L1100
@@ -128,5 +128,5 @@ L1100: read #2,using 'Form POS 1,N 3,N 6,N 3,POS P1,PD 6.2,POS 149,C 1': mat in1
 L1140: form pos 31,pd 6.2
 	read #1,using L550,key=k$: mat bm,mat revb nokey L1100
 	goto L560
-! ______________________________________________________________________
+!
 include: ertn

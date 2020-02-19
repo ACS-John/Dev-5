@@ -1,9 +1,9 @@
 ! Replace S:\acsUB\conversion\booktitle_altbil
 ! this program converts a field from ALL CAPITAL LETTERS  to Book Title Capitalization
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnxit,fnbooktitle$
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim nam$*30,ab$(4)*40
 	cno=val(env$('cno'))
 	pr newpage
@@ -23,7 +23,7 @@ L310: rinput fields mat io1$: cno conv L310
 		rewrite #1,using "Form Pos 11,4*C 40",rec=j: mat ab$ noRec L390
 L390: next j
 	goto DONE
-! ______________________________________________________________________
+!
 DONE: close #1: 
 	pr "company number "&str$(cno)&" completed successfully"
 	goto L270

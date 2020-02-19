@@ -1,8 +1,8 @@
 10000 ! S:\acsGL\adjustaccounts
-10010 ! ______________________________________________________________________
+10010 !
 10020   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fncursys$,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnagl$,fnqglbig,fnrglbig$,fngethandle,fnmsgbox,fnCmdKey
 10030   on error goto Ertn
-10040 ! ______________________________________________________________________
+10040 !
 10050   dim cap$*128,resp$(3)*255,ymbal(13),priorym(13)
 10060   fntop(program$,cap$="Adjust Account Balances")
 10070   fn_adjustaccounts
@@ -112,4 +112,4 @@
 11110   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 11120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 11130 ! /region
-11140 ! ______________________________________________________________________
+11140 !

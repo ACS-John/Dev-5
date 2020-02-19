@@ -1,13 +1,13 @@
 00010 ! formerly S:\acsGL\PeriodEndingDate
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndat,fnpedat$,fncch$,fnactpd,fnactpd$,fnactpd,fncch$,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs
 00050   fntop(program$,cap$="Period Ending Dates")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim cnam$*40,dat$*20,pedat$*20,cch$*20,iom$(2),scm$(2),cap$*128
 00090   dim periodOption$(13)*2,resp$(10)*200
 00092   for x=1 to 13 : periodOption$(x)=str$(x) : next x
-00100 ! ______________________________________________________________________
+00100 !
 20000   fntop(program$,cap$="Period Ending Dates")
 20020   pedat$=fnpedat$ 
 20040   fndat(dat$,1) 
@@ -17,7 +17,7 @@
 20120   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
 20140   read #20,using 'Form Pos 296,n 2',rec=1: lmu
 20160   close #20: 
-20180 ! ______________________________________________________________________
+20180 !
 20200 PERIOD_ENDING_DATES: ! 
 20220   cancel=99
 20240   fnTos("ped") 
@@ -56,4 +56,4 @@
 50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region
-50140 ! ______________________________________________________________________
+50140 !

@@ -1,17 +1,17 @@
 00010 ! replace S:\acsGL\Account_Search.br
 00020 ! search for general ledger accounts
-00030 ! ______________________________________________________________________
+00030 !
 00040   def library fnaccount_search(&x$;fixgrid)
 00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
 00060     on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080     dim item$(10)*50,resp$(30)*80,rf(6)
-00090 ! ______________________________________________________________________
+00090 !
 00100 ! x$=account #     !:
           ! to extract the flexgrid information (master file)
 00110     fncno(cno)
 00120     open #file_num:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
-00130 ! ______________________________________________________________________
+00130 !
 00140     restore #file_num: 
 00150     fnTos(sn$="AccountSrch")
 00160     ch$(1)="Account" : ch$(2)="Description" : ch$(3)="Balance" !:
@@ -34,21 +34,21 @@
 00250     next j
 00260     fnflexadd1(mat item$)
 00270     goto READ_FILE
-00280 ! ______________________________________________________________________
+00280 !
 00290 ERR_READ: ! 
 00300     if err<>61 then goto ERTN
 00310     pr 'Record locked during Account_Search flexgrid creation' !:
           pr 'It was skipped' !:
           read #file_num,release: !:
           goto READ_FILE
-00320 ! ______________________________________________________________________
+00320 !
 00330 L330: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE without displaying it
 00340     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00350     x$=lpad$(resp$(1),12)
 00360     if ckey=5 then x$="            " ! no one selected
 00370     goto XIT
-00380 ! ______________________________________________________________________
+00380 !
 00390 ! <Updateable Region: ERTN>
 00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -56,6 +56,6 @@
 00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
-00460 ! ______________________________________________________________________
+00460 !
 00470 XIT: close #file_num: : fnend 
-00480 ! ______________________________________________________________________
+00480 !

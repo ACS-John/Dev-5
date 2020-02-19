@@ -1,22 +1,22 @@
 00010 ! Replace S:\acsPR\JCRptFM
 00020 ! Job Cost User-Designed Report File
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fnoldmsgbox,fnfkey, fnopenprn,fncloseprn, fncno,fnerror,fnchain,fnrx,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,message$*40,msgline$(2)*60,response$(5)*1
 00080   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,iom$(3),scm$(3)*40
 00090   dim io1$(10),io2$(7),fd$(20),rptemp(20),tempch$(4)*256,rptn$*6,rnew$*6
 00100   dim rt$*51,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20),fc(20)
 00110   dim tcj(20),tcs(20),rno$(50)*2,em$*40,wrd3$(2)*23,io3$(2)
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop("S:\acsPR\JCRptFM",cap$="User Designed Reports")
 00140   fncno(cno)
 00145   fnconsole(1)
 00150   pg=3
-00160 ! ______________________________________________________________________
+00160 !
 00170   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outIn,keyed 
-00180 ! ______________________________________________________________________
+00180 !
 00190 MENU1: pr newpage
 00200   fnopenwin(win=101,09,20,15,59,cap$)
 00210   scm$(1)="1. Add or Edit" !:
@@ -29,7 +29,7 @@
 00250   if cmdkey=5 then goto XIT
 00260   on ti+1 goto XIT,L290,L2180,SRCH none L240
 00270   goto XIT
-00280 ! ______________________________________________________________________
+00280 !
 00290 L290: pr newpage
 00300   win=102
 00310   fnopenwin(win,10,20,14,59,cap$)
@@ -44,13 +44,13 @@
 00400   read #1,using L410,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey L440
 00410 L410: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 00420   goto L520
-00430 ! ______________________________________________________________________
+00430 !
 00440 L440: msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
 00450   msgline$(2)="Do you wish to add it now? (Y/N)"
 00460   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00470   if response$(1)="Y" then goto L500
 00480   if response$(1)="N" then goto L290
-00490 ! ______________________________________________________________________
+00490 !
 00500 L500: rt$="" : mat ch$=("") : ips=sd=cp=sc=0 : mat ps=(0) !:
         mat f$=("") : mat pp=(0) : mat ppr=(0) : mat dp=(0) : mat fc=(0) !:
         mat tcj=(0) : mat tcs=(0)
@@ -116,11 +116,11 @@
 01040   pr f "2,40,C 38,N": "DUPLICATE REPORT NUMBER.  PRESS ENTER."
 01050 L1050: input fields "2,79,C 1,N": cnt$ conv L1050
 01060   goto L810
-01070 ! ______________________________________________________________________
+01070 !
 01080 L1080: rptn$=lpad$(str$(rptn),2)
 01090   delete #1,key=rptn$: 
 01100   goto L290
-01110 ! ______________________________________________________________________
+01110 !
 01120 L1120: if ips<0 or ips>124 then goto L1130 else goto L1160
 01130 L1130: ce=7
 01140   goto L2910
@@ -236,7 +236,7 @@
 02140   fnrx(rn)
 02150   execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
 02160   fnchain('S:\acsPR\jcRptS1')
-02170 ! ______________________________________________________________________
+02170 !
 02180 L2180: pr newpage
 02190   restore #1,key>="  ": nokey L2850
 02200   fnopenwin(win=102,10,28,15,52,cap$)
@@ -303,11 +303,11 @@
 02810   next j
 02820   pr #255: newpage
 02830   goto L2450
-02840 ! ______________________________________________________________________
+02840 !
 02850 L2850: fncloseprn
 02860   on fkey 5 ignore 
 02870   goto MENU1
-02880 ! ______________________________________________________________________
+02880 !
 02890   if ce>0 then io1$(ce)(ce1:ce2)="U"
 02900   ce=cnt+1
 02910 L2910: pr f "24,80,C 1,N": bell
@@ -316,7 +316,7 @@
 02940   ce2=ce1+1
 02950   io1$(ce)(ce1:ce1)="RC"
 02960   goto L840
-02970 ! ______________________________________________________________________
+02970 !
 02980   if ce>0 then io2$(ce)(ce1:ce2)="U"
 02990   ce=cnt+1
 03000 L3000: pr f "24,80,C 1,N": bell
@@ -325,7 +325,7 @@
 03030   ce2=ce1+1
 03040   io2$(ce)(ce1:ce1)="RC"
 03050   goto L1810
-03060 ! ______________________________________________________________________
+03060 !
 03070 SRCH: ! 
 03080   bk=0
 03090 L3090: pr newpage
@@ -373,7 +373,7 @@
 03450   goto L3190
 03460 L3460: selclp=0
 03470   goto L3090
-03480 ! ______________________________________________________________________
+03480 !
 03490 SRCHEND: if rtrm$(k$)="" then goto L3550
 03500   rn=rx=rptn=val(k$) conv L3550
 03510   rptn$=lpad$(rtrm$(k$),2)
@@ -381,9 +381,9 @@
 03530   ti=1 : goto L520
 03540   close #101: ioerr L3550
 03550 L3550: goto MENU1
-03560 ! ______________________________________________________________________
+03560 !
 03570 XIT: fnxit
-03580 ! ______________________________________________________________________
+03580 !
 03590 ! <Updateable Region: ERTN>
 03600 ERTN: fnerror(program$,err,line,act$,"xit")
 03610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -391,4 +391,4 @@
 03630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03650 ! /region
-03660 ! ______________________________________________________________________
+03660 !

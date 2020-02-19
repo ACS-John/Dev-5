@@ -1,12 +1,12 @@
 00010 ! formerly S:\acsUB\ubDepChg
 00020 ! -- Customer Deposit Change Listing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fnTos,fnopenprn,fncloseprn,fnerror,fnxit,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fntop,fngethandle
 00050   on error goto Ertn
 00060   fntop(program$)
 00070   dim resp$(2)*20
 00080   dim dp$*70
-00130 ! ______________________________________________________________________
+00130 !
 24000 MENU1: ! r:
 24040   fnTos(sn$:="ubDepChg")
 24060   fnLbl(1,28," ",1,1)

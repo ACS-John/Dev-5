@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\FixRef
 00020 ! trying to place income statement reference numbers back into a chart of accounts, might be handy, but don't need on menu
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,"Fix Reference Numbers")
 00110   fncno(cno)
 00120   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
@@ -16,7 +16,7 @@
 00160   fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
 00170   fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
 00180   fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
-00190 ! ______________________________________________________________________
+00190 !
 00200   on fkey 5 goto XIT
 00210   pr newpage
 00220   close #2: ioerr L230
@@ -34,9 +34,9 @@
 00340   goto L240
 00350 L350: close #2: 
 00370   stop 
-00380 ! ______________________________________________________________________
+00380 !
 00390 XIT: fnxit
-00400 ! ______________________________________________________________________
+00400 !
 00410 ! <Updateable Region: ERTN>
 00420 ERTN: fnerror(program$,err,line,act$,"xit")
 00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -44,4 +44,4 @@
 00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
-00480 ! ______________________________________________________________________
+00480 !

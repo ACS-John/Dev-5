@@ -4,10 +4,10 @@
 00030   def library fntrmstr_v0_to_v1
 00040     library 'S:\Core\Library': fnerror,fnmsgbox,fnwait,fnStatus
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim message$*40,msgline$(6)*48,response$(5)*1
-00080 ! ______________________________________________________________________
-00110 ! ______________________________________________________________________
+00080 !
+00110 !
 00120     fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
 00160 ! fnwait(message$="Converting: please wait...",0)
 00170     open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative 
@@ -22,7 +22,7 @@
 00230     next j
 00240 L240: close #trmstr: 
 00250     goto XIT
-00260 ! ______________________________________________________________________
+00260 !
 00270 ! <Updateable Region: ERTN>
 00280 ERTN: fnerror(program$,err,line,act$,"xit")
 00290     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -30,6 +30,6 @@
 00310     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00320 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00330 ! /region
-00340 ! ______________________________________________________________________
+00340 !
 00350 XIT: fnend 
-00360 ! ______________________________________________________________________
+00360 !

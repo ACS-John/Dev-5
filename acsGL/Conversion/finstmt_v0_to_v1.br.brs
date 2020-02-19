@@ -4,10 +4,10 @@
 00030   def library fnfinstmt_v0_to_v1
 00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnStatus,fnindex_it
 00060     on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080     dim cap$*128
 00090     dim fil$(6),idx$(6)
-00130 ! ______________________________________________________________________
+00130 !
 00140     fnStatus('Converting Financial Statement.')
 20000 GOON: ! 
 20020     fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
@@ -71,7 +71,7 @@
 21180 NEXT_J: ! 
 21200     next j
 21220     goto XIT
-50570 ! ______________________________________________________________________
+50570 !
 50580 ! <Updateable Region: ERTN>
 50590 ERTN: fnerror(program$,err,line,act$,"xit")
 50600     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -79,6 +79,6 @@
 50620     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50630 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50640 ! /region
-50650 ! ______________________________________________________________________
+50650 !
 50660 XIT: fnend 
-50670 ! ______________________________________________________________________
+50670 !

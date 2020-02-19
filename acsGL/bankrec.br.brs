@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsGL\BankRec
 00020 ! Bank reconciliation routines for general ledger
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fncomboa,fnCmdSet,fnAcs,fnchain,fnTxt,fnButton,fnFra,fnOpt,fnflexinit1,fnflexadd1,fnCmdKey,fnChk,fncombof,fnmsgbox,fnrgl$,fnqgl,fnagl$,fnconsole,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,dat$*20,adr(2),gl(3),sf1$*28,pr$(4)*30,whgl$(5)*12
 00080   dim sendto$*80,ck$(22),cap$*128,aa(2),prtr(99),k$*21
 00090   dim tr$(5)*35,tr(2),de$*30,bn$*40,sn$*50
@@ -11,7 +11,7 @@
 00110   dim item1$(6)*40,item3$(9)*40,chdr$(5)*15,cmask$(5)*10,flxitm$(5)*21
 00120   dim w(4),hdw$(4)*40,miscgl$(10)*12,misc$(10)*20
 00130   dim io7$(9),dpt(3),io8$(25),dpd(5,5)
-00140 ! ______________________________________________________________________
+00140 !
 00150   fntop(program$, cap$="Reconcile Bank")
 00160   cancel=99 : right=1 : center=2 : left=0
 00170   fncno(cno,cnam$) !:
@@ -86,7 +86,7 @@
 00670 L670: close #81: ioerr L680
 00680 L680: if ti3<3 then wtt=ti3
 00690   on ti3 goto CLEARING_OPTIONS,CLEARING_OPTIONS,CLEARING_ADJUSTMENTS,CALCULATE_TOTALS,PRINT_LISTINGS none MENU1
-00700 ! ______________________________________________________________________
+00700 !
 00710 CLEARING_ADJUSTMENTS: ! 
 00720   fnTos(sn$="bankrec-11") !:
         respc=0
@@ -107,7 +107,7 @@
 00860   if clr><pcd1 then goto L820
 00870   rewrite #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,POS 12,N 6,POS 72,N 6': bankgl$,tcde,d1,stmtdt eof MENU1
 00880   goto L820
-00890 ! ______________________________________________________________________
+00890 !
 00900 CLEARING_OPTIONS: ! 
 00910   fnTos(sn$="bankrec-2") !:
         respc=0
@@ -250,7 +250,7 @@
 02100   if ck=5 then goto MENU1
 02110   if ck=1 then gosub L2140 : goto BANKTOTALSCREEN
 02120   goto BANKTOTALSCREEN
-02130 ! ______________________________________________________________________
+02130 !
 02140 L2140: fnopenprn
 02150   pr #255,using L2160: bn$(1:30)
 02160 L2160: form pos 20,cc 40
@@ -268,7 +268,7 @@
 02280   pr #255: cnvrt$("N 5",t1(8))&" Uncleared Withdrawals:"&cnvrt$("N 11.2",t1(9))
 02290   pr #255: "Actual Bank Balance:"&cnvrt$("N 19.2",t1(10))
 02300   return 
-02310 ! ______________________________________________________________________
+02310 !
 02320 PRINT_LISTINGS: ! 
 02330   hdw$(1)="Deposits not cleared as of "&cnvrt$("PIC(ZZ/ZZ/ZZ)",stmtdt)
 02340   hdw$(2)="Withdrawals not cleared as of "&cnvrt$("PIC(ZZ/ZZ/ZZ)",stmtdt)
@@ -306,11 +306,11 @@
 02610 L2610: form pos 1,c 10,pic(zz/zz/zz),n 12.2,x 2,c 37,pic(zz/zz/zz),skip 1
 02620   t2(w0)=t2(w0)+amt
 02630 L2630: return 
-02640 ! ______________________________________________________________________
+02640 !
 02650 L2650: pr #wp: newpage
 02660   gosub L2690
 02670   continue 
-02680 ! ______________________________________________________________________
+02680 !
 02690 L2690: ! 
 02700 ! 
 02710   hd2=46-int(len(rtrm$(hdw$(w0)))/2)
@@ -321,8 +321,8 @@
 02760   pr #wp: "________  ________  __________  ___________________________________  ________"
 02770   w(w0)=w(w0)+1
 02780   return 
-02790 ! ______________________________________________________________________
-02800 ! ______________________________________________________________________
+02790 !
+02800 !
 02810 L2810: c1=r1=2
 02820 CLEAR_BY_RANGE: ! clear by range of check numbers or by date
 02830   fnTos(sn$="bankrec-9") !:
@@ -385,7 +385,7 @@
 03310 FREE_DPAMNTS: ! 
 03320   fnFree("[Q]\GLmstr\DpAmnts.H[cno]")
 03330   continue 
-03340 ! ______________________________________________________________________
+03340 !
 03350 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 03360   if cda=1 then goto DPAMENU
 03370 L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.H[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
@@ -509,7 +509,7 @@
 04340 ERR7: pr f "24,78,C 1": bell : goto L4300
 04350 L4350: rewrite #93,using L3450,rec=1: mat dpt
 04360   goto DPAMENU
-04370 ! ______________________________________________________________________
+04370 !
 04380 DPDATES: ! ENTER DATES TO TOTAL
 04390   pr newpage
 04400   close #108: ioerr L4410
@@ -564,7 +564,7 @@
 04890   ce=0
 04900   rewrite #92,using L3400,rec=1: mat dpd
 04910   goto DPAMENU
-04920 ! ______________________________________________________________________
+04920 !
 04930 COR1: pr newpage
 04940   pr f "10,10,c 50": "Item Number to correct:"
 04950   pr f "12,35,C 10,B,99": "Stop (Esc)"
@@ -577,7 +577,7 @@
 05020   rinput fields "10,50,N 10.2,UT,N": am1
 05030   rewrite #dpamnts,using L3880,rec=cr1: tr$,am1,ti$
 05040   goto COR1
-05050 ! ______________________________________________________________________
+05050 !
 05060 L5060: restore #bankrec1,key>=wbc$&"2        ": nokey DPAMENU
 05070   t2=0
 05080 L5080: read #bankrec1,using 'Form POS 79,c 12,POS 3,N 1,pos 4,c 8,G 6,pd 10.2,POS 72,N 6': bankgl$,tcde,tr$(1),tr2,tr3,clr eof L5260
@@ -599,7 +599,7 @@
 05240 L5240: next r1
 05250   goto L5080
 05260 L5260: goto DPAMENU
-05270 ! ______________________________________________________________________
+05270 !
 05280 ! <Updateable Region: ERTN>
 05290 ERTN: fnerror(program$,err,line,act$,"xit")
 05300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -607,7 +607,7 @@
 05320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 05330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 05340 ! /region
-05350 ! ______________________________________________________________________
+05350 !
 05360 CLEAR_TRANSACTIONS_FROM_LIST: ! 
 05370   lastrec=nextrec=total=0 !:
         displayattop$="True"
@@ -687,7 +687,7 @@
 05890   lastrec=val(resp$(1)) !:
         if lastrec+1 <= lrec(clearing) then nextrec=lastrec+1 else nextrec=1
 05900 L5900: goto L5530
-05910 ! ______________________________________________________________________
+05910 !
 05920 XIT: fnxit
-05930 ! ______________________________________________________________________
+05930 !
 05940   execute "Index [Q]\GLmstr\bankrec.h[cno]"&' '&"[Q]\GLmstr\bankrec-idx.h[cno]" &" 79/3/4 12/1/8 Replace,DupKeys"

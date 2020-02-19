@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsUB\ChartOfAccounts
 00020 ! Temporary Chart of Accounts for Payroll when no GL or CB - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnindex_it
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$='Chart of Accounts')
 00100   fncno(cno)
 00110 ! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",Internal,Input,Relative  !:
@@ -19,14 +19,14 @@
 00135   gosub CLOSE_FILE
 00136   fnindex_it("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
 00140   goto XIT
-00150 ! ______________________________________________________________________
+00150 !
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
 00170   open #open_file_count+=1: "Name=[Q]\UBmstr\GLmstr.h[cno],Version=0,KFName=[Q]\UBmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed 
 00180   return 
-00190 ! ______________________________________________________________________
+00190 !
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-00210 ! ______________________________________________________________________
+00210 !
 00220 BUILD_LAYOUT: ! 
 00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
@@ -67,13 +67,13 @@
 00340   if d(1)=0 then mask(1)+=10000
 00350   if d(2)=0 then mask(3)+=10000
 00360   return 
-00370 ! ______________________________________________________________________
+00370 !
 00380 HAMSTER: ! 
 00390   fnHamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
-00410 ! ______________________________________________________________________
+00410 !
 00420 XIT: chain "S:\acsUB\postgl"
-00430 ! ______________________________________________________________________
+00430 !
 00440 ! <Updateable Region: ERTN>
 00450 ERTN: fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -81,4 +81,4 @@
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00500 ! /region
-00510 ! ______________________________________________________________________
+00510 !

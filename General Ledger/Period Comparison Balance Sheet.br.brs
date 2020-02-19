@@ -1,14 +1,14 @@
 00010 ! formerly S:\acsGL\acglBalY
 00020 ! G/L BALANCE SHEET with comparison on months
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnUseDeptNo,fnps,fnpedat$,fnactpd,fnpriorcd,fnGlAskFormatPriorCdPeriod,fnactpd$,fnfscode
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,pedat$*20,m1$(13)*9,m2$(13)*8,total(13),p$(20)*50
 00080   dim cch$*20,by(13),bp(13),sc1$(2)*20
 00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
 00100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$)
 00122   if fnGlAskFormatPriorCdPeriod=5 then goto XIT
 00135   actpd$=fnactpd$ !:
@@ -71,7 +71,7 @@
 00540   gosub L1600
 00550   gosub L1520
 00560   goto L440
-00570 ! ______________________________________________________________________
+00570 !
 00580 L580: if notrans=1 then goto L820 ! 8/4/88
 00590   if br>=val(r$) and val(r$)><0 then goto L630
 00600 L600: ! READ GENERAL LEDGER MASTER FILE FOR AMOUNTS
@@ -91,7 +91,7 @@
             total(j)+=cb
 00740 L740: next j
 00750   goto L600
-00760 ! ______________________________________________________________________
+00760 !
 00770 L770: for j=1 to 13 : total(j)+=bp(j) : next j
 00780   goto L600
 00790 L790: if br<val(r$) then goto L600
@@ -163,16 +163,16 @@
 01390   if te$="S" then secondr$=d$
 01400   gosub L1600
 01410   goto L440
-01420 ! ______________________________________________________________________
+01420 !
 01430 L1430: if foot1=1 then goto L1490
 01440   tabnote=sp
 01450   foot1=1
 01460   foot$=d$
 01470   goto L440
-01480 ! ______________________________________________________________________
+01480 !
 01490 L1490: foot$=rtrm$(foot$)&d$
 01500   goto L440
-01510 ! ______________________________________________________________________
+01510 !
 01520 L1520: for j=1 to 9
 01530     if ac(j)=0 or ac(j)=9 then goto L1570 ! 10/14/87
 01540     for k=1 to 13
@@ -180,7 +180,7 @@
 01560     next k
 01570 L1570: next j
 01580   return 
-01590 ! ______________________________________________________________________
+01590 !
 01600 L1600: if ls=0 then goto L1740
 01610   if ls=99 then goto L1650
 01620   pr #255,using L1630: " "
@@ -196,9 +196,9 @@
 01720   pr #255: newpage
 01730   gosub L1970
 01740 L1740: return 
-01750 ! ______________________________________________________________________
+01750 !
 01760 L1760: gosub L1650: continue 
-01770 ! ______________________________________________________________________
+01770 !
 01780 L1780: if ul=0 then goto L1930
 01790   if ul=1 then goto L1870
 01800   underlin$=" ==========="
@@ -217,7 +217,7 @@
 01930 L1930: if redir=0 then pr #255,using L1940: " "
 01940 L1940: form skip 1,c 1,skip 0
 01950   return 
-01960 ! ______________________________________________________________________
+01960 !
 01970 L1970: heading=1
 01980   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01990   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
@@ -232,16 +232,16 @@
 02080 L2080: pr #255,using L2090: mat m2$
 02090 L2090: form pos 42,13*c 12,skip 2
 02100 L2100: return 
-02110 ! ______________________________________________________________________
+02110 !
 02120 L2120: eofcode=1
 02130   gosub L1650
 02135   fnfscode(actpd)
 02136   fnpriorcd(1)
 02140   fncloseprn
 02150   goto XIT
-02160 ! ______________________________________________________________________
+02160 !
 02170 XIT: fnxit
-02180 ! ______________________________________________________________________
+02180 !
 02190 ! <Updateable Region: ERTN>
 02200 ERTN: fnerror(program$,err,line,act$,"xit")
 02210   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -249,4 +249,4 @@
 02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02250 ! /region
-02260 ! ______________________________________________________________________
+02260 !

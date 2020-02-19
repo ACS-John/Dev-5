@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsCL\CpInvLst
 00020 ! checkbook Accounts Payable Listing (Any Time)
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno,cnam$)
 00100   fntop(program$,cap$="Payables Listing (Any Time)")
 00120   cancel=99
@@ -49,7 +49,7 @@
 00450   if upa=0 then goto L470 ! don't pr 0 breakdowns
 00460   write #work,using 'Form POS 1,C 12,N 6,C 8,C 30,N 10.2': gl$,ivd,vn$,ltrm$(rtrm$(iv$))&" "&de$(1:17),upa
 00470 L470: goto READ_UNPDALOC
-00480 ! ______________________________________________________________________
+00480 !
 00490 END1: close #paytrans: 
 00500 READ_TRMSTR: ! 
 00510   read #trmstr,using 'Form pos 1,n 2,n 1,c 8,N 6,POS 28,C 8,POS 36,C 30,POS 78,N 1': bank_code,tcde,tr$(1),pd,vn$,de$,scd eof END2
@@ -66,7 +66,7 @@
 00600   if amt=0 then goto EO_LOOP ! don't allow 0 amounts to show
 00610   write #work,using 'Form POS 1,C 12,N 6,C 8,C 30,N 10.2': gl$,ivd,vn$,de$,amt
 00620 EO_LOOP: goto L580
-00630 ! ______________________________________________________________________
+00630 !
 00640 END2: close #1: 
 00650   close #tralloc: 
 00660   if lrec(work)=0 then goto XIT
@@ -105,9 +105,9 @@
 00970   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 10,C 30,N 12.2': gl$,ivd,vn$,de$,amt pageoflow NEWPGE
 00980   t1+=amt : t2+=amt : hgl$=gl$ : hvn$=vn$
 00990   goto READ_ADDR
-01000 ! ______________________________________________________________________
+01000 !
 01010 NEWPGE: pr #255: newpage: gosub HDR : continue 
-01020 ! ______________________________________________________________________
+01020 !
 01030 HDR: ! 
 01040   pr #255,using 'Form POS 1,C 8,CC 78': date$,cnam$
 01050   pr #255,using 'Form POS 1,C 8,POS 32,C 40': time$,cap$
@@ -117,7 +117,7 @@
 01080   pr #255: " G/L Number     Date     Number   Description                         Amount  "
 01090   pr #255: "____________  ________  ________  ______________________________  __________"
 01100   return 
-01110 ! ______________________________________________________________________
+01110 !
 01120 ENDALL: ! 
 01130   pr #255: "                                  ______________________________  __________"
 01140   if sq1$="G" then !:
@@ -129,7 +129,7 @@
 01180   pr #255: "                                  =========================================="
 01190   fncloseprn
 01200 XIT: fnxit
-01210 ! ______________________________________________________________________
+01210 !
 01220 ! <Updateable Region: ERTN>
 01230 ERTN: fnerror(program$,err,line,act$,"xit")
 01240   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -137,4 +137,4 @@
 01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01270 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01280 ! /region
-01290 ! ______________________________________________________________________
+01290 !

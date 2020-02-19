@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\acglinct
 00020 ! -- pr Income Statement !:
         ! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,cch$*20,by(13),bp(13),cap$*128,udf$*256
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Income Statement")
 00120   fncno(cno,cnam$)
 00130   udf$=env$('temp')&'\'
@@ -168,13 +168,13 @@
 01610   pr #255,using L1620: lpad$(rtrm$(fncch$),20),"Year To Date"
 01620 L1620: form pos 45,c 20,pos 73,c 12,skip 2
 01630   return 
-01640 ! ______________________________________________________________________
+01640 !
 01650 L1650: eofcode=1
 01660   gosub L1290
 01670 ! 
 01680   fncloseprn
 01690   goto XIT
-01700 ! ______________________________________________________________________
+01700 !
 01710 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed 
 01720   for j=1 to lrec(3)
 01730     read #3,using L1740,rec=j: pc1,bb,cb noRec L1830
@@ -191,7 +191,7 @@
 01830 L1830: next j
 01840   pc0=1
 01850   return 
-01860 ! ______________________________________________________________________
+01860 !
 01870 BLDPCT2: ! 
 01880   pc3=pc4=0
 01890   if val(k$)=0 then goto L1970
@@ -203,9 +203,9 @@
 01950   pc4=round(((total2-yt2)/total2)*100,0)
 01960   if pc4<-999 or pc4>9999 then pc4=0
 01970 L1970: return 
-01980 ! ______________________________________________________________________
+01980 !
 01990 XIT: fnxit
-02000 ! ______________________________________________________________________
+02000 !
 02010 ! <Updateable Region: ERTN>
 02020 ERTN: fnerror(program$,err,line,act$,"xit")
 02030   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

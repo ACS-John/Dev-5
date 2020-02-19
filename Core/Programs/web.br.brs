@@ -1,9 +1,9 @@
 00010 ! Replace S:\Core\Programs\Web
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fnmsgbox,fnerror,fnxit
-00040 ! ______________________________________________________________________
+00040 !
 00050   dim msgline$(3)*60,response$(5)*1,cap$*128
-00060 ! ______________________________________________________________________
+00060 !
 00070   cap$="ACS User's Website"
 00080   msgline$(1)="Do you wish open the web site:"
 00090   msgline$(2)="http://planetacs.net/user"
@@ -12,7 +12,7 @@
 00120   if resp$="No" or resp$="Cancel" then goto XIT
 00130   execute "sy start http://planetacs.net/user/index.htm"
 00140 XIT: fnxit("")
-00150 ! ______________________________________________________________________
+00150 !
 00160 ! <Updateable Region: ERTN>
 00170 ERTN: fnerror(program$,err,line,act$,"xit")
 00180   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

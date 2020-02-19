@@ -1,17 +1,17 @@
 00010 ! Replace S:\Core\Programs\PrintLay1
 00020 ! pr Several Layouts
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim a$(200,3)*80,h1$*55,rm$(4)*100,filename$*50,fil$(50)*80,ln$*120
 00072   dim ev$*50
 00080   dim a(200,6),a$*132,prg$*30,mo$(12),cap$*128
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\Core\PrintLay",cap$="Print Several Layouts")
 00110   data January,February,March,April,May,June,July,August,September,October,November,December
 00120   read mat mo$
-00130 ! ______________________________________________________________________
+00130 !
 00140   fnconsole(on=1)
 00150   dat$=mo$(val(date$("MM")))&" "&date$("DD")&", "&date$("CCYY")
 00160   fnwin3b(win=101,cap$,4,58,0,2)
@@ -61,7 +61,7 @@
 00590 L590: if rtrm$(fil$(f2))="" then goto L1600
 00600   open #1: "Name="&fil$(f2),display,input ioerr L530
 00610   goto L830
-00620 ! ______________________________________________________________________
+00620 !
 00630 L630: p1=pos(filename$,".",1)
 00640   if p1=0 then p1=min(8,len(filename$)) else p1=p1-1
 00650   pr newpage
@@ -92,7 +92,7 @@
 00900   p2=pos(ln$,",",p1)
 00910   prg$=ln$(p1:p2-1)
 00920 L920: goto L720
-00930 ! ______________________________________________________________________
+00930 !
 00940 LETLN: p2=len(rtrm$(ln$))-1
 00950   p1=pos(uprc$(ln$),"H1$",1)
 00960   if p1>0 then h1$=ln$(p1+5:p2) : goto L720
@@ -107,7 +107,7 @@
 01050   rm=val(ln$(p1+4:p1+4))
 01060   rm$(rm)=ln$(p1+8:p2)
 01070 L1070: goto L720
-01080 ! ______________________________________________________________________
+01080 !
 01090 DATALN: j3=j3+1
 01100   p1=11
 01110   p2=pos(srep$(ln$,'^','~'),'~',p1+1) ! pos(ln$,"^",p1+1)
@@ -142,7 +142,7 @@
 01380   rl=rl+int(val(a$(j3,3)(p1:min(pos(srep$(a$(j3,3),'^','~'),'~')-1,pos(a$(j3,3),chr$(9))-1))))*m1 !:
         ! min(pos(srep$(a$(j3,3),'^','~'),'~')-1,POS(A$(J3,3),chr$(9))-1)      was    P3
 01390 L1390: goto L720
-01400 ! ______________________________________________________________________
+01400 !
 01410 L1410: pgo=ceil(j3/24)
 01420   if pp=1 then goto L1580
 01430   gosub HDR
@@ -165,14 +165,14 @@
 01600 L1600: close #2: ioerr L1620
 01610   fncloseprn
 01620 L1620: goto XIT
-01630 ! ______________________________________________________________________
+01630 !
 01640 XIT: fnxit
-01650 ! ______________________________________________________________________
+01650 !
 01660 NEWPGE: if j=j3 then goto L1690
 01670 ! pr #255: NEWPAGE
 01680   gosub HDR
 01690 L1690: continue 
-01700 ! ______________________________________________________________________
+01700 !
 01710 HDR: ! 
 01720   pr #255,using 'Form POS 1,C 80': "{\b{\qc{\fs28 "&h1$&"}}}"
 01730 ! pr #255,Using 'Form POS 5,"Record Length: ",C 5,POS 30,C 45': PRG$,DAT$,PG+=1,PGO
@@ -186,7 +186,7 @@
 01810   pr #255: "   Item     Field Description                           Name                 Length    Decimals    Format    Storage     From      To  "
 01820   pr #255: "   ______   ________________________________________   __________________    ______    ________   _______    _______    _____    _____"
 01830   return 
-01840 ! ______________________________________________________________________
+01840 !
 01850 ! <Updateable Region: ERTN>
 01860 ERTN: fnerror(program$,err,line,act$,"xit")
 01870   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -194,4 +194,4 @@
 01890   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01910 ! /region
-01920 ! ______________________________________________________________________
+01920 !

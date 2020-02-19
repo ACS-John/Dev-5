@@ -16,10 +16,10 @@ library 'S:\Core\Library': fnub_cnv_ubmstr_vb
 library 'S:\Core\Library': fnub_index_customer
 library 'S:\Core\Library': fnfix_trans_breakdowns
 ! on error goto Ertn
-! ______________________________________________________________________
+!
 dim cap$*128
 dim message$(1)*256
-! ______________________________________________________________________
+!
 fntop(program$)
 dim company_file$*256,company_import_path$*256
 dim resp$(5)*256

@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsGL\acglTrJr
 10020 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 10040 ! and Purchases Journals a.k.a. Transaction Journals
-10060 ! ______________________________________________________________________
+10060 !
 10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnTos,fnCmdSet,fnAcs,fnLbl,fnTxt,fnconsole
 10100   on error goto Ertn
 10120 ! r: constants and dims
@@ -136,7 +136,7 @@
 36020   pr #255: newpage
 36040   gosub HDR
 36060   continue  ! /r
-38300 ! ______________________________________________________________________
+38300 !
 38320 ! <Updateable Region: ERTN>
 38340 ERTN: fnerror(program$,err,line,act$,"xit")
 38360   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -144,9 +144,9 @@
 38400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38440 ! /region
-38460 ! ______________________________________________________________________
+38460 !
 38480 XIT: fnxit
-38500 ! ______________________________________________________________________
+38500 !
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
 40040   fnTos(sn$="fix_trans_dates")

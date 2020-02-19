@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsGL\ACGLPOST
 00020 ! Post Entries from Holding File
-00030 ! ______________________________________________________________________,
+00030 !,
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnLbl,fnTos,fnTxt,fnCmdKey,fnAcs,fnflexadd1,fnflexinit1,fnHamster,fnmsgbox,fnCmdSet,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2,fnFree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim ta(2)
 00080   dim t$*12,n(2),l$*12,p$*30,ven$*8,zo(50),d$*50,cap$*128
 00100   dim k(10,8),filename$(0)*132 ,dir(200),ml$(4)*80,item$(3)
@@ -15,7 +15,7 @@
 00106   cmask$(1)='30'
 00107   cmask$(2)=''
 00108   cmask$(3)=''
-00118 ! ______________________________________________________________________
+00118 !
 00120   fntop(program$,cap$="Post Entries from Holding File")
 00140   open #4: "Name=[Q]\GLmstr\GLmstr.H[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.H[cno],Shr",internal,outIn,keyed 
 00150   open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
@@ -143,7 +143,7 @@
 01192     end if 
 01200   next j
 01210 XIT: fnxit
-01220 ! ______________________________________________________________________
+01220 !
 01230 L1230: fnopenprn
 01240   pr #255,using L1250: env$('cnam'),"General Ledger Posting","From: "&from$&"   To: "&to$
 01250 L1250: form pos 1,cc 80,skip 1,pos 30,c 30,skip 1,pos 28,c 40,skip 1
@@ -153,7 +153,7 @@
 01290 L1290: pr #255: newpage
 01300   gosub L1230
 01310   continue 
-01350 ! ______________________________________________________________________
+01350 !
 01360 REVIEW: ! 
 01370   fnTos(sn$="AcglPost2") !:
         mylen=20: mypos=mylen+3 : right=1
@@ -167,22 +167,22 @@
 01440   if ckey=5 then goto MAIN
 01450   review=val(resp$(1))
 01460   goto L1480 ! use hamster to review entries
-01470 ! ______________________________________________________________________
+01470 !
 01480 L1480: ! Holding file Transactions - Hamster
-01490 ! ______________________________________________________________________
+01490 !
 01500   dim cap$*128,lbl$(8)*38,tln(8),p$(8)*160,fltyp$(8),sln(8),mask(8),sp(8),c$(8,8)*256
-01510 ! ______________________________________________________________________
+01510 !
 01520   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
 01530 ! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H[cno],RecL=104,USE",Internal,outIn,Relative
 01540   goto MAIN
-01550 ! ______________________________________________________________________
+01550 !
 01560 OPEN_FILE: ! r:
 01562   open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
 01570   if exists("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]")=0 then gosub INDEX
 01580   open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno],RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
 01590   return  ! /r
-01600 ! ______________________________________________________________________
+01600 !
 01610 CLOSE_FILE: ! r:
 01612   for j=1 to open_file_count
 01620     close #j: ioerr ignore
@@ -192,8 +192,8 @@
 01660 INDEX: ! r:
 01670   if ~fnindex_it("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno]","1 12") then goto MAIN
 01690   return  ! /r
-01700 ! ______________________________________________________________________
-01930 ! ______________________________________________________________________
+01700 !
+01930 !
 01940 HAMSTER: ! r:
 01950   fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01960   return  ! /r

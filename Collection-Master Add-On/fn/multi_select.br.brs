@@ -60,7 +60,7 @@ def fn_setup ! Setup_  #AutoNumber# 30000,20
 	return  ! SETUP_CONSTANTS
 	SETUP_XIT: ! 
 fnend  ! fn_setup
-! ______________________________________________________________________
+!
 GRID_METRIX: ! r: Figure out the Grid Metrix
 	if max_width<sum(max_field) then max_width=sum(max_field)
 	if grid_rows=0 then grid_rows=udim(grid_data$)
@@ -95,7 +95,7 @@ GRID_METRIX: ! r: Figure out the Grid Metrix
 	mat grid_cache_data$(1,max_fields)=("")
 	if trim$(grid_border$)="" then grid_border$="S"
 return  ! /r
-! ______________________________________________________________________
+!
 GRID_SEARCH: ! r: Search Grid
 	dim search_type$*20,search_form$(4)*40,search$*80,search_direction$(2)*30,search_seek$*30,list_data$(1)*80,search_match$*256,prior_search$*80,searching$*80
 	search_seek=search_find=0 
@@ -206,7 +206,7 @@ GRID_SEARCH: ! r: Search Grid
 	L59391: !
 	if nsearch_match<>0 then default_start=nsearch_match
 return  ! /r
-! ______________________________________________________________________
+!
 def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*20,grid_footer$*999,grid_heading$*999,grid_keys$*999,grid_labels$*999,grid_scol,grid_srow,grid_cols,grid_rows,free,display_only) 
 	! (Grid_Title$*1024,Grid_heading$*1024,MAT Grid_Data$)
 	on soflow ignore 
@@ -457,7 +457,7 @@ def fnadd_node_(xml_filehandle, name$*100, data$*10000; mat attr$, mat attr_val$
 	fnclose_node_(xml_filehandle, name$)
 fnend 
 ! /r ------------------XML Management Functions-End------------------------
-! ______________________________________________________________________
+!
 def library fnmulti_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 	fnmulti_select=fn_multi_select(mat ms_selected$,mat ms_unselected$, cap$,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 fnend 
@@ -1072,9 +1072,9 @@ def fnwindowthis_size$*100(&win_height,&win_width; position$*80, border$*1)
 
 	let fnwindowthis_size$="SRow="&str$(win_srow)&",SCol="&str$(win_scol)&",Rows="&str$(win_height)&",Cols="&str$(win_width)&wts_border$
 fnend 
-! ______________________________________________________________________
+!
 IGNORE: continue 
-! ______________________________________________________________________
+!
 def library fnconfirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_again_key$*28)
 	let fnconfirm=fn_confirm(verb$,cap$, text_addition$,confirm_dont_ask_again_key$)
 fnend 
@@ -1299,7 +1299,7 @@ def library fngeneric_search_ask(&s_search$,&search_seek,&search_find; skey)
 	close #grid_search_handle: 
 	let s_search$=uprc$(trim$(s_search$))
 fnend  ! fnGeneric_Search_Ask
-! ________________________________________________________________________
+!__
 ! Updateable Region . Generic Grid Search . Top
 ! This region was last updated on 2008.06.04 at 1:13 pm
 def fn_generic_search(generic_fkey, generic_key_column, generic_grid_line_last)
@@ -1330,7 +1330,7 @@ def fn_generic_search(generic_fkey, generic_key_column, generic_grid_line_last)
 	let fn_generic_search=set_fn_generic_search
 fnend  ! fn_Generic_Search
 ! Updateable Region . Generic Grid Search . End
-! ________________________________________________________________________
+!__
 def fn_generic_grid_to_line$*1024(array_line,single_column_only)
 	! This function is custom for every different type of grid.  It pulls from local variables and returns The data from that line of grid for fn_Generic_Search
 	let column_count=6

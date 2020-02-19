@@ -1,11 +1,11 @@
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnxit,fntop,fnpause,fngethandle
 ! on error goto Ertn
-! ______________________________________________________________________
+!
 	dim ar(5),ph2$*12,ss2$*11,arta(2),cm$*70
 	dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10)
 	dim app(20),ma(20),ap2(20),ma2(20),ca(10)
-! ______________________________________________________________________
+!
 ! 
 	fntop(program$,"CLmstr to Support")
 	dim system_id$(20)*2

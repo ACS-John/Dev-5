@@ -3,10 +3,10 @@
 ! RO record i had to put an RE record in front of every RW record and 
 ! had to follow with an RT record - Right now this program will not 
 ! create an RO record
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnwait,fnDedNames,fnoldmsgbox,fntop,fnxit,fnconsole,fnAcs,fntop,fnLbl,fnTxt,fnTos,fnFra,fnCmdKey,fnmsgbox
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim em$(3)*30,ss$*11,d(14),tcp(32),s(9),t(9),z$*8,message$*40
 	dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
@@ -24,7 +24,7 @@
 	dim orgt1(9),orgt2(2)
 	dim orgw2(9),orgw3(2)
 	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(20)*40,path$*30
-! ______________________________________________________________________
+!
 	fntop(program$)
 	on fkey 5 goto Xit
 ! 
@@ -32,7 +32,7 @@
 	read #1,using L280: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax
 L280: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2
 	close #1: 
-! ______________________________________________________________________
+!
 DATE_SCREEN: ! 
 L320: fnTos(sn$="W2-1") 
 	rc=cf=0: mylen=34 : mypos=mylen+3
@@ -103,7 +103,7 @@ L600: !
 	ibm$="IBM"
 	namcde$="F"
 	typemp$="R"
-! ______________________________________________________________________
+!
 SCR1: ! 
 	goto L1220
 	fnTos(sn$="ElecW2-2") 
@@ -194,7 +194,7 @@ L1560: !
 	if ins<0 or ins>10 then ce=9: goto ERR1
 	if pen<0 or pen>10 then ce=10: goto ERR1
 	if dfc<0 or dfc>10 then ce=11: goto ERR1
-! ______________________________________________________________________
+!
 	mat io1$(2)
 	io1$(1)="12,71,N 2,UT,N"
 	io1$(2)="14,71,N 2,UT,N"
@@ -220,12 +220,12 @@ ERR2: pr f "24,78,C 1": bell : goto L1880
 L1930: if cmdkey=5 then goto Xit
 	if sr1<0 or sr1>udim(e$) then ce=1: goto ERR2
 	if sr1>0 and sr2=0 then ce=2: goto ERR2
-! ______________________________________________________________________
+!
 	gosub SCR2
 	pr newpage
 	win=101
 	message$=""
-! ______________________________________________________________________
+!
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 ! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",Internal,Input,Relative

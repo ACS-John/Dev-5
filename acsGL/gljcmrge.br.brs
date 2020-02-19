@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\gljcMrge
 00020 ! GENERAL LEDGER JOB COST MERGE Charges; attempts to merge job cost !:
         ! and then chains to regular general ledger merge program.
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno, fnchain
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,"Post Transactions")
 00100   fncno(cno)
 00110   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode !:
@@ -41,14 +41,14 @@
 00390   ta(2)=ot5
 00400   if nc1=0 then rewrite #2,using L250,key=cn$: mat l,mat ta
 00410   goto L180
-00420 ! ______________________________________________________________________
+00420 !
 00430 L430: close #2: 
 00440   close #3: 
 00450   close #5: 
 00460 L460: fnchain("S:\acsGL\ACGLMRGE")
-00470 ! ______________________________________________________________________
+00470 !
 00480 XIT: fnxit
-00490 ! ______________________________________________________________________
+00490 !
 00500 ! <Updateable Region: ERTN>
 00510 ERTN: fnerror(program$,err,line,act$,"xit")
 00520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

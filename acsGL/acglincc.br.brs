@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsGL\AcGlIncC
 00020 ! -- ! COMPARATIVE INCOME STATEMENT FOR 14 7/8*11 PAPER WITH PERCENTAGES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   fntop(program$,cap$="Comparative Income Statement")
-00060 ! ______________________________________________________________________
+00060 !
 00070   on error goto Ertn
-00090 ! ______________________________________________________________________
+00090 !
 00100   dim fl1$*256,p$(20)*50,cap$*128
 00110   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22
 00120   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4),udf$*256
 00130   dim bp(13),by(13),tp1(4)
-00140 ! ______________________________________________________________________
+00140 !
 00150   fncno(cno,cnam$)
 00160   udf$=env$('temp')&'\'
 00185   actpd$=fnactpd$ !:
@@ -21,7 +21,7 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00195   fscode=fnfscode !:
         priorcd=fnpriorcd
-00200 ! ______________________________________________________________________
+00200 !
 00210   pr newpage
 00220   pors=1
 00230   mp1=69
@@ -258,7 +258,7 @@
 02460   fnfscode(actpd)
 02465   fnpriorcd(1)
 02470   goto XIT
-02480 ! ______________________________________________________________________
+02480 !
 02490 L2490: close #1: ioerr L2500
 02500 L2500: close #3: ioerr L2510
 02510 L2510: total=0
@@ -292,7 +292,7 @@
 02790   percent4=tp1(4)
 02800 L2800: return 
 02810 XIT: fnxit
-02820 ! ______________________________________________________________________
+02820 !
 02830 ! <updateable region: ertn>
 02840 ERTN: fnerror(program$,err,line,act$,"xit")
 02850   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

@@ -1,20 +1,20 @@
 00010 ! Replace S:\acsGL\acglChrt
 00020 ! General Ledger Chart of Accounts
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fnTos,fnFra,fnOpt,fnCmdSet,fnAcs,fnLbl,fnqgl,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim gl(2,3),io2$(6),io1$(2),wrd1$(2)*46,cap$*128,p$(20)*50
 00080   dim d$*50,dat$*20,cnam$*40,cap$*128,resp$(10)*50
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Chart of Accounts")
 00110   fncno(cno,cnam$)
 00120   fndat(dat$)
 00130   process=fnprocess
-00140 ! ______________________________________________________________________
+00140 !
 00150   cap$="General Ledger Chart of Accounts"
 00160   if process=1 then sel=1 : goto L330
-00170 ! ______________________________________________________________________
+00170 !
 00180   pr newpage
 00190   fnTos(sn$="ChartAccoutnts") !:
         mylen=50: mypos=mylen+3 : right=1
@@ -36,7 +36,7 @@
 00310   if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))
 00320   if trim$(resp$(4))<>"" then gl2$=fnagl$(resp$(4))
 00330 L330: open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
-00340 ! ______________________________________________________________________
+00340 !
 00350   pr newpage
 00360   fnopenprn
 00370   pr #255,using "Form pos 1,C 20,Cc 90": date$('mm/dd/yy'),cnam$
@@ -55,11 +55,11 @@
 00490 L490: pr #255,using L500: dno,ano,sno,d$,br,ir,fr,sbr,sir,sfr pageoflow L570
 00500 L500: form pos 1,pic(zzz),x 1,n 6,x 1,pic(zzz),pos 20,c 50,x 3,n 5,x 5,n 5,x 5,n 5,x 7,n 5,x 5,n 5,x 5,n 5
 00510   goto L420
-00520 ! ______________________________________________________________________
+00520 !
 00530 L530: pr #255,using L540: dno,ano,sno,d$ pageoflow L570
 00540 L540: form pos 1,pic(zzz),x 1,n 6,x 1,pic(zzz),pos 20,c 50,skip 1
 00550   goto L420
-00560 ! ______________________________________________________________________
+00560 !
 00570 L570: pr #255: newpage
 00580   pr #255,using "Form pos 1,C 20,Cc 90": date$('mm/dd/yy'),cnam$
 00590   pr #255: time$;tab(57);"Chart of Accounts"
@@ -67,10 +67,10 @@
 00610   pr #255: 
 00620   gosub L680
 00630   goto L420
-00640 ! ______________________________________________________________________
+00640 !
 00650 L650: fncloseprn
 00660   goto XIT
-00670 ! ______________________________________________________________________
+00670 !
 00680 L680: if sel=2 then goto L730
 00690   pr #255,using L700: "********** Primary *********","********* Secondary ********"
 00700 L700: form pos 71,c 28,pos 103,c 28,skip 2
@@ -81,14 +81,14 @@
         pr #255,using L750: "Account #","Description"
 00750 L750: form pos 2,c 9,pos 38,c 11
 00760   goto L810
-00770 ! ______________________________________________________________________
+00770 !
 00780 L780: pr #255,using L800: "Account #","Description","Reference","Reference","Position","Reference","Reference","Position"
 00790   pr #255: ""
 00800 L800: form pos 2,c 9,pos 38,c 11,pos 71,c 9,x 1,c 9,x 1,c 8,x 4,c 9,x 1,c 9,x 1,c 8
 00810 L810: return 
-00820 ! ______________________________________________________________________
+00820 !
 00830 XIT: fnxit
-00840 ! ______________________________________________________________________
+00840 !
 00850 ! <Updateable Region: ERTN>
 00860 ERTN: fnerror(program$,err,line,act$,"xit")
 00870   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -96,4 +96,4 @@
 00890   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00910 ! /region
-00920 ! ______________________________________________________________________
+00920 !

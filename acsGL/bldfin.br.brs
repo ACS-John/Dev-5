@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\BldFin
 00020 ! ???
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   fntop(program$,"CHANGE_ME")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 00090   dim gln(3,3),fin(3),ta(2),ac(18),te$*1
-00100 ! ______________________________________________________________________
+00100 !
 00110   fncno(cno)
 00120 ! 
 00130   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
@@ -28,7 +28,7 @@
 00280   close #1: 
 00290   close #2: 
 00300 XIT: stop 
-00310 ! ______________________________________________________________________
+00310 !
 00320 ! <Updateable Region: ERTN>
 00330 ERTN: fnerror(program$,err,line,act$,"xit")
 00340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -36,4 +36,4 @@
 00360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00380 ! /region
-00390 ! ______________________________________________________________________
+00390 !

@@ -1,13 +1,13 @@
 00010 ! formerly S:\acsGL\acglTB
 00020 ! pr Trial Balance
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
 00080   dim a$(9)*3,cogl$(2)*12,u$*12,d(2),ta(2)
 00090   dim resp$(10)*80
-00100 ! ______________________________________________________________________
+00100 !
 00110   right=1
 00120   fntop(program$,cap$="Trial Balance")
 00150   open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative 
@@ -94,7 +94,7 @@
 01020   fncloseprn
 01030 ! 
 01040   goto XIT ! /r
-01050 ! ______________________________________________________________________
+01050 !
 01060 HDR2: ! r:
 01070   pr #255,using L1090: date$('mm/dd/yy'),env$('cnam')
 01080   pr #255,using L1090: time$,cap$

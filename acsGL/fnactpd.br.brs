@@ -1,6 +1,6 @@
 ! Replace S:\acsGL\fnActPd
 ! accounting periond from company information file
-! ______________________________________________________________________
+!
 def library fnactpd(;actpd)
 	library 'S:\Core\Library': fngethandle
 	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 

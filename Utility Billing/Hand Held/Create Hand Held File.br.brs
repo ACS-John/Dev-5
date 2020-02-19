@@ -1793,7 +1793,7 @@ def fn_setup
 		library 'S:\Core\Library': fnGetServiceCodesMetered
 		library 'S:\Core\Library': fnArrayWasPassedC
 		on error goto Ertn
-		! ______________________________________________________________________
+		!
 		dim resp$(64)*125
 		dim f$(3)*12,e2$*30
 		dim z$*10,e$(4)*30,d(15),a(7)

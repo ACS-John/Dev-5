@@ -1,13 +1,13 @@
 20000 ! Replace S:\acsGL\Vendor
 20020 ! Vendor file with dynamic editor - hamster
-20040 ! ______________________________________________________________________
+20040 !
 20060   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster
 20080   fntop(program$,cap$="Vendor")
 20100   on error goto Ertn
-20120 ! ______________________________________________________________________
+20120 !
 20140   dim cap$*128,fltyp$(08),fln(08),mask(08),p$(08)*65,lbl$(08)*22,sln(08)
 20160   dim c$(8,8)*40
-20180 ! ______________________________________________________________________
+20180 !
 20200   fncno(cno)
 20220   lbl$(1)="Vendor"
 20240   lbl$(2)="Name"
@@ -39,7 +39,7 @@
 20760   open #1: "Name=[Q]\GLmstr\gl1099.h[cno],KFName=[Q]\GLmstr\gl109idx.h[cno],Use,RecL=127,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 20780   fnHamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
 20800 XIT: fnxit
-20820 ! ______________________________________________________________________
+20820 !
 20840 ! <Updateable Region: ERTN>
 20860 ERTN: fnerror(program$,err,line,act$,"xit")
 20880   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -47,4 +47,4 @@
 20920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20940 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20960 ! /region
-20980 ! ______________________________________________________________________
+20980 !

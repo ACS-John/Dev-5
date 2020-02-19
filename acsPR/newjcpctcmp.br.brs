@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsPR\newjcPctCmp
 00020 ! Enter Percent Complete
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnxit,fntop,fnmsgbox,fnTos,fnLbl,fnTxt,fncmbjob,fncmbcategory,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,ml$(2)*60,resp$(5)*30
 00080   dim jn$*6,jno$*6,n$*40,cn$*11,k$*25
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
 00110   fncno(cno)
 00120 ! 
-00130 ! ______________________________________________________________________
+00130 !
 00140   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed 
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed 
 00160 TRANSACTION_ENTRY: ! 
@@ -72,11 +72,11 @@
 00530 L530: rewrite #2,using L540,key=cn$: k$,l10,l12,l13
 00540 L540: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
 00550   goto TRANSACTION_ENTRY
-00560 ! ______________________________________________________________________
+00560 !
 00570 DONE: ! 
 00580   close #2: 
 00590   fnxit
-00600 ! ______________________________________________________________________
+00600 !
 00610 ! <Updateable Region: ERTN>
 00620 ERTN: fnerror(program$,err,line,act$,"xit")
 00630   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -84,6 +84,6 @@
 00650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00660 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00670 ! /region
-00680 ! ______________________________________________________________________
+00680 !
 00690 XIT: fnxit
-00700 ! ______________________________________________________________________
+00700 !

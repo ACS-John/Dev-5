@@ -1,17 +1,17 @@
 10000 ! Replace S:\acsGL\AcPrReg
 10200 ! -- PAYROLL REGISTER
-10400 ! ______________________________________________________________________
+10400 !
 10600   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnpedat$,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
 10800   on error goto Ertn
-11000 ! ______________________________________________________________________
+11000 !
 11200   dim cnam$*40,cap$*128
 11400   dim k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 11600   dim fa$(2),sa$(2)*40,adr(2)
-11800 ! ______________________________________________________________________
+11800 !
 12000   fntop(program$,cap$="Fix Payroll Dates")
 12200   fncno(cno,cnam$)
 12400   fndat(dat$)
-12600 ! ______________________________________________________________________
+12600 !
 12800   fnTos(sn$="PayrollReg")
 13000   rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 13200   fnFra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
@@ -49,7 +49,7 @@
 20800     ca=nca
 21000   loop 
 22200   goto FINIS
-22400 ! ______________________________________________________________________
+22400 !
 22600   def fn_header
 22620     nametab=66-int(len(rtrm$(cnam$))/2)
 22800     pr #255,using L530: date$,time$,cnam$
@@ -77,7 +77,7 @@
 38800   goto XIT
 38900 XIT: fnxit
 39000 IGNORE: continue 
-54800 ! ______________________________________________________________________
+54800 !
 55000 ! <updateable region: ertn>
 55200 ERTN: fnerror(program$,err,line,act$,"xit")
 55400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

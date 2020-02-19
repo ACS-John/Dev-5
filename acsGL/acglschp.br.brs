@@ -3,12 +3,12 @@
 00030 ! ________________Needs fncmo and others to run _____________________
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnopenprn,fncloseprn
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,dollar$*1,k$*2,by(13),bp(13)
 00080   dim gl2$*12,d2$*50,by2(13),bp2(13)
 00090   dim sn$*78,ft$*78,gl$(80)*12,prtsch(99),d$*50
 00100   dim cnam$*40,d(2),actpd$*6,pedat$*20,cch$*20,d(2),cap$*128
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Print Schedules")
 00130   fncno(cno,cnam$)
 00140   open #20: "Name=CNO.H"&wsid$,internal,input,relative  !:
@@ -66,7 +66,7 @@
 00640     if priorcd=2 then goto L680
 00650     if fscode>1 then bb=by(fscode-1) else bb=0
 00660     goto L690
-00670 ! ______________________________________________________________________
+00670 !
 00680 L680: if fscode>1 then bb=bp(fscode-1) else bb=0
 00690 L690: curmo=cb-bb
 00700     if rs=1 then cb=-cb
@@ -76,7 +76,7 @@
 00740     dollar$=" "
 00750 L750: form pos 1,c 50,pos 67,c 1,pic(--,---,---.##),skip 1
 00760     goto L820
-00770 ! ______________________________________________________________________
+00770 !
 00780 L780: pr #255,using L810: d$,dollar$,curmo,dollar$,cb
 00790     j1=j1+1
 00800     dollar$=" "
@@ -87,7 +87,7 @@
 00850   gosub L890
 00860   gosub L1060
 00870   goto L380
-00880 ! ______________________________________________________________________
+00880 !
 00890 L890: ! TOTAL PRINT
 00900   if dp=1 then dollar$="$" else dollar$=" "
 00910   if cm=1 then goto L980
@@ -96,7 +96,7 @@
 00940   pr #255,using L750: "    TOTAL",dollar$,ytdtot
 00950   pr #255,using L930: "=============="
 00960   goto L1020
-00970 ! ______________________________________________________________________
+00970 !
 00980 L980: pr #255,using L990: "______________","______________"
 00990 L990: form pos 51,c 14,pos 67,c 14,skip 1
 01000   pr #255,using L810: "    TOTAL",dollar$,cmtot,dollar$,ytdtot
@@ -104,14 +104,14 @@
 01020 L1020: cmtot=0
 01030   ytdtot=0
 01040   return 
-01050 ! ______________________________________________________________________
+01050 !
 01060 L1060: fttab=int(43-len(rtrm$(ft$))/2)
 01070   sk=58-krec(255): fl=len(rtrm$(ft$))
 01080   pr #255,using L1090: rtrm$(ft$)
 01090 L1090: form skip sk,pos fttab,c fl,skip 1
 01100   pr #255: newpage
 01110   return 
-01120 ! ______________________________________________________________________
+01120 !
 01130 L1130: ! PAGE HEADING
 01140   pr #255,using L1150: cnam$,"SCHEDULE ",sn
 01150 L1150: form pos 11,cc 58,c 9,pic(zz)
@@ -125,18 +125,18 @@
 01230   pr #255,using L1240: cch$,"YEAR TO DATE"
 01240 L1240: form pos 48,c 20,pos 69,c 12,skip 2
 01250 L1250: return 
-01260 ! ______________________________________________________________________
+01260 !
 01270 DONE: ! 
 01280   fncloseprn
 01290   goto XIT
-01300 ! ______________________________________________________________________
+01300 !
 01310 XIT: fnxit
-01320 ! ______________________________________________________________________
+01320 !
 01330 L1330: ytdtot=ytdtot+cb
 01340   if cm><1 then goto L1360
 01350   cmtot=cmtot+curmo
 01360 L1360: return 
-01370 ! ______________________________________________________________________
+01370 !
 01380 ! <Updateable Region: ERTN>
 01390 ERTN: fnerror(program$,err,line,act$,"xit")
 01400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -144,4 +144,4 @@
 01420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01440 ! /region
-01450 ! ______________________________________________________________________
+01450 !

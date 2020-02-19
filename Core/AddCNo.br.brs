@@ -1,6 +1,6 @@
 ! Replace S:\Core\AddCNo
 ! add a new company program for [cursys] (copies it from 99999) then it chains to Company Information
-! ______________________________________________________________________
+!
 library 'S:\Core\Library': fntop
 library 'S:\Core\Library': fnTos,fnLbl,fnAcs2,fnTxt,fnCmdKey,fncmbcno,fnCmdSet
 library 'S:\Core\Library': fnCopy
@@ -11,7 +11,7 @@ library 'S:\Core\Library': fnindex_sys
 library 'S:\Core\Library': fncreg_write
 on error goto Ertn
 dim ml$(10)*80,resp$(40)*128,cap$*128
-! ______________________________________________________________________
+!
 fntop(program$,cap$="Add New "&env$('cursys')&" Company [cno]")
 if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
 	fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999','[Q]\'&env$('cursys')&'mstr\*.h[cno]')
@@ -66,7 +66,7 @@ else if env$('cursys')='UB' then ! r:
 	close #1: 
 	fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 	fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
-! ______________________________________________________________________
+!
 	fnindex_sys(val(env$('cno')),'UB')
 ! /r
 else if env$('cursys')='GL' then ! r:

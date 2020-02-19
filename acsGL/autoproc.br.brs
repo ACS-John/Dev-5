@@ -1,31 +1,31 @@
 00010 ! Replace S:\acsGL\AutoProc
 00020 ! GL - Begin Atomatic Processing
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnopenprn,fncloseprn,fnputcno,fnchain,fnprocess,fnpgnum,fncursys$,fnTos,fnLbl,fncomboa,fnCmdKey,fnAcs,fngetdir,fnflexinit1,fnflexadd1
 00050   fntop(program$,cap$="Begin Automatic Processing")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim clnum(20),clnam$(20)*40,cnam$*40,a$*40,cap$*128,oldcnam$*40
 00090   dim filename$(100)*40,opt$(100)*40,sys$*100,item$(2)*40,resp$(10)*100
-00100 ! ______________________________________________________________________
+00100 !
 00110   cap$="Begin Automatic Processing"
 00120   fncno(cno,oldcnam$)
 00130   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat",internal,outIn,relative ioerr BUILD_GLCLNT
 00140   rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=1: cno,cnam$
 00150   goto L210
-00160 ! ______________________________________________________________________
+00160 !
 00170 BUILD_GLCLNT: ! 
 00180   open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outIn,relative 
 00190   for j=1 to 20 !:
           write #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," " !:
         next j
-00200 ! ______________________________________________________________________
+00200 !
 00210 L210: if trim$(mysys$)='' then !:
           sys$=fncursys$&"mstr" else !:
           sys$=mysys$&"mstr"
-00220 ! ______________________________________________________________________
+00220 !
 00230   gosub BLD_ACNO
-00240 ! ______________________________________________________________________
+00240 !
 00250 MAIN: ! 
 00260   fnTos(sn$="autoproc") !:
         respc=0
@@ -58,7 +58,7 @@
 00450   clnum(count)=val(resp$(1)(33:37))
 00460   if ckey=1 then goto MAIN
 00470 L470: goto WRITE_EM
-00480 ! ______________________________________________________________________
+00480 !
 00490 BLD_ACNO: ! 
 00500   dir$=fncursys$&"mstr" !:
         filter$="Company.*" !:
@@ -80,7 +80,7 @@
           rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=j: clnum(j),clnam$(j) !:
         next j
 00630   goto BEGIN_AUTO
-00640 ! ______________________________________________________________________
+00640 !
 00650 BEGIN_AUTO: ! 
 00660   close #glclnt: 
 00670   execute "Load S:\Core\Process.br,RESIDENT"
@@ -89,9 +89,9 @@
         fnpgnum(-1) !:
         ! resets the last program processed back to 0 befor going to acglauto
 00700   fnchain("S:\acsGL\acglAuto")
-00710 ! ______________________________________________________________________
+00710 !
 00720 XIT: fnxit
-00730 ! ______________________________________________________________________
+00730 !
 00740 ! <Updateable Region: ERTN>
 00750 ERTN: fnerror(program$,err,line,act$,"xit")
 00760   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -99,4 +99,4 @@
 00780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00790 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00800 ! /region
-00810 ! ______________________________________________________________________
+00810 !

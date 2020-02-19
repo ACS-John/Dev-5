@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsGL\acglCas5
 00020 ! CASH FLOW STATEMENT  WITH BUDGET
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnGlAskFormatPriorCdPeriod,fnactpd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20 ,in3$(4),cap$*128,udf$*256
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13)
-00110 ! ______________________________________________________________________
+00110 !
 00120   fntop(program$,cap$="Cash Flow with Budget")
 00130   fncno(cno,cnam$)
 00140   udf$=env$('temp')&'\'
@@ -60,7 +60,7 @@
 00570   gosub L1720
 00580   gosub L1660
 00590   goto L470
-00600 ! ______________________________________________________________________
+00600 !
 00610 L610: if te$="B" and ap>0 then goto L1350 ! ENDING BANK BALANCE
 00620   if notrans=1 then goto L960
 00630   if ir>=val(r$) and val(r$)><0 then goto L750
@@ -87,12 +87,12 @@
 00840     ytdb=ytdb+bm(j)
 00850   next j
 00860   goto L640
-00870 ! ______________________________________________________________________
+00870 !
 00880 L880: for j=1 to fscode
 00890     ytdb=ytdb+bm(j)
 00900   next j
 00910   goto L640
-00920 ! ______________________________________________________________________
+00920 !
 00930 L930: if ir<val(r$) then goto L640
 00940   if ir>val(r$) then goto L960
 00950 L950: notrans=1
@@ -134,7 +134,7 @@
 01310   gosub L1850
 01320   gosub L1720
 01330   goto L470
-01340 ! ______________________________________________________________________
+01340 !
 01350 L1350: if ap=0 then ap=1
 01360   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01370   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
@@ -151,27 +151,27 @@
 01480   gosub L1850
 01490   gosub L1720
 01500   goto L470
-01510 ! ______________________________________________________________________
+01510 !
 01520 L1520: if te$="R" then report$=d$
 01530   if te$="S" then secondr$=d$
 01540   gosub L1720
 01550   goto L470
-01560 ! ______________________________________________________________________
+01560 !
 01570 L1570: if foot1=1 then goto L1630
 01580   tabnote=sp
 01590   foot1=1
 01600   foot$=d$
 01610   goto L470
-01620 ! ______________________________________________________________________
+01620 !
 01630 L1630: foot$=rtrm$(foot$)&d$
 01640   goto L470
-01650 ! ______________________________________________________________________
+01650 !
 01660 L1660: for j=1 to 9
 01670     if ac(j)=0 or ac(j)=9 then goto L1690
 01680     for j2=1 to 7 : accum(j,j2)=0 : next j2
 01690 L1690: next j
 01700   return 
-01710 ! ______________________________________________________________________
+01710 !
 01720 L1720: if ls=0 then goto L1830
 01730   if ls=99 then goto L1770
 01740   pr #255,using L1750: " "
@@ -185,7 +185,7 @@
 01810   pr #255: newpage
 01820   gosub L1980
 01830 L1830: return 
-01840 ! ______________________________________________________________________
+01840 !
 01850 L1850: if ul=0 then goto L1940
 01860   if ul=1 then goto L1910
 01870   underlin$="=============="
@@ -198,7 +198,7 @@
 01940 L1940: pr #255,using L1950: " "
 01950 L1950: form skip 1,c 1,skip 0
 01960   return 
-01970 ! ______________________________________________________________________
+01970 !
 01980 L1980: heading=1
 01990   pr #255: ""
 02000   pr #255,using L2020: cnam$
@@ -213,12 +213,12 @@
 02090   pr #255: tab(32);"Budget";tab(44);"       ";tab(62);"Date";tab(77);"To Date";tab(92);"Budget"
 02100   pr #255: ""
 02110   return 
-02120 ! ______________________________________________________________________
+02120 !
 02130 L2130: eofcode=1
 02140   gosub L1770
 02150   fncloseprn
 02160   goto XIT
-02170 ! ______________________________________________________________________
+02170 !
 02180 L2180: pr newpage
 02190   pr f "2,5,C 75,N": "Enter the Following Information for "& rtrm$(d$)
 02200   pr f "6,5,C 70,N": "Monthly             Current             Year To             Annual"
@@ -226,9 +226,9 @@
 02220 L2220: input fields mat in3$: monthb,total,total2,annualb conv L2220
 02230   pr newpage
 02240   goto L960
-02250 ! ______________________________________________________________________
+02250 !
 02260 XIT: fnxit
-02270 ! ______________________________________________________________________
+02270 !
 02280 ! <Updateable Region: ERTN>
 02290 ERTN: fnerror(program$,err,line,act$,"xit")
 02300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

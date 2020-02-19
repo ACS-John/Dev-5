@@ -6,7 +6,7 @@
 	en
 ! /r
 ! r: Notes on options
-	! ______________________________________________________________________
+	!
 	! Dir$=Directory to Read
 	! .            does not require but will accept a \ on the end
 	! filename$(x)=file names (includes path if /s option is used)
@@ -142,7 +142,7 @@ def fn_dir(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time
 	EO_TF1: ! /r
 	gd2_return=filename_count
 	! r: close and delete the temporary text file.  Return the number of files found
-	! ______________________________________________________________________
+	!
 	! if filename$(filename_count)='' then
 	!   filename_count=filename_count-1
 	!   mat filename$(filename_count)

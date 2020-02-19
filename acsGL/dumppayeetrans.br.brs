@@ -1,15 +1,15 @@
 00010 ! Replace S:\acsGL\DumpPayeeTrans
 00020 ! Vendor(Payee)  Dump old Transactions
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fndat,fnprocess,fnchain, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,holdvn$*8,vcode$*8
 00080   dim cnam$*40,dat$*20,adr(2),id1$*25
 00090   dim rn$*12,de$*30,adr(2),tvn$*8,cap$*128
 00100   dim scid$*79
 00110   dim sd$(8),se$(8)*30,pl$(8,2)*35
-00120 ! ______________________________________________________________________
+00120 !
 00130   fntop("S:\acsGL\VendorTransList",cap$="Dump Old Payee Transactions")
 00140   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -39,7 +39,7 @@
 00350 L350: delete #trans: 
 00360   goto L300
 00370 XIT: fnxit
-00380 ! ______________________________________________________________________
+00380 !
 00390 ! <Updateable Region: ERTN>
 00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -47,4 +47,4 @@
 00430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
-00460 ! ______________________________________________________________________
+00460 !

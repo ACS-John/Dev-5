@@ -1,17 +1,17 @@
 00010 ! Replace S:\acsGL\schedule_hamster
 00020 ! general ledger breakdowns for each schedule
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnagl$
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),sp(1),c$(1,8)*40
-00080 ! ______________________________________________________________________
+00080 !
 00090   fntop(program$,cap$='Bank Reconciliation')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub FIXGLACCOUNTS: gosub CLOSE_FILE: gosub INDEX
 00120   goto XIT
-00130 ! ______________________________________________________________________
+00130 !
 00140 OPEN_FILE: ! !:
         schedule=1 !:
         open_file_count=1 ! this value is used in the close_file sub routine
@@ -23,11 +23,11 @@
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
-00230 ! ______________________________________________________________________
+00230 !
 00240 INDEX: ! 
 00250   execute "Index [Q]\GLmstr\schedule"&str$(schedule)&".H[cno]"&' '&"[Q]\GLmstr\schedule"&str$(schedule)&"-idx.h[cno]" &" 1 12 Replace,DupKeys"
 00260   return 
-00270 ! ______________________________________________________________________
+00270 !
 00280 FIXGLACCOUNTS: ! left pad general ledger number and reference number
 00290   restore #open_file_count: 
 00300 L300: read #open_file_count, using "form pos 1,c 12": gl$ eof L340
@@ -35,12 +35,12 @@
 00320   rewrite #open_file_count, using "form pos 1,c 12": gl$
 00330   goto L300
 00340 L340: return 
-00350 ! ______________________________________________________________________
+00350 !
 00360 CLOSE_FILE: for j=1 to open_file_count
 00370     close #j: ioerr L380
 00380 L380: next j
 00390   return 
-00400 ! ______________________________________________________________________
+00400 !
 00410 BUILD_LAYOUT: ! 
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
@@ -84,13 +84,13 @@
         ! ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         ! lIMIT_TO_LIST$='1'
 00570   return 
-00580 ! ______________________________________________________________________
+00580 !
 00590 HAMSTER: ! 
 00600   fnHamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00610   return 
-00620 ! ______________________________________________________________________
+00620 !
 00630 XIT: fnxit
-00640 ! ______________________________________________________________________
+00640 !
 00650 ! <Updateable Region: ERTN>
 00660 ERTN: fnerror(program$,err,line,act$,"xit")
 00670   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -98,5 +98,5 @@
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00700 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00710 ! /region
-00720 ! ______________________________________________________________________
+00720 !
 00730   fltyp$(ic+=1)='N'

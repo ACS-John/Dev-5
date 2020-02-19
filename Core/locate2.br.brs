@@ -1,12 +1,12 @@
 00010 !  Replace S:\Core\Locate2
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fnTos,fnflexadd1,fnAcs,fnflexinit1,fngetcd,fnTxt,fnLbl,fntop,fnChk,fnxit,fnCmdSet
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim a$*132,prg$*40,lc$*40,dur$*40,rep$*40,resp$(20)*100,txt$*100
 00070   dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
 00080   dim report$*256,subprocfile$*256,procfile$*256,tempfile1$*256,tempfile2$*256
-00100 ! ______________________________________________________________________
+00100 !
 00120   fngetcd(dur$)
 00140   fntop(program$,'Locate2')
 00150   filter$="*.br, *.br"
@@ -16,7 +16,7 @@
         procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
         tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp" !:
         tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
-00180 ! ______________________________________________________________________
+00180 !
 00190 MAIN: ! 
 00200   fnTos("Locate") !:
         lngth=8 : ps=lngth+2 : rc=lc=0
@@ -97,11 +97,11 @@
         pr #2: "Run"
 00660   close #2: 
 00670   execute "Proc "&procfile$
-00680 ! ______________________________________________________________________
+00680 !
 00690 XIT: ! 
 00700 ! 
 00710   stop  ! fnXIT("")
-00720 ! ______________________________________________________________________
+00720 !
 00730 ! <Updateable Region: ERTN>
 00740 ERTN: fnerror(program$,err,line,act$,"xit")
 00750   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -109,4 +109,4 @@
 00770   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00780 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00790 ! /region
-00800 ! ______________________________________________________________________
+00800 !

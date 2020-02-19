@@ -1,13 +1,13 @@
 ! Replace S:\acsGL\Bld_D_Records
 ! Create Type "D" Records
-! ______________________________________________________________________
+!
 	library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnerror,fnchain
 	fntop(program$,cap$="Financial Statement")
 	on error goto Ertn
-! ______________________________________________________________________
+!
 	dim cnam$*40,dat$*20,io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 	dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
-! ______________________________________________________________________
+!
 !
 	on fkey 5 goto XIT
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -26,7 +26,7 @@
 	io1$(7)="8,68,Cu 1,UT,N"
 	io1$(8)="11,73,Nz 1,UT,N"
 	io1$(9)="13,49,Nz 5,UT,N"
-! ______________________________________________________________________
+!
 L310: pr newpage
 	close #2: ioerr ignore ! close any reference file that is opened
 L330: win=101
@@ -60,7 +60,7 @@ CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 ERR1: pr f "24,78,C 1": bell : goto L570
 L620: !
 	if cmdkey=5 then goto XIT
-! ______________________________________________________________________
+!
 	if gln(1,2)=0 then ce=1: goto ERR1
 	if gln(2,2)=0 then ce=4: goto ERR1
 	gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
@@ -72,7 +72,7 @@ L620: !
 	if fin=0 then ce=8: goto ERR1
 	if uprc$(type$)="A" or uprc$(type$)="L" or uprc$(type$)="Q" or uprc$(type$)="I" or uprc$(type$)="E" then goto L750 else ce=7: goto ERR1
 L750: if fs<1 or fs>5 then ce=9: goto ERR1
-! ______________________________________________________________________
+!
 	pr #101: newpage
 	pr #win,fields "5,1,Cc 75,N": "Please wait..."
 	ff=20 ! incrument reference numbers
@@ -99,6 +99,6 @@ L980: close #2:
 		execute "Index [Q]\GLmstr\"&fil$(fs)&".h[cno],[Q]\GLmstr\"&idx$(fs)&".h[cno],1,5,Replace,DupKeys"
 	end if
 	goto L310
-! ______________________________________________________________________
+!
 XIT: fnchain("General Ledger\Financial Statement Design")
 include: ertn

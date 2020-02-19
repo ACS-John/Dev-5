@@ -1,10 +1,10 @@
 00010 ! Replace S:\Core\brs2br
-00020 ! ______________________________________________________________________
+00020 !
 00030   library 'S:\Core\Library': fngetdir,fnerror
 00040   on error goto Ertn
-00050 ! ______________________________________________________________________
+00050 !
 00060   dim dir$*255,filename$(999)*60
-00070 ! ______________________________________________________________________
+00070 !
 00080   pr ' * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *'
 00090   pr ' * WARNING:  This program is about to convert all (*.brs) source'
 00100   pr ' *           code files into (*.br) working program files.      '
@@ -15,7 +15,7 @@
 00150   input fields "22,1,Cu 1,AE,N": warn$
 00160   if cmdkey=5 or cmdkey=99 or warn$="Q" or warn$="X" or warn$="N" then !:
           goto XIT
-00170 ! ______________________________________________________________________
+00170 !
 00180   rpl$='Save'
 00190   if uprc$(rpl$)<>uprc$("SAVE") and uprc$(rpl$)<>uprc$("Replace") then !:
           rpl$="Replace" ! default to Replace unless correctly specified
@@ -61,9 +61,9 @@
 00530   pr #20: " ! program files (*.br) from source code files (*.brs)"
 00540   close #20: 
 00550   chain "proc=proc."&wsid$
-00560 ! ______________________________________________________________________
+00560 !
 00570 XIT: stop 
-00580 ! ______________________________________________________________________
+00580 !
 00590 ! <Updateable Region: ERTN>
 00600 ERTN: fnerror(program$,err,line,act$,"xit")
 00610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -71,4 +71,4 @@
 00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00650 ! /region
-00660 ! ______________________________________________________________________
+00660 !

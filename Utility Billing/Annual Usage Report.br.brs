@@ -1,5 +1,5 @@
 10000 ! Formerly S:\acsUB\ubUsage2
-10040 ! ______________________________________________________________________
+10040 !
 10060   library 'S:\Core\Library': fnAcs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnLbl,fnTxt,fnTos,fnxit,fncomboa,fnCmdSet,fntop,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnreg_read,fnreg_write,fngethandle,fnget_services
 10080   on error goto Ertn
 12000   fntop(program$)
@@ -15,7 +15,7 @@
 12200   dim total_count_grand(13)
 12220   dim total_count_grand_code_date(10,13)
 12260   dim msgline$(2)*40,tg(11)
-12280 ! ______________________________________________________________________
+12280 !
 14120 ! 
 14180 ! 
 14200   fnLastBillingDate(d1)

@@ -1,20 +1,20 @@
 00010 ! Replace S:\acsPR\jcPctCmp
 00020 ! Enter Percent Complete
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnoldmsgbox,fncno,fnerror,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,msgline$(2)*60,response$(5)*1
 00080   dim jn$*6,jno$*6,n$*40,cn$*11,cnt$*5,k$*25
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
 00110   fncno(cno)
 00120 ! 
 00125   fnconsole(1)
-00130 ! ______________________________________________________________________
+00130 !
 00140   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed 
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed 
-00160 ! ______________________________________________________________________
+00160 !
 00170 L170: pr newpage
 00180   fnopenwin(win=101,08,07,16,72,cap$)
 00190   pr #win,fields "4,2,Cr 25,N": "Job Number:"
@@ -61,19 +61,19 @@
 00590 L590: rewrite #2,using L600,key=cn$: k$,l10,l12,l13 nokey L630
 00600 L600: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
 00610   goto L170
-00620 ! ______________________________________________________________________
+00620 !
 00630 L630: msgline$(1)="Invalid Job Number or Category Number"
 00640   msgline$(2)="Please reselect."
 00650   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00660   ce=1
 00670   goto ERR1
-00680 ! ______________________________________________________________________
+00680 !
 00690   goto L310
-00700 ! ______________________________________________________________________
+00700 !
 00710 DONE: ! 
 00720   close #2: 
 00730   goto XIT
-00740 ! ______________________________________________________________________
+00740 !
 00750 ! <Updateable Region: ERTN>
 00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -81,6 +81,6 @@
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region
-00820 ! ______________________________________________________________________
+00820 !
 00830 XIT: fnxit
-00840 ! ______________________________________________________________________
+00840 !

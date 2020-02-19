@@ -1,11 +1,11 @@
 00010 ! Replace S:\acsGL\RestPrint
 00020 ! -- pr Retained Earnings Statement
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$
 20000   on error goto Ertn
-20020 ! ______________________________________________________________________
+20020 !
 20040   dim cap$*128,ln1$*8800,ln$*8800,dat$*20
-20060 ! ______________________________________________________________________
+20060 !
 20080   fntop(program$,cap$="Print Retained Earnings Statement")
 20100   fndat(dat$)
 20120   tempx=val(fnactpd$) conv L180
@@ -68,14 +68,14 @@
 21260   next j2
 21280   pr #255: tab(10);ln$
 21300   goto READ_ACGLREST
-21320 ! ______________________________________________________________________
+21320 !
 21340 DONE: !
 21360   close #1: 
 21380   fncloseprn
 21400   goto XIT
-21420 ! ______________________________________________________________________
+21420 !
 21440 XIT: fnxit
-21460 ! ______________________________________________________________________
+21460 !
 21480 ! <Updateable Region: ERTN>
 21500 ERTN: fnerror(program$,err,line,act$,"xit")
 21520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -83,4 +83,4 @@
 21560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 21580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 21600 ! /region
-21620 ! ______________________________________________________________________
+21620 !

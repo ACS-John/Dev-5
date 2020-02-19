@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsGL\acglRest
 00020 ! pr Retained Earnings Statement
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnGlAskFormatPriorCdPeriod
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
 00080   dim sc2$(2),dat$*20,cap$*128
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Retained Earnings Statement")
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
@@ -14,7 +14,7 @@
 00130   for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 00140   fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
 00150   if fnprocess=1 then t=2 : goto L240
-00160 ! ______________________________________________________________________
+00160 !
 00170 MENU1: ! 
 00180   fnwin3(win=101,cap$,6,40,1,1,5)
 00190   sc2$(1)="1. Edit" : sc2$(2)="2. Print"
@@ -25,11 +25,11 @@
 00230   if cmdkey=5 or cmdkey=99 then goto XIT
 00240 L240: j=0
 00250   on t goto EDIT,L300 none MENU1
-00260 ! ______________________________________________________________________
+00260 !
 00270 EDIT: ! 
 00280   execute 'SY NotePad "'&os_filename$("[Q]\GLmstr\ACGLSTMT.h[cno]")&'"'
 00290   goto MENU1
-00300 L300: ! ______________________________________________________________________
+00300 L300: !
 00310   if fnGlAskFormatPriorCdPeriod=5 then goto MENU1
 00320   fnopenprn
 00330   pr newpage
@@ -59,7 +59,7 @@
 00490   fncloseprn
 00500   on fkey 5 ignore 
 00510   if fnprocess=1 then goto XIT else goto MENU1
-00520 ! ______________________________________________________________________
+00520 !
 00530 ! <Updateable Region: ERTN>
 00540 ERTN: fnerror(program$,err,line,act$,"xit")
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -67,6 +67,6 @@
 00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00590 ! /region
-00600 ! ______________________________________________________________________
+00600 !
 00610 XIT: fnxit
-00620 ! ______________________________________________________________________
+00620 !

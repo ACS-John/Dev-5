@@ -3,7 +3,7 @@
 ! r: setup library, on error, dims, and constants
   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnTos,fnFra,fnOpt,fnLbl,fnqgl,fnCmdSet,fnAcs,fnagl$,fnChk,fnTxt,fngethandle,fncreg_read,fncreg_write
   on error goto Ertn
-! ______________________________________________________________________
+!
   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3,cap$*128
   dim resp$(20)*128,bp(13)
   dim cogl$(3)*12,u$*12
@@ -147,7 +147,7 @@ AfterReadGlmstr: !
     if t9=9 then goto END_OF_TRANS
     gosub PRINT_A_TRANS
   loop
-! ______________________________________________________________________
+!
 END_OF_TRANS: ! 
   gosub PRINT_CB_OR_SUMTR
 goto READ_GLMSTR ! /r

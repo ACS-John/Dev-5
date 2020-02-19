@@ -1,19 +1,19 @@
 20000 ! Replace S:\Core\GetDir.br
 20020 ! reads a directory into an array
-20040 ! ______________________________________________________________________
+20040 !
 20060   def library fngetdir(&dir$,mat filename$; option$,filter$*40)
-20080 ! ______________________________________________________________________
+20080 !
 20100     library 'S:\Core\Library': fngethandle,fnerror,fnpause
 20120     on error goto Ertn
-20140 ! ______________________________________________________________________
+20140 !
 20160 ! Dir$=Directory to Read
 20180 ! .            does not require but will accept a \ on the end
 20200 ! filename$(x)=file names (includes path if /s option is used)
 20220 ! option$: /s or /o-g or what ever you want use "dir /?"
 20240 ! .        at dos prompt for complete list of options.
-20260 ! ______________________________________________________________________
+20260 !
 20280     dim tmp$*255
-20300 ! ______________________________________________________________________
+20300 !
 20320     mat filename$=("")
 20360     filter$=trim$(filter$) : if filter$="" then filter$="*.*"
 20380     option$=trim$(option$)
@@ -33,7 +33,7 @@
 20660       end if 
 20680     next x
 20700     goto XIT
-20720 ! ______________________________________________________________________
+20720 !
 20740 ! <Updateable Region: ERTN>
 20760 ERTN: fnerror(program$,err,line,act$,"xit")
 20780     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -45,4 +45,4 @@
 20900 XIT: ! 
 20910     close #tf1,free: ioerr ignore
 20920   fnend 
-20940 ! ______________________________________________________________________
+20940 !

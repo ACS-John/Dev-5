@@ -1,6 +1,6 @@
 20000 ! replace S:\acsUB\Customer_Search.br
 20020 ! search for a customer and return their act number
-20040 ! ______________________________________________________________________
+20040 !
 20060   def library fncustomer_search(&x$;fixgrid)
 20080 ! x$=account   to extract the flexgrid information (master file)
 20100     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle
@@ -29,20 +29,20 @@
 20540       read #file_num,using 'Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7': mat item$ eof EO_CUSTOMER ioerr ERR_READ
 20560       fnflexadd1(mat item$)
 20580     loop 
-20600 ! ______________________________________________________________________
+20600 !
 20620 ERR_READ: ! 
 20640     if err<>61 then goto ERTN
 20660 ! pr 'Record locked during Customer_Search flexgrid creation - skipped'
 20680     read #file_num,release: 
 20700     goto READ_FILE
-20720 ! ______________________________________________________________________
+20720 !
 20740 EO_CUSTOMER: ! 
 20760     fnCmdSet(2)
 20780     fnAcs(sn$,0,mat resp$,ckey)
 20800     x$=lpad$(resp$(1),10)
 20820     if ckey=5 then x$="          " ! no one selected
 20840     goto XIT
-20860 ! ______________________________________________________________________
+20860 !
 20880 ! <Updateable Region: ERTN>
 20900 ERTN: fnerror(program$,err,line,act$,"xit")
 20920     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -50,7 +50,7 @@
 20960     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20980 ERTN_EXEC_ACT: execute act$ : goto ERTN
 21000 ! /region
-21020 ! ______________________________________________________________________
+21020 !
 21040 XIT: close #file_num: ioerr ignore
 21060   fnend 
 21080 IGNORE: continue 

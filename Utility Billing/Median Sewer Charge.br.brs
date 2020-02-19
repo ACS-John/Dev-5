@@ -1,13 +1,13 @@
 20000 ! formerly S:\acsUB\ubmeans.br
-20020 ! ______________________________________________________________________
+20020 !
 20040   library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fnxit,fnCmdSet,fntop
-20060 ! ______________________________________________________________________
+20060 !
 20080   on error goto Ertn
-20100 ! ______________________________________________________________________
+20100 !
 20120   dim cd1(8),x(13),txt$*60,message$(5)*80,message$*60,tg(11)
-20140 ! ______________________________________________________________________
+20140 !
 20160   fntop(program$)
-20180 ! ______________________________________________________________________
+20180 !
 20200   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 20220   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 20240   open #5: "Name=[Q]\UBmstr\MEANs.h[cno],RecL=22,REPLACE",internal,output 
@@ -21,7 +21,7 @@
 20400   resp$(j)=str$(tdate)
 20420   goto L170
 20440 L230: restore #1: 
-20460 ! ______________________________________________________________________
+20460 !
 20480 SCR1: ! 
 20500   fnTos(sn$:='means-1') 
 20520   mylen=62 : mypos=50
@@ -46,7 +46,7 @@
 20900     fnmsgbox(mat message$,resp$,'',mytype) 
 20920     goto SCR1
 20940   end if
-20960 ! ______________________________________________________________________
+20960 !
 20980 SCR2: ! 
 21000   sn$="Means-2" 
 21020   fnTos(sn$)
@@ -84,17 +84,17 @@
 21660     end if
 21680   next j1
 21700   goto L530
-21720 ! ______________________________________________________________________
+21720 !
 21740 L620: if t1>0 then t3=int(t2/t1) else t3=0
 21760   write #5,using "Form POS 1,C 10,N 12.2": x$,t3
 21780   goto L470
-21800 ! ______________________________________________________________________
+21800 !
 21820 DONE: ! 
 21840   gosub PRINT_REPORT
 21860   fncloseprn
 21880 XIT: fnxit
-21900 ! ______________________________________________________________________
-21920 ! ______________________________________________________________________
+21900 !
+21920 !
 21940 ! <Updateable Region: ERTN>
 21960 ERTN: fnerror(program$,err,line,act$,"NO")
 21980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -102,7 +102,7 @@
 22020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 22040 ERTN_EXEC_ACT: execute act$ : goto ERTN
 22060 ! /region
-22080 ! ______________________________________________________________________
+22080 !
 22100 PRINT_REPORT: ! 
 22120   close #1: ioerr L820
 22140 L820: close #2: ioerr L830

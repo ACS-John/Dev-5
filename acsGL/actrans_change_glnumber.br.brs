@@ -1,12 +1,12 @@
 10000 ! Replace S:\acsGL\actrans_change_glnumber
-10200 ! ______________________________________________________________________
+10200 !
 10400   library 'S:\Core\Library': fntop,fnxit,fnAcs,fnLbl,fnTxt,fngethandle,fnTos,fnerror,fncno,fnmsgbox,fnCmdSet,fnChk,fncd,fnactpd,fnopenprn,fncloseprn
 10600   on error goto Ertn
-10800 ! ______________________________________________________________________
+10800 !
 11000   dim cnam$*40,cap$*128,resp$(100)*60
 11200   dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)
 11400   dim actrans_key$*20
-11600 ! ______________________________________________________________________
+11600 !
 11800   fncno(cno,cnam$)
 12000   fntop(program$, cap$="Change GL Numbers in ACTrans")
 12200 ! 
@@ -30,7 +30,7 @@
 17000 EO_ACTRANS: ! 
 17200   fncloseprn : report_open=0
 17400 XIT: fnxit
-17600 ! ______________________________________________________________________
+17600 !
 17800   def fn_screen_1(&gln_from$,&gln_to$)
 18000     fnTos(sn$="FixGLN")
 18200     mylen=22
@@ -57,7 +57,7 @@
 22600     end if  ! ~report_open
 22800     pr #255: line$ ! if gl$='  6   101  0' then pr #255: line$
 23000   fnend 
-51670 ! ______________________________________________________________________
+51670 !
 51680 ! <Updateable Region: ERTN>
 51690 ERTN: fnerror(program$,err,line,act$,"xit")
 51700   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT

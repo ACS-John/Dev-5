@@ -2692,7 +2692,7 @@
 05574 fnend 
 05580 ! #### - Available Line Number Range
 10999 ! #### - Available Line Number Range
-11000 ! ________________________________________________________________________ !:
+11000 !__ !:
       ! Updateable Region . Printer Selection . Top !:
       ! This region was last updated on 2009.06.25
 11010 dim prn_data$(1)*80,prn_fieldsc$(1)*20 ! for fnGet_PrnVar$
@@ -2709,7 +2709,7 @@
 11078 fnend  ! fnSel
 11080 FORM_FNSEL: form pos 1,c ,skip 0
 11190 ! Updateable Region . Printer Selection . End !:
-      ! ________________________________________________________________________
+      !__
 11200 def fnsetup_buckets
 11205   if setup_buckets then goto L11255
 11210   dim categ_code$(1)*4,categ_desc$(1)*60,categ_code$*4,categ_desc$*60
@@ -5857,7 +5857,7 @@
 19348   if case$="U" then let flip$=uprc$(flip$)
 19350   let fndebt_flip_$=rpad$(flip$,y)
 19352 fnend 
-19360 ! _____________________________________________________________________
+19360 !_____
 19362 def library fnis_nwp(ix_prn$*80)
 19364   let fnis_nwp=fnisnwp(ix_prn$)
 19366 fnend 
@@ -7720,7 +7720,7 @@
 25138   let hts_return$=srep$(hts_return$,hex$("C3BF"),chr$(255))
 25160 fnend  ! fn_unicode_to_ansi
 25170 FS: form pos 74,x 2,12*bh 4.2,6*bh 4.2
-25180 ! ______________________________________________________________________
+25180 !
 25182 def library fndiary_exists(fileno$,dcode,ddate$,dcmt$*20,dqueue$,dtime$,dpriority$)
 25184   let fndiary_exists=fndiary_exists_(fileno$,dcode,ddate$,dcmt$,dqueue$,dtime$,dpriority$)
 25186 fnend 
@@ -8138,7 +8138,7 @@
 26575     end if  ! II_Line$(II_Item)(1:1)=     '['     /  '!'   /     else 
 26580   next ii_item
 26585 fnend 
-26590 ! ______________________________________________________________________
+26590 !
 26592 def library fnini_read$*1024(il_section$*300,il_field$*300) ! shares mat INI_Section$, mat INI_Field$, mat INI_Value$ with FN_INI_OPEN
 26594   gosub SETUP_CONSTANTS
 26596   let fnini_read$=fn_ini_read$(il_section$,il_field$)
@@ -8829,7 +8829,7 @@
           let fil$(0:-1)="@::"
 28475 L28475: let fn_client_path$=fil$
 28480 fnend 
-28490 ! ______________________________________________________________________
+28490 !
 28492 ! ---------LIBRARY----------FNCHOP1$()----------------------------------
 28494 def library fnchop1$*128(chop$*2048,delim$*30)
 28496   let delim_pos=pos(chop$,delim$) !:
@@ -15534,7 +15534,7 @@
 52155 XIT_FNMAPPEDMSGBOX: ! 
 52160     let fnmappedmsgbox=set_fnmappedmsgbox
 52165   fnend 
-52170 ! ______________________________________________________________________
+52170 !
 52172   def library fnmake_dir(indir$*256) !:
           let fnmake_dir=fn_make_dir(indir$) !:
         fnend 
@@ -15586,7 +15586,7 @@
 52350     goto MD_XIT
 52355 MD_XIT: ! 
 52360   fnend 
-52370 ! ______________________________________________________________________
+52370 !
 52375   def library fnfix_fileno$(fileno$*24) !:
           let fnfix_fileno$=fnfixfileno$(fileno$) !:
         fnend 
@@ -15595,7 +15595,7 @@
           let fileno$=srep$(fileno$,",","-") !:
           let fnfixfileno$=uprc$(trim$(fileno$)) !:
         fnend 
-52390 ! ______________________________________________________________________
+52390 !
 52392   def library fnreport_path$*128 !:
           if ~cls_setup then let fnclssetup
 52394     let fnreport_path$=report_path$
@@ -15618,7 +15618,7 @@
 52428       let fnclaimpath$=""
 52430     end if 
 52432 XITFNCLAIMPATH: fnend 
-52440 ! ______________________________________________________________________
+52440 !
 52442   def library fnget_claimfiles(cn$*24, mat gcffiles$, mat gcfdate$, mat gcfsize; filter$*80) !:
           let fnget_claimfiles=fngetclaimfiles(cn$, mat gcffiles$, mat gcfdate$, mat gcfsize, filter$) !:
         fnend 
@@ -15687,7 +15687,7 @@
 52695     next j
 52700 ! 
 52705   fnend  ! fngetclaimfiles
-52710 ! ______________________________________________________________________
+52710 !
 52712   def library fnclaim_scroll(mat gcffile$, mat gcffdate$, mat gcfsize) !:
           let fnclaim_scroll=fnclaimscroll(mat gcffile$, mat gcffdate$, mat gcfsize) !:
         fnend 
@@ -15704,7 +15704,7 @@
 52732     next j
 52734     let fnclaimscroll=fnwinscroll_(mat scroll_data$, 0, "Title=Document Selection HEADING=Name;Last Modified;Size", "", "", 0, 0,0,0) ! , "", FOOTER$="", 2, 2,0,15)
 52736   fnend 
-52740 ! ______________________________________________________________________
+52740 !
 52742   def library fnput_reportpath(setit$*40)
 52744     let setit$=trim$(setit$)
 52746     open #equifax_setup:=fngethandle_: "NAME=SETUP.EFX/EQUIFAX,SHR",internal,outin,relative 
@@ -16750,7 +16750,7 @@
 56245 ! 
 56250 LEC_XIT: ! 
 56255 fnend 
-56260 ! _____________________________________________________________________
+56260 !_____
 56265 def library fnread_letter_akbe(llcode$,&base_extra$,mat add_key$)
 56270 ! fnRead_Letter_AKBE = set by SetFnReadAKBE - 0 means no record returned - 1 means record returned !:
         ! LLCode$ is the Key
@@ -16808,7 +16808,7 @@
 56470 READAKBE_XIT: ! 
 56475   let fnread_letter_akbe=setfnreadakbe
 56480 fnend 
-56490 ! _____________________________________________________________________
+56490 !_____
 56492 def library fnnextdebt(fileno$,h_debtor)
 56494   let fnnextdebt=fnnextdebt_(fileno$,h_debtor)
 56496 fnend 
@@ -16863,7 +16863,7 @@
 56665   execute '*Free [Temp]DIR-[Session].TXT -n'
 56670 GDMB_XIT: ! 
 56675 fnend 
-56680 ! _____________________________________________________________________
+56680 !_____
 56682 def library fnsql_key(skbuff$*512,skfileno$*8,mat sk$)
 56684   let setfnsql_key=0
 56686   let skbuff$=trim$(trim$(skbuff$),"\")
@@ -16883,7 +16883,7 @@
 56712 SK_XIT: ! 
 56714   let fnsql_key=setfnsql_key
 56716 fnend 
-56720 ! _____________________________________________________________________
+56720 !_____
 56722 def fnfirstnumber(firnumstr$*512)
 56724 ! this function returns the position of the first number in a string, or -1 if none are found
 56726   let setfnfirstnumber=-1
@@ -16894,7 +16894,7 @@
 56736 XIT_FNFIRSTNUMBER: ! 
 56738   let fnfirstnumber=setfnfirstnumber
 56740 fnend 
-56750 ! _____________________________________________________________________
+56750 !_____
 56755 def library fnptime$(ptime$)
 56760   let ptime$=trim$(ptime$)
 56765   if trim$(ptime$)="" then let ptime$="08:00:00"
@@ -16903,7 +16903,7 @@
 56780   if len(ptime$)=6 then let ptime$=ptime$(1:2)&":"&ptime$(3:4)&":"&ptime$(5:6)
 56785   let fnptime$=ptime$
 56790 fnend 
-56800 ! _____________________________________________________________________
+56800 !_____
 56802 def library fnremove_pk_part$*80(&pk$; how_many)
 56804   let fnremove_pk_part$=fnremovepk_part$(pk$, how_many)
 56806 fnend 
@@ -16971,7 +16971,7 @@
           let active_data_recno=lrec(active_handle)+1 !:
           write #active_handle,using active_form$: fileno$,trans_date,trans_time,paperless_desc$(21:48),paperless_desc$(1:20),code$,type$,user_id,0,active_data_recno,0,0
 56965 fnend 
-56970 ! ______________________________________________________________________
+56970 !
 56975 def library fnsql2finsum(mat finsum_data$,mat finsum_data,&fileno$; &dait$,mat f_filerec,mat f_frec,mat line1,mat line2,mat daily,&refno,&atty_no,&secy_no,&coll_no,&forwr,&took,&c0de,&masco,&accrual_flag$,&comm_inv_bill,&comm_inv_paid,&sfee_inv_bill,&sfee_inv_paid,&kept_int,&bpj$,&sales_no,&status$,&subcode,&trans_time,&type$,&code$,&recno,&ta_prin,&ta_contract,&ta_legal,&line3_4,&line3_5,&line3_6,&line3_7,&line3_8,&comment$,&add_bill)
 56980   if ~setup_sql then gosub SETUP_SQL
 56985   mat f_filerec(20)=(0) : mat f_frec(20)=(0) : mat line1(6)=(0) : mat line2(8)=(0) : mat daily(18)=(0) !:
@@ -17086,7 +17086,7 @@
 57095   let comment$=finsum_data$(finsum_comment) !:
         let add_bill=finsum_data(finsum_add_bill)
 57100 fnend 
-57110 ! ______________________________________________________________________
+57110 !
 57115 def library fnxbyst$(st$,date_jdg$)
 57120 ! This function looks a a number from StJdgDt.ini//8 or Custom\*.* and adds it (as Years) to the Date_Jdg$ and returns that. !:
         ! ST$ is a two letter state designation (not case sensitive) !:
@@ -17146,7 +17146,7 @@
           let set_fnxbyst$(5:10)="/02/28"
 57340   let fnxbyst$=set_fnxbyst$
 57345 fnend 
-57350 ! ______________________________________________________________________
+57350 !
 57355 def library fnis_holiday(d)
 57360   mat holidays(12)
 57365   let year$=fndate10_$(str$(d))(1:4)
@@ -17206,7 +17206,7 @@
 57635   if srch(holidays,d)>0 then let fnis_holiday=1 !:
         else let fnis_holiday=0
 57640 fnend 
-57650 ! ______________________________________________________________________
+57650 !
 57652 def library fnchanges(changes_handle,active_handle,trans_date,trans_time,fileno$,debtor_no,relation,type$,changes_code$,changes_desc$*11,user_id,recno,mat before_data$,mat before_data,mat after_data$,mat after_data,mat fieldsc$,mat fieldsn$,table_name$,account)
 57654   let fnchanges=fnchanges_(changes_handle,active_handle,trans_date,trans_time,fileno$,debtor_no,relation,type$,changes_code$,changes_desc$,user_id,recno,mat before_data$,mat before_data,mat after_data$,mat after_data,mat fieldsc$,mat fieldsn$,table_name$,account)
 57656 fnend 
@@ -17233,7 +17233,7 @@
           if recno=0 then print 'Invalid call to fnIChanges - RecNo=0' : pause 
 57715   let fnchanges_(ichanges_handle,active_handle=0,trans_date,trans_time,cnvrt$("PIC(########)",recno),debt_number=0,internal_file_number,type$,changes_code$,changes_desc$,user_id,recno,mat old_internal_data$,mat old_internal_data,mat internal_data$,mat internal_data,mat internal_fieldsc$,mat internal_fieldsn$,internal_table_name$(internal_file_number),account=1)
 57720 fnend 
-57730 ! ______________________________________________________________________
+57730 !
 57735 def library fnthere(there_text$*256, there_file$*256; allow_partial_match)
 57740 ! 
 57745 ! There_Text$ = the text to search for !:
@@ -17273,7 +17273,7 @@
 57875 THERE_XIT: ! 
 57880   let fnthere=setfnthere
 57885 fnend 
-57890 ! ______________________________________________________________________
+57890 !
 57895 def library fntheren(theren_text, theren_file$*256; allow_partial_match)
 57900 ! 
 57905 ! THEREN_Text = the number to search for !:
@@ -17313,7 +17313,7 @@
 58035 THEREN_XIT: ! 
 58040   let fntheren=setfnthere
 58045 fnend 
-58050 ! ______________________________________________________________________
+58050 !
 58060 def library fnread_screen7(mastorhist,key$*8,mat data$; userdefint)
 58062   let fnread_screen7=fnreadscreen7(mastorhist,key$,mat data$, userdefint)
 58064 fnend 
@@ -17409,7 +17409,7 @@
 58380     mat x(udim(x)-1)
 58382   end if 
 58384 fnend 
-58390 ! ______________________________________________________________________
+58390 !
 58392 def library fnquote$*1024(in$*1024)
 58394   let fnquote$=fnquote_$(in$)
 58396 fnend 
@@ -17612,7 +17612,7 @@
 59100   next kbbb_key_portion
 59105   let fnkeybuildby_buff$=kbbb_key$
 59110 fnend 
-59120 ! ______________________________________________________________________
+59120 !
 59122 def library fnkeybuild_by_recno$*512(kbbr_file_number_1,kbbr_dr_record_number) !:
         let fnkeybuild_by_recno$=fnkeybuildby_recno$(kbbr_file_number_1,kbbr_dr_record_number) !:
       fnend 
@@ -17630,7 +17630,7 @@
 59185 !  CLOSE #KBBR_FILE_HANDLE_2:
 59190 fnend 
 59200 FORM_GENERIC_C: form pos 1,c form_generic_c_len ! you must set    form_generic_c_len=min(rln(file_handle),32767)    , before using this form statement        this line is used by fnkeybuildby_recno$ and fndelrec
-59210 ! ______________________________________________________________________
+59210 !
 59212 def library fndait$(tdait$;dait_format$, y2k_setting$,dait_listprint_win)
 59214   let fndait$=fndait_$(tdait$,dait_format$, y2k_setting$, dait_listprint_win)
 59216 fnend 
@@ -17884,7 +17884,7 @@
 59835 if set_fnask_file1=99 then let data_fil$=af1_data_fil_prior$
 59840 let fnaskfile1=set_fnask_file1
 59845 fnend  ! Fnaskfile1
-59850 ! ______________________________________________________________________
+59850 !
 59860 def library fnygc_multi_calc$*20(ygc_id$*20,claim_type$*10)
 59870   let ygc_id$=srep$(ygc_id$,".*CTYPE","."&claim_type$)
 59880   let ygc_id$=srep$(ygc_id$,".*CTYP","."&claim_type$)
@@ -17892,7 +17892,7 @@
 59900   let ygc_id$=trim$(ygc_id$,".")
 59910   let fnygc_multi_calc$=ygc_id$
 59920 fnend 
-59930 ! ______________________________________________________________________
+59930 !
 59932 def library fnclient_system32$*256
 59934   let fnclient_system32$=fn_client_system32$
 59936 fnend  ! fnclient_system32$*256
@@ -17932,7 +17932,7 @@
 60010 def library fngui_pop
 60012   let fnguipop
 60014 fnend 
-60020 ! ______________________________________________________________________
+60020 !
 60025 def fnmenu_lowercase_enforcer(mat lce_item$)
 60030 ! this function fixes problems with menu options like "1. App; A. Other" to "1. app; A. Other"
 60035   dim fcletter$(1)*1 ! Array built parallel to mat LCE_Item$ contains the First Capital Alpha-Character of the selection description (after the .)
@@ -18022,7 +18022,7 @@
           let version(h_preclose,days(date))
 60480   let fnpreclose=h_preclose
 60490 fnend 
-60500 ! ______________________________________________________________________
+60500 !
 60502 def library fnsetmatcnc(mat c1$,mat n1,mat c2$, c1_delimited$*4096,n1_delimited$*4096,c2_delimited$*4096; shutup)
 60504   let fnsetmatcnc=fnsetmatcnc_(mat c1$,mat n1,mat c2$, c1_delimited$,n1_delimited$,c2_delimited$,shutup)
 60506 fnend 
@@ -18051,7 +18051,7 @@
 60550     let fnsetmatcnc_=c1_count
 60552   end if 
 60554 fnend 
-60560 ! ______________________________________________________________________
+60560 !
 60562 def fnsetmatn(mat n,n_delimited$*4096)
 60564   dim setmatn_c$(1)*80
 60566 ! LET N_DELIMITED$=TRIM$(N_DELIMITED$) !:
@@ -18063,7 +18063,7 @@
 60576   next temp_count
 60578   let fnsetmatn=setmatn_c_count
 60580 fnend 
-60590 ! ______________________________________________________________________
+60590 !
 60592 FNGRID_SETUP: ! 
 60594 def library fngrid_setup(gs_heading$*4096,width$*4096,form$*4096,mat gs_heading$,mat width,mat form$; width_default)
 60596   let fngrid_setup=fngridsetup(gs_heading$,width$,form$,mat gs_heading$,mat width,mat form$, width_default)
@@ -18098,7 +18098,7 @@
 60695     end if 
 60700   next count
 60705 fnend 
-60710 ! ______________________________________________________________________
+60710 !
 60715 def fnsection_get$*1024(cap_etc$*4096,section_identifier$*80,mat delimiter$)
 60720 ! this function returns the section identified starting at Section_Identifier= and continuing until it meets the next (any of mat Delimiter$)= or the end of the string.
 60725   dim section_text$*1024,section_pos(1)
@@ -18142,7 +18142,7 @@
         ! PRINT "cap_etc_backup$="&CAP_ETC_BACKUP$ !:
         ! PAUSE  ! XXX
 60870 fnend 
-60880 ! ______________________________________________________________________
+60880 !
 60882 def library fnmat_1d_to_2d(mat array_source$, mat array_destination$, dimension_two)
 60884   let fnmat_1d_to_2d=fnmat_1dto2d(mat array_source$, mat array_destination$, dimension_two)
 60886 fnend 
@@ -18171,7 +18171,7 @@
 60960     end if 
 60965   next line_count
 60970 fnend 
-60980 ! ______________________________________________________________________
+60980 !
 60982 def library fnlist_print(item$*2048; handle,lp_cache_disable, cap_etc$*1400,listprint_srow,listprint_scol,listprint_rows,listprint_cols,listprint_border$)
 60984   let fnlist_print=fn_list_print(item$, handle,lp_cache_disable, cap_etc$,listprint_srow,listprint_scol,listprint_rows,listprint_cols,listprint_border$)
 60986 fnend 
@@ -18315,7 +18315,7 @@
 62262   gosub SCREEN7_SETUP !:
         let screen7_setup=0 ! this is loafing, i know. needed to do a complete S7 setup later, just need mat field_pos$ now.
 62264 fnend 
-62270 ! ______________________________________________________________________
+62270 !
 62275 SCREEN7_SETUP: ! r: 
 62280 ! library : FNS7_WRITE
 62285 dim field_pos$(1)*32,field_type$(1)*8,fhelp$*1024,formr$*1024
@@ -18383,13 +18383,13 @@
 62560   if original_value$<>"" and value$="" then let set_fns7_field_valid=0 else let set_fns7_field_valid=1
 62565   let fns7_field_valid=set_fns7_field_valid
 62570 fnend 
-62580 ! ___________________________________________________________________________________
+62580 !_____________
 62582 def library fnkfname$*256(filenumber)
 62584   dim name_file$(1)*256,kfname_file$(1)*256,use_file$(1)*256
 62586   let fnstatusfile(mat name_file$,mat kfname_file$,mat use_file$)
 62588   let fnkfname$=kfname_file$(filenumber)
 62590 fnend 
-62600 ! ___________________________________________________________________________________
+62600 !_____________
 62605 def library fndbt_is_prop$(fileno$,debt_number,property_handle)
 62610 ! This function returns a " " or a "P" or a "L" !:
         ! FileNo$ - !:
@@ -18416,7 +18416,7 @@
 62675   end if 
 62680   let fndbt_is_prop$=is_prop$
 62685 fnend 
-62690 ! ________________________________________________________________________
+62690 !__
 62692 def library fnadd_one(mat add_to, one; no_add_zeros, no_add_duplicates)
 62694   let fnadd_one=fn_add_one(mat add_to, one, no_add_zeros, no_add_duplicates)
 62696 fnend 
@@ -18451,7 +18451,7 @@
 62760   end if 
 62765   let fn_add_one$=str$(udim(mat add_to))
 62770 fnend 
-62780 ! ________________________________________________________________________
+62780 !__
 62782 def library fnedi_finis(mat file_number,cap$*80; edi_finis_messagebox_text$*2048,edi_finis_mb_icon,auto_flag,edi_finis_autolaunch)
 62784   if ~setup then let fn_setup
 62786   let fnedi_finis=fn_edi_finis(mat file_number,cap$, edi_finis_messagebox_text$,edi_finis_mb_icon,auto_flag,edi_finis_autolaunch)
@@ -18520,17 +18520,17 @@
 63270 def library fnscr_thaw
 63272   let scr_thaw ! if ENV$("GUIMode")="ON" THEN LET SCR_THAW
 63274 fnend 
-63280 ! ________________________________________________________________________
+63280 !__
 63282 def library fnordinal$(oridnal_number)
 63284   let ordinal_suffix$(1)="th" : let ordinal_suffix$(2)="st" : let ordinal_suffix$(3)="nd" : let ordinal_suffix$(4)="rd" : for ordinal_suffix_count=5 to 10 : let ordinal_suffix$(ordinal_suffix_count)="th" : next ordinal_suffix_count
 63286   if mod(oridnal_number,100)=>10 and mod(oridnal_number,100)<=14 then let ordinal_suffix$="th" else let ordinal_suffix$=ordinal_suffix$(mod(oridnal_number,10)+1)
 63288   let fnordinal$=str$(oridnal_number)&ordinal_suffix$
 63290 fnend 
-63300 ! ________________________________________________________________________
+63300 !__
 63302 def library fndiv(numberator,denominator)
 63304   let fndiv=numberator/denominator zdiv ignore
 63306 fnend 
-63310 ! ________________________________________________________________________
+63310 !__
 63312 def library fnlist_print_handle$(lp_handle)
 63314   let fnlist_print_handle$=fn_list_print_handle$(lp_handle)
 63316 fnend 
@@ -18544,7 +18544,7 @@
 63355   end if 
 63360   let fn_list_print_handle$=set_fn_list_print_handle$
 63365 fnend 
-63370 ! _______________________________________________________________________
+63370 !_
 63372 def library fnmerge_pool_utilize$
 63374   let fnmerge_pool_utilize$=fnmergepool_utilize$
 63376 fnend 
@@ -18552,11 +18552,11 @@
 63380   if ~cls_setup then let fnclssetup
 63382   let fnmergepool_utilize$=uprc$(merge_pool$)
 63384 fnend 
-63386 ! _______________________________________________________________________
+63386 !_
 63388 def library fntrue_path$*256(filewb_name$*256)
 63390   let fntrue_path$=fntruepath_$(filewb_name$)
 63392 fnend 
-63394 ! _______________________________________________________________________
+63394 !_
 63396 def library fnlist_print_newpage(lp_handle)
 63398   gosub SETUP_CONSTANTS
 63400   let fnlist_print_newpage=fn_list_print_newpage(lp_handle)
@@ -18564,7 +18564,7 @@
 63404 def fn_list_print_newpage(lp_handle)
 63406   print #lp_handle,fields fn_list_print_handle$(lp_handle)&",=": mat empty$
 63408 fnend 
-63410 ! _______________________________________________________________________
+63410 !_
 63420 def library fncheck_trust
 63422   dim path$*256,acct_name$*28,new_path$*256,des1$*80
 63425   open #h_account:=fngethandle_: "NAME=ACCOUNT//7,SHR",display,input 

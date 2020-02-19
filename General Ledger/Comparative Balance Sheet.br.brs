@@ -6,7 +6,7 @@
 14060 ! 
 14080   dim fl1$*256,cogl$(3)*12,accum(9,2),bp(13),by(13)
 14100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*56
-14120 ! ______________________________________________________________________
+14120 !
 14140   fntop(program$)
 14160   if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
 14180   actpd$=fnactpd$ 

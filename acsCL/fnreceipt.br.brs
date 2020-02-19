@@ -3,7 +3,7 @@
 00030   def library fnaddreceipt
 00040     library 'S:\Core\Library': fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnmsgbox,fnFra,fnButton,fnflexinit1,fnflexadd1,fnCmdKey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
 00050     on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070     dim rec$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,vcode$*8
 00080     dim tr$(5)*35,item6$(11)*35
 00090     dim item$(11)*50,cmask$(11),chdr$(11)*20
@@ -11,7 +11,7 @@
 00110     dim cap$*128,key$*19
 00120     dim ml$(3)*70,citystzip$*30,glitem$(5)*30,receiptkey$*8,receiptgl$*12
 00130     dim gldesc$*30,resp$(60)*50
-00140 ! ______________________________________________________________________
+00140 !
 00150     fncno(cno)
 00155     execute "Index [Q]\CLmstr\Recmstr.h[cno]"&' '&"[Q]\CLmstr\Recidx1.h[cno] 1 8 Replace DupKeys,Shr" ioerr ignore
 00160     left=0: right=1
@@ -53,7 +53,7 @@
           read #receipt,using 'Form Pos 1,C 8,c 30',rec=editrec: rec$,nam$
 00400   if ck=2 then edit=1 : goto EDIT_RECEIPT
 00410   if ck=3 then gosub DELETE_RECEIPT : goto MENU1
-00420 ! ______________________________________________________________________
+00420 !
 00430 DELETE_RECEIPT: ! 
 00440 ! check for Linked Unpaid Invoices !:
         ! if there are any - than tell them, and don't delete.
@@ -85,11 +85,11 @@
 00610 EO_DEL_KEY_ON_TRANS: ! 
 00620   close #trans: 
 00630 EO_DELETE: return 
-00640 ! ______________________________________________________________________
+00640 !
 00650 ADD_NEW_RECEIPT: ! 
 00660   rec$=nam$=""
 00670   goto EDIT_RECEIPT
-00680 ! ______________________________________________________________________
+00680 !
 46000 EDIT_RECEIPT: ! 
 46020   holdrec$=rec$
 46040   fnTos(sn$="Receipt2")
@@ -170,7 +170,7 @@
 56140 ! 
 56160   if ck=1 then goto MENU1
 56180   goto MENU1
-56200 ! ______________________________________________________________________
+56200 !
 58000 KEY_CHANGE: !  don't do on receipts
 58020   goto L1500 ! don't change any other files
 58040 ! change the references to this file in the Transaction file
@@ -218,14 +218,14 @@
 58880 ! 
 58900 L1500: ! 
 58920   return 
-58940 ! ______________________________________________________________________
+58940 !
 60000 MSGBOX3: ! r: dupkey
 60020   mat ml$(2)
 60040   ml$(1)="A record for receipt type "&rec$&" already exists"
 60060   ml$(2)="You must select a different receipt type."
 60080   fnmsgbox(mat ml$,resp$,cap$,16)
 60100   goto EDIT_RECEIPT ! /r
-60120 ! ______________________________________________________________________
+60120 !
 62000 ! <Updateable Region: ERTN>
 62020 ERTN: fnerror(program$,err,line,act$,"xit")
 62040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT

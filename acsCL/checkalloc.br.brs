@@ -1,18 +1,18 @@
 00010 ! Replace S:\acsCL\checkalloc
 00020 ! GL Distribution Report     AND/OR     Post to General Ledger
 00030 ! GLT: 1=Post  2=Print Only
-00040 ! ______________________________________________________________________
+00040 !
 00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fnpgnum,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*30,tr(2),tbc(99,2),io1$(8),pde$*30
 00080   dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*20,item1$(2)*12
-00090 ! ______________________________________________________________________
+00090 !
 00100   if glt=2 then !:
           cap$="GL Distribution Report" else !:
           cap$="Post to General Ledger"
 00110   fncno(cno,cnam$)
 00120   cancel=99
-00130 ! ______________________________________________________________________
+00130 !
 00140 ! determine if cash or accrual by checking for any !:
         ! accounts payable numbers in the general ledger control file
 00150   fnopenprn

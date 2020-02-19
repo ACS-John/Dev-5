@@ -1,10 +1,10 @@
 00010 ! 
-00020 ! ______________________________________________________________________
+00020 !
 20000 def library fnlog(log$*512;log_type)
 20020   ! Log_Type = 0 = why do i even bother logging this crap.
 20040   !          = 1 = chained somewhere
 20060   !          = 2 = you had an error.
-20080   ! ______________________________________________________________________
+20080   !
 20100   library 'S:\Core\Library': fngethandle
 20120   on error goto XIT
 20140   delim$=chr$(9)

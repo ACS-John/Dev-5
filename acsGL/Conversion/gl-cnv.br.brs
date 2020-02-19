@@ -1,16 +1,16 @@
 00010 ! Replace S:\acsGL\Conversion\GL-CNV
 00020 ! ???
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror,fnindex_it,fnfree
 00050   fntop(program$,"CHANGE_ME")
 00060   on error goto Ertn
-00070 ! ______________________________________________________________________
+00070 !
 00080   dim d$*50,rf(6),bc(12),bp(12),bm(12),ta(2),tr(7),tr$*12,td$*30
 00090   dim k$(3)*25,ss$*11,m(18)
 00100   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,procdat$*20
 00110   dim dat$*20,ch$*20,prgl(21),co(7),acctmo$*6,vn$*8,nam$*35,ad1$*20
 00120   dim ad2$*20,csz$*20,ss$*11,adr(2),revb(13)
-00130 ! ______________________________________________________________________
+00130 !
 00140   pr newpage
 00150   pr f "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
 00160   pr f "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
@@ -88,7 +88,7 @@
 00880   execute "Index [Q]\GLmstr\PRmstr.h[cno]"&' '&"[Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n" ioerr L890
 00890 L890: execute "Index [Q]\GLmstr\GL1099.h[cno]"&' '&"[Q]\GLmstr\GL109IDX.h[cno] 1 8 Replace DupKeys"
 00900   goto L1170
-00910 ! ______________________________________________________________________
+00910 !
 00920 L920: open #3: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",internal,outIn,keyed 
 00930   open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno]",internal,outIn,relative ioerr L950
 00940   close #2,free: 
@@ -113,7 +113,7 @@
 01130 L1130: execute "Copy [Q]\GLmstr\GL1099N.H[cno]"&' '&"[Q]\GLmstr\GL1099.h[cno]"
 01140   fnFree("[Q]\GLmstr\GL1099N.H[cno]")
 01150   return 
-01160 ! ______________________________________________________________________
+01160 !
 01170 L1170: ! REASS.CNV
 01180   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,outIn,keyed 
 01190   open #2: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,outIn,relative 
@@ -183,7 +183,7 @@
 01830   write #2,using L1840: pr1$,mat pr2
 01840 L1840: form pos 1,c 90,36*pd 5.2,2*n 5
 01850   goto L1780
-01860 ! ______________________________________________________________________
+01860 !
 01870 END1: close #1: 
 01880   close #2: 
 01890   execute "COPY "&env$('Temp')&"\Work."&session$&", [Q]\GLmstr\PRmstr.h[cno]"
@@ -217,11 +217,11 @@
 02170     if end1=1 then goto END2
 02180     rnp=0
 02190     goto L2130
-02200 ! ______________________________________________________________________
+02200 !
 02210 L2210: rewrite #1,using L2220: rnp
 02220 L2220: form pos 79,n 5
 02230     goto L2150
-02240 ! ______________________________________________________________________
+02240 !
 02250 FIND1: st1=rno : st2=99999 : rnp=0
 02260 L2260: read #1,using L2270: rno,ic eof END21
 02270 L2270: form pos 1,g 5,pos 75,n 1
@@ -231,13 +231,13 @@
 02310     goto L2260
 02320 END21: end1=1
 02330 L2330: return 
-02340 ! ______________________________________________________________________
+02340 !
 02350 END2: close #1: 
 02360 L2360: next j
 02370   chain "S:\acsGL\Company"
-02380 ! ______________________________________________________________________
+02380 !
 02390 XIT: stop 
-02400 ! ______________________________________________________________________
+02400 !
 02410 ! <Updateable Region: ERTN>
 02420 ERTN: fnerror(program$,err,line,act$,"xit")
 02430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -245,4 +245,4 @@
 02450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02470 ! /region
-02480 ! ______________________________________________________________________
+02480 !

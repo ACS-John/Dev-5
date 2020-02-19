@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsUB\UBColPrn
 00020 ! -- Cash Receipts Journal
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fnerror,fnget_services,fndat,fnwait,fndate_mmddyy_to_ccyymmdd,fnxit,fnCmdSet,fnChk,fntop,fnAcs,fnOpt,fnCmdSet,fnerror,fnmsgbox
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,scr1$(10)*30,alloc(10),nam$*30,o(2),route(200)
 00080   dim r(20,4),hd1$*255,cap$*128,serviceName$(10)*20,tg(11),resp$(7)*40
 00081   dim ml$(3)*90
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
 00120 ! 
 00130   fndat(dat$,1)
@@ -25,12 +25,12 @@
 00230   mat alloc(sz1)
 00240   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 00250   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\ubtrdt.h[cno],Shr",internal,input,keyed 
-00260 ! ______________________________________________________________________
+00260 !
 00270   on fkey 5 goto XIT
 00280   fnopenprn
 00290   gosub HDR
 00300   goto L430
-00310 ! ______________________________________________________________________
+00310 !
 00320 HDR: ! 
 00330 ! need date$,time$
 00340   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
@@ -40,7 +40,7 @@
 00370   pr #255: ""
 00380   pr #255: "\ql "&hd1$
 00390   return 
-00400 ! ______________________________________________________________________
+00400 !
 00430 L430: read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PRTOTALS
 00450   if ld1<>0 and tdate<ld1 then goto L430
 00460   if hd1<>0 and tdate>hd1 then goto L430
@@ -71,11 +71,11 @@
         fnmsgbox(mat ml$,resp$,cap$,49)
 00655 L655: if resp$="Cancel" then goto XIT
 00660   goto L430
-00670 ! ______________________________________________________________________
+00670 !
 00680 PGOF: pr #255: newpage
 00690   gosub HDR
 00700   continue 
-00710 ! ______________________________________________________________________
+00710 !
 00720 PRTOTALS: ! !:
         pr #255: "" !:
         pr #255: "    ************ Totals ************"
@@ -87,7 +87,7 @@
 00780   pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
 00850   fncloseprn
 00860 XIT: fnxit
-00870 ! ______________________________________________________________________
+00870 !
 00880 SCREEN1: ! 
 00890   fnTos(sn$="UBColPrn") !:
         mylen=33 : mypos=mylen+2
@@ -111,7 +111,7 @@
         ti1$=resp$(4)
 01030   fndat(dat$,2)
 01040   return 
-01050 ! ______________________________________________________________________
+01050 !
 01060 ! <Updateable Region: ERTN>
 01070 ERTN: fnerror(program$,err,line,act$,"xit")
 01080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -119,4 +119,4 @@
 01100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01110 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01120 ! /region
-01130 ! ______________________________________________________________________
+01130 !

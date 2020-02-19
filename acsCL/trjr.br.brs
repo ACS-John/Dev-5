@@ -1,26 +1,26 @@
 00010 ! Replace S:\acsCL\TrJr
 00020 ! pr Transaction Journals
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cnam$*40,vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
 00080   dim t1(3),glt(3),glts(3),bn$*30,cap$*128,des$*30,sltyn$(3)*1
 00090   dim udf$*256
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$, cap$="Transaction Journals")
 00120   udf$=env$('temp')&'\'
 00130   cancel=99
-00140 ! ______________________________________________________________________
+00140 !
 00150   fncno(cno,cnam$)
 00160   ti$(1)="Checks" !:
         ti$(2)="Deposits" !:
         ti$(3)="Adjustments"
-00170 ! ______________________________________________________________________
+00170 !
 00180   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  !:
         read #20,using 'form POS 152,N 2': wbc !:
         close #20: 
-00190 ! ______________________________________________________________________
+00190 !
 00200 MAIN: ! 
 00210   fnTos(sn$="Trjr") !:
         respc=0
@@ -110,7 +110,7 @@
 00820   if td1yn$="D" then !:
           pr #255,using 'Form POS 66,C 12,N 11.2,X 2,C 32,c 6': gl$,am2,tr5$,ivd$ pageoflow NEWPGE
 00830   goto SUMMARY_MAYBE
-00840 ! ______________________________________________________________________
+00840 !
 00850 PRINT_D_NEWPAGE: ! 
 00855   if amt<>totalalloc then pr #255,using "form pos 1,c 80": "The allocations on the above transaction do not agree with total transaction" ! kj 52307
 00860   if td1yn$="D" then !:
@@ -118,9 +118,9 @@
           ! if condition was left off and printed many blank pages if chose !:
           ! totals only 4/04/01
 00870   goto READ_TRMSTR
-00880 ! ______________________________________________________________________
+00880 !
 00890 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00900 ! ______________________________________________________________________
+00900 !
 00910 HDR: ! 
 00920   pr #255,using 'Form POS 1,C 8,Cc 74': date$,cnam$
 00930   if end3=0 then !:
@@ -136,7 +136,7 @@
 00990   pr #255: ref$& "   Date    Payee/Description                  Amount   GL Number      Amount   Item Description                  Date  "
 01000   pr #255: "  ________  ________  _______________________________ __________ ____________ __________  _______________________________ ________"
 01010 EOHDR: return 
-01020 ! ______________________________________________________________________
+01020 !
 01030 ENDALL: if slt(wcd)=0 then goto L1080
 01040   if td1yn$="D" then !:
           pr #255,using 'Form POS 52,G 12.2': "  __________"
@@ -157,9 +157,9 @@
 01100   gosub RESTORE_WORK
 01110   fncloseprn
 01120   goto XIT
-01130 ! ______________________________________________________________________
+01130 !
 01140 XIT: fnxit
-01150 ! ______________________________________________________________________
+01150 !
 01160 SUMMARY_MAYBE: ! 
 01170   mat glt=(0)
 01180   read #work,using 'Form POS 1,C 12,3*PD 6.2',key=gl$: gl$,mat glt nokey READ_WORK_NOKEY
@@ -196,7 +196,7 @@
 01450   pr #255: "____________  ____________  ____________  ____________"
 01460   pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': "   Totals",mat t1
 01470   return 
-01480 ! ______________________________________________________________________
+01480 !
 01490 ! <Updateable Region: ERTN>
 01500 ERTN: fnerror(program$,err,line,act$,"xit")
 01510   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -204,4 +204,4 @@
 01530   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01540 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01550 ! /region
-01560 ! ______________________________________________________________________
+01560 !

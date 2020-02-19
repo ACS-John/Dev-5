@@ -1,14 +1,14 @@
 00010 ! Replace S:\acsPR\newjcMrgC
 00020 ! JOB COST MERGE CHARGES
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
-00080 ! ______________________________________________________________________
+00080 !
 00090   fncno(cno)
 00100 ! 
-00110 ! ______________________________________________________________________
+00110 !
 00140   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed 
 00150   open #3: "Name=jccharges."&wsid$,internal,input 
 00160   open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative 
@@ -39,10 +39,10 @@
 00410   close #3: 
 00420   close #5: 
 00430 XIT: fnxit
-00440 ! ______________________________________________________________________
+00440 !
 00450 ERTN: fnerror(program$,err,line,act$,"NO")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00500 ! ______________________________________________________________________
+00500 !

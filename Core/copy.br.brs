@@ -145,7 +145,7 @@ def library fncscopy(&source$,&destination$)
 		gosub COPY_FROM_SERVER_TO_SERVER
 	end if 
 	goto XIT
-	! ______________________________________________________________________
+	!
 	COPY_FROM_CLIENT_TO_SERVER: ! r:
 	open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
 	! pr #20: "open "&RTRM$(SERVERIP$)
@@ -160,13 +160,13 @@ def library fncscopy(&source$,&destination$)
 	close #20: 
 	execute "Sy csCopy"&wsid$&".cmd"
 	return ! /r
-	! ______________________________________________________________________
+	!
 	COPY_FROM_CLIENT_TO_CLIENT: pause 
 	return 
-	! ______________________________________________________________________
+	!
 	COPY_FROM_SERVER_TO_CLIENT: pause 
 	return 
-	! ______________________________________________________________________
+	!
 	COPY_FROM_SERVER_TO_SERVER: pause 
 	return 
 	XIT: ! 

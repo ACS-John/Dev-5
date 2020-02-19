@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsCL\DueBy
 00020 ! pr Report of Invoices Due By Selected Dates
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnLbl,fnTxt,fnTos,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ade$*50
 00080   dim t2(10),d2(10),cap$*128
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Report of Invoices Due By Selected Dates")
 00110   fncno(cno,cnam$)
 00120   cancel=99
@@ -27,9 +27,9 @@
 00270   pr #255,using 'Form POS 1,C 10,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 99,N 10.2': vn$, vnam$,iv$,ivd,dd,ade$(1:18),amt pageoflow NEWPGE
 00280   t1+=amt
 00290   goto READ_INVOICES
-00300 ! ______________________________________________________________________
+00300 !
 00310 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00320 ! ______________________________________________________________________
+00320 !
 00330 TOT1: ! pr DATE TOTAL
 00340   pr #255,using 'Form POS 99,"----------",SKIP 1,POS 76,C 23,N 10.2': "Total Due by "&cnvrt$("PIC(####/##/##)",d2(wd2)),t1 !:
         pr #255: ""
@@ -41,7 +41,7 @@
 00400   pr #255: newpage
 00410   gosub HDR
 00420 L420: goto L230
-00430 ! ______________________________________________________________________
+00430 !
 00440 HDR: f1=1: pg=pg+1
 00450   pr #255,using L460: date$,cnam$
 00460 L460: form pos 1,c 8,pos 20,cc 40,skip 1
@@ -57,7 +57,7 @@
 00560   pr #255: "________  ______________________________  ____________  ________  ________  __________________  ____________"
 00570   f1=1
 00580   return 
-00590 ! ______________________________________________________________________
+00590 !
 00600 END1: if end1=1 then goto L630
 00610   end1=1 : goto TOT1
 00620   t2=0
@@ -70,7 +70,7 @@
 00690   pr #255,using L650: "Total Due by "&cnvrt$("PIC(####/##/##)",d2(d2)),t2
 00700   fncloseprn
 00710 XIT: fnxit
-00720 ! ______________________________________________________________________
+00720 !
 00730 ASK: ! 
 00740   fnTos(sn$="Dueby") !:
         respc=0
@@ -117,7 +117,7 @@
 01050 L1050: next j
 01060 L1060: wd2=1
 01070   return 
-01080 ! ______________________________________________________________________
+01080 !
 01090 ! <Updateable Region: ERTN>
 01100 ERTN: fnerror(program$,err,line,act$,"xit")
 01110   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -125,4 +125,4 @@
 01130   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01150 ! /region
-01160 ! ______________________________________________________________________
+01160 !

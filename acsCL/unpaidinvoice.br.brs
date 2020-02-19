@@ -4,7 +4,7 @@
 02040   library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fnCmdSet,fnrglbig$,fnqglbig
 02060   fntop(program$,cap$="Unpaid Invoice")
 02080   on error goto Ertn
-02120 ! ______________________________________________________________________
+02120 !
 02140   dim cap$*128
 02160   dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
 02180   dim in1$(9),de$*30,ta(2)
@@ -15,9 +15,9 @@
 02280   dim chdr$(16),cmask$(16),item$(16)*21 ! used with flex grid
 02300   dim gldesc$*30,ml$(3)*80
 02320   dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50 ! holdresp$(256)*50,
-02340 ! ______________________________________________________________________
+02340 !
 02360 ! screen_last=5
-02380 ! ______________________________________________________________________
+02380 !
 02400   right=1
 02420   fncno(cno)
 02440   open #20: "Name=Q:\CLmstr\PostDat.h[cno],Shr,Use,RecL=12",internal,outIn,relative 
@@ -163,7 +163,7 @@
 12070   print #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
 12080   print #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 12090   return  ! /r
-12100 ! ______________________________________________________________________
+12100 !
 14000 FINIS: ! r:
 14010   if havejc=1 and lrec(jcbreakdown)>0 then 
 14020     mat ml$(3)=("")
@@ -175,7 +175,7 @@
 14080   end if 
 14090   goto XIT ! /r
 14100 XIT: fnxit
-14110 ! ______________________________________________________________________
+14110 !
 16000 JCBLD: ! r: Open JC Files
 16010   mat chdr3$(6) : mat cmask3$(6) : mat jobitem$(6)
 16020   chdr3$(1)='Refenence'
@@ -201,7 +201,7 @@
 18050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 18060 ! /region
 18070 IGNORE: continue 
-18080 ! ______________________________________________________________________
+18080 !
 21000 CODE_FOR_PAYMENT: ! r:
 21010   lastrec=nextrec=total=0
 21020   displayattop$="True"
@@ -533,7 +533,7 @@
 32100 print #255: " Payee #    Invoice #    Job #    Cat #  Sub-Cat   Amount  Descripton"
 32120 print #255: " _______    _________    _____    _____  _______   ______  __________"
 32140 return  ! /r
-32160 ! ______________________________________________________________________
+32160 !
 33000 PRINT_JOB_COST_ENTRIES: ! r:
 33020 letotal_allocations=0
 33040 gosub HDR2

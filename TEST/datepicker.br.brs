@@ -3,7 +3,7 @@
 	library 'S:\Core\Library': fntop,fnxit, fnTos,fnFra,fnLbl,fnTxt,fnButton,fnCmdKey,fnAcs,fnflexadd1,fnflexinit1,fnChk
 	library 'S:\Core\Library': fngethandle
 	fntop(program$,cap$="Test DatePicker")
-! ______________________________________________________________________
+!
 	dim cap$*128
 	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
 	dim in1$(9),de$*30,ta(2)
@@ -14,7 +14,7 @@
 	dim chdr$(16),cmask$(16),item$(16)*21 ! used with flex grid
 	dim gldesc$*30,ml$(3)*80
 	dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50
-! ______________________________________________________________________
+!
 	open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
 	fnTos(sn$="paidinv")
 	respc=0 : mat resp$=('')

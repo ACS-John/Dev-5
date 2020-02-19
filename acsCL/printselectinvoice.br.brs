@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsCL\PrintSelectInvoice
 00020 ! unpaid invoice file
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnchain,fnerror,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fngethandle
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim cap$*128,cnam$*40,newkey$*20
 00080   dim de$*30,gl(3),t1(5),sc3$(5)*55,up$(4),d(2),nam$*30
-00090 ! ______________________________________________________________________
+00090 !
 00100   fntop(program$,cap$="Print Selected Invoice Listing")
 00110   cancel=99
 00120   fncno(cno,cnam$)
@@ -44,9 +44,9 @@
 00340   gosub BREAKDOWN
 00350   t1+=upa : hvn$=vn$ : t1(2)+=upa
 00360   goto READ_PAYTRANS
-00370 ! ______________________________________________________________________
+00370 !
 00380 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00390 ! ______________________________________________________________________
+00390 !
 00400 HDR: ! 
 00410   pr #255,using 'Form POS 1,C 8,Cc 82': date$,cnam$
 00420   pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg+=1,"Unpaid Invoice File Listing" !:
@@ -55,17 +55,17 @@
 00440   pr #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
 00450   pr #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 00460   return 
-00470 ! ______________________________________________________________________
+00470 !
 00480 DONE: ! 
 00490   close #bankmstr: 
 00500   close #paymstr1: 
 00510   close #paytrans: 
 00520   goto XIT
-00530 ! ______________________________________________________________________
+00530 !
 00540 XIT: fnxit
-00550 ! ______________________________________________________________________
+00550 !
 00560 PGOF: pr #255: newpage : gosub HEADER : continue 
-00570 ! ______________________________________________________________________
+00570 !
 00580 HEADER: ! 
 00590   pr #255,using 'Form POS 1,PIC(ZZ/ZZ/ZZ),CC 107': prd,cnam$
 00600   pr #255,using 'Form POS 1,C 4,N 4,CC 107,SKIP 1,POS 1,C 8': "Page",pg1+=1,"Selected Invoice Listing for Bank "&ltrm$(str$(bankcode)),date$
@@ -73,7 +73,7 @@
 00620   pr #255: " Number   Invoice Numb    Date      Date    Inv. Description       Amount     GL Number    Description                    Amount"
 00630   pr #255: "________  ____________  ________  ________  __________________  ____________  ____________ ______________________________ __________"
 00640   return 
-00650 ! ______________________________________________________________________
+00650 !
 00660 READ_AND_PRINT: ! 
 00670   nam$="" !:
         read #paymstr1,using 'Form POS 9,C 30',key=hvn$,release: nam$ nokey L680
@@ -81,7 +81,7 @@
         pr #255: "" pageoflow PGOF
 00690   t1=0
 00700   return 
-00710 ! ______________________________________________________________________
+00710 !
 00720 EO_PAYTRANS: ! 
 00730   if hvn$<>"" then gosub READ_AND_PRINT
 00740   t1(3)=t1(1)-t1(2): t1(5)=t1(4)+t1(2)
@@ -91,7 +91,7 @@
 00760   fncloseprn
 00770   on fkey 99 ignore 
 00780   goto XIT
-00790 ! ______________________________________________________________________
+00790 !
 00800 BREAKDOWN: ! 
 00810 ! 
 00820   startxx=0
@@ -110,7 +110,7 @@
           pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF !:
           ! only on noRec if startxx=0 (no allocations)
 00920   return 
-00930 ! ______________________________________________________________________
+00930 !
 00940 ! <Updateable Region: ERTN>
 00950 ERTN: fnerror(program$,err,line,act$,"xit")
 00960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -118,4 +118,4 @@
 00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00990 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01000 ! /region
-01010 ! ______________________________________________________________________
+01010 !

@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsPR\jcStWkSh
 00020 ! pr Job Status Worksheet
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fnoldmsgbox, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnconsole
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,response$(5)*1
 00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20,message$*40
 00090   dim msgline$(2)*60
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop("S:\acsPR\jcStWkSh",cap$="Job Status Worksheet")
 00120   fncno(cno) !:
         fndat(dat$)
@@ -16,7 +16,7 @@
 00140   prtjob$="N" : perpag$="N"
 00150   open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
 00160   open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
-00170 ! ______________________________________________________________________
+00170 !
 00180   if fnprocess=1 then goto L590 ! goto "asdf"
 00190   pr newpage
 00200   fnopenwin(win=101,09,14,15,65,cap$)
@@ -46,12 +46,12 @@
 00440 L440: if perpag$<>"Y" and perpag$<>"N" then goto L450 else goto L480
 00450 L450: ce=3
 00460   goto CONV1
-00470 ! ______________________________________________________________________
+00470 !
 00480 L480: fndat(dat$,2)
 00490   form pos 63,c 20
 00500   if prtjob$="N" then goto L590 ! "asdf"
 00510   if fnprocess=1 then goto L580
-00520 ! ______________________________________________________________________
+00520 !
 00530   pr newpage
 00540   msgline$(1)="Do you wish to skip all"
 00550   msgline$(2)="completed Jobs? (Y/N)"
@@ -71,7 +71,7 @@
 00690   next j
 00700   goto L730
 00710 L710: j=j-1
-00720 ! ______________________________________________________________________
+00720 !
 00730 L730: pr newpage
 00740   on fkey 5 goto DONE
 00750   fnwait(message$,1)
@@ -93,12 +93,12 @@
 00900   gosub L1170
 00910   cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
 00920   goto L870
-00930 ! ______________________________________________________________________
+00930 !
 00940 DONE: close #1: 
 00950   close #2: 
 00960   fncloseprn
 00970   goto XIT
-00980 ! ______________________________________________________________________
+00980 !
 00990 HDR: ! 
 01000   pr #255,using L1010: "Job Status Worksheet",dat$
 01010 L1010: form pos 56,c 20,skip 1,pos 1,cc 132,skip 2
@@ -107,7 +107,7 @@
 01040   pr #255,using L1050: "Number","Number","Complete Complete   Complete"
 01050 L1050: form pos 1,c 6,pos 48,c 6,pos 87,c 28,skip 2
 01060   return 
-01070 ! ______________________________________________________________________
+01070 !
 01080 L1080: if fst=1 then goto L1090 else goto L1120
 01090 L1090: if perpag$="N" then goto L1130
 01100   pr #255: newpage
@@ -116,7 +116,7 @@
 01130 L1130: pr #255,using L1140: jn$,n$
 01140 L1140: form pos 1,c 6,pos 8,c 40,skip jbskip
 01150   return 
-01160 ! ______________________________________________________________________
+01160 !
 01170 L1170: pr #255,using L1210: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L1190
 01180   goto L1220
 01190 L1190: pr #255: newpage
@@ -128,9 +128,9 @@
 01250 L1250: pr #255: newpage
 01260   gosub HDR
 01270 L1270: return 
-01280 ! ______________________________________________________________________
+01280 !
 01290 XIT: fnxit
-01300 ! ______________________________________________________________________
+01300 !
 01310 ! <Updateable Region: ERTN>
 01320 ERTN: fnerror(program$,err,line,act$,"xit")
 01330   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -138,4 +138,4 @@
 01350   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01360 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01370 ! /region
-01380 ! ______________________________________________________________________
+01380 !

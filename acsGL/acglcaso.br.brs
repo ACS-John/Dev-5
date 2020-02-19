@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsGL\acglCasO
 00020 ! Cash Flow with YTD Budget Comparison
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim bm(13),bp(13),by(13)
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),fl1$*256,cap$*128
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-00100 ! ______________________________________________________________________
+00100 !
 00110   fntop(program$,cap$="Cash Flow with YTD Budget Comparison")
 00120   report$=cap$
 00125   actpd$=fnactpd$ !:
@@ -49,13 +49,13 @@
 00400   if te$="S" or te$="F" then goto L420
 00410   if heading=0 and te$><"R" then gosub L1890
 00420 L420: on pos ("RFHDTSBC",te$,1) goto L1330,L1380,L440,L500,L1170,L1330,L500,L2070 none L350
-00430 ! ______________________________________________________________________
+00430 !
 00440 L440: pr #255,using L450: d$(1:40)
 00450 L450: form pos sp,c 40
 00460   gosub L1590
 00470   gosub L1470
 00480   goto L350
-00490 ! ______________________________________________________________________
+00490 !
 00500 L500: if te$="B" and ap>0 then goto L1170 ! ENDING BANK BALANCE
 00510   if notrans=1 then goto L780
 00520   if ir>=val(r$) and val(r$)><0 then goto L630
@@ -80,10 +80,10 @@
 00680   if fscode=0 then goto L690 else goto L720
 00690 L690: for j=1 to fnactpd : ytdb+=bm(j) : next j
 00700   goto READ_3
-00710 ! ______________________________________________________________________
+00710 !
 00720 L720: for j=1 to fscode : ytdb+=bm(j) : next j
 00730   goto READ_3
-00740 ! ______________________________________________________________________
+00740 !
 00750 L750: if ir<val(r$) then goto READ_3
 00760   if ir>val(r$) then goto L780
 00770 L770: notrans=1
@@ -125,7 +125,7 @@
 01130   gosub L1770
 01140   gosub L1590
 01150   goto L350
-01160 ! ______________________________________________________________________
+01160 !
 01170 L1170: if ap=0 then ap=1
 01180   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01190   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
@@ -146,16 +146,16 @@
 01340   if te$="S" then secondr$=d$
 01350   gosub L1590
 01360   goto L350
-01370 ! ______________________________________________________________________
+01370 !
 01380 L1380: if foot1=1 then goto L1440
 01390   tabnote=sp
 01400   foot1=1
 01410   foot$=d$
 01420   goto L350
-01430 ! ______________________________________________________________________
+01430 !
 01440 L1440: foot$=rtrm$(foot$)&d$
 01450   goto L350
-01460 ! ______________________________________________________________________
+01460 !
 01470 L1470: for j=1 to 9
 01480     if ac(j)=0 or ac(j)=9 then goto L1560
 01490     accum(j,1)=0
@@ -167,13 +167,13 @@
 01550     accum(j,7)=0
 01560 L1560: next j
 01570   return 
-01580 ! ______________________________________________________________________
+01580 !
 01590 L1590: if ls=0 then goto L1740
 01600   if ls=99 then goto L1650
 01610   pr #255,using L1620: " "
 01620 L1620: form pos 1,c 1,skip ls
 01630   goto L1740
-01640 ! ______________________________________________________________________
+01640 !
 01650 L1650: fnpglen(pglen)
 01660 ! If PGLEN<>42 Then pGLEN=58
 01670   sk=pglen-krec(255): fl=len(rtrm$(foot$))
@@ -184,20 +184,20 @@
 01720   pr #255: newpage
 01730   gosub L1890
 01740 L1740: return 
-01750 ! ______________________________________________________________________
+01750 !
 01760 L1760: gosub L1650: continue 
 01770 L1770: if ul=0 then goto L1860
 01780   if ul=1 then goto L1830
 01790   underlin$="=============="
 01800   pr #255: ""
 01810   goto L1840
-01820 ! ______________________________________________________________________
+01820 !
 01830 L1830: underlin$="______________"
 01840 L1840: pr #255,using L1850: underlin$,underlin$,underlin$
 01850 L1850: form skip redir,pos 37,3*c 15,skip redir
 01860 L1860: if redir=0 then pr #255: ""
 01870   return 
-01880 ! ______________________________________________________________________
+01880 !
 01890 L1890: heading=1
 01900   pt1+=1
 01910   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
@@ -209,14 +209,14 @@
 01970   pr #255: tab(44);"Year To";tab(60);"Annual";tab(71);"Over/Under"
 01980   pr #255: tab(45);"Date";tab(60);"Budget";tab(73);"Budget"
 01990   return 
-02000 ! ______________________________________________________________________
+02000 !
 02010 DONE: eofcode=1
 02020   gosub L1650
 02022   fnfscode(actpd)
 02023   fnpriorcd(1)
 02030   fncloseprn
 02040   goto XIT
-02050 ! ______________________________________________________________________
+02050 !
 02060   fnTos(sn$="ACglchgs2") !:
         mylen=30: mypos=mylen+3 : right=1
 02070 L2070: fnLbl(1,10,d$)
@@ -234,7 +234,7 @@
 02170   annualb=val(resp$(2))
 02180   return 
 02190 XIT: fnxit
-02200 ! ______________________________________________________________________
+02200 !
 02210 ! <Updateable Region: ERTN>
 02220 ERTN: fnerror(program$,err,line,act$,"xit")
 02230   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -242,4 +242,4 @@
 02250   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02260 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02270 ! /region
-02280 ! ______________________________________________________________________
+02280 !

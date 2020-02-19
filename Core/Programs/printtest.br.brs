@@ -26,10 +26,10 @@
 00190   for j=1 to val(resp$(2)) : pr #255: ln$ : next j
 00200   fncloseprn
 00210   goto XIT
-00220 ! ______________________________________________________________________
+00220 !
 00230 XIT: ! 
 00240   fnxit
-00250 ! ______________________________________________________________________
+00250 !
 00260 ! <Updateable Region: ERTN>
 00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
@@ -37,4 +37,4 @@
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00310 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00320 ! /region
-00330 ! ______________________________________________________________________
+00330 !

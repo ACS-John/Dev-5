@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsCL\DptMstr
 00020 ! ??? department
-00030 ! ______________________________________________________________________
+00030 !
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnfree
 00050   on error goto Ertn
-00060 ! ______________________________________________________________________
+00060 !
 00070   dim hd$(2)*60,cnam$*40,dat$*20,ots$(5),ins$(22),ink$(22)*42
 00080   dim pdate$(2)*20,de$*50,sm1$(6)*37,sf1$(6),d(2)
 00090   dim d$*30,key$*9,nkey$*9,flo$(4),fli$(3),scr$(3)
-00100 ! ______________________________________________________________________
+00100 !
 00110   fncno(cno,cnam$)
 00120   fndat(dat$)
 00130 ! 
@@ -210,14 +210,14 @@
 02030   ti=3: goto L990
 02040 L2040: if cmdkey=5 or eof1=1 then goto MENU1
 02050   goto L1820
-02060 ! ______________________________________________________________________
+02060 !
 02070 L2070: close #1: ioerr L2080
 02080 L2080: execute "Copy [Q]\CLmstr\DPTMSTR.h[cno] "&env$('Temp')&"\WORK -D -n"
 02090   fnFree("[Q]\CLmstr\DPTMSTR.h[cno]")
 02100   execute "RENAME "&env$('Temp')&"\WORK [Q]\CLmstr\DPTMSTR.h[cno] -n"
 02110   execute "Index [Q]\CLmstr\DPTMSTR.h[cno]"&' '&"[Q]\CLmstr\DPTIDX1.h[cno] 1 5 Replace DupKeys -n"
 02120   goto L240
-02130 ! ______________________________________________________________________
+02130 !
 02140 ! <Updateable Region: ERTN>
 02150 ERTN: fnerror(program$,err,line,act$,"xit")
 02160   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
@@ -225,6 +225,6 @@
 02180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02190 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02200 ! /region
-02210 ! ______________________________________________________________________
+02210 !
 02220 XIT: fnxit
-02230 ! ______________________________________________________________________
+02230 !
