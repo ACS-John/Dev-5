@@ -28,9 +28,9 @@ MENU1B: ! r:
 			totalacct+=val(x$) conv ignore
 			dim m1_item$(20)*80
 			m1_item$(1)=str$(rec(hTransUnposted)) ! record
-			m1_item$(2)=x$                     ! account
-			m1_item$(3)=str$(transAmount)               ! amount
-			m1_item$(4)=str$(transDate)               ! date
+			m1_item$(2)=x$                        ! account
+			m1_item$(3)=str$(transAmount)         ! amount
+			m1_item$(4)=str$(transDate)           ! date
 			m1_item$(5)=fn_collType$(transType)
 			! if env$('acsDeveloper')<>'' then m1_item$(5)=m1_item$(5)&' ('&str$(transType)&')'
 			m1_item$(6)=rcpt$ ! str$(postingCodeUnused)            ! 
