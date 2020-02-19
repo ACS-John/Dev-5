@@ -23,14 +23,10 @@ for fileItem=1 to fileNameCount
 	open #h_in:=fngethandle: 'Name='&env$('at')&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
-	! gnl_buffer$='' ! fn_getNextLine_reset
-	! open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	if fileItem=1 then
 		open #h_out:=fngethandle: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
-		! pr #255,using FORM_PRN_HEAD: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
 		open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 		fnopenprn
-		! pr #255: filename$(fileItem)
 		FORM_PRN: form pos 1,c 8,x 1,c 18,x 1,n 10.2,n 10,n 10,x 1,c 15,n 7.2,n 8.2
 	else
 		pr #255: ''
@@ -38,10 +34,10 @@ for fileItem=1 to fileNameCount
 	pr #255: '_________________________________________________________________________________________'
 	pr #255: empName$(fileItem)&' - '&filename$(fileItem)
 	pr #255: ''
-	pr #255,using FORM_PRN_HEAD: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
-	FORM_PRN_HEAD: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
-	FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
-	FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
+	pr #255,using Form_PrnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
+	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
+	Form_PrnLine: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
+	F_Support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*512
 
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
@@ -180,13 +176,13 @@ def fn_writeOutAcs(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sag
 		pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
 		!   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 	end if
-	write #h_out,using FORM_OUT: mat inp,0,1,wo_month,sc,'',0,wo_desc$
+	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month,sc,'',0,wo_desc$
 	! if expense<>0 then
 	! 	inp(3)=1
 	! 	inp(4)=expense
 	! 	sc=601
 	! 	wo_month=19
-	! 	write #h_out,using FORM_OUT: mat inp,0,1,wo_month,sc,'',0,'Expenses'
+	! 	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month,sc,'',0,'Expenses'
 	! end if
 fnend  ! fn_writeOutAcs
 def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
@@ -428,12 +424,12 @@ def fn_onsupport(wo_client,wo_month,the_date)
 	os_return=0
 	! try lpad first
 	spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
-	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
+	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
 
 	OS_TRY_RPAD: !
 	spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
-	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
+	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
 
 	OS_FOUND_REC: !

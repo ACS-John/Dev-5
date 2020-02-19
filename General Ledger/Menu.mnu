@@ -1,7 +1,6 @@
 ! *** GL - General Ledger ***
 File
 >Accounts (General Ledger Master)                   ^ General Ledger\Accounts
->>Duplicate Range of Accounts                       ^ acsGL\BldRange
 >Financial Statement Design                         ^ General Ledger\*
 >Payee                                              ^ General Ledger\*
 >>Payee Transaction List                            ^ acsGL\VendorTransList
@@ -79,6 +78,7 @@ Error Recovery
 >Fix Current Balance                              ^ General Ledger\*
 >Fix Period Accumulators from History             ^ General Ledger\*
 Utilities
+>Duplicate Range of Accounts                       ^ acsGL\BldRange
 >Consolidate Master Files                         ^ acsGL\COMBGL
 >Create ASCII File                                ^ acsGL\ASCIIGLM
 >Create Checkbook System Files                    ^ acsGL\CLBLD
