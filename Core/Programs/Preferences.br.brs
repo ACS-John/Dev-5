@@ -182,17 +182,16 @@ DO_SCREEN_THEME: ! r:
 		fnLbl(lc+=1,1,"*** Colors ***",win_width,2) : rc_color=rc_color_zero=3
 		fnLbl(lc+=1,col2_pos,"Foreground",10,2)
 		fnLbl(lc,col3_pos,"Background",10,2)
+		fnButton(lc   ,col3_pos+20,'Light Defaults',ck_lightMode:=1201)
+		fnButton(lc   ,col3_pos+40,'Dark Defaults' ,ck_darkMode:=1202)
 
-		fn_do_screen_theme_add_theme('Screen','#000000','#E7EDF5')
-		fnLbl(lc,col3_pos+12,'Base for all settings, including buttons that are not cancel nor default')
-		fn_do_screen_theme_add_theme('ScreenHeader','#000000','#FFFFFF')
-		fn_do_screen_theme_add_theme('TextBoxes','#000000','#FFFFFF')
-		fn_do_screen_theme_add_theme('Labels','#000000','#B0C4DE')
-		fn_do_screen_theme_add_theme('Buttons','#000000','#74DF00')
-		fnLbl(lc,col3_pos+12,'Default Button')
-		fn_do_screen_theme_add_theme('ButtonCancel','#000000','#CD5C5C')
-		fnLbl(lc,col3_pos+12,'Cancel Button')
-		fn_do_screen_theme_add_theme('GridHeaders','#000000','#FFFFFF')
+		fn_do_screen_theme_add_theme('Screen'      ,colorDefaultForeground$(1),colorDefaultBackground$(1))  :  fnLbl(lc,col3_pos+12,'Base for all settings, including buttons that are not cancel nor default')
+		fn_do_screen_theme_add_theme('ScreenHeader',colorDefaultForeground$(2),colorDefaultBackground$(2))
+		fn_do_screen_theme_add_theme('TextBoxes'   ,colorDefaultForeground$(3),colorDefaultBackground$(3))
+		fn_do_screen_theme_add_theme('Labels'      ,colorDefaultForeground$(4),colorDefaultBackground$(4))
+		fn_do_screen_theme_add_theme('Buttons'     ,colorDefaultForeground$(5),colorDefaultBackground$(5))  :  fnLbl(lc,col3_pos+12,'Default Button')
+		fn_do_screen_theme_add_theme('ButtonCancel',colorDefaultForeground$(6),colorDefaultBackground$(6))  :  fnLbl(lc,col3_pos+12,'Cancel Button')
+		fn_do_screen_theme_add_theme('GridHeaders' ,colorDefaultForeground$(7),colorDefaultBackground$(7))
 		
 		
 		fnCmdKey("&Save",1,1)
@@ -202,10 +201,31 @@ DO_SCREEN_THEME: ! r:
 		if ck=5 then 
 			goto XIT
 		else 
+			modeShift=0
+			if ck=ck_lightMode then
+				fn_set_color_defaults(0)
+				modeShift=1
+				ck=2
+			else if ck=ck_darkMode then
+				fn_set_color_defaults(1)
+				modeShift=1
+				ck=2
+			end if
 			background_picture$=resp$(resp_background_picture)
 			min_fontsize_height$=resp$(resp_min_fontsize_height) : if min_fontsize_height$='' then min_fontsize_height$=default_min_fontsize_height$
 			min_fontsize_width$=resp$(resp_min_fontsize_width) : if min_fontsize_width$='' then min_fontsize_width$=default_min_fontsize_width$
 			rc_color=rc_color_zero
+			if modeShift then
+				rc_tmp=rc_color_zero
+				resp$(rc_tmp+=1)=colorDefaultForeground$(1) : resp$(rc_tmp+=1)=colorDefaultBackground$(1)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(2) : resp$(rc_tmp+=1)=colorDefaultBackground$(2)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(3) : resp$(rc_tmp+=1)=colorDefaultBackground$(3)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(4) : resp$(rc_tmp+=1)=colorDefaultBackground$(4)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(5) : resp$(rc_tmp+=1)=colorDefaultBackground$(5)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(6) : resp$(rc_tmp+=1)=colorDefaultBackground$(6)
+				resp$(rc_tmp+=1)=colorDefaultForeground$(7) : resp$(rc_tmp+=1)=colorDefaultBackground$(7)
+				ck=2
+			end if
 			fnureg_write('color.[screen].foreground',resp$(rc_color+=1))
 			fnureg_write('color.[screen].background',resp$(rc_color+=1))
 			fnureg_write('color.[screenheader].foreground',resp$(rc_color+=1))
@@ -221,7 +241,6 @@ DO_SCREEN_THEME: ! r:
 			fnureg_write('color.[gridheaders].foreground',resp$(rc_color+=1))
 			fnureg_write('color.[gridheaders].background',resp$(rc_color+=1))
 		end if 
-		
 		! 
 		if ck=>screen_ck_low and ck<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
@@ -239,10 +258,29 @@ def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_defau
 	lc+=1
 	fnLbl(lc+=1,1,attribute$&":",col1_width,1)
 	fnTxt(lc,col2_pos,10,7,0,'',0,attribute$&' Foreground: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
-	fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=foreground_default$
+	fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1),foreground_default$,1) ! if resp$(rc_color)='' then resp$(rc_color)=foreground_default$
 	fnTxt(lc,col3_pos,10,7,0,'',0,attribute$&' Background: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
-	fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=background_default$
+	fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1),background_default$,1) ! if resp$(rc_color)='' then resp$(rc_color)=background_default$
 fnend 
+def fn_set_color_defaults(darkMode)
+	if darkMode then
+		colorDefaultForeground$(1)='#FFFFFF' : colorDefaultBackground$(1)='#283033' ! 'Screen'      
+		colorDefaultForeground$(2)='#FFFFFF' : colorDefaultBackground$(2)='#283033' ! 'ScreenHeader'
+		colorDefaultForeground$(3)='#FFFFFF' : colorDefaultBackground$(3)='#283033' ! 'TextBoxes'   
+		colorDefaultForeground$(4)='#FFFFFF' : colorDefaultBackground$(4)='#283033' ! 'Labels'      
+		colorDefaultForeground$(5)='#4eba52' : colorDefaultBackground$(5)='#283033' ! 'Buttons'     
+		colorDefaultForeground$(6)='#ff4760' : colorDefaultBackground$(6)='#283033' ! 'ButtonCancel'
+		colorDefaultForeground$(7)='#FFFFFF' : colorDefaultBackground$(7)='#283033' ! 'GridHeaders' 
+	else
+		colorDefaultForeground$(1)='#000000' : colorDefaultBackground$(1)='#E7EDF5' ! 'Screen'      
+		colorDefaultForeground$(2)='#000000' : colorDefaultBackground$(2)='#FFFFFF' ! 'ScreenHeader'
+		colorDefaultForeground$(3)='#000000' : colorDefaultBackground$(3)='#FFFFFF' ! 'TextBoxes'   
+		colorDefaultForeground$(4)='#000000' : colorDefaultBackground$(4)='#B0C4DE' ! 'Labels'      
+		colorDefaultForeground$(5)='#000000' : colorDefaultBackground$(5)='#74DF00' ! 'Buttons'     
+		colorDefaultForeground$(6)='#000000' : colorDefaultBackground$(6)='#CD5C5C' ! 'ButtonCancel'
+		colorDefaultForeground$(7)='#000000' : colorDefaultBackground$(7)='#FFFFFF' ! 'GridHeaders' 
+	end if
+fnend
 DO_SCREEN_PRINTER: ! r:
 	do 
 		fnTos

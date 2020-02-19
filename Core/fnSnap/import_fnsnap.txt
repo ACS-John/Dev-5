@@ -3,7 +3,7 @@ follow these instructions.
 
 rename *.dll *_dll.br
 
-load vol002\fnsnap_dll.br
-subproc vol002\acs_clean_fnsnap.prc
-replace vol002\fnsnap_dll.br
-list >vol002\fnsnap_dll.br.brs
+load Core\fnSnap\fnsnap_dll.br
+subproc Core\fnSnap\acs_clean_fnsnap.prc
+replace Core\fnSnap\fnsnap_dll.br
+list >Core\fnSnap\fnsnap_dll.br.brs
