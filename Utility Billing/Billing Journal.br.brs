@@ -115,7 +115,7 @@ if prtusage$='T'                                       then hd2$=hd2$&' {\ul Met
 fnopenprn
 gosub PrHeader
 if prtbkno<>0 and seq=1 then 
-	prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(1))
+	prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(hcustomer))
 	startcd=1
 	restore #hCustomer,key>=prtbkno$: nokey MAIN
 end if
@@ -205,8 +205,7 @@ PrRouteTotal: ! r:
 	mat tx=(0)
 return  ! /r
 EoCustomer: ! r:
-	close #hCustomer: ioerr ignore
-	close #hRate : ioerr ignore
+! close #hCustomer: ioerr ignore
 	if sum(tx) or sum(gx) then
 		if seq<>1 then 
 			pr #255: ''
@@ -225,6 +224,7 @@ EoCustomer: ! r:
 	end if
 	gosub PrTotalsByCode
 	close #hCustomer: ioerr ignore
+	close #hRate : ioerr ignore
 	fncloseprn
 goto Xit ! /r
 Xit: fnxit
