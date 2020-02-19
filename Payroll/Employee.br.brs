@@ -95,6 +95,17 @@ AddEmployee: ! r:
 	rtn=0
 	acc=0
 	acn$=''
+	w4Step2        =0
+	w4Step3        =0
+	w4Step4a       =0
+	w4Step4b       =0
+	w4Step4c       =0
+	disableStTax=0
+	disableFedTax=0
+	W4Year=2020
+	
+	
+	
 goto ScrEmployee ! /r
 EditEmployee: ! r:
 	if ent=0 then goto AskEmployee

@@ -47,7 +47,7 @@
 		io1$(44+j)=str$(j+9)&",78,N 2,UE,N"
 	next j
 	for j=1 to 4
-		fl1$(j)=str$(j+3)&",8,c 20"
+		fl1$(j)=str$(j+3)&",8,c 20,N"
 		ot2$(j)=str$(j+3)&",25,n 10.2,ut,n"
 		fl2$(j)=fl1$(j)
 	next j
@@ -66,7 +66,7 @@ REGULAR_ENTRY: ! r:
 	open #3: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,input,keyed
 	fnopenprn
 	L910: !
-	scrid$(1)="Time Management Input Of Invoices"
+	scrid$(1)="Time Management Input of Invoices"
 	scrid$(2)="Enter CLIENT # as 0 when completed."
 	scrid$(3)="-Code- ---------Invoice Descriptions-------------------------  --Amount-- CT SC"
 	scrid$(4)="  Press F1 when completed with this screen"
