@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                            
+4:58 PM 2/20/2020	UB	Billing Journal improvments to totals section and current billing date now prcoesses like historical dates
 15:23 02/20/2020	CO	5.74274  
 3:22 PM 2/19/2020	PR	Fixed: Employee Add - if run multiple times without returning to menu new fields were being remembered from the previous add.   
 11:03 AM 2/19/2020	GL	Duplicate Range of Accounts moved down the menu under Utilities 
