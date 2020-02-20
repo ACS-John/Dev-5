@@ -300,23 +300,23 @@ PrTotalsByCode: ! r: pr TOTALS BY CODE
 	pr #255: '{\ul Service             }  {\ul Code}  {\ul Description                             }  {\ul Billed}  {\ul     Amount}  {\ul     Tax Base}  {\ul          Usage}'
 	for j1=1 to 9
 		for j2=1 to 200
-			if t1(j1,j2,1)=0 and t1(j1,j2,3)=0 then goto L1960
-			if j2>99 then goto PrCol2 ! no codes >99
-			dim de$*40
-			de$=fn_rateName$(st$(j1)(1:2)&cnvrt$('N 2',j2))
-			if env$('client')='Carrizo' and j1=3 then goto PrCol2
-			if j1>4 then goto PrCol2
-			
-			PrCol1: !
-			pr #255,using Fpc1: serviceName$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-			Fpc1: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,x 14,pic(----,---,---,---)
-			goto L1960
-			
-			PrCol2: ! 
-			pr #255,using Fpc2:          st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-			Fpc2: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,     pic(---,---,---.--)
-			
-			L1960: ! 
+			if t1(j1,j2,1) or t1(j1,j2,3)=0 then 
+				dim de$*40
+				de$=''
+				if j2<=99 then
+					de$=fn_rateName$(st$(j1)(1:2)&cnvrt$('N 2',j2))
+				end if
+				if j2>99 or j1>4 or (env$('client')='Carrizo' and j1=3) then 
+					goto PrCol2
+					PrCol2: ! 
+					pr #255,using Fpc2: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+					Fpc2: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,pic(---,---,---.--)
+				else
+					PrCol1: !
+					pr #255,using Fpc1: serviceName$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+					Fpc1: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,x 14,pic(----,---,---,---)
+				end if
+			end if
 		next j2
 	next j1
 	for j=1 to 10
