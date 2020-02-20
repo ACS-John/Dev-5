@@ -300,7 +300,7 @@ PrTotalsByCode: ! r: pr TOTALS BY CODE
 	pr #255: '{\ul Service             }  {\ul Code}  {\ul Description                             }  {\ul Billed}  {\ul     Amount}  {\ul     Tax Base}  {\ul          Usage}'
 	for j1=1 to 9
 		for j2=1 to 200
-			if t1(j1,j2,1) or t1(j1,j2,3)=0 then 
+			if t1(j1,j2,1) or t1(j1,j2,3) then 
 				dim de$*40
 				de$=''
 				if j2<=99 then
