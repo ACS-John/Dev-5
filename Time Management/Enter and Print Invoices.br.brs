@@ -89,22 +89,23 @@ REGULAR_ENTRY: ! r:
 	pr f "1,72,C 8,R,N": date$
 	pr f "2,72,C 8,R,N": time$
 	pr f io1$(2): 2
-	L1150: !
-	input fields mat io1$,attr "R": mat xinp,invoiceNumber$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
-	cp1=currow
-	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
-	if cmdkey>0 then goto L1260 else ce=curfld
-	goto L1260
-	L1200: !
-	ce=ce+1
-	if ce>udim(io1$) then ce=1
-	CT1: !
-	io1$(ce)=rtrm$(uprc$(io1$(ce)))
-	ce1=pos(io1$(ce),"U",9)
-	if ce1=0 then goto L1200
-	ce2=ce1+1
-	io1$(ce)(ce1:ce1)="UC"
-	goto L1150
+	do
+		input fields mat io1$,attr "R": mat xinp,invoiceNumber$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
+		cp1=currow
+		if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
+		if cmdkey>0 then goto L1260 else ce=curfld
+		goto L1260
+		L1200: !
+		do
+			ce+=1
+			if ce>udim(io1$) then ce=1
+			CT1: !
+			io1$(ce)=rtrm$(uprc$(io1$(ce)))
+			ce1=pos(io1$(ce),"U",9)
+		loop while ce1=0
+		ce2=ce1+1
+		io1$(ce)(ce1:ce1)="UC"
+	loop
 	CONV1: !
 	if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
@@ -163,7 +164,7 @@ REGULAR_ENTRY: ! r:
 	read #3,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,da,gl$(de) nokey ERR1
 	pr f io1$(ce+10): des$
 	pr f io1$(ce+20): da
-	if cmdkey <> 6 then ce=ce+20
+	if cmdkey<>6 then ce+=20
 	goto CT1
 	L1700: !
 	ce=ce+10 : goto CT1
@@ -181,7 +182,7 @@ REGULAR_ENTRY: ! r:
 	if chg=2 then goto L1900
 	rw=lrec(hTmpInvoice)+1
 	write #hTmpInvoice,using F_TMWK2: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
-	iv1=val(invoiceNumber$) ! conv L1850  <--- removed conv on 5/11/18 - want it to error - why isn't my invoice number getting updated after printing invoices
+	iv1=val(invoiceNumber$)
 	fncreg_write('Last Invoice Number',iv1$)
 	L1850: !
 	if x9=0 then goto L950
