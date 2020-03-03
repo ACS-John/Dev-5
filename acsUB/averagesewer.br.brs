@@ -7,10 +7,10 @@
 00090   on fkey 5 goto DONE
 00100   fnTos(sn$="sewerusage")
 00110   fnLbl(1,5,"Show Customers who have sewer usage")
-00120   fnLbl(2,1,"Less than:",20,1)
+00120   fnLbl(2,1,"Greater than:",20,1)
 00130   fnTxt(2,23,9,0,right,"30",0,"Enter the minimum usage you want cosidered in your report. (Blank for all)",0 ) !:
         resp$(2)=""
-00140   fnLbl(3,1,"Greater than:",20,1)
+00140   fnLbl(3,1,"Less than:",20,1)
 00150   fnTxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your report (Blank for all).",0 ) !:
         resp$(3)=""
 00160   fnCmdSet(2)
