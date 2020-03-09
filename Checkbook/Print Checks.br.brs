@@ -135,7 +135,7 @@ UPDATEINVOICE: ! r:
 		end if 
 	end if  ! ~allign
 SCR_CKPRT7: ! 
-	fnTos(sn$="ckprt-7")
+	fnTos
 	respc=0
 	fnLbl(1,1,"",40,0)
 	fnLbl(1,1,"Print Options:",38,0)
@@ -201,7 +201,7 @@ EOF_ROUTINE: ! r:
 	goto MENU3
 ! /r
 MENU3: ! r: (reprint or transfer to history)
-	fnTos(sn$="ckprt-4")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Reprint Options:",38)
 	item5$(1)="Reprint Checks"
@@ -214,7 +214,7 @@ MENU3: ! r: (reprint or transfer to history)
 	on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
 ! /r
 MENU4: ! r: (Reprint Options)
-	fnTos(sn$="ckprt-reprint")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Reprint Options:",38)
 	item4$(1)="Reprint all checks"
@@ -331,7 +331,7 @@ L5460: !
 ! /r
 include: ertn
 REPRINT_CHECKS: ! r:
-	fnTos(sn$="reprintnumber")
+	fnTos
 	respc=0
 	fnLbl(1,1,"First Check Number to Reprint:",38,1)
 	fnTxt(1,40,8,0,1,"30",0,"")
@@ -425,7 +425,7 @@ def fn_get_coinfo
 	EO_PAYTRANS_1: ! 
 fnend 
 def fn_scr_check_entry
-	fnTos(sn$="ckprt-3")
+	fnTos
 	respc=0
 	fnFra(1,1,6,87,"Check"," ")
 	fnLbl(1,1,env$('cnam'),40,2,0,1)
@@ -750,7 +750,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 	read #trmstr1,using 'Form POS 4,C 8,G 6,pd 10.2,C 8,C 35',key=dk$: dtr$(1),dtr$(2),dtr3,dtr$(4),dtr$(5) nokey CKNUM_XIT
 	dtr$(3)=str$(dtr3)
 	SCR_CKPRT6: ! 
-	fnTos(sn$="ckprt-6")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Check number "&str$(ckn)&" has been previously used.",45,1)
 	fnLbl(2,10," Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),45,0)
@@ -1261,7 +1261,7 @@ def fn_scr_main_questions(;___,ck)
 		fncreg_read('Check Layout Option',layoutOptionSelected$, layoutOption$(1))
 	end if
 	ck=0
-	fnTos(sn$="ckprt1a")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Method of Printing checks:",38,1)
 	fnOpt(1,40,"Enter and pr Checks",0)
