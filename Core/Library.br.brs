@@ -960,6 +960,14 @@ fnend
 		fnmcreg_write=fnmcreg_write(reg_field_name$,reg_field_value$)
 	fnend
 ! /r
+! r: File stuff - whole file processes
+
+def library fnRemoveExcessCRLF$*256(csvFile$*256; minColCount)
+	library 'S:\Core\fn\removeExcessCRLF.br': fnRemoveExcessCRLF$
+	fnRemoveExcessCRLF$=fnRemoveExcessCRLF$(csvFile$, minColCount)
+fnend
+
+! /r
 ! r: Array stuff
 	def library fnSetForCombo$*256(mat option$,key$; kpos,klen)
 		library 'S:\Core\Array.br': fnSetForCombo$
@@ -1063,6 +1071,12 @@ fnend
 def library fnDateSelect$ (;_date$,format$,row,column)
 	library 'S:\Core\Date.br': fnDateSelect$
 	fnDateSelect$=fnDateSelect$ ( _date$,format$,row,column)
+fnend
+
+
+def library fnFirstMondayOfMonth(; day)
+	library 'S:\Core\Date.br': fnFirstMondayOfMonth
+	fnFirstMondayOfMonth=fnFirstMondayOfMonth( day)
 fnend
 def library fnEndOfMonth(day)
 	library 'S:\Core\Date.br': fnEndOfMonth

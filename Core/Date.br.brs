@@ -1,6 +1,7 @@
 ! r: test zone
-library program$: fnDateSelect$
-pr 'fnDateSelect$ returns "'&fnDateSelect$&'"'
+library program$: fnDateSelect$,fnFirstMondayOfMonth
+pr 'fnFirstMondayOfMonth returns: '&date$(fnFirstMondayOfMonth,'mm/dd/ccyy')
+! pr 'fnDateSelect$ returns "'&fnDateSelect$&'"'
 end
 ! /r
 
@@ -152,6 +153,18 @@ def library fnEndOfMonth(day; ___,returnN,eomYear,eomMonth,eomFirstOfNextMonth$)
 	eomFirstOfNextMonth$=cnvrt$('pic(####)',eomYear)&'/'&cnvrt$('pic(##)',eomMonth)&'/01'
 	returnN=days(eomFirstOfNextMonth$,'ccyy/mm/dd')-1
 	fnEndOfMonth=returnN
+fnend
+def library fnFirstMondayOfMonth(;_day, ___,checkDay,returnN)
+	if _day=0 then _day=days(date$)
+	checkDay=days(date$(_day,'mm')&'01'&date$(_day,'ccyy'),'mmddccyy')
+	do 
+		if mod(checkDay,7)=1 then
+			returnN=checkDay
+		else 
+			checkDay+=1
+		end if
+	loop until returnN
+	fnFirstMondayOfMonth=returnN
 fnend
 def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
 	! (previously fn2000)   converts mmddyy (of x) to ccyymmdd and returns it as the value of fndate_mmddyy_to_ccyymmdd
