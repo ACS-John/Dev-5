@@ -153,6 +153,7 @@ READ_ADRBIL: ! r:
 		fn_prnt1
 	end if 
 	fn_report_add
+	! fn_listFile_add(z$)
 	goto PRINT_NEXT
 ! /r
 def fn_open_template
@@ -353,6 +354,12 @@ def fn_report_close
 	return  ! RC_HDR
 	RC_XIT: ! 
 fnend  ! fn_report_close
+def fn_listFile_add(z$)
+	if ~h_lf then 
+		open #h_lf:=fngethandle: 'Name='&env$('temp')&'\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output 
+	end if  ! ~h_ra
+	pr #h_lf,using 'form pos 1,c 10': z$
+fnend
 def fn_report_add
 	if ~h_ra then 
 		open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output 

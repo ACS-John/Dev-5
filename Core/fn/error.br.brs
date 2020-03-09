@@ -55,20 +55,27 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		pr #win,f str$(lc+=1)&",2,Cr 13,N": "File:"
 		pr #win,f str$(lc   )&",16,C 53,P[textboxes]": callingprogram$(1:53)
 		lc+=1
-		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Error Number:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Error:"
+		pr #win,f str$(lc   )&",16,C 17,,B08": str$(errornumber)&'  (F8 BRWiki)'
 		lc+=1
-		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Line Number:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
+		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Line:"
+		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
+		  pr #win,f str$(lc   )&',16,C 17,,B11': str$(linenumber)&' (F11 N++)' 
+		else
+			pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(linenumber)
+		end if
+		
+		
+		
 		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Count+1:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(xcnt+1) ! ,r,n
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(xcnt+1)
 		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Session:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": session$ ! ,r,n
+		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": session$
 		button_pos$='47'
 		pr #win,f "9,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
 		pr #win,f "10,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
 	!   pr #win,f "6,"&button_pos$&",C 22,B,10": "WB Help (F10)"
-		pr #win,f "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
+		! pr #win,f "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
 	!   if exists(acshelp$)<>0 then
 	!     pr #win,f "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
 	!   end if
@@ -76,10 +83,10 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
-		  pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" ! 1,19,12/CC 12,,B1000
+		  ! pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" ! 1,19,12/CC 12,,B1000
 			pr #win,f "17,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
 			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)' ! 1,19,12/CC 12,,B1000
-			pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
+			! pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
 			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
 		
@@ -113,9 +120,11 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			exe 'dir "'&sourceFile$&'" -l -b >acsErrTmp'&session$&'.txt'
 			open #hTmp:=fngethandle: 'name=acsErrTmp[session].txt',display,input
 			linput #hTmp: line$ !  consume "Directory of" line
-			linput #hTmp: line$ !  consume "Directory of" line
+			linput #hTmp: line$ !  read line that contains sourceFile$
+			! pr 'line$=';line$ : pause
 			sourceFile$=srep$(sourceFile$,uprc$(line$(1:len(line$))),line$(1:len(line$)))
 			sourceFile$&='.brs'
+			! pr 'sourceFile$=';sourceFile$ : pause
 			close #hTmp:
 			exe '*Free acsErrTmp[session].txt -n'
 			execute '"'&os_filename$('S:\brEdit.cmd')&'"'
@@ -141,12 +150,12 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			fnWriteProc(''      ,'execute ''load "''&program$&''"''')
 			fnWriteProc(''      ,'run')
 			goto ERROR_XIT
-		else if cmdkey=23 then
-			ertnAct$='Proc errEdit.prc'
-			fnlog('action taken = '&ertnAct$,2)
-			fnWriteProc('errEdit' ,'end')
-			fnWriteProc(''   ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
-			goto ERROR_XIT
+		! else if cmdkey=23 then
+		! 	ertnAct$='Proc errEdit.prc'
+		! 	fnlog('action taken = '&ertnAct$,2)
+		! 	fnWriteProc('errEdit' ,'end')
+		! 	fnWriteProc(''   ,"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
+		! 	goto ERROR_XIT
 		end if 
 	goto ERR_INP
 	

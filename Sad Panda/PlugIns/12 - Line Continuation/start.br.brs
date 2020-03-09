@@ -25,7 +25,7 @@ def fn_applyLineContinuation(fileName$*256)
 			if lastLineContinued then line$=trim$(line$)
 			lineLastChr=len(rtrm$(line$))
 			if line$(lineLastChr-1:lineLastChr)=' _' t
-				pr #hOut: line$(1:lineLastChr-2);
+				pr #hOut: line$(1:lineLastChr-1);   !  this leaves the space - this is sometimes necessary  I don't think it ever hurts
 				lastLineContinued+=1
 			else
 				if lastLineContinued then

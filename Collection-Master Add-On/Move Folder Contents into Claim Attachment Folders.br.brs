@@ -41,7 +41,7 @@ fnGetDirClient(sourcePath$,mat sourceFile$)
 moveCount=failCount=0
 for sourceItem=1 to udim(mat sourceFile$)
 	fileno$=fn_parseFileno$(sourceFile$(sourceItem))
-	if fileno$='' then
+	if fileno$='' or sourceFile$(sourceItem)='Thumbs.db' then
 		fn_reportAdd(sourceFile$(sourceItem),'Failed to parse file number from filename.')
 		failCount+=1
 	else if ~fnRead_Oc(fileno$,mat m$,mat mN,oc$,hMopen,hMclosed,'', '',mFormAll$) then
