@@ -146,7 +146,7 @@ def fn_setup
 		dim resp$(30)*128
 	end if
 fnend
-def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN)
+def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	if ~invDateMmDdYy then invDateMmDdYy=date(fnEndOfMonth(days(date$)-15),'mmddyy')
 	fntos : rc=lc=0
 
@@ -172,7 +172,12 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN)
 		invoice_number=val(resp$(resp_invNo))
 		invMonth=val(resp$(resp_invMonth)(1:2))
 		invYear=val(resp$(resp_invYear))
-		invDateMmDdYy=fnEndOfMonth( days(cnvrt$('pic(##)',invMonth)&'15'&cnvrt$('pic(####)',invYear),'mmddyy') )
+		invDay=fnEndOfMonth( days(cnvrt$('pic(##)',invMonth)&'15'&cnvrt$('pic(####)',invYear),'mmddccyy') )
+		if date(invDay,'mm')=2 and date(invDay,'dd')=29 then
+			! it is a leap year - force the day to the 28th anyway.
+			invDay-=1
+		end if
+		invDateMmDdYy=date(invDay,'mmddyy')
 		pr "Invoice Date MUST match expiration date of Annual Support contracts!"
 		pr 'invDateMmDdYy (mmddyy) =';invDateMmDdYy
 		Pause

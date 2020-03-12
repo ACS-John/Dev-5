@@ -38,7 +38,7 @@ for fileItem=1 to fileNameCount
 	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
 	Form_PrnLine: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 	F_Support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
-	dim line$*512
+	dim line$*1024
 
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
 	! if fileItem=2 then pr 'header:',line_count,line$ : pause
@@ -48,7 +48,7 @@ for fileItem=1 to fileNameCount
 		the_date_prior=the_date
 		isEmptyLine=fn_lineIsEmpty(line$)
 		if ~isEmptyLine then
-			dim item$(0)*512
+			dim item$(0)*1024
 			str2mat(line$,mat item$,delim$,"QUOTES:TRIM")
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
 			if the_date<the_date_prior and the_date_prior>20151218 then 
@@ -66,7 +66,7 @@ for fileItem=1 to fileNameCount
 					hours=val(item$(7))
 					! expense=val(item$(8))
 					if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
-					dim description$*512
+					dim description$*1024
 					description$=item$(12)
 					!         if client_id=3811 and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
 					fn_writeOutAcs(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
@@ -185,7 +185,7 @@ def fn_writeOutAcs(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sag
 	! 	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month,sc,'',0,'Expenses'
 	! end if
 fnend  ! fn_writeOutAcs
-def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
+def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	dim wo_sage_code_prior$*128
 	if ~setup_sawo then
 		setup_sawo=1
