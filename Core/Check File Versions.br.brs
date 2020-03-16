@@ -281,10 +281,18 @@ def fn_cfv_utility_billing
 		version(hMeterType,version_meterType:=3)
 		close #hMeterType:
 	end if
-
-
-
-
+	if version_meterType=3 then
+		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
+		dim u4_device$*40
+		library 'S:\Core\Library': fnhand_held_device$
+		do
+			read #hMeterType: eof EoMeterTypeV3
+			rewrite #hMeterType,using 'form pos 81,c 8,c 3': '',''
+		loop
+		EoMeterTypeV3: !
+		version(hMeterType,version_meterType:=4)
+		close #hMeterType:
+	end if
 
 	!
 	! no need now that we have U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
