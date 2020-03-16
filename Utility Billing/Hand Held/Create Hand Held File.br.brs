@@ -676,11 +676,11 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC(20,''                                    ) ! Changed Meter Number
 			fn_record_addC( 4,sc$                                   ) ! Meter Type
 			fn_record_addC( 4,''                                    ) ! ChangedMeter Type
-			fn_record_addC( 8,''                                    ) ! Meter Size
+			fn_record_addC( 8,fn_meterInfo$('size',z$,sc$)          ) ! Meter Size
 			fn_record_addC( 8,''                                    ) ! ChangedMeter Size
 			fn_record_addC( 3,''                                    ) ! Meter Manufacturer
 			fn_record_addC( 3,''                                    ) ! Changed Meter Manufacturer
-			fn_record_addC( 3,''                                    ) ! Meter Unit of Measure
+			fn_record_addC( 3,fn_meterInfo$('unit',z$,sc$)          ) ! Meter Unit of Measure
 			fn_record_addC( 3,''                                    ) ! Changed Meter Unit of Measure
 			fn_record_addC( 4,''                                    ) ! Meter Location
 			fn_record_addC( 4,''                                    ) ! Changed Meter Location
@@ -717,7 +717,7 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)                ) !  Read Type
 			fn_record_addC(13,''                                               ) !  Collection ID
 			fn_record_addC( 7,''                                               ) !  For future use
-			fn_record_addC(20,''                                               ) !  Changed Collection ID
+			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)             ) !  Changed Collection ID
 			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)),'0' ) ! Dials                         Req  UB 50-51     2 NUM
 			fn_record_addN( 2,0                                                ) ! Changed Dials                 Opt  HH 52-453    2 NUM
 			fn_record_addN( 2,0                                                ) ! Decimals                      Req  UB 54-55     2 NUM
@@ -1371,7 +1371,7 @@ def fn_scr_selact
 	fnOpt(7,18,"Specific Accounts")
 	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
 	if udim(mat serviceCodeMetered$) then
-		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of "&deviceSelected$)
+		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of selected Hand Held Model.")
 		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
 	end if
 
@@ -1638,6 +1638,10 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle,___,return$*30)
 			return$=rtrm$(mt_data$(type_readType))
 		else if mi_field$='device' then
 			return$=rtrm$(mt_data$(type_deviceType))
+		else if mi_field$='size' then
+			return$=rtrm$(mt_data$(type_size))
+		else if mi_field$='unit' then
+			return$=rtrm$(mt_data$(type_unit))
 		end if
 	end if
 	MI_FINIS: !

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                              
+2:25 PM 3/16/2020	U4	Meter Type adds Unit and Size options - Neptune interface enhanced to send these settings out.
 16:51 03/20/2020	CO	5.74276  
 4:51 PM 3/3/2020	UB	fixed average sewer usage reports labels  
 16:59 02/20/2020	CO	5.74275   
