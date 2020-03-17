@@ -54,6 +54,7 @@ def fn_openOutFile ! open work areas based on type of Hand Held
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
 		! if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
 		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Neptune (Equinox v4)',env$('Desktop')&'\ACS to Neptune (Equinox v4).txt',1048,',eol=none')
 		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
 	end if
 	workopen=1 
@@ -65,6 +66,12 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 		if out_filename$='' then out_filename$=defaultOut_filename$
 		fnmakesurepathexists(env$('at')&out_filename$)
 		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+		if extraParameter$=',eol=none' then
+			gRecLenRequired=1
+		else 
+			gRecLenRequired=0
+		end if
+		
 	end if
 	fn_ifMatchOpenDo=hImodoReturn
 fnend
@@ -1340,9 +1347,15 @@ def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 	end if
 	if deviceSelected$='Itron FC300' then
 		write #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
+	else if gRecLenRequired then
+		rec_line$&=crlf$
+		pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
+		! pr 'len(rec_line$)=';len(rec_line$) : pause 
+		! pr #h_out,using 'form pos 1,C '&str$(len(rec_line$))&',c 1,c 2': rec_line$,'#',crlf$
 	else
 		pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
-		! pr srep$(rec_line$,chr$(9),'>') : pause
+		! pr 'len(rec_line$)=';len(rec_line$) : pause 
+		! pr srep$(rec_line$,tab$,'>') : pause
 	end if
 fnend
 ! /r
@@ -1371,7 +1384,7 @@ def fn_scr_selact
 	fnOpt(7,18,"Specific Accounts")
 	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
 	if udim(mat serviceCodeMetered$) then
-		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of selected Hand Held Model.")
+		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of selected Hand Held model.")
 		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
 	end if
 
