@@ -974,7 +974,7 @@ def fn_itron_record_rdg ! reading - pg 19
 	fn_record_addn(1,0) ! field 20
 	fn_record_addx(1)
 	!
-	itron_read_type=val(fn_meterInfo$('Read Type',z$,serviceCode$(a_item)))
+	! itron_read_type=val(fn_meterInfo$('Read Type',z$,serviceCode$(a_item)))
 	if itron_read_type=0 then itron_read_type=a_item ! gas, water, electric a unique number for each - a_item (service number) is as good as any
 	fn_record_addc(2,cnvrt$('pic(##)',itron_read_type))
 	fn_record_addn(6,0)
@@ -1350,12 +1350,8 @@ def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 	else if gRecLenRequired then
 		rec_line$&=crlf$
 		pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
-		! pr 'len(rec_line$)=';len(rec_line$) : pause 
-		! pr #h_out,using 'form pos 1,C '&str$(len(rec_line$))&',c 1,c 2': rec_line$,'#',crlf$
 	else
 		pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
-		! pr 'len(rec_line$)=';len(rec_line$) : pause 
-		! pr srep$(rec_line$,tab$,'>') : pause
 	end if
 fnend
 ! /r
