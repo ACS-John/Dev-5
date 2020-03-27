@@ -11,54 +11,9 @@ goto Xit
 def fn_setup
 	if ~setup then
 		setup=1
-		! {coreLibrary}
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnSystemNameFromAbbr$
-		library 'S:\Core\Library': fncompany_name
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fnLbl,fnchk
-		library 'S:\Core\Library': fnFra
-		library 'S:\Core\Library': fnbutton_or_disabled
-		library 'S:\Core\Library': fnAcs2,fnCmdKey,fnButton
-		library 'S:\Core\Library': fnMsgbox
-		library 'S:\Core\Library': fnCursys$
-		library 'S:\Core\Library': fnCno
-		library 'S:\Core\Library': fnPutCNo
-		library 'S:\Core\Library': fnChain
-		library 'S:\Core\Library': fnGetHandle
-		library 'S:\Core\Library': fnReg_read,fnReg_write
-		library 'S:\Core\Library': fnUreg_read,fnUreg_write
-		library 'S:\Core\Library': fnCreg_read,fnCreg_write
-		library 'S:\Core\Library': fnReg_close
-		library 'S:\Core\Library': fnProgram_properties
-		library 'S:\Core\Library': fnClient_has
-		library 'S:\Core\Library': fnClient_has_mat
-		library 'S:\Core\Library': fnPayroll_client_state$
-		library 'S:\Core\Library': fnDat
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnClient_is_converting
-		library 'S:\Core\Library': fnClear_menu
-		library 'S:\Core\Library': fnDisplay_menu
-		library 'S:\Core\Library': fnDecimal_assumed
-		library 'S:\Core\Library': fnTotal_ar
-		library 'S:\Core\Library': fnIndex_sys
-		library 'S:\Core\Library': fnCheckfileversion
-		library 'S:\Core\Library': fnReport_cache_folder_current$
-		library 'S:\Core\Library': fnAddOneC
-		! library 'S:\Core\Library': fnFM
-		library 'S:\Core\Library': fnHamsterFio,fnEditFile
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
-		library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
-		library 'S:\Core\Library': fnClearLayoutCache
-		library 'S:\Core\Library': fnClientSelect
-		library 'S:\Core\Library': fnPicBut
-		library 'S:\Core\Library': fnPrintAceTest
-		library 'S:\Core\Library': fnSystemIsAddOn
+		autoLibrary
 		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
 		dim resp$(32)*255
-
 	end if
 fnend
 def fn_setup_once
@@ -92,7 +47,7 @@ def fn_setup_once
 			goto Xit
 		end if
 	end if
-	!
+
 	dim cursys$*2
 	cursys$=fncursys$(cursys$)
 	library 'S:\Core\Library': fncno
@@ -111,15 +66,14 @@ def fn_setup_once
 	! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
 	! fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
 	fn_setup_on_cursys_change
-	!
+
 	dim temp$*2048
 	temp$=''
 	fndat(temp$,2) ! set default report heading date to today
 	! fnlog('Menu started (Session '&session$&'), wbversion='&wbversion$)
-	!
-	!
+
 	fntop(program$)
-	!
+
 	fnreg_read('Last Update',last_update$)
 	if last_update$='' then last_update$='(never updated)'
 	!     setenv('Icon','S:\Core\Icon\ACS-v5.ico')
@@ -171,7 +125,7 @@ def fn_grid_setup
 	headings$(4)='File'
 	headings$(5)='ss_text$'
 	grid_width=80-favorite_width
-	!
+
 	mat column_mask$(5)
 	! if env$('ACSDeveloper')<>'' then
 	! 	mat column_mask$=('80')
@@ -197,7 +151,7 @@ def fn_setup_on_cursys_change
 	if env$('cursys')='UB' then
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 	end if
-	!
+
 	dashboard_height=fn_dashboard_height
 	fn_grid_setup !
 	if ~exists(dataFolder$&'\Company.h[cno]') then
@@ -216,7 +170,7 @@ def fn_main
 			Tos: !
 			fnTos(screen_name$:='Menu') : frameCount=0
 			fnflexinit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
-	!
+
 			fn_caption_update
 			fn_update_program_grid
 			fn_display_buttons
@@ -232,7 +186,6 @@ def fn_main
 			fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 			fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
 			fnbutton_or_disabled(env$('enableClientSelection')=='Yes',program_grid_line+5,1,env$('client')(1:info_col_width),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_col_width)
-			! end if
 			if env$('Decimal_Assumed')<>'Decimal Required' then
 				fnLbl(program_grid_line+6,1,env$('Decimal_Assumed'),info_col_width,2)
 			end if
@@ -259,7 +212,7 @@ def fn_main
 			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard) 
 			!   if env$('taxYear')='2018' then resp$(2)='^' else resp$(2)='False'
 			! end if
-	!
+
 			setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 			fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
 			fnAcs2(mat resp$,fkey_value,0,0,0)
@@ -279,7 +232,7 @@ def fn_main
 			
 			
 		end if
-	!
+
 		if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
 	!  removed 1/21/2017 -  does not seem necessary - it does it when it is selected       fncursys$(env$('cursys'))
 	!       fn_put_plus(env$('cursys'),mat program_file$,mat program_plus$)
@@ -288,10 +241,10 @@ def fn_main
 		else
 			fn_session_reg_write(env$('cursys')&'.CurProg',str$(program_selection_id))
 		end if
-	!
+
 	!  if fkey_value=1 then !
 	! help button on the bottom
-	!
+
 		if fkey_value=98 then ! r: drop down menu
 			menu_option$=menu$
 			if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.prc' then
@@ -315,7 +268,7 @@ def fn_main
 				else
 					pr 'unrecognized syntax: '&menu_option$ : pause
 				end if
-				!
+
 			else if lwrc$(menu_option$(1:4))='http' then
 				execute 'Sy -M -c start '&menu_option$
 			else if lwrc$(menu_option$(1:5))='file:' then
@@ -525,7 +478,7 @@ def fn_callEditInWordProcessor(programSelection$*256)
 		pr 'can only MakeIfNEcessary if also forceAtlantis.  Please consider enhancing the code.' : pause
 	end if
 	if cewForceAtlantis then cewForce$='atlantis' else cewForce$='wordprocessor'
-	!
+
 	fn_callEditInWordProcessor=fnEditFile(cewForce$,fileToEditInWp$)
 fnend
 def fn_dashboard_height
@@ -550,11 +503,11 @@ def fn_dashboard_height
 	else
 		dhReturn=0
 	end if
-	!
+
 	if enableFavorites and dhReturn<2 then
 		dhReturn=2
 	end if
-	!
+
 	if env$('ACSDeveloper')<>'' then dhReturn=5
 	fn_dashboard_height=dhReturn
 fnend
@@ -704,7 +657,7 @@ fnend
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	dim ss_category$(1)*80
 	dim program_item$(1)*512
-	!
+
 	open #1: 'Name='&gpla_file$,display,input ioerr GPLA_Xit
 	linput #1: temp$ eof GPLA_EOF ! just consume first line
 	do
@@ -729,19 +682,19 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 				mat ss_text$(glpa_program_count)
 				mat program_level(glpa_program_count)
 				program_level(glpa_program_count)=fn_program_level(program_item$(1))
-				!
+
 				program_name$(glpa_program_count)=srep$(rtrm$(program_item$(1)),'>','         ')
 				program_name_trim$(glpa_program_count)=trim$(program_name$(glpa_program_count))
-				!
+			
 				if program_item_count>1 then program_file$(glpa_program_count)=trim$(program_item$(2))
-				!
+			
 				if trim$(program_file$(glpa_program_count))='' then
 					program_plus$(glpa_program_count)='**' ! fn_get_one_plus$(h_plus,env$('cursys'),program_file$(glpa_program_count))
 				end if
-				!
+			
 				ss_text$(glpa_program_count)='' ! ss_text$(glpa_program_count)&cnvrt$('Pic(#####)',glpa_program_count)
 				gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
-				!
+			
 				for gt_item=1 to 10
 					if gt_count=gt_item-1 then mat ss_category$(gt_item) : ss_category$(gt_item)=program_name$(glpa_program_count)
 				next gt_item
@@ -749,7 +702,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 					ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' - '&ltrm$(ss_category$(ss_cat_item))
 				next ss_cat_item
 				ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&ltrm$(program_plus$(glpa_program_count))
-				!
+			
 				if program_item_count>1 then ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' ~ '&program_item$(2)
 			end if
 		end if

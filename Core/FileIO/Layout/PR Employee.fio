@@ -54,7 +54,7 @@ hireDate        ,  Date Hired                          ,  n    6   , date(mmddyy
 lpd             ,  Last Payroll Date                   ,  n    6   , date(mmddyy), ! Pos=162       lpd,d1
 totalGrossPay   ,  Total Gross Pay                     ,  pd   5.2 ,             , ! Pos=168       tgp     
 w4step2         ,  W-4 Step 2 (1/0)                    ,  n    1   ,             , ! Pos=173       
-W4Year          ,  W-4 Year                            ,  n    4   ,             , ! Pos=174    2019 or 2020
+W4Year          ,  W-4 Year                            ,  C    4   ,             , ! Pos=174    "none", "2019" or "2020"
 unuse174        ,  unused                              ,  c    1   ,             , ! Pos=178
 ph              ,  Telephone Number                    ,  c   12   ,             , ! Pos=179       ph$     
 bd              ,  Birth Date                          ,  n    6   , date(mmddyy), ! Pos=191       bd      
