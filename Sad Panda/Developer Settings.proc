@@ -13,15 +13,19 @@
 !   ! /r
 execute 'config editor "C:\ACS\Program\Notepad++\notepad++.exe"'
 hh=val(time$(1:2))
-if hh<=7 or hh>19 t le setenv('background_picture','[pandaPath]\asset\night.jpg') else le setenv('background_picture','[pandaPath]\asset\day.jpg')
+! if hh<=7 or hh>19 t le setenv('background_picture','[pandaPath]\asset\night.jpg') else le setenv('background_picture','[pandaPath]\asset\day.jpg.jpg')
+if hh<=7 or hh>19 t le setenv('background_picture','[pandaPath]\asset\night.jpg') else le setenv('background_picture','[pandaPath]\asset\day2.jpg')
 
 enablePlugIns=1
 
 
 setEnv('keyword-include','include:')
+! setEnv('keyword-autoLibrary','autoLibrary')
+setEnv('path-autoLibrary','S:\Core\Library.br')
 setEnv('path-include','C:\ACS\Dev-5\^resource\')
 setEnv('ext-include','.brs')
 fnHasKeyAdd('[lineStartsWith]'&env$('keyword-include'))
+! fnHasKeyAdd('autoLibrary')
 
 fnHasKeyAdd(chr$(9))
 
