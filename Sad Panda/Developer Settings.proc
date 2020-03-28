@@ -25,7 +25,7 @@ setEnv('path-autoLibrary','S:\Core\Library.br')
 setEnv('path-include','C:\ACS\Dev-5\^resource\')
 setEnv('ext-include','.brs')
 fnHasKeyAdd('[lineStartsWith]'&env$('keyword-include'))
-! fnHasKeyAdd('autoLibrary')
+fnHasKeyAdd('autoLibrary')
 
 fnHasKeyAdd(chr$(9))
 
