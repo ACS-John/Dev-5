@@ -1,223 +1,119 @@
-!! r: Test The Tables!
-!	if env$('ACSdeveloper')<>'' then 
-!	  fn_setup 
-!	  fn_setupOpenFiles
-!	  fn_test_state_calk
-!	  end
-!	end if
-!! /r
-! formerly   S:\Payroll\Calc  S:\acsPR\newprCalk
-! Payroll Calculation
-! Each year list 'every year' and t
-	! sswh - social security withholding
-	! mcwh - medicare withholding
-	! MinHourlyWage -  minumum hourly wage
-	! payPeriodsPerYear used to be t6
-	! totalWagesYtd - total wages yearToDate
-	! gdp - gross pay for department
-	! totalGrossPay - total gross pay
-	! stdWhFed - Standard Federal Withholding
-	! stdWhFed - Standard Federal Withholding
-	fn_setup
-	fntop(program$)
-	gosub Screen1
-	if ckey=5 then goto XIT
+! r: Test The Tables!
+	if env$('ACSdeveloper')<>'' then 
+	  fn_setup 
+	  fn_setupOpenFiles
+	  fn_test_state_calk
+		! pause
+	  end
+	end if
+! /r
+! Payroll\Calculation   (formerly   S:\Payroll\Calc  S:\acsPR\newprCalk   )
 
-	dat$=lpad$(str$(d1),6)
-	mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
-	ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
-	d1=mo1*10000+da*100+yr
-	fnAutomatedSavePoint('before')
-	fn_setupOpenFiles
-	ReadRpWork: ! 
-	read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof Finis
-	if env$('acsDeveloper')<>'' then debug=1
+! Each year list 'every year'
+
+! sswh - social security withholding
+! mcwh - medicare withholding
+! MinHourlyWage -  minumum hourly wage
+! payPeriodsPerYear used to be t6
+! totalWagesYtd - total wages yearToDate
+! gdp - gross pay for department
+! totalGrossPay - total gross pay
+! stdWhFed - Standard Federal Withholding
+! stdWhFed - Standard Federal Withholding
+fn_setup
+fntop(program$)
+gosub Screen1
+if ckey=5 then goto XIT
+
+dat$=lpad$(str$(d1),6)
+mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
+ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
+d1=mo1*10000+da*100+yr
+fnAutomatedSavePoint('before')
+fn_setupOpenFiles
+open #hRpWork:=fngethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,outIn,keyed  ! was 3
+F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
+goto ReadRpWork
+ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically beginning of main loop
+	read #hRpWork,using F_RPWORK: x$,dep,mat _inp,gpd,mat hr eof Finis
+	! r: force test or check an entry from rpWork
 	! fnpause
 	! x$    ='      27'
 	! dep   =  2
 	! gpd   =637.5
 	! hr(1) = 12.75
 	! hr(2) = 19.13
-	! inp(1)=50 ! regular hours
+	! _inp(1)=50 ! regular hours
 	! d1= 10120
+	! /r
 	
-	if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP ! env$('client')='West Accounting' or 
-	! pr 'FIRST READ OF RPWORK right after read rpwork inp(6)=';inp(6) : pause
+	if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp ! env$('client')='West Accounting' or 
 	newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
-	! totaldef=0
-	! Form POS 1,C 8,N 3,5*PD 4.2,15*PD 5.2,2*PD 4.2,PD 3
 	eno=val(x$)
 	if eno=0 then goto ReadRpWork
-	if n$=x$ then goto L1540
-	twc=totalWagesYtd=tfy=cafy=eicytd=deducy=0
-	if rtrm$(n$)<>"" then gosub SUBROUTINE2
-goto ReadEmployee
-
-SUBROUTINE2: ! r: (reallocate state taxes based on earnings by dept and state
-	s3=0 : tcp(4)=0 : tcp4=0
-	oldeno=val(n$)
-	restore #h_department,key>=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",0): 
-	if stdWhSt=-1 then goto L960
-	! Read #h_department,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
-	do
-		L670: ! 
-		read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L960
-		if teno=oldeno then 
-			if debug then fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
-			if d1><tdt(4) then goto L670
-			holdtdn=tdn
-			olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
-			read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey L670
-			if debug then fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
-			dst3=0
-			for j=1 to 20
-				if dedst(j)>0 then dst3=dst3+tcp(j+4)
-			next j
-			! sTWH(tcd(1),1)=STWH(tcd(1),1)-DST3
-			if stwh(tcd(1),1)=0 then goto L670
-			if stwh(tcd(1),2)><0 then goto L870
-			if stdWhSt=0 then goto L840
-			if enableSkipWithholdingN(4)<>1 then stwh(tcd(1),2)=stdWhSt
-			goto L870
-			L840: ! 
-			if enableSkipWithholdingN(esw_state) then s3=0: goto L860
-			on tcd(1) gosub ST01,ST02,ST03,ST04,ST05,ST06,ST07,ST08,ST09,ST10
-			L860: ! 
-			stwh(tcd(1),2)=s3
-			L870: ! 
-			if env$('client')="Lamar" then 
-				tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
-			else 
-				tcp4=(stwh(tcd(1),2)+addOnSt)*((tcp(31)-dst3)/stwh(tcd(1),1))
-			end if 
-			tcp4=round(tcp4,2)
-			if enableSkipWithholdingN(esw_state) then tcp4=0
-			tcp(32)-=tcp4: tcp(4)=tcp4
-			rewritekey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)&cnvrt$("pd 6",prd) ! index employee#,department# and payroll date
-			rewrite #h_payrollchecks,using 'Form pos 80,pd 5.2,poS 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
-			fn_report_stuff
-			rewrite #h_department,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
-		else
-			goto L960
-		end if
-	loop while teno=oldeno
-	L960: ! 
-	gosub EmployeeLocalToRecord
-	rewrite #hEmployee,using F_employee,key=n$: mat em,d1,totalGrossPay
-	if fp(d1*.01)>.9 then hd1=19000000+fncd(d1) else hd1=20000000+fncd(d1)
-	mat stwh=(0)
-return ! /r
-EmployeeRecordToLocal: ! r:
-	maritial     =em(1)
-	fedExempt    =em(2)
-	stAllowances =em(3)
-	empStatus    =em(4)
-	payCode      =em(5)
-	ficaCode     =em(6)
-	eicCode      =em(7)
-	sickCode     =em(8)
-	vaca         =em(9)
-	hrsSick      =em(10)
-	hrsVaca      =em(11)
-	stdWhFed     =em(12)
-	addOnFed     =em(13)
-	stdWhSt      =em(14)
-	addOnSt      =em(15)
-	hireDate     =em(16)
-return ! /r
-EmployeeLocalToRecord: ! r:
-	em(1)  = maritial    
-	em(2)  = fedExempt   
-	em(3)  = stAllowances
-	em(4)  = empStatus   
-	em(5)  = payCode     
-	em(6)  = ficaCode    
-	em(7)  = eicCode     
-	em(8)  = sickCode    
-	em(9)  = vaca        
-	em(10) = hrsSick
-	em(11) = hrsVaca
-	em(12) = stdWhFed    
-	em(13) = addOnFed    
-	em(14) = stdWhSt     
-	em(15) = addOnSt     
-return ! /r
-
-ReadEmployee: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
-	dim em(16)
-	dim hr(2)
-	read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,w4year,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNotFound
-	gosub EmployeeRecordToLocal
-	
-	F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,pos 197,4*n 12.2
-	gosub CalculateAllDeductionsAllDept
-	n$=x$
-	! r: Accrue Sick and Vacation
-	if accrueVacaAndSick=1 then 
-		if sickCode=-1 then ! Check for elgibility
-			if hireDate=>10100 and hireDate<=123199 then 
-				dat$=lpad$(str$(hireDate),6)
-				mo  =val(dat$(1:2))
-				da  =val(dat$(3:4))
-				yr  =val(dat$(5:6))
-				dh  =round(yr*365+int(yr/4)+motab(mo)+da,2)
-				if ppd-dh=>sck(1) then 
-					sickCode=sck(3)
-					hrsSick =sck(2)
+	if n$<>x$ then 
+		twc=totalWagesYtd=tfy=cafy=eicytd=deducy=0
+		if rtrm$(n$)<>"" then gosub ReallocateStateByDept
+		dim em(16)
+		dim hr(2)
+		read #hEmployee,using F_employee,key=x$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNotFound
+		gosub EmployeeRecordToLocal
+		
+		F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,pos 197,4*n 12.2
+		gosub CalculateAllDeductionsAllDept
+		n$=x$
+		! r: Accrue Sick and Vacation
+		if accrueVacaAndSick=1 then 
+			if sickCode=-1 then ! Check for elgibility
+				if hireDate=>10100 and hireDate<=123199 then 
+					dat$=lpad$(str$(hireDate),6)
+					mo  =val(dat$(1:2))
+					da  =val(dat$(3:4))
+					yr  =val(dat$(5:6))
+					dh  =round(yr*365+int(yr/4)+motab(mo)+da,2)
+					if ppd-dh=>sck(1) then 
+						sickCode=sck(3)
+						hrsSick =sck(2)
+					end if
 				end if
 			end if
+			if sickCode>0 then hrsSick+=sickCode ! Accrue Sick
+			if sickCode>0 then  ! and env$('client')<>'Battlefield'
+				write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,sickCode,0 ioerr ignore
+			end if
+			if vaca>0 then hrsVaca+=vaca ! Accrue Vacation
+			if vaca>0 then ! and env$('client')<>'Battlefield'
+				write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,vaca,0 ioerr ignore
+			end if
 		end if
-		if sickCode>0 then hrsSick+=sickCode ! Accrue Sick
-		if sickCode>0 then  ! and env$('client')<>'Battlefield'
-			write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,sickCode,0 ioerr ignore
+		! /r
+		payPeriodsPerYear=fn_payPeriodsPerYear(payCode)
+		if payPeriodsPerYear<=0 then
+			goto ReadRpWork
 		end if
-		if vaca>0 then hrsVaca+=vaca ! Accrue Vacation
-		if vaca>0 then ! and env$('client')<>'Battlefield'
-			write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,vaca,0 ioerr ignore
+		if ~enableSkipWithholdingN(esw_federal) then 
+			fed_wh=fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c)
 		end if
+		! cafeteria plan - maybe???
+		totalWagesYtd=0
+		mat stuc=(0)
+		read #hDepartment,using "form pos 48,n 2",key=newdeptkey$: tcd(1) ! get state code
+		dim ytdTotal(32)
+		fn_determineEarnings(hPrChecks,eno, dep,beg_date,end_date,mat ytdTotal,ytdFICA,ytdMedicare,ytdEic,ytdWages,mat caf)
+		for j=1 to 20
+			if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then 
+				cafy+=caf(j)
+				cafd+=caf(j)
+			end if 
+		next j
+		totalWagesYtd+=ytdWages : tfy+=(ytdFICA+ytdMedicare) : ficatfy=tfy
+		oldsswg=totalWagesYtd-cafy : eicytd+=ytdEic : stuc(tcd(1))+=ytdWages-cafd
+		cafd=0
 	end if
-	! /r
-	! r: get payPeriodsPerYear from payCode
-	if payCode=1 then
-		payPeriodsPerYear=12
-	else if payCode=2 then
-		payPeriodsPerYear=24
-	else if payCode=3 then
-		 payPeriodsPerYear=26
-	else if payCode=4 then
-		payPeriodsPerYear=52
-	else
-		mat ml$(1)
-		ml$(1)="Incorrect Pay Code "&str$(payCode)&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
-		fnmsgbox(mat ml$,resp$,'',0)
-		goto ReadRpWork
-	end if
-	! /r
-	
-	if ~enableSkipWithholdingN(esw_federal) then 
-		fed_wh=fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4year,w4Step3,w4step4a,w4step4b,w4step4c)
-	end if
-	! cafeteria plan - maybe???
-	totalWagesYtd=0
-	mat stuc=(0)
-	read #h_department,using "form pos 48,n 2",key=newdeptkey$: tcd(1) ! get state code
-	dim ytdTotal(32)
-	fn_determineEarnings(h_payrollchecks,eno, dep,beg_date,end_date,mat ytdTotal,ytdFICA,ytdMedicare,ytdEic,ytdWages,mat caf)
-	for j=1 to 20
-		if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then 
-			cafy+=caf(j)
-			cafd+=caf(j)
-		end if 
-	next j
-	totalWagesYtd+=ytdWages : tfy+=(ytdFICA+ytdMedicare) : ficatfy=tfy
-	oldsswg=totalWagesYtd-cafy : eicytd+=ytdEic : stuc(tcd(1))+=ytdWages-cafd
-	cafd=0
-goto L1540 ! /r
-
-L1540: ! r:  Where Federal Withholdings are divided out into each department.
+	!   Where Federal Withholdings are divided out into each department.
 	! gpd = gross pay per department
 	! pog = percent of gross
-	read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
+	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
 	if totalGrossPay=0 then
@@ -231,38 +127,38 @@ L1540: ! r:  Where Federal Withholdings are divided out into each department.
 	for j=1 to 20
 		if env$('client')="Franklinton" then 
 			if j=1 and empStatus=3 then ! retirement of firemen  ! franklinton
-				inp(j+7)=round(inp(j+7)*gpd/100,2)
+				_inp(j+7)=round(_inp(j+7)*gpd/100,2)
 				goto L1710 ! franklinton
 			else 
 				if j=2 then ! retirement of police !franklinton
-					inp(j+7)=round(inp(j+7)*((hr(1)*(inp(1)+inp(3)+inp(4))+inp(6)+inp(17))/100),2)
+					_inp(j+7)=round(_inp(j+7)*((hr(1)*(_inp(1)+_inp(3)+_inp(4))+_inp(6)+_inp(17))/100),2)
 					goto L1710 ! franklinton
 				end if 
 			end if 
 			!   else if env$('client')="Washington Parrish" and j=3 and newcalcode(j)=2 then
-			!     inp(j+7)=round(inp(j+9)*(gpd+defcompmatch)/100,2)
+			!     _inp(j+7)=round(_inp(j+9)*(gpd+defcompmatch)/100,2)
 			!     goto L1700
-			!   else if env$('client')="West Accounting" and j=10 and inp(17)<>0 then
-			!     gosub WEST_ACC_WORKMANSCOMP
+			!   else if env$('client')="West Accounting" and j=10 and _inp(17)<>0 then
+			!     gosub West_Acc_WorkmansComp
 		else
 
 		end if 
-		if newcalcode(j)=2 then inp(j+9)=round(inp(j+9)*gpd/100,2)
+		if newcalcode(j)=2 then _inp(j+9)=round(_inp(j+9)*gpd/100,2)
 		! L1700: ! 
-		if enableSkipWithholdingN(4) then inp(j+9)=0
+		if enableSkipWithholdingN(4) then _inp(j+9)=0
 		L1710: ! 
 	next j
-	hrsSick-=inp(3) : hrsVaca-=inp(4)
+	hrsSick-=_inp(3) : hrsVaca-=_inp(4)
 	! if env$('client')='Battlefield' then goto L1760
-	if inp(3)>0 then ! write sick hours taken to breakdown file
-		write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,0,inp(3) ioerr ignore
+	if _inp(3)>0 then ! write sick hours taken to breakdown file
+		write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,0,_inp(3) ioerr ignore
 	end if 
-	if inp(4)>0 then ! write vacation hours taken to breakdown file
-		write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,0,inp(4) ioerr ignore
+	if _inp(4)>0 then ! write vacation hours taken to breakdown file
+		write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,0,_inp(4) ioerr ignore
 	end if 
 	! L1760: ! 
-	if inp(5)>0 then ! write holiday hours taken to breakdown file
-		write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Hol",prd,0,inp(5) ioerr ignore
+	if _inp(5)>0 then ! write holiday hours taken to breakdown file
+		write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Hol",prd,0,_inp(5) ioerr ignore
 	end if 
 	if sck(4)=999 then sck(4)=1000 ! system will only hold 999 maximum accrued sick hours.  If maximum is set at 999, assume no maximum
 	if sck(4)<>0 and hrsSick>sck(4) then hrsSick=sck(4)
@@ -270,23 +166,26 @@ L1540: ! r:  Where Federal Withholdings are divided out into each department.
 	ext=0 ! Excess Tips
 	goto NO_EXCESS_TIPS
 
-	if inp(9)=0 then 
-		goto NO_EXCESS_TIPS
-	else 
-		tr=round(inp(1)*MinHourlyWage+inp(2)*MinHourlyWage*1.5,2)
-		g1=gpd-inp(9)
+	if _inp(9) then 
+		tr=round(_inp(1)*MinHourlyWage+_inp(2)*MinHourlyWage*1.5,2)
+		g1=gpd-_inp(9)
 		ext=0
 		if g1>=tr then 
-			g2=inp(9)
+			g2=_inp(9)
 		else 
 			g2=gpd-tr
 		end if 
 	end if 
-NO_EXCESS_TIPS: ! 
-gosub FicaUnEmp
-
-
-FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
+	NO_EXCESS_TIPS: ! 
+	gosub FicaUnEmp
+goto FEDWH_DEPT ! /r
+EmployeeNotFound: ! r:
+	n$=" "
+	mat ml$(1)
+	ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
+	fnmsgbox(mat ml$,resp$,'',0)
+goto ReadRpWork ! /r
+FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
 	if debug then fnStatus('federal  withholding for department calculating')
 	f4=round(fed_wh*pog,2)
 	stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
@@ -303,13 +202,13 @@ FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 	end if
 	tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh : tcp(4)=tcp4
 	for j=5 to 24
-		tcp(j)=inp(j+5)
+		tcp(j)=_inp(j+5)
 	next j
 	tcp(25)=min(eic4,tcp(1))
-	tcp(27)=round(inp(2)*hr(2),2)
-	tcp(28)=inp(7)
-	tcp(29)=inp(8)
-	tcp(30)=inp(9)
+	tcp(27)=round(_inp(2)*hr(2),2)
+	tcp(28)=_inp(7)
+	tcp(29)=_inp(8)
+	tcp(30)=_inp(9)
 	tcp(26)=gpd-tcp(27)-tcp(28)-tcp(29)-tcp(30)
 	tcp(31)=gpd
 	tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
@@ -349,7 +248,7 @@ FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 	else 
 		tdc(9)=gpd-ext-deduc
 	end if
-	for j=1 to 5 : tdc(j)=inp(j) : next j ! Hours
+	for j=1 to 5 : tdc(j)=_inp(j) : next j ! Hours
 	! pause ! WORKMANS_COMP: !
 	! mat wcm is workman's comp maximum
 	! trp is (temp variable only used here)
@@ -358,9 +257,9 @@ FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 	! wc is (temp variable only used here)
 	! tdc(6) is Workman's Comp Wages
 	! if env$('client')="West Accounting" then ! perhaps everyone should be doing it this way -prd 01/06/2016
-	!   tcp(14)=tdc(1)*inp(19)*.01 ! base on regular hours times w/c rate
-	!   fnStatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * inp(19)('&str$(inp(19))&') * .01')
-	!   inp(19)=0   ! <-- nice idea but it does not make a difference
+	!   tcp(14)=tdc(1)*_inp(19)*.01 ! base on regular hours times w/c rate
+	!   fnStatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * _inp(19)('&str$(_inp(19))&') * .01')
+	!   _inp(19)=0   ! <-- nice idea but it does not make a difference
 	!   fnStatusPause
 	! end if  ! else 
 	trp=tcp(26)+tcp(27) ! base on wages
@@ -372,78 +271,15 @@ FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 		wc=wcm(payCode)-twc
 	end if 
 	twc+=wc : tdc(6)=wc
-	rewrite #h_department,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
+	rewrite #hDepartment,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
 	tcp(4)=0
-	write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
+	write #hPrChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 	! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 	! fnStatusPause
 	totalWagesYtd+=gpd : cafy+=ficat3 : eicytd+=ytdTotal(25)
 	if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
-	goto ReadRpWork
+goto ReadRpWork
 ! /r
-EmployeeNotFound: ! r:
-	n$=" "
-	mat ml$(1)
-	ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
-	fnmsgbox(mat ml$,resp$,'',0)
-goto ReadRpWork ! /r
-Finis: ! r:
-	if rtrm$(n$)<>"" then gosub SUBROUTINE2
-	close #hEmployee: 
-	close #h_department: 
-	close #h_rpwork: ! ,Free:
-	fnFree("[Q]\PRmstr\jcprh1.h[cno]") ! get rid of jobcost time entry file if exists
-goto XIT ! /r
-XIT: fnxit
-CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably other stuff, i.e. a % for each dept)
-	! Calculate all deduct for federal for all departments
-	totalGrossPay=t3=ded=0
-	do
-		for j=1 to 20
-			if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing inp(17) SKIP IT do not process it.   ! env$('client')='West Accounting' or 
-			if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then 
-				! r:  department.tdc1  State Code
-					sc1=1
-					read #h_department,using 'form pos 48,n 2',key=newdeptkey$: sc1 nokey ignore
-					if sc1=0 then sc1=1
-					! If env$('client')="Washington Parrish" AND J=3 Then sD3=INP(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
-					if newcalcode(j)=1 then 
-						sd3=inp(j+9) 
-					else 
-						sd3=inp(j+9)*gpd/100
-					end if
-					stwh(sc1,1)=stwh(sc1,1)-sd3
-					! returnN=sc1    !    THIS IS WRONG  returnN is not valid here.
-				! /r
-				if newcalcode(j)=1 then 
-					ded+=inp(j+9)
-				else 
-					ded+=inp(j+9)*gpd/100
-				end if 
-			end if 
-			if newdedfed(j)=2 then
-				if newcalcode(j)=1 then 
-					t3+=inp(j+9)
-				else 
-					t3+=inp(j+9)*gpd/100
-				end if 
-			end if 
-			L3090: ! 
-		next j
-		totalGrossPay+=gpd
-		read #h_rpwork,using F_RPWORK: newx$,newdep,mat inp,gpd,mat hr eof L3150
-		if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP ! env$('client')='West Accounting' or 
-		! pr 'A right after read rpwork inp(6)=';inp(6) : pause
-	loop while newx$=x$
-	L3150: ! 
-	workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
-	restore #h_rpwork,key>=workkey$: 
-	read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof Finis
-	if env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or 
-	! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
-return  ! /r
-
-
 
 Screen1: ! r:
 	fnGetPayrollDates(beg_date,end_date)
@@ -490,10 +326,7 @@ Screen1: ! r:
 
 		dim enableSkipWithholdingN(4)
 		mat enableSkipWithholdingN=(0)
-		esw_federal =1
-		esw_state   =2
-		esw_fica    =3
-		esw_standard=4
+
 		if resp$(resp_skipWh1)(1:1)="T" then enableSkipWithholdingN(esw_federal)=1
 		if resp$(resp_skipWh2)(1:1)="T" then enableSkipWithholdingN(esw_state)=1
 		if resp$(resp_skipWh3)(1:1)="T" then enableSkipWithholdingN(esw_fica)=1
@@ -503,7 +336,62 @@ Screen1: ! r:
 	end if
 return  ! /r
 
-def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4year,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak,withholdingPercentage,atLeast,baseAmt)
+Finis: ! r:
+	if rtrm$(n$)<>"" then gosub ReallocateStateByDept
+	fn_setupCloseFiles
+	close #hRpWork:
+	fnFree("[Q]\PRmstr\jcprh1.h[cno]") ! get rid of jobcost time entry file if exists
+goto XIT ! /r
+XIT: fnxit
+
+CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably other stuff, i.e. a % for each dept)
+	! Calculate all deduct for federal for all departments
+	totalGrossPay=t3=ded=0
+	do
+		for j=1 to 20
+			if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing _inp(17) SKIP IT do not process it.   ! env$('client')='West Accounting' or 
+			if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then 
+				! r:  department.tdc1  State Code
+					sc1=1
+					read #hDepartment,using 'form pos 48,n 2',key=newdeptkey$: sc1 nokey ignore
+					if sc1=0 then sc1=1
+					! If env$('client')="Washington Parrish" AND J=3 Then sD3=_inp(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
+					if newcalcode(j)=1 then 
+						sd3=_inp(j+9) 
+					else 
+						sd3=_inp(j+9)*gpd/100
+					end if
+					stwh(sc1,1)=stwh(sc1,1)-sd3
+					! returnN=sc1    !    THIS IS WRONG  returnN is not valid here.
+				! /r
+				if newcalcode(j)=1 then 
+					ded+=_inp(j+9)
+				else 
+					ded+=_inp(j+9)*gpd/100
+				end if 
+			end if 
+			if newdedfed(j)=2 then
+				if newcalcode(j)=1 then 
+					t3+=_inp(j+9)
+				else 
+					t3+=_inp(j+9)*gpd/100
+				end if 
+			end if 
+			L3090: ! 
+		next j
+		totalGrossPay+=gpd
+		read #hRpWork,using F_RPWORK: newx$,newdep,mat _inp,gpd,mat hr eof L3150
+		if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp ! env$('client')='West Accounting' or 
+		! pr 'A right after read rpwork _inp(6)=';_inp(6) : pause
+	loop while newx$=x$
+	L3150: ! 
+	workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
+	restore #hRpWork,key>=workkey$: 
+	read #hRpWork,using F_RPWORK: x$,dep,mat _inp,gpd,mat hr eof Finis
+	if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or 
+	! pr 'B right after read rpwork  _inp(6)=';_inp(6) : pause
+return  ! /r
+def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,maritial,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak,withholdingPercentage,atLeast,baseAmt)
 	! https://www.irs.gov/pub/irs-pdf/p15t.pdf
 	! https://www.irs.gov/pub/irs-pdf/fw4.pdf
 	! https://www.irs.gov/pub/irs-pdf/p15.pdf
@@ -708,9 +596,9 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 		else
 			! tableRow was j1
 			estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! estAnnualNetPay (previously g2) - estimated annual net pay
-			if w4year=2019 then
+			if w4Year$='2019' then
 				estAnnualNetPay-=fedExempt*fed_annual_wh_allowance
-			else ! w4year=2020 then
+			else ! w4Year$='2020' or w4Year$='none' then
 				estAnnualNetPay-=w4step3
 			end if
 			tableRow=fn_table_line(mat fedTable,estAnnualNetPay)
@@ -728,17 +616,17 @@ def fn_federalWithholding(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,pa
 	FwhFinis: !
 	! pr 'federal withholding is ';returnN : pause
 	if returnN<=0 then returnN=0 ! we should never have negative federal withholding.
-	fn_federalWithholding=returnN
+	fn_federalTax=returnN
 fnend
 FicaUnEmp: ! r: FICA
 	deduc=ficat3=f3=0 ! FICA
 	sswg=sswh=mcwh=0
 	for j=1 to 20
 		if dedfica(j)=1 and newdedcode(j)=newdedcode_Deduct then 
-			ficat3+=inp(j+9)
+			ficat3+=_inp(j+9)
 		end if
 		if deduc(j)=1 then ! total deductions for unemployment for current period and year to date
-			deduc+=inp(j+9)
+			deduc+=_inp(j+9)
 			deducy+=caf(j)
 		end if
 	next j
@@ -829,14 +717,14 @@ FicaUnEmp: ! r: FICA
 	end if ! ~enableSkipWithholdingN(esw_fica)
 	FicaUnEmpFinis: !
 return ! /r
-def fn_determineEarnings(h_payrollchecks,eno,dep,beg_date,end_date,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdEic,&ytdWages,mat caf; ___,heno)
+def fn_determineEarnings(hPrChecks,eno,dep,beg_date,end_date,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdEic,&ytdWages,mat caf; ___,heno)
 	ytdFICA=ytdMedicare=ytdEic=0: mat caf=(0)
 	mat tcp=(0)
 	mat ytdTotal=(0) : mat tdc=(0)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
-	restore #h_payrollchecks,key>=checkkey$: nokey dePrCkNokey
+	restore #hPrChecks,key>=checkkey$: nokey dePrCkNokey
 	do
-		read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
+		read #hPrChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
 		if heno=eno and prdate=>beg_date and prdate<=end_date then 
 			mat ytdTotal=ytdTotal+tcp
 		end if
@@ -851,34 +739,957 @@ def fn_determineEarnings(h_payrollchecks,eno,dep,beg_date,end_date,mat ytdTotal,
 	next j
 	dePrCkNokey:!
 fnend
+
+def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
+	! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
+	! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first 
+	if tl_second_dimension=0 then tl_second_dimension=1
+	for tl_item=1 to udim(mat tl_table,1)-1
+		if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then 
+			goto TL_XIT
+		end if 
+	next tl_item
+	tl_item=udim(mat tl_table,1)
+	TL_XIT: ! 
+	fn_table_line=tl_item
+fnend 
+
+def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear; clientState$*2)
+	
+	if clientState$='' th clientState$=fnpayroll_client_state$
+	
+	if clientState$='AR' then 
+		returnN=fn_wh_arkansas(wages,pppy,allowances,marital,eicCode)         
+	else if clientState$='AZ' then 
+		returnN=fn_wh_arizona(wages,allowances)                                   
+	else if clientState$='GA' then 
+		returnN=fn_wh_georgia(wages,pppy,allowances,marital,eicCode)              
+	else if clientState$='IL' then 
+		returnN=fn_wh_illinois(wages,pppy,allowances)  
+	else if clientState$='IN' then 
+		returnN=fn_wh_indiana(wages,pppy,allowances)                              
+	else if clientState$='KY' then ! added 10/03/2016 for R R Crawford Engineering
+		returnN=fn_wh_kentuky(wages,pppy,allowances)                              
+	else if clientState$='LA' then 
+		returnN=fn_wh_louisiana(wages,pppy,allowances) 
+	else if clientState$='MO' then 
+		returnN=fn_wh_missouri(wages,maritial,fedWh,allowances,pppy)              
+	else if clientState$='MS' then 
+		returnN=fn_wh_mississippi(wages,pppy,addOnSt) 
+	else if clientState$='OK' then 
+		returnN=fn_wh_oklahoma(wages,pppy,allowances,maritial) 
+	else if clientState$='OR' then 
+		returnN=fn_wh_oregon(wages,fedWh,pppy,allowances,marital,w4year$,taxYear)
+	else if clientState$='TN' then 
+		returnN=0 ! no Tenn wh
+	else if clientState$='TX' then 
+		returnN=0 ! no Texas wh
+	end if 
+	
+	fn_stateTax=returnN
+	
+fnend
+! r: fn_stateTax subordionate functions
+def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
+	if ~setup_arwh then ! r: setup AR Arkansas
+		dim ar(6,3) ! ar(7,3)
+		setup_arwh=1
+		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=5: mat ar ! Arkansas
+		! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
+		! over                              Percentage
+		ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
+		ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
+		ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
+		ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
+		ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
+		ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
+		arStandardDeduction=2200
+	end if ! /r
+	t1=round(war_wages_taxable_current*payPeriodsPerYear,2)
+	! t2=2000
+	t3=t1-arStandardDeduction
+	tableRow=fn_table_line(mat ar,t3)
+	s1=round(ar(tableRow,2)+(t3-ar(tableRow,1))*ar(tableRow,3),2)
+	s2=stAllowances*20
+	returnN=round((s1-s2)/payPeriodsPerYear,2)
+	if returnN<.1 then returnN=0
+	fn_wh_arkansas=returnN
+fnend
+def fn_wh_arizona(taxableWagesCurrent,allowances; ___,returnN,stp)
+	! no table  revised 1/01/10, functionalized 3/24/20
+	! effective june 30, 2010 the rates changed and also 
+	! the base change from a percent of federal wh to a percent of total taxable wages
+	if allowances=1 then stp=.013
+	if allowances=2 then stp=.018
+	if allowances=3 then stp=.027
+	if allowances=4 then stp=.036
+	if allowances=5 then stp=.042
+	if allowances=6 then stp=.0510
+	returnN=round(taxableWagesCurrent*stp,2)
+	! h3=min(h3,1200)
+	fn_wh_arizona=returnN
+fnend
+def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,returnN)
+	! created 06/29/2017
+	! taxableWagesCurrent - formerly b8
+	! payPeriodsPerYear - formerly stwh(tcd1,1)
+	if ~wga_setup then 
+		wga_setup=1
+		gaAnnualDependantAllowance=3000
+		! r: single Table F Page 43 of Employeer's Tax Guide dated 1/16/2017
+		dim gawhTableF(6,3)
+		gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
+		gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
+		gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
+		gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
+		gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
+		gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.06
+		! /r
+		! r: single Table G Page 44 of Employeer's Tax Guide dated 1/16/2017
+		dim gawhTableG(6,3)
+		gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
+		gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
+		gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
+		gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
+		gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
+		gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.06
+		! /r
+		! r: single Table H Page 45 of Employeer's Tax Guide dated 1/16/2017
+		dim gawhTableH(6,3)
+		gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
+		gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
+		gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
+		gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
+		gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
+		gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.06
+		! /r
+	end if 
+	Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+	Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
+	if env$('acsDeveloper')<>'' then dev=1 else dev=0
+	! if dev then pr 'taxableWagesCurrent=';taxableWagesCurrent
+	! if dev then pr '   payPeriodsPerYear=';payPeriodsPerYear
+	! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
+	! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
+	! if dev then pr '   allowances=';allowances
+	ga_WagesAnnual=(taxableWagesCurrent)*payPeriodsPerYear
+	! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
+	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+	! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
+	if wga_is_married=0 then ! SINGLE INDIVIDUAL 
+		mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
+		mat gawh=gawhTableH
+		! if dev then pr '   using Table H'
+	else if wga_is_married=4 or wga_is_married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
+		mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
+		mat gawh=gawhTableG
+		! if dev then pr '   using Table G'
+	else if wga_is_married=3 or wga_is_married=2 or wga_is_married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
+		mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
+		mat gawh=gawhTableF
+		! if dev then pr '   using Table F'
+	else 
+		pr 'unrecognized wga_is_married';wga_is_married : pause
+	end if
+	tableRow=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
+	! if dev then pr '   table line ';tableRow
+	! if dev then pause
+	ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*allowances
+	returnN=gawh(tableRow,2)+(ga_AnnualWagesSubjToWithhold-gawh(tableRow,1))*gawh(tableRow,3)
+	returnN=returnN
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,2) ! round to the nearest whole dollar
+	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
+	fn_wh_georgia=returnN
+fnend 
+def fn_wh_illinois(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN)
+	! no table
+	! line 1 allowances = +1 for claiming self, +1 for claiming spouse
+	! line 2 allowances = +1 for each other (not you nor spouse) dependent
+	g2=round(taxableWagesCurrent*payPeriodsPerYear,2)
+	!  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
+	!  new way needs awesome function !    allowances_line_2=stAllowances-allowances_line_1
+	!  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
+	g2=g2-1000*stAllowances
+	returnN=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
+	returnN=round(returnN/payPeriodsPerYear,2)
+	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
+	fn_wh_illinois=returnN
+fnend
+def fn_wh_indiana(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,returnN,h3)
+	! no table   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
+	! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
+	h3=round(taxableWagesCurrent*payPeriodsPerYear,2)-(stAllowances*1000)
+	if h3>0 then 
+		returnN=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
+		returnN=round(returnN/payPeriodsPerYear,2)
+		if returnN<.1 then returnN=0
+	end if 
+	fn_wh_indiana=returnN
+fnend
+def fn_wh_kentuky(taxableWagesCurrent,payPeriodsPerYear,allowances; ___,returnN,h1,h2,tableRow)
+	! revised 12/31/2005
+	! taxableWagesCurrent - formerly b8
+	! payPeriodsPerYear - formerly stwh(tcd1,1)
+	if ~wky_setup then 
+		wky_setup=1
+		! r: Pull the withholding routines from new\acswrk
+		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=20: mat ky ! Kentucky
+		dim ky(6,3)
+		ky(1,1)=    0 : ky(1,2)=   0 : ky(1,3)=0.02
+		ky(2,1)= 3000 : ky(2,2)=  60 : ky(2,3)=0.03
+		ky(3,1)= 4000 : ky(3,2)=  90 : ky(3,3)=0.04
+		ky(4,1)= 5000 : ky(4,2)= 130 : ky(4,3)=0.05
+		ky(5,1)= 8000 : ky(5,2)= 280 : ky(5,3)=0.058
+		ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
+		! /r
+	end if 
+	h1=(taxableWagesCurrent)*payPeriodsPerYear
+	h2=h1-1970
+	tableRow=fn_table_line(mat ky,h2)
+	returnN=ky(tableRow,2)+(h2-ky(tableRow,1))*ky(tableRow,3)
+	returnN=returnN-20*allowances
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,2)
+	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
+	fn_wh_kentuky=returnN
+fnend 
+def fn_wh_louisiana(taxableWagesCurrent,payPeriodsPerYear,allowances; _
+		___,returnN,h1,h2,h3,stateEarnings,x,y,m1,m2,a,bb,cc,dd,ee)
+	! no table: revised 1/01/03
+
+	stateEarnings=round(taxableWagesCurrent,2) ! stateEarnings
+	if maritial=0 or maritial=2 then 
+		y=stAllowances-1
+		x=1
+		if y>=0 then goto L3800
+		x=0
+		y=0
+		goto L3800
+	end if
+	if stAllowances=0 then y=0 : x=0
+	if stAllowances=1 then y=0 : x=1
+	if stAllowances>=2 then y=stAllowances-2 : x=2
+	L3800: ! married formula or >1 exemptions
+	if x<2 then m1=12500 : m2=25000
+	if x>=2 then m1=25000 : m2=50000
+	n=payPeriodsPerYear
+	if stateEarnings>0 then a=(stateEarnings*.021) else a=0
+	if stateEarnings>(m1/n) then bb=.0135*(stateEarnings-(m1/n)) else bb=0
+	if stateEarnings>(m2/n) then cc=.0135*(stateEarnings-(m2/n)) else cc=0
+	dd=.021*(((x*4500)+(y*1000))/n)
+	if ((x*4500)+(y*1000))>m1 then 
+		ee=.0135*(((x*4500)+(y*1000)-m1)/n)
+	else 
+		ee=0
+	end if 
+	returnN=max(0,((a+bb+cc)-(dd+ee)))
+	returnN=round(returnN,2)
+	if returnN<.1 then returnN=0
+	fn_wh_louisiana=returnN
+fnend
+def fn_wh_missouri(taxableWagesCurrent,maritial,fed_wh,allowances,payPeriodsPerYear; _
+										___,returnN,tableRow,numb6,h1,h2,numb4,h3)
+	! revised 1/1/2002
+	if ~setup_mowh then  ! r: MO Missouri
+		setup_mowh=1
+		dim mo(9,3)
+		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
+		mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
+		mo( 2,1)=1053 : mo( 2,2)= 16  : mo( 2,3)=0.02
+		mo( 3,1)=2106 : mo( 3,2)= 37  : mo( 3,3)=0.025
+		mo( 4,1)=3159 : mo( 4,2)= 63  : mo( 4,3)=0.03
+		mo( 5,1)=4212 : mo( 5,2)= 95  : mo( 5,3)=0.035
+		mo( 6,1)=5265 : mo( 6,2)=132  : mo( 6,3)=0.04
+		mo( 7,1)=6318 : mo( 7,2)=174  : mo( 7,3)=0.045
+		mo( 8,1)=7371 : mo( 8,2)=221  : mo( 8,3)=0.05
+		mo( 9,1)=8424 : mo( 9,2)=274  : mo( 9,3)=0.054
+	end if ! /r
+	! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
+	
+	if maritial=0 or maritial=1 or maritial=4 or maritial=5 then 
+		numb6=min(12200,fed_wh) ! FEDERAL DEDUTIONS LIMITED TO 12200 FOR SINGLE or married, filing seperately
+	else if maritial=2 then 
+		numb6=min(18350,fed_wh) ! FEDERAL DEDUCTIONS LIMIT FOR SINGLE HEAD OF HOUSEHOLD
+	else if maritial=3 then 
+		numb6=min(24400,fed_wh) ! Married filing joint, spouse doesn't work
+	end if
+	if maritial=1 or maritial=3 or maritial=4 or maritial=5 then 
+		h1=3925
+	else if maritial=2 then 
+		h1=7850
+	else
+		h1=4700
+	end if
+	h2=0
+	if allowances then 
+		if maritial=0 then  ! single
+			h2=1200+(allowances-1)*1200
+		else if maritial=1 or maritial=3 or maritial=4 or maritial=5 then 
+			h2=min(allowances,2)*1200+max(allowances-2,0)*1200 ! married
+		else if maritial=2 then  ! head of house hold
+			h2=3500+max(allowances-4,0)*1200
+		end if
+	end if
+	numb4=round(taxableWagesCurrent*payPeriodsPerYear,2)
+	h3=max(0,numb4-h1-h2-numb6)
+	tableRow=fn_table_line(mat mo,h3)
+	returnN=(mo(tableRow,2)+(h3-mo(tableRow,1))*mo(tableRow,3))/payPeriodsPerYear
+	returnN=round(returnN,0)
+	fn_wh_missouri=returnN
+fnend
+def fn_wh_mississippi(taxableWagesCurrent,payPeriodsPerYear,addOnSt; ___,returnN,h1,h3)
+  ! no table
+	! **********  REMOVE THE addOnSt FROM LINE 740 **********
+	! substitute the exemptions into the field now called state tax add-on
+	! the exemptions must be entered in dollars and the standard deduction
+	! must be added to the exemptions.
+	! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
+	h1=round(taxableWagesCurrent*payPeriodsPerYear,2)
+	h3=h1-addOnSt
+	if h3<=0 then 
+		returnN=0
+	else if h3<10000 then 
+		if h3>0 and h3<=5000 then 
+			returnN=.03*h3
+			if returnN<.1 then returnN=0
+		else
+			returnN=150+.04*(h3-5000)
+		end if
+	else 
+		returnN=350+.05*(h3-10000)
+	end if
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,2)
+	if returnN<.1 then returnN=0
+	fn_wh_mississippi=returnN
+fnend
+def fn_wh_oklahoma(taxableWagesCurrent,payPeriodsPerYear,allowances,maritial; _
+		___,g2,j2,tableRow,returnN)
+	!  REV. 1/01/07
+	if ~setup_okwh then ! r:
+		setup_okwh=1
+		dim ok(7,6)
+		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
+		! r: single 
+		ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
+		ok(2,1)= 6350 : ok(2,2)=   0   : ok(2,3)=0.005
+		ok(3,1)= 7350 : ok(3,2)=   5   : ok(3,3)=0.01
+		ok(4,1)= 8850 : ok(4,2)=  20   : ok(4,3)=0.02
+		ok(5,1)=10100 : ok(5,2)=  45   : ok(5,3)=0.03
+		ok(6,1)=11250 : ok(6,2)=  79.5 : ok(6,3)=0.04
+		ok(7,1)=13550 : ok(7,2)= 171.5 : ok(7,3)=0.05
+		! ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
+		! /r
+		! r: married 
+		ok(1,4)=    0  : ok(1,5)=  0 : ok(1,6)=0
+		ok(2,4)=12700  : ok(2,5)=  0 : ok(2,6)=0.005
+		ok(3,4)=14700  : ok(3,5)= 10 : ok(3,6)=0.01
+		ok(4,4)=17700  : ok(4,5)= 40 : ok(4,6)=0.02
+		ok(5,4)=20200  : ok(5,5)= 90 : ok(5,6)=0.03
+		ok(6,4)=22500  : ok(6,5)=159 : ok(6,6)=0.04
+		ok(7,4)=24900  : ok(7,5)=255 : ok(7,6)=0.05
+		! ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
+		! /r
+	end if ! /r
+	g2=taxableWagesCurrent*payPeriodsPerYear
+	g2=g2-allowances*1000
+	if maritial=0 or maritial=2 then j2=1 else j2=4 ! single of married
+	tableRow=fn_table_line(mat ok,g2)
+	returnN=ok(tableRow,j2+1)+(g2-ok(tableRow,j2))*ok(tableRow,j2+2)
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,0)
+	fn_wh_oklahoma=returnN
+fnend
+def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
+									payPeriodsPerYear,allowances,isMarried, _
+									w4year$,taxYear; ___, _
+									returnN,allowancesEffective,theyAreSingle, _
+									theyAreMarried,standardDeduction,whichTable, _
+									perAllowance	)
+	! requires retaining variables: wor_setup, mat or1, mat or2
+	! if env$('ACSdeveloper')<>'' then print taxableWagesCurrent,fedWhAnnualEstimate,payPeriodsPerYear,allowances,isMarried : pause
+	if ~wor_setup then ! r:
+		wor_setup=1
+		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
+		!  r: Withholding Table for Single with fewer than 3 allowances
+		dim or1(0,0)
+		if taxYear=2019 then
+			mat or1(5,3)
+			or1(1,1)=     0 : or1(1,2)=  206    : or1(1,3)=0.05
+			or1(2,1)=  3550 : or1(2,2)=  383.5  : or1(2,3)=0.07
+			or1(3,1)=  8900 : or1(3,2)=  758    : or1(3,3)=0.09
+			or1(4,1)= 50000 : or1(4,2)=  540    : or1(4,3)=0.09
+			or1(5,1)=250000 : or1(5,2)=11007    : or1(5,3)=0.099
+		else 
+			mat or1(4,3)
+			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
+			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
+			or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
+			
+			or1(4,1)= 50000 : or1(4,2)=   0   : or1(4,3)=0.099
+		end if
+		! /r
+		dim or2(0,0) ! r: Single with 3 or more allowances, or married
+		if taxYear=2019 then
+			mat or2(5,3)
+			or2(1,1)=     0 : or2(1,2)=  206 : or2(1,3)=0.05
+			or2(2,1)=  7100 : or2(2,2)=  561 : or2(2,3)=0.07
+			or2(3,1)= 17800 : or2(3,2)= 1310 : or2(3,3)=0.09
+			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
+			or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
+		else
+			mat or2(4,3)
+			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475
+			or2(2,1)=  7200 : or2(2,2)=  552 : or2(2,3)=0.0675
+			or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875
+			
+			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
+			! or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
+		end if
+		! /r
+	end if ! /r
+	! returns Oregon State Withholding
+	theyAreSingle=theyAreMarried=0
+	if isMarried=0 or isMarried=2 then theyAreSingle=1
+	if isMarried=1 or isMarried=3 or isMarried=4 or isMarried=5 then theyAreMarried=1
+
+	if w4year$='none' then
+		returnN=round(taxableWagesCurrent*.08,2) ! flat 8% if no w-4
+		fnStatus('flat 8% tax override triggered by W-4 Year setting of "none".')
+	else
+		allowancesEffective=allowances
+		if taxableWagesCurrent>100000 and theyAreSingle then allowancesEffective=0
+		if taxableWagesCurrent>200000 and theyAreMarried then allowancesEffective=0
+	
+		if theyAreMarried or (theyAreSingle and allowancesEffective>=3) then ! (married or more than 3 allowances)
+			whichTable=2
+		else ! (single and less than 3 allowances)
+			whichTable=1
+		end if 
+	
+		if whichTable=2 then ! theyAreMarried then
+			if taxYear=2019 then
+				standardDeduction=4545 ! 2019
+			else
+				standardDeduction=4630 ! 2020
+			end if
+		else ! if whichTable=1 then ! if theyAreSingle then
+			if taxYear=2019 then
+				standardDeduction=2270 ! 2019
+				perAllowance=206
+			else
+				standardDeduction=2315 ! 2020
+				perAllowance=210
+			end if
+		end if 
+			! 
+		wor_wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
+		fedWhAnnualEstimate=fedWhAnnualEstimate*payPeriodsPerYear ! needed to be annual, not pay period LS 12/31/18
+		wor_phaseOut=fn_oregonPhaseOut(wor_wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,theyAreSingle,theyAreMarried)
+		! 
+		! wor_base=taxableWagesCurrent*payPeriodsPerYear-min(fedWhAnnualEstimate,8550)-(allowancesEffective*2250)
+		wor_base=wor_wagesAnnualEstimate-wor_phaseOut-standardDeduction
+			! 
+		if whichTable=2 then 
+			wor_table_line=fn_table_line(mat or2,wor_base)
+			wor_removePrev=or2(wor_table_line,1)
+			wor_preBase=or2(wor_table_line,2)
+			wor_taxRate=or2(wor_table_line,3)
+		else ! whichTable=1
+			wor_table_line=fn_table_line(mat or1,wor_base)
+			wor_removePrev=or1(wor_table_line,1)
+			wor_preBase=or1(wor_table_line,2)
+			wor_taxRate=or1(wor_table_line,3)
+		end if 
+		if debug then 
+			fnStatus('-------------------------------------------')
+			if theyAreSingle then 
+				fnStatus('  Single with '&str$(allowancesEffective)&' allowances')
+			else if theyAreMarried then 
+				fnStatus('  Married with '&str$(allowancesEffective)&' allowances')
+			else 
+				fnStatus('  Maridal Status is undetermined!!!  ')
+			end if 
+			fnStatus('    Current Wage (Gross)    = '&str$(taxableWagesCurrent))
+			fnStatus('    Pay Periods Per Year    = '&str$(payPeriodsPerYear))
+			fnStatus('    Annual wage (estimate)  = '&str$(wor_wagesAnnualEstimate))
+			fnStatus('    standard deduction      = '&str$(standardDeduction))
+			fnStatus('    table '&str$(whichTable)&' line '&str$(wor_table_line))
+			fnStatus('    phase out               = '&str$(wor_phaseOut))
+			fnStatus('    fedWhAnnualEstimate = '&str$(fedWhAnnualEstimate))
+			fnStatus('.')
+			fnStatus('    BASE = '&str$(wor_wagesAnnualEstimate)&' (an..wages) - '&str$(wor_phaseOut)&' (phase out/fed wh) - '&str$(standardDeduction)&' (std ded)')
+			fnStatus('    base                   = '&str$(wor_base))
+			! fn  status('    pre base               = '&str$(wor_preBase))
+			! fn  status('    tax rate               = '&str$(wor_taxRate))
+			! fn  status('    remove_prev            = '&str$(wor_removePrev))
+			fnStatus('.')
+			fnStatus('                                   WH = '&str$(wor_preBase)&' + [('&str$(wor_base)&' - '&str$(wor_removePrev)&')] x '&str$(wor_taxRate)&'] - (195 x '&str$(allowancesEffective)&')')
+			fnStatus('-------------------------------------------')
+		end if
+		! 
+		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
+		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
+		! returnN=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
+		returnN = wor_preBase +(( wor_base - wor_removePrev) * wor_taxRate) - (perAllowance * allowancesEffective)
+	end if
+	! fnStatus(' ** annual withholding estimate = '&str$(returnN))
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,2)
+	if returnN<.1 then returnN=0
+	! fnStatus(' *** calculated withholding:  '&str$(returnN))
+	! if debug then fnStatusPause ! pause
+	fn_wh_oregon=returnN
+fnend 
+def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried)
+	if opo_wages<50000 then 
+		opo_return=min(opo_fed_wh,6800)
+	else if opo_table=1 then 
+		if opo_wages => 50000 and opo_wages<125000 th opo_return= 6950 : goto OPO_XIT
+		if opo_wages =>125000 and opo_wages<130000 th opo_return= 5550 : goto OPO_XIT
+		if opo_wages =>130000 and opo_wages<135000 th opo_return= 4150 : goto OPO_XIT
+		if opo_wages =>135000 and opo_wages<140000 th opo_return= 2750 : goto OPO_XIT
+		if opo_wages =>140000 and opo_wages<145000 th opo_return= 1350 : goto OPO_XIT
+		if opo_wages =>145000 then opo_return=0
+	else ! if opo_table=2 then
+		if isMarried then 
+			if opo_wages => 50000 and opo_wages<250000 then opo_return= 6950 : goto OPO_XIT
+			if opo_wages =>250000 and opo_wages<260000 then opo_return= 5550 : goto OPO_XIT
+			if opo_wages =>260000 and opo_wages<270000 then opo_return= 4150 : goto OPO_XIT
+			if opo_wages =>270000 and opo_wages<280000 then opo_return= 2750 : goto OPO_XIT
+			if opo_wages =>280000 and opo_wages<290000 then opo_return= 1350 : goto OPO_XIT
+			if opo_wages =>290000 then opo_return=0
+		else ! if isSingle then
+			if opo_wages => 50000 and opo_wages<125000 then opo_return= 6950 : goto OPO_XIT
+			if opo_wages =>125000 and opo_wages<130000 then opo_return= 5550 : goto OPO_XIT
+			if opo_wages =>130000 and opo_wages<135000 then opo_return= 4150 : goto OPO_XIT
+			if opo_wages =>135000 and opo_wages<140000 then opo_return= 2750 : goto OPO_XIT
+			if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
+			if opo_wages =>145000 then opo_return=0
+		end if 
+	end if 
+	OPO_XIT: ! 
+	fn_oregonPhaseOut=opo_return
+fnend 
+def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
+	if state$='GA' then
+		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
+			standardStateDeduction=2300
+		else if wga_is_married=5 then ! Married - filing seperate - both working
+			standardStateDeduction=1500
+		else if wga_is_married=4 then ! Married - filing joint - both working
+			standardStateDeduction=3000
+		else if wga_is_married=3 then ! Married - filing joint return - only one working
+			standardStateDeduction=3000
+		else  ! 1 - Married - (filing status unknown) - just use lowest deduction
+			standardStateDeduction=1500
+		end if
+	else
+		pr 'fn_standardStateDeduction not yet configured for state: "'&state$&'"'
+		pause
+	end if
+	fn_standardStateDeduction=standardStateDeduction
+fnend
+def fn_statePersonalAllowance(state$,wga_is_married,wga_eicCode)
+	if state$='GA' then
+		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
+			statePersonalAllowance=2700
+		else if wga_is_married=3 then ! Married - filing joint - only one working
+			statePersonalAllowance=3700
+		else if wga_is_married=4 then ! Married - filing joint - both working
+			statePersonalAllowance=7400
+		else if wga_is_married=5 then ! Married - filing seperate - both working
+			statePersonalAllowance=3700
+		else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
+			statePersonalAllowance=3700
+		end if
+	else
+		pr 'fn_statePersonalAllowance not yet configured for state: "'&state$&'"'
+		pause
+	end if
+	fn_statePersonalAllowance=statePersonalAllowance
+fnend
+def fn_test_state_calk
+	fn_setup
+	! show the state you are assined  to and you change it if you like.
+	!  is_married=0	! is_married = 0 - Single
+									! is_married = 1 - Married
+									! is_married = 2 - Single - Head of Household
+									! is_married = 3 - Married - filing joint return - only one working
+									! is_married = 4 - Married - filing seperate or joint return both working
+	!   eicCode=0		! eicCode = 0 - Not qualified for EIC
+									! eicCode = 1 - Single or Spouse not file
+									! eicCode = 2 - Married both filing
+	!		w4year$			! "2019", "2020", or "none"
+
+	! r: example 1 OR 2020
+		pay_periods_per_year=1
+		wages_taxable_current=15000
+		fed_wh=1166
+		allowances=0
+		is_married=0
+		eicCode=0
+		w4year$='2020'
+		gosub TscDisplayStats
+		tmp=fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
+		fnStatus('Oregon Example 1 returns '&str$(tmp))
+		fnStatusPause
+	! /r
+	! r: example 2 OR 2020
+		pay_periods_per_year=12
+		wages_taxable_current=1250
+		fed_wh=1166/12
+		allowances=0
+		is_married=0
+		eicCode=0
+		w4year$='2020'
+		gosub TscDisplayStats
+		fnStatus('Oregon Example 2 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
+		fnStatusPause
+	! /r
+	! r: example 3 OR 2020
+		pay_periods_per_year=12
+		wages_taxable_current=132000/12
+		fed_wh=21098
+		allowances=0 ! 4
+		is_married=0
+		eicCode=0
+		w4year$='none'
+		gosub TscDisplayStats
+		fnStatus('Oregon Example 3 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
+		fnStatusPause
+	! /r
+	! pr 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
+	! pr 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
+	! pr 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
+	! if env$('ACSdeveloper')<>'' then pause 
+fnend 
+TscDisplayStats: ! r: pr stats
+	fnStatus('wages_taxable_current: '&str$(wages_taxable_current))
+	fnStatus(' pay_periods_per_year: '&str$(pay_periods_per_year ))
+	fnStatus('               fed_wh: '&str$(fed_wh               ))
+	fnStatus('           allowances: '&str$(allowances           ))
+	fnStatus('           is_married: '&str$(is_married           ))
+	fnStatus('              eicCode: '&str$(eicCode              ))
+	fnStatus('               w4year: '&w4year$                    )
+return ! /r
+! /r
+
+West_Acc_WorkmansComp: ! r:
+	! _inp(6) Other Compensation
+	! if other compensation > 0 then
+	!   if pay code is 1 hours = 173.33
+	!   if pay code is 2 hours = 86.66
+	!   if pay code is 3 hours = 80
+	!   if pay code is 4 hours = 40
+	! else 
+	!   hours = regular hours + overtime hours
+	! end if
+	tmphrs=_inp(1)+_inp(2) ! if _inp(6)>0 then tmphrs=saif(payCode) else tmphrs=_inp(1)+_inp(2)
+	!     fnStatus('_inp(17) changed to '&str$(round(tmphrs*_inp(17)*.01,2))&' round('&str$(tmphrs)&' * _inp(17)('&str$(_inp(17))&' * .01)',2)
+	!     fnStatusPause
+	_inp(17)=round(tmphrs*_inp(17)*.01,2) ! _inp(17)=round(tmphrs*_inp(17)*.01,2)
+return  ! /r
+ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept and state
+	s3=0 : tcp(4)=0 : tcp4=0
+	oldeno=val(n$)
+	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",0): 
+	if stdWhSt=-1 then goto L960
+	! Read #hDepartment,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
+	do
+		L670: ! 
+		read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L960
+		if teno=oldeno then 
+			if debug then fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
+			if d1><tdt(4) then goto L670
+			holdtdn=tdn
+			olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
+			read #hPrChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey L670
+			if debug then fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
+			dst3=0
+			for j=1 to 20
+				if dedst(j)>0 then dst3=dst3+tcp(j+4)
+			next j
+			! sTWH(tcd(1),1)=STWH(tcd(1),1)-DST3
+			if stwh(tcd(1),1)=0 then 
+				goto L670
+			else if stwh(tcd(1),2)><0 then 
+				goto L870
+			else if stdWhSt then
+				if enableSkipWithholdingN(4)<>1 then stwh(tcd(1),2)=stdWhSt
+				goto L870
+			end if
+			if enableSkipWithholdingN(esw_state) then s3=0: goto L860
+				! tcd(1) = state code
+				! payPeriodsPerYear     = number of pay periods per year (formerly b8)
+				! stAllowances  = allowances
+				! maritial  = married (1=yes and more )
+				! stAllowances - number of allowances
+				! payPeriodsPerYear = number of pay periods (formerly b8)
+			if tcd(1)=1 then
+				s3=fn_stateTax(stwh(tcd(1),1),payPeriodsPerYear,stAllowances,marital,eicCode,fed_wh,addOnSt,w4year$,taxYear) ! ST01:
+			else if tcd(1)=2  then
+				s3=0 ! ST02:
+			else if tcd(1)=3  then
+				s3=0 ! ST03:
+			else if tcd(1)=4  then
+				s3=0 ! ST04:
+			else if tcd(1)=5  then
+				s3=0 ! ST05:
+			else if tcd(1)=6  then
+				s3=0 ! ST06:
+			else if tcd(1)=7  then
+				s3=0 ! ST07:
+			else if tcd(1)=8  then
+				s3=0 ! ST08:
+			else if tcd(1)=9  then
+				s3=0 ! ST09:
+			else if tcd(1)=10 then
+				s3=0 ! ST10:
+			end if
+
+			L860: ! 
+			stwh(tcd(1),2)=s3
+			L870: ! 
+			if env$('client')="Lamar" then 
+				tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
+			else 
+				tcp4=(stwh(tcd(1),2)+addOnSt)*((tcp(31)-dst3)/stwh(tcd(1),1))
+			end if 
+			tcp4=round(tcp4,2)
+			if enableSkipWithholdingN(esw_state) then tcp4=0
+			tcp(32)-=tcp4: tcp(4)=tcp4
+			rewritekey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)&cnvrt$("pd 6",prd) ! index employee#,department# and payroll date
+			rewrite #hPrChecks,using 'Form pos 80,pd 5.2,poS 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
+			fn_report_stuff
+			rewrite #hDepartment,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
+		else
+			goto L960
+		end if
+	loop while teno=oldeno
+	L960: ! 
+	gosub EmployeeLocalToRecord
+	rewrite #hEmployee,using F_employee,key=n$: mat em,d1,totalGrossPay
+	if fp(d1*.01)>.9 then hd1=19000000+fncd(d1) else hd1=20000000+fncd(d1)
+	mat stwh=(0)
+return ! /r
+def fn_report_stuff
+	! fnStatus('check completely calcualated for eno '&str$(eno))
+	! fnStatus('tcp(1)='&str$(tcp(1)))
+	! fnStatus('tcp(2)='&str$(tcp(2)))
+	! fnStatus('tcp(3)='&str$(tcp(3)))
+	! fnStatus('tcp(4)='&str$(tcp(4)))
+	! fnStatus('tcp(13)='&str$(tcp(13)))
+	! fnStatus('tcp(14)='&str$(tcp(14)))
+	! fnStatus('tcp(32)='&str$(tcp(32)))
+	! fnStatusPause
+fnend 
+EmployeeRecordToLocal: ! r:
+	maritial     =em(1)
+	fedExempt    =em(2)
+	stAllowances =em(3)
+	empStatus    =em(4)
+	payCode      =em(5)
+	ficaCode     =em(6)
+	eicCode      =em(7)
+	sickCode     =em(8)
+	vaca         =em(9)
+	hrsSick      =em(10)
+	hrsVaca      =em(11)
+	stdWhFed     =em(12)
+	addOnFed     =em(13)
+	stdWhSt      =em(14)
+	addOnSt      =em(15)
+	hireDate     =em(16)
+return ! /r
+EmployeeLocalToRecord: ! r:
+	em(1)  = maritial    
+	em(2)  = fedExempt   
+	em(3)  = stAllowances
+	em(4)  = empStatus   
+	em(5)  = payCode     
+	em(6)  = ficaCode    
+	em(7)  = eicCode     
+	em(8)  = sickCode    
+	em(9)  = vaca        
+	em(10) = hrsSick
+	em(11) = hrsVaca
+	em(12) = stdWhFed    
+	em(13) = addOnFed    
+	em(14) = stdWhSt     
+	em(15) = addOnSt     
+return ! /r
+def fn_payPeriodsPerYear(payCode; ___,returnN)
+	if payCode=1 then
+		returnN=12
+	else if payCode=2 then
+		returnN=24
+	else if payCode=3 then
+		returnN=26
+	else if payCode=4 then
+		returnN=52
+	else if payCode=5 then
+		returnN=1
+	else
+		mat ml$(1)
+		ml$(1)="Incorrect Pay Code "&str$(payCode)&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
+		fnmsgbox(mat ml$,resp$,'',0)
+		returnN=-1
+	end if
+	fn_payPeriodsPerYear=returnN
+fnend
+def library fnCheckStateCalculation(; ___, _
+	returnN, _
+	lc,respc,col1_len, _
+	marital,payCode,allowances,stateAddOn,w4Year$,wages,pppy,fedWh, _
+	col1_pos,col1_len,col2_pos,col2_len	)
+	! mat resp$,resp_*
+	if ~setup_checkCalculation then ! r:
+		setup_checkCalculation=1
+		if ~setup then fn_setup
+		dim marriedOption$(0)*58
+		dim eicOption$(0)*29
+		dim w4yearOption$(0)*4
+		dim payPeriodOption$(0)*16
+		fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+		
+		dim fed_exemption_option$(22)
+		for j=1 to 21
+			fed_exemption_option$(j)=str$(j-1)
+		next j
+		fed_exemption_option$(22)="99"
+		
+	end if ! /r
+	fn_setupOpenFiles
+	do
+		! r: set default answers ;)
+		pppy=1 				!	pay_periods_per_year=1
+		wages=15000 	! wages_taxable_current=15000
+		fedWh=1166    ! fed_wh=1166
+		payCode=5
+		allowances=0
+		is_married=0
+		eicCode=0
+		w4year$='2020'
+		taxYear=2020
+		! /r
+		fnTos ! r: Test State Calculation Ask Criteria Screen
+		lc=respc=0
+		col1_pos=1 : col1_len=22 : col2_pos=col1_pos+col1_len+1 : col2_len=25
+		
+		fnLbl(lc+=1,col1_pos,"Current Taxable Wages:",col1_len,1)
+		fnTxt(lc   ,col2_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
+		resp$(resp_wages=respc+=1)=str$(wages)
+	
+		fnLbl(lc+=1,col1_pos,"Federal Withholding:",col1_len,1)
+		fnTxt(lc   ,col2_pos,10,10,0,"32",0,"")
+		resp$(resp_fedWh=respc+=1)=str$(fedWh)
+		
+		lc+=1
+		
+		fnLbl(             lc+=1,col1_pos,'Marital Status:',col2_len,1)
+		fncomboa('Marital',lc   ,col2_pos,mat marriedOption$,'',col2_len)
+		resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(marital))
+		
+		fnLbl(              lc+=1,col1_pos,"Pay Code:",col1_len,1)
+		fncomboa("PayCode", lc    ,col2_pos,mat payPeriodOption$,"",16)
+		resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payPeriodOption$,str$(PayCode))
+	
+		lc+=1
+	
+		fnLbl(             lc+=1,col1_pos,"State Exemptions:",col1_len,1)
+		fncomboa("StateEx",lc   ,col2_pos,mat fed_exemption_option$,"",3)
+		resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(allowances),1,2)
+		
+		fnLbl(lc+=1,col1_pos,"State Tax Add-On:",col1_len,1)
+		fnTxt(lc   ,col2_pos,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
+		resp$(resp_StateAddOn=respc+=1)=str$(stateAddOn)
+		
+		lc+=1
+		
+		fnLbl(             lc+=1,col1_pos,"W-4 Year:",col1_len,1)
+		fncomboa("w4Year", lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+		resp$(resp_w4year=respc+=1)=w4Year$
+
+		fnLbl(lc+=1,col1_pos,"Tax Year:",col1_len,1)
+		fnTxt(lc   ,col2_pos,4,4,0,"30")
+		resp$(resp_taxYear=respc+=1)=str$(taxYear)
+
+		lc+=1
+		
+		fnLbl(              lc+=1,col1_pos,"EIC Code:",col1_len,1)
+		fncomboa("EICCode", lc   ,col2_pos,mat eicOption$,'',25)
+		resp$(resp_EicCode=respc+=1)=eicOption$(eicCode+1)
+
+		fnCmdSet(2)
+		fnAcs2(mat resp$,ckey) ! /r
+		if ckey=5 then
+			goto XitCheckStateCalculation
+		else 
+			! r: do test the calc.
+			marital       =val(resp$(resp_married        )(1:1)) ! marital status
+			payCode       =val(resp$(resp_payCode        )(1:2)) ! pay code
+			allowances    =val(resp$(resp_stExeptions    )(1:2)) ! state ex
+			stateAddOn    =val(resp$(resp_StateAddOn     )     ) ! state addon
+			w4year$       =    resp$(resp_w4year         )       ! W-4 Year
+			wages         =val(resp$(resp_wages          )     ) ! Current Wages Taxable
+			fedWh         =val(resp$(resp_fedWh          )     ) ! Federal Withholding
+			taxYear       =val(resp$(resp_taxYear        )     ) ! taxYear
+			eicCode       =val(resp$(resp_EicCode        )(1:2)) ! eic code
+			
+			
+			
+			pppy=fn_payPeriodsPerYear(payCode)
+
+			fnStatus('              taxYear: '&str$(taxYear            ))
+			fnStatus('Wages Taxable Current: '&str$(wages              ))
+			fnStatus(' Pay Periods Per Year: '&str$(pppy               ))
+			fnStatus('  Federal WithHolding: '&str$(fedWh              ))
+			fnStatus('           Allowances: '&str$(allowances         ))
+			fnStatus('              Married: '&marriedOption$(marital+1))
+			fnStatus('              eicCode: '&str$(eicCode            ))
+			fnStatus('               w4year: '&w4year$                  )
+
+
+			
+			fnStatus('Calculated Federal WithHolding: '&str$( fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,maritial,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c) ))
+			fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'AR') ))
+			fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'AZ') ))
+			fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'GA') ))
+			fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'IL') ))
+			fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'IN') ))
+			fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'KY') ))
+			fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'LA') ))
+			fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'MO') ))
+			fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'MS') ))
+			fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'OK') ))
+			fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'OR') ))
+			fnStatus('your State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear)               ))
+			fnStatusPause
+			fnStatusClose
+			! /r
+		end if
+	loop
+
+	! if env$('ACSdeveloper')<>'' then pause 
+	
+	
+	XitCheckStateCalculation: !
+	fn_setupCloseFiles
+	returnN=0 ! 
+	fnCheckStateCalculation=returnN
+fnend
+
+
 def fn_setup
-	library 'S:\Core\Library': fnTop
-	library 'S:\Core\Library': fnXit
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnFra
-	library 'S:\Core\Library': fnChk
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnCd
-	library 'S:\Core\Library': fnPayroll_client_state$
-	library 'S:\Core\Library': fnMsgbox
-	library 'S:\Core\Library': fnStatus
-	library 'S:\Core\Library': fnGethandle
-	library 'S:\Core\Library': fnAcs2
-	library 'S:\Core\Library': fnAutomatedSavePoint
-	library 'S:\Core\Library': fnDedNames
-	library 'S:\Core\Library': fnStatusPause
-	library 'S:\Core\Library': fnFree
-	library 'S:\Core\Library': fnPayPeriodEndingDate
-	library 'S:\Core\Library': fnGetPayrollDates
-	library 'S:\Core\Library': fnSetPayrollDatesForYear
-	library 'S:\Core\Library': fnpause
+	autoLibrary
 	on error goto Ertn
 	if env$('ACSDeveloper')<>'' then debug=1 else debug=0
 
 	dim stwh(10,2)
-	dim inp(29)
+	dim _inp(29)
 	dim dat$*20
 	dim caf(20)
 	dim resp$(10)*40
@@ -944,601 +1755,27 @@ def fn_setup
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
 
+	esw_federal =1 ! enums for enableSkipWithholdingN
+	esw_state   =2 ! enums for enableSkipWithholdingN
+	esw_fica    =3 ! enums for enableSkipWithholdingN
+	esw_standard=4 ! enums for enableSkipWithholdingN
+
 fnend 
 def fn_setupOpenFiles
-	open #breakdown=fngethandle: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]",internal,outIn,keyed  ! formerly file #1
-	open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
-	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed 
-	open #44: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed 
-	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id]"&".h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]"&"Idx.h[cno]",internal,outIn,keyed 
-	F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
+	open #hBreakdown:=fngethandle: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed ioerr ignore ! formerly file #31
+	open #hEmployee:=fngethandle: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]',internal,outIn,keyed  ! formerly file #1
+	open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed  ! was #2
+	open #hPrChecks:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17",internal,outIn,keyed  ! was 4
+	open #hPayrollCheckIdx3_unused:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed ! was 44
 fnend
-def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
-	! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
-	! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first 
-	if tl_second_dimension=0 then tl_second_dimension=1
-	for tl_item=1 to udim(mat tl_table,1)-1
-		if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then 
-			goto TL_XIT
-		end if 
-	next tl_item
-	tl_item=udim(mat tl_table,1)
-	TL_XIT: ! 
-	fn_table_line=tl_item
-fnend 
-ST01: ! r:
-! tcd(1) = state code
-! payPeriodsPerYear     = number of pay periods per year (formerly b8)
-! stAllowances  = allowances
-! maritial  = married (1=yes and more )
-	s3=0
-	if fnpayroll_client_state$='AR' then 
-		s3=fn_wh_arkansas(stwh(tcd(1),1),payPeriodsPerYear,stAllowances,maritial,eicCode)
-	else if fnpayroll_client_state$='AZ' then 
-		gosub AZWH
-	else if fnpayroll_client_state$='GA' then 
-		! if env$('acsDeveloper')<>'' then 
-		s3=fn_wh_georgia(stwh(tcd(1),1),payPeriodsPerYear,stAllowances,maritial,eicCode)
-		! else
-		!   s3=0 ! fn_wh_georgia(stwh(tcd(1),1),payPeriodsPerYear,stAllowances,maritial,eicCode)
-		! end if
-	else if fnpayroll_client_state$='IL' then 
-		gosub ILWH
-	else if fnpayroll_client_state$='IN' then 
-		gosub INWH
-	else if fnpayroll_client_state$='KY' then ! added 10/03/2016 for R R Crawford Engineering
-		s3=fn_wh_kentuky(stwh(tcd(1),1),payPeriodsPerYear,stAllowances)
-	else if fnpayroll_client_state$='LA' then 
-		gosub LAWH
-	else if fnpayroll_client_state$='MO' then 
-		gosub MOWH
-	else if fnpayroll_client_state$='MS' then 
-		gosub MSWH
-	else if fnpayroll_client_state$='OK' then 
-		gosub OKWH
-	else if fnpayroll_client_state$='OR' then 
-		s3=fn_wh_oregon(stwh(tcd(1),1),fed_wh,payPeriodsPerYear,stAllowances,maritial)
-	else if fnpayroll_client_state$='TN' then 
-		goto ST1_XIT ! no Tenn wh
-	else if fnpayroll_client_state$='TX' then 
-		goto ST1_XIT ! no Texas wh
-	end if 
-	ST1_XIT: ! 
-return  ! /r
-ST02: s3=0 : return
-ST03: s3=0 : return
-ST04: s3=0 : return
-ST05: s3=0 : return
-ST06: s3=0 : return
-ST07: s3=0 : return
-ST08: s3=0 : return
-ST09: s3=0 : return
-ST10: s3=0 : return
+def fn_setupCloseFiles
+	close #hBreakdown:
+	close #hEmployee: 
+	close #hDepartment: 
+	close #hPrChecks:
+	close #hPayrollCheckIdx3_unused:
+	! close #hRpWork:
+fnend
 
-def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,wga_allowances,wga_is_married,wga_eicCode; ___,s1,s2,s3)
-	if ~setup_arwh then ! r: setup AR Arkansas
-		dim ar(6,3) ! ar(7,3)
-		setup_arwh=1
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=5: mat ar ! Arkansas
-		! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
-		! over                              Percentage
-		ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
-		ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
-		ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
-		ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
-		ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
-		ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
-		arStandardDeduction=2200
-	end if ! /r
-	t1=round(war_wages_taxable_current*payPeriodsPerYear,2)
-	! t2=2000
-	t3=t1-arStandardDeduction
-	tableRow=fn_table_line(mat ar,t3)
-	s1=round(ar(tableRow,2)+(t3-ar(tableRow,1))*ar(tableRow,3),2)
-	s2=stAllowances*20
-	s3=round((s1-s2)/payPeriodsPerYear,2)
-	if s3<.1 then s3=0
-	
-	fn_wh_arkansas=s3
-fnend
-AZWH: ! r: REPLACE ACSWRK\ARIZONA.WH,SOURCE ! ARIZONA:  NO TABLE  REVISED 1/01/10
-	! effective june 30, 2010 the rates changed and also the base change from a percent of federal wh to a percent of total taxable wages
-	stp=0
-	if stAllowances=1 then stp=.013
-	if stAllowances=2 then stp=.018
-	if stAllowances=3 then stp=.027
-	if stAllowances=4 then stp=.036
-	if stAllowances=5 then stp=.042
-	if stAllowances=6 then stp=.0510
-	s3=round(stwh(tcd(1),1)*stp,2)
-	h3=min(h3,1200)
-return  ! /r
-def fn_wh_georgia(wga_wages_taxable_current,payPeriodsPerYear,wga_allowances,wga_is_married,wga_eicCode)
-	! created 06/29/2017
-	! wga_wages_taxable_current - formerly b8
-	! payPeriodsPerYear - formerly stwh(tcd1,1)
-	if ~wga_setup then 
-		wga_setup=1
-		gaAnnualDependantAllowance=3000
-		! r: single Table F Page 43 of Employeer's Tax Guide dated 1/16/2017
-		dim gawhTableF(6,3)
-		gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
-		gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
-		gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
-		gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
-		gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
-		gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.06
-		! /r
-		! r: single Table G Page 44 of Employeer's Tax Guide dated 1/16/2017
-		dim gawhTableG(6,3)
-		gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
-		gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
-		gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
-		gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
-		gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
-		gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.06
-		! /r
-		! r: single Table H Page 45 of Employeer's Tax Guide dated 1/16/2017
-		dim gawhTableH(6,3)
-		gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
-		gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
-		gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
-		gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
-		gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
-		gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.06
-		! /r
-	end if 
-	Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-	Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
-	if env$('acsDeveloper')<>'' then dev=1 else dev=0
-	! if dev then pr 'wga_wages_taxable_current=';wga_wages_taxable_current
-	! if dev then pr '   payPeriodsPerYear=';payPeriodsPerYear
-	! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
-	! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
-	! if dev then pr '   wga_allowances=';wga_allowances
-	ga_WagesAnnual=(wga_wages_taxable_current)*payPeriodsPerYear
-	! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
-	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-	! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
-	if wga_is_married=0 then ! SINGLE INDIVIDUAL 
-		mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
-		mat gawh=gawhTableH
-		! if dev then pr '   using Table H'
-	else if wga_is_married=4 or wga_is_married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
-		mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
-		mat gawh=gawhTableG
-		! if dev then pr '   using Table G'
-	else if wga_is_married=3 or wga_is_married=2 or wga_is_married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
-		mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
-		mat gawh=gawhTableF
-		! if dev then pr '   using Table F'
-	else 
-		pr 'unrecognized wga_is_married';wga_is_married : pause
-	end if
-	tableRow=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
-	! if dev then pr '   table line ';tableRow
-	! if dev then pause
-	ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*wga_allowances
-	s3=gawh(tableRow,2)+(ga_AnnualWagesSubjToWithhold-gawh(tableRow,1))*gawh(tableRow,3)
-	s3=s3
-	s3=s3/payPeriodsPerYear
-	s3=round(s3,2) ! round to the nearest whole dollar
-	if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-	fn_wh_georgia=s3
-fnend 
-ILWH: ! r: REPLACE ACSWRK\ILLINOIS.WH,SOURCE ! ILLINOIS   NO TABLE
-	! line 1 allowances = +1 for claiming self, +1 for claiming spouse
-	! line 2 allowances = +1 for each other (not you nor spouse) dependent
-	! stAllowances - number of allowances
-	! payPeriodsPerYear = number of pay periods (formerly b8)
-	g2=round((stwh(tcd(1),1))*payPeriodsPerYear,2)
-	!  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
-	!  new way needs awesome function !    allowances_line_2=stAllowances-allowances_line_1
-	!  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
-	g2=g2-1000*stAllowances
-	s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
-	s3=round(s3/payPeriodsPerYear,2)
-	if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-return  ! /r
-INWH: ! r: INDIANA    NO TABLE   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
-	! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-	h1=h2=h3=0
-	h1=round(stwh(tcd(1),1)*payPeriodsPerYear,2)
-	h2=stAllowances*1000
-	h3=h1-h2
-	if h3>0 then 
-		s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
-		s3=round(s3/payPeriodsPerYear,2)
-		if s3<.1 then s3=0
-	end if 
-return  ! /r
-def fn_wh_kentuky(wky_wages_taxable_current,payPeriodsPerYear,wky_allowances)
-	! KYWH: ! REPLACE kentucky.wh/acswrk,source ! kentucky:  rec=20  ky(6,3) ! revised 12/31/2005
-	! wky_wages_taxable_current - formerly b8
-	! payPeriodsPerYear - formerly stwh(tcd1,1)
-	if ~wky_setup then 
-		wky_setup=1
-		! r: Pull the withholding routines from new\acswrk
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=20: mat ky ! Kentucky
-		dim ky(6,3)
-		ky(1,1)=0     : ky(1,2)=0    : ky(1,3)=0.02
-		ky(2,1)=3000  : ky(2,2)=60   : ky(2,3)=0.03
-		ky(3,1)=4000  : ky(3,2)=90   : ky(3,3)=0.04
-		ky(4,1)=5000  : ky(4,2)=130  : ky(4,3)=0.05
-		ky(5,1)=8000  : ky(5,2)=280  : ky(5,3)=0.058
-		ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
-		! /r
-	end if 
-	h1=(wky_wages_taxable_current)*payPeriodsPerYear
-	h2=h1-1970
-	tableRow=fn_table_line(mat ky,h2)
-	s3=ky(tableRow,2)+(h2-ky(tableRow,1))*ky(tableRow,3)
-	s3=s3-20*wky_allowances
-	s3=s3/payPeriodsPerYear
-	s3=round(s3,2)
-	if s3<.1 then s3=0 ! do not withhold less than 10 cents.
-	fn_wh_kentuky=s3
-fnend 
-LAWH: ! r: REPLACE ACSWRK\LOUISIANA.WH,SOURCE ! LOUISIANA: NO TABLE: LA(5): revised 1/01/03
-	h1=0
-	h2=0
-	h3=0
-	mat la=(0)
-	s=round(stwh(tcd(1),1),2) ! state earnings
-	if maritial=0 or maritial=2 then 
-		y=stAllowances-1
-		x=1
-		if y>=0 then goto L3800
-		x=0
-		y=0
-		goto L3800
-	end if
-	if stAllowances=0 then y=0 : x=0
-	if stAllowances=1 then y=0 : x=1
-	if stAllowances>=2 then y=stAllowances-2 : x=2
-	L3800: ! married formula or >1 exemptions
-	if x<2 then m1=12500 : m2=25000
-	if x>=2 then m1=25000 : m2=50000
-	n=payPeriodsPerYear
-	if s>0 then a=(s*.021) else a=0
-	if s>(m1/n) then b=.0135*(s-(m1/n)) else b=0
-	if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
-	d=.021*(((x*4500)+(y*1000))/n)
-	if ((x*4500)+(y*1000))>m1 then 
-		e=.0135*(((x*4500)+(y*1000)-m1)/n)
-	else 
-		e=0
-	end if 
-	if (a+b+c)-(d+e)>0 then 
-		s3=(a+b+c)-(d+e)
-	else 
-		s3=0
-	end if 
-	s3=round(s3,2)
-	if s3<.1 then s3=0
-return  ! /r
-MOWH: ! r: REPLACE ACSWRK\MISSOURI.WH,SOURCE ! MISSOURI MO(10,3) REC # 28  REVISED 1/1/2002
-	if ~setup_mowh then  ! r: MO Missouri
-		setup_mowh=1
-		dim mo(9,3)
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
-		mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
-		mo( 2,1)=1053 : mo( 2,2)= 16  : mo( 2,3)=0.02
-		mo( 3,1)=2106 : mo( 3,2)= 37  : mo( 3,3)=0.025
-		mo( 4,1)=3159 : mo( 4,2)= 63  : mo( 4,3)=0.03
-		mo( 5,1)=4212 : mo( 5,2)= 95  : mo( 5,3)=0.035
-		mo( 6,1)=5265 : mo( 6,2)=132  : mo( 6,3)=0.04
-		mo( 7,1)=6318 : mo( 7,2)=174  : mo( 7,3)=0.045
-		mo( 8,1)=7371 : mo( 8,2)=221  : mo( 8,3)=0.05
-		mo( 9,1)=8424 : mo( 9,2)=274  : mo( 9,3)=0.054
-	end if ! /r
-	! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
-	numb4=round(stwh(tcd(1),1)*payPeriodsPerYear,2)
-	if maritial=0 or maritial=1 or maritial=4 or maritial=5 then numb6=min(12200,fed_wh) ! FEDERAL DEDUTIONS LIMITED TO 12200 FOR SINGLE or married, filing seperately
-	if maritial=2 then numb6=min(18350,fed_wh) ! FEDERAL DEDUCTIONS LIMIT FOR SINGLE HEAD OF HOUSEHOLD
-	if maritial=3 then numb6=min(24400,fed_wh) ! Married filing joint, spouse doesn't work
-	if maritial=1 or maritial=3 or maritial=4 or maritial=5 then h1=3925 : goto L4110
-	if maritial=2 then h1=7850 : goto L4110
-	h1=4700
-	goto L4110
-	L4110: ! 
-	h2=0
-	! on maritial+1 goto L4160,L4140,L4180 none L4190
-	if stAllowances<>0 then 
-		!
-		if maritial=0 then 
-			h2=1200+(stAllowances-1)*1200 ! SINGLE
-		else if maritial=1 or maritial=3 or maritial=4 or maritial=5 then 
-			h2=min(stAllowances,2)*1200+max(stAllowances-2,0)*1200 ! MARRIED
-		else if maritial=2 then 
-			h2=3500+max(stAllowances-4,0)*1200 ! HEAD OF HOUSE HOLD
-		end if
-	end if
-	h3=numb4-h1-h2-numb6
-	if h3<0 then h3=0
-	tableRow=fn_table_line(mat mo,h3)
-	s3=(mo(tableRow,2)+(h3-mo(tableRow,1))*mo(tableRow,3))/payPeriodsPerYear
-	s3=round(s3,0)
-	if s3<.1 then s3=0
-return  ! /r
-MSWH: ! r: REPLACE ACSWRK\MISISIPI.WH,SOURCE ! MISSISSIPPI  NO TABLE
-	! **********  REMOVE THE addOnSt FROM LINE 740 **********
-	! SUBSTITUTE THE EXEMPTIONS INTO THE FIELD NOW CALLED STATE TAX ADD-ON
-	! THE EXEMPTIONS MUST BE ENTERED IN DOLLARS AND THE STANDARD DEDUCTION
-	! MUST BE ADDED TO THE EXEMPTIONS.
-	! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
-	h1=round(stwh(tcd(1),1)*payPeriodsPerYear,2)
-	h3=h1-addOnSt
-	if h3<=0 then s3=0 : goto L4481
-	if h3<10000 then goto L4474
-	s3=350+.05*(h3-10000)
-	goto L4481
-	L4474: if h3>0 and h3<=5000 then goto L4477
-	s3=150+.04*(h3-5000)
-	goto L4481
-	L4477: s3=.03*h3
-	if s3<.1 then s3=0
-	goto L4481
-	L4481: s3=s3/payPeriodsPerYear
-	s3=round(s3,2)
-	if s3<.1 then s3=0
-return  ! /r
-OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table change also!)
-	if ~setup_okwh then ! r: OK Oklahoma
-		setup_okwh=1
-		! dim ok(8,6)
-		dim ok(7,6)
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
-		! r: single 
-		ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
-		ok(2,1)= 6350 : ok(2,2)=   0   : ok(2,3)=0.005
-		ok(3,1)= 7350 : ok(3,2)=   5   : ok(3,3)=0.01
-		ok(4,1)= 8850 : ok(4,2)=  20   : ok(4,3)=0.02
-		ok(5,1)=10100 : ok(5,2)=  45   : ok(5,3)=0.03
-		ok(6,1)=11250 : ok(6,2)=  79.5 : ok(6,3)=0.04
-		ok(7,1)=13550 : ok(7,2)= 171.5 : ok(7,3)=0.05
-		! ok(8,1)=15000 : ok(8,2)= 246.5 : ok(8,3)=0.0525
-		! /r
-		! r: married 
-		ok(1,4)=    0  : ok(1,5)=  0 : ok(1,6)=0
-		ok(2,4)=12700  : ok(2,5)=  0 : ok(2,6)=0.005
-		ok(3,4)=14700  : ok(3,5)= 10 : ok(3,6)=0.01
-		ok(4,4)=17700  : ok(4,5)= 40 : ok(4,6)=0.02
-		ok(5,4)=20200  : ok(5,5)= 90 : ok(5,6)=0.03
-		ok(6,4)=22500  : ok(6,5)=159 : ok(6,6)=0.04
-		ok(7,4)=24900  : ok(7,5)=255 : ok(7,6)=0.05
-		! ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
-		! /r
-	end if ! /r
-	g2=stwh(tcd(1),1)*payPeriodsPerYear
-	g2=g2-stAllowances*1000
-	if maritial=0 or maritial=2 then j2=1 else j2=4 ! single of married
-	tableRow=fn_table_line(mat ok,g2)
-	s3=ok(tableRow,j2+1)+(g2-ok(tableRow,j2))*ok(tableRow,j2+2)
-	s3=s3/payPeriodsPerYear
-	s3=round(s3,2)
-	s3=round(s3,0)
-	if s3<.1 then s3=0
-return  ! /r
-def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married)
-	! if env$('ACSdeveloper')<>'' then print wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married : pause
-	if ~wor_setup then 
-		wor_setup=1
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
-		dim or1(5,3) !  r: Withholding Table for Single with fewer than 3 allowances
-		or1(1,1)=    0 : or1(1,2)= 206   : or1(1,3)=0.05
-		or1(2,1)= 3550 : or1(2,2)= 383.5   : or1(2,3)=0.07
-		or1(3,1)= 8900 : or1(3,2)= 758   : or1(3,3)=0.09
-		or1(4,1)=50000 : or1(4,2)=540 : or1(4,3)=0.09
-		or1(5,1)=250000 : or1(5,2)=11007 : or1(5,3)=0.099
-		! /r
-		dim or2(5,3) ! r: Single with 3 or more allowances, or married
-		or2(1,1)=    0 : or2(1,2)= 206 : or2(1,3)=0.05
-		or2(2,1)= 7100 : or2(2,2)= 561 : or2(2,3)=0.07
-		or2(3,1)=17800 : or2(3,2)=1310 : or2(3,3)=0.09
-		or2(4,1)=50000 : or2(4,2)=1080 : or2(4,3)=0.09
-		or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
-		! /r
-	end if 
-		! requires locally populated variables Mat OR1 and Mat OR2
-		! returns Oregon State Withholding
-		! Oregon  !  rec=40
-		! 
-		! RECALK: ! used only for debugging purposes
-	wor_allowances_effective=wor_allowances
-		! 
-	wor_they_are_single=wor_they_are_married=0
-	if wor_is_married=0 or wor_is_married=2 then wor_they_are_single=1
-	if wor_is_married=1 or wor_is_married=3 or wor_is_married=4 or wor_is_married=5 then wor_they_are_married=1
-		! 
-	if wor_wages_taxable_current>100000 and wor_they_are_single then wor_allowances_effective=0
-	if wor_wages_taxable_current>200000 and wor_they_are_married then wor_allowances_effective=0
-		! 
-	if wor_they_are_married or (wor_they_are_single and wor_allowances_effective>=3) then ! (married or more than 3 allowances)
-		wor_table=2
-	else ! (single and less than 3 allowances)
-		wor_table=1
-	end if 
-		! 
-	if wor_table=2 then ! wor_they_are_married then
-		wor_standard_deduction=4545
-	else ! if wor_table=1 then ! if wor_they_are_single then
-		wor_standard_deduction=2270
-	end if 
-		! 
-	wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
-	wor_fed_wh_annual_estimate=wor_fed_wh_annual_estimate*wor_pay_periods_per_year ! needed to be annual, not pay period LS 12/31/18
-	wor_phase_out=fn_oregonPhaseOut(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
-		! 
-		! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
-	wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
-		! 
-	if wor_table=2 then 
-		wor_table_line=fn_table_line(mat or2,wor_base)
-		wor_pre_base=or2(wor_table_line,2)
-		wor_tax_rate=or2(wor_table_line,3)
-		wor_remove_prev=or2(wor_table_line,1)
-	else ! wor_table=1
-		wor_table_line=fn_table_line(mat or1,wor_base)
-		wor_pre_base=or1(wor_table_line,2)
-		wor_tax_rate=or1(wor_table_line,3)
-		wor_remove_prev=or1(wor_table_line,1)
-	end if 
-	if debug then fnStatus('-------------------------------------------')
-	if wor_they_are_single then 
-		if debug then fnStatus('  Single with '&str$(wor_allowances_effective)&' allowances')
-	else if wor_they_are_married then 
-		if debug then fnStatus('  Married with '&str$(wor_allowances_effective)&' allowances')
-	else 
-		if debug then fnStatus('  Maridal Status is undetermined!!!  ')
-	end if 
-	if debug then fnStatus('    Current Wage (Gross)    = '&str$(wor_wages_taxable_current))
-	if debug then fnStatus('    Pay Periods Per Year    = '&str$(wor_pay_periods_per_year))
-	if debug then fnStatus('    Annual wage (estimate)  = '&str$(wor_wages_annual_estimate))
-	if debug then fnStatus('    standard deduction     = '&str$(wor_standard_deduction))
-	if debug then fnStatus('    table '&str$(wor_table)&' line '&str$(wor_table_line))
-	if debug then fnStatus('    phase out              = '&str$(wor_phase_out))
-	if debug then fnStatus('    wor_fed_wh_annual_estimate = '&str$(wor_fed_wh_annual_estimate))
-	if debug then fnStatus('.')
-	if debug then fnStatus('    BASE = '&str$(wor_wages_annual_estimate)&' (an..wages) - '&str$(wor_phase_out)&' (phase out/fed wh) - '&str$(wor_standard_deduction)&' (std ded)')
-	if debug then fnStatus('    base                   = '&str$(wor_base))
-		! fn  status('    pre_base               = '&str$(wor_pre_base))
-		! fn  status('    tax rate               = '&str$(wor_tax_rate))
-		! fn  status('    remove_prev            = '&str$(wor_remove_prev))
-	if debug then fnStatus('.')
-	if debug then fnStatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
-		! 
-		! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances)
-		! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
-	wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (206 * wor_allowances_effective)
-	fnStatus('withholding before dividing by pay periods = '&str$(wor_return))
-	wor_return=wor_return/wor_pay_periods_per_year
-	wor_return=round(wor_return,2)
-	if wor_return<.1 then wor_return=0
-	fnStatus('calculated withholding ='&str$(wor_return))
-	if debug then fnStatusPause ! pause
-	fn_wh_oregon=wor_return
-fnend 
-def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
-	if opo_wages<50000 then 
-		opo_return=min(opo_fed_wh,6800)
-	else if opo_table=1 then 
-		if opo_wages => 50000 and opo_wages<125000 then opo_return= 6800 : goto OPO_XIT
-		if opo_wages =>125000 and opo_wages<130000 then opo_return= 5450 : goto OPO_XIT
-		if opo_wages =>130000 and opo_wages<135000 then opo_return= 4100 : goto OPO_XIT
-		if opo_wages =>135000 and opo_wages<140000 then opo_return= 2700 : goto OPO_XIT
-		if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
-		if opo_wages =>145000 then opo_return=0
-	else ! if opo_table=2 then
-		if opo_is_married then 
-			if opo_wages => 50000 and opo_wages<250000 then opo_return= 6800 : goto OPO_XIT
-			if opo_wages =>250000 and opo_wages<260000 then opo_return= 5450 : goto OPO_XIT
-			if opo_wages =>260000 and opo_wages<270000 then opo_return= 4100 : goto OPO_XIT
-			if opo_wages =>270000 and opo_wages<280000 then opo_return= 2700 : goto OPO_XIT
-			if opo_wages =>280000 and opo_wages<290000 then opo_return= 1350 : goto OPO_XIT
-			if opo_wages =>290000 then opo_return=0
-		else ! if opo_is_single then
-			if opo_wages => 50000 and opo_wages<125000 then opo_return= 6800 : goto OPO_XIT
-			if opo_wages =>125000 and opo_wages<130000 then opo_return= 5450 : goto OPO_XIT
-			if opo_wages =>130000 and opo_wages<135000 then opo_return= 4100 : goto OPO_XIT
-			if opo_wages =>135000 and opo_wages<140000 then opo_return= 2700 : goto OPO_XIT
-			if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
-			if opo_wages =>145000 then opo_return=0
-		end if 
-	end if 
-	OPO_XIT: ! 
-	fn_oregonPhaseOut=opo_return
-fnend 
-def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
-	if state$='GA' then
-		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
-			standardStateDeduction=2300
-		else if wga_is_married=5 then ! Married - filing seperate - both working
-			standardStateDeduction=1500
-		else if wga_is_married=4 then ! Married - filing joint - both working
-			standardStateDeduction=3000
-		else if wga_is_married=3 then ! Married - filing joint return - only one working
-			standardStateDeduction=3000
-		else  ! 1 - Married - (filing status unknown) - just use lowest deduction
-			standardStateDeduction=1500
-		end if
-	else
-		pr 'fn_standardStateDeduction not yet configured for state: "'&state$&'"'
-		pause
-	end if
-	fn_standardStateDeduction=standardStateDeduction
-fnend
-def fn_statePersonalAllowance(state$,wga_is_married,wga_eicCode)
-	if state$='GA' then
-		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
-			statePersonalAllowance=2700
-		else if wga_is_married=3 then ! Married - filing joint - only one working
-			statePersonalAllowance=3700
-		else if wga_is_married=4 then ! Married - filing joint - both working
-			statePersonalAllowance=7400
-		else if wga_is_married=5 then ! Married - filing seperate - both working
-			statePersonalAllowance=3700
-		else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
-			statePersonalAllowance=3700
-		end if
-	else
-		pr 'fn_statePersonalAllowance not yet configured for state: "'&state$&'"'
-		pause
-	end if
-	fn_statePersonalAllowance=statePersonalAllowance
-fnend
-def fn_test_state_calk
-	fn_setup
-	! show the state you are assined  to and you change it if you like.
-	pay_periods_per_year=52
-	wages_taxable_current=399.60
-	fed_wh=7.75
-	allowances=2
-	is_married=4  ! is_married = 0 - Single
-										! is_married = 1 - Married
-										! is_married = 2 - Single - Head of Household
-										! is_married = 3 - Married - filing joint return - only one working
-										! is_married = 4 - Married - filing seperate or joint return both working
-	eicCode=0    ! eicCode = 0 - Not qualified for EIC
-									 ! eicCode = 1 - Single or Spouse not file
-									 ! eicCode = 2 - Married both filing
-	pr 'wages_taxable_current: ';wages_taxable_current
-	pr ' pay_periods_per_year: ';pay_periods_per_year
-	pr '               fed_wh: ';fed_wh
-	pr '           allowances: ';allowances
-	pr '           is_married: ';is_married
-	pr '              eicCode: ';eicCode
-	pr 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
-	pr 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
-	pr 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married)
-	if env$('ACSdeveloper')<>'' then pause 
-fnend 
-def fn_report_stuff
-	! fnStatus('check completely calcualated for eno '&str$(eno))
-	! fnStatus('tcp(1)='&str$(tcp(1)))
-	! fnStatus('tcp(2)='&str$(tcp(2)))
-	! fnStatus('tcp(3)='&str$(tcp(3)))
-	! fnStatus('tcp(4)='&str$(tcp(4)))
-	! fnStatus('tcp(13)='&str$(tcp(13)))
-	! fnStatus('tcp(14)='&str$(tcp(14)))
-	! fnStatus('tcp(32)='&str$(tcp(32)))
-	! fnStatusPause
-fnend 
-WEST_ACC_WORKMANSCOMP: ! r:
-	! inp(6) Other Compensation
-	! if other compensation > 0 then
-	!   if pay code is 1 hours = 173.33
-	!   if pay code is 2 hours = 86.66
-	!   if pay code is 3 hours = 80
-	!   if pay code is 4 hours = 40
-	! else 
-	!   hours = regular hours + overtime hours
-	! end if
-	tmphrs=inp(1)+inp(2) ! if inp(6)>0 then tmphrs=saif(payCode) else tmphrs=inp(1)+inp(2)
-	!     fnStatus('inp(17) changed to '&str$(round(tmphrs*inp(17)*.01,2))&' round('&str$(tmphrs)&' * inp(17)('&str$(inp(17))&' * .01)',2)
-	!     fnStatusPause
-	inp(17)=round(tmphrs*inp(17)*.01,2) ! inp(17)=round(tmphrs*inp(17)*.01,2)
-return  ! /r
+
 include: Ertn no

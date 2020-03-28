@@ -38,7 +38,7 @@ AskEmployee: ! r:
 	else if ckey=2 then
 		goto EditEmployee
 	else if ckey=3 then
-		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
+		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
 		holdeno=eno
 		ent$=lpad$(str$(eno),8)
 		goto ScrEmployee
@@ -83,7 +83,6 @@ AddEmployee: ! r:
 	mat rs=(0)
 	mat em=(0)
 	lpd=tgp=0
-	w4Step2=0 : W4Year=2020
 	mat ty=(0)
 	mat tqm=(0)
 	mat tcp=(0)
@@ -102,7 +101,7 @@ AddEmployee: ! r:
 	w4Step4c       =0
 	disableStTax=0
 	disableFedTax=0
-	W4Year=2020
+	w4Year$='none'
 	
 	
 	
@@ -111,7 +110,7 @@ EditEmployee: ! r:
 	if ent=0 then goto AskEmployee
 	teno=eno=ent ! hdar=0
 	ent$=lpad$(str$(ent),8)
-	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c nokey EmpNotFound
+	read #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c nokey EmpNotFound
 	holdeno=eno
 goto ScrEmployee ! /r
 EmpNotFound: ! r:
@@ -197,8 +196,8 @@ ScrEmployee: ! r:
 	resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
 	
 	fnLbl(             lc(2)+=1,col3_pos,'Marital Status:',col3_len,1)
-	fncomboa('Marital',lc(2)   ,col4_pos,mat married_option$,'',25) ! ,'',11)
-	resp$(resp_married=respc+=1)=fnSetForCombo$(mat married_option$,str$(em(1)))
+	fncomboa('Marital',lc(2)   ,col4_pos,mat marriedOption$,'',25) ! ,'',11)
+	resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(em(1)))
 
 	! lc(2)+=1
 	! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
@@ -250,8 +249,8 @@ ScrEmployee: ! r:
 	fncombof("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 	resp$(resp_empStatus=respc+=1)=str$(em(4))
 	fnLbl(              lc(1)+=1,col1_pos,"Pay Code:",col1_len,1)
-	fncomboa("PayCode", lc(1)    ,col2_pos,mat payperiod_option$,"",16)
-	resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payperiod_option$,str$(em(5)))
+	fncomboa("PayCode", lc(1)    ,col2_pos,mat payPeriodOption$,"",16)
+	resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payPeriodOption$,str$(em(5)))
 	lc(1)+=1
 	fnLbl(lc(1)+=1,col1_pos,"Vacation Pay Code:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,6,6,0,"33",0,"Normally is number of vacation hours you want accrued each pay period.")
@@ -275,15 +274,15 @@ ScrEmployee: ! r:
 	fncomboa("FICACode",lc(2)    ,col4_pos,mat code6$,"",25)
 	resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
 	fnLbl(              lc(2)+=1,col3_pos,"EIC Code:",col3_len,1)
-	fncomboa("EICCode", lc(2)    ,col4_pos,mat code7$,"",25)
-	resp$(resp_EicCode=respc+=1)=code7$(em(7)+1)
+	fncomboa("EICCode", lc(2)    ,col4_pos,mat eicOption$,"",25)
+	resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
 	
 	
 	lc(1)+=1
 	
 	fnLbl(             lc(1)+=1,col1_pos,"W-4 Year:",col1_len,1)
-	fncomboa("w4year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
-	resp$(resp_w4year=respc+=1)=str$(w4year)
+	fncomboa("w4Year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+	resp$(resp_w4year=respc+=1)=w4Year$
 	
 	fnChk(lc(1)+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
 	resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
@@ -342,7 +341,7 @@ ScrEmployee: ! r:
 	lpd             =val(resp$(resp_lastPayrollDate)     ) ! last payroll date
 	bd              =val(resp$(resp_birthDate      )     ) ! birth date
 	ph$             =    resp$(resp_phone          )       ! phone
-	w4year         =val(resp$(resp_w4year          )     )
+	w4Year$         =    resp$(resp_w4year          )
 	if resp$(resp_w4Step2)='True' then w4Step2=1 else w4Step2=0
 	w4Step3        =val(resp$(resp_w4Step3         )     )
 	w4Step4a       =val(resp$(resp_w4Step4a        )     )
@@ -539,13 +538,13 @@ goto ScrDepartment ! /r
 
 SaveEmployee: ! r:
 	if add1=1 then 
-		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
+		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 		
 		add1=0
 	else if holdeno<>eno then 
 		goto ChangeEmployeeNo
 	else
-		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
+		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 	end if
 return ! /r
 
@@ -621,14 +620,14 @@ ChangeEmployeeNo: ! r:
 	! /r
 	! change main employee record
 	delete #hEmployee,key=ent$:
-	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,W4Year,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
+	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
 	ent$=lpad$(str$(eno),8)
 	hact$=ent$
 	CHGENO_XIT: !
 goto Menu1 ! /r
 def fn_openFiles
 	open #hEmployee:=fngethandle: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,x 1,c 12,n 6,4*n 12.2
+	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,c 4,x 1,c 12,n 6,4*n 12.2
 	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
@@ -651,33 +650,9 @@ def fn_EmployeeDepartments(eno,mat empDept)
 	fn_EmployeeDepartments=udim(mat empDept)
 fnend
 def fn_setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnAddOneN
-	library 'S:\Core\Library': fnhours
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnAcs2
-	library 'S:\Core\Library': fncombof
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnChk
-	library 'S:\Core\Library': fncmbemp
-	library 'S:\Core\Library': fncomboa,fnpic
-	library 'S:\Core\Library': fnFra
-	library 'S:\Core\Library': fnrgl$,fnqgl,fnagl$
-	library 'S:\Core\Library': fncheckfile
-	library 'S:\Core\Library': fnemployee_srch
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnKeyChange,fnKeyDelete
-	library 'S:\Core\Library': fnDedNames
-	library 'S:\Core\Library': fnaddonec
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnSetForCombo$
-	library 'S:\Core\Library': fnGetDir2
-	library 'S:\Core\Library': fnbutton_or_disabled
-	library 'S:\Core\Library': fnDeptName$
+	autoLibrary
 	on error goto Ertn
-	
+
 	dim ph$*12
 	dim resp$(50)*128
 	dim ty(21)
@@ -685,7 +660,7 @@ def fn_setup
 	dim tcp(22)
 	dim em(16)
 	dim w4Step2
-	dim W4Year
+	dim w4Year$*4
 	dim tdt(4),tcd(3)
 	dim tdet(23)
 	dim ss$*11
@@ -707,14 +682,7 @@ def fn_setup
 	gender_option$(2)="1 - Male"
 	gender_option$(3)="2 - Female"
 	
-	dim married_option$(0)*58
-	mat married_option$(0)
-	fnAddOneC(mat married_option$,"0 - Single")
-	fnAddOneC(mat married_option$,"1 - Married - filing jointly")
-	fnAddOneC(mat married_option$,'2 - Single - Head of Household')
-	fnAddOneC(mat married_option$,'3 - Married - filing joint - only one working')
-	fnAddOneC(mat married_option$,'4 - Married - filing joint - both working')
-	fnAddOneC(mat married_option$,'5 - Married - filing seperate - both working')
+
 
 	dim fed_exemption_option$(22)
 	for j=1 to 21
@@ -722,11 +690,7 @@ def fn_setup
 	next j
 	fed_exemption_option$(22)="99"
 
-	dim payperiod_option$(4)
-	payperiod_option$(1)="1 - Monthly"
-	payperiod_option$(2)="2 - Semi-monthly"
-	payperiod_option$(3)="3 - Bi-weekly"
-	payperiod_option$(4)="4 - Weekly"
+
 
 	dim code6$(4)*28
 	code6$(1)="0 - Subject to SS and Med WH"
@@ -734,10 +698,6 @@ def fn_setup
 	code6$(3)="2 - Medicare Only"
 	code6$(4)="9 - Neither SS nor Medicare"
 
-	dim code7$(3)*29
-	code7$(1)="0 - Not qualified for EIC"       !  em(7)=1
-	code7$(2)="1 - Single or Spouse not file"   !  em(7)=2
-	code7$(3)="2 - Married both filing"         !  em(7)=3
 
 	dim statenames$(10)*8
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
@@ -762,10 +722,49 @@ def fn_setup
 		fkey_scrDept(deptItem)=5201+deptItem
 	nex deptItem
 
-	dim w4yearOption$(2)*4
-	w4yearOption$(1)='2019'
-	w4yearOption$(2)='2020'
 
+
+	dim marriedOption$(0)*58
+	dim eicOption$(0)*29
+	dim w4yearOption$(0)*4
+	dim payPeriodOption$(0)*16
+	fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+
+
+
+fnend
+def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	if ~setup then fn_setup
+	fnGetEmpOptions=fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+fnend
+
+def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	mat marriedOption$(0)
+	fnAddOneC(mat marriedOption$,"0 - Single")
+	fnAddOneC(mat marriedOption$,"1 - Married - filing jointly")
+	fnAddOneC(mat marriedOption$,'2 - Single - Head of Household')
+	fnAddOneC(mat marriedOption$,'3 - Married - filing joint - only one working')
+	fnAddOneC(mat marriedOption$,'4 - Married - filing joint - both working')
+	fnAddOneC(mat marriedOption$,'5 - Married - filing seperate - both working')
+
+	mat eicOption$(0)
+	fnAddOneC(mat eicOption$,"0 - Not qualified for EIC"    )  !  em(7)=1
+	fnAddOneC(mat eicOption$,"1 - Single or Spouse not file")  !  em(7)=2
+	fnAddOneC(mat eicOption$,"2 - Married both filing"      )  !  em(7)=3
+	
+	mat w4yearOption$(0)
+	fnAddOneC(mat w4yearOption$,'2019')
+	fnAddOneC(mat w4yearOption$,'2020')
+	fnAddOneC(mat w4yearOption$,'none')
+	
+	
+	mat payPeriodOption$(0)
+	fnAddOneC(mat payPeriodOption$,'1 - Monthly'     )
+	fnAddOneC(mat payPeriodOption$,'2 - Semi-monthly')
+	fnAddOneC(mat payPeriodOption$,'3 - Bi-weekly'   )
+	fnAddOneC(mat payPeriodOption$,'4 - Weekly'      )
+	fnAddOneC(mat payPeriodOption$,'5 - Annually'    ) ! added 3/26/20, for testing state tax withholdings
+	
 fnend
 Finis: ! ! r:
 	close #hEmployee:

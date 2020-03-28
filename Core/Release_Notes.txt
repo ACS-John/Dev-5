@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                
+5:02 PM 3/27/2020	PR	Added "Check State Calculation" program and update OR state taxes for 2020
 12:07 PM 3/23/2020	PR	Added a W4 Year option of "none" - This is for use before new employees have completed their W-4.  If in Oregon it will cause an flat 8% withholding for state taxes.
  9:23 03/20/2020	CO	5.74278  
 14:26 03/20/2020	CO	5.74277   

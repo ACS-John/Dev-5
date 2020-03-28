@@ -4,7 +4,7 @@
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto Ertn
 00020 !
-00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,W4Year,W4Step3,tdt(4),tcd(3),tdet(20),tdy(6)
+00030   dim em$(3)*30,ss$*11,rs(2),em(16),w4step2,w4Year$,W4Step3,tdt(4),tcd(3),tdet(20),tdy(6)
 00031   dim tdc(6),ty(21),tqm(17),tcp(22),message$*40,cap$*40,resp$(10)*50
 00032   dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),inp(20),pp(20),dt(125)
 00033   dim gt(125),dh$*20,a$*40,cp(32),tdc(10),tcp(32),dc(10)
@@ -53,7 +53,7 @@
 00469 XIT: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
-19801 read #1,using "Form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,n 4,x 1,c 12,n 6,n 12.2": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,W4Year,ph$,bd,W4Step3 eof EOF1 ! fnStatus(str$(eno))
+19801 read #1,using "Form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,x 1,c 12,n 6,n 12.2": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,w4Year$,ph$,bd,W4Step3 eof EOF1 ! fnStatus(str$(eno))
 19802   ipsw=0
 19803   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey PRTRPT
 19804   mat tcp=(0): mat tdc=(0)

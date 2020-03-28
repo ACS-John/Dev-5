@@ -1493,6 +1493,20 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
+	def library fnCheckStateCalculation
+		library 'S:\Payroll\Calculation.br': fnCheckStateCalculation
+		fnCheckStateCalculation=fnCheckStateCalculation
+	fnend
+	def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+		! dim marriedOption$(0)*58
+		! dim eicOption$(0)*29
+		! dim w4yearOption$(0)*4
+		! dim payPeriodOption$(0)*16
+		library 'S:\Payroll\Employee.br': fnGetEmpOptions
+		fnGetEmpOptions=fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	fnend
+
+	
 	def library fnDeptName$*25(departmentCode)
 		library 'S:\Payroll\fn\deptName.br': fnDeptName$
 		fnDeptName$=fnDeptName$(departmentCode)
