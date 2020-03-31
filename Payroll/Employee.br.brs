@@ -778,7 +778,7 @@ DD: ! r:
 	key$=fn_dDkey$(eno)
 	hDd=fn_dDopen
 	read #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$ nokey DdReadNoKey
-ASKDD: !
+AskDd: !
 	if ~setup_askdd then
 		setup_askdd=1
 		dim optDirectDepositAccountType$(2)*22
@@ -837,18 +837,18 @@ ASKDD: !
 		ml$(1)="You must have valid answers in the routing #, account"
 		ml$(2)="type, and bank account before you can answer yes."
 		fnmsgbox(mat ml$,resp$)
-		goto ASKDD
+		goto AskDd
 	else if ckey=1 or ckey=4 then
 		key$=rpad$(str$(eno),10)
 		rewrite #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$
 		goto DdFinis
 	end if
-goto ASKDD ! /r
+goto AskDd ! /r
 
 DdReadNoKey: ! r:
 	dd$='N' : rtn=acc=0 : acn$='' ! defaults
 	write #hDd,using "Form pos 1,C 10,C 1,N 9,N 2,C 17": key$,dd$,rtn,acc,acn$ nokey DdReadNoKey
-goto ASKDD ! /r
+goto AskDd ! /r
 DdFinis: ! r:
 	fn_dDclose
 return  ! /r

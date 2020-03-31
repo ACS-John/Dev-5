@@ -261,7 +261,6 @@ def fn_main
 			else if menu_option$(1:8)='ScreenIO' then
 				if menu_option$(1:8)='ScreenIO' then
 					execute 'cd S:'
-					library 'S:\Core\ScreenIO\screenio.br': fnDesignScreen
 					fnDesignScreen
 					chain 's:\core\start'
 					! fn_chain('S:\Core\ScreenIO\screenio.br')
