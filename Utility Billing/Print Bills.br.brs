@@ -12,24 +12,7 @@
 ! /r
 ! PrintBill_Basic - dynamic pr bill program that works for multiple clients
 def fn_setup
-	library 'S:\Core\Library': fnreg_write,fnreg_read
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fncmbrt2,fncombof
-	library 'S:\Core\Library': fnOpt,fnTos
-	library 'S:\Core\Library': fncmbact
-	library 'S:\Core\Library': fnLastBillingDate
-	library 'S:\Core\Library': fnXit,fnCmdSet
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fncreg_read,fncreg_write
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fncustomer_address
-	library 'S:\Core\Library': fnformnumb$,fntrans_total_as_of,fnget_services
-	library 'S:\Core\Library': fnpa_fontbold,fnpa_font,fnpa_line,fnpa_fontitalic,fnpa_pic,fnpa_elipse
-	library 'S:\Core\Library': fnpa_open,fnpa_finis,fnpa_barcode,fnpa_newpage,fnpa_txt,fnpa_fontsize
-	library 'S:\Core\Library': fnpa_background
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnchain
-	library 'S:\Core\Library': fnub_printbill_program$
+	autoLibrary
 	on error goto Ertn
 !
 	dim resp$(60)*128
@@ -243,13 +226,13 @@ Screen1: ! r:
 			fnLbl(lc+=1,1,"Service From:",25,1)
 			fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Prior Reading Date in the customer's record")
 			fnLbl(lc,pf+8+4,"(only use to override the Prior Reading Dates from individual customer records)")
-			resp$(respc_service_from:=respc+=1)=cnvrt$("pic(zzzzzz)",d2)
+			resp$(respc_service_from:=respc+=1)=cnvrt$("pic(zzzzzz)",serviceFromOverride)
 		end if 
 		if enable_service_to then 
 			fnLbl(lc+=1,1,"Service To:",25,1)
 			fnTxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Current Reading Date in the customer's record")
 			fnLbl(lc,pf+8+4,"(only use to override the Current Reading Dates from individual customer records)")
-			resp$(respc_service_to:=respc+=1)=cnvrt$("pic(zzzzzz)",d3)
+			resp$(respc_service_to:=respc+=1)=cnvrt$("pic(zzzzzz)",serviceToOverride)
 		end if 
 	end if 
 	lc+=1
@@ -316,10 +299,10 @@ Screen1: ! r:
 		billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
 	end if
 	if enable_service_from then 
-		d2=val(resp$(respc_service_from))
+		serviceFromOverride=val(resp$(respc_service_from))
 	end if 
 	if enable_service_to then 
-		d3=val(resp$(respc_service_to))
+		serviceToOverride=val(resp$(respc_service_to))
 	end if 
 	if resp$(respc_start_place)="[All]" then 
 		starting_key$=""
@@ -387,29 +370,22 @@ Screen1: ! r:
 MainLoop: ! r: main loop
 	if filter_selected_only=1 then goto ScrAskIndividual
 	if enable_bulksort=1 then 
-		! READ_BULKSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
-		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est noRec MainLoop ! READ_BULKSORT
+		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est noRec MainLoop ! READ_BULKSORT
 	else if enable_bulksort=2 then 
 		L680: ! 
 		read #hBulk2,using 'form pos 22,c 10': z$ eof Finis
-		! if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L680 ! start with
-		! begin=0 ! cancel starting account
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey MainLoop ! READ_CASSSORT
+		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else if enable_cass_sort then 
-		! READ_CASSSORT: ! 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
 		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec MainLoop ! READ_CASSSORT
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey MainLoop ! READ_CASSSORT
+		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else 
-		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof Finis
+		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est eof Finis
 	end if 
-	! if trim$(z$)='100100.00'  then pr g(8) : pause
 	F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1831,n 9
-	! if z$=" 201700.00" and env$('acsDeveloper')="Laura" then pause
 	if route_filter<>0 and route_filter><route and enable_bulksort=0 then goto Finis
 	if enable_bulksort and route_filter and route_filter<>route then goto MainLoop
-	! if trim$(z$)='106700.00' then pr z$,f,d1 : pause
 
 	if f><d1 then goto MainLoop
 	if bal=0 and ~include_zero_bal then goto MainLoop
@@ -428,32 +404,32 @@ MainLoop: ! r: main loop
 	if filter_past_due_only and pb<=0 then goto MainLoop
 	if filter_no_past_due and pb>0 then goto MainLoop
 	fncustomer_address(z$,mat pe$) ! read alternate billing address
-	fn_override_service_date(d2,d3,extra_3,extra_4)
+	fn_override_service_date(serviceFromMmddYy,serviceToMmddYy,serviceFromOverride,serviceToOverride)
 	! r: pr bill routine
 	if env$('client')='French Settlement' then 
-		fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budgetpb,d2,d3)
+		fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budgetpb,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Campbell' then 
-		fn_print_bill_campbell(z$,mat mg$,d2,d3)
+		fn_print_bill_campbell(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Raymond' then 
 		fn_print_bill_raymond(z$,mat mg$, "Mailing Address: P O Box 87")
 	else if env$('client')='Cerro Gordo V' then 
-		fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2,d3)
+		fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Merriam Woods' then 
-		fn_print_bill_merriam(z$,mat mg$,d2,d3)
+		fn_print_bill_merriam(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Blucksberg' then 
-		fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,d2,d3)
+		fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Omaha' then 
-		fn_print_bill_omaha(z$,mat mg$,mat mg2$,d2,d3,mat penalty$)
+		fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFromMmddYy,serviceToMmddYy,mat penalty$)
 	else if env$('client')='Pennington' then
-		fn_print_bill_pennington(z$,mat mg$,mat mg2$,d2,d3,d4)
-		! fn_print_bill_Exeter(z$,mat mg$,d2,d3,d4)
+		fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFromMmddYy,serviceToMmddYy,d4)
+		! fn_print_bill_Exeter(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy,d4)
 	else if env$('client')='Edinburg' then
-		fn_print_bill_edinburg(z$,mat mg$,d1,d2,~and)
+		fn_print_bill_edinburg(z$,mat mg$,d1,serviceFromOverride,~and)
 	else if env$('client')='Billings' then
-		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2,d3,d4,mat pe$,final$,z$) ! 
+		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final$,z$) ! 
 	else if env$('client')='Choctaw' then
-		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat e$,final)
-		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat pe$,final)
+		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
+		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final)
 	else if env$('client')='GreenCo' and ~enableNewGreenCoBill then
 		fn_print_bill_greenCo
 	else if env$('client')='Galena' then
@@ -541,7 +517,7 @@ ScrAskIndividual: ! r: account selection screen
 	fnAcs2(mat resp$,ck)
 	if ck=5 or trim$(resp$(1))='' then goto Finis
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
-	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey ScrAskIndividual
+	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
 goto AfterCustomerRead ! /r
 
 def fn_closeBillPrinter
@@ -625,13 +601,13 @@ def fn_get_mat_at(mat at$)
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 fnend 
-def fn_override_service_date(&osd_service_from,&osd_service_to,osd_extra_3,osd_extra_4)
-	! osd_service_from / d2=Service From Date (ask on Screen)
-	! osd_service_to / d3=Service To Date (ask on Screen)
-	! osd_extra_3 / extra(3)=Current Reading Date (from customer record)
-	! osd_extra_4 / extra(4)=Prior Reading Date (from customer record)
-	if osd_service_from=0 then osd_service_from=osd_extra_4
-	if osd_service_to=0 then osd_service_to=osd_extra_3
+def fn_override_service_date(&serviceFrom,&serviceTo,serviceFromOverride,serviceToOverride)
+	! serviceFrom / serviceFromOverride= Prior Reading Date (from customer record)
+	! serviceTo   / serviceToOverride= Current Reading Date (from customer record)
+	! serviceToOverride   / extra(3)=Override Service To   Date (ask on Screen)
+	! serviceFromOverride / extra(4)=Override Service From Date (ask on Screen)  
+	if serviceFromOverride then serviceFrom=serviceFromOverride
+	if serviceToOverride   then serviceTo=serviceToOverride
 fnend 
 def fn_pay_after_amt(; returnN)
 	if bal<=0 then returnN=round(bal,2) else returnN=bal+g(10) ! Penalties at Merriam Woods are flat
@@ -699,7 +675,7 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	if count=2 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
 	if count=3 then count=0 : pr #255: newpage
 fnend 
-def fn_print_bill_campbell(z$,mat mg$,pbcampbell_service_from,pbcampbell_service_to)
+def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	! correct margins are left=.4, top=.35, right=.2, bottom=.2
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbcampbel_setup then 
@@ -709,8 +685,8 @@ def fn_print_bill_campbell(z$,mat mg$,pbcampbell_service_from,pbcampbell_service
 		blankbefore=1
 		blankafter=3
 	end if 
-	read #h_pbcampbel_customer,using F_PBCAMPBEL_CUSTOMER,key=z$: z$,pbcampbel_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4
-	fn_override_service_date(pbcampbell_service_from,pbcampbell_service_to,extra_3,extra_4)
+	read #h_pbcampbel_customer,using F_PBCAMPBEL_CUSTOMER,key=z$: z$,pbcampbel_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy
+	fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
 	dim pbcampbel_addr$(4)*30
 	dim pbcampbel_meter_address$*30
 	fncustomer_address(z$,mat pbcampbel_addr$)
@@ -762,7 +738,7 @@ def fn_print_bill_campbell(z$,mat mg$,pbcampbell_service_from,pbcampbell_service
 	pr #255: "" ! line 16
 	pr #255: "" ! line 17
 	pr #255: "" ! line 18
-	pr #255,using 'Form pos 1,pic(zz/zz/zz),Pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),POS 42,3*N 12.2,N 12.2': pbcampbell_service_to,g(12),g(11),pbcampbell_service_to,g(12),g(11),g(12),g(11) ! line 19
+	pr #255,using 'Form pos 1,pic(zz/zz/zz),Pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),POS 42,3*N 12.2,N 12.2': serviceTo,g(12),g(11),serviceTo,g(12),g(11),g(12),g(11) ! line 19
 	if (count+1)/3=int((count+1)/3) then goto PBCAMPBEL_L1250
 	if blankafter<>0 then 
 		for j=1 to blankafter
@@ -802,7 +778,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt('#'&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d3),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
@@ -977,7 +953,7 @@ SORT1: ! r: SELECT & SORT - sorts Cass1 file    requires: (h_customer_2,&enable_
 	open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
 	Xit_SORT1: ! 
 return  ! /r
-def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
+def fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFrom,serviceTo)
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbcerro_setup then 
 		pbcerro_setup=1
@@ -986,7 +962,7 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
 		blankbefore=1
 		blankafter=3
 	end if 
-	read #h_pbcerro_customer,using F_PBCERRO_CUSTOMER,key=z$: z$,pbcerro_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4
+	read #h_pbcerro_customer,using F_PBCERRO_CUSTOMER,key=z$: z$,pbcerro_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy
 	dim pbcerro_meter_address$*30 ! formerly e$(2)
 	fncustomer_address(z$,mat pe$)
 	! /r
@@ -1004,7 +980,7 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
 	pb=bal-g(11)
 	pr #255: ""
 	pr #255: ""
-	pr #255,using L1550: "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
+	pr #255,using L1550: "FROM",int(serviceFrom*.01),"TO",int(serviceTo*.01),d1
 	L1550: form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##),skip 4
 	if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""
 	pr #255: ""
@@ -1044,7 +1020,7 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)
 	if int(bills/3)=bills/3 then pr #255: newpage ! BOTTOM OF PAGE
 	! /r
 fnend 
-def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all those local customer variables too
+def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all those local customer variables too
 	if ~setup_merriam then ! r:
 		setup_merriam=1
 		lyne=3
@@ -1065,7 +1041,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	end if  ! /r
 	pb=bal-g(11)
 	net_bill=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
-	fn_override_service_date(service_from,service_to,extra_3,extra_4)
+	fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
 	! -- Standard 4 Per Page Even Perforated Card Stock Bills
 	billOnPageCount+=1
 	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      !   0   5
@@ -1094,7 +1070,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt(trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_from)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_to),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Due upon receipt",xmargin+2,lyne*8+ymargin)
 	fnpa_txt(e$(2),xmargin+2,lyne*9+ymargin)
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
@@ -1253,7 +1229,7 @@ def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all th
 		fnpa_newpage
 	end if 
 fnend 
-def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_to) ! inherrits all those local customer variables too
+def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo) ! inherrits all those local customer variables too
 	if ~setup_blucksberg then ! r:
 		setup_blucksberg=1
 		lyne=3
@@ -1329,7 +1305,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_
 
 	lyne=65 : adder=4
 	fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
-	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",service_from)&" To: "&cnvrt$("pic(zz/zz/zz)",service_to) ,23,lyne+=adder)
+	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",serviceFrom)&" To: "&cnvrt$("pic(zz/zz/zz)",serviceTo) ,23,lyne+=adder)
 
 	fnpa_line(26,85,157)
 
@@ -1474,7 +1450,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,service_from,service_
 	fnpa_newpage
 	! /r
 fnend 
-def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat penalty$)
+def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penalty$)
 ! correct margins are top=.2, bottom=.2,left=.4,right=.2
 ! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbomaha_setup then 
@@ -1483,7 +1459,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		F_PBOMAHA_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1854,pd 5.2
 		pboposrightcol=70
 	end if 
-	read #h_pbomaha_customer,using F_PBOMAHA_CUSTOMER,key=z$: z$,pbomaha_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4
+	read #h_pbomaha_customer,using F_PBOMAHA_CUSTOMER,key=z$: z$,pbomaha_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy
 	dim pbomaha_meter_address$*30 ! formerly e$(2)
 	fncustomer_address(z$,mat pe$)
 ! /r
@@ -1526,7 +1502,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,pbo_service_from,pbo_service_to,mat 
 		pr #255: 
 	end if 
 	pr #255,using 'form pos 25,pic(##/##/##),pos pboPosRightCol,c message2_max_len': d1,fn_mg2$(1)
-	pr #255,using 'form pos 4,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "From",int(pbo_service_from*.01),"To",int(pbo_service_to*.01)
+	pr #255,using 'form pos 4,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "From",int(serviceFrom*.01),"To",int(pbo_service_to*.01)
 	pr #255: ""
 	if pb<>0 then pb$="   Prior Balance" else pb$=""
 	pr #255: ""
@@ -1596,23 +1572,23 @@ PRIOR_USAGES: ! r: Blucksberg's prior usages gathering
 	goto L3160
 	PU_Xit: ! 
 return  ! /r
-def fn_print_bill_pennington(z$,mat mg$,mat mg2$,service_from,service_to,penaltyDueDate)
+def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDueDate)
 	! correct margins are top:.7, bottom:.25, left:.63, right:.25
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 		if ~pbpennington_setup then 
 			pbpennington_setup=1
 			open #h_pbpennington_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 		end if 
-		read #h_pbpennington_customer,using f_pbpennington,key=z$: z$,a4,mat b,mat d,bal,f,mat g,extra_3,extra_4
+		read #h_pbpennington_customer,using f_pbpennington,key=z$: z$,a4,mat b,mat d,bal,f,mat g,serviceToMmddYy,serviceFromMmddYy
 		f_pbpennington: form pos 1,c 10,pos 149,pd 2,pos 157,11*pd 4.2,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1750,2*n 6
 		fncustomer_address(z$,mat gTmpCustomerAddress$)
-		fn_override_service_date(service_from,service_to,extra_3,extra_4)
+		fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
 		pb=bal-g(11)
 	! /r
 	pr #255,using 'form pos 45,c 9,n 10.2': 'Water',g(1)+g(9)
 	pr #255,using 'form pos 45,c 9,pic(zzz,zzz.zz)': '',g(2)
-	if service_to=0 then tmpServiceFrom$='' else tmpServiceFrom$=date$(days(service_from,'mmddyy'),'mm dd') ! d3
-	if service_to=0 then tmpServiceTo$='' else tmpServiceTo$=date$(days(service_to,'mmddyy'),'mm dd') ! d4
+	if serviceTo=0 then tmpServiceFrom$='' else tmpServiceFrom$=date$(days(serviceFrom,'mmddyy'),'mm dd') ! serviceToOverride
+	if serviceTo=0 then tmpServiceTo$='' else tmpServiceTo$=date$(days(serviceTo,'mmddyy'),'mm dd') ! d4
 	pr #255,using 'form pos 11,c 5,pos 20,c 5,pos 30,pic(zzbzzbzz)': tmpServiceFrom$,tmpServiceTo$,date$(days(penaltyDueDate,'mmddyy'),'mm dd yy')
 	pr #255: ""
 	pr #255,using 'form pos 48,n 9.2,n 10.2': bal,bal+g(10)+g(7)
@@ -1659,7 +1635,7 @@ def fn_print_bill_pennington(z$,mat mg$,mat mg2$,service_from,service_to,penalty
 		count=0
 	end if 
 fnend 
-def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
+def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceTo,penaltyDueDate)
 ! correct margins are ??
 ! r: any and all necessary setup (except opening the printer) to pr one bill
 		if ~pbedinburg_setup then 
@@ -1668,11 +1644,11 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 			F_PBedinburg_CUSTOMER: form pos 1,c 10,pos 147,pd 2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1750,2*n 6
 			lyne=3
 		end if 
-!   read #1,using L590,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$ nokey SCREEN3
+!   read #1,using L590,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,serviceToOverride,serviceFromOverride,bulk$,extra1$ nokey SCREEN3
 !   L590: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30
-		read #h_pbedinburg_customer,using F_PBedinburg_CUSTOMER,key=z$: z$,a3,final,mat d,bal,f,mat g,route,extra_3,extra_4
+		read #h_pbedinburg_customer,using F_PBedinburg_CUSTOMER,key=z$: z$,a3,final,mat d,bal,f,mat g,route,serviceFromMmddYy,serviceToMmddYy
 		fncustomer_address(z$,mat pe$)
-		fn_override_service_date(service_from,service_to,extra_3,extra_4)
+		fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
 ! /r
 	billOnPageCount+=1
 	if billOnPageCount=1 then xmargin=0 : ymargin=0
@@ -1691,7 +1667,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,service_from,service_to,penaltyDueDate)
 	fnpa_txt("  Edinburg, IL 62531    ",xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt('#'&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_from)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_to),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
@@ -1856,7 +1832,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt(poundBeforeAccount$&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d3),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
 	if enableIsDueNowAndPayable>0 then
 		fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
 	end if
@@ -2006,7 +1982,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 		fnpa_newpage
 	end if 
 fnend 
-def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,datePastDue,mat pe$,final$,z$)  ! three per page RTF Bill
+def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFrom,serviceTo,datePastDue,mat pe$,final$,z$)  ! three per page RTF Bill
 	if final=2 then g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 	penalty=0
 	for j=1 to 10
@@ -2014,7 +1990,7 @@ def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,dateP
 	next j
 	pb=bal-g(11)
 	pr #255: ''
-	pr #255,using 'form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
+	pr #255,using 'form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "FROM",int(serviceFrom*.01),"TO",int(serviceTo*.01),d1
 	pr #255,using 'form pos 1,c 10,pos 13,c 18': trim$(z$),e$(1)(1:18)
 	pr #255: ''
 	pr #255: ''
@@ -2076,7 +2052,7 @@ def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,dateP
 	end if
 	! billsPrintedCount(1)+=1  ! not sure if (1) is right.
 fnend
-def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final)
+def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d4,mat e$,final)
 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"
 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"
 	if final=2 then 
@@ -2092,7 +2068,7 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final
 	pb=bal-g(11)
 	pr #255: ''
 	pr #255,using 'form pos 4,c 10,pos 32,c 10,pos 48,pic(zz/zz/zz)': z$,z$,d4
-	pr #255,using 'form pos 1,c 5,pic(zz/zz/zz),c 4,pic(zz/zz/zz)': "From:",d2x," To:",d3x
+	pr #255,using 'form pos 1,c 5,pic(zz/zz/zz),c 4,pic(zz/zz/zz)': "From:",serviceFrom," To:",serviceTo
 	pr #255,using 'form pos 32,n 8.2,pos 48,n 8.2': g(12),g(11)
 	pr #255,using 'form pos 32,n 8.2,pos 48,n 8.2': pb,pb
 	pr #255,using 'form pos 32,n 8.2,pos 48,n 8.2': bal+penalty,bal
@@ -2100,7 +2076,13 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	if g(1)>0 then cde=1: d4$=cnvrt$("pic(zz/zz/zz)",d4) else cde=0 : d4$=""
+	if g(1)>0 then 
+		cde=1
+		d4$=cnvrt$("pic(zz/zz/zz)",d4) 
+	else 
+		cde=0 
+		d4$=""
+	end if
 	pr #255,using ce_L1690: "Water",g(1),d4$,e$(2)
 	ce_L1690: form pos 1,c 5,pic(-----.--),pos 18,pic(zz/zz/zz),pos 32,c 30,skip 1
 	if g(9)>0 then cde=2: d4$=cnvrt$("pic(zz/zz/zz)",d4) else cde=0 : d4$=""
@@ -2114,7 +2096,6 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2x,d3x,d4,mat e$,final
 	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2': pb,pb
 	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2': bal+penalty,bal
 	pr #255: ''
-	d2=d3=0
 	bills+=1
 	billOnPage+=1
 	if billOnPage=1 or billOnPage=2 then ! int(bills/3)<>bills/3 then ! space extra if 1st or 2nd bill
@@ -2313,8 +2294,8 @@ def fn_print_bill_galena
 	end if 
 	! /r
 ! r: bottom table
-	fnpa_txt(date$(days(d3,"mmddyy"),"m")     ,xmargin+ 2    ,lyne*23+ymargin)
-	fnpa_txt(date$(days(d3,"mmddyy"),"D")     ,xmargin+11    ,lyne*23+ymargin)
+	fnpa_txt(date$(days(serviceToOverride,"mmddyy"),"m")     ,xmargin+ 2    ,lyne*23+ymargin)
+	fnpa_txt(date$(days(serviceToOverride,"mmddyy"),"D")     ,xmargin+11    ,lyne*23+ymargin)
 	if bal>0 then 
 		fnpa_txt(fnformnumb$(bal-g(9),2,9)      ,lsColPrevious ,lyne*23+ymargin)
 		if g(10)>0 then

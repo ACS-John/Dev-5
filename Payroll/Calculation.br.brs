@@ -592,7 +592,7 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 	else
 		estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
 		if estPayPeriodNetPay<=0 then 
-			estAnnualNetPay=withholdingPercentage=fedTaxesAnnualEstimate=returnN=0
+			returnN=estAnnualNetPay=withholdingPercentage=fedTaxesAnnualEstimate=0
 		else
 			! tableRow was j1
 			estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! estAnnualNetPay (previously g2) - estimated annual net pay
@@ -1678,10 +1678,9 @@ def library fnCheckStateCalculation(; ___, _
 	
 	XitCheckStateCalculation: !
 	fn_setupCloseFiles
-	returnN=0 ! 
+	returnN=0 
 	fnCheckStateCalculation=returnN
 fnend
-
 
 def fn_setup
 	autoLibrary
