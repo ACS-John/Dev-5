@@ -973,8 +973,7 @@ def fn_itron_record_rdg ! reading - pg 19
 	fn_record_addn(5,0)
 	fn_record_addn(1,0) ! field 20
 	fn_record_addx(1)
-	!
-	! itron_read_type=val(fn_meterInfo$('Read Type',z$,serviceCode$(a_item)))
+	itron_read_type=val(fn_meterInfo$('Read Type',z$,serviceCode$(a_item)))
 	if itron_read_type=0 then itron_read_type=a_item ! gas, water, electric a unique number for each - a_item (service number) is as good as any
 	fn_record_addc(2,cnvrt$('pic(##)',itron_read_type))
 	fn_record_addn(6,0)
