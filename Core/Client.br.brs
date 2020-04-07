@@ -191,6 +191,7 @@ def fn_setup_client ! ** set up for new clients
 		fn_setup_client_add("Choctaw" ,918,34214)
 		! fn_setup_client_add("Colyell" ,980,33948)
 		! fn_setup_client_add("Community Dev" ,982,34156)
+		fn_setup_client_add("Crane" ,1120,0)
 		fn_setup_client_add("Crockett County" ,1141,15110)
 		fn_setup_client_add("Divernon" ,1350,33698)
 		fn_setup_client_add("Dorothy Salch" ,3812,34494)
