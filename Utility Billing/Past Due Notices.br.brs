@@ -1,30 +1,14 @@
 ! formerly S:\acsUB\ubPdNot
 ! Past Due Notices
-!_
-library 'S:\Core\Library': fnOpenprn,fncloseprn
-library 'S:\Core\Library': fnXit
-library 'S:\Core\Library': fnComboA,fnFra,fncmbrt2
-library 'S:\Core\Library': fnDat,fnLastBillingDate,fngethandle
-library 'S:\Core\Library': fnTop
-library 'S:\Core\Library': fnLbl,fnTxt,fnTos,fnOpt
-library 'S:\Core\Library': fnCmbAct,fnChk,fnCmdKey
-library 'S:\Core\Library': fnCmdSet
-library 'S:\Core\Library': fnAcs
-library 'S:\Core\Library': fnReg_read,fnReg_write
-library 'S:\Core\Library': fnCreg_read,fnCreg_write
-library 'S:\Core\Library': fnprint_file_name$
-library 'S:\Core\Library': fnGetdir2,fncustomer_address
-library 'S:\Core\Library': fnPa_open
-library 'S:\Core\Library': fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line
-library 'S:\Core\Library': fnPa_finis
-library 'S:\Core\Library': fnFree,fnEditFile,fncopy
+autoLibrary
 on error goto Ertn
 ! r: dims
 	dim z$*10
 	dim meter_address$*30
 	dim gb(10)
 	dim d$(4)*20
-	dim f$(3)*12,a(7),b(11),c(4),d(15),g(12)
+	dim f$(3)*12,a(7)
+	dim xb(11),c(4),d(15),g(12)
 	dim resp$(15)*512
 	dim ln$*8800,flname$*256
 	dim r1$(120)*30
@@ -108,10 +92,10 @@ MENU1: ! r:
 PRINT_NEXT: ! r: the main read it and pr it routine
 	if sel_indv$="Y" then goto ASK_NEXT_ACT
 	if bk1>0 then 
-		read #customer5,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
+		read #customer5,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
 		if route>bk1 then goto EO_CUSTOMER
 	else 
-		read #customer1,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
+		read #customer1,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
 	end if 
 	if deltype<3 and bal<=1 then goto PRINT_NEXT
 	if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
@@ -125,18 +109,11 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	if deltype=5 and bal>0 then goto READ_ADRBIL
 	if deltype=6 and f=d1 then goto READ_ADRBIL ! pr all customers who were billed last billing cycle
 	goto PRINT_NEXT
-!
-READ_ADRBIL: ! r:
+
+	READ_ADRBIL: !
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
-! dim altadr$(4)*30
-! read #adrbil,using "Form POS 11,4*C 30",key=z$: mat altadr$ nokey L940
-! if trim$(altadr$(1)&altadr$(2)&altadr$(3)&altadr$(4))<>"" then 
-!   e$(2)=altadr$(1)
-!   e$(3)=altadr$(2)
-!   e$(4)=altadr$(4)
-! end if 
-! L940: ! /r
+
 	if reminder=1 then 
 		fn_vbprint
 	else if env$('client')="Granby" then 
@@ -224,53 +201,57 @@ fnend
 def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 	! if trim$(z$)='901246.40' then pr 'the beginning of it' : pause
 	mat r1$=("")
-	r1$(1)=ltrm$(z$)
-	r1$(2)=rtrm$(meter_address$) ! meter address
-	r1$(3)=rtrm$(addr$(1)) ! name
-	r1$(4)=rtrm$(addr$(2)) ! rtrm$(e$(3)) ! address
-	r1$(108)=rtrm$(addr$(3)) ! address
-	r1$(5)=rtrm$(addr$(4)) ! city st zip
-	for j=1 to 3 : r1$(j+5)=f$(j) : next j
-	for j=1 to 7 : r1$(j+9)=str$(a(j)) : next j
-	for j=1 to 11 : r1$(j+16)=ltrm$(cnvrt$("N 8.2",b(j))) : next j
-	for j=1 to 4 : r1$(j+27)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",c(j))) : next j
-	for j=1 to 15: r1$(j+31)=ltrm$(cnvrt$("N 10",d(j))) : next j
+	r1$(1)  =ltrm$(z$                  )
+	r1$(2)  =rtrm$(meter_address$      ) ! meter address
+	r1$(3)  =rtrm$(addr$(1)            ) ! name
+	r1$(4)  =rtrm$(addr$(2)            ) ! rtrm$(e$(3)) ! address
+	r1$(108)=rtrm$(addr$(3)            ) ! address
+	r1$(5)  =rtrm$(addr$(4)            ) ! city st zip
+	for j=1 to  3 : r1$(j+5)=f$(j)                                : next j
+	for j=1 to  7 : r1$(j+9)=str$(a(j))                           : next j
+	for j=1 to 11 : r1$(j+16)=ltrm$(cnvrt$("N 8.2",xb(j)))        : next j
+	for j=1 to  4 : r1$(j+27)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",c(j))) : next j
+	for j=1 to 15 : r1$(j+31)=ltrm$(cnvrt$("N 10",d(j)))          : next j
 	r1$(47)=ltrm$(cnvrt$("N 10.2",bal))
 	r1$(49)=ltrm$(cnvrt$("PIC(##/##/##)",f))
-	for j=1 to 12 : r1$(j+49)=cnvrt$("N 10.2",g(j)) : next j
-	for j=1 to 10 : r1$(j+61)=cnvrt$("N 10.2",gb(j)) : next j
+	for j=1 to 12 : r1$(j+49)=cnvrt$("N 10.2",g(j))               : next j
+	for j=1 to 10 : r1$(j+61)=cnvrt$("N 10.2",gb(j))              : next j
 	r1$(72)=cnvrt$("n 10.2",bal+(g(12)-g(11))) ! balance plus penalty (assume total penalties will be difference in gross and net bill)
 	r1$(73)=ltrm$(cnvrt$("n 10.2",bal+(g(12)-g(11)))) ! balance plus penalty trimmed
 	if env$('client')="White Hall" then r1$(73)=ltrm$(cnvrt$("n 10.2",bal+10)) ! balance plus $10 penalty trimmed
 	r1$(74)=cnvrt$("n 10.2",bal-g(11)) ! past due balance
 	r1$(75)=ltrm$(cnvrt$("n 10.2",bal-g(11))) ! past due balance trimed
 	r1$(76)=cnvrt$("N 10.2",bal) ! balance not trimed
-	r1$(77)=ltrm$(cnvrt$("PIC(##/##/##)",extra(3))) ! date read current
-	if balance >0 then r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11))))) else r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",0)) ! pay after amount (balance plus penalty trimmed) nothing if balance <0
-	r1$(80)=df$ ! bank draft Y
-	r1$(81)=da$ ! bank Account
-	r1$(82)=dc$ ! Account code
-	r1$(83)=dc$ ! bank acct #
-	r1$(84)=trim$(cnvrt$("N 2",extra(1))) ! route number
-	r1$(85)=trim$(cnvrt$("N 7",extra(2))) ! sequence #
-	r1$(86)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(3))) ! current reading date
-	r1$(87)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(4))) ! prior   reading date
-	r1$(88)=ltrm$(cnvrt$("PIC(zZzZZZZ)",extra(5))) ! sewer rediction
-	r1$(89)=ltrm$(cnvrt$("n 10.2",extra(6))) conv ignore ! security light charge
-	r1$(90)=ltrm$(cnvrt$("PIC(ZZzZZzZZ)",extra(7))) ! security light count
-	r1$(91)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(8))) ! electric multiplier
-	r1$(92)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(9))) ! demand average usage
-	r1$(93)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(10))) ! gas multiplier
-	r1$(94)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(11))) ! service 6 rate code
-	r1$(95)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(12))) ! service 7 rate code
-	r1$(96)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(13))) ! service 8 rate code
-	r1$(97)=ltrm$(cnvrt$("PIC(zZZ)",extra(14))) ! units per meter sewer
-	r1$(98)=ltrm$(cnvrt$("PIC(zZZ)",extra(15))) ! units per meter electric
-	r1$(99)=ltrm$(cnvrt$("PIC(zZZ)",extra(16))) ! units per meter gas
+	r1$(77)=ltrm$(cnvrt$("PIC(##/##/##)"  ,extra(3)  )  ) ! date read current
+	if balance <=0 then 
+		r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",0))           ! pay after amount (balance plus penalty trimmed) nothing if balance <0
+	else 
+		r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11))))) 
+	end if
+	r1$(80)=df$                                           ! bank draft Y
+	r1$(81)=da$                                           ! bank Account
+	r1$(82)=dc$                                           ! Account code
+	r1$(83)=dc$                                           ! bank acct #
+	r1$(84)=trim$(cnvrt$("N 2"            ,extra(1)  )  ) ! route number
+	r1$(85)=trim$(cnvrt$("N 7"            ,extra(2)  )  ) ! sequence #
+	r1$(86)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)"  ,extra(3)  )  ) ! current reading date
+	r1$(87)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)"  ,extra(4)  )  ) ! prior   reading date
+	r1$(88)=ltrm$(cnvrt$("PIC(zZzZZZZ)"   ,extra(5)  )  ) ! sewer rediction
+	r1$(89)=ltrm$(cnvrt$("n 10.2"         ,extra(6)  )  ) conv ignore ! security light charge
+	r1$(90)=ltrm$(cnvrt$("PIC(ZZzZZzZZ)"  ,extra(7)  )  ) ! security light count
+	r1$(91)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(8)  )  ) ! electric multiplier
+	r1$(92)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(9)  )  ) ! demand average usage
+	r1$(93)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(10) )  ) ! gas multiplier
+	r1$(94)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(11) )  ) ! service 6 rate code
+	r1$(95)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(12) )  ) ! service 7 rate code
+	r1$(96)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)" ,extra(13) )  ) ! service 8 rate code
+	r1$(97)=ltrm$(cnvrt$("PIC(zZZ)"       ,extra(14) )  ) ! units per meter sewer
+	r1$(98)=ltrm$(cnvrt$("PIC(zZZ)"       ,extra(15) )  ) ! units per meter electric
+	r1$(99)=ltrm$(cnvrt$("PIC(zZZ)"       ,extra(16) )  ) ! units per meter gas
 	! r1$(100)  skipped
-	r1$(101)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(17))) ! final billing date
+	r1$(101)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)" ,extra(17)))  ! final billing date
 	r1$(102)=ltrm$(cnvrt$("PIC(ZZzzzzzzz)",extra(18))) ! average sewer usage
-	r1$(103)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(19))) ! estimated date
+	r1$(103)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)" ,extra(19)))  ! estimated date
 	extra(20)=0: r1$(104)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(20))) ! extra
 	extra(21)=0: r1$(105)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(21))) ! extra
 	extra(22)=0: r1$(106)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(22))) ! extra
@@ -281,7 +262,7 @@ def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 		r1$(j)=trim$(extra1$(j-107)) ! escrow balance thru end
 	next j
 	! if trim$(z$)='901246.40' then pr 'the end of it' : pause
-fnend  ! fn_bldr1
+fnend
 def fn_vbopenprint
 	fnpa_open
 	lyne=3
@@ -340,17 +321,17 @@ def fn_report_close
 		close #h_ra,free: 
 		h_ra=0
 	end if  ! h_ra
-	goto RC_XIT
-	RC_PGOF: ! 
-	pr #255: newpage
-	gosub RC_HDR
-	continue  ! RC_PGOF
-	RC_HDR: ! 
-	rc_page+=1
-	pr #255: "\qc "&cnam$
-	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-	pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
-	pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
+	goto RC_XIT 
+	RC_PGOF: ! r:
+		pr #255: newpage
+		gosub RC_HDR
+	continue  ! /r
+	RC_HDR: ! r:
+		rc_page+=1
+		pr #255: "\qc "&cnam$
+		pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+		pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
+		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
 	return  ! RC_HDR
 	RC_XIT: ! 
 fnend  ! fn_report_close
@@ -715,7 +696,7 @@ ASK_NEXT_ACT: ! r:
 	end if 
 !
 READ_CUSTOMER: ! 
-	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
+	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
 	goto READ_ADRBIL ! /r
 EO_CUSTOMER: ! r:
 ! if env$('client')='Merriam Woods' then

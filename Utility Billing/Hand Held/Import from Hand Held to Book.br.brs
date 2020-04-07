@@ -684,16 +684,19 @@ fnend
 			if line_type$="prmdt" then ! r: Premises Detail
 				if z$<>'' then 
 					! write the previous one
-					br: fn_nev4_write(hOut,z$,reading_water) 
+					fn_nev4_write(hOut,z$,reading_water,customer_sequence) 
 				end if
+				! reset for the next one
 				reading_water=0
-				z$=line$(104:123) soflow Sub_soFlowAccountNo
-				pr 'z$="'&z$&'"' 
-				pr '*TODO: complete this account number code' : pr line$ : fnPause
-				z$=trim$(z$)(1:10)
+				customer_sequence=0
+				z$=trim$(line$(104:123)) soflow Sub_soFlowAccountNo
+				! pr 'z$="'&z$&'"' 
+				! pr '*TODO: complete this account number code' : pr line$ : fnPause
+				! z$=trim$(z$)(1:10)
 				! /r
 			else if line_type$="" then 
 			else if line_type$="rdgdt" then ! r: Reading Detail
+				! pr 'line '&line_type$&' detected.' : pause
 				! Record ID                    Req UB  1 - 5 5 A / N RDGDT.
 				! Read Type                    Req UB  6 - 9 4 A / N Details of a particular register. For Example: HIGH,LOW,GAL,CFT,WTR,GAS
 				! Collection ID                Req UB 10 - 22 13 NUM Indicates the MIU serial number. Use spaces if device provides no ID value.
@@ -709,6 +712,14 @@ fnend
 				! Prev Read                    Req UB 79 - 88 10 NUM
 				! Reading                      Req HH 89 - 98 10 A / N
 				! Collector Reading            Req HH 99 - 108 10 A / N Raw unadjusted reading from the MIU.
+				if 'WTR'=trim$(line$(6:9)) then
+					reading_water=val(line$(99:108))
+				else 
+					pr 'unhandled service in RDGDT record: '&line$(6:9)
+					pause
+				end if
+				
+				
 				! Read Code                    Req HH 109 - 110 2 A / N
 				! Re-entry Count               Req HH 111 - 112 2 NUM
 				! Water No Flow 35 Days        Req HH 113 1 NUM Number of days.
@@ -742,52 +753,47 @@ fnend
 				! Register ID                  Req HH 246 - 255 10 A / N
 				! CRLF                         Req UB 256 - 257 2 Carriage return, line feed.
 
-				if sc$='WA' and line$(6:9)='WTR' then
-					reading_water=8675309
-				end if
 
-				pr line_type$ 
-				pr '*TODO: complete this Reading Detail code' : pr line$ : fnPause
+
+				! pr line_type$ 
+				! pr '*TODO: complete this Reading Detail code' : pr line$ : fnPause
 				
 				! /r
 			else if line_type$="ordst" then ! r: Order Status  
-				pr """Unfortunately, the .exp doesn't have readings but you'll see where the Order Status Record is created & "
-				pr " this is where the readings will be placed."" -Kieth"
-				pr line_type$ 
-				pr '*TODO: complete this code Order Status' : pr line$ : fnPause
+				! pr """Unfortunately, the .exp doesn't have readings but you'll see where the Order Status Record"
+				! pr "is created & this is where the readings will be placed."" -Kieth"
+				! pr line_type$ 
+				! pr '*TODO: complete this code Order Status' : pr line$ : fnPause
 				! /r
 			else if line_type$="mtrdt" then ! r: Meter Detail
-				! Record ID             Req UB 1 - 5 5 A / N MTRDT.
-				! Read Sequence         Req UB 6 - 11 6 NUM Right-justify, zero-fill.
-				! Changed Read Sequence Opt HH 12 - 17 6 NUM Changed value coming back from field.
-				! Meter Key             Req UB 18 - 37 20 NUM Key to identify the meter within the premises key. Use meter number for this unless the CIS utility billing system vendor has a better key. Meter Number          Req UB 38 - 57 20 A / N Meter serial number.
-				! Changed Meter Number  Opt HH 58 - 77 20 A / N Actual meter number found in the field.
-				! Meter Type            Req UB 78 - 81 4 A / N
-				! Changed Meter Type    Opt HH 82 - 85 4 A / N
-				! Meter Size            Req UB 86 - 93 8 A / N See field description "Meter Size" on page 34.
-				! Changed Meter Size    Opt HH 94 - 101 8 A / N
-				
-				customer_sequence=val(line$(12:17)) ! Changed Read Sequence
-				
-				
-				pr line_type$ 
-				pr '*TODO: complete this Meter Detail code' : pr line$ : fnPause
+				                                    ! Record ID             Req UB 1 - 5 5 A / N MTRDT.
+				                                    ! Read Sequence         Req UB 6 - 11 6 NUM Right-justify, zero-fill.
+				customer_sequence=val(line$(12:17)) ! Changed Read Sequence Opt HH 12 - 17 6 NUM Changed value coming back from field.
+				                                    ! Meter Key             Req UB 18 - 37 20 NUM Key to identify the meter within the premises key. Use meter number for this unless the CIS utility billing system vendor has a better key. Meter Number          Req UB 38 - 57 20 A / N Meter serial number.
+				                                    ! Changed Meter Number  Opt HH 58 - 77 20 A / N Actual meter number found in the field.
+				                                    ! Meter Type            Req UB 78 - 81 4 A / N
+				                                    ! Changed Meter Type    Opt HH 82 - 85 4 A / N
+				                                    ! Meter Size            Req UB 86 - 93 8 A / N See field description "Meter Size" on page 34.
+				                                    ! Changed Meter Size    Opt HH 94 - 101 8 A / N
+				! pr line_type$ 
+				! pr '*TODO: complete this Meter Detail code' : pr line$ : fnPause
 				
 				! /r
 			end if
 		loop
 		Eo_nev4: !
 		! write the last one
-		fn_nev4_write(hOut,z$,reading_water)
+		fn_nev4_write(hOut,z$,reading_water,customer_sequence)
 		close #hIn:
 		close #hOut:
-		pr 'nev4 complete' : fnPause
+		! pr 'nev4 complete' : fnPause
 	fnend
 		Sub_soFlowAccountNo: ! r:
 			z$='*invalid*'
 			pr bell;'account number too long: ';line$(194:123)
+			pause
 		continue ! /r
-	def fn_nev4_write(hOut,z$,reading_water)
+	def fn_nev4_write(hOut,z$,reading_water,customer_sequence)
 		! pr #hOut,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
 			fn_prHout('Customer.Number='&z$)
