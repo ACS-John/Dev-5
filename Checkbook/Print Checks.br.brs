@@ -811,7 +811,7 @@ fnend
 ! 
 def fn_portion_stub(stubOnCheck)
 	! stubOnCheck - 1 or 2 to say if it is the first or second stub on a check.  Some formats care
-	if env$('client')="Billings" then 
+	if env$('client')="Billings" or env$('client')='Diamond' then 
 		fn_portion_stub_billings(stubOnCheck)
 	else if env$('client')="Divernon" then 
 		fn_portion_stub_divernon
@@ -879,7 +879,7 @@ def fn_portion_check
 		fn_portion_check_acs(amt)
 	else if env$('client')="Ash Grove" then 
 		fn_portion_check_ashgrove(amt)
-	else if env$('client')="Billings" then 
+	else if env$('client')="Billings" or env$('client')='Diamond' then 
 		fn_portion_check_billings(amt)
 	else if env$('client')="Campbell" then 
 		fn_portion_check_generic(amt, 28,57)

@@ -130,7 +130,7 @@
 	if bankcode=0 then bankcode=1
 	check_number=ckno
 ! if env$('client')="West Rest Haven" then sc1$="C"
-	if env$('client')="Billings" then sc1$="CSS"
+	if env$('client')="Billings" or env$('client')='Diamond' then sc1$="CSS"
 	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then ficam1$="Y"
 	ddcode$="R"
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
@@ -760,7 +760,7 @@ def fn_print_check
 		fn_check_legacy(3,3)
 	else if env$('client')="Bethany" then 
 		fn_check_bethany
-	else if env$('client')="Billings" then 
+	else if env$('client')="Billings" or env$('client')='Diamond' then 
 		fn_check_billings
 	else if env$('client')="Crockett County" then 
 		! if env$('acsDeveloper')<>"" then pause
@@ -1273,7 +1273,7 @@ def fn_print_stub
 		tdedcp=tdedcp+ttc(j): tdedytd=tdedytd+tty(j)
 		L2240: ! 
 	next j
-	if env$('client')='Billings' then 
+	if env$('client')='Billings' or env$('client')='Diamond' then 
 		fn_stub_billings
 	else if env$('client')="Edison" then 
 		fn_stub_standard( 0,2)
