@@ -793,11 +793,18 @@ fnend
 			pr bell;'account number too long: ';line$(194:123)
 			pause
 		continue ! /r
-	def fn_nev4_write(hOut,z$,reading_water,customer_sequence)
+	def fn_nev4_write(hOut,z$,reading_water,customer_sequence; ___,meterMultiplier)
 		! pr #hOut,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
 			fn_prHout('Customer.Number='&z$)
+			if reading_water then
+				meterMultiplier=val(fncustomerdata$('meter multiplier'))
+				if meterMultiplier then
+					reading_water=reading_water*meterMultiplier
+					reading_water=round(reading_water,0)
+				end if
 			fn_inz(reading_water     ,'Reading.Water'       )
+			end if
 			fn_inz(customer_sequence ,'customer.sequence'   )
 		else
 			fn_prHout('! customer number '&z$&' has all zero readings.')
@@ -949,30 +956,7 @@ def fn_getCustomerGroup(mat gcgFromLabel$,mat gcgFromValue$,gcgCustomerNumbers$,
 	fn_getCustomerGroup=gcgReturn
 fnend
 def fn_setup
-	library 'S:\Core\Library': fnPause
-	library 'S:\Core\Library': fnXit
-	library 'S:\Core\Library': fnUreg_read
-	library 'S:\Core\Library': fnTop
-	library 'S:\Core\Library': fnRegistered_for_hh
-	library 'S:\Core\Library': fnHand_held_Device$
-	library 'S:\Core\Library': fnHandHeldList
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnChk
-	library 'S:\Core\Library': fnComboA
-	library 'S:\Core\Library': fnAcs2
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnGethandle
-	library 'S:\Core\Library': fnMsgbox
-	library 'S:\Core\Library': fnUreg_write
-	library 'S:\Core\Library': fnCopy
-	library 'S:\Core\Library': fnRename
-	library 'S:\Core\Library': fnFileTo2Arrays
-	library 'S:\Core\Library': fnAccountFromLocationId$
-	library 'S:\Core\Library': fnSrch_case_insensitive
-	library 'S:\Core\Library': fnMakesurePathExists
-	library 'S:\Core\Library': fnAddOneC
+	autoLibrary
 	on error goto Ertn
 	dim preferenceHandHeldFromFile$*128
 	fnureg_read('Hand Held From File',preferenceHandHeldFromFile$, '[ask]')

@@ -689,7 +689,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 			last_ln$=ln$
 		end if
 	end if
-	L5440: !
+	L5440: !0
 	if env$('client')="Monticello" then
 		read #hCustomer1,using 'form pos 1954,c 12',key=lpad$(trim$(x$),10): extra$(7) nokey L5480 ! monticello
 		if trim$(extra$(7))="22" then x(ti1)=round(x(ti1)/100,0) ! monticello

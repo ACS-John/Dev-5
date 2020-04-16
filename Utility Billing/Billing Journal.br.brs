@@ -283,7 +283,7 @@ AccumulateTotalsByCode: ! r: ACCUMULATE TOTALS BY CODE
 		L1690: ! 
 		if g(j)><0 and x2=0 then x2=200: codemis=1
 		if x2>200 then x2=200
-		if env$('client')='Billings' and j>5 and j<9 then goto L1720
+		if (env$('client')='Billings' or env$('client')='Diamond') and j>5 and j<9 then goto L1720
 			if x2<>0 then 
 				t1(j,x2,1)+=1
 				t1(j,x2,2)+=g(j)

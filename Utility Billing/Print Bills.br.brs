@@ -128,7 +128,7 @@ PrintBill_Basic: !
 	!       pa_orientation$='Landscape'
 	!       include_zero_bal=include_credit_bal=1
 	!       basePenaltyOnCurrentBillOnly=1
-	else if env$('client')='Billings' then ! 04/26/2017 ! three per page RTF
+	else if env$('client')='Billings' or env$('client')='Diamond' then ! 04/26/2017 ! three per page RTF
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
 		enable_bulksort=1
@@ -425,7 +425,7 @@ MainLoop: ! r: main loop
 		! fn_print_bill_Exeter(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy,d4)
 	else if env$('client')='Edinburg' then
 		fn_print_bill_edinburg(z$,mat mg$,d1,serviceFromOverride,~and)
-	else if env$('client')='Billings' then
+	else if env$('client')='Billings' or env$('client')='Diamond' then
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final$,z$) ! 
 	else if env$('client')='Choctaw' then
 		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
