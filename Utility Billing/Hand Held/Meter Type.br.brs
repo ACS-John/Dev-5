@@ -1,7 +1,4 @@
-library 'S:\Core\Library': fntop,fnxit
-library 'S:\Core\Library': fnmsgbox
-library 'S:\Core\Library': fnhand_held_device$
-library 'S:\Core\Library': fnHamsterFio
+autoLibrary
 on error goto Ertn
 fntop(program$)
 dim device$*256

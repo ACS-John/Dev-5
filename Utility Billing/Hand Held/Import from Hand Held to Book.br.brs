@@ -784,21 +784,23 @@ fnend
 		Eo_nev4: !
 		! write the last one
 		fn_nev4_write(hOut,z$,reading_water,customer_sequence)
+		fnMeterInfo$('','','', 1)
 		close #hIn:
 		close #hOut:
 		! pr 'nev4 complete' : fnPause
 	fnend
-		Sub_soFlowAccountNo: ! r:
-			z$='*invalid*'
-			pr bell;'account number too long: ';line$(194:123)
-			pause
-		continue ! /r
+	Sub_soFlowAccountNo: ! r:
+		z$='*invalid*'
+		pr bell;'account number too long: ';line$(194:123)
+		pause
+	continue ! /r
 	def fn_nev4_write(hOut,z$,reading_water,customer_sequence; ___,meterMultiplier)
 		! pr #hOut,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
 			fn_prHout('Customer.Number='&z$)
 			if reading_water then
-				meterMultiplier=val(fncustomerdata$('meter multiplier'))
+				meterMultiplier=val(fnMeterInfo$('reading multipler',z$,'WA'))
+				! pr 'meterMultiplier=';meterMultiplier : pause
 				if meterMultiplier then
 					reading_water=reading_water*meterMultiplier
 					reading_water=round(reading_water,0)
