@@ -1,13 +1,9 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnapplyDefaultRatesFio
-		library 'S:\Core\Library': fnOpenFile,fnCloseFile
-		library 'S:\Core\Library': fnMeterInfo$
-		library 'S:\Core\Library': fncustomer_address
+		autoLibrary
 		on error goto Ertn
 		
-		library 'S:\Core\Library': fnget_services
 		dim serviceName$(0)*20
 		dim serviceCode$(0)*2
 		fnget_services(mat serviceName$,mat serviceCode$)
@@ -21,6 +17,7 @@ def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
 	fnCustomerData$=fn_customerData$(account$,fieldName$, leaveOpen)
 fnend
 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,whichService)
+	if trim$(account$&fieldName$)='' and leaveOpen=0 then goto CustomerDataFinis !  just close it and move on
 	account$=lpad$(trim$(account$),10)
 	if customerDataSetup$<>account$ then ! r:
 		customerDataSetup$=account$

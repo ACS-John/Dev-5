@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                    
+10:19 AM 4/28/2020	U4	Import from Hand Held to Book - Neptune now respects reading multiplier
 10:07 04/20/2020	CO	5.74282  
 3:57 PM 4/7/2020	UB	Import from Hand Held to Book for Neptune meters is ready for Water Readings 
 11:48 AM 4/1/2020	UB	fixed hand held create issue 
