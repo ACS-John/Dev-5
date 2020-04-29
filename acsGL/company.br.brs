@@ -216,7 +216,7 @@ SCREEN_3: ! r:
 		prgl(j,1)=val(gl$(j)(1:3)): prgl(j,2)=val(gl$(j)(4:9)): prgl(j,3)=val(gl$(j)(10:12))
 	next j
 	if ckey=4 then gosub SAVE 
-goto XIT ! /r
+goto SCREEN_4 ! /r
 
 SCREEN_4: ! r:
 	fnTos(sn$="Company-4") 
