@@ -152,7 +152,10 @@ SCREEN_2: ! r:
 	fnAcs(sn$,0,mat resp$,ckey)
 	e$(1)=fnagl$(resp$(1)) ! Summary # 1
 	e$(2)=fnagl$(resp$(2)) ! Summary # 1
-	if ckey=4 then gosub SAVE : goto XIT
+	if ckey=4 then !  save and exit
+		gosub SAVE 
+		goto XIT 
+	end if
 	if ckey=2 then goto SCREEN_1
 goto SCREEN_3 ! /r
 
@@ -215,7 +218,10 @@ SCREEN_3: ! r:
 		gl$(j)=fnagl$(resp$(j+6))
 		prgl(j,1)=val(gl$(j)(1:3)): prgl(j,2)=val(gl$(j)(4:9)): prgl(j,3)=val(gl$(j)(10:12))
 	next j
-	if ckey=4 then gosub SAVE 
+	if ckey=4 then !  save and exit
+		gosub SAVE 
+		goto XIT 
+	end if
 goto SCREEN_4 ! /r
 
 SCREEN_4: ! r:
