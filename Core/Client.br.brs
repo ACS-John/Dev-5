@@ -215,9 +215,10 @@ def fn_setup_client ! ** set up for new clients
 !   fn_setup_client_add("Gilbertown",1985,0)
 !   fn_setup_client_add("Granby",2040,34098) ! no longer using as of 6/13/2016
 		fn_setup_client_add("Grandview",2050,34040)
-		fn_setup_client_add("GreenCo",2070,33910)
+		fn_setup_client_add("GreeneCo",2070,33910)
 		fn_setup_client_add("Halfway" ,2130,33768)
 		fn_setup_client_add("Hope Welty" ,851,34152)
+		fn_setup_client_add("Laco Vinyl" ,2222,0)
 		fn_setup_client_add("Payroll Done Right" ,3393,0)
 		fn_setup_client_add("Schachtner Portnoy" ,3828,200008100)
 		! fn_setup_client_add("Illiopolis",2340,0)
@@ -449,7 +450,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Schachtner Portnoy' then 
 			fn_user_limit(76)
 			fn_add_ch_sys('CM')
-		else if env$('client')='GreenCo' then 
+		else if env$('client')='GreeneCo' then 
 			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
 				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
 				fn_add_ch_sys('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
@@ -739,7 +740,7 @@ def library fnub_printbill_program$*256
 !   fn_upp_add("Franklinton","ubprtbl1_Franklinton")
 		fn_upp_add('French Settlement','(basic)') ! 'printbill_french_settlement_gas'
 		fn_upp_add("Grandview","ubprtbl1_gra")
-		fn_upp_add("GreenCo",'(basic)') ! "ubprtbl1_greenco"
+		fn_upp_add("GreeneCo",'(basic)') ! "ubprtbl1_GreeneCo"
 		fn_upp_add("Kincaid","ubprtbl1_kin")
 		! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
 		! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
@@ -842,7 +843,7 @@ def library fnpayroll_client_state$*2
 !   fn_pcs_add("Franklin and Son",'AR')
 !   fn_pcs_add("Franklinton",'LA')
 		fn_pcs_add("Galena",'MO')
-!   fn_pcs_add("GreenCo",'MO')
+!   fn_pcs_add("GreeneCo",'MO')
 		fn_pcs_add("Hope Welty",'IL')
 		fn_pcs_add("Kincaid",'IL')
 		! fn_pcs_add("Kimberling",'MO')

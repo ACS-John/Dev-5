@@ -132,23 +132,23 @@ PrintBill_Basic: !
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
 		enable_bulksort=1
-	else if env$('client')='GreenCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
-		enableNewGreenCoBill=0
-		if enableNewGreenCoBill then
+	else if env$('client')='GreeneCo' then ! 06/05/2018 ! 8.5x11, 4 per page - hit pre-printed form
+		! enableNewGreeneCoBill=1
+		! if enableNewGreeneCoBill then
 			message1_line_count=3
 			pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
 			pa_orientation$='Landscape'
 			include_zero_bal=include_credit_bal=1
 			message2_line_count=2
 			message2_max_len=30
-		else
-			message1_line_count=3
-			message2_line_count=0
-			message1_max_len=52
-			pa_enabled=1 ! PrintAce
-			pa_orientation$='Landscape'
-			include_zero_bal=include_credit_bal=1
-		end if
+		! else
+		! 	message1_line_count=3
+		! 	message2_line_count=0
+		! 	message1_max_len=52
+		! 	pa_enabled=1 ! PrintAce
+		! 	pa_orientation$='Landscape'
+		! 	include_zero_bal=include_credit_bal=1
+		! end if
 	else if env$('client')='Galena' then ! 11/29/2018 Portrait two per page - hit pre-printed form
 		message1_line_count=3
 		message2_line_count=0
@@ -430,11 +430,11 @@ MainLoop: ! r: main loop
 	else if env$('client')='Choctaw' then
 		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
 		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final)
-	else if env$('client')='GreenCo' and ~enableNewGreenCoBill then
-		fn_print_bill_greenCo
+	! else if env$('client')='GreeneCo' and ~enableNewGreeneCoBill then
+	! 	fn_print_bill_GreeneCo
 	else if env$('client')='Galena' then
 		fn_print_bill_galena
-	else ! Exeter, Findlay, etc
+	else ! GreeneCo, Exeter, Findlay, etc
 		if enableReturnServiceRequested=>0 then enableReturnServiceRequested=1
 		if enableIsDueNowAndPayable=>0 then enableIsDueNowAndPayable=1
 		fn_print_bill_standard_pdf_a(z$,mat mg$,mat mg2$,enableIsDueNowAndPayable,enableReturnServiceRequested)
@@ -2113,10 +2113,10 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 		billOnPage=0
 	end if ! 
 fnend
-def fn_print_bill_greenCo
+def fn_print_bill_GreeneCo
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
-	if ~setup_greenco then
-		setup_greenco=1
+	if ~setup_GreeneCo then
+		setup_GreeneCo=1
 		lyne=3
 	end if
 	billOnPageCount+=1

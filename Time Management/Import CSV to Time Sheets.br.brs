@@ -1,7 +1,6 @@
 fn_setup
 fntop(program$)
 ! r: Screens
-if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : fnpause
 
 dim filter_date(2)
 filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)

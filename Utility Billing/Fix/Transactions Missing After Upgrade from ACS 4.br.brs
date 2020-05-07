@@ -1,4 +1,4 @@
-! GreenCo - Melissa
+! GreeneCo - Melissa
 ! Fred Cook
 ! 102068.00
 !  is missing a lot of newer transactions 
@@ -7,7 +7,7 @@
 
 fn_setup
 if env$('acsDeveloper')<>'' then
-	open #hOld:=fngethandle: 'Name=C:\ACS\(Client_Files)\GreenCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',internal,input,relative 
+	open #hOld:=fngethandle: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',internal,input,relative 
 else
 	open #hOld:=fngethandle: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',internal,input
 end if
