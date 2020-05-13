@@ -1,7 +1,7 @@
 ! Replace S:\acsGL\SelAuto
 ! Select Automatic Processing Programs
 
-	library 'S:\Core\Library': fntop,fnxit, fnTos,fnflexinit1,fnflexadd1,fnCmdKey,fnAcs,fnTxt,fnLbl,fnclient_has,fnfree
+	autoLibrary
 	on error goto Ertn
 
 	dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
@@ -111,7 +111,7 @@ L860: goto L1640
 	data "  pr Bank Reconciliation","S:\acsGL\GLCkRec","GLCkRec","E"
 	data "  pr Trial Balance Worksheet","S:\acsGL\ACGLWKSH","acglwksh","E"
 	data "  pr Budget Worksheet","S:\acsGL\BudWkSh","BudWkSh","E"
-	data "  pr Transactions Journal","S:\acsGL\AcGLTrJr","acgltrjr","ES24"
+	data "  pr Transactions Journal","S:\General Ledger\Transactions Journal","Transactions Journal","ES24"
 	data "  pr Trial Balance","S:\General Ledger\Trial Balance","acgltb","ES25"
 ! Financial Stmts.
 	data "  Cover Letter","S:\acsGL\ACGLCOVL","acglcovl","E"
@@ -150,7 +150,7 @@ L860: goto L1640
 ! Monthly
 	data "  pr Payroll Registers","S:\acsGL\ACPRReg","ACPRReg","E"
 	data "  Post Payroll Checks","S:\acsGL\PRMerge","PRMerge","E"
-	data "  Post Entries from Holding Files","S:\acsGL\acGLPost","acGLPost","E"
+	data "  Post Entries from Holding Files","S:\General Ledger\Post Entries from Holding File","Post Entries from Holding File","E"
 ! Quarterly
 	data "  pr State Unemployment Compensation Report","S:\acsGL\PRStatUC","prstatuc","E"
 	data "  pr 941 Summary","S:\acsGL\PR941","PR941","E"
@@ -180,10 +180,12 @@ L1640: execute "drop [Q]\GLmstr\acGLPGMN.h[cno]"
 	close #1: ioerr ignore
 	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative 
 	for j1=1 to 20 
-		if j1>lrec(3) then write #1,using L1690: nxtpgm$(j1),nxtdesc$(j1),pn(j1),cp(j1),prim(j1),srq(j1)
+		if j1>lrec(3) then 
+			write #1,using L1690: nxtpgm$(j1),nxtdesc$(j1),pn(j1),cp(j1),prim(j1),srq(j1)
+			L1690: form pos 1,c 35,c 35,n 3,3*n 1
+		end if
 	next j1
-L1690: form pos 1,c 35,c 35,n 3,3*n 1
 	close #1: ioerr ignore
-	close #3: ioerr XIT
+	close #3: ioerr ignore
 XIT: fnxit
 include: ERTN

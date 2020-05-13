@@ -23,7 +23,7 @@ Print
 >Trial Balance Worksheet                            ^ acsGL\ACGLWkSh
 >Trial Balance                                      ^ General Ledger\*
 >Budget Worksheet                                   ^ acsGL\BudWkSh
->Transactions Journal                               ^ acsGL\AcGLTrJr
+>Transactions Journal                               ^ General Ledger\*
 >Chart of Accounts                                  ^ acsGL\acGLCHRT
 Financial Statements
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
@@ -55,12 +55,12 @@ Financial Statements
 >>Cash Flow with YTD Budget Comparison              ^ acsGL\acGLCasO
 >Retained Earnings Statement
 >>Edit Retained Earnings Statement                  ^ EditInWordProcessor:[Q]\GLmstr\ACGLStmt.h[cno] forceAtlantis makeIfNecessary
->>Print Retained Earnings Statement                 ^ acsGL\ReStPrint
+>>Print Retained Earnings Statement                 ^ General Ledger\*
 >Print Schedules                                    ^ General Ledger\*
 >Financial Statements Notes                         ^ acsGL\acGLNote
 ! removed 3/14/17   -  doesnt seem that anyone is using it.   >Print Bar Graph of Earnings                        ^ acsGL\bargraph
 Monthly
->Post Entries from Holding Files                    ^ acsGL\acGLPost
+>Post Entries from Holding Files                    ^ General Ledger\*
 >Close Month                                        ^ General Ledger\*
 Annually
 >Print Accumulated Trial Balance                    ^ General Ledger\*
@@ -74,7 +74,7 @@ Error Recovery
 >Generate Reversing Entries                       ^ acsGL\Reverse 
 >Remove Entries Posted by Mistake                 ^ acsGL\Unpost
 >Reassign Transaction Addresses                   ^ acsGL\glreass
->Fix Current Period Transaction Dates             ^ acsGL\Fix_Trans_Dates
+>Fix Current Period Transaction Dates             ^ General Ledger\*
 >Fix Current Balance                              ^ General Ledger\*
 >Fix Period Accumulators from History             ^ General Ledger\*
 Utilities
