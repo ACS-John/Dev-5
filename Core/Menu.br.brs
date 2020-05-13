@@ -26,6 +26,7 @@ def fn_setup_once
 		ml$(2)='If an update does not solve the issue please contact ACS at 1-800-643-6318'
 		ml$(3)='Perform an Update now?'
 		fnmsgbox(mat ml$,resp$,'',16+4)
+		if env$('acsDeveloper')<>'' then pr 'Developer Pause' : pause
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else

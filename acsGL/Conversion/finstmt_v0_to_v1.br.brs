@@ -1,84 +1,75 @@
-00010 ! Replace S:\acsGL\Conversion\FinStmt_v0_to_v1
-00020 ! converts fin stmts files (all of them) !:
-        ! from recl=79 to recl=83 and version 1
-00030   def library fnfinstmt_v0_to_v1
-00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnStatus,fnindex_it
-00060     on error goto Ertn
-00070 !
-00080     dim cap$*128
-00090     dim fil$(6),idx$(6)
-00130 !
-00140     fnStatus('Converting Financial Statement.')
-20000 GOON: ! 
-20020     fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
-20040     fil$(2)="acglfnSI": idx$(2)="fnSIIndx" ! Income Statement
-20060     fil$(3)="acglfnSF": idx$(3)="fnSFIndx" ! Funt Statement / Cash Flow
-20080     fil$(4)="acglfnSC": idx$(4)="fnSCIndx" ! Secondary Balance Sheet
-20100     fil$(5)="acglfnSJ": idx$(5)="fnSJIndx" ! Secondary Income Statement
-20120     fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
-20140 ! 
-20160     for j=1 to 6
-20180       execute "Copy [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
-20200       execute "Copy  "&env$('temp')&"\WORK."&session$&' '&"[Q]\GLmstr\"&fil$(j)&".h[cno] -n"
-20220       fnindex_it("[Q]\GLmstr\"&fil$(j)&".h[cno]","Index [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&"[Q]\GLmstr\"&idx$(j)&".h[cno] 1 5 Replace DupKeys ")
-20240 ! 
-20260       if j=2 or j=5 then 
-20280         open #1: "Name=[Q]\GLmstr\"&fil$(j)&".h[cno],KFName=[Q]\GLmstr\"&idx$(j)&".h[cno]",internal,outIn,keyed 
-20300         version(1,1)
-20320         delete_count=read_count=0
-20340         end1=st1=st2=rno=rnp=0
-20360 PHASE1: ! gosub FIND1
-20380         st1=rno : st2=99999 : rnp=0
-20400 READ_1: ! 
-20420         read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
-20440         read_count+=1
-20460         pr 'read_1 did'; ! pause
-20480         if rno=0 then delete #1: : goto READ_1
-20500         if ic=0 then pr ' ic=0, skipped' : goto READ_1
-20520         if ic=1 then pr ' rnp=rno' : rnp=rno
-20540         if ic=2 then pr ' st2=rno' : st2=rno : goto PHASE2
-20560         pr ' ic=';ic;', skipped'
-20580         goto READ_1
-20600 ! 
-20620 PHASE1_READ_CONV: ! 
-20640 !     pr 'PHASE1_READ_CONV,read_count=';read_count : pause
-20660         read #1,using 'Form POS 1,C 5,POS 75,N 1': rno$ eof PHASE1_EOF
-20680         delete #1: 
-20700         delete_count+=1
-20720         goto READ_1
-20740 ! 
-20760 PHASE1_EOF: ! 
-20780 !   pr 'PHASE1_EOF,read_count=';read_count : pause
-20800         end1=1
-20820 PHASE2: ! 
-20840         pr 'restoring to ';st1
-20860 !   pr 'PHASE2,read_count=';read_count : pause
-20880         restore #1,key>=lpad$(str$(st1),5): nokey PHASE2_EOF
-20900         do 
-20920           read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE2_EOF
-20940           pr 'do read did';
-20960 !     if end1=1 then pr 'end1=1' : pause ! goto PHASE2_EOF
-20980           if rno<st2 then pr 'going back to L390' : goto L390
-21000           if end1=1 then goto PHASE2_EOF
-21020           rnp=0
-21040           goto PHASE1
-21060 L390:     rewrite #1,using 'Form POS 79,N 5': rnp
-21080 !     pr 'rewrite did' : pause
-21100         loop 
-21120 PHASE2_EOF: ! 
-21140         close #1: 
-21160       end if  ! j=2 or j=5
-21180 NEXT_J: ! 
-21200     next j
-21220     goto XIT
-50570 !
-50580 ! <Updateable Region: ERTN>
-50590 ERTN: fnerror(program$,err,line,act$,"xit")
-50600     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-50610     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50620     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-50630 ERTN_EXEC_ACT: execute act$ : goto ERTN
-50640 ! /region
-50650 !
-50660 XIT: fnend 
-50670 !
+! Replace S:\acsGL\Conversion\FinStmt_v0_to_v1
+! converts fin stmts files (all of them)  from recl=79 to recl=83 and version 1
+def library fnfinstmt_v0_to_v1
+	autoLibrary
+	on error goto Ertn
+
+
+	fnStatus('Converting Financial Statement.')
+	GOON: ! 
+	dim fil$(6),idx$(6)
+	fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
+	fil$(2)="acglfnSI": idx$(2)="fnSIIndx" ! Income Statement
+	fil$(3)="acglfnSF": idx$(3)="fnSFIndx" ! Funt Statement / Cash Flow
+	fil$(4)="acglfnSC": idx$(4)="fnSCIndx" ! Secondary Balance Sheet
+	fil$(5)="acglfnSJ": idx$(5)="fnSJIndx" ! Secondary Income Statement
+	fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
+
+	for j=1 to 6
+		execute "Copy [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
+		execute "Copy  "&env$('temp')&"\WORK."&session$&' '&"[Q]\GLmstr\"&fil$(j)&".h[cno] -n"
+		fnindex_it("[Q]\GLmstr\"&fil$(j)&".h[cno]","Index [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&"[Q]\GLmstr\"&idx$(j)&".h[cno] 1 5 Replace DupKeys ")
+
+		if j=2 or j=5 then 
+			open #1: "Name=[Q]\GLmstr\"&fil$(j)&".h[cno],KFName=[Q]\GLmstr\"&idx$(j)&".h[cno]",internal,outIn,keyed 
+			version(1,1)
+			delete_count=read_count=0
+			end1=st1=st2=rno=rnp=0
+			PHASE1: ! gosub FIND1
+			st1=rno : st2=99999 : rnp=0
+			READ_1: ! 
+			read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
+			read_count+=1
+			pr 'read_1 did'; ! pause
+			if rno=0 then delete #1: : goto READ_1
+			if ic=0 then pr ' ic=0, skipped' : goto READ_1
+			if ic=1 then pr ' rnp=rno' : rnp=rno
+			if ic=2 then pr ' st2=rno' : st2=rno : goto PHASE2
+			pr ' ic=';ic;', skipped'
+			goto READ_1
+
+			PHASE1_READ_CONV: ! 
+			!     pr 'PHASE1_READ_CONV,read_count=';read_count : pause
+			read #1,using 'Form POS 1,C 5,POS 75,N 1': rno$ eof PHASE1_EOF
+			delete #1: 
+			delete_count+=1
+			goto READ_1
+
+			PHASE1_EOF: ! 
+			!   pr 'PHASE1_EOF,read_count=';read_count : pause
+			end1=1
+			PHASE2: ! 
+			pr 'restoring to ';st1
+			!   pr 'PHASE2,read_count=';read_count : pause
+			restore #1,key>=lpad$(str$(st1),5): nokey PHASE2_EOF
+			do 
+				read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE2_EOF
+				pr 'do read did';
+				!     if end1=1 then pr 'end1=1' : pause ! goto PHASE2_EOF
+				if rno<st2 then pr 'going back to L390' : goto L390
+				if end1=1 then goto PHASE2_EOF
+				rnp=0
+				goto PHASE1
+				L390: !
+				rewrite #1,using 'Form POS 79,N 5': rnp
+			!     pr 'rewrite did' : pause
+			loop 
+			PHASE2_EOF: ! 
+			close #1: 
+		end if  ! j=2 or j=5
+		NEXT_J: ! 
+	next j
+goto Xit
+
+Xit: fnend 
+include: Ertn

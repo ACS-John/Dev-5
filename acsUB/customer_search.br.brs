@@ -1,56 +1,47 @@
-20000 ! replace S:\acsUB\Customer_Search.br
-20020 ! search for a customer and return their act number
-20040 !
-20060   def library fncustomer_search(&x$;fixgrid)
-20080 ! x$=account   to extract the flexgrid information (master file)
-20100     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle
-20120     on error goto Ertn
-20140     dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
-20160     fnTos(sn$="CustomerSrch")
-20180     open #file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
-20200     restore #file_num: 
-20220     mat ch$(12) : mat cm$(12) : mat cm$(12)
-20240     ch$(1)="Account"
-20260     ch$(2)="Status"
-20280     ch$(3)="Name"
-20300     ch$(4)="Address"
-20320     ch$(5)="Address"
-20340     ch$(6)="City, ST Zip"
-20360     ch$(7)="Meter Address"
-20380     ch$(8)="Route"
-20400     ch$(9)="Sequence"
-20420     ch$(10)="Phone"
-20440     ch$(11)="Meter"
-20460     ch$(12)="Alpha"
-20480     mat cm$=("80") : cm$(2)="61" : cm$(8)="61": cm$(9)="61"
-20500     fnflexinit1('Cust2',1,1,10,72,mat ch$,mat cm$,1)
-20520     do 
-20530 READ_FILE: ! 
-20540       read #file_num,using 'Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7': mat item$ eof EO_CUSTOMER ioerr ERR_READ
-20560       fnflexadd1(mat item$)
-20580     loop 
-20600 !
-20620 ERR_READ: ! 
-20640     if err<>61 then goto ERTN
-20660 ! pr 'Record locked during Customer_Search flexgrid creation - skipped'
-20680     read #file_num,release: 
-20700     goto READ_FILE
-20720 !
-20740 EO_CUSTOMER: ! 
-20760     fnCmdSet(2)
-20780     fnAcs(sn$,0,mat resp$,ckey)
-20800     x$=lpad$(resp$(1),10)
-20820     if ckey=5 then x$="          " ! no one selected
-20840     goto XIT
-20860 !
-20880 ! <Updateable Region: ERTN>
-20900 ERTN: fnerror(program$,err,line,act$,"xit")
-20920     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-20940     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20960     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-20980 ERTN_EXEC_ACT: execute act$ : goto ERTN
-21000 ! /region
-21020 !
-21040 XIT: close #file_num: ioerr ignore
-21060   fnend 
-21080 IGNORE: continue 
+! replace S:\acsUB\Customer_Search.br
+! search for a customer and return their act number
+!
+def library fncustomer_search(&x$;fixgrid)
+	! x$=account   to extract the flexgrid information (master file)
+	autoLibrary
+	on error goto Ertn
+	dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
+	fnTos
+	open #file_num:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	restore #file_num: 
+	mat ch$(12) : mat cm$(12) : mat cm$(12)
+	ch$(1)="Account"
+	ch$(2)="Status"
+	ch$(3)="Name"
+	ch$(4)="Address"
+	ch$(5)="Address"
+	ch$(6)="City, ST Zip"
+	ch$(7)="Meter Address"
+	ch$(8)="Route"
+	ch$(9)="Sequence"
+	ch$(10)="Phone"
+	ch$(11)="Meter"
+	ch$(12)="Alpha"
+	mat cm$=("80") : cm$(2)="61" : cm$(8)="61": cm$(9)="61"
+	fnflexinit1('Cust2',1,1,10,72,mat ch$,mat cm$,1)
+	do 
+		READ_FILE: ! 
+		read #file_num,using 'Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7': mat item$ eof EO_CUSTOMER ioerr ERR_READ
+		fnflexadd1(mat item$)
+	loop 
+
+	ERR_READ: ! 
+		if err<>61 then goto ERTN
+		! pr 'Record locked during Customer_Search flexgrid creation - skipped'
+		read #file_num,release: 
+	goto READ_FILE
+
+	EO_CUSTOMER: ! 
+		fnCmdSet(2)
+		fnAcs(sn$,0,mat resp$,ckey)
+		x$=lpad$(resp$(1),10)
+		if ckey=5 then x$="          " ! no one selected
+	goto XIT
+	XIT: close #file_num: ioerr ignore
+fnend 
+include: Ertn
