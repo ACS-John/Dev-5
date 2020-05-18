@@ -4,7 +4,7 @@
   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnqgl,fnChk,fnCmdSet,fnAcs,fnagl$,fnrgl$,fnconsole
   on error goto Ertn
 !
-  dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
+  dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*40,gln1$*12,gln2$*12
   dim cap$*128,resp$(10)*80,revb(13)
 !
   right=1 : center=2 : left=0
