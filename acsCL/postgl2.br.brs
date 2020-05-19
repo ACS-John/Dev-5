@@ -1,47 +1,46 @@
 ! Replace S:\acsCL\PostGL2.br
 ! GL Distribution Report (fnpostgl2(2)   AND/OR     Post to General Ledger (fnpostgl2(1) - or run directly)
-
-	library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
+autoLibrary
 ! on error goto Ertn
-	fntop(program$,"Post to General Ledger")
-	fnpostgl2(1)
-	fnxit
-	def library fnpostgl2(glt)
-		library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnmsgbox,fnfree
-		on error goto Ertn
-!
-! GLT: 1=Post  2=Print Only
-		glt_post=1
-		glt_print_only=2
-! 
-		dim de$*30,tbc(99,2),pde$*30
-		dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*256,opt_cash_or_accrual$(2)*12,ml$(3)*100
-! 
-		opt_cash_or_accrual$(1)="Cash"
-		opt_cash_or_accrual$(2)="Accrual"
-!
-		if glt=glt_print_only then 
-			cap$="GL Distribution Report"
-			xitable$='YES'
-		else 
-			cap$="Post to General Ledger"
-		xitable$='NO'
-		end if 
-! 
+fntop(program$,"Post to General Ledger")
+fnpostgl2(1)
+fnxit
+def library fnpostgl2(glt)
+	library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fnTos,fnLbl,fnTxt,fncomboa,fnChk,fnCmdSet,fnAcs,fnmsgbox,fnfree
+	on error goto Ertn
+
+	! GLT: 1=Post  2=Print Only
+	glt_post=1
+	glt_print_only=2
+
+	dim de$*30,tbc(99,2),pde$*30
+	dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*256,opt_cash_or_accrual$(2)*12,ml$(3)*100
+
+	opt_cash_or_accrual$(1)="Cash"
+	opt_cash_or_accrual$(2)="Accrual"
+
+	if glt=glt_print_only then 
+		cap$="GL Distribution Report"
+		xitable$='YES'
+	else 
+		cap$="Post to General Ledger"
+	xitable$='NO'
+	end if 
+
 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
 		up1$="C"
 		open #fundmstr=9: "Name=[Q]\CLmstr\FundMstr.H[cno],KFName=[Q]\CLmstr\FundIdx1.H[cno],Shr",internal,input,keyed 
-READ_FUNDMSTR: ! 
-		read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
-		accrual=val(gw$) conv L230
-		if accrual>0 then 
-			up1$="A"
-			goto EO_FUNDMSTR
-		end if 
-L230: ! 
-		goto READ_FUNDMSTR
-EO_FUNDMSTR: ! /r
-		fnTos(sn$="postgl2")
+		do
+			read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
+			accrual=val(gw$) conv L230
+			if accrual>0 then 
+				up1$="A"
+				goto EO_FUNDMSTR
+			end if 
+			L230: ! 
+		loop
+		EO_FUNDMSTR: ! /r
+		fnTos
 		fnLbl(1,60,"",0,1)
 		fnLbl(1,1,"Starting Date:",44,1)
 		fnTxt(1,46,10,0,1,"3",0,"Normally this would be the first day of the month.  If you post more often than once a month, it would be the first day of the period you are posting.")
@@ -61,7 +60,8 @@ EO_FUNDMSTR: ! /r
 		fnChk(8,47,"Update After the Fact Payroll records:",1)
 		resp$(7)="False"
 		fnLbl(10,1,"Post to General Ledger Company Number:",44,1)
-		fnTxt(10,46,5,0,1,"30",0,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
+		fnTxt(10,46,5,0,1,"30",1,"Only change this default answer if wish to post to a different company than the one you are assigned to.") 
+		! protected this option on 5/19/2020 - i don't think they should ever change this.  if i am wrong i'll put it back in - john bowman  (to put it back list:   [cno]" ! &str$(gl2)   )
 		resp$(8)=env$('cno')
 		fnCmdSet(2)
 		fnAcs(sn$,0,mat resp$,ck)
@@ -75,178 +75,182 @@ EO_FUNDMSTR: ! /r
 		if resp$(5)(1:1)="T" then prc$="Y" else prc$="N" ! combine payroll entries
 		if resp$(6)(1:1)="T" then pr1$="Y" else pr1$="N" ! pr distribution listing
 		if resp$(7)(1:1)="T" then pr2$="Y" else pr2$="N" ! update after fact payroll
-		gl2=val(resp$(8)) ! GL company to post
+		! gl2=val(resp$(8)) ! GL company to post
 		if pr2$="Y" then let fnprocess(4)
 		if glt=glt_print_only then pr1$="Y"
-		fnputcno(gl2)
-!   pr f "13,34,C 12,B,99": "Cancel (Esc)"
-!   on fkey 99 goto XIT
-		fnopenprn
-		open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
-		open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
-		open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 
-		open #work=5: "Name="&env$('Temp')&"\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
-		if ~fn_check_breakdowns_add_up then goto XIT ! gosub CHECK_BREAKDOWNS
-		gosub GLBUCKET_STUFF
-! Gosub GLCHG
+	! fnputcno(gl2)
+	!   pr f "13,34,C 12,B,99": "Cancel (Esc)"
+	!   on fkey 99 goto XIT
+	fnopenprn
+	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
+	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
+	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 
+	open #work=5: "Name="&env$('Temp')&"\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
+	if ~fn_check_breakdowns_add_up then goto XIT ! gosub CHECK_BREAKDOWNS
+	gosub GLBUCKET_STUFF
+	! Gosub GLCHG
 READ_TRMSTR: ! r: main loop
-L630: read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof END1
-		if scd=4 and fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto L630
-		if fndate_mmddyy_to_ccyymmdd(pd)<dt1 then goto L630
-		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: nokey L630
-READ_TRALLOC: ! 
-		read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof READ_TRMSTR
-		ivd=val(ivd$) conv ignore
-		if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
-		if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
-		if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto L1040 ! thru, allocation doesn/t belong to this transaction
-		if amt=0 then goto READ_TRALLOC ! SKIP 0
-		if scd=4 then gosub PRDBLD
-		if scd=4 or fndate_mmddyy_to_ccyymmdd(ivd)>fndate_mmddyy_to_ccyymmdd(pd) then ivd=pd
-! gde=1  never in ap - entered and paid same month
-! gde=2  posted to ap from unpaid file
-! gde=3  previously posted to ap  - now posted from ck history
-		if include_prev_posted$="Y" then goto L800
-		if gde=1 or gde=3 then goto READ_TRALLOC
-L800: if scd><4 then goto L820
-		if fndate_mmddyy_to_ccyymmdd(ivd)>=dt1 and fndate_mmddyy_to_ccyymmdd(ivd)<=dt2 then 
-			goto L990
-		else 
-			goto READ_TRALLOC
-		end if 
-L820: ! 
-		if ivd>0 then goto L850
-		if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto READ_TRALLOC
-		ivd=pd: goto L990 ! Manual Check
-L850: ! 
-		if up1$="C" then ivd=pd
-		if fndate_mmddyy_to_ccyymmdd(ivd)>dt2 then goto READ_TRALLOC
-		if up1$="A" and gde=2 and fndate_mmddyy_to_ccyymmdd(ivd)<dt1 then goto L900
-		if up1$="A" and include_prev_posted$="Y" and gde=3 and fndate_mmddyy_to_ccyymmdd(ivd)<dt1 then goto L900
-		if up1$="C" or gde<2 then goto L920
-L900: ! 
-		if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto L920
-		gosub REVERSE_AP
-		goto L1000
-L920: ! 
-		if include_prev_posted$="Y" and gde=1 and fndate_mmddyy_to_ccyymmdd(pd)<=dt2 then goto L990
-		if gde=0 and fndate_mmddyy_to_ccyymmdd(pd)<=dt2 then goto L990
-		if fndate_mmddyy_to_ccyymmdd(ivd)<dt1 or fndate_mmddyy_to_ccyymmdd(ivd)>dt2 then goto READ_TRALLOC ! DONT POST ANY INVOICE AS EXPENSE IF OUTSIDE POSTING DATE
-		if include_prev_posted$="N" and gde=2 then goto READ_TRALLOC
-		if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then 
-			write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ltrm$(iv$)(1:8),vn$,de$,amt, 0, 4, 0
-		else 
-			write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,0,tcde,scd
-		end if 
-		gde=2
-		goto L1020
-L990: write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd
-L1000: if pcde=0 or pcde=2 then pcde+=1
-		if gde=0 or gde=2 then gde+=1
-L1020: ! 
-		if glt=glt_post then 
-			rewrite #tralloc,using 'Form POS 80,N 1': gde
-		end if 
+	read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof END1
+	if scd=4 and fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto READ_TRMSTR
+	if fndate_mmddyy_to_ccyymmdd(pd)<dt1 then goto READ_TRMSTR
+	restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: nokey READ_TRMSTR
+	READ_TRALLOC: ! 
+	read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof READ_TRMSTR
+	ivd=val(ivd$) conv ignore
+	if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
+	if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
+	if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto L1040 ! thru, allocation doesn/t belong to this transaction
+	if amt=0 then goto READ_TRALLOC ! SKIP 0
+	if scd=4 then gosub PRDBLD
+	if scd=4 or fndate_mmddyy_to_ccyymmdd(ivd)>fndate_mmddyy_to_ccyymmdd(pd) then ivd=pd
+	! gde=1  never in ap - entered and paid same month
+	! gde=2  posted to ap from unpaid file
+	! gde=3  previously posted to ap  - now posted from ck history
+	if include_prev_posted$="Y" then goto L800
+	if gde=1 or gde=3 then goto READ_TRALLOC
+	L800: !
+	if scd><4 then goto L820
+	if fndate_mmddyy_to_ccyymmdd(ivd)>=dt1 and fndate_mmddyy_to_ccyymmdd(ivd)<=dt2 then 
+		goto L990
+	else 
 		goto READ_TRALLOC
-L1040: ! 
-		if glt=glt_post then 
-			rewrite #trmstr,using 'Form POS 71,N 1': pcde
-		end if 
-		if scd=4 then gosub PRDWRITE
-		goto L630
-END2: close #1: 
-		close #tralloc: 
-		if lrec(work)=0 then goto ENDALL
-		close #work: 
-		open #1: "Name="&env$('Temp')&"\CONTROL."&wsid$&",SIZE=0,RecL=128,Replace",internal,output 
-		write #1,using L1150: "! SORT FOR G/L DISTRIBUTION LIST IN PROCESS"
-		write #1,using L1150: "FILE "&env$('Temp')&"\WORK."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
-		write #1,using L1150: "MASK 1,26,C,A"
-L1150: form pos 1,c 128
-		close #1: 
-		fnFree(env$('Temp')&"\Addr."&session$)
-		execute 'SORT '&env$('Temp')&'\CONTROL.'&wsid$&' -n'
-		open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr ENDALL
-		open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 
-		if pr1$="N" then goto L1240
-		if f1=0 then gosub HDR
-		pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NEWPGE
-L1240: ! 
-		read #1,using 'Form POS 1,PD 3': r5 eof ENDALL
-		read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
-		if amt=0 then goto L1240
-		if gl$(1:3)="  0" then gl$(1:3)="   "
-		if gl$(10:12)="  0" then gl$(10:12)="   "
-		if hgl$=gl$ then goto L1410
-		if prc$="N" then goto L1350
-		if sc2><4 then goto L1350
-		gosub PRGL
-		if pr1$="Y" then 
-			pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
-		end if 
-		pa1=pa2=sc2=0
-L1350: ! 
-		if tc1=0 and tc2=0 then goto L1410
-		if pr1$="N" then goto L1400
-		pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
-		pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" TOTAL",tc1,tc2
-		pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
-L1400: ! 
-		tc1=tc2=0
-L1410: ! 
-		p1=75 : cl=1
-		if tcde=1 and amt<0 then p1=87 : cl=2
-		if tcde=2 and amt>0 then p1=87 : cl=2
-		if tcde=3 and amt>0 then p1=87 : cl=2
-		if tcde=4 and amt<0 then p1=87 : cl=2
-		if prc$="N" then goto L1500
-		gosub COMBINEPR
-! aMT=ABS(AMT)
-		if scd=4 then goto L1530
-L1500: ! aMT=ABS(AMT)
-		gosub REGGL
-		if pr1$="Y" then pr #255,using L1530: gl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
-L1530: form pos 1,c 14,pic(zz/zz/zz),x 2,2*c 10,c 30,pos p1,g 12.2,skip 1
-		if cl=2 then 
-			tc2=tc2+abs(amt)
-			gc2=gc2+abs(amt)
-		else 
-			tc1=tc1+abs(amt)
-			gc1=gc1+abs(amt)
-		end if 
-		if tcde<>3 then goto L1590
-		p1=75
-		if pr1$="Y" then 
-			pr #255,using L1530: bgl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
-		end if 
-		if cl<>2 then 
-			tc2=tc2+abs(amt)
-			gc2=gc2+abs(amt)
-		else 
-			tc1=tc1+abs(amt)
-			gc1=gc1+abs(amt)
-		end if 
-L1590: ! 
-		if bank_code=0 then goto L1660
-		if tcde=1 then tbc(bank_code,1)=tbc(bank_code,1)+amt
-		if tcde=2 then tbc(bank_code,2)=tbc(bank_code,2)+amt
-! IF TCDE=3 AND AMT>0 THEN tBC(Bank_Code,2)=TBC(Bank_Code,2)+AMT
-! IF TCDE=3 AND AMT<0 THEN tBC(Bank_Code,1)=TBC(Bank_Code,1)+ABS(AMT)
-		if tcde=4 then tbc(bank_code,1)=tbc(bank_code,1)+amt
-		goto L1740
-L1660: ! 
-		ap1=val(gl$(1:3))
-		if ap1=0 then j=99 : goto L1720
-		for j=1 to 98
-			if apc(j,1)=0 then goto L1720
-			if apc(j,1)=ap1 then goto L1720
-		next j
-L1720: ! 
-		apc(j,1)=ap1
-		apc(j,2)=apc(j,2)+(amt)
-L1740: ! 
-		hgl$=gl$
-		goto L1240 ! /r
+	end if 
+	L820: ! 
+	if ivd>0 then goto L850
+	if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto READ_TRALLOC
+	ivd=pd: goto L990 ! Manual Check
+	L850: ! 
+	if up1$="C" then ivd=pd
+	if fndate_mmddyy_to_ccyymmdd(ivd)>dt2 then goto READ_TRALLOC
+	if up1$="A" and gde=2 and fndate_mmddyy_to_ccyymmdd(ivd)<dt1 then goto L900
+	if up1$="A" and include_prev_posted$="Y" and gde=3 and fndate_mmddyy_to_ccyymmdd(ivd)<dt1 then goto L900
+	if up1$="C" or gde<2 then goto L920
+	L900: ! 
+	if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto L920
+	gosub REVERSE_AP
+	goto L1000
+	L920: ! 
+	if include_prev_posted$="Y" and gde=1 and fndate_mmddyy_to_ccyymmdd(pd)<=dt2 then goto L990
+	if gde=0 and fndate_mmddyy_to_ccyymmdd(pd)<=dt2 then goto L990
+	if fndate_mmddyy_to_ccyymmdd(ivd)<dt1 or fndate_mmddyy_to_ccyymmdd(ivd)>dt2 then goto READ_TRALLOC ! DONT POST ANY INVOICE AS EXPENSE IF OUTSIDE POSTING DATE
+	if include_prev_posted$="N" and gde=2 then goto READ_TRALLOC
+	if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then 
+		write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ltrm$(iv$)(1:8),vn$,de$,amt, 0, 4, 0
+	else 
+		write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,0,tcde,scd
+	end if 
+	gde=2
+	goto L1020
+	L990: !
+	write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd
+	L1000: !
+	if pcde=0 or pcde=2 then pcde+=1
+	if gde=0 or gde=2 then gde+=1
+	L1020: ! 
+	if glt=glt_post then 
+		rewrite #tralloc,using 'Form POS 80,N 1': gde
+	end if 
+	goto READ_TRALLOC
+	L1040: ! 
+	if glt=glt_post then 
+		rewrite #trmstr,using 'Form POS 71,N 1': pcde
+	end if 
+	if scd=4 then gosub PRDWRITE
+	goto READ_TRMSTR
+END2: !
+	close #1: 
+	close #tralloc: 
+	if lrec(work)=0 then goto ENDALL
+	close #work: 
+	open #1: "Name="&env$('Temp')&"\CONTROL."&wsid$&",SIZE=0,RecL=128,Replace",internal,output 
+	write #1,using L1150: "! SORT FOR G/L DISTRIBUTION LIST IN PROCESS"
+	write #1,using L1150: "FILE "&env$('Temp')&"\WORK."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	write #1,using L1150: "MASK 1,26,C,A"
+	L1150: form pos 1,c 128
+	close #1: 
+	fnFree(env$('Temp')&"\Addr."&session$)
+	execute 'SORT '&env$('Temp')&'\CONTROL.'&wsid$&' -n'
+	open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr ENDALL
+	open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 
+	if pr1$="N" then goto L1240
+	if f1=0 then gosub HDR
+	pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NEWPGE
+	L1240: ! 
+	read #1,using 'Form POS 1,PD 3': r5 eof ENDALL
+	read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
+	if amt=0 then goto L1240
+	if gl$(1:3)="  0" then gl$(1:3)="   "
+	if gl$(10:12)="  0" then gl$(10:12)="   "
+	if hgl$=gl$ then goto L1410
+	if prc$="N" then goto L1350
+	if sc2><4 then goto L1350
+	gosub PRGL
+	if pr1$="Y" then 
+		pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
+	end if 
+	pa1=pa2=sc2=0
+	L1350: ! 
+	if tc1=0 and tc2=0 then goto L1410
+	if pr1$="N" then goto L1400
+	pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+	pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" TOTAL",tc1,tc2
+	pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+	L1400: ! 
+	tc1=tc2=0
+	L1410: ! 
+	p1=75 : cl=1
+	if tcde=1 and amt<0 then p1=87 : cl=2
+	if tcde=2 and amt>0 then p1=87 : cl=2
+	if tcde=3 and amt>0 then p1=87 : cl=2
+	if tcde=4 and amt<0 then p1=87 : cl=2
+	if prc$="N" then goto L1500
+	gosub COMBINEPR
+	! aMT=ABS(AMT)
+	if scd=4 then goto L1530
+	L1500: ! aMT=ABS(AMT)
+	gosub REGGL
+	if pr1$="Y" then pr #255,using L1530: gl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
+	L1530: form pos 1,c 14,pic(zz/zz/zz),x 2,2*c 10,c 30,pos p1,g 12.2,skip 1
+	if cl=2 then 
+		tc2=tc2+abs(amt)
+		gc2=gc2+abs(amt)
+	else 
+		tc1=tc1+abs(amt)
+		gc1=gc1+abs(amt)
+	end if 
+	if tcde<>3 then goto L1590
+	p1=75
+	if pr1$="Y" then 
+		pr #255,using L1530: bgl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
+	end if 
+	if cl<>2 then 
+		tc2=tc2+abs(amt)
+		gc2=gc2+abs(amt)
+	else 
+		tc1=tc1+abs(amt)
+		gc1=gc1+abs(amt)
+	end if 
+	L1590: ! 
+	if bank_code=0 then goto L1660
+	if tcde=1 then tbc(bank_code,1)=tbc(bank_code,1)+amt
+	if tcde=2 then tbc(bank_code,2)=tbc(bank_code,2)+amt
+	! IF TCDE=3 AND AMT>0 THEN tBC(Bank_Code,2)=TBC(Bank_Code,2)+AMT
+	! IF TCDE=3 AND AMT<0 THEN tBC(Bank_Code,1)=TBC(Bank_Code,1)+ABS(AMT)
+	if tcde=4 then tbc(bank_code,1)=tbc(bank_code,1)+amt
+	goto L1740
+	L1660: ! 
+	ap1=val(gl$(1:3))
+	if ap1=0 then j=99 : goto L1720
+	for j=1 to 98
+		if apc(j,1)=0 then goto L1720
+		if apc(j,1)=ap1 then goto L1720
+	next j
+	L1720: ! 
+	apc(j,1)=ap1
+	apc(j,2)=apc(j,2)+(amt)
+	L1740: ! 
+	hgl$=gl$
+goto L1240 ! /r
 NEWPGE: ! r:
 		pr #255: newpage
 		gosub HDR
@@ -319,98 +323,97 @@ L2300: !
 		if glb=2 then 
 			goto XIT
 		else 
-			fnputcno(gl2)
+			! fnputcno(gl2)
 			fnchain("S:\acsGL\ACGLMrge")
 		end if 
 ! /r
 END1: ! r:
-		if scd=4 and pa1+pa2<>0 then gosub COMBINEPR
-		if up1$="C" then goto END2
-		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
-		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
-		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
-READ_PAYTRANS: ! 
-		read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
-		if include_prev_posted$="Y" then goto L2450
-		if pcde=2 then goto READ_PAYTRANS
-L2450: ! 
-		if include_prev_posted><1 then goto L2500
-		if pdte=0 then goto L2500
-		if fndate_mmddyy_to_ccyymmdd(pdte)<dt1 then goto READ_PAYTRANS
-		if fndate_mmddyy_to_ccyymmdd(pdte)>dt2 then goto READ_PAYTRANS
-		goto L2510
-L2500: ! 
-		if fndate_mmddyy_to_ccyymmdd(dd)>dt2 then goto READ_PAYTRANS
-L2510: ! 
-		read #paymstr,using 'Form POS 9,C 30',key=vn$: de$ nokey L2520
-L2520: ! 
-		restore #unpdaloc,key>=vn$&iv$: nokey READ_PAYTRANS
-L2540: ! 
-		read #unpdaloc,using 'Form POS 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof READ_PAYTRANS
-		if vn$<>trvn$ or iv$<>triv$ then goto READ_PAYTRANS
-		if amt=0 then goto L2580
-		write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,dd,ltrm$(iv$)(1:8),vn$,de$,amt,0,4,0
-L2580: ! 
-		if glt=glt_post then 
-			rewrite #paytrans,using 'Form POS 96,N 1,N 6': 2,d2 ioerr L2590
-		end if 
-L2590: ! 
-		goto L2540
-L2610: ! 
-		close #paytrans: 
-		close #unpdaloc: 
-		close #paymstr: 
-		goto END2 ! /r
+	if scd=4 and pa1+pa2<>0 then gosub COMBINEPR
+	if up1$="C" then goto END2
+	open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
+	open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
+	open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
+	READ_PAYTRANS: ! 
+	read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
+	if include_prev_posted$="Y" then goto L2450
+	if pcde=2 then goto READ_PAYTRANS
+	L2450: ! 
+	if include_prev_posted><1 then goto L2500
+	if pdte=0 then goto L2500
+	if fndate_mmddyy_to_ccyymmdd(pdte)<dt1 then goto READ_PAYTRANS
+	if fndate_mmddyy_to_ccyymmdd(pdte)>dt2 then goto READ_PAYTRANS
+	goto L2510
+	L2500: ! 
+	if fndate_mmddyy_to_ccyymmdd(dd)>dt2 then goto READ_PAYTRANS
+	L2510: ! 
+	read #paymstr,using 'Form POS 9,C 30',key=vn$: de$ nokey L2520
+	L2520: ! 
+	restore #unpdaloc,key>=vn$&iv$: nokey READ_PAYTRANS
+	L2540: ! 
+	read #unpdaloc,using 'Form POS 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof READ_PAYTRANS
+	if vn$<>trvn$ or iv$<>triv$ then goto READ_PAYTRANS
+	if amt=0 then goto L2580
+	write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,dd,ltrm$(iv$)(1:8),vn$,de$,amt,0,4,0
+	L2580: ! 
+	if glt=glt_post then 
+		rewrite #paytrans,using 'Form POS 96,N 1,N 6': 2,d2 ioerr L2590
+	end if 
+	L2590: ! 
+	goto L2540
+	L2610: ! 
+	close #paytrans: 
+	close #unpdaloc: 
+	close #paymstr: 
+	goto END2 ! /r
 COMBINEPR: ! r:
-		if scd><4 then goto L2750
-		if pgl$=gl$ and pivd=ivd then goto L2730
-		if sc2><4 then goto L2720
-		gosub PRGL
-		if pr1$="Y" then 
-			pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
-		end if 
-L2720: ! 
-		pa1=pa2=0
-L2730: ! 
-		sc2=scd : pgl$=gl$ : pivd=ivd : pde$="Payroll Total" : pbank_code=bank_code
-		if amt<0 then pa2+=abs(amt) else pa1+=amt
-L2750: ! 
-		return  ! /r
+	if scd><4 then goto L2750
+	if pgl$=gl$ and pivd=ivd then goto L2730
+	if sc2><4 then goto L2720
+	gosub PRGL
+	if pr1$="Y" then 
+		pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
+	end if 
+	L2720: ! 
+	pa1=pa2=0
+	L2730: ! 
+	sc2=scd : pgl$=gl$ : pivd=ivd : pde$="Payroll Total" : pbank_code=bank_code
+	if amt<0 then pa2+=abs(amt) else pa1+=amt
+	L2750: ! 
+return  ! /r
 GLBUCKET_STUFF: ! r:
-		if glt=glt_print_only then goto L2840
-		d2$=cnvrt$("PIC(######)",d2)
-		open #glbucket=20: "Name=[Q]\GLmstr\GLBucket.H"&str$(gl2),internal,input,relative ioerr L2830
-		read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
-		close #glbucket: 
-L2830: ! 
-		if glb=2 then 
-			glwk$="[Q]\GLmstr\GL"&d2$&".H"&str$(gl2)
-			open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
-		else 
-			glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(gl2)
-			open #glwk=11: "Name="&glwk$&",Size=0,RecL=104,Replace",internal,output 
-		end if 
-L2840: ! 
-		if pr2$<>"N" then 
-			open #glwk2wsid=13: "Name=[Q]\GLmstr\GLWK2"&wsid$&".H"&str$(gl2)&",RecL=110,Replace",internal,output 
-		end if 
-		return  ! /r
+	if glt=glt_print_only then goto L2840
+	d2$=cnvrt$("PIC(######)",d2)
+	open #glbucket=20: "Name=[Q]\GLmstr\GLBucket.H[cno]",internal,input,relative ioerr L2830 ! [cno]" ! &str$(gl2)
+	read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
+	close #glbucket: 
+	L2830: ! 
+	if glb=2 then 
+		glwk$="[Q]\GLmstr\GL"&d2$&".H[cno]" ! &str$(gl2)
+		open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
+	else 
+		glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]" ! &str$(gl2)
+		open #glwk=11: "Name="&glwk$&",Size=0,RecL=104,Replace",internal,output 
+	end if 
+	L2840: ! 
+	if pr2$<>"N" then 
+		open #glwk2wsid=13: "Name=[Q]\GLmstr\GLWK2"&wsid$&".H[cno],RecL=110,Replace",internal,output ! [cno]" ! &str$(gl2)
+	end if 
+return  ! /r
 REGGL: ! r:
-		gw$=gl$ : wbank_code=bank_code
-REGGL2: ! 
-		tr4=ivd : tr5=amt : tr6=tcde
-		if tr6=2 or tr6=3 then tr5=-tr5
-		if scd=4 then tr6=1
-		tr$=ck$ : td$=de$ : ven$="" ! VN$
-		if tr6=3 then 
-			gosub SOMETHING
-			tr5=-tr5
-			gw$=bgl$
-			wbank_code=bank_code
-		end if 
-		goto SOMETHING
-! 
-PRGL: ! 
+	gw$=gl$ : wbank_code=bank_code
+	REGGL2: ! 
+	tr4=ivd : tr5=amt : tr6=tcde
+	if tr6=2 or tr6=3 then tr5=-tr5
+	if scd=4 then tr6=1
+	tr$=ck$ : td$=de$ : ven$="" ! VN$
+	if tr6=3 then 
+		gosub SOMETHING
+		tr5=-tr5
+		gw$=bgl$
+		wbank_code=bank_code
+	end if 
+goto SOMETHING ! /r
+	PRGL: ! r:
 		gw$=pgl$ : tr4=pivd : x=pivd : pivd=x
 		tr$="PR "&cnvrt$("PIC(ZZ/ZZ/ZZ)",pivd) : td$=pde$ : ven$="" : wbank_code=pbank_code
 		if pa1<>0 then 
@@ -424,36 +427,36 @@ PRGL: !
 			tr5=-pa2 : tr6=1 : ven$=""
 			goto SOMETHING
 		end if 
-! 
-BANKGL: ! 
-		gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
-		tr$="BK "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
-		td$="Bank #:"&str$(j)&" Total" : ven$=""
-		if tbc(j,1)<>0 then 
-			tr5=-tbc(j,1)
-			tr6=1
-			gosub SOMETHING
-		end if 
-		if tbc(j,2)=0 then 
+	! /r
+	BANKGL: ! r:
+			gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
+			tr$="BK "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
+			td$="Bank #:"&str$(j)&" Total" : ven$=""
+			if tbc(j,1)<>0 then 
+				tr5=-tbc(j,1)
+				tr6=1
+				gosub SOMETHING
+			end if 
+			if tbc(j,2)=0 then 
+				goto EO_SOMETHING
+			else 
+				tr5=tbc(j,2)
+				tr6=2
+				goto SOMETHING
+			end if 
+	! /r
+	APGL: ! r:
+			gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
+			tr$="AP "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2) : td$="AP Total"
+			ven$=""
+			if apc(j,2)<>0 then 
+				tr5=-apc(j,2)
+				tr6=4
+				gosub SOMETHING
+			end if 
 			goto EO_SOMETHING
-		else 
-			tr5=tbc(j,2)
-			tr6=2
-			goto SOMETHING
-		end if 
-! 
-APGL: ! 
-		gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
-		tr$="AP "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2) : td$="AP Total"
-		ven$=""
-		if apc(j,2)<>0 then 
-			tr5=-apc(j,2)
-			tr6=4
-			gosub SOMETHING
-		end if 
-		goto EO_SOMETHING
-! 
-SOMETHING: ! 
+	! /r
+	SOMETHING: ! r:
 		if tcde><4 then goto L3160
 		if rtrm$(gw$(1:3))="" then 
 			goto L3160
@@ -461,17 +464,17 @@ SOMETHING: !
 			read #fundmstr,using 'Form Pos 52,C 12',key=gw$(1:3): bgl$ nokey L3160
 		end if 
 		goto L3170
-L3160: ! 
+		L3160: ! 
 		read #bankmstr,using 'Form POS 33,C 12', key=lpad$(str$(wbank_code),2): bgl$ nokey L3170
-L3170: ! 
+		L3170: ! 
 		if glt=glt_post then 
 			write #glwk,using 'Form Pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
 		end if 
 		gosub FUNDTR
-EO_SOMETHING: ! 
-		return  ! /r
-XIT: ! 
-	fnend 
+		EO_SOMETHING: ! 
+	return  ! /r
+	XIT: ! 
+fnend 
 REVERSE_AP: ! r: Reverse AP Entries
 	if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto L3470
 	ap1=val(gl$(1:3))
