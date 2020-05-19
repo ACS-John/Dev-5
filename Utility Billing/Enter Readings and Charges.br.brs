@@ -5,39 +5,7 @@ goto MENU1
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnPause
-		library 'S:\Core\Library': fnConfirmDelete
-		library 'S:\Core\Library': fnOpenprn,fncloseprn
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnMsgbox
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnChain
-		library 'S:\Core\Library': fnDate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnComboa
-		library 'S:\Core\Library': fnHand_held_device$
-		library 'S:\Core\Library': fnGet_services
-		library 'S:\Core\Library': fnCustomer
-		library 'S:\Core\Library': fnGethandle
-		library 'S:\Core\Library': fnButton
-		library 'S:\Core\Library': fnRegistered_for_hh
-		library 'S:\Core\Library': fnRetrieveHandHeldFile
-		library 'S:\Core\Library': fnAsk_account
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnLbl,fnTxt
-		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fnOpt,fnChk,fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fnCmbact,fncmbrt2,fnFra,fnCmdSet,fnCmdKey
-		library 'S:\Core\Library': fnCreg_read,fncreg_write
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnGetdir2
-		library 'S:\Core\Library': fnApply_default_rates
-		library 'S:\Core\Library': fnStatusClose
-		library 'S:\Core\Library': fnIndex_it
-		library 'S:\Core\Library': fnAccountFromLocationId$
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
-		library 'S:\Core\Library': fnCustomerData$
+		autoLibrary
 		on error goto Ertn
 	! dims, constants, top, etc
 		dim resp$(40)*256

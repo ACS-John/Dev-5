@@ -8,17 +8,7 @@ XIT: fnxit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnerror
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnTos,fnAcs,fnCmdKey,fnFra,fnButton,fnChk
-		library 'S:\Core\Library': fnCmdSet,fnOpt,fnLbl,fnTxt,fncmbact
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnmsgbox,fnxit
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnclosefile
-		library 'S:\Core\Library': fnCustomerData$
+		autoLibrary
 		on error goto Ertn
 		
 		tcode_charge      	=1

@@ -1,11 +1,9 @@
 ! formerly S:\acsCL\unpaidinvoice
 ! r: SETUP: fntop, dims, open files, etc
-	library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fnTos,fnFra,fnLbl,fnTxt,fncombof,fncomboa,fnButton,fnCmdKey,fnAcs,fnmsgbox,fnflexadd1,fnflexinit1,fnChk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
-	library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fnCmdSet,fnrglbig$,fnqglbig
-	fntop(program$,cap$="Unpaid Invoice")
+	autoLibrary
+	fntop(program$)
 	on error goto Ertn
-!
-	dim cap$*128
+
 	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
 	dim in1$(9),de$*30,ta(2)
 	dim pr$(4)*30,t1(5),up$(4),unpaidkey$*20
@@ -15,19 +13,18 @@
 	dim chdr$(16),cmask$(16),item$(16)*21 ! used with flex grid
 	dim gldesc$*30,ml$(3)*80
 	dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*128
-!
+
 ! screen_last=5
-!
+
 	right=1
-	fncno(cno)
 	open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Shr,Use,RecL=12",internal,outIn,relative 
 	read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 noRec L690
 	goto L700
-L690: ! 
+	L690: ! 
 	write #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2
-L700: ! 
+	L700: ! 
 	close #20: 
-!
+
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative 
 	read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
 	if d(1)=0 and d(2)=0 then 
@@ -170,7 +167,7 @@ FINIS: ! r:
 		ml$(1)="It appears you have "&str$(lrec(jcbreakdown))&"job cost entries"
 		ml$(2)="that have not been posted.  Do you wish to post these"
 		ml$(3)="entries before you exit?"
-		fnmsgbox(mat ml$,resp$,cap$,4)
+		fnmsgbox(mat ml$,resp$,'',4)
 		if resp$="Yes" then gosub POST_TO_JOB
 	end if
 goto XIT ! /r
@@ -349,13 +346,13 @@ MSGBOX3: ! r: need range of reference numbers
 mat ml$(2)
 ml$(1)="You must enter the 'Range From' and 'Range To'"
 ml$(2)="reference numbers to choose this option."
-fnmsgbox(mat ml$,resp$,cap$,16)
+fnmsgbox(mat ml$,resp$,'',16)
 goto CODE_FOR_PAYMENT ! /r
 MSGBOX4: ! r: need due date for selecting by due date
 mat ml$(2)
 ml$(1)="You must enter the 'Due Date' if you choose to'"
 ml$(2)="approve by due date."
-fnmsgbox(mat ml$,resp$,cap$,16)
+fnmsgbox(mat ml$,resp$,'',16)
 goto CODE_FOR_PAYMENT ! /r
 PAY_ALL: ! r: pay all unpaid invoices
 restore #paytrans: 
@@ -476,7 +473,7 @@ mat ml$(3)=("")
 ml$(1)="Job # "&jn$&" does not exist."
 ml$(2)="                                        "
 ml$(3)="Take OK to select a different job #."
-fnmsgbox(mat ml$,resp$,cap$,0)
+fnmsgbox(mat ml$,resp$,'',0)
 goto ENTRY_SCREEN
 L6600: if ck=69 then goto L6610 else goto L6620
 L6610: cn$="": fncategory_srch(cn$,1) : cat=val(cn$): goto ENTRY_SCREEN
@@ -546,7 +543,7 @@ PGOF2: ! r:
 pr #255: newpage
 gosub HDR2
 continue ! /r
-def fntest_key(holdkey$*20,vn$,iv$,cap$*128)
+def fn_test_key(holdkey$*20,vn$,iv$)
 	dim newkey$*20
 ! uses open files:
 	newkey$=rpad$(vn$&iv$,20)
@@ -571,7 +568,7 @@ TEST_KEY_FAIL_ON_PAYTRANS: !
 	ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 	ml$(2)="already exists in the Unpaid Invoice file."
 	ml$(3)="Please change the Invoice Number or the Payee."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
 ! ___________
 TEST_KEY_FAIL_ON_IV: ! 
@@ -579,17 +576,17 @@ TEST_KEY_FAIL_ON_IV: !
 	ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 	ml$(2)="already exists in the Paid Invoice file."
 	ml$(3)="Please change the Invoice Number or the Payee."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
 ! ___________
 TEST_KEY_OK: ! 
 ! pr 'fnTest Key PASSED'
-	fntest_key=1
+	fn_test_key=1
 	goto EO_TEST_KEY
 ! ___________
 TEST_KEY_FAIL: ! 
 ! pr 'fnTest Key FAILED'
-	fntest_key=2
+	fn_test_key=2
 	goto EO_TEST_KEY
 ! ___________
 EO_TEST_KEY: ! 
@@ -784,21 +781,21 @@ def fn_InvoiceValid ! very local
 	for iv2dItem=1 to udim(mat alloc2d$,1)
 		tac+=val(alloc2d$(iv2dItem,2))
 	nex iv2dItem
-	if fntest_key(holdkey$,vn$,iv$,cap$)=2 then 
+	if fn_test_key(holdkey$,vn$,iv$)=2 then 
 		ivReturn=0
 	else if trim$(iv$)="" then  ! must have an invoice number
 		mat ml$(3)
 		ml$(1)="You must enter an invoice number on each unpaid "
 		ml$(2)="record.  If you must make up an invoice number,"
 		ml$(3)="be careful to use a different number each time!"
-		fnmsgbox(mat ml$,resp$,cap$,16)
+		fnmsgbox(mat ml$,resp$,'',16)
 		ivReturn=0
 	else if tac<>upa then ! allocations don't match total invoice
 		mat ml$(3)
 		ml$(1)="The allocations of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(tac)))&" do not agree with"
 		ml$(2)="the total invoice of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(upa)))&"."
 		ml$(3)="You must correct the problem before you can continue!"
-		fnmsgbox(mat ml$,resp$,cap$,16)
+		fnmsgbox(mat ml$,resp$,'',16)
 		ivReturn=0 
 	end if
 	fn_InvoiceValid=ivReturn
@@ -933,4 +930,4 @@ def fn2d_remove(mat a2d$,iadWhich)
 		mat a2d$=a2dnew$
 	end if
 fnend
-include: ertn
+include: Ertn

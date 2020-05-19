@@ -1,12 +1,8 @@
 ! formerly S:\acsUB\accessdate
 ! -- Check for last date customers records were accessed
 
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnGetDir2
-	on errror goto ERTN
+	autoLibrary
+	on error goto ERTN
 	fntop(program$)
 	dim resp$(100)*128
 	! dim ln$*128
