@@ -1,16 +1,5 @@
 ! formerly S:\acsUB\ubNoUsage
-library 'S:\Core\Library': fnAcs2
-library 'S:\Core\Library': fnOpenprn,fnCloseprn
-library 'S:\Core\Library': fnLastBillingDate
-library 'S:\Core\Library': fnGet_services
-library 'S:\Core\Library': fnCmbrt2
-library 'S:\Core\Library': fnCmdSet
-library 'S:\Core\Library': fnTop
-library 'S:\Core\Library': fnChk
-library 'S:\Core\Library': fnTos
-library 'S:\Core\Library': fnLbl
-library 'S:\Core\Library': fnTxt
-library 'S:\Core\Library': fnXit
+autoLibrary
 on error goto Ertn
 dim z$*10,e$(4)*30,resp$(10)*40,d(15)
 dim serviceName$(10)*20,a(7)

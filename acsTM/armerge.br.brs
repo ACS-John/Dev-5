@@ -1,6 +1,6 @@
 on error goto Ertn
 dim gl$(10)*12,ga(10),pgl$*12
-library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fngethandle
+autoLibrary
 fntop(program$,cap$="AR Merge")
 dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
 pr newpage

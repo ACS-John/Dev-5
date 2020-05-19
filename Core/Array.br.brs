@@ -1,7 +1,7 @@
 def fn_setup
   if ~setup then
     setup=1
-    library 'S:\Core\Library.br': fngethandle
+    autoLibrary
   end if
 fnend
 
