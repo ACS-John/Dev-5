@@ -1,16 +1,16 @@
 ! formerly S:\acsGL\FixPA
-fn_setup
+	fn_setup
   fntop(program$)
   current_accounting_period=fnactpd
-! 
+
   process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
-! 
-  open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
+
+  open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
   read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
-! lmu = Last Accounting Period Closed
-! nap = Number of Accounting Periods
+	! lmu = Last Accounting Period Closed
+	! nap = Number of Accounting Periods
   close #company: 
-  fn_get_fund_list(mat fund_list) ! pr 'fund_list:' : pr mat fund_list : pause
+  fnGetFundList(mat fund_list) ! pr 'fund_list:' : pr mat fund_list : pause
   mat last_retained_earnings_acct$(udim(mat fund_list)) : if udim(last_retained_earnings_acct$)=0 then mat last_retained_earnings_acct$(1)
   mat period_accumulator_current(nap)
   mat period_accumulator_prior(nap)
@@ -29,19 +29,19 @@ fn_setup
   open #h_glmstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed 
 	F_GLMSTR: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
   do 
-	 read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
-	 fn_report('*** '&gl$&' ***')
-	 mat balance_current_year_month=(0)
-	 mat period_accumulator_current=(0)
-	 if fn_is_a_retained_earn_account(gl$) then 
-		period_accumulator_current(1)=balance_prior_year_month(nap)
-		! if gl$='  1   405  0' then pr 'initialize it to  ';period_accumulator_current(1) : pause
-	 else 
-		period_accumulator_current(1)=0 ! bb ! bb = Beginning Balance (at the beginning of the fiscal year)
-	 end if 
-	 mat period_accumulator_prior=(0)
-	 gln_period_did_change=0
-	 for period=1 to nap
+		read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
+		fn_report('*** '&gl$&' ***')
+		mat balance_current_year_month=(0)
+		mat period_accumulator_current=(0)
+		if fn_is_a_retained_earn_account(gl$) then 
+			period_accumulator_current(1)=balance_prior_year_month(nap)
+			! if gl$='  1   405  0' then pr 'initialize it to  ';period_accumulator_current(1) : pause
+		else 
+			period_accumulator_current(1)=0 ! bb ! bb = Beginning Balance (at the beginning of the fiscal year)
+	end if 
+	mat period_accumulator_prior=(0)
+	gln_period_did_change=0
+	for period=1 to nap
 		if period=nap then 
 		  period_date_end=date(days(period_date_start(1)+1,'mmddyy')-1,'mmddyy')
 		  prior_period_date_end=date(days(prior_period_date_start(1)+1,'mmddyy')-1,'mmddyy')
@@ -52,7 +52,7 @@ fn_setup
 		! if gl$='  1   405  0' and period=3 then pr 'before fn_process_trans   period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
 		fn_process_trans(h_actrans, 1)
 		! if gl$='  1   405  0' then pr 'after fn_process_trans' : pause
-		if process_gltrans then let fn_process_trans(h_gltrans)
+		if process_gltrans then fn_process_trans(h_gltrans)
 		if period>1 and period<=current_accounting_period then 
 		  period_accumulator_current(period)+=period_accumulator_current(period-1)
 		! if gl$='  1   405  0' and period=3 then pr 'after adding in the prior period    period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
@@ -89,26 +89,16 @@ fn_setup
   loop 
 	EO_GLMSTR: ! 
 	! fncloseprn : report_open=0
-XIT: fnxit ! if env$('acsdeveloper')<>'' then stop else let fnxit ! XXX
+XIT: fnxit ! if env$('acsdeveloper')<>'' then stop else fnxit ! XXX
 def fn_setup
-  library 'S:\Core\Library': fntop,fnxit
-  library 'S:\Core\Library': fnTos,fnAcs,fnLbl,fnTxt,fnCmdSet,fnChk
-  library 'S:\Core\Library': fngethandle
-  library 'S:\Core\Library': fncreg_write,fncreg_read
-  library 'S:\Core\Library': fncd
-  library 'S:\Core\Library': fnactpd
-  library 'S:\Core\Library': fnStatus
-  library 'S:\Core\Library': fnqgl
-  library 'S:\Core\Library': fnagl$
-  library 'S:\Core\Library': fnindex_it
-  library 'S:\Core\Library': fnrgl$
+  autoLibrary
   on error goto Ertn
 
   dim resp$(100)*60
   dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)
   dim actrans_key$*20
 fnend
-  def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
+def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 	 mat period_date_start(nap)
 	 period_date_start=(0)
 	 mat prior_period_date_start(nap)
@@ -169,7 +159,7 @@ fnend
 		end if 
 	 end if  ! ck<>5
 	 fn_screen_1=ck
-  fnend  ! fn_screen_1
+fnend
 def fn_date_mmddyy_is_within_range(dmi_test_date,dmi_date_start,dmi_date_end)
 	 dmi_return=0
 	 dmi_test_date=fncd(dmi_test_date)
@@ -232,11 +222,11 @@ def fn_report(line$*256)
 	!   pr #255: line$
 	 fnStatus(line$) ! pr line$ ! XXX
 fnend 
-  def fn_is_a_retained_earn_account(gl$; ___,returnN)
-! pr 'gl number passed is *'&gl$&'*'
-! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
-	 gl$=trim$(fnagl$(gl$))
-	 if srep$(srep$(gl$,' ',''),'0','')='' then ! if GL account is 0-0-0 than it is not a retained earnings account, because it's invalid.
+def fn_is_a_retained_earn_account(gl$; ___,returnN)
+	! pr 'gl number passed is *'&gl$&'*'
+	! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
+	gl$=trim$(fnagl$(gl$))
+	if srep$(srep$(gl$,' ',''),'0','')='' then ! if GL account is 0-0-0 than it is not a retained earnings account, because it's invalid.
 		retunN=0
 		goto IareaFinis
 	 else if use_dept then 
@@ -246,42 +236,16 @@ fnend
 		fund_which=1
 	 end if 
 	 if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then 
-!     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
+		!     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
 		returnN=1
-!     pause
+		!     pause
 	 else 
-!     pr '"'&gl$&'">"'&trim$(last_retained_earnings_acct$(fund_which))&'" so it is NOT a retained earnings account - fund:'&str$(fund_which)
+		!     pr '"'&gl$&'">"'&trim$(last_retained_earnings_acct$(fund_which))&'" so it is NOT a retained earnings account - fund:'&str$(fund_which)
 		returnN=0
-!     pause
+		!     pause
 	 end if 
 	 IareaFinis: !
 	 fn_is_a_retained_earn_account=returnN
   fnend 
-def library fnGetFundList(mat fund_list)
-  if ~setup then let fn_setup
-  fnGetFundList=fn_get_fund_list(mat fund_list)
-fnend
-def fn_get_fund_list(mat fund_list)
-  ! returns an array of all unique gl number funds
-  open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
-  read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
-  close #company: 
-  if use_dept then 
-	 mat fund_list(999)
-	 open #gfl_h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,input,keyed 
-	 do 
-		read #gfl_h_glmstr,using 'form pos 1,N 3': fund eof GFL_EO_GLMSTR
-		if fund<>fund_prior then 
-		  fund_list_count+=1
-		  fund_list(fund_list_count)=fund
-		  fund_prior=fund
-		end if 
-	 loop 
-	 GFL_EO_GLMSTR: ! 
-	 close #gfl_h_glmstr: 
-  else ! no departments
-	 fund_list_count=0
-  end if 
-  mat fund_list(fund_list_count)
-fnend 
-include: ertn
+
+include: Ertn
