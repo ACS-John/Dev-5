@@ -52,13 +52,17 @@ PRINTING: !
 		if bal=0 then goto READ_CUSTOMER
 		if bal<0 and skipcr=1 then goto READ_CUSTOMER
 		if bal<0 then mat month=(0): month(1)=bal: goto L510
-		gosub READ_TRANS
+		gosub ReadTrans
 		L510: if sum(month)=(0) and bal<>0 then month(4)=bal
 		pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': z$,e$(1:20),month(1),month(2),month(3),month(4),bal pageoflow PGOF
 		totcolumn1+=month(1) : totcolumn2+=month(2) 
 		totcolumn3+=month(3) : totcolumn4+=month(4) : totbal+=bal
 	loop
-
+Finis: !
+close #1: ioerr ignore
+close #2: ioerr ignore
+fncloseprn
+Xit: fnXit
 PrHeader: ! r:
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
@@ -66,43 +70,36 @@ PrHeader: ! r:
 	pr #255,using 'Form POS 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
 	pr #255: "{\ul Account No}  {\ul Customer Name}        {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(1)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(2)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(3)))(1:10)&"} {\ul      Older} {\ul    Balance}"
 return ! /r
-
 PrTotals: ! r:
 	pr #255: "                                 __________ __________ __________ __________ __________"
 	pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PGOF
 	pr #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
 goto Finis ! /r
-Finis: !
-close #1: ioerr ignore
-close #2: ioerr ignore
-fncloseprn
-XIT: fnxit
-!
-PGOF: pr #255: newpage
+PgOf: ! r:
+	pr #255: newpage
 	gosub PrHeader
-	continue 
-!
-READ_TRANS: ! 
-sortreq=0 : mat month=(0)
-restore #2,key>=z$&"         ": nokey L990
-do
-	L790: !
-	read #2,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof L990
-	if p$<>z$ then goto L880
-	if tcode =3 or tcode=4 then goto L790 ! skip collections or cm
-	for j=1 to 3
-		if tdate<firstday(3) then goto L790 ! older than we want to analyze
-		if tdate>=firstday(j) and tdate<=lastday(j) then 
-			month(j)+=tamount : goto L790
-		end if
-		if tdate>lastday(1) then 
-			month(1)+=tamount : goto L790 
-			! if trans dated after the last day of the first month, 
-			! just go ahead and put it the first month
-		end if
-	next j
-loop
-L880: ! r:
+continue ! /r
+ReadTrans: ! r:
+	sortreq=0 : mat month=(0)
+	restore #2,key>=z$&"         ": nokey L990
+	do
+		read #2,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof L990
+		if p$<>z$ then goto L880
+		if tcode =3 or tcode=4 then goto L790 ! skip collections or cm
+		for j=1 to 3
+			if tdate<firstday(3) then goto L790 ! older than we want to analyze
+			if tdate>=firstday(j) and tdate<=lastday(j) then 
+				month(j)+=tamount : goto L790
+			end if
+			if tdate>lastday(1) then 
+				month(1)+=tamount : goto L790 
+				! if trans dated after the last day of the first month, 
+				! just go ahead and put it the first month
+			end if
+		next j
+		L790: !
+	loop
+	L880: !
 	tempbal=bal
 	if month(1)=tempbal then tempbal=0 : month : month(2)=month(3)=month(4)=0 : goto L990
 	if month(1)<tempbal then tempbal=tempbal-month(1) : goto L920

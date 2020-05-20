@@ -1076,8 +1076,6 @@ def library fnDateSelect$ (;_date$,format$,row,column)
 	library 'S:\Core\Date.br': fnDateSelect$
 	fnDateSelect$=fnDateSelect$ ( _date$,format$,row,column)
 fnend
-
-
 def library fnFirstMondayOfMonth(; day)
 	library 'S:\Core\Date.br': fnFirstMondayOfMonth
 	fnFirstMondayOfMonth=fnFirstMondayOfMonth( day)
@@ -1364,38 +1362,42 @@ fnend
 		fnend
 	! /r
 ! /r
-! r: GL   general ledger
+! r: GL   General Ledger
 	def library fnregistered_for_GlBudgetMgmt
 		library 'S:\Core\Client.br': fnregistered_for_GlBudgetMgmt
 		fnregistered_for_GlBudgetMgmt=fnregistered_for_GlBudgetMgmt
 	fnend
+	def library fnAddGlPayee
+		library 'S:\General Ledger\fn\addGlPayee.br': fnAddGlPayee
+		fnAddGlPayee=fnAddGlPayee
+	fnend
+	def library fnBalanceSheet(; defaultFormat$)
+		library 'S:\General Ledger\fn\balanceSheet.br': fnBalanceSheet
+		fnBalanceSheet=fnBalanceSheet( defaultFormat$)
+	fnend
 	def library fnGetFundList(mat fund_list)
-		library 'S:\General Ledger\Fix Period Accumulators from History.br': fnGetFundList
+		library 'S:\General Ledger\fn\getFundList.br': fnGetFundList
 		fnGetFundList=fnGetFundList(mat fund_list)
 	fnend
 	def library fnW2supEdit(;empNo$)
 		library 'S:\acsGL\w2box16.br': fnW2supEdit
 		fnW2supEdit=fnW2supEdit( empNo$)
 	fnend
-	def library fncmbbud(&indexfile$)
-		library 'S:\acsGL\CmbBud.br': fncmbbud
-		fncmbbud=fncmbbud(indexfile$)
+	def library fnCmbBud(&indexfile$)
+		library 'S:\acsGL\CmbBud.br': fnCmbBud
+		fnCmbBud=fnCmbBud(indexfile$)
 	fnend
-	def library fnactpd(;a)
+	def library fnActPd(;a)
 		library 'S:\acsGL\fnActPd.br': fnactpd
-		fnactpd=fnactpd(a)
+		fnActPd=fnActPd(a)
 	fnend
-	def library fnaddglpayee
-		library 'S:\General Ledger\Payee.br': fnaddglpayee
-		fnaddglpayee=fnaddglpayee
+	def library fnActPd$(;a$)
+		library 'S:\acsGL\fnActPd$.br': fnActPd$
+		fnActPd$=fnActPd$(a$)
 	fnend
-	def library fnactpd$(;a$)
-		library 'S:\acsGL\fnActPd$.br': fnactpd$
-		fnactpd$=fnactpd$(a$)
-	fnend
-	def library fncch$*20(;a$*20)
-		library 'S:\acsGL\fnCCH$.br': fncch$
-		fncch$=fncch$(a$)
+	def library fnCch$*20(;a$*20)
+		library 'S:\acsGL\fnCCH$.br': fnCch$
+		fnCch$=fnCch$(a$)
 	fnend
 	def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$)
 		library 'S:\acsGL\fnglfs.br': fnGlAskFormatPriorCdPeriod
@@ -1443,9 +1445,9 @@ fnend
 	library 'S:\acsCL\Conversion\apmstr-cnv.br': fnApMstrConversion
 	fnApMstrConversion=fnApMstrConversion
 	fnend
-	def library fnpostgl2(glt)
-		library 'S:\acsCL\PostGL2.br': fnpostgl2
-		fnpostgl2(glt)
+	def library fnPostCheckbookToGl(; enablePost)
+		library 'S:\Checkbook\fn\postCheckbookToGl.br': fnPostCheckbookToGl
+		fnPostCheckbookToGl( enablePost)
 	fnend
 	def library fntrmstr_v1_to_v2
 		library 'S:\acsCL\Conversion\TrMstr-v1-to-v2.br': fntrmstr_v1_to_v2

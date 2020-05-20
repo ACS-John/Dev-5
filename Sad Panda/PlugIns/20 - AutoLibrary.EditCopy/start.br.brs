@@ -66,8 +66,11 @@ def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 	str2mat(line$,mat item$,' ')
 	for it=1 to udim(mat item$)
 		if item$(it)(1:2)='fn' and item$(it)(3:3)<>'_' and (item$(it)<>'fn' and item$(it)<>'fne' and item$(it)<>'fnen' and item$(it)<>'fnend') th
-			fnAddOneC(mat fmAll$,item$(it), 0,1)
-			returnN+=1
+			if it>1 and item$(it-1)='def' then goto Gfc_PastAdd
+			if it>2 and item$(it-1)='library' then goto Gfc_PastAdd
+				fnAddOneC(mat fmAll$,item$(it), 0,1)
+				returnN+=1
+			Gfc_PastAdd: !
 		en if
 	nex it
 	fn_gatherFnCalls=returnN

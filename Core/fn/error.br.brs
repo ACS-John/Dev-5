@@ -114,7 +114,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			fnlog("action taken = Program Pause",2)
 			goto ERROR_XIT
 	
-		else if fkey=11 then 
+		else if fkey=11 then ! goto that line in n++ (source file)
 			sourceFile$=srep$(os_filename$(callingprogram$),'F:\CLSINC\','C:\ACS\Dev-5\')
 			sourceFile$=srep$(sourceFile$,'COLLECTION-MASTER ADD-ON','Collection-Master Add-On')
 			exe 'dir "'&sourceFile$&'" -l -b >acsErrTmp'&session$&'.txt'

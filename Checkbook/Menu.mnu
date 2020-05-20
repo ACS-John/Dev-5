@@ -27,16 +27,16 @@ General Ledger
 >General Ledger Control                   ^ acsCL\GLControl
 Other Files
 >Department Breakdown                     ^ acsCL\department
-Print Checks                              ^ Checkbook\Print Checks
+Print Checks                              ^ Checkbook\*
 Print
 >Accounts Payable Listing - Any Time      ^ acsCL\CPInvLst
 >Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
->Claims or Purchases Report               ^ Checkbook\Claims or Purchases Report
->GL Distribution Report                   ^ acsCL\PostGL2b
->Print 1099 Forms                         ^ Checkbook\Print 1099 Forms
+>Claims or Purchases Report               ^ Checkbook\*
+>GL Distribution Report                   ^ Checkbook\*                    ^ GL
+>Print 1099 Forms                         ^ Checkbook\*
 Export                                    
 >Transfer to Accountant                   ^ acsCL\TrToCPA
->Post to General Ledger                   ^ acsCL\PostGL2                    ^ GL
+>Post to General Ledger                   ^ Checkbook\*                    ^ GL
 Import                                    
 >Import General Ledger Chart of Accounts  ^ acsCL\InitGLCoA
 >Import Payee Records from General Ledger ^ acsCL\initglpay

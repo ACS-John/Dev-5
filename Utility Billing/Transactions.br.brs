@@ -13,7 +13,7 @@ def fn_setup
 		
 		tcode_charge      	=1
 		tcode_penalty     	=2
-		tcode_collection 	=3
+		tcode_collection  	=3
 		tcode_credit      	=4
 		tcode_debit       	=5
 		
