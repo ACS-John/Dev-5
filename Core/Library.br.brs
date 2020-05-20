@@ -533,9 +533,9 @@ fnend
 		library 'S:\Core\Dec2Hex.br': fndec2hex
 		fndec2hex=fndec2hex(input_dec, output_hex$)
 	fnend
-	def library fnhex2dec(input_hex$,&output_dec)
-		library 'S:\Core\hex2dec.br': fnhex2dec
-		fnhex2dec=fnhex2dec(input_hex$, output_dec)
+	def library fnhex2dec(input_hex$)
+		library 'S:\Core\fn\hex2dec.br': fnhex2dec
+		fnhex2dec=fnhex2dec(input_hex$)
 	fnend
 	def library fnwin3b(win,&cap$,win_height,win_width; display_cnam,button_option,win_align,pr_newpg)
 		library 'S:\Core\Ace\Win3B.br': fnwin3b

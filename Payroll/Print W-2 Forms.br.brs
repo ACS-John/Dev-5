@@ -1,33 +1,6 @@
 !  (formerly) S:\acsPR\newPRW2A 
 ! r: setup
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fnchain
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnAcs
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnChk
-	library 'S:\Core\Library': fnpa_finis
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnpa_open
-	library 'S:\Core\Library': fnpa_newpage
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnpa_newpage
-	library 'S:\Core\Library': fncreg_read
-	library 'S:\Core\Library': fncreg_write
-	library 'S:\Core\Library': fnpa_background
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnDedNames
-	library 'S:\Core\Library': fncomboa
-	library 'S:\Core\Library': fnw3
-	library 'S:\Core\Library': fnNameParse
-	library 'S:\Core\Library': fnAddOneC
-	library 'S:\Core\Library': fnask_w2_info
-	library 'S:\Core\Library': fnw2_text
-	library 'S:\Core\Library': fnFree
+	autoLibrary
 	on error goto Ertn
 
 	dim fw2box16$*255
@@ -77,7 +50,7 @@
 	!
 	! /r
 	ASK_INFO: !
-	if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,unused_state$,loccode,cLocality$) then goto XIT
+	if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,unused_state$,loccode,cLocality$) then goto Xit
 	! pause  !
 	dim w2ssnMask(6) ! W2CopyFile2pp$(6)*128,W2CopyFile$(6)*128,
 	w2ssnMask(1)=0 ! W2CopyFile$(1)='S:\Core\pdf\'&taxYear$&'\W-2\Copy A.pdf' :  W2CopyFile2pp$(1)='S:\Core\pdf\'&taxYear$&'\W-2\Copy A - 2pp.pdf'
@@ -335,7 +308,7 @@ EO_EMPLOYEE: ! r:
 		end if
 	next dedItem
 	goto FINIS: ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #hEmployee: 
 	close #hDepartment: 
 	close #hAddr: 
@@ -357,14 +330,14 @@ FINIS: ! r:
 			tmpMsgLine$(2)=os_filename$(file$(hExport))
 			close #hExport:
 			fnmsgbox(mat tmpMsgLine$,resp$) ! ,16+4)
-		goto XIT
+		goto Xit
 	else
 		if goproc=1 then 
 			goto PRW2B
 		end if
 	end if
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 PRW2B: ! r:
 	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
 	restore #1: 
@@ -386,7 +359,7 @@ ASK_EMP_LOCALITY: ! r:
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	empLocality$=resp$(1)
 	controlNumber$=rtrm$(controlNumber$)
 	if controlNumber$="1" then goto L2770
@@ -515,10 +488,10 @@ PrintW2: ! r:
 		fnw2_text(topmargin,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
 	end if
 return  ! /r
-def fnQAC(mat qac$,qacText$*256)
+def fn_QAC(mat qac$,qacText$*256)
 	qacCount+=1
 	mat qac$(qacCount)
 	qac$(qacCount)=qacText$
-	fnQAC=qacCount
+	fn_QAC=qacCount
 fnend
-include: ertn
+include: Ertn
