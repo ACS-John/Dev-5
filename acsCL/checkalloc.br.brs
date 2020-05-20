@@ -8,7 +8,7 @@ open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[
 open #work=5: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 READ_TRMSTR: ! 
 do
-	read #trmstr,using 'Form pos 1,n 2,n 1,C 8,N 6,PD 10.2,pos 28,C 8,pos 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,,pcde,scd eof Finis
+	read #trmstr,using 'Form pos 1,n 2,n 1,C 8,N 6,PD 10.2,pos 28,C 8,pos 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,pcde,scd eof Finis
 	if fndate_mmddyy_to_ccyymmdd(pd)=>20050530 then !  ! skip everything older than this date
 		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: ! Nokey 210
 		totalalloc=0
