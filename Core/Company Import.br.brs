@@ -98,7 +98,7 @@ else
 		if ~cnv_pr then let fncheckfileversion
 		if cnv_ub_french_settlement then 
 			fnfix_trans_breakdowns(1,0)
-			fntranslate_rate_abreviations('GS','GA')
+			fn_translateRateAbbreviations('GS','GA')
 		!       fn_ub_combine_services(5,4)
 		else if cnv_ub_merriam_woods then 
 			fn_ub_cust_route_from_acctno(destination_company_number)
@@ -114,8 +114,8 @@ else
 	end if 
 end if 
 fnindex_sys(cno,cursys$)
-XIT: ! 
-fnxit
+Xit: ! 
+fnXit
 def fn_deleteExistingFiles
 	company_import_extension$=company_file$(pos_point_h:len(company_file$))
 	company_import_path$=company_file$(1:pos(company_file$,'\',-1))
@@ -287,8 +287,7 @@ def fn_ub_copy_extras
 	end if  ! exists [import path][Q]\UBmstr\notes.h[company_import_extension]
 	! /r
 fnend 
-IGNORE: continue 
-def fntranslate_rate_abreviations(from$*2,to$*2)
+def fn_translateRateAbbreviations(from$*2,to$*2)
 	fnStatus('Translating Rate abbreviations from '&from$&' to '&to$)
 	from$=uprc$(from$)
 	to$=uprc$(to$)
