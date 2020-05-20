@@ -762,7 +762,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add("Purdy","ubprtbl1_purdy")
 		fn_upp_add("Galena",'(basic)') ! "ubprtbl1_galena") 
 ! >>Bills-Laser (3 per page) ^ ubPrtThree
-		fn_upp_add("Ash Grove","ubprtprace_ash")
+		! fn_upp_add("Ash Grove","ubprtprace_ash")  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20
 !   fn_upp_add("Albany","ubprtthree_Albany")
 		fn_upp_add("Brier Lake","ubprtthree_Brier")
 		fn_upp_add("Billings",'(basic)') ! ubprtthree_bill
