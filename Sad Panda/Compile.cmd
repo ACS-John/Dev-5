@@ -53,7 +53,7 @@ if "%~1"=="" (
 	Set name=%1
 )
 
-set runProc=%temp%\Lexi_%random%%random%%random%%random%%random%.proc
+set runProc=%temp%\sadPanda_%random%%random%%random%%random%%random%.proc
 
 @echo Load "%~dp0BambooForest.br",resident   >%runProc%
 @echo Load "%~dp0Compile.br"                 >>%runProc%
