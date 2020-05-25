@@ -1,5 +1,5 @@
 ! r: setup
-	library 'S:\Core\Library': fnAcs,fnCmdSet,fnLbl,fnTxt,fnerror,fnTos,fncno,fnxit,fntop,fnpause,fngethandle,fnopenprn,fncloseprn
+	autoLibrary
 	on error goto Ertn
 	dim cap$*128
 	dim line$*512,item$(1)*512
@@ -10,7 +10,7 @@
 	crlf$=cr$&lf$
 	fncno(cno,cnam$)
 !
-	fntop(program$,cap$="Import CSV to Time Sheets")
+	fnTop(program$,cap$="Import CSV to Time Sheets")
 	if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : fnpause
 	client_id_sage_ax=3811
 	client_id_brc=90
@@ -22,7 +22,7 @@
 	label$(1)='Starting Date'
 	label$(2)='Ending Date'
 	fn_ask_dates(mat label$,mat filter_date)
-	if fkey=93 or fkey=99 then goto XIT
+	if fkey=93 or fkey=99 then goto Xit
 	open #h_in:=fngethandle: 'Name=D:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
 	! open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	open #h_out:=fngethandle: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
@@ -64,7 +64,7 @@
 	! THE_END: !
 	close #h_in:
 	fncloseprn
-XIT: fnxit
+Xit: fnXit
 def fn_acs_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
 	dim inp(7)
 	inp(1)=wo_client
@@ -113,7 +113,7 @@ def fn_get_next_line(&line$)
 fnend  ! fn_get_next_line
 def fn_get_the_date(gtd_source$*256)
 	gtd_return=0
-	if pos(gtd_source$,'Thu, Jan 10, 19')>0 then 
+	if pos(gtd_source$,'Thu, Jan 10, 19')>0 then
 		pr gtd_source$
 		pause
 	end if
@@ -239,7 +239,7 @@ def fn_ask_dates(mat label$,mat filter_date)
 		resp$(respc+=1)=str$(filter_date(ad_line))
 	next ad_line
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then let fkey(99)
 	for ad_line=1 to udim(mat label$)
 		filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))
@@ -269,15 +269,15 @@ def fn_onsupport(wo_client,wo_month,the_date)
 	spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
-
+ 
 	OS_TRY_RPAD: !
 	spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
-
+ 
 	OS_FOUND_REC: !
 	if the_date<=sdt2 then os_return=1
-
+ 
 	OS_FINIS: !
 	fn_onsupport=os_return
 fnend
@@ -330,4 +330,4 @@ def fn_sage_write_out(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	sawo_line$&=wo_desc$
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_acs_write_out
-include: ertn
+include: Ertn

@@ -1,8 +1,8 @@
 library program$: fnWorkOrderList
-library 'S:\Core\Library': fnxit,fntop
-fntop(program$)
+library 'S:\Core\Library': fnXit,fnTop
+fnTop(program$)
 fnWorkOrderList('[All]')
-fnxit
+fnXit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -20,7 +20,7 @@ def fn_setup
 	end if
 fnend 
 def library fnWorkOrderList(; z$*10)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnTos(sn$="workorder")
 	respc=0
 	fnLbl(1,43," ",1,1)

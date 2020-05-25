@@ -1,4 +1,4 @@
-library 'S:\Core\Library': fnAddOneN
+autoLibrary
 doorCount=3
 howManyToEliminate=doorCount-2
 tryCount=150000
@@ -34,9 +34,9 @@ for itteration=1 to 2
 		
 		NextTry: !
 	nex try
-	if doSwitchForSecondGuess then 
+	if doSwitchForSecondGuess then
 		pr '**Switch For Second Guess: '&str$((successFirstQuessCount+successCount)/tryCount*100)&'% **'
-	else 
+	else
 		pr '**    Trust your instinct: '&str$((successFirstQuessCount+successCount)/tryCount*100)&'% **'
 	end if
 nex itteration

@@ -1,6 +1,6 @@
-library 'S:\Core\Library': fntop,fnxit, fnerror,fnHamster,fnhamsterfio
+autoLibrary
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 fnhamsterfio('U4 Meter Location')
-XIT: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

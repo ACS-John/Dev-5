@@ -1,16 +1,10 @@
 ! (formerly) S:\acsGL\glPrt109
-library 'S:\Core\Library': fntop
-library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-library 'S:\Core\Library': fnask_1099_info
-library 'S:\Core\Library': fn1099print_close
-library 'S:\Core\Library': fn1099print
-library 'S:\Core\Library': fngethandle
-library 'S:\Core\Library': fnxit
-fntop(program$)
+autoLibrary
+fnTop(program$)
 on error goto Ertn
 if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
-	open #hPayee=fngethandle: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
-	open #hTrans=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed 
+	open #hPayee=fngethandle: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
+	open #hTrans=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
 	do
 		dim vn$*8
 		dim nam$*30
@@ -20,9 +14,9 @@ if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
 		read #hPayee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof EoPayee
 		ytdp=fn_YearToDapPay(hTrans,vn$, beg_date,end_date)
 		form pos 1,c 8,c 35,3*c 20,x 5,n 2,c 11
-		if typ<>0 then 
-			if ytdp=>minamt then 
-				if seltp=0 or seltp=typ then 
+		if typ<>0 then
+			if ytdp=>minamt then
+				if seltp=0 or seltp=typ then
 					mat box=(0)
 					if typ<1 or typ>8 then typ=1
 					box(typ)=ytdp
@@ -36,21 +30,21 @@ if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
 	close #hTrans: ioerr ignore
 	fn1099print_close
 end if
-XIT: fnxit
+Xit: fnXit
 def fn_YearToDapPay(hTrans,key$; beg_date,end_date)
 	ytdpReturn=0
-	restore #hTrans,key>=key$: nokey ytdpFinis 
+	restore #hTrans,key>=key$: nokey ytdpFinis
 	do
 		read #hTrans,using 'Form POS 1,c 8,N 6,PD 5.2',release: trvn$,dt,am eof ytdpFinis
-		if trim$(key$)=trim$(trvn$) then 
-			if beg_date=0 or fndate_mmddyy_to_ccyymmdd(dt)=>beg_date then 
-				if end_date=0 or fndate_mmddyy_to_ccyymmdd(dt)<=end_date then 
+		if trim$(key$)=trim$(trvn$) then
+			if beg_date=0 or fndate_mmddyy_to_ccyymmdd(dt)=>beg_date then
+				if end_date=0 or fndate_mmddyy_to_ccyymmdd(dt)<=end_date then
 					ytdpReturn+=am
 				end if
 			end if
 		end if
 	loop while trim$(key$)=trim$(trvn$)
 	ytdpFinis: !
-	fn_YearToDapPay=ytdpReturn 
+	fn_YearToDapPay=ytdpReturn
 fnend
 include: Ertn

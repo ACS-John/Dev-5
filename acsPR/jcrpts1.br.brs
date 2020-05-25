@@ -1,246 +1,240 @@
-00010 ! Replace S:\acsPR\jcRptS1
-00020 ! Create Job Cost Report Program
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnerror,fntop, fnxit, fnrx
-00050   on error goto Ertn
-00060 !
-00070   dim rn$*2,rt$*51,ch$(2)*132,psc(100),cap$*128,message$*40
-00080   dim f$(20)*50,pp(20),ppr(20),dp(20),fc(20),tcj(20),tcs(20),ty$(24)*8
-00090   dim a$(20)*32,a(20),underlin$*30
-00100   dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
-00110   dim uaf$*255
-00120 !
-00121   fntop("S:\acsPR\jcRptS1",cap$="User Designed Reports (1)")
-00130   fncno(cno)
-00150 !
-00160   data "JN"
-00170   data "n$"
-00180   data "A$(1)"
-00190   data "a$(2)"
-00200   data "a$(3)"
-00210   data "X6"
-00220   data "X7"
-00230   data "X8"
-00240   data "X9"
-00250   data "cn"
-00260   data "k$"
-00270   data "X12"
-00280   data "X13"
-00290   data "X14"
-00300   data "X15"
-00310   data "X16"
-00320   data "X17"
-00330   data "X18"
-00340   data "X19"
-00350   data "X20"
-00360   data "X21"
-00370   data "X22"
-00380   data "X23"
-00390   data "X24"
-00400   read mat ty$
-00410 ! ___________________________
-00420   rn=fnrx
-00430   underlin$="______________________________"
-00440   cap$="Create Job Cost Report Program"
-00450   rn$=lpad$(str$(rn),2)
-00460 !
-00470   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx",internal,input,keyed 
-00480   read #1,using L490,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey XIT
-00490 L490: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
-00500   close #1: 
-00510 !
-00520   pr newpage
-00530   fnwait(message$="Please wait...",0)
-00540 !
-00550   open #11: "Name=PROC."&session$,display,output ioerr L570
-00560   close #11,free: 
-00570 L570: open #11: "Name=PROC."&session$&",SIZE=0,RecL=255",display,output 
-00580   pr #11: "Clear"
-00590   pr #11: "ProcErr Return"
-00600   pr #11: "Load S:\acsPR\JCRpt-Mod"
-00610   pr #11: "00010 ! Replace S:\acsPR\JCPrnt";str$(rn) !:
-        ! this program is dynamicaly created by S:\acsPR\jcRptS1 and !:
-        ! uses S:\acsPR\JCRpt-Mod as a base"
-00620   pr #11: '00051 RN$="';rn$;'"'
-00630   pf$="19900 pr #255, USING 19910: "
-00640   af$="19910 FORM SKIP 1"
-00650   gpf$="20140 pr #255, USING 20150: "
-00660   gaf$="20150 FORM SKIP 2,""Grand Totals"""
-00670   jpf$="20025 pr #255, USING 20026: "
-00680   jaf$="20026 FORM SKIP 1,""Job Totals"""
-00690   upf$="20000 pr #255,using 20020: "
-00700   uaf$="20020 form skip 0"
-00710   pr #11: "19850 on zdiv goto 25000"
-00720   pr #11: "19851 on uflow goto 25000"
-00730   pr #11: "19852 on oflow goto 25000"
-00740   pr #11: "25000 continue"
-00750   pr #11: "25001 !"
-00760   pr #11: "25010 jn=0"
-00770   pr #11: "25020 cn=0"
-00780   pr #11: "25030 Continue"
-00790   pr #11: "25031 !"
-00800   pr #11: '25050 cn$=""'
-00810   pr #11: "25060 Continue"
-00820   pr #11: "25061 !"
-00830   for j=1 to 20
-00840     if rtrm$(f$(j))="" then goto L920
-00850     for j2=1 to 30 ! Search for Column Within Formula
-00860       if uprc$(f$(j)(j2:j2))="C" then goto L900
-00870     next j2
-00880     pr #11: str$(19850+j*2+1);" c(";str$(j);")=c(";str$(j);")+";f$(j)
-00890     goto L910
-00900 L900: pr #11: str$(19850+j*2+1);" c("&str$(j);")=";f$(j)
-00910 L910: j1=j1+1
-00920 L920: next j
-00930   pr #11: "19895 x6=0"
-00940   pr #11: "19896 x7=0"
-00950   pr #11: "19897 x8=0"
-00960   pr #11: "19898 x9=0"
-00970   pr #11: "19899 if sd = 1 then 19833"
-00980   for j=1 to 20
-00990     if rtrm$(f$(j))="" then goto L1350
-01000     if f$(j)(3:3)>="0" and f$(j)(3:3)<="9" then goto L1060 !:
-            ! Search Category Record
-01010     if f$(j)(1:2)="x1" or f$(j)(1:2)="X1" then !:
-            i$="jn$(1:"&str$(ppr(j))&")"
-01020     if f$(j)(1:2)="x2" or f$(j)(1:2)="X2" then !:
-            i$="n$(1:"&str$(ppr(j))&")"
-01030     if f$(j)(1:2)="x3" or f$(j)(1:2)="X3" then !:
-            i$="a$(1)  (1:"&str$(ppr(j))&")"
-01040     if f$(j)(1:2)="x4" or f$(j)(1:2)="X4" then !:
-            i$="a$(2)  (1:"&str$(ppr(j))&")"
-01050     if f$(j)(1:2)="x5" or f$(j)(1:2)="X5" then !:
-            i$="a$(3)  (1:"&str$(ppr(j))&")"
-01060 L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then !:
-            i$="cn$(7:11)"
-01070     if f$(j)(1:3)="x11" or f$(j)(1:3)="X11" then !:
-            i$="k$(1:"&str$(ppr(j))&")"
-01080     if rtrm$(i$)="" then cn=1 else cn=0
-01090     if rtrm$(i$)="" then i$="c("&str$(j)&")"
-01100     if fc(j)=1 then goto L1170 ! Skip Detail Print
-01110     pf$=rtrm$(pf$)&","&i$ ! pr Statement
-01120     if j=<1 then goto L1150
-01130     if fc(j-1)=1 then goto L1150
-01140     if pp(j)<pp(j-1)+ppr(j-1) then af$=af$&",skip 1"
-01150 L1150: if cn=1 then !:
-            af$=rtrm$(af$)&",POS "&str$(pp(j))&",N "&str$(ppr(j)) !:
-            ! Form Statement
-01160     if cn<>1 then !:
-            af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
-            ! Form Statement
-01170 L1170: if tcs(j)=0 then goto L1210
-01180     i$(1:1)="t"
-01190     gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
-01200     gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
-          ! Form Statement Grand Totals
-01210 L1210: if tcj(j)=0 then goto L1270
-01220     i$(1:1)="s"
-01230     jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
-01240     jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
-          ! Form Statement Job Totals
-01250     upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
-01260     uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
-          ! Underline Form Statement
-01270 L1270: if dp(j)=0 then goto L1340
-01280     if fc(j)=1 then goto L1300
-01290     af$=rtrm$(af$)&"."&str$(dp(j)) ! Add Decimal Points
-01300 L1300: if tcs(j)=0 then goto L1320
-01310     gaf$=rtrm$(gaf$)&"."&str$(dp(j)) !:
-          ! Add Decimal Points-Grand Totals
-01320 L1320: if tcj(j)=0 then goto L1340
-01330     jaf$=rtrm$(jaf$)&"."&str$(dp(j)) ! ADD DECIMAL POINTS-JOB TOTALS
-01340 L1340: i$=" "
-01350 L1350: next j
-01360   pf$(31:31)=" "
-01370   pf$=rtrm$(pf$)&" pageoflow 300"
-01380   pr #11: pf$
-01390   af$(11:11)=" "
-01400   af$=rtrm$(af$)&",skip 0"
-01410   pr #11: af$
-01420   pr #11: '19911 IF FILE$(255)(1:4)<>"PRN:" THEN pr #255:'
-01430   pr #11: "19920 mat t=t+c"
-01440   pr #11: "19930 mat s=s+c"
-01450   pr #11: "19940 mat c=(0)"
-01460   pr #11: "19941 jn$="""""
-01470   pr #11: "19942 n$="""""
-01480   pr #11: "19945 if sd><0 then 19800"
-01490   pr #11: "19950 IF CN$(1:6)=JN1$ and sd=0 then 19833"
-01500   if rtrm$(gpf$(31:255))="" then goto L1560
-01510   gpf$(31:31)=" "
-01520   gaf$=rtrm$(gaf$)&",skip 1"
-01530   pr #11: gpf$
-01540   pr #11: gaf$
-01550   goto L1570
-01560 L1560: pr #11: "20105 goto 390"
-01570 L1570: if rtrm$(jpf$(31:255))="" then goto L1700
-01580   jpf$(31:31)=" "
-01590   jaf$=rtrm$(jaf$)&",skip 1"
-01600   pr #11: jpf$
-01610   pr #11: jaf$
-01620   upf$(30:30)=" "
-01630   uaf$(11:11)=" "
-01640   pr #11: upf$
-01650   uaf$=rtrm$(uaf$)&",skip 0"
-01660   pr #11: uaf$
-01670   pr #11: "20030 mat s=(0)"
-01680   pr #11: "20040 goto 19800"
-01690   goto L1710
-01700 L1700: pr #11: "20000 goto 19800"
-01710 L1710: pr #11: "20100 snd: !"
-01720   pr #11: "20110 pr #255: newpage"
-01730   pr #11: "20120 gosub hdr"
-01740   pr #11: "20160 goto 390"
-01750   if ips=0 then goto L2130
-01760   if ips>9 then goto L1950
-01770   on sc goto L1880,L1790,L1820,L1850 none L1880
-01780 !
-01790 L1790: pr #11: "19814 if ";ty$(ips);">=psc(1) then 19820 else 19800"
-01800   goto L2130
-01810 !
-01820 L1820: pr #11: "19814 if ";ty$(ips);"<=psc(1) then 19820 else 19800"
-01830   goto L2130
-01840 !
-01850 L1850: pr #11: "19814 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19820 else 19800"
-01860   goto L2130
-01870 !
-01880 L1880: pr #11: "19811 for j=1 to 100"
-01890   pr #11: "19814   IF "&ty$(ips)&"= PSC(J) then 19820"
-01900   pr #11: "19813   IF PSC(J)=0 then 19800"
-01910   pr #11: "19815 next j"
-01920   pr #11: "19816 goto 19800"
-01930   goto L2130
-01940 !
-01950 L1950: on sc goto L2060,L1970,L2000,L2030 none L2060
-01960 !
-01970 L1970: pr #11: "19837 if ";ty$(ips);">=psc(1) then 19850 else 19833"
-01980   goto L2130
-01990 !
-02000 L2000: pr #11: "19837 if ";ty$(ips);"<=psc(1) then 19850 else 19833"
-02010   goto L2130
-02020 !
-02030 L2030: pr #11: "19837 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19850 else 19833"
-02040   goto L2130
-02050 !
-02060 L2060: pr #11: "19837 for j=1 to 100"
-02070   pr #11: "19839   IF ";ty$(ips);"= PSC(J) then 19850"
-02080   pr #11: "19838   IF PSC(J)=0 then 19833"
-02090   pr #11: "19840 next j"
-02100   pr #11: "19841 goto 19833"
-02110   goto L2130
-02120 !
-02130 L2130: pr #11: "Free S:\acsPR\jcPrnt"&str$(rn)&".br -n"
-02140   pr #11: "Save S:\acsPR\jcPrnt"&str$(rn)
-02150   pr #11: "run Menu"
-02160   close #11: 
-02170   chain "Proc=Proc."&session$
-02180 !
-02190 ! <Updateable Region: ERTN>
-02200 ERTN: fnerror(program$,err,line,act$,"xit")
-02210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-02220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-02240 ERTN_EXEC_ACT: execute act$ : goto ERTN
-02250 ! /region
-02260 !
-02270 XIT: fnxit
-02280 !
+! Replace S:\acsPR\jcRptS1
+! Create Job Cost Report Program
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim rn$*2,rt$*51,ch$(2)*132,psc(100),cap$*128,message$*40
+	dim f$(20)*50,pp(20),ppr(20),dp(20),fc(20),tcj(20),tcs(20),ty$(24)*8
+	dim a$(20)*32,a(20),underlin$*30
+	dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
+	dim uaf$*255
+ 
+	fnTop("S:\acsPR\jcRptS1",cap$="User Designed Reports (1)")
+	fncno(cno)
+ 
+	data "JN"
+	data "n$"
+	data "A$(1)"
+	data "a$(2)"
+	data "a$(3)"
+	data "X6"
+	data "X7"
+	data "X8"
+	data "X9"
+	data "cn"
+	data "k$"
+	data "X12"
+	data "X13"
+	data "X14"
+	data "X15"
+	data "X16"
+	data "X17"
+	data "X18"
+	data "X19"
+	data "X20"
+	data "X21"
+	data "X22"
+	data "X23"
+	data "X24"
+	read mat ty$
+! ___________________________
+	rn=fnrx
+	underlin$="______________________________"
+	cap$="Create Job Cost Report Program"
+	rn$=lpad$(str$(rn),2)
+ 
+	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx",internal,input,keyed
+	read #1,using L490,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey Xit
+L490: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
+	close #1:
+ 
+	pr newpage
+	fnwait(message$="Please wait...",0)
+ 
+	open #11: "Name=PROC."&session$,display,output ioerr L570
+	close #11,free:
+L570: open #11: "Name=PROC."&session$&",SIZE=0,RecL=255",display,output
+	pr #11: "Clear"
+	pr #11: "ProcErr Return"
+	pr #11: "Load S:\acsPR\JCRpt-Mod"
+	pr #11: "00010 ! Replace S:\acsPR\JCPrnt";str$(rn) : _
+	! this program is dynamicaly created by S:\acsPR\jcRptS1 and : _
+	! uses S:\acsPR\JCRpt-Mod as a base"
+	pr #11: '00051 RN$="';rn$;'"'
+	pf$="19900 pr #255, USING 19910: "
+	af$="19910 FORM SKIP 1"
+	gpf$="20140 pr #255, USING 20150: "
+	gaf$="20150 FORM SKIP 2,""Grand Totals"""
+	jpf$="20025 pr #255, USING 20026: "
+	jaf$="20026 FORM SKIP 1,""Job Totals"""
+	upf$="20000 pr #255,using 20020: "
+	uaf$="20020 form skip 0"
+	pr #11: "19850 on zdiv goto 25000"
+	pr #11: "19851 on uflow goto 25000"
+	pr #11: "19852 on oflow goto 25000"
+	pr #11: "25000 continue"
+	pr #11: "25001 !"
+	pr #11: "25010 jn=0"
+	pr #11: "25020 cn=0"
+	pr #11: "25030 Continue"
+	pr #11: "25031 !"
+	pr #11: '25050 cn$=""'
+	pr #11: "25060 Continue"
+	pr #11: "25061 !"
+	for j=1 to 20
+		if rtrm$(f$(j))="" then goto L920
+		for j2=1 to 30 ! Search for Column Within Formula
+			if uprc$(f$(j)(j2:j2))="C" then goto L900
+		next j2
+		pr #11: str$(19850+j*2+1);" c(";str$(j);")=c(";str$(j);")+";f$(j)
+		goto L910
+L900: pr #11: str$(19850+j*2+1);" c("&str$(j);")=";f$(j)
+L910: j1=j1+1
+L920: next j
+	pr #11: "19895 x6=0"
+	pr #11: "19896 x7=0"
+	pr #11: "19897 x8=0"
+	pr #11: "19898 x9=0"
+	pr #11: "19899 if sd = 1 then 19833"
+	for j=1 to 20
+		if rtrm$(f$(j))="" then goto L1350
+		if f$(j)(3:3)>="0" and f$(j)(3:3)<="9" then goto L1060 : _
+			! Search Category Record
+		if f$(j)(1:2)="x1" or f$(j)(1:2)="X1" then : _
+			i$="jn$(1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x2" or f$(j)(1:2)="X2" then : _
+			i$="n$(1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x3" or f$(j)(1:2)="X3" then : _
+			i$="a$(1)  (1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x4" or f$(j)(1:2)="X4" then : _
+			i$="a$(2)  (1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x5" or f$(j)(1:2)="X5" then : _
+			i$="a$(3)  (1:"&str$(ppr(j))&")"
+L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then : _
+			i$="cn$(7:11)"
+		if f$(j)(1:3)="x11" or f$(j)(1:3)="X11" then : _
+			i$="k$(1:"&str$(ppr(j))&")"
+		if rtrm$(i$)="" then cn=1 else cn=0
+		if rtrm$(i$)="" then i$="c("&str$(j)&")"
+		if fc(j)=1 then goto L1170 ! Skip Detail Print
+		pf$=rtrm$(pf$)&","&i$ ! pr Statement
+		if j=<1 then goto L1150
+		if fc(j-1)=1 then goto L1150
+		if pp(j)<pp(j-1)+ppr(j-1) then af$=af$&",skip 1"
+L1150: if cn=1 then : _
+			af$=rtrm$(af$)&",POS "&str$(pp(j))&",N "&str$(ppr(j)) : _
+			! Form Statement
+		if cn<>1 then : _
+			af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) : _
+			! Form Statement
+L1170: if tcs(j)=0 then goto L1210
+		i$(1:1)="t"
+		gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
+		gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
+		! Form Statement Grand Totals
+L1210: if tcj(j)=0 then goto L1270
+		i$(1:1)="s"
+		jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
+		jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
+		! Form Statement Job Totals
+		upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
+		uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) : _
+		! Underline Form Statement
+L1270: if dp(j)=0 then goto L1340
+		if fc(j)=1 then goto L1300
+		af$=rtrm$(af$)&"."&str$(dp(j)) ! Add Decimal Points
+L1300: if tcs(j)=0 then goto L1320
+		gaf$=rtrm$(gaf$)&"."&str$(dp(j)) : _
+		! Add Decimal Points-Grand Totals
+L1320: if tcj(j)=0 then goto L1340
+		jaf$=rtrm$(jaf$)&"."&str$(dp(j)) ! ADD DECIMAL POINTS-JOB TOTALS
+L1340: i$=" "
+L1350: next j
+	pf$(31:31)=" "
+	pf$=rtrm$(pf$)&" pageoflow 300"
+	pr #11: pf$
+	af$(11:11)=" "
+	af$=rtrm$(af$)&",skip 0"
+	pr #11: af$
+	pr #11: '19911 IF FILE$(255)(1:4)<>"PRN:" THEN pr #255:'
+	pr #11: "19920 mat t=t+c"
+	pr #11: "19930 mat s=s+c"
+	pr #11: "19940 mat c=(0)"
+	pr #11: "19941 jn$="""""
+	pr #11: "19942 n$="""""
+	pr #11: "19945 if sd><0 then 19800"
+	pr #11: "19950 IF CN$(1:6)=JN1$ and sd=0 then 19833"
+	if rtrm$(gpf$(31:255))="" then goto L1560
+	gpf$(31:31)=" "
+	gaf$=rtrm$(gaf$)&",skip 1"
+	pr #11: gpf$
+	pr #11: gaf$
+	goto L1570
+L1560: pr #11: "20105 goto 390"
+L1570: if rtrm$(jpf$(31:255))="" then goto L1700
+	jpf$(31:31)=" "
+	jaf$=rtrm$(jaf$)&",skip 1"
+	pr #11: jpf$
+	pr #11: jaf$
+	upf$(30:30)=" "
+	uaf$(11:11)=" "
+	pr #11: upf$
+	uaf$=rtrm$(uaf$)&",skip 0"
+	pr #11: uaf$
+	pr #11: "20030 mat s=(0)"
+	pr #11: "20040 goto 19800"
+	goto L1710
+L1700: pr #11: "20000 goto 19800"
+L1710: pr #11: "20100 snd: !"
+	pr #11: "20110 pr #255: newpage"
+	pr #11: "20120 gosub hdr"
+	pr #11: "20160 goto 390"
+	if ips=0 then goto L2130
+	if ips>9 then goto L1950
+	on sc goto L1880,L1790,L1820,L1850 none L1880
+ 
+L1790: pr #11: "19814 if ";ty$(ips);">=psc(1) then 19820 else 19800"
+	goto L2130
+ 
+L1820: pr #11: "19814 if ";ty$(ips);"<=psc(1) then 19820 else 19800"
+	goto L2130
+ 
+L1850: pr #11: "19814 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19820 else 19800"
+	goto L2130
+ 
+L1880: pr #11: "19811 for j=1 to 100"
+	pr #11: "19814   IF "&ty$(ips)&"= PSC(J) then 19820"
+	pr #11: "19813   IF PSC(J)=0 then 19800"
+	pr #11: "19815 next j"
+	pr #11: "19816 goto 19800"
+	goto L2130
+ 
+L1950: on sc goto L2060,L1970,L2000,L2030 none L2060
+ 
+L1970: pr #11: "19837 if ";ty$(ips);">=psc(1) then 19850 else 19833"
+	goto L2130
+ 
+L2000: pr #11: "19837 if ";ty$(ips);"<=psc(1) then 19850 else 19833"
+	goto L2130
+ 
+L2030: pr #11: "19837 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19850 else 19833"
+	goto L2130
+ 
+L2060: pr #11: "19837 for j=1 to 100"
+	pr #11: "19839   IF ";ty$(ips);"= PSC(J) then 19850"
+	pr #11: "19838   IF PSC(J)=0 then 19833"
+	pr #11: "19840 next j"
+	pr #11: "19841 goto 19833"
+	goto L2130
+ 
+L2130: pr #11: "Free S:\acsPR\jcPrnt"&str$(rn)&".br -n"
+	pr #11: "Save S:\acsPR\jcPrnt"&str$(rn)
+	pr #11: "run Menu"
+	close #11:
+	chain "Proc=Proc."&session$
+ 
+include: Ertn
+ 
+Xit: fnXit
+ 

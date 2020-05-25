@@ -1,15 +1,15 @@
 ! Replace S:\acsPR\newpr1099 (formerly)
-! r: setup, fntop, open files, on error, etc
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fn1099print,fngethandle,fn1099print_close,fnask_1099_info
+! r: setup, fnTop, open files, on error, etc
+	autoLibrary
 	on error goto Ertn
 !
 	dim vn$*8,nam$*30,empAddr$(3)*30,ss$*11,box(11)
 	dim tcp(32),tdc(10)
-	fntop(program$)
+	fnTop(program$)
 	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! /r
-	if ~fnask_1099_info (seltp,type,min1,beg_date,end_date) then goto XIT
+	if ~fnask_1099_info (seltp,type,min1,beg_date,end_date) then goto Xit
 START: ! r: main loop
 	mat empAddr$=("")
 	read #hEmployee,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,empAddr$(1),empAddr$(2),ss$ eof FINIS
@@ -39,6 +39,6 @@ FINIS: ! r:
 	mat empAddr$=("")
 	mat box=(0)
 	fn1099print_close
-	goto XIT ! /r
-XIT: fnxit
-include: ertn
+	goto Xit ! /r
+Xit: fnXit
+include: Ertn

@@ -1,25 +1,15 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnsave_as_path$,fngethandle,fnreg_close,fnreg_write
-		library 'S:\Core\Library': fnmsgbox,fnEditFile,fnSystemNameFromAbbr$,fnlog
-		library 'S:\Core\Library': fnAcs,fnCmdSet,fnTos,fnLbl,fnTxt,fncomboa
-		library 'S:\Core\Library': fncursys$,fncheckfileversion
-		library 'S:\Core\Library': fnmakesurepathexists
-		library 'S:\Core\Library': fnStatus,fnStatusClose,fnStatusPause,fnCopy,fnindex_sys
-		library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
-		library 'S:\Core\Library': fnRename,fnGetPp
-		library 'S:\Core\Library': fnSrepEnv$
-		library 'S:\Core\Library' : fnProgramDataDir$
+		autoLibrary
 		dim company_import_path$*256
 		dim resp$(5)*256
 		dim ml$(0)*1024
 		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 	end if
 fnend
-ignore: continue
 def library fnFileSaveAs(save_what$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnFileSaveAs=fn_FileSaveAs(save_what$)
 fnend
 def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,disableCopyToLocal)
@@ -188,7 +178,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 	fn_analyze_7zip_compresslog=~failure
 fnend 
 def library fnOpenPartial
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnOpenPartial=fn_openPartial
 fnend
 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
@@ -469,7 +459,7 @@ def fn_ub_copy_extras(company_import_path$*256,company_import_extension$,destina
 	fn_ub_copy_extras=uceReturn
 fnend 
 def library fnAutomatedSavePoint(fileNameAddition$*128)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAutomatedSavePoint=fn_automatedSavePoint(fileNameAddition$)
 fnend
 def fn_automatedSavePoint(fileNameAddition$*128)

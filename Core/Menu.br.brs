@@ -73,7 +73,7 @@ def fn_setup_once
 	fndat(temp$,2) ! set default report heading date to today
 	! fnlog('Menu started (Session '&session$&'), wbversion='&wbversion$)
 
-	fntop(program$)
+	fnTop(program$)
 
 	fnreg_read('Last Update',last_update$)
 	if last_update$='' then last_update$='(never updated)'
@@ -455,7 +455,7 @@ def fn_callHamsterFio(tmpCap$*128)
 	else
 		tmpCursys$=env$('cursys')
 	end if
-	fntop('S:\'&fnSystemNameFromAbbr$&'\'&tmpCap$&'.br',tmpCap$)
+	fnTop('S:\'&fnSystemNameFromAbbr$&'\'&tmpCap$&'.br',tmpCap$)
 	fnHamsterFio(tmpCursys$&' '&tmpCap$)
 	fnXit
 fnend
@@ -785,9 +785,9 @@ def fn_display_menu
 		fn_dm_add(' Open &Report Cache','%report_cache_folder_current%\')
 		! end if
 		fn_dm_add(' -')
-		fn_dm_add(' E&xit'&chr$(9)&'Alt+F4','Exit')
+		fn_dm_add(' E&Xit'&chr$(9)&'Alt+F4','Exit')
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			fn_dm_add(' E&xit and Logout','Exit and Logout')
+			fn_dm_add(' E&Xit and Logout','Exit and Logout')
 		end if
 		if udim(mat system_name$)>1 then
 			fn_dm_add('&System',str$(x+=1))

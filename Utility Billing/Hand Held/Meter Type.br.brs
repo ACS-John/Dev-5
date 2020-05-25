@@ -1,6 +1,6 @@
 autoLibrary
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 dim device$*256
 device$=fnhand_held_device$
 if device$<>'Itron FC300' and device$(1:6)<>'[Ask]' and device$(1:6)<>'Aclara'  and device$<>'Badger Beacon' and device$<>'Neptune (Equinox v4)' then 
@@ -11,5 +11,5 @@ if device$<>'Itron FC300' and device$(1:6)<>'[Ask]' and device$(1:6)<>'Aclara'  
 end if 
 fnHamsterFio("U4 Meter Type")
 goto Xit
-Xit: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

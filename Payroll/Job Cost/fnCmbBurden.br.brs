@@ -21,8 +21,8 @@
 		end if
 		fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\burden.h[cno]",1,8,9,30,if$,1+addall,0,"Select from the list of personnel burden records. To add a personnel burden record, take the Add option.",container)
 		indexfile$=""
-		goto XIT
-	XIT: !
+		goto Xit
+	Xit: !
 fnend
-include: ertn
+include: Ertn
 

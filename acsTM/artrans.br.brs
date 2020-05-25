@@ -1,30 +1,29 @@
-library 'S:\Core\Library': fntop,fnxit
-library 'S:\Core\Library': fnH2Init,fnH2AddText,fnHamster2AddCombo,fnH2AddComboF,fnH2AddComboA,fnHamster2
-
+autoLibrary
+ 
 on error goto Ertn
-
-fntop(program$)
+ 
+fnTop(program$)
 fn_setup_hamster
 gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 fnHamster2("ARTrans")
 gosub CLOSE_FILE
-goto XIT
-
+goto Xit
+ 
 OPEN_FILE: ! r:
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Version=0,Use,RecL=60,Shr",internal,outIn,relative 
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Version=0,Use,RecL=60,Shr",internal,outIn,relative
 return ! /r
-
-CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-
-XIT: fnxit
-
+ 
+CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
+ 
+Xit: fnXit
+ 
 def fn_setup_hamster
 	mask_pointtwo=32 : mask_number=30
 	mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 	textlen_mmddyy=8 : textlen_ccyymmdd=10
 	storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-
+ 
 	dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 	mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 	mask_pointtwo=32 : mask_number=30
@@ -45,4 +44,4 @@ def fn_setup_hamster
 	fnH2AddText("Next Trans Addr",5,'PD',3)
 	fnH2AddComboF(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 fnend
-include: ertn
+include: Ertn

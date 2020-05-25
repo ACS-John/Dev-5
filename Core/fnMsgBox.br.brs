@@ -8,7 +8,7 @@ def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
 	!   else
 	!     fn_ace_messagebox(mat mg$,response$, cap$,mt)
 	!   end if
-	XIT: !
+	Xit: !
 fnend
 IGNORE: continue
 def fn_br_messagebox(&mat mg$, &response$; cap$*128, mt)
@@ -124,4 +124,4 @@ def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 	if ckey=7 then response$="No"
 fnend
 
-include: ertn
+include: Ertn

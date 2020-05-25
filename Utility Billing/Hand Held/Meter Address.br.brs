@@ -1,15 +1,12 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 fnHamsterFio('UB Meter Address')
-XIT: !
-fnxit
+Xit: !
+fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fngethandle,fnerror,fnindex_it,fnStatusClose,fnStatus,fnHamsterFio
-		library 'S:\Core\Library': fnAddOneC,fnAddOneN,fnCountMatchesN,fnArrayMax
-		library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile,fnBuildKey$
-		library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read,fnreg_write
+		autoLibrary
 		dim form$(0)*256
 		dim maData$(0)*30,maDataN(0)
 		dim mg$(0)*128
@@ -24,7 +21,7 @@ def fn_InitialializeMeterAddress
 	hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, imaInputOnly,2)
 	if imaNeedsInitialization then
 		fnStatus('Initializing UB Meter Address table...')
-		fnCloseFile(hMeterAddressLocationID,'UB Meter Address') 
+		fnCloseFile(hMeterAddressLocationID,'UB Meter Address')
 		fnindex_it('[Q]\UBmstr\MeterAddress.h[cno]','[Q]\UBmstr\MeterAddress_Idx2.h[cno]', '12 30u')
 		hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 0,2)
 		fn_newLocationID( 1)
@@ -51,7 +48,7 @@ def fn_imaAdd(hMeterAddressName,imaMeterAddress$*30) ! add the record if it does
 	 fn_imaAdd=1
 	 IaXit: !
 fnend
-
+ 
 def fn_newLocationID(; initialize)
 	if initialize then
 		nliLastLocation=0
@@ -89,6 +86,6 @@ def fn_askAddDuplicate$(meterAddressBefore$*30,meterAddressAfter$*80)
 	fnmsgbox(mat mg$, aaResponse$, '', 4) ! mtype 4 is yes/no
 	fn_askAddDuplicate$=aaResponse$
 fnend
-
+ 
 include: fn_open
-include: ertn
+include: Ertn

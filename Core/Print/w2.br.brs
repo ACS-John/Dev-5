@@ -23,7 +23,7 @@ end
 def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,mat w2destinationOpt$,&enableW3$,&enableBackground$,&w2Copy,&w2Copy$,&exportFormatID,&w2laser_output_filename$,&pn1,&dc1,&topmargin,&bottom,&state$,enableAskCLocality,&cLocality$)
 	if ~awi_setup then ! r:
 		awi_setup=1
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		! r: constants
 		dim resp$(128)*256
 		dim optW2Copy$(6)*68
@@ -286,7 +286,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		! /r
 		if w2Copy$=optW2Copy$(1) and enableBackground$='True' then let fn_FormCopyAwithBackgroundWarn
 	end if 
-	XIT: !
+	Xit: !
 	fnask_w2_info=awiReturn
 fnend
 def fn_setup
@@ -334,7 +334,7 @@ def fn_ask_margins
 	end if
 fnend
 def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! passed in: fullname$
 	! gathered: nameFormat$, mat optNameFormat$
 	! returns: nameFirst$,nameMiddle$,nameLast$
@@ -411,7 +411,7 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 	! pr nameFirst$,nameMiddle$,nameLast$
 fnend
 def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; w2Box14Amt,specialform2018)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! r: variable definations
 	! topmargin       how far down the page (mm) is the top of W-2
 	! maskSsn         if 1 than turn all but the last 4 of the SSN into *s
@@ -539,7 +539,7 @@ def fn_line(lineNumber)
 	fn_line=lReturn
 fnend
 def library fnFormCopyAwithBackgroundWarn
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnFormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
 fnend
 def fn_FormCopyAwithBackgroundWarn
@@ -563,4 +563,4 @@ def fn_FormCopyAwithBackgroundWarn
 		fnmsgbox(mat fcawbwText$,response$,'Notification')
 	end if
 fnend
-include: ertn
+include: Ertn

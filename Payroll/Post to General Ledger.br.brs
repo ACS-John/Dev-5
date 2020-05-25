@@ -1,18 +1,9 @@
 ! formerly S:\acsPR\newprPostGL
 ! Payroll Post to General Ledger
-! r: setup library, on err, dims, fntop, etc
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnqgl,fnrgl$,fnagl$,fnChk
-	library 'S:\Core\Library': fnPayPeriodEndingDate,fnDedNames
-	library 'S:\Core\Library': fnclient_has
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnStatusClose
-	library 'S:\Core\Library': fnIndex_it
-	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-	library 'S:\Core\Library': fnchain
+! r: setup library, on err, dims, fnTop, etc
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3),oldtgl(3)
 	dim tr(7),tr$*12,td$*30,dat$*20,a(100),i$*21,glwk$*30,desc$*50
 	dim tgl$*12,oldtgl$*12
@@ -20,18 +11,18 @@
 	dim message$*40,msgline$(2)*60,ml$(4)*80,resp$(10)*60
 	dim fullname$(20)*20,abbrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),gl$(20)*12
-
-	fntop(program$)
+ 
+	fnTop(program$)
 	fnIndex_it('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
 	fnStatusClose
 	fnopenprn
-
+ 
 	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",internal,input,relative ioerr L260
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	if glb=2 then let fn_askaccrue
 	L260: !
-
+ 
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
 	d1=fnPayPeriodEndingDate
@@ -41,7 +32,7 @@
 		ml$(2)="General Ledger if you have the Checkbook system."
 		ml$(3)="Click OK to continue or Cancel to stop."
 		fnmsgbox(mat ml$,resp$,'',1)
-		if resp$="OK" then goto ASK_DATE else goto XIT
+		if resp$="OK" then goto ASK_DATE else goto Xit
 	end if
 goto ASK_DATE ! /r
 ASK_DATE: !
@@ -57,9 +48,9 @@ ASK_DATE: !
 	fnChk(3,28,"Print Report Only:",1)
 	resp$(respc+=1)="False"
 	fnCmdKey("&Next",1,1,0,"Proceed with posting." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask payroll date
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask payroll date
+	if ckey=5 then goto Xit
 	dat1=d1=val(resp$(1))
 	dat2=d2=val(resp$(2))
 	if resp$(3)="True" then skipposting=1
@@ -162,7 +153,7 @@ L1400: ! r:
 	if ~skipposting=1 and glinstal and glb<>2 then
 		fnchain("S:\acsGL\ACGLMRGE")
 	end if
-goto XIT ! /r
+goto Xit ! /r
 PgOf: !  r:
 	pr #255: newpage
 	fn_pr_hdr
@@ -238,9 +229,9 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	fnqgl(1,mypos+3,0,2,pas)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask clearing
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask clearing
+	if ckey=5 then goto Xit
 	key$=k$=bankgl$=fnagl$(resp$(1))
 	ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
 	pr #255,using L1700: 0," ",mat ttgl,totaldue
@@ -283,9 +274,9 @@ def fn_finalscrctrlbookmulitfunds
 	fnqgl(1,mypos+3,0,2,pas)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask clearing
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask clearing
+	if ckey=5 then goto Xit
 	key$=fnagl$(resp$(1))
 	ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
 	pr #255,using L980: 0," ",mat ttgl,totalrec
@@ -310,7 +301,7 @@ def fn_askaccrue
 	fnmsgbox(mat msgline$,resp$,'',4)
 	accrue$=resp$
 	if accrue$<>"Yes" then goto ASKACCRUE_XIT
-
+ 
 	ACCRUAL: ! r:
 	fnTos(sn$="PostGl5")
 	respc=0: mypos=50
@@ -327,9 +318,9 @@ def fn_askaccrue
 	fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
 	resp$(4)=str$(d2)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask accrual info
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask accrual info
+	if ckey=5 then goto Xit
 	day=val(resp$(1)) ! days in pay period
 	dayslm=val(resp$(2)) ! days last month
 	key$=fnagl$(resp$(3))
@@ -366,5 +357,5 @@ def fn_askaccrue
 	L2860: form pos 13,c 50
 	ASKACCRUE_XIT: ! ! /r
 fnend
-XIT: fnxit
-include: ertn no
+Xit: fnXit
+include: Ertn no

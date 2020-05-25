@@ -1,4 +1,4 @@
-library 'S:\Core\Library': fnOpenFile,fnchain
+autoLibrary
 dim form$(0)*128
 dim location$(0)*128
 dim locationN(0)

@@ -1,5 +1,5 @@
 	fn_setup
-	fntop(program$,cap$="Check Balance Breakdowns 2")
+	fnTop(program$,"Check Balance Breakdowns 2")
 MENU1: ! r:
 	fnTos(sn$="bldtrans") : chk_align=0
 	fnLbl(1,1,"Scan:")
@@ -30,20 +30,14 @@ MENU1: ! r:
 		if do_move_credit then let fn_moveCredit(do_move_credit)
 		if do_apply_credit then let fn_applyCreditFromOther(do_apply_credit)
 	end if
-goto XIT ! /r
-XIT: fnxit 
-ignore: continue
+goto Xit ! /r
+Xit: fnXit 
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fngethandle,fnStatus,fnget_services
-		library 'S:\Core\Library': fnerror,fntop,fnxit
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnAcs,fnChk,fnCmdSet,fnLbl,fnTos
-		library 'S:\Core\Library': fnservice_other
+		autoLibrary
 		on error goto Ertn
-		!
-		dim cap$*128
+
 		dim serviceName$(10)*20,srv$(10)*2
 		fnget_services(mat serviceName$,mat srv$)
 	end if 
@@ -238,4 +232,4 @@ def fn_applyCreditFromOther(do_apply_credit)
 	ACFO_CUSTOMER_EOF: ! 
 	close #h_customer: 
 fnend 
-include: ertn
+include: Ertn

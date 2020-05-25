@@ -1,5 +1,5 @@
-library 'S:\Core\Library': fntop,fnxit, fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs2,fncombof,fnFra
-
+autoLibrary
+ 
 fnTos
 respc=0
 fnFra(1,1,6,87,"Check"," ")

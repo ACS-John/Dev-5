@@ -1,22 +1,9 @@
 ! formerly S:\acsGL\BalanceSheet
 ! Balance Sheet - Standard 8.5x11
 ! r: setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnprocess
-	library 'S:\Core\Library': fnpedat$
-	library 'S:\Core\Library': fnpriorcd
-	library 'S:\Core\Library': fnps
-	library 'S:\Core\Library': fnfscode
-	library 'S:\Core\Library': fnUseDeptNo
-	library 'S:\Core\Library': fnGlAskFormatPriorCdPeriod
-	library 'S:\Core\Library': fnpglen
-	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
-	library 'S:\Core\Library': fnactpd,fnactpd$
-	library 'S:\Core\Library': fnindex_it
-	library 'S:\Core\Library': fngethandle
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim b$*3
 	dim a$(8)*30
 	dim oldtrans$*16
@@ -25,15 +12,15 @@
 	dim foot$*132
 	dim underlin$*14
 ! /r
-	fntop(program$)
+	fnTop(program$)
 	actpd$=fnactpd$
 	actpd=fnactpd
 	fnfscode(actpd)
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fnfscode
 	fnpriorcd
-
+ 
 	if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 ! /r
 Screen1: ! r:
@@ -45,20 +32,20 @@ Screen1: ! r:
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 goto GetStarted ! /r
 GetStarted: ! r:
 	if fnps=2 then
 		mp1=66
 		exe 'con sub [FinancialStatementCode] C'
-		! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed
+		! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
 		fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","66 3")
 	else
 		exe 'con sub [FinancialStatementCode] B'
 		mp1=63
-		! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed
+		! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
 		fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","63 3")
 	end if
 	dim fsN(0),fs$(0)*128
@@ -69,9 +56,9 @@ GetStarted: ! r:
 	reportHeading1$=env$('program_caption')
 	do
 		READ_TOP: !
-
+ 
 		read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis
-
+ 
 		if ltrm$(fs$(fsd_number))<>"" and ltrm$(fs$(fsd_number))<>"0" then
 			if costcntr=0 or costcntr=fsN(fsd_costCenterCode) then
 				if fs$(fsd_entryType)<>"S" and fs$(fsd_entryType)<>"F" and fs$(fsd_entryType)<>"R" and heading=0 then
@@ -108,7 +95,7 @@ GetStarted: ! r:
 		end if
 	loop
 ! /r EoF (above) goes to Finis
-
+ 
 def fn_teRS(mat fs$,mat fsN,&reportHeadingX$,foot$*132,tabnote)
 	reportHeadingX$=fs$(fsd_description)
 	fn_footer(foot$,tabnote,mat fsN)
@@ -122,7 +109,7 @@ def fn_teFootnote(mat fs$,mat fsN,&foot$,&tabnote)
 		foot$=rtrm$(foot$)&fs$(fsd_description)
 	end if
 fnend
-
+ 
 def fn_teHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpStartPos)
 	pr #255,using L470: fs$(fsd_description)
 	tmpStartPos=fsN(fsd_startPos)
@@ -131,15 +118,15 @@ def fn_teHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpStartPos)
 	fn_setAccum(mat fsN,mat accum)
 fnend
 def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&total,&cb; ___,dollar$*1,dollar,sp2,tmpStartPos)
-
+ 
 	! local to TeDE only, but retained values: br
 	if notrans=1 then goto L660
 	if br>=val(fs$(fsd_number)) and val(fs$(fsd_number))><0 then goto L610
 	ReadGlMasterAmounts: ! read general ledger master file for amounts
 	dim by(13)
 	dim bp(13)
-
-
+ 
+ 
 	read #hGl,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof EoGlMasterAmounts
 	if br=0 then goto ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
@@ -154,13 +141,13 @@ def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&tota
 	else if br>val(fs$(fsd_number)) then
 		goto L660
 	end if
-
+ 
 	EoGlMasterAmounts: !
 	notrans=1
-
+ 
 	L660: !
 	if fs$(fsd_entryType)="E" then total=-accum(fsN(fsd_accumulatorToPrint))
-
+ 
 	if fsN(fsd_clearAccumulator1)<>9 then accum(1)+=total
 	if fsN(fsd_clearAccumulator2)<>9 then accum(2)+=total
 	if fsN(fsd_clearAccumulator3)<>9 then accum(3)+=total
@@ -170,7 +157,7 @@ def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&tota
 	if fsN(fsd_clearAccumulator7)<>9 then accum(7)+=total
 	if fsN(fsd_clearAccumulator8)<>9 then accum(8)+=total
 	if fsN(fsd_clearAccumulator9)<>9 then accum(9)+=total
-
+ 
 	if fsN(fsd_reverseSign)=1 then total=-total
 	if fsN(fsd_dollarSign)=1 then dollar$="$" else dollar$=" "
 	dollar=24+14*fsN(fsd_column) ! If CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
@@ -304,7 +291,7 @@ Finis: ! r:
 	fncloseprn
 	close #hGl: ioerr ignore
 	close #hFsD: ioerr ignore
-goto XIT ! /r
-XIT: fnxit
-include: ertn
+goto Xit ! /r
+Xit: fnXit
+include: Ertn
 include: fn_open

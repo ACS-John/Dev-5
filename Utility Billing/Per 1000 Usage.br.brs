@@ -1,19 +1,13 @@
 ! formerly S:\acsUB\Per1000
 ! r: setup
-	library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnTos
-	library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnLastBillingDate,fncomboa,fnCmdSet
-	library 'S:\Core\Library': fnget_services,fncreg_read,fncreg_write
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnGetServiceCodesMetered
-	library 'S:\Core\Library': fnCustomerData$
-	library 'S:\Core\Library': fnAddOneC,fnAddOneN
+	autoLibrary
 	on error goto Ertn
-	! 
+	!
 	dim range(16),cust(16)
 	dim resp$(20)*40
 	dim serviceName$(10)*20
-	! 
-	fntop(program$)
+	!
+	fnTop(program$)
 	fnLastBillingDate(d1)
 	!
 	fnget_services(mat serviceName$,mat serviceCode$)
@@ -67,7 +61,7 @@ fnCmdSet(3)
 fnAcs(sn$,win,mat resp$,ck)
 ! /r
 if ck=5 then
-	goto XIT
+	goto Xit
 else
 	! r: move into local variables   and   save entries for next time
 	d1=val(resp$(1))
@@ -85,8 +79,8 @@ else
 	nex rangeItem
 	! /r
 end if
-! return  ! /r 
-
+! return  ! /r
+ 
 ! r: main loop
 on pageoflow goto PGOF
 fnopenprn
@@ -107,8 +101,8 @@ do
 				usage=tranN(trans_s3use)
 			else if serviceWhich=4 then
 				usage=tranN(trans_s4use)
-			else 
-				pr 'unhandeled serviceWhich=';serviceWhich 
+			else
+				pr 'unhandeled serviceWhich=';serviceWhich
 				pause
 			end if
 			fn_usageChartAccum(usage,mat range,mat cust,mat over)
@@ -121,8 +115,8 @@ Finis: ! r:
 	fn_overageListPrint(mat over,range(udim(mat range)))
 	close #hTran2: ioerr ignore
 	fncloseprn
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 def fn_usageChartAccum(usage,mat range,mat cust,mat over)
 	if usage=>range(udim(mat range)) then
 		cust(udim(mat range))+=1

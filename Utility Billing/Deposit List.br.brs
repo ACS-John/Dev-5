@@ -1,12 +1,7 @@
 ! formerly S:\acsUB\UBCustDp
 ! -- Customer Deposit List
 ! r: setup stuff
-	library 'S:\Core\Library': fnAcs2,fnTos,fnTxt,fnLbl,fnCmdSet,fntop,fnChk,fnOpt,fncomboa
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fndat
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fnget_services
-	library 'S:\Core\Library': fncreg_read,fncreg_write
+	autoLibrary
 	on error goto Ertn
 	dim z$*10
 	dim e$(2)*30
@@ -31,7 +26,7 @@
 	filter_option$(5)="3 - Active / but Do Not Bill"
 	filter_option$(6)="4 - Finaled / but Not Billed"
 	
-	fntop(program$)
+	fnTop(program$)
 	fnget_services(mat serviceName$ )
 	for j=1 to 4
 		serviceName$(j)=lpad$(rtrm$(serviceName$(j)),16)
@@ -72,14 +67,14 @@
 ! /r
 fnopenprn
 gosub Header
-if seq=1 then 
+if seq=1 then
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed  ! name sequence
-else 
+else
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! route sequence
-end if 
+end if
 F_CUSTOMER: form pos 1,c 10,2*c 30,pos 157,11*pd 4.2,4*pd 4,pos 1741,n 2,n 7,pos 1821,n 1
 do ! r: main loop
-	CUSTOMER_READ: ! 
+	CUSTOMER_READ: !
 	holdroute=route
 	read #1,using F_CUSTOMER: z$,mat e$,mat b_,mat c,route,sequence,final_billing_code eof PrintGrandTotals
 	if c(3)=1 or c(3)=2 then c(3)=0 ! if deposit date previously used for final billing code, set it to zero
@@ -95,18 +90,18 @@ do ! r: main loop
 			if final_billing_code<>3 then goto CUSTOMER_READ
 		else if filter_choice=6 then ! 4 - Finaled / but Not Billed
 			if final_billing_code<>4 then goto CUSTOMER_READ
-		end if 
-	end if 
+		end if
+	end if
 	mat totalb=totalb+b_
 	if seq=2 and subtotal$="True" then ! consider subtotals
 		if holdroute>0 and holdroute<>route then gosub PrintSubTotals
-	end if 
+	end if
 	gosub PrintDetails
 loop ! /r
 PrintGrandTotals: ! r:
 	pr #255: "{\b Totals:}"
 	for j=1 to 4
-		if trim$(serviceName$(j))<>"" then 
+		if trim$(serviceName$(j))<>"" then
 			pr #255,using F_TOTALS: serviceName$(j),r(j)
 		end if
 		F_TOTALS: form pos 7,c 30,n 10.2
@@ -114,7 +109,7 @@ PrintGrandTotals: ! r:
 	close #1: ioerr ignore
 	fncloseprn
 goto Xit ! /r
-Xit: fnxit
+Xit: fnXit
 Header: ! r:
 	p2=p2+1
 	lnpg=0
@@ -142,7 +137,7 @@ Header: ! r:
 		x=pos(trim$(serviceName$(j))," ",1)
 		if x=0 then x=len(serviceName$(j))
 		services$(jp)=trim$(serviceName$(j))(1:x)
-		L730: ! 
+		L730: !
 	next j
 	pr #255,using 'form pos 62,4*cc 18': mat services$
 	pr #255,using 'form pos 60,c 80': date_amount$
@@ -161,7 +156,7 @@ PrintDetails: ! r:
 		r(j)=r(j)+b_(j+7)
 		s(j)=s(j)+b_(j+7)
 		deposit$(jp)=cnvrt$("pic(zzz/zz/zz)",depdate(jp))&" "&cnvrt$("nz 8.2",amount(jp))
-		L930: ! 
+		L930: !
 	next j
 	mat deposit$(jp)
 	if sum(amount) then

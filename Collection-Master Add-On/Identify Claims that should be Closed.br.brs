@@ -1,7 +1,7 @@
 on error goto Ertn
 fn_setup
 ! fnTop(program$)
-fntop(program$,'',1)
+fnTop(program$,'',1)
 ! r: Set Defaults and Filters
 	mat forwarderFilter(0)
 	fnAddOneN(mat forwarderFilter,4033)
@@ -34,7 +34,7 @@ fntop(program$,'',1)
 	forwarderFilter$=resp$(1)
 	fnrange_to_array(forwarderFilter$,mat forwarderFilter)
 	
-	fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
+	fn_sel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
 	if fkey=93 or fkey=99 then goto Xit
 	
 ! /r

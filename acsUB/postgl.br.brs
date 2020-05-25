@@ -1,13 +1,13 @@
 ! Replace S:\acsUB\postgl
 ! Company Information File
 !
-	library 'S:\Core\Library': fntop,fnxit,fnchain,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnqgl25,fnrgl$,fncomboa,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fnFra,fnOpt,fnCmdSet,fndat,fnopenprn,fncloseprn,fnflexinit1,fnflexadd1,fnqgl,fnget_services
+	autoLibrary
 	on error goto Ertn
 	dim cap$*128,resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
 	dim dat$*20,amount(10,3),tg(10),totaltg(10),heading$*130,dollar(3)
 	dim msgline$(3)*80,glwk$*256,option2$(10)*20,service$*20,gl$(3)*12
 	dim item$(6)*20,service$(10)*20,a(7)
-	fntop(program$,cap$="Post General Ledger")
+	fnTop(program$,cap$="Post General Ledger")
 	fndat(dat$,1)
 	fnget_services(mat serviceName$)
 	x=0
@@ -18,20 +18,20 @@
 		serviceName$(j)=trim$(serviceName$(j)(1:8))&":"
 	next j
 	option2$(x)
-	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed 
-	open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed 
+	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed
+	open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed
 	glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
 	open #14: "Name="&glwk$&",Replace,RecL=104",internal,output ioerr ignore
 	if exists("[Q]\UBmstr\glinfo.h[cno]")=0 then goto L270 else goto L290
-L270: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed 
-	close #15: 
-L290: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed 
+L270: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed
+	close #15:
+L290: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed
 !
 	fnstyp(14)
 	!  styp=11 for jobcost; styp=14 for regular payroll
 	goto SCREEN1
 !
-SCREEN2: ! 
+SCREEN2: !
 	respc=x=0
 	fnTos(sn$="Postgl-2")
 	mylen=10: mypos=mylen+3 : right=1 : respc=0
@@ -52,7 +52,7 @@ SCREEN2: !
 	fnCmdKey("&Save",1,1,0,"Saves any changes and returns to menu.")
 	fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto L580
 	if ckey=3 then chain "S:\acsUB\chartofaccounts"
 	for j=1 to 30
@@ -60,11 +60,11 @@ SCREEN2: !
 	next j
 L580: rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",key=key$: service$,ratecode,gl$(1),gl$(2),gl$(3),mat amount
 	goto SCREEN1
-SCREEN1: ! 
+SCREEN1: !
 	fnTos(sn$='Postub2')
 	mylen=36 : mypos=mylen+2
 	fnLbl(1,1,"Report Heading Date:",mylen,1,0)
-	fnTxt(1,mypos,20) 
+	fnTxt(1,mypos,20)
 	resp$(1)=dat$
 	fnLbl(2,1,"Starting Date (blank for all):",mylen,1)
 	fnTxt(2,mypos,10,0,1,"3",0,"Enter the first day of the period being posted.")
@@ -79,15 +79,15 @@ SCREEN1: !
 	fnChk(6,30,"Show Details:",1,0)
 	if showdetails=1 then resp$(6)="True" else resp$(6)="False"
 	fnFra(8,1,2,60,"Method of Posting","You can either post on a Cash basis which only effects Cash and Revenues or you can post on an accrual method also effecting receivables.")
-	fnOpt(1,3,"Cash Basis",0,1) 
+	fnOpt(1,3,"Cash Basis",0,1)
 	if basis=0 or basis=1 then resp$(7)="True"
-	fnOpt(2,3,"Accrual Method",0,1) 
+	fnOpt(2,3,"Accrual Method",0,1)
 	if basis=2 then resp$(8)="False"
 	fnCmdKey("&Post",1,1,0,"Begins the posting process.")
 	fnCmdKey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	dat$=resp$(1) : ld1=val(resp$(2)) : hd1=val(resp$(3))
 	postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
 	if resp$(4)="True" then gli=1 else gli=0
@@ -95,12 +95,12 @@ SCREEN1: !
 	if resp$(6)="True" then showdetails=1
 	basis=0 : if resp$(7)="True" then basis=cash=1
 	if resp$(8)="True" then basis=accrual=2
-	if ld1>hd1 and ld1>0 and hd1>0 then 
-		mat msgline$(1): msgline$(1)="Ending Date Before Starting Date!" 
+	if ld1>hd1 and ld1>0 and hd1>0 then
+		mat msgline$(1): msgline$(1)="Ending Date Before Starting Date!"
 		fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
 	end if
-	if basis=0 then 
-		mat msgline$(1): msgline$(1)="You must enter the basis for accounting!" 
+	if basis=0 then
+		mat msgline$(1): msgline$(1)="You must enter the basis for accounting!"
 		fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
 	end if
 	if ckey=2 then goto GL_INFORMATION
@@ -108,33 +108,33 @@ SCREEN1: !
 	gosub HDR
 	goto ACCUMULATE_TOTALS
 !
-	restore #15: 
+	restore #15:
 L940: read #15,using "form pos 60,3*n 10.2": mat dollar eof ACCUMULATE_TOTALS ! clear totals on end of each allocation record
 	mat dollar=(0)
 	rewrite #15,using "form pos 60,3*n 10.2": mat dollar
 	goto L940
-ACCUMULATE_TOTALS: ! 
+ACCUMULATE_TOTALS: !
 L990: read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof CREATE_ENTRIES
 	if tdate<ld1 or tdate>hd1 then goto L990
 	read #1,using 'form pos 143,7*pd 2,pos 1806,3*n 2',key=p$: mat a,extra11,extra12,extra13 nokey L1030
 	goto L1040
-L1030: mat msgline$(2): msgline$(1)="You have tranactions on customer # "&p$ 
-	msgline$(2)="but the customer record no longer exists. "&p$ 
+L1030: mat msgline$(2): msgline$(1)="You have tranactions on customer # "&p$
+	msgline$(2)="but the customer record no longer exists. "&p$
 	fnmsgbox(mat msgline$,resp$,cap$,48)
 L1040: ! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
 	for j =1 to 10
 		if basis=cash and tcode=1 or tcde=2 or tcode=4 or tcode=5 then goto L990 ! dont record anything but collections on cash basis.
-		if basis=cash and tcode=3 then 
-			amount(j,1)=amount(j,1)+tg(j) 
-			amount(j,3)=amount(j,3)-tg(j) 
-			glcode=13 
-			goto L1130 
+		if basis=cash and tcode=3 then
+			amount(j,1)=amount(j,1)+tg(j)
+			amount(j,3)=amount(j,3)-tg(j)
+			glcode=13
+			goto L1130
 			! debit bank and credit revenues on collections
 		end if
 		if basis=accrual and tcode=1 then
-			amount(j,2)=amount(j,2)+tg(j) 
-			amount(j,3)=amount(j,3)-tg(j) 
-			glcode=23 
+			amount(j,2)=amount(j,2)+tg(j)
+			amount(j,3)=amount(j,3)-tg(j)
+			glcode=23
 			! record sales as debit to receivables and credit to  sales
 		end if
 		if basis=accrual and tcode=2 then
@@ -160,7 +160,7 @@ L1040: ! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
 L1130: next j
 	if showdetails=1 then pr #255,using "form pos 1,c 10,x 1,pic(zzzz/zz/zz),n 2,10 * n 9.2": p$,tdate,tcode,mat tg pageoflow PAGE_OVER_FLOW
 	goto L990
-CREATE_ENTRIES: ! 
+CREATE_ENTRIES: !
 	for j=1 to 10
 		if j=1 then ratecode=a(1)
 		if j=2 then ratecode=a(2)
@@ -194,16 +194,16 @@ L1460: next j
 	pr #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
 	fncloseprn
 	if gli=1 then let fnchain("S:\acsGL\acglMrge")
-XIT: fnxit
+Xit: fnXit
 HDR: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 	pr #255: "\qc {\f181 \fs24 \b UB Posting Recap}"
 	pr #255: "\qc {\f181 \fs24 \b "&dat$&"}"
-	if ld1<>0 and hd1<>0 then 
+	if ld1<>0 and hd1<>0 then
 		pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",ld1)&" to "&cnvrt$("pic(zzzz/zz/zz)",hd1))&"}"
 	end if
 	pr #255,using 'Form POS 1,C 20,POS 110,C 12': "\ql","Page "&str$(p2+=1)
-	pr #255: 
+	pr #255:
 	heading$="Account      Date     Cd"
 	for h=1 to 10
 		heading$=heading$&lpad$(serviceName$(h)(1:19),9)
@@ -215,64 +215,64 @@ return ! /r
 PAGE_OVER_FLOW: ! r:
 	pr #255: newpage
 gosub HDR ! /r
-	continue 
+	continue
 !
-GL_INFORMATION: ! 
-	fnTos(sn$="Breakdown") 
+GL_INFORMATION: !
+	fnTos(sn$="Breakdown")
 	respc=0
-	mat chdr$(6) : mat cmask$(6) : mat item$(6) 
-	chdr$(1)='Rec' 
-	chdr$(2)='Service Name' : chdr$(3)='Rate Code' 
-	chdr$(4)='GL-Cash' : chdr$(5)='GL-Receivable' 
+	mat chdr$(6) : mat cmask$(6) : mat item$(6)
+	chdr$(1)='Rec'
+	chdr$(2)='Service Name' : chdr$(3)='Rate Code'
+	chdr$(4)='GL-Cash' : chdr$(5)='GL-Receivable'
 	chdr$(6)='GL-Revenue'
-	cmask$(1)=cmask$(2)='' 
-	cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='' 
-	fnflexinit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame) 
+	cmask$(1)=cmask$(2)=''
+	cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)=''
+	fnflexinit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame)
 	editrec=0
-	restore #15: 
-READ_GLINFO_1: ! 
+	restore #15:
+READ_GLINFO_1: !
 	read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar eof EO_FLEX1
-	item$(1)=str$(rec(15)) 
-	item$(2)=service$ : item$(3)=str$(ratecode) 
-	item$(4)=gl$(1) 
-	item$(5)=gl$(2) 
-	item$(6)=gl$(3) 
+	item$(1)=str$(rec(15))
+	item$(2)=service$ : item$(3)=str$(ratecode)
+	item$(4)=gl$(1)
+	item$(5)=gl$(2)
+	item$(6)=gl$(3)
 	fnflexadd1(mat item$)
 	goto READ_GLINFO_1
-EO_FLEX1: ! 
-	fnCmdKey("&Add",1,0,0,"Add new records") 
-	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.") 
-	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.") 
-	fnCmdKey("E&xit",5,0,1,"Exit to menu")
-	fnAcs(sn$,0,mat resp$,ck)
+EO_FLEX1: !
+	fnCmdKey("&Add",1,0,0,"Add new records")
+	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.")
+	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.")
+	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
+	fnAcs2(mat resp$,ck)
 	addone=edit=0: holdvn$=""
-	if ck=5 then 
-		goto SCREEN1 
-	else if ck=1 then 
+	if ck=5 then
+		goto SCREEN1
+	else if ck=1 then
 		addone=1
-		service$="": ratecode=0: mat gl$=("") 
+		service$="": ratecode=0: mat gl$=("")
 		goto MAINTAIN_GLINFO
-	else if ck=2 or ck=3 then 
+	else if ck=2 or ck=3 then
 		editrec=val(resp$(1))
 	end if
 if editrec=0 then goto GL_INFORMATION
-if ck=2 or ck=3 then 
+if ck=2 or ck=3 then
 	read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 end if
 if ck=2 then edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
 if ck=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
 !
-DELETE_GLINFO: ! 
-mat msgline$(2): msgline$(1)="You have chosen to delete a record." 
-msgline$(2)="Take OK to delete, Cancel to retain." 
+DELETE_GLINFO: !
+mat msgline$(2): msgline$(1)="You have chosen to delete a record."
+msgline$(2)="Take OK to delete, Cancel to retain."
 fnmsgbox(mat msgline$,resp$,cap$,49)
 if resp$="OK" then goto L2000 else goto L2010
-L2000: delete #15,rec=editrec: 
+L2000: delete #15,rec=editrec:
 L2010: goto GL_INFORMATION
-REINDEX: ! 
+REINDEX: !
 execute "Index [Q]\UBmstr\Ubinfo.h[cno]"&' '&"[Q]\UBmstr\ubinfoidx.h[cno] 1 23 Replace DupKeys -n" ioerr L2040
-L2040: return 
-MAINTAIN_GLINFO: ! 
+L2040: return
+MAINTAIN_GLINFO: !
 right=1: mylen=25: mypos=mylen+3
 fnTos(sn$="Glinfo2")
 fnLbl(1,1,"Service:",mylen,right)
@@ -281,21 +281,21 @@ for j=1 to udim(optio2$)
 	if option2$(j)=service$ then resp$(1)=option2$(j)
 next j
 fnLbl(2,1,"Rate Code:",mylen,right)
-fnTxt(2,mypos,3,0,0,"30",0,"Set up the general ledger informatin for each rate code you have for each service.") 
+fnTxt(2,mypos,3,0,0,"30",0,"Set up the general ledger informatin for each rate code you have for each service.")
 resp$(2)=str$(ratecode)
 fnLbl(3,1,"Cash G/L Number:",mylen,right)
-fnqgl(3,mylen,0,2,pas) 
+fnqgl(3,mylen,0,2,pas)
 resp$(3)=fnrgl$(gl$(1))
 fnLbl(4,1,"Receivable G/L Number:",mylen,right)
-fnqgl(4,mylen,0,2,pas) 
+fnqgl(4,mylen,0,2,pas)
 resp$(4)=fnrgl$(gl$(2))
 fnLbl(5,1,"Revenue G/L Number:",mylen,right)
-fnqgl(5,mylen,0,2,pas) 
+fnqgl(5,mylen,0,2,pas)
 resp$(5)=fnrgl$(gl$(3))
 fnCmdKey("&Save",1,1,0,"Saves any changes and returns to gl breakdown screen.")
 fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
 fnCmdKey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
-fnAcs(sn$,0,mat resp$,ckey)
+fnAcs2(mat resp$,ckey)
 if ckey=5 then goto GL_INFORMATION
 if ckey=3 then chain "S:\acsUB\chartofaccounts"
 service$=resp$(1)
@@ -307,5 +307,5 @@ breakdownde$=resp$(2)
 if edit=1 then rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 if addone=1 then write #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 goto GL_INFORMATION
-
-include: ertn
+ 
+include: Ertn

@@ -1,7 +1,7 @@
 ! Replace S:\Core\Programs\Preferences
 ! maintain ACS Core system settings
-	if ~setup then let fn_setup
-	fntop(program$)
+	if ~setup then fn_setup
+	fnTop(program$)
 	win_height=20
 ! r: read all the setting here (unless read and set on the fly)
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
@@ -131,7 +131,7 @@ DO_SCREEN_MAIN: ! r:
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
-			goto XIT
+			goto Xit
 		else 
 			if text_editor$<>'' then text_editor$=os_filename$(env$('at')&resp$(resp_text_editor))
 			decimal_assumed$=resp$(resp_decimal_assumed)
@@ -153,7 +153,7 @@ DO_SCREEN_MAIN: ! r:
 			text_editor$=fn_text_editor_default$
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto XIT
+			if ck<>2 then goto Xit
 		end if 
 	loop  ! /r
 DO_SCREEN_THEME: ! r:
@@ -199,7 +199,7 @@ DO_SCREEN_THEME: ! r:
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
-			goto XIT
+			goto Xit
 		else 
 			modeShift=0
 			if ck=ck_lightMode then
@@ -251,7 +251,7 @@ DO_SCREEN_THEME: ! r:
 			min_fontsize_width$=default_min_fontsize_width$
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto XIT
+			if ck<>2 then goto Xit
 		end if 
 	loop  ! /r
 def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_default$)
@@ -335,7 +335,7 @@ DO_SCREEN_PRINTER: ! r:
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs('',0,mat resp$,ck)
 		if ck=5 then 
-			goto XIT
+			goto Xit
 		else 
 			! report_cache$=resp$(resp_report_cache)
 			! wait_wp_close$=resp$(resp_wait_wp_close)
@@ -372,7 +372,7 @@ DO_SCREEN_PRINTER: ! r:
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\Report Cache')&'"'
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto XIT
+			if ck<>2 then goto Xit
 		end if 
 	loop  ! /r
 DO_SCREEN_HH: ! r:
@@ -413,7 +413,7 @@ do
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		u4_device$=resp$(resp_u4_device)
 		u4_meterLocationIdSequential$=resp$(resp_u4_MeterLocIdSequential)
@@ -426,7 +426,7 @@ do
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto XIT
+		if ck<>2 then goto Xit
 	end if 
 loop ! /r
 DO_SCREEN_UB: ! r:
@@ -455,7 +455,7 @@ do
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		ub_total_ar_on_dashboard$=resp$(resp_ub_total_ar)
 		ub_collPrintInAccountOrder$=resp$(resp_ub_cpiao)
@@ -465,7 +465,7 @@ do
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto XIT
+		if ck<>2 then goto Xit
 	end if
 loop ! /r
 DO_SCREEN_GL: ! r:
@@ -486,7 +486,7 @@ do
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		gl_retainFieldsDuringAdd$=resp$(resp_gl_retainFieldsDuringAdd)
 	end if 
@@ -494,7 +494,7 @@ do
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto XIT
+		if ck<>2 then goto Xit
 	end if
 loop ! /r
 DO_SCREEN_PR: ! r:
@@ -528,7 +528,7 @@ do
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
 		pr_prNetZeroChecks$=resp$(resp_pr_prNetZeroChecks)
@@ -541,7 +541,7 @@ do
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto XIT
+		if ck<>2 then goto Xit
 	end if
 loop ! /r
 Do_Screen_Em: ! r:
@@ -573,7 +573,7 @@ do
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ck)
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		em_emailReplyTo$=resp$(resp_em_emailReplyTo)
 		em_smtpServer$=resp$(resp_em_smtpServer)
@@ -585,7 +585,7 @@ do
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto XIT
+		if ck<>2 then goto Xit
 	end if 
 loop ! /r
 SCREEN_CK_GOTO: ! r:
@@ -709,7 +709,7 @@ fnend
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt ,fnerror,fnTos,fnChk,fnreg_read,fnreg_write,fnButton,fnCmdKey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
+		library 'S:\Core\Library': fnTop,fnXit, fnAcs,fnLbl,fnTxt ,fnerror,fnTos,fnChk,fnreg_read,fnreg_write,fnButton,fnCmdKey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
 		library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnOpt,fnGetPp,fncopyfile
 		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 		library 'S:\Core\Library': fnaddonec
@@ -737,9 +737,9 @@ def fn_setup
 	end if 
 fnend 
 IGNORE: continue 
-XIT: fnxit
+Xit: fnXit
 def library fnapply_theme(; disableConScreenOpenDflt)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnapply_theme=fn_apply_theme( disableConScreenOpenDflt)
 fnend 
 def fn_apply_theme(; disableConScreenOpenDflt)
@@ -769,7 +769,7 @@ def fn_set_color(attribute$,foreground_default$,background_default$)
 	execute 'Config Attribute '&attribute$&' /'&foreground$&':'&background$ error ignore ! pr 'config attribute '&attribute$&' /'&foreground$&':'&background$ : pause
 fnend
 def library fnEditFile(efEditorType$,fileToEdit$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnEditFile=fn_editFile(efEditorType$,fileToEdit$)
 fnend
 def fn_editFile(efEditorType$,efFileToEdit$*256)
@@ -841,7 +841,7 @@ def fn_text_editor_default$*256
 	fn_text_editor_default$=text_editor$
 fnend 
 def library fnget_wordprocessor_exe(&wordprocessor_exe$; force$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnget_wordprocessor_exe=fn_get_wordprocessor_exe(wordprocessor_exe$, force$)
 fnend
 def fn_get_wordprocessor_exe(&wordprocessor_exe$; force$)
@@ -918,7 +918,7 @@ def fn_first_exists_in_list(mat feil_list$)
 	fn_first_exists_in_list=feil_return
 fnend 
 def library fndecimal_assumed
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fndecimal_assumed=fn_decimal_assumed
 fnend 
 def fn_decimal_assumed
@@ -932,7 +932,7 @@ def fn_decimal_assumed
 	end if 
 fnend 
 def library fnsave_as_path$*256
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnsave_as_path$=fn_save_as_path$
 fnend 
 def fn_save_as_path$*256
@@ -944,4 +944,4 @@ def fn_save_as_path$*256
 	end if 
 	fn_save_as_path$=env$('at')&sap_return$
 fnend 
-include: ertn
+include: Ertn

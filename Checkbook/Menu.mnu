@@ -1,22 +1,22 @@
 ! *** CL - Checkbook ***
-Transaction                               ^ Checkbook\Transaction
->Running Bank Balance                     ^ Checkbook\Running Bank Balance
+Transaction                               ^ Checkbook\*
+>Running Bank Balance                     ^ Checkbook\*
 >Transaction Journals                     ^ acsCL\TrJr
 >Remove Old Transactions                  ^ acsCL\RmTrans
 >Endorse Checks                           ^ acsCL\endorsment
-Unpaid Invoice                            ^ Checkbook\Unpaid Invoice
+Unpaid Invoice                            ^ Checkbook\*
 >Print Selected Invoice Listing           ^ acsCL\PrintSelectInvoice
->Unpaid Invoice Listing (Current)         ^ Checkbook\Unpaid Invoice Listing (Current)
->Unpaid Invoice Summary                   ^ Checkbook\Unpaid Invoice Summary
->Report of Invoices Due by Selected Dates ^ acsCL\DueBy
+>Unpaid Invoice Listing (Current)         ^ Checkbook\*
+>Unpaid Invoice Summary                   ^ Checkbook\*
+>Report of Invoices Due by Selected Dates ^ Checkbook\*
 Paid Invoice                              ^ acsCL\PaidInvoice
 >Remove Paid Invoices                     ^ acsCL\RemovePaidInvoices
-Bank                                      ^ acsCL\Bank
+Bank                                      ^ acsCL\*
 >Bank Reconciliation                      ^ acsCL\BankReconciliation
 >Select Bank Account                      ^ acsCL\ChgBank
 >Unclear All Entries by Bank              ^ acsCL\UnClBank
-Payee                                     ^ Checkbook\Payee
->Payee Labels                             ^ Checkbook\Payee Labels
+Payee                                     ^ Checkbook\*
+>Payee Labels                             ^ Checkbook\*
 >Payee Listing                            ^ acsCL\PayList
 >Remove Payee Records                     ^ acsCL\PayDump
 >Payee Fund Listing                       ^ acsCL\VNFund

@@ -2,13 +2,13 @@
 ! Create Direct Deposit File
 fn_setup
 fn_readSavedResponses
-fntop(program$)
+fnTop(program$)
 open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 dim dd$(0)*32, ddN(0)
 dd=fn_open('PR Direct Deposit',mat dd$,mat ddN,mat form$)
 open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 goto Screen1
-
+ 
 Screen1: ! r:
 	fnTos
 	respc=0    ! response counter
@@ -36,10 +36,10 @@ Screen1: ! r:
 	fnTxt(9,mypos+3,9,0,0,"",0,"The Federal ID number can be found on any payroll report.")
 	resp$(resp_fedId:=respc+=1)=fedid$(1:9)
 	fnCmdKey("&Next",1,1,0,"Create the file." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask employee number
-	if ckey=5 then 
-		goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask employee number
+	if ckey=5 then
+		goto Xit
 	else
 		payrollDate  =val(resp$(resp_payrollDate))
 		path$        =resp$(resp_path)
@@ -117,9 +117,9 @@ MainLoop: ! r: main loop
 	L1770: form pos 22,c 15,n 12.2
 	! if env$('client')="West Rest Haven" then pr #255,using L1770: "Total In House",totalin
 	fncloseprn
-goto XIT ! /r
-XIT: fnXit
-FileHeaderRecord: ! r: (1) File Header Record 
+goto Xit ! /r
+Xit: fnXit
+FileHeaderRecord: ! r: (1) File Header Record
 	pcde=01 ! Priority Code
 	fcd$=date$("YYMMDD") ! File Creation Date
 	fct$=time$(1:2)&time$(4:5) ! File Creation Time
@@ -134,7 +134,7 @@ FileHeaderRecord: ! r: (1) File Header Record
 	write #ddout,using F_ddout_1: 1,pcde,bankrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
 	F_ddout_1: Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2
 return ! /r
-BatchHeaderRecord: ! r: (5) Company/Batch Header Record 
+BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	scc=220 ! Service Class Code
 	cdd$="" ! Company Discretionary Data
 	ecc$="PPD" ! Standard Entry Class Code
@@ -145,7 +145,7 @@ BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	write #ddout,using F_ddout_5: 5,scc,env$('cnam')(1:16),cdd$="Payroll",'9'&fedid$,ecc$,ced$,fncd(d2),eed$,"",osc$,bankaccount$,bn,crlf$
 	F_ddout_5: Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2
 return ! /r
-
+ 
 EntryDetailRecord: ! r: (6) entry detail
 	t1=t1+tcp(32)
 	if ddN(dd_accType)=27 then
@@ -167,7 +167,7 @@ EntryDetailRecord: ! r: (6) entry detail
 	! if env$('client')="West Rest Haven" and ddN(dd_routing)=1190515 then totalin=totalin+tcp(32)
 	eh=eh+int(ddN(dd_routing)/10) ! Entry Hash should accumulate Routing numbers    dropping the last digit of the routing number
 return ! /r
-
+ 
 BatchControlRecord: ! r: (8) Company/Batch Control Record
 	scc=220 ! Service Class Code
 	eac=tn1 ! Entry Addenda Count
@@ -182,9 +182,9 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		ml$(2)="direct deposit this pay period."
 		ml$(3)="Click OK to continue."
 		fnmsgbox(mat ml$,resp$)
-		goto XIT
+		goto Xit
 	end if
-
+ 
 	! write #ddout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
 	! F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! File Control Record
@@ -202,13 +202,13 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		ml$(2)="direct deposit this pay period."
 		ml$(3)="Click OK to continue."
 		fnmsgbox(mat ml$,resp$)
-		goto XIT
+		goto Xit
 	end if
 	! write #ddout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
 	! F_ddout_6b: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	write #ddout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
 	F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
-	! 5/5/19 moved the write out for 8 record to after 6 record write out 
+	! 5/5/19 moved the write out for 8 record to after 6 record write out
 return ! /r
 FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,totalCredit,crlf$
 	write #ddout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
@@ -221,7 +221,7 @@ FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,tota
 		next j
 	end if
 return ! /r
-
+ 
 ReportPgof: ! r:
 	pr #255: newpage
 	gosub ReportHdr
@@ -233,26 +233,15 @@ ReportHdr: ! r:
 	pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zzzz/zz/zz)",payrollDate)&"}"
 	pr #255: "\ql   "
 return ! /r
-
-
-
+ 
+ 
+ 
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnXit
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnChk,fnCmdSet
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnPayPeriodEndingDate
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnfree
-		library 'S:\Core\Library': fnCd
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnSpecialFolderPath$
+		autoLibrary
 		on error goto Ertn
-
+ 
 		dim ml$(0)*256
 		dim tcp(32)
 		! tcp(32) = Net Pay
@@ -270,37 +259,37 @@ def fn_readSavedResponses ! basicaly all variables are local
 	fncreg_read('Direct Deposit Save File Path',path$, fnSpecialFolderPath$('desktop')&'\DirDep.txt',1) ! The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'
 	dim bankaccount$*8
 	dim bankaccountDefault$*8
-	if env$('client')="Billings" then 
+	if env$('client')="Billings" then
 		bankaccountDefault$=" 0040118"
-	!else if env$('client')="Washington Parrish" then 
+	!else if env$('client')="Washington Parrish" then
 	!	bankaccountDefault$="20428027"
-	!else if env$('client')="West Rest Haven" then 
+	!else if env$('client')="West Rest Haven" then
 	!	bankaccountDefault$=" 1055003"
 	else
 		bankaccountDefault$='' ! Origination DFI Identification  (your bank account number)
 	end if
 	fncreg_read('Direct Deposit Source Bank Account',bankaccount$, bankaccountDefault$) ! The right hand set of numbers at the bottom of your checks.
-
+ 
 	dim bankrouting$*10 ! Immediage Origin Routing Number
 	dim bankrouting$*10
 	dim bankrouting$*10
 	!  then imo$=
-	if env$('client')="Billings" then 
+	if env$('client')="Billings" then
 		bankRoutingDefault$=" 000017738"
 	!else if env$('client')="Washington Parrish"
 	!	bankRoutingDefault$=" 065201611"
-	!else if env$('client')="West Rest Haven" 
+	!else if env$('client')="West Rest Haven"
 	!	bankRoutingDefault$=" 111905159"
 	else
 		bankRoutingDefault$='' ! Immediate Origin (contains the routing number for your bank)
 	end if
 	fncreg_read('Direct Deposit Source Bank Routing',bankrouting$, bankRoutingDefault$) ! The middle set of numbers at the bottom of your checks.
-
-	! if env$('client')="Billings" then 
+ 
+	! if env$('client')="Billings" then
 	! 	federalroutingDefault$=" 081505964"
-	! !else if env$('client')="Washington Parrish" then 
+	! !else if env$('client')="Washington Parrish" then
 	! !	federalroutingDefault$=" 061000146"
-	! !else if env$('client')="West Rest Haven" then 
+	! !else if env$('client')="West Rest Haven" then
 	! !	federalroutingDefault$=" 111000038"
 	! else
 	! 	federalroutingDefault$='' ! Immediate Destination   (routing number for federal reserve bank they use)
@@ -312,30 +301,30 @@ def fn_readSavedResponses ! basicaly all variables are local
 	dim bankNameDefault$*23 ! (23) Immediate Origin Name
 	if env$('client')='Billings' then
 		bankNameDefault$='Bank of Billings'
-	!else  if env$('client')="Washington Parrish" then 
+	!else  if env$('client')="Washington Parrish" then
 	!	bankNameDefault$="Parrish National"
-	!else if env$('client')="West Rest Haven" then 
+	!else if env$('client')="West Rest Haven" then
 	!	bankNameDefault$="State National Bank"
 	else
 		bankNameDefault$='' ! (23) Immediate Origin Name  (your bank name)
 	end if
 	fncreg_read('Direct Deposit Source Bank Name',bankname$, bankNameDefault$)
-
+ 
 	dim fedid$*12
 	dim fedidDefault$*12
 	if env$('client')='Billings' then
 		fedidDefault$='430903099'
-	!else if if env$('client')="West Rest Haven" then 
+	!else if if env$('client')="West Rest Haven" then
 	!	fedidDefault$="741551549"
-	!else if env$('client')="Washington Parrish" then 
+	!else if env$('client')="Washington Parrish" then
 	!	fedidDefault$="726001461"
 	else
 		fedidDefault$=''  ! Company Identification
 	end if
 	fncreg_read('Direct Deposit Federal ID Number',fedid$, fedidDefault$) ! The Federal ID number can be found on any payroll report.
-
+ 
 	payrollDate=fnPayPeriodEndingDate
-
+ 
 fnend
 include: Ertn
 include: fn_open

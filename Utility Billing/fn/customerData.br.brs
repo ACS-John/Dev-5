@@ -13,7 +13,7 @@ def fn_setup
 fnend
 
 def library fnCustomerData$*128(account$*10,fieldName$*40; leaveOpen)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnCustomerData$=fn_customerData$(account$,fieldName$, leaveOpen)
 fnend
 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,whichService)
@@ -159,4 +159,4 @@ def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,wh
 fnend
 
 include: fn_open
-include: ertn
+include: Ertn

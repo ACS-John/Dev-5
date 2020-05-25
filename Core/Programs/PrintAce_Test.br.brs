@@ -1,24 +1,11 @@
-library 'S:\Core\Library': fntop,fnxit
+library 'S:\Core\Library': fnTop,fnXit
 library program$: fnPrintAceTest
-fntop(program$,'PrintAce Test')
+fnTop(program$,'PrintAce Test')
 fnPrintAceTest
-fnxit
+fnXit
 def library fnPrintAceTest(;format$)
 ! r: setup stuff
-  library 'S:\Core\Library': fnerror
-  library 'S:\Core\Library': fnpa_line
-  library 'S:\Core\Library': fnpa_txt
-  library 'S:\Core\Library': fnpa_open
-  library 'S:\Core\Library': fnpa_finis
-  library 'S:\Core\Library': fnpa_barcode
-  library 'S:\Core\Library': fnpa_elipse
-  library 'S:\Core\Library': fnpa_font
-  library 'S:\Core\Library': fnpa_fontsize
-  library 'S:\Core\Library': fnpa_fontbold
-  library 'S:\Core\Library': fnbarcode
-  library 'S:\Core\Library': fnbarcodewide
-  library 'S:\Core\Library': fnpa_pic
-  library 'S:\Core\Library': fnreg_read
+  autoLibrary
   ! ** the only fonts currently used in ACS are **
   !    Courier New
   !    Lucida Console
@@ -123,8 +110,8 @@ def library fnPrintAceTest(;format$)
   end if ! /r
   if enablePieChart then gosub PIECHARTTEST
   fnpa_finis
-XIT: ! 
-fnend !  fnxit ! if env$('ACSDeveloper')<>'' then stop else let fnxit
+Xit: ! 
+fnend !  fnXit ! if env$('ACSDeveloper')<>'' then stop else let fnXit
 PIECHARTTEST: ! r: Pie Chart
 ! ______________________
 ! X=Random percentage, Y=Remainder, Z=Max(X,Y)/2
@@ -178,4 +165,4 @@ def fn_pa_rulerv !|  (along the left side of the page)
     fnpa_line(y,xp,prLength,0)
   nex xp
 fnend
-include: ertn
+include: Ertn

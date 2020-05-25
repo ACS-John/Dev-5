@@ -18,8 +18,9 @@ def fn_balanceSheet(; defaultFormat$)
 	if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 
 	Screen1: ! r:
-		fnTos(sn$="GLInput")
-		mylen=30: mypos=mylen+3 : right=1
+		fnTos
+		mylen=30
+		mypos=mylen+3 : right=1
 		fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 		fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 		resp$(1)=""
@@ -34,12 +35,12 @@ def fn_balanceSheet(; defaultFormat$)
 		if fnps=2 then
 			mp1=66
 			exe 'con sub [FinancialStatementCode] C'
-			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed
+			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
 			fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","66 3")
 		else
 			exe 'con sub [FinancialStatementCode] B'
 			mp1=63
-			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed
+			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
 			fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","63 3")
 		end if
 		dim fsN(0),fs$(0)*128
@@ -97,8 +98,9 @@ def fn_balanceSheet(; defaultFormat$)
 		close #hGl: ioerr ignore
 		hGl=0
 		close #hFsD: ioerr ignore
-		hFsD=0
-fnend ! /r
+		hFsD=0 
+	! /r
+fnend 
 
 def fn_teSetHeaderOrSubHead(mat fs$,mat fsN,&reportHeadingX$,foot$*132,tabnote)
 	reportHeadingX$=fs$(fsd_description)
@@ -290,5 +292,5 @@ def fn_tePrnHeader(reportHeading1$*50,reportHeading2$*50)
 	pr #255: "\ql "
 fnend
 
-include: ertn
+include: Ertn
 include: fn_open

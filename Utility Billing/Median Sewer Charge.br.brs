@@ -6,7 +6,7 @@
 
 	dim cd1(8),x(13),txt$*60,message$(5)*80,message$*60,tg(11)
 
-	fntop(program$)
+	fnTop(program$)
 
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
@@ -32,7 +32,7 @@ SCR1: !
 		resp$(j)="" 
 	next j
 	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	for j=1 to 8
 L320: x=pos(resp$(j),"/",1)
 		if x>0 then resp$(j)(x:x)="": goto L320
@@ -92,7 +92,7 @@ L620: if t1>0 then t3=int(t2/t1) else t3=0
 DONE: ! 
 	gosub PRINT_REPORT
 	fncloseprn
-XIT: fnxit
+Xit: fnXit
 
 
 

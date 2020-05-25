@@ -1,7 +1,7 @@
 ! Replace S:\acsPR\CmbEmp.br
 ! creates a screen ace combobox for employee records
 def library fncmbemp(myline,mypos; addall,container)
-	library 'S:\Core\Library': fncombof
+	autoLibrary
 	if addall<>1 then addall=0
 	if addall=0 then 
 		fen$="CeMP.h[cno]" 

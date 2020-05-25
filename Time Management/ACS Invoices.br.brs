@@ -1,13 +1,13 @@
 ! formerly acsTM\moInvoice
 fn_setup
-	fntop(program$)
+	fnTop(program$)
 	client_id_sageAx=3811
 	client_id_brc=90
 	enableMinimumMonthlyBill=1
 	
 	dim b(8)
 	dim iv$*12
-
+ 
 	dim inpX(7)
 	fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 	invoice_number+=1
@@ -17,17 +17,17 @@ fn_setup
 	fn_askScreen1(invDateMmDdYy,invoice_number)
 	invoiceDateCcyymmdd=date(days(invDateMmDdYy,"mmddyy"),"ccyymmdd")
 	fnAutomatedSavePoint('before')
-	open #hClient:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed 
+	open #hClient:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
 ! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 ! execute "Index S:\Core\Data\acsllc\support.h[cno]  S:\Core\Data\acsllc\support-idx.h[cno] 1/7,6/2,replace,DupKeys"
-	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed 
+	open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 	F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 	fn_thsht_combine_entries("S:\Core\Data\acsllc\TimeSheet.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 	! restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1
 	pr newpage
 	pr f "10,10,Cc 60": "Printing Invoices..."
 ! r: process "S:\Core\Data\acsllc\TMWK2"&wsid$&".h[cno]"
-	open #h_tmwk2:=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn 
+	open #h_tmwk2:=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
 	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	dim cde$(30)*6
 	dim inv_item$(30)*128
@@ -39,16 +39,16 @@ fn_setup
 	! restore #h_tmwk2:
 	dim client_id$*5
 	dim client_addr$(3)*30
-	do 
+	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
 		client_id=val(client_id$)
 		iv$=rpad$(str$(invoice_number),12)
 		restore #h_support: ! ,key>=lpad$(trim$(client_id$),kln(h_support)): nokey BMM_SUPPORT_EOF
-		do 
+		do
 			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,supData_cost eof BMM_SUPPORT_EOF
 			cln=val(cln$)
 			!     if client_id=918 then pr 'cln=';cln;'client_id=';client_id ! pause
-			if cln=client_id then 
+			if cln=client_id then
 				!       if stm$="Mo" then goto BillMaint ! always bill monthly
 				if stm$="Mo" then goto NXTJ ! never bill monthly
 				!        pr "An";int(invoiceDateCcyymmdd*.01);'=';int(sup_exp_date*.01);' !  bill annual if it expires this month'
@@ -57,34 +57,34 @@ fn_setup
 				pr 'ZZZAAABBB i did not think it could reach here 7/2/2019' : pause
 				if invoiceDateCcyymmdd<=sup_exp_date then goto NXTJ ! on maintenance
 				BillMaint: ! r:
-				if supData_cost>0 then 
+				if supData_cost>0 then
 					b(3)=supData_cost
 					b(8)=scode
 					b3=b3+b(3)
 					inv_line=inv_line+1
-					if stm$="An" then 
+					if stm$="An" then
 						inv_item$(inv_line)='Annual'
-					else 
+					else
 						inv_item$(inv_line)='Monthly'
-					end if 
-					if scode$='U4' then 
+					end if
+					if scode$='U4' then
 						inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for (UB) Hand Held Add-On"
-					else 
+					else
 						inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for "&trim$(fnSystemNameFromId$(scode))
-						if trim$(fnSystemNameFromId$(scode))='' then 
+						if trim$(fnSystemNameFromId$(scode))='' then
 							pr ' sending blank system name  scode='&str$(scode)
 							pr '   client_id=';client_id
-							pause 
+							pause
 						end if
-					end if 
+					end if
 					inv_amt(inv_line)=supData_cost
 					inv_category(inv_line)=6
 					inv_service_code(inv_line)=scode
 					inv_gl$(inv_line)="  0  1160  0"
 				end if
 				! /r
-			end if 
-			NXTJ: ! 
+			end if
+			NXTJ: !
 		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
 		BMM_SUPPORT_EOF: ! if client_id=4568 then pr 'A (maintenance renewal stuff) 4568 encountered' : pause
 		! if client_id=918 then pr 'processing client 918 COMPLETE' : pause
@@ -93,11 +93,11 @@ fn_setup
 EOJ: ! r:
 	fn_summary_print
 	fnClosePrn
-	! open #h_ivnum:=fngethandle: "Name=S:\Core\Data\acsllc\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative 
+	! open #h_ivnum:=fngethandle: "Name=S:\Core\Data\acsllc\IVNUM.h[cno],Use,RecL=8,Shr",internal,outIn,relative
 	! rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
-	close #h_ivnum: 
-	close #hClient: 
-	close #h_tmwk2: 
+	close #h_ivnum:
+	close #hClient:
+	close #h_tmwk2:
 	do
 		fntos : lc=0
 		fnOpt(lc+=1,41,'Merge Invoices and Email Queued Invoices',1)
@@ -118,38 +118,19 @@ EOJ: ! r:
 		end if
 	loop
 	! /r
-XIT: fnxit
+Xit: fnXit
 !_____
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnComboF
-		library 'S:\Core\Library': fnSystemNameFromId$
-		library 'S:\Core\Library': fnPrintInvoice
-		library 'S:\Core\Library': fnTop,fnXit
-		library 'S:\Core\Library': fnOpenPrn,fnClosePrn
-		library 'S:\Core\Library': fnGethandle
-		library 'S:\Core\Library': fnAutomatedSavePoint
-		library 'S:\Core\Library': fnCreg_read
-		library 'S:\Core\Library': fnEndOfMonth
-		library 'S:\Core\Library': fnCustomerHasEbilling
-		library 'S:\Core\Library': fnMakesurepathexists
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnPrint_file_name$
-		library 'S:\Core\Library': fnClient_has
-		library 'S:\Core\Library': fnReport_cache_folder_current$
-		library 'S:\Core\Library': fnChain
-		library 'S:\Core\Library': fnTos,fnlbl,fncmdset,fnAcs2,fntxt
-		library 'S:\Core\Library': fnOpt
-		library 'S:\Core\Library': fnEmailQueuedInvoices
-		library 'S:\Core\Library': fnSaveToAsStart
+		autoLibrary
 		dim resp$(30)*128
 	end if
 fnend
 def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	if ~invDateMmDdYy then invDateMmDdYy=date(fnEndOfMonth(days(date$)-15),'mmddyy')
 	fntos : rc=lc=0
-
+ 
 	fnlbl(lc+=1, 2,'Invoice Month:'          ,24,1)
 	fnComboF('month',lc,26,20,'S:\Core\Data\month.dat',1,2,3,18,'S:\Core\Data\month.idx',1,0,'Select Month Billing for - the month you are ending')
 	resp$(resp_invMonth:=rc+=1)=str$(val(date$(days(invDateMmDdYy,'mmddyy'),'m')))
@@ -157,16 +138,16 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	fnlbl(lc+=1, 2,'Invoice Year (ccyy):'    ,24,1)
 	fntxt(lc   ,26,4, 0,0,'number')
 	resp$(resp_invYear:=rc+=1)=date$(days(invDateMmDdYy,'mmddyy'),'ccyy')
-
+ 
 	fnlbl(lc+=1, 2,'Starting Invoice Number:',24,1)
 	fntxt(lc   ,26,12, 0,0,'number')
 	resp$(resp_invNo:=rc+=1)=str$(invoice_number)
-
+ 
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
 	if ckey=5 then
 		returnN=99
-	else 
+	else
 		returnN=0
 		! invDateMmDdYy=val(resp$(resp_invDate)) ! date(days(resp$(1),'ccyymmdd'),'mmddyy')
 		invoice_number=val(resp$(resp_invNo))
@@ -184,21 +165,21 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	end if
 	fn_askScreen1=returnN
 fnend
-
+ 
 def fn_timesheet2(hTimeSheet; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
 	read #hTimeSheet,using F_TIME,key=client_id$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
 	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
-	do 
+	do
 		if b8=0 then b8=19
 		delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
 		fn_bld_rec(client_id$)
 		read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
 	loop while inpX(1)=client_id
-	TM_XIT2: ! 
-fnend 
+	TM_XIT2: !
+fnend
 def fn_bld_rec(client_id$)
 	if inv_line=30 then let fn_print_inv ! pr invoice if more than 20 entries
-	if inv_line>29 then pause 
+	if inv_line>29 then pause
 	spk$=" "&client_id$&cnvrt$("n 2",b8)
 	if inpX(7)=2 then goto BLD_REC_L1780 ! always bill modifications
 	if inpX(7)=23 or inpX(7)=11 then goto BLD_XIT ! always no charge
@@ -207,27 +188,27 @@ def fn_bld_rec(client_id$)
 	!   if stm$="Mo" or (stm$='An' and trans_date<=sup_exp_date) then goto BLD_XIT ! TM_RD2 ! on maintenance
 	if (stm$='An' and trans_date<=sup_exp_date) then goto BLD_XIT ! TM_RD2 ! on maintenance
 	! if client_id=4625 then pause
-	BLD_REC_L1780: ! 
+	BLD_REC_L1780: !
 	b(3)=inpX(5)
 	b(8)=b8
 	b3=b3+b(3)
 	inv_line+=1
 	! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
-	if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then 
+	if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
 		!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inpX(6))
 		inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
-	else if inpX(7)=2 then 
+	else if inpX(7)=2 then
 		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
-	else 
+	else
 		inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
-	end if 
+	end if
 	
 	inv_amt(inv_line)=inpX(5)
 	inv_category(inv_line)=6
 	inv_service_code(inv_line)=b8
 	inv_gl$(inv_line)="  0  1160  0"
-	BLD_XIT: ! 
-fnend 
+	BLD_XIT: !
+fnend
 def fn_get_system_list(mat sys_name$)
 	mat sys_name$(40)
 	sys_name$(01)="General Ledger"
@@ -273,9 +254,9 @@ def fn_get_system_list(mat sys_name$)
 fnend  ! fn_get_system_list
 def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___,wo_desc$*30)
 	dim tce_to_inp(7)
-	open #tce_h_from:=fngethandle: 'Name='&file_from$,internal,input 
-	open #tce_h_to:=fngethandle: 'Name='&file_to$&',KFName='&env$('Temp')&'\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed 
-	do 
+	open #tce_h_from:=fngethandle: 'Name='&file_from$,internal,input
+	open #tce_h_to:=fngethandle: 'Name='&file_to$&',KFName='&env$('Temp')&'\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	do
 		read #tce_h_from,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		tce_key$=cnvrt$("N 5",inpX(1))&cnvrt$("N 2",b8)&cnvrt$("N 6",inpX(6))
@@ -286,15 +267,15 @@ def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___
 		rewrite #tce_h_to,using F_TIME,key=tce_key$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
 		!   if inpX(1)=4568 then rewr_count+=1
 		goto TCE_NEXT
-		TCE_TO_ADD: ! 
+		TCE_TO_ADD: !
 		write #tce_h_to,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
 		!   if inpX(1)=4568 then wr_count+=1
-		TCE_NEXT: ! 
+		TCE_NEXT: !
 		! if inpX(1)=4568 then pr '4568 (';b8;') had a time of ';inpX(3);' on ';inpX(6);' charge=';inpX(5)
-	loop 
-	TCE_EOF: ! 
-	close #tce_h_from: 
-	close #tce_h_to: 
+	loop
+	TCE_EOF: !
+	close #tce_h_from:
+	close #tce_h_to:
 	! pr 'rewr_count=';rewr_count
 	! pr '  wr_count=';wr_count
 	! pause
@@ -302,7 +283,7 @@ def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
-	open #hTimeSheet:=fngethandle: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed 
+	open #hTimeSheet:=fngethandle: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed
 fnend  ! fn_thsht_combine_entries
 def fn_summary_add
 	open #22: "Name=skip_prn,RecL=80,replace",display,output ioerr SI_ADD
@@ -311,37 +292,37 @@ def fn_summary_add
 	pr #22: "_____ ______________  ________  __________  __________  __________  __________"
 	SI_ADD: !
 	if (pbal+b3)<1 then piv$="" else piv$=iv$ ! if less than a dollar than don't charge it
-	if piv$<>'' then 
+	if piv$<>'' then
 		pr #22,using Fsa22: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,b3,pbal+b3,piv$
 		Fsa22: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=b3
 		totalPreviousBalances+=pbal
 	end if  ! piv$<>''
-fnend 
+fnend
 def fn_summary_print
 	close #22: ioerr SP_XIT
-	open #22: "Name=skip_prn",display,input 
+	open #22: "Name=skip_prn",display,input
 	pr #255: "\ql"
 	dim skln$*80
-	do 
+	do
 		linput #22: skln$ eof SP_FINIS
 		pr #255: skln$
-	loop 
-	SP_FINIS: ! 
-	pr #255: 
+	loop
+	SP_FINIS: !
+	pr #255:
 	pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
 	pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
 	pr #255: '}' ! end the RTF font size setting of 8
-	close #22,free: 
-	SP_XIT: ! 
-fnend 
+	close #22,free:
+	SP_XIT: !
+fnend
 def fn_print_inv
 	dim pdf_filename_final$*255
 	fn_timesheet2(hTimeSheet)
 	if enableMinimumMonthlyBill then
-		if b3>0 and sum(mat inv_amt)<100 then 
+		if b3>0 and sum(mat inv_amt)<100 then
 			inv_line+=1
-			if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then 
+			if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then
 				inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
 				inv_amt(inv_line)=100-sum(mat inv_amt) : b3+=inv_amt(inv_line)
 				inv_service_code(inv_line)=19
@@ -350,7 +331,7 @@ def fn_print_inv
 		end if
 	end if
 	fn_summary_add ! pr all clients
-	if b3=>1 then 
+	if b3=>1 then
 		write #h_tmwk2,using F_TMWK2: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
 	end if
 	if b3=>1 or pbal=>1 then
@@ -361,25 +342,25 @@ def fn_print_inv
 		saveToAsStartFile$&='.rtf'
 		fnSaveToAsStart(saveToAsStartFile$)
 		fnOpenPrn
-		if ClientEbilling=1 then 
-			! see if customer that we're sending the invoice for right now has ebilling selected 
+		if ClientEbilling=1 then
+			! see if customer that we're sending the invoice for right now has ebilling selected
 			ebilling=fnCustomerHasEbilling(client_id$)
-		end if 
+		end if
 		! if trim$(client_id$)='4132' then pause
-		! if trim$(client_id$)='1478' then pr ebilling : pause 
-		if ebilling=0 then 
+		! if trim$(client_id$)='1478' then pr ebilling : pause
+		if ebilling=0 then
 		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 			pr #255: newpage ! mat inv_item$=("")
-		else if ebilling then 
-			! open pdf 
+		else if ebilling then
+			! open pdf
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
-			pr 'creating:  '&pdf_filename_final$ 
+			pr 'creating:  '&pdf_filename_final$
 			
 			! print pdf
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal,pdf_filename_final$)
-			! close pdf 
-			! close #pdfout: 
-			! move to Send folder 
+			! close pdf
+			! close #pdfout:
+			! move to Send folder
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
 			! pause
 			fnCopy(env$('at')&os_filename$(pdf_filename_final$),env$('at')&fnreport_cache_folder_current$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
@@ -388,8 +369,8 @@ def fn_print_inv
 				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnreport_cache_folder_current$)
 				! open the folder it is in
 				execute 'sy -c -w explorer "'&fnreport_cache_folder_current$&'\Ebilling"'
-
-		end if 
+ 
+		end if
 		invoice_number+=1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 		! end if
 	end if
@@ -402,4 +383,4 @@ def fn_print_inv
 	inv_line=b3=0
 fnend  ! fn_print_inv
 include: fn_open
-include: ertn
+include: Ertn

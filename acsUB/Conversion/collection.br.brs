@@ -1,43 +1,38 @@
-00010 ! Replace S:\acsUB\conversion\collection
-00020 ! try converting colletion for 402 when they do not have allocations on them in the transaction history.
-00030 !
-00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fncno,fndat,fnxit,fntop,fnindex_it
-00050   fntop("S:\acsUB\conversion\collection",cap$="Convert Collections")
-00060 !
-00070   dim cnam$*40,dat$*20,a$(61)*30,u(61),scr1$(10)*30,alloc(10),nam$*30,o(2)
-00080   dim r(20,4),hd1$*190,hd2$*190,cap$*128,message$*40
-00090 !
-00100   fncno(cno,cnam$)
-00110 ! 
-00120   cap$="Convert Collections"
-00130 !
-00140   def fndate_mmddyy_to_ccyymmdd(x)
-00150     x2=(x-int(x*.01)*100)*10000+int(x*.01)
-00160     if int(x2*.0001)<90 then x2=x2+20000000 else x2=x2+19000000
-00170     fndate_mmddyy_to_ccyymmdd=x2
-00180   fnend 
-00190 !
-00210   open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,outIn,relative 
-00220   open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
-00230 L230: ! 
-00240 L240: read #6,using L280: x$,m,n,mat o,adrnxt,rcpt$,mat alloc eof L440
-00250   for j=1 to udim(alloc)
-00260     if alloc(j)<-20202 then alloc(j)=0
-00270   next j
-00280 L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
-00310   if m=0 then goto L230
-00320   if o(1)<1 or o(1)>4 then o(1)=1
-00330   if o(1)=3 then ti2=1 : tcode=3 ! REG.COLLECTION
-00340   if o(1)=4 then ti2=2 : tcode=5 ! CREDIT MEMO
-00350   if o(1)=1 and o(2)=4 then ti2=3 : tocde=6 ! DEBIT MEMO
-00360   tdate=fndate_mmddyy_to_ccyymmdd(n)
-00370   tamount=m
-00380   for j=1 to 10 : tg(j)=alloc(j): next j
-00390   read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): p$ nokey L420
-00400   rewrite #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
-00410   goto L430
-00420 L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
-00430 L430: goto L240
-00440 L440: close #2: 
-00450   fnindex_it("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
-00460 XIT: fnxit
+! Replace S:\acsUB\conversion\collection
+! try converting colletion for 402 when they do not have allocations on them in the transaction history.
+ 
+	autoLibrary
+	fnTop("S:\acsUB\conversion\collection",cap$="Convert Collections")
+ 
+	dim cnam$*40,dat$*20,a$(61)*30,u(61),scr1$(10)*30,alloc(10),nam$*30,o(2)
+	dim r(20,4),hd1$*190,hd2$*190,cap$*128,message$*40
+ 
+	fncno(cno,cnam$)
+ 
+	cap$="Convert Collections"
+ 
+ 
+	open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,outIn,relative
+	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+L230: !
+L240: read #6,using L280: x$,m,n,mat o,adrnxt,rcpt$,mat alloc eof L440
+	for j=1 to udim(alloc)
+		if alloc(j)<-20202 then alloc(j)=0
+	next j
+L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
+	if m=0 then goto L230
+	if o(1)<1 or o(1)>4 then o(1)=1
+	if o(1)=3 then ti2=1 : tcode=3 ! REG.COLLECTION
+	if o(1)=4 then ti2=2 : tcode=5 ! CREDIT MEMO
+	if o(1)=1 and o(2)=4 then ti2=3 : tocde=6 ! DEBIT MEMO
+	tdate=fndate_mmddyy_to_ccyymmdd(n)
+	tamount=m
+	for j=1 to 10 : tg(j)=alloc(j): next j
+	read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): p$ nokey L420
+	rewrite #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+	goto L430
+L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+L430: goto L240
+L440: close #2:
+	fnindex_it("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
+Xit: fnXit

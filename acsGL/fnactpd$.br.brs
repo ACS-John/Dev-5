@@ -1,16 +1,16 @@
-00010 ! Replace S:\acsGL\fnActPd$
-33000 def library fnactpd$(;actpd$)
-33020   library 'S:\Core\Library': fncno,fngethandle
-33040   get=1 : put=2
-33060   if trim$(actpd$)="" then get_or_put=1 else get_or_put=2
-33080   open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
-33100   if get_or_put=get then 
-33120     read #tmp,using "Form POS 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
-33140   else if get_or_put=put then 
-33160     rewrite #tmp,using "Form POS 270,C 6",rec=1: actpd$
-33180   end if
-33200   CLOSE_TMP: !
-33220   close #tmp: 
-33240   fnactpd$=actpd$
-33260   XIT: ! 
-33280 fnend 
+! Replace S:\acsGL\fnActPd$
+def library fnactpd$(;actpd$)
+	autoLibrary
+	get=1 : put=2
+	if trim$(actpd$)="" then get_or_put=1 else get_or_put=2
+	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+	if get_or_put=get then
+		read #tmp,using "Form POS 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
+	else if get_or_put=put then
+		rewrite #tmp,using "Form POS 270,C 6",rec=1: actpd$
+	end if
+	CLOSE_TMP: !
+	close #tmp:
+	fnactpd$=actpd$
+	Xit: !
+fnend

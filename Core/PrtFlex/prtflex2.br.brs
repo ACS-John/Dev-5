@@ -1,20 +1,7 @@
 ! Prtflex2 ! DO NOT RENUMBER
 ! Replace S:\Core\PrtFlex\PrtFlex2
 ! r: libraries
-	library 'S:\Core\Library': fnAcs
-	library 'S:\Core\Library': fncmbact
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnOpt
-	library 'S:\Core\Library': fnflexadd1
-	library 'S:\Core\Library': fnflexinit1
-	library 'S:\Core\Library': fnButton
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnFra
-	library 'S:\Core\Library': fnLbl
+	autoLibrary
 ! /r
 	on error goto Ertn
 ! r: dims
@@ -36,18 +23,18 @@
 	dim chk4d5$*1,chk4d6$*1,chk4d7$*1,chk4d8$*1,otherspec$*40,chk4d9$*1
 	dim heap$*1,chk4d21$*1,comment2$*150,votime$*8,holdname$(3)*30
 ! /r
-	fntop(program$,"Print Flex")
+	fnTop(program$,"Print Flex")
 	programfolder$=env$('cursys')&"mstr"
 	datafolder$='[Q]\'&env$('cursys')&"mstr"
 	dataext$='.h[cno]'
 	columns=1
 ! r: OPENFILES: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 !               remove the old reads in case they dont match
-	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed 
+	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 ! /r
-	open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative 
+	open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative
 	read #11,using 'Form POS 1,C 40',rec=1: gridname$
-	close #11: 
+	close #11:
 	if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET
 PRINTGRID: ! r: Prints the grid
 	mat item$(columns)
@@ -76,9 +63,9 @@ READ_NEXT: gosub READDATAFILES ! reads the database for the grid information    
 	fnAcs('',win,mat response$,ckey) ! CALL items selected
 	lastgridresponse$=response$(1)
 	if ckey=5 then chain "S:\Core\prtflex\Grids",programfolder$,datafolder$
-! fnXIT(CURSYS$)
+! fnXit(CURSYS$)
 ! /r
-
+ 
 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info
 L9010: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	read #1,using L9010: p$,tdate,tcode,tamount,mat tg,we,wu,er,eu,gr,gu,tbal,pcode eof EOFONREAD
@@ -90,8 +77,8 @@ GRIDDETAILS: ! r: The following lines are generated lines.  They will be        
 	item$(1)=e$(2)
 	return  ! /r
 DONE: close #1: ioerr ignore
-XIT: fnxit
-
+Xit: fnXit
+ 
 ASKTRANSET: ! r:
 	transtype$(1)="Charge"
 	transtype$(2)="Penalty"
@@ -103,41 +90,41 @@ ASKTRANSET: ! r:
 	fnFra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 	cf+=1 : fratype=cf
 	fnOpt(1,3,"[All]",0,fratype)
-	if sel_code=1 or sel_code=0 then 
+	if sel_code=1 or sel_code=0 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnOpt(2,3,"Charges",0,fratype)
-	if sel_code=2 then 
+	if sel_code=2 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnOpt(3,3,"Penalties",0,fratype)
-	if sel_code=3 then 
+	if sel_code=3 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnOpt(4,3,"Collections",0,fratype)
-	if sel_code=4 then 
+	if sel_code=4 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnOpt(5,3,"Credit Memos",0,fratype)
-	if sel_code=5 then 
+	if sel_code=5 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnOpt(6,3,"Debit Memos",0,fratype)
-	if sel_code=6 then 
+	if sel_code=6 then
 		resp$(rc+=1)="True"
-	else 
+	else
 		resp$(rc+=1)="False"
-	end if 
+	end if
 	fnFra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 	fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
@@ -151,28 +138,28 @@ ASKTRANSET: ! r:
 	fnLbl(1,1,"Account:",8,1,0,fraaccount)
 	fncmbact(1,10,1,fraaccount)
 	rc+=1
-	if trim$(hact$)<>"" then 
+	if trim$(hact$)<>"" then
 		resp$(rc)=hact$
-	else if resp$(rc)="" then 
+	else if resp$(rc)="" then
 		resp$(rc)="[All]"
-	end if 
+	end if
 	fnCmdKey("&Display",1,1,0,"Displays a list of transactions on the screen")
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
 	fnAcs('',0,mat resp$,ckey)
-	if ckey=cancel then goto XIT_ASKTRANSET
-	if resp$(1)="True" then 
+	if ckey=cancel then goto Xit_ASKTRANSET
+	if resp$(1)="True" then
 		sel_code=1
-	else if resp$(2)="True" then 
+	else if resp$(2)="True" then
 		sel_code=2
-	else if resp$(3)="True" then 
+	else if resp$(3)="True" then
 		sel_code=3
-	else if resp$(4)="True" then 
+	else if resp$(4)="True" then
 		sel_code=4
-	else if resp$(5)="True" then 
+	else if resp$(5)="True" then
 		sel_code=5
-	else if resp$(6)="True" then 
+	else if resp$(6)="True" then
 		sel_code=6
-	end if 
+	end if
 	beg_date=val(resp$(7))
 	end_date=val(resp$(8))
 	c$=resp$(9)(1:10)

@@ -1,31 +1,15 @@
 ! formerly S:\acsPR\newprReg1
 ! Payroll Register
-
-! r: general setup: libraries, dims, fntop,fncno,read defaults, open files, etc
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnPayPeriodEndingDate
-	library 'S:\Core\Library': fndat
-	library 'S:\Core\Library': fnprocess
-	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnChk
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnAcs2
-	library 'S:\Core\Library': fnpayroll_register_2
-	library 'S:\Core\Library': fnreg_read,fnreg_write
-	library 'S:\Core\Library': fncreg_read,fncreg_write
-	library 'S:\Core\Library': fnDedNames
-	library 'S:\Core\Library': fnGetHandle
+ 
+! r: general setup: libraries, dims, fnTop,fncno,read defaults, open files, etc
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim em$*30,cp(32),tcp(32)
 	dim tdc(10),ttdc(10)
 	dim thc(5)
-
-	fntop(program$)
+ 
+	fnTop(program$)
 	fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$,'True')
 	fnreg_read('prreg2.append_reg1',append_reg1$,'True')
 	! pr 'before fndednames' : pause
@@ -39,7 +23,7 @@
 	dim deduc(20)
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
-
+ 
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
@@ -56,18 +40,18 @@
 	ckno+=1
 	d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
 	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
-
+ 
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
-
-
+ 
+ 
 	open #hEmployee:=fnGetHandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #h_dd=fnGetHandle: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
 	open #hCheck1:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,input,keyed
 	open #hCheck3:=fnGetHandle: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,input,keyed
 ! /r
-
+ 
 if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
-
+ 
 ASK_CHECK_NO: ! r:
 	fnTos
 	respc=0
@@ -87,9 +71,9 @@ ASK_CHECK_NO: ! r:
 		resp$(resp_include_tips_in_other_wh:=respc+=1)='False'
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed with pr the payroll register." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
 	fnAcs2(mat resp$,ckey) ! ask employee #
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	ckno=val(resp$(1))
 	ppd=val(resp$(2))
 	append_reg1$=resp$(resp_append_reg1)
@@ -105,7 +89,7 @@ START_REPORT: ! r:
 	end if
 	gosub HDR
 goto LOOP_TOP ! /r
-
+ 
 def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
 	theDate=date(days(theDate,'mmddyy'),'ccyymmdd')
 	ehcKey$=cnvrt$('N 8',eno)
@@ -117,7 +101,7 @@ def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
 	EhcFinis: !
 	fn_employeeHasCheckOnDate=returnN
 fnend
-
+ 
 LOOP_TOP: ! r: main loop
 	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6': eno,em$,lpd eof FINIS
 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
@@ -154,20 +138,20 @@ L760: !
 	!   end if
 	! next j
 	for j=5 to 24
-		if newdedcode(j-4)=newdedcode_Benefit then 
+		if newdedcode(j-4)=newdedcode_Benefit then
 			! do nothing
-		else if newdedcode(j-4)=newdedcode_Add then 
+		else if newdedcode(j-4)=newdedcode_Add then
 			other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
 		else if newdedcode(j-4)=newdedcode_Deduct then
 			other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
 		else ! default to behave like a deduction
 			other_wh=other_wh+tcp(j)
 			! pr 'newdedcode('&str$(j-4)&')='&str$(newdedcode(j-4))&' which is invalid.'
-			! pr bell 
+			! pr bell
 			! pause
-		end if 
+		end if
 	next j
-
+ 
 	if include_tips_in_other_wh then ! include tips in Other Withholdings added for West Accounting on 1/18/2016
 		other_wh+=tcp(30) ! if break_is_on and tcp(30)<>0 then pr 'tcp('&str$(30)&') TIPS    adds '&str$(tcp(30))
 	end if
@@ -190,7 +174,7 @@ L940: !
 	total_gross_pay+=tcp(31)
 	other_wh=0
 	goto LOOP_TOP ! /r
-
+ 
 TOTALS: ! r:
 	pr #255: ''
 	pr #255: '    Total Hours: '&lpad$(str$(total_hours),26)
@@ -234,6 +218,6 @@ FINIS: ! r:
 		fncloseprn
 	end if
 	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1,ppd)
-	goto XIT ! /r let fnchain("S:\acsPR\newprReg2")
-XIT: fnxit
-include: ertn
+	goto Xit ! /r let fnchain("S:\acsPR\newprReg2")
+Xit: fnXit
+include: Ertn

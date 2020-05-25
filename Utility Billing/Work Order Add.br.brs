@@ -1,17 +1,17 @@
 library program$: fnworkOrderAdd
-library 'S:\Core\Library': fnxit,fntop,fnask_account,fngethandle
-fntop(program$)
+library 'S:\Core\Library': fnXit,fnTop,fnask_account,fngethandle
+fnTop(program$)
 open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 do
 	if fnask_account('Work Order',z$,h_customer)=5 then 
-		goto XIT
+		goto Xit
 	else
 		fnworkOrderAdd(z$)
 	end if 
 loop
-XIT: !
+Xit: !
 close #h_customer:
-fnxit
+fnXit
 def library fnworkOrderAdd(z$*10)
 	if ~wo_setup then ! r:
 		wo_setup=1
@@ -242,4 +242,4 @@ def fn_not_blank(nbTestText$*256)
 	end if
 	fn_not_blank=nbReturn
 fnend
-include: ertn
+include: Ertn

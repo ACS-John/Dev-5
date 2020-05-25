@@ -1,23 +1,23 @@
 ! formerly S:\acsUB\BkDraft
 fn_setup
-fntop(program$)
-
-
+fnTop(program$)
+ 
+ 
 	if ~fnclient_has('UB-EFT') then
 		mat ml$(2)
 		ml$(1)="You must purchase the ACS Utility Billing EFT"
 		ml$(2)="module to access these features"
 		fnmsgbox(mat ml$, response$, '',64)
-		goto XIT
+		goto Xit
 	end if
-
+ 
 ! r: Screen 1
 	dim pth$*128
 	fnureg_read('Bank Draft File',pth$,env$('Desktop')&'\bkdraft.dat')
 	fnLastBillingDate(d1)
 	
 	fnTos(sn$="BKDraft")
-	mylen=13 
+	mylen=13
 	mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Billing Date:",mylen,1)
@@ -31,9 +31,9 @@ fntop(program$)
 	resp$(respc_bankDraftFile:=respc+=1)=pth$
 	fnChk(4,mypos,"Post Collections:",1)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	d1=val(resp$(1))
 	d2=val(resp$(2))
 	pth$=trim$(resp$(respc_bankDraftFile))
@@ -43,14 +43,14 @@ fntop(program$)
 	
 goto initialization ! /r
 initialization: ! r: initialization
-	! open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative 
-	open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+	! open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative
+	open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	close #22: ioerr ignore
 	open #hOut:=fngethandle: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
-	if postub=1 then 
-		open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative 
-	end if 
-	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed 
+	if postub=1 then
+		open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative
+	end if
+	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
 	fnopenprn
 	gosub HdrP1
 	gosub HDR1
@@ -93,11 +93,11 @@ HDR1: ! r: ! FILE HEADER RECORD
 	osc$="1" ! ORIGINATOR STATUS CODE
 	odi$=fnEftData$('originating dfi identification') ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 	bn=1 !  BN=BATCH NUMBER
-	if env$('client')="Depoe Bay" then 
+	if env$('client')="Depoe Bay" then
 		pr #hOut,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$    ,fcd$,"",osc$,odi$,bn
-	else 
+	else
 		pr #hOut,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn
-	end if 
+	end if
 	L850: form pos 1,g 1,pic(###),c 16,c 20,c 10,c 3,c 10,pic(######),g 6,g 3,g 1,c 8,pic(#######)
 return  ! /r
 DETAIL1: ! r:
@@ -126,7 +126,7 @@ WritePostingEntry: ! r:
 	m=bal : n=d2 : o(1)=3
 	write #6,using "Form POS 1,C 10,PD 4.2,PD 4,2*N 1,POS 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
 return ! /r
-
+ 
 CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
 	scc=225 ! SERVICE CLASS CODE
 	eac=tn1 ! ENTRY ADDENDA COUNT
@@ -136,12 +136,12 @@ CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
 	! TC1=TOTAL CREDIT AMOUNT
 	! CID$=COMPANY IDENTIFICATION
 	tn1=tn1+1 : tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
-	if env$('client')="Billings" then 
+	if env$('client')="Billings" then
 		tn1-=1
-	else 
+	else
 		pr #hOut,using L1126: 6,22,imo$(2:9),imo$(10:10),trim$(odi$),td1*100,"",env$('cnam')(1:22),"",0,odi$&tn$ ! putting total deposit in city's bank account ! Billings does not offset the withdrawls with a deposit.  The banker does that manually.
 		L1126: form pos 1,g 1,g 2,c 8,c 1,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
-	end if 
+	end if
 	pr #hOut,using L1140: 8,scc,eac,eh,td1*100,tc1*100,cid$,mac$,"",odi$,bn
 	L1140: form pos 1,g 1,pic(###),pic(######),pic(##########),2*pic(############),c 10,c 19,c 6,c 8,pic(#######)
 	! FILE CONTROL RECORD
@@ -157,7 +157,7 @@ CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
 	for j=1 to bkfactor
 		pr #hOut,using "Form POS 1,C 94": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
 	next j
-	L1280: ! 
+	L1280: !
 return  ! /r
 Finis: ! r:
 	gosub CTRL1
@@ -167,39 +167,39 @@ Finis: ! r:
 	close #hOut:
 	
 	! r:
-	open #hTmpIn:=fngethandle: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94",display,input 
-	open #hTmpOut:=fngethandle: "Name="&env$('temp')&"\BkDraft_Tmp_24."&session$&",RecL=96,EOL=None,Replace",external,output 
+	open #hTmpIn:=fngethandle: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94",display,input
+	open #hTmpOut:=fngethandle: "Name="&env$('temp')&"\BkDraft_Tmp_24."&session$&",RecL=96,EOL=None,Replace",external,output
 	dim a$*94
-	do 
+	do
 		linput #hTmpIn: a$ eof L1590
 		if a$(94:94)="X" then a$(94:94)=""
 		write #hTmpOut,using "Form POS 1,C 94,C 1,c 1": rpad$(a$,94),chr$(13),chr$(10)
-	loop 
-	L1590: ! 
-	close #hTmpOut: 
-	close #hTmpIn: 
-	COPY_TO_DESTINATION: ! 
-	if ~fnRename(env$('temp')&"\BkDraft_Tmp_24."&session$,pth$) then 
+	loop
+	L1590: !
+	close #hTmpOut:
+	close #hTmpIn:
+	COPY_TO_DESTINATION: !
+	if ~fnRename(env$('temp')&"\BkDraft_Tmp_24."&session$,pth$) then
 		mat ml$(3)
 		ml$(1)="Unable to create file: "
 		ml$(2)=pth$
 		ml$(3)='Select OK to retry.'
 		fnmsgbox(mat ml$,resp$,'',65)
 		if resp$="OK" then goto COPY_TO_DESTINATION
-		goto XIT
+		goto Xit
 	end if
 	! /r
 	
 	
-if postub=1 then 
-	mat ml$(3) 
-	ml$(1)="You have indicated you want to post the drafts" 
-	ml$(2)="as collections to each customers account." 
-	ml$(3)="Click OK to continue else Cancel to skip posting." 
+if postub=1 then
+	mat ml$(3)
+	ml$(1)="You have indicated you want to post the drafts"
+	ml$(2)="as collections to each customers account."
+	ml$(3)="Click OK to continue else Cancel to skip posting."
 	fnmsgbox(mat ml$,resp$,'',1)
 	if resp$="OK" then gosub Merge
 end if
-goto XIT ! /r
+goto Xit ! /r
 Merge: ! r:
 	r6=0
 	do
@@ -226,9 +226,9 @@ Merge: ! r:
 		for j=1 to 10
 			if trim$(srvname$(j))<>'' then
 				j2=j2+1
-				if o(1)=5 then 
-					gb(j)=gb(j)+alloc(j2) 
-				else 
+				if o(1)=5 then
+					gb(j)=gb(j)+alloc(j2)
+				else
 					gb(j)=gb(j)-alloc(j2)
 				end if
 			end if
@@ -238,35 +238,22 @@ Merge: ! r:
 		rewrite #6,using "Form POS 19,2*N 1",rec=r6: mat o
 	loop
 	L2120: !
-	close #6,free: 
+	close #6,free:
 return  ! /r
-XIT: fnxit
-NEWPGE: pr #255: newpage : gosub HdrP1: continue 
+Xit: fnXit
+NEWPGE: pr #255: newpage : gosub HdrP1: continue
 HdrP1: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
 	pr #255: "\qc  {\f181 \fs22 \b "&date$("Month DD, CCYY")&"}"
 	pr #255: "{\ul Account No}  {\ul Customer Name                 }  {\ul Pay Date}  {\ul     Amount}"
 return  ! /r
-
-
+ 
+ 
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop,fnxit
-		library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnCmdSet,fnChk
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnOpenprn,fncloseprn
-		library 'S:\Core\Library': fnMsgbox
-		library 'S:\Core\Library': fnUreg_write,fnureg_read
-		library 'S:\Core\Library': fnCreg_write,fncreg_read
-		library 'S:\Core\Library': fnGet_services
-		library 'S:\Core\Library': fnDate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnCd
-		library 'S:\Core\Library': fnRename
-		library 'S:\Core\Library': fnGethandle
-		library 'S:\Core\Library': fnClient_has
-		library 'S:\Core\Library': fnEftData$
+		autoLibrary
 		dim ml$(0)*128
 		dim alloc(10)
 		dim resp$(5)*128
@@ -279,5 +266,5 @@ def fn_setup
 		on error goto Ertn
 	end if
 fnend
-
+ 
 include: Ertn

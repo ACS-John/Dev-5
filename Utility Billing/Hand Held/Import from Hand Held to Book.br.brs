@@ -7,13 +7,13 @@ if ~fnregistered_for_hh then ! r:
 	ml$(1)="You must purchase the ACS Utility Billing Hand Held"
 	ml$(2)="module to access these features"
 	fnmsgbox(mat ml$, response$, '',64)
-	goto XIT
+	goto Xit
 end if  ! /r
 fnRetrieveHandHeldFile
-fnxit
+fnXit
 def library fnRetrieveHandHeldFile(; automationBookNumber)
-	if ~setup then let fn_setup
-	fntop(program$)
+	if ~setup then fn_setup
+	fnTop(program$)
 	if automationBookNumber>0 and lwrc$(devicePreference$)<>'[ask]' and lwrc$(preferenceHandHeldFromFile$)<>'[ask]' then
 		respc=0
 		resp$(rc_book:=respc+=1)=str$(automationBookNumber)
@@ -77,8 +77,8 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 			end if
 			if fn_transfer(bookNumberToStoreReadings$,enableMerge$,env$('at')&askPath$)=-1 then goto SCREEN1
 		end if
-	goto XIT ! /r
-	XIT: ! target of Ertn exits
+	goto Xit ! /r
+	Xit: ! target of Ertn exits
 fnend
 def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 	transferReturn=0
@@ -553,7 +553,7 @@ fnend
 		if resp$(1)="" then resp$(1)="F:\"
 		fnCmdSet(2)
 		fnAcs2(mat resp$,ckey)
-		if ckey=5 then goto XIT
+		if ckey=5 then goto Xit
 		source$=resp$(1)
 		if len(source$)=0 then goto L1420
 		if len(source$)=1 then source$(2:2)=":"

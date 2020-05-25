@@ -1,6 +1,6 @@
 fn_setup
-fntop(program$)
-
+fnTop(program$)
+ 
 do ! main loop
 	fnTos
 	dim resp$(64)*128
@@ -21,7 +21,7 @@ do ! main loop
 	fnflexinit1('tmTran',3,1,10,10,mat heading$,mat mask$) ! r: draw the flexgrid
 	dim trans$(0)*80,transN(0)
 	hTrans=fn_open('TM Transaction',mat trans$,mat transN,mat form$, 1)
-
+ 
 	dim item$(11)*128
 	do
 		read #hTrans,using form$(hTrans): mat trans$,mat transN eof EoFlexDraw
@@ -43,12 +43,12 @@ do ! main loop
 	loop
 	EoFlexDraw: ! /r
 	fnCloseFile(hTrans,'TM Transaction')
-
+ 
 	fnCmdKey('Delete',ck_delete:=4)
 	fnCmdKey('Exit',ck_exit:=5,0,1)
 	fnCmdKey('Reassign Next Transaction Addresses',ck_rnta:=6)
 	fnAcs2(mat resp$,ckey)
-	if ckey=ck_exit then 
+	if ckey=ck_exit then
 		goto Finis
 	else
 		selectedRecord=val(resp$(1))
@@ -107,7 +107,7 @@ def fn_clientName$*30(clientId$; ___,return$*30,x)
 	end if
 	fn_clientName$=return$
 fnend
-
+ 
 DeleteTransaction: ! r: requires selectedRecord
 	dim mg$(0)*128
 	mat mg$(0)
@@ -147,25 +147,16 @@ Finis: ! r:
 		needToRnta=0
 	end if
 goto Xit ! /r
-
-Xit: fnxit
+ 
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnAddOneC,fnAddOneN
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnTos,fnFlexInit1,fnFlexAdd1,fnCmdKey,fnAcs2
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnMsgBox
-		library 'S:\Core\Library': fnCloseFile
-		library 'S:\Core\Library': fnReassignNTA
+		autoLibrary
 		gosub Enum
 	end if
 fnend
-
+ 
 include: fn_open
 include: enum
-include: ertn
+include: Ertn

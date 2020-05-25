@@ -1,4 +1,4 @@
-00010   library 'S:\Core\Library': fngetcd
-00020   dim mycd$*256
-00030   fngetcd(mycd$)
-00040   pr mycd$
+autoLibrary
+dim mycd$*256
+fngetcd(mycd$)
+pr mycd$

@@ -1,7 +1,7 @@
 ! Replace S:\acsUB\CmbAct.br
 ! creates a screen ace combobox for [Q]\UBmstr accounts
 def library fncmbact(myline,mypos; addall,container,indexfile$*256)
-	library 'S:\Core\Library': fncombof
+	autoLibrary
 	if addall<>1 then addall=0
 	if addall=0 then 
 		fen$="CAct"

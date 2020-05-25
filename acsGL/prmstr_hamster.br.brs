@@ -1,32 +1,32 @@
 ! another Hamster
-library 'S:\Core\Library': fntop,fnxit,fnHamster
+autoLibrary
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 fn_setup_hamster
 fn_open_file : fn_close_file : fn_open_file
 if sum(mat sp)=0 then mat sp(0)
 fnHamster("PRmstr",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 fn_close_file
-goto XIT
-
+goto Xit
+ 
 def fn_open_file
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed 
-fnend 
+	open #open_file_count+=1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed
+fnend
 def fn_close_file
 	for j=1 to open_file_count : close #j: : next j
 fnend  ! fn_close_file
-XIT: fnxit
-
+Xit: fnXit
+ 
 def fn_setup_hamster
 	mask_pointtwo=32 : mask_number=30
 	mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 	textlen_mmddyy=8 : textlen_ccyymmdd=10
 	storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-
+ 
 	dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
 	mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
-
+ 
 	! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 	fn_add_rec("ENo ",12,'N',4,mask_number)
 	fn_add_rec("Name ",25)
@@ -55,4 +55,4 @@ def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,stora
 	mat c$(add_rec_item,8)
 fnend
 include: Ertn
-
+ 

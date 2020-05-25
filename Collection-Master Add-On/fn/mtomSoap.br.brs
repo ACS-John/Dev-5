@@ -10,8 +10,7 @@ def fn_setup
 		dim mtomSoapUtil$*256
 		mtomSoapUtil$=os_filename$('Collection-Master Add-On\mtomSoap.cmd') ! os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
 		
-		library 'S:\Core\Library.br': fngethandle
-		library 'S:\Core\Library.br': fnFree
+		autoLibrary
 
 	end if
 fnend
@@ -66,7 +65,7 @@ def fn_prOutXmlItem(encap$*128,value$*128; optional)
 fnend
 ! r: APIs('
 def library fnListMunicipalities
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnListMunicipalities=fn_listMunicipalities
 fnend
 def fn_listMunicipalities
@@ -78,7 +77,7 @@ def fn_listMunicipalities
 fnend
 
 def library fnLoadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationEmail$; custMemo$*256,dssNumber$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnLoadExistingCase=fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$,notificationEmail$, custMemo$,dssNumber$)
 fnend
 def fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationEmail$*256; custMemo$*256,dssNumber$)
@@ -93,7 +92,7 @@ def fn_loadExistingCase(caseNumber$,fileBarNumber$,hearingDate$*64,notificationE
 	fn_mtomSoapFinis
 fnend
 def library fnCreateNewFiling(court$,countyNumber$,caseType$,fileBarNumber$,notificationEmail$*256; custMemo$*256,dssNumber$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnCreateNewFiling=fn_createNewFiling(court$,countyNumber$,caseType$,fileBarNumber$,notificationEmail$, custMemo$,dssNumber$)
 fnend
 def fn_createNewFiling(court$,countyNumber$,caseType$,fileBarNumber$,notificationEmail$*256; custMemo$*256,dssNumber$)
@@ -110,7 +109,7 @@ def fn_createNewFiling(court$,countyNumber$,caseType$,fileBarNumber$,notificatio
 	fn_mtomSoapFinis
 fnend
 def library fnAddParty(; filingId$,partyRole$,partyType$,firstName$,lastName$,middleInitial$,suffix$,gender$,businessName$,SSNFTIN$,aka1type$,aka1$,aka2type$,aka2$,address1$,address2$,city$,state$,zipCode$,homePhone$,dateOfBirth$,dateOfDeath$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAddParty=fn_addParty( filingId$,partyRole$,partyType$,firstName$,lastName$,middleInitial$,suffix$,gender$,businessName$,SSNFTIN$,aka1type$,aka1$,aka2type$,aka2$,address1$,address2$,city$,state$,zipCode$,homePhone$,dateOfBirth$,dateOfDeath$)
 fnend
 def fn_addParty(; filingId$,partyRole$,partyType$,firstName$,lastName$,middleInitial$,suffix$,gender$,businessName$,SSNFTIN$,aka1type$,aka1$,aka2type$,aka2$,address1$,address2$,city$,state$,zipCode$,homePhone$,dateOfBirth$,dateOfDeath$)
@@ -141,7 +140,7 @@ def fn_addParty(; filingId$,partyRole$,partyType$,firstName$,lastName$,middleIni
 fnend
 
 def library fnStreamDocument(filingId$,docType$,pdfFile$*1024; filedFor$,docNumber$,serviceMethod$,serviceFees$,serviceInstructions$,serviceDate$,judgmentDebtor$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnStreamDocument=fn_streamDocument(filingId$,docType$,pdfFile$, filedFor$,docNumber$,serviceMethod$,serviceFees$,serviceInstructions$,serviceDate$,judgmentDebtor$)
 fnend
 def fn_streamDocument(filingId$,docType$,pdfFile$*1024; filedFor$,docNumber$,serviceMethod$,serviceFees$,serviceInstructions$,serviceDate$,judgmentDebtor$)
@@ -160,7 +159,7 @@ def fn_streamDocument(filingId$,docType$,pdfFile$*1024; filedFor$,docNumber$,ser
 fnend
 
 def library fnSubmitFiling(filingI$,appearanceDate$; commentsForCler$*1024)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSubmitFiling=fn_submitFiling(filingI$,appearanceDate$, commentsForCler$)
 fnend
 def fn_submitFiling(filingI$,appearanceDate$; commentsForCler$*1024)

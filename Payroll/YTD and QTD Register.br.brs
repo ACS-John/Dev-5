@@ -1,7 +1,7 @@
 ! formerly S:\acsPR\newprYTDQTD
 ! Year-To-Date Quarter-To-Date Register
 fn_setup
-fntop(program$)
+fnTop(program$)
 if ~fnprocess=1 then
 	gosub Screen1
 end if
@@ -44,9 +44,9 @@ fnopenprn
 		dim rptot(21,2)
 		
 		twy=tty=twq=ttq=tficawy=tficawq=0
-
+ 
 		gosub DetermineEarnings
-
+ 
 		rptemp(1) +=wagesYr                  ! total wages ytd
 		rptemp(2) +=fedYr                    ! federal wh ytd
 		rptemp(3) +=ficaYr                   ! fica wh ytd
@@ -108,12 +108,12 @@ PrEmp: ! r:
 		tx1=0
 	end if
 return ! /r
-
+ 
 PgOf: ! r:
 	pr #255: newpage
 	gosub PrHdr
 continue ! /r
-
+ 
 Finis: ! r:
 	pr #255:
 	eno=0
@@ -140,7 +140,7 @@ Finis: ! r:
 	close #hTrans: ioerr ignore
 	close #hEmployee: ioerr ignore
 goto Xit ! /r
-
+ 
 PrHdr: ! r:
 	pr #255,using "form pos 1,c 25": 'Page '&str$(pgno+=1)&' '&date$('mm/dd/ccyy')
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
@@ -152,9 +152,9 @@ PrHdr: ! r:
 	pr #255: "  Number  Name                   Total      Taxable       SS/Med   Fed W/H    St W/H       Total        SS/Med   Fed W/H    St W/H"
 	pr #255: "________  ___________________  __________ ___________ __________ __________ __________  ___________ __________ __________ __________"
 return ! /r
-
-XIT: fnxit
-
+ 
+Xit: fnXit
+ 
 Screen1: ! r:
 	dim resp$(10)*40
 	prdate=fnPayPeriodEndingDate
@@ -167,7 +167,7 @@ Screen1: ! r:
 	fnCmdKey("Next"  ,1,1,0)
 	fnCmdKey("Cancel",5,0,1)
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	prdate=val(resp$(1))
 	payrollYear=val(resp$(rc_prdate)(1:4))
 	beg_date=qtr1=payrollYear*10000+ 101
@@ -229,24 +229,10 @@ DetermineEarnings: ! r:
 	DetermineEarningsXit: !
 return ! /r
 def fn_setup
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fnwait
-	library 'S:\Core\Library': fnopenprn
-	library 'S:\Core\Library': fncloseprn
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fnLbl
-	library 'S:\Core\Library': fnTxt
-	library 'S:\Core\Library': fnCmdKey
-	library 'S:\Core\Library': fnFra
-	library 'S:\Core\Library': fnAcs2
-	library 'S:\Core\Library': fnprocess
-	library 'S:\Core\Library': fnGetPayrollDates,fnPayPeriodEndingDate
-	library 'S:\Core\Library': fnDedNames
+	autoLibrary
 	
 	on error goto Ertn
-
+ 
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #1,using 'Form POS 239,PD 4.2': ficaMaxW
 	close #1:

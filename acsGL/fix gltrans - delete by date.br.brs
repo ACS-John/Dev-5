@@ -2,9 +2,9 @@
 ! NOTICE: You should probably be using "Remove Entries Posted by Mistake" instead of this.
 enableDelete=1
 monthToDelete=8
-
-library 'S:\Core\Library': fngethandle,fnCopy,fnsafe_filename$
-
+ 
+autoLibrary
+ 
 if enableDelete then
 	fnCopy('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\GLTrans backup at '&fnsafe_filename$(date$&' - '&time$)&'.h[cno]')
 end if
@@ -28,6 +28,6 @@ do
 loop
 EO_hTrans: !
 pr 'lrec(hTrans)=';lrec(hTrans)
-close #hTrans: 
+close #hTrans:
 pr 'deleteCount=';deleteCount
 end

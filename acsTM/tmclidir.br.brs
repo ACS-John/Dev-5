@@ -1,10 +1,8 @@
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnRead30Categories
+	autoLibrary
 	on fkey 5 goto L830
 	on error goto Ertn
-
-	fntop(program$,"Client Directory")
+ 
+	fnTop(program$,"Client Directory")
 	fnRead30Categories(mat cat$)
 	for j=1 to 10
 		flo$(j)=str$(j+10)&",30,C 30,N"
@@ -66,7 +64,7 @@ L700: form pos 40,pic(zz/zz/zz),skip 3
 L720: form pos 2,c 6,pos 70,c 4,pos 77,c 8,skip 1
 		pr #255,using L740: "NUMBER","NAME AND ADDRESS","CLIENT INFORMATION","END","IN CHARGE"
 L740: form pos 2,c 6,pos 12,c 16,pos 42,c 19,pos 71,c 3,pos 76,c 9,skip 2
-		return 
+		return
 L760: if numprint=1 then goto L800
 		pr #255: newpage
 		restore #1,key>="     ": nokey L800
@@ -76,6 +74,6 @@ L800: close #1: ioerr L830
 	goto L840
 L830: fncloseprn
 L840: if uprc$(rtrm$(prg$))="S:\acsTM\client" then chain prg$
-	goto XIT
-XIT: fnxit
-include: ertn
+	goto Xit
+Xit: fnXit
+include: Ertn

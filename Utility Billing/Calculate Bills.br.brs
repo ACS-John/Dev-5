@@ -1,4 +1,4 @@
-library 'S:\Core\Library': fnTop,fnCalculateBills,fnXit
+autoLibrary
 fnTop(program$)
 fnCalculateBills('calculate')
 fnXit

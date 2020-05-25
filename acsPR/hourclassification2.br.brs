@@ -2,7 +2,7 @@
 ! enter and track houly breakdowns of time for comp time, etc
 def library fnhours(eno)
 
-	library 'S:\Core\Library': fntop,fnxit, fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton,fnAcs2,fnmsgbox,fnCmdSet,fncombof
+	autoLibrary
 	on error goto Ertn
 
 	dim message$*40,resp$(10)*40
@@ -11,7 +11,7 @@ def library fnhours(eno)
 	dim impname$*25,empname$*30
 	dim flxitm$(8)*30,key$*21
 
-	fntop(program$,"Time Classification")
+	fnTop(program$,"Time Classification")
 	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed 
 	open #classification=2: "Name=[Q]\PRmstr\HourClass.H[cno],KFName=[Q]\PRmstr\HourClass-idx.H[cno],Shr",internal,outIn,keyed 
 	open #hEmployee=3: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
@@ -62,7 +62,7 @@ def library fnhours(eno)
 		fnButton(lc,50,"&Refresh",46) 
 		fnButton(lc,60,"&Delete",44)
 		fnAcs2(mat resp$,ck) 
-		if ck=5 then goto XIT
+		if ck=5 then goto Xit
 		eno=val(resp$(1)(1:8))
 		editrec=val(resp$(2)) ! record # if edit
 		if ck=45 then edithours=1 else edithours=0
@@ -135,7 +135,7 @@ def library fnhours(eno)
 		ml$(3)="Do you wish to change to employee "&str$(empno)&"?" 
 		fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then eno=empno: goto L670 else empno=holdeno: goto ADDFM ! /r
-XIT: fnend 
+Xit: fnend 
 SETUP: ! r:
 	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1,kln=5,replace",internal,outIn,keyed 
 	close #breakdown: 

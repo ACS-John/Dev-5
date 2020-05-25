@@ -1,61 +1,52 @@
 ! S:\acsCL\unpaidinvoice - backup copy in C:\ACS\Dev-5\acsCL\UnpaidInvoice(before_overhaul09-28-2016).br.brs
-! r: SETUP: fntop, dims, open files, etc
-	library 'S:\Core\Library': fntop,fnxit, fnTos,fnFra,fnLbl,fnTxt,fnButton,fnCmdKey,fnAcs,fnflexadd1,fnflexinit1,fnChk
-	library 'S:\Core\Library': fngethandle
-	fntop(program$,cap$="Test DatePicker")
-!
-	dim cap$*128
-	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
-	dim in1$(9),de$*30,ta(2)
-	dim pr$(4)*30,t1(5),up$(4),unpaidkey$*20
-	dim d(2),sn$*50
-	dim jn$*6,cn$*11,l(13)
-	dim contact$*30,ph$*12,email$*50,fax$*12,myact$*20,resp$(50)*50
-	dim chdr$(16),cmask$(16),item$(16)*21 ! used with flex grid
-	dim gldesc$*30,ml$(3)*80
-	dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50
-!
-	open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
-	fnTos(sn$="paidinv")
-	respc=0 : mat resp$=('')
-	fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
-						fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
-						restore #clearing: 
-						if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
-					L4890: for j=nextrec to lrec(clearing) ! read starting with next record
-							read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
-							flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
-							flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
-							flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
-							flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
-							flxitm$(16)=str$(pdte)
-							flxitm$(1)=str$(rec(clearing))
-							if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-					fnflexadd1(mat flxitm$)
-					L4940: next j
-					if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
-					for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
-						read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+autoLibrary
+fnTop(program$,"Test DatePicker")
+ 
+dim chdr$(16),cmask$(16) ! used with flex grid
+dim resp$(256)*50
+ 
+open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
+fnTos
+respc=0 : mat resp$=('')
+fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&'',65,2)
+					fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
+					restore #clearing:
+					if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
+				L4890: for j=nextrec to lrec(clearing) ! read starting with next record
+						read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
 						flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 						flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 						flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
 						flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+						flxitm$(16)=str$(pdte)
 						flxitm$(1)=str$(rec(clearing))
 						if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-					fnflexadd1(mat flxitm$)
-					next j
-					L5020: goto L5070
-					L5030: ! 
-					read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+				fnflexadd1(mat flxitm$)
+				L4940: next j
+				if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
+				for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
+					read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
 					flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 					flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 					flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
 					flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
-					flxitm$(16)=str$(pdte)
-					flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
+					flxitm$(1)=str$(rec(clearing))
 					if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-					fnflexadd1(mat flxitm$) : goto L5030
-L5070: fnFra(2,1,13,23,"Approval Options"," ")
+				fnflexadd1(mat flxitm$)
+				next j
+				L5020: goto L5070
+				L5030: !
+				read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+				flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+				flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+				flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+				flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+				flxitm$(16)=str$(pdte)
+				flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
+				if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
+				fnflexadd1(mat flxitm$) : goto L5030
+L5070: !
+fnFra(2,1,13,23,"Approval Options"," ")
 fnButton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
 fnButton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)
 fnLbl(4,4,"From:",5,1,0,1)
@@ -84,4 +75,4 @@ fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file
 fnCmdKey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
 fnCmdKey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
 fnCmdKey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
-fnAcs(sn$,0,mat resp$,ck)
+fnAcs2(mat resp$,ck)

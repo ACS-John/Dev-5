@@ -2,16 +2,12 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngetdir2
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnAddOneC,fnAddOneN
+		autoLibrary
 	end if
 fnend
 
 def library fncno(&cno; &cnam$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! cursys$=env$('cursys')
 	! r: Read CNo (normal method - tied to session and env$('cursys')
 	fnreg_read(session$&'.'&env$('cursys')&'.cno',cno$)
@@ -50,7 +46,7 @@ def library fncno(&cno; &cnam$)
 	fncno=cno
 fnend 
 def library fnputcno(cno)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnputcno=fn_putcno(cno)
 fnend
 def fn_putcno(cno)
@@ -59,7 +55,7 @@ def fn_putcno(cno)
 	execute 'config substitute [cno] '&str$(cno)
 fnend 
 def library fnget_company_number_list(mat cno_list; sysid$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if sysid$='' then sysid$=env$('cursys')
 	fngetdir2('[Q]\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
 	company_count=filename_item=0
@@ -94,7 +90,7 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 	fn_CnoLegacyNtoCReg=valuePassedIn
 fnend 
 def library fnpedat$*20(;pedat$*20)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! Get_or_Put=1 then GET 
 	! Get_or_Put=2 then PUT
 	if trim$(pedat$)="" then get_or_put=1 else get_or_put=2
@@ -121,31 +117,31 @@ def library fnpedat$*20(;pedat$*20)
 	fnpedat$=pedat$
 fnend 
 def library fnfscode(;fscode)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnfscode=fn_CnoLegacyNtoCReg(env$('temp')&"\fscode-"&session$&".dat","Form POS 1,N 9",'Financial Statement Code', fscode)
 fnend 
 def library fnpriorcd(;PriorCD)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnpriorcd=fn_CnoLegacyNtoCReg(env$('temp')&"\priorcd-"&session$&".dat","Form POS 1,N 9",'PriorCD', PriorCD)
 fnend
 def library fnpgnum(;pgnum)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnpgnum=fn_CnoLegacyNtoCReg(env$('temp')&"\PgNum-"&session$&".dat","Form POS 1,N 9",'PgNum', pgnum)
 fnend
 def library fnrx(;rx)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnrx=fn_CnoLegacyNtoCReg(env$('temp')&"\rx-"&session$&".dat","Form POS 1,N 9",'rx', rx)
 fnend
 def library fnstyp(;STyp)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnstyp=fn_CnoLegacyNtoCReg(env$('temp')&"\STyp-"&session$&".dat","Form POS 1,N 9",'STyp', STyp)
 fnend
 def library fnps(;ps)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnps=fn_CnoLegacyNtoCReg(env$('temp')&"\ps-"&session$&".dat","Form POS 1,N 9",'ps', ps)
 fnend
 def library fnUseDeptNo
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~useDeptNosetup then ! r:
 		useDeptNosetup=1
 		if env$('cursys')="GL" then ! read directly from gl if in gl system
@@ -162,7 +158,7 @@ def library fnUseDeptNo
 	fnUseDeptNo=gld1
 fnend 
 def library fndat(&dat$;get_or_put)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! Get_or_Put=0 then READ Dat$ (default to Read)
 	! Get_or_Put=1 then READ Dat$
 	! Get_or_Put=2 then REWRITE Dat$
@@ -219,7 +215,7 @@ def fn_setup_systemCache
 	end if
 fnend
 def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN) 
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fn_setup_systemCache
 	sia_systemAbbr$=lwrc$(trim$(sia_systemAbbr$))
 	sia_which=srch(mat sAbbr$,sia_systemAbbr$)
@@ -237,7 +233,7 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	fnSystemIsAddOn=returnN
 fnend
 def library fnSystemNameFromId$*256(sysno; ___,return$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fn_setup_systemCache
 	sWhich=srch(mat sNumber,sysno)
 	if sWhich>0 then
@@ -246,7 +242,7 @@ def library fnSystemNameFromId$*256(sysno; ___,return$*256)
 	fnSystemNameFromId$=return$
 fnend
 def library fnSystemNameFromAbbr$*40(; as2n_abbr$*256,___,return$*40)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fn_setup_systemCache
 	if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
 	as2n_abbr$=lwrc$(as2n_abbr$)
@@ -258,7 +254,7 @@ def library fnSystemNameFromAbbr$*40(; as2n_abbr$*256,___,return$*40)
 	fnSystemNameFromAbbr$=return$
 fnend 
 def library fncursys$(; cursys_set$*256,resetCache)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if cursys_set$<>'' then 
 		cursys_cache$=uprc$(cursys_set$)
 		fnreg_write(session$&'.CurSys',cursys_cache$)

@@ -1,9 +1,9 @@
 ! Customer File Editor
 library program$: fnCustomer
-library 'S:\Core\Library': fnxit,fntop
-fntop(program$)
+autoLibrary
+fnTop(program$)
 fnCustomer(x)
-fnxit
+fnXit
 def library fnCustomer(x)
 	fn_setup
 	! r: open files
@@ -71,7 +71,7 @@ def library fnCustomer(x)
 		! Gosub DRAFT1
 		if tgb=bal then goto REWRITE_RECORD
 	goto BREAKDOWN_NOT_EQUAL ! /r
-	!
+
 	REWRITE_RECORD: ! r:
 		gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 		if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
@@ -101,7 +101,7 @@ def library fnCustomer(x)
 	PAST_CASS_DELETE: ! 
 	! probably change customer in ubtrans-vb here !Gosub 5130
 	if ad1=1 then goto ADD_RECORD else goto AskAcct ! /r
-	!
+
 	ASK_CONFIRM_KEY_CHANGE: ! r:
 		mat ml$(2)
 		ml$(1)="Do you wish to change account"
@@ -150,7 +150,7 @@ def library fnCustomer(x)
 		noteFileNew$=fn_notedir$&"\"&trim$(z$)&".txt" ! new notes
 		if exists(noteFile$)<>0 then execute "rename "&noteFile$&" "&noteFileNew$&" -d -n"
 	goto AskAcct ! /r
-	!
+
 	DeleteCustomer: ! r:
 	if bal<>0 then 
 			mat ml$(3)
@@ -169,7 +169,7 @@ def library fnCustomer(x)
 			hact$=""
 		end if
 	goto AskAcct ! /r
-	!
+
 	ALT_ADDRESS_SAVE: ! r: write or rewrite alternate billing address
 		rewrite #h_ubadrbil,using F_ADRBIL,key=z$: z$,mat ab$ nokey AAS_WRITE
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))="" then 
@@ -208,8 +208,7 @@ def library fnCustomer(x)
 		read #h_budmstr,using F_BUDMSTR,key=z$: z$,mat ba,mat badr nokey L3040
 		br1=1
 		L3040: !
-		sn$="budget1"
-		fnTos(sn$)
+		fnTos
 		fnFra(1,1,framelen-1,45,"Budget Billing Information","Enter budget amounts to activate budget billing",0)
 		fnLbl(2,16,"Budget Amounts",20,2,3,1)
 		fnLbl(3,1,"Date:",20,1,0,1)
@@ -231,13 +230,13 @@ def library fnCustomer(x)
 		fnCmdKey("Access &Transactions",8,0)
 		fnCmdKey("&Delete",3,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(sn$,0,mat budgetinfo$,ckey) ! budget billing master record
+		fnAcs2(mat budgetinfo$,ckey) ! budget billing master record
 		if ckey=5 then goto NameScreen
 		if ckey=8 then goto TRANS_ROUTINE
-		x=1: ba(1)=val(budgetinfo$(1)) conv ignore
+		x=1 : ba(1)=val(budgetinfo$(1)) conv ignore
 		for j=2 to 11
 			if trim$(srvnam$(j-1))<>"" then 
-				x+=1: ba(j)=val(budgetinfo$(x))
+				x+=1 : ba(j)=val(budgetinfo$(x))
 			end if 
 		next j
 		x+=1: ba(12)=val(budgetinfo$(x))
@@ -247,7 +246,7 @@ def library fnCustomer(x)
 		rewrite #h_budmstr,using F_BUDMSTR: z$,mat ba,mat badr
 		if ckey=2 then goto L3350
 	goto NameScreen 
-	! 
+
 	L3330: !
 	if sum(ba)=0 then goto TRANS_ROUTINE
 	write #h_budmstr,using F_BUDMSTR: z$,mat ba,mat badr
@@ -280,8 +279,7 @@ def library fnCustomer(x)
 			read #h_budtrans,using F_BUDTRANS,rec=ta1: x$,mat bt1,nba noRec BUDTR_XIT
 			! BUDTRANS: ! budget transactions
 			mat budgetinfo$(28)
-			sn$="BUDGET"
-			fnTos(sn$)
+			fnTos
 			fnFra(1,1,framelen+1,50,"Budget Billing Transactions","Actual billing compared to budget billing for any month billed",0)
 			fnLbl(2,22,"Budget     Actual",20,2,2,1)
 			fnLbl(3,1,"Date:",20,1,0,1)
@@ -289,7 +287,7 @@ def library fnCustomer(x)
 			fnTxt(3,22,8,8,1,"1",0,'',1)
 			budgetinfo$(2)=str$(bt1(1,2))
 			fnTxt(3,34,8,8,1,"1",0,empty$,1)
-			x=2: lyne=3
+			x=2 : lyne=3
 			for j=1 to 10
 				if trim$(srvnam$(j))<>"" then ! they have this service
 					x=x+2
@@ -316,7 +314,7 @@ def library fnCustomer(x)
 			budgetinfo$(x+=1)=str$(bt1(14,2))
 			fnTxt(lyne,34,8,8,1,"1",0,'',1)
 			fnCmdSet(2)
-			fnAcs(sn$,0,mat budgetinfo$,ckey) ! budget billing transactions
+			fnAcs2(mat budgetinfo$,ckey) ! budget billing transactions
 			if ckey=5 then goto NameScreen
 			x=0
 			for j=1 to 14
@@ -379,7 +377,7 @@ def library fnCustomer(x)
 		close #h_ubtransvb:
 	return  ! /r
 	NameScreen: ! r: the main customer screen
-		fnTos(sn$="custinfo")
+		fnTos
 		respc=0 : frac=0
 		mylen=25 : mylen+2
 		fnLbl(1,1,"Account:",15,1)               : fnTxt(1,17,10,10,1)                     : custInfo$(respc+=1)=trim$(z$)
@@ -498,7 +496,7 @@ def library fnCustomer(x)
 			fnCmdKey("Delete",4,0,0,"Deletes this record")
 		end if 
 		fnCmdKey("&Cancel",5,0,1,"Stops without recording any changes")
-		fnAcs(sn$,0,mat custInfo$,ckey) ! CALL main screen
+		fnAcs2(mat custInfo$,ckey) ! CALL main screen
 		if ckey=5 then 
 			release #h_customer_1: ioerr ignore
 			release #h_ubadrbil: ioerr ignore
@@ -616,8 +614,7 @@ def library fnCustomer(x)
 		end if 
 	! /r (NameScreen)
 	BILLING_INFO: ! r:
-		sn$="billing_info"
-		fnTos(sn$)
+		fnTos
 		fnLbl(1,14,"Billing Information",30,2,4)
 		fnLbl(2,1,"Account:",10,1)
 		fnTxt(2,12,10,0,1,'',1)
@@ -658,7 +655,7 @@ def library fnCustomer(x)
 		fnTxt(lyne,19,10,0,1,'10',0,'',1)
 		bxnf$(billinfo+=1)=str$(g(12))
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat bxnf$,ckey) ! billing information
+		fnAcs2(mat bxnf$,ckey) ! billing information
 		if ckey=5 then goto NameScreen
 		lastBillingDate=val(bxnf$(3))
 		bal=val(bxnf$(4))
@@ -678,8 +675,7 @@ def library fnCustomer(x)
 		billinfo=billinfo+1 : g(12)=val(bxnf$(billinfo))
 	goto NameScreen ! /r
 	BANK_DRAFT: ! r:
-		sn$="bank_draft"
-		fnTos(sn$)
+		fnTos
 		fnLbl(1,9,"Bank Draft Information",40,2,4)
 		fnLbl(2,1,"Account:",10,1)
 		fnTxt(2,12,10,10,1,'',1)
@@ -711,7 +707,7 @@ def library fnCustomer(x)
 		fnTxt(7,20,17,0,0,'',0,"Customer's bank account from which payments should be drafted.")
 		dri$(6)=da$
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat dri$,ckey) ! bank draft information
+		fnAcs2(mat dri$,ckey) ! bank draft information
 		if ckey=5 then goto NameScreen ! dont update information
 		df$=dri$(3)
 		dr$=dri$(4)
@@ -720,7 +716,7 @@ def library fnCustomer(x)
 	goto NameScreen ! /r
 	DEPOSIT_HIST: ! r:
 		read #h_deposit2,using 'form pos 1,c 10,g 8,c 32,2*n 10.2',key=z$: k32$,dt1,dp$,dp1,dp2 nokey DEPOSIT_HIST_NONE
-		fnTos(sn$="billing_info")
+		fnTos
 		fnLbl(1,16,"Deposit Change Information",40,2,4)
 		fnLbl(2,1,"Account:",16,1)
 		fnTxt(2,18,10,0,1,'',1)
@@ -751,7 +747,7 @@ def library fnCustomer(x)
 		loop
 		L7160: ! 
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey) ! CALL deposit change grd
+		fnAcs2(mat resp$,ckey) ! CALL deposit change grd
 		DEPOSIT_HIST_XIT: ! 
 	goto NameScreen ! /r
 	DEPOSIT_HIST_NONE: ! r:
@@ -775,18 +771,18 @@ def library fnCustomer(x)
 		else if ckey=1 then ! edit
 			goto EDIT_CUSTOMER
 		else if ckey=5 then ! Cancel
-			goto XIT
+			goto Xit
 		end if 
 		goto AskAcct
 	! /r
 	ADD_RECORD: ! r:
-		fnTos(sn$="customer8")
+		fnTos
 		fnLbl(1,5,"Adding Accounts",20,0,2)
 		fnLbl(3,1,"Account:",15,1)
 		fnTxt(3,17,10,0,1)
 		resp$(1)=""
 		fnCmdSet(11)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=5 then goto AskAcct
 		x$=lpad$(trim$(resp$(1)),10)
 		if trim$(x$)="" then goto ADD_RECORD
@@ -817,7 +813,7 @@ def library fnCustomer(x)
 		read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
 	IGNORE: continue 
-	XIT: ! r: close files and leave
+	Xit: ! r: close files and leave
 	! close #2: ioerr ignore
 	fn_close_file(h_customer_2)
 	fnCloseFile(hLocation,'U4 Meter Location')
@@ -838,7 +834,7 @@ def library fnCustomer(x)
 	! fn_close_file(h_customer_5) ! /r
 fnend 
 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~setup_depositChange then let fn_setup_depositChange
 	fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 fnend
@@ -888,7 +884,7 @@ SERVICE_SCREEN: ! r:
 		respc=gFkeyMeterLocationSelect=srvLine=0 
 		srvCol1len=20 : srvCol2pos=22 
 		gLocationFirstRespc=0 : gLocationKey$=''
-		fnTos(sn$='service'&str$(service_code))
+		fnTos
 		fnLbl(srvLine+=1,19,srvnam$(service_code),20,2,4)
 		fnLbl(srvLine+=1, 1,"Account:"  ,10,1) : fnTxt(srvLine,12,10, 0,1,'',1) : rateInfo$(respc+=1)=z$    ! 1
 		fnLbl(srvLine    ,24,"Name:"    , 5,1) : fnTxt(srvLine,31,25,30,0,'',1) : rateInfo$(respc+=1)=e$(2) ! 2
@@ -974,7 +970,7 @@ SERVICE_SCREEN: ! r:
 		next j
 		fn_ScrAddServiceMeterInfo(srvLine,respc+=1,mat rateInfo$,srv$(service_code),service_code)
 		fnCmdKey("&Save",1,1,1) ! fnCmdSet(2)  <---  remove the cancel button
-		fnAcs(sn$,0,mat rateInfo$,ckey) ! rate screen 1
+		fnAcs2(mat rateInfo$,ckey) ! rate screen 1
 		! /r
 		if ckey<>5 then ! r: get local values out of mat rateInfo$ and Save the record
 			! r: receive ratecode back
@@ -1162,7 +1158,7 @@ def fn_record_previous_update(rp_account$*10)
 	!   pr 'after' : for x=1 to 10 : pr x;'.';rp_prev$(x) : next x
 fnend 
 def library fnCustomerNotes(z$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnCustomerNotes=fn_customerNotes(z$)
 fnend
 def fn_customerNotes(z$)
@@ -1193,7 +1189,7 @@ def fn_record_previous_clear
 fnend 
 
 def library fnNoteDir$*256
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnNoteDir$=fn_notedir$
 fnend 
 def fn_notedir$*256
@@ -1299,7 +1295,7 @@ def fn_key_tweak(&kt_key$,h_customer_1)
 fnend 
 
 def library fnask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_button_enable_add)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnask_account=fn_ask_account(prev_list_id$,x$,h_customer_1, select_button_text$,aas_button_enable_add)
 fnend 
 def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_button_enable_add)
@@ -1324,7 +1320,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	col2_pos=col1_width+2
 	do 
 	AAS_TOP: ! 
-		fnTos(sn$="Customer-AskAcct2")
+		fnTos
 		respc=0
 		AskAcct_line=0
 		if rp_prev$(1)<>'' then 
@@ -1369,7 +1365,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		fnCmdKey(select_button_text$,1,1,0,select_button_text$&" the selected/highlighted record.")
 		fnCmdKey("Search",6,0,0,"Search for customer record")
 		fnCmdKey('Back',5,0,1,"Returns to previous screen")
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		x$=trim$(resp$(1)(1:10))
 		if account_selection_method=asm_text and ckey=1 then 
 			if ~fn_key_tweak(x$,h_customer_1) then 
@@ -1424,7 +1420,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	fn_ask_account=ckey
 fnend 
 def library fnapply_default_rates(mat extra, mat a)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnapply_default_rates=fn_apply_default_rates(mat extra, mat a)
 fnend 
 def fn_apply_default_rates(mat extra, mat a)
@@ -1476,28 +1472,7 @@ fnend
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnerror,fnAcs,fnflexadd1,fnflexinit1,fnTos
-		library 'S:\Core\Library': fncustomer_search,fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
-		library 'S:\Core\Library': fncmbact,fnComboF,fncmbrt2
-		library 'S:\Core\Library': fnMeterAddressLocationID
-		library 'S:\Core\Library': fnCmdSet,fnCmdKey,fngethandle
-		library 'S:\Core\Library': fnreg_read
-		library 'S:\Core\Library': fntransfile
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnEditFile
-		library 'S:\Core\Library': fnureg_write,fnureg_read
-		library 'S:\Core\Library': fnbutton_or_disabled
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnKeyChange
-		library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
-		library 'S:\Core\Library': fnGetServiceCodesMetered
-		library 'S:\Core\Library': fnMeterAddressName$
-		library 'S:\Core\Library': fnAccountFromLocationId$
-		library 'S:\Core\Library': fnOpenFile,fnCloseFile,fnbuildkey$
-		library 'S:\Core\Library': fnCustomerMeterLocationSelect
-		library 'S:\Core\Library': fnmakesurepathexists
-		library 'S:\Core\Library': fnFixPd
-		library 'S:\Core\Library': fnConfirmDeleteHard
+		autoLibrary
 		on error goto Ertn
 		! r: dims
 		dim z$*10
@@ -1835,5 +1810,5 @@ fnend
 def fn_customerChangesReport(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
 	open #h_notefile:=fngethandle:'name='&fn_notedir$&"\"&trim$(z$)&".log",d,output
 fnend
-include: ertn
+include: Ertn
 include: fn_open

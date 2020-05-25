@@ -4,14 +4,14 @@ def library fnlog(log$*512;log_type)
 	!          = 2 = you had an error.
 	!
 	autoLibrary
-	on error goto XIT
+	on error goto Xit
 	delim$=chr$(9)
 	if ~exists(env$('temp')&'\acs\Log.txt') then
 		needsHeader=1
 	else
 		needsHeader=0
 	end if
-	open #h_log:=fngethandle: "Name="&env$('temp')&"\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr XIT
+	open #h_log:=fngethandle: "Name="&env$('temp')&"\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr Xit
 	if needsHeader then
 		pr #h_log: 'acsUserId/Session'&delim$;
 		pr #h_log: 'logType'&delim$;
@@ -30,5 +30,5 @@ def library fnlog(log$*512;log_type)
 	pr #h_log: log$ 
 	FINIS: ! 
 	close #h_log: ioerr ignore
-	XIT: ! 
+	Xit: ! 
 fnend 

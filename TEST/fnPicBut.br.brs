@@ -1,8 +1,8 @@
-
+ 
 ! gosub TestSimple
 gosub TestAcs
 end
-
+ 
 TestSimple: ! r:
 	dim filename$*512
 	dim default$*512
@@ -16,12 +16,11 @@ TestSimple: ! r:
 	end if
 	pr filename$
 return ! /r
-
+ 
 TestAcs: ! r:
-	library 'S:\Core\Library': fntop,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs2,fnPicBut
-	library 'S:\Core\Library': fnPic
+	autoLibrary
 	dim resp$(30)*512
-	fntop(program$)
+	fnTop(program$)
 	fnTos
 	! fnPic(1,1,3,3,'S:\Core\Icon\calendar_icon.png')
 	! fnpic(1,1,4,30,"Logo.bmp")
@@ -30,7 +29,7 @@ TestAcs: ! r:
 	fnPicBut(1,1,'',3,'S:\Core\Icon\facebook.png',2,2)
 	fnLbl(6,1,"File:",5,1)
 	fnTxt(6,8,40,256,right,"1070",0,"",0 )
-	resp$(1)='' ! 
+	resp$(1)='' !
 	fnCmdKey("mmmK",1,1)
 	fnAcs2(mat resp$,ckey)
 	pr resp$(1)

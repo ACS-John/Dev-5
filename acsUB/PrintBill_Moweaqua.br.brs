@@ -1,17 +1,17 @@
 ! Replace S:\acsUB\ubprtbl1_mow
 ! pr bills for Village of Moweaqua
-
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fncombof,fnChk,fnerror,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpa_txt,fnpa_finis,fnpa_open,fnpa_font,fnpa_fontbold,fnpa_fontsize,fnpa_newpage,fnpa_line
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim resp$(10)*40,txt$*45,mg$(3)*30,cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),b(11),extra1$*30
 	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
-
+ 
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
 	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
-	close #21: 
+	close #21:
 	at$(1)=env$('cnam')
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
@@ -24,13 +24,13 @@
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 ! linelength=62
-! 
-! 
+!
+!
 	fn_bulksort
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
 	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.H[cno],Shr",internal,input,keyed  ! open in route-sequence #
-
-SCREEN1: ! 
+ 
+SCREEN1: !
 	a$="" : prtbkno=0
 	fnTos(sn$="UBPrtBl1-1")
 	pf=26 : ll=24
@@ -61,8 +61,8 @@ SCREEN1: !
 	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(respc+=1)="False"
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	d1=val(resp$(5))
 	d4=val(resp$(1))
 	mg$(1)=resp$(2)
@@ -71,22 +71,22 @@ SCREEN1: !
 	if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 	if resp$(7)="[All]" then prtbkno=0 else prtbkno=val(resp$(7))
 	if resp$(8)="True" then sl1=1: z$="" else sl1=0
-	if trim$(a$)<>"" then 
+	if trim$(a$)<>"" then
 		read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
 		st1=1
 		st1$=z$
-	end if 
+	end if
 L460: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed 
+ 
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed
 	fnpa_open("Landscape")
 	lyne=3
-NEXT_CUSTOMER: ! 
+NEXT_CUSTOMER: !
 	if sl1=1 then goto SCR_ASK_CUSTOMER
-READ_SORT_FILE: ! 
+READ_SORT_FILE: !
 	read #6,using 'form pos 22,c 10': z$ eof RELEASE_PRINT
 	read #1,using F_CUSTOMER,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,sequence nokey READ_SORT_FILE
 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1743,n 7
@@ -95,7 +95,7 @@ F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,
 L620: if f><d1 then goto NEXT_CUSTOMER
 	if st1=0 then goto AFTER_CUSTOMER_READ
 	if st1$=z$ then st1=0 else goto NEXT_CUSTOMER
-AFTER_CUSTOMER_READ: ! 
+AFTER_CUSTOMER_READ: !
 ! r: read alternate billing address
 	read #3,using 'form pos 11,4*c 30',key=z$: mat ba$ nokey L750
 	e1=0 : mat pe$=("")
@@ -103,8 +103,8 @@ AFTER_CUSTOMER_READ: !
 		if rtrm$(ba$(j))<>"" then e1=e1+1 : pe$(e1)=ba$(j)
 	next j
 	goto PRINT_IT
-
-L750: ! 
+ 
+L750: !
 	e1=0 : mat pe$=("")
 	for j=2 to 4
 		if rtrm$(e$(j))<>"" then e1=e1+1 : pe$(e1)=e$(j)
@@ -112,36 +112,36 @@ L750: !
 	if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 	goto PRINT_IT
 ! /r
-RELEASE_PRINT: ! 
+RELEASE_PRINT: !
 	close #1: ioerr ignore
 	close #3: ioerr ignore
 	fnpa_finis
 	goto ENDSCR
-
+ 
 PRINT_IT: ! r:
-	if bal<>0 then 
+	if bal<>0 then
 		pb=bal-g(11)
 		if bal<=0 then g(10)=0 ! don't show penalty if balance 0 or less
 ! ______________print bill routine______________________________________
 		fn_vbprint
 ! _____________end of pr routine______________________________________
 		bct(2)=bct(2)+1 ! accumulate totals
-	end if 
+	end if
 	goto NEXT_CUSTOMER ! /r
-
+ 
 SCR_ASK_CUSTOMER: ! r:
 	sn$="UBPrtBl1-2"
 	fnTos(sn$)
 	txt$="Account (blank to stop)"
 	fnLbl(1,1,txt$,31,1)
 	! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
-	if trim$(z$)<>"" then 
+	if trim$(z$)<>"" then
 		fnLbl(3,1,"Last Account entered was "&z$,44,1)
-	end if 
-	fncmbact(1,17) ! 
+	end if
+	fncmbact(1,17) !
 	resp$(1)=a$
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ck=5 then goto RELEASE_PRINT
@@ -156,9 +156,9 @@ ENDSCR: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs(sn$,0,mat resp$,ck)
-goto XIT ! /r
-XIT: fnxit
+	fnAcs2(mat resp$,ck)
+goto Xit ! /r
+Xit: fnXit
 def fn_vbprint
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 	checkcounter+=1
@@ -166,7 +166,7 @@ def fn_vbprint
 	if checkcounter=2 then xmargin=139 : ymargin=0
 	if checkcounter=3 then xmargin=0 : ymargin=108
 	if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
-
+ 
 	fnpa_line(xmargin+5,ymargin+2,55,lyne*3+3,1)
 	fnpa_fontbold(1)
 	fnpa_fontsize(12)
@@ -186,65 +186,65 @@ def fn_vbprint
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
 	fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
-
+ 
 	meter=14
 	fnpa_fontsize(8)
-	if g(1) then 
+	if g(1) then
 		fnpa_txt("WTR",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+6,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(2) then 
+	end if
+	if g(2) then
 		fnpa_txt("SWR",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(3) then 
+	end if
+	if g(3) then
 		fnpa_txt("Water Plant Improvements",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(3),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-
-	if a4=1 then 
+	end if
+ 
+	if a4=1 then
 		gcode$="RSGS"
-	else if a4=2 then 
+	else if a4=2 then
 		gcode$="CMGS"
-	else if a4=3 then 
+	else if a4=3 then
 		gcode$="INGS"
-	else 
+	else
 		gcode$="GAS"
-	end if 
-	if g(4) then 
+	end if
+	if g(4) then
 		fnpa_txt(gcode$,xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(11),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(5) then 
+	end if
+	if g(5) then
 		fnpa_txt("SAN",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(6) then 
+	end if
+	if g(6) then
 		fnpa_txt("FP",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(6),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(7) then 
+	end if
+	if g(7) then
 		fnpa_txt("FEUL ADJ",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(7),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(8) then 
+	end if
+	if g(8) then
 		fnpa_txt("MISC",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if g(9) then 
+	end if
+	if g(9) then
 		fnpa_txt("TAX",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
-	if pb then 
+	end if
+	if pb then
 		fnpa_txt("Previous Balance",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(pb,2,9),xmargin+45,lyne*meter+ymargin)
-	end if 
+	end if
 	fnpa_fontsize
-
+ 
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 	fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+42,lyne*24+ymargin)
@@ -252,7 +252,7 @@ def fn_vbprint
 	fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+42,lyne*25+ymargin)
 	fnpa_line(xmargin+1,lyne*26+1+ymargin,63,0)
 	fnpa_txt("Phone: 217-768-3435",xmargin+1,lyne*27+ymargin)
-
+ 
 	fnpa_fontsize(7)
 	fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
 	fnpa_line(xmargin+90,ymargin+0,7,0)
@@ -284,15 +284,15 @@ def fn_vbprint
 	fnpa_txt(mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
 	addy+=1
 	fnpa_fontsize
-	if df$="Y" then 
+	if df$="Y" then
 		fnpa_txt("Drafted",xmargin+1,lyne*(addy+=1)+ymargin)
-	end if 
-	if c4>0 then 
+	end if
+	if c4>0 then
 		fnpa_txt("Final Bill",xmargin+1,lyne*(addy+=1)+ymargin)
-	end if 
-	if d(10)=1 then 
+	end if
+	if d(10)=1 then
 		fnpa_txt("Bill Estimated",xmargin+1,lyne*(addy+=1)+ymargin)
-	end if 
+	end if
 	fnpa_txt("#"&trim$(z$)&' '&bulk$,xmargin+68,lyne*(addy+=1)+ymargin)
 	fnpa_txt(pe$(1),xmargin+68,lyne*(addy+=1)+ymargin)
 	fnpa_txt(pe$(2),xmargin+68,lyne*(addy+=1)+ymargin)
@@ -304,18 +304,18 @@ def fn_vbprint
 	if checkcounter=3 then checkx=1.375 : checky=7.9375
 	if checkcounter=0 then checkx=6.75 : checky=7.9375
 	if checkcounter=0 then let fnpa_newpage
-fnend 
-
+fnend
+ 
 def fn_bulksort ! bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output 
+	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
 	L2730: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	goto L2730
 	L2760: close #1: ioerr ignore
 	close #6: ioerr ignore
 	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n"
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('temp')&"\Tempidx."&session$,internal,input,keyed 
-
-fnend 
-include: ertn
+	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('temp')&"\Tempidx."&session$,internal,input,keyed
+ 
+fnend
+include: Ertn

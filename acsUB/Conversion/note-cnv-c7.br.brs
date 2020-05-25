@@ -2,7 +2,7 @@
 ! Note1 and Note2 conversion program - converts them up to version 1 with account length of 10 (adds .00)
 def library fnub_cnv_note_phase_1
   dim rm$*60,ra(2),newra(2)
-  library 'S:\Core\Library': fnStatus,fnindex_it,fnCopy,fnGetHandle
+  autoLibrary
 ! 
 ! r: ** phase 1 **
   open #note1=fnGetHandle: "Name=[Q]\UBmstr\Note1.h[cno]",internal,outIn,relative 
@@ -102,5 +102,5 @@ def library fnub_cnv_note_phase_1
 	close #note1b: ioerr ignore
 	close #note2b: ioerr ignore
 	close #hCustomer: ioerr ignore
-	XIT: ! 
+	Xit: ! 
 fnend 

@@ -1,7 +1,7 @@
 ! formerly S:\acsGL\GLInput
 ! enter GL transactions
-! r: setup library, dims, constants, fntop
-	library 'S:\Core\Library': fntop,fnxit, fncloseprn,fnopenprn,fnchain,fnprocess,fnfscode,fnstyp,fnTos,fnLbl,fnqgl,fnrgl$,fnTxt,fnCmdKey,fnAcs,fnagl$,fnmsgbox,fncomboa,fncombof,fnButton,fnflexinit1,fnflexadd1,fngethandle,fnaddglpayee,fnCmdSet,fnFra,fnOpt,fnreg_read,fncopy
+! r: setup library, dims, constants, fnTop
+	autoLibrary
 	on error goto Ertn
 !
 	dim cap$*128,resp$(30)*128
@@ -18,16 +18,16 @@
 	dim glitem2$(7)*30,ml$(4)*100,text$*80,bankname$*40,k_list$(30)*12
 	dim pr(19)
 !
-	fntop(program$,cap$="Enter Transactions")
+	fnTop(program$,cap$="Enter Transactions")
 	gltyp=7
 	fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
 ! fil$(1)="Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr"
 ! fil$(2)="Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
 ! fil$(3)="Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]"
-! 
+!
 ! fil$(5)="Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]"
 ! fil$(6)="Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr"
-! 
+!
 	typeofentry_option$(1)="1 = Disbursements"
 	typeofentry_option$(2)="2 = Receipts"
 	typeofentry_option$(3)="3 = Adjustments"
@@ -55,7 +55,7 @@
 	cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
 	cmask$(4)='32'
 	mat glitem$(5)
-! 
+!
 	dim chdr2$(7)*25
 	mat chdr2$(7)
 	mat cmask2$(7)
@@ -72,14 +72,14 @@
 	cmask2$(5)=''
 	cmask2$(6)='10'
 	cmask2$(7)=""
-! 
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
-	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
-	close #1: 
-! /r
-	open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
 !
-	if gltyp<>1 then 
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
+	close #1:
+! /r
+	open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+!
+	if gltyp<>1 then
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
 	end if
@@ -89,14 +89,14 @@
 	pc=1
 	adr=lrec(h_gl_work)
 	if adr<1 then goto L460
-L400: ! 
+L400: !
 	read #h_gl_work,using 'form pos 27,n 2',rec=adr: pc noRec CHECK_FOR_DELETED conv L460
 	if pc=0 then post=1 ! if previous batch not posted, set post=1
 	if pc>0 then goto L460 ! PREVIOUS TRANSACTIONS HAVE BEEN POSTED
 	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]",internal,outIn,relative ioerr L460
 	goto SCREEN_1
-	L460: ! 
-	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],SIZE=0,RecL=538,Replace",internal,outIn,relative 
+	L460: !
+	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],SIZE=0,RecL=538,Replace",internal,outIn,relative
 	write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 SCREEN_1: ! r:
 	edit=0
@@ -128,8 +128,8 @@ SCREEN_1: ! r:
 	fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	fnCmdKey("&Proof Totals",3,0,0,"Provides proof totals and option to post the entries.")
 	fnCmdKey("&Cancel",5,0,1,"Exits.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 ! pOST=1 ! code as unposted once leave this screen
 	if post=1 and resp$(respc_regularInput)="True" then gosub CHECK_FOR_CONTRAS ! remove any contra entries created in previous run
 	if resp$(respc_regularInput) ="True" then pt1=j=1
@@ -166,30 +166,30 @@ ERASE_PREVIOUS_INPUT: ! r:
 	close #glallocations: ioerr ignore
 	close #paymstr: ioerr ignore
 	close #payeegl: ioerr ignore
-	if pt1=3 then 
+	if pt1=3 then
 		fnCopy(dv$&"GLWK101.H[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
 		fnCopy(dv$&"GLWK201.H[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
-		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative 
-		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative 
+		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative
+		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative
 		open #9: "Name="&dv$&"PAYMSTR.H[cno],KFName="&dv$&"PAYIDX1.H[cno]",internal,input,keyed ioerr ignore
-	else 
-		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative 
-		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative 
-	end if 
-	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",internal,outIn,relative 
+	else
+		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative
+		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative
+	end if
+	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",internal,outIn,relative
 	write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 F_5: form pos 1,pd 6.2,80*pd 6.2,pd 6.2,pd 6.2,20*n 2
 	goto L1140 ! /r
 L1140: ! r:
 	close #6: ioerr ignore
-	open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed 
-	open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-	open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+	open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed
+	open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
-	if jccode then 
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
+	if jccode then
 		open #8: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed ioerr ignore
-	end if 
+	end if
 	if ckey=3 then goto PROOF_TOTALS
 goto MAIN ! /r
 PREPARE_EDIT_SCREEN: ! r:
@@ -200,9 +200,9 @@ PREPARE_EDIT_SCREEN: ! r:
 	read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
 	holdtr$=tr$
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
-	restore #h_gl_work: 
-GLALLOCATIONS_READ: ! 
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
+	restore #h_gl_work:
+GLALLOCATIONS_READ: !
 	read #h_gl_work,using F_2B: payeegl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof GLALLOCATIONS_EOF
 	if trim$(tr$)<>trim$(holdtr$) then goto GLALLOCATIONS_READ
 	if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
@@ -213,12 +213,12 @@ GLALLOCATIONS_READ: !
 	if tr(6)=2 then sel=2 ! reg receipt
 	if tr(6)=3 then sel=3 ! reg adj
 	if tr(6)=4 then sel=4
-	if tr(6)=7 then sel=5 ! 
-	if tr(6)=8 then sel=6 ! 
+	if tr(6)=7 then sel=5 !
+	if tr(6)=8 then sel=6 !
 	write #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,tr(5),td$,rec(2)
 	totalalloc+=tr(5) ! re-add total allocations
 	goto GLALLOCATIONS_READ
-GLALLOCATIONS_EOF: ! 
+GLALLOCATIONS_EOF: !
 	read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
 PES_XIT: return  ! /r
 POSTING_OPTIONS: ! r:
@@ -235,32 +235,32 @@ POSTING_OPTIONS: ! r:
 	fnOpt(5,2,"Return to Menu without posting",0,0)
 	resp$(5)="False"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
-	if resp$(5)="True" or ckey=5 then goto XIT ! return w/o posting
+	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
 	if resp$(2)="True" then let fnprocess(1) else let fnprocess(0)
 	if resp$(4)="True" then let fnprocess(4) ! post both
 	if resp$(1)="True" then goto ACGLMRGE
 	if resp$(3)="True" then let fnchain("S:\acsGL\PRMerge")
-	open #h_process:=30: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative 
+	open #h_process:=30: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 	if resp$(4)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
-	close #h_process: 
+	close #h_process:
 	if resp$(4)="True" then goto ACGLMRGE ! post both
 	if resp$(2)="True" then let fnchain("S:\acsGL\autoproc")
-	goto XIT ! /r
-XIT: fnxit
+	goto Xit ! /r
+Xit: fnXit
 !
 RECORD_TRANSACTIONS: ! r:
 	if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales
-	if transadr>0 then 
-		rewrite #h_gl_work,using fGlWork,rec=transadr: mat tr,tr$,td$ noRec L3280 
+	if transadr>0 then
+		rewrite #h_gl_work,using fGlWork,rec=transadr: mat tr,tr$,td$ noRec L3280
 		goto L3300
 	end if
 	lr2=lrec(h_gl_work)+1
-	L3280: ! 
+	L3280: !
 	write #h_gl_work,using fGlWork,rec=lr2: mat tr,tr$,td$,vn$,mat jv$,key$
 	fGlWork: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 	L3300: !
@@ -272,44 +272,44 @@ MAIN: ! r:
 	fnLbl(3,1,"Date:",mylen,right)
 	fnTxt(3,mypos,8,0,right,"1",0,"Transaction date must always be answered.",0 )
 	resp$(1)=str$(tr(4))
-	if sel=3 then 
+	if sel=3 then
 		fnLbl(4,1,"Amount:",mylen,right)
-	else 
+	else
 		fnLbl(4,1,"Net Amount:",mylen,right)
-	end if 
+	end if
 	fnLbl(4,36,message$,50,left)
-! 
+!
 	fnTxt(4,mypos,13,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
 	fnTxt(5,mypos,12,0,0,"",0,"Enter check number, receipt # or adjusting entry number",0)
 	resp$(3)=tr$
-	if sel=2 or sel=3 or sel=5 then 
+	if sel=2 or sel=3 or sel=5 then
 		fnLbl(6,1,"Description:",mylen,right) ! for receipts
 		fnTxt(6,mypos,30,0,left,"",0,"Brief description of transaction.",0 )
 		resp$(4)=td$
-	else 
+	else
 		fnLbl(6,1,"Payee #:",mylen,right)
-		if disable_payee=1 then 
+		if disable_payee=1 then
 			fnTxt(6,mypos,8,0,right,"",1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 			resp$(4)=""
-		else 
+		else
 			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\paymstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
-		end if 
-	end if 
+		end if
+	end if
 	fnLbl(7,1,"General Ledger #:",mylen,right)
 	fnqgl(7,mypos,0,2,pas)
 	resp$(5)=fnrgl$(gl$)
-	if sel=3 then 
+	if sel=3 then
 		fnLbl(7,60,"Net Adj:",8,right)
 		fnTxt(7,70,13,0,right,"10",1,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 		resp$(6)=str$(totalalloc)
-	else 
+	else
 		fnLbl(7,60,"Amount:",8,right)
 		fnTxt(7,70,13,0,right,"10",0,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 		resp$(6)=""
-	end if 
+	end if
 	seltype=tr(6) : if tr(6)>4 then seltype=tr(6)-2
 	if edit=1 then typeofentry_selected$=typeofentry_option$(seltype) else typeofentry_selected$=typeofentry$(4:20)
 	fnLbl(1,4,"Type of Entry: "&typeofentry_selected$,36,right)
@@ -325,7 +325,7 @@ MAIN: ! r:
 	mat cmask$=('')
 	cmask$(3)='10'
 	fnflexinit1('Glalloc',10,40,6,60,mat chdr$,mat cmask$,1,0,0)
-	restore #glallocations: 
+	restore #glallocations:
 	mat glitem$(4)
 	do  ! READ_GL_ALLOCATIONS: !
 		read #glallocations,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
@@ -336,28 +336,28 @@ MAIN: ! r:
 		fnflexadd1(mat glitem$)
 	loop  !  goto READ_GL_ALLOCATIONS
 EO_FLEX1: ! /r
-	if sel=1 or sel=6 then 
+	if sel=1 or sel=6 then
 		fnButton(6,61,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
 		if disable_payee=1 then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
 		fnButton(6,72,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
 		fnButton(6,87,"&Add Payee",17,"Allows you to add a payee record.",1,10)
-	end if 
+	end if
 	fnButton(9,85,"&Edit",18,"Correct an allocation.",1,5)
 	fnButton(9,92,"Edit Al&l",19,"Edit all allocations without returning to this screen.",1,8)
 ! fnLbl(17,73,"",1,right)
 ! fnLbl(16,1," ")
 ! If EDIT=1 Then Let fnCmdKey("C&hange Acct #",9,0,0,"")
-	if editmode=1 then 
+	if editmode=1 then
 		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
-	else 
+	else
 		fnCmdKey("&Next Transaction",1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
-	end if 
+	end if
 	fnCmdKey("&More Breakdowns",2,0,0,"More breakdowns to the same transaction.")
 	fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
 	if ~edit then let fnCmdKey("&Finish",9,0,1,"")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	allocamt=0
 	! pAS=1 ! kj 61107
 	message$=""
@@ -365,21 +365,21 @@ EO_FLEX1: ! /r
 	if (ckey=9 or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
 	if ckey=30 and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
 	if (ckey=9 or ckey=3 or ckey=6) and lrec(glallocations)>0 and edit=0 then goto AFP_XIT ! 4430 ! unwritten record on screen
-	if ckey=9 and val(resp$(2))=0 then 
+	if ckey=9 and val(resp$(2))=0 then
 		goto PROOF_TOTALS
-	else if ckey=3 then 
+	else if ckey=3 then
 		gosub REVIEW_TRANS : goto MAIN
-	else if ckey=6 then 
+	else if ckey=6 then
 		transactionamt=0
 		un$=tr$=""
 		goto SCREEN_1
-	else if ckey=7 then 
+	else if ckey=7 then
 		goto DELETE_TRANS
-	else if ckey=16 then 
+	else if ckey=16 then
 		if disable_payee=0 then disable_payee=1 : goto MAIN
 		if disable_payee=1 then disable_payee=0 : goto MAIN
-	end if 
-
+	end if
+ 
 	tr(4)=val(resp$(1)) ! date
 	transactionamt=val(resp$(2)) ! amount
 	if ckey=2 and transactionamt=0 then goto MAIN
@@ -389,15 +389,15 @@ EO_FLEX1: ! /r
 	read #paymstr, using "form pos 1,c 8",key=glkey$,release: x$ nokey PAYMSTR_GLNUM_NOKEY
 	td$=resp$(4)(9:38) ! transaction description = vendor name when vendor entered
 goto ALLOCATE_FROM_PAYEE
-PAYMSTR_GLNUM_NOKEY: ! 
+PAYMSTR_GLNUM_NOKEY: !
 	td$=resp$(4)(1:30)
 goto ALLOCATE_FROM_PAYEE ! use full response as description if not a payee name
 ! /r
 ALLOCATE_FROM_PAYEE: ! r:
-	if ckey=15 and editmode=0 then 
+	if ckey=15 and editmode=0 then
 		extract=1
 		goto EXTRACT ! pull allocation breakdown from payee record
-	end if 
+	end if
 	allocgl$=fnagl$(resp$(5))
 	allocamt=val(resp$(6))
 	if sel=3 and ckey<>30 then allocamt=transactionamt ! create an allocation amount automatically on adjustments
@@ -426,52 +426,52 @@ AFP_XIT: ! r:
 		if sel=4 then tr(6)=4 ! payroll check
 		if sel=5 then tr(6)=7 ! sales
 		if sel=6 then tr(6)=8 ! purchases
-	end if 
-	if ckey=17 then 
+	end if
+	if ckey=17 then
 		fnaddglpayee
 		pas=0
 		goto MAIN
-	else if ckey=18 then 
+	else if ckey=18 then
 		gosub EditAllocations
 		goto MAIN
-	else if ckey=19 then 
+	else if ckey=19 then
 		editall=1
 		gosub EditAllocations
 		goto MAIN
-	else if ckey=30 then 
+	else if ckey=30 then
 		goto L4460
-	else if ckey=2 and allocamt<>0 then 
+	else if ckey=2 and allocamt<>0 then
 		write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
 		allocgl$=""
 		totalalloc+=allocamt
 		allocamt=0
 		goto MAIN
-	else if ckey=1 and allocamt<>0 then 
+	else if ckey=1 and allocamt<>0 then
 		write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
 		allocgl$=""
 		totalalloc+=allocamt
 		allocamt=0
-	end if 
+	end if
 	if ckey=1 and sel <>3 and transactionamt<>totalalloc then message$= "Allocations don't add up!" : goto MAIN
 	! If CKEY=1 AND SEL=3 AND TOTALALLOC <>0 Then mESSAGE$= "Allocations don't add up!": Goto MAIN
 	if ckey=1 or ckey=2 or (ckey=9 and edit=0 and lrec(glallocations)>0) then  ! ckey 9 thing: allow last transaction to be written if take finish
 		L4460: !
-		restore #glallocations: 
+		restore #glallocations:
 		for j=1 to lrec(glallocations)
 			read #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocamt,td$,transadr eof L4520
 			tr(1)=val(allocgl$(1:3)) : tr(2)=val(allocgl$(4:9))
 			tr(3)=val(allocgl$(10:12)) : tr(5)=allocamt
 			gosub RECORD_TRANSACTIONS
 		next j
-		L4520: ! 
-	else 
+		L4520: !
+	else
 		goto L4620
 	end if
 	if ckey=2 then goto L4620
 goto CLEAN_MAIN_SCREEN ! /r
 CLEAN_MAIN_SCREEN: ! r: clear entry screen before returning
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative 
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
 	transactionamt=0
 	if gl_retainFieldsDuringAdd$='False' then
 		td$=""
@@ -479,38 +479,38 @@ CLEAN_MAIN_SCREEN: ! r: clear entry screen before returning
 	fn_increment_tr
 	vn$=gl$=""
 	totalalloc=editmode=0 ! extract=0 kj
-	if ckey=3 or ckey=30 then 
+	if ckey=3 or ckey=30 then
 		gosub REVIEW_TRANS : goto MAIN
-	else if ckey=6 then 
+	else if ckey=6 then
 		transactionamt=0
 		un$=tr$=vn$=""
 		goto SCREEN_1
-	end if 
-	! 
-	L4620: ! 
+	end if
+	!
+	L4620: !
 	if ckey=9 then goto PROOF_TOTALS
 goto MAIN ! /r
 EXTRACT: ! r:
 	glkey$=lpad$(rtrm$(vn$),8)
 	restore #payeegl,key>=glkey$: nokey L4780
-READPAYEEGL: ! 
+READPAYEEGL: !
 	read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
 	if payeekey$<>glkey$ then goto L4740
 	if percent=0 and lrec(glallocations)=0 then percent=100
 	allocamt=round(transactionamt*(percent*.01),2)
 	write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: allocgl$="": totalalloc+=allocamt: allocamt=0
 	goto READPAYEEGL
-L4740: ! 
-	if totalalloc<>transactionamt then 
+L4740: !
+	if totalalloc<>transactionamt then
 		read #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation noRec L4770
-	else 
+	else
 		goto L4770
-	end if 
+	end if
 	lastallocation+=transactionamt-totalalloc
 	rewrite #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation
 	L4770: !
 	allocamt=0: ! kj  eXTRACT=0
-	L4780: ! 
+	L4780: !
 goto MAIN ! /r
 DELETE_TRANS: ! r: deletes entire transaction
 	mat ml$(3)
@@ -519,27 +519,27 @@ DELETE_TRANS: ! r: deletes entire transaction
 	ml$(3)="Click Cancel to return to main entry screen."
 	fnmsgbox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L5120 else goto MAIN
-L5120: restore #glallocations: 
+L5120: restore #glallocations:
 L5130: read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,transadr eof L5170
-	delete #glallocations: 
+	delete #glallocations:
 	delete #h_gl_work,rec=transadr: ioerr ignore
 	goto L5130
-L5170: ! 
+L5170: !
 	transactionamt=0
 	vn$=gl$=tr$=""
 	goto MAIN ! /r
 REVIEW_TRANS: ! r:
 	fnTos(sn$="GLInput4")
 	fnflexinit1('GlTrans',1,1,20,90,mat chdr2$,mat cmask2$,1,0,0)
-	restore #h_gl_work: 
+	restore #h_gl_work:
 L5230: read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof L5310
-	if trim$(tr$)<>"" and tr$<>oldtr$ then 
+	if trim$(tr$)<>"" and tr$<>oldtr$ then
 		mat glitem2$=("")
 		glitem2$(6)=str$(net)
 		glitem2$(7)="Net"
 		fnflexadd1(mat glitem2$)
 		net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
-	end if 
+	end if
 ! gL$=CNVRT$("pic(zz#)",TR(1))&CNVRT$("pic(zzzzz#)",TR(2))&CNVRT$("pic(zz#)",TR(3))
 	glitem2$(1)=str$(rec(2))
 	glitem2$(2)=str$(tr(4)) ! str$(date(days(tr(4),'mmddyy'),'ccyymmdd'))
@@ -552,7 +552,7 @@ L5230: read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat j
 	net+=tr(5) ! add net check
 	oldtr$=tr$ ! hold reference numbers
 	goto L5230
-L5310: ! 
+L5310: !
 	mat glitem2$=("")
 	glitem2$(6)=str$(net): glitem2$(7)="Net"
 	fnflexadd1(mat glitem2$)
@@ -561,7 +561,7 @@ L5310: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any allocation and click Edit to change any part of the entire transaction")
 	fnCmdKey("&Print Proof List",4,0,0,"Prints a proof list of your entries..")
 	fnCmdKey("&Back",5,0,1,"Return to main entry screen.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then edit=0: goto CLEAN_MAIN_SCREEN
 	rn=val(resp$(1))
 	if ckey=2 then edit=1 else edit=0 ! set edit mode
@@ -574,7 +574,7 @@ L5310: !
 ! r: populate grid from PayeeGL
 	if trim$(vn$)="" then goto EO_FLEX3
 	restore #payeegl,key>=vn$: nokey EO_FLEX3
-	do 
+	do
 		read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,td$ eof EO_FLEX3
 		if vn$<>payeekey$ then goto EO_FLEX3
 		glitem$(1)=str$(rec(payeegl))
@@ -583,63 +583,63 @@ L5310: !
 		glitem$(4)=str$(percent)
 		glitem$(5)=td$
 		fnflexadd1(mat glitem$)
-	loop 
+	loop
 	EO_FLEX3: ! /r
 return  ! /r
 COPY_AR_IN: ! r:
-	close #h_gl_work: 
+	close #h_gl_work:
 	execute "COPY "&dv$&"GLWK101.H[cno],"&"Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
 	open #10: "Name="&dv$&"ARTOGL.DAT",internal,input ioerr L5670
 	read #10,using L5650: cgl$(1),camt(1),cgl$(2),camt(2),cgl$(3),camt(3),cgl$(4),camt(4),cgl$(5),camt(5)
 L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2
-	close #10: 
-L5670: ! 
+	close #10:
+L5670: !
 	fnstyp(92)
 	goto ACGLMRGE ! /r
 ACGLMRGE: fnchain("S:\acsGL\acglMrge")
 SCREEN_INSERT_DISKETTE: ! r:
 	close #101: ioerr ignore
-	open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outIn 
+	open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outIn
 	pr #101: newpage
 	pr f "#101,2,1,Cr 40": "Insert Input Diskette in selected drive:"
 	if dv$="" then dv$="A"
 	rinput fields "#101,2,42,Cu 1,UT,N": dv$
 	dv$=dv$&":" ! if dv$="A" or dv$="B" then dv$=dv$&":" else goto L5750
-	close #101: 
+	close #101:
 	return  ! /r
 PROOF_TOTALS: ! r: add and display proof totals
 ! r: accumulate proof totals (mat k, tc (total credits), td (total debits))
 	mat k_list$=("            "): mat k=(0) : td=tc=0
-	restore #h_gl_work: 
-	do 
+	restore #h_gl_work:
+	do
 		read #h_gl_work,using "Form POS 1,c 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8 ,C 6,C 5,C 3,C 12": gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof SCREEN_PROOF_TOTALS
 !   pr 'read an entruy from work file:'&gl$&' - '&key$ : pause
-! 
+!
 		for j=1 to 30
 			if k_list$(j)<>"" and key$=k_list$(j) then goto L6100 ! found matching contra account
 			if trim$(k_list$(j))="" then k_list$(j)=key$: goto L6100 ! found a blank contra and no previous match
 		next j
 		goto SCREEN_PROOF_TOTALS
-L6100: ! 
-! 
-		if k_list$(j)=key$ then 
-			if tr(6)=1 or tr(6)=4 or tr(6)=8 then 
+L6100: !
+!
+		if k_list$(j)=key$ then
+			if tr(6)=1 or tr(6)=4 or tr(6)=8 then
 				k(j,6)+=tr(5)
 				td+=tr(5)
 				tc=tc-tr(5) ! total debits entered
-			else if tr(6)=2 or tr(6)=7 then 
+			else if tr(6)=2 or tr(6)=7 then
 				k(j,5)+=tr(5)
 				tc+=tr(5)
 				td=td-tr(5) ! total credits entered
-			else if tr(6)=3 then 
+			else if tr(6)=3 then
 				k(j,7)+=tr(5) ! net adjustments
 				if tr(5)<0 then tc+=tr(5)
 				if tr(5)>0 then td+=tr(5)
-			end if 
-		end if 
-	loop 
+			end if
+		end if
+	loop
 ! /r
-SCREEN_PROOF_TOTALS: ! 
+SCREEN_PROOF_TOTALS: !
 	fnTos(sn$="proof_totals")
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Total Debits:",mylen,right)
@@ -660,9 +660,9 @@ SCREEN_PROOF_TOTALS: !
 	for j=1 to 30
 		read #h_glmstr,using "form pos 87,pd 6.2",key=k_list$(j),release: k(j,4) nokey L6240 ! get last balance
 		k(j,8)=k(j,4)-k(j,5)-k(j,6)+k(j,7) ! new balance when posted
-L6240: ! 
+L6240: !
 	next j
-! 
+!
 	fnflexinit1('Prooftotals',8,1,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
 	mat glitem3$=("")
 	for j=1 to 30
@@ -674,26 +674,26 @@ L6240: !
 			glitem3$(5)=str$(k(j,7))
 			glitem3$(6)=str$(k(j,8))
 			fnflexadd1(mat glitem3$)
-		end if 
+		end if
 	next j
 	fnCmdKey("Print Proof Totals",10)
 	fnCmdKey("Print Proof List",4)
 	fnCmdKey("&Make Corrections",1,1,0,"Allows you to make corrections to any transactions before they are posted.")
 	fnCmdKey("&Cancel Without Posting",5,0,1,"Allows you to escape without posting this batch of entries.")
 	fnCmdKey("&Post",2,0,0,"Will post this group of entries to the general ledger files.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	if ckey=4 then let fn_pr_proof_list : goto SCREEN_PROOF_TOTALS
 	if ckey=10 then let fn_pr_proof_totals : goto SCREEN_PROOF_TOTALS
 	if ckey=1 then gosub REVIEW_TRANS : goto MAIN
-	if ckey=2 and td<>-tc then 
+	if ckey=2 and td<>-tc then
 		mat ml$(3)
 		ml$(1)="Total Debits of "&trim$(cnvrt$("pic(-----,---,---.##)",td))&" to not equal"
 		ml$(2)="the total Credits of "&trim$(cnvrt$("Pic(----,---,---.##",tc))
 		ml$(3)="Click OK to continue or Cancel to go back."
 		fnmsgbox(mat ml$,resp$,cap$,49)
 		if resp$="Cancel" then goto SCREEN_PROOF_TOTALS
-	end if 
+	end if
 	if ckey=2 then goto POSTING_OPTIONS
 	goto PROOF_TOTALS ! /r
 	def fn_pr_proof_totals
@@ -701,9 +701,9 @@ F_PPT_LINE: form pos 1,c 12,5*cr 19
 		for j=1 to 30
 			read #h_glmstr,using "form pos 87,pd 6.2",key=k_list$(j),release: k(j,4) nokey PPT_L6240 ! get last balance
 			k(j,8)=k(j,4)-k(j,5)-k(j,6)+k(j,7) ! new balance when posted
-PPT_L6240: ! 
+PPT_L6240: !
 		next j
-! 
+!
 		fnopenprn
 		pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",td)
 		pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",tc)
@@ -723,18 +723,18 @@ PPT_L6240: !
 				glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",k(j,7))
 				glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",k(j,8)) ! cmask3$(6)='10'
 				pr #255,using F_PPT_LINE: mat glitem3$
-			end if 
+			end if
 		next j
 		fncloseprn
-	fnend 
+	fnend
 CREATE_CONTRA_ENTRIES: ! r:
-	restore #h_gl_work: 
+	restore #h_gl_work:
 	tr$="999999999999"
 	for j=1 to 30
-		if val(k_list$(j))<>0 then 
+		if val(k_list$(j))<>0 then
 			if k(j,5)<>0 then write #h_gl_work,using F_2A,rec=lrec(h_gl_work)+1: k_list$(j),contra_entry_date,-k(j,5),2,0,tr$,"Contra Entry","","","","" ! debits from receipts or sales
 			if k(j,6)<>0 then write #h_gl_work,using F_2A,rec=lrec(h_gl_work)+1: k_list$(j),contra_entry_date,-k(j,6),1,0,tr$,"Contra Entry","","","","" ! credits from checks or purchases
-		end if 
+		end if
 	next j
 	return  ! /r
 PAYROLL: ! r:
@@ -746,7 +746,7 @@ PAYROLL: ! r:
 	resp$(1)=str$(tr(4))
 	if sel=3 then let fnLbl(4,1,"Amount:",mylen,right) else let fnLbl(4,1,"Net Amount:",mylen,right)
 	fnLbl(4,36,message$,50,left)
-! 
+!
 	fnTxt(4,mypos,12,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
@@ -806,27 +806,27 @@ PAYROLL: ! r:
 ! fnLbl(17,73,"",1,right)
 ! fnLbl(16,1," ")
 ! If EDIT=1 Then Let fnCmdKey("C&hange Acct #",9,0,0,"")
-	if editmode=1 then 
+	if editmode=1 then
 		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
-	else 
+	else
 		fnCmdKey("&Next Transaction",1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
-	end if 
+	end if
 	fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
 	fnCmdKey("&Finish",9,0,1,"")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=9 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey=9 then
 		goto SCREEN_1
-	else if ckey=6 then 
+	else if ckey=6 then
 		transactionamt=0
 		mat pr=(0)
 		tr$=""
 		vn$=""
 		goto SCREEN_1
-	else if ckey=3 then 
+	else if ckey=3 then
 		gosub REVIEW_TRANS : goto MAIN
-	end if 
+	end if
 	tr(4)=val(resp$(1)) ! date
 	tr(5)=transactionamt=val(resp$(2)) ! amount
 	tr$=resp$(3) ! ref #
@@ -863,26 +863,26 @@ WRITE_PAYROLL_TRANS: ! r:
 		if j=6 then td$="Local Withholdings"
 		if j=3 or j=4 or j=5 or j=6 then allocgl$=cnvrt$("pic(zz#)",pgl(j-2,1))&cnvrt$("pic(zzzzz#)",pgl(j-2,2))&cnvrt$("pic(zz#)",pgl(j-2,3))
 		if j=19 then allocgl$=cnvrt$("pic(zz#)",pgl(5,1))&cnvrt$("pic(zzzzz#)",pgl(5,2))&cnvrt$("pic(zz#)",pgl(5,3)) ! eic
-		if j>6 and j<17 then 
+		if j>6 and j<17 then
 			allocgl$=miscgl$(j-6)
 			td$=miscname$(j-6) ! miscellaneous deductions
-		end if 
-		if j>2 and j<7 then 
+		end if
+		if j>2 and j<7 then
 			pr(j)=-pr(j) ! reverse sign on fica, etc
-		else if j>6 and j<17 and dedcode(j-6)=1 then 
+		else if j>6 and j<17 and dedcode(j-6)=1 then
 			pr(j)=-pr(j)
 ! .     ! turn sign around on any of ten deductions coded as additions
-		else if j=17 then 
+		else if j=17 then
 			pr(j)=-pr(j)
 			td$="Tips"
 			allocgl$=gl$ ! tips
-		else if j=19 then 
+		else if j=19 then
 			pr(j)=pr(j)
 			td$="Eic" ! eic as positive
-		end if 
-		if pr(j)<>0 then 
+		end if
+		if pr(j)<>0 then
 			write #h_gl_work,using F_2A,rec=lrec(h_gl_work)+1: allocgl$,tr(4),pr(j),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ ! gross wage
-		end if 
+		end if
 	next j
 	transactionamt=0
 	mat pr=(0)
@@ -892,8 +892,8 @@ WRITE_PAYROLL_TRANS: ! r:
 CHECK_FOR_CONTRAS: ! r:
 	for j=1 to lrec(h_gl_work)
 		read #h_gl_work,using F_2B,rec=j: gl$,tr(4),tr(5),tr(6),tr(7),tr$ noRec CFC_NEXT_J
-		if trim$(tr$)="999999999999" then delete #h_gl_work, rec=j: 
-CFC_NEXT_J: ! 
+		if trim$(tr$)="999999999999" then delete #h_gl_work, rec=j:
+CFC_NEXT_J: !
 	next j
 	gl$="": tr(4)=tr(5)=tr(6)=tr(7)=0: tr$=""
 	return  ! /r
@@ -903,19 +903,19 @@ CHECK_FOR_DELETED: ! r:
 def fn_increment_tr
 	x=0
 	x=val(tr$) conv L4580
-	if tr$<>"999999999999" then 
+	if tr$<>"999999999999" then
 		tr$=str$(val(tr$)+1) ! increment if possible
-	else 
-		L4580: ! 
+	else
+		L4580: !
 		if gl_retainFieldsDuringAdd$='False' then
 			tr$=""
 		end if
-	end if 
-fnend 
+	end if
+fnend
 EditAllocations: ! r:  editing glallocation while still being entered into allocation grid
 	editrecord=val(resp$(7))
 	if editall=19 then editrecord=1
-	EA_READ_GLALLOC: ! 
+	EA_READ_GLALLOC: !
 	read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr noRec EA_FINIS
 	holdallocation=allocation
 	fnTos(sn$="GLInput3")
@@ -932,56 +932,56 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	fnCmdKey("&Next",1,1,0,"Apply any changes and return to main entry screen.")
 	fnCmdKey("&Delete",6,0,0,"Deletes this allocation.")
 	fnCmdKey("&Cancel",5,0,1,"Return to main entry screen without applying changes.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto EA_FINIS
-	if ckey=6 then 
+	if ckey=6 then
 		mat ml$(3)
 		ml$(1)="You have chosen to delete this allocation."
 		ml$(2)="Click OK to delete this entry."
 		ml$(3)="Click Cancel to return to previous screen."
 		fnmsgbox(mat ml$,resp$,cap$,49)
-		if resp$<>"OK" then 
+		if resp$<>"OK" then
 			goto EditAllocations
-		end if 
-		if ckey=6 then delete #glallocations,rec=editrecord: 
+		end if
+		if ckey=6 then delete #glallocations,rec=editrecord:
 		delete #h_gl_work,rec=transadr: ioerr ignore
 		transactionamt+=-holdallocation
-	else 
+	else
 		allocgl$=fnagl$(resp$(2))
 		allocation=val(resp$(1))
 		transactionamt+=allocation-holdallocation ! update net amount of transaction
 		td$=resp$(3)
 		rewrite #glallocations,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
-		totalalloc+=allocation-holdallocation ! 
-	end if 
-	if editall=1 then 
+		totalalloc+=allocation-holdallocation !
+	end if
+	if editall=1 then
 		editrecord=editrecord+1
 		goto EA_READ_GLALLOC
-	end if 
-EA_FINIS: ! 
+	end if
+EA_FINIS: !
 	editall=0
 return  ! /r
 def fn_pr_proof_list
 	fnopenprn
 	gosub PROOF_LIST_HDR
 	holdtr$="" : tr$=""
-	restore #h_gl_work: 
-	do 
+	restore #h_gl_work:
+	do
 		holdtr$=tr$
 		read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof PE_FINIS
-		if trim$(holdtr$)<>"" and holdtr$<>tr$ then 
+		if trim$(holdtr$)<>"" and holdtr$<>tr$ then
 			pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount
 			netamount=0
-		end if 
+		end if
 		if tr(6)=3 then prntkey$="" else printkey$=key$
 		pr #255,using F_PE_LINE: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,printkey$,mat jv$ pageoflow PROOF_LIST_PGOF
 		F_PE_LINE: form pos 1,c 12,x 2,pic(zz/zz/zz),n 11.2,x 4,pic(zz),pic(zz),c 13,c 30,c 10,c 12,c 7,c 7,c 41
 		netamount+=tr(5)
-	loop 
-	PE_FINIS: ! 
+	loop
+	PE_FINIS: !
 	pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount : netamount=0
 	fncloseprn
-fnend 
+fnend
 PROOF_LIST_PGOF: ! r:
 	pr #255: newpage
 	gosub PROOF_LIST_HDR

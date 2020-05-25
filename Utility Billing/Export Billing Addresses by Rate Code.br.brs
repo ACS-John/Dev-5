@@ -1,16 +1,10 @@
 ! formerly S:\acsUB\ubNamLst
-! r: setup library, dims, constants, fntop, etc
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnAcs, fnLbl,fnTxt,fnChk,fnTos,fncomboa,fnCmdSet,fnComboF
-	library 'S:\Core\Library': fnerror,fnget_services,fnXit
-	library 'S:\Core\Library': fnclosefile
-	library 'S:\Core\Library': fnCustomerData$
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnGetHandle
+! r: setup library, dims, constants, fnTop, etc
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim resp$(10)*256
-	fntop(program$)
+	fnTop(program$)
 ! /r
 ! MENU1: ! r:
 	fnTos("ubnamlst")
@@ -18,7 +12,7 @@
 	col1_len=18
 	col2_pos=col1_len+2
 	fnLbl(2,1,"Rate to Export:",col1_len,1)
-	fnComboF("nerd",2,col2_pos,55,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1) 
+	fnComboF("nerd",2,col2_pos,55,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1)
 	resp$(resp_rate:=respc+=1)=''
 	fnChk(4,1,'include Final Billed')
 	resp$(resp_enableFinaled:=respc+=1)='false'
@@ -26,8 +20,8 @@
 	fnTxt(6,col2_pos,42,256,0,'70',0,'Choose the output file name. [Rate Code] will be replaced with the rate code selected.')
 	resp$(resp_fileOut:=respc+=1)=env$('Desktop')&'\ACS-Customer-[Rate Code].txt'
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	if resp$(resp_enableFinaled)='True' then enableFinaled=1 else enableFinaled=0
 	dim fileOut$*256
 	fileOut$=resp$(resp_fileOut)
@@ -69,7 +63,7 @@ MainLoop: ! r:
 		end if
 	loop
 ! /r
-
+ 
 DONE: ! r:
 	fnCustomerData$('',''   )
 	close #hOut: ioerr ignore
@@ -79,7 +73,7 @@ DONE: ! r:
 	ml$(1)=env$('program_caption')&' successfully completed.'
 	ml$(2)=fileOut$
 	fnmsgbox(mat ml$,resp$,"ACS",0)
-goto XIT ! /r
-XIT: fnxit
-include: ertn
+goto Xit ! /r
+Xit: fnXit
+include: Ertn
 include: fn_open

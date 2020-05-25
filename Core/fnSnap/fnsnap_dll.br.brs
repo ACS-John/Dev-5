@@ -1596,11 +1596,11 @@
         ! | Used for creating single page PDF's for the FORMPRINT routine³!:
         ! |                                                             | !:
         !    !
-08110   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fngetfile$,fntop$,fnleft$,fnlines$
+08110   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fngetfile$,fnTop$,fnleft$,fnlines$
 08120   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 08130   dim pdffile$*100,macno$(1)*40
 08140   open #(filnum:=fngethandle): "name=PDF:/READER,PrintFile="&destination$&",eol=none,use",display,output  !:
-        pr #filnum: fntop$(1)&fnleft$(0)&fnlines$(0)
+        pr #filnum: fnTop$(1)&fnleft$(0)&fnlines$(0)
 08150   pr #filnum: esc$&"pdf='"&str$(page)&","&source$&"'"
 08160   close #filnum: 
 08170   filnum=0
@@ -2601,7 +2601,7 @@
         ! | page PRN file for use with FORMPRN.br forms library import. | !:
         !    !
 32010   execute "PROC=*"&env$("PD")&"Core\fnsnap\tt"
-32020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fntop$,fnleft$,fnlines$,fngethandle
+32020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnTop$,fnleft$,fnlines$,fngethandle
 32030   dim png$*200
 32040   png$=""
 32050   msgbox("Select an HP6L printer that has had the driver configured for printing to a file."&crlf$&"This will properly format the file for further conversion to PCL5 and storage in the FORMS library.")
@@ -2614,7 +2614,7 @@
 32120   close #infile: 
 32140   if _rec>32000 then arec=32000 else arec=_rec
 32150   if _rec>32000 then brec=_rec-int(_rec/32000)*32000 else brec=0
-32160   pr #outfile: fntop$(0)&fnleft$(0)&fnlines$(0)&chr$(27)&"&a0v0H"&chr$(27)&"picture='8.2,10.9,"&png$&":ISOTROPIC'"
+32160   pr #outfile: fnTop$(0)&fnleft$(0)&fnlines$(0)&chr$(27)&"&a0v0H"&chr$(27)&"picture='8.2,10.9,"&png$&":ISOTROPIC'"
 32170   close #outfile: 
 32180 ZPIC2PRN: ! 
 32190   outfile=infile=0
@@ -4234,7 +4234,7 @@
 52910 def library fnposition$*100(_v,_h)=chr$(27)&"&a"&str$(_v*720)&"v"&str$(_h*720)&"H" !:
       ! creates a POSITION parameter using inch input to position a cursor !:
       ! on a PCL or NWP page at a specific location
-52912 def library fntop$(_l)=chr$(27)&"&l"&str$(_l)&"E" !:
+52912 def library fnTop$(_l)=chr$(27)&"&l"&str$(_l)&"E" !:
       ! Sets the top margin in ROWS
 52914 def library fnleft$(_l)=chr$(27)&"&a"&str$(_l)&"L" !:
       ! Sets the left margin in PCL

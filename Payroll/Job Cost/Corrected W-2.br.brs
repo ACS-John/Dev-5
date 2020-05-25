@@ -1,15 +1,10 @@
 !  formerly S:\acsPR\newcorrectedPRW2A
 ! used to file a corrected w2 using prace.exe
-
-library 'S:\Core\Library': fntop,fnxit
-library 'S:\Core\Library': fnDedNames
-library 'S:\Core\Library': fnChk,fncmbemp
-library 'S:\Core\Library': fnAcs2,fnFra,fnTos,fnLbl,fnTxt,fnCmdKey,fnOpt,fncombof
-library 'S:\Core\Library': fnpa_open,fnpa_newpage,fnpa_finis
-library 'S:\Core\Library': fnFree
-fntop(program$)
+ 
+autoLibrary
+fnTop(program$)
 on error goto Ertn
-
+ 
 dim ss$*11,d(14),ty(21),s(13),t(13),z$*8
 dim desc$(6)*15,amt(6),io1$(12)
 dim tcp(32),tdc(10),resp$(70)*50
@@ -24,23 +19,23 @@ dim dedyn$(20)*1
 dim miscded(20),box12(20),txt$*80,totalbox12(20)
 dim fm4$*255
 fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 read #1,using 'form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
-close #1: 
+close #1:
 dim fullname$(20)*20,newcalcode(20)
 dim dedfica(20),dedst(20),deduc(20)
 fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-DATE_SCREEN: ! 
+DATE_SCREEN: !
 L290: fnTos
 	rc=cf=0: mylen=25 : mypos=mylen+3
-	fnFra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0) 
+	fnFra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0)
 	cf+=1 : fratype=cf
 	fnLbl(1,1,"Starting Date:",mylen,1,0,1)
-	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) 
+	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1)
 	resp$(rc+=1)=str$(beg_date)
 	fnLbl(2,1,"Ending Date:",mylen,1,0,1)
-	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) 
+	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1)
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
@@ -50,63 +45,63 @@ L290: fnTos
 	end_date=val(resp$(2))
 	taxyear=val(resp$(2)(1:4))
 	if beg_date=0 or end_date=0 then goto L290
-	ssrate=.062 
-	ssmax=102000 
-	mcrate=.0145 
-	mcmax=999999 
-	w1=4 
-	namcde$="F" 
-	topmargin=13 
-	bottom=141 
+	ssrate=.062
+	ssmax=102000
+	mcrate=.0145
+	mcmax=999999
+	w1=4
+	namcde$="F"
+	topmargin=13
+	bottom=141
 	posx=130
-ASK_INFO: ! 
+ASK_INFO: !
 	fnTos
 	rc=cf=0: mylen=46: mypos=mylen+3
-	fnFra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) 
+	fnFra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0)
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
-	fnTxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum) 
+	fnTxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum)
 	resp$(rc+=1)=str$(ssrate)
 	fnLbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-	fnTxt(2,mypos,10,0,1,"10",0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum) 
+	fnTxt(2,mypos,10,0,1,"10",0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
 	resp$(rc+=1)=str$(ssmax)
 	fnLbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
-	fnTxt(4,mypos,10,0,1,"34",0,"Use format such as .0145 .",franum) 
+	fnTxt(4,mypos,10,0,1,"34",0,"Use format such as .0145 .",franum)
 	resp$(rc+=1)=str$(mcrate)
 	fnLbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-	fnTxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum) 
+	fnTxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 	resp$(rc+=1)=str$(mcmax)
-	fnFra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.") 
+	fnFra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
-	fnOpt(1,3,"Print W-2",0,franum) 
+	fnOpt(1,3,"Print W-2",0,franum)
 	resp$(rc+=1)="True"
-	fnOpt(2,3,"Export to another system",0,franum) 
+	fnOpt(2,3,"Export to another system",0,franum)
 	resp$(rc+=1)="False"
-	fnFra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.") 
+	fnFra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-	fnTxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) 
+	fnTxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 	resp$(rc+=1)=str$(pn1)
 	fnLbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-	fnTxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) 
+	fnTxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 	resp$(rc+=1)=str$(dc1)
 	fnLbl(18,1,"Employee Name Format-(F)irst name 1st; (L)ast name 1st:",57,1,0,0)
-	fnTxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0) 
+	fnTxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0)
 	resp$(rc+=1)=namcde$
-	fnFra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") 
+	fnFra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.")
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
-	fnTxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum) 
+	fnTxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum)
 	resp$(rc+=1)=str$(topmargin)
 	fnLbl(2,1,"Top Margin - Bottom W-2:",mylen,1,0,franum)
-	fnTxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum) 
+	fnTxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum)
 	resp$(rc+=1)=str$(bottom)
 	fnLbl(3,1,"Position of Pension X:",mylen,1,0,franum)
-	fnTxt(3,mypos,3,0,1,"30",0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum) 
+	fnTxt(3,mypos,3,0,1,"30",0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum)
 	resp$(rc+=1)=str$(posx)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	ssrate=val(resp$(1))
 	ssmax=val(resp$(2))
@@ -125,12 +120,12 @@ ASK_INFO: !
 	gosub VBOPENPRINT
 	goproc=0
 	if w1=2 then gosub L5930
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed 
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	open #3: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L960
-	close #3,free: 
-L960: open #3: "Name="&env$('Temp')&"\Addr."&session$&",size=0,RecL=33,NoShr",internal,output 
+	close #3,free:
+L960: open #3: "Name="&env$('Temp')&"\Addr."&session$&",size=0,RecL=33,NoShr",internal,output
 	if w1=3 then gosub L4430
 	write #3,using L990: ssmax,w1,nw
 L990: form pos 1,n 10.2,2*n 1
@@ -179,7 +174,7 @@ L1290: dedfica=0
 	w(11)=w(11)+tcp(31)-dedfica ! TOTAL MC WAGES & TIPS
 	if em6=2 then w(5)=0 ! NO SS
 	if em6=1 then w(11)=0 ! NO MC
-L1460: ! 
+L1460: !
 	if uprc$(med$)="Y" then w(3)=w(3)+tcp(2) ! ss wh and medicare seperated in employee record
 	if uprc$(med$)="Y" then w(12)=w(12)+tcp(3) ! medicare
 	if tcd><stcode then goto L1580
@@ -246,7 +241,7 @@ goto L1040
 L2090: !
 	if w1=3 then goto L2230
 goto ASK_STARTING
-
+ 
 	if wctr=0 or nosub=0 then goto L2140
 	desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
 L2130: mat w=s: g$="SUB TOTAL" : gosub TOT1
@@ -264,27 +259,27 @@ L2220: !
 	first$=mid$=last$=""
 	gosub TOT1
 L2230: !
-	close #1: 
-	close #2: 
-	close #3: 
+	close #1:
+	close #2:
+	close #3:
 	if w1=3 then close #5: : goto Xit
 	L2270: !
 	fnpa_finis
 	if goproc=1 then goto PRW2B
 goto Xit
-
-AskDefaultLocality: ! r: 
+ 
+AskDefaultLocality: ! r:
 	fnTos
 	rc=cf=0: mylen=20: mypos=mylen+3
 	fnLbl(1,1,"Locality Name:",mylen,1,0,0)
-	fnTxt(1,mypos,12,0,1,"",0,"If you have answered that you have local withholdings in the company information file, you must enter the locality name") 
+	fnTxt(1,mypos,12,0,1,"",0,"If you have answered that you have local withholdings in the company information file, you must enter the locality name")
 	resp$(rc+=1)=z$
 	fnLbl(3,5,"(Enter the locality name if the same on all employees.",60,0,0,0)
 	fnLbl(4,5,"Leave blank if not applicable.  Enter YES if applicable",60,0,0,0)
 	fnLbl(5,5,"but not he same on all employees.)",60,0,0,0)
-	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
+	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	z$=resp$(1)
 	z$=uprc$(rtrm$(z$))
@@ -297,34 +292,34 @@ ASK_STARTING: ! r:
 	fnTos
 	respc=cf=0: mylen=40: mypos=mylen+3 : mylen2=62: mypos2=20
 	fnLbl(1,1,"Starting Employee Number:",mylen,1,0,0)
-	fncmbemp(1,mypos) 
+	fncmbemp(1,mypos)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Ending Employee Number (blank for all):",mylen,1,0,0)
-	fncmbemp(2,mypos) 
+	fncmbemp(2,mypos)
 	resp$(respc+=1)=""
 	fnLbl(4,mypos2,"To pr a single W2, use the same starting and ending number.",mylen2,0,0,0)
 	fnLbl(9,mypos2," ",mylen2,0,0,0)
-	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
+	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
 	fnAcs2(mat resp$,ckey)
 	if ckey=5 then totalcode=1 : goto L2130
-	restore #1: 
+	restore #1:
 	numb=val(resp$(1)(1:8))
 	endnum=val(resp$(2)(1:8))
 	if numb=0 then goto L1040
 	empno=numb
 goto L1040 ! /r
-
+ 
 ASK_LOCALITY: ! r:
 	fnTos
 	rc=cf=0: mylen=30: mypos=mylen+3
 	fnLbl(1,1,k$(1),mylen,1,0,0)
 	fnLbl(2,1,"Locality Name:",mylen,1,0,0)
-	fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0) 
+	fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 	resp$(rc+=1)=f$
-	fnCmdKey("&Next",1,1,0,"Proceed to next screen.") 
+	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	f$=resp$(1)
 	g$=rtrm$(g$)
@@ -332,27 +327,27 @@ ASK_LOCALITY: ! r:
 	f$=g$
 	L2790: !
 return ! /r
-
+ 
 PRW2B: ! r:
-	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
-	restore #1: 
+	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output
+	restore #1:
 	L2830: form pos 1,c 128
 	write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
-	close #1: 
+	close #1:
 		fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
 	execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 goto Xit ! /r
-Xit: fnxit
-
+Xit: fnXit
+ 
 TOT1: ! r:
 	mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: k$(1)="Total Sheet"
 	x$=" ": p1=58: p2=126
 goto PRINTW2 ! /r
 PRINTW2: ! r: pr W2 FORM
 	gosub ASK_OLD_INFO
-	column1=15 
-	column2=60 
+	column1=15
+	column2=60
 	column3=113
 	column4=160
 	inc=0
@@ -494,7 +489,7 @@ L4430: ! r:
 	dim fl$*40
 	! pr NEWPAGE
 	close #101: ioerr ignore
-	open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outIn 
+	open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outIn
 	pr f "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
 	pr f "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
 	pr f "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
@@ -519,7 +514,7 @@ L4560: ! r:
 	L4640: !
 	open #5: "Name="&fl$&",RecL=470,REPLACE",display,output ioerr L4580
 	L4650: !
-	close #101: 
+	close #101:
 return ! /r
 W2LASER: ! GENERATE FILE FOR LAZER W2
 	on sw1 goto L4690,L5400
@@ -608,7 +603,7 @@ L5400: ! r: LAZER W2 FOR CENTER PIECE SOFTWARE
 	L5510: form pos 1,c 13,c 16,2*c 30,c 15,c 2,2*c 10,c 11,c 15,c 2,13*n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,13*n 10.2,c 2,c 15
 	c$=','
 goto L4100 ! /r
-
+ 
 ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 	fnTos
 	rc=cf=0: mylen=20: mypos=mylen+3
@@ -617,16 +612,16 @@ ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 	fnLbl(4,7," Deduction Name    Yes     Box #     Code",40,0,0,0)
 	for j=1 to 20
 		fnLbl(j+4,1,fullname$(j),mylen,1,0,0)
-		fnChk(j+4,26,"",0,0) 
+		fnChk(j+4,26,"",0,0)
 		resp$(rc+=1)="False"
-		fnTxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0) 
+		fnTxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0)
 		resp$(rc+=1)=str$(box12(j))
-		fnTxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0) 
+		fnTxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0)
 		resp$(rc+=1)=dedcode$(j)
 	next j
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	x=0
 	for j=1 to 20
@@ -653,9 +648,9 @@ L5870: ! r: last name first
 	L5910: ! pr FIRST$,MID$,LAST$
 return ! /r
 L5930: ! r: left or right stub
-	pr newpage 
+	pr newpage
 	close #101: ioerr ignore
-	open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&env$('program_caption')&" - Right or Left Stub",display,outIn 
+	open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&env$('program_caption')&" - Right or Left Stub",display,outIn
 	pr f "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
 	pr f "7,28,C 9,B,1": "Next (F1)"
 	pr f "7,39,C 11,B,5": "Cancel (F5)"
@@ -663,11 +658,11 @@ L5930: ! r: left or right stub
 	if cmdkey=5 then goto Xit
 return ! /r
 VBOPENPRINT: ! r:
-	if file(20)=-1 then 
+	if file(20)=-1 then
 		fnpa_open ! open #20: "Name=[Q]\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
 		lyne=topmargin ! starting of 1st line
 		character=1.5
-	end if 
+	end if
 return ! /r
 ASK_OLD_INFO: ! r:
 	fnTos
@@ -676,57 +671,57 @@ ASK_OLD_INFO: ! r:
 	fnLbl(lc+=1,1,heading$,40,0)
 	fnLbl(lc+=2,1,"Employee "&str$(eno),mylen,1)
 	fnLbl(lc+=1,1,"SS #:",mylen,1)
-	fnTxt(lc,mypos,11,0,0,"") 
+	fnTxt(lc,mypos,11,0,0,"")
 	resp$(rc+=1)=ss$
 	fnLbl(lc+=1,1,"Total Wage:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(2))
 	fnLbl(lc+=1,1,"SS Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(5))
 	fnLbl(lc+=1,1,"Medicare Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(11))
 	fnLbl(lc+=1,1,"State Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(9))
 	mypos+=37: fnLbl(lc=1,38,"Federal Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(1))
 	fnLbl(lc+=1,38,"SS Withholdings:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(3))
 	fnLbl(lc+=1,38,"Medicare Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(12))
 	fnLbl(lc+=1,38,"State Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(w(7))
 	fnLbl(lc+=1,38,"Box 12a Code:",mylen,1)
-	fnTxt(lc,mypos,2,0,0,"") 
+	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box1a$
 	fnLbl(lc+=1,38,"Box 12a Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(box1)
 	fnLbl(lc+=1,38,"Box 12b Code:",mylen,1)
-	fnTxt(lc,mypos,2,0,0,"") 
+	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box2a$
 	fnLbl(lc+=1,38,"Box 12b Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(box2)
 	fnLbl(lc+=1,38,"Box 12c Code:",mylen,1)
-	fnTxt(lc,mypos,2,0,0,"") 
+	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box3a$
 	fnLbl(lc+=1,38,"Box 12c Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(box3)
 	fnLbl(lc+=1,38,"Box 12d Code:",mylen,1)
-	fnTxt(lc,mypos,2,0,0,"") 
+	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box4a$
 	fnLbl(lc+=1,38,"Box 12d Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10") 
+	fnTxt(lc,mypos,10,0,0,"10")
 	resp$(rc+=1)=str$(box4)
-	fnCmdKey('&Next',1,1,0) 
+	fnCmdKey('&Next',1,1,0)
 	fnCmdKey('&Cancel',5,0,1)
 	fnAcs2(mat resp$,ckey) ! old amounts
 	if totalcode=1 then goto L2270

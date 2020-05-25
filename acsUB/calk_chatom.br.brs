@@ -2,7 +2,7 @@
 def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	if ~setup_calk then ! r:
 		setup_calk=1
-		library 'S:\Core\Library': fnget_services,fnpause
+		autoLibrary
 		dim x$*10,gb(10),da(2),c(4),dp$*60,serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 		dim san(3)
 		san(1)=8 : san(2)=15 : san(3)=20

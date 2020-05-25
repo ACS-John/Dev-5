@@ -50,7 +50,7 @@
 00450   close #1: ioerr ignore
 00460   close #2: ioerr ignore
 00465   fncloseprn ! /r
-00469 XIT: chain "S:\acsPR\newprRpt3"
+00469 Xit: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
 19801 read #1,using "Form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,x 1,c 12,n 6,n 12.2": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,w4Year$,ph$,bd,W4Step3 eof EOF1 ! fnStatus(str$(eno))
@@ -71,7 +71,7 @@
 20100 L20100: ! r: Check for Totals to pr ______________
 21200 goto EOF1 ! /r
 50000 ERTN: ! r:
-50001   fnerror(program$,err,line,act$,"xit") 
+50001   fnerror(program$,err,line,act$,"Xit") 
 50010   if uprc$(act$)<>"PAUSE" then goto L50040
 50020   execute "list "&str$(line) : pause : goto L50040
 50030   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
@@ -106,7 +106,7 @@
 61060   fnCmdKey("Next",1,1,0,"Prints the report")
 61070   fnCmdKey("Cancel",5,0,1,"Returns to menu")
 61080   fnAcs2(mat resp$,ckey) 
-61082   if ckey=5 then goto XIT
+61082   if ckey=5 then goto Xit
 61090   beg_date=val(resp$(1))
 61100   end_date=val(resp$(2))
 61110   dh$=resp$(3)

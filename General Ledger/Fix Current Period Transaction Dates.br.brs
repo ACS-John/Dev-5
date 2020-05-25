@@ -1,6 +1,6 @@
 	autoLibrary
 	on error goto Ertn
-	fntop(program$,cap$="Fix Current Period Transactions Dates")
+	fnTop(program$,cap$="Fix Current Period Transactions Dates")
 ! r: constants and dims
 	dim tr(7),tr$*12,td$*30,oldtr$*12
 	dim cap$*128,resp$(50)*50
@@ -19,7 +19,7 @@
 
 
 	gosub ASK_PERIOD
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 
 	fnopenprn
 	open #h_gltrans:=3: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative 
@@ -124,14 +124,14 @@ EO_JOURNAL: ! r:
 	gosub PJ_SOME_TOTAL
 	gosub JOURNAL_TOTALS
 L1210: fncloseprn
-	goto XIT ! /r
+	goto Xit ! /r
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r
 
 
-XIT: fnxit
+Xit: fnXit
 !
 ASK_PERIOD: ! r:
 ! pr newpage

@@ -1,6 +1,6 @@
 fn_setup
-fntop(program$)
-
+fnTop(program$)
+ 
 do ! r: Main Loop
 	dim resp$(3)*256
 	fnTos : lc=0
@@ -16,9 +16,9 @@ do ! r: Main Loop
 	fnCmdKey('Import',ckey_import:=2, 0,0,'Import modified Route and Sequence numbers from file')
 	fnCmdKey('Exit'  ,5, 0,1)
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then 
-		goto XIT
-	else 
+	if ckey=5 then
+		goto Xit
+	else
 		fnreg_write(env$('cap')&'.path and file',resp$(1))
 		if ckey=ckey_export then
 			fn_exportRouteAndSequence(resp$(1),tab$)
@@ -27,14 +27,14 @@ do ! r: Main Loop
 		end if
 	end if
 loop ! /r
-XIT: fnxit
+Xit: fnXit
 dim customer$(0)*256
 dim customerN(0)
 dim mg$(0)*256,mgResp$*40
 def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pass,route,sequence,lineCount,failErrorNumber,bkno1$,bkno2$,bkno1,bkno2)
 	fncreg_read('Route Low' ,bkno1$) : bkno1=val(bkno1$)
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
-
+ 
 	hCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
 	open #hIn:=fngethandle: 'Name='&br_filename$(source$),display,input ioerr ImportFail
 	dim header$(0)*256
@@ -58,7 +58,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 			z$      =lpad$(trim$(item$(in_acct)),10)
 			route   =val(item$(in_route   )) conv ImportFail
 			sequence=val(item$(in_sequence)) conv ImportFail
-			if route<bkno1 or route>bkno2 then 
+			if route<bkno1 or route>bkno2 then
 				goto ImportFailInvalidRoute
 			end if
 			if ~fnKeyExists(hCustomer,z$, 2) then goto ImportFailAccountKey
@@ -76,7 +76,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 	fnAddOneC(mat mg$,'Succesfully completed import from:')
 	fnAddOneC(mat mg$,source$)
 	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
-
+ 
 	goto ImportFinis
 	
 	ImportFail: ! r:
@@ -110,20 +110,20 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,'This range can be changed in Company>Configuration.')
 		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
-
+ 
 	ImportFinis: !
 	close #hIn: ioerr ignore
 	fnCloseFile(hCustomer,'UB Customer')
 fnend
 def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	hCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$, 1)
-	! open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative 
+	! open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative
 	fnMakeSurePathExists(outFile$)
 	open #hOut:=fngethandle: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',display,output
 	!  r: Header
 	pr #hOut: 'Account Key'         &delim$;          ! z$
-	pr #hOut: 'Route'              	&delim$;          
-	pr #hOut: 'Sequence'           	&delim$;          
+	pr #hOut: 'Route'              	&delim$;
+	pr #hOut: 'Sequence'           	&delim$;
 	pr #hOut: 'Meter Address'&delim$;                 ! e$(1)
 	pr #hOut: 'Name'&delim$;                          ! e$(2)
 	pr #hOut: 'Address 1 - Primary'&delim$;           ! e$(3)
@@ -142,8 +142,8 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	pr #hOut: 'Alpha Sort Field'&delim$; ! alp$&delim$;
 	pr #hOut: ''
 	! /r
-
-	do 
+ 
+	do
 		read #hCustomer,using form$(hCustomer): mat customer$,mat customerN eof ExportRouteAndSequence_Finis
 		if finalBillingCode=0 or finalBillingCode=3 then
 			! r: pr #hOut delimited field values
@@ -169,7 +169,7 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 			pr #hOut:''
 			! /r
 		end if
-	loop 
+	loop
 	ExportRouteAndSequence_Finis: !
 	close #hCustomer: ioerr ignore
 	close #hOut: ioerr ignore
@@ -178,25 +178,11 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	fnAddOneC(mat mg$,outFile$)
 	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
 fnEnd
-
+ 
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
-		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs2
-		library 'S:\Core\Library': fnCmdKey
-		library 'S:\Core\Library': fncustomer_address
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnSpecialFolderPath$
-		library 'S:\Core\Library': fnMakeSurePathExists
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnVal
-		library 'S:\Core\Library': fncreg_read
-		library 'S:\Core\Library': fnCloseFile
-		library 'S:\Core\Library': fnKeyExists
+		autoLibrary
 	
 		on error goto Ertn
 		gosub Enum
@@ -207,4 +193,4 @@ def fn_setup
 fnend
 include: enum
 include: fn_open
-include: ertn
+include: Ertn

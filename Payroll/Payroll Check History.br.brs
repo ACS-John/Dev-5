@@ -1,7 +1,7 @@
 ! formerly S:\acsPR\checkhistory
 ! Payroll Check History
 fn_setup
-fntop(program$)
+fnTop(program$)
 
 open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
 if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then
@@ -19,7 +19,7 @@ close #hEmployee: ioerr ignore
 close #hCheckIdx1: ioerr ignore
 close #hCheckIdx3: ioerr ignore
 gosub ReIndexPayrollChecks
-Xit: fnxit
+Xit: fnXit
 ReIndexPayrollChecks: ! r:
 	fnindex_it('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx3.h[cno]','1/12/9 8/6/3')
 	fnindex_it('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx.h[cno]','1 17')
@@ -28,7 +28,7 @@ return ! /r
 
 
 def library fncheckfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fncheckfile=fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hEmployee)
 fnend
 def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
@@ -38,7 +38,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	dim gridname$*30
 	dim oldgridname$*30
 
-	! fntop(program$,cap$="Payroll Check History")
+	! fnTop(program$,cap$="Payroll Check History")
 	cancel=5 : back=2 : ckEdit=1 : save=1 : disable=1
 	add=4
 	transtype$(1)="Check Only"
@@ -918,24 +918,7 @@ def fn_setup
 	if ~setup then
 		setup=1
 		on error goto Ertn
-
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnindex_it,fnStatusClose
-		library 'S:\Core\Library': fnTos,fnAcs,fnCmdKey
-		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fnFra,fnOpt,fnLbl,fnTxt
-		library 'S:\Core\Library': fnCmdSet,fncmbact,fnChk
-		library 'S:\Core\Library': fncmbemp,fncombof,fnButton
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnDedNames
-		library 'S:\Core\Library': fnGetPayrollDates
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnreg_read
-
+		autoLibrary
 	end if
 fnend
 def fn_isBlank(text$*128; ___,returnN)
@@ -944,4 +927,4 @@ def fn_isBlank(text$*128; ___,returnN)
 	end if
 	fn_isBlank=returnN
 fnend
-include: ertn
+include: Ertn

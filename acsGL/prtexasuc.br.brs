@@ -1,130 +1,124 @@
-00010 ! Replace S:\acsGL\PRTexasUC
-00020 ! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess,fnTos,fnLbl,fnTxt,fnAcs,fnCmdSet,fngethandle,fnreg_read,fnreg_write
-00050   on error goto Ertn
-00060 !
-00070   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
-00080   dim fa$(3),sa$(3)*40,cnam$*40
-00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*5
-00100   dim resp$(3)*255,csvpath$*255
-00110 !
-00120   fntop(program$,cap$="Print Texas Unemployment Report")
-00130   fncno(cno,cnam$)
-00150   open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  !:
-        read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc !:
-        close #1: 
-00160   if fnprocess=1 then goto L280
-00170 ! 
-00175 L170: fnTos(sn$="PrTexasUc1") !:
-        mylen=60: mypos=mylen+3 : right=1
-00180   fnLbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
-00185   fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) !:
-        resp$(1)=""
-00190   fnLbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
-00195   fnTxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) !:
-        resp$(2)=""
-00200   fnLbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
-00205   fnTxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
-00210   fnreg_read("TexasUCFile",csvpath$)
-00215   if trim$(csvpath$)="" then csvpath$="[Q]\GLmstr\txuc.csv"
-00220   resp$(3)=csvpath$
-00225   fnCmdSet(2)
-00230   fnAcs(sn$,0,mat resp$,ckey)
-00235   if ckey=5 then goto XIT
-00240   pedat$=resp$(1)
-00245   namcde$=uprc$(resp$(2))
-00250   csvpath$=resp$(3)
-00255   if trim$(namcde$)="" then goto L170
-00280 L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed 
-00290   open #(h_csv:=fngethandle): "Name="&csvpath$&",REPLACE",display,output 
-00300   fnopenprn
-00310   gosub HDR
-00315 L310: read #2,using L320: mat k,mat k$,mat l$,mat m eof L600
-00320 L320: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
-00330   if m(2)=0 or k(1)=0 then goto L500
-00340   deducy=deducq=0
-00350   for j=1 to 10
-00360     if deduc(j)=1 then deducy=deducy+m(j*2+9)
-00370     if deduc(j)=1 then deducq=deducq+m(j*2+10)
-00380   next j
-00390   m(1)=m(1)-deducy
-00400   m(2)=m(2)-deducq
-00410   if p1<57 then goto L450
-00420   gosub L820
-00430   pr #255: newpage
-00440   gosub HDR
-00450 L450: gosub L670
-00460   t1=t1+m(2)
-00470   t2=t2+h3
-00480   t3=t3+h2
-00490   t4=t4+m(34)
-00500 L500: goto L310
-00510 !
-00520 HDR: ! 
-00530   pr #255,using L540: b$(2),b$(1),pedat$
-00540 L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
-00550   pr #255,using L560: a$(1),a$(2),a$(3)
-00560 L560: form pos 22,c 40,skip 1,pos 22,c 40,skip 1,pos 22,c 40,skip 6
-00570   p1=16
-00580   return 
-00590 !
-00600 L600: gosub L820
-00610   close #2: 
-00620   fncloseprn
-00630   fnreg_write("TexasUCFile",csvpath$)
-00640   close #h_csv: 
-00650   goto XIT
-00660 !
-00670 XIT: fnxit
-00680 !
-00685 L670: p3=p3+1
-00690   if m(1)<ucm then goto L740
-00695   if m(1)-m(2)>ucm then goto L720
-00700   h2=ucm-(m(1)-m(2))
-00705   goto L750
-00720 L720: h2=0
-00730   goto L750
-00740 L740: h2=m(2)
-00750 L750: h3=m(2)-h2
-00760   gosub L1000 ! break name down
-00770   f$=first$(1:1): m$=mid$(1:1)
-00790   pr #255,using L790: l$(1),f$,m$,last$,m(2)
-00800   pr #h_csv: l$(1)&","""&srep$(first$,"""","""""")&""","&m$&","""&srep$(last$,"""","""""")&""","&str$(m(2))
-00805 L790: form pos 4,c 11,pos 21,c 1,pos 24,c 1,pos 27,c 16,pos 51,pic(zzz,zzz.##),skip 2
-00810   p1=p1+2
-00815   return 
-00820 L820: j1=68-p1
-00830   pr #255,using L840: t1
-00840 L840: form skip j1,pos 47,pic(zzz,zzz,zzz.##)
-00850   p3=0
-00860   t1=0
-00870   t2=0
-00880   t3=0
-00890   t4=0
-00900   return 
-00910 !
-00920 ! <Updateable Region: ERTN>
-00930 ERTN: fnerror(program$,err,line,act$,"xit")
-00940   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00950   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00960   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00970 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00980 ! /region
-00990 !
-01000 L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
-01010   k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
-01020   x1=pos(k$(1)," ",1)
-01030   x2=pos(k$(1)," ",x1+1)
-01040   x3=pos(k$(1)," ",x2+1)
-01050   if uprc$(namcde$)="L" then goto L1100
-01060   first$=k$(1)(1:max(min(15,x1-1),1))
-01070   if x2>0 then mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
-01080   if x2=0 then last$=k$(1)(x1+1:len(k$(1))): mid$=""
-01090   goto L1140
-01100 L1100: ! last name first
-01110   if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
-01120   if x2>0 then first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
-01130   if x2=0 then first$=k$(1)(x1+1:len(k$(1))): mid$=""
-01140 L1140: ! pr FIRST$,MID$,LAST$
-01150   return 
+! Replace S:\acsGL\PRTexasUC
+! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
+	dim fa$(3),sa$(3)*40,cnam$*40
+	dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*5
+	dim resp$(3)*255,csvpath$*255
+ 
+	fnTop(program$,cap$="Print Texas Unemployment Report")
+	fncno(cno,cnam$)
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
+	read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc : _
+	close #1:
+	if fnprocess=1 then goto L280
+ 
+L170: fnTos(sn$="PrTexasUc1") : _
+	mylen=60: mypos=mylen+3 : right=1
+	fnLbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
+	fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) : _
+	resp$(1)=""
+	fnLbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
+	fnTxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) : _
+	resp$(2)=""
+	fnLbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
+	fnTxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
+	fnreg_read("TexasUCFile",csvpath$)
+	if trim$(csvpath$)="" then csvpath$="[Q]\GLmstr\txuc.csv"
+	resp$(3)=csvpath$
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	pedat$=resp$(1)
+	namcde$=uprc$(resp$(2))
+	csvpath$=resp$(3)
+	if trim$(namcde$)="" then goto L170
+L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
+	open #(h_csv:=fngethandle): "Name="&csvpath$&",REPLACE",display,output
+	fnopenprn
+	gosub HDR
+L310: read #2,using L320: mat k,mat k$,mat l$,mat m eof L600
+L320: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
+	if m(2)=0 or k(1)=0 then goto L500
+	deducy=deducq=0
+	for j=1 to 10
+		if deduc(j)=1 then deducy=deducy+m(j*2+9)
+		if deduc(j)=1 then deducq=deducq+m(j*2+10)
+	next j
+	m(1)=m(1)-deducy
+	m(2)=m(2)-deducq
+	if p1<57 then goto L450
+	gosub L820
+	pr #255: newpage
+	gosub HDR
+L450: gosub L670
+	t1=t1+m(2)
+	t2=t2+h3
+	t3=t3+h2
+	t4=t4+m(34)
+L500: goto L310
+ 
+HDR: !
+	pr #255,using L540: b$(2),b$(1),pedat$
+L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
+	pr #255,using L560: a$(1),a$(2),a$(3)
+L560: form pos 22,c 40,skip 1,pos 22,c 40,skip 1,pos 22,c 40,skip 6
+	p1=16
+return
+ 
+L600: gosub L820
+	close #2:
+	fncloseprn
+	fnreg_write("TexasUCFile",csvpath$)
+	close #h_csv:
+	goto Xit
+ 
+Xit: fnXit
+ 
+L670: p3=p3+1
+	if m(1)<ucm then goto L740
+	if m(1)-m(2)>ucm then goto L720
+	h2=ucm-(m(1)-m(2))
+	goto L750
+L720: h2=0
+	goto L750
+L740: h2=m(2)
+L750: h3=m(2)-h2
+	gosub L1000 ! break name down
+	f$=first$(1:1): m$=mid$(1:1)
+	pr #255,using L790: l$(1),f$,m$,last$,m(2)
+	pr #h_csv: l$(1)&","""&srep$(first$,"""","""""")&""","&m$&","""&srep$(last$,"""","""""")&""","&str$(m(2))
+L790: form pos 4,c 11,pos 21,c 1,pos 24,c 1,pos 27,c 16,pos 51,pic(zzz,zzz.##),skip 2
+	p1=p1+2
+return
+L820: j1=68-p1
+	pr #255,using L840: t1
+L840: form skip j1,pos 47,pic(zzz,zzz,zzz.##)
+	p3=0
+	t1=0
+	t2=0
+	t3=0
+	t4=0
+return
+ 
+include: Ertn
+ 
+L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
+	k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
+	x1=pos(k$(1)," ",1)
+	x2=pos(k$(1)," ",x1+1)
+	x3=pos(k$(1)," ",x2+1)
+	if uprc$(namcde$)="L" then goto L1100
+	first$=k$(1)(1:max(min(15,x1-1),1))
+	if x2>0 then mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
+	if x2=0 then last$=k$(1)(x1+1:len(k$(1))): mid$=""
+	goto L1140
+L1100: ! last name first
+	if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
+	if x2>0 then first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
+	if x2=0 then first$=k$(1)(x1+1:len(k$(1))): mid$=""
+L1140: ! pr FIRST$,MID$,LAST$
+return

@@ -1,7 +1,7 @@
 ! formerly S:\acsGL\PeriodEndingDate
 
 	autoLibrary
-	fntop(program$)
+	fnTop(program$)
 	on error goto Ertn
 
 	dim periodOption$(13)*2,resp$(10)*200
@@ -37,7 +37,7 @@ PERIOD_ENDING_DATES: !
 	fnLbl(6,1,"Last Accounting Period closed was "&str$(lmu),60,2)
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	pedat$=resp$(1)
 	dat$=resp$(2)
 	actpd=val(resp$(3))
@@ -51,6 +51,6 @@ PERIOD_ENDING_DATES: !
 		fncch$(cch$)
 	! /r
 	
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 include: Ertn

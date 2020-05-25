@@ -1,39 +1,33 @@
-00010 ! Replace S:\acsGL\BldFin
-00020 ! ???
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
-00050   fntop(program$,"CHANGE_ME")
-00060   on error goto Ertn
-00070 !
-00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
-00090   dim gln(3,3),fin(3),ta(2),ac(18),te$*1
-00100 !
-00110   fncno(cno)
-00120 ! 
-00130   open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed 
-00140   open #2: "Name=[Q]\GLmstr\ACGLFNSI.h[cno]",internal,output 
-00150 READ_GLMSTR: ! 
-00160   read #1,using L180: dno,ano,sno,d$,mat rf eof END1
-00170   if ano<1000 then goto READ_GLMSTR
-00180 L180: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
-00190   rno=rno+10
-00200   ac(1)=3
-00210   if ano<2000 then ac(5)=1 else ac(5)=0
-00220   write #2,using L230: rno,d$,"D",mat ac
-00230 L230: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3
-00240   rf(2)=rno
-00250   rewrite #1,using L180: dno,ano,sno,d$,mat rf
-00260   goto READ_GLMSTR
-00270 END1: ! 
-00280   close #1: 
-00290   close #2: 
-00300 XIT: stop 
-00310 !
-00320 ! <Updateable Region: ERTN>
-00330 ERTN: fnerror(program$,err,line,act$,"xit")
-00340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00370 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00380 ! /region
-00390 !
+! Replace S:\acsGL\BldFin
+! ???
+ 
+	autoLibrary
+	fnTop(program$)
+	on error goto Ertn
+ 
+	dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
+	dim gln(3,3),fin(3),ta(2),ac(18),te$*1
+ 
+	fncno(cno)
+ 
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\GLmstr\ACGLFNSI.h[cno]",internal,output
+READ_GLMSTR: !
+	read #1,using L180: dno,ano,sno,d$,mat rf eof END1
+	if ano<1000 then goto READ_GLMSTR
+L180: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
+	rno=rno+10
+	ac(1)=3
+	if ano<2000 then ac(5)=1 else ac(5)=0
+	write #2,using L230: rno,d$,"D",mat ac
+L230: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3
+	rf(2)=rno
+	rewrite #1,using L180: dno,ano,sno,d$,mat rf
+	goto READ_GLMSTR
+END1: !
+	close #1:
+	close #2:
+Xit: stop
+ 
+include: Ertn
+ 

@@ -1,34 +1,13 @@
 fn_setup
 library program$: fncheckfileversion
-fntop(program$)
+fnTop(program$)
 fncheckfileversion
-XIT: fnxit
-IGNORE: continue
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnerror
-		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnglcontrol
-		library 'S:\Core\Library': fnindex_it
-		library 'S:\Core\Library': fnCopy,fnFree,fnRename
-		library 'S:\Core\Library': fnclient_has
-		library 'S:\Core\Library': fngetdir2
-		library 'S:\Core\Library': fnGetPp
-		library 'S:\Core\Library': fncreg_write
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnKeyChange
-		library 'S:\Core\Library': fnSystemNameFromAbbr$
-		library 'S:\Core\Library': fnIniToReg
-		library 'S:\Core\Library': fnOpenFile,fnCloseFile
-		library 'S:\Core\Library': fnStatus,fnStatusPause
-		library 'S:\Core\Library': fnInitialializeMeterLocation
-		library 'S:\Core\Library': fnAutomatedSavePoint
-		library 'S:\Core\Library': fnreg_read
+		autoLibrary
 		on error goto Ertn
-		dim form$(0)*512
 	end if
 fnend
 
@@ -37,7 +16,7 @@ def library fncheckfileversion
 	! This Fn is called from S:\Core\Program\Select Company.br and S:\Core\Company Import
 	! this library function checks to make sure all file versions for the
 	! current system are up to date - and runs the appropriate conversion  function if not
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! there are other Library statements in this program - but they are placed in the section for which system they really belong to.
 	!_
 	dim tmpfile$*512,tmpkps(10),tmpkln(10),name$*512,kfname$*512
@@ -270,7 +249,6 @@ def fn_cfv_utility_billing
 		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
 		! F_meterType_v3: form pos 1,c 5,c 40,c 9,n 2,c 4,c 20
 		dim u4_device$*40
-		library 'S:\Core\Library': fnhand_held_device$
 		fnreg_read('Hand Held Device',u4_device$, fnhand_held_device$)
 		if trim$(u4_device$)='[Ask]' then u4_device$='[All]'
 		do
@@ -284,7 +262,6 @@ def fn_cfv_utility_billing
 	if version_meterType=3 then
 		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
 		dim u4_device$*40
-		library 'S:\Core\Library': fnhand_held_device$
 		do
 			read #hMeterType: eof EoMeterTypeV3
 			rewrite #hMeterType,using 'form pos 81,c 8,c 3': '',''
@@ -357,7 +334,6 @@ def fn_cfv_utility_billing
 fnend
 def fn_cfv_checkbook
 	! Checkbook Only
-	library 'S:\Core\Library': fntrmstr_v1_to_v2, fntralloc_v1_to_v2, fnunpdaloc_v1_to_v2, fnpaytrans_v1_to_v2, fnpaymstr_v0_to_v1, fnglmstrtorecl62, fntrmstr_v0_to_v1
 	if exists("[Q]\CLmstr")=0 then execute "MkDir [Q]\CLmstr"
 	! if ~exists('[Q]\INI\Checkbook') then execute 'mkdir "[Q]\INI\Checkbook"'
 	fn_ini_move(env$('cursys'))
@@ -645,6 +621,13 @@ def fn_cfv_checkbook
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
 	end if
+	
+
+	if exists("[Q]\CLmstr\PostDat.h[cno]") then
+		fnFree('[Q]\CLmstr\PostDat.h[cno]')
+	end if
+	
+	
 fnend
 def fn_cfv_payroll
 	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
@@ -843,8 +826,6 @@ def fn_cfv_general_ledger
 	!
 	fn_file_setup_data("[Q]\GLmstr\GLTrans.h[cno]",73,0)
 	!
-	library 'S:\Core\Library': fnfinstmt_v0_to_v1,fnglmstr_338_416
-	library 'S:\Core\Library': fnglpayee_v0_to_v1
 	if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
 	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'
 	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir "[Q]\INI\General Ledger\Accountants"'
@@ -912,16 +893,17 @@ def fn_cfv_general_ledger
 		fnFree(kfname$)
 		fnindex_it(name$,kfname$,'13 30')
 	end if
-	!
+
 	fn_file_setup_data("[Q]\GLmstr\AcGLFnSc.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\FnScIndx.h[cno]",'1','5')
-	! r:  Six Files, with 1 primary index each
+	fn_file_setup_index("[Q]\GLmstr\agfsidx1.h[cno]",'1','5')	! add delete for '[Q]\GLmstr\F nScIndx.h[cno]' - it was the old name of agfsidx1 (without the space in it)
+	! Six Files, with 1 primary index each
 	!         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
 	fn_file_setup_data("[Q]\GLmstr\acglfnsj.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\Fnsjindx.h[cno]",'1','5')
+	fn_file_setup_index("[Q]\GLmstr\agfsidx2.h[cno]",'1','5')
+	! add delete for '[Q]\GLmstr\F nsjindx.h[cno]' - it was the old name of agfsidx1 (without the space in it)
 	! r: GLmstr\acglfnsi
 	name$="[Q]\GLmstr\acglfnsi.h[cno]"
-	kfname$="[Q]\GLmstr\fnsiindx.h[cno]"
+	kfname$="[Q]\GLmstr\agfsidx3.h[cno]"
 	fn_file_setup_data(name$,83,1)
 	fn_file_setup_index(kfname$,'1','5')
 	! myrln=83
@@ -946,18 +928,15 @@ def fn_cfv_general_ledger
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	fn_file_setup_data("[Q]\GLmstr\acglfnsb.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\Fnsbindx.h[cno]",'1','5')
-	!
-	fn_file_setup_data("[Q]\GLmstr\acglfnsb.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\Fnsbindx.h[cno]",'1','5')
-	!
+	fn_file_setup_index("[Q]\GLmstr\agfsidx4.h[cno]",'1','5')
+
 	fn_file_setup_data("[Q]\GLmstr\acglfnsf.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\Fnsfindx.h[cno]",'1','5')
-	!
+	fn_file_setup_index("[Q]\GLmstr\agfsidx5.h[cno]",'1','5')
+
 	fn_file_setup_data("[Q]\GLmstr\acglfnsg.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\Fnsgindx.h[cno]",'1','5')
+	fn_file_setup_index("[Q]\GLmstr\agfsidx6.h[cno]",'1','5')
 	!
 	! /r
 	! PAYEEGLBREAKDOWN: !
@@ -1062,7 +1041,7 @@ def fn_cfv_general_ledger
 		 goto ERTN
 	end if
 	GlBrecFinis: !
-	!
+
 	! SCHEDULE: ! Primary, Non-Split Index  (General ledger schedules)
 	dim sn$*78,ft$*78,gl$(80)*12
 	name$="[Q]\GLmstr\acglschs.h[cno]"
@@ -1106,7 +1085,6 @@ def fn_cfv_general_ledger
 	L4050: !
 	!
 	! r: these functions hav their own conversions and only need to be called to launch
-	library 'S:\Core\Library': fnfscode,fnpedat$,fnpriorcd,fnpgnum,fnrx,fnstyp,fnps
 	fnfscode
 	fnpedat$
 	fnpriorcd
@@ -1124,20 +1102,19 @@ def fn_cfv_general_ledger
 		write #hGlPeriod,using 'form pos 1,N 2,C 30': 13,'End of Year Adjustments'
 		close #hGlPeriod:
 	end if
-	!
+
 	if exists("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
 		if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
 			fnFree("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]")
 		end if
 	end if
-	!
+
 	if exists("[Q]\GLmstr\GLWK1"&wsid$&".dat") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
 		if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".dat","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
 			fnFree('[Q]\GLmstr\GLWK1'&wsid$&'.dat')
 		end if
 	end if
-	!
-	!
+
 fnend
 L9000: ! r: skip bad schedule records
 	reread #tmp, using "Form POS 1,c 2": a$ eof EO_TMP ioerr ignore
@@ -1244,11 +1221,6 @@ fnend
 def fn_rrOne(from$*256,to$*256)
 	if ~rr1Setup then
 		rr1Setup=1
-		if env$('ACSDeveloper')<>'' then
-			library 'S:\Core\Library': fnsreg_rename
-		else
-			library 'S:\Core\Library': fnreg_rename
-		end if
 		dim property$(0)*128
 		mat property$(0)
 		fnAddOneC(mat property$,'Orientation' )
@@ -1280,4 +1252,4 @@ def fn_programIniFileName$*256(pif_program$*256; doNotCreate)
 	fn_programIniFileName$=pif_return$
 fnend
 include: fn_open
-include: ertn
+include: Ertn

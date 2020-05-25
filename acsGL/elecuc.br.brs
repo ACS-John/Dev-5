@@ -13,8 +13,8 @@
 	dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 	dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 
-	fntop(program$,"Electronic U/C")
-	on fkey 5 goto XIT
+	fnTop(program$,"Electronic U/C")
+	on fkey 5 goto Xit
  
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],SHR",internal,input 
 	read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
@@ -87,7 +87,7 @@ CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 ERR1: pr f "24,78,C 1": bell : goto L890
 L940: ! 
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 	if rtrm$(a$(1))="" then ce=1: goto ERR1
 	if rtrm$(a$(2))="" then ce=2: goto ERR1
 	if rtrm$(ct$)="" then ce=3: goto ERR1
@@ -192,7 +192,7 @@ END1: !
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 	fncloseprn
 	gosub L2040
-XIT: fnxit
+Xit: fnXit
 !
 L2040: ! r:
 	close #24: ioerr ignore
@@ -323,7 +323,7 @@ L2900: if button_option=0 then goto L3010
 	scrline=er+1: gosub FkeyX
 
 L3010: return  ! /r Fnend
-OldMsgBox: ! r: Def Library fnOldMsgBox(mat RESPONSE$,mat MSGLINE$,MTYPE)
+OldMsgBox: ! r: def library fnOldMsgBox(mat RESPONSE$,mat MSGLINE$,MTYPE)
 ! mtype=0 means splash    - returns no response                                 ! mostly for "please WaitX..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
 ! mtype=1 means OK only   - returns no response
 ! mtype=2 means Yes or No - returns "Y" or "N"
@@ -358,7 +358,7 @@ L3230: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 	if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3230
 	close #104: ioerr L3360
 L3360: return  ! /r Fnend
-WaitX: ! r: Def Library FNWAIT(&MESSAGE$,STOPABLE)
+WaitX: ! r: def library fnWAIT(&MESSAGE$,STOPABLE)
 ! if stopable=1 will display "Cancel (F5)" button
 ! win = window number
 	close #win: ioerr ignore
@@ -371,7 +371,7 @@ WaitX: ! r: Def Library FNWAIT(&MESSAGE$,STOPABLE)
 	if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
 	if stopable=1 then pr f "15,34,C 11,B,5": "Cancel (F5)"
 return  ! /r Fnend
-FkeyX: ! r: Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
+FkeyX: ! r: def library fnFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
 	totallen=0 
 	startpos=0
 	for j=1 to udim(fkey$) ! add ' (Fx)' to each button

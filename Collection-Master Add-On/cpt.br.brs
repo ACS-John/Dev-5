@@ -1,21 +1,15 @@
 fn_setup(table$)
 on error goto Ertn
 ! pr 'table$=';table$
-fntop(program$)
+fnTop(program$)
 if ~exists('[Q]\Data\cpt.dat') then let fn_InitialializeCpt
 fnHamsterFio(table$)
-XIT: !
-fnxit
+Xit: !
+fnXit
 def fn_setup(&table$)
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnHamsterFio
-		library 'S:\Core\Library': fnOpenFile
-		library 'S:\Core\Library': fnCloseFile
-		library 'S:\Core\Library': fnKeyExists
-		library 'S:\Core\Library': fnCopy
+		autoLibrary
 		dim cpt$(0)*1024
 		dim cptN(0)
 		table$='CM CPT'
@@ -94,7 +88,7 @@ fnend
 
 
 def library fnCptCode$*800(code$*5)
-	if ~setup then let fn_setup(table$)
+	if ~setup then fn_setup(table$)
 	if ~setup_fnCptCode then
 		setup_fnCptCode=1
 		hFnCptCode=fn_open(table$,mat cpt$,mat cptN,mat form$)
@@ -107,4 +101,4 @@ def library fnCptCode$*800(code$*5)
 fnend
 
 include: fn_open
-include: ertn
+include: Ertn

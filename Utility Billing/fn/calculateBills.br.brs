@@ -1,12 +1,12 @@
 pr bell;'do not run this program directly.  it is just for library function calling. ' : end
 ! fn_setup
-! fntop(program$)
+! fnTop(program$)
 ! dim goal$*11
 ! goal$=lwrc$(env$('program_caption')(1:pos(env$('program_caption'),' ')-1))
 ! fn_calculateBills(goal$)
-! XIT: fnxit
+! Xit: fnXit
 def library fnCalculateBills(goal$*11)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnCalculateBills=fn_calculateBills(goal$)
 fnend
 def fn_calculateBills(goal$*11)
@@ -31,7 +31,7 @@ def fn_calculateBills(goal$*11)
 		serviceName$(j)=trim$(serviceName$(j))
 	next j
 	fn_ask_billing_date
-	if ck=5 then goto XIT_CALCULATE
+	if ck=5 then goto Xit_CALCULATE
 ! fnwait("Calculating: please wait...",0)
 	fnAutomatedSavePoint('before')
 	fnopenprn
@@ -511,23 +511,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTos,fnLbl
-		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fncloseprn,fnopenprn
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnTxt,fntop,fncd,fnChk
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fngethandle,fnFree
-		library 'S:\Core\Library': fnapply_default_rates
-		library 'S:\Core\Library': fnAutomatedSavePoint
-		library 'S:\Core\Library': fnpause
-		library 'S:\Core\Library': fnCmdSet
-		library 'S:\Core\Library': fncomboa
-		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fnEnableCostOfGas
+		autoLibrary
 		if env$('client')="Chatom" then 
 			library "S:\acsUB\calk_Chatom": fncalk
 		else 

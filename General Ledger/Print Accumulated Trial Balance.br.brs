@@ -1,7 +1,7 @@
 ! formerly S:\acsGL\AcGLAcTB
 ! pr Accumulated Trial Balance
 ! r: setup library, on error, dims, and constants
-  library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnTos,fnFra,fnOpt,fnLbl,fnqgl,fnCmdSet,fnAcs,fnagl$,fnChk,fnTxt,fngethandle,fncreg_read,fncreg_write
+autoLibrary
   on error goto Ertn
 !
   dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3,cap$*128
@@ -18,12 +18,12 @@
   a$(8)="P/J"
   a$(9)=" "
 ! /r
-  fntop(program$,cap$="Print Accumulated Trial Balance")
-  open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+  fnTop(program$,cap$="Print Accumulated Trial Balance")
+  open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
   read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$
   read #20,using "Form pos 296,N 2",rec=1: lmu
   read #20,using 'Form Pos 384,n 2',rec=1: nap
-  close #20: 
+  close #20:
   fncreg_read('Last "Capital" Account',lastCapitalAccount$,cogl$(3))
   fncreg_Read('Print Ending Balance on First Line',petro_opt$,'False')
   fncreg_Read(cap$&': DayStart',tmp$) : startday=val(tmp$)
@@ -31,8 +31,8 @@
   m2GlmCbAmtPos=87
   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
   ! last=val(lastCapitalAccount$(4:9))
-  open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
-  open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed 
+  open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+  open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed
   if fnprocess=1 then s1=1 : goto mainLoopInit
 goto SCREEN1
 SCREEN1: ! r:
@@ -63,17 +63,17 @@ SCREEN1: ! r:
   fnFra(12,1,4,90,"Filters"," ",0) : frameno=2
   mylen=14 : mypos=mylen+2
   fnLbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-  fnTxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+  fnTxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno)
   resp$(resp_dateStart:=rc+=1)=date$(startday,'ccyymmdd')
   fnLbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-  fnTxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+  fnTxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno)
   resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
   fnLbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
   fnTxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
   resp$(resp_costCenter:=rc+=1)=""
   fnCmdSet(2)
-  fnAcs(sn$,0,mat resp$,ckey)
-  if ckey=5 then goto XIT
+  fnAcs2(mat resp$,ckey)
+  if ckey=5 then goto Xit
   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
   petro_opt$=resp$(respc_prBalFirst)
   periodToPrint=val(resp$(respc_periodCode)) ! period code to print
@@ -87,8 +87,8 @@ SCREEN1: ! r:
   costCenterFilter=val(resp$(resp_costCenter))
   fncreg_write('Last "Capital" Account',lastCapitalAccount$)
   fncreg_write('Print Ending Balance on First Line',petro_opt$)
-  fncreg_write(cap$&': DayStart',str$(startday)) 
-  fncreg_write(cap$&': DayEnd'  ,str$(endday)) 
+  fncreg_write(cap$&': DayStart',str$(startday))
+  fncreg_write(cap$&': DayEnd'  ,str$(endday))
   fncreg_write('Print Ending Balance on First Line',petro_opt$)
   if periodToPrint>1 then m1GlmBbAmtPos=periodToPrint*6+81
   m2GlmCbAmtPos=periodToPrint*6+87
@@ -109,7 +109,7 @@ mainLoopInit: ! r: main loop setup (costCenterFilter)
   gosub HDR
   goto READ_GLMSTR ! /r main loop setup
 READ_GLMSTR: ! r: main loop
-  if s1=2 then 
+  if s1=2 then
     gosub SELECT_ACCOUNT
   else
     do
@@ -117,7 +117,7 @@ READ_GLMSTR: ! r: main loop
       ! m2GlmCbAmtPos=87=current balance
       F_GLMSTR: form pos 1,c 12,c 50,pos m1GlmBbAmtPos,pd 6.2,pos m2GlmCbAmtPos,pd 6.2,pos 171,13*pd 6.2
       bb=bp(nap)
-!     pause ! 
+!     pause !
     loop while s1=3 and n$<n1$
     if s1=3 and n$>n2$ then goto TOTALS
   end if
@@ -133,13 +133,13 @@ AfterReadGlmstr: !
 !   activity=0
 !   pr str$(dno)&'-'&str$(ano)&'-'&str$(sno) : pause
   end if
-  if petro_opt$='True' then 
+  if petro_opt$='True' then
     pr #255,using L1380: dno,ano,sno,d$,bb,cb
     L1380: form pos 1,pic(zzz),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(--,---,--z.## cr),pos 110,pic(zz,zzz,zzz.## cr)
-  else 
+  else
     pr #255,using L1390: dno,ano,sno,d$,bb
     L1390: form pos 1,pic(zzz),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(--,---,--z.## cr)
-  end if 
+  end if
   restore #h_actrans,key>=n$&cnvrt$("N 2",periodToPrint)&"      ": nokey END_OF_TRANS
   t9=0
   do
@@ -148,18 +148,18 @@ AfterReadGlmstr: !
     gosub PRINT_A_TRANS
   loop
 !
-END_OF_TRANS: ! 
+END_OF_TRANS: !
   gosub PRINT_CB_OR_SUMTR
 goto READ_GLMSTR ! /r
 TOTALS: ! r: EOF ON MASTER FILE
   pr #255: ""
   pr #255,using L1100: "Trial Balance Proof Totals",begbal,trtotal,curbal
   L1100: form pos 1,cr 78,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(z,zzz,zzz.## cr)
-  close #h_glmstr: 
-  close #h_actrans: 
+  close #h_glmstr:
+  close #h_actrans:
   fncloseprn
-  goto XIT ! /r
-XIT: fnxit
+  goto Xit ! /r
+Xit: fnXit
 PGOF: ! r:
   pr #255: newpage
   gosub HDR
@@ -184,7 +184,7 @@ READ_TR: ! r:
   if startday>0 and days(tr(4),'mmddyy')<startday then goto READ_TR
   if endday>0 and days(tr(4),'mmddyy')>endday then goto READ_TR
   if t$><n$ then goto ReadTrFinisT9
-  if periodToPrint<>0 and periodToPrint><pcde then 
+  if periodToPrint<>0 and periodToPrint><pcde then
     goto ReadTrFinisT9
   end if
   if tr(5)=0 then goto READ_TR
@@ -192,13 +192,13 @@ READ_TR: ! r:
   goto ReadTrXit
   ReadTrFinisT9: ! r:
     t9=9
-  goto ReadTrXit ! /r 
+  goto ReadTrXit ! /r
   ReadTrXit: !
 return ! /r
 PRINT_A_TRANS: ! r:
   x$=a$(tr(6))
   if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then goto PRINT_TRANS
-  if t$>=cogl$(1) and t$<=cogl$(2) then 
+  if t$>=cogl$(1) and t$<=cogl$(2) then
       if tr(5)>0 then goto PRINT_TRANS
       u0=u0+tr(5)
       trtotal=trtotal+tr(5)
@@ -206,23 +206,23 @@ PRINT_A_TRANS: ! r:
       goto L1630
   end if
   if tr$="999999999999" then tr$=" "
-  PRINT_TRANS: ! 
-  ! 
+  PRINT_TRANS: !
+  !
   pr #255,using L1610: td$,tr(4),x$,lpad$(rtrm$(tr$),12),tr(5)
   L1610: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos 67,c 12,pos 95,pic(zz,zzz,zzz.## cr)
   trtotal=trtotal+tr(5)
   u$=t$
-  L1630: ! 
+  L1630: !
 return ! /r
 PRINT_CB_OR_SUMTR: ! r:
-  if u0 and u$=>cogl$(1) and u$<=cogl$(2) then 
+  if u0 and u$=>cogl$(1) and u$<=cogl$(2) then
     pr #255,using L1690: "Summary Transaction",u0
     L1690: form pos 21,c 30,pos 95,pic(zz,zzz,zz#.## cr)
     u0=0
   end if
-  if petro_opt$='False' then 
+  if petro_opt$='False' then
     pr #255,using 'form pos 110,pic(zz,zzz,zzz.## cr)': cb
-  end if 
+  end if
   curbal=curbal+cb
   begbal=begbal+bb
 return ! /r
@@ -233,10 +233,10 @@ SELECT_ACCOUNT: ! r:
   fnqgl(1,mypos,0,2)
   resp$(1)=""
   fnCmdSet(2)
-  fnAcs(sn$,0,mat resp$,ckey)
+  fnAcs2(mat resp$,ckey)
   if ckey=5 then goto TOTALS
   n$=fnagl$(resp$(1))
   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT
   bb=bp(nap)
 return ! /r
-include: ertn
+include: Ertn

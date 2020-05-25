@@ -1,7 +1,7 @@
 ! S:\Core\Programs\Update
 	force_update=1
 ! r: dims and constants
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 ! dim message$(1)*256
 	dim batch_name$*256
 	dim script_name$*256
@@ -13,7 +13,7 @@
 	grace_days=45
 	fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 ! /r
-	fntop(program$,"ACS Update")
+	fnTop(program$,"ACS Update")
 ! r: main loop
 	fnStatus('launching update')
 	if ~fn_simple_connectivity_test then
@@ -24,11 +24,11 @@
 		fn_update_license
 		fn_update
 	end if
-XIT: fnxit
+Xit: fnXit
 ! /r
 def fn_setup
 	setup=1
-	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle
+	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fnTop,fnXit,fngethandle
 	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemNameFromAbbr$,fnclient_support,fnerror
 	library 'S:\Core\Library': fnFree
 	library 'S:\Core\Library': fnSrepEnv$
@@ -93,7 +93,7 @@ def fn_conectivity_test$*40
 	fn_conectivity_test$=wud_return$
 fnend
 def library fnUpdateLicense
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnUpdateLicense=fn_update_license
 fnend
 def fn_update_license
@@ -234,7 +234,7 @@ def fn_update
 	end if
 fnend
 def library fnAcsInstallationPath$*256(; longFileName)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAcsInstallationPath$=fn_acs_installation_path$( longFileName)
 fnend
 def fn_acs_installation_path$*256(; longFileName)
@@ -277,4 +277,4 @@ def fn_execute(flags$*128,exe_what$*256)
 	end if
 fnend
 
-include: ertn
+include: Ertn

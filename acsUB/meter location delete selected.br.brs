@@ -1,6 +1,6 @@
 dim form$(0)*2048
 dim location$(0)*256,locationN(0)
-library 'S:\Core\Library': fnOpenFile,fnXit
+autoLibrary
 hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$)
 do
 	read #hLocation,using form$(hLocation): mat location$,mat locationN eof EoLocation
@@ -25,4 +25,4 @@ def fn_open(fileName$*255, mat openData$, mat openDataN, mat form$; inputOnly,op
 		next fileIoEnumItem
 	end if
 fnend
-
+ 

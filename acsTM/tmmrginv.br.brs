@@ -1,7 +1,7 @@
 ! REPLACE S:\acsTM\TMMRGINV
 on error goto Ertn
-library 'S:\Core\Library': fnxit,fngethandle
-! fntop(program$,cap$="Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]" ")
+autoLibrary
+! fnTop(program$,cap$="Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]" ")
 dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4
 dim arta(2) ! ,ga(10)
 ! clmstr dims
@@ -87,12 +87,12 @@ do  ! r: main loop
 	rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3',key=k$: mat sc,mat ca,ar1,mat arta
 	amt=0
 loop  ! /r
-
+ 
 FINIS: ! r:
 	close #h_clmstr:
 	close #h_tmtrans:
 	close #h_tmwk2:
 	close #h_tmtraddr:
 ! close #h_armotran:
-XIT: fnxit ! /r
-include: ertn
+Xit: fnXit ! /r
+include: Ertn

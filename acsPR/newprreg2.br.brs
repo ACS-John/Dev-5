@@ -3,18 +3,11 @@
 	fn_setup
 	det=0
 	fn_payroll_register_2(det)
-XIT: fnxit
+Xit: fnXit
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnDedNames,fnprocess
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnss_employee,fnss_employer
-		library 'S:\Core\Library': fnindex_it
-		library 'S:\Core\Library': fnStatusClose
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnPayPeriodEndingDate
+		autoLibrary
 		on error goto Ertn
 	end if 
 fnend 
@@ -33,7 +26,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	dim statewh(10),totaltcp(32),totalthc(5),deptname$*20
 	dim sucrat(10),stuc1(10),stuc2(10),err$(3)*65,cap$*128
 
-	fntop(program$,cap$="Payroll Registers")
+	fnTop(program$,cap$="Payroll Registers")
 	open #20: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr L180
 	read #20,using 'Form POS 5,N 5': ckno
 	close #20: 
@@ -317,4 +310,4 @@ L1990: !
 		fnindex_it("[Q]\PRmstr\prTot.h[cno]","[Q]\PRmstr\PRTotIdx.h[cno]","1 9")
 		! fnStatusClose
 fnend 
-include: ertn
+include: Ertn

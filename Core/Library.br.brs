@@ -226,13 +226,13 @@ def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeleting
 	fnConfirmDeleteHard=fnConfirmDeleteHard(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
 fnend
 ! /r
-def library fn_encodebase64(&content$)
-	library 'S:\Core\base64_l.br': fn_encodebase64
-	fn_encodebase64=fn_encodebase64(content$)
+def library fnEncodeBase64(&content$)
+	library 'S:\Core\base64_l.br': fnEncodeBase64
+	fnEncodeBase64=fnEncodeBase64(content$)
 fnend
-def library Fn_Decodebase64(&Content$)
-	library 'S:\Core\base64_l.br': Fn_Decodebase64
-	Fn_Decodebase64=Fn_Decodebase64(Content$)
+def library fnDecodeBase64(&Content$)
+	library 'S:\Core\base64_l.br': fnDecodeBase64
+	fnDecodeBase64=fnDecodeBase64(Content$)
 fnend
 def library fnKeyChange(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
 	library 'S:\Core\key.br': fnKeyChange
@@ -545,9 +545,9 @@ fnend
 		library 'S:\Core\Ace\GetCD.br': fngetcd
 		fngetcd=fngetcd(mcd$)
 	fnend
-	def library fnxit(;cursys$)
-		library 'S:\Core\fn\xit.br': fnxit
-		fnxit=fnxit(cursys$)
+	def library fnXit(;cursys$)
+		library 'S:\Core\fn\Xit.br': fnXit
+		fnXit=fnXit(cursys$)
 	fnend
 	def library fninch2twip(&x)
 		library 'S:\Core\Inch2Twip.br': fninch2twip
@@ -951,9 +951,9 @@ fnend
 		library 'S:\Core\program_properties.br': fnread_program_print_property
 		fnread_program_print_property=fnread_program_print_property(key$,value$, programFileOverride$)
 	fnend
-	def library fnwrite_program_print_property(key$*80,value$*256; programFileOverride$*256)
-		library 'S:\Core\program_properties.br': fnwrite_program_print_property
-		fnwrite_program_print_property=fnwrite_program_print_property(key$,value$, programFileOverride$)
+	def library fnwriteProgramPrintProperty(key$*80,value$*256; programFileOverride$*256)
+		library 'S:\Core\program_properties.br': fnwriteProgramPrintProperty
+		fnwriteProgramPrintProperty=fnwriteProgramPrintProperty(key$,value$, programFileOverride$)
 	fnend
 	def library fnmcreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
 		library 'S:\Core\Reg.br': fnmcreg_read
@@ -973,6 +973,10 @@ fnend
 
 ! /r
 ! r: Array stuff
+	def library fnArrayItemRemoveC(mat array$,itemToRemove)
+		library 'S:\Core\Array.br': fnArrayItemRemoveC
+		fnArrayItemRemoveC=fnArrayItemRemoveC(mat array$,itemToRemove)
+	fnend
 	def library fnSetForCombo$*256(mat option$,key$; kpos,klen)
 		library 'S:\Core\Array.br': fnSetForCombo$
 		fnSetForCombo$=fnSetForCombo$(mat option$,key$, kpos,klen)

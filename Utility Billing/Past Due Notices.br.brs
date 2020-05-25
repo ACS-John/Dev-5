@@ -16,7 +16,7 @@ on error goto Ertn
 	dim tmp_rtf_filename$*1024
 ! /r
 ! r: top of programs, constants,initial setup, etc
-	fntop(program$)
+	fnTop(program$)
 	tmp_rtf_filename$=fnprint_file_name$
 	if env$('client')='French Settlement' or env$('client')='Granby' then hard_coded=1
 	fnLastBillingDate(d1)
@@ -76,7 +76,7 @@ MENU1: ! r:
 	if deltype=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
 	d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
 	d$(3)=cnvrt$("PIC(##/##/##)",d3=val(resp$(3)))
@@ -687,7 +687,7 @@ ASK_NEXT_ACT: ! r:
 	fnCmdSet(19)
 	fnAcs(sn$,0,mat resp$,ckey)
 	if ckey=5 then 
-		goto XIT
+		goto Xit
 	else if ckey=2 then 
 		goto EO_CUSTOMER
 	else 
@@ -711,7 +711,7 @@ EO_CUSTOMER: ! r:
 		else 
 			fncloseprn
 		end if 
-		goto SELECT_SCREEN ! XIT
+		goto SELECT_SCREEN ! Xit
 	end if 
 	close #customer1: ioerr ignore
 	customer1=0
@@ -724,8 +724,8 @@ EO_CUSTOMER: ! r:
 	else 
 		fncloseprn
 	end if  ! /r
-XIT: ! r:
+Xit: ! r:
 	fn_report_close
-fnxit
+fnXit
 ! /r
-include: ertn
+include: Ertn

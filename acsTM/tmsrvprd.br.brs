@@ -1,7 +1,7 @@
 	on fkey 5 goto L470
 	on error goto Ertn
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnconsole,fnRead30Categories
-	fntop(program$,cap$="Service Production Report")
+	autoLibrary
+	fnTop(program$,cap$="Service Production Report")
 	fnconsole(1)
 	fnopenprn
 	dim cat$(30)*30
@@ -9,17 +9,17 @@
 	namtab=41-int(len(rtrm$(env$('cnam')))/2)
 	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,input,keyed
 	fnRead30Categories(mat cat$)
-	open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
+	open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
 	if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 	pr newpage
 	pr f "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"
 	pr f "10,65,n 6,n": dat
 	pr f "13,30,c 20": "Press F5 to Stop"
 L230: input fields "10,65,n 6,eu,n": dat conv L230
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 	if dat<10100 or dat>123199 then goto L230
 	rewrite #8,using "form pos 1,n 6",rec=1: dat
-	close #8: 
+	close #8:
 	pr newpage
 	pr f "10,15,c 57,n": "PRINT SERVICE PRODUCTION REPORT IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"
@@ -43,11 +43,11 @@ L460: gosub L700
 L470: !
 close #1: ioerr ignore
 fncloseprn
-XIT: fnxit
+Xit: fnXit
 L500: pr #255,using L510: catno*100,cat$(catno)
 L510: form pos 2,pic(zzzz),pos 8,c 30,skip 1
 	hcatno=catno
-	return 
+	return
 L540: if th><0 then goto L600
 	pr #255,using L640: sc$,ds$,th,sf,0 pageoflow L570
 	goto L650
@@ -63,7 +63,7 @@ L650: b1=b1+th
 	b2=b2+sf
 	m$=r$
 	hcatno=catno
-	return 
+	return
 L700: if b1=0 then goto L730
 	b0=b2/b1
 	if b0<10000 then goto L740
@@ -72,8 +72,8 @@ L740: pr #255,using L750: "TOTAL",cat$(hcatno),b1,b2,b0
 L750: form pos 17,c 5,pos 23,c 30,pos 53,n 13.2,n 13.2,n 13.2,skip 1
 	b1=0
 	b2=0
-	pr #255: 
-return 
+	pr #255:
+return
 L800: !
 	p1=p1+1
 	pr #255,using L820: date$,env$('cnam'),"PAGE",p1
@@ -87,4 +87,4 @@ L800: !
 	pr #255,using L900: "CODE","DESCRIPTION","HOURS","AT STANDARD","HOURLY RATE"
 	L900: form pos 5,c 4,pos 18,c 11,pos 60,c 5,pos 68,c 11,pos 81,c 11,skip 3
 return
-include: ertn
+include: Ertn

@@ -1,10 +1,10 @@
 ! formerly S:\acsUB\FlexTran
 
 fn_setup
-fntop(program$)
+fnTop(program$)
 dim unused_gb(10)
 fn_transfile( empty$,unused_bal,mat unused_gb)
-XIT: fnxit
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
@@ -31,7 +31,7 @@ def fn_setup
 	end if
 fnend
 def library fntrans_total_as_of(; customer_key$,date_ccyymmdd,trans_type)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fntrans_total_as_of=fn_trans_total_as_of(customer_key$,date_ccyymmdd,trans_type)
 fnend
 def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
@@ -60,7 +60,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	fn_trans_total_as_of=ttao_return
 fnend 
 def library fntransfile(; hact$*81,&bal,mat gb)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fntransfile=fn_transfile( hact$,bal,mat gb)
 fnend
 def fn_transfile(; hact$*81,&bal,mat gb)
@@ -455,7 +455,7 @@ def fn_printTrans ! very local function - lots of inherritance
 				if len(alloc$(counter))-pos(alloc$(counter),".")<2 then alloc$(counter)=alloc$(counter)&"0" ! get both decimals if needed 
 				alloc$(counter)=lpad$(alloc$(counter),8," ")
 				next counter 
-			penaltyindex=fnGetPenaltyIndex(mat serviceName$)
+			penaltyindex=fn_getPenaltyIndex(mat serviceName$)
 			if penaltyindex<>0 then alloc$(penaltyindex)=""
 		else
 			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
@@ -537,12 +537,12 @@ def fn_printTrans ! very local function - lots of inherritance
 	fncloseprn
 	PT_XIT: ! 
 fnend
-def fnGetPenaltyIndex(mat serviceName$;___,pindex,moveone)
+def fn_getPenaltyIndex(mat serviceName$;___,pindex,moveone)
 	! this function returns the slot for penalty
 	for pindex=1 to udim(mat serviceName$)
 		if trim$((serviceName$(pindex)))="" then let moveone+=1
 		if trim$(uprc$(serviceName$(pindex)))="PENALTY" then
-			let fnGetPenaltyIndex=pindex-moveone
+			let fn_getPenaltyIndex=pindex-moveone
 		end if 
 	next pindex
 fnend 
@@ -765,6 +765,6 @@ def fn_columnSelect
 	end if
 ! pause
 fnend
-include: ertn
+include: Ertn
 include: fn_open
 

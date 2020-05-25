@@ -1,9 +1,9 @@
 ! Replace S:\acsCL\TrToCPA
 ! Transfer to Accountant
-
-	library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnprg,fnstyp,fnTos,fnLbl,fnTxt,fnChk,fnCmdSet,fnAcs,fnwait,fncomboa,fnmsgbox,fnchain
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim dat$*20
 	dim de$*35,ta(2)
 	dim td$*30
@@ -15,57 +15,57 @@
 	dim glwk$*256
 	dim ml$(0)*128
 	dim ty$(3)*20
-
-	fntop(program$,"Transfer to Accountant")
+ 
+	fnTop(program$,"Transfer to Accountant")
 	cancel=99 : right=1
 	fndat(dat$,1)
-	ty$(1)=" Check Number:" 
-	ty$(2)=" Deposit Number:" 
+	ty$(1)=" Check Number:"
+	ty$(2)=" Deposit Number:"
 	ty$(3)=" Adjustment Number: "
-
+ 
 MAIN: ! r:
-	fnTos(sn$="Tr2cpa") 
+	fnTos(sn$="Tr2cpa")
 	mylen=40 : mypos=mylen+2 : lc=0
 	fnLbl(lc+=1,1,"Starting Date:",mylen,right)
-	fnTxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") 
+	fnTxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred")
 	! rESP$(1)=""
 	fnLbl(lc+=1,1,"Ending Date:",mylen,right)
-	fnTxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") 
+	fnTxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred")
 	! rESP$(2)=""
 	lc+=1
-	fnChk(lc+=1,mypos,"Transfer previously posted transactions:",1) 
+	fnChk(lc+=1,mypos,"Transfer previously posted transactions:",1)
 	if resp$(3)="" then resp$(3)="False"
 	lc+=1
 	fnLbl(lc+=1,1,"Destination Path:",mylen,right)
-	fnTxt(lc,mypos,66) 
+	fnTxt(lc,mypos,66)
 	if resp$(4)="" then resp$(4)="A:\"
-	fnCmdSet(2) 
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
-	d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date 
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
+	d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date
 	d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
-	if resp$(3)(1:1)="T" then pvt$="Y": else pvt$="N" 
+	if resp$(3)(1:1)="T" then pvt$="Y": else pvt$="N"
 		! post previously entries
 	dv$=resp$(4)
 	gosub GETPRC
-
+ 
 	fnwait
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative  
-	read #20,using 'Form POS 618,10*N 1': mat dedcode 
-	close #20: 
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	read #20,using 'Form POS 618,10*N 1': mat dedcode
+	close #20:
 	d2$=cnvrt$("PIC(######)",d2)
-	open #20: "Name=[Q]\GLmstr\glBucket.H[cno],Shr",internal,input,relative ioerr L400 
+	open #20: "Name=[Q]\GLmstr\glBucket.H[cno],Shr",internal,input,relative ioerr L400
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
-	close #20: 
+	close #20:
 	L400: !
 	if glb=2 then glwk$="[Q]\GLmstr\GL"&d2$&".H[cno]"
 	if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
-	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
-	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.H[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed 
-	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.H[cno],Size=0,RecL=104,Replace",internal,output 
-	open #glwk201=4: "Name=[Q]\CLmstr\GLWK201.H[cno],Size=0,RecL=110,Replace",internal,output 
-	open #bankmstr=5: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed 
-	open #paymstr=6: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
+	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed
+	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.H[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
+	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.H[cno],Size=0,RecL=104,Replace",internal,output
+	open #glwk201=4: "Name=[Q]\CLmstr\GLWK201.H[cno],Size=0,RecL=110,Replace",internal,output
+	open #bankmstr=5: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed
+	open #paymstr=6: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed
 	fnopenprn
 	gosub HDR
 goto READ_TRMSTR ! /r
@@ -93,10 +93,10 @@ READ_TRMSTR: ! r: main loop
 	if typ=0 then ven$=""
 	bgl$=""
 	read #bankmstr,using 'Form POS 33,C 12',key=bk$: bgl$ nokey ignore
-	key$=bk$&str$(cde)&tr$(5:12) 
+	key$=bk$&str$(cde)&tr$(5:12)
 	restore #tralloc,key=key$: nokey EO_TRALLOC
-	READ_TRALLOC: ! 
-	read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,tr5,td$,ivd eof EO_TRALLOC 
+	READ_TRALLOC: !
+	read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,tr5,td$,ivd eof EO_TRALLOC
 	if key$<>newkey$ then goto EO_TRALLOC
 	td$=de$(1:30) ! SEND NAME TO GL INSTEAD OF DESCRIPTION
 	if tr5=0 then goto READ_TRALLOC
@@ -104,11 +104,11 @@ READ_TRMSTR: ! r: main loop
 	if tr6>1 then tr5=-tr5
 	if prc$="Y" and scd=4 then goto COMBINEPR
 	
-	WRITE_GLWK101: ! 
+	WRITE_GLWK101: !
 	write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
-	AFTER_WRITE_GLWK101: ! 
+	AFTER_WRITE_GLWK101: !
 	amt+=tr5
-	if tr6=3 then 
+	if tr6=3 then
 		write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,tr4,-tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
 	end if
 	if pr1 then
@@ -121,8 +121,8 @@ READ_TRMSTR: ! r: main loop
 		if fp(ivd*.01)=.19 then prd(20)=int(ivd*.01)
 	end if
 	goto READ_TRALLOC
-
-	EO_TRALLOC: ! 
+ 
+	EO_TRALLOC: !
 	rewrite #trmstr,using 'Form POS 71,N 1': 1
 	if pr1 then
 		prd(1)=pr1 : prd(2)=tr4
@@ -134,9 +134,9 @@ READ_TRMSTR: ! r: main loop
 	if cde=2 then p1=68 else p1=56
 	if cde=3 and amt>0 then t1+=amt: t2=t2-amt: goto L1080
 	if cde=3 and amt<0 then t2+=amt: t1=t1-amt: goto L1110
-	if cde=2 then 
-		c2+=amt : t2+=amt 
-	else 
+	if cde=2 then
+		c2+=amt : t2+=amt
+	else
 		c1+=amt : t1+=amt
 	end if
 	pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
@@ -148,57 +148,57 @@ READ_TRMSTR: ! r: main loop
 	L1110: !
 	pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE: p1=68
 	pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
-	THERE: ! 
+	THERE: !
 goto READ_TRMSTR ! /r
-
+ 
 NEWPGE: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r
-
+ 
 HDR: ! r:
 	pr #255,using 'Form POS 1,C 8,CC 76': date$,env$('program_caption')
 	pr #255,using 'Form POS 1,C 8,POS 31,C 40': time$,"Transferred to General Ledger"
-	pr #255,using 'Form POS 1,C 4,N 4,CC 76': "Page",pg+=1,dat$ 
+	pr #255,using 'Form POS 1,C 4,N 4,CC 76': "Page",pg+=1,dat$
 	pr #255: ""
 	pr #255: "Ref-Numb    Date    Payee/Description                      Checks     Deposits"
 	pr #255: "________  ________  ___________________________________  __________  __________"
 return ! /r
-
+ 
 Finis: ! r:
 	if pri1=1 then gosub PRWRITE
 	gosub CONTRA
 	pr #255: tab(56);"  ____________  ____________"
 	pr #255,using 'Form POS 56,2*N 14.2': t1,t2
 	fncloseprn
-	close #1: 
-	close #tralloc: 
-	close #glwk101: 
+	close #1:
+	close #tralloc:
+	close #glwk101:
 	lr4=lrec(glwk201)
-	close #glwk201: 
-	close #bankmstr: 
+	close #glwk201:
+	close #bankmstr:
 	if trim$(dv$)="" then goto TRY_TO_SEND_TO_GL
 	execute "Copy [Q]\CLmstr\GLWk101.h[cno] "&dv$&" -n" ioerr MSGBOX1
 	execute "Copy [Q]\CLmstr\GLWk201.h[cno] "&dv$&" -n"
 	execute "Copy [Q]\CLmstr\PayMstr.h[cno] "&dv$&" -n"
 	execute "Copy [Q]\CLmstr\PayIdx1.h[cno] "&dv$&" -n"
 goto Xit ! /r
-XIT: fnxit
-
+Xit: fnXit
+ 
 TRY_TO_SEND_TO_GL: ! r:
 	if glb=2 then goto BUCKET
 	execute "Copy [Q]\CLmstr\GLWK101.H[cno]"&' '&"[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".H[cno] -n"
 	execute "Copy [Q]\CLmstr\GLWK201.H[cno]"&' '&"[Q]\GLmstr\GLWK2"&wsid$&".H[cno] -n"
 	if lr4=0 then goto L1550
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed ioerr L1550
-	fnprg("S:\acsGL\PRMerge",2) 
+	fnprg("S:\acsGL\PRMerge",2)
 	fnstyp(99)
 	L1550: !
 fnchain("S:\acsGL\acglMrge") ! /r
-
+ 
 CONTRA: ! r:
 	t9$="999999999999"
-	if trim$(dv$)="" then 
+	if trim$(dv$)="" then
 		if c1 then
 			td$="CHECKS   "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 			write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,d2,-c1,1,0,t9$,td$,"","","","",bgl$
@@ -216,25 +216,25 @@ CONTRA: ! r:
 	end if
 	c1=c2=0
 return ! /r
-
+ 
 GETPRC: ! r:
 	pri1=0
-	open #7: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input ioerr GetPrcFinis 
-	read #7,using 'Form POS 437,15*C 12': mat prgln$ 
-	close #7: 
+	open #7: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input ioerr GetPrcFinis
+	read #7,using 'Form POS 437,15*C 12': mat prgln$
+	close #7:
 	pri1=1
 	! pr newpage
 	! close #103: ioerr ignore
-	! open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&env$('program_caption'),display,outIn 
+	! open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&env$('program_caption'),display,outIn
 	mat ml$(4) : mat ml$=("")
 	ml$(1)="This program can combine all like General Ledger Numbers for"
 	ml$(2)="Payroll Withholding Accounts as they are transferred to GL."
 	ml$(4)="Do you wish to combine these accounts?"
 	fnmsgbox(mat ml$,resp$,'',3)
-	if resp$='Cancel' then goto XIT else prc$=resp$(1:1)
+	if resp$='Cancel' then goto Xit else prc$=resp$(1:1)
 	GetPrcFinis: !
 return ! /r
-
+ 
 COMBINEPR: ! r:
 	for j=1 to 15
 		if prgln$(j)=gl$ then goto L1900
@@ -243,47 +243,47 @@ COMBINEPR: ! r:
 	L1900: !
 	pra(j)=pra(j)+tr5
 goto AFTER_WRITE_GLWK101 ! /r
-
+ 
 PRWRITE: ! r:
 	td$="PR-WH: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 	for j=1 to 15
-		if pra(j) then 
+		if pra(j) then
 			write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': prgln$(j),d2,pra(j),1,0,str$(d2),td$,"","","","",bgl$
 		end if
 	next j
 return ! /r
-
+ 
 CKALLOC: ! r:
 	tal=0
-	key$=bk$&str$(cde)&tr$(5:12) 
+	key$=bk$&str$(cde)&tr$(5:12)
 	restore #tralloc,key=key$: nokey EO_CKALLOC
-	CKALLOC_READ_TRALLOC: ! 
+	CKALLOC_READ_TRALLOC: !
 	read #tralloc,using 'Form Pos 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,tr5,td$,ivd eof EO_CKALLOC
-	if key$<>newkey$ then 
-		goto EO_CKALLOC 
-	else 
-		tal+=tr5 
+	if key$<>newkey$ then
+		goto EO_CKALLOC
+	else
+		tal+=tr5
 		goto CKALLOC_READ_TRALLOC
 	end if
-	EO_CKALLOC: ! 
+	EO_CKALLOC: !
 return ! /r
-
+ 
 BUCKET: ! r: MOVE TO GLBUCKET
-	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.H[cno]",internal,input 
-	open #9: "Name="&glwk$&",RecL=104,USE",internal,output 
+	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.H[cno]",internal,input
+	open #9: "Name="&glwk$&",RecL=104,USE",internal,output
 	do
 		read #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$, tr4,tr5,tr6,tr7, tr$,td$,ven$,j$,j$,j$,bgl$ eof L2160
 		write #9,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,tr7,tr$,td$,ven$,j$,j$,j$,bgl$
 	loop
 	L2160: !
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed ioerr XIT
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed ioerr Xit
 fnchain("S:\acsGL\PRMerge") ! /r
-
+ 
 MSGBOX1: ! r:
-	mat ml$(2) 
-	ml$(1)="Make sure the diskette is properly inserted " 
-	ml$(2)="and the proper device has been selected." 
-	fnmsgbox(mat ml$,resp$,'',16) 
+	mat ml$(2)
+	ml$(1)="Make sure the diskette is properly inserted "
+	ml$(2)="and the proper device has been selected."
+	fnmsgbox(mat ml$,resp$,'',16)
 goto MAIN ! /r
-
+ 
 include: Ertn

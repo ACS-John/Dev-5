@@ -6,7 +6,7 @@ def library fnlabel(mat linestyle$)
 	library 'S:\Core\Library': fnwait
 	library 'S:\Core\Library': fnopenprn,fncloseprn
 	library 'S:\Core\Library': fnAcs,fnLbl,fnTos,fnButton,fnFra,fnTxt,fnCmdSet,fncomboa
-	library 'S:\Core\Library': fnxit
+	library 'S:\Core\Library': fnXit
 	library 'S:\Core\Library': fnreg_read,fnreg_write
 	library 'S:\Core\Library': fnpa_finis,fnpa_newpage,fnpa_open
 	library 'S:\Core\Library': fnpa_fontsize
@@ -49,7 +49,7 @@ def library fnlabel(mat linestyle$)
 		resp$(1)=opt$(1)
 		fnCmdSet(2)
 		fnAcs(sn$,unused,mat resp$,ckey)
-		if ckey=5 then goto XIT_ASK_LABEL
+		if ckey=5 then goto Xit_ASK_LABEL
 		if resp$(1)=opt$(3) then 
 			label_format=1 
 		else 
@@ -70,7 +70,7 @@ def library fnlabel(mat linestyle$)
 		next j
 		fnCmdSet(1)
 		fnAcs(sn$,unused,mat resp$,ckey)
-		if ckey=5 then goto XIT_ASK_LABEL_2
+		if ckey=5 then goto Xit_ASK_LABEL_2
 		lstart=ckey-21 ! because the other routine starts out adding one.
 		labx=int((lstart+2)/3) 
 		laby=lstart-((labx-1)*3)
@@ -253,13 +253,13 @@ RELEASE_PRINT: ! r:
 	close #3: ioerr ignore
 	fnpa_finis
 goto Xit
-Xit: fnxit
+Xit: fnXit
 def fn_test_mat_lab$
 	if udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5 then 
 		mat wabel$(10,3,5)
 	end if  ! udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5
 fnend  ! fn_test_mat_lab$
-! r:  ertn - fails to label_xit instead of xit
+! r:  ertn - fails to label_xit instead of Xit
 ERTN: fnerror(program$,err,line,act$,"label_xit")
 	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT

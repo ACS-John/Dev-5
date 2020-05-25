@@ -248,7 +248,7 @@ def library fnreg_close ! closes all registries (sreg, creg and reg)
 	fn_mcreg_close
 	fn_creg_close
 	fn_sreg_close
-	XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
+	Xit: ! This Xit label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
 fnend
 def fn_creg_close
 	close #creg_h: ioerr ignore
@@ -275,7 +275,7 @@ def fn_setup
 	end if
 fnend
 def library fnIniToReg
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~reg_setup then reg_setup=fn_reg_setup
 	if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 	fnIniToReg=fn_IniToReg
@@ -299,7 +299,7 @@ def fn_iniToReg
 	nex programItem
 fnend
 ! r: Create SReg from INI (for ACS Developer only) - should never need to be run again (6/13/2017)
-if ~setup then let fn_setup
+if ~setup then fn_setup
 library 'S:\Core\Library': fnhamsterfio
 ! exec "free 's:\core\data\sys*.*'" err ignore
 mat acsSys$(0)
@@ -330,4 +330,4 @@ nex sysItem
 fnhamsterfio('CO System Registry')
 ! /r
 
-include: ertn
+include: Ertn

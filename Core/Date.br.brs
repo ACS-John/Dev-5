@@ -8,12 +8,12 @@ end
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library.br': fnGetHandle
+		autoLibrary
 	end if
 fnend
 
 def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	save_date$=_date$
 	baseyear=val(env$('status.config.baseyear'))
 	if baseyear <= 1900 then execute 'config baseyear 1930'

@@ -1,65 +1,59 @@
-00010 ! Replace S:\acsUB\Escrow1
-00020 !
-00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntop,fnTos,fnAcs,fnLbl,fnTxt,fndat,fnxit,fncomboa,fnCmdSet,fnopenprn,fncloseprn
-00040   on error goto Ertn
-00050 !
-00060   dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
-00070 !
-00080   fntop("S:\acsUB\escrow1",cap$="Escrow Balance Report")
-00090   fncno(cno,cnam$)
-00100   fndat(resp$(1))
-00110 ! 
-00120   fnTos(sn$="escrow1") !:
-        mylen=20 : mypos=mylen+2 : lc=0
-00130   fnLbl(lc+=1,1,"Report Heading Date:",mylen,1)
-00140   fnTxt(lc,mypos,20)
-00150   fnLbl(lc+=1,1,"Sort by:",mylen,1)
-00160   opt$(1)="1. Account" : opt$(2)="2. Name" : mat opt$(2) !:
-        fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
-        resp$(2)=opt$(1)
-00170   fnCmdSet(3)
-00180   fnAcs(sn$,0,mat resp$,ck)
-00190   if ck=5 then goto XIT
-00200   fndat(resp$(1),put=2)
-00210   customer=1 !:
-        if resp$(2)=opt$(1) then !:
-          open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed else !:
-          if resp$(2)=opt$(2) then !:
-            open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed 
-00220   fnopenprn
-00230   on pageoflow goto PGOF
-00240   gosub HDR
-00250 READ_CUSTOMER: ! 
-00260   read #customer,using 'Form POS 1,C 10,pos 41,C 30,POS 1859,PD 5.2': z$, customer_name$, escrow_bal eof DONE
-00270   if escrow_bal=0 then goto READ_CUSTOMER
-00280   pr #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
-00290   total_escrow+=escrow_bal
-00300   goto READ_CUSTOMER
-00310 !
-00320 PGOF: pr #255: newpage : gosub HDR : continue 
-00330 !
-00340 HDR: ! 
-00350   pr #255,using 'Form POS 20,Cc 40': "",cnam$
-00360   pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': "Page "&str$(pg+=1),cap$
-00370   pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': date$,resp$(1)
-00380   pr #255: ""
-00390   pr #255: "Account No  Customer Name                   Escrow Bal"
-00400   pr #255: "__________  ______________________________  __________"
-00410   return 
-00420 !
-00430 DONE: ! 
-00440   pr #255: tab(43);"  __________"
-00450   pr #255,using 'Form POS 43,N 12.2': total_escrow
-00460   fncloseprn
-00470   goto XIT
-00480 !
-00490 XIT: fnxit
-00500 !
-00510 ! <Updateable Region: ERTN>
-00520 ERTN: fnerror(program$,err,line,act$,"xit")
-00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00560 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00570 ! /region
-00580 !
+! Replace S:\acsUB\Escrow1
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
+ 
+	fnTop("S:\acsUB\escrow1",cap$="Escrow Balance Report")
+	fncno(cno,cnam$)
+	fndat(resp$(1))
+ 
+	fnTos(sn$="escrow1") : _
+	mylen=20 : mypos=mylen+2 : lc=0
+	fnLbl(lc+=1,1,"Report Heading Date:",mylen,1)
+	fnTxt(lc,mypos,20)
+	fnLbl(lc+=1,1,"Sort by:",mylen,1)
+	opt$(1)="1. Account" : opt$(2)="2. Name" : mat opt$(2) : _
+	fncomboa("acc_or_nam",lc,mypos,mat opt$) : _
+	resp$(2)=opt$(1)
+	fnCmdSet(3)
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
+	fndat(resp$(1),put=2)
+	customer=1 : _
+	if resp$(2)=opt$(1) then : _
+		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed else : _
+		if resp$(2)=opt$(2) then : _
+			open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed
+	fnopenprn
+	on pageoflow goto PGOF
+	gosub HDR
+READ_CUSTOMER: !
+	read #customer,using 'Form POS 1,C 10,pos 41,C 30,POS 1859,PD 5.2': z$, customer_name$, escrow_bal eof DONE
+	if escrow_bal=0 then goto READ_CUSTOMER
+	pr #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
+	total_escrow+=escrow_bal
+	goto READ_CUSTOMER
+ 
+PGOF: pr #255: newpage : gosub HDR : continue
+ 
+HDR: !
+	pr #255,using 'Form POS 20,Cc 40': "",cnam$
+	pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': "Page "&str$(pg+=1),cap$
+	pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': date$,resp$(1)
+	pr #255: ""
+	pr #255: "Account No  Customer Name                   Escrow Bal"
+	pr #255: "__________  ______________________________  __________"
+return
+ 
+DONE: !
+	pr #255: tab(43);"  __________"
+	pr #255,using 'Form POS 43,N 12.2': total_escrow
+	fncloseprn
+	goto Xit
+ 
+Xit: fnXit
+ 
+include: Ertn
+ 

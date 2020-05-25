@@ -55,7 +55,7 @@ def fn_setup
 fnend
 def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayName$*128,recip_cc$*128)
 	! SEND_EMAIL: !
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~setupSmtpMail then
 		setupSmtpMail=1
 		dim smtp$*80

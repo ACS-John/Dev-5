@@ -17,10 +17,10 @@ if env$('enableClientSelection')='Yes' then goto ClientSelect
 !   !  it is now ...  !!!     pr program$&' is not intended to be run directly' : end 
 ClientSelect: ! r:
 	fn_setup
-	fntop(program$)
+	fnTop(program$)
 	fn_clientSelect
-goto XIT ! /r
-XIT: fnXit
+goto Xit ! /r
+Xit: fnXit
 def library fnClientSelect
 	fn_setup
 	! fn_getClientLicense(mat client_has$)
@@ -77,17 +77,7 @@ fnend
 def fn_setup
 	if ~setup_library then 
 		setup_library=1
-		library 'S:\Core\Library': fngethandle,fnreg_read
-		library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnCmdSet,fntop,fnAcs
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnreg_close
-		library 'S:\Core\Library': fnSetQ
-		library 'S:\Core\Library': fnsrch_case_insensitive
-		library 's:\Core\Library': fnmakesurepathexists
-		library 's:\Core\Library': fnmcreg_write
-		library 's:\Core\Library': fnfree
-		library 's:\Core\Library': fncursys$
-		library 's:\Core\Library': fncno
+		autoLibrary
 	end if 
 	fn_setup_client
 fnend 

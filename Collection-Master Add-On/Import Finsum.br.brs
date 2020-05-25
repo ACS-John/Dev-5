@@ -19,7 +19,7 @@ basePath_db3_real$='\\192.168.111.44\Data\CLSINC2'
 dim sourcePath$*512
 sourcePath$=basePath_db3_test$
 
-fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
+fn_sel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
 if fkey=93 or fkey=99 then goto Xit
 
 dim filenoList$(0)*8
@@ -157,7 +157,7 @@ fnend
 def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName$*28,trustItem)
 	mat trustPath$(0)
 	mat trustName$(0)
-	if ~setup_categ then let fnsetup_categ
+	if ~setup_categ then let fn_setup_categ
 	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
 	open #hFinSum:=fnGetHandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
 	! open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
@@ -172,7 +172,7 @@ def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName
 	Xitfn_getTrusts: !
 	fn_getTrusts=udim(mat trustPath$)
 fnend
-def fnsetup_categ(; basePath$*512,___,returnN)
+def fn_setup_categ(; basePath$*512,___,returnN)
 	dim categ2$(99)*80
 	dim heading$(48)*80
 	dim autostatus2$(99)
@@ -216,7 +216,7 @@ def fnsetup_categ(; basePath$*512,___,returnN)
 			Autostatus2$(J)=Finlstat$(J)(Pos(Finlstat$(J),',')+1:Len(Finlstat$(J)))
 		next j
 	end if
-	fnsetup_categ=returnN
+	fn_setup_categ=returnN
 fnend
 def fn_setup
 	if ~setup then
@@ -242,7 +242,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 
 		library 'library\CLSUtil.wb': fnList_Print
 		library 'library\CLSUtil.wb': fncom

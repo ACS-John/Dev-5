@@ -1,6 +1,6 @@
-library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamsterfio
+library 'S:\Core\Library': fnTop,fnXit, fnerror,fnhamsterfio
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 fnhamsterfio(env$('cursys')&' '&program$(pos(program$,'\',-1)+1:pos(program$,'.')-1))
-XIT: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

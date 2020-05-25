@@ -22,15 +22,15 @@ def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 		execute tmp$
 		open #tf1:=fngethandle: "Name="&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
 		for x=1 to udim(filename$)
-			linput #tf1: tmp$ eof XIT
+			linput #tf1: tmp$ eof Xit
 			filename$(x)=rtrm$(tmp$)
 			if filename$(x)=uprc$(filename$(x)) then ! never all caps-anything but
 				filename$(x)=lwrc$(filename$(x))
 			end if 
 		next x
-	goto XIT
+	goto Xit
 
-	XIT: ! 
+	Xit: ! 
 		close #tf1,free: ioerr ignore
 fnend 
 include: Ertn

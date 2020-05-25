@@ -6,7 +6,7 @@ end
 ! /r doNotInclude
 ! ertn
 Ertn: !
-	library 'S:\Core\Library': fnerror
+	autoLibrary
 	dim ertnAct$*256
 	fnerror(program$,err,line,ertnAct$,'NO')
 	if lwrc$(ertnAct$)='pause' then

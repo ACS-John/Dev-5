@@ -1,94 +1,87 @@
-00010 ! Replace S:\acsUB\ubCass2
-00020 ! -- Place Certified File Back on PC
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fnwait,fnLbl,fnTos,fncomboa,fnAcs,fnCmdSet,fntop
-00050   on error goto Ertn
-00060 !
-00070   dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
-00071   dim a$*5,b$*4,c$*3,bc$*12,cr$*4,d$(2)
-00080 !
-00090   fncno(cno) !:
-        ! 
-00100   fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
-00110 !
-00120   sn$="ubCass2" !:
-        fnTos(sn$) !:
-        respc = 0
-00130   fnLbl(1,1,"Path to Returned Postal Diskette:",33,1)
-00140   opt1$(1)="A:\" !:
-        opt1$(2)="C:\" !:
-        opt1$(3)="E:\" !:
-        opt1$(4)="F:\" !:
-        fncomboa("AB",1,35,mat opt1$) !:
-        resp$(respc+=1)=opt1$(1)
-00150   fnLbl(3,1,"This program prints:")
-00160   fnLbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
-00170   fnCmdSet(2)
-00180 L180: fnAcs(sn$,0,mat resp$,ckey)
-00190   if ckey=5 then goto XIT
-00200   dv$=resp$(1)
-00210 !
-00220 ! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
-00221   open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
-00230   open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output 
-00240   open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
-00250   open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative 
-00260   fnopenprn(cp,0,0,process)
-00270   pr #255: "\qc {\b "&cap$ !:
-        pr #255: "Listing of Customer Addresses that could not be certified" !:
-        pr #255: date$("mm/dd/ccyy")&"}" !:
-        pr #255: "\ql "
-00280 READ_A: ! 
-00290 ! Read #1,Using 300: Z$,NAM$,STA$,CITY$,STATE$,A$,B$,C$,CR$ Eof END1
-00291   read #1,using L301: z$,nam$,sta$,city$,state$,a$,b$,d$,cr$ eof END1
-00292 ! bC$=A$&B$&C$  when return batch total
-00293   bc$=a$&b$&d$ ! when have to generate barcode
-00300   form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 106,c 23,pos 151,c 2,pos 166,c 5,pos 172,c 4,pos 192,c 3,pos 202,c 4
-00301 L301: form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 71,c 23,pos 94,c 2,pos 96,c 5,c 4,c 2,pos 107,c 4
-00310   if rtrm$(bc$(6:9))="" then !:
-          pr #255,using L320: z$,nam$,sta$,city$,state$,bc$ : goto READ_A
-00320 L320: form pos 1,c 12,2*c 32,c 25,c 4,c 12
-00330 ! Gosub CREATE_CHECK_DIGIT  ! already done by melissa read bc$ as c 12 instead of c 11
-00331   gosub CREATE_CHECK_DIGIT ! melissa returned only 11 digits
-00340   write #2,using L350: z$,nam$,sta$,city$,state$,bc$,cr$
-00350 L350: form pos 1,c 10,2*c 30,c 23,c 2,c 12,c 4
-00360   gosub L580
-00370   goto READ_A
-00380 !
-00390 END1: ! 
-00400   close #1: 
-00410   close #2: 
-00420   execute "Index [Q]\UBmstr\Cass1.h[cno],[Q]\UBmstr\Cass1Idx.h[cno],1,10,Replace,DupKeys -n"
-00430   fncloseprn
-00440 XIT: fnxit
-00450 !
-00460 CREATE_CHECK_DIGIT: ! 
-00470   bc$=rtrm$(bc$)
-00480   if bc$="" then goto L560
-00490   c1=0
-00500   for j=1 to len(bc$)
-00510     c1=c1+val(bc$(j:j)) conv L520
-00520 L520: next j
-00530   c1$=str$(c1) !:
-        l1=len(c1$) !:
-        c2=val(c1$(l1:l1))
-00540   if c2=0 then cd$="0" else cd$=str$(10-c2)
-00550   bc$=bc$&cd$
-00560 L560: return 
-00570 !
-00580 L580: csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
-00585   goto L640 ! don't update any addresses
-00590   read #3,using "Form POS 385,PD 3",key=z$: aba nokey L640
-00600   if aba=0 then goto L630
-00610   rewrite #4,using "Form POS 41,2*C 30",rec=aba: sta$,csz$ noRec L630
-00620   goto L640
-00630 L630: rewrite #3,using "Form POS 71,2*C 30",key=z$: sta$,csz$
-00640 L640: return 
-00650 !
-00660 ! <Updateable Region: ERTN>
-00670 ERTN: fnerror(program$,err,line,act$,"xit")
-00680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00690   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00700   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00710 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00720 ! /region
+! Replace S:\acsUB\ubCass2
+! -- Place Certified File Back on PC
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
+	dim a$*5,b$*4,c$*3,bc$*12,cr$*4,d$(2)
+ 
+ 
+	fnTop(program$,cap$="Place Certified File Back on PC")
+ 
+	sn$="ubCass2" : _
+	fnTos(sn$) : _
+	respc = 0
+	fnLbl(1,1,"Path to Returned Postal Diskette:",33,1)
+	opt1$(1)="A:\" : _
+	opt1$(2)="C:\" : _
+	opt1$(3)="E:\" : _
+	opt1$(4)="F:\" : _
+	fncomboa("AB",1,35,mat opt1$) : _
+	resp$(respc+=1)=opt1$(1)
+	fnLbl(3,1,"This program prints:")
+	fnLbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
+	fnCmdSet(2)
+L180: fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	dv$=resp$(1)
+ 
+! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
+	open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
+	open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output
+	open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative
+	fnopenprn(cp,0,0,process)
+	pr #255: "\qc {\b "&cap$ : _
+	pr #255: "Listing of Customer Addresses that could not be certified" : _
+	pr #255: date$("mm/dd/ccyy")&"}" : _
+	pr #255: "\ql "
+READ_A: !
+! Read #1,Using 300: Z$,NAM$,STA$,CITY$,STATE$,A$,B$,C$,CR$ Eof END1
+	read #1,using L301: z$,nam$,sta$,city$,state$,a$,b$,d$,cr$ eof END1
+! bC$=A$&B$&C$  when return batch total
+	bc$=a$&b$&d$ ! when have to generate barcode
+	form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 106,c 23,pos 151,c 2,pos 166,c 5,pos 172,c 4,pos 192,c 3,pos 202,c 4
+L301: form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 71,c 23,pos 94,c 2,pos 96,c 5,c 4,c 2,pos 107,c 4
+	if rtrm$(bc$(6:9))="" then : _
+		pr #255,using L320: z$,nam$,sta$,city$,state$,bc$ : goto READ_A
+L320: form pos 1,c 12,2*c 32,c 25,c 4,c 12
+! Gosub CREATE_CHECK_DIGIT  ! already done by melissa read bc$ as c 12 instead of c 11
+	gosub CREATE_CHECK_DIGIT ! melissa returned only 11 digits
+	write #2,using L350: z$,nam$,sta$,city$,state$,bc$,cr$
+L350: form pos 1,c 10,2*c 30,c 23,c 2,c 12,c 4
+	gosub L580
+	goto READ_A
+ 
+END1: !
+	close #1:
+	close #2:
+	execute "Index [Q]\UBmstr\Cass1.h[cno],[Q]\UBmstr\Cass1Idx.h[cno],1,10,Replace,DupKeys -n"
+	fncloseprn
+Xit: fnXit
+ 
+CREATE_CHECK_DIGIT: !
+	bc$=rtrm$(bc$)
+	if bc$="" then goto L560
+	c1=0
+	for j=1 to len(bc$)
+		c1=c1+val(bc$(j:j)) conv L520
+L520: next j
+	c1$=str$(c1) : _
+	l1=len(c1$) : _
+	c2=val(c1$(l1:l1))
+	if c2=0 then cd$="0" else cd$=str$(10-c2)
+	bc$=bc$&cd$
+L560: return
+ 
+L580: csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
+	goto L640 ! don't update any addresses
+	read #3,using "Form POS 385,PD 3",key=z$: aba nokey L640
+	if aba=0 then goto L630
+	rewrite #4,using "Form POS 41,2*C 30",rec=aba: sta$,csz$ noRec L630
+	goto L640
+L630: rewrite #3,using "Form POS 71,2*C 30",key=z$: sta$,csz$
+L640: return
+ 
+include: Ertn

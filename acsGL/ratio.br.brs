@@ -1,7 +1,7 @@
 ! Replace S:\acsGL\ratio
 ! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
 !
-	library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fndat,fnprocess,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnHamster,fnmsgbox,fnqgl,fnrgl$,fnagl$
+	autoLibrary
 	on error goto Ertn
 !
 	dim gln(80,3),k4$*2,message$*40
@@ -9,7 +9,7 @@
 	dim e$(2)*12,option$(6)*60,item$(7)*80
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70,resp$(90)*50
 !
-	fntop(program$)
+	fnTop(program$)
 	fndat(dat$)
 	ratiomst=10
 	if exists("[Q]\GLmstr\ratiomst.h[cno]")=0 then gosub CREATE_FILES
@@ -20,84 +20,84 @@ L180: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioID
 	close #ratiomst: ioerr L210
 L210: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
 	goto L180
-RATIOMSTGRID: ! 
-	fnTos(sn$="Ratiomst") 
+RATIOMSTGRID: !
+	fnTos(sn$="Ratiomst")
 	respc=0
-	mat chdr$(3) : mat cmask$(3) : mat flxitm$(3) 
-	chdr$(1)="Rec" 
-	chdr$(2)="Ratio #" : chdr$(3)="Ratio Name" 
+	mat chdr$(3) : mat cmask$(3) : mat flxitm$(3)
+	chdr$(1)="Rec"
+	chdr$(2)="Ratio #" : chdr$(3)="Ratio Name"
 	cmask$(1)='30' : cmask$(2)='': cmask$(3)=''
 	frame=0
-	restore #ratiomst: 
+	restore #ratiomst:
 	fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
 READ_RATIOMST: ! read Ratiomst file
 	read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12': hac$,na$,mat gl$ eof EO_RATIOMST_GRID
-	item$(1)=str$(rec(ratiomst)) 
-	item$(2)=hac$: item$(3)=na$ 
+	item$(1)=str$(rec(ratiomst))
+	item$(2)=hac$: item$(3)=na$
 	fnflexadd1(mat item$)
 	goto READ_RATIOMST
-EO_RATIOMST_GRID: ! 
+EO_RATIOMST_GRID: !
 	fnLbl(11,1,"")
 	fnCmdKey("&Add",1,0,0,"Allows you to add new Ratios.")
-! 
+!
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
 	fnCmdKey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Ratios option")
-	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	add=edit=0
 	editrec=val(resp$(1))
 	if ckey=2 then edit=1
 	if ckey=4 then goto GL_NUMBERS
 ! If CKEY=3 Then Chain "S:\acsGL\acglschp" ! prints prints a Ratiomst
-	if ckey=1 then 
-		add=1 
-		hac$=na$="" 
-		mat gl$=("") 
+	if ckey=1 then
+		add=1
+		hac$=na$=""
+		mat gl$=("")
 		goto ADD_EDIT_RATIOMST ! add
 	end if
 ! to ADD_EDIT_Ratiomst ! add
-	if ckey=2 then 
-		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ noRec RATIOMSTGRID 
-		holdsn=sn 
+	if ckey=2 then
+		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ noRec RATIOMSTGRID
+		holdsn=sn
 		goto ADD_EDIT_RATIOMST
-	else if ckey=8 then 
-		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ noRec RATIOMSTGRID 
-		delete #ratiomst,rec=editrec: 
+	else if ckey=8 then
+		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ noRec RATIOMSTGRID
+		delete #ratiomst,rec=editrec:
 		goto RATIOMSTGRID
 	end if
-	pause 
-! 
-ADD_EDIT_RATIOMST: ! 
-	fnTos(sn$="Ratiomst2") 
+	pause
+!
+ADD_EDIT_RATIOMST: !
+	fnTos(sn$="Ratiomst2")
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Ratio Number:",mylen,right)
 	fncombof('glRatiomst',1,mypos,0,"[Q]\GLmstr\ratiomst.h[cno]",1,3,4,40,"[Q]\GLmstr\ratioidx.h[cno]",add_all)
 	if edit=1 then resp$(1)=hac$
 	if add=1 then resp$(1)=""
 	fnLbl(2,1,"Ratio Nane::",mylen,right)
-	fnTxt(2,mypos,40,0,left,"",0,"",0 ) 
+	fnTxt(2,mypos,40,0,left,"",0,"",0 )
 	resp$(2)=na$
 	fnCmdKey("&Next",1,1,0,"Save the ratio.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of Ratios withouit saving any changes.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	hac$=resp$(1)(1:3) conv ADD_EDIT_RATIOMST
 	na$=resp$(2)
 	if edit=1 then goto REWRITE_EXISTING_RATIOMST
 	if add=1 then goto WRITE_NEW_RATIOMST
-	pause 
+	pause
 !
-REWRITE_EXISTING_RATIOMST: ! 
+REWRITE_EXISTING_RATIOMST: !
 	if hac$="" or trim$(hac$)="0" then goto ADD_EDIT_RATIOMST
 	if holdhac$<>hac$ and holdhac$<>"" then goto MSGBOX1 else goto L780
-MSGBOX1: ! 
-	mat ml$(3) 
-	ml$(1)="You are changing Ratio # "&holdhac$&" to " 
-	ml$(2)="Ratio # "&hac$&".  Click OK to continue, " 
-	ml$(3)="else Cancel to prevent changing the #." 
+MSGBOX1: !
+	mat ml$(3)
+	ml$(1)="You are changing Ratio # "&holdhac$&" to "
+	ml$(2)="Ratio # "&hac$&".  Click OK to continue, "
+	ml$(3)="else Cancel to prevent changing the #."
 	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
 L780: rewrite #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
@@ -107,20 +107,20 @@ WRITE_NEW_RATIOMST: write #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=edit
 	new1=1
 L830: goto RATIOMSTGRID
 !
-	close #ratiomst: 
+	close #ratiomst:
 	if new1=1 then gosub L940
-	goto XIT
+	goto Xit
 !
-CREATE_FILES: ! 
+CREATE_FILES: !
 	close #ratiomst: ioerr L910
 L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",internal,outIn,keyed ioerr L930
 	close #ratiomst,free: ioerr L930
-L930: open #ratiomst: "Name=[Q]\GLmstr\ratiomst.h[cno],KFName=[Q]\GLmstr\ratioidx.h[cno],RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed 
+L930: open #ratiomst: "Name=[Q]\GLmstr\ratiomst.h[cno],KFName=[Q]\GLmstr\ratioidx.h[cno],RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed
 L940: close #ratiomst: ioerr L950
 L950: close #11: ioerr L970
 INDEX: ! (main Ratio files)
 L970: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\RatioIDX.h[cno] 1 3 Replace DupKeys -n"
-	return 
+	return
 !
 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID
 L1010: on fkey 5 goto L1330
@@ -156,32 +156,32 @@ L1270: j1=j1+1
 	goto L1030
 !
 L1330: fncloseprn
-	on fkey 5 ignore 
-	if fnprocess=1 then goto XIT
+	on fkey 5 ignore
+	if fnprocess=1 then goto Xit
 	goto ADD_EDIT_RATIOMST
 !
 L1380: if err=4152 then goto L930 else goto ERTN
 !
-XIT: fnxit
+Xit: fnXit
 !
-
+ 
 GL_NUMBERS: ! r:
-LEFT_SIDE: ! 
-	fnTos(sn$="Ratiomst3") 
+LEFT_SIDE: !
+	fnTos(sn$="Ratiomst3")
 	resp=0
 	fnLbl(1,35,"Left Side Of Ratio",30,0)
 	mypos(1)=1: mypos (2)=50
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2,pas) 
+			fnqgl(j/2+1,mypos(x),0,2,pas)
 			if x =1 then resp$(resp+=1)=fnrgl$(gl$(j-1)) else resp$(resp+=1)=fnrgl$(gl$(j))
 		next x
 	next j
 	fnCmdKey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
 	fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
 	fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
-	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	for j=1 to 40
 		gl$(j)=fnagl$(resp$(j))
@@ -196,15 +196,15 @@ RIGHT_SIDE: !
 	fnLbl(1,35,"Right Side Of Ratio",30,0)
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2,pas) 
+			fnqgl(j/2+1,mypos(x),0,2,pas)
 			if x=1 then resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else resp$(resp+=1)=fnrgl$(gl$(40+j))
 		next x
 	next j
 	fnCmdKey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
 	fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
 	fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
-	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	for j=1 to 40
 		gl$(j+40)=fnagl$(resp$(j))
@@ -213,4 +213,4 @@ RIGHT_SIDE: !
 	if ckey=3 then goto RIGHT_SIDE
 	if ckey=6 then goto REWRITE_EXISTING_RATIOMST
 goto RATIOMSTGRID ! /r
-include: ertn
+include: Ertn

@@ -1,6 +1,6 @@
 ! Replace Work\PrintLay
 !
-	library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn
+	autoLibrary
 	on error goto Ertn
 !
 	dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
@@ -13,7 +13,7 @@
 	io1$(2)="12,65,C 14,UT,N"
 	pr newpage
 	close #101: ioerr L120
-L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn 
+L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn
 	pr #101: newpage
 	pr f "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
 	pr f "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
@@ -24,12 +24,12 @@ L160: input fields mat io1$: pp,ev$ conv L160
 	if ev$="" then goto L260
 	execute "DROP DIRFILE" ioerr L210
 L210: execute "DIR *."&ev$&" >DIRFILE"
-	open #2: "Name=DIRFILE",display,input 
+	open #2: "Name=DIRFILE",display,input
 	p1=pos(ev$,"/",1)
 	ex$=ev$(1:p1-1)
 	goto L360
 L260: close #101: ioerr L270
-L270: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn 
+L270: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outIn
 	pr #101: newpage
 	if f1>0 then pr f "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
 	pr f "4,5,C 60": "Enter File Name/VolId to pr or Blank to stop"
@@ -140,15 +140,15 @@ L1340: next j
 	pr #255: newpage
 	pr #255,using L970: hex$("1B40")
 	fncloseprn
-L1370: close #1: 
+L1370: close #1:
 	if f2<f1 then goto L360
 L1390: close #2: ioerr L1400
 L1400: pr f "24,1,C 7,UT,N": "Done..."
-	stop 
+	stop
 NEWPGE: if j=j3 then goto L1450
 	pr #255: newpage
 	gosub HDR
-L1450: continue 
+L1450: continue
 HDR: ! r:
 	pr #255,using L970: hex$("2B0205000A1042")
 	pr #255,using L970: hex$("1B471B2D00")
@@ -177,4 +177,4 @@ HDR: ! r:
 	pr #255: "   ------   ----------------------------------------   --------    ------    --------   -------    -------    -----    -----"
 	pr #255,using L970: hex$("1B2D01")
 return ! /r
-include: ertn
+include: Ertn

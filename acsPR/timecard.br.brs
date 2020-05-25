@@ -1,16 +1,16 @@
 !  Replace S:\acsPR\TimeCard
 ! Extend Time Card
-
+ 
 	dim sc1$(7),fl1$(7),io1$(101),inp(20,5),hrs(20),em$*30
 	dim p$(20)*50,wrd2$(2)*35,message$*40
-
-	library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncloseprn,fnopenprn,fntop,fnxit,fnconsole
+ 
+	autoLibrary
 	on error goto Ertn
-
-	fntop("S:\acsPR\TimeCard","Extend Time Card")
+ 
+	fnTop("S:\acsPR\TimeCard","Extend Time Card")
 	fnconsole(1)
-! 
-
+!
+ 
 	sc1$(1)="Employee #:": fl1$(1)="1,2,C 20,N"
 	sc1$(2)=" Date": fl1$(2)="3,15,C 6,R,N"
 	sc1$(3)="Time  In": fl1$(3)="2,28,C 8,R,N"
@@ -26,8 +26,8 @@
 		io1$(j*5-5)=str$(j+2)&",42,N 2,UT,N"
 		io1$(j*5-4)=str$(j+2)&",48,N 2,UET,N"
 	next j
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	pr newpage 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	pr newpage
 	fnopenwin(win=101,10,22,15,58,env$('program_caption'))
 	io2$(1)="4,2,C 35,N"
 	io2$(2)="5,2,C 35,N"
@@ -35,7 +35,7 @@
 	wrd2$(2)="Use Hours and Hundredths of an Hour"
 	pr f "16,35,C 09,B,5": "Exit (F5)"
 	rinput #win,select mat io2$,attr "H": mat wrd2$
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 	ti1=curfld
 	if ti1=2 then sc1$(5)=sc1$(6)="Hrs  Hnd"
 L400: pr newpage
@@ -83,7 +83,7 @@ L650: ln=currow
 	if ln<23 then pr f str$(ln+1)&",15,N 6,UT,N": dt
 	pr f "2,55,N 6.2,R,N": sum(hrs)
 	goto L460
-
+ 
 L860: fnopenprn(cp,58,220,process)
 	fnwait(message$,0)
 	pr #255,using L890: mat sc1$
@@ -109,7 +109,7 @@ L1050: form pos 53,c 10,skip 1,pos 53,n 10.2,skip 1,pos 53,c 10,skip 2
 L1080: mat hrs=(0)
 	mat inp=(0)
 	goto L400
-
+ 
 END1: fncloseprn
-XIT: fnxit
-Include: Ertn
+Xit: fnXit
+include: Ertn

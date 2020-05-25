@@ -1,25 +1,25 @@
 ! Replace S:\acsPR\adjustpaydate.br
 ! This program corrects a pay date in history even after later payrolls have been processed
 !
-	library 'S:\Core\Library': fntop,fnxit,fnerror,fncno,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fngethandle
-	fntop("S:\acsPR\adjustpaydate","Adjust Historical Pay Date")
+	autoLibrary
+	fnTop("S:\acsPR\adjustpaydate","Adjust Historical Pay Date")
 	on error goto Ertn
 	fn_adjustpaydate
 !
 	def fn_adjustpaydate
 ! main routine
-		if fn_getdates then 
+		if fn_getdates then
 			fncno(cno,cnam$)
-			open #(h_prchecks:=fngethandle): "Name=PRmstr\Payrollchecks.h[cno],KFName=PRmstr\checkidx3.h[cno]",internal,outIn,keyed 
+			open #(h_prchecks:=fngethandle): "Name=PRmstr\Payrollchecks.h[cno],KFName=PRmstr\checkidx3.h[cno]",internal,outIn,keyed
 CHECKSFORM: form pos 1,n 8,n 3,pd 6
-			do 
+			do
 				read #h_prchecks,using CHECKSFORM: eno,tdn,prd eof CHECKSDONE
 				if prd=val(prdate$(1)) then prd=val(prdate$(2))
 				rewrite #h_prchecks,using CHECKSFORM: eno,tdn,prd
-			loop 
-CHECKSDONE: ! 
-			close #h_prchecks: 
-		end if 
+			loop
+CHECKSDONE: !
+			close #h_prchecks:
+		end if
 	fnend  ! fn_adjustpaydate
 	def fn_getdates
 ! gets the old and new payroll dates
@@ -34,14 +34,14 @@ CHECKSDONE: !
 		prdate$(2)=""
 		fnCmdKey("Next",1,1,0,"Proceed with date adjustment.")
 		fnCmdKey("Cancel",5,0,1,"Return to menu without changing the payroll date as indicated.")
-		fnAcs(sn$,0,mat prdate$,ckey)
-		if ckey=5 then 
+		fnAcs2(mat prdate$,ckey)
+		if ckey=5 then
 			fn_getdates=0
-		else 
+		else
 			if prdate$(1)="00000000" or prdate$(2)="00000000" then let fn_getdates=fn_getdates else let fn_getdates=1
-		end if 
+		end if
 	fnend  ! fn_getdates
-XIT: fnxit
+Xit: fnXit
 ERTN: fnerror(program$,err,line,act$,"NO")
 	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT

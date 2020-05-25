@@ -1,9 +1,9 @@
 fn_setup(table$)
 on error goto Ertn
-fntop(program$)
-
+fnTop(program$)
+ 
 ! enableReportSuccess=1
-
+ 
 Screen1: ! r:
 dim resp$(20)*256
 dim sourcePath$*256
@@ -18,26 +18,26 @@ fntos : lc=0 : rc=0 : col1_width=20 : col2_pos=1+col1_width+1
 	resp$(resp_pcode:=rc+=1)=pcode$
 	fnCmdSet(2)
 fnacs2(mat resp$,ckey)
-if ckey=5 then goto XIT
+if ckey=5 then goto Xit
 sourcePath$=resp$(resp_sourcePath)
 pcode$=resp$(resp_pcode)
 fnreg_write(env$('cap')&'.Source Path',sourcePath$)
 fnreg_write(env$('cap')&'.Paperless Code',pcode$)
 ! /r
 ! Screen2
-	fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
+	fn_sel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
 	if fkey=93 or fkey=99 then goto Screen1
 !
-
+ 
 open   #hMopen:=fngethandle: 'Name=MASTER//6 ,KFName=MASTERX//6 ,shr',INTERNAL,Input,KEYED
 open #hMclosed:=fngethandle: 'Name=HISTORY//1,KFName=HISTORYX//1,shr',INTERNAL,Input,KEYED
 hActiveOpen=fnOpen_active(mat h_active_open)
 hActiveClosed=fnClosed_active(mat h_active_closed)
-
+ 
 dim sourceFile$(0)*256
-transTime$=time$ 
+transTime$=time$
 transDate=Date('CYMD')
-fnGetDirClient(sourcePath$,mat sourceFile$) 
+fnGetDirClient(sourcePath$,mat sourceFile$)
 moveCount=failCount=0
 for sourceItem=1 to udim(mat sourceFile$)
 	fileno$=fn_parseFileno$(sourceFile$(sourceItem))
@@ -67,7 +67,7 @@ for sourceItem=1 to udim(mat sourceFile$)
 		end if
 	end if
 nex sourceItem
-XIT: !
+Xit: !
 for x=1 to udim(mat h_active_closed)
 	close #h_active_closed(x):
 nex x
@@ -77,7 +77,7 @@ nex x
 close #hMopen:
 close #hMclosed:
 fn_reportClose
-fnxit
+fnXit
 def fn_reportAdd(theFile$*256,theReason$*256; ___,alignOption$)
 	if ~initReportReject then
 		initReportReject=1
@@ -108,42 +108,32 @@ def fn_parseFileno$*8(filename$*256; ___,dpos,return$*8)
 	end if
 	fn_parseFileno$=return$
 fnend
-
+ 
 def fn_setup(&table$)
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnTxt,fnLbl
-		library 'S:\Core\Library': fnCmdSet
-		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnGetDirClient
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnRename
-		! library 'S:\Core\Library': fnOpenPrn,fnClosePrn
-		library 'S:\Core\Library': fnGetHandle
+		autoLibrary
 		library 'S:\Collection-Master Add-On\fn\Library.br': fnClaimFolder$
-
+ 
 		library 'Library\SQL.wb': fnsql_setup$
 		library 'Library\CLSUTIL.wb': fnRead_oc
 		library 'Library\OPENFILE.wb': fnOpen_active,fnClosed_active
 		library 'Library\TagUtil': fnPaper_note
-
+ 
 		gosub Enum
 		gosub SetupPrint
-
+ 
 		dim m$(0)*128,mN(0)
 		dim mFieldsC$(0)*20,mFieldsN$(0)*20
 		dim mFormAll$*2048
 		! execute '*SubProc '&     <--- not necessary with include:enum\forw  and  gosub Enumforw
 		fnsql_setup$('master',mat m$,mat mN,mat mFieldsC$,mat mFieldsN$,mFormAll$)
 		gosub EnumMaster
-
+ 
 	end if
 fnend
 include: cm\enum\common
 include: cm\enum\master
 include: fn_open
 include: cm\print
-include: ertn
+include: Ertn

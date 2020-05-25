@@ -1,18 +1,18 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 fnHamsterFio('CO Favorites')
-xit: fnxit
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnHamsterFio,fnCloseFile,fnAddOneC,fnBuildKey$
+		autoLibrary
 		on error goto Ertn
 		dim form$(0)*256
 		dim favData$(0)*128,favDataN(0)
 	end if
 fnend
 def library fnFavoriteAdd(programCaption$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	hFav=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$)
 	mat favData$=('') : mat favDataN=(0)
 	favData$(fav_user)=env$('Unique_Computer_ID')
@@ -22,7 +22,7 @@ def library fnFavoriteAdd(programCaption$*256)
 	fnCloseFile(hFav,'CO Favorites')
 fnend
 def library fnFavoriteDel(programCaption$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	hFavProgram=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$,0,2)
 	mat favData$=('') : mat favDataN=(0)
 	favData$(fav_user)=env$('Unique_Computer_ID')
@@ -32,7 +32,7 @@ def library fnFavoriteDel(programCaption$*256)
 	fnCloseFile(hfav,'CO Favorites')
 fnend
 def library fnFavoriteList(mat favorite$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	mat favorite$(0)
 	hFav=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$,1)
 	restore #hFav,key>=fn_favKey$: nokey fl_eof
@@ -62,4 +62,4 @@ def fn_favKey$*42
 	fn_favKey$=favKeyReturn$
 fnend
 include: fn_open
-include: ertn
+include: Ertn

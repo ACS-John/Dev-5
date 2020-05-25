@@ -1,7 +1,7 @@
 ! Replace S:\acsGL\AcGlinyy
 ! Income Statement with Year Comparison
 !
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+	autoLibrary
 	on error goto Ertn
 !
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
@@ -9,12 +9,12 @@
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4)
 	dim bp(13),d(2),by(13),tp1(4)
 !
-	fntop(program$,"Income Statement with Year Comparison")
+	fnTop(program$,"Income Statement with Year Comparison")
 	on fkey 5 goto L2590
 	
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd=fnactpd
@@ -27,36 +27,36 @@
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	mp1=69
 	if fnps=2 then mp1=mp1+3
-	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\FNSIINDX.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\FNSJINDX.h[cno],Shr"
+	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
+	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	form c 9,skip 0
 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(env$('cnam')))/2)
-	pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed 
+	pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
 	if actpd>0 and actpd<14 then goto L430
 	pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
 	pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 	input fields "23,2,C 1,E,N": pause$
-	goto XIT
-L430: open #1: fl1$,internal,input,keyed 
+	goto Xit
+L430: open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L550
 	if percent=1 then goto L550
-	fnTos(sn$="ACGlinyy") 
+	fnTos(sn$="ACGlinyy")
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
+	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L550: !
 	pf1=len(env$('cnam'))+int((43-len(env$('cnam')))/2)
 	close #101: ioerr L580
-L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE INCOME STATEMENT ",display,outIn 
+L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE INCOME STATEMENT ",display,outIn
 	pr f "08,18,C 41,H,N": lpad$(env$('cnam'),pf1)
 	pr f "09,18,C 41,H,N": "            COMPANY NUMBER [cno]"
 	pr f "11,18,C 41,R,N": "              IN PROCESS"
@@ -69,8 +69,8 @@ L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 69 3 Replace DupKeys -N"
 	goto L710
 L700: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 72 3 Replace DupKeys -N"
-L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed 
-L720: ! 
+L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
+L720: !
 L730: read #1,using L780: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2510
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L720
 	if costcntr=0 then goto L780
@@ -203,7 +203,7 @@ L1930: for j=1 to 9
 		accum(j,3)=0
 		accum(j,4)=0
 L1990: next j
-	return 
+	return
 L2010: if percent=0 then goto L2160
 	if ls=0 then goto L2160
 	if ls=99 then goto L2070
@@ -219,8 +219,8 @@ L2120: form skip sk,pos tabnote,c fl,pos 70,c 8,skip 1
 	if eofcode=1 then goto L2160
 	pr #255: newpage
 	gosub L2310
-L2160: return 
-L2170: gosub L2070: continue 
+L2160: return
+L2170: gosub L2070: continue
 L2180: if percent=0 then goto L2300
 	if ul=0 then goto L2280
 	if ul=1 then goto L2250
@@ -233,7 +233,7 @@ L2250: underlin$="_______________ ______"
 L2270: form skip redir,pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip redir
 L2280: if redir=0 then pr #255,using L2290: " "
 L2290: form skip 1,c 1,skip 0
-L2300: return 
+L2300: return
 L2310: heading=1
 	pt1+=1
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -241,14 +241,14 @@ L2310: heading=1
 	if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
 	pr #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
 	pr #255: "\ql "
-	pr #255: 
+	pr #255:
 	pr #255: tab(36);"CURRENT YEAR";tab(60);"PRIOR YEAR"
 	pr #255,using L2450: "     YEAR TO DATE","     YEAR TO DATE"
 L2450: form pos 32,c 20,pos 55,c 22,skip redir
 L2460: form pos 31,c 22,pos 55,c 22,skip 1
 	pr #255,using L2460: "_____________________","______________________"
-	pr #255: 
-	return 
+	pr #255:
+	return
 !
 L2510: if pas=2 then goto L2590
 	pas=2
@@ -260,13 +260,13 @@ L2510: if pas=2 then goto L2590
 	goto L2670
 L2590: eofcode=1
 	gosub L2070
-L2610: ! 
-! 
+L2610: !
+!
 	fnfscode(actpd)
 	fnpriorcd(1)
 	fncloseprn
-! 
-	goto XIT
+!
+	goto Xit
 !
 L2670: close #1: ioerr L2680
 L2680: close #3: ioerr L2690
@@ -290,7 +290,7 @@ L2810: form pos 1,g 5,4*pd 7.2
 	rewrite #4,using L2810: k4$,mat tp1
 	goto L2890
 L2880: write #4,using L2810: r$,tp1,tp2,tp3,tp4
-L2890: return 
+L2890: return
 PAS2: mat tp1=(0)
 	if rnp=0 then goto L2980
 	k4$=lpad$(str$(rnp),5)
@@ -299,6 +299,6 @@ L2940: percent1=tp1(1)
 	percent2=tp1(2)
 	percent3=tp1(3)
 	percent4=tp1(4)
-L2980: return 
-XIT: fnxit
-include: ertn
+L2980: return
+Xit: fnXit
+include: Ertn

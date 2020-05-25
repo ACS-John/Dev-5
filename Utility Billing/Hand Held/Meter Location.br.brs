@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 !   ! r: restore unconverted files and remove already converted files (for testing only, of course)
 !      if env$('acsDeveloper')<>'' and env$('client')='Campbell' then
 !   !   exec 'copy "C:\ACS\(Client_Files)\Bethany\ACS meter location mess\autosave before first one\UB Company 1 2018-01-02 14-02-30 Menu - before meter location initialize\Meter*.h1" "[Q]\UBmstr\*.h[cno]"'
@@ -11,30 +11,12 @@ fntop(program$)
 !      end if
 !  if forceKeepLeft then  pr 'forceKeepLeftCount=';forceKeepLeftCount : pause : end ! /r
 fnHamsterFio(table$)
-XIT: !
-fnxit
+Xit: !
+fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
-		library 'S:\Core\Library': fngethandle,fnerror
-		library 'S:\Core\Library': fnindex_it,fnHamsterFio
-		library 'S:\Core\Library': fnStatusClose,fnStatus
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnOpenFile,fnCloseFile
-		library 'S:\Core\Library': fnAutomatedSavePoint
-		library 'S:\Core\Library': fnreg_read
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
-		library 'S:\Core\Library': fnBuildKey$
-		library 'S:\Core\Library': fnKeyExists
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnCustomerData$
-		library 'S:\Core\Library': fnFree,fnRename
-		library 'S:\Core\Library': fnlbl,fntos,fnacs,fntxt,fncmdset,fncombof
-		library 'S:\Core\Library': fncmdkey,fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fnapplyDefaultRatesFio
+		autoLibrary
 		dim info$(0)*20,infoN(0)
 		dim addr$(0)*30,addrN(0)
 		dim location$(0)*256,locationN(0)
@@ -74,7 +56,7 @@ def fn_populateLocationNonSeq
 					! else
 					!   location$(loc_meterType     )=''
 					! end if
-					fnLocationWrite(mat location$,mat locationN, 1)
+					fn_locationWrite(mat location$,mat locationN, 1)
 				end if
 			nex serviceItem
 		end if
@@ -85,7 +67,7 @@ def fn_populateLocationNonSeq
 fnend
 
 def library fnInitialializeMeterLocation
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! fnInitialializeMeterLocation=fn_InitialializeMeterLocation    <---  fn_setup handles it if it is necessary.
 fnend
 def fn_InitialializeMeterLocation
@@ -164,7 +146,7 @@ def fn_InitialializeMeterLocation
 							location$(loc_transmitter    )=info$(meter_transmitter    )
 							location$(loc_meterType      )=info$(meter_meterType      )
 							fnstatus('importing '&account$&'.'&location$(loc_serviceId)&'.'&str$(locationId)&': ')
-							fnLocationWrite(mat location$,mat locationN)
+							fn_locationWrite(mat location$,mat locationN)
 							loacationRecordsAdded(serviceItem)+=1
 							if deleteEnabled then delete #hInfo:
 							InfoNokey: !
@@ -177,7 +159,7 @@ def fn_InitialializeMeterLocation
 							pr 'no locations found for "'&account$&'"- just write a record without any services'
 							pause
 						end if
-						fnLocationWrite(mat location$,mat locationN)
+						fn_locationWrite(mat location$,mat locationN)
 						loacationRecordsAdded(11)+=1
 					end if
 					if deleteEnabled then delete #hAddress:
@@ -218,7 +200,7 @@ def fn_InitialializeMeterLocation
 					location$(loc_transmitter    )=info$(meter_transmitter    )
 					location$(loc_meterType      )=info$(meter_meterType      )
 					! fnStatus('creating new location from '&account$&' - '&location$(loc_serviceId)&' meter address file')
-					fnLocationWrite(mat location$,mat locationN)
+					fn_locationWrite(mat location$,mat locationN)
 					if deleteEnabled then delete #hInfo:
 				end if
 				NextInfoRecord:!
@@ -239,7 +221,7 @@ def fn_InitialializeMeterLocation
 	end if
 	fn_InitialializeMeterLocation=hLocation
 fnend
-def fnLocationWrite(mat location$,mat locationN; leaveFileOpen) ! inherits local dim form$
+def fn_locationWrite(mat location$,mat locationN; leaveFileOpen) ! inherits local dim form$
 	if ~hLocation(1) then ! r:
 		hLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
 		for lwIndex=2 to 5
@@ -415,7 +397,7 @@ def fn_AllStringsMatch(mat a$,mat b$; caseInsensitive)
 	fn_AllStringsMatch=asmReturn
 fnend
 def library fnAccountFromLocationId$*10(locationId; leaveFileOpen)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAccountFromLocationId$=fn_accountFromLocIdViaLocation$(locationId, leaveFileOpen)
 fnend
 def fn_accountFromLocIdViaLocation$(locationId; leaveFileOpen)
@@ -434,7 +416,7 @@ def fn_accountFromLocIdViaLocation$(locationId; leaveFileOpen)
 	fn_accountFromLocIdViaLocation$=aliReturn$
 fnend
 def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*14,leaveFileOpen)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~hLfaLocation then hLfaLocation=fn_open(table$,mat location$,mat locationN,mat form$, 1,4)
 	dim lfaReturn$*30
 	lfaReturn$=''
@@ -473,7 +455,7 @@ def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*
 	fnLocationIdFromAccountAndServ$=lfaReturn$
 fnend
 def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns the locationID for a provided meterAddress$
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
 	dim location$(0)*128,locationN(0),locationKey$*128
 	hMaLocationByName=fn_open(table$,mat location$,mat locationN,mat form$, 1,2)
@@ -487,7 +469,7 @@ def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns 
 	fnMeterAddressLocationID=locationN(loc_LocationID)
 fnend
 def library fnMeterAddressName$*30(locationId; leaveFileOpen) ! returns the meterAddress$ for a provided LocationID
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if leaveFileOpen and hMaLocationByLocationId<>0 then goto manPastOpen
 	hMaLocationByLocationId=fn_open(table$,mat location$,mat locationN,mat form$, 1)
 	manPastOpen: !
@@ -541,7 +523,7 @@ fnend
 ! fnend  /r
 
 def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	hCmlsLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
 	for j=2 to 5 : hCmlsLocation(j)=hCmlsLocation(1)+j-1 : nex j
 	CmlsSelect: !
@@ -681,7 +663,7 @@ CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires 
 			goto CmlsAddReEdit
 		end if
 		fn_purgeSrvAccountFromLocation(serviceCode$,account$)
-		fnLocationWrite(mat location$,mat locationN)
+		fn_locationWrite(mat location$,mat locationN)
 	end if
 return ! /r
 def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
@@ -709,6 +691,6 @@ def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
 	CmlsDelFinis: !
 fnend
 include: fn_open
-include: ertn
+include: Ertn
 
 

@@ -1,9 +1,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnMsgBox
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs2
+		autoLibrary
 		gosub Enum
 	end if
 fnend

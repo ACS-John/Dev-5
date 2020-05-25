@@ -89,7 +89,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 
 		library 'library\CLSUtil.wb': fnList_Print
 		library 'library\CLSUtil.wb': fncom

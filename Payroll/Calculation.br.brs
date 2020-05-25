@@ -21,9 +21,9 @@
 ! stdWhFed - Standard Federal Withholding
 ! stdWhFed - Standard Federal Withholding
 fn_setup
-fntop(program$)
+fnTop(program$)
 gosub Screen1
-if ckey=5 then goto XIT
+if ckey=5 then goto Xit
 
 dat$=lpad$(str$(d1),6)
 mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
@@ -341,8 +341,8 @@ Finis: ! r:
 	fn_setupCloseFiles
 	close #hRpWork:
 	fnFree("[Q]\PRmstr\jcprh1.h[cno]") ! get rid of jobcost time entry file if exists
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 
 CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably other stuff, i.e. a % for each dept)
 	! Calculate all deduct for federal for all departments

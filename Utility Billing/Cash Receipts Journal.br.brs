@@ -1,9 +1,6 @@
 ! formerly S:\acsUB\UBColPrn
 !
-	library 'S:\Core\Library': fntop,fnxit, fnLbl,fnTxt,fnTos
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnget_services
-	library 'S:\Core\Library': fnChk,fnAcs2,fnCmdSet,fnmsgbox,fngethandle
+	autoLibrary
 !
 	dim scr1$(10)*30
 	dim alloc(10)
@@ -16,7 +13,7 @@
 	dim resp$(7)*40
 	dim ml$(3)*90
 !
-	fntop(program$)
+	fnTop(program$)
 ! skip_header=1 ! <--  this is really a developer only option.
 	fnget_services(mat serviceName$)
 	gosub SCREEN1
@@ -79,7 +76,7 @@ READ_TRANS: !
 		fnmsgbox(mat ml$,resp$,'',49)
 	end if
 	route(extra1)+=tamount
-	if resp$="Cancel" then goto XIT
+	if resp$="Cancel" then goto Xit
 	goto READ_TRANS
 !
 PGOF: ! r:
@@ -104,8 +101,8 @@ PRTOTALS: ! r:
 		next j
 	end if
 	fncloseprn
-	goto XIT ! /r
-XIT: fnxit
+	goto Xit ! /r
+Xit: fnXit
 SCREEN1: ! r:
 	fnTos
 	mylen=33 : mypos=mylen+2
@@ -121,7 +118,7 @@ SCREEN1: ! r:
 	resp$(4)="False"
 	fnCmdSet(3)
 	fnAcs2(mat resp$,ck)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	ld1=val(resp$(1))
 	hd1=val(resp$(2))
 	ti1$=resp$(3)
@@ -139,4 +136,4 @@ HDR: ! r:
 		pr #255: "\ql "&hd1$
 	end if
 return  ! /r
-include: ertn
+include: Ertn

@@ -1,9 +1,9 @@
 ! Replace S:\acsPR\newQTRFedUC
 ! Quarterly Federal U/C Worksheet
-
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fncreg_read,fnDedNames,fnGetPayrollDates
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
 	dim fullname$(20)*20,abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 	dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10)
@@ -11,26 +11,26 @@
 	dim tcp(32),tdc(10)
 	dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),qtr(32)
 	dim ytdtotal(32),ss$*11,em$(3)*30,m$*20
-
-	fntop(program$,cap$="Quarterly Federal Unemployment Worksheet")
+ 
+	fnTop(program$,cap$="Quarterly Federal Unemployment Worksheet")
 	fnopenprn
-
+ 
 	fncreg_read('calculation date text',m$)
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #20,using L250: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10
 	L250: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
-	close #20: 
-
+	close #20:
+ 
 ! If FNPROCESS=1 Then Goto 230
 MENU1: ! r:
-	fnTos(sn$="prqtrfeduc") 
+	fnTos(sn$="prqtrfeduc")
 	respc=0
 	if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
 	fnLbl(1,1,"Tax Year:",26,1)
-	fnTxt(1,30,4,0,0,"30",0,"") 
+	fnTxt(1,30,4,0,0,"30",0,"")
 	resp$(respc+=1)=str$(taxyear)
 	option1$(1)="March 31"
 	option1$(2)="June 30"
@@ -42,12 +42,12 @@ MENU1: ! r:
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 	if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnCmdSet(2): fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	taxyear=val(resp$(1)) ! tax year
 	if taxyear<2000 then goto L510
 	ending_date=taxyear*10000+1231 conv L510
-
+ 
 	for j=1 to 4
 		if resp$(2)=option1$(j) then qtr=j: m$=option1$(j): goto L550 ! quarter ending date
 	next j
@@ -56,12 +56,12 @@ if qtr=1 then begdate=taxyear*10000+0312: enddate=val(taxyear$)*10000+0318
 if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618
 if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
 if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
-
+ 
 on pageoflow goto PGOF
-open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 gosub HDR
-open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
+open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
 L650: !
 	read #2,using L660: eno,mat em$,ss$,em5,em6 eof DONE
 	L660: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
@@ -99,24 +99,24 @@ ANALYZE_WAGES: ! r: analyze wages on each person
 	if m2=0 then goto L650
 	gosub L1360
 goto L650 ! /r
-
+ 
 HDR: ! r:
 	p2=p2+1
 	pr #255,using L1060: "Page ",p2
 	L1060: form pos 70,c 5,pic(zzz),skip 1
-	pr #255: 
+	pr #255:
 	pr #255,using L1090: cap$
 	L1090: form pos 20,c 40,skip 1
 	pr #255,using L1110: "For quarter ended "&m$
 	L1110: form pos 20,cc 40,skip 1
-	pr #255: 
+	pr #255:
 	pr #255,using L1140: "     Rate",a$(1),"Fed ID",b$(1)
 	L1140: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
 	pr #255,using L1160: feducrat,a$(2)
 	L1160: form pos 3,pic(zzzz.##),pos 17,c 40,skip 1
 	pr #255,using L1180: a$(3)
 	L1180: form pos 17,c 40,skip 1
-	pr #255: 
+	pr #255:
 	pr #255: tab(44);"Total Wages   Excess Wages    Taxable"
 	pr #255: " SS Number             Name";
 	pr #255,using L1230: "For Quarter   Over $",feducmax,"Wages"
@@ -131,7 +131,7 @@ DONE: ! r:
 	close #3: ioerr ignore
 	fncloseprn
 goto Xit ! /r
-XIT: fnxit
+Xit: fnXit
 L1360: ! r:
 	if m1=0 then goto L1510 ! skip if quarterly wage=0
 	p3=p3+1
@@ -171,9 +171,9 @@ PGOF: ! r:
 	gosub HDR
 continue ! /r
 L510: ! r:
-	mat ml$(2) 
-	ml$(1)="You must enter a valid tax year such as 2007." 
-	ml$(2)="Take OK to enter the year." 
-	fnmsgbox(mat ml$,resp$,cap$,0) 
+	mat ml$(2)
+	ml$(1)="You must enter a valid tax year such as 2007."
+	ml$(2)="Take OK to enter the year."
+	fnmsgbox(mat ml$,resp$,cap$,0)
 goto MENU1 ! /r
-Include: Ertn
+include: Ertn

@@ -1,16 +1,16 @@
 on error goto Ertn
-library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fnTos,fnFra,fnOpt,fnLbl,fnTxt,fncmbact,fnCmdKey,fnAcs,fnChk,fnDedNames
-fntop(program$)
-
+autoLibrary
+fnTop(program$)
+ 
 dim em$*30,tcp(32),tdc(10),cp(32),ttdc(10)
 dim dedcode(20),calcode(20),dedfed(20),fullname$(20)*20,resp$(50)*60
 dim abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 dim sel_ded(20),sel_pen(20)
 fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 gosub L710
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
-open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
 fnopenprn
 gosub HDR
 L250: !
@@ -25,8 +25,8 @@ L320: !
 	if deferred_comp_wh=0 and deferred_comp_match=0 then goto L360 ! skip if no deferred comp
 	pr #255,using L340: em$(1:24),ss$,reg_earnings,deferred_comp_wh,deferred_comp_match pageoflow L1020
 	L340: form pos 1,c 24,c 12,4*n 12.2
-	total_salary+=reg_earnings 
-	total_wh+=deferred_comp_wh 
+	total_salary+=reg_earnings
+	total_wh+=deferred_comp_wh
 	total_deferred_comp+=deferred_comp_match
 	L360: !
 goto L250
@@ -39,8 +39,8 @@ END1: !
 	pr #255: "                                      =========-  ==========  ========== "
 	form pos 1,c 1,c 32,n 6,3*n 9,c 14,c 2
 	fncloseprn
-	close #25: ioerr XIT
-XIT: fnxit
+	close #25: ioerr Xit
+Xit: fnXit
 !
 L560: !
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
@@ -64,44 +64,44 @@ L560: !
 L710: ! r:
 	fnTos
 	rc=cf=0
-	fnFra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) 
+	fnFra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0)
 	cf+=1 : fratype=cf
 	for j=1 to 20
-		fnChk(j,3,fullname$(j),0,fratype) 
+		fnChk(j,3,fullname$(j),0,fratype)
 		resp$(rc+=1)="False"
 	next j
-	fnFra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) 
+	fnFra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0)
 	cf+=1 : fratype=cf
 	for j=1 to 20
-		fnOpt(j,3,fullname$(j),0,fratype) 
+		fnOpt(j,3,fullname$(j),0,fratype)
 		resp$(rc+=1)="False"
 	next j
-	fnFra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") 
+	fnFra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 	fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
-	fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate) 
+	fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 	resp$(rc+=1)=str$(beg_date)
 	fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
-	fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate) 
+	fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	for j=1 to 20
 		if resp$(j)="True" then sel_ded(j)=1
 	next j
 	for j=1 to 20
 		if resp$(j+20)="True" then sel_pen(j)=1
 	next j
-	beg_date=val(resp$(41)) 
+	beg_date=val(resp$(41))
 	end_date=val(resp$(42))
 return ! /r
 HDR: !  r:
 	pr #255: "\qc  {\f181 \fs18 \b "&trim$(env$('cnam'))&"}"
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
 	pr #255: "\qc  {\f181 \fs16 \b From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-	pr #255: "\ql   " 
+	pr #255: "\ql   "
 	pr #255: "Name                    SS Number     Total Wage     Comp WH  Comp Match"
 return ! /r
 L1020: ! r:

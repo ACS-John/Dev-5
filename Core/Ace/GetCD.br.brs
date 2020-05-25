@@ -1,5 +1,5 @@
 def library fngetcd(&mcd$)
-	library 'S:\Core\Library': fnshortpath$
+	autoLibrary
 	option retain 
 
 	dim getcd_ln$*60

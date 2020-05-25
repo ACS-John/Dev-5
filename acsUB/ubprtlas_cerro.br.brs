@@ -1,97 +1,97 @@
 ! Replace S:\acsUB\ubPrtLas_Cerro
 ! pr bills (new format)
-
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnOpt,fnTos,fncmbact,fnLastBillingDate,fnxit,fnCmdSet,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnget_services
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim resp$(10)*80,txt$*40,mg$(3)*30,rw(22,13),indexfile$*256
 	dim cap$*128,datafile$*256
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 	dim gb(10),pe$(4)*30,ba$(4)*30,ba(12)
-
+ 
 ! fnTop - set by another calling program
 	fnLastBillingDate(d1)
-! 
+!
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 	fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 	linelength=62
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed 
-
-SCREEN1: ! 
+	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed
+ 
+SCREEN1: !
 	a$="" : prtbkno=0
-	fnTos(sn$="UBPrtBl1-1") 
-	pf=26 : ll=24 
+	fnTos(sn$="UBPrtBl1-1")
+	pf=26 : ll=24
 	respc=0
 	a$="" : prtbkno=0
-	fnTos(sn$="UBPrtBl1-1") 
-	pf=26 : ll=24 
+	fnTos(sn$="UBPrtBl1-1")
+	pf=26 : ll=24
 	respc=0
 	fnLbl(1,1,"Service From:",ll,1)
-	fnTxt(1,pf,8,8,1,"1",0,tt$) 
+	fnTxt(1,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 	fnLbl(2,1,"Service To:",ll,1)
-	fnTxt(2,pf,8,8,1,"1") 
+	fnTxt(2,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 	fnLbl(3,1,"Penalty Due Date:",ll,1)
-	fnTxt(3,pf,8,8,1,"1",0,tt$) 
+	fnTxt(3,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 	fnLbl(4,1,"Message on Bill:",ll,1)
-	fnTxt(4,pf,30,30) 
+	fnTxt(4,pf,30,30)
 	resp$(respc+=1)=mg$(1)
-	fnTxt(5,pf,30,30) 
+	fnTxt(5,pf,30,30)
 	resp$(respc+=1)=mg$(2)
-	fnTxt(6,pf,30,30) 
+	fnTxt(6,pf,30,30)
 	resp$(respc+=1)=mg$(3)
 	fnLbl(7,1,"Date of Billing:",ll,1)
 	fnTxt(7,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	fnLbl(8,1,"Starting Account:",ll,1)
-	fe$="ubm-act-nam" 
-	datafile$="[Q]\UBmstr\Customer.h[cno]" 
-	indexfile$="[Q]\UBmstr\ubindx5.h[cno]" 
-	kp=1741: kl=9 : dp=41 : dl=30 
-	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) 
+	fe$="ubm-act-nam"
+	datafile$="[Q]\UBmstr\Customer.h[cno]"
+	indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
+	kp=1741: kl=9 : dp=41 : dl=30
+	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
-	fncmbrt2(9,pf) 
+	fncmbrt2(9,pf)
 	resp$(respc+=1)="[All]"
-	fnChk(10,pf,"Select Accounts to Print",1) 
+	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(respc+=1)="False"
-	fnCmdSet(3) 
-	fnAcs(sn$,0,mat resp$,ck)
+	fnCmdSet(3)
+	fnAcs2(mat resp$,ck)
 	if ck=5 then goto ENDSCR
-	d1 = val(resp$(7)) 
-	d2x= val(resp$(1)) 
-	d3x= val(resp$(2)) 
-	d4 = val(resp$(3)) 
-	mg$(1) = resp$(4) 
-	mg$(2) = resp$(5) 
+	d1 = val(resp$(7))
+	d2x= val(resp$(1))
+	d3x= val(resp$(2))
+	d4 = val(resp$(3))
+	mg$(1) = resp$(4)
+	mg$(2) = resp$(5)
 	mg$(3) = resp$(6)
-	if resp$(8)="[All]" then 
-		a$="" 
-	else 
+	if resp$(8)="[All]" then
+		a$=""
+	else
 		a$ = lpad$(trim$(resp$(8)(1:10)),10)
 	end if
-	if resp$(9)="[All]" then 
-		prtbkno=0 
-	else 
+	if resp$(9)="[All]" then
+		prtbkno=0
+	else
 		prtbkno = val(resp$(9))
 	end if
 	if resp$(10)="True" then sl1=1 else sl1=0
-	if trim$(a$)<>"" then 
-		read #1,using L580,key=a$: z$,route,sequence nokey SCREEN1 
+	if trim$(a$)<>"" then
+		read #1,using L580,key=a$: z$,route,sequence nokey SCREEN1
 		st1=1
 	end if
 L580: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
-
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
+ 
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
 	fnopenprn
-
+ 
 	on fkey 5 goto RELEASE_PRINT
 	gosub BULKSORT
 L680: if sl1=1 then goto SCREEN3 ! select accounts
@@ -112,82 +112,82 @@ L810: if prtbkno=0 then goto L830
 L830: if f><d1 then goto L680
 	if st1=0 then goto HERE
 	if st1$=z$ then st1=0 else goto L680
-HERE: ! 
+HERE: !
 ! read alternate billing address
 	read #3,using L890,key=z$: mat ba$ nokey L960
 L890: form pos 11,4*c 30
 	e1=0 : mat pe$=("")
 	for j=1 to 4
-		if rtrm$(ba$(j))<>"" then 
+		if rtrm$(ba$(j))<>"" then
 			e1=e1+1 : pe$(e1)=ba$(j)
 		end if
 	next j
 	goto L1080
-
+ 
 L960: e1=0 : mat pe$=("")
 	for j=2 to 4
-		if rtrm$(e$(j))<>"" then 
+		if rtrm$(e$(j))<>"" then
 			e1=e1+1 : pe$(e1)=e$(j)
 		end if
 	next j
 	goto L1080
-
-RELEASE_PRINT: ! 
+ 
+RELEASE_PRINT: !
 	close #1: ioerr L1040
 L1040: close #3: ioerr L1050
 L1050: fncloseprn
 	goto ENDSCR
-
-L1080: ! 
+ 
+L1080: !
 	pb=bal-g(11)
 ! ______________print bill routine______________________________________
 	gosub PRINTBILL
 ! _____________end of pr routine______________________________________
 	bct(2)=bct(2)+1
 	goto L680
-
-SCREEN3: ! 
+ 
+SCREEN3: !
 	fnTos
 	fnLbl(1,1,"Account (blank to stop)" ,31,1)
 	if trim$(a$)="" then goto L1200 else goto L1210
 L1200: !
-	if z$<>"" then 
-		fnLbl(3,1,"Last Account entered was "&z$ ,44,1) 
+	if z$<>"" then
+		fnLbl(3,1,"Last Account entered was "&z$ ,44,1)
 	end if
-L1210: fncmbact(1,17) ! 
+L1210: fncmbact(1,17) !
 	resp$(1)=a$
-	fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
-	a$ = lpad$(trim$(resp$(1)(1:10)),10) 
+	fnCmdSet(3): fnAcs2(mat resp$,ck)
+	a$ = lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" or ck=5 then goto RELEASE_PRINT
 	read #1,using L740,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3,est nokey SCREEN3
 	goto HERE
-
+ 
 BULKSORT: ! sort in bulk sort code sequence
-	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
+	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 L1290: form pos 1,c 128
 	write #9,using L1290: "FILE customer.H[cno],[Q]\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 	if prtbkno>0 then write #9,using L1290: 'RECORD I,1,2,N,"'&str$(prtbkno)&'","'&str$(prtbkno)&'"'
 	write #9,using L1290: "MASK 1942,12,C,A,1,10,C,A"
-	close #9: 
+	close #9:
 	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr L1350
 L1350: execute "Sort "&env$('Temp')&"\Control."&session$
-	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
-	return 
-
+	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	return
+ 
 ENDSCR: ! pr totals screen
 	if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 	fnTos
-	mylen=23 : mypos=mylen+2 
+	mylen=23 : mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
-	fnTxt(1,mypos,8,0,1,"",1) 
+	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-	fnCmdSet(52) 
-	fnAcs(sn$,0,mat resp$,ck)
-XIT: !
-fnxit
+	fnCmdSet(52)
+	fnAcs2(mat resp$,ck)
+Xit: !
+fnXit
 PRINTBILL: ! r:
-	if final=2 then 
+	if final=2 then
 		g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 	end if
 	penalty=0
@@ -195,8 +195,8 @@ PRINTBILL: ! r:
 		if penalty$(j)="Y" then penalty+=g(j) : g(j)=0 ! accumulate all penalties and set charge to zero
 	next j
 	pb=bal-g(11)
-	pr #255: "" 
-	pr #255: "" 
+	pr #255: ""
+	pr #255: ""
 	pr #255,using L1550: "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
 L1550: form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##),skip 4
 	if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""

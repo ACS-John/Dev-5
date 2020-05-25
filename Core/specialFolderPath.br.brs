@@ -24,7 +24,7 @@ def fn_setup
 	end if
 fnend
 def library fnSpecialFolderPath$*256(folderName$*64)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSpecialFolderPath$=fn_specialFolderPath$(folderName$)
 fnend
 def fn_specialFolderPath$*256(folderName$*64; ___,line$*256,lineCount,return$*256)

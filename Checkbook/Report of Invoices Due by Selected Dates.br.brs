@@ -7,7 +7,7 @@ dim ade$*50
 dim t2(10)
 dim d2(10)
 
-fntop(program$,"Report of Invoices Due By Selected Dates")
+fnTop(program$,"Report of Invoices Due By Selected Dates")
 dim dat$*20
 fndat(dat$)
 gosub Ask
@@ -99,7 +99,7 @@ Ask: ! r:
 	fnTxt(10,27,10,0,1,"3") 
 	resp$(respc+=1)=""
 	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	for j=1 to 10
 		d2(j)=val(resp$(j))
 	next j

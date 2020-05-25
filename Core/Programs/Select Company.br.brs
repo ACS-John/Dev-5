@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 gosub IfCoTryAgain
 fncno(cno)
 MENU1: ! r:
@@ -36,10 +36,10 @@ MENU1: ! r:
 		colmask$(1)='30'
 		colmask$(2)=''
 	end if
-
+ 
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 	!
-
+ 
 	fngetdir2(fn_dataFolder$,mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 	company_count=filename_item=0
 	for filename_item=1 to udim(mat filename$)
@@ -264,33 +264,7 @@ fnend
 def fn_setup
 	if setup<>1 then
 		setup=1
-		library 'S:\Core\Library': fnConfirmDeleteHard
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnCno
-		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fnchain,fnXit
-		library 'S:\Core\Library': fnputcno
-		library 'S:\Core\Library': fngetdir2
-		library 'S:\Core\Library': fncursys$
-		library 'S:\Core\Library': fnLbl,fnCmdSet
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnTxt,fnCmdKey,fnSrepEnv$
-		library 'S:\Core\Library': fncheckfileversion
-		library 'S:\Core\Library': fnmsgbox,fnflexadd1,fnflexinit1
-		library 'S:\Core\Library': fnButton,fnFra
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnclient_is_converting
-		library 'S:\Core\Library': fnclient_has_mat
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnSystemNameFromAbbr$
-		library 'S:\Core\Library': fnApMstrConversion
-		library 'S:\Core\Library': fnbutton_or_disabled
-		library 'S:\Core\Library': fnClientSelect
-		library 'S:\Core\Library': fnOpenPartial
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnCompanyPayPeriodEndingDate
-		library 'S:\Core\Library': fnSystemIsAddOn
+		autoLibrary
 		on error goto Ertn
 		!
 		dim filename$(999)*40
@@ -326,9 +300,9 @@ def fn_system_setup
 			goto Xit
 		end if
 	end if
-
+ 
 	gosub IfCoTryAgain
-
+ 
 	dim cursys$*40
 	!  cursys$=fncursys$
 	fnreg_read(session$&'.CurSys',cursys$)
@@ -356,5 +330,5 @@ def fn_setup_on_cursys_change
 	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'TM' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
 	! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
 fnend
-
-include: ertn
+ 
+include: Ertn

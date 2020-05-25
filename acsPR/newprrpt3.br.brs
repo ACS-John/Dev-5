@@ -1,24 +1,24 @@
 ! Replace S:\acsPR\newprRpt3
 ! User Designed Reports
-
-	library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnerror,fnTos,fnLbl,fnCmdKey,fnAcs,fncombof,fnmsgbox,fnChk,fnTxt,fnFra,fncomboa,fnindex_it,fngethandle,fnStatusClose,fnprint_designed_report
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim rt$*78,ch$(2)*132,psc(100)
 	dim inp(20),pp(20),ti(20),rt40$*40
 	dim rptn$*2,cap$*128,resp$(100)*150
 	dim ml$(4)*128
-
-	fntop(program$,cap$="Design Reports")
+ 
+	fnTop(program$,cap$="Design Reports")
 	fnindex_it("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
 	fnStatusClose
-	open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed 
+	open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed
 F_PRREPORT: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
-! 
-
+!
+ 
 	gosub DATANAMES
-SCR1: ! 
-ASKREPORT: ! 
+SCR1: !
+ASKREPORT: !
 	fnTos(sn$="Report-ask")
 	respc=0
 	fnLbl(1,1,"Report:",11,1)
@@ -27,29 +27,29 @@ ASKREPORT: !
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,0,0,"Modify the selected report")
 	fnCmdKey("Print",4,1,0,"Run the selected report")
-	fnCmdKey("E&xit",5,0,1,"Return to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask report #
-	if ckey=5 then goto XIT
+	fnCmdKey("E&Xit",5,0,1,"Return to menu")
+	fnAcs2(mat resp$,ckey) ! ask report #
+	if ckey=5 then goto Xit
 	editrec=addone=0
 	rptn=val(resp$(1)(1:2))
-	if ckey=1 then 
+	if ckey=1 then
 		addone=1
 		rptn=0
 		goto CONTINUE_FOR_ADD_AND_EDIT
-	else if ckey=2 then 
+	else if ckey=2 then
 		editrec=1
 		goto CONTINUE_FOR_ADD_AND_EDIT
-	else if ckey=4 then 
+	else if ckey=4 then
 		fnprint_designed_report(rptn)
-	end if 
+	end if
 	goto ASKREPORT
-CONTINUE_FOR_ADD_AND_EDIT: ! 
+CONTINUE_FOR_ADD_AND_EDIT: !
 	rptn$=lpad$(str$(rptn),2)
-	if addone=1 then 
+	if addone=1 then
 		read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey SCR2
-	else if editrec=1 then 
+	else if editrec=1 then
 		read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey EDIT_READ_NOKEY
-	end if 
+	end if
 	goto L400
 EDIT_READ_NOKEY: ! r:
 	mat ml$(2)
@@ -57,10 +57,10 @@ EDIT_READ_NOKEY: ! r:
 	ml$(2)="Select a different numbe if you wish to add a new report."
 	fnmsgbox(mat ml$,resp$,cap$,48)
 	goto ASKREPORT ! /r
-L400: ! 
+L400: !
 	holdrn=rn
-! 
-SCR2: ! 
+!
+SCR2: !
 	if addone=1 then ! r: initialize variables to 0 or blank
 		rn=0
 		rt$=""
@@ -97,23 +97,23 @@ SCR2: !
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
 	fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask report #
+	fnAcs2(mat resp$,ckey) ! ask report #
 	addone=0
 	if ckey=5 then goto SCR1
 	rn=val(resp$(1)(1:2))
-	if holdrn>0 and rn<>holdrn then 
+	if holdrn>0 and rn<>holdrn then
 ! r: confirm_key_change
 		mat ml$(3)
 		ml$(1)="You are attempting to change report number"
 		ml$(2)="from "&str$(holdrn)& " to "&str$(rn)&"."
 		ml$(3)="Take OK to continue, else Cancel."
 		fnmsgbox(mat ml$,resp$,cap$,49)
-		if resp$="OK" then 
+		if resp$="OK" then
 			holdrn=rn
-		else 
+		else
 			goto SCR2
 		end if  ! /r
-	end if 
+	end if
 	rt40$=resp$(2)(1:40)
 	ch$(1)=resp$(3)
 	ch$(2)=resp$(4)
@@ -121,31 +121,31 @@ SCR2: !
 	for j=1 to udim(mat code$)
 		if resp$(5)=code$(j) then ips=j-1 : goto L760
 	next j
-L760: ! 
+L760: !
 	if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
-	if ips<0 or ips>126 or (ips>1 and ips<6) then 
+	if ips<0 or ips>126 or (ips>1 and ips<6) then
 		mat ml$(2)
 		ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
 		ml$(2)=" Take OK to select a different item."
 		fnmsgbox(mat ml$,resp$,cap$,48)
 		goto SCR2
-	end if 
+	end if
 	if sd$="Y" then sd=1 else sd=0
 	rt$=rt40$
-	if ckey=4 then 
+	if ckey=4 then
 		goto DELETEIT
-		DELETEIT: ! 
+		DELETEIT: !
 		mat ml$(2)
 		ml$(1)="You have chosen to delete report # "&rptn$
 		ml$(2)="Take Ok to continue, else Cancel to keep the report."
 		fnmsgbox(mat ml$,resp$,cap$,49)
-		if resp$="OK" then 
-			delete #h_prreport,key=rptn$: 
-		else 
+		if resp$="OK" then
+			delete #h_prreport,key=rptn$:
+		else
 			goto SCR1
-		end if 
-	end if 
-! 
+		end if
+	end if
+!
 ! SCR3: ! r:
 ! If RN=0 Then Goto DONE  ! ain't this just redundant?
 	if ips=0 then goto SCR4
@@ -162,16 +162,16 @@ L760: !
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
 	fnCmdKey("&Back",6,0,0,"Back up a screen.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask matching criteria
+	fnAcs2(mat resp$,ckey) ! ask matching criteria
 	if ckey=5 then goto SCR1
 	for j=1 to 100
 		psc(j)=val(resp$(j))
 	next j
 	if ckey=6 then goto SCR2
 goto SCR4 ! /r
-
+ 
 SCR4: ! r:
-	fnTos(sn$="Report-scr4") 
+	fnTos(sn$="Report-scr4")
 	respc=0: mylen=15: mypos=mylen+3
 	fnFra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
 	fnLbl(1,1,"Print       Want ",50,1,0,1)
@@ -180,15 +180,15 @@ SCR4: ! r:
 		if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)+1) else resp$(respc+=1)=" "
 	! if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)  ) else resp$(respc+=1)=" "
 		fncomboa("DataNames",j+2,1,mat code$,"",25,1)
-		fnTxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1) 
+		fnTxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1)
 		resp$(respc+=1)=str$(pp(j))
 		if ti(j)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 		fnChk(j+2,48,"",1,1) ! total the column
 	next j
-	fnCmdKey("&Next",1,1,0,"Save changes on this report design." ) 
-	fnCmdKey("&Back",6,0,0,"Back up a screen.") 
+	fnCmdKey("&Next",1,1,0,"Save changes on this report design." )
+	fnCmdKey("&Back",6,0,0,"Back up a screen.")
 	fnCmdKey("&Cancel",5,0,1,"Return to report selection screen without saving any changes.")
-	fnAcs(sn$,0,mat resp$,ckey) ! enter column information
+	fnAcs2(mat resp$,ckey) ! enter column information
 	if ckey<>5 then
 		x=0
 		for j=3 to 60 step 3
@@ -200,24 +200,24 @@ SCR4: ! r:
 			pp(x)=val(resp$(j-1))
 			if resp$(j)="True" then ti(x)=1 else ti(x)=0
 		next j
-		if rptn=rn then 
+		if rptn=rn then
 			rewrite #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
-		else 
+		else
 			read #h_prreport,using 'form pos 1,n 2',key=lpad$(str$(rn),2): rn nokey CHANGETHENUMBER
 		end if
 	end if
 goto SCR1 ! /r
-
-
+ 
+ 
 CHANGETHENUMBER: ! r:
 	write #h_prreport,using F_PRREPORT: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
 	delete #h_prreport,key=rptn$: nokey ignore
 goto SCR1 ! /r
-
-XIT: !
+ 
+Xit: !
 close #h_prreport: ioerr ignore
-fnxit
-IGNORE: continue 
+fnXit
+IGNORE: continue
 ! L1770: ! r: ADD NEW RECORD
 !   rt$="": mat ch$=("")
 !   ips=sd=cp=0
@@ -231,7 +231,7 @@ def fn_add_dn(dn_x_1$*30,dn_x_2$*30,dn_x_3$*30)
 	datanames$(dn_counter,1)=dn_x_1$
 	datanames$(dn_counter,2)=dn_x_2$
 	datanames$(dn_counter,3)=dn_x_3$
-fnend 
+fnend
 DATANAMES: ! r:
 	dim datanames$(104,3)*30
 	dn_counter=0
@@ -339,23 +339,23 @@ DATANAMES: ! r:
 	fn_add_dn('Tips'                   ,'tcp(30)'     ,'pd 5.2')
 	fn_add_dn('Total Wage'             ,'tcp(31)'     ,'pd 5.2')
 	fn_add_dn('Net Pay'                ,'tcp(32)'     ,'pd 5.2')
-
+ 
 	dim fullname$(20)*20
 	fnDedNames(mat fullname$)
-
+ 
 	dim code$(105)*30
 	code$(1)=""
 	for j=1 to udim(datanames$)
 		code$(j+1)=datanames$(j,1)
-		if j>39 and j<60 and trim$(fullname$(j-39))<>"" then 
+		if j>39 and j<60 and trim$(fullname$(j-39))<>"" then
 			code$(j+1)=trim$(fullname$(j-39))(1:22)
-		else if j>39 and j<60 and trim$(fullname$(j-39))="" then 
+		else if j>39 and j<60 and trim$(fullname$(j-39))="" then
 			code$(j+1)="Misc -"&str$(j-39)&"-Std Ded"
 		else if j>76 and j<95 and trim$(fullname$(j-76))<>"" then ! miscellaneous withholding amounts
 			code$(j+1)=trim$(fullname$(j-76))(1:27)&"-Wh"
 		else if j>76 and j<94 and trim$(fullname$(j-76))="" then ! plug names if none
 			code$(j+1)="Misc - "&str$(j-76)
-		end if 
+		end if
 	next j
 return  ! /r
-include: ertn
+include: Ertn

@@ -14,11 +14,7 @@ end if
 fnXit
 def fn_setup
 	setup=1
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnclient_has_on_support_item
-	library 'S:\Core\Library': fnUpdateLicense
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnxit
+	autoLibrary
 	on error goto Ertn
 fnend
-include: ertn
+include: Ertn

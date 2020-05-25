@@ -1,72 +1,65 @@
-00010 ! Replace S:\acsGL\acglRest
-00020 ! pr Retained Earnings Statement
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnGlAskFormatPriorCdPeriod
-00050   on error goto Ertn
-00060 !
-00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
-00080   dim sc2$(2),dat$*20,cap$*128
-00090 !
-00100   fntop(program$,cap$="Retained Earnings Statement")
-00110   fncno(cno,cnam$) !:
-        fndat(dat$)
-00120   sh$="2,10,C 60,H,N"
-00130   for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
-00140   fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
-00150   if fnprocess=1 then t=2 : goto L240
-00160 !
-00170 MENU1: ! 
-00180   fnwin3(win=101,cap$,6,40,1,1,5)
-00190   sc2$(1)="1. Edit" : sc2$(2)="2. Print"
-00200   for j=1 to 2 : fl2$(j)=str$(j+3)&",02,C 08,N" : next j
-00210   rinput #win,select mat fl2$,attr "H": mat sc2$ !:
-        t=curfld
-00220   close #win: 
-00230   if cmdkey=5 or cmdkey=99 then goto XIT
-00240 L240: j=0
-00250   on t goto EDIT,L300 none MENU1
-00260 !
-00270 EDIT: ! 
-00280   execute 'SY NotePad "'&os_filename$("[Q]\GLmstr\ACGLSTMT.h[cno]")&'"'
-00290   goto MENU1
-00300 L300: !
-00310   if fnGlAskFormatPriorCdPeriod=5 then goto MENU1
-00320   fnopenprn
-00330   pr newpage
-00340   open #1: "Name=[Q]\GLmstr\AcGLStmt.h[cno],Shr",display,input ioerr EDIT
-00350   pr newpage !:
-        pr f "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
-        pr f "12,34,C 11,B,5": "Cancel (F5)" !:
-        on fkey 5 goto L480
-00360 L360: linput #1: ln$ eof L480
-00370   for j2=1 to len(rtrm$(ln$))
-00380     if ln$(j2:j2)><"@" then goto L450
-00390     if ln$(j2+1:j2+1)="1" then !:
-            ln1$=ln$(1:j2-1)&rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) !:
-          else goto L410
-00400     goto L440
-00410 L410: if ln$(j2+1:j2+1)="2" then !:
-            ln1$=ln$(1:j2-1)&rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) !:
-          else goto L430
-00420     goto L440
-00430 L430: if ln$(j2+1:j2+1)="3" then !:
-            ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
-00440 L440: ln$=ln1$
-00450 L450: next j2
-00460   pr #255: tab(10);ln$
-00470   goto L360
-00480 L480: close #1: 
-00490   fncloseprn
-00500   on fkey 5 ignore 
-00510   if fnprocess=1 then goto XIT else goto MENU1
-00520 !
-00530 ! <Updateable Region: ERTN>
-00540 ERTN: fnerror(program$,err,line,act$,"xit")
-00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00580 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00590 ! /region
-00600 !
-00610 XIT: fnxit
-00620 !
+! Replace S:\acsGL\acglRest
+! pr Retained Earnings Statement
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
+	dim sc2$(2),dat$*20,cap$*128
+ 
+	fnTop(program$,cap$="Retained Earnings Statement")
+	fncno(cno,cnam$) : _
+	fndat(dat$)
+	sh$="2,10,C 60,H,N"
+	for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
+	fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
+	if fnprocess=1 then t=2 : goto L240
+ 
+MENU1: !
+	fnwin3(win=101,cap$,6,40,1,1,5)
+	sc2$(1)="1. Edit" : sc2$(2)="2. Print"
+	for j=1 to 2 : fl2$(j)=str$(j+3)&",02,C 08,N" : next j
+	rinput #win,select mat fl2$,attr "H": mat sc2$ : _
+	t=curfld
+	close #win:
+	if cmdkey=5 or cmdkey=99 then goto Xit
+L240: j=0
+	on t goto EDIT,L300 none MENU1
+ 
+EDIT: !
+	execute 'SY NotePad "'&os_filename$("[Q]\GLmstr\ACGLSTMT.h[cno]")&'"'
+	goto MENU1
+L300: !
+	if fnGlAskFormatPriorCdPeriod=5 then goto MENU1
+	fnopenprn
+	pr newpage
+	open #1: "Name=[Q]\GLmstr\AcGLStmt.h[cno],Shr",display,input ioerr EDIT
+	pr newpage : _
+	pr f "10,20,Cc 30,H,N": "R/E Statement Printing..." : _
+	pr f "12,34,C 11,B,5": "Cancel (F5)" : _
+	on fkey 5 goto L480
+L360: linput #1: ln$ eof L480
+	for j2=1 to len(rtrm$(ln$))
+		if ln$(j2:j2)><"@" then goto L450
+		if ln$(j2+1:j2+1)="1" then : _
+			ln1$=ln$(1:j2-1)&rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) : _
+		else goto L410
+		goto L440
+L410: if ln$(j2+1:j2+1)="2" then : _
+			ln1$=ln$(1:j2-1)&rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) : _
+		else goto L430
+		goto L440
+L430: if ln$(j2+1:j2+1)="3" then : _
+			ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
+L440: ln$=ln1$
+L450: next j2
+	pr #255: tab(10);ln$
+	goto L360
+L480: close #1:
+	fncloseprn
+	on fkey 5 ignore
+	if fnprocess=1 then goto Xit else goto MENU1
+ 
+include: Ertn
+Xit: fnXit
+ 

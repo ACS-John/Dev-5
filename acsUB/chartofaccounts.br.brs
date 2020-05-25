@@ -1,84 +1,78 @@
-00010 ! Replace S:\acsUB\ChartOfAccounts
-00020 ! Temporary Chart of Accounts for Payroll when no GL or CB - Hamster !:
-        ! pretty useless to the end user - but quite usefull to the programmer
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnHamster,fnindex_it
-00050   on error goto Ertn
-00060 !
-00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
-00080 !
-00090   fntop(program$,cap$='Chart of Accounts')
-00100   fncno(cno)
-00110 ! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",Internal,Input,Relative  !:
-        ! Read #20,Using 'Form POS 150,2*N 1',Rec=1: D(1),D(2) !:
-        ! Close #20:
-00115   d(1)=d(2)=1 ! default to fund number and sub number
-00120   gosub BUILD_LAYOUT
-00130   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
-        gosub HAMSTER
-00135   gosub CLOSE_FILE
-00136   fnindex_it("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
-00140   goto XIT
-00150 !
-00160 OPEN_FILE: ! !:
-        open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name=[Q]\UBmstr\GLmstr.h[cno],Version=0,KFName=[Q]\UBmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed 
-00180   return 
-00190 !
-00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
-00210 !
-00220 BUILD_LAYOUT: ! 
-00230   fncno(cno)
-00240 ! ** Field Labels    ** !:
-        ic=0 ! temporary Item Counter
-00250   lbl$(ic+=1)="Department" !:
-        lbl$(ic+=1)="Account" !:
-        lbl$(ic+=1)="Sub Account" !:
-        lbl$(ic+=1)="Description"
-00260 ! ** Text Box / Field Display   Lengths   ** !:
-        ic=0 ! temporary Item Counter !:
-        mmddyy=8 !:
-        ccyymmdd=10
-00270   tln(ic+=1)=3 !:
-        tln(ic+=1)=6 !:
-        tln(ic+=1)=3 !:
-        tln(ic+=1)=50
-00280 ! ** Field Types ** !:
-        ic=0
-00290   fltyp$(ic+=1)='N' !:
-        fltyp$(ic+=1)='N' !:
-        fltyp$(ic+=1)='N' !:
-        fltyp$(ic+=1)='C'
-00300 ! ** Field Storage Lengths ** !:
-        ic=0 !:
-        mmddyy=6 : ccyymmdd=8
-00310   sln(ic+=1)=3 !:
-        sln(ic+=1)=6 !:
-        sln(ic+=1)=3 !:
-        sln(ic+=1)=50
-00320 ! ** Field Masks ** !:
-        ic=0 !:
-        pointtwo=32 : number=30 !:
-        ccyymmdd=3 : mmddyy=1 : glnumber=53
-00330   mask(ic+=1)=number !:
-        mask(ic+=1)=number !:
-        mask(ic+=1)=number !:
-        mask(ic+=1)=0
-00340   if d(1)=0 then mask(1)+=10000
-00350   if d(2)=0 then mask(3)+=10000
-00360   return 
-00370 !
-00380 HAMSTER: ! 
-00390   fnHamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
-00400   return 
-00410 !
-00420 XIT: chain "S:\acsUB\postgl"
-00430 !
-00440 ! <Updateable Region: ERTN>
-00450 ERTN: fnerror(program$,err,line,act$,"xit")
-00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00500 ! /region
-00510 !
+! Replace S:\acsUB\ChartOfAccounts
+! Temporary Chart of Accounts for Payroll when no GL or CB - Hamster : _
+	! pretty useless to the end user - but quite usefull to the programmer
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
+ 
+	fnTop(program$,cap$='Chart of Accounts')
+	fncno(cno)
+! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",Internal,Input,Relative  : _
+	! Read #20,Using 'Form POS 150,2*N 1',Rec=1: D(1),D(2) : _
+	! Close #20:
+	d(1)=d(2)=1 ! default to fund number and sub number
+	gosub BUILD_LAYOUT
+	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE : _
+	gosub HAMSTER
+	gosub CLOSE_FILE
+	fnindex_it("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
+	goto Xit
+ 
+OPEN_FILE: ! : _
+	open_file_count=0 ! this value is used in the close_file sub routine
+	open #open_file_count+=1: "Name=[Q]\UBmstr\GLmstr.h[cno],Version=0,KFName=[Q]\UBmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed
+return
+ 
+CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
+ 
+BUILD_LAYOUT: !
+	fncno(cno)
+! ** Field Labels    ** : _
+	ic=0 ! temporary Item Counter
+	lbl$(ic+=1)="Department" : _
+	lbl$(ic+=1)="Account" : _
+	lbl$(ic+=1)="Sub Account" : _
+	lbl$(ic+=1)="Description"
+! ** Text Box / Field Display   Lengths   ** : _
+	ic=0 ! temporary Item Counter : _
+	mmddyy=8 : _
+	ccyymmdd=10
+	tln(ic+=1)=3 : _
+	tln(ic+=1)=6 : _
+	tln(ic+=1)=3 : _
+	tln(ic+=1)=50
+! ** Field Types ** : _
+	ic=0
+	fltyp$(ic+=1)='N' : _
+	fltyp$(ic+=1)='N' : _
+	fltyp$(ic+=1)='N' : _
+	fltyp$(ic+=1)='C'
+! ** Field Storage Lengths ** : _
+	ic=0 : _
+	mmddyy=6 : ccyymmdd=8
+	sln(ic+=1)=3 : _
+	sln(ic+=1)=6 : _
+	sln(ic+=1)=3 : _
+	sln(ic+=1)=50
+! ** Field Masks ** : _
+	ic=0 : _
+	pointtwo=32 : number=30 : _
+	ccyymmdd=3 : mmddyy=1 : glnumber=53
+	mask(ic+=1)=number : _
+	mask(ic+=1)=number : _
+	mask(ic+=1)=number : _
+	mask(ic+=1)=0
+	if d(1)=0 then mask(1)+=10000
+	if d(2)=0 then mask(3)+=10000
+return
+ 
+HAMSTER: !
+	fnHamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+return
+ 
+Xit: chain "S:\acsUB\postgl"
+ 
+include: Ertn
+ 

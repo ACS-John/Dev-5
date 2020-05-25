@@ -1,17 +1,17 @@
-if ~setup then let fn_setup
-fntop(program$)
+if ~setup then fn_setup
+fnTop(program$)
 do ! r: main loop
 	fnTos(sn$="test-Button")
 	fnLbl(2,2,'Server IP or Name:',19,1)
 	fnTxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
 	fnureg_read('CS Server Name',server_name$)
-	if server_name$='' and env$('user_limit')='1' then 
+	if server_name$='' and env$('user_limit')='1' then
 		server_name$='localhost'
-	else if server_name$='' then 
+	else if server_name$='' then
 		server_name$=env$('computername')
-	end if 
+	end if
 	resp$(1)=server_name$
-
+ 
 	fnLbl(4,2,'Port:',19,1)
 	fnTxt(4,22,4,0,0,'number',0,'Default is 8555')
 	fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
@@ -24,16 +24,16 @@ do ! r: main loop
 	fnTxt(7,22,20,128,0,'',0,'leave blank to disable')
 	fnureg_read('CS Anonymous Password',anon_pass$)
 	resp$(4)=anon_pass$
-
+ 
 	fnCmdKey("Install Server",2,1,0)
 	fnCmdKey("Uninstall Server",3,0,0)
 	fnCmdKey('&Back',5,0,1)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ck)
 	server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
 	cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
 	anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
 	anon_pass$=resp$(4) : fnureg_write('CS Anonymous Password',anon_pass$)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	if ck=2 then let fn_server_install
 	if ck=3 then let fn_server_uninstall
 	fnStatusClose
@@ -47,11 +47,11 @@ def fn_server_install
 	fnCopy('S:\brclient*.*',env$('temp')&'\acs\brCsInstall\ACS 5 Client\*.*')
 	execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client')&'\*.*" /S'
 	fnStatus('make [Q]\brListener.conf')
-	open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
+	open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output
 	pr #h_br_parms_txt: 'host='&server_name$
 	pr #h_br_parms_txt: 'label=ACS_5_CS'
-	close #h_br_parms_txt: 
-	open #h_brlistener_conf:=fngethandle: 'Name=[Q]\brListener.conf,RecL=256,replace',display,output 
+	close #h_br_parms_txt:
+	open #h_brlistener_conf:=fngethandle: 'Name=[Q]\brListener.conf,RecL=256,replace',display,output
 	pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\acs-Log-CS.txt'
 	pr #h_brlistener_conf: 'LogLevel=10'
 	pr #h_brlistener_conf: '['
@@ -60,19 +60,19 @@ def fn_server_install
 	pr #h_brlistener_conf: 'Executable="'&env$("STATUS.FILES.EXECUTABLE")&'"' ! br_prog$&br_ext$
 	pr #h_brlistener_conf: 'Config="'&os_filename$('S:\brconfig.sys')&'"' ! br_prog$&br_ext$
 	pr #h_brlistener_conf: 'Caption="ACS 5"'
-	if anon_user$<>'' and anon_pass$<>'' then 
+	if anon_user$<>'' and anon_pass$<>'' then
 		pr #h_brlistener_conf: 'Anonymous="'&anon_user$&'@'&anon_pass$&'"'
-	end if 
-	if cs_port$<>'8555' and cs_port$<>'0' and cs_port$<>'' then 
+	end if
+	if cs_port$<>'8555' and cs_port$<>'0' and cs_port$<>'' then
 		pr #h_brlistener_conf: 'Port='&cs_port$
-	end if 
+	end if
 	pr #h_brlistener_conf: 'MultiSession'
 	pr #h_brlistener_conf: ']'
-	close #h_brlistener_conf: 
+	close #h_brlistener_conf:
 	fnStatus('  and copy it into windows')
 	fnStatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
   ! execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
-	open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
+	open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
     pr #h_copy_cmd:     '@echo on'
 	pr #h_copy_cmd: 'copy "'&os_filename$('[Q]\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 	! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
@@ -87,9 +87,9 @@ def fn_server_install
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'"'
     pr #h_copy_cmd:     'pause'
-	close #h_copy_cmd: 
+	close #h_copy_cmd:
 	execute 'sy -c explorer "'&env$('temp')&'\acs\brCsInstall\"' ! Install_BR_Server_'&session$&'.cmd"'
-fnend 
+fnend
 def fn_server_uninstall
   dim sd_br_server_executable$*1024
   fnureg_read('CS Server Activate Executable',sd_br_server_executable$)
@@ -97,37 +97,36 @@ def fn_server_uninstall
   end if
 	fnStatus('fn_server_uninstall')
 	fnMakeSurePathExists('[temp]\acs\brCsInstall\')
-	open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
+	open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
 	pr #h_copy_cmd: 'del "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 	pr #h_copy_cmd: 'del "'&os_filename$(env$('SystemRoot')&'\System32\brListener.exe')&'"'
-	close #h_copy_cmd: 
+	close #h_copy_cmd:
 	! execute 'sy "'&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd"'
 	execute 'sy -C explorer "'&env$('temp')&'\acs\brCsInstall\"' ! Remove_BR_Server_'&session$&'.cmd"'
-fnend 
+fnend
 def fn_server_is_active ! unused
 	dim sia_br_server_executable$*1024
 	fnureg_read('CS Server Activate Executable',sia_br_server_executable$)
-	if sia_br_server_executable$<>'' then 
+	if sia_br_server_executable$<>'' then
 		sia_return=1
-	else 
+	else
 		sia_return=0
-	end if 
+	end if
 	fn_server_is_active=sia_return
-fnend 
+fnend
 execute 'Sy -w '&os_filename$('S:\Core\ACS_PrAce_Support_Install_ocx.exe')
 execute 'Sy '&os_filename$('S:\Core\ACS_PrAce_Reg.cmd')&' /s'
-XIT: fnxit
+Xit: fnXit
 def fn_setup
-	if ~setup then 
+	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit,fnerror,fnbutton_or_disabled,fnAcs,fnCmdKey,fnButton,fnCopy,fnureg_read,fnureg_write,fnTos,fnGetPp,fnStatus,fngethandle,fnLbl,fnTxt,fnStatusClose
-		library 'S:\Core\Library': fnMakeSurePathExists
+		autoLibrary
 		on error goto Ertn
 		dim resp$(10)*256
 		dim server_name$*128
 		dim anon_user$*128
 		dim anon_pass$*128
-	end if 
-fnend 
-include: ertn
+	end if
+fnend
+include: Ertn

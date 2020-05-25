@@ -59,7 +59,11 @@ def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 	! 	pr '_ encountered: '&line$
 	! 	pause
 	! en if
-	line$=xlate$(line$,rpt$(' ', 36)&'$           0123456789       abcdefghijklmnopqrstuvwxyz    _ abcdefghijklmnopqrstuvwxyz'&rpt$(' ', 133))
+	
+	
+	
+	line$=xlate$(line$,rpt$(' ', 36)&'$           0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz'&rpt$(' ', 133))
+	! leave the backslash in to omit hits on things like "\fnfilenotafunction" 
 	do
 		line$=srep$(line$,'  ',' ')
 	loop until pos(line$,'  ')<=0

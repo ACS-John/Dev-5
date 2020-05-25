@@ -1,29 +1,32 @@
-	library "S:\Core\Library.br": fnopenprn,fncloseprn,fnxit,fntop,fnRead30Categories
-	on error goto Ertn
-	fntop(program$,"Unbilled Work In Process")
-	fnopenprn
-	dim cat$(30)*30,cliprt$*5
-	dim l$(20,2)*25,l(20,2),s(13)
-	dim z$*5,cliname$*30,ca(10),ta(25,2),fb(25),empname$*25,scdesc$*30
-	dim cxno$*5,cna$*30,en$*9,d(8)
-	dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
-	namtab=66-int(len(rtrm$(env$('cnam')))/2)
-	fnRead30Categories(mat cat$)
-	open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
-	if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
-	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
-	open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,input,relative ioerr Ertn
-	open #3: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,input,relative ioerr Ertn
-	open #4: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
-	goto L460
-L270: read #4,using L280,key=e$: empname$ nokey L300 ioerr Ertn
-L280: form pos 10,c 25
-	return
-L300: empname$="EMPLOYEE NOT ON FILE"
+autoLibrary
+on error goto Ertn
+fnTop(program$,"Unbilled Work In Process")
+fnopenprn
+dim cat$(30)*30,cliprt$*5
+dim l$(20,2)*25,l(20,2),s(13)
+dim z$*5,cliname$*30,ca(10),ta(25,2),fb(25),empname$*25,scdesc$*30
+dim cxno$*5,cna$*30,en$*9,d(8)
+dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
+namtab=66-int(len(rtrm$(env$('cnam')))/2)
+fnRead30Categories(mat cat$)
+open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
+if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
+open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
+open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,input,relative ioerr Ertn
+open #3: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,input,relative ioerr Ertn
+open #4: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
+goto L460
+L270: !
+	read #4,using L280,key=e$: empname$ nokey L300 ioerr Ertn
+	L280: form pos 10,c 25
+return
+L300: !
+	empname$="EMPLOYEE NOT ON FILE"
 	if b(7)><2 then goto L340
 	empname$="OTHER CHARGES"
-	goto L450
-L340: if b(7)><3 then goto L370
+goto L450
+L340: !
+	if b(7)><3 then goto L370
 	empname$="ADJUSTMENT"
 	goto L450
 L370: if fb(j2)=1 or fb(j2)=2 then goto L410 else goto L380
@@ -53,7 +56,7 @@ L560: pr newpage
 	pr f mat in1$: dat,olddat
 	pr f "12,20,c 40": "Press F1 to Continue; F5 to Cancel"
 L630: input fields mat in1$: dat,olddat conv L630
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 	if cmdkey<>1 then goto L560
 	if dat<10100 or dat>123199 then goto L560
 	if olddat<10100 or olddat>123199 then goto L560
@@ -152,7 +155,7 @@ L1590: close #4: ioerr L1600
 L1600: close #5: ioerr L1610
 L1610: close #6: ioerr L1620
 L1620: close #7: ioerr L1630
-L1630: goto XIT
+L1630: goto Xit
 L1640: p1=p1+1 ! pr PAGE HEADING
 	pr #255,using L1660: date$,env$('cnam')
 L1660: form pos 1,c 8,pos namtab,c 40,skip 1
@@ -215,7 +218,7 @@ L2210: pr #255: newpage
 L2230: next j
 L2240: mat l$=(" ")
 	mat l=(0)
-	return
+return
 L2270: for j=1 to 20 ! ACCUMULATE EMPLOYEE SUMMARY INFORMATION
 		if b(7)<0 then goto L2370
 		if l$(j,2)=empname$ then goto L2350
@@ -275,10 +278,6 @@ L2640: !
 	s(13)=365+at3
 return
 
-XIT: fnxit
-def fndate_mmddyy_to_ccyymmdd(x)
-	x2=(x-int(x*.01)*100)*10000+int(x*.01)
-	if int(x2*.0001)<90 then x2=x2+20000000 else x2=x2+19000000
-	fndate_mmddyy_to_ccyymmdd=x2
-fnend
-include: ertn
+Xit: fnXit
+
+include: Ertn

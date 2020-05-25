@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 dim Selmenu$(0)*128
 fnAddOneC(mat Selmenu$,'Duplicate Forwarder+Forwarder File Number')
 fnAddOneC(mat Selmenu$,'Duplicate Forwarder+Infinity.*TrakFNo')
@@ -61,10 +61,10 @@ FFFN: ! r:
 		fnfix_bh(mat master_data)
 		! read_recno=rec( main_read)
 		! fnmast2_int_cache(mat master_data$,mat master_data,mat master_fieldsc$,mat master_fieldsn$,mat extra_data$,mat extra_data,mat extra_fieldsc$,mat extra_fieldsn$)
-		master_data$(master_docket_no)=fnget_docket$(master_data$(1))
-		master_data$(master_forw_refno)=fnget_edi_refno$(master_data$(1))
-		master_data$(master_jmt_no)=fnget_jmt_no$(master_data$(1))
-		master_data$(master_forw_fileno)=fnget_fofile$(master_data$(1))
+		master_data$(master_docket_no)=fn_getDocket$(master_data$(1))
+		master_data$(master_forw_refno)=fn_getEdiRefno$(master_data$(1))
+		master_data$(master_jmt_no)=fn_getJmtNo$(master_data$(1))
+		master_data$(master_forw_fileno)=fn_getFoFile$(master_data$(1))
 		
 		readCount+=1
 		fnAddOneC(mat fileno$,master_data$(master_fileno))
@@ -121,10 +121,10 @@ FFIT: ! r:
 		read #main_read,using master_formall$,rec=mRec: mat master_data$,mat master_data norec Ffit_NextMasterRecord
 		fncom(mRec,lastRecord,6)
 		fnfix_bh(mat master_data)
-		master_data$(master_docket_no)=fnget_docket$(master_data$(1))
-		master_data$(master_forw_refno)=fnget_edi_refno$(master_data$(1))
-		master_data$(master_jmt_no)=fnget_jmt_no$(master_data$(1))
-		master_data$(master_forw_fileno)=fnget_fofile$(master_data$(1))
+		master_data$(master_docket_no)=fn_getDocket$(master_data$(1))
+		master_data$(master_forw_refno)=fn_getEdiRefno$(master_data$(1))
+		master_data$(master_jmt_no)=fn_getJmtNo$(master_data$(1))
+		master_data$(master_forw_fileno)=fn_getFoFile$(master_data$(1))
 		fngetinf$(hInf,master_data$(master_fileno)&'*TrakFNo',inf_value,trakFno$)
 		readCount+=1
 		fnAddOneC(mat fileno$,master_data$(master_fileno))
@@ -196,7 +196,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnCountMatchesC
 		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
-		library 'S:\Core\Library.br': fntop
+		library 'S:\Core\Library.br': fnTop
 		library 'S:\Core\Library.br': fnXit
 
 		library "library\CLSUtil.wb": fnGetInf$
@@ -233,49 +233,49 @@ def fn_setup
 	end if
 fnend
 
-def fnget_docket$*30(docket_fileno$)
+def fn_getDocket$*30(docket_fileno$)
 	dim docket_no$*30
 	read #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
-	let fnget_docket$=docket_no$ 
+	let fn_getDocket$=docket_no$ 
 	! if trim$(docket_no$)="" and trim$(master_data$(master_docket_no))<>"" then 
-	!  let fnget_docket$=docket_no$=master_data$(master_docket_no) 
+	!  let fn_getDocket$=docket_no$=master_data$(master_docket_no) 
 	!  let fnmessagebox("Warning, Internal Docket Number is missing\nUsing MASTER.DOCKET_NO instead\n"&docket_no$,64,"Problem with Docket/Case #") 
 	!  rewrite #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
 	! end if
 	L17420: !
 fnend 
-def fnget_jmt_no$*30(jmt_fileno$)
+def fn_getJmtNo$*30(jmt_fileno$)
 	dim jmt_no$*30
 	read #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
-	let fnget_jmt_no$=jmt_no$
+	let fn_getJmtNo$=jmt_no$
 	! if trim$(jmt_no$)="" and trim$(master_data$(master_jmt_no))<>"" then 
-	!  let fnget_jmt_no$=jmt_no$=master_data$(master_jmt_no)
+	!  let fn_getJmtNo$=jmt_no$=master_data$(master_jmt_no)
 	!  let fnmessagebox("Warning, Internal Judgment Number is missing\nUsing MASTER.JMT_NO instead\n"&jmt_no$,mb_information+mb_okonly,"Problem with Judgment Number")
 	!  rewrite #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
 	! end if  ! jmt_no$="" and master.jmt_no<>""
 	JMN_XIT: ! 
-fnend  ! fnget_jmt_no$
-def fnget_edi_refno$*30(edi_fileno$)
+fnend  ! fn_getJmtNo$
+def fn_getEdiRefno$*30(edi_fileno$)
 	dim edi_refno_no$*30
 	read #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
-	let fnget_edi_refno$=edi_refno_no$ 
+	let fn_getEdiRefno$=edi_refno_no$ 
 	! if trim$(edi_refno_no$)="" and trim$(master_data$(master_forw_refno))<>"" then 
-	!  let fnget_edi_refno$=edi_refno_no$=master_data$(master_forw_refno) 
+	!  let fn_getEdiRefno$=edi_refno_no$=master_data$(master_forw_refno) 
 	!  let fnmessagebox("Warning, Internal EDI_REFNO # is missing\nUsing MASTER.FORW_REFNO instead\n"&edi_refno_no$,64,"Problem with FORW_REFNO/Edi Ref #") 
 	!  rewrite #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
 	! end if
 	L17480: !
 fnend 
-def fnget_fofile$*30(fofile_fileno$)
+def fn_getFoFile$*30(fofile_fileno$)
 	dim fofile$*30
 	read #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
-	let fnget_fofile$=fofile$ 
+	let fn_getFoFile$=fofile$ 
 	! if trim$(fofile$)="" and trim$(master_data$(master_forw_fileno))<>"" then 
-	!  let fnget_fofile$=fofile$=master_data$(master_forw_fileno) 
+	!  let fn_getFoFile$=fofile$=master_data$(master_forw_fileno) 
 	!  let fnmessagebox("Warning, Internal Forw File Number is missing\nUsing MASTER.FORW_FILENO instead\n"&fofile$,64,"Problem with Forw Fileno #") 
 	!  rewrite #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
 	! end if
 	L17496: !
 fnend 
-include: ertn
+include: Ertn
 include: cm\enum\master

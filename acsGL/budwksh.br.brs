@@ -1,56 +1,56 @@
 ! Replace S:\acsGL\BudWksh
 ! pr Budget Worksheet
 !
-  library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnqgl,fnChk,fnCmdSet,fnAcs,fnagl$,fnrgl$,fnconsole
+autoLibrary
   on error goto Ertn
 !
   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*40,gln1$*12,gln2$*12
   dim cap$*128,resp$(10)*80,revb(13)
 !
   right=1 : center=2 : left=0
-  fntop(program$,cap$="Budget Worksheet")
+  fnTop(program$,cap$="Budget Worksheet")
   fnconsole(off=0)
   fncno(cno,cnam$)
   gosub DETERMINE_DATE
   on fkey 5 goto L760
-  open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,input,keyed 
-  open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed 
+  open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,input,keyed
+  open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
   if fnprocess=1 then goto L440
-! defaults 
+! defaults
   pba$='False' : bud$="False"
-  SCREEN1: ! 
-  fnTos(sn$='BudgetWksht') 
+  SCREEN1: !
+  fnTos(sn$='BudgetWksht')
   lc=0 : mylen=40 : mypos=mylen+2
   fnLbl(lc+=1,1,'Fund:',mylen,right)
-  fnTxt(lc,mypos,40) 
+  fnTxt(lc,mypos,40)
   resp$(1)=name$
   fnLbl(lc+=1,1,'Starting Account:',mylen,right)
-  fnqgl(lc,mypos) 
+  fnqgl(lc,mypos)
   resp$(2)=fnrgl$(gln1$)
   fnLbl(lc+=1,1,'Ending Account:',mylen,right)
-  fnqgl(lc,mypos) 
+  fnqgl(lc,mypos)
   resp$(3)=fnrgl$(gln2$)
-  fnChk(lc+=1,mypos,'Enter proposed budget amounts',right) 
+  fnChk(lc+=1,mypos,'Enter proposed budget amounts',right)
   resp$(4)=pba$
-  fnChk(lc+=1,mypos,'Revised Budget instead of Origional',right) 
+  fnChk(lc+=1,mypos,'Revised Budget instead of Origional',right)
   resp$(5)=bud$
   fnLbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
-  fnTxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") 
+  fnTxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.")
   resp$(6)=str$(priordate) ! previous year end
   fnLbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
-  fnTxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") 
+  fnTxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.")
   resp$(7)=str$(priorpriordate) ! two years ago
   fnChk(lc+=1,mypos,"Year Already Closed:",right)
   resp$(8)="False"
   fnCmdSet(3)
-  fnAcs(sn$,0,mat resp$,ckey)
-  if ckey=5 then goto XIT
-  name$=resp$(1) 
-  gln1$=fnagl$(resp$(2)) 
-  gln2$=fnagl$(resp$(3)) 
-  pba$=resp$(4) 
+  fnAcs2(mat resp$,ckey)
+  if ckey=5 then goto Xit
+  name$=resp$(1)
+  gln1$=fnagl$(resp$(2))
+  gln2$=fnagl$(resp$(3))
+  pba$=resp$(4)
   bud$=resp$(5)
-  priordate=val(resp$(6)) 
+  priordate=val(resp$(6))
   priorpriordate=val(resp$(7))
   if resp$(8)="True" then yearclosed=1
   yr1$=resp$(6)(5:6) : if len(yr1$)=1 then let yr1$=resp$(6)(4:5) ! fixed kln conflict error for len(5) dates in resp$
@@ -89,7 +89,7 @@ L720: priorbudkey$=n$&yr2$ ! get two years ago
 L740: gosub PRINT_MASTER_RECORD
   goto L480
 L760: ! EOF OR EOJ ON MASTER FILE
-  pr #255: 
+  pr #255:
   if priordate=0 and priorpriordate=0 then pr #255,using L810: "Totals",tpyb,tcb,tcyb,tbud
   if priordate>0 and priorpriordate=0 then pr #255,using L820: "Totals",toldcb,toldbud,tcb,tcyb,tbud
   if priordate>0 and priorpriordate>0 then pr #255,using L820: "Totals",tpriorcb,tpriorbud,toldcb,toldbud,tcb,tcyb,tbud
@@ -102,10 +102,10 @@ L820: form pos 25,c 6,pos 34,7*pic(----,---,---.##),skip 1
   tpriorcb=tpriorcb=toldcb=toldbud=0
   fncloseprn
   goto SCREEN1
-  goto XIT
+  goto Xit
 !
 HEADING: ! pr PAGE HEADING
-  pr #255: 
+  pr #255:
   pr #255,using L950: rtrm$(cnam$)
 L950: form pos 20,cc 40
   pr #255,using L950: "Budget Worksheet"
@@ -132,23 +132,23 @@ L1160: if priordate>0 and priorpriordate>0 then goto L1170 else goto L1200
 L1170: pr #255,using L1180: "Number","Description","        Balance","         Budget","        Balance","         Budget","        Balance","         Budget","         Budget"
 L1180: form pos 4,c 6,pos 22,c 11,pos 34,7*c 15
 L1190: form pos 4,c 6,pos 22,c 11,pos 44,c 18,pos 74,c 15,pos 101,c 19,pos 123,c 15
-L1200: return 
+L1200: return
 !
-PRINT_MASTER_RECORD: ! 
-  if pba$="True" then 
-    fnTos(sn$='Budwksh-add-ba') 
+PRINT_MASTER_RECORD: !
+  if pba$="True" then
+    fnTos(sn$='Budwksh-add-ba')
     lc=0 : mylen=50 : mypos=mylen+2
     fnLbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
     lc+=1
     fnLbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
-    fnTxt(lc,mypos,12,0,0,'currency') 
+    fnTxt(lc,mypos,12,0,0,'currency')
     resp$=''
     fnLbl(lc+=1,1,d$,mylen,right)
     fnCmdSet(3)
-    fnAcs(sn$,0,mat resp$,ckey)
-    if ckey=5 then goto XIT
+    fnAcs2(mat resp$,ckey)
+    if ckey=5 then goto Xit
     bud=val(resp$(1)) : tbud+=bud
-  end if 
+  end if
   if priordate=0 and priorpriordate=0 then goto L1360 else goto L1430
 L1360: if pba$="True" then goto L1400
   pr #255,using L1380: dno,ano,sno,d$(1:22),bp(12),cb,cyb," ______________" pageoflow NWPGE
@@ -172,38 +172,38 @@ L1540: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(--
   goto L1580
 L1560: pr #255,using L1570: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb," ______________" pageoflow NWPGE
 L1570: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(----,---,---.##),c 15,skip 2
-L1580: return 
+L1580: return
 !
 NWPGE: ! SPACE TO NEWPAGE
   pr #255: newpage
   gosub HEADING
-  continue 
+  continue
 !
-XIT: fnxit
+Xit: fnXit
 !
 ! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"xit")
+ERTN: fnerror(program$,err,line,act$,"Xit")
   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
 ! /region
 !
-DETERMINE_DATE: ! 
+DETERMINE_DATE: !
   endingdate$=rtrm$(fnpedat$)
   x=pos(endingdate$," ",1)
   month$=endingdate$(1:x-1)
   day=val(endingdate$(x+1:x+2)) conv L1800
 L1800: year=val(endingdate$(len(endingdate$)-1:len(endingdate$))) : prioryear=year-1
   dim month$(12),payrolldate$*20
-  month$(1)="January": month$(2)="February" 
-  month$(3)="March": month$(4)="April": month$(5)="May" 
-  month$(6)="June" : month$(7)="July" 
-  month$(8)="August": month$(9)="September" 
+  month$(1)="January": month$(2)="February"
+  month$(3)="March": month$(4)="April": month$(5)="May"
+  month$(6)="June" : month$(7)="July"
+  month$(8)="August": month$(9)="September"
   month$(10)="October": month$(11)="November": month$(12)="December"
   for j=1 to 12
     if uprc$(month$)=uprc$(month$(j)) then month=j: goto L1860
   next j
 L1860: priordate=(month*10000)+day*100+prioryear
   priorpriordate=priordate-1
-  return 
+  return

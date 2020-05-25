@@ -1,0 +1,6 @@
+! Replace Test\2000
+	library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
+	x=123102
+	pr fndate_mmddyy_to_ccyymmdd(x)
+	pr x
+	stop

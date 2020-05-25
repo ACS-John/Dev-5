@@ -48,7 +48,7 @@
         right=109 : left=108 : home=112 !:
         end=113 : fldplus=114 : fldminus=115
 00500   return 
-50000 ! DEF LIBRARY FNRTF(MAT TYPES$,MAT STYLES$,MAT CELLS$,TXTFILE,RTFFILE;LMARGIN,RMARGIN,LEFTTEXT$,NUME,LANDSCAPE)
+50000 ! def library fnRTF(MAT TYPES$,MAT STYLES$,MAT CELLS$,TXTFILE,RTFFILE;LMARGIN,RMARGIN,LEFTTEXT$,NUME,LANDSCAPE)
 50001   def library fnrtf(txtfile,specfile$*100,rtffile;picpath$*100,subpath$*100)
 50010 ! mat TYPES$ holds single letters used to designate type!:
           ! of line such as H=header F=Footer D=Detail data T=Total line

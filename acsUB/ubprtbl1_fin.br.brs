@@ -1,7 +1,7 @@
 ! Replace S:\acsUB\ubprtbl1_fin
 ! pr bills for Village of Findlay
 !
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnwait,fncmbrt2,fncombof,fnChk,fnerror,fnOpt,fnTos,fncmbact,fncno,fnLastBillingDate,fnxit,fnCmdSet,fntop,fnformnumb$,fnpause,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt
+	autoLibrary
 		on error goto Ertn
 !______________________________________________________________________
 		dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128,a(7)
@@ -9,54 +9,54 @@
 		dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 !
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  
-	read #21,using "Form POS 41,2*C 40": at$(2),at$(3) 
-	close #21: 
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
+	close #21:
 	penalty_rate=.1 ! if env$('client')='Findlay' then penalty_rate=.1 else penalty_rate=.05
-	at$(1)=env$('cnam') 
-	z=21 
-	at$(1)=trim$(at$(1))(1:z) 
-	x=len(at$(1)) : y=z-x 
+	at$(1)=env$('cnam')
+	z=21
+	at$(1)=trim$(at$(1))(1:z)
+	x=len(at$(1)) : y=z-x
 	at$(1)=rpt$(" ",int(y/2))&at$(1)
-	z=26 
-	for j=2 to udim(at$) 
-		at$(j)=trim$(at$(j))(1:z) 
-		x=len(at$(j)) : y=z-x 
-			at$(j)=rpt$(" ",int(y/2))&at$(j) 
+	z=26
+	for j=2 to udim(at$)
+		at$(j)=trim$(at$(j))(1:z)
+		x=len(at$(j)) : y=z-x
+			at$(j)=rpt$(" ",int(y/2))&at$(j)
 		next j
 		linelength=62
-	! 
+	!
 		gosub BULKSORT
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 		open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 	!
-	SCREEN1: ! 
+	SCREEN1: !
 		a$="" : prtbkno=0
-		fnTos(sn$="UBPrtBl1-1") 
-		pf=27 : ll=25 
+		fnTos(sn$="UBPrtBl1-1")
+		pf=27 : ll=25
 		respc=0
 		fnLbl(3,1,"Penalty Due Date:",ll,1)
-		fnTxt(3,pf,8,8,1,"1",0,tt$) 
+		fnTxt(3,pf,8,8,1,"1",0,tt$)
 		resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 		fnLbl(4,1,"Message on Bill:",ll,1)
-		fnTxt(4,pf,30,30) 
+		fnTxt(4,pf,30,30)
 		resp$(respc+=1)=mg$(1)
-		fnTxt(5,pf,30,30) 
+		fnTxt(5,pf,30,30)
 		resp$(respc+=1)=mg$(2)
-		fnTxt(6,pf,30,30) 
+		fnTxt(6,pf,30,30)
 		resp$(respc+=1)=mg$(3)
 		fnLbl(7,1,"Date of Billing:",ll,1)
-		fnTxt(7,pf,8,8,1,"1") 
+		fnTxt(7,pf,8,8,1,"1")
 		resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 		fnLbl(8,1,"Starting Route/Sequence:",ll,1)
-		fe$="ubm-act-nam" 
-		datafile$="[Q]\UBmstr\Customer.h[cno]" 
-		indexfile$="[Q]\UBmstr\ubindx5.h[cno]" 
-		kp=1741: kl=9 : dp=41 : dl=30 
-		fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) 
+		fe$="ubm-act-nam"
+		datafile$="[Q]\UBmstr\Customer.h[cno]"
+		indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
+		kp=1741: kl=9 : dp=41 : dl=30
+		fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 		resp$(respc+=1)="[All]"
 		fnLbl(9,1,"Route Number:",ll,1)
-		fncmbrt2(9,pf) 
+		fncmbrt2(9,pf)
 		resp$(respc+=1)="[All]"
 		fnChk(10,pf,"Select Accounts to Print",1)
 		resp$(respc+=1)="False"
@@ -67,7 +67,7 @@
 		fnTxt(13,pf,8,8,1,"1")
 		resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3_override)
 		fnCmdSet(3)
-		fnAcs(sn$,0,mat resp$,ck)
+		fnAcs2(mat resp$,ck)
 		if ck=5 then goto ENDSCR
 		d1 = val(resp$(5))
 		d4 = val(resp$(1))
@@ -86,7 +86,7 @@
 		if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 		if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 	!
-		open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
+		open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
 		gosub BUD1
 		gosub VBOPENPRINT
 	!
@@ -106,13 +106,13 @@
 		energy=0: energy=val(energy$) conv L690
 	L690: if st1=0 then goto READALTADR
 	! If ST1$=Z$ Then sT1=0 Else Goto 560
-	READALTADR: ! 
+	READALTADR: !
 	! read alternate billing address
 		read #3,using L740,key=z$: mat ba$ nokey L810
 	L740: form pos 11,4*c 30
 		e1=0 : mat pe$=("")
 		for j=1 to 4
-			if rtrm$(ba$(j))<>"" then 
+			if rtrm$(ba$(j))<>"" then
 				e1=e1+1 : pe$(e1)=ba$(j)
 				end if
 		next j
@@ -125,14 +125,14 @@
 		if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 		goto L960
 	!
-	RELEASE_PRINT: ! 
+	RELEASE_PRINT: !
 		close #1: ioerr L900
 	L900: close #3: ioerr L910
-	L910: ! 
+	L910: !
 		fnpa_finis
 		goto ENDSCR
 	!
-	L960: ! 
+	L960: !
 		pb=bal-g(11)
 		if bal<=0 then g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
 		if d2_override<>0 then d2=d2_override
@@ -140,27 +140,27 @@
 	! ______________print bill routine______________________________________
 		gosub VBPRINT
 	! _____________end of pr routine______________________________________
-		bct(2)=bct(2)+1 
+		bct(2)=bct(2)+1
 		! accumulate totals
 		goto L560
 	!
-	SCREEN3: ! 
-		sn$ = "UBPrtBl1-2" 
+	SCREEN3: !
+		sn$ = "UBPrtBl1-2"
 		fnTos(sn$)
-		txt$="Account (blank to stop)" 
+		txt$="Account (blank to stop)"
 		fnLbl(1,1,txt$,31,1)
 	! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
-		if trim$(z$)<>"" then 
-			txt$="Last Account entered was "&z$ 
-			fnLbl(3,1,txt$,44,1) 
-		else 
-			txt$="" 
+		if trim$(z$)<>"" then
+			txt$="Last Account entered was "&z$
 			fnLbl(3,1,txt$,44,1)
-		end if 
-		fncmbact(1,17) ! 
+		else
+			txt$=""
+			fnLbl(3,1,txt$,44,1)
+		end if
+		fncmbact(1,17) !
 		resp$(1)=a$
-		fnCmdSet(3): fnAcs(sn$,0,mat resp$,ck)
-		a$ = lpad$(trim$(resp$(1)(1:10)),10) 
+		fnCmdSet(3): fnAcs2(mat resp$,ck)
+		a$ = lpad$(trim$(resp$(1)(1:10)),10)
 		if trim$(a$)="" then goto RELEASE_PRINT
 		if ck=5 then goto RELEASE_PRINT
 		read #1,using L620,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,energy$,mat a,extra11,extra12 nokey SCREEN3
@@ -168,11 +168,11 @@
 	!
 	SORT1: ! SELECT & SORT
 		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1430
-		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
+		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output
 		s5=1
-		if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " 
+		if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       "
 			! key off first record in route (route # no longer part of customer #)
-		restore #2,search>=routekey$: 
+		restore #2,search>=routekey$:
 	L1230: read #2,using L1240: z$,f,route eof END5
 	L1240: form pos 1,c 10,pos 296,pd 4,pos 1741
 		if prtbkno=0 then goto L1270
@@ -183,53 +183,53 @@
 	L1300: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 		goto L1230
 	!
-	END5: close #6: 
-		open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
+	END5: close #6:
+		open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 	L1350: form pos 1,c 128
 		write #9,using L1350: "File "&env$('Temp')&"\Temp."&wsid$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 		write #9,using L1350: "Mask 1,19,C,A"
-		close #9: 
+		close #9:
 		execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr L1400
 	L1400: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-		open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative 
-		open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
-	L1430: return 
+		open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative
+		open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	L1430: return
 	!
 	ENDSCR: ! pr totals screen
 		if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-		fnTos(sn$="Bills-Total") 
-		mylen=23 : mypos=mylen+2 
+		fnTos(sn$="Bills-Total")
+		mylen=23 : mypos=mylen+2
 		respc=0
 		fnLbl(1,1,"Total Bills Printed:",mylen,1)
-		fnTxt(1,mypos,8,0,1,"",1) 
+		fnTxt(1,mypos,8,0,1,"",1)
 		resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-		fnCmdSet(52) 
-		fnAcs(sn$,0,mat resp$,ck)
-	XIT: fnxit
+		fnCmdSet(52)
+		fnAcs2(mat resp$,ck)
+	Xit: fnXit
 	!
-	ERTN: fnerror(program$,err,line,act$,"xit")
+	ERTN: fnerror(program$,err,line,act$,"Xit")
 		if uprc$(act$)<>"PAUSE" then goto L1630
-		execute "list -"&str$(line) 
-		pause  
+		execute "list -"&str$(line)
+		pause
 		goto L1630
-		pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
+		pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
 	L1630: execute act$
 		goto ERTN
 	!
-	VBOPENPRINT: ! 
+	VBOPENPRINT: !
 		fnPa_open("Landscape")
 		lyne=3
-		return 
+		return
 	!
-	VBPRINT: ! 
+	VBPRINT: !
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 		checkcounter+=1
 		if checkcounter=1 then xmargin=0 : ymargin=0
 		if checkcounter=2 then xmargin=139 : ymargin=0
 		if checkcounter=3 then xmargin=0 : ymargin=108
-		if checkcounter=4 then 
+		if checkcounter=4 then
 			xmargin=139
-			ymargin=108 
+			ymargin=108
 			checkcounter=0
 		end if
 	!
@@ -253,86 +253,86 @@
 		pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 		pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
 	!
-	PRINTGRID: meter=14 
+	PRINTGRID: meter=14
 		pr #20: 'Call Print.MyFontSize(8)'
 		if havebudget=1 then payby=bal-gb(4)+budgetpb
 		if havebudget=1 then gas=ba(5) else gas=g(4)
 		if havebudget=1 then currentcharges=g(1)+g(2)+g(3)+gas+g(8)+g(9)
 		if havebudget=0 then currentcharges=g(1)+g(2)+g(3)+g(4)+g(8)+g(9)
 		if havebudget=1 then pb=payby-currentcharges
-		if pb=0 then 
-				goto L2110 
-		else 
-			pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
+		if pb=0 then
+				goto L2110
+		else
+			pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-		end if 
-	L2110: if g(1)=0 then 
-					goto L2120 
-			else 
-				pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-				pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' 
-				pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' 
+		end if
+	L2110: if g(1)=0 then
+					goto L2120
+			else
+				pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+				pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
+				pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 				pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-			end if 
-	L2120: if g(2)=0 then 
-				goto L2130 
-			else 
-				pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-				pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' 
+			end if
+	L2120: if g(2)=0 then
+				goto L2130
+			else
+				pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+				pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 				pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 			end if
-	L2130: if g(3)=0 and d(7)=0 then 
-		goto L2150 
-	else 
-			pr #20: 'Call Print.AddText("Pool R",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-			! pr #20: 'Call Print.AddText("'&FNFORMNUMB$(D(5),0,9)&'",'&STR$(XMARGIN+6)&','&STR$(LYNE*METER+YMARGIN)&')' 
+	L2130: if g(3)=0 and d(7)=0 then
+		goto L2150
+	else
+			pr #20: 'Call Print.AddText("Pool R",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+			! pr #20: 'Call Print.AddText("'&FNFORMNUMB$(D(5),0,9)&'",'&STR$(XMARGIN+6)&','&STR$(LYNE*METER+YMARGIN)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 		end if
 	!  pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(3),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
 		L2150: !
-		if a4=1 then 
-			gcode$="RSGS" 
-		else 
-			if a4=2 then 
-				gcode$="CMGS" 
-			else 
-				if a4=3 then 
-						gcode$="INGS" 
-				else 
+		if a4=1 then
+			gcode$="RSGS"
+		else
+			if a4=2 then
+				gcode$="CMGS"
+			else
+				if a4=3 then
+						gcode$="INGS"
+				else
 					gcode$="GAS"
 				end if
-			end if 
+			end if
 		end if
-		if g(4)=0 then 
-			goto L2230 
-		else 
-			pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
-			pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' 
+		if g(4)=0 then
+			goto L2230
+		else
+			pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+			pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
-		end if 
-		if havebudget=0 then 
-			pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')' 
-		else 
+		end if
+		if havebudget=0 then
+			pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+		else
 			pr #20: 'Call Print.AddText("'&fnformnumb$(ba(5),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-		end if 
+		end if
 		if havebudget=1 then pr #20: 'Call Print.AddText("Actual Gas Charge: '&trim$(cnvrt$("pic($$$,$$$.##",g(4)))&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		if havebudget=1 and gb(4)>=0 then pr #20: 'Call Print.AddText("Level billing behind '&trim$(cnvrt$("pic($$$,$$$.##",abs(gb(4)-g(4))))&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		if havebudget=1 and gb(4)<0 then pr #20: 'Call Print.AddText("Level billing ahead '&trim$(cnvrt$("pic($$$,$$$.##",abs(gb(4)-g(4))))&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		if havebudget=1 and gb(4)<>0 then pr #20: 'Call Print.AddText("before paying this bill. ",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		if havebudget=1 and energy<>0 then pr #20: 'Call Print.AddText("Less CEFS Applied:             '&trim$(cnvrt$("pic(zzz,zzz.##",energy))&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 	! IF HAVEBUDGET=1 THEN bAL=G(1)+G(2)+G(3)+GAS+G(8)+G(9)+BUDGETPB ! change balance on bill if they have a budget (show as current months charges plus andy prior budget amounts not paid
-	L2230: if g(8)=0 then 
-		goto L2240 
-		else 
-			pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
+	L2230: if g(8)=0 then
+		goto L2240
+		else
+			pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-		end if 
-	L2240: if g(9)=0 then 
-			goto L2250 
-		else 
-			pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
+		end if
+	L2240: if g(9)=0 then
+			goto L2250
+		else
+			pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-		end if 
+		end if
 		L2250: ! If PB><0 Then pr #20: 'Call Print.AddLine('&STR$(XMARGIN+46)&','&STR$(LYNE*(METER+=1)+YMARGIN)&',15,0)'
 		pr #20: 'Call Print.MyFontSize(10)'
 	!
@@ -376,7 +376,7 @@
 		fnpa_txt(env$('cnam'),xmargin+68,lyne*9+ymargin) ! pr #20: 'Call Print.AddText("'&env$('cnam')&'",'&str$(xmargin+68)&','&str$(lyne*9+ymargin)&')'
 		fnpa_fontsize ! pr #20: 'Call Print.MyFontSize(10)'
 		fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*11+ymargin) ! pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68)&','&str$(lyne*11+ymargin)&')'
-		if havebudget=1 then 
+		if havebudget=1 then
 			pr #20: 'Call Print.AddText("'&fnformnumb$(payby,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'
 		else
 			pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'
@@ -404,14 +404,14 @@
 		if checkcounter=2 then checkx=6.75 : checky=3.6875
 		if checkcounter=3 then checkx=1.375 : checky=7.9375
 		if checkcounter=0 then checkx=6.75 : checky=7.9375
-		if checkcounter=0 then 
+		if checkcounter=0 then
 			fnpa_newpage
 		end if
-		return 
+		return
 	!
 	BULKSORT: ! bulk sort order
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
+		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output
 		do
 			read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
 			write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
@@ -419,17 +419,17 @@
 	L3040: close #1: ioerr ignore
 		close #6: ioerr ignore
 		execute "Index "&env$('Temp')&"\Temp."&wsid$&" "&env$('Temp')&"\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
-		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\Tempidx."&wsid$,internal,input,keyed 
-	L3080: return 
-	IGNORE: continue 
+		open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\Tempidx."&wsid$,internal,input,keyed
+	L3080: return
+	IGNORE: continue
 	BUD1: bud1=0
 		dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5)
 		open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
-		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
+		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
 		bud1=1
-	EO_BUD1: return 
+	EO_BUD1: return
 	!
-	BUD2: ! 
+	BUD2: !
 		totba=bd1=bd2=budgetpb=havebudget=00
 		mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 		if bud1=0 then goto EO_BUD2
@@ -448,5 +448,5 @@
 		bd1=bd1+1
 		if bd1>5 then goto EO_BUD2
 		L3340: ta1=nba : goto L3260
-		EO_BUD2: ! 
-	return 
+		EO_BUD2: !
+	return

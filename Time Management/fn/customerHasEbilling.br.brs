@@ -1,6 +1,6 @@
 ! this is GetEmail.br to contain def library fnCustomerHasEbilling(clientId$) for returnN records
 pr "running as a test only"
-library 'S:\Core\Library': fnCustomerHasEbilling
+autoLibrary
 testAcct$='1438' : pr 'fnCustomerHasEbilling('&testAcct$&') returns ';fnCustomerHasEbilling(testAcct$)
 testAcct$='3045' : pr 'fnCustomerHasEbilling('&testAcct$&') returns ';fnCustomerHasEbilling(testAcct$)
 testAcct$='1438' : pr 'fnCustomerHasEbilling('&testAcct$&') returns ';fnCustomerHasEbilling(testAcct$)

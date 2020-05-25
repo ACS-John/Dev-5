@@ -9,7 +9,7 @@
 	dim sc1$(2)*20,wrd1$(2)*30,resp$(50)*50
 	dim b$*3,a$(8)*30,oldtrans$*21,journal_to_print(8),tgl(200,4)
 
-	fntop(program$)
+	fnTop(program$)
 	a$(1)="Disbursements Journal"
 	a$(2)="Receipts Journal"
 	a$(3)="General Journal      (Adj)"
@@ -168,13 +168,13 @@ EO_JOURNAL: ! r:
 	gosub JOURNAL_TOTALS
 	L1210: !
 	fncloseprn
-goto XIT ! /r
+goto Xit ! /r
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r
 
-XIT: fnxit
+Xit: fnXit
 
 ASK_PERIOD: ! r:
 ! pr newpage
@@ -207,7 +207,7 @@ ASK_PERIOD: ! r:
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	if resp$(1)="True" then cur_prior=1 else cur_prior=2
 	mat journal_to_print=(0)
 	for j=1 to 8
