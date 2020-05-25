@@ -20,7 +20,7 @@ def library fnGetPp(&input$,&path$,&prog$,&ext$)
 	if fslash_pos<=0 and bslash_pos<=0 then gosub NOSLASH_PARSE
 	dot_pos=pos(prog$,".",-1)
 	if dot_pos>0 then gosub RIP_EXT
-	goto XIT
+	goto Xit
 	! 
 	FSLASH_PARSE: ! r: front slash parse 
 		prog$=input$(1:fslash_pos-1) 
@@ -38,8 +38,8 @@ def library fnGetPp(&input$,&path$,&prog$,&ext$)
 		ext$=prog$(dot_pos:len(prog$))
 		prog$=prog$(1:dot_pos-1)
 	return ! /r
-	XIT: ! 
+	Xit: ! 
 	path$=trim$(path$)
 	if path$(len(path$):len(path$))<>"\" then path$=trim$(path$)&"\"
 fnend 
-include: ertn
+include: Ertn

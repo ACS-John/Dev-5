@@ -1,5 +1,5 @@
-00010 ! replace Test\PayTransaction
-00020   library 'S:\Core\Library': fnpaytransaction,fntop,fnxit
-00030   fntop("Test\PayTransaction","Test Pay Transaction")
-00050   fnpaytransaction(10)
-00060   fnxit
+! replace Test\PayTransaction
+	autoLibrary
+	fnTop("Test\PayTransaction","Test Pay Transaction")
+	fnpaytransaction(10)
+	fnXit

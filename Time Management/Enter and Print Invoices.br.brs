@@ -1,15 +1,7 @@
 ! r: setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fncreg_read,fncreg_write
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnmakesurepathexists,fnprint_file_name$,fnCustomerHasEbilling
-	library 'S:\Core\Library': fnPrintInvoice
-	library 'S:\Core\Library': fnClient_has
-	library 'S:\Core\Library': fnreport_cache_folder_current$
-	library 'S:\Core\Library': fnCopy
+	autoLibrary
 	on error goto Ertn
-	fntop(program$)
+	fnTop(program$)
 	dim fl1$(8),io1$(60),scrid$(4)*80
 	dim xinp(3)
 	dim invoiceNumber$*12,a1$*30
@@ -24,9 +16,9 @@
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
 	bc$(3)="WRITE OFF"
-
+ 
 	fncreg_read('Last Invoice Number',tmp$) : iv1=val(tmp$)
-
+ 
 	fl1$(5)="1,10,c 60,h,n"
 	fl1$(6)="2,10,c 60,h,n"
 	fl1$(7)="9,1,c 80,h,n"
@@ -195,7 +187,7 @@ REGULAR_ENTRY: ! r:
 	SCR_ADDEDIT: !
 	pr newpage
 	pr f "10,10,c 60": "Enter ref # to correct; enter 0 when completed"
-	L1930: ! 
+	L1930: !
 	input fields "10,60,N 5,UE,N": rr conv L1930
 	if rr=0 then goto SCR_FINAL
 	read #hTmpInvoice,using F_TMWK2,rec=rr: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT
@@ -206,7 +198,7 @@ REGULAR_ENTRY: ! r:
 		pt(4)=pt(4)-sc(j)
 	next j
 goto L1080 ! /r
-
+ 
 SCR_FINAL: ! r:
 	pr newpage
 	scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
@@ -276,7 +268,7 @@ SCR_PRINT_INVOICES: ! r:
 	restore #hTmpInvoice:
 	do  ! for j=1 to lrec(hTmpInvoice)
 		PR_SELECTED_INVOICE: !
-
+ 
 		read #hTmpInvoice,using F_TMWK2: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF
 		if xinp(1)=0 then goto L2840
 		k$=lpad$(str$(xinp(1)),5)
@@ -285,12 +277,12 @@ SCR_PRINT_INVOICES: ! r:
 			! open pdf
 			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,invoiceNumber$,inv_date,mat inv_item$,mat inv_amt,0,pdf_filename_final$)
-			! move to Send folder 
+			! move to Send folder
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
 			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 		else
 		   fnPrintInvoice(255,align, k$, mat billto$, invoiceNumber$, xinp(3),mat id$, mat da,0)
-		end if 
+		end if
 		 L2840: !
 		! if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop  ! next j
@@ -320,7 +312,7 @@ REPR_PREV_INV: ! r:
 		L3050: !
 	next rw
 return ! /r
-XIT: fnxit
+Xit: fnXit
 SRCH1: ! r: name search
 	s1=1
 	open #127: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outIn  ! SAVE SCREEN
@@ -446,4 +438,4 @@ HELP1: ! r:
 	L4430: !
 	selclp=0
 goto L3990 ! /r
-include: ertn
+include: Ertn

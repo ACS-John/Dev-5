@@ -1,19 +1,18 @@
-00010 ! Replace S:\acsCL\fnBankBal
-00020 ! Checkbook Transaction File Editor
-00030   def library fnbankbal(bank_code)
-00040     library 'S:\Core\Library': fncno,fngethandle
-00050     fncno(cno)
-00060     open #bankmstr:=fngethandle: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
-00070     if bank_code=0 then 
-00080       bankbal=0
-00090       for j=1 to lrec(bankmstr)
-00100         read #bankmstr,using 'Form Pos 45,PD 6.2',rec=j: bal noRec L120
-00110         bankbal+=bal
-00120 L120: next j
-00130     else 
-00140       key$=cnvrt$('Pic(zz)',bank_code) !:
-            read #bankmstr,using 'Form Pos 45,PD 6.2',key=key$: bankbal
-00150     end if 
-00160     close #bankmstr: 
-00170     fnbankbal=bankbal
-00180   fnend 
+! Replace S:\acsCL\fnBankBal
+! Checkbook Transaction File Editor
+def library fnbankbal(bankCode; ___,returnN,key$*2,bal)
+	autoLibrary
+	open #hBank:=fngethandle: "Name=[Q]\CLmstr\hBank.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,input,keyed
+	if bankCode then
+		key$=cnvrt$('Pic(zz)',bankCode)
+		read #hBank,using 'Form Pos 45,PD 6.2',key=key$: returnN
+	else
+		do
+			read #hBank,using 'Form Pos 45,PD 6.2': bal eof EohBank
+			returnN+=bal
+		loop
+		EohBank: !
+	end if
+	close #hBank:
+	fnbankbal=returnN
+fnend

@@ -1,7 +1,4 @@
-! library 'S:\Core\Library': fnTop
-library 'S:\Core\FileIO\fileio.br': fnProgressBar
-library 'S:\Core\FileIO\fileio.br': fnCloseBar
-! fnTop(program$)
+autoLibrary
 dim caption$*255
 dim messageRow$*255
 ! caption$=env$('program_caption')

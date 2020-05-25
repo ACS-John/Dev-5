@@ -1,10 +1,10 @@
 ! Replace S:\acsPR\newPR941  ! fix the count (box 1; needs logic to look thru history and count the active employees on a certain date)
 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
-
-	library 'S:\Core\Library': fntop,fnxit,fnTos,fnLbl,fnGetPayrollDates,fnerror,fnopenprn,fncloseprn,fnTxt,fnChk,fnCmdSet,fnAcs,fncomboa,fnFra,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fncreg_read,fnpa_txt,fnpa_pic,fnpa_fontsize,fnDedNames
-	fntop(program$,cap$="941 Summary")
+ 
+	autoLibrary
+	fnTop(program$,cap$="941 Summary")
 	on error goto Ertn
-
+ 
 	dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
 	dim fullname$(20)*20,abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 	dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10),em$(3)*30
@@ -13,18 +13,18 @@
 	dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),qtr(32)
 	dim ytdtotal(32),ss$*11,m$*20
 	dim city$*15,state$*2,zip$*9,csz$*40,ml$(2)*80
-
+ 
 	fncreg_read('calculation date text',m$)
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #20,using L280: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10
 	L280: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 	ficarate=ficarate/100
 	mcr=mcr*.01
-	close #20: 
-
+	close #20:
+ 
 MENU1: ! r:
 	fnTos(sn$="pr941")
 	respc=0
@@ -42,55 +42,55 @@ MENU1: ! r:
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 	if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-	fnChk(3,30,"Print Worksheet:",1) 
+	fnChk(3,30,"Print Worksheet:",1)
 	resp$(respc+=1)="True"
 	fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
 	fnLbl(1,1,"Month 1:",10,1,0,1)
-	fnTxt(1,13,12,0,1,"10",0,"",1) 
+	fnTxt(1,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Month 2:",10,1,0,1)
-	fnTxt(2,13,12,0,1,"10",0,"",1) 
+	fnTxt(2,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Month 3:",10,1,0,1)
-	fnTxt(3,13,12,0,1,"10",0,"",1) 
+	fnTxt(3,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnFra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 	mylen=52
 	fnLbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-	fnTxt(1,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(1,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-	fnTxt(2,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(2,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-	fnTxt(3,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(3,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-	fnTxt(4,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(4,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-	fnTxt(5,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(5,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-	fnTxt(6,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(6,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-	fnTxt(7,mylen+3,12,0,1,"10",0,"",2) 
+	fnTxt(7,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
-	fnTxt(20,mylen+4,12,0,1,"10",0,"",0) 
+	fnTxt(20,mylen+4,12,0,1,"10",0,"",0)
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnCmdSet(2): fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	taxyear=val(resp$(1)) ! tax year
 	if taxyear<2000 then goto L810
 	ending_date=taxyear*10000+1231 conv L810
 	goto L820
 	L810: ! r:
-		mat ml$(2) 
-		ml$(1)="You must enter a valid tax year such as 2018." 
-		ml$(2)="Take OK to enter the year." 
-		fnmsgbox(mat ml$,resp$,cap$,0) 
+		mat ml$(2)
+		ml$(1)="You must enter a valid tax year such as 2018."
+		ml$(2)="Take OK to enter the year."
+		fnmsgbox(mat ml$,resp$,cap$,0)
 	goto MENU1 ! /r
 	L820: !
 	for j=1 to 4
@@ -119,12 +119,12 @@ MENU1: ! r:
 	fn_print941_info
 ! gosub LASER_941
 goto FINIS ! /r
-
+ 
 def fn_start_print
 	on pageoflow goto PGOF
-	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
+	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
 	if frm=2 then gosub WK_HEADER
 	L1140: read #2,using L1150: eno,mat em$,ss$,em5,em6 eof WK_END
 	L1150: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
@@ -167,8 +167,8 @@ def fn_start_print
 	if m2=0 then goto L1140
 	fn_print_details
 	goto L1140
-
-	WK_HEADER: ! 
+ 
+	WK_HEADER: !
 	p2=p2+1
 	pr #255,using L1600: "Page ",p2
 	L1600: form pos 70,c 5,pic(zzz)
@@ -191,16 +191,16 @@ def fn_start_print
 	pr #255: tab(41);"For Quarter        Wages";tab(75);"Wages"
 	pr #255: "___________  __________________________";
 	pr #255: tab(41);"___________   ____________  ____________"
-	L1790: return 
-
-	WK_END: ! 
+	L1790: return
+ 
+	WK_END: !
 	fn_totals
 	pr #255: newpage
-	on pageoflow ignore 
-fnend 
-FINIS: ! 
+	on pageoflow ignore
+fnend
+FINIS: !
 	fncloseprn
-XIT: fnxit
+Xit: fnXit
 def fn_print_details ! detailed listing
 	if m1=0 then goto L2130
 	p3=p3+1
@@ -230,8 +230,8 @@ def fn_print_details ! detailed listing
 	t3=t3+h3
 	t2=t2+h2
 	p1=p1+2
-	L2130: ! 
-fnend 
+	L2130: !
+fnend
 def fn_totals
 	if frm=1 then goto L2230
 	pr #255,using L2180: "___________    ___________  ____________"
@@ -249,13 +249,13 @@ def fn_totals
 	t2=0
 	t3=0
 	t4=0
-fnend 
+fnend
 PGOF: ! r:
 	pr #255: newpage
 	gosub WK_HEADER
 continue ! /r
 def fn_build_941
-	!   if env$('client')="Washington Parrish" then tpt(30)=0 ! used tips for something else 
+	!   if env$('client')="Washington Parrish" then tpt(30)=0 ! used tips for something else
 	wagefica=round((gt2-tpt(30))*(ficarate*2),2) ! 2013
 	taxfica=round(tpt(30)*(ficarate*2),2) ! 2013 requirements that employee fica be 4.2 and employer be 6.2  (was ficarate*2)
 	!   tipfica= round((tpt(30))*(ficarate*2),2) ! 2013    FICARATE)
@@ -280,16 +280,16 @@ def fn_build_941
 	box12=box10-box11 ! blance due
 	if box10-box11<0 then box13=abs(box10-box11) : box12=0 else box13=0 ! overpayment if any
 	box15d=box15a+box15b+box15c ! total deposits for quarter
-fnend 
+fnend
 ! LASER_941: ! r:
 	fnpa_open
 	fn_print941_origional
 	close #2: ioerr ignore
 	close #3: ioerr ignore
-	! 
+	!
 	fnpa_finis
 return  ! /r
-include: ertn
+include: Ertn
 def fn_print941_origional
 	fnpa_fontsize(12)
 	fnpa_pic("S:\acsPR\941.bmp",1,1)
@@ -363,7 +363,7 @@ def fn_print941_origional
 	fnpa_txt(cnvrt$("pic(-,---,---.##)",box15b),tab4,68)
 	fnpa_txt(cnvrt$("pic(-,---,---.##)",box15c),tab4,74)
 	fnpa_txt(cnvrt$("pic(-,---,---.##)",box15a+box15b+box15c),tab4,82)
-fnend 
+fnend
 def fn_csz ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 	L3680: !
 	p1=pos(csz$,".",1)
@@ -381,22 +381,22 @@ def fn_csz ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 	zip$=csz$(p1+1:len(csz$)): zip$=ltrm$(rtrm$(zip$))
 	p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 	city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
-fnend 
+fnend
 def fn_print941_info ! pr 941 information
 	pr #255: "Employer ID # (EIN): ";b$(1)
 	pr #255: "Name (not trade name): "
 	pr #255: "Trade Name: ";a$(1)
 	pr #255: "Address: ";a$(2)
 	pr #255: "City, State Zip: ";a$(3)
-	pr #255: 
+	pr #255:
 	pr #255,using "form pos 5, cr 50,pic(zzzzzzzzzzz#)": "Number of Employees receiving pay for Quarter: ",box1
 	pr #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Wages, Tips & Other Compensation: ",box2
 	pr #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Income Tax Withheld: ",box3
-	pr #255: 
+	pr #255:
 	pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5a",box5a1,box5a2
 	pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5b",box5b1,box5b2
 	pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5c",box5c1,box5c2
-	pr #255: 
+	pr #255:
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "5d",box5d
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "6",box6
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7a",box7a

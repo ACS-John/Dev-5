@@ -1,7 +1,5 @@
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnsearch
-	fntop(program$)
+	autoLibrary
+	fnTop(program$)
 	dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25
 	dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 	dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
@@ -9,7 +7,7 @@
 	open #h_company:=1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr Ertn
 	read #h_company,using 'form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3': i3,i4,i5,mat gln1,mat gln2 ioerr Ertn
 	! i3=1 ! ENTER G/L #'S
-	close #h_company: 
+	close #h_company:
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
 	otgl$(1)="9,30,pic(zzz)"
 	otgl$(2)="9,34,pic(zzzzzz)"
@@ -40,13 +38,13 @@
 		gpx=1
 	end if
 	open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn ioerr L530
-	close #h_addr,free: 
+	close #h_addr,free:
 	L530: !
 	open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr Ertn
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr Ertn
 	L560: form pos 1,c 255,142*c 18
-	close #1: 
+	close #1:
 	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
 	open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr Ertn
 	L590: !
@@ -144,10 +142,10 @@
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto L590
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 	ps1=1
-	if tr(1)<10100 or tr(1)>123199 then 
+	if tr(1)<10100 or tr(1)>123199 then
 		pr f "5,48,c 20": "Invalid Date"
 		goto ScreenSomething
-	end if 
+	end if
 	L1340: !
 	if tr(3) then
 		if gx=0 then goto L1520
@@ -205,7 +203,7 @@ ScreenTotals: ! r:
 	pr f "18,1,C 70,H,N": "ENTER 1 TO MERGE; 2 FOR CORRECTIONS: 5 STOP WITHOUT POSTING"
 	L1790: !
 	input fields "18,61,n 1,eu,n": j conv L1790
-	if j=5 then goto XIT
+	if j=5 then goto Xit
 on j goto ChainArMerge,L1810 none L1790 ! /r
 L1810: ! r:
 	pr newpage
@@ -213,7 +211,7 @@ L1810: ! r:
 	L1830: !
 	input fields "10,60,n 1,eu,n": j conv L1830
 on j goto L1850,L2060 none L1830 ! /r
-L1850: ! 
+L1850: !
 	r=0
 	fnopenprn
 	pr newpage
@@ -237,7 +235,7 @@ L1850: !
 	goto L1960
 	L2040: !
 	fncloseprn
-	on fkey 5 ignore 
+	on fkey 5 ignore
 	L2060: !
 	pr newpage
 	pr f "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
@@ -266,8 +264,8 @@ L1850: !
 	on j goto L590,ScreenTotals none L2250
 	ChainArMerge: !
 chain "S:\acsTM\ARMerge"
-XIT: pr newpage: fnxit
-
+Xit: pr newpage: fnXit
+ 
 TMSRCH: ! r: search for customer #
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70
 	file_num=11 ! alpha index on clients
@@ -281,4 +279,4 @@ TMSRCH: ! r: search for customer #
 	ano=val(selection$) conv L4910
 L4910: !
 return ! /r
-include: ertn
+include: Ertn

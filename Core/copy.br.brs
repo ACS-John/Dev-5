@@ -2,12 +2,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnStatus
-		library 'S:\Core\Library': fnStatusPause
-		library 'S:\Core\Library': fnGetDir2
-		library 'S:\Core\Library': fnMakeSurePathExists
-		library 'S:\Core\Library': fnGetPp
-		library 'S:\Core\Library': fnSrepEnv$
+		autoLibrary
 		on error goto Ertn
 	end if
 fnend
@@ -144,7 +139,7 @@ def library fncscopy(&source$,&destination$)
 	if copy_from_server=1 and copy_to_server=1 then 
 		gosub COPY_FROM_SERVER_TO_SERVER
 	end if 
-	goto XIT
+	goto Xit
 	!
 	COPY_FROM_CLIENT_TO_SERVER: ! r:
 	open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
@@ -169,10 +164,10 @@ def library fncscopy(&source$,&destination$)
 	!
 	COPY_FROM_SERVER_TO_SERVER: pause 
 	return 
-	XIT: ! 
+	Xit: ! 
 fnend 
 def library fnFree(fileToDelete$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fileToDelete$=fnSrepEnv$(fileToDelete$)
 	freeReturn=0
 	fileToDelete$=trim$(fileToDelete$,'"')
@@ -189,7 +184,7 @@ def library fnFree(fileToDelete$*256)
 	fnFree=freeReturn
 fnend
 def library fnRename(from$*256,to$*256; ___,returnN)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	from$=fnSrepEnv$(from$)
 	to$=fnSrepEnv$(to$)
 	from$=trim$(from$,'"')
@@ -211,7 +206,7 @@ include: filenamesPopUpperCase
 	fnRename=returnN
 fnend
 def library fnRemoveDeletedRecords(from$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	from$=fnSrepEnv$(from$)
 	rdrReturn=0
 include: filenamesPushMixedCase
@@ -228,4 +223,4 @@ include: filenamesPopUpperCase
 	RdrFinis: !
 	fnRemoveDeletedRecords=rdrReturn
 fnend
-include: ertn
+include: Ertn

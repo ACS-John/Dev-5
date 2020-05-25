@@ -1,8 +1,6 @@
 ! REPLACE S:\acsTM\arinput_import_csv.br
-library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnsearch
-library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs,fnflexadd1,fnflexinit1,fnTos,fncustomer_search,fnLbl,fnTxt,fnmsgbox,fnButton,fnFra
-library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fnCmdSet,fnCmdKey,fntop,fngethandle
-fntop(program$,cap$="Import Transactions from Mint CSV to CL")
+autoLibrary
+fnTop(program$,cap$="Import Transactions from Mint CSV to CL")
 dim cr$*1,lf$*1,crlf$*2,line$*2048,item$(1)*1024
 cr$=chr$(13) : lf$=chr$(10)
 crlf$=cr$&lf$
@@ -36,19 +34,19 @@ SCREEN_1: ! r:
 	fnTxt(ad_line,col2_pos,40,256,1,"70")
 	resp$(respc+=1)=file_import$
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
 		fkey(99)
-	else 
+	else
 		filter_date(1)=val(srep$(resp$(1),'/',''))
 		filter_date(2)=val(srep$(resp$(2),'/',''))
 		file_import$=resp$(3)
-	end if 
+	end if
 	fn_import_it(file_import$)
 	end  ! pr newpage
 ! pr f mat fl1$: mat sc1$,"A/R Input Selection Menu","Selection:"
-L630: ! 
-! 
+L630: !
+!
 	input fields "13,29,n 1,eu,n": transaction_type conv L630
 	if transaction_type=0 then vf=1 : goto SCREEN_PROOF_TOTALS
 	if transaction_type<1 or transaction_type>4 then goto L630
@@ -57,36 +55,36 @@ SCREENS_TRANS_ENTRY_A: ! r: old
 	if transaction_type=4 or transaction_type=3 then sc2$(7)="G/L # to Credit" else sc2$(7)="G/L # to Debit"
 	if transaction_type=3 then sc2$(6)="Discount Amount" else sc2$(6)=""
 	if gx=0 then sc2$(7)=" "
-SCREENS_TRANS_ENTRY_B: ! 
+SCREENS_TRANS_ENTRY_B: !
 	pr newpage
 	pr f mat flo1$: mat sc2$,"A/R Input "&sc1$(transaction_type+1)(5:18),"Client Number as 0 to stop"
 	ps1=0
 	if vf=0 then goto L790
 	if gx><0 then goto L780
-L760: ! 
+L760: !
 	pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
 	goto L790
-L780: ! 
+L780: !
 	pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
-L790: ! 
+L790: !
 	pr f "5,30,pic(zzzzzz)": tr(1)
 	pr f "24,20,C 50,N": "F1 Continue   F2 verify name    F4 Search"
 	if gx><0 then goto L910
-L820: ! 
+L820: !
 	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 	if cmdkey=4 then let fn_tmsrch : goto L760
 	p$=uprc$(lpad$(rtrm$(p$),5))
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=0
 	goto L1280
-L870: ! 
+L870: !
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=cnt+1
 	fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 	goto L820
-L910: ! 
+L910: !
 	if ps1=1 or vf=1 then goto L1060
-L920: ! 
+L920: !
 	rinput fields "3,30,C 5,EU,n": p$ conv L920
 	if cmdkey=4 then let fn_tmsrch : goto L920
 	p$=uprc$(lpad$(rtrm$(p$),5))
@@ -95,16 +93,16 @@ L920: !
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 	if ltrm$(p$)="-1" then name$="CASH SALE" else goto L990
 	goto L1050
-L990: ! 
+L990: !
 	read #h_clmstr,using 'form pos 6,c 25',key=p$,release: name$ nokey L1020 ioerr ERR_FILE
 	goto L1050
-L1020: ! 
+L1020: !
 	name$="INVALID CLIENT NUMBER"
 	pr f "3,40,C 25,R,N": name$
 	goto L920
-L1050: ! 
+L1050: !
 	pr f "3,40,C 25,N": name$
-L1060: ! 
+L1060: !
 	fli1$(4)="6,30,n 11.2,ut,n"
 	if r1>0 then goto L1180
 	if transaction_type=3 then fli1$(4)="6,30,n 11.2,ue,n"
@@ -116,53 +114,53 @@ L1060: !
 	if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
 	if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
 	if sz=5 then gl(1,1)=gln1(2): gl(1,2)=tr(3)
-L1180: ! 
+L1180: !
 	rinput fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto L920
-L1200: ! 
+L1200: !
 	p$=uprc$(lpad$(rtrm$(p$),5))
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=0
 	goto L1280
-L1240: ! 
+L1240: !
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=cnt+1
 	fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 	if cnt<=4 then goto L1060 else goto L1180
-L1280: ! 
+L1280: !
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto SCREEN_1
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 	ps1=1
 	if tr(1)<10100 or tr(1)>123199 then goto L1320 else goto L1340
-L1320: ! 
+L1320: !
 	pr f "5,48,c 20": "INVALID DATE"
 	goto L790
-L1340: ! 
+L1340: !
 	if tr(3)><0 then goto L1370
 	pr f "6,48,c 20": "NO AMOUNT ENTERED"
 	goto L790
-L1370: ! 
+L1370: !
 	if gx=0 then goto L1520
 	if pgl(gpx)>0 then goto L1410
 	pr f "9,45,c 30": "G/L # REQUIRED"
 	goto L790
-L1410: ! 
+L1410: !
 	gla=0
 	for j=1 to 10
 		if gl(j,gx)=0 then goto L1460
 		gla=gla+gl(j,gx)
 	next j
-L1460: ! 
+L1460: !
 	if transaction_type=3 then gla=gla-tr(2)
 	if gla=tr(3) then goto L1520
 	pr f "11,2,c 75,h,n": " G/L ALLOCATIONS DO NOT AGREE WITH TOTAL AMOUNT.  PRESS ENTER TO CONTINUE."
 	input fields "11,78,c 1,EU,n": pause$
 	pr f "11,2,c 75,n,n": " "
 	goto L790
-L1520: ! 
+L1520: !
 	if ltrm$(p$)="-1" then goto L1540
 	pt(1)=pt(1)+val(p$) conv L1540
-L1540: ! 
+L1540: !
 	pt(transaction_type+1)=pt(transaction_type+1)+tr(3)
 	if transaction_type=3 then tdt=tdt+tr(2)
 	if ltrm$(p$)="-1" then pt(6)=pt(6)+tr(3)
@@ -173,12 +171,12 @@ L1540: !
 	p$=""
 	q2=0
 	goto SCREENS_TRANS_ENTRY_B
-L1630: ! 
+L1630: !
 	iv$=" "
 	mat tr=(0)
 	id$=" "
 	mat gl=(0)
-L1670: ! 
+L1670: !
 	rewrite #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl
 	p$=""
 	goto SCREEN_ASK_REF_TO_FIX ! /r
@@ -190,10 +188,10 @@ SCREEN_PROOF_TOTALS: ! r: old
 	pr f mat flo3$: mat pt
 	pr f "12,26,n 11.2": tdt
 	pr f "18,1,C 70,H,N": "1=Merge; 2=Corrections; 3=Proof List: 5=Stop Without Posting"
-L1790: ! 
+L1790: !
 	input fields "18,61,n 1,eu,n": j conv L1790
 	if j=3 then let fn_print_proof_list : goto L1790
-	if j=5 then goto XIT
+	if j=5 then goto Xit
 	if j=1 then goto CHAIN_ARMERGE
 	goto L1790
 ! /r
@@ -209,21 +207,21 @@ def fn_print_proof_list
 	pr f "23,2,C 30,N": "Press F5 To Stop"
 	pr #255: "Ref #  Cl #  Invoice #";
 	pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
-	L1960: ! 
+	L1960: !
 	r=r+1
 	read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr ERR_FILE
 	L2110: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 	if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 	name$=""
 	read #h_clmstr,using 'form pos 6,c 25',key=p$,release: name$ nokey L2010
-	L2010: ! 
+	L2010: !
 	pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 	L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12
 	goto L1960
-	L2040: ! 
+	L2040: !
 	fncloseprn
-	on fkey 5 ignore 
-fnend 
+	on fkey 5 ignore
+fnend
 SCREEN_ASK_REF_TO_FIX: ! r:
 	pr newpage
 	pr f "10,10,c 60": "Ref Number To Correct; (0 when Completed)"
@@ -245,13 +243,13 @@ SCREEN_ASK_ADD_MORE: ! r:
 	pr newpage
 	vf=0
 	pr f "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
-L2250: ! 
+L2250: !
 	input fields "10,61,N 1,EU,N": j conv L2250
 	on j goto SCREEN_1,SCREEN_PROOF_TOTALS none L2250
 ! /r
 CHAIN_ARMERGE: chain "S:\acsTM\ARMerge"
-XIT: ! 
-	fnxit
+Xit: !
+	fnXit
 ERR_FILE: ! r:
 	if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
 	goto L2350
@@ -264,8 +262,8 @@ L2350: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 	if err=61 and rtrm$(uprc$(quitcode$))="Q" then goto SCREEN_1 else goto L2410
 	pr f "23,3,C 78,N": ""
 	pr f "24,3,C 78,N": ""
-	retry 
-L2410: goto XIT
+	retry
+L2410: goto Xit
 ! /r
 	def fn_tmsrch !  search for customer #
 		dim heading$*70,form$*80,numeric_format$*20,selection$*70
@@ -278,14 +276,14 @@ L2410: goto XIT
 		p$=selection$ ! pull key from first field in search line
 		ano=0
 		ano=val(selection$) conv L4910
-		L4910: ! 
-	fnend 
+		L4910: !
+	fnend
 def fn_get_old_setup
 	open #h_company:=1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr ERR_FILE
 	read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr ERR_FILE
 	! i3=1 ! ENTER G/L #'S
 	L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3
-	close #h_company: 
+	close #h_company:
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
 	otgl$(1)="9,30,pic(zzz)"
 	otgl$(2)="9,34,pic(zzzzzz)"
@@ -322,11 +320,11 @@ def fn_get_old_setup
 	goto L510
 	L490: ! NO GL TO BE ENTERED
 	sz=6
-	L510: ! 
+	L510: !
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr ERR_FILE
 	read #1,using 'form pos 1,c 255,142*c 18',rec=sz: ioerr ERR_FILE
-	close #1: 
-fnend 
+	close #1:
+fnend
 def fn_get_next_line(&line$)
 	dim gnl_block$*512
 	dim gnl_buffer$*32767
@@ -334,21 +332,21 @@ def fn_get_next_line(&line$)
 		gnl_block$=''
 		read #h_in,using 'form pos 1,C 100': gnl_block$ ioerr GNL_H_IN_READ_IOERR
 		gnl_buffer$=gnl_buffer$&gnl_block$
-	loop 
+	loop
 	pos_crlf=pos(gnl_buffer$,lf$)
 	line$=gnl_buffer$(1:pos_crlf)
 	gnl_buffer$(1:pos_crlf+1)=''
 	! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
 	! pr 'line='&line$ : pause
 	goto GNL_XIT
-	GNL_H_IN_READ_IOERR: ! 
+	GNL_H_IN_READ_IOERR: !
 		gnl_block$=gnl_block$&lf$
 		gnl_eof=1
 	continue  ! gnl_h_in_read_ioerr
-	GNL_XIT: ! 
+	GNL_XIT: !
 fnend  ! fn_get_next_line
 def fn_import_it(file_import$*256)
-	open #h_in:=fngethandle: 'Name='&file_import$&',RecL=100,Shr',external,input 
+	open #h_in:=fngethandle: 'Name='&file_import$&',RecL=100,Shr',external,input
 	fnopenprn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 	FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
@@ -367,41 +365,41 @@ def fn_import_it(file_import$*256)
 	csv_labels=srch(mat item$,"Labels")
 	csv_notes=srch(mat item$,"Notes"&lf$) ! pr csv_notes : pause
 	! /r
-	do 
+	do
 		fn_get_next_line(line$) : line_count+=1
-		if line$<>'' then 
+		if line$<>'' then
 			str2mat(line$,mat item$,',',"QUOTES:TRIM")
 			if item$(csv_date)<>'' then the_date=fn_get_the_date(item$(csv_date))
-			if the_date=>filter_date(1) and the_date<=filter_date(2) then 
+			if the_date=>filter_date(1) and the_date<=filter_date(2) then
 				pr the_date,val(item$(csv_amt)),item$(csv_desc),item$(csv_odesc)
 				! r: translate from csv to acs tranaction thing
-				if item$(csv_type)='credit' then 
+				if item$(csv_type)='credit' then
 					transaction_type=2 ! deposit
-				else if item$(csv_type)='debit' then 
+				else if item$(csv_type)='debit' then
 					transaction_type=1 ! check
-				else 
+				else
 					pr 'unhandled transaction_type!  item$(csv_type)='&item$(csv_type)
-					pause 
-				end if 
-				if item$(csv_acct)='Free Business Checking' then 
+					pause
+				end if
+				if item$(csv_acct)='Free Business Checking' then
 					bank_account=1
-				else 
+				else
 					pr 'unhan bank account!  item$(csv_acct)='&item$(csv_acct)
-					pause 
-				end if 
+					pause
+				end if
 				! /r
 				pr #255,using FORM_PRN: the_date,val(item$(csv_amt)),item$(csv_type),item$(csv_desc),item$(csv_odesc),item$(csv_cat),item$(csv_acct),item$(csv_labels),item$(csv_notes)
 			end if  ! the_date=>filter_date(1) and <=filter_date(2)
 		end if  ! line$<>''
 	loop until line$=''
-	THE_END: ! 
-	close #h_in: 
+	THE_END: !
+	close #h_in:
 	fncloseprn
-fnend 
+fnend
 def fn_get_the_date(the_date$)
 	the_date=date(days(the_date$,'m/dd/ccyy'),'ccyymmdd')
 	fn_get_the_date=the_date
-fnend 
+fnend
 def fn_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30)
 	dim des$*30,inp(7)
 	inp(1)=wo_client
@@ -414,16 +412,16 @@ def fn_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30)
 	b6=0 ! ???
 	b7=1 ! ???
 	b8=wo_month
-	if wo_cat=6 then 
+	if wo_cat=6 then
 		sc=601
-	else if wo_cat=2 then 
+	else if wo_cat=2 then
 		sc=201
-	else if wo_cat=11 then 
+	else if wo_cat=11 then
 		sc=1101
-	else if wo_cat=23 then 
+	else if wo_cat=23 then
 		sc=2300
-	else 
+	else
 		pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
-	end if 
+	end if
 	write #h_out,using FORM_OUT: mat inp,b6,b7,b8,sc,'',0,wo_desc$
 fnend  ! fn_write_out

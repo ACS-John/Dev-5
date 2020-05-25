@@ -12,7 +12,7 @@
 	dim nxtpgm$(20)*35,nxtdesc$(20)*35,ff$(3)*18,prim(20),pn(20),cp(20)
 	dim ln$*128,ln2$*128,item$(1)*35,resp$(60)*35,prg$(100)*40,nam$(100)*35
 
-	fntop(program$,cap$="Select Programs")
+	fnTop(program$,cap$="Select Programs")
 	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr L190
 	goto L210
 L190: if exists("[Q]\GLmstr\acGLPGMN.h[cno]") >0 then let fnFree("[Q]\GLmstr\acGLPGMN.h[cno]")
@@ -82,7 +82,7 @@ L700: fnCmdKey("&Next",1,1,0,"Selects the highlited option for automatic process
 	fnCmdKey("&Delete All",4,0,0,"Deletes all selections.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
 	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	if ckey=2 then goto L860
 	if ckey=4 then 
 		mat nxtdesc$=("")
@@ -187,5 +187,5 @@ L1640: execute "drop [Q]\GLmstr\acGLPGMN.h[cno]"
 	next j1
 	close #1: ioerr ignore
 	close #3: ioerr ignore
-XIT: fnxit
-include: ERTN
+Xit: fnXit
+include: Ertn

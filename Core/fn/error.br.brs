@@ -1,13 +1,10 @@
-library 'S:\Core\Library': fnxit
+autoLibrary
 on error goto Ertn
 pr 1/0
-XIT: fnxit
-! 
+Xit: fnXit
+
 def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, stopable$; ___,sourceFile$*300,line$*512)
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnlog
-	library 'S:\Core\Library': fnWriteProc
+	autoLibrary
 	on error goto NEVER
 	xcnt=cnt
 
@@ -201,4 +198,5 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	ERROR_XIT: ! 
 		if file(win)<>-1 then close #win: 
 fnend 
+
 include: Ertn

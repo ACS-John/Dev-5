@@ -7,7 +7,7 @@ def fn_setup
 	end if
 fnend
 def library fnHamsterFio(fileid$*64)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	dim defaultFileLayoutPath$*256
 	
 	if env$('client')='Brumbaugh' then
@@ -174,4 +174,4 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 	close #hLay:
 fnend
 include: fn_open
-include: ertn
+include: Ertn

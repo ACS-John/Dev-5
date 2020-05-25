@@ -1,39 +1,32 @@
 ! formerly S:\acsPR\newJCCPR1
-
-library 'S:\Core\Library': fntop,fnxit
-library 'S:\Core\Library': fnmsgbox
-library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-library 'S:\Core\Library': fnchain
-library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdSet
-library 'S:\Core\Library': fnAcs2
-library 'S:\Core\Library': fncmbjob
-library 'S:\Core\Library': fnCmdKey
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim jn$*6,cn$*11,ta(2),tr(9),io1$(2),n$*40,tn$*6,dr(7),en$*12
 dim resp$(3)*50,ml$(2)*60
-
-fntop(program$)
-
-open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed 
-open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative 
-open #4: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output 
-
-MENU1: ! 
+ 
+fnTop(program$)
+ 
+open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
+open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative
+open #4: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output
+ 
+MENU1: !
 	fnTos
 	respc=0
 	fnLbl(1,47," ",1,1)
 	fnLbl(1,1,"Beginning Date:",20,1)
-	fnTxt(1,23,8,0,0,"1",0,"First day of week being printed.") 
+	fnTxt(1,23,8,0,0,"1",0,"First day of week being printed.")
 	resp$(respc+=1)=str$(df)
 	fnLbl(2,1,"Ending Date:",20,1)
-	fnTxt(2,23,8,0,0,"1",0,"Week ending date.") 
+	fnTxt(2,23,8,0,0,"1",0,"Week ending date.")
 	resp$(respc+=1)=str$(dt)
 	fnCmdSet(2): fnAcs2(mat resp$,ck)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	df=val(resp$(1)) ! beginning date
 	dt=val(resp$(2)) ! ending date
-
+ 
 	mat dr=(0)
 	dr(1)=int(df*.01)
 	dr(7)=int(dt*.01)
@@ -56,15 +49,15 @@ MENU1: !
 	write #4,using L470: df1,dt1,mat dr
 	L470: form pos 1,2*n 6,7*pd 3
 goto ASKJOB
-
-ASKJOB: ! 
+ 
+ASKJOB: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Job #:",8,1)
-	fncmbjob(1,11) 
+	fncmbjob(1,11)
 	resp$(respc+=1)=jn$
 	if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
-	fnCmdKey("&Next",1,1,0,"Process the job" ) 
+	fnCmdKey("&Next",1,1,0,"Process the job" )
 	fnCmdKey("&Complete",2,0,0,"Start printing")
 	fnAcs2(mat resp$,ck)
 	if ck=2 then goto PRINT_REPORT
@@ -76,10 +69,10 @@ ASKJOB: !
 goto L670
 L640: !
 	if rw>0 then goto ASKJOB
-	mat ml$(2) 
-	ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$) 
-	ml$(2)="within the specified date range." 
-	fnmsgbox(mat ml$,resp$,'',0) 
+	mat ml$(2)
+	ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$)
+	ml$(2)="within the specified date range."
+	fnmsgbox(mat ml$,resp$,'',0)
 	goto ASKJOB
 	L660: !
 	read #2,using L620: cn$,mat ta eof L640
@@ -100,20 +93,20 @@ L640: !
 	if nta=0 then goto L660
 	adr=nta
 goto L700
-PRINT_REPORT: ! 
-	if rw=0 then goto XIT
-	close #2: 
-	close #3: 
-	close #4: 
-	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
-	restore #1: 
+PRINT_REPORT: !
+	if rw=0 then goto Xit
+	close #2:
+	close #3:
+	close #4:
+	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output
+	restore #1:
 	write #1,using L880: "FILE "&env$('temp')&"\Work."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
 	L880: form pos 1,c 128
 	write #1,using L880: "MASK 13,6,c,a,1,12,c,a,33,2,c,a,29,4,c,a"
-	close #1: 
+	close #1:
 	execute "FREE "&env$('Temp')&"\Addr."&session$&" -n"
 	execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 fnchain ("S:\Payroll\Job Cost\Certified Payroll Register (Part 2)")
-
-XIT: fnxit
+ 
+Xit: fnXit
 include: Ertn

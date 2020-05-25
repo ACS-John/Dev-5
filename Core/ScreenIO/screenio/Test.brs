@@ -27,11 +27,11 @@
 05001 ! ============================================================
 05002 ! Imported From "S:\Core\ScreenIO\function\defaults\enter.brs"
 05003 def fnEnterDefault
-05004   library 'S:\Core\Library': fntop,fncompany_name,fnprogram_properties,fnBackgroundDisable
+05004   library 'S:\Core\Library': fnTop,fncompany_name,fnprogram_properties,fnBackgroundDisable
 05005   if screenio$(si_caption)='Properties' then
 05006      ! fnBackgroundDisable(1)
 05007   else
-05008     fntop(program$,screenio$(si_caption))
+05008     fnTop(program$,screenio$(si_caption))
 05009     fncompany_name(0,115)
 05010     for attrItem=1 to udim(mat attr$)
 05011       if lwrc$(attr$(attrItem))=lwrc$('[buttons]') then

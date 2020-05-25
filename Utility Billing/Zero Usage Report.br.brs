@@ -3,7 +3,7 @@ autoLibrary
 on error goto Ertn
 dim z$*10,e$(4)*30,resp$(10)*40,d(15)
 dim serviceName$(10)*20,a(7)
-fntop(program$)
+fnTop(program$)
 fnLastBillingDate(d1)
 fnget_services(mat serviceName$)
 MAIN: ! r:
@@ -15,17 +15,17 @@ MAIN: ! r:
 	fnChk(4,23,"Print Meter Address:",1) :  resp$(3)="True"
 	fnCmdSet(3)
 	fnAcs2(mat resp$,ck)
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	d1 = val(resp$(1))
-	if resp$(2)="[All]" then 
-		prtbkno=0 
-	else 
+	if resp$(2)="[All]" then
+		prtbkno=0
+	else
 		prtbkno=val(resp$(2))
 	end if
 	if resp$(3)="True" then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 	gosub HDR
 	if prtbkno=0 then goto READ_CUSTOMER
 	prtbkno$=lpad$(str$(prtbkno),2)&"       "
@@ -49,10 +49,10 @@ READ_CUSTOMER: ! r:
 		goto READ_CUSTOMER
 	end if
 	if startcd=1 and prtbkno<>route then goto TOTALS
-	if printadr=1 then 
-		pr #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PGOF 
+	if printadr=1 then
+		pr #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PGOF
 		L550: form pos 1,c 10,pos 13,c 30,pos 43,n 13,x 4,n 13,x 3,c 25
-	else 
+	else
 		pr #255,using L550: z$,e$(2),currentread,priorread pageoflow PGOF
 	end if
 	tbal=tbal+bal
@@ -70,17 +70,17 @@ HDR: ! r:
 	pr #255: ""
 return ! /r
 PGOF: ! r:
-	pr #255: newpage 
-	gosub HDR 
+	pr #255: newpage
+	gosub HDR
 continue ! /r
 TOTALS: ! r:
-! pr #255: RPT$(" ",55)&"{\ul             }" 
-	! pr #255,Using "Form POS 56,N 12.2": TBAL 
+! pr #255: RPT$(" ",55)&"{\ul             }"
+	! pr #255,Using "Form POS 56,N 12.2": TBAL
 	! pr #255: RPT$(" ",55)&"{\ul \strike             }"
 goto DONE ! /r
 DONE: ! r:
 	close #1: ioerr ignore
 	fncloseprn
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 include: Ertn

@@ -1,6 +1,6 @@
 ! -- pr Customer Labels
 fn_setup
-	fntop(program$)
+	fnTop(program$)
 SCR1: ! r:
 	fnTos(sn$="ublabel-1b")
 	fnLbl(1,1,"Sort by:",20,1)
@@ -33,7 +33,7 @@ SCR1: ! r:
 ! 
 	fnCmdSet(2)
 	fnAcs(sn$,0,mat resp$,ck) ! select order of printing
-	if ck=5 then goto XIT
+	if ck=5 then goto Xit
 	fnreg_write('ublabel.sequence',resp$(1))
 	fnreg_write('ublabel.address',resp$(2))
 	fnreg_write('ublabel.line 1',resp$(3))
@@ -117,7 +117,7 @@ SCR2: !
 	fnCmdSet(6)
 	fnAcs(sn$,0,mat resp$,ckey) ! method of selection
 	filter_selection=srch(mat filter_option$,resp$(1))
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	if ckey=2 then goto SCR1
 	if annbc=sequence_route then goto SELBK ! select by route
 	if filter_selection=4 then goto SELR ! select range of customers
@@ -180,7 +180,7 @@ ADDLABEL: ! r:
 DONE: ! r:
 	close #1: ioerr ignore
 	fnlabel(mat pt$)
-	goto XIT ! /r
+	goto Xit ! /r
 	def fn_set_line_text(&labeltext$,lineToPrint)
 		if lineToPrint=line_x_blank then 
 			labeltext$=''
@@ -208,7 +208,7 @@ DONE: ! r:
 			labeltext$='(invalid selection)'
 		end if 
 	fnend 
-XIT: fnxit
+Xit: fnXit
 SELR: ! r: select range of accounts
 	fnTos(sn$="ublabel-3")
 	fnLbl(1,1,"Starting Account:",20)
@@ -219,7 +219,7 @@ SELR: ! r: select range of accounts
 	resp$(2)=h1$
 	fnCmdSet(22)
 	fnAcs(sn$,0,mat resp$,ckey) ! select by range
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	l1$=lpad$(trim$(resp$(1)(1:10)),10)
 	h1$=lpad$(trim$(resp$(2)(1:10)),10)
 	if ckey=6 then let fncustomer_search(resp$(1)) else goto L1470
@@ -252,7 +252,7 @@ IACC: ! r: select individual accounts
 		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto IACC
 	end if 
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 ! if ckey=1 then goto L1660
 	if ckey=4 then goto DONE
 ! L1660: !
@@ -274,7 +274,7 @@ SELBK: ! r: selects by route
 	resp$(respc+=1)=""
 	fnCmdSet(22)
 	fnAcs(sn$,0,mat resp$,ckey) ! select labels by route
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	if ckey=2 then goto SCR2
 	bk=0 : bk=val(resp$(1)) conv L1860
 	seq=val(resp$(2)) conv L1860
@@ -293,7 +293,7 @@ SCR4F3: ! r: select starting account name
 	end if 
 	fnCmdSet(21)
 	fnAcs(sn$,0,mat resp$,ckey) ! select starting customer name
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	if ckey=6 then let fncustomer_search(resp$(1))
 	restore #customer,key>="       ": nokey ignore
 	SCR4F3_READ_CUSTOMER: ! 
@@ -361,7 +361,7 @@ SELSTART: ! r: select customer to start with
 		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto SELSTART
 	end if 
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	z$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(z$)="[All]" then restore #1: : goto TOP
 	selz$="": mat sele$=("")
@@ -376,7 +376,7 @@ READ_FROM_GRID: ! r: select customers from grid
 	fnLbl(2,40,"",30,0)
 	fnCmdSet(3)
 	fnAcs(sn$,0,mat resp$,ckey) ! select starting customer #
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	open #6: "Name="&trim$(resp$(1)),display,input ioerr READ_FROM_GRID
 	LIN6: linput #6: x$ eof DONE
 	z$=lpad$(trim$(x$(1:10)),10)
@@ -386,7 +386,7 @@ READ_FROM_GRID: ! r: select customers from grid
 	gosub ADDLABEL
 goto LIN6 ! /r
 def library fncustomer_address(z$*10,mat addr$; ca_address_type,ca_closeFiles)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fncustomer_address=fn_customer_address(z$,mat addr$, ca_address_type,ca_closeFiles)
 fnend
 def fn_customer_address(z$*10,mat addr$; ca_address_type,ca_closeFiles)
@@ -492,7 +492,7 @@ OPENCASS: ! r:
 return  ! /r
 IGNORE: continue 
 def fn_setup
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
+	library 'S:\Core\Library': fnTop,fnXit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
 	library 'S:\Core\Library': fnAddOneC
 	on error goto Ertn
 ! r: constants and dims
@@ -544,4 +544,4 @@ def fn_setup
 	filter_option$(7)="Active Customers"
 ! /r
 fnend 
-include: ertn
+include: Ertn

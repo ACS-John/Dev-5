@@ -1,13 +1,8 @@
 ! Replace S:\Core\PrtFlex\prtflex1
 !
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos
-	library 'S:\Core\Library': fncomboa
-	library 'S:\Core\Library': fnflexadd1,fnflexinit1,fnCmdKey
-	library 'S:\Core\Library': fntop,fngetdir2,fnCopy,fnfree
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fngetdir,fnCmdSet
+	autoLibrary
 	on error goto Ertn
-	fntop(program$)
+	fnTop(program$)
 ! r: dims
 	dim gridname$*40,gridindx$*40,filename$*60
 	dim resp$(87)*80,message$*40
@@ -23,15 +18,15 @@
 	dim programfolder$*256
 	programfolder$=os_filename$('S:\acs'&env$('cursys')) ! program grid folder (and sub-folder and files) are for distribution.  files and folders only distribute if they are missing.  makes updating them difficult.
 ! r: make any missing folders in the data directory
-	if ~exists(datafolder$&"\Grid") then 
+	if ~exists(datafolder$&"\Grid") then
 		execute 'MkDir "'&datafolder$&'\Grid"'
-	end if 
+	end if
 	dim tmp_directory_list$(1)*256
 	fngetdir2(programfolder$&'\Grid\',mat tmp_directory_list$, '/ad')
 	for tmp_directory_list_item=1 to udim(mat tmp_directory_list$)
-		if ~exists(datafolder$&'\Grid\'&tmp_directory_list$(tmp_directory_list_item)) then 
+		if ~exists(datafolder$&'\Grid\'&tmp_directory_list$(tmp_directory_list_item)) then
 			execute 'MkDir "'&datafolder$&"\Grid\"&tmp_directory_list$(tmp_directory_list_item)&'"'
-		end if 
+		end if
 	next tmp_directory_list_item
 ! /r
 ! r: copy any missing files to the data folder
@@ -41,13 +36,13 @@
 !       pr '1'; tmp_file_list$(tmp_file_list_item)
 		tmp_file_list$(tmp_file_list_item)(1:len(programfolder$))='' ! remove the program folder prefix from it - keep \Grid\...
 !      pr '2'; tmp_file_list$(tmp_file_list_item)
-		if ~exists(datafolder$&tmp_file_list$(tmp_file_list_item)) then 
+		if ~exists(datafolder$&tmp_file_list$(tmp_file_list_item)) then
 !      pr '3'; 'copy "'&programfolder$&tmp_file_list$(tmp_file_list_item)&'" "'&datafolder$&tmp_file_list$(tmp_file_list_item)&'"' : pause
 			execute 'copy "'&programfolder$&tmp_file_list$(tmp_file_list_item)&'" "'&datafolder$&tmp_file_list$(tmp_file_list_item)&'"'
-		end if 
+		end if
 	next tmp_file_list_item
 ! /r
-SelectDataBase: ! 
+SelectDataBase: !
 !  allows you to search the grid folder for any subfolders
 ! (You must create a sub-folder for each data base you can
 !  access)
@@ -66,7 +61,7 @@ SelectDataBase: !
 	resp$(1)=database_list$(1)
 	fnCmdSet(2)
 	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	database$=resp$(1)
 !
 GRIDSELECTION: ! r:
@@ -99,16 +94,16 @@ GRIDSELECTION: ! r:
 	fullgridindx$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".idx"
 	gridname$=resp$(1)
 	open_read$=datafolder$&"\Grid\"&database$&"\"&database$&"_info"
-	if ckey=4 then 
+	if ckey=4 then
 		close #hgridfile: ioerr ignore
 		if fnFree(fullgridname$)<=0 then goto SelectDataBase
 		fnFree(fullgridindx$)
 		goto SelectDataBase
-	end if 
+	end if
 	close #1: ioerr ignore
 	if ckey=1 then goto GridColumns
 ! If CKEY=4 Then Goto DisplayGrid
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	goto SelectDataBase ! /r
 !
 GridColumns: !  r: Displays all vaiables in the data base and allows you to                        choose the ones you want in your grid
@@ -126,13 +121,13 @@ GridColumns: !  r: Displays all vaiables in the data base and allows you to     
 	filename$="flexreview"
 	fnflexinit1(filename$,2,1,10,72,mat colhdr$,mat colmask$,1)
 	if lrec(hgridfile)=0 then goto DisplayGrid
-	do 
+	do
 		read #hgridfile,using fGridFile: columnnum,name$,vname$,fieldlen,colmask$,abbrev$ eof L1050
 		item$(1)=str$(columnnum)
 		item$(2)=name$
 		fGridFile: form pos 1,n 3,c 30,c 20,n 4,c 3,c 20
 		fnflexadd1(mat item$)
-	loop 
+	loop
 	L1050: !
 	fnCmdKey("&Add Column",1,1)
 	fnCmdKey("&Delete Column",2)
@@ -140,14 +135,14 @@ GridColumns: !  r: Displays all vaiables in the data base and allows you to     
 	fnCmdKey("&Back",4)
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs('',0,mat resp$,ckey) ! CALL items selected
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	if ckey=1 then goto DisplayGrid
 	if ckey=3 then goto PrintGrid
 	if ckey=4 then goto SelectDataBase ! select a different grid
-	if ckey=2 then 
+	if ckey=2 then
 		deletekey$=cnvrt$("n 3",val(resp$(1)))
 		delete #hgridfile,key=deletekey$: ioerr GridColumns
-	end if 
+	end if
 	if ckey<>2 then goto SelectDataBase
 	restore #hgridfile: : newcolumn=0
 	do
@@ -155,7 +150,7 @@ GridColumns: !  r: Displays all vaiables in the data base and allows you to     
 		newcolumn=newcolumn+1
 		rewrite #hgridfile,using fGridFile: newcolumn
 	loop
-DisplayGrid: ! 
+DisplayGrid: !
 	restore #hgridfile: ! determine next available column number
 	do
 		read #hgridfile,using fGridFile: lastcolumn eof L1250
@@ -178,12 +173,12 @@ DisplayGrid: !
 	mat gridname_list$(300)
 	mat gridname_list$=("")
 	close #16: ioerr ignore
-	open #16: 'Name=S:\acs[cursys]\Grid\'&database$&"\"&database$&'.fil',display,input 
+	open #16: 'Name=S:\acs[cursys]\Grid\'&database$&"\"&database$&'.fil',display,input
 	do
 		linput #16: ln$ eof L1420
 		gridname_list$(x+=1)=trim$(ln$)
 	loop
-	L1420: ! 
+	L1420: !
 	mat gridname_list$(x)
 	close #16: ioerr ignore
 	tt$="Highlite any column heading you wish to add to your grid"
@@ -208,25 +203,25 @@ AddToGrid: ! r: add items to individual grids
 	decimalposition=val(maskinfo$(1:2))
 	x=pos(uprc$(name$),"DATE",1)
 	if x>0 then itisadate$="Y" else itisadate$="N"
-	if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then 
+	if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then
 		colmask$="1" ! DATE IN MMDDYY FORMAT
-	else if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then 
+	else if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then
 		colmask$="3"
-	else if trim$(maskformat$)="PD" and fieldlen>7 and itisadate$="Y" then 
+	else if trim$(maskformat$)="PD" and fieldlen>7 and itisadate$="Y" then
 		colmask$="3"! DATE IN CCYYMMDD FORMAT
-	else if trim$(maskformat$)="PD" and fieldlen<8 and itisadate$="Y" then 
+	else if trim$(maskformat$)="PD" and fieldlen<8 and itisadate$="Y" then
 		colmask$="1" ! DATE IN MMDDYY FORMAT
-	else if trim$(maskformat$)="N" and decimalposition=2 and itisadate$="N" then 
+	else if trim$(maskformat$)="N" and decimalposition=2 and itisadate$="N" then
 		colmask$="10" ! AMERICAN CURRENCY
-	else if trim$(maskformat$)="N" and decimalposition>0 and itisadate$="N" then 
+	else if trim$(maskformat$)="N" and decimalposition>0 and itisadate$="N" then
 		colmask$=str$(30+decimalposition) ! NUMERIC WITH DECIMALS
-	else if trim$(maskformat$)="PD" and decimalposition>0 and itisadate$="N" then 
+	else if trim$(maskformat$)="PD" and decimalposition>0 and itisadate$="N" then
 		colmask$="10" ! NUMERIC WITH DECIMALS
-	else if (trim$(maskformat$)="N" or trim$(maskformat$)="PD") and decimalposition=0 and itisadate$="N" then 
+	else if (trim$(maskformat$)="N" or trim$(maskformat$)="PD") and decimalposition=0 and itisadate$="N" then
 		colmask$=str$(30+decimalposition) ! NUMERIC WITH DECIMALS
-	else if (trim$(maskformat$)="C" or trim$(maskformat$)="G") then 
+	else if (trim$(maskformat$)="C" or trim$(maskformat$)="G") then
 		colmask$="80" ! NORMAL CHARACTER
-	end if 
+	end if
 	read #hgridfile,using fGridFile,key=cnvrt$("pic(zzz)",val(gridinfo$(3))): oldcolumn nokey WriteNewRecord ! CHECK TO SEE IF ALREADY EXITS
 goto InsertGridColumn
 WriteNewRecord: !
@@ -234,7 +229,7 @@ WriteNewRecord: !
 goto DisplayGrid ! /r
 InsertGridColumn: ! r: Renumbers the selected grid columns if one is deleted
 	read #hgridfile,using fGridFile,last: lastcolumn eof ignore
-	! restore #hgridfile: 
+	! restore #hgridfile:
 	! do
 	!   read #hgridfile,using fGridFile: lastcolumn eof L1810
 	! loop
@@ -273,19 +268,19 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 		specline=specline+10
 		if pos(vname$,"$",1) then  ! determine if numeric or character
 			pr #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " item$("&str$(columns)&")="&trim$(vname$)
-		else 
+		else
 			pr #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " item$("&str$(columns)&")= str$("&trim$(vname$)&")"
 		end if
 		dataline=dataline+10
 	loop
-	L2160: ! 
+	L2160: !
 	close #h_gridspecs1: ioerr L2180
 	if columns=0 then goto DisplayGrid
-	L2180: ! 
+	L2180: !
 	dim new_prtflex2_name$*512
 	new_prtflex2_name$=env$('temp')&'\PrtFlex2_'&session$&'.br'
 	fnCopy("S:\Core\PrtFlex\PrtFlex2.br",new_prtflex2_name$)
-	open #h_gridspecs2:=10: "Name="&env$('temp')&"\GridSpecs2.tmp,RecL=255,Replace",display,output 
+	open #h_gridspecs2:=10: "Name="&env$('temp')&"\GridSpecs2.tmp,RecL=255,Replace",display,output
 	pr #h_gridspecs2,using F_GRIDSPECS1: "PROC NOECHO"
 	pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
 	pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
@@ -295,10 +290,10 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 	pr #h_gridspecs2,using F_GRIDSPECS1: "Replace "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
 	pr #h_gridspecs2,using F_GRIDSPECS1: 'chain "'&new_prtflex2_name$&'"' ! S:\Core\PrtFlex\PrtFlex2"'
 	! pr #h_gridspecs2,Using 1980: "PROC ECHO"
-	close #h_gridspecs2: 
-	open #h_gridname:=11: "Name="&env$('temp')&"\Gridname.tmp,RecL=80,Replace",internal,output,relative 
+	close #h_gridspecs2:
+	open #h_gridname:=11: "Name="&env$('temp')&"\Gridname.tmp,RecL=80,Replace",internal,output,relative
 	write #h_gridname,using 'form pos 1,c 40': gridname$
-	close #h_gridname: 
+	close #h_gridname:
 	! write fullgridname$,fullgridIndex,columns to file for prtflex2
 	! pr NEWPAGE
 execute "proc "&env$('temp')&"\gridspecs2.tmp" ! /r
@@ -317,5 +312,5 @@ AddGridName: ! r: Allows you to add columns to your grid
 	ckey=1 : goto L780
 ! /r
 DONE: close #1: ioerr ignore
-XIT: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

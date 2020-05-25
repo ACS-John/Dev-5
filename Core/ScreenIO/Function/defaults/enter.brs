@@ -1,9 +1,9 @@
 def fnEnterDefault
-  library 'S:\Core\Library': fntop,fncompany_name,fnprogram_properties,fnBackgroundDisable
+  library 'S:\Core\Library': fnTop,fncompany_name,fnprogram_properties,fnBackgroundDisable
   if screenio$(si_caption)='Properties' then
      ! fnBackgroundDisable(1)
   else
-    fntop(program$,screenio$(si_caption))
+    fnTop(program$,screenio$(si_caption))
     fncompany_name(0,115)
     for attrItem=1 to udim(mat attr$)
       if lwrc$(attr$(attrItem))=lwrc$('[buttons]') then

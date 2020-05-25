@@ -61,11 +61,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnSrepEnv$
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnArrayWasPassedC
-		library 'S:\Core\Library': fnArrayWasPassedN
+		autoLibrary
 		dim tmp$*512
 		dim directory_of$*256
 	end if
@@ -124,7 +120,7 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 
 		fnFree(csat$&fileList_br$)
 		tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList_os$&'"'
-		execute tmp$ ioerr XIT
+		execute tmp$ ioerr Xit
 
 		open #tf1:=fngethandle: "Name="&csat$&fileList_br$,display,input  ioerr Gd2_openReturnFailure
 		filename_count=line_count=0
@@ -181,7 +177,7 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 	goto EO_TF1
 	EO_TF1: ! 
 	gd2_return=filename_count
-	XIT: ! 
+	Xit: ! 
 	if env$('acsDebug')='Yes' then
 		close #tf1: ioerr ignore
 	else
@@ -234,4 +230,4 @@ def library fnGetDirClient(dir$*256,mat filename$; filter$*40, ___,returnN,hGdc,
 	fnGetDirClient=returnN
 fnend
 
-include: ertn
+include: Ertn

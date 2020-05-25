@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 fn_readService
 fnTos(sn$="TypeOfService") ! r:
 	fnLbl(2,13,"Full Name",20,2)
@@ -50,11 +50,11 @@ fnTos(sn$="TypeOfService") ! r:
 		close #hService:
 	end if
 goto Xit ! /r
-Xit: fnxit
+Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
+		library 'S:\Core\Library': fnTop,fnXit
 		library 'S:\Core\Library': fnTxt,fnLbl,fnTos,fnAcs,fnCmdSet,fnChk
 		library 'S:\Core\Library': fngethandle,fnAddOneC
 		library 'S:\Core\Library': fnArrayWasPassedC,fnArrayWasPassedN
@@ -148,4 +148,4 @@ def fn_service_other
 	end if
 	fn_service_other=so_return
 fnend
-include: ertn
+include: Ertn

@@ -1,6 +1,6 @@
 def fnco_properties_btn_ok
   ! library 'S:\Core\Library': fnIniSet,fnIniWrite
-  library 'S:\Core\Library': fnwrite_program_print_property
+  library 'S:\Core\Library': fnwriteProgramPrintProperty
   ! r: if Landscape/Portrait, than switch height and width if necessary
     tmp_height=val(s$(sio_txtHeight))
     tmp_width=val(s$(sio_txtWidth))
@@ -18,14 +18,14 @@ def fnco_properties_btn_ok
       end if 
     end if 
   ! /r
-  fnwrite_program_print_property('Orientation',     s$(sio_cmbOrientation)    )
-  fnwrite_program_print_property('Height',          s$(sio_txtHeight)         )
-  fnwrite_program_print_property('Width',           s$(sio_txtWidth)          )
-  fnwrite_program_print_property('Lines',           s$(sio_txtLpp)            )
-  fnwrite_program_print_property('FontSize',        s$(sio_txtFontSize)       )
-  fnwrite_program_print_property('TopMargin',       s$(sio_txtMarginTop)      )
-  fnwrite_program_print_property('BottomMargin',    s$(sio_txtMarginBottom)   )
-  fnwrite_program_print_property('LeftMargin',      s$(sio_txtMarginLeft)     )
-  fnwrite_program_print_property('RightMargin',     s$(sio_txtMarginRight)    )
+  fnwriteProgramPrintProperty('Orientation',     s$(sio_cmbOrientation)    )
+  fnwriteProgramPrintProperty('Height',          s$(sio_txtHeight)         )
+  fnwriteProgramPrintProperty('Width',           s$(sio_txtWidth)          )
+  fnwriteProgramPrintProperty('Lines',           s$(sio_txtLpp)            )
+  fnwriteProgramPrintProperty('FontSize',        s$(sio_txtFontSize)       )
+  fnwriteProgramPrintProperty('TopMargin',       s$(sio_txtMarginTop)      )
+  fnwriteProgramPrintProperty('BottomMargin',    s$(sio_txtMarginBottom)   )
+  fnwriteProgramPrintProperty('LeftMargin',      s$(sio_txtMarginLeft)     )
+  fnwriteProgramPrintProperty('RightMargin',     s$(sio_txtMarginRight)    )
   ExitMode=QuitOnly
 fnend

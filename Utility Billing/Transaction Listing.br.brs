@@ -10,12 +10,7 @@
 ! firstone=1   lastone=1   ! just one transaction
 ! firstone=0   lastone=0   ! not first and not last
 !
-	library 'S:\Core\Library': fnAcs,fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnget_services,fndat
-	library 'S:\Core\Library': fnTos,fnLbl,fnTxt
-	library 'S:\Core\Library': fnCmdSet,fntop,fnFra,fnOpt,fnChk
-	library 'S:\Core\Library': fnmsgbox,fnxit
-	library 'S:\Core\Library': fnreg_read,fnreg_write
+	autoLibrary
 	on error goto Ertn
 	dim p$*10,foot$*16,gb(10),tgb(10),ggb(10),dat$*20
 	dim subtotal_gb(10)
@@ -24,7 +19,7 @@
 	dim t1(5),tc$(5)*14,resp$(20)*256,msgline$(1)*128
 	dim st1(5)
 	if env$('ACSDeveloper')<>'' then raw_output=1
-	fntop(program$)
+	fnTop(program$)
 	fndat(dat$)
 	ccyymmdd_mask$="3"
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
@@ -75,8 +70,8 @@ fnChk(18,3,"Include Accounts without no activity", 0,0) ! fnChk(lyne,ps,txt$*196
 resp_no_activity=10
 if include_no_activity_accounts then resp$(resp_no_activity)='True' else resp$(resp_no_activity)='False'
 fnCmdSet(3)
-fnAcs(sn$,0,mat resp$,ckey)
-if ckey=5 then goto XIT
+fnAcs2(mat resp$,ckey)
+if ckey=5 then goto Xit
 dat$=resp$(1)
 filter_date_start=val(resp$(2))
 filter_date_end=val(resp$(3))
@@ -166,7 +161,7 @@ TRANS_EO_CUSTOMER: !
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'trans_EO_customer' : pause
 	if bal<>0 or (bal=0 and include_zero_balance_accounts) then gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL<>0 Then Gosub PRINT_INFO ! no transactions KJ
 loop
-
+ 
 EO_CUSTOMER: !
 q9=9
 if t9<>0 then gosub ACCUM_TOTALS
@@ -326,9 +321,9 @@ return  ! /r
 DONE: !
 close #ubtransvb: ioerr ignore
 fncloseprn
-XIT: fnxit
-
-
+Xit: fnXit
+ 
+ 
 DETERMINE_CURRRENT_BALANCE: !  r: determine current balance by subtracting or adding any transactions with a later date than the highest transaction date entered.
 	restore #ubtransvb,key>=z$&"         ": nokey L2140
 	READ_UBTRANSVB2: !
@@ -376,4 +371,4 @@ FIX_BALANCE_BREAKDOWN: ! fix balance breakdown so it matches balance when someth
 	! pr MAT GB: Pause
 	! If SUM(GB)<>BAL Then Pause
 return  ! /r
-include: ertn
+include: Ertn

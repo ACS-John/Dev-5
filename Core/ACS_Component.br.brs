@@ -3,20 +3,7 @@ end
 def fn_setup
 	if ~setup_library then
 		setup_library=1
-		library 'S:\Core\Library': fnprg
-		library 'S:\Core\Library': fnerror
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnpause
-		library 'S:\Core\Library': fnCmdKey
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnDateSelect$
-		library 'S:\Core\Library': fnListPrint
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnMakeSurePathExists
-		library 'S:\Core\Library': fnSystemNameFromAbbr$
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnArrayEmpty
-		library 'S:\Core\Library': fnGetPp
+		autoLibrary
 	end if
 	on error goto Ertn
 	dim _program$(1)*255
@@ -28,7 +15,7 @@ fnend
 
 def library fnTos(;sn$*100)
 	! screen ace top of screen function
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if sn$='' then
 		if env$('cursys')<>'' then
 			sn$=env$('cursys')&'\'
@@ -39,7 +26,7 @@ def library fnTos(;sn$*100)
 	tmp_combo_count_for_set=0
 	combooptionsetlistcount=combooption_which_prior=combooption_which=0
 	combokeycurrent$=combokeyprior$=''
-	if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto XIT
+	if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto Xit
 	! close #119: ioerr ignore
 	! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outIn,relative	! recl was 500
 	fn_clear_env(tmp_combo_count_for_read,tmp_combo_count_for_set)
@@ -54,17 +41,17 @@ def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon
 	!					 if unspecified, it defaults to len(txt$)
 	! myalign	 alignment of the text within the label
 	!					 0=left,	1=right,	2=center
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if mylen=0 then mylen=len(txt$)
 	setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
 fnend
 def library fnPic(lyne,ps,height,width,picture$*300;con,tabcon)
 	! add a picture/image to a screen ace form
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
 fnend
 def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! screen ace text box
 	if lwrc$(mask$)='mmddyy' then
 		mask$='1'
@@ -94,7 +81,7 @@ def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,ta
 fnend
 def library fnMultiLine(lyne,ps,height,width;contain,tabcon,tooltip$*200)
 	! add a multiline text box to a screen ace form
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 	lyne=ps=height=width=contain=tabcon=0
 	tooltip$=""
@@ -105,18 +92,18 @@ def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	! txt$			visible text/caption
 	! align			0=left,	 1=right
 	! contain		container number (for containers like frames and tab strips)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))
 	setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend
 def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 	! add a screen ace check box
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))-2
 	setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 fnend
 def library fnComboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnComboA=fn_comboA(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 fnend
 def fn_comboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
@@ -148,7 +135,7 @@ fnend
 def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if keyFormat$='' then keyFormat$='C'
 	dim key$*30,desc$*120,form$*200,becky$*199
 	dim ml$(10)*256
@@ -218,7 +205,7 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 		ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
 		fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
 	else
-		goto ERTN
+		goto Ertn
 	end if
 	read #df,release:
 	continue	! /r
@@ -273,7 +260,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	!												 =-1=append previous
 	! sfn$			(simple file name) specific file you want flexgrid stored
 	!						do not use an extension on the file name
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if env$('exitnow')='yes' then goto FLEXINIT1_COMPLETE ! special processing to increase speed for exitnow
 	dim hdrfile$*192,all_hdr$*6491,all_mask$*6491
 	dim optfile$*199
@@ -289,7 +276,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 		pause
 		goto FLEXINIT1_COMPLETE
 	end if
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! fncno(cno)
 	all_hdr$=all_mask$=""
 	! fn_get_flexhandle
@@ -344,7 +331,7 @@ fnend
 def library fnFlexAdd1(mat item$) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
 	! add a line to a flexgrid on a screen ace form
 	if env$('exitnow')='yes' then goto FLEXADD1_COMPLETE ! special processing to increase speed for exitnow
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	dim all_item$*6491
 	mat2str(mat item$,all_item$,hex$('09'))
 	flexhandle=fn_get_flexhandle
@@ -354,7 +341,7 @@ def library fnFlexAdd1(mat item$) ! this function may need to be updated to save
 fnend
 def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 	! add a frame to a screen ace form
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend
 def library fnTab(myline,mypos,height,width,mat cap$)
@@ -366,7 +353,7 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 	! udim(mat cap$) will set the number of tabs
 	! each tab caption should not be longer than 80 characters
 	! no more than 99 tabs
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	open #tf1:=fngethandle: "Name="&env$('temp')&"\tab.txt,size=0,RecL=80,replace",internal,output
 	for j=1 to udim(mat cap$)
 		write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
@@ -376,11 +363,11 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 fnend
 def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 	! add a button to a screen ace form
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
 fnend
 def library fnCmdSet(bon)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if bon=1 then
 		fnCmdKey("&Cancel",5,1,1)
 	else if bon=2 then
@@ -462,13 +449,13 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	! mylen		 button.width
 	! txt$		 button.caption
 	! tt$			 button.tooltiptext
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	height=max(height,1) ! button height is at least 1
 	if width=0 then width=len(txt$)
 	setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 fnend
 def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel,___,tmpControlX$*2048)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	! mylen		 button.width
 	! txt$		 button.caption
 	! tt$			 button.tooltiptext
@@ -493,7 +480,7 @@ def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 fnend
 IGNORE: continue
 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$; ___,menu_string$*10000,index_)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	for index_=1 to udim(mat _menu$)
 		menu_string$&=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
 	next index_
@@ -507,7 +494,7 @@ def fn_clear_menu
 	display menu: mat _m$,mat _p$,mat _s$
 fnend
 def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	dim txt$*201,path1$*300,tt$*400,tabline$*8019
 	dim cap$*128 ! caption / title bar text
 	dim addtomask$*40
@@ -523,16 +510,16 @@ def library fnAcs(sn$*100,unused,mat resp$,&ckey; startfield,close_on_exit,paren
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
-	goto XIT
-	ERTN: !
-	fnerror(program$,err,line,act$,"xit")
+	goto Xit
+	Ertn: !
+	fnerror(program$,err,line,act$,"Xit")
 	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 	execute "List -"&str$(line)
 	pause
 	ERTN_EXEC_ACT: !
 	execute act$ : goto ERTN
-	! please note for program pause to work the way we want XIT: and fnend must be on the same line.!
-XIT: fnend
+	! please note for program pause to work the way we want Xit: and fnend must be on the same line.!
+Xit: fnend
 def fn_ace_init
 	ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
 	grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
@@ -944,7 +931,7 @@ def fn_isDate (mat date_data,ace_item;___,index_,returnN)
 	fn_isDate=returnN
 fnend
 def fn_programProperties
-	library 'S:\Core\Library': fnprogram_properties
+	autoLibrary
 	dim temp_resp$(1)*512,temp_ace_resp$(1)*512
 	mat temp_io$(udim(ace_io$))=ace_io$
 	mat temp_resp$(udim(resp$))=resp$
@@ -2057,7 +2044,7 @@ def fn_control_count
 	fn_control_count=control_count
 fnend
 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
 !_
 ! the response$ for this - should be gotten with fnAGL

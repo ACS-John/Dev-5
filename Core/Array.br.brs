@@ -37,7 +37,7 @@ def fn_array_item_insert(mat array, insert_item, insert_item_number)
 fnend
 
 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
-  ! if ~setup then let fn_setup
+  ! if ~setup then fn_setup
   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 fnend  ! fnsrch_case_insensitive
 def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
@@ -54,7 +54,7 @@ def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
     end if
   loop until srch_start_ele>srch_array_count or srch_return
   fn_srch_case_insensitive=srch_return
-fnend  ! fn_srch_case_insensitive
+fnend
 
 def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
   fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)
@@ -165,7 +165,7 @@ fnend
 
 ! r: read a file into parallel 1-D Arrays
 def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim ftaLine$*1024
   if ftaDelimiter$='' then ftaDelimiter$='='
   open #hFta:=fngethandle: 'name='&ftaFile$,d,i
@@ -191,7 +191,7 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
 fnend
 
 def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim r1Line$*256
   dim r1LineItem$(0)*128
   mat r1Return$(0)
@@ -210,7 +210,7 @@ def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
 fnend
 def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumber1,r2ColumnNumber2,r2Delimiter$)
 
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim r2Line$*256
   dim r2LineItem$(0)*128
   mat r2Return1$(0)
@@ -236,7 +236,7 @@ def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumb
   fnRead2column=udim(mat r2Return1$)
 fnend
 def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*256,r3ColumnNumber1,r3ColumnNumber2,r3ColumnNumber3,r3Delimiter$)
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim r3Line$*256
   dim r3LineItem$(0)*128
   mat r3Return1$(0)
@@ -256,7 +256,7 @@ def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*2
   fnRead3column=udim(mat r3Return1$)
 fnend
 def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$*256,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim r4Line$*256
   dim r4LineItem$(0)*128
   mat r4Return1$(0)
@@ -281,7 +281,7 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   ! for reading files into two arrays where the first X positions in the file are column1 and the rest of the line is column2
   ! a 1 character delimiter between the two columns is assumed.
   ! no headings is assumed
-  if ~setup then let fn_setup
+  if ~setup then fn_setup
   dim r2fLine$*256
   mat r2fReturn1$(0)
   mat r2fReturn2$(0)
@@ -313,32 +313,32 @@ def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
 fnend
 
 def library fnArrayAddN(mat array_combined,mat array_part_one,mat array_part_two)
-	let array_part_one_udim=udim(array_part_one)
-	let array_part_two_udim=udim(array_part_two)
-	let array_combined_udim=array_part_one_udim+array_part_two_udim
+	array_part_one_udim=udim(array_part_one)
+	array_part_two_udim=udim(array_part_two)
+	array_combined_udim=array_part_one_udim+array_part_two_udim
 	mat array_combined(array_combined_udim)
-	if array_part_one_udim=0 then 
+	if array_part_one_udim=0 then
 		mat array_combined=array_part_two
-	else if array_part_two_udim=0 then 
+	else if array_part_two_udim=0 then
 		mat array_combined=array_part_one
-	else if array_part_one_udim>0 and array_part_two_udim>0 then 
+	else if array_part_one_udim>0 and array_part_two_udim>0 then
 		mat array_combined(1:array_part_one_udim)=array_part_one(1:array_part_one_udim)
 		mat array_combined(array_part_one_udim+1:array_combined_udim)=array_part_two(1:array_part_two_udim)
-	end if 
-fnend 
+	end if
+fnend
 def library fnArrayReverseC(mat in$,mat out$)
-	let in_udim=udim(in$)
+	in_udim=udim(in$)
 	mat out$(in_udim)
 	for in_item=1 to in_udim
-		let out$(in_udim-in_item+1)=in$(in_item)
+		out$(in_udim-in_item+1)=in$(in_item)
 	next in_item
-fnend 
+fnend
 def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 	Chr_Count=0
-	DO 
+	do
 		Cc_Pos_Chr=Pos(String_To_Search$,Chr_To_Count$,Cc_Pos_Chr+1)
-		IF Cc_Pos_Chr>0 THEN Chr_Count+=1
-	LOOP Until Cc_Pos_Chr<=0
+		if Cc_Pos_Chr>0 then Chr_Count+=1
+	loop Until Cc_Pos_Chr<=0
 	fnChrCount=Chr_Count
 fnend
 def library fnPosOfAny(textToSearch$*1024,mat searchFor$; fromEnd,___,returnN,howMany,x)
@@ -372,4 +372,15 @@ def library fnSetForCombo$*256(mat option$,key$; kpos,klen, ___,return$*256,item
 	next item
 	SetForComboFinis: !
 	fnSetForCombo$=return$
+fnend
+def library fnArrayItemRemoveC(mat array$,itemToRemove)
+	fnArrayItemRemoveC=fn_arrayItemRemoveC(mat array$,itemToRemove)
+fnend
+def fn_arrayItemRemoveC(mat array$,itemToRemove)
+	if itemToRemove=udim(mat array$) then
+		mat array$(itemToRemove-1)
+	else
+		mat array$(itemToRemove:udim(mat array$)-1)=array$(itemToRemove+1:udim(mat array$))
+		mat array$(udim(mat array$)-1)
+	end if
 fnend

@@ -33,7 +33,7 @@
 05002 ! Imported From "S:\Core\ScreenIO\function\co_properties_btn_ok.brs"
 05003 def fnco_properties_btn_ok
 05004   ! library 'S:\Core\Library': fnIniSet,fnIniWrite
-05005   library 'S:\Core\Library': fnwrite_program_print_property
+05005   library 'S:\Core\Library': fnwriteProgramPrintProperty
 05006   ! r: if Landscape/Portrait, than switch height and width if necessary
 05007     tmp_height=val(s$(sio_txtHeight))
 05008     tmp_width=val(s$(sio_txtWidth))
@@ -51,15 +51,15 @@
 05020       end if
 05021     end if
 05022   ! /r
-05023   fnwrite_program_print_property('Orientation',     s$(sio_cmbOrientation)    )
-05024   fnwrite_program_print_property('Height',          s$(sio_txtHeight)         )
-05025   fnwrite_program_print_property('Width',           s$(sio_txtWidth)          )
-05026   fnwrite_program_print_property('Lines',           s$(sio_txtLpp)            )
-05027   fnwrite_program_print_property('FontSize',        s$(sio_txtFontSize)       )
-05028   fnwrite_program_print_property('TopMargin',       s$(sio_txtMarginTop)      )
-05029   fnwrite_program_print_property('BottomMargin',    s$(sio_txtMarginBottom)   )
-05030   fnwrite_program_print_property('LeftMargin',      s$(sio_txtMarginLeft)     )
-05031   fnwrite_program_print_property('RightMargin',     s$(sio_txtMarginRight)    )
+05023   fnwriteProgramPrintProperty('Orientation',     s$(sio_cmbOrientation)    )
+05024   fnwriteProgramPrintProperty('Height',          s$(sio_txtHeight)         )
+05025   fnwriteProgramPrintProperty('Width',           s$(sio_txtWidth)          )
+05026   fnwriteProgramPrintProperty('Lines',           s$(sio_txtLpp)            )
+05027   fnwriteProgramPrintProperty('FontSize',        s$(sio_txtFontSize)       )
+05028   fnwriteProgramPrintProperty('TopMargin',       s$(sio_txtMarginTop)      )
+05029   fnwriteProgramPrintProperty('BottomMargin',    s$(sio_txtMarginBottom)   )
+05030   fnwriteProgramPrintProperty('LeftMargin',      s$(sio_txtMarginLeft)     )
+05031   fnwriteProgramPrintProperty('RightMargin',     s$(sio_txtMarginRight)    )
 05032   ExitMode=QuitOnly
 05033 fnend
 05034 !
@@ -107,11 +107,11 @@
 05076 !
 05077 ! Imported From "S:\Core\ScreenIO\function\defaults\enter.brs"
 05078 def fnEnterDefault
-05079   library 'S:\Core\Library': fntop,fncompany_name,fnprogram_properties,fnBackgroundDisable
+05079   library 'S:\Core\Library': fnTop,fncompany_name,fnprogram_properties,fnBackgroundDisable
 05080   if screenio$(si_caption)='Properties' then
 05081      ! fnBackgroundDisable(1)
 05082   else
-05083     fntop(program$,screenio$(si_caption))
+05083     fnTop(program$,screenio$(si_caption))
 05084     fncompany_name(0,115)
 05085     for attrItem=1 to udim(mat attr$)
 05086       if lwrc$(attr$(attrItem))=lwrc$('[buttons]') then

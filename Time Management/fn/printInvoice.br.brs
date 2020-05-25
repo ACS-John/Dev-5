@@ -1,8 +1,11 @@
-library 'S:\Core\Library': fnPrintInvoice
-fnPrintInvoice
+fn_setup
+fn_printInvoice
 
-def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$, ___,isCss,total_amt)
-	if ~setup then let fn_setup
+def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$)
+	if ~setup then fn_setup
+	fnPrintInvoice=fn_printInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal, pdfFileName$)
+fnend
+def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$, ___,isCss,total_amt)
 	if pdfFileName$='' then ebilling=0 else ebilling=1
 	forcePrintAcePdf=0
 	if fnval(actnum$)=4132 then  ! Stern and Stern
@@ -195,20 +198,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnopenprn
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnpa_finis
-		library 'S:\Core\Library': fnpa_open
-		library 'S:\Core\Library': fnpa_fontbold
-		library 'S:\Core\Library': fnpa_font
-		library 'S:\Core\Library': fnpa_fontSize
-		library 'S:\Core\Library': fnpa_fontSize
-		library 'S:\Core\Library': fnpa_txt
-		library 'S:\Core\Library': fnpa_pic
-		library 'S:\Core\Library': fnpa_line
-		library 'S:\Core\Library': fnval
-		
+		autoLibrary
 		dim pdfline$*255
 		pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&lpad$("_",67,"_")&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 

@@ -1,45 +1,38 @@
-00010 ! Replace S:\acsGL\AddCNo
-00020 ! was GLCopy - but the functionality needed to be in addFRO_C_N_O, which there wasn't one of so I just renamed it to that for the time being and we need to fix and test addCno later.
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntop,fnxit,fnchain,fnTos,fnLbl,fncmbcno,fnCmdSet,fnAcs,fnCopy,fnFree
-00050   fntop(program$,cap$="Add Company")
-00060   on error goto Ertn
-00070 !
-00080   dim zer(57),resp$(10)*80
-00090 ! ___________________________
-00100   right=1
-00120   fncno(to_cno)
-00130 ! ___________________________
-00140 MENU1: ! 
-00150   fnTos(sn$="GLAddCNo") !:
-        mylen=37 : mypos=mylen+2
-00160   fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,right)
-00170   fncmbcno(1,mypos)
-00180   fnCmdSet(2)
-00190   fnAcs(sn$,0,mat resp$,ckey)
-00195   if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
-00200   fro_cno=val(resp$(1)(43:47))
-00205   if fro_cno=0 then fro_cno=99999
-00210 L210: if to_cno<1 or to_cno=fro_cno then goto MENU1
-00220 ! ___________________________
-00230   fnCopy("[Q]\GLmstr\*.h"&str$(fro_cno),"[Q]\GLmstr\*.h"&str$(to_cno))
-00240   open #20: "Name=[Q]\GLmstr\GLmstr.h"&str$(to_cno)&",KFName=[Q]\GLmstr\GLIndex.h"&str$(to_cno)&",NoShr",internal,outIn,keyed 
-00250 L250: read #20,using 'Form POS 87,PD 6.2': cb eof L280
-00260   rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
-00270   goto L250
-00280 L280: close #20: 
-00290 ! ___________________________
-00295   execute 'drop "'&"[Q]GLmstr\GLTrans.H"&str$(to_cno)&'"' err ignore 
-00350   fnFree("[Q]\GLmstr\ACTrans.h"&str$(to_cno))
-00360   open #1: "Name=[Q]\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output 
-00370   close #1: 
-00380 XIT: fnchain("S:\acsGL\Company")
-00390 IGNORE: continue 
-00400 ! <Updateable Region: ERTN>
-00410 ERTN: fnerror(program$,err,line,act$,"xit")
-00420   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00450 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00460 ! /region
-00470 !
+! Replace S:\acsGL\AddCNo
+! was GLCopy - but the functionality needed to be in addFRO_C_N_O, which there wasn't one of so I just renamed it to that for the time being and we need to fix and test addCno later.
+ 
+	autoLibrary
+	fnTop(program$,cap$="Add Company")
+	on error goto Ertn
+ 
+	dim zer(57),resp$(10)*80
+! ___________________________
+	right=1
+	fncno(to_cno)
+! ___________________________
+MENU1: !
+	fnTos(sn$="GLAddCNo") : _
+	mylen=37 : mypos=mylen+2
+	fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,right)
+	fncmbcno(1,mypos)
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
+	fro_cno=val(resp$(1)(43:47))
+	if fro_cno=0 then fro_cno=99999
+L210: if to_cno<1 or to_cno=fro_cno then goto MENU1
+! ___________________________
+	fnCopy("[Q]\GLmstr\*.h"&str$(fro_cno),"[Q]\GLmstr\*.h"&str$(to_cno))
+	open #20: "Name=[Q]\GLmstr\GLmstr.h"&str$(to_cno)&",KFName=[Q]\GLmstr\GLIndex.h"&str$(to_cno)&",NoShr",internal,outIn,keyed
+L250: read #20,using 'Form POS 87,PD 6.2': cb eof L280
+	rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
+	goto L250
+L280: close #20:
+! ___________________________
+	execute 'drop "'&"[Q]GLmstr\GLTrans.H"&str$(to_cno)&'"' err ignore
+	fnFree("[Q]\GLmstr\ACTrans.h"&str$(to_cno))
+	open #1: "Name=[Q]\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output
+	close #1:
+Xit: fnchain("S:\acsGL\Company")
+IGNORE: continue
+include: Ertn

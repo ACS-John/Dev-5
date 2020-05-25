@@ -1,10 +1,10 @@
 ! Replace S:\acsPR\newprInpWk
-library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn
+autoLibrary
 on error goto Ertn
 dim em$*30,em(3),tdt(4),tdy(6),ta(2)
 dim message$*40
 dim gl$*12,tdt(4),tcd(3),tdet(23)
-fntop(program$)
+fnTop(program$)
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 open #2: "Name=[Q]\PRmstr\Department.h[cno], KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 fnopenprn
@@ -28,9 +28,9 @@ READ_EMPLOYEE: ! r: main loop
 	fsttrl=0
 	L350: !
 goto L260 ! /r
-
+ 
 NEWPGE: pr #255: newpage : gosub HDR : continue
-
+ 
 DONE: ! r:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
@@ -38,8 +38,8 @@ DONE: ! r:
 	L420: form pos 11,c 33,skip 1,pos 57,c 36,skip 1
 	fncloseprn
 goto Xit ! /r
-Xit: fnxit
-
+Xit: fnXit
+ 
 HDR: ! r:
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
@@ -50,5 +50,5 @@ HDR: ! r:
 	pr #255: " Number   Employee Name                   Numb      Rate   Regluar     Overtime      Other"
 	pr #255: "________  ______________________________  ____    ______  __________  __________  __________"
 return ! /r
-
+ 
 include: Ertn

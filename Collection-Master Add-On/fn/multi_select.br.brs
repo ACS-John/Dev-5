@@ -212,7 +212,7 @@ def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*2
 	on soflow ignore 
 	! IF TRIM$(LOGIN_NAME$)="siul" THEN PAUSE
 	msg$("Building Grid") 
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	max_body=udim(grid_data$) 
 	search$=prior_search$="": prior_match=0 
 	grid_title$=srep$(grid_title$,",",".")
@@ -385,7 +385,7 @@ def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*2
 fnend 
 ! r: ------------------XML Management Functions----------------------------
 def library fnopen_xml_writer(filename$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	dim xml_node_stack$(1)*100
 	mat xml_node_stack$(0)
 	open #(xmlfh:=fngethandle): "NAME="&filename$&",REPLACE,RECL=4096",display,output 
@@ -464,7 +464,7 @@ fnend
 def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$,ms_rotation_default)
 
 	if ~setup_fn_multi_select then 
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		dim ms_gof_grid_heading$*1024
 		dim ms_unselected_2d$(1,1)*80,ms_selected_2d$(1,1)*80
 		dim button_image$(10)*128
@@ -511,7 +511,7 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	if udim(mat ms_selected$)+udim(mat ms_unselected$)=0 then 
 		let fnmessagebox("There is nothing to select.", mb_stop+mb_okonly,cap$)
 		let fkey(99)
-		goto XIT_FN_MULTI_SELECT
+		goto Xit_FN_MULTI_SELECT
 	end if  ! UDIM(MAT MS_SELECTED$)+UDim(MAT MS_UNSELECTED$)=0
 
 	let ms_did_change=0
@@ -525,7 +525,7 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		gosub MULTISELECT_GUI_OFF
 	end if  ! UprC$(Env$("GUIMode"))="ON"   /   else 
 	display menu : mat empty_1$, mat empty_2$, mat empty_3$ ! or do  fn_Menu_Restore  if fnMenu_Backup was performed above.
-	goto XIT_FN_MULTI_SELECT
+	goto Xit_FN_MULTI_SELECT
 	! ~*~ ~*~ ~*~ ~*~ ~*~
 	MS_2D_BUILD: ! 
 	let ms_unselected_count=udim(mat ms_unselected$)
@@ -881,10 +881,10 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		if ms_gof_mb_response=mb_yes then 
 			goto MS_GOF_ASK_UNSELECTED
 		else if ms_gof_mb_response=mb_no then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! MS_GOF_MB_Response=MB_CANCEL
 			let fkey(99)
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		end if  ! MS_GOF_MB_Response=MB_YES   /   MS_GOF_MB_Response=MB_NO   /   else 
 	end if  ! udim(MAT MS_SELECTED$)=0
 
@@ -902,13 +902,13 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		goto MS_GOF_ASK_UNSELECTED
 	else if fkey=ms_fkey_complete then 
 		if fn_confirm('complete',cap$,'Selected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$))) then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! they did not confirm to complete
 			goto MS_GOF_ASK_SELECTED
 		end if  ! FN_CONFIRM('complete'...
 	else if fkey=fkey_exit or fkey_escape then 
 		if fn_confirm('cancel',cap$,'You will lose any selections!\nSelected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$))) then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! they did not confirm to complete
 			goto MS_GOF_ASK_SELECTED
 		end if  ! FN_CONFIRM('complete'...
@@ -920,10 +920,10 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		if ms_gof_mb_response=mb_yes then 
 			goto MS_GOF_ASK_SELECTED
 		else if ms_gof_mb_response=mb_no then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! MS_GOF_MB_Response=MB_CANCEL
 			let fkey(fkey_escape)
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		end if  ! MS_GOF_MB_Response=MB_YES   /   MS_GOF_MB_Response=MB_NO   /   else 
 	end if  ! udim(MAT MS_SELECTED$)=0
 	let ms_gof_au_ws_response=fnwinscroll(mat ms_unselected$, ms_gof_au_ws_response,"Title=Unselected Heading="&ms_gof_grid_heading$,"","Keys="&ms_fkey_complete$&";"&ms_fkey_add$&";"&ms_fkey_add_all$&";"&ms_fkey_side_switch$&";99 Labels=Complete;Add;Add All;Selected;Cancel",scol=3,scroll_srow=0,scroll_cols=0,scroll_rows=0,display_only=0)
@@ -940,13 +940,13 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		goto MS_GOF_ASK_SELECTED
 	else if fkey=ms_fkey_complete then 
 		if fn_confirm('complete',cap$,'Selected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$))) then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! they did not confirm to complete
 			goto MS_GOF_ASK_UNSELECTED
 		end if  ! FN_CONFIRM('complete'...
 	else if fkey=fkey_exit or fkey_escape then 
 		if fn_confirm('cancel',cap$,'You will lose any selections!\nSelected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$))) then 
-			goto XIT_MS_GO
+			goto Xit_MS_GO
 		else ! they did not confirm to complete
 			goto MS_GOF_ASK_UNSELECTED
 		end if  ! FN_CONFIRM('complete'...
@@ -1012,7 +1012,7 @@ def library fnwindow_this_size$*40(&win_height,&win_width; position$*80,border$*
 	let fnwindow_this_size$=fnwindowthis_size$(win_height,win_width, position$, border$)
 fnend 
 def fnwindowthis_size$*100(&win_height,&win_width; position$*80, border$*1)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	dim wts_border$*9
 	let position$=uprc$(trim$(position$))
 	if position$="" then let position$="CENTER"
@@ -1080,7 +1080,7 @@ def library fnconfirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_aga
 fnend 
 def fn_confirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_again_key$*28)
 	! Verb$ - something like "confirm" or "cancel" or "delete" or "complete"
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let confirm_fkey_origional=fkey
 	if lwrc$(text_addition$(1:2))='\n' then let text_addition$=text_addition$(3:len(text_addition$))
 	if lwrc$(text_addition$(len(text_addition$)-1:len(text_addition$)))='\n' then let text_addition$=text_addition$(1:len(text_addition$)-2)
@@ -1097,7 +1097,7 @@ def library fnarray_quick$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128
 	let fnarray_quick$=fn_array_quick$(mat array$,a$, b$,c$,d$,e$,f$,g$,h$,i$,j$,k$,l$,m$)
 fnend  ! FN_ARRAY_QUICK$
 def fn_array_quick$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128,h$*128,i$*128,j$*128,k$*128,l$*128,m$*128)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	mat array$(0)
 	let fnadd_one$(mat array$,a$,no_add_blanks=1)
 	let fnadd_one$(mat array$,b$,no_add_blanks)
@@ -1117,7 +1117,7 @@ def library fnarray_quick(mat array,an; bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,
 	let fnarray_quick=fn_array_quick(mat array,an, bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
 fnend  ! FN_ARRAY_QUICK$
 def fn_array_quick(mat array,an; bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	mat array(0)
 	let fnadd_one(mat array,an,no_add_blanks=1)
 	let fnadd_one(mat array,bn,no_add_blanks)
@@ -1144,7 +1144,7 @@ def library fnarray_append$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*12
 	let fnarray_append$=fn_array_append$(mat array$,a$, b$,c$,d$,e$,f$,g$)
 fnend  ! fnArray_Append$
 def fn_array_append$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fnadd_one$(mat array$,a$,no_add_blanks=1)
 	let fnadd_one$(mat array$,b$,no_add_blanks)
 	let fnadd_one$(mat array$,c$,no_add_blanks)
@@ -1157,7 +1157,7 @@ def library fnarray_append(mat array,an; bn,cn,dn,en,ffn,gn)
 	let fnarray_append=fn_array_append(mat array,an, bn,cn,dn,en,ffn,gn)
 fnend  ! fnArray_Append
 def fn_array_append(mat array,an; bn,cn,dn,en,ffn,gn)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fnadd_one(mat array,an,no_add_blanks=1)
 	let fnadd_one(mat array,bn,no_add_blanks)
 	let fnadd_one(mat array,cn,no_add_blanks)
@@ -1170,7 +1170,7 @@ def library fnarray_item_move$(mat from_array$, mat to_array$, array_item)
 	let fnarray_item_move$=fn_array_item_move$(mat from_array$, mat to_array$, array_item)
 fnend  ! FNARRAY_ITEM_MOVE$
 def fn_array_item_move$(mat from_array$, mat to_array$, array_item)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fnadd_one$(mat to_array$, from_array$(array_item))
 	let fnremove_arrayitem$(mat from_array$, array_item)
 fnend 
@@ -1178,7 +1178,7 @@ def library fnarray_item_move(mat from_array, mat to_array, array_item)
 	let fnarray_item_move=fn_array_item_move(mat from_array, mat to_array, array_item)
 fnend  ! FNARRAY_ITEM_MOVE
 def fn_array_item_move(mat from_array, mat to_array, array_item)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fnadd_one(mat to_array, from_array(array_item))
 	let fnremove_arrayitem(mat from_array, array_item)
 fnend 
@@ -1241,7 +1241,7 @@ fnend  ! fn_Field_Disable
 def library fngeneric_search_ask(&s_search$,&search_seek,&search_find; skey)
 	if ~setup_fn_grid_search then 
 		let setup_fn_grid_search=1
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		dim search_type$*20,search$*80,search_direction$(2)*30,search_seek$*30
 		dim list_data$(1)*80,search_match$*256,prior_search$*80,searching$*80
 		mat empty$(0)
@@ -1431,7 +1431,7 @@ def fn_array_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_co
 	end if  ! ARI_Insert_Item_Count>0
 fnend  ! fn_Array_Range_Insert
 def library fnmenu2(m2_title$*80,m2_cap$*80,&m2_pk$,mat m2_option$; m2_default_selection$*256, m2_trust$*80,m2_timeout,m2_footer$*80,m2_preserve_backgroud)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fnmenu2=fn_menu2(m2_title$,m2_cap$,m2_pk$,mat m2_option$, m2_default_selection$, m2_trust$,m2_timeout,m2_footer$,m2_preserve_backgroud)
 fnend  ! Fnmenu2
 def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_selection$*256, m2_trust$*80,m2_timeout,m2_footer$*80,m2_preserve_backgroud) ! M2_
@@ -1947,7 +1947,7 @@ def fn_array_move_braketed_to_top(mat amb_list$)
 	end if  ! amb_bracketed_count>0
 fnend  ! fn_array_move_braketed_to_top(mat ambtt_array$)
 def library fncombobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	let fncombobox$=fn_combobox$(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$, cb_col_heading$,cb_default_selection$,cb_timeout,cb_select_disable)
 fnend  ! fncombobox
 def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable) ! cb_

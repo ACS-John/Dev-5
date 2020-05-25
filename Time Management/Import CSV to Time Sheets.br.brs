@@ -1,7 +1,7 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 ! r: Screens
-
+ 
 dim filter_date(2)
 filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
@@ -11,9 +11,9 @@ label$(2)='Ending Date'
 dim empName$(5)*64
 dim filename$(5)*1024
 fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$)
-if fkey=93 or fkey=99 then goto XIT
+if fkey=93 or fkey=99 then goto Xit
 goto MainBody ! /r
-MainBody: ! r: 
+MainBody: ! r:
 mat ctHandles(0)
 mat ctFiles$(0)
 fileNameCount=srch(mat filename$,'')-1
@@ -38,7 +38,7 @@ for fileItem=1 to fileNameCount
 	Form_PrnLine: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 	F_Support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*1024
-
+ 
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
 	! if fileItem=2 then pr 'header:',line_count,line$ : pause
 	if pos(line$,chr$(9))>0 then let delim$=chr$(9) else delim$=','
@@ -50,7 +50,7 @@ for fileItem=1 to fileNameCount
 			dim item$(0)*1024
 			str2mat(line$,mat item$,delim$,"QUOTES:TRIM")
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
-			if the_date<the_date_prior and the_date_prior>20151218 then 
+			if the_date<the_date_prior and the_date_prior>20151218 then
 				pr file$(h_in)
 				pr 'line '&str$(line_count)
 				pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem'
@@ -92,7 +92,7 @@ nex ctItem
 mat ctHandles(0)
 mat ctFiles$(0)
 goto Xit ! /r
-XIT: fnxit
+Xit: fnXit
 dim ctFiles$(0)*1024
 dim ctHandles(0)
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
@@ -103,7 +103,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctWhich=srch(mat ctFiles$,ctFile$)
 	if ctWhich>0 then
 		hCt=ctHandles(ctWhich)
-	else 
+	else
 		fnAddOneC(mat ctFiles$,ctFile$)
 		hCt:=fngethandle
 		fnAddOneN(mat ctHandles,hCt)
@@ -146,7 +146,7 @@ def fn_lineIsEmpty(line$*1024; ___,returnN)
 	line$=srep$(line$,'0','')
 	line$=srep$(line$,'.','')
 	line$=srep$(line$,' ','')
-	if line$='' then 
+	if line$='' then
 		returnN=1
 	else
 		returnN=0
@@ -223,7 +223,7 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	sawo_line$&=wo_desc$
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_writeOutAcs
-
+ 
 def fn_get_next_line(h_in,&line$)
 	dim gnl_block$*512
 	dim gnl_buffer$*32767
@@ -250,7 +250,7 @@ def fn_getNextLine_reset
 fnend
 def fn_get_the_date(gtd_source$*256)
 	gtd_return=0
-	! if pos(gtd_source$,'Thu, Jan 10, 19')>0 then 
+	! if pos(gtd_source$,'Thu, Jan 10, 19')>0 then
 	! 	pr gtd_source$
 	! 	pause
 	! end if
@@ -394,8 +394,8 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 	fnureg_read('TM Employee 4 Name',resp$(resp_e4name:=respc+=1)) : fnureg_read('TM Employee 4 TimeSheet CSV',resp$(resp_e4_file:=respc+=1))
 	fnureg_read('TM Employee 5 Name',resp$(resp_e5name:=respc+=1)) : fnureg_read('TM Employee 5 TimeSheet CSV',resp$(resp_e5_file:=respc+=1))
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
 		fkey(99)
 	else
 		for ad_line=1 to udim(mat label$)
@@ -425,15 +425,15 @@ def fn_onsupport(wo_client,wo_month,the_date)
 	spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
-
+ 
 	OS_TRY_RPAD: !
 	spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
-
+ 
 	OS_FOUND_REC: !
 	if the_date<=sdt2 then os_return=1
-
+ 
 	OS_FINIS: !
 	fn_onsupport=os_return
 fnend
@@ -468,21 +468,9 @@ def fn_houryRateSage(wo_sage_code$; the_date)
 	fn_houryRateSage=shr_return
 fnend
 def fn_setup
-	if ~setup then 
+	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnAcs,fnCmdSet
-		library 'S:\Core\Library': fnLbl,fnTxt,fnTos,fnxit
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnpause
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnStatus,fnStatusClose
-		library 'S:\Core\Library': fnureg_read,fnureg_write
-		library 'S:\Core\Library': fnClientNameShort$
-		library 'S:\Core\Library': fnmakesurepathexists
-		library 'S:\Core\Library': fnreport_cache_folder_current$
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnAddOneN
+		autoLibrary
 		on error goto Ertn
 		gosub Enum
 		dim sage_code$*128
@@ -492,4 +480,4 @@ def fn_setup
 	end if
 fnend
 include: enum
-include: ertn
+include: Ertn

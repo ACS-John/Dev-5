@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                     
+9:44 AM 5/25/2020	CO	Implemented autoLibrary in all available locations and removed line numbers from all acs legacy applications.
 11:51 AM 5/18/2020	GL	increase report name size limit for printed budget worksheet
 16:38 05/20/2020	CO	5.74286  
 19:58 04/20/2020	CO	5.74285   

@@ -1,15 +1,13 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fncreg_write,fncreg_read
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnclient_has
+		autoLibrary
 		
 		on error goto Ertn
 	end if
 fnend
 def library fnEftData$*128(field$*128; return$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	field$=trim$(lwrc$(field$))
 	if return$<>'' then
 		fncreg_write('UB.EFT.'&field$, return$)

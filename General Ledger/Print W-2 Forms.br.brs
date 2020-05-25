@@ -1,37 +1,30 @@
 ! Replace S:\acsGL\PRW2
 ! r: setup
-library 'S:\Core\Library': fnxit,fntop
-library 'S:\Core\Library': fnpa_open,fnpa_background,fnpa_newpage,fnpa_finis
-library 'S:\Core\Library': fngethandle
-library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs2
-library 'S:\Core\Library': fnNameParse
-library 'S:\Core\Library': fnmsgbox
-library 'S:\Core\Library': fnw3
-library 'S:\Core\Library': fnask_w2_info,fnw2_text
+autoLibrary
 on error goto Ertn
-
+ 
 dim ss$*11,s(13),t(13)
 dim state$*2,a$(3)*40,b$(2)*12,controlNumber$*12,desc$(6)*15
 dim m(36),w(13)
 dim tmpMsgLine$(0)*256
-
+ 
 dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 dim k$(3)*30
-
-fntop(program$)
-
+ 
+fnTop(program$)
+ 
 open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
-read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag 
-close #1: 
-ficarate=ficarate/100 
+read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag
+close #1:
+ficarate=ficarate/100
 feducrat=feducrat/100
-open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  
-read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst 
-close #hCompany: 
+open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst
+close #hCompany:
 for j=1 to 3 : a$(j)=a$(j)(1:30) : next j
-for j=1 to 4 
-	fl1$(j)=str$(j+7)&",28,N 1,UT,N" 
-	fl1$(j+4)=str$(j+7)&",37,N 1,UT,N" 
+for j=1 to 4
+	fl1$(j)=str$(j+7)&",28,N 1,UT,N"
+	fl1$(j+4)=str$(j+7)&",37,N 1,UT,N"
 next j
 dim w2laser_output_filename$*256
 !
@@ -45,12 +38,12 @@ W2CopyFile$(4)='S:\Core\pdf\2016\W-2\Copy C.pdf' : w2ssnMask(4)=1
 W2CopyFile$(5)='S:\Core\pdf\2016\W-2\Copy 2.pdf' : w2ssnMask(5)=1
 W2CopyFile$(6)='S:\Core\pdf\2016\W-2\Copy D.pdf' : w2ssnMask(6)=1
 !
-
+ 
 ! /r
 ASK_INFO: !
-	if ~fnask_w2_info(taxYear$,unusedmaybe_beg_date,unusedmaybe_end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality:=1,cLocality$) then goto XIT
+	if ~fnask_w2_info(taxYear$,unusedmaybe_beg_date,unusedmaybe_end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality:=1,cLocality$) then goto Xit
 ! r: open export files (if appropriate, return to ASK_INFO screen if failure
-if exportFormatID then 
+if exportFormatID then
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[CompanyNumber]',env$('cno'))
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[companynumber]',env$('cno'))
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[COMPANYNUMBER]',env$('cno'))
@@ -60,12 +53,12 @@ if exportFormatID then
 	open #hExport:=fngethandle: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
 end if
 ! /r
-
+ 
 ! r: open files, initialize output, etc
-if exportFormatID=0 then 
-	fnpa_open('',w2Copy$,'PDF') 
-end if 
-open #hEmployee:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed 
+if exportFormatID=0 then
+	fnpa_open('',w2Copy$,'PDF')
+end if
+open #hEmployee:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
 box16=0
 open #hW2Box16:=fngethandle: "Name=[Q]\GLmstr\W2Box16.H[cno],KFName=[Q]\GLmstr\W2INDEX.H[cno],Shr",internal,input,keyed ioerr w2b16openfail
 box16=1
@@ -83,7 +76,7 @@ READ_EMPLOYEE: ! r:
 		if m(1)=0 then goto READ_EMPLOYEE
 		dedfed=dedfica=dedst=0
 		for j=1 to 10
-			if dedcode(j)=1 then 
+			if dedcode(j)=1 then
 				if dedfed(j)=1 then dedfed=dedfed+m(j*2+9)
 				if dedfica(j)=1 then dedfica=dedfica+m(j*2+9)
 				if dedst(j)=1 then dedst=dedst+m(j*2+9)
@@ -104,7 +97,7 @@ READ_EMPLOYEE: ! r:
 		w(7)=m(7) ! STATE WH
 		w(9)=m(1)-dedst ! STATE WAGES
 		if m(9)=0 then ! NO LOCAL WH
-			printLocality$=""  
+			printLocality$=""
 		else
 			w(8)=m(9) ! LOCAL WITHHOLDING
 			w(10)=m(1)-dedst ! LOCAL WAGES
@@ -117,13 +110,13 @@ READ_EMPLOYEE: ! r:
 		sswh=min(round((w(5)+w(6))*ssrate,2),w(3))
 		w(12)=w(3)-sswh ! MEDICARE WH
 		w(3)=sswh ! SOCIAL SECURITY WITHHELD
-		if exportFormatID=1 then 
+		if exportFormatID=1 then
 			nqp=amt(1)+amt(2)
 			gosub EXPORT_AMS
 			x$=''
-			! else if exportFormatID=2 then 
+			! else if exportFormatID=2 then
 			!   gosub EXPORT_CPS !  ! removed access 01/03/2017
-		else 
+		else
 			gosub PrintW2
 		end if
 		mat s=s+w
@@ -134,8 +127,8 @@ READ_EMPLOYEE: ! r:
 		mat w=(0)
 	loop ! /r
 FINIS: ! r:
-close #hEmployee: 
-close #hW2Box16: 
+close #hEmployee:
+close #hW2Box16:
 if ~exportFormatID then
 	mat t=t+s
 	box12aCode$=''
@@ -150,16 +143,16 @@ if ~exportFormatID then
 	fnpa_finis
 end if
 if enableW3$="True" then let fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
-if exportFormatID then 
+if exportFormatID then
 	mat tmpMsgLine$(2)
 	tmpMsgLine$(1)='Export file created:'
 	tmpMsgLine$(2)=os_filename$(file$(hExport))
 	close #hExport:
 	fnmsgbox(mat tmpMsgLine$,resp$) ! ,16+4)
-	goto XIT
+	goto Xit
 end if
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 ASK_EMP_LOCALITY: ! r:
 	fnTos
 	rc=0
@@ -170,14 +163,14 @@ ASK_EMP_LOCALITY: ! r:
 	fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 	resp$(rc+=1)=empLocality$
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	empLocality$=resp$(1)
 	! controlNumber$=rtrm$(controlNumber$)
 	! if controlNumber$="1" then goto L2770
 	! empLocality$=controlNumber$
-	! L2770: ! 
+	! L2770: !
 return ! /r
 BOX16_process: ! r: Box 16
 	! passed hW2Box16,kz$, mat w, etc
@@ -202,9 +195,9 @@ BOX16_process: ! r: Box 16
 		if in4$(j*5-1)="2" then w(5)=w(5)-amt(j)
 		!   if env$('client')="Washington Parrish" then goto L3810
 		if in4$(j*5-1)="2" then w(11)=w(11)-amt(j)
-		! L3810: ! 
+		! L3810: !
 		if in4$(j*5-0)="2" then w(9)=w(9)-amt(j)
-		if j=1 then 
+		if j=1 then
 			desc$(j)=lpad$(in4$(j*5-4)(1:2)&"  "&ltrm$(cnvrt$("Nz 10.2",amt(j))),15)
 		else if j=2 then
 			desc$(j)=lpad$(in4$(j*5-4)(1:2)&"  "&cnvrt$("Nz 10.2",amt(j)),15)
@@ -301,4 +294,4 @@ PrintW2: ! r:
 		fnw2_text(topmargin,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6))
 	end if
 return  ! /r
-include: ertn
+include: Ertn

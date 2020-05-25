@@ -1,2 +1,2 @@
-library 's:\core\library': fnsystemnamefromabbr$
+autoLibrary
 pr fnsystemnamefromabbr$('ub')

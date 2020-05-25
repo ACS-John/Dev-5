@@ -64,7 +64,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			execute 'config shell default client'
 			setenv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
 			fn_startStatus('Collecting local environment variables...')
-			fncs_env
+			fn_csEnv
 			if env$('client_acsDeveloper')<>'' then setenv('acsDeveloper',env$('client_acsDeveloper'))
 			setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
 			setenv('userprofile','@::'&env$('client_userprofile'))
@@ -99,7 +99,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			setenv('Temp',tmpFolder$)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
-		if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
+		if ~fn_temp_dir_validate then goto Xit ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto Xit
 		if pos(env$('Q'),' ')>0 then
 			fn_setQ(fnshortpath$(env$('Q')))
 		end if
@@ -110,8 +110,8 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_setQbase(New2Qbase$)
 		end if
 		if env$('client_temp')='' then setenv('Client_TEMP',env$('Temp'))
-		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
-		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
+		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto Xit
+		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto Xit ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)
 		! r: set to last client selected (if appropriate)
 			if env$('enableClientSelection')='Yes' and env$('clientSelected')='' then
@@ -197,7 +197,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
 		fnapply_theme ! ( disableConScreenOpenDflt)
-		if ~fn_multisession_test then goto XIT
+		if ~fn_multisession_test then goto Xit
 		! setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
 		setenv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
 		version_prior$=fn_last_version_used$
@@ -304,7 +304,7 @@ def fn_AcsUserId_Initialize
 		execute 'config substitute [acsUserId] u'&acs_userid$
 	end if
 fnend
-XIT: execute "System"
+Xit: execute "System"
 def fn_setup
 	if ~setup then
 		setup=1
@@ -542,7 +542,7 @@ def fn_update_version_for_inno
 	pr #h_tmp: 'AppVerName=ACS '&env$('acsVersion')
 	close #h_tmp:
 fnend
-def fncs_env
+def fn_csEnv
 	dim ce_line$*2048
 	dim ce_prefix$
 	ce_prefix$="Client_"
@@ -567,7 +567,7 @@ def fncs_env
 	CE_MAKE_TEMP_FILE: !
 	fnmakesurepathexists(ce_br_temp_file$)
 	execute '*sys -M set > "'&ce_os_temp_file$&'"'
-	open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_FNCS_ENV
+	open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_fn_csEnv
 	do
 		linput #hOsSet: ce_line$ error XIT_LOOP
 		gw_wholeline=len(rtrm$(ce_line$))
@@ -608,11 +608,11 @@ def fncs_env
 	pr '     ce_br_temp_file$='&ce_br_temp_file$
 	pr '          exists=';exists(ce_br_temp_file$)
 	pr '    Press ENTER to Exit' : kstat$(1)
-	goto XIT
+	goto Xit
 	XIT_LOOP: ! End of Startloop
 		close #hOsSet,free: error ignore
 	!
-	! XIT_FNCS_ENV: !
+	! XIT_fn_csEnv: !
 	execute "*sy -M CD > "&ce_os_temp_file$
 	open #hOsCd:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
 	linput #hOsCd: client_os_path$ error ignore
@@ -814,4 +814,4 @@ def fn_programDataDir$*256(;___,return$*256,pddTryItem)
 	end if
 	fn_programDataDir$=return$
 fnend
-include: ertn
+include: Ertn

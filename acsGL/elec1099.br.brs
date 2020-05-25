@@ -1,9 +1,9 @@
 !  Replace S:\acsGL\Elec1099
-! Create Electronic 1099s 
+! Create Electronic 1099s
 	! modified for new 750 recl for 1998 (this change not made until 2/26/99          so everybodys will be wrong! must do conversion pgm to change to new            format when disketts returned
 !
 	autoLibrary
-	fntop(program$,cap$="Create Electronic 1099s")
+	fnTop(program$,cap$="Create Electronic 1099s")
 	on error goto Ertn
 !
 	dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,cap$*128
@@ -12,7 +12,7 @@
 	dim amt(12),c$*29,s$*2,z$*9,ps$*2,camt(12),kamt(51,12),stu(51)
 	dim ti2(12),cn$*40,orc$*1,de$*30,resp$(60)*40
 	dim tr$(13)*12
-
+ 
 	! r: get mat st$
 	dim st$(51)*22
 	st$(1 )='AL-01-Alabama'
@@ -214,9 +214,9 @@
 	tr$(11)="L 5498"
 	tr$(12)="W W-2G"
 !
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  
-	read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$ 
-	close #20: 
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$
+	close #20:
 !
 	ficamax=oldmax
 L2210: p1=pos(b$,"-",1)
@@ -231,9 +231,9 @@ L2260: p1=pos(a$(3),",",1)
 	p2=len(rtrm$(a$(3)))
 	p1=p2-4
 	zip$=a$(3)(p1:p2)
-	if val(date$(1:2))-1 <70 then 
-		yr=2000+val(date$(1:2))-1 
-	else 
+	if val(date$(1:2))-1 <70 then
+		yr=2000+val(date$(1:2))-1
+	else
 		yr=1900+val(date$(1:2))-1
 	end if
 L2340: io1$(01)="04,36,C 40,UT,N"
@@ -253,7 +253,7 @@ L2340: io1$(01)="04,36,C 40,UT,N"
 	namcde$="F"
 	typemp$="R"
 	pr newpage
-MAIN: ! 
+MAIN: !
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
@@ -268,38 +268,38 @@ MAIN: !
 	resp$(3)=a$(3)
 	mylen=40: mypos=mylen+3
 	fnLbl(7,1,"Federal ID Number:",mylen,right)
-	fnTxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) 
+	fnTxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 )
 	resp$(4)=str$(b1)
 	fnLbl(8,1,"Payment Year:",mylen,right)
-	fnTxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) 
+	fnTxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 )
 	resp$(5)=str$(yr)
 	fnLbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
-	fnTxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) 
+	fnTxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 )
 	resp$(6)=pnc$
-	fnChk(11,mypos,"Combined Federal/State Filer:",1) 
+	fnChk(11,mypos,"Combined Federal/State Filer:",1)
 	resp$(7)=cfsy$
 	fnLbl(12,1,"5 Character Transmitter Code:",mylen,right)
-	fnTxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) 
+	fnTxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 )
 	resp$(8)=pnc$
-	fnChk(13,mypos,"Is Payer a Foreign Corporation:",1) 
+	fnChk(13,mypos,"Is Payer a Foreign Corporation:",1)
 	resp$(9)=tcc$
 	fnLbl(14,1,"Contact Name:",mylen,right)
-	fnTxt(14,mypos,40,0,0,"",0,"",0 ) 
+	fnTxt(14,mypos,40,0,0,"",0,"",0 )
 	resp$(10)=cn$
 	fnLbl(15,1,"Contact Phone Number:",mylen,right)
-	fnTxt(15,mypos,10,0,0,"30",0,"",0 ) 
+	fnTxt(15,mypos,10,0,0,"30",0,"",0 )
 	resp$(11)=str$(cpn)
 	mylen=60: mypos=mylen+3
 	fnLbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
-	fnTxt(17,mypos,1,0,0,"",0,"",0 ) 
+	fnTxt(17,mypos,1,0,0,"",0,"",0 )
 	resp$(12)=orc$
 	fnLbl(18,1,"Payer Phone Number:",mylen,right)
-	fnTxt(18,mypos,10,0,0,"30",0,"",0 ) 
+	fnTxt(18,mypos,10,0,0,"30",0,"",0 )
 	resp$(13)=str$(ppn)
 	fnCmdKey("&Next",1,1,0,"Moves to next questions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 ! Input #101,Fields MAT IO1$: MAT A$,B1,YR,PNC$,CFSYN$,TCC$,FCIYN$,CN$,CPN,ORC$,PPN Conv CONV1
 	if cfsyn$="Y" then cfs$="1" else cfs$=" "
 	if fciyn$="Y" then fci$="1" else fci$=" "
@@ -316,27 +316,27 @@ L2950: if uprc$(orc$)="O" then orc2$="1  "
 	csz$=a$(3)(1:20): gosub CSZ
 	if cfs$=" " then goto L3180
 	if cfs$><"1" then goto MAIN
-SELECT_ST: ! 
+SELECT_ST: !
 	resp=0
-	fnTos(sn$="elec10992") 
+	fnTos(sn$="elec10992")
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
 	for j=1 to 17
 		for x=1 to 3
-! fnChk(J+1,X*20,ST$(STOP2),1) 
+! fnChk(J+1,X*20,ST$(STOP2),1)
 			! rESP$(RESP+=1)=ST$(J*3-2)
 		next x
 	next j
 	fnCmdKey("&Next",1,1,0,"Moves to next questions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	for j=1 to 51
 		if resp$(j)="True" then stu(j)=1
 	next j
 !
 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing
 	close #102: ioerr L3200
-L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn 
+L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&cap$,display,outIn
 	pr #102: newpage
 	pr #102,fields "2,2,C 17,N": "Select Form Type:"
 	for j=1 to 13
@@ -349,7 +349,7 @@ L3280: rinput #102,select mat io2$,attr "H": mat wrd2$
 	if ti1<1 or ti1>udim(tr$) then goto L3280
 	ti$=tr$(ti1)(1:1)
 	close #101: ioerr L3330
-L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outIn 
+L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outIn
 	pr #101: newpage
 	pr f "4,05,C 04,R,N": "Type"
 	pr f "4,11,C 40,R,N": "Category"
@@ -369,7 +369,7 @@ L3480: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
 CONV2: if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 ERR2: pr f "24,78,C 1": bell : goto L3480
-L3530: if cmdkey=5 then goto XIT
+L3530: if cmdkey=5 then goto Xit
 	if sum(ti2)<1 then goto L3440
 	ai$=""
 	for j=1 to 12
@@ -377,24 +377,24 @@ L3530: if cmdkey=5 then goto XIT
 		ai$(j:j)=str$(j)
 L3590: next j
 	gosub PROCESS
-ASKDAT: ! 
-	fnTos(sn$="VendorTransList") 
+ASKDAT: !
+	fnTos(sn$="VendorTransList")
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Transaction Starting Date:",mylen,1)
-	fnTxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') 
+	fnTxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.')
 	resp$(1)=str$(transactionstartingdate)
 	fnLbl(2,1,"Transaction Ending Date:",mylen,1)
-	fnTxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') 
+	fnTxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.')
 	resp$(2)=str$(transactionendingdate)
 	fnLbl(2,1,"",45,1)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-! 
+	fnAcs2(mat resp$,ckey)
+!
 	transactionstartingdate=val(resp$(1))
 	transactionendingdate=val(resp$(2))
-	open #paymstr=1: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-	open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,input,keyed 
-	if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output 
+	open #paymstr=1: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,input,keyed
+	if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output
 	if ct1=0 then gosub RECT
 	gosub RECA
 	if lrec(1)=0 then goto L3800
@@ -439,7 +439,7 @@ L4130: next j
 !
 L4180: pr newpage
 	close #103: ioerr L4200
-L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outIn 
+L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outIn
 	io3$(1)="7,55,Cu 1,UT,N"
 	io3$(2)="8,55,C 9,UT,N"
 	pr #103,fields "4,2,C 60,N": "Vendor Number: "&ltrm$(vn$)
@@ -463,7 +463,7 @@ L4340: rinput #103,fields mat io3$: tinfs$,ss$ conv L4300
 	if tin$=" " and len(rtrm$(ss$))><0 then goto L4340
 	if tin$><" " and ssn=0 then goto L4300
 	if tin$=" " or tin$="1" or tin$="2" then goto L4450 else goto L4300
-	close #103: 
+	close #103:
 L4450: gosub PROCESS
 L4460: if tin$="1" then ln4$=uprc$(nam$(1:4)) : goto L4530
 	p1=len(rtrm$(nam$))
@@ -483,7 +483,7 @@ L4530: for j=1 to 51
 L4610: next j
 	pr newpage
 	close #103: ioerr L4640
-L4640: open #103: "SROW=7,SCOL=14,EROW=15,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outIn 
+L4640: open #103: "SROW=7,SCOL=14,EROW=15,ECOL=65,BORDER=SR,CAPTION=<"&cap$,display,outIn
 	pr #103: newpage
 	pr #103,fields "2,2,Cc 50,H,N": "invalid State Code encountered"
 	pr #103,fields "1,1,C 7,N": hex$("07")
@@ -498,17 +498,17 @@ L4750: if orc$="C" then cri$="G" else cri$=""
 	gosub RECB
 	goto L3790
 !
-RECT: ! 
+RECT: !
 	seq=seq+1: pr #22,using L4810: "T",yr,"",b1,tcc$," "," "," ",fic$,a$(1)," ",a$(1)," ",a$(2),city$,st$,zip$," ",1,cn$,cpn," "," "," "," "," ",seq," ","V","Advanced Computer Services, Inc.","P O Box 758","Harrison","AR","72601","Ken Johnson","8707415447","acs1@alltel.net"," "," "
 L4810: form pos 1,c 1,n 4,c 1,n 9,c 5,c 2,c 5,c 1,c 1,6*c 40,c 2,c 9,c 15,pic(########),c 40,n 15,c 35,c 2,c 15,c 6,c 83,pic(########),c 10,c 1,c 40,c 40,c 40,c 2,c 9,c 40,c 15,c 35,c 9,c 2
-	return 
+	return
 !
-RECA: ! 
+RECA: !
 	seq=seq+1: pr #22,using L4860: "A",yr," ",b1,pnc$," ",cfs$,ti$,ai$," ",orc2$," ",fci$,a$(1)," ",tai,a$(2),city$,st$,zip$,ppn," ",seq," "," "
 L4860: form pos 1,c 1,n 4,c 6,g 9,c 4,3*c 1,c 12,c 8,c 3,c 1,c 1,2*c 40,n 1,2*c 40,c 2,c 9,n 15,pos 240,c 260,pos 500,pic(########),c 231,c 2
-	return 
+	return
 !
-RECB: ! 
+RECB: !
 	totalb=totalb+1
 	seq=seq+1: pr #22,using L4920: "B",yr,cri$," ",tin$,ss$,vn$," "," ",mat amt,"",fci$,nam$,"","",ad1$,"",c$,s$,z$,"",seq,"","","",0,0,"",""
 L4920: form pos 1,c 1,n 4,c 1,c 4,c 1,c 9,c 20,c 4,c 10,12*pic(############),c 48,c 1,6*c 40,c 2,c 9,c 1,pic(########),pos 508,c 36,pos 544,c 119,c 60,2*pic(##########),c 2,c 2
@@ -516,16 +516,16 @@ L4920: form pos 1,c 1,n 4,c 1,c 4,c 1,c 9,c 20,c 4,c 10,12*pic(############),c 4
 	cnp=cnp+1
 	tnp=tnp+1
 	mat amt=(0)
-	return 
+	return
 !
-RECC: ! 
+RECC: !
 	seq=seq+1: pr #22,using L5010: "C",cnp,"",mat camt,"",seq," "," "
 L5010: form pos 1,c 1,pic(########),c 6,12*pic(##################),c 268,pic(########),c 231,c 2
 	mat camt=(0)
 	cnp=0
-	return 
+	return
 !
-RECK: ! 
+RECK: !
 	for j=1 to 51
 		if knp(j)=0 or stu(j)=0 then goto L5110
 		seq=seq+1: pr #22,using L5100: "K",knp(j),"",kamt(j,1),kamt(j,2),kamt(j,3),kamt(j,4),kamt(j,5),kamt(j,6),kamt(j,7),kamt(j,8),kamt(j,9),kamt(j,10),kamt(j,11),kamt(j,12),"",seq," ","","","",st$(j)(4:5),""
@@ -533,19 +533,19 @@ L5100: form pos 1,c 1,pic(########),c 6,12*pic(##################),c 268,pic(###
 L5110: next j
 	mat kamt=(0)
 	mat knp=(0)
-	return 
+	return
 !
-RECF: ! 
+RECF: !
 	seq=seq+1: pr #22,using L5180: "F",tnp,"",totalb,"",seq," "
 L5180: form pos 1,c 1,pic(########),"000000000000000000000",c 19,pic(########),c 442,pic(########),c 241,c 2
-	return 
+	return
 !
 END1: gosub RECC
 	gosub RECK
-	close #1: 
+	close #1:
 	pr newpage
 	close #104: ioerr L5260
-L5260: open #104: "SROW=7,SCOL=8,EROW=09,ECOL=72,Border=SR,Caption=<"&cap$,display,outIn 
+L5260: open #104: "SROW=7,SCOL=8,EROW=09,ECOL=72,Border=SR,Caption=<"&cap$,display,outIn
 	pr #104,fields "2,2,C 58,N": "Do you have another type of return for this company (Y/N):"
 	yn$="N" ! default
 L5290: rinput #104,fields "2,61,Cu 1,UT,N": yn$ conv L5290
@@ -556,19 +556,19 @@ L5290: rinput #104,fields "2,61,Cu 1,UT,N": yn$ conv L5290
 	gosub RECF
 	close #22: ioerr L5370
 	gosub L5600
-L5370: goto XIT
+L5370: goto Xit
 !
-XIT: fnxit
+Xit: fnXit
 !
 PROCESS: ! r:
 	pr newpage
 	close #101: ioerr ignore
-	open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outIn 
+	open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outIn
 	pr f "10,35,C 10,N": "processing"
 	pr f "13,34,C 11,B,5": "Cancel (F5)"
 	pr f "12,32,C 20": "  0% COMPLETED"
 return ! /r
-
+ 
 CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 	L5500: p1=pos(csz$,".",1)
 	if p1>0 then csz$(p1:p1)="": goto L5500
@@ -579,13 +579,13 @@ CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 	state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 	zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
 return ! /r
-
+ 
 L5600: ! r:
 	close #24: ioerr ignore
 	dim a$*750
 	close #25: ioerr ignore
-	open #24: "Name=X,RecL=751,EOL=NONE,Replace",external,output 
-	open #25: "Name=irstax,RecL=750",display,input 
+	open #24: "Name=X,RecL=751,EOL=NONE,Replace",external,output
+	open #25: "Name=irstax,RecL=750",display,input
 	do
 		linput #25: a$ eof L5700
 		if a$(750:750)="X" then a$(750:750)=""
@@ -593,8 +593,8 @@ L5600: ! r:
 		L5680: form pos 1,c 750,c 1
 	loop
 	L5700: !
-	close #24: 
-	close #25: 
+	close #24:
+	close #25:
 	fnCopy('x','a:irstax')
 return ! /r
 include: Ertn

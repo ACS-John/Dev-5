@@ -13,16 +13,12 @@ Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnureg_read,fnureg_write
+		autoLibrary
 		on error goto Ertn
 	end if
 fnend
 def library fnAskFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*256,recallAddOn$*64)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAskFileName=fn_askFileName(opFileOpen$,purpose$, filter$,filterDescription$,path$,recallAddOn$)
 fnend
 def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*256,recallAddOn$*64,___,returnN)
@@ -59,5 +55,5 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 	end if
 	fn_askFileName=returnN
 fnend
-include: ertn
+include: Ertn
 include: fn_open

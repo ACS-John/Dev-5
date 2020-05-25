@@ -2,7 +2,7 @@
 ! create a screen ace combo box for available Route Numbers
 def library fncmbrt2(myline,mypos; disableAll)
 	! disableAll (0=add option [All] to list, 1=dont show an option for disableAll)
-	library 'S:\Core\Library': fncomboa,fncreg_read
+	autoLibrary
 	dim option$(999)
 	fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$)
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)

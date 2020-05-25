@@ -1,42 +1,36 @@
-00010 ! Replace S:\acsCL\Conversion\UnPdAloc-v1-to-v2
-00020 ! converts the CL UnPdAloc file from version 0 or version 1 to Version 2
-00030   def library fnunpdaloc_v1_to_v2
-00040     library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnmsgbox,fnCopy,fnindex_it,fnStatus
-00050     on error goto Ertn
-00060 !
-00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
-00080 !
-00090     fncno(cno,cnam$)
-00100     cap$="Checkbook update UnPdAloc from v1 to v2"
-00120     fnStatus("Payment Allocation file until it is updating from v1 to v2")
-00180     open #unpdaloc=1: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]",internal,outIn,keyed 
-00182 !      close #unpdaloc:
-00190     if version(unpdaloc)=2 then let fnStatus("UnPdAloc is already version 2") : goto XIT
-00200     version(unpdaloc,2)
-00210     close #unpdaloc: 
-00220 ! 
-00230 ! change the record length
-00240     fnCopy("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UnPdAloc.h[cno]",67)
-00270 ! 
-00280 ! make sure the Key is right justified
-00290     open #unpdaloc=1: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]",internal,outIn,keyed 
-00300     for j=1 to lrec(unpdaloc)
-00310       read #unpdaloc,using 'Form Pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
-00315       vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
-00320       rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
-00330 L330: next j
-00340     close #unpdaloc: 
-00350     fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")
-00360     fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
-00370     goto XIT
-00380 !
-00390 ! <Updateable Region: ERTN>
-00400 ERTN: fnerror(program$,err,line,act$,"xit")
-00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00450 ! /region
-00460 !
-00470 XIT: fnend 
-00480 !
+! Replace S:\acsCL\Conversion\UnPdAloc-v1-to-v2
+! converts the CL UnPdAloc file from version 0 or version 1 to Version 2
+def library fnunpdaloc_v1_to_v2
+		autoLibrary
+		on error goto Ertn
+ 
+		dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
+ 
+		fncno(cno,cnam$)
+		cap$="Checkbook update UnPdAloc from v1 to v2"
+		fnStatus("Payment Allocation file until it is updating from v1 to v2")
+		open #unpdaloc=1: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]",internal,outIn,keyed
+!      close #unpdaloc:
+		if version(unpdaloc)=2 then let fnStatus("UnPdAloc is already version 2") : goto Xit
+		version(unpdaloc,2)
+		close #unpdaloc:
+ 
+! change the record length
+		fnCopy("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UnPdAloc.h[cno]",67)
+ 
+! make sure the Key is right justified
+		open #unpdaloc=1: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]",internal,outIn,keyed
+		for j=1 to lrec(unpdaloc)
+			read #unpdaloc,using 'Form Pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
+			vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
+			rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
+L330: next j
+		close #unpdaloc:
+		fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")
+		fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
+		goto Xit
+ 
+include: Ertn
+ 
+Xit: fnend
+ 

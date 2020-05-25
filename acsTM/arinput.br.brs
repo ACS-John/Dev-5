@@ -1,5 +1,5 @@
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn, fnTos,fnLbl,fnTxt,fnChk,fnqgl,fnCmdSet,fnAcs,fnagl$,fnsearch
-	fntop(program$,cap$="Collections")
+	autoLibrary
+	fnTop(program$,cap$="Collections")
 	dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25
 	dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 	dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
@@ -8,7 +8,7 @@
 	read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr L2290
 ! i3=1 ! ENTER G/L #'S
 L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3
-	close #h_company: 
+	close #h_company:
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
 	otgl$(1)="9,30,pic(zzz)"
 	otgl$(2)="9,34,pic(zzzzzz)"
@@ -46,12 +46,12 @@ L420: ! YES DEPT    NO SUB ACCOUNT
 L490: ! NO GL TO BE ENTERED
 	sz=6
 L510: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn ioerr L530
-	close #h_addr,free: 
+	close #h_addr,free:
 L530: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr L2290
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr L2290
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr L2290
 L560: form pos 1,c 255,142*c 18
-	close #1: 
+	close #1:
 	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr L2290
 	open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L2290
 L590: hd$(1)="A/R Input Selection Menu"
@@ -128,10 +128,10 @@ L1240: if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 L1280: if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto L590
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 	ps1=1
-	if tr(1)<10100 or tr(1)>123199 then 
+	if tr(1)<10100 or tr(1)>123199 then
 		pr f "5,48,c 20": "Invalid Date"
 		goto L790
-	end if 
+	end if
 L1340: if tr(3)><0 then goto L1370
 	pr f "6,48,c 20": "NO AMOUNT ENTERED"
 	goto L790
@@ -180,7 +180,7 @@ L1700: pr newpage
 	pr f "12,26,n 11.2": tdt
 	pr f "18,1,C 70,H,N": "ENTER 1 TO MERGE; 2 FOR CORRECTIONS: 5 STOP WITHOUT POSTING"
 L1790: input fields "18,61,n 1,eu,n": j conv L1790
-	if j=5 then goto XIT
+	if j=5 then goto Xit
 	on j goto L2270,L1810 none L1790
 L1810: pr newpage
 	pr f "10,5,c 60": "ENTER 1 FOR A LISTING OF ENTRIES; ELSE ENTER 2"
@@ -206,7 +206,7 @@ L2010: pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12,skip 1
 	goto L1960
 L2040: fncloseprn
-	on fkey 5 ignore 
+	on fkey 5 ignore
 L2060: pr newpage
 	pr f "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
@@ -229,7 +229,7 @@ L2220: pr newpage
 L2250: input fields "10,61,N 1,EU,N": j conv L2250
 	on j goto L590,L1700 none L2250
 L2270: chain "S:\acsTM\ARMerge"
-XIT: pr newpage: fnxit
+Xit: pr newpage: fnXit
 L2290: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
 	goto L2350
 L2310: pr newpage
@@ -241,8 +241,8 @@ L2350: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 	if err=61 and rtrm$(uprc$(quitcode$))="Q" then goto L610 else goto L2410
 	pr f "23,3,C 78,N": ""
 	pr f "24,3,C 78,N": ""
-	retry 
-L2410: goto XIT
+	retry
+L2410: goto Xit
 TMSRCH: ! search for customer #
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70
 	file_num=11 ! alpha index on clients
@@ -254,5 +254,5 @@ TMSRCH: ! search for customer #
 	p$=selection$ ! pull key from first field in search line
 	ano=0
 	ano=val(selection$) conv L4910
-L4910: return 
-include: ertn
+L4910: return
+include: Ertn

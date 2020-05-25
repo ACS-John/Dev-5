@@ -1,5 +1,5 @@
 ! D change
-library 'S:\Core\Library': fnOpenFile,fnXit,fnCopy,fnStime,fnChain,fnclosefile,fnHamsterFio,fnGetHandle,fnRead4column
+autoLibrary
 ! fnCopy('[Q]\UBmstr\MeterLocation*.h[cno]','[Q]\UBmstr\MeterLocation*_before.h[cno]')
 fnCopy('[Q]\UBmstr\MeterLocation_before.h[cno]','[Q]\UBmstr\MeterLocation.h[cno]')
 fnCopy('[Q]\UBmstr\MeterLocationIdx1_before.h[cno]','[Q]\UBmstr\MeterLocationIdx1.h[cno]')
@@ -31,7 +31,7 @@ def fn_fixIt
 	do
 		read #hLocation,using form$(hLocation): mat location$,mat locationN eof FiEoLocation
 		inWhich=srch(mat inLocationIdN,locationN(loc_locationId))
-		if inWhich<=0 then 
+		if inWhich<=0 then
 			pr 'could not find location '&str$(locationN(loc_locationId))&' in Jessica table.'
 			pause
 			fn_fixTransmitterMeterMixup(location$(loc_transmitter),location$(loc_meterNumber))
@@ -68,9 +68,9 @@ def fn_fixTransmitterMeterMixup(&transmitter$,&meter$)
 		transmitter$=holdTransmitter$
 		ftmnmReturn=3
 	else if ~fn_isTransmitterNumber(transmitter$) and ~fn_isTransmitterNumber(meter$) then
-		if transmitter$<>'' then 
-			if meter$<>'' and transmitter$<>meter$ then 
-				pr 'prob   meter:'&meter$&'  transmitter:'&transmitter$ 
+		if transmitter$<>'' then
+			if meter$<>'' and transmitter$<>meter$ then
+				pr 'prob   meter:'&meter$&'  transmitter:'&transmitter$
 				! pause
 				ftmnmReturn=0
 				goto OutOfThis
@@ -83,7 +83,7 @@ def fn_fixTransmitterMeterMixup(&transmitter$,&meter$)
 	OutOfThis: !
 	fn_fixTransmitterMeterMixup=ftmnmReturn
 fnend
-
+ 
 def fn_open(fileName$*255, mat openData$, mat openDataN, mat form$; inputOnly,openKeyNum,disableEnumSort,openPath$*255,mat openDescription$,mat fieldWidths,disableUpdate, ___,fileIoEnumItem)
 	dim form$(0)*2048 ! global
 	dim fileIoEnum$(1)*800

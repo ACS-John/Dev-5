@@ -1,60 +1,53 @@
-00010 ! Replace S:\acsCL\InitGLPay
-00020 ! Import General Ledger Payee Records
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fnTos,fnLbl,fnTxt,fncomboa,fnCmdSet,fnAcs,fnmsgbox,fngethandle
-00050   on error goto Ertn
-00060 !
-00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
-00080 !
-00090   fntop(program$,cap$="Import GL Payee Records")
-00100   cancel=99 : right=1 : left=0 : center=2 : number$='30'
-00110   fncno(cno,cnam$) !:
-        fndat(dat$)
-00120 MENU1: ! 
-00130   fnTos(sn$="InitGLPay") !:
-        mylen=45 : mypos=mylen+2 : lc=0
-00140   fnLbl(lc+=1,1,"Extract Payee Information from general ledger:",45,right)
-00150   item1$(1)="ACS G/L system" !:
-        item1$(2)="Accountant's Diskette"
-00160   fncomboa("claims-srt",lc,mypos,mat item1$,tt$) !:
-        resp$(1)=item1$(1)
-00170   fnLbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
-00180   fnTxt(lc,mypos,5,0,left,number$) !:
-        resp$(2)=env$('cno')
-00190   fnCmdSet(2) !:
-        fnAcs(sn$,0,mat resp$,ck)
-00200   if ck=5 then goto XIT else !:
-          if resp$(1)=item1$(1) then pas$="BUILD" else !:
-            if resp$(1)=item1$(2) then pas$="COPY"
-00210   glcno=val(resp$(2))
-00220   execute "COPY A:paymstr.H"&str$(glcno)&' '&"[Q]\CLmstr\*.*" ioerr MSGBOX2
-00230   execute "COPY A:payeeglbreakdown.H"&str$(glcno)&' '&"[Q]\CLmstr\*.*" ioerr MSGBOX2
-00240   execute "Index [Q]\CLmstr\paymstr.H"&str$(glcno)&' '&"[Q]\CLmstr\payidx1.H"&str$(glcno)&",1,8,replace,DupKeys"
-00250   execute "Index [Q]\CLmstr\payeeglbreakdown.H"&str$(glcno)&' '&"[Q]\CLmstr\Payeeglbkdidx.H"&str$(glcno)&",1,8,replace,DupKeys"
-00252   open #paymstr:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-00254   open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
-00255   version(payeegl,1)
-00256   version(paymstr,1)
-00257   close #paymstr: 
-00258   close #payeegl: 
-00260 XIT: fnxit
-00270 !
-00280 ! <Updateable Region: ERTN>
-00290 ERTN: fnerror(program$,err,line,act$,"xit")
-00300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00340 ! /region
-00350 !
-00360 MSGBOX1: ! 
-00370   mat ml$(2) !:
-        ml$(1)="A general ledger chart of accounts has not been set up" !:
-        ml$(2)="for this company.  You must choose a different option" !:
-        fnmsgbox(mat ml$,resp$,cap$,16) !:
-        goto MENU1
-00380 MSGBOX2: ! 
-00390   mat ml$(1) !:
-        ml$(1)="Be sure the diskette is properly inserted and try again" !:
-        fnmsgbox(mat ml$,resp$,cap$,16) !:
-        goto MENU1
+! Replace S:\acsCL\InitGLPay
+! Import General Ledger Payee Records
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
+ 
+	fnTop(program$,cap$="Import GL Payee Records")
+	cancel=99 : right=1 : left=0 : center=2 : number$='30'
+	fncno(cno,cnam$) : _
+	fndat(dat$)
+MENU1: !
+	fnTos(sn$="InitGLPay") : _
+	mylen=45 : mypos=mylen+2 : lc=0
+	fnLbl(lc+=1,1,"Extract Payee Information from general ledger:",45,right)
+	item1$(1)="ACS G/L system" : _
+	item1$(2)="Accountant's Diskette"
+	fncomboa("claims-srt",lc,mypos,mat item1$,tt$) : _
+	resp$(1)=item1$(1)
+	fnLbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
+	fnTxt(lc,mypos,5,0,left,number$) : _
+	resp$(2)=env$('cno')
+	fnCmdSet(2) : _
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit else : _
+		if resp$(1)=item1$(1) then pas$="BUILD" else : _
+			if resp$(1)=item1$(2) then pas$="COPY"
+	glcno=val(resp$(2))
+	execute "COPY A:paymstr.H"&str$(glcno)&' '&"[Q]\CLmstr\*.*" ioerr MSGBOX2
+	execute "COPY A:payeeglbreakdown.H"&str$(glcno)&' '&"[Q]\CLmstr\*.*" ioerr MSGBOX2
+	execute "Index [Q]\CLmstr\paymstr.H"&str$(glcno)&' '&"[Q]\CLmstr\payidx1.H"&str$(glcno)&",1,8,replace,DupKeys"
+	execute "Index [Q]\CLmstr\payeeglbreakdown.H"&str$(glcno)&' '&"[Q]\CLmstr\Payeeglbkdidx.H"&str$(glcno)&",1,8,replace,DupKeys"
+	open #paymstr:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+	version(payeegl,1)
+	version(paymstr,1)
+	close #paymstr:
+	close #payeegl:
+Xit: fnXit
+ 
+include: Ertn
+MSGBOX1: !
+	mat ml$(2) : _
+	ml$(1)="A general ledger chart of accounts has not been set up" : _
+	ml$(2)="for this company.  You must choose a different option" : _
+	fnmsgbox(mat ml$,resp$,cap$,16) : _
+	goto MENU1
+MSGBOX2: !
+	mat ml$(1) : _
+	ml$(1)="Be sure the diskette is properly inserted and try again" : _
+	fnmsgbox(mat ml$,resp$,cap$,16) : _
+	goto MENU1

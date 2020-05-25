@@ -1,8 +1,8 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 on error goto Ertn
-Fnsel(80,"Select Test Destination")
-! fnSel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
+fn_sel(80,"Select Test Destination")
+! fn_sel(1024, 'Select Output for '&env$('cap') ,255, 'Cancel','HTML',env$('cap'))
 if fkey=93 or fkey=99 then goto Xit
 pr #255: env$('program_caption')
 fnClose

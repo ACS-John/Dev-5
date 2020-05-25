@@ -1,28 +1,28 @@
 ! formerly S:\acsUB\ubUnBill
-! r: setup 
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fncmbrt2,fnTos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fnCmdSet,fntop,fnChk
+! r: setup
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim z$*10,e$(4)*30,resp$(10)*40
-
+ 
 	fnLastBillingDate(d1)
-	fntop(program$)
+	fnTop(program$)
 goto MAIN ! /r
 MAIN: ! r: main screen
-	fnTos(sn$:="UBUnBill") 
-	mylen=20 
+	fnTos(sn$:="UBUnBill")
+	mylen=20
 	mypos=mylen+2
 	fnLbl(2,1,"Billing Date:" ,mylen,1)
-	fnTxt(2,mypos,8,8,0,"1") 
+	fnTxt(2,mypos,8,8,0,"1")
 	resp$(1)=str$(d1)
 	fnLbl(3,1,"Route Number:" ,mylen,1)
-	fncmbrt2(3,mypos) 
+	fncmbrt2(3,mypos)
 	resp$(2)="[All]"
 	fnChk(4,23,"Print Meter Address:",1)
 	resp$(3)="True"
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 goto Initialize ! /r
 Initialize: ! r:
 	d1=val(resp$(1))
@@ -30,7 +30,7 @@ Initialize: ! r:
 	if resp$(3)="True" then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 	gosub HDR
 	if prtbkno=0 then goto READ_CUSTOMER
 	prtbkno$=lpad$(str$(prtbkno),2)&"       "
@@ -51,8 +51,8 @@ READ_CUSTOMER: ! r: main loop
 	tbal=tbal+bal
 goto READ_CUSTOMER ! /r
 TOTALS: ! r:
-	pr #255: rpt$(" ",55)&"{\ul             }" 
-	pr #255,using "Form POS 56,N 12.2": tbal 
+	pr #255: rpt$(" ",55)&"{\ul             }"
+	pr #255,using "Form POS 56,N 12.2": tbal
 	pr #255: rpt$(" ",55)&"{\ul \strike             }"
 goto DONE ! /r
 HDR: ! r:
@@ -69,12 +69,12 @@ HDR: ! r:
 	pr #255: ""
 return ! /r
 PGOF: ! r:
-	pr #255: newpage 
-	gosub HDR 
+	pr #255: newpage
+	gosub HDR
 continue ! /r
 DONE: ! r:
 	close #1: ioerr ignore
 	fncloseprn
-goto XIT ! /r
-XIT: fnxit
-include: ertn
+goto Xit ! /r
+Xit: fnXit
+include: Ertn

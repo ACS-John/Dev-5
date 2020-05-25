@@ -1,19 +1,14 @@
 ! formerly S:\acsUB\ubRate
 ! -- Rate File editor
 fn_setup
-fntop(program$)
+fnTop(program$)
 open #hRate1:=fnGetHandle: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
 open #hRate2:=fnGetHandle: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
 goto ScreenGrid ! program starts with flex grid of all rates currently in file
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1,fnAcs2,fnLbl,fnTxt
-		library 'S:\Core\Library': fnmsgbox,fnopenprn,fncloseprn,fncomboa
-		library 'S:\Core\Library': fnOpt,fnTos,fnerror,fnxit,fnCmdSet,fntop,fnCmdKey
-		library 'S:\Core\Library': fnget_services,fnGetServiceCodesMetered
-		library 'S:\Core\Library': fnapply_default_rates
-		library 'S:\Core\Library': fnGetHandle
+		autoLibrary
 		! 
 		dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
 		dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
@@ -69,7 +64,7 @@ L1010: !
 	fnAcs2(mat resp$,ckey) ! CALL FLEXGRID
 	k$=rpad$(resp$(1),4)
 	if ckey=5 then 
-		goto XIT
+		goto Xit
 	else if ckey=2 then 
 		goto AddNewRecord
 	else if ckey=3 then 
@@ -80,7 +75,7 @@ L1010: !
 		gosub DeleteRec
 	end if 
 	goto ScreenGrid
-	goto XIT
+	goto Xit
 ! /r
 DeleteRec: ! r:
 	mat msgline$(2)
@@ -244,9 +239,9 @@ PrintOneRate: ! r:
 	pg=0
 	P1R_FINIS: ! 
 return  ! /r
-XIT: fnxit
+Xit: fnXit
 def library fnapplyDefaultRatesFio(mat customerN)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnapplyDefaultRatesFio=fn_applyDefaultRatesFio(mat customerN)
 fnend 
 def fn_applyDefaultRatesFio(mat customerN)
@@ -319,4 +314,4 @@ def fn_applyDefaultRatesFio(mat customerN)
 	customerN(c_s10rate)=a(7)
 	! /r
 fnend
-include: ertn
+include: Ertn

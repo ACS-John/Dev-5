@@ -1,81 +1,73 @@
-00010 ! Replace S:\acsUB\Bill-Rpt
-00020 ! pr utility billing reports based on bills
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnAcs,fnLbl,fnTxt,fnwait,fnChk,fncmbrt2,fnTos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnLastBillingDate,fnCmdSet,fntop
-00050   on error goto Ertn
-00060 !
-00070   dim cap$*128,z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,cnam$*40,dat$*20
-00080 !
-00090   fntop("S:\acsUB\Bill-Rpt", cap$="Final Billing")
-00100   fncno(cno,cnam$) !:
-        ! 
-00110   fnLastBillingDate(d1)
-00120   fndat(dat$,1)
-00130 !
-00140 SCR1: ! 
-00150   fnTos(sn$="Bill-Rpt")
-00160   fnLbl(1,1,"Billing Date:",15,1)
-00170   fnTxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") !:
-        resp$(1)=str$(d1)
-00180   fnLbl(2,1,"Route Number:",15,1)
-00190   fncmbrt2(2,17,0) !:
-        resp$(2)= "[All]"
-00200   fnChk(4,2,"Outstanding Balances Only") !:
-        resp$(3)="False"
-00210   fnCmdSet(3)
-00220   fnAcs(sn$,0,mat resp$,ck)
-00230   if ck=5 then goto XIT
-00240   d1= val(resp$(1)) conv SCR1 !:
-        if uprc$(resp$(2))=uprc$("[All]") then route=0 else !:
-          route=val(resp$(2))
-00250   if resp$(3)="False" then oob$="N" else oob$="Y"
-00260   goto STARTREPORT
-00270 !
-00280 DONE: ! 
-00290   fncloseprn
-00300 XIT: fnxit
-00310 !
-00320 STARTREPORT: ! 
-00330   fnwait("Printing: please wait...",1)
-00340   on fkey 5 goto DONE
-00350   open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
-00360   fnopenprn
-00370   gosub HEADER
-00380   goto REPORT
-00390 !
-00400 HEADER: ! 
-00410   if d1<>0 then temp$(1)="Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
-00420   if oob$="Y" then temp$(2)="Only Outstanding Balances"
-00430   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-00440   pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
-00450   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-00460   if d1<>0 or oob$="Y" then !:
-          pr #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
-00470   pr #255,using L480: "\ql  ","Page "&str$(pg+=1)
-00480 L480: form pos 1,c 82,c 10,skip 1
-00490   pr #255: "{\ul Act.Number} {\ul Customer Name                 } {\ul    Balance} {\ul Billing Date} {\ul  Deposit}"
-00500   return 
-00510 !
-00520 PGOF: ! !:
-        pr #255: newpage !:
-        gosub HEADER !:
-        continue 
-00530 !
-00540 REPORT: ! 
-00550 L550: read #1,using 'Form POS 1,C 10,4*C 30,POS 1821,N 1,POS 292,PD 4.2,PD 4,POS 227,PD 5,POS 1741,N 2,pos 185,4*pd 4.2': z$,mat e$,finalbil,bal,lastbilldate,usage,extra(1),watdep,sewdep,elecdep,gasdep eof DONE
-00551   deposit=watdep+sewdep+elecdep+gasdep
-00560   if finalbil>0 then goto L570 else goto L550
-00570 L570: if d1<>0 and d1<>lastbilldate then goto REPORT
-00580   if route>0 and extra(1)<>route then goto REPORT
-00590   if oob$="Y" and bal<=0 then goto REPORT
-00600   pr #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PGOF
-00610   goto REPORT
-00620 !
-00630 ! <Updateable Region: ERTN>
-00640 ERTN: fnerror(program$,err,line,act$,"xit")
-00650   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00660   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00670   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00680 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00690 ! /region
-00700 !
+! Replace S:\acsUB\Bill-Rpt
+! pr utility billing reports based on bills
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,dat$*20
+ 
+	fnTop("S:\acsUB\Bill-Rpt", "Final Billing")
+	fnLastBillingDate(d1)
+	fndat(dat$,1)
+ 
+SCR1: !
+	fnTos
+	fnLbl(1,1,"Billing Date:",15,1)
+	fnTxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") : _
+	resp$(1)=str$(d1)
+	fnLbl(2,1,"Route Number:",15,1)
+	fncmbrt2(2,17,0) : _
+	resp$(2)= "[All]"
+	fnChk(4,2,"Outstanding Balances Only") : _
+	resp$(3)="False"
+	fnCmdSet(3)
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
+	d1= val(resp$(1)) conv SCR1 : _
+	if uprc$(resp$(2))=uprc$("[All]") then route=0 else : _
+		route=val(resp$(2))
+	if resp$(3)="False" then oob$="N" else oob$="Y"
+	goto STARTREPORT
+ 
+DONE: !
+	fncloseprn
+Xit: fnXit
+ 
+STARTREPORT: !
+	fnwait("Printing: please wait...",1)
+	on fkey 5 goto DONE
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	fnopenprn
+	gosub HEADER
+	goto REPORT
+ 
+HEADER: !
+	if d1<>0 then temp$(1)="Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
+	if oob$="Y" then temp$(2)="Only Outstanding Balances"
+	pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+	pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
+	pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+	if d1<>0 or oob$="Y" then : _
+		pr #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
+	pr #255,using L480: "\ql  ","Page "&str$(pg+=1)
+L480: form pos 1,c 82,c 10,skip 1
+	pr #255: "{\ul Act.Number} {\ul Customer Name                 } {\ul    Balance} {\ul Billing Date} {\ul  Deposit}"
+return
+ 
+PGOF: ! : _
+	pr #255: newpage : _
+	gosub HEADER : _
+	continue
+ 
+REPORT: !
+L550: read #1,using 'Form POS 1,C 10,4*C 30,POS 1821,N 1,POS 292,PD 4.2,PD 4,POS 227,PD 5,POS 1741,N 2,pos 185,4*pd 4.2': z$,mat e$,finalbil,bal,lastbilldate,usage,extra(1),watdep,sewdep,elecdep,gasdep eof DONE
+	deposit=watdep+sewdep+elecdep+gasdep
+	if finalbil>0 then goto L570 else goto L550
+L570: if d1<>0 and d1<>lastbilldate then goto REPORT
+	if route>0 and extra(1)<>route then goto REPORT
+	if oob$="Y" and bal<=0 then goto REPORT
+	pr #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PGOF
+	goto REPORT
+ 
+include: Ertn
+ 

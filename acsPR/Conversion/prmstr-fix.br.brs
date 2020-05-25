@@ -44,5 +44,5 @@ END1: !
 	execute "RENAME RPTRAIL.X [Q]\PRmstr\RPTRAIL.h[cno] -n"
 	execute "Index [Q]\PRmstr\RPMstr.h[cno]"&' '&"[Q]\PRmstr\RPIndex.h[cno] 1 8 Replace DupKeys -n"
 	execute "Index [Q]\PRmstr\RPMstr.h[cno]"&' '&"[Q]\PRmstr\RPIndx2.h[cno] 9 30 Replace DupKeys -n"
-XIT: stop 
-Include: ERTN
+Xit: stop 
+include: Ertn

@@ -1,11 +1,11 @@
-
-! If a check has a statement cleared date of 7/31/18 
-! 	and it a record number lower than 3838 than 
-! 	change the statement cleared date to 
+ 
+! If a check has a statement cleared date of 7/31/18
+! 	and it a record number lower than 3838 than
+! 	change the statement cleared date to
 ! 	the end of the month it is written in.
-
-
-library 'S:\Core\Library': fnXit,fnTop,fnEndOfMonth
+ 
+ 
+autoLibrary
 dim t$(0)*128,tN(0)
 hTrans=fn_open('CL Transaction',mat t$,mat tN,mat form$)
 on error goto Ertn
@@ -40,6 +40,6 @@ pr 'passFilter1Count=';passFilter1Count
 pr 'passFilter2Count=';passFilter2Count
 pr 'matchCount=';matchCount
 end
-Xit: fnxit
+Xit: fnXit
 include: fn_open
-include: ertn
+include: Ertn

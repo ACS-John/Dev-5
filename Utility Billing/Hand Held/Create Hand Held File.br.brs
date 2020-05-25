@@ -1,7 +1,7 @@
 ! formerly S:\acsUB\hhto
 ! -- Tranfer Data From Computer to Hand Held
 fn_setup
-fntop(program$)
+fnTop(program$)
 open #h_customer_i1:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 open #h_customer_i5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 goto SEL_ACT
@@ -9,7 +9,7 @@ goto SEL_ACT
 SEL_ACT: ! r:
 fn_scr_selact
 if ckey=5 then 
-	goto XIT
+	goto Xit
 else if ckey=2 then 
 	goto Finis
 else ! ckey=1
@@ -1484,8 +1484,8 @@ Finis: ! r: Transfer to or from Hand Held Computer
 	end if
 	fn_report_created_file(out_filename_report$)
 	fn_transfer
-goto XIT ! /r
-Xit: fnxit
+goto Xit ! /r
+Xit: fnXit
 def fn_rmk1$*20(z$)
 	! read the footnote from the note file  (any note with * as first character
 	dim rm$*1320
@@ -1785,28 +1785,9 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fnTos,fnLbl,fncomboa,fnAcs2,fncmbrt2,fnxit,fncmbact,fnButton
-		library 'S:\Core\Library': fnFra,fnCmdSet,fnCmdKey,fnmsgbox,fnTxt
-		library 'S:\Core\Library': fngethandle,fnpause,fnOpt
-		library 'S:\Core\Library': fncustomer_search
-		library 'S:\Core\Library': fnComboF
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnhand_held_device$
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnureg_read,fnureg_write,fnreg_read
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnMeterAddressLocationID
-		library 'S:\Core\Library': fnAccountFromLocationId$
-		library 'S:\Core\Library': fncsz
-		library 'S:\Core\Library': fnmakesurepathexists
-		library 'S:\Core\Library': fnbuildkey$
-		library 'S:\Core\Library': fnCustomerData$
-		library 'S:\Core\Library': fnGetServiceCodesMetered
-		library 'S:\Core\Library': fnArrayWasPassedC
+		autoLibrary
 		on error goto Ertn
-		!
+
 		dim resp$(64)*125
 		dim f$(3)*12,e2$*30
 		dim z$*10,e$(4)*30,d(15),a(7)
@@ -1874,4 +1855,4 @@ def fn_setup
 fnend
 include: fn_open
 include: enum
-include: ertn
+include: Ertn

@@ -16,8 +16,8 @@ def library fnaddlabel(mat in_labeltext$)
 	write #tmp,using "Form POS 1,5*C 120": mat labeltext$ 
 	close #tmp: 
 	mat labeltext$=("")
-	goto XIT
-	XIT: !
+	goto Xit
+	Xit: !
 fnend 
 
-include: ertn
+include: Ertn

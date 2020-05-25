@@ -1,17 +1,17 @@
 ! Replace S:\acsCL\chgbank
 ! Select Bank Account program - just updates the Company file
-
-library 'S:\Core\Library': fntop,fnxit, fntop,fnxit,fnchain,fnTos,fnLbl,fncombof,fnCmdKey,fnAcs2
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim cap$*128,resp$(1)*60
-
-fntop(program$, cap$="Select Bank Account")
-
+ 
+fnTop(program$, cap$="Select Bank Account")
+ 
 open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
 read #20,using 'Form POS 152,N 2',rec=1,release: wbc
 close #20:
-
+ 
 ASK1: !
 	fnTos
 	lc=0 : mylen=20 : mypos=mylen+2
@@ -23,7 +23,7 @@ ASK1: !
 	fnCmdKey('&Cancel',5,0,1)
 	fnAcs2(mat resp$,ckey)
 	if ckey=5 or ckey=99 then
-		goto XIT
+		goto Xit
 	else if ckey=1 then
 		fnchain("S:\acsCL\Bank")
 	else if ckey=2 then
@@ -32,7 +32,7 @@ ASK1: !
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
 	rewrite #20,using 'Form POS 152,N 2',rec=1: wbc
 	close #20:
-goto XIT
-
-XIT: fnxit
+goto Xit
+ 
+Xit: fnXit
 include: Ertn

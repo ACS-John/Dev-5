@@ -4,7 +4,7 @@
 def library fnemployee_srch(&x$; fixgrid)
 	! x$=account #     
 	! to extract the flexgrid information (master file)
-	library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs2,fnCmdSet,fngethandle
+	autoLibrary
 	on error goto Ertn
 	dim item$(6)*30
 	dim resp$(30)*80
@@ -37,11 +37,11 @@ def library fnemployee_srch(&x$; fixgrid)
 	goto READ_FILE
 
 	L280: !
-	if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
+	if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
 	x$=lpad$(resp$(1)(1:8),8)
 	if ckey=5 then x$="        " ! no one selected
-goto XIT
-XIT: close #hEmployee: : fnend 
+goto Xit
+Xit: close #hEmployee: : fnend 
 include: Ertn

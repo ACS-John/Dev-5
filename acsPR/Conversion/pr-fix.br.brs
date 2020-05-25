@@ -5,7 +5,7 @@ dim ta(2)
 open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno]",internal,outIn,keyed 
 open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,outIn,relative 
 do
-	read #1,using L140: lpd,tgp,mat ta eof XIT
+	read #1,using L140: lpd,tgp,mat ta eof Xit
 	L140: form pos 162,n 6,pd 5.2,2*pd 3
 	if lpd then
 		tgp=0
@@ -26,5 +26,5 @@ do
 	end if
 loop
 
-XIT: stop 
+Xit: stop 
 include: Ertn

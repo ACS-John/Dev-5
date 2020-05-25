@@ -1,2 +1,2 @@
-library 'S:\Core\Library': fnSpecialFolderPath$
+autoLibrary
 pr 'client desktop is located at "'&fnSpecialFolderPath$('desktop')&'"'

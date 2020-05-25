@@ -1,15 +1,15 @@
 !
-	library 'S:\Core\Library': fnxit,fntop,fncloseprn,fnopenprn,fnRead30Categories
-	fntop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
+	autoLibrary
+	fnTop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
 	on fkey 5 goto L450
 	on error goto Ertn
 !
 	dim cxno$*5,cna$*30,en$*9,e$*25,l$(50)*9,d(8),l(50,6),t(6)
 	dim cat$(30)*30,cap$*128
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
-
+ 
 	fnRead30Categories(mat cat$)
-
+ 
 	open #1: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
 	open #2: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 	pr newpage
@@ -41,7 +41,7 @@ L450: close #1: ioerr L460
 L460: close #2: ioerr L470
 L470: close #6: ioerr L480
 L480: fncloseprn
-XIT: fnxit
+Xit: fnXit
 !
 L510: pr #255: newpage
 L520: pr #255,using L530: date$,env$('cnam')
@@ -107,4 +107,4 @@ L1060: form pos 5,c 25,pos 38,n 7.2,x 1,5*n 11.2,skip 1
 	next j
 L1110: !
 return
-include: ertn
+include: Ertn

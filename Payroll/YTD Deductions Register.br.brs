@@ -1,9 +1,9 @@
 ! formerly S:\acsPR\newprYTDMis
 ! Miscellaneous Deductions Register - YTD
 !
-library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnGetPayrollDates,fnDedNames
+autoLibrary
 on error goto Ertn
-
+ 
 dim em$*30,em(6),message$*40
 dim dat$*20,t1(20),t2(20)
 dim dedcode(20),calcode(20),dedfed(20)
@@ -12,37 +12,37 @@ dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10)
 dim e$(10)*12,tpt(32),resp$(15)*30
 dim tcp(32),tdc(10),ytdtotal(32),ss$*11
 !
-	fntop(program$)
-
+	fnTop(program$)
+ 
 	fnGetPayrollDates(beg_date,end_date)
-
-MENU1: ! 
+ 
+MENU1: !
 	fnTos(sn$="prytdmis")
 	respc=0
 	fnLbl(1,43," ",1,1)
 	fnLbl(1,1,"Beginning Date of Tax Year:",26,1)
-	fnTxt(1,30,12,0,0,"3",0,"") 
+	fnTxt(1,30,12,0,0,"3",0,"")
 	resp$(respc+=1)=str$(beg_date)
 	fnLbl(2,1,"Ending Date of Tax Year:",26,1)
-	fnTxt(2,30,12,0,0,"3",0,"") 
+	fnTxt(2,30,12,0,0,"3",0,"")
 	resp$(respc+=1)=str$(end_date)
-	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ck)
+	fnCmdSet(2): fnAcs2(mat resp$,ck)
 	if ck=5 then goto Xit
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year
-
+ 
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	for j=1 to 20: abbrevname$(j)=lpad$(rtrm$(abbrevname$(j)),6) : next j
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #20,using L360: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10
 	L360: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
-	close #20: 
-	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-
-	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
-
+	close #20:
+	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+ 
+	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+ 
 	fnopenprn
 	gosub HDR
 	do
@@ -59,7 +59,7 @@ MENU1: !
 		if prd<beg_date or prd>end_date then goto L510 ! not this year
 		mat ytdtotal=ytdtotal+tcp
 	loop
-
+ 
 	PRINT_INFO: ! r:
 	for j=1 to 20
 		t1(j)=ytdtotal(j+4)
@@ -87,13 +87,13 @@ EOJ: ! r:
 	goto L810
 L800: !
 pr #255,using L680: t2(11),t2(12),t2(13),t2(14),t2(15),t2(16),t2(17),t2(18),t2(19),t2(20)
-L810: ! 
+L810: !
 fncloseprn
 close #1: ioerr ignore
 close #2: ioerr ignore
 goto Xit ! /r
 !
-NEWPGE: pr #255: newpage : gosub HDR : continue 
+NEWPGE: pr #255: newpage : gosub HDR : continue
 !
 HDR: ! r:
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -115,5 +115,5 @@ HDR: ! r:
 	pr #255: "                                 ";rpt$("  ________",10)
 	L1070: !
 return ! /r
-Xit: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

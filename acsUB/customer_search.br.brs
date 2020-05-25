@@ -41,7 +41,7 @@ def library fncustomer_search(&x$;fixgrid)
 		fnAcs(sn$,0,mat resp$,ckey)
 		x$=lpad$(resp$(1),10)
 		if ckey=5 then x$="          " ! no one selected
-	goto XIT
-	XIT: close #file_num: ioerr ignore
+	goto Xit
+	Xit: close #file_num: ioerr ignore
 fnend 
 include: Ertn

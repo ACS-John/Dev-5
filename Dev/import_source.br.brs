@@ -99,19 +99,19 @@ def fn_getdir2(dir$*256,mat filename$; option$,filter$*40)
 	if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
 	execute 'free '&env$('temp')&'\GetDir'&session$&'.tmp -n' ioerr ignore
 	tmp$='Sy -M Dir '&os_filename$(rtrm$(dir$,'\'))&'\'&filter$&' /b '&option$&' >"'&os_filename$(env$('temp')&'\GetDir'&session$&'.tmp"')
-	execute tmp$ ioerr XIT
+	execute tmp$ ioerr Xit
 	open #tf1:=20: "Name="&env$('temp')&"\GetDir"&session$&".tmp",display,input 
 	filename_count=0
 	do  ! for filename_count=1 to udim(filename$)
-		linput #tf1: tmp$ eof XIT
+		linput #tf1: tmp$ eof Xit
 		mat filename$(filename_count+=1)
 		filename$(filename_count)=rtrm$(tmp$)
 		if filename$(filename_count)=uprc$(filename$(filename_count)) then 
 			filename$(filename_count)=lwrc$(filename$(filename_count)) ! never all caps-anything but
 		end if  ! filename$(filename_count)=uprc$(filename$(filename_count))
 	loop  ! next filename_count
-	goto XIT
+	goto Xit
 
-	XIT: ! 
+	Xit: ! 
 	close #tf1,free: ioerr ignore
 fnend 

@@ -1,12 +1,12 @@
 ! Replace work\signature
-library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fnTos,fnopenprn,fncloseprn,fncomboa,fnmsgbox,fnCmdSet
+autoLibrary
 dim docname$*30
 dim msgline$(5)*200
 dim cddrive$*1
 dim response$(5)*30
-open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outIn,keyed 
+open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outIn,keyed
 ! read #1,using 60:docname$,docline,docposition,docsigchoice,cddrive$
-
+ 
 MAINSCREEN: ! r:
 	dim comboa$(99)*30
 	mat comboa$(99)
@@ -14,7 +14,7 @@ MAINSCREEN: ! r:
 	mylen = 17 : myalign = 1
 	fnLbl(1,1,"Document Name:",mylen,myalign)
 	a=0
-	restore #1: 
+	restore #1:
 	do
 		read #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$ eof L105
 		L60: form pos 1,c 30,n 3,n 3,n 2,c 1
@@ -27,45 +27,45 @@ MAINSCREEN: ! r:
 	fncomboa("DocNames",1,18,mat comboa$,'',25)
 	fnLbl(2,1,"Number of Copies:",mylen,myalign)
 	fnTxt(2,18,2)
-	response$(2)=str$(1) 
+	response$(2)=str$(1)
 	fnCmdSet(14)
 	fnAcs2(mat response$,ckey)
 	docname$=response$(1)
 	copies=max(1,val(response$(2)))
-	if ckey=5 then goto XIT
-	if ckey=10 then goto XIT
-	docline=docposition=0 
+	if ckey=5 then goto Xit
+	if ckey=10 then goto Xit
+	docline=docposition=0
 	docsigchoice=1
-	if ckey=1 then 
+	if ckey=1 then
 		docname$="": goto EDITSCREEN
-	else if ckey=2 then 
-		read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN 
+	else if ckey=2 then
+		read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN
 		goto EDITSCREEN
-	else if ckey=4 then 
-		read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN 
+	else if ckey=4 then
+		read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN
 		goto PRINTSIGNATURE
 	end if
 goto EDITSCREEN ! /r
-
+ 
 EDITSCREEN: ! r:
 	fnTos
 	mylen=17 : myalign=1
 	
 	fnLbl(1,1,"Document Name:",mylen,myalign)
 	fnTxt(1,mylen+1,30,30,0,'',0,"Choose a name that you will remember, such as Payroll Check" )
-	response$(1)=docname$ 
+	response$(1)=docname$
 	fnLbl(2,1,"Line on Form:",mylen,myalign)
 	fnTxt(2,mylen+1,4,3,0,"30",0,"This is the distance from the top of the form where the signature shold print. (Normally about 6 lines per inch)" )
-	response$(2)=str$(docline) 
+	response$(2)=str$(docline)
 	fnLbl(3,1,"Position on Form:",mylen,myalign)
 	fnTxt(3,mylen+1,4,3,0,"30",0,"This is the number of characters from the left side of the form.       (Normally about 10 characters per inch)" )
-	response$(3)=str$(docposition) 
+	response$(3)=str$(docposition)
 	fnLbl(4,1,"Signature Choice:",mylen,myalign)
 	fnTxt(4,mylen+1,3,2,0,"30" ,0,"You can have up to 10 different signatures.  Choose the one you want printed on this document." )
-	response$(4)=str$(docsigchoice) 
+	response$(4)=str$(docsigchoice)
 	fnLbl(5,1,"CD Drive:",mylen,myalign)
 	fnTxt(5,mylen+1,1,1,0,'',0,"Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" )
-	response$(5)=cddrive$ 
+	response$(5)=cddrive$
 	fnCmdSet(4)
 	fnAcs2(mat response$,ckey)
 	if ckey=5 then goto MAINSCREEN
@@ -74,9 +74,9 @@ EDITSCREEN: ! r:
 	docposition =val(response$(3)) conv BADPOSITION
 	docsigchoice=val(response$(4)) conv BADSIGCHOICE
 	cddrive$    =uprc$(response$(5))
-	if cddrive$<"A" or cddrive$>"Z" then 
-		mat msgline$(2): msgline$(1)="The drive designation you used is invalid!" 
-		msgline$(2) =" Normal designations would be D or E, but can be other letters" 
+	if cddrive$<"A" or cddrive$>"Z" then
+		mat msgline$(2): msgline$(1)="The drive designation you used is invalid!"
+		msgline$(2) =" Normal designations would be D or E, but can be other letters"
 		fnmsgbox(mat msgline$,response$,"Bad CD Drive designation",48)
 		goto EDITSCREEN
 	end if
@@ -87,17 +87,17 @@ L415: ! r:
 goto MAINSCREEN ! /r
 BADLINE: ! r:
 	mat msgline$(1)
-	msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!" 
+	msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!"
 	fnmsgbox(mat msgline$,response$,"Bad line number",48)
 goto EDITSCREEN ! /r
 BADPOSITION: ! r:
 	mat msgline$(1)
-	msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!" 
+	msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!"
 	fnmsgbox(mat msgline$,response$,"Bad position",48)
 goto EDITSCREEN ! /r
 BADSIGCHOICE: ! r:
 	mat msgline$(1)
-	msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10" 
+	msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10"
 	fnmsgbox(mat msgline$,response$,"Bad position",48)
 goto EDITSCREEN ! /r
 PRINTSIGNATURE: ! r:
@@ -113,4 +113,4 @@ PRINTSIGNATURE: ! r:
 	fncloseprn
 	pr newpage
 goto MAINSCREEN ! /r
-XIT: ! chain "menu"
+Xit: ! chain "menu"

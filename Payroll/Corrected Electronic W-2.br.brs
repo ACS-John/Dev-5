@@ -1,10 +1,10 @@
 ! REPLACE S:\acsPR\newprElecW2correction
-! never could get it work with an RO record if all zeroes; without 
-! RO record i had to put an RE record in front of every RW record and 
-! had to follow with an RT record - Right now this program will not 
+! never could get it work with an RO record if all zeroes; without
+! RO record i had to put an RE record in front of every RW record and
+! had to follow with an RT record - Right now this program will not
 ! create an RO record
 !
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnwait,fnDedNames,fnoldmsgbox,fntop,fnxit,fnconsole,fnAcs,fntop,fnLbl,fnTxt,fnTos,fnFra,fnCmdKey,fnmsgbox
+	autoLibrary
 	on error goto Ertn
 !
 	dim em$(3)*30,ss$*11,d(14),tcp(32),s(9),t(9),z$*8,message$*40
@@ -25,39 +25,39 @@
 	dim orgw2(9),orgw3(2)
 	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(20)*40,path$*30
 !
-	fntop(program$)
+	fnTop(program$)
 	on fkey 5 goto Xit
-! 
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+!
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #1,using L280: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax
 L280: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2
-	close #1: 
+	close #1:
 !
-DATE_SCREEN: ! 
-L320: fnTos(sn$="W2-1") 
+DATE_SCREEN: !
+L320: fnTos(sn$="W2-1")
 	rc=cf=0: mylen=34 : mypos=mylen+3
-	fnFra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0) 
+	fnFra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0)
 	cf+=1 : fratype=cf
 	fnLbl(1,1,"Starting Date:",mylen,1,0,1)
-	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) 
+	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1)
 	resp$(rc+=1)=str$(beg_date)
 	fnLbl(2,1,"Ending Date:",mylen,1,0,1)
-	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) 
+	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1)
 	resp$(rc+=1)=str$(end_date)
 	fnLbl(3,1,"Output File Designation and Name:",mylen,1,0,1)
-	fnTxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1) 
+	fnTxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1)
 	resp$(rc+=1)="c:\w2report"
-	fnFra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0) 
+	fnFra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0)
 	cf+=1 : fratype=cf
 	fnLbl(1,1,"Original Starting Date:",mylen,1,0,2)
-	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2) 
+	fnTxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2)
 	resp$(rc+=1)=str$(orgbeg_date)
 	fnLbl(2,1,"Original Ending Date:",mylen,1,0,2)
-	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2) 
+	fnTxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2)
 	resp$(rc+=1)=str$(orgend_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
@@ -71,7 +71,7 @@ L560: p1=pos(b$,"-",1)
 	if p1=0 then goto L600
 	b$(p1:p1)=""
 	goto L560
-L600: ! 
+L600: !
 	b1=val(b$)
 	p1=pos(a$(3),",",1): comma=1
 	if p1=0 then p1=pos(a$(3)," ",1): comma=0
@@ -104,51 +104,51 @@ L600: !
 	namcde$="F"
 	typemp$="R"
 !
-SCR1: ! 
+SCR1: !
 	goto L1220
-	fnTos(sn$="ElecW2-2") 
+	fnTos(sn$="ElecW2-2")
 	rc=cf=0: mylen=30 : mypos=mylen+3
 	fnLbl(1,1,"Position Diskette in Drive A",mylen+25,1,0,0)
 	fnLbl(3,1,"Company Name:",mylen,1,0,0)
-	fnTxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0) 
+	fnTxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0)
 	resp$(rc+=1)=a$(1)
 	fnLbl(4,1,"Street Address:",mylen,1,0,0)
-	fnTxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0) 
+	fnTxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0)
 	resp$(rc+=1)=a$(2)
 	fnLbl(5,1,"City:",mylen,1,0,0)
-	fnTxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0) 
+	fnTxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0)
 	resp$(rc+=1)=ct$
 	fnLbl(6,1,"State:",mylen,1,0,0)
-	fnTxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0) 
+	fnTxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0)
 	resp$(rc+=1)=st$
 	fnLbl(7,1,"Zip Code:",mylen,1,0,0)
-	fnTxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0) 
+	fnTxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0)
 	resp$(rc+=1)=zip$
 	fnLbl(8,1,"Federal ID #:",mylen,1,0,0)
-	fnTxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0) 
+	fnTxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0)
 	resp$(rc+=1)=str$(b1)
 	fnLbl(9,1,"Payment Year:",mylen,1,0,0)
-	fnTxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0) 
+	fnTxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0)
 	resp$(rc+=1)=str$(yr)
 	fnLbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
-	fnTxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0) 
+	fnTxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0)
 	resp$(rc+=1)=str$(ssmax)
 	fnLbl(11,1,"Social Security Rate:",mylen,1,0,0)
-	fnTxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0) 
+	fnTxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0)
 	resp$(rc+=1)=str$(ssrate)
 	fnLbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
-	fnTxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0) 
+	fnTxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0)
 	resp$(rc+=1)=str$(mcmax)
 	fnLbl(13,1,"Medicare Rate:",mylen,1,0,0)
-	fnTxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0) 
+	fnTxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0)
 	resp$(rc+=1)=str$(mcrate)
 	fnCmdKey("Next",1,1,0,"Proceed with submission")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) 
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 L1220: pr newpage
 	close #101: ioerr L1240
-L1240: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outIn 
+L1240: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outIn
 	pr f "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
 	pr f "5,5,C 60": "Company Name:"
 	pr f "6,5,C 60": "Street Address:"
@@ -180,7 +180,7 @@ L1510: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 ERR1: pr f "24,78,C 1": bell : goto L1510
-L1560: ! 
+L1560: !
 	if cmdkey=5 then goto Xit
 	if rtrm$(a$(1))="" then ce=1: goto ERR1
 	if rtrm$(a$(2))="" then ce=2: goto ERR1
@@ -200,7 +200,7 @@ L1560: !
 	io1$(2)="14,71,N 2,UT,N"
 	close #101: ioerr L1750
 L1750: pr newpage
-	open #101: "SROW=7,SCOL=2,EROW=16,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outIn 
+	open #101: "SROW=7,SCOL=2,EROW=16,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outIn
 	pr f "8,4,C 72": "Some states require filing W2's on diskette.  Answer the following"
 	pr f "9,4,C 72": "questions if you wish to create 'RS' records during this run."
 	pr f "12,8,Cr 62": "State code used in your record to identify the selected state:"
@@ -227,10 +227,10 @@ L1930: if cmdkey=5 then goto Xit
 	message$=""
 !
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 ! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",Internal,Input,Relative
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
-L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",display,output 
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",display,output
 	goto L2140
 	pr newpage
 	msgline$(1)="Insert Diskette"
@@ -305,7 +305,7 @@ L2680: gosub EXTRACT_ORIGINAL
 	gosub RECRCT
 	tw2=0
 goto L2160
-
+ 
 RECRCA: ! r:
 	pr #22,using L2830: "RCA",b1,emppin$(1:8),"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L","1",tlcn$,""
 	L2830: form pos 1,c 3,pic(#########),c 8,c 9,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 6,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 1,c 6,c 701
@@ -415,13 +415,13 @@ END1: ! r:
 	gosub RECRCF
 	gosub L3980
 goto Xit ! /r
-Xit: fnxit
+Xit: fnXit
 L3980: ! r:
 	dim a$*1024
 	close #24: ioerr ignore
 	close #22: ioerr ignore
-	open #24: "Name=X,RecL=1025,EOL=NONE,REPLACE",external,output 
-	open #22: "Name=w2report,RecL=1024",display,input 
+	open #24: "Name=X,RecL=1025,EOL=NONE,REPLACE",external,output
+	open #22: "Name=w2report,RecL=1024",display,input
 	do
 		linput #22: a$ eof L4080
 		if a$(1024:1024)="X" then a$(1024:1024)=""
@@ -429,29 +429,29 @@ L3980: ! r:
 		L4060: form pos 1,c 1024,c 1
 	loop
 	L4080: !
-	close #24: 
-	close #22: 
+	close #24:
+	close #22:
 	execute "COPY x "&path$&" -n"
 return ! /r
-SCR2: ! 
+SCR2: !
 	dim contact$*27,email$*40
 	win=101
 	win_height=12: win_width=75: display_cnam=1: button_option=2: gosub L4560 ! fnWin3b(WIN,CAP$,12,62,1,2)
-	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" 
-	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" 
-	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" 
-	pr #win,fields "07,2,Cr 31,N": "Contact Name:" 
-	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:" 
-	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:" 
-	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:" 
+	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:"
+	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:"
+	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:"
+	pr #win,fields "07,2,Cr 31,N": "Contact Name:"
+	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:"
+	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:"
+	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:"
 	pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:"
-	scr2_io$(1)="04,34,C 17,UT,N" 
-	scr2_io$(2)="05,34,C 01,UT,N" 
-	scr2_io$(3)="06,34,C 06,UT,N" 
-	scr2_io$(4)="07,34,C 27,UT,N" 
-	scr2_io$(5)="08,34,C 15,UT,N" 
-	scr2_io$(6)="09,34,C 05,UT,N" 
-	scr2_io$(7)="10,34,C 40,UT,N" 
+	scr2_io$(1)="04,34,C 17,UT,N"
+	scr2_io$(2)="05,34,C 01,UT,N"
+	scr2_io$(3)="06,34,C 06,UT,N"
+	scr2_io$(4)="07,34,C 27,UT,N"
+	scr2_io$(5)="08,34,C 15,UT,N"
+	scr2_io$(6)="09,34,C 05,UT,N"
+	scr2_io$(7)="10,34,C 40,UT,N"
 	scr2_io$(8)="11,34,C 01,UT,N"
 	if resub$="" then resub$="0"
 ! If TLCN$="" Then tLCN$="0"
@@ -471,9 +471,9 @@ L4310: !
 	if resub$="1" and rtrm$(tlcn$)="" then ce=3 : goto ERR_SCR2
 	if terminat$<>"0" and terminat$<>"1" then ce=8 : goto ERR_SCR2
 	if uprc$(med$)="Y" or uprc$(med$)="N" then goto L4350 else ce=9: goto ERR_SCR2
-L4350: close #win: 
+L4350: close #win:
 	if cmdkey=5 then goto SCR1
-	return 
+	return
 L4380: dim first$*15,mid$*15,last$*20,em$(3)*30
 	em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
 	x1=pos(em$(1)," ",1)
@@ -491,22 +491,22 @@ L4480: ! last name first
 	if x2=0 then first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
 	x=pos(first$,",",1): if x>0 then first$(x:x)=""
 L4540: ! pr FIRST$,MID$,LAST$
-	return 
-L4560: ! Def Library fnWin3b(WIN,&CAP$,WIN_HEIGHT,WIN_WIDTH,DISPLAY_CNAM,BUTTON_OPTION)
+	return
+L4560: ! def library fnWin3b(WIN,&CAP$,WIN_HEIGHT,WIN_WIDTH,DISPLAY_CNAM,BUTTON_OPTION)
 ! Win= Window number to be opened
 ! Cap$= Caption to be used
 ! Win_Height and Win_Width= seems pretty obvious don't it
-! Display_CNam= 1. Display Cnam and Cno in top 2 lines of window 
+! Display_CNam= 1. Display Cnam and Cno in top 2 lines of window
 	!               2. Display only Cno in top 1 line
-! button_option= 0. Does nothing. 
-	!                1. Cancel(F5)  
-	!                2. Next(F1),Cancel(F5) 
-	!                3. Print(F1),Cancel(F5)  
-	!                4. Save (F1),Cancel(F5) 
-	!                5. Next (F1),Cancel(F5),Search(F6) 
-	!                6. Next (F1),Back(F2),Cancel(F5) 
-	!                7. Save (F1),Delete(F4),Cancel(F5) 
-	!                8. (undefinded)  
+! button_option= 0. Does nothing.
+	!                1. Cancel(F5)
+	!                2. Next(F1),Cancel(F5)
+	!                3. Print(F1),Cancel(F5)
+	!                4. Save (F1),Cancel(F5)
+	!                5. Next (F1),Cancel(F5),Search(F6)
+	!                6. Next (F1),Back(F2),Cancel(F5)
+	!                7. Save (F1),Delete(F4),Cancel(F5)
+	!                8. (undefinded)
 	! (button_option>0 is set to have Cancel(F5))
 	if exists("C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L4640 else pr newpage
 L4640: screen_width=80
@@ -520,11 +520,11 @@ L4680: sc=max(int(((screen_width-win_width)/2)+1),2)
 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
 	close #win: ioerr L4760
-L4760: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&env$('program_caption'),display,outIn 
+L4760: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&env$('program_caption'),display,outIn
 	pr #win: newpage
 	if display_cnam=0 then goto L4810
-	if display_cnam=1 then 
-		pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) 
+	if display_cnam=1 then
+		pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 		pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
 	end if
 	if display_cnam=2 then
@@ -533,9 +533,9 @@ L4760: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&
 L4810: if button_option=0 then goto L4920
 	mat fkey$=("") : em$="" : es=0
 	fkey$(5)="Cancel" ! included by default
-	if button_option=2 then 
+	if button_option=2 then
 		fkey$(1)="Next"
-	else if button_option=3 then 
+	else if button_option=3 then
 		fkey$(1)="Print"
 	else if button_option=4 then
 		fkey$(1)="Save"
@@ -550,7 +550,7 @@ L4810: if button_option=0 then goto L4920
 		fkey$(4)="Delete"
 	end if
 	scrline=er+1: gosub L5560 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
-! 
+!
 L4920: return  ! Fnend
 L4930: ! mtype=0 means splash    - returns no response                                 ! mostly for "please wait..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
 ! mtype=1 means OK only   - returns no response
@@ -562,7 +562,7 @@ L4990: endrow=12
 	for j=2 to udim(msgline$)
 		if msgline$(j)<>"" then endrow=endrow+1
 	next j
-	open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&env$('program_caption'),display,outIn 
+	open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&env$('program_caption'),display,outIn
 	pr #104: newpage
 	mglinerow=2
 	for j=1 to udim(msgline$)
@@ -586,26 +586,26 @@ L5130: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 	if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L5130
 	close #104: ioerr ignore
 return  ! Fnend
-! Def Library FNOPENWIN(WIN,SR,SC,ER,EC,&CAP$)
+! def library fnOPENWIN(WIN,SR,SC,ER,EC,&CAP$)
 	if sr<1 then sr=10
 	if sc<1 then sc=20
 	if er<1 then er=14
 	if ec<1 then ec=59
 	win_width=ec-sc+1
 	close #win: ioerr L5490
-L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&env$('program_caption'),display,outIn 
+L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&env$('program_caption'),display,outIn
 	pr #win: newpage
 	pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 	pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
-! 
-! 
+!
+!
 	return  ! Fnend
-L5560: ! Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
-	totallen=0 
+L5560: ! def library fnFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
+	totallen=0
 	startpos=0
 	for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 		if fkey$(j)="" then goto L5620
-		fkey$(j)=fkey$(j)&" (F"&str$(j)&")" 
+		fkey$(j)=fkey$(j)&" (F"&str$(j)&")"
 		! add ' (Fx)' to each button
 		totallen=totallen+len(fkey$(j))+1
 L5620: next j
@@ -638,7 +638,7 @@ L5880: if rtrm$(holdst$)="" then goto L5890 else goto L5900
 L5890: next j
 L5900: holdst$=ltrm$(holdst$)(1:2)
 	if holdst$="TE" then holdst$="TX"
-return 
+return
 EXTRACT_ORIGINAL: ! r:
 	restore #4,key>=checkkey$: nokey L2170
 	L6040: !

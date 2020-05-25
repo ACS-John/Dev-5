@@ -1,5 +1,5 @@
 def library fnXit(;cursys$)
-	library 'S:\Core\Library': fnchain,fnprocess
+	autoLibrary
 
 	if env$('CurSys')="GL" and fnprocess=1 then 
 		fnchain("S:\acsGL\acglAuto")

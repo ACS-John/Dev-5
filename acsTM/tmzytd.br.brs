@@ -1,10 +1,8 @@
-
+ 
 	on error goto Ertn
-	library 'S:\Core\Library': fntop
-	library 'S:\Core\Library': fnxit
-	library 'S:\Core\Library': fnchain
-	fntop(program$,"Zero Year to Date")
-
+	autoLibrary
+	fnTop(program$,"Zero Year to Date")
+ 
 	dim eno$*9,cytdhrs(10),ncytdhrs(20),cytdamt(10),ncytdamt(20),prg$*20
 Scr1: ! r:
 	pr newpage
@@ -26,7 +24,7 @@ pr newpage
 		rewrite #1,using 'form pos 158,30*pd 4.2,pos 428,30*pd 5.2': mat cytdhrs,mat ncytdhrs,mat cytdamt,mat ncytdamt
 	loop
 	Eo1: !
-	close #1: 
+	close #1:
 	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,outIn,keyed
 	F_Scmstr: form pos 35,pd 4.2,pd 5.2
 	do
@@ -34,8 +32,8 @@ pr newpage
 		rewrite #1,using F_Scmstr: 0,0
 	loop
 	EoScmstr: !
-	close #1: 
+	close #1:
 END1: !
 if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then fnchain("S:\acsTM\EMAINT")
-XIT: fnxit
+Xit: fnXit
 include: Ertn

@@ -1,15 +1,7 @@
 ! Formerly S:\acsGL\glMaint
 ! General Ledger Master File editor
 !
-	library 'S:\Core\Library': fnxit,fntop
-	library 'S:\Core\Library': fnTos,fnOpt,fnLbl,fnCmdSet,fnAcs
-	library 'S:\Core\Library': fnagl$,fnFra,fnTxt,fncombof,fnCmdKey
-	library 'S:\Core\Library': fnflexinit1,fnflexadd1
-	library 'S:\Core\Library': fnaccount_search
-	library 'S:\Core\Library': fnqglbig,fnrglbig$
-	library 'S:\Core\Library': fnButton
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fngethandle
+	autoLibrary
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
 	on error goto Ertn
 !
@@ -25,7 +17,7 @@
 	dim ml$(3)*128
 	dim item$(9)*30
 !
-	fntop(program$)
+	fnTop(program$)
 	fixgrid=99
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
@@ -63,24 +55,24 @@ MAIN: !
 		f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
 		fnFra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
 		fnLbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
-		fncombof("fs-bal",1,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsbindx.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
+		fncombof("fs-bal",1,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
 		resp$(4)=str$(rf(1)) ! balance sheet ref #
 		fnLbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
-		fncombof("fs-bal2",1,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsc.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnscindx.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
+		fncombof("fs-bal2",1,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsc.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx1.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
 		resp$(5)=str$(rf(2)) ! balance sheet ref #
 		fnLbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
-		fncombof("fs-inc",2,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsiindx.h[cno]",0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
+		fncombof("fs-inc",2,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
 		resp$(6)=str$(rf(3)) ! income statement ref #
 		fnLbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
-		fncombof("fs-inc2",2,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsj.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsjindx.h[cno]",0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
+		fncombof("fs-inc2",2,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsj.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx2.h[cno]",0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
 		resp$(7)=str$(rf(4)) ! 2nd income statement
 		fnLbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
-		fncombof("fs-cash",3,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsf.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsfindx.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+		fncombof("fs-cash",3,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsf.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx5.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 		resp$(8)=str$(rf(5)) ! income statement ref #
 		fnLbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
-		fncombof("fs-cash2",3,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsg.h[cno]",1,5,6,30,"[Q]\GLmstr\Fnsgindx.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+		fncombof("fs-cash2",3,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsg.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx6.h[cno]",0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 		resp$(9)=str$(rf(6)) ! 2nd cash flow
-
+ 
 		fnLbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
 		fnTxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
 		resp$(10)=str$(pbp)
@@ -117,8 +109,8 @@ MAIN: !
 		fnCmdKey("Sea&rch",8,0,0,"")
 	end if
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 ! If edit_mode=1 Then kEY$=GL$=LPAD$(RESP$(1)(1:12),12): Goto 885
 	gl$=fnagl$(resp$(1)) : key$=gl$
 	if ckey=7 then gosub DELETE_ACCT : goto L1780
@@ -150,7 +142,7 @@ L960: !
 	goto MAIN
 !
 ! BLDRANGE: fnchain("S:\acsGL\BldRange")
-XIT: fnxit
+Xit: fnXit
 !
 ADD: !
 	fnTos(sn$="GLAdd")
@@ -172,7 +164,7 @@ ADD: !
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	fixgrid=99
 	dno=ano=sno=0  : rc=0
@@ -278,7 +270,7 @@ REVIEW_TRANS: ! r:
 	fnOpt(2,1,"History transactions",0,1)
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	if resp$(1)="True" then currentOrHistory=1
 	if resp$(2)="True" then currentOrHistory=2
@@ -328,8 +320,8 @@ TRANSACTION_GRID: !
 	if currentOrHistory=1 then goto L2780 else goto ReadAcTrans ! read from current or history
 EO_TRANS_GRID: !
 	if currentOrHistory=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
-	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
-	fnAcs(sn$,0,mat resp$,ck)
+	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
+	fnAcs2(mat resp$,ck)
 	if ck=5 then goto MAIN
 	if ck=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
@@ -371,7 +363,7 @@ EO_TRANS_GRID: !
 	fnTxt(8,mypos,2,0,0,"30",0,"",0)
 	resp$(8)=str$(pc2)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	trgl$=fnagl$(resp$(1)) ! transaction gl #
 	tr(4)=val(resp$(2)) ! date
@@ -428,7 +420,7 @@ CHANGE_ACCT_NUM: ! r:
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=d$
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	fixgrid=99
 	dno=ano=sno=0
@@ -471,4 +463,4 @@ MSGBOX4: ! r:
 	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto DO_EDIT
 if resp$='Cancel' then gl$=key$=holdgl$: goto MAIN ! /r
-include: ertn
+include: Ertn

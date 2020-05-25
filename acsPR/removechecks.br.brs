@@ -1,52 +1,46 @@
-00010 ! Replace S:\acsPR\RemoveChecks
-00020 ! Remove Transactions
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnAcs,fnTos,fnTxt,fndate_mmddyy_to_ccyymmdd,fnCmdSet,fnLbl
-00050   on error goto Ertn
-00060 !
-00070   dim de$*30,cap$*128,tr$(5)*35,cp(32),tdc(10)
-00080 !
-00090   fncno(cno)
-00100   fntop(program$,"Remove Old Payroll Checks")
-00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
-        left=0
-00120   open #1: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],NoShr",internal,outIn,keyed 
-00130   open #work1:=2: "Name=[Q]\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outIn,relative 
-00140   fnTos(sn$='RemoveChecks') !:
-        mylen=22 : mypos=mylen+3 : lc=0
-00150   fnLbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
-00160   fnTxt(lc,mypos,10,0,0,'1003') !:
-        resp$(1)=str$(date('ccyymmdd')-50000)
-00170   lc+=1
-00180   fnLbl(lc+=1,1,"All transactions with a",mylen*2,center)
-00190   fnLbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
-00200   fnCmdSet(2)
-00210   fnAcs(sn$,0,mat resp$,ckey)
-00220   if ckey=5 or ckey=cancel then goto XIT else !:
-          rd1=val(resp$(1))
-00230 READ_CHECKS: ! 
-00240   read #1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof END1
-00250   if prd>=rd1 then goto KEEP
-00260   goto READ_CHECKS
-00270 !
-00280 KEEP: ! 
-00290   write #work1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp
-00300   goto READ_CHECKS
-00310 !
-00320 END1: ! 
-00330   close #work1: 
-00340   close #1,free: 
-00350   execute "Rename [Q]\PRmstr\Work1."&wsid$&' '&"[Q]\PRmstr\PayrollChecks.h[cno] -n"
-00360   execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx.h[cno] 1 17 Replace DupKeys -n"
-00370   goto XIT
-00380 !
-00390 XIT: fnxit
-00400 !
-00410 ! <Updateable Region: ERTN>
-00420 ERTN: fnerror(program$,err,line,act$,"xit")
-00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00470 ! /region
-00480 !
+! Replace S:\acsPR\RemoveChecks
+! Remove Transactions
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim de$*30,cap$*128,tr$(5)*35,cp(32),tdc(10)
+ 
+	fncno(cno)
+	fnTop(program$,"Remove Old Payroll Checks")
+	cancel=99 : right=1 : center=2 : on=1 : off=0 : _
+	left=0
+	open #1: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],NoShr",internal,outIn,keyed
+	open #work1:=2: "Name=[Q]\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outIn,relative
+	fnTos(sn$='RemoveChecks') : _
+	mylen=22 : mypos=mylen+3 : lc=0
+	fnLbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
+	fnTxt(lc,mypos,10,0,0,'1003') : _
+	resp$(1)=str$(date('ccyymmdd')-50000)
+	lc+=1
+	fnLbl(lc+=1,1,"All transactions with a",mylen*2,center)
+	fnLbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 or ckey=cancel then goto Xit else : _
+		rd1=val(resp$(1))
+READ_CHECKS: !
+	read #1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof END1
+	if prd>=rd1 then goto KEEP
+	goto READ_CHECKS
+ 
+KEEP: !
+	write #work1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp
+	goto READ_CHECKS
+ 
+END1: !
+	close #work1:
+	close #1,free:
+	execute "Rename [Q]\PRmstr\Work1."&wsid$&' '&"[Q]\PRmstr\PayrollChecks.h[cno] -n"
+	execute "Index [Q]\PRmstr\PayrollChecks.h[cno]"&' '&"[Q]\PRmstr\checkidx.h[cno] 1 17 Replace DupKeys -n"
+	goto Xit
+ 
+Xit: fnXit
+ 
+include: Ertn
+ 

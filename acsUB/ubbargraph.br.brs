@@ -1,19 +1,19 @@
 ! Replace S:\acsUB\ubbargraph
 ! pr bar graph of earnings by month for current year of prior year.
 !
-	library 'S:\Core\Library': fntop,fnxit, fnget_services, fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt,fnOpt,fnFra,fncomboa,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
+	autoLibrary
 	on error goto Ertn
 !
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)
 	right=1 : center=2
-	fntop(program$,"Bar Graph")
+	fnTop(program$,"Bar Graph")
 	dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
 	dim n2(24),n3(24,13),resp$(27),txt$*80
 	dim serviceName$(10)*20,msgline$(2)*40,tg(11),opt$(3)*20
 	dim srv$(10)*2,dollars(24)
 !
-
+ 
 	open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
 	read #1,using "Form POS 121,N 6": d1 ioerr L230
 	close #1:
@@ -98,8 +98,8 @@ SCREEN1: !
 	resp$(rc+=1)="True"
 	fnOpt(2,2,"Use Dollars",0,1)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	for j=1 to 24
 L740: x=pos(resp$(j),"/",1)
 		if x>0 then resp$(j)(x:x)="": goto L740
@@ -224,9 +224,9 @@ DETERMINE_BOTTOM_LINE: !
 	next j
 	gosub RELEASE_PRINT
 	close #1:
-	goto XIT
+	goto Xit
 !
-XIT: fnxit
+Xit: fnXit
 !
 VBOPENPRINT: !
 	if file(20)=-1 then
@@ -246,4 +246,4 @@ MSGBOX: !
 	msgline$(2)="invalid format.  Use mmddyy format."
 	fnmsgbox(mat msgline$,resp$,'',1)
 goto SCREEN1
-include: ertn
+include: Ertn

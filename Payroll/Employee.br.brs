@@ -4,7 +4,7 @@ enableEasyDeptNavigation=0 ! if env$('acsDeveloper')<>'' then enableEasyDeptNavi
 ! Payroll Employee File
 ! r: setup and open files
 fn_setup
-fntop(program$)
+fnTop(program$)
 fn_openFiles
 goto Menu1 ! /r
 
@@ -28,7 +28,7 @@ AskEmployee: ! r:
 	fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
-	fnCmdKey("E&xit",6,0,1,"Returns to menu")
+	fnCmdKey("E&Xit",6,0,1,"Returns to menu")
 	fnAcs2(mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
@@ -770,8 +770,8 @@ Finis: ! ! r:
 	close #hEmployee:
 	close #hEmployeeIdx2:
 	close #hDepartment:
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 
 
 DD: ! r:

@@ -1,55 +1,49 @@
-00010 ! formerly S:\acsCL\cl1099
-00030 ! r: setup library, fntop, dims, on error
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fn1099print,fn1099print_close,fnask_1099_info
-00050   fntop(program$,cap$="Print 1099 Forms")
-00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
-00100   dim cap$*128,key$*19,tr$(5)*35
-00060   on error goto Ertn
-00290 ! /r
-32000 ! r: body of program
-32020   if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then 
-32040     open #payee=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,input,keyed 
-32060     open #trmstr2=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed 
-36000     do
-36020       read #payee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
-36040       gosub READ_TRANSACTIONS
-36060       if typ<>0 and ytdp>minamt then 
-36080         if seltp=0 or seltp=typ then 
-36100           mat box=(0)
-36120           if typ<1 or typ>8 then typ=1
-36140           box(typ)=ytdp
-36145 ! pr mat ad$ : pause
-36160           fn1099print(vn$,nam$,mat ad$,ss$,mat box)
-36180         end if
-36200       end if
-36220     loop
-44000     FINIS: !
-44020     close #payee: ioerr ignore
-44040     close #trmstr2: ioerr ignore
-44060     fn1099print_close  !  if lz1$="E" then close #5: else    gosub RELEASE_PRINT
-44080   end if
-44900 goto XIT ! /r
-48000 XIT: fnxit
-50000 ! <Updateable Region: ERTN>
-50020 ERTN: fnerror(program$,err,line,act$,"xit")
-50040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
-50120 ! /region
-54000 READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp
-54010   ytdp=0
-54020   wbc=0: wtt=1 ! all banks and only checks
-54040   key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
-54060   restore #trmstr2,key>=key$: nokey rtFinis 
-54100   do
-54120     read #trmstr2,using 'Form Pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof rtFinis
-54140     if trim$(vn$)=trim$(tr$(4)) then 
-54160       tranDate=fndate_mmddyy_to_ccyymmdd(val(tr$(2)))
-54180       if tranDate=>beg_date and tranDate<=end_date then
-54200         ytdp+=tr3
-54220       end if
-54240     end if
-54260   loop while trim$(vn$)=trim$(tr$(4))
-54280   rtFinis: !
-54300 return ! /r
+! formerly S:\acsCL\cl1099
+! r: setup library, fnTop, dims, on error
+	autoLibrary
+	fnTop(program$,cap$="Print 1099 Forms")
+	dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
+	dim cap$*128,key$*19,tr$(5)*35
+	on error goto Ertn
+! /r
+! r: body of program
+	if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
+		open #payee=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,input,keyed
+		open #trmstr2=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
+		do
+			read #payee,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof FINIS
+			gosub READ_TRANSACTIONS
+			if typ<>0 and ytdp>minamt then
+				if seltp=0 or seltp=typ then
+					mat box=(0)
+					if typ<1 or typ>8 then typ=1
+					box(typ)=ytdp
+! pr mat ad$ : pause
+					fn1099print(vn$,nam$,mat ad$,ss$,mat box)
+				end if
+			end if
+		loop
+		FINIS: !
+		close #payee: ioerr ignore
+		close #trmstr2: ioerr ignore
+		fn1099print_close  !  if lz1$="E" then close #5: else    gosub RELEASE_PRINT
+	end if
+goto Xit ! /r
+Xit: fnXit
+include: Ertn
+READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp
+	ytdp=0
+	wbc=0: wtt=1 ! all banks and only checks
+	key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8)
+	restore #trmstr2,key>=key$: nokey rtFinis
+	do
+		read #trmstr2,using 'Form Pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof rtFinis
+		if trim$(vn$)=trim$(tr$(4)) then
+			tranDate=fndate_mmddyy_to_ccyymmdd(val(tr$(2)))
+			if tranDate=>beg_date and tranDate<=end_date then
+				ytdp+=tr3
+			end if
+		end if
+	loop while trim$(vn$)=trim$(tr$(4))
+	rtFinis: !
+return ! /r

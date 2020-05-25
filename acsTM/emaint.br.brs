@@ -1,10 +1,9 @@
 ! REPLACE S:\acsTM\EMAINT
-! 
+!
 	on error goto Ertn
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnconsole,fndat,fnRead30Categories
-	library 'S:\Core\Library': fnFree
-	fntop(program$,"Employee")
-! 
+	autoLibrary
+	fnTop(program$,"Employee")
+!
 	dim ccat$(10)*30,nccat$(20)*30
 	dim cat$(30)*30
 	fnRead30Categories(mat cat$)
@@ -24,7 +23,7 @@ L180: form pos 1,103*c 18
 	read #1,using L180: mat fl4$,mat ot4$,mat in4$
 	read #1,using L180: mat fl5$,mat ot5$,mat in5$
 	read #1,using L180: mat fl6$,mat ot6$,mat in6$
-	close #1: 
+	close #1:
 	
 	gosub L1270
 	open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
@@ -121,7 +120,7 @@ L1140: input fields mat in6$: mat y,mat z conv L1640
 	on cmdkey goto L630,L890,L990,L1080,L1170 none L1170
 L1170: if ti=2 then goto L1200
 	if x1=eno then goto L1250
-	delete #1,key=holdeno$: 
+	delete #1,key=holdeno$:
 L1200: write #1,using L600: eno$,e$,mat d,mat s,mat w,mat t,mat x,mat u,mat y,mat v,mat z,mat r
 	mat d=(0): mat s=(0): mat w=(0): mat t=(0): mat x=(0): mat u=(0): mat y=(0): mat v=(0): mat z=(0): mat r=(0)
 	eno$=" ": e$=" "
@@ -141,7 +140,7 @@ L1270: scr3$(1)="EMPLOYEE NUMBER"
 L1360: scr3$(j+4)=" "
 L1370: next j
 	scr3$(15)="NON - CHARGEABLE RATE"
-	return 
+	return
 L1400: if cv>0 then in3$(cv)(cv1:cv2)="U"
 	cv=cnt+1
 	pr f "24,78,C 1": bell
@@ -231,10 +230,10 @@ L2160: pr #255,using L2161: env$('cnam')
 L2161: form pos 47,cc 40,skip 1
 	pr #255,using L2170: "EMPLOYEE PROOF LISTING",dat$
 L2170: form pos 56,c 26,skip 1,pos dattab,c 34,skip 2
-	return 
-L2190: close #1: 
+	return
+L2190: close #1:
 	if new1=1 then goto L2340
-	goto XIT
+	goto Xit
 L2220: pr newpage
 	pr f "8,22,c 31,r,n": "  ********  WARNING  ********"
 	pr f "11,10,c 70": "THIS SELECTION ERASES ALL EMPLOYEE RECORDS ON THIS FILE."
@@ -248,13 +247,13 @@ L2290: !
 	close #1: ioerr ignore
 	fnFree('S:\Core\Data\acsllc\EMmstr.H[cno]')
 	open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],SIZE=0,RecL=610",internal,output
-	close #1: 
-
+	close #1:
+ 
 L2340: !
 	execute "Index S:\Core\Data\acsllc\EMmstr.H[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
-	if ti<2 then chain 'S:\acsTM\EMAINT' else goto XIT
-	goto XIT
+	if ti<2 then chain 'S:\acsTM\EMAINT' else goto Xit
+	goto Xit
 L2370: !
 	if err=4152 then goto L2290
-XIT: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

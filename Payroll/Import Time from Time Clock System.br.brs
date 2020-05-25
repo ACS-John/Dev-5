@@ -2,37 +2,34 @@
 ! Capture Time for Time Sheet Entry                                            this program pulls time form any system that can create the following           layout : employee # n 8 : name c 30 : department n 3: reghrs n 7.2 :            othrs n 7.2 : vachrs n 7.2 : sickhrs n 7.2 : holhrs n 7.2
 ! the file name should be \program files\acs\timeclock.h&cno
 ! this program places the information in same file that simple time             clock uses in the input time sheets program
-
-library 'S:\Core\Library': fntop,fnxit
-library 'S:\Core\Library': fnopenprn,fncloseprn
-library 'S:\Core\Library': fnmsgbox
-library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim ml$(0)*128
 dim name$*30
-
-
-fntop(program$,"Import Time from Time Clock System")
+ 
+ 
+fnTop(program$,"Import Time from Time Clock System")
 dim pathtotimecard$*200
 pathtotimecard$="c:\progra~1\acs\"
-
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
-
-ASK_PAYROLL_DATE: ! 
+ 
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative
+ 
+ASK_PAYROLL_DATE: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"",34,1) ! bigger screen
 	fnLbl(2,1,"Payroll Date:",20,1)
 	fnTxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
 	resp$(respc+=1)=str$(ppd)
-	fnCmdKey("&Next",1,1,0,"Proceed with importing time." ) 
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
-	if ckey=5 then goto XIT
+	fnCmdKey("&Next",1,1,0,"Proceed with importing time." )
+	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnAcs2(mat resp$,ckey) ! ask employee #
+	if ckey=5 then goto Xit
 endingdate=val(resp$(1))
-
+ 
 fnopenprn
 ! dim filename$*128
 ! filename$="Payroll"&cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
@@ -43,8 +40,8 @@ gosub HDR
 on fkey 5 goto L580
 dim simple$*50
 simple$=pathtotimecard$&"TimeCard.h[cno]"
-open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outIn,keyed 
-open #5: "Name="&simple$&",RecL=76",display,input 
+open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outIn,keyed
+open #5: "Name="&simple$&",RecL=76",display,input
 L410: !
 dim ln$*76
 do
@@ -68,25 +65,25 @@ loop
 L580: !
 	close #3: ioerr ignore
 	execute "Index "&pathtotimecard$&"TimeCard\SimpleSummary "&pathtotimecard$&"TimeCard\SSIndex 1 16 Replace DupKeys -n"
-goto XIT
-
-XIT: !
+goto Xit
+ 
+Xit: !
 fncloseprn
-fnxit
+fnXit
 MESSAGE1: ! r: bad data
-	mat ml$(4) 
-	ml$(1)="Cannot read the data! It must be a corrupted" 
-	ml$(2)="file or in the wrong format.  You must export" 
-	ml$(3)="the time from your time clock system before" 
-	ml$(4)="attempting to run this menu option." 
+	mat ml$(4)
+	ml$(1)="Cannot read the data! It must be a corrupted"
+	ml$(2)="file or in the wrong format.  You must export"
+	ml$(3)="the time from your time clock system before"
+	ml$(4)="attempting to run this menu option."
 	fnmsgbox(mat ml$,resp$,'',48)
-goto XIT ! /r
+goto Xit ! /r
 MESSAGE2: ! r: bad employee number
-	mat ml$(4) 
-	ml$(1)="Employee "&str$(eno)&" has time imported" 
-	ml$(2)="from the time clock, but does not have a matching" 
-	ml$(3)="employee number in the payroll system.  This" 
-	ml$(4)="person will be skipped.   "&name$ 
+	mat ml$(4)
+	ml$(1)="Employee "&str$(eno)&" has time imported"
+	ml$(2)="from the time clock, but does not have a matching"
+	ml$(3)="employee number in the payroll system.  This"
+	ml$(4)="person will be skipped.   "&name$
 	fnmsgbox(mat ml$,resp$,'',48)
 goto L410 ! /r
 HDR: ! r:

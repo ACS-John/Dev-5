@@ -1,13 +1,6 @@
-def fn_setup
-	setup=1
-	library 'S:\Core\Library': fnerror,fnBackgroundDisable
-	library 'S:\Core\Library': fnsreg_read,fnsreg_write
-	library 'S:\Core\Library': fnreg_write,fnreg_read
-	library 'S:\Core\Library': fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs2,fnwrite_program_print_property
-fnend
 def library fnprogram_properties(; forceProgramCaption$*256)
+	autoLibrary
 	on error goto Ertn
-	if ~setup then let fn_setup
 	if forceProgramCaption$<>'' then
 		dim oldCap$*256
 		oldCap$=env$('Program_Caption')
@@ -69,29 +62,30 @@ def fn_localPropertiesEdit
 			end if
 		end if
 		! /r
-		fnwrite_program_print_property('Orientation',     resp$(sio_cmbOrientation)    )
-		fnwrite_program_print_property('Height',          resp$(sio_txtHeight)         )
-		fnwrite_program_print_property('Width',           resp$(sio_txtWidth)          )
-		fnwrite_program_print_property('Lines',           resp$(sio_txtLpp)            )
-		fnwrite_program_print_property('FontSize',        resp$(sio_txtFontSize)       )
-		fnwrite_program_print_property('TopMargin',       resp$(sio_txtMarginTop)      )
-		fnwrite_program_print_property('BottomMargin',    resp$(sio_txtMarginBottom)   )
-		fnwrite_program_print_property('LeftMargin',      resp$(sio_txtMarginLeft)     )
-		fnwrite_program_print_property('RightMargin',     resp$(sio_txtMarginRight)    )
+		fn_writeProgramPrintProperty('Orientation',     resp$(sio_cmbOrientation)    )
+		fn_writeProgramPrintProperty('Height',          resp$(sio_txtHeight)         )
+		fn_writeProgramPrintProperty('Width',           resp$(sio_txtWidth)          )
+		fn_writeProgramPrintProperty('Lines',           resp$(sio_txtLpp)            )
+		fn_writeProgramPrintProperty('FontSize',        resp$(sio_txtFontSize)       )
+		fn_writeProgramPrintProperty('TopMargin',       resp$(sio_txtMarginTop)      )
+		fn_writeProgramPrintProperty('BottomMargin',    resp$(sio_txtMarginBottom)   )
+		fn_writeProgramPrintProperty('LeftMargin',      resp$(sio_txtMarginLeft)     )
+		fn_writeProgramPrintProperty('RightMargin',     resp$(sio_txtMarginRight)    )
 	end if
 
 fnend
-include: ertn
 def library fnpglen(&pglen)
+	autoLibrary
+	on error goto Ertn
 	fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
 	fnpglen=pglen
 fnend
 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
-	if ~setup then let fn_setup
+	autoLibrary
+	on error goto Ertn
 	fnread_program_print_property=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
 fnend
 def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
-	on error goto Ertn
 	dim prg$*256
 	if prgCapForSettingsOverride$='' then
 		prg$=env$('Program_Caption')
@@ -128,9 +122,12 @@ def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
 	!   pause
 	! end if
 fnend
-def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
-	if ~setup then let fn_setup
+def library fnwriteProgramPrintProperty(key$*80,value$*256; prgCapForSettingsOverride$*256)
+	autoLibrary
 	on error goto Ertn
+	fnwriteProgramPrintProperty=fn_writeProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
+fnend
+def fn_writeProgramPrintProperty(key$*80,value$*256; prgCapForSettingsOverride$*256)
 	dim prg$*256
 	if prgCapForSettingsOverride$='' then
 		prg$=env$('Program_Caption')
@@ -145,3 +142,4 @@ def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettings
 		! pause
 	end if
 fnend
+include: Ertn

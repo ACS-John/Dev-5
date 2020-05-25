@@ -10,10 +10,10 @@ SetupPrint: ! r:
 return
 ! Updateable Region . Printer Selection . Top 
 ! This region was last updated on 2019.01.10
-def fnSel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32) ! open printer routine
+def fn_sel(width; printer_prompt$*80,printfile_handle, print_cancel_option$*80,supported_printer_type_list$*80,print_destination_custom$*1024,print_pk$*32) ! open printer routine
 	if ~setupPrint then gosub SetupPrint
 	on soflow ignore
-	fnSel=fnSel_lib(Width,Printer_Prompt$,Printfile_Handle, Print_Cancel_Option$,Supported_Printer_Type_List$,Print_Destination_Custom$,Pk$)
+	fn_sel=fnSel_lib(Width,Printer_Prompt$,Printfile_Handle, Print_Cancel_Option$,Supported_Printer_Type_List$,Print_Destination_Custom$,Pk$)
 	if fkey=93 or fkey=99 then
 		prnname$=comp$=ff$=orient$=""
 		lpp=wid=prn_num=0

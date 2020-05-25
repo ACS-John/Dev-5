@@ -1,15 +1,15 @@
 ! formerly S:\acsUB\Sewer ! dont forget to change lines 510 &  640
-library 'S:\Core\Library': fntop,fnxit, fnAcs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fnTxt,fnLbl,fnTos,fngethandle,fncreg_read,fncreg_write,fnCmdKey,fnapply_default_rates
+autoLibrary
 dim cd1(8),x(13),message$(5)*80,message$*60,tg(11),extra(23)
 on error goto Ertn
-fntop(program$)
-
-open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed 
-open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+fnTop(program$)
+ 
+open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE
 restore #h_trans,key>=x$&"         ": nokey L220
-L160: ! 
+L160: !
 read #h_trans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L220
 if p$<>x$ then goto L220 ! history record must belong to this customer
 if tcode<>1 then goto L160 ! charge transaction
@@ -17,10 +17,10 @@ j=j+1
 if j>8 then goto L220
 resp$(j)=str$(tdate)
 goto L160
-L220: ! 
-restore #h_customer: 
-
-SCR1: ! 
+L220: !
+restore #h_customer:
+ 
+SCR1: !
 	fnTos(sn$:="ubsewer-1b")
 	mylen=47 : mypos=49
 	fnLbl(1,1,"Billing Dates for Months to Average:",mylen,1)
@@ -34,85 +34,85 @@ SCR1: !
 	fnCmdKey("&Clear Sewer Code Averages",3,0)
 	fnCmdKey("&Next",1,1)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	if ckey=3 then clear_averages=1 else clear_averages=0
 	for j=1 to 8
-L310: ! 
+L310: !
 	x=pos(resp$(j),"/",1)
-	if x>0 then 
+	if x>0 then
 		resp$(j)(x:x)=""
 		goto L310
-	end if 
+	end if
 next j
 filter_sewer_code=val(resp$(9)) conv SCR1
-if filter_sewer_code=0 and ~clear_averages then 
+if filter_sewer_code=0 and ~clear_averages then
 	mat message$(1)
 	message$(1)="You must enter at least one date!"
 	fnmsgbox(mat message$,resp$,'',0)
 	goto SCR1
-end if 
+end if
 for j=1 to 8
 	cd1(j)=val(resp$(j)) conv SCR1
 	fncreg_write(sn$&'.billing date.'&str$(j),resp$(j))
 next j
 fncreg_write(sn$&'.sewer code to average',resp$(9))
-if cd1(1)=0 and ~clear_averages then 
+if cd1(1)=0 and ~clear_averages then
 	mat message$(1)
 	message$(1)="You must enter at least one date!"
 	fnmsgbox(mat message$,resp$,'',0)
 	goto SCR1
-end if 
-
+end if
+ 
 fnopenprn
 message$="Calculating: please wait..."
 fnwait(message$,1)
 gosub HDR
-L480: ! 
+L480: !
 read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE
 if customer_sewer_rate_code<>filter_sewer_code then goto L480 ! only average certain rate codes
 L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 ! r: calculate average
-	if clear_averages then 
+	if clear_averages then
 		t3=0
-	else 
+	else
 		t1=t2=t3=x=0
 		mat x=(0)
 		restore #h_trans,key>=x$&"         ": nokey L480
-		READ_TRANS: ! 
+		READ_TRANS: !
 		read #h_trans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EO_TRANS
 		F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 		if p$<>x$ then goto EO_TRANS
 		if tcode<>1 then goto READ_TRANS ! only charge transactions
 		! if trim$(x$)='306100.00' then pause
 		for j1=1 to 8
-			if cd1(j1)=tdate then 
+			if cd1(j1)=tdate then
 				t1=t1+1
 				t2=t2+wu
 				x=x+1
 				x(x)=wu
 				goto READ_TRANS
-			end if 
+			end if
 		next j1
 		goto READ_TRANS
-
-	EO_TRANS: ! 
+ 
+	EO_TRANS: !
 		if t1>0 then t3=int((t2+.5)/t1) else t3=0
 		if env$('client')="Monticello" and t3=0 then goto L670 ! skip record if no dates found  (multiple cycles)
 		if t1=1 and env$('client')="Monticello" then t3=8 ! if only one month use 8
-	end if 
+	end if
 	rewrite #h_customer,using "Form POS 1822,N 9": t3
 	pr #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE
 	L660: form pos 1,c 12,6*nz 9
-	L670: ! 
+	L670: !
 goto L480 ! /r
-
-DONE: ! 
-	close #h_customer: 
+ 
+DONE: !
+	close #h_customer:
 	fncloseprn
-XIT: fnxit
-
+Xit: fnXit
+ 
 PAGE: ! r:
 	pr #255: newpage
 	gosub HDR
@@ -131,4 +131,4 @@ APPLY_DEFAULT_RATE: ! r:
 	fnapply_default_rates(mat extra, mat a)
 	customer_sewer_rate_code=a(2)
 return ! /r
-include: ertn no
+include: Ertn no

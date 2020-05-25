@@ -1,22 +1,22 @@
 ! Replace S:\acsGL\Bld_D_Records
 ! Create Type "D" Records
 !
-	library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fnerror,fnchain
-	fntop(program$,cap$="Financial Statement")
+	autoLibrary
+	fnTop(program$,cap$="Financial Statement")
 	on error goto Ertn
 !
 	dim cnam$*40,dat$*20,io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 	dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 !
 !
-	on fkey 5 goto XIT
+	on fkey 5 goto Xit
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
-	fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
-	fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
-	fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
-	fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
-	fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
-	fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
+	fil$(1)="ACGLFNSB" : idx$(1)="agfsidx4"
+	fil$(2)="ACGLFNSc" : idx$(2)="agfsidx1"
+	fil$(3)="ACGLFNSi" : idx$(3)="agfsidx3"
+	fil$(4)="ACGLFNSj" : idx$(4)="agfsidx2"
+	fil$(5)="ACGLfNSf" : idx$(5)="agfsidx5"
+	fil$(6)="ACGLfNSg" : idx$(6)="agfsidx6"
 	io1$(1)="5,32,Nz 3,UT,N"
 	io1$(2)="5,36,Nz 6,UT,N"
 	io1$(3)="5,43,Nz 3,UT,N"
@@ -59,7 +59,7 @@ CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 ERR1: pr f "24,78,C 1": bell : goto L570
 L620: !
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 !
 	if gln(1,2)=0 then ce=1: goto ERR1
 	if gln(2,2)=0 then ce=4: goto ERR1
@@ -100,5 +100,5 @@ L980: close #2:
 	end if
 	goto L310
 !
-XIT: fnchain("General Ledger\Financial Statement Design")
-include: ertn
+Xit: fnchain("General Ledger\Financial Statement Design")
+include: Ertn

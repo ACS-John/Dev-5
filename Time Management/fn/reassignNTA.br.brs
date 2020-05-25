@@ -1,5 +1,5 @@
 def library fnReassignNTA(filename$*256,keyForm$,ntaForm$; ___,x,key$*64,formBoth$*64,nta,recCount)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnCopy(filename$,filename$&'.beforeReassignTranAddr')
 	open #hRta:=fngethandle: 'name='&filename$,internal,outin,relative
 	recCount=lrec(hRta)
@@ -39,15 +39,7 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnAddOneC,fnAddOneN
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnTos,fnFlexInit1,fnFlexAdd1,fnCmdKey,fnAcs2
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnMsgBox
-		library 'S:\Core\Library': fnCloseFile
+		autoLibrary
 		gosub Enum
 	end if
 fnend

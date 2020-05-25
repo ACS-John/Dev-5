@@ -1,9 +1,9 @@
 ! Email Invoice
 ! This program emails queued pdf invoices as attachments
 fn_setup
-fntop(program$)
+fnTop(program$)
 fn_emailEntryScreen
-XIT: fnxit
+Xit: fnXit
 def fn_emailEntryScreen
 	dim resp$(1)*80
 	fnTos
@@ -27,7 +27,7 @@ def fn_emailEntryScreen
 	Tf_XIT: ! continue
 fnend
 def library fnEmailQueuedInvoices(email_date$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnEmailQueuedInvoices=fn_emailQueuedInvoices(email_date$)
 fnend
 def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos2,testday$)
@@ -104,17 +104,11 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnSendEmail
-		library 'S:\Core\Library': fntop,fngethandle,fnmakesurepathexists
-		library 'S:\Core\Library': fnTos,fnAcs2,fnCmdKey,fnFra,fnButton,fnChk,fnxit,fnlbl,fntxt
-		library 'S:\Core\Library': fnAddOneC
-		library 'S:\Core\Library': fnMsgBox
-		library 'S:\Core\Library': fnreport_cache_folder_current$
-		library 'S:\Core\Library': fnRename
+		autoLibrary
 		on error goto Ertn
 		gosub Enum
 	end if 
 fnend
-include: ertn
+include: Ertn
 include: fn_open
 include: enum

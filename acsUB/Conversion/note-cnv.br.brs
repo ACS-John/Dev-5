@@ -1,7 +1,7 @@
 ! Replace S:\acsUB\conversion\Note-cnv
 ! this program converts the footnotes to new format
 def library fnub_cnv_note
-	library 'S:\Core\Library': fnerror,fnStatus,fnCopy,fnub_cnv_note_phase_1,fngethandle,fnindex_it
+	autoLibrary
 	if exists("[Q]\UBmstr\Note1.h[cno]") then
 		fnub_cnv_note_phase_1 ! this needs to be done first in case they are on version 1 on note1 and note2 
 		fnStatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
@@ -40,7 +40,7 @@ def library fnub_cnv_note
 		execute 'free [Q]\UBmstr\Note2.h[cno]' ioerr ignore
 		fnStatus('Note Conversion of company number [cno] completed successfully')
 	end if
-	XIT: !
+	Xit: !
 fnend
 !
-include: ertn
+include: Ertn

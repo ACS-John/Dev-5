@@ -6,7 +6,7 @@
 
 	dim cap$*128,ln1$*8800,ln$*8800,dat$*20
 
-	fntop(program$)
+	fnTop(program$)
 	fndat(dat$)
 	tempx=val(fnactpd$) conv L180
 	if tempx=1 then 
@@ -39,7 +39,7 @@
 		actpd$="fourteen"
 	end if
 	L180: !
-	open #1: "Name=[Q]\GLmstr\acglstmt.h[cno],Shr",display,input ioerr XIT
+	open #1: "Name=[Q]\GLmstr\acglstmt.h[cno],Shr",display,input ioerr Xit
 	fnopenprn
 	READ_ACGLREST: ! 
 	linput #1: ln$ eof DONE ioerr DONE
@@ -73,7 +73,7 @@ goto READ_ACGLREST
 DONE: !
 	close #1: 
 	fncloseprn
-goto XIT
+goto Xit
 
-XIT: fnxit
+Xit: fnXit
 include: Ertn

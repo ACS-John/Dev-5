@@ -1,13 +1,13 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 fn_gatherLibraryFunctions
 fn_gatherLibraryKeywords
 fn_sortFunctions
-
+ 
 fn_updateNppCallTipFile
-xit: fnxit
+Xit: fnXit
 def fn_setup
-	library 'S:\Core\Library': fngethandle,fntop,fnxit,fnAddOneC,fnCopy
+	autoLibrary
 	dim functions$(0)*512,line$*512
 fnend
 def fn_gatherLibraryKeywords
@@ -138,7 +138,7 @@ def fn_gatherLibraryFunctions
 			if lineVal>0 then line$(1:posSpace1)=''
 		RemvoeLineNumberFinis: ! /r
 		! remove all excess spaces
-		do while pos(line$,'  ')>0 
+		do while pos(line$,'  ')>0
 			line$=srep$(line$,'  ',' ')
 		loop
 		if pos(line$,'!')>0 then line$=line$(1:pos(line$,'!')-1) ! remove any trailing comments (! only)
@@ -231,7 +231,7 @@ def fn_functionParse(funLine$*512,&funName$,&funReturnValue$,mat funParms$)
 	if posOpenParenthesis<=0 then
 		mat funParms$(0)
 	else
-		funLine$=funline$(posOpenParenthesis+1:len(funLine$)-1) 
+		funLine$=funline$(posOpenParenthesis+1:len(funLine$)-1)
 		funLine$=srep$(funLine$,';',';,')
 		str2mat(funLine$,mat funParms$,',')
 	end if

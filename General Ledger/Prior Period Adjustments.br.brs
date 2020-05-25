@@ -1,31 +1,25 @@
 ! formerly S:\acsGL\PriorPeriodAdj
 ! -- Enter Prior Period Adjustments
-
-library 'S:\Core\Library': fnxit,fntop
-library 'S:\Core\Library': fnopenprn,fncloseprn
-library 'S:\Core\Library': fndat
-library 'S:\Core\Library': fnTos,fnLbl,fnCmdSet,fnAcs2,fnTxt,fnComboF
-library 'S:\Core\Library': fnqgl,fnagl$
-library 'S:\Core\Library': fnindex_it
-library 'S:\Core\Library': fngethandle
+ 
+autoLibrary
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 dim dat$*20
 fndat(dat$)
 open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
-read #20,using "Form pos 384,N 2",rec=1: nap 
-close #20: 
-open #hGlmstr:=fngethandle:  "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
-open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTRANS.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,outIn,keyed 
-
+read #20,using "Form pos 384,N 2",rec=1: nap
+close #20:
+open #hGlmstr:=fngethandle:  "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTRANS.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,outIn,keyed
+ 
 do ! r: main loop
 	dim resp$(10)*80
 	resp$(2)=""
-	fnTos 
-	lc=0 
+	fnTos
+	lc=0
 	mylen=40 : mypos=mylen+2
 	fnLbl(lc+=1,1,"General Ledger Number:",mylen,1)
-	fnqgl(lc,mypos,0,2) 
+	fnqgl(lc,mypos,0,2)
 	resp$(1)=""
 	fnLbl(lc+=1,1,"Adjustment Amount:",mylen,1)
 	fnTxt(lc,mypos,12,0,0,'pointtwo')
@@ -43,25 +37,25 @@ do ! r: main loop
 	fnComboF('Year',lc,mypos,0,"[Q]\GLmstr\Year.h[cno]",1,1,2,7,"[Q]\GLmstr\Year-Idx.h[cno]",1)
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then 
+	if ckey=5 then
 		goto Finis
-	else 
-		k$=fnagl$(resp$(1)) 
-		am=val(resp$(2)) 
-		d1=val(resp$(3)) 
+	else
+		k$=fnagl$(resp$(1))
+		am=val(resp$(2))
+		d1=val(resp$(3))
 		dim fm(4)
-		fm(1)=val(resp$(4)(1:2)) 
-		fm(2)=val(resp$(5)(1:2)) 
-		fm(3)=val(resp$(6)(1:2)) 
+		fm(1)=val(resp$(4)(1:2))
+		fm(2)=val(resp$(5)(1:2))
+		fm(3)=val(resp$(6)(1:2))
 		fm(4)=val(resp$(7)(1:2))
-		if val(k$)=0 and am=0 then 
+		if val(k$)=0 and am=0 then
 			goto Finis
 		end if
 	end if
 	if fm(2)=1 then fm2$="C" else fm2$="P"
 	if fm(4)=1 then fm4$="C" else fm4$="P"
 	
-	if ~prnOpen then 
+	if ~prnOpen then
 		fnopenprn
 		prnOpen=1
 	end if
@@ -73,7 +67,7 @@ do ! r: main loop
 	ce=0
 	pr #255,using 'Form POS 9,PIC(ZZZ),X 6,PIC(ZZZZZZ),X 9,PIC(ZZZ),X 4,C 35,X 1,N 2,X 1,C 1,X 11,N 2,X 1,C 1,X 4,N 11.2': val(k$(1:3)),val(k$(4:9)),val(k$(10:12)),d$(1:35),fm(1),fm2$,fm(3),fm4$,am pageoflow PGOF
 	if am>0 then am1=am1+am else am2=am2+am
-	if fm(2)=1 then 
+	if fm(2)=1 then
 		first=fm(1)
 	else
 		if fm(4)=1 then last=nap else last=fm(3)
@@ -95,18 +89,18 @@ do ! r: main loop
 	end if
 loop ! /r
 Finis: ! r:
-	close #hGlmstr: 
-	close #hAcTrans: 
+	close #hGlmstr:
+	close #hAcTrans:
 	pr #255,using 'Form pos 5,c 18,n 12.2': '   Total Debits: ',am1
 	pr #255,using 'Form pos 5,c 18,n 12.2': '  Total Credits: ',am2
 	pr #255,using 'Form pos 5,c 18,n 12.2': 'Net Adjustments: ',am1+am2
 	fncloseprn : prnOpen=0
 	fnindex_it('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
-goto XIT ! /r
+goto Xit ! /r
 HDR: ! r:
-	pr #255,using 'Form Pos 20,Cc 40': env$('cnam') 
+	pr #255,using 'Form Pos 20,Cc 40': env$('cnam')
 	pr #255,using 'Form Pos 20,Cc 40': env$('program_caption')
-	pr #255,using 'Form Pos 20,Cc 40': dat$ 
+	pr #255,using 'Form Pos 20,Cc 40': dat$
 	pr #255: ""
 	dim scr$(8)*20
 	pr #255,using 'Form POS 4,C 12,X 2,C 12,C 13,POS 43,C 12,POS 73,C 60': scr$(1),scr$(2),scr$(3),"Description","1st Month/Yr   Last Month/Yr   Amount"
@@ -115,6 +109,6 @@ PGOF: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r
-XIT: !
-fnxit
-include: ertn
+Xit: !
+fnXit
+include: Ertn

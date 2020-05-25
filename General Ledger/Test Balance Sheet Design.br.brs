@@ -1,45 +1,45 @@
 ! formerly S:\acsGL\BalanceSheetTest
 ! Balance Sheet - Standard 8.5x11
 !
-  library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnGlAskFormatPriorCdPeriod,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnread_program_print_property
+autoLibrary
   on error goto Ertn
 !
   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 !
-  fntop(program$)
-  if fnGlAskFormatPriorCdPeriod=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-  if fnps=2 then 
+  fnTop(program$)
+  if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+  if fnps=2 then
     mp1=66
-    open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\fnSCIndx.h[cno],Shr",internal,input,keyed 
+    open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
   else
     mp1=63
-    open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\FNSBIndx.h[cno],Shr",internal,input,keyed 
+    open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
   end if
-  if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
+  if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 !
 Screen1: ! r:
-  fnTos(sn$="GLInput") 
+  fnTos(sn$="GLInput")
   mylen=30: mypos=mylen+3 : right=1
   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-  fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
+  fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
   resp$(1)=""
   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
   fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-  fnAcs(sn$,0,mat resp$,ckey)
-  if ckey=5 then goto XIT
-  costcntr=val(resp$(1)) 
+  fnAcs2(mat resp$,ckey)
+  if ckey=5 then goto Xit
+  costcntr=val(resp$(1))
 goto GetStarted ! /r
 GetStarted: if fnps=2 then goto L310 ! secondary
   execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.H[cno] 63 3 Replace DupKeys -N"
   goto L320
 L310: execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.H[cno] 66 3 Replace DupKeys -N"
-L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed 
+L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
   fnopenprn
   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
   report$="Balance Sheet"
-READ_TOP: ! 
+READ_TOP: !
   read #1,using L380: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 L380: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
   if ltrm$(r$)="" or ltrm$(r$)="0" then goto READ_TOP
@@ -103,8 +103,8 @@ L900: gosub SET_ACCUM
   gosub UNDERLINE
 L920: gosub FOOTER
   if te$><"P" then goto L950
-  for j=1 to 9 
-    accum(j)=accum(j)-accum(ap) 
+  for j=1 to 9
+    accum(j)=accum(j)-accum(ap)
   next j
 L950: goto READ_TOP
 !
@@ -121,13 +121,13 @@ L1010: if foot1=1 then goto L1070
 L1070: foot$=rtrm$(foot$)&d$
   goto READ_TOP
 !
-SET_ACCUM: ! 
+SET_ACCUM: !
   for j=1 to 9
     if ac(j)=0 or ac(j)=9 then goto L1130 else accum(j)=0
 L1130: next j
-  return 
+  return
 !
-FOOTER: ! 
+FOOTER: !
   if ls=0 then goto EO_FOOTER
   if ls=99 then goto L1220
   pr #255,using L1200: " "
@@ -142,13 +142,13 @@ L1270: form skip sk,pos tabnote,c fl,skip 1
   if eofcode=1 then goto EO_FOOTER
   pr #255: newpage
   gosub HEADER
-EO_FOOTER: return 
+EO_FOOTER: return
 !
-PGOF: ! 
+PGOF: !
   gosub L1220
-  continue 
+  continue
 !
-UNDERLINE: ! 
+UNDERLINE: !
   if ul=0 then goto L1480
   underlin=25+14*bc ! if CP=1 Then uNDERLIN=51+14*BC Else uNDERLIN=25+14*BC
   if ul=1 then goto L1450
@@ -161,7 +161,7 @@ L1450: underlin$="______________"
 L1470: form pos underlin,c 14,skip redir
 L1480: if redir=0 then pr #255,using L1490: " "
 L1490: form skip 1,c 1,skip 0
-  return 
+  return
 !
 HEADER: ! r:
   heading=1
@@ -172,12 +172,12 @@ HEADER: ! r:
   pr #255: "\ql "
   return ! /r
 !
-DONE: ! 
+DONE: !
   eofcode=1
   gosub L1220
   if pors<>2 then let fncloseprn
-  goto XIT
+  goto Xit
 !
-XIT: fnxit
+Xit: fnXit
 !
-include: ertn
+include: Ertn

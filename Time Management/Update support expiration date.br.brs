@@ -3,7 +3,7 @@ fn_setup
 fn_openFiles
 fnTop(program$)
 fn_updateSupportExpirationDate
-goto XIT
+goto Xit
 def fn_updateSupportExpirationDate(; clientKey$*5)
 	if clientKey$='' then ! r: ask client(s) and process them
 		do
@@ -17,7 +17,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 			fncombof('',1,posCol2,37,'S:\Core\Data\acsllc\CLmstr.H[cno]',1,5,6,30,'S:\Core\Data\acsllc\CLIndex.H[cno]',1)
 			fnCmdSet( 2)
 			fnAcs('',0,mat resp$, fk)
-			if fk<>5 then 
+			if fk<>5 then
 				dim selectedClient$*128
 				selectedClient$=resp$(1)
 				clientKey$=selectedClient$(1:5)
@@ -31,7 +31,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 				fnaddonec(mat msgConfirm$,'')
 				fnaddonec(mat msgConfirm$,'Update Expiration Dates? (adds one year to each)')
 				fnmsgbox(mat msgConfirm$, resp$,'',buttonYN+iconQuestion+buttonDefaultTwo)
-				if resp$='Yes' then 
+				if resp$='Yes' then
 					fn_updateOneSupportExpDate(selectedClient$(1:5))
 					mat msgConfirm$(0)
 					fnaddonec(mat msgConfirm$,'Client:'&tab$&selectedClient$)
@@ -74,8 +74,8 @@ def fn_getSupportArrayByClient(client$,mat sysno,mat sysid$,mat dateStart,mat ti
 		fnAddOneN(mat cost,cost)
 		read #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof G1Finis
 	loop
-	G1Finis: ! 
-
+	G1Finis: !
+ 
 fnend
 def fn_updateOneSupportExpDate(client$)
 	client$=rpad$(client$,kln(hSupport))
@@ -88,26 +88,23 @@ def fn_updateOneSupportExpDate(client$)
 		rewrite #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 		read #hSupport,using fSupport: client$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof U1Finis
 	loop
-	U1Finis: ! 
+	U1Finis: !
 	! pause
 fnend
 def fn_openFiles
 	if ~openFiles then
 		openFiles=1
-		open #hClientKey :=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-		open #hClientName:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed 
+		open #hClientKey :=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
+		open #hClientName:=fngethandle: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
 		open #hSupport   :=fngethandle: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 	end if
 	fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
 fnend
 def fn_setup
-	library 'S:\Core\Library': fntop,fnxit, fnerror
-	library 'S:\Core\Library': fngethandle,fnaddonec,fnAddOneN
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnAcs,fnTos,fnLbl,fncombof,fnCmdSet
+	autoLibrary
 	dim resp$(10)*128
 	tab$=chr$(9)
-	buttonYN=4 : iconQuestion=32 : iconInformation=64 : buttonDefaultTwo=256 
+	buttonYN=4 : iconQuestion=32 : iconInformation=64 : buttonDefaultTwo=256
 fnend
-XIT: fnxit
-include: ertn
+Xit: fnXit
+include: Ertn

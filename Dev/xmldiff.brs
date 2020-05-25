@@ -1,4 +1,4 @@
-library 's:\core\library': fngethandle,fngetdir2,fnAddOneC
+autoLibrary
 pr newpage
 ! dim fileOld$*256
 ! dim fileNew$*256
@@ -32,7 +32,7 @@ for locItem=1 to udim(mat locList$)
     ! fileNew$='C:\Users\John\Desktop\pbjExport\08-pbj_emp_q4_081916-082616\'&filename$(fileItem)
     ! fileOld$='C:\SageAX\ACC\wb\cdsk\pbjsent - q4 - submitted\08-pbj_emp_q4_081916-082616\e_q4.64.08192016-08262016.xml'
     ! fileNew$='C:\Users\John\Desktop\pbjExport\08-pbj_emp_q4_081916-082616\e_q4.64.08192016-08262016.xml'
-    
+ 
     open #hOld:=fngethandle: 'name='&filenameOld$(fileItem),d,i
     open #hNew:=fngethandle: 'name='&filenameNew$(fileItem),d,i
     do
@@ -50,7 +50,7 @@ for locItem=1 to udim(mat locList$)
         if lineNew$(1:len('<terminationDate>'))='<terminationDate>' and lineOld$(1:len('<terminationDate>'))='<terminationDate>' then
           write #hInt,using 'form pos 1,C 18,C 10,C 10,C 400': empid$,hire$,term$,'*** Old: '&lineOld$&'   New: '&lineNew$ ! &'  FileNew:'&filenameNew$(fileItem)
           TerminationDateChangeCount+=1
-        else if lineNew$(1:len('<terminationDate>'))<>'<terminationDate>' then 
+        else if lineNew$(1:len('<terminationDate>'))<>'<terminationDate>' then
           write #hInt,using 'form pos 1,C 18,C 10,C 10,C 400': empid$,hire$,term$,'*** Old: '&lineOld$&'   New: '&lineNew$ ! &'  FileNew:'&filenameNew$(fileItem)
           unusualCount+=1
           pause
@@ -102,4 +102,4 @@ for locItem=1 to udim(mat locList$)
   if TerminationDateChangeCount>0 then pr location$&' has '&str$(TerminationDateChangeCount)&' Termination Date Changes' : TerminationDateChangeCount=0
   if unusualCount>0 then pr location$&' has '&str$(unusualCount)&' unusual diffs' : unusualCount=0
 next locItem
-
+ 

@@ -1,64 +1,58 @@
-20000 ! Replace S:\Core\fnRgl$
-20020 ! format the answer to fnQgl -
-28000   def library fnrgl$*60(x$; ReturnMaxLength)
-28020     library 'S:\Core\Library': fngethandle,fnerror,fnpause
-28040     on error goto Ertn
-28060     if ReturnMaxLength=0 then returnMaxLength=35
-28080 !_
-28100 ! X$ should be formatted as though it were just read in and is ready 
-28120 !    for a read Key=...   ie "  0   100  0"
-28140 !_
-28160     dim desc$*50
-28180 !_
-28200     if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
-28220     if env$('CurSys')="UB" and exists("[Q]\UBmstr\GLmstr.h[cno]") then cursys$="UB": goto L180
-28240     if env$('CurSys')="PR" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
-28260     if env$('CurSys')="PR" and exists("[Q]\CLmstr\Company.h[cno]") then cursys$="CL": goto L180
-28280     if env$('CurSys')="PR" and exists("[Q]\PRmstr\glmstr.h[cno]") then cursys$="PR": goto L180
-28300     if env$('CurSys')='CL' then cursys$='CL' else cursys$='GL'
-28320     if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then cursys$='GL'
-28340     if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then cursys$='CR'
-28360 ! find out if I should use the department number and/or the sub account number
-28380 L180: !
-28400     if cursys$='GL' or cursys$='CL' then 
-28420       open #company:=fngethandle: "Name=[Q]\"&cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr L260
-28440       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
-28460       close #company: 
-28480     else if cursys$="PR" or cursys$="UB" or cursys$="CR" then 
-28500       L260: !
-28520       use_dept=use_sub=1 ! default both to use
-28540     end if
-28560     desc$=''
-28580     open #glmstr:=fngethandle: "Name=[Q]\"&cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&cursys$&"mstr\GLIndex.h[cno],Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
-28600     read #glmstr,using "Form Pos 13,C 50",key=x$: desc$ nokey NOKEYGLMSTR ioerr NOKEYGLMSTR
-28620     close #glmstr: 
-28640     L_ERR_OPEN_FOR_DESC: !
-28660  ! reformat it from a read key= ready format to an input ready format
-28680     if use_sub=0 then 
-28700       x$(10:12)="" 
-28720     else 
-28740       x$(10:12)="-"&trim$(x$(10:12))
-28760     end if
-28780     x$(4:9)=trim$(x$(4:9))
-28800     if use_dept =0 then 
-28820       x$(1:3)="" 
-28840     else 
-28860       x$(1:3)=trim$(x$(1:3))&"-"
-28880     end if
-32000 DONE: ! 
-32020 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
-32040     fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
-32060     goto XIT
-32080 !_
-34000 NOKEYGLMSTR: ! 
-34020     close #glmstr: 
-34040     x$="": desc$=""
-34060     goto DONE
-48000 XIT: fnend 
-62000 ! <Updateable Region: ERTN>
-62020 ERTN: fnerror(program$,err,line,act$,"xit")
-62040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-62060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
-62120 ! /region
+! Replace S:\Core\fnRgl$
+! format the answer to fnQgl -
+def library fnrgl$*60(x$; ReturnMaxLength)
+		library 'S:\Core\Library': fngethandle,fnerror,fnpause
+		on error goto Ertn
+		if ReturnMaxLength=0 then returnMaxLength=35
+!_
+! X$ should be formatted as though it were just read in and is ready
+!    for a read Key=...   ie "  0   100  0"
+!_
+		dim desc$*50
+!_
+		if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
+		if env$('CurSys')="UB" and exists("[Q]\UBmstr\GLmstr.h[cno]") then cursys$="UB": goto L180
+		if env$('CurSys')="PR" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
+		if env$('CurSys')="PR" and exists("[Q]\CLmstr\Company.h[cno]") then cursys$="CL": goto L180
+		if env$('CurSys')="PR" and exists("[Q]\PRmstr\glmstr.h[cno]") then cursys$="PR": goto L180
+		if env$('CurSys')='CL' then cursys$='CL' else cursys$='GL'
+		if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]") then cursys$='GL'
+		if env$('CurSys')='CR' and exists("[Q]\GLmstr\Company.h[cno]")=0 then cursys$='CR'
+! find out if I should use the department number and/or the sub account number
+L180: !
+		if cursys$='GL' or cursys$='CL' then
+			open #company:=fngethandle: "Name=[Q]\"&cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr L260
+			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
+			close #company:
+		else if cursys$="PR" or cursys$="UB" or cursys$="CR" then
+			L260: !
+			use_dept=use_sub=1 ! default both to use
+		end if
+		desc$=''
+		open #glmstr:=fngethandle: "Name=[Q]\"&cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&cursys$&"mstr\GLIndex.h[cno],Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
+		read #glmstr,using "Form Pos 13,C 50",key=x$: desc$ nokey NOKEYGLMSTR ioerr NOKEYGLMSTR
+		close #glmstr:
+		L_ERR_OPEN_FOR_DESC: !
+ ! reformat it from a read key= ready format to an input ready format
+		if use_sub=0 then
+			x$(10:12)=""
+		else
+			x$(10:12)="-"&trim$(x$(10:12))
+		end if
+		x$(4:9)=trim$(x$(4:9))
+		if use_dept =0 then
+			x$(1:3)=""
+		else
+			x$(1:3)=trim$(x$(1:3))&"-"
+		end if
+DONE: !
+! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
+		fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
+		goto Xit
+!_
+NOKEYGLMSTR: !
+		close #glmstr:
+		x$="": desc$=""
+		goto DONE
+Xit: fnend
+include: Ertn

@@ -1,6 +1,6 @@
 ! Replace S:\acsUB\printbill
 	fn_setup
-	fntop(program$)
+	fnTop(program$)
 ! r: Direct clients to the (basic) PrintBill_Basic routine (below) or their custom bill program
 	dim alternate_printbill_program$*256
 	alternate_printbill_program$=fnub_printbill_program$
@@ -2342,4 +2342,4 @@ def fn_print_bill_galena
 		billOnPageCount=0
 	end if 
 fnend
-include: ertn
+include: Ertn

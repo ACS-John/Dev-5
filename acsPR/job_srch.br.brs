@@ -1,53 +1,47 @@
-00010 ! replace S:\acsPR\Job_Srch.br
-00020 ! search for an job numbers
-00030 !
-00040   def library fnjob_srch(&jn$;fixgrid)
-00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle
-00060     on error goto Ertn
-00070 !
-00080     dim item$(4)*40,resp$(30)*80
-00090 !
-00100 ! jn$=Job #     !:
-          ! to extract the flexgrid information (master file)
-00104     fncno(cno)
-00105     open #file_num:=fngethandle: "Name=[Q]\PRmstr\Jcmstr.h[cno],KFName=[Q]\PRmstr\jcIndx.h[cno],Shr",internal,input,keyed ioerr ERTN
-00110 !
-00120     restore #file_num: 
-00130     fnTos(sn$="JobSrch")
-00140     ch$(1)="Job #" : ch$(2)="Job Name" : ch$(3)="Address" !:
-          ch$(4)="City, ST Zip" !:
-          mat ch$(4) : mat cm$(4) : mat cm$=("4")
-00160     if fixgrid=99 then usefile=0 else usefile=1 !:
-            ! set to rebuild grid file only as you exit program and the !:
-            ! fixgrid code has been changed to necessary
-00170     usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
-00180     if usefile>0 then goto L280 ! file already exists, do not recreate
-00190 READ_FILE: ! 
-00200     read #file_num,using 'Form POS 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
-00210     fnflexadd1(mat item$)
-00220     goto READ_FILE
-00230 !
-00240 ERR_READ: ! 
-00250     if err<>61 then goto ERTN
-00260     pr 'Record locked during job_search flexgrid creation' !:
-          pr 'It was skipped' !:
-          read #file_num,release: !:
-          goto READ_FILE
-00270 !
-00280 L280: if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING job files
-00290     fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) !:
-          ! CALL FLEXGRID
-00300     jn$=lpad$(resp$(1),6)
-00310     if ckey=5 then jn$="      " ! no one selected
-00320     goto XIT
-00330 !
-00340 ! <Updateable Region: ERTN>
-00350 ERTN: fnerror(program$,err,line,act$,"xit")
-00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00400 ! /region
-00410 !
-00420 XIT: close #file_num: : fnend 
-00430 !
+! replace S:\acsPR\Job_Srch.br
+! search for an job numbers
+!
+def library fnjob_srch(&jn$;fixgrid)
+	! jn$=Job #     
+	! to extract the flexgrid information (master file)
+	autoLibrary
+	on error goto Ertn
+
+	dim item$(4)*40
+	dim resp$(30)*80
+
+	open #h:=fngethandle: "Name=[Q]\PRmstr\Jcmstr.h[cno],KFName=[Q]\PRmstr\jcIndx.h[cno],Shr",internal,input,keyed ioerr ERTN
+
+	restore #h: 
+	fnTos
+	ch$(1)="Job #" 
+	ch$(2)="Job Name" 
+	ch$(3)="Address" 
+	ch$(4)="City, ST Zip" 
+	mat ch$(4) : mat cm$(4) : mat cm$=("4")
+	if fixgrid=99 then usefile=0 else usefile=1 ! set to rebuild grid file only as you exit program and the   fixgrid code has been changed to necessary
+	usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
+	if usefile>0 then goto L280 ! file already exists, do not recreate
+	READ_FILE: ! 
+		read #h,using 'Form POS 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
+		fnflexadd1(mat item$)
+	goto READ_FILE
+
+	ERR_READ: ! 
+		if err<>61 then goto ERTN
+		pr 'Record locked during job_search flexgrid creation' 
+		pr 'It was skipped' 
+		read #h,release: 
+	goto READ_FILE
+
+	L280: !
+		if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING job files
+		fnCmdSet(2)
+		fnAcs2(mat resp$,ckey) 
+		jn$=lpad$(resp$(1),6)
+		if ckey=5 then jn$="      " ! no one selected
+	goto Xit
+	Xit: !
+	close #h:
+fnend 
+include: Ertn

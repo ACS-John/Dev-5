@@ -1,6 +1,6 @@
 ! Replace S:\acsUB\totalBal
 fn_setup
-fntop(program$,"View Total Accounts Receivable")
+fnTop(program$,"View Total Accounts Receivable")
 do 
 	fnTos
 	mylen=28 : mypos=mylen+2
@@ -15,22 +15,11 @@ do
 	excludeFinalBilled$=resp$(2)
 	fncreg_write(env$('program_caption')&' - Exclude Final Billed',excludeFinalBilled$)
 loop until ck=5
-XIT: fnxit
+Xit: fnXit
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnGethandle
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnLbl
-		library 'S:\Core\Library': fnTxt
-		library 'S:\Core\Library': fnChk
-		library 'S:\Core\Library': fnCmdKey
-		library 'S:\Core\Library': fnAcs2
-		library 'S:\Core\Library': fnCreg_read
-		library 'S:\Core\Library': fnCreg_write
+		autoLibrary
 		on error goto Ertn
 	end if 
 	fnLastBillingDate(lastBillingDate)

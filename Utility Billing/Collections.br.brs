@@ -1,6 +1,6 @@
 ! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
 	fn_setup ! r:
-	fntop(program$) ! for now use the settings from Enter Collections for page formatting of reports
+	fnTop(program$) ! for now use the settings from Enter Collections for page formatting of reports
 	open #hCustomer1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 	open #hCustomer2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed 
 	open #hTrans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed 
@@ -84,7 +84,7 @@ MENU1B: ! r:
 		fnCmdKey("Import CSV",14,0,0,'Import Collections CSV')
 		fnAcs(sn$,0,mat resp$,ck1)
 		if ck1=5 then 
-			goto XIT
+			goto Xit
 		else 
 			edrec=val(resp$(resp_selectedRecordNumber))
 			if ck1=1 then 
@@ -400,8 +400,8 @@ MERGE: ! r:
 	close #hCustomer2: 
 	close #hTrans: 
 	close #hTransUnposted: ioerr ignore
-	goto XIT ! /r
-XIT: fnxit
+	goto Xit ! /r
+Xit: fnXit
 ! SeemsWrong1: !
 	!   this seems wrong    !!!   ! Check for previous months
 	!   this seems wrong    !!!   mat tgb=(0)
@@ -704,31 +704,7 @@ return  ! /r
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnflexinit1,fnflexadd1
-		library 'S:\Core\Library': fncomboa
-		library 'S:\Core\Library': fncmbact
-		library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-		library 'S:\Core\Library': fnCustomer,fnCustomerNotes
-		library 'S:\Core\Library': fnCmdKey,fntop,fnChk
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnget_services
-		library 'S:\Core\Library': fnButton
-		library 'S:\Core\Library': fnopen_receipt_printer,fnclose_receipt_printer
-		library 'S:\Core\Library': fnask_account
-		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fnureg_read,fnureg_write
-		library 'S:\Core\Library': fnsafe_filename$
-		library 'S:\Core\Library': fnreport_cache_folder_current$
-		library 'S:\Core\Library': fnerror
-		library 'S:\Core\Library': fnTos,fnLbl,fnAcs,fnTxt,fnCmdSet
-		library 'S:\Core\Library': fnclient_has
-		library 'S:\Core\Library': fnreg_read
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnbuildkey$
-		library 'S:\Core\Library': fnKeyExists
-		library 'S:\Core\Library': fnapply_default_rates
+		autoLibrary
 		on error goto Ertn
 
 		possibleServiceCount=10
@@ -1534,5 +1510,5 @@ def fn_totalAdd(transType,amt,&totalCollections,&totalDebitMemos,&totalCreditMem
 	end if 
 fnend
 
-include: ertn no
+include: Ertn no
 include: fn_open

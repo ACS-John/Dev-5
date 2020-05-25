@@ -2,7 +2,7 @@
 ! Vendor file with dynamic editor - hamster
 !
 	autoLibrary
-	fntop(program$)
+	fnTop(program$)
 	on error goto Ertn
 
 	dim fltyp$(08),fln(08),mask(08),p$(08)*65,lbl$(08)*22,sln(08)
@@ -37,5 +37,5 @@
 	c$(07,7)="[Q]\Data\1099Box.idx" : c$(07,8)='1'
 	open #1: "Name=[Q]\GLmstr\gl1099.h[cno],KFName=[Q]\GLmstr\gl109idx.h[cno],Use,RecL=127,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 	fnHamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
-XIT: fnxit
+Xit: fnXit
 include: Ertn

@@ -1,5 +1,5 @@
 ! State U/C Report
-	library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fnChk,fncomboa,fncombof,fncreg_read,fncreg_write,fnGetPayrollDates,fnDedNames
+	autoLibrary
 	on error goto Ertn
 ! r: setup
 	dim ss$*11,em$(3)*30,department$*128
@@ -21,7 +21,7 @@
 	qtr_option$(3)="3"
 	qtr_option$(4)="4"
 	dim quarter_ending_date$*20
-! 
+!
 	dim column$(4) ! columns to include on the report (True or False)
 	dim ptotal(4)
 	dim grand_total(4)
@@ -49,20 +49,20 @@
 	heading_1$(4)="     State   "
 	heading_2$(4)="      W/H    "
 	heading_3$(4)="  ___________"
-
-	fntop(program$,cap$="State UnEmp Report")
+ 
+	fnTop(program$,cap$="State UnEmp Report")
 	fncreg_read('calculation date text',quarter_ending_date$)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #1,using 'Form POS 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,POS 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
-	close #1: 
+	close #1:
 	ficamaxw=ficamaxw*10
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	for j=1 to 10
-		if trim$(e$(j))<>"" then 
+		if trim$(e$(j))<>"" then
 			x+=1
 			option1$(x)=str$(j)&" = "&d$(j)
-		end if 
+		end if
 	next j
 	mat option1$(max(1,x))
 	fncreg_read('uc1 - quarter'                ,quarter$  ) : if quarter$  ='' then quarter$  ='1'
@@ -97,8 +97,8 @@
 	fncombof("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
 	resp$(respc+=1)='[All]'
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	quarter_ending_date$=resp$(1) ! quarter ending date
 	stcode=val(resp$(2)(1:2)) ! state code
 	heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
@@ -123,12 +123,12 @@
 	on fkey 5 goto FINIS
 	fnopenprn
 	if file$(255)(1:3)="PRN" then redir=0 else redir=1
-
-	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	open #h_department:=3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed 
-	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+ 
+	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #h_department:=3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	gosub HDR
-TOP: ! 
+TOP: !
 	read #2,using "Form POS 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE
 	m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
 	mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
@@ -157,10 +157,10 @@ ANALYZE_WAGES: ! r: analyze wages on each person
 	if quarter_code=4 then mat qtr=qtr4tcp
 	dcq=0 ! total wage for quarter
 	for j=1 to 20
-		if dedcode(j)=1 and deduc(j)=1 then 
+		if dedcode(j)=1 and deduc(j)=1 then
 			dcy=dcy+ytdtotal(j+4)
 			dcq=dcq+qtr(j+4)
-		end if 
+		end if
 	next j
 ! if env$('client')="Washington Parrish" then
 !   m2=m2+ytdtotal(31)-dcy+ytdtotal(6)
@@ -190,7 +190,7 @@ L1480: form pos 5,c 15,pic(--,---,---.zz)
 FINIS: close #2: ioerr ignore
 	close #h_department: ioerr ignore
 	fncloseprn
-	fnxit ! /r
+	fnXit ! /r
 SUBTOTALS: ! r:
 	if m1=0 then goto L1780 ! SKIP IF QUARTERLY WAGE=0
 	p3=p3+1
@@ -200,12 +200,12 @@ SUBTOTALS: ! r:
 	h2=m(stcode)-(m2-m1)
 	if round$="Y" then h2=round(h2,0)
 	goto L1650
-L1620: ! 
+L1620: !
 	h2=0
 	goto L1650
-L1640: ! 
+L1640: !
 	h2=m1
-L1650: ! 
+L1650: !
 	h3=m1-h2
 	if round$="Y" then h3=round(h3,0)
 	if column$(1)<>"True" then m1=0 ! no total column
@@ -226,7 +226,7 @@ L1650: !
 	next col_item
 	pr #255: pageoflow PGOF
 	p1=p1+2
-L1780: ! 
+L1780: !
 	return  ! /r
 PAGE_TOTALS: ! r:
 	fn_print_line_str(mat total_underline$,44)
@@ -243,7 +243,7 @@ PGOF: ! r:
 	gosub PAGE_TOTALS
 	gosub HDR
 continue  ! /r
-XIT: fnxit
+Xit: fnXit
 HDR: ! r:
 ! r: page heading
 	pr #255,using L1090: "Page ",p2+=1
@@ -254,7 +254,7 @@ L1090: form pos 70,c 5,pic(zzz)
 	pr #255,using L1150: "For quarter ended "&quarter_ending_date$
 	if department$<>'[All]' then pr #255,using L1150: "Department "&department$
 L1150: form pos 20,cc 40
-	pr #255: 
+	pr #255:
 	pr #255,using L1180: "     Rate",a$(1),"Fed ID",b$(1)
 L1180: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
 	if stcode=0 then stcode=1
@@ -262,7 +262,7 @@ L1180: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
 L1210: form pos 3,pic(zzzz.##),pos 17,c 40,pos 59,c 8,pos 69,c 12,skip 1
 	pr #255,using L1230: a$(3),"STATE",d$(stcode)
 L1230: form pos 17,c 40,pos 59,c 5,pos 69,c 8,skip 1
-	pr #255: 
+	pr #255:
 ! /r
 ! r: column headings
 	fn_print_line_str(mat heading_1$, 44)
@@ -277,20 +277,20 @@ def fn_print_line_str(mat pl_str$; pl_pos)
 	pl_line$=''
 	if pl_pos=0 then pl_pos=42
 	for pl_item=1 to udim(mat column$)
-		if column$(pl_item)="True" then 
+		if column$(pl_item)="True" then
 			pl_line$=pl_line$&pl_str$(pl_item)
-		end if 
+		end if
 	next pl_item
 	pr #255,using 'form pos pl_pos,c': pl_line$
-fnend 
+fnend
 def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
 	pl_line$=''
 	if pl_pos=0 then pl_pos=42
 	for pl_item=1 to udim(mat column$)
-		if column$(pl_item)="True" then 
+		if column$(pl_item)="True" then
 			pl_line$=pl_line$&cnvrt$(pl_form$(pl_item),pl_amt(pl_item))
-		end if 
+		end if
 	next pl_item
 	pr #255,using 'form pos pl_pos,c': pl_line$
-fnend 
+fnend
 include: Ertn

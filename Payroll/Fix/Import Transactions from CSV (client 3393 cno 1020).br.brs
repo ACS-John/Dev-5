@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 	dim dednames$(20)*20
 	dim abrevname$(20)*8
 	dim newdedcode(20)
@@ -9,8 +9,8 @@ fntop(program$)
 		
 dim emplRegisterFile$*1024
 dim delim$*1
-
-
+ 
+ 
 SCREEN1: ! r:
 fncreg_read(cap$&'.department$',department$, '1')
 fncreg_read(cap$&'.emplRegisterFile$',emplRegisterFile$, 'D:\ACS\(Client_Files)\Payroll Done Right\YEN HA 2019 TRANSACTION REBUILD - employee.txt')
@@ -23,8 +23,8 @@ fnLbl(2,1,"Employee Register CSV:",col1_width,1)
 fnTxt(2,col2_pos,30,256,0,'70',0,'')
 resp$(2)=emplRegisterFile$
 fnCmdSet(2)
-fnAcs(sn$,0,mat resp$,ckey)
-if ckey=5 then goto XIT
+fnAcs2(mat resp$,ckey)
+if ckey=5 then goto Xit
 department$=resp$(1)
 emplRegisterFile$=resp$(2)
 fncreg_write(cap$&'.department$',department$)
@@ -78,93 +78,93 @@ for empItem=1 to emplRecordCount
 	fedUc             	=round(emplList_Total_Pay(empItem),0)
 	StateUc           	=round(emplList_Total_Pay(empItem),0)
 	fn_buildTran1(empNo,dept,prDate,ckno,hoursReg,hoursOt,hoursSick,hoursVac,hoursHoli,wagesWorkmansComp,wagesSS,wagesMedicare,fedUc,StateUc)
-	tcp1 =emplList_Federal(empItem)        		! ,WH - Federal             
-	tcp2 =emplList_FICA(empItem)           			! ,WH - SS                  
-	tcp3 =emplList_Med_WH(empItem)         			! ,WH - Medicare            
-	tcp4 =emplList_State(empItem)          			! ,WH - State               
-	tcp5 =emplList_Draw(empItem)           			! ,DRAW standard deduction 1   
-	tcp6 =0                                			! ,standard deduction 2       
-	tcp7 =0                                			! ,GARN standard deduction 3   
-	tcp8 =0				! ,standard deduction 4       
-	tcp9 =0				! ,standard deduction 5       
-	tcp10=0				! ,+ TIPS standard deduction 6 
-	tcp11=-emplList_FEE(empitem)            			! ,standard deduction 7      
-	tcp12=emplList_WC(empItem) ! deptList_WC(deptIndex) ! round(deptList_WC(deptIndex),0)				! ,W/C standard deduction 8  
-	tcp13=emplList_TRANSIT(empItem) ! deptList_TrimetTax(deptIndex)				! ,standard deduction 9      
+	tcp1 =emplList_Federal(empItem)        		! ,WH - Federal
+	tcp2 =emplList_FICA(empItem)           			! ,WH - SS
+	tcp3 =emplList_Med_WH(empItem)         			! ,WH - Medicare
+	tcp4 =emplList_State(empItem)          			! ,WH - State
+	tcp5 =emplList_Draw(empItem)           			! ,DRAW standard deduction 1
+	tcp6 =0                                			! ,standard deduction 2
+	tcp7 =0                                			! ,GARN standard deduction 3
+	tcp8 =0				! ,standard deduction 4
+	tcp9 =0				! ,standard deduction 5
+	tcp10=0				! ,+ TIPS standard deduction 6
+	tcp11=-emplList_FEE(empitem)            			! ,standard deduction 7
+	tcp12=emplList_WC(empItem) ! deptList_WC(deptIndex) ! round(deptList_WC(deptIndex),0)				! ,W/C standard deduction 8
+	tcp13=emplList_TRANSIT(empItem) ! deptList_TrimetTax(deptIndex)				! ,standard deduction 9
 	tcp14=0				! ,NO USE standard deduction 10
-	tcp15=0				! ,standard deduction 11   
-	tcp16=0				! ,standard deduction 12   
-	tcp17=0				! ,standard deduction 13   
-	tcp18=0				! ,standard deduction 14   
-	tcp19=0				! ,standard deduction 15   
-	tcp20=0				! ,standard deduction 16   
-	tcp21=0				! ,standard deduction 17   
-	tcp22=0				! ,standard deduction 18   
-	tcp23=0				! ,standard deduction 19   
-	tcp24=0				! ,standard deduction 20   
-	tcp25=0				! ,tcp25                    
-	tcp26=emplList_Total_Pay(empItem) !   deptList_TotalPay(deptIndex)				! ,Pay - Regular            
-	tcp27=0				! ,Pay - OverTime           
-	tcp28=0 ! deptList_Other(deptIndex)			! ,Other Compensation      
-	tcp29=0				! ,Meals                    
-	tcp30=emplList_TIPS(empItem) ! deptList_Tips(deptIndex)				! ,Tips                     
-	tcp31=emplList_Total_Pay(empItem)  !   deptList_TotalPay(deptIndex)				! ,Pay - Total              
-	tcp32=emplList_Net_Pay(empItem)    ! deptList_Pay(deptIndex)				! ,Pay - Net                
+	tcp15=0				! ,standard deduction 11
+	tcp16=0				! ,standard deduction 12
+	tcp17=0				! ,standard deduction 13
+	tcp18=0				! ,standard deduction 14
+	tcp19=0				! ,standard deduction 15
+	tcp20=0				! ,standard deduction 16
+	tcp21=0				! ,standard deduction 17
+	tcp22=0				! ,standard deduction 18
+	tcp23=0				! ,standard deduction 19
+	tcp24=0				! ,standard deduction 20
+	tcp25=0				! ,tcp25
+	tcp26=emplList_Total_Pay(empItem) !   deptList_TotalPay(deptIndex)				! ,Pay - Regular
+	tcp27=0				! ,Pay - OverTime
+	tcp28=0 ! deptList_Other(deptIndex)			! ,Other Compensation
+	tcp29=0				! ,Meals
+	tcp30=emplList_TIPS(empItem) ! deptList_Tips(deptIndex)				! ,Tips
+	tcp31=emplList_Total_Pay(empItem)  !   deptList_TotalPay(deptIndex)				! ,Pay - Total
+	tcp32=emplList_Net_Pay(empItem)    ! deptList_Pay(deptIndex)				! ,Pay - Net
 	fn_buildTran2(tcp1,tcp2,tcp3,tcp4,tcp5,tcp6,tcp7,tcp8,tcp9,tcp10,tcp11,tcp12,tcp13,tcp14,tcp15,tcp16,tcp17,tcp18,tcp19,tcp20,tcp21,tcp22,tcp23,tcp24,tcp25,tcp26,tcp27,tcp28,tcp29,tcp30,tcp31,tcp32)
 	write #hTran,using form$(hTran): mat tran$,mat tranN
 nex empItem
 goto Xit
 def fn_buildTran1(empNo,dept,prDate,ckno,hoursReg,hoursOt,hoursSick,hoursVac,hoursHoli,wagesWorkmansComp,wagesSS,wagesMedicare,fedUc,StateUc)
-	tranN(check_emp          )=empNo              	! ,Employee                   
-	tranN(check_dept         )=dept               	! ,Department                 
+	tranN(check_emp          )=empNo              	! ,Employee
+	tranN(check_dept         )=dept               	! ,Department
 	tranN(check_payrollDate )= prDate            	! ,Payroll Date  date(ccyymmdd)
-	tranN(check_ckno         )=ckno               	! ,Check Number             
-	tranN(check_tdc1         )=hoursReg           	! ,Hours - Regular          
-	tranN(check_tdc2         )=hoursOt            	! ,Hours - OverTime         
-	tranN(check_tdc3         )=hoursSick          	! ,Hours - Sick             
-	tranN(check_tdc4         )=hoursVac           	! ,Hours - Vacation         
-	tranN(check_tdc5         )=hoursHoli          	! ,Hours - Holiday          
+	tranN(check_ckno         )=ckno               	! ,Check Number
+	tranN(check_tdc1         )=hoursReg           	! ,Hours - Regular
+	tranN(check_tdc2         )=hoursOt            	! ,Hours - OverTime
+	tranN(check_tdc3         )=hoursSick          	! ,Hours - Sick
+	tranN(check_tdc4         )=hoursVac           	! ,Hours - Vacation
+	tranN(check_tdc5         )=hoursHoli          	! ,Hours - Holiday
 	tranN(check_tdc6         )=wagesWorkmansComp 	! ,Workman Compensation Wages
-	tranN(check_tdc7         )=wagesSS            	! ,SS Wages                 
-	tranN(check_tdc8         )=wagesMedicare     	! ,Wages - Medicare        
-	tranN(check_tdc9         )=fedUc              	! ,Federal UC               
-	tranN(check_tdc10        )=StateUc	          	! ,State UC                 
+	tranN(check_tdc7         )=wagesSS            	! ,SS Wages
+	tranN(check_tdc8         )=wagesMedicare     	! ,Wages - Medicare
+	tranN(check_tdc9         )=fedUc              	! ,Federal UC
+	tranN(check_tdc10        )=StateUc	          	! ,State UC
 fnend
 def fn_buildTran2(tcp1,tcp2,tcp3,tcp4,tcp5,tcp6,tcp7,tcp8,tcp9,tcp10,tcp11,tcp12,tcp13,tcp14,tcp15,tcp16,tcp17,tcp18,tcp19,tcp20,tcp21,tcp22,tcp23,tcp24,tcp25,tcp26,tcp27,tcp28,tcp29,tcp30,tcp31,tcp32)
-	tranN(check_tcp1 )=tcp1 				! ,WH - Federal             
-	tranN(check_tcp2 )=tcp2 				! ,WH - SS                  
-	tranN(check_tcp3 )=tcp3 				! ,WH - Medicare            
-	tranN(check_tcp4 )=tcp4 				! ,WH - State               
+	tranN(check_tcp1 )=tcp1 				! ,WH - Federal
+	tranN(check_tcp2 )=tcp2 				! ,WH - SS
+	tranN(check_tcp3 )=tcp3 				! ,WH - Medicare
+	tranN(check_tcp4 )=tcp4 				! ,WH - State
 	tranN(check_tcp5 )=tcp5 				! ,DRAW standard deduction 1       , PD 5.2,                ,! SPos=83  aka=tcp(5)
-	tranN(check_tcp6 )=tcp6 				! ,standard deduction 2       
+	tranN(check_tcp6 )=tcp6 				! ,standard deduction 2
 	tranN(check_tcp7 )=tcp7 				! ,GARN standard deduction 3       , PD 5.2,                ,! SPos=93  aka=tcp(7)
-	tranN(check_tcp8 )=tcp8 				! ,standard deduction 4       
-	tranN(check_tcp9 )=tcp9 				! ,standard deduction 5       
+	tranN(check_tcp8 )=tcp8 				! ,standard deduction 4
+	tranN(check_tcp9 )=tcp9 				! ,standard deduction 5
 	tranN(check_tcp10)=tcp10				! ,+ TIPS standard deduction 6       , PD 5.2,                ,! SPos=108 aka=tcp(10)
-	tranN(check_tcp11)=tcp11				! ,standard deduction 7      
-	tranN(check_tcp12)=tcp12				! ,W/C standard deduction 8  
-	tranN(check_tcp13)=tcp13				! ,standard deduction 9      
+	tranN(check_tcp11)=tcp11				! ,standard deduction 7
+	tranN(check_tcp12)=tcp12				! ,W/C standard deduction 8
+	tranN(check_tcp13)=tcp13				! ,standard deduction 9
 	tranN(check_tcp14)=tcp14				! ,NO USE standard deduction 10      , PD 5.2,                ,! SPos=128 aka=tcp(14)
-	tranN(check_tcp15)=tcp15				! ,standard deduction 11   
-	tranN(check_tcp16)=tcp16				! ,standard deduction 12   
-	tranN(check_tcp17)=tcp17				! ,standard deduction 13   
-	tranN(check_tcp18)=tcp18				! ,standard deduction 14   
-	tranN(check_tcp19)=tcp19				! ,standard deduction 15   
-	tranN(check_tcp20)=tcp20				! ,standard deduction 16   
-	tranN(check_tcp21)=tcp21				! ,standard deduction 17   
-	tranN(check_tcp22)=tcp22				! ,standard deduction 18   
-	tranN(check_tcp23)=tcp23				! ,standard deduction 19   
-	tranN(check_tcp24)=tcp24				! ,standard deduction 20   
-	tranN(check_tcp25)=tcp25				! ,tcp25                    
-	tranN(check_tcp26)=tcp26				! ,Pay - Regular            
-	tranN(check_tcp27)=tcp27				! ,Pay - OverTime           
-	tranN(check_tcp28)=tcp28				! ,Other Compensation      
-	tranN(check_tcp29)=tcp29				! ,Meals                    
-	tranN(check_tcp30)=tcp30				! ,Tips                     
-	tranN(check_tcp31)=tcp31				! ,Pay - Total              
-	tranN(check_tcp32)=tcp32				! ,Pay - Net                
+	tranN(check_tcp15)=tcp15				! ,standard deduction 11
+	tranN(check_tcp16)=tcp16				! ,standard deduction 12
+	tranN(check_tcp17)=tcp17				! ,standard deduction 13
+	tranN(check_tcp18)=tcp18				! ,standard deduction 14
+	tranN(check_tcp19)=tcp19				! ,standard deduction 15
+	tranN(check_tcp20)=tcp20				! ,standard deduction 16
+	tranN(check_tcp21)=tcp21				! ,standard deduction 17
+	tranN(check_tcp22)=tcp22				! ,standard deduction 18
+	tranN(check_tcp23)=tcp23				! ,standard deduction 19
+	tranN(check_tcp24)=tcp24				! ,standard deduction 20
+	tranN(check_tcp25)=tcp25				! ,tcp25
+	tranN(check_tcp26)=tcp26				! ,Pay - Regular
+	tranN(check_tcp27)=tcp27				! ,Pay - OverTime
+	tranN(check_tcp28)=tcp28				! ,Other Compensation
+	tranN(check_tcp29)=tcp29				! ,Meals
+	tranN(check_tcp30)=tcp30				! ,Tips
+	tranN(check_tcp31)=tcp31				! ,Pay - Total
+	tranN(check_tcp32)=tcp32				! ,Pay - Net
 fnend
-
+ 
 def fn_emptyline(line$*2048; ___,returnN)
 	line$=srep$(line$,',','')
 	line$=srep$(line$,chr$(9),'')
@@ -172,8 +172,8 @@ def fn_emptyline(line$*2048; ___,returnN)
 	if line$='' then returnN=1
 	fn_emptyline=returnN
 fnend
-
-def fn_readEmplIntoArrays ! it is all local 
+ 
+def fn_readEmplIntoArrays ! it is all local
 	linput #hInempl: line$ ! simply skip the headers for now
 	if pos(line$,chr$(9))>0 then delim$=chr$(9) else delim$=','
 	emplRecordCount=0
@@ -184,7 +184,7 @@ def fn_readEmplIntoArrays ! it is all local
 		fn_mat_emplList(emplRecordCount+=1)
 		if trim$(item$(empl_Date))='' then ! use the last date
 			emplList_Date        	(emplRecordCount)	=emplList_Date(emplRecordCount-1)
-		else 
+		else
 			emplList_Date        	(emplRecordCount)	=date(days(item$(empl_Date),'mm/dd/ccyy'),'ccyymmdd')
 		end if
 		emplList_Check_No       	(emplRecordCount)	=val(item$(empl_Check_No      	))
@@ -209,7 +209,7 @@ def fn_readEmplIntoArrays ! it is all local
 		emplList_Draw            	(emplRecordCount)	=val(item$(empl_Draw            	))
 		emplList_FEE             	(emplRecordCount)	=val(item$(empl_FEE            	))
 		emplList_TIPS            	(emplRecordCount)	=val(item$(empl_TIPS           	))
-
+ 
 	loop
 	ReadEmplEof: !
 	fn_readEmplIntoArrays=emplRecordCount
@@ -239,36 +239,26 @@ def fn_mat_emplList(newArraySize)
 	mat emplList_FEE          	(newArraySize)
 	mat emplList_TIPS          	(newArraySize)
 fnend
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
 def fn_setup
 	if ~setup then
 		setup=1
 		on error goto Ertn
-
+ 
 		dim line$*1024
 		dim item$(0)*256
-
-
-		library 'S:\Core\Library': fntop
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnTos,fnAcs,fnCmdKey
-		library 'S:\Core\Library': fnxit
-		library 'S:\Core\Library': fnLbl,fnTxt
-		library 'S:\Core\Library': fnCmdSet
-		library 'S:\Core\Library': fncombof,fnButton
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnDedNames
-		library 'S:\Core\Library': fnAddOneC,fnAddOneN
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-
+ 
+ 
+		autoLibrary
+ 
 		dim resp$(64)*1024
-
+ 
 	end if
 fnend
 Xit: fnXit
 include: fn_open
-include: ertn
+include: Ertn

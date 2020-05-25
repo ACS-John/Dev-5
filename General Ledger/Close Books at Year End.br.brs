@@ -1,33 +1,33 @@
 ! formerly S:\acsGL\acGLClos
 ! Close Books at Year End
 ! r: setup and read constants
-	library 'S:\Core\Library': fntop,fnxit,fnUseDeptNo,fnTos,fnLbl,fnCmdSet,fnAcs,fnTxt,fnqgl,fnagl$,fnOpt,fnFra,fncreg_read,fncreg_write,fngethandle,fnGetFundList,fnrgl$
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim acno$*12,bc(13),bp(13),bud(13)
 	dim resp$(10)*80
-	fntop(program$)
-	open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+	fnTop(program$)
+	open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 	read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
-	close #hCompany: 
+	close #hCompany:
 	fnGetFundList(mat fund_list)
 ! /r
 do ! r: the first screen
-	fnTos(sn$="CloseYear1") 
+	fnTos(sn$="CloseYear1")
 	lc=rc=frame=0 : mylen=30 : mypos=mylen+2 : width=0
 	fnLbl(lc+=1,1,"* * *   Warning   * * *",width,2)
 	fnLbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
 	fnLbl(lc+=1,1,"year, after all reports have been processed.",width,2)
 	fnLbl(lc+=1,1,"Enter CLOSE to continue:",mylen,1)
-	fnTxt(lc,mypos,5) 
+	fnTxt(lc,mypos,5)
 	resp$(rc_erase:=rc+=1)=""
 	lc+=1
 	fnLbl(lc+=1,1,"Year being closed:",mylen,1)
-	fnTxt(lc,mypos,2,0,1,"30",0,"Enter the two digit code for the year you are closing.") 
+	fnTxt(lc,mypos,2,0,1,"30",0,"Enter the two digit code for the year you are closing.")
 	resp$(rc_year:=rc+=1)=""
-
+ 
 	if fnUseDeptNo then
-
+ 
 		! lc+=1 : col3_pos=1 ! mypos+20
 		! resp_lrea_fund_1=rc+1
 		! col4_pos=mypos ! col3_pos+10
@@ -38,17 +38,17 @@ do ! r: the first screen
 		!   rc+=1
 		!   fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 		! next fund_item
-
+ 
 			lc+=1
 			mylen=30 : mypos=mylen+3 : width=0
 			fnFra(lc+=1,1,2,70,"Method of Closing","You must indicate if you will be closing to one equity account or to multiple accounts.",0)
 			frame+=1
-			fnOpt(1,3,"Close each fund to a separate account",0,frame) 
+			fnOpt(1,3,"Close each fund to a separate account",0,frame)
 			fncreg_read('Close each fund to a separate account',resp$(rc_close1:=rc+=1),'False')
-			fnOpt(2,3,"Close all departments to one retained earnings (equity) account",0,frame) 
+			fnOpt(2,3,"Close all departments to one retained earnings (equity) account",0,frame)
 			fncreg_read('Close all departments to one retained earnings (equity) account',resp$(rc_close2:=rc+=1),'False')
-
-	! else 
+ 
+	! else
 	!   col4_pos=col3_pos+32
 	!   fnLbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
 	!   fnqgl(lc,col4_pos)
@@ -56,8 +56,8 @@ do ! r: the first screen
 	!   fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 	end if
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	pas$=resp$(rc_erase)
 	yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
 	if fnUseDeptNo then
@@ -67,20 +67,20 @@ do ! r: the first screen
 		!   next fund_item
 		fncreg_write('Close each fund to a separate account',resp$(rc_close1))
 		fncreg_write('Close all departments to one retained earnings (equity) account',resp$(rc_close2))
-		if resp$(rc_close1)="True" then 
-			closeDeptToRetainedEarnings=0 
-		else 
+		if resp$(rc_close1)="True" then
+			closeDeptToRetainedEarnings=0
+		else
 			closeDeptToRetainedEarnings=1
 		end if
-	else 
+	else
 		last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
 		fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 	end if
 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
-open #hGlMstr1:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
-open #hGlMstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed 
+open #hGlMstr1:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+open #hGlMstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 fGlMstr1: form pos 1,c 12,pos 81,41*pd 6.2
-open #hBudgetInfo:=fngethandle: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed 
+open #hBudgetInfo:=fngethandle: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed
 ! r: empty GLmstr\acprcks - file handle (#1) used to conflict hGlMstr1 (also #1) and it didn't close, but it did ioerr ignore, so it probably didn't do anything for years
 open #hAcPrCks:=fngethandle: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",internal,output ioerr ignore
 close #hAcPrCks: ioerr ignore
@@ -92,37 +92,37 @@ do
 	rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0
 loop
 L500: !
-close #hPrMstr: 
+close #hPrMstr:
 ! /r
-SCR2: ! 
+SCR2: !
 	t5=0
 	fnTos(sn$='CloseYear3')
 	lc=0 : mylen=30 : mypos=mylen+2 : width=80
 	fnLbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
 	fnLbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
-	lc+=1 
-	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then 
+	lc+=1
+	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then
 		fnLbl(lc+=1,1,"All accounts after this ",width,2)
-	else 
+	else
 		fnLbl(lc+=1,1,"All Accounts for this Cost Center after this ",width,2)
-	end if 
+	end if
 	fnLbl(lc+=1,1,"be reset with zero balances.",width,2)
 	fnLbl(lc+=1,1,"account will be reset with zero balances.",width,2)
 	fnLbl(lc+=1,1,"Enter Account Number:",mylen,1)
 	fnqgl(lc,mypos)
 	resp$(1)=''
 	fnCmdSet(11)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	glnumber$=fnagl$(resp$(1))
-	if closeDeptToRetainedEarnings then 
+	if closeDeptToRetainedEarnings then
 		fncreg_write("last retained earnings account - fund "&str$(val(glnumber$(1:3))),resp$(1))
-	else 
+	else
 		fncreg_write("last retained earnings account - no fund",resp$(1))
-	end if 
+	end if
 	read #hGlMstr1,using 'form pos 1,c 3,c 6,c 3',key=glnumber$: dno$,ano$,sno$ nokey SCR2
 	acno$=glnumber$(1:3)&"         "
-! 
+!
 read #hGlMstr1,using fGlMstr1,key>=acno$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR2
 goto L770
 do
@@ -131,7 +131,7 @@ do
 	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then goto L790
 	if glnumber$(1:3)><acno$(1:3) then dno=ano=sno=0: goto SCR2
 	L790: !
-	if acno$=glnumber$ then 
+	if acno$=glnumber$ then
 		cb=-t5
 		! bC(NAP)=CB   ! SET RETAINED BALANCE IN HISTORY AFTER CLOSING
 		if nap=0 or nap>13 then nap=12
@@ -148,16 +148,16 @@ do
 	rewrite #hGlMstr1,using 'form pos 1,c 12,pos 81,41*pd 6.2,pos 327,pd 6.2': acno$,bb,cb,mat bc,mat bp,mat bud,pbp
 loop
 L940: !
-	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then 
+	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then
 		goto FINIS
 	end if
-	dno=ano=sno=0 
+	dno=ano=sno=0
 goto SCR2
-! 
+!
 FINIS: ! r:
-	close #hGlMstr1: 
-	close #hGlMstr2: 
-	close #hBudgetInfo: 
-goto XIT ! /r
-XIT: fnxit
-include: ertn
+	close #hGlMstr1:
+	close #hGlMstr2:
+	close #hBudgetInfo:
+goto Xit ! /r
+Xit: fnXit
+include: Ertn

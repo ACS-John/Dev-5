@@ -1,19 +1,11 @@
 ! formerly S:\acsUB\expubm
 ! r: setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs2
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fncustomer_address
-	library 'S:\Core\Library': fnget_services
-	library 'S:\Core\Library': fnreg_read,fnreg_write
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnSpecialFolderPath$
-	library 'S:\Core\Library': fnMakeSurePathExists
-
+	autoLibrary
+ 
 	on error goto Ertn
-
+ 
 ! /r
-	fntop(program$)
+	fnTop(program$)
 	dim serviceName$(10)*20
 	fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 MENU1: ! r:
@@ -28,7 +20,7 @@ MENU1: ! r:
 	fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	dim dest$*256
 	dest$=resp$(1)
 	! delas=val(resp$(2))
@@ -38,15 +30,15 @@ MENU1: ! r:
 MainLoop: ! r:
 	dim delim$*1
 	delim$=chr$(9)
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative 
-	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative 
+	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative
+	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
 	fnMakeSurePathExists(dest$)
 	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 	! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
 	! form pos 287,c 10,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1
-	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
+	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 	gosub HEADER ! work in progress
-	do 
+	do
 		dim z$*10
 		dim e$(4)*30
 		dim f$(3)*12
@@ -156,9 +148,9 @@ Finis: ! r:
 	close #h_customer: ioerr ignore
 	close #2: ioerr ignore
 	close #3: ioerr ignore
-goto XIT ! /r
-XIT: ! 
-	fnxit
+goto Xit ! /r
+Xit: !
+	fnXit
 ALT_BILL_ADR: ! r:
 	dim ab$(3)*30
 	mat ab$=("")
@@ -250,4 +242,4 @@ HEADER: ! r:
 	pr #2: 'Billing Address 4'&delim$;
 	pr #2: 'Email'&delim$
 return  ! /r
-include: ertn
+include: Ertn

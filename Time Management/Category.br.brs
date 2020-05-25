@@ -6,12 +6,7 @@ Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnCloseFile
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnhamsterfio
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnXit
+		autoLibrary
 	end if
 fnend
 
@@ -39,7 +34,7 @@ def fn_setupCategories
 fnend
 
 def library fnRead30Categories(mat dimTo30$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~setupCategories then let fn_setupCategories
 	hCategory=fn_open('TM Category',mat catData$,mat catDataN,mat form$)
 	mat dimTo30$=('')
@@ -51,4 +46,4 @@ def library fnRead30Categories(mat dimTo30$)
 	fnCloseFile(hCategory,'TM Category')
 fnend
 include: fn_open
-include: ertn
+include: Ertn

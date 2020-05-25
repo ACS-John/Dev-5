@@ -1,4 +1,4 @@
 autoLibrary
-fntop(program$)
+fnTop(program$)
 fnAddGlPayee
-fnxit
+fnXit

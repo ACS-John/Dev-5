@@ -9,7 +9,7 @@
 ! from fileio.brs - md/mkdir function fileio version is not a library 2/7/2017 except this version is a library and quote encapsulates the path$ it is making
 ! 8/24/2017 - more modifications to better work with UNC paths
 def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN,wasFilenamesUpperCase)
-	library 'S:\Core\Library': fnSrepEnv$
+	autoLibrary
 	! if env$('acsDeveloper')<>'' and fileName$='[Q]\Data\' then
 	! 	pr 'call to fnMakeSurepathExists("'&fileName$&'"; "'&path$&'")'
 	! 	debug=1

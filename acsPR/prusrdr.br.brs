@@ -1,43 +1,37 @@
-00010 ! Replace S:\acsPR\PrUsrDR
-00020 ! pr User-Designed Reports
-00030 !
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnerror,fnconsole
-00050 !
-00060   dim jcs$(40),cap$*128,rn(20),rn$(20)*74
-00070 !
-00075   fnconsole(1)
-00080   fntop(program$,cap$="User Designed Report (2)")
-00090   open #1: "Name=S:\acsPR\JCReport.mst,KFName=S:\acsPR\JCReport.idx,Shr",internal,input,keyed 
-00100   for j=1 to 20 !:
-          read #1,using 'Form POS 1,N 2,C 74': rn(j),rn$(j) eof L110 !:
-        next j
-00110 L110: close #1: 
-00120 L120: pr newpage !:
-        fnopenwin(win=101,3,2,22,79,cap$)
-00130   pr #win: newpage
-00140   for j=1 to 20 !:
-          jcs$(j)=str$(j)&",2,Pic(ZZ),N" !:
-          jcs$(j+20)=str$(j)&",5,C 74,N" !:
-        next j
-00150   pr #win,fields mat jcs$: mat rn,mat rn$
-00160   pr f "23,22,C 09,B,5": "Exit (F5)"
-00170   pr f "23,32,C 23,R,N": "Report Number to Print:"
-00180 L180: rinput fields "23,56,Nz 2,UT,N": rno conv L180
-00190   if rno=0 then goto XIT
-00200   for j=1 to 20
-00210     if rno=rn(j) then goto JCPRNT
-00220   next j
-00230   goto L120
-00240 !
-00250 JCPRNT: chain "S:\acsPR\jcPrnt"&str$(rno)
-00260 !
-00270 XIT: fnxit
-00280 !
-00290 ! <Updateable Region: ERTN>
-00300 ERTN: fnerror(program$,err,line,act$,"xit")
-00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00340 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00350 ! /region
-00360 !
+! Replace S:\acsPR\PrUsrDR
+! pr User-Designed Reports
+ 
+	autoLibrary
+ 
+	dim jcs$(40),cap$*128,rn(20),rn$(20)*74
+ 
+	fnconsole(1)
+	fnTop(program$,cap$="User Designed Report (2)")
+	open #1: "Name=S:\acsPR\JCReport.mst,KFName=S:\acsPR\JCReport.idx,Shr",internal,input,keyed
+	for j=1 to 20 : _
+		read #1,using 'Form POS 1,N 2,C 74': rn(j),rn$(j) eof L110 : _
+	next j
+L110: close #1:
+L120: pr newpage : _
+	fnopenwin(win=101,3,2,22,79,cap$)
+	pr #win: newpage
+	for j=1 to 20 : _
+		jcs$(j)=str$(j)&",2,Pic(ZZ),N" : _
+		jcs$(j+20)=str$(j)&",5,C 74,N" : _
+	next j
+	pr #win,fields mat jcs$: mat rn,mat rn$
+	pr f "23,22,C 09,B,5": "Exit (F5)"
+	pr f "23,32,C 23,R,N": "Report Number to Print:"
+L180: rinput fields "23,56,Nz 2,UT,N": rno conv L180
+	if rno=0 then goto Xit
+	for j=1 to 20
+		if rno=rn(j) then goto JCPRNT
+	next j
+	goto L120
+ 
+JCPRNT: chain "S:\acsPR\jcPrnt"&str$(rno)
+ 
+Xit: fnXit
+ 
+include: Ertn
+ 

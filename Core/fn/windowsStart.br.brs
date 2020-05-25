@@ -4,7 +4,7 @@ def library fnWindowsStart(wsFile$*1024)
 		option retain
 		dim hWsCmdFile$*256
 	end if
-	library 'S:\Core\Library': fngethandle
+	autoLibrary
 	if shortTermUniqueNumber=>9999 then shortTermUniqueNumber=0
 	shortTermUniqueNumber$=cnvrt$('pic(####)',shortTermUniqueNumber+=1)
 	hWsCmdFile$=env$('client_temp')&'\acsWinStart_'&session$&'-'&shortTermUniqueNumber$&'.cmd'

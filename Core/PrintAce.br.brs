@@ -26,7 +26,7 @@ def fn_pa_setup
 		g_pa_max_pages=val(max_pages$) conv ignore
 	end if 
 	fn_pa_setup=pa_setup
-XIT: ! 
+Xit: ! 
 fnend  ! fn_pa_setup
 def library fnpa_finis(; h_printace)
 	fn_pa_setup
@@ -1035,4 +1035,4 @@ def library fnbarcode(barcode$,rightleft,updown)
 	end if
 fnend 
 ! /r
-include: ertn
+include: Ertn

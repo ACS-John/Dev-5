@@ -1,6 +1,6 @@
 ! formerly S:\acsUB\UBIpChg
 fn_setup
-fntop(program$)
+fnTop(program$)
 goto MENU1
 def fn_setup
 	if ~setup then
@@ -902,7 +902,7 @@ EST2: ! r:
 	fn_accumulateprooftotals
 	L7220: !
 return  ! /r
-XIT: fnxit
+Xit: fnXit
 IGNORE: continue
 def fn_us1
 	rc1=0 ! SET USAGE FIELDS
@@ -953,7 +953,7 @@ def fn_est_dates
 	next j
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ckey=cancel then goto XIT
+	if ckey=cancel then goto Xit
 	for j=1 to 8
 		cd1(j)=val(resp$(j)) conv EST_DATES
 	next j
@@ -1298,7 +1298,7 @@ MENU1READWORKEOF: ! /r
 	end if
 	fnAcs2(mat resp$,ck)
 	if ck=cancel then
-		goto XIT
+		goto Xit
 	end if
 	d1=val(resp$(1))
 	d2=val(resp$(2))
@@ -1311,7 +1311,7 @@ MENU1READWORKEOF: ! /r
 	if ck=4 then
 		fn_print_readings(hWork)
 	else if fkey_saveToHoldingFile and ck=fkey_saveToHoldingFile then ! add to holding file
-		if fn_holdingFileSave(hWork) then goto XIT
+		if fn_holdingFileSave(hWork) then goto Xit
 	else if ck=8 then
 		delete #hWork,key=x$:
 	else if ck=9 then
@@ -1342,7 +1342,7 @@ MENU1READWORKEOF: ! /r
 		goto ImportTabDelimited
 	else if fky_importHHtoBook and ck=fky_importHHtoBook then
 		fnRetrieveHandHeldFile
-		fntop(program$)
+		fnTop(program$)
 	else if fky_clearAll and ck=fky_clearAll then
 		close #hWork:
 		fnFree(workFile$)
@@ -1350,7 +1350,7 @@ MENU1READWORKEOF: ! /r
 		open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
 	else if fky_importAndLoad and ck=fky_importAndLoad then
 		fnRetrieveHandHeldFile
-		fntop(program$)
+		fnTop(program$)
 		addmethod=am_fromHhFile
 		fn_loadBookOrHoldingFile(addmethod)
 
@@ -1482,7 +1482,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto INPUT_HAND
 	else if ck=ck_importHHtoBook then
 		fnRetrieveHandHeldFile
-		fntop(program$)
+		fnTop(program$)
 		goto INPUT_HAND
 	else if ck=ck_delete then
 		
@@ -2330,4 +2330,4 @@ def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImport
 	end if
 fnend
 include: fn_open
-include: ertn
+include: Ertn

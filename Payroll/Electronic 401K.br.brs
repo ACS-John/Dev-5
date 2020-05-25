@@ -1,23 +1,22 @@
 ! Replace S:\acsPR\pr401k
 ! Electronic 401k Filing
-
-	library 'S:\Core\Library': fntop,fnxit, fnopenwin, fndate_mmddyy_to_ccyymmdd,fncreg_read
-	library 'S:\Core\Library': fngethandle
+ 
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim a$*40,em$(3)*30,ta(2),cp(22),tcp(22),hc(5),thc(5),d$*20,whc(10)
 	dim dedcode(10),calcode(10),dedfed(10),k$(20)*30,em$*30
 	dim dv$*1,message$*40
-
-	fntop(program$)
-	fncreg_read('calculation date',tmp$) : ppd=val(tmp$) 
+ 
+	fnTop(program$)
+	fncreg_read('calculation date',tmp$) : ppd=val(tmp$)
 	fncreg_read('calculation date text',d$)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  
-	read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1: 
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative 
-	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
-	open #hpraddr:=fngethandle: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input 
-	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
+	open #hpraddr:=fngethandle: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
+	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output
 	ReadPrAddr1: !
 	read #hpraddr,using 'Form POS 1,PD 3': address eof END1
 	read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd noRec ReadPrAddr1
@@ -43,7 +42,7 @@
 	do
 	read #2,using L440,rec=adr: lpd,mat hc,mat cp,nta
 	L440: form pos 42,n 6,pos 150,5*pd 3.2,pos 358,22*pd 5.2,pos 468,pd 3
-	if lpd=ppd then 
+	if lpd=ppd then
 		mat tcp=tcp+cp
 		mat thc=thc+hc
 	end if
@@ -73,7 +72,7 @@ L520: ! r:
 	pr #4,using L730: mat k$
 	L730: form pos 1,c 9,3*c 12,c 2,c 10,c 2,c 10,3*c 30,c 20,c 2,c 5,4*c 8,c 9,c 8
 goto ReadPrAddr1 ! /r
-
+ 
 CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 	dim csz$*30
 	csz$=uprc$(rtrm$(csz$))
@@ -98,11 +97,11 @@ L810: p1=pos(csz$,"  ",1)
 	zip4$=zip$(l2-3:l2)
 	L980: !
 return ! /r
-END1: ! 
-	close #1: 
-	close #2: 
-	close #hpraddr: 
-	close #4: 
+END1: !
+	close #1:
+	close #2:
+	close #hpraddr:
+	close #4:
 L1050: pr newpage ! COPY TO DISKETTE
 	fnopenwin(win=101,7,8,11,44,env$('program_caption'))
 	io1$(1)="8,42,CU 1,UET,N"
@@ -112,10 +111,10 @@ L1050: pr newpage ! COPY TO DISKETTE
 	pr f "12,26,C 11,B,5": "Cancel (F5)"
 	if dv$="" then dv$="A"
 L1130: rinput #win,fields "4,33,Cu 1,UET,N": dv$
-	if cmdkey=5 then goto XIT
+	if cmdkey=5 then goto Xit
 	if dv$="A" or dv$="B" then goto L1160 else goto L1130
 L1160: execute "Copy [Q]\PRmstr\PR401K.DAT "&dv$&": -N" ioerr L1180
-XIT: fnxit
+Xit: fnXit
 L1180: !
 	driv=1 ! drive not ready
 goto L1050

@@ -2,7 +2,7 @@
 ! screen ace combobox of available company numbers
 
 def library fncmbcno(myline,mypos; mysys$)
-	library 'S:\Core\Library': fngetdir,fncomboa,fngethandle
+	autoLibrary
 	on error goto Ertn
 
 	! the response$ for this has the company number in pos 43:47
@@ -46,7 +46,7 @@ def library fncmbcno(myline,mypos; mysys$)
 	next a
 	EXITFOR: ! 
 	fncomboa('CmbCNo-'&env$('cursys'),myline,mypos,mat opt$,'Select from currently installed companies for the '&env$('cursys')&' system.',55)
-	goto XIT
-	XIT: !
+	goto Xit
+	Xit: !
 fnend 
-include: ertn
+include: Ertn

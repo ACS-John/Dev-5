@@ -2,34 +2,17 @@
 ! open the report, printer, etc...
 !
 def fn_setup
-	on error goto Ertn
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fnError
-		library 'S:\Core\Library': fnRead_program_print_property
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnFree
-		library 'S:\Core\Library': fnReg_read
-		library 'S:\Core\Library': fnUreg_read
-		library 'S:\Core\Library': fnSystemNameFromAbbr$
-		library 'S:\Core\Library': fnGetPp
-		library 'S:\Core\Library': fnOsver
-		library 'S:\Core\Library': fnGet_wordprocessor_exe
-		library 'S:\Core\Library': fnProcess
-		library 'S:\Core\Library': fnInch2twip
-		library 'S:\Core\Library': fnGethandle
-		library 'S:\Core\Library': fnStatusClose
-		library 'S:\Core\Library': fnMakesurepathexists
-		library 'S:\Core\Library': fnSrepEnv$
-		library 'S:\Core\Library': fnProgramDataDir$
-		! library 'S:\Core\Library': fnTos,fnLbl,fnTxt,fnAcs,fnOpt,fnCmdSet
-		! 
+		autoLibrary
 		! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
 		! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 		! fnureg_read('wait_wp_close',wait_wp_close$,'True')
 		! if wait_wp_close$='False' then print_report_nowait=1 else print_report_nowait=0
 	end if 
+	on error goto Ertn
 fnend 
+
 def library fnprint_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
 	fn_setup
 	fnprint_file_name$=fn_print_file_name$( pfn_sendto_base_name_addition$,pfn_extension$,programCaptionOverride$)
@@ -53,6 +36,7 @@ def fn_print_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$
 	pfnReturn$=fnSrepEnv$(pfnReturn$)
 	fn_print_file_name$=pfnReturn$
 fnend 
+
 def library fnreport_cache_folder_current$*512
 	fn_setup
 	fnreport_cache_folder_current$=fn_report_cache_folder_current$
@@ -72,6 +56,7 @@ def fn_report_cache_folder_current$*512(; ___,return$*512)
 	fnmakesurepathexists(env$('at')&return$&'\')
 	fn_report_cache_folder_current$=return$
 fnend
+
 def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
 	fn_setup
 	fnopen_receipt_printer=fn_open_receipt_printer( orp_only_if_it_is_assigned)
@@ -112,7 +97,7 @@ def library fnopenprn(;xx,xxxxx,xxxxxxx,process,sendto_base_name_addition$*128,p
 	fnopenprn=fn_openprn( process,sendto_base_name_addition$,prgCapForSettingsOverride$,programCaptionOverride$)
 fnend 
 def fn_openprn(;process, sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
-	if file(255)<>-1 then goto XIT
+	if file(255)<>-1 then goto Xit
 	dim g_prgCapForSettingsOverride$*256
 	g_prgCapForSettingsOverride$=prgCapForSettingsOverride$
 	dim op_printFileName$*1024
@@ -123,14 +108,15 @@ def fn_openprn(;process, sendto_base_name_addition$*128,prgCapForSettingsOverrid
 	dim g_prn_destination_name$*1024
 	g_prn_destination_name$=op_printFileName$
 	open #255: 'Name=[Q]\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output 
-	goto XIT
+	goto Xit
 	SET_DEFAULTS: ! r:
 		pr "Lines settings for this program were not found."
 		pr "Default Settings will be used."
 		pr "  Lines: 54"
 		lpp$='54'
 	return  ! /r
-XIT: fnend 
+Xit: fnend 
+
 def library fncloseprn(;forceWordProcessor$)
 	fn_setup
 	dim cp_destinationFileName$*1024
@@ -340,16 +326,18 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToA
 	end if 
  ! pause
 fnend 
+
 def library fnWaitForShellCloseStart(whatsRunning$*256)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnWaitForShellCloseStart=fn_waitForWpToCloseStart(whatsRunning$)
 fnend
 def fn_waitForWpToCloseStart(whatsRunning$*256)
 	open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output 
 	pr #h_win_wait,fields str$(val(env$('Session_Rows'))/2)&',1,Cc '&env$('Session_Cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
 fnend 
+
 def library fnWaitForShellCloseEnd
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnWaitForShellCloseEnd=fn_waitForWpToCloseEnd
 fnend
 def fn_waitForWpToCloseEnd
@@ -421,4 +409,4 @@ def fn_safe_filename$*256(sf_in$*256)
 	loop until pos(sf_in$,'  ')<=0
 	fn_safe_filename$=trim$(sf_in$)
 fnend 
-include: ertn
+include: Ertn

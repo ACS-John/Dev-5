@@ -4,7 +4,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 
 	if glfsSetup<>val(env$('cno')) then ! r:
 		glfsSetup=val(env$('cno'))
-		library 'S:\Core\Library': fngethandle,fnTos,fnLbl,fncomboa,fnTxt,fnAcs,fnerror,fnCmdSet,fncomboa,fnps,fnfscode,fnpriorcd,fnprocess,fnactpd,fnactpd$
+		autoLibrary
 		on error goto Ertn
 		
 		open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
@@ -66,7 +66,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 			fnactpd	(actpd )
 		end if
 	end if
-	XIT: ! 
+	Xit: ! 
 	fnGlAskFormatPriorCdPeriod=returnN
 fnend 
-include: ertn
+include: Ertn

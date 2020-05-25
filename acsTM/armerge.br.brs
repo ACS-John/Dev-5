@@ -1,7 +1,7 @@
 on error goto Ertn
 dim gl$(10)*12,ga(10),pgl$*12
 autoLibrary
-fntop(program$,cap$="AR Merge")
+fnTop(program$,cap$="AR Merge")
 dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
 pr newpage
 pr f "10,10,c 50,H,N": "A/R Merge Transactions In Process"
@@ -74,6 +74,6 @@ if prtcode then
 	pr f "22,2,c 40": "Press enter to return to system menu."
 	input fields "23,2,c 1,ae,n": pause$
 end if
-XIT: fnxit
+Xit: fnXit
 include: Ertn
 

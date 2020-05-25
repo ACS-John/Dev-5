@@ -1,8 +1,8 @@
 ! Replace S:\acsPR\newJCCPR2
-
-library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnDedNames
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim ss$*11
 dim tr(9)
 dim tded(6),tdc(5),dedcode(10)
@@ -16,33 +16,33 @@ dim qtr3tcp(32)
 dim qtr4tcp(32)
 dim ytdtotal(32)
 dim quartertotals(32)
-
-fntop(program$)
-
+ 
+fnTop(program$)
+ 
 fnopenprn
 if file$(255)(1:3)<>"PRN" then jbskip=1
 dim dedcode(20)
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  
-read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un 
-close #1: 
-
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative
+read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un
+close #1:
+ 
 dim fullname$(20)*20,abrevname$(20)*8,dedfed(20),calcode(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
 fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 for j=1 to 20
 	if trim$(fullname$)="Union" then un=j ! determine union deduction
 next j
-
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed 
-open #3: "Name="&env$('temp')&"\Work."&session$,internal,input,relative 
-open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr XIT
-open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed 
-open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+ 
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
+open #3: "Name="&env$('temp')&"\Work."&session$,internal,input,relative
+open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr Xit
+open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
+open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 dim dr(7)
 read #3,using L430,rec=1: df,dt,mat dr
 L430: form pos 1,2*n 6,7*pd 3
-
-
+ 
+ 
 Read4: !
 	read #4,using L450: r4 eof Finis
 	L450: form pos 1,pd 3
@@ -52,7 +52,7 @@ Read4: !
 	L480: form pos 5,c 8,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
 	if jn1$><jn$ then goto L660
 	if en1$><en$ then goto L780
-	if tr1(3)><tr(3) then 
+	if tr1(3)><tr(3) then
 		gosub L1450
 		goto L880
 	end if
@@ -61,7 +61,7 @@ Read4: !
 		if int(tr1(4)*.01)=dr(j) then goto L570
 	next j
 goto Read4
-
+ 
 L570: ! r:
 	dim hr2(8),hr1(8)
 	hr1(j)=hr1(j)+tr1(5)
@@ -92,7 +92,7 @@ L780: ! r:
 	gosub L1610
 	en$=en1$
 goto L860 ! /r
-
+ 
 L860: ! r:
 	read #1,using F_employee,key=en$: mat em$,ss$,em2,lpd,tgp nokey L1120
 	F_employee: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2
@@ -117,7 +117,7 @@ L860: ! r:
 	next j
 	tcp22=tcp22+ttc(22)
 goto MOVEINFO ! /r
-L1120: ! r: 
+L1120: ! r:
 	mat em$=("")
 	ss$=""
 	em2=0
@@ -130,7 +130,7 @@ MOVEINFO: ! r:
 	pl1$(4)=ss$
 	pl1$(5)=lpad$(str$(em2),6) ! pL1$(5)=LPAD$(STR$(TDN),6)
 goto L520 ! /r
-
+ 
 PGOF: ! r:
 	pr #255: newpage
 	gosub L1300
@@ -207,13 +207,13 @@ Finis: ! r:
 	gosub L1610
 	gosub TOTALS
 	fncloseprn
-goto XIT ! /r
-XIT: fnxit
+goto Xit ! /r
+Xit: fnXit
 DETERMINE_EARNINGS: ! r:
 	tfd=tmd=td14=tdw=0: mat caf=(0): mat ttc=(0): mat ttdc=(0)
-	mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) 
+	mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0)
 	mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
-	fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 
+	fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 	medqtr=eicyr=eicqtr=wagesqtr=0
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #7,key>=checkkey$: nokey L2500
@@ -263,7 +263,7 @@ ACCUMULATE_DEPT_TOTALS: ! r:
 	j2=tdep
 	L2590: !
 	tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
-	deptgl$="" 
+	deptgl$=""
 	read #8,using "Form pos 12,c 12,pos 62,2*pd 4.2",key=cnvrt$("pic(ZZZZZZZ#)",eno)&cnvrt$("pic(ZZ#)",tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
 	tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
 	tdep(j2,3)=val(deptgl$(4:9))

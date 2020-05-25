@@ -7,7 +7,7 @@
 	dim z$*10,e$*30
 	dim firstday(3),lastday(3),month(4)
 
-	fntop(program$)
+	fnTop(program$)
 	fndat(dat$,1)
 
 	fnTos
@@ -29,7 +29,7 @@
 	resp$(respc+=1)="False"
 	fnCmdSet(3) 
 	fnAcs2(mat resp$,ckey,1)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	for j=1 to 3
 		! x=POS(RESP$(J),"/",1)
 		! If X>0 Then rESP$(J)(X:X)="": Goto 300

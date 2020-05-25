@@ -1,9 +1,9 @@
 ! formerly S:\acsPR\newprOPDReg
 ! Other Pay and Deductions Register
 ! r: setup library, on error, dims, open files, etc
-  library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnTos,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnDedNames,fnPayPeriodEndingDate
+autoLibrary
   on error goto Ertn
-! 
+!
   dim em$*30,tdc(10),tcp(32),rpTemp(25),rptot(25),message$*40
   dim dat$*20
 	dim name$(27)*8
@@ -12,10 +12,10 @@
   dim printline1(20),printline2(20),dedname$(20)*8
   dim fullname$(20)*20,abbrevname$(20)*8, newdedcode(20)
 !
-  fntop(program$)
+  fnTop(program$)
   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 	d1=fnPayPeriodEndingDate
-  open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+  open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! r: setup mat name$, mat dedname$, numberded1, numberded2
   name$(1)="O/T"
   name$(2)="Other"
@@ -26,9 +26,9 @@
   name$(27)="Total"
   numberded=0
   for j=6 to 25
-    if trim$(abbrevname$(j-5))<>"" then 
+    if trim$(abbrevname$(j-5))<>"" then
       dedname$(numberded+=1)=abbrevname$(j-5)(1:5)
-    end if 
+    end if
   next j
   mat dedname$(numberded)
   numberded1=max(round(numberded/2,0),1) ! # of deductions listed on line 1
@@ -37,24 +37,24 @@
   if fnprocess=1 then goto START_REPORT else goto ASK_PAYROLL_DATE
 ! /r
 ASK_PAYROLL_DATE: ! r:
-  fnTos(sn$="OtherPayded") 
+  fnTos(sn$="OtherPayded")
   respc=0
   fnLbl(1,1,"",34,1) ! bigger screen
   fnLbl(2,1,"Payroll Date:",20,1)
   fnTxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
   resp$(respc+=1)=str$(d1)
-  fnCmdKey("&Next",1,1,0,"Proceed with importing time." ) 
-  fnCmdKey("E&xit",5,0,1,"Returns to menu")
-  fnAcs(sn$,0,mat resp$,ckey) ! ask employee #
-  if ckey=5 then goto XIT
+  fnCmdKey("&Next",1,1,0,"Proceed with importing time." )
+  fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+  fnAcs2(mat resp$,ckey) ! ask employee #
+  if ckey=5 then goto Xit
   ppd=val(resp$(1))
 goto START_REPORT ! /r
 START_REPORT: !  r: main report loop
-! 
+!
   on fkey 5 goto DONE
   fnopenprn
   gosub HDR
-  open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed 
+  open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
   do
     ReadEmployee: !
     read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS
@@ -67,9 +67,9 @@ START_REPORT: !  r: main report loop
     ! L590: form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3
     checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
     restore #4,key>=checkkey$: nokey ReadEmployee
-    do 
+    do
       read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L680
-      if heno=eno and prd=ppd then 
+      if heno=eno and prd=ppd then
         holdckno=ckno
         mat tcp=tcp+cp : mat ttdc=ttdc+tdc
       end if
@@ -77,7 +77,7 @@ START_REPORT: !  r: main report loop
     L680: !
     if sum(tcp)=0 and sum(ttdc)=0 then goto ReadEmployee ! no pay on this person for this payroll date
     for j=1 to 25
-      if j>4 then 
+      if j>4 then
         rpTemp(j)=rpTemp(j)+tcp(j)
       else
         rpTemp(j)=rpTemp(j)+tcp(j+26)
@@ -112,21 +112,21 @@ START_REPORT: !  r: main report loop
   L1000: next j
   mat printline1(numberded1): mat printline2(numberded2)
   line2part1$=rpt$(' ',65)
-  if int(numberded1/2)=numberded1/2 then 
+  if int(numberded1/2)=numberded1/2 then
     ! if rpTemp(4)>99.99 then
       ! pr #255,using 'form pos 1,Cr 46,c ': name$(4)&' (-1) too large to fit on next line:',' '&str$(rpTemp(4))
-      pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),-1,rpXxxx,mat printline1,totTemp pageoflow PGOF 
+      pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),-1,rpXxxx,mat printline1,totTemp pageoflow PGOF
       pr #255,using 'form pos 40,N 12.2 ': rpTemp(4)
       L1040: form pos 1,pic(zzzzzzzz),pos 10,c 15,n 7.2,n 8.2,pos 40,n 6.2,n 6.2,pos 52,n 8.2,pos 60,numberded1*n 12.2,n 12.2,skip 1
       line2part1$(41:41+12)=cnvrt$('N 12.2',rpTemp(4))
     ! else
-    !   pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PGOF 
+    !   pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PGOF
     ! end if
   else
     ! if rpTemp(4)>99.99 then
       ! pr #255,using 'form pos 1,Cr 46,c ': name$(4)&' (-1) too large to fit on next line:',' '&str$(rpTemp(4))
       line2part1$(41:41+12)=cnvrt$('N 12.2',rpTemp(4))
-      pr #255,using L105b: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),0,rpXxxx,mat printline1,totTemp pageoflow PGOF 
+      pr #255,using L105b: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),0,rpXxxx,mat printline1,totTemp pageoflow PGOF
       L105b: form pos 1,pic(zzzzzzzz),pos 10,c 15,n 7.2,n 8.2,pos 40,n 6.2,nz 6.2,pos 52,n 8.2,pos 60,numberded1*n 12.2,x 6,n 12.2,skip 1
     ! else
     !   pr #255,using L105a: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PGOF
@@ -141,7 +141,7 @@ return  ! /r
 PGOF: ! r:
   pr #255: newpage
   gosub HDR
-  continue 
+  continue
 return  ! /r
 FINALTOTALS: ! r:
   pr #255,using 'form skip 2,pos 10,c 12,skip 2': "Final Totals"
@@ -149,13 +149,13 @@ FINALTOTALS: ! r:
   totTemp=totded
   rpXxxx=rpTemp(1)+rpTemp(2)+rpTemp(3)+rpTemp(4)
   for j=1 to 27
-    if j=5 then 
+    if j=5 then
       pr #255,using FlabelAndCurrency: name$(j),rpXxxx
-    else if j=26 then 
+    else if j=26 then
       pr #255,using FlabelAndCurrency: name$(j),totaleic
-    else if j=27 then 
+    else if j=27 then
       pr #255,using FlabelAndCurrency: name$(j),totTemp
-    else if j>5 and j<26 then 
+    else if j>5 and j<26 then
       if trim$(abbrevname$(j-5))<>"" then  ! skip ded if not used
         pr #255,using FlabelAndCurrency: rtrm$(abbrevname$(j-5)),rpTemp(j-1)
       end if
@@ -169,8 +169,8 @@ DONE: ! r:
   close #1: ioerr ignore
   close #2: ioerr ignore
   fncloseprn
-XIT: fnxit ! /r
-IGNORE: continue 
+Xit: fnXit ! /r
+IGNORE: continue
 HDR: ! r:
   ! pr #255,Using 1380: DATE$,TIME$,env$('program_caption')
   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -178,7 +178,7 @@ HDR: ! r:
   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
   pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zzzz/zz/zz)",ppd)&"}"
   pr #255: "\ql   "
-  ! 
+  !
   form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 49,c 33,skip 1
   pr #255,using L1560: dat$
   L1560: form pos dattab,c 20,skip 2
@@ -188,4 +188,4 @@ HDR: ! r:
   pr #255,using L1610: "Number","Name",name$(1),name$(2),name$(3),name$(4),name$(5),mat dedname$,total$
   L1610: form pos 2,c 6,pos 14,c 4,pos 29,c 6,c 6,c 7,c 7,c 7,pos 66,numberded*c 6,c 12,skip 1
 return  ! /r
-include: ertn
+include: Ertn

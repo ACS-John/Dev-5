@@ -13,7 +13,7 @@ def fn_Setup
 fnend
 def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 	pdfDecipos=0 ! no longer passed - no longer needed
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
 	g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
 	open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
@@ -51,7 +51,7 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 	fnpdf_open=poReturn
 fnend
 def library fnpdf_Close
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	close #hPdfOut: error PDFCLOSEERR
 	hPdfOut=0
 	fnWindowsStart(os_filename$(g_filename_final$))
@@ -77,7 +77,7 @@ goto pdfCloseFinit
 pdfCloseFinit: !
 fnend
 def library fnpdf_newpage
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fn_print('[newpage]')
 fnend
 def fn_pdf_mmpos(mmX,mmY) ! position cursor on page in millimeters 
@@ -131,19 +131,19 @@ def fn_pdf_pop
 	fn_phe('&f1S',1) ! Pop
 fnend
 def library fnpdf_text(text$*256,mmX; mmY)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fn_pdf_push
 	fn_pdf_mmpos(mmX,mmY)
 	fn_print(text$)
 	fn_pdf_pop
 fnend
 def library fnpdf_background(background_pdf$*256)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	! background_pdf$ requres a br_filename$
 	fn_phe("pdf='1,"&background_pdf$&"'")
 fnend
 def library fnpdf_lineh(mmX,mmY,length)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	length=length/72*30/19*30
 	fn_debug('fnpdf_lineH('&str$(mmX)&'mm,'&str$(mmy)&'mm,'&str$(length)&')')
 	fn_pdf_push
@@ -153,7 +153,7 @@ def library fnpdf_lineh(mmX,mmY,length)
 	fn_pdf_pop
 fnend
 def library fnpdf_linev(mmX,mmY,height) 
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fn_debug('fnpdf_lineV('&str$(mmX)&'mm,'&str$(mmy)&'mm,'&str$(height)&')')
 	fn_pdf_push
 	!
@@ -177,7 +177,7 @@ def library fnpdf_linev(mmX,mmY,height)
 	fn_pdf_pop
 fnend
 def library fnpdf_font(; fontname$)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fnpdf_font=fn_pdf_font( fontname$)
 fnend
 def fn_pdf_font(; fontname$)
@@ -206,7 +206,7 @@ def fn_pdf_font(; fontname$)
 	end if
 fnend
 def library fnpdf_fontsize(; fontsize)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fn_debug('fnpdf_fontsize('&str$(fontsize)&')')
 	fnpdf_fontsize=fn_pdf_fontsize( fontsize)
 fnend
@@ -224,7 +224,7 @@ def fn_pdf_fontsize(; fontsize)
 	gFontSize=fontsize
 fnend
 def library fnpdf_fontbold(; off_or_on)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fnpdf_fontbold=fn_pdf_fontbold( off_or_on)
 fnend
 def fn_pdf_fontbold(; off_or_on)
@@ -236,7 +236,7 @@ def fn_pdf_fontbold(; off_or_on)
 	gFontBold=off_or_on
 fnend
 def library fnpdf_fontitalic(; off_or_on)
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	fnpdf_fontitalic=fn_pdf_fontitalic( off_or_on)
 fnend
 def fn_pdf_fontitalic(; off_or_on)
@@ -252,7 +252,7 @@ def library fnpdf_pic(imgname$*1024,mmX,mmY,imgWidth,imgHeight; style$)
 	! PRINTER PDF [PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME'"
 	! PRINTER PDF [ISO PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME: ISOTROPIC'"
 	! PRINTER PDF [TILE PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME: TILE'"
-	if ~setup then let fn_Setup
+	if ~setup then fn_setup
 	! background_pdf$ requres a br_filename$
 ! if style$='' then style$='Isotropic'
 	if style$<>'' then style$=': '&style$

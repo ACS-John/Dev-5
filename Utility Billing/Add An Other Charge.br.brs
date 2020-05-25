@@ -19,21 +19,11 @@ Xit: fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror,fntop,fnask_account,fnCmbAct
-		library 'S:\Core\Library': fntos,fnlbl,fntxt,fncmdset,fnacs
-		library 'S:\Core\Library': fnservice_other
-		library 'S:\Core\Library': fnGetHandle
-		library 'S:\Core\Library': fnMsgBox
-		library 'S:\Core\Library': fnCloseFile
-		library 'S:\Core\Library': fnCustomerData$
-		library 'S:\Core\Library': fnNoteDir$
-		library 'S:\Core\Library': fnAddOneC,fnaddonen
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fncloseprn,fnopenprn
+		autoLibrary
 	end if
 fnend
 def library fnAddAnOtherCharge(;z$*10,hCustomer1)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnAddAnOtherCharge=fn_addAnOtherCharge( z$,hCustomer1)
 fnend
 def fn_addAnOtherCharge(; z$*10,hCustomer1)
@@ -314,5 +304,5 @@ def fn_lastTBalBeforeRec(hTranRelative,z$,recNum; ___,returnN)
 	fn_lastTBalBeforeRec=returnN
 fnend
 
-include: ertn
+include: Ertn
 include: fn_open

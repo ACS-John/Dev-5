@@ -2,7 +2,7 @@
 ! accounting periond from company information file
 !
 def library fnactpd(;actpd)
-	library 'S:\Core\Library': fngethandle
+	autoLibrary
 	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
 	if actpd<=0 then 
 		actpd=0

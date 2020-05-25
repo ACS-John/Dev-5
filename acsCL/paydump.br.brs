@@ -1,84 +1,84 @@
-00010 ! Replace S:\acsCL\PayDump
-00020 ! Remove Payee Records
-00030 !
-00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs,fndate_mmddyy_to_ccyymmdd,fngethandle
-00050   on error goto Ertn
-00060 !
-00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
-00080 !
-00090   fntop(program$,cap$="Remove Payee Records")
-00100   cancel=99 : right=1
-00110   fncno(cno,cnam$) !:
-        fndat(dat$)
-00120 !
-00130   open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
-        close #20: 
-00140   open #trmstr2=22: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx2.H[cno],Shr",internal,input,keyed 
-00150   open #paymstr1=1: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed 
-00160   open #paymstr2=2: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed 
-00170   open #payeeglbreakdown:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr",internal,outIn,keyed 
-00180   fnTos(sn$="PayDump") !:
-        respc=0 : mylen=21 : mypos=mylen+2
-00190   fnLbl(1,1,"Oldest retained Date:",mylen,right)
-00200   fnTxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
-        resp$(respc+=1)=str$(date('ccyymmdd')-50000)
-00210   fnLbl(1,46,"",1,1)
-00220   fnCmdSet(2) !:
-        fnAcs(sn$,0,mat resp$,ckey)
-00230   if ckey=5 then goto XIT else !:
-          olddate=val(resp$(1))
-00240   fnopenprn
-00250   gosub HDR
-00260 ! ___________________________
-00270 READ_PAYMSTR1: ! 
-00280   read #paymstr1,using 'Form POS 1,C 8,C 30': vn$,nam$ eof DONE
-00290   restore #trmstr2,search>=vn$: nokey PRINT_IT
-00300 READ_TRMSTR2: ! 
-00310   read #trmstr2,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof READ_PAYMSTR1 : tr$(3)=str$(tr3)
-00320   if vn$><tr$(4) then goto PRINT_IT !:
-          ! moved thru all checks without finding a check with date !:
-          ! later than one entered above
-00330   lastdate=val(tr$(2)) conv READ_TRMSTR2
-00340   if fndate_mmddyy_to_ccyymmdd(lastdate)>olddate then goto READ_PAYMSTR1 !:
-          ! keep this vendor recored
-00350   goto READ_TRMSTR2
-00360 !
-00370 PRINT_IT: ! 
-00380   pr #255,using "Form POS 1,C 8,X 3,C 30": vn$,nam$ pageoflow NEWPGE
-00390   delete #paymstr1,key=vn$: nokey L410
-00400   gosub REMOVE_FROM_PAYEEGLBREAKDOWN
-00410 L410: goto READ_PAYMSTR1
-00420 !
-00430 REMOVE_FROM_PAYEEGLBREAKDOWN: ! uses VN$
-00440   restore #payeeglbreakdown,key>=vn$: nokey OUTTA_PGB_LOOP
-00450 READ_PAYEEGLBREAKDOWN: ! 
-00460   read #payeeglbreakdown,using 'Form Pos 1,C 8': readvn$ eof OUTTA_PGB_LOOP
-00470   if readvn$=vn$ then !:
-          delete #payeeglbreakdown: !:
-          goto READ_PAYEEGLBREAKDOWN else !:
-          goto OUTTA_PGB_LOOP
-00480 OUTTA_PGB_LOOP: ! 
-00490   return 
-00500 !
-00510 DONE: ! 
-00520   fncloseprn !:
-        goto XIT
-00530 !
-00540 XIT: fnxit
-00550 !
-00560 NEWPGE: pr #255: newpage : gosub HDR : continue 
-00570 !
-00580 HDR: ! 
-00590   pr #255,using 'Form POS 1,Cc 80': cnam$ !:
-        pr #255,using 'Form POS 1,Cc 80': cap$ !:
-        pr #255,using 'Form POS 1,Cc 80': dat$
-00600   return 
-00610 !
-00620 ! <Updateable Region: ERTN>
-00630 ERTN: fnerror(program$,err,line,act$,"NOt")
-00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00670 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00680 ! /region
-00690 !
+! Replace S:\acsCL\PayDump
+! Remove Payee Records
+ 
+	autoLibrary
+	on error goto Ertn
+ 
+	dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
+ 
+	fnTop(program$,cap$="Remove Payee Records")
+	cancel=99 : right=1
+	fncno(cno,cnam$) : _
+	fndat(dat$)
+ 
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d : _
+	close #20:
+	open #trmstr2=22: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx2.H[cno],Shr",internal,input,keyed
+	open #paymstr1=1: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed
+	open #paymstr2=2: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed
+	open #payeeglbreakdown:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr",internal,outIn,keyed
+	fnTos(sn$="PayDump") : _
+	respc=0 : mylen=21 : mypos=mylen+2
+	fnLbl(1,1,"Oldest retained Date:",mylen,right)
+	fnTxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") : _
+	resp$(respc+=1)=str$(date('ccyymmdd')-50000)
+	fnLbl(1,46,"",1,1)
+	fnCmdSet(2) : _
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit else : _
+		olddate=val(resp$(1))
+	fnopenprn
+	gosub HDR
+! ___________________________
+READ_PAYMSTR1: !
+	read #paymstr1,using 'Form POS 1,C 8,C 30': vn$,nam$ eof DONE
+	restore #trmstr2,search>=vn$: nokey PRINT_IT
+READ_TRMSTR2: !
+	read #trmstr2,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof READ_PAYMSTR1 : tr$(3)=str$(tr3)
+	if vn$><tr$(4) then goto PRINT_IT : _
+		! moved thru all checks without finding a check with date : _
+		! later than one entered above
+	lastdate=val(tr$(2)) conv READ_TRMSTR2
+	if fndate_mmddyy_to_ccyymmdd(lastdate)>olddate then goto READ_PAYMSTR1 : _
+		! keep this vendor recored
+	goto READ_TRMSTR2
+ 
+PRINT_IT: !
+	pr #255,using "Form POS 1,C 8,X 3,C 30": vn$,nam$ pageoflow NEWPGE
+	delete #paymstr1,key=vn$: nokey L410
+	gosub REMOVE_FROM_PAYEEGLBREAKDOWN
+L410: goto READ_PAYMSTR1
+ 
+REMOVE_FROM_PAYEEGLBREAKDOWN: ! uses VN$
+	restore #payeeglbreakdown,key>=vn$: nokey OUTTA_PGB_LOOP
+READ_PAYEEGLBREAKDOWN: !
+	read #payeeglbreakdown,using 'Form Pos 1,C 8': readvn$ eof OUTTA_PGB_LOOP
+	if readvn$=vn$ then : _
+		delete #payeeglbreakdown: : _
+		goto READ_PAYEEGLBREAKDOWN else : _
+		goto OUTTA_PGB_LOOP
+OUTTA_PGB_LOOP: !
+return
+ 
+DONE: !
+	fncloseprn : _
+	goto Xit
+ 
+Xit: fnXit
+ 
+NEWPGE: pr #255: newpage : gosub HDR : continue
+ 
+HDR: !
+	pr #255,using 'Form POS 1,Cc 80': cnam$ : _
+	pr #255,using 'Form POS 1,Cc 80': cap$ : _
+	pr #255,using 'Form POS 1,Cc 80': dat$
+return
+ 
+! <Updateable Region: ERTN>
+ERTN: fnerror(program$,err,line,act$,"NOt")
+	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
+ERTN_EXEC_ACT: execute act$ : goto ERTN
+! /region
+ 

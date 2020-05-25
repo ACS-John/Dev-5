@@ -26,7 +26,7 @@
 end ! /r
 
 def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnSendEmail=fn_sendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmail$,mat bccEmail$)
 fnend
 def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$, ___,hResult,returnN,output$*1024,returnN)
@@ -114,18 +114,11 @@ fnend
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnreg_read
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnmakesurepathexists
-		library 'S:\Core\Library': fnCopy,fnFree
-		library 'S:\Core\Library': fnreport_cache_folder_current$
-		library 'S:\Core\Library': fnArrayWasPassedC
-		library 'S:\Core\Library': fnsafe_filename$
-		library 'S:\Core\Library': fnAddOneC
+		autoLibrary
 		on error goto Ertn
 		gosub Enum
 	end if 
 fnend
 include: enum
 include: fn_open
-include: ertn
+include: Ertn

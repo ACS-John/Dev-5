@@ -1,8 +1,8 @@
 ! Replace S:\acsPR\conversion\v4.cnv
 !    medicare_is_seperated     ...         look for "Fica_Combined" if medicare not separated and remove both exclamations
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 
-	fntop(program$,cap$="Department Conversion")
+	fnTop(program$,cap$="Department Conversion")
 ! r: do every company - loop top
 	fngetdir2('[Q]\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
 	filename_item=0
@@ -23,9 +23,7 @@ ACNO_CONV: !
 	chain "S:\acsPR\conversion\v4_part2"
 def fn_setup
 	setup=1
-	library 'S:\Core\Library': fntop, fnerror,fndate_mmddyy_to_ccyymmdd
-	library 'S:\Core\Library': fngetdir2,fnStatus,fnindex_it,fncursys$
-	library 'S:\Core\Library': fnStatusPause,fnCopy,fngethandle,fnDedNames
+	autoLibrary
 	on error goto Ertn
 
 	dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40
@@ -34,7 +32,7 @@ def fn_setup
 	dim ty(21),tqm(17),tcp(22),tdet(17),dednames$(20)*20,d1$*20
 fnend 
 def library fnpr_conversion_department(cno; medicare_is_seperated)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnpr_conversion_department=fn_pr_conversion_department(cno, medicare_is_seperated)
 fnend 
 def fn_pr_conversion_department(cno; medicare_is_seperated)
@@ -185,7 +183,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		fnindex_it("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
 	!   end if  ! cno_current<>0
 	! next company_item
-	XIT: ! 
+	Xit: ! 
 		close #h_prckhist: ioerr ignore
 		fnStatus('payrollcheck_write_count='&str$(payrollcheck_write_count))
 	! fnStatusPause

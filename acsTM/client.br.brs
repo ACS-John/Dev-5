@@ -1,38 +1,38 @@
 ! Replace S:\acsTM\Client
 ! TM Client - Hamster
-
-library 'S:\Core\Library': fntop,fnxit, fnHamster
+ 
+autoLibrary
 on error goto Ertn
-
-fntop(program$,'Client 420')
-
+ 
+fnTop(program$,'Client 420')
+ 
 fn_hamster_setup_1
 fn_open_file : fn_close_file : fn_open_file
 fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 fn_close_file
-goto XIT
-
+goto Xit
+ 
 def fn_open_file
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed 
-	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed 
-fnend 
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
+fnend
 def fn_close_file
 	for cf_h_item=1 to open_file_count
-		close #cf_h_item: 
+		close #cf_h_item:
 	next cf_h_item
 fnend  ! fn_close_file
-
-XIT: fnxit
-
+ 
+Xit: fnXit
+ 
 def fn_hamster_setup_1
 	mask_pointtwo=32 : mask_number=30
 	mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 	textlen_mmddyy=8 : textlen_ccyymmdd=10
 	storage_len_mmddyy=6 : storage_len_ccyymmdd=8
-
+ 
 	fn_hamster_field_reset
-
+ 
 	fn_hamster_field_add("Client ID" ,5,'N',0,mask_number)
 	fn_hamster_field_add("Name",30,'C')
 	fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ,disable:=1) ! ar(1)
@@ -42,7 +42,7 @@ def fn_hamster_setup_1
 	fn_hamster_field_add("Business Type",30,'C')
 	fn_hamster_field_add("Phone",12,'C') ! ph$
 	fn_hamster_field_add("Federal ID",11,'c') ! ss$
-
+ 
 	fn_hamster_field_add("Home Phone",12,'c',0,0,260) ! ph2$
 fnend  ! fn_hamster_setup_1
 def fn_hamster_field_reset
@@ -60,14 +60,14 @@ def fn_hamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_
 	mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 	mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 	mat sp(add_rec_item) : sp(add_rec_item)=storage_position
-	if storage_position=0 then 
-		if add_rec_item=1 then 
+	if storage_position=0 then
+		if add_rec_item=1 then
 			sp(add_rec_item)=1
 			auto_storage_position=1
-		else 
+		else
 			sp(add_rec_item)=sp(add_rec_item-1)+sln(add_rec_item-1)
-		end if 
-	end if 
+		end if
+	end if
 	mat c$(add_rec_item,8)
 	! c$(add_rec_item,7)=str$(disable)
 fnend  ! fn_hamster_field_add

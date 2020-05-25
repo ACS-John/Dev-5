@@ -1,6 +1,6 @@
-library 'S:\Core\Library': fntop,fnxit, fnAcs2,fnLbl,fnTxt,fnTos,fnCmdSet,fnOpenFile,fnFree
+autoLibrary
 on error goto Ertn
-fntop(program$)
+fnTop(program$)
 gosub CompanyLoad
 fnTos : col1Len=19 : col2Pos=col1Len+2
 ! r: company information portion of screen
@@ -13,11 +13,11 @@ fnTos : col1Len=19 : col2Pos=col1Len+2
 ! /r
 fnCmdSet(2)
 fnAcs2(mat Comp$,ck)
-if ck<>5 then 
+if ck<>5 then
 	gosub CompanySave
 end if
-Xit: fnxit
-
+Xit: fnXit
+ 
 CompanyLoad: ! r:
 	dim comp$(0)*128,compN(0),form$(0)*256
 	hCompany=fnOpenFile(env$('cursys')&' Company',mat comp$,mat compN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat unused$,supressprompt:=2)
@@ -28,8 +28,8 @@ CompanySave: ! r:
 	fnFree('[Q]\'&env$('cursys')&'mstr\Company.h[cno]')
 	dim fileiosubs$(0)*512
 	hCompany=fnOpenFile(env$('cursys')&' Company',mat comp$,mat compN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat fileiosubs$,supressprompt:=2)
-	write #hCompany,using form$(hCompany): mat comp$,mat compN 
-	close #hCompany: 
+	write #hCompany,using form$(hCompany): mat comp$,mat compN
+	close #hCompany:
 return  ! /r
 include: Ertn
-
+ 

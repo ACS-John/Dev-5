@@ -1,12 +1,9 @@
 ! Replace S:\acsPR\hours.br
 ! enter and track houly breakdowns of time for comp time, etc
-! fnTOP("S:\acsPR\hourclassification2","Time Classification")
+! fnTop("S:\acsPR\hourclassification2","Time Classification")
 def library fnhours(eno)
 
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnChk,fnflexinit1,fnflexadd1,fnButton
-	library 'S:\Core\Library': fnAcs2,fnmsgbox,fnCmdSet,fncombof,fnCmdKey
-	library 'S:\Core\Library': fngethandle
+	autoLibrary
 	on error goto Ertn
 
 	dim message$*40,resp$(10)*40
@@ -94,7 +91,7 @@ def library fnhours(eno)
 		fnCmdKey("&Delete",44) 
 		fnCmdKey("&Cancel",5,0,1)
 		fnAcs2(mat resp$,ck) 
-		if ck=5 then goto XIT
+		if ck=5 then goto Xit
 		hact$=trim$(resp$(1)(1:8))
 		if hact$="[All]" then goto MAIN
 		empno=eno=val(resp$(1)(1:8))
@@ -174,8 +171,8 @@ def library fnhours(eno)
 		ml$(2)="this feature.  Go to Files on the main menu and then " 
 		ml$(3)="take Time Classifications." 
 		fnmsgbox(mat ml$,resp$,'',65)
-		goto XIT
-	XIT: ! 
+		goto Xit
+	Xit: ! 
 	close #hBreakdown: ioerr ignore
 	close #hClassification: ioerr ignore
 	close #hEmployee: ioerr ignore

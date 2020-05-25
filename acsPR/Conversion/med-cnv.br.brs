@@ -16,7 +16,7 @@
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
 	open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
 	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
-L220: read #1,using L230: eno,mat em$,ss$,em6,ta eof XIT
+L220: read #1,using L230: eno,mat em$,ss$,em6,ta eof Xit
 L230: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 L240: read #2,using L250,rec=ta: teno,tcd,mat ty,ta
 L250: form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3
@@ -44,5 +44,5 @@ L250: form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3
 	nqp=dcb=w3=0
 	if ta>0 then goto L240 else goto L220
 
-XIT: stop 
+Xit: stop 
 include: Ertn

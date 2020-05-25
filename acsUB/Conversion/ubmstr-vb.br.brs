@@ -1,8 +1,7 @@
 ! replace S:\acsUB\conversion\UBmstr-vb
 ! always start conversion process with bld_trans
 def library fnub_cnv_ubmstr_vb
-	library 'S:\Core\Library': fnxit,fnerror,fnpause,fnCopy,fnindex_it,fnub_index_customer,fnStatus,fnFree
-	library 'S:\Core\Library': fnGetHandle
+	autoLibrary
 	on error goto Ertn
 	dim b(11),a(7),d(15),alpha$*7,f2$*12,extra(23),extra$(11)*30,ba(12)
 	dim custname$*30,badr(2)
@@ -21,7 +20,7 @@ def library fnub_cnv_ubmstr_vb
 	fnindex_it("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
 
 	open #h_customer:=fnGetHandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
-	if version(1)=1 then goto XIT
+	if version(1)=1 then goto Xit
 	open #h81:=fnGetHandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
 	open #h82:=fnGetHandle: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative 
 	do
@@ -70,6 +69,6 @@ def library fnub_cnv_ubmstr_vb
 	close #h82: ioerr ignore
 	fnindex_it("[Q]\UBmstr\BudMstr.h[cno]","[Q]\UBmstr\BudIdx1.h[cno]", '1 10')
 	! L640: ! Goto 70
-	XIT: !
-fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnxit
-include: ertn
+	Xit: !
+fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnXit
+include: Ertn

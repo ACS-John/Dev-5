@@ -15,7 +15,7 @@
 	cmask$(2)=''
 	cmask$(3)=''
 
-	fntop(program$)
+	fnTop(program$)
 	open #4: "Name=[Q]\GLmstr\GLmstr.H[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.H[cno],Shr",internal,outIn,keyed 
 	open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
 	gosub BUILD_LAYOUT
@@ -33,7 +33,7 @@ MAIN: ! r:
 	fnCmdKey("&Next",1,1,0,"Allows you to select files to be posted.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
 	fnacs2(mat resp$,ckey)
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 	from =val(resp$(1))
 	to =val(resp$(2))
 	from$=cnvrt$("PIC(######)",from): to$=cnvrt$("PIC(######)",to)
@@ -64,7 +64,7 @@ MAIN: ! r:
 	if ckey=1 then listing$='N' : goto PRINT_POST
 	if ckey=2 then goto REVIEW
 	if ckey=3 then listing$="Y" : goto PRINT_POST
-	if ckey=5 then goto XIT
+	if ckey=5 then goto Xit
 ! /r
 PRINT_POST: !
 	if listing$="Y" then listing=1 else listing=0
@@ -141,7 +141,7 @@ L1170: !
 			fnFree("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H[cno]")
 		end if 
 	next j
-XIT: fnxit
+Xit: fnXit
 
 L1230: ! r:
 	fnopenprn
@@ -322,4 +322,4 @@ BUILD_LAYOUT: ! r:
 	! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 	limit_to_list$='1'
 return  ! /r
-include: ertn
+include: Ertn

@@ -15,7 +15,7 @@ next sysitem
 end
 ! /r
 def fn_setup
-	library 'S:\Core\Library': fnxit
+	library 'S:\Core\Library': fnXit
 	library 'S:\Core\Library': fnStatus
 	library 'S:\Core\Library': fnget_company_number_list
 	library 'S:\Core\Library': fngethandle
@@ -124,12 +124,12 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index_it("[Q]\GLmstr\ACTrans.h"&str$(cno),"[Q]\GLmstr\AcTrIdx.h"&str$(cno),"1/71/17/13 12/2/2/4")
 		fn_index_it("[Q]\GLmstr\AcTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
 
-		fn_index_it("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\FNSbINDX.h"&str$(cno),",1 5")
-		fn_index_it("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\FNScINDX.h"&str$(cno),",1 5")
-		fn_index_it("[Q]\GLmstr\ACGLfNSf.h"&str$(cno),"[Q]\GLmstr\FNSfINDX.h"&str$(cno),",1 5")
-		fn_index_it("[Q]\GLmstr\ACGLfNSg.h"&str$(cno),"[Q]\GLmstr\FNSGINDX.h"&str$(cno),",1 5")
-		fn_index_it("[Q]\GLmstr\ACGLFNSi.h"&str$(cno),"[Q]\GLmstr\FNSiINDX.h"&str$(cno),",1 5")
-		fn_index_it("[Q]\GLmstr\ACGLFNSj.h"&str$(cno),"[Q]\GLmstr\FNSjINDX.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\agfsidx4.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\agfsidx1.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLfNSf.h"&str$(cno),"[Q]\GLmstr\agfsidx5.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLfNSg.h"&str$(cno),"[Q]\GLmstr\agfsidx6.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLFNSi.h"&str$(cno),"[Q]\GLmstr\agfsidx3.h"&str$(cno),",1 5")
+		fn_index_it("[Q]\GLmstr\ACGLFNSj.h"&str$(cno),"[Q]\GLmstr\agfsidx2.h"&str$(cno),",1 5")
 	! /r
 	! r: B
 		fn_index_it("[Q]\GLmstr\bankrec.H"&str$(cno),"[Q]\GLmstr\bankrec-idx.h"&str$(cno) ,"79/3/4 12/1/8")
@@ -274,5 +274,5 @@ def fn_ub_index_customer(cno)
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx4.h"&str$(cno),"41 30")
 	fn_index_it("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
 fnend
-XIT: fnxit
+Xit: fnXit
 include: Ertn

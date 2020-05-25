@@ -312,9 +312,10 @@ def library fnPostCheckbookToGl(; enablePost)
 		L2300: ! 
 		if ~enablePost then goto Xit
 		close #20: ioerr ignore
-		open #20: "Name=[Q]\CLmstr\PostDat.H[cno],Replace,RecL=12",internal,outIn,relative 
-		write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
-		close #20: 
+		! removed 5/20/20 - jb - nothing ever read this in anyway.  a better way would be to write it with fncreg_write
+		! open #20: "Name=[Q]\CLmstr\PostDat.H[cno],Replace,RecL=12",internal,outIn,relative 
+		! write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
+		! close #20: 
 		if glb=2 then 
 			goto Xit
 		else 

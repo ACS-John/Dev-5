@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 gosub DoLoad
 screen=screen_main
 MAIN: ! r:
@@ -153,7 +153,7 @@ MAIN: ! r:
 	fnAcs2(mat resp$,ck)
 	
 	if ck=5 then 
-		goto XIT
+		goto Xit
 	else 
 		if screen=screen_main then
 			! r: RESP$ to main screen variables
@@ -209,9 +209,9 @@ MAIN: ! r:
 	end if
 
 	gosub DoSave
-goto XIT ! /r
+goto Xit ! /r
 
-XIT: fnxit
+Xit: fnXit
 DoLoad: ! r:
 	! r: Company Load
 	open #h_company:=1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
@@ -325,7 +325,7 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	fncomboa("ubfm-rates",cr_lyne,cr_pos,mat rates$,ttt$,30,fra)
 fnend
 def library fnEnableCostOfGas(; setIt$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnEnableCostOfGas=fn_enableCostOfGas( setIt$)
 fnend
 def fn_enableCostOfGas(; setIt$, ___,returnN)
@@ -351,16 +351,7 @@ fnend
 def fn_setup
 	if ~setup then 
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit
-		library 'S:\Core\Library': fnAcs2,fnLbl,fnTxt,fnTos,fnCmdSet,fnChk,fncomboa
-		library 'S:\Core\Library': fnFra
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnLastBillingDate
-		library 'S:\Core\Library': fnbutton_or_disabled
-		library 'S:\Core\Library': fnEftData$
-		library 'S:\Core\Library': fnclient_has
+		autoLibrary
 		on error goto Ertn
 	
 		dim resp$(256)*40

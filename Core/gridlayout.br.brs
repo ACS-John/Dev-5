@@ -1,62 +1,56 @@
-00010 ! Replace S:\Core\GridLayout  ! layout for grid program
-00020   library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnTos,fnerror,fnxit,fnCmdSet,fntop
-00030   dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
-00040 !
-00050   on error goto Ertn
-00060   fntop(program$,"Grid Layout")
-00070 !
-00080 L80: fnTos(sn$="file_layout")
-00090   lablen=15
-00100   text$="File Name:"
-00102   fnLbl(1,1,text$,lablen,1)
-00110   fnTxt(1,lablen+2,60,0,0,"")
-00112   resp$(1)="programfolder\grid\data_base_name\filename"
-00120   fnCmdSet(2)
-00130   fnAcs(sn$,0,mat resp$,ckey)
-00140   outputfile$=trim$(resp$(1))&".fil"
-00150   open #10: "Name="&outputfile$&",RecL=87,use",display,output ioerr L80
-00160 L160: sn$="file_layout"
-00162   fnTos(sn$)
-00170   lablen=30
-00180   fnLbl(1,1,"Field name:",lablen,1)
-00190   fnTxt(1,lablen+2,30,0,0,"")
-00192   resp$(1)=""
-00200   fnLbl(2,1,"Variable Name:",lablen,1)
-00210   fnTxt(2,lablen+2,20,0,0,"")
-00212   resp$(1)=""
-00220   text$="Field Length:"
-00222   fnLbl(3,1,text$,lablen,1)
-00230   fnTxt(3,lablen+2,4,0,0,"20")
-00232   resp$(1)=""
-00240   text$="# of Decimal Positions:"
-00242   fnLbl(4,1,text$,lablen,1)
-00250   fnTxt(4,lablen+2,2,0,0,"20")
-00252   resp$(1)=""
-00260   text$="Format (eg. C 30,pd 4.2):"
-00262   fnLbl(5,1,text$,lablen,1)
-00270   fnTxt(5,lablen+2,11,0,0,"")
-00272   resp$(5)=""
-00280   text$="Abbreviated Name:"
-00282   fnLbl(6,1,text$,lablen,1)
-00290   fnTxt(6,lablen+2,20,0,0,"")
-00292   resp$(6)=""
-00300   fnCmdSet(11)
-00310   fnAcs(sn$,0,mat resp$,ckey)
-00320   if ckey=5 then goto XIT
-00330   fieldnam$=trim$(resp$(1))
-00340   vn$=trim$(resp$(2))
-00350   fl=val(resp$(3))
-00360   dp=val(resp$(4))
-00370   ft$=trim$(resp$(5))
-00380   an$=trim$(resp$(6))
-00390   pr #10,using L400: fieldnam$,vn$,fl,dp,ft$,an$
-00400 L400: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
-00410   goto L160
-00420 XIT: stop 
-00430 ! <Updateable Region: ERTN>
-00440 ERTN: fnerror(program$,err,line,act$,"xit")
-00450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-00460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00480 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00490 ! /region
+! Replace S:\Core\GridLayout  ! layout for grid program
+	autoLibrary
+	dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
+ 
+	on error goto Ertn
+	fnTop(program$,"Grid Layout")
+ 
+L80: fnTos(sn$="file_layout")
+	lablen=15
+	text$="File Name:"
+	fnLbl(1,1,text$,lablen,1)
+	fnTxt(1,lablen+2,60,0,0,"")
+	resp$(1)="programfolder\grid\data_base_name\filename"
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	outputfile$=trim$(resp$(1))&".fil"
+	open #10: "Name="&outputfile$&",RecL=87,use",display,output ioerr L80
+L160: sn$="file_layout"
+	fnTos(sn$)
+	lablen=30
+	fnLbl(1,1,"Field name:",lablen,1)
+	fnTxt(1,lablen+2,30,0,0,"")
+	resp$(1)=""
+	fnLbl(2,1,"Variable Name:",lablen,1)
+	fnTxt(2,lablen+2,20,0,0,"")
+	resp$(1)=""
+	text$="Field Length:"
+	fnLbl(3,1,text$,lablen,1)
+	fnTxt(3,lablen+2,4,0,0,"20")
+	resp$(1)=""
+	text$="# of Decimal Positions:"
+	fnLbl(4,1,text$,lablen,1)
+	fnTxt(4,lablen+2,2,0,0,"20")
+	resp$(1)=""
+	text$="Format (eg. C 30,pd 4.2):"
+	fnLbl(5,1,text$,lablen,1)
+	fnTxt(5,lablen+2,11,0,0,"")
+	resp$(5)=""
+	text$="Abbreviated Name:"
+	fnLbl(6,1,text$,lablen,1)
+	fnTxt(6,lablen+2,20,0,0,"")
+	resp$(6)=""
+	fnCmdSet(11)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	fieldnam$=trim$(resp$(1))
+	vn$=trim$(resp$(2))
+	fl=val(resp$(3))
+	dp=val(resp$(4))
+	ft$=trim$(resp$(5))
+	an$=trim$(resp$(6))
+	pr #10,using L400: fieldnam$,vn$,fl,dp,ft$,an$
+L400: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
+	goto L160
+Xit: stop
+include: Ertn

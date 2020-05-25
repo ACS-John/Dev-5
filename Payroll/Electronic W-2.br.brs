@@ -1,14 +1,14 @@
 ! r: setup
 ! ken: "
-! never could get it work with an RO record if all zeroes;  
-! without RO record i had to put an RE record in front of every RW record and 
-! had to follow with an RT record -  
+! never could get it work with an RO record if all zeroes;
+! without RO record i had to put an RE record in front of every RW record and
+! had to follow with an RT record -
 ! Right now this program will not create an RO record
 ! "
-library 'S:\Core\Library': fntop,fnxit, fnerror,fnAcs,fnLbl,fnTxt,fnTos,fnCmdKey,fnureg_read,fnureg_write,fngethandle,fnDedNames,fncreg_read,fncreg_write,fncomboa
+autoLibrary
 on error goto Ertn
-fntop(program$)
-
+fnTop(program$)
+ 
 	dim em$(3)*30,ss$*11,tcp(32),tmp$*128
 	dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
@@ -18,23 +18,23 @@ fntop(program$)
 	dim tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 	dim w2(9),i1(9),t1(9),ct$*20,st$*2
 	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(40)*256,path$*256
-	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #hCompany,using fCompany: mat a$,federal_id$,loccode
 	fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
-	close #hCompany: 
+	close #hCompany:
 	!
 	dim optNameFormat$(2)*20,nameFormat_sf$(2)*1
 	optNameFormat$(1)='First Name First' : nameFormat_sf$(1)='F'
 	optNameFormat$(2)='Last Name First'  : nameFormat_sf$(2)='S'
 	!
-	disable=1 ! 
+	disable=1 !
 	med$="Y"
 ! /r
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed 
+	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! r: initialize variables
-
+ 
 	fnureg_read('electronic w-2 file',path$,os_filename$(env$('Desktop')&'\w2elec-[cno]'))
 	beg_date=val('0101'&date$(days(date$)-180,'YY'))
 	end_date=val('1231'&date$(days(date$)-180,'YY'))
@@ -80,68 +80,68 @@ fntop(program$)
 !
 ! /r
 SCREEN1_NEW: ! r:
-	fnTos(sn$="W2-1") 
+	fnTos(sn$="W2-1")
 	rc=lyne=0: mylen=17 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Starting Date:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,1,"3",0,"First day of calendar year",0) 
+	fnTxt(lyne,mypos,10,0,1,"3",0,"First day of calendar year",0)
 	resp$(respc_dateStart:=rc+=1)=str$(beg_date)
 	fnLbl(lyne+=1,1,"Ending Date:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,1,"3",0,"Last day of calendar year",0) 
+	fnTxt(lyne,mypos,10,0,1,"3",0,"Last day of calendar year",0)
 	resp$(respc_dateEnd:=rc+=1)=str$(end_date)
 	lyne+=1
 	fnLbl(lyne+=1,1,"Output File Name:",mylen,1,0,0)
-	fnTxt(lyne,mypos,30,0,0,'70',0,"Destination and file name you wish to use.",0) 
+	fnTxt(lyne,mypos,30,0,0,'70',0,"Destination and file name you wish to use.",0)
 	resp$(respc_path:=rc+=1)=path$
 	lyne+=1
 	fnLbl(lyne+=1,1,"Company Name:",mylen,1,0,0)
-	fnTxt(lyne,mypos,40,0,0,"",0,"Enter the name of the company submitting",0) 
+	fnTxt(lyne,mypos,40,0,0,"",0,"Enter the name of the company submitting",0)
 	resp$(resp_cnam:=rc+=1)=a$(1)
 	fnLbl(lyne+=1,1,"Street Address:",mylen,1,0,0)
-	fnTxt(lyne,mypos,40,0,0,"",0,"Address of the company submitting",0) 
+	fnTxt(lyne,mypos,40,0,0,"",0,"Address of the company submitting",0)
 	resp$(resp_cstreet:=rc+=1)=a$(2)
 	fnLbl(lyne+=1,1,"City:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,22,0,"",0,"City of the company submitting",0) 
+	fnTxt(lyne,mypos,10,22,0,"",0,"City of the company submitting",0)
 	resp$(resp_ccity:=rc+=1)=ct$
 	fnLbl(lyne,mypos+10+2,"State:",6,1,0,0)
-	fnTxt(lyne,mypos+10+2+6+2,2,0,0,"",0,"State for the company being submitted",0) 
+	fnTxt(lyne,mypos+10+2+6+2,2,0,0,"",0,"State for the company being submitted",0)
 	resp$(resp_cstate:=rc+=1)=st$
 	fnLbl(lyne,mypos+10+2+6+2+2+2,"Zip:",4,1,0,0)
-	fnTxt(lyne,mypos+10+2+6+2+2+2+4+2,5,0,0,"",0,"Zip code for the company being submitted",0) 
+	fnTxt(lyne,mypos+10+2+6+2+2+2+4+2,5,0,0,"",0,"Zip code for the company being submitted",0)
 	resp$(resp_czip:=rc+=1)=zip$
 	fnLbl(lyne+=1,1,"Federal ID:",mylen,1,0,0)
-	fnTxt(lyne,mypos,12,0,0,"1000",0,"Enter the Federal Id number without slashes or dashes.",0) 
-	resp$(resp_fid:=rc+=1)=federal_id$ 
+	fnTxt(lyne,mypos,12,0,0,"1000",0,"Enter the Federal Id number without slashes or dashes.",0)
+	resp$(resp_fid:=rc+=1)=federal_id$
 	!
 	lyne=0
 	col3=17+2+30+2 :   mylen=29 : mypos=col3+mylen+2
 	fnLbl(lyne+=1,col3,"Payment Year:",mylen,1,0,0)
-	fnTxt(lyne,mypos,4,0,0,"1030",0,"Enter the year for which the wages were paid in ccyy format.",0) 
+	fnTxt(lyne,mypos,4,0,0,"1030",0,"Enter the year for which the wages were paid in ccyy format.",0)
 	resp$(resp_paymentYear:=rc+=1)=str$(yr)
 	fnLbl(lyne+=1,col3,"Social Security Maximum Wage:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the social security maximum wage for the year just completed.",0) 
+	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the social security maximum wage for the year just completed.",0)
 	resp$(resp_ssmax:=rc+=1)=str$(ssmax)
 	fnLbl(lyne+=1,col3,"Social Security Rate:",mylen,1,0,0)
-	fnTxt(lyne,mypos,6,0,0,"34",disable,"Enter the social security rate for the year just completed.",0) 
+	fnTxt(lyne,mypos,6,0,0,"34",disable,"Enter the social security rate for the year just completed.",0)
 	resp$(resp_ssrate:=rc+=1)=str$(ssrate)
 	fnLbl(lyne+=1,col3,"Medicare Maximum Wage:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the medicare maximum wage for the year just completed.",0) 
+	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the medicare maximum wage for the year just completed.",0)
 	resp$(resp_mcmax:=rc+=1)=str$(mcmax)
 	fnLbl(lyne+=1,col3,"Medicare Rate:",mylen,1,0,0)
-	fnTxt(lyne,mypos,6,0,0,"30",disable,"Enter the medicare rate for the year just completed.",0) 
+	fnTxt(lyne,mypos,6,0,0,"30",disable,"Enter the medicare rate for the year just completed.",0)
 	resp$(resp_mcrate:=rc+=1)=str$(mcrate)
 	!
 	lyne=10 : mylen=69 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:",mylen,1,0,0)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_ins:=rc+=1)=str$(ins)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Pension:",mylen,1,0,0)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_pen:=rc+=1)=str$(pen)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Deferred Compensation:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_dfc:=rc+=1)=str$(dfc)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Dependent Care Assistance:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_dcan:=rc+=1)=str$(dcan)
 	lyne+=1
 	mylen=31 : mypos=mylen+2
@@ -150,45 +150,45 @@ SCREEN1_NEW: ! r:
 	resp$(resp_nameFormat:=rc+=1)=optNameFormat$(nameFormat)
 	lyne+=1
 	fnLbl(lyne+=1,1,"Personal ID Number:",mylen,1)
-	fnTxt(lyne,mypos,17,0,0,"",0,"",0) 
+	fnTxt(lyne,mypos,17,0,0,"",0,"",0)
 	resp$(resp_emppin:=rc+=1)=emppin$
 	fnLbl(lyne+=1,1,"Resub Indicator:",mylen,1)
-	fnTxt(lyne,mypos,1,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,1,0,0,"30",0,"",0)
 	resp$(resp_resub:=rc+=1)=resub$
 				fnLbl(lyne+=1,1,"Resub TLCN:",mylen,1)
-				fnTxt(lyne,mypos,6,0,0,"30",0,"",0) 
+				fnTxt(lyne,mypos,6,0,0,"30",0,"",0)
 				resp$(resp_tlcn:=rc+=1)=tlcn$
 	fnLbl(lyne+=1,1,"Contact Name:",mylen,1)
-	fnTxt(lyne,mypos,27,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,27,0,0,"30",0,"",0)
 	resp$(resp_contact:=rc+=1)=contact$
 	fnLbl(lyne+=1,1,"Contact Phone Number:",mylen,1)
-	fnTxt(lyne,mypos,15,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,15,0,0,"30",0,"",0)
 	resp$(resp_contactph:=rc+=1)=contactph$
 				fnLbl(lyne+=1,1,"Contact Phone Extension:",mylen,1)
-				fnTxt(lyne,mypos,5,0,0,"",0,"",0) 
+				fnTxt(lyne,mypos,5,0,0,"",0,"",0)
 				resp$(resp_phoneext:=rc+=1)=phoneext$
 	fnLbl(lyne+=1,1,"Contact E-Mail:",mylen,1)
-	fnTxt(lyne,mypos,40,0,0,"",0,"",0) 
+	fnTxt(lyne,mypos,40,0,0,"",0,"",0)
 	resp$(resp_email:=rc+=1)=email$
 	fnLbl(lyne+=1,1,"Terminating Business Indicator:",mylen,1)
-	fnTxt(lyne,mypos,1,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,1,0,0,"30",0,"",0)
 	resp$(resp_terminat:=rc+=1)=terminat$
 	lyne+=1
 	mylen=62 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Some states require filing electronic W-2s.",80,2)
 	fnLbl(lyne+=1,1,"Answer the following questions if you wish to create 'RS' records during this run.",80,2)
 	fnLbl(lyne+=1,1,"State code used in your record to identify the selected state:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_state_code:=rc+=1)=str$(sr1)
 	fnLbl(lyne+=1,1,"Appropriate FIPS postal numeric code:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0) 
+	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
 	resp$(resp_fips:=rc+=1)=str$(sr2)
 	fnLbl(lyne+=1,1,'(See an appendix in your electronic booklet for the postal code!)',80,2)
 	!
 	fnCmdKey("Next",1,1,0,"Creates the export")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! /r
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey) ! /r
+	if ckey=5 then goto Xit
 ! r: populate local variables from mat resp$
 	beg_date=val(resp$(respc_dateStart))
 	end_date=val(resp$(respc_dateEnd))
@@ -248,9 +248,9 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 Company City',ct$)
 	fncreg_write('W-2 Company State',st$)
 	fncreg_write('W-2 Company Zip',zip$)
-	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,outIn 
+	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,outIn
 	rewrite #hCompany,using 'form pos 1,x 120,c 12,pos 150,x 80,n 2',rec=1: federal_id$,loccode
-	close #hCompany: 
+	close #hCompany:
 	fncreg_write('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',str$(ins))
 	fncreg_write('Miscellaneous Deduction Used For Pension',str$(pen))
 	fncreg_write('Miscellaneous Deduction Used For Deferred Compensation',str$(dfc))
@@ -269,7 +269,7 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 FIPS',str$(sr2))
 	!
 ! /r
-	open #hOut:=fngethandle: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output 
+	open #hOut:=fngethandle: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output
 !
 	gosub RecRA
 	gosub RecRE ! kj 22610  was commented
@@ -298,10 +298,10 @@ L2120: read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": hen
 	dedret=0
 	cafded=0
 	for j=1 to 20
-		if newdedfed(j)=1 then 
+		if newdedfed(j)=1 then
 			dedret=dedret+tcp(j+4)
 		end if
-		if dedfica(j)=1 then 
+		if dedfica(j)=1 then
 			cafded=cafded+tcp(j+4)
 		end if
 	next j
@@ -311,13 +311,13 @@ L2120: read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": hen
 ! if client$="Washington Parrish" then w3(1)=w3(1)+tcp(5) ! add deferred comp match to medicare wages
 	w3(1)=min(mcmax,w3(1)) ! MC WAGES CANNOT EXCEED MAXIMUM
 	if uprc$(med$)="Y" then  ! SS WH
-		w2=w2+tcp(2) 
-	else 
+		w2=w2+tcp(2)
+	else
 		w2=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2)
 	end if
 	if uprc$(med$)="Y" then  ! MEDICARE WITHHELD
-		w3(2)=w3(2)+tcp(3) 
-		else 
+		w3(2)=w3(2)+tcp(3)
+		else
 		w3(2)=w3-w2
 	end if
 	w2(2)=w2(2)+tcp(30) ! FICA TIPS YTD
@@ -340,7 +340,7 @@ L2480: !
 	if em6=9 then w2(1)=w2(4)=w3(1)=w3(2)=0 ! NO SS OR MC
 	if em6=1 then w3(1)=w3(2)=0 ! NO MEDICARE
 	if em6=2 then w2(1)=w2(4)=0 ! NO SOC-SEC
-	if w2(3)<>0 or w2(1)<>0 then 
+	if w2(3)<>0 or w2(1)<>0 then
 		! Gosub RecRE   kj 22610
 		gosub RecRW
 		gosub RecRS
@@ -350,7 +350,7 @@ L2480: !
 		! tW2=0  kj 22610
 	end if
 goto NEXT_EMPLOYEE ! /r
-
+ 
 RecRA: ! r:
 	pr #hOut,using fRecRA: "RA",federal_id_val,emppin$(1:8),"",resub$,tlcn$,"98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L",""
 	fRecRA: form pos 1,c 2,pic(#########),c 8,c 9,c 1,c 6,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 12
@@ -364,7 +364,7 @@ return ! /r
 ! ! form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 !   pr #hOut,using L2710: "2E",ct$,st$,"",zip$,nameFormat_sf$(nameFormat),typemp$(1:1),"","","",""
 ! L2710: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
-!   return 
+!   return
 ! /r
 RecRW: ! r:
 	for j=1 to 9: w2(j)=w2(j)*100: next j
@@ -420,21 +420,21 @@ FINIS: ! r:
 	gosub RecRT ! kj 22610
 	gosub RecRF
 	gosub FILE_SHUFFLE
-XIT: fnxit
+Xit: fnXit
 ! /r
 FILE_SHUFFLE: ! r:
 	dim a$*512
 	close #24: ioerr ignore
 	close #hOut: ioerr ignore
-	open #24: "Name=X,RecL=513,EOL=NONE,REPLACE",external,output 
-	open #hOut:=fngethandle: "Name=w2report,RecL=512",display,input 
-	do 
+	open #24: "Name=X,RecL=513,EOL=NONE,REPLACE",external,output
+	open #hOut:=fngethandle: "Name=w2report,RecL=512",display,input
+	do
 		linput #hOut: a$ eof L3320
 		if a$(512:512)="X" then a$(512:512)=""
 		write #24,using 'form pos 1,c 512,c 1': rpad$(a$,512),chr$(10)
-	loop 
-L3320: close #24: 
-	close #hOut: 
+	loop
+L3320: close #24:
+	close #hOut:
 	execute "COPY x "&path$
 return ! /r
 NameParse: ! r:
@@ -462,20 +462,20 @@ EXTRACT_STATE: ! r: extract state name
 	p4=10
 	for j=1 to 10
 		p3=pos(rtrm$(em$(3))," ",p3+1)
-		if oldp3>p3 then 
+		if oldp3>p3 then
 			goto L5110 ! end of address reached
 		end if
-		if p3>0 then 
-			oldp3=p3 
+		if p3>0 then
+			oldp3=p3
 		end if
 	next j
 	L5110: !
 	for j=1 to 10
 		if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then
-			if rtrm$(holdst$)<>"" then 
+			if rtrm$(holdst$)<>"" then
 				goto L5150
 			end if
-		else 
+		else
 			p4=p4-1: holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j)
 		end if
 	next j

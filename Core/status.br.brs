@@ -1,11 +1,10 @@
 def fn_setup
 	setup=1
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnSrepEnv$
+	autoLibrary
 	on error goto Ertn
 fnend
 def library fnStatus(text$*512)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnStatus=fn_status(text$)
 fnend
 def fn_status(text$*512)
@@ -32,16 +31,16 @@ def fn_status(text$*512)
 fnend
 
 def library fnStatusPause
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fn_status('Press any key to continue.')
 	kstat$(1)
 fnend
 
 def library fnStatusClose
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	close #hStatusWin: ioerr ignore
 	hStatusWin=0
 	status_initialized=0
 Xit: ! necessary for ertn
 fnend
-include: ertn
+include: Ertn

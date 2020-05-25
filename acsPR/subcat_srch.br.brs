@@ -1,52 +1,46 @@
-00010 ! replace S:\acsPR\subCAT_SRCH.br
-00020 ! search for an valid sub-caterories for this job
-00030 !
-00040   def library fnsubcat_srch(&cde$,&ckey;fixgrid)
-00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
-00060     on error goto Ertn
-00070 !
-00080     dim item$(2)*40,resp$(30)*80
-00090 !
-00100     cde$=lpad$(rtrm$(cde$),3) ! pass back sub-category #
-00110     fncno(cno)
-00120     subcat=1 ! # of subcatergory file in calling program
-00130 !
-00140     restore #subcat: 
-00150     fnTos(sn$="SubCatSrch")
-00160     ch$(1)="Sub-Category #" : !:
-          ch$(2)="Description" : !:
-          mat ch$(2) : mat cm$(2) : mat cm$=("2")
-00170     usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
-00190 READ_FILE: ! 
-00200     read #subcat,using 'Form POS 1,c 3,c 25': mat item$ eof L280 ioerr ERR_READ
-00210     fnflexadd1(mat item$)
-00220     goto READ_FILE
-00230 !
-00240 ERR_READ: ! 
-00250     if err<>61 then goto ERTN
-00260     pr 'Record locked during cat_search flexgrid creation' !:
-          pr 'It was skipped' !:
-          read #subcat,release: !:
-          goto READ_FILE
-00270 !
-00280 L280: fnCmdKey("&Add",97,0,0,"Add a new sub-category record." ) !:
-          fnCmdKey("E&dit",98,1,0,"Access the highlited record") !:
-          fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") !:
-          fnCmdKey("&Listing",94,0,0,"Print a list of sub-category records") !:
-          fnCmdKey("E&xit",5,0,1,"Returns to main menu.")
-00290     fnAcs(sn$,0,mat resp$,ckey) !:
-          ! CALL FLEXGRID
-00300     x$=cde$=lpad$(resp$(1),3)
-00310     if ckey=5 then cde$="   " ! no one selected
-00320     goto XIT
-00330 !
-00340 ! <Updateable Region: ERTN>
-00350 ERTN: fnerror(program$,err,line,act$,"xit")
-00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00400 ! /region
-00410 !
-00420 XIT: fnend 
-00430 !
+! replace S:\acsPR\subCAT_SRCH.br
+! search for an valid sub-caterories for this job
+ 
+def library fnsubcat_srch(&cde$,&ckey;fixgrid)
+		autoLibrary
+		on error goto Ertn
+ 
+		dim item$(2)*40,resp$(30)*80
+ 
+		cde$=lpad$(rtrm$(cde$),3) ! pass back sub-category #
+		fncno(cno)
+		subcat=1 ! # of subcatergory file in calling program
+ 
+		restore #subcat:
+		fnTos(sn$="SubCatSrch")
+		ch$(1)="Sub-Category #" : : _
+		ch$(2)="Description" : : _
+		mat ch$(2) : mat cm$(2) : mat cm$=("2")
+		usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
+READ_FILE: !
+		read #subcat,using 'Form POS 1,c 3,c 25': mat item$ eof L280 ioerr ERR_READ
+		fnflexadd1(mat item$)
+		goto READ_FILE
+ 
+ERR_READ: !
+		if err<>61 then goto ERTN
+		pr 'Record locked during cat_search flexgrid creation' : _
+		pr 'It was skipped' : _
+		read #subcat,release: : _
+		goto READ_FILE
+ 
+L280: fnCmdKey("&Add",97,0,0,"Add a new sub-category record." ) : _
+		fnCmdKey("E&dit",98,1,0,"Access the highlited record") : _
+		fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") : _
+		fnCmdKey("&Listing",94,0,0,"Print a list of sub-category records") : _
+		fnCmdKey("E&Xit",5,0,1,"Returns to main menu.")
+		fnAcs(sn$,0,mat resp$,ckey) : _
+		! CALL FLEXGRID
+		x$=cde$=lpad$(resp$(1),3)
+		if ckey=5 then cde$="   " ! no one selected
+		goto Xit
+ 
+include: Ertn
+ 
+Xit: fnend
+ 

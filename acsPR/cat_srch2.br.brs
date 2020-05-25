@@ -1,54 +1,46 @@
-00010 ! replace S:\acsPR\CAT_SRCH2.br
-00020 ! search for an valid caterories for this job
-00030 !
-00040   def library fncat_srch2(&cn$,&ckey;fixgrid)
-00050     library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fncno,fngethandle,fnCmdKey
-00060     on error goto Ertn
-00070 !
-00080     dim item$(2)*40,resp$(30)*80
-00090 !
-00100     jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
-00110     fncno(cno)
-00120     category=16 ! category file in jcmaint
-00130 !
-00140     fnTos(sn$="CatSrch")
-00150     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
-          mat ch$(2) : mat cm$(2) : mat cm$=("2")
-00160     fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
-00170     restore #category: 
-00180 READ_FILE: ! 
-00190     read #category,using 'Form POS 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
-00200     fnflexadd1(mat item$)
-00210     goto READ_FILE
-00220 !
-00230 ERR_READ: ! 
-00240     if err<>61 then goto ERTN
-00250     pr 'Record locked during cat_search flexgrid creation' !:
-          pr 'It was skipped' !:
-          read #category,release: !:
-          goto READ_FILE
-00260 !
-00270 L270: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00280     fnCmdKey("&Add",97,0,0,"Add a new category record." ) !:
-          fnCmdKey("&Edit",98,0,0,"Review or change category breakdown record." ) !:
-          fnCmdKey("Re&view Details",95,1,0,"Review detail transactions") !:
-          fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") !:
-          fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") !:
-          fnCmdKey("D&uplicate",12,0,1,"Duplicates all Caterories from anouther existing job.") !:
-          fnCmdKey("E&xit",6,0,1,"Returns to main screen.")
-00290     fnAcs(sn$,0,mat resp$,ckey) !:
-          ! CALL FLEXGRID
-00300     cn$=lpad$(resp$(1),11)
-00310     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected
-00320     goto XIT
-00330 !
-00340 ! <Updateable Region: ERTN>
-00350 ERTN: fnerror(program$,err,line,act$,"xit")
-00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
-00400 ! /region
-00410 !
-00420 XIT: fnend 
-00430 !
+! replace S:\acsPR\CAT_SRCH2.br
+! search for an valid caterories for this job
+ 
+def library fncat_srch2(&cn$,&ckey;fixgrid)
+		autoLibrary
+		on error goto Ertn
+ 
+		dim item$(2)*40,resp$(30)*80
+ 
+		jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
+		category=16 ! category file in jcmaint
+ 
+		fnTos(sn$="CatSrch")
+		ch$(1)="Job & Category": ch$(2)="Category Name" : : _
+		mat ch$(2) : mat cm$(2) : mat cm$=("2")
+		fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
+		restore #category:
+READ_FILE: !
+		read #category,using 'Form POS 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
+		fnflexadd1(mat item$)
+		goto READ_FILE
+ 
+ERR_READ: !
+		if err<>61 then goto ERTN
+		pr 'Record locked during cat_search flexgrid creation' : _
+		pr 'It was skipped' : _
+		read #category,release: : _
+		goto READ_FILE
+ 
+L270: ! If FIXGRID=99 Then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
+		fnCmdKey("&Add",97,0,0,"Add a new category record." ) : _
+		fnCmdKey("&Edit",98,0,0,"Review or change category breakdown record." ) : _
+		fnCmdKey("Re&view Details",95,1,0,"Review detail transactions") : _
+		fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") : _
+		fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") : _
+		fnCmdKey("D&uplicate",12,0,1,"Duplicates all Caterories from anouther existing job.") : _
+		fnCmdKey("E&Xit",6,0,1,"Returns to main screen.")
+		fnAcs(sn$,0,mat resp$,ckey) : _
+		! CALL FLEXGRID
+		cn$=lpad$(resp$(1),11)
+		if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected
+		goto Xit
+ 
+ 
+Xit: fnend
+include: Ertn

@@ -1,19 +1,19 @@
 ! GreeneCo - Melissa
 ! Fred Cook
 ! 102068.00
-!  is missing a lot of newer transactions 
+!  is missing a lot of newer transactions
 ! transaction import process stopped around 9/01/2010
 ! we need the remainder of the transactions imported.
-
+ 
 fn_setup
 if env$('acsDeveloper')<>'' then
-	open #hOld:=fngethandle: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',internal,input,relative 
+	open #hOld:=fngethandle: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',internal,input,relative
 else
 	open #hOld:=fngethandle: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',internal,input
 end if
 dim tg(11)
 hTrans=fn_open('UB Transaction',mat t$,mat tN,mat form$)
-
+ 
 	do
 		read #hOld,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EoOld
 		if ~fn_transAlreadyExist(p$,tdate,tcode,tamount) then
@@ -49,8 +49,7 @@ Xit: stop
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle,fnXit
-		library 'S:\Core\Library': fnbuildkey$
+		autoLibrary
 	end if
 fnend
 def fn_transAlreadyExist(p$,tdate,tcode,tamount; ___,returnN,taeKeyMatch)
@@ -82,4 +81,4 @@ def fn_transAlreadyExist(p$,tdate,tcode,tamount; ___,returnN,taeKeyMatch)
 	fn_transAlreadyExist=returnN
 fnend
 include: fn_open
-include: ertn
+include: Ertn

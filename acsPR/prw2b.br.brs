@@ -1,26 +1,26 @@
 !  Replace S:\acsPR\prW2b
-! pr W-2s for second state - chained to from newprw2a (now Payroll\PrintW2Forms)  though (9/27/2016) 
+! pr W-2s for second state - chained to from newprw2a (now Payroll\PrintW2Forms)  though (9/27/2016)
 	! FORM TYPE 22222 FOR WAGE AND TAX STATEMENT  - 1993
-
-library 'S:\Core\Library': fnopenprn,fncloseprn,fngethandle,fnxit
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim em$(3)*30,ss$*11,d(14),w(12),s(12),t(12),ta(1)
 dim a$(3)*40,b$*12,f$*8,g$*8,h$*8,d$(10)*8,e$(10)*12
 dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),eno$*8
-
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+ 
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 read #1,using L140: mat a$,b$,mat d$,loccode,mat e$
 L140: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
-close #1: 
+close #1:
 pr newpage
 pr f "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
 pr f "12,15,C 60": "PRESS ENTER TO CONTINUE:"
 input fields "12,40,C 1,I,N": pause$
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-open #2: "Name=[Q]\PRmstr\PRW2ADDR.h[cno],NoShr",internal,input 
-open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input,relative 
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #2: "Name=[Q]\PRmstr\PRW2ADDR.h[cno],NoShr",internal,input
+open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input,relative
 read #hAddr,using 'form pos 1,n 10.2,n 1',rec=1: ficamax,w1
 ficamaw=ficamax*10
 first=1
@@ -45,8 +45,8 @@ ADDR_LOOP_TOP: ! r:
 	L430: !
 	oldeno=eno
 	oldtcd=tcd
-goto ADDR_LOOP_TOP 
-EMP_READ: ! 
+goto ADDR_LOOP_TOP
+EMP_READ: !
 	eno$=lpad$(str$(oldeno),8)
 	read #1,using 'form pos 9,3*c 30,c 11',key=eno$: mat em$,ss$
 	g$=ltrm$(eno$)
@@ -62,12 +62,12 @@ EMP_READ: !
 	oldtcd=tcd
 goto EMP_READ ! /r
 FINIS: ! r:
-	close #1: 
-	close #2: 
-	close #hAddr: 
-	fncloseprn 
-goto XIT ! /r 
-XIT: fnxit
+	close #1:
+	close #2:
+	close #hAddr:
+	fncloseprn
+goto Xit ! /r
+Xit: fnXit
 PRINTW2: ! r: pr W2 FORM
 	fnopenprn
 	! if rtrm$(file$(255))="PRN:/SELECT" then pr #255,using ' form pos 1,c 9': hex$("2B0205000A1021")

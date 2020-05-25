@@ -1,7 +1,7 @@
-library 'S:\Core\Library': fntop,fnxit, fnH2Init,fnH2AddText,fnH2AddComboA,fnHamster2
+autoLibrary
 on error goto Ertn
 gosub Enum
-fntop(program$)
+fnTop(program$)
 fnH2Init
 fnH2AddText("eno"                   ,8                           )
 fnH2AddText("dep"                   ,3                           )
@@ -37,19 +37,19 @@ fnH2AddText("inp(29)"               ,7,"PD",5.2,mask_pointtwo,147)
 fnH2AddText("GPD"                   ,7,"PD",5.2,mask_pointtwo,152)
 fnH2AddText("hr(1)"                 ,7,"PD",4.2,mask_pointtwo,157)
 fnH2AddText("hr(2)"                 ,7,"PD",4.2,mask_pointtwo,161)
-
+ 
 fn_open_file : fn_close_file : fn_open_file
 fnHamster2("RPWork")
 fn_close_file
-goto XIT
-
+goto Xit
+ 
 def fn_open_file
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: 'Name=[Q]\PRmstr\rpwork01.h[cno],Version=0,KFName=[Q]\PRmstr\rpwork01Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',internal,outIn,keyed 
-fnend 
+	open #open_file_count+=1: 'Name=[Q]\PRmstr\rpwork01.h[cno],Version=0,KFName=[Q]\PRmstr\rpwork01Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',internal,outIn,keyed
+fnend
 def fn_close_file
 	for j=1 to open_file_count : close #j: : next j
 fnend
-XIT: fnxit
+Xit: fnXit
 include: Enum
 include: Ertn

@@ -3,7 +3,7 @@ fnTop(program$)
 fn_premierCardiologyImport('allData')
 fnXit
 def library fnPremierCardiologyImport(; sourceId$)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	fnPremierCardiologyImport=fn_premierCardiologyImport( sourceId$)
 fnend
 def  fn_premierCardiologyImport(; sourceId$)
@@ -1572,7 +1572,7 @@ def fn_reportClosedEncounter(oc$,fileno$,forwNo$,forwFileNo$,Balance$,BalanceNew
 
 	if ~reportClosedEncounter_init then
 		reportClosedEncounter_init=1
-		fnSel(1024, 'Select Output',255, '','HTML')
+		fn_sel(1024, 'Select Output',255, '','HTML')
 		if fkey=93 or fkey=99 then pr 'unexpected cancel' : pause
 		pr #255: '</pre>'
 		pr #255: '<table algin="Center">'

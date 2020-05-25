@@ -1,6 +1,5 @@
 def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
-	library 'S:\Core\Library': fnbooktitle$
-	library 'S:\Core\Library': fnGetHandle
+	autoLibrary
 	! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 	! to create your own file instead of using this program, store the description,variable name,field length,# of deciaml points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
 	! if you create the display file, as just described, create a folder under your program folder called GRID; a subfolder such as CUSTOMER which will be referred to in the grid program as the data base you are using.  You can have any number of these subfolders (actually one for each file you are allowing them to access with the grid programs.
@@ -119,7 +118,7 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 	close #2: ioerr ignore
 	close #15: ioerr ignore
 	gosub MoveItToText
-	XIT: !
+	Xit: !
 fnend
 !
 MoveItToText: ! r:
@@ -137,4 +136,4 @@ MoveItToText: ! r:
 	close #hMiitOut:
 	hMiitOut=0
 return ! /r
-include: ertn
+include: Ertn

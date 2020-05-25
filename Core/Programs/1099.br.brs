@@ -40,7 +40,7 @@ def library fn1099print_close
 		ten99initialized=0
 fnend
 def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~ten99initialized then ! r: initialize output destination (if necessary)
 		dim a$(3)*40
 		if env$('CurSys')='PR' then
@@ -165,7 +165,7 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		end if
 		! /r
 	end if
-	XIT: !
+	Xit: !
 fnend
 def fn_line(lineNumber)
 	if lineNumber=1  then
@@ -212,7 +212,7 @@ fnend
 def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	if ~awi_setup then ! r:
 		awi_setup=1
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		! r: read or set values for ASK_INFO screen
 		taxYear$=date$(days(date$)-180,'CCYY')
 		if env$('CurSys')='PR' then

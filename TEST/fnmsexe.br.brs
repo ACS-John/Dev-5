@@ -1,3 +1,3 @@
-library 'S:\Core\Library': FNMSEXE$
+autoLibrary
 pr FNMSEXE$("winword.exe")
 end

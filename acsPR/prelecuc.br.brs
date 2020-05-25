@@ -1,19 +1,12 @@
 ! REPLACE S:\acsPR\prElecuc
-! never could get it work with an RO record if all zeroes; without 
-! RO record i had to put an RE record in front of every RW record and 
-! had to follow with an RT record - Right now this program will not 
+! never could get it work with an RO record if all zeroes; without
+! RO record i had to put an RE record in front of every RW record and
+! had to follow with an RT record - Right now this program will not
 ! create an RO record
-
-library 'S:\Core\Library': fntop,fnXit
-library 'S:\Core\Library': fngethandle
-library 'S:\Core\Library': fnCopy
-library 'S:\Core\Library': fnWin3b
-library 'S:\Core\Library': fnopenprn,fncloseprn
-library 'S:\Core\Library': fnconsole
-library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd
-library 'S:\Core\Library': fnOldMsgBox
+ 
+autoLibrary
 on error goto Ertn
-
+ 
 dim em$(3)*30
 dim ss$*11
 dim ty(21)
@@ -48,17 +41,17 @@ dim last$*20
 dim m(10)
 dim r(10)
 dim e$(10)*12
-
-fntop(program$,cap$="Electronic U/C")
+ 
+fnTop(program$,cap$="Electronic U/C")
 fnconsole(1)
-
-on fkey 5 goto XIT
-
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+ 
+on fkey 5 goto Xit
+ 
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
-close #1: 
-
+close #1:
+ 
 do
 	p1=pos(b$,"-",1)
 	if p1=0 then goto L340
@@ -91,11 +84,11 @@ io1$(14)="19,57,c 1,UT,N"
 io1$(15)="20,49,c 1,UT,N"
 namcde$="F"
 typemp$="R"
-
+ 
 SCR1: ! r:
 	pr newpage
 	close #101: ioerr ignore
-	open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outIn 
+	open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outIn
 	pr f "3,15,C 51,R,N": "  Insert diskette for elecronic U/C in drive A:"
 	pr f "5,5,C 60": "Company Name:"
 	pr f "6,5,C 60": "Street Address:"
@@ -130,8 +123,8 @@ SCR1: ! r:
 	ce=cnt+1
 	ERR1: !
 	pr f "24,78,C 1": bell : goto L890
-	L940: ! 
-	if cmdkey=5 then goto XIT
+	L940: !
+	if cmdkey=5 then goto Xit
 	if rtrm$(a$(1))="" then ce=1: goto ERR1
 	if rtrm$(a$(2))="" then ce=2: goto ERR1
 	if rtrm$(ct$)="" then ce=3: goto ERR1
@@ -150,13 +143,13 @@ SCR1: ! r:
 	yr=endingdate-(int(endingdate/100)*100)+2000
 ! falls through ! /r
 gosub SCR2
-
-open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative 
-open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output 
+ 
+open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
+open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output
 goto BEGINNING_OF_FILE
-
-
+ 
+ 
 BEGINNING_OF_FILE: ! r:
 	gosub RECRA
 	gosub RECRE
@@ -190,7 +183,7 @@ READ_EMPLOYEE: ! r:
 	gosub RECRS
 	tw1=tw1+1 ! counter
 goto READ_EMPLOYEE ! /r
-
+ 
 RECRA: ! r:
 	pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 	L1580: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
@@ -232,14 +225,14 @@ END1: ! r:
 	fncloseprn
 	gosub L2040
 goto Xit ! /r
-Xit: fnxit
-
+Xit: fnXit
+ 
 L2040: ! r:
 	dim a$*512
 	close #24: ioerr ignore
 	close #22: ioerr ignore
-	open #24: "Name=X,RecL=514,EOL=NONE,REPLACE",external,output 
-	open #22: "Name=[Q]\UCReport,RecL=512",display,input 
+	open #24: "Name=X,RecL=514,EOL=NONE,REPLACE",external,output
+	open #22: "Name=[Q]\UCReport,RecL=512",display,input
 	do
 		linput #22: a$ eof L2140
 		if a$(512:512)="X" then a$(512:512)=""
@@ -247,8 +240,8 @@ L2040: ! r:
 		L2120: form pos 1,c 512,c 1,c 1
 	loop
 	L2140: !
-	close #24: 
-	close #22: 
+	close #24:
+	close #22:
 	savelocation$=trim$(savelocation$)
 	if savelocation$(len(savelocation$):len(savelocation$))<>"\" then savelocation$=savelocation$&"\"
 	fnCopy('x',savelocation$&"[Q]\UCReport")
@@ -256,25 +249,25 @@ return ! /r
 SCR2: ! r:
 	dim contact$*27,email$*40,savelocation$*40
 	fnWin3b(win,cap$,win_height=13,win_width=75,display_cnam=1,button_option=2)
-	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" 
-	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" 
-	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" 
-	pr #win,fields "07,2,Cr 31,N": "Contact Name:" 
-	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:" 
-	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:" 
-	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:" 
-	pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:" 
-	pr #win,fields "12,2,Cr 66,N": "Is Medicare W/H a separate field in the employee record (Y/N):" 
+	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:"
+	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:"
+	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:"
+	pr #win,fields "07,2,Cr 31,N": "Contact Name:"
+	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:"
+	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:"
+	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:"
+	pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:"
+	pr #win,fields "12,2,Cr 66,N": "Is Medicare W/H a separate field in the employee record (Y/N):"
 	pr #win,fields "13,2,Cr 25,N": "Location to save output:"
-	scr2_io$(1)="04,34,C 17,UT,N" 
-	scr2_io$(2)="05,34,C 01,UT,N" 
-	scr2_io$(3)="06,34,C 06,UT,N" 
-	scr2_io$(4)="07,34,C 27,UT,N" 
-	scr2_io$(5)="08,34,C 15,UT,N" 
-	scr2_io$(6)="09,34,C 05,UT,N" 
-	scr2_io$(7)="10,34,C 40,UT,N" 
-	scr2_io$(8)="11,34,C 01,UT,N" 
-	scr2_io$(9)="12,68,Cu 01,UT,N" 
+	scr2_io$(1)="04,34,C 17,UT,N"
+	scr2_io$(2)="05,34,C 01,UT,N"
+	scr2_io$(3)="06,34,C 06,UT,N"
+	scr2_io$(4)="07,34,C 27,UT,N"
+	scr2_io$(5)="08,34,C 15,UT,N"
+	scr2_io$(6)="09,34,C 05,UT,N"
+	scr2_io$(7)="10,34,C 40,UT,N"
+	scr2_io$(8)="11,34,C 01,UT,N"
+	scr2_io$(9)="12,68,Cu 01,UT,N"
 	scr2_io$(10)="13,27,C 40,UT,N"
 	if resub$="" then resub$="0"
 	! If TLCN$="" Then tLCN$="0"
@@ -300,10 +293,10 @@ SCR2: ! r:
 	if terminat$<>"0" and terminat$<>"1" then ce=8 : goto ERR_SCR2
 	if uprc$(med$)="Y" or uprc$(med$)="N" then goto L2410 else ce=9: goto ERR_SCR2
 	L2410: !
-	close #win: 
+	close #win:
 	if cmdkey=5 then goto SCR1
 return ! /r
-
+ 
 NAME_BREAKDOWN: ! r:
 	dim first$*15,mid$*15,last$*20,em$(3)*30
 	em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
@@ -337,9 +330,9 @@ STATE_BREAKDOWN: ! r: extract state name
 	next j
 	L3960: !
 	for j=1 to 10
-		if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then 
-			goto L3980 
-		else 
+		if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then
+			goto L3980
+		else
 			p4=p4-1
 			holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j)
 			goto L3990
@@ -355,10 +348,10 @@ return ! /r
 CALCULATEUC: ! r: determine quarterly wages
 	dcy=dcq=0
 	for j=1 to 10
-		if dedfed(j)=2 and dedcode(j)=1 and cafiteria$="Y" then 
+		if dedfed(j)=2 and dedcode(j)=1 and cafiteria$="Y" then
 			dcy=dcy+ty(j+3): dcq=dcq+tqm(j+3)
 		end if
-		if dedfed(j)=1 and dedcode(j)=1 and pension$="Y" then 
+		if dedfed(j)=1 and dedcode(j)=1 and pension$="Y" then
 			dcy=dcy+ty(j+3): dcq=dcq+tqm(j+3)
 		end if
 	next j

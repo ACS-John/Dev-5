@@ -32,7 +32,7 @@ def fn_replaceLFwithSpace$*256(csvFile$*256; ___,line$*1024,outFile$*300, _
 fnend
 def fn_chunkOpen(filename$*80,&vrec,&chunk,&rpos,&file_size,&trec,&head)
 	dim wb_results(1)
-	fnwbheader(filename$,mat wb_results)
+	fn_readBrIntro(filename$,mat wb_results)
 	vrec=wb_results(4)+1
 	trec=wb_results(4) 
 	rpos=wb_results(5)+1
@@ -53,7 +53,7 @@ def fn_chunkOpen(filename$*80,&vrec,&chunk,&rpos,&file_size,&trec,&head)
 	goto L4746
 	L4746: !
 fnend
-def fnwbheader(filname$*80,mat results; ___,hTmp)
+def fn_readBrIntro(filname$*80,mat results; ___,hTmp)
 	hTmp=fngethandle
 	mat results(7)=(0) 
 	! 1 = LastRec 
@@ -76,7 +76,7 @@ def fnwbheader(filname$*80,mat results; ___,hTmp)
 		results(7)=-err
 	goto WbhXit ! /r
 	WbhXit: ! 
-	fnwbheader=results(7)
+	fn_readBrIntro=results(7)
 fnend 
 def library fnRemoveExcessCRLF$*256(csvFile$*256; minColCount, ___, _
 						return$*256,hIn,hOut,line$*1024,delim$,lineCount, _
@@ -173,12 +173,7 @@ def fn_setup
 	on error goto Ertn
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library.br': fnAddOneC,fnAddOneN
-		library 'S:\Core\Library.br': fnGetHandle
-		library 'S:\Core\Library.br': fnChrCount
-		library 'S:\Core\Library.br': fnPause
-		library 'S:\Core\Library.br': fnFree
-		library 'S:\Core\Library.br': fnCopy
+		autoLibrary
 		gosub Enum
 
 	end if

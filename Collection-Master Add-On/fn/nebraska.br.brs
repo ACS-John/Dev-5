@@ -660,11 +660,11 @@ def fn_addCounty(countyNumber$*2,countyName$*40)
 	fnAddOneC(mat countyNameList$,countyName$)
 fnend
 def fn_setup
-	library 'S:\Core\Library.br': fnAddOneC
+	autoLibrary
 	library 'S:\Core\Library.br': fn_srch_case_insensitive
 fnend
 def library fnNeCountyNumber$*2(countyName$*40; ___,return$*2,which)
-	if ~setup then let fn_setup
+	if ~setup then fn_setup
 	if ~setup_counties then 
 		pr 'replace this logic with a read of the file' : pause
 		! gosub SetupCounties

@@ -2,10 +2,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 	!	 top of (every) program function
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnAcsSystemInitialize
-		library 'S:\Core\Library': fnprg
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnBookTitle$
+		autoLibrary
 		on error goto Ertn
 	end if
 	pr newpage
@@ -43,10 +40,9 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		end if
 		if env$('CM_Core_Initialized')='' then
 			setenv('CM_Core_Initialized','Yes')
-			! library 'S:\Core\Library': fnapply_theme
 			! fnapply_theme
 			fnAcsSystemInitialize(2)
 		end if
 	end if
 fnend
-include: ertn
+include: Ertn

@@ -164,12 +164,12 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		fnCmdKey("Edi&t",opt_edit,1)
 		fnCmdKey("&Add",opt_add)
 		fnCmdKey("&Delete",opt_delete)
-		fnCmdKey("E&xit",opt_cancel,0,1)
+		fnCmdKey("E&Xit",opt_cancel,0,1)
 		fnAcs2(mat resp$,menu1_opt)
 		prec=val(resp$(1)) conv MENU1
 		if prec=0 and menu1_opt=opt_edit then menu1_opt=opt_add
 		if menu1_opt=opt_cancel then
-			goto XIT
+			goto Xit
 		else if menu1_opt=opt_add then
 			goto TO_ADD
 		else if menu1_opt=opt_edit then
@@ -371,7 +371,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		read #fin,using keyForm$,rec=prec: mat blank$
 		for j=1 to udim(blank$) : key$=key$&blank$(j) : next j
 	continue  ! not Return  ! not Retry ! /r
-	XIT: !
+	Xit: !
 fnend
 
 def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
@@ -387,4 +387,4 @@ def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
 	! pr 'return$='&return$ ! XXX
 	fn_setKeyForm$=return$
 fnend
-include: ertn
+include: Ertn

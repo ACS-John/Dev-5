@@ -1,6 +1,6 @@
 	! r: testing zone
 	!    fn_setup
-	!   fntop('W-3 Line Testing')
+	!   fnTop('W-3 Line Testing')
 	!   fnpa_open('','W-3','PDF')
 	!   fnpa_background('S:\Core\pdf\W-3.pdf')
 	!   for lyne=1 to 14
@@ -12,7 +12,7 @@
 	def fn_setup
 		if ~setup then
 			setup=1
-			library 'S:\Core\Library': fntop,fnxit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
+			library 'S:\Core\Library': fnTop,fnXit,fnchain,fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt,fnmsgbox,fnChk,fnpa_finis,fnerror,fnureg_read,fnureg_write,fnButton,fnCmdSet,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt,fnpa_background,fngethandle,fnDedNames,fnreg_read,fnreg_write,fncomboa
 			fnreg_read('W-3 - Enable Background'              ,enableBackground$   ,'True' )
 		end if
 	fnend
@@ -36,7 +36,7 @@
 		! dcb       deferred comp
 		! state$    
 		! stcode$   
-		if ~setup then let fn_setup
+		if ~setup then fn_setup
 		fnpa_open('','W-3','PDF')
 		if enableBackground$='True' then let fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 		fnpa_fontsize(12)

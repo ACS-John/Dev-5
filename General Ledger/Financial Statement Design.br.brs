@@ -1,26 +1,26 @@
 ! formerly S:\acsGL\financialstatement
 fn_setup
-fntop(program$)
-
+fnTop(program$)
+ 
 ScrMenu1: ! r:
 	fnTos(sn$="FsDesign")
 	mylen=20: mypos=mylen+3 : right=1
 	! fnFra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
 	frame=0 ! 1
-	fnOpt(1,2,id$(1),0,frame)  : resp$(1)="True"    
-	fnOpt(2,2,id$(2),0,frame)  : resp$(2)="False"   
-	fnOpt(3,2,id$(3),0,frame)  : resp$(3)="False"   
+	fnOpt(1,2,id$(1),0,frame)  : resp$(1)="True"
+	fnOpt(2,2,id$(2),0,frame)  : resp$(2)="False"
+	fnOpt(3,2,id$(3),0,frame)  : resp$(3)="False"
 	                                                fnOpt(1,35,id$(4),0,frame) : resp$(4)="False"
 	                                                fnOpt(2,35,id$(5),0,frame) : resp$(5)="False"
 	                                                fnOpt(3,35,id$(6),0,frame) : resp$(6)="False"
-	                                                
-	 
+	
+	
 	fnCmdKey("&Next",1,1,0,"Access the chosen financial statement design.")
 	fnCmdKey("&Build D Records",2,0,0,"Automaticly build all type D records (without having to rekey all descriptions).")
 	fnCmdKey("&Proof List",3,0,0,"Allows you to pr a proof list of the financial statement layout.")
 	fnCmdKey("&Close",5,0,1,"Return to main menu.")
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	if ckey=2 then chain "S:\acsGL\Bld_D_Records"
 	if resp$(1)="True" then selection=1
 	if resp$(2)="True" then selection=2
@@ -81,8 +81,8 @@ ScrGrid: ! r:
 	fnCmdKey("&Add"   ,1,0,0,"Allows you to add new financial statement reference numbers.")
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
-	fnCmdKey("E&xit"  ,5,0,1,"Exits to main menu")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnCmdKey("E&Xit"  ,5,0,1,"Exits to main menu")
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto IndexThenMenu1
 	add=edit=0
 	editRec=val(resp$(1)) ! (1:pos(resp$(1)&' ',' ')-1))
@@ -96,7 +96,7 @@ ScrGrid: ! r:
 		edit=1
 		read #hFSDesign,using F_FSDesign,rec=editRec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec ScrGrid
 		holdrno$=rno$
-		goto AddEdit 
+		goto AddEdit
 	else if ckey=8 then
 		read #hFSDesign,using F_FSDesign,rec=editRec,release: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec ScrGrid
 		gosub DeleteRef
@@ -151,7 +151,7 @@ AddEdit: ! r:
 	resp$(21)=str$(fc)
 	fnCmdKey("&Save",1,1,0,"Saves changes.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto ScrGrid
 	rno$=resp$(1)
 	rno$=lpad$(rtrm$(rno$),5)
@@ -172,7 +172,7 @@ AddEdit: ! r:
 	gosub AddEditValidation
 	if edit=1 then
 		if trim$(rno$)="" or trim$(rno$)="0" then goto AddEdit
-		if holdrno$<>rno$ and trim$(holdrno$)<>"" then 
+		if holdrno$<>rno$ and trim$(holdrno$)<>"" then
 			mat ml$(3)
 			ml$(1)="You are changing reference # "&holdrno$&" to "
 			ml$(2)="reference # "&rno$&".  Click OK to continue, else"
@@ -182,8 +182,8 @@ AddEdit: ! r:
 		end if
 		rewrite #hFSDesign,using F_FSDesign,rec=editRec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp
 		
-
-	else if add=1 then 
+ 
+	else if add=1 then
 		write #hFSDesign,using F_FSDesign: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp
 	end if
 goto ScrGrid ! /r
@@ -197,7 +197,7 @@ DeleteRef: ! r: delete a reference #
 	L1530: !
 	delete #hFSDesign,rec=editRec:
 goto ScrGrid ! /r
-
+ 
 AddEditValidation: ! r:
 	rno$=lpad$(rtrm$(rno$),5)
 	te$=uprc$(te$)
@@ -246,14 +246,14 @@ AddEditValidation: ! r:
 		fnmsgbox(mat ml$,resp$,'',49)
 		goto AddEdit
 	end if
-	if te$="E" and (ap<1 or ap>9) then 
+	if te$="E" and (ap<1 or ap>9) then
 		mat ml$(3)
 		ml$(1)="If the transaction type is an 'E' then you must"
 		ml$(2)="enter a valid accumulator to pr of 1 thru 9. "
 		ml$(3)="Click OK to fix."
 		fnmsgbox(mat ml$,resp$,'',49)
 		goto AddEdit
-	else if ap<0 or ap>9 then 
+	else if ap<0 or ap>9 then
 		mat ml$(3)
 		ml$(1)="The Accumulator to pr must be no less than 0 or "
 		ml$(2)="or no greater than 9. All other codes are invalid, "
@@ -262,7 +262,7 @@ AddEditValidation: ! r:
 		goto AddEdit
 	else
 		for j=1 to 9
-			if ac(j)<>0 and ac(j)<>1 and ac(j)<>9 then 
+			if ac(j)<>0 and ac(j)<>1 and ac(j)<>9 then
 				mat ml$(3)
 				ml$(1)="Accumulator to clear must be a 0,1, or 9."
 				ml$(2)="All other codes are invalid, "
@@ -299,7 +299,7 @@ def fn_print_proof_hdr
 	pr #255,using L2170: "Ref #","Description","Entry","Print","Skip","Sign","Line","Sign","Col","Print","1","2","3","4","5","6","7","8","9","Item","Code"
 	L2170: form pos 1,c 5,x 19,c 11,x 16,c 5,x 3,c 5,x 2,c 4,x 1,c 4,x 2,c 4,x 1,c 4,x 1,c 3,x 1,c 5,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 1,c 4,x 1,c 4,skip 2
 fnend
-XIT: fnxit
+Xit: fnXit
 ! r: (UNUSED) Initial build all financial statements
 	close #1: ioerr ignore
 	open #hFSDesign=1: "Name=[Q]\GLmstr\"&fil$(f1)&",NoShr",internal,output
@@ -316,58 +316,57 @@ DeleteCorruptRecord: ! r:
 	reread #hFSDesign,using F_FSDesign: rno$ noRec READ_FIN_STMT,eof EO_FIN_STMT_GRID,ioerr ignore
 	delete #hFSDesign,key=rno$:
 goto READ_FIN_STMT ! /r
-include: ertn
+include: Ertn
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnTos,fnFra,fnOpt,fnCmdKey,fnAcs,fndat,fnflexinit1,fnflexadd1,fnLbl,fnTxt,fnChk,fncomboa,fnmsgbox
-		library 'S:\Core\Library': fnAddOneC
+		autoLibrary
 		on error goto Ertn
-
+ 
 		dim ac(9)
 		dim ml$(4)*80
 		dim resp$(25)*256
-
+ 
 		dim choice$*55
-
+ 
 		hp1=66-int(len(rtrm$(env$('cnam')))/2)
 		hp2=66-int(len(rtrm$(date$("Month DD, CCYY")))/2)
 	
 		dim id$(6)*40                           , fil$(6)*18                , idx$(6)*18
-		id$(1)=" 1. Balance Sheet"              : fil$(1)="ACGLFNSB.H[cno]" : idx$(1)="FNSBINDX.H[cno]"
-		id$(2)=" 2. Income Statement"           : fil$(2)="ACGLFNSI.H[cno]" : idx$(2)="FNSIINDX.H[cno]"
-		id$(3)=" 3. Fund Statement / Cash Flow" : fil$(3)="ACGLFNSF.H[cno]" : idx$(3)="FNSFINDX.H[cno]"
-		id$(4)=" 4. Secondary Balance Sheet"    : fil$(4)="ACGLFNSC.H[cno]" : idx$(4)="FNSCINDX.H[cno]"
-		id$(5)=" 5. Secondary Income Statement" : fil$(5)="ACGLFNSJ.H[cno]" : idx$(5)="FNSJINDX.H[cno]"
-		id$(6)=" 6. Secondary Fund / Cash Flow" : fil$(6)="ACGLFNSG.H[cno]" : idx$(6)="FNSGINDX.H[cno]"
+		id$(1)=" 1. Balance Sheet"              : fil$(1)="ACGLFNSB.H[cno]" : idx$(1)="agfsidx4.H[cno]"
+		id$(2)=" 2. Income Statement"           : fil$(2)="ACGLFNSI.H[cno]" : idx$(2)="agfsidx3.H[cno]"
+		id$(3)=" 3. Fund Statement / Cash Flow" : fil$(3)="ACGLFNSF.H[cno]" : idx$(3)="agfsidx5.H[cno]"
+		id$(4)=" 4. Secondary Balance Sheet"    : fil$(4)="ACGLFNSC.H[cno]" : idx$(4)="agfsidx1.H[cno]"
+		id$(5)=" 5. Secondary Income Statement" : fil$(5)="ACGLFNSJ.H[cno]" : idx$(5)="agfsidx2.H[cno]"
+		id$(6)=" 6. Secondary Fund / Cash Flow" : fil$(6)="ACGLFNSG.H[cno]" : idx$(6)="agfsidx6.H[cno]"
 		! r: Column headers
 		ic=0 ! temporary Item Counter
 		number$="30"
-		! Field Labels               Field Masks              
+		! Field Labels               Field Masks
 		mat chdr$(24)              : mat cmask$(24)
-		chdr$(ic+=1)="Ref #"       : cmask$(ic)=number$ 
-		chdr$(ic+=1)="F/S #"       : cmask$(ic)=""      
-		chdr$(ic+=1)="Description" : cmask$(ic)=""      
-		chdr$(ic+=1)="Type"        : cmask$(ic)=""      
-		chdr$(ic+=1)="Pos"         : cmask$(ic)=number$ 
-		chdr$(ic+=1)="LineSkip"    : cmask$(ic)=number$ 
-		chdr$(ic+=1)="$"           : cmask$(ic)=number$ 
-		chdr$(ic+=1)="UndrL"       : cmask$(ic)=number$ 
-		chdr$(ic+=1)="RevSign"     : cmask$(ic)=number$ 
-		chdr$(ic+=1)="BS Col"      : cmask$(ic)=number$ 
-		chdr$(ic+=1)="PrAccum"     : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum1"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum2"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum3"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum4"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum5"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum6"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum7"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum8"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="ClrAccum9"   : cmask$(ic)=number$ 
-		chdr$(ic+=1)="Base%"       : cmask$(ic)=number$ 
-		chdr$(ic+=1)="CostCntr"    : cmask$(ic)=number$ 
-		chdr$(ic+=1)="Abbrv Name"  : cmask$(ic)=""     
+		chdr$(ic+=1)="Ref #"       : cmask$(ic)=number$
+		chdr$(ic+=1)="F/S #"       : cmask$(ic)=""
+		chdr$(ic+=1)="Description" : cmask$(ic)=""
+		chdr$(ic+=1)="Type"        : cmask$(ic)=""
+		chdr$(ic+=1)="Pos"         : cmask$(ic)=number$
+		chdr$(ic+=1)="LineSkip"    : cmask$(ic)=number$
+		chdr$(ic+=1)="$"           : cmask$(ic)=number$
+		chdr$(ic+=1)="UndrL"       : cmask$(ic)=number$
+		chdr$(ic+=1)="RevSign"     : cmask$(ic)=number$
+		chdr$(ic+=1)="BS Col"      : cmask$(ic)=number$
+		chdr$(ic+=1)="PrAccum"     : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum1"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum2"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum3"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum4"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum5"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum6"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum7"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum8"   : cmask$(ic)=number$
+		chdr$(ic+=1)="ClrAccum9"   : cmask$(ic)=number$
+		chdr$(ic+=1)="Base%"       : cmask$(ic)=number$
+		chdr$(ic+=1)="CostCntr"    : cmask$(ic)=number$
+		chdr$(ic+=1)="Abbrv Name"  : cmask$(ic)=""
 	
 		dim option2$(10)*55
 		option2$(1) ="D = Detail (Pulls amounts from G/L accounts)"

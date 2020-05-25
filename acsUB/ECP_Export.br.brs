@@ -1,7 +1,7 @@
 ! similar to S:\Utility Billing\Create Hand Held File
 ! -- Tranfer Data From Computer to Hand Held
 ! r: setup
-	library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnAcs,fnxit,fncno,fnCmdSet,fntop,fnmsgbox,fnTxt,fngethandle,fnclient_has,fnureg_read,fnureg_write,fnget_services
+	autoLibrary
 	on error goto Ertn
 !
 	dim gb(10),ab$(3)*30
@@ -16,43 +16,43 @@
 	dim exp_filename$*256
 !
 	fncno(cno)
-	fntop(program$,cap$="Export for External Collections Process")
-! 
-	if ~fnclient_has('U5') then 
+	fnTop(program$,cap$="Export for External Collections Process")
+!
+	if ~fnclient_has('U5') then
 		mat m$(2)
 		m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 		m$(2)="module to access these features"
 		fnmsgbox(mat m$, response$, cap$,64)
-		goto XIT
-	end if 
-! 
+		goto Xit
+	end if
+!
 	fnget_services(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 	delim$=chr$(9)
-! 
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
-	open #h_alt_bill:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
-! 
+!
+	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #h_alt_bill:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+!
 	fnureg_read('ECP Export Filename',exp_filename$)
 	if exp_filename$='' then exp_filename$=os_filename$(env$('Desktop'))&"\ACS_ECP_Export.txt"
 ! /r
-MENU1: ! 
+MENU1: !
 	fnTos(sn$="ecp_export")
 	fnLbl(1,1,"Destination Path and File Name:",34,1)
 	fnTxt(1,36,40,256,0,"71")
 	resp$(1)=exp_filename$
 	fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	exp_filename$=resp$(1)
-! 
+!
 	open #h_ecp:=fngethandle: "Name="&env$('at')&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 	exp_filename$=os_filename$(file$(h_ecp))
 	fnureg_write('ECP Export Filename',exp_filename$)
 ! restore #h_customer:
 ! r: main loop
 	gosub HEADER ! work in progress
-	do 
+	do
 		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,mat extra$ eof FINIS
 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,pos 1864,c 30,7*c 12,3*c 30
 		gosub ALT_BILL_ADR
@@ -213,22 +213,22 @@ HEADER: ! r:
 	pr #h_ecp: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
 	pr #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)
 	return  ! /r
-
+ 
 FINIS: ! r: Transfer to or from Hand Held Computer
 	close #h_customer: ioerr ignore
 	close #h_alt_bill: ioerr ignore
 	close #h_ecp: ioerr ignore
 	fn_report_created_file(exp_filename$)
-	goto XIT ! /r
-XIT: fnxit
+	goto Xit ! /r
+Xit: fnXit
 ! IGNORE: continue
 	def fn_report_created_file(exp_filename_report$*512)
 		dim m$(2)*512
-		if exp_filename_report$<>'' and exp_filename_report$<>':CON:' then 
+		if exp_filename_report$<>'' and exp_filename_report$<>':CON:' then
 			mat m$(2)
 			m$(1)="External Collections File created:"
 			m$(2)=os_filename$(exp_filename_report$)
 			fnmsgbox(mat m$, response$, cap$,64)
-		end if 
-	fnend 
-include: ertn
+		end if
+	fnend
+include: Ertn

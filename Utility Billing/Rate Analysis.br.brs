@@ -1,22 +1,11 @@
 ! formerly S:\acsUB\Analyze
 ! r: setup
-	library 'S:\Core\Library': fntop,fnxit
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnTos
-	library 'S:\Core\Library': fncombof,fnLbl,fnTxt,fnFra,fnAcs
-	library 'S:\Core\Library': fnLastBillingDate
-	library 'S:\Core\Library': fnCmdSet
-	library 'S:\Core\Library': fnget_services
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnaddone$
-	library 'S:\Core\Library': fnmsgbox
-	library 'S:\Core\Library': fnCustomerData$
-	library 'S:\Core\Library': fnCloseFile
+	autoLibrary
 	on error goto Ertn
-
+ 
 	dim resp$(40)*80
-
-	fntop(program$)
+ 
+	fnTop(program$)
 	fnLastBillingDate(bdate) : billingDay=days(bdate,'mmddyy')
 	dim srvnam$(10)*20,srv$(10)
 	fnget_services(mat srvnam$,mat srv$)
@@ -32,8 +21,8 @@ SCR1: ! r:
 	usa+=1
 	resp$(rc+=1)="" ! just default to the first one
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
-	if ckey=5 then goto XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	bdate=val(resp$(1)) : billingDay=days(bdate,'mmddyy')
 	dim rateToAnalyze$*80
 	rateToAnalyze$=trim$(resp$(2))
@@ -86,14 +75,14 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 		resp$(rc+=1)=rt$(rtc+=1)
 	next j
 	fnCmdSet(8)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=2 then
 		goto SCR1
 	else if ckey=5 then
-		goto XIT
+		goto Xit
 	end if
 	dim rate(11)
-
+ 
 	use_from( 1)=0              : use_to( 1)=val(resp$(3))  : rate( 1)=val(resp$( 2))
 	use_from( 2)=val(resp$( 4)) : use_to( 2)=val(resp$(5))  : rate( 2)=val(resp$( 6))
 	use_from( 3)=val(resp$( 7)) : use_to( 3)=val(resp$(8))  : rate( 3)=val(resp$( 9))
@@ -179,7 +168,7 @@ DONE: ! r:
 	fnclosefile(hTrans,'UB Transaction')
 	fnCustomerData$('','',0)
 	fncloseprn
-goto XIT ! /r
+goto Xit ! /r
 def fn_whichTier(value,mat fromN,mat toN; ___,returnN,x)
 	for x=1 to udim(mat fromN)
 		if value=>fromN(x) and value<=toN(x) then
@@ -191,6 +180,6 @@ def fn_whichTier(value,mat fromN,mat toN; ___,returnN,x)
 	WhichTierFinis: !
 	fn_whichTier=returnN
 fnend
-XIT: fnxit
+Xit: fnXit
 include: fn_open
-include: ertn
+include: Ertn

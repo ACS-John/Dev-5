@@ -1,5 +1,5 @@
-library 'S:\Core\Library': fngethandle
-
+autoLibrary
+ 
 !  dim internal_data$(0)*60,internal_data(0)
 !  dim internal_fieldsc$(0)*20,internal_fieldsn$(0)*20
 !  dim internal_fc$(1,3)*80,internal_fn$(1,3)*80
@@ -21,5 +21,5 @@ do
 	read #h,using iform$: fileno2$,dno2,rel2,type$,no,acct_no$
 	pr fileno2$;' ';dno2;' ';rel2type$;' ';no;' ';acct_no$
 loop while fileno$=fileno2$
-
-
+ 
+ 

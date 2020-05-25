@@ -1,13 +1,13 @@
 ! formerly S:\acsUB\ubPDTnOf
 ! r: initial stuff
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTxt,fnerror,fnTos,fnopenprn,fncloseprn,fnxit,fncomboa,fnFra,fnLastBillingDate,fnCmdSet,fntop,fnChk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
+	autoLibrary
 	on error goto Ertn
-! 
+!
 	dim resp$(20)*80
 	dim z$*10,e$*30,g(12),metradr$*30
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),month(4),dat$*20
-! 
-	fntop(program$)
+!
+	fnTop(program$)
 	fnLastBillingDate(lbill)
 	fndat(dat$)
 	dim opt_aai$(3)
@@ -22,7 +22,7 @@
 	fncreg_read('ubpdtnof.pr_s4_meter_number',pr_s4_meter_number$,'False')
 	fncreg_read('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$,'False')
 	fncreg_read('ubpdtnof.accountSequence',accountSequence$,'True')
-
+ 
 	dim srvnam$(10)*20,srv$(10)*2
 	fnget_services(mat srvnam$,mat srv$)
 ! /r
@@ -30,7 +30,7 @@
 	fnTos(sn$="UBPdTnOf")
 	mylen=21 : mypos=mylen+2
 	fnFra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
-
+ 
 	fnLbl(1,1,"Current Month:",mylen,1,0,1)
 	fnTxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
 	resp$(1)=""
@@ -61,8 +61,8 @@
 	fnChk(17,40,"Account Sequence",1)
 	resp$(rc_accountSequence:=12)=accountSequence$
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ck)
-	if ck=5 then goto XIT
+	fnAcs2(mat resp$,ck)
+	if ck=5 then goto Xit
 	for j=1 to 3
 L400: x=pos(resp$(j),"/",1)
 		if x>0 then resp$(j)(x:x)="" : goto L400
@@ -97,15 +97,15 @@ L400: x=pos(resp$(j),"/",1)
 	fnopenprn
 	gosub HDR1
 	if accountSequence$='True' then
-		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 	else
-		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 	end if
-	open #hTrans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
-	! open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
+	open #hTrans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+	! open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
 	gosub BUD1
 ! /r
-MAIN_LOOP_TOP: ! 
+MAIN_LOOP_TOP: !
 	read #hCustomer,using F_CUSTOMER: z$,metradr$,e$,a7,final,bal,f,mat g,s4_meter_number$,route eof TOTAL_FINAL
 F_CUSTOMER: form pos 1,c 10,c 30,pos 41,c 30,pos 155,pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 373,c 12,pos 1741,n 2
 	if bud1=1 then gosub BUD2
@@ -115,55 +115,55 @@ F_CUSTOMER: form pos 1,c 10,c 30,pos 41,c 30,pos 155,pd 2,pos 1821,n 1,pos 292,p
 	if final=3 then final=0 ! consider active customer who are not be billed the same as regular active customers.
 	if printal$=opt_aai$(2) and final>0 then goto MAIN_LOOP_TOP
 	if printal$=opt_aai$(3) and final=0 then goto MAIN_LOOP_TOP
-L650: ! 
+L650: !
 	if holdrt=0 or route=0 or holdrt=route then goto L690
 	gosub TOTAL_BOOK
 	pr #255: newpage
 	gosub HDR1
-L690: ! 
-	gosub TRANS_ACCUMULATE 
-! 
+L690: !
+	gosub TRANS_ACCUMULATE
+!
 ! if trim$(z$)='100780.00' then pause
 	az$=""
-	if month(4)>0 or bd1=3 then 
+	if month(4)>0 or bd1=3 then
 		az$="****"
-	else if month(3)>0 or bd1=2 then 
+	else if month(3)>0 or bd1=2 then
 		az$="***"
-	else if month(2)>0 or bd1=1 then 
+	else if month(2)>0 or bd1=1 then
 		az$="**"
-	end if 
-! 
+	end if
+!
 	if totba>0 then lev$="L" else lev$=""
 	if excludecurrent=1 and len(az$)<2 then goto L880 ! exclude those oweing only current month
 	if excludelast=1 and len(az$)<3 then goto L880 ! exclude those oweing only current month  or previous month
 	if pastduebalance=1 and excludecurrent=1 then bal=bal-month(1) ! don't show current in past due balance column
 	if pastduebalance=1 and excludelast=1 then bal=bal-month(2) ! don't show last month in past due balance column
-! 
-	if printadr and pr_s4_meter_number then 
+!
+	if printadr and pr_s4_meter_number then
 		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25),fn_s4_meter_number$ pageoflow PGOF
-	else if pr_s4_meter_number then 
+	else if pr_s4_meter_number then
 		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,fn_s4_meter_number$ pageoflow PGOF
-	else if printadr then 
+	else if printadr then
 		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25) pageoflow PGOF
-	else 
+	else
 		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$ pageoflow PGOF
-	end if 
-	if trans_accumulate_execption$<>'' then 
+	end if
+	if trans_accumulate_execption$<>'' then
 		pr #255,using 'form pos 64,C 24': trans_accumulate_execption$ pageoflow PGOF
-	end if 
-	if pr_blank_lines_for_notes$='True' then 
+	end if
+	if pr_blank_lines_for_notes$='True' then
 		pr #255: '' pageoflow PGOF
 		pr #255: rpt$('_',71) pageoflow PGOF
 		pr #255: '' pageoflow PGOF
-	end if 
+	end if
 F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
-! 
+!
 	s2=s2+bal
 	t2=t2+bal
 	t1=t1+g(10)
 	s1=s1+g(10)
 	holdrt=route
-L880: ! 
+L880: !
 	goto MAIN_LOOP_TOP
 ! /r
 HDR1: ! r:
@@ -174,20 +174,20 @@ HDR1: ! r:
 	pr #255: "As of "&dat$
 	pr #255,using L970: "\ql "&date$,"Page "&str$(p2)
 L970: form pos 1,c 70,cr 14
-	if pastduebalance=1 then 
+	if pastduebalance=1 then
 		pr #255: "                                         Past Due  Last Bill   Turn"
-	else 
+	else
 		pr #255: "                                         Current   Last Bill   Turn"
-	end if 
-	if printadr and pr_s4_meter_number then 
+	end if
+	if printadr and pr_s4_meter_number then
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }  {\ul Meter Number}"
-	else if pr_s4_meter_number then 
+	else if pr_s4_meter_number then
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Number}"
-	else if printadr then 
+	else if printadr then
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }"
-	else 
+	else
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance }  {\ul    Date   }  {\ul  Off}"
-	end if 
+	end if
 	return  ! /r
 TOTAL_BOOK: ! r:
 	pr #255: "" pageoflow PGOF
@@ -213,17 +213,17 @@ DONE: ! r:
 	close #hCustomer: ioerr ignore
 	close #hTrans: ioerr ignore
 	fncloseprn
-	goto XIT ! /r
+	goto Xit ! /r
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR1
 	continue  ! /r
-XIT: fnxit
-IGNORE: continue 
+Xit: fnXit
+IGNORE: continue
 BUD1: ! r:
 	bud1=0
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L1390
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative 
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
 	bud1=1
 L1390: return  ! /r
 BUD2: ! r:
@@ -243,7 +243,7 @@ L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bd1(bd1)=bt1(1,2)
 	bd2(bd1)=ta1
 	L1570: ta1=nba : goto L1490
-	L1580: ! 
+	L1580: !
 return  ! /r
 PR_TRAN_DEBUG_DATA: ! r:
 	if debug_this_tran then pr '                            tdate=';tdate;' tcode=';tcode;' tamount=';tamount : debug_this_tran=1 else debug_this_tran=0 ! pause
@@ -255,7 +255,7 @@ TRANS_ACCUMULATE: ! r:
 ! if trim$(z$)='100093.57' then pause
 	restore #hTrans,key>=z$&"         ": nokey TA_NO_TRANS
 	ta_p1_read_count=0
-TA_TRANS_READ: ! 
+TA_TRANS_READ: !
 	read #hTrans,using 'form pos 1,c 10,n 8,n 1,pd 4.2': p$,tdate,tcode,tamount eof TA_PHASE_2
 	ta_p1_read_count+=1
 ! if env$('ACSDeveloper')<>'' and trim$(z$)='100780.00' then debug_this_account=1 else debug_this_account=0 ! pause
@@ -266,7 +266,7 @@ TA_TRANS_READ: !
 		if tdate<firstday(3) then ! older than we want to analyze
 !     if debug_this_tran then pr '  A  older than what we want to analyze'
 			goto TA_TRANS_READ
-		else if tdate>=firstday(j) and tdate<=lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then 
+		else if tdate>=firstday(j) and tdate<=lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then
 			month(j)=month(j)+tamount
 !      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  B  month(';j;')=';month(j);'    because ';tdate;' =/between >';firstday(j);' - ';lastday(j);' and tcode=';tcode
 			goto TA_TRANS_READ
@@ -274,36 +274,36 @@ TA_TRANS_READ: !
 			month(j)=month(j)+tamount
 !      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  C  month(';j;')=';month(j);'    because ';tdate;'>';lastday(j);' and tcode=';tcode
 			goto TA_TRANS_READ
-		end if 
+		end if
 	next j
 	goto TA_TRANS_READ
-TA_PHASE_2: ! 
+TA_PHASE_2: !
 	if debug_this_account then pr ' the month accumulators before pahse 2' : pr mat month ! pause
 	holdbal=bal
 	for j=1 to 4 ! find oldest month still owed
-		if holdbal<=0 then 
+		if holdbal<=0 then
 !     if debug_this_account then pr '  AA  changing month(';j;') from ';month(j);' to 0 because holdbal<=0'
 			month(j)=0
 !   else if env$('client')="Albany" and holdbal<10.50 then ! don't any balance less than a minimum bill cause a month to show delinquent
 !     month(j)=0
-		else if holdbal>0 then 
+		else if holdbal>0 then
 !     if debug_this_account then pr '  CC  changing holdbal from (';holdbal;') to ';holdbal-month(j)
 			holdbal=holdbal-month(j)
-		end if 
+		end if
 !   if debug_this_account then pause
 	next j
 	goto TA_FINIS
-TA_NO_TRANS: ! 
+TA_NO_TRANS: !
 	trans_accumulate_execption$='(no transaction history)'
 	goto TA_PHASE_2 ! TA_FINIS
-TA_FINIS: ! 
-	if debug_this_account then 
+TA_FINIS: !
+	if debug_this_account then
 		pr ' the month accumulators AFTER pahse 2' : pr mat month
 		pr ' trans_accumulate_execption$='&trans_accumulate_execption$
-		pause 
-	end if 
+		pause
+	end if
 return  ! /r
 def fn_s4_meter_number$*12
 	fn_s4_meter_number$=s4_meter_number$
-fnend 
-include: ertn
+fnend
+include: Ertn

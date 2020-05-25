@@ -8,12 +8,12 @@ def library fnfinstmt_v0_to_v1
 	fnStatus('Converting Financial Statement.')
 	GOON: ! 
 	dim fil$(6),idx$(6)
-	fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
-	fil$(2)="acglfnSI": idx$(2)="fnSIIndx" ! Income Statement
-	fil$(3)="acglfnSF": idx$(3)="fnSFIndx" ! Funt Statement / Cash Flow
-	fil$(4)="acglfnSC": idx$(4)="fnSCIndx" ! Secondary Balance Sheet
-	fil$(5)="acglfnSJ": idx$(5)="fnSJIndx" ! Secondary Income Statement
-	fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
+	fil$(1)="acglfnSB": idx$(1)="agfsidx4" ! Balance Sheet
+	fil$(2)="acglfnSI": idx$(2)="agfsidx3" ! Income Statement
+	fil$(3)="acglfnSF": idx$(3)="agfsidx5" ! Funt Statement / Cash Flow
+	fil$(4)="acglfnSC": idx$(4)="agfsidx1" ! Secondary Balance Sheet
+	fil$(5)="acglfnSJ": idx$(5)="agfsidx2" ! Secondary Income Statement
+	fil$(6)="acglfnSG": idx$(6)="agfsidx6" ! Secondary Fund / Cash Flow
 
 	for j=1 to 6
 		execute "Copy [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
