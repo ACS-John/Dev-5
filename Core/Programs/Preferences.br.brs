@@ -806,7 +806,7 @@ def fn_editFile(efEditorType$,efFileToEdit$*256)
 	if clientServer then
 		dim efFilePath$*256,efFileName$*128,efFileExt$*128
 		fnGetPp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
-		efEditOnClientCopyOfFile$=env$('at')&fnProgramDataDir$&'\Temp\Session'&session$&'\'&efFileName$&efFileExt$
+		efEditOnClientCopyOfFile$=env$('at')&fnProgramDataDir$&'Temp\Session'&session$&'\'&efFileName$&efFileExt$
 		fnmakesurepathexists(efEditOnClientCopyOfFile$)
 		if exists(efFileToEdit$) then
 			fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
@@ -828,6 +828,8 @@ def fn_text_editor_default$*256
 	if exists(env$('at')&":C:\Windows\Notepad.exe") then 
 		text_editor$='C:\Windows\Notepad.exe'
 	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\Atlantis.exe") then 
+		text_editor$='C:\Program Files (x86)\Atlantis\Atlantis.exe'
+	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\awp.exe") then 
 		text_editor$='C:\Program Files (x86)\Atlantis\Atlantis.exe'
 	else if exists(env$('at')&":C:\Program Files\Atlantis\Atlantis.exe") then 
 		text_editor$='C:\Program Files\Atlantis\Atlantis.exe'
