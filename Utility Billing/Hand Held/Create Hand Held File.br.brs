@@ -1112,7 +1112,9 @@ def fn_itron_record_rff ! off-site (Radio) reads - pg 22
 		fn_record_init
 		fn_record_addc(3,'RFF')
 		fn_record_addc(8,route_itron$)
-		fn_record_addc(8,fn_meterInfo$('transmitter number',z$,serviceCode$(a_item)))
+		if env$('client')='Bethany' then let transmitterlen=10 else let transmitterlen=8 ! longer transmitter number for some at Bethany
+		fn_record_addc(transmitterlen,fn_meterInfo$('transmitter number',z$,serviceCode$(a_item)))
+		if env$('client')='Bethany' then let blanklen=4 else let blanklen=6 ! adjust blank after it for those at Bethany 
 		fn_record_addc(6,'')
 		fn_record_addc(4,'ERT ') ! field 5
 		fn_record_addx(7)
