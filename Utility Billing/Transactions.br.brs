@@ -110,7 +110,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 	fnCmdKey("Next",1,1,0,"Displays a list of transactions on the screen")
 	fnCmdKey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
 	fnCmdKey("Cancel",5,0,1,"Returns to customer record")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then 
 		goto Tf_XIT
 	else
@@ -161,7 +161,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 		fnCmdKey('Edit',opt_edit:=1,1,0)
 		fnCmdKey('Print',opt_print:=4,0,0)
 		fnCmdKey('Close',5,0,1)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=opt_back then 
 			goto ScreenAskFilters
 		else if ckey=5 then 
@@ -306,7 +306,7 @@ def fn_TransactionEdit(editrec)
 	resp$(rc+=1)=str$(tamount)
 	fnCmdKey('Save',1,1,0)
 	fnCmdKey('Cancel',5,0,1)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=1 then 
 		tdate=val(resp$(respc_tDate))
 		rewrite #trans,using "Form pos 11,N 8",rec=editrec: tdate
@@ -755,7 +755,7 @@ def fn_columnSelect
 	nex hdrItem
 ! pause
 	fnCmdSet(4)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey<>5 then
 		respc=0
 		for hdrItem=6 to udim(mat csHeader$)

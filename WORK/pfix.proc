@@ -1,0 +1,10 @@
+setenv('pfix_program',program$)
+env$('PandaSourceFile')
+if env$('name')(1:1)='"' then let setenv('namewoq',env$('name')(2:len(env$('name'))-1) ) else let setenv('namewoq',env$('name'))
+end
+exec 'copy "'&env$('namewoq')&'" "'&env$('namewoq')&'.bak"'
+exec 'copy "'&env$('namewoq')&'.beforeRemoveLineNumbers"  "'&env$('namewoq')&'"'
+if exists(env$('namewoq')&'.beforeAutoLibrary') th exec 'free "'&env$('namewoq')&'.beforeAutoLibrary"' 
+execute 'sy ""C:\ACS\Program\Notepad++\notepad++.exe" "'&env$('namewoq')&'"'
+
+

@@ -43,7 +43,7 @@ ERR_READ: !
 		goto READ_FILE
  
 L330: ! If FIXGRID=99 Then goto Xit ! FIXING NEW GRID FILE without displaying it
-		fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey) : _
+		fnCmdSet(2): fnAcs2(mat resp$,ckey) : _
 		! CALL FLEXGRID
 		x$=lpad$(resp$(1),12)
 		if ckey=5 then x$="            " ! no one selected

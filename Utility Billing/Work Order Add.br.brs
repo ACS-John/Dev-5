@@ -109,7 +109,7 @@ def library fnworkOrderAdd(z$*10)
 	fnCmdKey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
 	fnCmdKey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main customer record.")
-	fnAcs(sn$,0,mat resp$,ckey) ! work order screen
+	fnAcs2(mat resp$,ckey) ! work order screen
 
 	if ckey=5 then goto woaXIT
 	z$=resp$(respc_accont)(1:10) ! lpad$(trim$(resp$(respc_accont)(1:10)),10)

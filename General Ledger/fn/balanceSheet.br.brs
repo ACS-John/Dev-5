@@ -27,7 +27,7 @@ def fn_balanceSheet(; defaultFormat$)
 		fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 		fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 		fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=5 then goto Finis
 		costcntr=val(resp$(1)) conv Screen1
 	goto GetStarted ! /r

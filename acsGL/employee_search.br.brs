@@ -40,7 +40,7 @@ def library fnemployee_search(&x$;fixgrid)
 	L280: !
 		if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 		fnLbl(12,1,"")
-		fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
+		fnCmdSet(2): fnAcs2(mat resp$,ckey)
 		! CALL FLEXGRID
 		x$=lpad$(resp$(1),4)
 		if ckey=5 then x$="    " ! no one selected

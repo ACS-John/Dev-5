@@ -301,7 +301,7 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey<>5 then
 		! r: gather local variables from mat resp$
 		if env$('cursys')='PR' then

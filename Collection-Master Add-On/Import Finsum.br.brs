@@ -157,7 +157,7 @@ fnend
 def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName$*28,trustItem)
 	mat trustPath$(0)
 	mat trustName$(0)
-	if ~setup_categ then let fn_setup_categ
+	if ~setup_categ then fn_setup_categ
 	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
 	open #hFinSum:=fnGetHandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
 	! open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts

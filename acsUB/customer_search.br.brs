@@ -38,7 +38,7 @@ def library fncustomer_search(&x$;fixgrid)
 
 	EO_CUSTOMER: ! 
 		fnCmdSet(2)
-		fnAcs(sn$,0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		x$=lpad$(resp$(1),10)
 		if ckey=5 then x$="          " ! no one selected
 	goto Xit

@@ -1,16 +1,15 @@
 ! Replace S:\acsGL\fnActPd
 ! accounting periond from company information file
 !
-def library fnactpd(;actpd)
+def library fnactpd(; actpd)
 	autoLibrary
-	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative 
+	open #h=fngethandle: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,outIn,relative 
 	if actpd<=0 then 
-		actpd=0
-		read #tmp,using "Form POS 268,N 2",rec=1: actpd noRec CLOSE_TMP
+		read #h,using 'Form POS 268,N 2',rec=1: actpd noRec Finis
 	else 
-		rewrite #tmp,using "Form POS 268,N 2",rec=1: actpd
+		rewrite #h,using 'Form POS 268,N 2',rec=1: actpd
 	end if
-	CLOSE_TMP: !
-	close #tmp: 
+	Finis: !
+	close #h: 
 	fnactpd=actpd
 fnend 

@@ -1,16 +1,13 @@
 ! Replace S:\acsGL\fnActPd$
-def library fnactpd$(;actpd$)
+def library fnActPd$(; accountingPeriod$)
 	autoLibrary
-	get=1 : put=2
-	if trim$(actpd$)="" then get_or_put=1 else get_or_put=2
-	open #tmp=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
-	if get_or_put=get then
-		read #tmp,using "Form POS 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
-	else if get_or_put=put then
-		rewrite #tmp,using "Form POS 270,C 6",rec=1: actpd$
+	open #h=fngethandle: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,outIn,relative
+	if trim$(accountingPeriod$)='' then ! get
+		read #h,using 'Form POS 270,C 6',rec=1: accountingPeriod$ noRec Finis
+	else ! put
+		rewrite #h,using 'Form POS 270,C 6',rec=1: accountingPeriod$
 	end if
-	CLOSE_TMP: !
-	close #tmp:
-	fnactpd$=actpd$
-	Xit: !
+	Finis: !
+	close #h:
+	fnactpd$=accountingPeriod$
 fnend

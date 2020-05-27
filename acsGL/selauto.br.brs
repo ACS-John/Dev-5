@@ -81,7 +81,7 @@ L700: fnCmdKey("&Next",1,1,0,"Selects the highlited option for automatic process
 	fnCmdKey("&Save",2,0,0,"Saves the selections and returns to menu.")
 	fnCmdKey("&Delete All",4,0,0,"Deletes all selections.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=2 then goto L860
 	if ckey=4 then 
