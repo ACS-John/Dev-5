@@ -27,7 +27,7 @@ fnTos(sn$="TypeOfService") ! r:
 		fnTxt(a+2,72,2,0,0,"30")
 	next a
 	fnCmdSet(4)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey<>5 then
 		for a=1 to 10
 			serviceName$(a)=resp$(a*6-5)

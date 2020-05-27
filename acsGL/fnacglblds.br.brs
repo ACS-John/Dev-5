@@ -92,7 +92,6 @@ def library fnacglblds
 		fnFree("[Q]\GLmstr\ACGLScr.h[cno]")
 L380: open #20: "Name=[Q]\GLmstr\ACGLScr.h[cno],Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ : _
 		close #20:
-		fnacprscr
 goto Xit
 
 Xit: fnend

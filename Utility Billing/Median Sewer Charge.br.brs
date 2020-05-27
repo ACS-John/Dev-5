@@ -31,7 +31,7 @@ SCR1: !
 		fnTxt(j+1,mypos,10,0,0,"3") 
 		resp$(j)="" 
 	next j
-	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 8
 L320: x=pos(resp$(j),"/",1)
@@ -54,7 +54,7 @@ SCR2: !
 	fnLbl(1,1,txt$,22,1)
 	fnTxt(1,24,2,2,0,"20") 
 	resp$(1)=""
-	fnCmdSet(2): fnAcs(sn$,0,mat resp$,ckey)
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto SCR1
 	sewcode=val(resp$(1)) conv SCR2
 	if sewcode=0 then 

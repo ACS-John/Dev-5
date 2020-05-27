@@ -17,7 +17,7 @@ MENU1: !
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Prints the highlighted report." )
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
-	fnAcs(sn$,0,mat resp$,ckey) ! ask report #
+	fnAcs2(mat resp$,ckey) ! ask report #
 	if ckey=5 then goto Xit
 	rn=val(resp$(1)(1:2))
 	fn_print_designed_report(rn,3)

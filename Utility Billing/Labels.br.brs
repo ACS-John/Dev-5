@@ -115,7 +115,7 @@ SCR2: !
 	resp$(1)=filter_option_enabled$(1)
 	gosub OPEN_FILES
 	fnCmdSet(6)
-	fnAcs(sn$,0,mat resp$,ckey) ! method of selection
+	fnAcs2(mat resp$,ckey) ! method of selection
 	filter_selection=srch(mat filter_option$,resp$(1))
 	if ckey=5 then goto Xit
 	if ckey=2 then goto SCR1
@@ -218,7 +218,7 @@ SELR: ! r: select range of accounts
 	fncmbact(2,22,1)
 	resp$(2)=h1$
 	fnCmdSet(22)
-	fnAcs(sn$,0,mat resp$,ckey) ! select by range
+	fnAcs2(mat resp$,ckey) ! select by range
 	if ckey=5 then goto Xit
 	l1$=lpad$(trim$(resp$(1)(1:10)),10)
 	h1$=lpad$(trim$(resp$(2)(1:10)),10)
@@ -245,7 +245,7 @@ IACC: ! r: select individual accounts
 	fnLbl(3,1,"Last selection: "&hz$,35,0)
 	if trim$(sele$(2))<>"" then let fnLbl(2,17,sele$(2),20,0)
 	fnCmdSet(23)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=2 then 
 		fncustomer_search(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -273,7 +273,7 @@ SELBK: ! r: selects by route
 	fnTxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
 	resp$(respc+=1)=""
 	fnCmdSet(22)
-	fnAcs(sn$,0,mat resp$,ckey) ! select labels by route
+	fnAcs2(mat resp$,ckey) ! select labels by route
 	if ckey=5 then goto Xit
 	if ckey=2 then goto SCR2
 	bk=0 : bk=val(resp$(1)) conv L1860
@@ -292,7 +292,7 @@ SCR4F3: ! r: select starting account name
 		fnLbl(2,17,sele$(2),20,0)
 	end if 
 	fnCmdSet(21)
-	fnAcs(sn$,0,mat resp$,ckey) ! select starting customer name
+	fnAcs2(mat resp$,ckey) ! select starting customer name
 	if ckey=5 then goto Xit
 	if ckey=6 then let fncustomer_search(resp$(1))
 	restore #customer,key>="       ": nokey ignore
@@ -354,7 +354,7 @@ SELSTART: ! r: select customer to start with
 	fncmbact(1,mypos,1)
 	if trim$(selz$)='' then resp$(1)='[All]' else resp$(1)=selz$
 	fnCmdSet(5)
-	fnAcs(sn$,0,mat resp$,ckey) ! select starting customer
+	fnAcs2(mat resp$,ckey) ! select starting customer
 	if ckey=6 then 
 		fncustomer_search(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -375,7 +375,7 @@ READ_FROM_GRID: ! r: select customers from grid
 	resp$(1)=""
 	fnLbl(2,40,"",30,0)
 	fnCmdSet(3)
-	fnAcs(sn$,0,mat resp$,ckey) ! select starting customer #
+	fnAcs2(mat resp$,ckey) ! select starting customer #
 	if ckey=5 then goto Xit
 	open #6: "Name="&trim$(resp$(1)),display,input ioerr READ_FROM_GRID
 	LIN6: linput #6: x$ eof DONE

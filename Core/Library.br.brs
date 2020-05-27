@@ -1423,10 +1423,6 @@ fnend
 		library 'S:\acsGL\employee_search.br': fnemployee_search
 		fnemployee_search=fnemployee_search(x$,fixgrid)
 	fnend
-	def library fnacprscr
-		library 'S:\acsGL\fnacprscr.br': fnacprscr
-		fnacprscr=fnacprscr
-	fnend
 	def library fnfinstmt_v0_to_v1
 		library 'S:\acsGL\Conversion\FinStmt_v0_to_v1.br': fnfinstmt_v0_to_v1
 		fnfinstmt_v0_to_v1=fnfinstmt_v0_to_v1

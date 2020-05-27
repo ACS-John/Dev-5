@@ -335,7 +335,7 @@ EDIT_REC: ! r:
 	fnCmdKey("&Edit",2,0,0,"Allows you to change the breakdown")
 	fnCmdKey("&Delete",4,0,0,"Deletes this collection record")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main collection screen")
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	! 
 	if ckey=5 then goto L2590
 	! If CKEY=2 Then Goto X
@@ -957,7 +957,7 @@ def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat validServiceLabel$; 
 	else 
 		fnCmdSet(6) ! fnCmdKey("&Next",1,1) : fnCmdKey("&Back",2) : fnCmdKey("&Cancel",5,0,1)
 	end if 
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	! 
 	if env$('acsDeveloper')<>'' then debug=1
 	for j=1 to udim(mat alloc)
@@ -1152,7 +1152,7 @@ def fn_csv_import
 	resp$(2)=enableSkipDuplicates$
 	
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey<>5 then 
 		ecp_filename$=resp$(1)
 		enableSkipDuplicates$=resp$(2)

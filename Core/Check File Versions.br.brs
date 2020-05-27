@@ -864,7 +864,7 @@ def fn_cfv_general_ledger
 		fnStatus('Record Length Error in File: '&tmpfile$)
 		fnStatus('         RLn: '&str$(tmprln))
 	end if
-	if tmprln=338 then let fnglmstr_338_416
+	if tmprln=338 then fnglmstr_338_416
 	x=1 : if tmpkps(x)<>1 then
 		fnStatus('Key Position ('&str$(x)&') Error in '&kfname$)
 		fnStatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))

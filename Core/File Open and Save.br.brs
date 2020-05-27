@@ -284,7 +284,7 @@ def fn_opMain(omFileOpen$*256)
 	! fnLbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
 	! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	! /r
 	dim selectedSource$*128
 	selectedSource$=resp$(resp_fileSource)
