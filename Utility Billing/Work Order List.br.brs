@@ -34,7 +34,7 @@ def library fnWorkOrderList(; z$*10)
 	fncmbact(3,35,1)
 	resp$(respc+=1)=z$
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	if ck=5 then goto PWL_XIT
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year

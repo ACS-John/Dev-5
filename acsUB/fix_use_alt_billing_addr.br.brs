@@ -47,6 +47,6 @@ FINIS: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1) 
 	resp$(respc+=1)=str$(changeCount)
 	fnCmdSet(52) 
-	fnAcs(sn$,0,mat resp$,ck) ! /r
+	fnAcs2(mat resp$,ckey) ! /r
 Xit: fnXit
 include: Ertn

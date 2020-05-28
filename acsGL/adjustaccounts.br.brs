@@ -61,7 +61,7 @@ def fn_getadjustment
 		fnLbl(3,1,"Balance on Date:",mylen,right)
 		fnTxt(3,mypos,14,0,right,"10",0) : resp$(3)=''
 		fnCmdSet(11)
-		fnAcs("accountadjust",0,mat resp$,ckey)
+		fnAcs2(mat resp$,ckey)
 		if ckey=1 then
 			gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
 		else

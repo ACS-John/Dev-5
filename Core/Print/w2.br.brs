@@ -323,7 +323,7 @@ def fn_ask_margins
 	fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
 	fnCmdSet(4)
-	fnAcs(sn$,0,mat amResp$,ckey)
+	fnAcs2(mat amResp$,ckey)
 	if ckey<>5 then
 		fnreg_write('W-2 - Form 1 Y' ,amResp$(1))
 		fnreg_write('W-2 - Form 2 Y' ,amResp$(2))

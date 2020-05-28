@@ -21,7 +21,7 @@ def fn_getrange
 	resp$(2)=str$(date("mmddyy"))
 	fnCmdKey("Next",1,1,0,"Calculate sewer statistics.")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu.")
-	fnAcs("sewerstats-1",0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then let fnXit
 	d1=val(resp$(1)) : d2=val(resp$(2)) : yrend=d1+10000 : yrcnt=1
 	do while yrend<d2

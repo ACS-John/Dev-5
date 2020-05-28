@@ -49,7 +49,7 @@ def fn_clientSelect
 		fnflexadd1(mat flexItem$)
 	nex clientItem
 	fnCmdSet(2)
-	fnAcs('clientSelect',0,mat resp$,ckey)
+	fnAcs2(mat resp$,ckey)
 	if ckey=1 then ! r: select that client
 		fn_setClient(resp$(1))
 	end if ! /r 
