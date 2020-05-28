@@ -32,7 +32,7 @@ SCR1: ! r:
 	fnreg_read('ublabel.line 5',resp$(7)) : if resp$(7)='' then resp$(7)=line_x_option$(5 )
 ! 
 	fnCmdSet(2)
-	fnAcs(sn$,0,mat resp$,ck) ! select order of printing
+	fnAcs2(mat resp$,ckey) ! select order of printing
 	if ck=5 then goto Xit
 	fnreg_write('ublabel.sequence',resp$(1))
 	fnreg_write('ublabel.address',resp$(2))

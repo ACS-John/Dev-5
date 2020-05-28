@@ -157,6 +157,11 @@ PrintBill_Basic: !
 		! pa_orientation$='Landscape'
 		include_zero_bal=include_credit_bal=1
 		enable_cass_sort=1
+		
+		enable_service_from=0 ! does not print prior reading date anyway.
+		enable_service_to=1
+
+		
 	else !  default settings:  Findlay, Edison
 		message1_line_count=3
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
@@ -433,7 +438,7 @@ MainLoop: ! r: main loop
 	! else if env$('client')='GreeneCo' and ~enableNewGreeneCoBill then
 	! 	fn_print_bill_GreeneCo
 	else if env$('client')='Galena' then
-		fn_print_bill_galena
+		fn_print_bill_galena(serviceToMmddYy)
 	else ! GreeneCo, Exeter, Findlay, etc
 		if enableReturnServiceRequested=>0 then enableReturnServiceRequested=1
 		if enableIsDueNowAndPayable=>0 then enableIsDueNowAndPayable=1
@@ -2113,7 +2118,7 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 		billOnPage=0
 	end if ! 
 fnend
-def fn_print_bill_GreeneCo
+def fn_print_bill_GreeneCo(serviceTo)
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 	if ~setup_GreeneCo then
 		setup_GreeneCo=1
@@ -2207,7 +2212,7 @@ def fn_print_bill_GreeneCo
 	end if
 fnend
 
-def fn_print_bill_galena
+def fn_print_bill_galena(serviceTo)
 	if ~setup_print_bill_galena then
 		setup_print_bill_galena=1
 		lyne=4 ! 3
@@ -2216,6 +2221,7 @@ def fn_print_bill_galena
 		fontNorm =10 ! 8
 		fontSmall= 9
 	end if
+	fn_override_service_date(unused,serviceTo,alsoUnused,serviceToMmddYy)
 	billOnPageCount+=1
 	if billOnPageCount=1 then 
 		xmargin=0
@@ -2227,20 +2233,7 @@ def fn_print_bill_galena
 		xmargin=0
 		ymargin=140
 	end if
-	! if env$('acsDeveloper')<>'' then ! r: debug values
-	! 	d(1) =111456789 
-	! 	d(3) =333456789 
-	! 	g(1) =111456.89 
-	! 	g(2) =222456.89
-	! 	d(9) =999456789
-	! 	d(11)=111111789
-	! 	g(4) =444456.89 
-	! 	g(5) =555456.89
-	! 	g(6) =666456.89 
-	! 	g(8) =888456.89 
-	! 	g(9) =999456.89
-	! 	pB   =484856.89
-	! end if ! /r
+
 
 	! r: left side
 	lsColService =xmargin     + 1
@@ -2294,8 +2287,9 @@ def fn_print_bill_galena
 	end if 
 	! /r
 ! r: bottom table
-	fnpa_txt(date$(days(serviceToOverride,"mmddyy"),"m")     ,xmargin+ 2    ,lyne*23+ymargin)
-	fnpa_txt(date$(days(serviceToOverride,"mmddyy"),"D")     ,xmargin+11    ,lyne*23+ymargin)
+	fnpa_txt(date$(days(serviceTo,"mmddyy"),"m")     ,xmargin+ 2    ,lyne*23+ymargin)
+	fnpa_txt(date$(days(serviceTo,"mmddyy"),"D")     ,xmargin+11    ,lyne*23+ymargin)
+	! pr z$,serviceTo : pause
 	if bal>0 then 
 		fnpa_txt(fnformnumb$(bal-g(9),2,9)      ,lsColPrevious ,lyne*23+ymargin)
 		if g(10)>0 then

@@ -114,7 +114,7 @@ def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 	else if mt=0 then ! ok
 		fnCmdKey("&Ok",1,1,1)
 	end if
-	fnAcs(sn$,0,mat resp$,ckey,0,0,1,1)
+	fnAcs2(mat resp$,ckey,0,0,1,1)
 	if ckey=1 then response$="OK"
 	if ckey=99 then response$="Cancel"
 	if ckey=3 then response$="Abort"
