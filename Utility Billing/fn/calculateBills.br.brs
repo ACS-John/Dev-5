@@ -101,7 +101,11 @@ TOP: ! r:
 	mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 	gosub CHECK_UNUSUAL_USAGE
 	if r9_usage_is_zero=1 then goto TOP
-	fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	if env$('client')="Chatom" then 
+		fncalkChatom(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	else
+		fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	end if
 	fn_date_meter_read ! update meter reading date
 	if g(11)>99999 or g(12)>99999 then 
 		goto BILL_TOO_LARGE
@@ -512,11 +516,6 @@ def fn_setup
 	if ~setup then
 		setup=1
 		autoLibrary
-		if env$('client')="Chatom" then 
-			library "S:\acsUB\calk_Chatom": fncalk
-		else 
-			library "S:\acsUB\calk_standard": fncalk
-		end if 
 		on error goto Ertn
 		! r: dims
 		dim resp$(10)*128

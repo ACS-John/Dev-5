@@ -18,7 +18,6 @@ def fn_setup_calk
 		fncreg_read('Service '&str$(service_item)&' only month',tmp$) : onlyMonth(service_item)=val(tmp$)
 	next service_item
 fnend 
-Ignore: continue
 def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	debug_account=0
 	! if trim$(x$)='101200.00' and env$('acsdeveloper')<>'' then debug_account=1 ! pause
