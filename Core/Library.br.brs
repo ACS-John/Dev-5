@@ -1201,6 +1201,14 @@ fnend
 		library 'S:\Utility Billing\fn\calculateBills.br': fnCalculateBills
 		fnCalculateBills=fnCalculateBills(goal$)
 	fnend
+	def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+		library 'S:\acsUB\calk_standard.br': fncalk
+		fncalk=fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	fnend
+	def library fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+		library 'S:\acsUB\calk_chatom.br': fncalkChatom
+		fncalkChatom=fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	fnend
 	! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
 	!   library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
 	!   fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
