@@ -1,3 +1,4 @@
+	autoLibrary
 library program$: fnworkOrderAdd
 library 'S:\Core\Library': fnXit,fnTop,fnask_account,fngethandle
 fnTop(program$)
@@ -15,6 +16,7 @@ fnXit
 def library fnworkOrderAdd(z$*10)
 	if ~wo_setup then ! r:
 		wo_setup=1
+		autoLibrary
 		library 'S:\Core\Library': fnWorkOrderPrint
 		library 'S:\Core\Library': fnAcs,fnTos,fnLbl,fnTxt
 		library 'S:\Core\Library': fngethandle
