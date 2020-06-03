@@ -1566,15 +1566,15 @@ def library fnCheckStateCalculation(; ___, _
 	fn_setupOpenFiles
 	do
 		! r: set default answers ;)
-		pppy       = 12     ! =1     	!	pay_periods_per_year=1
-		wages      = 9807   ! =15000 	! wages_taxable_current=15000
-		fedWh      = 1530.71! =1166  	! fed_wh=1166
-		payCode    = 1      ! =5
-		allowances = 0      ! =0
-		is_married = 0      ! =0
-		eicCode    = 0      ! =0
-		w4year$    = '2020' ! ='2020'
-		taxYear    = 2020   ! =2020
+		pppy       = 12      ! =1     	!	pay_periods_per_year=1
+		wages      = 9807    ! =15000 	! wages_taxable_current=15000
+		fedWh      = 1530.71 ! =1166  	! fed_wh=1166
+		payCode    = 1       ! =5
+		allowances = 0       ! =0
+		is_married = 0       ! =0
+		eicCode    = 0       ! =0
+		w4year$    = '2020'  ! ='2020'
+		taxYear    = 2020    ! =2020
 		! /r
 		fnTos ! r: Test State Calculation Ask Criteria Screen
 		lc=respc=0
