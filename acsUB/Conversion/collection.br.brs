@@ -34,5 +34,5 @@ L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
 L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 L430: goto L240
 L440: close #2:
-	fnindex_it("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
+	fnIndex("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
 Xit: fnXit

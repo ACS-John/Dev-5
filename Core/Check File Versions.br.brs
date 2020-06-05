@@ -63,7 +63,7 @@ def fn_file_setup_index(fsi_kfname$*512,fsi_kps$,fsi_kln$)
 	dim g_fs_kfname$*512
 	g_fs_kfname$=fsi_kfname$
 	if ~exists(fsi_kfname$) or lwrc$(env$('force_reindex'))='yes' or ~fn_check_indexes(g_fs_name$,fsi_kfname$,fsi_kps$,fsi_kln$) then
-		fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
+		fnIndex(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 	end if
 fnend
 def fn_make_data_file_exist(name$*512,myrln,version_proper)
@@ -109,7 +109,7 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 	fnStatus('error '&str$(err)&' opening Name='&name$&',KFName='&kfnames$(ci_item))
 	if err=607 or err=632 then
 		fnStatus('indexing to fix it')
-		fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
+		fnIndex(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 		goto CI_OPEN_IT
 	else
 		fnStatus('error unhandled')
@@ -243,7 +243,7 @@ def fn_cfv_utility_billing
 		EoMeterTypeV1: !
 		version(hMeterType,version_meterType:=2)
 		close #hMeterType:
-		fnindex_it('[Q]\UBmstr\MeterType.h[cno]','[Q]\UBmstr\MeterTypeIdx.h[cno]','1 5u')
+		fnIndex('[Q]\UBmstr\MeterType.h[cno]','[Q]\UBmstr\MeterTypeIdx.h[cno]','1 5u')
 	end if
 	if version_meterType=2 then
 		open #hMeterType:=fngethandle: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
@@ -373,7 +373,7 @@ def fn_cfv_checkbook
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 11')
+		fnIndex(name$,kfname$,'1 11')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -405,7 +405,7 @@ def fn_cfv_checkbook
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L1840: !
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'9 12')
+		fnIndex(name$,kfname$,'9 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -433,7 +433,7 @@ def fn_cfv_checkbook
 	name$="[Q]\CLmstr\UnPdAloc.h[cno]"
 	kfname$="[Q]\CLmstr\UAIdx2.h[cno]"
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 20')
+		fnIndex(name$,kfname$,'1 20')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	x=1 : if tmpkps(x)<>1 then
@@ -452,7 +452,7 @@ def fn_cfv_checkbook
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 20')
+		fnIndex(name$,kfname$,'1 20')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -478,7 +478,7 @@ def fn_cfv_checkbook
 	name$="[Q]\CLmstr\PayTrans.h[cno]"
 	kfname$="[Q]\CLmstr\UnPdIdx2.h[cno]"
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'31/27/1 2/4/26')
+		fnIndex(name$,kfname$,'31/27/1 2/4/26')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	x=1 : if tmpkps(x)<>31 then
@@ -513,7 +513,7 @@ def fn_cfv_checkbook
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 8')
+		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -539,7 +539,7 @@ def fn_cfv_checkbook
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 8')
+		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -564,7 +564,7 @@ def fn_cfv_checkbook
 	name$="[Q]\CLmstr\PayMstr.h[cno]"
 	kfname$="[Q]\CLmstr\PayIdx2.h[cno]"
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'9 30')
+		fnIndex(name$,kfname$,'9 30')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	x=1 : if tmpkps(x)<>9 then
@@ -583,7 +583,7 @@ def fn_cfv_checkbook
 	!   version_proper=0
 	!   fn_make_data_file_exist(name$,myrln,version_proper)
 	!   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-	!     fnindex_it(name$,kfname$,'1 12')
+	!     fnIndex(name$,kfname$,'1 12')
 	!   end if
 	fn_file_setup_data("[Q]\CLmstr\GLmstr.h[cno]",62,1)
 	fn_file_setup_index("[Q]\CLmstr\GLIndex.h[cno]",'1','12')
@@ -784,8 +784,8 @@ def fn_cfv_payroll
 			loop
 			EoEmployeeV0: !
 			close #hEmployee:
-			fnindex_it('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-no.h[cno]'  ,'1 8')
-			fnindex_it('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-name.h[cno]','9 30')
+			fnIndex('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-no.h[cno]'  ,'1 8')
+			fnIndex('[Q]\PRmstr\Employee.h[cno]','[Q]\PRmstr\EmployeeIdx-name.h[cno]','9 30')
 		else
 			pr bell;'Employee record length change failed.  Payroll system unusable until fixed.'
 			pause
@@ -800,7 +800,7 @@ def fn_version(filename$*256; ___,returnN,hTmp)
 fnend
 Check4124OnPrGlindex: ! r:
  if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
-	 fnindex_it('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')
+	 fnIndex('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')
 	 goto PrGlindex
  else
 		fnStatus('Failure.')
@@ -847,7 +847,7 @@ def fn_cfv_general_ledger
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 14')
+		fnIndex(name$,kfname$,'1 14')
 	end if
 	! GL_GLMSTR1: ! Primary Non-Split Index
 	name$="[Q]\GLmstr\GLmstr.h[cno]"
@@ -856,7 +856,7 @@ def fn_cfv_general_ledger
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 12')
+		fnIndex(name$,kfname$,'1 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -878,7 +878,7 @@ def fn_cfv_general_ledger
 	name$="[Q]\GLmstr\GLmstr.h[cno]"
 	kfname$="[Q]\GLmstr\GLIndx2.h[cno]"
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'13 30')
+		fnIndex(name$,kfname$,'13 30')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	x=1 : if tmpkps(x)<>13 then
@@ -891,7 +891,7 @@ def fn_cfv_general_ledger
 	end if
 	if tmpkln(x)=50 then
 		fnFree(kfname$)
-		fnindex_it(name$,kfname$,'13 30')
+		fnIndex(name$,kfname$,'13 30')
 	end if
 
 	fn_file_setup_data("[Q]\GLmstr\AcGLFnSc.h[cno]",83,1)
@@ -910,7 +910,7 @@ def fn_cfv_general_ledger
 	! version_proper=1
 	! fn_make_data_file_exist(name$,myrln,version_proper)
 	! if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-	!   fnindex_it(name$,kfname$,'1 5')
+	!   fnIndex(name$,kfname$,'1 5')
 	! end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -947,7 +947,7 @@ def fn_cfv_general_ledger
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3510: !
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 8')
+		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
@@ -971,7 +971,7 @@ def fn_cfv_general_ledger
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3600: !
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
+		fnIndex(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -996,7 +996,7 @@ def fn_cfv_general_ledger
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3690: !
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
-		fnindex_it(name$,kfname$,'1 8')
+		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -1019,7 +1019,7 @@ def fn_cfv_general_ledger
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
 	GlBrecIndex: !
-		fnindex_it(name$,kfname$,'1 24')
+		fnIndex(name$,kfname$,'1 24')
 	end if
 	if ~fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$) then goto GlBrecOpenErr
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -1049,7 +1049,7 @@ def fn_cfv_general_ledger
 	myrln=162
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	L3870: fnindex_it(name$,kfname$,'1 3')
+	L3870: fnIndex(name$,kfname$,'1 3')
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
@@ -1064,7 +1064,7 @@ def fn_cfv_general_ledger
 	rewrite #tmp, using "Form POS 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
 	if exists("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")=0 then open #schedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule:
 	if exists("[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]")=0 then
-		fnindex_it("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]","[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]","1 12")
+		fnIndex("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]","[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]","1 12")
 	end if
 	open #schedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
 	for j=1 to 80

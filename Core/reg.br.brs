@@ -93,7 +93,7 @@ fnend
 mcreg_PreEtrn: ! r:
 	if err=4126 then
 		fn_mcreg_close
-		fnIndex_it(mcregFileData$,mcregFileIndex$,'1 128')
+		fnIndex(mcregFileData$,mcregFileIndex$,'1 128')
 		fn_mcreg_setup
 	end if
 	fnStatusClose
@@ -101,7 +101,7 @@ retry ! /r
 def fn_mcreg_setup
 	if ~mcreg_setup then
 		 mcreg_setup=1
-		library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnStatusClose
+		library 'S:\Core\Library': fngethandle,fnerror,fnIndex,fnStatusClose
 		dim mcregFileData$*256
 		dim mcregFileIndex$*256
 		mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
@@ -200,7 +200,7 @@ fnend
 CReg_PreEtrn: ! r:
 	if err=4126 then
 		fn_creg_close
-		fnIndex_it(cregFileData$,cregFileIndex$,'1 128')
+		fnIndex(cregFileData$,cregFileIndex$,'1 128')
 		fn_creg_setup
 	end if
 	fnStatusClose
@@ -209,7 +209,7 @@ def fn_creg_setup
 	if creg_setup<>val(env$('CNo')) then
 		if creg_setup>0 then let fn_creg_close
 		 !
-		library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnStatusClose
+		library 'S:\Core\Library': fngethandle,fnerror,fnIndex,fnStatusClose
 		dim cregFileData$*256
 		dim cregFileIndex$*256
 

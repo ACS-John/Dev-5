@@ -118,7 +118,7 @@ SCREEN_1: !
 		open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 		close #h_rpwork:
 	end if
-	fnindex_it("[Q]\PRmstr\rpwork[unique_computer_id].h[cno]","[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]","1,11")
+	fnIndex("[Q]\PRmstr\rpwork[unique_computer_id].h[cno]","[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]","1,11")
 	fnStatusClose
 	if additional=2 then
 !   if exists("[Q]\PRmstr\rpwork[unique_computer_id].h[cno]") then

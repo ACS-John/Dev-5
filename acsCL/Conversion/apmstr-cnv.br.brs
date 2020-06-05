@@ -59,12 +59,12 @@ EO_11: ! r:
   close #apmstr,free:
   fnFree('[Q]\tmpAP\*.*')
   execute 'RmDir "[Q]\tmpAP"'
-  fnindex_it("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx1.h[cno]","1 8")
-  fnindex_it("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx2.h[cno]","9 30")
-  fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.h[cno]","1,20")
-  fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
-  fnindex_it("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.h[cno]","9 12")
-  fnindex_it("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.h[cno]","1 20")
+  fnIndex("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx1.h[cno]","1 8")
+  fnIndex("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx2.h[cno]","9 30")
+  fnIndex("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.h[cno]","1,20")
+  fnIndex("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
+  fnIndex("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.h[cno]","9 12")
+  fnIndex("[Q]\CLmstr\Unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.h[cno]","1 20")
   ! /r
 Xit: !
 fnend

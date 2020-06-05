@@ -22,7 +22,7 @@ def fn_InitialializeMeterAddress
 	if imaNeedsInitialization then
 		fnStatus('Initializing UB Meter Address table...')
 		fnCloseFile(hMeterAddressLocationID,'UB Meter Address')
-		fnindex_it('[Q]\UBmstr\MeterAddress.h[cno]','[Q]\UBmstr\MeterAddress_Idx2.h[cno]', '12 30u')
+		fnIndex('[Q]\UBmstr\MeterAddress.h[cno]','[Q]\UBmstr\MeterAddress_Idx2.h[cno]', '12 30u')
 		hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 0,2)
 		fn_newLocationID( 1)
 		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input,relative

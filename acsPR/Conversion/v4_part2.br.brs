@@ -39,15 +39,15 @@ L2180: !
 		open #14: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace",internal,outIn,keyed
 L2200: !
 		close #14:
-!   fnindex_it("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx3.h[cno]","1/12/9 8/6/3")
+!   fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx3.h[cno]","1/12/9 8/6/3")
  
 		open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed
 		close #breakdown:
-!   fnindex_it("[Q]\PRmstr\HourBreakdown.H[cno]","[Q]\PRmstr\HourBreakdown-idx.H[cno]","1/9/14 8/5/8")
+!   fnIndex("[Q]\PRmstr\HourBreakdown.H[cno]","[Q]\PRmstr\HourBreakdown-idx.H[cno]","1/9/14 8/5/8")
  
 		open #30: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed
 		close #30:
-!   fnindex_it("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
+!   fnIndex("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
  
 		fnindex_sys(cno,'PR')
 		goto Xit

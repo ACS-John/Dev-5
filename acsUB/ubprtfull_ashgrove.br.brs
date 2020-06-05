@@ -434,7 +434,7 @@ BulkSort: ! r:bulk sort order
 	L3080: !
 	close #1: ioerr ignore
 	close #6: ioerr ignore
-	if fnindex_it('[temp]\Temp.[session]','[temp]\TempIdx.[session]','1,19') then
+	if fnIndex('[temp]\Temp.[session]','[temp]\TempIdx.[session]','1,19') then
 		open #6: 'Name=[temp]\Temp.[session],KFName=[temp]\TempIdx.[session]',internal,input,keyed
 	end if
 return ! /r

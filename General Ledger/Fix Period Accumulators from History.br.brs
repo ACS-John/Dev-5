@@ -21,7 +21,7 @@
   open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.H[cno],KFName=[Q]\GLmstr\AcTrIdx.H[cno],Shr",internal,outIn,keyed
 	F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
   if process_gltrans then
-	 fnindex_it("[Q]\GLmstr\GLTrans.H[cno]",env$('Temp')&"\GLIndex.H[cno]","1 12")
+	 fnIndex("[Q]\GLmstr\GLTrans.H[cno]",env$('Temp')&"\GLIndex.H[cno]","1 12")
 	 open #h_gltrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],KFName="&env$('Temp')&"\GLIndex.h[cno],Shr",internal,outIn,keyed
   end if  ! process_gltrans
 	F_GLTRANS: form pos 1,c 12,n 6,pd 6.2,n 2

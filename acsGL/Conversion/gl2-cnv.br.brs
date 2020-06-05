@@ -81,7 +81,7 @@ L800: open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],size=0,RecL=68,Shru",internal,outI
 	gosub L890 ! CONVERT VENDOR FILES
 	execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\GLIndex.h[cno] 1 12 REPLACE DupKeys"
 	execute "Index [Q]\GLmstr\GL1099.h[cno]"&' '&"[Q]\GLmstr\GL109IDX.h[cno] 1 8 REPLACE DupKeys"
-	fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 	execute "Index [Q]\GLmstr\PRmstr.h[cno]"&' '&"[Q]\GLmstr\PRIndex.h[cno] 1 4 REPLACE DupKeys" ioerr L870
 L870: execute "Index [Q]\GLmstr\GL1099.h[cno]"&' '&"[Q]\GLmstr\GL109IDX.h[cno] 1 8 REPLACE DupKeys"
 	goto L1130

@@ -31,7 +31,7 @@ def library fnub_cnv_note_phase_1
   execute "Free [Q]\UBmstr\Note1.h[cno] -n"
   execute "Rename "&env$('temp')&"\Work."&session$&' '&"[Q]\UBmstr\Note1.h[cno] -n"
   fnCopy("[Q]\UBmstr\Note2.h[cno]","[Q]\UBmstr\Note2.h[cno]",73) 
-  fnindex_it("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
+  fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
   open #note1=fnGetHandle: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed 
   version(note1,1)
   close #note1: ioerr ignore
@@ -76,7 +76,7 @@ def library fnub_cnv_note_phase_1
 	else if exists("[Q]\UBmstr\ubMaster.h[cno]") then
 		open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\ubMaster.h[cno]",internal,input,relative 
 	end if
-	fnindex_it("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
+	fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
 	open #note1b:=fngethandle: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed 
 	open #note2b:=fngethandle: "Name=[Q]\UBmstr\Note2.h[cno]",internal,outIn,relative 
 	L50100: !

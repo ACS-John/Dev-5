@@ -5,7 +5,7 @@ def library fnaddreceipt
 	on error goto Ertn
 	dim ml$(0)*128	
 
-	fnIndex_it('[Q]\CLmstr\Recmstr.h[cno]','[Q]\CLmstr\Recidx1.h[cno]','1 8')
+	fnIndex('[Q]\CLmstr\Recmstr.h[cno]','[Q]\CLmstr\Recidx1.h[cno]','1 8')
 	fnStatusClose
 	open #trmstr2:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 	if exists("[Q]\CLmstr\RECmstr.H[cno]")=0 then gosub CREATERECEIPTFILE
@@ -43,7 +43,7 @@ def library fnaddreceipt
 	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
 	dim resp$(60)*50
 	fnAcs2(mat resp$,ckey)
-	add=edit=0
+	add=xedit=0
 	if ckey=5 then 
 		goto Xit 
 	else if ckey=1 then 
@@ -55,7 +55,7 @@ def library fnaddreceipt
 	if ckey=2 or ckey=3 then 
 		read #receipt,using 'Form Pos 1,C 8,c 30',rec=editrec: rec$,nam$
 	end if
-	if ckey=2 then edit=1 : goto EDIT_RECEIPT
+	if ckey=2 then xedit=1 : goto EDIT_RECEIPT
 	if ckey=3 then gosub DELETE_RECEIPT : goto MENU1
 	DELETE_RECEIPT: ! r:
 		! check for Linked Unpaid Invoices 
@@ -171,8 +171,8 @@ def library fnaddreceipt
 		fnmsgbox(mat ml$,resp$,'',16)
 		goto EDIT_RECEIPT
 		SAVE_RECEIPT: ! 
-		if edit=1 and rec$<>holdrec$ then gosub KEY_CHANGE
-		if edit=1 then 
+		if xedit=1 and rec$<>holdrec$ then gosub KEY_CHANGE
+		if xedit=1 then 
 			rewrite #receipt, using 'Form Pos 1,Cr 8,C 30': rec$,nam$
 		else if add=1 then 
 			write #receipt,using 'Form Pos 1,Cr 8,C 30': rec$,nam$ duprec MSGBOX3

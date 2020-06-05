@@ -39,7 +39,7 @@ MENU1: ! r:
 	if uprc$(code$)="H" then
 		fnStatus('Processing history instead of current transactions')
 		if del_dupe_only then
-			fnindex_it("[Q]\GLmstr\AcTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
+			fnIndex("[Q]\GLmstr\AcTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 		end if  ! del_dupe_only
 		open #h_trans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed  ! 3
 		if del_dupe_only then
@@ -48,7 +48,7 @@ MENU1: ! r:
 	else
 		fnStatus('Processing current transactions only')
 		if del_dupe_only then
-			fnindex_it("[Q]\GLmstr\GLTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
+			fnIndex("[Q]\GLmstr\GLTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 		end if  ! del_dupe_only
 		open #h_trans=fngethandle: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative  ! 2
 		if del_dupe_only then

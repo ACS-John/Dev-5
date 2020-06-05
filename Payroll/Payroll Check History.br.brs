@@ -21,8 +21,8 @@ close #hCheckIdx3: ioerr ignore
 gosub ReIndexPayrollChecks
 Xit: fnXit
 ReIndexPayrollChecks: ! r:
-	fnindex_it('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx3.h[cno]','1/12/9 8/6/3')
-	fnindex_it('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx.h[cno]','1 17')
+	fnIndex('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx3.h[cno]','1/12/9 8/6/3')
+	fnIndex('[Q]\PRmstr\PayrollChecks.h[cno]','[Q]\PRmstr\checkidx.h[cno]','1 17')
 	fnStatusClose
 return ! /r
 
@@ -71,7 +71,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! 31 - 76 selections 46*n 1
 		close #hPrReport:
 	else if exists("[Q]\PRmstr\reportidx.H[cno]") =0 then
-		fnindex_it('[Q]\PRmstr\payrollreports.H[cno]','[Q]\PRmstr\reportidx.H[cno]','1 30')
+		fnIndex('[Q]\PRmstr\payrollreports.H[cno]','[Q]\PRmstr\reportidx.H[cno]','1 30')
 		fnStatusClose
 	end if
 	

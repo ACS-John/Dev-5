@@ -15,5 +15,5 @@ L140: form pos 12,n 6
 NEXT_J: !
 	next j
 	close #trmstr:
-	fnindex_it("[Q]\CLmstr\TRMSTR.H[cno]","[Q]\CLmstr\TRIDX1.H[cno]","1 11")
-	fnindex_it("[Q]\CLmstr\TRMSTR.H[cno]","[Q]\CLmstr\TRIDX2.H[cno]","28/1 8/11")
+	fnIndex("[Q]\CLmstr\TRMSTR.H[cno]","[Q]\CLmstr\TRIDX1.H[cno]","1 11")
+	fnIndex("[Q]\CLmstr\TRMSTR.H[cno]","[Q]\CLmstr\TRIDX2.H[cno]","28/1 8/11")

@@ -18,7 +18,7 @@ def library fnglmstr_338_416
 	DONE: !
 	stopable$="Xit"
 	close #1:
-	fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\glIndex.h[cno]","1 12")
+	fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\glIndex.h[cno]","1 12")
 	fnacglblds
 	goto Xit
 Xit: fnend

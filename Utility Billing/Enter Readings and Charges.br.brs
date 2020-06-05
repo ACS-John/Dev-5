@@ -1398,7 +1398,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		dim holdingFileIndex$*256
 		holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
 		holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
-		fnindex_it(holdingFile$,holdingFileIndex$,'1 10')
+		fnIndex(holdingFile$,holdingFileIndex$,'1 10')
 		open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 		restore #hWork: ! ,search>="": nokey AppendFinis
 		do

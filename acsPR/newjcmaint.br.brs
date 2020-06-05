@@ -685,9 +685,9 @@ L1640: ! r:
 	open #1: "Name=[Q]\PRmstr\JCPRH1.H[cno],SIZE=0,RecL=40",internal,output
 	close #1:
 	IndexAndXit: !
-	fnIndex_it('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCIndx.h[cno]','1,6')
-	fnIndex_it('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCINDX2.H[cno]','7,25')
-	fnIndex_it('[Q]\PRmstr\JCCAT.H[cno]' ,'[Q]\PRmstr\CatIndx.h[cno]','1,11')
+	fnIndex('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCIndx.h[cno]','1,6')
+	fnIndex('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCINDX2.H[cno]','7,25')
+	fnIndex('[Q]\PRmstr\JCCAT.H[cno]' ,'[Q]\PRmstr\CatIndx.h[cno]','1,11')
 goto Xit ! /r
 Xit: fnXit
  

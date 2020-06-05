@@ -31,7 +31,7 @@
 	if ~exists("[Q]\GLmstr\bankrec.H[cno]") then
 		open #6: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankrec-idx.H[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
 		close #6:
-		fnindex_it("[Q]\GLmstr\bankrec.H[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
+		fnIndex("[Q]\GLmstr\bankrec.H[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
 	end if
 	open #6: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed
 	if exists("[Q]\GLmstr\gltr1099.h[cno]")=0 then
@@ -198,13 +198,13 @@ L1620: close #1:
 L1660: !
 	close #4: ioerr ignore
 	if new1=1 or new2=1 then
-		fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+		fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 	end if
 	if new1=1 then
-		fnindex_it("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\GLIndex.h[cno]","1 12")
+		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\GLIndex.h[cno]","1 12")
 	end if
 	if new2=1 then
-		fnindex_it("[Q]\GLmstr\GL1099.h[cno]","[Q]\GLmstr\GL109IDX.h[cno]","1 8")
+		fnIndex("[Q]\GLmstr\GL1099.h[cno]","[Q]\GLmstr\GL109IDX.h[cno]","1 8")
 	end if
 	open #30: "Name=[Q]\GLmstr\Process.h[cno],Shr",internal,outIn,relative ioerr L1760
 	read #30,using "form pos 1,n 1",rec=1: process noRec L1760 ! read post payroll code

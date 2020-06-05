@@ -30,8 +30,8 @@ def library fnpaytrans_v1_to_v2
 		next j
 L320: version(paytrans1,2)
 		close #paytrans1:
-		fnindex_it("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.H[cno]","1 20")
-		fnindex_it("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
+		fnIndex("[Q]\CLmstr\PayTrans.H[cno]","[Q]\CLmstr\UnPdIdx1.H[cno]","1 20")
+		fnIndex("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
 		goto Xit
  
 include: Ertn

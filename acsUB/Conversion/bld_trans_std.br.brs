@@ -125,7 +125,7 @@ PHASE4: !
  
 	close #transvb:
 	pr "ReIndexing ubTransVB..."
-	fnindex_it("[Q]\UBmstr\UBTransVB.h[cno]","[Q]\UBmstr\UBTrIndx.h[cno]","1 19")
+	fnIndex("[Q]\UBmstr\UBTransVB.h[cno]","[Q]\UBmstr\UBTrIndx.h[cno]","1 19")
 	pr "Transactions for company [cno] were built successfully."
 	pr ""
 	if removebaddates$="True" then gosub REMOVEBADDATES

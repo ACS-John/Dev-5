@@ -13,7 +13,7 @@
 	dim dedst(20),deduc(20),gl$(20)*12
  
 	fnTop(program$)
-	fnIndex_it('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
+	fnIndex('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
 	fnStatusClose
 	fnopenprn
  

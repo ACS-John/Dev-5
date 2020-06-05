@@ -17,7 +17,7 @@ def library fnub_cnv_ubmstr_vb
 	end if 
 	fnCopy("[Q]\UBmstr\Customer.h[cno]","[Q]\UBmstr\Customer.h[cno]",2067)
 	fnub_index_customer
-	fnindex_it("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
+	fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
 
 	open #h_customer:=fnGetHandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
 	if version(1)=1 then goto Xit
@@ -67,7 +67,7 @@ def library fnub_cnv_ubmstr_vb
 	close #h_customer: ioerr ignore
 	close #h81: ioerr ignore
 	close #h82: ioerr ignore
-	fnindex_it("[Q]\UBmstr\BudMstr.h[cno]","[Q]\UBmstr\BudIdx1.h[cno]", '1 10')
+	fnIndex("[Q]\UBmstr\BudMstr.h[cno]","[Q]\UBmstr\BudIdx1.h[cno]", '1 10')
 	! L640: ! Goto 70
 	Xit: !
 fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnXit

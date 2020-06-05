@@ -65,12 +65,12 @@ def library fnacglbld
 	open #1: "Name=[Q]\GLmstr\acPrCks.h[cno],Size=0,RecL=110",internal,output,relative
 	L580: !
 	close #1:
-	fnindex_it('[Q]\GLmstr\GLmstr.h[cno]','[Q]\GLmstr\GLIndex.h[cno]','1 12')
-	fnindex_it('[Q]\GLmstr\GLmstr.h[cno]','[Q]\GLmstr\glIndx2.h[cno]','13 30')
-	fnindex_it('[Q]\GLmstr\gl1099.h[cno]','[Q]\GLmstr\gl109Idx.h[cno]','1 8')
-	fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
-	fnindex_it('[Q]\GLmstr\PRmstr.h[cno]','[Q]\GLmstr\PRINDEX.h[cno]','1 4')
-	fnindex_it('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
+	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[Q]\GLmstr\GLIndex.h[cno]','1 12')
+	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[Q]\GLmstr\glIndx2.h[cno]','13 30')
+	fnIndex('[Q]\GLmstr\gl1099.h[cno]','[Q]\GLmstr\gl109Idx.h[cno]','1 8')
+	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+	fnIndex('[Q]\GLmstr\PRmstr.h[cno]','[Q]\GLmstr\PRINDEX.h[cno]','1 4')
+	fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
 	fnchain("S:\General Ledger\Accounts")
 	goto Xit
 Xit: fnend

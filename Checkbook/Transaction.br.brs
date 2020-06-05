@@ -1,8 +1,8 @@
 ! replace S:\Checkbook\Transaction
 ! Checkbook transaction file editor
 !
-	autoLibrary
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
 ! r: dim
 	dim tr$(5)*35,de$*30,bn$*40,aa(2)
 	dim ml$(10)*80 ! message box message lines
@@ -185,8 +185,10 @@ MENU1: ! r:
 	item$(5)=tr$(4)
 	item$(6)=tr$(5)
 	item$(7)=str$(posting_code)
-	item$(8)=str$(clr) : item$(9)=str$(scd)
-	item$(10)=newkey$(1:2) : item$(11)=newkey$(3:3)
+	item$(8)=str$(clr)
+	item$(9)=str$(scd)
+	item$(10)=newkey$(1:2)
+	item$(11)=newkey$(3:3)
 	fnflexadd1(mat item$)
 	transactionsTotal+=tr3
 	goto READ_TRMSTR1_1
@@ -268,8 +270,8 @@ REMOVE_TRALLOC_FOR_KEY_READ: !
 	end if
 	goto REMOVE_TRALLOC_FOR_KEY_READ
 REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
-!
-!
+
+
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 	if typeofentry=2 then
 		open #payee:=fngethandle: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
@@ -278,7 +280,7 @@ REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
 		open #payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
 		open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	end if
-!
+
 	read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL
 	restore #payeegl,key>=vn$: nokey EO_READSTGL
 	totalalloc=0 : totalamt=0
@@ -296,11 +298,11 @@ GET_TOTAL: !
 		allocamt=round(val(tr$(3))*percent*.01,2)
 		totalalloc+=percent
 		totalamt+=allocamt
-!
+
 		write #h_tralloc,using 'form pos 1,C 11,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': key$,payeegl$,allocamt,gldesc$,0,"",0
 		lastrec=rec(h_tralloc)
 	loop
-!
+
 EO_READSTGL: !
 	if totalamt<>val(tr$(3)) then
 		allocamt-=totalamt-val(tr$(3))
@@ -363,7 +365,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		fnmsgbox(mat ml$,resp$,'',0)
 		allocations_messed_with=false
 	end if
-!
+
 ! save - update bank balance for changed amounts
 	if editrec=0 then goto L2040 ! adding new record
 	if oldtr3<>val(tr$(3)) or oldbank_code<>bank_code or tcde<>oldtcde then
@@ -395,11 +397,11 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		L2130: !
 	end if
 	EO_UPDATE_TRALLOC_KEYS: !
-!
-!
-!
-!
-!
+
+
+
+
+
 ! and finaly, actually save the transaction
 	tr$(1)=lpad$(trim$(tr$(1)),8)
 	tx3=val(tr$(3))

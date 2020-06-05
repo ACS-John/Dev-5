@@ -139,13 +139,13 @@ DONE: close #glmstr:
 	L1180: !
 	close #gl1099: ioerr ignore
 	if new1=1 or new2=1 then
-		fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+		fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 	end if
 	if new1=1 then 
-		fnindex_it('[Q]\GLmstr\GLmstr.H[cno]','[Q]\GLmstr\GLIndex.H[cno]','1 12')
+		fnIndex('[Q]\GLmstr\GLmstr.H[cno]','[Q]\GLmstr\GLIndex.H[cno]','1 12')
 	end if
 	if new2=1 then 
-		fnindex_it('[Q]\GLmstr\GL1099.H[cno]','[Q]\GLmstr\GL109IDX.H[cno]','1 8')
+		fnIndex('[Q]\GLmstr\GL1099.H[cno]','[Q]\GLmstr\GL109IDX.H[cno]','1 8')
 	end if
 	if fnprocess=1 then 
 		fnchain("S:\acsGL\acGLAuto") 

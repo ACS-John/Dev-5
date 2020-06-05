@@ -54,7 +54,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	ficar1=ficar1*.01
 	ficar2=ficar2*.01
 	ficarate=ficar1+ficar2
-	fnindex_it("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\CheckIdx2.h[cno]","9/12/1 3/6/8")
+	fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\CheckIdx2.h[cno]","9/12/1 3/6/8")
 	! execute "Index [Q]\PRmstr\PayrollChecks.h[cno],[Q]\PRmstr\CheckIdx2.h[cno] 9/12/1 3/6/8,replace,DupKeys -n"
 	open #h_payrollchecks:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",internal,input,keyed 
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
@@ -307,7 +307,7 @@ L1990: !
 		close #h_payrollchecks: ioerr ignore
 		! fnStatusClose
 		fncloseprn
-		fnindex_it("[Q]\PRmstr\prTot.h[cno]","[Q]\PRmstr\PRTotIdx.h[cno]","1 9")
+		fnIndex("[Q]\PRmstr\prTot.h[cno]","[Q]\PRmstr\PRTotIdx.h[cno]","1 9")
 		! fnStatusClose
 fnend 
 include: Ertn

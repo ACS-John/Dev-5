@@ -260,7 +260,7 @@ L2580: if cmdkey=5 then goto Xit
 	goto L480
 L2610: if new1=1 or z1=1 then goto L2620 else goto Xit
 L2620: close #1:
-	fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 	if z1=1 then goto OPEN_FILES else goto Xit
  
 L2660: if err=4152 then goto L740 else goto ERTN

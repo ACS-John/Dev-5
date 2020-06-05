@@ -4,6 +4,6 @@
 def library fnglcontrol
 	autoLibrary
 	fnCopy('[Q]\CLmstr\fundmstr.h[cno]','[Q]\CLmstr\fundmstr.h[cno]',75)
-	fnIndex_it('[Q]\CLmstr\fundmstr.h[cno]','[Q]\CLmstr\fundidx1.h[cno]','1,3')
+	fnIndex('[Q]\CLmstr\fundmstr.h[cno]','[Q]\CLmstr\fundidx1.h[cno]','1,3')
 fnend
  

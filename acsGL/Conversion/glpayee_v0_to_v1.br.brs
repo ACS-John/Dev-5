@@ -28,11 +28,11 @@ EOD_GL1099: !
 		version(2,1)
 		close #1,free: ioerr ignore
 		close #2: ioerr ignore
-		fnindex_it("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
-		fnindex_it("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
-		fnindex_it("[Q]\GLmstr\payeeglbreakdown.h[cno]","[Q]\GLmstr\payeeglbkdidx.h[cno]","1 8")
+		fnIndex("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
+		fnIndex("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
+		fnIndex("[Q]\GLmstr\payeeglbreakdown.h[cno]","[Q]\GLmstr\payeeglbkdidx.h[cno]","1 8")
 		if ~exists("[Q]\GLmstr\gltr1099.h[cno]") then let fnCopy("S:\General Ledger\mstr\gltr1099.h99999","[Q]\GLmstr\gltr1099.h[cno]")
-		fnindex_it("[Q]\GLmstr\gltr1099.h[cno]","[Q]\GLmstr\gltridx.h[cno]","1 8")
+		fnIndex("[Q]\GLmstr\gltr1099.h[cno]","[Q]\GLmstr\gltridx.h[cno]","1 8")
 		goto Xit
  
  
