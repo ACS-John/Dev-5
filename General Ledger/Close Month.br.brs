@@ -59,7 +59,7 @@ GET_GOING: !
 	FINIS: !
 	close #h_glbrec:
 	fnRemoveDeletedRecords("[Q]\GLmstr\GLBRec.h[cno]")
-	fnindex_it("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
+	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 goto Xit
 GLBREC_DROP: !
 	open #h_glbrec:=1: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn
@@ -78,7 +78,7 @@ def fn_current_to_accumlated_trans
 	CTAT_EoTransCurrent: !
 	close #hTransAccumulated:
 	close #hTransCurrent:
-	fnindex_it("[Q]\GLmstr\ACTRANS.h[cno]","[Q]\GLmstr\ACTRIDX.h[cno]","1/71/17/13 12/2/2/4")
+	fnIndex("[Q]\GLmstr\ACTRANS.h[cno]","[Q]\GLmstr\ACTRIDX.h[cno]","1/71/17/13 12/2/2/4")
 fnend
 !
 Xit: fnXit

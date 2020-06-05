@@ -20,8 +20,8 @@ def library fntrmstr_v1_to_v2
 	Xit: !
 		if file$(trmstr)>'' then close #trmstr:
 		fnCopy("[Q]\CLmstr\TRmstr.h[cno]","[Q]\CLmstr\TRmstr.h[cno]",78)
-		fnindex_it("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx1.H[cno]","1 11")
-		fnindex_it("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx2.H[cno]","28/1 8/11")
+		fnIndex("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx1.H[cno]","1 11")
+		fnIndex("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx2.H[cno]","28/1 8/11")
 fnend
  
 include: Ertn No

@@ -17,7 +17,7 @@
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE : _
 	gosub HAMSTER
 	gosub CLOSE_FILE
-	fnindex_it("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
+	fnIndex("[Q]\UBmstr\GLmstr.h[cno]", "[Q]\UBmstr\glindex.h[cno]","1 12")
 	goto Xit
  
 OPEN_FILE: ! : _

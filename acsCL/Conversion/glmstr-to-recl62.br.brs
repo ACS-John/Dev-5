@@ -6,6 +6,6 @@ def library fnglmstrtorecl62
 	autoLibrary
 	fnCopy('[Q]\CLmstr\GLmstr.H[cno]','[Q]\CLmstr\GLmstr.H[cno]',62)
 	fnRemoveDeletedRecords('[Q]\CLmstr\GLmstr.H[cno]')
-	fnindex_it('[Q]\CLmstr\GLmstr.H[cno]','[Q]\CLmstr\GLIndex.h[cno]','1,12')
+	fnIndex('[Q]\CLmstr\GLmstr.H[cno]','[Q]\CLmstr\GLIndex.h[cno]','1,12')
 fnend
 

@@ -26,8 +26,8 @@ def library fnunpdaloc_v1_to_v2
 			rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
 L330: next j
 		close #unpdaloc:
-		fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")
-		fnindex_it("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
+		fnIndex("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")
+		fnIndex("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
 		goto Xit
  
 include: Ertn

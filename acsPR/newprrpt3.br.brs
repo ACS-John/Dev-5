@@ -10,7 +10,7 @@
 	dim ml$(4)*128
  
 	fnTop(program$,cap$="Design Reports")
-	fnindex_it("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
+	fnIndex("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
 	fnStatusClose
 	open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed
 F_PRREPORT: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1

@@ -188,7 +188,7 @@ CLOSE_FILE: ! r:
 	next j
 return  ! /r
 INDEX: ! r:
-	if ~fnindex_it("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno]","1 12") then goto MAIN
+	if ~fnIndex("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno]","1 12") then goto MAIN
 	return  ! /r
 
 ADD: ! r:

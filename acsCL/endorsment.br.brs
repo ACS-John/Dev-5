@@ -1,11 +1,10 @@
 ! REPLACE S:\acsCL\Endorsment
 ! pr endorsment on back of check
- 
-	autoLibrary
-	fnTop(program$,"Endorse Checks")
-	on error goto Ertn
+autoLibrary
+fnTop(program$,"Endorse Checks")
+on error goto Ertn
 ENDORSE_CHECKS: !
-	fnTos(sn$="Endorse")
+	fnTos
 	fnLbl(1,1,"Number of Endorsements:",25,1,0)
 	fnTxt(1,28,6,0,0,"30",0,"You can guess. Too many will only cause you to have to cancel print.")
 	resp$(1)=""
@@ -27,10 +26,4 @@ ENDORSE_CHECKS: !
 	fncloseprn
 	goto Xit
 Xit: fnXit
-! <updateable region: ertn>
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! </updateable region: ertn>
+include: Ertn

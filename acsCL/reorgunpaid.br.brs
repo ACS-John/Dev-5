@@ -24,9 +24,9 @@ L260: close #paytrans:
 	close #unpdaloc:
 	close #newunpdaloc:
 	fnCopy('[Q]\CLmstr\newunpdaloc.H[cno]',"[Q]\CLmstr\unpdaloc.H[cno]")
-	fnIndex_it('[Q]\CLmstr\PayTrans.H[cno]','[Q]\CLmstr\UnPdIdx1.H[cno]',"1,20")
-	fnIndex_it('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx2.H[cno]',"1,20")
-	fnIndex_it('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx1.H[cno]',"9,12")
+	fnIndex('[Q]\CLmstr\PayTrans.H[cno]','[Q]\CLmstr\UnPdIdx1.H[cno]',"1,20")
+	fnIndex('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx2.H[cno]',"1,20")
+	fnIndex('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx1.H[cno]',"9,12")
 Xit: fnXit
  
 include: Ertn

@@ -18,14 +18,8 @@
 ! pr "The answer is "&response$
 Xit: !
 	pr "Exit Successful"
-	stop
+stop
  
-! <Updateable Region: ERTN>
-ERTN: !
-	fnerror(program$,err,line,act$,"QUIT_WO_CALC")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
+include: Ertn
+
  

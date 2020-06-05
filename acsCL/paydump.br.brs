@@ -74,11 +74,5 @@ HDR: !
 	pr #255,using 'Form POS 1,Cc 80': dat$
 return
  
-! <Updateable Region: ERTN>
-ERTN: fnerror(program$,err,line,act$,"NOt")
-	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /region
+include: Ertn No
  

@@ -95,7 +95,7 @@ Finis: ! r:
 	pr #255,using 'Form pos 5,c 18,n 12.2': '  Total Credits: ',am2
 	pr #255,using 'Form pos 5,c 18,n 12.2': 'Net Adjustments: ',am1+am2
 	fncloseprn : prnOpen=0
-	fnindex_it('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
+	fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
 goto Xit ! /r
 HDR: ! r:
 	pr #255,using 'Form Pos 20,Cc 40': env$('cnam')

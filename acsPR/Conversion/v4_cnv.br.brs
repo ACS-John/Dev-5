@@ -48,8 +48,8 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		open #h_rpmstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],RecL=196,Use",internal,outIn 
 		close #h_rpmstr: 
 	end if 
-	fnindex_it("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndex.h[cno]","1 8")
-	fnindex_it("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
+	fnIndex("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndex.h[cno]","1 8")
+	fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
 	open #h_rpmstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
 	if rln(h_rpmstr)<196 then 
 		close #h_rpmstr: 
@@ -63,7 +63,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		open #h_rptrail:=2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],RecL=474,Use,Shr",internal,outIn,relative 
 	end if 
 
-	if fnindex_it("[Q]\PRmstr\PRCkHist.h[cno]","[Q]\PRmstr\PRCKINDX.h[cno]","1 14") then 
+	if fnIndex("[Q]\PRmstr\PRCkHist.h[cno]","[Q]\PRmstr\PRCKINDX.h[cno]","1 14") then 
 		open #h_prckhist:=fngethandle: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCkIndx.h[cno],Shr",internal,outIn,keyed ioerr L320
 		foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
 	else 
@@ -174,13 +174,13 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		open #h_deptname:=fngethandle: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],replace,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
 		close #h_deptname: 
 		close #12: ioerr ignore
-		fnindex_it("[Q]\PRmstr\Department.h[cno]","[Q]\PRmstr\DeptIdx.h[cno]","1 11")
+		fnIndex("[Q]\PRmstr\Department.h[cno]","[Q]\PRmstr\DeptIdx.h[cno]","1 11")
 		close #h_payrollchecks: 
-		fnindex_it("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx.h[cno]","1 17")
-		fnindex_it("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
+		fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx.h[cno]","1 17")
+		fnIndex("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
 		close #h_rpmstr: ioerr ignore
-		fnindex_it("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndex.H[cno]","1,8")
-		fnindex_it("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
+		fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndex.H[cno]","1,8")
+		fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
 	!   end if  ! cno_current<>0
 	! next company_item
 	Xit: ! 

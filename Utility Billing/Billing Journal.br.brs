@@ -80,7 +80,7 @@ else if seq=2 then            ! account
 else if seq=3 then ! Alpha Sort Sequence
 	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',internal,input,keyed
 else if seq=4 then ! Customer Name
-	fnindex_it('[Q]\UBmstr\Customer.h[cno]', env$('temp')&'\customer_name'&session$&'.h[cno]','41 30')
+	fnIndex('[Q]\UBmstr\Customer.h[cno]', env$('temp')&'\customer_name'&session$&'.h[cno]','41 30')
 	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
 end if
 if trim$(serviceName$(1))='Water'                               then services+=1 : water=1

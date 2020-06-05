@@ -7,7 +7,7 @@ def library fnub_cnv_note
 		fnStatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
 		dim nam$*30,rm$*60,ra(2),z$*10
 
-		fnindex_it("[Q]\UBmstr\Note1.h[cno]", "[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
+		fnIndex("[Q]\UBmstr\Note1.h[cno]", "[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
 		open #h_note1:=fngethandle: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno],Shr",internal,input,keyed 
 		!   fnCopy("[Q]\UBmstr\Note2.h[cno]","[Q]\UBmstr\Note2.h[cno]",73)  ! BAD IDEA - THIS PROGRAM DOES NOT HANDLE THAT FORMAT OF NOTE2.hxx file - I think S:\acsUB\Conversion\note-cnv-c7.br will convert it to the format necessary for this to continue though
 

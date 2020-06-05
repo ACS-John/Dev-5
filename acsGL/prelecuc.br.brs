@@ -1,33 +1,34 @@
 ! REPLACE S:\acsGL\prElecuc
-! never could get it work with an RO record if all zeroes; without : _
-	! RO record i had to put an RE record in front of every RW record and : _
-	! had to follow with an RT record - Right now this program will not : _
-	! create an RO record
- 
-	autoLibrary
-	fnTop(program$,cap$="PR ELEC UC")
-	on error goto Ertn
- 
-	dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
-	dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
-	dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2)
-	dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),w3(2),i2(2),t2(2)
-	dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
-	dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
-	dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
- 
-	on fkey 5 goto Xit
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
+! never could get it work with an RO record if all zeroes; without 
+! RO record i had to put an RE record in front of every RW record and 
+! had to follow with an RT record - Right now this program will not 
+! create an RO rec
+
+autoLibrary
+fnTop(program$,cap$="PR ELEC UC")
+on error goto Ertn
+
+dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
+dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
+dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2)
+dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),w3(2),i2(2),t2(2)
+dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
+dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
+dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
+
+open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 FORM_COMPANY: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 ! read #1,using FORM_PRCOINFO: mat a$,b$,c$,oldmax,mat dedfed
 ! FORM_PRCOINFO: form pos 1,3*c 40,c 12,x 12,c 5,pos 188,pd 7.2,pos 658,10*n 1
-	close #1:
-L340: p1=pos(b$,"-",1)
+close #1:
+L340: !
+	p1=pos(b$,"-",1)
 	if p1=0 then goto L380
 	b$(p1:p1)=""
-	goto L340
-L380: b1=val(b$)
+goto L340
+L380: !
+	b1=val(b$)
 	p1=pos(a$(3),",",1): comma=1
 	if p1=0 then p1=pos(a$(3)," ",1): comma=0
 	ct$=a$(3)(1:p1-1)
@@ -53,7 +54,7 @@ L380: b1=val(b$)
 	io1$(15)="20,49,c 1,UT,N"
 	namcde$="F"
 	typemp$="R"
- 
+
 SCR1: !
 	pr newpage
 	close #101: ioerr L680
@@ -104,23 +105,23 @@ L990: !
 L1120: if pension$="Y" or pension$="N" then goto L1130 else ce=15: goto ERR1
 L1130: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
 	yr=endingdate-(int(endingdate/100)*100)+2000
- 
+
 	gosub SCR2
 	pr newpage
 	win=101
 	message$=""
 	stopable=1: gosub L3390 ! fnWAIT(MESSAGE$,1)
- 
+
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
 L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output
- 
+
 	goto BEGINNING_OF_FILE
 	pr newpage
 	msgline$(1)="Insert Diskette"
 	mtype=1
 	if err=4221 then gosub L3040
 	goto L1230
- 
+
 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE
 	open #255: "Name=PRN:/SELECT,PAGEOFLOW=58,RecL=220",display,output
 	pr #255,using "form SKIP 2,pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
@@ -150,20 +151,20 @@ L1480: p1=pos(ss$,"-",1)
 	gosub RECRS
 	tw1=tw1+1 ! counter
 	goto READ_EMPLOYEE
- 
+
 RECRA: pr #22,using L1620: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 L1620: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
 return
- 
+
 RECRE: pr #22,using L1660: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
 L1660: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 126,c 9,c 6,c 1,n 5.4,c 1,c 6,c 185
 return
- 
+
 	form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 	pr #22,using L1710: "2E",ct$,st$,"",zip$,namcde$,typemp$,"","","",""
 L1710: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
 return
- 
+
 RECRS: ! STATE RECORD
 	if sr1=0 then goto L1830 ! NO STATE SELECTED
 	if m1=0 then goto L1830 ! NO quarterly wages
@@ -186,52 +187,55 @@ L1830: t1=t1+1: mat t1=t1+w2
 	mat w3=(0)
 	mat s2=(0)
 return
- 
+
 RECRF: pr #22,using L1980: "RF"," ",tw1,""
 L1980: form pos 1,c 2,c 5,pic(#########),c 496
 return
- 
+
 END1: !
 	pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 	gosub L2070
-Xit: fnXit
- 
-L2070: close #24: ioerr L2090
+goto Xit
+
+L2070: !
+	close #24: ioerr ignore
 	dim a$*512
-L2090: close #22: ioerr L2100
-L2100: open #24: "Name="&env$('temp')&"\x,RecL=514,EOL=NONE,REPLACE",external,output
+	close #22: ioerr ignore
+	open #24: "Name="&env$('temp')&"\x,RecL=514,EOL=NONE,REPLACE",external,output
 	open #22: "Name=[Q]\UCReport,RecL=512",display,input
-L2120: linput #22: a$ eof L2170
+	L2120: !
+	linput #22: a$ eof L2170
 	if a$(512:512)="X" then a$(512:512)=""
 	write #24,using L2150: rpad$(a$,512),chr$(13),chr$(10)
-L2150: form pos 1,c 512,c 1,c 1
+	L2150: form pos 1,c 512,c 1,c 1
 	goto L2120
-L2170: close #24:
+	L2170: !
+	close #24:
 	close #22:
-	execute "COPY "&env$('temp')&"\x a:UCReport"
+	fnCopy(env$('temp')&"\x","a:UCReport")
 return
 SCR2: !
 	dim contact$*27,email$*40
 	win=101
 	win_height=12: win_width=75: display_cnam=1: button_option=2: gosub L2680
-	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" : _
-	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" : _
-	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" : _
-	pr #win,fields "07,2,Cr 31,N": "Contact Name:" : _
-	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:" : _
-	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:" : _
-	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:" : _
-	pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:" : _
+	pr #win,fields "04,2,Cr 31,N": "Personal ID Number:"
+	pr #win,fields "05,2,Cr 31,N": "Resub Indicator:"
+	pr #win,fields "06,2,Cr 31,N": "Resub TLCN:"
+	pr #win,fields "07,2,Cr 31,N": "Contact Name:"
+	pr #win,fields "08,2,Cr 31,N": "Contact Phone Number:"
+	pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:"
+	pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:"
+	pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:"
 	pr #win,fields "12,2,Cr 66,N": "Is Medicare W/H a separate field in the employee record (Y/N):"
-	scr2_io$(1)="04,34,C 17,UT,N" : _
-	scr2_io$(2)="05,34,C 01,UT,N" : _
-	scr2_io$(3)="06,34,C 06,UT,N" : _
-	scr2_io$(4)="07,34,C 27,UT,N" : _
-	scr2_io$(5)="08,34,C 15,UT,N" : _
-	scr2_io$(6)="09,34,C 05,UT,N" : _
-	scr2_io$(7)="10,34,C 40,UT,N" : _
-	scr2_io$(8)="11,34,C 01,UT,N" : _
+	scr2_io$(1)="04,34,C 17,UT,N"
+	scr2_io$(2)="05,34,C 01,UT,N"
+	scr2_io$(3)="06,34,C 06,UT,N"
+	scr2_io$(4)="07,34,C 27,UT,N"
+	scr2_io$(5)="08,34,C 15,UT,N"
+	scr2_io$(6)="09,34,C 05,UT,N"
+	scr2_io$(7)="10,34,C 40,UT,N"
+	scr2_io$(8)="11,34,C 01,UT,N"
 	scr2_io$(9)="12,68,Cu 01,UT,N"
 	if resub$="" then resub$="0"
 ! If TLCN$="" Then tLCN$="0"
@@ -246,17 +250,14 @@ L2350: scr2_io$(ce)=rtrm$(scr2_io$(ce)) : ce1=pos(scr2_io$(ce),"U",9) : if ce1=0
 CONV_SCR2: if ce>0 then scr2_io$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 ERR_SCR2: pr f "24,78,C 1": bell : goto L2350
-L2400: if resub$<>"0" and resub$<>"1" then ce=2 : _
-		goto ERR_SCR2
-	if resub$="1" and rtrm$(tlcn$)="" then ce=3 : _
-		goto ERR_SCR2
-	if terminat$<>"0" and terminat$<>"1" then ce=8 : _
-		goto ERR_SCR2
+L2400: if resub$<>"0" and resub$<>"1" then ce=2 : goto ERR_SCR2
+	if resub$="1" and rtrm$(tlcn$)="" then ce=3   : goto ERR_SCR2
+	if terminat$<>"0" and terminat$<>"1" then ce=8 : goto ERR_SCR2
 	if uprc$(med$)="Y" or uprc$(med$)="N" then goto L2440 else ce=9: goto ERR_SCR2
 L2440: close #win:
 	if cmdkey=5 then goto SCR1
 return
- 
+
 NAME_BREAKDOWN: !
 	dim first$*15,mid$*15,last$*20,em$(3)*30
 	em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
@@ -293,31 +294,33 @@ L2790: sc=max(int(((screen_width-win_width)/2)+1),2)
 L2870: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn
 	pr #win: newpage
 	if display_cnam=0 then goto L2920
-	if display_cnam=1 then : _
-		pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) : _
+	if display_cnam=1 then
+		pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 		pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
-	if display_cnam=2 then : _
+	else if display_cnam=2 then
 		pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
+	end if
 L2920: if button_option=0 then goto L3030
 	mat fkey$=("") : em$="" : es=0
 	fkey$(5)="Cancel" ! included by default
-	if button_option=2 then : _
+	if button_option=2 then
 		fkey$(1)="Next"
-	if button_option=3 then : _
+	else if button_option=3 then
 		fkey$(1)="Print"
-	if button_option=4 then : _
+	else if button_option=4 then
 		fkey$(1)="Save"
-	if button_option=5 then : _
-		fkey$(1)="Next" : _
+	else if button_option=5 then
+		fkey$(1)="Next"
 		fkey$(6)="Search"
-	if button_option=6 then : _
-		fkey$(1)="Next" : _
+	else if button_option=6 then
+		fkey$(1)="Next"
 		fkey$(2)="Back"
-	if button_option=7 then : _
-		fkey$(1)="Save" : _
+	else if button_option=7 then
+		fkey$(1)="Save"
 		fkey$(4)="Delete"
+	end if
 	scrline=er+1: gosub L3660 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
- 
+
 L3030: return  ! Fnend
 L3040: ! def library fnOldMsgBox(mat RESPONSE$,&CAP$,mat MSGLINE$,MTYPE)
 ! mtype=0 means splash    - returns no response                                 ! mostly for "please wait..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
@@ -378,16 +381,15 @@ L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&
 	pr #win: newpage
 	pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
 	pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number [cno]"(1:min(40,win_width))
- 
- 
+
+
 return  ! Fnend
 L3660: ! def library fnFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
-	totallen=0 : _
+	totallen=0
 	startpos=0
 	for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 		if fkey$(j)="" then goto L3720
-		fkey$(j)=fkey$(j)&" (F"&str$(j)&")" : _
-		! add ' (Fx)' to each button
+		fkey$(j)=fkey$(j)&" (F"&str$(j)&")"		! add ' (Fx)' to each button
 		totallen=totallen+len(fkey$(j))+1
 L3720: next j
 	totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
@@ -420,9 +422,7 @@ L3990: next j
 L4000: holdst$=ltrm$(holdst$)(1:2)
 	if holdst$="TE" then holdst$="TX"
 return
- 
-! <Updateable Region: ERTN>
- 
+
 CALCULATEUC: ! determine quarterly wages
 	dcy=dcq=0
 	for j=1 to 10
@@ -446,17 +446,5 @@ L4240: h3=m1-h2
 	t2=t2+h3
 	t3=t3+h2
 L4280: return
-ERTN: !
-	if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
-	goto L4360
-L4320: pr newpage
-	if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
-	goto L4360
-L4350: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-L4360: pr f "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
-	input fields "24,60,C 1,N": quitcode$
-	if rtrm$(uprc$(quitcode$))="Q" then goto L4420
-	pr f "23,1,C 80,N": ""
-	pr f "24,1,C 80,N": ""
-	retry
-L4420: fnXit
+Xit: fnXit
+include: Ertn

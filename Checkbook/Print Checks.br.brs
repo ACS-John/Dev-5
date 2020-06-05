@@ -803,10 +803,10 @@ def fn_index
 	fn_close(ivpaid)
 	fnRemoveDeletedRecords("[Q]\CLmstr\PayTrans.h[cno]")
 	fnRemoveDeletedRecords("[Q]\CLmstr\UnPdAloc.h[cno]")
-	fnIndex_it("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UNPdIdx1.h[cno]","1,20")
-	fnIndex_it("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.H[cno]","1,20")
-	fnIndex_it("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.H[cno]","9,12")
-	fnIndex_it("[Q]\CLmstr\IvPaid.h[cno]","[Q]\CLmstr\IVIndex.h[cno]","1,20")
+	fnIndex("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UNPdIdx1.h[cno]","1,20")
+	fnIndex("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.H[cno]","1,20")
+	fnIndex("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.H[cno]","9,12")
+	fnIndex("[Q]\CLmstr\IvPaid.h[cno]","[Q]\CLmstr\IVIndex.h[cno]","1,20")
 fnend
 !
 def fn_portion_stub(stubOnCheck)

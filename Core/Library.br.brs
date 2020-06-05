@@ -479,9 +479,9 @@ fnend
 		library 'S:\Core\fnFixWordingOnGrid.br': fnFixWordingOnGrid
 		fnFixWordingOnGrid=fnFixWordingOnGrid(ev$,outputfile$)
 	fnend
-	def library fnindex_it(data_file$*256,index_statement$*512; index_parameters$*256)
-		library 'S:\Core\Index.br': fnindex_it
-		fnindex_it=fnindex_it(data_file$,index_statement$, index_parameters$)
+	def library fnIndex(data_file$*256,index_statement$*512; index_parameters$*256)
+		library 'S:\Core\Index.br': fnIndex
+		fnIndex=fnIndex(data_file$,index_statement$, index_parameters$)
 	fnend
 	def library fnindex_sys(; only_cno,system_id$*256)
 		library 'S:\Core\Index.br': fnindex_sys

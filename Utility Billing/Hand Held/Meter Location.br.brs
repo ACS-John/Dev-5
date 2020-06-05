@@ -84,7 +84,7 @@ def fn_InitialializeMeterLocation
 		hInfo=fn_open('UB Meter Info',mat info$,mat infoN,mat form$)
 		hLocation=fn_open(table$,mat location$,mat locationN,mat form$)
 		fnCloseFile(hLocation,table$)
-		fnindex_it('[Q]\UBmstr\MeterLocation.h[cno]','[Q]\UBmstr\MeterLocationIdx2.h[cno]', '12 30u')
+		fnIndex('[Q]\UBmstr\MeterLocation.h[cno]','[Q]\UBmstr\MeterLocationIdx2.h[cno]', '12 30u')
 	end if
 	hLocation=fn_open(table$,mat location$,mat locationN,mat form$, 0,2)
 	fncreg_read('u4 meter location clean zeros from Location ID',umlCleanZeroLocationId$,'True')

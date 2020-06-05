@@ -27,7 +27,7 @@
 		mp1=69
 		open #hAcGlFnsX:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr",internal,input,keyed
 	end if
-	fnindex_it("[Q]\GLmstr\GLmstr.h[cno]",env$('temp')&"\fsindex.H[cno]",str$(mp1)&" 3")
+	fnIndex("[Q]\GLmstr\GLmstr.h[cno]",env$('temp')&"\fsindex.H[cno]",str$(mp1)&" 3")
 	fnopenprn
 	open #hGlMstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&"\fsindex.h[cno],Shr",internal,input,keyed
 	fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
