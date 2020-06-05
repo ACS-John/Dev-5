@@ -37,7 +37,7 @@ SCREEN1: !
 EOF1: close #h_tralloc:
 	fnCmdKey('Ok',1,1,0)
 	fnCmdKey('Cancel',99,0,1)
-	fnAcs("S-Flex",0,mat resp$,ck)
+	fnAcs("S-Flex",0,mat resp$,ckey)
 	pr "returned response is "&resp$(1)
 	pr "Press Enter to continue"
 ! input fields "1,1,C 1,AE,N": pause$

@@ -7,6 +7,6 @@ fnTos
 fncmbcno(1,1)
 resp$(1)="1"
 fnCmdKey("Ok",1,1,1)
-fnAcs2(mat resp$,ck)
+fnAcs2(mat resp$,ckey)
  
 pr resp$(1)(43:47)

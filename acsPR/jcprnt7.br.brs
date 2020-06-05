@@ -25,8 +25,8 @@ MAIN_SCREEN: !
 	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") : _
 	resp$(resp+=1)=dh$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	dat$=dh$=resp$(1) ! heading date
 	close #win: ioerr L69
 L69: fndat(dh$,put=2)

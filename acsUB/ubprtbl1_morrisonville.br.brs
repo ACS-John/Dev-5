@@ -67,7 +67,7 @@ SCREEN1: !
 	resp$(respc+=1)="False"
 	fnCmdSet(3)
 	fnAcs2(mat resp$,ckey)
-	if ck=5 then goto ENDSCR
+	if ckey=5 then goto ENDSCR
 	d1=val(resp$(7))
 	billstart$=resp$(2)
 	billend$=resp$(3)
@@ -166,7 +166,7 @@ L1070: if z$<>"" then
 L1080: fncmbact(1,17) ! 
 	resp$(1)=a$
 	fnCmdSet(11): fnAcs2(mat resp$,ckey)
-	if ck=5 then goto F5_CANCEL
+	if ckey=5 then goto F5_CANCEL
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto F5_CANCEL
 	read #1,using L650,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route nokey SCREEN3

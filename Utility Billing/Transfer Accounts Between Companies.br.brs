@@ -26,8 +26,8 @@ MENU1: !
 	resp$(2)=''
 	fnLbl(4,10,"(Both companies must be set up in advance)",49,0)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	co1=cno ! val(resp$(1)(43:47))
 	co2=val(resp$(2)(43:47))
 	if co1=0 or co2=0 then goto MENU1
@@ -63,8 +63,8 @@ L700: fnTos(sn$="CoTr-2")
 	fncmbact(1,30)
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto DONE
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto DONE
 	z$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #1,using mstrform$,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ nokey L700
 	z2$=z$
@@ -79,8 +79,8 @@ MENU3: !
 	resp$(1)=z2$
 	fnLbl(1,1,"Account "&z2$&" already exists!",0,2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto MENU2
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto MENU2
 	z2=val(resp$(1)) conv MENU3
 	if z2=0 then goto MENU2
 	z2$=cnvrt$("N 10.2",z2)

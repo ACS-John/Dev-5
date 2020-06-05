@@ -31,7 +31,7 @@ def fn_calculateBills(goal$*11)
 		serviceName$(j)=trim$(serviceName$(j))
 	next j
 	fn_ask_billing_date
-	if ck=5 then goto Xit_CALCULATE
+	if ckey=5 then goto Xit_CALCULATE
 ! fnwait("Calculating: please wait...",0)
 	fnAutomatedSavePoint('before')
 	fnopenprn
@@ -445,7 +445,7 @@ def fn_cuu_gas
 	fn_cuu_gas=cuu_gas_return
 fnend 
 def fn_ask_billing_date
-	! returns ck (if ck=5 upon return then cancel  was selected)
+	! returns ckey (if ckey=5 upon return then cancel  was selected)
 	ASK_BILLING_DATE: ! 
 	fnTos
 	mylen=24 : mypos=mylen+2
@@ -493,8 +493,8 @@ def fn_ask_billing_date
 	resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 	! /r
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck<>5 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey<>5 then 
 		d1=val(resp$(respc_billing_date))
 		if enableCostOfGas then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
 		if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then calc_interest_on_deposit=1 else calc_interest_on_deposit=0

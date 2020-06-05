@@ -64,8 +64,8 @@ SCREEN1: !
 	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(selacct_i=respc+=1)="False"
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto ENDSCR
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto ENDSCR
 	d1=val(resp$(d1_i))
 	d4=val(resp$(d4_i))
 	d5=val(resp$(d5_i))
@@ -156,8 +156,8 @@ L1070: if z$<>"" then
 	end if
 L1080: fncmbact(1,17) !
 	resp$(1)=a$
-	fnCmdSet(11): fnAcs2(mat resp$,ck)
-	if ck=5 then goto F5_CANCEL
+	fnCmdSet(11): fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto F5_CANCEL
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto F5_CANCEL
 	read #1,using L650,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,estimatedate nokey SCREEN3
@@ -200,7 +200,7 @@ ENDSCR: ! pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 Xit: fnXit
  
 ERTN: fnerror(program$,err,line,act$,"Xit")

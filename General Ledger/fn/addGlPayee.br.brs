@@ -65,25 +65,25 @@ def library fnAddGlPayee
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.") 
 		fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
 		fnCmdKey("E&Xit",5,0,1,"Exit to menu")
-		fnAcs2(mat resp$,ck)
-		add=edit=0
-		if ck=5 then 
+		fnAcs2(mat resp$,ckey)
+		add=_edit=0
+		if ckey=5 then 
 			goto XitFn
-		else if ck=1 then 
+		else if ckey=1 then 
 			add=1
 			goto ADD_NEW_PAYEE
-		else if ck=2 or ck=3 then 
+		else if ckey=2 or ckey=3 then 
 			editrec=val(resp$(1))
 		end if
 		if editrec=0 then goto MENU1
-		if ck=2 or ck=3 then 
+		if ckey=2 or ckey=3 then 
 			read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 		end if
-		if ck=2 then 
-			edit=1 
+		if ckey=2 then 
+			_edit=1 
 			goto EDIT_PAYEE
 		end if
-		if ck=3 then gosub DELETE_PAYEE : goto MENU1
+		if ckey=3 then gosub DELETE_PAYEE : goto MENU1
 	goto MENU1 ! /r
 	DELETE_PAYEE: ! r: a gosub routine
 		delete #paymstr,rec=editrec: 
@@ -183,8 +183,8 @@ def library fnAddGlPayee
 		fnCmdKey("Save",1,1,0,"Saves and returns to payee selection") 
 		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee") 
 		fnCmdKey("&Cancel",5,0,1,"Return to payee selection")
-		fnAcs2(mat resp$,ck)
-		if ck=5 then goto MENU1
+		fnAcs2(mat resp$,ckey)
+		if ckey=5 then goto MENU1
 		vn$=lpad$(trim$(resp$(1)(1:8)),8) 
 		nam$=resp$(2) ! name 
 		ad1$=resp$(3) ! address 
@@ -200,14 +200,14 @@ def library fnAddGlPayee
 		fax$=resp$(11) ! fax number 
 		myact$=resp$(12) ! my account number with this payee 
 		gldistrec=val(resp$(13)) ! record number of gl distribution entry
-		if ck=4 then 
+		if ckey=4 then 
 			gosub PAYEE_TRANSACTIONS 
 			goto EDIT_PAYEE
-		else if ck=2 then  ! add gl breakdown
+		else if ckey=2 then  ! add gl breakdown
 			percent=gldistrec=0: payeekey$=gldesc$=payeegl$="" 
 			gosub GL_BREAKDOWNS
 			goto EDIT_PAYEE
-		else if ck=7 then  ! edit gl breakdown
+		else if ckey=7 then  ! edit gl breakdown
 			read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$ 
 			gosub GL_BREAKDOWNS
 			goto EDIT_PAYEE
@@ -224,8 +224,8 @@ def library fnAddGlPayee
 			goto SAVE_PAYEE
 		end if ! /r
 	SAVE_PAYEE: ! r:
-		if edit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
-		if edit=1 then 
+		if _edit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
+		if _edit=1 then 
 			rewrite #paymstr, using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 		else if add=1 then 
 			write #paymstr,using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ duprec MSGBOX3
@@ -319,18 +319,18 @@ PAYEE_TRANSACTIONS: ! r:
 		fnCmdKey('&Edit',4,0,0,"Allows you to change or delete a transaction.")
 	end if
 	fnCmdKey('&Close',5,0,1)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	edittrans=0
-	if ck<>5 then 
-		if ck=3 then 
+	if ckey<>5 then 
+		if ckey=3 then 
 			gosub ADD_TRANSACTIONS
 			goto PAYEE_TRANSACTIONS
-		else if ck=4 then 
+		else if ckey=4 then 
 			edittrans=1 
 			editrec=val(resp$(3)) 
 			gosub EDIT_TRANSACTIONS
 			goto PAYEE_TRANSACTIONS
-		else if ck=2 then 
+		else if ckey=2 then 
 			transactionstartingdate=val(resp$(1))
 			transactionendingdate=val(resp$(2))
 			goto PAYEE_TRANSACTIONS ! goto the top of this function
@@ -352,18 +352,18 @@ GL_BREAKDOWNS: ! r: sub routine
 	fnTxt(5,mypos,30) 
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
-	fnAcs2(mat resp$,ck)
-	if ck<>5 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey<>5 then 
 		payeekey$=vn$
 		payeegl$=fnagl$(resp$(1))
 		percent=val(resp$(2)) ! percent
 		gldesc$=resp$(3)
-		if ck=4 and gldistrec>0 then 
+		if ckey=4 and gldistrec>0 then 
 			delete #payeegl,rec=gldistrec: 
 			goto GlBreakdownsXit
-		else if ck=1 and gldistrec=0 then 
+		else if ckey=1 and gldistrec=0 then 
 			write #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$
-		else if ck=1 and gldistrec>0 then 
+		else if ckey=1 and gldistrec>0 then 
 			rewrite #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 		end if
 	end if
@@ -404,10 +404,10 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 	fnCmdKey("Save",1,1,0,"Saves any changes and returns to Payee selection")
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing transaction.")
 	fnCmdKey("&Cancel",5,0,1,"Return to Payee selection screen.")
-	fnAcs2(mat resp$,ck)
-	if ck=5 then 
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then 
 		goto XitTransactionAdd
-	else if ck=3 then 
+	else if ckey=3 then 
 		mat ml$(2) 
 		ml$(1)="You have chosen to delete this transaction." 
 		ml$(2)="Click OK to delete or Cancel to retain the transaction." 

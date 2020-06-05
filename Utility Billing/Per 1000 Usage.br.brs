@@ -58,9 +58,9 @@ fnTxt(8,mypos(3),7) : fnTxt(8,mypos(4),7)
 fnTxt(9,mypos(1),7) : fnTxt(9,mypos(2),7)
 fnTxt(9,mypos(3),7) : fnTxt(9,mypos(4),7)
 fnCmdSet(3)
-fnAcs(sn$,win,mat resp$,ck)
+fnAcs(sn$,win,mat resp$,ckey)
 ! /r
-if ck=5 then
+if ckey=5 then
 	goto Xit
 else
 	! r: move into local variables   and   save entries for next time

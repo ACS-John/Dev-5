@@ -24,7 +24,7 @@
 	ty$(3)=" Adjustment Number: "
  
 MAIN: ! r:
-	fnTos(sn$="Tr2cpa")
+	fnTos
 	mylen=40 : mypos=mylen+2 : lc=0
 	fnLbl(lc+=1,1,"Starting Date:",mylen,right)
 	fnTxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred")
@@ -40,8 +40,8 @@ MAIN: ! r:
 	fnTxt(lc,mypos,66)
 	if resp$(4)="" then resp$(4)="A:\"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date
 	d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
 	if resp$(3)(1:1)="T" then pvt$="Y": else pvt$="N"

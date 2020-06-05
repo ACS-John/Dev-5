@@ -14,6 +14,6 @@
 	dim resp$(100)*128
 	resp$(1)=access_date$
 	fnCmdSet(41)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 Xit: fnXit
 include: Ertn

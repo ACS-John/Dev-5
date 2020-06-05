@@ -129,8 +129,8 @@ DO_SCREEN_MAIN: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ck)
-		if ck=5 then 
+		fnAcs('',0,mat resp$,ckey)
+		if ckey=5 then 
 			goto Xit
 		else 
 			if text_editor$<>'' then text_editor$=os_filename$(env$('at')&resp$(resp_text_editor))
@@ -142,18 +142,18 @@ DO_SCREEN_MAIN: ! r:
 			enableBackupReportCache$=resp$(resp_enableBackupReportCache)
 		end if 
 		! 
-		if ck=>screen_ck_low and ck<=screen_ck_high then 
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
-		else if ck=15 then 
+		else if ckey=15 then 
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\')&'"'
-		else if ck=16 then 
+		else if ckey=16 then 
 			fnureg_write('Save As Path',os_filename$(env$('Desktop')))
-		else if ck=14 then 
+		else if ckey=14 then 
 			fnureg_write('Text_Editor','')
 			text_editor$=fn_text_editor_default$
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto Xit
+			if ckey<>2 then goto Xit
 		end if 
 	loop  ! /r
 DO_SCREEN_THEME: ! r:
@@ -197,19 +197,19 @@ DO_SCREEN_THEME: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ck)
-		if ck=5 then 
+		fnAcs('',0,mat resp$,ckey)
+		if ckey=5 then 
 			goto Xit
 		else 
 			modeShift=0
-			if ck=ck_lightMode then
+			if ckey=ck_lightMode then
 				fn_set_color_defaults(0)
 				modeShift=1
-				ck=2
-			else if ck=ck_darkMode then
+				ckey=2
+			else if ckey=ck_darkMode then
 				fn_set_color_defaults(1)
 				modeShift=1
-				ck=2
+				ckey=2
 			end if
 			background_picture$=resp$(resp_background_picture)
 			min_fontsize_height$=resp$(resp_min_fontsize_height) : if min_fontsize_height$='' then min_fontsize_height$=default_min_fontsize_height$
@@ -224,7 +224,7 @@ DO_SCREEN_THEME: ! r:
 				resp$(rc_tmp+=1)=colorDefaultForeground$(5) : resp$(rc_tmp+=1)=colorDefaultBackground$(5)
 				resp$(rc_tmp+=1)=colorDefaultForeground$(6) : resp$(rc_tmp+=1)=colorDefaultBackground$(6)
 				resp$(rc_tmp+=1)=colorDefaultForeground$(7) : resp$(rc_tmp+=1)=colorDefaultBackground$(7)
-				ck=2
+				ckey=2
 			end if
 			fnureg_write('color.[screen].foreground',resp$(rc_color+=1))
 			fnureg_write('color.[screen].background',resp$(rc_color+=1))
@@ -242,16 +242,16 @@ DO_SCREEN_THEME: ! r:
 			fnureg_write('color.[gridheaders].background',resp$(rc_color+=1))
 		end if 
 		! 
-		if ck=>screen_ck_low and ck<=screen_ck_high then 
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
-		else if ck=11 then 
+		else if ckey=11 then 
 			background_picture$=background_picture_default$
-		else if ck=12 then 
+		else if ckey=12 then 
 			min_fontsize_height$=default_min_fontsize_height$
 			min_fontsize_width$=default_min_fontsize_width$
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto Xit
+			if ckey<>2 then goto Xit
 		end if 
 	loop  ! /r
 def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_default$)
@@ -333,8 +333,8 @@ DO_SCREEN_PRINTER: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ck)
-		if ck=5 then 
+		fnAcs('',0,mat resp$,ckey)
+		if ckey=5 then 
 			goto Xit
 		else 
 			! report_cache$=resp$(resp_report_cache)
@@ -350,9 +350,9 @@ DO_SCREEN_PRINTER: ! r:
 		end if 
 		
 		! 
-		if ck=>screen_ck_low and ck<=screen_ck_high then 
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 			goto SCREEN_CK_GOTO
-		else if ck=14 then 
+		else if ckey=14 then 
 			fnureg_write('Printer.Receipt',receipt_printer$)
 			fnopen_receipt_printer
 			pr #255: 'ACS Receipt Printer Test'
@@ -360,19 +360,19 @@ DO_SCREEN_PRINTER: ! r:
 			pr #255: ''
 			pr #255: ''
 			fnclose_receipt_printer
-		else if ck=13 then 
+		else if ckey=13 then 
 			fnureg_write('Atlantis Path','')
 			fn_get_atlantis(atlantis_exe$) : atlantis_exe$=trim$(atlantis_exe$,'"')
-		else if ck=15 then 
+		else if ckey=15 then 
 			dim office_word_exe$*256
 			if fn_get_office_word(office_word_exe$) then 
 				word_exe$=office_word_exe$
 			end if 
-		else if ck=12 then 
+		else if ckey=12 then 
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\Report Cache')&'"'
 		else ! Save and Apply
 			fn_save
-			if ck<>2 then goto Xit
+			if ckey<>2 then goto Xit
 		end if 
 	loop  ! /r
 DO_SCREEN_HH: ! r:
@@ -411,8 +411,8 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ck)
-	if ck=5 then 
+	fnAcs('',0,mat resp$,ckey)
+	if ckey=5 then 
 		goto Xit
 	else 
 		u4_device$=resp$(resp_u4_device)
@@ -422,11 +422,11 @@ do
 		hhfro$=resp$(resp_hhfro)
 		hhrun$=resp$(resp_hhrun)
 	end if 
-	if ck=>screen_ck_low and ck<=screen_ck_high then 
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto Xit
+		if ckey<>2 then goto Xit
 	end if 
 loop ! /r
 DO_SCREEN_UB: ! r:
@@ -453,19 +453,19 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ck)
-	if ck=5 then 
+	fnAcs('',0,mat resp$,ckey)
+	if ckey=5 then 
 		goto Xit
 	else 
 		ub_total_ar_on_dashboard$=resp$(resp_ub_total_ar)
 		ub_collPrintInAccountOrder$=resp$(resp_ub_cpiao)
 		ub_collDisableDepositList$=resp$(resp_ub_collDisableDepositList)
 	end if 
-	if ck=>screen_ck_low and ck<=screen_ck_high then 
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto Xit
+		if ckey<>2 then goto Xit
 	end if
 loop ! /r
 DO_SCREEN_GL: ! r:
@@ -484,17 +484,17 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ck)
-	if ck=5 then 
+	fnAcs('',0,mat resp$,ckey)
+	if ckey=5 then 
 		goto Xit
 	else 
 		gl_retainFieldsDuringAdd$=resp$(resp_gl_retainFieldsDuringAdd)
 	end if 
-	if ck=>screen_ck_low and ck<=screen_ck_high then 
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto Xit
+		if ckey<>2 then goto Xit
 	end if
 loop ! /r
 DO_SCREEN_PR: ! r:
@@ -526,8 +526,8 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ck)
-	if ck=5 then 
+	fnAcs('',0,mat resp$,ckey)
+	if ckey=5 then 
 		goto Xit
 	else 
 		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
@@ -537,11 +537,11 @@ do
 			! pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
 		end if
 	end if 
-	if ck=>screen_ck_low and ck<=screen_ck_high then 
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto Xit
+		if ckey<>2 then goto Xit
 	end if
 loop ! /r
 Do_Screen_Em: ! r:
@@ -571,8 +571,8 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ck)
-	if ck=5 then 
+	fnAcs('',0,mat resp$,ckey)
+	if ckey=5 then 
 		goto Xit
 	else 
 		em_emailReplyTo$=resp$(resp_em_emailReplyTo)
@@ -581,33 +581,33 @@ do
 		em_emailFromPassword$=resp$(resp_em_emailPassword)
 		em_emailPort$=resp$(resp_em_emailPort)
 	end if 
-	if ck=>screen_ck_low and ck<=screen_ck_high then 
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
-		if ck<>2 then goto Xit
+		if ckey<>2 then goto Xit
 	end if 
 loop ! /r
 SCREEN_CK_GOTO: ! r:
-	if ck=1001 then 
+	if ckey=1001 then 
 		screen=screen_main : goto DO_SCREEN_MAIN
-	else if ck=1002 then 
+	else if ckey=1002 then 
 		screen=screen_theme : goto DO_SCREEN_THEME
-	else if ck=1003 then 
+	else if ckey=1003 then 
 		screen=screen_print : goto DO_SCREEN_PRINTER
-	else if ck=1004 then 
+	else if ckey=1004 then 
 		screen=screen_hh : goto DO_SCREEN_HH
-	else if ck=1005 then 
+	else if ckey=1005 then 
 		screen=screen_ub : goto DO_SCREEN_UB
-	else if ck=1006 then 
+	else if ckey=1006 then 
 		screen=screen_gl : goto DO_SCREEN_GL
-	else if ck=1007 then 
+	else if ckey=1007 then 
 		screen=screen_pr : goto DO_SCREEN_PR
-	else if ck=1008 then 
+	else if ckey=1008 then 
 		screen=screen_em : goto Do_Screen_Em
 
 	else
-		pr 'SCREEN_CK_GOTO does not know how to handle ck='&str$(ck)&'.'
+		pr 'SCREEN_CK_GOTO does not know how to handle ckey='&str$(ckey)&'.'
 		pause
 	end if 
 ! /r

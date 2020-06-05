@@ -28,8 +28,8 @@ MAIN_SCREEN: !
 	fnChk(3,mypos,"Print One Job Per Page:",left) : _
 	resp$(resp+=1)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	dat$=resp$(1) ! heading date
 	if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
 	if resp$(3)="True" then perpag$="Y" else perpad$="N"
@@ -53,8 +53,8 @@ ASKJOB: !
 		prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
 		fnCmdKey("&Next",1,1,0,"Print this job." ) : _
 		fnCmdKey("&Complete",5,0,1,"No more jobs. Release the print.")
-		fnAcs2(mat resp$,ck)
-		if ck=5 then goto L490
+		fnAcs2(mat resp$,ckey)
+		if ckey=5 then goto L490
 		prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
 	next j
 	goto L510

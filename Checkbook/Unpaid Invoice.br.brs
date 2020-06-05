@@ -26,7 +26,7 @@
 		glnMask$='53'
 	end if
 	close #20:
-!
+
 	bankcode=val(bc$)
 	open #bankmstr=fngethandle: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal, outin, keyed
 	read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
@@ -48,7 +48,7 @@ MENU1: ! r:
 	chdr$(7)='Description' : chdr$(8)='Amount'
 	chdr$(9)='Disc Amt' : chdr$(10)='Disc Date'
 	chdr$(11)='Pay Code' : chdr$(12)='Bank'
-	chdr$(13)='Ck Num' : chdr$(14)='Date Paid'
+	chdr$(13)='ChkNum' : chdr$(14)='Date Paid'
 	chdr$(15)='Post Code' : chdr$(16)='Post Date'
 	cmask$(1)="30"
 	cmask$(2)="": cmask$(3)="" : cmask$(4)='1'
@@ -85,15 +85,15 @@ EO_INVOICE_GRID: ! /r
 	fnCmdKey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
 	fnCmdKey("&Listing",3,0,0,"Prints listings from unpaid file")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu") ! 320
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	displayalljobs=0
-	if ck=5 then goto FINIS
+	if ckey=5 then goto FINIS
 	! screen=0
-	if ck=2 then edit=1 : RecordNumberToEdit=val(resp$(1)) else edit=0 : RecordNumberToEdit=0
-	if (ck=1 or ck=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
-	if ck=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! pr listings of unpaid invoice file
-	if ck=8 then goto CODE_FOR_PAYMENT ! select invoices to payment
-	if ck=9 then
+	if ckey=2 then edit=1 : RecordNumberToEdit=val(resp$(1)) else edit=0 : RecordNumberToEdit=0
+	if (ckey=1 or ckey=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
+	if ckey=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! pr listings of unpaid invoice file
+	if ckey=8 then goto CODE_FOR_PAYMENT ! select invoices to payment
+	if ckey=9 then
 		displayalljobs=1
 		jn$="" : iv$="" : vn$=""
 		subcat=0 : cat=0
@@ -212,7 +212,7 @@ DISPLAY_GRID: !
 	chdr$(8)="Description": chdr$(9)="Amount"
 	chdr$(10)="Dis Amt" : chdr$(11)="Dis Date"
 	chdr$(12)="BK Code"
-	chdr$(13)="Ck #" : chdr$(14)="D Paid"
+	chdr$(13)="CkNo" : chdr$(14)="D Paid"
 	chdr$(15)="P C" : chdr$(16)="P Date"
 	cmask$(1)='30' : cmask$(2)='30' : cmask$(3)=""
 	cmask$(4)=''
@@ -294,9 +294,9 @@ fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file
 fnCmdKey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
 fnCmdKey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
 fnCmdKey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
-fnAcs2(mat resp$,ck)
+fnAcs2(mat resp$,ckey)
 displayunpaid=total=displayall=0
-if ck=5 or ck=99 then goto MENU1
+if ckey=5 or ckey=99 then goto MENU1
 selectedrec=val(resp$(respc_selectedrec)) ! selected record from grid
 rangefrom=val(resp$(respc_rangefrom)) ! if select range of reference numbers
 rangeto=val(resp$(respc_rangeto)) ! if select range of reference numbers
@@ -304,16 +304,16 @@ duedate =val(resp$(respc_duedate)) ! used in selecting invoices by due date
 payeevn$=resp$(respc_payee) ! payee number to select
 total=val(resp$(respc_total)) ! total used for display only
 displayattop$=resp$(7) ! display at top
-if ck=2 then displayunpaid=2: goto CODE_FOR_PAYMENT !                                                   redisplay on uncoded
-if ck=3 then displayunpaid=1: goto CODE_FOR_PAYMENT ! displays only                                       cleared on this date
-if ck=9 then displayall=1: goto CODE_FOR_PAYMENT ! displays everything                                 in unpaid file
-if ck=62 then goto PAY_ALL
-if ck=63 and rangefrom=0 then goto MSGBOX3
-if ck=69 then goto APPROVE_BY_RANGE
-if ck=64 and duedate=0 then goto MSGBOX4
-if ck=64 then goto CLEAR_BY_DUEDATE
-if ck=65 then goto APPROVE ! approve or unselect an invoice
-if ck=66 then goto APPROVE_BY_PAYEE ! approve all invoices for a specific payee
+if ckey=2 then displayunpaid=2: goto CODE_FOR_PAYMENT !                                                   redisplay on uncoded
+if ckey=3 then displayunpaid=1: goto CODE_FOR_PAYMENT ! displays only                                       cleared on this date
+if ckey=9 then displayall=1: goto CODE_FOR_PAYMENT ! displays everything                                 in unpaid file
+if ckey=62 then goto PAY_ALL
+if ckey=63 and rangefrom=0 then goto MSGBOX3
+if ckey=69 then goto APPROVE_BY_RANGE
+if ckey=64 and duedate=0 then goto MSGBOX4
+if ckey=64 then goto CLEAR_BY_DUEDATE
+if ckey=65 then goto APPROVE ! approve or unselect an invoice
+if ckey=66 then goto APPROVE_BY_PAYEE ! approve all invoices for a specific payee
 goto APPROVE ! /r  (used to just fall though to approve here)
 APPROVE: ! r: clear or unclear selected invoices
 	if selectedrec>0 then
@@ -440,18 +440,18 @@ fnCmdKey("&Next",1,1,0,"Accept this transaction)")
 fnCmdKey("&Listing",4,0,0,"Print listing of all job cost entries.")
 fnCmdKey("&Post To Jobs",3,0,0,"Post this batch ofjob cost entries to job cost records. Normally done once complete with batch.")
 fnCmdKey("&Cancel",5,0,1,"Cancels without posting to jub cost)")
-fnAcs2(mat resp$,ck)
-if ck=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
-if val(resp$(4))=0 and ck<>65 then ck=5 ! exit if no amount on next
-if ck=5 then amt=0: totalcost=0 : goto L6930 ! sCREEN=0: Goto MENU1
-if ck=3 then gosub POST_TO_JOB : goto ENTRY_SCREEN
-if ck=65 then goto L6520 else goto L6530
+fnAcs2(mat resp$,ckey)
+if ckey=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
+if val(resp$(4))=0 and ckey<>65 then ckey=5 ! exit if no amount on next
+if ckey=5 then amt=0: totalcost=0 : goto L6930 ! sCREEN=0: Goto MENU1
+if ckey=3 then gosub POST_TO_JOB : goto ENTRY_SCREEN
+if ckey=65 then goto L6520 else goto L6530
 L6520: !
 editrec=val(resp$(6))
 read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12",rec=editrec: jn$,cat,subcat,amt,jobdesc$,vn$,iv$
 delete #jcbreakdown,rec=editrec: noRec ENTRY_SCREEN
 goto ENTRY_SCREEN
-L6530: if ck=68 then goto L6540 else goto L6550
+L6530: if ckey=68 then goto L6540 else goto L6550
 L6540: jn$="": fnjob_srch(jn$,1) : goto ENTRY_SCREEN
 L6550: jn$=resp$(1)(1:6)
 jn$=lpad$(rtrm$(jn$),6)
@@ -464,7 +464,7 @@ ml$(2)="                                        "
 ml$(3)="Take OK to select a different job #."
 fnmsgbox(mat ml$,resp$,'',0)
 goto ENTRY_SCREEN
-L6600: if ck=69 then goto L6610 else goto L6620
+L6600: if ckey=69 then goto L6610 else goto L6620
 L6610: cn$="": fncategory_srch(cn$,1) : cat=val(cn$): goto ENTRY_SCREEN
 L6620: cat=val(resp$(2)(1:5))
 subcat=val(resp$(3)(1:3))
@@ -602,7 +602,7 @@ def fn_addInvoice(vn$,iv$,aiRecordNumberToEdit)
 		read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=aiRecordNumberToEdit,release: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 		mat resp$=("")
 		holdkey$=vn$&iv$
-	else ! add  (ck=1)
+	else ! add  (ckey=1)
 		mat resp$=("")
 		editing=0
 		holdkey$=''
@@ -694,8 +694,8 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	! fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
 	fnCmdKey("&Delete",3,0,0,"Delete the invoice highlighted above")
 	fnCmdKey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
-	fnAcs2(mat resp$,ck)
-	if ck=5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
 		alloc2d_setup$=''
 		mat alloc2d$=('')
 		goto aiFinis
@@ -715,21 +715,21 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	if resp$(10)=item1$(3) then pcde=2 ! paid
 	bcde=val(resp$(11)(1:3))
 	selected_alloc$=fnagl$(resp$(12))
-	if ck=3 then ! delete invoice and breakdowns
+	if ckey=3 then ! delete invoice and breakdowns
 		fn_InvoiceDelete(holdkey$)
 		goto aiFinis
-	else if ck=2 then
+	else if ckey=2 then
 		fn_InvoiceAllocateFromPayee(mat alloc2d$,vn$,upa,paymstr1,payeegl)
-	else if ck=50 then
+	else if ckey=50 then
 		!   vn$=ss$=ph$=contact$=email$=fax$=myact$=""
 		fnaddpayee
-	else if ck=52 then ! Add
+	else if ckey=52 then ! Add
 		fn_InvoiceAllocationFM(vn$,iv$)
-	else if ck=53 then ! Edit
+	else if ckey=53 then ! Edit
 		fn_InvoiceAllocationFM(vn$,iv$, selected_alloc$)
-	else if ck=54 then
+	else if ckey=54 then
 		fn_InvoiceAllocationDelete(selected_alloc$)
-	else if ck=1 then ! Save
+	else if ckey=1 then ! Save
 		if fn_InvoiceValid then
 			fn_InvoiceSave
 			if havejc=1 then gosub JOBCOST

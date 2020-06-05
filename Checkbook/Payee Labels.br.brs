@@ -3,30 +3,28 @@
 ! r: setup stuff
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim resp$(64)*256
- 
+
 	fnTop(program$,"Payee Labels")
-	cancel=99 : right=1 : limit_to_list=1 : on=1
-	off=0 : left=0 : center=2
- 
+
 	dim item1$(3)
 	item1$(print_all=1)="[All]"
 	item1$(check_range=2)="Range of Checks"
 	item1$(specific_payees=3)="Specific payees"
 goto MAIN ! /r
- 
+
 MAIN: ! r:
 	fnTos
 	respc=0 : mylen=25 : mypos=mylen+2
-	fnLbl(1,1,"Print Labels For:",mylen,right)
+	fnLbl(1,1,"Print Labels For:",mylen,1)
 	fi$="cllabels"
 	fncomboa(fi$,1,mypos,mat item1$,"The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence")
 	resp$(respc+=1)=item1$(1)
-	fnChk(2,mypos+2,'Print Payee Number on Label',right)
+	fnChk(2,mypos+2,'Print Payee Number on Label',1)
 	resp$(respc+=1)='False'
-	fnLbl(4,1,"Bank:",mylen,right)
-	fncombof('Bank',4,mypos,33,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list)
+	fnLbl(4,1,"Bank:",mylen,1)
+	fncombof('Bank',4,mypos,33,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
 	resp$(respc+=1)=''
 	fnLbl(5,1,"Starting Check Number:",25,1)
 	fncombof('Check',5,mypos,33,"[Q]\CLmstr\TrMstr.h[cno]",4,8,36,35)
@@ -35,14 +33,14 @@ MAIN: ! r:
 	fncombof('Check',6,mypos,33,"[Q]\CLmstr\TrMstr.h[cno]",4,8,36,35)
 	resp$(respc+=1)=''
 	fnLbl(8,1,"Starting Payee Number:",25,1)
-! fnTxt(8,27,8,0,1,'',0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')!
+	! fnTxt(8,27,8,0,1,'',0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')!
 	! rESP$(RESPC+=1)=''
 	fncombof("Payee",8,27,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Select starting payee record for printing")
 	resp$(respc+=1)=''
 	fnLbl(8,1,'.',50,1) ! just so the right side of the comboboxes for checks can be seen
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
 	else if resp$(1)=item1$(1) then
 		prtall=print_all
@@ -78,18 +76,18 @@ MAIN: ! r:
 ASK_VN: ! r:
 	fnTos
 	respc=0 : mylen=20
-	fnLbl(1,1,"Payee to Print:",mylen,right)
+	fnLbl(1,1,"Payee to Print:",mylen,1)
 	fncombof("Payee",1,22,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
 	resp$(respc+=1)=''
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then
 		goto Finis
 	else
 		vn$=lpad$(rtrm$(resp$(1)(1:8)),8)
 	end if
 goto GetStarted ! /r
-	
+
 GetStarted: ! r: just kinda starts here
 	read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey ASK_VN
 	goto L530
@@ -110,21 +108,21 @@ GetStarted: ! r: just kinda starts here
 		goto ASK_VN
 	end if
 goto READ_PAYMSTR ! /r
- 
+
 Finis: ! r:
 	close #hPaymstr:
 	dim pt$(5)
 	fnlabel(mat pt$)
 goto Xit ! /r
 Xit: fnXit
- 
+
 ProcessCheckRange: ! r: uses: ebc,c1,hTrmstr,hPaymstr
 	tr4$=cnvrt$("N 2",wbc)&str$(1)&cnvrt$("N 8",c1)
 	restore #hTrmstr,key>=tr4$: nokey EO_OPT2
 	do
 		READ_TRMSTR: !
-		read #hTrmstr,using 'Form POS 4,C 8,POS 28,C 8': ck$,vn$ eof EO_OPT2
-		if c2>0 and ck$>lpad$(str$(c2),8) then goto EO_OPT2
+		read #hTrmstr,using 'Form POS 4,C 8,POS 28,C 8': checkNumber$,vn$ eof EO_OPT2
+		if c2>0 and checkNumber$>lpad$(str$(c2),8) then goto EO_OPT2
 		read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey READ_TRMSTR
 		fn_payeeAddLabel(vn$,nam$,ad1$,ad2$,csz$)
 	loop
@@ -150,5 +148,5 @@ def fn_payeeAddLabel(vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30) ! uses local printpa
 	! labelAddCount+=1
 	fnaddlabel(mat labeltext$)
 fnend
- 
+
 include: Ertn

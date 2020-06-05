@@ -148,7 +148,7 @@ MENU1: ! r:
 	fnLbl(lc=13,1,'Transaction Grid',20)
 	mat chdr$(11) : mat cmask$(11) : mat item$(11)
 	chdr$(1)='Rec'
-	chdr$(2)='Ck/Rf'
+	chdr$(2)='ChkRf'
 	chdr$(3)='Date'
 	chdr$(4)='Amount'
 	chdr$(5)='Payee'

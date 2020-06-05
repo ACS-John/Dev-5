@@ -80,8 +80,8 @@ MENU1: ! r:
 	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
 	fnTxt(20,mylen+4,12,0,1,"10",0,"",0)
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	taxyear=val(resp$(1)) ! tax year
 	if taxyear<2000 then goto L810
 	ending_date=taxyear*10000+1231 conv L810

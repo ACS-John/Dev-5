@@ -60,7 +60,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	resp$(8)=env$('cno')
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 	dt1=val(resp$(1)) ! beginning date
 	dt2=val(resp$(2)) ! ending date
 	d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date
@@ -85,22 +85,22 @@ def library fnPostCheckbookToGl(; enablePost)
 	gosub GLBucketStuff
 	! Gosub GLCHG
 	READ_TRMSTR: ! r: main loop
-		read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof End1
+		read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof End1
 		if scd=4 and fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto READ_TRMSTR
 		if fndate_mmddyy_to_ccyymmdd(pd)<dt1 then goto READ_TRMSTR
-		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: nokey READ_TRMSTR
+		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&checkNumber$: nokey READ_TRMSTR
 		READ_TRALLOC: ! 
 		read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof READ_TRMSTR
 		ivd=val(ivd$) conv ignore
 		if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 		if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
-		if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto L1040 ! thru, allocation doesn/t belong to this transaction
+		if bank_code<>trbank_code or trtcde<>tcde or checkNumber$<>trck$ then goto L1040 ! thru, allocation doesn/t belong to this transaction
 		if amt=0 then goto READ_TRALLOC ! SKIP 0
 		if scd=4 then gosub PrdBld
 		if scd=4 or fndate_mmddyy_to_ccyymmdd(ivd)>fndate_mmddyy_to_ccyymmdd(pd) then ivd=pd
 		! gde=1  never in ap - entered and paid same month
 		! gde=2  posted to ap from unpaid file
-		! gde=3  previously posted to ap  - now posted from ck history
+		! gde=3  previously posted to ap  - now posted from check history
 		if include_prev_posted$="Y" then goto L800
 		if gde=1 or gde=3 then goto READ_TRALLOC
 		L800: !
@@ -132,12 +132,12 @@ def library fnPostCheckbookToGl(; enablePost)
 		if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then 
 			write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ltrm$(iv$)(1:8),vn$,de$,amt, 0, 4, 0
 		else 
-			write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,0,tcde,scd
+			write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,0,tcde,scd
 		end if 
 		gde=2
 		goto L1020
 		L990: !
-		write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd
+		write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd
 		L1000: !
 		if pcde=0 or pcde=2 then pcde+=1
 		if gde=0 or gde=2 then gde+=1
@@ -172,7 +172,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NewPge
 		L1240: ! 
 		read #1,using 'Form POS 1,PD 3': r5 eof EndAll
-		read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
+		read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
 		if amt=0 then goto L1240
 		if gl$(1:3)="  0" then gl$(1:3)="   "
 		if gl$(10:12)="  0" then gl$(10:12)="   "
@@ -204,7 +204,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		if scd=4 then goto L1530
 		L1500: ! aMT=ABS(AMT)
 		gosub REGGL
-		if pr1$="Y" then pr #255,using L1530: gl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NewPge
+		if pr1$="Y" then pr #255,using L1530: gl$,ivd,checkNumber$,vn$,de$,abs(amt) pageoflow NewPge
 		L1530: form pos 1,c 14,pic(zz/zz/zz),x 2,2*c 10,c 30,pos p1,g 12.2,skip 1
 		if cl=2 then 
 			tc2=tc2+abs(amt)
@@ -216,7 +216,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		if tcde<>3 then goto L1590
 		p1=75
 		if pr1$="Y" then 
-			pr #255,using L1530: bgl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NewPge
+			pr #255,using L1530: bgl$,ivd,checkNumber$,vn$,de$,abs(amt) pageoflow NewPge
 		end if 
 		if cl<>2 then 
 			tc2=tc2+abs(amt)
@@ -401,7 +401,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		tr4=ivd : tr5=amt : tr6=tcde
 		if tr6=2 or tr6=3 then tr5=-tr5
 		if scd=4 then tr6=1
-		tr$=ck$ : td$=de$ : ven$="" ! VN$
+		tr$=checkNumber$ : td$=de$ : ven$="" ! VN$
 		if tr6=3 then 
 			gosub Something
 			tr5=-tr5
@@ -500,11 +500,11 @@ ReverseApEntries: ! r: Reverse AP Entries
 	p1=75 : gw$=""
 	read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3430
 	L3430: ! 
-	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Reverse AP",amt pageoflow NewPge
+	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,checkNumber$,"","Reverse AP",amt pageoflow NewPge
 	p1=87: gw$=""
 	read #bankmstr,using 'Form POS 33,C 12', key=lpad$(str$(bank_code),2): gw$ nokey L3460
 	L3460: ! 
-	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Take Out of Bank",amt pageoflow NewPge
+	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,checkNumber$,"","Take Out of Bank",amt pageoflow NewPge
 	L3470: ! 
 return  ! /r
 PrdBld: ! r:
@@ -523,7 +523,7 @@ PrdWrite: ! r:
 	if pr2$="N" then goto L3850
 	prd(1)=val(vn$) conv L3850
 	prd(2)=pd
-	prd(3)=val(ck$) conv ignore
+	prd(3)=val(checkNumber$) conv ignore
 	prd(22)=ca1
 	write #glwk2wsid,using 'Form POS 1,N 4,2*PD 4,19*PD 5.2,PD 3': mat prd
 	L3850: ! 
@@ -605,16 +605,16 @@ def fn_cb_trmstr_test ! TEST_CHECKHISTORY: !
 	do 
 		totalloc=0
 		CB_TT_READ: ! 
-		read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof EO_TRMSTR_TEST
+		read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof EO_TRMSTR_TEST
 		if scd=4 and fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto CB_TT_READ
 		if fndate_mmddyy_to_ccyymmdd(pd)<dt1 then goto CB_TT_READ
-		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: nokey CB_TT_READ
+		restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&checkNumber$: nokey CB_TT_READ
 		do  ! CB_TT_READ_TRALLOC: !
 			read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof CB_TT_FINIS ! eof EO_TRMSTR_TEST
 			ivd=val(ivd$) conv ignore ! ivd$ logic added 8/12/2015 to prevent merriam wood's error here from using characters in this field
 			if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 			if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
-			if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto CB_TT_FINIS ! thru, allocation doesn/t belong to this transaction
+			if bank_code<>trbank_code or trtcde<>tcde or checkNumber$<>trck$ then goto CB_TT_FINIS ! thru, allocation doesn/t belong to this transaction
 			totalloc+=amt
 		loop  !  goto CB_TT_READ_TRALLOC
 	CB_TT_FINIS: ! 
@@ -622,7 +622,7 @@ def fn_cb_trmstr_test ! TEST_CHECKHISTORY: !
 			mat ml$(3)
 			ml$(1)="The allocations ("&cnvrt$("pic(---,---.##)",totalloc)&" does not match the total"
 			ml$(2)="transaction amount ("&cnvrt$("pic(---,---.##)",ca1)&".  You must fix this "
-			ml$(3)="transaction ("&ck$&") (bank "&str$(trbank_code)&") check history before you can continue. "
+			ml$(3)="transaction ("&checkNumber$&") (bank "&str$(trbank_code)&") check history before you can continue. "
 			fnmsgbox(mat ml$,ok$,cap$,48)
 			cb_tt_return=0
 			goto EO_TRMSTR_TEST

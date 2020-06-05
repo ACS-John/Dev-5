@@ -1,13 +1,13 @@
 ! Replace Test\wait
-! -------------------------------------------------------------------
+
 	autoLibrary
-! -------------------------------------------------------------------
-	dim item$(6)*30,prg$*30,chdr$(6)*20,cm$(6)*2,cap$*128
-! -------------------------------------------------------------------
-	fnTop(prg$="Test\Wait",cap$="Test 5 second transition between screens")
-! -------------------------------------------------------------------
+
+	dim item$(6)*30,prg$*30,chdr$(6)*20,cm$(6)*2
+
+	fnTop(program$,"Test 5 second transition between screens")
+
 	pr 'just before tos - '&time$
-	fnTos("S-1")
+	fnTos
 	chdr$(1)="Account" : chdr$(2)="Name" : _
 	chdr$(3)="Address" : chdr$(4)="City" : _
 	chdr$(5)="State" : chdr$(6)="Zip"
@@ -21,28 +21,28 @@ READ_1: ! : _
 	goto READ_1
 EOF1: close #1:
 	fnCmdKey('Ok-1',1,1,0)
-	fnAcs("S-Flex",0,mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	pr 'just after return from fnAcs - '&time$
  
 	sleep(5) : pr "sleep for 5 seconds"
 	pr 'just before tos - '&time$
 	fnTos(sn$="S-2")
 	fnCmdKey('Ok-2',1,1,0)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	pr 'just after return from fnAcs - '&time$
  
 	sleep(5) : pr "sleep for 5 seconds"
 	pr 'just before tos - '&time$
 	fnTos(sn$="S-3")
 	fnCmdKey('Ok-3',1,1,0)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	pr 'just after return from fnAcs - '&time$
  
 	sleep(5) : pr "sleep for 5 seconds"
 	pr 'just before tos - '&time$
 	fnTos(sn$="S-4")
 	fnCmdKey('Ok-4',1,1,0)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	pr 'just after return from fnAcs - '&time$
  
 	stop

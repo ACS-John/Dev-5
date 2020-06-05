@@ -21,54 +21,44 @@ MENU1: !
 	fnTxt(lc,mypos,5,0,left,number$) : _
 	resp$(2)=env$('cno')
 	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit else : _
-		if resp$(1)=item1$(1) then pas$="BUILD" else : _
-			if resp$(1)=item1$(2) then pas$="COPY"
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then 
+		goto Xit
+	else if resp$(1)=item1$(1) then 
+		pas$="BUILD" 
+	else if resp$(1)=item1$(2) then 
+		pas$="COPY"
+	end if
 	glcno=val(resp$(2))
-	if pas$><"COPY" then goto L270
-	close #1: ioerr L250
-L250: execute "COPY A:GLmstr.H"&str$(glcno)&' '&"[Q]\CLmstr\*.*" ioerr MSGBOX2
-	goto Xit
-L270: if trim$(pas$)><"BUILD" then goto MENU1
-	close #1: ioerr L290
-L290: open #2: "Name=[Q]\GLmstr\GLmstr.h"&str$(glcno)&",KFName=[Q]\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",internal,input,keyed ioerr MSGBOX1
+	if pas$="COPY" then 
+		close #1: ioerr ignore
+		if fnCopy('A:GLmstr.H'&str$(glcno),'[Q]\CLmstr\*.*')<0 then 
+			mat ml$(1)
+			ml$(1)="Be sure the diskette is properly inserted and try again" 
+			fnmsgbox(mat ml$,resp$,cap$,16) 
+			goto MENU1
+		end if
+		goto Xit
+	end if
+	if trim$(pas$)><"BUILD" then goto MENU1
+	close #1: ioerr ignore
+	open #2: "Name=[Q]\GLmstr\GLmstr.h"&str$(glcno)&",KFName=[Q]\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",internal,input,keyed ioerr MSGBOX1
 	open #1: "Name=[Q]\CLmstr\GLmstr.H[cno],Size=0,RecL=62,Replace",internal,output
-L310: read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
-	write #1,using 'Form POS 1,C 12,C 50': gl$,de$
-	goto L310
-END1: close #1:
+	do
+		read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
+		write #1,using 'Form POS 1,C 12,C 50': gl$,de$
+	loop
+	END1: !
+	close #1:
 	close #2:
 	execute "Index [Q]\CLmstr\GLmstr.H[cno]"&' '&"[Q]\CLmstr\GLINDEX.H[cno] 1 12 Replace DupKeys"
-	goto Xit
- 
-	execute "Index [Q]\CLmstr\GLmstr.H[cno]"&' '&"[Q]\CLmstr\GLINDEX.H[cno] 1 12 Replace DupKeys"
-	goto Xit
- 
-	restore #1,key>="            ": nokey MENU1
-L420: ln=eof1=0
-	pr newpage
-	if ck=5 or eof1=1 then goto MENU1
-	goto L420
- 
+goto Xit
 Xit: fnXit
-! r: unreferenced stuff
-	close #1: ioerr ignore
-	fnCopy("[Q]\CLmstr\GLmstr.H[cno]",env$('Temp')&"\WORK",0,"-D")
-	fnFree("[Q]\CLmstr\GLmstr.h[cno]")
-	fnRename(env$('Temp')&"\WORK","[Q]\CLmstr\GLmstr.h[cno]")
-	fnIndex_it("[Q]\CLmstr\GLmstr.H[cno]","[Q]\CLmstr\GLINDEX.H[cno]","1 12")
-	goto L120
-! /r
-include: Ertn
-MSGBOX1: !
+
+MSGBOX1: ! r:
 	mat ml$(2) : _
 	ml$(1)="A general ledger chart of accounts has not been set up" : _
 	ml$(2)="for this company.  You must choose a different option" : _
 	fnmsgbox(mat ml$,resp$,cap$,16) : _
-	goto MENU1
-MSGBOX2: !
-	mat ml$(1) : _
-	ml$(1)="Be sure the diskette is properly inserted and try again" : _
-	fnmsgbox(mat ml$,resp$,cap$,16) : _
-	goto MENU1
+goto MENU1 ! /r
+include: Ertn

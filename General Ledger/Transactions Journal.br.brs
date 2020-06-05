@@ -207,7 +207,7 @@ ASK_PERIOD: ! r:
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 	if resp$(1)="True" then cur_prior=1 else cur_prior=2
 	mat journal_to_print=(0)
 	for j=1 to 8

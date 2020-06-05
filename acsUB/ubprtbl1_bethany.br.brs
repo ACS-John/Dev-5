@@ -65,8 +65,8 @@ SCREEN1: !
 	fnTxt(12,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",newd2)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto ENDSCR
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto ENDSCR
 	d1 = val(resp$(5))
 	d4 = val(resp$(1))
 	mg$(1) = resp$(2)
@@ -167,10 +167,10 @@ SCREEN3: ! r:
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing")
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
-	if ck=5 then goto RELEASE_PRINT
+	if ckey=5 then goto RELEASE_PRINT
 	read #8,using L680,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey SCREEN3
 	if d3=0 then d3=newd3
 	if d2=0 then d2=newd2
@@ -221,7 +221,7 @@ ENDSCR: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",0)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 goto Xit ! /r
 Xit: fnXit
  

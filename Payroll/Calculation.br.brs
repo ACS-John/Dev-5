@@ -1190,6 +1190,9 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
 		wor_phaseOut=fn_oregonPhaseOut(wor_wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,theyAreSingle,theyAreMarried)
 		! 
 		! wor_base=taxableWagesCurrent*payPeriodsPerYear-min(fedWhAnnualEstimate,8550)-(allowancesEffective*2250)
+		
+		! pr 'break wor_base' : pause
+		
 		wor_base=wor_wagesAnnualEstimate-wor_phaseOut-standardDeduction
 			! 
 		if whichTable=2 then 
@@ -1693,7 +1696,8 @@ def fn_setup
 	dim dat$*20
 	dim caf(20)
 	dim resp$(10)*40
-	dim tdt(4),tcd(3)
+	dim tdt(4)
+	dim tcd(3)
 	dim tdet(17)
 	dim tdc(10)
 	dim tcp(32)

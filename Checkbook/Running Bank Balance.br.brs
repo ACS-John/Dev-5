@@ -12,7 +12,7 @@
 	read #20,using 'Form POS 152,N 2',rec=1,release: bank_code
 	close #20:
 MAIN: !
-	fnTos(sn$="bankbal")
+	fnTos
 	respc=0
 	fnLbl(1,40,"",1,1)
 	fnLbl(1,1,"Starting Date:",31,1)
@@ -54,12 +54,12 @@ L440: mat ml$(2)
 	fnmsgbox(mat ml$)
 goto MAIN
 READ_2: !
-	read #trmstr,using 'Form POS 1,N 2,N 1,C 8,g 6,PD 10.2,POS 36,C 35': tbank_code,tcde,ck$,d2,amt,de$ eof ENDALL
+	read #trmstr,using 'Form POS 1,N 2,N 1,C 8,g 6,PD 10.2,POS 36,C 35': tbank_code,tcde,checkNumber$,d2,amt,de$ eof ENDALL
 	if fndate_mmddyy_to_ccyymmdd(d2)<d1 then goto READ_2
 	if tbank_code<>bank_code then goto READ_2
 	if tcde=2 or tcde=3 then p1=68 else p1=56
 	if tcde=2 or tcde=3 then b1=b1+amt else b1=b1-amt
-	pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 12.2,POS 80,N 12.2': ck$,d2,de$,amt,b1 pageoflow NEWPGE
+	pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 12.2,POS 80,N 12.2': checkNumber$,d2,de$,amt,b1 pageoflow NEWPGE
 goto READ_2
  
 NEWPGE: pr #255: newpage: gosub HDR : continue

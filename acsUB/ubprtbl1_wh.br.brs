@@ -68,8 +68,8 @@ SCREEN1: !
 	fnTxt(9,pf,8,8,1,"1") : _
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",0)
 	fnCmdSet(3) : _
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto ENDSCR
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto ENDSCR
 	d4 = val(resp$(1))
 	mg$(1) = resp$(2)
 ! mg$(2) = resp$(3)
@@ -165,10 +165,10 @@ SCREEN3: !
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing") : _
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	a$=lpad$(trim$(resp$(1)(1:10)),10) : _
 	if trim$(a$)="" then goto RELEASE_PRINT
-	if ck=5 then goto RELEASE_PRINT
+	if ckey=5 then goto RELEASE_PRINT
 	read #8,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,extra_3,extra_4,extra_22 nokey SCREEN3
 	if d3=0 then d3=extra_3
 	if d2=0 then d2=extra_4
@@ -222,7 +222,7 @@ ENDSCR: ! pr totals screen
 ! fnTxt(4,MYPOS,8,0,1,"",1) : _
 	! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
 	fnCmdSet(52) : _
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 Xit: fnXit
 IGNORE: continue
  

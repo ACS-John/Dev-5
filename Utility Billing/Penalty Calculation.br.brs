@@ -27,7 +27,7 @@ EO_MINIMUMBAL: !
 	close #minbal:
 ! /r
 	fn_scr_main
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 	fnAutomatedSavePoint('before')
 	open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
@@ -113,8 +113,8 @@ def fn_scr_main
 		resp$(8)="True"
 	end if  ! env$('client')=...
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck<>5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey<>5 then
 		pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 		bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
 		dat$=resp$(3)

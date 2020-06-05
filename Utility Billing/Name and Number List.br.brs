@@ -57,8 +57,8 @@
 	fnChk(10,29,"Print Cell")
 	resp$(resp_print_cell:=respc+=1)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	q0=2 ! default to name sequence
 	if resp$(1)=item1$(1) then
 		q0=1 : opt=1 : turn$="N"

@@ -76,7 +76,7 @@ fnend
 def fn_hdr1
 	fn_header
 	pr #255:''
-	pr #255,using 'form pos 1,c 132': "EMP #    EMPLOYEE NAME         GROSS   FED W/H  FICA W/H    ST W/H  MISC W/H   LOC W/H       NET     TIPS    EIC   DATE    CK #"
+	pr #255,using 'form pos 1,c 132': "EMP #    EMPLOYEE NAME         GROSS   FED W/H  FICA W/H    ST W/H  MISC W/H   LOC W/H       NET     TIPS    EIC   DATE    CHK#"
 	pr #255:''
 fnend
 def fn_accumulate_totals
@@ -191,8 +191,8 @@ L1620: form pos 50,c 30,pos 80,pic(----,---.##),skip 1
 		pr #255,using L1620: "TOTAL FED U/C TAX QTD",fuc2*feducrat
 fnend
 def fn_941_breakdown
-		ck$=lpad$(str$(d(2)),6)
-		ckdat=val(ck$(3:4))
+		tmp$=(lpad$(str$(d(2)),6))
+		ckdat=val(tmp$(3:4))
 		if ckdat>0 and ckdat<32 then x=ckdat else x=31
 		deposit(x,1)=deposit(x,1)+d(4)
 		deposit(x,2)=deposit(x,2)+d(5)+d(6)+d(6)-d(21) ! FEDERAL + DOUBLE SS - EIC

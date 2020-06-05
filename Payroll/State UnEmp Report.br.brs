@@ -21,7 +21,7 @@
 	qtr_option$(3)="3"
 	qtr_option$(4)="4"
 	dim quarter_ending_date$*20
-!
+
 	dim column$(4) ! columns to include on the report (True or False)
 	dim ptotal(4)
 	dim grand_total(4)
@@ -97,8 +97,8 @@
 	fncombof("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
 	resp$(respc+=1)='[All]'
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	quarter_ending_date$=resp$(1) ! quarter ending date
 	stcode=val(resp$(2)(1:2)) ! state code
 	heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '

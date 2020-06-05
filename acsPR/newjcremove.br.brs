@@ -30,9 +30,9 @@ ASKJOB: !
 	fnCmdKey("&Next",1,1,0,"Process the job" ) : _
 	fnCmdKey("Com&plete",2,0,0,"Finished with all jobs.") : _
 	fnCmdKey("&Cancel",5,0,1,"Cancel without deleting any jobs.")
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
-	if ck=2 then goto DELETE_THEM
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	if ckey=2 then goto DELETE_THEM
 	jn$=lpad$(trim$(resp$(1)(1:6)),6)
 	mat ml$(1) : _
 	ml$(1)="Do you really want to delete job # "&jn$ : _

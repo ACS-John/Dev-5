@@ -45,7 +45,7 @@ HDR: !
 	pr #255,using 'FORM POS 1,C 8,CC 86': date$,env$('cnam')
 	pr #255,using 'FORM POS 1,C 8,POS 40,C 40': time$,"Unpaid Invoice Summary"
 	pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg+=1,dat$
-	pr #255: "Payee Name                      Description                    Ck-Amount  GL-Amount    GL-Number"
+	pr #255: "Payee Name                      Description                    ChkAmount  GL-Amount    GL-Number"
 L470: pr #255: "______________________________ ______________________________ __________ __________ ____________"
 return
  

@@ -19,7 +19,7 @@
 
 
 	gosub ASK_PERIOD
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 
 	fnopenprn
 	open #h_gltrans:=3: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative 
@@ -148,7 +148,7 @@ ASK_PERIOD: ! r:
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ck<>5 then 
+	if ckey<>5 then 
 		date_bad=val(resp$(1))
 		date_good=val(resp$(2))
 		if date_bad=0 or date_good=0 then goto ASK_PERIOD

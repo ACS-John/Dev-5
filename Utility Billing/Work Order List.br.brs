@@ -35,7 +35,7 @@ def library fnWorkOrderList(; z$*10)
 	resp$(respc+=1)=z$
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ck=5 then goto PWL_XIT
+	if ckey=5 then goto PWL_XIT
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year
 	askz$=lpad$(trim$(resp$(3)(1:10)),10)

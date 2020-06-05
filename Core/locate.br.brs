@@ -1,17 +1,17 @@
 !  Replace S:\Core\Locate
-!
+
 autoLibrary
 on error goto Ertn
  
 dim a$*132,prg$*40,lc$*80,dur$*40,rep$*40,resp$(20)*100,txt$*100
 dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
 dim report$*256,subprocfile$*256,procfile$*256,tempfile1$*256,tempfile2$*256
-dim insline$*78,filter$*38
+dim insline$*78
+dim filter$*38
  
 dur$=fnAcsInstallationPath$
 fnTop(program$,"Locate 1")
 filter$="*.br"
-cancel=5
 report$=env$('temp')&"\LocRpt-"&session$&".txt"
 subprocfile$=env$('temp')&"\loc3-"&session$&".tmp"
 procfile$=env$('temp')&"\Loc0-"&session$&".prc"
@@ -49,8 +49,8 @@ MAIN: !
 	lc+=1 ! blank line
 	fnLbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
 	fnCmdSet(2)
-	fnAcs("Locate",0,mat resp$,ck)
-	if ck=cancel then goto Xit
+	fnAcs("Locate",0,mat resp$,ckey)
+	if ckey=5 then goto Xit
 	lc$=trim$(resp$(1))
 	lc2$=trim$(resp$(2))
 	dur$=trim$(resp$(3))
@@ -60,16 +60,16 @@ MAIN: !
 	rnm$=resp$(7)
 	insline$=trim$(resp$(8))
 	if lc2$<>"" and rep$<>"" then goto MAIN
-!
+
 	fngetdir(dur$,mat brfn$," /s ",filter$)
 	for j=1 to udim(brfn$)
 		if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L500
 	next j
-L500: pr "Found "&str$(j-1)&" files."
+	L500: pr "Found "&str$(j-1)&" files."
 	open #2: "Name="&procfile$&",Replace",display,output
 	if uprc$(app_prev$)="FALSE" then fnFree(report$)
-L530: pr #2: "print border: 'Locating...'"
-! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
+	L530: pr #2: "print border: 'Locating...'"
+	! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
 	for j=1 to udim(brfn$)
 		pr #2: "Load "&brfn$(j)
 		pr #2: "Load "&brfn$(j)
@@ -77,7 +77,7 @@ L530: pr #2: "print border: 'Locating...'"
 		pr #2: "Load "&brfn$(j)
 		pr #2: 'List >'&tempfile1$
 		pr #2: 'Load '&tempfile1$&',Source'
-!  record program name
+		!  record program name
 		pr #2: 'list 1 >'&tempfile2$
 		pr #2: 'type '&tempfile2$&' >>'&report$
 		if rep$<>"" then : _
