@@ -3,40 +3,36 @@
 	on error goto Ertn
  
 	dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
-	dim usagtot(18,20),ratetot(18,20),customer(18,20),cap$*128
+	dim usagtot(18,20),ratetot(18,20),customer(18,20)
 	dim fa$(5),sa$(4),fb$(1),fc$(1),sb$(1)*38,fd$(1),z$(4)*11,srvc$*11
 	dim io2$(38),cnam$*40,code$(4),a(7),d(15),g(10),e$(4)*30,f$(3)*12
  
 	fncno(cno,cnam$)
 	fnLastBillingDate(bdate)
-	fnTop(program$,cap$="Analyze Charges")
+	fnTop(program$,"Analyze Charges")
 MAIN: !
-	fnTos(sn$:="UBAnalyze") : _
-	mylen=20 : _
+	fnTos
+	mylen=20
 	mypos=mylen+2
 	fnLbl(1,1,"Billing Date:",mylen,1)
-	fnTxt(1,mypos,8,8,0,"1") : _
+	fnTxt(1,mypos,8,8,0,"1")
 	resp$(1)=str$(bdate)
 	fnLbl(2,1,"Type of Service:",mylen,1)
-	code$(1)="Water" : _
-	code$(2)="Sewer" : _
-	code$(3)="Electric" : _
-	code$(4)="Gas" : _
+	code$(1)="Water"
+	code$(2)="Sewer"
+	code$(3)="Electric"
+	code$(4)="Gas"
 	fncomboa("Service",2,mylen+3,mat code$,"",16)
 	fnLbl(3,1,"Rate Code",mylen,1)
-	fnTxt(3,mypos,3,3,0,"30") : _
+	fnTxt(3,mypos,3,3,0,"30")
 	resp$(3)=""
-	fnCmdSet(3): fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnCmdSet(3): fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	bdate= val(resp$(1))
-	if resp$(2)="Water" then : _
-		srvc=1 : srvc$=resp$(2)
-	if resp$(2)="Sewer" then : _
-		srvc=2 : srvc$=resp$(2)
-	if resp$(2)="Electric" then : _
-		srvc=3 : srvc$=resp$(2)
-	if resp$(2)="Gas" then : _
-		srvc=4 : srvc$=resp$(2)
+	if resp$(2)="Water"    then srvc=1 : srvc$=resp$(2)
+	if resp$(2)="Sewer"    then srvc=2 : srvc$=resp$(2)
+	if resp$(2)="Electric" then srvc=3 : srvc$=resp$(2)
+	if resp$(2)="Gas"      then srvc=4 : srvc$=resp$(2)
 	rcode=val(resp$(3))
 	fnopenprn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed

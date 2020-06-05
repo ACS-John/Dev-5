@@ -67,8 +67,8 @@
 		fnTxt(13,pf,8,8,1,"1")
 		resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3_override)
 		fnCmdSet(3)
-		fnAcs2(mat resp$,ck)
-		if ck=5 then goto ENDSCR
+		fnAcs2(mat resp$,ckey)
+		if ckey=5 then goto ENDSCR
 		d1 = val(resp$(5))
 		d4 = val(resp$(1))
 		mg$(1) = resp$(2)
@@ -159,10 +159,10 @@
 		end if
 		fncmbact(1,17) !
 		resp$(1)=a$
-		fnCmdSet(3): fnAcs2(mat resp$,ck)
+		fnCmdSet(3): fnAcs2(mat resp$,ckey)
 		a$ = lpad$(trim$(resp$(1)(1:10)),10)
 		if trim$(a$)="" then goto RELEASE_PRINT
-		if ck=5 then goto RELEASE_PRINT
+		if ckey=5 then goto RELEASE_PRINT
 		read #1,using L620,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,energy$,mat a,extra11,extra12 nokey SCREEN3
 		goto L660
 	!
@@ -204,7 +204,7 @@
 		fnTxt(1,mypos,8,0,1,"",1)
 		resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 		fnCmdSet(52)
-		fnAcs2(mat resp$,ck)
+		fnAcs2(mat resp$,ckey)
 	Xit: fnXit
 	!
 	ERTN: fnerror(program$,err,line,act$,"Xit")

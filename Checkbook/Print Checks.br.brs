@@ -57,7 +57,7 @@ MAIN_QUESTIONS: !
 	amt=arec=x=y=0
 	mat amt=(0) : mat de$=("")
 READ_4: !
-	read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,n 1,n 6,n 10.2,n 8',release: vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde,pdate,disamt,ddate eof EOF_ROUTINE
+	read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,n 1,n 6,n 10.2,n 8',release: vn$,iv$,mat up$,upa,pcde,bc,checkNumber$,dp,gde,pdate,disamt,ddate eof EOF_ROUTINE
 	vn$=lpad$(rtrm$(vn$),8)
 	if rtrm$(vn$)="" then goto READ_4
 	if pcde=0 then goto READ_4
@@ -88,21 +88,21 @@ goto READ_4
  
 SUB_PRINT_CHECK: ! r:
 	fn_cknum
-! if env$('client')="Washington Parrish" then let fnprocess(1) ! skip Atlantis screen
+	! if env$('client')="Washington Parrish" then fnprocess(1) ! skip Atlantis screen
 	fnopenprn(cp,42,220,process)
 	ckn1=ckn
-!   on ckoption goto L1360,L1360 none L1360 ! L1390
-! L1360: !
+	!   on ckoption goto L1360,L1360 none L1360 ! L1390
+	! L1360: !
 	if amt<=0 then goto L2420
-	if scc$="CSS" then let fn_portion_check : fn_portion_stub(1) : fn_portion_stub(2)
-! L1390: !
-	if scc$="SCS" then let fn_portion_stub(1) : fn_portion_check : fn_portion_stub(2)
-	if scc$="SSC" then let fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
-	if scc$="SCC" then let fn_portion_stub(1) : fn_portion_check : fn_portion_check
-	gosub UPDATEINVOICE
+	if scc$="CSS" then fn_portion_check : fn_portion_stub(1) : fn_portion_stub(2)
+	! L1390: !
+	if scc$="SCS" then fn_portion_stub(1) : fn_portion_check : fn_portion_stub(2)
+	if scc$="SSC" then fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
+	if scc$="SCC" then fn_portion_stub(1) : fn_portion_check : fn_portion_check
+	gosub UpdateInvoice
 return ! /r
  
-UPDATEINVOICE: ! r:
+UpdateInvoice: ! r:
 	for j=1 to arec
 		rewrite #h_paytrans,using 'Form POS 76,N 8,N 6',rec=arec(j): ckn,prdmmddyy
 	next j
@@ -111,7 +111,7 @@ UPDATEINVOICE: ! r:
 	if allign=3 then pr #255: newpage : goto ALIGN_COMPLETED
 	pr #255: newpage
 	fncloseprn
-! if env$('client')="Washington Parrish" then let fnprocess(0)
+	! if env$('client')="Washington Parrish" then fnprocess(0)
 	holdpayee$=""
 	if ti1=1 then ckoption=1 : allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
 	if ~allign then
@@ -153,16 +153,16 @@ SCR_CKPRT7: !
 		end if
 	end if
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if (ck=5 or ck=99) and ckoption=1 then let fn_write_ck_hist_1 : goto MENU1
-	if (ck=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
+	fnAcs2(mat resp$,ckey)
+	if (ckey=5 or ckey=99) and ckoption=1 then fn_write_ck_hist_1 : goto MENU1
+	if (ckey=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
 	for j=1 to 4
 		if resp$(j)(1:1)="T" then allign=j : goto L2300
 	next j
 L2300: !
-	if ckoption=1 and allign=2 then let fn_write_ck_hist_1 ! write regular check history if not a reprint
+	if ckoption=1 and allign=2 then fn_write_ck_hist_1 ! write regular check history if not a reprint
 ! L2310: !
-	if ckoption=1 and allign=3 then let fn_write_ck_hist_1 !  write regular check history
+	if ckoption=1 and allign=3 then fn_write_ck_hist_1 !  write regular check history
 	on allign goto ALIGN_REPR_SAME,ALIGN_PRINT_NEXT,ALIGN_COMPLETED,ALIGN_PRINT_NEXT none SCR_CKPRT7
  
 ALIGN_REPR_SAME: !
@@ -179,7 +179,8 @@ ALIGN_PRINT_NEXT: !
 		write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,g 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",0,dp,1
 	end if
 	ckn=ckn+1
-L2420: !
+goto L2420 ! /r
+L2420: ! r:
 	mat iv$=("") : mat de$=("")
 	mat amt=(0) : mat de$=("")
 	amt=arec=x=y=0
@@ -190,11 +191,11 @@ L2420: !
 	hiv$=""
 	tac=0
 	if (ckoption=1 or ckoption=3) and allign=3 then goto MENU1
-	return ! /r
+return ! /r
 EOF_ROUTINE: ! r:
 	if st1=1 then gosub SUB_PRINT_CHECK
 	fncloseprn
-! if env$('client')="Washington Parrish" then let fnprocess(0)
+! if env$('client')="Washington Parrish" then fnprocess(0)
 	mat amt=(0) : mat de$=("") : mat iv$=("") : mat de$=("") : x=y=1
 	st1=0 : holdvn$=""
 	goto MENU3
@@ -207,7 +208,7 @@ MENU3: ! r: (reprint or transfer to history)
 	item5$(2)="Transfer to Check History"
 	fncomboa("ckprt-cmb1",1,40,mat item5$,tt$)
 	resp$(respc+=1)=item5$(2)
-	fnCmdSet(41): fnAcs2(mat resp$,ck)
+	fnCmdSet(41): fnAcs2(mat resp$,ckey)
 	if resp$(1)=item5$(1) then ti2=1 else ti2=2
 	allign=0
 	on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
@@ -224,8 +225,8 @@ MENU4: ! r: (Reprint Options)
 	fncombof("Paymstr",3,10,30,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 	resp$(respc+=1)=holdpayee$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	if resp$(1)=item4$(1) then ti2=1 else ti2=2
 	begvn$=resp$(2)(1:8) ! beginning payee to start reprint
 	on ti2 goto L3430,L3470
@@ -250,7 +251,7 @@ FINIS: ! r: COMPLETE
 	fn_close(bankmstr)
 	fn_close(h_paymstr1)
 	fn_close(company)
-	if idx then let fn_index
+	if idx then fn_index
 	goto Xit ! /r
 	def fn_close(h_closeme)
 		close #h_closeme: ioerr CLOSE_IGNORE
@@ -261,10 +262,10 @@ IGNORE: continue
 CKOPTION1_CHECK_ENTRY: ! r:
 	mat resp$=("")
 CKOPTION1_CHECK_ENTRY_2: !
-	ck=fn_scr_check_entry
-	if ck=5 then
+	ckey=fn_scr_check_entry
+	if ckey=5 then
 		goto Xit
-	else if ck=20 or ck=21 then
+	else if ckey=20 or ckey=21 then
 		goto ASSIGN_SCREENS
 	else
 		goto STORE_GL_BREAKDOWNS
@@ -282,7 +283,7 @@ STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
 		in3$(j+4)=holdresp$(x+2)(1:30) ! description  kj 081507
 		tac+=val(in3$(j+3))
 	next j
-	if ck=20 or ck=21 then
+	if ckey=20 or ckey=21 then
 		goto ASSIGN_SCREENS
 	else
 		goto COMPLETED_WITH_SCREEN
@@ -290,12 +291,12 @@ STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
 ! /r
 ASSIGN_SCREENS: ! r: assign screen # based on more and back options
 	if screen=0 then screen=1
-	if ck=20 and screen=1 then screen=2 : goto L5070
-	if ck=20 and screen=2 then screen=3 : goto L5070
-	if ck=20 and screen=3 then screen=3 : goto L5070 ! shouldn't happen
-	if ck=21 and screen=2 then screen=1 : goto L5070
-	if ck=21 and screen=1 then screen=1 : goto L5070 ! shouldn't happen
-	if ck=21 and screen=3 then screen=2 : goto L5070
+	if ckey=20 and screen=1 then screen=2 : goto L5070
+	if ckey=20 and screen=2 then screen=3 : goto L5070
+	if ckey=20 and screen=3 then screen=3 : goto L5070 ! shouldn't happen
+	if ckey=21 and screen=2 then screen=1 : goto L5070
+	if ckey=21 and screen=1 then screen=1 : goto L5070 ! shouldn't happen
+	if ckey=21 and screen=3 then screen=2 : goto L5070
 L5070: for j=1 to 30
 		if screen=1 then x=j+2
 		if screen=2 then x=j+34
@@ -305,7 +306,7 @@ L5070: for j=1 to 30
 	goto CKOPTION1_CHECK_ENTRY_2 ! /r
 COMPLETED_WITH_SCREEN: ! r:
 	screen=0
-	if ck<>2 then goto PRINT_REGULAR_CHECKS ! skip automatic allocation
+	if ckey<>2 then goto PRINT_REGULAR_CHECKS ! skip automatic allocation
 	fn_read_standard_breakdowns
 	goto CKOPTION1_CHECK_ENTRY_2
 ! /r
@@ -313,7 +314,7 @@ PRINT_REGULAR_CHECKS: ! r:
 	fn_cknum
 	amt=arec=x=y=0
 	mat amt=(0) : mat de$=("")
-	if tac<>val(tr$(3)) then let fn_msg_allocations_off : goto CKOPTION1_CHECK_ENTRY_2 ! ALLOCATIONS NOT EQUAL
+	if tac<>val(tr$(3)) then fn_msg_allocations_off : goto CKOPTION1_CHECK_ENTRY_2 ! ALLOCATIONS NOT EQUAL
 	for j=1 to 30 ! kj was 10
 		if in3$(j*5)=hiv$ and rtrm$(hiv$)<>"" then goto L5460
 		y=y+1: if y>2 then y=1
@@ -338,9 +339,9 @@ REPRINT_CHECKS: ! r:
 	fnLbl(2,1,"Last Check Number to Reprint:",38,1)
 	fnTxt(2,40,8,0,1,"30",0,"")
 	resp$(respc+=1)=str$(lastckn)
-	if reprintckn>0 then let fnLbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
-	fnCmdSet(2): fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	if reprintckn>0 then fnLbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	firstckn=ckn1=reprintckn=val(resp$(1))
 	lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
 	if lastckn>0 and lastckn<firstckn then goto REPRINT_CHECKS ! smaller lastckn
@@ -394,11 +395,11 @@ L7820: !
 L7910: !
 	fnopenprn
 	ckn1=reprintckn: amt=tr3
-	if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
-	! if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2) ! reprint checks does it double for no reason!?
-	if scc$="SCS" then let fn_portion_stub(1) : fn_portion_check   : fn_portion_stub(2)
-	if scc$="SSC" then let fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
-	if scc$="SCC" then let fn_portion_stub(1) : fn_portion_check    : fn_portion_check
+	if scc$="CSS" then fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
+	! if scc$="CSS" then fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2) ! reprint checks does it double for no reason!?
+	if scc$="SCS" then fn_portion_stub(1) : fn_portion_check   : fn_portion_stub(2)
+	if scc$="SSC" then fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
+	if scc$="SCC" then fn_portion_stub(1) : fn_portion_check    : fn_portion_check
 	if lastckn>0 and reprintckn<lastckn then reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
 L7970: !
 	fncloseprn
@@ -468,14 +469,14 @@ def fn_scr_check_entry
 	fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
 	fnCmdKey("&Complete",5,0,1,"Return to menu.")
 	! need a fnCmdKey to change screens for the breakdowns  (screen 1,2 or 3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then screen=0 : goto SCE_XIT
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then screen=0 : goto SCE_XIT
 	!
 	for j=3 to 30, step 3
 		resp$(j)=fnagl$(resp$(j))
 	next j
 	!
-	if ck=50 then let fn_payee_add : goto CKOPTION1_CHECK_ENTRY_2
+	if ckey=50 then fn_payee_add : goto CKOPTION1_CHECK_ENTRY_2
 	tr$(3)=resp$(1) ! amount
 	vn$=tr$(4)=lpad$(rtrm$(resp$(2)(1:8)),8) ! payee number
 	read #h_paymstr1,using "Form pos 1,c 8",key=vn$,release: vn$ nokey SCE_L4640
@@ -485,7 +486,7 @@ def fn_scr_check_entry
 	tr$(5)=resp$(2)(1:30)
 	vn$=tr$(4)="": b$(1)=tr$(5) ! payee name without vendor record
 	SCE_L4650: !
-	ckn=val(resp$(33)) ! ck number
+	ckn=val(resp$(33)) ! ckey number
 	holdpayee$=resp$(2)
 	prd=val(resp$(34)): ! date
 	prdmmddyy=val(resp$(34)(5:6))*10000+val(resp$(34)(7:8))*100+val(resp$(34)(3:4)) ! convert date back to mmddyy format
@@ -509,7 +510,7 @@ def fn_scr_check_entry
 	SCE_L4820: !
 	next j
 	SCE_XIT: !
-	fn_scr_check_entry=ck
+	fn_scr_check_entry=ckey
 fnend
 def fn_read_standard_breakdowns ! pull standard gl breakdowns from payee file
 	read #h_paymstr1,using "Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,X 6,C 12,C 30,C 50,C 12,C 20",key=lpad$(rtrm$(vn$),8),release: vn$,mat pr$,ytdp,typ,ss$,ph$,contact$,email$,fax$,myact$ nokey RSB_XIT
@@ -517,7 +518,7 @@ def fn_read_standard_breakdowns ! pull standard gl breakdowns from payee file
 	restore #payeegl,key>=vn$: nokey RSB_EO_READSTGL
 	totalalloc=0
 	for j=3 to 92 step 3
-		if j=33 or j=34 then goto RSB_L5310 ! skip ck num and date  (resp$(33)&34)
+		if j=33 or j=34 then goto RSB_L5310 ! skip ckey num and date  (resp$(33)&34)
 	RSB_L5240: !
 		read #payeegl,using "Form Pos 1,C 8,c 12,n 6.2,c 30",release: payeekey$,payeegl$,percent,gldesc$ eof RSB_EO_READSTGL
 		if vn$<>payeekey$ then goto RSB_EO_READSTGL
@@ -562,11 +563,11 @@ def fn_write_history
 		delete #h_paymstr1,key=vn$: nokey ignore
 	end if  ! ltrm$(vn$)(1:2)="T-"
 	WH_L3740: !
-	if holdvn$<>vn$ or (hck<>ck and hck>0) then
+	if holdvn$<>vn$ or (hck<>ckey and hck>0) then
 		write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bc,1,ckpay,dp,upa,vn$,b$(1),0,0,1
-	end if  ! holdvn$<>vn$ or (hck<>ck and hck>0)
+	end if  ! holdvn$<>vn$ or (hck<>ckey and hck>0)
 	holdvn$=vn$
-	hck=ck
+	hck=ckey
 	WH_L3770: !
 	read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey WH_L3800
 	bal=bal-upa
@@ -761,7 +762,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 	fnTxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
 	resp$(respc+=1)=""
 	
-	fnCmdSet(2): fnAcs2(mat resp$,ck)
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
 	ckn2=val(resp$(2))
 	if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
 	if ckn2<=0 then
@@ -1249,7 +1250,7 @@ def fn_portion_check_edison(dolamt)
 	pr #255: ''
 	pr #255: ''
 fnend
-def fn_scr_main_questions(;___,ck)
+def fn_scr_main_questions(;___,ckey)
 	if ~smq_setup then
 		smq_setup=1
 		dim layoutOption$(4)*18,scc$(4)*3
@@ -1259,7 +1260,7 @@ def fn_scr_main_questions(;___,ck)
 		layoutOption$(4)="Stub, Check, Check" : scc$(4)="SCC"
 		fncreg_read('Check Layout Option',layoutOptionSelected$, layoutOption$(1))
 	end if
-	ck=0
+	ckey=0
 	fnTos
 	respc=0
 	fnLbl(1,1,"Method of Printing checks:",38,1)
@@ -1285,20 +1286,20 @@ def fn_scr_main_questions(;___,ck)
 	if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then resp$(respc)=layoutOption$(2)
 	! need button to show totals
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck<>5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey<>5 then
 		for j=1 to 3
 			if resp$(j)='True' then ti1=j : ckoption=j
 		next j
 		prd=val(resp$(4)) ! date of checks
 		prdmmddyy=val(resp$(4)(5:6))*10000+val(resp$(4)(7:8))*100+val(resp$(4)(3:4)) ! convert date back to mmddyy format
-		ckn=val(resp$(5)) ! beginning ck number
+		ckn=val(resp$(5)) ! beginning ckey number
 		bankcode=val(resp$(6)(1:3))
 		layoutOptionSelected$=resp$(7)
 		for j=1 to 4
 			if trim$(layoutOptionSelected$)=trim$(layoutOption$(j)) then scc$=scc$(j)
 		next j
 		fncreg_write('Check Layout Option',layoutOptionSelected$)
-	end if  ! ck<>5
-	fn_scr_main_questions=ck
+	end if  ! ckey<>5
+	fn_scr_main_questions=ckey
 fnend

@@ -42,8 +42,8 @@ MENU1: ! r:
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 	if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-	fnCmdSet(2): fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	taxyear=val(resp$(1)) ! tax year
 	if taxyear<2000 then goto L510
 	ending_date=taxyear*10000+1231 conv L510

@@ -1,10 +1,10 @@
 ! Formerly S:\acsGL\glMaint
 ! General Ledger Master File editor
-!
-	autoLibrary
+
+autoLibrary
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
-	on error goto Ertn
-!
+on error goto Ertn
+
 	dim tr(7),tr$*12,td$*30
 	dim d$*50,bc(13),bp(13)
 	dim bm(13)
@@ -16,7 +16,7 @@
 	dim resp$(100)*60
 	dim ml$(3)*128
 	dim item$(9)*30
-!
+
 	fnTop(program$)
 	fixgrid=99
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
@@ -277,10 +277,14 @@ REVIEW_TRANS: ! r:
 !
 TRANSACTION_GRID: !
 	mat chdr$(9) : mat cmask$(9) : mat item$(9)
-	chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date'
+	chdr$(1)='Ref'
+	chdr$(2)='G/L #'
+	chdr$(3)='Date'
 	chdr$(4)='Amount'
-	chdr$(5)='T Code' : chdr$(6)='P Code'
-	chdr$(7)='Ck/Rec #' : chdr$(8)='Description'
+	chdr$(5)='T Code' 
+	chdr$(6)='P Code'
+	chdr$(7)='ChkRec #'
+	chdr$(8)='Description'
 	chdr$(9)='Period'
 	cmask$(1)="30"
 	cmask$(2)="": cmask$(3)="3" : cmask$(4)='10'
@@ -289,7 +293,7 @@ TRANSACTION_GRID: !
 	fnTos(sn$="gltrans")
 	fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	adr=ta(1): pc2=0
-!  read current or history files
+	!  read current or history files
 	if currentOrHistory=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
 	READ_FROM_CURRENT: !
 	transfile=2
@@ -318,12 +322,12 @@ TRANSACTION_GRID: !
 	item$(9)=str$(pc2)
 	fnflexadd1(mat item$)
 	if currentOrHistory=1 then goto L2780 else goto ReadAcTrans ! read from current or history
-EO_TRANS_GRID: !
+	EO_TRANS_GRID: !
 	if currentOrHistory=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto MAIN
-	if ck=2 then edit_mode=1 else edit_mode=0
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto MAIN
+	if ckey=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
 	if recordnum=0 then goto MAIN
 	if currentOrHistory=1 then
@@ -353,7 +357,7 @@ EO_TRANS_GRID: !
 	fnLbl(5,1,"Post Code:",mylen,right)
 	fnTxt(5,mypos,2,0,right,"30",0,"",0)
 	resp$(5)=str$(tr(7))
-	fnLbl(6,1,"Ck/Ref:",mylen,right)
+	fnLbl(6,1,"ChkRef:",mylen,right)
 	fnTxt(6,mypos,12,0,right,"",0,"",0)
 	resp$(6)=tr$
 	fnLbl(7,1,"Description:",mylen,right)

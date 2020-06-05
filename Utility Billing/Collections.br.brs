@@ -1135,7 +1135,7 @@ def fn_csv_import
 			ml$(3)=tab$&"Date"
 			ml$(4)=tab$&"Account"&tab$&'("Acct" and "Acct #" are acceptable also.)'
 			ml$(5)=tab$&"Amount"&tab$&'("Amt" and "Payment" are acceptable also.)'
-			ml$(6)=tab$&"Type"&tab$&'"Cash" for cash.' ! '  "CK [checknumber]" for checks.'
+			ml$(6)=tab$&"Type"&tab$&'"Cash" for cash.' ! '  "Chk[checknumber]" for checks.'
 			ml$(7)=tab$&tab$&'("Pmt Type" is acceptable also.)'
 			ml$(8)="Negative amounts will be entered as Debit Memos."
 			ml$(9)="Tab or Comma delimiters are allowed."

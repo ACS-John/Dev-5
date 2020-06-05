@@ -1,67 +1,60 @@
 ! Replace S:\acsCL\TrJr
 ! pr Transaction Journals
- 
+
 	autoLibrary
 	on error goto Ertn
- 
-	dim cnam$*40,vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
-	dim t1(3),glt(3),glts(3),bn$*30,cap$*128,des$*30,sltyn$(3)*1
-	dim udf$*256
- 
-	fnTop(program$, cap$="Transaction Journals")
-	udf$=env$('temp')&'\'
-	cancel=99
- 
-	fncno(cno,cnam$)
-	ti$(1)="Checks" : _
-	ti$(2)="Deposits" : _
+
+	dim vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
+	dim t1(3),glt(3),glts(3),bn$*30
+	dim des$*30,sltyn$(3)*1
+
+	fnTop(program$, "Transaction Journals")
+	ti$(1)="Checks"
+	ti$(2)="Deposits"
 	ti$(3)="Adjustments"
- 
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  : _
-	read #20,using 'form POS 152,N 2': wbc : _
+
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input
+	read #20,using 'form POS 152,N 2': wbc
 	close #20:
- 
+
 MAIN: !
-	fnTos(sn$="Trjr") : _
+	fnTos
 	respc=0
 	fnLbl(1,1,"Beginning Date:",38,1)
-	fnTxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") : _
+	fnTxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!")
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Ending Date:",38,1)
-	fnTxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") : _
+	fnTxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!")
 	resp$(respc+=1)=""
 	fnLbl(4,1,"Information to Print:",38,1)
-	item2$(1)="Details" : _
+	item2$(1)="Details"
 	item2$(2)="Totals Only"
-	fncomboa("claims-act",4,40,mat item2$) : _
+	fncomboa("claims-act",4,40,mat item2$)
 	resp$(respc+=1)=item2$(1)
-	fnChk(7,40,"Print Disbursments Journal:",1) : _
+	fnChk(7,40,"Print Disbursments Journal:",1)
 	resp$(respc+=1)="True"
-	fnChk(8,40,"Print Receipts Journal:",1) : _
+	fnChk(8,40,"Print Receipts Journal:",1)
 	resp$(respc+=1)="True"
-	fnChk(9,40,"Print Adjustments Journal:",1) : _
+	fnChk(9,40,"Print Adjustments Journal:",1)
 	resp$(respc+=1)="False"
 	fnLbl(11,1,"Bank Account:",38,1)
 	fncombof("Bankmstr",11,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing") : _
 	resp$(respc+=1)=str$(wbc)
-	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
-	dt1=val(resp$(1)) ! beginning date : _
-	dt2=val(resp$(2)) ! ending date : _
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	dt1=val(resp$(1)) ! beginning date
+	dt2=val(resp$(2)) ! ending date
 	td1yn$=resp$(3)(1:1) !  detail
-	if resp$(4)(1:1)="T" then sltyn$(1)="Y": slt(1)=1 : _
-	else sltyn$(1)="N" ! disb jrn
-	if resp$(5)(1:1)="T" then sltyn$(2)="Y" : slt(2)=1 : _
-	else sltyn$(2)="N" ! rec jrn
-	if resp$(6)(1:1)="T" then sltyn$(3)="Y" : slt(3)=1 : _
-	else sltyn$(3)="N" ! adj jrn
+	if resp$(4)(1:1)="T" then sltyn$(1)="Y" : slt(1)=1 else sltyn$(1)="N" ! disb jrn
+	if resp$(5)(1:1)="T" then sltyn$(2)="Y" : slt(2)=1 else sltyn$(2)="N" ! rec jrn
+	if resp$(6)(1:1)="T" then sltyn$(3)="Y" : slt(3)=1 else sltyn$(3)="N" ! adj jrn
 	wbc=val(resp$(7)(1:2))
 ! FNWAIT
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,input,keyed
 	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
 	open #glmstr=4: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
-	open #work=3: "Name="&udf$&"WORK,KFName="&udf$&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outIn,keyed  : _
+	open #work=3: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outIn,keyed  : _
 	! this file is used to total Amounts by General Ledger Number
 	open #bankmstr=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
 	read #bankmstr,using 'Form POS 3,C 30,C 12,PD 6.2',key=cnvrt$("N 2",wbc),release: bn$ nokey MAIN
@@ -82,7 +75,7 @@ HERE: if wcd>2 then goto ENDALL
 	if td1yn$="D" then gosub HDR
 	restore #trmstr,key>=lpad$(str$(wbc),2)&str$(wcd)&"        ": nokey END1
 READ_TRMSTR: !
-	read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35': bank_code,tcde,ck$,tr2,amt,vn$,de$ eof ENDALL
+	read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35': bank_code,tcde,checkNumber$,tr2,amt,vn$,de$ eof ENDALL
 	if tcde=1 then de$=rpad$(ltrm$(vn$),8)&" "&de$(1:26)
 	if bank_code><wbc then goto ENDALL
 	if tcde><wcd then goto END1
@@ -90,16 +83,16 @@ READ_TRMSTR: !
 		goto READ_TRMSTR
 	sq$=" "
 	if tcde><1 then goto L750
-	ck1=val(ck$) conv L750
+	ck1=val(checkNumber$) conv L750
 	if ck2=0 then goto L740
 	if ck2+1><ck1 then sq$="*"
 L740: ck2=ck1
 L750: if td1yn$="D" then : _
-		pr #255,using 'Form POS 1,C 2,C 10,PIC(ZZ/ZZ/ZZBB),C 29,N 12.2': sq$,ck$,tr2,de$(1:29),amt pageoflow NEWPGE
+		pr #255,using 'Form POS 1,C 2,C 10,PIC(ZZ/ZZ/ZZBB),C 29,N 12.2': sq$,checkNumber$,tr2,de$(1:29),amt pageoflow NEWPGE
 	t1(wcd)+=amt
 RESTORE_TRALLOC: !
 	totalalloc=0 ! kj 52307
-	key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&ck$ : _
+	key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&checkNumber$
 	restore #tralloc,key>=key$: nokey PRINT_D_NEWPAGE
 READ_TRALLOC: !
 	read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,am2,tr5$,ivd$ eof PRINT_D_NEWPAGE : _
@@ -110,7 +103,7 @@ READ_TRALLOC: !
 	if td1yn$="D" then : _
 		pr #255,using 'Form POS 66,C 12,N 11.2,X 2,C 32,c 6': gl$,am2,tr5$,ivd$ pageoflow NEWPGE
 	goto SUMMARY_MAYBE
- 
+
 PRINT_D_NEWPAGE: !
 	if amt<>totalalloc then pr #255,using "form pos 1,c 80": "The allocations on the above transaction do not agree with total transaction" ! kj 52307
 	if td1yn$="D" then : _
@@ -118,11 +111,11 @@ PRINT_D_NEWPAGE: !
 		! if condition was left off and printed many blank pages if chose : _
 		! totals only 4/04/01
 	goto READ_TRMSTR
- 
+
 NEWPGE: pr #255: newpage: gosub HDR : continue
- 
+
 HDR: !
-	pr #255,using 'Form POS 1,C 8,Cc 74': date$,cnam$
+	pr #255,using 'Form POS 1,C 8,Cc 74': date$,env$('cnam')
 	if end3=0 then : _
 		pr #255,using 'Form POS 1,C 8,POS 24,CC 40': time$,"Bank # "&str$(wbc)&" "&bn$ : _
 		pr #255,using 'Form POS 24,Cc 40': ti$(wcd)&" Journal"
@@ -136,7 +129,7 @@ HDR: !
 	pr #255: ref$& "   Date    Payee/Description                  Amount   GL Number      Amount   Item Description                  Date  "
 	pr #255: "  ________  ________  _______________________________ __________ ____________ __________  _______________________________ ________"
 EOHDR: return
- 
+
 ENDALL: if slt(wcd)=0 then goto L1080
 	if td1yn$="D" then : _
 		pr #255,using 'Form POS 52,G 12.2': "  __________"
@@ -157,9 +150,9 @@ L1080: for j=1 to 3 : _
 	gosub RESTORE_WORK
 	fncloseprn
 	goto Xit
- 
+
 Xit: fnXit
- 
+
 SUMMARY_MAYBE: !
 	mat glt=(0)
 	read #work,using 'Form POS 1,C 12,3*PD 6.2',key=gl$: gl$,mat glt nokey READ_WORK_NOKEY
@@ -196,5 +189,5 @@ END3B: !
 	pr #255: "____________  ____________  ____________  ____________"
 	pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': "   Totals",mat t1
 return
- 
+
 include: Ertn

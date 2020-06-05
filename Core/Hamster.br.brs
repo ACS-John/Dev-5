@@ -243,9 +243,9 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			fnCmdKey("&Save",1,1)
 			fnCmdKey("&Cancel",opt_cancel,0,1)
 			!
-			fnAcs2(mat p2$,ck)
+			fnAcs2(mat p2$,ckey)
 			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
-			if ck<>opt_cancel then gosub REWR_P
+			if ckey<>opt_cancel then gosub REWR_P
 			addloop$=p2$(alana)
 			if lwrc$(addloop$)=lwrc$('True') then goto TO_ADD else goto MENU1
 	! /r

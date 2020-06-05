@@ -29,7 +29,7 @@ MENU1: ! r:
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
 	delubtransvb$=resp$(1) : removebaddates$=resp$(2)
-	if ck=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
+	if ckey=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
  
 return  ! /r
 Xit: chain "S:\acsUB\conversion\UBmstr-vb"

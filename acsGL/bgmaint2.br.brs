@@ -37,43 +37,45 @@
 	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 	close #1:
 	open #1: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
+	! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
 	open #5: "Name=[Q]\GLmstr\BudInfo.H[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.H[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed
 	read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
 	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
-!
+
 	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
-!
+
 	mat ml$(2)
 	ml$(1)="Budget Management is a separately licensed product. "
 	ml$(2)="Contact your representative or ACS to license the product. "
 	fnmsgbox(mat ml$,resp$,'',0)
-	goto Xit
-L470: gosub DATE_SCREEN
-! /r
-!
+goto Xit ! /r
+
 MENU1: ! r:
-	fnTos(sn$="Budget_File")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Budget File #:",14,right)
 	execute "Dir [Q]\GLmstr\budget*.H[cno] >"&env$('temp')&"\FlexWork.tmp" ioerr L530
 	L530: j=0
 	open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
-	L550: linput #13: ln$ eof L680
+	L550: !
+	linput #13: ln$ eof L680
 	ln$=uprc$(ln$)
 	x=pos(ln$,"KILOBYTES",1)
 	if x>0 then goto L680
 	x=pos(ln$(1:3),"DIR",1)
 	if x>0 or ln$(1:1)="." then goto L550 else goto L610
-	L610: x=pos(ln$,".",1)
+	L610: !
+	x=pos(ln$,".",1)
 	bud=val(ln$(x-1:x-1)) conv L670
 	bud=val(ln$(x-2:x-1)) conv L640
 	L640: k$=lpad$(str$(bud),2)
 	read #5,using L650,key=k$: k$,bud$,mat gl$ nokey L670
-L650: form c 2,c 50,40*c 12
+	L650: form c 2,c 50,40*c 12
 	options$(j+=1)=str$(bud)&" "&bud$
-L670: goto L550
-L680: close #13:
+	L670: !
+goto L550 ! /r
+L680: ! r:
+	close #13:
 L690: if j<=0 then j=1
 	mat options$(j)
 	fen$="CBud.h[cno]"
@@ -102,11 +104,11 @@ L690: if j<=0 then j=1
 		goto Xit
 	end if
 goto MENU1 ! /r
-!
+
 DATE_SCREEN: ! r:
 fd1=0101*100+val(date$(1:2))
 fd2=1231*100+val(date$(1:2))
-fnTos(sn$="bgmaint2")
+fnTos
 respc=0 : right=1
 fnLbl(1,47," ",1,1)
 fnLbl(1,1,"Beginning Day Of Year:",30,1)
@@ -115,8 +117,8 @@ resp$(respc+=1)=str$(fd1)
 fnLbl(2,1,"Ending Day of Year:",30,1)
 fnTxt(2,34,12,0,0,"3",0,"")
 resp$(respc+=1)=str$(fd2)
-fnCmdSet(2): fnAcs2(mat resp$,ck)
-if ck=5 then goto MENU1
+fnCmdSet(2): fnAcs2(mat resp$,ckey)
+if ckey=5 then goto MENU1
 fd1=val(resp$(1)) ! beginning of year
 fd2=val(resp$(2)) ! ending day of year
 return ! /r
@@ -268,7 +270,7 @@ goto DISPLAY_GRID ! /r (end of updating balances)
 ASK_BEGINNING_ITEM: ! r:
 goto DISPLAY_GRID
 ! r: skip this screen
-fnTos(sn$="bgmaint3")
+fnTos
 respc=0
 fnLbl(1,1,"Beginning General Ledger #:",30,1)
 fnqgl(1,33)
@@ -286,7 +288,7 @@ DISPLAY_GRID: ! r:
 restore #2:
 x=13
 if trim$(startgl$)<>"" then restore #2,key>=startgl$&"B": nokey L2430
-L2430: fnTos(sn$="Bgmaint4")
+L2430: fnTos
 respc=0
 fnLbl(1,1,bud$,50,right) ! move cmdkeys down
 frame=0
@@ -327,32 +329,32 @@ fnCmdKey("&Listing",3,0,0,"Prints listings of the budget")
 fnCmdKey("&Delete",7,0,0,"Deletes this line item")
 fnCmdKey("&Back",8,0,0,"Reselect starting budget item to display.")
 fnCmdKey("E&Xit",5,0,1,"Exits back to main budget screen.")
-fnAcs2(mat resp$,ck) ! GRID
+fnAcs2(mat resp$,ckey) ! GRID
 add=edit=0
-if ck=5 then goto MENU1
-if ck=2 then edit=1
-if ck=3 then goto PRNT1 ! pr listings of unpaid invoice file
-if ck=1 then
+if ckey=5 then goto MENU1
+if ckey=2 then edit=1
+if ckey=3 then goto PRNT1 ! pr listings of unpaid invoice file
+if ckey=1 then
 	add=1: insrt=1: jb1=1
 	g1$=k$(max(1,curfld-1)): mat bg=(0): gd$=ex$=cd$=""
 	mat resp$=(""): goto MAINTAIN_NONB_RECORDS
 end if
-if ck=2 then
+if ckey=2 then
 	rec2=val(resp$(1)) : read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2,release: g1$,mat bg,gd$,ex$,cd$
 	mat resp$=("")
 	holdkey$=g1$&cd$
 else
 	holdkey$=''
 end if
-if ck=2 then
+if ckey=2 then
 	resp$(1)=g1$: resp$(2)=str$(bg(1)): resp$(3)=str$(bg(2))
 	resp$(4)=str$(bg(3)): resp$(5)=str$(bg(4)) : resp$(6)=str$(bg(5))
 	resp$(7)=gd$: resp$(8)=ex$
 	resp$(9)=cd$
 	goto MAINTAIN_LINE_ITEM
 end if
-if ck=6 then goto INCLUDE_CHANGES
-if ck=7 then goto L2860 else goto L2890
+if ckey=6 then goto INCLUDE_CHANGES
+if ckey=7 then goto L2860 else goto L2890
 L2860: mat ml$(2)
 ml$(1)="You have chosen to delete the highlighted budget item."
 ml$(2)="Take YES to continue, else NO to retain the record."
@@ -361,12 +363,12 @@ if resp$="Yes" then goto L2880 else goto DISPLAY_GRID
 L2880: delete #2,rec=val(resp$(1)):
 restore #2:
 goto DISPLAY_GRID
-L2890: if ck=8 then goto MENU1
-if ck=9 then goto ASK_ABOUT_HISTORY
+L2890: if ckey=8 then goto MENU1
+if ckey=9 then goto ASK_ABOUT_HISTORY
 goto DISPLAY_GRID
 MAINTAIN_NONB_RECORDS: !
 if add=1 then g1$=gd$=cd$=""
-fnTos(sn$="Add_line_item")
+fnTos
 mylen=23: mypos=mylen+3 : right=1: rc=0
 if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
@@ -425,7 +427,7 @@ goto DISPLAY_GRID ! /r
 MAINTAIN_LINE_ITEM: ! r:
 if cd$="B" then goto L3350 else goto MAINTAIN_NONB_RECORDS
 L3350: holdg1$=g1$: holdcd$=cd$
-fnTos(sn$="Budget_Edit")
+fnTos
 respc=0: mylen=20: mypos=mylen+3
 fnLbl(1,1,"Account #:",mylen,right)
 fnqgl(1,mypos)
@@ -495,7 +497,7 @@ resp$(respc+=1)=option2$(1)
 fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
 fnCmdKey("&Save",1,1,0,"Save any changes." )
 fnCmdKey("E&Xit",5,0,1,"Exit without saving any changes.")
-fnAcs2(mat resp$,ck) ! EDIT SCREEN
+fnAcs2(mat resp$,ckey) ! EDIT SCREEN
 if ckey=5 then goto MENU1
 g1$=fnagl$(resp$(1))
 bg(1)=val(resp$(2))
@@ -529,7 +531,7 @@ PRNT1: ! r: John's pr Routine ... yeah, i made this mess
 header$="" : opr=255 : ps$="############"
 screen=cp=page=bob1=bob2=bob3=bob4=lyne=0
 uline2$=rpt$("_",244) : dline2$=rpt$("=",244)
-fnTos(sn$="bgprint")
+fnTos
 respc=0 : right=1 : mylen=25 : mypos=mylen+3
 fnLbl(lyne+=1,1,"Check the columns your want prirted",38,1)
 fnChk(lyne+=2,mypos,"GL Description:",1)
@@ -581,8 +583,8 @@ fnTxt(lyne,mypos,30,0,0,"",0,"Date you want printed in heading of the report.")
 resp$(respc+=1)=dat$
 fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&Xit",5,0,1,"Returns to main menu")
-fnAcs2(mat resp$,ck) ! pr setup
-if ck=5 then goto DISPLAY_GRID
+fnAcs2(mat resp$,ckey) ! pr setup
+if ckey=5 then goto DISPLAY_GRID
 if resp$(1)="True" then 	an1$(1)="Y" : an2(1)=val(resp$(2))
 if resp$(3) ="True" then an1$(2)= "Y" : an2(2)=val( resp$(4))
 if resp$(5) ="True" then an1$(3)= "Y" : an2(3)=val( resp$(6))
@@ -689,7 +691,7 @@ L5150: form pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 2
 !
 MAINTAIN_RANGE_FILE: ! r:
 if ad1=1 then bud=0: bud$="": mat gl$=("")
-fnTos(sn$="bgmaintrange")
+fnTos
 respc=0 : mylen=20 : mypos=20: mypos2=60: lyne=3
 fnLbl(1,1,"Budget #:",mylen,right)
 fnTxt(1,mylen+3,2,0,0,"30",0,"")
@@ -709,8 +711,8 @@ fnCmdKey("&Complete",1,1,0,"Saves the changes and and builds the new file from t
 !
 fnCmdKey("&Delete",6,0,0,"Deletes this complete budget file.")
 fnCmdKey("&Cancel",5,0,1,"Returns to main budget file menu.")
-fnAcs2(mat resp$,ck) ! gl breakdown screen
-if ck=5 then goto MENU1
+fnAcs2(mat resp$,ckey) ! gl breakdown screen
+if ckey=5 then goto MENU1
 bud=val(resp$(1))
 bud$=resp$(2)
 k$=lpad$(str$(bud),2)
@@ -718,7 +720,7 @@ for j=1 to 40
 	gl$(j)=fnagl$(resp$(j+2))
 next j
 if add=1 then goto L5470
-if ck=6 then goto L5410 else goto L5450
+if ckey=6 then goto L5410 else goto L5450
 L5410: mat ml$(2)
 ml$(1)="You have chosen to delete the budget file. Click Yes "
 ml$(2)="to continue, else No to retain the file."
@@ -737,20 +739,20 @@ L5510: goto READD_TOTALS ! /r
 Xit: fnXit
 !
 INCLUDE_CHANGES: ! r:
-fnTos(sn$="Include_Changes")
+fnTos
 respc=0: mylen=40: mypos=mylen+3 : lyne=0
 fnChk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1)
 resp$(respc+=1)="True"
 fnCmdKey("&Next",1,1,0,"Continue with re-calculations. ")
 fnCmdKey("E&Xit",5,0,1,"Returns to main menu")
-fnAcs2(mat resp$,ck) ! include changes if remaining balance
-if ck=5 then goto MENU1
+fnAcs2(mat resp$,ckey) ! include changes if remaining balance
+if ckey=5 then goto MENU1
 if resp$(1)="True" then ti3=1 else ti3=2
 chg=1
 goto READD_TOTALS ! /r
 !
 ASK_ABOUT_HISTORY: ! r:
-fnTos(sn$="Ask_about")
+fnTos
 respc=0: mylen=40: mypos=mylen+3 : lyne=0
 fnChk(lyne+=1,mypos,"Include Actual Receitps and Expenditures:",1)
 resp$(respc+=1)="True"
@@ -765,8 +767,8 @@ for j=1 to 4
 next j
 fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&Xit",5,0,1,"Returns to main menu")
-fnAcs2(mat resp$,ck) ! ask prior years
-if ck=5 then goto MENU1
+fnAcs2(mat resp$,ckey) ! ask prior years
+if ckey=5 then goto MENU1
 if resp$(1)="True" then needactual=1 else needactual=0
 if resp$(2)="True" then needbudget=1 else needbudget=0
 totalextra=0

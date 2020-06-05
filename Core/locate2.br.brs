@@ -9,7 +9,6 @@ dim report$*256,subprocfile$*256,procfile$*256,tempfile1$*256,tempfile2$*256
 fngetcd(dur$)
 fnTop(program$,'Locate2')
 filter$="*.br, *.br"
-cancel=5
 report$=env$('temp')&"\LocRpt-"&session$&".txt"
 subprocfile$=env$('temp')&"\loc3-"&session$&".tmp"
 procfile$=env$('temp')&"\Loc0-"&session$&".prc"
@@ -46,8 +45,8 @@ MAIN: !
 	fnLbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
 	fnLbl(lc+=1,1,"In Windows XP I can use '*.br,*.br'")
 	fnCmdSet(2)
-	fnAcs("Locate",0,mat resp$,ck)
-	if ck=cancel then goto Xit
+	fnAcs("Locate",0,mat resp$,ckey)
+	if ckey=5 then goto Xit
 	lc$=trim$(resp$(1))
 	lc2$=trim$(resp$(2))
 	dur$=trim$(resp$(3))
@@ -55,7 +54,7 @@ MAIN: !
 	filter$=trim$(resp$(5))
 	app_prev$=resp$(6)
 	if lc2$<>"" and rep$<>"" then goto MAIN
-!
+
 	fngetdir(dur$,mat brfn$," /s ",filter$)
 	for j=1 to udim(brfn$)
 		if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L490

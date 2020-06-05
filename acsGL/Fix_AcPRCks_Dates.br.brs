@@ -4,15 +4,14 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cnam$*40,cap$*128
 	dim k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 	dim fa$(2),sa$(2)*40,adr(2)
  
-	fnTop(program$,cap$="Fix Payroll Dates")
-	fncno(cno,cnam$)
+	fnTop(program$,"Fix Payroll Dates")
+	fncno(cno)
 	fndat(dat$)
  
-	fnTos(sn$="PayrollReg")
+	fnTos
 	rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 	fnFra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
 	fnLbl(1,1,"Bad Date:",mylen,1,0,frameno)
@@ -51,16 +50,16 @@ L390: read #h_prmstr,using 'Form POS 1,N 4,3*C 25,POS 271,2*N 5': eno,mat k$,mat
 	goto FINIS
  
 def fn_header
-		nametab=66-int(len(rtrm$(cnam$))/2)
-		pr #255,using L530: date$,time$,cnam$
+		nametab=66-int(len(rtrm$(env$('cnam')))/2)
+		pr #255,using L530: date$,time$,env$('cnam')
 L530: form pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
-		p1=66-int(len(rtrm$(cap$))/2)
-		pr #255,using L560: rtrm$(cap$)
+		p1=66-int(len(rtrm$(env$('program_caption')))/2)
+		pr #255,using L560: env$('program_caption')
 L560: form pos p1,c 50
 fnend
 def fn_hdr1
 		fn_header
-		pr #255,using L630: "EMP #    EMPLOYEE NAME         GROSS   FED W/H  FICA W/H    ST W/H  MISC W/H   LOC W/H       NET     TIPS    EIC   DATE    CK #"
+		pr #255,using L630: "EmpNo    Employee Name         Gross   Fed W/H  FICA W/H    St W/H  Misc W/H   Loc W/H       Net     Tips    EIC   Date    Chk#"
 L630: form skip 1,c 132,skip 2
 fnend
 def fn_print_1

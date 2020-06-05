@@ -36,10 +36,10 @@ MENU1: ! r:
 		colmask$(1)='30'
 		colmask$(2)=''
 	end if
- 
+
 	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 	!
- 
+
 	fngetdir2(fn_dataFolder$,mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 	company_count=filename_item=0
 	for filename_item=1 to udim(mat filename$)
@@ -75,47 +75,47 @@ MENU1: ! r:
 	if exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 		fnCmdKey("&Cancel",5,0,1)
 	end if
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	!
-	if ck=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
+	if ckey=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
 		goto Xit
-	else if ck=2 then
+	else if ckey=2 then
 		goto COMPANY_ADD
-	else if ck=17 then ! Open...
+	else if ckey=17 then ! Open...
 		fnOpenPartial
 		chain program$
-	else if ck=13 and (fnclient_is_converting or company_count=0) then ! import
+	else if ckey=13 and (fnclient_is_converting or company_count=0) then ! import
 		fnchain('S:\Core\Company Import.br')
 	end if
 	!
 	cno_selected=val(resp$(1))
 	!
-	if ck=3 then ! Copy
+	if ckey=3 then ! Copy
 		fn_companyCopy(cno_selected)
 	!   goto MENU1
-	else if ck=14 then ! Delete Company
+	else if ckey=14 then ! Delete Company
 		gosub SELECT_COMPANY
 		fn_companyConfigure(scno)
-	else if ck=4 and company_count=>2 then ! Delete Company
+	else if ckey=4 and company_count=>2 then ! Delete Company
 		fn_companyDelete(cno_selected)
 	!   goto MENU1
-	else if ck=10 then ! Select that Company
+	else if ckey=10 then ! Select that Company
 		gosub SELECT_COMPANY
 		chain program$
-	else if ck>1000 and ck<1200 then ! Select System 1001-1199 reserved for system selection
-		cursys$=client_has$(ck-1000)
+	else if ckey>1000 and ckey<1200 then ! Select System 1001-1199 reserved for system selection
+		cursys$=client_has$(ckey-1000)
 		fnreg_write(session$&'.CurSys',cursys$)
 		fncursys$(cursys$)
 		fn_setup_on_cursys_change
 		chain program$
-	else if fkey_client>0 and ck=fkey_client then
+	else if fkey_client>0 and ckey=fkey_client then
 		fnClientSelect
 		fn_system_setup
 		if udim(mat client_has$)=>2 and srch(mat client_has$,env$('cursys'))<=0 then ! change it to the second available system (1st is CO) if they don't have the currently selected system
 			fncursys$(client_has$(2))
 			fn_setup_on_cursys_change
 		end if
-	else if ck=15 then ! SAVE
+	else if ckey=15 then ! SAVE
 		gosub SELECT_COMPANY
 		goto Xit
 	end if
@@ -132,8 +132,8 @@ COMPANY_ADD: ! r:
 	fnTxt(1,mypos,5,0,0,"30")
 	resp$(respc+=1)="0"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto MENU1
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto MENU1
 	cno_selected=val(resp$(1))
 	if fn_company_already_exists(cno_selected)=1 then goto MENU1
 	fnputcno(cno_selected)
@@ -241,8 +241,8 @@ def fn_companyCopy(scno)
 	fnLbl(lc+=1,1,"If the destination company exists",80,2)
 	fnLbl(lc+=1,1,"it will be overwritten!",80,2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck<>5 then
+	fnAcs2(mat resp$,ckey)
+	if ckey<>5 then
 		dcno=val(resp$(1))
 		dcnam$=resp$(2)
 		if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
@@ -300,9 +300,9 @@ def fn_system_setup
 			goto Xit
 		end if
 	end if
- 
+
 	gosub IfCoTryAgain
- 
+
 	dim cursys$*40
 	!  cursys$=fncursys$
 	fnreg_read(session$&'.CurSys',cursys$)
@@ -330,5 +330,5 @@ def fn_setup_on_cursys_change
 	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'TM' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
 	! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
 fnend
- 
+
 include: Ertn

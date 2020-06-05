@@ -11,10 +11,10 @@ do
 	resp$(2)=excludeFinalBilled$
 	fnCmdKey('Close',5,0,1,'Save option(s) and exit')
 	fnCmdKey('Refresh',1,1,0,'Recalculate')
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	excludeFinalBilled$=resp$(2)
 	fncreg_write(env$('program_caption')&' - Exclude Final Billed',excludeFinalBilled$)
-loop until ck=5
+loop until ckey=5
 Xit: fnXit
 def fn_setup
 	if ~setup then 

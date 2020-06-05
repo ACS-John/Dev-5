@@ -195,7 +195,7 @@ HDR: ! r:
 	pr #255: tab(71);"<-Pay->";
 	pr #255: tab(79);"<-----------------Deductions---------------->";
 	pr #255: tab(129);"Net"
-	pr #255: "CK #   Emp #  Name";
+	pr #255: "CkNo   EmpNo  Name";
 	pr #255: tab(29);"  Reg    O/T   Sick    Vac    Hol  Total";
 	pr #255: tab(71);"  Total   Med WH     FICA  Federal    State    Other      Pay"
 	return  ! /r

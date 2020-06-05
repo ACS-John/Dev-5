@@ -137,8 +137,8 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 	 end if
 	 fnCmdSet(2)
-	 fnAcs2(mat resp$,ck)
-	 if ck<>5 then
+	 fnAcs2(mat resp$,ckey)
+	 if ckey<>5 then
 		respc=0
 		for period=1 to nap
 		  period_date_start(period)=val(resp$(period))
@@ -157,8 +157,8 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		  last_retained_earnings_acct$(1)=fnagl$(resp$(respc+=1))
 		  fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 		end if
-	 end if  ! ck<>5
-	 fn_screen_1=ck
+	 end if  ! ckey<>5
+	 fn_screen_1=ckey
 fnend
 def fn_date_mmddyy_is_within_range(dmi_test_date,dmi_date_start,dmi_date_end)
 	 dmi_return=0

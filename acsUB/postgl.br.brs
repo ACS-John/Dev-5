@@ -244,23 +244,23 @@ EO_FLEX1: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.")
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.")
 	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
-	fnAcs2(mat resp$,ck)
-	addone=edit=0: holdvn$=""
-	if ck=5 then
+	fnAcs2(mat resp$,ckey)
+	addone=_edit=0: holdvn$=""
+	if ckey=5 then
 		goto SCREEN1
-	else if ck=1 then
+	else if ckey=1 then
 		addone=1
 		service$="": ratecode=0: mat gl$=("")
 		goto MAINTAIN_GLINFO
-	else if ck=2 or ck=3 then
+	else if ckey=2 or ckey=3 then
 		editrec=val(resp$(1))
 	end if
 if editrec=0 then goto GL_INFORMATION
-if ck=2 or ck=3 then
+if ckey=2 or ckey=3 then
 	read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 end if
-if ck=2 then edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
-if ck=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
+if ckey=2 then _edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
+if ckey=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
 !
 DELETE_GLINFO: !
 mat msgline$(2): msgline$(1)="You have chosen to delete a record."
@@ -304,7 +304,7 @@ gl$(1)=fnagl$(resp$(3))
 gl$(2)=fnagl$(resp$(4))
 gl$(3)=fnagl$(resp$(5))
 breakdownde$=resp$(2)
-if edit=1 then rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
+if _edit=1 then rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 if addone=1 then write #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 goto GL_INFORMATION
  

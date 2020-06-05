@@ -21,8 +21,8 @@ MAIN: ! r: main screen
 	fnChk(4,23,"Print Meter Address:",1)
 	resp$(3)="True"
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 goto Initialize ! /r
 Initialize: ! r:
 	d1=val(resp$(1))

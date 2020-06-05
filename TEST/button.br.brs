@@ -9,7 +9,7 @@ fnbutton_or_disabled(1,1,1,"Look, I'm a button",8,tooltiptext$,w,curframe)
 fnbutton_or_disabled(0,2,1,"Look, I'm a button",8,tooltiptext$,w,curframe)
 ! fnButton(1,1,"Look, I'm a button",8,tooltiptext$,h,w,curframe)
 fnCmdKey('every form needs one',1)
-fnAcs2(mat response$,ck)
+fnAcs2(mat response$,ckey)
 
-pr 'command key returned is '&str$(ck)
+pr 'command key returned is '&str$(ckey)
 stop 

@@ -43,12 +43,12 @@ def fn_screen_1(&gln_from$,&gln_to$)
 		fnTxt(myline,mypos,12,0,1)
 		resp$(respc+=1)=gln_to$
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ck)
-		if ck<>5 then
+		fnAcs2(mat resp$,ckey)
+		if ckey<>5 then
 			gln_from$=lpad$(resp$(1),12)
 			gln_to$=lpad$(resp$(2),12)
-		end if  ! ck<>5 then
-		fn_screen_1=ck
+		end if  ! ckey<>5 then
+		fn_screen_1=ckey
 fnend  ! fn_screen_1
 def fn_report(line$*256)
 		if ~report_open then

@@ -49,7 +49,7 @@ def fn_setup
 		opt_final_billing$(3)="2 = Final & Refund Deposit"
 		opt_final_billing$(4)="3 = Active, but do not Bill"
 		opt_final_billing$(5)="4 = Finaled, but not billed"
-	!
+
 		fnLastBillingDate(d1)
 		if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-23 then d1=0
 		open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
@@ -64,7 +64,7 @@ def fn_setup
 		fncreg_read('unusual usage minimum water',uum_water$) : uum_water=val(uum_water$)
 		fncreg_read('unusual usage minimum gas',uum_gas$) : uum_gas=val(uum_gas$)
 		fncreg_read('unusual usage minimum electric',uum_electric$) : uum_electric=val(uum_electric$)
-	!
+
 		pcent=pcent*.01 ! convert unusual usage % to decimal
 		cancel=5
 		workFile$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
@@ -171,23 +171,23 @@ def fn_setup_service(mat service_enabled)
 	if service_type(4)=4 then
 		service_enabled(4)=1
 	end if
-	!
+
 	if service_type(5)=5 or (service_is_not_blank(5) and service_is_not_a_penalty(5)) then
 		service_enabled(5)=1
 	end if
-	!
+
 	if service_type(6)=5 or (service_is_not_blank(6) and service_is_not_a_penalty(6)) then
 		service_enabled(6)=1
 	end if
-	!
+
 	if service_type(7)=5 or (service_is_not_blank(7) and service_is_not_a_penalty(7)) then ! Service 7 seems to incompletly implemented
 		service_enabled(7)=1
 	end if
-	!
+
 	if service_type(8)=5 or (service_is_not_blank(8) and service_is_not_a_penalty(8)) then
 		service_enabled(8)=1
 	end if
-	!
+
 	!   if service_is_not_blank(9) then
 	!     service_enabled(9)=1
 	!   end if
@@ -220,8 +220,8 @@ AUTO_REC: ! r:
 	fncmbact(1,26,1)
 	resp$(1)="[All]"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=cancel then
+	fnAcs2(mat resp$,ckey)
+	if ckey=cancel then
 		done_with_readings=1
 		goto MENU1
 	end if
@@ -246,8 +246,8 @@ SEL_ACC: ! r:
 	end if
 	x$=""
 SEL_ACT_TOS: !
-	ck=fnask_account('ubipchg',x$,hCustomer1)
-	if ck=5 or ck=cancel then
+	ckey=fnask_account('ubipchg',x$,hCustomer1)
+	if ckey=5 or ckey=cancel then
 		addmethod=0
 		goto MENU1
 	end if
@@ -268,7 +268,7 @@ READ_ROUTE_SEQUENCE: ! r:
 	fnapply_default_rates(mat extra, mat a)
 	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE
 	px$=""
-	goto EnterReadings ! /r
+goto EnterReadings ! /r
 def fn_meter_roll
 	mat txt$(4)
 	txt$(1)="Reading: "&str$(cur_read)&"   Prior: "&str$(prior_read)&"   Usage: "&str$(x0)
@@ -405,7 +405,7 @@ CHANGE_ACT_NUM: ! r:
 	fnTxt(1,mypos,10)
 	resp$(1)=""
 	fnCmdSet(1)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	x$=trim$(resp$(1))
 	read #hCustomer1,using "Form POS 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
 	goto REWRITE_WORK ! /r
@@ -779,8 +779,8 @@ EST1: ! r: ESTIMATEING ROUTINE
 	fnOpt(2,1,"Route",0,2)
 	resp$(8)="True"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	if ck=cancel then goto MENU1
+	fnAcs2(mat resp$,ckey)
+	if ckey=cancel then goto MENU1
 	for j=1 to 3
 		if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
 		est1(j,2)=val(resp$(j*2)) conv EST1
@@ -801,7 +801,7 @@ EST1: ! r: ESTIMATEING ROUTINE
 		goto ASK_EST
 	L6570: !
 	next j
-	if ck=cancel then goto MENU1
+	if ckey=cancel then goto MENU1
 	if uprc$(resp$(7))=uprc$("True") then est1=1
 	if uprc$(resp$(8))=uprc$("True") then est1=2 ! select route #
 	fn_est_dates
@@ -820,9 +820,9 @@ EST3: ! r:
 		resp$(2)=ex$
 	end if
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
-	if ck=cancel or trim$(x$)="" then goto MENU1
+	if ckey=cancel or trim$(x$)="" then goto MENU1
 	x$=lpad$(trim$(x$),10) conv EST3
 	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey EST3
 	fnapply_default_rates(mat extra, mat a)
@@ -842,11 +842,11 @@ ASK_ROUTE: ! r:
 		resp$(respc+=1)=str$(eb2)
 	end if
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	if resp$(1)="[All]" then eb1=0 : goto L6890
 	eb1=val(resp$(1))
 	L6890: !
-	if ck=cancel then goto MENU1 ! finish
+	if ckey=cancel then goto MENU1 ! finish
 	restore #hCustomer1:
 	READ_CUSTOMER: !
 	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) eof ASK_ROUTE
@@ -1296,8 +1296,8 @@ MENU1READWORKEOF: ! /r
 		fnCmdKey("&Close",5,0,1)
 		! fnCmdSet(1)
 	end if
-	fnAcs2(mat resp$,ck)
-	if ck=cancel then
+	fnAcs2(mat resp$,ckey)
+	if ckey=cancel then
 		goto Xit
 	end if
 	d1=val(resp$(1))
@@ -1305,50 +1305,50 @@ MENU1READWORKEOF: ! /r
 	fnLastBillingDate(d1,1)
 	fncreg_write('Meter Reading Date Current',str$(d2))
 	x$=lpad$(trim$(resp$(3)(1:10)),10) ! formerly resp$(9)
-	if lrec(hWork)>0 and ck=2 then
+	if lrec(hWork)>0 and ckey=2 then
 		goto MAKE_CORRECTIONS
 	end if
-	if ck=4 then
+	if ckey=4 then
 		fn_print_readings(hWork)
-	else if fkey_saveToHoldingFile and ck=fkey_saveToHoldingFile then ! add to holding file
+	else if fkey_saveToHoldingFile and ckey=fkey_saveToHoldingFile then ! add to holding file
 		if fn_holdingFileSave(hWork) then goto Xit
-	else if ck=8 then
+	else if ckey=8 then
 		delete #hWork,key=x$:
-	else if ck=9 then
+	else if ckey=9 then
 		if fn_meter_change_out=3 then goto EnterReadings3
-	else if ck=10 then
+	else if ckey=10 then
 		if days(d1,"mmddyy")<days(date$)-25 then
 			let ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
 			end if
 		fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
-	else if ck=fky_askCustomersInSequence then
+	else if ckey=fky_askCustomersInSequence then
 		addmethod=am_customersInSequence
 		goto AUTO_REC
-	else if ck=1 or (fky_askAndEnterIndviduals and ck=fky_askAndEnterIndviduals) then
+	else if ckey=1 or (fky_askAndEnterIndviduals and ckey=fky_askAndEnterIndviduals) then
 		addmethod=am_askAndEnterIndviduals
 		goto SEL_ACC
-	else if fky_loadHoldingFile and ck=fky_loadHoldingFile then
+	else if fky_loadHoldingFile and ckey=fky_loadHoldingFile then
 		addmethod=am_loadHoldingFile
 		fn_loadBookOrHoldingFile(addmethod)
-	else if fky_estimateReadings and ck=fky_estimateReadings then
+	else if fky_estimateReadings and ckey=fky_estimateReadings then
 		addmethod=am_estimateReadings
 		goto EST1
-	else if ck=fky_loadBook then
+	else if ckey=fky_loadBook then
 		addmethod=am_fromHhFile
 		fn_loadBookOrHoldingFile(addmethod)
-	else if fky_importTabDelimited and ck=fky_importTabDelimited then
+	else if fky_importTabDelimited and ckey=fky_importTabDelimited then
 		addmethod=am_importTabDelimited
 		goto ImportTabDelimited
-	else if fky_importHHtoBook and ck=fky_importHHtoBook then
+	else if fky_importHHtoBook and ckey=fky_importHHtoBook then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
-	else if fky_clearAll and ck=fky_clearAll then
+	else if fky_clearAll and ckey=fky_clearAll then
 		close #hWork:
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
 		open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
-	else if fky_importAndLoad and ck=fky_importAndLoad then
+	else if fky_importAndLoad and ckey=fky_importAndLoad then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
 		addmethod=am_fromHhFile
@@ -1385,8 +1385,8 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	resp$(3)="True"
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs2(mat resp$,ck)
-	if ck<>cancel then
+	fnAcs2(mat resp$,ckey)
+	if ckey<>cancel then
 		holdingFileSaveReturn=1
 		bk1=val(resp$(1)) conv HoldingFileSave
 		if bk1<=0 then goto HoldingFileSave
@@ -1466,12 +1466,12 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	fnCmdKey("&Delete",ck_delete=4)
 	fnCmdKey("&Print",ck_print=6)
 	fnCmdKey("&Cancel",cancel,0,1)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	holdingFile$=""
 	ip1$=resp$(1)
-	if ck=cancel or ip1$='' then
+	if ckey=cancel or ip1$='' then
 		goto IH_XIT
-	else if ck=ck_print then
+	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
 			open #hpHoldingFile:=fngethandle: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
@@ -1480,11 +1480,11 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 			fn_hh_readings(ip1$, 1) ! pr for Books
 		end if
 		goto INPUT_HAND
-	else if ck=ck_importHHtoBook then
+	else if ckey=ck_importHHtoBook then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
 		goto INPUT_HAND
-	else if ck=ck_delete then
+	else if ckey=ck_delete then
 		
 		! mat txt$(1)
 		! txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
@@ -1733,15 +1733,15 @@ EnterReadings: ! r:
 	fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
 	fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
 	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
-	fnAcs2(mat resp$,ck)
-	if ck=8 then
+	fnAcs2(mat resp$,ckey)
+	if ckey=8 then
 		fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
 		goto EnterReadings3
 	end if
 	rc=first_read_rc
 	! If PASSCHECK=CKFAIL Then eDITMODE=0 ! xxx Ken
-	if ck=3 then done_with_readings=1 ! code as done with entering readings is select finish
+	if ckey=3 then done_with_readings=1 ! code as done with entering readings is select finish
 	if service_enabled(1) then ! Service 1 - Water
 		x(01)=val(resp$(rc+=1))
 		x(09)=val(resp$(rc+=1))
@@ -1789,19 +1789,19 @@ EnterReadings: ! r:
 	! pause
 	rc+=1
 	x(15)=val(resp$(resp_fianl_billing_code)(1:1)) ! final billing code
-	if ck=2 and addmethod=am_fromHhFile then
+	if ckey=2 and addmethod=am_fromHhFile then
 		skiprec=1
 		goto L2910 ! if choose skip on pulling from hh file, then skip writing the record   ! kj 3/24/06
 	else if addmethod=am_loadHoldingFile then
 		goto CHECK_UNUSUAL
-	else if ck=2 and editmode=0 then
+	else if ckey=2 and editmode=0 then
 		goto SEL_ACC
-	else if ck=2 and editmode=1 then
+	else if ckey=2 and editmode=1 then
 		goto MENU1
-	else if ck=3 or ck=cancel then
+	else if ckey=3 or ckey=cancel then
 		addmethod=0
 		goto MENU1
-	else if ck=9 then
+	else if ckey=9 then
 		if fn_meter_change_out=3 then goto EnterReadings3
 		goto MENU1
 	end if

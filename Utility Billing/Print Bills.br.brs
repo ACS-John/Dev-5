@@ -291,11 +291,11 @@ Screen1: ! r:
 	fnCmdKey('&Test'   ,ckey_test:=1023   ,0,0,'Prints 4 Bills and then stops.')
 	fnCmdKey('&Print'  ,ckey_print:=1     ,1)
 	fnCmdKey('&Cancel' ,5,0,1)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
-	if ckey_test and ck=ckey_test then
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
+	if ckey_test and ckey=ckey_test then
 		testMode=1
-		ck=ckey_print
+		ckey=ckey_print
 	end if 
 	d1=val(resp$(respc_billing_date))
 	d4=val(resp$(respc_penalty_due_date))
@@ -336,7 +336,7 @@ Screen1: ! r:
 		fncreg_write('bill message2 '&str$(mg2_item),mg2$(mg2_item))
 	next mg2_item
 	fncreg_write('Penalty Due Date',str$(d4))
-	if enable_customMargins and ck=ckey_margins then
+	if enable_customMargins and ckey=ckey_margins then
 		fn_ask_margins
 		goto Screen1
 	end if
@@ -519,8 +519,8 @@ ScrAskIndividual: ! r: account selection screen
 	fncmbact(1,17)
 	resp$(1)=starting_key$
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ck)
-	if ck=5 or trim$(resp$(1))='' then goto Finis
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 or trim$(resp$(1))='' then goto Finis
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
 goto AfterCustomerRead ! /r
@@ -551,7 +551,7 @@ Finis: ! r:
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 goto Xit ! /r
 Xit: fnXit
 BUD1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1

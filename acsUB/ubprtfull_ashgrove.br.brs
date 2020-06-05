@@ -84,8 +84,8 @@ SCREEN1: !
 !  fnTxt(19,PF,25,25,0,"",0,"Example: September 4, 2007")
 	!  rESP$(RESPC+=1)=DUEBY$
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto EndScreen
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto EndScreen
 	d1 = val(resp$(15))
 	d4 = val(resp$(1))
 	mg$(1) = resp$(2)
@@ -201,9 +201,9 @@ SCREEN3: ! r:
 	resp$(1)=""
 	fnCmdKey("&Print",1,1)
 	fnCmdKey("&Finish",5,0,1)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10)
-	if trim$(a$)="" or ck=5 then goto ReleasePrint
+	if trim$(a$)="" or ckey=5 then goto ReleasePrint
 	read #1,using L800,key=a$: z$,mat e$,f$,a3,mat _b,final,mat _d,bal,_f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey SCREEN3
 goto READALTADR ! /r
 SORT1: ! r: SELECT & SORT
@@ -243,7 +243,7 @@ EndScreen: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 goto Xit !  /r
 Xit: fnXit
  

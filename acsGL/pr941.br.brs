@@ -1,28 +1,26 @@
 ! Replace S:\acsGL\PR941  ! fix the count (box 1; needs logic to look thru history and count the active employees on a certain date)
 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
- 
-	autoLibrary
-	fnTop(program$,cap$="Print 941 Report")
-	on error goto Ertn
- 
-	dim io1$(2),ss$*11,em$(3)*30,ty(21),tqm(17),frm_wrd$(2)*11
-	dim dedcode(10),calcode(10),dedfed(10),option1$(4)*20
-	dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10),msgline$(2)*60
-	dim e$(10)*12,tpt(26),pt(26),cap$*128,message$*40,option$(4)*15,resp$(15)*30
-	dim d(2),e$(2)*12,prgl(5,3),miscname$(10)*20,dedfica(10),dedst(10),deduc(10),miscgl$(10)*12
-	dim tb$*30,m(36),k(1),l$(1)*11,k$(3)*30
-	dim city$*15,state$*2,zip$*9,csz$*40,x$*40
- 
-	fnconsole(off=1)
- 
-def fn_a(r)=int(r*100+.5)/100 ! /r
- 
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
-	read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-	ficarate=ficarate/100
-	mcr=mcr*.01
-! Close #20:
- 
+
+autoLibrary
+fnTop(program$,"Print 941 Report")
+on error goto Ertn
+dim io1$(2),ss$*11,em$(3)*30,ty(21),tqm(17),frm_wrd$(2)*11
+dim dedcode(10),calcode(10),dedfed(10),option1$(4)*20
+dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10),msgline$(2)*60
+dim e$(10)*12,tpt(26),pt(26)
+dim message$*40,option$(4)*15,resp$(15)*30
+dim d(2),e$(2)*12,prgl(5,3),miscname$(10)*20,dedfica(10),dedst(10),deduc(10),miscgl$(10)*12
+dim tb$*30,m(36),k(1),l$(1)*11,k$(3)*30
+dim city$*15,state$*2,zip$*9,csz$*40,x$*40
+
+
+
+
+open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+close #1:
+ficarate=ficarate/100
+mcr=mcr*.01
 MENU1: !
 	fnTos
 	respc=0
@@ -40,46 +38,47 @@ MENU1: !
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 	if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
-	fnChk(3,30,"Print Worksheet:",1) : _
+	fnChk(3,30,"Print Worksheet:",1)
 	resp$(respc+=1)="True"
 	fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
 	fnLbl(1,1,"Month 1:",10,1,0,1)
-	fnTxt(1,13,12,0,1,"10",0,"",1) : _
+	fnTxt(1,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Month 2:",10,1,0,1)
-	fnTxt(2,13,12,0,1,"10",0,"",1) : _
+	fnTxt(2,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Month 3:",10,1,0,1)
-	fnTxt(3,13,12,0,1,"10",0,"",1) : _
+	fnTxt(3,13,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=""
 	fnFra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 	mylen=52
 	fnLbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-	fnTxt(1,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(1,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-	fnTxt(2,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(2,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-	fnTxt(3,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(3,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-	fnTxt(4,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(4,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-	fnTxt(5,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(5,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-	fnTxt(6,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(6,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-	fnTxt(7,mylen+3,12,0,1,"10",0,"",2) : _
+	fnTxt(7,mylen+3,12,0,1,"10",0,"",2)
 	resp$(respc+=1)=""
-	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0) : _
-	fnTxt(20,mylen+4,12,0,1,"10",0,"",0) : _
+	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
+	fnTxt(20,mylen+4,12,0,1,"10",0,"",0)
 	resp$(respc+=1)=""
-	fnCmdSet(2): fn_acs(sn$,0,mat resp$,ck)
-	if ck=5 then goto Xit
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	taxyear$=resp$(1) ! tax year
 	for j=1 to 4
 		if resp$(2)=option1$(j) then qtr=j: m$=option1$(j): goto L790 ! quarter ending date
@@ -105,7 +104,7 @@ L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: enddate=val(taxyear$)*1000
 	gosub BUILD_941
 	gosub LASER_941
 	goto DONE
- 
+
 START_PRINT: !
 	if frm=1 then goto L1070
 	message$="Printing: please wait..."
@@ -150,7 +149,7 @@ L1170: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 ! If DEPENO=ENO Then bOX1+=1 ! count employees who worked the twelfth day of the first month of the quarter
 	gosub PRINT_DETAILS
 	goto L1090
- 
+
 WK_HEADER: !
 	p2=p2+1
 	pr #255,using L1480: "Page ",p2
@@ -175,7 +174,7 @@ L1600: form pos 17,c 40,pos 59,c 5,pos 69,c 8,skip 1
 	pr #255: "___________  __________________________";
 	pr #255: tab(41);"___________   ____________  ____________"
 L1670: return
- 
+
 WK_END: !
 	gosub TOTALS
 	if frm=1 then goto L1730
@@ -183,7 +182,7 @@ WK_END: !
 L1730: return
 DONE: !
 Xit: fnXit
- 
+
 PRINT_DETAILS: ! detailed listing
 	if m1=0 then goto L2030
 	p3=p3+1
@@ -211,7 +210,7 @@ L1980: t1=t1+m1-dfq
 	t2=t2+h2
 	p1=p1+2
 L2030: return
- 
+
 TOTALS: !
 	if frm=1 then goto L2130
 	pr #255,using L2080: "___________    ___________  ____________"
@@ -227,12 +226,12 @@ L2130: p3=0
 	gt4=gt4+t4
 	t1=t2=t3=t4=t5=0
 return
- 
+
 PGOF: !
 	pr #255: newpage
 	gosub WK_HEADER
 	continue
- 
+
 SUMMARY: !
 	fnopenprn
 	eof=1: gosub WK_HEADER
@@ -261,7 +260,7 @@ L2400: form pos 1,c 40,n 10.2,x 10,n 10.2
 		pr #255: "" : _
 	next j
 return
- 
+
 GET_MAT_TPT: !
 	open #19: "Name=[Q]\GLmstr\PRTOT.H[cno],Kfn_ame=[Q]\GLmstr\PRTOTIDX.H[cno],Shr",internal,input,keyed
 L2530: read #19,using L2540: mo,mat pt eof L2600
@@ -273,7 +272,7 @@ L2540: form pos 1,n 2,pos 10,25*pd 5.2,n 4
 	goto L2530
 L2600: close #19:
 return
- 
+
 BUILD_941: !
 	wagefica=fn_a((gt2-tpt(20))*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 	taxfica=fn_a(tpt(20)*(ficarate+ficarate+.02)) ! FICARATE*2) 2011
@@ -299,22 +298,20 @@ BUILD_941: !
 	if box10-box11<0 then box13=abs(box10-box11) : box12=0 else box13=0 ! overpayment if any
 	box15d=box15a+box15b+box15c ! total deposits for quarter
 return
- 
+
 LASER_941: !
 	gosub OPEN_PRINTER
 	gosub PRINT941
 	gosub RELEASE_PRINT
 return
- 
-include: Ertn
- 
+
 OPEN_PRINTER: !
 	if file(20)=-1 then
 		open #20: "Name=[Q]\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output
 		pr #20: 'Call Print.MyOrientation("Portrait")'
 	end if
 return
- 
+
 PRINT941: !
 	pr #20: 'Call Print.MyFontSize(12)'
 	pr #20: 'Call Print.addPicture("S:\acsGL\941.bmp",1,1)'
@@ -407,3 +404,5 @@ L3960: p1=pos(rtrm$(csz$),"  ",1)
 	p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 	city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 return
+def fn_a(r)=int(r*100+.5)/100 ! /r
+include: Ertn

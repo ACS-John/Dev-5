@@ -97,19 +97,19 @@ L670: d1=val(resp$(2))
 	read #1,using L780,key=x$,release: em10,em11 nokey L1190
 L780: form pos 132,2*pd 4.2
 	if pgl1=1 then gosub POSTGL2
-	ck=0
+	cxk=0
 ! DELETE_OLD_PAYROLL_CHECK: !
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	restore #4,key>=checkkey$: nokey UPDATE_MASTER
 L840: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
 	if heno<>eno then goto UPDATE_MASTER
 	if prd=d1 then mat tcp=tcp+cp : delete #4:
-	ck=1
+	cxk=1
 	if prd=d1 then em10=em10+tdc(3) ! add sick hours back
 	if prd=d1 then em11=em11+tdc(4) ! add vacation hours back
 	goto L840
 UPDATE_MASTER: !
-	if ck=0 then goto L1220
+	if cxk=0 then goto L1220
 	rewrite #1,using L950,key=x$: em10,em11,0 ! WRITE 0 IN LAST PAYROLL DATE IN MASTER RECORD
 L950: form pos 132,2*pd 4.2,pos 162,n 6
 	success=1

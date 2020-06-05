@@ -579,7 +579,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			let namelen=12
 		end if 
 		if trim$(nam$)<>"" and holdnam$<>nam$ then desc$=nam$(1:namelen) : holdnam$=nam$ : nam$=""
-		! if trim$(desc$)="Total Ck" then goto L3360 ! don't pr total check on printout
+		! if trim$(desc$)="TotalChk" then goto L3360 ! don't pr total check on printout
 		! L3360: !
 		pr #255,using hfm$: desc$(1:namelen),mat cp0
 		if desc$(1:12)="Employee Tot" then pr #255:
@@ -618,8 +618,8 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp2(2)=0 ! no totals on date
 			if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp2(2)=0 ! no totals on date
 			if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp2(1)=0 ! no totals on date
-			if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp2(4)=0 ! no totals on ck num
-			if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(2)=0 ! no totals on ck num ! new 11/9/15 could this be right?
+			if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp2(4)=0 ! no totals on chk num
+			if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(2)=0 ! no totals on chk num ! new 11/9/15 could this be right?
 			if hf(1)=0 and hf(2)=0 and hf(3)=0 and hf(4)=1 then cp2(1)=0 ! no totals on cknum
 			if hf(1)=1 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(3)=0 ! no totals on cknum
 			if printit=1 then pr #255,using hfm$: "",mat cp2
@@ -639,7 +639,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp1(2)=0 ! no totals on date
 		if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp1(2)=0 ! no totals on date
 		if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp1(1)=0 ! no totals on date
-		if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp1(4)=0 ! no totals on ck num
+		if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp1(4)=0 ! no totals on chk num
 		if hf(1)=0 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp1(3)=0 ! no totals on cknum
 		if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp1(2)=0 ! no totals on cknum
 
@@ -731,11 +731,11 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			mat totaltdc=totaltdc+tdc: mat totaltcp=totaltcp+tcp
 			goto READ_BREAKDOWNS ! same check, no details
 		else if checkonly=1 and holdckno<>0 and holdckno<>ckno and (sum(tdc)+sum(tcp))>0 then
-			desc$="Total Ck"
+			desc$="TotalChk"
 			holdrecnum=0
 			gosub PrintGrid
 			mat totaltdc=totaltdc+tdc: mat totaltcp=totaltcp+tcp
-			desc$="Total Ck"
+			desc$="TotalChk"
 		end if
 		if details=1 then
 			enoprint=eno
@@ -844,7 +844,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! If EOFCODE=1 AND EMPLOYEE=1 AND PRD>=BEG_DATE AND PRD<=END_DATE Then Mat EMPLOYEETDC=EMPLOYEETDC+TDC: Mat EMPLOYEETCP=EMPLOYEETCP+TCP : Mat GRAND2TCP=GRAND2TCP+TCP: Mat GRAND2TDC=GRAND2TDC+TDC
 		! If EOFCODE=1 AND ANNUAL=1 AND PRD>=BEGIN_YEAR AND PRD<=END_YEAR Then Mat ANNUALTDC=ANNUALTDC+TDC: Mat ANNUALTCP=ANNUALTCP+TCP
 		if sum(totaltdc)+sum(totaltcp)<>0 then gosub PrintGrid ! last check not printed yet
-		if sum(totaltdc)+sum(totaltcp)<>0 and checkonly=1 then desc$="Total Ck"
+		if sum(totaltdc)+sum(totaltcp)<>0 and checkonly=1 then desc$="TotalChk"
 		if (sum(qtr1tdc)>0 or sum(qtr1tcp)>0) and qtr1printed=0 then
 			mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp
 			qtr1printed=1: desc$="1st Qtr": holdnam$="": gosub PrintGrid

@@ -44,8 +44,8 @@ SCREEN1: ! r:
 		! end if
 	! next servicecount
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	filterBillingDate=val(resp$(resp_billingDate))
 	if trim$(resp$(respc_routeFilter))="[All]" then
 		filterRoute=0

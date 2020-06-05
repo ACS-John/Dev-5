@@ -103,8 +103,8 @@ SCREEN1: !
 	fnChk(4,mypos,"Include Details:",1) : _
 	resp$(4)="True"
 	fnCmdSet(3)
-	fnAcs(sn$,win,mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs(sn$,win,mat resp$,ckey)
+	if ckey=5 then goto Xit
 	dat$=resp$(1) : _
 	ld1=val(resp$(2)) : _
 	hd1=val(resp$(3)) : _

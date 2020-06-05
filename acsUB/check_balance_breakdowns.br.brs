@@ -13,7 +13,7 @@ MENU1: ! r:
 	fnChk(11,5,"  and apply credits"            ,chk_align) : resp$(6)="False"
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey)
-	if ck<>5 then 
+	if ckey<>5 then 
 		if resp$(1)='True' then do_fix_balance_breakdowns=1 else do_fix_balance_breakdowns=0
 		if resp$(2)='True' then do_fix_trans_breakdowns=1 else do_fix_trans_breakdowns=0
 		if resp$(3)='True' then do_report=1 else do_report=0

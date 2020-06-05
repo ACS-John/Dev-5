@@ -75,4 +75,4 @@ fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file
 fnCmdKey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
 fnCmdKey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
 fnCmdKey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
-fnAcs2(mat resp$,ck)
+fnAcs2(mat resp$,ckey)

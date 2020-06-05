@@ -8,9 +8,8 @@
 	dim io1$(2),wrd1$(2),item1$(2)*15
  
 	fnTop(program$)
-	cancel=99
 	fndat (dat$)
-	fnTos(sn$="unpdinv")
+	fnTos
 	respc=0
 	fnLbl(1,40,"",1,1)
 	fnLbl(1,1,"Order for Printing:",20,1)
@@ -18,9 +17,9 @@
 	item1$(2)="Fund Number"
 	fncomboa("unpdinv",1,22,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
-	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit else : _
+	fnCmdSet(2)
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit else : _
 		if resp$(1)=item1$(1) then fund=1 else : _
 			fund=2
 ! FNWAIT

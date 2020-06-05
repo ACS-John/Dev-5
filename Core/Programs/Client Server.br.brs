@@ -1,7 +1,7 @@
 if ~setup then fn_setup
 fnTop(program$)
 do ! r: main loop
-	fnTos(sn$="test-Button")
+	fnTos
 	fnLbl(2,2,'Server IP or Name:',19,1)
 	fnTxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
 	fnureg_read('CS Server Name',server_name$)
@@ -28,14 +28,14 @@ do ! r: main loop
 	fnCmdKey("Install Server",2,1,0)
 	fnCmdKey("Uninstall Server",3,0,0)
 	fnCmdKey('&Back',5,0,1)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
 	cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
 	anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
 	anon_pass$=resp$(4) : fnureg_write('CS Anonymous Password',anon_pass$)
-	if ck=5 then goto Xit
-	if ck=2 then let fn_server_install
-	if ck=3 then let fn_server_uninstall
+	if ckey=5 then goto Xit
+	if ckey=2 then let fn_server_install
+	if ckey=3 then let fn_server_uninstall
 	fnStatusClose
 loop ! /r
 def fn_server_install

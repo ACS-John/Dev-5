@@ -16,8 +16,8 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	fnTxt(7,pf,8,8,1,"1") 
 	resp$(1)='' ! cnvrt$("pic(zzzzzz)",d1)
 	fnCmdSet(2) 
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit
 	d1=val(resp$(1))
 ! /r
 ! r: main loop

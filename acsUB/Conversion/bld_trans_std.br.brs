@@ -1,14 +1,14 @@
 ! Replace S:\acsUB\Conversion\Bld_Trans
-! Builds an ubTransVB from ubTrans.h, UBmstr.h and ubAccTrn.h : _
+! Builds an ubTransVB from ubTrans.h, UBmstr.h and ubAccTrn.h 
 	! this conversion must be done before ubmaster is converted to customer
-! this program assumes the following : _
-	! service 1 is Water : _
-	! service 2 is Sewer : _
-	! service 3 is Electric : _
-	! Service 4 is Gas : _
-	! Service 5 is Sanitation : _
-	! Service 6 is Fire Protection : _
-	! Service 7 is Merchandise : _
+! this program assumes the following
+	! service 1 is Water
+	! service 2 is Sewer
+	! service 3 is Electric
+	! Service 4 is Gas
+	! Service 5 is Sanitation
+	! Service 6 is Fire Protection
+	! Service 7 is Merchandise
 	! Service 8 is Other
  
 	autoLibrary
@@ -21,8 +21,8 @@
 	pr newpage
 LOOP_STEP_1: !
 	gosub MENU1
-	gosub CONVERT_CNO : _
-	goto Xit : _
+	gosub CONVERT_CNO 
+	goto Xit 
 	! If CNO<>0 Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else goto Xit
  
 include: Ertn
@@ -30,17 +30,17 @@ include: Ertn
 Xit: chain "S:\acsUB\conversion\UBmstr-vb"
  
 MENU1: !
-	fnTos(sn$="bldtrans")
+	fnTos
 	fnLbl(1,1,"Convert Transactions")
-	fnChk(4,1,"Delete existing transaction file before conversion") : _
+	fnChk(4,1,"Delete existing transaction file before conversion")
 	resp$(1)="True"
-	fnChk(5,1,"Remove Transactions with Bad Dates") : _
+	fnChk(5,1,"Remove Transactions with Bad Dates")
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck)
-	delubtransvb$=resp$(1) : _
+	fnAcs2(mat resp$,ckey)
+	delubtransvb$=resp$(1)
 	removebaddates$=resp$(2)
-	if ck=5 then cno=0
+	if ckey=5 then cno=0
  
 return
  

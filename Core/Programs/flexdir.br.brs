@@ -4,11 +4,11 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim resp$(10)*255,cap$*128
+	dim resp$(10)*255
 	dim path$(2,1000)*255,prog$(2,1000)*100,ext$(2,1000)*100
 	dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
  
-	fnTop("S:\Core\FlexDir",cap$="Flex Dir")
+	fnTop("S:\Core\FlexDir","Flex Dir")
 	fngetcd(dur$)
 REFREASH: !
 	mat brfn$(1000) : mat brfn$=("")
@@ -38,11 +38,11 @@ OUT_THE_LOOP: !
 		fnflexadd1(mat item$)
 	next j
 	fnCmdSet(102)
-L350: fnAcs2(mat resp$,ck)
-	if ck=5 then goto DONE
+L350: fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto DONE
 	filter$=resp$(1) : _
 	dur$=resp$(2)
-	if ck=6 then goto REFREASH
+	if ckey=6 then goto REFREASH
  
 	goto L350
  

@@ -26,7 +26,7 @@
 	fTransBoth: form pos 1,c 12,n 6,pd 6.2
 	! /r
 	do ! r: main loop
- 
+
 		read #hGlMstr,using 'Form POS 1,C 12,Pos 81,2*PD 6.2,pos 327,pd 6.2,pos 171,13*pd 6.2': gln$, bb,cb,pbp,mat bp eof Xit
 		cbOrigional=cb
 		! debug_gl$=' 10   592  0'
@@ -97,7 +97,7 @@ def fn_theScreen ! lots of local variables
 	fncreg_read(cap$&': dayEnd',tmp$) : dayEnd=val(tmp$)
 	fnTos
 	rc=0
- 
+
 	fnLbl(lc+=1,1,'WARNING: This program recalculates all the Current Balance files in General Ledger Accounts.')
 	fnLbl(lc+=1,1,'Normally this program rebuilds the current balance from current transactions only.')
 	fnLbl(lc+=1,1,'However you may choose to process History Transactions too.')
@@ -114,7 +114,7 @@ def fn_theScreen ! lots of local variables
 	fnLbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
 	fnTxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0)
 	resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
- 
+
 		lc+=1 : col3_pos=mypos+20
 		resp_lrea_fund_1=rc+1
 		if use_dept then
@@ -156,7 +156,7 @@ def fn_theScreen ! lots of local variables
 			last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
 			fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 		end if
-	end if  ! ck<>5
+	end if
 	fn_theScreen=theScreenReturn
 fnend
 def fn_currentActivity(hGlTrans,gln$; ___,returnN)
@@ -199,5 +199,5 @@ def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
 	aaFinis: !
 	fn_accumulatedActivity=aaReturn
 fnend
- 
+
 include: Ertn

@@ -182,9 +182,9 @@ MAIN_QUESTIONS: ! r:
 	end if
 	fncmdkey('Test Check Format',ck_TestCheck:=21)
 	fnCmdSet(2) ! need button to show totals
-	fnAcs2(mat resp$,ck)
-	if ck=5 then goto Xit ! /r
-	if ck=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
+	fnAcs2(mat resp$,ckey)
+	if ckey=5 then goto Xit ! /r
+	if ckey=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
 ! r: validate answers (and move to local variables from mat resp$)
 	d1                       =val(resp$(resp_payroll_date))            ! payroll date
 	pre$                     =uprc$(resp$(2)(1:1))                     ! pre-numbered checks Y or N
@@ -366,11 +366,11 @@ ALLIGNMENT: ! r:
 	resp$(rc+=1)="True"
 	if env$('client')='Billings' then resp$(2)='True' : resp$(3)='False'
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck) ! allignment
+	fnAcs2(mat resp$,ckey) ! allignment
 	if resp$(1)="True" then allign=1
 	if resp$(2)="True" then allign=2
 	if resp$(3)="True" then allign=3
-	if ck=5 then getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
+	if ckey=5 then getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
 	on allign goto REPRINT_SAME_CHECK,CHECK_PRINT_TOP,CHECK_PRINT_TOP none ALLIGNMENT
 ! /r
 REPRINT_SAME_CHECK: !

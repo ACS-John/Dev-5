@@ -71,7 +71,7 @@ MENU1: !
 	if env$('client')="Carrizo" then resp$(9)="True" else resp$(9)="False"
 	fnCmdSet(3) 
 	fnAcs2(mat resp$,ckey)
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else         route=val(resp$(1))
 	svt$=resp$(2)
 	svt2$=resp$(3)
@@ -197,7 +197,7 @@ SELECTONE: !
 	fnAcs2(mat resp$,ckey)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10) 
 	if trim$(a$)="" then goto DONE
-	if ck=5 then goto DONE
+	if ckey=5 then goto DONE
 
 	read #11,using L1060,key=a$: z$,mat e$,f1$,d1,d3,f3$,c4,f2$,d5,d7,d9,d11,book1,mat a,d13,extra16,b2,b5 nokey SELECTONE
 	form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9

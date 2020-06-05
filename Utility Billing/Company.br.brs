@@ -150,9 +150,9 @@ MAIN: ! r:
 		! /r
 	end if
 	fnCmdSet(4)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	
-	if ck=5 then 
+	if ckey=5 then 
 		goto Xit
 	else 
 		if screen=screen_main then
@@ -205,7 +205,7 @@ MAIN: ! r:
 			ecc$    =resp$(resp_ecc     )
 			! /r
 		end if
-		if ck>1000 then screen=ck : goto MAIN
+		if ckey>1000 then screen=ckey : goto MAIN
 	end if
 
 	gosub DoSave

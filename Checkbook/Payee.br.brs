@@ -76,20 +76,20 @@ def fn_addpayee
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.")
 	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
 	fnAcs2(mat resp$,ck)
-	add=edit=0: holdvn$=""
-	if ck=5 then
+	add=xedit=0: holdvn$=""
+	if ckey=5 then
 		goto PayeeXIT
-	else if ck=1 then
+	else if ckey=1 then
 		add=1
 		goto ADD_NEW_PAYEE
 	end if
-	if ck=2 or ck=3 then editrec=val(resp$(1))
+	if ckey=2 or ckey=3 then editrec=val(resp$(1))
 	if editrec=0 then goto MENU1
-	if ck=2 or ck=3 then
+	if ckey=2 or ckey=3 then
 		read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 	end if
-	if ck=2 then edit=1 : holdvn$=vn$: goto EDIT_PAYEE
-	if ck=3 then gosub DELETE_PAYEE : goto MENU1
+	if ckey=2 then xedit=1 : holdvn$=vn$: goto EDIT_PAYEE
+	if ckey=3 then gosub DELETE_PAYEE : goto MENU1
  
 	DELETE_PAYEE: ! r:
 	! check for Linked Unpaid Invoices
@@ -204,14 +204,14 @@ return ! /r
 	fnCmdKey("&Transactions",4,0,0,"List all checks for this payee")
 	fnCmdKey("&Cancel",5,0,1,"Return to Vendor selection")
 	fnAcs2(mat resp$,ck)
-	if ck=5 then goto MENU1
+	if ckey=5 then goto MENU1
 	vn$=lpad$(trim$(resp$(1)(1:8)),8)
 	nam$=resp$(2) ! name
 	ad1$=resp$(3) ! address
 	ad2$=resp$(4) ! address
 	csz$=resp$(5) ! city state zip
 	if add=1 then goto L1190
-	if edit=1 and holdvn$<>vn$ then goto L1190
+	if xedit=1 and holdvn$<>vn$ then goto L1190
 	goto L1210
 	L1190: read #paymstr,using 'Form Pos 1,C 8',key=vn$: oldvn$ nokey L1210
 	if add=1 then goto L1205
@@ -247,14 +247,14 @@ return ! /r
 	fax$=resp$(11) ! fax number
 	myact$=resp$(12) ! my account number with this vendor
 	gldistrec=val(resp$(13)) ! record number of gl distribution entry
-	if ck=4 then
+	if ckey=4 then
 		gosub CHECK_HISTORY
 		goto EDIT_PAYEE
-	else if ck=2 then
+	else if ckey=2 then
 		percent=gldistrec=0
 		payeekey$=gldesc$=payeegl$=""
 		goto GL_BREAKDOWNS ! add gl breakdown
-	else if ck=7 then
+	else if ckey=7 then
 		read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec,release: payeekey$,payeegl$,percent,gldesc$
 		goto GL_BREAKDOWNS ! edit gl breakdown
 	end if
@@ -275,8 +275,8 @@ return ! /r
 	fnmsgbox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 	SAVE_PAYEE: ! r:
-	if edit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
-	if edit=1 then
+	if xedit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
+	if xedit=1 then
 		rewrite #paymstr, using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 	else if add=1 then
 		write #paymstr,using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ duprec MSGBOX3
@@ -349,7 +349,7 @@ return ! /r
 	fnLbl(lc=6,40,'Transaction Grid')
 	mat chdr$(11) : mat cmask$(11) : mat item6$(11)
 	chdr$(1)='Rec'
-	chdr$(2)='Ck/Rf'
+	chdr$(2)='ChkRf'
 	chdr$(3)='Date'
 	chdr$(4)='Amount'
 	chdr$(5)='Payee'
@@ -388,10 +388,10 @@ return ! /r
 	fnCmdKey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
 	fnCmdKey('&Close',5,0,1)
 	fnAcs2(mat resp$,ck)
-	if ck=5 or ck=cancel then goto EO_CHECK_HISTORY
+	if ckey=5 or ckey=cancel then goto EO_CHECK_HISTORY
 	transactionstartingdate=val(resp$(1))
 	transactionendingdate=val(resp$(2))
-	if ck=2 then goto CHECK_HISTORY ! goto the top of this function
+	if ckey=2 then goto CHECK_HISTORY ! goto the top of this function
 	EO_CHECK_HISTORY: !
 	close #trans:
 return
@@ -411,16 +411,16 @@ return
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
 	fnAcs2(mat resp$,ck)
-	if ck=5 then goto EDIT_PAYEE
+	if ckey=5 then goto EDIT_PAYEE
 	payeekey$=vn$
 	payeegl$=fnagl$(resp$(1))
 	percent=val(resp$(2)) ! percent
 	gldesc$=resp$(3)
-	if ck=4 and gldistrec>0 then
+	if ckey=4 and gldistrec>0 then
 		delete #payeegl,rec=gldistrec:
-	else if ck=1 and gldistrec=0 then
+	else if ckey=1 and gldistrec=0 then
 		write #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$
-	else if ck=1 and gldistrec>0 then
+	else if ckey=1 and gldistrec>0 then
 		rewrite #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 	end if
 	goto EDIT_PAYEE ! /r

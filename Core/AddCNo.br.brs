@@ -29,7 +29,7 @@ else if env$('cursys')='UB' then ! r:
 	! resp$(1)=''
 	! fnCmdKey("&Next",1,1,1)
 	! fnAcs2(mat resp$,ckey)
-	! if ck=5 then goto Xit
+	! if ckey=5 then goto Xit
 	! copytoscno=val(resp$(1)(43:47))
 	! if copytoscno=0 then
 	! 	fnCopy("S:\Utility Billing\mstr\UBData\*.h99999","[Q]\UBmstr\UBData\*.h[cno]")

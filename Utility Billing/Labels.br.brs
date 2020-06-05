@@ -33,7 +33,7 @@ SCR1: ! r:
 ! 
 	fnCmdSet(2)
 	fnAcs2(mat resp$,ckey) ! select order of printing
-	if ck=5 then goto Xit
+	if ckey=5 then goto Xit
 	fnreg_write('ublabel.sequence',resp$(1))
 	fnreg_write('ublabel.address',resp$(2))
 	fnreg_write('ublabel.line 1',resp$(3))

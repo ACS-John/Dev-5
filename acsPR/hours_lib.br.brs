@@ -16,7 +16,7 @@ def library fnhours(eno)
 	open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	MAIN: ! 
 		addhours=edithours=0
-		fnTos(sn$="Main") 
+		fnTos
 		respc=0 : lc=0 : mat resp$=('') 
 		mylen=20 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
@@ -90,16 +90,16 @@ def library fnhours(eno)
 		fnCmdKey("&Edit",45) 
 		fnCmdKey("&Delete",44) 
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs2(mat resp$,ck) 
-		if ck=5 then goto Xit
+		fnAcs2(mat resp$,ckey) 
+		if ckey=5 then goto Xit
 		hact$=trim$(resp$(1)(1:8))
 		if hact$="[All]" then goto MAIN
 		empno=eno=val(resp$(1)(1:8))
 		editrec=val(resp$(2)) ! record # if edit
-		if ck=45 then edithours=1 else edithours=0
-		if ck=43 then addhours=1 else addhours=0
-		if ck=44 then goto MSGBOX1 ! delete a record
-		if ck=46 then goto MAIN ! refresh grid
+		if ckey=45 then edithours=1 else edithours=0
+		if ckey=43 then addhours=1 else addhours=0
+		if ckey=44 then goto MSGBOX1 ! delete a record
+		if ckey=46 then goto MAIN ! refresh grid
 	ADDFM: ! add hours
 		holdeno=eno ! allow then to enter time on more than one employee while here, but warn them
 		if empno=0 then empno=eno ! assign to default employee if adding
@@ -130,8 +130,8 @@ def library fnhours(eno)
 		fnTxt(lc,mypos,10,0,right,'32',0,"",frame1 ) 
 		resp$(5)=str$(decrease)
 		fnCmdSet(4)
-		fnAcs2(mat resp$,ck) 
-		if ck=5 then goto MAIN
+		fnAcs2(mat resp$,ckey) 
+		if ckey=5 then goto MAIN
 		empno=val(resp$(1)(1:8)) 
 		class$=resp$(2)(1:5) 
 		tdate=val(resp$(3)) 

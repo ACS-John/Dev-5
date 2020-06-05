@@ -21,9 +21,9 @@ L200: if cmdkey=5 then stop
 
 	open #1: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX1.H[cno],Shr",internal,outIn,keyed 
 	open #3: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",internal,outIn,relative 
-L250: read #1,using L260: ck$,pd,ca1,vn$,de$,pcde,scd,mat tr eof END1
+L250: read #1,using L260: checkNumber$,pd,ca1,vn$,de$,pcde,scd,mat tr eof END1
 L260: form pos 4,c 8,n 6,pd 10.2,pos 28,c 8,c 30,pos 71,n 1,x 6,n 1,2*pd 3
-! pr CK$
+! pr checkNumber$
 	if scd=4 then goto L250
 	if fncd(pd)<=fncd(dt1) then goto L250
 	adr=tr(1)
@@ -33,7 +33,7 @@ L330: form pos 1,n 2,n 1,pos 12,c 12,pd 5.2,c 12,x 18,n 6,pd 3,pos 80,n 1
 	if gde><3 then goto L400
 	rewrite #3,using L360,rec=adr: 2
 L360: form pos 80,n 1
-! pr #255,USING 380: CK$,IVD,PD,AMT
+! pr #255,USING 380: checkNumber$,IVD,PD,AMT
 	form pos 1,c 8,2*pic(zz/zz/zz),n 12.2
 	if pcde=1 or pcde=3 then pcde=pcde-1
 L400: adr=nta : goto L310

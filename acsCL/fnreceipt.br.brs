@@ -42,21 +42,21 @@ def library fnaddreceipt
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") 
 	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
 	dim resp$(60)*50
-	fnAcs(sn$,0,mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	add=edit=0
-	if ck=5 then 
+	if ckey=5 then 
 		goto Xit 
-	else if ck=1 then 
+	else if ckey=1 then 
 		add=1
 		goto ADD_NEW_RECEIPT
 	end if
-	if ck=2 or ck=3 then editrec=val(resp$(1))
+	if ckey=2 or ckey=3 then editrec=val(resp$(1))
 	if editrec=0 then goto MENU1
-	if ck=2 or ck=3 then 
+	if ckey=2 or ckey=3 then 
 		read #receipt,using 'Form Pos 1,C 8,c 30',rec=editrec: rec$,nam$
 	end if
-	if ck=2 then edit=1 : goto EDIT_RECEIPT
-	if ck=3 then gosub DELETE_RECEIPT : goto MENU1
+	if ckey=2 then edit=1 : goto EDIT_RECEIPT
+	if ckey=3 then gosub DELETE_RECEIPT : goto MENU1
 	DELETE_RECEIPT: ! r:
 		! check for Linked Unpaid Invoices 
 		! if there are any - than tell them, and don't delete.
@@ -141,15 +141,15 @@ def library fnaddreceipt
 		fnButton(16,67,"Edit",7,"Edit or Delete a standard general ledger breakdown")
 		fnCmdKey("Save",1,1,0,"Saves and returns to Receipt selection")
 		fnCmdKey("&Cancel",5,0,1,"Return to Receipt selection")
-		fnAcs(sn$,0,mat resp$,ck)
-		if ck=5 then goto MENU1
+		fnAcs2(mat resp$,ckey)
+		if ckey=5 then goto MENU1
 		rec$=lpad$(trim$(resp$(1)(1:8)),8)
 		nam$=resp$(2) ! name
 		gldistrec=val(resp$(3)) ! record number of gl distribution entry
-		if ck=2 then 
+		if ckey=2 then 
 			percent=gldistrec=0: receiptkey$=gldesc$=receiptgl$=""
 			goto GL_BREAKDOWNS ! add gl breakdown
-		else if ck=7 then 
+		else if ckey=7 then 
 			read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
 			goto GL_BREAKDOWNS ! edit gl breakdown
 		end if 
@@ -201,7 +201,7 @@ def library fnaddreceipt
 			goto L1300
 		end if 
 	EO_CHANGE_KEY_ON_RECEIPTGL: ! 
-	! 
+
 	! Change references to this file in the linked file PayTrans
 	open #paytrans:=fngethandle: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 	restore #paytrans,key>=holdrec$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
@@ -247,17 +247,17 @@ def library fnaddreceipt
 		fnTxt(5,mypos,30)
 		resp$(respc+=1)=gldesc$
 		fnCmdSet(7)
-		fnAcs(sn$,0,mat resp$,ck)
-		if ck=5 then goto EDIT_RECEIPT
+		fnAcs2(mat resp$,ckey)
+		if ckey=5 then goto EDIT_RECEIPT
 		receiptkey$=rec$
 		receiptgl$=fnagl$(resp$(1))
 		percent=val(resp$(2)) ! percent
 		gldesc$=resp$(3)
-		if ck=4 and gldistrec>0 then 
+		if ckey=4 and gldistrec>0 then 
 			delete #receiptgl,rec=gldistrec: 
-		else if ck=1 and gldistrec=0 then 
+		else if ckey=1 and gldistrec=0 then 
 			write #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$
-		else if ck=1 and gldistrec>0 then 
+		else if ckey=1 and gldistrec>0 then 
 			rewrite #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
 		end if 
 	goto EDIT_RECEIPT ! /r

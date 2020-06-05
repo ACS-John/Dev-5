@@ -32,7 +32,7 @@ hvn$="" : t1=pg1=0
 gosub HEADER
 do
 	READ_PAYTRANS: !
-	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde eof EO_PAYTRANS
+	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,checkNumber$,dp,gde eof EO_PAYTRANS
 	bank_code=bc
 	if rtrm$(vn$)="" or pcde><1 or bc<>bankcode then t1(4)+=upa: goto READ_PAYTRANS ! reject and add invoices not selected or for other bank accounts
 	if hvn$<>"" and hvn$><vn$ then gosub READ_AND_PRINT
