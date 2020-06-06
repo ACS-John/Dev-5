@@ -404,9 +404,9 @@
 02534       execute "INDEX "&flnm$&" "&kfnm$&" "&ks$&" "&kl$&" DUPKEYS REPLACE -N" locked LOCKERR ioerr 2550
 02536     end if 
 02540     fnindex=1 : goto 2580
-02550     fnindex=0: gosub DELDUPS
-02555     if dupa=2 then let fnindex=2: goto 2580
-02560     if dupa=3 then let fnindex=3: goto 2580
+02550     fnindex=0 : gosub DELDUPS
+02555     if dupa=2 then fnindex=2 : goto 2580
+02560     if dupa=3 then fnindex=3 : goto 2580
 02570     goto 2529
 02580   fnend 
 02600 ! ----------------------------

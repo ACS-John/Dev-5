@@ -76,7 +76,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	!   if exists(acshelp$)<>0 then
 	!     pr #win,f "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
 	!   end if
-		pr #win,f "14,"&button_pos$&",Cc 22,,B12": "Developer Pause (F12)" ! 1,19,12/CC 12,,B1000
+		pr #win,f "14,"&button_pos$&",Cc 22,,B12": "Console Pause (F12)" ! 1,19,12/CC 12,,B1000
 		
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
