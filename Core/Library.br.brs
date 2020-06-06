@@ -1,5 +1,5 @@
 ! test changes 
-! r: functions that do not redirect!
+! r: simple functions that do not redirect
 def library fnVal(stringToConvert$*128; ___,returnN)
 	returnN=val(stringToConvert$) conv ValConv
 	goto ValXit
@@ -115,7 +115,6 @@ fnend
 def library fnpause(;unused)
 	if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
 XITPAUSE: fnend 
-
 ! /r
 ! r: S:\Core\Start.br
 	def library fnWriteProc(procName$*64,procLine$*256)

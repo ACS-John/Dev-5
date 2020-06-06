@@ -1,5 +1,5 @@
 fn_setup
-fn_index("[Q]\UBmstr\UBTransVB.h"&env$('cno'), "[Q]\UBmstr\UBTrdt.h"&env$('cno'),"11/1 8/10")
+fn_index("[Q]\UBmstr\UBTransVB.h[cno]", "[Q]\UBmstr\UBTrdt.h[cno]","11/1 8/10")
 stop
 ! r: reindex the *new* add company files
 dim syslist$(4)*2
@@ -27,21 +27,32 @@ def library fnIndex(data_file$*256,index_statement_or_file$*512; index_parameter
 	fn_setup
 	fnIndex=fn_index(data_file$,index_statement_or_file$, index_parameters$)
 fnend 
-def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
+def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,___,isIndexStatement,fail)
 	fn_setup
 	data_file$=trim$(data_file$)
-	is_index_statement=1
-	is_index_file=2
-	!   /r
-	fail=0
-	if index_parameters$='' then index_statement_or_file=is_index_statement else index_statement_or_file=is_index_file
+	if index_parameters$='' then isIndexStatement=1
+	dim dataFile$*256
+	dataFile$=data_file$
+	data_file$=fnSrepEnv$(data_file$)
+	! if dataFile$<>data_file$ then
+	! 	pr data_file$
+	! 	pr dataFile$
+	! 	pause
+	! end if
 	if exists(data_file$) then 
-		if index_statement_or_file=is_index_statement then 
+		if isIndexStatement then 
 			fnStatus(index_statement_or_file$)
 			dim index_execute_text$*512
 			index_execute_text$=index_statement_or_file$
 			execute index_execute_text$ ioerr EXE_INDEX_ERR
-		else ! index_statement_or_file=is_index_file
+
+			if env$('acsDeveloper')<>'' then
+				pr 'developer only pause - you are in fnIndex and youre coming from an old call - please consider fixing it now'
+				pause
+			end if
+
+		else
+			! index_statement_or_file$=fnSrepEnv$(index_statement_or_file$)
 			fnStatus(os_filename$(index_statement_or_file$))
 			index_parameters$=lwrc$(index_parameters$)
 			index_parameters$=' '&index_parameters$&' '
@@ -52,9 +63,16 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
 			index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
 			if pos(data_file$,' ')>0 then data_file$=fnshortpath$(data_file$)
 			if pos(index_statement_or_file$,' ')>0 then index_statement_or_file$=fnshortpath$(index_statement_or_file$)
-			! 
+
 			!       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
 			index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
+			
+			! r: new high tech major con sub method of dealing with long file names
+				fn_conSub('[dataFile]',data_file$)
+				fn_conSub('[indexFile]',index_statement_or_file$)
+				index_execute_text$='index [dataFile] [indexFile] '&index_parameters$
+			! /r
+			
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(1:2)
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(3:len(env$('temp')))
 			execute index_execute_text$ ioerr EXE_INDEX_ERR
@@ -86,6 +104,11 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
 		index_it_return=1
 	end if 
 	fn_index=index_it_return
+fnend
+def fn_conSub(from$*256,to$*256; ___,quoteF$*1,quoteT$*1)
+	if pos(to$,' ')>0 then		quoteT$='"'
+	if pos(from$,' ')>0 then	quoteF$='"'
+	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&data_file$&quoteT$
 fnend
 def library fnindex_sys(; only_cno,system_id$*2)
 	fn_setup

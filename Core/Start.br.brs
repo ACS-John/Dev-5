@@ -14,7 +14,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_startStatus("Loading Collection-Master Add-On core components..." )
 		else
 			fn_startStatus("Loading ACS System..." )
-			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusLine off"
+			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then exe "config statusLine off"
 			! r: set environment variables based on login_name$ and/or BR_MODEL
 			! if env$('ACSDeveloper')<>'' then setenv('disableAutomatedSavePoints','Yes') else setenv('disableAutomatedSavePoints','')
 			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then
@@ -28,7 +28,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			end if
 			! /r
 		end if
-		execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
+		exe 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 		if ~setup then fn_setup
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 
@@ -61,7 +61,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			end if
 		end if
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			execute 'config shell default client'
+			exe 'config shell default client'
 			setenv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
 			fn_startStatus('Collecting local environment variables...')
 			fn_csEnv
@@ -74,22 +74,22 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		!
 		if env$('acsDeveloper')<>'' then
-			execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
+			exe 'config substitute [ScreenIO_ScreenFldDrive] S:'
 		end if
 		!
-		execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
-		execute "load S:\Core\Library.br,Resident" error ignore
-		!  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
-		execute "load S:\Core\Index.br,Resident"
-		execute "load S:\Core\ACS_Component.br,Resident"
-		execute "load S:\Core\fn\windowsStart.br,Resident"
-		execute 'load "S:\Core\FileIO\fileio.br",Resident'
-		!  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
+		exe "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
+		exe "load S:\Core\Library.br,Resident" error ignore
+		!  fails on windows XP  !  exe "load S:\Core\Start.br,Resident"
+		exe "load S:\Core\Index.br,Resident"
+		exe "load S:\Core\ACS_Component.br,Resident"
+		exe "load S:\Core\fn\windowsStart.br,Resident"
+		exe 'load "S:\Core\FileIO\fileio.br",Resident'
+		!  maybe but not yet ...     exe "load S:\Core\Client.br,resident"
 		! fn_setup  <-- already called
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then fncheckcompiled ! sets the current directory to "S:" if it is not already
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			! execute 'config editor'   !  editor setting removed from brconfig.sys - not necessary
+			! exe 'config editor'   !  editor setting removed from brconfig.sys - not necessary
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
 				setenv('programdata',env$('CsServerTemp'))
 			end if
@@ -145,8 +145,8 @@ def fn_acsSystemInitialize(; syInitMode)
 			end if
 			if workingDir$(2:2)=':' then
 				fnmakesurepathexists(workingDir$&'\')
-				execute 'CD '&workingDir$(1:2)
-				execute 'CD "'&workingDir$(3:len(workingDir$))&'"'
+				exe 'CD '&workingDir$(1:2)
+				exe 'CD "'&workingDir$(3:len(workingDir$))&'"'
 				if exists('S:\ScreenIO.ini') then
 					fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
 				end if
@@ -168,13 +168,13 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		!
 		! fn_writeProc('relive','stop'                              )
-		! fn_writeProc(''      ,'execute ''load "''&program$&''"''' )
+		! fn_writeProc(''      ,'exe ''load "''&program$&''"''' )
 		! fn_writeProc(''      ,'run '                              )
 		!
 		if env$('ACSDeveloper')<>'' then
 			if ~exists('reload') then
 				fn_writeProc('reload','end')
-				fn_writeProc(''      ,'execute ''load "''&program$&''"''')
+				fn_writeProc(''      ,'exe ''load "''&program$&''"''')
 				fn_writeProc('out',"exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"''')
 			end if
 			if ~exists('ed') then
@@ -185,7 +185,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				fn_writeProc(''   ,"setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')")
 				fn_writeProc(''   ,"setenv('source',os_filename$(env$('source')))")
 				fn_writeProc(''   ,"exec 'sy """"C:\ACS\Dev-5\Sad Panda\Compile.cmd"" ""'&env$('source')&'""""'")
-				fn_writeProc(''   ,'execute ''load "''&program$&''"''')
+				fn_writeProc(''   ,'exe ''load "''&program$&''"''')
 			end if
 		end if
 		setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
@@ -236,8 +236,8 @@ def fn_uniqueComputerId_initialize
 		uci_tmp_filename$='acs_uuid_tmp'&session$&'.txt'
 		hdd_serial$=''
 		uuid$=''
-		! OLD failed in some places (like local on acs online server)  execute 'sy -m wmic csproduct get UUID |more >"%temp%\'&uci_tmp_filename$&'"'
-		execute 'sy -m wmic csproduct get UUID |more >"'&env$('client_temp')&'\'&uci_tmp_filename$&'"'
+		! OLD failed in some places (like local on acs online server)  exe 'sy -m wmic csproduct get UUID |more >"%temp%\'&uci_tmp_filename$&'"'
+		exe 'sy -m wmic csproduct get UUID |more >"'&env$('client_temp')&'\'&uci_tmp_filename$&'"'
 		open #h_tmp:=fn_gethandle: 'name=@:'&env$('client_temp')&'\'&uci_tmp_filename$&',EoL=None',display,input ! ioerr NO_WMIC
 		linput #h_tmp: tmp_line$
 		tmp_line$=srep$(tmp_line$,chr$(10),'~')
@@ -260,8 +260,8 @@ def fn_uniqueComputerId_initialize
 		close #h_tmp,free:
 		if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then
 			uuid_valid=0
-			execute 'sy -m wmic  DISKDRIVE get SerialNumber |more >'&uci_tmp_filename$ ioerr NO_WMIC
-!  execute 'sy -m wmic /output:"'&uci_tmp_filename$&'" DISKDRIVE get SerialNumber'   <--encoded in something other than ANSI, hard to read
+			exe 'sy -m wmic  DISKDRIVE get SerialNumber |more >'&uci_tmp_filename$ ioerr NO_WMIC
+!  exe 'sy -m wmic /output:"'&uci_tmp_filename$&'" DISKDRIVE get SerialNumber'   <--encoded in something other than ANSI, hard to read
 			open #h_tmp:=fn_gethandle: 'name='&uci_tmp_filename$&',EoL=None',display,input ioerr NO_WMIC
 			linput #h_tmp: tmp_line$
 			tmp_line$=srep$(tmp_line$,chr$(10),'~')
@@ -287,6 +287,7 @@ def fn_uniqueComputerId_initialize
 		setenv('Unique_Computer_ID',wsid$)
 	goto UcaFinis ! /r
 	UcaFinis: !
+	exe 'config substitute [Unique_Computer_ID] '&env$('Unique_Computer_ID')
 fnend
 def fn_AcsUserId_Initialize
 	! this function returns nothing but is used to initiate env$('acsUserId')
@@ -301,10 +302,10 @@ def fn_AcsUserId_Initialize
 			fnreg_write('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
 		end if
 		setenv('acsUserId','u'&acs_userid$)
-		execute 'config substitute [acsUserId] u'&acs_userid$
+		exe 'config substitute [acsUserId] u'&acs_userid$
 	end if
 fnend
-Xit: execute "System"
+Xit: exe "System"
 def fn_setup
 	if ~setup then
 		setup=1
@@ -328,7 +329,7 @@ fnend
 def fn_spoolPath$*256(; initialize)
 	if initialize then
 		fnmakesurepathexists(env$('temp')&'\acs\Spool\')
-		execute 'config spoolpath '&env$('temp')&'\acs\Spool'
+		exe 'config spoolpath '&env$('temp')&'\acs\Spool'
 	end if
 	fn_spoolPath$=env$('temp')&'\acs\Spool'
 fnend
@@ -343,7 +344,7 @@ def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_te
 	!
 	open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outIn,relative ioerr RT_FAIL
 	close #h_test:
-	execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
+	exe 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
 	goto RT_PASS
 	RT_FAIL: !
 	rt_return=0
@@ -362,8 +363,8 @@ fnend
 def fn_move_data(file_name$*256,destination_name$*256; ignore_exists)
 	md_return=0
 	if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then
-		execute 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
-		execute 'Free "'&file_name$&'"' ioerr ignore
+		exe 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
+		exe 'Free "'&file_name$&'"' ioerr ignore
 		md_return=1
 	end if
 	MOVE_DATA_XIT: !
@@ -376,7 +377,7 @@ def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 	fnMapToVirturalDrive=fn_map_to_virtural_drive(path_to_map$,drive_id$)
 fnend
 def fn_map_to_virtural_drive(path_to_map$*256,drive_id$*2)
-	execute 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
+	exe 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
 fnend
 def fn_temp_dir_validate
 	tdt_return=1
@@ -392,9 +393,9 @@ def fn_temp_dir_validate
 fnend
 def fn_change_temp
 	ct_return=1
-	if ~exists(env$('USERPROFILE')&'\AppData') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
-	if ~exists(env$('USERPROFILE')&'\AppData\Local') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
-	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
+	if ~exists(env$('USERPROFILE')&'\AppData') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
+	if ~exists(env$('USERPROFILE')&'\AppData\Local') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
+	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then
 		msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
 		ct_return=0
@@ -411,9 +412,9 @@ fnend
 !     tmp_dir_count=1
 !     tmp_dir$(1)=rtrm$(udf$,'\')
 !     dim filename$(1)*1024,tmp_dir$(1)*1024
-!     execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
-!     execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-!     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\'&'" /S /T'
+!     exe 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
+!     exe 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
+!     exe 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\'&'" /S /T'
 !     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
 !     for f_i=1 to udim(mat filename$)
 !       if exists(filename$(f_i))=1 then ! it is a directory
@@ -426,18 +427,18 @@ fnend
 !         tmp_from$=lwrc$(filename$(f_i))
 !         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then
 !           fnCopy(tmp_from$,'[Q]\UBmstr\*.*')
-!           execute 'free "'&tmp_from$&'"' ioerr ignore
+!           exe 'free "'&tmp_from$&'"' ioerr ignore
 !         else if ~exists(tmp_to$) then
 !           if fnCopy(tmp_from$,tmp_to$) then
-!             execute 'free "'&tmp_from$&'"' ioerr ignore
+!             exe 'free "'&tmp_from$&'"' ioerr ignore
 !           end if
 !         else if exists(tmp_to$) then
-!           execute 'free "'&tmp_from$&'"' ioerr ignore
+!           exe 'free "'&tmp_from$&'"' ioerr ignore
 !         end if
 !       end if
 !     next f_i
 !     for d_i=tmp_dir_count to 1, step -1
-!       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
+!       exe 'rmdir '&tmp_dir$(d_i) ioerr ignore
 !     next d_i
 !   end if
 ! fnend /r
@@ -480,9 +481,9 @@ def fn_setQ(setQ$*256)
 	setQ$=rtrm$(setQ$,'\')
 	if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
 	setenv('Q',setQ$)
-	execute 'config substitute [Q] "'&env$('Q')&'"'
+	exe 'config substitute [Q] "'&env$('Q')&'"'
 	if env$('acsDeveloper')='' then
-		execute 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
+		exe 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
 	end if
 	fnmakesurepathexists('[Q]\Data\')
 	fnmakesurepathexists('[Q]\'&env$('CurSys')&'mstr\')
@@ -566,7 +567,7 @@ def fn_csEnv
 	ce_retry_4152_count=0
 	CE_MAKE_TEMP_FILE: !
 	fnmakesurepathexists(ce_br_temp_file$)
-	execute '*sys -M set > "'&ce_os_temp_file$&'"'
+	exe '*sys -M set > "'&ce_os_temp_file$&'"'
 	open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_fn_csEnv
 	do
 		linput #hOsSet: ce_line$ error XIT_LOOP
@@ -613,7 +614,7 @@ def fn_csEnv
 		close #hOsSet,free: error ignore
 	!
 	! XIT_fn_csEnv: !
-	execute "*sy -M CD > "&ce_os_temp_file$
+	exe "*sy -M CD > "&ce_os_temp_file$
 	open #hOsCd:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
 	linput #hOsCd: client_os_path$ error ignore
 	close #hOsCd,free: error ignore
