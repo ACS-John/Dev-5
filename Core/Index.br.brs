@@ -23,17 +23,17 @@ def fn_setup
 		!     working_dir_rights=fnrights_test('',"Try Run As Administrator.",'Program','Indexes are unable to process without this access and will be skipped for the remainder of this session.')
 	end if 
 fnend 
-def library fnIndex(data_file$*256,index_statement_or_file$*512; index_parameters$*256)
+def library fnIndex(data_file$*256,index_statement_or_file$*512; indexParameters$*256)
 	fn_setup
-	fnIndex=fn_index(data_file$,index_statement_or_file$, index_parameters$)
+	fnIndex=fn_index(data_file$,index_statement_or_file$, indexParameters$)
 fnend 
-def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,___,isIndexStatement,fail)
+def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,___,isIndexStatement,fail)
 	fn_setup
 	data_file$=trim$(data_file$)
-	if index_parameters$='' then isIndexStatement=1
+	if indexParameters$='' then isIndexStatement=1
 	dim dataFile$*256
 	dataFile$=data_file$
-	data_file$=fnSrepEnv$(data_file$)
+	data_file$=fnSrepEnv$(data_file$,'[Q]')
 	! if dataFile$<>data_file$ then
 	! 	pr data_file$
 	! 	pr dataFile$
@@ -42,9 +42,9 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,
 	if exists(data_file$) then 
 		if isIndexStatement then 
 			fnStatus(index_statement_or_file$)
-			dim index_execute_text$*512
-			index_execute_text$=index_statement_or_file$
-			execute index_execute_text$ ioerr EXE_INDEX_ERR
+			dim indexStatement$*512
+			indexStatement$=index_statement_or_file$
+			execute indexStatement$ ioerr EXE_INDEX_ERR
 
 			if env$('acsDeveloper')<>'' then
 				pr 'developer only pause - you are in fnIndex and youre coming from an old call - please consider fixing it now'
@@ -52,30 +52,32 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,
 			end if
 
 		else
-			! index_statement_or_file$=fnSrepEnv$(index_statement_or_file$)
+			! index_statement_or_file$=fnSrepEnv$(index_statement_or_file$,,'[Q]')
 			fnStatus(os_filename$(index_statement_or_file$))
-			index_parameters$=lwrc$(index_parameters$)
-			index_parameters$=' '&index_parameters$&' '
-			index_parameters$=srep$(index_parameters$,',',' ')
-			index_parameters$=srep$(index_parameters$,' replace',' ')
-			index_parameters$=srep$(index_parameters$,' dupkeys',' ')
-			index_parameters$=srep$(index_parameters$,' -n',' ')
-			index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
+			indexParameters$=lwrc$(indexParameters$)
+			indexParameters$=' '&indexParameters$&' '
+			indexParameters$=srep$(indexParameters$,',',' ')
+			indexParameters$=srep$(indexParameters$,' replace',' ')
+			indexParameters$=srep$(indexParameters$,' dupkeys',' ')
+			indexParameters$=srep$(indexParameters$,' -n',' ')
+			indexParameters$=trim$(indexParameters$)&' Replace DupKeys Shr' ! -N
+		!	! r: old way 
 			if pos(data_file$,' ')>0 then data_file$=fnshortpath$(data_file$)
 			if pos(index_statement_or_file$,' ')>0 then index_statement_or_file$=fnshortpath$(index_statement_or_file$)
-
-			!       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
-			index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
-			
-			! r: new high tech major con sub method of dealing with long file names
-				fn_conSub('[dataFile]',data_file$)
-				fn_conSub('[indexFile]',index_statement_or_file$)
-				index_execute_text$='index [dataFile] [indexFile] '&index_parameters$
-			! /r
+		!
+		!		!       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&indexParameters$ : pause
+			indexStatement$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&indexParameters$
+		!	! /r old way
+		!!! does not work	! r: new high tech major con sub method of dealing with long file names
+		!!! does not work		fn_conSub('[dataFile]',data_file$)
+		!!! does not work		fn_conSub('[indexFile]',index_statement_or_file$)
+		!!! does not work		indexStatement$='index [dataFile] [indexFile] '&indexParameters$
+		!!! does not work	! /r
 			
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(1:2)
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(3:len(env$('temp')))
-			execute index_execute_text$ ioerr EXE_INDEX_ERR
+			fnStatus(indexStatement$) ! pr 'indexStatement$='&indexStatement$&' sreped='&fnsrepenv$(indexStatement$,'[Q]') : pause
+			execute indexStatement$ ioerr EXE_INDEX_ERR
 			!       if env$('ACSDeveloper')='' then execute 'CD S:'
 		end if 
 	else 
@@ -87,7 +89,7 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,
 	EXE_INDEX_ERR: ! 
 	fail=1
 	fnStatus("Encountered error "&str$(err)&" executing index:")
-	fnStatus("     ("&index_execute_text$&")") ! pause
+	fnStatus("     ("&indexStatement$&")") ! pause
 	if err=7600 then 
 		open #h_tmp:=fngethandle: 'name='&data_file$,internal,input error EIE_7600_XIT
 		fnStatus('     (Record Length is '&str$(rln(h_tmp))&')')
@@ -98,17 +100,13 @@ def fn_index(data_file$*256,index_statement_or_file$*512; index_parameters$*256,
 	end if 
 	INDEX_XIT: ! 
 	if fail then 
+		! if env$('acsDeveloper')<>'' then pr 'dev: pause on index_xit fail' : pause
 		!     fnStatusPause
 		index_it_return=0
 	else 
 		index_it_return=1
 	end if 
 	fn_index=index_it_return
-fnend
-def fn_conSub(from$*256,to$*256; ___,quoteF$*1,quoteT$*1)
-	if pos(to$,' ')>0 then		quoteT$='"'
-	if pos(from$,' ')>0 then	quoteF$='"'
-	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&data_file$&quoteT$
 fnend
 def library fnindex_sys(; only_cno,system_id$*2)
 	fn_setup
