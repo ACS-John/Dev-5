@@ -84,14 +84,24 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*
 	MaeFinis: !
 	fnKeyExists=returnN
 fnend
-def library fnSrepEnv$*2048(text$*2048)
-	dim seVariable$*128
+def library fnConSub(from$*256,to$*256; ___,quoteF$*1,quoteT$*1) ! it works but it is currently unused.
+	if pos(from$,' ')>0 then	quoteF$='"'
+	if pos(to$,' ')>0 then		quoteT$='"'
+	pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
+	setenv(from$(2:len(from$)-1),to$)
+	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
+fnend
+def library fnSrepEnv$*2048(text$*2048; exclude$*64,___,sePosOpen,sePosClose,seVariable$*128,seStartSearchPos)
 	do
-		sePosOpen=pos(text$,'[')
-		sePosClose=pos(text$,']',sePosOpen)
+		sePosOpen =pos(text$,'[', seStartSearchPos)
+		sePosClose=pos(text$,']', max(seStartSearchPos,sePosOpen))
 		if sePosOpen>0 and sePosClose>sePosOpen then
-			seVariable$=text$(sePosOpen+1:sePosClose-1)
-			text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
+			if lwrc$(text$(sePosOpen:sePosClose))=lwrc$(exclude$)  then
+				seStartSearchPos=sePosClose+1
+			else
+				seVariable$=text$(sePosOpen+1:sePosClose-1)
+				text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
+			end if
 		end if
 	loop while sePosOpen>0 and sePosClose>sePosOpen
 	fnSrepEnv$=text$
