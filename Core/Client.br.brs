@@ -739,17 +739,17 @@ def library fnub_printbill_program$*256
 		fn_upp_add("Merriam Woods",'(basic)') ! "PrintBill_Merriam_Woods"
 		fn_upp_add("Millry","ubprtbl1_millry")
 !   fn_upp_add("Monticello","ubprtbl1_montic")
+		fn_upp_add("Morrisonville","ubprtbl1_morrisonville")
 		fn_upp_add("Moweaqua","PrintBill_Moweaqua")
 !   fn_upp_add("Oakland","ubprtbl1_Oakland")
+		fn_upp_add("Purdy","ubprtbl1_purdy")
 		fn_upp_add("Raymond",'(basic)') ! "ubprtbl1_Raymond")
-		fn_upp_add("Thomasboro","ubprtbl1_tho")
-		fn_upp_add("Thayer","ubprtbl1_thayer")
 		fn_upp_add("Scottville Rural","ubprtbl1_scottville")
+		fn_upp_add("Thayer","ubprtbl1_thayer")
+		fn_upp_add("Thomasboro","ubprtbl1_tho")
 !   fn_upp_add("Gilbertown","ubprtbl1_Gilbertown")
 !   fn_upp_add("Waverly","ubprtbl1_Waverly")
 		fn_upp_add("White Hall","ubprtbl1_wh")
-		fn_upp_add("Morrisonville","ubprtbl1_morrisonville")
-		fn_upp_add("Purdy","ubprtbl1_purdy")
 		fn_upp_add("Galena",'(basic)') ! "ubprtbl1_galena") 
 ! >>Bills-Laser (3 per page) ^ ubPrtThree
 		! fn_upp_add("Ash Grove","ubprtprace_ash")  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20

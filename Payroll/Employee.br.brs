@@ -28,7 +28,7 @@ AskEmployee: ! r:
 	fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
-	fnCmdKey("E&Xit",6,0,1,"Returns to menu")
+	fnCmdKey("E&xit",6,0,1,"Returns to menu")
 	fnAcs2(mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
