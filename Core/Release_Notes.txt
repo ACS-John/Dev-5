@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________ 
+3:51 PM 6/8/2020	PR	Check State Calculation program no longer shows all states, it only shows your own.
 15:45 06/20/2020	CO	5.75013  
 3:33 PM 6/8/2020	PR	Fixed: State Tax Add On was not being respected. 
 3:31 PM 6/8/2020	PR	Fixed: a OR state payroll tax bracket for people single, less than 3 allowances, making more than 50k annually were being underbilled state taxes 

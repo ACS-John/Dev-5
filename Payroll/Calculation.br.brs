@@ -1694,21 +1694,19 @@ def library fnCheckStateCalculation(; ___, _
 			fnStatus('              eicCode: '&str$(eicCode            ))
 			fnStatus('               w4year: '&w4year$                  )
 
-
-			
 			fnStatus('Calculated Federal WithHolding: '&str$( fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,maritial,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c) ))
-			fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
-			fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
-			fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
-			fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
-			fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
-			fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
-			fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
-			fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
-			fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
-			fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
-			fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
-			fnStatus('your State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
+			! fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
+			! fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
+			! fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
+			! fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
+			! fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
+			! fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
+			! fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
+			! fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
+			! fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
+			! fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
+			! fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
+			fnStatus('Calculated State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
 			fnStatusPause
 			fnStatusClose
 			! /r
