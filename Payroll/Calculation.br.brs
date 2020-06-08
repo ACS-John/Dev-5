@@ -1,12 +1,12 @@
-! r: Test The Tables!
-	if env$('ACSdeveloper')<>'' then 
-	  fn_setup 
-	  fn_setupOpenFiles
-	  fn_test_state_calk
-		! pause
-	  end
-	end if
-! /r
+!    ! r: Test The Tables!
+!    	if env$('ACSdeveloper')<>'' then 
+!    	  fn_setup 
+!    	  fn_setupOpenFiles
+!    	  fn_test_state_calk
+!    		! pause
+!    	  end
+!    	end if
+!    ! /r
 ! Payroll\Calculation   (formerly   S:\Payroll\Calc  S:\acsPR\newprCalk   )
 
 ! Each year list 'every year'
@@ -784,10 +784,12 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 		returnN=0 ! no Tenn wh
 	else if clientState$='TX' then 
 		returnN=0 ! no Texas wh
-	end if 
+	end if
+
+	returnN+=addOnSt
 	
 	fn_stateTax=returnN
-	
+	pr 'statetax is returning ';returnN : pause
 fnend
 ! r: fn_stateTax subordionate functions
 def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
@@ -1102,43 +1104,43 @@ def fn_wh_oklahoma(taxableWagesCurrent,payPeriodsPerYear,allowances,maritial; _
 	returnN=round(returnN,0)
 	fn_wh_oklahoma=returnN
 fnend
-def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
-									payPeriodsPerYear,allowances,isMarried, _
+def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances,isMarried, _
 									w4year$,taxYear; ___, _
-									returnN,allowancesEffective,theyAreSingle, _
-									theyAreMarried,standardDeduction,whichTable, _
-									perAllowance	)
+									returnN,allowancesEffective,theyAreSingle,theyAreMarried,standardDeduction,whichTable, _
+									perAllowance,wagesAnnualEstimate,phaseOut,tableLine,fedWhAnnualEstimate, _
+									orBase,orDebug	)
 	! requires retaining variables: wor_setup, mat or1, mat or2
-	! if env$('ACSdeveloper')<>'' then print taxableWagesCurrent,fedWhAnnualEstimate,payPeriodsPerYear,allowances,isMarried : pause
+
 	if ~wor_setup then ! r:
 		wor_setup=1
 		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
 		!  r: Withholding Table for Single with fewer than 3 allowances
 		dim or1(0,0)
-		if taxYear=2019 then
+		if taxYear=2019 then ! r:
 			mat or1(5,3)
 			or1(1,1)=     0 : or1(1,2)=  206    : or1(1,3)=0.05
 			or1(2,1)=  3550 : or1(2,2)=  383.5  : or1(2,3)=0.07
 			or1(3,1)=  8900 : or1(3,2)=  758    : or1(3,3)=0.09
 			or1(4,1)= 50000 : or1(4,2)=  540    : or1(4,3)=0.09
-			or1(5,1)=250000 : or1(5,2)=11007    : or1(5,3)=0.099
+			or1(5,1)=250000 : or1(5,2)=11007    : or1(5,3)=0.099 ! /r
 		else 
 			mat or1(4,3)
 			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
 			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
+					!	210+(9050-3600)*0.0675
 			or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
-			
-			or1(4,1)= 50000 : or1(4,2)=   0   : or1(4,3)=0.099
+					!	(50000-9050)*0.0875+749
+			or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099
 		end if
 		! /r
 		dim or2(0,0) ! r: Single with 3 or more allowances, or married
-		if taxYear=2019 then
+		if taxYear=2019 then ! r:
 			mat or2(5,3)
 			or2(1,1)=     0 : or2(1,2)=  206 : or2(1,3)=0.05
 			or2(2,1)=  7100 : or2(2,2)=  561 : or2(2,3)=0.07
 			or2(3,1)= 17800 : or2(3,2)= 1310 : or2(3,3)=0.09
 			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
-			or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
+			or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099 ! /r
 		else
 			mat or2(4,3)
 			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475
@@ -1185,26 +1187,48 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
 			end if
 		end if 
 			! 
-		wor_wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
-		fedWhAnnualEstimate=fedWhAnnualEstimate*payPeriodsPerYear ! needed to be annual, not pay period LS 12/31/18
-		wor_phaseOut=fn_oregonPhaseOut(wor_wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,theyAreSingle,theyAreMarried)
-		! 
-		! wor_base=taxableWagesCurrent*payPeriodsPerYear-min(fedWhAnnualEstimate,8550)-(allowancesEffective*2250)
+		if env$('ACSdeveloper')<>'' then 
+			orDebug=1
+			pr 'eno=';eno
+			pr '  taxableWagesCurrent=';taxableWagesCurrent
+			pr '  fedWhEstimate=';fedWhEstimate
+			pr '    payPeriodsPerYear=';payPeriodsPerYear
+			pr '           allowances=';allowances
+			pr '            isMarried=';isMarried
+			pr '              w4year$=';w4year$
+			pr '              taxYear=';taxYear
+		en if
+			
+		wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
 		
-		! pr 'break wor_base' : pause
+		fedWhAnnualEstimate=fedWhEstimate*payPeriodsPerYear ! needed to be annual, not pay period LS 12/31/18
 		
-		wor_base=wor_wagesAnnualEstimate-wor_phaseOut-standardDeduction
+		phaseOut=fn_oregonPhaseOut(wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,theyAreSingle,theyAreMarried)
+		
+		if orDebug then
+			pr '  fed Wh Estimate=';fedWhEstimate
+			pr '  fed Wh Annual Estimate=';fedWhAnnualEstimate
+			pr '  phaseOut=';phaseOut
+		end if
+
+
+		! orBase=taxableWagesCurrent*payPeriodsPerYear-min(fedWhAnnualEstimate,8550)-(allowancesEffective*2250)
+		! fnStatus('BASE=wagesAnnualEstimate-phaseOut-standardDeduction')
+		! fnStatus('BASE='&str$(wagesAnnualEstimate)&'-'&str$(phaseOut)&'-'&str$(standardDeduction))
+		orBase=wagesAnnualEstimate-phaseOut-standardDeduction
+		! fnStatus('BASE='&str$(orBase))
+
 			! 
 		if whichTable=2 then 
-			wor_table_line=fn_table_line(mat or2,wor_base)
-			wor_removePrev=or2(wor_table_line,1)
-			wor_preBase=or2(wor_table_line,2)
-			wor_taxRate=or2(wor_table_line,3)
+			tableLine=fn_table_line(mat or2,orBase)
+			wor_removePrev=or2(tableLine,1)
+			wor_preBase=or2(tableLine,2)
+			wor_taxRate=or2(tableLine,3)
 		else ! whichTable=1
-			wor_table_line=fn_table_line(mat or1,wor_base)
-			wor_removePrev=or1(wor_table_line,1)
-			wor_preBase=or1(wor_table_line,2)
-			wor_taxRate=or1(wor_table_line,3)
+			tableLine=fn_table_line(mat or1,orBase)
+			wor_removePrev=or1(tableLine,1)
+			wor_preBase=or1(tableLine,2)
+			wor_taxRate=or1(tableLine,3)
 		end if 
 		if debug then 
 			fnStatus('-------------------------------------------')
@@ -1215,28 +1239,38 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
 			else 
 				fnStatus('  Maridal Status is undetermined!!!  ')
 			end if 
-			fnStatus('    Current Wage (Gross)    = '&str$(taxableWagesCurrent))
-			fnStatus('    Pay Periods Per Year    = '&str$(payPeriodsPerYear))
-			fnStatus('    Annual wage (estimate)  = '&str$(wor_wagesAnnualEstimate))
-			fnStatus('    standard deduction      = '&str$(standardDeduction))
-			fnStatus('    table '&str$(whichTable)&' line '&str$(wor_table_line))
-			fnStatus('    phase out               = '&str$(wor_phaseOut))
-			fnStatus('    fedWhAnnualEstimate = '&str$(fedWhAnnualEstimate))
+			fnStatus('    Current Wage (Gross)      = '&str$(taxableWagesCurrent))
+			fnStatus('    Pay Periods Per Year      = '&str$(payPeriodsPerYear))
+			fnStatus('    Annual wage (estimate)    = '&str$(wagesAnnualEstimate))
+			fnStatus('    standard deduction        = '&str$(standardDeduction))
+			fnStatus('    phase out                 = '&str$(phaseOut))
+			fnStatus('    fed WH Estimate PayPeriod = '&str$(fedWhEstimate))
+			fnStatus('    fed WH Estimate Annual    = '&str$(fedWhAnnualEstimate))
 			fnStatus('.')
-			fnStatus('    BASE = '&str$(wor_wagesAnnualEstimate)&' (an..wages) - '&str$(wor_phaseOut)&' (phase out/fed wh) - '&str$(standardDeduction)&' (std ded)')
-			fnStatus('    base                   = '&str$(wor_base))
-			! fn  status('    pre base               = '&str$(wor_preBase))
-			! fn  status('    tax rate               = '&str$(wor_taxRate))
-			! fn  status('    remove_prev            = '&str$(wor_removePrev))
+			fnStatus('    BASE = '&str$(wagesAnnualEstimate)&' (an.wage est) - '&str$(phaseOut)&' (phase out/fed wh) - '&str$(standardDeduction)&' (std ded)')
+			fnStatus('    base                   = '&str$(orBase))
 			fnStatus('.')
-			fnStatus('                                   WH = '&str$(wor_preBase)&' + [('&str$(wor_base)&' - '&str$(wor_removePrev)&')] x '&str$(wor_taxRate)&'] - (195 x '&str$(allowancesEffective)&')')
+			fnStatus('    table '&str$(whichTable)&' line '&str$(tableLine))
+			fnStatus('    remove_prev            = '&str$(wor_removePrev))
+			fnStatus('    pre base               = '&str$(wor_preBase))
+			fnStatus('    tax rate               = '&str$(wor_taxRate))
+			
+			fnStatus('.')
+			fnStatus('         WH = '&str$(wor_preBase)&' + (('&str$(orBase)&' - '&str$(wor_removePrev)&')) x '&str$(wor_taxRate)&') - ('&str$(perAllowance)&' x '&str$(allowancesEffective)&')')
 			fnStatus('-------------------------------------------')
 		end if
-		! 
+		
+		if orDebug then
+			pr 'BASE='&str$(wagesAnnualEstimate)&'-'&str$(phaseOut)&'-'&str$(standardDeduction)
+			pr 'BASE='&str$(orBase)
+			pr 'BASE='&str$(orBase)
+			pause
+		end if
+		
 		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
 		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
-		! returnN=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
-		returnN = wor_preBase +(( wor_base - wor_removePrev) * wor_taxRate) - (perAllowance * allowancesEffective)
+		! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
+		returnN = wor_preBase +(( orBase - wor_removePrev) * wor_taxRate) - (perAllowance * allowancesEffective)
 	end if
 	! fnStatus(' ** annual withholding estimate = '&str$(returnN))
 	returnN=returnN/payPeriodsPerYear
@@ -1246,35 +1280,35 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhAnnualEstimate, _
 	! if debug then fnStatusPause ! pause
 	fn_wh_oregon=returnN
 fnend 
-def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried)
+def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,returnN)
 	if opo_wages<50000 then 
-		opo_return=min(opo_fed_wh,6800)
+		returnN=min(opo_fed_wh,6800)
 	else if opo_table=1 then 
-		if opo_wages => 50000 and opo_wages<125000 th opo_return= 6950 : goto OPO_XIT
-		if opo_wages =>125000 and opo_wages<130000 th opo_return= 5550 : goto OPO_XIT
-		if opo_wages =>130000 and opo_wages<135000 th opo_return= 4150 : goto OPO_XIT
-		if opo_wages =>135000 and opo_wages<140000 th opo_return= 2750 : goto OPO_XIT
-		if opo_wages =>140000 and opo_wages<145000 th opo_return= 1350 : goto OPO_XIT
-		if opo_wages =>145000 then opo_return=0
+		if opo_wages => 50000 and opo_wages<125000 th returnN= 6950 : goto Opo_Finis
+		if opo_wages =>125000 and opo_wages<130000 th returnN= 5550 : goto Opo_Finis
+		if opo_wages =>130000 and opo_wages<135000 th returnN= 4150 : goto Opo_Finis
+		if opo_wages =>135000 and opo_wages<140000 th returnN= 2750 : goto Opo_Finis
+		if opo_wages =>140000 and opo_wages<145000 th returnN= 1350 : goto Opo_Finis
+		if opo_wages =>145000 then returnN=0
 	else ! if opo_table=2 then
 		if isMarried then 
-			if opo_wages => 50000 and opo_wages<250000 then opo_return= 6950 : goto OPO_XIT
-			if opo_wages =>250000 and opo_wages<260000 then opo_return= 5550 : goto OPO_XIT
-			if opo_wages =>260000 and opo_wages<270000 then opo_return= 4150 : goto OPO_XIT
-			if opo_wages =>270000 and opo_wages<280000 then opo_return= 2750 : goto OPO_XIT
-			if opo_wages =>280000 and opo_wages<290000 then opo_return= 1350 : goto OPO_XIT
-			if opo_wages =>290000 then opo_return=0
+			if opo_wages => 50000 and opo_wages<250000 then returnN= 6950 : goto Opo_Finis
+			if opo_wages =>250000 and opo_wages<260000 then returnN= 5550 : goto Opo_Finis
+			if opo_wages =>260000 and opo_wages<270000 then returnN= 4150 : goto Opo_Finis
+			if opo_wages =>270000 and opo_wages<280000 then returnN= 2750 : goto Opo_Finis
+			if opo_wages =>280000 and opo_wages<290000 then returnN= 1350 : goto Opo_Finis
+			if opo_wages =>290000 then returnN=0
 		else ! if isSingle then
-			if opo_wages => 50000 and opo_wages<125000 then opo_return= 6950 : goto OPO_XIT
-			if opo_wages =>125000 and opo_wages<130000 then opo_return= 5550 : goto OPO_XIT
-			if opo_wages =>130000 and opo_wages<135000 then opo_return= 4150 : goto OPO_XIT
-			if opo_wages =>135000 and opo_wages<140000 then opo_return= 2750 : goto OPO_XIT
-			if opo_wages =>140000 and opo_wages<145000 then opo_return= 1350 : goto OPO_XIT
-			if opo_wages =>145000 then opo_return=0
+			if opo_wages => 50000 and opo_wages<125000 then returnN= 6950 : goto Opo_Finis
+			if opo_wages =>125000 and opo_wages<130000 then returnN= 5550 : goto Opo_Finis
+			if opo_wages =>130000 and opo_wages<135000 then returnN= 4150 : goto Opo_Finis
+			if opo_wages =>135000 and opo_wages<140000 then returnN= 2750 : goto Opo_Finis
+			if opo_wages =>140000 and opo_wages<145000 then returnN= 1350 : goto Opo_Finis
+			if opo_wages =>145000 then returnN=0
 		end if 
 	end if 
-	OPO_XIT: ! 
-	fn_oregonPhaseOut=opo_return
+	Opo_Finis: ! 
+	fn_oregonPhaseOut=returnN
 fnend 
 def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
 	if state$='GA' then
@@ -1573,6 +1607,7 @@ def library fnCheckStateCalculation(; ___, _
 		wages      = 9807    ! =15000 	! wages_taxable_current=15000
 		fedWh      = 1530.71 ! =1166  	! fed_wh=1166
 		payCode    = 1       ! =5
+		stateAddOn = 50
 		allowances = 0       ! =0
 		is_married = 0       ! =0
 		eicCode    = 0       ! =0
@@ -1659,18 +1694,18 @@ def library fnCheckStateCalculation(; ___, _
 
 			
 			fnStatus('Calculated Federal WithHolding: '&str$( fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,maritial,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c) ))
-			fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'AR') ))
-			fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'AZ') ))
-			fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'GA') ))
-			fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'IL') ))
-			fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'IN') ))
-			fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'KY') ))
-			fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'LA') ))
-			fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'MO') ))
-			fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'MS') ))
-			fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'OK') ))
-			fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear, 'OR') ))
-			fnStatus('your State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear)               ))
+			fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
+			fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
+			fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
+			fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
+			fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
+			fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
+			fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
+			fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
+			fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
+			fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
+			fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
+			fnStatus('your State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
 			fnStatusPause
 			fnStatusClose
 			! /r
