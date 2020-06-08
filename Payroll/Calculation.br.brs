@@ -789,7 +789,7 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 	returnN+=addOnSt
 	
 	fn_stateTax=returnN
-	pr 'statetax is returning ';returnN : pause
+	! pr 'statetax is returning ';returnN : pause
 fnend
 ! r: fn_stateTax subordionate functions
 def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
@@ -1108,7 +1108,7 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 									w4year$,taxYear; ___, _
 									returnN,allowancesEffective,theyAreSingle,theyAreMarried,standardDeduction,whichTable, _
 									perAllowance,wagesAnnualEstimate,phaseOut,tableLine,fedWhAnnualEstimate, _
-									orBase,orDebug	)
+									orBase,orDebug,preBase,removePrev,taxRate	)
 	! requires retaining variables: wor_setup, mat or1, mat or2
 
 	if ~wor_setup then ! r:
@@ -1126,11 +1126,13 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 		else 
 			mat or1(4,3)
 			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
+					! 0+3600*.0475+210=381
 			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
-					!	210+(9050-3600)*0.0675
+					! (9050-3600)*.0675+381= 748.875  (round to 749)
 			or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
-					!	(50000-9050)*0.0875+749
+					! (50000-9050)*.0875+749=  4332.125 (round to 4332)
 			or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099
+			! or1(4,1)= 50000 : or1(4,2)= 0   : or1(4,3)=0.099
 		end if
 		! /r
 		dim or2(0,0) ! r: Single with 3 or more allowances, or married
@@ -1170,7 +1172,8 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 		else ! (single and less than 3 allowances)
 			whichTable=1
 		end if 
-	
+		
+		! r: determine:  standardDeduction,perAllowance  provided:  whichTable,taxYear
 		if whichTable=2 then ! theyAreMarried then
 			if taxYear=2019 then
 				standardDeduction=4545 ! 2019
@@ -1186,18 +1189,18 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 				perAllowance=210
 			end if
 		end if 
-			! 
-		if env$('ACSdeveloper')<>'' then 
-			orDebug=1
-			pr 'eno=';eno
-			pr '  taxableWagesCurrent=';taxableWagesCurrent
-			pr '  fedWhEstimate=';fedWhEstimate
-			pr '    payPeriodsPerYear=';payPeriodsPerYear
-			pr '           allowances=';allowances
-			pr '            isMarried=';isMarried
-			pr '              w4year$=';w4year$
-			pr '              taxYear=';taxYear
-		en if
+		! /r
+		! if env$('ACSdeveloper')<>'' then ! r: set orDebug and pr some entry values
+		! 	orDebug=1
+		! 	pr 'eno=';eno
+		! 	pr '  taxableWagesCurrent=';taxableWagesCurrent
+		! 	pr '  fedWhEstimate=';fedWhEstimate
+		! 	pr '    payPeriodsPerYear=';payPeriodsPerYear
+		! 	pr '           allowances=';allowances
+		! 	pr '            isMarried=';isMarried
+		! 	pr '              w4year$=';w4year$
+		! 	pr '              taxYear=';taxYear
+		! en if ! /r
 			
 		wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
 		
@@ -1221,16 +1224,32 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			! 
 		if whichTable=2 then 
 			tableLine=fn_table_line(mat or2,orBase)
-			wor_removePrev=or2(tableLine,1)
-			wor_preBase=or2(tableLine,2)
-			wor_taxRate=or2(tableLine,3)
+			removePrev=or2(tableLine,1)
+			preBase=or2(tableLine,2)
+			taxRate=or2(tableLine,3)
 		else ! whichTable=1
 			tableLine=fn_table_line(mat or1,orBase)
-			wor_removePrev=or1(tableLine,1)
-			wor_preBase=or1(tableLine,2)
-			wor_taxRate=or1(tableLine,3)
+			removePrev=or1(tableLine,1)
+			preBase=or1(tableLine,2)
+			taxRate=or1(tableLine,3)
 		end if 
-		if debug then 
+
+
+		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
+		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
+		! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
+		returnN = preBase +(( orBase - removePrev) * taxRate) - (perAllowance * allowancesEffective)
+		
+
+		
+	end if
+	! fnStatus(' ** annual withholding estimate = '&str$(returnN))
+	returnN=returnN/payPeriodsPerYear
+	returnN=round(returnN,2)
+	if returnN<.1 then returnN=0
+	
+	
+		if debug then ! r: display all the details
 			fnStatus('-------------------------------------------')
 			if theyAreSingle then 
 				fnStatus('  Single with '&str$(allowancesEffective)&' allowances')
@@ -1247,36 +1266,20 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			fnStatus('    fed WH Estimate PayPeriod = '&str$(fedWhEstimate))
 			fnStatus('    fed WH Estimate Annual    = '&str$(fedWhAnnualEstimate))
 			fnStatus('.')
-			fnStatus('    BASE = '&str$(wagesAnnualEstimate)&' (an.wage est) - '&str$(phaseOut)&' (phase out/fed wh) - '&str$(standardDeduction)&' (std ded)')
-			fnStatus('    base                   = '&str$(orBase))
+			fnStatus('    BASE = '&str$(wagesAnnualEstimate)&' (wagesAnnualEstimate) - '&str$(phaseOut)&' (phaseOut) - '&str$(standardDeduction)&' (standardDeduction)')
+			fnStatus('    BASE = '&str$(orBase))
 			fnStatus('.')
 			fnStatus('    table '&str$(whichTable)&' line '&str$(tableLine))
-			fnStatus('    remove_prev            = '&str$(wor_removePrev))
-			fnStatus('    pre base               = '&str$(wor_preBase))
-			fnStatus('    tax rate               = '&str$(wor_taxRate))
-			
+			fnStatus('    removePrev            = '&str$(removePrev))
+			fnStatus('    preBase               = '&str$(preBase))
+			fnStatus('    taxRate               = '&str$(taxRate))
 			fnStatus('.')
-			fnStatus('         WH = '&str$(wor_preBase)&' + (('&str$(orBase)&' - '&str$(wor_removePrev)&')) x '&str$(wor_taxRate)&') - ('&str$(perAllowance)&' x '&str$(allowancesEffective)&')')
+			fnStatus('         WH = '&str$(preBase)&' (preBase) + (('&str$(orBase)&' (Base) - '&str$(removePrev)&' (removePrev) )) x '&str$(taxRate)&' (taxRate) ) - ('&str$(perAllowance)&' x '&str$(allowancesEffective)&')')
+			fnStatus('         WH = '&str$(returnN))
 			fnStatus('-------------------------------------------')
-		end if
-		
-		if orDebug then
-			pr 'BASE='&str$(wagesAnnualEstimate)&'-'&str$(phaseOut)&'-'&str$(standardDeduction)
-			pr 'BASE='&str$(orBase)
-			pr 'BASE='&str$(orBase)
-			pause
-		end if
-		
-		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
-		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
-		! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
-		returnN = wor_preBase +(( orBase - wor_removePrev) * wor_taxRate) - (perAllowance * allowancesEffective)
-	end if
-	! fnStatus(' ** annual withholding estimate = '&str$(returnN))
-	returnN=returnN/payPeriodsPerYear
-	returnN=round(returnN,2)
-	if returnN<.1 then returnN=0
-	! fnStatus(' *** calculated withholding:  '&str$(returnN))
+		end if ! /r
+	
+	
 	! if debug then fnStatusPause ! pause
 	fn_wh_oregon=returnN
 fnend 
