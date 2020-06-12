@@ -24,6 +24,7 @@ def fn_setup
 		dim serviceName$(10)*60,serviceCode$(10)*2
 		dim resp$(128)*128
 		fnget_services(mat serviceName$, mat serviceCode$)
+		fn_InitialializeMeterLocation
 		for snI=1 to udim(mat serviceName$) : serviceName$(snI)=trim$(serviceName$(snI)) : nex snI
 		table$='U4 Meter Location'
 		fnGetServiceCodesMetered(mat serviceCodeMetered$)
@@ -68,7 +69,7 @@ fnend
 
 def library fnInitialializeMeterLocation
 	if ~setup then fn_setup
-	! fnInitialializeMeterLocation=fn_InitialializeMeterLocation    <---  fn_setup handles it if it is necessary.
+	fnInitialializeMeterLocation=fn_InitialializeMeterLocation  
 fnend
 def fn_InitialializeMeterLocation
 	imlCreateNew  = imlImportFromInfo = 0
