@@ -5,7 +5,7 @@
 !  Created: 03/28/06
 ! Modified: 02/11/19
 !
-def fnVersion=111
+def fnVersion=113
 !
 !
 ! #Autonumber# 500,1
@@ -1815,7 +1815,7 @@ EXPORTTOCSV: ! **** Export a data file to CSV format
       end if
    fnend
 !
-   def Fnclientserver(;___,Serverfolder$*255,Clientfolder$*255)
+   def library Fnclientserver(;___,Serverfolder$*255,Clientfolder$*255)
        if wbversion$(1:3)>="4.3" then
           if lwrc$(trim$(env$("br_model")))="client/server" then
              let fnClientServer=1
@@ -1840,7 +1840,7 @@ EXPORTTOCSV: ! **** Export a data file to CSV format
    fnend
 
 def fnCSVExportDlg(&CSVPath$,&UseRecNums;&DialogType,___,Dialog,KeyP,CSVFile,UseRecNums$*50,SelectColumns$*50,FileString$*255,Rows,Cols)
-    library : fnReadLayoutHeader
+    library : fnReadLayoutHeader,fnClientServer
 
     dim Keys$(1)*80,KeyDesc$(1)*80,SrcFieldNames$(1)*80
     let fnReadScreenS(Rows,Cols)
@@ -2000,7 +2000,7 @@ fnend
 def fnCountCharacter(&String$,Char$)=len(String$)-len(srep$(String$,Char$,""))
 
 def fnCSVImportDlg(Layout$,&CSVPath$,&KeyNum;___,Dialog,Key,FileName$*255,CSVPath2$*300,Key$*160,Index,Sel$,CSVFile,CSVLine$*32000,FileChanged,FileString$*255,Rows,Cols,CurrentField,FunctionKey)
-    library : fnReadLayoutHeader
+    library : fnReadLayoutHeader,Fnclientserver
 
     dim Keys$(1)*80,KeyDesc$(1)*80,KeyOptions$(1)*160,SrcFieldNames$(1)*80
     let fnReadScreenS(Rows,Cols)
@@ -6725,7 +6725,7 @@ BeginAudit: ! ***** This function will create an Audit Comparison folder for all
          close #CS:
 
          ! Launch the file in the default application ..
-         execute "sy -C -M start "&os_filename$(FileName$)
+         execute "sy -C -M -@ start "&os_filename$(FileName$)
          Close #Waitwin:
       else
          msgbox("Export from Listview requires BR 4.3 or higher.","Export Failed")
@@ -6842,7 +6842,7 @@ BeginAudit: ! ***** This function will create an Audit Comparison folder for all
       let fnMilitaryTime$=fnBuildTime$(H,M,S,P,1,Seconds)
    fnend
 
-def library fnCalculateHours(timein$,tout$,daysin,daysout;___,hrin,hrout,minin,minout,secin,secout,total)
+def library fnCalculateHours(timein$,tout$,daysin,daysout;___,hrin,hrout,minin,minout,secin,secout,total,totalout)
    ! this function returns the hours between timein and tout, which must be passed in as hhmmss in string form
    let hrin=val(timein$(1:2))
    let hrout=val(tout$(1:2))
@@ -6883,8 +6883,9 @@ def library fnCalculateHours(timein$,tout$,daysin,daysout;___,hrin,hrout,minin,m
       total+=(minout/60)
       total+=(secout/3600)
    end if
-
-   let fnCalculateHours=round(total,2)
+   let totalout=round(total,2)
+   if totalout=0 then let totalout=.01 ! set to a few seconds minimum
+   let fnCalculateHours=totalout
 fnend
 
 
