@@ -410,7 +410,7 @@ return
 	fnTxt(5,mypos,30)
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
-	fnAcs2(mat resp$,ck)
+	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto EDIT_PAYEE
 	payeekey$=vn$
 	payeegl$=fnagl$(resp$(1))
