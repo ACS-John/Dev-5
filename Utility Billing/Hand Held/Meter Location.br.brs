@@ -24,7 +24,7 @@ def fn_setup
 		dim serviceName$(10)*60,serviceCode$(10)*2
 		dim resp$(128)*128
 		fnget_services(mat serviceName$, mat serviceCode$)
-		fn_InitialializeMeterLocation
+		! fn_InitialializeMeterLocation
 		for snI=1 to udim(mat serviceName$) : serviceName$(snI)=trim$(serviceName$(snI)) : nex snI
 		table$='U4 Meter Location'
 		fnGetServiceCodesMetered(mat serviceCodeMetered$)
@@ -67,7 +67,7 @@ def fn_populateLocationNonSeq
 	fncloseFile(hCustomer,'UB Customer')
 fnend
 
-def library fnInitialializeMeterLocation
+def library fnInitialializeMeterLocation 
 	if ~setup then fn_setup
 	fnInitialializeMeterLocation=fn_InitialializeMeterLocation  
 fnend
