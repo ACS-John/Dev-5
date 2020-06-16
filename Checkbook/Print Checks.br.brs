@@ -829,7 +829,11 @@ def fn_portion_stub_generic
 	if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey L10970
 	L10970: !
 	pr #255: ""
-	pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+	if env$('client')='Crockett County' then 
+		pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy
+	else
+		pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+	end if 
 	pr #255: ""
 	mat b$=(" ") : b$(1)=tr$(5)(1:30)
 	if h_vf1=23 then vp1=173 else vp1=147

@@ -867,7 +867,7 @@ def fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_
 ! if line_item=4 the pr line_item : pause
 		if line_item=line_date and line_item=line_amount then
 			pr #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_amt,c 18': dat,ca$
-		else if line_item=line_date and line_item=line_checkNumber and line_checkNumber<>0 then
+		else if line_item=line_date and line_item=line_checkNumber and line_checkNumber<>0  then
 			pr #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_checkNumber,N 8': dat,checkNumber
 		else if line_item=line_nameOnly and line_item=line_amount then
 			pr #255,using "form Pos pos_nameOnly,C 30,pos pos_amt,c 18": em$(1),ca$
@@ -1322,10 +1322,10 @@ def fn_print_stub
 	else if env$('client')='Crockett County' then
 		stubCount+=1
 		if stubCount=1 then
-			fn_stub_standard(0)
+			fn_stub_standard(0,0,1)
 		else if stubCount=2 then
 			stubCount=0
-			fn_stub_standard
+			fn_stub_standard(0,0,1)
 		end if
 	else
 		fn_stub_standard
@@ -1333,9 +1333,13 @@ def fn_print_stub
 fnend
 F_STUB_01: form pos 3,c 18,2*pic(-------.--),x 4,c 12,pic(-------.--),pic(-----------.--)
 F_STUB_02: form pos 3,c 9,pic(------.--),2*pic(-------.--),x 4,c 12,pic(-------.--),pic(-----------.--)
-def fn_stub_standard(; stst_show_tips,ststaddlength)
+def fn_stub_standard(; stst_show_tips,ststaddlength,Hide_Checknumber)
 	pr #255: ""
-	pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
+	if Hide_Checknumber=0 then 
+	   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
+	else if Hide_Checknumber=1 then
+	   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy
+	end if
 	for j=1 to 20
 		if tty(j+4)=0 then abrevName$(j)="" else abrevName$(j)=hnames$(j)
 	next j
