@@ -1042,7 +1042,7 @@ def fn_portion_check_Crocket(dolamt)
 	! next j
 	fn_englishdollar(dolamt)
 	if dolamt=0 then eng$='        *** V O I D ***'
-	if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+	if dolamt<=0 then ca$="***VOID***" else ca$=lpad$("*"&trim$(cnvrt$("PIC(ZZZ,ZZZ,ZZ#.##)",dolamt)),14," ") ! changed for preprinted symbol 
 	skipline=0
 	if prenum=2 then
 		pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1 ! line 2,3, 4
