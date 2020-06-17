@@ -746,7 +746,7 @@ def fn_print_check
 		fn_check_billings
 	else if env$('client')="Crockett County" then
 		! if env$('acsDeveloper')<>"" then pause
-		fn_check_dynamic(26,7,7,9,12,58,0,6)
+		fn_check_dynamic(26,7,7,9,12,58,0,6,0,0,0,0,0,1)
 		! length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english
 	else if env$('client')="Campbell" then ! r: updated 1/17/2018 - uses very few options
 		length                 =26
@@ -856,13 +856,13 @@ def fn_print_check
 		fn_check_dynamic(21,6,6,7,13) ! fn_check_legacy ! default for everyone without a special routine...
 	end if
 fnend
-def fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english)
-	!
+def fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english,use_asterisk)
+	pause !
 	if pos_date=0 then pos_date=65
 	if pos_amt=0 then pos_amt=pos_date+18
 	if pos_nameOnly=0 then pos_nameOnly=12
 	if pos_amount_english=0 then pos_amount_english=9
-	!
+	if use_asterisk=1 then let ca$=srep$(ca$,"$","*")
 	for line_item=1 to length
 ! if line_item=4 the pr line_item : pause
 		if line_item=line_date and line_item=line_amount then
