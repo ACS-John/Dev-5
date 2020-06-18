@@ -857,7 +857,7 @@ def fn_print_check
 	end if
 fnend
 def fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address; pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,checkNumber,pos_amount_english,use_asterisk)
-	pause !
+	!
 	if pos_date=0 then pos_date=65
 	if pos_amt=0 then pos_amt=pos_date+18
 	if pos_nameOnly=0 then pos_nameOnly=12
