@@ -582,7 +582,7 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 			end if
 		end if
 	! /r
-pause 
+! pause 
 	if fedpct>0 then 
 		returnN=round((totalGrossPay-ded)*fedpct,2)
 	else if stdWhFed=-1 or enableSkipWithholdingN(esw_federal) then ! no federal withholding
