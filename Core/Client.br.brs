@@ -3,7 +3,7 @@ if env$('enableClientSelection')='Yes' then goto ClientSelect
 !   ! r: sandbox for testing local functions
 !     if env$('ACSDeveloper')<>'' then setenv('acsclient','BRCorp')
 !     fn_setup
-!     pr 'fn_client_has_mat returns ';fn_client_has_mat(mat tmp$)
+!     pr 'fn_clientHasMat returns ';fn_clientHasMat(mat tmp$)
 !     pr mat tmp$
 !     pr 'fn_client_support returns ';fn_client_support(mat tmp_system_id$,mat tmp_system_support_end_date,mat tmp_on_support)
 !     for x=1 to udim(mat tmp_system_id$)
@@ -23,7 +23,6 @@ goto Xit ! /r
 Xit: fnXit
 def library fnClientSelect
 	fn_setup
-	! fn_getClientLicense(mat client_has$)
 	fnClientSelect=fn_clientSelect
 fnend
 def fn_clientSelect
@@ -79,11 +78,11 @@ def fn_setup
 		setup_library=1
 		autoLibrary
 	end if 
-	fn_setup_client
+	fn_setupClient
 fnend 
-def library fnclient$*18
+def library fnClient$*18
 	fn_setup
-	fnclient$=fn_client$
+	fnClient$=fn_client$
 fnend 
 def fn_client$*18
 	! if env$('ACSDeveloper')<>'' then pr 'on the way in env client$ is '&env$('client')
@@ -129,7 +128,7 @@ def fn_client$*18
 fnend 
 def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 	if ~setup then fn_setup
-	if ~setup_client then fn_setup_client
+	if ~setup_client then fn_setupClient
 	if clientId<=0 then
 		return$=env$('client')
 	else
@@ -146,7 +145,7 @@ def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 	end if
 	fnClientNameShort$=return$
 fnend
-def fn_setup_client ! ** set up for new clients
+def fn_setupClient ! ** set up for new clients
 	if ~setup_client then 
 		setup_client=1
 		dim client_name$(1)*18
@@ -154,439 +153,111 @@ def fn_setup_client ! ** set up for new clients
 		mat client_name$(client_count)
 		mat client_cno(client_count)
 		mat client_brserial(client_count)
-		!  fn_setup_client_add("ACS",1,0) ! TEMP
-		! 
-		fn_setup_client_add("ACS" ,420,34660) ! 58650
-		fn_setup_client_add("Ed Horton" ,5535,0)! Ed processes like ACS
-		! 
-		fn_setup_client_add("Lamar" ,1,33854)
-		!   fn_setup_client_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
-		fn_setup_client_add("Allendale" ,200,0)
-		fn_setup_client_add("Ash Grove" ,286,19016)
-		!   fn_setup_client_add("Ashland" ,300,33584)
-		!   fn_setup_client_add("Battlefield" ,369,33306)
-		fn_setup_client_add("Bethany" ,380,34326)
-		fn_setup_client_add("Billings" ,440,33534)
-		fn_setup_client_add("Blucksberg" ,465,34564)
-		!   fn_setup_client_add("Brazeal" ,570,34418)
-		fn_setup_client_add("Brier Lake" ,578,20306)
-		fn_setup_client_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
-		fn_setup_client_add("Brumbaugh" ,7007,200033202) ! Limited BR license
-		fn_setup_client_add("Campbell" ,700,33942)
-		fn_setup_client_add("Carr Plumbing" ,780,34610)
-		! fn_setup_client_add("Carrizo" ,800,34416)
-		fn_setup_client_add("Cerro Gordo V" ,850,34508) ! 33994)
-		fn_setup_client_add("Cerro Gordo T" ,970,34508)
-		fn_setup_client_add("Chatom" ,911,15678)
-		fn_setup_client_add("Choctaw" ,918,34214)
-		! fn_setup_client_add("Colyell" ,980,33948)
-		! fn_setup_client_add("Community Dev" ,982,34156)
-		fn_setup_client_add("Crane" ,1120,0)
-		fn_setup_client_add("Crockett County" ,1141,15110)
-		fn_setup_client_add('Diamond' ,1345,0)
-		fn_setup_client_add("Divernon" ,1350,33698)
-		fn_setup_client_add("Dorothy Salch" ,3812,34494)
-		fn_setup_client_add("Durden" ,1406,16410)
-		fn_setup_client_add("Edinburg" ,1478,34022)
-		fn_setup_client_add("Edison" ,1480,34022)
-		! fn_setup_client_add("Eldorado" ,1500,33352)
-		fn_setup_client_add("Evelyn Pareya" ,3385,34366)
-		fn_setup_client_add("Exeter" ,1615,31210)
-		fn_setup_client_add("Energy Exchanger" ,1550,10172)
-		!   fn_setup_client_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
-		fn_setup_client_add("Findlay" ,1700,34132)
-		!   fn_setup_client_add("Franklin and Son" ,1870,32454)
-		fn_setup_client_add("Franklin Co Hosp" ,1876,33668)
-		!   fn_setup_client_add("Franklinton" ,1876,0) ! Town of
-		fn_setup_client_add("French Settlement" ,1880,33380)
-		fn_setup_client_add("Fulton" ,1890,33720) ! Utilities Board
-		fn_setup_client_add("Galena" ,1945,34566)
-		fn_setup_client_add("Garrity",1950,0)
-!   fn_setup_client_add("Gilbertown",1985,0)
-!   fn_setup_client_add("Granby",2040,34098) ! no longer using as of 6/13/2016
-		fn_setup_client_add("Grandview",2050,34040)
-		fn_setup_client_add("GreeneCo",2070,33910)
-		fn_setup_client_add("Halfway" ,2130,33768)
-		fn_setup_client_add("Hope Welty" ,851,34152)
-		fn_setup_client_add("Laco Vinyl" ,2222,0)
-		fn_setup_client_add("Payroll Done Right" ,3393,0)
-		fn_setup_client_add("Schachtner Portnoy" ,3828,200008100)
-		! fn_setup_client_add("Illiopolis",2340,0)
-		fn_setup_client_add("Kathys Bookkeeping",3979,33672)
-		! fn_setup_client_add("Kimberling",2530,19212)
-		fn_setup_client_add("Kincaid",2532,33652)
-		fn_setup_client_add("Lovington",2689,32720)
-		fn_setup_client_add("Loma Linda",2690,33244)
-!   fn_setup_client_add("Nancy Mouser",2795,34318)
-		fn_setup_client_add("Merriam Woods",2900,31702)
-!   fn_setup_client_add("Miller Hardware",3005,14668)
-		fn_setup_client_add("Millry",3025,33968)
-!   fn_setup_client_add("Monticello",3040,12196)
-		fn_setup_client_add("Moweaqua",3045,34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
-		fn_setup_client_add("Morrisonville",3050,34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
-!   fn_setup_client_add("Northwest",3241,11176 )
-!   fn_setup_client_add("Oakland",3250,34260)
-		fn_setup_client_add("Omaha",3320,33346)
-		fn_setup_client_add("Pennington",3431,33332)
-!   fn_setup_client_add("Petromark",3535,33620)
-		fn_setup_client_add("Philo",3534,34150)
-!   fn_setup_client_add("PiattCO",3536,20832)
-		fn_setup_client_add("Purdy",3610,34570)
-		fn_setup_client_add("Raymond",3660,32798)
-		fn_setup_client_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
-		fn_setup_client_add('Sheila',770,0)
-		fn_setup_client_add("Thomas Richardson",3720,7718)
-!   fn_setup_client_add("Riverside",3725,18332)
-!   fn_setup_client_add("Sangamon",3815,34066)
-		fn_setup_client_add("Scottville Rural",3840,33390)
-		fn_setup_client_add("Starr County Gas",4127,33390)
-		fn_setup_client_add("Stern and Stern",4132,200014280)
-		fn_setup_client_add("Thayer",4245,32800)
-		fn_setup_client_add("Thomasboro",4260,34068)
-		fn_setup_client_add("Unity",4380,34478)
-!   fn_setup_client_add("Washington Parrish",4510,34116)
-!   fn_setup_client_add("Waverly",4515,34430)
-!   fn_setup_client_add("West Accounting",4560,30176)   retired as of 02/22/2018
-!   fn_setup_client_add("West Rest Haven",4567,34032)
-		fn_setup_client_add("White Hall",4625,32242)
-!   fn_setup_client_add("Willard",4650,33514)
-		fn_setup_client_add("World Wide",4650,33604)
-		fn_setup_client_add("Zaleski",4710,34164)
-		! fn_setup_client_add("Demo",20001,34450)
-		! fn_setup_client_add("Demo",20002,34450)
-		! fn_setup_client_add("Demo",20003,34450)
-		! fn_setup_client_add("Demo",20004,34450)
-	end if
-	! 
-fnend
-def fn_getClientLicense(mat client_has$)
-	if setup_client_has$<>env$('client') then
-		setup_client_has$=env$('client')
-		mat client_has$(0)
-		! r: big if statement 
-		client_has_system_count=0
-		if env$('client')='ACS' then 
-			! fn_add_ch_sys('UB')
-			! fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
-			! fn_add_ch_sys('CL')
-			! fn_add_ch_sys('PR')
-			! fn_add_ch_sys('GL')
-			! fn_add_ch_sys('OE')
-			fn_add_ch_sys('TM')
-			fn_add_ch_sys('EM')
-		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
-		!   fn_user_limit(1)
-		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_add_ch_sys('UB') : fn_set_ub_limit(500)
-		!   if days(date)<=days(20151231,'ccyymmdd') then fn_add_ch_sys('U4')
-		else if env$('client')='BRCorp' then 
-			fn_user_limit(99)
-			fn_add_ch_sys('OE') 
-		else if env$('client')='Ed Horton' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Ash Grove' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('PR')
-			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('GL')
-			! canceled 2/7/2018 as per Debbie  -   fn_add_ch_sys('CL')
-		else if env$('client')='Allendale' then 
-			if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
-				fn_user_limit(1)
-				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-				fn_add_ch_sys('U4') ! U4 Utility Billing Hand Held Add-On
-			end if
-		else if env$('client')='Bethany' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Brier Lake' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Billings' and (env$('Unique_Computer_Id')="58973139-FC9B-1A95-F234-C145E2B22211" or env$('Unique_Computer_Id')="50A59A38-38BF-A82F-9868-04C4E5DD281A") then ! Limit to only UB stuff for (Katrina or Gale)
-			fn_user_limit(2) ! actually licensed for 3 users, but has two separate installations
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('UB-EFT')
-			!     fn_add_ch_sys('CR')
-		else if env$('client')='Billings' and env$('Unique_Computer_Id')="BD04113D-C102-BA29-78AC-D23201FDC70C" then ! Limit to NOT UB stuff for Chris Hopkins
-			fn_user_limit(1) ! actually licensed for 3 users, but has two separate installations
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Billings' then 
-			fn_user_limit(3)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('UB-EFT')
-			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_add_ch_sys('EM')  ! Alpha testing
-			!     fn_add_ch_sys('CR')
-		else if env$('client')='Blucksberg' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
-			fn_add_ch_sys('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Brumbaugh' then 
-			fn_user_limit(64)
-			fn_add_ch_sys('CM')
-		else if env$('client')='Campbell' then 
-			fn_user_limit(4)
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Badger Beacon"
-			fn_add_ch_sys('UB-EFT')
-		else if env$('client')='Carr Plumbing' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')
-		else if env$('client')='Chatom' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Cerro Gordo V' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Cerro Gordo T' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Choctaw' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			! fn_add_ch_sys('GL')  -  removed from support as of 4/30/19
-		else if env$('client')='Crockett County' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('GB')  !  GB is General Ledger Budget Management Add-On
-		else if env$('client')='Diamond' and days(date$)<=days('05/31/2020','mm/dd/ccyy') then
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-			! fn_add_ch_sys('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+		!  fn_setupClient_add("ACS",1,0) ! TEMP
 
-		else if env$('client')='Edinburg' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Edison' then 
-			fn_user_limit(3)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Exeter' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		! else if env$('client')='Energy Exchanger' then 
-		! 	fn_user_limit(1)
-		! 	fn_add_ch_sys('PR')
-		else if env$('client')='Dorothy Salch' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-		else if env$('client')='Evelyn Pareya' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-		else if env$('client')='Findlay' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-			!   else if env$('client')='Franklin and Son' then 
-			!     fn_user_limit(1)
-			!     fn_add_ch_sys('PR')
-		else if env$('client')='Franklin Co Hosp' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('CL')
-		else if env$('client')='French Settlement' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
-		else if env$('client')='Galena' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			!   else if env$('client')='Granby' then 
-			!     fn_user_limit(2)
-			!     fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
-		else if env$('client')='Grandview' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-		else if env$('client')='Payroll Done Right' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-		else if env$('client')='Schachtner Portnoy' then 
-			fn_user_limit(76)
-			fn_add_ch_sys('CM')
-		else if env$('client')='GreeneCo' then 
-			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
-				fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-				fn_add_ch_sys('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
-			! end if
-		else if env$('client')='Hope Welty' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Kathys Bookkeeping' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('GL')
-			!     fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-			fn_add_ch_sys('PR')
-			!     fn_add_ch_sys('P4')
-		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')
-			!   else if env$('client')='Kincaid' and and env$('Unique_Computer_Id')='XXX need to do XXX' then
-			!     fn_user_limit(1)
-			!     fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='03000200-0400-0500-0006-000700080009' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Kincaid' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-			!     fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-		else if env$('client')='Lovington' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
-			fn_add_ch_sys('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-		else if env$('client')='Merriam Woods' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U5') ! UB External Collections Processing
-			!     fn_add_ch_sys('CR')
-			!     fn_add_ch_sys('GL')
-			!     fn_add_ch_sys('PR')
-			!     fn_add_ch_sys('CL')
-		else if env$('client')='Millry' then 
-			fn_user_limit(4)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Morrisonville' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Moweaqua' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_add_ch_sys('U4') : u4_device$="Badger Connect C" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Pennington' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Purdy' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Omaha' then 
-			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_user_limit(3) else fn_user_limit(1) ! 2 user bonus for 60 days
-			fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
-		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
-		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
-		! 	fn_user_limit(1)
-		! 	fn_add_ch_sys('PR')
-		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
-		! 	fn_user_limit(1)
-		! 	fn_add_ch_sys('PR')
-		else if env$('client')='Raymond' then 
-			fn_user_limit(2)
-		! 	fn_add_ch_sys('PR')
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='R R Crawford' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
-			fn_add_ch_sys('GL')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
-		else if env$('client')='Scottville Rural' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Starr County Gas' then 
-			fn_user_limit(1)
-			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_add_ch_sys('UB') : fn_set_ub_limit(9999)
-		else if env$('client')='Sheila' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-		else if env$('client')='Stern and Stern' then 
-			fn_user_limit(99) ! unknown
-			fn_add_ch_sys('CM')
-		else if env$('client')='Thayer' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Thomasboro' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-			fn_add_ch_sys('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-			fn_add_ch_sys('CL')
-			fn_add_ch_sys('UB-EFT')
-		else if env$('client')='Thomas Richardson' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-			fn_add_ch_sys('PR')
-		!   else if env$('client')='Waverly' then 
-		!     fn_user_limit(1)
-		!     fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-		! else if env$('client')='West Accounting' then 
-		!   fn_user_limit(1)
-		!   fn_add_ch_sys('PR')
-		else if env$('client')='White Hall' then 
-			fn_user_limit(2)
-			fn_add_ch_sys('UB')
-			!   else if env$('client')='Willard' then 
-			!     fn_user_limit(1)
-			!     fn_add_ch_sys('GL')
-			!     fn_add_ch_sys('PR')
-			!     fn_add_ch_sys('CL')
-		else if env$('client')='World Wide' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('GL')
-		else if env$('client')='Zaleski' then 
-			fn_user_limit(1)
-			fn_add_ch_sys('PR') 
-			fn_add_ch_sys('GL') 
-			fn_add_ch_sys('G2') ! G3 Accountant's General Ledger
-		end if 
-		! /r
+		fn_setupClient_add("ACS" ,420,34660) ! 58650
+		fn_setupClient_add("Ed Horton" ,5535,0)! Ed processes like ACS
+
+		fn_setupClient_add("Lamar" ,1,33854)
+		!   fn_setupClient_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
+		fn_setupClient_add("Allendale" ,200,0)
+		fn_setupClient_add("Ash Grove" ,286,19016)
+		!   fn_setupClient_add("Ashland" ,300,33584)
+		!   fn_setupClient_add("Battlefield" ,369,33306)
+		fn_setupClient_add("Bethany" ,380,34326)
+		fn_setupClient_add("Billings" ,440,33534)
+		fn_setupClient_add("Blucksberg" ,465,34564)
+		!   fn_setupClient_add("Brazeal" ,570,34418)
+		fn_setupClient_add("Brier Lake" ,578,20306)
+		fn_setupClient_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
+		fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
+		fn_setupClient_add("Campbell" ,700,33942)
+		fn_setupClient_add("Carr Plumbing" ,780,34610)
+		! fn_setupClient_add("Carrizo" ,800,34416)
+		fn_setupClient_add("Cerro Gordo V" ,850,34508) ! 33994)
+		fn_setupClient_add("Cerro Gordo T" ,970,34508)
+		fn_setupClient_add("Chatom" ,911,15678)
+		fn_setupClient_add("Choctaw" ,918,34214)
+		! fn_setupClient_add("Colyell" ,980,33948)
+		! fn_setupClient_add("Community Dev" ,982,34156)
+		fn_setupClient_add("Crane" ,1120,0)
+		fn_setupClient_add("Crockett County" ,1141,15110)
+		fn_setupClient_add('Diamond' ,1345,0)
+		fn_setupClient_add("Divernon" ,1350,33698)
+		fn_setupClient_add("Dorothy Salch" ,3812,34494)
+		fn_setupClient_add("Durden" ,1406,16410)
+		fn_setupClient_add("Edinburg" ,1478,34022)
+		fn_setupClient_add("Edison" ,1480,34022)
+		! fn_setupClient_add("Eldorado" ,1500,33352)
+		fn_setupClient_add("Evelyn Pareya" ,3385,34366)
+		fn_setupClient_add("Exeter" ,1615,31210)
+		fn_setupClient_add("Energy Exchanger" ,1550,10172)
+		!   fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
+		fn_setupClient_add("Findlay" ,1700,34132)
+		!   fn_setupClient_add("Franklin and Son" ,1870,32454)
+		fn_setupClient_add("Franklin Co Hosp" ,1876,33668)
+		!   fn_setupClient_add("Franklinton" ,1876,0) ! Town of
+		fn_setupClient_add("French Settlement" ,1880,33380)
+		fn_setupClient_add("Fulton" ,1890,33720) ! Utilities Board
+		fn_setupClient_add("Galena" ,1945,34566)
+		fn_setupClient_add("Garrity",1950,0)
+		!   fn_setupClient_add("Gilbertown",1985,0)
+		!   fn_setupClient_add("Granby",2040,34098) ! no longer using as of 6/13/2016
+		fn_setupClient_add("Grandview",2050,34040)
+		fn_setupClient_add("GreeneCo",2070,33910)
+		fn_setupClient_add("Halfway" ,2130,33768)
+		fn_setupClient_add("Hope Welty" ,851,34152)
+		fn_setupClient_add("Laco Vinyl" ,2222,0)
+		fn_setupClient_add("Payroll Done Right" ,3393,0)
+		fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
+		! fn_setupClient_add("Illiopolis",2340,0)
+		fn_setupClient_add("Kathys Bookkeeping",3979,33672)
+		! fn_setupClient_add("Kimberling",2530,19212)
+		fn_setupClient_add("Kincaid",2532,33652)
+		fn_setupClient_add("Lovington",2689,32720)
+		fn_setupClient_add("Loma Linda",2690,33244)
+		!   fn_setupClient_add("Nancy Mouser",2795,34318)
+		fn_setupClient_add("Merriam Woods",2900,31702)
+		!   fn_setupClient_add("Miller Hardware",3005,14668)
+		fn_setupClient_add("Millry",3025,33968)
+		!   fn_setupClient_add("Monticello",3040,12196)
+		fn_setupClient_add("Moweaqua",3045,34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
+		fn_setupClient_add("Morrisonville",3050,34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
+		!   fn_setupClient_add("Northwest",3241,11176 )
+		!   fn_setupClient_add("Oakland",3250,34260)
+		fn_setupClient_add("Omaha",3320,33346)
+		fn_setupClient_add("Pennington",3431,33332)
+		!   fn_setupClient_add("Petromark",3535,33620)
+		fn_setupClient_add("Philo",3534,34150)
+		!   fn_setupClient_add("PiattCO",3536,20832)
+		fn_setupClient_add("Purdy",3610,34570)
+		fn_setupClient_add("Raymond",3660,32798)
+		fn_setupClient_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
+		fn_setupClient_add('Sheila',770,0)
+		fn_setupClient_add("Thomas Richardson",3720,7718)
+		!   fn_setupClient_add("Riverside",3725,18332)
+		!   fn_setupClient_add("Sangamon",3815,34066)
+		fn_setupClient_add("Scottville Rural",3840,33390)
+		fn_setupClient_add("Starr County Gas",4127,33390)
+		fn_setupClient_add("Stern and Stern",4132,200014280)
+		fn_setupClient_add("Thayer",4245,32800)
+		fn_setupClient_add("Thomasboro",4260,34068)
+		fn_setupClient_add("Unity",4380,34478)
+		!   fn_setupClient_add("Washington Parrish",4510,34116)
+		!   fn_setupClient_add("Waverly",4515,34430)
+		!   fn_setupClient_add("West Accounting",4560,30176)   retired as of 02/22/2018
+		!   fn_setupClient_add("West Rest Haven",4567,34032)
+		fn_setupClient_add("White Hall",4625,32242)
+		!   fn_setupClient_add("Willard",4650,33514)
+		fn_setupClient_add("World Wide",4650,33604)
+		fn_setupClient_add("Zaleski",4710,34164)
+		! fn_setupClient_add("Demo",20001,34450)
+		! fn_setupClient_add("Demo",20002,34450)
+		! fn_setupClient_add("Demo",20003,34450)
+		! fn_setupClient_add("Demo",20004,34450)
 	end if
 fnend
-def fn_setup_client_add(sca_name$*18,sca_customer_number,sca_brserial_number)
+def fn_setupClient_add(sca_name$*18,sca_customer_number,sca_brserial_number)
 	client_count+=1
 	mat client_name$(client_count)
 	mat client_cno(client_count)
@@ -595,16 +266,357 @@ def fn_setup_client_add(sca_name$*18,sca_customer_number,sca_brserial_number)
 	client_cno(client_count)=sca_customer_number
 	client_brserial(client_count)=sca_brserial_number
 fnend 
+
+def fn_getClientLicense(mat client_has$)
+	if setup_client_has$<>env$('client') then
+		setup_client_has$=env$('client')
+		mat client_has$(0)
+		! r: big if statement 
+		client_has_system_count=0
+		if env$('client')='ACS' then 
+			! fn_getClientLicense_add('UB')
+			! fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
+			! fn_getClientLicense_add('CL')
+			! fn_getClientLicense_add('PR')
+			! fn_getClientLicense_add('GL')
+			! fn_getClientLicense_add('OE')
+			fn_getClientLicense_add('TM')
+			fn_getClientLicense_add('EM')
+		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
+		!   fn_userLimit(1)
+		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_getClientLicense_add('UB') : fn_setUbLimit(500)
+		!   if days(date)<=days(20151231,'ccyymmdd') then fn_getClientLicense_add('U4')
+		else if env$('client')='BRCorp' then 
+			fn_userLimit(99)
+			fn_getClientLicense_add('OE') 
+		else if env$('client')='Ed Horton' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Ash Grove' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('PR')
+			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('GL')
+			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('CL')
+		else if env$('client')='Allendale' then 
+			if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
+				fn_userLimit(1)
+				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+				fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
+			end if
+		else if env$('client')='Bethany' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Brier Lake' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		else if env$('client')='Billings' and (env$('Unique_Computer_Id')="58973139-FC9B-1A95-F234-C145E2B22211" or env$('Unique_Computer_Id')="50A59A38-38BF-A82F-9868-04C4E5DD281A") then ! Limit to only UB stuff for (Katrina or Gale)
+			fn_userLimit(2) ! actually licensed for 3 users, but has two separate installations
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('UB-EFT')
+			!     fn_getClientLicense_add('CR')
+		else if env$('client')='Billings' and env$('Unique_Computer_Id')="BD04113D-C102-BA29-78AC-D23201FDC70C" then ! Limit to NOT UB stuff for Chris Hopkins
+			fn_userLimit(1) ! actually licensed for 3 users, but has two separate installations
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Billings' then 
+			fn_userLimit(3)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('UB-EFT')
+			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_getClientLicense_add('EM')  ! Alpha testing
+			!     fn_getClientLicense_add('CR')
+		else if env$('client')='Blucksberg' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Brumbaugh' then 
+			fn_userLimit(64)
+			fn_getClientLicense_add('CM')
+		else if env$('client')='Campbell' then 
+			fn_userLimit(4)
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Badger Beacon"
+			fn_getClientLicense_add('UB-EFT')
+		else if env$('client')='Carr Plumbing' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('PR')
+		else if env$('client')='Chatom' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Cerro Gordo V' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Cerro Gordo T' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Choctaw' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			! fn_getClientLicense_add('GL')  -  removed from support as of 4/30/19
+		else if env$('client')='Crockett County' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('GB')  !  GB is General Ledger Budget Management Add-On
+		else if env$('client')='Diamond' and days(date$)<=days('05/31/2020','mm/dd/ccyy') then
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+			! fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+
+		else if env$('client')='Edinburg' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Edison' then 
+			fn_userLimit(3)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Exeter' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! else if env$('client')='Energy Exchanger' then 
+		! 	fn_userLimit(1)
+		! 	fn_getClientLicense_add('PR')
+		else if env$('client')='Dorothy Salch' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+		else if env$('client')='Evelyn Pareya' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+		else if env$('client')='Findlay' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			!   else if env$('client')='Franklin and Son' then 
+			!     fn_userLimit(1)
+			!     fn_getClientLicense_add('PR')
+		else if env$('client')='Franklin Co Hosp' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='French Settlement' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+		else if env$('client')='Galena' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			!   else if env$('client')='Granby' then 
+			!     fn_userLimit(2)
+			!     fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+		else if env$('client')='Grandview' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+		else if env$('client')='Payroll Done Right' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+		else if env$('client')='Schachtner Portnoy' then 
+			fn_userLimit(76)
+			fn_getClientLicense_add('CM')
+		else if env$('client')='GreeneCo' then 
+			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
+				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+				fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
+			! end if
+		else if env$('client')='Hope Welty' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Kathys Bookkeeping' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('GL')
+			!     fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('PR')
+			!     fn_getClientLicense_add('P4')
+		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('PR')
+			!   else if env$('client')='Kincaid' and and env$('Unique_Computer_Id')='XXX need to do XXX' then
+			!     fn_userLimit(1)
+			!     fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='03000200-0400-0500-0006-000700080009' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Kincaid' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			!     fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+		else if env$('client')='Lovington' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+			fn_getClientLicense_add('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+		else if env$('client')='Merriam Woods' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U5') ! UB External Collections Processing
+			!     fn_getClientLicense_add('CR')
+			!     fn_getClientLicense_add('GL')
+			!     fn_getClientLicense_add('PR')
+			!     fn_getClientLicense_add('CL')
+		else if env$('client')='Millry' then 
+			fn_userLimit(4)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Morrisonville' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Moweaqua' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+			fn_getClientLicense_add('U4') : u4_device$="Badger Connect C" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Pennington' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		else if env$('client')='Purdy' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Omaha' then 
+			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
+			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
+		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
+		! 	fn_userLimit(1)
+		! 	fn_getClientLicense_add('PR')
+		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
+		! 	fn_userLimit(1)
+		! 	fn_getClientLicense_add('PR')
+		else if env$('client')='Raymond' then 
+			fn_userLimit(2)
+		! 	fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='R R Crawford' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('PR')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
+			fn_getClientLicense_add('GL')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
+		else if env$('client')='Scottville Rural' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		else if env$('client')='Starr County Gas' then 
+			fn_userLimit(1)
+			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
+		else if env$('client')='Sheila' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+		else if env$('client')='Stern and Stern' then 
+			fn_userLimit(99) ! unknown
+			fn_getClientLicense_add('CM')
+		else if env$('client')='Thayer' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
+		else if env$('client')='Thomasboro' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('CL')
+			fn_getClientLicense_add('UB-EFT')
+		else if env$('client')='Thomas Richardson' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+			fn_getClientLicense_add('PR')
+		!   else if env$('client')='Waverly' then 
+		!     fn_userLimit(1)
+		!     fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! else if env$('client')='West Accounting' then 
+		!   fn_userLimit(1)
+		!   fn_getClientLicense_add('PR')
+		else if env$('client')='White Hall' then 
+			fn_userLimit(2)
+			fn_getClientLicense_add('UB')
+			!   else if env$('client')='Willard' then 
+			!     fn_userLimit(1)
+			!     fn_getClientLicense_add('GL')
+			!     fn_getClientLicense_add('PR')
+			!     fn_getClientLicense_add('CL')
+		else if env$('client')='World Wide' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('GL')
+		else if env$('client')='Zaleski' then 
+			fn_userLimit(1)
+			fn_getClientLicense_add('PR') 
+			fn_getClientLicense_add('GL') 
+			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+		end if 
+		! /r
+	end if
+fnend
+def fn_getClientLicense_add(ch_item$*256)
+	client_has_system_count=udim(mat client_has$)
+	if client_has_system_count=0 then 
+		client_has_system_count=2
+		dim client_has$(0)*256
+		mat client_has$(1)
+		client_has$(1)='CO'
+	else 
+		client_has_system_count+=1
+	end if 
+	mat client_has$(client_has_system_count)
+	client_has$(client_has_system_count)=ch_item$
+fnend 
 def library fnclient_has_mat(mat c_has$) ! returns a list of system each client owns
 	fn_setup
-	fnclient_has_mat=fn_client_has_mat(mat c_has$)
+	fnclient_has_mat=fn_clientHasMat(mat c_has$)
 fnend 
-def fn_client_has_mat(mat c_has$)
-	if env$('client')='' then pr 'fn_client_has_mat called but env client not set.' : pause 
+def fn_clientHasMat(mat c_has$)
+	if env$('client')='' then pr 'fn_clientHasMat called but env client not set.' : pause 
 	fn_getClientLicense(mat client_has$)
 	mat c_has$(udim(mat client_has$))
 	mat c_has$=client_has$
-	fn_client_has_mat=client_has_system_count
+	fn_clientHasMat=client_has_system_count
 fnend 
 def library fnclient_has(ch_sys$*256)
 	fn_setup
@@ -616,7 +628,7 @@ def fn_client_has(ch_sys$*256)
 	if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
 	fn_client_has=ch_return
 fnend 
-def fn_user_limit(userLimit)
+def fn_userLimit(userLimit)
 	if env$('acsProduct')='ACS Online' then
 		userCount=fn_userCount
 		! if env$('acsDeveloper')<>'' then pause
@@ -658,38 +670,21 @@ fnend
 ! fn_getClientLicense(mat client_has$)
 !   fnuser_limit_exceeded=user_limit_exceeded
 ! /r fnend
-def fn_add_ch_sys(ch_item$*256)
-	client_has_system_count=udim(mat client_has$)
-	if client_has_system_count=0 then 
-		client_has_system_count=2
-		dim client_has$(0)*256
-		mat client_has$(1)
-		client_has$(1)='CO'
-	else 
-		client_has_system_count+=1
-	end if 
-	mat client_has$(client_has_system_count)
-	client_has$(client_has_system_count)=ch_item$
-fnend 
+
 def library fnregistered_for_hh
 	fn_setup
 	fn_getClientLicense(mat client_has$)
-	fnregistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
+	fnRegistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
 fnend 
-def library fnregistered_for_hh
+def library fnRegistered_for_job_cost_pr
 	fn_setup
 	fn_getClientLicense(mat client_has$)
-	fnregistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
-fnend 
-def library fnregistered_for_job_cost_pr
-	fn_setup
-	fn_getClientLicense(mat client_has$)
-	fnregistered_for_job_cost_pr=fn_client_has('P4')
+	fnRegistered_for_job_cost_pr=fn_client_has('P4')
 fnend
-def library fnregistered_for_GlBudgetMgmt
+def library fnRegistered_for_GlBudgetMgmt
 	fn_setup
 	fn_getClientLicense(mat client_has$)
-	fnregistered_for_GlBudgetMgmt=fn_client_has('GB')
+	fnRegistered_for_GlBudgetMgmt=fn_client_has('GB')
 fnend
 def library fnhand_held_device$*20
 	fn_setup
@@ -703,7 +698,7 @@ def fn_hand_held_device$*20
 	if u4_device$='' then u4_device$=u4_deviceDefault$ ! in case it's been set and then blanked out to force default for client
 	fn_hand_held_device$=u4_device$
 fnend 
-def fn_set_ub_limit(x)
+def fn_setUbLimit(x)
 	gUbLimit=x
 	setenv('UB_Limit',str$(gUbLimit))
 fnend 
@@ -884,7 +879,7 @@ fnend
 def fn_client_has_on_support_list(mat chosl_list$; chosl_grace_days)
 	dim chosl_owns_list$(0)*256
 	chosl_count=0
-	chosl_owns_count=fn_client_has_mat(mat chosl_owns_list$)
+	chosl_owns_count=fn_clientHasMat(mat chosl_owns_list$)
 	for chosl_item=1 to chosl_owns_count
 		if fn_client_has_on_support_item(chosl_owns_list$(chosl_item), chosl_grace_days) then 
 			chosl_count+=1
@@ -922,7 +917,7 @@ fnend
 def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_days_grace)
 	! css_days_grace=day grace period to allow users to update after support has expired.
 	if css_setup<>client_id then ! r:
-		cache_css_client_owns_count=fn_client_has_mat(mat css_client_owns$)
+		cache_css_client_owns_count=fn_clientHasMat(mat css_client_owns$)
 				mat css_client_owns$(cache_css_client_owns_count)
 				mat css_system_id$(cache_css_client_owns_count)
 				mat css_system_id$=css_client_owns$

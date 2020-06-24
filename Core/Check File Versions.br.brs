@@ -351,7 +351,7 @@ def fn_cfv_checkbook
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then
 		if tmpversion=0 or tmpversion=-1 then
-			fntrmstr_v0_to_v1
+			fn_checkbookTrmstr_v0_to_v1
 			goto CL_TRMSTR1
 		end if
 		if tmpversion=1 then
@@ -629,6 +629,22 @@ def fn_cfv_checkbook
 	
 	
 fnend
+def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
+	! converts the CL TRmstr file to version 1
+	! meainging the amount changes from G 10.2 to PD 10.2
+	fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
+	open #trmstr:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative 
+	if version(trmstr)=1 then
+	else 
+		version(trmstr,1)
+		for j=1 to lrec(trmstr)
+			read #trmstr,using 'form pos 18,n 10.2': amt eof L240
+			rewrite #trmstr,using 'form pos 18,pd 10.2': amt
+		next j
+		L240: !
+		close #trmstr: 
+	end if
+fnend 
 def fn_cfv_payroll
 	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
 	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'

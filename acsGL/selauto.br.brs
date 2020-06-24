@@ -1,30 +1,33 @@
 ! Replace S:\acsGL\SelAuto
 ! Select Automatic Processing Programs
 
-	autoLibrary
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
 
-	dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
-	dim mx$(200)*80,pgmx$(200)*22,statusx$(200),pgm(200),mo$(12)*10
-	dim cnam$*40,dat$*20,s(3),s(11),pedat$*20,autoproc$(200)*80,temp$(20)*80
-	dim cch$*20,actpd$*6,iom$(2),scm$(2),sendto$*40,xec$*80,rpmsg$*46
-	dim sf1$(20),l1(20),desc$*35,sf$(20),sd$(20)*35,prog$*8,srq(20)
-	dim nxtpgm$(20)*35,nxtdesc$(20)*35,ff$(3)*18,prim(20),pn(20),cp(20)
-	dim ln$*128,ln2$*128,item$(1)*35,resp$(60)*35,prg$(100)*40,nam$(100)*35
+dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200)
+dim desc$*35,srq(20)
+dim nxtpgm$(20)*35,nxtdesc$(20)*35,prim(20),pn(20),cp(20)
+dim ln$*128,ln2$*128,item$(1)*35,resp$(60)*35
+dim prg$(100)*40,nam$(100)*35
 
-	fnTop(program$,cap$="Select Programs")
-	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr L190
-	goto L210
-L190: if exists("[Q]\GLmstr\acGLPGMN.h[cno]") >0 then let fnFree("[Q]\GLmstr\acGLPGMN.h[cno]")
-	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr MAIN
-L210: if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
-	for j=1 to lrec(1)
-		read #1,using L1690: nxtpgm$(j),nxtdesc$(j),pn(j),cp(j),prim(j),srq(j) noRec L240
-L240: next j
+fnTop(program$,"Select Programs")
+open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr L190
+goto L210
+L190: !
+if exists("[Q]\GLmstr\acGLPGMN.h[cno]") >0 then let fnFree("[Q]\GLmstr\acGLPGMN.h[cno]")
+open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr MAIN
+L210: !
+if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
+for j=1 to lrec(1)
+	read #1,using L1690: nxtpgm$(j),nxtdesc$(j),pn(j),cp(j),prim(j),srq(j) noRec L240
+L240: !
+next j
 	form pos 1,c 20,c 35,n 3,3*n 1
-	close #1: 
-MAIN: ! 
-L280: fnTos(sn$="GLInput") 
+close #1: 
+MAIN: !
+
+L280: !
+	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	item=0: resp=0
 	fnLbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
@@ -59,9 +62,11 @@ L410: linput #1: ln$ eof L540
 	item$(2)=desc$ 
 	fnflexadd1(mat item$)
 	goto L410
-L540: close #1: ioerr ignore
+L540: !
+	close #1: ioerr ignore
 	if fnclient_has('G2') then open #1: "Name=S:\General Ledger\Accountants\Menu.mnu",display,input else goto L700
-L560: linput #1: ln$ eof L690
+L560: !
+	linput #1: ln$ eof L690
 	if ln$(1:1)<>">" then goto L560 ! skip headings
 	if ln$(1:1)=">" then ln$(1:1)=""
 	if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
@@ -75,7 +80,7 @@ L560: linput #1: ln$ eof L690
 	item$(1)=str$(item) 
 	item$(2)=desc$ 
 	fnflexadd1(mat item$)
-	goto L560
+goto L560
 L690: fnLbl(22,1," ")
 L700: fnCmdKey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
 	fnCmdKey("&Save",2,0,0,"Saves the selections and returns to menu.")
@@ -134,7 +139,7 @@ L860: goto L1640
 	data "    GASB Budgetary Schedule - I/C","S:\acsGL\ACGLINCo","acglinco","ES86"
 	data "    Year Comparison -I/C","S:\acsGL\ACGLINYY","acglinyy","ES87"
 ! Stmt of Change in Financial Position
-	data "    Standard (FP)","S:\acsGL\ACGLCHGR","acglchgr","ES62"
+	data "    Standard (FP)","S:\General Ledger\Change in Financial Position","Change in Financial Position","ES62"
 	data "    Change Amount (FP)","S:\acsGL\ACGLCHGS","acglchgs","ES63"
 	data "    Comparative (FP)","S:\acsGL\acGLChg","acGLchg","ES64"
 	data "    Comparative Change Amount (FP)","S:\acsGL\acGLChgC","acGLchgc","ES65"
@@ -154,7 +159,7 @@ L860: goto L1640
 ! Quarterly
 	data "  pr State Unemployment Compensation Report","S:\acsGL\PRStatUC","prstatuc","E"
 	data "  pr 941 Summary","S:\acsGL\PR941","PR941","E"
-	data "  Zero QTD Payroll Info","S:\acsGL\PRZQTD","przqtd","E"
+	data "  Zero QTD Payroll Info","S:\General Ledger\Accountants\Zero QTD Payroll Info","Zero QTD Payroll Info","E"
 ! Annually
 	data "  pr Accumulated Trial Balance","S:\General Ledger\Print Accumulated Trial Balance","acGLAcTb","ES33"
 	data "  Clear Accumulated Transactions","S:\acsGL\acGLClr","acGLClr","E"
