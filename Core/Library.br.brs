@@ -627,10 +627,6 @@ fnend
 		library 'S:\Core\OldMsgBox.br': fnoldmsgbox
 		fnoldmsgbox=fnoldmsgbox(mat response$,cap$,mat msgline$,mtype)
 	fnend
-	def library fnsearch(unused$,fum,&hea$,&form$,nformat$,&sel$,klength)
-		library 'S:\Core\Search.br': fnsearch
-		fnsearch=fnsearch(unused$,fum,hea$,form$,nformat$,sel$,klength)
-	fnend
 	def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 		library 'S:\Core\Menu.br': fnGetProgramList
 		fnGetProgramList=fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
@@ -1409,7 +1405,7 @@ fnend
 		fnCmbBud=fnCmbBud(indexfile$)
 	fnend
 	def library fnActPd(;a)
-		library 'S:\acsGL\fnActPd.br': fnactpd
+		library 'S:\General Ledger\fn\actPd.br': fnActPd
 		fnActPd=fnActPd(a)
 	fnend
 	def library fnActPd$(;a$)
@@ -1493,10 +1489,6 @@ fnend
 	def library fnglcontrol
 		library 'S:\acsCL\Conversion\fundmstr-RecL75.br': fnglcontrol
 		fnglcontrol=fnglcontrol
-	fnend
-	def library fntrmstr_v0_to_v1
-		library 'S:\acsCL\Conversion\fnTrMstr_v0_to_v1.br': fntrmstr_v0_to_v1
-		fntrmstr_v0_to_v1=fntrmstr_v0_to_v1
 	fnend
 	def library fnaddpayee
 		library 'S:\Checkbook\Payee.br': fnaddpayee
@@ -1652,6 +1644,10 @@ fnend
 	! /r
 ! /r
 ! r: TM Time Management
+	def library fnSearch(unused$,fum,&hea$,&form$,nformat$,&sel$,klength)
+		library 'S:\Time Management\fn\search.br': fnSearch
+		fnSearch=fnSearch(unused$,fum,hea$,form$,nformat$,sel$,klength)
+	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
 		library 'S:\Time Management\fn\printInvoice.br': fnReassignNTA
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)

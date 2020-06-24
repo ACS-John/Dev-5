@@ -1,13 +1,14 @@
 00001 ! exe 'lo "'&program$(1:pos(program$,'.')-1)&'.br"'
 00002 ! execute 'config editor "c:\program files\notepad++\notepad++.exe"'
 00003 ! ed ~                     
-00004 ! ** Please do not remove line numbers nor used syntax that requires a pre-compilier in this program. **
+00004 ! ** do not remove line numbers nor used syntax that requires a pre-compilier in this program. **
 00010 dim pandaPath$*256
 00020 pandaPath$=program$(1:pos(program$,'\',-1)-1) ! pandaPath$=env$('cmd_home')(without a trailing backslash
 00240 execute 'con sub [pandaPath] '&pandaPath$
 00242 setenv('pandaPath',pandaPath$)
 00250 if env$('returningFromPlugInProc')='' t exe 'loa "'&env$('pandaPath')&'\BambooForest.br",Resident'
 00260 library env$('pandaPath')&'\BambooForest.br': fnAddOneC,fnAddOneN,fnGetHandle,fnGetPp,fnOpenInAndOut,fnCloseInAndOut,fnStatusClose,fnStatus,fnHasInitialScan,fnStatusPause,fnhas,fnReadFileIntoArray,fnBackgroundPicture$,fnWriteProc,fnHasKeyAdd
+00261 ! library '[pandaPath]\BambooForest.br': <--- fyi, that doesn't work.
 02000 ! r: basic tests on file specified (in env$('name')) to confirm the program will work properly
 02020 dim orgSourceFile$*256            ! full name (without quotes) of the program source file we are compiling.
 02040 orgSourceFile$=trim$(env$('name'),'"')
@@ -187,13 +188,13 @@
 96400 fn
 98000 ErrorHandler: ! r:
 98020   ! exec 'list -'&str$(line)
-98030   pr bell;'***   ***   ***   ***   ***   ***   ***   ***   Error   ***   ***   ***   ***   ***   ***   ***   ***'
+98030   pr bell;'***   ***   ***   ***   ***   ***   Error   ***   ***   ***   ***   ***   ***'
 98032   exe 'st st'
 98040   pr '        program: '&program$
 98060   pr '      variable$: '&variable$
 98080   pr '          error: '&str$(err)
 98082   pr '          line: '&str$(line)
 98090   exec 'list '&str$(line)
-98092   pr bell;'***   ***   ***   ***   ***   ***   ***   ***   o-_-o   ***   ***   ***   ***   ***   ***   ***   ***'
+98092   pr bell;'***   ***   ***   ***   ***   ***   o-_-o   ***   ***   ***   ***   ***   ***'
 98100   pau
 98120 retry ! /r

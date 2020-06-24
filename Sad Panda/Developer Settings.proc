@@ -29,7 +29,7 @@ fnHasKeyAdd('autoLibrary')
 
 fnHasKeyAdd(chr$(9))
 
-setEnv('exe-examDiff','D:\Program Files\ExamDiff Pro\ExamDiff.exe')
+setEnv('exe-examDiff','C:\Program Files\ExamDiff Pro\ExamDiff.exe')
 
 
 

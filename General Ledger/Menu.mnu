@@ -45,7 +45,7 @@ Financial Statements
 >>Income Statement with GASB Budget                 ^ acsGL\ACGLINCo
 >>Income Statement with Year Comparison             ^ acsGL\ACGLINYY
 >>Income Statement-Month & Year Budgets             ^ acsGL\ACGLINc6b
->Change in Financial Position                       ^ acsGL\ACGLCHGR
+>Change in Financial Position                       ^ General Ledger\*
 >>Change Amount (FP)                                ^ acsGL\ACGLCHGS
 >>Comparative (FP)                                  ^ acsGL\acGLChg
 >>Comparative Change Amount (FP)                    ^ acsGL\acGLChgC
@@ -101,7 +101,7 @@ General Ledger Accountants Add-On                 ^                             
 >>Print Texas Unemployment Report                 ^ acsgl\prtexasuc                                       ^ G2
 >>State UnEmp.-Electronic Submission              ^ acsgl\elecuc                                          ^ G2
 >>Print 941 Summary                               ^ acsGL\PR941                                           ^ G2
->>Zero QTD Payroll Information                    ^ acsGL\PRZQTD                                          ^ G2
+>>Zero QTD Payroll Information                    ^ General Ledger\Accountants\*                          ^ G2
 >>Fix YTD - QTD Earnings                          ^ acsgl\fixytdqtd                                       ^ G2
 >Annually                                                                                                 ^ G2
 ! >>W-2 Supplemental Information                  ^ acsgl\w2box16   <-- moved into Employee file          ^ G2
