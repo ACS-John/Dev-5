@@ -492,7 +492,7 @@ OPENCASS: ! r:
 return  ! /r
 IGNORE: continue 
 def fn_setup
-	library 'S:\Core\Library': fnTop,fnXit, fnerror,fnAcs,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
+	library 'S:\Core\Library': fnTop,fnXit, fnerror,fnAcs,fnAcs2,fncomboa,fnLbl,fnTos,fnmsgbox,fnTxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fnCmdSet,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
 	library 'S:\Core\Library': fnAddOneC
 	on error goto Ertn
 ! r: constants and dims

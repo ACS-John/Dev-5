@@ -1,12 +1,12 @@
 library program$: fnWorkOrderList
-library 'S:\Core\Library': fnXit,fnTop
+library 'S:\Core\Library': fnXit,fnTop,fnAcs2
 fnTop(program$)
 fnWorkOrderList('[All]')
 fnXit
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs,fnTos
+		library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs2,fnTos
 		library 'S:\Core\Library': fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
 		library 'S:\Core\Library': fncmbact
 		library 'S:\Core\Library': fnCmdSet,fngethandle
