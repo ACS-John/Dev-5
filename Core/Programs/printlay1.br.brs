@@ -33,7 +33,7 @@ ERR1: pr f "24,78,C 1": bell : goto L260
 L310: if cmdkey=5 then goto Xit
 	if pp<0 or pp>2 then ce=1 : goto ERR1
 	if pp=1 then goto L350
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 L350: ev$=rtrm$(ev$)
 	if ev$="" then goto L430
 	execute "DROP DirFile" ioerr L380

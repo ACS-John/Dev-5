@@ -81,7 +81,7 @@ pr #255: newpage
 gosub L890
 form pos 124,n 6
 goto L560
-L890: fnopenprn(cp,58,220,process)
+L890: fnopenprn
 pr #255: 
 pr #255,using L920: z$,d1,ar(1)
 L920: form skip 4,pos 60,c 5,x 6,pic(zz/zz/zz),skip 5,pos 62,pic($$$,$$$.##),skip 2
@@ -126,7 +126,7 @@ L1170: form pos 10,n 10.2,x 8,n 10.2,x 9,n 10.2,x 8,n 10.2,pos 77,n 12.2
 	pr f "23,30,c 20": "Press F5 to Cancel"
 L1280: input fields "15,11,N 1,UE,N": align conv L1280
 	if cmdkey=5 then goto Xit
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	on align goto L500,L1330,L1330 none L1280
  
 L1330: p=0

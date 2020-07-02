@@ -38,7 +38,7 @@
 	if ckey=5 then goto Xit
 L390: costcntr=val(resp$(1))
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	if fnps=2 then goto L480 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"

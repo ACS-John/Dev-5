@@ -23,7 +23,7 @@
 	priorcd=fnpriorcd
 !
 	pors=1
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	mp1=69
 	if fnps=2 then mp1=mp1+3
@@ -63,7 +63,7 @@ L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE
 	pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 	if cmdkey=5 then goto L2610
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	if fnps=2 then goto L700 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 69 3 Replace DupKeys -N"

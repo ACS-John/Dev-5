@@ -232,7 +232,7 @@ L2140: input fields "10,60,n 5,eu,n": rr conv L2140
 	goto L830
 L2230: pr newpage
 	pr f "10,10,c 60,h,n": "TIME MANAGEMENT CORRECTION LISTING IN PROCESS"
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	if rtrm$(file$(255))(1:4)<>"PRN:" then goto L2280
 	if cp=1 then pr #255,using L2280: hex$("2B0205000F1042") else pr #255,using L2280: hex$("2B0205000F1042")
 L2280: form pos 1,c 9,skip 0

@@ -98,7 +98,7 @@ PROOFLIST: !
 	message$="Printing Proof List..."
 	fnwait(message$,1)
 	on fkey 5 goto L1080
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	pr #255,using L980: "Job Cost Input Billings Proof List"
 L980: form skip 2,pos 10,c 60,skip 1
 	pr #255: tab(10);"Date:  ";date$;"   Time:  ";time$

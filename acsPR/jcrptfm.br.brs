@@ -262,7 +262,7 @@ L2360: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2360
 L2400: pr newpage
 	fnwait(message$="Printing Proof List...",1)
 	on fkey 5 goto L2850
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	k=0
 L2450: if prtall=0 then goto L2500
 L2460: k=k+1

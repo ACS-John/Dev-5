@@ -166,7 +166,7 @@ L1540: pr newpage
 	pr f "11,18,C 41,R,N": "              IN PROCESS"
 	pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 	on fkey 5 goto L1720
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	gosub L1690
 L1640: read #1,using L1250: fun,dpt,d$ eof L1720
 	pr #255,using L1660: fun,dpt,d$ pageoflow L1680

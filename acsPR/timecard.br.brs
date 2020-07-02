@@ -84,7 +84,7 @@ L650: ln=currow
 	pr f "2,55,N 6.2,R,N": sum(hrs)
 	goto L460
  
-L860: fnopenprn(cp,58,220,process)
+L860: fnopenprn
 	fnwait(message$,0)
 	pr #255,using L890: mat sc1$
 L890: form pos 1,4*c 14,skip 1,pos 29,3*c 14

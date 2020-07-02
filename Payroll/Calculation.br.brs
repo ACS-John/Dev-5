@@ -1434,6 +1434,7 @@ West_Acc_WorkmansComp: ! r:
 return  ! /r
 ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept and state
 	s3=0 : tcp(4)=0 : tcp4=0
+	! tcp4 - is the state withholding for the transaction record
 	oldeno=val(n$)
 	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",0): 
 	if stdWhSt=-1 then goto L960
@@ -1493,11 +1494,11 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 			L860: ! 
 			stwh(tcd(1),2)=s3
 			L870: ! 
-			if env$('client')="Lamar" then 
-				tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
-			else 
-				tcp4=(stwh(tcd(1),2)+addOnSt)*((tcp(31)-dst3)/stwh(tcd(1),1))
-			end if 
+			! if env$('client')="Lamar" then 
+			tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
+			! else 
+			! 	tcp4=(stwh(tcd(1),2)+addOnSt)*((tcp(31)-dst3)/stwh(tcd(1),1))
+			! end if 
 			tcp4=round(tcp4,2)
 			if enableSkipWithholdingN(esw_state) then tcp4=0
 			tcp(32)-=tcp4: tcp(4)=tcp4

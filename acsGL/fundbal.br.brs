@@ -24,7 +24,7 @@
 	data " "
 	data " "
 	read mat desc$
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
 	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
 	pr newpage

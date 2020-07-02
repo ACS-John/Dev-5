@@ -6,12 +6,12 @@
  
 	dim fl1$*256,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 	dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128,udf$*256
  
 	fnTop(program$,cap$="Six Column Income Statement with Budget")
 	on fkey 5 goto L2350
-	fncno(cno,cnam$)
+	fncno(cno)
 	udf$=env$('temp')&'\'
 	actpd=fnactpd
 	actpd$=fnactpd$
@@ -21,8 +21,7 @@
 	curyear$=pedat$(len(rtrm$(pedat$))-4:len(rtrm$(pedat$)))
 	curyear=val(curyear$) conv L230
 L230: prioryr=curyear-1
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
  
 	pr newpage
 	pors=1
@@ -30,9 +29,6 @@ L230: prioryr=curyear-1
 	if fnps=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
-	form c 9,skip 0
-	form c 7,skip 0
-	nametab=int(44-len(rtrm$(cnam$))/2)
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L450
 	fnTos(sn$="ACglincb") : _
@@ -46,10 +42,8 @@ L230: prioryr=curyear-1
 	fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto Xit
 L450: costcntr=val(resp$(1))
-	cnam$=rtrm$(cnam$)
-	pf1=len(cnam$)+int((43-len(cnam$))/2)
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	if fnps=2 then goto L540 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"

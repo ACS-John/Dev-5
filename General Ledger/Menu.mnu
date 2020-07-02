@@ -36,7 +36,7 @@ Financial Statements
 >>Quarterly Income Statement                        ^ acsGL\ACGLINCQ
 >>Income Statement with Percents                    ^ acsGL\ACGLINCP
 >>Comparative Income Statement                      ^ acsGL\ACGLINCC
->>Income Statement with Budget                      ^ acsGL\ACGLINCB
+>>Income Statement with Budget                      ^ General Ledger\*
 >>Income Statement with Varience                    ^ acsGL\ACGLINCV
 >>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
 >>Four Column Budget Income Statement               ^ General Ledger\*

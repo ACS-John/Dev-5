@@ -130,7 +130,7 @@ L860: goto L1640
 	data "    Quarterly - I/C","S:\acsGL\ACGLINCQ","acglincq","ES59"
 	data "    Percent - I/C","S:\acsGL\ACGLINCP","acglincp","ES58"
 	data "    Comparison - I/C","S:\acsGL\ACGLINCC","acglincc","ES59"
-	data "    Budget - I/C","S:\acsGL\ACGLINCB","acglincb","ES60"
+	data "    Budget - I/C","S:\General Ledger\Income Statement with Budget","Income Statement with Budget","ES60"
 	data "    Period Comparison - I/C","S:\acsGL\ACGLINCY","acglincy","ES61"
 	data "    Fund Comparison - I/C","S:\acsGL\ACGLINCF","acglincf","ES89"
 	data "    Variance - I/C","S:\acsGL\ACGLINCV","acglincv","ES84"

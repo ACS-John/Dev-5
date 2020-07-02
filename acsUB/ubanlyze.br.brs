@@ -78,7 +78,7 @@ L870: for k8=1 to 18
 	next k9
 L930: message$="Printing: Please wait..." :         fnwait(message$,1)
 	on fkey 5 goto DONE
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 L960: read #1,using L970: mat a,mat d,f eof L1250
 L970: form pos 143,4*pd 2,pos 217,12*pd 5,pos 296,pd 4
 	if f<>bdate then goto L960

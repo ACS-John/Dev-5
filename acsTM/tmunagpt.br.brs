@@ -15,7 +15,7 @@
 	pr newpage
 	pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
 	pr f "12,30,Cc 20,B,5": "Cancel (F5)"
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	gosub L520
 L250: read #1,using L260: cxno$,cna$,en$,mat d eof L300 ioerr ERTN
 L260: form pos 1,c 5,c 30,c 9,n 2,n 6,pd 4.2,5*pd 4.2
