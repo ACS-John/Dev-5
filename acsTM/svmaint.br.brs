@@ -132,7 +132,7 @@ L1300: rinput fields "12,40,c 20,uE,n": dat$ conv L1300
 L1340: pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"
 	on fkey 5 goto L1670
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 L1380: j=0
 	eofc=0
 L1400: read #1,using L570: sc$,ds$,th,sf eof L1640 ioerr L2010

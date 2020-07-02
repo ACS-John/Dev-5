@@ -32,7 +32,7 @@
 	pr newpage
 	pr f "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 	on fkey 5 goto L2130
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	open #1: fl1$,internal,input,keyed
 	if process=1 or d(1)=0 then goto L390
 	pr newpage

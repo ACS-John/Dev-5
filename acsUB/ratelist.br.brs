@@ -36,7 +36,7 @@ MAIN: !
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 
 	on fkey 5 goto DONE
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 ! Read #1,Using 370: MAT A,MAT D,F Eof 400
 ! Form POS 143,4*PD 2,POS 217,12*PD 5,POS 296,PD 4
 ! If F<>BDATE Then Goto 360

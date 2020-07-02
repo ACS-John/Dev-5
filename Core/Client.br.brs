@@ -559,7 +559,8 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Thomasboro' then 
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
+			! fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! switched to Beacon on 7/2/20 JB
+			fn_getClientLicense_add('U4') : u4_device$='Badger Beacon' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
@@ -712,65 +713,66 @@ def library fnub_printbill_program$*256
 		mat ub_printbill_client$(999)
 		mat ub_printbill_program$(999)
 		ub_printbill_count=0
-		fn_upp_add("Ash Grove","ubprtfull_ashgrove")
-	!     fn_upp_add("Ashland","ubprtbl1_ashland")
-		fn_upp_add("Bethany","ubprtbl1_Bethany")  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
-		fn_upp_add("Campbell",'(basic)')  ! derived from printbill_french_settlement_gas which should still work too
-		fn_upp_add("Chatom","ubprtbl1_chatom")
-		fn_upp_add("Divernon","ubprtbl1_div")
-		fn_upp_add("Edinburg",'(basic)') ! "ubprtbl1_edi")
-		fn_upp_add("Edison",'(basic)')
-		fn_upp_add("Exeter",'(basic)')
-		fn_upp_add("Findlay","ubprtbl1_fin")
-!   fn_upp_add("Franklinton","ubprtbl1_Franklinton")
-		fn_upp_add('French Settlement','(basic)') ! 'printbill_french_settlement_gas'
-		fn_upp_add("Grandview","ubprtbl1_gra")
-		fn_upp_add("GreeneCo",'(basic)') ! "ubprtbl1_GreeneCo"
-		fn_upp_add("Kincaid","ubprtbl1_kin")
-		! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
-		! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
-		fn_upp_add("Lovington","ubprtbl1_Lovington")
-		fn_upp_add("Loma Linda","ubprtbl1_ll")
-		fn_upp_add("Merriam Woods",'(basic)') ! "PrintBill_Merriam_Woods"
-		fn_upp_add("Millry","ubprtbl1_millry")
-!   fn_upp_add("Monticello","ubprtbl1_montic")
-		fn_upp_add("Morrisonville","ubprtbl1_morrisonville")
-		fn_upp_add("Moweaqua","PrintBill_Moweaqua")
-!   fn_upp_add("Oakland","ubprtbl1_Oakland")
-		fn_upp_add("Purdy","ubprtbl1_purdy")
-		fn_upp_add("Raymond",'(basic)') ! "ubprtbl1_Raymond")
-		fn_upp_add("Scottville Rural","ubprtbl1_scottville")
-		fn_upp_add("Thayer","ubprtbl1_thayer")
-		fn_upp_add("Thomasboro","ubprtbl1_tho")
-!   fn_upp_add("Gilbertown","ubprtbl1_Gilbertown")
-!   fn_upp_add("Waverly","ubprtbl1_Waverly")
-		fn_upp_add("White Hall","ubprtbl1_wh")
-		fn_upp_add("Galena",'(basic)') ! "ubprtbl1_galena") 
-! >>Bills-Laser (3 per page) ^ ubPrtThree
-		! fn_upp_add("Ash Grove","ubprtprace_ash")  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20
-!   fn_upp_add("Albany","ubprtthree_Albany")
-		fn_upp_add("Brier Lake","ubprtthree_Brier")
-		fn_upp_add("Billings",'(basic)') ! ubprtthree_bill
-		fn_upp_add('Diamond','(basic)') ! ubprtthree_bill
-		fn_upp_add("Cerro Gordo V","ubprtlas_cerro")
-		fn_upp_add("Choctaw",'(basic)') ! "ubprtlas_choctaw"
-		! fn_upp_add("Colyell","ubprtlas_colyell")
-		! fn_upp_add("Carrizo","ubprtthree_Carrizo")
-		! fn_upp_add("Ed","ubprtthree_barcode")
-		! fn_upp_add("Gilbertown","ubprtthree_Gilb")
-		! fn_upp_add("Granby","ubprt3prace_Granby")
-		! fn_upp_add("Riverside","ubprtthree_River")
-		fn_upp_add("Omaha",'(basic)') ! "ubprtthree_Omaha")
-		!   fn_upp_add("Sangamon","ubprtthree_san")
-		! >>Bills-Dot Matrix 4x6 ^ S:\acsUB\ubPrtBl14X6
-		! >>Bills-Dot Matrix 3.5x6 ^ S:\acsUB\Bill35X6
-		! >>Bills-Dot Matrix 3.5x7.5 ^ S:\acsUB\Bill35X75
-		fn_upp_add("Pennington",'(basic)') ! PrintBill_Pennington ! atlantis format - hits preprinted stock
-		! >>Bills-Dot Matrix Double Wide ^ S:\acsUB\billDouble
-		! >>Bills-Full Page ^ S:\acsUB\Ubprtfull
-		fn_upp_add("Blucksberg",'(basic)') ! "PrintBill_Blucksberg")
-		! >>Bills-Miscellaneous ^ S:\acsUB\Ubprtful
-		! 
+		fn_upp_add('Ash Grove'         ,'ubprtfull_ashgrove'    )
+		fn_upp_add('Bethany'           ,'ubprtbl1_Bethany'      )  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
+		fn_upp_add('Campbell'          ,'(basic)'               )  ! derived from printbill_french_settlement_gas which should still work too
+		fn_upp_add('Chatom'            ,'ubprtbl1_chatom'       )
+		fn_upp_add('Divernon'          ,'ubprtbl1_div'          )
+		fn_upp_add('Edinburg'          ,'(basic)'               ) ! 'ubprtbl1_edi'
+		fn_upp_add('Edison'            ,'(basic)'               )
+		fn_upp_add('Exeter'            ,'(basic)'               )
+		fn_upp_add('Findlay'           ,'ubprtbl1_fin'          )
+		fn_upp_add('French Settlement' ,'(basic)'               ) ! 'printbill_french_settlement_gas'
+		fn_upp_add('Grandview'         ,'ubprtbl1_gra'          )
+		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
+		fn_upp_add('Kincaid'           ,'ubprtbl1_kin'          )
+		fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
+		fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
+		fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
+		fn_upp_add('Millry'            ,'ubprtbl1_millry'       )
+		fn_upp_add('Morrisonville'     ,'ubprtbl1_morrisonville')
+		fn_upp_add('Moweaqua'          ,'PrintBill_Moweaqua'    )
+		fn_upp_add('Purdy'             ,'ubprtbl1_purdy'        )
+		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
+		fn_upp_add('Scottville Rural'  ,'ubprtbl1_scottville'   )
+		fn_upp_add('Thayer'            ,'ubprtbl1_thayer'       )
+		fn_upp_add('Thomasboro'        ,'ubprtbl1_tho'          )
+		fn_upp_add('White Hall'        ,'ubprtbl1_wh'           )
+		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
+		fn_upp_add('Brier Lake'        ,'ubprtthree_Brier'      )
+		fn_upp_add('Billings'          ,'(basic)'               ) ! ubprtthree_bill
+		fn_upp_add('Diamond'           ,'(basic)'               ) ! ubprtthree_bill
+		fn_upp_add('Cerro Gordo V'     ,'ubprtlas_cerro'        )
+		fn_upp_add('Choctaw'           ,'(basic)'               ) ! 'ubprtlas_choctaw'
+		fn_upp_add('Omaha'             ,'(basic)'               ) ! 'ubprtthree_Omaha'
+		fn_upp_add('Pennington'        ,'(basic)'               ) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
+		fn_upp_add('Blucksberg'        ,'(basic)'               ) ! 'PrintBill_Blucksberg'
+		! r: old removed lines
+			! fn_upp_add("Ashland","ubprtbl1_ashland")
+			! fn_upp_add("Franklinton","ubprtbl1_Franklinton")
+			! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
+			! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
+			! fn_upp_add("Monticello","ubprtbl1_montic")
+			! fn_upp_add("Oakland","ubprtbl1_Oakland")
+			! fn_upp_add("Gilbertown","ubprtbl1_Gilbertown")
+			! fn_upp_add("Waverly","ubprtbl1_Waverly")
+			! >>Bills-Laser (3 per page) ^ ubPrtThree
+			! fn_upp_add("Ash Grove","ubprtprace_ash")  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20
+			! fn_upp_add("Albany","ubprtthree_Albany")
+			! fn_upp_add("Colyell","ubprtlas_colyell")
+			! fn_upp_add("Carrizo","ubprtthree_Carrizo")
+			! fn_upp_add("Ed","ubprtthree_barcode")
+			! fn_upp_add("Gilbertown","ubprtthree_Gilb")
+			! fn_upp_add("Granby","ubprt3prace_Granby")
+			! fn_upp_add("Riverside","ubprtthree_River")
+			! fn_upp_add("Sangamon","ubprtthree_san")
+			! >>Bills-Dot Matrix 4x6 ^ S:\acsUB\ubPrtBl14X6
+			! >>Bills-Dot Matrix 3.5x6 ^ S:\acsUB\Bill35X6
+			! >>Bills-Dot Matrix 3.5x7.5 ^ S:\acsUB\Bill35X75
+			! >>Bills-Dot Matrix Double Wide ^ S:\acsUB\billDouble
+			! >>Bills-Full Page ^ S:\acsUB\Ubprtfull
+			! >>Bills-Miscellaneous ^ S:\acsUB\Ubprtful
+		! /r
 		mat ub_printbill_client$(ub_printbill_count)
 		mat ub_printbill_program$(ub_printbill_count)
 		! 

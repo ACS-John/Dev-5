@@ -209,7 +209,7 @@ L2040: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print List
 	pr f "13,34,C 11,B,5": "Cancel (F5)"
 	on fkey 5 goto L2250
 	restore #1,key>=currgl$&"            ": nokey L2370
-	fnopenprn(cp,58,220,process)
+	fnopenprn
 	gosub L2290
 L2140: read #1,using L980: gl$,c$,p$,s$,mat a eof L2250
 	if currgl$=gl$ then goto L2160 else goto L2250

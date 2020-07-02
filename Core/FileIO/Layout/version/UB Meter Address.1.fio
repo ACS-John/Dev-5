@@ -1,0 +1,7 @@
+[Q]\UBmstr\oMeterAddress.h[cno], oma_, 1
+[Q]\UBmstr\oMeterAddress_Idx1.h[cno] ,  LocationID
+[Q]\UBmstr\oMeterAddress_Idx2.h[cno] ,  Name-u
+recl=41
+===================================================
+LocationID   ,    Location ID    ,  N  11      , !  Pos=1  Required=True
+Name$        ,    Meter Address  ,  C  30      , !  Pos=12 Required=True

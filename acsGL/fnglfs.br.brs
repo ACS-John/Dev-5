@@ -62,8 +62,8 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 			fnps(format)
 			fnpriorcd(priorOrCurrent)
 			fnfscode(actpd)
-			fnactpd$(actpd$) 
-			fnactpd	(actpd )
+			! fnactpd$(actpd$) 
+			! fnactpd	(actpd )
 		end if
 	end if
 	Xit: ! 
