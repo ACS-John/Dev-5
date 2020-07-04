@@ -1,6 +1,0 @@
-[Q]\PRmstr\oDeptName.h[cno], odptnam_, 0
-[Q]\PRmstr\oDeptNameIdx.h[cno]     , code
-recl=32
-===================================================
-code   	, Code               	,  N    3  	, !
-name  	, Name               	,  c   25  	, !

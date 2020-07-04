@@ -24,3 +24,5 @@
 ' else sleep'  	' else le sleep'   
 ' t str2mat'   	' t le str2mat'      
 ' else str2mat'	' else le str2mat'   
+' t cmdkey'   	' t le cmdkey'      
+' else cmdkey'	' else le cmdkey'   

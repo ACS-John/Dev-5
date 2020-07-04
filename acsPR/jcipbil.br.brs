@@ -5,9 +5,9 @@
 	on error goto Ertn
  
 	dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38,wrds$(2)*20,n$*40
-	dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),cap$*128,message$*40
+	dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),message$*40
  
-	fnTop("S:\acsPR\jcIpBil",cap$="Enter Billings")
+	fnTop("S:\acsPR\jcIpBil","Enter Billings")
 	fncno(cno)
  
 	c1=3
@@ -20,7 +20,7 @@ L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",
 L190: shoption=1
 L200: pr newpage
 	win=101
-	fnopenwin(win,09,08,16,71,cap$)
+	fnopenwin(win,09,08,16,71,env$('program_caption'))
 	pr #win,fields "4,2,Cr 14,N": "Job Number:"
 	pr #win,fields "5,2,Cr 14,N": "Amount:"
 	pr #win,fields "6,2,Cr 14,N": "Date (mmddyy):"
@@ -60,24 +60,24 @@ L510: if cmdkey=5 then goto L730
 	if inp(1)=0 then ce=2: goto ERR1
 	jn$=lpad$(rtrm$(jn$),6)
 	read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3 nokey L600
-	goto L660
+goto L660
  
 L600: msgline$(1)="Job Number not found."
 	msgline$(2)="Please reselect."
-	fnoldmsgbox(mat response$,cap$,mat msgline$,1)
+	fnoldmsgbox(mat response$,env$('program_caption'),mat msgline$,1)
 	ce=1
-	goto ERR1
+goto ERR1
  
 L660: ta=ta+inp(1)
 	if c1=2 then goto L1120
 L680: rw=lrec(2)+1
 	write #2,using L700,rec=rw: jn$,mat inp duprec L680
 L700: form pos 1,c 6,pd 5.2,pd 4,n 2
-	goto L200
+goto L200
  
 L730: pr newpage
 	win=102
-	fnopenwin(win,07,20,15,59,cap$)
+	fnopenwin(win,07,20,15,59,env$('program_caption'))
 	pr #win,fields "9,1,C 40,R,N": " Total of Amounts Entered:"
 	pr #win,fields "9,28,N 10.2,R,N": ta
 	wrd2$(1)="1. pr Billing Proof List"
@@ -91,7 +91,7 @@ L730: pr newpage
 L860: rinput #win,select mat io2$,attr "H": mat wrd2$
 	c1=curfld
 	if cmdkey=5 then goto Xit
-	on c1 goto PROOFLIST,L1160,L190,L1300 none L860
+on c1 goto PROOFLIST,L1160,L190,L1300 none L860
  
 PROOFLIST: !
 	pr newpage
@@ -115,12 +115,12 @@ L1080: fncloseprn
 L1100: goto L730
  
 L1120: rewrite #2,using L700,rec=rr: jn$,mat inp
-	goto L1160
+goto L1160
  
 L1150: rewrite #2,using L700,rec=rr: "",0,0,0
 L1160: pr newpage
 	win=103
-	fnopenwin(win,10,20,14,59,cap$)
+	fnopenwin(win,10,20,14,59,env$('program_caption'))
 	pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
 	pr f "15,35,C 09,B,5": "Done (F5)"
 L1210: input #win,fields "4,31,Nz 5,UT,N": rr conv L1210
@@ -130,7 +130,7 @@ L1210: input #win,fields "4,31,Nz 5,UT,N": rr conv L1210
 	read #2,using L700,rec=rr: jn$,mat inp
 	ta=ta-inp(1)
 	shoption=2
-	goto L200
+goto L200
  
 L1300: for j=1 to rw
 		read #2,using L700,rec=j: jn$,mat inp noRec Xit
@@ -140,7 +140,7 @@ L1300: for j=1 to rw
 		if inp(3)><0 then b4=inp(3)
 		rewrite #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4
 L1370: next j
-	goto Xit
+goto Xit
  
 Xit: fnXit
  
@@ -200,13 +200,14 @@ SREND: if j>1 then j=j-1
 	restore #1,key>=bk$(bk): nokey L2000
 	bk=bk-1
 L1970: selclp=1
-	goto L1590
+goto L1590
  
 L2000: selclp=0
-	goto L1480
+goto L1480
  
-SEARCHEND: close #103: ioerr L2040
-L2040: return
+SEARCHEND: !
+	close #103: ioerr ignore
+return
  
 include: Ertn
  

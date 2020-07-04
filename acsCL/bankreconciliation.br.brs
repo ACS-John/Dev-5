@@ -83,7 +83,7 @@ BANK_STMT_INFO: !
 		if resp$(6)=item1$(j) then ti3=j: goto L610
 	next j
 	L610: !
-	if ti3=6 then let fnchain("S:\Checkbook\Transaction")
+	if ti3=6 then fnchain("S:\Checkbook\Transaction")
 	close #81: ioerr ignore
 	open #81: "Name=[Q]\CLmstr\Bank"&str$(wbc)&".H[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 7.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L660
@@ -124,11 +124,11 @@ CLEARING_OPTIONS: !
 	fnLbl(2,1,"Cleared Amount:",28,1)
 	fnTxt(2,31,12,0,1,"10",0,"You do not have to enter the amount.  If you do, it will compare the amount you enter to your check history and warn you of any differences. ")
 	resp$(respc+=1)=""
-	if ti3=1 then let fnButton(1,50,"Clear &Range of Checks",60,"This option allows you to clear a range of checks without having to enter each check number",0,20)
-	if ti3=2 then let fnButton(1,50,"Clear Deposits by &Amount",61,"This option allows you to clear deposits by entering the amount without having to know the reference number.",0,30)
-	if ti3=2 then let fnButton(3,50,"Clear Deposits by Date &Range",62,"This option allows you to clear deposits by entering a date range.",0,30)
-	if ti3=2 then let fnButton(5,50,"Clear Deposits from &List",63,"This option allows you to clear deposits from a listing of all outstanding deposits.",0,30)
-	if ti3=1 then let fnButton(3,50,"Clear Checks from &List",64,"This option allows you to clear checks from a listing of all outstanding checks.",0,20)
+	if ti3=1 then fnButton(1,50,"Clear &Range of Checks",60,"This option allows you to clear a range of checks without having to enter each check number",0,20)
+	if ti3=2 then fnButton(1,50,"Clear Deposits by &Amount",61,"This option allows you to clear deposits by entering the amount without having to know the reference number.",0,30)
+	if ti3=2 then fnButton(3,50,"Clear Deposits by Date &Range",62,"This option allows you to clear deposits by entering a date range.",0,30)
+	if ti3=2 then fnButton(5,50,"Clear Deposits from &List",63,"This option allows you to clear deposits from a listing of all outstanding deposits.",0,30)
+	if ti3=1 then fnButton(3,50,"Clear Checks from &List",64,"This option allows you to clear checks from a listing of all outstanding checks.",0,20)
 	fnCmdSet(2): fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto MENU1
 	k$=resp$(1) ! check # to clear
@@ -483,8 +483,8 @@ ENTER_DEPOSITS_CLEARED: !
 	fnLbl(1,1,"Amount to Clear:",25,1)
 	fnTxt(1,28,12,0,1,"10",0,"Enter each deposit amount that shows as cleared on the bank statement.")
 	resp$(respc+=1)=""
-	if am1>0 then let fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
-	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	if am1>0 then fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
+	fnCmdSet(2) : fnAcs2(mat resp$,ckey)
 	if ckey=5 then goto PRINT_EDITS
 	am1=val(resp$(1)) ! deposit amount entered
 	if am1=0 then goto PRINT_EDITS

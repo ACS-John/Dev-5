@@ -120,5 +120,4 @@ def fn_setup
 	end if 
 fnend
 include: enum
-include: fn_open
 include: Ertn

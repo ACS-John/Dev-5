@@ -1,3 +1,5 @@
+! you're probably looking for Meter Location instead of this
+
 autoLibrary
 fnTop(program$)
 if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$(1:6)<>'[Ask]' and fnhand_held_device$(1:6)<>'Aclara' and fnhand_held_device$<>'Master Meter' then 

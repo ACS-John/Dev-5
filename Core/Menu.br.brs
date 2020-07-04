@@ -96,7 +96,7 @@ def fn_checkFileVersionIfNecessary
 	fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
 	version_current$=env$('acsVersion')
 	if company_last_version$<version_current$ then
-		fncheckfileversion
+		fnCheckFileVersion
 		fncreg_write('last version used',version_current$)
 	end if
 fnend

@@ -248,8 +248,8 @@ fnend
 def fn_listPrint(item$*2048)
 	if ~listPrintSetup then
 		listPrintSetup=1
-		if env$('Session_Rows')='' then let setenv('Session_Rows',24)
-		if env$('Session_Cols')='' then let setenv('Session_Cols',80)
+		if env$('Session_Rows')='' then setenv('Session_Rows',24)
+		if env$('Session_Cols')='' then setenv('Session_Cols',80)
 		
 		listPrint_sRow=int(val(env$('Session_Rows'))/2)
 		listPrint_Rows=val(env$('Session_Rows'))-listPrint_sRow-2

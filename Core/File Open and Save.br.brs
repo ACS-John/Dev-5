@@ -326,7 +326,7 @@ def fn_opMain(omFileOpen$*256)
 				fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),source_company_number)
 				opScreenReturn+=1 
 				setenv('force_reindex','yes') 
-				fncheckfileversion
+				fnCheckFileVersion
 				fnindex_sys(cno)
 				fnStatusClose
 				dim msgTmp$(0)*128
@@ -385,7 +385,7 @@ def fn_fileOpenEverything(foeSource$*256)
 			opScreenReturn=1 
 			setenv('force_reindex','yes') 
 		end if
-		fncheckfileversion
+		fnCheckFileVersion
 		fnindex_sys(cno)
 		fnStatusClose
 	else if env$('acsDebug')='Yes' then
