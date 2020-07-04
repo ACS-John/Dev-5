@@ -137,7 +137,7 @@ COMPANY_ADD: ! r:
 	cno_selected=val(resp$(1))
 	if fn_company_already_exists(cno_selected)=1 then goto MENU1
 	fnputcno(cno_selected)
-	fncheckfileversion
+	fnCheckFileVersion
 	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursys')='TM' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
 		if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
 			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')

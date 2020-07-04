@@ -603,9 +603,9 @@ fnend
 		library 'S:\Core\Print1099.br': fnprint1099
 		fnprint1099(lz1$)
 	fnend
-	def library fncheckfileversion
-		library 'S:\Core\Check File Versions.br': fncheckfileversion
-		fncheckfileversion=fncheckfileversion
+	def library fnCheckFileVersion
+		library 'S:\Core\Check File Versions.br': fnCheckFileVersion
+		fnCheckFileVersion=fnCheckFileVersion
 	fnend
 	def library fnconsole(;on_off)
 		library 'S:\Core\Ace\Console.br': fnconsole
@@ -1214,10 +1214,6 @@ fnend
 		library 'S:\acsUB\calk_chatom.br': fncalkChatom
 		fncalkChatom=fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	fnend
-	! def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
-	!   library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
-	!   fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
-	! fnend
 	def library fnDepositChangeLog(z$*10,odp,ndp,chgDate,comment$*32)
 		library 'S:\Utility Billing\Customer.br': fnDepositChangeLog
 		fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)

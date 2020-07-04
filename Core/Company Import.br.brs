@@ -81,9 +81,9 @@ else
 		end if
 	end if
 	! /r
-	setenv('force_reindex','yes') ! for fncheckfileversion
+	setenv('force_reindex','yes') ! for fnCheckFileVersion
 	if ~import_only then
-		if ~cnv_pr then fncheckfileversion
+		if ~cnv_pr then fnCheckFileVersion
 		if cnv_ub_french_settlement then
 			fnfix_trans_breakdowns(1,0)
 			fn_translateRateAbbreviations('GS','GA')
@@ -97,7 +97,7 @@ else
 				fnpr_conversion_department(cno, pr_cnv_medicare_is_seperated)
 				fnpr_conversion_add_missing(cno)
 			end if
-			fncheckfileversion
+			fnCheckFileVersion
 		end if
 	end if
 end if

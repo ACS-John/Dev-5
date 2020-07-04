@@ -1,3 +1,5 @@
+! exe 'dir [Q]\UBmstr\MeterLocation.h[cno]'
+
 fn_setup
 fnTop(program$)
 !   ! r: restore unconverted files and remove already converted files (for testing only, of course)
@@ -31,7 +33,9 @@ def fn_setup
 	end if
 	fnLastBillingDate(lastBillingDate)
 	fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
-	if exists('[Q]\UBmstr\Meter.h[cno]') or ~exists('[Q]\UBmstr\MeterLocation.h[cno]') then let fn_InitialializeMeterLocation
+	if exists('[Q]\UBmstr\Meter.h[cno]') or ~exists('[Q]\UBmstr\MeterLocation.h[cno]') then 
+		fn_InitialializeMeterLocation
+	end if
 fnend
 
 def fn_populateLocationNonSeq
@@ -112,71 +116,71 @@ def fn_InitialializeMeterLocation
 		fncreg_write('u4 meter location account numbers left justified','True')
 		restore #hLocation:
 	end if
-	if exists('[Q]\UBmstr\MeterAddress.h[cno]') then
-		! r: import UB Meter Address (and subordinate UB Meter Info data into U4 Meter Location)
-			fnStatus('Initializing U4 Meter Location table...')
-			hAddress=fn_open('UB Meter Address',mat addr$,mat addrN,mat form$, 0,2)
-			fnStatus('Record Count of UB Meter Address: '&str$(lrec(hAddress)))
-			dim loacationRecordsAdded(11)
-			mat loacationRecordsAdded=(0)
-			fnStatus('Record Count of UB Meter Info: '&str$(lrec(hInfo)))
-			do
-				mat location$=('') : mat locationN=(0)
-				read #hAddress,using form$(hAddress): mat addr$,mat addrN eof EoAddress
-				locationId=addrN(loc_LocationID)
-				account$=trim$(fn_accountFromLocIdViaLocation$(locationId, 1))
-				if account$='' then
-					fnStatus('No account found for Location ID '&str$(locationId)&' from Address file.')
-				else
-					locationN(loc_locationID     )=locationId
-					location$(loc_name           )=addr$(ma_Name)
-					location$(loc_activeCustomer )=account$
-					servicesFound=0
-					for serviceItem=1 to udim(mat serviceName$)
-						if serviceCode$(serviceItem)<>'' then
-							if ~imlImportFromInfo then goto InfoNokey
-							mat info$=('') : mat infoN=(0)
-							info$(meter_customer )=trim$(account$)
-							info$(meter_serviceId)=serviceCode$(serviceItem)
-							read #hInfo,using form$(hInfo),key=fnBuildKey$('UB Meter Info',mat info$,mat infoN): mat info$,mat infoN nokey InfoNokey
-							servicesFound+=1
-							location$(loc_serviceId      )=info$(meter_serviceId      )
-							location$(loc_longitude      )=info$(meter_longitude      )
-							location$(loc_latitude       )=info$(meter_latitude       )
-							location$(loc_meterNumber    )=info$(meter_meterNumber    )
-							location$(loc_transmitter    )=info$(meter_transmitter    )
-							location$(loc_meterType      )=info$(meter_meterType      )
-							fnstatus('importing '&account$&'.'&location$(loc_serviceId)&'.'&str$(locationId)&': ')
-							fn_locationWrite(mat location$,mat locationN)
-							loacationRecordsAdded(serviceItem)+=1
-							if deleteEnabled then delete #hInfo:
-							InfoNokey: !
-						end if
-					next serviceItem
-					if servicesFound=0 then
-						if udim(mat serviceCodeMetered$)=1 then ! only one metered service, it is safe to assume
-							location$(loc_serviceId      )=serviceCodeMetered$(1)
-						else
-							pr 'no locations found for "'&account$&'"- just write a record without any services'
-							pause
-						end if
-						fn_locationWrite(mat location$,mat locationN)
-						loacationRecordsAdded(11)+=1
-					end if
-					if deleteEnabled then delete #hAddress:
-				end if
-			loop
-			EoAddress: !
-			for x=1 to 10
-				if serviceName$(x)<>'' and loacationRecordsAdded(x)>0 then
-					fnStatus('Imported '&str$(loacationRecordsAdded(x))&' records '&serviceName$(x)&' from Info (with added data from Address)')
-				end if
-			nex x
-			if loacationRecordsAdded(11) then
-				fnStatus('Imported '&str$(loacationRecordsAdded(11))&' records  with NO service from Info.')
-			end if
-		! /r
-	end if
+	! no longer necessary         if exists('[Q]\UBmstr\MeterAddress.h[cno]') then
+	! no longer necessary         	! r: import UB Meter Address (and subordinate UB Meter Info data into U4 Meter Location)
+	! no longer necessary         		fnStatus('Initializing U4 Meter Location table...')
+	! no longer necessary         		hAddress=fn_open('UB Meter Address',mat addr$,mat addrN,mat form$, 0,2)
+	! no longer necessary         		fnStatus('Record Count of UB Meter Address: '&str$(lrec(hAddress)))
+	! no longer necessary         		dim loacationRecordsAdded(11)
+	! no longer necessary         		mat loacationRecordsAdded=(0)
+	! no longer necessary         		fnStatus('Record Count of UB Meter Info: '&str$(lrec(hInfo)))
+	! no longer necessary         		do
+	! no longer necessary         			mat location$=('') : mat locationN=(0)
+	! no longer necessary         			read #hAddress,using form$(hAddress): mat addr$,mat addrN eof EoAddress
+	! no longer necessary         			locationId=addrN(loc_LocationID)
+	! no longer necessary         			account$=trim$(fn_accountFromLocIdViaLocation$(locationId, 1))
+	! no longer necessary         			if account$='' then
+	! no longer necessary         				fnStatus('No account found for Location ID '&str$(locationId)&' from Address file.')
+	! no longer necessary         			else
+	! no longer necessary         				locationN(loc_locationID     )=locationId
+	! no longer necessary         				location$(loc_name           )=addr$(ma_Name)
+	! no longer necessary         				location$(loc_activeCustomer )=account$
+	! no longer necessary         				servicesFound=0
+	! no longer necessary         				for serviceItem=1 to udim(mat serviceName$)
+	! no longer necessary         					if serviceCode$(serviceItem)<>'' then
+	! no longer necessary         						if ~imlImportFromInfo then goto InfoNokey
+	! no longer necessary         						mat info$=('') : mat infoN=(0)
+	! no longer necessary         						info$(meter_customer )=trim$(account$)
+	! no longer necessary         						info$(meter_serviceId)=serviceCode$(serviceItem)
+	! no longer necessary         						read #hInfo,using form$(hInfo),key=fnBuildKey$('UB Meter Info',mat info$,mat infoN): mat info$,mat infoN nokey InfoNokey
+	! no longer necessary         						servicesFound+=1
+	! no longer necessary         						location$(loc_serviceId      )=info$(meter_serviceId      )
+	! no longer necessary         						location$(loc_longitude      )=info$(meter_longitude      )
+	! no longer necessary         						location$(loc_latitude       )=info$(meter_latitude       )
+	! no longer necessary         						location$(loc_meterNumber    )=info$(meter_meterNumber    )
+	! no longer necessary         						location$(loc_transmitter    )=info$(meter_transmitter    )
+	! no longer necessary         						location$(loc_meterType      )=info$(meter_meterType      )
+	! no longer necessary         						fnstatus('importing '&account$&'.'&location$(loc_serviceId)&'.'&str$(locationId)&': ')
+	! no longer necessary         						fn_locationWrite(mat location$,mat locationN)
+	! no longer necessary         						loacationRecordsAdded(serviceItem)+=1
+	! no longer necessary         						if deleteEnabled then delete #hInfo:
+	! no longer necessary         						InfoNokey: !
+	! no longer necessary         					end if
+	! no longer necessary         				next serviceItem
+	! no longer necessary         				if servicesFound=0 then
+	! no longer necessary         					if udim(mat serviceCodeMetered$)=1 then ! only one metered service, it is safe to assume
+	! no longer necessary         						location$(loc_serviceId      )=serviceCodeMetered$(1)
+	! no longer necessary         					else
+	! no longer necessary         						pr 'no locations found for "'&account$&'"- just write a record without any services'
+	! no longer necessary         						pause
+	! no longer necessary         					end if
+	! no longer necessary         					fn_locationWrite(mat location$,mat locationN)
+	! no longer necessary         					loacationRecordsAdded(11)+=1
+	! no longer necessary         				end if
+	! no longer necessary         				if deleteEnabled then delete #hAddress:
+	! no longer necessary         			end if
+	! no longer necessary         		loop
+	! no longer necessary         		EoAddress: !
+	! no longer necessary         		for x=1 to 10
+	! no longer necessary         			if serviceName$(x)<>'' and loacationRecordsAdded(x)>0 then
+	! no longer necessary         				fnStatus('Imported '&str$(loacationRecordsAdded(x))&' records '&serviceName$(x)&' from Info (with added data from Address)')
+	! no longer necessary         			end if
+	! no longer necessary         		nex x
+	! no longer necessary         		if loacationRecordsAdded(11) then
+	! no longer necessary         			fnStatus('Imported '&str$(loacationRecordsAdded(11))&' records  with NO service from Info.')
+	! no longer necessary         		end if
+	! no longer necessary         	! /r
+	! no longer necessary         end if
 	if imlImportFromInfo then
 		! r: import from Info only - if you're importing both, do address first, because it add's this info too, this one is to add whatever is left after the other one.  it still leaves ones with accounts which do not point to a customer record.
 			fnStatus('checking Meter Information file for valid data to migrate to Meter Location table')

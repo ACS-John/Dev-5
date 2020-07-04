@@ -1,7 +1,7 @@
 fn_setup
-library program$: fncheckfileversion
+library program$: fnCheckFileVersion
 fnTop(program$)
-fncheckfileversion
+fnCheckFileVersion
 Xit: fnXit
 def fn_setup
 	if ~setup then
@@ -11,20 +11,20 @@ def fn_setup
 	end if
 fnend
 
-def library fncheckfileversion
+def library fnCheckFileVersion
 	! Checks the File versions and calls conversion programs if necessary
 	! This Fn is called from S:\Core\Program\Select Company.br and S:\Core\Company Import
 	! this library function checks to make sure all file versions for the
 	! current system are up to date - and runs the appropriate conversion  function if not
 	if ~setup then fn_setup
 	! there are other Library statements in this program - but they are placed in the section for which system they really belong to.
-	!_
+
 	dim tmpfile$*512,tmpkps(10),tmpkln(10),name$*512,kfname$*512
 	dim kfnames$(1)*512
-	! ____________
+
 	fnStatus('Running fnCheckFileVersion for '&env$('cursys')&' and Company Number '&env$('cno')) ! XXX
-	fn_cfv_add_missing_files
-	!
+	fn_cfv_addMissingFiles
+
 	if env$('cursys')='GL' then
 		fn_cfv_general_ledger
 	else if env$('cursys')='PR' then
@@ -41,17 +41,17 @@ def library fncheckfileversion
 	end if
 	fnStatus('CheckFileVersion Completed')
 fnend
-def fn_cfv_add_missing_files
+def fn_cfv_addMissingFiles(; ___,path$*256,prog$*256,ext$*128,item)
 	dim camf_filename$(0)*256
-	dim camf_path$*256,camf_prog$*256,camf_ext$*128
-	fngetdir2('S:\'&fnSystemNameFromAbbr$&'\mstr\',mat camf_filename$, '','*.h99999')
-	for camf_item=1 to udim(mat camf_filename$)
-		fnGetPp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
-		! if lwrc$(camf_filename$(camf_item))='department' then pause
-		if ~exists('[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]') then
-			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\'&camf_filename$(camf_item),'[Q]\'&env$('cursys')&'mstr\'&camf_prog$&'.h[cno]')
+	mat camf_filename$(0)
+	fnGetDir2('S:\'&fnSystemNameFromAbbr$&'\mstr\',mat camf_filename$, '','*.h99999')
+	for item=1 to udim(mat camf_filename$)
+		fnGetPp(camf_filename$(item),path$,prog$,ext$)
+		! if lwrc$(camf_filename$(item))='department' then pause
+		if ~exists('[Q]\'&env$('cursys')&'mstr\'&prog$&'.h[cno]') then
+			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\'&camf_filename$(item),'[Q]\'&env$('cursys')&'mstr\'&prog$&'.h[cno]')
 		end if
-	next camf_item
+	next item
 fnend
 def fn_file_setup_data(fsad_name$*512,fsad_recl,fsad_version_proper)
 	dim g_fs_name$*512
@@ -215,18 +215,18 @@ def fn_cfv_utility_billing
 	fn_file_setup_index("[Q]\UBmstr\ubIndx3.h[cno]","11","30")
 	fn_file_setup_index("[Q]\UBmstr\ubIndx4.h[cno]","41","30")
 	fn_file_setup_index("[Q]\UBmstr\ubIndx5.h[cno]","1741/1743","2/7")
-	!
+
 	fn_file_setup_data("[Q]\UBmstr\ubAdrBil.h[cno]",130,0)
 	fn_file_setup_index("[Q]\UBmstr\AdrIndex.h[cno]",'1','10')
-	!
+
 	!     fn_file_setup_data("[Q]\UBmstr\Deposit1.h[cno]",16,0)
 	!     fn_file_setup_index("[Q]\UBmstr\DepIdx1.h[cno]",'1','10')
 	fn_file_setup_data("[Q]\UBmstr\Deposit2.h[cno]",73,0)
 	fn_file_setup_index("[Q]\UBmstr\Deposit2Index.h[cno]",'1','10')
-	!
+
 	fn_file_setup_data("[Q]\UBmstr\workOrder.h[cno]",600,0)
 	fn_file_setup_index("[Q]\UBmstr\wkIndex.h[cno]",'1/11','10/8')
-	!
+
 	fn_file_setup_data("[Q]\UBmstr\MeterType.h[cno]",128,1)
 	fn_file_setup_index("[Q]\UBmstr\MeterTypeIdx.h[cno]",'1','5')
 	version_meterType=fn_version('[Q]\UBmstr\MeterType.h[cno]')
@@ -271,12 +271,12 @@ def fn_cfv_utility_billing
 		close #hMeterType:
 	end if
 
-	!
-	! no need now that we have U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
-	! no need now that we have U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
-	!
+
+	! no need, replaced by U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
+	! no need, replaced by U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
+
 	fnInitialializeMeterLocation
-	!
+
 	if exists('[Q]\UBmstr\CityStZip.dat') then
 		fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
 		open #hUbCsz:=fngethandle: "Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
@@ -297,13 +297,13 @@ def fn_cfv_utility_billing
 		fnFree('[Q]\UBmstr\CityStZip.idx')
 		fnCloseFile(hCoCsz,'CO City State Zip')
 	end if
-	!
+
 	if exists('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]') then
 		if fnCopy('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]','[Q]\UBmstr\Collections-'&env$('acsUserId')&'.h[cno]') then
 			fnFree('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]')
 		end if
 	end if
-	!
+
 	if exists('[Q]\UBmstr\IpChg01.h[cno]') then
 		open #hupipchg:=fngethandle: "Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
 		read #hupipchg,using "Form pos 1,N 6": d2 ioerr ignore
@@ -326,11 +326,11 @@ def fn_cfv_utility_billing
 		close #hPer1000:
 		fnFree('[Q]\UBmstr\per1000.h[cno]')
 	end if
-	!
+
 	fn_file_setup_data("[Q]\UBmstr\ubData\RateMst.h[cno]",374,0)
 	fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx1.h[cno]",'1','4')
 	fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx2.h[cno]",'5','25')
-	!
+
 fnend
 def fn_cfv_checkbook
 	! Checkbook Only
@@ -593,7 +593,7 @@ def fn_cfv_checkbook
 	!     pr 'Record Length Error in File: '&tmpfile$
 	!     pr '         RLn: '&str$(tmprln)
 	!   end if
-	if tmprln=72 or tmprln=80 then let fnglmstrtorecl62
+	if tmprln=72 or tmprln=80 then fnglmstrtorecl62
 	!   x=1 : if tmpkps(x)<>1 then
 	!     pr 'Key Position ('&str$(x)&') Error in '&kfname$
 	!     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
@@ -611,7 +611,7 @@ def fn_cfv_checkbook
 	fn_file_setup_index("[Q]\CLmstr\fundidx1.h[cno]",'1','3')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
-	if tmprln=63 then let fnglcontrol
+	if tmprln=63 then fnglcontrol
 	!
 	fn_file_setup_data("[Q]\CLmstr\BankMstr.h[cno]",64,1)
 	fn_file_setup_index("[Q]\CLmstr\BankIdx1.h[cno]",'1','2')
@@ -756,7 +756,6 @@ def fn_cfv_payroll
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 	end if
 	if exists('[Q]\PRmstr\RPMstr.h[cno]') and ~exists('[Q]\PRmstr\Employee.h[cno]') then
-		fnAutomatedSavePoint('before RPMstr to Employee')  ! let's remove this after the first few rounds of testing...
 		! r: Convert from RPMstr.h[cno] to Employee.h[cno]
 		! only significant difference is that mat ta(2) has been removed to make room for w4step2 (initialized to 0 here)
 		open #hIn  :=fngethandle: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',internal,outIn,relative
@@ -930,12 +929,12 @@ def fn_cfv_general_ledger
 	! end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
-	if tmpversion=0 then let fnfinstmt_v0_to_v1
+	if tmpversion=0 then fnfinstmt_v0_to_v1
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
 	end if
-! If TMPRLN=81 OR TMPRLN=78 Then Let FNFINSTMT_v0_to_v1
+! If TMPRLN=81 OR TMPRLN=78 Then FNFINSTMT_v0_to_v1
 	x=1 : if tmpkps(x)<>1 then
 		pr 'Key Position ('&str$(x)&') Error in '&kfname$
 		pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
@@ -978,8 +977,8 @@ def fn_cfv_general_ledger
 		goto L3510
 	end if
 	! GLPAYMSTR: ! Primary, Non-Split Index  (Vendor or payee files in g/l)
-	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then let fnglpayee_v0_to_v1
-	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then let fnFree("[Q]\GLmstr\gl1099.h[cno]")
+	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then fnglpayee_v0_to_v1
+	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then fnFree("[Q]\GLmstr\gl1099.h[cno]")
 	name$="[Q]\GLmstr\PayMstr.h[cno]"
 	kfname$="[Q]\GLmstr\Payidx1.h[cno]"
 	myrln=276

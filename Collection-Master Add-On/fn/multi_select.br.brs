@@ -3,15 +3,15 @@ execute "*con gui on"
 library "": fngridio
 dim grid$(1)*80
 do
-	let nmax+=1 
+	nmax+=1 
 	mat grid$(nmax)=("")
 	print fields '24,1,cc 80,[S]': "Important Stuff Goes Here"
 	for ngrid=1 to nmax 
-		! LET GRID$(NGRID)=CNVRT$('n 5',NGRID)&"³ --- ³"&STR$(NGRID): NEXT NGRID 
-		let grid$(ngrid)=cnvrt$('n 5',ngrid)&"³ Sample Grid --------------------------³"&str$(ngrid)
+		! GRID$(NGRID)=CNVRT$('n 5',NGRID)&"³ --- ³"&STR$(NGRID): NEXT NGRID 
+		grid$(ngrid)=cnvrt$('n 5',ngrid)&"³ Sample Grid --------------------------³"&str$(ngrid)
 	next ngrid
 	! 	PRINT "Starting:";TIME$
-	let choice=fngridio(mat grid$,nmax,"Sample","S[U]","","#;Description;Count","1;3;4;5","One;Three - Is Nick;Four;Five") ! ,0,5,0,19) 
+	choice=fngridio(mat grid$,nmax,"Sample","S[U]","","#;Description;Count","1;3;4;5","One;Three - Is Nick;Four;Five") ! ,0,5,0,19) 
 	print fields '21,10,C': "Choice:"&str$(choice) 
 	print fields '22,10,C': "  FKey:"&str$(fkey)
 loop
@@ -38,7 +38,7 @@ def fn_setup ! Setup_  #AutoNumber# 30000,20
 	goto SETUP_XIT
 	SETUP_LIBRARY: ! 
 		if ~setup_library then 
-			let setup_library=1
+			setup_library=1
 			library 'Collection-Master Add-On\fn\Library.br': fnsession_size_setup
 			library "CLSUtil/library": fngethandle,fnhtml$,fnlist,fnhelp,fnstime,fnkey_after$,fngenerate_buttons_for_window
 			library "CLSUtil/library": fngenerate_buttons,fnerase_buttons,fnopen_parent$,fnarray_add$
@@ -367,7 +367,7 @@ def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*2
 	L59975: !
 	curfld(1,default_start)
 	input #gridio_handle, fields grid_handle$&",ROWSUB,SELONE": default_start 
-	if cmdkey=93 then let cmdkey(99)
+	if cmdkey=93 then cmdkey(99)
 	if cmdkey=2 or cmdkey=10 or cmdkey=20 then 
 		gosub GRID_SEARCH 
 		goto L59975
@@ -378,7 +378,7 @@ def library fngridio(mat grid_data$;default_start,grid_title$*999,grid_border$*2
 		item_fkey=99
 	end if
 	fngridio=default_start
-	if xfkey>0 then let fkey(item_fkey)
+	if xfkey>0 then fkey(item_fkey)
 	if gridio_handle then close #gridio_handle: ioerr L59988
 	L59988: !
 	if gridio_footer_handle then close #gridio_footer_handle: ioerr ignore
@@ -471,31 +471,31 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		dim button_tooltip$(10)*1024
 		dim s_search$*80
 		!   MS_Side
-		let ms_side_unselected=1001
-		let ms_side_selected=1002
+		ms_side_unselected=1001
+		ms_side_selected=1002
 		!   MS_FKey
-		let ms_fkey_add$=str$(ms_fkey_add=1)
-		let ms_fkey_add_all$=str$(ms_fkey_add_all=3)
-		let ms_fkey_remove$=str$(ms_fkey_remove=8)
-		let ms_fkey_remove_all$=str$(ms_fkey_remove_all=7)
-		let ms_fkey_side_switch$=str$(ms_fkey_side_switch=4)
-		let ms_fkey_rotate$=str$(ms_fkey_rotate=5)
-		let ms_fkey_complete$=str$(ms_fkey_complete=6)
-		let ms_fkey_cancel$=str$(ms_fkey_cancel=fkey_escape)
-		let ms_fkey_search$=str$(ms_fkey_search=10)
-		let ms_fkey_search_reverse$=str$(ms_fkey_search_reverse=20)
-		let ms_fkey_search_1$=str$(ms_fkey_search_1=2)
-		let ms_fkey_search_2$=str$(ms_fkey_search_2=12)
-		let ms_fkey_search_3$=str$(ms_fkey_search_3=10)
-		let ms_fkey_search_4$=str$(ms_fkey_search_4=20)
-		let ms_fkey_enter_action=ms_fkey_add
+		ms_fkey_add$=str$(ms_fkey_add=1)
+		ms_fkey_add_all$=str$(ms_fkey_add_all=3)
+		ms_fkey_remove$=str$(ms_fkey_remove=8)
+		ms_fkey_remove_all$=str$(ms_fkey_remove_all=7)
+		ms_fkey_side_switch$=str$(ms_fkey_side_switch=4)
+		ms_fkey_rotate$=str$(ms_fkey_rotate=5)
+		ms_fkey_complete$=str$(ms_fkey_complete=6)
+		ms_fkey_cancel$=str$(ms_fkey_cancel=fkey_escape)
+		ms_fkey_search$=str$(ms_fkey_search=10)
+		ms_fkey_search_reverse$=str$(ms_fkey_search_reverse=20)
+		ms_fkey_search_1$=str$(ms_fkey_search_1=2)
+		ms_fkey_search_2$=str$(ms_fkey_search_2=12)
+		ms_fkey_search_3$=str$(ms_fkey_search_3=10)
+		ms_fkey_search_4$=str$(ms_fkey_search_4=20)
+		ms_fkey_enter_action=ms_fkey_add
 		!   MS_Rotation
-		let ms_rotation_horizontal=1
-		let ms_rotation_vertical=2
-		let ms_rotation_locked=false ! If True than Set the Rotation with MS_Rotation_Default ! This should possilby be passed to the function
-		if ~ms_rotation_default then let ms_rotation_default=ms_rotation_horizontal
+		ms_rotation_horizontal=1
+		ms_rotation_vertical=2
+		ms_rotation_locked=false ! If True than Set the Rotation with MS_Rotation_Default ! This should possilby be passed to the function
+		if ~ms_rotation_default then ms_rotation_default=ms_rotation_horizontal
 		mat empty_1$(0) : mat empty_2$(0) : mat empty_3$(0)
-		let setup_fn_multi_select=1
+		setup_fn_multi_select=1
 	end if  ! ~Setup_fn_multi_select
 	! backup arrays for in case of cancel
 	dim ms_before_unselected$(1)*256
@@ -505,18 +505,18 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 
 	! Remove any duplicates from Mat MS_Unselected$
 	for ms_selected_item=1 to udim(mat ms_selected$)
-		let is_there=srch(mat ms_unselected$,ms_selected$(ms_selected_item))
-		if is_there>0 then let fnremove_arrayitem$(mat ms_unselected$,is_there)
+		is_there=srch(mat ms_unselected$,ms_selected$(ms_selected_item))
+		if is_there>0 then fnremove_arrayitem$(mat ms_unselected$,is_there)
 	next ms_selected_item
 	if udim(mat ms_selected$)+udim(mat ms_unselected$)=0 then 
-		let fnmessagebox("There is nothing to select.", mb_stop+mb_okonly,cap$)
-		let fkey(99)
+		fnmessagebox("There is nothing to select.", mb_stop+mb_okonly,cap$)
+		fkey(99)
 		goto Xit_FN_MULTI_SELECT
 	end if  ! UDIM(MAT MS_SELECTED$)+UDim(MAT MS_UNSELECTED$)=0
 
-	let ms_did_change=0
+	ms_did_change=0
 
-	let ms_column_count=udim(mat ms_grid_heading$)
+	ms_column_count=udim(mat ms_grid_heading$)
 	gosub MS_2D_BUILD
 	! fn_Menu_Backup
 	if uprc$(env$("GUIMode"))="ON" then 
@@ -528,19 +528,19 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	goto Xit_FN_MULTI_SELECT
 	! ~*~ ~*~ ~*~ ~*~ ~*~
 	MS_2D_BUILD: ! 
-	let ms_unselected_count=udim(mat ms_unselected$)
-	if ms_unselected_count=0 then let ms_unselected_enabled=false else let ms_unselected_enabled=true
-	let ms_selected_count=udim(mat ms_selected$)
-	if ms_selected_count=0 then let ms_selected_enabled=false else let ms_selected_enabled=true
-	let fnmat_1d_to_2d(mat ms_unselected$, mat ms_unselected_2d$, ms_column_count)
-	let fnmat_1d_to_2d(mat ms_selected$, mat ms_selected_2d$, ms_column_count)
+	ms_unselected_count=udim(mat ms_unselected$)
+	if ms_unselected_count=0 then ms_unselected_enabled=false else ms_unselected_enabled=true
+	ms_selected_count=udim(mat ms_selected$)
+	if ms_selected_count=0 then ms_selected_enabled=false else ms_selected_enabled=true
+	fnmat_1d_to_2d(mat ms_unselected$, mat ms_unselected_2d$, ms_column_count)
+	fnmat_1d_to_2d(mat ms_selected$, mat ms_selected_2d$, ms_column_count)
 	return  ! MS_2D_BUILD
 	MS_ROTATE: ! 
-	let scr_freeze
+	scr_freeze
 	if ms_rotation=ms_rotation_horizontal then 
-		let ms_rotation=ms_rotation_vertical
+		ms_rotation=ms_rotation_vertical
 	else if ms_rotation=ms_rotation_vertical then 
-		let ms_rotation=ms_rotation_horizontal
+		ms_rotation=ms_rotation_horizontal
 	end if  ! MS_Rotation=MS_Rotation_Horizontal   /   MS_Rotation=MS_Rotation_Vertical
 	close #ms_win_unselected_handle: 
 	close #ms_win_selected_handle: 
@@ -548,38 +548,38 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	gosub MS_GON_WIN_OPEN
 	return  ! MS_ROTATE
 	MS_GON_WIN_OPEN: ! 
-	let scr_freeze
-	if ms_rotation<=0 or ms_rotation_locked=true then let ms_rotation=ms_rotation_default
+	scr_freeze
+	if ms_rotation<=0 or ms_rotation_locked=true then ms_rotation=ms_rotation_default
 	if ms_rotation=ms_rotation_horizontal then ! =
-		let ms_win_unselected_srow=2 : let ms_win_unselected_srow$=str$(ms_win_unselected_srow)
-		let ms_win_unselected_scol=2 : let ms_win_unselected_scol$=str$(ms_win_unselected_scol)
-		let ms_win_unselected_width=ms_parent_width-2 : let ms_win_unselected_width$=str$(ms_win_unselected_width)
-		let ms_win_unselected_height=int(ms_parent_height/2)-2 : let ms_win_unselected_height$=str$(ms_win_unselected_height)
+		ms_win_unselected_srow=2 : ms_win_unselected_srow$=str$(ms_win_unselected_srow)
+		ms_win_unselected_scol=2 : ms_win_unselected_scol$=str$(ms_win_unselected_scol)
+		ms_win_unselected_width=ms_parent_width-2 : ms_win_unselected_width$=str$(ms_win_unselected_width)
+		ms_win_unselected_height=int(ms_parent_height/2)-2 : ms_win_unselected_height$=str$(ms_win_unselected_height)
 
-		let ms_tool_line=ms_win_unselected_height+3 : let ms_tool_line$=str$(ms_tool_line)
-		let ms_tool_col=-1 : let ms_tool_col$=str$(ms_tool_col)
-		let ms_tool_col_width=-1 : let ms_tool_col_width$=str$(ms_tool_col_width)
+		ms_tool_line=ms_win_unselected_height+3 : ms_tool_line$=str$(ms_tool_line)
+		ms_tool_col=-1 : ms_tool_col$=str$(ms_tool_col)
+		ms_tool_col_width=-1 : ms_tool_col_width$=str$(ms_tool_col_width)
 
-		let ms_win_selected_srow=ms_tool_line+2 : let ms_win_selected_srow$=str$(ms_win_selected_srow)
-		let ms_win_selected_scol=2 : let ms_win_selected_scol$=str$(ms_win_selected_scol)
-		let ms_win_selected_width=ms_parent_width-2 : let ms_win_selected_width$=str$(ms_win_selected_width)
-		let ms_win_selected_height=ms_parent_height-ms_tool_line-2 : let ms_win_selected_height$=str$(ms_win_selected_height)
+		ms_win_selected_srow=ms_tool_line+2 : ms_win_selected_srow$=str$(ms_win_selected_srow)
+		ms_win_selected_scol=2 : ms_win_selected_scol$=str$(ms_win_selected_scol)
+		ms_win_selected_width=ms_parent_width-2 : ms_win_selected_width$=str$(ms_win_selected_width)
+		ms_win_selected_height=ms_parent_height-ms_tool_line-2 : ms_win_selected_height$=str$(ms_win_selected_height)
 	else if ms_rotation=ms_rotation_vertical then ! ||
-		let ms_win_unselected_width=int(ms_parent_width/2)-3: let ms_win_unselected_width$=str$(ms_win_unselected_width)
-		let ms_win_unselected_height=ms_parent_height-2 : let ms_win_unselected_height$=str$(ms_win_unselected_height)
-		let ms_win_unselected_scol=2 : let ms_win_unselected_scol$=str$(ms_win_unselected_scol)
-		let ms_win_unselected_srow=2 : let ms_win_unselected_srow$=str$(ms_win_unselected_srow)
+		ms_win_unselected_width=int(ms_parent_width/2)-3: ms_win_unselected_width$=str$(ms_win_unselected_width)
+		ms_win_unselected_height=ms_parent_height-2 : ms_win_unselected_height$=str$(ms_win_unselected_height)
+		ms_win_unselected_scol=2 : ms_win_unselected_scol$=str$(ms_win_unselected_scol)
+		ms_win_unselected_srow=2 : ms_win_unselected_srow$=str$(ms_win_unselected_srow)
 
-		let ms_tool_line=-1 : let ms_tool_line$=str$(ms_tool_line)
-		let ms_tool_col=ms_win_unselected_width+1 : let ms_tool_col$=str$(ms_tool_col)
-		let ms_tool_col_width=2 : let ms_tool_col_width$=str$(ms_tool_col_width)
+		ms_tool_line=-1 : ms_tool_line$=str$(ms_tool_line)
+		ms_tool_col=ms_win_unselected_width+1 : ms_tool_col$=str$(ms_tool_col)
+		ms_tool_col_width=2 : ms_tool_col_width$=str$(ms_tool_col_width)
 
-		let ms_win_selected_srow=2 : let ms_win_selected_srow$=str$(ms_win_selected_srow)
-		let ms_win_selected_scol=ms_tool_col+ms_tool_col_width+3 : let ms_win_selected_scol$=str$(ms_win_selected_scol)
-		let ms_win_selected_width=ms_parent_width-ms_tool_col-ms_tool_col_width-3 : let ms_win_selected_width$=str$(ms_win_selected_width)
-		let ms_win_selected_height=ms_parent_height-2 : let ms_win_selected_height$=str$(ms_win_selected_height)
+		ms_win_selected_srow=2 : ms_win_selected_srow$=str$(ms_win_selected_srow)
+		ms_win_selected_scol=ms_tool_col+ms_tool_col_width+3 : ms_win_selected_scol$=str$(ms_win_selected_scol)
+		ms_win_selected_width=ms_parent_width-ms_tool_col-ms_tool_col_width-3 : ms_win_selected_width$=str$(ms_win_selected_width)
+		ms_win_selected_height=ms_parent_height-2 : ms_win_selected_height$=str$(ms_win_selected_height)
 
-		let ms_tool_col+=2 : let ms_tool_col$=str$(ms_tool_col)
+		ms_tool_col+=2 : ms_tool_col$=str$(ms_tool_col)
 	end if  ! MS_Rotation=MS_Rotation_Horizontal   /   MS_Rotation=MS_Rotation_Vertical
 	open #ms_win_unselected_handle:=fngethandle: "SRow="&ms_win_unselected_srow$&",SCol="&ms_win_unselected_scol$&",Rows="&ms_win_unselected_height$&",Cols="&ms_win_unselected_width$&",Border=S,Caption=Unselected,Parent="&ms_parent_handle$,display,output 
 	open #ms_win_selected_handle:=fngethandle: "SRow="&ms_win_selected_srow$&",SCol="&ms_win_selected_scol$&",Rows="&ms_win_selected_height$&",Cols="&ms_win_selected_width$&",Border=S,Caption=Selected,Parent="&ms_parent_handle$,display,output 
@@ -590,21 +590,21 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	if ms_unselected_enabled=false and ms_selected_enabled=false then 
 		print "Nothing to choose" : pause 
 	else if ms_unselected_enabled=false then 
-		let ms_side_active=ms_side_selected
+		ms_side_active=ms_side_selected
 	else if ms_selected_enabled=false then 
-		let ms_side_active=ms_side_unselected
+		ms_side_active=ms_side_unselected
 	end if  ! MS_Unselected_Enabled=False and MS_Selected_Enabled=False   /   MS_Unselected_Enabled=False   /   MS_Selected_Enabled=False
 
 	if ms_side_active=ms_side_unselected then !     SOURCE=Unselected   DESTINATION=Selected
 		print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",=R,-1": mat ms_unselected_2d$ ! ,B"&Str$(MS_Side_Unselected): Mat MS_Unselected$
-		let x_end(1)=(udim(mat ms_unselected$)) : print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&',Attr,-1': (mat one_sub_one, mat x_end, mat attr_t$)
+		x_end(1)=(udim(mat ms_unselected$)) : print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&',Attr,-1': (mat one_sub_one, mat x_end, mat attr_t$)
 		print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",=R,"&ms_fkey_side_switch$: mat ms_selected_2d$ ! ,B"&Str$(MS_Side_Selected): Mat MS_Selected$
-		let x_end(1)=(udim(mat ms_selected$)) : print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&',Attr,'&ms_fkey_side_switch$: (mat one_sub_one, mat x_end, mat attr_inactive$)
+		x_end(1)=(udim(mat ms_selected$)) : print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&',Attr,'&ms_fkey_side_switch$: (mat one_sub_one, mat x_end, mat attr_inactive$)
 	else if ms_side_active=ms_side_selected then 
 		print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",=R,"&ms_fkey_side_switch$: mat ms_unselected_2d$ ! ,B"&Str$(MS_Side_Unselected): Mat MS_Unselected$
-		let x_end(1)=(udim(mat ms_unselected$)) : print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&',Attr,'&ms_fkey_side_switch$: (mat one_sub_one, mat x_end, mat attr_inactive$)
+		x_end(1)=(udim(mat ms_unselected$)) : print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&',Attr,'&ms_fkey_side_switch$: (mat one_sub_one, mat x_end, mat attr_inactive$)
 		print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",=R,-1": mat ms_selected_2d$ ! ,B"&Str$(MS_Side_Selected): Mat MS_Selected$
-		let x_end(1)=(udim(mat ms_selected$)) : print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&',Attr,-1': (mat one_sub_one, mat x_end, mat attr_t$)
+		x_end(1)=(udim(mat ms_selected$)) : print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&',Attr,-1': (mat one_sub_one, mat x_end, mat attr_t$)
 	end if  ! MS_SIDE_ACTIVE=MS_SIDE_UnselectED   /   MS_SIDE_ACTIVE=MS_SIDE_SELECTED
 
 	if ms_gon_selected_focus_update then gosub MS_GON_SELECTED_FOCUS_TO_END
@@ -614,28 +614,28 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	if ms_rotation<>ms_rotation_hold then 
 		if ms_rotation=ms_rotation_horizontal then ! =
 			open #ms_tool_handle:=fngethandle: "SRow="&ms_tool_line$&",SCol=1,Rows=1,Cols="&ms_parent_width$&",Picture=icons\ToolBar.gif,Parent="&ms_parent_handle$,display,output  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
-			let fn_array_quick$(mat button_pos$,'34','37','41','44','70')
-			let button_image$(1)="Icons\A-Dn.png" ! Add
-			let button_image$(2)="Icons\R-Up.png" ! Remove
-			let button_image$(3)="Icons\AA-Dn.png" ! Add All
-			let button_image$(4)="Icons\RA-Up.png" ! Remove All
-			!       LET BUTTON_IMAGE$(5)="Icons\Rotate.png"
-			!       LET BUTTON_IMAGE$(6)="Icons\Switch.png"
-			let button_image$(5)="Icons\Complete.png" ! Complete
+			fn_array_quick$(mat button_pos$,'34','37','41','44','70')
+			button_image$(1)="Icons\A-Dn.png" ! Add
+			button_image$(2)="Icons\R-Up.png" ! Remove
+			button_image$(3)="Icons\AA-Dn.png" ! Add All
+			button_image$(4)="Icons\RA-Up.png" ! Remove All
+			!       BUTTON_IMAGE$(5)="Icons\Rotate.png"
+			!       BUTTON_IMAGE$(6)="Icons\Switch.png"
+			button_image$(5)="Icons\Complete.png" ! Complete
 			for button_item=1 to button_count
 				print #ms_tool_handle,fields "1,"&button_pos$(button_item)&",P 1/2,,-1": ""
 				print #ms_tool_handle,fields "1,"&button_pos$(button_item)&",P 1/2,,"&button_fkey$(button_item), help "1a;"&button_tooltip$(button_item)&";": button_image$(button_item)&":Isotropic"
 			next button_item
 		else if ms_rotation=ms_rotation_vertical then ! ||
 			open #ms_tool_handle:=fngethandle: "SRow=1,SCol="&ms_tool_col$&",Rows="&ms_parent_height$&",Cols="&ms_tool_col_width$&",Parent="&ms_parent_handle$,display,output  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
-			let fn_array_quick$(mat button_line$,'10','11','13','14','20')
-			let button_image$(1)="Icons\A-Right.png" ! Add
-			let button_image$(2)="Icons\R-Left.png" ! Remove
-			let button_image$(3)="Icons\AA-Right.png" ! Add All
-			let button_image$(4)="Icons\RA-Left.png" ! Remove All
-			!       LET BUTTON_IMAGE$(5)="Icons\Rotate.png"
-			!       LET BUTTON_IMAGE$(6)="Icons\Switch.png"
-			let button_image$(5)="Icons\Complete.png" ! Complete
+			fn_array_quick$(mat button_line$,'10','11','13','14','20')
+			button_image$(1)="Icons\A-Right.png" ! Add
+			button_image$(2)="Icons\R-Left.png" ! Remove
+			button_image$(3)="Icons\AA-Right.png" ! Add All
+			button_image$(4)="Icons\RA-Left.png" ! Remove All
+			!       BUTTON_IMAGE$(5)="Icons\Rotate.png"
+			!       BUTTON_IMAGE$(6)="Icons\Switch.png"
+			button_image$(5)="Icons\Complete.png" ! Complete
 			!        FOR Button_Item=1 TO Button_Count
 			!          PRINT #Ms_Tool_Handle,FIELDS Button_Line$(Button_Item)&",1,P 1/2,,-1": ""
 			!          PRINT #Ms_Tool_Handle,FIELDS Button_Line$(Button_Item)&",1,P 1/2,,"&Button_Fkey$(Button_Item), HELP "1a;"&Button_Tooltip$(Button_Item)&';': Button_Image$(Button_Item)&":Isotropic"
@@ -645,59 +645,59 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 			print #ms_tool_handle,fields button_line$(3)&",1,CC 2,[Toolbar],B"&button_fkey$(3), help "4a;"&button_tooltip$(3)&';': ">>"
 			print #ms_tool_handle,fields button_line$(4)&",1,CC 2,[Toolbar],B"&button_fkey$(4), help "4a;"&button_tooltip$(4)&';': "<<"
 		end if  ! MS_Rotation=MS_Rotation_Horizontal   /   MS_Rotation=MS_Rotation_Vertical
-		let ms_rotation_hold=ms_rotation
+		ms_rotation_hold=ms_rotation
 	end if  ! MS_ROTATION<>MS_ROTATION_HOLD
 	return  ! /r MS_GON_TOOL_DISPLAY
 	MULTISELECT_GON: ! 
 	dim ms_parent_caption$*89
 	dim ms_gons_field$(4)*40 ! ,MS_GONS_FIELD_DISABLED$(4)*40
-	let ms_rotation_hold=0
-	if trim$(cap$)="" then let ms_parent_caption$="" else let ms_parent_caption$=",Caption="&cap$
+	ms_rotation_hold=0
+	if trim$(cap$)="" then ms_parent_caption$="" else ms_parent_caption$=",Caption="&cap$
 	open #ms_parent_handle:=fngethandle: fnwindowthis_size$(ms_parent_height,ms_parent_width,"Full Screen","S")&ms_parent_caption$&",Parent=0",display,output 
-	let ms_parent_height$=str$(ms_parent_height)
-	let ms_parent_width$=str$(ms_parent_width)
-	let ms_parent_handle$=str$(ms_parent_handle)
-	if ms_side_active=0 then let ms_side_active=ms_side_unselected
-	if ms_rotation=0 then let ms_rotation=ms_rotation_default
+	ms_parent_height$=str$(ms_parent_height)
+	ms_parent_width$=str$(ms_parent_width)
+	ms_parent_handle$=str$(ms_parent_handle)
+	if ms_side_active=0 then ms_side_active=ms_side_unselected
+	if ms_rotation=0 then ms_rotation=ms_rotation_default
 	gosub MS_GON_WIN_OPEN
 
 	mat one_sub_one(1)=(1) : mat attr_inactive$(1)=('[INACTIVE]') : mat attr_t$(1)=('[T]') : mat x_end(1) ! these are all used only in the GUI on grid display routine.           ! [INACTIVE]
 
 	mat msgo_menu_text$(0) : mat msgo_menu_status$(0) : mat msgo_menu_fkey$(0)
-	let fnmsgo_menu_item_add('&Navigate')
-	let fnmsgo_menu_item_add(' Add',ms_fkey_add)
-	let fnmsgo_menu_item_add(' Add All',ms_fkey_add_all)
-	let fnmsgo_menu_item_add(' -')
-	let fnmsgo_menu_item_add(' Remove',ms_fkey_remove)
-	let fnmsgo_menu_item_add(' Remove All',ms_fkey_remove_all)
-	let fnmsgo_menu_item_add(' -')
-	let fnmsgo_menu_item_add(' Rotate',ms_fkey_rotate)
-	let fnmsgo_menu_item_add(' Switch Sides',ms_fkey_side_switch)
-	!   LET FNMSGO_MENU_ITEM_ADD(' Search',MS_FKEY_SEARCH)
-	!   LET FNMSGO_MENU_ITEM_ADD('  Search 1',MS_FKEY_SEARCH_1)
-	!   LET FNMSGO_MENU_ITEM_ADD('  Search 2',MS_FKEY_SEARCH_2)
-	!   LET FNMSGO_MENU_ITEM_ADD('  Search 3',MS_FKEY_SEARCH_3)
-	!   LET FNMSGO_MENU_ITEM_ADD('  Search 4',MS_FKEY_SEARCH_4)
-	let fnmsgo_menu_item_add(' -')
-	let fnmsgo_menu_item_add(' Complete',ms_fkey_complete)
-	let fnmsgo_menu_item_add(' Cancel',fkey_escape)
+	fnmsgo_menu_item_add('&Navigate')
+	fnmsgo_menu_item_add(' Add',ms_fkey_add)
+	fnmsgo_menu_item_add(' Add All',ms_fkey_add_all)
+	fnmsgo_menu_item_add(' -')
+	fnmsgo_menu_item_add(' Remove',ms_fkey_remove)
+	fnmsgo_menu_item_add(' Remove All',ms_fkey_remove_all)
+	fnmsgo_menu_item_add(' -')
+	fnmsgo_menu_item_add(' Rotate',ms_fkey_rotate)
+	fnmsgo_menu_item_add(' Switch Sides',ms_fkey_side_switch)
+	!   FNMSGO_MENU_ITEM_ADD(' Search',MS_FKEY_SEARCH)
+	!   FNMSGO_MENU_ITEM_ADD('  Search 1',MS_FKEY_SEARCH_1)
+	!   FNMSGO_MENU_ITEM_ADD('  Search 2',MS_FKEY_SEARCH_2)
+	!   FNMSGO_MENU_ITEM_ADD('  Search 3',MS_FKEY_SEARCH_3)
+	!   FNMSGO_MENU_ITEM_ADD('  Search 4',MS_FKEY_SEARCH_4)
+	fnmsgo_menu_item_add(' -')
+	fnmsgo_menu_item_add(' Complete',ms_fkey_complete)
+	fnmsgo_menu_item_add(' Cancel',fkey_escape)
 
-	let button_count=5
-	let button_text$(btn_num:=1)='Add' : let button_fkey$(btn_num)=ms_fkey_add$ : let button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]Select the highlighted item(s)."
-	let button_text$(btn_num:=2)='Remove' : let button_fkey$(btn_num)=ms_fkey_remove$ : let button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nUnselect the highlighted item(s)."
-	let button_text$(btn_num:=3)='Add All' : let button_fkey$(btn_num)=ms_fkey_add_all$ : let button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nSelect all items."
-	let button_text$(btn_num:=4)='Remove All' : let button_fkey$(btn_num)=ms_fkey_remove_all$ : let button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nUnselect all items."
-	!   LET BUTTON_TEXT$(btn_num:=5)="Rotate" : LET BUTTON_FKEY$(btn_num)=MS_FKEY_ROTATE$ : LET BUTTON_TOOLTIP$(btn_num)="[F"&BUTTON_FKEY$(btn_num)&"]\nToggle the rotation of the selection grids between horizontal and vertical."
-	!   LET BUTTON_TEXT$(btn_num:=6)="Switch Sides" : LET BUTTON_FKEY$(btn_num)=MS_FKEY_SIDE_SWITCH$ : LET BUTTON_TOOLTIP$(btn_num)="[F"&BUTTON_FKEY$(btn_num)&"]\nMove your cursor to the other side (selected or Unselected).  If the other side empty than you will not be able to switch to it."
-	let button_text$(btn_num:=5)="OK" : let button_fkey$(btn_num)=ms_fkey_complete$ : let button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nProceed.\nComplete.\nDone.\nContinue.\nOK"
-	let ms_gons_field$(1)="1,10,CU 30/80,[D]S"
-	let ms_gons_field$(2)="1,41,Check 16/18,[W],1001"
-	let ms_gons_field$(3)="1,58,Radio 6/6,0,1001"
-	let ms_gons_field$(4)="1,65,Radio 5/6,0,1001"
-	let ms_gons_field_count=udim(mat ms_gons_field$)
+	button_count=5
+	button_text$(btn_num:=1)='Add' : button_fkey$(btn_num)=ms_fkey_add$ : button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]Select the highlighted item(s)."
+	button_text$(btn_num:=2)='Remove' : button_fkey$(btn_num)=ms_fkey_remove$ : button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nUnselect the highlighted item(s)."
+	button_text$(btn_num:=3)='Add All' : button_fkey$(btn_num)=ms_fkey_add_all$ : button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nSelect all items."
+	button_text$(btn_num:=4)='Remove All' : button_fkey$(btn_num)=ms_fkey_remove_all$ : button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nUnselect all items."
+	!   BUTTON_TEXT$(btn_num:=5)="Rotate" : BUTTON_FKEY$(btn_num)=MS_FKEY_ROTATE$ : BUTTON_TOOLTIP$(btn_num)="[F"&BUTTON_FKEY$(btn_num)&"]\nToggle the rotation of the selection grids between horizontal and vertical."
+	!   BUTTON_TEXT$(btn_num:=6)="Switch Sides" : BUTTON_FKEY$(btn_num)=MS_FKEY_SIDE_SWITCH$ : BUTTON_TOOLTIP$(btn_num)="[F"&BUTTON_FKEY$(btn_num)&"]\nMove your cursor to the other side (selected or Unselected).  If the other side empty than you will not be able to switch to it."
+	button_text$(btn_num:=5)="OK" : button_fkey$(btn_num)=ms_fkey_complete$ : button_tooltip$(btn_num)="[F"&button_fkey$(btn_num)&"]\nProceed.\nComplete.\nDone.\nContinue.\nOK"
+	ms_gons_field$(1)="1,10,CU 30/80,[D]S"
+	ms_gons_field$(2)="1,41,Check 16/18,[W],1001"
+	ms_gons_field$(3)="1,58,Radio 6/6,0,1001"
+	ms_gons_field$(4)="1,65,Radio 5/6,0,1001"
+	ms_gons_field_count=udim(mat ms_gons_field$)
 	mat ms_gons_field$(ms_gons_field_count)
 	!   FOR _MS_GONS_FIELD=1 TO MS_GONS_FIELD_COUNT
-	!     LET MS_GONS_FIELD_DISABLED$(_MS_GONS_FIELD)=FN_FIELD_DISABLE$(MS_GONS_FIELD$(_MS_GONS_FIELD))
+	!     MS_GONS_FIELD_DISABLED$(_MS_GONS_FIELD)=FN_FIELD_DISABLE$(MS_GONS_FIELD$(_MS_GONS_FIELD))
 	!   NEXT _MS_GONS_FIELD
 
 	gosub MS_GON_NAVIGATION_DISPLAY
@@ -708,9 +708,9 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	!   MAT MS_CURRENT_SELECTION(9999)=(0)
 
 	if ms_side_active=ms_side_unselected then 
-		let ms_fkey_enter_action=ms_fkey_add
-		let ms_fkey_click_action=ms_fkey_add
-		let ms_fkey_click_double_action=ms_fkey_add
+		ms_fkey_enter_action=ms_fkey_add
+		ms_fkey_click_action=ms_fkey_add
+		ms_fkey_click_double_action=ms_fkey_add
 		input #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",RowCnt,Sel": ms_current_selection_count
 		mat ms_current_selection(ms_current_selection_count)
 		input #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",RowSub,Sel,NoWait": mat ms_current_selection
@@ -731,16 +731,16 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 			gosub MS_GON_REMOVE_ALL
 			goto MS_INPUT
 		else if fkey=ms_fkey_side_switch then 
-			let ms_side_active=ms_side_selected
-			let generic_grid_line_current=1
+			ms_side_active=ms_side_selected
+			generic_grid_line_current=1
 			goto MS_INPUT
 		else if fkey=ms_fkey_complete then 
-			let fkey(0) ! and let it fall through
+			fkey(0) ! and it fall through
 		else if fkey=fkey_exit or fkey=fkey_escape then 
 			if ~ms_did_change or fn_confirm('cancel',cap$,'','multi_select_cancel') then ! fn_confirm('cancel',cap$,'You will lose any selections!\nSelected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$)))
 				mat ms_unselected$(udim(mat ms_before_unselected$))=ms_before_unselected$
 				mat ms_selected$(udim(mat ms_before_selected$))=ms_before_selected$
-				!         let it fall through
+				!         it fall through
 			else ! they did not confirm to complete
 				goto MS_INPUT
 			end if  ! FN_CONFIRM('complete'...
@@ -755,9 +755,9 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		end if  ! FKey=MS_FKey_Add   /   FKey=MS_FKey_Add_All   /   FKey=MS_FKey_Side_Switch    /   FKey=MS_FKey_Complete   /   FKey=FKey_Exit   /   FKey=FKey_Escape   /   FKey=MS_FKey_Rotate   /   else 
 
 	else if ms_side_active=ms_side_selected then 
-		let ms_fkey_enter_action=ms_fkey_remove
-		let ms_fkey_click_action=ms_fkey_remove
-		let ms_fkey_click_double_action=ms_fkey_remove
+		ms_fkey_enter_action=ms_fkey_remove
+		ms_fkey_click_action=ms_fkey_remove
+		ms_fkey_click_double_action=ms_fkey_remove
 		input #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",RowCnt,Sel": ms_current_selection_count
 		mat ms_current_selection(ms_current_selection_count)
 		input #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",RowSub,Sel,NoWait": mat ms_current_selection
@@ -778,16 +778,16 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 			gosub MS_GON_REMOVE_ALL
 			goto MS_INPUT
 		else if fkey=ms_fkey_side_switch then 
-			let ms_side_active=ms_side_unselected
-			let generic_grid_line_current=1
+			ms_side_active=ms_side_unselected
+			generic_grid_line_current=1
 			goto MS_INPUT
 		else if fkey=ms_fkey_complete then 
-			let fkey(0) ! and let it fall through
+			fkey(0) ! and it fall through
 		else if fkey=fkey_exit or fkey=fkey_escape then 
 			if fn_confirm('cancel',cap$,'You will lose any selections!\nSelected Items:'&tab$&str$(udim(ms_selected$))&'\nUnselected Items:'&tab$&str$(udim(ms_unselected$))) then 
 				mat ms_unselected$(udim(mat ms_before_unselected$))=ms_before_unselected$
 				mat ms_selected$(udim(mat ms_before_selected$))=ms_before_selected$
-				!         let it fall through
+				!         it fall through
 			else ! they did not confirm to complete
 				goto MS_INPUT
 			end if  ! FN_CONFIRM('complete'...
@@ -804,98 +804,98 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 		print 'no valid MS_Side_Active ('&str$(ms_side_active)&")" : pause 
 	end if  ! MS_Side_Active=MS_Side_Unselected   /   MS_Side_Active=MS_Side_Unselected   /   else 
 	close #ms_parent_handle: 
-	let fnerase_buttons
+	fnerase_buttons
 	return  ! MULTISELECT_GON
 	MS_GON_NAVIGATION_DISPLAY: ! r:
-	let fngenerate_buttons(ms_fkey_side_switch$&','&ms_fkey_search$&','&ms_fkey_search_reverse$&','&ms_fkey_rotate$, 'Switch Sides,Search,^ Search,Rotate', 1, 0, 1)
-	let fngenerate_buttons(ms_fkey_complete$&','&ms_fkey_cancel$, 'OK,Cancel', 2, 0, 1)
+	fngenerate_buttons(ms_fkey_side_switch$&','&ms_fkey_search$&','&ms_fkey_search_reverse$&','&ms_fkey_rotate$, 'Switch Sides,Search,^ Search,Rotate', 1, 0, 1)
+	fngenerate_buttons(ms_fkey_complete$&','&ms_fkey_cancel$, 'OK,Cancel', 2, 0, 1)
 
 	display menu : mat msgo_menu_text$, mat msgo_menu_fkey$, mat msgo_menu_status$
 	return  ! /r MS_GON_NAVIGATION_DISPLAY
-	let ms_did_change=1
+	ms_did_change=1
 	MS_GON_ADD: ! r:
-	let ms_did_change=1
+	ms_did_change=1
 	mat tmp_selection(9999)=(0)
 	input #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",RowSub,Sel,NoWait": mat tmp_selection
-	let tmp_selection_count=srch(mat tmp_selection,0)-1
+	tmp_selection_count=srch(mat tmp_selection,0)-1
 	mat tmp_selection(tmp_selection_count)
-	let fn_array_sort(mat tmp_selection)
+	fn_array_sort(mat tmp_selection)
 	for tmp_selection_item=1 to tmp_selection_count
-		let fn_array_item_move$(mat ms_unselected$, mat ms_selected$, tmp_selection(tmp_selection_item)-tmp_selection_item+1)
+		fn_array_item_move$(mat ms_unselected$, mat ms_selected$, tmp_selection(tmp_selection_item)-tmp_selection_item+1)
 	next tmp_selection_item
 	gosub MS_2D_BUILD
-	let ms_gon_selected_focus_update=true
+	ms_gon_selected_focus_update=true
 	return  ! /r MS_GON_ADD
 	MS_GON_REMOVE: ! r:
-	let ms_did_change=1
+	ms_did_change=1
 	mat tmp_selection(9999)=(0)
 	input #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",RowSub,Sel,NoWait": mat tmp_selection
-	let tmp_selection_count=srch(mat tmp_selection,0)-1
+	tmp_selection_count=srch(mat tmp_selection,0)-1
 	mat tmp_selection(tmp_selection_count)
-	let fn_array_sort(mat tmp_selection)
+	fn_array_sort(mat tmp_selection)
 	for tmp_selection_item=1 to tmp_selection_count
-		let fn_array_item_move$(mat ms_selected$, mat ms_unselected$, tmp_selection(tmp_selection_item)-tmp_selection_item+1)
+		fn_array_item_move$(mat ms_selected$, mat ms_unselected$, tmp_selection(tmp_selection_item)-tmp_selection_item+1)
 	next tmp_selection_item
 	gosub MS_2D_BUILD
-	let ms_gon_unselected_focus_update=true
+	ms_gon_unselected_focus_update=true
 	return  ! /r
 	MS_GON_SELECTED_FOCUS_TO_END: ! r:   set the focus to the bottom of selected
 	input #ms_win_selected_handle,fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",RowCnt,All,NoWait": gui_base ! ioerr ...
-	let curfld(1,gui_base)
+	curfld(1,gui_base)
 	input #ms_win_selected_handle,fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",Rowsub,SelOne,NoWait": choice
-	let ms_gon_selected_focus_update=false
+	ms_gon_selected_focus_update=false
 	return  ! /r MS_GON_Selected_Focus_to_End
 	MS_GON_UNSELECTED_FOCUS_TO_END: ! r: set the focus to the bottom of unselected
 	input #ms_win_unselected_handle,fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",RowCnt,All,NoWait": gui_base ! ioerr ...
-	let curfld(1,gui_base)
+	curfld(1,gui_base)
 	input #ms_win_unselected_handle,fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",Rowsub,SelOne,NoWait": choice
-	let ms_gon_unselected_focus_update=false
+	ms_gon_unselected_focus_update=false
 	return  ! /r
 	MS_GON_ADD_ALL: ! r: 
-	let fnarray_add$(mat ms_selected$,mat ms_selected$,mat ms_unselected$) ! FNARRAY_ADD$(MAT ARRAY_COMBINED$,MAT ARRAY_PART_ONE$,MAT ARRAY_PART_TWO$)
+	fnarray_add$(mat ms_selected$,mat ms_selected$,mat ms_unselected$) ! FNARRAY_ADD$(MAT ARRAY_COMBINED$,MAT ARRAY_PART_ONE$,MAT ARRAY_PART_TWO$)
 	mat ms_unselected$(0)
 	gosub MS_2D_BUILD
-	let ms_gon_selected_focus_update=true
+	ms_gon_selected_focus_update=true
 	return  ! /r
 	MS_GON_REMOVE_ALL: ! 
-	let ms_did_change=1
-	let fnarray_add$(mat ms_unselected$,mat ms_unselected$,mat ms_selected$) ! FNARRAY_Add$(MAT ARRAY_COMBINED$,MAT ARRAY_PART_ONE$,MAT ARRAY_PART_TWO$)
+	ms_did_change=1
+	fnarray_add$(mat ms_unselected$,mat ms_unselected$,mat ms_selected$) ! FNARRAY_Add$(MAT ARRAY_COMBINED$,MAT ARRAY_PART_ONE$,MAT ARRAY_PART_TWO$)
 	mat ms_selected$(0)
 	gosub MS_2D_BUILD
-	let ms_gon_unselected_focus_update=true
+	ms_gon_unselected_focus_update=true
 	return  ! MS_GON_REMOVE_ALL
 	MULTISELECT_GUI_OFF: ! 
 	for ms_grid_heading_item=1 to udim(mat ms_grid_heading$)
-		let ms_gof_grid_heading$=ms_gof_grid_heading$&ms_grid_heading$(ms_grid_heading_item)&";"
+		ms_gof_grid_heading$=ms_gof_grid_heading$&ms_grid_heading$(ms_grid_heading_item)&";"
 	next ms_grid_heading_item
-	let ms_gof_grid_heading$=trim$(ms_gof_grid_heading$,";")
-	let fndisplay_top(cap$,pk$)
-	let fnerase_buttons
-	let ms_fkey_enter_action=ms_fkey_complete
-	let ms_fkey_click_action=ms_fkey_add
-	let ms_fkey_click_double_action=ms_fkey_add
+	ms_gof_grid_heading$=trim$(ms_gof_grid_heading$,";")
+	fndisplay_top(cap$,pk$)
+	fnerase_buttons
+	ms_fkey_enter_action=ms_fkey_complete
+	ms_fkey_click_action=ms_fkey_add
+	ms_fkey_click_double_action=ms_fkey_add
 
 	MS_GOF_ASK_SELECTED: ! 
 	if udim(mat ms_selected$)=0 then 
-		let ms_gof_mb_response=fnmessagebox("There is nothing selected.\nWould you like to add selections now?", mb_yesnocancel+mb_question+mb_button1_default,cap$)
+		ms_gof_mb_response=fnmessagebox("There is nothing selected.\nWould you like to add selections now?", mb_yesnocancel+mb_question+mb_button1_default,cap$)
 		if ms_gof_mb_response=mb_yes then 
 			goto MS_GOF_ASK_UNSELECTED
 		else if ms_gof_mb_response=mb_no then 
 			goto Xit_MS_GO
 		else ! MS_GOF_MB_Response=MB_CANCEL
-			let fkey(99)
+			fkey(99)
 			goto Xit_MS_GO
 		end if  ! MS_GOF_MB_Response=MB_YES   /   MS_GOF_MB_Response=MB_NO   /   else 
 	end if  ! udim(MAT MS_SELECTED$)=0
 
-	let ms_gof_as_ws_response=fnwinscroll(mat ms_selected$, udim(mat ms_selected$),"Title=Selected Heading="&ms_gof_grid_heading$,"","Keys="&ms_fkey_complete$&";"&ms_fkey_add$&";"&ms_fkey_add_all$&";"&ms_fkey_side_switch$&";99 Labels=Complete;Remove;Remove All;Unselected;Cancel",scol=3,scroll_srow=0,scroll_cols=0,scroll_rows=0,display_only=0)
+	ms_gof_as_ws_response=fnwinscroll(mat ms_selected$, udim(mat ms_selected$),"Title=Selected Heading="&ms_gof_grid_heading$,"","Keys="&ms_fkey_complete$&";"&ms_fkey_add$&";"&ms_fkey_add_all$&";"&ms_fkey_side_switch$&";99 Labels=Complete;Remove;Remove All;Unselected;Cancel",scol=3,scroll_srow=0,scroll_cols=0,scroll_rows=0,display_only=0)
 
 	gosub MS_FKEY_CONSOLODATE
 	if fkey=ms_fkey_add then 
-		let fn_array_item_move$(mat ms_selected$, mat ms_unselected$, ms_gof_as_ws_response)
+		fn_array_item_move$(mat ms_selected$, mat ms_unselected$, ms_gof_as_ws_response)
 		goto MS_GOF_ASK_SELECTED
 	else if fkey=ms_fkey_add_all then 
-		let fnarray_add$(mat ms_unselected$,mat ms_unselected$,mat ms_selected$)
+		fnarray_add$(mat ms_unselected$,mat ms_unselected$,mat ms_selected$)
 		mat ms_selected$(0)
 		goto MS_GOF_ASK_UNSELECTED
 	else if fkey=ms_fkey_side_switch then 
@@ -916,24 +916,24 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 
 	MS_GOF_ASK_UNSELECTED: ! 
 	if udim(mat ms_unselected$)=0 then 
-		let ms_gof_mb_response=fnmessagebox("Everything is selected.\nWould you like to go to remove items now?", mb_yesnocancel+mb_question+mb_button1_default,cap$)
+		ms_gof_mb_response=fnmessagebox("Everything is selected.\nWould you like to go to remove items now?", mb_yesnocancel+mb_question+mb_button1_default,cap$)
 		if ms_gof_mb_response=mb_yes then 
 			goto MS_GOF_ASK_SELECTED
 		else if ms_gof_mb_response=mb_no then 
 			goto Xit_MS_GO
 		else ! MS_GOF_MB_Response=MB_CANCEL
-			let fkey(fkey_escape)
+			fkey(fkey_escape)
 			goto Xit_MS_GO
 		end if  ! MS_GOF_MB_Response=MB_YES   /   MS_GOF_MB_Response=MB_NO   /   else 
 	end if  ! udim(MAT MS_SELECTED$)=0
-	let ms_gof_au_ws_response=fnwinscroll(mat ms_unselected$, ms_gof_au_ws_response,"Title=Unselected Heading="&ms_gof_grid_heading$,"","Keys="&ms_fkey_complete$&";"&ms_fkey_add$&";"&ms_fkey_add_all$&";"&ms_fkey_side_switch$&";99 Labels=Complete;Add;Add All;Selected;Cancel",scol=3,scroll_srow=0,scroll_cols=0,scroll_rows=0,display_only=0)
+	ms_gof_au_ws_response=fnwinscroll(mat ms_unselected$, ms_gof_au_ws_response,"Title=Unselected Heading="&ms_gof_grid_heading$,"","Keys="&ms_fkey_complete$&";"&ms_fkey_add$&";"&ms_fkey_add_all$&";"&ms_fkey_side_switch$&";99 Labels=Complete;Add;Add All;Selected;Cancel",scol=3,scroll_srow=0,scroll_cols=0,scroll_rows=0,display_only=0)
 
 	gosub MS_FKEY_CONSOLODATE
 	if fkey=ms_fkey_add then 
-		let fn_array_item_move$(mat ms_unselected$, mat ms_selected$, ms_gof_au_ws_response)
+		fn_array_item_move$(mat ms_unselected$, mat ms_selected$, ms_gof_au_ws_response)
 		goto MS_GOF_ASK_UNSELECTED
 	else if fkey=ms_fkey_add_all then 
-		let fnarray_add$(mat ms_selected$,mat ms_selected$,mat ms_unselected$)
+		fnarray_add$(mat ms_selected$,mat ms_selected$,mat ms_unselected$)
 		mat ms_unselected$(0)
 		goto MS_GOF_ASK_SELECTED
 	else if fkey=ms_fkey_side_switch then 
@@ -954,251 +954,251 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	XIT_MS_GO: ! 
 	return  ! MULTISELECT_GUI_OFF
 	MS_FKEY_CONSOLODATE: ! 
-	if fkey=fkey_menu then let fkey(val(msgo_menu_fkey$(menu)))
-	if fkey=fkey_click then let fkey(ms_fkey_click_action)
-	if fkey=fkey_click_double then let fkey(ms_fkey_click_double_action)
-	if fkey=0 then let fkey(ms_fkey_enter_action)
+	if fkey=fkey_menu then fkey(val(msgo_menu_fkey$(menu)))
+	if fkey=fkey_click then fkey(ms_fkey_click_action)
+	if fkey=fkey_click_double then fkey(ms_fkey_click_double_action)
+	if fkey=0 then fkey(ms_fkey_enter_action)
 	if fkey=ms_fkey_search_1 or fkey=ms_fkey_search_2 or fkey=ms_fkey_search_3 or fkey=ms_fkey_search_4 then 
 		if fkey=ms_fkey_search_1 then ! fkey=2
-			let ms_gon_search_type=2
+			ms_gon_search_type=2
 		else if fkey=ms_fkey_search_2 then ! fkey=12
-			let ms_gon_search_type=12
+			ms_gon_search_type=12
 		else if fkey=ms_fkey_search_3 then ! fkey=10
-			let ms_gon_search_type=10
+			ms_gon_search_type=10
 		else if fkey=ms_fkey_search_4 then ! fkey=20
-			let ms_gon_search_type=20
+			ms_gon_search_type=20
 		end if  ! FKey=MS_FKEY_Search_1   /   MS_FKEY_Search_2   /   MS_FKEY_Search_3   /   MS_FKEY_Search_4
-		let fkey(ms_fkey_search)
+		fkey(ms_fkey_search)
 	end if  ! FKey=MS_FKEY_Search_1 or FKey=MS_FKEY_Search_2 or FKey=MS_FKEY_Search_3 or fkey=MS_FKEY_Search_4
 	!   if MS_SIDE_ACTIVE=MS_Side_Unselected then
 	!    else ! MS_SIDE_ACTIVE=MS_Side_Selected
 	! pause
 	!     if fkey=MS_FKEY_ADD then
-	!       let fkey(MS_FKEY_REMOVE)
+	!       fkey(MS_FKEY_REMOVE)
 	!      else if fkey=MS_FKEY_ADD_ALL then
-	!       let fkey(MS_FKEY_REMOVE_ALL)
+	!       fkey(MS_FKEY_REMOVE_ALL)
 	!      else if fkey=MS_FKEY_REMOVE then
-	!       let fkey(MS_FKEY_ADD)
+	!       fkey(MS_FKEY_ADD)
 	!     end if ! fkey=...
 	!   end if ! MS_SIDE_ACTIVE=MS_Side_Unselected   /   else 
 	return  ! MS_FKey_Consolodate
 	MS_GON_GRID_SEARCH: ! Search MultiSelect GUI On Grid
 	!   uses: MS_GON_Search_Type and
 	!     GOSUB RecNumSel_REFRESH ! grid must be in origional sort order
-	if ms_side_active=ms_side_unselected then let row_count=udim(mat ms_unselected$) else let row_count=udim(mat ms_selected$)
-	let generic_search_return=fn_generic_search(ms_gon_search_type,seek_col=1,row_count)
-	if generic_search_return>0 then let curfld(1,generic_search_return)
+	if ms_side_active=ms_side_unselected then row_count=udim(mat ms_unselected$) else row_count=udim(mat ms_selected$)
+	generic_search_return=fn_generic_search(ms_gon_search_type,seek_col=1,row_count)
+	if generic_search_return>0 then curfld(1,generic_search_return)
 	gosub MS_GON_NAVIGATION_DISPLAY
-	!     LET FKEY(-1) ! set FKey so loop will continue back to the input
+	!     FKEY(-1) ! set FKey so loop will continue back to the input
 	return  ! MS_GON_GRID_SEARCH
 	XIT_FN_MULTI_SELECT: ! 
 fnend  ! fn_multi_select
 def fnmsgo_menu_item_add(msgo_menu_text$*256; msgo_menu_fkey)
-	let msgo_menu_status$='E'
+	msgo_menu_status$='E'
 	if msgo_menu_fkey=99 then 
-		let msgo_menu_fkey$='[Esc]'
+		msgo_menu_fkey$='[Esc]'
 	else if msgo_menu_fkey>0 then 
-		let msgo_menu_fkey$='[F'&str$(msgo_menu_fkey)&']'
+		msgo_menu_fkey$='[F'&str$(msgo_menu_fkey)&']'
 	else 
-		let msgo_menu_fkey$=''
-		let msgo_menu_status$=''
+		msgo_menu_fkey$=''
+		msgo_menu_status$=''
 	end if  ! MSGO_Menu_FKey=...
-	if msgo_menu_fkey$<>'' then let msgo_menu_text$=msgo_menu_text$&tab$&msgo_menu_fkey$
-	let fnadd_one$(mat msgo_menu_text$,msgo_menu_text$)
-	let fnadd_one$(mat msgo_menu_status$,msgo_menu_status$)
-	let fnadd_one$(mat msgo_menu_fkey$,str$(msgo_menu_fkey))
+	if msgo_menu_fkey$<>'' then msgo_menu_text$=msgo_menu_text$&tab$&msgo_menu_fkey$
+	fnadd_one$(mat msgo_menu_text$,msgo_menu_text$)
+	fnadd_one$(mat msgo_menu_status$,msgo_menu_status$)
+	fnadd_one$(mat msgo_menu_fkey$,str$(msgo_menu_fkey))
 fnend  ! fnMSGO_Menu_Item_Add
 def library fnwindow_this_size$*40(&win_height,&win_width; position$*80,border$*1)
-	let fnwindow_this_size$=fnwindowthis_size$(win_height,win_width, position$, border$)
+	fnwindow_this_size$=fnwindowthis_size$(win_height,win_width, position$, border$)
 fnend 
 def fnwindowthis_size$*100(&win_height,&win_width; position$*80, border$*1)
 	if ~setup then fn_setup
 	dim wts_border$*9
-	let position$=uprc$(trim$(position$))
-	if position$="" then let position$="CENTER"
-	if position$="FULL" then let position$="FULL SCREEN"
-	if trim$(border$)='' then let border=false else let border=true
+	position$=uprc$(trim$(position$))
+	if position$="" then position$="CENTER"
+	if position$="FULL" then position$="FULL SCREEN"
+	if trim$(border$)='' then border=false else border=true
 	WTS_DIMENSIONS_SET: ! 
 	if position$="FULL SCREEN" and border then 
-		let win_srow=2
-		let win_scol=2
-		let win_height=session_rows-2
-		let win_width=session_cols-2
+		win_srow=2
+		win_scol=2
+		win_height=session_rows-2
+		win_width=session_cols-2
 	else if position$="FULL SCREEN" and ~border then 
-		let win_srow=1
-		let win_scol=1
-		let win_height=session_rows
-		let win_width=session_cols
+		win_srow=1
+		win_scol=1
+		win_height=session_rows
+		win_width=session_cols
 	else if position$="CENTER" then 
-		let win_srow=int((session_rows-win_height)/2)+1
-		let win_scol=int((session_cols-win_width)/2)
+		win_srow=int((session_rows-win_height)/2)+1
+		win_scol=int((session_cols-win_width)/2)
 	end if  ! Position$= full screen or center (+- border)
 	if fn_find_and_remove(position$,'TOP')>0 then 
 		if border then 
-			let win_srow=2
+			win_srow=2
 		else ! ~border
-			let win_srow=1
+			win_srow=1
 		end if  ! border   /   else 
 		if win_height=0 then print 'sorry, Win_Height=0 and position TOP not compatable.' : pause 
 	end if  ! fn_find_and_remove(Position$,'TOP')>0
 	if fn_find_and_remove(position$,'BOTTOM')>0 then 
 		if win_height=0 then print 'sorry, Win_Height=0 and position BOTTOM not compatable.' : pause 
-		let win_srow=session_rows-win_height-1
+		win_srow=session_rows-win_height-1
 	end if  ! fn_find_and_remove(Position$,'BOTTOM')>0
 	if fn_find_and_remove(position$,'LEFT')>0 then 
 		if win_width=0 then print 'sorry, Win_Width=0 and position LEFT not compatable, or are they type go and find out... if it works - delete this line.' : pause 
 		if border then 
-			let win_scol=2
+			win_scol=2
 		else ! ~border
-			let win_scol=1
+			win_scol=1
 		end if  ! border   /   else 
 	end if  ! fn_find_and_remove(Position$,'LEFT')>0
 	if fn_find_and_remove(position$,'RIGHT')>0 then 
 		if win_width=0 then print 'sorry, Win_Width=0 and position RIGHT not compatable.' : pause 
 		if border then 
-			let win_scol=session_cols-win_width-2
+			win_scol=session_cols-win_width-2
 		else ! ~border
-			let win_scol=session_cols-win_width
+			win_scol=session_cols-win_width
 		end if  ! border   /   else 
 	end if  ! fn_find_and_remove(Position$,'RIGHT')
 	if win_width<=0 or win_height<=0 or win_srow<=0 or win_scol<=0 then 
 		print "Somethin unhandled occured in fnWindowThis_Size$." : pause 
 		if uprc$(env$("Debug"))="YES" then pause 
-		let position$="CENTER"
+		position$="CENTER"
 		goto WTS_DIMENSIONS_SET
 	end if  ! Win_Width<=0 or Win_Height<=0 or Win_SRow<=0 or Win_SCol<=0
 
-	if border$<>'' then let wts_border$=',Border='&border$ else let wts_border$=''
+	if border$<>'' then wts_border$=',Border='&border$ else wts_border$=''
 
-	let fnwindowthis_size$="SRow="&str$(win_srow)&",SCol="&str$(win_scol)&",Rows="&str$(win_height)&",Cols="&str$(win_width)&wts_border$
+	fnwindowthis_size$="SRow="&str$(win_srow)&",SCol="&str$(win_scol)&",Rows="&str$(win_height)&",Cols="&str$(win_width)&wts_border$
 fnend 
 !
 IGNORE: continue 
 !
 def library fnconfirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_again_key$*28)
-	let fnconfirm=fn_confirm(verb$,cap$, text_addition$,confirm_dont_ask_again_key$)
+	fnconfirm=fn_confirm(verb$,cap$, text_addition$,confirm_dont_ask_again_key$)
 fnend 
 def fn_confirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_again_key$*28)
 	! Verb$ - something like "confirm" or "cancel" or "delete" or "complete"
 	if ~setup then fn_setup
-	let confirm_fkey_origional=fkey
-	if lwrc$(text_addition$(1:2))='\n' then let text_addition$=text_addition$(3:len(text_addition$))
-	if lwrc$(text_addition$(len(text_addition$)-1:len(text_addition$)))='\n' then let text_addition$=text_addition$(1:len(text_addition$)-2)
-	if text_addition$<>'' then let text_addition$='\n\n'&text_addition$
-	if verb$='delete' then let confirm_button_add=mb_button2_default else let confirm_button_add=mb_button1_default
-	let mb_repsonse=fnmessagebox('Do you really want to '&lwrc$(verb$)&'?'&text_addition$,mb_question+mb_yesno+confirm_button_add,cap$,confirm_dont_ask_again_key$)
-	let fkey(confirm_fkey_origional)
-	if mb_repsonse=mb_yes then let fn_confirm=1 else let fn_confirm=0
+	confirm_fkey_origional=fkey
+	if lwrc$(text_addition$(1:2))='\n' then text_addition$=text_addition$(3:len(text_addition$))
+	if lwrc$(text_addition$(len(text_addition$)-1:len(text_addition$)))='\n' then text_addition$=text_addition$(1:len(text_addition$)-2)
+	if text_addition$<>'' then text_addition$='\n\n'&text_addition$
+	if verb$='delete' then confirm_button_add=mb_button2_default else confirm_button_add=mb_button1_default
+	mb_repsonse=fnmessagebox('Do you really want to '&lwrc$(verb$)&'?'&text_addition$,mb_question+mb_yesno+confirm_button_add,cap$,confirm_dont_ask_again_key$)
+	fkey(confirm_fkey_origional)
+	if mb_repsonse=mb_yes then fn_confirm=1 else fn_confirm=0
 fnend 
 def library fnconfirm_delete(what_you_deleting$*60,cap$*80;pk$*80,confirm_dont_ask_again_key$*28)
-	let fnconfirm_delete=fn_confirm('delete',cap$,what_you_deleting$,confirm_dont_ask_again_key$)
+	fnconfirm_delete=fn_confirm('delete',cap$,what_you_deleting$,confirm_dont_ask_again_key$)
 fnend 
 def library fnarray_quick$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128,h$*128,i$*128,j$*128,k$*128,l$*128,m$*128)
-	let fnarray_quick$=fn_array_quick$(mat array$,a$, b$,c$,d$,e$,f$,g$,h$,i$,j$,k$,l$,m$)
+	fnarray_quick$=fn_array_quick$(mat array$,a$, b$,c$,d$,e$,f$,g$,h$,i$,j$,k$,l$,m$)
 fnend  ! FN_ARRAY_QUICK$
 def fn_array_quick$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128,h$*128,i$*128,j$*128,k$*128,l$*128,m$*128)
 	if ~setup then fn_setup
 	mat array$(0)
-	let fnadd_one$(mat array$,a$,no_add_blanks=1)
-	let fnadd_one$(mat array$,b$,no_add_blanks)
-	let fnadd_one$(mat array$,c$,no_add_blanks)
-	let fnadd_one$(mat array$,d$,no_add_blanks)
-	let fnadd_one$(mat array$,e$,no_add_blanks)
-	let fnadd_one$(mat array$,f$,no_add_blanks)
-	let fnadd_one$(mat array$,g$,no_add_blanks)
-	let fnadd_one$(mat array$,h$,no_add_blanks)
-	let fnadd_one$(mat array$,i$,no_add_blanks)
-	let fnadd_one$(mat array$,j$,no_add_blanks)
-	let fnadd_one$(mat array$,k$,no_add_blanks)
-	let fnadd_one$(mat array$,l$,no_add_blanks)
-	let fnadd_one$(mat array$,m$,no_add_blanks)
+	fnadd_one$(mat array$,a$,no_add_blanks=1)
+	fnadd_one$(mat array$,b$,no_add_blanks)
+	fnadd_one$(mat array$,c$,no_add_blanks)
+	fnadd_one$(mat array$,d$,no_add_blanks)
+	fnadd_one$(mat array$,e$,no_add_blanks)
+	fnadd_one$(mat array$,f$,no_add_blanks)
+	fnadd_one$(mat array$,g$,no_add_blanks)
+	fnadd_one$(mat array$,h$,no_add_blanks)
+	fnadd_one$(mat array$,i$,no_add_blanks)
+	fnadd_one$(mat array$,j$,no_add_blanks)
+	fnadd_one$(mat array$,k$,no_add_blanks)
+	fnadd_one$(mat array$,l$,no_add_blanks)
+	fnadd_one$(mat array$,m$,no_add_blanks)
 fnend  ! fnArray_Quick$
 def library fnarray_quick(mat array,an; bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
-	let fnarray_quick=fn_array_quick(mat array,an, bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
+	fnarray_quick=fn_array_quick(mat array,an, bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
 fnend  ! FN_ARRAY_QUICK$
 def fn_array_quick(mat array,an; bn,cn,dn,en,ffn,gn,n_08,n_09,n_10, n_11,n_12,n_13,n_14,n_15,n_16,n_17,n_18,n_19,n_20)
 	if ~setup then fn_setup
 	mat array(0)
-	let fnadd_one(mat array,an,no_add_blanks=1)
-	let fnadd_one(mat array,bn,no_add_blanks)
-	let fnadd_one(mat array,cn,no_add_blanks)
-	let fnadd_one(mat array,dn,no_add_blanks)
-	let fnadd_one(mat array,en,no_add_blanks)
-	let fnadd_one(mat array,ffn,no_add_blanks)
-	let fnadd_one(mat array,gn,no_add_blanks)
-	let fnadd_one(mat array,n_08,no_add_blanks)
-	let fnadd_one(mat array,n_09,no_add_blanks)
-	let fnadd_one(mat array,n_10,no_add_blanks)
-	let fnadd_one(mat array,n_11,no_add_blanks)
-	let fnadd_one(mat array,n_12,no_add_blanks)
-	let fnadd_one(mat array,n_13,no_add_blanks)
-	let fnadd_one(mat array,n_14,no_add_blanks)
-	let fnadd_one(mat array,n_15,no_add_blanks)
-	let fnadd_one(mat array,n_16,no_add_blanks)
-	let fnadd_one(mat array,n_17,no_add_blanks)
-	let fnadd_one(mat array,n_18,no_add_blanks)
-	let fnadd_one(mat array,n_19,no_add_blanks)
-	let fnadd_one(mat array,n_20,no_add_blanks)
+	fnadd_one(mat array,an,no_add_blanks=1)
+	fnadd_one(mat array,bn,no_add_blanks)
+	fnadd_one(mat array,cn,no_add_blanks)
+	fnadd_one(mat array,dn,no_add_blanks)
+	fnadd_one(mat array,en,no_add_blanks)
+	fnadd_one(mat array,ffn,no_add_blanks)
+	fnadd_one(mat array,gn,no_add_blanks)
+	fnadd_one(mat array,n_08,no_add_blanks)
+	fnadd_one(mat array,n_09,no_add_blanks)
+	fnadd_one(mat array,n_10,no_add_blanks)
+	fnadd_one(mat array,n_11,no_add_blanks)
+	fnadd_one(mat array,n_12,no_add_blanks)
+	fnadd_one(mat array,n_13,no_add_blanks)
+	fnadd_one(mat array,n_14,no_add_blanks)
+	fnadd_one(mat array,n_15,no_add_blanks)
+	fnadd_one(mat array,n_16,no_add_blanks)
+	fnadd_one(mat array,n_17,no_add_blanks)
+	fnadd_one(mat array,n_18,no_add_blanks)
+	fnadd_one(mat array,n_19,no_add_blanks)
+	fnadd_one(mat array,n_20,no_add_blanks)
 fnend  ! fnArray_Quick
 def library fnarray_append$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128)
-	let fnarray_append$=fn_array_append$(mat array$,a$, b$,c$,d$,e$,f$,g$)
+	fnarray_append$=fn_array_append$(mat array$,a$, b$,c$,d$,e$,f$,g$)
 fnend  ! fnArray_Append$
 def fn_array_append$(mat array$,a$*128; b$*128,c$*128,d$*128,e$*128,f$*128,g$*128)
 	if ~setup then fn_setup
-	let fnadd_one$(mat array$,a$,no_add_blanks=1)
-	let fnadd_one$(mat array$,b$,no_add_blanks)
-	let fnadd_one$(mat array$,c$,no_add_blanks)
-	let fnadd_one$(mat array$,d$,no_add_blanks)
-	let fnadd_one$(mat array$,e$,no_add_blanks)
-	let fnadd_one$(mat array$,f$,no_add_blanks)
-	let fnadd_one$(mat array$,g$,no_add_blanks)
+	fnadd_one$(mat array$,a$,no_add_blanks=1)
+	fnadd_one$(mat array$,b$,no_add_blanks)
+	fnadd_one$(mat array$,c$,no_add_blanks)
+	fnadd_one$(mat array$,d$,no_add_blanks)
+	fnadd_one$(mat array$,e$,no_add_blanks)
+	fnadd_one$(mat array$,f$,no_add_blanks)
+	fnadd_one$(mat array$,g$,no_add_blanks)
 fnend  ! fnArray_Append$
 def library fnarray_append(mat array,an; bn,cn,dn,en,ffn,gn)
-	let fnarray_append=fn_array_append(mat array,an, bn,cn,dn,en,ffn,gn)
+	fnarray_append=fn_array_append(mat array,an, bn,cn,dn,en,ffn,gn)
 fnend  ! fnArray_Append
 def fn_array_append(mat array,an; bn,cn,dn,en,ffn,gn)
 	if ~setup then fn_setup
-	let fnadd_one(mat array,an,no_add_blanks=1)
-	let fnadd_one(mat array,bn,no_add_blanks)
-	let fnadd_one(mat array,cn,no_add_blanks)
-	let fnadd_one(mat array,dn,no_add_blanks)
-	let fnadd_one(mat array,en,no_add_blanks)
-	let fnadd_one(mat array,ffn,no_add_blanks)
-	let fnadd_one(mat array,gn,no_add_blanks)
+	fnadd_one(mat array,an,no_add_blanks=1)
+	fnadd_one(mat array,bn,no_add_blanks)
+	fnadd_one(mat array,cn,no_add_blanks)
+	fnadd_one(mat array,dn,no_add_blanks)
+	fnadd_one(mat array,en,no_add_blanks)
+	fnadd_one(mat array,ffn,no_add_blanks)
+	fnadd_one(mat array,gn,no_add_blanks)
 fnend  ! fnArray_Append
 def library fnarray_item_move$(mat from_array$, mat to_array$, array_item)
-	let fnarray_item_move$=fn_array_item_move$(mat from_array$, mat to_array$, array_item)
+	fnarray_item_move$=fn_array_item_move$(mat from_array$, mat to_array$, array_item)
 fnend  ! FNARRAY_ITEM_MOVE$
 def fn_array_item_move$(mat from_array$, mat to_array$, array_item)
 	if ~setup then fn_setup
-	let fnadd_one$(mat to_array$, from_array$(array_item))
-	let fnremove_arrayitem$(mat from_array$, array_item)
+	fnadd_one$(mat to_array$, from_array$(array_item))
+	fnremove_arrayitem$(mat from_array$, array_item)
 fnend 
 def library fnarray_item_move(mat from_array, mat to_array, array_item)
-	let fnarray_item_move=fn_array_item_move(mat from_array, mat to_array, array_item)
+	fnarray_item_move=fn_array_item_move(mat from_array, mat to_array, array_item)
 fnend  ! FNARRAY_ITEM_MOVE
 def fn_array_item_move(mat from_array, mat to_array, array_item)
 	if ~setup then fn_setup
-	let fnadd_one(mat to_array, from_array(array_item))
-	let fnremove_arrayitem(mat from_array, array_item)
+	fnadd_one(mat to_array, from_array(array_item))
+	fnremove_arrayitem(mat from_array, array_item)
 fnend 
 def library fnarray_sort$(mat as$)
-	let fnarray_sort$=fn_array_sort$(mat as$)
+	fnarray_sort$=fn_array_sort$(mat as$)
 fnend  ! fnArray_Sort$
 def fn_array_sort$(mat as$)
 	dim as_before$(1)*128,as_before_u$(1)*128
 	mat as_before$(udim(mat as$))=as$ 
 	mat as_before_u$(udim(mat as$))
 	for _as_before=1 to udim(as_before$) 
-		let as_before_u$(_as_before)=uprc$(as$(_as_before)) 
+		as_before_u$(_as_before)=uprc$(as$(_as_before)) 
 	next _as_before
 	mat as_sequence(udim(mat as_before$))=aidx(as_before_u$)
 	for as_sequence_item=1 to udim(as_sequence)
-		let as$(as_sequence_item)=as_before$(as_sequence(as_sequence_item))
+		as$(as_sequence_item)=as_before$(as_sequence(as_sequence_item))
 	next as_sequence_item
 fnend  ! FN_ARRAY_Sort$
 def library fnarray_sort(mat as)
-	let fnarray_sort=fn_array_sort(mat as)
+	fnarray_sort=fn_array_sort(mat as)
 fnend  ! FNArray_Sort
 def fn_array_sort(mat as)
 	dim as_before(1)
@@ -1206,78 +1206,78 @@ def fn_array_sort(mat as)
 	mat as_before=as
 	mat as_sequence(udim(mat as_before))=aidx(as_before)
 	for as_sequence_item=1 to udim(as_sequence)
-		let as(as_sequence_item)=as_before(as_sequence(as_sequence_item))
+		as(as_sequence_item)=as_before(as_sequence(as_sequence_item))
 	next as_sequence_item
 fnend  ! FN_Array_Sort
 def library fnfind_and_remove(&far_find_in$,far_remove$*128)
-	let fnfind_and_remove=fn_find_and_remove(far_find_in$,far_remove$)
+	fnfind_and_remove=fn_find_and_remove(far_find_in$,far_remove$)
 fnend  ! fnfind_and_remove
 def fn_find_and_remove(&far_find_in$,far_remove$*128)
-	let set_fn_find_and_remove=0
-	let far_pos_start=pos(far_find_in$,far_remove$)
+	set_fn_find_and_remove=0
+	far_pos_start=pos(far_find_in$,far_remove$)
 	if far_pos_start>0 then 
-		let far_pos_end=far_pos_start+len(far_remove$)
-		let far_find_in$(far_pos_start:far_pos_end)=''
-		let set_fn_find_and_remove=1
+		far_pos_end=far_pos_start+len(far_remove$)
+		far_find_in$(far_pos_start:far_pos_end)=''
+		set_fn_find_and_remove=1
 	end if  ! FAR_Pos_Start>0
-	let fn_find_and_remove=set_fn_find_and_remove
+	fn_find_and_remove=set_fn_find_and_remove
 fnend  ! fn_find_and_remove
 def library fnfield_disable$*1024(fd_field$*1024)
-	let fnfield_disable$=fn_field_disable$(fd_field$)
+	fnfield_disable$=fn_field_disable$(fd_field$)
 fnend  ! fnField_Disable
 def fn_field_disable$*1024(fd_field$*1024)
 	dim set_fnfield_disable$*1024
-	let set_fnfield_disable$=fd_field$
-	let set_fnfield_disable$=srep$(set_fnfield_disable$,"[D]ST","[P]SP")
-	let set_fnfield_disable$=srep$(set_fnfield_disable$,"[D]S","[P]SP")
-	let pos_comma_last=pos(set_fnfield_disable$,",",-1)
-	let hotkey_value=val(set_fnfield_disable$(pos_comma_last+1:9999)) conv XIT_FN_FIELD_DISABLE
+	set_fnfield_disable$=fd_field$
+	set_fnfield_disable$=srep$(set_fnfield_disable$,"[D]ST","[P]SP")
+	set_fnfield_disable$=srep$(set_fnfield_disable$,"[D]S","[P]SP")
+	pos_comma_last=pos(set_fnfield_disable$,",",-1)
+	hotkey_value=val(set_fnfield_disable$(pos_comma_last+1:9999)) conv XIT_FN_FIELD_DISABLE
 	if hotkey_value>0 then 
-		let set_fnfield_disable$(pos_comma_last:9999)=''
+		set_fnfield_disable$(pos_comma_last:9999)=''
 	end if  ! hotkey_value>0
 	XIT_FN_FIELD_DISABLE: ! 
-	let fn_field_disable$=set_fnfield_disable$
+	fn_field_disable$=set_fnfield_disable$
 fnend  ! fn_Field_Disable
 def library fngeneric_search_ask(&s_search$,&search_seek,&search_find; skey)
 	if ~setup_fn_grid_search then 
-		let setup_fn_grid_search=1
+		setup_fn_grid_search=1
 		if ~setup then fn_setup
 		dim search_type$*20,search$*80,search_direction$(2)*30,search_seek$*30
 		dim list_data$(1)*80,search_match$*256,prior_search$*80,searching$*80
 		mat empty$(0)
 		dim search_form$(4)*40
-		let search_form$(1)="1,10,CU 30/80,[D]S" 
-		let search_form$(2)="1,41,Check 16/18,[W],1001" 
-		let search_form$(3)="1,58,Radio 6/6,0,1001" 
-		let search_form$(4)="1,65,Radio 5/6,0,1001"
+		search_form$(1)="1,10,CU 30/80,[D]S" 
+		search_form$(2)="1,41,Check 16/18,[W],1001" 
+		search_form$(3)="1,58,Radio 6/6,0,1001" 
+		search_form$(4)="1,65,Radio 5/6,0,1001"
 	end if  ! ~SETUP_FN_GRID_SEARCH
 	if skey=02 then 
-		let search_seek=1 : let search_find=01 : let search_type$="Seek" 
+		search_seek=1 : search_find=01 : search_type$="Seek" 
 	else if skey=10 then 
-		let search_seek=0 : let search_find=01 : let search_type$="Find" 
+		search_seek=0 : search_find=01 : search_type$="Find" 
 	else if skey=12 then 
-		let search_seek=1 : let search_find=-1 : let search_type$="Rev.Seek" 
+		search_seek=1 : search_find=-1 : search_type$="Rev.Seek" 
 	else if skey=20 then 
-		let search_seek=0 : let search_find=-1 : let search_type$="Rev.Find"
+		search_seek=0 : search_find=-1 : search_type$="Rev.Find"
 	end if
 	open #grid_search_handle:=fngethandle: "SCol=1,SRow=24,Cols=80,Rows=1",display,outin  
 	print #grid_search_handle: newpage
 	display menu : mat empty$, mat empty$, mat empty$
-	! LET FNERASE_BUTTONS 
+	! FNERASE_BUTTONS 
 	! ** Note: This Erase_buttons will cause the buttons from the calling program to be erased 
 	! As this function cannot restore the buttons, the calling program should handle this
 	GRID_SEARCH_ASK_AGAIN: ! 
 	if search_seek=1 then 
-		let search_seek$="Extended search" 
+		search_seek$="Extended search" 
 	else 
-		let search_seek$="^Extended search"
+		search_seek$="^Extended search"
 	end if
 	if search_find=1 then 
-		let search_direction$(1)="^Down" 
-		let search_direction$(2)="Up" 
+		search_direction$(1)="^Down" 
+		search_direction$(2)="Up" 
 	else 
-		let search_direction$(1)="Down" 
-		let search_direction$(2)="^Up"
+		search_direction$(1)="Down" 
+		search_direction$(2)="^Up"
 	end if
 	if env$("GUIMODE")="ON" then 
 		print #grid_search_handle,fields "1,1,Cr 9/15,[W];1,71,CC 7,[Button],B0": search_type$&":","Search" 
@@ -1290,14 +1290,14 @@ def library fngeneric_search_ask(&s_search$,&search_seek,&search_find; skey)
 		rinput #grid_search_handle, fields "1,10,CU 50/80,[D]AE",attr '[A]': s_search$
 	end if
 	if search_seek$(1:1)<>"^" then 
-		let search_seek=1 
+		search_seek=1 
 	else 
-		let search_seek=0
+		search_seek=0
 	end if
-	if search_direction$(1)(1:1)="^" then  search_find=1 else let search_find=-1
+	if search_direction$(1)(1:1)="^" then  search_find=1 else search_find=-1
 	if fkey=1001 then goto GRID_SEARCH_ASK_AGAIN             ! ** After user selects a choice, allow them to type more
 	close #grid_search_handle: 
-	let s_search$=uprc$(trim$(s_search$))
+	s_search$=uprc$(trim$(s_search$))
 fnend  ! fnGeneric_Search_Ask
 !__
 ! Updateable Region . Generic Grid Search . Top
@@ -1305,99 +1305,99 @@ fnend  ! fnGeneric_Search_Ask
 def fn_generic_search(generic_fkey, generic_key_column, generic_grid_line_last)
 	! This function returns for Cancel a -1 and a FKey=93 or FKey=99
 	if ~setup_generic then 
-		let setup_generic=1
+		setup_generic=1
 		dim generic_line$*1024
 		dim generic_search_criteria$*80,generic_search_criteria_prior$*80
-		let generic_grid_line_current=1
+		generic_grid_line_current=1
 	end if  ! ~SETUP_Generic
 	if generic_fkey<>2 and generic_fkey<>10 and generic_fkey<>12 and generic_fkey<>20 then print 'Invalid Generic_FKey='&str$(fkey) : pause 
-	if generic_key_column=0 then let generic_key_column=1
-	let set_fn_generic_search=-1
-	let fngeneric_search_ask(generic_search_criteria$,generic_one_column_only,generic_line_increment,generic_fkey) ! ask criteria and options
+	if generic_key_column=0 then generic_key_column=1
+	set_fn_generic_search=-1
+	fngeneric_search_ask(generic_search_criteria$,generic_one_column_only,generic_line_increment,generic_fkey) ! ask criteria and options
 	if fkey<>93 and fkey<>99 then 
-		let generic_found_it=0
-		if generic_search_criteria$<>generic_search_criteria_prior$ then let generic_grid_line_current=1 : let generic_search_criteria_prior$=generic_search_criteria$
-		let generic_grid_line_first_test=generic_grid_line_current
+		generic_found_it=0
+		if generic_search_criteria$<>generic_search_criteria_prior$ then generic_grid_line_current=1 : generic_search_criteria_prior$=generic_search_criteria$
+		generic_grid_line_first_test=generic_grid_line_current
 		do 
-			let generic_line$=fn_generic_grid_to_line$(generic_grid_line_current,generic_one_column_only*generic_key_column)
-			if generic_one_column_only and lwrc$(generic_line$(1:len(generic_search_criteria$)))=lwrc$(generic_search_criteria$) or ~generic_one_column_only and pos(lwrc$(generic_line$),lwrc$(generic_search_criteria$))>0 then let generic_found_it=generic_grid_line_current
-			let generic_grid_line_current=generic_grid_line_current+=generic_line_increment ! Search next line first
-			if generic_grid_line_current>generic_grid_line_last then let generic_grid_line_current=1
-			if generic_grid_line_current<0 then let generic_grid_line_current=generic_grid_line_last
+			generic_line$=fn_generic_grid_to_line$(generic_grid_line_current,generic_one_column_only*generic_key_column)
+			if generic_one_column_only and lwrc$(generic_line$(1:len(generic_search_criteria$)))=lwrc$(generic_search_criteria$) or ~generic_one_column_only and pos(lwrc$(generic_line$),lwrc$(generic_search_criteria$))>0 then generic_found_it=generic_grid_line_current
+			generic_grid_line_current=generic_grid_line_current+=generic_line_increment ! Search next line first
+			if generic_grid_line_current>generic_grid_line_last then generic_grid_line_current=1
+			if generic_grid_line_current<0 then generic_grid_line_current=generic_grid_line_last
 		loop until generic_found_it>0 or generic_grid_line_first_test=generic_grid_line_current
-		let set_fn_generic_search=generic_found_it
+		set_fn_generic_search=generic_found_it
 	end if  ! FKey<>93 and FKey<>99
-	let fn_generic_search=set_fn_generic_search
+	fn_generic_search=set_fn_generic_search
 fnend  ! fn_Generic_Search
 ! Updateable Region . Generic Grid Search . End
 !__
 def fn_generic_grid_to_line$*1024(array_line,single_column_only)
 	! This function is custom for every different type of grid.  It pulls from local variables and returns The data from that line of grid for fn_Generic_Search
-	let column_count=6
+	column_count=6
 	if ms_side_active=ms_side_unselected then 
-		let row_count=udim(mat ms_unselected$)
+		row_count=udim(mat ms_unselected$)
 	else ! MS_SIDE_ACTIVE=MS_SIDE_SELECTED
-		let row_count=udim(mat ms_selected$)
+		row_count=udim(mat ms_selected$)
 	end if  ! MS_SIDE_ACTIVE=MS_SIDE_UNSELECTED   /   else 
 	if array_line>0 and array_line<=row_count then 
 		if single_column_only and single_column_only<=column_count then 
 			if ms_side_active=ms_side_unselected then 
-				let keep_len=pos(ms_unselected$(array_line),"³")-1
-				if keep_len<=0 then let keep_len=len(ms_unselected$(array_line))
-				let fn_generic_grid_to_line$=ms_unselected$(array_line)(1:keep_len)
+				keep_len=pos(ms_unselected$(array_line),"³")-1
+				if keep_len<=0 then keep_len=len(ms_unselected$(array_line))
+				fn_generic_grid_to_line$=ms_unselected$(array_line)(1:keep_len)
 			else 
-				let keep_len=pos(ms_selected$(array_line),"³")-1
-				if keep_len<=0 then let keep_len=len(ms_selected$(array_line))
-				let fn_generic_grid_to_line$=ms_selected$(array_line)
+				keep_len=pos(ms_selected$(array_line),"³")-1
+				if keep_len<=0 then keep_len=len(ms_selected$(array_line))
+				fn_generic_grid_to_line$=ms_selected$(array_line)
 			end if  ! MS_SIDE_ACTIVE=MS_SIDE_UNSELECTED   /   else 
 		else ! ~Single_Column_Only or Single_Column_Only>Column_Count
 			if ms_side_active=ms_side_unselected then 
-				let fn_generic_grid_to_line$=ms_unselected$(array_line)
+				fn_generic_grid_to_line$=ms_unselected$(array_line)
 			else 
-				let fn_generic_grid_to_line$=ms_selected$(array_line)
+				fn_generic_grid_to_line$=ms_selected$(array_line)
 			end if  ! MS_SIDE_ACTIVE=MS_SIDE_UNSELECTED   /   else 
 		end if  ! Single_Column_Only   /   else 
 	else 
-		let fn_generic_grid_to_line$=''
+		fn_generic_grid_to_line$=''
 	end if  ! Array_Line>0 and Array_Line<=UDim(Mat Col_1)
 fnend  ! fn_Generic_Grid_To_Line$
 def library fnlistboxae_process$(laep_fkey,&tcurfld,max_rows)
-	let action$="Error"
+	action$="Error"
 	if laep_fkey=93 then 
-		let action$="Exit"
+		action$="Exit"
 	else if laep_fkey=99 then 
-		let action$="Cancel"
+		action$="Cancel"
 	else if laep_fkey=91 or laep_fkey=102 or laep_fkey=111 then 
-		let action$="Loop"
-		let tcurfld-=1
+		action$="Loop"
+		tcurfld-=1
 	else if laep_fkey=104 or laep_fkey=110 or laep_fkey=114 then 
-		let action$="Loop"
-		let tcurfld+=1
+		action$="Loop"
+		tcurfld+=1
 	else if (laep_fkey>=100 and laep_fkey<=116) then 
-		let action$="Loop"
+		action$="Loop"
 	else if laep_fkey=120 then ! Shift+End or Ctrl+End
-		let action$="Loop"
+		action$="Loop"
 	else if (laep_fkey>=126 and laep_fkey<=127) then ! Ctrl+Up   Ctrl+Down
-		let action$="Loop"
+		action$="Loop"
 	else if (laep_fkey>=133 and laep_fkey<=136) then !  Shift+Left   Shift+Right   Shift+Up   Shift+Down
-		let action$="Loop"
+		action$="Loop"
 	else if laep_fkey=200 or laep_fkey=201 or laep_fkey=206 then 
-		let action$="Zoom"
+		action$="Zoom"
 	else 
-		let action$="OK" ! happens for any unrecognized FKey
+		action$="OK" ! happens for any unrecognized FKey
 	end if  ! LAEP_FKey=...
-	let tcurfld=min(max_rows,tcurfld)
-	let tcurfld=max(1,tcurfld)
-	let fnlistboxae_process$=action$
+	tcurfld=min(max_rows,tcurfld)
+	tcurfld=max(1,tcurfld)
+	fnlistboxae_process$=action$
 fnend  ! fnListBoxAE_Process
 def library fnarray_range_insert$(mat ari_array$,ari_insert_after_item,ari_insert_item_count)
-	let fnarray_range_insert$=fn_array_range_insert$(mat ari_array$,ari_insert_after_item,ari_insert_item_count)
+	fnarray_range_insert$=fn_array_range_insert$(mat ari_array$,ari_insert_after_item,ari_insert_item_count)
 fnend  ! fnArray_Range_Insert$
 def fn_array_range_insert$(mat ari_array$,ari_insert_after_item,ari_insert_item_count)
-	if ari_insert_after_item>udim(mat ari_array$) then let ari_insert_after_item=udim(mat ari_array$)
+	if ari_insert_after_item>udim(mat ari_array$) then ari_insert_after_item=udim(mat ari_array$)
 	if ari_insert_item_count>0 then 
-		let ari_count_origional=udim(mat ari_array$)
-		let ari_count_new=ari_count_origional+ari_insert_item_count
+		ari_count_origional=udim(mat ari_array$)
+		ari_count_new=ari_count_origional+ari_insert_item_count
 		mat ari_array$(ari_count_new)
 		if ari_insert_after_item=0 then ! insert at beginning
 			mat ari_array$(ari_insert_item_count+1:ari_count_new)=ari_array$(1:ari_count_origional)
@@ -1411,13 +1411,13 @@ def fn_array_range_insert$(mat ari_array$,ari_insert_after_item,ari_insert_item_
 	end if  ! ARI_Insert_Item_Count>0
 fnend  ! fn_Array_Range_Insert$
 def library fnarray_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_count)
-	let fnarray_range_insert=fn_array_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_count)
+	fnarray_range_insert=fn_array_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_count)
 fnend  ! fnArray_Range_Insert
 def fn_array_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_count)
-	if ari_insert_after_item>udim(mat ari_array) then let ari_insert_after_item=udim(mat ari_array)
+	if ari_insert_after_item>udim(mat ari_array) then ari_insert_after_item=udim(mat ari_array)
 	if ari_insert_item_count>0 then 
-		let ari_count_origional=udim(mat ari_array)
-		let ari_count_new=ari_count_origional+ari_insert_item_count
+		ari_count_origional=udim(mat ari_array)
+		ari_count_new=ari_count_origional+ari_insert_item_count
 		mat ari_array(ari_count_new)
 		if ari_insert_after_item=0 then ! insert at beginning
 			mat ari_array(ari_insert_item_count+1:ari_count_new)=ari_array(1:ari_count_origional)
@@ -1432,7 +1432,7 @@ def fn_array_range_insert(mat ari_array,ari_insert_after_item,ari_insert_item_co
 fnend  ! fn_Array_Range_Insert
 def library fnmenu2(m2_title$*80,m2_cap$*80,&m2_pk$,mat m2_option$; m2_default_selection$*256, m2_trust$*80,m2_timeout,m2_footer$*80,m2_preserve_backgroud)
 	if ~setup then fn_setup
-	let fnmenu2=fn_menu2(m2_title$,m2_cap$,m2_pk$,mat m2_option$, m2_default_selection$, m2_trust$,m2_timeout,m2_footer$,m2_preserve_backgroud)
+	fnmenu2=fn_menu2(m2_title$,m2_cap$,m2_pk$,mat m2_option$, m2_default_selection$, m2_trust$,m2_timeout,m2_footer$,m2_preserve_backgroud)
 fnend  ! Fnmenu2
 def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_selection$*256, m2_trust$*80,m2_timeout,m2_footer$*80,m2_preserve_backgroud) ! M2_
 	! Mat M2_Option$ - options - each item should delimit it's fields with ³.
@@ -1448,70 +1448,70 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	dim m2_option_2d$(1,1)*80,m2_heading$(1)*80
 	dim m2_big_empty$*100,m2_footer_tooltip$*128
 	dim m2_option_col1$(1)*80,m2_filter$*80
-	let m2_big_empty$=rpt$(chr$(0),100)
+	m2_big_empty$=rpt$(chr$(0),100)
 	if m2_parent_handle>0 and file$(m2_parent_handle)=":CON:" then goto M2_ASK ! XXX EXPIRAMENTAL
 	if m2_preserve_backgroud=0 then 
 		open #m2_display_top_parent:=fngethandle: 'SRow=1,SCol=1,Cols=80,Rows=24,Border=None',display,output 
 	else if m2_preserve_backgroud=2 then 
 		dim m2_dtp_data$(1)*128,dumb_tmp$*2048
-		let dumb_tmp$=fnopen_parent$('Parent=None,SRow=1,SCol=1,Cols=80,Rows=30,Border=None,Name=M2,button.fkey=0;99,button.text=OK;Exit',mat m2_dtp_data$,1)
+		dumb_tmp$=fnopen_parent$('Parent=None,SRow=1,SCol=1,Cols=80,Rows=30,Border=None,Name=M2,button.fkey=0;99,button.text=OK;Exit',mat m2_dtp_data$,1)
 		if jbowman then pr 'dumb_tmp$=';dumb_tmp$ : pause
 		open #m2_display_top_parent:=fngethandle: dumb_tmp$,display,output 
-		let fngenerate_buttons_for_window(mat m2_dtp_data$,m2_display_top_parent)
+		fngenerate_buttons_for_window(mat m2_dtp_data$,m2_display_top_parent)
 	else 
-		let m2_display_top_parent=0
+		m2_display_top_parent=0
 	end if  ! m2_preserve_backgroud=0   /   2   /   else 
 
 	! if env$("UserName")="JBowman" then pause
 
-	let m2_cap$=trim$(srep$(m2_cap$,"["&m2_pk$&"]",""))
-	let m2_cap$=trim$(srep$(m2_cap$,"["&trim$(m2_pk$,'-')&"]",""))
-	let m2_pk$=fnpk_cleanup$(m2_pk$,1)(1:80)
-	let m2_cap$=trim$(srep$(m2_cap$,"["&m2_pk$&"]",""))
-	let m2_cap$=srep$(m2_cap$,' & ',' and ')
-	if m2_title$='' then let m2_title$=m2_cap$
-	if m2_display_top_parent>0 then let fndisplay_top(m2_title$,m2_pk$,0,m2_trust$,m2_display_top_parent)
-	let m2_option_count=udim(mat m2_option$)
+	m2_cap$=trim$(srep$(m2_cap$,"["&m2_pk$&"]",""))
+	m2_cap$=trim$(srep$(m2_cap$,"["&trim$(m2_pk$,'-')&"]",""))
+	m2_pk$=fnpk_cleanup$(m2_pk$,1)(1:80)
+	m2_cap$=trim$(srep$(m2_cap$,"["&m2_pk$&"]",""))
+	m2_cap$=srep$(m2_cap$,' & ',' and ')
+	if m2_title$='' then m2_title$=m2_cap$
+	if m2_display_top_parent>0 then fndisplay_top(m2_title$,m2_pk$,0,m2_trust$,m2_display_top_parent)
+	m2_option_count=udim(mat m2_option$)
 	mat m2_option_text$(m2_option_count)
-	let m2_help_available=fnsecurity("GUI:MENU.HELP",'',89,fnuser_init$,inquiry_only:=1) : if m2_help_available=-1 then let m2_help_available=0
-	let m2_return=0
-	let m2_type_and_grow=0
-	let m2_option_col1_len_max=0
-	let m2_rinput_process_count=0
-	let m2_stime_start=fnstime(time$)
-	let m2_tick_delay=30
-	if m2_timeout>0 and m2_timeout<m2_tick_delay then let m2_tick_delay=m2_timeout
+	m2_help_available=fnsecurity("GUI:MENU.HELP",'',89,fnuser_init$,inquiry_only:=1) : if m2_help_available=-1 then m2_help_available=0
+	m2_return=0
+	m2_type_and_grow=0
+	m2_option_col1_len_max=0
+	m2_rinput_process_count=0
+	m2_stime_start=fnstime(time$)
+	m2_tick_delay=30
+	if m2_timeout>0 and m2_timeout<m2_tick_delay then m2_tick_delay=m2_timeout
 	if m2_option_count=20 then 
-		let m2_parent_srow$=str$(m2_parent_srow=2)
+		m2_parent_srow$=str$(m2_parent_srow=2)
 	else if m2_option_count=19 or m2_option_count>20 then 
-		let m2_parent_srow$=str$(m2_parent_srow=3)
+		m2_parent_srow$=str$(m2_parent_srow=3)
 	else 
-		let m2_parent_srow$=str$(m2_parent_srow=4)
+		m2_parent_srow$=str$(m2_parent_srow=4)
 	end if  ! M2_Option_Count=>20   /   =19   /   else 
-	let m2_parent_height$=str$(m2_parent_height=min(session_rows-m2_parent_srow,m2_option_count+3))
-	let m2_parent_width$=str$(m2_parent_width=72)
+	m2_parent_height$=str$(m2_parent_height=min(session_rows-m2_parent_srow,m2_option_count+3))
+	m2_parent_width$=str$(m2_parent_width=72)
 	open #m2_parent_handle:=fngethandle: 'Parent='&str$(m2_display_top_parent)&',SRow='&m2_parent_srow$&',SCol=4,Rows='&m2_parent_height$&',Cols='&m2_parent_width$&',Border=S[N],Tab='&m2_cap$,display,output 
-	let m2_parent_handle$=str$(m2_parent_handle)
-	let m2_grid_height$=str$(m2_grid_height=m2_parent_height-2)
-	let m2_grid_width$=str$(m2_grid_width=m2_parent_width-3)
-	let fn_m2_setup_grid(mat m2_option$, mat m2_option_2d$,mat m2_heading$,mat m2_width,mat m2_form$)
+	m2_parent_handle$=str$(m2_parent_handle)
+	m2_grid_height$=str$(m2_grid_height=m2_parent_height-2)
+	m2_grid_width$=str$(m2_grid_width=m2_parent_width-3)
+	fn_m2_setup_grid(mat m2_option$, mat m2_option_2d$,mat m2_heading$,mat m2_width,mat m2_form$)
 	mat m2_option_col1$(m2_option_count)
 	for m2_option_col1_item=1 to m2_option_count
-		let m2_option_col1$(m2_option_col1_item)=trim$(m2_option_2d$(m2_option_col1_item,1))
-		let m2_option_col1_len_max=max(len(m2_option_col1$(m2_option_col1_item)),m2_option_col1_len_max)
+		m2_option_col1$(m2_option_col1_item)=trim$(m2_option_2d$(m2_option_col1_item,1))
+		m2_option_col1_len_max=max(len(m2_option_col1$(m2_option_col1_item)),m2_option_col1_len_max)
 	next m2_option_col1_item
-	let m2_pk_len$=str$(m2_pk_len=len(m2_pk$))
-	let m2_field_1_width=max(2,m2_option_col1_len_max+1)
-	let m2_toolbar_width=m2_grid_width-m2_field_1_width-m2_pk_len+2
+	m2_pk_len$=str$(m2_pk_len=len(m2_pk$))
+	m2_field_1_width=max(2,m2_option_col1_len_max+1)
+	m2_toolbar_width=m2_grid_width-m2_field_1_width-m2_pk_len+2
 
 	if m2_default_selection$='' then 
-		let m2_default_selection=0
+		m2_default_selection=0
 	else 
-		let m2_default_selection$=trim$(m2_default_selection$,"@")
-		let m2_default_selection$=trim$(m2_default_selection$,"-")
-		let m2_default_selection=srch(mat m2_option_col1$,m2_default_selection$)
+		m2_default_selection$=trim$(m2_default_selection$,"@")
+		m2_default_selection$=trim$(m2_default_selection$,"-")
+		m2_default_selection=srch(mat m2_option_col1$,m2_default_selection$)
 	end if  ! M2_Default_Selection$=''   /   else 
-	if m2_default_selection>0 then let m2_filter$=m2_default_selection$ else let m2_filter$=m2_option_col1$(1)
+	if m2_default_selection>0 then m2_filter$=m2_default_selection$ else m2_filter$=m2_option_col1$(1)
 
 	open #m2_toolbar_handle:=fngethandle: 'SRow=1,SCol='&str$(m2_field_1_width+m2_pk_len+2)&',Rows=1,Cols='&str$(m2_toolbar_width)&',Border=None,Picture=Icons\Toolbar.gif,Parent='&m2_parent_handle$,display,output 
 	rinput #m2_toolbar_handle,select '1,'&str$(m2_toolbar_width-1)&',P 1/2,[Toolbar],B99',wait=0, help "3a;[Esc] Exit;": 'Icons\X.gif:Isotropic' timeout ignore
@@ -1520,81 +1520,81 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	if debug then rinput #m2_toolbar_handle,select '1,'&str$(m2_toolbar_width-32)&',P 1/2,[Toolbar],B8000',wait=0, help "3a;[F8000] Copy Menu Path (*Debug Feature);": 'Icons\PK_Copy.png:Isotropic' timeout ignore ioerr ignore
 	gosub M2_TICK_EVENT
 	open #m2_vbar_handle:=fngethandle: 'SRow=2,SCol='&str$(m2_parent_width-1)&',Rows='&str$(m2_parent_height-2)&',Cols=2,Parent='&m2_parent_handle$&",picture=icons\VBar.Gif" ,display,outin ioerr ignore
-	let m2_grid_pos$="2,1"
-	let m2_grid_field$=m2_grid_pos$&",List "&m2_grid_height$&"/"&m2_grid_width$
-	let m2_field_1_len=max(1,len(m2_filter$))
+	m2_grid_pos$="2,1"
+	m2_grid_field$=m2_grid_pos$&",List "&m2_grid_height$&"/"&m2_grid_width$
+	m2_field_1_len=max(1,len(m2_filter$))
 	! gosub M2_FIELD_1_SET
 	if m2_footer$<>'' then 
-		let m2_footer_tooltip$=srep$(m2_footer$,'³',chr$(10))
-		let m2_footer$=srep$(m2_footer$,'³','|')
+		m2_footer_tooltip$=srep$(m2_footer$,'³',chr$(10))
+		m2_footer$=srep$(m2_footer$,'³','|')
 		for m2_space_count=6 to 2, step -1
-			let m2_footer$=srep$(m2_footer$,rpt$(' ',m2_space_count),rpt$(' ',m2_space_count-1))
+			m2_footer$=srep$(m2_footer$,rpt$(' ',m2_space_count),rpt$(' ',m2_space_count-1))
 		next m2_space_count
 		rinput #m2_parent_handle,select m2_parent_height$&',1,49/C 128,[S];'&m2_parent_height$&',50,23/C 100,[W]',wait=0, help '3a;'&m2_footer_tooltip$&';': m2_footer$,m2_big_empty$ timeout ignore
 	end if  ! 
 	if m2_preserve_backgroud<>2 then rinput #m2_parent_handle,select m2_parent_height$&',51,Cc 10,[Button],B0',wait=0, help "3a;[Enter] OK;": 'OK' timeout ignore ! M2_Parent_Width-21
 	if m2_preserve_backgroud<>2 then rinput #m2_parent_handle,select m2_parent_height$&',62,Cc 10,[Button],B99',wait=0, help "3a;[Esc] Exit;": 'Exit' timeout ignore ! M2_Parent_Width-10
-	let m2_field$(2)=m2_grid_field$&",RowSub,SelOne"
+	m2_field$(2)=m2_grid_field$&",RowSub,SelOne"
 
 	print #m2_parent_handle, fields m2_grid_field$&",Headers,S[N]": (mat m2_heading$, mat m2_width, mat m2_form$)
 	print #m2_parent_handle, fields m2_grid_field$&",=R,-1": mat m2_option_2d$
 	if m2_default_selection>0 then 
-		let curfld(1,m2_default_selection)
+		curfld(1,m2_default_selection)
 		rinput #m2_parent_handle, fields m2_field$(2)&',nowait': m2_current_selection
-		let curfld(1)
+		curfld(1)
 	end if  ! M2_Default_Selection>0
 	! 
 	M2_ASK: ! 
 	gosub M2_FIELD_1_SET
 	rinput #m2_parent_handle,wait=0,fields mat m2_field$: m2_filter$,m2_current_selection timeout ignore
-	let curfld(1)
+	curfld(1)
 	rinput #m2_parent_handle, fields mat m2_field$,wait=m2_tick_delay: m2_filter$,m2_current_selection timeout ignore
 	! if env$("UserName")="JBowman" then pause
-	let m2_type_and_grow=0
-	let m2_rinput_process_count+=1
-	let m2_curfld=curfld
+	m2_type_and_grow=0
+	m2_rinput_process_count+=1
+	m2_curfld=curfld
 	if developer and m2_preserve_backgroud=0 then print #m2_display_top_parent,fields '2,1,Cl 80,[w]': ' FKey='&str$(fkey)&' M2_RInput_Process_Count='&str$(m2_rinput_process_count)&' M2_Curfld='&str$(m2_curfld)&' currow='&str$(currow)
 	! if fkey=100 then goto M2_ASK ! Ctrl+Y   ...    used here for HELP
 	if fkey=0 then 
 		if curfld=1 then 
-			let m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
+			m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
 			if m2_return<=0 then 
 				print bell;
 				goto M2_ASK
 			end if  ! M2_Return<=0
 		else ! if curfld=2 then
-			let m2_return=currow
+			m2_return=currow
 		end if  ! curfld=1   /   else 
 	!  else if Fkey=90 then ! PageUp
 	!   goto M2_ASK
 	!  else if Fkey=91 then ! grid, ctrl+left
 	!   goto M2_ASK
 	else if fkey=93 then 
-		let m2_return=-10093
+		m2_return=-10093
 	!   execute 'system' ! Fn_Menu2='Exit' ! todo: hmmm...
 	else if fkey=98 then 
-		let m2_return=-10098
+		m2_return=-10098
 	else if fkey=99 then 
-		let m2_return=-10099
+		m2_return=-10099
 	else if fkey=100 then 
 		if curfld=1 then 
-			let m2_help_context=srch(mat m2_option_col1$,trim$(m2_filter$))
+			m2_help_context=srch(mat m2_option_col1$,trim$(m2_filter$))
 			if m2_help_context<=0 then 
 				print bell;
-				let fnhelp(m2_pk$)
+				fnhelp(m2_pk$)
 				goto M2_ASK
 			end if  ! M2_Return<=0
 		else ! if curfld=2 then
-			let m2_help_context=currow
+			m2_help_context=currow
 		end if 
-		let fnhelp(m2_pk$&'-'&str$(m2_help_context))
+		fnhelp(m2_pk$&'-'&str$(m2_help_context))
 		goto M2_ASK
 	else if fkey=101 then ! Timeout
 		gosub M2_TICK_EVENT
-		let m2_stime_progress=fnstime(time$)-m2_stime_start
+		m2_stime_progress=fnstime(time$)-m2_stime_start
 	!   if Developer then print #M2_Display_Top_Parent,fields '24,1,Cl 80,[w]': ' FKey='&Str$(Fkey)&' M2_Stime_Start='&Str$(M2_Stime_Start)&' M2_Stime_Progress='&Str$(M2_Stime_Progress)&' M2_Timeout='&Str$(M2_Timeout)
 		if m2_timeout>0 and m2_stime_progress>m2_timeout then 
-			let m2_return=-10101
+			m2_return=-10101
 		else 
 			goto M2_ASK
 		end if 
@@ -1602,77 +1602,77 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 		goto M2_ASK
 	else if fkey=90 or fkey=91 or fkey=102 or fkey=104 or fkey=105 or fkey=106 then 
 		if fkey=90 then ! Text, PgUp
-			let m2_nextrow=m2_current_selection-m2_grid_height
+			m2_nextrow=m2_current_selection-m2_grid_height
 		else if fkey=91 then ! Text, PgDn
-			let m2_nextrow=m2_current_selection+m2_grid_height
+			m2_nextrow=m2_current_selection+m2_grid_height
 		else if fkey=102 then ! Text, Up
-			let m2_nextrow=m2_current_selection-1
+			m2_nextrow=m2_current_selection-1
 		else if fkey=104 then ! Text, Down
-			let m2_nextrow=m2_current_selection+1
+			m2_nextrow=m2_current_selection+1
 		else if fkey=105 then 
-			let m2_nextrow=currow-1
+			m2_nextrow=currow-1
 		else if fkey=106 then 
-			let m2_nextrow=currow+1
+			m2_nextrow=currow+1
 		end if 
-		let m2_nextrow=max(1,m2_nextrow)
-		let m2_nextrow=min(m2_nextrow,udim(m2_option_col1$))
-		let m2_filter$=trim$(m2_option_2d$(m2_nextrow,1))
-		let m2_field_1_len=len(m2_filter$)
-		let curfld(2,m2_nextrow)
+		m2_nextrow=max(1,m2_nextrow)
+		m2_nextrow=min(m2_nextrow,udim(m2_option_col1$))
+		m2_filter$=trim$(m2_option_2d$(m2_nextrow,1))
+		m2_field_1_len=len(m2_filter$)
+		curfld(2,m2_nextrow)
 		goto M2_ASK
 	else if fkey=107 then 
-		let m2_type_and_grow=1
+		m2_type_and_grow=1
 		if m2_option_col1_len_max>1 and m2_field_1_len=m2_option_col1_len_max then 
-			let m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
+			m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
 			if m2_return<=0 then 
 				print bell;
-				let m2_filter$=m2_filter$(1:m2_field_1_len-1)
+				m2_filter$=m2_filter$(1:m2_field_1_len-1)
 				goto M2_ASK
 			end if  ! M2_Return<=0 then
 		else if m2_option_col1_len_max>1 and m2_field_1_len<m2_option_col1_len_max then 
-			let m2_option_item=m2_highlighted_first_match=m2_match_count=0
+			m2_option_item=m2_highlighted_first_match=m2_match_count=0
 			do 
-				let m2_option_item+=1
+				m2_option_item+=1
 				if m2_filter$=m2_option_col1$(m2_option_item)(1:m2_field_1_len) then 
-					let m2_match_count+=1
-					let m2_highlighted_first_match=m2_option_item
+					m2_match_count+=1
+					m2_highlighted_first_match=m2_option_item
 				end if  ! 
 			loop until m2_option_item=>m2_option_count ! Udim(Mat M2_Option_Col1$)
 			if m2_match_count=1 then 
-				let m2_return=m2_highlighted_first_match
+				m2_return=m2_highlighted_first_match
 			else 
-				let m2_field_1_len+=1
+				m2_field_1_len+=1
 				goto M2_ASK
 			end if 
 		else 
-			let m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
+			m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
 			if m2_return<=0 then 
-				let m2_field_1_len=1
-				let m2_filter$=''
+				m2_field_1_len=1
+				m2_filter$=''
 				print bell;
 				goto M2_ASK
 			end if  ! M2_Return<=0
 		end if  ! M2_Option_Col1_Len_Max>1 And M2_Field_1_Len=M2_Option_Col1_Len_Max   /   M2_Option_Col1_Len_Max>1 And M2_Field_1_Len<M2_Option_Col1_Len_Max   /   else 
 	else if fkey=110 then ! Tab
-		if m2_curfld=1 then let curfld(2) else let curfld(1)
+		if m2_curfld=1 then curfld(2) else curfld(1)
 		goto M2_ASK
 	else if fkey=111 then ! Shift+Tab
-		if m2_curfld=1 then let curfld(2) else let curfld(1)
+		if m2_curfld=1 then curfld(2) else curfld(1)
 		goto M2_ASK
 	else if fkey=112 then ! Home
-		let m2_filter$=m2_option_col1$(1)
-		let m2_field_1_len=len(m2_filter$)
-		let curfld(2,1)
+		m2_filter$=m2_option_col1$(1)
+		m2_field_1_len=len(m2_filter$)
+		curfld(2,1)
 		goto M2_ASK
 	else if fkey=113 then ! End
-		let m2_filter$=m2_option_col1$(m2_option_count)
-		let m2_field_1_len=len(m2_filter$)
-		let curfld(2,m2_option_count)
+		m2_filter$=m2_option_col1$(m2_option_count)
+		m2_field_1_len=len(m2_filter$)
+		curfld(2,m2_option_count)
 		goto M2_ASK
 	else if fkey=116 then ! right
 		goto M2_ASK
 	else if fkey=120 then ! Grid, Shift+End
-		let curfld(2,m2_option_count)
+		curfld(2,m2_option_count)
 		goto M2_ASK
 	else if fkey=126 then ! Ctrl+Up
 		goto M2_ASK
@@ -1692,27 +1692,27 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 		if nxtfld=1 then 
 			goto M2_ASK
 		else 
-			let fkey(0)
-			let m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
+			fkey(0)
+			m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
 		end if  ! nxtfld=1   /   else 
 	else if fkey=200 or fkey=206 then ! or fkey=201
-		let curfld(m2_curfld,fkey)
-		let m2_filter$=""
+		curfld(m2_curfld,fkey)
+		m2_filter$=""
 		rinput #m2_parent_handle,wait=0,fields mat m2_field$: m2_filter$,m2_current_selection timeout M2_ASK_FIELD2_CLICK_TIMEOUT
 		rinput #m2_parent_handle,wait=0,fields mat m2_field$: m2_filter$,m2_current_selection timeout M2_ASK_FIELD2_CLICK_TIMEOUT
 	M2_ASK_FIELD2_CLICK_TIMEOUT: ! 
-		let m2_filter$=m2_option_col1$(m2_current_selection)
-		let m2_field_1_len=len(m2_filter$)
+		m2_filter$=m2_option_col1$(m2_current_selection)
+		m2_field_1_len=len(m2_filter$)
 		goto M2_ASK
 	else if fkey=208 then 
 		goto M2_ASK
 	else if fkey=8000 then ! reqerved for fnMenu2's future internal use
-		let setenv('ClipBoard',m2_pk$&'-'&m2_filter$)
+		setenv('ClipBoard',m2_pk$&'-'&m2_filter$)
 		goto M2_ASK
 	else if fkey=>8001 and fkey<=8999 then ! reqerved for fnMenu2's future internal use
 		goto M2_ASK
 	else ! any other FKey, should return with the selection
-		let m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
+		m2_return=srch(mat m2_option_col1$,trim$(m2_filter$))
 	end if  ! Fkey=...
 	! ~
 	! if fkey=101 then pause
@@ -1720,8 +1720,8 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 		print bell;
 		if debug then print '**M2_Return=';m2_return
 		if developer then pause 
-		let m2_filter$=''
-		let m2_field_1_len=1
+		m2_filter$=''
+		m2_field_1_len=1
 		goto M2_ASK
 	end if  ! M2_Return<=0 and M2_Return=>-10000 then
 	! ~  only succesful result should fall through, all othere should goto M2_ASK
@@ -1730,9 +1730,9 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	! ~
 	M2_FIELD_1_SET: ! 
 	if m2_type_and_grow then 
-		let m2_field$(1)='1,'&str$(m2_pk_len+2)&','&str$(m2_field_1_width)&'/Cu '&str$(m2_field_1_len)&',[D]STAEX'&str$(m2_field_1_len)
+		m2_field$(1)='1,'&str$(m2_pk_len+2)&','&str$(m2_field_1_width)&'/Cu '&str$(m2_field_1_len)&',[D]STAEX'&str$(m2_field_1_len)
 	else 
-		let m2_field$(1)='1,'&str$(m2_pk_len+2)&','&str$(m2_field_1_width)&'/Cu '&str$(m2_field_1_len)&',[D]STAEX'
+		m2_field$(1)='1,'&str$(m2_pk_len+2)&','&str$(m2_field_1_width)&'/Cu '&str$(m2_field_1_len)&',[D]STAEX'
 	end if 
 	return  ! M2_FIELD_1_SET
 	! ~
@@ -1746,89 +1746,89 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	return  ! M2_TICK_EVENT
 	! ~
 	M2_FINIS: ! 
-	if fkey=107 then let fkey(0)
-	if m2_return<>-10101 then let fn_menu2_finis
+	if fkey=107 then fkey(0)
+	if m2_return<>-10101 then fn_menu2_finis
 	return  ! M2_FINIS
 	! ~
 	M2_XIT: ! 
 	! if Debug And Fkey<>0 then print 'on exit of Fn_Menu2, M2_Return='&Str$(M2_Return)&' and fkey='&Str$(Fkey) ! pause
-	let fn_menu2=m2_return
+	fn_menu2=m2_return
 fnend  ! Fn_Menu2
 def library fnmenu2_finis(; m2_transition_text$*78)
-	let fnmenu2_finis=fn_menu2_finis( m2_transition_text$)
+	fnmenu2_finis=fn_menu2_finis( m2_transition_text$)
 fnend  ! FnMenu2_Finis
 def fn_menu2_finis(; m2_transition_text$*78)
 	if m2_parent_handle>0 and file$(m2_parent_handle)=":CON:" then 
-		!       if M2_Transition_Text$='' then let M2_Transition_Text$='Loading...'
+		!       if M2_Transition_Text$='' then M2_Transition_Text$='Loading...'
 		!       print #M2_Parent_Handle: Newpage
 		!       print #M2_Parent_Handle,fields '4,1,Cc '&M2_Grid_Width$&',[W]': M2_Transition_Text$
 		!       if Debug then print #M2_Parent_Handle,fields M2_Parent_Height$&',20,10/C 60,[P]SP': 'FKey='&Str$(Fkey) ! DEBUG todo: remove
 		close #m2_parent_handle: ioerr ignore
-		let scr_freeze
+		scr_freeze
 		! DISPLAY MENU: "","",""
 		if m2_display_top_parent>0 then close #m2_display_top_parent: ioerr ignore
-		let m2_parent_handle=m2_display_top_parent=0
-	! LET SCR_THAW
+		m2_parent_handle=m2_display_top_parent=0
+	! SCR_THAW
 	end if  ! M2_Display_Top_Parent>0 and file$(M2_Display_Top_Parent)=":CON:"
 fnend  ! Fn_Menu2_Finis
 def fn_m2_setup_grid(mat msg_option$, mat msg_option_2d$,mat msg_heading$,mat msg_width,mat msg_form$) ! Msg_
 	mat msg_width(1)=(0)
 	mat msg_form$(1)=("")
-	let msg_column_count=0
-	let msg_option_count=udim(mat msg_option$)
-	let msg_column_count=fnchr_count(msg_option$(1),"³")+1
+	msg_column_count=0
+	msg_option_count=udim(mat msg_option$)
+	msg_column_count=fnchr_count(msg_option$(1),"³")+1
 	if msg_column_count=1 then 
-		let fnmenu_autonumber(mat msg_option$,"³")
-		let msg_column_count=2
+		fnmenu_autonumber(mat msg_option$,"³")
+		msg_column_count=2
 	end if  ! Msg_Column_Count=1'
-	let xlen_extra=0
-	let fnmat_1d_to_2d(mat msg_option$,mat msg_option_2d$,msg_column_count)
+	xlen_extra=0
+	fnmat_1d_to_2d(mat msg_option$,mat msg_option_2d$,msg_column_count)
 	for msg_option_item=1 to msg_option_count
-		let this_field=0
-		let msg_option_pos_pipe_prior=0
+		this_field=0
+		msg_option_pos_pipe_prior=0
 		MSG_NEXT_FIELD: ! 
-		let this_field+=1
-		let msg_option_pos_pipe=pos(msg_option$(msg_option_item),"³",msg_option_pos_pipe_prior+1)
-		let xmsg_option_pos_pipe=msg_option_pos_pipe
-		if msg_option_pos_pipe<=0 then let xmsg_option_pos_pipe=9999
+		this_field+=1
+		msg_option_pos_pipe=pos(msg_option$(msg_option_item),"³",msg_option_pos_pipe_prior+1)
+		xmsg_option_pos_pipe=msg_option_pos_pipe
+		if msg_option_pos_pipe<=0 then xmsg_option_pos_pipe=9999
 		if udim(msg_width)<this_field then mat msg_width(this_field) : mat msg_form$(this_field)
-		let xlen=max(1,len(rtrm$(msg_option$(msg_option_item)(msg_option_pos_pipe_prior+1:xmsg_option_pos_pipe-1))))
-		if xlen>msg_width(this_field) then let msg_width(this_field)=xlen
+		xlen=max(1,len(rtrm$(msg_option$(msg_option_item)(msg_option_pos_pipe_prior+1:xmsg_option_pos_pipe-1))))
+		if xlen>msg_width(this_field) then msg_width(this_field)=xlen
 
 		if msg_form$(this_field)="C" then goto PARA_59760
 		if ~fn_is_val(msg_option$(msg_option_item)(msg_option_pos_pipe_prior+1:xmsg_option_pos_pipe-1)) then 
 			goto MSG_TYPE_DATE_TEST
 		end if 
 		if trim$(msg_form$(this_field))="" or trim$(msg_form$(this_field))="N" then 
-			let msg_form$(this_field)='Cr 128,[M]LX' ! "N"
+			msg_form$(this_field)='Cr 128,[M]LX' ! "N"
 			goto PARA_59760
 		end if 
 		MSG_TYPE_DATE_TEST: ! 
-		let dval$=fndate10$(msg_option$(msg_option_item)(msg_option_pos_pipe_prior+1:xmsg_option_pos_pipe-1)(1:18))
+		dval$=fndate10$(msg_option$(msg_option_item)(msg_option_pos_pipe_prior+1:xmsg_option_pos_pipe-1)(1:18))
 		if trim$(dval$)="" then goto MSG_TYPE_CHARACTER_SET
 		if trim$(msg_form$(this_field))="" or trim$(msg_form$(this_field))="D" then 
-			let msg_form$(this_field)='Cr 128,[M]LX' ! "D"
+			msg_form$(this_field)='Cr 128,[M]LX' ! "D"
 			goto PARA_59760
 		end if 
 		MSG_TYPE_CHARACTER_SET: ! 
 		msg_form$(this_field)='C 128,[M]LX' ! 'C'
 		PARA_59760: ! 
 		if msg_option_pos_pipe>0 then 
-			let msg_option_pos_pipe_prior=msg_option_pos_pipe
+			msg_option_pos_pipe_prior=msg_option_pos_pipe
 			goto MSG_NEXT_FIELD
 		end if 
-		if this_field>msg_column_count then let msg_column_count=this_field
+		if this_field>msg_column_count then msg_column_count=this_field
 	next msg_option_item
 	for msg_width_item=1 to udim(mat msg_width)
-		if msg_width(msg_width_item)<=8 then let msg_width(msg_width_item)+=1 : let xlen_extra+=1
+		if msg_width(msg_width_item)<=8 then msg_width(msg_width_item)+=1 : xlen_extra+=1
 	next msg_width_item
-	let msg_width(udim(mat msg_width))-=xlen_extra
+	msg_width(udim(mat msg_width))-=xlen_extra
 	mat msg_heading$(msg_column_count)=("")
 fnend  ! Fn_M2_Setup_Grid
 def library fntable_unique_key_list(stukl_handle,mat stukl_key_list$)
 	gosub SETUP_LIBRARY
 	gosub SETUP_CONSTANTS
-	let fntable_unique_key_list=fn_table_unique_key_list(stukl_handle,mat stukl_key_list$)
+	fntable_unique_key_list=fn_table_unique_key_list(stukl_handle,mat stukl_key_list$)
 fnend  ! fntable_unique_key_list
 def fn_table_unique_key_list(stukl_handle,mat stukl_key_list$) ! stukl_
 	! This function when provided stukl_Handle,mat stukl_data$,mat stukl_data,stukl_formall$ returns an array of all unique keys in the file)
@@ -1837,109 +1837,109 @@ def fn_table_unique_key_list(stukl_handle,mat stukl_key_list$) ! stukl_
 	open #stukl_com_handle:=fngethandle: "SRow=12,SCol=32,Rows=1,Cols=14,Border=None",display,output 
 	restore #stukl_handle: 
 	dim stukl_key$*128,stukl_form$*80
-	let stukl_key_pos=kps(stukl_handle)
-	let stukl_key_len=kln(stukl_handle)
-	let stukl_form$=cform$("Form Pos "&str$(stukl_key_pos)&",C "&str$(stukl_key_len))
+	stukl_key_pos=kps(stukl_handle)
+	stukl_key_len=kln(stukl_handle)
+	stukl_form$=cform$("Form Pos "&str$(stukl_key_pos)&",C "&str$(stukl_key_len))
 	mat stukl_key_list$(0)
 	read #stukl_handle,using stukl_form$: stukl_key$ eof STUKL_EOF
 	gosub STUKL_ADD
 	do 
 		read #stukl_handle,using stukl_form$,key>=fnkey_after$(stukl_key_prior$,stukl_handle): stukl_key$ eof STUKL_EOF nokey STUKL_EOF ! 
-		let fnspin$("1,2,C 1", "1,4,C 8,[W]",time_start$,stukl_com_handle,stukl_com_handle)
+		fnspin$("1,2,C 1", "1,4,C 8,[W]",time_start$,stukl_com_handle,stukl_com_handle)
 		gosub STUKL_ADD
 	loop 
 	STUKL_ADD: ! 
-	let fnadd_one$(mat stukl_key_list$,stukl_key$,no_add_blanks=0,no_add_duplicates=1)
-	let stukl_key_prior$=stukl_key$
+	fnadd_one$(mat stukl_key_list$,stukl_key$,no_add_blanks=0,no_add_duplicates=1)
+	stukl_key_prior$=stukl_key$
 	return  ! STUKL_ADD
 	STUKL_EOF: ! 
 	close #stukl_com_handle: 
-	let fn_table_unique_key_list=udim(mat stukl_key_list$)
+	fn_table_unique_key_list=udim(mat stukl_key_list$)
 fnend  ! fn_table_unique_key_list
 def library fnstring_to_wordlist(stw_source$*1024,mat stw_wordlist$)
 	gosub SETUP_LIBRARY
 	gosub SETUP_CONSTANTS
-	let fnstring_to_wordlist=fn_string_to_wordlist(stw_source$,mat stw_wordlist$)
+	fnstring_to_wordlist=fn_string_to_wordlist(stw_source$,mat stw_wordlist$)
 fnend  ! fnstring_to_wordlist
 def fn_string_to_wordlist(stw_source$*1024,mat stw_wordlist$) ! stw_
-	let stw_source$=fnsymbol_xlate$(stw_source$)
-	let str2mat(srep$(stw_source$," ",tab$),mat stw_wordlist$, tab$)
+	stw_source$=fnsymbol_xlate$(stw_source$)
+	str2mat(srep$(stw_source$," ",tab$),mat stw_wordlist$, tab$)
 fnend  ! fn_string_to_wordlist
 def library fnm2_string_in_choice(msic_user_input$*1024,msic_option_text$*1024)
 	gosub SETUP_LIBRARY
 	gosub SETUP_CONSTANTS
-	let fnm2_string_in_choice=fn_m2_string_in_choice(msic_user_input$,msic_option_text$)
+	fnm2_string_in_choice=fn_m2_string_in_choice(msic_user_input$,msic_option_text$)
 fnend  ! fnm2_string_in_choice
 def fn_m2_string_in_choice(msic_user_input$*1024,msic_option_text$*1024) ! msic_
 	dim msic_wordlist_a$(1)*128
 	dim msic_wordlist_b$(2)*128
-	let fn_string_to_wordlist(lwrc$(msic_user_input$),mat msic_wordlist_a$)
-	let fn_string_to_wordlist(lwrc$(msic_option_text$),mat msic_wordlist_b$)
-	let fn_m2_string_in_choice=fn_wordlist_compare_all_left(mat msic_wordlist_a$,mat msic_wordlist_b$)
+	fn_string_to_wordlist(lwrc$(msic_user_input$),mat msic_wordlist_a$)
+	fn_string_to_wordlist(lwrc$(msic_option_text$),mat msic_wordlist_b$)
+	fn_m2_string_in_choice=fn_wordlist_compare_all_left(mat msic_wordlist_a$,mat msic_wordlist_b$)
 fnend  ! fn_m2_string_in_choice
 def library fnwordlist_compare_all_left(mat wcap_wordlist_a$,mat wcap_wordlist_b$)
 	gosub SETUP_LIBRARY
 	gosub SETUP_CONSTANTS
-	let fnwordlist_compare_all_left=fn_wordlist_compare_all_left(mat wcap_wordlist_a$,mat wcap_wordlist_b$)
+	fnwordlist_compare_all_left=fn_wordlist_compare_all_left(mat wcap_wordlist_a$,mat wcap_wordlist_b$)
 fnend  ! FnWordlist_Compare_all_left
 def fn_wordlist_compare_all_left(mat wcap2_wordlist_a$,mat wcap2_wordlist_b$) ! wcap2_
 	! returns true if all words in wordlist_A are either words or the start of words in wordlist_B
 	! this function IS CASE SENSITIVE
-	let wcap2_return=false
-	let wcap2_hit_count=0
-	let wcap2_wordlist_a_count=udim(mat wcap2_wordlist_a$)
-	let wcap2_wordlist_b_count=udim(mat wcap2_wordlist_b$)
+	wcap2_return=false
+	wcap2_hit_count=0
+	wcap2_wordlist_a_count=udim(mat wcap2_wordlist_a$)
+	wcap2_wordlist_b_count=udim(mat wcap2_wordlist_b$)
 	for wcap2_wa_item=1 to wcap2_wordlist_a_count
-		if fn_word_vs_wordlist_left(wcap2_wordlist_a$(wcap2_wa_item),mat wcap2_wordlist_b$) then let wcap2_hit_count+=1
+		if fn_word_vs_wordlist_left(wcap2_wordlist_a$(wcap2_wa_item),mat wcap2_wordlist_b$) then wcap2_hit_count+=1
 	next wcap2_wa_item
-	if wcap2_hit_count=wcap2_wordlist_a_count then let wcap2_return=true
-	let fn_wordlist_compare_all_left=wcap2_return
+	if wcap2_hit_count=wcap2_wordlist_a_count then wcap2_return=true
+	fn_wordlist_compare_all_left=wcap2_return
 fnend  ! Fn_Wordlist_Compare_all_left
 def library fnword_vs_wordlist_left(wvwl_word$*128,mat wvwl_wordlist$)
 	gosub SETUP_LIBRARY
 	gosub SETUP_CONSTANTS
-	let fnword_vs_wordlist_left=fn_word_vs_wordlist_left(wvwl_word$,mat wvwl_wordlist$)
+	fnword_vs_wordlist_left=fn_word_vs_wordlist_left(wvwl_word$,mat wvwl_wordlist$)
 fnend  ! fnword_vs_wordlist_left
 def fn_word_vs_wordlist_left(wvwl_word$*128,mat wvwl_wordlist$) ! wvwl_
 	! this function IS CASE SENSITIVE
-	let wvwl_return=false
-	if srch(mat wvwl_wordlist$,wvwl_word$)>0 then let wvwl_return=true : goto WVWL_XIT
-	let wvwl_word_len=len(wvwl_word$)
+	wvwl_return=false
+	if srch(mat wvwl_wordlist$,wvwl_word$)>0 then wvwl_return=true : goto WVWL_XIT
+	wvwl_word_len=len(wvwl_word$)
 	for wvwl_wordlist_item=1 to udim(mat wvwl_wordlist$)
 		if fn_is_number(wvwl_word$(1:1)) then 
-			if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) then let wvwl_return=true : goto WVWL_XIT
+			if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) then wvwl_return=true : goto WVWL_XIT
 		else 
 			if wvwl_word_len<=2 then ! or env$("username")='JBowman' then
-				if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) then let wvwl_return=true : goto WVWL_XIT
+				if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) then wvwl_return=true : goto WVWL_XIT
 			else 
-				if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) or fnsoundex$(wvwl_word$)=fnsoundex$(wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len)) then let wvwl_return=true : goto WVWL_XIT
+				if wvwl_word$=wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len) or fnsoundex$(wvwl_word$)=fnsoundex$(wvwl_wordlist$(wvwl_wordlist_item)(1:wvwl_word_len)) then wvwl_return=true : goto WVWL_XIT
 			end if  ! wvwl_word_len<=2   /   else 
 		end if  ! fn_is_number(wvwl_word$)   /   else 
 	next wvwl_wordlist_item
 	WVWL_XIT: ! 
-	let fn_word_vs_wordlist_left=wvwl_return
+	fn_word_vs_wordlist_left=wvwl_return
 fnend  ! fn_word_vs_wordlist_left
 def fn_is_number(hn_string$*128)
-	let hn_return=0
-	let val(hn_string$) conv HN_FINIS
-	let hn_return=1
+	hn_return=0
+	val(hn_string$) conv HN_FINIS
+	hn_return=1
 	HN_FINIS: ! 
-	let fn_is_number=hn_return
+	fn_is_number=hn_return
 fnend  ! fn_is_number
 def fn_array_move_braketed_to_top(mat amb_list$)
 	dim amb_bracketed$(1)*128
 	mat amb_bracketed$(0)
-	let amb_item=0
+	amb_item=0
 	do until amb_item>=udim(mat amb_list$)
-		let amb_item+=1
+		amb_item+=1
 		if amb_list$(amb_item)(1:1)='[' then 
-			let fnadd_one$(mat amb_bracketed$,amb_list$(amb_item))
-			let fnremove_arrayitem$(mat amb_list$,amb_item)
-			let amb_item-=1
+			fnadd_one$(mat amb_bracketed$,amb_list$(amb_item))
+			fnremove_arrayitem$(mat amb_list$,amb_item)
+			amb_item-=1
 		end if  ! amb_list$(amb_item)(1:1)='[' then
 	loop 
-	let amb_list_count=udim(mat amb_list$)
-	let amb_bracketed_count=udim(mat amb_bracketed$)
+	amb_list_count=udim(mat amb_list$)
+	amb_bracketed_count=udim(mat amb_bracketed$)
 	if amb_bracketed_count>0 then 
 		mat amb_list$(amb_list_count+amb_bracketed_count)
 		mat amb_list$(amb_bracketed_count+1:amb_list_count+amb_bracketed_count)=amb_list$(1:amb_list_count)
@@ -1948,7 +1948,7 @@ def fn_array_move_braketed_to_top(mat amb_list$)
 fnend  ! fn_array_move_braketed_to_top(mat ambtt_array$)
 def library fncombobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable)
 	if ~setup then fn_setup
-	let fncombobox$=fn_combobox$(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$, cb_col_heading$,cb_default_selection$,cb_timeout,cb_select_disable)
+	fncombobox$=fn_combobox$(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$, cb_col_heading$,cb_default_selection$,cb_timeout,cb_select_disable)
 fnend  ! fncombobox
 def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_width,mat cb_opt$; cb_col_heading$*80,cb_default_selection$*256,cb_timeout,cb_select_disable) ! cb_
 	! this function will return fkey 93 (big x), fkey 101 (timeout), or fkey 0 (selection made or canceled)
@@ -1956,79 +1956,79 @@ def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_
 	dim cb_heading$(1)*80,cb_width(1),cb_form$(1)*20
 	dim cb_filter$*128
 
-	let cb_return$=''
-	let cb_rinput_process_count=0
-	let cb_opt_count=udim(mat cb_opt$) 
+	cb_return$=''
+	cb_rinput_process_count=0
+	cb_opt_count=udim(mat cb_opt$) 
 	if cb_opt_count=0 then             print bell; : goto CB_XIT
-	let cb_width$=str$(cb_width)
-	let fn_array_sort$(mat cb_opt$)
-	let fn_array_move_braketed_to_top(mat cb_opt$)
-	let cb_opt_filter=0
+	cb_width$=str$(cb_width)
+	fn_array_sort$(mat cb_opt$)
+	fn_array_move_braketed_to_top(mat cb_opt$)
+	cb_opt_filter=0
 	if udim(cb_opt$)=0 then             print bell; : goto CB_XIT
-	mat cb_filter$(udim(cb_opt$))=(""): let cb_filter$=last_cb_filter$=""
+	mat cb_filter$(udim(cb_opt$))=(""): cb_filter$=last_cb_filter$=""
 	for cb_opt_item=1 to cb_opt_count
-		let cb_filter$=rtrm$(cb_opt$(cb_opt_item))
+		cb_filter$=rtrm$(cb_opt$(cb_opt_item))
 		if uprc$(cb_filter$)<>uprc$(last_cb_filter$) then 
-			let cb_filter$(cb_opt_filter+=1)=cb_filter$ 
-			let last_cb_filter$=uprc$(cb_filter$)
+			cb_filter$(cb_opt_filter+=1)=cb_filter$ 
+			last_cb_filter$=uprc$(cb_filter$)
 		end if
 	next cb_opt_item
-	let cb_opt_count=cb_opt_filter 
+	cb_opt_count=cb_opt_filter 
 	if cb_opt_filter=0 then             print bell; : goto CB_XIT
 	mat cb_opt$(cb_opt_count)=cb_filter$(1:cb_opt_count)
-	let cb_default_selection$=rtrm$(cb_default_selection$)
+	cb_default_selection$=rtrm$(cb_default_selection$)
 	! 
-	if cb_opt_count=0 then print bell;'ComboBox - no options to select, default returned.' : let cb_return$=cb_default_selection$ : goto CB_XIT
+	if cb_opt_count=0 then print bell;'ComboBox - no options to select, default returned.' : cb_return$=cb_default_selection$ : goto CB_XIT
 	! 
-	if cb_default_selection$='' and srch(mat cb_opt$,'')<=0 and ~cb_select_disable then let cb_default_selection$=cb_opt$(1)
-	let cb_default_which=srch(mat cb_opt$,cb_default_selection$)
+	if cb_default_selection$='' and srch(mat cb_opt$,'')<=0 and ~cb_select_disable then cb_default_selection$=cb_opt$(1)
+	cb_default_which=srch(mat cb_opt$,cb_default_selection$)
 	if cb_default_which<=0 and ~cb_select_disable then 
-		let cb_filter$=''
-		let cb_default_which=1
+		cb_filter$=''
+		cb_default_which=1
 		print bell;'ComboBox - invalid default selection passed ('&cb_default_selection$&') could not be found in passed options (mat cb_opt$).  cb_opt$(1) ('&cb_opt$(1)&') will be the default instead.'
 		if developer then pause 
 	end if 
-	let cb_return$=cb_filter$=cb_default_selection$ ! cb_opt$(cb_default_which)
-	let cb_current_selection=cb_default_which
+	cb_return$=cb_filter$=cb_default_selection$ ! cb_opt$(cb_default_which)
+	cb_current_selection=cb_default_which
 	! 
-	if cb_parent=0 and (cb_parent_rows=0 or cb_parent_cols=0) then let cb_parent_rows=session_rows : let cb_parent_cols=session_cols
+	if cb_parent=0 and (cb_parent_rows=0 or cb_parent_cols=0) then cb_parent_rows=session_rows : cb_parent_cols=session_cols
 	if cb_parent<>0 and (cb_parent_rows=0 or cb_parent_cols=0) then print 'error - parent used but parents size was not passed.' : pause 
 	! calc above or below
-	let tmp_lines_above=cb_srow-1
-	let tmp_lines_below=cb_parent_rows-cb_srow
-	if tmp_lines_above>tmp_lines_below then let cb_parent_above=1 else let cb_parent_above=0
+	tmp_lines_above=cb_srow-1
+	tmp_lines_below=cb_parent_rows-cb_srow
+	if tmp_lines_above>tmp_lines_below then cb_parent_above=1 else cb_parent_above=0
 	! calc above or below
 	if cb_parent_above then ! combo box apears on and ABOVE cb_srow
-		let cb_srow_origional=cb_srow
-		let cb_rows=min(cb_opt_count+2,cb_srow_origional)
-		let cb_rows=max(cb_rows,4)
-		let cb_srow=max(cb_srow_origional-cb_rows+1,2)
+		cb_srow_origional=cb_srow
+		cb_rows=min(cb_opt_count+2,cb_srow_origional)
+		cb_rows=max(cb_rows,4)
+		cb_srow=max(cb_srow_origional-cb_rows+1,2)
 	else ! combo box apears on and BELOW cb_srow
-		let cb_rows=min(cb_opt_count+2,cb_parent_rows-cb_srow)
+		cb_rows=min(cb_opt_count+2,cb_parent_rows-cb_srow)
 	end if  ! cb_parent_above
 
 	open #cb_canvas_handle:=fngethandle: 'Parent='&str$(cb_parent)&',SRow='&str$(cb_srow)&',SCol='&str$(cb_scol)&',Cols='&str$(cb_width)&',Rows='&str$(cb_rows)&',Border=S,N=[N]',display,output 
 
-	let cb_canvas_handle$=str$(cb_canvas_handle)
+	cb_canvas_handle$=str$(cb_canvas_handle)
 
-	let cb_grid_height$=str$(cb_grid_height=cb_rows-1)
-	let cb_heading$(1)=cb_col_heading$
-	let cb_width(1)=cb_width
-	let cb_form$(1)='Cl 128,[M]LX^NoSort'
+	cb_grid_height$=str$(cb_grid_height=cb_rows-1)
+	cb_heading$(1)=cb_col_heading$
+	cb_width(1)=cb_width
+	cb_form$(1)='Cl 128,[M]LX^NoSort'
 
 	if cb_parent_above then 
 		open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
 	!     open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
-		let cb_grid_field$='1,1,List '&cb_grid_height$&'/'&cb_width$
-		let cb_field$(1)=str$(cb_rows)&',1,'&str$(cb_width)&'/Search 128,[D]STAEX,1,1'
+		cb_grid_field$='1,1,List '&cb_grid_height$&'/'&cb_width$
+		cb_field$(1)=str$(cb_rows)&',1,'&str$(cb_width)&'/Search 128,[D]STAEX,1,1'
 	else ! combo box apears on and BELOW cb_srow
 		open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
 	!     open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
-		let cb_grid_field$='2,1,List '&cb_grid_height$&'/'&cb_width$
-		let cb_field$(1)='1,1,'&str$(cb_width)&'/Search 128,[D]STAEX,2,1'
+		cb_grid_field$='2,1,List '&cb_grid_height$&'/'&cb_width$
+		cb_field$(1)='1,1,'&str$(cb_width)&'/Search 128,[D]STAEX,2,1'
 	end if  ! cb_parent_above   /   else 
 	print #cb_x_handle,fields '1,1,P 1/2,[Toolbar],B99',help "3a;[Esc] Exit;": 'Icons\Combo_X.PNG'
-	let cb_field$(2)=cb_grid_field$&',RowSub,SelOne'
+	cb_field$(2)=cb_grid_field$&',RowSub,SelOne'
 
 	print #cb_canvas_handle, fields cb_grid_field$&",Headers,S[N]": (mat cb_heading$, mat cb_width, mat cb_form$)
 	print #cb_canvas_handle, fields cb_grid_field$&",=R,-1": mat cb_opt$
@@ -2036,54 +2036,54 @@ def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_
 
 	CB_ASK: ! 
 	!   rinput #cb_canvas_handle,wait=0,fields cb_field$(2): cb_current_selection timeout IGNORE
-	let curfld(2,cb_current_selection)
+	curfld(2,cb_current_selection)
 	rinput #cb_canvas_handle, fields cb_field$(2)&',nowait': cb_current_selection
-	let curfld(1)
+	curfld(1)
 	if cb_timeout>0 then 
 		rinput #cb_canvas_handle, fields mat cb_field$,attr '[A]',wait=cb_timeout: cb_filter$,cb_current_selection timeout ignore
 	else 
 		rinput #cb_canvas_handle, fields mat cb_field$: cb_filter$,cb_current_selection
 	end if  ! cb_timeout>0   /   else 
 
-	let cb_rinput_process_count+=1
-	let cb_curfld=curfld
+	cb_rinput_process_count+=1
+	cb_curfld=curfld
 	if fkey=93 then 
-		let cb_return$=cb_default_selection$
+		cb_return$=cb_default_selection$
 	else if fkey=99 then 
-		let cb_return$=cb_default_selection$
+		cb_return$=cb_default_selection$
 	else if fkey=101 then ! Timeout
-		let cb_return$=cb_default_selection$
+		cb_return$=cb_default_selection$
 	else if fkey=103 then ! left
 		goto CB_ASK
 	else if fkey=90 or fkey=91 or fkey=102 or fkey=104 or fkey=105 or fkey=106 then 
 		if fkey=90 then ! Text, PgUp
-			let cb_current_selection=cb_nextrow=max(1,cb_current_selection-cb_grid_height)
+			cb_current_selection=cb_nextrow=max(1,cb_current_selection-cb_grid_height)
 		else if fkey=91 then ! Text, PgDn
-			let cb_current_selection=cb_nextrow=min(cb_opt_count,cb_current_selection+cb_grid_height)
+			cb_current_selection=cb_nextrow=min(cb_opt_count,cb_current_selection+cb_grid_height)
 		else if fkey=102 then ! Text, Up
-			let cb_current_selection=max(1,cb_current_selection-1)
-			let cb_filter$=cb_opt$(cb_current_selection)
-	!       let cb_nextrow=cb_current_selection-1
+			cb_current_selection=max(1,cb_current_selection-1)
+			cb_filter$=cb_opt$(cb_current_selection)
+	!       cb_nextrow=cb_current_selection-1
 		else if fkey=104 then ! Text, Down
-			let cb_current_selection=min(cb_opt_count,cb_current_selection+1)
-			let cb_filter$=cb_opt$(cb_current_selection)
-	!       let cb_nextrow=cb_current_selection+1
+			cb_current_selection=min(cb_opt_count,cb_current_selection+1)
+			cb_filter$=cb_opt$(cb_current_selection)
+	!       cb_nextrow=cb_current_selection+1
 		else if fkey=105 then 
-			let cb_nextrow=currow-1
+			cb_nextrow=currow-1
 		else if fkey=106 then 
-			let cb_nextrow=currow+1
+			cb_nextrow=currow+1
 		end if 
-		let cb_nextrow=max(1,cb_nextrow)
-		let cb_nextrow=min(cb_nextrow,cb_opt_count)
-		let curfld(2,cb_nextrow)
+		cb_nextrow=max(1,cb_nextrow)
+		cb_nextrow=min(cb_nextrow,cb_opt_count)
+		curfld(2,cb_nextrow)
 		goto CB_ASK
 	else if fkey=112 then ! Home
-		let cb_filter$=cb_opt$(1)
-		let curfld(2,1)
+		cb_filter$=cb_opt$(1)
+		curfld(2,1)
 		goto CB_ASK
 	else if fkey=113 then ! End
-		let cb_filter$=cb_opt$(cb_opt_count)
-		let curfld(2,cb_opt_count)
+		cb_filter$=cb_opt$(cb_opt_count)
+		curfld(2,cb_opt_count)
 		goto CB_ASK
 	else if fkey=116 or fkey=126 or fkey=127 or fkey=135 or fkey=136 then ! Right or Ctrl+Up or Ctrl+Down or Ctrl+Shift+Up or Ctrl+Shift+Down
 		goto CB_ASK
@@ -2092,31 +2092,31 @@ def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_
 			goto CB_ASK
 		else 
 			rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
-			let cb_return$=cb_filter$=cb_opt$(cb_current_selection)
-			let fkey(0)
+			cb_return$=cb_filter$=cb_opt$(cb_current_selection)
+			fkey(0)
 		end if  ! nxtfld=1   /   else 
 	else if fkey=200 or fkey=206 then 
-		let curfld(cb_curfld,fkey)
-		let cb_filter$=""
+		curfld(cb_curfld,fkey)
+		cb_filter$=""
 		rinput #cb_canvas_handle,wait=0,fields mat cb_field$: cb_filter$,cb_current_selection timeout ignore
-		let cb_filter$=cb_opt$(cb_current_selection)
+		cb_filter$=cb_opt$(cb_current_selection)
 		goto CB_ASK
 	else ! any other FKey, should return with the selection
 		if cb_select_disable then 
-			let cb_return$=cb_filter$
+			cb_return$=cb_filter$
 		else 
-			let cb_return$=cb_opt$(cb_current_selection)
+			cb_return$=cb_opt$(cb_current_selection)
 		end if  ! cb_select_disable
 	end if  ! Fkey=...
 	! ~
 	! ~  only succesful result should fall through, all othere should goto CB_ASK
-	let scr_freeze
+	scr_freeze
 	close #cb_canvas_handle: ioerr ignore
-	let cb_canvas_handle=0
-	!   if fkey<>93 and fkey<>101 and fkey<>110 and fkey<>111 then let fkey(0) ! all FKey values should be returned.
+	cb_canvas_handle=0
+	!   if fkey<>93 and fkey<>101 and fkey<>110 and fkey<>111 then fkey(0) ! all FKey values should be returned.
 	goto CB_XIT
 	! ~
 	CB_XIT: ! 
-	let fn_combobox$=cb_return$
+	fn_combobox$=cb_return$
 fnend  ! fn_combobox$
 include: cm\enum\common

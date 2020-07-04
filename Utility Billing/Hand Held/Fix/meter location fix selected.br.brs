@@ -44,59 +44,45 @@ def fn_fixIt
 	FiEoLocation: !
 	fnclosefile(hLocation,'U4 Meter Location')
 fnend
-def fn_isTransmitterNumber(number$*64)
-	itnReturn=0 : itnTestCount+=1
-	if number$(1:3)='220' then itnReturn=1
-	! if number$(1:3)='693' then itnReturn=1
-	if itnReturn then itnTrue+=1 else itnFalse+=1
-	fn_isTransmitterNumber=itnReturn
+def fn_isTransmitterNumber(number$*64; ___,returnN)
+	itnTestCount+=1
+	if number$(1:3)='220' then returnN=1
+	! if number$(1:3)='693' then returnN=1
+	if returnN then itnTrue+=1 else itnFalse+=1
+	fn_isTransmitterNumber=returnN
 fnend
-def fn_fixTransmitterMeterMixup(&transmitter$,&meter$)
-	ftmnmReturn=0
+def fn_fixTransmitterMeterMixup(&transmitter$,&meter$; ___,returnN)
 	transmitter$=trim$(transmitter$)
 	meter$=trim$(meter$)
 	if fn_isTransmitterNumber(transmitter$) and fn_isTransmitterNumber(meter$) then
-		if meter$<>'' then ftmnmReturn=1
+		if meter$<>'' then returnN=1
 		meter$=''
 	else if fn_isTransmitterNumber(transmitter$) and ~fn_isTransmitterNumber(meter$) then
 		! it's perfect do nothing
-		ftmnmReturn=0
+		returnN=0
 	else if ~fn_isTransmitterNumber(transmitter$) and fn_isTransmitterNumber(meter$) then
 		dim holdTransmitter$*64
 		holdTransmitter$=meter$
 		meter$=transmitter$
 		transmitter$=holdTransmitter$
-		ftmnmReturn=3
+		returnN=3
 	else if ~fn_isTransmitterNumber(transmitter$) and ~fn_isTransmitterNumber(meter$) then
 		if transmitter$<>'' then
 			if meter$<>'' and transmitter$<>meter$ then
 				pr 'prob   meter:'&meter$&'  transmitter:'&transmitter$
 				! pause
-				ftmnmReturn=0
+				returnN=0
 				goto OutOfThis
 			end if
-			ftmnmReturn=2
+			returnN=2
 			meter$=transmitter$
 			transmitter$=''
 		end if
 	end if
 	OutOfThis: !
-	fn_fixTransmitterMeterMixup=ftmnmReturn
+	fn_fixTransmitterMeterMixup=returnN
 fnend
  
-def fn_open(fileName$*255, mat openData$, mat openDataN, mat form$; inputOnly,openKeyNum,disableEnumSort,openPath$*255,mat openDescription$,mat fieldWidths,disableUpdate, ___,fileIoEnumItem)
-	dim form$(0)*2048 ! global
-	dim fileIoEnum$(1)*800
-	dim loadedEnums$(1)*32
-	fn_open=fnOpenFile(fileName$, mat openData$, mat openDataN, mat form$, inputOnly,openKeyNum,disableEnumSort, openPath$,mat openDescription$,mat fieldWidths, mat fileIoEnum$,disableUpdate)
-	if ~max(srch(mat loadedEnums$,uprc$(fileName$)),0) then
-		mat loadedEnums$(udim(mat loadedEnums$)+1)
-		loadedEnums$(udim(mat loadedEnums$))=uprc$(fileName$)
-		for fileIoEnumItem=1 to udim(mat fileIoEnum$)
-			execute fileIoEnum$(fileIoEnumItem)
-		next fileIoEnumItem
-	end if
-fnend
 def fn_quickExport(; append$*18)
 	dim location$(0)*256,locationN(0)
 	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,1)
@@ -110,3 +96,4 @@ def fn_quickExport(; append$*18)
 	close #hLocation:
 	close #hOut:
 fnend
+include: fn_open
