@@ -11,4 +11,4 @@
 	font_mod=0 : _
 	mytext$="This is a two Line Label, Woo Hoo."
 	fnLbl(myline,mypos,mytext$,mylen,myalign,font_mod)
-	fnAcs2(2,mat response$,ckey)
+	fnAcs(2,mat response$,ckey)

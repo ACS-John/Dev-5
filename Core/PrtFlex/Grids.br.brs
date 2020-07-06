@@ -60,7 +60,7 @@ SelectDataBase: !
 	fncomboa("OTHER",1,18,mat database_list$,empty$,20)
 	resp$(1)=database_list$(1)
 	fnCmdSet(2)
-	fnAcs('',0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	database$=resp$(1)
 !
@@ -84,7 +84,7 @@ GRIDSELECTION: ! r:
 	fnCmdKey("&Add",3)
 	fnCmdKey("&Delete",4)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	resp$(1)=trim$(resp$(1)(1:20))
 	if ckey=5 then goto SelectDataBase
 	if ckey=3 then goto AddGridName
@@ -134,7 +134,7 @@ GridColumns: !  r: Displays all vaiables in the data base and allows you to     
 	fnCmdKey("Display &Grid",3)
 	fnCmdKey("&Back",4)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey) ! CALL items selected
+	fnAcs(mat resp$,ckey) ! CALL items selected
 	if ckey=5 then goto Xit
 	if ckey=1 then goto DisplayGrid
 	if ckey=3 then goto PrintGrid
@@ -187,7 +187,7 @@ DisplayGrid: !
 	if udim(mat gridname_list$)=>1 then gridinfo$(respc)=gridname_list$(1) else gridinfo$(respc)=''
 	fnCmdKey("&Add Column",1,1)
 	fnCmdKey("&Finish",5,0,1)
-	fnAcs('',0,mat gridinfo$,ckey) ! data options available
+	fnAcs(mat gridinfo$,ckey) ! data options available
 	if ckey=1 then goto AddToGrid
 	if ckey=5 then goto GridColumns
 goto GridColumns ! /r
@@ -304,7 +304,7 @@ AddGridName: ! r: Allows you to add columns to your grid
 	gridinfo$(2)=gridname$
 	fnTxt(1,22,11,11,0,"",0,"Limited to 11 characters!" )
 	fnCmdSet(2)
-	fnAcs('',0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto GRIDSELECTION
 	resp$(1)=trim$(resp$(1))
 	resp$(1)=trim$(resp$(1))(1:20)

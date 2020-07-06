@@ -39,7 +39,7 @@ def library fnemployee_srch(&x$; fixgrid)
 	L280: !
 	if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	x$=lpad$(resp$(1)(1:8),8)
 	if ckey=5 then x$="        " ! no one selected
 goto Xit

@@ -103,7 +103,7 @@ SCREEN1: ! r:
 	rc+=1
 	if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_accum_type$(1)
 	fnCmdSet(2)
-	fnAcs2(mat scr1_resp$,ckey)
+	fnAcs(mat scr1_resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 12
 L560: !

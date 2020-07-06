@@ -32,7 +32,7 @@ ERR_READ: ! r:
 		if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 		fnCmdKey("&Next",2,1,0,"Allows you to select the highlighted record.")
 		fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
-		fnAcs2(mat resp$,ckey) ! CALL FLEXGRID
+		fnAcs(mat resp$,ckey) ! CALL FLEXGRID
 		cn$=lpad$(resp$(1)(1:5),5)
 		if ckey=5 then cn$="     " ! no one selected
 	goto Xit ! /r

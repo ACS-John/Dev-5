@@ -21,7 +21,7 @@ fnLbl(2,1,"Employee Register CSV:",col1_width,1)
 fnTxt(2,col2_pos,30,256,0,'70',0,'')
 resp$(1)=emplRegisterFile$
 fnCmdSet(2)
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 emplRegisterFile$=resp$(1)
 fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)

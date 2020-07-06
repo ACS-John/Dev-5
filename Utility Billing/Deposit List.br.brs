@@ -53,7 +53,7 @@
 	fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
 	resp$(resp_filter:=5)=filter_default$
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
 	if resp$(2)="True" then seq=1 else seq=2 ! 1=name sequence  2= route sequence

@@ -25,7 +25,7 @@ SCR1: !
 		fnTxt(j+2,20,8,0,0,"3") : _
 		resp$(j)="" : _
 	next j
-	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 8
 L250: x=pos(resp$(j),"/",1)

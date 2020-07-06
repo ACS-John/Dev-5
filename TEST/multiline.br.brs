@@ -12,5 +12,5 @@
 	resp$(1)="This is a test"
 	fnCmdKey("This is a test of dynamic button width",5,0,1) : _
 	fnCmdKey("I",1)
-	fnAcs('test',win,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	pr mat resp$

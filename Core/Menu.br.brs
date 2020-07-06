@@ -1,25 +1,10 @@
 enableFavorites=1
-
 fn_setup
 
-fn_setup_once
-fn_main
-if menu$='Exit and Logout' then
-	execute "System Logoff"
-end if
-goto Xit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim system_abbr_list$(1)*20,ml$(1)*128,last_update$*128,last_save$*128
-		dim resp$(32)*255
-	end if
-fnend
-def fn_setup_once
+! r: setup once (additional setup stuff that just needs to be run once)
 	setenv('Session_Rows', '35')
 	setenv('Session_Cols','115')
-
+	dim ml$(1)*128
 	if ~fnclient_has_mat(mat client_has$) then
 		mat ml$(3)
 		ml$(1)='Client '&env$('client')&' has nothing licensed.'
@@ -33,7 +18,19 @@ def fn_setup_once
 			goto Xit
 		end if
 	end if
-	fn_get_system_abbr_list(mat system_abbr_list$)
+	dim system_abbr_list$(0)*20
+	dim system_name$(0)*40
+	mat system_abbr_list$(0)
+	mat system_name$(0)
+	fn_addIfLicensed('CM')
+	fn_addIfLicensed('TM')
+	fn_addIfLicensed('OE')
+	fn_addIfLicensed('CM')
+	fn_addIfLicensed('CL')
+	fn_addIfLicensed('GL')
+	fn_addIfLicensed('PR')
+	fn_addIfLicensed('UB')
+
 	if ~udim(mat system_abbr_list$) then
 		mat ml$(4)
 		ml$(1)='No systems detected.  Please perform an update.'
@@ -51,7 +48,6 @@ def fn_setup_once
 
 	dim cursys$*2
 	cursys$=fncursys$(cursys$)
-	library 'S:\Core\Library': fncno
 	dim cnam$*128
 	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
 	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
@@ -66,7 +62,7 @@ def fn_setup_once
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
 	! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
 	! fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
-	fn_setup_on_cursys_change
+	fn_setupOnCursysChange
 
 	dim temp$*2048
 	temp$=''
@@ -75,6 +71,7 @@ def fn_setup_once
 
 	fnTop(program$)
 
+	dim last_update$*128
 	fnreg_read('Last Update',last_update$)
 	if last_update$='' then last_update$='(never updated)'
 	!     setenv('Icon','S:\Core\Icon\ACS-v5.ico')
@@ -83,13 +80,27 @@ def fn_setup_once
 		fnureg_read('FavoritesOpen',FavoritesOpen$, 'False')
 		setenv('FavoritesOpen',FavoritesOpen$)
 	end if
-	fn_grid_setup
+	fn_gridSetup
 	fn_checkFileVersionIfNecessary
 	! fnreg_read('Report_Cache',report_cache$)
 	if ~(env$('cursys')='TM' and env$('cno')='420') then
 		fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
 	end if
 	setenv('ForceScreenIOUpdate','')
+! /r
+
+fn_main
+
+if menu$='Exit and Logout' then
+	execute "System Logoff"
+end if
+goto Xit
+def fn_addIfLicensed(sysCode$)
+	! if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	if fnclient_has(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+		fnAddOneC(mat system_abbr_list$,sysCode$)
+		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
+	end if
 fnend
 def fn_checkFileVersionIfNecessary
 	! if necessary detect if this company needs any automatic conversions
@@ -100,7 +111,7 @@ def fn_checkFileVersionIfNecessary
 		fncreg_write('last version used',version_current$)
 	end if
 fnend
-def fn_grid_setup
+def fn_gridSetup
 	screen_height=35 : grid_height=screen_height-5-dashboard_height
 	if dashboard_height>0 then grid_height=grid_height-1
 	! filter_line=2
@@ -139,7 +150,7 @@ def fn_grid_setup
 	column_mask$(3)='80'
 	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
 fnend
-def fn_setup_on_cursys_change
+def fn_setupOnCursysChange
 	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256
 	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	fncno(cno)
@@ -153,14 +164,14 @@ def fn_setup_on_cursys_change
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 	end if
 
-	dashboard_height=fn_dashboard_height
-	fn_grid_setup !
+	dashboard_height=fn_dashboardHeight
+	fn_gridSetup !
 	if ~exists(dataFolder$&'\Company.h[cno]') then
-	
+
 		chain "S:\Core\Programs\Select Company.br"
 	end if
 fnend
-def fn_caption_update
+def fn_captionUpdate
 	setenv('Program_Caption',fnSystemNameFromAbbr$(env$('cursys')))
 	fncompany_name(0,screen_width)
 fnend
@@ -169,16 +180,17 @@ def fn_main
 	do
 		if env$('ExitNow')<>'yes' then
 			Tos: !
-			fnTos(screen_name$:='Menu') : frameCount=0
+			fnTos : frameCount=0
 			fnflexinit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
 
-			fn_caption_update
-			fn_update_program_grid
-			fn_display_buttons
+			fn_captionUpdate
+			fn_updateProgramGrid
+			fn_displayButtons
 			if ~enableFavorites then
 				fnLbl(program_grid_line,1,'Filter:',info_col_width,1)
 			end if
 			fnreg_read('Last Save Date',last_save_date$)
+			dim last_save$*128
 			fnreg_read('Last Save File',last_save$)
 			dim tmp_tooltip$*2048
 			tmp_tooltip$='Last successful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
@@ -202,36 +214,37 @@ def fn_main
 			end if
 			tmp_tooltip$="ACS was last updated on "&last_update$&'\n to version '&version_current$&'.'
 			fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_col_width,2,0,0,0,tmp_tooltip$)
-			if env$('acsProduct')<>'ACS Online' then 
+			if env$('acsProduct')<>'ACS Online' then
 				fnLbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-			end if 
+			end if
 			fnLbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
-			fn_dashboard_draw
+			fn_dashboardDraw
 			if enableFavorites then fn_favoritesDraw
-			fn_display_menu
+			fn_displayMenu
 			! if env$('cursys')="PR" then
-			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard) 
+			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard)
 			!   if env$('taxYear')='2018' then resp$(2)='^' else resp$(2)='False'
 			! end if
 
 			setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 			fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
-			fnAcs2(mat resp$,fkey_value,0,0,0)
+			dim resp$(32)*255
+			fnAcs(mat resp$,fkey_value,0,0,0)
 			setenv('tmp_acs_back_arrow','')
 			program_selection$=resp$(1)
 			program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
 			program_selection$(1:pos(program_selection$,']'))=''
 			curfld_value=curfld
 			! if env$('cursys')="PR" then
-			!   if resp$(2)='True' or resp$(2)='^' then setenv('taxYear','2018') else setenv('taxYear','') 
+			!   if resp$(2)='True' or resp$(2)='^' then setenv('taxYear','2018') else setenv('taxYear','')
 			! end if
 			if fkey_value=1449 then ! fkey_facebook then ! =1449
 				execute 'sy -M -C Start https://www.facebook.com/pg/advancedcomputerservices/community/'
 				goto Tos
 			end if
 
-			
-			
+
+
 		end if
 
 		if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
@@ -240,7 +253,7 @@ def fn_main
 			fnureg_write('FavoritesOpen',env$('FavoritesOpen'))
 			goto Xit_MAIN
 		else
-			fn_session_reg_write(env$('cursys')&'.CurProg',str$(program_selection_id))
+			fn_sessionRegWrite(env$('cursys')&'.CurProg',str$(program_selection_id))
 		end if
 
 	!  if fkey_value=1 then !
@@ -249,11 +262,11 @@ def fn_main
 		if fkey_value=98 then ! r: drop down menu
 			menu_option$=menu$
 			if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.prc' then
-				fnclear_menu
+				fnClearMenu
 				execute 'proc '&menu_option$
 			else if lwrc$(menu_option$(len(menu_option$)-2:len(menu_option$)))='.br' then
 				menu_option$=srep$(menu_option$,'[cursys]',env$('cursys'))
-				fnclear_menu
+				fnClearMenu
 				fn_chain(menu_option$)
 			else if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.cmd' then
 				execute 'Sy -c "'&trim$(menu_option$)&'"'
@@ -276,10 +289,10 @@ def fn_main
 				if menu_option$='Open' then
 					fnOpenPartial
 				else if menu_option$='Save All Data As' then
-					fnclear_menu
+					fnClearMenu
 					fnFileSaveAs('*.*')
 				else if menu_option$='Save Company As' then
-					fnclear_menu
+					fnClearMenu
 					fnFileSaveAs('*h[cno]')
 				end if
 			else if lwrc$(ltrm$(menu_option$)(1:20))='editinwordprocessor:' then
@@ -306,10 +319,10 @@ def fn_main
 			else if lwrc$(menu_option$(1:8))='[cursys=' then
 				cursys$=menu_option$(9:10)
 				fncursys$(cursys$)
-				fn_setup_on_cursys_change
+				fn_setupOnCursysChange
 				fn_checkFileVersionIfNecessary
-				fn_update_program_grid
-				fn_caption_update
+				fn_updateProgramGrid
+				fn_captionUpdate
 			else if lwrc$(menu_option$(len(menu_option$):len(menu_option$)))='\' then ! it is a Folder - just open it
 				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnreport_cache_folder_current$)
 				execute 'sy -c -w explorer "'&os_filename$(menu_option$(1:len(menu_option$)-1))&'"'
@@ -319,7 +332,7 @@ def fn_main
 		!  else if fkey_value=67 then
 		!      /r  fkey=98
 		else if fkey_value=3 then
-			fnclear_menu
+			fnClearMenu
 			fnprogram_properties(trim$(program_name$(program_selection_id))) ! (program_selection$) ! 1 is the flag to chain back to main menu
 			chain program$
 		else if fkey_value=209 then
@@ -376,7 +389,7 @@ def fn_main
 					pr 'fkey_value=';fkey_value
 					pause
 				end if
-!
+
 			else if env$('cursys')='GL' and fkey_value<>0 then
 				if fnclient_has('G2') and fkey_value=fkey_g2_employee then
 						fnchain('S:\General Ledger\Accountants\Employee')
@@ -440,7 +453,7 @@ def fn_main
 				end if
 			end if
 		end if
-!
+
 	loop
 	Xit_MAIN: !
 fnend
@@ -463,7 +476,7 @@ def fn_callEditInWordProcessor(programSelection$*256)
 	programSelection$=trim$(programSelection$)
 	programSelection$(1:20)=''
 	dim fileToEditInWp$*256,options$*256
-	if (cewPosSpace1:=pos(programSelection$,' '))>0 then 
+	if (cewPosSpace1:=pos(programSelection$,' '))>0 then
 		fileToEditInWp$=programSelection$(1:cewPosSpace1-1)
 		options$=programSelection$(cewPosSpace1+1:inf)
 	else
@@ -481,7 +494,7 @@ def fn_callEditInWordProcessor(programSelection$*256)
 
 	fn_callEditInWordProcessor=fnEditFile(cewForce$,fileToEditInWp$)
 fnend
-def fn_dashboard_height
+def fn_dashboardHeight
 	if env$('cursys')="OE" then
 		dhReturn=1
 	else if env$('cursys')="CM" then
@@ -509,7 +522,7 @@ def fn_dashboard_height
 	end if
 
 	if env$('ACSDeveloper')<>'' then dhReturn=5
-	fn_dashboard_height=dhReturn
+	fn_dashboardHeight=dhReturn
 fnend
 def fn_ddAddButton(buttonText$*64,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
 	if buttonLine=0 then buttonLine=1
@@ -526,7 +539,7 @@ def fn_favoritesDraw
 		! fnFra(program_grid_line,favorite_left,grid_height-1,favorite_width,'Favorites')
 		fnFra(dashboard_height+3,favorite_left,favorite_height,favorite_width,'Favorites') :  : frameCount+=1 : fraFavorites=frameCount
 		dim favorite$(0)*128
-		fnFavoriteList(mat favorite$) 
+		fnFavoriteList(mat favorite$)
 		fnButton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
 		fnbutton_or_disabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
 		fnbutton_or_disabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
@@ -539,7 +552,7 @@ def fn_favoritesDraw
 		nex favItem
 	end if
 fnend
-def fn_dashboard_draw
+def fn_dashboardDraw
 	if dashboard_height>0 then
 		dashboard_width=screen_width-4
 		fnFra(1,1,dashboard_height,dashboard_width,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
@@ -560,7 +573,6 @@ def fn_dashboard_draw
 			fn_ddAddButton('Enter Time',fkey_pr_enter_time:=5002,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 		else if env$('cursys')="GL" then
-			library 'S:\Core\Library': fnpedat$
 			open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_Xit
 			read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
 			close #h_tmp:
@@ -610,38 +622,19 @@ def fn_dashboard_draw
 		! end if
 	end if
 fnend
-def fn_display_buttons
+def fn_displayButtons
 	fnCmdKey('OK' ,4,1,0,'Press "OK" to launch the selected program')
 	fnCmdKey('Help' ,1,0,0,'Press "Help" to launch the help page about this program')
 	fnCmdKey('Properties',3,0,0,'Press "Properties" to view the properties this program')
 	fnCmdKey('Exit',99,0,1,'Press "Exit" to quit')
-fnend  ! fn_display_buttons
-def fn_session_reg_read(ls_field_name$*128,&ls_field_value$)
-	fn_session_reg_read=fnreg_read(session$&'.'&ls_field_name$,ls_field_value$)
+fnend  ! fn_displayButtons
+def fn_sessionRegRead(ls_field_name$*128,&ls_field_value$)
+	fn_sessionRegRead=fnreg_read(session$&'.'&ls_field_name$,ls_field_value$)
 fnend
-def fn_session_reg_write(ls_field_name$*128,ls_field_value$*256)
-	fn_session_reg_write=fnreg_write(session$&'.'&ls_field_name$,ls_field_value$)
+def fn_sessionRegWrite(ls_field_name$*128,ls_field_value$*256)
+	fn_sessionRegWrite=fnreg_write(session$&'.'&ls_field_name$,ls_field_value$)
 fnend
-def fn_get_system_abbr_list(mat system_abbr_list$)
-	dim system_name$(0)*40
-	mat system_name$(0)
-	mat system_abbr_list$(0)
-	fn_add_if_licensed('CM')
-	fn_add_if_licensed('TM')
-	fn_add_if_licensed('OE')
-	fn_add_if_licensed('CM')
-	fn_add_if_licensed('CL')
-	fn_add_if_licensed('GL')
-	fn_add_if_licensed('PR')
-	fn_add_if_licensed('UB')
-fnend
-def fn_add_if_licensed(sysCode$)
-	! if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
-	if fnclient_has(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
-		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
-	end if
-fnend
+
 def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	if ~setup then fn_setup
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
@@ -664,7 +657,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 		linput #1: temp$ eof GPLA_EOF
 		if trim$(temp$)<>'' and trim$(temp$)(1:1)<>'!' then
 			str2mat(temp$,mat program_item$,'^')
-			if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then 
+			if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
 				program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
 			end if
 			if udim(mat program_item$)>=3 then
@@ -681,20 +674,20 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 				mat program_file$(glpa_program_count)
 				mat ss_text$(glpa_program_count)
 				mat program_level(glpa_program_count)
-				program_level(glpa_program_count)=fn_program_level(program_item$(1))
+				program_level(glpa_program_count)=fn_programLevel(program_item$(1))
 
 				program_name$(glpa_program_count)=srep$(rtrm$(program_item$(1)),'>','         ')
 				program_name_trim$(glpa_program_count)=trim$(program_name$(glpa_program_count))
-			
+
 				if program_item_count>1 then program_file$(glpa_program_count)=trim$(program_item$(2))
-			
+
 				if trim$(program_file$(glpa_program_count))='' then
 					program_plus$(glpa_program_count)='**' ! fn_get_one_plus$(h_plus,env$('cursys'),program_file$(glpa_program_count))
 				end if
-			
+
 				ss_text$(glpa_program_count)='' ! ss_text$(glpa_program_count)&cnvrt$('Pic(#####)',glpa_program_count)
 				gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
-			
+
 				for gt_item=1 to 10
 					if gt_count=gt_item-1 then mat ss_category$(gt_item) : ss_category$(gt_item)=program_name$(glpa_program_count)
 				next gt_item
@@ -702,7 +695,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 					ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' - '&ltrm$(ss_category$(ss_cat_item))
 				next ss_cat_item
 				ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&ltrm$(program_plus$(glpa_program_count))
-			
+
 				if program_item_count>1 then ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' ~ '&program_item$(2)
 			end if
 		end if
@@ -711,14 +704,13 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	close #1: ioerr ignore
 	GPLA_Xit: !
 fnend
-def fn_program_level(tmp$*512) !
-	chr_pos=0
+def fn_programLevel(tmp$*512; ___,returnN)
 	do
-		chr_pos+=1
-	loop while tmp$(chr_pos:chr_pos)='>'
-	fn_program_level=chr_pos
+		returnN+=1
+	loop while tmp$(returnN:returnN)='>'
+	fn_programLevel=returnN
 fnend
-def fn_update_program_grid
+def fn_updateProgramGrid
 	col_return=1
 	col_plus=2
 	col_name=3
@@ -728,13 +720,13 @@ def fn_update_program_grid
 	dim program_selection_id$*256
 	setenv('current_grid_row',str$(1))
 	program_selection_id=0
-	fn_session_reg_read(env$('cursys')&'.CurProg',program_selection_id$) : program_selection_id=val(program_selection_id$) conv ignore
+	fn_sessionRegRead(env$('cursys')&'.CurProg',program_selection_id$) : program_selection_id=val(program_selection_id$) conv ignore
 	if udim(mat program_name$) then
 		hide_level=0
 		hiding=0
 		for upg_item=1 to udim(mat program_name$)
 			if hiding and program_level(upg_item)=hide_level and program_plus$(upg_item)='+' then
-				fn_upg_show_it(upg_item)
+				fn_upgShowIt(upg_item)
 			else if hiding and program_level(upg_item)<=hide_level then
 				hiding=0
 				pr '  turning off hide at '&program_name$(upg_item)
@@ -743,16 +735,16 @@ def fn_update_program_grid
 				hide_level=program_level(upg_item)
 				hiding=1
 				pr '--' : pr '  turning ON hide  after '&program_name$(upg_item)
-				fn_upg_show_it(upg_item)
+				fn_upgShowIt(upg_item)
 			end if
 			if hiding then
 			else if ~hiding then
-				fn_upg_show_it(upg_item)
+				fn_upgShowIt(upg_item)
 			end if
 		next upg_item
 	end if
 fnend
-def fn_upg_show_it(upg_item)
+def fn_upgShowIt(upg_item)
 	program_grid_row$(col_return)='['&str$(upg_item)&']'&program_file$(upg_item)
 	program_grid_row$(col_plus)=program_plus$(upg_item)
 	program_grid_row$(col_name)=program_name$(upg_item)
@@ -763,7 +755,7 @@ def fn_upg_show_it(upg_item)
 	program_grid_row$(col_ss_text)=ss_text$(upg_item)
 	fnflexadd1(mat program_grid_row$)
 fnend
-def fn_display_menu
+def fn_displayMenu
 	if ~dm_setup then
 		dm_setup=1
 		dim m_a$(1)*256,m_b$(1)*256,m_c$(1)*256
@@ -871,7 +863,7 @@ def fn_display_menu
 			end if
 		end if
 	end if  ! ~dm_setup
-	fndisplay_menu(mat m_a$,mat m_b$,mat m_c$)
+	fnDisplayMenu(mat m_a$,mat m_b$,mat m_c$)
 fnend
 def fn_dm_add(a$*256; b$*256,c$*1)
 	mat m_a$(udim(mat m_a$)+1) : m_a$(udim(mat m_a$))=a$
@@ -884,4 +876,5 @@ def fn_chain(c_program$*128)
 	fnchain(c_program$)
 fnend
 Xit: execute "System"
-include: Ertn
+include: fn_setup
+

@@ -23,7 +23,7 @@ for j=1 to 2
 next j
 fnTxt(5,22,2,0,0,"30")
 fnCmdSet(2)
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 for j=1 to 8
 	L250: !

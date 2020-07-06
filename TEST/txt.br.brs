@@ -6,4 +6,4 @@ fnTos(sn$='testtxt')
 
 fnTxt(5,5,10,0,0,"71")
 fnCmdSet(2)
-fnAcs2(mat resp$, ckey)
+fnAcs(mat resp$, ckey)

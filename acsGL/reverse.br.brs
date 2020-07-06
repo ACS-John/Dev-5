@@ -37,7 +37,7 @@ MENU1: !
 	resp$(7)="True"
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing adjustments.")
 	fnCmdKey("&Cancel",5,0,1,"Return to menu without reversing.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	s_ad=val(resp$(1))
 	s_rn$=resp$(2)

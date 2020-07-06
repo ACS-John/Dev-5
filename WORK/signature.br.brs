@@ -29,7 +29,7 @@ MAINSCREEN: ! r:
 	fnTxt(2,18,2)
 	response$(2)=str$(1)
 	fnCmdSet(14)
-	fnAcs2(mat response$,ckey)
+	fnAcs(mat response$,ckey)
 	docname$=response$(1)
 	copies=max(1,val(response$(2)))
 	if ckey=5 then goto Xit
@@ -67,7 +67,7 @@ EDITSCREEN: ! r:
 	fnTxt(5,mylen+1,1,1,0,'',0,"Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" )
 	response$(5)=cddrive$
 	fnCmdSet(4)
-	fnAcs2(mat response$,ckey)
+	fnAcs(mat response$,ckey)
 	if ckey=5 then goto MAINSCREEN
 	docname$=response$(1)(1:30)
 	docline     =val(response$(2)) conv BADLINE

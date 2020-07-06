@@ -198,7 +198,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	! /r
 	! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
 	if ckey=5 then 
@@ -293,16 +293,7 @@ def fn_setup
 	if ~setup then
 		setup=1
 		dim w2laser_output_filename$*256
-		library 'S:\Core\Library': fnTos,fnFra,fnLbl,fnTxt,fnCmdKey,fnAcs,fnOpt
-		library 'S:\Core\Library': fnmsgbox
-		library 'S:\Core\Library': fnChk,fncmbemp,fnpa_finis
-		library 'S:\Core\Library': fnButton,fnCmdSet
-		library 'S:\Core\Library': fnpa_fontsize,fnpa_txt
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnureg_read,fnureg_write
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fncomboa,fnAddOneC
+		autoLibrary
 		on error goto Ertn
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
@@ -323,7 +314,7 @@ def fn_ask_margins
 	fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
 	fnCmdSet(4)
-	fnAcs2(mat amResp$,ckey)
+	fnAcs(mat amResp$,ckey)
 	if ckey<>5 then
 		fnreg_write('W-2 - Form 1 Y' ,amResp$(1))
 		fnreg_write('W-2 - Form 2 Y' ,amResp$(2))

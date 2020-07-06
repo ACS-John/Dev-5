@@ -1,14 +1,10 @@
 ! Replace S:\Core\programs\1099.br
 ! library for all 1099 forms
-	dim empAddr$(3)*30,ss$*11,a$(3)*40,box(11),ph$*12
+dim empAddr$(3)*30,ss$*11,a$(3)*40,box(11),ph$*12
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_FontSize
-		library 'S:\Core\Library': fnFormCopyAwithBackgroundWarn,fnButton,fncombof
-		library 'S:\Core\Library': fnAcs,fnCmdKey,fnCmdSet,fncomboa
-		library 'S:\Core\Library': fncreg_read,fncreg_write,fnLbl,fndednames,fnmsgbox
-		library 'S:\Core\Library': fnpa_background,fnreg_read,fnreg_write,fnureg_read,fnureg_write,fnOpt,fnTxt,fnTos,fngethandle,fnChk
+		autoLibrary
 		on error goto Ertn
 		! r: constants
 		dim ml$(0)*128
@@ -66,7 +62,7 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		fncreg_read('1099 - Your Phone Number',ph$)
 		fncreg_read('1099 - Copy Current'    ,copyCurrent$,optCopy$(1)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
-		!
+
 		if ten99Export$='True' then
 			dim output_filename$*256
 			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
@@ -80,7 +76,7 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 			fnpa_open('',copyCurrent$,'PDF')
 		end if
 	end if ! /r
-	!
+
 	if ten99Export$='True' then
 		! r: export one
 		pr #hExport: "01 ";" "
@@ -186,7 +182,7 @@ def fn_line(lineNumber)
 	fn_line=lineReturn
 fnend
 def fn_ask_margins
-! if env$('acsdeveloper')='' then pr bell; : goto am_xit
+	! if env$('acsdeveloper')='' then pr bell; : goto am_xit
 	fnreg_read('1099 - Form 1 Y',amResp$(1),'5' )
 	fnreg_read('1099 - Form 2 Y',amResp$(2),'144')
 	fnreg_read('1099 - X'       ,amResp$(3),'5' )
@@ -199,7 +195,7 @@ def fn_ask_margins
 	fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
 	fnCmdSet(4)
-	fnAcs2(mat amResp$,ckey)
+	fnAcs(mat amResp$,ckey)
 	if ckey<>5 then
 		fnreg_write('1099 - Form 1 Y' ,amResp$(1))
 		fnreg_write('1099 - Form 2 Y' ,amResp$(2))
@@ -230,9 +226,9 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 				typeOption$(j)=str$(j)
 			next j
 		end if
-		!
+
 		fncreg_read('1099 - Filter - Minimum Amount',tmp$,'600') : min1=val(tmp$)
-		!
+
 		fnreg_read('Print 1099'              ,destinationOpt$(1),'True' )
 		fnreg_read('1099 - Export 1'         ,destinationOpt$(2),'False')
 		fnreg_read('1099 - Enable Background',enableBackground$  ,'True' )
@@ -269,7 +265,7 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 		fnLbl(lc+=1,1,"Payee Type to Print:",mylen,1)
 		fncombof("Payeetype",lc,mypos,27,"[Q]\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.")
 		resp$(respc_deduction:=rc+=1)=seltp$
-!
+
 	end if
 	lc+=1
 	fnLbl(lc+=1,1,"Minimum Amount to Print:",mylen,1)
@@ -297,11 +293,11 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	resp$(resp_export_file:=rc+=1)=output_filename$
 	fnButton(lc,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(lc+=1,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
-	!
+
 	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		! r: gather local variables from mat resp$
 		if env$('cursys')='PR' then

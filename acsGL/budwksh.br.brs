@@ -40,7 +40,7 @@ if fnprocess=1 then goto L440
 	fnChk(lc+=1,mypos,"Year Already Closed:",1)
 	resp$(8)="False"
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	name$=resp$(1)
 	gln1$=fnagl$(resp$(2))
@@ -143,7 +143,7 @@ PRINT_MASTER_RECORD: ! r:
 		resp$=''
 		fnLbl(lc+=1,1,d$,mylen,1)
 		fnCmdSet(3)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto Xit
 		bud=val(resp$(1)) : tbud+=bud
 	end if

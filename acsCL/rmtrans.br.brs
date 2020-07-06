@@ -29,7 +29,7 @@
 		fnLbl(lc+=1,1,"All transactions with a",mylen*2,center)
 	fnLbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 or ckey=cancel then goto Xit else : _
 		rd1=val(resp$(1))
 ! fnwait

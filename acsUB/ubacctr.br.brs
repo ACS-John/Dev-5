@@ -33,7 +33,7 @@ SCREEN1: !
 	text$="You may leave Starting Date and/or Ending Date blank to indicate all."
 	fnLbl(5,1,text$,75)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
 	d(1)=val(resp$(2))

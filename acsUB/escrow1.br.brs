@@ -18,7 +18,7 @@
 	fncomboa("acc_or_nam",lc,mypos,mat opt$) : _
 	resp$(2)=opt$(1)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	fndat(resp$(1),put=2)
 	customer=1 : _

@@ -16,7 +16,7 @@ SCR1: !
 	fnTxt(2,33,8,0,0,"1") 
 	resp$(respc+=1)=str$(d1)
 	fnCmdSet(3) 
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="[All]" then rt1=0 else rt1=val(resp$(1))
 	d1=val(resp$(2))

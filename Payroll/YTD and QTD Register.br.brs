@@ -166,7 +166,7 @@ Screen1: ! r:
 	resp$(rc_prdate=rc+=1)=str$(prdate)
 	fnCmdKey("Next"  ,1,1,0)
 	fnCmdKey("Cancel",5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	prdate=val(resp$(1))
 	payrollYear=val(resp$(rc_prdate)(1:4))

@@ -35,7 +35,7 @@ ASKEMPLOYEE: !
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information")
 	fnCmdKey("&Proof List",8,0,0,"Returns to menu")
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=8 then gosub PRINT_PROOF: goto ASKEMPLOYEE
 	if ckey=1 then goto ADD_RECORD
@@ -69,7 +69,7 @@ SCREEN_1: ! maintain personnel burdern screen
 	fnCmdKey("&Save",1,1,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Delete",4,0,0,"Deletes this record from the personnel burden file.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ASKEMPLOYEE
 	eno=val(resp$(1)(1:8)) : eno$=lpad$(trim$(resp$(1)),8)
 	name$=resp$(2)
@@ -100,7 +100,7 @@ ADD_RECORD: !
 	fncmbemp(3,18)
 	resp$(1)=""
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ASKEMPLOYEE
 	eno=val(resp$(1)(1:8))
 	eno$=lpad$(trim$(resp$(1)(1:8)),8)

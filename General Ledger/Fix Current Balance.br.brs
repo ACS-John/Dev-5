@@ -134,7 +134,7 @@ def fn_theScreen ! lots of local variables
 			fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 		end if
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		theScreenReturn=0
 	else

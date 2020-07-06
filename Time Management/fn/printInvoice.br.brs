@@ -1,27 +1,31 @@
 fn_setup
 fn_printInvoice
-
+end
 def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$)
 	if ~setup then fn_setup
 	fnPrintInvoice=fn_printInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal, pdfFileName$)
 fnend
 def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$, ___,isCss,total_amt)
+
+	dim pdfline$*255
+	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&lpad$("_",67,"_")&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
+
 	if pdfFileName$='' then ebilling=0 else ebilling=1
 	forcePrintAcePdf=0
 	if fnval(actnum$)=4132 then  ! Stern and Stern
 		isCss=1
 		dim cnam$*40
 		dim cLogo$*128
-		cnam$='Commercial Software Solutions LLC' 
+		cnam$='Commercial Software Solutions LLC'
 		cLogo$='S:\Time Management\resource\cssLogo.png'
 	else
 		cnam$='Advanced Computer Services LLC'
 		cLogo$='s:\acsTM\bwlogo2.jpg'
 	end if
-	
+
 	if ebilling then
 		! r: create ebill
-		
+
 		if forcePrintAcePdf then ! r: incomplete.
 			out=fnpa_open( 'Portrait',' - inv no '&inv_num$&' - acct '&actnum$,'PDF')
 			! pr 'just after fnpa_open' : pause
@@ -43,7 +47,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 			fnpa_txt(trim$(billto$(2)),ml,lc+=lh)
 			fnpa_txt(trim$(billto$(3)),ml,lc+=lh)
 			fnpa_fontSize(36)
-			fnpa_fontbold(1) 
+			fnpa_fontbold(1)
 			fnpa_txt('Invoice',10,lc:=45)
 			! pr #out: "[pos(+0,+40)]Invoice"
 			fnpa_fontbold
@@ -60,7 +64,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 			pr #out: "[pos(+0,+7)][SETSIZE(10)][Bold]Description [pos(+0,+50)]Amount[/BOLD]"
 			pr #out: pdfline$
 			pr #out: ''
-			
+
 			for j1=1 to udim(mat desc$)
 				if amt(j1) then
 					pr #out: "[pos(+0,+7)][PUSH][LEFT]"&desc$(j1)&"[POP][RIGHT][pos(+0,+55)]"&cnvrt$("pic(ZZZ,ZZ#.##)",amt(j1))
@@ -81,7 +85,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 			dim tmpFilename$*2048
 			tmpFilename$=file$(out)
 			fnpa_finis
-			fnCopy(tmpFilename$,env$('at')&pdfFileName$) 
+			fnCopy(tmpFilename$,env$('at')&pdfFileName$)
 
 			! /r
 		else
@@ -117,7 +121,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 			pr #out: "[pos(+0,+7)][SETSIZE(10)][Bold]Description [pos(+0,+50)]Amount[/BOLD]"
 			pr #out: pdfline$
 			pr #out: ''
-			
+
 			for j1=1 to udim(mat desc$)
 				if amt(j1) then
 					pr #out: "[pos(+0,+7)][PUSH][LEFT]"&desc$(j1)&"[POP][RIGHT][pos(+0,+55)]"&cnvrt$("pic(ZZZ,ZZ#.##)",amt(j1))
@@ -139,7 +143,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 			pr file$(out)
 			close #out:
 			! pause
-			
+
 			! /r
 		end if
 
@@ -156,7 +160,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		pr #out: '\ql {\f181 \b '&cnam$&'}'
 		pr #out: "\ql {\f181 4 Syme Ave}"
 		pr #out: "\ql {\f181 West Orange, NJ  07052}"
-		! execute "config option 32 ON" ! Supress notification of error 6245, which indicates an invalid or unsupported (by BR) escape sequence has been printed during Native Windows Printing.	
+		! execute "config option 32 ON" ! Supress notification of error 6245, which indicates an invalid or unsupported (by BR) escape sequence has been printed during Native Windows Printing.
 		pr #out: "*INSERT FILE:S:\Time Management\ACS_Logo2.rtf" ! "*INSERT FILE:S:\acsTM\acs_logo.rtf"
 		pr #out: ''
 		pr #out: ''
@@ -183,7 +187,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 				pr #out: ''
 			end if
 		next j1
-		
+
 		if pbal then
 			pr #out,using "Form POS 1,C 55,X 3,PIC(---,---,---.--)": "Previous Balance",pbal
 			total_amt+=pbal
@@ -195,12 +199,4 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		! /r
 	end if
 fnend
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim pdfline$*255
-		pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&lpad$("_",67,"_")&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
-
-	end if
-fnend
+include: fn_setup

@@ -70,7 +70,7 @@ fnChk(18,3,"Include Accounts without no activity", 0,0) ! fnChk(lyne,ps,txt$*196
 resp_no_activity=10
 if include_no_activity_accounts then resp$(resp_no_activity)='True' else resp$(resp_no_activity)='False'
 fnCmdSet(3)
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 dat$=resp$(1)
 filter_date_start=val(resp$(2))

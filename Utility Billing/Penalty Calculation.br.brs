@@ -113,7 +113,7 @@ def fn_scr_main
 		resp$(8)="True"
 	end if  ! env$('client')=...
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 		bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))

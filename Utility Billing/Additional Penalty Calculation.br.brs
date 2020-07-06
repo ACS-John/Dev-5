@@ -1,9 +1,9 @@
 ! formerly S:\acsUB\ubPenCa2
 ! Additional Penalty Calculation ( calculates a standard dollar amount of penalty of each penalty charge in their system
-!
+
 	autoLibrary
 	on error goto Ertn
-!
+
 	dim resp$(20)*128
 	dim msgline$(1)*80
 	dim oldtg(11)  ! read but otherwise unused
@@ -25,10 +25,10 @@
 	dim columnhead$(10)*13
 	dim tmp$*220
 	dim coltot(10)
-!
+
 	fnTop(program$)
 	fnLastBillingDate(bildat)
-!
+
 	fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 	for j=1 to 10
 		if uprc$(penalty$(j))="Y" then
@@ -41,7 +41,7 @@
 	mat pencolumn(pencount)
 	mat columnhead$(pencount)
 	mat coltot(pencount)
-!
+
 	fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : minimumbal=val(minimumbal$) conv ignore
 	fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
 	fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
@@ -50,7 +50,7 @@
 		read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 		close #minbal: ioerr ignore
 	end if
-!
+
 SCREEN1: !
 	fnTos
 	mylen=29 : mypos=mylen+2 : rc=0
@@ -75,7 +75,7 @@ SCREEN1: !
 	resp$(rc+=1)=skip_s10r9$
 	fnLbl(10,50,'') ! avoids error 857 caused by check box (skip customers...) - it is a bug in acs_component - jb 2019/08/22
 	fnCmdSet(2)
-	fnAcs('',0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 	bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
@@ -153,7 +153,7 @@ SCREEN1: !
 		next j
 		rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 		goto L1000
-		! __
+		
 		L990: !
 		write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 		L1000: !

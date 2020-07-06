@@ -41,7 +41,7 @@ MAIN: !
 	fncombof("Bankmstr",11,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing") : _
 	resp$(respc+=1)=str$(wbc)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	dt1=val(resp$(1)) ! beginning date
 	dt2=val(resp$(2)) ! ending date

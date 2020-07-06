@@ -208,7 +208,7 @@ def fn_selectSchedules(mat prtsch)
 		fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	end if
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without printing.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		mat prtsch(totallisted)
 		for j=1 to totallisted

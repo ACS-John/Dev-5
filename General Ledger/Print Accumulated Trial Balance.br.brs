@@ -72,7 +72,7 @@ SCREEN1: ! r:
   fnTxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
   resp$(resp_costCenter:=rc+=1)=""
   fnCmdSet(2)
-  fnAcs2(mat resp$,ckey)
+  fnAcs(mat resp$,ckey)
   if ckey=5 then goto Xit
   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
   petro_opt$=resp$(respc_prBalFirst)
@@ -233,7 +233,7 @@ SELECT_ACCOUNT: ! r:
   fnqgl(1,mypos,0,2)
   resp$(1)=""
   fnCmdSet(2)
-  fnAcs2(mat resp$,ckey)
+  fnAcs(mat resp$,ckey)
   if ckey=5 then goto TOTALS
   n$=fnagl$(resp$(1))
   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT

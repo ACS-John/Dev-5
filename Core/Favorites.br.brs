@@ -2,15 +2,8 @@ fn_setup
 fnTop(program$)
 fnHamsterFio('CO Favorites')
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-		dim form$(0)*256
-		dim favData$(0)*128,favDataN(0)
-	end if
-fnend
+dim form$(0)*256
+dim favData$(0)*128,favDataN(0)
 def library fnFavoriteAdd(programCaption$*256)
 	if ~setup then fn_setup
 	hFav=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$)
@@ -62,4 +55,4 @@ def fn_favKey$*42
 	fn_favKey$=favKeyReturn$
 fnend
 include: fn_open
-include: Ertn
+include: fn_setup

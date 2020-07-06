@@ -22,7 +22,7 @@ SCREEN1: ! r:
 	fncmbact(5,26)
 	resp$(4)="[All]"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1))
 	d2=val(resp$(2))

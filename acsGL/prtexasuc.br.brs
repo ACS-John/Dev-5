@@ -30,7 +30,7 @@ L170: fnTos(sn$="PrTexasUc1") : _
 	if trim$(csvpath$)="" then csvpath$="[Q]\GLmstr\txuc.csv"
 	resp$(3)=csvpath$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	pedat$=resp$(1)
 	namcde$=uprc$(resp$(2))

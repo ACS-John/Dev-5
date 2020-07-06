@@ -1,17 +1,10 @@
 ! Replace Test\Flex
 	autoLibrary
 	dim resp$(22)*100
-	fnTop(program$,cap$="Test Flex")
+	fnTop(program$)
 	dim item$(6)*30,prg$*30,chdr$(6)*20,cm$(6)*2
 SCREEN1: !
-	fnTos("S-Flex")
-! use_old=1 : replace_old=0 : select_by_row=1
-! chdr$(1)="AccountX" : chdr$(2)="Name" : _
-	! chdr$(3)="Address" : chdr$(4)="City" : _
-	! chdr$(5)="State" : chdr$(6)="Zip"
-! cm$(1)="81" : cm$(2)="81" : cm$(3)="80" : cm$(4)="80" : _
-	! cm$(5)="80" : cm$(6)="80"
-! fnflexinit1('flex_test',1,1,10,50,mat chdr$,mat cm$,select_by_row,replace_old)
+	fnTos
 	mat chdr$(7) : mat cmask$(7) : mat item$(7)
 	chdr$(1)='Rec'
 	chdr$(2)='GL Account'
@@ -37,9 +30,7 @@ SCREEN1: !
 EOF1: close #h_tralloc:
 	fnCmdKey('Ok',1,1,0)
 	fnCmdKey('Cancel',99,0,1)
-	fnAcs("S-Flex",0,mat resp$,ckey)
-	pr "returned response is "&resp$(1)
-	pr "Press Enter to continue"
-! input fields "1,1,C 1,AE,N": pause$
+	fnAcs(mat resp$,ckey)
+
 	goto SCREEN1
 Xit: fnXit

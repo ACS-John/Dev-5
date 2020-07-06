@@ -113,7 +113,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnCmdKey('&Back',back,0,0)
 		fnCmdKey('&Add',add,0,0)
 		fnCmdKey('&Close',cancel,0,1)
-		fnAcs2(mat resp$,ckey) ! check history building grid
+		fnAcs(mat resp$,ckey) ! check history building grid
 		addcode=0 : holdeno=0
 		if ckey=back then goto SCREEN1
 		if ckey=cancel then goto SCREEN1
@@ -235,7 +235,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnCmdKey('&Save',save,1,0)
 		fnCmdKey('&Delete',4,0,0)
 		fnCmdKey('&Cancel',cancel,0,1)
-		fnAcs2(mat resp$,ckey) ! correcting check
+		fnAcs(mat resp$,ckey) ! correcting check
 		if ckey=cancel then
 			goto SCREEN2
 		else if ckey=4 then
@@ -377,7 +377,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnCmdKey("&Print Report",2,0,0,"Prints a check listing using the columns selected.")
 		fnCmdKey("&Maintain column selections",3,0,0,"Allows you to add or change columns that should be displayed.")
 		fnCmdKey("&Back",5,0,1,"Returns to employee record")
-		fnAcs2(mat resp$,ckey) ! dates and options
+		fnAcs(mat resp$,ckey) ! dates and options
 		printit=0: f1=0
 		if ckey=cancel then goto CheckFileXit
 		checkonly=details=grand=quarterly=annual=employee=0 : holdnam$=""
@@ -486,7 +486,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		if addone=1 then let fnCmdKey("&Save This Format",4,0,0,"Save this format for later use.")
 		fnCmdKey("&Use This Format",3,0,0,"Use the format as now displayed.")
 		fnCmdKey("&Cancel",5,0,1,"Cancel without saving the format selections.")
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey<>5 then
 			addone=0
 			if ckey=2 then
@@ -901,7 +901,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		resp$(1)=""
 		fnCmdKey('&Save',1,1,0,"Adds this new grid or report to your selections.")
 		fnCmdKey('&Cancel',5,0,1,"Returns to selection screen without adding this report.")
-		fnAcs2(mat resp$,ckey) ! add grid name
+		fnAcs(mat resp$,ckey) ! add grid name
 		if ckey<>5 then
 			oldgridname$=gridname$=rpad$(trim$(resp$(1)),30)
 			rewrite #hGridName,using "form pos 1,c 30",rec=1: gridname$

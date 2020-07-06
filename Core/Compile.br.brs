@@ -8,15 +8,15 @@ def library fnReCompile(; disableRebuildCache)
 	open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
 
 	if ~disableRebuildCache then
-		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr DONE
+		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr RcDone
 	end if
 	open #dirfile:=20: "Name=S:\(import)\brsfiles",display,input
 	pr #proc_file: 'Scr_Freeze'
 	do
-		linput #dirfile: filename$ eof DONE
+		linput #dirfile: filename$ eof RcDone
 		if fn_hasLineNumbers(filename$) then
 			pr #proc_file: 'Load "'&filename$&'",Source'
-			parameter$=fn_build_parameter$(filename$)
+			parameter$=fn_buildParameter$(filename$)
 			if exists(filename$(1:len(filename$)-4)) then
 				pr #proc_file: 'Replace "'&filename$(1:len(filename$)-4)&'"'&parameter$
 			else
@@ -29,9 +29,9 @@ def library fnReCompile(; disableRebuildCache)
 		pr #proc_file: ''
 	loop
 	pr #proc_file: 'Scr_Thaw'
-	goto DONE
+	goto RcDone
 	
-	DONE: !
+	RcDone: !
 	if env$("AfterRecompile")="" then
 		pr #proc_file: "Sy"
 	else
@@ -42,7 +42,7 @@ def library fnReCompile(; disableRebuildCache)
 	close #proc_file:
 	execute "subproc "&msr_file$
 fnend
-def fn_build_parameter$(filename$*256)
+def fn_buildParameter$(filename$*256)
 	bp_gets_object=0
 	filename$=lwrc$(filename$)
 	if pos(filename$,'_s1.brs')>0 then   ! only files that end with _s1.brs can not be distributed as object
@@ -55,10 +55,10 @@ def fn_build_parameter$(filename$*256)
 		bp_gets_object=1
 	end if
 	if bp_gets_object then
-		fn_build_parameter$=',object'
+		fn_buildParameter$=',object'
 	end if
 fnend
-def fnLexiLineNum(lextFileIn$*256,lextFileOut$*256)
+def fn_lexiLineNum(lextFileIn$*256,lextFileOut$*256)
 	dim string$*4000
 	dim const$(1)*800
 	dim constantName$(1)*30
@@ -231,3 +231,32 @@ def fn_hasLineNumbers(filename$*256)
 		HlnFinis: !
 	fn_hasLineNumbers=hasLineNumbersReturn
 fnend
+def library fnCheckCompiled
+	if env$('acsEnableComplier')='Yes' then
+		dim filename$*256
+		! pr 'entered into fncheckcompiled' : pause
+		execute 'CD S:'
+		if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
+		execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr CcDone
+		open #hBrsFileList:=20: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
+		linput #hBrsFileList: filename$ eof CcDone
+		! pr filename$ : pause
+		if env$('compile_without_asking')='Yes' then
+			docompile=2
+			setenv('compile_without_asking','')
+		else
+			docompile=msgbox("You have uncompiled source files!  Recompile?", "ACS 5 - "&os_filename$(program$), "Yn", "Qst")
+		end if
+		if docompile=2 then
+			setenv("AfterRecompile", "S:\Core\Start")
+			chain 'S:\Core\Compile.br' ! execute "Proc S:\ReCompile.prc" ioerr ignore
+		end if
+		CcDone: !
+		close #hBrsFileList:
+	end if
+fnend
+CC_ERR: ! r:
+	mb_response=msgbox(program$&' encountered an error '&str$(err)&' on line '&str$(line)&'.'&chr$(13)&'Close ACS?'&chr$(13)&'(Choose Cancel for developer pause.)','ACS 5 - S:\Core\CheckCompiled - Error','OKc','Excl')
+	if mb_response=1 then execute 'system'
+	pause
+retry  ! /r

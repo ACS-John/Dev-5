@@ -24,7 +24,7 @@
 	resp$(respc+=1)=str$(date('ccyymmdd')-50000)
 	fnLbl(1,46,"",1,1)
 	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit else : _
 		olddate=val(resp$(1))
 	fnopenprn

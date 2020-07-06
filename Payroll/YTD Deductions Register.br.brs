@@ -26,7 +26,7 @@ MENU1: !
 	fnLbl(2,1,"Ending Date of Tax Year:",26,1)
 	fnTxt(2,30,12,0,0,"3",0,"")
 	resp$(respc+=1)=str$(end_date)
-	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year

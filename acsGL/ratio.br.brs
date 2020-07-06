@@ -45,7 +45,7 @@ EO_RATIOMST_GRID: !
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Ratios option")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	add=edit=0
 	editrec=val(resp$(1))
@@ -82,7 +82,7 @@ ADD_EDIT_RATIOMST: !
 	resp$(2)=na$
 	fnCmdKey("&Next",1,1,0,"Save the ratio.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of Ratios withouit saving any changes.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	hac$=resp$(1)(1:3) conv ADD_EDIT_RATIOMST
 	na$=resp$(2)
@@ -181,7 +181,7 @@ LEFT_SIDE: !
 	fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
 	fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	for j=1 to 40
 		gl$(j)=fnagl$(resp$(j))
@@ -204,7 +204,7 @@ RIGHT_SIDE: !
 	fnCmdKey("&Rignt Side",3,0,0,"Enter all G/L Numbers to be used on the right side of the ratio.")
 	fnCmdKey("&Finished",6,0,0,"Finished with general ledger assignments.")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto RATIOMSTGRID
 	for j=1 to 40
 		gl$(j+40)=fnagl$(resp$(j))

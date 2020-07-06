@@ -12,7 +12,7 @@ fnTos : col1Len=19 : col2Pos=col1Len+2
 	fnTxt(3,col2Pos,40)
 ! /r
 fnCmdSet(2)
-fnAcs2(mat Comp$,ckey)
+fnAcs(mat Comp$,ckey)
 if ckey<>5 then
 	gosub CompanySave
 end if

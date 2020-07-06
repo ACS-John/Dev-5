@@ -43,7 +43,7 @@ def fn_localPropertiesEdit
 	fnlbl(lc+=1,1,'Left Margin:'      ,18,1) : fntxt(lc,33,10,0,0,'')
 	fnlbl(lc+=1,1,'Right Margin:'     ,18,1) : fntxt(lc,33,10,0,0,'')
 	fncmdset(2)
-	fnacs2(mat resp$,ckey, 0,0,0,1)
+	fnAcs(mat resp$,ckey, 0,0,0,1)
 	if ckey<>5 then
 		! r: if Landscape/Portrait, than switch height and width if necessary
 		tmp_height=val(resp$(sio_txtHeight))

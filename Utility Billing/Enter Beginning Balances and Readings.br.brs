@@ -31,7 +31,7 @@ MENU1: !
 	fnLbl(5,1,"Please make sure no one else is in Utility Billing",90,2)
 	fnLbl(6,1,"while you use this program.",90,2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	n=val(resp$(2))
 	hz$=z$=lpad$(trim$(resp$(1)(1:10)),10)
@@ -93,7 +93,7 @@ SCREEN2: !
 	fnCmdKey("&Next",1,1,0,"Save and display next account in account order." )
 	fnCmdKey("&Select Account",2,0,0,"Select another account." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	bal=val(resp$(2))
 	respc=2

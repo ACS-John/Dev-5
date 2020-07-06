@@ -4,4 +4,4 @@ fnTop(program$)
 fnTos
 fnTxt(5,5,10,0,0,"",1)
 fnCmdSet(2)
-fnAcs2(mat resp$, ckey)
+fnAcs(mat resp$, ckey)

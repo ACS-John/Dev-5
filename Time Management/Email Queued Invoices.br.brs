@@ -17,7 +17,7 @@ def fn_emailEntryScreen
 	! resp$(rc+=1)=use_date$
 	fnCmdKey("Next",1,1,0,"Emails all PDF invoices created on this date")
 	fnCmdKey("Cancel",5,0,1,"Returns to main menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then 
 		goto Tf_XIT
 	else if ckey=1 then 
@@ -101,14 +101,5 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	close #hList: 
 	fnRename(fnreport_cache_folder_current$&'\Ebilling\sendingnow.txt',fnreport_cache_folder_current$&'\Ebilling\Sent\sent'&date$("mmddyy")&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
 fnend
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-		gosub Enum
-	end if 
-fnend
-include: Ertn
+include: fn_setup
 include: fn_open
-include: enum

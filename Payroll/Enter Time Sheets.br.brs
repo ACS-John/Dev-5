@@ -43,7 +43,7 @@ SCREEN_1: !
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then ! Regular Time Sheet Entry
 		noauto=ti1=1
@@ -106,7 +106,7 @@ SCREEN_1: !
 	! 	next j
 	! 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	! 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
-	! 	fnAcs2(mat resp$,ckey)
+	! 	fnAcs(mat resp$,ckey)
 	! 	if ckey<>5 then
 	! 		for j=1 to 20
 	! 			if resp$(j+resp_skipDedAdd)="True" then skipit$(j)="Y" else skipit$(j)="N"
@@ -260,7 +260,7 @@ ENTER_TIME: !
 	fnCmdKey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
 	if editmode=0 then let fnCmdKey("E&Xit",5,0,1,"Returns to menu")
 	if editmode=1 then let fnCmdKey("&Finish",7,0,1,"Finished making corrections")
-	fnAcs2(mat resp$,ckey) ! ask time
+	fnAcs(mat resp$,ckey) ! ask time
 	if ckey=5 and editmode=0 then goto FINISH
 	for j=1 to 9
 		inpX(j)=val(resp$(j))
@@ -389,7 +389,7 @@ PROOF_TOTALS: !
 	fnCmdKey("&Calculate",3,1,0,"Calculates the pay.")
 	fnCmdKey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
 	fnCmdKey("E&Xit",5,0,1,"Exit without calculating")
-	fnAcs2(mat resp$,ckey) ! proof totals
+	fnAcs(mat resp$,ckey) ! proof totals
 	pullFromTimeCardSystem=0
 	cor=ckey
 	if ckey=5 then goto XitWOCAL
@@ -483,7 +483,7 @@ CORRECTIONS: ! r:
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Make corrections to this employee's time." )
 	fnCmdKey("&Finish",6,0,1,"Finished making corrections")
-	fnAcs2(mat resp$,ckey) ! ask employee #
+	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=6 then editmode=0: goto PROOF_TOTALS ! finished corretions
 	eno=ent=val(resp$(1)(1:8))
 	read #h_rpwork,using F_rpwork,key>=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",0),release: depeno,dep2,mat inpX,gpd,mat hr nokey L4790
@@ -662,7 +662,7 @@ ASK_EMPLOYEE: ! r:
 	fnCmdKey("&Search",2,0,0,"Search for employee record")
 	fnCmdKey("&Finish",6,0,1,"Finished entering hours")
 !                     fnCmdKey("E&Xit",5,0,1,"Returns to menu") !   fix kj
-	fnAcs2(mat resp$,ckey) ! ask employee #
+	fnAcs(mat resp$,ckey) ! ask employee #
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
 		goto ENTER_TIME
@@ -706,7 +706,7 @@ PRINT_LISTING: !
 	fnOpt(1,13,"Account Order",0) : if printorder<>2 then resp$(1)="True" else resp$(1)='False'
 	fnOpt(2,13,"Order Entered",0) : if printorder=2 then resp$(2)='True' else resp$(2)="False"
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if resp$(1)="False" and resp$(2)="False" then goto PrList_Screen
 	if resp$(1)="True" then printorder=1 else printorder=2
 	fncreg_write('enter time sheets proof sequence',str$(printorder))

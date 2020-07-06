@@ -28,7 +28,7 @@ ASKDAT: !
 	resp$(1)=str$(oldestdate)
 	fnLbl(1,50,"")
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	oldestdate=val(resp$(1))
 L300: read #trans,using L320: trvn$,dt,am,rn$,de$ eof Xit

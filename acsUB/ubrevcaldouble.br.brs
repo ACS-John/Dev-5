@@ -39,7 +39,7 @@ L250: fnTos(sn$="ubrevcal") : _
 	fnChk(8,29,"Print Status Report") : _
 	resp$(respc+=1)="True"
 	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="[All]" then resp$(1)=""
 	if resp$(4)="[All]" then resp$(4)=""

@@ -40,7 +40,7 @@ def fn_ChangePayrollDates
 	fnCmdKey('Year Forward',2,0,0,'Adjust date range years higher one')
 	fnCmdKey("Save",1,1,0,"Save and Continue")
 	fnCmdKey("Cancel",5,0,1,"Close without Saving")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then 
 		prd=d1=val(resp$(1))
 		beg_date=val(resp$(2)) 
@@ -85,7 +85,7 @@ def fn_setup
 		library 'S:\Core\Library': fnLbl
 		library 'S:\Core\Library': fnTxt
 		library 'S:\Core\Library': fnCmdKey
-		library 'S:\Core\Library': fnAcs2
+		library 'S:\Core\Library': fnAcs
 		library 'S:\Core\Library': fngethandle
 		on error goto Ertn
 	 end if

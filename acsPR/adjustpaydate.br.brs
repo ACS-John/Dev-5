@@ -34,7 +34,7 @@ CHECKSDONE: !
 		prdate$(2)=""
 		fnCmdKey("Next",1,1,0,"Proceed with date adjustment.")
 		fnCmdKey("Cancel",5,0,1,"Return to menu without changing the payroll date as indicated.")
-		fnAcs2(mat prdate$,ckey)
+		fnAcs(mat prdate$,ckey)
 		if ckey=5 then
 			fn_getdates=0
 		else

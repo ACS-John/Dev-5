@@ -14,7 +14,7 @@
 	fnTxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your report (Blank for all).",0 ) : _
 	resp$(3)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	minu=val(resp$(1))
 	maxu=val(resp$(2))

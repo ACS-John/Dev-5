@@ -113,7 +113,7 @@ L840: !
 	fnOpt(9,10,"Change Account Number",0,0)
 	resp$(1)="False"
 	fnCmdKey("&Next",1,1,0,"Allows you to either add the account or change the account #.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if resp$(1)="True" then goto ADD
 	if resp$(2)="True" then goto CHANGE_ACCOUNTS
 	goto L840
@@ -142,7 +142,7 @@ ADD: !
 	resp$(rc+=1)=""
 !
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	pas=0
 	dno=ano=sno=0
 	if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
@@ -170,7 +170,7 @@ CHANGE_ACCOUNTS: !
 	fnqglbig(1,mypos,0,2)
 	resp$(1)=fnrglbig$(gl$)
 	fnCmdKey("&Next",1,1,0,"Will change to the selected account.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto L440
 	gl$=fnagl$(resp$(1)) : t$=gl$ : goto L440
 !

@@ -1,5 +1,11 @@
 fn_setup
 fnTop(program$)
+
+dim sage_code$*128
+dim resp$(20)*1048
+client_id_sage_ax=3811
+client_id_brc=90
+
 ! r: Screens
  
 dim filter_date(2)
@@ -394,7 +400,7 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 	fnureg_read('TM Employee 4 Name',resp$(resp_e4name:=respc+=1)) : fnureg_read('TM Employee 4 TimeSheet CSV',resp$(resp_e4_file:=respc+=1))
 	fnureg_read('TM Employee 5 Name',resp$(resp_e5name:=respc+=1)) : fnureg_read('TM Employee 5 TimeSheet CSV',resp$(resp_e5_file:=respc+=1))
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		fkey(99)
 	else
@@ -467,17 +473,5 @@ def fn_houryRateSage(wo_sage_code$; the_date)
 	end if
 	fn_houryRateSage=shr_return
 fnend
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-		gosub Enum
-		dim sage_code$*128
-		dim resp$(20)*1048
-		client_id_sage_ax=3811
-		client_id_brc=90
-	end if
-fnend
-include: enum
-include: Ertn
+
+include: fn_setup

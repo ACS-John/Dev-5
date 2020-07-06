@@ -36,12 +36,5 @@ def library fnReassignNTA(filename$*256,keyForm$,ntaForm$; ___,x,key$*64,formBot
 	! /r
 	close #hRta:
 fnend
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		gosub Enum
-	end if
-fnend
-include: Enum
+include: fn_setup
 include: fn_open

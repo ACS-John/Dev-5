@@ -56,7 +56,7 @@ do ! r: the first screen
 	!   fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 	end if
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	pas$=resp$(rc_erase)
 	yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
@@ -112,7 +112,7 @@ SCR2: !
 	fnqgl(lc,mypos)
 	resp$(1)=''
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	glnumber$=fnagl$(resp$(1))
 	if closeDeptToRetainedEarnings then

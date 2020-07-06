@@ -452,9 +452,9 @@ fnend
 		library 'S:\Core\fn\windowsStart.br': fnWindowsStart
 		fnWindowsStart=fnWindowsStart(wsFile$)
 	fnend
-	def library fncheckcompiled
-		library 'S:\Core\checkcompiled.br': fncheckcompiled
-		fncheckcompiled=fncheckcompiled
+	def library fnCheckCompiled
+		library 'S:\Core\Compile.br': fnCheckCompiled
+		fnCheckCompiled=fnCheckCompiled
 	fnend
 	def library fnbooktitle$*256(x$*256)
 		library 'S:\Core\booktitle.br': fnbooktitle$
@@ -860,20 +860,17 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnpicbut
 		fnpicbut=fnpicbut(lyne,mypos,txt$,comkey,pic1$,btnh,btnw, pic2$,tt$,container,tabcon,default,cancel)
 	fnend
-	def library fndisplay_menu(mat _menu$,mat _program$,mat _status$)
-		library 'S:\Core\ACS_Component.br': fndisplay_menu
-		fndisplay_menu=fndisplay_menu(mat _menu$,mat _program$,mat _status$)
+	def library fnDisplayMenu(mat _menu$,mat _program$,mat _status$)
+		library 'S:\Core\ACS_Component.br': fnDisplayMenu
+		fnDisplayMenu=fnDisplayMenu(mat _menu$,mat _program$,mat _status$)
 	fnend
-	def library fnclear_menu
-		library 'S:\Core\ACS_Component.br': fnclear_menu
-		fnclear_menu=fnclear_menu
+	def library fnClearMenu
+		library 'S:\Core\ACS_Component.br': fnClearMenu
+		fnClearMenu=fnClearMenu
 	fnend
-	def library fnAcs2(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+	def library fnAcs(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
 		library 'S:\Core\ACS_Component.br': fnAcs
-		fnAcs2=fnAcs('',0,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
-	def library fnAcs(sn$*100,win,mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
-		library 'S:\Core\ACS_Component.br': fnAcs
-		fnAcs=fnAcs(sn$,win,mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
+		fnAcs=fnAcs(mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
 	def library fnpic(lyne,ps,hi,wd,picture$*300; x,y)
 		library 'S:\Core\ACS_Component.br': fnpic
 		fnpic=fnpic(lyne,ps,hi,wd,picture$, x,y)

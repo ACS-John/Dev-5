@@ -39,7 +39,7 @@ MAIN: ! r:
 	resp$(respc+=1)=''
 	fnLbl(8,1,'.',50,1) ! just so the right side of the comboboxes for checks can be seen
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		goto Xit
 	else if resp$(1)=item1$(1) then
@@ -80,7 +80,7 @@ ASK_VN: ! r:
 	fncombof("Payee",1,22,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
 	resp$(respc+=1)=''
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		goto Finis
 	else

@@ -19,7 +19,7 @@ L120: fnTos
 	fnTxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the year.",0 ) : _
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
  
 	if ckey=5 then goto Xit
 	pas$=uprc$(resp$(1))

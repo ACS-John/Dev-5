@@ -1,7 +1,12 @@
 fn_setup
+dim resp$(60)*20
+dim serviceName$(10)*20
+dim serviceCode$(10)*2
+dim taxCode$(10)*1
+
 fnTop(program$)
 fn_readService
-fnTos(sn$="TypeOfService") ! r:
+fnTos ! r:
 	fnLbl(2,13,"Full Name",20,2)
 	fnLbl(2,34,"Code",4,0)
 	fnLbl(2,39,"Taxable",7,0)
@@ -11,8 +16,7 @@ fnTos(sn$="TypeOfService") ! r:
 	fnLbl(1,66,"Order to apply",14,2)
 	fnLbl(2,66,"Collection",14,2)
 	for a=1 to 10
-		text$="Service "&str$(a)&":"
-		fnLbl(a+2,1,text$,11,1)
+		fnLbl(a+2,1,"Service "&str$(a)&":",11,1)
 		resp$(a*6-5)=serviceName$(a)
 		fnTxt(a+2,13,20)
 		resp$(a*6-4)=serviceCode$(a)
@@ -27,7 +31,7 @@ fnTos(sn$="TypeOfService") ! r:
 		fnTxt(a+2,72,2,0,0,"30")
 	next a
 	fnCmdSet(4)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		for a=1 to 10
 			serviceName$(a)=resp$(a*6-5)
@@ -51,21 +55,7 @@ fnTos(sn$="TypeOfService") ! r:
 	end if
 goto Xit ! /r
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		library 'S:\Core\Library': fnTop,fnXit
-		library 'S:\Core\Library': fnTxt,fnLbl,fnTos,fnAcs,fnCmdSet,fnChk
-		library 'S:\Core\Library': fngethandle,fnAddOneC
-		library 'S:\Core\Library': fnArrayWasPassedC,fnArrayWasPassedN
-		library 'S:\Core\Library': fnCopy
-		on error goto Ertn
-		!
-		dim resp$(60)*20,serviceName$(10)*20,serviceCode$(10)*2
-		dim taxCode$(10)*1
-		!
-	end if
-fnend
+
 def fn_readService
 	if readServiceSetup<>val(env$('cno')) then
 		readServiceSetup=val(env$('cno'))
@@ -148,4 +138,4 @@ def fn_service_other
 	end if
 	fn_service_other=so_return
 fnend
-include: Ertn
+include: fn_setup

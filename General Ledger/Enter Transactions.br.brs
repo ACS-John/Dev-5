@@ -128,7 +128,7 @@ SCREEN_1: ! r:
 	fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	fnCmdKey("&Proof Totals",3,0,0,"Provides proof totals and option to post the entries.")
 	fnCmdKey("&Cancel",5,0,1,"Exits.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 ! pOST=1 ! code as unposted once leave this screen
 	if post=1 and resp$(respc_regularInput)="True" then gosub CHECK_FOR_CONTRAS ! remove any contra entries created in previous run
@@ -235,7 +235,7 @@ POSTING_OPTIONS: ! r:
 	fnOpt(5,2,"Return to Menu without posting",0,0)
 	resp$(5)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
 	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
@@ -357,7 +357,7 @@ EO_FLEX1: ! /r
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
 	if ~edit then let fnCmdKey("&Finish",9,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	allocamt=0
 	! pAS=1 ! kj 61107
 	message$=""
@@ -561,7 +561,7 @@ L5310: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any allocation and click Edit to change any part of the entire transaction")
 	fnCmdKey("&Print Proof List",4,0,0,"Prints a proof list of your entries..")
 	fnCmdKey("&Back",5,0,1,"Return to main entry screen.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then edit=0: goto CLEAN_MAIN_SCREEN
 	rn=val(resp$(1))
 	if ckey=2 then edit=1 else edit=0 ! set edit mode
@@ -681,7 +681,7 @@ L6240: !
 	fnCmdKey("&Make Corrections",1,1,0,"Allows you to make corrections to any transactions before they are posted.")
 	fnCmdKey("&Cancel Without Posting",5,0,1,"Allows you to escape without posting this batch of entries.")
 	fnCmdKey("&Post",2,0,0,"Will post this group of entries to the general ledger files.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=4 then let fn_pr_proof_list : goto SCREEN_PROOF_TOTALS
 	if ckey=10 then let fn_pr_proof_totals : goto SCREEN_PROOF_TOTALS
@@ -815,7 +815,7 @@ PAYROLL: ! r:
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
 	fnCmdKey("&Finish",9,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=9 then
 		goto SCREEN_1
 	else if ckey=6 then
@@ -932,7 +932,7 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	fnCmdKey("&Next",1,1,0,"Apply any changes and return to main entry screen.")
 	fnCmdKey("&Delete",6,0,0,"Deletes this allocation.")
 	fnCmdKey("&Cancel",5,0,1,"Return to main entry screen without applying changes.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto EA_FINIS
 	if ckey=6 then
 		mat ml$(3)

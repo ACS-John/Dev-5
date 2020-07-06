@@ -59,7 +59,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	! protected this option on 5/19/2020 - i don't think they should ever change this.  if i am wrong i'll put it back in - john bowman  (to put it back list:   [cno]" ! &str$(gl2)   )
 	resp$(8)=env$('cno')
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	dt1=val(resp$(1)) ! beginning date
 	dt2=val(resp$(2)) ! ending date

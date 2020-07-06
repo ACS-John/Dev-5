@@ -17,7 +17,7 @@
 	fnLbl(4,1,"without consulting ACS",mylen,1)
 	fnLbl(4,15,"",mylen,1)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 L180: !
 x=pos(resp$(1),"/",1)
 if x>0 then resp$(1)(x:x)="": goto L180

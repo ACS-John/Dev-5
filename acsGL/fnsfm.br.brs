@@ -40,7 +40,7 @@ MAIN: !
 	resp$(6)="False"
 	fnCmdKey("&Next",1,1,0,"Access the chosen financial statement design..")
 	fnCmdKey("&Cancel",5,1,0,"Return to main menu.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then selection=1
 	if resp$(2)="True" then selection=2

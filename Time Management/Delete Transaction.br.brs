@@ -47,7 +47,7 @@ do ! main loop
 	fnCmdKey('Delete',ck_delete:=4)
 	fnCmdKey('Exit',ck_exit:=5,0,1)
 	fnCmdKey('Reassign Next Transaction Addresses',ck_rnta:=6)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=ck_exit then
 		goto Finis
 	else
@@ -149,14 +149,5 @@ Finis: ! r:
 goto Xit ! /r
  
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		gosub Enum
-	end if
-fnend
- 
 include: fn_open
-include: enum
-include: Ertn
+include: fn_setup

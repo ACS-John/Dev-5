@@ -58,7 +58,7 @@ fnTxt(8,mypos(3),7) : fnTxt(8,mypos(4),7)
 fnTxt(9,mypos(1),7) : fnTxt(9,mypos(2),7)
 fnTxt(9,mypos(3),7) : fnTxt(9,mypos(4),7)
 fnCmdSet(3)
-fnAcs(sn$,win,mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 ! /r
 if ckey=5 then
 	goto Xit

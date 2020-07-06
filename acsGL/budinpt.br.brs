@@ -30,7 +30,7 @@
 	resp$(rc+=1)="False"
 	fnCmdSet(2)
 !
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then method=1 else method=2
 	if resp$(3)="True" then method_to_allocate=1 ! divide evenly
@@ -56,7 +56,7 @@ L450: fnLbl(1,1," General Ledger Number:",mylen,right)
 	fnTxt(2,mypos,12,0,1,"10",0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).")
 	resp$(2)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	k$=fnagl$(resp$(1))
 	budgetamt=val(resp$(2)) ! new budget amount
@@ -101,7 +101,7 @@ L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 !
 	fnCmdSet(2)
 !
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then budyear=1 else budyear=2
 	if budyear=1 then p1=37 else p1=43 ! CURRENT YEARS BUDGET OR NEXT YEARS BUDGET
@@ -114,7 +114,7 @@ BUDGET_FILE_NUM: ! r:
 	fnTxt(1,mypos,3,0,1,"30",0,"You can have different budget files in the budget management system.  Enter the budget file you wish to pull.")
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	bud=val(resp$(1)) ! budget file number to pull
 	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr BUDGET_FILE_NUM

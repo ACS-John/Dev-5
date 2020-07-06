@@ -35,7 +35,7 @@ resp$(respc+=1)="60"
 fnLbl(5,1,"Aging Break 3:",23,1)
 fnTxt(5,25,3,0,1,"30")
 resp$(respc+=1)="90"
-fnCmdSet(2): fnAcs2(mat resp$,ckey)
+fnCmdSet(2): fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 d1=val(resp$(1))
 bk(1,2)=val(resp$(2))

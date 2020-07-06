@@ -41,7 +41,7 @@ ADDREC: ! r:
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Record this sub category record.")
 	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
-	fnAcs2(mat resp$,ckey) ! add sub-category #
+	fnAcs(mat resp$,ckey) ! add sub-category #
 	if ckey=5 then goto ASKSUBCAT
 	cde$=lpad$(rtrm$(resp$(1)),3)
 	read #1,using Fprmstr,key=cde$: cde$,des$ nokey L350
@@ -70,7 +70,7 @@ EDITREC: ! r:
 	fnCmdKey("&Add" 			,2,0,0,"Save these changes and then add a new record." )
 	fnCmdKey("&Delete"		,4,0,0,"Delete this sub-category record." )
 	fnCmdKey("E&Xit"			,5,0,1,"Returns to main screen.")
-	fnAcs2(mat resp$,ckey) ! edit sub-category
+	fnAcs(mat resp$,ckey) ! edit sub-category
 	if ckey=5 then goto ASKSUBCAT
 	cde$=lpad$(rtrm$(resp$(1)),3)
 	des$=resp$(2)

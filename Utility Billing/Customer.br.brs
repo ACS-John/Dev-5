@@ -230,7 +230,7 @@ def library fnCustomer(x)
 		fnCmdKey("Access &Transactions",8,0)
 		fnCmdKey("&Delete",3,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs2(mat budgetinfo$,ckey) ! budget billing master record
+		fnAcs(mat budgetinfo$,ckey) ! budget billing master record
 		if ckey=5 then goto NameScreen
 		if ckey=8 then goto TRANS_ROUTINE
 		x=1 : ba(1)=val(budgetinfo$(1)) conv ignore
@@ -314,7 +314,7 @@ def library fnCustomer(x)
 			budgetinfo$(x+=1)=str$(bt1(14,2))
 			fnTxt(lyne,34,8,8,1,"1",0,'',1)
 			fnCmdSet(2)
-			fnAcs2(mat budgetinfo$,ckey) ! budget billing transactions
+			fnAcs(mat budgetinfo$,ckey) ! budget billing transactions
 			if ckey=5 then goto NameScreen
 			x=0
 			for j=1 to 14
@@ -496,7 +496,7 @@ def library fnCustomer(x)
 			fnCmdKey("Delete",4,0,0,"Deletes this record")
 		end if 
 		fnCmdKey("&Cancel",5,0,1,"Stops without recording any changes")
-		fnAcs2(mat custInfo$,ckey) ! CALL main screen
+		fnAcs(mat custInfo$,ckey) ! CALL main screen
 		if ckey=5 then 
 			release #h_customer_1: ioerr ignore
 			release #h_ubadrbil: ioerr ignore
@@ -655,7 +655,7 @@ def library fnCustomer(x)
 		fnTxt(lyne,19,10,0,1,'10',0,'',1)
 		bxnf$(billinfo+=1)=str$(g(12))
 		fnCmdSet(2)
-		fnAcs2(mat bxnf$,ckey) ! billing information
+		fnAcs(mat bxnf$,ckey) ! billing information
 		if ckey=5 then goto NameScreen
 		lastBillingDate=val(bxnf$(3))
 		bal=val(bxnf$(4))
@@ -707,7 +707,7 @@ def library fnCustomer(x)
 		fnTxt(7,20,17,0,0,'',0,"Customer's bank account from which payments should be drafted.")
 		dri$(6)=da$
 		fnCmdSet(2)
-		fnAcs2(mat dri$,ckey) ! bank draft information
+		fnAcs(mat dri$,ckey) ! bank draft information
 		if ckey=5 then goto NameScreen ! dont update information
 		df$=dri$(3)
 		dr$=dri$(4)
@@ -747,7 +747,7 @@ def library fnCustomer(x)
 		loop
 		L7160: ! 
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey) ! CALL deposit change grd
+		fnAcs(mat resp$,ckey) ! CALL deposit change grd
 		DEPOSIT_HIST_XIT: ! 
 	goto NameScreen ! /r
 	DEPOSIT_HIST_NONE: ! r:
@@ -782,7 +782,7 @@ def library fnCustomer(x)
 		fnTxt(3,17,10,0,1)
 		resp$(1)=""
 		fnCmdSet(11)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto AskAcct
 		x$=lpad$(trim$(resp$(1)),10)
 		if trim$(x$)="" then goto ADD_RECORD
@@ -970,7 +970,7 @@ SERVICE_SCREEN: ! r:
 		next j
 		fn_ScrAddServiceMeterInfo(srvLine,respc+=1,mat rateInfo$,srv$(service_code),service_code)
 		fnCmdKey("&Save",1,1,1) ! fnCmdSet(2)  <---  remove the cancel button
-		fnAcs2(mat rateInfo$,ckey) ! rate screen 1
+		fnAcs(mat rateInfo$,ckey) ! rate screen 1
 		! /r
 		if ckey<>5 then ! r: get local values out of mat rateInfo$ and Save the record
 			! r: receive ratecode back
@@ -1365,7 +1365,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		fnCmdKey(select_button_text$,1,1,0,select_button_text$&" the selected/highlighted record.")
 		fnCmdKey("Search",6,0,0,"Search for customer record")
 		fnCmdKey('Back',5,0,1,"Returns to previous screen")
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		x$=trim$(resp$(1)(1:10))
 		if account_selection_method=asm_text and ckey=1 then 
 			if ~fn_key_tweak(x$,h_customer_1) then 

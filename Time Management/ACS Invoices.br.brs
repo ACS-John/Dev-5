@@ -107,7 +107,7 @@ EOJ: ! r:
 		fnOpt(lc+=1,1,'Stop (neither merge, nor email)')
 		resp$(3)='False'
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 or resp$(3)='True' then
 			goto Xit
 		else if resp$(1)='True' then
@@ -119,14 +119,7 @@ EOJ: ! r:
 	loop
 	! /r
 Xit: fnXit
-!_____
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim resp$(30)*128
-	end if
-fnend
+dim resp$(30)*128
 def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	if ~invDateMmDdYy then invDateMmDdYy=date(fnEndOfMonth(days(date$)-15),'mmddyy')
 	fntos : rc=lc=0
@@ -144,7 +137,7 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	resp$(resp_invNo:=rc+=1)=str$(invoice_number)
  
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		returnN=99
 	else
@@ -383,4 +376,4 @@ def fn_print_inv
 	inv_line=b3=0
 fnend  ! fn_print_inv
 include: fn_open
-include: Ertn
+include: fn_setup

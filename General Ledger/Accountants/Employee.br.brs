@@ -60,7 +60,7 @@ MAIN: !
 	fnCmdKey("&Add",2,0,0,"")
 	fnCmdKey("&Proof Llist",4,0,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 L480: if ckey=5 then goto Xit
 	if ckey=2 then goto ASK_NEW_NUMBER
 	if ckey=4 then goto PROOF_LIST
@@ -75,7 +75,7 @@ ASK_NEW_NUMBER: !  add new employee
 	resp$(1)=""
 	fnCmdKey("&Next",1,1,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	holden1=en1=val(resp$(1))
 	if en1=0 then goto MAIN
 	addemployee=1 ! code for adding new employee
@@ -117,7 +117,7 @@ DISPLAY_EMPLOYEE: !
 	fnCmdKey("&Change Number",7,0,0,"")
 	fnCmdKey("&Delete",6,0,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	disable=1
 	if ckey=5 then goto MAIN
 	if ckey=2 then let fnW2supEdit(resp$(1)) : goto DISPLAY_EMPLOYEE
@@ -294,7 +294,7 @@ L2340: fnTos(sn$="Payroll4") : _
 	resp$(21)=str$(prd(21))
 	fnCmdKey("&Next",1,1,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then add=0: goto MAIN
 	for j=1 to 21
 		prd(j)=val(resp$(j))

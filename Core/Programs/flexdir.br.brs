@@ -38,7 +38,7 @@ OUT_THE_LOOP: !
 		fnflexadd1(mat item$)
 	next j
 	fnCmdSet(102)
-L350: fnAcs2(mat resp$,ckey)
+L350: fnAcs(mat resp$,ckey)
 	if ckey=5 then goto DONE
 	filter$=resp$(1) : _
 	dur$=resp$(2)

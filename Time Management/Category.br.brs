@@ -3,13 +3,6 @@ fn_setupCategories
 fnTop(program$)
 fnhamsterfio('TM Category')
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	end if
-fnend
-
 def fn_setupCategories
 	if ~setupCategories then
 		setupCategories=1
@@ -46,4 +39,4 @@ def library fnRead30Categories(mat dimTo30$)
 	fnCloseFile(hCategory,'TM Category')
 fnend
 include: fn_open
-include: Ertn
+include: fn_setup

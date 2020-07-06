@@ -55,7 +55,7 @@ TRANSACTION_ENTRY: !
 	fnCmdKey("De&lete",4,0,0,"Deletes this entry.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
 	fnCmdKey("&Post",8,0,1,"Post these entries to the job files.")
-	fnAcs2(mat resp$,ckey) ! detail job screen     editrec
+	fnAcs(mat resp$,ckey) ! detail job screen     editrec
 	if ckey=5 then goto L490 else goto L510
 L490: mat ml$(2)
 	ml$(1)="You have chosen to cancel without postng these entries!  "
@@ -158,7 +158,7 @@ L1400: fnCmdKey("&Add",1,0,0,"Add a new transaction." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information")
 	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
-	fnAcs2(mat resp$,ckey) ! review_details  grid of transactions
+	fnAcs(mat resp$,ckey) ! review_details  grid of transactions
 	if ckey=5 then goto TRANSACTION_ENTRY
 	editrec=val(resp$(1))
 	if ckey=1 then addone=1: mat inp=(0): jn$="": goto TRANSACTION_ENTRY

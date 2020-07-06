@@ -51,7 +51,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 		resp$(resp_actpd:=rc+=1)=str$(actpd) ! periodOption$(1)
 		
 		fnCmdSet(3)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then 
 			returnN=5 
 		else

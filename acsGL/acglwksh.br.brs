@@ -31,7 +31,7 @@ SCREEN1: !
 	fnTxt(1,mypos,3,0,0,'number') : _
 	resp$(1)=""
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	costcent=val(resp$(1)) : _
 	n$=lpad$(str$(costcent),3)&"     0  0"

@@ -29,7 +29,7 @@ AskEmployee: ! r:
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask employee #
+	fnAcs(mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
@@ -64,7 +64,7 @@ AddEmployee: ! r:
 	resp$(respc+=1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screem.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	add1=1
 	ent=val(resp$(1))
@@ -313,7 +313,7 @@ ScrEmployee: ! r:
 	end if
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	eno             =val(resp$(resp_eno            )(1:8))
 	em$(1)          =    resp$(resp_name           )       ! name
@@ -472,7 +472,7 @@ ScrDepartment: !
 	fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
 	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
@@ -818,7 +818,7 @@ AskDd: !
 	fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
 	fnCmdKey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto DdFinis
 	key$ =    resp$(1)
 	dd$  =    resp$(2)(1:1)

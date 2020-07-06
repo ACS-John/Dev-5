@@ -39,7 +39,7 @@ SCR1: !
 	fnqgl(lc,mypos)
 	resp$(2)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	year=val(resp$(1))
 	if resp$(2)="True" then pullfrom$="Current"

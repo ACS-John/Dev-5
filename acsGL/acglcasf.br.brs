@@ -42,7 +42,7 @@
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 	gosub ASK_MONTHLY
@@ -261,7 +261,7 @@ L2400: fnTos(sn$="ACglcasf3") : _
 	next j
 	fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 10
 		fundnum(j)=val(resp$(j*2-1))
@@ -288,7 +288,7 @@ ASK_MONTHLY: ! ask monthly info or ytd info
 	resp$(2)="True"
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then monthly=1
 	if resp$(2)="True" then monthly=2

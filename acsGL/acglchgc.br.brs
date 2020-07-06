@@ -49,7 +49,7 @@ L350: close #1:
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L480: fnopenprn : _
@@ -107,7 +107,7 @@ L870: fnTos(sn$="ACglchgs2") : _
 	resp$(3)=str$(total2)
 	fnCmdKey("&Next",1,1,0,"Accept the answer.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	d$=resp$(1)
 	total=val(resp$(2))

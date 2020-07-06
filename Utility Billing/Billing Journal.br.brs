@@ -59,7 +59,7 @@ MAIN: ! r: Screen 1
 	fnChk(10,27,'Print Usages:',1)
 	fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	billing_date=val(resp$(1))
 	if resp$(2)='True' then seq=1 ! route sequence

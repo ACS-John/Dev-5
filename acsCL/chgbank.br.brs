@@ -21,7 +21,7 @@ ASK1: !
 	fnCmdKey('&Save',2,1,0)
 	fnCmdKey('&Add',1,0,0,'This takes you to the Bank File')
 	fnCmdKey('&Cancel',5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 or ckey=99 then
 		goto Xit
 	else if ckey=1 then

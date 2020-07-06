@@ -82,7 +82,7 @@ MENU1B: ! r:
 			fnCmdKey("Open Drawer",12,0,0,'Open an attached cash drawer')
 		end if
 		fnCmdKey("Import CSV",14,0,0,'Import Collections CSV')
-		fnAcs2(mat resp$,ck1)
+		fnAcs(mat resp$,ck1)
 		if ck1=5 then
 			goto Xit
 		else
@@ -191,7 +191,7 @@ SCREEN_ADD: ! r:
 	fnCmdKey("&Notes",3,0,0,"Customer Notes")
 	fnCmdKey("&Back",2,0,0,"Back up one screen. Select a different customer.")
 	fnCmdKey("&Cancel",5,0,1,"Return to proof total screen.")
-	fnAcs2(mat resp$,ckey,1)
+	fnAcs(mat resp$,ckey,1)
 
 	do_not_blank_rcpt=0
 
@@ -335,7 +335,7 @@ EDIT_REC: ! r:
 	fnCmdKey("&Edit",2,0,0,"Allows you to change the breakdown")
 	fnCmdKey("&Delete",4,0,0,"Deletes this collection record")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main collection screen")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 
 	if ckey=5 then goto L2590
 	! If CKEY=2 Then Goto X
@@ -431,7 +431,7 @@ BUD2: ! r: requires x1$
 		L4990: !
 	next j
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ck1)
+	fnAcs(mat resp$,ck1)
 	if ck1=5 then goto L5080 ! 7/06/05  KJ
 	L5030: !
 	for j=1 to 5
@@ -894,7 +894,7 @@ def fn_askAllocations(x1$,mat srvName$,mat gb,mat alloc,mat validServiceLabel$; 
 	else
 		fnCmdSet(6) ! fnCmdKey("&Next",1,1) : fnCmdKey("&Back",2) : fnCmdKey("&Cancel",5,0,1)
 	end if
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	!
 	if env$('acsDeveloper')<>'' then debug=1
 	for j=1 to udim(mat alloc)
@@ -1089,7 +1089,7 @@ def fn_csv_import
 	resp$(2)=enableSkipDuplicates$
 
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		ecp_filename$=resp$(1)
 		enableSkipDuplicates$=resp$(2)

@@ -46,12 +46,6 @@ hTrans=fn_open('UB Transaction',mat t$,mat tN,mat form$)
 	loop
 	EoOld: !
 Xit: stop
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	end if
-fnend
 def fn_transAlreadyExist(p$,tdate,tcode,tamount; ___,returnN,taeKeyMatch)
 	if ~taeSetup then
 		taeSetup=1
@@ -81,4 +75,4 @@ def fn_transAlreadyExist(p$,tdate,tcode,tamount; ___,returnN,taeKeyMatch)
 	fn_transAlreadyExist=returnN
 fnend
 include: fn_open
-include: Ertn
+include: fn_setup

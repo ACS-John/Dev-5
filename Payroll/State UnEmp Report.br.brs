@@ -97,7 +97,7 @@
 	fncombof("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
 	resp$(respc+=1)='[All]'
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	quarter_ending_date$=resp$(1) ! quarter ending date
 	stcode=val(resp$(2)(1:2)) ! state code

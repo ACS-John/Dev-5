@@ -72,7 +72,7 @@ ASK_CHECK_NO: ! r:
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed with pr the payroll register." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask employee #
+	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto Xit
 	ckno=val(resp$(1))
 	ppd=val(resp$(2))

@@ -34,7 +34,7 @@ SCREEN_1: ! r:
 	fnTxt(ad_line,col2_pos,40,256,1,"70")
 	resp$(respc+=1)=file_import$
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		fkey(99)
 	else

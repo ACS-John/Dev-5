@@ -234,12 +234,7 @@ def fn_setup
 
 
 		library 'S:\Core\Library.br': fnXit
-		library 'S:\Core\Library.br': fnTos
-		library 'S:\Core\Library.br': fnChk
-		library 'S:\Core\Library.br': fnLbl,fnTxt
-		library 'S:\Core\Library.br': fnCmdSet,fnAcs
 		library 'S:\Core\Library.br': fnGetHandle
-		library 'S:\Core\Library.br': fnMsgBox
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
 		library 'S:\Core\Library.br': fnTop

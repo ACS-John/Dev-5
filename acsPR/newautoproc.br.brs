@@ -55,7 +55,7 @@ Main: ! r:
 	fnCmdKey("&Next",1,1,0,"Selects the highlited company to be included in automatic processing.")
 	fnCmdKey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.")
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=2 and count>0 then goto L550
 	clnam$(count+=1)=resp$(1)(1:30)

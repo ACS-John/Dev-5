@@ -71,7 +71,7 @@ MENU1: ! r:
 	fnOpt(2,2,"Account Sequence",0,1)
 	resp$(11)=fn_reg_try$(sn$&'.account sequence',"False")
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 	svt$=resp$(2)
@@ -283,7 +283,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	! resp$(2)='WA'
 	! fncomboa("ubrate3",lc,mypos,mat option$)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto CAMPBELL_XIT
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 	service$="W"
