@@ -67,7 +67,7 @@
 		fnTxt(13,pf,8,8,1,"1")
 		resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3_override)
 		fnCmdSet(3)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto ENDSCR
 		d1 = val(resp$(5))
 		d4 = val(resp$(1))
@@ -159,7 +159,7 @@
 		end if
 		fncmbact(1,17) !
 		resp$(1)=a$
-		fnCmdSet(3): fnAcs2(mat resp$,ckey)
+		fnCmdSet(3): fnAcs(mat resp$,ckey)
 		a$ = lpad$(trim$(resp$(1)(1:10)),10)
 		if trim$(a$)="" then goto RELEASE_PRINT
 		if ckey=5 then goto RELEASE_PRINT
@@ -204,7 +204,7 @@
 		fnTxt(1,mypos,8,0,1,"",1)
 		resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 		fnCmdSet(52)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 	Xit: fnXit
 	!
 	ERTN: fnerror(program$,err,line,act$,"Xit")

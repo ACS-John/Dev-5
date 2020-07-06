@@ -98,7 +98,7 @@ SCR1: !
 		fnTxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.")
 		resp$(j+3)=""
 	next j
-	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 6
 		L1030: !

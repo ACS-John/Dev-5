@@ -19,7 +19,7 @@ MAIN: !
 	fnTxt(4,23,8,0,0,"0")
 	resp$(3)='0' ! str$(33430) ! str$(88000)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 	date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))

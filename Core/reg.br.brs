@@ -254,10 +254,18 @@ def fn_cReg_close
 	creg_setup=0
 fnend
 
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
+
+
+def library fnIniToReg
+	if ~setup then fn_setup
+	if ~reg_setup then reg_setup=fn_regSetup
+	if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
+	fnIniToReg=fn_IniToReg
+fnend
+def fn_iniToReg
+	if ~setup_iniToReg then
+		setup_iniToReg=1
+		
 		dim property$(0)*128,default$(0)*128
 		mat property$(0) : mat default$(0)
 		fnAddOneC(mat property$,'Orientation' ) : fnAddOneC(mat default$,'Portrait')
@@ -269,18 +277,9 @@ def fn_setup
 		fnAddOneC(mat property$,'BottomMargin') : fnAddOneC(mat default$,'0.500'   )
 		fnAddOneC(mat property$,'LeftMargin'  ) : fnAddOneC(mat default$,'0.500'   )
 		fnAddOneC(mat property$,'RightMargin' ) : fnAddOneC(mat default$,'0.500'   )
-
-		dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256
+		
 	end if
-fnend
-
-def library fnIniToReg
-	if ~setup then fn_setup
-	if ~reg_setup then reg_setup=fn_regSetup
-	if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
-	fnIniToReg=fn_IniToReg
-fnend
-def fn_iniToReg
+	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256
 	fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	for programItem=1 to udim(mat program_name$)
 		if program_file$(programItem)<>'' then
@@ -331,4 +330,4 @@ fnend
 ! 	fnhamsterfio('CO System Registry')
 ! ! /r
 
-include: Ertn
+include: fn_setup

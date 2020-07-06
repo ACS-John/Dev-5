@@ -2,7 +2,7 @@
 ! search for a personnel burden record
 
 def library fnburden_srch(&x$;fixgrid)
-	library 'S:\Core\Library': fnTos,fnflexinit1,fnflexadd1,fnAcs,fnCmdSet,fnerror,fngethandle,fnCmdKey
+	autoLibrary
 	on error goto Ertn
 
 	dim item$(6)*30,resp$(30)*80
@@ -36,7 +36,7 @@ ERR_READ: !
 	if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 	fnCmdKey("&Edit",2,1,0,"Allows you to change the highlighted record.")
 	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
-	fnAcs2(mat resp$,ckey)           ! CALL FLEXGRID
+	fnAcs(mat resp$,ckey)           ! CALL FLEXGRID
 	x$=lpad$(resp$(1)(1:8),8)
 	if ckey=5 then x$="        " ! no one selected
 	goto Xit

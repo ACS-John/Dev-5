@@ -117,7 +117,7 @@ SCREEN1: ! r:
 	fnChk(5,mypos,"Show Totals by Route:",1)
 	resp$(4)="False"
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	ld1=val(resp$(1))
 	hd1=val(resp$(2))

@@ -17,10 +17,6 @@ def library fnworkOrderAdd(z$*10)
 	if ~wo_setup then ! r:
 		wo_setup=1
 		autoLibrary
-		library 'S:\Core\Library': fnWorkOrderPrint
-		library 'S:\Core\Library': fnAcs,fnTos,fnLbl,fnTxt
-		library 'S:\Core\Library': fngethandle
-		library 'S:\Core\Library': fnNoteDir$,fnCmdKey,fnWorkOrderList,fnerror
 		on error goto Ertn
 		dim resp$(128)*512
 		dim i$(16)*320
@@ -111,7 +107,7 @@ def library fnworkOrderAdd(z$*10)
 	fnCmdKey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
 	fnCmdKey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main customer record.")
-	fnAcs2(mat resp$,ckey) ! work order screen
+	fnAcs(mat resp$,ckey) ! work order screen
 
 	if ckey=5 then goto woaXIT
 	z$=resp$(respc_accont)(1:10) ! lpad$(trim$(resp$(respc_accont)(1:10)),10)

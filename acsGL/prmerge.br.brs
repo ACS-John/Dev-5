@@ -108,7 +108,7 @@ L870: fnTos(sn$="prmerge") : _
 	fnOpt(9,10,"Change Employee Number",0,0) : _
 	resp$(2)="False"
 	fnCmdKey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if resp$(1)="True" then gosub ADD : goto L220
 	if resp$(2)="True" then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
 	goto L80
@@ -129,7 +129,7 @@ ADD: !
 	fnTxt(4,mypos,11,0,left,"",0,"Enter the employee social security number.",0 ) : _
 	resp$(rc+=1)=ss$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto L220
 	k$(1)=resp$(1) : _
 	k$(2)=resp$(2) : _
@@ -148,7 +148,7 @@ CHANGE_EMPLOYEE_NUMBER: !
 	fncombof("PRmstr",1,mypos,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,pas, "Choose from the list of employees.",0) : _
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto L220
 	en$=lpad$(rtrm$(resp$(1)(1:4)),4)
 	goto L220

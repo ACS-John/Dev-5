@@ -37,7 +37,7 @@ MENU1: close #101: ioerr ignore
 ! tEXT$=STR$(P)
 ! fnPRF(PFX,6,30,20,0,TEXT$)
 	fnCmdSet(2)
-	fnAcs("Amort1",0,mat response$,ckey)
+	fnAcs(mat response$,ckey)
 	rc=0
 	s=la=val(response$(rc+=1))
 	ir=val(response$(rc+=1))

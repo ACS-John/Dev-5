@@ -5,7 +5,7 @@
 ! mat p$      array of
 def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	! r: setup
-	library 'S:\Core\Library': fnTos,fnflexinit1,fnCmdKey,fnAcs2,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
+	library 'S:\Core\Library': fnTos,fnflexinit1,fnCmdKey,fnAcs,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fngethandle
 	on error goto Ertn
 
 	dim sln2(199)
@@ -165,7 +165,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		fnCmdKey("&Add",opt_add)
 		fnCmdKey("&Delete",opt_delete)
 		fnCmdKey("E&Xit",opt_cancel,0,1)
-		fnAcs2(mat resp$,menu1_opt)
+		fnAcs(mat resp$,menu1_opt)
 		prec=val(resp$(1)) conv MENU1
 		if prec=0 and menu1_opt=opt_edit then menu1_opt=opt_add
 		if menu1_opt=opt_cancel then
@@ -243,7 +243,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			fnCmdKey("&Save",1,1)
 			fnCmdKey("&Cancel",opt_cancel,0,1)
 			!
-			fnAcs2(mat p2$,ckey)
+			fnAcs(mat p2$,ckey)
 			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
 			if ckey<>opt_cancel then gosub REWR_P
 			addloop$=p2$(alana)

@@ -289,7 +289,7 @@ ASK_TI1: ! r:
 	fnTxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.")
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	d2=val(resp$(1)) ! cutoff date
 	ti1$=resp$(2)(1:1)

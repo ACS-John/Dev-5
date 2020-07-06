@@ -111,13 +111,4 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,
 	fn_sendEmail=returnN
 	Xit: !
 fnend
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-		gosub Enum
-	end if 
-fnend
-include: enum
-include: Ertn
+include: fn_setup

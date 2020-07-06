@@ -29,7 +29,7 @@ fnTop(program$,'',1)
 	fnTxt(2,24,40)
 	resp$(1)=forwarderFilter$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	forwarderFilter$=resp$(1)
 	fnrange_to_array(forwarderFilter$,mat forwarderFilter)
@@ -215,7 +215,7 @@ def fn_setup
 		library 'library\clsUtil.wb': fnArray_to_range$,fnRange_to_array
 
 		library 'S:\Core\Library.br': fnXit
-		library 'S:\Core\Library.br': fnTos,fnLbl,fnTxt,fnCmdSet,fnAcs
+		library 'S:\Core\Library.br': fnTos,fnAcs,fnLbl,fnTxt,fnCmdSet
 		library 'S:\Core\Library.br': fnGetHandle
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
@@ -224,7 +224,7 @@ def fn_setup
 		library 'library\CLSUtil.wb': fncom
 		library 'library\CLSUtil.wb': fnList_Print
 
-		library 'Library\SQL.wb': fnsql_setup$
+		library 'Library\SQL.wb': fnSql_setup$
 
 		gosub Enum
 		gosub SetupPrint

@@ -137,7 +137,7 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 	 end if
 	 fnCmdSet(2)
-	 fnAcs2(mat resp$,ckey)
+	 fnAcs(mat resp$,ckey)
 	 if ckey<>5 then
 		respc=0
 		for period=1 to nap

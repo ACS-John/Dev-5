@@ -1,4 +1,7 @@
 fn_setup
+dim serviceName$(10)*20
+fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
+
 fnTop(program$)
  
 do ! r: Main Loop
@@ -15,7 +18,7 @@ do ! r: Main Loop
 	fnCmdKey('Export',ckey_export:=1, 0,0,'Export file to modify Route and Sequence numbers')
 	fnCmdKey('Import',ckey_import:=2, 0,0,'Import modified Route and Sequence numbers from file')
 	fnCmdKey('Exit'  ,5, 0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		goto Xit
 	else
@@ -178,19 +181,5 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	fnAddOneC(mat mg$,outFile$)
 	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
 fnEnd
- 
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	
-		on error goto Ertn
-		gosub Enum
-		
-		dim serviceName$(10)*20
-		fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
-	end if
-fnend
-include: enum
+include: fn_setup
 include: fn_open
-include: Ertn

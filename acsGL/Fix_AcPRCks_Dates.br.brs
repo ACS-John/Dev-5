@@ -22,7 +22,7 @@
 	resp$(rc+=1)=str$(date_good)
 	fnCmdKey("Next",1,1,0,"Calculate tax deposit.")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
  
 	date_bad=val(resp$(1))

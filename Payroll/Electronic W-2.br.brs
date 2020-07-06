@@ -187,7 +187,7 @@ SCREEN1_NEW: ! r:
 	!
 	fnCmdKey("Next",1,1,0,"Creates the export")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! /r
+	fnAcs(mat resp$,ckey) ! /r
 	if ckey=5 then goto Xit
 ! r: populate local variables from mat resp$
 	beg_date=val(resp$(respc_dateStart))

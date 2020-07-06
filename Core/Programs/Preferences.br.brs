@@ -75,7 +75,7 @@
 ! /r
 !  main loops - build and display screens, get, save, apply settings, etc
 DO_SCREEN_MAIN: ! r:
-	do 
+	do
 		fnTos
 		fn_nav_buttons
 		col1_width=33 : col2_pos=col1_width+2 : lc=rc=0 : win_width=75
@@ -129,10 +129,10 @@ DO_SCREEN_MAIN: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ckey)
-		if ckey=5 then 
+		fnAcs(mat resp$,ckey)
+		if ckey=5 then
 			goto Xit
-		else 
+		else
 			if text_editor$<>'' then text_editor$=os_filename$(env$('at')&resp$(resp_text_editor))
 			decimal_assumed$=resp$(resp_decimal_assumed)
 			disable_multisession$=resp$(resp_disable_multisession)
@@ -140,24 +140,24 @@ DO_SCREEN_MAIN: ! r:
 			enableSaveCompanyAs$=resp$(resp_enableSaveCompanyAs)
 			! enableOpenPartial$=resp$(resp_enableOpenPartial)
 			enableBackupReportCache$=resp$(resp_enableBackupReportCache)
-		end if 
-		! 
-		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+		end if
+		
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then
 			goto SCREEN_CK_GOTO
-		else if ckey=15 then 
+		else if ckey=15 then
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\')&'"'
-		else if ckey=16 then 
+		else if ckey=16 then
 			fnureg_write('Save As Path',os_filename$(env$('Desktop')))
-		else if ckey=14 then 
+		else if ckey=14 then
 			fnureg_write('Text_Editor','')
 			text_editor$=fn_text_editor_default$
 		else ! Save and Apply
 			fn_save
 			if ckey<>2 then goto Xit
-		end if 
+		end if
 	loop  ! /r
 DO_SCREEN_THEME: ! r:
-	do 
+	do
 		fnTos
 		fn_nav_buttons
 		col1_width=19 : col2_pos=col1_width+2 : col3_pos=col2_pos+12 : lc=0 : win_width=75
@@ -192,15 +192,15 @@ DO_SCREEN_THEME: ! r:
 		fn_do_screen_theme_add_theme('Buttons'     ,colorDefaultForeground$(5),colorDefaultBackground$(5))  :  fnLbl(lc,col3_pos+12,'Default Button')
 		fn_do_screen_theme_add_theme('ButtonCancel',colorDefaultForeground$(6),colorDefaultBackground$(6))  :  fnLbl(lc,col3_pos+12,'Cancel Button')
 		fn_do_screen_theme_add_theme('GridHeaders' ,colorDefaultForeground$(7),colorDefaultBackground$(7))
-		
-		
+
+
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ckey)
-		if ckey=5 then 
+		fnAcs(mat resp$,ckey)
+		if ckey=5 then
 			goto Xit
-		else 
+		else
 			modeShift=0
 			if ckey=ck_lightMode then
 				fn_set_color_defaults(0)
@@ -240,19 +240,19 @@ DO_SCREEN_THEME: ! r:
 			fnureg_write('color.[buttoncancel].background',resp$(rc_color+=1))
 			fnureg_write('color.[gridheaders].foreground',resp$(rc_color+=1))
 			fnureg_write('color.[gridheaders].background',resp$(rc_color+=1))
-		end if 
-		! 
-		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+		end if
+		!
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then
 			goto SCREEN_CK_GOTO
-		else if ckey=11 then 
+		else if ckey=11 then
 			background_picture$=background_picture_default$
-		else if ckey=12 then 
+		else if ckey=12 then
 			min_fontsize_height$=default_min_fontsize_height$
 			min_fontsize_width$=default_min_fontsize_width$
 		else ! Save and Apply
 			fn_save
 			if ckey<>2 then goto Xit
-		end if 
+		end if
 	loop  ! /r
 def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_default$)
 	lc+=1
@@ -261,28 +261,28 @@ def fn_do_screen_theme_add_theme(attribute$,foreground_default$,background_defau
 	fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1),foreground_default$,1) ! if resp$(rc_color)='' then resp$(rc_color)=foreground_default$
 	fnTxt(lc,col3_pos,10,7,0,'',0,attribute$&' Background: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
 	fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1),background_default$,1) ! if resp$(rc_color)='' then resp$(rc_color)=background_default$
-fnend 
+fnend
 def fn_set_color_defaults(darkMode)
 	if darkMode then
-		colorDefaultForeground$(1)='#FFFFFF' : colorDefaultBackground$(1)='#283033' ! 'Screen'      
+		colorDefaultForeground$(1)='#FFFFFF' : colorDefaultBackground$(1)='#283033' ! 'Screen'
 		colorDefaultForeground$(2)='#FFFFFF' : colorDefaultBackground$(2)='#283033' ! 'ScreenHeader'
-		colorDefaultForeground$(3)='#FFFFFF' : colorDefaultBackground$(3)='#283033' ! 'TextBoxes'   
-		colorDefaultForeground$(4)='#FFFFFF' : colorDefaultBackground$(4)='#283033' ! 'Labels'      
-		colorDefaultForeground$(5)='#4eba52' : colorDefaultBackground$(5)='#283033' ! 'Buttons'     
+		colorDefaultForeground$(3)='#FFFFFF' : colorDefaultBackground$(3)='#283033' ! 'TextBoxes'
+		colorDefaultForeground$(4)='#FFFFFF' : colorDefaultBackground$(4)='#283033' ! 'Labels'
+		colorDefaultForeground$(5)='#4eba52' : colorDefaultBackground$(5)='#283033' ! 'Buttons'
 		colorDefaultForeground$(6)='#ff4760' : colorDefaultBackground$(6)='#283033' ! 'ButtonCancel'
-		colorDefaultForeground$(7)='#FFFFFF' : colorDefaultBackground$(7)='#283033' ! 'GridHeaders' 
+		colorDefaultForeground$(7)='#FFFFFF' : colorDefaultBackground$(7)='#283033' ! 'GridHeaders'
 	else
-		colorDefaultForeground$(1)='#000000' : colorDefaultBackground$(1)='#E7EDF5' ! 'Screen'      
+		colorDefaultForeground$(1)='#000000' : colorDefaultBackground$(1)='#E7EDF5' ! 'Screen'
 		colorDefaultForeground$(2)='#000000' : colorDefaultBackground$(2)='#FFFFFF' ! 'ScreenHeader'
-		colorDefaultForeground$(3)='#000000' : colorDefaultBackground$(3)='#FFFFFF' ! 'TextBoxes'   
-		colorDefaultForeground$(4)='#000000' : colorDefaultBackground$(4)='#B0C4DE' ! 'Labels'      
-		colorDefaultForeground$(5)='#000000' : colorDefaultBackground$(5)='#74DF00' ! 'Buttons'     
+		colorDefaultForeground$(3)='#000000' : colorDefaultBackground$(3)='#FFFFFF' ! 'TextBoxes'
+		colorDefaultForeground$(4)='#000000' : colorDefaultBackground$(4)='#B0C4DE' ! 'Labels'
+		colorDefaultForeground$(5)='#000000' : colorDefaultBackground$(5)='#74DF00' ! 'Buttons'
 		colorDefaultForeground$(6)='#000000' : colorDefaultBackground$(6)='#CD5C5C' ! 'ButtonCancel'
-		colorDefaultForeground$(7)='#000000' : colorDefaultBackground$(7)='#FFFFFF' ! 'GridHeaders' 
+		colorDefaultForeground$(7)='#000000' : colorDefaultBackground$(7)='#FFFFFF' ! 'GridHeaders'
 	end if
 fnend
 DO_SCREEN_PRINTER: ! r:
-	do 
+	do
 		fnTos
 		fn_nav_buttons
 		col1_width=33 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsp_rc=0
@@ -333,10 +333,10 @@ DO_SCREEN_PRINTER: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs('',0,mat resp$,ckey)
-		if ckey=5 then 
+		fnAcs(mat resp$,ckey)
+		if ckey=5 then
 			goto Xit
-		else 
+		else
 			! report_cache$=resp$(resp_report_cache)
 			! wait_wp_close$=resp$(resp_wait_wp_close)
 			pa_max_pages$		=resp$(resp_pa_max_pages)
@@ -347,12 +347,12 @@ DO_SCREEN_PRINTER: ! r:
 			use_atlantis$		=resp$(resp_use_atlantis)
 			receipt_printer$=resp$(resp_receipt_printer)
 			formsFormat$			=resp$(resp_formsFormat)
-		end if 
-		
-		! 
-		if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+		end if
+
+		!
+		if ckey=>screen_ck_low and ckey<=screen_ck_high then
 			goto SCREEN_CK_GOTO
-		else if ckey=14 then 
+		else if ckey=14 then
 			fnureg_write('Printer.Receipt',receipt_printer$)
 			fnopen_receipt_printer
 			pr #255: 'ACS Receipt Printer Test'
@@ -360,20 +360,20 @@ DO_SCREEN_PRINTER: ! r:
 			pr #255: ''
 			pr #255: ''
 			fnclose_receipt_printer
-		else if ckey=13 then 
+		else if ckey=13 then
 			fnureg_write('Atlantis Path','')
 			fn_get_atlantis(atlantis_exe$) : atlantis_exe$=trim$(atlantis_exe$,'"')
-		else if ckey=15 then 
+		else if ckey=15 then
 			dim office_word_exe$*256
-			if fn_get_office_word(office_word_exe$) then 
+			if fn_get_office_word(office_word_exe$) then
 				word_exe$=office_word_exe$
-			end if 
-		else if ckey=12 then 
+			end if
+		else if ckey=12 then
 			execute 'sy -c -w explorer "'&os_filename$('[Q]\Report Cache')&'"'
 		else ! Save and Apply
 			fn_save
 			if ckey<>2 then goto Xit
-		end if 
+		end if
 	loop  ! /r
 DO_SCREEN_HH: ! r:
 do
@@ -406,28 +406,28 @@ do
 	fnLbl(lc+=1,1,"Command to run afterward:",col1_width,1,0,0,0,'Select a command to run after the hand held file is made.')
 	fnTxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
 	fnLbl(lc,col2_pos+45,"(use [file] to indicate the created file)")
-	resp$(resp_hhrun:=dsh_rc+=1)=hhrun$ 
+	resp$(resp_hhrun:=dsh_rc+=1)=hhrun$
 
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
-	else 
+	else
 		u4_device$=resp$(resp_u4_device)
 		u4_meterLocationIdSequential$=resp$(resp_u4_MeterLocIdSequential)
 		u4_includeFinalBilled$=resp$(resp_u4_uncludeFinalBilled)
 		hhto$=resp$(resp_hhto)
 		hhfro$=resp$(resp_hhfro)
 		hhrun$=resp$(resp_hhrun)
-	end if 
-	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+	end if
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
 		if ckey<>2 then goto Xit
-	end if 
+	end if
 loop ! /r
 DO_SCREEN_UB: ! r:
 do
@@ -453,15 +453,15 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
-	else 
+	else
 		ub_total_ar_on_dashboard$=resp$(resp_ub_total_ar)
 		ub_collPrintInAccountOrder$=resp$(resp_ub_cpiao)
 		ub_collDisableDepositList$=resp$(resp_ub_collDisableDepositList)
-	end if 
-	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+	end if
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
@@ -484,13 +484,13 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
-	else 
+	else
 		gl_retainFieldsDuringAdd$=resp$(resp_gl_retainFieldsDuringAdd)
-	end if 
-	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+	end if
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
@@ -526,18 +526,18 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
-	else 
+	else
 		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
 		pr_prNetZeroChecks$=resp$(resp_pr_prNetZeroChecks)
 		if fnclient_has('CL') then
 			pr_prEmpToClPayee$=resp$(resp_pr_prEmpToClPayee)
 			! pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
 		end if
-	end if 
-	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+	end if
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
@@ -571,45 +571,45 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs('',0,mat resp$,ckey)
-	if ckey=5 then 
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
 		goto Xit
-	else 
+	else
 		em_emailReplyTo$=resp$(resp_em_emailReplyTo)
 		em_smtpServer$=resp$(resp_em_smtpServer)
 		em_emailFrom$=resp$(resp_em_emailFrom)
 		em_emailFromPassword$=resp$(resp_em_emailPassword)
 		em_emailPort$=resp$(resp_em_emailPort)
-	end if 
-	if ckey=>screen_ck_low and ckey<=screen_ck_high then 
+	end if
+	if ckey=>screen_ck_low and ckey<=screen_ck_high then
 		goto SCREEN_CK_GOTO
 	else ! Save and Apply
 		fn_save
 		if ckey<>2 then goto Xit
-	end if 
+	end if
 loop ! /r
 SCREEN_CK_GOTO: ! r:
-	if ckey=1001 then 
+	if ckey=1001 then
 		screen=screen_main : goto DO_SCREEN_MAIN
-	else if ckey=1002 then 
+	else if ckey=1002 then
 		screen=screen_theme : goto DO_SCREEN_THEME
-	else if ckey=1003 then 
+	else if ckey=1003 then
 		screen=screen_print : goto DO_SCREEN_PRINTER
-	else if ckey=1004 then 
+	else if ckey=1004 then
 		screen=screen_hh : goto DO_SCREEN_HH
-	else if ckey=1005 then 
+	else if ckey=1005 then
 		screen=screen_ub : goto DO_SCREEN_UB
-	else if ckey=1006 then 
+	else if ckey=1006 then
 		screen=screen_gl : goto DO_SCREEN_GL
-	else if ckey=1007 then 
+	else if ckey=1007 then
 		screen=screen_pr : goto DO_SCREEN_PR
-	else if ckey=1008 then 
+	else if ckey=1008 then
 		screen=screen_em : goto Do_Screen_Em
 
 	else
 		pr 'SCREEN_CK_GOTO does not know how to handle ckey='&str$(ckey)&'.'
 		pause
-	end if 
+	end if
 ! /r
 def fn_save
 	fnreg_write('Enable Save Company As',enableSaveCompanyAs$)
@@ -665,9 +665,9 @@ def fn_save
 		fnreg_write('email.Port',em_emailPort$)
 	end if
 
-fnend 
+fnend
 def fn_nav_buttons
-	if ~setup_nav_buttons then 
+	if ~setup_nav_buttons then
 		setup_nav_buttons=1
 		screen_main=1
 		screen_theme=2
@@ -679,7 +679,7 @@ def fn_nav_buttons
 		screen_em=8
 		screen_ck_low=1001
 		screen_ck_high=1008
-	end if 
+	end if
 	if screen=0 then screen=screen_main
 	nb_lc=0 : nb_pos=110 : nb_len=15
 	fnLbl(win_height,nb_len,'') ! forces all the windows for each screen to be at least the hight specified by win_height (set toward the top of this program)
@@ -705,17 +705,11 @@ def fn_nav_buttons
 		fnbutton_or_disabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
 	end if
 	fnLbl(22,1,'')
-fnend 
+fnend
 def fn_setup
-	if ~setup then 
+	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnTop,fnXit, fnAcs,fnLbl,fnTxt ,fnerror,fnTos,fnChk,fnreg_read,fnreg_write,fnButton,fnCmdKey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
-		library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnOpt,fnGetPp,fncopyfile
-		library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
-		library 'S:\Core\Library': fnaddonec
-		library 'S:\Core\Library': fnPrPrintNetZeroDefault$
-		library 'S:\Core\Library': fnBrFilename$,fnOsFilename$
-		library 'S:\Core\Library': fnProgramDataDir$
+		autoLibrary
 		on error goto Ertn
 		dim resp$(20)*256
 		dim background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
@@ -724,24 +718,24 @@ def fn_setup
 		default_min_fontsize_width$='8' ! '6'
 		dim background_picture_default$*256
 		background_picture_default$=fnOsFilename$('S:\Core\wallpaper\LauraVisitsKilimanjaro2019.jpg')
-		!
+
 		dim printer_list$(1)*256
 		printer_list(mat printer_list$) ! printer_count=printer_list(mat printer_list$)
-		!
+
 		dim pdf_or_printace$(2)*12
 		pdf_or_printace$(1)='PrintAce'
 		pdf_or_printace$(2)='PDF'
-		!
+
 		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
-		!
-	end if 
-fnend 
-IGNORE: continue 
+
+	end if
+fnend
+IGNORE: continue
 Xit: fnXit
 def library fnapply_theme(; disableConScreenOpenDflt)
 	if ~setup then fn_setup
 	fnapply_theme=fn_apply_theme( disableConScreenOpenDflt)
-fnend 
+fnend
 def fn_apply_theme(; disableConScreenOpenDflt)
 	fnureg_read('Background_Picture',background_picture$)
 	if background_picture$='' or ~exists(background_picture$) then background_picture$=background_picture_default$
@@ -759,7 +753,7 @@ def fn_apply_theme(; disableConScreenOpenDflt)
 	if ~disableConScreenOpenDflt then
 		execute 'Config Screen OpenDflt "Rows=35, Cols=115, Picture='&env$('background_picture')&',border=S:[screen],N=[screen]"'
 	end if
-fnend 
+fnend
 ERR_MIN_FONTSIZE: ! r:
 	execute 'config Min_FontSize '&default_min_fontsize_height$&'x'&default_min_fontsize_width$ ! pr 'ERR_MIN_FONTSIZE' : pause
 continue ! /r
@@ -797,7 +791,7 @@ def fn_editFile(efEditorType$,efFileToEdit$*256)
 	else if lwrc$(efEditorType$)=lwrc$('text') then
 		fnureg_read('Text_Editor',efExe$,fn_text_editor_default$)
 		efWaitText$='Text Editor'
-	else 
+	else
 		pr 'unrecognized Editor Type: '&efEditorType$ : pause
 	end if
 	! /r
@@ -825,23 +819,23 @@ def fn_editFile(efEditorType$,efFileToEdit$*256)
 fnend
 def fn_text_editor_default$*256
 	dim atlantis_path$*256,text_editor$*256
-	if exists(env$('at')&":C:\Windows\Notepad.exe") then 
+	if exists(env$('at')&":C:\Windows\Notepad.exe") then
 		text_editor$='C:\Windows\Notepad.exe'
-	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\Atlantis.exe") then 
+	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\Atlantis.exe") then
 		text_editor$='C:\Program Files (x86)\Atlantis\Atlantis.exe'
-	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\awp.exe") then 
+	else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\awp.exe") then
 		text_editor$='C:\Program Files (x86)\Atlantis\Atlantis.exe'
-	else if exists(env$('at')&":C:\Program Files\Atlantis\Atlantis.exe") then 
+	else if exists(env$('at')&":C:\Program Files\Atlantis\Atlantis.exe") then
 		text_editor$='C:\Program Files\Atlantis\Atlantis.exe'
-	else 
+	else
 		text_editor$=os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')
-	end if 
-	! if ~exists(br_filename$(trim$(text_editor$,'"'))) then 
+	end if
+	! if ~exists(br_filename$(trim$(text_editor$,'"'))) then
 	!   text_editor$='"'&os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')&'"'
-	! end if 
+	! end if
 	text_editor$=trim$(text_editor$,'"')
 	fn_text_editor_default$=text_editor$
-fnend 
+fnend
 def library fnget_wordprocessor_exe(&wordprocessor_exe$; force$)
 	if ~setup then fn_setup
 	fnget_wordprocessor_exe=fn_get_wordprocessor_exe(wordprocessor_exe$, force$)
@@ -854,11 +848,11 @@ def fn_get_wordprocessor_exe(&wordprocessor_exe$; force$)
 	if force$='' then
 		fnureg_read('Default to Use Atlantis',use_atlantis$,'False')
 	end if
-	if lwrc$(force$)=lwrc$('atlantis') or trim$(use_atlantis$)='True' then 
+	if lwrc$(force$)=lwrc$('atlantis') or trim$(use_atlantis$)='True' then
 		fn_get_atlantis(wordprocessor_exe$)
-	else 
+	else
 		fnureg_read('Word Path',wordprocessor_exe$)
-		if trim$(wordprocessor_exe$)='' or resetWordExePersistently$='True' then 
+		if trim$(wordprocessor_exe$)='' or resetWordExePersistently$='True' then
 			if fn_get_office_word(wordprocessor_exe$) then
 				fnureg_write('Word Path',wordprocessor_exe$)
 			else
@@ -866,11 +860,11 @@ def fn_get_wordprocessor_exe(&wordprocessor_exe$; force$)
 			end if !
 		end if
 	end if
-fnend 
+fnend
 def fn_get_atlantis(&atlantis_exe$)
 	dim atlantis_path$*256
 	fnureg_read('Atlantis Path',atlantis_path$)
-	if trim$(atlantis_path$)<>'' then 
+	if trim$(atlantis_path$)<>'' then
 		if ~exists(env$('at')&atlantis_path$) and exists(env$('at')&srep$(lwrc$(atlantis_path$),'atlantis.exe','awp.exe')) then
 			atlantis_path$=srep$(lwrc$(atlantis_path$),'atlantis.exe','awp.exe')
 		end if
@@ -878,7 +872,7 @@ def fn_get_atlantis(&atlantis_exe$)
 			atlantis_path$=srep$(lwrc$(atlantis_path$),'awp.exe','atlantis.exe')
 		end if
 		atlantis_exe$=atlantis_path$
-	else 
+	else
 		dim atl_check_path$(5)*256
 		atl_check_path$(1)="C:\Program Files (x86)\Atlantis\Atlantis.exe"
 		atl_check_path$(2)="C:\Program Files\Atlantis\Atlantis.exe"
@@ -888,14 +882,14 @@ def fn_get_atlantis(&atlantis_exe$)
 		atl_check_path$(5)=env$('local_program_dir')&('\Core\Atlantis Nova\Atlantis.exe')
 		if atl_check_path$(5)(1:2)='@:' then atl_check_path$(5)(1:2)=''
 		atl_which=fn_first_exists_in_list(mat atl_check_path$)
-		if atl_which>0 then 
+		if atl_which>0 then
 			atlantis_exe$=atl_check_path$(atl_which)
 			fnureg_write('Atlantis Path',atlantis_exe$)
-		else 
+		else
 			atlantis_exe$='' ! atl_check_path$(3)
-		end if 
-	end if 
-fnend 
+		end if
+	end if
+fnend
 def fn_get_office_word(&office_word_exe$)
 	gow_which=0
 	office_word_exe$=fnMsExe$("winword.exe")
@@ -903,7 +897,7 @@ def fn_get_office_word(&office_word_exe$)
 		gow_which=1
 	end if
 	fn_get_office_word=gow_which
-fnend 
+fnend
 def fn_first_exists_in_list(mat feil_list$)
 	feil_return=0
 	feil_item=0
@@ -913,37 +907,37 @@ def fn_first_exists_in_list(mat feil_list$)
 		dim feil_tmp_test$*1024
 		feil_tmp_test$=feil_list$(feil_item)
 		if feil_tmp_test$(1:2)<>'@:' then feil_tmp_test$(0:0)='@:'
-		if exists(feil_tmp_test$) then 
+		if exists(feil_tmp_test$) then
 			feil_return=feil_item
-		end if 
-	loop 
+		end if
+	loop
 	fn_first_exists_in_list=feil_return
-fnend 
+fnend
 def library fndecimal_assumed
 	if ~setup then fn_setup
 	fndecimal_assumed=fn_decimal_assumed
-fnend 
+fnend
 def fn_decimal_assumed
 	fnureg_read('Decimal',tmp$,'False')
-	if tmp$='False' and env$('decimal_assumed')<>'Decimal Required' then 
+	if tmp$='False' and env$('decimal_assumed')<>'Decimal Required' then
 		execute 'Config Decimal Required'
 		setenv('decimal_assumed','Decimal Required')
 	else if tmp$='True' and env$('decimal_assumed')<>'Decimal Assumed' then
 		execute 'Config Decimal Assumed'
 		setenv('decimal_assumed','Decimal Assumed')
-	end if 
-fnend 
+	end if
+fnend
 def library fnsave_as_path$*256
 	if ~setup then fn_setup
 	fnsave_as_path$=fn_save_as_path$
-fnend 
+fnend
 def fn_save_as_path$*256
 	dim sap_return$*256
 	fnureg_read('Save As Path',sap_return$)
 	if sap_return$(1:2)='@:' then sap_return$(1:2)=''
-	if sap_return$='' or ~exists(env$('at')&sap_return$) then 
+	if sap_return$='' or ~exists(env$('at')&sap_return$) then
 		sap_return$=os_filename$(env$('Desktop'))
-	end if 
+	end if
 	fn_save_as_path$=env$('at')&sap_return$
-fnend 
+fnend
 include: Ertn

@@ -57,7 +57,7 @@ L320: fnTos(sn$="W2-1")
 	resp$(rc+=1)=str$(orgend_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
@@ -144,7 +144,7 @@ SCR1: !
 	resp$(rc+=1)=str$(mcrate)
 	fnCmdKey("Next",1,1,0,"Proceed with submission")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 L1220: pr newpage
 	close #101: ioerr L1240

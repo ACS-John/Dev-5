@@ -26,7 +26,7 @@ Mid-Month
 Month-End
 >Transaction Listing                                  ^ Utility Billing\*
 >Cash Receipts Journal                                ^ Utility Billing\*
->Balance Breakdown (Aged by Month)                    ^ acsUB\ubOwed
+>Balance Breakdown (Aged by Month)                    ^ Utility Billing\*
 >Post to General Ledger                               ^ acsub\postgl                                            ^ GL
 Annual
 >Print

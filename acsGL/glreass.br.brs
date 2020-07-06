@@ -15,7 +15,7 @@ MENU1: !
 	fnLbl(5,1,"Take Next to continue with the reassign process.")
 	fnCmdKey("&Next",1,1,0,"Reassigns the general ledger transactions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without processing.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=1 then gosub REORG
 	goto Xit

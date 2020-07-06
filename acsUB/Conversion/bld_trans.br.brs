@@ -27,7 +27,7 @@ MENU1: ! r:
 	fnChk(4,1,"Delete existing transaction file before conversion") : resp$(1)="True"
 	fnChk(5,1,"Remove Transactions with Bad Dates") : resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	delubtransvb$=resp$(1) : removebaddates$=resp$(2)
 	if ckey=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
  

@@ -36,7 +36,7 @@ L210: acglfnsi=1 : _
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L330: on fkey 5 goto L1910

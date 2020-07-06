@@ -73,7 +73,7 @@ ASK_EMPLOYEE_NO: !
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing of payroll." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
 !
-	fnAcs2(mat resp$,ckey) ! ask employee #
+	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto Xit
 	success=0
 	if resp$(1)="[All]" then reverse_all=1 : goto L670
@@ -214,7 +214,7 @@ POSTGL1: ! r:
 	fnTxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing entry." )
 	fnCmdKey("E&Xit",5,0,1,"Don't Post")
-	fnAcs2(mat resp$,ckey) ! posting date
+	fnAcs(mat resp$,ckey) ! posting date
 	if ckey<>5 then
 		dat1=val(resp$(1))
 		if glb=2 then glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H[cno]"
@@ -434,7 +434,7 @@ return  ! /r
 	!   resp$(4)=str$(d2)
 !   fnCmdKey("&Next",1,1,0,"Continue posting." )
 	!   fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-!   fnAcs2(mat resp$,ckey) ! ask accrual info
+!   fnAcs(mat resp$,ckey) ! ask accrual info
 !   if ckey=5 then goto Xit
 !   day=val(resp$(1)) ! days in pay period
 !   dayslm=val(resp$(2)) ! days last month

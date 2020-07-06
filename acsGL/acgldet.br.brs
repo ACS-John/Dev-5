@@ -45,7 +45,7 @@
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L410: read #1,using L450: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1870

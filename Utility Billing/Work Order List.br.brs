@@ -1,27 +1,14 @@
 library program$: fnWorkOrderList
-library 'S:\Core\Library': fnXit,fnTop,fnAcs2
+fn_setup
 fnTop(program$)
 fnWorkOrderList('[All]')
 fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnAcs2,fnTos
-		library 'S:\Core\Library': fnLbl,fnTxt,fnmsgbox,fncomboa,fnButton,fnFra
-		library 'S:\Core\Library': fncmbact
-		library 'S:\Core\Library': fnCmdSet,fngethandle
-		library 'S:\Core\Library': fncreg_read,fncreg_write
-		library 'S:\Core\Library': fnureg_write,fnureg_read
-		on error goto Ertn
-		! r: dims
-		dim resp$(50)*320
-		dim nam$*30,line$(5)*100
-		! /r
-	end if
-fnend 
+
 def library fnWorkOrderList(; z$*10)
 	if ~setup then fn_setup
-	fnTos(sn$="workorder")
+	dim resp$(50)*320
+	dim nam$*30,line$(5)*100
+	fnTos
 	respc=0
 	fnLbl(1,43," ",1,1)
 	fnLbl(1,1,"Beginning Date to Review:",32,1)
@@ -34,7 +21,7 @@ def library fnWorkOrderList(; z$*10)
 	fncmbact(3,35,1)
 	resp$(respc+=1)=z$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto PWL_XIT
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year
@@ -80,4 +67,4 @@ PWL_PGOFLOW: ! r:
 	pr #255: newpage
 	gosub PWL_HDR
 continue  ! /r
-include: Ertn
+include: fn_setup

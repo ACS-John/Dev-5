@@ -79,7 +79,7 @@ NEWSCREEN: ! r:
 		gosub PAGE1
 	end if
 	fnCmdSet(4) ! Save and Cancel
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if page=1 then
 		a$(1)=resp$(1)
 		a$(2)=resp$(2)

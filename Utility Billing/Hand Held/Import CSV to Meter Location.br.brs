@@ -102,11 +102,4 @@ end if
 goto Xit
 Xit: stop ! fnXit
 include: fn_open
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-	end if
-fnend
-include: Ertn
+include: fn_setup

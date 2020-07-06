@@ -85,7 +85,7 @@ EO_INVOICE_GRID: ! /r
 	fnCmdKey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
 	fnCmdKey("&Listing",3,0,0,"Prints listings from unpaid file")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu") ! 320
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	displayalljobs=0
 	if ckey=5 then goto FINIS
 	! screen=0
@@ -294,7 +294,7 @@ fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file
 fnCmdKey("&Display Selected",3,0,0,"Displays all invoices selected for payment")
 fnCmdKey("&Display UnSelected",2,0,0,"Displays all remaining uncleared invoices")
 fnCmdKey("C&omplete",5,0,1,"Return to main unpaid invoice menu")
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 displayunpaid=total=displayall=0
 if ckey=5 or ckey=99 then goto MENU1
 selectedrec=val(resp$(respc_selectedrec)) ! selected record from grid
@@ -440,7 +440,7 @@ fnCmdKey("&Next",1,1,0,"Accept this transaction)")
 fnCmdKey("&Listing",4,0,0,"Print listing of all job cost entries.")
 fnCmdKey("&Post To Jobs",3,0,0,"Post this batch ofjob cost entries to job cost records. Normally done once complete with batch.")
 fnCmdKey("&Cancel",5,0,1,"Cancels without posting to jub cost)")
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 if ckey=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
 if val(resp$(4))=0 and ckey<>65 then ckey=5 ! exit if no amount on next
 if ckey=5 then amt=0: totalcost=0 : goto L6930 ! sCREEN=0: Goto MENU1
@@ -694,7 +694,7 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	! fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
 	fnCmdKey("&Delete",3,0,0,"Delete the invoice highlighted above")
 	fnCmdKey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		alloc2d_setup$=''
 		mat alloc2d$=('')
@@ -886,7 +886,7 @@ def fn_InvoiceAllocationFM(vn$,iv$; selected_alloc$*50)
 	fnTxt(lc,mypos,18)
 	resp$(iaf_respc_desc:=respc+=1)=iaf_desc$
 	fnCmdSet(4)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		iaf_amt=val(resp$(iaf_respc_amt))
 		iaf_gl$=fnagl$(resp$(iaf_respc_gl))

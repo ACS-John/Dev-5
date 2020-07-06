@@ -12,6 +12,8 @@ Enum: ! r: Common Enumerations
 
 		if uprc$(env$("Developer"))="YES" then developer=1
 		if uprc$(env$("Debug"))="YES" then debug=1
+		
+		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 
 		! r: MessageBox
 		if ~setup_messagebox then
@@ -35,15 +37,15 @@ Enum: ! r: Common Enumerations
 		! /r
 		! r: fnHamster2 Enumerations
 		mask_pointtwo=32
-		mask_number=30
-		mask_ccyymmdd=3
-		mask_mmddyy=1
+		mask_number  =30
+		mask_ccyymmdd= 3
+		mask_mmddyy  = 1
 		mask_glnumber=53
-		
-		textlen_mmddyy=8
+									      
+		textlen_mmddyy  = 8
 		textlen_ccyymmdd=10
 
-		storage_len_mmddyy=6
+		storage_len_mmddyy  =6
 		storage_len_ccyymmdd=8
 		! /r
 	end if

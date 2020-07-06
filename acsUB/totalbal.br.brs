@@ -11,7 +11,7 @@ do
 	resp$(2)=excludeFinalBilled$
 	fnCmdKey('Close',5,0,1,'Save option(s) and exit')
 	fnCmdKey('Refresh',1,1,0,'Recalculate')
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	excludeFinalBilled$=resp$(2)
 	fncreg_write(env$('program_caption')&' - Exclude Final Billed',excludeFinalBilled$)
 loop until ckey=5

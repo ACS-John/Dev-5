@@ -1,11 +1,3 @@
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		
-		on error goto Ertn
-	end if
-fnend
 def library fnEftData$*128(field$*128; return$*256)
 	if ~setup then fn_setup
 	field$=trim$(lwrc$(field$))
@@ -56,4 +48,4 @@ def library fnEftData$*128(field$*128; return$*256)
 	end if
 	fnEftData$=return$
 fnend
-include: Ertn
+include: fn_setup

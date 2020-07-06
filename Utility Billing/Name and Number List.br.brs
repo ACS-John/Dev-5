@@ -57,7 +57,7 @@
 	fnChk(10,29,"Print Cell")
 	resp$(resp_print_cell:=respc+=1)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	q0=2 ! default to name sequence
 	if resp$(1)=item1$(1) then
@@ -241,7 +241,7 @@ OPEN_GRID: ! r: select customers from grid
 	fnTxt(1,30,70,0,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
 	resp$(1)=""
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey) ! Select starting customer #
+	fnAcs(mat resp$,ckey) ! Select starting customer #
 	if ckey=5 then goto Xit
 	open #6: "Name="&trim$(resp$(1)),display,input ioerr OPEN_GRID
 return  ! /r

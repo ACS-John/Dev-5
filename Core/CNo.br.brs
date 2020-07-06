@@ -1,14 +1,6 @@
-! Replace S:\Core\CNo.br
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	end if
-fnend
-
-def library fncno(&cno; &cnam$)
+def library fnCno(&cno; &cnam$)
 	if ~setup then fn_setup
-	! cursys$=env$('cursys')
+
 	! r: Read CNo (normal method - tied to session and env$('cursys')
 	fnreg_read(session$&'.'&env$('cursys')&'.cno',cno$)
 	cno=val(cno$)
@@ -45,11 +37,11 @@ def library fncno(&cno; &cnam$)
 	end if
 	fncno=cno
 fnend 
-def library fnputcno(cno)
+def library fnPutCno(cno)
 	if ~setup then fn_setup
-	fnputcno=fn_putcno(cno)
+	fnPutCno=fn_putCno(cno)
 fnend
-def fn_putcno(cno)
+def fn_putCno(cno)
 	fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
 	setenv('cno',str$(cno))
 	execute 'config substitute [cno] '&str$(cno)
@@ -289,4 +281,4 @@ def library fncursys$(; cursys_set$*256,resetCache)
 	fncursys$=cursys_cache$
 fnend 
 include: fn_open
-include: Ertn
+include: fn_setup

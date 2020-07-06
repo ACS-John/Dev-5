@@ -32,7 +32,7 @@ SCREEN1: !
 	usa+=1 
 	resp$(4)="" ! just default to the first one
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
 	d(1)=val(resp$(2))

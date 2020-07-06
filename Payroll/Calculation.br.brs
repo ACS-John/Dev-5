@@ -312,7 +312,7 @@ Screen1: ! r:
 
 	fnCmdKey("Calculate",1,1,0,"Proceed with calculations.")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		prd=d1=val(resp$(resp_d1N))
 		d1$=resp$(resp_d1S)
@@ -1662,7 +1662,7 @@ def library fnCheckStateCalculation(; ___, _
 		resp$(resp_EicCode=respc+=1)=eicOption$(eicCode+1)
 
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey) ! /r
+		fnAcs(mat resp$,ckey) ! /r
 		if ckey=5 then
 			goto XitCheckStateCalculation
 		else

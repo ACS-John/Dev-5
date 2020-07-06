@@ -42,7 +42,7 @@ def library fnaddreceipt
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") 
 	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
 	dim resp$(60)*50
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	add=xedit=0
 	if ckey=5 then 
 		goto Xit 
@@ -141,7 +141,7 @@ def library fnaddreceipt
 		fnButton(16,67,"Edit",7,"Edit or Delete a standard general ledger breakdown")
 		fnCmdKey("Save",1,1,0,"Saves and returns to Receipt selection")
 		fnCmdKey("&Cancel",5,0,1,"Return to Receipt selection")
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto MENU1
 		rec$=lpad$(trim$(resp$(1)(1:8)),8)
 		nam$=resp$(2) ! name
@@ -247,7 +247,7 @@ def library fnaddreceipt
 		fnTxt(5,mypos,30)
 		resp$(respc+=1)=gldesc$
 		fnCmdSet(7)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto EDIT_RECEIPT
 		receiptkey$=rec$
 		receiptgl$=fnagl$(resp$(1))

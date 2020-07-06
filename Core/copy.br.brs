@@ -1,13 +1,6 @@
 ! Replace S:\Core\copy.br
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-	end if
-fnend
 def library fnCopy(from$*256,to$*256; new_record_length,options$)
-	if ~setup the let fn_setup
+	if ~setup the fn_setup
 	fnCopy=fn_Copy(from$,to$, new_record_length,options$)
 fnend
 def fn_Copy(from$*256,to$*256; new_record_length,options$)
@@ -33,7 +26,7 @@ def fn_Copy(from$*256,to$*256; new_record_length,options$)
 		dim toPath$*256,toFile$*256,toExt$*256
 		dim copyFromFolder$(0)*256
 		gd2_return=fnGetDir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
-		! 
+		
 		! pr 'gd2_return=';gd2_return : pause
 		for cfi=1 to udim(mat copyFromFolder$)
 			dim copyToFolder$*256
@@ -102,70 +95,7 @@ include: filenamesPopUpperCase
 	goto COPY_XIT ! /r
 	COPY_XIT: ! 
 	fn_Copy=copy_return
-fnend 
-def library fncscopy(&source$,&destination$)
-	! client server copy function
-	if ~setup the let fn_setup
-	source$=fnSrepEnv$(source$)
-	destination$=fnSrepEnv$(destination$)
-	! source$ = the file to copy from
-	! destination$ = file to copy to
-	! (start either source$ or destination$ with a @ in pos 1 to specify it's location is on the client)
-	dim serverip$*20
-	open #20: "Name=ServerIP.txt",display,input 
-	linput #20: serverip$
-	close #20: 
-	if source$(1:1)="@" then 
-		source$=source$(2:len(source$))
-		copy_from_client=1
-	else 
-		copy_from_server=1
-	end if 
-	if destination$(1:1)="@" then 
-		destination$=destination$(2:len(destination$))
-		copy_to_client=1
-	else 
-		copy_to_server=1
-	end if 
-	if copy_from_client=1 and copy_to_server=1 then 
-		gosub COPY_FROM_CLIENT_TO_SERVER
-	end if 
-	if copy_from_client=1 and copy_to_client=1 then 
-		gosub COPY_FROM_CLIENT_TO_CLIENT
-	end if 
-	if copy_from_server=1 and copy_to_client=1 then 
-		gosub COPY_FROM_SERVER_TO_CLIENT
-	end if 
-	if copy_from_server=1 and copy_to_server=1 then 
-		gosub COPY_FROM_SERVER_TO_SERVER
-	end if 
-	goto Xit
-	!
-	COPY_FROM_CLIENT_TO_SERVER: ! r:
-	open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
-	! pr #20: "open "&RTRM$(SERVERIP$)
-	pr #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
-	pr #20: "WOCS"&str$(val(wsid$)-50)
-	pr #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
-	pr #20: "bye"
-	close #20: 
-	open #20: "Name=csCopy"&wsid$&".cmd,Size=0,RecL=255,Replace",display,output 
-	pr #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
-	pr #20: "pause"
-	close #20: 
-	execute "Sy csCopy"&wsid$&".cmd"
-	return ! /r
-	!
-	COPY_FROM_CLIENT_TO_CLIENT: pause 
-	return 
-	!
-	COPY_FROM_SERVER_TO_CLIENT: pause 
-	return 
-	!
-	COPY_FROM_SERVER_TO_SERVER: pause 
-	return 
-	Xit: ! 
-fnend 
+fnend
 def library fnFree(fileToDelete$*256)
 	if ~setup then fn_setup
 	fileToDelete$=fnSrepEnv$(fileToDelete$)
@@ -223,4 +153,4 @@ include: filenamesPopUpperCase
 	RdrFinis: !
 	fnRemoveDeletedRecords=rdrReturn
 fnend
-include: Ertn
+include: fn_setup

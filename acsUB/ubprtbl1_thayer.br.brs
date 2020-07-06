@@ -57,7 +57,7 @@ SCREEN1: !
 	fnTxt(11,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur_s1)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ENDSCR
 	d4=val(resp$(1))
 	mg$(1)=resp$(2)
@@ -152,7 +152,7 @@ SCREEN3: !
 	end if
 	fncmbact(1,17) !
 	resp$(1)=a$
-	fnCmdSet(3): fnAcs2(mat resp$,ckey)
+	fnCmdSet(3): fnAcs(mat resp$,ckey)
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
@@ -210,7 +210,7 @@ ENDSCR: ! pr totals screen
 ! fnTxt(4,MYPOS,8,0,1,"",1)
 ! .   ! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 Xit: fnXit
 !
 VBOPENPRINT: !

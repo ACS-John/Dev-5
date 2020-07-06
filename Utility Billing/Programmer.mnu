@@ -8,8 +8,8 @@ Programmer
 
 >Customer Hamster                          ^ HamsterFio:Customer
 >WorkOrder Hamster                         ^ acsUB\workorderHamster
->Type Of Service                           ^ Utility Billing\Type Of Service
->Type of Services (All Companies)          ^ acsUB\TypeOfServices
+>Type Of Service                           ^ Utility Billing\*
+>Type of Services (All Companies)          ^ Utility Billing\*
 >Customer Hamster                          ^ acsUB\Customer_Hamster
 >Deposit1 HamsterFio                       ^ HamsterFio:Deposit1
 >Deposit2 HamsterFio                       ^ HamsterFio:Deposit2

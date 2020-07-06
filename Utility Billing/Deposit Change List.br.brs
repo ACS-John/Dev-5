@@ -17,7 +17,7 @@ MENU1: ! r:
 	fnTxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
 	resp$(2)=str$(ed1)
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	bd1=val(resp$(1))
 	bd1=fndate_mmddyy_to_ccyymmdd(bd1)

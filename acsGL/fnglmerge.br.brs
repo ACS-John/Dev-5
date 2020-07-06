@@ -82,7 +82,7 @@ def library fnglmerge
 		fnLbl(lc+=1,1,'Do you wish to add this account now?',80,center)
 		fnCmdKey('&Yes',1,1,0)
 		fnCmdKey('&No',5,0,1)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=1 then in1$='Yes' else if ckey=5 then in1$='No'
 	if in1$="Yes" then goto ADD_GL else goto CORRECT_GL
  
@@ -94,7 +94,7 @@ CORRECT_GL: !
 	fncombof("gla-[cno]",lc,mypos,0,"[Q]\GLmstr\GLmstr.h[cno]",13,20,1,12,"[Q]\GLmstr\glIndx2.h[cno]",limit_to_list)
 	resp$(1)=''
 	fnCmdKey('&Okay',1,1,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	t$=resp$(1)(22:33)
 	goto HERE_A
  
@@ -106,7 +106,7 @@ ADD_GL: !
 	fnTxt(lc,mypos,30)
 	resp$(1)=''
 	fnCmdKey('&Okay',1,1,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	d$=resp$(1)
 	mat ta=(0) : cb=0
 	write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
@@ -229,7 +229,7 @@ ASK_GLCNO: !
 	fnLbl(lc+=1,1,'Select the General Ledger Company to Post to')
 	fncmbcno(lc+=1,5,'GL')
 	fnCmdKey('&Okay',1,1,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	cno=val(resp$(1)(43:47))
  
 return

@@ -21,7 +21,7 @@ MENU1: !
 	fnTxt(lc,mypos,5,0,left,number$) : _
 	resp$(2)=env$('cno')
 	fnCmdSet(2) : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then 
 		goto Xit
 	else if resp$(1)=item1$(1) then 

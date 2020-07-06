@@ -12,7 +12,7 @@ MENU1: ! r:
 	fnChk(10,5,"Move Credit Balnces to Other"   ,chk_align) : resp$(5)="False"
 	fnChk(11,5,"  and apply credits"            ,chk_align) : resp$(6)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then 
 		if resp$(1)='True' then do_fix_balance_breakdowns=1 else do_fix_balance_breakdowns=0
 		if resp$(2)='True' then do_fix_trans_breakdowns=1 else do_fix_trans_breakdowns=0

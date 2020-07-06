@@ -16,7 +16,7 @@
 	resp$(1)=fnrgl$('  0   700  0')
 ! pr RESP$(1) : fnPAUSE ! XXX
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	x$=fnagl$(resp$(1))
 	pr 'This is your returned value"'&x$&'".'

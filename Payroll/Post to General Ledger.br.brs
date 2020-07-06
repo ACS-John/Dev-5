@@ -49,7 +49,7 @@ ASK_DATE: !
 	resp$(respc+=1)="False"
 	fnCmdKey("&Next",1,1,0,"Proceed with posting." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask payroll date
+	fnAcs(mat resp$,ckey) ! ask payroll date
 	if ckey=5 then goto Xit
 	dat1=d1=val(resp$(1))
 	dat2=d2=val(resp$(2))
@@ -230,7 +230,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask clearing
+	fnAcs(mat resp$,ckey) ! ask clearing
 	if ckey=5 then goto Xit
 	key$=k$=bankgl$=fnagl$(resp$(1))
 	ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
@@ -275,7 +275,7 @@ def fn_finalscrctrlbookmulitfunds
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask clearing
+	fnAcs(mat resp$,ckey) ! ask clearing
 	if ckey=5 then goto Xit
 	key$=fnagl$(resp$(1))
 	ttgl(1)=val(key$(1:3)): ttgl(2)=val(key$(4:9)): ttgl(3)=val(key$(10:12))
@@ -319,7 +319,7 @@ def fn_askaccrue
 	resp$(4)=str$(d2)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask accrual info
+	fnAcs(mat resp$,ckey) ! ask accrual info
 	if ckey=5 then goto Xit
 	day=val(resp$(1)) ! days in pay period
 	dayslm=val(resp$(2)) ! days last month

@@ -33,7 +33,7 @@ TRANSACTION_ENTRY: !
 	resp$(respc+=1)=str$(l10)
 	fnCmdKey("&Update Job",1,1,0,"Posts these percentages immediately to this job.")
 	fnCmdKey("&Complete",5,0,1,"Returns you to main menu.")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	jn$=lpad$(trim$(resp$(1)(1:6)),6) ! job number
 	if trim$(jn$)="" then goto L340 else goto L350

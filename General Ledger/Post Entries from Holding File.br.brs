@@ -32,7 +32,7 @@ MAIN: ! r:
 	fnLbl(4,37,"")
 	fnCmdKey("&Next",1,1,0,"Allows you to select files to be posted.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnacs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	from =val(resp$(1))
 	to =val(resp$(2))
@@ -60,7 +60,7 @@ MAIN: ! r:
 	fnCmdKey("&Review",2,0,0,"Review entries before posting.")
 	fnCmdKey("&Print",3,0,0,"Prints list of entries.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnacs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=1 then listing$='N' : goto PRINT_POST
 	if ckey=2 then goto REVIEW
 	if ckey=3 then listing$="Y" : goto PRINT_POST
@@ -164,7 +164,7 @@ REVIEW: ! r:
 	fnLbl(2,40,"")
 	fnCmdKey("&Next",1,1,0,"Review the entries for the date entered.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to listing of dates.")
-	fnacs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	review=val(resp$(1))
 	!  use hamster to review entries
@@ -211,7 +211,7 @@ ADD: ! r:
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
-	fnacs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	pas=0
 	if ckey=5 then goto MAIN
 	dno=ano=sno=0
@@ -243,7 +243,7 @@ CHANGE_ACCOUNT: ! r:
 	fnqgl(1,mypos,0,2,pas) 
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting.")
-	fnacs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	key$=bankgl$=fnagl$(resp$(1)) ! gl number
 return  ! /r
 BUILD_LAYOUT: ! r:

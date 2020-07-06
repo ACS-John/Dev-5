@@ -28,7 +28,7 @@ ASKDEPARTMENT: !
 	fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record") : _
 	fnCmdKey("&Delete",3,0,0,"Deletes the highlited record.") : _
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask department #
+	fnAcs(mat resp$,ckey) ! ask department #
 	if ckey=5 then goto Xit
 	dp$=resp$(1)
 	dp$=lpad$(uprc$(rtrm$(dp$)),3)
@@ -60,7 +60,7 @@ L490: fnLbl(y+=1,1,label1$(x+=1),15,1)
 L510: next j
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next record" ) : _
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask gl numbers
+	fnAcs(mat resp$,ckey) ! ask gl numbers
 	if ckey=5 then goto Xit
 	dp$=resp$(1)
 	dp$=lpad$(uprc$(rtrm$(dp$)),3)

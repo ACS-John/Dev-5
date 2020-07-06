@@ -104,7 +104,7 @@ SCREEN1: !
 	resp$(rc+=1)="True"
 	fnOpt(2,2,"Use Dollars",0,1)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 24
 L800: x=pos(resp$(j),"/",1)

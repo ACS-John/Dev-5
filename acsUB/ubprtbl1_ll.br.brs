@@ -58,7 +58,7 @@ SCREEN1: !
 	fnChk(9,pf,"Select Accounts to Print:",1) : _
 	resp$(respc+=1)="False"
 	fnCmdSet(3) : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ENDSCR
 	d4=date(days(d1,'mmddyy')+30,'mmddyy')
 	mg$(1) = resp$(1)
@@ -150,7 +150,7 @@ SCREEN3: !
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing") : _
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10) : _
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
@@ -207,7 +207,7 @@ ENDSCR: ! pr totals screen
 ! fnTxt(4,MYPOS,8,0,1,"",1) : _
 	! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
 	fnCmdSet(52) : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 Xit: fnXit
  
 ERTN: fnerror(program$,err,line,act$,"Xit")

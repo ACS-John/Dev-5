@@ -30,7 +30,7 @@
 	fnqgl(6,mypos,0,2) : _
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then sel=1 else sel=2
 	if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))

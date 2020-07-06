@@ -9,7 +9,7 @@ def fn_undobilling ! main
 	do_all=1 : do_route=2 : do_individual=3
 	fnTop(program$)
 	fnget_services(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
-	!
+	
 	ASK_OPTIONS: !
 	cont=fn_askOptions(route,billingdate$) ! collect user options
 	if ckey=5 then goto Xit_FN_UNDOBILLING
@@ -19,14 +19,14 @@ def fn_undobilling ! main
 		fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
 		goto ASK_OPTIONS
 	end if
- !
+ 
 	mat msgtext$(3)
 	msgtext$(1) = "Warning: this action will reduce the balance and balance breakdown of all selected customers"
 	msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
 	msgtext$(3) = "Are you sure?"
 	fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
 	if (answer$<>"Yes") then cont=0
-	!
+	
 	undoCount=0
 	if cont then
 		dim acct$*10,custname$*30,trcust$(3)*10,trdate(3),tramt(3),srvamt1(11),srvamt2(11),srvamt3(11),srvread1(6),srvread2(6),srvread3(6),trbal(3)
@@ -152,16 +152,16 @@ def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return
 	fncmbrt2(lc,pos_col2,1)
 	resp_route=rcnt+=1
 ! if resp$(resp_route)='' then resp$(resp_route)="[All]"
-!
+
 	fnOpt(lc+=1,1,'Individual:')
 	resp_opt_individual=rcnt+=1
 	if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='True'
 	fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
 	resp_individual=rcnt+=1
 ! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
-!
+
 	fnCmdSet(2) ! show "Next" and "Cancel" buttons
-	fnAcs(screen_name$,0,mat resp$,ckey) ! run the screen
+	fnAcs(mat resp$,ckey) ! run the screen
 	 ! if env$('ACSDeveloper')<>'' then pause
 	if ckey=5 then ! if user pressed Cancel
 		fn_askOptions=0

@@ -27,7 +27,7 @@ MAIN: !
 	fnLbl(2,1,text$,mylen,1)
 	fnTxt(3,mypos,3,3,0,"30")
 	resp$(3)=""
-	fnCmdSet(3): fnAcs2(mat resp$,ckey)
+	fnCmdSet(3): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	bdate= val(resp$(1))
 	if resp$(2)="Water" then          svce=1

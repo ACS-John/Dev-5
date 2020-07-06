@@ -22,7 +22,7 @@
 	fnLbl(3,1,"Fund Number to Print:",23,1)
 	fnTxt(3,25,3,0,1,"30")
 	resp$(respc+=1)=str$(fund)
-	fnCmdSet(2): fnAcs2(mat resp$,ckey)
+	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	ped=val(resp$(1))
 	sq1$=resp$(2)(1:1)

@@ -17,7 +17,7 @@ fnLbl(1,1,"Penalty Date:",26,1)
 fnTxt(1,28,10,0,0,"3")
 resp$(1)=""
 fnCmdSet(2)
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 ubpendat=val(srep$(resp$(1),'/',''))
 if ckey=5 then goto Xit
 fnAutomatedSavePoint('before')

@@ -11,6 +11,6 @@ fnTxt(1,10,0,0,0,'',0,'tooltip 1',0,1)
 resp$(1)='one'
  
 fnCmdSet(1)
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 pr 'ckey=';ckey
 pr mat resp$

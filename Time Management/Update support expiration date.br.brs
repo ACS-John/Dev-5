@@ -16,7 +16,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 			fnLbl(1,1,'Client:',lenCol1,alignRight)
 			fncombof('',1,posCol2,37,'S:\Core\Data\acsllc\CLmstr.H[cno]',1,5,6,30,'S:\Core\Data\acsllc\CLIndex.H[cno]',1)
 			fnCmdSet( 2)
-			fnAcs('',0,mat resp$, fk)
+			fnAcs(mat resp$, fk)
 			if fk<>5 then
 				dim selectedClient$*128
 				selectedClient$=resp$(1)

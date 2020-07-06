@@ -1,5 +1,5 @@
 def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
-	library 'S:\Core\Library': fnerror,fnTos,fnLbl,fnCmdKey,fnAcs
+	fn_setup
 	on error goto Ertn
 	if env$('exitnow')='yes' then let setenv('exitnow','cancelled by fnmsgbox')
 	if cap$='' then cap$=env$('Program_Caption')
@@ -10,7 +10,7 @@ def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
 	!   end if
 	Xit: !
 fnend
-IGNORE: continue
+
 def fn_br_messagebox(&mat mg$, &response$; cap$*128, mt)
 	dim bm_text$*2048
 	bm_text$=''
@@ -114,7 +114,7 @@ def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 	else if mt=0 then ! ok
 		fnCmdKey("&Ok",1,1,1)
 	end if
-	fnAcs2(mat resp$,ckey,0,0,1,1)
+	fnAcs(mat resp$,ckey,0,0,1,1)
 	if ckey=1 then response$="OK"
 	if ckey=99 then response$="Cancel"
 	if ckey=3 then response$="Abort"
@@ -124,4 +124,4 @@ def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 	if ckey=7 then response$="No"
 fnend
 
-include: Ertn
+include: fn_setup

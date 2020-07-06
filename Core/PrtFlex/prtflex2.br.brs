@@ -60,7 +60,7 @@ READ_NEXT: gosub READDATAFILES ! reads the database for the grid information    
 	EOFONREAD: ! Complete the grid once all data has been read
 	! fnLbl(15,1,"Export the grid to a fixed width file, for later use.")
 	fnCmdSet(52)
-	fnAcs('',win,mat response$,ckey) ! CALL items selected
+	fnAcs(mat response$,ckey) ! CALL items selected
 	lastgridresponse$=response$(1)
 	if ckey=5 then chain "S:\Core\prtflex\Grids",programfolder$,datafolder$
 ! fnXit(CURSYS$)
@@ -145,7 +145,7 @@ ASKTRANSET: ! r:
 	end if
 	fnCmdKey("&Display",1,1,0,"Displays a list of transactions on the screen")
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
-	fnAcs('',0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=cancel then goto Xit_ASKTRANSET
 	if resp$(1)="True" then
 		sel_code=1

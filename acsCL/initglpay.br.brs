@@ -15,7 +15,7 @@ MENU1: !
 	fnTxt(lc,mypos,5,0,0,'30') 
 	resp$(2)=env$('cno')
 	fnCmdSet(2) 
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit else : _
 		if resp$(1)=item1$(1) then pas$="BUILD" else : _
 			if resp$(1)=item1$(2) then pas$="COPY"

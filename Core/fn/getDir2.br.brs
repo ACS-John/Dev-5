@@ -58,15 +58,8 @@
 	! Switches may be preset in the DIRCMD environment variable.  Override
 	! preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 ! /r
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim tmp$*512
-		dim directory_of$*256
-	end if
-fnend
-
+dim tmp$*512
+dim directory_of$*256
 def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
 		fn_setup
 		on error goto Ertn
@@ -230,4 +223,4 @@ def library fnGetDirClient(dir$*256,mat filename$; filter$*40, ___,returnN,hGdc,
 	fnGetDirClient=returnN
 fnend
 
-include: Ertn
+include: fn_setup

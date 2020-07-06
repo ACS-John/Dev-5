@@ -3,13 +3,6 @@ library program$: fnCheckFileVersion
 fnTop(program$)
 fnCheckFileVersion
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-	end if
-fnend
 
 def library fnCheckFileVersion
 	! Checks the File versions and calls conversion programs if necessary
@@ -1267,4 +1260,4 @@ def fn_programIniFileName$*256(pif_program$*256; doNotCreate)
 	fn_programIniFileName$=pif_return$
 fnend
 include: fn_open
-include: Ertn
+include: fn_setup

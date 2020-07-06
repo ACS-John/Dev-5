@@ -36,7 +36,7 @@ PERIOD_ENDING_DATES: !
 	resp$(respc+=1)=cch$
 	fnLbl(6,1,"Last Accounting Period closed was "&str$(lmu),60,2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	pedat$=resp$(1)
 	dat$=resp$(2)

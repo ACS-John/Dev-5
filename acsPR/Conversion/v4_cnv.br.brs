@@ -20,17 +20,7 @@ ACNO_CONV: !
 	next filename_item
 ! /r
 !  fnStatusPause
-	chain "S:\acsPR\conversion\v4_part2"
-def fn_setup
-	setup=1
-	autoLibrary
-	on error goto Ertn
-
-	dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40
-	dim dedcode(10),calcode(10),dedfed(10),cap$*128
-	dim tcp(32),newtdc(10),newtdet(23),tdt(4),tcd(3),tdet(17),tdy(6),tdc(6)
-	dim ty(21),tqm(17),tcp(22),tdet(17),dednames$(20)*20,d1$*20
-fnend 
+chain "S:\acsPR\conversion\v4_part2"
 def library fnpr_conversion_department(cno; medicare_is_seperated)
 	if ~setup then fn_setup
 	fnpr_conversion_department=fn_pr_conversion_department(cno, medicare_is_seperated)
@@ -242,4 +232,8 @@ def fn_payrollchecks_write
 	write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,ckno,mat newtdc,mat cp ! payroll check history
 	payrollcheck_write_count+=1
 fnend 
-include: Ertn
+dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40
+dim dedcode(10),calcode(10),dedfed(10),cap$*128
+dim tcp(32),newtdc(10),newtdet(23),tdt(4),tcd(3),tdet(17),tdy(6),tdc(6)
+dim ty(21),tqm(17),tcp(22),tdet(17),dednames$(20)*20,d1$*20
+include: fn_setup

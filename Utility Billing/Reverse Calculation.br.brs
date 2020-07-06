@@ -50,7 +50,7 @@ L250: fnTos(sn$="ubrevcal")
 	fnChk(8,29,"Print Status Report")
 	resp$(respc+=1)="True"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if trim$(reqz$)="" and trim$(holdreqz$)<>"" then goto Xit ! if they ever select a customer and then accidently take f1 to continue, it will stop instead of reversing everyone else in file
 	reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)

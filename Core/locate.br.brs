@@ -49,7 +49,7 @@ MAIN: !
 	lc+=1 ! blank line
 	fnLbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
 	fnCmdSet(2)
-	fnAcs("Locate",0,mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	lc$=trim$(resp$(1))
 	lc2$=trim$(resp$(2))

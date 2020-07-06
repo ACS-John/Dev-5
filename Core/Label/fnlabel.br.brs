@@ -2,16 +2,7 @@
 ! pr label library, finds out how to format the labels and then 
 ! prints them using PrintAce so bar codes pr right
 def library fnlabel(mat linestyle$)
-	library 'S:\Core\Library': fnerror
-	library 'S:\Core\Library': fnwait
-	library 'S:\Core\Library': fnopenprn,fncloseprn
-	library 'S:\Core\Library': fnAcs,fnLbl,fnTos,fnButton,fnFra,fnTxt,fnCmdSet,fncomboa
-	library 'S:\Core\Library': fnXit
-	library 'S:\Core\Library': fnreg_read,fnreg_write
-	library 'S:\Core\Library': fnpa_finis,fnpa_newpage,fnpa_open
-	library 'S:\Core\Library': fnpa_fontsize
-	library 'S:\Core\Library': fngethandle
-	library 'S:\Core\Library': fnfree
+	if ~setup then fn_setup
 	on error goto Ertn
 
 	dim labeltext$(5)*120,wabel$(10,3,5)*120
@@ -40,7 +31,7 @@ def library fnlabel(mat linestyle$)
 	goto LABEL_XIT ! /r
 
 	ASK_LABEL_FORMAT: ! r:
-		fnTos(sn$="labellib1")
+		fnTos
 		fnLbl(1,1,"Label Format:",15,1)
 		opt$(1)="Avery 8160 (30/Page Ink Jet)" 
 		opt$(2)="Avery 5160 (30/Page Laser)" 
@@ -48,7 +39,7 @@ def library fnlabel(mat linestyle$)
 		fncomboa("labellib1."&wsid$,1,17,mat opt$,"Choose either dot-matrix or laser type labels",32) 
 		resp$(1)=opt$(1)
 		fnCmdSet(2)
-		fnAcs(sn$,unused,mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto Xit_ASK_LABEL
 		if resp$(1)=opt$(3) then 
 			label_format=1 
@@ -69,7 +60,7 @@ def library fnlabel(mat linestyle$)
 			if mypos>30 then mypos=1
 		next j
 		fnCmdSet(1)
-		fnAcs(sn$,unused,mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto Xit_ASK_LABEL_2
 		lstart=ckey-21 ! because the other routine starts out adding one.
 		labx=int((lstart+2)/3) 
@@ -104,7 +95,7 @@ def library fnlabel(mat linestyle$)
 		fnTxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") 
 		resp$(4)=str$(label_pos3)
 		fnCmdSet(2)
-		fnAcs(sn$,unused,mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		top_marg=val(resp$(1)) 
 		label_pos1=val(resp$(2)) 
 		label_pos2=val(resp$(3)) 
@@ -176,7 +167,6 @@ def library fnlabel(mat linestyle$)
 			if x=10 then pr #255: newpage
 		next x
 	return ! /r
-
 
 
 	BARCODE_PRINT: ! r:
@@ -257,12 +247,6 @@ Xit: fnXit
 def fn_test_mat_lab$
 	if udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5 then 
 		mat wabel$(10,3,5)
-	end if  ! udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5
-fnend  ! fn_test_mat_lab$
-! r:  ertn - fails to label_xit instead of Xit
-ERTN: fnerror(program$,err,line,act$,"label_xit")
-	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-	if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr '' : pause : goto ERTN_EXEC_ACT
-ERTN_EXEC_ACT: execute act$ : goto ERTN
-! /r
+	end if
+fnend
+include: fn_setup

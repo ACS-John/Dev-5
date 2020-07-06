@@ -220,7 +220,7 @@ AUTO_REC: ! r:
 	fncmbact(1,26,1)
 	resp$(1)="[All]"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=cancel then
 		done_with_readings=1
 		goto MENU1
@@ -405,7 +405,7 @@ CHANGE_ACT_NUM: ! r:
 	fnTxt(1,mypos,10)
 	resp$(1)=""
 	fnCmdSet(1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	x$=trim$(resp$(1))
 	read #hCustomer1,using "Form POS 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
 	goto REWRITE_WORK ! /r
@@ -779,7 +779,7 @@ EST1: ! r: ESTIMATEING ROUTINE
 	fnOpt(2,1,"Route",0,2)
 	resp$(8)="True"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=cancel then goto MENU1
 	for j=1 to 3
 		if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
@@ -820,7 +820,7 @@ EST3: ! r:
 		resp$(2)=ex$
 	end if
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
 	if ckey=cancel or trim$(x$)="" then goto MENU1
 	x$=lpad$(trim$(x$),10) conv EST3
@@ -842,7 +842,7 @@ ASK_ROUTE: ! r:
 		resp$(respc+=1)=str$(eb2)
 	end if
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if resp$(1)="[All]" then eb1=0 : goto L6890
 	eb1=val(resp$(1))
 	L6890: !
@@ -952,7 +952,7 @@ def fn_est_dates
 		resp$(j)=""
 	next j
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=cancel then goto Xit
 	for j=1 to 8
 		cd1(j)=val(resp$(j)) conv EST_DATES
@@ -1296,7 +1296,7 @@ MENU1READWORKEOF: ! /r
 		fnCmdKey("&Close",5,0,1)
 		! fnCmdSet(1)
 	end if
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=cancel then
 		goto Xit
 	end if
@@ -1385,7 +1385,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	resp$(3)="True"
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>cancel then
 		holdingFileSaveReturn=1
 		bk1=val(resp$(1)) conv HoldingFileSave
@@ -1466,7 +1466,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	fnCmdKey("&Delete",ck_delete=4)
 	fnCmdKey("&Print",ck_print=6)
 	fnCmdKey("&Cancel",cancel,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	holdingFile$=""
 	ip1$=resp$(1)
 	if ckey=cancel or ip1$='' then
@@ -1733,7 +1733,7 @@ EnterReadings: ! r:
 	fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
 	fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
 	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=8 then
 		fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
@@ -1965,7 +1965,7 @@ def fn_meter_change_out
 		fncmbact(6,20,1)
 		resp$(4)="[All]"
 		fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto Mco_Xit
 		servicetype$=resp$(3)(1:2)
 		begx$=resp$(4)(1:10)
@@ -2015,7 +2015,7 @@ def fn_meter_change_out
 	end if
 	fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
 	fnCmdKey("&Finish",10)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Mco_Xit
 	if ckey=10 then goto Mco_Xit
 	oldmeterprior=val(resp$(1))

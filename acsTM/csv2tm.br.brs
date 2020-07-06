@@ -239,7 +239,7 @@ def fn_ask_dates(mat label$,mat filter_date)
 		resp$(respc+=1)=str$(filter_date(ad_line))
 	next ad_line
 	fnCmdSet(3)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then let fkey(99)
 	for ad_line=1 to udim(mat label$)
 		filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))

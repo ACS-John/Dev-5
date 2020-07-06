@@ -75,7 +75,7 @@ MENU1: ! r:
 	if exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel only allowed if they have not deleted their current company
 		fnCmdKey("&Cancel",5,0,1)
 	end if
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	!
 	if ckey=5 and exists(fn_dataFolder$&'\Company.h'&str$(cno)) then ! cancel
 		goto Xit
@@ -132,7 +132,7 @@ COMPANY_ADD: ! r:
 	fnTxt(1,mypos,5,0,0,"30")
 	resp$(respc+=1)="0"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MENU1
 	cno_selected=val(resp$(1))
 	if fn_company_already_exists(cno_selected)=1 then goto MENU1
@@ -241,7 +241,7 @@ def fn_companyCopy(scno)
 	fnLbl(lc+=1,1,"If the destination company exists",80,2)
 	fnLbl(lc+=1,1,"it will be overwritten!",80,2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		dcno=val(resp$(1))
 		dcnam$=resp$(2)

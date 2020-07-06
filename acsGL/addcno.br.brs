@@ -16,7 +16,7 @@ MENU1: !
 	fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,right)
 	fncmbcno(1,mypos)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
 	fro_cno=val(resp$(1)(43:47))
 	if fro_cno=0 then fro_cno=99999

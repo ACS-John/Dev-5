@@ -291,7 +291,7 @@ Screen1: ! r:
 	fnCmdKey('&Test'   ,ckey_test:=1023   ,0,0,'Prints 4 Bills and then stops.')
 	fnCmdKey('&Print'  ,ckey_print:=1     ,1)
 	fnCmdKey('&Cancel' ,5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey_test and ckey=ckey_test then
 		testMode=1
@@ -480,7 +480,7 @@ def fn_ask_margins
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Default",ckey_default:=1022)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs2(mat ub4upBill_data$,ckey)
+	fnAcs(mat ub4upBill_data$,ckey)
 	if ckey=ckey_default then
 		fnreg_write('ub4upBill Margin Top 1' ,'')
 		fnreg_write('ub4upBill Margin Top 2' ,'')
@@ -519,7 +519,7 @@ ScrAskIndividual: ! r: account selection screen
 	fncmbact(1,17)
 	resp$(1)=starting_key$
 	fnCmdSet(11)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 or trim$(resp$(1))='' then goto Finis
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
@@ -551,7 +551,7 @@ Finis: ! r:
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 	fnCmdSet(52)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 goto Xit ! /r
 Xit: fnXit
 BUD1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1

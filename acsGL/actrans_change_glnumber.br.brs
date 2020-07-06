@@ -43,7 +43,7 @@ def fn_screen_1(&gln_from$,&gln_to$)
 		fnTxt(myline,mypos,12,0,1)
 		resp$(respc+=1)=gln_to$
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey<>5 then
 			gln_from$=lpad$(resp$(1),12)
 			gln_to$=lpad$(resp$(2),12)

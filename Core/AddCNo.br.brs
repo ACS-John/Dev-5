@@ -18,7 +18,7 @@ if env$('cursys')='CL' then ! r:
 	ml$(2)='ACS Accounts Payable system?'
 	ml$(3)='This is only chance.'
 	fnmsgbox(mat ml$,resp$,cap$,36)
-	if resp$='Yes' then let fnchain("S:\acsCL\Conversion\APmstr-Cnv")
+	if resp$='Yes' then fnchain("S:\acsCL\Conversion\APmstr-Cnv")
 ! /r
 else if env$('cursys')='UB' then ! r:
 	! the following block of logic is removed in favor of logic located in "S:\Utility Billing\Type of Service.br"
@@ -28,7 +28,7 @@ else if env$('cursys')='UB' then ! r:
 	! fncmbcno(lc,mypos)
 	! resp$(1)=''
 	! fnCmdKey("&Next",1,1,1)
-	! fnAcs2(mat resp$,ckey)
+	! fnAcs(mat resp$,ckey)
 	! if ckey=5 then goto Xit
 	! copytoscno=val(resp$(1)(43:47))
 	! if copytoscno=0 then
@@ -70,7 +70,7 @@ MENU1: !
 	fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
 	fncmbcno(1,mypos)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
 	fro_cno=val(resp$(1)(43:47))
 	if fro_cno=0 then fro_cno=99999

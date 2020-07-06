@@ -25,7 +25,7 @@ MAIN: !
 	fnTxt(3,33,2,0,1,"30")
 	resp$(respc+=1)=str$(bank_code)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1))
 	b1=val(resp$(2))

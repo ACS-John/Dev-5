@@ -1,10 +1,3 @@
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		gosub Enum
-	end if
-fnend
 def library fnConfirm(cVerb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
 	if ~setup then fn_setup
 	fnConfirm=fn_confirm(cVerb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
@@ -61,11 +54,11 @@ def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecifi
 	fnTxt(9,col2_pos,col2_len)
 	resp$(1)=''
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	e$=uprc$(trim$(resp$(1)))
 	if ckey<>5 and uprc$(trim$(resp$(1)))=typeWord$ then
 		returnN=1
 	end if
 	fn_confirmHard=returnN
 fnend
-include: enum
+include: fn_setup

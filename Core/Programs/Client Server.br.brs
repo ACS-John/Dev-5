@@ -1,5 +1,9 @@
 if ~setup then fn_setup
 fnTop(program$)
+dim resp$(10)*256
+dim server_name$*128
+dim anon_user$*128
+dim anon_pass$*128
 do ! r: main loop
 	fnTos
 	fnLbl(2,2,'Server IP or Name:',19,1)
@@ -28,7 +32,7 @@ do ! r: main loop
 	fnCmdKey("Install Server",2,1,0)
 	fnCmdKey("Uninstall Server",3,0,0)
 	fnCmdKey('&Back',5,0,1)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
 	cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
 	anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
@@ -118,15 +122,5 @@ fnend
 execute 'Sy -w '&os_filename$('S:\Core\ACS_PrAce_Support_Install_ocx.exe')
 execute 'Sy '&os_filename$('S:\Core\ACS_PrAce_Reg.cmd')&' /s'
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
-		dim resp$(10)*256
-		dim server_name$*128
-		dim anon_user$*128
-		dim anon_pass$*128
-	end if
-fnend
-include: Ertn
+
+include: fn_setup

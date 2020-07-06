@@ -86,7 +86,7 @@ AskRange: ! r:
 	fnButton(1,48,"Search",7,blank$,0,7,2)
 	fnCmdKey("&Finish",2,1,0,"Completed with all routes")
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 	if ckey=2 then goto Finis
@@ -124,7 +124,7 @@ AskRoute: ! r:
 	fnCmdKey("&Next",1,1,0,"Add the selected route" )
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
 	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
-	fnAcs2(mat resp$, ckey)
+	fnAcs(mat resp$, ckey)
 	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 	bk1=val(resp$(1)) conv L850
 	resp$(1)=""
@@ -154,7 +154,7 @@ AskMeterType: ! r:
 	fnCmdKey("&Next",1,1,0,"Add the selected route" )
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
 	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
-	fnAcs2(mat resp$, ckey)
+	fnAcs(mat resp$, ckey)
 	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 	bk1=val(resp$(1)) conv ignore
 	lastMeterType$=resp$(1)
@@ -230,7 +230,7 @@ NextAskAccount: ! r:
 	fncmbact(myline,16)
 	resp$(1)=z$
 	fnCmdSet(5)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=6 then 
 		fncustomer_search(resp$(1))
 	end if
@@ -1394,7 +1394,7 @@ def fn_scr_selact
 		fnLbl(9,1,"",46,2)
 		fnCmdSet(2)
 	! end if
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 			if lwrc$(devicePreference$)='[ask]' then
 				deviceSelected$=resp$(rc_Device)
@@ -1432,7 +1432,7 @@ def fn_transfer
 		fnLbl(1,1,"Android Drive:",20,1)
 		fncomboa("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey<>5 then
 			dest$=resp$(1)
 			fnCopy(out_filename$,trim$(dest$)&"acs_meter_data.txt")
@@ -1456,7 +1456,7 @@ def fn_transfer
 		fnTxt(1,23,20,100,0,"",0,"Destination can be a drive designation including folders")
 		if resp$(1)="" then resp$(1)="A:\"
 		fnCmdSet(2)
-		fnAcs2(mat resp$,ckey)
+		fnAcs(mat resp$,ckey)
 		if ckey=5 then goto TRANSFER_XIT
 		dest$=resp$(1)
 		if len(dest$)=0 then goto TRANSFER_TO_LAPTOP

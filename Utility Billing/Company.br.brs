@@ -150,7 +150,7 @@ MAIN: ! r:
 		! /r
 	end if
 	fnCmdSet(4)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	
 	if ckey=5 then 
 		goto Xit

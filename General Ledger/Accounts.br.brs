@@ -109,7 +109,7 @@ MAIN: !
 		fnCmdKey("Sea&rch",8,0,0,"")
 	end if
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 ! If edit_mode=1 Then kEY$=GL$=LPAD$(RESP$(1)(1:12),12): Goto 885
 	gl$=fnagl$(resp$(1)) : key$=gl$
@@ -164,7 +164,7 @@ ADD: !
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	fixgrid=99
 	dno=ano=sno=0  : rc=0
@@ -270,7 +270,7 @@ REVIEW_TRANS: ! r:
 	fnOpt(2,1,"History transactions",0,1)
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	if resp$(1)="True" then currentOrHistory=1
 	if resp$(2)="True" then currentOrHistory=2
@@ -325,7 +325,7 @@ TRANSACTION_GRID: !
 	EO_TRANS_GRID: !
 	if currentOrHistory=1 then let fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	if ckey=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
@@ -367,7 +367,7 @@ TRANSACTION_GRID: !
 	fnTxt(8,mypos,2,0,0,"30",0,"",0)
 	resp$(8)=str$(pc2)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	trgl$=fnagl$(resp$(1)) ! transaction gl #
 	tr(4)=val(resp$(2)) ! date
@@ -424,7 +424,7 @@ CHANGE_ACCT_NUM: ! r:
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=d$
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto MAIN
 	fixgrid=99
 	dno=ano=sno=0

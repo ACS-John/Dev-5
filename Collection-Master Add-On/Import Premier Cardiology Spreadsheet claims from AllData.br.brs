@@ -316,7 +316,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	resp$(resp_enableImport:=rc+=1)=enableImport$
 
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		returnN=99
 		goto AskScreen1_xit
@@ -1487,7 +1487,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnTos,fnLbl,fnTxt,fnCmdSet
 		library 'S:\Core\Library.br': fnChk
 		library 'S:\Core\Library.br': fnCombof
-		library 'S:\Core\Library.br': fnAcs2
+		library 'S:\Core\Library.br': fnAcs
 		library 'S:\Core\Library.br': fnPosOfAny
 		library 'S:\Core\Library.br': fnReg_read
 		library 'S:\Core\Library.br': fnReg_write

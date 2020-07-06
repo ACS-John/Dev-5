@@ -5,12 +5,7 @@ pr 'fnFirstMondayOfMonth returns: '&date$(fnFirstMondayOfMonth,'mm/dd/ccyy')
 end
 ! /r
 
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	end if
-fnend
+
 
 def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
 	if ~setup then fn_setup
@@ -58,8 +53,8 @@ def library fnDateSelect$ (;_date$,format$,row,column,___, window,days_in_week,g
 		useryear=year
 		rinput #window, fields gridspec$&",cell,cur;1,3,N 02,AEX/#000066:#FFFFFF;1,10,N 4,AEX/#000066:#FFFFFF": day$, usermonth, useryear
 		fn_updateMonthAndYear (usermonth,useryear,month,year,fkey)
-		if fkey=2504 then let fkey(201)
-		if fkey=2505 then let fkey(99)
+		if fkey=2504 then fkey(201)
+		if fkey=2505 then fkey(99)
 
 		_date$= lpad$(str$(month),2,'0')&day$&str$(year)
 	loop until fkey=93 or fkey=99 or (fkey=201 and trim$(day$)<>'')
@@ -185,3 +180,4 @@ def library fnSetMonth(mat mo$)
 	mo$(11)="November"
 	mo$(12)="December"
 fnend
+include: fn_setup

@@ -1,6 +1,18 @@
 ! formerly S:\acsPR\newDD
 ! Create Direct Deposit File
 fn_setup
+
+dim ml$(0)*256
+dim tcp(32)
+! tcp(32) = Net Pay
+dim cp(32)
+dim tdc(10)
+dim path$*256 ! Path to Save File to
+! lastPayrollDate  = Last Payroll Date (from first screen of employee record,  not departmental record)
+! tdt4  = Last Payroll Date (from Departmental record)
+dim resp$(10)*256
+dim em$(3)*30 ! (1)=Emp Name, (2)=Emp Addr, (3)=Emp CSZ
+
 fn_readSavedResponses
 fnTop(program$)
 open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
@@ -37,7 +49,7 @@ Screen1: ! r:
 	resp$(resp_fedId:=respc+=1)=fedid$(1:9)
 	fnCmdKey("&Next",1,1,0,"Create the file." )
 	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	fnAcs2(mat resp$,ckey) ! ask employee number
+	fnAcs(mat resp$,ckey) ! ask employee number
 	if ckey=5 then
 		goto Xit
 	else
@@ -236,25 +248,8 @@ return ! /r
  
  
  
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		on error goto Ertn
- 
-		dim ml$(0)*256
-		dim tcp(32)
-		! tcp(32) = Net Pay
-		dim cp(32)
-		dim tdc(10)
-		dim path$*256 ! Path to Save File to
-		! lastPayrollDate  = Last Payroll Date (from first screen of employee record,  not departmental record)
-		! tdt4  = Last Payroll Date (from Departmental record)
-		dim resp$(10)*256
-		dim em$(3)*30 ! (1)=Emp Name, (2)=Emp Addr, (3)=Emp CSZ
-		crlf$=chr$(13)&chr$(10)
-	end if
-fnend
+
+
 def fn_readSavedResponses ! basicaly all variables are local
 	fncreg_read('Direct Deposit Save File Path',path$, fnSpecialFolderPath$('desktop')&'\DirDep.txt',1) ! The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'
 	dim bankaccount$*8
@@ -326,5 +321,5 @@ def fn_readSavedResponses ! basicaly all variables are local
 	payrollDate=fnPayPeriodEndingDate
  
 fnend
-include: Ertn
+include: fn_setup
 include: fn_open

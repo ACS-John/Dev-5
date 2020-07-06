@@ -34,7 +34,7 @@
 	resp$(4)=str$(lcd)
 	fnCmdSet(3)
 ! Rinput #101,Fields MAT IO1$: GL1,GL2,GL3,DAT$,BANKBAL,LCD : _
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	resp$(1)=fnagl$(resp$(1)) : _
 	gl1=val(resp$(1)(1:3)) : _

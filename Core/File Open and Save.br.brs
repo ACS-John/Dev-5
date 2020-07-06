@@ -1,13 +1,10 @@
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim company_import_path$*256
-		dim resp$(5)*256
-		dim ml$(0)*1024
-		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
-	end if
+dim resp$(5)*256
+dim ml$(0)*1024
+def fn_isClientServer(; ___,returnN)
+	if env$('BR_MODEL')='CLIENT/SERVER' then returnN=1
+	fn_isClientServer=returnN
 fnend
+
 def library fnFileSaveAs(save_what$)
 	if ~setup then fn_setup
 	fnFileSaveAs=fn_FileSaveAs(save_what$)
@@ -39,7 +36,7 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 		zOmitReportCacheOption$=' -xr!"Report Cache\*"'
 	end if
 	dim serverTempSaveFile$*256
-	if clientServer then
+	if fn_isClientServer then
 		serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
 		fnFree(serverTempSaveFile$)
 	else
@@ -50,7 +47,7 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
-	if clientServer then
+	if fn_isClientServer then
 		pr #h_tmp: '@echo temp on server: "'&serverTempSaveFile$&'"'
 	end if
 	pr #h_tmp: '@echo.'
@@ -76,11 +73,11 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	end if
 	pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 	close #h_tmp: 
-	if clientServer and ~disableCopyToLocal then
+	if fn_isClientServer and ~disableCopyToLocal then
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 		fnmakesurepathexists(env$('at')&save_name$)
 		fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
-	else if clientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
+	else if fn_isClientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 		dim save_path$*1024,save_filename$*256,save_ext$
 		fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
@@ -149,6 +146,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			ml$(2)='The following log was created:'
 			ml$(3)=arc_filename$
 			ml$(4)='Display the log now?'
+			
 			fnmsgbox(mat ml$,resp$,"ACS",4+64)
 			if resp$="Yes" then 
 				! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
@@ -237,7 +235,7 @@ def fn_openPartial
 	close #h_tmp: 
 	dim fileList$(0)*256,archiveList$(0)*50
 	dim tmpFileOpen$*256
-	if clientServer then
+	if fn_isClientServer then
 		tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
 		fnmakesurepathexists(tmpFileOpen$)
 		! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
@@ -284,7 +282,7 @@ def fn_opMain(omFileOpen$*256)
 	! fnLbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
 	! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 	fnCmdSet(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	! /r
 	dim selectedSource$*128
 	selectedSource$=resp$(resp_fileSource)
@@ -346,7 +344,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	dim foeDestinationFolder$*256
 	dim foeLogFile$*256
 	dim foeFileOpen$*256
-	if clientServer then
+	if fn_isClientServer then
 		foeFileOpen$=env$('temp')&'\acs\OpenPartialTmpFileOpenEverything'&session$&'.zip'
 		fnmakesurepathexists(foeFileOpen$)
 		fnCopyFile(foeSource$,foeFileOpen$)
@@ -379,7 +377,7 @@ def fn_fileOpenEverything(foeSource$*256)
 		fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 		fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
 		fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
-		if clientServer then
+		if fn_isClientServer then
 			fnStatus('Copying Files in...')
 			fnCopy(foeDestinationFolder$&'\*.*','[Q]\*.*',0,'recursive')
 			opScreenReturn=1 
@@ -474,3 +472,4 @@ def fn_automatedSavePoint(fileNameAddition$*128)
 		fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 	end if
 fnend
+include: fn_setup

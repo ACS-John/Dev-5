@@ -16,12 +16,6 @@ if doFix then
 end if
 fn_addAnOtherCharge
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-	end if
-fnend
 def library fnAddAnOtherCharge(;z$*10,hCustomer1)
 	if ~setup then fn_setup
 	fnAddAnOtherCharge=fn_addAnOtherCharge( z$,hCustomer1)
@@ -47,7 +41,7 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 	fnLbl(lc+=1,1,'Amount:' , col1Len,1) : fntxt(lc,col2Pos,10, 0,0,'currency') : resp$(rc+=1)=amt$
 	fnLbl(lc+=1,1,'Note:'   , col1Len,1) : fntxt(lc,col2Pos,40, 128)            : resp$(rc+=1)=note$
 	fnCmdset(2)
-	fnAcs2(mat resp$,ckey)
+	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 		rc=0
 		z$   =lpad$(trim$(resp$(rc+=1)(1:10)),10)
@@ -304,5 +298,5 @@ def fn_lastTBalBeforeRec(hTranRelative,z$,recNum; ___,returnN)
 	fn_lastTBalBeforeRec=returnN
 fnend
 
-include: Ertn
+include: fn_setup
 include: fn_open
