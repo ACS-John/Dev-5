@@ -1299,7 +1299,7 @@ def library fngeneric_search_ask(&s_search$,&search_seek,&search_find; skey)
 	close #grid_search_handle: 
 	s_search$=uprc$(trim$(s_search$))
 fnend  ! fnGeneric_Search_Ask
-!__
+
 ! Updateable Region . Generic Grid Search . Top
 ! This region was last updated on 2008.06.04 at 1:13 pm
 def fn_generic_search(generic_fkey, generic_key_column, generic_grid_line_last)
@@ -1330,7 +1330,7 @@ def fn_generic_search(generic_fkey, generic_key_column, generic_grid_line_last)
 	fn_generic_search=set_fn_generic_search
 fnend  ! fn_Generic_Search
 ! Updateable Region . Generic Grid Search . End
-!__
+
 def fn_generic_grid_to_line$*1024(array_line,single_column_only)
 	! This function is custom for every different type of grid.  It pulls from local variables and returns The data from that line of grid for fn_Generic_Search
 	column_count=6

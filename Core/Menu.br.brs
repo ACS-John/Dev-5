@@ -573,11 +573,19 @@ def fn_dashboardDraw
 			fn_ddAddButton('Enter Time',fkey_pr_enter_time:=5002,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 		else if env$('cursys')="GL" then
-			open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_Xit
-			read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
-			close #h_tmp:
-			fnLbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
-			fnLbl(1,21,str$(lmu),4,0,0,fraDashboard)
+			! open #h_tmp:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr DD_GL_Xit
+			! read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
+			! close #h_tmp:
+			! fnLbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)
+			! fnLbl(1,21,str$(lmu),4,0,0,fraDashboard)
+			
+
+			fnLbl(1,1,'Current Period:',19,1,0,fraDashboard)
+			fnLbl(1,21,str$(fnActPd),4,0,0,fraDashboard)
+			
+			
+			
+			
 			fnLbl(1,26,'Pay Ending Date:',16,1,0,fraDashboard)
 			dim pedat$*20
 			pedat$=fnpedat$

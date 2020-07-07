@@ -36,11 +36,11 @@ L310: if fscode<=0 or fscode>12 then : _
 	if fscode<=0 or fscode>12 then : _
 		pincome=pincome-bp(actpd) else pincome=pincome-bp(fscode)
 L330: goto L250
-! ___________________________
+! 
 L350: close #1:
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L480
-! ___________________________
+! 
 	fnTos(sn$="ACglchgc") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)

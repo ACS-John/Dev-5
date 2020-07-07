@@ -145,12 +145,4 @@ L1200: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1
  
 Xit: fnXit
  
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto L1290
-	if trim$(env$("ACSDeveloper"))<>"" then : _
-		execute "list "&str$(line) : _
-		pause  : _
-		goto L1290
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-L1290: execute act$
-	goto ERTN
+include: Ertn

@@ -1,6 +1,6 @@
 ! Replace S:\acsGL\acglSchP
 ! pr Schedules  (once used to pr schedules; now called glschprt)
-! ________________Needs fncmo and others to run _____________________
+! Needs fncmo and others to run _____________________
 	autoLibrary
 	on error goto Ertn
  

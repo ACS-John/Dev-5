@@ -76,7 +76,7 @@ MENU1: !
 	if fro_cno=0 then fro_cno=99999
 L210: !
 	if cno<1 or cno=fro_cno then goto MENU1
-! ___________________________
+
 	execute "Copy [Q]\GLmstr\*.h"&str$(fro_cno)&' '&"[Q]\GLmstr\*.h[cno] -n"
 	open #20: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr",internal,outIn,keyed
 	do
@@ -84,7 +84,7 @@ L210: !
 		rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
 	loop
 EO_GLMSTR: close #20:
-! ___________________________
+
 	execute "drop [Q]\GLmstr\GLTrans.H[cno]"
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
 	close #1:

@@ -11,7 +11,7 @@
 	dim sc$(8),sd$(8),se$(8)*30,pl$(8,2)*35,fl2$(7),sc2$(7)*38
  
 	fnTop("S:\acsGL\VendorReas",cap$="Reassign Vendor Transaction Addresses")
-	fncno(cno,cnam$) : _
+	fncno(cno,cnam$)
 	fndat(dat$)
  
 	for j=1 to 7: fl2$(j)=str$(j+3)&",2,C 38": next j
@@ -197,7 +197,7 @@ L1890: rewrite #1,using L880,key=vn$: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat a
 	dattab=66-int(len(rtrm$(dat$))/2)
 	if fnprocess<>1 then gosub ASKDAT
 	goto L2130
-! _________________________
+! 
 ASKDAT: !
 	pr newpage
 	close #102: ioerr L2030
@@ -394,7 +394,7 @@ L3920: form pos p1,c 30,pos 110,c 4,n 5,skip 2
 	pr #255,using L3940: "Vendor #","Vendor Name","Date","Reference #","Description","Amount","YTD Purchases"
 L3940: form pos 1,c 8,pos 10,c 11,pos 48,c 4,pos 56,c 11,pos 70,c 11,pos 104,c 6,pos 112,c 13,skip 2
 return
-! _________________________________________
+
 	ce=curfld
 	ce1=pos(uprc$(sc$(ce)),"U",1)
 	ce2=ce1+1

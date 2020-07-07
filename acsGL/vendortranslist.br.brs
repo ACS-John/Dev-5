@@ -20,7 +20,7 @@
 	namtab=66-int(len(rtrm$(cnam$))/2)
 	dattab=66-int(len(rtrm$(dat$))/2)
 	if fnprocess=1 then goto L380
-! _________________________
+! 
 MENU1: !
 ASKDAT: !
 	fnTos(sn$="VendorTransList") : _

@@ -170,7 +170,7 @@ L1680: next j
 	close #2:
 	execute "Rename X [Q]\GLmstr\AcTrans.h[cno]"
 	execute "Index [Q]\GLmstr\AcTrans.h[cno]"&' '&"[Q]\GLmstr\AcTrIdx.h[cno] 1/71/17/13 12/2/2/4 Replace DupKeys"
-! ___    __________   ___________   __________   ___________   _________
+!     __________   ___________   __________   ___________   _________
 L1740: ! S:\acsGL\PRmstr.CNV
 	dim pr1$*90,pr1(18),pr2(36)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]",internal,outIn,keyed ioerr L1940

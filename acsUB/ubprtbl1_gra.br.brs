@@ -128,9 +128,9 @@ L870: fnpa_finis
 L920: !
 	pb=bal-g(11)
 	if bal<=0 then g(10)=0 ! don't show penalty if balance 0 or less
-! ______________print bill routine______________________________________
+! print bill routine
 	gosub VBPRINT
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1 : _
 	! accumulate totals
 	goto L550
@@ -196,15 +196,6 @@ ENDSCR: ! pr totals screen
 	fnCmdSet(52) : _
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
-IGNORE: continue
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto L1590
-	execute "list -"&str$(line) : _
-	pause  : _
-	goto L1590
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-L1590: execute act$
-	goto ERTN
  
 VBOPENPRINT: ! r:
 		fnPa_open("Landscape")
@@ -366,3 +357,5 @@ L2820: close #1: ioerr ignore
 	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2860
 	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed
 L2860: return
+include: Ertn
+

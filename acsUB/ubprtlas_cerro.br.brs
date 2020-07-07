@@ -140,9 +140,9 @@ L1050: fncloseprn
  
 L1080: !
 	pb=bal-g(11)
-! ______________print bill routine______________________________________
+! print bill routine
 	gosub PRINTBILL
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1
 	goto L680
  

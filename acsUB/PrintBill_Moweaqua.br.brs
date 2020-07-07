@@ -122,9 +122,9 @@ PRINT_IT: ! r:
 	if bal<>0 then
 		pb=bal-g(11)
 		if bal<=0 then g(10)=0 ! don't show penalty if balance 0 or less
-! ______________print bill routine______________________________________
+! print bill routine
 		fn_vbprint
-! _____________end of pr routine______________________________________
+! end of pr routine
 		bct(2)=bct(2)+1 ! accumulate totals
 	end if
 	goto NEXT_CUSTOMER ! /r

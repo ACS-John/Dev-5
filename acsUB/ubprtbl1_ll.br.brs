@@ -128,9 +128,9 @@ L1000: !
 	if bud1=1 then gosub BUD2
 	pb=bal-g(11)
 ! If BAL<=0 Then g(10)=0 ! don't show penalty if balance 0 or less
-! ______________print bill routine______________________________________
+! print bill routine
 	gosub VBPRINT
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1 : _
 	! accumulate totals
 	goto L600
@@ -210,15 +210,7 @@ ENDSCR: ! pr totals screen
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
  
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto L1710
-	execute "list -"&str$(line) : _
-	pause  : _
-	goto L1710
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-L1710: execute act$
-	goto ERTN
- 
+
 VBOPENPRINT: !
 		fnPa_open("Landscape")
 		lyne=3

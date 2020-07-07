@@ -1,5 +1,5 @@
 ! Replace S:\acsCL\Department
-! __Departmental breakdown file for monticello and others for claims report
+! Departmental breakdown file for monticello and others for claims report
 autoLibrary
 on error goto Ertn
 fnTop(program$,cap$="Department Breakdown")

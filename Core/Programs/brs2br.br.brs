@@ -27,15 +27,15 @@
 		pr "Directory not found..." : _
 		goto Xit
 	fngetdir(dir$,mat filename$)
-! __
+! 
 	for tmp=1 to udim(filename$)
 		if rtrm$(filename$(tmp))="" then goto L280
 	next tmp
 L280: mat filename$(tmp)
 	pr 'Files Found = '&str$(tmp)
-! __
+! 
 	open #20: "Name=Proc."&wsid$&",Size=0,Replace",display,output
-! __
+! 
 	for j=1 to udim(filename$)
 		if filename$(j)="" then goto AFT_LOOP1
 		tmpa$=uprc$(filename$(j)(len(filename$(j))-3:len(filename$(j)))) : _
@@ -51,7 +51,7 @@ L280: mat filename$(tmp)
 		pr #20: ' ! '
 LOOP1_NEXT: !
 	next j
-! __
+! 
 AFT_LOOP1: !
 	mat filename$(999)
 	pr #20: " ! Now you've done it.  You've gone and updated all your"

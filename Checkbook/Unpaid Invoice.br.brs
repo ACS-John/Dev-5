@@ -2,7 +2,7 @@
 	autoLibrary
 	fnTop(program$)
 	on error goto Ertn
- 
+
 	dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
 	dim in1$(9),de$*30,ta(2)
 	dim pr$(4)*30,t1(5),up$(4),unpaidkey$*20
@@ -13,7 +13,7 @@
 	dim gldesc$*30,ml$(3)*80
 	dim item1$(3)*15,type$*25
 	dim holdkey$*20,resp$(256)*128
- 
+
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
 	read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
 	if d(1)=0 and d(2)=0 then
@@ -534,52 +534,52 @@ gosub HDR2
 continue ! /r
 def fn_test_key(holdkey$*20,vn$,iv$)
 	dim newkey$*20
-! uses open files:
+	! uses open files:
 	newkey$=rpad$(vn$&iv$,20)
 	if newkey$=holdkey$ then goto TEST_KEY_OK
-!
-! TEST1: !
-! pass goes to test2 - fail goes to test_key_fail_on_iv
-	close #ivpaid: ioerr ignore
-	open #ivpaid:=fngethandle: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
-	unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
-	read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
+
+	! TEST1: !
+	! pass goes to test2 - fail goes to test_key_fail_on_iv
+		close #ivpaid: ioerr ignore
+		open #ivpaid:=fngethandle: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
+		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
+		read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
-! ___________
-TEST2: !
-! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-	open #testpaytrans:=fngethandle: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
-	read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
+	
+	TEST2: !
+		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
+		open #testpaytrans:=fngethandle: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
+		read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
-! ____________
-TEST_KEY_FAIL_ON_PAYTRANS: !
-	mat ml$(3)=("")
-	ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
-	ml$(2)="already exists in the Unpaid Invoice file."
-	ml$(3)="Please change the Invoice Number or the Payee."
-	fnmsgbox(mat ml$,resp$,'',0)
+	
+	TEST_KEY_FAIL_ON_PAYTRANS: !
+		mat ml$(3)=("")
+		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
+		ml$(2)="already exists in the Unpaid Invoice file."
+		ml$(3)="Please change the Invoice Number or the Payee."
+		fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
-! ___________
-TEST_KEY_FAIL_ON_IV: !
-	mat ml$(3)=("")
-	ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
-	ml$(2)="already exists in the Paid Invoice file."
-	ml$(3)="Please change the Invoice Number or the Payee."
-	fnmsgbox(mat ml$,resp$,'',0)
+	
+	TEST_KEY_FAIL_ON_IV: !
+		mat ml$(3)=("")
+		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
+		ml$(2)="already exists in the Paid Invoice file."
+		ml$(3)="Please change the Invoice Number or the Payee."
+		fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
-! ___________
-TEST_KEY_OK: !
-! pr 'fnTest Key PASSED'
-	fn_test_key=1
+	
+	TEST_KEY_OK: !
+		! pr 'fnTest Key PASSED'
+		fn_test_key=1
 	goto EO_TEST_KEY
-! ___________
-TEST_KEY_FAIL: !
-! pr 'fnTest Key FAILED'
-	fn_test_key=2
+	
+	TEST_KEY_FAIL: !
+	! pr 'fnTest Key FAILED'
+		fn_test_key=2
 	goto EO_TEST_KEY
-! ___________
-EO_TEST_KEY: !
-! If FILE(IVPAID)<>0 Then Close #IVPAID:
+	
+	EO_TEST_KEY: !
+	! If FILE(IVPAID)<>0 Then Close #IVPAID:
 	if file(testpaytrans)<>0 then close #testpaytrans: ioerr ignore
 fnend
 def fn_addInvoice(vn$,iv$,aiRecordNumberToEdit)
@@ -744,8 +744,8 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	end if
 	goto ai_ADD_UNPAID_INVOICES_TOS
 ! /r
- 
- 
+
+
 aiFinis: !
 fnend
 def fn_InvoiceSave  ! write any new invoices and matching allocations

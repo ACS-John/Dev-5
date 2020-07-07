@@ -4,12 +4,12 @@ def library fnrgl$*60(x$; ReturnMaxLength)
 		library 'S:\Core\Library': fngethandle,fnerror,fnpause
 		on error goto Ertn
 		if ReturnMaxLength=0 then returnMaxLength=35
-!_
+
 ! X$ should be formatted as though it were just read in and is ready
 !    for a read Key=...   ie "  0   100  0"
-!_
+
 		dim desc$*50
-!_
+
 		if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
 		if env$('CurSys')="UB" and exists("[Q]\UBmstr\GLmstr.h[cno]") then cursys$="UB": goto L180
 		if env$('CurSys')="PR" and exists("[Q]\GLmstr\Company.h[cno]") then cursys$="GL": goto L180
@@ -49,7 +49,7 @@ DONE: !
 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
 		fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
 		goto Xit
-!_
+
 NOKEYGLMSTR: !
 		close #glmstr:
 		x$="": desc$=""

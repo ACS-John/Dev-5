@@ -38,7 +38,7 @@
 	data "X23"
 	data "X24"
 	read mat ty$
-! ___________________________
+! 
 	rn=fnrx
 	underlin$="______________________________"
 	cap$="Create Job Cost Report Program"

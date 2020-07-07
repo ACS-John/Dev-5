@@ -1,7 +1,7 @@
 00001 ! exe 'lo "'&program$(1:pos(program$,'.')-1)&'.br"'
 00002 ! execute 'config editor "c:\program files\notepad++\notepad++.exe"'
 00003 ! ed ~                     
-00004 ! ** do not remove line numbers nor used syntax that requires a pre-compilier in this program. **
+00004 ! ** do not remove line numbers nor use syntax that requires a pre-compilier in this program. **
 00010 dim pandaPath$*256
 00020 pandaPath$=program$(1:pos(program$,'\',-1)-1) ! pandaPath$=env$('cmd_home')(without a trailing backslash
 00240 execute 'con sub [pandaPath] '&pandaPath$
@@ -20,6 +20,9 @@
 03700   pr 'If you try to use this program to compile itself, you''re probably not gonna have a good time.'
 03720   pr 'Program stopping.'
 03740   en
+03641 else if 'filelist:'=orgSourceFile$(1:len('filelist:')) t
+03642   pr 'filelist: detected in orgSourceFile$ ('&orgSourceFile$&')'
+03643   Pause
 03760 else if ~exists(orgSourceFile$) t
 03780   pr 'It appears the file you are trying to compile does not exist.'
 03800   pr 'Program stopping.'

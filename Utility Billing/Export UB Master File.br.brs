@@ -1,13 +1,8 @@
 ! formerly S:\acsUB\expubm
-! r: setup
-	autoLibrary
- 
-	on error goto Ertn
- 
-! /r
-	fnTop(program$)
-	dim serviceName$(10)*20
-	fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
+fn_setup
+fnTop(program$)
+dim serviceName$(10)*20
+fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 MENU1: ! r:
 	dim resp$(3)*256
 	fnTos
@@ -29,7 +24,7 @@ MENU1: ! r:
 ! /r
 MainLoop: ! r:
 	dim delim$*1
-	delim$=chr$(9)
+	delim$=tab$
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative
 	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
 	fnMakeSurePathExists(dest$)
@@ -59,30 +54,30 @@ MainLoop: ! r:
 		fncustomer_address(z$,mat addr$)
 		! r: pr #2 delimited field values
 		pr #2: '"'&z$&'"'              	&delim$;
-		pr #2: e$(1)                    	&delim$;
-		pr #2: e$(2)                    	&delim$;
-		pr #2: e$(3)                    	&delim$;
+		pr #2: e$(1)                   	&delim$;
+		pr #2: e$(2)                   	&delim$;
+		pr #2: e$(3)                   	&delim$;
 		pr #2: extra$(1)               	&delim$;
-		pr #2: e$(4)                    	&delim$;
-		pr #2: f$(1)                    	&delim$;
-		pr #2: str$(a(1))               	&delim$;
-		pr #2: str$(a(2))               	&delim$;
-		pr #2: str$(a(3))               	&delim$;
-		pr #2: str$(a(4))               	&delim$;
-		pr #2: str$(a(5))               	&delim$;
-		pr #2: str$(a(6))               	&delim$;
-		pr #2: str$(a(7))               	&delim$;
-		pr #2: str$(b(1))               	&delim$;
-		pr #2: str$(b(2))               	&delim$;
-		pr #2: str$(b(3))               	&delim$;
-		pr #2: str$(b(4))               	&delim$;
-		pr #2: str$(b(5))               	&delim$;
-		pr #2: str$(b(6))               	&delim$;
-		pr #2: str$(b(7))               	&delim$;
-		pr #2: str$(b(8))               	&delim$;
-		pr #2: str$(b(9))               	&delim$;
-		pr #2: str$(b(10))              	&delim$;
-		pr #2: str$(b(11))              	&delim$;
+		pr #2: e$(4)                   	&delim$;
+		pr #2: f$(1)                   	&delim$;
+		pr #2: str$(a(1))              	&delim$;
+		pr #2: str$(a(2))              	&delim$;
+		pr #2: str$(a(3))              	&delim$;
+		pr #2: str$(a(4))              	&delim$;
+		pr #2: str$(a(5))              	&delim$;
+		pr #2: str$(a(6))              	&delim$;
+		pr #2: str$(a(7))              	&delim$;
+		pr #2: str$(b(1))              	&delim$;
+		pr #2: str$(b(2))              	&delim$;
+		pr #2: str$(b(3))              	&delim$;
+		pr #2: str$(b(4))              	&delim$;
+		pr #2: str$(b(5))              	&delim$;
+		pr #2: str$(b(6))              	&delim$;
+		pr #2: str$(b(7))              	&delim$;
+		pr #2: str$(b(8))              	&delim$;
+		pr #2: str$(b(9))              	&delim$;
+		pr #2: str$(b(10))             	&delim$;
+		pr #2: str$(b(11))             	&delim$;
 		pr #2: str$(c(1))              	&delim$;
 		pr #2: str$(c(2))              	&delim$;
 		pr #2: str$(c(3))              	&delim$;
@@ -157,84 +152,84 @@ ALT_BILL_ADR: ! r:
 	read #3,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore
 return  ! /r
 HEADER: ! r:
-	pr #2: 'Account Key'&delim$;           ! z$
-	pr #2: 'Meter Address'&delim$;         ! e$(1)
-	pr #2: 'Name'&delim$;                  ! e$(2)
-	pr #2: 'Address 1 - Primary'&delim$;   ! e$(3)
-	pr #2: 'Address 2 - Primary'&delim$;   ! extra$(1)
-	pr #2: 'CSZ - Primary'&delim$;         ! e$(4)
-	pr #2: serviceName$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
-	pr #2: serviceName$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
-	pr #2: serviceName$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
-	pr #2: serviceName$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
-	pr #2: serviceName$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
-	pr #2: serviceName$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
-	pr #2: serviceName$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
-	pr #2: serviceName$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
-	pr #2: serviceName$(1)&' Standard Charge'&delim$; ! str$(b(1))&delim$;
-	pr #2: serviceName$(2)&' Standard Charge'&delim$; ! str$(b(2))&delim$;
-	pr #2: serviceName$(3)&' Standard Charge'&delim$; ! str$(b(3))&delim$;
-	pr #2: serviceName$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
-	pr #2: serviceName$(5)&' Standard Charge'&delim$; ! str$(b(5))&delim$;
-	pr #2: serviceName$(6)&' Standard Charge'&delim$; ! str$(b(6))&delim$;
-	pr #2: serviceName$(7)&' Standard Charge'&delim$; ! str$(b(7))&delim$;
-	pr #2: serviceName$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
-	pr #2: serviceName$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
-	pr #2: serviceName$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
-	pr #2: serviceName$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
-	pr #2: serviceName$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
-	pr #2: serviceName$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
-	pr #2: serviceName$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
-	pr #2: serviceName$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
-	pr #2: serviceName$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
-	pr #2: serviceName$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
-	pr #2: serviceName$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
-	pr #2: serviceName$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
-	pr #2: serviceName$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
-	pr #2: serviceName$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
+	pr #2: 'Account Key'&delim$;                         ! z$
+	pr #2: 'Meter Address'&delim$;                       ! e$(1)
+	pr #2: 'Name'&delim$;                                ! e$(2)
+	pr #2: 'Address 1 - Primary'&delim$;                 ! e$(3)
+	pr #2: 'Address 2 - Primary'&delim$;                 ! extra$(1)
+	pr #2: 'CSZ - Primary'&delim$;                       ! e$(4)
+	pr #2: serviceName$(1)&' Meter Number'&delim$;       ! f$(1)&delim$;
+	pr #2: serviceName$(1)&' Rate Code'&delim$;          ! str$(a(1))&delim$;
+	pr #2: serviceName$(2)&' Rate Code'&delim$;          ! str$(a(2))&delim$;
+	pr #2: serviceName$(3)&' Rate Code'&delim$;          ! str$(a(3))&delim$;
+	pr #2: serviceName$(4)&' Rate Code'&delim$;          ! str$(a(4))&delim$;
+	pr #2: serviceName$(5)&' Rate Code'&delim$;          ! str$(a(5))&delim$;
+	pr #2: serviceName$(9)&' Rate Code'&delim$;          ! str$(a(6))&delim$;
+	pr #2: serviceName$(10)&' Rate Code'&delim$;         ! str$(a(7))&delim$;
+	pr #2: serviceName$(1)&' Standard Charge'&delim$;    ! str$(b(1))&delim$;
+	pr #2: serviceName$(2)&' Standard Charge'&delim$;    ! str$(b(2))&delim$;
+	pr #2: serviceName$(3)&' Standard Charge'&delim$;    ! str$(b(3))&delim$;
+	pr #2: serviceName$(4)&' Standard Charge'&delim$;    ! str$(b(4))&delim$;
+	pr #2: serviceName$(5)&' Standard Charge'&delim$;    ! str$(b(5))&delim$;
+	pr #2: serviceName$(6)&' Standard Charge'&delim$;    ! str$(b(6))&delim$;
+	pr #2: serviceName$(7)&' Standard Charge'&delim$;    ! str$(b(7))&delim$;
+	pr #2: serviceName$(1)&' Deposit'&delim$;            ! str$(b(8))&delim$;
+	pr #2: serviceName$(2)&' Deposit'&delim$;            ! str$(b(9))&delim$;
+	pr #2: serviceName$(3)&' Deposit'&delim$;            ! str$(b(10))&delim$;
+	pr #2: serviceName$(4)&' Deposit'&delim$;            ! str$(b(11))&delim$;
+	pr #2: serviceName$(1)&' Deposit Date'&delim$;       ! str$(c(1))&delim$;
+	pr #2: serviceName$(2)&' Deposit Date'&delim$;       ! str$(c(2))&delim$;
+	pr #2: serviceName$(3)&' Deposit Date'&delim$;       ! str$(c(3))&delim$;
+	pr #2: serviceName$(4)&' Deposit Date'&delim$;       ! str$(c(4))&delim$;
+	pr #2: serviceName$(1)&' Reading - Current'&delim$;  ! str$(d(1))&delim$;
+	pr #2: serviceName$(1)&' Reading - Prior'&delim$;    ! str$(d(2))&delim$;
+	pr #2: serviceName$(1)&' Used - Current'&delim$;     ! str$(d(3))&delim$;
+	pr #2: serviceName$(1)&' Used - YTD'&delim$;         ! str$(d(4))&delim$;
+	pr #2: serviceName$(3)&' Reading - Current'&delim$;  ! str$(d(5))&delim$;
+	pr #2: serviceName$(3)&' Reading - Prior'&delim$;    ! str$(d(6))&delim$;
 	pr #2: serviceName$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
-	pr #2: serviceName$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
-	pr #2: serviceName$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
-	pr #2: serviceName$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
-	pr #2: serviceName$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
-	pr #2: serviceName$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
-	pr #2: 'Units Per Meter'&delim$; ! str$(d(13))&delim$;
-	pr #2: 'Demand Multiplier'&delim$; ! str$(d(14))&delim$;
-	pr #2: 'Demand Reading'&delim$; ! str$(d(15))&delim$;
-	pr #2: 'Current Balance'&delim$; ! str$(bal)&delim$;
-	pr #2: 'Date of Charge'&delim$; ! str$(f)&delim$;
-	pr #2: serviceName$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
-	pr #2: serviceName$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
-	pr #2: serviceName$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
-	pr #2: serviceName$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
-	pr #2: serviceName$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
-	pr #2: serviceName$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
-	pr #2: serviceName$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
-	pr #2: serviceName$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
-	pr #2: serviceName$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
-	pr #2: serviceName$(10)&' Charge'&delim$; ! str$(g(10))&delim$;
-	pr #2: 'Current Bill – Net Bill'&delim$; ! str$(g(11))&delim$;
-	pr #2: 'Current Bill – Gross Bill'&delim$; ! str$(g(12))&delim$;
-	pr #2: 'Alpha Sort Field'&delim$; ! alp$&delim$;
-	pr #2: serviceName$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
-	pr #2: serviceName$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
-	pr #2: serviceName$(1)&' Serial Number'&delim$; ! extra$(3)&delim$;
-	pr #2: serviceName$(3)&' Serial Number'&delim$; ! extra$(4)&delim$;
-	pr #2: serviceName$(4)&' Serial Number'&delim$; ! extra$(5)&delim$;
-	pr #2: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
-	pr #2: serviceName$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
-	pr #2: serviceName$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
-	pr #2: serviceName$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
-	pr #2: serviceName$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
-	pr #2: serviceName$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
-	pr #2: serviceName$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
-	pr #2: serviceName$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
-	pr #2: serviceName$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
-	pr #2: serviceName$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
-	pr #2: serviceName$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
-	pr #2: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
-	pr #2: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
-	pr #2: 'CSZ - Alternate Billing'&delim$; ! ab$(3)
+	pr #2: serviceName$(3)&' KWH Used -YTD'&delim$;      ! str$(d(8))&delim$;
+	pr #2: serviceName$(4)&' Reading - Current'&delim$;  ! str$(d(9))&delim$;
+	pr #2: serviceName$(4)&' Reading - Prior'&delim$;    ! str$(d(10))&delim$;
+	pr #2: serviceName$(4)&' Used-Current'&delim$;       ! str$(d(11))&delim$;
+	pr #2: serviceName$(4)&' Used-YTD'&delim$;           ! str$(d(12))&delim$;
+	pr #2: 'Units Per Meter'&delim$;                     ! str$(d(13))&delim$;
+	pr #2: 'Demand Multiplier'&delim$;                   ! str$(d(14))&delim$;
+	pr #2: 'Demand Reading'&delim$;                      ! str$(d(15))&delim$;
+	pr #2: 'Current Balance'&delim$;                     ! str$(bal)&delim$;
+	pr #2: 'Date of Charge'&delim$;                      ! str$(f)&delim$;
+	pr #2: serviceName$(1)&' Charge'&delim$;             ! str$(g(1))&delim$;
+	pr #2: serviceName$(2)&' Charge'&delim$;             ! str$(g(2))&delim$;
+	pr #2: serviceName$(3)&' Charge'&delim$;             ! str$(g(3))&delim$;
+	pr #2: serviceName$(4)&' Charge'&delim$;             ! str$(g(4))&delim$;
+	pr #2: serviceName$(5)&' Charge'&delim$;             ! str$(g(5))&delim$;
+	pr #2: serviceName$(6)&' Charge'&delim$;             ! str$(g(6))&delim$;
+	pr #2: serviceName$(7)&' Charge'&delim$;             ! str$(g(7))&delim$;
+	pr #2: serviceName$(8)&' Charge'&delim$;             ! str$(g(8))&delim$;
+	pr #2: serviceName$(9)&' Charge'&delim$;             ! str$(g(9))&delim$;
+	pr #2: serviceName$(10)&' Charge'&delim$;            ! str$(g(10))&delim$;
+	pr #2: 'Current Bill – Net Bill'&delim$;             ! str$(g(11))&delim$;
+	pr #2: 'Current Bill – Gross Bill'&delim$;           ! str$(g(12))&delim$;
+	pr #2: 'Alpha Sort Field'&delim$;                    ! alp$&delim$;
+	pr #2: serviceName$(3)&' Meter Number'&delim$;       ! f$(2)&delim$;
+	pr #2: serviceName$(4)&' Meter Number'&delim$;       ! f$(3)&delim$;
+	pr #2: serviceName$(1)&' Serial Number'&delim$;      ! extra$(3)&delim$;
+	pr #2: serviceName$(3)&' Serial Number'&delim$;      ! extra$(4)&delim$;
+	pr #2: serviceName$(4)&' Serial Number'&delim$;      ! extra$(5)&delim$;
+	pr #2: 'Alternate Billing Address'&delim$;           ! str$(bra)&delim$;
+	pr #2: serviceName$(1)&' Breakdown'&delim$;          ! str$(gb(1))&delim$;
+	pr #2: serviceName$(2)&' Breakdown'&delim$;          ! str$(gb(2))&delim$;
+	pr #2: serviceName$(3)&' Breakdown'&delim$;          ! str$(gb(3))&delim$;
+	pr #2: serviceName$(4)&' Breakdown'&delim$;          ! str$(gb(4))&delim$;
+	pr #2: serviceName$(5)&' Breakdown'&delim$;          ! str$(gb(5))&delim$;
+	pr #2: serviceName$(6)&' Breakdown'&delim$;          ! str$(gb(6))&delim$;
+	pr #2: serviceName$(7)&' Breakdown'&delim$;          ! str$(gb(7))&delim$;
+	pr #2: serviceName$(8)&' Breakdown'&delim$;          ! str$(gb(8))&delim$;
+	pr #2: serviceName$(9)&' Breakdown'&delim$;          ! str$(gb(9))&delim$;
+	pr #2: serviceName$(10)&' Breakdown'&delim$;         ! str$(gb(10))&delim$;
+	pr #2: 'Name - Alternate Billing'&delim$;            ! ab$(1)&delim$;
+	pr #2: 'Address - Alternate Billing'&delim$;         ! ab$(2)&delim$;
+	pr #2: 'CSZ - Alternate Billing'&delim$;             ! ab$(3)
 	pr #2: 'Final Billing Code'&delim$;
 	pr #2: 'Billing Address 1'&delim$;
 	pr #2: 'Billing Address 2'&delim$;
@@ -242,4 +237,4 @@ HEADER: ! r:
 	pr #2: 'Billing Address 4'&delim$;
 	pr #2: 'Email'&delim$
 return  ! /r
-include: Ertn
+include: fn_setup
