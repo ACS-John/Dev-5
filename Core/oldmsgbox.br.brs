@@ -55,7 +55,7 @@ L210: if mtype=3 then : _
 		if mtype=4 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"BACK" and response$(1)<>"CANCEL" then gosub PRNBELL : goto L210
 		close #104: ioerr L320
 L320: fnend
-! __________
+! 
 PRNBELL: ! pr bell
 	pr f "24,1,C 7,N": bell$
 return

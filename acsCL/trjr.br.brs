@@ -182,7 +182,7 @@ L1350: hgl$=gl$ : mat glts=glts+glt
 	read #glmstr,using 'Form POS 13,C 30',key=gl$: des$ nokey L1390
 L1390: pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': gl$,mat glt,des$
 	goto READ_WORK
-! ___________________________
+! 
 END3: !
 	if val(hgl$(1:3))<>0 then subcode=1: goto L1330
 END3B: !

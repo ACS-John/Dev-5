@@ -134,9 +134,9 @@ L920: fnpa_finis
  
 L950: !
 	pb=bal-g(11)
-! ______________print bill routine______________________________________
+! print bill routine
 	fn_vbprint
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1
 ! accumulate totals
 	goto L570
@@ -202,13 +202,7 @@ ENDSCR: ! pr totals screen
 	fnCmdSet(52)
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
- 
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto L1550
-	execute "List -"&str$(line) : pause : goto L1550
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-L1550: execute act$
-	goto ERTN
+
  
 def fn_vbprint
 ! -- Printer Program for New Laser Utility Bills
@@ -217,7 +211,7 @@ def fn_vbprint
 		if checkcounter=2 then xmargin=139 : ymargin=0
 		if checkcounter=3 then xmargin=0 : ymargin=108
 		if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
-! ___________________________
+! 
 ! - CONSTANTS
 		lyne=3
 		pr #20: 'Call Print.MyFont("Lucida Console")'
@@ -238,7 +232,7 @@ def fn_vbprint
 		pr #20: 'Call Print.AddText("Reading",'&str$(xmargin+14)&','&str$(lyne*12+ymargin)&')'
 		pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+37)&','&str$(lyne*12+ymargin)&')'
 		pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+54)&','&str$(lyne*12+ymargin)&')'
-! ___________________________
+! 
 PRINTGRID: meter=13
 		pr #20: 'Call Print.MyFontSize(8)'
 ! d(1)=123456789 : d(3)=123456789 : g(1)=123456.89 : g(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : g(4)=123456.89 : g(5)=123456.89 : g(6)=123456.89 : g(8)=123456.89 : g(9)=123456.89 : pB=123456.89
@@ -279,7 +273,7 @@ PRINTGRID: meter=13
 			pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+49)&','&str$(lyne*meter+ymargin)&')'
 		end if
 		pr #20: 'Call Print.MyFontSize(10)'
-! ___________________________
+! 
 		pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(lyne*23+1+ymargin)&','&str$(linelength)&',0)'
 		pr #20: 'Call Print.AddText("Pay Now:",'&str$(xmargin+5)&','&str$(lyne*24+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin)&')'
@@ -311,3 +305,4 @@ PRINTGRID: meter=13
 		end if
 fnend
  
+include: Ertn

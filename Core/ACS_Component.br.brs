@@ -1,19 +1,9 @@
 pr 'this program ('&program$&') is not intended to be run directly.'
 end
-def fn_setup
-	if ~setup_library then
-		setup_library=1
-		autoLibrary
-	end if
-	on error goto Ertn
-	dim _program$(1)*255
-	dim _menu$(1)*255
-	dim combooptionsetlist$(0)*256
-	tab$=hex$('09')
-	setup=1
-fnend
-
-def library fnTos(;sn$*100)
+dim _program$(1)*255
+dim _menu$(1)*255
+dim combooptionsetlist$(0)*256
+def library fnTos(; sn$*100)
 	! screen ace top of screen function
 	if ~setup then fn_setup
 	if sn$='' then
@@ -43,14 +33,14 @@ def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon
 	!					 0=left,	1=right,	2=center
 	if ~setup then fn_setup
 	if mylen=0 then mylen=len(txt$)
-	setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
+	setenv('control'&str$(fn_controlCount), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
 fnend
 def library fnPic(lyne,ps,height,width,picture$*300;con,tabcon)
 	! add a picture/image to a screen ace form
 	if ~setup then fn_setup
-	setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
+	setenv('control'&str$(fn_controlCount), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
 fnend
-def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+def library fnTxt(lyne,ps,width; maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 	if ~setup then fn_setup
 	! screen ace text box
 	if lwrc$(mask$)='mmddyy' then
@@ -77,12 +67,12 @@ def library fnTxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,ta
 	end if
 	if val(mask$)>=10 and val(mask$)<=49 then ali=1
 	if maxlen=0 then maxlen=width
-	setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
+	setenv('control'&str$(fn_controlCount), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
 fnend
 def library fnMultiLine(lyne,ps,height,width;contain,tabcon,tooltip$*200)
 	! add a multiline text box to a screen ace form
 	if ~setup then fn_setup
-	setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 	lyne=ps=height=width=contain=tabcon=0
 	tooltip$=""
 fnend
@@ -94,19 +84,19 @@ def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	! contain		container number (for containers like frames and tab strips)
 	if ~setup then fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))
-	setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend
 def library fnChk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 	! add a screen ace check box
 	if ~setup then fn_setup
 	if align=1 then ps=ps-len(rtrm$(txt$))-2
-	setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
+	setenv('control'&str$(fn_controlCount), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 fnend
-def library fnComboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
+def library fnComboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
 	if ~setup then fn_setup
 	fnComboA=fn_comboA(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 fnend
-def fn_comboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
+def fn_comboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
 	if env$('exitnow')='yes' then goto COMBOA_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from an array) to a screen ace form
 	! sfn$			simple file name
@@ -114,7 +104,7 @@ def fn_comboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	! mat opt$	choices in the combobox and one of them is your answer
 	! width			(optional) sets the field/max length of the combobox.
 	!						may not be larger than 81
-	! __________________________________________________
+	! 
 	! ** get/set constants ********
 	! fncno(cno)
 	sfn$=trim$(sfn$)&env$('cno')
@@ -127,7 +117,7 @@ def fn_comboA(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_com
 	for rec_count=1 to udim(mat opt$)
 		fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
 	next rec_count
-	setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
+	setenv('control'&str$(fn_controlCount),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
 	fn_comboOptionSetList_add(comboa_combooptionset$)
 	width=contain=0
 	COMBOA_COMPLETE: !
@@ -157,7 +147,7 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 		form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 	end if
 	becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\acs\'&becky$
-	! __________________________________________________
+	! 
 	if width=0 then width=lnk+lnd+1
 	dim combokeycurrent$*512,combokeyprior$*512
 	combokeycurrent$='df='&df$&',if='&if$&',psk='&str$(psk)&',lnk='&str$(lnk)&',psd='&str$(psd)&'lnd='&str$(lnd)&',limlis='&str$(limlis)
@@ -225,7 +215,7 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	fnpause
 	goto WRITE_IT ! /r
 	WRITE_IT: !
-	setenv('control'&str$(fn_control_count),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
+	setenv('control'&str$(fn_controlCount),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
 	fn_comboOptionSetList_add(combokeycurrent$)
 	COMBOF_COMPLETE: !
 fnend
@@ -251,7 +241,7 @@ def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 	end if
 fnend
-def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,seltype,usr,con,tabcon)
+def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,seltype,usr,con,tabcon)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
 	! mat colMask$		(column mask)=(see mask chart in screen ace manual)
 	! seltype		0=editable cells,	 1=row selection,	 2=column selection
@@ -265,7 +255,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	dim hdrfile$*192,all_hdr$*6491,all_mask$*6491
 	dim optfile$*199
 	if usr=0 then grid_populated=0
-	! __________________________________________________
+	! 
 	! if usr=0 then pr "USR=0-Replace"
 	! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
 	! if usr<0 then pr "USR<0-append=-1		 USR="&str$(usr)
@@ -298,7 +288,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then
 		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
-	! _______________________
+	! 
 	! ***	 test validity of some stuff **********
 	fnFlexInit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
@@ -316,7 +306,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then
 		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
-	! __________________________________________________
+	! 
 	fnFlexInit1=0
 	! if exists(env$('temp')&'\acs\'&optfile$) then
 	! 	fnFree(env$('temp')&'\acs\'&optfile$)
@@ -324,7 +314,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$;mat colMask$,selty
 	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output
 	WRITE_TO_ACE: !
 	sorttype=0
-	setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
 	usr=0
 	FLEXINIT1_COMPLETE: !
 fnend
@@ -342,7 +332,7 @@ fnend
 def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 	! add a frame to a screen ace form
 	if ~setup then fn_setup
-	setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 fnend
 def library fnTab(myline,mypos,height,width,mat cap$)
 	! myline sets the vertical (up and down) position
@@ -359,12 +349,12 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 		write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
 	next j
 	close #tf1:
-	setenv('control'&str$(fn_control_count),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
+	setenv('control'&str$(fn_controlCount),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
 fnend
 def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 	! add a button to a screen ace form
 	if ~setup then fn_setup
-	setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
+	setenv('control'&str$(fn_controlCount),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
 fnend
 def library fnCmdSet(bon)
 	if ~setup then fn_setup
@@ -452,7 +442,7 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	if ~setup then fn_setup
 	height=max(height,1) ! button height is at least 1
 	if width=0 then width=len(txt$)
-	setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 fnend
 def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel,___,tmpControlX$*2048)
 	if ~setup then fn_setup
@@ -476,7 +466,7 @@ def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 	tmpControlX$&=str$(tabcon)&'|'
 	tmpControlX$&=str$(default)&'|'
 	tmpControlX$&=str$(cancel)&'|'
-	setenv('control'&str$(fn_control_count),tmpControlX$)
+	setenv('control'&str$(fn_controlCount),tmpControlX$)
 fnend
 
 def library fnDisplayMenu(mat dmText$,mat _program$,mat _status$; ___,envControlValue$*10000,item)
@@ -484,7 +474,7 @@ def library fnDisplayMenu(mat dmText$,mat _program$,mat _status$; ___,envControl
 	for item=1 to udim(mat dmText$)
 		envControlValue$&=dmText$(item)&'~~~'&_program$(item)&'~~~'&_status$(item)&'###'
 	next item
-	setenv('control'&str$(fn_control_count),"menu|"&envControlValue$(1:len(envControlValue$)-3))
+	setenv('control'&str$(fn_controlCount),"menu|"&envControlValue$(1:len(envControlValue$)-3))
 fnend
 def library fnClearMenu
 	fnClearMenu=fn_clearMenu
@@ -511,14 +501,6 @@ def library fnAcs(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 	goto Xit
-	Ertn: !
-	fnerror(program$,err,line,act$,"Xit")
-	if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-	execute "List -"&str$(line)
-	pause
-	ERTN_EXEC_ACT: !
-	execute act$ : goto ERTN
-	! please note for program pause to work the way we want Xit: and fnend must be on the same line.!
 Xit: fnend
 def fn_ace_init
 	ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
@@ -700,7 +682,7 @@ def fn_processUserInput(; ___,returnN)
 		fkey(default_button_fkey) ! activate the default button when enter is pressed
 		ckey=fkey
 	else if fkey=2501 then
-		fn_export_grid
+		fn_exportGrid
 		fkey(-1) : returnN=1
 	else if fkey=2502 then
 		fn_print_grid
@@ -862,7 +844,7 @@ def fn_mainInput
 		! input #0, fields str$(Session_Rows)&","&str$(Session_Cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
 	end if
 fnend
-def fn_ace(sn$*100, unused,mat resp$, &ckey;startfield, close_on_exit, parent_none,background)
+def fn_ace(sn$*100, unused,mat resp$, &ckey; startfield, close_on_exit, parent_none,background)
 	if env$('ExitNow')='yes' then
 		ckey=fkey_cancel
 		goto AceFinis
@@ -1382,7 +1364,7 @@ def fn_ace_rd_flex(;___,index_)
 	! pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
 	!		pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
 fnend
-def fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices;___,index_,mask)
+def fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices; ___,index_,mask)
 	mat alpha_mask_indices(0)
 	for index_=1 to udim(mat _mask$)
 		mask=val(_mask$(index_)) conv ignore
@@ -1393,7 +1375,7 @@ def fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices;___,index_,mask)
 		end if
 	next index_
 fnend
-def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
+def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$; ___,index_)
 	data_file_nonempty=0
 	mat _headings$(udim(_headings$)+1)
 	mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
@@ -1429,7 +1411,7 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
 	close #grid_data:
 	fn_gridform=data_file_nonempty
 fnend
-def fn_column_mask(&form$,&width,mask$;___,invisible)
+def fn_column_mask(&form$,&width,mask$; ___,invisible)
 	maxlen=width + 10 ! to deal with bad data
 	mask=val(mask$) conv ignore
 	if mask=>1000 then
@@ -2038,19 +2020,19 @@ def fn_ace_io_add(aia_in$*255)
 	mat ace_io$(ace_io_count)
 	ace_io$(ace_io_count)=aia_in$
 fnend
-def fn_control_count
+def fn_controlCount
 	control_count=val(env$('control_count'))+1
 	setenv('control_count',str$(control_count))
-	fn_control_count=control_count
+	fn_controlCount=control_count
 fnend
 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
 	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
-!_
+
 ! the response$ for this - should be gotten with fnAGL
 ! fnComboA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
 ! this function has an integrated fnComboA - similar to the one above
-!_
+
 	dim qglopt$*60
 	dim glmstr_form$*80
 	dim qgloption$(1)*255
@@ -2157,7 +2139,7 @@ def fn_remove_crlf(&txt$)
 		end if
 	loop while x>0
 fnend
-def fn_export_grid(;___,index_)
+def fn_exportGrid(;___,index_)
 	dim filename$*1024
 	filename$=''
 	grid_rows=grid_columns=index_=0
@@ -2206,16 +2188,16 @@ def fn_export_grid(;___,index_)
 	fnmsgbox(mat ml$,resp$,"ACS",0)
 GRID_EXPORT_XIT: !
 fnend
-def fn_get_flexhandle(;forceclose)
+def fn_get_flexhandle(; forceclose)
 	if forceclose then
 		forceclose=0
 		close #118: ioerr ignore
 	end if
 	fn_get_flexhandle=118
 fnend
-def library fnbackgrounddisable(; activate)
+def library fnBackgroundDisable(; activate)
 	if ~setup_library then let fn_setup
-	fnbackgrounddisable=fn_backgrounddisable( activate)
+	fnBackgroundDisable=fn_backgrounddisable( activate)
 fnend
 def fn_backgrounddisable(; activate)
 	if activate then
@@ -2240,4 +2222,4 @@ def fn_company_name(window,win_cols)
 	end if
 	pr #window, fields "1,"&str$(win_cols-02)&",P 1/2,[buttons],1504": "S:\Core\Icon\help_icon.png" ioerr ignore
 fnend
-
+include: fn_setup

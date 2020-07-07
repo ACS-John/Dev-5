@@ -55,7 +55,7 @@ MENU1: !
 	actrans=3 : _
 	open #actrans: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
 	x=lrec(2)
-! ____
+! 
 	for j=1 to x
 READ_GLTRANS: !
 		read #gltrans,using L520,rec=j: t$,s,k,mat n,l$,p$ eof HIST noRec NEXT_GLTRANS

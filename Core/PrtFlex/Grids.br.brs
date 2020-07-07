@@ -250,7 +250,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 	columns=0
 	specline=10010
 	dataline=10510
-	!____
+
 	! This section generates the program lines needed to create the column            headings and column masks
 	close #hgridfile: ioerr ignore
 	open #hgridfile:=15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outIn,keyed ioerr SelectDataBase

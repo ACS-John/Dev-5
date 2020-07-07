@@ -296,7 +296,7 @@ def fn_pencal ! penalty calculation
 	next j
 	rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 	goto PAST_WRITE_2
-	! __
+	! 
 	WRITE_2: !
 	write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 	PAST_WRITE_2: !

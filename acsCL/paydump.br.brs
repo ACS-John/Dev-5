@@ -29,7 +29,7 @@
 		olddate=val(resp$(1))
 	fnopenprn
 	gosub HDR
-! ___________________________
+! 
 READ_PAYMSTR1: !
 	read #paymstr1,using 'Form POS 1,C 8,C 30': vn$,nam$ eof DONE
 	restore #trmstr2,search>=vn$: nokey PRINT_IT

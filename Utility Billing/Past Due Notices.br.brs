@@ -22,9 +22,9 @@ on error goto Ertn
 	fnLastBillingDate(d1)
 	fndat(d$(4))
 	dim at$(3)*40
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
 	read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
-	close #21: 
+	close #21:
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
 	x=len(at$(1)) : y=z-x
@@ -35,12 +35,12 @@ on error goto Ertn
 		x=len(at$(j)) : y=z-x
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
-! 
+!
 	deltype=0 : fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : deltype=val(deltype$) conv ignore
-! 
-	open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
-	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed 
-	open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed 
+!
+	open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed
+	open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed
 	F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 goto MENU1 ! /r
 MENU1: ! r:
@@ -91,12 +91,12 @@ MENU1: ! r:
 
 PRINT_NEXT: ! r: the main read it and pr it routine
 	if sel_indv$="Y" then goto ASK_NEXT_ACT
-	if bk1>0 then 
+	if bk1>0 then
 		read #customer5,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
 		if route>bk1 then goto EO_CUSTOMER
-	else 
+	else
 		read #customer1,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
-	end if 
+	end if
 	if deltype<3 and bal<=1 then goto PRINT_NEXT
 	if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
 	! pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
@@ -114,46 +114,46 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
 
-	if reminder=1 then 
+	if reminder=1 then
 		fn_vbprint
-	else if env$('client')="Granby" then 
+	else if env$('client')="Granby" then
 		fn_print_granby
-	else if env$('client')="French Settlement" then 
+	else if env$('client')="French Settlement" then
 		fn_french_settlement_gas
-	else if env$('client')="Blucksberg" then 
+	else if env$('client')="Blucksberg" then
 		fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$,z$,mat addr$,bal,d1)
 ! else if env$('client')="Merriam Woods" then
 !   fn_merriam_woods
-	else if do_print_std_form=1 then 
+	else if do_print_std_form=1 then
 		fn_print_standard_form
-	else 
+	else
 		fn_prnt1
-	end if 
+	end if
 	fn_report_add
 	! fn_listFile_add(z$)
 	goto PRINT_NEXT
 ! /r
 def fn_open_template
-	if ~h_template then 
-		open #h_template:=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative 
-	end if 
+	if ~h_template then
+		open #h_template:=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative
+	end if
 	fn_open_template=h_template
 fnend  ! fn_open_template
 def fn_prnt1
-	if ~h_prnt1 then 
+	if ~h_prnt1 then
 		open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
-	end if 
+	end if
 	fn_bldr1
 	r=0
 	dim ln3$*1
-	P1_NEXT_LN: ! 
+	P1_NEXT_LN: !
 	ln$=""
 	do
 		read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
 		if ln3$=chr$(13) then goto P1_L2310
 		ln$=ln$&ln3$
-		if len(rtrm$(ln$))>3900 then 
-			pr #h_prnt1: ln$ 
+		if len(rtrm$(ln$))>3900 then
+			pr #h_prnt1: ln$
 			goto P1_NEXT_LN
 		end if
 	loop
@@ -178,8 +178,8 @@ def fn_prnt1
 	P1_L2450: !
 	p1=p4+1
 	goto P1_L2320
-	! ___________________________
-	P1_L2480: ! 
+	!
+	P1_L2480: !
 	! if uprc$(ln$(p2+1:p2+2))><"B4" then
 	! end if
 	if uprc$(ln$(p2+1:p2+1))><"D" then goto P1_L2550
@@ -188,14 +188,14 @@ def fn_prnt1
 	l2$=l2$&d$(v1)
 	P1_L2550: !
 	goto P1_L2450
-	! ___________________________
+
 	P1_L2570: !
 	l2$=l2$&ln$(p1:p3)
 	pr #h_prnt1: l2$&chr$(13)
 	goto P1_NEXT_LN
-	!_____
-	P1_END1: ! 
-	restore #h_template: 
+
+	P1_END1: !
+	restore #h_template:
 	pr #h_prnt1: "\page"
 fnend
 def fn_bldr1 ! BUILD RECORD IN pr ARRAY
@@ -223,10 +223,10 @@ def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 	r1$(75)=ltrm$(cnvrt$("n 10.2",bal-g(11))) ! past due balance trimed
 	r1$(76)=cnvrt$("N 10.2",bal) ! balance not trimed
 	r1$(77)=ltrm$(cnvrt$("PIC(##/##/##)"  ,extra(3)  )  ) ! date read current
-	if balance <=0 then 
+	if balance <=0 then
 		r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",0))           ! pay after amount (balance plus penalty trimmed) nothing if balance <0
-	else 
-		r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11))))) 
+	else
+		r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11)))))
 	end if
 	r1$(80)=df$                                           ! bank draft Y
 	r1$(81)=da$                                           ! bank Account
@@ -298,30 +298,30 @@ def fn_vbprint
 	fnpa_txt(addr$(4),20,lyne*20.5+spacer)
 	checkcounter+=1
 	spacer+=90
-	if checkcounter=3 then 
+	if checkcounter=3 then
 		fnpa_newpage
 		checkcounter=0
 		spacer=0
 	end if  ! checkcounter=3
 	fn_report_add
-fnend 
+fnend
 def fn_report_close
-	if h_ra then 
+	if h_ra then
 		dim ra_line$*256
-		close #h_ra: 
-		open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input 
+		close #h_ra:
+		open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input
 		fnopenprn(0,0,0,0, 'Summary')
 		gosub RC_HDR
-		do 
+		do
 			linput #h_ra: ra_line$ eof RC_DONE
 			pr #255: rtrm$(ra_line$) pageoflow RC_PGOF ! ,using 'form pos 1,c 256'
-		loop 
-		RC_DONE: ! 
+		loop
+		RC_DONE: !
 		fncloseprn
-		close #h_ra,free: 
+		close #h_ra,free:
 		h_ra=0
 	end if  ! h_ra
-	goto RC_XIT 
+	goto RC_XIT
 	RC_PGOF: ! r:
 		pr #255: newpage
 		gosub RC_HDR
@@ -333,21 +333,21 @@ def fn_report_close
 		pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
 	return  ! RC_HDR
-	RC_XIT: ! 
+	RC_XIT: !
 fnend  ! fn_report_close
 def fn_listFile_add(z$)
-	if ~h_lf then 
-		open #h_lf:=fngethandle: 'Name='&env$('temp')&'\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output 
+	if ~h_lf then
+		open #h_lf:=fngethandle: 'Name='&env$('temp')&'\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
 	end if  ! ~h_ra
 	pr #h_lf,using 'form pos 1,c 10': z$
 fnend
 def fn_report_add
-	if ~h_ra then 
-		open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output 
+	if ~h_ra then
+		open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output
 		rc_page=0
 	end if  ! ~h_ra
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
- 
+
 fnend
 def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 		if a(1)=0 then water$="     " else water$="Water"
@@ -369,7 +369,7 @@ def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 		pr #255,using "Form pos 9,C 73": mis$(2)
 		pr #255,using "Form pos 9,C 73": mis$(3)
 		pr #255,using "Form pos 9,C 73": mis$(4)
-		pr #255: '' 
+		pr #255: ''
 		pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&cnvrt$('pic(###,##z.zz)',reconnect_fee)
 		pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
 		pr #255: ''
@@ -384,7 +384,7 @@ def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 		pr #255,using "Form pos 50,C 30": addr$(4)
 		! 4 more lines from this point before next page
 		pr #255: newpage
-	fnend 
+	fnend
 def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat addr$,bal,d1; ___,water$*5,gas$*3) ! 9/10/2018
 	fnopenprn
 	pr #255: ''
@@ -403,7 +403,7 @@ def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat a
 	pr #255,using "Form pos 9,C 73": mis$(2)
 	pr #255,using "Form pos 9,C 73": mis$(3)
 	pr #255,using "Form pos 9,C 73": mis$(4)
-	pr #255: '' 
+	pr #255: ''
 	if a(1)=0 then water$="     " else water$="Water"
 	if a(4)=0 then gas$="   " else gas$="Gas"
 	pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&'                Reconnection Fee: $25.00'
@@ -420,27 +420,27 @@ def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat a
 	pr #255,using "Form pos 7,C 30": addr$(4)
 	! 4 more lines from this point before next page
 	pr #255: newpage
-fnend 
+fnend
 def fn_print_granby
 	fnopenprn
 	pr #255,using 'form pos 4,c 47,skip 4': e$(1)
-	if gb(1)=0 then 
+	if gb(1)=0 then
 		pr #255,using Fgranby1: "Your Utility Account is Past Due."
-	else 
+	else
 		pr #255,using Fgranby2: "Your Utility Account is Past Due.","Water",gb(1)
-	end if 
+	end if
 	Fgranby1: form pos 4,c 47
 	Fgranby2: form pos 4,c 47,pos 53,c 10,pos 65,n 10.2
-	if gb(4)=0 then 
+	if gb(4)=0 then
 		pr #255,using Fgranby1: "Please pay the amount due by "&ltrm$(d$(2))
-	else 
+	else
 		pr #255,using Fgranby2: "Please pay the amount due by "&ltrm$(d$(2)),"Gas",gb(4)
-	end if 
-	if gb(5)=0 then 
+	end if
+	if gb(5)=0 then
 		pr #255,using Fgranby1: "to avoid Utility Disconnection."
-	else 
+	else
 		pr #255,using Fgranby2: "to avoid Utility Disconnection.","Sanitation",gb(5)
-	end if 
+	end if
 	if gb(2)=0 then pr #255: else pr #255,using Fgranby3: "Sewer",gb(2)
 	if gb(7)=0 then pr #255: else pr #255,using Fgranby3: "Primacy",gb(7)
 	if gb(8)=0 then pr #255: else pr #255,using Fgranby3: "Other",gb(8)
@@ -458,19 +458,19 @@ def fn_print_granby
 	pr #255: ''
 	pr #255,using 'form pos 63,n 10.2': bal
 	granby_print_count+=1
-	if granby_print_count/3=int(granby_print_count/3) then 
+	if granby_print_count/3=int(granby_print_count/3) then
 		pr #255: newpage
-	else 
-		pr #255: '' 
-		pr #255: '' 
+	else
 		pr #255: ''
-		pr #255: '' 
 		pr #255: ''
-	end if 
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+	end if
 fnend
 def fn_french_settlement_gas
 	fnopenprn
-	! ______________pre-print calculations__________________________________
+	! pre-print calculations__________________________________
 	if pb<>0 then pb$="Prior Balance" else pb$=""
 	if g(1)=0 then t1$="" else t1$="WTR"
 	if g(2)=0 then t2$="" else t2$="SWR"
@@ -486,7 +486,7 @@ def fn_french_settlement_gas
 	if c4>0 then final$="Final Bill" else final$=""
 	if bal<=0 then g(10)=0
 	gross=max(bal+g(10),0)
-	! ______________actual Bill Printing____________________________________
+	! actual Bill Printing____________________________________
 	pos_amt=28
 	pos_r=39
 	L310: form pos 1,nz 6,nz 7,nz 7,x 2,c 3,pos pos_amt,nz 8.2,pos pos_r,c 30
@@ -513,12 +513,12 @@ def fn_french_settlement_gas
 	pr #255: ""
 	pr #255: ""
 	count+=1: if count=2 then pr #255: ""
-	if count=3 then pr #255: 
+	if count=3 then pr #255:
 	pr #255,using L340: d(6),d(5),gross,bal,gross,d4,bal
 	if count=1 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 1ST and 2nd bills
 	if count=2 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
 	if count=3 then count=0 : pr #255: newpage
-fnend 
+fnend
 UBFORM: ! r: pr FROM TEXT FILE
 	dim file_rtf$(1)*512
 	fngetdir2("[Q]\UBmstr",mat file_rtf$, '/ON','*.rtf')
@@ -531,7 +531,7 @@ UBFORM: ! r: pr FROM TEXT FILE
 	goto SELECT_SCREEN ! /r
 !  r: def fn_merriam_woods
 !     library 'S:\acsUB\PrintBill_Merriam_Woods': fnpast_due_notice,fnpast_due_notice_finis
-! ! ______________pre-print calculations__________________________________
+! ! pre-print calculations__________________________________
 !     if pb<>0 then pb$="Prior Balance" else pb$=""
 !     if g(1)=0 then t1$="" else t1$="WTR"
 !     if g(2)=0 then t2$="" else t2$="SWR"
@@ -546,9 +546,9 @@ UBFORM: ! r: pr FROM TEXT FILE
 !     if c4>0 then final$="Final Bill" else final$=""
 !     if bal<=0 then g(10)=0
 !     gross=max(bal+g(10),0)
-! ! ______________actual Bill Printing____________________________________
+! ! actual Bill Printing____________________________________
 !     fnpast_due_notice(z$)
-! ! _____________end_________________
+! ! end_________________
 ! /r  fnend
 SELECT_SCREEN: ! r:
 	fn_report_close
@@ -556,22 +556,22 @@ SELECT_SCREEN: ! r:
 	mat resp$=("")
 	respc=0
 	fnLbl(1,1,"File Name:",28,1)
-	if hard_coded then 
+	if hard_coded then
 		fnTxt(1,30,10,0,0,'',1,'',0)
 		resp$(respc+=1)='hard coded'
-	else 
+	else
 		fncomboa("PDNOTRTF",1,30,mat file_rtf$)
 		! resp$(respc+=1)=file_rtf$(1)
-		if env$('client')='White Hall' then 
+		if env$('client')='White Hall' then
 			resp$(respc+=1)='White_Ha'
-		else if env$('client')='Ash Grove' then 
+		else if env$('client')='Ash Grove' then
 			resp$(respc+=1)='ashgrove.rtf'
-		else 
+		else
 			respc+=1
 			fncreg_read('ubpdnot_file_name',resp$(respc))
 			if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then resp$(respc)=file_rtf$(1)
-		end if 
-	end if 
+		end if
+	end if
 	fnLbl(3,1,"Route Number:",28,1)
 	fncmbrt2(3,30)
 	resp$(respc+=1)="[All]"
@@ -591,45 +591,45 @@ SELECT_SCREEN: ! r:
 	dim flname$*256
 	flname$=rtrm$(resp$(1))
 	fncreg_write('ubpdnot_file_name',flname$)
-	if resp$(2)<>"[All]" then 
+	if resp$(2)<>"[All]" then
 		bk1=val(resp$(2))
 		resp$(2)=""
-	else 
+	else
 		bk1=0
 		resp$(2)=""
-	end if 
-	if trim$(resp$(3))<>"[All]" then 
+	end if
+	if trim$(resp$(3))<>"[All]" then
 		sz$=lpad$(trim$(resp$(3)(1:10)),10)
 		resp$(3)=""
-	else 
+	else
 		sz$=""
 		resp$(3)=""
-	end if 
-	if resp$(4)="True" then 
+	end if
+	if resp$(4)="True" then
 		resp$(4)=""
 		sel_indv$="Y"
-	else 
+	else
 		resp$(4)=""
 		sel_indv$="N"
-	end if 
-	if ckey=1 and resp$(1)="(Pre-Printed)" then 
+	end if
+	if ckey=1 and resp$(1)="(Pre-Printed)" then
 		do_print_std_form=1
 		goto PRINTING_BEGIN
 	else if ckey=1 then ! pr the Past Due Notices
 		count=0
-		if resp$(1)="(Reminder)" then 
+		if resp$(1)="(Reminder)" then
 			fn_vbopenprint
 			reminder=1
-		else 
+		else
 			resp$(1)=""
 			if ~hard_coded then let fn_open_template
-		end if 
+		end if
 		goto PRINTING_BEGIN
-	else if ckey=5 then 
+	else if ckey=5 then
 		goto MENU1
-	else if ckey=6 then 
+	else if ckey=6 then
 		goto UBFORM
-	else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then 
+	else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then
 		goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
 	else if ckey=4 then ! r: Add
 		fnTos(sn$="Select_Name")
@@ -645,15 +645,15 @@ SELECT_SCREEN: ! r:
 		fnCopy("S:\Core\default\plain.rtf",os_filename$("[Q]\UBmstr\"&newname$))
 		fnEditFile('atlantis',"[Q]\UBmstr\"&newname$)
 		goto UBFORM ! /r
-	else if ckey=3 then 
+	else if ckey=3 then
 		fnEditFile('atlantis',"[Q]\UBmstr\"&flname$)
 		goto UBFORM
-	else if ckey=7 then 
+	else if ckey=7 then
 		fnFree("[Q]\UBmstr\"&trim$(flname$))
 		goto UBFORM
-	else 
+	else
 		goto UBFORM
-	end if 
+	end if
 ! /r  end of SELECT_SCREEN
 PRINTING_BEGIN: ! r:
 	checkcounter=0
@@ -668,14 +668,14 @@ PRINTING_BEGIN: ! r:
 		restore #customer5,key>=sz$: nokey PRINTING_BEGIN
 	else ! restore_for_customer
 		restore #customer1,key=sz$: nokey PRINTING_BEGIN
-	end if 
-L1360: ! 
+	end if
+L1360: !
 	goto NEXT_RECORD ! /r
 NEXT_RECORD: ! r:
-	if sel_indv$="Y" then 
+	if sel_indv$="Y" then
 		z$=lpad$(trim$(resp$(2)(1:10)),10)
 		goto READ_CUSTOMER
-	else 
+	else
 		goto PRINT_NEXT
 	end if  ! /r
 ASK_NEXT_ACT: ! r:
@@ -686,42 +686,42 @@ ASK_NEXT_ACT: ! r:
 	resp$(respc+=1)=""
 	fnCmdSet(19)
 	fnAcs(mat resp$,ckey)
-	if ckey=5 then 
+	if ckey=5 then
 		goto Xit
-	else if ckey=2 then 
+	else if ckey=2 then
 		goto EO_CUSTOMER
-	else 
+	else
 		sz$=lpad$(trim$(resp$(1)(1:10)),10)
 		goto READ_CUSTOMER ! if ckey=1
-	end if 
+	end if
 !
-READ_CUSTOMER: ! 
+READ_CUSTOMER: !
 	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
 	goto READ_ADRBIL ! /r
 EO_CUSTOMER: ! r:
 ! if env$('client')='Merriam Woods' then
 !   fnpast_due_notice_finis
-! else 
-	if ~reminder then 
+! else
+	if ~reminder then
 		restore #customer1: ! Close #customer1: Ioerr 980
 		granby_print_count=0
-		if h_prnt1 then 
+		if h_prnt1 then
 			close #h_prnt1: : h_prnt1=0
 			fnEditFile('atlantis',tmp_rtf_filename$)
-		else 
+		else
 			fncloseprn
-		end if 
+		end if
 		goto SELECT_SCREEN ! Xit
-	end if 
+	end if
 	close #customer1: ioerr ignore
 	customer1=0
 	fnpa_finis
 ! end if
-! 
-	if h_prnt1 then 
+!
+	if h_prnt1 then
 		close #h_prnt1: : h_prnt1=0
 		fnEditFile('atlantis',tmp_rtf_filename$)
-	else 
+	else
 		fncloseprn
 	end if  ! /r
 Xit: ! r:

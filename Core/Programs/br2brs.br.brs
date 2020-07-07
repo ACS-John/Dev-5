@@ -14,15 +14,15 @@
 	! .                                       /a-d - exclude dir. names : _
 	! .                                       /on  - order by name
 	fngetdir(dir$,mat filename$,option$)
-! __
+! 
 	for tmp=1 to udim(filename$)
 		if rtrm$(filename$(tmp))="" then goto L170
 	next tmp
 L170: mat filename$(tmp)
 	pr ' =)   Files Found = '&str$(tmp)
-! __
+! 
 	open #20: "Name=Proc."&wsid$&",Size=0,Replace",display,output
-! __
+! 
 	for j=1 to udim(filename$)
 VALID_FILE_TEST: !
 		if filename$(j)="" then goto AFT_LOOP1
@@ -40,7 +40,7 @@ VALID_FILE_TEST_PASS: !
 		pr #20: " ! file created: "&filename$(j)&"s"
 LOOP1_NEXT: !
 	next j
-! __
+! 
 AFT_LOOP1: !
 	mat filename$(999)
 	pr #20: "load S:\Core\br2brs"

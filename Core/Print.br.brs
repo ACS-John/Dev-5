@@ -232,7 +232,7 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToA
 	pr #21: "\sec"&time$(7:8)&"}";
 	pr #21: "{\author ACS 5 - "&login_name$&"}";
 	pr #21: "}"
- ! _______
+ ! 
 	pr #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
 	pr #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
 	pr #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));

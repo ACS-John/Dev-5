@@ -1430,7 +1430,7 @@ West_Acc_WorkmansComp: ! r:
 	tmphrs=_inp(1)+_inp(2) ! if _inp(6)>0 then tmphrs=saif(payCode) else tmphrs=_inp(1)+_inp(2)
 	!     fnStatus('_inp(17) changed to '&str$(round(tmphrs*_inp(17)*.01,2))&' round('&str$(tmphrs)&' * _inp(17)('&str$(_inp(17))&' * .01)',2)
 	!     fnStatusPause
-	_inp(17)=round(tmphrs*_inp(17)*.01,2) ! _inp(17)=round(tmphrs*_inp(17)*.01,2)
+	_inp(17)=round(tmphrs*_inp(17)*.01,2) ! inp(17)=round(tmphrs*_inp(17)*.01,2)
 return  ! /r
 ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept and state
 	s3=0 : tcp(4)=0 : tcp4=0

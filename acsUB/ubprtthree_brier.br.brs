@@ -142,9 +142,9 @@ L1030: !
 	fb$(2)=mg$(2)
 	fb$(3)=mg$(3)
 	if c4>0 then fb$(1)="          Final Bill" : fb$(2)="": fb$(3)=""
-! ______________print bill routine______________________________________
+! print bill routine
 	gosub VBPRINT
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1 : _
 	! accumulate totals
 	goto L630
@@ -174,13 +174,7 @@ ENDSCR: ! pr totals screen
 	fnCmdSet(52) : _
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
-IGNORE: continue
-ERTN: fnerror(program$,err,line,act$,"Xit")
-	if uprc$(act$)<>"PAUSE" then goto L1740
-	execute "list -"&str$(line) : pause : goto L1740
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-L1740: execute act$
-	goto ERTN
+
  
 VBPRINT: ! r: Brier Lake - 3 per page  Utility Bills  requires: (z$,fb$(1),mat d, mat g,mat pe$,d2,d3,pb)
 	fnpa_fontsize
@@ -227,3 +221,4 @@ BULKSORT: ! r: bulk sort order
 	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2260
 	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed
 L2260: return ! /r
+include: Ertn

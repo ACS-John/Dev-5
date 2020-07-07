@@ -19,12 +19,12 @@
  
 MENU1: pr newpage
 	fnopenwin(win=101,09,20,15,59,cap$)
-	scm$(1)="1. Add or Edit" : _
-	scm$(2)="2. pr Proof List" : _
+	scm$(1)="1. Add or Edit" 
+	scm$(2)="2. pr Proof List" 
 	scm$(3)="3. Search"
 	for j=1 to udim(scm$) : iom$(j)=str$(j+3)&",2,C 38,N" : next j
 	pr f "16,35,C 09,B,5": "Exit (F5)"
-L240: rinput #win,select mat iom$,attr "H": mat scm$ : _
+L240: rinput #win,select mat iom$,attr "H": mat scm$ 
 	ti=curfld
 	if cmdkey=5 then goto Xit
 	on ti+1 goto Xit,L290,L2180,SRCH none L240
@@ -51,8 +51,8 @@ L440: msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
 	if response$(1)="Y" then goto L500
 	if response$(1)="N" then goto L290
  
-L500: rt$="" : mat ch$=("") : ips=sd=cp=sc=0 : mat ps=(0) : _
-	mat f$=("") : mat pp=(0) : mat ppr=(0) : mat dp=(0) : mat fc=(0) : _
+L500: rt$="" : mat ch$=("") : ips=sd=cp=sc=0 : mat ps=(0) 
+	mat f$=("") : mat pp=(0) : mat ppr=(0) : mat dp=(0) : mat fc=(0) 
 	mat tcj=(0) : mat tcs=(0)
 	write #1,using L410: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 L520: tempch$(1)=ch$(1)(1:66)
@@ -84,11 +84,11 @@ L560: pr newpage
 	io1$(08)="18,54,Cu 1,UT,N"
 	io1$(09)="19,54,Cu 1,UT,N"
 	io1$(10)="20,54,Nz 1,UT,N"
-L810: mat fkey$=("") : _
-	fkey$(1)="Next" : _
-	fkey$(4)="Delete" : _
-	fkey$(5)="Done" : _
-	em$="" : _
+L810: mat fkey$=("") 
+	fkey$(1)="Next" 
+	fkey$(4)="Delete" 
+	fkey$(5)="Done" 
+	em$="" 
 	fnfkey(23,mat fkey$,mat disfk,em$)
 	if sd=1 then sd$="Y" else sd$="N"
 	if cp=1 then cp$="Y" else cp$="N"
@@ -96,7 +96,7 @@ L840: rinput #win,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$,sc conv CONV1
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if cmdkey>0 then goto L930 else ce=curfld
 L870: ce=ce+1: if ce>udim(io1$) then ce=1
-L880: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : _
+L880: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) 
 	if ce1=0 then goto L870
 	ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L840
 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
@@ -123,20 +123,20 @@ L1080: rptn$=lpad$(str$(rptn),2)
  
 L1120: if ips<0 or ips>124 then goto L1130 else goto L1160
 L1130: ce=7
-	goto L2910
-! _______________________________________________
+goto L2910
+
 L1160: if sd<0 or sd>1 then goto L1170 else goto L1200
 L1170: ce=8
-	goto L2910
-! _______________________________________________
+goto L2910
+
 L1200: if cp<0 or cp>1 then goto L1210 else goto L1240
 L1210: ce=9
 	goto L2910
-! _______________________________________________
+
 L1240: if sc<0 or sc>4 then goto L1250 else goto L1280
 L1250: ce=10
 	goto L2910
-! _______________________________________________
+
 L1280: ch$(1)=tempch$(1)&tempch$(2)
 	ch$(2)=tempch$(3)&tempch$(4)
 	if ips=0 then goto L1570
@@ -170,9 +170,9 @@ L1570: for j=1 to 20
 L1580: pr newpage
 		win=105
 		fnopenwin(win,07,04,19,77,cap$)
-		pr #win,fields "4,2,Cr 21,N": "Report Number:" : _
+		pr #win,fields "4,2,Cr 21,N": "Report Number:" 
 		pr #win,fields "4,24,C 2,N": str$(rptn)
-		pr #win,fields "5,2,Cr 21,N": "Column Number:" : _
+		pr #win,fields "5,2,Cr 21,N": "Column Number:" 
 		pr #win,fields "5,24,C 10,N": str$(j)
 		pr #win,fields "06,2,Cr 21,N": "Formula for Printing:"
 		pr #win,fields "07,2,Cr 21,N": "Starting Position:"
@@ -181,12 +181,12 @@ L1580: pr newpage
 		pr #win,fields "10,2,Cr 21,N": "Detail pr (Y/N):"
 		pr #win,fields "11,2,Cr 21,N": "Total by Job (Y/N):"
 		pr #win,fields "12,2,Cr 21,N": "Grand Totals (Y/N):"
-		mat fkey$=("") : _
-		fkey$(1)="Next" : _
-		fkey$(2)="Back" : _
-		fkey$(3)="Screen 1" : _
-		fkey$(4)="Completed" : _
-		em$="" : _
+		mat fkey$=("") 
+		fkey$(1)="Next" 
+		fkey$(2)="Back" 
+		fkey$(3)="Screen 1" 
+		fkey$(4)="Completed" 
+		em$="" 
 		fnfkey(20,mat fkey$,mat disfk,em$)
 		io2$(1)="06,24,C 50,UT,N"
 		io2$(2)="07,24,Nz 3,UT,N"
@@ -202,8 +202,8 @@ L1810: rinput #win,fields mat io2$: f$(j),pp(j),ppr(j),dp(j),detailprint$,totalb
 		if ce>0 then io2$(ce)(ce1:ce2)="U": ce=0
 		if cmdkey>0 then goto L1900 else ce=curfld
 L1840: ce=ce+1: if ce>udim(io2$) then ce=1
-L1850: io2$(ce)=rtrm$(io2$(ce)) : _
-		ce1=pos(io2$(ce),"U",1) : _
+L1850: io2$(ce)=rtrm$(io2$(ce)) 
+		ce1=pos(io2$(ce),"U",1) 
 		if ce1=0 then goto L1840
 		ce2=ce1+1 : io2$(ce)(ce1:ce1)="UC" : goto L1810
 CONV2: if ce>0 then io2$(ce)(ce1:ce2)="U"
@@ -354,12 +354,12 @@ L3190: pr newpage
 L3320: next j
 SREND: if j>1 then j=j-1
 	mat in2$(j)
-	mat fkey$=("") : _
-	fkey$(1)="Next" : _
-	fkey$(2)="Back" : _
-	fkey$(5)="Stop" : _
-	em$="or Select Report Number:" : _
-	es=2 : _
+	mat fkey$=("") 
+	fkey$(1)="Next" 
+	fkey$(2)="Back" 
+	fkey$(5)="Stop" 
+	em$="or Select Report Number:" 
+	es=2 
 	fnfkey(24,mat fkey$,mat disfk,em$,es)
 L3360: input fields "24,67,C 2,UT,N": k$
 	if cmdkey=5 then goto SRCHEND

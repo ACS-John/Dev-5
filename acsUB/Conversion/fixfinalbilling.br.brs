@@ -18,5 +18,5 @@ L170: form pos 1821,n 1
 L190: close #1:
 	execute "Index [Q]\UBmstr\Customer.h[cno]"&' '&"[Q]\UBmstr\UBIndx2.h[cno] 354 7 Replace DupKeys"
 Xit: fnXit
-! __________________________________________________
+! 
 include: Ertn

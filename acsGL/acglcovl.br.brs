@@ -32,7 +32,7 @@
 L190: sh$="1,10,C 60,H,N"
 	for j=1 to 20 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 	if fnprocess=1 then t=2 : goto L320 else goto MENU1
-!_____
+
 MENU1: pr newpage
 	close #101: ioerr L250
 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outIn
@@ -46,7 +46,7 @@ L300: rinput select mat fl2$,attr "H": mat sc2$ : _
 	t=curfld
 	if cmdkey=5 then goto Xit
 L320: on t goto L370,L390 none L300
-!_____
+
 	close #101: ioerr L350
 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outIn
 	pr #101,fields "1,1,Cc 52,R,N": cnam$

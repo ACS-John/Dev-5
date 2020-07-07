@@ -745,7 +745,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	else ! if device$="Other" or device$="Sensus" or device$="AMR" or device$="Green Tree" or device$="Hersey" or device$="EZReader" then
 		goto HH_OTHER_TYPE1_READ
 	end if
-	! ___________________________
+	! 
 	HH_W_END: !
 	fncloseprn
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings

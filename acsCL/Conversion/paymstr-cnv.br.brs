@@ -1,11 +1,10 @@
 ! Replace S:\acsCL\conversion\paymstr-cnv
 ! it's old
-! ________
+
 	autoLibrary
 	on error goto Ertn
-! _____________________________________
+
 ! fnTop
-	fncno(cno)
 	pr newpage
 	close #101: ioerr L110
 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outIn

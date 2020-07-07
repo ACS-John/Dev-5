@@ -3,7 +3,7 @@
 !
 	autoLibrary
 		on error goto Ertn
-!______________________________________________________________________
+
 		dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128,a(7)
 		dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 		dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
@@ -137,9 +137,9 @@
 		if bal<=0 then g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
 		if d2_override<>0 then d2=d2_override
 		if d3_override<>0 then d3=d3_override
-	! ______________print bill routine______________________________________
+	! print bill routine
 		gosub VBPRINT
-	! _____________end of pr routine______________________________________
+	! end of pr routine
 		bct(2)=bct(2)+1
 		! accumulate totals
 		goto L560
@@ -207,15 +207,7 @@
 		fnAcs(mat resp$,ckey)
 	Xit: fnXit
 	!
-	ERTN: fnerror(program$,err,line,act$,"Xit")
-		if uprc$(act$)<>"PAUSE" then goto L1630
-		execute "list -"&str$(line)
-		pause
-		goto L1630
-		pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause
-	L1630: execute act$
-		goto ERTN
-	!
+
 	VBOPENPRINT: !
 		fnPa_open("Landscape")
 		lyne=3
@@ -450,3 +442,4 @@
 		L3340: ta1=nba : goto L3260
 		EO_BUD2: !
 	return
+include: Ertn

@@ -141,9 +141,9 @@ L1000: ! r:
 	if bud1=1 then gosub BUD2
 	pb=bal-g(11)
 !	 If BAL<=0 Then g(10)=0 ! don't show penalty if balance 0 or less
-	! ______________print bill routine______________________________________
+	! print bill routine
 	gosub VBPRINT
-	! _____________end of pr routine______________________________________
+	! end of pr routine
 	bct(2)=bct(2)+1 ! accumulate totals
 goto L600 ! /r
  

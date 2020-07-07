@@ -129,9 +129,9 @@ RELEASE_PRINT: !
 L920: !
 	pb=bal-g(11)
 	if bal<=0 then g(10)=0 ! don't show penalty if balance 0 or less
-! ______________print bill routine______________________________________
+! print bill routine
 	gosub VBPRINT
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1 : _
 	! accumulate totals
 	goto L550

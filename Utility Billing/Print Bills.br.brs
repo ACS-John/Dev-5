@@ -619,7 +619,7 @@ def fn_pay_after_amt(; returnN)
 	fn_pay_after_amt=returnN
 fnend  ! fn_pay_after_amt
 def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budget,serviceFromDate,serviceToDate) ! french settlement gas
-	! ______________pre-print calculations__________________________________
+	! pre-print calculations__________________________________
 	if pb<>0 then pb$="Prior Balance" else pb$=""
 	!   if g(1)=0 then t1$="" else t1$="WTR"
 	!   if g(2)=0 then t2$="" else t2$="SWR"
@@ -642,10 +642,10 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	if budget>0 then bud$="Budgeted Amount:"&trim$(cnvrt$("Pic($$,$$$.##",budget)) else bud$=""
 	if bal<=0 then g(10)=0
 	gross=max(bal+g(10),0)
-	! ______________actual Bill Printing____________________________________
+	! actual Bill Printing____________________________________
 	F_PR_TABLE_AND_ADDR_1: form pos 1,nz 6,nz 7,nz 7,x 2,c 3,pos 28,nz 8.2,pos 39,c 30
 	F_PR_TABLE_AND_ADDR_2: form pos 1,c 20,pos 28,nz 8.2,pos 39,c 52
-	! __
+	! 
 	! 
 	pr #255,using 'form pos 25,c 10': z$
 	pr #255,using 'form pos 38,c 10,skip 4': z$

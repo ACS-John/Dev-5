@@ -143,9 +143,9 @@ L920: fnpa_finis
  
 L950: !
 	pb=bal-g(11)
-! ______________print bill routine______________________________________
+! print bill routine
 	fn_vbprint
-! _____________end of pr routine______________________________________
+! end of pr routine
 	bct(2)=bct(2)+1
 	! accumulate totals
 goto L570
@@ -225,7 +225,7 @@ def fn_vbprint
 	if checkcounter=3 then xmargin=1 : ymargin=110
 	if checkcounter=4 then xmargin=142 : ymargin=110 : checkcounter=0
 	col2_adj=65
-	! ___________________________
+	! 
 	! - CONSTANTS
 	lyne=3
 	character=1.5

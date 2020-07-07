@@ -15,7 +15,7 @@ def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 		option$=trim$(option$)
 		dir$=trim$(dir$)
 		if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
-		! _____________
+		! 
 		execute 'free '&env$('temp')&'\GetDir"&session$&".tmp -n' ioerr ignore
 		dim tmp$*255
 		tmp$='Sy -s -M Dir "'&rtrm$(os_filename$(dir$))&'\'&filter$&'" /b '&option$&' >"'&env$('temp')&'\GetDir'&session$&'.tmp"'

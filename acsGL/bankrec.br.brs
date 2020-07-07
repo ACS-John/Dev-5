@@ -1,9 +1,9 @@
 ! Replace S:\acsGL\BankRec
 ! Bank reconciliation routines for general ledger
- 
+
 autoLibrary
 on error goto Ertn
- 
+
 dim dat$*20,adr(2),gl(3),sf1$*28,pr$(4)*30,whgl$(5)*12
 dim sendto$*80,xck$(22),aa(2),prtr(99),k$*21
 dim tr$(5)*35,tr(2),de$*30,bn$*40,sn$*50
@@ -12,7 +12,7 @@ dim item1$(6)*40,item3$(9)*40,chdr$(5)*15
 dim cmask$(5)*10,flxitm$(5)*21
 dim w(4),hdw$(4)*40,miscgl$(10)*12,misc$(10)*20
 dim io7$(9),dpt(3),io8$(25),dpd(5,5)
- 
+
 fnTop(program$, "Reconcile Bank")
 fndat(dat$)
 open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\Bankrec-idx.H[cno],Shr",internal,outIn,keyed
@@ -35,7 +35,7 @@ BANK_STMT_INFO: !
 	respc=0
 	mylen=30 : mypos=mylen+2
 	fnLbl(1,1,"Bank Account:",mylen,1)
-	fnqgl(1,mypos,0,2,pas) 
+	fnqgl(1,mypos,0,2,pas)
 	resp$(respc+=1)=fnrgl$(wbc$)
 	fnLbl(3,1,"Statement Date:",mylen,1)
 	fnTxt(3,mypos,10,0,1,"3",0,"We suggest you always use the month end date.") : _
@@ -44,22 +44,22 @@ BANK_STMT_INFO: !
 	fnTxt(4,mypos,12,0,1,"10",0,"Pull this information directly from your current bank statement. ") : _
 	resp$(respc+=1)=str$(bgbal)
 	fnLbl(5,1,"Current Statement Balance:",mylen,1)
-	fnTxt(5,mypos,12,0,1,"10",0," ") 
+	fnTxt(5,mypos,12,0,1,"10",0," ")
 	resp$(respc+=1)=str$(stmtbal)
 	fnLbl(6,1,"Reconciliation Cutoff Date:",mylen,1)
 	fnTxt(6,mypos,10,0,1,"3",0,"The cutoff date would normally be the last day of the month.") : _
 	resp$(respc+=1)=str$(codt)
 	fnLbl(8,1,"Reconciliation Options:",28,1)
-	item1$(1)="Enter Cleared Checks" 
-	item1$(2)="Enter Cleared Deposits" 
-	item1$(3)="Clear All Adjustments" 
-	item1$(4)="Calculate Bank Totals" 
-	item1$(5)="Print Reconciliation Listing" 
+	item1$(1)="Enter Cleared Checks"
+	item1$(2)="Enter Cleared Deposits"
+	item1$(3)="Clear All Adjustments"
+	item1$(4)="Calculate Bank Totals"
+	item1$(5)="Print Reconciliation Listing"
 	item1$(6)="Make Corrections"
 	fncomboa("bankrec-1",8,30,mat item1$,"Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals")
 	if selection=0 then selection=1 : resp$(respc+=1)=item1$(selection)
 	fnCmdKey("&Display Balances",3,0,0,"Displays previous balances for this bank account.") : _
-	fnCmdKey("&Next",1,1,0,"Proceed to next options") 
+	fnCmdKey("&Next",1,1,0,"Proceed to next options")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
@@ -82,7 +82,7 @@ L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".H[cno],Use,RecL=32",internal,outIn
 L670: close #81: ioerr L680
 L680: if ti3<3 then wtt=ti3
 	on ti3 goto CLEARING_OPTIONS,CLEARING_OPTIONS,CLEARING_ADJUSTMENTS,CALCULATE_TOTALS,PRINT_LISTINGS none MENU1
- 
+
 CLEARING_ADJUSTMENTS: !
 	fnTos
 	respc=0
@@ -103,7 +103,7 @@ L820: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 2,N 1,POS 12,N 6,POS 72,N 6
 	if clr><pcd1 then goto L820
 	rewrite #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,POS 12,N 6,POS 72,N 6': bankgl$,tcde,d1,stmtdt eof MENU1
 	goto L820
- 
+
 CLEARING_OPTIONS: !
 	fnTos
 	respc=0
@@ -145,7 +145,7 @@ CLEARING_OPTIONS: !
 	if resp$="OK" then goto L1210
 	if resp$="Cancel" then goto CLEARING_OPTIONS
 L1190: !
-	mat ml$(1) 
+	mat ml$(1)
 	ml$(1)="Reference # "&k$(4:11)&" could not be found.  Retry!"
 	fnmsgbox(mat ml$,resp$,'',48)
 goto CLEARING_OPTIONS
@@ -248,7 +248,7 @@ EO_ADDING_BALANCE: !
 	if ckey=5 then goto MENU1
 	if ckey=1 then gosub L2140 : goto BANKTOTALSCREEN
 	goto BANKTOTALSCREEN
- 
+
 L2140: fnopenprn
 	pr #255,using L2160: bn$(1:30)
 L2160: form pos 20,cc 40
@@ -266,7 +266,7 @@ L2160: form pos 20,cc 40
 	pr #255: cnvrt$("N 5",t1(8))&" Uncleared Withdrawals:"&cnvrt$("N 11.2",t1(9))
 	pr #255: "Actual Bank Balance:"&cnvrt$("N 19.2",t1(10))
 return
- 
+
 PRINT_LISTINGS: !
 	hdw$(1)="Deposits not cleared as of "&cnvrt$("PIC(ZZ/ZZ/ZZ)",stmtdt)
 	hdw$(2)="Withdrawals not cleared as of "&cnvrt$("PIC(ZZ/ZZ/ZZ)",stmtdt)
@@ -275,13 +275,13 @@ PRINT_LISTINGS: !
 	fnTos
 	respc=0 : mat resp$=('')
 ! fnFra(1,1,4,60,"Select Listings to Print","Choose any of the four listing",0)
-	fnChk(1,3,hdw$(1),0) 
+	fnChk(1,3,hdw$(1),0)
 	resp$(respc+=1)=""
-	fnChk(2,3,hdw$(2),0) 
+	fnChk(2,3,hdw$(2),0)
 	resp$(respc+=1)=""
-	fnChk(3,3,hdw$(3),0) 
+	fnChk(3,3,hdw$(3),0)
 	resp$(respc+=1)=""
-	fnChk(4,3,hdw$(4),0) 
+	fnChk(4,3,hdw$(4),0)
 	resp$(respc+=1)=""
 	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 or ckey=99 then goto MENU1
@@ -304,13 +304,13 @@ L2570: if w(w0)=0 then goto L2630
 L2610: form pos 1,c 10,pic(zz/zz/zz),n 12.2,x 2,c 37,pic(zz/zz/zz),skip 1
 	t2(w0)=t2(w0)+amt
 L2630: return
- 
+
 L2650: pr #wp: newpage
 	gosub L2690
 	continue
- 
+
 L2690: !
- 
+
 	hd2=46-int(len(rtrm$(hdw$(w0)))/2)
 	pr #wp,using L2730: date$('mm/dd/yy'),rtrm$(env$('cnam'))&" - Bank Account # "&str$(wbc),time$," Reconciliation Listing",hdw$(w0),"Page",w(w0),dat$
 L2730: form skip 3,pos 1,c 8,cc 56,skip 1,pos 1,c 8,cc 56,skip 1,pos 9,cc 56,skip 1,pos 1,c 4,n 4,cc 56,skip 2
@@ -319,8 +319,8 @@ L2730: form skip 3,pos 1,c 8,cc 56,skip 1,pos 1,c 8,cc 56,skip 1,pos 9,cc 56,ski
 	pr #wp: "________  ________  __________  ___________________________________  ________"
 	w(w0)=w(w0)+1
 return
- 
- 
+
+
 L2810: c1=r1=2
 CLEAR_BY_RANGE: ! clear by range of check numbers or by date
 	fnTos
@@ -383,7 +383,7 @@ DISPLAYCLEAREDSOFAR: ! show what has been cleared
 FREE_DPAMNTS: !
 	fnFree("[Q]\GLmstr\DpAmnts.H[cno]")
 	continue
- 
+
 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 	if cda=1 then goto DPAMENU
 L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.H[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
@@ -398,7 +398,7 @@ L3450: form pos 1,3*n 1
 	goto L3480
 L3470: write #93,using L3450,rec=1: mat dpt
 L3480: cda=1
-! __________________________________________
+
 DPAMENU: !
 	fnTos
 	respc=0
@@ -507,7 +507,7 @@ CONV7: if ce>0 then io7$(ce)(ce1:ce2)="U"
 ERR7: pr f "24,78,C 1": bell : goto L4300
 L4350: rewrite #93,using L3450,rec=1: mat dpt
 	goto DPAMENU
- 
+
 DPDATES: ! ENTER DATES TO TOTAL
 	pr newpage
 	close #108: ioerr L4410
@@ -562,7 +562,7 @@ L4880: next ce
 	ce=0
 	rewrite #92,using L3400,rec=1: mat dpd
 	goto DPAMENU
- 
+
 COR1: pr newpage
 	pr f "10,10,c 50": "Item Number to correct:"
 	pr f "12,35,C 10,B,99": "Stop (Esc)"
@@ -575,7 +575,7 @@ L4960: input fields "10,50,Nz 4,UT,N": cr1 conv L4960
 	rinput fields "10,50,N 10.2,UT,N": am1
 	rewrite #dpamnts,using L3880,rec=cr1: tr$,am1,ti$
 	goto COR1
- 
+
 L5060: restore #bankrec1,key>=wbc$&"2        ": nokey DPAMENU
 	t2=0
 L5080: read #bankrec1,using 'Form POS 79,c 12,POS 3,N 1,pos 4,c 8,G 6,pd 10.2,POS 72,N 6': bankgl$,tcde,tr$(1),tr2,tr3,clr eof L5260
@@ -597,7 +597,7 @@ L5080: read #bankrec1,using 'Form POS 79,c 12,POS 3,N 1,pos 4,c 8,G 6,pd 10.2,PO
 L5240: next r1
 	goto L5080
 L5260: goto DPAMENU
- 
+
 include: Ertn
 CLEAR_TRANSACTIONS_FROM_LIST: !
 	lastrec=nextrec=total=0 : _
@@ -678,9 +678,9 @@ L5690: fnLbl(17,30,"Total Cleared:",16,1)
 	lastrec=val(resp$(1)) : _
 	if lastrec+1 <= lrec(clearing) then nextrec=lastrec+1 else nextrec=1
 L5900: goto L5530
- 
+
 Xit: fnXit
- 
+
 execute "Index [Q]\GLmstr\bankrec.h[cno]"&' '&"[Q]\GLmstr\bankrec-idx.h[cno]" &" 79/3/4 12/1/8 Replace,DupKeys"
- 
+
 def fn_cd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r

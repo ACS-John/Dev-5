@@ -113,9 +113,9 @@ def library fnPrintAceTest(;format$)
 Xit: ! 
 fnend !  fnXit ! if env$('ACSDeveloper')<>'' then stop else let fnXit
 PIECHARTTEST: ! r: Pie Chart
-! ______________________
+! 
 ! X=Random percentage, Y=Remainder, Z=Max(X,Y)/2
-! ______________________
+! 
 L690: ! 
   x=int((100-1+1)*rnd+1)
   y=abs(x-100)

@@ -34,9 +34,6 @@ MainLoop: ! r:
 	loop
 	EO_GLMSTR: !
 	close #h_glmstr:
-
-	fnActPd(actpd)
-
 	actpd+=1
 	if actpd>nap then actpd=1
 	fnActPd(actpd)
