@@ -32,7 +32,7 @@ do
 		l$(loc_longitude      )=''
 		l$(loc_latitude       )=''
 		l$(loc_meterNumber    )=c$(c_s1meterNumber)
-		l$(loc_transmitter    )=c$(c_s01serialNumber) ! Service 1 (Water) – Serial Number
+		l$(loc_transmitter    )=str$(int(val(c$(c_account)))) ! c$(c_s01serialNumber) ! Service 1 (Water) – Serial Number
 		l$(loc_meterType      )=' C'
 		locKey$=fnBuildKey$('U4 Meter Location',mat l$,mat lN)
 		read #hLocation,using form$(hLocation),key=locKey$: mat l$,mat lN noKey NoKeyGoodContinue
