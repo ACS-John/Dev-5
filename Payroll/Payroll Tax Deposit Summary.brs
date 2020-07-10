@@ -25,7 +25,7 @@ fnTxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included 
 resp$(rc+=1)=str$(end_date)
 fnCmdKey("Next",1,1,0,"Calculate tax deposit.")
 fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
-fnAcs2(mat resp$,ckey)
+fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 beg_date=val(resp$(1))
 end_date=val(resp$(2))
