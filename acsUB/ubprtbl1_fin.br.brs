@@ -322,7 +322,7 @@
 	L2240: if g(9)=0 then
 			goto L2250
 		else
-			pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+			pr #20: 'Call Print.AddText("TRA",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 			pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 		end if
 		L2250: ! If PB><0 Then pr #20: 'Call Print.AddLine('&STR$(XMARGIN+46)&','&STR$(LYNE*(METER+=1)+YMARGIN)&',15,0)'
@@ -338,7 +338,8 @@
 		if havebudget=1 and payby>0 then pr #20: 'Call Print.AddText("'&fnformnumb$((payby)+round((currentcharges-gas+g(4))*penalty_rate,2),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')' : goto L2420 ! owe current gas budget plus other services Plus any old budgets not paid
 		if bal<=0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')' : goto L2420
 		if a(5)=0 and extra11=0 and extra12=0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')' : goto L2420
-		if havebudget=0 then pr #20: 'Call Print.AddText("'&fnformnumb$(min(g(5)+g(6)+g(7)+bal,bal+max(0,round(bal*penalty_rate,2))),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
+		if havebudget=0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal+max(0,round(currentcharges*penalty_rate,2)),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
+		!                                                      fnformnumb$(bal+round(currentcharges*penalty_rate,2),2,9)
 		if havebudget=1 and bal>0 and g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$((currentcharges+budgetpb)+round((currentcharges-gas+g(4))*penalty_rate,2),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
 		if havebudget=1 and bal>0 and g(7)=0 then pr #20: 'Call Print.AddText("'&fnformnumb$((currentcharges+budgetpb),2,9)&'",'&str$(xmargin+42)&','&str$(lyne*26+ymargin)&')'
 	L2420: pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*27+1+ymargin)&',63,0)'
@@ -377,7 +378,7 @@
 		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68)&','&str$(lyne*12+ymargin)&')'
 		if havebudget=1 and payby=<0 then pr #20: 'Call Print.AddText("'&fnformnumb$(payby,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')': goto L2750
 		if havebudget=1 and payby>0 and g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$((payby)+round((currentcharges-gas+g(4))*penalty_rate,2),2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')' : goto L2750
-		if g(5)+g(6)+g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal+round(currentcharges*penalty_rate,2),2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')'
+		if currentcharges*penalty_rate>0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal+round(currentcharges*penalty_rate,2),2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')'
 	L2750: fnpa_fontsize(9)
 		addy=14
 		fnpa_txt(mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
