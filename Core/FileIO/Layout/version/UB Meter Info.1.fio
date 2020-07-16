@@ -1,0 +1,11 @@
+[Q]\UBmstr\oMeter.h[cno], ometer_, 1
+[Q]\UBmstr\oMeter_Idx.h[cno] ,  customer/serviceId
+recl=384
+===================================================
+customer$          ,    Account No          ,  C 10    , ! combof(ignored,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
+serviceId$         ,    Service ID          ,  c  2    , ! comboa(ignored,*custom:UB ServiceCodes*)
+longitude$         ,    Longitude           ,  c 17    , !
+latitude$          ,    Latitude            ,  c 17    , !
+meterNumber$       ,    Meter Number        ,  c 12    , !
+transmitter$       ,    Transmitter Number  ,  c 20    , !
+meterType$         ,    Meter Type          ,  c  5    , ! combof(ignored,[Q]\UBmstr\MeterType.h[cno],1,5,6,40,[Q]\UBmstr\MeterTypeIdx.h[cno],1)
