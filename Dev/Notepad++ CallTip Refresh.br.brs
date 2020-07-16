@@ -1,16 +1,16 @@
 fn_setup
 fnTop(program$)
-fn_gatherLibraryFunctions
-fn_gatherLibraryKeywords
-fn_sortFunctions
- 
+fn_gatherLibraryFunctions(mat functions$)
+fn_gatherLibraryKeywords(mat functions$)
+fn_sortFunctions(mat functions$)
+
 fn_updateNppCallTipFile
 Xit: fnXit
 def fn_setup
 	autoLibrary
-	dim functions$(0)*512,line$*512
+	dim functions$(0)*512
 fnend
-def fn_gatherLibraryKeywords
+def fn_gatherLibraryKeywords(mat functions$)
 	fnAddOneC(mat functions$,'str2mat(Source$,mat parsed$; mat delimiter$)')
 	fnAddOneC(mat functions$,'mat2str(mat Source$,&returned$; mat delimiter$)')
 	fnAddOneC(mat functions$,'abs(numeric_arg)')
@@ -125,7 +125,8 @@ def fn_gatherLibraryKeywords
 	! fnAddOneC(mat functions$,'wsid$')
 	! fnAddOneC(mat functions$,'xlate$(a$,b$; x)')
 fnend
-def fn_gatherLibraryFunctions
+def fn_gatherLibraryFunctions(mat functions$; ___,line$*512,hGlf,posSpace1,lineVal)
+	! updates local: mat functions$
 	open #hGlf:=fngethandle: 'name=S:\Core\Library.br.brs',d,i
 	do
 		linput #hGlf: line$ eof eoGlf
@@ -147,12 +148,12 @@ def fn_gatherLibraryFunctions
 			line$=line$(13:len(line$))
 			fnAddOneC(mat functions$,line$)
 		end if
-		!
+
 	loop
 	eoGlf: !
 	close #hGlf:
 fnend
-def fn_sortFunctions
+def fn_sortFunctions(mat functions$; ___)
 	dim functionsTmp$(0)*512
 	mat functionsTmp$(udim(mat functions$))
 	mat Sorted(udim(mat functions$))

@@ -84,12 +84,17 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*
 	MaeFinis: !
 	fnKeyExists=returnN
 fnend
-def library fnConSub(from$*256,to$*256; ___,quoteF$*1,quoteT$*1) ! it works but it is currently unused.
+def library fnSetEnv(from$*256,to$*256; ___,quoteF$*1,quoteT$*1,fromLen) ! it works but it is currently unused.
+	! setenv(from$,to$)
+	if from$(1:1)<>'[' then from$(0:0)='['
+	fromLen=len(from$)
+	if from$(fromLen:fromLen)<>']' then from$&=']'
 	if pos(from$,' ')>0 then	quoteF$='"'
 	if pos(to$,' ')>0 then		quoteT$='"'
-	pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
+	! pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
 	setenv(from$(2:len(from$)-1),to$)
 	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
+	! pause
 fnend
 def library fnSrepEnv$*2048(text$*2048; exclude$*64,___,sePosOpen,sePosClose,seVariable$*128,seStartSearchPos)
 	do

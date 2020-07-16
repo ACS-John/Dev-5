@@ -1,8 +1,8 @@
 ! Replace S:\Core\Programs\Preferences
 ! maintain ACS Core system settings
-	if ~setup then fn_setup
-	fnTop(program$)
-	win_height=20
+if ~setup then fn_setup
+fnTop(program$)
+win_height=20
 ! r: read all the setting here (unless read and set on the fly)
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
 	! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
@@ -730,7 +730,7 @@ def fn_setup
 
 	end if
 fnend
-IGNORE: continue
+
 Xit: fnXit
 def library fnapply_theme(; disableConScreenOpenDflt)
 	if ~setup then fn_setup
@@ -739,7 +739,7 @@ fnend
 def fn_apply_theme(; disableConScreenOpenDflt)
 	fnureg_read('Background_Picture',background_picture$)
 	if background_picture$='' or ~exists(background_picture$) then background_picture$=background_picture_default$
-	setenv('background_picture',background_picture$)
+	fnSetEnv('background_picture',background_picture$)
 	fnureg_read('Min_FontSize_Height',min_fontsize_height$)
 	fnureg_read('Min_FontSize_Width',min_fontsize_width$)
 	execute 'config Min_FontSize '&min_fontsize_height$&'x'&min_fontsize_width$ error ERR_MIN_FONTSIZE

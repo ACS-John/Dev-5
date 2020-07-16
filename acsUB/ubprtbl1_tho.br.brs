@@ -11,18 +11,18 @@
 	fncno(cno,cnam$) : _
 	fnLastBillingDate(d1)
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  : _
-	read #21,using "Form POS 41,2*C 40": at$(2),at$(3) : _
+	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 	close #21:
-	at$(1)=cnam$ : _
-	z=21 : _
-	at$(1)=trim$(at$(1))(1:z) : _
-	x=len(at$(1)) : y=z-x : _
+	at$(1)=cnam$
+	z=21
+	at$(1)=trim$(at$(1))(1:z)
+	x=len(at$(1)) : y=z-x
 	at$(1)=rpt$(" ",int(y/2))&at$(1)
-	z=26 : _
-	for j=2 to udim(at$) : _
-		at$(j)=trim$(at$(j))(1:z) : _
-		x=len(at$(j)) : y=z-x : _
-		at$(j)=rpt$(" ",int(y/2))&at$(j) : _
+	z=26
+	for j=2 to udim(at$)
+		at$(j)=trim$(at$(j))(1:z)
+		x=len(at$(j)) : y=z-x
+		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 	linelength=62
  
@@ -33,59 +33,57 @@
  
 SCREEN1: !
 	a$="" : prtbkno=0
-	fnTos(sn$="UBPrtBl1-1") : _
-	pf=26 : ll=24 : _
+	fnTos
+	pf=26 : ll=24
 	respc=0
 	fnLbl(3,1,"Penalty Due Date:",ll,1)
-	fnTxt(3,pf,8,8,1,"1",0,tt$) : _
+	fnTxt(3,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 	fnLbl(4,1,"Message on Bill:",ll,1)
-	fnTxt(4,pf,30,30) : _
+	fnTxt(4,pf,30,30)
 	resp$(respc+=1)=mg$(1)
-	fnTxt(5,pf,30,30) : _
+	fnTxt(5,pf,30,30)
 	resp$(respc+=1)=mg$(2)
-	fnTxt(6,pf,30,30) : _
+	fnTxt(6,pf,30,30)
 	resp$(respc+=1)=mg$(3)
 	fnLbl(7,1,"Date of Billing:",ll,1)
-	fnTxt(7,pf,8,8,1,"1") : _
+	fnTxt(7,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	fnLbl(8,1,"Starting Account:",ll,1)
-	fe$="ubm-act-nam" : _
-	datafile$="[Q]\UBmstr\Customer.h[cno]" : _
-	indexfile$="[Q]\UBmstr\ubindx5.h[cno]" : _
-	kp=1741: kl=9 : dp=41 : dl=30 : _
-	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) : _
+	fe$="ubm-act-nam"
+	datafile$="[Q]\UBmstr\Customer.h[cno]"
+	indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
+	kp=1741: kl=9 : dp=41 : dl=30
+	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
-	fncmbrt2(9,pf) : _
+	fncmbrt2(9,pf)
 	resp$(respc+=1)="[All]"
-	fnChk(10,pf,"Select Accounts to Print",1) : _
+	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(respc+=1)="False"
-	fnCmdSet(3) : _
+	fnCmdSet(3)
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ENDSCR
-	d1 = val(resp$(5)) : _
-	d4 = val(resp$(1)) : _
-	mg$(1) = resp$(2) : _
-	mg$(2) = resp$(3) : _
+	d1 = val(resp$(5))
+	d4 = val(resp$(1))
+	mg$(1) = resp$(2)
+	mg$(2) = resp$(3)
 	mg$(3) = resp$(4)
-	if resp$(6)="[All]" then : _
-		a$="" else : _
-		a$ = lpad$(trim$(resp$(6)(1:9)),9)
-	if resp$(7)="[All]" then : _
-		prtbkno=0 else : _
-		prtbkno = val(resp$(7))
+	if resp$(6)="[All]" then a$="" else a$ = lpad$(trim$(resp$(6)(1:9)),9)
+	if resp$(7)="[All]" then prtbkno=0 else prtbkno = val(resp$(7))
 	if resp$(8)="True" then sl1=1: z$="" else sl1=0
-	if trim$(a$)<>"" then read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1 : _
-		holdz$=z$: begin=1 : _
+	if trim$(a$)<>"" then 
+		read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
+		holdz$=z$: begin=1
 		st1=1
+	end if
 L460: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
 	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
-	gosub VBOPENPRINT ! Open #20: "Name=[Q]\UBmstr\Bill"&WSID$&".txt,Replace,RecL=5000",Display,Output  : _
+	gosub VBOPENPRINT ! Open #20: "Name=[Q]\UBmstr\Bill"&WSID$&".txt,Replace,RecL=5000",Display,Output 
 	! fnOPENPRN
  
 	on fkey 5 goto RELEASE_PRINT
@@ -108,15 +106,13 @@ READALTADR: !
 L700: form pos 11,4*c 30
 	e1=0 : mat pe$=("")
 	for j=1 to 4
-		if rtrm$(ba$(j))<>"" then : _
-			e1=e1+1 : pe$(e1)=ba$(j)
+		if rtrm$(ba$(j))<>"" then			e1=e1+1 : pe$(e1)=ba$(j)
 	next j
 	goto L920
  
 L770: e1=0 : mat pe$=("")
 	for j=2 to 4
-		if rtrm$(e$(j))<>"" then : _
-			e1=e1+1 : pe$(e1)=e$(j)
+		if rtrm$(e$(j))<>"" then			e1=e1+1 : pe$(e1)=e$(j)
 	next j
 	if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 	goto L920
@@ -133,25 +129,20 @@ L920: !
 ! print bill routine
 	gosub VBPRINT
 ! end of pr routine
-	bct(2)=bct(2)+1 : _
-	! accumulate totals
+	bct(2)=bct(2)+1	! accumulate totals
 	goto L550
  
 SCREEN3: !
-	sn$ = "UBPrtBl1-2" : _
+
 	fnTos(sn$)
-	txt$="Account (blank to stop)" : _
+	txt$="Account (blank to stop)"
 	fnLbl(1,1,txt$,31,1)
 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
-	if trim$(z$)<>"" then : _
-		txt$="Last Account entered was "&z$ : _
-		fnLbl(3,1,txt$,44,1) else : _
-		txt$="" : _
-		fnLbl(3,1,txt$,44,1)
-	fncmbact(1,17) ! : _
+	if trim$(z$)<>"" then fnLbl(3,1,"Last Account entered was "&z$,44,1) else fnLbl(3,1,'',44,1)
+	fncmbact(1,17) 
 	resp$(1)=a$
 	fnCmdSet(3): fnAcs(mat resp$,ckey)
-	a$ = lpad$(trim$(resp$(1)(1:10)),10) : _
+	a$ = lpad$(trim$(resp$(1)(1:10)),10) 
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
 	read #1,using L610,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,df$,extra22 nokey SCREEN3
@@ -161,9 +152,7 @@ SORT1: ! SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1390
 	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output
 	s5=1
-	if prtbkno=0 then routekey$="" else : _
-		routekey$=cnvrt$("N 2",prtbkno)&"       " : _
-		! key off first record in route (route # no longer part of customer #)
+	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #2,search>=routekey$:
 L1190: read #2,using L1200: z$,f,route eof END5
 L1200: form pos 1,c 10,pos 296,pd 4,pos 1741
@@ -189,22 +178,13 @@ L1390: return
  
 ENDSCR: ! pr totals screen
 	if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-	fnTos(sn$="Bills-Total") : _
-	mylen=23 : mypos=mylen+2 : _
+	fnTos
+	mylen=23 : mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
-	fnTxt(1,mypos,8,0,1,"",1) : _
+	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-! fnLbl(2,1,"Total  Bills  Coded:",MYLEN,1)
-! fnTxt(2,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-! fnLbl(3,1,"Total Bills Not Coded:",MYLEN,1)
-! fnTxt(3,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-! fnLbl(4,1,"Percent of Bills Coded:",MYLEN,1)
-! fnTxt(4,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
-	fnCmdSet(52) : _
+	fnCmdSet(52)
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
  
@@ -220,7 +200,7 @@ VBPRINT: !
 	if checkcounter=1 then xmargin=0 : ymargin=0
 	if checkcounter=2 then xmargin=139 : ymargin=0
 	if checkcounter=3 then xmargin=0 : ymargin=108
-	if checkcounter=4 then xmargin=139 : ymargin=108 : _
+	if checkcounter=4 then xmargin=139 : ymargin=108
 		checkcounter=0
  
 	pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
@@ -243,25 +223,25 @@ VBPRINT: !
 	pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 	pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
  
-PRINTGRID: meter=14 : _
+PRINTGRID: meter=14
 	pr #20: 'Call Print.MyFontSize(8)'
-	if g(1)=0 then goto L2020 else : _
-		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' : _
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' : _
+	if g(1) then 
+		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
+		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' 
+		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' 
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2020: if g(2)=0 then goto L2030 else : _
-		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+	end if
+	if g(2) then 
+		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2030: if g(3)=0 and d(7)=0 then goto L2050 else : _
-		pr #20: 'Call Print.AddText("LM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(5),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' : _
+	end if
+	if g(3) or d(7) then
+		pr #20: 'Call Print.AddText("LM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(d(5),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
-!  pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(3),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
-L2050: if a4=1 then gcode$="RSGS" else : _
-		if a4=2 then gcode$="CMGS" else : _
-			if a4=3 then gcode$="INGS" else : _
-				gcode$="GAS"
+		!  pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(3),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
+	end if
+	if a4=1 then gcode$="RSGS" else if a4=2 then gcode$="CMGS" else if a4=3 then gcode$="INGS" else gcode$="GAS"
 	if g(4)=0 then goto L2070 else : _
 		pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' : _
@@ -351,8 +331,7 @@ L2150: pr #20: 'Call Print.MyFontSize(10)'
 	if checkcounter=0 then checkx=6.75 : checky=7.9375
 	bc$=""
 	if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
-	if checkcounter=0 then : _
-		fnpa_newpage
+	if checkcounter=0 then fnpa_newpage
 return
  
 BULKSORT: ! bulk sort order

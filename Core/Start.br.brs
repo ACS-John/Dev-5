@@ -34,15 +34,15 @@ def fn_acsSystemInitialize(; syInitMode)
 
 		if syInitMode=2 then
 			fn_env_data_default(1)
-			setenv('data',os_filename$('//6')&'\ACS')
-			! setenv('data',os_filename$(env$('Status.Files.Drives.[I]')&'ACS')
+			fnSetEnv('data',os_filename$('//6')&'\ACS')
+			! fnSetEnv('data',os_filename$(env$('Status.Files.Drives.[I]')&'ACS')
 			fnMakeSurepathExists(env$('data')&'\')
 			! pause
 		else
 			fn_env_data_default(0)
 		end if
 
-		!
+		
 		if env$('Q')='' then
 			if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
 				if pos(env$('CsServerData'),'/')>0 then slash$='/' else slash$='\'
@@ -62,21 +62,21 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			exe 'config shell default client'
-			setenv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
+			fnSetEnv('at','@::')  ! second colon added 01/18/2018 - to fix client server making files with UNC paths - i.e.  Create Hand Held Files
 			fn_startStatus('Collecting local environment variables...')
 			fn_csEnv
 			if env$('client_acsDeveloper')<>'' then setenv('acsDeveloper',env$('client_acsDeveloper'))
-			setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
-			setenv('userprofile','@::'&env$('client_userprofile'))
+			fnSetEnv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
+			fnSetEnv('userprofile','@::'&env$('client_userprofile'))
 		else
-			setenv('local_program_dir',os_filename$('S:'))
-			setenv('at','')
+			fnSetEnv('local_program_dir',os_filename$('S:'))
+			fnSetEnv('at','')
 		end if
-		!
+		
 		if env$('acsDeveloper')<>'' then
 			exe 'config substitute [ScreenIO_ScreenFldDrive] S:'
 		end if
-		!
+		
 		exe "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
 		exe "load S:\Core\Library.br,Resident" error ignore
 		!  fails on windows XP  !  exe "load S:\Core\Start.br,Resident"
@@ -85,18 +85,17 @@ def fn_acsSystemInitialize(; syInitMode)
 		exe "load S:\Core\fn\windowsStart.br,Resident"
 		exe 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     exe "load S:\Core\Client.br,resident"
-		! fn_setup  <-- already called
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then fncheckcompiled ! sets the current directory to "S:" if it is not already
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_update_version_for_inno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			! exe 'config editor'   !  editor setting removed from brconfig.sys - not necessary
 			if env$('programdata')='' and env$('CsServerTemp')<>'' then
-				setenv('programdata',env$('CsServerTemp'))
+				fnSetEnv('programdata',env$('CsServerTemp'))
 			end if
-			! setenv('Temp','C:\ACS_Data\Temp\Session'&session$)
+			! fnSetEnv('Temp','C:\ACS_Data\Temp\Session'&session$)
 			dim tmpFolder$*256
 			tmpFolder$='C:\ACS_Data\Temp\'&srep$(srep$(srep$(login_name$,' ','_'),',',''),'.','')&'-Session'&session$
-			setenv('Temp',tmpFolder$)
+			fnSetEnv('Temp',tmpFolder$)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
 		if ~fn_temp_dir_validate then goto Xit ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto Xit
@@ -106,16 +105,15 @@ def fn_acsSystemInitialize(; syInitMode)
 		if pos(env$('Qbase'),' ')>0 then
 			dim New2Qbase$*256
 			New2Qbase$=fnshortpath$(env$('Qbase'))
-			setenv('QBase','')
+			fnSetEnv('QBase','')
 			fn_setQbase(New2Qbase$)
 		end if
-		if env$('client_temp')='' then setenv('Client_TEMP',env$('Temp'))
+		if env$('client_temp')='' then fnSetEnv('Client_TEMP',env$('Temp'))
 		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto Xit
 		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto Xit ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)
 		! r: set to last client selected (if appropriate)
 			if env$('enableClientSelection')='Yes' and env$('clientSelected')='' then
-				library 'S:\Core\Library': fnSetClient,fnmcreg_read
 				dim tmpClientSelected$*128
 				fnmcreg_read('clientSelected',tmpClientSelected$)
 				fnSetClient(tmpClientSelected$)
@@ -188,7 +186,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				fn_writeProc(''   ,'exe ''load "''&program$&''"''')
 			end if
 		end if
-		setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
+		fnSetEnv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 		! if syInitMode then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 		fn_startStatus('Identifying your system...')
 		fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
@@ -198,18 +196,18 @@ def fn_acsSystemInitialize(; syInitMode)
 		fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
 		fnapply_theme ! ( disableConScreenOpenDflt)
 		if ~fn_multisession_test then goto Xit
-		! setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
-		setenv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
+		! fnSetEnv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
+		fnSetEnv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
 		version_prior$=fn_last_version_used$
 		version_current$=fn_acsVersion$
-		setenv('acsVersion',version_current$)
+		fnSetEnv('acsVersion',version_current$)
 		if fn_update_needed(version_prior$,version_current$) then
 			fnclient$ ! this needs to be called to set client environment variables
 			fnchain('S:\Core\Programs\Update.br')
 		end if
-		library 'S:\Core\Library': fnSpecialFolderPath$
-		setenv('Desktop',fnSpecialFolderPath$('Desktop'))
-		! pr 'point XXX1' : pause
+
+		fnSetEnv('Desktop',fnSpecialFolderPath$('Desktop'))
+
 		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then
 			if  env$('cursys')<>'CM' then
 				fn_show_release_notes(version_prior$,version_current$)
@@ -277,14 +275,14 @@ def fn_uniqueComputerId_initialize
 			uuid_valid=1
 		end if
 		if uuid_valid then
-			setenv('Unique_Computer_ID',uuid$)
+			fnSetEnv('Unique_Computer_ID',uuid$)
 		else
-			setenv('Unique_Computer_ID',hdd_serial$)
+			fnSetEnv('Unique_Computer_ID',hdd_serial$)
 		end if
 	end if
 	goto UcaFinis
 	NO_WMIC: ! r: ! windows XP does not support WMIC
-		setenv('Unique_Computer_ID',wsid$)
+		fnSetEnv('Unique_Computer_ID',wsid$)
 	goto UcaFinis ! /r
 	UcaFinis: !
 	exe 'config substitute [Unique_Computer_ID] '&env$('Unique_Computer_ID')
@@ -301,7 +299,7 @@ def fn_AcsUserId_Initialize
 			fnreg_write('ACS UserID Number Last Assigned',acs_userid$)
 			fnreg_write('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
 		end if
-		setenv('acsUserId','u'&acs_userid$)
+		fnSetEnv('acsUserId','u'&acs_userid$)
 		exe 'config substitute [acsUserId] u'&acs_userid$
 	end if
 fnend
@@ -310,16 +308,7 @@ def fn_setup
 	if ~setup then
 		setup=1
 		option retain
-		library 'S:\Core\Library': fnchain
-		library 'S:\Core\Library': fncheckcompiled
-		library 'S:\Core\Library': fnapply_theme
-		library 'S:\Core\Library': fnCopy
-		library 'S:\Core\Library': fnshortpath$
-		library 'S:\Core\Library': fnureg_read
-		library 'S:\Core\Library': fnreg_read,fnreg_write
-		library 'S:\Core\Library': fnAcsInstallationPath$
-		library 'S:\Core\Library': fnMakeSurepathExists
-		library 'S:\Core\Library': fnclient$
+		autoLibrary
 	end if
 fnend
 def library fnSpoolPath$*256(; initialize)
@@ -400,8 +389,8 @@ def fn_change_temp
 		msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
 		ct_return=0
 	else
-		setenv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
-		setenv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
+		fnSetEnv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
+		fnSetEnv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
 	end if
 	fn_change_temp=ct_return
 fnend
@@ -456,7 +445,7 @@ fnend
 def fn_env_data_default(; colletionMasterMode)
 	if colletionMasterMode then
 		fnmakesurepathexists(env$('status.files.drives.[i]')&'ACS\')
-		setenv('data',env$('status.files.drives.[i]')&'ACS\')
+		fnSetEnv('data',env$('status.files.drives.[i]')&'ACS\')
 	else
 		if env$('data')='' then ! if env$('data') is blank than set it here.
 			dim edd_base$*256
@@ -465,10 +454,10 @@ def fn_env_data_default(; colletionMasterMode)
 			else
 				edd_base$=env$('ProgramData')
 			end if
-			setenv('data',edd_base$&'\ACS\')
+			fnSetEnv('data',edd_base$&'\ACS\')
 			fnmakesurepathexists(env$('data')&'\Data\')
 			if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
-				setenv('data',env$('data')&'\')
+				fnSetEnv('data',env$('data')&'\')
 			end if
 		end if
 	end if
@@ -480,7 +469,7 @@ fnend
 def fn_setQ(setQ$*256)
 	setQ$=rtrm$(setQ$,'\')
 	if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
-	setenv('Q',setQ$)
+	fnSetEnv('Q',setQ$)
 	exe 'config substitute [Q] "'&env$('Q')&'"'
 	if env$('acsDeveloper')='' then
 		exe 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
@@ -496,7 +485,7 @@ def fn_setQBase(newQBase$*256)
 	if env$('QBase')='' then
 		newQBase$=rtrm$(newQBase$,'\')
 		if pos(newQBase$,' ')>0 then newQBase$=fnshortpath$(newQBase$)
-		setenv('QBase',newQBase$)
+		fnSetEnv('QBase',newQBase$)
 		exe 'config substitute [QBase] '&env$('QBase')
 	end if
 fnend
@@ -552,7 +541,7 @@ def fn_csEnv
 	dim ce_os_temp_file$*1048
 	dim ce_br_temp_file$*1048
 	! if env$('data')='/br/orders/brc_oe/Data' then        !  Gordon's Linux CS Server
-	!   setenv('data','\\JAZZ\BR Order Entry\brc_oe\Data')  !  Gordon's Linux CS Server
+	!   fnSetEnv('data','\\JAZZ\BR Order Entry\brc_oe\Data')  !  Gordon's Linux CS Server
 	! end if                                                !  Gordon's Linux CS Server
 	if env$('cursys')='CM' then
 		ce_os_temp_file$=rtrm$(env$('cs_temp'),'\')&'\cs-'&session$&'.txt'
@@ -580,9 +569,9 @@ def fn_csEnv
 			if gw_equal > 0 then
 				ce_field$ = ce_prefix$&ce_line$(1:gw_posfnwp-1)
 				ce_value$ = ce_line$(gw_posfnwp+1:gw_wholeline)
-				setenv(ce_field$,ce_value$) error ignore
-!       pr 'setenv("'&ce_field$&'","'&ce_value$&'")'
-! Should SETENV FAIL, Ignore it
+				fnSetEnv(ce_field$,ce_value$) error ignore
+!       pr 'fnSetEnv("'&ce_field$&'","'&ce_value$&'")'
+! Should fnSetEnv FAIL, Ignore it
 			end if
 		end if
 	loop
@@ -618,7 +607,7 @@ def fn_csEnv
 	open #hOsCd:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
 	linput #hOsCd: client_os_path$ error ignore
 	close #hOsCd,free: error ignore
-	setenv('client_os_path',client_os_path$)
+	fnSetEnv('client_os_path',client_os_path$)
 	XIT_FNCS_OS_PATH: !
 fnend
 def fn_show_release_notes(version_prior$,version_current$; ___,didOpen)
@@ -687,7 +676,7 @@ def fn_UpdateQFileIO
 	end if
 fnend
 def fn_updateAlienFolder(localAlien$*512,sourceFolder$*512,filterFrom$,filterTo$)
-		library 'S:\Core\Library': fngetdir2
+		
 		dim sLayFile$(0)*256
 		dim sLayDate$(1)*32
 		dim sLayTime$(1)*32
@@ -764,7 +753,7 @@ def fn_acsVersion$
 	open #hBuild:=fn_gethandle: 'name=S:\Core\Build.txt',d,i
 	linput #hBuild: build$
 	close #hBuild:
-	 setenv('acsVersion','5.'&rtrm$(build$))
+	 fnSetEnv('acsVersion','5.'&rtrm$(build$))
 	fn_acsVersion$=env$('acsVersion')
 fnend
 def library fnWriteProc(procName$*64,procLine$*256)

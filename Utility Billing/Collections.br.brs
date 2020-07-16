@@ -15,9 +15,9 @@
 	open #hTransUnposted:=fngethandle: "Name="&collections_filename$&',RecL=91,Use',internal,outIn,relative
 	mat x=(0)
 	transType=postingCodeUnused=0
-goto MENU1B
+goto ScreenMenu1
 ! /r
-MENU1B: ! r:
+ScreenMenu1: ! r:
 	do
 		fnTos(sn$="Collections-menu1") : rc=0
 		fnflexinit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
@@ -99,7 +99,7 @@ MENU1B: ! r:
 				fn_print_listings
 			else if ck1=10 then
 				fn_print_listings
-				goto MERGE
+				goto Merge
 				! goto SCREEN_LAST_CHANCE
 			else if ck1=12 then
 				fn_open_cash_drawer
@@ -113,18 +113,18 @@ ADD_REC: ! r:
 	b7=transType=1 !     default to always adding collections
 	p$=" "
 	rcpt$=""
-goto SCREEN_SELECT_ACCOUNT ! /r
-SCREEN_SELECT_ACCOUNT: ! r:
+goto ScreenSelectAccount ! /r
+ScreenSelectAccount: ! r:
 	if fnask_account('Collections',z$,hCustomer1)=5 then
-		goto MENU1B
+		goto ScreenMenu1
 	end if
 	x1$=z$
-	! r: read selected account and prepare data for SCREEN_ADD
-	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey SCREEN_SELECT_ACCOUNT
+	! r: read selected account and prepare data for ScreenAdd
+	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey ScreenSelectAccount
 	havebudget=0
 	fn_getMatTgb(mat tgb,escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,oldescrowbal)
 	! /r
-goto SCREEN_ADD ! /r
+goto ScreenAdd ! /r
 def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,&oldescrowbal)
 	mat tgb=(0)
 	j2=0: escrow=0
@@ -133,7 +133,7 @@ def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal
 	next j
 	if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
 fnend
-SCREEN_ADD: ! r:
+ScreenAdd: ! r:
 	!
 	if x(3)=0 then x(3)=date('mmddyy') ! date should default to today
 	x(2)=max(0,bal) ! amount collected should default to balance (or 0 if they have a credit)
@@ -197,19 +197,19 @@ SCREEN_ADD: ! r:
 
 
 	if ckey=2 then ! 2=back
-		goto SCREEN_SELECT_ACCOUNT
+		goto ScreenSelectAccount
 	else if ckey=5 then
-		goto MENU1B ! 5=cancel
+		goto ScreenMenu1 ! 5=cancel
 	end if
 	x(2)=val(resp$(1))
 	x(3)=val(resp$(2))
 	rcpt$=trim$(resp$(3))(1:9)
 	if ckey=8 then
 		fnCustomer(x)
-		goto SCREEN_ADD
+		goto ScreenAdd
 	else if ckey=3 then
 		fnCustomerNotes(z$)
-		goto SCREEN_ADD
+		goto ScreenAdd
 	end if
 	transType=fn_oSub1(resp$(4))
 	hresp1$=fn_collType$(transType)
@@ -218,7 +218,7 @@ SCREEN_ADD: ! r:
 	if ckey=7 then
 		resp$(3)=rcpt$='CA'
 		do_not_blank_rcpt=1
-		goto SCREEN_ADD
+		goto ScreenAdd
 	end if
 	! r: validate
 	! r: transaction date is within the last 7 days else ask confirmation
@@ -230,7 +230,7 @@ SCREEN_ADD: ! r:
 			mesg$(3)="Enter Yes to correct, else No to proceed."
 			fnmsgbox(mat mesg$,resp$,'',52)
 			holdbaddate=x(3)
-			if resp$="Yes" then goto SCREEN_ADD
+			if resp$="Yes" then goto ScreenAdd
 		end if
 	end if
 	! /r
@@ -239,7 +239,7 @@ SCREEN_ADD: ! r:
 		mat mesg$(1)
 		mesg$(1)="Negative amounts are not allowed."
 		fnmsgbox(mat mesg$)
-		goto SCREEN_ADD
+		goto ScreenAdd
 	end if
 	! /r
 	! r: receipt required?
@@ -252,7 +252,7 @@ SCREEN_ADD: ! r:
 		mesg$(5)="prevent getting this message."
 		mesg$(6)="Take OK to continue."
 		fnmsgbox(mat mesg$)
-		goto SCREEN_ADD
+		goto ScreenAdd
 	end if
 	! /r
 	! /r
@@ -260,7 +260,7 @@ SCREEN_ADD: ! r:
 		fn_print_receipt(z$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
 	end if
 ! /r
-! r: after SCREEN_ADD - actually do the adding stuff
+! r: after ScreenAdd - actually do the adding stuff
 	! if ub_collDisableDepositList$='True' then
 		if sum(tgb)=x(2) then
 			for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
@@ -272,14 +272,14 @@ SCREEN_ADD: ! r:
 		gosub BUD2
 		gosub BUD3
 	! end if
-	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto SCREEN_SELECT_ACCOUNT
+	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto ScreenSelectAccount
 	! if env$('acsDeveloper')<>'' then
 	! 	pr 'ckey=';ckey
 	! 	pr 'dev-pause DD'
 	! 	pause
 	! end if
 	if ckey=2 then
-		goto SCREEN_ADD
+		goto ScreenAdd
 	end if
 	!
 	! L2020: !
@@ -294,31 +294,31 @@ SCREEN_ADD: ! r:
 	if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
 	write #hTransUnposted,using F_ubColInp,rec=r6: z$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060
 	transType=b7
-	goto SCREEN_SELECT_ACCOUNT ! /r
+	goto ScreenSelectAccount ! /r
 EDIT_REC: ! r:
-	read #hTransUnposted,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec MENU1B
+	read #hTransUnposted,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec ScreenMenu1
 	nam$=""
 	read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x$,release: nam$,bal,db1,mat gb,escrowbal nokey ignore
 	fnTos("Collections-edit")
 	respc=0
-	!
+
 	fnLbl(1,1,"Entry Type:",25,1)
 	fncomboa("rdc",1,27,mat coll_type_option$)
 	resp$(resp_CollType:=respc+=1)=fn_collType$(transType)
 	fnLbl(2,1,"Account:",25,1)
 	fncmbact(2,27)
 	resp$(resp_account:=respc+=1)=x$&"  "&nam$
-	!
+
 	if uprc$(escrow$)="Y" then transAmount+=escrow : escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
-	!
+
 	fnLbl(3,1,"Amount:",25,1)
 	fnTxt(3,27,9,0,0,"10")
 	resp$(resp_amount:=respc+=1)=str$(transAmount)
-	!
+
 	fnLbl(4,1,"Date (mmddyy):",25,1)
 	fnTxt(4,27,8,0,0,"1")
 	resp$(resp_transDate:=respc+=1)=str$(transDate)
-	!
+
 	fnLbl(5,1,"Receipt # (CA=Cash):",25,1)
 	fnTxt(5,27,9)
 	resp$(resp_receiptNumber:=respc+=1)=rcpt$
@@ -341,7 +341,7 @@ EDIT_REC: ! r:
 	! If CKEY=2 Then Goto X
 	if ckey=4 then
 		delete #hTransUnposted,rec=edrec:
-		goto MENU1B
+		goto ScreenMenu1
 	end if
 
 	transType=fn_oSub1(resp$(resp_CollType))
@@ -351,50 +351,51 @@ EDIT_REC: ! r:
 	transDate=val(resp$(resp_transDate))
 	rcpt$=trim$(resp$(resp_receiptNumber))
 	if uprc$(escrow$)="Y" then gosub CHECK_ESCROW ! check escrow balance
-	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto SCREEN_SELECT_ACCOUNT
+	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto ScreenSelectAccount
 	if uprc$(escrow$)="Y" then transAmount=transAmount-escrow ! .   ! .    ! subtract escrow amount from  payment amount before rewriting
 	rewrite #hTransUnposted,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
 	! If BUD1=1 Then Gosub BUD2 : Gosub BUD3
 	L2590: !
 	! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 	fn_print_receipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
-goto MENU1B ! /r
-MERGE: ! r:
+goto ScreenMenu1 ! /r
+Merge: ! r:
 	r6=0
 	do
 		MergeNext: !
 		r6+=1
-		if r6>lrec(hTransUnposted) then goto MERGE_FINIS ! prevent stopping to deleted record and quit when finished
+		if r6>lrec(hTransUnposted) then goto Merge_FINIS ! prevent stopping to deleted record and quit when finished
 		read #hTransUnposted,using F_ubColInp,rec=r6: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec MergeNext
-		if p$(1:2)="  " and transAmount=0 and escrow=0 then goto MergeNext
-		read #hCustomer1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal nokey MergeNext
-		if transType=3 then tcode=3 ! collection
-		if transType=4 then tcode=4 ! credit memo
-		if transType=5 then tcode=5 ! debit memo
-		if transType=5 then bal+=transAmount else bal-=transAmount
-		tmp=fndate_mmddyy_to_ccyymmdd(transDate)
-		mat tg=(0): x=0
-		for j=1 to possibleServiceCount
-			if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
-		next j
-		write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
-		if uprc$(escrow$)="Y" and escrow<>0 then
-			transAmount=escrow
-			mat tg=(0)
-			write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode ! write a history record for escrow amount
+		if p$(1:2)<>"  " or transAmount or escrow then
+			read #hCustomer1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal nokey MergeNext
+			if transType=3 then tcode=3 ! collection
+			if transType=4 then tcode=4 ! credit memo
+			if transType=5 then tcode=5 ! debit memo
+			if transType=5 then bal+=transAmount else bal-=transAmount
+			tmp=fndate_mmddyy_to_ccyymmdd(transDate)
+			mat tg=(0): x=0
+			for j=1 to possibleServiceCount
+				if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
+			next j
+			write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
+			if uprc$(escrow$)="Y" and escrow<>0 then
+				transAmount=escrow
+				mat tg=(0)
+				write #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode ! write a history record for escrow amount
+			end if
+			j2=0
+			for j=1 to possibleServiceCount
+				if srvName$(j)="" or srvName$(j)(1:5)="Reduc" then goto L4470
+				j2=j2+1
+				if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
+				L4470: !
+			next j
+			rewrite #hCustomer1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal+escrow
+			! postingCodeUnused=9
+			delete #hTransUnposted,rec=r6: ! rewrite #hTransUnposted,using "Form POS 19,2*N 1",rec=r6: transType,postingCodeUnused
 		end if
-		j2=0
-		for j=1 to possibleServiceCount
-			if srvName$(j)="" or srvName$(j)(1:5)="Reduc" then goto L4470
-			j2=j2+1
-			if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
-			L4470: !
-		next j
-		rewrite #hCustomer1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal+escrow
-		! postingCodeUnused=9
-		delete #hTransUnposted,rec=r6: ! rewrite #hTransUnposted,using "Form POS 19,2*N 1",rec=r6: transType,postingCodeUnused
 	loop
-	MERGE_FINIS: !
+	Merge_FINIS: !
 	close #hTransUnposted,free:
 	close #hCustomer1:
 	close #hCustomer2:
@@ -531,7 +532,7 @@ def fn_print_listings
 		if srt=2 then
 			restore #h_addr:
 		end if
-		gosub HEADER
+		gosub PrHeader
 		do
 			PS_LOOP_TOP: ! r:
 			if srt=2 then
@@ -564,15 +565,15 @@ def fn_print_listings
 			!
 			if xti1=1 then
 				if uprc$(escrow$)="Y" then
-					pr #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PGOF
+					pr #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PgOf
 					L3090:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,validSrvCount*n 8.2,n 8.2,x 3,c 30
 					totescrow+=escrow
 				else
-					pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
+					pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PgOf
 					L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,validSrvCount*n 8.2,x 3,c 30
 				end if
 			else if xti1=2 then
-				pr #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PGOF
+				pr #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PgOf
 			end if
 		loop ! goto PS_LOOP_TOP ! /r
 	PS_TOTALS: ! r:
@@ -595,7 +596,7 @@ def fn_print_listings
 		pr #255,using F_PR_TOTAL_STUFF: "Totals",totalCollections,totalCreditMemos,totalDebitMemos,totalCollections+totalCreditMemos+totalDebitMemos
 		pr #255: ""
 		for j=1 to validSrvCount
-			pr #255,using F_PR_TOTAL_STUFF: validServiceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
+			pr #255,using F_PR_TOTAL_STUFF: validServiceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PgOf
 		next j
 		if uprc$(escrow$)="Y" then pr #255,using F_PR_TOTAL_STUFF: "Escrow",totescrow
 		pr #255: ""
@@ -611,18 +612,19 @@ def fn_print_listings
 			next j
 			mat water=(0)
 		end if
-	 end if ! /r
+	 end if
+	 ! /r
 	 if xti1<>ti1_end then pr #255: newpage ! and env$('acsDeveloper')=''
 	next xti1
 	fncloseprn
 	close #h_addr: ioerr ignore
 	h_addr=0
-fnend  ! if l3=1 then goto MERGE else goto MENU1B
-PGOF: ! r:
+fnend  ! if l3=1 then goto Merge else goto ScreenMenu1
+PgOf: ! r:
 	pr #255: newpage
-	gosub HEADER
+	gosub PrHeader
 continue  ! /r
-HEADER: ! r:
+PrHeader: ! r:
 	if xti1=1 then
 		pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 		pr #255: "\qc  {\f181 \fs22 \b Receipt Listing}"
@@ -668,20 +670,20 @@ def fn_setup
 		dim bd1(5)
 		dim bd2(5)
 		dim bd3(5) ! bd$(5)*30,n$*30,txt$*80,notuse(10),
-		!
+
 		dim coll_type_option$(3)
 		coll_type_option$(1)="Regular Collection"
 		coll_type_option$(2)="Credit Memo"
 		coll_type_option$(3)="Debit Memo"
-		!
+
 		tab$=chr$(9)
-		!
+
 		collections_filename$="[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno]"
-		!
+
 		open #20: "Name=[Q]\UBmstr\Company.h[cno],NoShr",internal,input
 		read #20,using "Form pos 128,C 1,c 1": receipt$,escrow$
 		close #20:
-		!
+
 		dim srvName$(10)*20
 		dim srv$(10)*2
 		dim penalty$(10)*1
@@ -738,7 +740,7 @@ def fn_setup
 		mat validServiceLabel$(validSrvCount)
 		F_ubColInp: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,validSrvCount*pd 4.2,5*pd 3,pd 4.2
 	end if
-	! r: setup column headers (mat chdr$) and column masks (mat cm$) for flex grid on MENU1B
+	! r: setup column PrHeaders (mat chdr$) and column masks (mat cm$) for flex grid on ScreenMenu1
 		dim chdr$(20)*30
 		dim cm$(20)
 		mat chdr$(20)
@@ -775,16 +777,15 @@ def fn_setup
 	ei_item_amount=2
 	ei_item_date_time=3
 	ei_item_collection_type=4
-	!
+
 	fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
 	fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
 fnend
-def fn_haveMainBudget(h_budmstr,x1$)
-	havemainbudget=0
+def fn_haveMainBudget(h_budmstr,x1$; ___,returnN)
 	read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey HmbFinis ! get mat ba again
-	if ba(2)+ba(3)+ba(4)+ba(5)+ba(6)+ba(7)+ba(8)+ba(9)+ba(10)+ba(11)>0 then havemainbudget=1
+	if ba(2)+ba(3)+ba(4)+ba(5)+ba(6)+ba(7)+ba(8)+ba(9)+ba(10)+ba(11)>0 then returnN=1
 	HmbFinis: !
-	fn_haveMainBudget=havemainbudget
+	fn_haveMainBudget=returnN
 fnend
 def library fnBreakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,&ckey)
 	fn_setup
@@ -1104,7 +1105,7 @@ def fn_csv_import
 		if type=1 then
 			fn_ecp_import(h_csv)
 		else if type=2 then
-		! r: import standardized CSV (column headers enums already identified in fn_csv_type)
+		! r: import standardized CSV (column PrHeaders enums already identified in fn_csv_type)
 			dim csv_line$*512
 			dim csv_item$(0)*256
 			do
@@ -1308,7 +1309,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 	rcpt$=""
 	transType=b7
 	at_customer$=rpad$(trim$(at_customer$),10)
-	! r: read selected account and prepare data for SCREEN_ADD
+	! r: read selected account and prepare data for ScreenAdd
 	if fnKeyExists(hCustomer1,at_customer$, 1) then
 		AT_ReadCustomer: !
 		read #hCustomer1,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=at_customer$,release: nam$,bal,db1,mat gb,escrowbal
@@ -1319,7 +1320,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			havebudget=0
 			fn_getMatTgb(mat tgb,escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,oldescrowbal)
 			! /r
-			! SCREEN_ADD: !
+			! ScreenAdd: !
 			x(3)=at_date_mmddyy
 			x(2)=at_amount
 			transType=at_trans_type
@@ -1327,7 +1328,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			do_not_blank_rcpt=0
 			! rcpt$=trim$(resp$(3))(1:9)
 			at_customer$=lpad$(trim$(at_customer$),10)
-			! r: after SCREEN_ADD - actually do the adding stuff
+			! r: after ScreenAdd - actually do the adding stuff
 				if sum(tgb)=x(2) then
 					for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 					goto AT_L2040
@@ -1342,14 +1343,14 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 				if csv_import_in_process then
 					goto AT_FINIS
 				else
-					goto SCREEN_SELECT_ACCOUNT
+					goto ScreenSelectAccount
 				end if
 			end if
 			if ckey=2 then
 				! if env$('acsDeveloper')<>'' then
 				! 	pr 'dev-pause BB'
 				! 	pause
-				! 	! goto SCREEN_SELECT_ACCOUNT
+				! 	! goto ScreenSelectAccount
 				! end if
 				for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 			! else
@@ -1395,7 +1396,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 	end if
 
 	goto AT_FINIS ! /r
-		! pr 'completed add' : pause ! goto SCREEN_SELECT_ACCOUNT ! /r
+		! pr 'completed add' : pause ! goto ScreenSelectAccount ! /r
 	AT_NO_CUSTOMER: ! r:
 	goto AT_FINIS ! /r
 	AT_FINIS: !
