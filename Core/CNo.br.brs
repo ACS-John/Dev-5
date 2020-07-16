@@ -30,9 +30,9 @@ def library fnCno(&cno; &cnam$)
 	CNAM_XIT: ! 
 	! /r
 	cnam$=cnam_read$ soflow ignore
-	setenv('cnam',rtrm$(cnam_read$))
+	fnSetEnv('cnam',rtrm$(cnam_read$))
 	if env$('cno')<>str$(cno) then
-		setenv('cno',str$(cno))
+		fnSetEnv('cno',str$(cno))
 		execute 'config substitute [cno] '&str$(cno)
 	end if
 	fncno=cno
@@ -43,7 +43,7 @@ def library fnPutCno(cno)
 fnend
 def fn_putCno(cno)
 	fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
-	setenv('cno',str$(cno))
+	fnSetEnv('cno',str$(cno))
 	execute 'config substitute [cno] '&str$(cno)
 fnend 
 def library fnget_company_number_list(mat cno_list; sysid$*256)
@@ -165,18 +165,18 @@ def library fndat(&dat$;get_or_put)
 		fnreg_write('Report Heading Date',dat$)
 	end if 
 fnend 
-def library fnprg(&curprg$; g_p)
+def library fnprg(&curprg$; g_p,___,curprg_tmp$*1024)
+	if ~setup then fn_setup
 	if g_p=2 then ! Put
 		!     r: remove leading  S:\ 
-		dim curprg_tmp$*1024
 		curprg_tmp$=curprg$
-		if uprc$(curprg_tmp$(1:3))='S:\' then ! or uprc$(curprg_tmp$(1:3))='S:\' then 
+		if uprc$(curprg_tmp$(1:3))='S:\' then
 			curprg_tmp$(1:3)=''
 		else if uprc$(curprg_tmp$(1:2))='S:' then 
 			curprg_tmp$(1:2)=''
 		end if 
 		!     /r
-		setenv('Core_Program_Current',curprg_tmp$)
+		fnSetEnv('Core_Program_Current',curprg_tmp$)
 	else ! Get
 		curprg$=env$('Core_Program_Current')
 	end if 
@@ -274,8 +274,8 @@ def library fncursys$(; cursys_set$*256,resetCache)
 	if uprc$(cursys_cache$)="G2" then cursys_cache$="GL" ! Accountant's GL
 	if uprc$(cursys_cache$)="G3" then cursys_cache$="GL" ! Budget Management
 	if env$('CurSys')<>cursys_cache$ then
-		setenv('CurSys',cursys_cache$)
-		! just fnSystemNameFromAbbr$ instead       --->      setenv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
+		fnSetEnv('CurSys',cursys_cache$)
+		! just fnSystemNameFromAbbr$ instead       --->      fnSetEnv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
 		execute 'config substitute [CurSys] '&cursys_cache$
 	end if
 	fncursys$=cursys_cache$

@@ -1,7 +1,7 @@
 ! we use this library to tell programs which client is using the system
 if env$('enableClientSelection')='Yes' then goto ClientSelect
 !   ! r: sandbox for testing local functions
-!     if env$('ACSDeveloper')<>'' then setenv('acsclient','BRCorp')
+!     if env$('ACSDeveloper')<>'' then fnSetEnv('acsclient','BRCorp')
 !     fn_setup
 !     pr 'fn_clientHasMat returns ';fn_clientHasMat(mat tmp$)
 !     pr mat tmp$
@@ -59,13 +59,13 @@ def library fnSetClient(scClient$*128)
 fnend
 def fn_setClient(scClient$*128)
 	dim dataNew$*256
-	setenv('Client',scClient$) ! pr 'env$ client set to '&env$('client') : pause
-	setenv('clientSelected',env$('Client'))
+	fnSetEnv('Client',scClient$) ! pr 'env$ client set to '&env$('client') : pause
+	fnSetEnv('clientSelected',env$('Client'))
 	fnmcreg_write('clientSelected',env$('clientSelected'))
 	if env$('enableDataFolderByClient')='Yes' then
 		dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
 		fnmakesurepathexists(dataNew$)
-		setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
+		fnSetEnv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 		fnreg_close
 		! fnMapToVirturalDrive(dataNew$,'Q:') 
 		fnSetQ(dataNew$)
@@ -103,8 +103,8 @@ def fn_client$*18
 	else if serialWhich>0 then
 		clientWhich=serialWhich
 	end if
-	setenv('Client',client_name$(clientWhich))
-	setenv('Client_ID',str$(client_cno(clientWhich)))
+	fnSetEnv('Client',client_name$(clientWhich))
+	fnSetEnv('Client_ID',str$(client_cno(clientWhich)))
 	if env$('client')='' then
 		pr "env$('client') is blank." : pause
 	end if
@@ -116,11 +116,11 @@ def fn_client$*18
 		clientReturn$=env$('client')
 		client_which=srch(mat client_name$,env$('client'))
 		if client_which>0 then 
-			setenv('Client_ID',str$(client_cno(client_which)))
+			fnSetEnv('Client_ID',str$(client_cno(client_which)))
 		else
 			pr 'env: Client: "'&env$('client')&'" did not match any entries Mat client_name$.  env: Client_ID could not be set'
 			pause
-			setenv('Client_ID','')
+			fnSetEnv('Client_ID','')
 		end if
 	end if
 	! if env$('ACSDeveloper')<>'' then pr 'clientReturn$='&clientReturn$ : pause
@@ -517,6 +517,8 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Omaha' then 
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+			fn_getClientLicense_add('U4') : u4_device$='READy'
+			
 		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
@@ -640,7 +642,7 @@ def fn_userLimit(userLimit)
 		end if
 	else if val(env$('user_limit'))<>userLimit then
 		execute 'config option 9 '&str$(userLimit)
-		setenv('user_limit',str$(userLimit))
+		setEnv('user_limit',str$(userLimit))
 	end if 
 	! 
 fnend 
@@ -701,7 +703,7 @@ def fn_hand_held_device$*20
 fnend 
 def fn_setUbLimit(x)
 	gUbLimit=x
-	setenv('UB_Limit',str$(gUbLimit))
+	setEnv('UB_Limit',str$(gUbLimit))
 fnend 
 def library fnub_printbill_program$*256
 	if ~upp_setup then ! r:
