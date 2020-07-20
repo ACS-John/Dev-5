@@ -1,6 +1,6 @@
 00010 ! Replace acsPR\newprRpt.S1,Source
 00011 ! ______________________________________________________________________
-00012   library "Core\Library": fnerror,fngethandle,fncno,fnwin3b,fnopenprn,fncloseprn,fnlbl,fntxt,fncmdkey,fnacs,fnprocess,fntos,fnconsole
+00012   library "Core\Library": fnerror,fngethandle,fncno,fnwin3b,fnopenprn,fncloseprn,fnlbl,fntxt,fncmdkey,fnAcs,fnprocess,fntos,fnconsole
 00014   on error goto ERTN
 00020 ! ______________________________________________________________________
 00030   dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tdt(4),tcd(3),tdet(20),tdy(6)
@@ -106,9 +106,9 @@
 61056   let resp$(3)=d1$
 61060   let fncmdkey("Next",1,1,0,"Prints the report")
 61070   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-61080   let fnacs(sn$,0,mat resp$,ckey) 
+61080   let fnAcs(mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
 61090   let beg_date=val(resp$(1))
 61100   let end_date=val(resp$(2))
 61110   let dh$=resp$(3)
-61120   return ! /r
+61120 return ! /r
