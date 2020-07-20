@@ -42,7 +42,7 @@ def fn_setup
 		dim mroll(3) ! meter roll code from hand held file
 		dim serviceoption$(10)*25
 		dim srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
-		
+
 		dim opt_final_billing$(5)*33
 		opt_final_billing$(1)="0 = Not Finaled"
 		opt_final_billing$(2)="1 = Final Bill"
@@ -241,7 +241,7 @@ AUTO_REC: ! r:
 ! /r
 SEL_ACC: ! r:
 ! passcheckwater=passcheckgas=passcheckelec=0
-	if addmethod=am_customersInSequence then 
+	if addmethod=am_customersInSequence then
 		goto READ_ROUTE_SEQUENCE
 	end if
 	x$=""
@@ -623,9 +623,9 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_BOSON_READ ! Account Key :goto 5150
 	end if
 	ti$=ln$(14:14)
-	if ti$="W" or ti$="G" or ti$="E" then 
-		x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ 
-	else 
+	if ti$="W" or ti$="G" or ti$="E" then
+		x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ
+	else
 		x$=lpad$(rtrm$(ln$(5:14)),10) conv HH_BOSON_READ
 		ti$=""
 		ti1=1
@@ -639,7 +639,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	end if
 	L5420: x(ti1)=0: x(ti1)=val(ln$(89:97)) conv L5440 ! kj 120308 allow boson to place codes in field if cant read meter
 	! if env$('client')="Billings" and ln$(91:91)=" " then x(ti1)=val("1"&ln$(92:97))
-	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then 
+	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then
 		x(ti1)=round(x(ti1)*.1,0)
 	end if
 	if ti$="" or ti$="W" then
@@ -745,7 +745,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	else ! if device$="Other" or device$="Sensus" or device$="AMR" or device$="Green Tree" or device$="Hersey" or device$="EZReader" then
 		goto HH_OTHER_TYPE1_READ
 	end if
-	! 
+	
 	HH_W_END: !
 	fncloseprn
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings
@@ -903,7 +903,6 @@ EST2: ! r:
 	L7220: !
 return  ! /r
 Xit: fnXit
-IGNORE: continue
 def fn_us1
 	rc1=0 ! SET USAGE FIELDS
 	wr1=1 : er1=5 : gr1=9
@@ -1105,7 +1104,7 @@ MENU1: ! r:
 		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
 	end if  ! fnregistered_for_hh
 ! r: add the grid
-!
+
 	chc=0
 	mat colhdr$(30)
 	mat cm$(30)
@@ -1121,7 +1120,7 @@ MENU1: ! r:
 		cm$(chc)="10"
 		colhdr$(chc+=1)=srvnam$(1)&" Usage"
 		cm$(chc)="20"
-!
+
 		reporth$=reporth$&srvnam$(1)(1:2)&" Read   "&srvnam$(1)(1:2)&" Chg  "&srvnam$(1)(1:2)&" Usage "
 		form$=form$&",n 9,n 9.2,n 9"
 	end if
@@ -1130,7 +1129,7 @@ MENU1: ! r:
 	if service_enabled(2) then
 		colhdr$(chc+=1)=srvnam$(2)&" Charge"
 		cm$(chc)="10"
-!
+
 		reporth$=reporth$&" "&srvnam$(2)(1:2)&" Chg  "
 		form$=form$&",n 9.2"
 	end if
@@ -1145,7 +1144,7 @@ MENU1: ! r:
 		cm$(chc)="20"
 		colhdr$(chc+=1)="Demand"
 		cm$(chc)="20"
-!
+
 		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
 		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage   Demand "
 		form$=form$&",n 9,n 9.2,n 9,n 9"
@@ -1156,15 +1155,15 @@ MENU1: ! r:
 		cm$(chc)="10"
 		colhdr$(chc+=1)=srvnam$(3)&" Usage"
 		cm$(chc)="20"
-!
+
 		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
 		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage "
 		form$=form$&",n 9,n 9.2,n 9"
 	else if service_type(3)=3.2 then
 		colhdr$(chc+=1)=srvnam$(3)&" Usage"
 		cm$(chc)="20"
-!
-! LOOKS LIKE SOMETHING IS MiSSING HERE
+
+		! LOOKS LIKE SOMETHING IS MiSSING HERE
 	end if
 ! /r
 ! r: Service 4 - Gas
@@ -1175,7 +1174,7 @@ MENU1: ! r:
 		cm$(chc)="10"
 		colhdr$(chc+=1)=srvnam$(4)&" Usage"
 		cm$(chc)="20"
-!
+
 		reporth$=reporth$&srvnam$(4)(1:2)&" Read   "&srvnam$(4)(1:2)
 		reporth$=reporth$&" Chg  "&srvnam$(4)(1:2)&" Usage "
 		form$=form$&",n 9,n 9.2,n 9"
@@ -1185,7 +1184,7 @@ MENU1: ! r:
 	if service_enabled(5) then ! always show "Other Charge"
 		colhdr$(chc+=1)=srvnam$(5)&" Charge"
 		cm$(chc)="10"
-!
+
 		reporth$=reporth$&" "&srvnam$(5)(1:2)&" Chg  "
 		form$=form$&",n 9.2"
 	end if
@@ -1194,7 +1193,7 @@ MENU1: ! r:
 	if service_enabled(6) then ! always show "Other Charge"
 		colhdr$(chc+=1)=srvnam$(6)&" Charge"
 		cm$(chc)="10"
-!
+
 		reporth$=reporth$&" "&srvnam$(6)(1:2)&" Chg  "
 		form$=form$&",n 9.2"
 	end if
@@ -1203,7 +1202,7 @@ MENU1: ! r:
 	if service_enabled(7) then ! always show "Other Charge"
 		colhdr$(chc+=1)=srvnam$(7)&" Charge"
 		cm$(chc)="10"
-!
+
 		reporth$=reporth$&" "&srvnam$(7)(1:2)&" Chg  "
 		form$=form$&",n 9.2"
 	end if
@@ -1212,7 +1211,7 @@ MENU1: ! r:
 	if service_enabled(8) then ! always show "Other Charge"
 		colhdr$(chc+=1)=srvnam$(8)&" Charge"
 		cm$(chc)="10"
-!
+
 		reporth$=reporth$&" "& srvnam$(8)(1:2)&" Chg  "
 		form$=form$&",n 9.2"
 	end if
@@ -1220,13 +1219,13 @@ MENU1: ! r:
 ! r: final billing code
 	colhdr$(chc+=1)=" F/B"
 	cm$(chc)="30"
-!
+
 	reporth$=reporth$&" Final "
-!
+
 	form$=form$&",n 9"
 ! /r
 	mat colhdr$(chc) : mat cm$(chc)
-!
+
 	fnflexinit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
 	 entryCount=0
 	ic=0
@@ -1485,7 +1484,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		fnTop(program$)
 		goto INPUT_HAND
 	else if ckey=ck_delete then
-		
+
 		! mat txt$(1)
 		! txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
 		! fnmsgbox(mat txt$,resp$,'',36)
@@ -1511,7 +1510,7 @@ EnterReadings: ! r:
 	EnterReadings3: !
 	fnTos
 	rc=0 : frac=0
-	!
+	
 	fnFra(1,1,3,39,"Account Data")
 	mylen=15 : mypos=mylen+2 : fraad=frac+=1
 	fnLbl(1,1,"Account:",mylen,1,0,fraad)
@@ -1523,7 +1522,7 @@ EnterReadings: ! r:
 	fnLbl(3,1,"Meter Address:",mylen,1,0,fraad)
 	fnTxt(3,mypos,10,0,0,empty$,1,empty$,fraad)
 	resp$(rc+=1)=e2$
-	!
+	
 	fnFra(7,1,12,60,"Readings & Overrides")
 	mylen=0 : for j=1 to 8 : mylen=max(mylen,len(srvnam$(j))) : next j
 	mypos1=mylen+2 : mypos2=mypos1+12
@@ -1770,19 +1769,19 @@ EnterReadings: ! r:
 		x(11)=val(resp$(rc+=1))
 		x(14)=val(resp$(rc+=1)) ! gas
 	end if
-	!
+
 	if service_enabled(5)=1 then ! service 5
 		x(06)=val(resp$(rc+=1))
 	end if
-	!
+
 	if service_enabled(6)=1 then ! service 6
 		x(07)=val(resp$(rc+=1))
 	end if
-	!
+
 	if service_enabled(7) then ! service 7
 		x(07)=val(resp$(rc+=1))
 	end if
-	!
+
 	if service_enabled(8) then ! service 8
 		x(08)=val(resp$(rc+=1))
 	end if
@@ -1808,7 +1807,7 @@ EnterReadings: ! r:
 	CHECK_UNUSUAL: !
 	if addmethod<>am_loadHoldingFile then mat mroll=(0)
 	passcheck=ckpass=0 : ckfail=1 : ckcancel=2
-	!
+
 	fn_checkwater
 	if passcheck=ckfail then
 		editmode=1
@@ -1816,7 +1815,7 @@ EnterReadings: ! r:
 	else if passcheck=ckcancel then
 		goto EnterReadings_Finis
 	end if
-	!
+
 	fn_checkgas
 	if passcheck=ckfail then
 		editmode=1
@@ -1825,7 +1824,7 @@ EnterReadings: ! r:
 		editmode=1
 		goto EnterReadings3 ! Then Goto EnterReadings_Finis
 	end if
-	!
+
 	fn_checkelec
 	if passcheck=ckfail then
 		editmode=1
@@ -1833,16 +1832,16 @@ EnterReadings: ! r:
 	else if passcheck=ckcancel then
 		goto EnterReadings_Finis
 	end if
-	
+
 	L2910: !
-	if addmethod=am_fromHhFile or addmethod=am_importTabDelimited then 
+	if addmethod=am_fromHhFile or addmethod=am_importTabDelimited then
 		return  ! Hand Held or ImportTabDelimited
 	end if
 
 	if unusual<>2 then
-		if editmode=0 then 
+		if editmode=0 then
 			fn_writeWork(hWork,x$,mat x)
-		else if editmode=1 then 
+		else if editmode=1 then
 			gosub REWRITE_WORK
 		end if
 	end if
@@ -1927,14 +1926,14 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 		end if
 		fnflexadd1(mat item$)
 	loop
-	!
+
 	NO_RECORDS_FOUND: !
 		if items=0 then mat item$=("")
 		fnflexadd1(mat item$)
 	FlexReadXit: !
 fnend
 def fn_writeWork(hWork,x$,mat x; overwriteDupeAccount) ! write to hWork file
-	!
+
 	if overwriteDupeAccount then
 		rewrite #hWork,using F_WORK,key=lpad$(trim$(x$),kln(hWork)): trim$(x$),mat x nokey ww_overwriteAdd
 		goto ww_overwriteFinis
@@ -2298,8 +2297,8 @@ def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImport
 					location$(loc_latitude)=hotImportDataValue$(hotIdX)
 					rewrite #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
 				else if hotImportDataField$(hotIdX)='customer.sequence' then
-					! *TODO: rewtite for customer.sequence " 
-					pr "rewrite #hCustomer1,using 'form',key=x$: " 
+					! *TODO: rewtite for customer.sequence "
+					pr "rewrite #hCustomer1,using 'form',key=x$: "
 					pause
 				else
 					pr ' add code to update '&hotImportDataField$(hotIdX)

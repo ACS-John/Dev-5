@@ -143,23 +143,20 @@ L1000: !
 	gosub VBPRINT
 ! end of pr routine
 	bct(2)=bct(2)+1	! accumulate totals
-	goto L600
+goto L600
 
 SCREEN3: !
 	fnTos
 	fnLbl(1,1,"Account (blank to stop)",31,1)
 	if trim$(z$)<>"" then
-		txt$="Last Account entered was "&z$
-	else
-		txt$=""
+		fnLbl(3,1,"Last Account entered was "&z$,44,1)
 	end if
-	fnLbl(3,1,txt$,44,1)
 	fncmbact(1,17)
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing")
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
 	fnAcs(mat resp$,ckey)
-	a$=lpad$(trim$(resp$(1)(1:10)),10) : _
+	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
 	read #8,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,extra_3,extra_4,extra_22 nokey SCREEN3
@@ -207,18 +204,9 @@ ENDSCR: ! pr totals screen
 	mylen=23 : mypos=mylen+2 
 	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
-	fnTxt(1,mypos,8,0,1,"",1) : _
+	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-! fnLbl(2,1,"Total  Bills  Coded:",MYLEN,1)
-! fnTxt(2,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-! fnLbl(3,1,"Total Bills Not Coded:",MYLEN,1)
-! fnTxt(3,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-! fnLbl(4,1,"Percent of Bills Coded:",MYLEN,1)
-! fnTxt(4,MYPOS,8,0,1,"",1) : _
-	! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
-	fnCmdSet(52) : _
+	fnCmdSet(52)
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
 
@@ -456,12 +444,14 @@ L3280: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 L3300: if ta1=0 then goto L3360
 	read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec L3360
-L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+	L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(1,1)=d1 then budget=budget+bt1(12,1): goto L3350 ! budget for current month
-! if bt1(14,1)=0 then pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid
-L3350: ta1=nba : goto L3300
+	! if bt1(14,1)=0 then pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid
+	L3350: !
+	ta1=nba
+goto L3300
 L3360: return  ! /r
 def fn_pay_after_amt
-		if bal<0 then let fn_pay_after_amt=round(bal,2) else let fn_pay_after_amt=round(bal*1.05,2)
+	if bal<0 then let fn_pay_after_amt=round(bal,2) else let fn_pay_after_amt=round(bal*1.05,2)
 fnend
 include: Ertn
