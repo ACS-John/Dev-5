@@ -1,6 +1,6 @@
 00010 ! Replace acsPR\newprRpt_S1.brs,Source
 00011 !
-00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs2,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
+00012   library "S:\Core\Library": fnerror,fngethandle,fnGetPayrollDates,fnwin3b,fnopenprn,fncloseprn,fnLbl,fnTxt,fnCmdKey,fnAcs,fnprocess,fnTos,fnconsole,fnStatus,fnStatusPause
 00013   library "S:\Core\Library": fnPayPeriodEndingDate
 00014   on error goto Ertn
 00020 !
@@ -105,7 +105,7 @@
 61056   resp$(3)=date$("Month DD, CCYY")
 61060   fnCmdKey("Next",1,1,0,"Prints the report")
 61070   fnCmdKey("Cancel",5,0,1,"Returns to menu")
-61080   fnAcs2(mat resp$,ckey) 
+61080   fnAcs(mat resp$,ckey) 
 61082   if ckey=5 then goto Xit
 61090   beg_date=val(resp$(1))
 61100   end_date=val(resp$(2))
