@@ -468,10 +468,10 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
 		fn_record_addn(15,fn_unusualUsage('high',account$,srvCode$, 1))
 		fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1))
-		!
+
 		fn_record_write(h_out)
 fnend
-def fn_badgerConnectC
+def fn_badgerConnectC ! older than BadgerBeacon
 	for j=1 to len(seq$)
 		on val(seq$(j:j)) goto BadgerCcWater,BadgerCcElectric,BadgerCcDemand,BadgerCcGas none BadgerCcNextSequence
 		BadgerCcWater: !
@@ -496,9 +496,9 @@ def fn_badgerConnectC
 		goto BadgerCcNextSequence
 
 		BadgerCcDemand: !
-		goto BadgerCcNextSequence
-		m$=""
-		pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		! if ...
+		! m$=""
+		! pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 		goto BadgerCcNextSequence
 
 		BadgerCcGas: !

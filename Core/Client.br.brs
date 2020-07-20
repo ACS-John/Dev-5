@@ -517,7 +517,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Omaha' then 
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-			fn_getClientLicense_add('U4') : u4_device$='READy'
+			fn_getClientLicense_add('U4') : u4_device$='READy Water'
 			
 		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
 			fn_userLimit(1)
