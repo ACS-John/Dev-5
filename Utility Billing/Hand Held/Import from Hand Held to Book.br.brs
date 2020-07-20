@@ -668,11 +668,11 @@ fnend
 			fn_ilrt_lineParseFixedWidth=ilpfwReturn
 		fnend
 	! /r
-def fn_prHout(what$*512; hOverride,___,hPrOut)
-	if hOverride>0 then hPrOut=hOverride else hPrOut=hOut
-	pr #hPrOut: what$
-	pr what$ !  print to console also :)
-fnend
+	def fn_prHout(what$*512; hOverride,___,hPrOut)
+		if hOverride>0 then hPrOut=hOverride else hPrOut=hOut
+		pr #hPrOut: what$
+		pr what$ !  print to console also :)
+	fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
 		open #hIn:=fngethandle: "Name="&inputFile$,display,input
 		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output

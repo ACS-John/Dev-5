@@ -474,6 +474,11 @@ def fn_setQ(setQ$*256)
 	if env$('acsDeveloper')='' then
 		exe 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
 	end if
+	if setQ$(2:2)=':' and ~exists(setQ$(1:2)) then
+		msgbox('Your data drive ('&setQ$(1:2)&') could not be found.')
+		! if env$('acsDeveloper')<>'' then pr 'dev pause' : pause
+		goto Xit
+	end if
 	fnmakesurepathexists('[Q]\Data\')
 	fnmakesurepathexists('[Q]\'&env$('CurSys')&'mstr\')
 	! if env$('acsDebug')<>'' then
