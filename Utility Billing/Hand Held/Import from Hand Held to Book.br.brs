@@ -210,40 +210,44 @@ def fn_acsmr(bookFile$*256) ! ACS Meter Reader
 	ACSMR_XIT: !
 fnend
 def fn_CsvByLocationId(bookFile$*512,enableMerge$)
-	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
-	open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-	open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-	pr #hOut: '[ACS Hand Held File Generic Version 2]'
-	pr #hOut: 'Source File='&fn_hh_input_filename$
-	linput #hIn: line$ eof CblEoF
-	if srch(line$,chr$(9))>0 then cblDelimiter$=chr$(9) else cblDelimiter$=','
-	dim cblItem$(0)*256
-	str2mat(line$,mat cblItem$,cblDelimiter$)
-	cblCsv_LocationId=fn_findFirstMatch(mat cblItem$,'Location ID','LocationID')
-	cblCsv_ReadingWater=fn_findFirstMatch(mat cblItem$,'Water Reading')
-	cblCsv_WaterTransmitter=fn_findFirstMatch(mat cblItem$,'Water Transmitter Number','MTU ID')
-	cblCsv_WaterTransmitterSuffix=fn_findFirstMatch(mat cblItem$,'Port')
-	do
+	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then 
+		! aclaraWorkOrderReturn=-1
+	else
+		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		pr #hOut: '[ACS Hand Held File Generic Version 2]'
+		pr #hOut: 'Source File='&fn_hh_input_filename$
 		linput #hIn: line$ eof CblEoF
+		if srch(line$,chr$(9))>0 then cblDelimiter$=chr$(9) else cblDelimiter$=','
+		dim cblItem$(0)*256
 		str2mat(line$,mat cblItem$,cblDelimiter$)
-		pr #hOut: 'Customer.Number='&fnAccountFromLocationId$(val(cblItem$(cblCsv_LocationId)),1)
-		fn_g2IfTherePrOut(cblCsv_ReadingWater,'Reading.Water',mat cblItem$)
-		if cblCsv_LocationId<>0 then
-			pr #hOut: 'MeterAddress.LocationID='&str$(val(cblItem$(cblCsv_LocationId)))
-		end if
-		if cblCsv_WaterTransmitter<>0 and cblCsv_WaterTransmitterSuffix<>0 then
-			pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))&'-'&trim$(cblItem$(cblCsv_WaterTransmitterSuffix))
-		else if cblCsv_WaterTransmitter<>0 then
-			pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))
-		end if
-		pr #hOut: ''
-	loop
+		cblCsv_LocationId=fn_findFirstMatch(mat cblItem$,'Location ID','LocationID')
+		cblCsv_ReadingWater=fn_findFirstMatch(mat cblItem$,'Water Reading')
+		cblCsv_WaterTransmitter=fn_findFirstMatch(mat cblItem$,'Water Transmitter Number','MTU ID')
+		cblCsv_WaterTransmitterSuffix=fn_findFirstMatch(mat cblItem$,'Port')
+		do
+			linput #hIn: line$ eof CblEoF
+			str2mat(line$,mat cblItem$,cblDelimiter$)
+			pr #hOut: 'Customer.Number='&fnAccountFromLocationId$(val(cblItem$(cblCsv_LocationId)),1)
+			fn_g2IfTherePrOut(cblCsv_ReadingWater,'Reading.Water',mat cblItem$)
+			if cblCsv_LocationId<>0 then
+				pr #hOut: 'MeterAddress.LocationID='&str$(val(cblItem$(cblCsv_LocationId)))
+			end if
+			if cblCsv_WaterTransmitter<>0 and cblCsv_WaterTransmitterSuffix<>0 then
+				pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))&'-'&trim$(cblItem$(cblCsv_WaterTransmitterSuffix))
+			else if cblCsv_WaterTransmitter<>0 then
+				pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))
+			end if
+			pr #hOut: ''
+		loop
+	end if
 	CblEoF: !
 	close #hIn:
 	close #hOut:
 	if enableMerge$='True' then
 		fn_mergeBooks(mergeFileOrigional$,bookFile$)
 	end if
+	fn_CsvByLocationId=returnN
 fnend
 def fn_g2IfTherePrOut(gitproItemEnum,gitproLabel$*128,mat gitproItem$)
 	! utility for [ACS Hand Held File Generic Version 2]
@@ -330,11 +334,14 @@ fnend
 		end if
 		fn_BadgerBeaconParseLine=returnN
 	fnend
-	def fn_aclara(bookFile$*512,enableMerge$)
+	def fn_aclara(bookFile$*512,enableMerge$; ___,returnN)
 		! pr ' this import is not yet written.'
 		! pr ' this import will only import active clients'
 		! pause
-		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
+		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then 
+			returnN=-1
+			goto CblEoF
+		end if
 		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
@@ -350,7 +357,7 @@ fnend
 				pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
 			nex awoX
 			pr #hOut: ''
-			aclaraReturn+=1
+			returnN+=1
 		loop
 		EO_Aclara: !
 		close #hIn:
@@ -358,7 +365,7 @@ fnend
 		if enableMerge$='True' then
 			fn_mergeBooks(mergeFileOrigional$,bookFile$)
 		end if
-		fn_aclara=aclaraReturn
+		fn_aclara=returnN
 	fnend
 	def fn_aclaraParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
 		reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
@@ -836,7 +843,6 @@ def fn_okToMerge(bookFile$*512,requiredFormat$*128)
 		ml$(1)='The existing book (number '&bookNumberToStoreReadings$&') is not in a format that permits'
 		ml$(2)='merging with the '&deviceSelected$&' format.'
 		fnmsgbox(mat ml$)
-		aclaraWorkOrderReturn=-1
 		okayToMergeReturn=0
 	else
 		okayToMergeReturn=1

@@ -714,7 +714,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
 	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
-	!
+
 	HH_CONTINUE: ! Continue with standard Hand Held routine
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey HH_W_NXT
 	fn_us1
@@ -745,7 +745,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	else ! if device$="Other" or device$="Sensus" or device$="AMR" or device$="Green Tree" or device$="Hersey" or device$="EZReader" then
 		goto HH_OTHER_TYPE1_READ
 	end if
-	
+
 	HH_W_END: !
 	fncloseprn
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings
@@ -1510,7 +1510,7 @@ EnterReadings: ! r:
 	EnterReadings3: !
 	fnTos
 	rc=0 : frac=0
-	
+
 	fnFra(1,1,3,39,"Account Data")
 	mylen=15 : mypos=mylen+2 : fraad=frac+=1
 	fnLbl(1,1,"Account:",mylen,1,0,fraad)
@@ -1522,7 +1522,7 @@ EnterReadings: ! r:
 	fnLbl(3,1,"Meter Address:",mylen,1,0,fraad)
 	fnTxt(3,mypos,10,0,0,empty$,1,empty$,fraad)
 	resp$(rc+=1)=e2$
-	
+
 	fnFra(7,1,12,60,"Readings & Overrides")
 	mylen=0 : for j=1 to 8 : mylen=max(mylen,len(srvnam$(j))) : next j
 	mypos1=mylen+2 : mypos2=mypos1+12
@@ -1574,7 +1574,7 @@ EnterReadings: ! r:
 	tmpService=3
 	if a(tmpService)=0 then disa=1 else disa=0 ! electric rate code
 	if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
-	!
+
 	if service_type(tmpService)=3 then
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
 		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
@@ -1715,7 +1715,7 @@ EnterReadings: ! r:
 		end if
 	end if
 	! /r
-	!
+
 	lc=lc+2
 	fnLbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
 	fncomboa("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
@@ -1851,7 +1851,7 @@ EnterReadings: ! r:
 	if addmethod=am_customersInSequence and editmode=0 then goto READ_ROUTE_SEQUENCE
 	if addmethod=am_customersInSequence and editmode=1 then goto MENU1
 	! If ADDMETHOD=am_customersInSequence AND EDITMODE=1 Then Goto READ_ROUTE_SEQUENCE ! MENU1
-	if addmethod=am_askAndEnterIndviduals and (editmode=0 or editmode=1) then mat x=(0): goto SEL_ACC ! kj 92407
+	if addmethod=am_askAndEnterIndviduals and (editmode=0 or editme=1) then mat x=(0): goto SEL_ACC ! kj 92407
 	! If ADDMETHOD=am_askAndEnterIndviduals AND EDITMODE=1 Then Goto MENU1 ! kj 92407
 goto MENU1 ! /r
 def fn_setupFlexRead
@@ -2115,7 +2115,7 @@ def fn_hh_other_type2(listonly)
 			fn_lo_pr_rec(hot_z$,mat x)
 		else
 			fn_hot_write_work(hWork,hot_z$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
-		end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
+		end if
 		if listonly=1 then let fncloseprn
 	end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
 fnend
