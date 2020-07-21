@@ -574,7 +574,7 @@ def fn_csEnv
 			if gw_equal > 0 then
 				ce_field$ = ce_prefix$&ce_line$(1:gw_posfnwp-1)
 				ce_value$ = ce_line$(gw_posfnwp+1:gw_wholeline)
-				fnSetEnv(ce_field$,ce_value$) error ignore
+				fnSetEnv(ce_field$,ce_value$) ! error ignore
 !       pr 'fnSetEnv("'&ce_field$&'","'&ce_value$&'")'
 ! Should fnSetEnv FAIL, Ignore it
 			end if
