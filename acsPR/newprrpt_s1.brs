@@ -51,8 +51,8 @@
 00460   close #2: ioerr ignore
 00465   fncloseprn ! /r
 00469 Xit: chain "S:\acsPR\newprRpt3"
-00470 ignore: continue
-19800 PRTRPT: ! r:
+00470 Ignore: continue
+19800 PrtRpt: ! r:
 19801 read #1,using "Form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,x 1,c 12,n 6,n 12.2": eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4step2,w4Year$,ph$,bd,W4Step3 eof EOF1 ! fnStatus(str$(eno))
 19802   ipsw=0
 19803   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey PRTRPT
