@@ -2,79 +2,97 @@
 ! -- Tranfer Data From Computer to Hand Held
 fn_setup
 fnTop(program$)
-open #h_customer_i1:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+open #h_customer_i1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 open #h_customer_i5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
-goto SEL_ACT
+goto Screen1
 
-SEL_ACT: ! r:
-fn_scr_selact
-if ckey=5 then
-	goto Xit
-else if ckey=2 then
-	goto Finis
-else ! ckey=1
-	if ~workopen then
-		fn_openOutFile ! open work files based on type of Hand Held
-	end if
-	if deviceSelected$='Aclara' then
-		! u4_includeFinalBilled$='True'
-		selection_method=sm_LocationId ! all Location IDs
-	end if
-	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
-		goto SELECT_ALL
-	else if selection_method=sm_aRoute then
-		goto AskRoute
-	else if selection_method=sm_routeRange then
-		goto AskRange
-	else if selection_method=sm_Individuals then
-		goto NextAskAccount
-	else if selection_method=sm_LocationId then
-		goto NextLocationId
-	end if
-end if  ! /r
-def fn_openOutFile ! open work areas based on type of Hand Held
-	dim out_filename$*256
-	! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
-	fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('Desktop')&'\ACS to '&deviceSelected$&'.txt'))
-	if deviceSelected$='Itron FC300' then
-		fn_itron_open ! default
+Screen1: ! r:
+
+	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
+	fnTos : respc=0
+	fnLbl(2,1,"Hand Held model:",16,1)
+	if lwrc$(devicePreference$)='[ask]' then
+		fncomboa("HH-FroCBox",2,18,mat deviceName$)
+		resp$(rc_Device:=respc+=1)=deviceSelected$
 	else
-		h_out                 =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT"                       ,  80)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT"                                   ,  80)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3"                            , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger Connect C", "C:\CONNECT\CONNECT.IN3"                            , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            "[Q]\UBmstr\intopalm.txt"                           , 204)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           "[Q]\UBmstr\Laptop.Out"                             , 200)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat"                          , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           "[Q]\UBmstr\READINGS.DAT"                           , 282,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat"                          , 578,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat'          , 256,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt'     , 256)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  "[Q]\UBmstr\Readings.dat"                           , 128)
-		! if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",env$('Desktop')&'\Aclara Work Order.txt',1048)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara"           ,env$('Desktop')&'\ACS to Aclara.txt'    ,1048)
-		if h_out<=0 then h_out=fn_ifMatchOpenDo('Neptune (Equinox v4)',env$('Desktop')&'\ACS to Neptune (Equinox v4).txt',1048,',eol=none')
-		if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 env$('Desktop')&'\ACS Hand Held Out.txt',1048)
+		fnLbl(2,18,deviceSelected$)
 	end if
-	workopen=1
-fnend
-def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
-	! inherrits deviceSelected$,out_filename$
-	! returns open file handle
-	if deviceTest$='' or deviceSelected$=deviceTest$ then
-		if out_filename$='' then out_filename$=defaultOut_filename$
-		fnmakesurepathexists(env$('at')&out_filename$)
-		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
-		if extraParameter$=',eol=none' then
-			gRecLenRequired=1
-		else
-			gRecLenRequired=0
-		end if
+	fnLbl(4,1,"Select:",16,1)
+	if u4_includeFinalBilled$='True' then
+		fnOpt(4,18,"[All] (including inactive)")
+	else
+		fnOpt(4,18,"[All] Active Accounts")
+	end if
+	rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
+	fnOpt(5,18,"An Entire Route")
+	rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
+	fnOpt(6,18,"A Range of Accounts")
+	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
+	fnOpt(7,18,"Specific Accounts")
+	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
+	if udim(mat serviceCodeMetered$) then
+		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of selected Hand Held model.")
+		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
+	end if
 
+
+	! if lrec(2)>0 then
+	!   fnCmdSet(19)
+	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
+	! else
+		fnLbl(9,1,"",46,2)
+		fnCmdSet(2)
+	! end if
+	fnAcs(mat resp$,ckey)
+	if ckey<>5 then
+			if lwrc$(devicePreference$)='[ask]' then
+				deviceSelected$=resp$(rc_Device)
+				fnureg_write('Hand Held Device Asked',deviceSelected$)
+			else
+				deviceSelected$=devicePreference$
+			end if
+		if resp$(rc_selectionMethod1)='True' then
+			selection_method=sm_allExceptFinal
+		else if resp$(rc_selectionMethod2)='True' then
+			selection_method=sm_aRoute
+		else if resp$(rc_selectionMethod3)='True' then
+			selection_method=sm_routeRange
+		else if resp$(rc_selectionMethod4)='True' then
+			selection_method=sm_Individuals
+		else if rc_selectionMethod5 and resp$(rc_selectionMethod5)='True' then
+			selection_method=sm_meterTypes
+		end if
+		fncreg_write('hhto.selection_method',str$(selection_method))
 	end if
-	fn_ifMatchOpenDo=hImodoReturn
-fnend
+	mat resp$=("")
+	if deviceSelected$='Badger Beacon' then filterNoLocationId=1 else filterNoLocationId=0
+
+
+	if ckey=5 then
+		goto Xit
+	else if ckey=2 then
+		goto Finis
+	else ! ckey=1
+		if ~workopen then
+			fn_openOutFile ! open work files based on type of Hand Held
+		end if
+		if deviceSelected$='Aclara' then
+			! u4_includeFinalBilled$='True'
+			selection_method=sm_LocationId ! all Location IDs
+		end if
+		if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
+			goto SELECT_ALL
+		else if selection_method=sm_aRoute then
+			goto AskRoute
+		else if selection_method=sm_routeRange then
+			goto AskRange
+		else if selection_method=sm_Individuals then
+			goto NextAskAccount
+		else if selection_method=sm_LocationId then
+			goto NextLocationId
+		end if
+	end if
+! /r
 AskRange: ! r:
 	fnTos
 	fnFra(1,1,1,57,"Starting Account:")
@@ -90,7 +108,7 @@ AskRange: ! r:
 	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 	if ckey=2 then goto Finis
-	if ckey=99 or ckey=5 then mat resp$=(""): goto SEL_ACT
+	if ckey=99 or ckey=5 then mat resp$=(""): goto Screen1
 	if ckey=6 then
 		fn_searchScreen(x$,resp$(1))
 		goto AskRange
@@ -108,8 +126,7 @@ AskRange: ! r:
 	if fn_customerRead=-54 then goto AskRange
 	! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto AskRange
 	if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto AskRange
-goto SendRecordToWorkFile ! /r
-
+goto SendRecordToOutFile ! /r
 AskRoute: ! r:
 	fnTos
 	if hbk<>0 then
@@ -134,11 +151,11 @@ L850: !
 	else if ckey=2 then
 		goto Finis
 	else if ckey=5 then
-		goto SEL_ACT
+		goto Screen1
 	else
 		goto SELECT_ALL
 	end if
-!
+
 ! /r
 AskMeterType: ! r:
 	fnTos
@@ -165,23 +182,11 @@ AskMeterType: ! r:
 	else if ckey=2 then
 		goto Finis
 	else if ckey=5 then
-		goto SEL_ACT
+		goto Screen1
 	else
 		goto SELECT_ALL
 	end if
-!
 ! /r
-NextLocationId: ! r:
-!  pr 'readLocationId=';readLocationId : pause ! if readLocationId=118 then pr 'about to do location 119' : pause
-	nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
-	! if final<>0 then ! can not trust accounts to be unique if they are not active.
-	!   goto NextLocationId
-	if nliCustomerReadResponse=0 then ! else if nliCustomerReadResponse=0 then ! no active account found for LocationID
-		goto NextLocationId
-	else if nliCustomerReadResponse=-54 then ! end of file
-		goto END1
-	end if
-goto SendRecordToWorkFile ! /r
 SELECT_ALL: ! r:
 	! if deviceSelected$='Aclara Work Order' then
 	! 	fn_getFilterAccount(mat filterAccount$)
@@ -189,35 +194,29 @@ SELECT_ALL: ! r:
 	if bk1=0 then bk1=1
 	restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
 goto NextReadForAll ! /r
+
+NextLocationId: ! r:
+	!  pr 'readLocationId=';readLocationId : pause ! if readLocationId=118 then pr 'about to do location 119' : pause
+	nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
+	! if final<>0 then ! can not trust accounts to be unique if they are not active.
+	!   goto NextLocationId
+	if nliCustomerReadResponse=0 then ! else if nliCustomerReadResponse=0 then ! no active account found for LocationID
+		goto NextLocationId
+	else if nliCustomerReadResponse=-54 then ! end of file
+		goto End1
+	end if
+goto SendRecordToOutFile ! /r
 NextReadForAll: ! ! r:
 	if fn_customerRead=-54 then
-		goto END1
+		goto End1
 	else if selection_method=sm_aRoute then
 		if route=0 then
 			goto NextReadForAll
 		else if bk1><route then
-			goto END1
+			goto End1
 		end if
 	end if
-goto SendRecordToWorkFile ! /r
-END1: ! r:
-	if deviceSelected$='Itron FC300' then
-		fn_itron_close
-	else if deviceSelected$='Neptune (Equinox v4)' then
-		fn_neptuneEquinoxV4_close
-	end if
-	!
-	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
-		goto Finis
-	else if selection_method=sm_aRoute then
-		hbk=bk1
-		goto AskRoute
-	else if selection_method=sm_LocationId then
-		goto Finis
-	else
-		goto NextAskAccount
-	end if
-goto NextAskAccount ! /r
+goto SendRecordToOutFile ! /r
 NextAskAccount: ! r:
 	fnTos
 	if z$<>"" then
@@ -234,17 +233,19 @@ NextAskAccount: ! r:
 	if ckey=6 then
 		fncustomer_search(resp$(1))
 	end if
-	if ckey=99 or ckey=5 or resp$(1)="          " then goto SEL_ACT
+	if ckey=99 or ckey=5 or resp$(1)="          " then goto Screen1
 	z$=lpad$(trim$(resp$(1)(1:10)), 10)
 	if fn_customerRead(z$)=-4272 then goto NextAskAccount
-	goto SendRecordToWorkFile
+	goto SendRecordToOutFile
 ! /r
-SendRecordToWorkFile: ! r: doesn't seem to be very well named.
+
+SendRecordToOutFile: ! r: 
 	! if trim$(z$)='100100.99' then pause
 
 	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
 		if ~(selection_method=sm_meterTypes) or deviceSelected$=fn_meterInfo$('Device',z$,serviceCodeMetered$(1)) then
 			if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
+				dim ft$*20
 				ft$=fn_rmk1$(z$)
 				if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
 				seq$=str$(sq1)
@@ -253,7 +254,7 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 				! else if deviceSelected$="Aclara Work Order" then
 				! 	fn_aclaraWorkOrder
 				else if deviceSelected$="ACS Meter Reader" then
-					fn_acs_meter_reader
+					fn_acsMeterReader
 				else if deviceSelected$="AMR" then
 					fn_amr
 				else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then
@@ -272,19 +273,21 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 					fn_masterMeter
 				else if deviceSelected$="Neptune (Equinox v4)" then
 					fn_neptuneEquinoxV4(h_out)
-				else if deviceSelected$="Psion Workabout" then
-					fn_workabout
+				! else if deviceSelected$="Psion Workabout" then
+				! 	fn_workabout
 				else if deviceSelected$="READy Water" then
-					fn_READy_Water
+					fn_readyWater
+				else if deviceSelected$="READy Kamstrup (Geo)" then
+					fn_readyKamstrup(h_out,z$,'WA') ! newer than READy Water, has long/lat, requires meter location
 				else if deviceSelected$="Unitech HT630" then
 					fn_unitech_ht630
 				else
-					goto SEL_ACT ! go back if Hand Held information is not available for their selection
+					goto Screen1 ! go back if Hand Held information is not available for their selection
 				end if
 			end if
 		end if
 	end if
-	SendRecordToWorkFileFinis: !
+	SendRecordToOutFileFinis: !
 	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
 		goto NextReadForAll
 	else if selection_method=sm_aRoute then
@@ -299,8 +302,83 @@ SendRecordToWorkFile: ! r: doesn't seem to be very well named.
 		goto NextReadForAll
 	end if
 ! /r
+End1: ! r:
+	if deviceSelected$='Itron FC300' then
+		fn_itron_close
+	else if deviceSelected$='Neptune (Equinox v4)' then
+		fn_neptuneEquinoxV4_close
+	end if
 
-! r: create the line by handheld type funcitons
+	if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
+		goto Finis
+	else if selection_method=sm_aRoute then
+		hbk=bk1
+		goto AskRoute
+	else if selection_method=sm_LocationId then
+		goto Finis
+	else
+		goto NextAskAccount
+	end if
+goto NextAskAccount ! /r
+Finis: ! r: Transfer to or from Hand Held Computer
+	dim out_filename_report$*512
+	out_filename_report$=file$(h_out)
+	close #h_out: ioerr ignore
+	close #h_customer_i1: ioerr ignore
+	close #h_customer_i5: ioerr ignore
+	if hhrun$<>'' then
+		hhrun$=srep$(hhrun$,'[file]',out_filename_report$)
+		exec 'sy -C "'&hhrun$&'"'
+	end if
+	fn_reportCreatedFile(out_filename_report$)
+	fn_transfer
+goto Xit ! /r
+Xit: fnXit
+
+def fn_openOutFile ! open work areas based on type of Hand Held
+	dim out_filename$*256
+	! changed to next line on 2/2/2018      fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
+	fnureg_read('Hand Held To File',out_filename$,br_filename$(env$('Desktop')&'\ACS to '&deviceSelected$&'.txt'))
+	if deviceSelected$='Itron FC300' then
+		fn_itron_open ! default
+	else
+		h_out                 =fn_ifMatchOpenDo('Sensus'              ,'C:\vol002\amrs\READINGS.DAT'                       ,  80)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Green Tree'          ,'C:\READINGS.DAT'                                   ,  80)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Badger'              ,'C:\CONNECT\CONNECT.IN3'                            , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Badger Connect C'    ,'C:\CONNECT\CONNECT.IN3'                            , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Boson'               ,'[Q]\UBmstr\intopalm.txt'                           , 204)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('LapTop'              ,'[Q]\UBmstr\Laptop.Out'                             , 200)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('AMR'                 ,'C:\ezreader\download.dat'                          , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Hersey'              ,'[Q]\UBmstr\READINGS.DAT'                           , 282,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('EZReader'            ,'c:\ezreader\Download.dat'                          , 578,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Unitech HT630'       ,'[temp]\[session]_uni_ht630.dat'          , 256)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Unitech HT630'       ,'[temp]\[session]_uni_ht630.dat'          , 256,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('ACS Meter Reader'    ,'[temp]\[session]_acs_meter_data.txt'     , 256)
+		! if h_out<=0 then h_out=fn_ifMatchOpenDo('Psion Workabout'   ,'[Q]\UBmstr\Readings.dat'                           , 128)
+		! if h_out<=0 then h_out=fn_ifMatchOpenDo('Aclara Work Order' ,'[Desktop]\Aclara Work Order.txt',1048)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Aclara'              ,'[Desktop]\ACS to Aclara.txt'    ,1048)
+		if h_out<=0 then h_out=fn_ifMatchOpenDo('Neptune (Equinox v4)','[Desktop]\ACS to Neptune (Equinox v4).txt',1048,',eol=none')
+		if h_out<=0 then h_out=fn_ifMatchOpenDo(''                    ,'[Desktop]\ACS Hand Held Out.txt',1048)
+	end if
+	workopen=1
+fnend
+def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
+	! inherrits deviceSelected$,out_filename$
+	! returns open file handle
+	if deviceTest$='' or deviceSelected$=deviceTest$ then
+		if out_filename$='' then out_filename$=defaultOut_filename$
+		fnmakesurepathexists(env$('at')&out_filename$)
+		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+		if extraParameter$=',eol=none' then
+			gRecLenRequired=1
+		else
+			gRecLenRequired=0
+		end if
+	end if
+	fn_ifMatchOpenDo=hImodoReturn
+fnend
+
+! r: Hand Helds' create line for customer in #h_out 
 ! r: aclara
 def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
@@ -312,7 +390,7 @@ def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 		portNumber$=transmitterSerialNumber$(posTsnDash+1:len(transmitterSerialNumber$))
 		transmitterSerialNumber$(posTsnDash:len(transmitterSerialNumber$))=''
 	end if
-	
+
 	fn_record_init(chr$(9))                                      ! Aclara Name               ACS Name (if different)
 	fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))      ! LocationID
 	fn_record_addc(10,z$)                                        ! Account Number
@@ -375,7 +453,7 @@ fnend
 ! 	fn_record_write(h_out)
 ! /r fnend
 ! /r
-def fn_acs_meter_reader
+def fn_acsMeterReader
 	! FILE (from ACS to Hand Held and from Hand Held to ACS) needs to contain the following fields:
 	!   Account - 10 characters
 	!   Route and Sequence - 12 digits (this is the order for accounts to be displayed in - it might contain duplicates and/or skip large ranges of numbers)
@@ -398,7 +476,7 @@ def fn_acs_meter_reader
 			end if  ! a(a_item)>0
 		end if  ! it is a metered service
 	next a_item
-fnend  ! fn_acs_meter_reader
+fnend  ! fn_acsMeterReader
 def fn_amr ! AMR software solutions  ! same as ezreader, but specifically for Albany (who no longer uses ACS UB)
 	if header=0 then
 		if alp$(1:1)<>"*" then
@@ -574,9 +652,9 @@ fnend
 def fn_laptop
 	if a(1) and trim$(serviceName$(1))="Water" then
 		write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20":          z$,e$(2),e$(1),"W",watread ,watusage ,d(1),d(3) ,f$(1),ft$
-	else if a(3) and trim$(serviceName$(3))="Electric" then                        
+	else if a(3) and trim$(serviceName$(3))="Electric" then
 		write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20":          z$,e$(2),e$(1),"E",elecread,elecusage,d(5),d(8) ,f$(2),ft$
-	else if a(4) and trim$(serviceName$(4))="Gas" then                             
+	else if a(4) and trim$(serviceName$(4))="Gas" then
 		write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20,n 3,n 7":  z$,e$(2),e$(1),"G",gasread ,gasusage ,d(9),d(12),f$(3),ft$,route,sequence
 	end if
 fnend
@@ -587,8 +665,8 @@ def fn_masterMeter ! z$,mat e$,extra$(1-2),route
 	reading_current=d(1)
 	unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 	unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-	
-	fn_record_init(chr$(9))                                           
+
+	fn_record_init(chr$(9))
 	fn_record_addc(10,z$)                                             ! Account Number
 	fn_record_addc(30,e$(2))                                          ! Customer Name
 	fn_record_addc(30,e$(1))                                          ! Meter Address
@@ -793,7 +871,7 @@ def fn_neptuneEquinoxV4_close
 	fn_record_write(h_out)                 ! CRLF           Req UB 16-17 2
 fnend
 ! /r
-def fn_READy_Water ! z$,mat e$,extra$(1-2),route
+def fn_readyWater ! z$,mat e$,extra$(1-2),route
 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
 	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 	fn_record_init(chr$(9))                                           ! ACS Name (if different)
@@ -811,9 +889,31 @@ def fn_READy_Water ! z$,mat e$,extra$(1-2),route
 	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))         ! Meter.Meter Number
 	fn_record_write(h_out)
 fnend
+def fn_readyKamstrup(h_out,account$*10,srvCode$*2)
+	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+	fn_record_init(chr$(9))                                             ! ACS Names
+	fn_record_addc(10,account$)                                         ! Account Number
+	fn_record_addc(30,e$(2))                                            ! Customer Name
+	fn_record_addc(12,extra$(2))                                        ! Phone Number
+	fn_record_addc(30,e$(1)    )                                        ! Meter Address
+	! fn_record_addc(30,e$(3))                                          ! Address 1 - Primary
+	fn_record_addc(30,extra$(1))                                        ! Address 2 - Primary
+	fn_record_addc(30,tmpCity$ )                                        ! City
+	fn_record_addc(10,tmpState$)                                        ! State
+	fn_record_addc(15,tmpZip$  )                                        ! Zip
+	fn_record_addn( 3,route    )                                        ! Route Number
+	fn_record_addn( 7,sequence )                                        ! Sequence
+	fn_record_addc( 8,fn_meterInfo$('Meter Number',account$,srvCode$))  ! Meter.Meter Number
+	fn_record_addC(12,fn_meterInfo$('longitude',account$,srvCode$)    )
+	fn_record_addC(12,fn_meterInfo$('latitude' ,account$,srvCode$)    )
+  fn_record_addN(10,fn_serviceDataN('prior','reading',srvCode$)     ) ! Prev Read
+  fn_record_addN(10,fn_serviceDataN('current','reading',srvCode$)     ) ! current Read
+	fn_record_write(h_out)
+fnend
 ! r: itron
 def fn_itron_open
-	open #h_out:=fngethandle: "Name=[Q]\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outIn,relative
+	open #h_out:=fngethandle: "Name=[Q]\HH[session].int,RecL=128,EoL=None,Replace",internal,outIn,relative
 	fn_itron_record_fhd
 	itron_rdg_count=0
 	itron_cus_count=0
@@ -824,7 +924,7 @@ fnend
 def fn_itron_close
 	fn_itron_route_trailer
 	fn_itron_record_ftr
-	!
+
 	rec_current=0 ! restore #h_out:
 	do
 		rec_current+=1
@@ -890,7 +990,7 @@ def fn_itron_close
 	close #h_out,free:
 	fnmakesurepathexists(env$('at')&out_filename$)
 	fnCopy("[Q]\Download.dat",env$('at')&out_filename$)
-	fn_report_created_file(out_filename$)
+	fn_reportCreatedFile(out_filename$)
 	!   if exists ("C:\MVRS\MVRSWin5.exe") then
 	!     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
 	!       open #h_tmp:=fngethandle: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
@@ -1086,25 +1186,25 @@ def fn_itron_record_mtx ! latitude, longitude, etc - pg 16
 	fn_record_write(h_out)
 fnend  ! fn_itron_record_mtx
 def fn_dms_to_dec(dtd_in$*20) ! for longitude and latitude
-! N31 35 47.8
+	! N31 35 47.8
 	if dtd_in$(1:1)="n" then dtd_sign$='+' : dtd_in$(1:1)=''
 	if dtd_in$(1:1)="e" then dtd_sign$='+' : dtd_in$(1:1)=''
 	if dtd_in$(1:1)="s" then dtd_sign$='-' : dtd_in$(1:1)=''
 	if dtd_in$(1:1)="w" then dtd_sign$='-' : dtd_in$(1:1)=''
-	!
+
 	dtd_pos_space=pos(dtd_in$,' ')
 	dtd_degrees=val(dtd_in$(1:dtd_pos_space))
 	dtd_in$(1:dtd_pos_space)=''
-	!
+
 	dtd_pos_space=pos(dtd_in$,' ')
 	dtd_minutes=val(dtd_in$(1:dtd_pos_space))
 	dtd_in$(1:dtd_pos_space)=''
-	!
+
 	dtd_seconds=val(dtd_in$) conv ignore
 	dtd_return=dtd_degrees+dtd_minutes/60+dtd_seconds/3600
 	if dtd_sign$='-' then dtd_return=-dtd_return
 	fn_dms_to_dec=dtd_return
-fnend  ! fn_dms_to_dec
+fnend
 def fn_itron_record_rff ! off-site (Radio) reads - pg 22
 	if skip_next_rff_record=1 then
 		skip_next_rff_record=0
@@ -1131,7 +1231,7 @@ def fn_itron_record_rff ! off-site (Radio) reads - pg 22
 		! fn_record_addc(2,crlf$)
 		fn_record_write(h_out)
 	end if
-fnend  ! fn_itron_record_rff
+fnend
 def fn_itron_record_fhd ! file header - pg 3
 	fn_record_init
 	fn_record_addc(3,'FHD')
@@ -1161,7 +1261,7 @@ def fn_itron_record_ftr ! file trailer - pg 3
 	fn_record_addx(108) ! field 10
 	! fn_record_addc(2,crlf$)
 	fn_record_write(h_out)
-fnend  ! fn_itron_record_FTR
+fnend
 def fn_itron_record_chd ! cycle header - pg 5
 	fn_record_init
 	fn_record_addc(3,'CHD')
@@ -1171,7 +1271,7 @@ def fn_itron_record_chd ! cycle header - pg 5
 	fn_record_addx(109) ! field 5
 	! fn_record_addc(2,crlf$)
 	fn_record_write(h_out)
-fnend  ! fn_itron_record_chd
+fnend
 def fn_itron_record_ctr ! cycle trailer - pg 5
 	fn_record_init
 	fn_record_addc(3,'CTR')
@@ -1181,7 +1281,7 @@ def fn_itron_record_ctr ! cycle trailer - pg 5
 	fn_record_addx(109) ! field 5
 	! fn_record_addc(2,crlf$)
 	fn_record_write(h_out)
-fnend  ! fn_itron_record_ctr
+fnend
 def fn_itron_record_mtr ! meter record - pg 13
 	fn_record_init
 	fn_record_addc(3,'MTR')
@@ -1220,7 +1320,7 @@ def fn_itron_record_mtr ! meter record - pg 13
 	fn_record_addx(14)
 	! fn_record_addc(2,crlf$) ! field 35 (the end CR/LF)
 	fn_record_write(h_out)
-fnend  ! fn_itron_record_mtr
+fnend
 ! /r
 def fn_legacyMultiDevice
 	! r: set cd$ - included in several records - maybe some sort of meter id - not sure
@@ -1264,41 +1364,40 @@ def fn_legacyMultiDevice
 		end if
 	next j
 fnend
-def fn_workabout
-	dim ft$*20
-	for j=1 to len(seq$)
-		on val(seq$(j:j)) goto WORKABOUT_WATER,WORKABOUT_ELECTRIC,WORKABOUT_DEMAND,WORKABOUT_GAS none WORKABOUT_NEXT_SEQUENCE
-
-		FM_WORKABOUT: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 20
-
-		WORKABOUT_WATER: !
-			if a(1)=0 then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(1))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-
-		WORKABOUT_ELECTRIC: !
-			if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto WORKABOUT_LAWNMETER
-			m$=ltrm$(f$(2))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
-			WORKABOUT_LAWNMETER: !
-			if a(3)=0 or trim$(serviceName$(3))<>"Lawn Meter" then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(2))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-
-		WORKABOUT_DEMAND: !
-		goto WORKABOUT_NEXT_SEQUENCE
-
-		WORKABOUT_GAS: !
-			if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto WORKABOUT_NEXT_SEQUENCE
-			m$=ltrm$(f$(3))(1:10)
-			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
-		goto WORKABOUT_NEXT_SEQUENCE
-
-		WORKABOUT_NEXT_SEQUENCE: !
-	next j
-fnend
+! def fn_workabout r: old and no longer used 
+! 	for j=1 to len(seq$)
+! 		on val(seq$(j:j)) goto WorkaboutWATER,WorkaboutELECTRIC,WorkaboutDEMAND,WorkaboutGAS none WorkaboutNextSequence
+! 
+! 		FM_WORKABOUT: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 20
+! 
+! 		WorkaboutWATER: !
+! 			if a(1)=0 then goto WorkaboutNextSequence
+! 			m$=ltrm$(f$(1))(1:10)
+! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
+! 		goto WorkaboutNextSequence
+! 
+! 		WorkaboutELECTRIC: !
+! 			if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto WorkaboutLAWNMETER
+! 			m$=ltrm$(f$(2))(1:10)
+! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+! 			WorkaboutLAWNMETER: !
+! 			if a(3)=0 or trim$(serviceName$(3))<>"Lawn Meter" then goto WorkaboutNextSequence
+! 			m$=ltrm$(f$(2))(1:10)
+! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+! 		goto WorkaboutNextSequence
+! 
+! 		WorkaboutDEMAND: !
+! 		goto WorkaboutNextSequence
+! 
+! 		WorkaboutGAS: !
+! 			if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto WorkaboutNextSequence
+! 			m$=ltrm$(f$(3))(1:10)
+! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
+! 		goto WorkaboutNextSequence
+! 
+! 		WorkaboutNextSequence: !
+! 	next j
+! fnend /r
 def fn_unitech_ht630
 	! INPUT FILE (from ACS to Hand Held) needs to contain the following fields:
 	!   Account - 10 characters
@@ -1328,7 +1427,7 @@ def fn_record_init(; setDelimiter$)
 	dim rec_line$*2048
 	rec_line$=''
 	gRecordDelimiter$=setDelimiter$
-fnend 
+fnend
 def fn_record_addc(rac_field_length,rac_field_text$*256)
 	rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
 fnend
@@ -1357,66 +1456,6 @@ def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 fnend
 ! /r
 
-def fn_scr_selact
-	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
-	fnTos : respc=0
-	fnLbl(2,1,"Hand Held model:",16,1)
-	if lwrc$(devicePreference$)='[ask]' then
-		fncomboa("HH-FroCBox",2,18,mat deviceName$)
-		resp$(rc_Device:=respc+=1)=deviceSelected$
-	else
-		fnLbl(2,18,deviceSelected$)
-	end if
-	fnLbl(4,1,"Select:",16,1)
-	if u4_includeFinalBilled$='True' then
-		fnOpt(4,18,"[All] Active Accounts")
-	else
-		fnOpt(4,18,"[All] (including inactive)")
-	end if
-	rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
-	fnOpt(5,18,"An Entire Route")
-	rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
-	fnOpt(6,18,"A Range of Accounts")
-	rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
-	fnOpt(7,18,"Specific Accounts")
-	rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
-	if udim(mat serviceCodeMetered$) then
-		fnOpt(8,18,"Only for Active Accounts with "&serviceCodeMetered$(1)&" Meter Type of selected Hand Held model.")
-		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
-	end if
-
-
-	! if lrec(2)>0 then
-	!   fnCmdSet(19)
-	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
-	! else
-		fnLbl(9,1,"",46,2)
-		fnCmdSet(2)
-	! end if
-	fnAcs(mat resp$,ckey)
-	if ckey<>5 then
-			if lwrc$(devicePreference$)='[ask]' then
-				deviceSelected$=resp$(rc_Device)
-				fnureg_write('Hand Held Device Asked',deviceSelected$)
-			else
-				deviceSelected$=devicePreference$
-			end if
-		if resp$(rc_selectionMethod1)='True' then
-			selection_method=sm_allExceptFinal
-		else if resp$(rc_selectionMethod2)='True' then
-			selection_method=sm_aRoute
-		else if resp$(rc_selectionMethod3)='True' then
-			selection_method=sm_routeRange
-		else if resp$(rc_selectionMethod4)='True' then
-			selection_method=sm_Individuals
-		else if rc_selectionMethod5 and resp$(rc_selectionMethod5)='True' then
-			selection_method=sm_meterTypes
-		end if
-		fncreg_write('hhto.selection_method',str$(selection_method))
-	end if
-	mat resp$=("")
-	if deviceSelected$='Badger Beacon' then filterNoLocationId=1 else filterNoLocationId=0
-fnend
 def fn_searchScreen(x$,&res$)
 	fncustomer_search(x$)
 	if x$<>"" then
@@ -1456,7 +1495,7 @@ def fn_transfer
 		if resp$(1)="" then resp$(1)="A:\"
 		fnCmdSet(2)
 		fnAcs(mat resp$,ckey)
-		if ckey<>5 then 
+		if ckey<>5 then
 			dest$=resp$(1)
 			if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
 			if len(dest$)=1 then dest$=dest$=":"
@@ -1466,8 +1505,8 @@ def fn_transfer
 	goto TRANSFER_XIT ! /r
 	TRANSFER_XIT: !
 fnend  ! fn_transfer
-def fn_report_created_file(out_filename_report$*512)
-	if out_filename_report$<>'' and out_filename_report$<>':CON:' and deviceSelected$<>'Psion Workabout' and deviceSelected$<>'LapTop' then
+def fn_reportCreatedFile(out_filename_report$*512)
+	if out_filename_report$<>'' and out_filename_report$<>':CON:' and deviceSelected$<>'LapTop' then ! and deviceSelected$<>'Psion Workabout'
 		mat m$(2)
 		m$(1)="Hand Held File created:"
 		m$(2)=os_filename$(out_filename_report$)
@@ -1475,36 +1514,23 @@ def fn_report_created_file(out_filename_report$*512)
 	end if
 fnend
 
-Finis: ! r: Transfer to or from Hand Held Computer
-	dim out_filename_report$*512
-	out_filename_report$=file$(h_out)
-	close #h_out: ioerr ignore
-	close #h_customer_i1: ioerr ignore
-	if hhrun$<>'' then
-		hhrun$=srep$(hhrun$,'[file]',out_filename_report$)
-		exec 'sy -C "'&hhrun$&'"'
-	end if
-	fn_report_created_file(out_filename_report$)
-	fn_transfer
-goto Xit ! /r
-Xit: fnXit
-def fn_rmk1$*20(z$)
+def fn_rmk1$*20(z$; ___,return$*20)
 	! read the footnote from the note file  (any note with * as first character
 	dim rm$*1320
 	dim notefile$*256
-	ft$="                    "
 	notefile$='[Q]\UBmstr\notes.h[cno]\'&trim$(z$)&'.txt'
 	if exists(notefile$) then
 		open #20: "Name="&notefile$,display,input ioerr Rmk1_Finis
 		do
 			linput #20: rm$ eof Rmk1_Finis
 			if rm$(1:1)="*" then
-				ft$=rpad$(rm$(2:21),20)
+				return$=rpad$(rm$(2:21),20)
 			end if
 		loop until rm$(1:1)="*"
 	end if
 	Rmk1_Finis: !
 	close #20: ioerr ignore
+	fn_rmk1$=return$
 fnend
 def fn_pcent
 	if ~pcent_setup then
@@ -1847,7 +1873,7 @@ def fn_setup
 	sm_Individuals=4
 	sm_LocationId=5
 	sm_meterTypes=6
-	
+
 	meterDataSourceOverrideEnabled=1
 	dim serviceCodeMetered$(0)*2
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)

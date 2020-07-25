@@ -69,21 +69,21 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Session:"
 		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": session$
 		button_pos$='47'
-		pr #win,f "9,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
-		pr #win,f "10,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
+		pr #win,f "9,"&button_pos$&",Cc 22,,B12": "Console Pause (F12)" ! 1,19,12/CC 12,,B1000
 	!   pr #win,f "6,"&button_pos$&",C 22,B,10": "WB Help (F10)"
 		! pr #win,f "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
 	!   if exists(acshelp$)<>0 then
 	!     pr #win,f "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
 	!   end if
-		pr #win,f "14,"&button_pos$&",Cc 22,,B12": "Console Pause (F12)" ! 1,19,12/CC 12,,B1000
+		pr #win,f "13,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
+		pr #win,f "14,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
 		
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
-		  ! pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" ! 1,19,12/CC 12,,B1000
-			pr #win,f "17,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' ! 1,19,12/CC 12,,B1000
-			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)' ! 1,19,12/CC 12,,B1000
-			! pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' ! 1,19,12/CC 12,,B1000
+		  ! pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" 
+			pr #win,f "17,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' 
+			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)'
+			! pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' 
 			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
 		

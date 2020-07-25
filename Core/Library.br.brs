@@ -14,7 +14,7 @@ def library fnVal(stringToConvert$*128; ___,returnN)
 	fnVal=returnN
 fnend 
 
-def library fnsavetoasstart(filenameToCopyTo$*400)
+def library fnSaveToAsStart(filenameToCopyTo$*400)
 	setEnv('saveToAsStart',trim$(filenameToCopyTo$))
 fnend
 def library fnBrFilename$*512(filename$*512; return$*512)
@@ -124,10 +124,10 @@ def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
 	nex fpItem
 	fnFixPd=fpReturn
 fnend
-def library fncd(x)
+def library fnCd(x)
 	fncd=(x-int(x*.01)*100)*10000+int(x*.01)
 fnend
-def library fnformnumb$(numb,decimals,size)
+def library fnFormNumb$(numb,decimals,size)
 	fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
 fnend
 def library fnpause(;unused)
@@ -259,15 +259,15 @@ def library fnKeyDelete(h_filehandle,f_fileform_key_only$*128,key$*128)
 	library 'S:\Core\key.br': fnKeyDelete
 	fnKeyDelete=fnKeyDelete(h_filehandle,f_fileform_key_only$,key$)
 fnend
-def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
+def library fnFkey(scrline,mat fkey$,mat disfk,&em$,es)
 	library 'S:\Core\ace\win3b.br': fnfkey
 	fnfkey=fnfkey(scrline,mat fkey$,mat disfk,em$,es)
 fnend
-def library fnwin3(win,&cap$,wh,ww,dc,bo,win_align)
+def library fnWin3(win,&cap$,wh,ww,dc,bo,win_align)
 	library 'S:\Core\ace\Win3b.br': fnwin3b
 	fnwin3b(win, cap$,wh,ww,dc,bo,win_align,0)
 fnend
-def library fnopenwin(win,sr,sc,er,ec,&cap$)
+def library fnOpenWin(win,sr,sc,er,ec,&cap$)
 	library 'S:\Core\OpenWin.br': fnopenwin
 	fnopenwin=fnopenwin(win,sr,sc,er,ec, cap$)
 fnend
