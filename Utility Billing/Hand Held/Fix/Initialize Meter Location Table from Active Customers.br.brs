@@ -1,5 +1,7 @@
-
+! load 'S:\Utility Billing\Hand Held\Fix\Initialize Meter Location Table from Active Customers.br'
 ! if this program has duplicates it should not be used or should be modified to determine the location id differently
+
+! currently configured best for Omaha
 
 fn_setup
 fntop(program$)
@@ -23,23 +25,27 @@ do
 	read #hCustomer,using form$(hCustomer): mat c$,mat cN eof EoCustomer
 	customerStatus=cN(c_finalBilling)
 	if customerStatus=0 or customerStatus=3 then ! if active
+		id=cN(c_route)*100000000+cN(c_sequence)*10
+		ReDoLocation: !
 		mat l$=('')
 		mat lN=(0)
-		lN(loc_locationID     )=int(val(c$(c_account)))
+		lN(loc_locationID     )=id
 		l$(loc_name           )=c$(c_meterAddress)
 		l$(loc_activeCustomer )=trim$(c$(c_account))
 		l$(loc_serviceId      )='WA'
 		l$(loc_longitude      )=''
 		l$(loc_latitude       )=''
 		l$(loc_meterNumber    )=c$(c_s1meterNumber)
-		l$(loc_transmitter    )=str$(int(val(c$(c_account)))) ! c$(c_s01serialNumber) ! Service 1 (Water) – Serial Number
+		l$(loc_transmitter    )=str$(id) ! c$(c_s01serialNumber) ! Service 1 (Water) – Serial Number
 		l$(loc_meterType      )=' C'
 		locKey$=fnBuildKey$('U4 Meter Location',mat l$,mat lN)
 		read #hLocation,using form$(hLocation),key=locKey$: mat l$,mat lN noKey NoKeyGoodContinue
 		! Key already exists...
-			pr 'Key already exists.';bell
+			! pr 'Key already exists.';bell
 			dupCount+=1
-			pause
+			! pause
+			id+=1
+			goto ReDoLocation
 		goto NextCustomer
 		
 		NoKeyGoodContinue: !

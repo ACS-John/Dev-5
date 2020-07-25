@@ -1,0 +1,16 @@
+fields are space and tab delimited
+  c 10, Account Number
+  c 30, Customer Name
+  c 12, Phone Number
+  c 30, Meter Address
+  c 30, Address 2 - Primary
+  c 30, City
+  c 10, State
+  c 15, Zip
+  n  3, Route Number
+  n  7, Sequence
+  c  8,meter Number
+  C 12,meter longitude
+  C 12,meter latitude
+  N 10,Prev Read
+  N 10,current Read
