@@ -17,7 +17,7 @@ def library fnfinstmt_v0_to_v1
 
 	for j=1 to 6
 		execute "Copy [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
-		execute "Copy  "&env$('temp')&"\WORK."&session$&' '&"[Q]\GLmstr\"&fil$(j)&".h[cno] -n"
+		execute "Copy  [Temp]\WORK."&session$&' '&"[Q]\GLmstr\"&fil$(j)&".h[cno] -n"
 		fnIndex("[Q]\GLmstr\"&fil$(j)&".h[cno]","Index [Q]\GLmstr\"&fil$(j)&".h[cno]"&' '&"[Q]\GLmstr\"&idx$(j)&".h[cno] 1 5 Replace DupKeys ")
 
 		if j=2 or j=5 then 

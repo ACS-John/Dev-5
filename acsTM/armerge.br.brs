@@ -7,7 +7,7 @@ pr newpage
 pr f "10,10,c 50,H,N": "A/R Merge Transactions In Process"
 open #hClient:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
 open #hArTrans:=2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
-open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn,relative
+open #hAddr:=fngethandle: "Name=[Temp]\Addr."&session$,internal,outIn,relative
 ! open #h_armotran:=4: "Name=S:\Core\Data\acsllc\ARMoTran.h[cno],Shr",internal,output
 LOOP_TOP: !
 	read #hAddr,using F_addr: p$,iv$,mat tr,id$,pgl$,gl$(1),ga(1),gl$(2),ga(2),gl$(3),ga(3),gl$(4),ga(4),gl$(5),ga(5),gl$(6),ga(6),gl$(7),ga(7),gl$(8),ga(8),gl$(9),ga(9),gl$(10),ga(10) eof Finis,noRec Finis

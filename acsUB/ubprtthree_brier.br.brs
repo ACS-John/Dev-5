@@ -212,13 +212,13 @@ VBPRINT: ! r: Brier Lake - 3 per page  Utility Bills  requires: (z$,fb$(1),mat d
 return ! /r
 BULKSORT: ! r: bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
 	L2190: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	goto L2190
 	L2220: close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2260
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed
+	execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2260
+	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&session$,internal,input,keyed
 L2260: return ! /r
 include: Ertn

@@ -12,7 +12,7 @@
  
  
 	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
-	open #3: "Name="&env$('temp')&"\Work."&session$,internal,input
+	open #3: "Name=[Temp]\Work."&session$,internal,input
 	open #4: "Name=[Q]\PRmstr\JCPRH1.H[cno],Shr",internal,output
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
 L220: read #3,using L230: mat ji1,jn$,mat ji2,empnam$,sal eof L720

@@ -184,7 +184,7 @@ L1720: eofcode=1
 	fnpriorcd(1)
 	goto Xit
  
-BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
+BLDPCT1: open #10: "Name=[Temp]\Work."&session$&",KFName=[Temp]\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
 	for j=1 to lrec(3)
 		read #3,using L1810,rec=j: pc1,bb,cb noRec L1900
 L1810: form pos mp1,pd 3,pos 81,2*pd 6.2

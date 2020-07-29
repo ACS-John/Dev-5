@@ -10,7 +10,7 @@ fnTop(program$)
  
 open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
 open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative
-open #4: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output
+open #4: "Name=[Temp]\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output
  
 MENU1: !
 	fnTos
@@ -98,14 +98,14 @@ PRINT_REPORT: !
 	close #2:
 	close #3:
 	close #4:
-	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output
+	open #1: "Name=[Temp]\Control."&session$,internal,output
 	restore #1:
-	write #1,using L880: "FILE "&env$('temp')&"\Work."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
+	write #1,using L880: "FILE [Temp]\Work."&session$&",,,[Temp]\Addr."&session$&",,,acsPR,,A,N"
 	L880: form pos 1,c 128
 	write #1,using L880: "MASK 13,6,c,a,1,12,c,a,33,2,c,a,29,4,c,a"
 	close #1:
-	execute "FREE "&env$('Temp')&"\Addr."&session$&" -n"
-	execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
+	execute "FREE [Temp]\Addr."&session$&" -n"
+	execute "Sort [Temp]\Control."&session$&" -n"
 fnchain ("S:\Payroll\Job Cost\Certified Payroll Register (Part 2)")
  
 Xit: fnXit

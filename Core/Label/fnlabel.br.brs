@@ -220,7 +220,7 @@ def library fnlabel(mat linestyle$)
 	goto LABEL_DONE ! /r
 
 	OPEN_LABEL_WSID: ! r:
-		open #hLabelTemp:=fngethandle: "Name="&env$('temp')&"\Label.dat,RecL=600,Use",internal,outIn ioerr XNOW
+		open #hLabelTemp:=fngethandle: "Name=[Temp]\Label.dat,RecL=600,Use",internal,outIn ioerr XNOW
 	return  ! /r
 
 	LABEL_XIT: ! r:

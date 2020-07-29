@@ -32,7 +32,7 @@
 !               remove the old reads in case they dont match
 	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 ! /r
-	open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative
+	open #11: "Name=[Temp]\Gridname.tmp",internal,input,relative
 	read #11,using 'Form POS 1,C 40',rec=1: gridname$
 	close #11:
 	if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET

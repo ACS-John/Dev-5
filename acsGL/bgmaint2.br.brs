@@ -54,9 +54,9 @@ MENU1: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Budget File #:",14,right)
-	execute "Dir [Q]\GLmstr\budget*.H[cno] >"&env$('temp')&"\FlexWork.tmp" ioerr L530
+	execute "Dir [Q]\GLmstr\budget*.H[cno] >[Temp]\FlexWork.tmp" ioerr L530
 	L530: j=0
-	open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
+	open #13: "Name=[Temp]\FlexWork.tmp",display,input ioerr L690
 	L550: !
 	linput #13: ln$ eof L680
 	ln$=uprc$(ln$)
@@ -164,8 +164,8 @@ close #2:
 execute "Index [Q]\GLmstr\Budget"&str$(bud)&".H[cno],[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],1/149,12/1,Replace,DupKeys -n"
 open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed
 ! holding files in gl___________________________________________________
-execute "DIR [Q]\GLmstr\GL*.H[cno] >"&env$('temp')&"\Work."&session$
-open #3: "Name="&env$('temp')&"\Work."&session$,display,input
+execute "DIR [Q]\GLmstr\GL*.H[cno] >[Temp]\Work."&session$
+open #3: "Name=[Temp]\Work."&session$,display,input
 L1350: linput #3: ln$ eof L1530
 ln$=uprc$(ln$)
 if ln$(1:2)><"GL" then goto L1350

@@ -46,28 +46,28 @@ ASK_SORT: !
 	L420: !
 	close #paytrans: : close #unpdaloc: : close #clwork:
 	upa=0 ! this sort is ok. it sorts a temporary work file. leave in
-	open #tmp=9: "Name="&env$('temp')&"\Control,Size=0,RecL=128,Replace",internal,output
-	write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H[cno],[Q]\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
+	open #tmp=9: "Name=[Temp]\Control,Size=0,RecL=128,Replace",internal,output
+	write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H[cno],[Q]\CLmstr,,[Temp]\Addr,,,,,A,N"
 	if fund=2 then
 		write #tmp,using 'Form POS 1,C 128': "Mask 74,12,N,A" ! "Mask 74,3,N,A,1,20,C,A,86,4,N,A"
 	else
 		write #tmp,using 'Form POS 1,C 128': "Mask 1,20,C,A,86,4,N,A"
 	end if
 	close #tmp:
-	execute "Free "&env$('temp')&"\Addr -n" ioerr ignore
-	execute "Sort "&env$('temp')&"\Control -n"
-	open #addr:=9: "Name="&env$('temp')&"\Addr",internal,input
+	execute "Free [Temp]\Addr -n" ioerr ignore
+	execute "Sort [Temp]\Control -n"
+	open #addr:=9: "Name=[Temp]\Addr",internal,input
 	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed
 	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.H[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ioerr L550
 	prcode=1
 	L550: !
 	open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".H[cno],Shr",internal,input,relative
 	open #glmstr:=5: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-	open #work:=6: "Name="&env$('temp')&"\Work,Size=0,RecL=22,Replace",internal,output
+	open #work:=6: "Name=[Temp]\Work,Size=0,RecL=22,Replace",internal,output
 	close #work:
-	execute "Free "&env$('temp')&"\Indx -n" ioerr ignore
-	execute "Index "&env$('temp')&"\Work,"&env$('temp')&"\Indx,1,12,Replace,DupKeys -n"
-	open #work=6: "Name="&env$('temp')&"\Work,KFName="&env$('temp')&"\Indx",internal,outIn,keyed
+	execute "Free [Temp]\Indx -n" ioerr ignore
+	execute "Index [Temp]\Work,[Temp]\Indx,1,12,Replace,DupKeys -n"
+	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",internal,outIn,keyed
 	open #fundmstr=7: "Name=[Q]\CLmstr\FundMstr.H[cno],KFName=[Q]\CLmstr\FundIdx1.H[cno],Shr",internal,input,keyed
 	notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.H[cno],KFName=[Q]\CLmstr\dptidx1.H[cno]",internal,input,keyed ioerr L640 : notused=0
 	L640: !

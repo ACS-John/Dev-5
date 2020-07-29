@@ -29,7 +29,7 @@ rinput fields mat io1$: outputfile$,ev$ conv L290
 ev$=trim$(trim$(ev$,chr$(0)))
 outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 open #2: "Name="&ev$,display,input
-open #15: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed
+open #15: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed
 L340: !
 linput #2: ln$ eof L870
 ln$=srep$(ln$,chr$(9),'')
@@ -106,7 +106,7 @@ stop
 !
 MoveItToText: ! r:
 	open #10: "Name="&outputfile$&",RecL=87,Replace",display,output
-	open #15: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed
+	open #15: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed
 	do
 		read #15,using L970: textfile$ eof L1000
 		L970: form pos 1,c 87

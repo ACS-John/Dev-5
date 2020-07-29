@@ -80,7 +80,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
 	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
 	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 
-	open #work=5: "Name="&env$('Temp')&"\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
+	open #work=5: "Name=[Temp]\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 	if ~fn_check_breakdowns_add_up then goto Xit ! gosub CHECK_BREAKDOWNS
 	gosub GLBucketStuff
 	! Gosub GLCHG
@@ -157,16 +157,16 @@ def library fnPostCheckbookToGl(; enablePost)
 		close #tralloc: 
 		if lrec(work)=0 then goto EndAll
 		close #work: 
-		open #1: "Name="&env$('Temp')&"\CONTROL."&wsid$&",SIZE=0,RecL=128,Replace",internal,output 
+		open #1: "Name=[Temp]\CONTROL."&wsid$&",SIZE=0,RecL=128,Replace",internal,output 
 		write #1,using L1150: "! SORT FOR G/L DISTRIBUTION LIST IN PROCESS"
-		write #1,using L1150: "FILE "&env$('Temp')&"\WORK."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+		write #1,using L1150: "FILE [Temp]\WORK."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 		write #1,using L1150: "MASK 1,26,C,A"
 		L1150: form pos 1,c 128
 		close #1: 
 		fnFree(env$('Temp')&"\Addr."&session$)
 		execute 'SORT '&env$('Temp')&'\CONTROL.'&wsid$&' -n'
-		open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr EndAll
-		open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 
+		open #1: "Name=[Temp]\Addr."&session$,internal,input ioerr EndAll
+		open #work=5: "Name=[Temp]\WORK."&session$,internal,input,relative 
 		if pr1$="N" then goto L1240
 		if f1=0 then gosub Hdr
 		pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NewPge

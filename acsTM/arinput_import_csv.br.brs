@@ -11,7 +11,7 @@ dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 fn_get_old_setup
 open #h_clmstr:=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
 open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
-open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
+open #h_addr:=3: "Name=[Temp]\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
 SCREEN_1: ! r:
 ! exec 'config dimonly'
 	dim file_import$*256,filter_date(2)

@@ -131,11 +131,11 @@ L2140: !
 L2210: !
 		pr #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
 		close #h_tmp_dr:
-		open #h_tmp_proc:=fngethandle: "Name="&env$('temp')&"\PROC."&session$&",Replace",display,output
+		open #h_tmp_proc:=fngethandle: "Name=[Temp]\PROC."&session$&",Replace",display,output
 		pr #h_tmp_proc,using F_C255: "load [Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],Source"
 		pr #h_tmp_proc,using F_C255: "RUN"
 		close #h_tmp_proc:
-		chain "PROC="&env$('temp')&"\PROC."&session$
+		chain "PROC=[Temp]\PROC."&session$
 PDR_XIT: !
 fnend
  

@@ -45,9 +45,9 @@ L420: ! YES DEPT    NO SUB ACCOUNT
 	goto L510
 L490: ! NO GL TO BE ENTERED
 	sz=6
-L510: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn ioerr L530
+L510: open #h_addr:=3: "Name=[Temp]\Addr."&session$,internal,outIn ioerr L530
 	close #h_addr,free:
-L530: open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr L2290
+L530: open #h_addr:=3: "Name=[Temp]\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr L2290
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr L2290
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr L2290
 L560: form pos 1,c 255,142*c 18

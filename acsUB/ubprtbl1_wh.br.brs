@@ -166,7 +166,7 @@ goto READALTADR
 
 SORT1: ! r: SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1510
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then 
 		routekey$="" 
@@ -187,15 +187,15 @@ SORT1: ! r: SELECT & SORT
 goto L1310
 
 END5: close #6:
-	open #9: "Name="&env$('temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 L1430: form pos 1,c 128
-	write #9,using L1430: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	write #9,using L1430: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 	write #9,using L1430: "Mask 1,19,C,A"
 	close #9:
-	execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr ignore
-	execute "Sort "&env$('temp')&"\Control."&session$&" -n"
-	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
-	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	execute "Free [Temp]\Addr."&session$&" -n" ioerr ignore
+	execute "Sort [Temp]\Control."&session$&" -n"
+	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
+	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 L1510: return  ! /r
 
 ENDSCR: ! pr totals screen
@@ -414,14 +414,14 @@ return  ! /r
 
 BULKSORT: ! r: bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
 L3040: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3070
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	goto L3040
 L3070: close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\TempIdx."&session$&" 1,21,Replace,DupKeys -n" ioerr L3110 ! 1,19 was changed to 22,10 to switch sorting to account
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,input,keyed
+	execute "Index [Temp]\Temp."&session$&" [Temp]\TempIdx."&session$&" 1,21,Replace,DupKeys -n" ioerr L3110 ! 1,19 was changed to 22,10 to switch sorting to account
+	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$,internal,input,keyed
 L3110: return  ! /r
 BUD1: ! r:
 	bud1=0

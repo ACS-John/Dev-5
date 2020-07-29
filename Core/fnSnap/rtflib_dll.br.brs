@@ -189,7 +189,7 @@
           ! ?tart writing RTF text file                                   !:
           ! ?                                                             !:
           ! -------------------------------- !
-10380     open #(textfile:=fngethandle): "name="&env$('temp')&"\text"&session$&".txt,recl=5000,replace",display,output 
+10380     open #(textfile:=fngethandle): "name=[Temp]\text"&session$&".txt,recl=5000,replace",display,output 
 10385     if sort_col>0 then header$(inf:inf)="[RTFLINE] Sorted by "&headers$(sort_col)
 10390     pr #textfile: "H|[SPEC(spec"&session$&".spc)]"&header$&"[BOTLINE]" !:
           pr #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
@@ -347,7 +347,7 @@
 10670     close #textfile: 
 10680     open #textfile: "name="&textfile$,display,input 
 10682     _seq=-1
-10690     _seq+=1: open #(rtfout:=fngethandle): "name="&env$('temp')&"\temp"&session$&str$(_seq)&".rtf,eol=none,replace",display,output ioerr 10690
+10690     _seq+=1: open #(rtfout:=fngethandle): "name=[Temp]\temp"&session$&str$(_seq)&".rtf,eol=none,replace",display,output ioerr 10690
 10700     rtfout$=file$(rtfout)
 10705 ! close #waitwin:! PAUSE
 10710     gosub BUILD_SPEC
@@ -381,7 +381,7 @@
         ! ?uild an RTF specification file in the %TEMP% directory based !:
         ! ?n the number of columns and text of the lIST to print.       !:
         ! -------------------------------- !
-10810   open #(specfile=fngethandle): "name="&env$('temp')&"\spec"&session$&".spc,recl=2000,replace",display,output 
+10810   open #(specfile=fngethandle): "name=[Temp]\spec"&session$&".spc,recl=2000,replace",display,output 
 10820   pr #specfile: ""
 10825 ! -------------------------------- !:
         ! ?et margins                                                   !:

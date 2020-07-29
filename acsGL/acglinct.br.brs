@@ -175,7 +175,7 @@ L1650: eofcode=1
 	fncloseprn
 	goto Xit
  
-BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
+BLDPCT1: open #10: "Name=[Temp]\Work."&session$&",KFName=[Temp]\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
 	for j=1 to lrec(3)
 		read #3,using L1740,rec=j: pc1,bb,cb noRec L1830
 		cb=1

@@ -25,7 +25,7 @@
 	if ckey=5 then goto Xit
 	rd1=val(resp$(1))
  
-	open #2: "Name="&env$('temp')&"\Work."&session$&",RecL=72,Replace",internal,output
+	open #2: "Name=[Temp]\Work."&session$&",RecL=72,Replace",internal,output
 	open #1: "Name=[Q]\GLmstr\ACTRANS.H[cno]",internal,input
 L270: read #1,using L280: mat tr,tr$,td$,pcde eof END1
 L280: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
@@ -35,9 +35,9 @@ L280: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
  
 END1: close #2:
 	close #1:
-	execute "COPY "&env$('temp')&"\Work."&session$&' '&"[Q]\GLmstr\ACTRANS.H[cno] -n"
+	execute "COPY [Temp]\Work."&session$&' '&"[Q]\GLmstr\ACTRANS.H[cno] -n"
 	execute "Index [Q]\GLmstr\ACTRANS.H[cno]"&' '&"[Q]\GLmstr\ACTRIDX.H[cno] 1/71/17/13 12/2/2/4 Replace DupKeys"
-	execute "free "&env$('temp')&"\Work."&session$
+	execute "free [Temp]\Work."&session$
 	goto Xit
  
 Xit: fnXit

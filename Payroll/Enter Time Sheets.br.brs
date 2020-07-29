@@ -561,7 +561,7 @@ PullFromJobCost: ! r:
 ! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 	gosub SORTIT
 	open #5: "Name=[Q]\PRmstr\JCPRH1.H[cno]",internal,input,relative
-	open #6: "Name="&env$('Temp')&"\Addr."&session$,internal,input
+	open #6: "Name=[Temp]\Addr."&session$,internal,input
 	close #h_rpwork:=3: ioerr ignore
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 	close #h_rpwork:
@@ -643,13 +643,13 @@ L6000: !
 	goto PROOF_TOTALS
 ! /r
 SORTIT: ! r:
-	open #15: "Name="&env$('Temp')&"\Sort"&session$&".tmp,RecL=128,Replace",internal,output
-	write #15,using 'form pos 1,c 128': "FILE [Q]\PRmstr\JCPRH1.H[cno],,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
+	open #15: "Name=[Temp]\Sort"&session$&".tmp,RecL=128,Replace",internal,output
+	write #15,using 'form pos 1,c 128': "FILE [Q]\PRmstr\JCPRH1.H[cno],,,[Temp]\Addr."&session$&",,,acsPR,,A,N"
 	write #15,using 'form pos 1,c 128': "MASK 1,8,N,A,10,2,PD,A"
 	close #15:
 	close #6: ioerr ignore
-	execute "FREE "&env$('Temp')&"\Addr."&session$&" -n" ioerr ignore
-	execute "SORT "&env$('Temp')&"\Sort"&session$&".tmp -n"
+	execute "FREE [Temp]\Addr."&session$&" -n" ioerr ignore
+	execute "SORT [Temp]\Sort"&session$&".tmp -n"
 	return  ! /r
 ASK_EMPLOYEE: ! r:
 	editmode=0

@@ -212,7 +212,7 @@ GET_AU: ! r:
 return  ! /r
 STREET_REVERSE: ! r: FOR SORTING
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",internal,input,keyed
-	open #10: "Name="&env$('Temp')&"\Temp."&session$&",RecL=40,Replace",internal,outIn
+	open #10: "Name=[Temp]\Temp."&session$&",RecL=40,Replace",internal,outIn
 	do
 		read #1,using 'form pos 1,c 10,c 30': z$,e$(1) eof SORT1
 		x=y=0
@@ -224,14 +224,14 @@ STREET_REVERSE: ! r: FOR SORTING
 	SORT1: !
 	close #1:
 	close #10:
-	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
-	write #9,using 'form pos 1,c 128': "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+	write #9,using 'form pos 1,c 128': "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 	write #9,using 'form pos 1,c 128': "Mask 11,30,C,A"
 	close #9:
-	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
-	execute "Sort "&env$('Temp')&"\Control."&session$
-	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
-	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	execute "Free [Temp]\Addr."&session$ ioerr ignore
+	execute "Sort [Temp]\Control."&session$
+	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
+	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 return  ! /r
 OPEN_GRID: ! r: select customers from grid
 	sn$="ublabel-7"
