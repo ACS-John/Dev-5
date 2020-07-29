@@ -17,11 +17,11 @@ def fn_balanceSheet(; defaultFormat$)
 
 	if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 
-	Screen1: ! r:
+	Screen1: ! r: gets costCntr
 		fnTos
-		mylen=30
+		mylen=33
 		mypos=mylen+3 : right=1
-		fnLbl(1,1,"Cost Center or Department #:",mylen,right)
+		fnLbl(1,1,"Cost Center or Department Number:",mylen,right)
 		fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 		resp$(1)=""
 		fnLbl(2,1,"(Blank for all Departments)",mylen,right)
@@ -31,34 +31,34 @@ def fn_balanceSheet(; defaultFormat$)
 		if ckey=5 then goto Finis
 		costcntr=val(resp$(1)) conv Screen1
 	goto GetStarted ! /r
+	
 	GetStarted: ! r:
 		if fnps=2 then
 			mp1=66
-			exe 'con sub [FinancialStatementCode] C'
+			exe 'con sub [FinancialStatementCode] C' ! used by fn_open('GL FSDesign'...)
 			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
 			fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","66 3")
 		else
-			exe 'con sub [FinancialStatementCode] B'
+			exe 'con sub [FinancialStatementCode] B' ! used by fn_open('GL FSDesign'...)
 			mp1=63
 			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
 			fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","63 3")
 		end if
 		dim fsN(0),fs$(0)*128
-		hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1)
+		hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1) ! requires [FinancialStatementCode]
 		open #hGl:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
 		fnopenprn
-		dim reportHeading1$*50
-		reportHeading1$=env$('program_caption')
 		do
-			! READ_TOP: !
 			read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis
 			! if pos(trim$(fs$(2)),"CURRENT ASSETS") then pause
 			if ltrm$(fs$(fsd_number))<>"" and ltrm$(fs$(fsd_number))<>"0" then
 				if costcntr=0 or costcntr=fsN(fsd_costCenterCode) then
 					if fs$(fsd_entryType)<>"S" and fs$(fsd_entryType)<>"F" and fs$(fsd_entryType)<>"R" and heading=0 then
-						fn_tePrnHeader(reportHeading1$,reportHeading2$)
+						fn_tePrnHeader(reportHeading2$)
 					end if
 					if fs$(fsd_entryType)='R' then      ! R = Report Heading (Places name of report in heading)
+						dim reportHeading1$*50
+						reportHeading1$=env$('program_caption')
 						fn_teSetHeaderOrSubHead(mat fs$,mat fsN,reportHeading1$,foot$,tabnote)
 					else if fs$(fsd_entryType)='S' then ! S = Sub Heading (Places sub heading at top of F/S)
 						dim reportHeading2$*50
@@ -68,6 +68,12 @@ def fn_balanceSheet(; defaultFormat$)
 					else if fs$(fsd_entryType)='H' then ! H = Header (Places headings within the F/S)
 						fn_tePrnSectionHeading(mat fs$,mat fsN,foot$,tabnote,mat accum)
 					else if fs$(fsd_entryType)='D' then ! D = Detail (Pulls amounts from G/L accounts)
+						pr fs$(fsd_number) : pause
+						if trim$(fs$(fsd_number))='372' then
+							pr 'found 372'
+							pause
+						end if
+						
 						fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,notrans,actpd,mat accum,foot$,tabnote,total,cb)
 					else if fs$(fsd_entryType)='E' then ! E = Equity (Used to combine P&L with equity
 						fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,notrans,actpd,mat accum,foot$,tabnote,total,cb)
@@ -81,8 +87,6 @@ def fn_balanceSheet(; defaultFormat$)
 						pr bell;'unexpectedTe="'&fs$(fsd_entryType)&'"'
 						pause
 						goto Finis
-						! on pos ("RFHDTSPE",fs$(fsd_entryType),1) goto UnexpectedTe,UnexpectedTe,UnexpectedTe,UnexpectedTe,UnexpectedTe,UnexpectedTe,UnexpectedTe,UnexpectedTe none UnexpectedTe
-						!    pos ("RFHDTSPE",fs$(fsd_entryType),1) goto L970,L1010,L460,L520,L840,L970,L840,L520 none READ_TOP
 						!    pos ("RFHDTSPE",fs$(fsd_entryType),1) goto TeRS,TeF  ,TeH ,TeDE,TeTP,TeRS,TeTP,TeDE none READ_TOP
 					end if
 				end if
@@ -131,7 +135,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	De_ReadGlMasterAmounts: ! read general ledger master file for amounts
 	dim by(13)
 	dim bp(13)
-	read #hGl,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
+	read #hGl,using 'Form POS mp1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
 	if br=0 then goto De_ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto De_L610
 	if fnfscode<1 or fnfscode>12 then let fnfscode(1)
@@ -176,11 +180,11 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	sp2=dollar-fsN(fsd_startPos)-1
 	tmpStartPos=fsN(fsd_startPos)
 	if fsN(fsd_underline)=1 then
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PGOF  ! atlantis underline
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PgOf  ! atlantis underline
 		! F_withoutUl: form pos tmpStartPos,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip 0  ! ! atlantis underline
 		F_withoutUl: form pos tmpStartPos,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip 1
 	else
-		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,total pageoflow PGOF
+		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,total pageoflow PgOf
 		! F_withUl:    form pos tmpStartPos,c sp2,pos dollar,c 1,pic(---,---,---.##),skip 0
 		F_withUl:    form pos tmpStartPos,c sp2,pos dollar,c 1,pic(---,---,---.##),skip 1
 	end if
@@ -200,9 +204,9 @@ def fn_tePrnProfitLossAndTotal(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,
 	sp2=dollar-fsN(fsd_startPos)-1
 	tmpStartPos=fsN(fsd_startPos) !  if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
 	if fsN(fsd_underline)=1 then
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PgOf
 	else
-		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,accum1 pageoflow PGOF
+		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,accum1 pageoflow PgOf
 	end if
 	! if debug and trim$(fs$(fsd_description))='PROFIT OR LOSS' then
 	! 	pr trim$(fs$(fsd_description)),dollar$,accum1
@@ -261,10 +265,10 @@ def fn_footerPrint(foot$*132,tabnote; eofcode,___,sk,fl) ! FooterPrint
 	F_footer: form skip sk,pos tabnote,c fl,skip 1
 	if eofcode<>1 then
 		pr #255: newpage
-		fn_tePrnHeader(reportHeading1$,reportHeading2$)
+		fn_tePrnHeader(reportHeading2$)
 	end if
 fnend
-PGOF: ! r: foot$,tabnote
+PgOf: ! r: foot$,tabnote
 	fn_footerPrint(foot$,tabnote)
 continue ! /r
 def fn_underline(mat fsN; ___,underlin$*14)
@@ -281,10 +285,10 @@ def fn_underline(mat fsN; ___,underlin$*14)
 	else
 	end if
 fnend
-def fn_tePrnHeader(reportHeading1$*50,reportHeading2$*50)
+def fn_tePrnHeader(reportHeading2$*50)
 	heading=1
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-	pr #255: "\qc  {\f181 \fs24 \b "&trim$(reportHeading1$)&"}"
+	pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
 	if trim$(reportHeading2$)<>"" then
 		pr #255: "\qc  {\f181 \fs18 \b "&trim$(reportHeading2$)&"}"
 	end if

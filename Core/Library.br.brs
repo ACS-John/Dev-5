@@ -223,6 +223,10 @@ def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
 	library 'S:\Core\FileIO\fileio.br': fnCopyFile
 	fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
 fnend
+def library fnReIndex(fileioLayout$*255; indexNum)
+	library 'S:\Core\FileIO\fileio.br': fnReIndex
+	fnReIndex=fnReIndex(fileioLayout$, env$('Program_Caption'),indexNum) ! ,path$*255)
+fnend
 
 ! /r
 ! r: Confirm

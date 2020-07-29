@@ -134,19 +134,18 @@ def library fnps(;ps)
 fnend
 def library fnUseDeptNo
 	if ~setup then fn_setup
-	if ~useDeptNosetup then ! r:
-		useDeptNosetup=1
-		if env$('cursys')="GL" then ! read directly from gl if in gl system
-			open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
-			read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
-			close #company: 
-		else 
-			pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-			! open #tmp:=fngethandle: "Name="&env$('temp')&"\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
-			! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
-			! close #tmp: 
-		end if
-	end if ! /r
+	if env$('cursys')<>"GL" then
+		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
+		! open #tmp:=fngethandle: "Name="&env$('temp')&"\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
+		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
+		! close #tmp: 
+	end if
+	if useDeptNosetup<>val(env$('cno')) then
+		useDeptNosetup=val(env$('cno'))
+		open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+		read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
+		close #company: 
+	end if
 	fnUseDeptNo=gld1
 fnend 
 def library fndat(&dat$;get_or_put)

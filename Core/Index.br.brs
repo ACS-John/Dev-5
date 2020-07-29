@@ -136,8 +136,6 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\GLmstr\ACTrans.h"&str$(cno),"[Q]\GLmstr\AcTrIdx.h"&str$(cno),"1/71/17/13 12/2/2/4")
 		fn_index("[Q]\GLmstr\AcTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
 
-		fn_index("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\agfsidx4.h"&str$(cno),",1 5")
-		fn_index("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\agfsidx1.h"&str$(cno),",1 5")
 		fn_index("[Q]\GLmstr\ACGLfNSf.h"&str$(cno),"[Q]\GLmstr\agfsidx5.h"&str$(cno),",1 5")
 		fn_index("[Q]\GLmstr\ACGLfNSg.h"&str$(cno),"[Q]\GLmstr\agfsidx6.h"&str$(cno),",1 5")
 		fn_index("[Q]\GLmstr\ACGLFNSi.h"&str$(cno),"[Q]\GLmstr\agfsidx3.h"&str$(cno),",1 5")
@@ -176,6 +174,17 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		next sn
 		fn_index("[Q]\GLmstr\TransCodes.h"&str$(cno),"[Q]\GLmstr\transcodes-idx.h"&str$(cno),"1 2")
 		fn_index("[Q]\GLmstr\W2Box16.h"&str$(cno),"[Q]\GLmstr\W2INDEX.h"&str$(cno),"1 8")
+		
+
+		fn_index("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\agfsidx4.h"&str$(cno),",1 5")
+		fn_index("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\agfsidx1.h"&str$(cno),",1 5")
+
+
+		exe 'con sub [FinancialStatementCode] C' ! secondary
+		fnReIndex('GL FSDesign')
+		
+		exe 'con sub [FinancialStatementCode] B' ! primary
+		fnReIndex('GL FSDesign')
 	! /r
 	else if system_id$='UB' then ! r:
 		fn_index("[Q]\UBmstr\Reads_and_Chgs.h"&str$(cno), "[Q]\UBmstr\Reads_and_Chgs-Key.h"&str$(cno),"1 10")
