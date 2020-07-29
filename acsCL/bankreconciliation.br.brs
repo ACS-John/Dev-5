@@ -213,7 +213,7 @@ L1600: if ti3><5 then goto BANKTOTALSCREEN
 L1660: form pos 19,"  ----------",skip 1,pos 19,n 12.2,skip 1
 ! If NW=1 Then pr #WP: NEWPAGE
 		close #wp:
-		open #wp: "Name="&env$('temp')&"\RPT"&str$(j)&"."&wsid$,display,input
+		open #wp: "Name=[Temp]\RPT"&str$(j)&"."&wsid$,display,input
 L1700: linput #wp: line$ eof EO_WP
 		pr #255: line$
 		goto L1700
@@ -304,7 +304,7 @@ PRINT_LISTINGS: ! r:
 	for j=1 to 4
 		if w(j)=0 then goto L2520
 		wp=j+50
-		open #wp: "Name="&env$('temp')&"\RPT"&str$(j)&"."&wsid$&",Size=0,RecL=132,Replace",display,output
+		open #wp: "Name=[Temp]\RPT"&str$(j)&"."&wsid$&",Size=0,RecL=132,Replace",display,output
 	L2520: !
 	next j
 	mat t2=(0)

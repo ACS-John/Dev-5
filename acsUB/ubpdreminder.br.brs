@@ -137,20 +137,17 @@ L920: !
 	goto L550
  
 SCREEN3: !
-	sn$ = "UBPrtBl1-2" : _
-	fnTos(sn$)
-	txt$="Account (blank to stop)" : _
-	fnLbl(1,1,txt$,31,1)
+	fnTos
+	fnLbl(1,1,"Account (blank to stop)",31,1)
 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
-	if trim$(z$)<>"" then : _
-		txt$="Last Account entered was "&z$ : _
-		fnLbl(3,1,txt$,44,1) else : _
-		txt$="" : _
-		fnLbl(3,1,txt$,44,1)
-	fncmbact(1,17) ! : _
+	if trim$(z$)<>"" then 
+		fnLbl(3,1,"Last Account entered was "&z$,44,1)
+	end if
+	fncmbact(1,17)
 	resp$(1)=a$
-	fnCmdSet(3): fnAcs(mat resp$,ckey)
-	a$ = lpad$(trim$(resp$(1)(1:10)),10) : _
+	fnCmdSet(3)
+	fnAcs(mat resp$,ckey)
+	a$ = lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
 	read #1,using L610,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey SCREEN3
@@ -160,31 +157,31 @@ SORT1: ! SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1390
 	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
 	s5=1
-	if prtbkno=0 then routekey$="" else : _
-		routekey$=cnvrt$("N 2",prtbkno)&"       " : _
-		! key off first record in route (route # no longer part of customer #)
+	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #2,search>=routekey$:
-L1190: read #2,using L1200: z$,f,route eof END5
-L1200: form pos 1,c 10,pos 296,pd 4,pos 1741
-	if prtbkno=0 then goto L1230
-	if prtbkno><route then goto END5
-L1230: if f><d1 then goto L1190
-	zip5$=cr$=""
-	read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1260
-L1260: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
-	goto L1190
- 
-END5: close #6:
-	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
-L1310: form pos 1,c 128
-	write #9,using L1310: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	do
+		read #2,using L1200: z$,f,route eof END5
+		L1200: form pos 1,c 10,pos 296,pd 4,pos 1741
+		if prtbkno and prtbkno><route then goto END5
+		if f=d1 then
+			zip5$=cr$=""
+			read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey ignore
+			write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+		end if
+	loop
+	END5: !
+	close #6:
+	open #9: "Name=[Temp]\Control.[session],Size=0,RecL=128,Replace",internal,output
+	L1310: form pos 1,c 128
+	write #9,using L1310: "File [Temp]\Temp.[session],,,[Temp]\Addr.[session],,,,,A,N"
 	write #9,using L1310: "Mask 1,19,C,A"
 	close #9:
-	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr L1360
-L1360: execute "Sort "&env$('Temp')&"\Control."&session$
+	execute "Free [Temp]\Addr."&session$ ioerr ignore
+	execute "Sort [Temp]\Control."&session$
 	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
 	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
-L1390: return
+	L1390: !
+return
  
 ENDSCR: ! pr totals screen
 	if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
