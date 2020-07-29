@@ -32,7 +32,7 @@
 L280: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(cnam$))/2)
-	pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('temp')&"\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
+	pas=1 : open #4: "Name=[Temp]\Work."&session$&",KFName=[Temp]\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
 	if actpd>0 and actpd<14 then goto L380
 	pr newpage
 	pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"

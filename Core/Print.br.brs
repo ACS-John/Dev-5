@@ -206,7 +206,7 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToA
 	! end if
 	lrec20=lrec(20)
 	y=0
-	open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
+	open #21: "Name=[Temp]\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
 	pr #21: "{\rtf1\ansi\deflang1033";
 	pr #21: "{\fonttbl";
 	pr #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
@@ -253,7 +253,7 @@ def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToA
 	L660: ! 
 	close #21: 
 	execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
-	open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,RecL=800,use",display,output 
+	open #21: "Name=[Temp]\acs_print_tmp"&session$&".rtf,RecL=800,use",display,output 
 	goto L640
 	L700: ! 
 	! 

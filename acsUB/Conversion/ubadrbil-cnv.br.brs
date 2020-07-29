@@ -20,8 +20,8 @@ def library fnub_cnv_adrbil
 	goto L160
 	
 	L160: !
-	open #1: "Name="&env$('temp')&"\temp."&session$&"",internal,input,relative
-	open #2: "Name="&env$('temp')&"\tmp_x_"&session$&",RecL=130,Replace",internal,outIn,relative
+	open #1: "Name=[Temp]\temp."&session$&"",internal,input,relative
+	open #2: "Name=[Temp]\tmp_x_"&session$&",RecL=130,Replace",internal,outIn,relative
 	L180: !
 		read #3,using "form pos 1,c 10,pos 385,pd 3": z$,bra eof END1
 	if bra=0 then goto L180
@@ -42,7 +42,7 @@ def library fnub_cnv_adrbil
 		close #2:
 		fnCopy(env$('temp')&"\tmp_x_"&session$,"[Q]\UBmstr\UBAdrBil.h[cno]")
 		if ~fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10") then goto Xit ! ,Replace,DupKeys -n" ioerr Xit
-		execute "Free "&env$('temp')&"\temp."&session$
+		execute "Free [Temp]\temp."&session$
 		close #3: ioerr ignore
 		execute "Free [Q]\UBmstr\ubMaster.h[cno]" ioerr ignore
 	goto Xit

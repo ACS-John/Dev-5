@@ -9,7 +9,7 @@ dim alloc(10)
 dim _o(2)
 
 open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,input
-open #7: "Name="&env$('temp')&"\Work."&session$&",Replace,RecL=72",internal,output
+open #7: "Name=[Temp]\Work."&session$&",Replace,RecL=72",internal,output
 
 gosub ASKDATE
 READ_COLLECT: !
@@ -40,7 +40,7 @@ return
 END1: !
 	close #7:
 	close #6,free:
-	execute "Rename "&env$('temp')&"\Work."&session$&' '&"[Q]\UBmstr\Collect.h[cno] -n"
+	execute "Rename [Temp]\Work."&session$&' '&"[Q]\UBmstr\Collect.h[cno] -n"
 Xit: fnXit
 def fn_cd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 def fn_cd2(x)=(x-int(x*.0001)*10000)*10000+int(x*.0001) ! /r

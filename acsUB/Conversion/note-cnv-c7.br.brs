@@ -19,7 +19,7 @@ def library fnub_cnv_note_phase_1
   else
     fnStatus("converting [Q]\UBmstr\Note1.h[cno] to version 1")
   end if
-  open #work=fnGetHandle: "Name="&env$('temp')&"\Work."&session$&",Replace,RecL=16",internal,output 
+  open #work=fnGetHandle: "Name=[Temp]\Work."&session$&",Replace,RecL=16",internal,output 
   READ_NOTE1_PHASE1: ! 
   read #note1,using 'Form POS 1,C 7,2*PD 3': z$,a1,a2 eof EO1
   write #work,using 'Form POS 1,C 7,C 3,2*PD 3': z$,".00",a1,a2
@@ -29,7 +29,7 @@ def library fnub_cnv_note_phase_1
   close #note1: 
   close #work: 
   execute "Free [Q]\UBmstr\Note1.h[cno] -n"
-  execute "Rename "&env$('temp')&"\Work."&session$&' '&"[Q]\UBmstr\Note1.h[cno] -n"
+  execute "Rename [Temp]\Work."&session$&' '&"[Q]\UBmstr\Note1.h[cno] -n"
   fnCopy("[Q]\UBmstr\Note2.h[cno]","[Q]\UBmstr\Note2.h[cno]",73) 
   fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
   open #note1=fnGetHandle: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed 

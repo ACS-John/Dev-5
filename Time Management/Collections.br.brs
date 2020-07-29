@@ -37,10 +37,10 @@
 		mat pgl(1)=(0)
 		gpx=1
 	end if
-	open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$,internal,outIn ioerr L530
+	open #h_addr:=3: "Name=[Temp]\Addr."&session$,internal,outIn ioerr L530
 	close #h_addr,free:
 	L530: !
-	open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
+	open #h_addr:=3: "Name=[Temp]\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr Ertn
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr Ertn
 	L560: form pos 1,c 255,142*c 18

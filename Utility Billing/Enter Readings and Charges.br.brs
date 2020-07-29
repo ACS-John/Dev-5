@@ -1004,7 +1004,7 @@ ImportTabDelimited: ! r:
 	! r: phase 1 - import from text file into readings.tmp file
 	open #h_tmp:=fngethandle: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
 	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
-	open #h_readings_tmp:=fngethandle: "Name="&env$('Temp')&"\readings.tmp,RecL=30,replace",display,output
+	open #h_readings_tmp:=fngethandle: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
 	dim a$*256
 	do
 		IT_TEXT_READ: !
@@ -1032,7 +1032,7 @@ ImportTabDelimited: ! r:
 	! /r
 	! r: phase 2 - from readings.tmp file
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name="&env$('temp')&"\Readings.tmp,RecL=30",display,input
+	open #h_readings:=13: "Name=[Temp]\Readings.tmp,RecL=30",display,input
 	do
 		linput #h_readings: ln$ eof IT_FINIS
 		mat x=(0)

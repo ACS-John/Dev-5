@@ -33,7 +33,7 @@
 	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
 	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,input,keyed
 	open #unpdaloc=6: "Name=[Q]\CLmstr\UnPdAloc.h[cno],Version=2,KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,input,keyed
-	open #work=5: "Name="&env$('Temp')&"\Work,Size=0,RecL=66,Replace",internal,output
+	open #work=5: "Name=[Temp]\Work,Size=0,RecL=66,Replace",internal,output
 READ_PAYTRANS: !
 	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6',release: vn$,iv$,ivd,dd eof END1
 	if fndate_mmddyy_to_ccyymmdd(ivd)>ped then goto READ_PAYTRANS
@@ -71,9 +71,9 @@ END2: close #1:
 	close #tralloc:
 	if lrec(work)=0 then goto Xit
 	close #work:
-	open #tmp=1: "Name="&env$('Temp')&"\Control,Size=0,RecL=128,Replace",internal,output
+	open #tmp=1: "Name=[Temp]\Control,Size=0,RecL=128,Replace",internal,output
 	write #tmp,using 'Form POS 1,C 128': "! Sorting Accounts Payable Invoice List..."
-	write #tmp,using 'Form POS 1,C 128': "File "&env$('Temp')&"\Work,,,"&env$('Temp')&"\Addr,,,,,A,N"
+	write #tmp,using 'Form POS 1,C 128': "File [Temp]\Work,,,[Temp]\Addr,,,,,A,N"
 	if sq1$="G" then
 		write #tmp,using 'Form POS 1,C 128': "Mask 1,26,C,A"
 	else if sq1$="V" then
@@ -81,9 +81,9 @@ END2: close #1:
 	end if
 	close #tmp:
 	fnFree(env$('Temp')&"\ADDR")
-	execute "Sort "&env$('Temp')&"\Control"
-	open #addr=1: "Name="&env$('Temp')&"\ADDR",internal,input ioerr Xit
-	open #work=5: "Name="&env$('Temp')&"\WORK",internal,input,relative
+	execute "Sort [Temp]\Control"
+	open #addr=1: "Name=[Temp]\ADDR",internal,input ioerr Xit
+	open #work=5: "Name=[Temp]\WORK",internal,input,relative
 	fnopenprn
 	gosub HDR
 READ_ADDR: !

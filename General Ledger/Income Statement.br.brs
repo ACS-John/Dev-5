@@ -43,11 +43,11 @@
 L320: !
 	fnopenprn
 	if fnps=2 then ! secondary
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 72 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 72 3 Replace DupKeys -N"
 	else
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&"\fsindex.H[cno] 69 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 69 3 Replace DupKeys -N"
 	end if
-	open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&"\fsindex.h[cno],Shr",internal,input,keyed
+	open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 F_GLMSTR_A: form pos mp1,pd 3,pos 81,2*pd 6.2
 F_GLMSTR_B: form pos 1,c 12,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	report$="Statement of Income and Expenses"
@@ -237,7 +237,7 @@ L1650: ! r:
 	goto Xit ! /r
  
 BLDPCT1: ! r:
-	open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
+	open #10: "Name=[Temp]\Work."&session$&",KFName=[Temp]\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
 	for j=1 to lrec(3)
 		read #h_glmstr,using F_GLMSTR_A,rec=j: pc1,bb,cb noRec L1830
 		k$=cnvrt$("N 5",pc1)

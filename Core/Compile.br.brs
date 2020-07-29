@@ -239,7 +239,9 @@ def library fnCheckCompiled
 		if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
 		execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr CcDone
 		
-		if fnFileContainsMultipleEntries
+		! if fnFileContainsMultipleEntries then
+		! pause
+		! end if
 		
 		
 		open #hBrsFileList:=20: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR

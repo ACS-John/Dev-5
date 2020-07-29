@@ -161,7 +161,7 @@ SCREEN3: !
 !
 SORT1: ! SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1390
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then
 		routekey$=""
@@ -181,15 +181,15 @@ L1260: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 	goto L1190
 !
 END5: close #6:
-	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 L1310: form pos 1,c 128
-	write #9,using L1310: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	write #9,using L1310: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 	write #9,using L1310: "Mask 1,19,C,A"
 	close #9:
-	execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr L1360
-L1360: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
-	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	execute "Free [Temp]\Addr."&session$&" -n" ioerr L1360
+L1360: execute "Sort [Temp]\Control."&session$&" -n"
+	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
+	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 L1390: return
 !
 ENDSCR: ! pr totals screen
@@ -396,7 +396,7 @@ PRINTGRID: !
 !
 def fn_bulksort ! bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
 	L2790: !
 	read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2820
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": z$,0,0,z$ ! just do it in account order
@@ -405,8 +405,8 @@ def fn_bulksort ! bulk sort order
 	L2820: !
 	close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\TempIdx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2860
-	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,input,keyed
+	execute "Index [Temp]\Temp."&session$&" [Temp]\TempIdx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2860
+	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$,internal,input,keyed
 	L2860: !
 fnend
 include: Ertn

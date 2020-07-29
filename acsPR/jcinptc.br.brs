@@ -36,7 +36,7 @@
 		iolabel1$(j)=str$(j+3)&",2,Cr 17,N"
 	next j
  
-	open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outIn,relative
+	open #3: "Name=[Temp]\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outIn,relative
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
 	open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
 	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed

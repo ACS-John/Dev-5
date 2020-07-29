@@ -202,7 +202,7 @@ L2070: !
 	close #24: ioerr ignore
 	dim a$*512
 	close #22: ioerr ignore
-	open #24: "Name="&env$('temp')&"\x,RecL=514,EOL=NONE,REPLACE",external,output
+	open #24: "Name=[Temp]\x,RecL=514,EOL=NONE,REPLACE",external,output
 	open #22: "Name=[Q]\UCReport,RecL=512",display,input
 	L2120: !
 	linput #22: a$ eof L2170

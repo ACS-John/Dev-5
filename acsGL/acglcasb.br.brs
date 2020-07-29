@@ -73,7 +73,7 @@ L550: !
 	else
 		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.H[cno]','75 3')
 	end if
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&"\fsindex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 	L630: ! read amounts from gl master file
 	L640: !
 	read #3,using L730: ir,bb,cb,mat by,mat bp,mat bm eof L940

@@ -123,9 +123,9 @@ ASK_INFO: !
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-	open #3: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L960
+	open #3: "Name=[Temp]\Addr."&session$,internal,input ioerr L960
 	close #3,free:
-L960: open #3: "Name="&env$('Temp')&"\Addr."&session$&",size=0,RecL=33,NoShr",internal,output
+L960: open #3: "Name=[Temp]\Addr."&session$&",size=0,RecL=33,NoShr",internal,output
 	if w1=3 then gosub L4430
 	write #3,using L990: ssmax,w1,nw
 L990: form pos 1,n 10.2,2*n 1
@@ -329,14 +329,14 @@ ASK_LOCALITY: ! r:
 return ! /r
  
 PRW2B: ! r:
-	open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output
+	open #1: "Name=[Temp]\Control."&session$,internal,output
 	restore #1:
 	L2830: form pos 1,c 128
-	write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
+	write #1,using L2830: "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
 	close #1:
 		fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
-	execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
+	execute "Sort [Temp]\Control."&session$&" -n"
 goto Xit ! /r
 Xit: fnXit
  

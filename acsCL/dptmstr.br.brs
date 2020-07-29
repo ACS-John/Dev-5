@@ -212,9 +212,9 @@ L2040: if cmdkey=5 or eof1=1 then goto MENU1
 	goto L1820
  
 L2070: close #1: ioerr L2080
-L2080: execute "Copy [Q]\CLmstr\DPTMSTR.h[cno] "&env$('Temp')&"\WORK -D -n"
+L2080: execute "Copy [Q]\CLmstr\DPTMSTR.h[cno] [Temp]\WORK -D -n"
 	fnFree("[Q]\CLmstr\DPTMSTR.h[cno]")
-	execute "RENAME "&env$('Temp')&"\WORK [Q]\CLmstr\DPTMSTR.h[cno] -n"
+	execute "RENAME [Temp]\WORK [Q]\CLmstr\DPTMSTR.h[cno] -n"
 	execute "Index [Q]\CLmstr\DPTMSTR.h[cno]"&' '&"[Q]\CLmstr\DPTIDX1.h[cno] 1 5 Replace DupKeys -n"
 	goto L240
  

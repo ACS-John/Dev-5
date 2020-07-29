@@ -344,12 +344,12 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 	! each tab caption should not be longer than 80 characters
 	! no more than 99 tabs
 	if ~setup then fn_setup
-	open #tf1:=fngethandle: "Name="&env$('temp')&"\tab.txt,size=0,RecL=80,replace",internal,output
+	open #tf1:=fngethandle: "Name=[Temp]\tab.txt,size=0,RecL=80,replace",internal,output
 	for j=1 to udim(mat cap$)
 		write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
 	next j
 	close #tf1:
-	setenv('control'&str$(fn_controlCount),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
+	setenv('control'&str$(fn_controlCount),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|[Temp]\|tab.txt|")
 fnend
 def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 	! add a button to a screen ace form

@@ -136,7 +136,7 @@ def library fnUseDeptNo
 	if ~setup then fn_setup
 	if env$('cursys')<>"GL" then
 		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-		! open #tmp:=fngethandle: "Name="&env$('temp')&"\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
+		! open #tmp:=fngethandle: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
 		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 		! close #tmp: 
 	end if

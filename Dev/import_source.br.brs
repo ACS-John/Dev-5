@@ -100,7 +100,7 @@ def fn_getdir2(dir$*256,mat filename$; option$,filter$*40)
 	execute 'free '&env$('temp')&'\GetDir'&session$&'.tmp -n' ioerr ignore
 	tmp$='Sy -M Dir '&os_filename$(rtrm$(dir$,'\'))&'\'&filter$&' /b '&option$&' >"'&os_filename$(env$('temp')&'\GetDir'&session$&'.tmp"')
 	execute tmp$ ioerr Xit
-	open #tf1:=20: "Name="&env$('temp')&"\GetDir"&session$&".tmp",display,input 
+	open #tf1:=20: "Name=[Temp]\GetDir"&session$&".tmp",display,input 
 	filename_count=0
 	do  ! for filename_count=1 to udim(filename$)
 		linput #tf1: tmp$ eof Xit

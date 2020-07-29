@@ -30,11 +30,11 @@ goto PR_JOURNAL
 PR_JOURNAL: ! r:
 	fnopenprn
 	if cur_prior=1 then 
-		execute "Index [Q]\GLmstr\GLTrans.h[cno] "&env$('Temp')&"\fsindex.H[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
-		open #3: "Name=[Q]\GLmstr\GLtrans.h[cno],KFName="&env$('Temp')&"\fsindex.h[cno],Shr",internal,input,keyed 
+		execute "Index [Q]\GLmstr\GLTrans.h[cno] [Temp]\fsindex.H[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
+		open #3: "Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
 	else if cur_prior=2 then ! index current file
-		execute "Index [Q]\GLmstr\AcTrans.h[cno] "&env$('Temp')&"\fsindex.H[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N" ! index current file
-		open #3: "Name=[Q]\GLmstr\ACtrans.h[cno],KFName="&env$('Temp')&"\fsindex.h[cno],Shr",internal,input,keyed 
+		execute "Index [Q]\GLmstr\AcTrans.h[cno] [Temp]\fsindex.H[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N" ! index current file
+		open #3: "Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
 	end if 
 	PJ_READ_1: ! 
 	if cur_prior=2 then 

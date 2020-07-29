@@ -168,7 +168,7 @@
 	!
 	SORT1: ! SELECT & SORT
 		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1430
-		open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
+		open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
 		s5=1
 		if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       "
 			! key off first record in route (route # no longer part of customer #)
@@ -184,15 +184,15 @@
 		goto L1230
 	!
 	END5: close #6:
-		open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+		open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 	L1350: form pos 1,c 128
-		write #9,using L1350: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+		write #9,using L1350: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 		write #9,using L1350: "Mask 1,19,C,A"
 		close #9:
-		execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr L1400
-	L1400: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-		open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
-		open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+		execute "Free [Temp]\Addr."&session$&" -n" ioerr L1400
+	L1400: execute "Sort [Temp]\Control."&session$&" -n"
+		open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
+		open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 	L1430: return
 	!
 	ENDSCR: ! pr totals screen
@@ -404,15 +404,15 @@
 	!
 	BULKSORT: ! bulk sort order
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-		open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
+		open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
 		do
 			read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
 			write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 		loop
 	L3040: close #1: ioerr ignore
 		close #6: ioerr ignore
-		execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
-		open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&wsid$,internal,input,keyed
+		execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
+		open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&wsid$,internal,input,keyed
 	L3080: return
 	IGNORE: continue
 	BUD1: bud1=0

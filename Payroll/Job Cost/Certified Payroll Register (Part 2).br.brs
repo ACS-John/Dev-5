@@ -34,8 +34,8 @@ next j
  
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-open #3: "Name="&env$('temp')&"\Work."&session$,internal,input,relative
-open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr Xit
+open #3: "Name=[Temp]\Work."&session$,internal,input,relative
+open #4: "Name=[Temp]\Addr."&session$,internal,input ioerr Xit
 open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 dim dr(7)
