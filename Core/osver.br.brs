@@ -5,25 +5,23 @@ def library fnosver(&osver$; get_or_put)
 	if get_or_put=0 then get_or_put=1
 	on error goto Ertn
 	if get_or_put<>2 then get_or_put=1
-	osv_file$=env$('temp')&"\osVer-"&wsid$
-	on get_or_put gosub OSV_READ, OSV_BUILD_AND_READ
-	gosub OSV_RIP_RELEASE
+	osv_file$=env$('temp')&"\osVer-"&session$
+	on get_or_put gosub OsvRead, OsvBuildAndRead
+	gosub OsvRipRelease
 	goto Xit
 
-	OSV_READ: ! r:
-		open #osv_tfn:=fngethandle: "Name="&osv_file$,display,input ioerr OSV_READ_OPEN_IOERR
+	OsvRead: ! r:
+		open #osv_tfn:=fngethandle: "Name="&osv_file$,display,input ioerr OsvReadOpenIoErr
 		do until osver$<>''
 			linput #osv_tfn: osver$
 		loop
 		close #osv_tfn: ioerr ignore
 	return ! /r
-	OSV_READ_OPEN_IOERR: ! r:
-		if err=4152 then gosub OSV_BUILD else goto ERTN
+	OsvReadOpenIoErr: ! r:
+		if err=4152 then gosub OsvBuild else goto ERTN
 	return  ! /r 
-	OSV_BUILD: ! r:
-		execute "Free "&osv_file$&" -n" ioerr OSV_BUILD_NXT
-	goto OSV_BUILD_NXT ! /r
-	OSV_BUILD_NXT: ! r:
+	OsvBuild: ! r:
+		fnFree(osv_file$)
 		open #osv_tfn:=fngethandle: "Name="&osv_file$&",RecL=80,replace",display,output 
 		if rtrm$(env$("os"))="" then 
 			osv_temp$="Microsoft Windows 95/98"
@@ -33,13 +31,16 @@ def library fnosver(&osver$; get_or_put)
 		pr #osv_tfn: osv_temp$
 		close #osv_tfn: 
 	return ! /r
-	OSV_BUILD_AND_READ: ! ! r:
-		gosub OSV_BUILD
-		gosub OSV_READ
+
+	OsvBuildAndRead: ! ! r:
+		gosub OsvBuild
+		gosub OsvRead
 	return ! /r
-	OSV_RIP_RELEASE: ! ! r:
+
+	OsvRipRelease: ! ! r:
 		tmp=pos(osver$,"[",1)
 		if tmp>1 then osver$(tmp-1:len(osver$))=""
 	return ! /r
+
 Xit: fnend 
 include: Ertn

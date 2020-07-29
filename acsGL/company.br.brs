@@ -52,7 +52,7 @@ read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.
  
 lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 SCREEN_1: ! r:
-	fnTos(sn$="Company-1")
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	respc=0
 	fnLbl(1,30,"Company # [cno]")
@@ -132,7 +132,7 @@ SCREEN_1: ! r:
 	end if
 goto SCREEN_2 ! /r
 SCREEN_2: ! r:
-	fnTos(sn$="Company-2")
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"   The system will allow you to summarize the Payroll Withholding entries into",85,left)
 	fnLbl(2,1,"one entry for each Withholding Account on your Trial Balance.  If you wish",85,left)
@@ -164,7 +164,7 @@ SCREEN_3: ! r:
 		gl$(j)=cnvrt$("pic(zz#)",prgl(j,1))&cnvrt$("pic(zzzzz#)",prgl(j,2))&cnvrt$("pic(zz#)",prgl(j,3))
 	next j
 ! FICARATE,FICAWAGE,FEDUCRAT,FEDUCWAG,MCR,MCM,MAT PRGL
-	fnTos(sn$="Company-3")
+	fnTos
 	mylen=32: mypos=mylen+3 : right=1
 	fnLbl(1,25,"After-the Fact Payroll Information")
 	fnLbl(3,1,"Social Security Rate:",mylen,right)
@@ -225,7 +225,7 @@ SCREEN_3: ! r:
 goto SCREEN_4 ! /r
  
 SCREEN_4: ! r:
-	fnTos(sn$="Company-4")
+	fnTos
 	mylen=32: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Enter the names of the 10 Miscellaneous Deductions and indicate",90,left)
 	fnLbl(2,1,"how each deduction is to be handled by the system.  A check",90,left)
@@ -280,4 +280,19 @@ SAVE: ! r:
 	rewrite #20,using 'Form POS 1,N 1',rec=1: glb
 	close #20:
 return ! /r
+
+def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
+	autoLibrary
+	if setit then
+		open #h:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		rewrite #h,using 'Form Pos 296,n 2',rec=1: setit
+		close #h:
+		returnN=setit
+	else
+		open #h:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		read #h,using 'Form Pos 296,n 2',rec=1: returnN
+		close #h: 
+	end if
+	fnLastAccountingPeriodClosed=returnN
+fnend
 include: Ertn

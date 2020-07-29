@@ -84,7 +84,7 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*
 	MaeFinis: !
 	fnKeyExists=returnN
 fnend
-def library fnSetEnv(from$*256,to$*256; ___,quoteF$*1,quoteT$*1,fromLen,returnN) ! it works but it is currently unused.
+def library fnSetEnv(from$*256,to$*256; conSubOnly, ___,quoteF$*1,quoteT$*1,fromLen,returnN) ! it works but it is currently unused.
 	! setenv(from$,to$)
 	if from$(1:1)<>'[' then from$(0:0)='['
 	fromLen=len(from$)
@@ -93,7 +93,9 @@ def library fnSetEnv(from$*256,to$*256; ___,quoteF$*1,quoteT$*1,fromLen,returnN)
 	if pos(to$,' ')>0 then		quoteT$='"'
 	! pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
 	returnN=0
-	setenv(from$(2:len(from$)-1),to$) error SetEnvFinis
+	if ~conSubOnly then
+		setenv(from$(2:len(from$)-1),to$) error SetEnvFinis
+	end if
 	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
 	returnN=1
 	SetEnvFinis: !
@@ -1381,6 +1383,10 @@ fnend
 	! /r
 ! /r
 ! r: GL   General Ledger
+def library fnLastAccountingPeriodClosed(; setit)
+		library 'S:\acsGL\company.br': fnLastAccountingPeriodClosed
+		fnLastAccountingPeriodClosed=fnLastAccountingPeriodClosed( setit)
+fnend
 	def library fnregistered_for_GlBudgetMgmt
 		library 'S:\Core\Client.br': fnregistered_for_GlBudgetMgmt
 		fnregistered_for_GlBudgetMgmt=fnregistered_for_GlBudgetMgmt
