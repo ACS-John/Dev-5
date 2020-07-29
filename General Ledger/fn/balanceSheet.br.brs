@@ -37,13 +37,12 @@ def fn_balanceSheet(; defaultFormat$)
 			mp1=66
 			exe 'con sub [FinancialStatementCode] C' ! used by fn_open('GL FSDesign'...)
 			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
-			fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","66 3")
 		else
 			exe 'con sub [FinancialStatementCode] B' ! used by fn_open('GL FSDesign'...)
 			mp1=63
 			! open #hFsD:=fngethandle:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
-			fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]","63 3")
 		end if
+		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.H[cno]",str$(mp1)&" 3")
 		dim fsN(0),fs$(0)*128
 		hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1) ! requires [FinancialStatementCode]
 		open #hGl:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
@@ -68,11 +67,11 @@ def fn_balanceSheet(; defaultFormat$)
 					else if fs$(fsd_entryType)='H' then ! H = Header (Places headings within the F/S)
 						fn_tePrnSectionHeading(mat fs$,mat fsN,foot$,tabnote,mat accum)
 					else if fs$(fsd_entryType)='D' then ! D = Detail (Pulls amounts from G/L accounts)
-						pr fs$(fsd_number) : pause
-						if trim$(fs$(fsd_number))='372' then
-							pr 'found 372'
-							pause
-						end if
+						! pr fs$(fsd_number) : pause
+						! if trim$(fs$(fsd_number))='372' then
+						! 	pr 'found 372'
+						! 	pause
+						! end if
 						
 						fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,notrans,actpd,mat accum,foot$,tabnote,total,cb)
 					else if fs$(fsd_entryType)='E' then ! E = Equity (Used to combine P&L with equity
