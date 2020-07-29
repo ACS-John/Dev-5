@@ -34,6 +34,7 @@ MainLoop: ! r:
 	loop
 	EO_GLMSTR: !
 	close #h_glmstr:
+	fnLastAccountingPeriodClosed(actpd)
 	actpd+=1
 	if actpd>nap then actpd=1
 	fnActPd(actpd)

@@ -603,7 +603,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	! if env$('client')="Moweaqua" Then x(TI1)=X(TI1)
 	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
-	!
+
 	HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
 	dim last_ln$*256
 	last_ln$=""
@@ -722,15 +722,18 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
 	if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
 	if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
-	if sum(est1)=0 then goto L6010
-	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey HH_W_NXT
-	gosub EST2B
-	L6010: !
-	gosub CHECK_UNUSUAL
-	if skiprec=1 then skiprec=0 : goto HH_W_NXT ! skip record   !kj 3/24/06
-	fn_writeWork(hWork,x$,mat x)
-	fn_accumulateprooftotals
-	fn_rmk1
+	if sum(est1) then
+		read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey HH_W_NXT
+		gosub EST2B
+	end if
+	gosub CheckUnusual
+	if skiprec=1 then ! skip record
+		skiprec=0 : goto HH_W_NXT
+	else 
+		fn_writeWork(hWork,x$,mat x)
+		fn_accumulateprooftotals
+		fn_rmk1
+	end if
 	HH_W_NXT: !
 	if device$="Badger" or device$="Badger Connect C" then
 		goto HH_BADGER_READ
@@ -1057,7 +1060,7 @@ ImportTabDelimited: ! r:
 			fnapply_default_rates(mat extra, mat a)
 			gosub EST2B
 		end if
-		gosub CHECK_UNUSUAL
+		gosub CheckUnusual
 		fn_writeWork(hWork,x$,mat x)
 		fn_accumulateprooftotals
 		fn_rmk1
@@ -1792,7 +1795,7 @@ EnterReadings: ! r:
 		skiprec=1
 		goto L2910 ! if choose skip on pulling from hh file, then skip writing the record   ! kj 3/24/06
 	else if addmethod=am_loadHoldingFile then
-		goto CHECK_UNUSUAL
+		goto CheckUnusual
 	else if ckey=2 and editmode=0 then
 		goto SEL_ACC
 	else if ckey=2 and editmode=1 then
@@ -1804,7 +1807,7 @@ EnterReadings: ! r:
 		if fn_meter_change_out=3 then goto EnterReadings3
 		goto MENU1
 	end if
-	CHECK_UNUSUAL: !
+	CheckUnusual: !
 	if addmethod<>am_loadHoldingFile then mat mroll=(0)
 	passcheck=ckpass=0 : ckfail=1 : ckcancel=2
 

@@ -176,7 +176,7 @@ goto HERE ! ./r
  
 SORT1: ! r: SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1410
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output
+	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #2,search>=routekey$:
@@ -195,12 +195,12 @@ SORT1: ! r: SELECT & SORT
 	close #6:
 	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 	L1330: form pos 1,c 128
-	write #9,using L1330: "File "&env$('Temp')&"\Temp."&wsid$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	write #9,using L1330: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 	write #9,using L1330: "Mask 1,19,C,A"
 	close #9:
 	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 	execute "Sort "&env$('Temp')&"\Control."&session$
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative
+	open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
 	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
 	L1410: !
 return ! /r

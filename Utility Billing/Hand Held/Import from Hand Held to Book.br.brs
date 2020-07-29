@@ -376,6 +376,12 @@ fnend
 		fn_addTmpData('Reading.Water'  ,lineItem$(7))
 		! fn_addTmpData('Reading.Water.Date'  ,lineItem$(8))
 	fnend
+	def fn_addTmpData(name$*128,value$*128)
+		dim tmpDataName$(0)*128
+		dim tmpDataValue$(0)*128
+		fnaddonec(mat tmpDataName$,name$)
+		fnaddonec(mat tmpDataValue$,value$)
+	fnend
 	! r: aclara work order
 	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
 	! 	dataIncludesHeaders=1
@@ -421,12 +427,6 @@ fnend
 	! 		fn_addTmpData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
 	! 		fn_addTmpData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
 	! fnend
-	def fn_addTmpData(name$*128,value$*128)
-		dim tmpDataName$(0)*128
-		dim tmpDataValue$(0)*128
-		fnaddonec(mat tmpDataName$,name$)
-		fnaddonec(mat tmpDataValue$,value$)
-	fnend
 	! /r
 	def fn_amr(bookFile$*512)
 		fn_readings_backup(bookFile$)
@@ -822,7 +822,6 @@ fnend
 	def fn_inz(notZeroAmt,what$*512; hOverride) ! ifNotZeroPrHoutEqualsNotZeroAmt
 		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt), hOverride)
 	fnend
-
 ! /r
 def fn_readings_backup(bookFile$*512)
 	if exists(bookFile$) then

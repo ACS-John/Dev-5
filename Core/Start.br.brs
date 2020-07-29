@@ -99,6 +99,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fnmakesurepathexists(env$('Temp')&'\')
 		end if
 		if ~fn_temp_dir_validate then goto Xit ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto Xit
+		
 		if pos(env$('Q'),' ')>0 then
 			fn_setQ(fnshortpath$(env$('Q')))
 		end if
@@ -109,6 +110,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_setQbase(New2Qbase$)
 		end if
 		if env$('client_temp')='' then fnSetEnv('Client_TEMP',env$('Temp'))
+		fnSetEnv('temp',env$('temp'), conSubOnly=1)
 		if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto Xit
 		if ~fn_rights_test(env$('temp'),'Correct your Temp environment variable.','Temp') then goto Xit ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)

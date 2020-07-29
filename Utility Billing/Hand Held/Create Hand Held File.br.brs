@@ -81,7 +81,7 @@ Screen1: ! r:
 			selection_method=sm_LocationId ! all Location IDs
 		end if
 		if selection_method=sm_allExceptFinal or selection_method=sm_meterTypes then
-			goto SELECT_ALL
+			goto StartForSelectAll
 		else if selection_method=sm_aRoute then
 			goto AskRoute
 		else if selection_method=sm_routeRange then
@@ -124,7 +124,7 @@ AskRange: ! r:
 	restore #h_customer_i5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
 	NextReadForRange: !
 	if fn_customerRead=-54 then goto AskRange
-	! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto AskRange
+	! if (route=last_route and sequence>last_sequence) or route>last_route Then Goto AskRange
 	if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto AskRange
 goto SendRecordToOutFile ! /r
 AskRoute: ! r:
@@ -142,18 +142,18 @@ AskRoute: ! r:
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
 	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
 	fnAcs(mat resp$, ckey)
-	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto StartForSelectAll ! if they select all on the route screen, handle same as pr all option from 1st menu
 	bk1=val(resp$(1)) conv L850
 	resp$(1)=""
 L850: !
 	if ckey=1 then
-		goto SELECT_ALL
+		goto StartForSelectAll
 	else if ckey=2 then
 		goto Finis
 	else if ckey=5 then
 		goto Screen1
 	else
-		goto SELECT_ALL
+		goto StartForSelectAll
 	end if
 
 ! /r
@@ -172,72 +172,28 @@ AskMeterType: ! r:
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
 	fnCmdKey("&Cancel",5,0,0,"Don't sent to Hand Held")
 	fnAcs(mat resp$, ckey)
-	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+	if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto StartForSelectAll ! if they select all on the route screen, handle same as pr all option from 1st menu
 	bk1=val(resp$(1)) conv ignore
 	lastMeterType$=resp$(1)
 	resp$(1)=''
 
 	if ckey=1 then
-		goto SELECT_ALL
+		goto StartForSelectAll
 	else if ckey=2 then
 		goto Finis
 	else if ckey=5 then
 		goto Screen1
 	else
-		goto SELECT_ALL
+		goto StartForSelectAll
 	end if
 ! /r
-SELECT_ALL: ! r:
+StartForSelectAll: ! r:
 	! if deviceSelected$='Aclara Work Order' then
 	! 	fn_getFilterAccount(mat filterAccount$)
 	! end if
 	if bk1=0 then bk1=1
 	restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
 goto NextReadForAll ! /r
-
-NextLocationId: ! r:
-	!  pr 'readLocationId=';readLocationId : pause ! if readLocationId=118 then pr 'about to do location 119' : pause
-	nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
-	! if final<>0 then ! can not trust accounts to be unique if they are not active.
-	!   goto NextLocationId
-	if nliCustomerReadResponse=0 then ! else if nliCustomerReadResponse=0 then ! no active account found for LocationID
-		goto NextLocationId
-	else if nliCustomerReadResponse=-54 then ! end of file
-		goto End1
-	end if
-goto SendRecordToOutFile ! /r
-NextReadForAll: ! ! r:
-	if fn_customerRead=-54 then
-		goto End1
-	else if selection_method=sm_aRoute then
-		if route=0 then
-			goto NextReadForAll
-		else if bk1><route then
-			goto End1
-		end if
-	end if
-goto SendRecordToOutFile ! /r
-NextAskAccount: ! r:
-	fnTos
-	if z$<>"" then
-		fnLbl(1,1,"Last Account Selected: "&z$,40,2)
-		myline=3
-	else
-		myline=1
-	end if
-	fnLbl(myline,1,"Account:",15,1)
-	fncmbact(myline,16)
-	resp$(1)=z$
-	fnCmdSet(5)
-	fnAcs(mat resp$,ckey)
-	if ckey=6 then
-		fncustomer_search(resp$(1))
-	end if
-	if ckey=99 or ckey=5 or resp$(1)="          " then goto Screen1
-	z$=lpad$(trim$(resp$(1)(1:10)), 10)
-	if fn_customerRead(z$)=-4272 then goto NextAskAccount
-	goto SendRecordToOutFile
-! /r
 
 SendRecordToOutFile: ! r: 
 	! if trim$(z$)='100100.99' then pause
@@ -302,6 +258,51 @@ SendRecordToOutFile: ! r:
 		goto NextReadForAll
 	end if
 ! /r
+
+NextLocationId: ! r:
+	!  pr 'readLocationId=';readLocationId : pause ! if readLocationId=118 then pr 'about to do location 119' : pause
+	nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
+	! if final<>0 then ! can not trust accounts to be unique if they are not active.
+	!   goto NextLocationId
+	if nliCustomerReadResponse=0 then ! else if nliCustomerReadResponse=0 then ! no active account found for LocationID
+		goto NextLocationId
+	else if nliCustomerReadResponse=-54 then ! end of file
+		goto End1
+	end if
+goto SendRecordToOutFile ! /r
+NextReadForAll: ! ! r:
+	if fn_customerRead=-54 then
+		goto End1
+	else if selection_method=sm_aRoute then
+		if route=0 then
+			goto NextReadForAll
+		else if bk1><route then
+			goto End1
+		end if
+	end if
+goto SendRecordToOutFile ! /r
+NextAskAccount: ! r:
+	fnTos
+	if z$<>"" then
+		fnLbl(1,1,"Last Account Selected: "&z$,40,2)
+		myline=3
+	else
+		myline=1
+	end if
+	fnLbl(myline,1,"Account:",15,1)
+	fncmbact(myline,16)
+	resp$(1)=z$
+	fnCmdSet(5)
+	fnAcs(mat resp$,ckey)
+	if ckey=6 then
+		fncustomer_search(resp$(1))
+	end if
+	if ckey=99 or ckey=5 or resp$(1)="          " then goto Screen1
+	z$=lpad$(trim$(resp$(1)(1:10)), 10)
+	if fn_customerRead(z$)=-4272 then goto NextAskAccount
+	goto SendRecordToOutFile
+! /r
+
 End1: ! r:
 	if deviceSelected$='Itron FC300' then
 		fn_itron_close
@@ -326,10 +327,14 @@ Finis: ! r: Transfer to or from Hand Held Computer
 	close #h_out: ioerr ignore
 	close #h_customer_i1: ioerr ignore
 	close #h_customer_i5: ioerr ignore
+
+	dim hhrun$*256
+	fnureg_read('Hand Held Run File',hhrun$)
 	if hhrun$<>'' then
 		hhrun$=srep$(hhrun$,'[file]',out_filename_report$)
 		exec 'sy -C "'&hhrun$&'"'
 	end if
+
 	fn_reportCreatedFile(out_filename_report$)
 	fn_transfer
 goto Xit ! /r
@@ -378,7 +383,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	fn_ifMatchOpenDo=hImodoReturn
 fnend
 
-! r: Hand Helds' create line for customer in #h_out 
+! r: Hand Helds' SendRecordToOutFile functions (create line for customer in #h_out)
 ! r: aclara
 def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 	dim tmpCity$*64,tmpState$*64,tmpZip$*64
@@ -1806,7 +1811,7 @@ fnend
 ! 	mat filterAccount$(0)
 ! 	fnAddOneC(mat filterAccount$,'100050.05')
 ! 	fnAddOneC(mat filterAccount$,'100110.00')
-! 	fnAddOneC(mat filterAccount$,'100111.00')
+! 	...
 ! 	fnAddOneC(mat filterAccount$,'100114.00')
 ! /r fnend
 
@@ -1878,8 +1883,6 @@ def fn_setup
 	dim serviceCodeMetered$(0)*2
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)
 
-	dim hhrun$*256
-	fnureg_read('Hand Held Run File',hhrun$)
 fnend
 include: fn_open
 include: enum

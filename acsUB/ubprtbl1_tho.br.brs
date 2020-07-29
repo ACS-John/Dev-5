@@ -8,9 +8,9 @@
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
  
-	fncno(cno,cnam$) : _
+	fncno(cno,cnam$)
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  : _
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
 	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 	close #21:
 	at$(1)=cnam$
@@ -150,7 +150,7 @@ SCREEN3: !
  
 SORT1: ! SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1390
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #2,search>=routekey$:
@@ -165,15 +165,15 @@ L1260: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 	goto L1190
  
 END5: close #6:
-	open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 L1310: form pos 1,c 128
-	write #9,using L1310: "File "&env$('Temp')&"\Temp."&wsid$&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+	write #9,using L1310: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
 	write #9,using L1310: "Mask 1,19,C,A"
 	close #9:
-	execute "Free "&env$('Temp')&"\Addr."&session$ ioerr L1360
-L1360: execute "Sort "&env$('Temp')&"\Control."&session$
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$,internal,input,relative
-	open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative
+	execute "Free [Temp]\Addr."&session$ ioerr L1360
+L1360: execute "Sort [Temp]\Control."&session$
+	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
+	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 L1390: return
  
 ENDSCR: ! pr totals screen
@@ -195,13 +195,12 @@ VBOPENPRINT: !
 return
  
 VBPRINT: !
-! -- Standard 4 Per Page Even Perferated Card Stock Bills
+	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 	checkcounter+=1
 	if checkcounter=1 then xmargin=0 : ymargin=0
 	if checkcounter=2 then xmargin=139 : ymargin=0
 	if checkcounter=3 then xmargin=0 : ymargin=108
-	if checkcounter=4 then xmargin=139 : ymargin=108
-		checkcounter=0
+	if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
  
 	pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 	pr #20: "Call Print.MyFontBold(True)"
@@ -242,33 +241,32 @@ PRINTGRID: meter=14
 		!  pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(3),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
 	end if
 	if a4=1 then gcode$="RSGS" else if a4=2 then gcode$="CMGS" else if a4=3 then gcode$="INGS" else gcode$="GAS"
-	if g(4)=0 then goto L2070 else : _
-		pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' : _
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' : _
+	if g(4) then 
+		pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2070: ! If G(5)=0 Then Goto 2040 Else : _
-	! pr #20: 'Call Print.AddText("MET",'&STR$(XMARGIN+1)&','&STR$(LYNE*(METER+=1)+YMARGIN)&')' : _
-	! pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(5),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
-! If G(6)=0 Then Goto 2050 Else : _
-	! pr #20: 'Call Print.AddText("FUR",'&STR$(XMARGIN+1)&','&STR$(LYNE*(METER+=1)+YMARGIN)&')' : _
-	! pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(6),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
-	if g(7)=0 then goto L2100 else : _
-		pr #20: 'Call Print.AddText("TRASH   ",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+	end if
+	if g(7) then 
+		pr #20: 'Call Print.AddText("TRASH   ",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2100: if g(8)=0 then goto L2110 else : _
-		pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+	end if
+	if g(8) then
+		pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2110: if g(9)=0 then goto L2120 else : _
-		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+	end if
+	if g(9) then
+		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2120: if pb><0 then pr #20: 'Call Print.AddLine('&str$(xmargin+46)&','&str$(lyne*(meter+=1)+ymargin)&',15,0)'
-	if pb><0 then pr #20: 'Call Print.AddText("   Subtotal",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin)&')' : _
+	end if
+	if pb then 
+		pr #20: 'Call Print.AddLine('&str$(xmargin+46)&','&str$(lyne*(meter+=1)+ymargin)&',15,0)'
+		pr #20: 'Call Print.AddText("   Subtotal",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1)+g(2)+g(3)+g(4)+g(7)+g(8)+g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-	if pb=0 then goto L2150 else : _
-		pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+		pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' 
 		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-L2150: pr #20: 'Call Print.MyFontSize(10)'
+	end if
+	pr #20: 'Call Print.MyFontSize(10)'
  
 	if estimatedate=d1 then pr #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin)&',63,0)'
@@ -296,7 +294,7 @@ L2150: pr #20: 'Call Print.MyFontSize(10)'
 	pr #20: 'Call Print.AddText("      Paid",'&str$(xmargin+100)&','&str$(lyne*4-1+ymargin)&')'
 	pr #20: 'Call Print.AddText("  Permit No 1",'&str$(xmargin+100)&','&str$(lyne*5-1+ymargin)&')'
 	pr #20: 'Call Print.MyFontSize(9)'
-! pr #20: 'Call Print.AddText("Address Service Requested",'&STR$(XMARGIN+68)&','&STR$(LYNE*7+YMARGIN-6)&')'
+  ! pr #20: 'Call Print.AddText("Address Service Requested",'&STR$(XMARGIN+68)&','&STR$(LYNE*7+YMARGIN-6)&')'
 	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68)&','&str$(lyne*7+ymargin)&')'
 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68)&','&str$(lyne*8+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&cnam$&'",'&str$(xmargin+68)&','&str$(lyne*9+ymargin)&')'
@@ -312,19 +310,25 @@ L2150: pr #20: 'Call Print.MyFontSize(10)'
 	pr #20: 'Call Print.AddText("'&mg$(3)&'",'&str$(xmargin+68)&','&str$((addy+=1)*lyne+ymargin)&')'
 	addy+=1
 	pr #20: 'Call Print.MyFontSize(10)'
-	if c4>0 then : _
+	if c4>0 then
 		pr #20: 'Call Print.AddText("Final Bill",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)
+	end if
 	pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68)&','&str$(lyne*(addy+=1)+ymargin)&')'
-	if pe$(1)<>"" then : _
+	if pe$(1)<>"" then
 		pr #20: 'Call Print.AddText("'&trim$(pe$(1))&'",'&str$(xmargin+68)&','&str$(lyne*(addy+=1)+ymargin)&')'
-	if pe$(2)<>"" then : _
+	end if
+	if pe$(2)<>"" then
 		pr #20: 'Call Print.AddText("'&trim$(pe$(2))&'",'&str$(xmargin+68)&','&str$(lyne*(addy+=1)+ymargin)&')'
-	if uprc$(df$)='Y' then : _
+	end if
+	if uprc$(df$)='Y' then 
 		pr #20: 'Call Print.AddText("Direct Debit",'&str$(xmargin+36)&','&str$(lyne*(addy)+ymargin)&')'
-	if pe$(3)<>"" then : _
+	end if
+	if pe$(3)<>"" then
 		pr #20: 'Call Print.AddText("'&trim$(pe$(3))&'",'&str$(xmargin+68)&','&str$(lyne*(addy+=1)+ymargin)&')'
-	if pe$(4)<>"" then : _
+	end if
+	if pe$(4)<>"" then 
 		pr #20: 'Call Print.AddText("'&trim$(pe$(4))&'",'&str$(xmargin+68)&','&str$(lyne*(addy+=1)+ymargin)&')'
+	end if
 	if checkcounter=1 then checkx=1.375 : checky=3.6875
 	if checkcounter=2 then checkx=6.75 : checky=3.6875
 	if checkcounter=3 then checkx=1.375 : checky=7.9375
@@ -336,14 +340,14 @@ return
  
 BULKSORT: ! bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output
+	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
 	do
 	read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2810
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	loop
 	L2810: close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index "&env$('Temp')&"\Temp."&wsid$&" "&env$('Temp')&"\TempIdx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2850
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,input,keyed
+	execute "Index [Temp]\Temp."&session$&" [Temp]\TempIdx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2850
+	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$,internal,input,keyed
 L2850: return
 include: Ertn

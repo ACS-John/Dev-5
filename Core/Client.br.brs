@@ -215,7 +215,7 @@ def fn_setupClient ! ** set up for new clients
 		! fn_setupClient_add("Kimberling",2530,19212)
 		fn_setupClient_add("Kincaid",2532,33652)
 		fn_setupClient_add("Lovington",2689,32720)
-		fn_setupClient_add("Loma Linda",2690,33244)
+		! fn_setupClient_add("Loma Linda",2690,33244)
 		!   fn_setupClient_add("Nancy Mouser",2795,34318)
 		fn_setupClient_add("Merriam Woods",2900,31702)
 		!   fn_setupClient_add("Miller Hardware",3005,14668)
@@ -729,7 +729,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
 		fn_upp_add('Kincaid'           ,'ubprtbl1_kin'          )
 		fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
-		fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
+		! fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
 		fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
 		fn_upp_add('Millry'            ,'ubprtbl1_millry'       )
 		fn_upp_add('Morrisonville'     ,'ubprtbl1_morrisonville')
@@ -738,7 +738,10 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
 		fn_upp_add('Scottville Rural'  ,'ubprtbl1_scottville'   )
 		fn_upp_add('Thayer'            ,'ubprtbl1_thayer'       )
+		
+		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
 		fn_upp_add('Thomasboro'        ,'ubprtbl1_tho'          )
+		
 		fn_upp_add('White Hall'        ,'ubprtbl1_wh'           )
 		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
 		fn_upp_add('Brier Lake'        ,'ubprtthree_Brier'      )

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                               
+2:20 PM 7/29/2020	GL	Close Month - double check field was broken - Last Month Closed was not being updated by Close Month.  this is fixed and will correct itself upon next months close.  
 16:23 07/20/2020	CO	5.75043  
 9:17 AM 7/24/2020	UB	Fixed a client/server issue with Export Billing Addresses by Rate Code 
 16:21 07/20/2020	CO	5.75042   

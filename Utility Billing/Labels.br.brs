@@ -460,7 +460,7 @@ def fn_primary_address
 fnend
 BulkSort: ! r: bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,input,keyed  ! open in Account order
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output
+	open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BULKSORT_FINIS
 		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
@@ -468,8 +468,8 @@ BulkSort: ! r: bulk sort order
 	BULKSORT_FINIS: !
 	close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index "&env$('Temp')&"\Temp."&wsid$&" "&env$('Temp')&"\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr BULKSORT_XIT
-	open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\Tempidx."&wsid$,internal,input,keyed
+	execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr BULKSORT_XIT
+	open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&wsid$,internal,input,keyed
 	BULKSORT_XIT: !
 return  ! /r
 OpenFiles: ! r:
