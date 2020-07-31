@@ -214,6 +214,11 @@ goto Xit ! /r
 Xit: fnXit
 DoLoad: ! r:
 	! r: Company Load
+	
+	fncreg_read('Route Low' ,bkno1$, '1' ) : bkno1=val(bkno1$) ! Route Number Range Low
+	fncreg_read('Route High',bkno2$, '99') : bkno2=val(bkno2$) ! Route Number Range High
+	
+	
 	open #h_company:=1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
 	read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
 	close #h_company: 
