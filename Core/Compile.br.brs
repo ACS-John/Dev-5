@@ -3,35 +3,40 @@ execute 'con gui off'
 library program$: fnReCompile
 fnReCompile
 def library fnReCompile(; disableRebuildCache)
+	autoLibrary
 	dim filename$*255,msr_file$*255
 	if ~exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
 	open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
 
 	if ~disableRebuildCache then
-		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr RcDone
+		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ! ioerr RcDone
 	end if
-	open #dirfile:=20: "Name=S:\(import)\brsfiles",display,input
+
+		dim sourceFile$(0)*256
+		mat sourceFile$(0)
+		fn_getFileList('S:\(import)\brsfiles',mat sourceFile$)
+		sourceCount=udim(mat sourceFile$)
+	! RcDone:!
+	
+	open #dirfile:=fngethandle: "Name=S:\(import)\brsfiles",display,input
 	pr #proc_file: 'Scr_Freeze'
-	do
-		linput #dirfile: filename$ eof RcDone
-		if fn_hasLineNumbers(filename$) then
-			pr #proc_file: 'Load "'&filename$&'",Source'
-			parameter$=fn_buildParameter$(filename$)
-			if exists(filename$(1:len(filename$)-4)) then
-				pr #proc_file: 'Replace "'&filename$(1:len(filename$)-4)&'"'&parameter$
+	for sourceItem=1 to sourceCount
+		if fn_hasLineNumbers(sourceFile$(sourceItem)) then
+			pr #proc_file: 'Load "'&sourceFile$(sourceItem)&'",Source'
+			parameter$=fn_buildParameter$(sourceFile$(sourceItem))
+			if exists(sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)) then
+				pr #proc_file: 'Replace "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
 			else
-				pr #proc_file: 'Save "'&filename$(1:len(filename$)-4)&'"'&parameter$
+				pr #proc_file: 'Save "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
 			end if
 		else
-			pr #proc_file:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&filename$&'""'
-			! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&filename$&'""'
+			pr #proc_file:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&sourceFile$(sourceItem)&'""'
+			! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
 		end if
 		pr #proc_file: ''
-	loop
+	nex sourceItem
 	pr #proc_file: 'Scr_Thaw'
-	goto RcDone
-	
-	RcDone: !
+
 	if env$("AfterRecompile")="" then
 		pr #proc_file: "Sy"
 	else
@@ -41,6 +46,17 @@ def library fnReCompile(; disableRebuildCache)
 	msr_file$=file$(proc_file)
 	close #proc_file:
 	execute "subproc "&msr_file$
+fnend
+def fn_getFileList(filename$,mat list$; ___,dirfile,returnN)
+	returnN=0
+	mat list$(0)
+	open #dirfile:=fngethandle: 'Name='&filename$,display,input
+	do
+		linput #dirfile: line$ eof Gfl_Done
+		returnN=fnAddOneC(mat list$,line$)
+	loop
+	Gfl_Done: ! 
+	fn_getFileList=returnN
 fnend
 def fn_buildParameter$(filename$*256)
 	bp_gets_object=0
@@ -205,17 +221,17 @@ def fn_hasLineNumbers(filename$*256)
 		dim hlnLine$*2048
 		linput #hTmp: hlnLine$ eof HlnEof
 		close #hTmp:
-		!
+		
 		hlnTest1=0
 		hlnTest1=val(hlnLine$(1:5)) conv ignore
 		if hlnTest1>0 then goto HlnYesLineNumbers
-		!
+		
 		hlnPosSpace=pos(hlnLine$,' ')
 		if hlnPosSpace>0 then
 			hlnTest1=val(hlnLine$(1:hlnPosSpace-1)) conv ignore
 			if hlnTest1>0 then goto HlnYesLineNumbers
 		end if
-		!
+		
 		goto HlnNoLineNumbers
 		HlnYesLineNumbers: !
 			hasLineNumbersReturn=1
@@ -224,45 +240,52 @@ def fn_hasLineNumbers(filename$*256)
 			hasLineNumbersReturn=0
 		goto HlnFinis
 		HlnEof: !
-		pr bell;'HlnEof file analyzed (filename$='&filename$&') had no lines (EoF).' 
+		pr bell;'HlnEof file analyzed (filename$='&filename$&') had no lines (EoF).'
 		pause
 		goto HlnFinis
 	end if
 		HlnFinis: !
 	fn_hasLineNumbers=hasLineNumbersReturn
 fnend
-def library fnCheckCompiled
+def library fnCheckCompiled(; ___,filename$*256)
+	autoLibrary
 	if env$('acsEnableComplier')='Yes' then
-		dim filename$*256
+
 		! pr 'entered into fncheckcompiled' : pause
 		execute 'CD S:'
 		if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
 		execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr CcDone
-		
-		! if fnFileContainsMultipleEntries then
-		! pause
-		! end if
-		
-		
-		open #hBrsFileList:=20: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
+
+		open #hBrsFileList:=fngethandle: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
 		linput #hBrsFileList: filename$ eof CcDone
-		! pr filename$ : pause
+		! pr 'there is at least one source file to be recompiled.' : pr  filename$ : pause
+		close #hBrsFileList:
 		if env$('compile_without_asking')='Yes' then
 			docompile=2
 			setenv('compile_without_asking','')
 		else
 			docompile=msgbox("You have uncompiled source files!  Recompile?", "ACS 5 - "&os_filename$(program$), "Yn", "Qst")
 		end if
+
+
+		! if fnFileContainsMultipleEntries then
+		! pause
+		! end if
+
+
 		if docompile=2 then
 			setenv("AfterRecompile", "S:\Core\Start")
 			chain 'S:\Core\Compile.br' ! execute "Proc S:\ReCompile.prc" ioerr ignore
 		end if
 		CcDone: !
-		close #hBrsFileList:
+
 	end if
 fnend
 CC_ERR: ! r:
-	mb_response=msgbox(program$&' encountered an error '&str$(err)&' on line '&str$(line)&'.'&chr$(13)&'Close ACS?'&chr$(13)&'(Choose Cancel for developer pause.)','ACS 5 - S:\Core\CheckCompiled - Error','OKc','Excl')
+	mb_response=msgbox(program$&' encountered an error '&str$(err) _
+	&' on line '&str$(line)&'.'&chr$(13)&'Close ACS?'&chr$(13)& _
+	'(Choose Cancel for developer pause.)','ACS 5 - S:\Core\CheckCompiled - Error' _
+	,'OKc','Excl')
 	if mb_response=1 then execute 'system'
 	pause
 retry  ! /r
