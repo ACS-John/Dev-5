@@ -161,9 +161,8 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		pr #out: "\ql {\f181 4 Syme Ave}"
 		pr #out: "\ql {\f181 West Orange, NJ  07052}"
 		! execute "config option 32 ON" ! Supress notification of error 6245, which indicates an invalid or unsupported (by BR) escape sequence has been printed during Native Windows Printing.
-		pr #out: "*INSERT FILE:S:\Time Management\ACS_Logo2.rtf" ! "*INSERT FILE:S:\acsTM\acs_logo.rtf"
-		pr #out: ''
-		pr #out: ''
+		pr #out: "*INSERT FILE:S:\Time Management\ACS_Logo3.rtf" ! "*INSERT FILE:S:\Time Management\ACS_Logo2.rtf" ! "*INSERT FILE:S:\acsTM\acs_logo.rtf"
+
 		pr #out: ''
 		pr #out: ''
 		pr #out: "\ql {\f181 \b "&billto$(1)&"}"
