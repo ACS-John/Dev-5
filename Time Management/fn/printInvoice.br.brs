@@ -20,7 +20,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		cLogo$='S:\Time Management\resource\cssLogo.png'
 	else
 		cnam$='Advanced Computer Services LLC'
-		cLogo$='s:\acsTM\bwlogo2.jpg'
+		cLogo$='S:\Core\bwLogo.jpg' ! 's:\acsTM\bwlogo2.jpg'
 	end if
 
 	if ebilling then
