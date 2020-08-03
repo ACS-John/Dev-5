@@ -64,7 +64,6 @@ Hand Held                                             ^                         
 >Import from Hand Held to Book                        ^ Utility Billing\Hand Held\*                             ^ U4
 >Meter Type                                           ^ Utility Billing\Hand Held\*                             ^ U4
 ! >Meter Information                                    ^ Utility Billing\Hand Held\*                           ^ U4
-! >Meter Address                                        ^ HamsterFio:*                                          ^ U4
 
 External Collections Processing                       ^                                                         ^ U5
 >Export for External Collections Process              ^ acsUB\ECP_Export                                        ^ U5

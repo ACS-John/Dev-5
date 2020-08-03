@@ -2,6 +2,7 @@
 File
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
+>>Prices                                          ^ HamsterFio:CO *
 >Transactions (ARTrans - processed)               ^ acsTM\ARTrans
 >>Delete Transaction                              ^ Time Management\*
 >>Transaction Code                                ^ HamsterFio:*
@@ -16,8 +17,8 @@ File
 ! >Monthly Transactions                           ^ acsTM\arfmmoth
 ! >Employee                                       ^ acsTM\emaint
 ! >Company Information (Support)                  ^ acsSU\Company
->Systems                                          ^ HamsterFio:*
->Time Frame (Support)                             ^ acsSU\TimeFrame
+>Systems                                          ^ HamsterFio:CO *
+>Time Frame                                       ^ HamsterFio:*
 >Client Labels                                    ^ acsTM\CliLabel
 ! >Client (Support)                               ^ acsSU\Client
 >Contact                                          ^ HamsterFio:Contact         ^EM

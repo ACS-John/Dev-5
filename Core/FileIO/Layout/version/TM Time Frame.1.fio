@@ -1,0 +1,7 @@
+S:\Core\Data\acsllc\oTimeFrame.h[cno], otf_, 1
+S:\Core\Data\acsllc\oTimeFrame-Idx.h[cno]   ,  id
+o
+recl=52
+===================================================
+id    , ID             ,  C   2 , ! SPos=1   Required=True
+name  , Description    ,  C  50 , ! SPos=3   Required=True

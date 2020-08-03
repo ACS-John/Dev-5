@@ -1,0 +1,5 @@
+[Q]\PRmstr\oEmpStatus.dat, oemst_, 0
+[Q]\PRmstr\oEmpstatus.idx     , code
+===================================================
+code   	, Code               	,  N    2  	, !
+name  	, Name               	,  c   25  	, !
