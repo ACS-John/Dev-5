@@ -4,7 +4,6 @@ if env$('acsdeveloper')<>'' then
 end if
 fnTop(program$)
 open  #hProc:=fnGetHandle: 'name=fileioproc'&session$&'.$$$,replace',display,output
-! open  #hProc:=fnGetHandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
 pr #hProc: 'load S:\Core\FileIO\fileio.br'
 pr #hProc: 'cd S:'
 pr #hProc: 'Run'
@@ -17,5 +16,4 @@ elsesy
 	pr #hProc: 'run'
 end if
 close #hProc:
-! execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
 execute 'proc fileioproc'&session$&'.$$$'

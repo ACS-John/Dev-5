@@ -462,6 +462,8 @@ def fn_callHamsterFio(tmpCap$*128)
 	if lwrc$(tmpCap$(1:11))=lwrc$('HamsterFio:') then
 		tmpCap$(1:11)=''
 	end if
+	tmpCap$=trim$(tmpCap$)
+	! pause
 	if tmpCap$(1:3)=uprc$(tmpCap$(1:2))&' ' then !  if the first two letters are uppercase and the third is a space then assume it includes it's own system code
 		tmpCursys$=tmpCap$(1:2)
 		tmpCap$(1:3)=''

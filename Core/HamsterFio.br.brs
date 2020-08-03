@@ -59,21 +59,25 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 			fnAddOneN(mat hfFieldLen,tmp)
 			! /r
 			if udim(mat hfItem$)=> 4 then
-				if pos(lwrc$(hfItem$(4)),' required=true')>0 then hfMask(hfitem)+=1000
-				do while pos(hfItem$(4),'= ')>0
-					hfItem$(4)=srep$(hfItem$(4),'= ','=')
+
+				if udim(mat hfItem$)=>5 then hamsterColumn=5 else hamsterColumn=4
+
+				if pos(lwrc$(hfItem$(hamsterColumn)),' required=true')>0 then hfMask(hfitem)+=1000
+				do while pos(hfItem$(hamsterColumn),'= ')>0
+					hfItem$(hamsterColumn)=srep$(hfItem$(hamsterColumn),'= ','=')
 				loop 
-				hfItem$(4)=trim$(hfItem$(4))
-				if hfItem$(4)(1:1)='!' then hfItem$(4)(1:1)=''
-				hfItem$(4)=' '&trim$(hfItem$(4))&' '
-				posMask=pos(lwrc$(hfItem$(4)),' mask=')
-				posComboF=pos(lwrc$(hfItem$(4)),' combof(') 
-				posComboA=pos(lwrc$(hfItem$(4)),' comboa(') 
+				hfItem$(hamsterColumn)=trim$(hfItem$(hamsterColumn))
+				if hfItem$(hamsterColumn)(1:1)='!' then hfItem$(hamsterColumn)(1:1)=''
+				hfItem$(hamsterColumn)=' '&trim$(hfItem$(hamsterColumn))&' '
+				posMask=pos(lwrc$(hfItem$(hamsterColumn)),' mask=')
+				posComboF=pos(lwrc$(hfItem$(hamsterColumn)),' combof(') 
+				posComboA=pos(lwrc$(hfItem$(hamsterColumn)),' comboa(') 
+				
 				if posMask>0 then 
 					! r: masked text box
-					posSpaceAfter=pos(hfItem$(4),' ',posMask+1)
-					! pr hfItem$(4) : pause
-					mask$=lwrc$(hfItem$(4)(posMask+6:posSpaceAfter-1))
+					posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
+					! pr hfItem$(hamsterColumn) : pause
+					mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
 					if mask$='currency' or mask$='pointtwo' then
 						tmp=32
 					else if mask$='glnumber' then
@@ -85,7 +89,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 					else if mask$='number' then
 						tmp=30
 					else
-						tmp=val(hfItem$(4)(posMask+6:posSpaceAfter))
+						tmp=val(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter))
 					end if
 					if tmp=0 then
 						if hfFieldType$(hfItem)='N' or hfFieldType$(hfItem)='PD' or hfFieldType$(hfItem)='G' and fp(hfStorageLen(hfItem))=2 then
