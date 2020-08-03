@@ -23,7 +23,7 @@
 	fndat(dat$)
 	ccyymmdd_mask$="3"
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
-	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 !
 	fnreg_read('ubtrlist.date.start',tmp$) : filter_date_start=val(tmp$) conv ignore
 	fnreg_read('ubtrlist.date.end',tmp$) : filter_date_end=val(tmp$) conv ignore

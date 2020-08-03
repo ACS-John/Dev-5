@@ -504,7 +504,7 @@ def fn_setup
 	dim extra$(11)*30,extra(23) ! fields from Customer File
 	dim srvnam$(10)*20,srv$(10)*2
 
-	fnget_services(mat srvnam$, mat srv$)
+	fnGetServices(mat srvnam$, mat srv$)
 
 	dim line_x_option$(9)*70
 	mat line_x_option$(0)

@@ -1,9 +1,3 @@
-def fn_setup
-  if ~setup then
-    setup=1
-    autoLibrary
-  end if
-fnend
 
 def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
   fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
@@ -37,7 +31,7 @@ def fn_array_item_insert(mat array, insert_item, insert_item_number)
 fnend
 
 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
-  ! if ~setup then fn_setup
+  ! autoLibrary
   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 fnend  ! fnsrch_case_insensitive
 def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
@@ -56,35 +50,35 @@ def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   fn_srch_case_insensitive=srch_return
 fnend
 
-def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
-  fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)
+def library fnAddOneN(mat addTo, one; skipZeros, skipDupes)
+  fnAddOneN=fn_addOneN(mat addTo, one, skipZeros, skipDupes)
 fnend
-def fn_addOneN(mat add_to, one; skip_zeros, skip_dupes)
+def fn_addOneN(mat addTo, one; skipZeros, skipDupes)
   ! must dim an array to 0 before you can add a first item
-  !    Mat Add_To - the array to add One item to
-  !    One - the One item to add to Mat Add_To
-  !    skip_Zeros - if =1 than only add One if One<>0
-  !    skip_dupes - if =1 than only add One if One is not yet in Mat Add_To
+  !    Mat addTo - the array to add One item to
+  !    One - the One item to add to Mat addTo
+  !    skipZeros - if =1 than only add One if One<>0
+  !    skipDupes - if =1 than only add One if One is not yet in Mat addTo
   !    This function returns the number of items in the array after any add
-  if skip_zeros=0 or (skip_zeros and one<>0) then
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to,one)=-1) then
-      add_to_udim=udim(mat add_to) : mat add_to(add_to_udim+1) : add_to(add_to_udim+1)=one
+  if skipZeros=0 or (skipZeros and one<>0) then
+    if skipDupes=0 or (skipDupes and srch(mat addTo,one)=-1) then
+      add_to_udim=udim(mat addTo) : mat addTo(add_to_udim+1) : addTo(add_to_udim+1)=one
     end if
   end if
-  fn_addOneN=udim(mat add_to)
+  fn_addOneN=udim(mat addTo)
 fnend
-def library fnAddOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
-  fnAddOneC=fn_addOneC(mat add_to$, one$, skip_blanks, skip_dupes)
+def library fnAddOneC(mat add_to$, one$*2048; skip_blanks, skipDupes)
+  fnAddOneC=fn_addOneC(mat add_to$, one$, skip_blanks, skipDupes)
 fnend
-def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skip_dupes)
+def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skipDupes)
   ! must dim an array to 0 before you can add a first item
   !    Mat Add_To$ - the array to add One$ item to
   !    One$ - the One$ item to add to Mat Add_To$
   !    skip_Blanks - if =1 than only add One$ if Trim$(One$)<>""
-  !    skip_dupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
+  !    skipDupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
   !    This function returns the number of items in the array after any add
   if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then
-    if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)<=0) then
+    if skipDupes=0 or (skipDupes and srch(mat add_to$,one$)<=0) then
       add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
     end if
   end if
@@ -165,7 +159,7 @@ fnend
 
 ! r: read a file into parallel 1-D Arrays
 def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
-  if ~setup then fn_setup
+  autoLibrary
   dim ftaLine$*1024
   if ftaDelimiter$='' then ftaDelimiter$='='
   open #hFta:=fngethandle: 'name='&ftaFile$,d,i
@@ -191,7 +185,7 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
 fnend
 
 def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
-  if ~setup then fn_setup
+  autoLibrary
   dim r1Line$*256
   dim r1LineItem$(0)*128
   mat r1Return$(0)
@@ -209,8 +203,7 @@ def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
   fnRead1column=udim(mat r1Return$)
 fnend
 def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumber1,r2ColumnNumber2,r2Delimiter$)
-
-  if ~setup then fn_setup
+  autoLibrary
   dim r2Line$*256
   dim r2LineItem$(0)*128
   mat r2Return1$(0)
@@ -236,7 +229,7 @@ def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumb
   fnRead2column=udim(mat r2Return1$)
 fnend
 def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*256,r3ColumnNumber1,r3ColumnNumber2,r3ColumnNumber3,r3Delimiter$)
-  if ~setup then fn_setup
+  autoLibrary
   dim r3Line$*256
   dim r3LineItem$(0)*128
   mat r3Return1$(0)
@@ -256,7 +249,7 @@ def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*2
   fnRead3column=udim(mat r3Return1$)
 fnend
 def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Return4$,r4File$*256,r4ColumnNumber1,r4ColumnNumber2,r4ColumnNumber3,r4ColumnNumber4,r4Delimiter$)
-  if ~setup then fn_setup
+  autoLibrary
   dim r4Line$*256
   dim r4LineItem$(0)*128
   mat r4Return1$(0)
@@ -281,7 +274,7 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   ! for reading files into two arrays where the first X positions in the file are column1 and the rest of the line is column2
   ! a 1 character delimiter between the two columns is assumed.
   ! no headings is assumed
-  if ~setup then fn_setup
+  autoLibrary
   dim r2fLine$*256
   mat r2fReturn1$(0)
   mat r2fReturn2$(0)

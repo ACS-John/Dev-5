@@ -12,7 +12,7 @@
 	fnLastBillingDate(lbill)
 	fnTop(program$,cap$="Past Due Balance Breakdown")
 ! need to build headings from this information
-	fnget_services(mat serviceName$, mat srv$, mat tax_code$,mat penalty$)
+	fnGetServices(mat serviceName$, mat srv$, mat tax_code$,mat penalty$)
 	fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$)
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
 	if trim$(serviceName$(3))<>"Electric" and trim$(srv$(3))="EL" then needelecused=1

@@ -202,7 +202,7 @@ Xit: fnXit
 IGNORE: continue
 GET_AU: ! r:
 	dim serviceName$(10)*20,service$(10)*2
-	fnget_services(mat serviceName$,mat service$)
+	fnGetServices(mat serviceName$,mat service$)
 	for j=1 to 10
 		if trim$(service$(j))<>"" then
 			hd1$=hd1$&lpad$(service$(j)(1:2),3)

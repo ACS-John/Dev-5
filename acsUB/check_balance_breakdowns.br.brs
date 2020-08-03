@@ -39,7 +39,7 @@ def fn_setup
 		on error goto Ertn
 
 		dim serviceName$(10)*20,srv$(10)*2
-		fnget_services(mat serviceName$,mat srv$)
+		fnGetServices(mat serviceName$,mat srv$)
 	end if 
 fnend 
 def fn_report_it(z$,mat report_g,bal_breakdown; heading$*80,col_2_heading$*12,col_3_heading$,col_3_value$)

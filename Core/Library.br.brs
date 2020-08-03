@@ -1217,11 +1217,11 @@ fnend
 		library 'S:\Utility Billing\fn\calculateBills.br': fnCalculateBills
 		fnCalculateBills=fnCalculateBills(goal$)
 	fnend
-	def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	def library fnCalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 		library 'S:\acsUB\calk_standard.br': fncalk
 		fncalk=fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	fnend
-	def library fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+	def library fnCalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 		library 'S:\acsUB\calk_chatom.br': fncalkChatom
 		fncalkChatom=fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	fnend
@@ -1281,19 +1281,19 @@ fnend
 		library 'S:\Utility Billing\Customer.br': fnCustomerNotes
 		fnCustomerNotes=fnCustomerNotes(z$)
 	fnend
-	def library fnapply_default_rates(mat extra, mat a)
+	def library fnApply_default_rates(mat extra, mat a)
 		library 'S:\Utility Billing\Customer.br': fnapply_default_rates
 		fnapply_default_rates=fnapply_default_rates(mat extra, mat a)
 	fnend
-	def library fnapplyDefaultRatesFio(mat customerN)
+	def library fnApplyDefaultRatesFio(mat customerN)
 		library 'S:\Utility Billing\Rates.br': fnapplyDefaultRatesFio
 		fnapplyDefaultRatesFio=fnapplyDefaultRatesFio(mat customerN)
 	fnend
-	def library fnget_services(mat serviceName$; mat serviceCode$, mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
-		library 'S:\Utility Billing\Type of Service.br': fnget_services
-		fnget_services=fnget_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+	def library fnGetServices(mat serviceName$; mat serviceCode$, mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+		library 'S:\Utility Billing\Type of Service.br': fnGetServices
+		fnGetServices=fnGetServices(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 	fnend
-	def library fnservice_other
+	def library fnService_other
 		library 'S:\Utility Billing\Type of Service.br': fnservice_other
 		fnservice_other=fnservice_other
 	fnend

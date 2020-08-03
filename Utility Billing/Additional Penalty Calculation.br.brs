@@ -29,7 +29,7 @@
 	fnTop(program$)
 	fnLastBillingDate(bildat)
 
-	fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+	fnGetServices(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 	for j=1 to 10
 		if uprc$(penalty$(j))="Y" then
 			pencount=pencount+1 ! count number of penalty columns needed

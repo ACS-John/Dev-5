@@ -135,10 +135,10 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'[cno]',env$('cno'))
 						cfItem$(cbIndex)=fnSrepEnv$(cfItem$(cbIndex))
 						if pos(cfItem$(cbIndex),'*custom:UB ServiceCodes*')>0 then
-							library 'S:\Core\Library': fnget_services
+							library 'S:\Core\Library': fnGetServices
 							dim serviceName$(10)*20
 							dim serviceCode$(10)*2
-							fnget_services(mat serviceName$,mat serviceCode$)
+							fnGetServices(mat serviceName$,mat serviceCode$)
 							dim tmpList$*256
 							tmpList$=''
 							for scItem=1 to udim(mat serviceCode$)

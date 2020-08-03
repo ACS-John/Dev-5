@@ -4,7 +4,7 @@ on error goto Ertn
  
 fnTop(program$)
 dim srvnam$(10)*20,srv$(10)*2
-fnget_services(mat srvnam$, mat srv$)
+fnGetServices(mat srvnam$, mat srv$)
 fn_setup_hamster
 fn_open_file : fn_close_file : fn_open_file
 fnHamster("Customer_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)

@@ -24,7 +24,7 @@
 	fncreg_read('ubpdtnof.accountSequence',accountSequence$,'True')
  
 	dim srvnam$(10)*20,srv$(10)*2
-	fnget_services(mat srvnam$,mat srv$)
+	fnGetServices(mat srvnam$,mat srv$)
 ! /r
 ! r: SCREEN1
 	fnTos(sn$="UBPdTnOf")

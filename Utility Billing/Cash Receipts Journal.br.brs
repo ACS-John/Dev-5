@@ -15,7 +15,7 @@
 !
 	fnTop(program$)
 ! skip_header=1 ! <--  this is really a developer only option.
-	fnget_services(mat serviceName$)
+	fnGetServices(mat serviceName$)
 	gosub SCREEN1
 	hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 	for j=1 to 10

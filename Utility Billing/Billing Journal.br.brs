@@ -16,7 +16,7 @@ fnTop(program$)
 fnLastBillingDate(billing_date)
 fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
 dim serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1
-fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
+fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
 hd1$='Account                             '
 hd2$='{\ul Number   }  {\ul Name                   }  '
 for j=1 to 10

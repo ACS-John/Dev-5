@@ -9,7 +9,7 @@
  
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-	fnget_services(mat srv$)
+	fnGetServices(mat srv$)
 	for j=1 to udim(srv$)
 		srv$(j)=trim$(srv$(j))
 		if srv$(j)<>"" then srv$(j)=srv$(j)&":" : services+=1

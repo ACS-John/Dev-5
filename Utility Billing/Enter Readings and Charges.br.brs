@@ -92,7 +92,7 @@ def fn_setup
 fnend
 def fn_setup_service(mat service_enabled)
 	! r: older stuff
-	fnget_services(mat srvnam$,mat srv$,mat tax_code$,mat penalty$)
+	fnGetServices(mat srvnam$,mat srv$,mat tax_code$,mat penalty$)
 	for j=1 to udim(mat srvnam$)
 		srvnam$(j)=trim$(srvnam$(j))
 		srvnamc$(j)=srvnam$(j)&":"
@@ -1862,7 +1862,7 @@ def fn_setupFlexRead
 		setupFlexRead=1
 		dim colmask$(30),frColHdr$(30)*20,serviceName$(10)*20,item$(25)*70
 		dim tg(11),a(7)
-		fnget_services(mat serviceName$)
+		fnGetServices(mat serviceName$)
 		tcode$(1)="Charge"
 		tcode$(2)="Penalty"
 		tcode$(3)="Collect"

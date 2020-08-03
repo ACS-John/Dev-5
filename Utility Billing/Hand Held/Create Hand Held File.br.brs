@@ -1854,7 +1854,7 @@ def fn_setup
 			drive$(22)="Z:\"
 		! /r
 		gosub Enum
-		fnget_services(mat serviceName$, mat serviceCode$)
+		fnGetServices(mat serviceName$, mat serviceCode$)
 		fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
 		dim devicePreference$*20
 		devicePreference$=fnhand_held_device$

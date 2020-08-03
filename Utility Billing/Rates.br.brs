@@ -15,7 +15,7 @@ def fn_setup
 		! 
 		on error goto Ertn
 		!
-		fnget_services(mat snm$,mat srv$)
+		fnGetServices(mat snm$,mat srv$)
 		dim serviceCodeMetered$(0)*2
 		fnGetServiceCodesMetered(mat serviceCodeMetered$)
 		optionCount=0

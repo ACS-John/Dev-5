@@ -33,7 +33,7 @@ def fn_setup
 	dim tax_code$(10)*1
 	dim penalty$(10)*1
 
-	fnget_services(mat serviceName$, mat serviceCode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
+	fnGetServices(mat serviceName$, mat serviceCode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
 fnend
 PrintBill_Basic: ! r: set prefrences for clients
 	! PrintBill_Basic - dynamic pr bill program that works for multiple clients

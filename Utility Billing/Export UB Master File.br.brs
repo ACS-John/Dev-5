@@ -2,7 +2,7 @@
 fn_setup
 fnTop(program$)
 dim serviceName$(10)*20
-fnget_services(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
+fnGetServices(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 MENU1: ! r:
 	dim resp$(3)*256
 	fnTos

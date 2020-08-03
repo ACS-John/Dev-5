@@ -259,7 +259,7 @@ def fn_setup
 		dim resp$(5)*128
 		
 		dim srvname$(10)*20
-		fnget_services(mat srvname$)
+		fnGetServices(mat srvname$)
 		for j=1 to 10
 			if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 		next j

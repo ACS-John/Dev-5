@@ -2,52 +2,60 @@ pr border: 'Import Source'
 execute 'con gui off'
 library program$: fnReCompile
 fnReCompile
-def library fnReCompile(; disableRebuildCache)
+def library fnReCompile(; disableRebuildCache,___,hproc)
 	autoLibrary
 	dim filename$*255,msr_file$*255
 	if ~exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
-	open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
+	open #hproc:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
 
 	if ~disableRebuildCache then
-		execute "sy -M sortfiles -D . -C "".br.brs|.br""" ! ioerr RcDone
+		execute "sy -M sortFiles -D . -C "".br.brs|.br""" ! ioerr RcDone
 	end if
 
-		dim sourceFile$(0)*256
-		mat sourceFile$(0)
-		fn_getFileList('S:\(import)\brsfiles',mat sourceFile$)
-		sourceCount=udim(mat sourceFile$)
+	dim sourceFile$(0)*256
+	mat sourceFile$(0)
+	sourceCount=fn_getFileList('S:\(import)\brsfiles',mat sourceFile$)
+	! sourceCount=udim(mat sourceFile$)
 	! RcDone:!
 	
-	open #dirfile:=fngethandle: "Name=S:\(import)\brsfiles",display,input
-	pr #proc_file: 'Scr_Freeze'
-	for sourceItem=1 to sourceCount
-		if fn_hasLineNumbers(sourceFile$(sourceItem)) then
-			pr #proc_file: 'Load "'&sourceFile$(sourceItem)&'",Source'
-			parameter$=fn_buildParameter$(sourceFile$(sourceItem))
-			if exists(sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)) then
-				pr #proc_file: 'Replace "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
+	! open #dirfile:=fngethandle: "Name=S:\(import)\brsfiles",display,input
+	! if sourceCount<=1 then
+		! r: old way: file by file (but too slow for multiple files)
+		pr #hproc: 'Scr_Freeze'
+		for sourceItem=1 to sourceCount
+			if fn_hasLineNumbers(sourceFile$(sourceItem)) then
+				pr #hproc: 'Load "'&sourceFile$(sourceItem)&'",Source'
+				parameter$=fn_buildParameter$(sourceFile$(sourceItem))
+				if exists(sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)) then
+					pr #hproc: 'Replace "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
+				else
+					pr #hproc: 'Save "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
+				end if
 			else
-				pr #proc_file: 'Save "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
+				pr #hproc:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&sourceFile$(sourceItem)&'""'
+				! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
 			end if
+			pr #hproc: ''
+		nex sourceItem
+		pr #hproc: 'Scr_Thaw'
+	
+		if env$("AfterRecompile")="" then
+			pr #hproc: "Sy"
 		else
-			pr #proc_file:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&sourceFile$(sourceItem)&'""'
-			! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
+			pr #hproc: 'chain "'&env$("AfterRecompile")&'"'
 		end if
-		pr #proc_file: ''
-	nex sourceItem
-	pr #proc_file: 'Scr_Thaw'
-
-	if env$("AfterRecompile")="" then
-		pr #proc_file: "Sy"
-	else
-		pr #proc_file: 'chain "'&env$("AfterRecompile")&'"'
-	end if
-	close #dirfile: ioerr ignore
-	msr_file$=file$(proc_file)
-	close #proc_file:
-	execute "subproc "&msr_file$
+		! close #dirfile: ioerr ignore
+		msr_file$=file$(hproc)
+		close #hproc:
+		execute "subProc "&msr_file$
+		! /r
+	! else
+	! 	! r: now with filelist:
+	! 	pause
+	! 	! /r
+	! end if
 fnend
-def fn_getFileList(filename$,mat list$; ___,dirfile,returnN)
+def fn_getFileList(filename$*256,mat list$; ___,dirfile,returnN,line$*256)
 	returnN=0
 	mat list$(0)
 	open #dirfile:=fngethandle: 'Name='&filename$,display,input

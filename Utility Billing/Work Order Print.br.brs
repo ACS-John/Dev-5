@@ -2,9 +2,9 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	if wop_setup<>val(env$('cno')) then
 		wop_setup=val(env$('cno'))
 		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnget_services
+		library 'S:\Core\Library': fnGetServices
 		dim srvnam$(10)*20
-		fnget_services(mat srvnam$)
+		fnGetServices(mat srvnam$)
 		if trim$(srvnam$(3))='Association Fee' then s3_non_metered=1 else s3_non_metered=0
 	end if
 	!

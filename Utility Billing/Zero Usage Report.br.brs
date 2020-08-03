@@ -5,7 +5,7 @@ dim z$*10,e$(4)*30,resp$(10)*40,d(15)
 dim serviceName$(10)*20,a(7)
 fnTop(program$)
 fnLastBillingDate(d1)
-fnget_services(mat serviceName$)
+fnGetServices(mat serviceName$)
 MAIN: ! r:
 	fnTos
 	mylen=20

@@ -26,7 +26,7 @@
 		goto Xit
 	end if
 !
-	fnget_services(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
+	fnGetServices(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 	delim$=chr$(9)
 !
 	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
