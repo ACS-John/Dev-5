@@ -5,9 +5,9 @@ def fn_isClientServer(; ___,returnN)
 	fn_isClientServer=returnN
 fnend
 
-def library fnFileSaveAs(save_what$)
+def library fnFileSaveAs(save_what$; saveFileName$*256)
 	if ~setup then fn_setup
-	fnFileSaveAs=fn_FileSaveAs(save_what$)
+	fnFileSaveAs=fn_FileSaveAs(save_what$, saveFileName$)
 fnend
 def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,disableCopyToLocal)
 	dim save_name$*256,ln$*512
