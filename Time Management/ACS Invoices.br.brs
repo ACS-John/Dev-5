@@ -15,7 +15,7 @@ fn_askScreen1(invDateMmDdYy,invoice_number)
 invoiceDateCcyymmdd=date(days(invDateMmDdYy,"mmddyy"),"ccyymmdd")
 fnStatus('Commit your work.  This data is saved in the repository.')
 execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
-fnStatusPause
+! fnStatusPause
 
 ! fnStatus("Custom Saving to 'D:\ACS\ACS LLC 420.zip'...")  ! these were nice ideas when the data wasnt in core.
 ! fnFileSaveAs('*.*', 'D:\ACS\ACS LLC 420.zip')             ! these were nice ideas when the data wasnt in core.
