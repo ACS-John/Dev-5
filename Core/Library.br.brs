@@ -438,9 +438,9 @@ fnend
 		library 'S:\Core\File Open and Save.br': fnOpenPartial
 		fnOpenPartial=fnOpenPartial
 	fnend
-	def library fnFileSaveAs(save_what$)
+	def library fnFileSaveAs(save_what$; saveFileName$*256)
 		library 'S:\Core\File Open and Save.br': fnFileSaveAs
-		fnFileSaveAs=fnFileSaveAs(save_what$)
+		fnFileSaveAs=fnFileSaveAs(save_what$, saveFileName$)
 	fnend
 	def library fnAutomatedSavePoint(fileNameAddition$*128)
 		library 'S:\Core\File Open and Save.br': fnAutomatedSavePoint

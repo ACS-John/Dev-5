@@ -1,7 +1,0 @@
-[Q]\Data\oFavorites.dat, ofav_, 1
-[Q]\Data\oFavoritesUserSys.idx, user/system
-[Q]\Data\oFavoritesProgram.idx, program
-===================================================
-user$   ,    unique computer id,   C 40,  ! maybe this should be login_name$
-system$ ,    System ID,            C 2,   !
-Program$,    Program Caption,      C 128, !
