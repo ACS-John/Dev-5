@@ -10,7 +10,7 @@ dim ml$(3)*90
 fnTop(program$,"Cash Receipts Journal")
 
 fndat(dat$,1)
-fnget_services(mat serviceName$)
+fnGetServices(mat serviceName$)
 
 gosub SCREEN1
 

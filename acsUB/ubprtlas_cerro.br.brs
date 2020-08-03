@@ -13,7 +13,7 @@
 	fnLastBillingDate(d1)
 !
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1
-	fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+	fnGetServices(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 	linelength=62
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #

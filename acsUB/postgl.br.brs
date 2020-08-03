@@ -9,7 +9,7 @@
 	dim item$(6)*20,service$(10)*20,a(7)
 	fnTop(program$,cap$="Post General Ledger")
 	fndat(dat$,1)
-	fnget_services(mat serviceName$)
+	fnGetServices(mat serviceName$)
 	x=0
 	for j=1 to 10
 		service$(j)=serviceName$(j)

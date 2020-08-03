@@ -26,7 +26,7 @@ def fn_setup
 
 		dim serviceName$(10)*20
 		dim srv$(10)*2
-		fnget_services(mat serviceName$, mat srv$)
+		fnGetServices(mat serviceName$, mat srv$)
 		
 	end if
 fnend

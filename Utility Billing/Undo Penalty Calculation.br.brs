@@ -10,7 +10,7 @@ dim penatly$(10)*1,gb(10)
 dim extra(23),extra$(11)*30
 dim a(7)
 dim serviceName$(10)*20,service$(10),tax_code$(10)*1,penalty$(10)
-fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
+fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
  
 fnTos(sn$="ubUnPen")
 fnLbl(1,1,"Penalty Date:",26,1)

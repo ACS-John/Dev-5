@@ -8,7 +8,7 @@ dim dat$*20,resp$(4)*20,pe2$*30,e2$*30,text$*80
 dim svce$*11,srvnam$(10)*20,srv$(10),data$*256,idx$*256
 
 fnTop(program$,"Usage and Dollar Report")
-fnget_services(mat srvnam$,mat srv$)
+fnGetServices(mat srvnam$,mat srv$)
 fndat(dat$)
 
 SCREEN1: !

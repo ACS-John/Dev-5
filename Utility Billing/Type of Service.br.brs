@@ -99,9 +99,9 @@ def fn_readService
 	if fnArrayWasPassedN( mat subjectTo   ) then mat subjectTo   (udim(mat cacheSubjectTo   )) : mat subjectTo   =cacheSubjectTo
 	if fnArrayWasPassedN( mat orderToApply) then mat orderToApply(udim(mat cacheOrderToApply)) : mat orderToApply=cacheOrderToApply
 fnend
-def library fnget_services(mat serviceName$; mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+def library fnGetServices(mat serviceName$; mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 	fn_setup
-	fnget_services=fn_get_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+	fnGetServices=fn_get_services(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 fnend
 def fn_get_services(mat serviceName$; mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 	fn_readService

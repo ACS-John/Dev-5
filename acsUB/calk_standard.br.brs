@@ -4,7 +4,7 @@ def fn_setup_calk
 		autoLibrary
 		dim x$*10,gb(10),dp$*60,serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 		FORM_RATEMSTR: form pos 55,32*g 10
-		fnget_services(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+		fnGetServices(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 		for j=1 to udim(serviceName$)
 			serviceName$(j)=trim$(serviceName$(j))
 		next j

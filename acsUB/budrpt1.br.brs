@@ -7,7 +7,7 @@
 	dim t1(11),t2(11),t3(11),cap$*128,message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
 	fnTop(program$, cap$="Worksheet")
 !
-	fnget_services(mat serviceName$,mat service$)
+	fnGetServices(mat serviceName$,mat service$)
 	hdr$="{\ul  Date   }"
 	underline$="          "
 	for j=1 to 10

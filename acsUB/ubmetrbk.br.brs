@@ -12,7 +12,7 @@ dim notefile$*100,notedir$*100,ul$*60,d(15),snm$(10)*20,srv$(10)*2
 fnTop(program$,cap$="Meter Reading Book")
 fndat(dat$,1)
 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
-	fnget_services(mat snm$,mat srv$)
+	fnGetServices(mat snm$,mat srv$)
 	x=0
 	option$(x+=1)="[All]"
 	for j=1 to 4

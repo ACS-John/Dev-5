@@ -27,7 +27,7 @@
 	filter_option$(6)="4 - Finaled / but Not Billed"
 	
 	fnTop(program$)
-	fnget_services(mat serviceName$ )
+	fnGetServices(mat serviceName$ )
 	for j=1 to 4
 		serviceName$(j)=lpad$(rtrm$(serviceName$(j)),16)
 	next j

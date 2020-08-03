@@ -11,7 +11,7 @@ dim extra(23)
 
 fnTop(program$,"Reset Readings")
 dim srvnam$(10)*20,srv$(10)*2
-fnget_services(mat srvnam$,mat srv$)
+fnGetServices(mat srvnam$,mat srv$)
 
 SCREEN1: !
 	fnTos

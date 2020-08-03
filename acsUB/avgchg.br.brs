@@ -96,7 +96,7 @@ include: Ertn No
 	dim hd1$*400,hd2$*400,g1(11),g2(11)
 	dim serviceName$(10)*20,services$(10)*2,tax_code$(10)*1,tg(11),usages(3)
 BLDHDR: ! r: build pr headings
-	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
+	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
 	hd1$="Account                             " : _
 	hd2$="{\ul Number   }  {\ul Name                   }  "
 	for j=1 to 9 ! skip penalty

@@ -15,10 +15,10 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 		dim abbrevname$(20)*8
 		fnDedNames(mat fullname$,mat abbrevname$)
 	else if env$('cursys')='UB' then
-		library 'S:\Core\Library': fnget_services
+		library 'S:\Core\Library': fnGetServices
 			dim serviceName$(10)*20
 			dim srv$(10)*2
-		fnget_services(mat serviceName$,mat srv$)
+		fnGetServices(mat serviceName$,mat srv$)
 	end if
 	open #2: "Name="&ev$,display,input 
 	open #15: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outIn,keyed 

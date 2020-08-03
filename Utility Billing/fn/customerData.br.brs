@@ -5,7 +5,7 @@ fnend
 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,whichService)
 	dim serviceName$(0)*20
 	dim serviceCode$(0)*2
-	if udim(mat serviceName$)=0 then fnget_services(mat serviceName$,mat serviceCode$)
+	if udim(mat serviceName$)=0 then fnGetServices(mat serviceName$,mat serviceCode$)
 	if trim$(account$&fieldName$)='' and leaveOpen=0 then goto CustomerDataFinis !  just close it and move on
 	account$=lpad$(trim$(account$),10)
 	if customerDataSetup$<>account$ then ! r:

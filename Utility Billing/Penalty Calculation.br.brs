@@ -32,7 +32,7 @@ EO_MINIMUMBAL: !
 	open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
 !
-	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 !
 	for j=1 to 10
 		if uprc$(penalty$(j))="Y" then

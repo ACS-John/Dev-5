@@ -10,7 +10,7 @@
 	fnTop(program$)
 	fnLastBillingDate(d1)
 	!
-	fnget_services(mat serviceName$,mat serviceCode$)
+	fnGetServices(mat serviceName$,mat serviceCode$)
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)
 ! /r
 ! r: Ask Usage Ranges

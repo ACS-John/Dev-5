@@ -15,7 +15,7 @@
 !
 	fnTop(program$,cap$="Swap Current and Prior Readings for Water")
 	fnLastBillingDate(d1)
-	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
+	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 	for j=1 to udim(serviceName$)
 		serviceName$(j)=trim$(serviceName$(j))
 	next j

@@ -18,7 +18,7 @@
 	read #1,using "Form POS 121,N 6": d1 ioerr L230
 	close #1:
 	magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
-L230: fnget_services(mat serviceName$,mat srv$)
+L230: fnGetServices(mat serviceName$,mat srv$)
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 L260: read #1,using L990,release: z$,e$,bildat eof SCREEN1

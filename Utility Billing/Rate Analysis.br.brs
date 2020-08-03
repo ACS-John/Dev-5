@@ -8,7 +8,7 @@
 	fnTop(program$)
 	fnLastBillingDate(bdate) : billingDay=days(bdate,'mmddyy')
 	dim srvnam$(10)*20,srv$(10)
-	fnget_services(mat srvnam$,mat srv$)
+	fnGetServices(mat srvnam$,mat srv$)
 goto SCR1 ! /r
 SCR1: ! r:
 	fnTos(sn$="Anlyze-1")

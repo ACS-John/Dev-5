@@ -10,7 +10,7 @@
 	dim resp$(11)*128
  
 	fnLastBillingDate(filterBillingDate)
-	fnget_services(mat serviceName$,mat srv$)
+	fnGetServices(mat serviceName$,mat srv$)
 	if trim$(serviceName$(1))<>'' then service1enabled=1
 	if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1
 	if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1

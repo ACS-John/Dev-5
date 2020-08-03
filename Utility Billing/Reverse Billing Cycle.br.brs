@@ -8,7 +8,7 @@ def fn_undobilling ! main
 	dim billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),serviceName$(10)*20
 	do_all=1 : do_route=2 : do_individual=3
 	fnTop(program$)
-	fnget_services(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
+	fnGetServices(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 	
 	ASK_OPTIONS: !
 	cont=fn_askOptions(route,billingdate$) ! collect user options

@@ -9,7 +9,7 @@ autoLibrary
 dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
 dim serviceName$(10)*20,textfile$*87,abbrev$*30
-fnget_services(mat serviceName$)
+fnGetServices(mat serviceName$)
 fnsetmonth(mat mo$)
  
 dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",20"&date$(1:2)

@@ -12,7 +12,7 @@
 	gosub SCR1
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-	fnget_services(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply)
+	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply)
 	for j=1 to 10
 		serviceName$(j)=lpad$(rtrm$(serviceName$(j)(1:8)),8)
 	next j

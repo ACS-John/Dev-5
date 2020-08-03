@@ -23,7 +23,7 @@
  
 	dim serviceName$(10)*20
 	dim srv$(10)*2
-	fnget_services(mat serviceName$,mat srv$)
+	fnGetServices(mat serviceName$,mat srv$)
  
 	dim opt_service_to_analyze$(3)*20,opt_accum_type$(2)
 	opt_service_to_analyze$(1)="Water"

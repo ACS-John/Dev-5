@@ -27,7 +27,7 @@ ms$(10)="MAR"
 ms$(11)="FEB"
 ms$(12)="JAN"
 ms$(13)="DEC"
-fnget_services(mat snm$,mat srv$)
+fnGetServices(mat snm$,mat srv$)
 x=0
 for j=1 to 4
 	if j=1 and trim$(snm$(j))="Water" then option$(x+=1)=srv$(j)    :            service=service+1

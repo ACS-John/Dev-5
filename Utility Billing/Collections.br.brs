@@ -685,7 +685,7 @@ def fn_setup
 		dim srv$(10)*2
 		dim penalty$(10)*1
 		dim apply(10)
-		fnget_services(mat srvName$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
+		fnGetServices(mat srvName$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
 		for srvnameItem=1 to udim(mat srvName$)
 			srvName$(srvnameItem)=trim$(srvName$(srvnameItem))
 		nex srvnameItem

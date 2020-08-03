@@ -25,7 +25,7 @@ def fn_setup
 		dim mg$(0)*128
 		dim serviceName$(10)*60,serviceCode$(10)*2
 		dim resp$(128)*128
-		fnget_services(mat serviceName$, mat serviceCode$)
+		fnGetServices(mat serviceName$, mat serviceCode$)
 		! fn_InitialializeMeterLocation
 		for snI=1 to udim(mat serviceName$) : serviceName$(snI)=trim$(serviceName$(snI)) : nex snI
 		table$='U4 Meter Location'
