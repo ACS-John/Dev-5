@@ -28,7 +28,7 @@ L340: input fields mat fli$: mat catcode conv L340
 	pr newpage
 	pr f "10,25,c 48,n": "CLIENT DIRECTORY IN PROCESS"
 	pr f "23,2,c 30,n": "Press F5 to stop"
-	fnopenprn(cp,0,0,process)
+	fnopenprn
 	form c 9,skip 0
 	if numprint=1 then goto L440
 	for j=1 to 10

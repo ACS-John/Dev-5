@@ -133,7 +133,7 @@ FOOTER: !
   pr #255,using L1200: " "
 L1200: form pos 1,c 1,skip ls
   goto EO_FOOTER
-L1220: fnread_program_print_property('Lines',lpp$) : pglen=val(lpp$)
+L1220: fnReadProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
 ! If PGLEN<>42 Then pGLEN=58
   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK+=1

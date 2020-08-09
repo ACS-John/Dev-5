@@ -14,7 +14,7 @@ Xit: fnXit
 def fn_CsvToMeterInformation
 	colP=16
 	dim line$*1024,item$(0)*256
-	open #hIn:=fngethandle: 'name='&env$('at')&'C:\ACS\(Client_Files)\Purdy\Purdy MO Installation List 20171015 Final All.txt',d,input
+	open #hIn:=fngethandle: 'name=[at]'&'C:\ACS\(Client_Files)\Purdy\Purdy MO Installation List 20171015 Final All.txt',d,input
 	open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 	linput #hIn: line$ eof CtmiEof ! consume headers
 	do

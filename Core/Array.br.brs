@@ -326,6 +326,37 @@ def library fnArrayReverseC(mat in$,mat out$)
 		out$(in_udim-in_item+1)=in$(in_item)
 	next in_item
 fnend
+def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$; ___,a1count,a2count,index,count)
+	! sorts both arrays based on the ascending order of the values in the arrayOneN
+	! r: get array count ( and ensure arrays are the same size)
+	a1count=udim(mat arrayOneN)
+	a2count=udim(mat arrayTwo$)
+	if a1count>a2count then
+		mat arrayTwo$(a1count)
+		a2count=a1count
+	else if a1count<a2count then
+		mat arrayOneN(a2count)
+		a1count=a2count
+	end if
+	count=a1count ! at this point a1count and a2count should be equal anyway
+	! /r
+	
+	dim a1tmpN(0)
+	mat a1tmpN(count)
+	mat a1tmpN=arrayOneN
+	
+	dim a2tmp$(0)*512
+	mat a2tmp$(count)
+	mat a2tmp$=arrayTwo$
+	
+	dim sorted(0)
+	mat sorted=aidx(arrayOneN)
+	for index=1 to udim(mat functions$)
+		arrayOneN(index)=a1tmpN(sorted(index))
+		arrayTwo$(index)=a2tmp$(sorted(index))
+	next index
+	fn2arraySort=count
+fnend
 def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 	Chr_Count=0
 	do

@@ -21,7 +21,7 @@
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
 	report$="Other Deductions Register-YTD QTD"
-	fnopenprn(cp,58,220,0)
+	fnopenprn
 	gosub L390
 L240: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L490
 	gosub L440

@@ -17,7 +17,7 @@ on error goto Ertn
 ! /r
 ! r: top of programs, constants,initial setup, etc
 	fnTop(program$)
-	tmp_rtf_filename$=fnprint_file_name$
+	tmp_rtf_filename$=fnPrintFileName$
 	if env$('client')='French Settlement' or env$('client')='Granby' then hard_coded=1
 	fnLastBillingDate(d1)
 	fndat(d$(4))
@@ -310,7 +310,7 @@ def fn_report_close
 		dim ra_line$*256
 		close #h_ra:
 		open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input
-		fnopenprn(0,0,0,0, 'Summary')
+		fnopenprn('Summary')
 		gosub RC_HDR
 		do
 			linput #h_ra: ra_line$ eof RC_DONE

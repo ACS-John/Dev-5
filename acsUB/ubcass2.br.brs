@@ -32,7 +32,7 @@ L180: fnAcs(mat resp$,ckey)
 	open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output
 	open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative
-	fnopenprn(cp,0,0,process)
+	fnopenprn
 	pr #255: "\qc {\b "&cap$ : _
 	pr #255: "Listing of Customer Addresses that could not be certified" : _
 	pr #255: date$("mm/dd/ccyy")&"}" : _

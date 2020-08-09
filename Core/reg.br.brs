@@ -184,6 +184,7 @@ def library fnCreg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*
 		cr_fieldValue$=cr_defaultIfNotRead$
 	end if
 	! pr 'load ';trim$(cr_fieldName$);'=';cr_fieldValue$
+	fnCreg_read=val(cr_fieldValue$) conv ignore
 fnend
 def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	fn_creg_setup

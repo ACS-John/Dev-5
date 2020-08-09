@@ -1524,9 +1524,9 @@ def fn_removeExcessCRLF$*256(csvFile$*256; ___,return$*256,hIn,hOut,line$*1024,d
 	minItemCount=Fnopen_Csv(hIn:=fnGetHandle,env$('at')&csvFile$,delim$,Mat csv_fields$,Mat csv_data$)
 	lineCount=0
 	close #hIn: ioerr ignore
-	open #hIn:=fnGetHandle:  'name='&env$('at')&csvFile$,display,input
+	open #hIn=fnGetHandle:  'name=[at]'&csvFile$,display,input
 include: filenamesPushMixedCase
-	open #hOut:=fnGetHandle: 'name='&env$('at')&csvFile$&'-fixedCrLf,recl=2048,replace',display,output
+	open #hOut=fnGetHandle: 'name=[at]'&csvFile$&'-fixedCrLf,recl=2048,replace',display,output
 include: filenamesPopUpperCase
 
 	do

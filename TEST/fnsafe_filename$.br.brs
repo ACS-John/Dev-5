@@ -1,2 +1,2 @@
 autoLibrary
-pr fnsafe_filename$(time$)
+pr fnSafeFilename$(time$)

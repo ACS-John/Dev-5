@@ -251,7 +251,8 @@ GO_MERGE: ! r:
 	! fnEmailQueuedInvoices(email_date$)  this seems like a good idea to add here, perhaps a question like int S:\Time Management\ACS Invoices.br.brs
 	close #1:
 	close #hTmpInvoice:
-chain "S:\acsTM\TMMRGINV" ! /r
+	fnMergeInvoices
+goto Xit ! /r
 SCR_PRINT_INVOICES: ! r:
 	select_invoices_to_print=0
 	! pr newpage
@@ -275,7 +276,7 @@ SCR_PRINT_INVOICES: ! r:
 		read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
 		if ebilling and fnCustomerHasEbilling(client_id$) then
 			! open pdf
-			pdf_filename_final$=fnprint_file_name$(client_id$,'pdf')
+			pdf_filename_final$=fnPrintFileName$(client_id$,'pdf')
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,invoiceNumber$,inv_date,mat inv_item$,mat inv_amt,0,pdf_filename_final$)
 			! move to Send folder
 			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")

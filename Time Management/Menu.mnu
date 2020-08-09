@@ -1,4 +1,5 @@
 ! *** TM - Time Management ***
+Test fnPrintInvoice                               ^ TEST\fnPrintInvoice
 File
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*

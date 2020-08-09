@@ -89,7 +89,7 @@ goto READ_4
 SUB_PRINT_CHECK: ! r:
 	fn_cknum
 	! if env$('client')="Washington Parrish" then fnprocess(1) ! skip Atlantis screen
-	fnopenprn(cp,42,220,process)
+	fnopenprn
 	ckn1=ckn
 	!   on ckoption goto L1360,L1360 none L1360 ! L1390
 	! L1360: !
