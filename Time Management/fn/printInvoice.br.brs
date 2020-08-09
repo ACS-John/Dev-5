@@ -105,10 +105,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		! /r
 	else
 		if disableRtf then
-			pr 'pdfFileName$="'&pdfFileName$&'"'
-			open #out:=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
-			fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
-			close #out:
+			gosub LauraStyleInvoiceBody
 		else
 			if file(255)=0 then
 				fnopenprn
@@ -163,7 +160,10 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 	end if
 fnend
 LauraStyleInvoiceBody: ! r:
-
+	pr 'pdfFileName$="'&pdfFileName$&'"'
+			open #out:=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
+			fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+			close #out:
 return ! /r
 def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12, _
 		actnum$,mat billto$,pbal,mat desc$,mat amt; ___, _
