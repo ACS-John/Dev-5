@@ -31,7 +31,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	read #20,using 'Form POS 5,N 5': ckno
 	close #20: 
 	L180: ! 
-	if ~append_reg1 then let fnopenprn( 0,0,0,fnprocess,' (Departmental Register)')
+	if ~append_reg1 then fnopenprn(' (Departmental Register)')
 	
 	open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr L220X
 	founddept=1

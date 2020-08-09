@@ -86,9 +86,9 @@ def library fnRemoveExcessCRLF$*256(csvFile$*256; minColCount, ___, _
 	if ~setup then fn_setup
 	csvFile$=fn_replaceLFwithSpace$(csvFile$)
 	lineCount=0
-	open #hIn:=fnGetHandle:  'name='&env$('at')&csvFile$,display,input
+	open #hIn:=fnGetHandle:  'name=[at]'&csvFile$,display,input
 include: filenamesPushMixedCase
-	open #hOut:=fnGetHandle: 'name='&env$('at')&csvFile$&'-fixedCrLf, _
+	open #hOut:=fnGetHandle: 'name=[at]'&csvFile$&'-fixedCrLf, _
 														recl=2048,replace',display,output
 include: filenamesPopUpperCase
 

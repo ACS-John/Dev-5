@@ -1,7 +1,7 @@
 def fn_Setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle,fnprint_file_name$,fnWindowsStart,fnCopy
+		library 'S:\Core\Library': fngethandle,fnPrintFileName$,fnWindowsStart,fnCopy
 !   exec 'Config Option 68 On' ! Prevent stretching printed fonts. (unfortunately it also turns off all font size respect)
 		esc$=chr$(27)
 		gFontItalic=0
@@ -11,12 +11,14 @@ def fn_Setup
 		debug=1 ! debug=1
 	end if
 fnend
-def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
+def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128,h)
 	pdfDecipos=0 ! no longer passed - no longer needed
 	if ~setup then fn_setup
 	dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
-	g_filename_final$=fnprint_file_name$( pdf_sendto_base_name_addition$,'pdf')
-	open #hPdfOut:=fngethandle: 'Name=PDF:,PrintFile='&env$('at')&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+	g_filename_final$=fnPrintFileName$( pdf_sendto_base_name_addition$,'pdf')
+	if h>0 then hPdfOut=h else hPdfOut=fngethandle
+	open #hPdfOut: 'Name=PDF:,PrintFile=[at]'&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+	! pr g_filename_final$ : pause
 	! if env$('acsDeveloper')<>'' then pr 'hPdfOut=';hPdfOut : pause
 	poReturn=hPdfOut
 	gPdfDecipos=pdfDecipos ! if gPdfDecipos then skip translation from mm to gPdfDecipont, expect all input as Decipoints
@@ -50,31 +52,31 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128)
 	poFINIS: !
 	fnpdf_open=poReturn
 fnend
-def library fnpdf_Close
+def library fnpdf_Close(; h,___,pcHpdfOut)
 	if ~setup then fn_setup
-	close #hPdfOut: error PDFCLOSEERR
-	hPdfOut=0
+	if h>0 then pcHpdfOut=h else pcHpdfOut=hPdfOut : hPdfOut=0
+	close #pcHpdfOut: error PdfCloseErr
 	fnWindowsStart(os_filename$(g_filename_final$))
-goto pdfCloseFinit
-PDFCLOSEERR: !
-if debug then 
-	if env$('acsDeveloper')<>'' then 
-		pr 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
-		pr 'PDFCLOSEERR - debugging log follows... '
-		pause
+	goto pdfCloseFinit
+	PdfCloseErr: !
+	if debug then 
+		if env$('acsDeveloper')<>'' then 
+			pr 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
+			pr 'PdfCloseErr - debugging log follows... '
+			pause
+		end if
+		pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
+		close #hDebugLog:
+		debugLogSetup=0
+		exe 'sy -M -C "'&os_filename$('acsBrPdf.txt')&'"'
+		if debugScriptSetup then
+			debugScriptSetup=0
+			close #hDebugScript:
+			exe 'sy -M -C "'&os_filename$('acsBrPdfScript.txt')&'"'
+		end if
 	end if
-	pr #hDebugLog: 'Error '&str$(err)&' on Close PDF File/during PDF file creation'
-	close #hDebugLog:
-	debugLogSetup=0
-	exe 'sy -M -C "'&os_filename$('acsBrPdf.txt')&'"'
-	if debugScriptSetup then
-		debugScriptSetup=0
-		close #hDebugScript:
-		exe 'sy -M -C "'&os_filename$('acsBrPdfScript.txt')&'"'
-	end if
-end if
-goto pdfCloseFinit
-pdfCloseFinit: !
+	goto pdfCloseFinit
+	pdfCloseFinit: !
 fnend
 def library fnpdf_newpage
 	if ~setup then fn_setup

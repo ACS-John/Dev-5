@@ -22,12 +22,12 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	else
 		open #h_tmp:=fngethandle: "Name=SAVE:"&fnsave_as_path$&"\*.zip,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
 		save_name$=os_filename$(file$(h_tmp))
-		close #h_tmp,free: 
+		close #h_tmp,free:
 		fnCopy('S:\drive.sys','[Q]\*.*')
 		fnCopy('S:\brserial.dat','[Q]\*.*')
 	end if
 	fnreg_close
-	open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+	open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	dim tmp7ZipCommand$*512
 	dim zOmitReportCacheOption$*64
 	if enableBackupReportCache$='True' then
@@ -72,7 +72,7 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	pr #h_tmp: '@echo PROCESSING AUTOMATED SAVE...'
 	end if
 	pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
-	close #h_tmp: 
+	close #h_tmp:
 	if fn_isClientServer and ~disableCopyToLocal then
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 		fnmakesurepathexists(env$('at')&save_name$)
@@ -87,21 +87,21 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 		execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
 	end if
 	if fsa_automatedSaveFileName$<>'' then
-		if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
+		if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then
 			fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
 			fnreg_write('Last Automated Save Time',time$)
 			fnreg_write('Last Automated Save File',save_name$)
 			fnreg_write('Last Automated Save Path',save_name$(1:pos(save_name$,'\',-1)))
-		end if 
+		end if
 	else
-		if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$,0,suppressErrorLog) then 
+		if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$,0,suppressErrorLog) then
 			fnreg_write('Last Save Date',date$('ccyy/mm/dd'))
 			fnreg_write('Last Save Time',time$)
 			fnreg_write('Last Save File',save_name$)
 			fnreg_write('Last Save Path',save_name$(1:pos(save_name$,'\',-1)))
-		end if 
+		end if
 	end if
-	! 
+
 	goto SAVE_AS_XIT
 	SAVE_AS_OPEN_ERR: ! there was a problem opening the file.
 	if fsa_automatedSaveFileName$<>'' then
@@ -119,22 +119,22 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 		ml$(2)='Error: '&str$(err)
 		fnmsgbox(mat ml$)
 		pr "Err:";err;" Line:";line
-	end if 
-	SAVE_AS_XIT: ! 
+	end if
+	SAVE_AS_XIT: !
 	!  fn_fsa_clean_up
-fnend 
+fnend
 def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_name$*256; statusInsteadOfMsgBox,suppressErrorLog)
 	open #h_compresslog:=fngethandle: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
 	failure=1
-	do 
+	do
 		linput #h_compresslog: ln$ eof ARC_EO_COMPRESSLOG
-		if lwrc$(ln$)='everything is ok' then 
+		if lwrc$(ln$)='everything is ok' then
 			failure=0
-		end if 
-	loop 
-	ARC_EO_COMPRESSLOG: ! 
-	close #h_compresslog: 
-	if failure then 
+		end if
+	loop
+	ARC_EO_COMPRESSLOG: !
+	close #h_compresslog:
+	if failure then
 		fnlog(save_name$&': FAILURE: '&success_text_line1$)
 		if suppressErrorLog then
 			fnCopy(arc_filename$,save_name$&'(failureLog).txt')
@@ -146,16 +146,16 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			ml$(2)='The following log was created:'
 			ml$(3)=arc_filename$
 			ml$(4)='Display the log now?'
-			
+
 			fnmsgbox(mat ml$,resp$,"ACS",4+64)
-			if resp$="Yes" then 
+			if resp$="Yes" then
 				! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
 				fnEditFile('text',arc_filename$)
-			end if 
-		end if 
-	else 
+			end if
+		end if
+	else
 		fnlog(save_name$&': '&success_text_line1$)
-		if statusInsteadOfMsgBox then 
+		if statusInsteadOfMsgBox then
 			fnStatus(success_text_line1$)
 			fnStatus(save_name$)
 		else
@@ -164,17 +164,17 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			ml$(2)=save_name$
 			fnmsgbox(mat ml$,resp$,"ACS",0)
 		end if
-	end if 
+	end if
 	goto ARC_XIT
-	A7C_OPEN_ERR: ! 
+	A7C_OPEN_ERR: !
 	mat ml$(2)
 	ml$(1)='FAILURE: The log file could not be opened.'
 	ml$(2)=arc_filename$
 	fnmsgbox(mat ml$,resp$,"ACS",0)
 	if env$('acsDeveloper')<>'' then pause
-	ARC_XIT: ! 
+	ARC_XIT: !
 	fn_analyze_7zip_compresslog=~failure
-fnend 
+fnend
 def library fnOpenPartial
 	if ~setup then fn_setup
 	fnOpenPartial=fn_openPartial
@@ -182,16 +182,16 @@ fnend
 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 	dim gflfaTmpFile$*512
 	gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
-	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
 	pr #h_tmp: env$('path_to_7z_exe')&' l "'&zFileOpen$&'" > "'&gflfaTmpFile$&'"'
-	close #h_tmp: 
+	close #h_tmp:
 	execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
 	open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
 	fileCount=0
-	do 
+	do
 		linput #h_tmp: ln$ eof ZflaEof
 	loop until ln$='------------------- ----- ------------ ------------  ------------------------'
 	ln$=''
@@ -204,7 +204,7 @@ def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 			filename$(fileCount)=ln$(54:len(ln$))
 		end if
 	loop until ln$='------------------- ----- ------------ ------------  ------------------------'
-	ZflaEof: close #h_tmp,free: 
+	ZflaEof: close #h_tmp,free:
 	fn_7zFileListFromArchive=fileCount
 fnend
 def fn_fileListToArchiveList(mat fileList$,mat archiveList$)
@@ -232,14 +232,14 @@ def fn_openPartial
 	fnFree(br_filename$(env$('temp')&'\acs\Open_Log.txt'))
 	open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
 	opFileOpen$=os_filename$(file$(h_tmp))
-	close #h_tmp: 
+	close #h_tmp:
 	dim fileList$(0)*256,archiveList$(0)*50
 	dim tmpFileOpen$*256
 	if fn_isClientServer then
 		tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
 		fnmakesurepathexists(tmpFileOpen$)
 		! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-			fnCopyFile(env$('at')&opFileOpen$,tmpFileOpen$) 
+			fnCopyFile(env$('at')&opFileOpen$,tmpFileOpen$)
 			if env$('acsDeveloper')<>'' then pr bell; : sleep(.2) : pr bell; : sleep(.1) : pr bell;
 		! SKIPFORDEV: ! XXX DELETE ME
 	else
@@ -252,18 +252,18 @@ def fn_openPartial
 	fnreg_close
 	fn_opMain(tmpFileOpen$)
 	goto OP_XIT
-	OP_OP_ERR: ! 
+	OP_OP_ERR: !
 	if err=622 then ! it was just canceled
 		pr 'canceled' : goto OP_XIT
-	else 
+	else
 		mat ml$(2)
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
 		fnmsgbox(mat ml$,resp$)
 		!     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
 		pr "Err:";err;" Line:";line
-	end if 
-	OP_XIT: ! 
+	end if
+	OP_XIT: !
 fnend
 def fn_opMain(omFileOpen$*256)
 	! destination_company_number=val(env$('cno'))
@@ -287,13 +287,13 @@ def fn_opMain(omFileOpen$*256)
 	dim selectedSource$*128
 	selectedSource$=resp$(resp_fileSource)
 	sourceWhich=srch(mat archiveList$,selectedSource$)
-	if ckey=5 or sourceWhich<=0 then 
+	if ckey=5 or sourceWhich<=0 then
 		opScreenReturn=0
 	else
 		if selectedSource$='(All Companies)' then
 			fn_fileOpenEverything( omFileOpen$)
-			opScreenReturn=1 
-		else 
+			opScreenReturn=1
+		else
 			source_company_number=archiveCNo(sourceWhich)
 			destination_company_number=source_company_number
 			cursys$=archiveSysAbbr$(sourceWhich)
@@ -307,7 +307,7 @@ def fn_opMain(omFileOpen$*256)
 			cursys$=fncursys$(cursys$)
 			fnputcno(destination_company_number) : cno=destination_company_number
 			fnStatus('Set active Company Number to: '&str$(destination_company_number))
-			! 
+			!
 			dim omSourceFilter$*64
 			if cursys$='UB' then
 				omSourceFilter$='*.h'&str$(source_company_number)&' Notes.h'&str$(source_company_number)&'\*'
@@ -315,15 +315,15 @@ def fn_opMain(omFileOpen$*256)
 				omSourceFilter$='*.h'&str$(source_company_number)
 			end if
 			fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
-			if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemNameFromAbbr$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then 
+			if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemNameFromAbbr$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then
 				fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 				fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
 				fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
 				fnreg_write('Last Open Partial System',env$('cursys'))
 				fnreg_write('Last Open Partial Company Number',env$('cno'))
 				fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),source_company_number)
-				opScreenReturn+=1 
-				setenv('force_reindex','yes') 
+				opScreenReturn+=1
+				setenv('force_reindex','yes')
 				fnCheckFileVersion
 				fnindex_sys(cno)
 				fnStatusClose
@@ -333,7 +333,7 @@ def fn_opMain(omFileOpen$*256)
 				fnaddonec(mat msgTmp$,'Company '&str$(destination_company_number)&' loaded from')
 				fnaddonec(mat msgTmp$,omFileOpen$)
 				fnmsgbox(mat msgTmp$)
-			end if 
+			end if
 			if selectedSource$<>'(All Companies)' then goto OpmAskWhichToOpen
 		end if
 	end if
@@ -353,7 +353,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	end if
 	foeDestinationFolder$=os_filename$(env$('Q'))
 	foeLogFile$=env$('temp')&'\acs\Open_Log.txt'
-	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
@@ -371,17 +371,17 @@ def fn_fileOpenEverything(foeSource$*256)
 	pr #h_tmp: '@echo OPEN PROCESSING...'
 	pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\acs\Open_Log.txt"'
 	! pr #h_tmp: 'pause'
-	close #h_tmp: 
+	close #h_tmp:
 	execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
-	if fn_analyze_7zip_compresslog(env$('temp')&'\acs\Open_Log.txt','Successfully Opened',foeSource$,1) then 
+	if fn_analyze_7zip_compresslog(env$('temp')&'\acs\Open_Log.txt','Successfully Opened',foeSource$,1) then
 		fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 		fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
 		fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
 		if fn_isClientServer then
 			fnStatus('Copying Files in...')
 			fnCopy(foeDestinationFolder$&'\*.*','[Q]\*.*',0,'recursive')
-			opScreenReturn=1 
-			setenv('force_reindex','yes') 
+			opScreenReturn=1
+			setenv('force_reindex','yes')
 		end if
 		fnCheckFileVersion
 		fnindex_sys(cno)
@@ -389,10 +389,10 @@ def fn_fileOpenEverything(foeSource$*256)
 	else if env$('acsDebug')='Yes' then
 		pr 'fn_analyze_7zip_compresslog failed.'
 		pause
-	end if 
+	end if
 fnend
 def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDestinationFolder$*256)
-	open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output 
+	open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: 'set openFile="'&eafSourceFile$&'"'
@@ -415,7 +415,7 @@ def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDest
 	pr #h_tmp: 'RmDir %destinationDir% /s /q'
 	!
 	pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa %openFile% -o%destinationDir% %filter% > %log%'
-	close #h_tmp: 
+	close #h_tmp:
 	! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
 	execute 'sy -s "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
 fnend
@@ -432,30 +432,30 @@ def fn_copy_files_in(company_import_path$*256,company_import_extension$,destinat
 		end if
 	end if
 	fn_copy_files_in=cfiReturn
-fnend 
+fnend
 def fn_ub_copy_extras(company_import_path$*256,company_import_extension$,destination_company_number)
 	! r: import rates
-	if exists(company_import_path$&'ubdata') then 
-		if exists('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number)) then 
+	if exists(company_import_path$&'ubdata') then
+		if exists('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number)) then
 			fnFree('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
 		end if  ! exists('[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
 		uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,'[Q]\UBmstr\ubdata\*.h'&str$(destination_company_number))
 		if uceReturn>0 then
 			fnStatus('UBmstr\ubData found in source and is replacing destination.')
 		end if
-	else 
+	else
 		fnStatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
-	end if 
+	end if
 	! /r
 	! r: import notes folder
-	if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then 
+	if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then
 		fnFree('[Q]\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
 		execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$('[Q]\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
 		fnStatus('UB Notes imported.')
 	end if  ! exists [import path][Q]\UBmstr\notes.h[company_import_extension]
 	! /r
 	fn_ub_copy_extras=uceReturn
-fnend 
+fnend
 def library fnAutomatedSavePoint(fileNameAddition$*128)
 	if ~setup then fn_setup
 	fnAutomatedSavePoint=fn_automatedSavePoint(fileNameAddition$)

@@ -47,7 +47,7 @@ SCR1: !
 			if resp$(3)=sel$(3) then ti2=3 ! active, inactive, etc...
  
 	on fkey 5 goto DONE
-	fnopenprn(cp,0,0,process)
+	fnopenprn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\"&idx$(q0)&".h[cno],Shr",internal,input,keyed
 	gosub BUD1
 	gosub HEADER

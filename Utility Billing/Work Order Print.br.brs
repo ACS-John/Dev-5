@@ -7,11 +7,11 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 		fnGetServices(mat srvnam$)
 		if trim$(srvnam$(3))='Association Fee' then s3_non_metered=1 else s3_non_metered=0
 	end if
-	!
+
 	library 'S:\Core\Library': fnsavetoasstart
 	fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
-	fnopenprn( 0,0,0,0,z$,'Work Order Add','Work Order')
-	!
+	fnopenprn( z$,'Work Order Add','Work Order')
+
 	pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
 	pr #255: "{\fs24 "&env$('cnam')&"}}}"
 	pr #255: "\qc {\fs20 "&trim$(i$(1))&"}"
@@ -28,7 +28,7 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	else
 		pr #255: ''
 	end if
-	
+
 	if fn_not_blank(i$(5)) then
 		pr #255: "{\b      Request made by: }"&i$(5)
 		pr #255: ""
@@ -54,7 +54,7 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 		pr #255: ""
 	end if
 	if fn_not_blank(i$(9)) then
-		pr #255: "{\b             Turn Off: }{\ul "&date$(days(fn_clean_ul$(i$(9),1006),'mmddyy'),'mm/dd/ccyy')&'}' 
+		pr #255: "{\b             Turn Off: }{\ul "&date$(days(fn_clean_ul$(i$(9),1006),'mmddyy'),'mm/dd/ccyy')&'}'
 		pr #255: ""
 	end if
 	if fn_not_blank(i$(10)) then
@@ -72,11 +72,11 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	pr #255: '<--------------------------------Comments-------------------------------->'
 	pr #255: ""
 	for j=1 to 5
-		if trim$(line$(j))<>"" then 
+		if trim$(line$(j))<>"" then
 			pr #255: line$(j)
-		else 
+		else
 			pr #255: rpt$("_",74)
-		end if 
+		end if
 		pr #255: ""
 	next j
 	for j=1 to 2
@@ -88,30 +88,30 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	pr #255: ""
 	pr #255,using 'form pos 32,c 51': "{\b By: _______________________________________}"
 	fncloseprn
-fnend 
+fnend
 def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$; deposit_amt,rate_code,is_not_metered)
-	if trim$(service_name$)<>"" and trim$(service_name$)<>"Capital Surcharge" then 
+	if trim$(service_name$)<>"" and trim$(service_name$)<>"Capital Surcharge" then
 		dash_len=int((72-len(trim$(service_name$)))/2)
 		pr #255: "{\b <"&rpt$('-',dash_len)&trim$(service_name$)&rpt$('-',dash_len)&">}"
 		pr #255:   "{\b             Code: }{\ul "&str$(rate_code)&'}'
 		pr #255:   "{\b          Deposit: }{\ul "&trim$(cnvrt$('N 8.2',deposit_amt))&"}"
-		if trim$(serial_number$)<>'' then 
+		if trim$(serial_number$)<>'' then
 			pr #255: "{\b    Serial Number: }{\ul "&trim$(serial_number$)&"}"
-		end if 
+		end if
 		if ~is_not_metered then ! if not not metered than it is metered
-			if trim$(meter_number$)<>'' then 
+			if trim$(meter_number$)<>'' then
 				pr #255: "{\b     Meter Number: }{\ul "&trim$(meter_number$)&"}"
-			end if 
-			if reading_prior>0 then 
+			end if
+			if reading_prior>0 then
 				pr #255: "{\b Previous Reading: }{\ul "&str$(reading_prior)&"}     {\b  Current Reading: }____________________"
 				pr #255: ""
 			else
 				pr #255:   "                              {\b  Current Reading: }____________________"
 				pr #255: ""
-			end if 
-		end if 
-	end if 
-fnend 
+			end if
+		end if
+	end if
+fnend
 def fn_not_blank(nbTestText$*256)
 	nbReturn=1
 	nbTestText$=srep$(nbTestText$,'0','')
@@ -126,7 +126,7 @@ def fn_not_blank(nbTestText$*256)
 fnend
 def fn_clean_ul$*256(cu_in$*256; cu_reformat)
 	cu_len=len(rtrm$(cu_in$))
-	if cu_in$(1:5)='{\ul ' and cu_in$(cu_len:cu_len)='}' then 
+	if cu_in$(1:5)='{\ul ' and cu_in$(cu_len:cu_len)='}' then
 		cu_in$(cu_len:cu_len)=''
 		cu_in$(1:5)=''
 	end if
@@ -141,4 +141,4 @@ def fn_clean_ul$*256(cu_in$*256; cu_reformat)
 		end if
 	end if
 	fn_clean_ul$=cu_in$
-	fnend
+fnend

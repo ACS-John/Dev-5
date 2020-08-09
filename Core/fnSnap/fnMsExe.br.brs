@@ -5,7 +5,7 @@ def library fnMsExe$*256(l$)
 	library 'S:\Core\Library': fngethandle
 	execute "sys -M "&fn_pathToBrRegister$&"\BRRegister2.exe -B"&session$&" -N"&l$
 	exefil=1
-	ope #exefil:=fngethandle: "name="&env$('at')&fn_pathToBrRegister$&"\dbde"&session$&".txt",display,input
+	ope #exefil:=fngethandle: "name=[at]"&fn_pathToBrRegister$&"\dbde"&session$&".txt",display,input
 	dim exefil$*2048
 	lin #exefil: exefil$
 	clo #exefil,free:

@@ -80,10 +80,10 @@ def library fnpglen(&pglen)
 	fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
 	fnpglen=pglen
 fnend
-def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
+def library fnReadProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
 	autoLibrary
 	on error goto Ertn
-	fnread_program_print_property=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
+	fnReadProgramPrintProperty=fn_readProgramPrintProperty(key$,value$, prgCapForSettingsOverride$)
 fnend
 def fn_readProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
 	dim prg$*256

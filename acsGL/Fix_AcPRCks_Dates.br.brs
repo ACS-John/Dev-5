@@ -30,7 +30,7 @@
  
 	open #h_prmstr:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
 	open #h_acprcks:=fngethandle: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
-	fnopenprn(cp,58,220,0)
+	fnopenprn
 	fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390
 L360: !

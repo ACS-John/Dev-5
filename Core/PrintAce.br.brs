@@ -2,10 +2,10 @@ def fn_pa_setup
 	on error goto Ertn
 	if ~pa_setup then 
 		pa_setup=1
-		!
+
 		debug_pdf=0  ! turn on to pause everytime a unhandled pdf call occurs
-		!
-		library 'S:\Core\Library': fnerror,fnStatus,fnStatusClose,fnStatusPause,fnprint_file_name$,fnreg_read
+
+		library 'S:\Core\Library': fnerror,fnStatus,fnStatusClose,fnStatusPause,fnPrintFileName$,fnreg_read
 		library 'S:\Core\PrintPdf': fnpdf_open
 		library 'S:\Core\PrintPdf': fnpdf_Close
 		library 'S:\Core\PrintPdf': fnpdf_Newpage
@@ -28,6 +28,11 @@ def fn_pa_setup
 	fn_pa_setup=pa_setup
 Xit: ! 
 fnend  ! fn_pa_setup
+
+
+def library fnpa_filename$*256(; h_printace)
+	fnpa_filename$=g_finial_filename$
+fnend
 def library fnpa_finis(; h_printace)
 	fn_pa_setup
 	if formsFormat$="PDF" then
@@ -76,14 +81,14 @@ def fn_pa_finis(; h_printace, pf_final_batch)
 	end if 
 	g_pa_filename$=g_finial_filename$=''
 fnend 
-def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
+def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$,h)
 	fn_pa_setup
 	if formsFormatForce$<>'' then
 		formsFormatPrior$=formsFormat$
 		formsFormat$=formsFormatForce$
 	end if
 	if formsFormat$="PDF" then 
-		fnpa_open=fnpdf_open( pa_orientation$,pa_sendto_base_name_addition$)
+		fnpa_open=fnpdf_open( pa_orientation$,pa_sendto_base_name_addition$,h)
 	else
 		! fnStatus('fnpa_open')
 		g_pa_batch=0
@@ -91,17 +96,17 @@ def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsF
 	end if
 	setenv('FormsFormatCurrent',formsFormat$)
 fnend 
-def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
+def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$,h)
 	g_pa_batch+=1
 	fnStatus('Initiating a PrintAce Batch '&str$(g_pa_batch))
 	if g_pa_max_pages then let fnStatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
-	h_printace=20
+	if h then h_printace=h else h_printace=20
 	if file(h_printace)=-1 then 
 		dim g_pa_filename$*1024
 		! if print_report_caching then 
-		g_pa_filename$='[Q]\tmp_'&session$&'.prn' ! fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
+		g_pa_filename$='[Q]\tmp_'&session$&'.prn' ! fnPrintFileName$(pa_sendto_base_name_addition$,'PrintAce')
 		dim g_finial_filename$*256
-		g_finial_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
+		g_finial_filename$=fnPrintFileName$(pa_sendto_base_name_addition$,'PrintAce')
 		fnStatus('  Report Cache Name: '&g_finial_filename$)
 		! else 
 		!   g_pa_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'

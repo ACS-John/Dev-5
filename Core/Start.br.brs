@@ -30,6 +30,8 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		exe 'Config FieldBreak Min_Spaces 3, UnderScore Off'
 		if ~setup then fn_setup
+		setenv('Session',session$)
+		setenv('WSID',wsid$)
 		fnClient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 
 		if syInitMode=2 then

@@ -110,6 +110,7 @@ def library fnSrepEnv$*2048(text$*2048; exclude$*64,___,sePosOpen,sePosClose,seV
 				seStartSearchPos=sePosClose+1
 			else
 				seVariable$=text$(sePosOpen+1:sePosClose-1)
+				! pr 'changing ['&seVariable$&'] to '&env$(seVariable$)&'.' : pause
 				text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
 			end if
 		end if
@@ -704,9 +705,9 @@ fnend
 		library 'S:\Core\PrintAce.br': fnpa_finis
 		fnpa_finis=fnpa_finis(pt_h)
 	fnend  ! fn_pa_finis
-	def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
+	def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$,h)
 		library 'S:\Core\PrintAce.br': fnpa_open
-		fnpa_open=fnpa_open( pa_orientation$,pa_sendto_base_name_addition$,formsFormatForce$)
+		fnpa_open=fnpa_open( pa_orientation$,pa_sendto_base_name_addition$,formsFormatForce$,h)
 	fnend
 	def library fnpa_fontsize(; pfs_fontsize,h_printace)
 		library 'S:\Core\PrintAce.br': fnpa_fontsize
@@ -736,23 +737,27 @@ fnend
 		library 'S:\Core\PrintAce.br': fnbarcodewide
 		fnbarcodewide=fnbarcodewide(barcode$,rightleft,updown)
 	fnend
+	def library fnpa_filename$*256
+		library 'S:\Core\PrintAce.br': fnpa_filename$
+		fnpa_filename$=fnpa_filename$
+	fnend
 ! /r
 ! r: pr   S:\Core\Print.br and S:\Core\Print\*
-	def library fnsafe_filename$*256(sf_in$*256)
-		library 'S:\Core\Print.br': fnsafe_filename$
-		fnsafe_filename$=fnsafe_filename$(sf_in$)
+	def library fnSafeFilename$*256(sf_in$*256)
+		library 'S:\Core\Print.br': fnSafeFilename$
+		fnSafeFilename$=fnSafeFilename$(sf_in$)
 	fnend
-	def library fnprint_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
-		library 'S:\Core\Print.br': fnprint_file_name$
-		fnprint_file_name$=fnprint_file_name$( pfn_sendto_base_name_addition$,pfn_extension$,programCaptionOverride$)
+	def library fnPrintFileName$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
+		library 'S:\Core\Print.br': fnPrintFileName$
+		fnPrintFileName$=fnPrintFileName$( pfn_sendto_base_name_addition$,pfn_extension$,programCaptionOverride$)
 	fnend
-	def library fnreport_cache_folder_current$*512
-		library 'S:\Core\Print.br': fnreport_cache_folder_current$
-		fnreport_cache_folder_current$=fnreport_cache_folder_current$
+	def library fnReportCacheFolderCurrent$*512
+		library 'S:\Core\Print.br': fnReportCacheFolderCurrent$
+		fnReportCacheFolderCurrent$=fnReportCacheFolderCurrent$
 	fnend
-	def library fnopenprn(; xx,xxxxx,xxxxxxx,process,sendto_base_name_addition$*128,programNameOverride$*256,programCaptionOverride$*256)
+	def library fnopenprn(; sendto_base_name_addition$*128,programNameOverride$*256,programCaptionOverride$*256)
 		library 'S:\Core\Print.br': fnopenprn
-		fnopenprn=fnopenprn( xx,xxxxx,xxxxxxx,process,sendto_base_name_addition$,programNameOverride$,programCaptionOverride$)
+		fnopenprn=fnopenprn( sendto_base_name_addition$,programNameOverride$,programCaptionOverride$)
 	fnend
 	def library fncloseprn(;forceWordProcessor$)
 		library 'S:\Core\Print.br': fncloseprn
@@ -963,9 +968,9 @@ fnend
 		library 'S:\Core\Reg.br': fnIniToReg
 		fnIniToReg=fnIniToReg
 	fnend
-	def library fnread_program_print_property(key$*80,&value$; programFileOverride$*256)
-		library 'S:\Core\program_properties.br': fnread_program_print_property
-		fnread_program_print_property=fnread_program_print_property(key$,value$, programFileOverride$)
+	def library fnReadProgramPrintProperty(key$*80,&value$; programFileOverride$*256)
+		library 'S:\Core\program_properties.br': fnReadProgramPrintProperty
+		fnReadProgramPrintProperty=fnReadProgramPrintProperty(key$,value$, programFileOverride$)
 	fnend
 	def library fnwriteProgramPrintProperty(key$*80,value$*256; programFileOverride$*256)
 		library 'S:\Core\program_properties.br': fnwriteProgramPrintProperty
@@ -1001,7 +1006,6 @@ fnend
 		library 'S:\Core\Array.br': fnPosOfAny
 		fnPosOfAny=fnPosOfAny(textToSearch$,mat searchFor$, fromEnd)
 	fnend
-
 	def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 		library 'S:\Core\Array.br': fnChrCount
 		fnChrCount=fnChrCount(String_To_Search$,Chr_To_Count$)
@@ -1009,6 +1013,10 @@ fnend
 	def library fnArrayReverseC(mat in$,mat out$)
 		library 'S:\Core\Array.br': fnArrayReverseC
 		fnArrayReverseC=fnArrayReverseC(mat in$,mat out$)
+	fnend
+	def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$) ! untested unimplemented
+		library 'S:\Core\Array.br': fn2arraySortNc
+		fn2arraySortNc=fn2arraySortNc(mat arrayOneN,mat arrayTwo$)
 	fnend
 	def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
 		library 'S:\Core\Array.br': fnArrayAddC
@@ -1678,6 +1686,10 @@ fnend
 	def library fnCustomerHasEbilling(Client_id$)
 		library 'S:\Time Management\fn\customerHasEbilling.br': fnCustomerHasEbilling
 		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
+	fnend 
+	def library fnMergeInvoices
+		library 'S:\Time Management\ACS Invoices.br': fnMergeInvoices
+		fnMergeInvoices=fnMergeInvoices
 	fnend 
 ! /r
 

@@ -34,7 +34,7 @@
 	fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 	open #h_acprcks:=fngethandle: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
 	report$="Payroll Check Register"
-	fnopenprn(cp,58,220,0)
+	fnopenprn
 	fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390
 L360: if sum(empd)=0 then goto L390

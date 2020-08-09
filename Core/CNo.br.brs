@@ -6,16 +6,16 @@ def library fnCno(&cno; &cnam$)
 	cno=val(cno$)
 	! /r
 	! r: read cno tied to WSID (v 5 but before feb 2015)
-	if ~cno then 
+	if ~cno then
 		fnreg_read(wsid$&'.'&env$('cursys')&'.cno',cno$)
 		cno=val(cno$)
 		fn_putcno(cno)
-	end if 
+	end if
 	! /r
 	! r: legacy cno fetch
 	if ~cno then ! it's not yet converted to be used in the registry (5.0)
 		cno=1
-	end if 
+	end if
 	! /r
 	! r: read cnam
 	dim cnam_read$*40
@@ -26,8 +26,8 @@ def library fnCno(&cno; &cnam$)
 		open #tf1:=fngethandle: "Name=[Q]\[cursys]mstr\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
 	end if
 	read #tf1,using "Form pos 1,C 40": cnam_read$ ioerr ignore
-	close #tf1: 
-	CNAM_XIT: ! 
+	close #tf1:
+	CNAM_XIT: !
 	! /r
 	cnam$=cnam_read$ soflow ignore
 	fnSetEnv('cnam',rtrm$(cnam_read$))
@@ -36,7 +36,7 @@ def library fnCno(&cno; &cnam$)
 		execute 'config substitute [cno] '&str$(cno)
 	end if
 	fncno=cno
-fnend 
+fnend
 def library fnPutCno(cno)
 	if ~setup then fn_setup
 	fnPutCno=fn_putCno(cno)
@@ -45,7 +45,7 @@ def fn_putCno(cno)
 	fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
 	fnSetEnv('cno',str$(cno))
 	execute 'config substitute [cno] '&str$(cno)
-fnend 
+fnend
 def library fnget_company_number_list(mat cno_list; sysid$*256)
 	if ~setup then fn_setup
 	if sysid$='' then sysid$=env$('cursys')
@@ -57,17 +57,17 @@ def library fnget_company_number_list(mat cno_list; sysid$*256)
 		if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
 			company_count+=1
 			cno_list(company_count)=tmp_cno
-		end if 
-	ACNO_CONV: ! 
+		end if
+	ACNO_CONV: !
 	next filename_item
 	mat cno_list(company_count)
 	fnget_company_number_list=company_count
 fnend
 def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
-	! Get_or_Put=1 then GET 
+	! Get_or_Put=1 then GET
 	! Get_or_Put=2 then PUT
 	if valuePassedIn>0 then get_or_put=2 else get_or_put=1
-	if get_or_put=1 then 
+	if get_or_put=1 then
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 		if valuePassedIn=0 then
 			open #tmp:=fngethandle: "Name="&legacyFilename$,internal,outIn,relative ioerr LegacyOpenFail
@@ -76,17 +76,17 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 			fncreg_write(registryKey$,str$(valuePassedIn))
 			LegacyOpenFail: !
 		end if
-	else if get_or_put=2 then 
+	else if get_or_put=2 then
 		fncreg_write(registryKey$,str$(valuePassedIn))
 	end if
 	fn_CnoLegacyNtoCReg=valuePassedIn
-fnend 
+fnend
 def library fnpedat$*20(;pedat$*20)
 	if ~setup then fn_setup
-	! Get_or_Put=1 then GET 
+	! Get_or_Put=1 then GET
 	! Get_or_Put=2 then PUT
 	if trim$(pedat$)="" then get_or_put=1 else get_or_put=2
-	if get_or_put=1 then 
+	if get_or_put=1 then
 		fncreg_read('Pay Period Ending Date',pedat$)
 		if pedat$='' then
 			dim pedatLegacyFile$*256
@@ -103,15 +103,15 @@ def library fnpedat$*20(;pedat$*20)
 			fncreg_write('Pay Period Ending Date',pedat$)
 			xLegacyOpenFail: !
 		end if
-	else if get_or_put=2 then 
+	else if get_or_put=2 then
 		fncreg_write('Pay Period Ending Date',pedat$)
 	end if
 	fnpedat$=pedat$
-fnend 
+fnend
 def library fnfscode(;fscode)
 	if ~setup then fn_setup
 	fnfscode=fn_CnoLegacyNtoCReg(env$('temp')&"\fscode-"&session$&".dat","Form POS 1,N 9",'Financial Statement Code', fscode)
-fnend 
+fnend
 def library fnpriorcd(;PriorCD)
 	if ~setup then fn_setup
 	fnpriorcd=fn_CnoLegacyNtoCReg(env$('temp')&"\priorcd-"&session$&".dat","Form POS 1,N 9",'PriorCD', PriorCD)
@@ -136,49 +136,49 @@ def library fnUseDeptNo
 	if ~setup then fn_setup
 	if env$('cursys')<>"GL" then
 		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-		! open #tmp:=fngethandle: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative 
+		! open #tmp:=fngethandle: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative
 		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
-		! close #tmp: 
+		! close #tmp:
 	end if
 	if useDeptNosetup<>val(env$('cno')) then
 		useDeptNosetup=val(env$('cno'))
-		open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+		open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 		read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
-		close #company: 
+		close #company:
 	end if
 	fnUseDeptNo=gld1
-fnend 
+fnend
 def library fndat(&dat$;get_or_put)
 	if ~setup then fn_setup
 	! Get_or_Put=0 then READ Dat$ (default to Read)
 	! Get_or_Put=1 then READ Dat$
 	! Get_or_Put=2 then REWRITE Dat$
-	if get_or_put=0 or get_or_put=1 then 
+	if get_or_put=0 or get_or_put=1 then
 		fnreg_read('Report Heading Date',dat$)
 		dat$=trim$(dat$)
-		if dat$="" then 
+		if dat$="" then
 			dat$=date$("Month DD, CCYY")
 			fnreg_write('Report Heading Date',dat$)
-		end if 
-	else if get_or_put=2 then 
+		end if
+	else if get_or_put=2 then
 		fnreg_write('Report Heading Date',dat$)
-	end if 
-fnend 
+	end if
+fnend
 def library fnprg(&curprg$; g_p,___,curprg_tmp$*1024)
 	if ~setup then fn_setup
 	if g_p=2 then ! Put
-		!     r: remove leading  S:\ 
+		!     r: remove leading  S:\
 		curprg_tmp$=curprg$
 		if uprc$(curprg_tmp$(1:3))='S:\' then
 			curprg_tmp$(1:3)=''
-		else if uprc$(curprg_tmp$(1:2))='S:' then 
+		else if uprc$(curprg_tmp$(1:2))='S:' then
 			curprg_tmp$(1:2)=''
-		end if 
+		end if
 		!     /r
 		fnSetEnv('Core_Program_Current',curprg_tmp$)
 	else ! Get
 		curprg$=env$('Core_Program_Current')
-	end if 
+	end if
 fnend
 
 def fn_setup_systemCache
@@ -205,17 +205,18 @@ def fn_setup_systemCache
 		close #hS:
 	end if
 fnend
-def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN) 
+
+def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	if ~setup then fn_setup
 	fn_setup_systemCache
 	sia_systemAbbr$=lwrc$(trim$(sia_systemAbbr$))
 	sia_which=srch(mat sAbbr$,sia_systemAbbr$)
 	if sia_which>0 then
 		returnN=sIsAddOnN(sia_which)
-		if returnN<>1 and returnN<>0 then 
+		if returnN<>1 and returnN<>0 then
 			pr bell;'invalid boolean'
 			pr '  sia_systemAbbr$='&sia_systemAbbr$
-			pr '  IsAnAddOn=';returnN 
+			pr '  IsAnAddOn=';returnN
 			pause
 		end if
 	else if sia_systemAbbr$(3:3)='-' then
@@ -237,35 +238,35 @@ def library fnSystemNameFromAbbr$*40(; as2n_abbr$*256,___,return$*40)
 	fn_setup_systemCache
 	if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
 	as2n_abbr$=lwrc$(as2n_abbr$)
-	
+
 	sWhich=srch(mat sAbbr$,as2n_abbr$)
 	if sWhich>0 then
 		return$=sName$(sWhich)(1:40)
 	end if
 	fnSystemNameFromAbbr$=return$
-fnend 
+fnend
 def library fncursys$(; cursys_set$*256,resetCache)
 	if ~setup then fn_setup
-	if cursys_set$<>'' then 
+	if cursys_set$<>'' then
 		cursys_cache$=uprc$(cursys_set$)
 		fnreg_write(session$&'.CurSys',cursys_cache$)
-	else 
+	else
 		cursys_cache$=uprc$(env$('CurSys'))
-	end if 
-	! 
-	if cursys_cache$="" or resetCache then 
+	end if
+
+	if cursys_cache$="" or resetCache then
 		fnreg_read(session$&'.CurSys',cursys_cache$)
-		if cursys_cache$="" then 
+		if cursys_cache$="" then
 			fngetdir2('S:\',mat system_abbr_list$, '/ON','??.mnu')
-			if udim(system_abbr_list$)=>1 then 
+			if udim(system_abbr_list$)=>1 then
 				cursys_cache$=trim$(system_abbr_list$(1)(1:len(system_abbr_list$(1))-4))
-			end if 
-			if cursys_cache$="" then 
+			end if
+			if cursys_cache$="" then
 				cursys_cache$="CO"
-			end if 
-		end if 
-	end if 
-	! 
+			end if
+		end if
+	end if
+
 	if uprc$(cursys_cache$)="P1" then cursys_cache$="PR" ! Payroll
 	if uprc$(cursys_cache$)="P2" then cursys_cache$="PR" ! Job Cost Payroll
 	if uprc$(cursys_cache$)="P4" then cursys_cache$="PR" ! version 4 Payroll
@@ -278,6 +279,6 @@ def library fncursys$(; cursys_set$*256,resetCache)
 		execute 'config substitute [CurSys] '&cursys_cache$
 	end if
 	fncursys$=cursys_cache$
-fnend 
+fnend
 include: fn_open
 include: fn_setup

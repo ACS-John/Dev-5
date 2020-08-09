@@ -83,9 +83,9 @@ ASK_CHECK_NO: ! r:
 goto START_REPORT ! /r
 START_REPORT: ! r:
 	if append_reg1 then
-		fnopenprn( 0,0,0,fnprocess,' (Check and Departmental Registers)')
+		fnopenprn(' (Check and Departmental Registers)')
 	else
-		fnopenprn( 0,0,0,fnprocess,' (Check Register)')
+		fnopenprn(' (Check Register)')
 	end if
 	gosub HDR
 goto LOOP_TOP ! /r

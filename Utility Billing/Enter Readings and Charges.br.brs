@@ -565,7 +565,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
 	goto L5000
 	L4990: restore #h_readings:
-	L5000: if listonly=1 then let fnopenprn( 0,0,0,0, 'Book '&ip1$)
+	L5000: if listonly=1 then let fnopenprn('Book '&ip1$)
 	j1=29 : j2=97
 	HH_W_READ: !
 	ln$="" : mat x=(0)

@@ -37,7 +37,7 @@ Print
 Export                                    
 >Transfer to Accountant                   ^ acsCL\TrToCPA
 >Post to General Ledger                   ^ Checkbook\*                    ^ GL
-Import                                    
->Import General Ledger Chart of Accounts  ^ acsCL\InitGLCoA
->Import Payee Records from General Ledger ^ acsCL\initglpay
+! Import                                    
+! >Import General Ledger Chart of Accounts  ^ acsCL\InitGLCoA ! never used still hardcoded to A: - removed 8/7/20 
+! >Import Payee Records from General Ledger ^ acsCL\initglpay ! never used still hardcoded to A: - removed 8/7/20 
 

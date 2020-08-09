@@ -46,7 +46,7 @@ MENU1: !
 	if ckey=5 then goto Xit
 	exp_filename$=resp$(1)
 !
-	open #h_ecp:=fngethandle: "Name="&env$('at')&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
+	open #h_ecp=fngethandle: "Name=[at]"&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 	exp_filename$=os_filename$(file$(h_ecp))
 	fnureg_write('ECP Export Filename',exp_filename$)
 ! restore #h_customer:

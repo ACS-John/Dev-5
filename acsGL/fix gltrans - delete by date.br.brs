@@ -6,7 +6,7 @@ monthToDelete=8
 autoLibrary
  
 if enableDelete then
-	fnCopy('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\GLTrans backup at '&fnsafe_filename$(date$&' - '&time$)&'.h[cno]')
+	fnCopy('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\GLTrans backup at '&fnSafeFilename$(date$&' - '&time$)&'.h[cno]')
 end if
 open #hTrans=fngethandle: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative
 do

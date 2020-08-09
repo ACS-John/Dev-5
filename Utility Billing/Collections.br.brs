@@ -501,11 +501,11 @@ def fn_printListings
 	end if
 
 	if xti1=1 then
-		fnopenprn(0,0,0,0,"Receipt Listing") : ti1_start=1 : ti1_end=1
+		fnopenprn("Receipt Listing") : ti1_start=1 : ti1_end=1
 	else if xti1=2 then
-		fnopenprn(0,0,0,0,"Deposit Listing") : ti1_start=2 : ti1_end=2
+		fnopenprn("Deposit Listing") : ti1_start=2 : ti1_end=2
 	else ! if ub_collDisableDepositList$='False' then
-		fnopenprn(0,0,0,0,"Receipt and Deposit Listing") : ti1_start=1 : ti1_end=2
+		fnopenprn("Receipt and Deposit Listing") : ti1_start=1 : ti1_end=2
 	end if
 	dim brk(5,10)
 	mat ct=(0)
@@ -1094,7 +1094,7 @@ def fn_csv_import
 		fnureg_write('Collections CSV Import Filename',enableSkipDuplicates$)
 		!
 		fn_ei_backup(ecp_filename$)
-		open #h_csv:=fngethandle: "Name="&env$('at')&ecp_filename$,display,input ioerr EI_SCREEN1
+		open #h_csv:=fngethandle: "Name=[at]"&ecp_filename$,display,input ioerr EI_SCREEN1
 		ecp_filename$=os_filename$(file$(h_csv))
 		fnureg_write('Collections CSV Import Filename',ecp_filename$)
 		type=fn_csv_type(h_csv)
@@ -1235,7 +1235,7 @@ fnend
 def fn_taeReportAdd(p$*10,tdate,tcode,tamount)
 	if ~taeReportSetup then
 		taeReportSetup=1
-		fnopenprn( 0,0,0,0,'Import Transactions - Skipped Duplicates')
+		fnopenprn('Import Transactions - Skipped Duplicates')
 		pr #255: '             Import Transactions - Skipped Duplicates             '
 		pr #255: 'Account      Date       Type                                Amount'
 		pr #255: '__________  __________  ____________________  ____________________'
@@ -1297,7 +1297,7 @@ def fn_transAlreadyPosted(p$,tdate,tcode,tamount; ___,returnN,tapKeyMatch)
 fnend
 def fn_ei_backup(ecp_filename$*256)
 	if exists(ecp_filename$) then
-		fnCopy(ecp_filename$,fnreport_cache_folder_current$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnsafe_filename$(time$)&'.csv')
+		fnCopy(ecp_filename$,fnreport_cache_folder_current$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.csv')
 	end if  ! exists UBmstr\readings.[bk$]
 fnend
 def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount; enableSkipDuplicates$)

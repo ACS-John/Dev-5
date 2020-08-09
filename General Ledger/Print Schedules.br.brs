@@ -24,7 +24,7 @@
 	else
 		if ~fn_selectSchedules(mat prtsch) then goto Xit
 	end if
-	fnopenprn( 0,0,0,0) ! str$(sn)&" - "&trim$(sn$))
+	fnopenprn
 	for prtSchItem=1 to udim(mat prtsch)
 		if prtall=1 or prtsch(prtSchItem)<>0 then
 			if prtall=1 then

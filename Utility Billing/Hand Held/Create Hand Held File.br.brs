@@ -373,7 +373,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	if deviceTest$='' or deviceSelected$=deviceTest$ then
 		if out_filename$='' then out_filename$=defaultOut_filename$
 		fnmakesurepathexists(env$('at')&out_filename$)
-		open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+		open #hImodoReturn:=fngethandle: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
 		if extraParameter$=',eol=none' then
 			gRecLenRequired=1
 		else

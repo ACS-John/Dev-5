@@ -1,26 +1,26 @@
 ! formerly S:\acsUB\UBUsage
 ! r: setup library, on err, dims, constants, etc
-	autoLibrary
-	on error goto Ertn
-	fnTop(program$)
- 
-	dim z$*10,name$*30,dx(15)
-	dim totalRoute(3,2),line$*212
-	dim serviceName$(10)*20,srv$(10)*2
-	dim resp$(11)*128
- 
-	fnLastBillingDate(filterBillingDate)
-	fnGetServices(mat serviceName$,mat srv$)
-	if trim$(serviceName$(1))<>'' then service1enabled=1
-	if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1
-	if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
-	sequenceRoute=1
-	sequenceAccount=2
-	open #h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-	open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ! 1
+autoLibrary
+on error goto Ertn
+fnTop(program$)
+
+dim z$*10,name$*30,dx(15)
+dim totalRoute(3,2),line$*212
+dim serviceName$(10)*20,srv$(10)*2
+dim resp$(11)*128
+
+fnLastBillingDate(filterBillingDate)
+fnGetServices(mat serviceName$,mat srv$)
+if trim$(serviceName$(1))<>'' then service1enabled=1
+if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1
+if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
+sequenceRoute=1
+sequenceAccount=2
+open #h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+open #h_customer_1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ! 1
 	! /r
 SCREEN1: ! r:
-	fnTos(sn$="UBUsage")
+	fnTos
 	respc=0
 	fnLbl(2,1,"Billing Date:",32,1)
 	fnTxt(2,34,8,0,1,"1")
@@ -66,7 +66,7 @@ SCREEN1: ! r:
 		! routePrior=filterRoute
 	end if
 ! /r
-fnopenprn(cp,58,320,process)
+fnopenprn
 gosub HDR
 do ! r: main report loop
 	read #hCustomerForReport,using F_Customer: z$,name$,mat dx,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
@@ -182,7 +182,7 @@ def fn_printTotals(totalRoute)
 		pr #255: ''
 		pr #255: tab(39);"Current    Year to Date";
 		if ~totalRoute then pr #255: tab(69);"Current    Year to Date"
-		!
+
 		line$=''
 		if trim$(serviceName$(1))<>'' then
 			line$=serviceName$(1)(1:11)&line$&cnvrt$("n 10",totalRoute(1,1))&"      "&cnvrt$("n 10",totalRoute(1,2))
@@ -191,7 +191,7 @@ def fn_printTotals(totalRoute)
 			end if
 			pr #255,using "Form POS 25,C 120": line$
 		end if
-		!
+
 		line$=''
 		if service3enabled then
 			line$=serviceName$(3)(1:12)&line$&cnvrt$("n 10",totalRoute(2,1))&"      "&cnvrt$("n 10",totalRoute(2,2))
@@ -200,7 +200,7 @@ def fn_printTotals(totalRoute)
 			line$&="    "&cnvrt$("n 10",totalGrand(2,1))&"      "&cnvrt$("n 10",totalGrand(2,2))
 		end if
 		pr #255,using "Form POS 25,C 120": line$
-		!
+
 		line$=''
 		if service4enabled then
 			line$=serviceName$(4)(1:11)&line$&cnvrt$("n 10",totalRoute(3,1))&"      "&cnvrt$("n 10",totalRoute(3,2))
@@ -209,7 +209,7 @@ def fn_printTotals(totalRoute)
 			line$&="    "&cnvrt$("n 10",totalGrand(3,1))&"      "&cnvrt$("n 10",totalGrand(3,2))
 		end if
 		pr #255,using "Form POS 25,C 120": line$
-		!
+
 		if totalRoute=1 then
 			pr #255: newpage
 			gosub HDR
