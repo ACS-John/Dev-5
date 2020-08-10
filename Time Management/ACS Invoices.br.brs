@@ -240,7 +240,7 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 
 fnend
 def fn_summary_add
-	pr 'fn_summary_add   totalInvoicesPrinted=';totalInvoicesPrinted !
+	! pr 'fn_summary_add   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
 		open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ! ioerr SI_ADD
 		! pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
@@ -256,7 +256,7 @@ def fn_summary_add
 	end if
 fnend
 def fn_summary_print
-pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
+	! pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
 	close  #hSummary:
 	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input
 	fnOpenPrn
@@ -276,7 +276,7 @@ pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
 	fnClosePrn
 	totalInvoicesPrinted=0
 	totalPreviousBalances=0
-	pause
+	! pause
 fnend
 
 
