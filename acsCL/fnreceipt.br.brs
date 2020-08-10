@@ -98,7 +98,7 @@ def library fnaddreceipt
 	goto EDIT_RECEIPT ! /r
 	EDIT_RECEIPT: ! r:
 		holdrec$=rec$
-		fnTos(sn$="Receipt2")
+		fnTos
 		respc=0
 		mylen=28 : mypos=mylen+2
 		fnFra(1,1,12,70,"Receipt Information"," ")
@@ -234,7 +234,7 @@ def library fnaddreceipt
 		fnmsgbox(mat ml$,resp$,'',16)
 	goto EDIT_RECEIPT ! /r
 	GL_BREAKDOWNS: ! r:
-		fnTos(sn$='receipt_gl_dist')
+		fnTos
 		respc=0 : mylen=28 : mypos=mylen+2
 		fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
 		fnLbl(3,1,"General Ledger Number:",mylen,1)

@@ -217,7 +217,7 @@ goto SCR1 ! /r
 Xit: !
 close #h_prreport: ioerr ignore
 fnXit
-IGNORE: continue
+
 ! L1770: ! r: ADD NEW RECORD
 !   rt$="": mat ch$=("")
 !   ips=sd=cp=0

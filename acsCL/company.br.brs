@@ -60,7 +60,7 @@ READ_COMPANY: ! r:
 ! /r
 !
 NEWSCREEN: ! r:
-	fnTos(sn$='Company-Pg'&str$(page))
+	fnTos
 	lc=0
 	fnButton(1,01,'&Basic            ',ck_page1:=6,'',height=02,23)
 	fnButton(1,26,'&General Ledger   ',ck_page2:=7,'',height=2,23)

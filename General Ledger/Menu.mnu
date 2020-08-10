@@ -52,7 +52,7 @@ Financial Statements
 >Cash Flow Statement                                ^ acsGL\ACGLCASH
 >>Cash Flow Statement With Budget                   ^ acsGL\acGLCASB
 >>Cash Flow with Fund Comparison                    ^ acsGL\acGLCasF
->>Cash Flow with YTD Budget Comparison              ^ acsGL\acGLCasO
+>>Cash Flow with YTD Budget Comparison              ^ General Ledger\*
 >Retained Earnings Statement
 >>Edit Retained Earnings Statement                  ^ EditInWordProcessor:[Q]\GLmstr\ACGLStmt.h[cno] forceAtlantis makeIfNecessary
 >>Print Retained Earnings Statement                 ^ General Ledger\*

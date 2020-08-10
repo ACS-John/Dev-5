@@ -260,9 +260,9 @@ L2010: if nta=0 then goto L2030
 	adr=nta : goto L1960
 L2030: delete_it=0
 	return  ! /r
-IGNORE: continue
+
 REVIEW_TRANS: ! r:
-	fnTos(sn$="review_trans")
+	fnTos
 	mylen=23: mypos=mylen+3 : right=1: rc=0
 	fnFra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
 	fnOpt(1,1,"Current transactions",0,1)

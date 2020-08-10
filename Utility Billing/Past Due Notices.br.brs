@@ -310,7 +310,7 @@ def fn_report_close
 		dim ra_line$*256
 		close #h_ra:
 		open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input
-		fnopenprn('Summary')
+		fnopenprn( 'Summary')
 		gosub RC_HDR
 		do
 			linput #h_ra: ra_line$ eof RC_DONE

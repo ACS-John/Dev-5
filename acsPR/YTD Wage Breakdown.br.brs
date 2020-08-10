@@ -22,11 +22,10 @@ NPG: ! r:
 continue ! /r
 HDR: ! r:
 	pr #255,using L240: "PR Year To Date Pay Report","Page",pagenum+=1,env$('cnam'),dat$
-	pr #255,using L250: "Emp-Numb","Name                          ","     Reg Wages","   Overtime","  Other Cmp","     Vacation","         Sick","      Holiday","      Total"
-	pr #255,using L250: "________","______________________________","______________","___________","___________","_____________","_____________","_____________","___________"
 	L240: form pos 53,c 40,pos 122,c 6,n 3,skip 1,cc 132,skip 1,cc 132,skip 2
+	pr #255,using L250: "Emp-Numb","Name                          ","     Reg Wages","   Overtime","  Other Cmp","     Vacation","         Sick","      Holiday","      Total"
 	L250: form pos 1,c 8,x 1,c 30,x 1,c 14,x 1,c 11,x 1,c 11,x 1,c 13,x 1,c 13,x 1,c 13,x 1,c 11,skip 1
-	L260: form pos 1,n 8,x 1,c 30,x 1,n 14.2,x 1,n 11.2,x 1,n 11.2,x 1,n 13.2,x 1,n 13.2,x 1,n 13.2,x 1,n 11.2,skip 1
+	pr #255,using L250: "________","______________________________","______________","___________","___________","_____________","_____________","_____________","___________"
 return ! /r
 LYNES: ! r:
 	em1$=""
@@ -63,6 +62,7 @@ LYNES: ! r:
 	tc9+=c9
 	! /r
 	pr #255,using L260: teno,em1$,round(c3,2),round(c4,2),round(c5,2),round(c6,2),round(c7,2),round(c8,2),round(c9,2) pageoflow NPG
+	L260: form pos 1,n 8,x 1,c 30,x 1,n 14.2,x 1,n 11.2,x 1,n 11.2,x 1,n 13.2,x 1,n 13.2,x 1,n 13.2,x 1,n 11.2,skip 1
 goto LYNES ! /r
  
 SUMMARY: ! r:

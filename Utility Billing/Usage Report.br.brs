@@ -103,7 +103,7 @@ FINIS: ! r:
 	close #hCustomerForReport: ioerr ignore
 	fncloseprn
 goto Xit ! /r
-IGNORE: continue
+
 NEWPGE: ! r:
 	pr #255: newpage
 	gosub HDR

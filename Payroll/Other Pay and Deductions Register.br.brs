@@ -170,7 +170,7 @@ DONE: ! r:
   close #2: ioerr ignore
   fncloseprn
 Xit: fnXit ! /r
-IGNORE: continue
+
 HDR: ! r:
   ! pr #255,Using 1380: DATE$,TIME$,env$('program_caption')
   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$

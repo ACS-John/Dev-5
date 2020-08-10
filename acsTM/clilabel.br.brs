@@ -156,4 +156,4 @@ SRCHEND: !
 	close #101: ioerr ignore
 	close #127: ioerr ignore
 goto L250
-IGNORE: continue
+

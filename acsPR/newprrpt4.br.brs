@@ -54,6 +54,6 @@ L560: !
 L570: !
 	fncloseprn
 Xit: fnXit
-IGNORE: continue
+
 include: Ertn
  

@@ -393,7 +393,7 @@ MAKE_CORRECTIONS: ! r:
 REWRITE_WORK: ! r:
 	rewrite #hWork,using F_WORK,key=x$: trim$(x$),mat x nokey L3900
 	goto L3910
-L3900: if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then let fn_writeWork(hWork,x$,mat x)
+L3900: if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then fn_writeWork(hWork,x$,mat x)
 L3910: if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
 	fn_accumulateprooftotals
 	if editmode=1 then return
@@ -419,7 +419,7 @@ def fn_accumulateprooftotals
 	next j
 fnend
 def fn_checkwater
-	if wr1=0 then let fn_us1
+	if wr1=0 then fn_us1
 	if a(1)<>0 then ! skip routine if no water code
 		sn$=srvnam$(1)
 		if trim$(srvnam$(1))="" or mroll(1)=1 or (d(wr1)=0 and x(1)=0) then
@@ -435,7 +435,7 @@ def fn_checkwater
 		sn$=srvnam$(1) : x0=x4 : prior_read=d(wr1) : cur_read=x(1)
 		if x4>=0 then goto CHECKWATER_L4260
 		if x(12)>0 then sn$=srvnam$(1) : goto CHECKWATER_FINIS
-		if x4<0 then let fn_meter_roll
+		if x4<0 then fn_meter_roll
 	end if  ! a(1)<>0
 	goto CHECKWATER_FINIS
 	CHECKWATER_L4260: !
@@ -451,7 +451,7 @@ def fn_checkwater
 	fn_checkend
 fnend
 def fn_checkelec
-	if er1=0 then let fn_us1
+	if er1=0 then fn_us1
 	if a(3)=0 then goto CHECKELEC_FINIS ! if no electric code skip
 	if trim$(sn$)="Electric" and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
 	if (service_type(3)=3 or (service_type(3)=3.1 and env$('client')<>"Thomasboro")) then
@@ -466,7 +466,7 @@ def fn_checkelec
 	sn$=srvnam$(3) : x0=x2 : : prior_read=d(er1) : cur_read=x(3)
 	if x2>=0 then goto L4420
 	if x(13)>0 then sn$=srvnam$(3) : goto CHECKELEC_FINIS
-	if x2<0 then let fn_meter_roll
+	if x2<0 then fn_meter_roll
 	goto CHECKELEC_FINIS
 	L4420: !
 	if d(7)=0 then goto CHECKELEC_FINIS
@@ -493,7 +493,7 @@ def fn_checkgas
 	sn$=srvnam$(4): x0=x3 : prior_read=d(gr1): cur_read=x(2)
 	if x3>=0 then goto CHECKGAS_L4580
 	if x(14)>0 then sn$=srvnam$(4): goto CHECKGAS_FINIS
-	if x3<0 then let fn_meter_roll
+	if x3<0 then fn_meter_roll
 	goto CHECKGAS_FINIS
 	CHECKGAS_L4580: !
 	if d(11)=0 then goto CHECKGAS_FINIS
@@ -556,7 +556,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		goto HH_BOSON
 	else if device$="Laptop" then
 		gosub LAPTOP
-		if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+		if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 		goto HH_CONTINUE
 	else ! if device$='Master Meter' or device$='READy Water' or device$="AMR" or device$="Other" or device$="Sensus" or device$="Green Tree" or device$="Hersey" or device$="EZReader" or device$="Itron FC300" or device$="" then
 		goto HH_OTHER
@@ -564,8 +564,10 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_WORKABOUT: ! r: hand held routines for workabout
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
 	goto L5000
-	L4990: restore #h_readings:
-	L5000: if listonly=1 then let fnopenprn('Book '&ip1$)
+	L4990: !
+	restore #h_readings:
+	L5000: !
+	if listonly=1 then fnopenprn( 'Book '&ip1$)
 	j1=29 : j2=97
 	HH_W_READ: !
 	ln$="" : mat x=(0)
@@ -579,7 +581,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	mroll(2)=val(ln$(40:40)) : x(4)=val(ln$(41:49))
 	ft$=rtrm$(ln$(50:69))
 	if ft$="00000000000000000000" then ft$=""
-	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	if x$(1:1)="0" then x$(1:1)=" " ! drop leading zero
 	if file(255)=-1 and rtrm$(ft$)<>"" then
 		fnopenprn
@@ -589,7 +591,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	end if
 	goto HH_CONTINUE ! /r
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
-	if listonly=1 then let fnopenprn
+	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
 	HH_BADGER_READ: !
@@ -601,13 +603,13 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	ti1=1: ti1=val(ln$(64:64))       conv HH_BADGER_READ
 	x(ti1)=val(ln$(96:104))          conv HH_BADGER_READ
 	! if env$('client')="Moweaqua" Then x(TI1)=X(TI1)
-	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
 
 	HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
 	dim last_ln$*256
 	last_ln$=""
-	if listonly=1 then let fnopenprn
+	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
 	HH_BOSON_READ: !
@@ -669,7 +671,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	end if  ! t$="Monticello"
 	goto HH_CONTINUE ! /r
 	LAPTOP: ! r: readings from a laptop using acs meter reading software
-		if listonly=1 then let fnopenprn
+		if listonly=1 then fnopenprn
 		close #h_readings: ioerr ignore
 		open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
 		HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
@@ -682,7 +684,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		if uprc$(ti$)="G" then ti1=3
 		x(ti1)=val(ln$(11:19)) conv HH_LAPTOP_READ
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
-	return ! if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+	return ! if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	! goto HH_CONTINUE ! /r
 	HH_OTHER: ! r:
 	if device$='AMR' then goto HH_OTHER_TYPE1
@@ -695,7 +697,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	fn_hh_other_type2(listonly)
 	goto HH_W_END ! /r
 	HH_OTHER_TYPE1: ! r:
-	if listonly=1 then let fnopenprn
+	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
 	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
 	HH_OTHER_TYPE1_READ: !
@@ -712,7 +714,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		x(ti1)=val(ln$(11:20)) conv ignore
 	end if
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
-	if listonly=1 then let fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
 
 	HH_CONTINUE: ! Continue with standard Hand Held routine
@@ -1320,7 +1322,7 @@ MENU1READWORKEOF: ! /r
 		if fn_meter_change_out=3 then goto EnterReadings3
 	else if ckey=10 then
 		if days(d1,"mmddyy")<days(date$)-25 then
-			let ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
+			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
 			end if
 		fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
@@ -1734,7 +1736,7 @@ EnterReadings: ! r:
 	fn_flexRead(1,mypos5+2,hTrans,x$,begdate,0,fraro) ! beginning date=billing date less one year
 	fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
 	fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
-	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then let fnCmdSet(17) else let fnCmdSet(11) ! kj   3/24/06
+	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then fnCmdSet(17) else fnCmdSet(11) ! kj   3/24/06
 	fnAcs(mat resp$,ckey)
 	if ckey=8 then
 		fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
@@ -1871,7 +1873,7 @@ def fn_setupFlexRead
 	end if
 fnend
 def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
-	if ~setupFlexRead then let fn_setupFlexRead
+	if ~setupFlexRead then fn_setupFlexRead
 	z$=trim$(z$)
 	if z$<>'' then
 		open #tmp=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
@@ -2033,7 +2035,7 @@ def fn_meter_change_out
 		fnmsgbox(mat txt$,resp$,'',1)
 		if resp$="OK" then goto MCO_RECORD_READINGS
 	end if
-	if method$="File" then let fn_rewrite_usage : goto MCO_WORK_READ ! read new record from readings file
+	if method$="File" then fn_rewrite_usage : goto MCO_WORK_READ ! read new record from readings file
 	if method$="Customer" and servicetype$="WA" then x(1)=newmetercurrent: x(12)=usage
 	if method$="Customer" and servicetype$="GA" then x(2)=newmetercurrent: x(14)=usage
 	if method$="Customer" and servicetype$="EL" then x(3)=newmetercurrent: x(13)=usage
@@ -2073,7 +2075,7 @@ def fn_hh_other_type2(listonly)
 	hot_ver$=trim$(hot_ver$)
 	hot_z_prior$=hot_z$=''
 	if hot_ver$='[ACS Hand Held File Generic Version 2]' then
-		if listonly=1 then let fnopenprn
+		if listonly=1 then fnopenprn
 		do
 			hotWaterMeterChangeBefore=hotWaterMeterChangeAfter=0
 			mat hotImportDataField$(0)
@@ -2119,7 +2121,7 @@ def fn_hh_other_type2(listonly)
 		else
 			fn_hot_write_work(hWork,hot_z$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
 		end if
-		if listonly=1 then let fncloseprn
+		if listonly=1 then fncloseprn
 	end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
 fnend
 def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDataValue$,&hotWaterMeterChangeBefore,&hotWaterMeterChangeAfter)

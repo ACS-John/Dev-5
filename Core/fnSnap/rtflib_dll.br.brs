@@ -1881,4 +1881,4 @@
 60240 ZTYPE: close #infile: !:
         infile=0
 60250 fnend 
-62000 IGNORE: continue 
+62000  

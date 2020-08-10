@@ -1073,7 +1073,7 @@ def fnwindowthis_size$*100(&win_height,&win_width; position$*80, border$*1)
 	fnwindowthis_size$="SRow="&str$(win_srow)&",SCol="&str$(win_scol)&",Rows="&str$(win_height)&",Cols="&str$(win_width)&wts_border$
 fnend 
 !
-IGNORE: continue 
+ 
 !
 def library fnconfirm(verb$*40,cap$*80; text_addition$*2048,confirm_dont_ask_again_key$*28)
 	fnconfirm=fn_confirm(verb$,cap$, text_addition$,confirm_dont_ask_again_key$)

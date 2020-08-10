@@ -306,8 +306,8 @@ def fn_print_inv
 		else if ebilling then
 			! open pdf
 			dim pdf_filename_final$*255
-			pdf_filename_final$=fnPrintFileName$(client_id$,'pdf')
-			pr 'creating:  '&pdf_filename_final$
+			! pdf_filename_final$=fnPrintFileName$(client_id$,'pdf')
+			! pr 'creating:  '&pdf_filename_final$
 
 			! print pdf
 			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal,pdf_filename_final$)
@@ -319,9 +319,9 @@ def fn_print_inv
 			fnCopy('[at]'&os_filename$(pdf_filename_final$),'[at]'&fnReportCacheFolderCurrent$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
 			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
 			exec 'sy -c "'&fnReportCacheFolderCurrent$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
-				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
-				! open the folder it is in
-				execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+			!	menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
+			! open the folder it is in
+			execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
 
 		end if
 		invoice_number+=1

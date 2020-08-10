@@ -414,7 +414,7 @@
 		execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
 		open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&wsid$,internal,input,keyed
 	L3080: return
-	IGNORE: continue
+	
 	BUD1: bud1=0
 		dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5)
 		open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
