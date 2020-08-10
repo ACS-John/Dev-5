@@ -2,7 +2,6 @@ fn_setup
 fn_printInvoice
 end
 def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
-def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
 	fnPrintInvoice=fn_printInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 fnend
