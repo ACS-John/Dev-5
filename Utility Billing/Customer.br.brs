@@ -812,7 +812,7 @@ def library fnCustomer(x)
 		fixgrid=1
 		read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
-	IGNORE: continue 
+	 
 	Xit: ! r: close files and leave
 	! close #2: ioerr ignore
 	fn_close_file(h_customer_2)

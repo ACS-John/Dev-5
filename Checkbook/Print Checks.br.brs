@@ -1,7 +1,7 @@
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim vn$*8,holdvn$*8,up$(4),amt(15,3),iv$(15,3),de$(15,3)*13,ivdate(15,3)
 	dim cnam$*40,tr(2),misc$(10)*20,miscgl$(10)*12
 	dim de$*50,lcn$*8,whgl$(5)*12,gl$*12,allocde$*30
@@ -15,7 +15,7 @@
 	dim allockey$*20
 	dim eng$*128,wording$(27)*9,amount(11)
 	dim tr$(5)*35,sn$*30,dtr$(5)*35,payeegl$*12,gldesc$*30
- 
+
 	fnTop(program$)
 	prd=val(date$(4:5)&date$(7:8)&date$(1:2))
 	open #bankmstr:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
@@ -85,7 +85,7 @@ L1130: if arec>30 then gosub SUB_PRINT_CHECK
 	amt=sum(amt)
 	st1=1
 goto READ_4
- 
+
 SUB_PRINT_CHECK: ! r:
 	fn_cknum
 	! if env$('client')="Washington Parrish" then fnprocess(1) ! skip Atlantis screen
@@ -101,7 +101,7 @@ SUB_PRINT_CHECK: ! r:
 	if scc$="SCC" then fn_portion_stub(1) : fn_portion_check : fn_portion_check
 	gosub UpdateInvoice
 return ! /r
- 
+
 UpdateInvoice: ! r:
 	for j=1 to arec
 		rewrite #h_paytrans,using 'Form POS 76,N 8,N 6',rec=arec(j): ckn,prdmmddyy
@@ -164,7 +164,7 @@ L2300: !
 ! L2310: !
 	if ckoption=1 and allign=3 then fn_write_ck_hist_1 !  write regular check history
 	on allign goto ALIGN_REPR_SAME,ALIGN_PRINT_NEXT,ALIGN_COMPLETED,ALIGN_PRINT_NEXT none SCR_CKPRT7
- 
+
 ALIGN_REPR_SAME: !
 	if prenum=1 then
 		write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,g 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",1,dp,1
@@ -253,12 +253,11 @@ FINIS: ! r: COMPLETE
 	fn_close(company)
 	if idx then fn_index
 	goto Xit ! /r
-	def fn_close(h_closeme)
-		close #h_closeme: ioerr CLOSE_IGNORE
-CLOSE_IGNORE: !
-	fnend  ! fn_close
+def fn_close(h_closeme)
+	close #h_closeme: ioerr ignore
+fnend
 Xit: fnXit
-IGNORE: continue
+
 CKOPTION1_CHECK_ENTRY: ! r:
 	mat resp$=("")
 CKOPTION1_CHECK_ENTRY_2: !
@@ -607,7 +606,7 @@ def fn_englishdollar(dolamt) ! returns eng$
 	if dol<1000000 and dol>=0 then goto L2760
 	eng$="Value too big for editing or was less than zero"
 	goto ENGLISHDOLLAR_XIT
-	
+
 	L2760: !
 	eng$="***"
 	amount(1)=int(dol*100+.500000001)
@@ -644,7 +643,7 @@ def fn_englishdollar(dolamt) ! returns eng$
 	a0=1
 	gosub ENGLISHDOLLAR_L3190
 	goto L3090
-	
+
 	L3080: !
 	eng$=rtrm$(eng$)&" Zero"
 	L3090: !
@@ -659,7 +658,7 @@ def fn_englishdollar(dolamt) ! returns eng$
 	next j
 	L3170: !
 	goto ENGLISHDOLLAR_XIT
-	
+
 	ENGLISHDOLLAR_L3190: !
 		if amount(a0+2)=0 then goto L3210
 		eng$=rtrm$(eng$)&" "&wording$(amount(a0+2))
@@ -761,7 +760,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 	fnLbl(8,1,"New check number (if applicable):",45,1)
 	fnTxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
 	resp$(respc+=1)=""
-	
+
 	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	ckn2=val(resp$(2))
 	if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
@@ -829,11 +828,11 @@ def fn_portion_stub_generic
 	if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey L10970
 	L10970: !
 	pr #255: ""
-	if env$('client')='Crockett County' then 
+	if env$('client')='Crockett County' then
 		pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy
 	else
 		pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-	end if 
+	end if
 	pr #255: ""
 	mat b$=(" ") : b$(1)=tr$(5)(1:30)
 	if h_vf1=23 then vp1=173 else vp1=147
@@ -1042,7 +1041,7 @@ def fn_portion_check_Crocket(dolamt)
 	! next j
 	fn_englishdollar(dolamt)
 	if dolamt=0 then eng$='        *** V O I D ***'
-	if dolamt<=0 then ca$="***VOID***" else ca$=lpad$("*"&trim$(cnvrt$("PIC(ZZZ,ZZZ,ZZ#.##)",dolamt)),14," ") ! changed for preprinted symbol 
+	if dolamt<=0 then ca$="***VOID***" else ca$=lpad$("*"&trim$(cnvrt$("PIC(ZZZ,ZZZ,ZZ#.##)",dolamt)),14," ") ! changed for preprinted symbol
 	skipline=0
 	if prenum=2 then
 		pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1 ! line 2,3, 4

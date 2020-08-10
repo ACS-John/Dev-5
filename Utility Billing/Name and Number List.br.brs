@@ -199,7 +199,7 @@ DONE: ! r:
 	fncloseprn
 goto Xit ! /r
 Xit: fnXit
-IGNORE: continue
+
 GET_AU: ! r:
 	dim serviceName$(10)*20,service$(10)*2
 	fnGetServices(mat serviceName$,mat service$)

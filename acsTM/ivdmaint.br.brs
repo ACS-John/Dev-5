@@ -103,4 +103,4 @@ L1050: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 	pr f "24,3,C 78,N": ""
 	retry
 Xit: fnXit
-IGNORE: continue
+

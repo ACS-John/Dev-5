@@ -1,15 +1,14 @@
 fn_setup
 fn_printInvoice
 end
-def library fnPrintInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$)
+def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
-	fnPrintInvoice=fn_printInvoice(out,align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal, pdfFileName$)
+	fnPrintInvoice=fn_printInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 fnend
-def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; &pdfFileName$, ___,isCss,total_amt)
+def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; ___,isCss,total_amt)
 
+	dim pdfFileName$*512
 
-	if pdfFileName$='' then ebilling=0 else ebilling=1
-	
 	forcePrintAcePdf=0
 	disableRtf=1
 	! r: set cnam$ and cLogo$
@@ -25,7 +24,7 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 	end if
 	! /r
 
-	if ebilling then
+	if fnCustomerHasEbilling(actnum$) then
 		! r: create ebill
 
 		if forcePrintAcePdf then ! r: incomplete.
@@ -100,8 +99,11 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 		else
 			gosub LauraStyleInvoiceBody
 		end if
-
-		! pause
+		fnmakesurepathexists(fnReportCacheFolderCurrent$&"\Ebilling\")
+		fnCopy('[at]'&os_filename$(pdfFileName$),'[at]'&fnReportCacheFolderCurrent$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
+		exec 'sy -c "'&fnReportCacheFolderCurrent$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
+		execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+		pause
 		! /r
 	else
 		if disableRtf then
@@ -160,14 +162,18 @@ def fn_printInvoice(out,align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,m
 	end if
 fnend
 LauraStyleInvoiceBody: ! r:
+	pdfFileName$=fnPrintFileName$( trim$(inv_num$)&' - '&trim$(actnum$),'pdf','Invoice\')
+	pr '1=';pdfFileName$
+	pdfFileName$=fnReportCacheFolderCurrent$&'\Invoice\'&trim$(inv_num$)&' - '&trim$(actnum$)&'.pdf'
+	pr '2=';pdfFileName$
+	pause
+
 	pr 'pdfFileName$="'&pdfFileName$&'"'
 			open #out:=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
 			fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
 			close #out:
 return ! /r
-def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12, _
-		actnum$,mat billto$,pbal,mat desc$,mat amt; ___, _
-		total_amt,pdfline$*151)
+def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)
 
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 

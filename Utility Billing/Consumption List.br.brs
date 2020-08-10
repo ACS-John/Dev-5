@@ -48,7 +48,7 @@ MAIN: !
 DONE: close #1: ioerr ignore
 L370: fncloseprn
 Xit: fnXit
-IGNORE: continue
+
  
 PRINTIT: ! r:
 	p2=0

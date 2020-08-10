@@ -37,7 +37,7 @@ L350: goto L300
 L360: close #1:
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L480
-	fnTos(sn$="ACglchgs") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _

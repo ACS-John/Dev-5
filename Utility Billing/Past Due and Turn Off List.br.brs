@@ -219,7 +219,7 @@ PGOF: ! r:
 	gosub HDR1
 	continue  ! /r
 Xit: fnXit
-IGNORE: continue
+
 BUD1: ! r:
 	bud1=0
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L1390

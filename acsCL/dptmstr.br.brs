@@ -134,7 +134,7 @@ L1250: form pos 1,n 3,n 2,c 30
 L1270: close #1:
 	if new1=1 then goto L1760
 	goto Xit
-IGNORE: continue
+
 L1310: pr newpage
 	if dpt><0 then goto L1350
 	pr f "8,10,c 60,n": "YOU CHOSE TO DELETE ACCOUNT # "&str$(hfun)&" "&str$(hdpt)

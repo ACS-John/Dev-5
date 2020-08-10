@@ -34,7 +34,7 @@
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L410
-	fnTos(sn$="ACglcasf") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
@@ -248,9 +248,9 @@ Xit: fnXit
 L2370: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative
 	read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 L2390: form pos 1,10*n 3,10*c 20
-L2400: fnTos(sn$="ACglcasf3") : _
+L2400: fnTos
 	mylen=1: mypos=mylen+3
-	fnTos(sn$="ACglcasf3") : _
+	fnTos
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10
@@ -272,15 +272,16 @@ L2400: fnTos(sn$="ACglcasf3") : _
 L2570: write #5,using L2390: mat fundnum,mat funddesc$
 L2580: close #5:
 	for j=1 to 10
-		if fundnum(j)>0 then : _
-			heading$=heading$&" "&lpad$(rtrm$(funddesc$(j)(1:13)),13) : _
+		if fundnum(j)>0 then
+			heading$=heading$&" "&lpad$(rtrm$(funddesc$(j)(1:13)),13)
 			totcol+=1
+		end if
 	next j
 	big=totcol*14
 return
  
 ASK_MONTHLY: ! ask monthly info or ytd info
-	fnTos(sn$="ACglcasf2") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnOpt(1,2,"Print Monthly Figures" ,0,0) : _
 	resp$(2)="False"

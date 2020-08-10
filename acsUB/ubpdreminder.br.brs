@@ -119,7 +119,7 @@ L770: e1=0 : mat pe$=("")
 	next j
 	if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 	goto L920
-IGNORE: continue
+
 RELEASE_PRINT: !
 	close #1: ioerr ignore
 	close #3: ioerr ignore

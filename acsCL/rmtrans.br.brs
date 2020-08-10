@@ -17,7 +17,7 @@
 	open #work1:=2: "Name=[Q]\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative
 	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,input,keyed
 	open #work2=4: "Name=[Q]\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative
-	fnTos(sn$='RmTrans-'&str$(rcn)) : _
+	fnTos
 	mylen=21 : mypos=mylen+2 : lc=0
 	fnLbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
 	fnTxt(lc,mypos,10,0,0,'1003') : _

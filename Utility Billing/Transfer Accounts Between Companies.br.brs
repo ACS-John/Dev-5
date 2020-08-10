@@ -146,7 +146,7 @@ HDR: ! r:
 	pr #255: ""
 	pr #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
 return  ! /r
-IGNORE: continue
+
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR

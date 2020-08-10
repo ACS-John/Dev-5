@@ -10,7 +10,7 @@ Unpaid Invoice                            ^ Checkbook\*
 >Unpaid Invoice Summary                   ^ Checkbook\*
 >Report of Invoices Due by Selected Dates ^ Checkbook\*
 Paid Invoice                              ^ acsCL\PaidInvoice
->Remove Paid Invoices                     ^ acsCL\RemovePaidInvoices
+>Remove Paid Invoices                     ^ Checkbook\*
 Bank                                      ^ acsCL\*
 >Bank Reconciliation                      ^ acsCL\BankReconciliation
 >Select Bank Account                      ^ acsCL\ChgBank

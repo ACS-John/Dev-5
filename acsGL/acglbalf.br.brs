@@ -226,7 +226,7 @@ L2010: pr newpage ! determine fund #s
 	open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative
 	read #5,using L2070: mat fundnum,mat funddesc$ ioerr L2080
 L2070: form pos 1,10*n 3,10*c 20
-L2080: fnTos(sn$="ACglcasf3") : _
+L2080: fnTos
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10

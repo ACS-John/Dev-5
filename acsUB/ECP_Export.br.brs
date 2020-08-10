@@ -221,7 +221,7 @@ FINIS: ! r: Transfer to or from Hand Held Computer
 	fn_report_created_file(exp_filename$)
 	goto Xit ! /r
 Xit: fnXit
-! IGNORE: continue
+! 
 	def fn_report_created_file(exp_filename_report$*512)
 		dim m$(2)*512
 		if exp_filename_report$<>'' and exp_filename_report$<>':CON:' then

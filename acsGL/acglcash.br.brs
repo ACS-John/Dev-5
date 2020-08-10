@@ -33,7 +33,7 @@
 		fl1$=fl1$&"KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L360
-	fnTos(sn$="ACglcash") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
@@ -208,7 +208,7 @@ L1820: eofcode=1
 	fncloseprn
 	goto Xit
  
-L1880: fnTos(sn$="ACglcash2") : _
+L1880: fnTos
 	mylen=25: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Total Current Month:",mylen,right)
 	fnTxt(1,mypos,12,0,right,"10",0,"Enter the total for the current month.",0 ) : _

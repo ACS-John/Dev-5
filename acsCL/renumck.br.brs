@@ -15,7 +15,7 @@
 	close #20:
 	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno]",internal,outIn,keyed
 	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,outIn,keyed
-L150: fnTos(sn$='RmTrans-'&str$(rcn)) : _
+L150: fnTos
 	mylen=30 : mypos=mylen+3 : lc=0
 	fnLbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
 	fnTxt(lc,mypos,10,0,0,'30') : _

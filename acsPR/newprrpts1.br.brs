@@ -150,7 +150,7 @@ NORECORDSONFILE: ! r: no records on file
 ! XIT_PRAUTO: fnXit
  
 Xit: fnXit
-IGNORE: continue
+
 include: Ertn
  
 NO_PRREPORT: ! r:
