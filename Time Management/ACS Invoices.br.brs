@@ -8,7 +8,6 @@ enableMinimumMonthlyBill=1
 invoice_number=fncreg_read('Last Invoice Number',tmp$)
 invoice_number+=1
 if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
-clientEbilling=fnClient_has('EM')
 
 Screen1: !
 if fn_askScreen1(invDateMmDdYy,invoice_number)=99 then goto Xit
@@ -288,42 +287,16 @@ def fn_print_inv
 	end if
 	if invTotal=>1 or pbal=>1 then
 		! if sum(mat inv_amt)+pbal>0 then
+		
+		
 		dim saveToAsStartFile$*1024
 		saveToAsStartFile$='D:\ACS\Doc\Invoices\ACS Invoices - '
 		saveToAsStartFile$&=str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)
-		saveToAsStartFile$&='.rtf'
+		saveToAsStartFile$&='.pdf'
 		fnSaveToAsStart(saveToAsStartFile$)
-		! fnOpenPrn
-		if clientEbilling=1 then
-			! see if customer that we're sending the invoice for right now has ebilling selected
-			ebilling=fnCustomerHasEbilling(client_id$)
-		end if
-		! if trim$(client_id$)='4132' then pause
-		! if trim$(client_id$)='1478' then pr ebilling : pause
-		if ebilling=0 then
-		   fnPrintInvoice(255,align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
-			 ! pr #255: newpage ! mat inv_item$=("")
-		else if ebilling then
-			! open pdf
-			dim pdf_filename_final$*255
-			! pdf_filename_final$=fnPrintFileName$(client_id$,'pdf')
-			! pr 'creating:  '&pdf_filename_final$
 
-			! print pdf
-			fnPrintInvoice(pdfout,align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal,pdf_filename_final$)
-			! close pdf
-			! close #pdfout:
-			! move to Send folder
-			fnmakesurepathexists(fnReportCacheFolderCurrent$&"\Ebilling\")
-			! pause
-			fnCopy('[at]'&os_filename$(pdf_filename_final$),'[at]'&fnReportCacheFolderCurrent$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
-			! execute 'copy "'&os_filename$(env$('at')&pdf_filename_final$)&'" "'&os_filename$("s:\Time Management\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')&'"'
-			exec 'sy -c "'&fnReportCacheFolderCurrent$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
-			!	menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
-			! open the folder it is in
-			execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 
-		end if
 		invoice_number+=1
 	end if
 	mat inv_item$=(" ")
