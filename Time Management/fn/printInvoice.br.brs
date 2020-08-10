@@ -162,14 +162,14 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 	end if
 fnend
 LauraStyleInvoiceBody: ! r:
-	pdfFileName$=fnPrintFileName$( trim$(inv_num$)&' - '&trim$(actnum$),'pdf','Invoice\')
-	pr '1=';pdfFileName$
+	! pdfFileName$=fnPrintFileName$( trim$(inv_num$)&' - '&trim$(actnum$),'pdf','Invoice\')
+	! pr '1=';pdfFileName$
 	pdfFileName$=fnReportCacheFolderCurrent$&'\Invoice\'&trim$(inv_num$)&' - '&trim$(actnum$)&'.pdf'
-	pr '2=';pdfFileName$
-	pause
+	! pr '2=';pdfFileName$
+	! pause
 
 	pr 'pdfFileName$="'&pdfFileName$&'"'
-			open #out:=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
+			open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
 			fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
 			close #out:
 return ! /r
