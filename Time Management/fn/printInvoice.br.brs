@@ -238,7 +238,8 @@ def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat bil
 
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 
-	pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
+	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
+	pr #out: '[BOLD][FONT TIMES][SETSIZE(14)][pos(+0,+6)][6LPI][LEFT]';
 	pr #out: '     '&cnam$;
 	pr #out: '[/BOLD]'
 	pr #out,using 'form pos 27,C': '4 Syme Ave'
