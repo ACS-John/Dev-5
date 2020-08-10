@@ -2,6 +2,7 @@ fn_setup
 fn_printInvoice
 end
 def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
+def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
 	fnPrintInvoice=fn_printInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 fnend
@@ -99,11 +100,11 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 		else
 			gosub LauraStyleInvoiceBody
 		end if
-		fnmakesurepathexists(fnReportCacheFolderCurrent$&"\Ebilling\")
-		fnCopy('[at]'&os_filename$(pdfFileName$),'[at]'&fnReportCacheFolderCurrent$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
-		exec 'sy -c "'&fnReportCacheFolderCurrent$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf"'
-		execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
-		pause
+		
+
+		! fnCopy('[at]tmp[session].pdf','[at]D:\ACS\Doc\Invoices\ACS Invoices - '&str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)&'.pdf'		)
+		
+
 		! /r
 	else
 		if disableRtf then
@@ -168,10 +169,22 @@ LauraStyleInvoiceBody: ! r:
 	! pr '2=';pdfFileName$
 	! pause
 
-	pr 'pdfFileName$="'&pdfFileName$&'"'
-			open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&pdfFileName$&',Replace,RecL=5000',Display,Output
-			fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
-			close #out:
+	! pr 'pdfFileName$="'&pdfFileName$&'"'
+	dim tmpFile$*512
+	tmpFile$=fnPrintFileName$( actnum$,'pdf') ! 'tmp[session].pdf'
+	open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
+	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	close #out:
+	! pr 'pdfFileName$="'&pdfFileName$&'"'
+	
+	fnCopy(tmpFile$,'[at]'&pdfFileName$)
+	fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\*.*')
+	if fnCustomerHasEbilling(actnum$) then
+		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&"\Ebilling\ACS Invoice."&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
+	else
+		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\*.*')
+	end if
+	
 return ! /r
 def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)
 

@@ -117,6 +117,9 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	close #h_ivnum:
 	close #hClient:
 	close #h_tmwk2:
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
 fnend
 def fn_billForMaintenance(stm$,scode$,scode,client_id,supData_cost,&invTotal,&inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$; ___,returnN)
 	if supData_cost=0 then supData_cost=fn_price(scode$,stm$)
@@ -286,14 +289,6 @@ def fn_print_inv
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
-		! if sum(mat inv_amt)+pbal>0 then
-		
-		
-		dim saveToAsStartFile$*1024
-		saveToAsStartFile$='D:\ACS\Doc\Invoices\ACS Invoices - '
-		saveToAsStartFile$&=str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)
-		saveToAsStartFile$&='.pdf'
-		fnSaveToAsStart(saveToAsStartFile$)
 
 		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 
