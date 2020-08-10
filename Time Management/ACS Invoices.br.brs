@@ -238,39 +238,37 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 
 fnend 
 def fn_summary_add
-	open #22: "Name=PrnSummary[session],RecL=80,replace",display,output ioerr SI_ADD
-	pr #22: "{\fs16"  ! set the RTF Font Size to 8
-	pr #22: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
-	pr #22: "_____ ______________  ________  __________  __________  __________  __________"
+	open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ioerr SI_ADD
+	pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
+	pr #hSummary: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
+	pr #hSummary: "_____ ______________  ________  __________  __________  __________  __________"
 	SI_ADD: !
 	if (pbal+invTotal)<1 then piv$="" else piv$=iv$ ! if less than a dollar than don't charge it
 	if piv$<>'' then
-		pr #22,using Fsa22: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,piv$
-		Fsa22: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
+		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,piv$
+		Fsummary: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=invTotal
 		totalPreviousBalances+=pbal
 	end if  ! piv$<>''
 fnend
 def fn_summary_print
-	close #22: ioerr SP_XIT
-	open #22: "Name=PrnSummary[session]",display,input
-	
-
+	close  #hSummary:
+	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input
 	fnOpenPrn
 	pr #255: "\ql"
 	dim line$*80
 	do
-		linput #22: line$ eof SpFinis
+		linput #hSummary: line$ eof SpFinis
 		pr #255: line$
 	loop
 	SpFinis: !
+	close #hSummary,free:
+	hSummary=0
 	pr #255:
 	pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
 	pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
 	pr #255: '}' ! end the RTF font size setting of 8
-	close #22,free:
 	fnClosePrn
-	SP_XIT: !
 	totalInvoicesPrinted=0
 	totalPreviousBalances=0
 fnend
@@ -278,24 +276,21 @@ fnend
 
 def fn_print_inv
 	fn_billForNonMaint(hTimeSheet)
-	if enableMinimumMonthlyBill then
-		if invTotal>0 and sum(mat inv_amt)<100 then
-			inv_line+=1
-			if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then
-				inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
-				inv_amt(inv_line)=100-sum(mat inv_amt) : invTotal+=inv_amt(inv_line)
-				inv_service_code(inv_line)=19
-				inv_gl$(inv_line)='  0  1160  0'
-			end if
+	if enableMinimumMonthlyBill and invTotal>0 and sum(mat inv_amt)<100 then
+		inv_line+=1
+		if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then
+			inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
+			inv_amt(inv_line)=100-sum(mat inv_amt) : invTotal+=inv_amt(inv_line)
+			inv_service_code(inv_line)=19
+			inv_gl$(inv_line)='  0  1160  0'
 		end if
 	end if
-	fn_summary_add ! pr all clients
 	if invTotal=>1 then
 		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
-
+		fn_summary_add
 		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 
 		invoice_number+=1
