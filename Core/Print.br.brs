@@ -135,16 +135,14 @@ def library fncloseprn(;forceWordProcessor$)
 	end if
 	g_prgCapForSettingsOverride$=''
 fnend
-def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
+def fn_start(start_destinationFilename$*1024; unused,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
 	on error goto START_ERTN
-	
-	! NoDrop    = 1 = Do not delete the file when your done with it.
-	
+
 	dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
 	dim landscape$*1
 	dim marg(4)
 	dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
-	
+
 	start_destinationFilename$=trim$(start_destinationFilename$)
 	winxp$="Microsoft Windows XP"
 	win2k$="Microsoft Windows 2000"
@@ -176,7 +174,7 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	end if
  DROPIT: !
 	goto START_XIT
-	
+
 	START_ERTN: ! r:
 	if err=4591 then   ! added for time-outs
 		pr newpage
@@ -194,7 +192,7 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	on error goto Ertn
 fnend
 def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAsStart$*2048, ___,hOut,y,z)
-	
+
 	fn_startReadProperties
 	! r:  make the temp rtf file
 	dim startRtf_destinationFileName$*1024
@@ -261,7 +259,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 					line$(z:z+6)="\" : z=z+1
 				end if
 			loop while z
-		
+
 			y+=len(line$)+2
 			if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
 				if y<lrec20 then
@@ -271,7 +269,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 			end if
 			pr #hOut: line$&"\par"
 		goto SrRead ! /r
-			
+
 		end if
 		SrRead: !
 	loop
@@ -304,7 +302,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 		!       pr 'CS set destination to: '&startRtf_destinationFileName$
 		end if
 	end if
-	 
+
 	fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$)
 	wordprocessor_exe$=trim$(wordprocessor_exe$,'"')
 	if saveToAsStart$<>'' then

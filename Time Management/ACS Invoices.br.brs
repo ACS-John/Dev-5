@@ -208,8 +208,6 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	fn_askScreen1=returnN
 fnend
 
-
-
 def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	dim tce_to_inp(7)
 	open #tce_h_from=fngethandle: 'Name='&file_from$,internal,input
