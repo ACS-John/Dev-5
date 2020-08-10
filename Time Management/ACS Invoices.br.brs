@@ -23,7 +23,9 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 ! /r
 fnStatus('producing Invoice Archive...')
+fnInvoiceOpen
 fn_produceInvoices( 0,1)
+fnInvoiceClose
 fnStatus('producing Individual Invoices...')
 fn_produceInvoices( 1,0)
 	! filter  0 = all invoices
@@ -77,14 +79,14 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #h_support=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 	F_support: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
-	
+
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	! fnIndex("TMSHT[wsid]","TMSHT-IDX[wsid]",'1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
 	open #hTimeSheet=fngethandle: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
-	
+
 	! restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey Screen1
 	fnStatus("Printing Invoices...")
 
@@ -120,7 +122,7 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 				end if
 			end if
 		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
-		BMM_SUPPORT_EOF: ! 
+		BMM_SUPPORT_EOF: !
 
 		fn_print_inv
 	loop
@@ -236,20 +238,22 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	! pr '  wr_count=';wr_count
 	! pause
 
-fnend 
+fnend
 def fn_summary_add
-	open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ioerr SI_ADD
-	pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
-	pr #hSummary: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
-	pr #hSummary: "_____ ______________  ________  __________  __________  __________  __________"
-	SI_ADD: !
-	if (pbal+invTotal)<1 then piv$="" else piv$=iv$ ! if less than a dollar than don't charge it
-	if piv$<>'' then
+	pr 'fn_summary_add' : pause
+	if ~hSummary then
+		open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ! ioerr SI_ADD
+		pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
+		pr #hSummary: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
+		pr #hSummary: "_____ ______________  ________  __________  __________  __________  __________"
+	end if
+	! SI_ADD: !
+	if (pbal+invTotal)>1 then 
 		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,piv$
 		Fsummary: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=invTotal
 		totalPreviousBalances+=pbal
-	end if  ! piv$<>''
+	end if
 fnend
 def fn_summary_print
 	close  #hSummary:
@@ -315,20 +319,20 @@ def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under main
 			if inv_line=30 then fn_print_inv ! pr invoice if more than 20 entries
 			if inv_line>29 then pause
 			spk$=" "&client_id$&cnvrt$("n 2",b8)
-		
+
 			if inpX(7)=2 then goto BfhGo ! always bill modifications
-		
+
 			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
-			
+
 			if inpX(7)<>2 then
 				read #h_support,using F_support,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supData_cost nokey BfhGo
 				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
 				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
 			end if
-		
+
 			BfhGo: !
 			supData_cost=inpX(5)
-		
+
 			invTotal+=supData_cost
 			inv_line+=1
 			! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
@@ -340,14 +344,14 @@ def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under main
 			else
 				inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
 			end if
-		
+
 			inv_amt(inv_line)=inpX(5)
 			inv_category(inv_line)=6
 			inv_service_code(inv_line)=b8
 			inv_gl$(inv_line)="  0  1160  0"
 			BfhXit: !
 			! fnend
-			
+
 			read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
 		loop while inpX(1)=client_id
 	end if

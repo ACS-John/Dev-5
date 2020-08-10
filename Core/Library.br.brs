@@ -1675,6 +1675,18 @@ fnend
 		library 'S:\Time Management\fn\printInvoice.br': fnPrintInvoice
 		fnPrintInvoice=fnPrintInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 	fnend
+	def library fnInvoiceOpen
+		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceOpen
+		fnInvoiceOpen=fnInvoiceOpen
+	fnend
+	def library fnInvoiceClose
+		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceClose
+		fnInvoiceClose=fnInvoiceClose
+	fnend
+	
+	
+	
+	
 	def library fnEmailQueuedInvoices(emailDate$)
 		library 'S:\Time Management\Email Queued Invoices.br': fnEmailQueuedInvoices
 		fnEmailQueuedInvoices=fnEmailQueuedInvoices(emailDate$)
