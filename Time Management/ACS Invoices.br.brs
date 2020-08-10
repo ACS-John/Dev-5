@@ -30,6 +30,11 @@ fn_produceInvoices( 1,0)
 	!         1 = print only invoices
 	! individualize  0 = a single combined pdf containing multiple pages
 	!                1 = individual pdf for each client
+
+execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
+execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
+
 fnStatus('producing Summary...')
 fn_summary_print
 
@@ -73,6 +78,15 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	open #h_support=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 	F_support: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 	fn_thsht_combine_entries("S:\Core\Data\acsllc\TimeSheet.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
+	
+	! dim timesheet$(0)*128
+	! dim timesheetN(0)
+	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
+	fnIndex(file_to$,file_to_index$,'1,5')
+	open #hTimeSheet=fngethandle: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed
+	
+	
+	
 	! restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey Screen1
 	fnStatus("Printing Invoices...")
 
@@ -113,13 +127,11 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 		fn_print_inv
 	loop
 	EOJ: !
-
+	close #hTimeSheet:
 	close #h_ivnum:
 	close #hClient:
 	close #h_tmwk2:
-	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
-	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
-	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
+
 fnend
 def fn_billForMaintenance(stm$,scode$,scode,client_id,supData_cost,&invTotal,&inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$; ___,returnN)
 	if supData_cost=0 then supData_cost=fn_price(scode$,stm$)
@@ -225,12 +237,8 @@ def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___
 	! pr 'rewr_count=';rewr_count
 	! pr '  wr_count=';wr_count
 	! pause
-	execute 'index '&file_to$&' '&file_to_index$&' 1,5,replace,DupKeys,Shr'
-	! dim timesheet$(0)*128
-	! dim timesheetN(0)
-	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
-	open #hTimeSheet=fngethandle: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed
-fnend  ! fn_thsht_combine_entries
+
+fnend 
 def fn_summary_add
 	open #22: "Name=PrnSummary[session],RecL=80,replace",display,output ioerr SI_ADD
 	pr #22: "{\fs16"  ! set the RTF Font Size to 8
