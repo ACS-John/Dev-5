@@ -46,37 +46,34 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			pr #win,f "1,1,Cc 69,N": "Problem with Index File"
 		end if 
 
-		lc=7
-		pr #win,f str$(lc   )&",2,Cr 13,N": "Program:"
-		pr #win,f str$(lc   )&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
-		pr #win,f str$(lc+=1)&",2,Cr 13,N": "File:"
-		pr #win,f str$(lc   )&",16,C 53,P[textboxes]": callingprogram$(1:53)
-		lc+=1
-		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Error:"
-		pr #win,f str$(lc   )&",16,C 17,,B08": str$(errornumber)&'  (F8 BRWiki)'
-		lc+=1
-		pr #win,f str$(lc+=1)&", 2,Cr 13,[screen]": "Line:"
-		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
-		  pr #win,f str$(lc   )&',16,C 17,,B11': str$(linenumber)&' (F11 N++)' 
+		pr #win,f " 7, 2,Cr 13,N": "Program:"
+		pr #win,f " 7,16,Cl 53,P[textboxes]": env$('Core_Program_Current')(1:53)
+		pr #win,f " 8, 2,Cr 13,N": "File:"
+		pr #win,f " 8,16,Cl 53,P[textboxes]": callingprogram$(1:53)
+		pr #win,f "10, 2,Cr 13,[screen]": "Error:"
+		pr #win,f "10,16,Cl 17,,B08": str$(errornumber)&'  (F8 BRWiki)'
+		pr #win,f "12, 2,Cr 13,[screen]": "Line:"
+		if env$('acsDeveloper')<>'' then
+		  pr #win,f '12,16,Cl 17,,B11': str$(linenumber)&' (F11 N++)' 
 		else
-			pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(linenumber)
+			pr #win,f "12,16,Cl 5,P[textboxes]": str$(linenumber)
 		end if
 		
 		
 		
-		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Count+1:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": str$(xcnt+1)
-		pr #win,f str$(lc+=1)&", 2,Cr 13,N": "Session:"
-		pr #win,f str$(lc   )&",16,C 5,P[textboxes]": session$
+		pr #win,f "13, 2,Cr 13,N": "Count+1:"
+		pr #win,f "13,16,C 5,P[textboxes]": str$(xcnt+1)
+		pr #win,f "14, 2,Cr 13,N": "Session:"
+		pr #win,f "14,16,C 5,P[textboxes]": session$
 		button_pos$='47'
-		pr #win,f "9,"&button_pos$&",Cc 22,,B12": "Console Pause (F12)" ! 1,19,12/CC 12,,B1000
-	!   pr #win,f "6,"&button_pos$&",C 22,B,10": "WB Help (F10)"
-		! pr #win,f "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
+		pr #win,f "10,47,Cc 22,,B12": "Command Console (F12)" ! 1,19,12/CC 12,,B1000
+	!   pr #win,f "6,47,C 22,B,10": "WB Help (F10)"
+		! pr #win,f "11,47,Cc 22,,B08": "BRWiki Help (F8)"
 	!   if exists(acshelp$)<>0 then
-	!     pr #win,f "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
+	!     pr #win,f "12,47,Cc 22,,B09": "ACS Help (F9)"
 	!   end if
-		pr #win,f "13,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
-		pr #win,f "14,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
+		pr #win,f "13,47,Cc 22,,B01": "Retry (Enter)"
+		pr #win,f "14,47,Cc 22,,B99": "Exit (Esc)"
 		
 		
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
