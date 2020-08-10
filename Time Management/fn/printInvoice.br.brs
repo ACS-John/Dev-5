@@ -164,7 +164,16 @@ LauraStyleInvoiceBody: ! r:
 	dim tmpFile$*16
 	tmpFile$='tmp[session].pdf'
 	open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
+	if ~hCollection then
+		dim tmpCollectionFile$*32
+		tmpCollectionFile$='tmpCollection[session].pdf'
+		open #hCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',Display,Output
+		collectionPageCount=0
+	end if
 	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	if collectionPageCount then pr #hCollection: newpage
+	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	collectionPageCount+=1
 	close #out:
 	
 	! r: copy created temp pdf to it's places
@@ -178,6 +187,7 @@ LauraStyleInvoiceBody: ! r:
 
 	fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actnum$,'pdf'))
 	fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
+
 	
 	if fnCustomerHasEbilling(actnum$) then
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
@@ -186,6 +196,30 @@ LauraStyleInvoiceBody: ! r:
 	end if
 	! /r
 return ! /r
+def library fnInvoiceOpen
+	if ~setup then fn_setup
+	fnInvoiceOpen=fn_invoiceOpen
+fnend
+def fn_invoiceOpen
+	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
+fnend
+def library fnInvoiceClose
+	if ~setup then fn_setup
+	fnInvoiceClose=fn_invoiceClose
+fnend
+def fn_invoiceClose(; ___,invoiceFilenameBase$*64)
+	close #hCollection: 
+	hCollection=0
+
+	invoiceFilenameBase$='ACS Invoice '
+	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
+	invoiceFilenameBase$&='.pdf'
+	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
+	if env$('acsDeveloper')<>'' then ! ='John' then
+		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\ACS '&invoiceFilenameBase$)
+	end if
+	collectionPageCount=0
+fnend
 def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)
 
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
