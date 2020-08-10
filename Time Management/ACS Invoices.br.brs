@@ -309,50 +309,53 @@ def fn_print_inv
 fnend
 def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
 	dim inpX(7)
-	read #hTimeSheet,using F_TIME,key=client_id$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
+	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
 	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
-	do
-		if b8=0 then b8=19
-		delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
-		! fn_billForHours(client_id$)
-		! def fn_billForHours(client_id$) ! ,mat inpX,etc...
-		if inv_line=30 then fn_print_inv ! pr invoice if more than 20 entries
-		if inv_line>29 then pause
-		spk$=" "&client_id$&cnvrt$("n 2",b8)
-	
-		if inpX(7)=2 then goto BfhGo ! always bill modifications
-	
-		if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
-		if inpX(7)<>2 then
-			read #h_support,using F_support,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supData_cost nokey BfhGo
-			trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
-			if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
-		end if
-	
-		BfhGo: !
-		supData_cost=inpX(5)
-	
-		invTotal+=supData_cost
-		inv_line+=1
-		! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
-		if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
-			!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inpX(6))
-			inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
-		else if inpX(7)=2 then
-			inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
-		else
-			inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
-		end if
-	
-		inv_amt(inv_line)=inpX(5)
-		inv_category(inv_line)=6
-		inv_service_code(inv_line)=b8
-		inv_gl$(inv_line)="  0  1160  0"
-		BfhXit: !
-		! fnend
+	if inpX(1)=val(client_id$) then
+		do
+			if b8=0 then b8=19
+			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
+			! fn_billForHours(client_id$)
+			! def fn_billForHours(client_id$) ! ,mat inpX,etc...
+			if inv_line=30 then fn_print_inv ! pr invoice if more than 20 entries
+			if inv_line>29 then pause
+			spk$=" "&client_id$&cnvrt$("n 2",b8)
 		
-		read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
-	loop while inpX(1)=client_id
+			if inpX(7)=2 then goto BfhGo ! always bill modifications
+		
+			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
+			
+			if inpX(7)<>2 then
+				read #h_support,using F_support,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supData_cost nokey BfhGo
+				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
+				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
+			end if
+		
+			BfhGo: !
+			supData_cost=inpX(5)
+		
+			invTotal+=supData_cost
+			inv_line+=1
+			! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
+			if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
+				!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inpX(6))
+				inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$("pic(##/##/##)",inpX(6))
+			else if inpX(7)=2 then
+				inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inpX(6))
+			else
+				inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&" support on "&cnvrt$("pic(##/##/##)",inpX(6))
+			end if
+		
+			inv_amt(inv_line)=inpX(5)
+			inv_category(inv_line)=6
+			inv_service_code(inv_line)=b8
+			inv_gl$(inv_line)="  0  1160  0"
+			BfhXit: !
+			! fnend
+			
+			read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
+		loop while inpX(1)=client_id
+	end if
 	TM_XIT2: !
 fnend
 
