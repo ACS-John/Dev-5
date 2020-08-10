@@ -108,7 +108,7 @@ def fn_openprn(; sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,p
 	if lpp$='' then gosub SET_DEFAULTS
 	dim g_prn_destination_name$*1024
 	g_prn_destination_name$=op_printFileName$
-	open #255: 'Name=[Q]\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output
+	open #255: 'Name=[Q]\tmp_[session].prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output
 	goto Xit
 	SET_DEFAULTS: ! r:
 		pr "Lines settings for this program were not found."
@@ -124,10 +124,10 @@ def library fncloseprn(;forceWordProcessor$)
 	if file(255)<>-1 then ! if the printer file is open.
 		cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
 		close #255:
-		if fnCopy('[Q]\tmp_'&session$&'.prn',g_prn_destination_name$) then
-			fnfree('[Q]\tmp_'&session$&'.prn')
+		if fnCopy('[Q]\tmp_[session].prn',g_prn_destination_name$) then
+			fnfree('[Q]\tmp_[session].prn')
 		else
-			pr 'copy failed.  report lost at temp file: "[Q]\tmp_'&session$&'.prn"'
+			pr 'copy failed.  report lost at temp file: "[Q]\tmp_[session].prn"'
 			pause
 		end if
 		fnStatusClose
@@ -137,14 +137,14 @@ def library fncloseprn(;forceWordProcessor$)
 fnend
 def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
 	on error goto START_ERTN
-	!
+	
 	! NoDrop    = 1 = Do not delete the file when your done with it.
-	!
+	
 	dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
 	dim landscape$*1
 	dim marg(4)
 	dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
-	!
+	
 	start_destinationFilename$=trim$(start_destinationFilename$)
 	winxp$="Microsoft Windows XP"
 	win2k$="Microsoft Windows 2000"
@@ -165,10 +165,10 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	end if
 
 	if isRtf then
-		fn_start_rtf(start_destinationFilename$, forceWordProcessor$,saveToAsStart$)
+		fn_startRtf(start_destinationFilename$, forceWordProcessor$,saveToAsStart$)
 	else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then
 		! r: start_winxp
-		temp$='Sy -w NotePad "'&serverSendto$&'"'
+		temp$='Sy -w NotePad "'&startRtf_destinationFileName$&'"'
 		execute temp$
 		! /r
 	else
@@ -176,7 +176,7 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	end if
  DROPIT: !
 	goto START_XIT
-	!
+	
 	START_ERTN: ! r:
 	if err=4591 then   ! added for time-outs
 		pr newpage
@@ -193,132 +193,130 @@ def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$,___,isR
 	START_XIT: !
 	on error goto Ertn
 fnend
-def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAsStart$*2048)
-	dim line$*32000
+def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAsStart$*2048, ___,hOut,y,z)
+	
 	fn_startReadProperties
 	! r:  make the temp rtf file
-	dim clientSendto$*1024
-	dim serverSendto$*1024
-	clientSendto$=env$('at')&startRtf_destinationFileName$
-	serverSendto$=startRtf_destinationFileName$
-	!   open #20: "Name="&clientSendto$,display,input
+	dim startRtf_destinationFileName$*1024
+
+	!   open #20: "Name="&'[at]'&startRtf_destinationFileName$,display,input
 	! else
-	open #20: "Name="&serverSendto$,display,input
+	open #20: "Name="&startRtf_destinationFileName$,display,input
 	! end if
 	lrec20=lrec(20)
-	y=0
-	open #21: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
-	pr #21: "{\rtf1\ansi\deflang1033";
-	pr #21: "{\fonttbl";
-	pr #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
-	pr #21: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
-	pr #21: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
-	pr #21: "}"
-	pr #21: "{\stylesheet";
-	pr #21: "{\snext0\f8\fs22\fi0\li0\ri0\ql{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
-	pr #21: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28\keepn\sb240\sa60} heading 1;}" ! ;
-	pr #21: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60} heading 2;}" ! ;
-	pr #21: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} heading 3;}" ;
-	pr #21: "}"
+	open #hOut=fngethandle: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
+	pr #hOut: "{\rtf1\ansi\deflang1033";
+	pr #hOut: "{\fonttbl";
+	pr #hOut: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
+	pr #hOut: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
+	pr #hOut: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
+	pr #hOut: "}"
+	pr #hOut: "{\stylesheet";
 
-	pr #21: "{\*\cs4\additive Default Paragraph Font;}{\*\cs5\additive\sbasedon4\super Footnote Reference;}{\*\cs6\additive\sbasedon4\super Endnote Reference;}}{\*\listtable}{\*\listoverridetable}"
-	pr #21: "{\*\generator ACS "&env$('acsVersion')&";}"
+	pr #hOut: "{\snext0\f8\fs22\fi0\li0\ri0\ql{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
+	pr #hOut: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28\keepn\sb240\sa60} heading 1;}" ! ;
+	pr #hOut: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60} heading 2;}" ! ;
+	pr #hOut: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} heading 3;}" ;
+	pr #hOut: "}"
 
-	pr #21: "{\info";
-	pr #21: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
-	pr #21: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"\sec"&time$(7:8)&"}";
-	pr #21: "{\author ACS 5 - "&login_name$&"}";
-	pr #21: "}"
+	pr #hOut: "{\*\generator ACS "&env$('acsVersion')&";}"
+	pr #hOut: "{\info";
+	pr #hOut: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
+	pr #hOut: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"\sec"&time$(7:8)&"}";
+	pr #hOut: "{\author ACS 5 - "&login_name$&"}";
+	pr #hOut: "}"
 
-	pr #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
-	pr #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
-	pr #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
+	pr #hOut: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
+	pr #hOut: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
+	pr #hOut: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
 	if uprc$(landscape$)=uprc$("Y") then
-		pr #21: "\lndscpsxn";
+		pr #hOut: "\lndscpsxn";
 	end if
-	pr #21: "\widowctrl\useltbaln\plain"
-	pr #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
- L640: linput #20: line$ eof END_OF_FILE
-	if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then
-		line$=line$(14:len(line$))
-		goto L660
-	else if line$(1:12)="S:\Core\images\" then
-		goto L660
-	else
-		goto L700
-	end if
-	L660: !
-	close #21:
-	execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
-	open #21: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",display,output
-	goto L640
-	L700: !
-	!
-	!
-	L730: !
-	z=pos(line$,"\",z)
-	if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then
-		line$(z:z)="\\" : z=z+2
-		goto L730
-	else
-	L18700: !
-		z=pos(line$,"/fcode/",z)
-		if z=>1 then
-			line$(z:z+6)="\" : z=z+1
-			goto L18700
+	pr #hOut: "\widowctrl\useltbaln\plain"
+	pr #hOut: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
+	dim line$*32000
+	do
+		linput #20: line$ eof SrEoInput
+		if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then
+			line$=line$(14:len(line$))
+			goto SpInsertThatFileHere
+		else if line$(1:12)="S:\Core\images\" then
+			goto SpInsertThatFileHere
 		else
-			z=0
+			! r: process the line
+			!  look for \s and replace with double \\s
+			!  so they will display correctly in rtf
+			!  "{" was added to allow support for bold, italic, underline, etc.
+			!  "q" was added to allow support for alignment.
+			do
+				z=max(0,pos(line$,"\",z))
+				if z and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then
+					line$(z:z)="\\"
+					z+=2
+				end if
+			loop while z
+			do
+				z=max(0,pos(line$,"/fcode/",z))
+				if z then
+					line$(z:z+6)="\" : z=z+1
+				end if
+			loop while z
+		
+			y+=len(line$)+2
+			if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
+				if y<lrec20 then
+					pr #hOut: "\page"
+				end if
+				line$(1:1)=''
+			end if
+			pr #hOut: line$&"\par"
+		goto SrRead ! /r
+			
 		end if
-	 !  look for \s and replace with double \\s
-	 !  so they will display correctly in rtf
-	 !  "{" was added to allow support for bold, italic, underline, etc.
-	 !  "q" was added to allow support for alignment.
-	end if
-	y=y+len(line$)+2
-	if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
-		if y<lrec20 then
-			pr #21: "\page"
-		end if
-		line$(1:1)=''
-	end if
-	pr #21: line$&"\par"
-	goto L640
-	!
-	END_OF_FILE: !
-	pr #21: "}"
-	close #21:
+		SrRead: !
+	loop
+	SpInsertThatFileHere: ! r:
+		close #hOut:
+		execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
+		open #hOut=fngethandle: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",display,output
+	goto SrRead ! /r
+
+	SrEoInput: !
+	pr #hOut: "}"
+	close #hOut:
+	hOut=0
 	close #20:
 	! /r
 	if env$('BR_MODEL')='CLIENT/SERVER' then
-		fnCopy('[temp]\acs_print_tmp[session].rtf',clientSendto$)
+		fnCopy('[temp]\acs_print_tmp[session].rtf','[at]'&startRtf_destinationFileName$)
 	end if
-	fnCopy('[temp]\acs_print_tmp[session].rtf',serverSendto$)
-	! pr 'BR copied to: '&clientSendto$ !
+	fnCopy('[temp]\acs_print_tmp[session].rtf',startRtf_destinationFileName$)
+	! pr 'BR copied to: '&'[at]'&startRtf_destinationFileName$ !
 	if env$('BR_MODEL')='CLIENT/SERVER' then
 		if ~setup_cs then
 			setup_cs=1
 			dim cache_sendto_path$*512
 			dim cache_sendto_file_base$*256
 			dim cache_sendto_file_ext$*128
-			fnGetPp(serverSendto$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
+			fnGetPp(startRtf_destinationFileName$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
 		!       pause
-			serverSendto$=fn_reportCacheFolderCurrent$&'\'&cache_sendto_file_base$&cache_sendto_file_ext$
-		!       pr 'CS set destination to: '&serverSendto$
+			startRtf_destinationFileName$=fn_reportCacheFolderCurrent$&'\'&cache_sendto_file_base$&cache_sendto_file_ext$
+		!       pr 'CS set destination to: '&startRtf_destinationFileName$
 		end if
 	end if
-	 !
+	 
 	fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$)
 	wordprocessor_exe$=trim$(wordprocessor_exe$,'"')
 	if saveToAsStart$<>'' then
-		fnCopy(serverSendto$,env$('at')&saveToAsStart$)
+		fnCopy(startRtf_destinationFileName$,env$('at')&saveToAsStart$)
 	end if
 	if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then
-		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
+		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(startRtf_destinationFileName$)&'"' ! automatic processing  ! kj 53107
 	else ! if print_report_nowait or fnprocess=1 then
-		execute 'Sy -w -C "'&wordprocessor_exe$&'" "'&os_filename$(fnSrepEnv$(serverSendto$))&'"'
+		execute 'Sy -w -C "'&wordprocessor_exe$&'" "'&os_filename$(fnSrepEnv$(startRtf_destinationFileName$))&'"'
 	! else
 	!   fn_waitForWpToCloseStart('Word Processor')
-	!   execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
+	!   execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(startRtf_destinationFileName$)&'"'
 	!   fn_waitForWpToCloseEnd
 	end if
  ! pause
