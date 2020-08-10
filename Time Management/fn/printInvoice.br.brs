@@ -99,10 +99,6 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 		else
 			gosub LauraStyleInvoiceBody
 		end if
-		
-
-		! fnCopy('[at]tmp[session].pdf','[at]D:\ACS\Doc\Invoices\ACS Invoices - '&str$(invoiceDateCcyymmdd)(1:4)&'-'&str$(invoiceDateCcyymmdd)(5:6)&'.pdf'		)
-		
 
 		! /r
 	else
@@ -183,6 +179,7 @@ LauraStyleInvoiceBody: ! r:
 	else
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\*.*')
 	end if
+
 	
 return ! /r
 def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)

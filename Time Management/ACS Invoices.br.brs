@@ -77,15 +77,13 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #h_support=fngethandle: "Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 	F_support: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
-	fn_thsht_combine_entries("S:\Core\Data\acsllc\TimeSheet.h[cno]","TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 	
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
-	fnIndex(file_to$,file_to_index$,'1,5')
-	open #hTimeSheet=fngethandle: "Name="&file_to$&",KFName="&file_to_index$,internal,outIn,keyed
-	
-	
+	! fnIndex("TMSHT[wsid]","TMSHT-IDX[wsid]",'1,5')
+	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
+	open #hTimeSheet=fngethandle: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
 	
 	! restore #hClient,key>=lpad$(str$(starting_acct_no),5): nokey Screen1
 	fnStatus("Printing Invoices...")
@@ -97,9 +95,9 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	dim inv_category(30)
 	dim inv_service_code(30)
 	dim inv_gl$(30)*12
-	! restore #h_tmwk2:
 	dim client_id$*5
 	dim client_addr$(3)*30
+	! restore #h_tmwk2:
 	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
 		client_id=val(client_id$)
@@ -210,10 +208,10 @@ fnend
 
 
 
-def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256; ___,wo_desc$*30)
+def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	dim tce_to_inp(7)
 	open #tce_h_from=fngethandle: 'Name='&file_from$,internal,input
-	open #tce_h_to=fngethandle: 'Name='&file_to$&',KFName=[Temp]\tmwksh.idx,Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	open #tce_h_to=fngethandle: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
 		read #tce_h_from,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
