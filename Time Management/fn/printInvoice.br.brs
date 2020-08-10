@@ -215,9 +215,9 @@ fnend
 def fn_invoiceOpen
 	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
 fnend
-def library fnInvoiceClose
+def library fnInvoiceClose(inv_date)
 	if ~setup then fn_setup
-	fnInvoiceClose=fn_invoiceClose
+	fnInvoiceClose=fn_invoiceClose(inv_date)
 fnend
 def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
 	close #hCollection: 
