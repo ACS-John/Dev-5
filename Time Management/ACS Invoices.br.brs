@@ -25,7 +25,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 fnStatus('producing Invoice Archive...')
 fnInvoiceOpen
 fn_produceInvoices( 0,1)
-fnInvoiceClose
+fnInvoiceClose(invDateMmDdYy)
 fnStatus('producing Individual Invoices...')
 fn_produceInvoices( 1,0)
 	! filter  0 = all invoices
@@ -240,10 +240,10 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 
 fnend
 def fn_summary_add
-	pr 'fn_summary_add' : pause
+	pr 'fn_summary_add   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
 		open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ! ioerr SI_ADD
-		pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
+		! pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
 		pr #hSummary: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
 		pr #hSummary: "_____ ______________  ________  __________  __________  __________  __________"
 	end if
@@ -256,10 +256,11 @@ def fn_summary_add
 	end if
 fnend
 def fn_summary_print
+pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
 	close  #hSummary:
 	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input
 	fnOpenPrn
-	pr #255: "\ql"
+	! pr #255: "\ql"
 	dim line$*80
 	do
 		linput #hSummary: line$ eof SpFinis
@@ -271,10 +272,11 @@ def fn_summary_print
 	pr #255:
 	pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
 	pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
-	pr #255: '}' ! end the RTF font size setting of 8
+	! pr #255: '}' ! end the RTF font size setting of 8
 	fnClosePrn
 	totalInvoicesPrinted=0
 	totalPreviousBalances=0
+	pause
 fnend
 
 

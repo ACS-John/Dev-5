@@ -160,7 +160,7 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 
 fnend
 LauraStyleInvoiceBody: ! r:
-
+	customerHasEbilling=fnCustomerHasEbilling(actnum$)
 	dim tmpFile$*16
 	tmpFile$='tmp[session].pdf'
 	open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
@@ -169,10 +169,26 @@ LauraStyleInvoiceBody: ! r:
 		tmpCollectionFile$='tmpCollection[session].pdf'
 		open #hCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',Display,Output
 		collectionPageCount=0
+
+		dim tmpPrintCollectionFile$*64
+		tmpPrintCollectionFile$='tmpPrintCollection[session].pdf'
+		open #hPrintCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',Display,Output
+
 	end if
+	
+	! make the individual file
 	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
-	if collectionPageCount then pr #hCollection: newpage
+	! make the collection files
+	if collectionPageCount then 
+		pr #hCollection: newpage
+		pr #hPrintCollection: newpage
+	end if
+	! archive (gets everything)
 	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	! print collection (only stuff that needs to be printed this month)
+	if ~customerHasEbilling then
+		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	end if
 	collectionPageCount+=1
 	close #out:
 	
@@ -186,13 +202,9 @@ LauraStyleInvoiceBody: ! r:
 	
 
 	fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actnum$,'pdf'))
-	fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
 
-	
-	if fnCustomerHasEbilling(actnum$) then
+	if customerHasEbilling then
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
-	else
-		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\'&invoiceFilenameBase$)
 	end if
 	! /r
 return ! /r
@@ -207,16 +219,18 @@ def library fnInvoiceClose
 	if ~setup then fn_setup
 	fnInvoiceClose=fn_invoiceClose
 fnend
-def fn_invoiceClose(; ___,invoiceFilenameBase$*64)
+def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
 	close #hCollection: 
-	hCollection=0
+	close #hPrintCollection: 
+	hCollection=hPrintCollection=0
 
 	invoiceFilenameBase$='ACS Invoice '
 	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
 	invoiceFilenameBase$&='.pdf'
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
+	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\'&invoiceFilenameBase$)
 	if env$('acsDeveloper')<>'' then ! ='John' then
-		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\ACS '&invoiceFilenameBase$)
+		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
 	end if
 	collectionPageCount=0
 fnend
