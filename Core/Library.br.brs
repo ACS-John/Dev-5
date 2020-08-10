@@ -1679,9 +1679,9 @@ fnend
 		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceOpen
 		fnInvoiceOpen=fnInvoiceOpen
 	fnend
-	def library fnInvoiceClose
+	def library fnInvoiceClose(inv_date)
 		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceClose
-		fnInvoiceClose=fnInvoiceClose
+		fnInvoiceClose=fnInvoiceClose(inv_date)
 	fnend
 	
 	
