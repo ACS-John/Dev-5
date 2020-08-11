@@ -256,7 +256,8 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 			do
 				z=max(0,pos(line$,"/fcode/",z))
 				if z then
-					line$(z:z+6)="\" : z=z+1
+					line$(z:z+6)="\"
+					z+=1
 				end if
 			loop while z
 

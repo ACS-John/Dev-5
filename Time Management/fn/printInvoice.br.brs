@@ -21,6 +21,7 @@ def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
 	invoiceFilenameBase$='ACS Invoice '
 	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
 	invoiceFilenameBase$&='.pdf'
+	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\'&invoiceFilenameBase$)
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
 	if env$('acsDeveloper')<>'' then ! ='John' then
