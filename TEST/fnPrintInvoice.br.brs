@@ -19,12 +19,9 @@ fnAddOneC(mat inv_item$,'invoice item number 1') : fnAddOneN(mat inv_amt,  100.1
 fnAddOneC(mat inv_item$,'invoice item number 2') : fnAddOneN(mat inv_amt, 2200.22)
 fnAddOneC(mat inv_item$,'invoice item number 3') : fnAddOneN(mat inv_amt,33300.33)
 dim pdfFileName$*255
-! fnpa_open
-! fnPrintInvoiceClose
-for inv=1 to 1
-	pdfFileName$=fnPrintFileName$(client_id$(inv),'pdf','invoice\individual\*')
-	fnInvoiceAdd(255,0,client_id$(inv),mat client_addr$,inv_num$(inv),inv_date,mat inv_item$,mat inv_amt,pbal, pdfFileName$)
-	exec 'sy -c "'&pdfFileName$&'"'
+fnInvoiceOpen
+for inv=1 to 2
+	fnInvoiceAdd(client_id$(inv),mat client_addr$,inv_num$(inv),inv_date,mat inv_item$,mat inv_amt,pbal)
 nex inv
-! fnpa_finis
+fnInvoiceClose
 fnXit
