@@ -100,7 +100,7 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,
 	if debug then pr #hCmd: 'pause'
 	close #hCmd:
 	execute 'sy -M -s sendEmail_'&session$&'.cmd'
-	fnCopy('EmailLog.'&session$,fnreport_cache_folder_current$&'\Emails Sent - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.txt')
+	fnCopy('EmailLog.'&session$,fnReportCacheFolderCurrent$&'\Emails Sent - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.txt')
 	! execute 'type EmailLog.'&session$&' >>EmailLog.txt'
 	open #hResult:=fngethandle: "name=EmailLog."&session$&",recl=512",display,input
 	do until file(hResult)
