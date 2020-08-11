@@ -242,6 +242,8 @@ def fn_summaryRelease
 	close  #hSummary:
 	if exists('PrnSummary[session]') then
 		open #hSummary=fngethandle: 'Name=PrnSummary[session]',display,input ! ioerr SpFinis
+		fnsavetoasstart('[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\ACS Invoice Summary '&date$(days(invDateMmDdYy,'mmddyy'),'ccyy-mm')&'.rtf')
+
 		fnOpenPrn('Summary')
 		pr #255: '\ql'
 		dim line$*80
