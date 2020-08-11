@@ -246,21 +246,39 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 			!  so they will display correctly in rtf
 			!  "{" was added to allow support for bold, italic, underline, etc.
 			!  "q" was added to allow support for alignment.
-			do
-				z=max(0,pos(line$,"\",z))
-				if pos(uprc$(line$),'{\Q')>0 then pause
-				if z and uprc$(line$(z-1:z+1))<>"{\Q" then
-					line$(z:z)="\\"
-					z+=2
+			
+				L730: !
+				z=pos(line$,"\",z)
+				if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then
+					line$(z:z)="\\" : z=z+2
+					goto L730
+				else
+				L18700: !
+					z=pos(line$,"/fcode/",z)
+					if z=>1 then
+						line$(z:z+6)="\" : z=z+1
+						goto L18700
+					else
+						z=0
+					end if
 				end if
-			loop while z
-			do
-				z=max(0,pos(line$,"/fcode/",z))
-				if z then
-					line$(z:z+6)="\"
-					z+=1
-				end if
-			loop while z
+			
+			
+			! faulty rewrite   do
+			! faulty rewrite   	z=max(0,pos(line$,"\",z))
+			! faulty rewrite   	if pos(uprc$(line$),'{\Q')>0 then pause
+			! faulty rewrite   	if z and uprc$(line$(z-1:z+1))<>"{\Q" then
+			! faulty rewrite   		line$(z:z)="\\"
+			! faulty rewrite   		z+=2
+			! faulty rewrite   	end if
+			! faulty rewrite   loop while z
+			! faulty rewrite   do
+			! faulty rewrite   	z=max(0,pos(line$,"/fcode/",z))
+			! faulty rewrite   	if z then
+			! faulty rewrite   		line$(z:z+6)="\"
+			! faulty rewrite   		z+=1
+			! faulty rewrite   	end if
+			! faulty rewrite   loop while z
 
 			y+=len(line$)+2
 			if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word

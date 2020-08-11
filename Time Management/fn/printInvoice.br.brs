@@ -27,7 +27,7 @@ def fn_invoiceClose(invDate; ___,invoiceFilenameBase$*64)
 	if env$('acsDeveloper')<>'' then ! ='John' then
 		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
 	end if
-	collectionPageCount=0
+	collectionPageCount=printCollectionPageCount=0
 fnend
 def library fnInvoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
@@ -59,7 +59,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 		dim tmpCollectionFile$*32
 		tmpCollectionFile$='tmpCollection[session].pdf'
 		open #hCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',Display,Output
-		collectionPageCount=0
+		collectionPageCount=printCollectionPageCount=0
 
 		dim tmpPrintCollectionFile$*64
 		tmpPrintCollectionFile$='tmpPrintCollection[session].pdf'
@@ -69,20 +69,24 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 
 	! make the individual file
 	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
+
 	! make the collection files
 	if collectionPageCount then
 		pr #hCollection: newpage
+	end if
+	if printCollectionPageCount and ~customerHasEbilling then
 		pr #hPrintCollection: newpage
 	end if
+
 	! archive (gets everything)
 	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
+	collectionPageCount+=1
+
 	! print collection (only stuff that needs to be printed this month)
 	if ~customerHasEbilling then
 		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
-	else
-
+		printCollectionPageCount+=1
 	end if
-	collectionPageCount+=1
 	close #out:
 
 	! r: copy created temp pdf to it's places
@@ -92,9 +96,6 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	invoiceFilenameBase$&=' inv '&trim$(invNum$)
 	invoiceFilenameBase$&=' act '&trim$(actNum$)
 	invoiceFilenameBase$&='.pdf'
-
-
-	! fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actNum$,'pdf'))
 
 	if customerHasEbilling then
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
