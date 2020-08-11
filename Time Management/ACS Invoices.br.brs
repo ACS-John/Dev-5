@@ -64,7 +64,7 @@ do
 	end if
 loop
 ! /r
-def fn_produceInvoices(; filter,individualize,displayInvoices,accumulateSummary)
+def fn_produceInvoices(; filter,individualize,accumulateSummary)
 	! filter  0 = all invoices
 	!         1 = print only invoices
 	!         2 = email only invoices
@@ -254,24 +254,26 @@ def fn_summaryAccumulate
 	end if
 fnend
 def fn_summaryRelease
-
+	pause
 	close  #hSummary:
-	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input ioerr SpFinis
-	fnOpenPrn('Summary')
-	pr #255: "\ql"
-	dim line$*80
-	do
-		linput #hSummary: line$ eof SpEoI
-		pr #255: line$
-	loop
-	SpEoI: !
-	close #hSummary,free:
-	hSummary=0
-	pr #255:
-	pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
-	pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
-	pr #255: '}' ! end the RTF font size setting of 8
-	fnClosePrn
+	if exists('PrnSummary[session]') then
+		open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input ! ioerr SpFinis
+		fnOpenPrn('Summary')
+		pr #255: "\ql"
+		dim line$*80
+		do
+			linput #hSummary: line$ eof SpEoI
+			pr #255: line$
+		loop
+		SpEoI: !
+		close #hSummary,free:
+		hSummary=0
+		pr #255:
+		pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
+		pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
+		pr #255: '}' ! end the RTF font size setting of 8
+		fnClosePrn
+	end if
 	SpFinis: !
 	totalInvoicesPrinted=0
 	totalPreviousBalances=0
@@ -466,14 +468,12 @@ def fn_mergeInvoices
 		amt=0
 	loop  ! /r
 
-	MiFinis: ! r:
-		close #h_clmstr:
-		close #h_tmtrans:
-		close #h_tmwk2:
-		close #h_tmtraddr:
-		! close #h_armotran:
-		fnStatusClose
-
+	MiFinis: ! 
+	close #h_clmstr:
+	close #h_tmtrans:
+	close #h_tmwk2:
+	close #h_tmtraddr:
+	fnStatusClose
 
 fnend
 
