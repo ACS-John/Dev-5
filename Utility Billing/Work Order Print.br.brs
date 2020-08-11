@@ -1,14 +1,12 @@
 def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$; cell$)
 	if wop_setup<>val(env$('cno')) then
 		wop_setup=val(env$('cno'))
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		library 'S:\Core\Library': fnGetServices
+		autoLibrary
 		dim srvnam$(10)*20
 		fnGetServices(mat srvnam$)
 		if trim$(srvnam$(3))='Association Fee' then s3_non_metered=1 else s3_non_metered=0
 	end if
 
-	library 'S:\Core\Library': fnsavetoasstart
 	fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
 	fnopenprn( z$,'Work Order Add','Work Order')
 
