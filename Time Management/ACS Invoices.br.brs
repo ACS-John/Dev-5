@@ -297,7 +297,6 @@ def fn_print_inv(accumulateSummary)
 	if invTotal=>1 or pbal=>1 then
 		if accumulateSummary then fn_summaryAccumulate
 		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
-
 		invoice_number+=1
 	end if
 	mat inv_item$=(" ")

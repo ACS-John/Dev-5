@@ -240,7 +240,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat bil
 
 	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
 	pr #out: '[BOLD][FONT TIMES][SETSIZE(11)][pos(+0,+6)][8LPI][LEFT]';
-	pr #out: '     '&cnam$;
+	pr #out: rpt$(' ',26)&cnam$;
 	pr #out: '[/BOLD]'
 	pr #out,using 'form pos 27,C': '4 Syme Ave'
 	pr #out,using 'form pos 27,C': 'West Orange, NJ  07052'
