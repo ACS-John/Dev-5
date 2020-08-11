@@ -34,12 +34,10 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
 	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
-	execute "dir '"&fnReportCacheFolderCurrent$&"\Ebilling' >'"&fnReportCacheFolderCurrent$&"\Ebilling\sendingnow.txt' -B" 
-	open #hList:=fngethandle: "name="&fnReportCacheFolderCurrent$&"\Ebilling\sendingnow.txt",display,input
 	dim contact$(0)*255
 	dim contactN(0)
 	hContact=fn_open("TM Contact",mat contact$,mat contactN,mat form$, 1,1)
-	
+
 	dim filename$(0)*256
 	fnGetDir2('fnReportCacheFolderCurrent$&"\Ebilling',mat filename$, '','Invoice*.pdf')
 	for fileItem=1 to udim(mat filename$)
@@ -47,11 +45,13 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 		linput #hList: pdfline$ eof EmailInvoiceFinis
 		! if it exists then look up customer to information
 		! pause 
-		if pdfline$(1:7)="Invoice" then 
+		if pdfline$(1:7)='Invoice' then 
 			pdfname$=pdfline$(1:len(pdfline$))
-			ppos=pos(pdfname$,".")
+			posClientNo=pos(pdfname$,"act ")
 			ppos2=pos(pdfname$,".",ppos+1)
-			clientno$=trim$(pdfname$(ppos+1:ppos2-1))
+			clientno$=trim$(pdfname$(posClientNo+4:pos(pdfline$,' ',posClientNo+4)))
+			pr 'act=';clientno$
+			pause
 			testday$=pdfname$(ppos2+1:pos(pdfname$,".",ppos2+1)-1)
 			! if on selected date
 			! print testday$ : print email_date$ : pause 
