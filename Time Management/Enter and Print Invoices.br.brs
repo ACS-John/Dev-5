@@ -53,7 +53,7 @@
 	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
 ! /r
 REGULAR_ENTRY: ! r:
-	open #hTmpInvoice:=fngethandle: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",internal,outIn,relative
+	open #hTmpInvoice=fngethandle: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",internal,outIn,relative
 	F_TMWK2: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	open #3: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,input,keyed
 	fnopenprn
@@ -264,7 +264,7 @@ SCR_PRINT_INVOICES: ! r:
 	! if select_invoices_to_print><0 then goto L2590
 	! pr newpage
 	! pr f "10,10,Cc 60": "Printing invoices in process"
-	fnopenprn
+	fnInvoiceOpen
 	align=0
 	restore #hTmpInvoice:
 	do  ! for j=1 to lrec(hTmpInvoice)
@@ -274,21 +274,12 @@ SCR_PRINT_INVOICES: ! r:
 		if xinp(1)=0 then goto L2840
 		k$=lpad$(str$(xinp(1)),5)
 		read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
-		if ebilling and fnCustomerHasEbilling(client_id$) then
-			! open pdf
-			pdf_filename_final$=fnPrintFileName$(client_id$,'pdf')
-			fnInvoiceAdd(pdfout,align,client_id$, mat client_addr$,invoiceNumber$,inv_date,mat inv_item$,mat inv_amt,0,pdf_filename_final$)
-			! move to Send folder
-			fnmakesurepathexists(fnreport_cache_folder_current$&"\Ebilling\")
-			fnCopy(os_filename$(env$('at')&pdf_filename_final$),fnreport_cache_folder_current$&'\Ebilling\ACS Invoice.'&trim$(client_id$)&'.'&date$("mmddyy")&'.pdf')
-		else
-		   fnInvoiceAdd(255,align, k$, mat billto$, invoiceNumber$, xinp(3),mat id$, mat da,0)
-		end if
+		   fnInvoiceAdd(k$,mat billto$,invoiceNumber$,xinp(3),mat id$,mat da,0)
 		 L2840: !
 		! if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop  ! next j
 	PRI_EOF: !
-	fncloseprn
+	fnInvoiceClose
 	L2870: !
 goto SCR_FINAL ! /r
 ! SCR_SELECT_INVOICE: ! r:
@@ -320,7 +311,7 @@ SRCH1: ! r: name search
 	L3230: !
 	pr #127: newpage
 	close #101: ioerr ignore
-	open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUsiness Name Search",display,outIn
+	open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=Business Name Search",display,outIn
 	prtall=0
 	pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 	pr f "9,32,C 16,R,N": "Press F5 to stop"

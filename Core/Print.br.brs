@@ -248,7 +248,8 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 			!  "q" was added to allow support for alignment.
 			do
 				z=max(0,pos(line$,"\",z))
-				if z and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then
+				if pos(uprc$(line$),'{\Q')>0 then pause
+				if z and uprc$(line$(z-1:z+1))<>"{\Q" then
 					line$(z:z)="\\"
 					z+=2
 				end if

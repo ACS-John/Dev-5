@@ -9,17 +9,17 @@ fnend
 def fn_invoiceOpen
 	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
 fnend
-def library fnInvoiceClose(inv_date)
+def library fnInvoiceClose(invDate)
 	if ~setup then fn_setup
-	fnInvoiceClose=fn_invoiceClose(inv_date)
+	fnInvoiceClose=fn_invoiceClose(invDate)
 fnend
-def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
-	close #hCollection: 
-	close #hPrintCollection: 
+def fn_invoiceClose(invDate; ___,invoiceFilenameBase$*64)
+	close #hCollection:
+	close #hPrintCollection:
 	hCollection=hPrintCollection=0
 
 	invoiceFilenameBase$='ACS Invoice '
-	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
+	invoiceFilenameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
 	invoiceFilenameBase$&='.pdf'
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\'&invoiceFilenameBase$)
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
@@ -29,16 +29,16 @@ def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
 	end if
 	collectionPageCount=0
 fnend
-def library fnInvoiceAdd(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
+def library fnInvoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
-	fnInvoiceAdd=fn_printInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
+	fnInvoiceAdd=fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 fnend
-def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal; ___,isCss,total_amt)
+def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; ___,isCss,totalAmt)
 
 	! forcePrintAcePdf=0
 	! disableRtf=1
 	! r: set cnam$ and cLogo$
-	if fnval(actnum$)=4132 then  ! Stern and Stern
+	if fnval(actNum$)=4132 then  ! Stern and Stern
 		isCss=1
 		dim cnam$*40
 		dim cLogo$*128
@@ -51,7 +51,7 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 	! /r
 	!	gosub LauraStyleInvoiceBody
 	! LauraStyleInvoiceBody: ! r:
-	customerHasEbilling=fnCustomerHasEbilling(actnum$)
+	customerHasEbilling=fnCustomerHasEbilling(actNum$)
 	dim tmpFile$*16
 	tmpFile$='tmp[session].pdf'
 	open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
@@ -66,35 +66,35 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 		open #hPrintCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',Display,Output
 
 	end if
-	
+
 	! make the individual file
-	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
 	! make the collection files
-	if collectionPageCount then 
+	if collectionPageCount then
 		pr #hCollection: newpage
 		pr #hPrintCollection: newpage
 	end if
 	! archive (gets everything)
-	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
 	! print collection (only stuff that needs to be printed this month)
 	if ~customerHasEbilling then
-		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,inv_num$,actnum$,mat billto$,pbal,mat desc$,mat amt)
+		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
 	else
-	
+
 	end if
 	collectionPageCount+=1
 	close #out:
-	
+
 	! r: copy created temp pdf to it's places
 	dim invoiceFilenameBase$*64
 	invoiceFilenameBase$='Invoice '
-	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
-	invoiceFilenameBase$&=' inv '&trim$(inv_num$)
-	invoiceFilenameBase$&=' act '&trim$(actnum$)
+	invoiceFilenameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
+	invoiceFilenameBase$&=' inv '&trim$(invNum$)
+	invoiceFilenameBase$&=' act '&trim$(actNum$)
 	invoiceFilenameBase$&='.pdf'
-	
 
-	! fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actnum$,'pdf'))
+
+	! fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actNum$,'pdf'))
 
 	if customerHasEbilling then
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
@@ -104,35 +104,38 @@ def fn_printInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat a
 
 fnend
 
-def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)
-
+def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
+	
+	staticSize=0
+	
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 
 	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
 	pr #out: '[pos(+0,+62)][pic(1,1,'&cLogo$&')]'
-	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][8LPI][LEFT]';
-	pr #out: '[LEFT][pos(+0,+7)][BOLD]'&trim$(cnam$)&'[/BOLD]'
+	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][6LPI][LEFT]'
+
+	pr #out: ''
+	pr #out: ''
+	pr #out: '[pos(+0,+7)][BOLD]'&trim$(cnam$)&'[/BOLD]'
 	pr #out: '[pos(+0,+7)]4 Syme Ave'
 	pr #out: '[pos(+0,+7)]West Orange, NJ  07052'
 
 	pr #out: ''
 	pr #out: ''
-	pr #out: ''
-	pr #out: ''
 
-	pr #out: '[LEFT][pos(+4,+7)][BOLD]'&trim$(billto$(1))&'[/BOLD]'
-	pr #out: '[pos(+0,+7)]'&trim$(billto$(2))
-	pr #out: '[pos(+0,+7)]'&trim$(billto$(3))
-	pr #out: ''
+	pr #out: '[LEFT][pos(+4,+7)][BOLD]'&trim$(billTo$(1))&'[/BOLD]'
+	pr #out: '[pos(+0,+7)]'&trim$(billTo$(2))
+	pr #out: '[pos(+0,+7)]'&trim$(billTo$(3))
+	pr #out: '[8LPI]'
 	pr #out: ''
 	pr #out: '[SETSIZE(36)][BOLD][CENTER]'
 	pr #out: '[pos(+0,+40)]Invoice'
 	pr #out: '[SETSIZE(8)][/BOLD][LEFT] [SETFONT(Lucida Sans)]'
 	pr #out: pdfline$
 	pr #out: ''
-	pr #out: '[RIGHT][pos(+0,+4)]                 Invoice Number:[LEFT]  [BOLD]'&trim$(inv_num$)&'[/BOLD]'
-	pr #out: '[RIGHT][pos(+0,+4)]                 Account Number:[LEFT]  [BOLD]'&trim$(actnum$)&'[/BOLD]'
-	pr #out: '[RIGHT][pos(+0,+5)]                  Invoice Date:[LEFT]  [BOLD]'&cnvrt$('pic(##/##/##)',inv_date)&'[/BOLD]'
+	pr #out: '[RIGHT][pos(+0,+4)]                 Invoice Number:[LEFT]  [BOLD]'&trim$(invNum$)&'[/BOLD]'
+	pr #out: '[RIGHT][pos(+0,+4)]                 Account Number:[LEFT]  [BOLD]'&trim$(actNum$)&'[/BOLD]'
+	pr #out: '[RIGHT][pos(+0,+5)]                  Invoice Date:[LEFT]  [BOLD]'&cnvrt$('pic(##/##/##)',invDate)&'[/BOLD]'
 	pr #out: ''
 	pr #out: ''
 	pr #out: '[pos(+0,+7)][SETSIZE(10)][Bold]Description [pos(+0,+50)]Amount[/BOLD]'
@@ -142,18 +145,18 @@ def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat bil
 	for j1=1 to udim(mat desc$)
 		if amt(j1) then
 			pr #out: '[pos(+0,+7)][PUSH][LEFT]'&desc$(j1)&'[POP][RIGHT][pos(+0,+55)]'&cnvrt$('pic(ZZZ,ZZ#.##)',amt(j1))
-			total_amt+=amt(j1)
-		else
+			totalAmt+=amt(j1)
+		else if staticSize then
 			pr #out: ''
 		end if
 	next j1
 	if pbal then
 		pr #out: '[pos(+0,+7)]Previous Balance [pos(+0,+34)][right]'&cnvrt$('pic(zzz,zzz,zz#.##)',pbal)
-		total_amt+=pbal
+		totalAmt+=pbal
 	end if
-	pr #out: '' ! using 'Form POS 1,c 100' : '[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]'
-	pr #out: '[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]'&cnvrt$('pic($zzz,zzz,zz#.##)',total_amt)
-	pr #out: '' ! ,using 'Form POS 1,c 100' : '[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]'
+	pr #out: ''
+	pr #out: '[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]'&cnvrt$('pic($zzz,zzz,zz#.##)',totalAmt)
+	pr #out: ''
 	pr #out: '[pos(+0,-2)]'&pdfline$
 
 fnend
