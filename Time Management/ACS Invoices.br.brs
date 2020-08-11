@@ -24,7 +24,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 ! /r
 fnStatus('producing Invoice Archive...')
 fnInvoiceOpen
-fn_produceInvoices( 0,1)
+fn_produceInvoices( 0,1,1)
 fnInvoiceClose(invDateMmDdYy)
 fnStatus('producing Individual Invoices...')
 fn_produceInvoices( 1,0)
@@ -64,7 +64,7 @@ do
 	end if
 loop
 ! /r
-def fn_produceInvoices(; filter,individualize,displayInvoices)
+def fn_produceInvoices(; filter,individualize,displayInvoices,accumulateSummary)
 	! filter  0 = all invoices
 	!         1 = print only invoices
 	!         2 = email only invoices
@@ -124,7 +124,7 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
 		EoSupport: !
 
-		fn_print_inv
+		fn_print_inv(accumulateSummary)
 	loop
 	EoClient: !
 	close #hTimeSheet:
@@ -278,8 +278,8 @@ def fn_summary_print
 fnend
 
 
-def fn_print_inv
-	fn_billForNonMaint(hTimeSheet)
+def fn_print_inv(accumulateSummary)
+	fn_billForNonMaint(hTimeSheet,accumulateSummary)
 	if enableMinimumMonthlyBill and invTotal>0 and sum(mat inv_amt)<100 then
 		inv_line+=1
 		if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then
@@ -294,7 +294,7 @@ def fn_print_inv
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
-		fn_summary_add
+		if accumulateSummary then fn_summary_add
 		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 
 		invoice_number+=1
@@ -306,7 +306,7 @@ def fn_print_inv
 	mat inv_amt=(0)
 	inv_line=invTotal=0
 fnend
-def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
+def fn_billForNonMaint(hTimeSheet,accumulateSummary; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
 	dim inpX(7)
 	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
 	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
@@ -316,7 +316,7 @@ def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under main
 			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
 			! fn_billForHours(client_id$)
 			! def fn_billForHours(client_id$) ! ,mat inpX,etc...
-			if inv_line=30 then fn_print_inv ! pr invoice if more than 20 entries
+			if inv_line=30 then fn_print_inv(accumulateSummary) ! pr invoice if more than 20 entries
 			if inv_line>29 then pause
 			spk$=" "&client_id$&cnvrt$("n 2",b8)
 
