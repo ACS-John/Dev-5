@@ -111,7 +111,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		hCt=ctHandles(ctWhich)
 	else
 		fnAddOneC(mat ctFiles$,ctFile$)
-		hCt:=fngethandle
+		hCt=fngethandle
 		fnAddOneN(mat ctHandles,hCt)
 		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
 		pr #hCt: 'Employee Name'&tab$;
