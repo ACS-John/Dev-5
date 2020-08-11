@@ -101,13 +101,13 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 	dim client_addr$(3)*30
 	! restore #h_tmwk2:
 	do
-		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
+		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 		client_id=val(client_id$)
 		dim iv$*12
 		iv$=rpad$(str$(invoice_number),12)
-		restore #h_support: ! ,key>=lpad$(trim$(client_id$),kln(h_support)): nokey BMM_SUPPORT_EOF
+		restore #h_support: ! ,key>=lpad$(trim$(client_id$),kln(h_support)): nokey EoSupport
 		do
-			read #h_support,using F_support: cln$,scode,scode$,stm$,sup_exp_date,supData_cost eof BMM_SUPPORT_EOF
+			read #h_support,using F_support: cln$,scode,scode$,stm$,sup_exp_date,supData_cost eof EoSupport
 			cln=val(cln$)
 			!     if client_id=918 then pr 'cln=';cln;'client_id=';client_id ! pause
 			if cln=client_id then
@@ -122,11 +122,11 @@ def fn_produceInvoices(; filter,individualize,displayInvoices)
 				end if
 			end if
 		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
-		BMM_SUPPORT_EOF: !
+		EoSupport: !
 
 		fn_print_inv
 	loop
-	EOJ: !
+	EoClient: !
 	close #hTimeSheet:
 	close #h_ivnum:
 	close #hClient:
@@ -257,7 +257,7 @@ def fn_summary_print
 	! pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
 	close  #hSummary:
 	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input
-	fnOpenPrn
+	fnOpenPrn('Summary')
 	! pr #255: "\ql"
 	dim line$*80
 	do
