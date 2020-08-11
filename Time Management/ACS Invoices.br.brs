@@ -38,7 +38,7 @@ execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
 execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
 
 fnStatus('producing Summary...')
-fn_summary_print
+fn_summaryRelease
 
 
 ! r: final screen
@@ -237,11 +237,11 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	! pause
 
 fnend
-def fn_summary_add
-	! pr 'fn_summary_add   totalInvoicesPrinted=';totalInvoicesPrinted !
+def fn_summaryAccumulate
+	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
 		open #hSummary=fngethandle: "Name=PrnSummary[session],RecL=80,replace",display,output ! ioerr SI_ADD
-		! pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
+		pr #hSummary: "{\fs16"  ! set the RTF Font Size to 8
 		pr #hSummary: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
 		pr #hSummary: "_____ ______________  ________  __________  __________  __________  __________"
 	end if
@@ -253,38 +253,39 @@ def fn_summary_add
 		totalPreviousBalances+=pbal
 	end if
 fnend
-def fn_summary_print
-	! pr 'fn_summary_print  totalInvoicesPrinted=';totalInvoicesPrinted : pause
+def fn_summaryRelease
+
 	close  #hSummary:
-	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input
+	open #hSummary=fngethandle: "Name=PrnSummary[session]",display,input ioerr SpFinis
 	fnOpenPrn('Summary')
-	! pr #255: "\ql"
+	pr #255: "\ql"
 	dim line$*80
 	do
-		linput #hSummary: line$ eof SpFinis
+		linput #hSummary: line$ eof SpEoI
 		pr #255: line$
 	loop
-	SpFinis: !
+	SpEoI: !
 	close #hSummary,free:
 	hSummary=0
 	pr #255:
 	pr #255: "Total of Invoices Printed:  "&cnvrt$("N 12.2",totalInvoicesPrinted)
 	pr #255: "Total of Previous Balances: "&cnvrt$("N 12.2",totalPreviousBalances)
-	! pr #255: '}' ! end the RTF font size setting of 8
+	pr #255: '}' ! end the RTF font size setting of 8
 	fnClosePrn
+	SpFinis: !
 	totalInvoicesPrinted=0
 	totalPreviousBalances=0
 	! pause
 fnend
 
-
 def fn_print_inv(accumulateSummary)
 	fn_billForNonMaint(hTimeSheet,accumulateSummary)
 	if enableMinimumMonthlyBill and invTotal>0 and sum(mat inv_amt)<100 then
 		inv_line+=1
-		if inv_line<30 and client_id<>client_id_sageAx and client_id<>client_id_brc and client_id<>4625 then
+		if inv_line<30 then
 			inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
-			inv_amt(inv_line)=100-sum(mat inv_amt) : invTotal+=inv_amt(inv_line)
+			inv_amt(inv_line)=100-sum(mat inv_amt)
+			invTotal+=inv_amt(inv_line)
 			inv_service_code(inv_line)=19
 			inv_gl$(inv_line)='  0  1160  0'
 		end if
@@ -294,7 +295,7 @@ def fn_print_inv(accumulateSummary)
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
-		if accumulateSummary then fn_summary_add
+		if accumulateSummary then fn_summaryAccumulate
 		fnPrintInvoice(align,client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
 
 		invoice_number+=1
