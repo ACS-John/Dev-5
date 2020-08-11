@@ -1,6 +1,33 @@
 fn_setup
 fn_printInvoice
 end
+
+def library fnInvoiceOpen
+	if ~setup then fn_setup
+	fnInvoiceOpen=fn_invoiceOpen
+fnend
+def fn_invoiceOpen
+	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
+fnend
+def library fnInvoiceClose(inv_date)
+	if ~setup then fn_setup
+	fnInvoiceClose=fn_invoiceClose(inv_date)
+fnend
+def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
+	close #hCollection: 
+	close #hPrintCollection: 
+	hCollection=hPrintCollection=0
+
+	invoiceFilenameBase$='ACS Invoice '
+	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
+	invoiceFilenameBase$&='.pdf'
+	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
+	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
+	if env$('acsDeveloper')<>'' then ! ='John' then
+		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
+	end if
+	collectionPageCount=0
+fnend
 def library fnPrintInvoice(align,&actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
 	fnPrintInvoice=fn_printInvoice(align,actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
@@ -201,91 +228,64 @@ LauraStyleInvoiceBody: ! r:
 	invoiceFilenameBase$&='.pdf'
 	
 
-	fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actnum$,'pdf'))
+	! fnCopy(tmpFile$,'[at]'&fnPrintFileName$( actnum$,'pdf'))
 
 	if customerHasEbilling then
 		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
 	end if
 	! /r
 return ! /r
-def library fnInvoiceOpen
-	if ~setup then fn_setup
-	fnInvoiceOpen=fn_invoiceOpen
-fnend
-def fn_invoiceOpen
-	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
-fnend
-def library fnInvoiceClose(inv_date)
-	if ~setup then fn_setup
-	fnInvoiceClose=fn_invoiceClose(inv_date)
-fnend
-def fn_invoiceClose(inv_date; ___,invoiceFilenameBase$*64)
-	close #hCollection: 
-	close #hPrintCollection: 
-	hCollection=hPrintCollection=0
-
-	invoiceFilenameBase$='ACS Invoice '
-	invoiceFilenameBase$&=date$(days(inv_date,'mmddyy'),'ccyy-mm')
-	invoiceFilenameBase$&='.pdf'
-	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
-	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
-	if env$('acsDeveloper')<>'' then ! ='John' then
-		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
-	end if
-	collectionPageCount=0
-fnend
 def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,inv_num$*12,actnum$,mat billto$,pbal,mat desc$,mat amt; ___, total_amt,pdfline$*151)
 
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 
 	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
-	pr #out: '[BOLD][FONT TIMES][SETSIZE(11)][pos(+0,+6)][8LPI][LEFT]';
-	pr #out: rpt$(' ',26)&cnam$;
-	pr #out: '[/BOLD]'
-	pr #out,using 'form pos 27,C': '4 Syme Ave'
-	pr #out,using 'form pos 27,C': 'West Orange, NJ  07052'
+	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][8LPI][LEFT]';
+	pr #out: '[LEFT][pos(+4,+7)][BOLD]'&trim$(cnam$)&'[/BOLD]'
+	pr #out: '[pos(+0,+7)]4 Syme Ave'
+	pr #out: '[pos(+0,+7)]West Orange, NJ  07052'
 	pr #out: '[pos(+0,+62)][pic(1,1,'&cLogo$&')]'
-	! pr #out: '[pos(+0,+67)][pic(.5,.5,'&cLogo$&')]'   ! "[PIC(1,1,S:\Time Management\ACS_Logo2.rtf)]"
+
 	pr #out: ''
 	pr #out: ''
 	pr #out: ''
 	pr #out: ''
 
-	pr #out: "[LEFT][pos(+4,+7)][BOLD]"&trim$(billto$(1))&"[/BOLD]"
-	pr #out: "[pos(+0,+7)]"&trim$(billto$(2))
-	pr #out: "[pos(+0,+7)]"&trim$(billto$(3))
+	pr #out: '[LEFT][pos(+4,+7)][BOLD]'&trim$(billto$(1))&'[/BOLD]'
+	pr #out: '[pos(+0,+7)]'&trim$(billto$(2))
+	pr #out: '[pos(+0,+7)]'&trim$(billto$(3))
 	pr #out: ''
 	pr #out: ''
-	pr #out: "[SETSIZE(36)][BOLD][CENTER]"
-	pr #out: "[pos(+0,+40)]Invoice"
-	pr #out: "[SETSIZE(8)][/BOLD][LEFT] [SETFONT(Lucida Sans)]"
+	pr #out: '[SETSIZE(36)][BOLD][CENTER]'
+	pr #out: '[pos(+0,+40)]Invoice'
+	pr #out: '[SETSIZE(8)][/BOLD][LEFT] [SETFONT(Lucida Sans)]'
 	pr #out: pdfline$
 	pr #out: ''
-	pr #out: "[RIGHT][pos(+0,+4)]                 Invoice Number:[LEFT]  [BOLD]"&trim$(inv_num$)&"[/BOLD]"
-	pr #out: "[RIGHT][pos(+0,+4)]                 Account Number:[LEFT]  [BOLD]"&trim$(actnum$)&"[/BOLD]"
-	pr #out: "[RIGHT][pos(+0,+5)]                  Invoice Date:[LEFT]  [BOLD]"&cnvrt$("pic(##/##/##)",inv_date)&"[/BOLD]"
+	pr #out: '[RIGHT][pos(+0,+4)]                 Invoice Number:[LEFT]  [BOLD]'&trim$(inv_num$)&'[/BOLD]'
+	pr #out: '[RIGHT][pos(+0,+4)]                 Account Number:[LEFT]  [BOLD]'&trim$(actnum$)&'[/BOLD]'
+	pr #out: '[RIGHT][pos(+0,+5)]                  Invoice Date:[LEFT]  [BOLD]'&cnvrt$('pic(##/##/##)',inv_date)&'[/BOLD]'
 	pr #out: ''
 	pr #out: ''
-	pr #out: "[pos(+0,+7)][SETSIZE(10)][Bold]Description [pos(+0,+50)]Amount[/BOLD]"
+	pr #out: '[pos(+0,+7)][SETSIZE(10)][Bold]Description [pos(+0,+50)]Amount[/BOLD]'
 	pr #out: pdfline$
 	pr #out: ''
 
 	for j1=1 to udim(mat desc$)
 		if amt(j1) then
-			pr #out: "[pos(+0,+7)][PUSH][LEFT]"&desc$(j1)&"[POP][RIGHT][pos(+0,+55)]"&cnvrt$("pic(ZZZ,ZZ#.##)",amt(j1))
+			pr #out: '[pos(+0,+7)][PUSH][LEFT]'&desc$(j1)&'[POP][RIGHT][pos(+0,+55)]'&cnvrt$('pic(ZZZ,ZZ#.##)',amt(j1))
 			total_amt+=amt(j1)
 		else
 			pr #out: ''
 		end if
 	next j1
 	if pbal then
-		pr #out: "[pos(+0,+7)]Previous Balance [pos(+0,+34)][right]"&cnvrt$("pic(zzz,zzz,zz#.##)",pbal)
+		pr #out: '[pos(+0,+7)]Previous Balance [pos(+0,+34)][right]'&cnvrt$('pic(zzz,zzz,zz#.##)',pbal)
 		total_amt+=pbal
 	end if
-	pr #out: '' ! using "Form POS 1,c 100" : "[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]"
-	pr #out: "[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]"&cnvrt$("pic($zzz,zzz,zz#.##)",total_amt)
-	pr #out: '' ! ,using "Form POS 1,c 100" : "[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]"
-	pr #out: "[pos(+0,-2)]"&pdfline$
+	pr #out: '' ! using 'Form POS 1,c 100' : '[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]'
+	pr #out: '[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]'&cnvrt$('pic($zzz,zzz,zz#.##)',total_amt)
+	pr #out: '' ! ,using 'Form POS 1,c 100' : '[PIC(1,1,S:\acsTM\black line - six inch.rtf.txt)]'
+	pr #out: '[pos(+0,-2)]'&pdfline$
 
 fnend
 include: fn_setup
