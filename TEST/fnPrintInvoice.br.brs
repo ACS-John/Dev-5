@@ -23,7 +23,7 @@ dim pdfFileName$*255
 ! fnPrintInvoiceClose
 for inv=1 to 1
 	pdfFileName$=fnPrintFileName$(client_id$(inv),'pdf','invoice\individual\*')
-	fnPrintInvoice(255,0,client_id$(inv),mat client_addr$,inv_num$(inv),inv_date,mat inv_item$,mat inv_amt,pbal, pdfFileName$)
+	fnInvoiceAdd(255,0,client_id$(inv),mat client_addr$,inv_num$(inv),inv_date,mat inv_item$,mat inv_amt,pbal, pdfFileName$)
 	exec 'sy -c "'&pdfFileName$&'"'
 nex inv
 ! fnpa_finis
