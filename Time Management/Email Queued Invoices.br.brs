@@ -33,20 +33,21 @@ fnend
 def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos2,testday$)
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
-	fnmakesurepathexists(fnreport_cache_folder_current$&'\Ebilling\Sent\')
-	execute "dir '"&fnreport_cache_folder_current$&"\Ebilling' >'"&fnreport_cache_folder_current$&"\Ebilling\sendingnow.txt' -B" 
-	open #hList:=fngethandle: "name="&fnreport_cache_folder_current$&"\Ebilling\sendingnow.txt",display,input
+	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
+	execute "dir '"&fnReportCacheFolderCurrent$&"\Ebilling' >'"&fnReportCacheFolderCurrent$&"\Ebilling\sendingnow.txt' -B" 
+	open #hList:=fngethandle: "name="&fnReportCacheFolderCurrent$&"\Ebilling\sendingnow.txt",display,input
 	dim contact$(0)*255
 	dim contactN(0)
 	hContact=fn_open("TM Contact",mat contact$,mat contactN,mat form$, 1,1)
 	
-	! todo: implement fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
-	
-	do while file(hList)=0
+	dim filename$(0)*256
+	fnGetDir2('fnReportCacheFolderCurrent$&"\Ebilling',mat filename$, '','Invoice*.pdf')
+	for fileItem=1 to udim(mat filename$)
+		pdfline$=filename$(fileItem)
 		linput #hList: pdfline$ eof EmailInvoiceFinis
 		! if it exists then look up customer to information
 		! pause 
-		if pdfline$(1:7)="ACS Inv" then 
+		if pdfline$(1:7)="Invoice" then 
 			pdfname$=pdfline$(1:len(pdfline$))
 			ppos=pos(pdfname$,".")
 			ppos2=pos(pdfname$,".",ppos+1)
@@ -74,11 +75,11 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 						emailBody$&='1-800-643-6318</p>'
 						
 						dim attachment$*1024
-						attachment$=fnreport_cache_folder_current$&'\'&trim$(pdfname$)
+						attachment$=fnReportCacheFolderCurrent$&'\'&trim$(pdfname$)
 						dim tmpTo$*512
 						tmpTo$=trim$(contact$(con_bemail))
 						if fnSendEmail(tmpTo$,emailBody$,"ACS Invoice ",attachment$)>0 then 
-							fnRename(attachment$,fnreport_cache_folder_current$&'\Sent\'&trim$(pdfname$))
+							fnRename(attachment$,fnReportCacheFolderCurrent$&'\Sent\'&trim$(pdfname$))
 						else
 							dim mg$(0)*128
 							mat mg$(0)
@@ -96,10 +97,9 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 				skipthis: ! no key 
 			end if 
 		end if 
-	loop 
+	nex fileItem
 	EmailInvoiceFinis: ! close and done 
-	close #hList: 
-	fnRename(fnreport_cache_folder_current$&'\Ebilling\sendingnow.txt',fnreport_cache_folder_current$&'\Ebilling\Sent\sent'&date$("mmddyy")&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
+	fnRename(fnReportCacheFolderCurrent$&'\Ebilling\sendingnow.txt',fnReportCacheFolderCurrent$&'\Ebilling\Sent\sent'&date$("mmddyy")&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
 fnend
 include: fn_setup
 include: fn_open

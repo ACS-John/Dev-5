@@ -102,7 +102,7 @@ Xit: fnXit
 dim ctFiles$(0)*1024
 dim ctHandles(0)
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
-	ctFile$=env$('at')&fnreport_cache_folder_current$&'\Client TimeSheets\'
+	ctFile$=env$('at')&fnReportCacheFolderCurrent$&'\Client TimeSheets\'
 	ctFile$&=fnClientNameShort$(client_id)&'\'
 	ctFile$&=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)

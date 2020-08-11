@@ -1297,7 +1297,7 @@ def fn_transAlreadyPosted(p$,tdate,tcode,tamount; ___,returnN,tapKeyMatch)
 fnend
 def fn_ei_backup(ecp_filename$*256)
 	if exists(ecp_filename$) then
-		fnCopy(ecp_filename$,fnreport_cache_folder_current$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.csv')
+		fnCopy(ecp_filename$,fnReportCacheFolderCurrent$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.csv')
 	end if  ! exists UBmstr\readings.[bk$]
 fnend
 def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount; enableSkipDuplicates$)
