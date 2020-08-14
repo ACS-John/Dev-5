@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                   
+12:46 PM 8/14/2020	UB	Deposit Change List - added customer name, well, at least the first 16 characters of it.
 11:03 08/20/2020	CO	5.75047  
 10:52 AM 8/14/2020	UB	Transactions - Edit - you may now edit Usages on Charge Transactions, this does not affect the charges that were calculated previously based on the replaced usages 
 11:59 07/20/2020	CO	5.75046   
