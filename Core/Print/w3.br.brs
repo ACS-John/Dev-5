@@ -38,15 +38,15 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	! stcode$   
 	if ~setup then fn_setup
 	fnpa_open('','W-3','PDF')
-	if enableBackground$='True' then let fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
+	if enableBackground$='True' then fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 	fnpa_fontsize(12)
 	fnpa_txt("X",38,fn_line(2))
 	col1=  8
-	if env$('client')="Kincaid" then let col1+=2
+	if env$('client')="Kincaid" then col1+=2
 	col2=113
 	col3=169
-	 ! if env$('acsdeveloper')<>'' then  pause ! let specialform2018=1
-	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then let specialform2018=1
+	 ! if env$('acsdeveloper')<>'' then  pause ! specialform2018=1
+	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then specialform2018=1
 	fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
 	fnpa_txt(a$(1),col1,fn_line(6))
 	fnpa_txt(a$(2),col1,fn_line(7)-2)
@@ -72,23 +72,19 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	fnpa_txt(cnvrt$("pic(--,---,---.##",w(8)),col4,fn_line(12)) ! local wh
 	fnpa_finis
 fnend
-def fn_line(lineNumber)
-	lReturn=0
+def fn_line(lineNumber; ___,returnN)
 	if lineNumber=1 then 
-		lReturn=10
+		returnN=10
 	else  ! if lineNumber>=1 and lineNumber<=14 then
-		lReturn=20+(8.5*(lineNumber-2))
-	! else 
-	!   pr 'invalid lineNumber ('&str$(lineNumber)&')'
-	!   pause
+		returnN=20+(8.5*(lineNumber-2))
 	end if 
 	if specialform2018=1 then 
-		let lreturn-=1
+		returnN-=1
 		if linenumber<10 then
-			let lreturn-=2
+			returnN-=2
 		end if 
 	end if 
-	fn_line=lReturn
+	fn_line=returnN
 fnend
 
 
