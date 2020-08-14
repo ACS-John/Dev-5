@@ -5,6 +5,7 @@ fnTop(program$)
 dim unused_gb(10)
 fn_transfile( empty$,unused_bal,mat unused_gb)
 Xit: fnXit
+
 def fn_setup
 	if ~setup then
 		setup=1
@@ -59,6 +60,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	TTAO_FINIS: !
 	fn_trans_total_as_of=ttao_return
 fnend 
+
 def library fntransfile(; hact$*81,&bal,mat gb)
 	if ~setup then fn_setup
 	fntransfile=fn_transfile( hact$,bal,mat gb)
@@ -71,7 +73,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 	dim totalalloc(10),totalusage(3),usage(3)
 
 	ScreenAskFilters: ! r: 
-	fnTos(sn$="Transaction-1")
+	fnTos
 	rc=cf=0
 	fnFra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 	cf+=1 : fratype=cf
@@ -145,7 +147,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 
 	ScreenTransGrid: ! r:
 	do
-		fnTos(sn$="Transaction-2")
+		fnTos
 		stgFlexLine=0
 		fnButton(stgFlexLine+=1,1,'Columns',opt_columns:=6)
 		if z$<>'[All]' then
@@ -284,11 +286,11 @@ def fn_lastTBalBeforeRec(hTranRelative,z$,recNum; ___,returnN) ! reqires local m
 	loop until xTran$(trans_acct)=z$ or recNum=1
 	fn_lastTBalBeforeRec=returnN
 fnend
-def fn_TransactionEdit(editrec)
+def fn_TransactionEdit(editrec; ___,transAcct$,tdate,tcode,tamount,serviceItem,s1use,s3use,s4use,lc,mylen,mypos,rc,s1use,s3use,s4use)
 	open #trans=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],Shr",internal,outIn,relative 
-	read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2",rec=editrec: transAcct$,tdate,tcode,tamount
-	fnTos(sn$="Transaction-3")
-	lc=rc=0 : mylen=20 : mypos=mylen+2
+	read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5",rec=editrec: transAcct$,tdate,tcode,tamount,s1use,s3use,s4use
+	fnTos
+	mylen=20 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Record:",mylen)
 	fnTxt(lc,mypos,10,0,0,empty$,1)
 	resp$(rc+=1)=str$(editrec)
@@ -304,12 +306,38 @@ def fn_TransactionEdit(editrec)
 	fnLbl(lc+=1,1,"Amount:",mylen)
 	fnTxt(lc,mypos,10,0,0,"10",1)
 	resp$(rc+=1)=str$(tamount)
+	if tcode=1 then !  if it is a charge then
+		lc+=1
+		rcServiceBase=rc
+		for serviceItem=1 to 10
+			if (serviceItem=1 or serviceItem=3 or serviceItem=4) and fn_serviceIsMetered(serviceItem) then
+				fnLbl(lc+=1, 1,trim$(serviceName$(serviceItem))&" Usage:",mylen)
+				fnTxt(lc    ,22,10,0,1,"number")
+				rc+=1
+				if serviceItem=1 then resp$(rc)=str$(s1use)
+				if serviceItem=3 then resp$(rc)=str$(s3use)
+				if serviceItem=4 then resp$(rc)=str$(s4use)
+			end if
+		next serviceItem
+	end if
+
 	fnCmdKey('Save',1,1,0)
 	fnCmdKey('Cancel',5,0,1)
 	fnAcs(mat resp$,ckey)
 	if ckey=1 then 
 		tdate=val(resp$(respc_tDate))
-		rewrite #trans,using "Form pos 11,N 8",rec=editrec: tdate
+		if tcode=1 then !  if it is a charge then
+			rc=rcServiceBase
+			for serviceItem=1 to 10
+				if (serviceItem=1 or serviceItem=3 or serviceItem=4) and fn_serviceIsMetered(serviceItem) then
+				rc+=1
+				if serviceItem=1 then s1use=val(resp$(rc))
+				if serviceItem=3 then s3use=val(resp$(rc))
+				if serviceItem=4 then s4use=val(resp$(rc))
+				end if
+			nex serviceItem
+		end if
+		rewrite #trans,using "Form pos 11,N 8,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5",rec=editrec: tdate,s1use,s3use,s4use
 	end if 
 	close #trans: 
 fnend
@@ -746,7 +774,7 @@ def fn_columnEnabledGet(mat colenabled) ! requires local: headerCount
 fnend
 def fn_columnSelect
 	dim csHeader$(30)*20
-	fnTos(sn$='ubTrColSel') : respc=0 : csLine=0
+	fnTos : respc=0 : csLine=0
 	fn_columnGet(mat csHeader$,mat unusedColMask$,unusedShowElecUsed,unusedShowGasUsed)
 	for hdrItem=6 to udim(mat csHeader$)
 		fnChk(csLine+=1,25,csHeader$(hdrItem), 1)
@@ -764,6 +792,15 @@ def fn_columnSelect
 		nex hdrItem
 	end if
 ! pause
+fnend
+def fn_serviceIsMetered(serviceNumber; ___,returnN)
+	if ~setupServiceIsMetered then
+		setupServiceIsMetered
+		dim serviceCodeMetered$(0)*2
+		fnGetServiceCodesMetered(mat serviceCodeMetered$)
+	end if
+	returnN=max(0,srch(mat serviceCodeMetered$,srv$(serviceNumber)))
+	fn_serviceIsMetered=returnN
 fnend
 include: Ertn
 include: fn_open

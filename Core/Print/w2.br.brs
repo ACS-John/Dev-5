@@ -462,23 +462,17 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	fnpa_txt(rtrm$(nameSuffix$),left+92,fn_line(7))
 	fnpa_txt(box12aCode$,w2Box12CodePos,fn_line(7))
 	fnpa_txt(box12aAmt$,w2Box12AmtPos,fn_line(7))
+	fnpa_txt(k$(2),w2Col1,fn_line(8))
 	if specialform2018<>1 then 
-		fnpa_txt(k$(2),w2Col1,fn_line(8))
 		fnpa_txt(retirementPlanX$,left+118,fn_line(8))
-		fnpa_txt(box12bCode$,w2Box12CodePos,fn_line(8))
-		fnpa_txt(box12bAmt$,w2Box12AmtPos,fn_line(8))
-		fnpa_txt(k$(3),w2Col1,fn_line(9))
-		fnpa_txt(box12cCode$,w2Box12CodePos,fn_line(9))
-		fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	else if specialform2018=1 then
-		fnpa_txt(k$(2),w2Col1,fn_line(8))
 		fnpa_txt(retirementPlanX$,left+119,fn_line(8)) 
-		fnpa_txt(box12bCode$,w2Box12CodePos,fn_line(8))
-		fnpa_txt(box12bAmt$,w2Box12AmtPos,fn_line(8))
-		fnpa_txt(k$(3),w2Col1,fn_line(9))
-		fnpa_txt(box12cCode$,w2Box12CodePos,fn_line(9))
-		fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	end if 
+	fnpa_txt(box12bCode$,w2Box12CodePos,fn_line(8))
+	fnpa_txt(box12bAmt$,w2Box12AmtPos,fn_line(8))
+	fnpa_txt(k$(3),w2Col1,fn_line(9))
+	fnpa_txt(box12cCode$,w2Box12CodePos,fn_line(9))
+	fnpa_txt(box12cAmt$,w2Box12AmtPos,fn_line(9))
 	fnpa_txt(box12dCode$,w2Box12CodePos,fn_line(10))
 	fnpa_txt(box12dAmt$,w2Box12AmtPos,fn_line(10))
 	if w2Box14Amt<>0 then
@@ -513,10 +507,10 @@ def fn_line(lineNumber)
 		lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
 		if specialform2018=1 and lineNumber=12 then
 			lReturn+=.5
-			goto Thomasboroskip
+			goto LineFinis
 		else if specialform2018=1 and lineNumber=8 then 
 			lReturn+=2
-			goto Thomasboroskip
+			goto LineFinis
 		end if 
 		if lineNumber>=11 then 
 			! if env$('client')='Edinburg' then 
@@ -526,7 +520,7 @@ def fn_line(lineNumber)
 			! end if
 		end if
 	end if 
-	Thomasboroskip: ! skip here for special pre-printed forms
+	LineFinis: ! skip here for special pre-printed forms
 	fn_line=lReturn
 fnend
 def library fnFormCopyAwithBackgroundWarn

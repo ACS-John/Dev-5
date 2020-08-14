@@ -450,7 +450,7 @@ def fn_checkwater
 	CHECKWATER_FINIS: !
 	fn_checkend
 fnend
-def fn_checkelec
+def fn_checkElec
 	if er1=0 then fn_us1
 	if a(3)=0 then goto CHECKELEC_FINIS ! if no electric code skip
 	if trim$(sn$)="Electric" and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
@@ -480,7 +480,7 @@ def fn_checkelec
 	CHECKELEC_FINIS: !
 	fn_checkend
 fnend
-def fn_checkgas
+def fn_checkGas
 	if a(4)=0 then goto CHECKGAS_FINIS ! skip if no gas codes
 	sn$=srvnam$(4)
 	if trim$(srvnam$(4))<>"Gas" or mroll(2)=1 then
@@ -1821,7 +1821,7 @@ EnterReadings: ! r:
 		goto EnterReadings_Finis
 	end if
 
-	fn_checkgas
+	fn_checkGas
 	if passcheck=ckfail then
 		editmode=1
 		goto EnterReadings3
@@ -1830,7 +1830,7 @@ EnterReadings: ! r:
 		goto EnterReadings3 ! Then Goto EnterReadings_Finis
 	end if
 
-	fn_checkelec
+	fn_checkElec
 	if passcheck=ckfail then
 		editmode=1
 		goto EnterReadings3

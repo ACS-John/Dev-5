@@ -1,10 +1,10 @@
 ! Replace S:\acsUB\printbill
-	fn_setup
-	fnTop(program$)
+fn_setup
+fnTop(program$)
 ! r: Direct clients to the (basic) PrintBill_Basic routine (below) or their custom bill program
 	dim alternate_printbill_program$*256
 	alternate_printbill_program$=fnub_printbill_program$
-	if alternate_printbill_program$='(basic)' then ! or env$('client')='Thomasboro' then
+	if alternate_printbill_program$='(basic)' then
 		goto PrintBill_Basic
 	else
 		fnchain(fnub_printbill_program$,1)
