@@ -41,6 +41,7 @@ def fn_sreg_read(fieldName$*128,&fieldValue$; defaultIfNotRead$*128)
 		fieldValue$=defaultIfNotRead$ ! ''
 	end if
 	! pr 'load ';trim$(fieldName$);'=';fieldValue$
+	fn_sreg_read=val(fieldValue$) conv ignore
 fnend
 def fn_sreg_write(fieldName$*128,fieldValue$*256)
 	 if env$('ACSDeveloper')<>'' then
@@ -77,6 +78,7 @@ def library fnmcreg_read(mcr_fieldName$*128,&mcr_fieldValue$; mcr_defaultIfNotRe
 		mcr_fieldValue$=mcr_defaultIfNotRead$
 	end if
 	! pr 'load ';trim$(mcr_fieldName$);'=';mcr_fieldValue$
+	fnmcreg_read=val(mcr_fieldValue$) conv ignore
 fnend
 def library fnmcreg_write(mcw_fieldName$*128,mcw_fieldValue$*256)
 	fn_mcregSetup
@@ -145,6 +147,7 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 	if alsoUseDefaultIfReadBlank and trim$(rr_fieldValue$)='' then
 		rr_fieldValue$=rr_defaultIfNotRead$
 	end if
+	fn_regRead=val(rr_fieldValue$) conv ignore
 fnend
 def fn_regWrite(rw_fieldName$*128,rw_fieldValue$*256)
 	rw_fieldName$=rpad$(lwrc$(trim$(rw_fieldName$)),128)
@@ -156,6 +159,7 @@ def fn_regWrite(rw_fieldName$*128,rw_fieldValue$*256)
 	! pr 'write #reg_h'
 	REG_SAVE_XIT: !
 	! pr 'save ';trim$(rw_fieldName$);'=';rw_fieldValue$
+	fn_regWrite=val(rw_fieldValue$) conv ignore
 fnend
 def fn_regRename(fieldName_old$*128,fieldNameNew$*128)
 	fieldName_old$=rpad$(lwrc$(trim$(fieldName_old$)),128)
