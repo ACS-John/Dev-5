@@ -1,14 +1,10 @@
-! formerly S:\acsUB\ubDepChg
-! -- Customer Deposit Change Listing
-
 autoLibrary
 on error goto Ertn
 fnTop(program$)
 dim resp$(2)*20
-
- bd1=fnreg_read(env$('cap')&'.Starting Date',ignored$,'0101'&date$('yy'))
- ed1=fnreg_read(env$('cap')&'.Ending Date',ignored$,'1231'&date$('yy'))
-MENU1: ! r:
+bd1=fnreg_read(env$('cap')&'.Starting Date',ignored$,'0101'&date$('yy'))
+ed1=fnreg_read(env$('cap')&'.Ending Date',ignored$,'1231'&date$('yy'))
+Menu1: ! r:
 	fnTos
 	fnLbl(1,28," ",1,1)
 	fnLbl(1,1,"Starting Date:",16,1)
@@ -33,13 +29,24 @@ Report: ! r: start report
 	open #hDeposit2=fngethandle: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr",internal,outIn,relative
 	fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
 	fnopenprn
-	gosub HDR
+	gosub PrHeader
 	dim da(2)
-	! gosub LegacyWay
-	gosub NewWay
-goto DONE ! /r
-NEWPGE: pr #255: newpage : gosub HDR : continue
-HDR: ! r:
+	! ! r: new way whcich uses indexes
+	dim dp$*70
+	do
+		read #hDeposit2,using fDeposit2: k32$,dt1,dp$,dp1,dp2 eof FinisNewWay
+		if dt1>=bd1 or bd1=0 then
+			if dt1<=ed1 or ed1=0 then
+				pr #255,using 'form pos 1,c 12,C 16,x 1,pic(####/##/##bb),c 32,2*n 10.2': k32$,fnCustomerData$(k32$,'name')(1:16),dt1,dp$,dp1,dp2 pageoflow NewPge
+				t1=t1+dp2-dp1
+			end if
+		end if
+	loop
+	FinisNewWay: !
+	! /r
+goto Finis ! /r
+NewPge: pr #255: newpage : gosub PrHeader : continue
+PrHeader: ! r:
 	pg=pg+1
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
@@ -48,23 +55,11 @@ HDR: ! r:
 	pr #255: ""
 	pr #255: "{\ul Account No}  {\ul Name           }  {\ul    Date   }  {\ul Description                     }  {\ul  Before }  {\ul   After }"
 return ! /r
-DONE: ! r:
+Finis: ! r:
 	pr #255: ""
 	pr #255,using "Form POS 16,C 21,N 12.2": "Net Amount of Change:",t1
 	fncloseprn
 goto Xit ! /r
-NewWay: ! r: new way whcich uses indexes
-	dim dp$*70
-	do
-		read #hDeposit2,using fDeposit2: k32$,dt1,dp$,dp1,dp2 eof FinisNewWay
-		if dt1>=bd1 or bd1=0 then
-			if dt1<=ed1 or ed1=0 then
-				pr #255,using 'form pos 1,c 12,C 16,x 1,pic(####/##/##bb),c 32,2*n 10.2': k32$,fnCustomerData$(k32$,'name')(1:16),dt1,dp$,dp1,dp2 pageoflow NEWPGE
-				t1=t1+dp2-dp1
-			end if
-		end if
-	loop
-	FinisNewWay: !
-return ! /r
+
 Xit: fnXit
 include: Ertn

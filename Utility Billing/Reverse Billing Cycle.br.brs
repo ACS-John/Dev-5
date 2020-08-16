@@ -1,60 +1,77 @@
 forceRollBackNotMostRecentRec=0
 autoLibrary
 on error goto Ertn
-! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto Xit
+fnTop(program$)	
+
+! msgbox(env$('program_caption')&" is currently under construction.",env$('program_caption')&' Unavailable',"OK","Inf") : if env$('ACSDeveloper')='' then goto Xit
 fn_undobilling
 goto Xit
 def fn_undobilling ! main
-	dim billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),serviceName$(10)*20
+
+
+	debugAcct$='700710.02'
+
+
+	dim billingdate$*10
+	dim msgtext$(1)*1000
+	dim readings(12),charges(12)
+	dim breakdown(10)
+	dim readingdates(2)
+	dim serviceName$(10)*20
 	do_all=1 : do_route=2 : do_individual=3
-	fnTop(program$)
-	fnGetServices(mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
-	
+	fnGetServices(mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$)
+
 	ASK_OPTIONS: !
-	cont=fn_askOptions(route,billingdate$) ! collect user options
-	if ckey=5 then goto Xit_FN_UNDOBILLING
+	doContinue=fn_askOptions(route,billingdate$) ! collect user options
+	if ckey=5 then goto XitUndoBilling
 	if trim$(billingdate$)="0" then
 		mat msgtext$(1)
 		msgtext$(1)=("You must enter a billing date")
 		fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
 		goto ASK_OPTIONS
 	end if
- 
-	mat msgtext$(3)
-	msgtext$(1) = "Warning: this action will reduce the balance and balance breakdown of all selected customers"
-	msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
-	msgtext$(3) = "Are you sure?"
-	fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
-	if (answer$<>"Yes") then cont=0
-	
+
+	if filter=do_individual then
+		doContinue=fnConfirm('Reverse Billing Cycle for an Individual Customer', 'This action will reduce the balance and balance breakdown of customer '&cust$)
+	else
+		doContinue=fnConfirm('Reverse Billing Cycle for Multiple Customers', 'This action will reduce the balance and balance breakdown of all selected customers')
+	end if
+
 	undoCount=0
-	if cont then
-		dim acct$*10,custname$*30,trcust$(3)*10,trdate(3),tramt(3),srvamt1(11),srvamt2(11),srvamt3(11),srvread1(6),srvread2(6),srvread3(6),trbal(3)
-		CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
-		TRANSFORM: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
+	if doContinue then
+		dim acct$*10,custname$*30
+		dim trcust$(3)*10,trdate(3),tramt(3)
+		dim srvamt1(11),srvamt2(11),srvamt3(11)
+		dim srvread1(6),srvread2(6),srvread3(6)
+		dim trbal(3)
+		Fcustomer: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
+		Ftrans: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
 		fnAutomatedSavePoint('before')
-		fn_openfiles ! open data files
-		fnopenprn : fn_printheader
+		! open data files
+		open #h_customer=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+		open #hTrans=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
+		fnopenprn
+		fn_printHeader
 		do
-			NEXT_CUSTOMER: !
 			if filter=do_individual then
-				read #h_customer,using CUSTFORM,key=lpad$(cust$,kln(h_customer)): acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
+				read #h_customer,using Fcustomer,key=lpad$(cust$,kln(h_customer)): acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 			else
-				read #h_customer,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CUSTDONE ! get every customer one at a time
+				read #h_customer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CustDone ! get every customer one at a time
 			end if
-					! if trim$(acct$)='1000000.01' then pause
+			! if trim$(acct$)='1000000.01' then pause
 			if filter<>do_route or custroute=route then ! if a route was selected and customer doesn't match, skip customer
-				if fn_get3trans(acct$,billingdate$,lastdate,priordate,priordate2) then ! get latest and 2 prior charge transactions for this customer
+				! if trim$(acct$)=debugAcct$ then pr ' just before call to fn_get3trans.' : pause
+				if fn_get3trans(acct$,billingdate$,lastDate1,lastDate2,lastDate3) then ! get latest and 2 prior charge transactions for this customer
 					! get the three latest transactions and their data; most recent is in first array element, prior in second, prior2 in third
-					if priordate>0 then
-						read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(priordate)&"1": trcust$(2),trdate(2),tramt(2),mat srvamt2,mat srvread2,trbal(2) nokey NEXT_CUSTOMER
+					if lastDate2>0 then
+						read #hTrans,using Ftrans,key=lpad$(acct$,10)&str$(lastDate2)&"1": trcust$(2),trdate(2),tramt(2),mat srvamt2,mat srvread2,trbal(2) nokey NEXT_CUSTOMER
 					end if
-					if priordate2>0 then
-						read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(priordate2)&"1": trcust$(3),trdate(3),tramt(3),mat srvamt3,mat srvread3,trbal(3) nokey NEXT_CUSTOMER
+					if lastDate3>0 then
+						read #hTrans,using Ftrans,key=lpad$(acct$,10)&str$(lastDate3)&"1": trcust$(3),trdate(3),tramt(3),mat srvamt3,mat srvread3,trbal(3) nokey NEXT_CUSTOMER
 					end if
 					undoCount+=1
-					read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(lastdate)&"1": trcust$(1),trdate(1),tramt(1),mat srvamt1,mat srvread1,trbal(1)
-					if priordate>0 then
+					read #hTrans,using Ftrans,key=lpad$(acct$,10)&str$(lastDate1)&"1": trcust$(1),trdate(1),tramt(1),mat srvamt1,mat srvread1,trbal(1)
+					if lastDate2>0 then
 						! update readings
 						readings(4)-=readings(3) ! roll back YTD usage
 						readings(8)-=readings(7)
@@ -65,7 +82,7 @@ def fn_undobilling ! main
 						readings(7)=srvread2(4)
 						readings(9)=srvread2(5)
 						readings(11)=srvread2(6)
-						if priordate2>0 then ! update all prior readings
+						if lastDate3>0 then ! update all prior readings
 							readings(2)=srvread3(1)
 							readings(6)=srvread3(3)
 							readings(10)=srvread3(5)
@@ -87,26 +104,28 @@ def fn_undobilling ! main
 						balance-=srvamt1(11)
 						! update reading dates; guess at prior reading date
 						readingdates(2)=readingdates(1)
-						readingdates(1)=val(date$(days(priordate2,"ccyymmdd"),"mmddyy"))
+						readingdates(1)=val(date$(days(lastDate3,"ccyymmdd"),"mmddyy"))
 						! update last billing date
-						if priordate>lastbilling then lastbilling=priordate
+						if lastDate2>lastbilling then lastbilling=lastDate2
 					else
 						mat readings(1:12)=(0) : mat charges(1:12)=(0) : balance=0 : chargedate=0 : mat breakdown(1:10)=(0) : mat readingdates(1:2)=(0)
 					end if
 					! rewrite customer master record
-					rewrite #h_customer,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
+					rewrite #h_customer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 					! delete rolled-back transaction
-					delete #h_trans:
-					pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz)": trcust$(1),str$(trdate(1)) pageoflow PRINTPAGEOVERFLOW
+					delete #hTrans:
+					pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz)": trcust$(1),str$(trdate(1)) pageoflow PrintPageOverflow
 				end if
 			end if
-		loop while filter<>do_individual
-		goto CUSTDONE
-		PRINTPAGEOVERFLOW: ! r:
+			NEXT_CUSTOMER: !
+			! pr 'ereiamjh' : pause
+			if filter=do_individual then goto CustDone
+		loop
+		PrintPageOverflow: ! r:
 		 pr #255: newpage
-		 fn_printheader
+		 fn_printHeader
 		continue ! /r
-		CUSTDONE: !
+		CustDone: !
 		if filter=do_all then
 			lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
 			fnLastBillingDate(lastbilling,1)
@@ -118,34 +137,34 @@ def fn_undobilling ! main
 		if filter=do_individual then goto ASK_OPTIONS
 	end if
 	!
-	XIT_FN_UNDOBILLING: !
-fnend  ! fn_UndoBilling
+	XitUndoBilling: !
+fnend
 Xit: fnXit
 def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return selections
 	dim screen_name$*100,resp$(20)*255
 	fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 	filter=0 : route=0 : cust$=''
-	OPTIONS_TOS: !
-	fnTos(screen_name$="UndoBillingOptions")
+	ScreenOptions: !
+	fnTos
 	rcnt=0 : lc=0 : pos_col2=16
 	lc+=1
 	fnLbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
 	lc+=1
-! billing date text box
+	! billing date text box
 	fnLbl(lc+=1,2,"Billing Date:",13,1)
 	fnTxt(lc,pos_col2,8,0,0,"1001")
 	resp_billing_date=rcnt+=1
 	if resp$(resp_billing_date)='' then resp$(resp_billing_date)=str$(lastbilling)
- 
+
 	lc+=1
 	lc+=1
 	fnLbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
 	lc+=1
- 
+
 	fnOpt(lc+=1,1,'All') ! fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	resp_opt_all=rcnt+=1
 	if resp$(resp_opt_all)='' then resp$(resp_opt_all)='False'
-!
+
 	fnOpt(lc+=1,1,'Route:')
 	resp_opt_route=rcnt+=1
 	if resp$(resp_opt_route)='' then resp$(resp_opt_route)='False'
@@ -177,57 +196,72 @@ def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return
 		else if resp$(resp_opt_route)='True' then
 			filter=do_route
 			route=val(resp$(resp_route))
-			if route=0 then pr bell;'please select a route' : goto OPTIONS_TOS
+			if route=0 then pr bell;'please select a route' : goto ScreenOptions
 		else if resp$(resp_opt_individual)='True' then
 			filter=do_individual
 			cust$=trim$(resp$(resp_individual)(1:10))
-			if trim$(cust$)='' then pr bell;'please select a customer' : goto OPTIONS_TOS
+			if trim$(cust$)='' then pr bell;'please select a customer' : goto ScreenOptions
 		end if
-!     pr 'answers retreived' : pause  !
 		fn_askOptions=1
 	end if
 fnend  ! fn_askOptions
-def fn_openfiles
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
-	open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
-fnend
 def fn_close_files
 	close #h_customer: ioerr ignore
-	close #h_trans: ioerr ignore
+	close #hTrans: ioerr ignore
 fnend
-def fn_get3trans(acct$,billingdate$,&lastdate,&priordate,&priordate2)
-	dim transacct$*10,transacct2$*10
-	CUSTTRANSFORM: form c 10,n 8,n 1
-	!
-	lastdate=0 : priordate=0 : priordate2=0
-	dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then dateshouldbe+=1000000
-	!
+def fn_get3trans(acct$,billingdate$,&lastDate1,&lastDate2,&lastDate3; ___,returnN,recPriorRead,transRec)
+	! requres local: hTrans, and a whole lot more
+	lastDate1=lastDate2=lastDate3=0
+	dateShouldBe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") ! if str$(dateShouldBe)(1:2)="19" then dateShouldBe+=1000000
+
 	! first, check for the transaction for this customer on the date specified for rollback; if not found, exit
-	read #h_trans,using CUSTTRANSFORM,key=lpad$(acct$,10)&str$(dateshouldbe)&"1": transacct$,transdate,transcode eof GOTTRANS nokey GOTTRANS
-	if forceRollBackNotMostRecentRec then goto NOLATERTRANS
+	dim transAcct$*10
+	read #hTrans,using F_CustTrans,key=lpad$(acct$,10)&str$(dateShouldBe)&"1": transAcct$,transDate,transCode eof GotTrans nokey GotTrans
+	F_CustTrans: form c 10,n 8,n 1
+	if forceRollBackNotMostRecentRec then goto NoLaterTrans
 	! next, see if there are any later charge transactions; if so, exit (cannot roll back any date except the most recent)
-	read #h_trans,using CUSTTRANSFORM,next: transacct2$,transdate,transcode eof NOLATERTRANS
-	if transcode=1 and transacct2$=transacct$ then goto GOTTRANS
-	!
-	NOLATERTRANS: !
+	dim transAcct2$*10
+	read #hTrans,using F_CustTrans,next: transAcct2$,transDate,transCode eof NoLaterTrans
+
+	if transCode=1 and transAcct2$=transAcct$ then goto GotTrans
+
+	NoLaterTrans: !
+	transRecProcessedCount=0
+	mat transRecProcessed(transRecProcessedCount)
 	do  ! finally, read back up file to get 2 prior transaction dates
-		lastdate=dateshouldbe
-		read #h_trans,using CUSTTRANSFORM,prior: transacct2$,transdate,transcode eof GOTTRANS
-		if transacct2$=transacct2$ and transcode=1 and transdate<lastdate then
-			if priordate=0 then
-				priordate=transdate
-			else if priordate2=0 then
-				priordate2=transdate
+		lastDate1=dateShouldBe
+		read #hTrans,using F_CustTrans,prior: transAcct2$,transDate,transCode eof GotTrans
+		!		! r: test for looping in cases where all dates can not be found
+		!		transRec=rec(hTrans)
+		!		if trim$(acct$)=debugAcct$ then pr '  fn_get3trans read rec '&str$(transRec)
+		!		if srch(mat transRecProcessed,transRec)>0 then ! already prcoessed this record
+		!			pr ' magic exit' : pause
+		!			goto GotTrans
+		!		else
+		!			transRecProcessedCount+=1
+		!			mat transRecProcessed(transRecProcessedCount)
+		!			transRecProcessed(transRecProcessedCount)=transRec
+		!		end if
+		!		! did not work   use above isntead    if rec(hTrans)=0 then goto GotTrans ! recPriorRead then goto GotTrans else recPriorRead=rec(hTrans) ! it's like EoF, but for the start of a file (because we're using ,prior)
+		!		! /r
+
+		if transAcct$=transAcct2$ and transCode=1 and transDate<lastDate1 then
+			if lastDate2=0 then
+				lastDate2=transDate
+			else if lastDate3=0 then
+				lastDate3=transDate
 			else
-				goto GOTTRANS
+				goto GotTrans
 			end if
 		end if
-	loop while transacct2$=transacct$ and (priordate=0 or priordate2=0)
-	!
-	GOTTRANS: !
-	if lastdate=0 then let fn_get3trans=0 else let fn_get3trans=1
+	loop while transAcct$=transAcct2$ and (lastDate2=0 or lastDate3=0)
+
+	GotTrans: !
+	if lastDate1=0 then returnN=0 else returnN=1
+	if trim$(acct$)=debugAcct$ then pr '  fn_get3trans returnning '&str$(returnN)&' and last dates: 1='&str$(lastDate1)&' 2='&str$(lastDate2)&' 3='&str$(lastDate3)
+	fn_get3trans=returnN
 fnend
-def fn_printheader
+def fn_printHeader
 	pg+=1
 	pr #255: "Reverse Calculation Status Report"
 	pr #255: "Page "&str$(pg)
