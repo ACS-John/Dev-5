@@ -231,7 +231,7 @@ fnend
 
 ! /r
 ! r: Confirm
-def library fnConfirm(Verb$*40; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
+def library fnConfirm(Verb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
 	library 'S:\Core\Confirm.br': fnConfirm
 	fnConfirm=fnConfirm(Verb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
 fnend

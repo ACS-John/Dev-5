@@ -261,6 +261,15 @@ def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 	end if
 	! pr 'rewriting balance '&str$(cN(c_balance))&' for '&origTran$(trans_acct)
 	! pause
+	
+	! cN(c_lastBillingDate) mmddyy
+	customerLastBillingDay=days(cN(c_lastBillingDate),'mmddyy')
+	transactionDay=days(origTranN(trans_tdate),'ccyymmdd')
+	if customerLastBillingDay=transactionDay then
+		pr 'need to roll back customer last billing date' : pause
+		! cN(c_lastBillingDate)=
+	end if
+	
 	rewrite #hCustomer,using form$(hCustomer),key=origTran$(trans_acct): mat c$,mat cN
 	fnclosefile(hCustomer,'UB Customer')
 	! /r
