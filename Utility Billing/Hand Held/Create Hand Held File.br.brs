@@ -2,8 +2,8 @@
 ! -- Tranfer Data From Computer to Hand Held
 fn_setup
 fnTop(program$)
-open #h_customer_i1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-open #h_customer_i5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+open #h_customer_i1=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+open #h_customer_i5=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
 goto Screen1
 
 Screen1: ! r:
@@ -527,18 +527,18 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		dim tmpCity$*64,tmpState$*64,tmpZip$*64
 		fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 		fn_record_init(tab$)                                                     ! BadgerBeacon Name      ACS Name (if different)
-		fn_record_addc(10,account$)                                              ! Account_ID             Account Number
-		fn_record_addc(30,fnCustomerData$(account$,'name', 1))                   ! Account_Full_Name      Customer Name
-		fn_record_addc(13,extra$(2))                                             ! Account_Phone          Phone Number
-		fn_record_addc(16,srvCode$)                                              ! Service_Point_ID
-		fn_record_addc(11,fn_meterInfo$('Location_ID',account$,srvCode$))        ! Location_ID
-		fn_record_addc(30,fn_meterInfo$('address',account$,srvCode$))            ! Location_Address_Line1
-		fn_record_addc(40,tmpCity$)                                              ! Location_City
-		fn_record_addc(14,tmpState$)                                             ! Location_State
-		fn_record_addc(12,tmpZip$)                                               ! Location_Zip
-		fn_record_addc(18,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Location_Latitude
-		fn_record_addc(18,fn_meterInfo$('Longitude',account$,srvCode$))          ! Location_Longitude
-		fn_record_addn(19,route)                                                 ! Service_Point_Route    Route Number
+		fn_record_addC(10,account$)                                              ! Account_ID             Account Number
+		fn_record_addC(30,fnCustomerData$(account$,'name', 1))                   ! Account_Full_Name      Customer Name
+		fn_record_addC(13,extra$(2))                                             ! Account_Phone          Phone Number
+		fn_record_addC(16,srvCode$)                                              ! Service_Point_ID
+		fn_record_addC(11,fn_meterInfo$('Location_ID',account$,srvCode$))        ! Location_ID
+		fn_record_addC(30,fn_meterInfo$('address',account$,srvCode$))            ! Location_Address_Line1
+		fn_record_addC(40,tmpCity$)                                              ! Location_City
+		fn_record_addC(14,tmpState$)                                             ! Location_State
+		fn_record_addC(12,tmpZip$)                                               ! Location_Zip
+		fn_record_addC(18,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Location_Latitude
+		fn_record_addC(18,fn_meterInfo$('Longitude',account$,srvCode$))          ! Location_Longitude
+		fn_record_addN(19,route)                                                 ! Service_Point_Route    Route Number
 		fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Service_Point_Latitude
 		fn_record_addC(23,fn_meterInfo$('Longitude',account$,srvCode$))          ! Service_Point_Longitude
 		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_ID                  (meter number)
@@ -546,11 +546,11 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		fn_record_addC(15,'')                                                    ! Register_Number           (blank)                  (meter number)
 		fn_record_addC(24,'GAL')                                                 ! Register_Unit_Of_Measure
 		fn_record_addC(19,fn_meterInfo$('reading multipler',account$,srvCode$))  ! Register_Resolution
-		fn_record_addc(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
+		fn_record_addC(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
 		fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
-		fn_record_addn(13,sequence)                                              ! Read_Sequence                Sequence
-		fn_record_addn(15,fn_unusualUsage('high',account$,srvCode$, 1))
-		fn_record_addn(14,fn_unusualUsage('low' ,account$,srvCode$, 1))
+		fn_record_addN(13,sequence)                                              ! Read_Sequence                Sequence
+		fn_record_addN(15,fn_unusualUsage('high',account$,srvCode$, 1))
+		fn_record_addN(14,fn_unusualUsage('low' ,account$,srvCode$, 1))
 
 		fn_record_write(h_out)
 fnend

@@ -55,7 +55,7 @@ Utilities
 >Extend Time Card                                ^ acsPR\TimeCard
 >Payroll Departmental Register                   ^ acsPR\newprReg2
 >Fix Wording On Grids                            ^ acspr\pulllay
->Check State Calculation                         ^ Payroll\*
+>Check Payroll Calculation                       ^ Payroll\*
 
 Payroll Job Cost Add-On                    ^                                            ^ P2
 >File                                      ^                                            ^ P2
