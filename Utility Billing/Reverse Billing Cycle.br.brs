@@ -6,11 +6,9 @@ fnTop(program$)
 ! msgbox(env$('program_caption')&" is currently under construction.",env$('program_caption')&' Unavailable',"OK","Inf") : if env$('ACSDeveloper')='' then goto Xit
 fn_undobilling
 goto Xit
-def fn_undobilling ! main
+def fn_undobilling
 
-
-	debugAcct$='700710.02'
-
+	! debugAcct$='700710.02'
 
 	dim billingdate$*10
 	dim msgtext$(1)*1000
@@ -118,7 +116,6 @@ def fn_undobilling ! main
 				end if
 			end if
 			NEXT_CUSTOMER: !
-			! pr 'ereiamjh' : pause
 			if filter=do_individual then goto CustDone
 		loop
 		PrintPageOverflow: ! r:
@@ -133,10 +130,11 @@ def fn_undobilling ! main
 		mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
 		fnmsgbox(mat msgtext$,answer$,"Report",0)
 		fncloseprn
-		fn_close_files
+		close #h_customer: ioerr ignore
+		close #hTrans: ioerr ignore
 		if filter=do_individual then goto ASK_OPTIONS
 	end if
-	!
+
 	XitUndoBilling: !
 fnend
 Xit: fnXit
@@ -170,14 +168,14 @@ def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return
 	if resp$(resp_opt_route)='' then resp$(resp_opt_route)='False'
 	fncmbrt2(lc,pos_col2,1)
 	resp_route=rcnt+=1
-! if resp$(resp_route)='' then resp$(resp_route)="[All]"
+	! if resp$(resp_route)='' then resp$(resp_route)="[All]"
 
 	fnOpt(lc+=1,1,'Individual:')
 	resp_opt_individual=rcnt+=1
 	if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='True'
 	fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
 	resp_individual=rcnt+=1
-! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
+	! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
 
 	fnCmdSet(2) ! show "Next" and "Cancel" buttons
 	fnAcs(mat resp$,ckey) ! run the screen
@@ -205,10 +203,6 @@ def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return
 		fn_askOptions=1
 	end if
 fnend  ! fn_askOptions
-def fn_close_files
-	close #h_customer: ioerr ignore
-	close #hTrans: ioerr ignore
-fnend
 def fn_get3trans(acct$,billingdate$,&lastDate1,&lastDate2,&lastDate3; ___,returnN,recPriorRead,transRec)
 	! requres local: hTrans, and a whole lot more
 	lastDate1=lastDate2=lastDate3=0
@@ -231,20 +225,6 @@ def fn_get3trans(acct$,billingdate$,&lastDate1,&lastDate2,&lastDate3; ___,return
 	do  ! finally, read back up file to get 2 prior transaction dates
 		lastDate1=dateShouldBe
 		read #hTrans,using F_CustTrans,prior: transAcct2$,transDate,transCode eof GotTrans
-		!		! r: test for looping in cases where all dates can not be found
-		!		transRec=rec(hTrans)
-		!		if trim$(acct$)=debugAcct$ then pr '  fn_get3trans read rec '&str$(transRec)
-		!		if srch(mat transRecProcessed,transRec)>0 then ! already prcoessed this record
-		!			pr ' magic exit' : pause
-		!			goto GotTrans
-		!		else
-		!			transRecProcessedCount+=1
-		!			mat transRecProcessed(transRecProcessedCount)
-		!			transRecProcessed(transRecProcessedCount)=transRec
-		!		end if
-		!		! did not work   use above isntead    if rec(hTrans)=0 then goto GotTrans ! recPriorRead then goto GotTrans else recPriorRead=rec(hTrans) ! it's like EoF, but for the start of a file (because we're using ,prior)
-		!		! /r
-
 		if transAcct$=transAcct2$ and transCode=1 and transDate<lastDate1 then
 			if lastDate2=0 then
 				lastDate2=transDate
@@ -258,7 +238,6 @@ def fn_get3trans(acct$,billingdate$,&lastDate1,&lastDate2,&lastDate3; ___,return
 
 	GotTrans: !
 	if lastDate1=0 then returnN=0 else returnN=1
-	if trim$(acct$)=debugAcct$ then pr '  fn_get3trans returnning '&str$(returnN)&' and last dates: 1='&str$(lastDate1)&' 2='&str$(lastDate2)&' 3='&str$(lastDate3)
 	fn_get3trans=returnN
 fnend
 def fn_printHeader

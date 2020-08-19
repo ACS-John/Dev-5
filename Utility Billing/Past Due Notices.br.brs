@@ -35,16 +35,16 @@ on error goto Ertn
 		x=len(at$(j)) : y=z-x
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
-!
+
 	deltype=0 : fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : deltype=val(deltype$) conv ignore
-!
+
 	open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed
 	open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed
 	F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 goto MENU1 ! /r
 MENU1: ! r:
-	fnTos(sn$="UBPdNot1")
+	fnTos
 	respc=0
 	fnLbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
 	fnTxt(2,40,8,0,1,"1")
@@ -87,7 +87,7 @@ MENU1: ! r:
 		resp$(a)=""
 	next a
 	fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
-	goto UBFORM ! /r
+goto UBFORM ! /r
 
 PRINT_NEXT: ! r: the main read it and pr it routine
 	if sel_indv$="Y" then goto ASK_NEXT_ACT
@@ -102,15 +102,15 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	! pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
 	if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
 	if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
-! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
+	! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
 	if deltype=1 and f=d1 and bal>0 then goto READ_ADRBIL ! pr ALL CUSTOMERS WHO HAVE NOT PAID THEIR MOST CURRENT BILL
 	if deltype=2 and f=d1 and bal>g(11) then goto READ_ADRBIL ! pr all customers who owe more than last times bill
-! IF DELTYPE=2 AND F<>D1 AND BAL>0 THEN GOTO READ_ADRBIL ! pr all customers who owe a prior bill but didn't get billed this time
+	! IF DELTYPE=2 AND F<>D1 AND BAL>0 THEN GOTO READ_ADRBIL ! pr all customers who owe a prior bill but didn't get billed this time
 	if deltype=5 and bal>0 then goto READ_ADRBIL
 	if deltype=6 and f=d1 then goto READ_ADRBIL ! pr all customers who were billed last billing cycle
-	goto PRINT_NEXT
-
-	READ_ADRBIL: !
+goto PRINT_NEXT ! /r
+	
+READ_ADRBIL: ! r:
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
 
@@ -122,8 +122,8 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 		fn_french_settlement_gas
 	else if env$('client')="Blucksberg" then
 		fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$,z$,mat addr$,bal,d1)
-! else if env$('client')="Merriam Woods" then
-!   fn_merriam_woods
+	! else if env$('client')="Merriam Woods" then
+	!   fn_merriam_woods
 	else if do_print_std_form=1 then
 		fn_print_standard_form
 	else
@@ -131,17 +131,16 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	end if
 	fn_report_add
 	! fn_listFile_add(z$)
-	goto PRINT_NEXT
-! /r
+goto PRINT_NEXT ! /r
 def fn_open_template
 	if ~h_template then
-		open #h_template:=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative
+		open #h_template=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative
 	end if
 	fn_open_template=h_template
 fnend  ! fn_open_template
 def fn_prnt1
 	if ~h_prnt1 then
-		open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
+		open #h_prnt1=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
 	end if
 	fn_bldr1
 	r=0
@@ -178,7 +177,7 @@ def fn_prnt1
 	P1_L2450: !
 	p1=p4+1
 	goto P1_L2320
-	!
+
 	P1_L2480: !
 	! if uprc$(ln$(p2+1:p2+2))><"B4" then
 	! end if
@@ -309,7 +308,7 @@ def fn_report_close
 	if h_ra then
 		dim ra_line$*256
 		close #h_ra:
-		open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input
+		open #h_ra: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256',display,input
 		fnopenprn( 'Summary')
 		gosub RC_HDR
 		do
@@ -332,59 +331,59 @@ def fn_report_close
 		pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 		pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
 		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
-	return  ! RC_HDR
+	return  ! /r
 	RC_XIT: !
-fnend  ! fn_report_close
+fnend 
 def fn_listFile_add(z$)
 	if ~h_lf then
-		open #h_lf:=fngethandle: 'Name='&env$('temp')&'\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
-	end if  ! ~h_ra
+		open #h_lf:=fngethandle: 'Name=[temp]\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
+	end if
 	pr #h_lf,using 'form pos 1,c 10': z$
 fnend
 def fn_report_add
 	if ~h_ra then
-		open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output
+		open #h_ra:=fngethandle: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256,replace',display,output
 		rc_page=0
 	end if  ! ~h_ra
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
 
 fnend
 def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
-		if a(1)=0 then water$="     " else water$="Water"
-		if a(4)=0 then gas$="   " else gas$="Gas"
-		fnopenprn
-		pr #255: ''
-		pr #255: ''
-		pr #255: ''
-		pr #255: ''
-		pr #255,using "Form pos 7,C 40": trim$(at$(1))
-		pr #255,using "Form pos 7,C 40": trim$(at$(2))
-		pr #255,using "Form pos 7,C 40": trim$(at$(3))
-		pr #255: ''
-		pr #255: ''
-		pr #255: ''
-		pr #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
-		pr #255: ''
-		pr #255,using "Form pos 9,C 73": mis$(1)
-		pr #255,using "Form pos 9,C 73": mis$(2)
-		pr #255,using "Form pos 9,C 73": mis$(3)
-		pr #255,using "Form pos 9,C 73": mis$(4)
-		pr #255: ''
-		pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&cnvrt$('pic(###,##z.zz)',reconnect_fee)
-		pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
-		pr #255: ''
-		pr #255,using "Form pos 13,C 11,N 10.2": "Amount Due:",bal
-		pr #255: ''
-		pr #255: ''
-		pr #255: ''
-		pr #255: ''
-		pr #255,using "Form pos 50,C 30": addr$(1)
-		pr #255,using "Form pos 50,C 30": addr$(2)
-		pr #255,using "Form pos 50,C 30": addr$(3)
-		pr #255,using "Form pos 50,C 30": addr$(4)
-		! 4 more lines from this point before next page
-		pr #255: newpage
-	fnend
+	if a(1)=0 then water$="     " else water$="Water"
+	if a(4)=0 then gas$="   " else gas$="Gas"
+	fnopenprn
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 7,C 40": trim$(at$(1))
+	pr #255,using "Form pos 7,C 40": trim$(at$(2))
+	pr #255,using "Form pos 7,C 40": trim$(at$(3))
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
+	pr #255: ''
+	pr #255,using "Form pos 9,C 73": mis$(1)
+	pr #255,using "Form pos 9,C 73": mis$(2)
+	pr #255,using "Form pos 9,C 73": mis$(3)
+	pr #255,using "Form pos 9,C 73": mis$(4)
+	pr #255: ''
+	pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&cnvrt$('pic(###,##z.zz)',reconnect_fee)
+	pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
+	pr #255: ''
+	pr #255,using "Form pos 13,C 11,N 10.2": "Amount Due:",bal
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255: ''
+	pr #255,using "Form pos 50,C 30": addr$(1)
+	pr #255,using "Form pos 50,C 30": addr$(2)
+	pr #255,using "Form pos 50,C 30": addr$(3)
+	pr #255,using "Form pos 50,C 30": addr$(4)
+	! 4 more lines from this point before next page
+	pr #255: newpage
+fnend
 def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat addr$,bal,d1; ___,water$*5,gas$*3) ! 9/10/2018
 	fnopenprn
 	pr #255: ''
@@ -528,7 +527,7 @@ UBFORM: ! r: pr FROM TEXT FILE
 	next fl1
 	mat file_rtf$(fl1) : file_rtf$(fl1)="(Pre-Printed)"
 	mat file_rtf$(fl1+=1) : file_rtf$(fl1)="(Reminder)"
-	goto SELECT_SCREEN ! /r
+goto SELECT_SCREEN ! /r
 !  r: def fn_merriam_woods
 !     library 'S:\acsUB\PrintBill_Merriam_Woods': fnpast_due_notice,fnpast_due_notice_finis
 ! ! pre-print calculations__________________________________
@@ -552,7 +551,7 @@ UBFORM: ! r: pr FROM TEXT FILE
 ! /r  fnend
 SELECT_SCREEN: ! r:
 	fn_report_close
-	fnTos(sn$="Select_and_Book")
+	fnTos
 	mat resp$=("")
 	respc=0
 	fnLbl(1,1,"File Name:",28,1)
@@ -632,7 +631,7 @@ SELECT_SCREEN: ! r:
 	else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then
 		goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
 	else if ckey=4 then ! r: Add
-		fnTos(sn$="Select_Name")
+		fnTos
 		respc=0
 		fnLbl(1,1,"File Name:",15,1)
 		fnTxt(1,17,40,64,1,"")
@@ -659,8 +658,8 @@ PRINTING_BEGIN: ! r:
 	checkcounter=0
 	if trim$(sz$)="" and sel_indv$="Y" then goto ASK_NEXT_ACT ! selected to pick specific account but did not have one on screen
 	if trim$(sz$)<>"" and sel_indv$="Y" then z$=sz$: goto READ_CUSTOMER ! selected to pirnt specific account and had an account on screen
-! if rtrm$(sz$)="" then goto L1330
-!  L1330: !
+	! if rtrm$(sz$)="" then goto L1330
+	!  L1330: !
 	if bk1=0 and trim$(sz$)="" then goto NEXT_RECORD
 	if bk1=0 then goto L1360
 	if trim$(sz$)="" or bk1>0 then ! restore_for_route
@@ -669,8 +668,8 @@ PRINTING_BEGIN: ! r:
 	else ! restore_for_customer
 		restore #customer1,key=sz$: nokey PRINTING_BEGIN
 	end if
-L1360: !
-	goto NEXT_RECORD ! /r
+	L1360: !
+goto NEXT_RECORD ! /r
 NEXT_RECORD: ! r:
 	if sel_indv$="Y" then
 		z$=lpad$(trim$(resp$(2)(1:10)),10)
@@ -679,7 +678,7 @@ NEXT_RECORD: ! r:
 		goto PRINT_NEXT
 	end if  ! /r
 ASK_NEXT_ACT: ! r:
-	fnTos(sn$="UBPdNot-5")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Next Account:",18,1)
 	fncmbact(1,20,1)
@@ -694,14 +693,14 @@ ASK_NEXT_ACT: ! r:
 		sz$=lpad$(trim$(resp$(1)(1:10)),10)
 		goto READ_CUSTOMER ! if ckey=1
 	end if
-!
-READ_CUSTOMER: !
+! /r
+READ_CUSTOMER: ! r:
 	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
-	goto READ_ADRBIL ! /r
+goto READ_ADRBIL ! /r
 EO_CUSTOMER: ! r:
-! if env$('client')='Merriam Woods' then
-!   fnpast_due_notice_finis
-! else
+	! if env$('client')='Merriam Woods' then
+	!   fnpast_due_notice_finis
+	! else
 	if ~reminder then
 		restore #customer1: ! Close #customer1: Ioerr 980
 		granby_print_count=0
@@ -716,8 +715,8 @@ EO_CUSTOMER: ! r:
 	close #customer1: ioerr ignore
 	customer1=0
 	fnpa_finis
-! end if
-!
+	! end if
+
 	if h_prnt1 then
 		close #h_prnt1: : h_prnt1=0
 		fnEditFile('atlantis',tmp_rtf_filename$)

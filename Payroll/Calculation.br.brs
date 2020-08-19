@@ -787,7 +787,7 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 	end if
 
 	returnN+=addOnSt
-
+	returnN=max(0,returnN)
 	fn_stateTax=returnN
 	! pr 'statetax is returning ';returnN : pause
 fnend
@@ -1576,7 +1576,7 @@ def fn_payPeriodsPerYear(payCode; ___,returnN)
 	end if
 	fn_payPeriodsPerYear=returnN
 fnend
-def library fnCheckStateCalculation(; ___, _
+def library fnCheckPayrollCalculation(; ___, _
 	returnN, _
 	lc,respc,col1_len, _
 	marital,payCode,allowances,stateAddOn,w4Year$,wages,pppy,fedWh, _
@@ -1712,7 +1712,7 @@ def library fnCheckStateCalculation(; ___, _
 	XitCheckStateCalculation: !
 	fn_setupCloseFiles
 	returnN=0
-	fnCheckStateCalculation=returnN
+	fnCheckPayrollCalculation=returnN
 fnend
 
 def fn_setup

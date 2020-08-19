@@ -5,7 +5,7 @@
 ! Data\Finan
 !  have ready by monday.
 fn_setup
-fnCopy('FINAN.INT//6','Finan(beforePrePurge'&date$('ccyymmdd')&srep$(time$,':','')&'.int//6')
+fnCopy('FINAN.INT//6','Finan(beforePrePurge[datetime].int//6')
 open #hFinan:=fngethandle: "NAME=FINAN.INT//6,Shr",internal,outin,relative
 do
 	read #hFinan,using finan_formall$: mat finan_data$,mat finan_data eof EoFinan

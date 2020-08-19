@@ -1527,9 +1527,9 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
-	def library fnCheckStateCalculation
-		library 'S:\Payroll\Calculation.br': fnCheckStateCalculation
-		fnCheckStateCalculation=fnCheckStateCalculation
+	def library fnCheckPayrollCalculation
+		library 'S:\Payroll\Calculation.br': fnCheckPayrollCalculation
+		fnCheckPayrollCalculation=fnCheckPayrollCalculation
 	fnend
 	def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
 		! dim marriedOption$(0)*58

@@ -9,8 +9,8 @@ def fn_Copy(from$*256,to$*256; new_record_length,options$)
 	!           errorNotify - displays a message box when an error is detected letting the user know of the failure and then proceeds as normal
 
 	from$=fnSrepEnv$(from$)
+	to$=srep$(to$,'[datetime]',date$('ccyymmdd')&srep$(time$,':',''))
 	to$=fnSrepEnv$(to$)
-
 	from$=trim$(from$,'"')
 	to$=trim$(to$,'"')
 	options$=rtrm$(options$)&' '

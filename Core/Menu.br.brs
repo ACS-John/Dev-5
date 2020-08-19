@@ -151,7 +151,7 @@ def fn_gridSetup
 	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
 fnend
 def fn_setupOnCursysChange
-	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256
+	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
 	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	fncno(cno)
 	if cno=0 then
