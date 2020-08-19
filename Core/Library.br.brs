@@ -663,13 +663,13 @@ fnend
 	fnend
 ! /r
 ! r: label   S:\Core\label\
-	def library fnlabel(mat linestyle$)
-		library 'S:\Core\Label\fnLabel.br': fnlabel
-		fnlabel=fnlabel(mat linestyle$)
+	def library fnLabel(mat lineStyle$)
+		library 'S:\Core\Label.br': fnLabel
+		fnlabel=fnLabel(mat lineStyle$)
 	fnend
-	def library fnaddlabel(mat in_labeltext$)
-		library 'S:\Core\Label\fnAddLabel.br': fnaddlabel
-		fnaddlabel=fnaddlabel(mat in_labeltext$)
+	def library fnAddLabel(mat in_labelText$)
+		library 'S:\Core\Label.br': fnAddLabel
+		fnAddLabel=fnAddLabel(mat in_labelText$)
 	fnend
 ! /r
 ! r: PrintAce   S:\Core\printAce
