@@ -10,12 +10,10 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 	dim abbrev$*30
 	dim ln$*80
 	if env$('cursys')='PR' then
-		library 'S:\Core\Library': fnDedNames
 		dim fullname$(20)*20
 		dim abbrevname$(20)*8
 		fnDedNames(mat fullname$,mat abbrevname$)
 	else if env$('cursys')='UB' then
-		library 'S:\Core\Library': fnGetServices
 			dim serviceName$(10)*20
 			dim srv$(10)*2
 		fnGetServices(mat serviceName$,mat srv$)
@@ -113,14 +111,14 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 	write #15,using L860: trim$(a$(j3,1)(1:30)),a$(j3,2),a(j3,2),a(j3,3),a$(j3,3),abbrev$(1:20)
 	L860: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
 	L870: goto ReadEv
-	!
+	
 	Finis: !
 	close #2: ioerr ignore
 	close #15: ioerr ignore
 	gosub MoveItToText
 	Xit: !
 fnend
-!
+
 MoveItToText: ! r:
 	dim miitLine$*87
 	open #hMiitIn :=fnGetHandle: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
