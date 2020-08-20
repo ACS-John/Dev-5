@@ -42,8 +42,8 @@ on error goto Ertn
 	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed
 	open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed
 	F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-goto MENU1 ! /r
-MENU1: ! r:
+goto Menu1 ! /r
+Menu1: ! r:
 	fnTos
 	respc=0
 	fnLbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
@@ -87,10 +87,10 @@ MENU1: ! r:
 		resp$(a)=""
 	next a
 	fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
-goto UBFORM ! /r
+goto UbForm ! /r
 
 PRINT_NEXT: ! r: the main read it and pr it routine
-	if sel_indv$="Y" then goto ASK_NEXT_ACT
+	if sel_indv$="Y" then goto AskNextAct
 	if bk1>0 then
 		read #customer5,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
 		if route>bk1 then goto EO_CUSTOMER
@@ -100,17 +100,27 @@ PRINT_NEXT: ! r: the main read it and pr it routine
 	if deltype<3 and bal<=1 then goto PRINT_NEXT
 	if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
 	! pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
-	if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
-	if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
-	! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
-	if deltype=1 and f=d1 and bal>0 then goto READ_ADRBIL ! pr ALL CUSTOMERS WHO HAVE NOT PAID THEIR MOST CURRENT BILL
-	if deltype=2 and f=d1 and bal>g(11) then goto READ_ADRBIL ! pr all customers who owe more than last times bill
-	! IF DELTYPE=2 AND F<>D1 AND BAL>0 THEN GOTO READ_ADRBIL ! pr all customers who owe a prior bill but didn't get billed this time
-	if deltype=5 and bal>0 then goto READ_ADRBIL
-	if deltype=6 and f=d1 then goto READ_ADRBIL ! pr all customers who were billed last billing cycle
+	
+
+	
+	if deltype=3 and final=0 then                 ! pr ALL ACTIVE CUSTOMERS
+		goto PrintPastDueNotice 
+	else if deltype=4 and final>0 and bal>0 then  ! pr ALL INACTIVE CUSTOMERS WITH BAL
+		 goto PrintPastDueNotice 
+	else if deltype=1 and f=d1 and bal>0 then     ! pr ALL CUSTOMERS WHO HAVE NOT PAID THEIR MOST CURRENT BILL
+		goto PrintPastDueNotice
+	else if deltype=2 and f=d1 and bal>g(11) then ! pr all customers who owe more than last times bill
+		goto PrintPastDueNotice
+	! else if deltype=2 and f<>d1 and bal>0 then goto PrintPastDueNotice ! pr all customers who owe a prior bill but didn't get billed this time
+	! 	goto PrintPastDueNotice
+	else if deltype=5 and bal>0 then 
+		goto PrintPastDueNotice
+	else if deltype=6 and f=d1 then               ! pr all customers who were billed last billing cycle
+		goto PrintPastDueNotice
+	end if
 goto PRINT_NEXT ! /r
 	
-READ_ADRBIL: ! r:
+PrintPastDueNotice: ! r:
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
 
@@ -518,16 +528,16 @@ def fn_french_settlement_gas
 	if count=2 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
 	if count=3 then count=0 : pr #255: newpage
 fnend
-UBFORM: ! r: pr FROM TEXT FILE
-	dim file_rtf$(1)*512
-	fngetdir2("[Q]\UBmstr",mat file_rtf$, '/ON','*.rtf')
-	fl1=udim(mat file_rtf$)
-	for fl1=1 to udim(mat file_rtf$)
-		file_rtf$(fl1)=file_rtf$(fl1)
-	next fl1
-	mat file_rtf$(fl1) : file_rtf$(fl1)="(Pre-Printed)"
-	mat file_rtf$(fl1+=1) : file_rtf$(fl1)="(Reminder)"
-goto SELECT_SCREEN ! /r
+dim fileRtf$(1)*512
+UbForm: ! r: pr FROM TEXT FILE (mat fileRtf$; ___,frCount)
+	fngetdir2("[Q]\UBmstr",mat fileRtf$, '/ON','*.rtf')
+	frCount=udim(mat fileRtf$)
+	for frCount=1 to udim(mat fileRtf$)
+		fileRtf$(frCount)=fileRtf$(frCount)
+	next frCount
+	mat fileRtf$(frCount) : fileRtf$(frCount)="(Pre-Printed)"
+	mat fileRtf$(frCount+=1) : fileRtf$(frCount)="(Reminder)"
+goto ScreenSelect ! /r
 !  r: def fn_merriam_woods
 !     library 'S:\acsUB\PrintBill_Merriam_Woods': fnpast_due_notice,fnpast_due_notice_finis
 ! ! pre-print calculations__________________________________
@@ -549,7 +559,7 @@ goto SELECT_SCREEN ! /r
 !     fnpast_due_notice(z$)
 ! ! end_________________
 ! /r  fnend
-SELECT_SCREEN: ! r:
+ScreenSelect: ! r:
 	fn_report_close
 	fnTos
 	mat resp$=("")
@@ -559,8 +569,8 @@ SELECT_SCREEN: ! r:
 		fnTxt(1,30,10,0,0,'',1,'',0)
 		resp$(respc+=1)='hard coded'
 	else
-		fncomboa("PDNOTRTF",1,30,mat file_rtf$)
-		! resp$(respc+=1)=file_rtf$(1)
+		fncomboa("pdnotrtf",1,30,mat fileRtf$)
+		! resp$(respc+=1)=fileRtf$(1)
 		if env$('client')='White Hall' then
 			resp$(respc+=1)='White_Ha'
 		else if env$('client')='Ash Grove' then
@@ -568,7 +578,7 @@ SELECT_SCREEN: ! r:
 		else
 			respc+=1
 			fncreg_read('ubpdnot_file_name',resp$(respc))
-			if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then resp$(respc)=file_rtf$(1)
+			if resp$(respc)='' or srch(mat fileRtf$,resp$(respc))<=0 then resp$(respc)=fileRtf$(1)
 		end if
 	end if
 	fnLbl(3,1,"Route Number:",28,1)
@@ -578,42 +588,32 @@ SELECT_SCREEN: ! r:
 	fncmbact(4,30,1)
 	resp$(respc+=1)="[All]"
 	fnChk(6,30,"Print only Selected Accounts")
+	resp$(respc+=1)="False"
+	fnChk(8,30,"Print Labels after")
+	resp$(resp_labels=respc+=1)="False"
 	! fnCmdSet(102)
 	fnCmdKey("&Print",1,1)
-	if ~hard_coded then let fnCmdKey("E&dit",3)
-	if ~hard_coded then let fnCmdKey("&Add",4)
-	if ~hard_coded then let fnCmdKey("&Delete",7)
-	if ~hard_coded then let fnCmdKey("&Refresh",6)
+	if ~hard_coded then fnCmdKey("E&dit",3)
+	if ~hard_coded then fnCmdKey("&Add",4)
+	if ~hard_coded then fnCmdKey("&Delete",7)
+	if ~hard_coded then fnCmdKey("&Refresh",6)
 	fnCmdKey("&Cancel",5,0,1)
 	fnAcs(mat resp$,ckey)
 	do_print_std_form=0
 	dim flname$*256
 	flname$=rtrm$(resp$(1))
 	fncreg_write('ubpdnot_file_name',flname$)
-	if resp$(2)<>"[All]" then
-		bk1=val(resp$(2))
-		resp$(2)=""
-	else
-		bk1=0
-		resp$(2)=""
-	end if
-	if trim$(resp$(3))<>"[All]" then
-		sz$=lpad$(trim$(resp$(3)(1:10)),10)
-		resp$(3)=""
-	else
-		sz$=""
-		resp$(3)=""
-	end if
-	if resp$(4)="True" then
-		resp$(4)=""
-		sel_indv$="Y"
-	else
-		resp$(4)=""
-		sel_indv$="N"
-	end if
+	if resp$(2)<>"[All]" then bk1=val(resp$(2)) else bk1=0
+	resp$(2)=""
+	if trim$(resp$(3))<>"[All]" then sz$=lpad$(trim$(resp$(3)(1:10)),10) else sz$=""
+	resp$(3)=""
+	if resp$(4)="True" then sel_indv$="Y" else sel_indv$="N"
+	resp$(4)=""
+	if resp$(resp_labels)='True' then enableLabels=1 else enableLabels=0
+	pr 'enableLabels=';enableLabels : pause
 	if ckey=1 and resp$(1)="(Pre-Printed)" then
 		do_print_std_form=1
-		goto PRINTING_BEGIN
+		goto PrintingBegin
 	else if ckey=1 then ! pr the Past Due Notices
 		count=0
 		if resp$(1)="(Reminder)" then
@@ -621,15 +621,15 @@ SELECT_SCREEN: ! r:
 			reminder=1
 		else
 			resp$(1)=""
-			if ~hard_coded then let fn_open_template
+			if ~hard_coded then fn_open_template
 		end if
-		goto PRINTING_BEGIN
+		goto PrintingBegin
 	else if ckey=5 then
-		goto MENU1
+		goto Menu1
 	else if ckey=6 then
-		goto UBFORM
+		goto UbForm
 	else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then
-		goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
+		goto ScreenSelect ! CANT EDIT STANDARD FORM
 	else if ckey=4 then ! r: Add
 		fnTos
 		respc=0
@@ -638,46 +638,46 @@ SELECT_SCREEN: ! r:
 		resp$(respc+=1)=""
 		fnCmdSet(2)
 		fnAcs(mat resp$,ckey)
-		if ckey=5 then goto MENU1
+		if ckey=5 then goto Menu1
 		dim newname$*256
 		newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
 		fnCopy("S:\Core\default\plain.rtf",os_filename$("[Q]\UBmstr\"&newname$))
 		fnEditFile('atlantis',"[Q]\UBmstr\"&newname$)
-		goto UBFORM ! /r
+		goto UbForm ! /r
 	else if ckey=3 then
 		fnEditFile('atlantis',"[Q]\UBmstr\"&flname$)
-		goto UBFORM
+		goto UbForm
 	else if ckey=7 then
 		fnFree("[Q]\UBmstr\"&trim$(flname$))
-		goto UBFORM
+		goto UbForm
 	else
-		goto UBFORM
+		goto UbForm
 	end if
-! /r  end of SELECT_SCREEN
-PRINTING_BEGIN: ! r:
+! /r  end of ScreenSelect
+PrintingBegin: ! r:
 	checkcounter=0
-	if trim$(sz$)="" and sel_indv$="Y" then goto ASK_NEXT_ACT ! selected to pick specific account but did not have one on screen
-	if trim$(sz$)<>"" and sel_indv$="Y" then z$=sz$: goto READ_CUSTOMER ! selected to pirnt specific account and had an account on screen
+	if trim$(sz$)="" and sel_indv$="Y" then goto AskNextAct ! selected to pick specific account but did not have one on screen
+	if trim$(sz$)<>"" and sel_indv$="Y" then z$=sz$: goto ReadCustomer ! selected to pirnt specific account and had an account on screen
 	! if rtrm$(sz$)="" then goto L1330
 	!  L1330: !
-	if bk1=0 and trim$(sz$)="" then goto NEXT_RECORD
+	if bk1=0 and trim$(sz$)="" then goto NextRecord
 	if bk1=0 then goto L1360
 	if trim$(sz$)="" or bk1>0 then ! restore_for_route
-		sz$=cnvrt$("N 2",bk1)&"       " conv PRINTING_BEGIN
-		restore #customer5,key>=sz$: nokey PRINTING_BEGIN
+		sz$=cnvrt$("N 2",bk1)&"       " conv PrintingBegin
+		restore #customer5,key>=sz$: nokey PrintingBegin
 	else ! restore_for_customer
-		restore #customer1,key=sz$: nokey PRINTING_BEGIN
+		restore #customer1,key=sz$: nokey PrintingBegin
 	end if
 	L1360: !
-goto NEXT_RECORD ! /r
-NEXT_RECORD: ! r:
+goto NextRecord ! /r
+NextRecord: ! r:
 	if sel_indv$="Y" then
 		z$=lpad$(trim$(resp$(2)(1:10)),10)
-		goto READ_CUSTOMER
+		goto ReadCustomer
 	else
 		goto PRINT_NEXT
 	end if  ! /r
-ASK_NEXT_ACT: ! r:
+AskNextAct: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Next Account:",18,1)
@@ -691,12 +691,12 @@ ASK_NEXT_ACT: ! r:
 		goto EO_CUSTOMER
 	else
 		sz$=lpad$(trim$(resp$(1)(1:10)),10)
-		goto READ_CUSTOMER ! if ckey=1
+		goto ReadCustomer ! if ckey=1
 	end if
 ! /r
-READ_CUSTOMER: ! r:
-	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
-goto READ_ADRBIL ! /r
+ReadCustomer: ! r:
+	read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat xb,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey AskNextAct
+goto PrintPastDueNotice ! /r
 EO_CUSTOMER: ! r:
 	! if env$('client')='Merriam Woods' then
 	!   fnpast_due_notice_finis
@@ -710,7 +710,7 @@ EO_CUSTOMER: ! r:
 		else
 			fncloseprn
 		end if
-		goto SELECT_SCREEN ! Xit
+		goto ScreenSelect ! Xit
 	end if
 	close #customer1: ioerr ignore
 	customer1=0

@@ -3,10 +3,10 @@ def fn_sreg_setup(; ___,returnN)
 	autoLibrary
 	returnN=0
 	if env$('ACSDeveloper')='' then
-		open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
+		open #sreg_h=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
 		returnN=1
 	else
-		open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #sreg_h=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		returnN=2
 	end if
 	fn_sreg_setup=returnN
@@ -109,7 +109,7 @@ def fn_mcregSetup
 		mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
 		mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
 		if ~exists(mcregFileData$) then fnmakesurepathexists(mcregFileData$)
-		open #mcreg_h:=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #mcreg_h=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	end if
 	on error goto Ertn
 fnend
@@ -168,7 +168,7 @@ fnend
 def fn_regSetup
 	autoLibrary
 	fnmakesurepathexists('[Q]\Data\')
-	open #reg_h:=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+	open #reg_h=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	fn_regSetup=1
 	on error goto Ertn
 fnend
@@ -228,7 +228,7 @@ def fn_creg_setup
 
 		cregFileData$ =datafolder$&'\reg-'&env$('CurSys')&'.h[cno]'
 		cregFileIndex$=datafolder$&'\reg-'&env$('CurSys')&'-idx.h[cno]'
-		open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #creg_h=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		fn_creg_setup=val(env$('CNo'))
 		creg_setup=val(env$('CNo'))
 	end if
@@ -270,7 +270,7 @@ fnend
 def fn_iniToReg
 	if ~setup_iniToReg then
 		setup_iniToReg=1
-		
+
 		dim property$(0)*128,default$(0)*128
 		mat property$(0) : mat default$(0)
 		fnAddOneC(mat property$,'Orientation' ) : fnAddOneC(mat default$,'Portrait')
@@ -282,9 +282,9 @@ def fn_iniToReg
 		fnAddOneC(mat property$,'BottomMargin') : fnAddOneC(mat default$,'0.500'   )
 		fnAddOneC(mat property$,'LeftMargin'  ) : fnAddOneC(mat default$,'0.500'   )
 		fnAddOneC(mat property$,'RightMargin' ) : fnAddOneC(mat default$,'0.500'   )
-		
+
 	end if
-	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*80,program_name_trim$(1)*80,ss_text$(1)*256
+	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
 	fnGetProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	for programItem=1 to udim(mat program_name$)
 		if program_file$(programItem)<>'' then
@@ -297,7 +297,7 @@ def fn_iniToReg
 					fn_regWrite(env$('cursys')&'.'&trim$(program_name$(programItem))&'.Print.'&property$(propertyItem),iniData$)
 				end if
 			nex propertyItem
-			
+
 			execute 'free "S:\Core\Data\ini_default\'&trim$(program_file$(programItem))&'.ini"' err ignore
 		end if
 	nex programItem
@@ -327,7 +327,7 @@ fnend
 ! 						fn_sreg_write(acsSys$(sysItem)&'.'&trim$(program_name$(programItem))&'.Print.'&property$(propertyItem),iniData$)
 ! 					end if
 ! 				nex propertyItem
-! 				
+!
 ! 				execute 'free "S:\Core\Data\ini_default\'&trim$(program_file$(programItem))&'.ini"' err ignore
 ! 			end if
 ! 		nex programItem
