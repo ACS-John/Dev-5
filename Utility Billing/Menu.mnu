@@ -82,7 +82,7 @@ Extras
 ! >>Calculate Average Charges for Date Range            ^ acsUB\AvgChg        ! removed on 4/1/20 one has an error and both were getting confused with Calculate Sewer Averages
 ! >>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg     ! removed on 4/1/20 one has an error and both were getting confused with Calculate Sewer Averages
 >Error Recovery
->>Undo Penalty Calculation                            ^ acsUB\ubUnPen
+>>Undo Penalty Calculation                            ^ Utility Billing\Undo Penalty Calculation
 >>Change Wrong Billing Date                           ^ Utility Billing\*
 >>Recalculate All Current Bills                       ^ Utility Billing\*
 >>Forgot to Zero Year To Date Usage                    ^ Utility Billing\Forgot to Zero Year-To-Date
