@@ -1,7 +1,7 @@
 forceRollBackNotMostRecentRec=0
 autoLibrary
 on error goto Ertn
-fnTop(program$)	
+fnTop(program$)
 
 ! msgbox(env$('program_caption')&" is currently under construction.",env$('program_caption')&' Unavailable',"OK","Inf") : if env$('ACSDeveloper')='' then goto Xit
 fn_undobilling
@@ -141,6 +141,7 @@ Xit: fnXit
 def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return selections
 	dim screen_name$*100,resp$(20)*255
 	fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
+	lastbilling=date(days(lastbilling,'mmddyy'),'ccyymmdd')
 	filter=0 : route=0 : cust$=''
 	ScreenOptions: !
 	fnTos
