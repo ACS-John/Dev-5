@@ -124,6 +124,17 @@ PrintPastDueNotice: ! r:
 	dim addr$(4)*30
 	fncustomer_address(z$,mat addr$)
 
+	if enableLabels then 
+		dim labelText$(5)*80
+		mat labelText$=('')
+		labelText$(1)=z$
+		labelText$(2)=addr$(1)
+		labelText$(3)=addr$(2)
+		labelText$(4)=addr$(3)
+		labelText$(5)=addr$(4)
+		fnAddLabel(mat labelText$)
+	end if
+
 	if reminder=1 then
 		fn_vbprint
 	else if env$('client')="Granby" then
@@ -589,9 +600,8 @@ ScreenSelect: ! r:
 	resp$(respc+=1)="[All]"
 	fnChk(6,30,"Print only Selected Accounts")
 	resp$(respc+=1)="False"
-	fnChk(8,30,"Print Labels after")
-	resp$(resp_labels=respc+=1)="False"
-	! fnCmdSet(102)
+	! fnChk(8,30,"Print Labels too")
+	! resp$(resp_labels=respc+=1)="False"
 	fnCmdKey("&Print",1,1)
 	if ~hard_coded then fnCmdKey("E&dit",3)
 	if ~hard_coded then fnCmdKey("&Add",4)
@@ -609,8 +619,7 @@ ScreenSelect: ! r:
 	resp$(3)=""
 	if resp$(4)="True" then sel_indv$="Y" else sel_indv$="N"
 	resp$(4)=""
-	if resp$(resp_labels)='True' then enableLabels=1 else enableLabels=0
-	pr 'enableLabels=';enableLabels : pause
+	! if resp$(resp_labels)='True' then enableLabels=1 else enableLabels=0
 	if ckey=1 and resp$(1)="(Pre-Printed)" then
 		do_print_std_form=1
 		goto PrintingBegin
@@ -716,7 +725,10 @@ EO_CUSTOMER: ! r:
 	customer1=0
 	fnpa_finis
 	! end if
-
+	if enableLabels then 
+		dim lineStyle$(5)
+		fnLabel(mat lineStyle$)
+	end if
 	if h_prnt1 then
 		close #h_prnt1: : h_prnt1=0
 		fnEditFile('atlantis',tmp_rtf_filename$)

@@ -1,6 +1,11 @@
 ! add a label to a queue that will be printed when fnLabel is called
+dim gLabelFileName$*128
+
 def library fnAddLabel(mat in_labeltext$)
 	if ~setup then fn_setup
+
+	gLabelFileName$='[Temp]\Label_s[session].dat'
+
 	! on error goto Ertn   (  failure should probably skip a label, not all  )
 	dim labeltext$(5)*120
 
@@ -11,7 +16,7 @@ def library fnAddLabel(mat in_labeltext$)
 	for j=1 to min(5,udim(in_labeltext$))
 		labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120))
 	next j
-	open #tmp=fngethandle: "Name="&labelFileName$&",RecL=600,Use",internal,output
+	open #tmp=fngethandle: "Name="&gLabelFileName$&",RecL=600,Use",internal,output
 	write #tmp,using "Form POS 1,5*C 120": mat labeltext$
 	close #tmp:
 	mat labeltext$=("")
@@ -162,14 +167,14 @@ def library fnLabel(mat linestyle$)
 		fnopenprn
 		fnwait("Printing: Please wait...",1)
 		if top_marg>0 then
-			pr #255,using "Form POS 1,C 1,SKIP "&str$(top_marg): ''
+			pr #255,using "Form pos 1,c 1,skip "&str$(top_marg): ''
 		end if
 		for x=1 to 10
 			for z=1 to 5
 				for y=1 to 3
-				!	If UPRC$(LINESTYLE$(Z))="BAR" AND wabel$(X,Y,Z)<>"" Then
-				!		pRINTEDABARCODE=1
-				!		fnBARCODE(wabel$(X,Y,Z),labelPos(Y))
+				!	if uprc$(linestyle$(z))="bar" and wabel$(x,y,z)<>"" then
+				!		printedabarcode=1
+				!		fnbarcode(wabel$(x,y,z),labelpos(y))
 				!	end if
 				!	If wabel$(X,Y,Z)<>"" Then Let FNBARCODE(wabel$(X,Y,Z),labelPos(Y))
 				next y
@@ -179,7 +184,7 @@ def library fnLabel(mat linestyle$)
 					printedabarcode=0
 					goto L1310
 				end if
-				! If LINESTYLE$(Z)<>"" Then Let FNSETLINESTYLE(LINESTYLE$(Z))
+				! if linestyle$(z)<>"" then let fnsetlinestyle(linestyle$(z))
 				pr #255,using L1300: wabel$(x,1,z)(1:25),wabel$(x,2,z)(1:25),wabel$(x,3,z)(1:25)
 				L1300:  form pos labelPos1,c 25,pos labelPos2,c 25,pos labelPos3,c 25
 				L1310: !
@@ -241,14 +246,12 @@ def library fnLabel(mat linestyle$)
 	goto LabelDone ! /r
 
 	OepnLabelFile: ! r:
-		dim labelFileName$*128
-		labelFileName$='[Temp]\Label_s[session].dat'
-		open #hLabelTemp=fngethandle: "Name="&labelFileName$&",RecL=600,Use",internal,outIn ioerr Xnow
+		open #hLabelTemp=fngethandle: "Name="&gLabelFileName$&",RecL=600,Use",internal,outIn ioerr Xnow
 	return  ! /r
 
 	LabelXit: ! r:
 		close #hLabelTemp,free: ioerr ignore
-		fnfree(labelFileName$)
+		fnfree(gLabelFileName$)
 		hLabelTemp=0
 	goto Xnow ! /r
 	Xnow: !
