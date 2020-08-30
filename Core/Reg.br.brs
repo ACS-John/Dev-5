@@ -141,7 +141,7 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 	if rr_key_compare$=rr_fieldName$ then
 		rr_fieldValue$=rtrm$(rr_tmpfieldValue$)
 	else
-		rr_fieldValue$=rr_defaultIfNotRead$ ! ''
+		rr_fieldValue$=rr_defaultIfNotRead$
 	end if
 
 	if alsoUseDefaultIfReadBlank and trim$(rr_fieldValue$)='' then

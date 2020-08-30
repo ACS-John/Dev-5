@@ -4,32 +4,32 @@ fnTop(program$)
 Screen1: ! r:
 	fnTos
 	fnLbl(1,1,"Sort by:",20,1)
-	fncomboa("ublabels-ord",1,22,mat sequence_option$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
-	fnreg_read('ublabel.sequence',resp$(1)) : if resp$(1)='' then resp$(1)=sequence_option$(sequence_account)
+	fncomboa("ublabels-ord",1,22,mat optSequence$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
+	fnreg_read('ublabel.sequence',resp$(1),optSequence$(sequence_account),1)
 
 	fnLbl(3,1,"Print Address:",20,1)
-	fncomboa("ubnamlst-act",3,22,mat address_option$)
-	fnreg_read('ublabel.address',resp$(2)) : if srch(mat address_option$,resp$(2))<=0 then resp$(2)=address_option$(ao_billing)
+	fncomboa("ubnamlst-act",3,22,mat optAddress$)
+	fnreg_read('ublabel.address',resp$(2), optAddress$(ao_billing),1)
 
 	fnLbl(5,1,"Line 1:",20,1)
-	fncomboa("ublabel_tl1",5,22,mat line_x_option$,'',70)
-	fnreg_read('ublabel.line 1',resp$(3)) : if resp$(3)='' then resp$(3)=line_x_option$(1)
+	fncomboa("ublabel_tl1",5,22,mat optLineX$,'',70)
+	fnreg_read('ublabel.line 1',resp$(3), optLineX$(1),1)
 
 	fnLbl(6,1,"Line 2:",20,1)
-	fncomboa("ublabel_tl2",6,22,mat line_x_option$,'',70)
-	fnreg_read('ublabel.line 2',resp$(4)) : if resp$(4)='' then resp$(4)=line_x_option$(2)
+	fncomboa("ublabel_tl2",6,22,mat optLineX$,'',70)
+	fnreg_read('ublabel.line 2',resp$(4), optLineX$(2),1)
 
 	fnLbl(7,1,"Line 3:",20,1)
-	fncomboa("ublabel_tl3",7,22,mat line_x_option$,'',70)
-	fnreg_read('ublabel.line 3',resp$(5)) : if resp$(5)='' then resp$(5)=line_x_option$(3)
+	fncomboa("ublabel_tl3",7,22,mat optLineX$,'',70)
+	fnreg_read('ublabel.line 3',resp$(5), optLineX$(3),1)
 
 	fnLbl(8,1,"Line 4:",20,1)
-	fncomboa("ublabel_tl4",8,22,mat line_x_option$,'',70)
-	fnreg_read('ublabel.line 4',resp$(6)) : if resp$(6)='' then resp$(6)=line_x_option$(4)
+	fncomboa("ublabel_tl4",8,22,mat optLineX$,'',70)
+	fnreg_read('ublabel.line 4',resp$(6), optLineX$(4),1)
 
 	fnLbl(9,1,"Line 5:",20,1)
-	fncomboa("ublabel_tl5",9,22,mat line_x_option$,'',70)
-	fnreg_read('ublabel.line 5',resp$(7)) : if resp$(7)='' then resp$(7)=line_x_option$(5 )
+	fncomboa("ublabel_tl5",9,22,mat optLineX$,'',70)
+	fnreg_read('ublabel.line 5',resp$(7), optLineX$(5),1)
 
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey) ! select order of printing
@@ -43,28 +43,28 @@ Screen1: ! r:
 	fnreg_write('ublabel.line 5',resp$(7))
 	! annbc=sequence_name ! default to name sequence
 	pt$(5)=""
-	if resp$(1)=sequence_option$(sequence_account) then
+	if resp$(1)=optSequence$(sequence_account) then
 		annbc=sequence_account
-	! else if resp$(1)=sequence_option$(sequence_name) then
+	! else if resp$(1)=optSequence$(sequence_name) then
 	! 	annbc=sequence_name
-	else if resp$(1)=sequence_option$(sequence_bar_code) then
+	else if resp$(1)=optSequence$(sequence_bar_code) then
 		annbc=sequence_bar_code
 		pt$(5)="BAR"
-	else if resp$(1)=sequence_option$(sequence_route) then
+	else if resp$(1)=optSequence$(sequence_route) then
 		annbc=sequence_route
-	else if resp$(1)=sequence_option$(sequence_grid) then
+	else if resp$(1)=optSequence$(sequence_grid) then
 		annbc=sequence_grid
-	else if resp$(1)=sequence_option$(sequence_bulk_sort) then
+	else if resp$(1)=optSequence$(sequence_bulk_sort) then
 		annbc=sequence_bulk_sort
 	end if
 
-	altaddr=srch(mat address_option$,resp$(2))
+	altaddr=srch(mat optAddress$,resp$(2))
 
-	line_1_print=srch(mat line_x_option$,resp$(3))
-	lineToPrint=srch(mat line_x_option$,resp$(4))
-	line_3_print=srch(mat line_x_option$,resp$(5))
-	line_4_print=srch(mat line_x_option$,resp$(6))
-	line_5_print=srch(mat line_x_option$,resp$(7))
+	line_1_print=srch(mat optLineX$,resp$(3))
+	lineToPrint=srch(mat optLineX$,resp$(4))
+	line_3_print=srch(mat optLineX$,resp$(5))
+	line_4_print=srch(mat optLineX$,resp$(6))
+	line_5_print=srch(mat optLineX$,resp$(7))
 
 	if annbc=sequence_route then
 		filter_selection=6
@@ -82,41 +82,42 @@ Screen2: !
 	fnTos
 	fnLbl(1,1,"Select by:",12,0,0)
 	if annbc=sequence_account then
-		filter_option_enabled$(1)=filter_option$(1)
-		filter_option_enabled$(2)=filter_option$(2)
-		filter_option_enabled$(3)=filter_option$(3)
-		filter_option_enabled$(4)=filter_option$(4)
-		filter_option_enabled$(5)=filter_option$(5)
-		filter_option_enabled$(6)=filter_option$(6)
-		filter_option_enabled$(7)=filter_option$(7)
-		mat filter_option_enabled$(7)
+		dim optFilterEnabled$(7)*50
+		optFilterEnabled$(1)=optFilter$(1)
+		optFilterEnabled$(2)=optFilter$(2)
+		optFilterEnabled$(3)=optFilter$(3)
+		optFilterEnabled$(4)=optFilter$(4)
+		optFilterEnabled$(5)=optFilter$(5)
+		optFilterEnabled$(6)=optFilter$(6)
+		optFilterEnabled$(7)=optFilter$(7)
+		mat optFilterEnabled$(7)
 	! else if annbc=sequence_name then
-	! 	filter_option_enabled$(1)=filter_option$(1)
-	! 	filter_option_enabled$(2)=filter_option$(2)
-	! 	filter_option_enabled$(3)=filter_option$(3)
-	! 	filter_option_enabled$(4)=filter_option$(5)
-	! 	filter_option_enabled$(5)=filter_option$(7)
-	! 	mat filter_option_enabled$(5)
+	! 	optFilterEnabled$(1)=optFilter$(1)
+	! 	optFilterEnabled$(2)=optFilter$(2)
+	! 	optFilterEnabled$(3)=optFilter$(3)
+	! 	optFilterEnabled$(4)=optFilter$(5)
+	! 	optFilterEnabled$(5)=optFilter$(7)
+	! 	mat optFilterEnabled$(5)
 	else if annbc=sequence_bar_code then
-		filter_option_enabled$(1)=filter_option$(1)
-		filter_option_enabled$(2)=filter_option$(2)
-		filter_option_enabled$(3)=filter_option$(3)
-		filter_option_enabled$(4)=filter_option$(5)
-		filter_option_enabled$(5)=filter_option$(6)
-		mat filter_option_enabled$(5)
+		optFilterEnabled$(1)=optFilter$(1)
+		optFilterEnabled$(2)=optFilter$(2)
+		optFilterEnabled$(3)=optFilter$(3)
+		optFilterEnabled$(4)=optFilter$(5)
+		optFilterEnabled$(5)=optFilter$(6)
+		mat optFilterEnabled$(5)
 	else if annbc=sequence_route then
-		filter_option_enabled$(1)=filter_option$(1)
-		filter_option_enabled$(2)=filter_option$(2)
-		filter_option_enabled$(3)=filter_option$(3)
-		filter_option_enabled$(4)=filter_option$(6)
-		mat filter_option_enabled$(4)
+		optFilterEnabled$(1)=optFilter$(1)
+		optFilterEnabled$(2)=optFilter$(2)
+		optFilterEnabled$(3)=optFilter$(3)
+		optFilterEnabled$(4)=optFilter$(6)
+		mat optFilterEnabled$(4)
 	end if
-	fncomboa("ublabels-ord",1,14,mat filter_option_enabled$,'',30)
-	resp$(1)=filter_option_enabled$(1)
+	fncomboa("ublabels-ord",1,14,mat optFilterEnabled$,'',30)
+	resp$(1)=optFilterEnabled$(1)
 	gosub OpenFiles
 	fnCmdSet(6)
 	fnAcs(mat resp$,ckey) ! method of selection
-	filter_selection=srch(mat filter_option$,resp$(1))
+	filter_selection=srch(mat optFilter$,resp$(1))
 	if ckey=5 then goto Xit
 	if ckey=2 then goto Screen1
 	if annbc=sequence_route then goto SelectByRoute ! select by route
@@ -232,7 +233,7 @@ SelectRangeOfAccounts: ! r: select range of accounts
 	if h1$<l1$ then
 		mat msgline$(1)
 		msgline$(1)="You have entered invalid accounts!"
-		fnmsgbox(mat msgline$,resp$,cap$,48)
+		fnmsgbox(mat msgline$,resp$,'',48)
 		goto SelectRangeOfAccounts
 	end if
 	restore #customer,key=l1$: nokey SelectRangeOfAccounts
@@ -306,7 +307,7 @@ goto Top ! /r
 ! SCR4F3_NO_MATCH: ! r:
 ! 	mat msgline$(1)
 ! 	msgline$(1)="No matching name found!"
-! 	fnmsgbox(mat msgline$,resp$,cap$,48)
+! 	fnmsgbox(mat msgline$,resp$,'',48)
 ! goto SelectStartingCustomer ! /r
 ! ! /r
 Sort1: ! r: SELECT & SORT
@@ -497,51 +498,52 @@ def fn_setup
 	on error goto Ertn
 ! r: constants and dims
 	on fkey 5 goto Finis
-	dim filter_option_enabled$(7)*50,e$(4)*30
+	dim e$(4)*30
 	dim meter_address$*30
-	dim pe$(4)*30,ba$(4)*30,cap$*128,resp$(10)*80
+	dim pe$(4)*30,ba$(4)*30
+	dim resp$(10)*80
 	dim labeltext$(5)*120,x$*512,z$*50
 	dim extra$(11)*30,extra(23) ! fields from Customer File
-	dim srvnam$(10)*20,srv$(10)*2
+	dim srvName$(10)*20,srv$(10)*2
 
-	fnGetServices(mat srvnam$, mat srv$)
+	fnGetServices(mat srvName$, mat srv$)
 
-	dim line_x_option$(9)*70
-	mat line_x_option$(0)
-	line_x_blank                   =fnAddoneC(mat line_x_option$,"(blank)"                                                        )
-	line_x_account_number          =fnAddoneC(mat line_x_option$,"Account"                                                        )
-	line_x_accountRightJustified   =fnAddoneC(mat line_x_option$,"Account (right justified)"                                      )
-	line_x_meter_address           =fnAddoneC(mat line_x_option$,"Meter Address"                                                  )
-	line_x_customer_name           =fnAddoneC(mat line_x_option$,"Name"                                                           )
-	line_x_mailing_address_line_1  =fnAddoneC(mat line_x_option$,"Mailing Address Line 1"                                         )
-	line_x_mailing_address_line_2  =fnAddoneC(mat line_x_option$,"Mailing Address Line 2 or if blank City State Zip"              )
-	line_x_mailing_address_line_3  =fnAddoneC(mat line_x_option$,"City State Zip if Mailing Address Line 2 not blank"             )
-	line_x_meter_route_and_sequenc =fnAddoneC(mat line_x_option$,trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"          )
-	line_x_account_meter4_and_seq  =fnAddoneC(mat line_x_option$,"Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"    )
-	line_x_meterAndSequence        =fnAddoneC(mat line_x_option$,trim$(srvnam$(4))&" Meter and Sequence Numbers"                 )
+	dim optLineX$(9)*70
+	mat optLineX$(0)
+	line_x_blank                   =fnAddoneC(mat optLineX$,"(blank)"                                                        )
+	line_x_account_number          =fnAddoneC(mat optLineX$,"Account"                                                        )
+	line_x_accountRightJustified   =fnAddoneC(mat optLineX$,"Account (right justified)"                                      )
+	line_x_meter_address           =fnAddoneC(mat optLineX$,"Meter Address"                                                  )
+	line_x_customer_name           =fnAddoneC(mat optLineX$,"Name"                                                           )
+	line_x_mailing_address_line_1  =fnAddoneC(mat optLineX$,"Mailing Address Line 1"                                         )
+	line_x_mailing_address_line_2  =fnAddoneC(mat optLineX$,"Mailing Address Line 2 or if blank City State Zip"              )
+	line_x_mailing_address_line_3  =fnAddoneC(mat optLineX$,"City State Zip if Mailing Address Line 2 not blank"             )
+	line_x_meter_route_and_sequenc =fnAddoneC(mat optLineX$,trim$(srvName$(4))&" Meter, Route and Sequence Numbers"          )
+	line_x_account_meter4_and_seq  =fnAddoneC(mat optLineX$,"Account, "&trim$(srvName$(4))&" Meter, and Sequence Numbers"    )
+	line_x_meterAndSequence        =fnAddoneC(mat optLineX$,trim$(srvName$(4))&" Meter and Sequence Numbers"                 )
 
-	dim address_option$(3)*30
-	address_option$(ao_primary  :=1)="Primary Address"
-	address_option$(ao_alternate:=2)="Alternate Billing Address"
-	address_option$(ao_billing  :=3)="Billing Address"
+	dim optAddress$(3)*30
+	optAddress$(ao_primary  :=1)="Primary Address"
+	optAddress$(ao_alternate:=2)="Alternate Billing Address"
+	optAddress$(ao_billing  :=3)="Billing Address"
 
-	dim sequence_option$(6)*22
+	dim optSequence$(6)*22
 	sequenceCount=0
-	sequence_option$(sequence_account  :=sequenceCount+=1)="Account"
-	! sequence_option$(sequence_name:=2)="Customer Name"
-	sequence_option$(sequence_bar_code :=sequenceCount+=1)="Bar Code"
-	sequence_option$(sequence_route    :=sequenceCount+=1)="Route"
-	sequence_option$(sequence_grid     :=sequenceCount+=1)="Grid"
-	sequence_option$(sequence_bulk_sort:=sequenceCount+=1)="Bulk Sort Code"
+	optSequence$(sequence_account  :=sequenceCount+=1)="Account"
+	! optSequence$(sequence_name:=2)="Customer Name"
+	optSequence$(sequence_bar_code :=sequenceCount+=1)="Bar Code"
+	optSequence$(sequence_route    :=sequenceCount+=1)="Route"
+	optSequence$(sequence_grid     :=sequenceCount+=1)="Grid"
+	optSequence$(sequence_bulk_sort:=sequenceCount+=1)="Bulk Sort Code"
 
-	dim filter_option$(7)*50
-	filter_option$(1)="[All]"
-	filter_option$(2)="Customers billed last month"
-	filter_option$(3)="Customers not billed last billing"
-	filter_option$(4)="Range of Accounts"
-	filter_option$(5)="Individual accounts"
-	filter_option$(6)="Route"
-	filter_option$(7)="Active Customers"
+	dim optFilter$(7)*50
+	optFilter$(1)="[All]"
+	optFilter$(2)="Customers billed last month"
+	optFilter$(3)="Customers not billed last billing"
+	optFilter$(4)="Range of Accounts"
+	optFilter$(5)="Individual accounts"
+	optFilter$(6)="Route"
+	optFilter$(7)="Active Customers"
 ! /r
 fnend
 include: Ertn
