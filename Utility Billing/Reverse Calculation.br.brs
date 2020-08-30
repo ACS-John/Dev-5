@@ -30,8 +30,8 @@ ALLOW_PROGRAM: !
 	fn_bud1
 ASK1: !
 	x=6
-	close #111: ioerr L250
-L250: fnTos(sn$="ubrevcal")
+	close #111: ioerr ignore
+	fnTos
 	respc=0
 	fnLbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
 	fnLbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)

@@ -84,7 +84,7 @@ continue
 Xit: fnXit
 def fn_scr_main
 	SM_ASK: !
-	fnTos(sn$="ubPenCal")
+	fnTos
 	mylen=27
 	mypos=mylen+2
 	fnLbl(1,1,"Penalty Date:",mylen,right)
