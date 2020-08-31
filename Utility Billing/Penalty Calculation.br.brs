@@ -1,9 +1,9 @@
 ! formerly S:\acsUB\ubPenCal
 ! Penalty Calculation
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim resp$(8)*40,msgline$(1)*80,oldtg(11)
 	dim z$*10,g(12),dat$*20,e$(4)*30,rt(10,3),transkey$*19
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),tg(11),route(99)
@@ -11,7 +11,7 @@
 	dim d(15)
 	dim subjectto(10),gb(10),extra(23),a(7)
 	dim columnhead$(10)*13,tmp$*220,coltot(10),basepenalty(10)
- 
+
 	right=1
 	fnTop(program$)
 	fnLastBillingDate(bildat)
@@ -75,12 +75,12 @@ EO_CUSTOMER: !
 	close #h_trans: ioerr ignore
 	fncloseprn
 	goto Xit
- 
+
 PGOF: !
 	pr #255: newpage
 	fn_print_header
 continue
- 
+
 Xit: fnXit
 def fn_scr_main
 	SM_ASK: !
@@ -296,12 +296,12 @@ def fn_pencal ! penalty calculation
 	next j
 	rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 	goto PAST_WRITE_2
-	! 
+
 	WRITE_2: !
 	write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 	PAST_WRITE_2: !
 	rewrite #h_customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
-	!
+
 	totb+=bal
 	if route_number<0 or route_number>99 then route_number=99
 	route(route_number)+=sum(pencolumn)

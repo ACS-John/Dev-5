@@ -80,7 +80,7 @@ SCREEN1: !
 	if resp$(6)="True" then sl1=1: z$="" else sl1=0
 	pr service_from=val(resp$(7)) : service_to=val(resp$(8))
 	if service_from<>0 and service_to<>0 then use_entered_dates=1 else use_entered_dates=0
-	if trim$(a$)<>"" then 
+	if trim$(a$)<>"" then
 		read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1
 		holdz$=z$: begin=1
 		st1=1
@@ -166,34 +166,33 @@ goto READALTADR
 
 SORT1: ! r: SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1510
-	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
+	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=19",internal,output
 	s5=1
-	if prtbkno=0 then 
-		routekey$="" 
-	else 
+	if prtbkno=0 then
+		routekey$=""
+	else
 		routekey$=cnvrt$("N 2",prtbkno)&"       " 		! key off first record in route (route # no longer part of customer #)
 	end if
 	restore #2,search>=routekey$:
 	L1310: !
-	read #2,using L1320: z$,f,route eof END5
-	L1320: form pos 1,c 10,pos 296,pd 4,pos 1741
-	if prtbkno=0 then goto L1350
-	if prtbkno><route then goto END5
-	L1350: if f><d1 then goto L1310
-	zip5$=cr$=""
-	read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1380
-	L1380: !
-	write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
-goto L1310
-
-END5: close #6:
-	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
-L1430: form pos 1,c 128
-	write #9,using L1430: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
+		read #2,using L1320: z$,f,route eof END5
+		L1320: form pos 1,c 10,pos 296,pd 4,pos 1741
+		if prtbkno=0 then goto L1350
+		if prtbkno><route then goto END5
+		L1350: if f><d1 then goto L1310
+		zip5$=cr$=""
+		read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1380
+		L1380: !
+		write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+	goto L1310
+	END5: close #6:
+	open #9: "Name=[Temp]\Control.[session],Size=0,RecL=128,Replace",internal,output
+	L1430: form pos 1,c 128
+	write #9,using L1430: "File [Temp]\Temp.[session],,,[Temp]\Addr.[session],,,,,A,N"
 	write #9,using L1430: "Mask 1,19,C,A"
 	close #9:
-	execute "Free [Temp]\Addr."&session$&" -n" ioerr ignore
-	execute "Sort [Temp]\Control."&session$&" -n"
+	execute "Free [Temp]\Addr.[session] -n" ioerr ignore
+	execute "Sort [Temp]\Control.[session] -n"
 	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
 	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 L1510: return  ! /r
@@ -201,7 +200,7 @@ L1510: return  ! /r
 ENDSCR: ! pr totals screen
 	if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 	fnTos
-	mylen=23 : mypos=mylen+2 
+	mylen=23 : mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
 	fnTxt(1,mypos,8,0,1,"",1)
@@ -414,44 +413,55 @@ return  ! /r
 
 BULKSORT: ! r: bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
-L3040: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3070
-	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
-	goto L3040
-L3070: close #1: ioerr ignore
+	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
+	do
+		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BsEo1
+		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+	loop
+	BsEo1: close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index [Temp]\Temp."&session$&" [Temp]\TempIdx."&session$&" 1,21,Replace,DupKeys -n" ioerr L3110 ! 1,19 was changed to 22,10 to switch sorting to account
-	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$,internal,input,keyed
-L3110: return  ! /r
+	execute "Index [Temp]\Temp.[session] [Temp]\TempIdx.[session] 1,21,Replace,DupKeys -n" ioerr BsFinis ! 1,19 was changed to 22,10 to switch sorting to account
+	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\TempIdx."&session$,internal,input,keyed
+	BsFinis: !
+return  ! /r
 BUD1: ! r:
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L3200
+	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr Bud1Finis
 	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
 	bud1=1
 	for j=1 to 5
 		bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
 	next j
-L3200: return  ! /r
+	Bud1Finis: !
+return  ! /r
 BUD2: ! r:
 	budget=pbud=bd1=0
 	mat bd1(5)
 	mat bd1=(0)
 	mat bd2=(0)
-	if bud1=0 then goto L3360
-	read #81,using L3280,key=z$: z$,mat ba,mat badr nokey L3360
-L3280: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	if bud1=0 then goto Bud2Finis
+	read #81,using F82,key=z$: z$,mat ba,mat badr nokey Bud2Finis
+	F82: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
-L3300: if ta1=0 then goto L3360
-	read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec L3360
-	L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	if bt1(1,1)=d1 then budget=budget+bt1(12,1): goto L3350 ! budget for current month
-	! if bt1(14,1)=0 then pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid
-	L3350: !
-	ta1=nba
-goto L3300
-L3360: return  ! /r
+	do while ta1
+		read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec Bud2Finis
+		L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+		if bt1(1,1)=d1 then ! budget for current month
+			budget=budget+bt1(12,1)
+		! else if bt1(14,1)=0 then
+			! pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid
+		end if
+		L3350: !
+		ta1=nba
+	loop
+	Bud2Finis: !
+return  ! /r
 def fn_pay_after_amt
-	if bal<0 then let fn_pay_after_amt=round(bal,2) else let fn_pay_after_amt=round(bal*1.05,2)
+	if bal<0 then
+		fn_pay_after_amt=round(bal,2)
+	else
+		fn_pay_after_amt=round(bal*1.05,2)
+	end if
 fnend
 include: Ertn
