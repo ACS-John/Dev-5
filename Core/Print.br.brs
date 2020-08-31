@@ -155,7 +155,7 @@ def library fnClosePrn(;forceWordProcessor$)
 fnend
 def fn_start(start_destinationFilename$*1024; unused,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
 	! on error goto START_ERTN
- if env$('acsDeveloper')<>'' then pr 'start_destinationFilename$='&start_destinationFilename$ : pause
+	! if env$('acsDeveloper')<>'' then pr 'start_destinationFilename$='&start_destinationFilename$ : pause
 	dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
 	dim landscape$*1
 	dim marg(4)
