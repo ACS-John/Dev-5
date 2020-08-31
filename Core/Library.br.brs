@@ -1299,7 +1299,7 @@ fnend
 	fnend
 	def library fnGetServices(mat serviceName$; mat serviceCode$, mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 		library 'S:\Utility Billing\Type of Service.br': fnGetServices
-		fnGetServices=fnGetServices(mat serviceName$, mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
+		fnGetServices=fnGetServices(mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply)
 	fnend
 	def library fnService_other
 		library 'S:\Utility Billing\Type of Service.br': fnservice_other
