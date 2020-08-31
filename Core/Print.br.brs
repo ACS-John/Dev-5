@@ -217,7 +217,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 
 	!   open #20: "Name="&'[at]'&startRtf_destinationFileName$,display,input
 	! else
-	open #20: "Name=[at]"&startRtf_destinationFileName$,display,input
+	open #20: "Name="&startRtf_destinationFileName$,display,input
 	! end if
 	lrec20=lrec(20)
 	open #hOut=fngethandle: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
@@ -306,7 +306,10 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	hOut=0
 	close #20:
 	! /r
+	if env$('BR_MODEL')='CLIENT/SERVER' then
 		fnCopy('[temp]\acs_print_tmp[session].rtf','[at]'&startRtf_destinationFileName$)
+	end if
+	fnCopy('[temp]\acs_print_tmp[session].rtf',startRtf_destinationFileName$)
 	! pr 'BR copied to: '&'[at]'&startRtf_destinationFileName$ !
 	if env$('BR_MODEL')='CLIENT/SERVER' then
 		if ~setup_cs then
@@ -324,7 +327,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$)
 	wordprocessor_exe$=trim$(wordprocessor_exe$,'"')
 	if saveToAsStart$<>'' then
-		fnCopy(startRtf_destinationFileName$,'[at]'&saveToAsStart$)
+		fnCopy(startRtf_destinationFileName$,env$('at')&saveToAsStart$)
 	end if
 	if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then
 		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(startRtf_destinationFileName$)&'"' ! automatic processing  ! kj 53107
