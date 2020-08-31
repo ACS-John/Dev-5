@@ -29,11 +29,12 @@ def fn_printFileName$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,p
 	pfnReturn$=fn_reportCacheFolderCurrent$&'\'&fn_safeFilename$(programCaptionOverride$,1)
 	pfn_sendto_base_name_addition$=trim$(fn_safeFilename$(pfn_sendto_base_name_addition$))
 	if pfn_sendto_base_name_addition$<>'' then
-		pfnReturn$=pfnReturn$&' '&pfn_sendto_base_name_addition$
+		pfnReturn$&=' '&pfn_sendto_base_name_addition$
 	end if
-	pfnReturn$=pfnReturn$&' - '&date$('ccyy-mm-dd')&' '&fn_safeFilename$(time$)
-	pfnReturn$=pfnReturn$&'.'&pfn_extension$
+	pfnReturn$&=' - '&date$('ccyy-mm-dd')&' '&fn_safeFilename$(time$)
+	pfnReturn$&='.'&pfn_extension$
 	pfnReturn$=fnSrepEnv$(pfnReturn$)
+	! pfnReturn$='[at]'&pfnReturn$    <--- we don't do this because the workstation's report cache is only copied to and opened from, the files are actually made on the server's report cache
 	if pos(programCaptionOverride$,'\')>0 then fnmakesurepathexists(pfnReturn$)
 	fn_printFileName$=pfnReturn$
 fnend
@@ -54,21 +55,24 @@ def fn_reportCacheFolderCurrent$*512(; ___,return$*512)
 	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemNameFromAbbr$
 	return$=rtrm$(return$,'\')&'\'&fn_safeFilename$(env$('cnam'))&' ([cno])'
 	return$=fnSrepEnv$(return$)
-	fnmakesurepathexists(env$('at')&return$&'\')
+	if env$('BR_MODEL')='CLIENT/SERVER' then ! client gets a parallel report cache with only thir own stuff in it
+		fnmakesurepathexists('[at]'&return$&'\')
+	end if
+	fnmakesurepathexists(return$&'\')
 	fn_reportCacheFolderCurrent$=return$
 fnend
 
 def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
 	fn_setup
-	fnopen_receipt_printer=fn_open_receipt_printer( orp_only_if_it_is_assigned)
+	fnopen_receipt_printer=fn_openReceiptPrinter( orp_only_if_it_is_assigned)
 fnend
-def fn_open_receipt_printer(; orp_only_if_it_is_assigned)
+def fn_openReceiptPrinter(; orp_only_if_it_is_assigned)
 	dim orp_receipt_printer$*256
 	fnureg_read('Printer.Receipt',orp_receipt_printer$)
 	orp_did_open=0
 	if orp_receipt_printer$='' then
 		if ~orp_only_if_it_is_assigned then
-			fn_openprn
+			fn_openPrn
 			orp_did_open=1
 		end if
 	else
@@ -76,52 +80,66 @@ def fn_open_receipt_printer(; orp_only_if_it_is_assigned)
 		orp_did_open=1
 	end if
 	ORP_FINIS: !
-	fn_open_receipt_printer=orp_did_open
+	fn_openReceiptPrinter=orp_did_open
 fnend
 def library fnclose_receipt_printer
 	fn_setup
-	fnclose_receipt_printer=fn_close_receipt_printer
+	fnclose_receipt_printer=fn_closeReceiptPrinter
 fnend
-def fn_close_receipt_printer
+def fn_closeReceiptPrinter
 	close #255: ioerr ignore
 fnend
 def library fnopen_cash_drawer
 	fn_setup
-	if fn_open_receipt_printer(1) then
+	if fn_openReceiptPrinter(1) then
 		pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore
-		fn_close_receipt_printer
+		fn_closeReceiptPrinter
 	end if
 fnend
 
-def library fnopenprn(;sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
+def library fnOpenPrn(;baseNameAddition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
 	fn_setup
-	fnopenprn=fn_openprn( sendto_base_name_addition$,prgCapForSettingsOverride$,programCaptionOverride$)
+	fnOpenPrn=fn_openPrn( baseNameAddition$,prgCapForSettingsOverride$,programCaptionOverride$)
 fnend
-def fn_openprn(; sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
-	if file(255)<>-1 then goto Xit
-	dim g_prgCapForSettingsOverride$*256
-	g_prgCapForSettingsOverride$=prgCapForSettingsOverride$
-	dim op_printFileName$*1024
-	op_printFileName$=fn_printFileName$( sendto_base_name_addition$,'',programCaptionOverride$) ! ,pfn_extension$)
+def fn_openPrn(; baseNameAddition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
 
-	fnReadProgramPrintProperty("Lines",lpp$, g_prgCapForSettingsOverride$) ! lpp=val(lpp$)
-	if lpp$='' then gosub SET_DEFAULTS
-	dim g_prn_destination_name$*1024
-	g_prn_destination_name$=op_printFileName$
-	open #255: 'Name=[Q]\tmp_[session].prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output
-	goto Xit
-	SET_DEFAULTS: ! r:
-		pr "Lines settings for this program were not found."
-		pr "Default Settings will be used."
-		pr "  Lines: 54"
-		lpp$='54'
-	return  ! /r
+	! The File internal function returns the numeric value that specifies the status of file associated with the File Handle.
+	!
+	! -1	File not opened.
+	! 0	Operation performed successfully.
+	! 10	End of file occurred during input.
+	! 11	End of file occurred during output.
+	! 20	Transmission error during input.
+	! 21	Transmission error during output.
+
+
+	if file(255)=-1 then ! -1	File not opened.
+		dim g_prgCapForSettingsOverride$*256
+		g_prgCapForSettingsOverride$=prgCapForSettingsOverride$
+		dim op_printFileName$*1024
+		op_printFileName$=fn_printFileName$( baseNameAddition$,'',programCaptionOverride$) ! ,pfn_extension$)
+
+		fnReadProgramPrintProperty("Lines",lpp$, g_prgCapForSettingsOverride$) ! lpp=val(lpp$)
+		if lpp$='' then
+			pr "Lines settings for this program were not found."
+			pr "Default Settings will be used."
+			pr "  Lines: 54"
+			lpp$='54'
+		end if
+
+		dim g_prn_destination_name$*1024
+		g_prn_destination_name$=op_printFileName$
+		open #255: 'Name=[Q]\tmp_[session].prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output
+		! if env$('acsDeveloper')<>'' then pr 'fnOpenPrn did its thing.  ' : pause
+	else
+		! if env$('acsDeveloper')<>'' then pr 'fnOpenPrn skipped any action due to file(255)=-1.  ' : pause
+	end if
 Xit: fnend
 
-def library fncloseprn(;forceWordProcessor$)
+def library fnClosePrn(;forceWordProcessor$)
 	fn_setup
 	dim cp_destinationFileName$*1024
-	if file(255)<>-1 then ! if the printer file is open.
+	if file(255)<>-1 then ! the printer file is open.
 		cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
 		close #255:
 		if fnCopy('[Q]\tmp_[session].prn',g_prn_destination_name$) then
@@ -136,8 +154,8 @@ def library fncloseprn(;forceWordProcessor$)
 	g_prgCapForSettingsOverride$=''
 fnend
 def fn_start(start_destinationFilename$*1024; unused,forceWordProcessor$,___,isRtf,saveToAsStart$*2048)
-	on error goto START_ERTN
-
+	! on error goto START_ERTN
+ if env$('acsDeveloper')<>'' then pr 'start_destinationFilename$='&start_destinationFilename$ : pause
 	dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
 	dim landscape$*1
 	dim marg(4)
@@ -175,19 +193,19 @@ def fn_start(start_destinationFilename$*1024; unused,forceWordProcessor$,___,isR
  DROPIT: !
 	goto START_XIT
 
-	START_ERTN: ! r:
-	if err=4591 then   ! added for time-outs
-		pr newpage
-		pr f "10,10,Cc 60,N": "Press ENTER to continue"
-		input fields "11,10,C 1,N": pause$
-		continue
-	end if
-	fnerror(program$,err,line,act$,"start_xit")
-	if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
-	execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
-	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
-	START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
-	! /r
+	! START_ERTN: ! r:
+	! if err=4591 then   ! added for time-outs
+	! 	pr newpage
+	! 	pr f "10,10,Cc 60,N": "Press ENTER to continue"
+	! 	input fields "11,10,C 1,N": pause$
+	! 	continue
+	! end if
+	! fnerror(program$,err,line,act$,"start_xit")
+	! if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
+	! execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
+	! pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
+	! START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
+	! ! /r
 	START_XIT: !
 	on error goto Ertn
 fnend
@@ -246,7 +264,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 			!  so they will display correctly in rtf
 			!  "{" was added to allow support for bold, italic, underline, etc.
 			!  "q" was added to allow support for alignment.
-			
+
 				L730: !
 				z=pos(line$,"\",z)
 				if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then
@@ -262,23 +280,6 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 						z=0
 					end if
 				end if
-			
-			
-			! faulty rewrite   do
-			! faulty rewrite   	z=max(0,pos(line$,"\",z))
-			! faulty rewrite   	if pos(uprc$(line$),'{\Q')>0 then pause
-			! faulty rewrite   	if z and uprc$(line$(z-1:z+1))<>"{\Q" then
-			! faulty rewrite   		line$(z:z)="\\"
-			! faulty rewrite   		z+=2
-			! faulty rewrite   	end if
-			! faulty rewrite   loop while z
-			! faulty rewrite   do
-			! faulty rewrite   	z=max(0,pos(line$,"/fcode/",z))
-			! faulty rewrite   	if z then
-			! faulty rewrite   		line$(z:z+6)="\"
-			! faulty rewrite   		z+=1
-			! faulty rewrite   	end if
-			! faulty rewrite   loop while z
 
 			y+=len(line$)+2
 			if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word

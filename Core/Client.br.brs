@@ -715,43 +715,44 @@ def library fnub_printbill_program$*256
 		mat ub_printbill_client$(999)
 		mat ub_printbill_program$(999)
 		ub_printbill_count=0
+		
 		fn_upp_add('Ash Grove'         ,'ubprtfull_ashgrove'    )
 		fn_upp_add('Bethany'           ,'ubprtbl1_Bethany'      )  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
-		fn_upp_add('Campbell'          ,'(basic)'               )  ! derived from printbill_french_settlement_gas which should still work too
 		fn_upp_add('Chatom'            ,'ubprtbl1_chatom'       )
 		fn_upp_add('Divernon'          ,'ubprtbl1_div'          )
-		fn_upp_add('Edinburg'          ,'(basic)'               ) ! 'ubprtbl1_edi'
-		fn_upp_add('Edison'            ,'(basic)'               )
-		fn_upp_add('Exeter'            ,'(basic)'               )
 		fn_upp_add('Findlay'           ,'ubprtbl1_fin'          )
-		fn_upp_add('French Settlement' ,'(basic)'               ) ! 'printbill_french_settlement_gas'
 		fn_upp_add('Grandview'         ,'ubprtbl1_gra'          )
-		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
 		fn_upp_add('Kincaid'           ,'ubprtbl1_kin'          )
 		fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
 		! fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
-		fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
 		fn_upp_add('Millry'            ,'ubprtbl1_millry'       )
 		fn_upp_add('Morrisonville'     ,'ubprtbl1_morrisonville')
 		fn_upp_add('Moweaqua'          ,'PrintBill_Moweaqua'    )
 		fn_upp_add('Purdy'             ,'ubprtbl1_purdy'        )
-		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
 		fn_upp_add('Scottville Rural'  ,'ubprtbl1_scottville'   )
 		fn_upp_add('Thayer'            ,'ubprtbl1_thayer'       )
-		
-		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
 		fn_upp_add('Thomasboro'        ,'ubprtbl1_tho'          )
-		
 		fn_upp_add('White Hall'        ,'ubprtbl1_wh'           )
-		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
 		fn_upp_add('Brier Lake'        ,'ubprtthree_Brier'      )
+		fn_upp_add('Cerro Gordo V'     ,'ubprtlas_cerro'        )
+		
+		fn_upp_add('Campbell'          ,'(basic)'               )  ! derived from printbill_french_settlement_gas which should still work too
+		fn_upp_add('Edinburg'          ,'(basic)'               ) ! 'ubprtbl1_edi'
+		fn_upp_add('Edison'            ,'(basic)'               )
+		fn_upp_add('Exeter'            ,'(basic)'               )
+		fn_upp_add('French Settlement' ,'(basic)'               ) ! 'printbill_french_settlement_gas'
+		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
+		fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
+		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
+		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
+		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
 		fn_upp_add('Billings'          ,'(basic)'               ) ! ubprtthree_bill
 		fn_upp_add('Diamond'           ,'(basic)'               ) ! ubprtthree_bill
-		fn_upp_add('Cerro Gordo V'     ,'ubprtlas_cerro'        )
 		fn_upp_add('Choctaw'           ,'(basic)'               ) ! 'ubprtlas_choctaw'
 		fn_upp_add('Omaha'             ,'(basic)'               ) ! 'ubprtthree_Omaha'
 		fn_upp_add('Pennington'        ,'(basic)'               ) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
 		fn_upp_add('Blucksberg'        ,'(basic)'               ) ! 'PrintBill_Blucksberg'
+		
 		! r: old removed lines
 			! fn_upp_add("Ashland","ubprtbl1_ashland")
 			! fn_upp_add("Franklinton","ubprtbl1_Franklinton")
