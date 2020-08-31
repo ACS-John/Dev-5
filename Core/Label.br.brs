@@ -95,10 +95,10 @@ def library fnLabel(mat linestyle$)
 		end if
 	return ! /r
 	AskL2MARGINS: ! r:
-		fnreg_read('top_marg',top_marg$) : top_marg=val(top_marg$) conv ignore
-		fnreg_read('labelPos1',labelPos1$) : labelPos1=val(labelPos1$) conv ignore
-		fnreg_read('labelPos2',labelPos2$) : labelPos2=val(labelPos2$) conv ignore
-		fnreg_read('labelPos3',labelPos3$) : labelPos3=val(labelPos3$) conv ignore
+		top_marg =fnreg_read('top_marg',top_marg$)
+		labelPos1=fnreg_read('labelPos1',labelPos1$)
+		labelPos2=fnreg_read('labelPos2',labelPos2$)
+		labelPos3=fnreg_read('labelPos3',labelPos3$)
 		if top_marg=0 and labelPos1+labelPos2+labelPos3=0 then
 			if uprc$(linestyle$(5))="BAR" then
 				labelPos1=01 : labelPos2=75 : labelPos3=150
