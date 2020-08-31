@@ -462,7 +462,7 @@ fnend
 		end if
 	fnend
 	def fn_ezreader(bookFile$*512)
-		fn_readings_backup(bookFile$)
+		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
 		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
 		open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input
 		do
