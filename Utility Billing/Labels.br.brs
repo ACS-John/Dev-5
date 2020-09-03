@@ -223,7 +223,7 @@ SelectRangeOfAccounts: ! r: select range of accounts
 	if ckey=5 then goto Xit
 	l1$=lpad$(trim$(resp$(1)(1:10)),10)
 	h1$=lpad$(trim$(resp$(2)(1:10)),10)
-	if ckey=6 then fncustomer_search(resp$(1)) else goto L1470
+	if ckey=6 then fnCustomerSearch(resp$(1)) else goto L1470
 	if trim$(l1$)="" then l1$=resp$(1) : goto SelectRangeOfAccounts
 	if trim$(h1$)="" then h1$=resp$(1) : goto SelectRangeOfAccounts
 	goto SelectRangeOfAccounts
@@ -248,7 +248,7 @@ SelectIndividualAccounts: ! r: select individual accounts
 	fnCmdSet(23)
 	fnAcs(mat resp$,ckey)
 	if ckey=2 then
-		fncustomer_search(resp$(1))
+		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto SelectIndividualAccounts
@@ -295,7 +295,7 @@ goto Top ! /r
 ! 	fnCmdSet(21)
 ! 	fnAcs(mat resp$,ckey) ! select starting customer name
 ! 	if ckey=5 then goto Xit
-! 	if ckey=6 then fncustomer_search(resp$(1))
+! 	if ckey=6 then fnCustomerSearch(resp$(1))
 ! 	restore #customer,key>="       ": nokey ignore
 ! 	SCR4F3_READ_CUSTOMER: !
 ! 	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f,f3$,route,seq,extra$(1),final eof SCR4F3_NO_MATCH
@@ -356,7 +356,7 @@ SelectStartingCustomer: ! r: select customer to start with
 	fnCmdSet(5)
 	fnAcs(mat resp$,ckey) ! select starting customer
 	if ckey=6 then
-		fncustomer_search(resp$(1))
+		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto SelectStartingCustomer

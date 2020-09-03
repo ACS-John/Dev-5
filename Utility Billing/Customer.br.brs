@@ -1390,7 +1390,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		else if ckey=5 then 
 			goto AA_FINIS
 		else if ckey=6 then 
-			fncustomer_search(x$,fixgrid)
+			fnCustomerSearch(x$,fixgrid)
 			if trim$(x$)<>'' then ! in case the search was canceled
 				hact$=x$
 				fn_record_previous_update(x$)

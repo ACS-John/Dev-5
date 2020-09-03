@@ -1,7 +1,7 @@
 ! Replace S:\acsUB\d1.br
 ! returns the last billing date
 def library fnLastBillingDate(&d1; get_or_put)
-	library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read
+	autoLibrary
 	if get_or_put=0 then ! 0 = Get
 		fncreg_read('Current Billing Date',d1$)
 		if d1$='' then let fnreg_read('UB.Current Billing Date.Company [cno]',d1$)

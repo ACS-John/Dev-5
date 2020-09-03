@@ -1317,9 +1317,9 @@ fnend
 		library 'S:\Utility Billing\fn\lastBillingDate.br': fnLastBillingDate
 		fnLastBillingDate=fnLastBillingDate(d1,get_or_put)
 	fnend
-	def library fncustomer_search(&x$;fixgrid)
-		library 'S:\acsUB\customer_search.br': fncustomer_search
-		fncustomer_search=fncustomer_search(x$,fixgrid)
+	def library fnCustomerSearch(&x$;fixgrid)
+		library 'S:\Utility Billing\fn\customerSearch.br': fnCustomerSearch
+		fnCustomerSearch=fnCustomerSearch(x$,fixgrid)
 	fnend
 	def library fncustomer(x)
 		library 'S:\Utility Billing\Customer.br': fncustomer

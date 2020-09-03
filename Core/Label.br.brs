@@ -106,7 +106,7 @@ def library fnLabel(mat linestyle$)
 				labelPos1=02 : labelPos2=30 : labelPos3=63
 			end if
 			top_marg=2
-		end if  ! top_marg=0 and labelPos1+labelPos2+labelPos3=0
+		end if
 		fnTos
 		fnLbl(1,1,"Top Margin (lines):",24,1)
 		fnTxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels")
@@ -122,12 +122,12 @@ def library fnLabel(mat linestyle$)
 		resp$(4)=str$(labelPos3)
 		fnCmdSet(2)
 		fnAcs(mat resp$,ckey)
-		top_marg=val(resp$(1))
+		top_marg =val(resp$(1))
 		labelPos1=val(resp$(2))
 		labelPos2=val(resp$(3))
 		labelPos3=val(resp$(4))
 		if ckey<>5 then
-			fnreg_write('top_marg',str$(top_marg))
+			fnreg_write('top_marg' ,str$(top_marg ))
 			fnreg_write('labelPos1',str$(labelPos1))
 			fnreg_write('labelPos2',str$(labelPos2))
 			fnreg_write('labelPos3',str$(labelPos3))

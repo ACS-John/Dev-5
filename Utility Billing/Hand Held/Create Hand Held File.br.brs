@@ -295,7 +295,7 @@ NextAskAccount: ! r:
 	fnCmdSet(5)
 	fnAcs(mat resp$,ckey)
 	if ckey=6 then
-		fncustomer_search(resp$(1))
+		fnCustomerSearch(resp$(1))
 	end if
 	if ckey=99 or ckey=5 or resp$(1)="          " then goto Screen1
 	z$=lpad$(trim$(resp$(1)(1:10)), 10)
@@ -1462,7 +1462,7 @@ fnend
 ! /r
 
 def fn_searchScreen(x$,&res$)
-	fncustomer_search(x$)
+	fnCustomerSearch(x$)
 	if x$<>"" then
 		read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
 		res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
