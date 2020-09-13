@@ -2,7 +2,7 @@
 File
 >Employee                                   ^ Payroll\*
 >Payroll Check History                      ^ Payroll\*
->Design Reports                             ^ acsPR\newprRpt3
+>User Designed Reports                      ^ Payroll\*
 ! >W-2 Supplemental Information             ^ acsPR\W2Box16
 >Accrued Payroll Tax Information            ^ acsPR\NewMGLmstr
 >Time Classifications                       ^ acspr\hourclassification

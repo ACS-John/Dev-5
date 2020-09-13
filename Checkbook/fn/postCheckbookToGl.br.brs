@@ -251,7 +251,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		gosub Hdr
 	continue  ! /r
 	Hdr: ! r:
-		pg=pg+1
+		pg+=1
 		f1=1
 		pr #255,using 'form pos 1,c 8,cc 76': date$,env$('cnam')
 		pr #255,using 'form pos 1,c 8,cc 76': time$,"General Ledger Distribution Listing"

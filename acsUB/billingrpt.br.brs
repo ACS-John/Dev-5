@@ -62,7 +62,7 @@ L570: execute "Sort [Temp]\Control."&session$&" -n"
 	goto REPORT
  
 HEADER_PAGE: !
-	pg=pg+1
+	pg+=1
 	if print_details$="N" then temp$(1)="No Details"
 	if print_grand_totals$="N" then temp$(3)="No Usage Totals"
 L670: form pos 1,c 20,x 5,cc 40,cr 20,skip 1

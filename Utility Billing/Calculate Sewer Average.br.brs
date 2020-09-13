@@ -99,8 +99,6 @@ L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
  
 	EO_TRANS: !
 		if t1>0 then t3=int((t2+.5)/t1) else t3=0
-		if env$('client')="Monticello" and t3=0 then goto L670 ! skip record if no dates found  (multiple cycles)
-		if t1=1 and env$('client')="Monticello" then t3=8 ! if only one month use 8
 	end if
 	rewrite #h_customer,using "Form POS 1822,N 9": t3
 	pr #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE

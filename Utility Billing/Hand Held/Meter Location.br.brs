@@ -19,12 +19,15 @@ def fn_setup
 	if ~setup then
 		setup=1
 		autoLibrary
+		
+		on error goto Ertn
+		
 		dim info$(0)*20,infoN(0)
 		dim addr$(0)*30,addrN(0)
 		dim location$(0)*256,locationN(0)
-		dim mg$(0)*128
-		dim serviceName$(10)*60,serviceCode$(10)*2
 		dim resp$(128)*128
+		
+		dim serviceName$(10)*60,serviceCode$(10)*2
 		fnGetServices(mat serviceName$, mat serviceCode$)
 		! fn_InitialializeMeterLocation
 		for snI=1 to udim(mat serviceName$) : serviceName$(snI)=trim$(serviceName$(snI)) : nex snI
@@ -221,7 +224,7 @@ def fn_InitialializeMeterLocation
 			fnRename('[Q]\UBmstr\Meter.h[cno]','[Q]\UBmstr\Meter(old).h[cno]')
 		end if
 		fnFree('[Q]\UBmstr\Meter_Idx.h[cno]')
-		! if env$('acsDeveloper')<>'' then let fnStatusPause
+		! if env$('acsDeveloper')<>'' then fnStatusPause
 		fnStatusClose
 	end if
 	fn_InitialializeMeterLocation=hLocation
@@ -429,7 +432,20 @@ def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*
 	field$=lwrc$(field$)
 	mat location$=('')
 	mat locationN=(0)
-	locationKey$=rpad$(trim$(account$),kln(hLfaLocation,1))&rpad$(trim$(serviceId$),kln(hLfaLocation,2))
+
+	! origional line
+	! locationKey$=rpad$(trim$(account$),kln(hLfaLocation,1))&rpad$(trim$(serviceId$),kln(hLfaLocation,2))
+	
+	! gabriel's recommended way due to fileio "index compression" which makes kln wrong when disecting...  he is going to fix and add an option to do it properly
+	location$(loc_activeCustomer)=rpad$(trim$(account$),10)
+	location$(loc_serviceId     )=rpad$(trim$(serviceId$),2)
+	locationKey$=fnBuildKey$(table$,mat location$,mat locationN, 4)
+	mat location$=('')
+	mat locationN=(0)
+	
+	! another way that is perhaps the simplest fastest and easiest
+	! locationKey$=rpad$(trim$(account$),10)&rpad$(trim$(serviceId$),2) ! this works
+	
 	read #hLfaLocation,using form$(hLfaLocation),key=locationKey$: mat location$,mat locationN nokey ignore
 	if field$='locationid' then
 		lfaReturn$=str$(locationN(loc_locationID))
@@ -459,20 +475,20 @@ def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*
 	end if
 	fnLocationIdFromAccountAndServ$=lfaReturn$
 fnend
-def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns the locationID for a provided meterAddress$
-	if ~setup then fn_setup
-	if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
-	dim location$(0)*128,locationN(0),locationKey$*128
-	hMaLocationByName=fn_open(table$,mat location$,mat locationN,mat form$, 1,2)
-	maliPastOpen: !
-	locationN(loc_LocationID)=-1
-	read #hMaLocationByName,using form$(hMaLocationByName),key=rpad$(meterAddress$,KLN(hMaLocationByName)),release: mat location$,mat locationN nokey ignore
-	if ~leaveFileOpen then
-		close #hMaLocationByName:
-		hMaLocationByName=0
-	end if
-	fnMeterAddressLocationID=locationN(loc_LocationID)
-fnend
+! r: obosoluete   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns the locationID for a provided meterAddress$
+!    obosoluete    	if ~setup then fn_setup
+!    obosoluete    	if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
+!    obosoluete    	dim location$(0)*128,locationN(0),locationKey$*128
+!    obosoluete    	hMaLocationByName=fn_open(table$,mat location$,mat locationN,mat form$, 1,2)
+!    obosoluete    	maliPastOpen: !
+!    obosoluete    	locationN(loc_LocationID)=-1
+!    obosoluete    	read #hMaLocationByName,using form$(hMaLocationByName),key=rpad$(meterAddress$,KLN(hMaLocationByName)),release: mat location$,mat locationN nokey ignore
+!    obosoluete    	if ~leaveFileOpen then
+!    obosoluete    		close #hMaLocationByName:
+!    obosoluete    		hMaLocationByName=0
+!    obosoluete    	end if
+!    obosoluete    	fnMeterAddressLocationID=locationN(loc_LocationID)
+! /r obosoluete    fnend
 def library fnMeterAddressName$*30(locationId; leaveFileOpen) ! returns the meterAddress$ for a provided LocationID
 	if ~setup then fn_setup
 	if leaveFileOpen and hMaLocationByLocationId<>0 then goto manPastOpen
@@ -494,7 +510,7 @@ def fn_newLocationIdNonSequential(account$)
 fnend
 
 def fn_newLocationIdSequential(; alterAmount)
-	if alterAmount=0 then let alterAmount=1
+	if alterAmount=0 then alterAmount=1
 	fncreg_read('Last Location ID Assigned',nliLastLocation$)
 	nliLastLocation=val(nliLastLocation$)
 	nliLastLocation+=alterAmount

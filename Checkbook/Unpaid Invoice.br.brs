@@ -140,7 +140,7 @@ NEWPGE: ! r:
 	gosub HDR
 continue ! /r
 HDR: ! r:
-	pg=pg+1
+	pg+=1
 	fnopenprn
 	pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
 	pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Unpaid Invoice File Listing"

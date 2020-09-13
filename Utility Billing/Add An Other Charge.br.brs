@@ -11,7 +11,7 @@ if doFix then
 	! exec 'copy     "c:\acs\temp\mwubIndx4.h1"     "C:\Users\John\OneDrive\ACS\DEV-5D~1\MERRIA~1\ubmstr\ubIndx4.h1"    '
 	! exec 'copy     "c:\acs\temp\mwubIndx5.h1"     "C:\Users\John\OneDrive\ACS\DEV-5D~1\MERRIA~1\ubmstr\ubIndx5.h1"    '
 	! pause
-	let fn_fixBadOnes(0) 
+	fn_fixBadOnes(0) 
 	goto Xit
 end if
 fn_addAnOtherCharge
@@ -143,7 +143,7 @@ def fn_addTransaction(z$,serviceCode,tDate,amt,newBalance)
 	fnclosefile(hTran,'UB Transaction')
 fnend
 def fn_addNote(z$,amt,note$*256)
-	open #h_notefile:=fngethandle: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
+	open #h_notefile=fngethandle: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
 	pr #h_notefile: '** Other Charge added '&date$('mm/dd/ccyy')&' at '&time$&' **'
 	pr #h_notefile:   '  Account: '&z$&'  '&customer_name$
 	if fn_not_blank(note$) then

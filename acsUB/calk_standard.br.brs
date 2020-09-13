@@ -73,7 +73,7 @@ def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,ma
 			else if penalty$(j)<>"Y" and service$(j)<>"TX" and trim$(serviceName$(j))<>"" then ! skip penalty, sales tax and unused services
 				if env$('client')="Kimberling" and int(d1*.0001)><2 and (j=5 or j=6) then goto LX1110 ! CALCULATE fees EACH FEB 1
 				if trim$(serviceName$(j))="Inspection Fee" and ~charge_inspection_fee then goto LX1110 ! French Settlement Gas only ask that question, but it should only be calculated when selected
-				if j=6 and env$('client')='Lovington' then goto SKIP_THIS_NON_METERED_SERVICE
+				! if j=6 and env$('client')='Lovington' then goto SKIP_THIS_NON_METERED_SERVICE
 				g(j)=fn_calk_non_metered(j)
 				SKIP_THIS_NON_METERED_SERVICE: !
 			end if
@@ -142,7 +142,7 @@ def fn_calk_water
 fnend  ! fn_calk_water
 def fn_calk_sewer
 	! if trim$(x$)='300290.02' then pause
-	if env$('client')='Lovington' and a(2)>0 then g(6)=5 ! storm sewer
+	! if env$('client')='Lovington' and a(2)>0 then g(6)=5 ! storm sewer
 	if x(5)><0 then w(2)=x(5) : goto SEWER_COMPLETED
 	if b(2)><0 then goto STANDARD_SEWER_CHARGE ! was disabled but re-enabled on 12/5/16 - standard charge should work on sewer.  clients like Pennington need it.
 	!   if env$('client')="Ashland" and a(2)=1 and g(1)<>0 then w(2)=round(g(1)*3/4,2) : goto SEWER_COMPLETED
@@ -640,9 +640,10 @@ def fn_calk_demand
 	if env$('client')="Bethany" then read #h_ratemst,using FORM_RATEMSTR,key="DM"&lpad$(str$(extra(11)),2): mc1,mu1,mat rt nokey L6390 : goto L6360
 	!  Read #RATEMST,Using 540,Key="DM"&LPAD$(STR$(B(2)),2): MC1,MU1,MAT RT Nokey 6070  ! don't have a demand code any where in record.  wlll have to customize for each client  on Bethany we used service 6 to hold demand
 	L6360: if env$('client')="Bethany" then g(6)=mc1: goto L6380
-	if env$('client')="Lovington" then goto L6380
+	! if env$('client')="Lovington" then goto L6380
 	g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
-	L6380: d(15)=x(4)
+	L6380: !
+	d(15)=x(4)
 	L6390: !
 fnend  ! fn_calk_demand
 def fn_calk_purcahsed_gas_cost_adj(btu,usage_gas)

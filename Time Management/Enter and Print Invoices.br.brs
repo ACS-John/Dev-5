@@ -279,7 +279,7 @@ SCR_PRINT_INVOICES: ! r:
 		! if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop  ! next j
 	PRI_EOF: !
-	fnInvoiceClose
+	fnInvoiceClose(xinp(3))
 	L2870: !
 goto SCR_FINAL ! /r
 ! SCR_SELECT_INVOICE: ! r:

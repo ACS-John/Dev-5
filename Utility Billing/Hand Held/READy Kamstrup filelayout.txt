@@ -14,3 +14,9 @@ fields are space and tab delimited
   C 12,meter latitude
   N 10,Prev Read
   N 10,current Read
+  
+purposed Reading file:
+  c 10,Account Number
+  c  8,meter Number 
+  N 10,current Read  
+  ccyymmdd, current read date 

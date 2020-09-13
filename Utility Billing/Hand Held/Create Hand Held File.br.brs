@@ -8,7 +8,7 @@ goto Screen1
 
 Screen1: ! r:
 
-	fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
+	selection_method=fncreg_read('hhto.selection_method',selection_method$,'2')
 	fnTos : respc=0
 	fnLbl(2,1,"Hand Held model:",16,1)
 	if lwrc$(devicePreference$)='[ask]' then
@@ -35,14 +35,8 @@ Screen1: ! r:
 		rc_selectionMethod5:=respc+=1 : if selection_method=sm_meterTypes then resp$(rc_selectionMethod5)='True' else resp$(rc_selectionMethod5)='False'
 	end if
 
-
-	! if lrec(2)>0 then
-	!   fnCmdSet(19)
-	!   fnLbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
-	! else
-		fnLbl(9,1,"",46,2)
-		fnCmdSet(2)
-	! end if
+	fnLbl(9,1,"",46,2)
+	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
 			if lwrc$(devicePreference$)='[ask]' then
@@ -195,7 +189,7 @@ StartForSelectAll: ! r:
 	restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
 goto NextReadForAll ! /r
 
-SendRecordToOutFile: ! r: 
+SendRecordToOutFile: ! r:
 	! if trim$(z$)='100100.99' then pause
 
 	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
@@ -563,6 +557,7 @@ def fn_badgerConnectC ! older than BadgerBeacon
 		if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
 		if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
 		if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+		dim rt$*4
 		rt$=cnvrt$("pic(##)",extra(1))&"  "
 		if env$('client')='Raymond' then manual_or_dialog$="N"
 		if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
@@ -625,32 +620,27 @@ def fn_boson(; ___,z_out$*14,custname$*30)
 		metertag=0: metertag=val(extra$(3)) conv ignore
 		if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
 		if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-		if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-		if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
-		! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
-		if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-		if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
 		meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
 		! if trim$(z_out$)='200670' then pause
 		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
 		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
 		F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
 		goto Boson_NextSequence
-		!
+
 		Boson_Electric: if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto Boson_NextSequence
 		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
 		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
 		goto Boson_NextSequence
-		!
+
 		Boson_Demand: goto Boson_NextSequence
 		goto Boson_NextSequence
-		!
+
 		Boson_Gas: if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto Boson_NextSequence
 		readingt$="R"
 		pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
 		!     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
 		goto Boson_NextSequence
-		!
+
 		Boson_NextSequence: !
 	next j
 fnend
@@ -1328,14 +1318,7 @@ def fn_itron_record_mtr ! meter record - pg 13
 fnend
 ! /r
 def fn_legacyMultiDevice
-	! r: set cd$ - included in several records - maybe some sort of meter id - not sure
-	cd$="M"
-	if env$('client')="Oakland" or env$('client')="Lovington" then
-		if trim$(extra$(7))="1" then
-			cd$="B"
-		end if
-	end if
-	! /r
+	cd$="M" !  - included in several records - maybe some sort of meter id - not sure
 	! r: make c$ - a legacy customer service list for the following loop to walk through
 	c$=""
 	if a(1)>0 then c$="1"
@@ -1369,18 +1352,18 @@ def fn_legacyMultiDevice
 		end if
 	next j
 fnend
-! def fn_workabout r: old and no longer used 
+! def fn_workabout r: old and no longer used
 ! 	for j=1 to len(seq$)
 ! 		on val(seq$(j:j)) goto WorkaboutWATER,WorkaboutELECTRIC,WorkaboutDEMAND,WorkaboutGAS none WorkaboutNextSequence
-! 
+!
 ! 		FM_WORKABOUT: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 20
-! 
+!
 ! 		WorkaboutWATER: !
 ! 			if a(1)=0 then goto WorkaboutNextSequence
 ! 			m$=ltrm$(f$(1))(1:10)
 ! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
 ! 		goto WorkaboutNextSequence
-! 
+!
 ! 		WorkaboutELECTRIC: !
 ! 			if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto WorkaboutLAWNMETER
 ! 			m$=ltrm$(f$(2))(1:10)
@@ -1390,16 +1373,16 @@ fnend
 ! 			m$=ltrm$(f$(2))(1:10)
 ! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
 ! 		goto WorkaboutNextSequence
-! 
+!
 ! 		WorkaboutDEMAND: !
 ! 		goto WorkaboutNextSequence
-! 
+!
 ! 		WorkaboutGAS: !
 ! 			if a(4)=0 or trim$(serviceName$(4))<>"Gas" then goto WorkaboutNextSequence
 ! 			m$=ltrm$(f$(3))(1:10)
 ! 			pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
 ! 		goto WorkaboutNextSequence
-! 
+!
 ! 		WorkaboutNextSequence: !
 ! 	next j
 ! fnend /r
@@ -1826,7 +1809,8 @@ def fn_setup
 		dim z$*10,e$(4)*30,d(15),a(7)
 		dim res$*41,m$(2)*80
 		dim serviceName$(10)*20,serviceCode$(10)*2
-		dim rt$*4,extra(23)
+
+		dim extra(23)
 		dim filterAccount$(0)
 		! r: set mat drive
 			dim drive$(22)*3

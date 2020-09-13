@@ -19,13 +19,29 @@ Enum: ! r: Common Enumerations
 		if ~setup_messagebox then
 			setup_messagebox=1
 			! Response Enumerations
-			mb_ok=1 : mb_cancel=2 : mb_abort=3 : mb_retry=4 : mb_ignore=5 : mb_yes=6 : mb_no=7
+			mb_ok     = 1
+			mb_cancel = 2
+			mb_abort  = 3
+			mb_retry  = 4
+			mb_ignore = 5
+			mb_yes    = 6
+			mb_no     = 7
 			! Icon Enumerations
-			mb_stop=16 : mb_question=32 : mb_exclamation=48 : mb_information=64
+			mb_stop        = 16
+			mb_question    = 32
+			mb_exclamation = 48
+			mb_information = 64
 			! Default Button Enumerations
-			mb_button1_default=0 : mb_button2_default=256 : mb_button3_default=512
+			mb_button1_default =   0
+			mb_button2_default = 256
+			mb_button3_default = 512
 			! Button Set Enumerations
-			mb_okonly=0 : mb_okcancel=1 : mb_abortretryignore=2 : mb_yesnocancel=3 : mb_yesno=4 : mb_retrycancel=5
+			mb_okonly           = 0
+			mb_okcancel         = 1
+			mb_abortretryignore = 2
+			mb_yesnocancel      = 3
+			mb_yesno            = 4
+			mb_retrycancel      = 5
 		end if
 		! /r
 		! r:  Standard FKey Enumerations

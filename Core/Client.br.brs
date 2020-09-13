@@ -214,7 +214,7 @@ def fn_setupClient ! ** set up for new clients
 		fn_setupClient_add("Kathys Bookkeeping",3979,33672)
 		! fn_setupClient_add("Kimberling",2530,19212)
 		fn_setupClient_add("Kincaid",2532,33652)
-		fn_setupClient_add("Lovington",2689,32720)
+		! fn_setupClient_add("Lovington",2689,32720)
 		! fn_setupClient_add("Loma Linda",2690,33244)
 		!   fn_setupClient_add("Nancy Mouser",2795,34318)
 		fn_setupClient_add("Merriam Woods",2900,31702)
@@ -480,13 +480,13 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
 			!     fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		else if env$('client')='Lovington' then 
-			fn_userLimit(1)
-			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-			fn_getClientLicense_add('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
-			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('PR')
-			fn_getClientLicense_add('CL')
+		! else if env$('client')='Lovington' then 
+		! 	fn_userLimit(1)
+		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
+		! 	fn_getClientLicense_add('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
+		! 	fn_getClientLicense_add('GL')
+		! 	fn_getClientLicense_add('PR')
+		! 	fn_getClientLicense_add('CL')
 		else if env$('client')='Merriam Woods' then 
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -723,7 +723,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Findlay'           ,'ubprtbl1_fin'          )
 		fn_upp_add('Grandview'         ,'ubprtbl1_gra'          )
 		fn_upp_add('Kincaid'           ,'ubprtbl1_kin'          )
-		fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
+		! fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
 		! fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
 		fn_upp_add('Millry'            ,'ubprtbl1_millry'       )
 		fn_upp_add('Morrisonville'     ,'ubprtbl1_morrisonville')
@@ -758,7 +758,6 @@ def library fnub_printbill_program$*256
 			! fn_upp_add("Franklinton","ubprtbl1_Franklinton")
 			! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
 			! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
-			! fn_upp_add("Monticello","ubprtbl1_montic")
 			! fn_upp_add("Oakland","ubprtbl1_Oakland")
 			! fn_upp_add("Gilbertown","ubprtbl1_Gilbertown")
 			! fn_upp_add("Waverly","ubprtbl1_Waverly")
@@ -841,7 +840,7 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Kincaid",'IL')
 		! fn_pcs_add("Kimberling",'MO')
 		fn_pcs_add("Kathys Bookkeeping",'OK')
-		fn_pcs_add("Lovington",'IL')
+!		fn_pcs_add("Lovington",'IL')
 		fn_pcs_add("Merriam Woods",'MO')
 !   fn_pcs_add("Monticello",'IL')
 !   fn_pcs_add("Nancy Mouser",'OK')

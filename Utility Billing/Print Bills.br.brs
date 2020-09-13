@@ -1415,7 +1415,6 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	PU_Xit: ! 
 	! return  ! /r
 	
-	! pr #20: 'Call Print.AddPicture("Monticello.jpg",82,1)'
 	fnpa_fontsize
 	! fnpa_txt("Blucksberg Mtn Water Association",158)
 	! fnpa_txt("8077 Blucksberg Drive",15,13)

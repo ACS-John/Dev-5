@@ -1,9 +1,9 @@
-! test changes 
+! test changes
 ! r: simple functions that do not redirect
 def library fnVal(stringToConvert$*128; ___,returnN)
 	returnN=val(stringToConvert$) conv ValConv
 	goto ValXit
-	ValConv: ! 
+	ValConv: !
 		stringToConvert$=srep$(stringToConvert$,'$','')
 		stringToConvert$=srep$(stringToConvert$,',','')
 		stringToConvert$=srep$(stringToConvert$,'"','')
@@ -12,7 +12,7 @@ def library fnVal(stringToConvert$*128; ___,returnN)
 	goto ValXit
 	ValXit: !
 	fnVal=returnN
-fnend 
+fnend
 
 def library fnSaveToAsStart(filenameToCopyTo$*400)
 	setEnv('saveToAsStart',trim$(filenameToCopyTo$))
@@ -20,7 +20,7 @@ fnend
 def library fnBrFilename$*512(filename$*512; return$*512)
 	if trim$(filename$)='' then
 		return$=''
-	else 
+	else
 		return$=br_filename$(filename$)
 	end if
 	fnBrFilename$=return$
@@ -28,55 +28,66 @@ fnend
 def library fnOsFilename$*512(filename$*512; return$*512)
 	if trim$(filename$)='' then
 		return$=''
-	else 
+	else
 		return$=os_filename$(filename$)
 	end if
 	fnOsFilename$=return$
 fnend
-def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN,origionalKey$*256,attemptFix2Count)
+def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
+	origionalKey$*256,attemptFix2Count,tried0,triedDot00,lenTmp,dotPos,tmp$*128)
 	! attemptFix =1 try it: As-Is, Left-padded, Right-padded
 	!            =2 also try it: with adding 0, 00, .00 in all of the previous ways
 	origionalKey$=keyToTest$
+	! if trim$(origionalKey$)='101650' then pr 'yes' : pause
 	keyToTest$=rpad$(keyToTest$,kLn(hFile))
-	read #hFile,key=keyToTest$,release: nokey MaeNo
+	read #hFile,key=keyToTest$,release: nokey KeTop
 	returnN=1
 	goto MaeFinis
-	MaeNo: !
-	if attemptFix then 
+
+	KeTop: !
+	if attemptFix then
+
 		keyToTest$=lpad$(rtrm$(keyToTest$),kln(hFile))
-		read #hFile,key=keyToTest$,release: nokey MaeNoLpad1
+		read #hFile,key=keyToTest$,release: nokey KeAlign1
 		returnN=1
 		goto MaeFinis
-		MaeNoLpad1: ! try lpad(trim) 
+
+		KeAlign1: ! try lpad(trim)
 			keyToTest$=lpad$(trim$(keyToTest$),kln(hFile))
-			read #hFile,key=keyToTest$,release: nokey MaeNoLpad2
+			read #hFile,key=keyToTest$,release: nokey KeAlign2
 			returnN=1
 		goto MaeFinis
-		MaeNoLpad2: ! try rpad(trim)
+		KeAlign2: ! try rpad(trim)
 			keyToTest$=rpad$(trim$(keyToTest$),kln(hFile))
-			read #hFile,key=keyToTest$,release: nokey MaeNoLpad3
+			read #hFile,key=keyToTest$,release: nokey KeAlign3
 			returnN=1
 		goto MaeFinis
-		
-		MaeNoLpad3: ! 
-		if attemptFix=2 then
-			attemptFix2Count+=1
-			! pr 'attemptFix2Count=';attemptFix2Count 
-			if attemptFix2Count=1 then
-				keyToTest$=trim$(origionalKey$)&'0' soflow MaeJustFail
-				! pr '  keyToTest$="'&keyToTest$&'"' : pause
-				goto MaeNo
-			else if attemptFix2Count=2 then
-				keyToTest$=trim$(origionalKey$)&'00' soflow MaeJustFail
-				! pr '  keyToTest$="'&keyToTest$&'"' : pause
-				goto MaeNo
-			else if attemptFix2Count=3 then
-				keyToTest$=trim$(origionalKey$)&'.00' soflow MaeJustFail
-				! pr '  keyToTest$="'&keyToTest$&'"' : pause
-				goto MaeNo
+		KeAlign3: !
+
+		if attemptFix=>2 then ! treat it like a mistreated UB Customer number - look for missing trailing 0 or .00
+			! attempt additions to make it work (may have been truncated)
+			! attemptFix2Count+=1
+
+			tmp$=trim$(keyToTest$)
+			lenTmp=len(tmp$)
+			dotPos=pos(tmp$,'.',-1)
+			if dotPos<=0 and ~triedDot00 then
+				keyToTest$=tmp$&'.00' soflow PastDot00
+				triedDot00=1
+				goto KeTop
 			end if
+			PastDot00: !
+			
+			if dotPos=len(tmp$)-1 and ~tried0 then
+				keyToTest$=tmp$&'0' soflow Past0
+				tried0=1
+				goto KeTop
+			end if
+			Past0: !
+
 		end if
 		MaeJustFail: !
+		! if attemptFix2Count<4 goto KeTop
 		returnN=0
 		keyToTest$=origionalKey$
 	end if
@@ -135,7 +146,7 @@ def library fnFormNumb$(numb,decimals,size)
 fnend
 def library fnpause(;unused)
 	if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
-XITPAUSE: fnend 
+XITPAUSE: fnend
 ! /r
 ! r: S:\Core\Start.br
 	def library fnWriteProc(procName$*64,procLine$*256)
@@ -1237,10 +1248,10 @@ fnend
 		library 'S:\Utility Billing\Customer.br': fnDepositChangeLog
 		fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)
 	fnend
-	def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
-		library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressLocationID
-		fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
-	fnend
+	! def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
+	! 	library 'S:\Utility Billing\Hand Held\Meter Location.br': fnMeterAddressLocationID
+	! 	fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
+	! fnend
 	def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2)
 		library 'S:\Utility Billing\Hand Held\Meter Location.br': fnCustomerMeterLocationSelect
 		fnCustomerMeterLocationSelect=fnCustomerMeterLocationSelect(account$,serviceCode$)
@@ -1540,14 +1551,14 @@ fnend
 		fnGetEmpOptions=fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
 	fnend
 
-	
+
 	def library fnDeptName$*25(departmentCode)
 		library 'S:\Payroll\fn\deptName.br': fnDeptName$
 		fnDeptName$=fnDeptName$(departmentCode)
 	fnend
 
 	def library fnPrPrintNetZeroDefault$(; ___,return$)
-		if env$('client')="Divernon" or env$('client')="Payroll Done Right" then 
+		if env$('client')="Divernon" or env$('client')="Payroll Done Right" then
 			return$='True'
 		else
 			return$='False'
@@ -1578,10 +1589,6 @@ fnend
 		library 'S:\acsPR\Employee_srch.br': fnemployee_srch
 		fnemployee_srch(x$,fixgrid)
 	fnend
-	! def library fncat_srch(&x$;fixgrid)
-	! 	library 'S:\acsPR\CAT_srch.br': fncat_srch
-	! 	fncat_srch(x$,fixgrid)
-	! fnend
 	def library fncat_srch2(&x$,&ckey;fixgrid)
 		library 'S:\acsPR\CAT_srch2.br': fncat_srch2
 		fncat_srch2(x$,ckey,fixgrid)
@@ -1694,10 +1701,10 @@ fnend
 	def library fnCustomerHasEbilling(Client_id$)
 		library 'S:\Time Management\fn\customerHasEbilling.br': fnCustomerHasEbilling
 		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
-	fnend 
+	fnend
 	def library fnMergeInvoices
 		library 'S:\Time Management\ACS Invoices.br': fnMergeInvoices
 		fnMergeInvoices=fnMergeInvoices
-	fnend 
+	fnend
 ! /r
 

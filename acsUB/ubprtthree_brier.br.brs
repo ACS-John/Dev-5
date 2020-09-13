@@ -1,5 +1,4 @@
 ! Replace S:\acsUB\ubprtthree_Brier
-! pr bills for Village of Monticello (full page)
  
 	autoLibrary
 	on error goto Ertn

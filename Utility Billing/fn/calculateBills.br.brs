@@ -296,7 +296,7 @@ def fn_demand
 		g(6)=mc1
 		goto DEMAND_FINIS
 	end if
-	if env$('client')="Lovington" then goto DEMAND_FINIS
+	! if env$('client')="Lovington" then goto DEMAND_FINIS
 	g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
 	DEMAND_FINIS: !
 	d(15)=x(4)

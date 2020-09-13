@@ -898,8 +898,8 @@ def fn_portion_check
 		fn_portion_check_edison(amt)
 	else if env$('client')="Kimberling" then
 		fn_portion_check_kimber(amt)
-	else if env$('client')="Lovington" then
-		fn_portion_check_generic(amt, 29)
+	! else if env$('client')="Lovington" then
+	! 	fn_portion_check_generic(amt, 29)
 	else
 		fn_portion_check_generic(amt)
 	end if
@@ -934,7 +934,7 @@ def fn_portion_check_generic(dolamt; length,posDate)
 		if env$('client')="Bethany" then a=54
 		if env$('client')="Thomasboro" or env$('client')="Unity" then a=55
 		if env$('client')="Hope Welty" or env$('client')="Philo" then a=55
-		if env$('client')="Monticello" or env$('client')="Edinburg" then a=55
+		if env$('client')="Edinburg" then a=55
 	end if
 	if env$('client')='Campbell' then pr #255: ''
 	pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$ ! line 14

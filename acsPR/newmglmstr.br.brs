@@ -107,7 +107,7 @@ L920: form pos 1,c 6,11*c 14,skip 1
  
 NWPG: pr #255: newpage: gosub HDR4: continue
  
-HDR4: pg=pg+1
+HDR4: pg+=1
 	pr #255,using L990: "Page",pg,env$('cnam')
 L990: form pos 1,c 4,n 4,pos hp1,c 40,skip 1
 	pr #255: date$;tab(50);"Department GL Number File Listing"

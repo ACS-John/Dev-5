@@ -320,7 +320,7 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 	restore #hWork: ! ,search>="": nokey PR_TOTALS    <-- needs to work with or without an index
 	do
 
-		read #hWork,using F_WORK: x$,mat x eof PR_TOTALS
+		read #hWork,using Fwork: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
 		e1$=e2$=""
 		read #hCustomer1,using F_CUSTOMER_B,key=x$: e1$,e2$,mat d,f,mat a nokey PR_CUSTOMER_NOKEY
@@ -383,7 +383,7 @@ PrintReadings_PgOf: ! r:
 	fn_printReadings_Heading( printReadings_altHeading$)
 continue ! /r
 MAKE_CORRECTIONS: ! r:
-	read #hWork,using F_WORK,key=x$: x$,mat x nokey MENU1
+	read #hWork,using Fwork,key=x$: x$,mat x nokey MENU1
 	t(1)-=1 ! SUBTRACT PROOF TOTALS
 	for j1=1 to 15 : t(j1+1)-=x(j1) : next j1
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
@@ -391,7 +391,7 @@ MAKE_CORRECTIONS: ! r:
 	editmode=1
 	goto EnterReadings3 ! /r
 REWRITE_WORK: ! r:
-	rewrite #hWork,using F_WORK,key=x$: trim$(x$),mat x nokey L3900
+	rewrite #hWork,using Fwork,key=x$: trim$(x$),mat x nokey L3900
 	goto L3910
 L3900: if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then fn_writeWork(hWork,x$,mat x)
 L3910: if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
@@ -521,17 +521,16 @@ def fn_checkend
 		txt$(7)="No = Go Back, so I can re-enter the reading;"
 		txt$(8)="Cancel = Do not enter a reading for that Customer."
 		fnmsgbox(mat txt$,resp$,'',51)
-	else
-		goto CHECKEND_XIT
+		if resp$="Yes" then
+			passcheck=ckpass
+		else if resp$="No" then
+			passcheck=ckfail
+		else if resp$="Cancel" then
+			passcheck=ckfail
+			editmode=0
+		end if
 	end if
-	if resp$="Yes" then
-		passcheck=ckpass
-	else if resp$="No" then
-		passcheck=ckfail
-	else if resp$="Cancel" then
-		passcheck=ckfail
-		editmode=0
-	end if
+
 	CHECKEND_XIT: !
 fnend
 def fn_print_unusual
@@ -562,7 +561,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		goto HH_OTHER
 	end if
 	HH_WORKABOUT: ! r: hand held routines for workabout
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
+	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
 	goto L5000
 	L4990: !
 	restore #h_readings:
@@ -593,7 +592,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
+	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
 	HH_BADGER_READ: !
 	linput #h_readings: ln$ eof HH_W_END
 	! pr ln$ : pause
@@ -611,7 +610,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	last_ln$=""
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
+	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
 	HH_BOSON_READ: !
 	if last_ln$="" then
 		linput #h_readings: ln$ eof HH_W_END
@@ -621,9 +620,6 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	end if
 	if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BOSON_READ
 	mat x=(0)
-	if env$('client')="Monticello" then
-		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_BOSON_READ ! Account Key :goto 5150
-	end if
 	ti$=ln$(14:14)
 	if ti$="W" or ti$="G" or ti$="E" then
 		x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ
@@ -632,7 +628,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		ti$=""
 		ti1=1
 	end if
-	if uprc$(ti$)="W" or env$('client')="Monticello" then
+	if uprc$(ti$)="W" then
 		ti1=1
 	else if uprc$(ti$)="G" then
 		ti1=2
@@ -659,21 +655,12 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 			last_ln$=ln$
 		end if
 	end if
-	L5440: !0
-	if env$('client')="Monticello" then
-		read #hCustomer1,using 'form pos 1954,c 12',key=lpad$(trim$(x$),10): extra$(7) nokey L5480 ! monticello
-		if trim$(extra$(7))="22" then x(ti1)=round(x(ti1)/100,0) ! monticello
-	L5480: !
-		if trim$(extra$(7))="23" then x(ti1)=round(x(ti1)/10,0) ! monticello
-	!       If TRIM$(EXTRA$(7))="24" or TRIM$(EXTRA$(7))="65" or TRIM$(EXTRA$(7))="66"Then don't do anything ! monticello
-		if trim$(extra$(7))="66" then x(ti1)=round(x(ti1)/10,0) ! monticello
-		if trim$(extra$(7))="65" then x(ti1)=round(x(ti1)/100,0) ! monticello
-	end if  ! t$="Monticello"
+	L5440: !
 	goto HH_CONTINUE ! /r
 	LAPTOP: ! r: readings from a laptop using acs meter reading software
 		if listonly=1 then fnopenprn
 		close #h_readings: ioerr ignore
-		open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
+		open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
 		HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
 		mat x=(0)
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_LAPTOP_READ ! Account Key
@@ -693,13 +680,13 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	if device$='Hersey' then goto HH_OTHER_TYPE1
 	if device$='Master Meter' then goto HH_OTHER_TYPE1
 	if device$='READy Water' then goto HH_OTHER_TYPE1
-	if device$='Sensus' then goto HH_OTHER_TYPE1
-	fn_hh_other_type2(listonly)
+	! if device$='Sensus' then goto HH_OTHER_TYPE1
+	fn_hh_other_type2(ip1$,listonly)
 	goto HH_W_END ! /r
 	HH_OTHER_TYPE1: ! r:
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
+	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
 	HH_OTHER_TYPE1_READ: !
 	linput #h_readings: ln$ eof HH_W_END
 	mat x=(0)
@@ -708,8 +695,8 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	x(ti1)=0
 	if device$='READy Water' then
 		x(ti1)=val(ln$(11:len(ln$))) conv ignore
-	else if env$('client')="Lovington" then
-		x(ti1)=val(ln$(11:19)) conv ignore
+	! else if env$('client')="Lovington" then
+	! 	x(ti1)=val(ln$(11:19)) conv ignore
 	else
 		x(ti1)=val(ln$(11:20)) conv ignore
 	end if
@@ -867,7 +854,7 @@ EST2: ! r:
 	mat x=(0) ! actually calculate the estimated usage
 	EST2B: !
 	a1=est4=0
-	read #hWork,using F_WORK,key=x$: x$,mat x nokey L7060
+	read #hWork,using Fwork,key=x$: x$,mat x nokey L7060
 	a1=1
 	t(1)-=1 ! Reverse Proof Totals
 	for j=1 to 15 : t(j+1)=t(j+1)-x(j) : next j
@@ -898,7 +885,7 @@ EST2: ! r:
 	if est4=0 then goto L7220
 	if addmethod=am_loadHoldingFile then goto L7220 ! FROM Hand Held
 	if a1=1 then
-		rewrite #hWork,using F_WORK: trim$(x$),mat x
+		rewrite #hWork,using Fwork: trim$(x$),mat x
 		goto L7210
 	end if
 	fn_writeWork(hWork,x$,mat x)
@@ -994,7 +981,7 @@ def fn_rewrite_usage
 	if servicetype$="WA" then x(12)=usage
 	if servicetype$="GA" then x(14)=usage
 	if servicetype$="EL" then x(13)=usage
-	rewrite #hWork,using F_WORK: trim$(x$),mat x
+	rewrite #hWork,using Fwork: trim$(x$),mat x
 fnend
 def fn_write_tamper(custno$*10,tval)
 	read #hCustomer1,using TMPFORM,key=lpad$(trim$(custno$),10): tmp$ nokey WT_XIT
@@ -1041,11 +1028,11 @@ ImportTabDelimited: ! r:
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv IT_W_NEXT ! Account Key
 		ti1=1 ! water
 		x(ti1)=0
-		if env$('client')="Lovington" then
-			x(ti1)=val(ln$(11:19)) conv ignore
-		else
+		! if env$('client')="Lovington" then
+		! 	x(ti1)=val(ln$(11:19)) conv ignore
+		! else
 			x(ti1)=val(ln$(11:20)) conv ignore
-		end if
+		! end if
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
 		!       goto HH_CONTINUE
 
@@ -1103,9 +1090,11 @@ MENU1: ! r:
 	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
 
 	if fnregistered_for_hh then
-		fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
-		fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
-		fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		! fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
+		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
+		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+
 		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
 	end if  ! fnregistered_for_hh
 ! r: add the grid
@@ -1237,7 +1226,7 @@ MENU1: ! r:
 	restore #hWork:
 	batchtot=0
 	do
-		read #hWork,using F_WORK: x$,mat x eof MENU1READWORKEOF
+		read #hWork,using Fwork: x$,mat x eof MENU1READWORKEOF
 		ic=0
 		item$(ic+=1)=x$
 		batchtot+=val(x$) conv L1100
@@ -1361,11 +1350,11 @@ MENU1READWORKEOF: ! /r
 	end if
 goto MENU1 ! /r
 
-def fn_holdingFileLoad
+def fn_holdingFileLoad(; ___,hld9)
 	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
-	open #hld9=9: "Name="&holdingFile$,internal,input ioerr L7460
+	open #hld9=fngethandle: "Name="&holdingFile$,internal,input ioerr L7460 ! was =9
 	do
-		read #hld9,using F_WORK: x$,mat x eof IPHOLD_EO_HLD9
+		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
 		fn_writeWork(hWork,x$,mat x, 1)
 		fn_accumulateprooftotals
 	loop
@@ -1406,7 +1395,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 		restore #hWork: ! ,search>="": nokey AppendFinis
 		do
-			read #hWork,using F_WORK: x$,mat x eof AppendFinis
+			read #hWork,using Fwork: x$,mat x eof AppendFinis
 			fn_writeWork(hld8,x$,mat x, 1)
 		loop
 		AppendFinis: !
@@ -1436,8 +1425,10 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	! r: book or holding file grid
 	colhdr$(1)=book_or_holding_file$ ! "Book"
 	colhdr$(2)="Size"
-	colhdr$(3)="Date"
-	colhdr$(4)="Time"
+	colhdr$(3)="Date Time"
+	colhdr$(4)="Comment"
+	
+	dim bookItem$(0)*128
 	mat bookItem$(4)
 	mat colhdr$(4)
 	ihFileCount=fngetdir2('[Q]\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
@@ -1449,29 +1440,31 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 			tmpBookNumber=val(ihFilename$(ihFileItem)(10:len(ihFilename$(ihFileItem)))) conv ihInvalidFile
 			bookItem$(1)=str$(tmpBookNumber)
 			bookItem$(2)=cnvrt$("pic(zzz,zzz,zzz,zzz)",ihFileSize(ihFileItem))
-			bookItem$(3)=ihFileDate$(ihFileItem)
-			bookItem$(4)=ihFileTime$(ihFileItem)
+			bookItem$(3)=ihFileDate$(ihFileItem)&' '&ihFileTime$(ihFileItem)
+			dim bookComment$*128
+			fncreg_read('book comment '&str$(tmpBookNumber),bookComment$)
+			bookItem$(4)=bookComment$
 			fnflexadd1(mat bookItem$)
 		else ! if book_or_holding_file$='Holding File' then
-			ihTmpHoldingFileNumber$=ihFilename$(ihFileItem)(7:pos(ihFilename$(ihFileItem),".",-1)-1) conv ihInvalidFile
+			ihTmpHoldingFileNumber$=ihFilename$(ihFileItem)(7:pos(ihFilename$(ihFileItem),'.',-1)-1) conv ihInvalidFile
 			if ihTmpHoldingFileNumber$='-index' then goto ihInvalidFile
 			bookItem$(1)=ihTmpHoldingFileNumber$
-			bookItem$(2)=cnvrt$("pic(zzz,zzz,zzz,zzz)",ihFileSize(ihFileItem))
+			bookItem$(2)=cnvrt$('pic(zzz,zzz,zzz,zzz)',ihFileSize(ihFileItem))
 			bookItem$(3)=ihFileDate$(ihFileItem)
 			bookItem$(4)=ihFileTime$(ihFileItem)
 			fnflexadd1(mat bookItem$)
 		end if
 		ihInvalidFile: !
 	next ihFileItem
-	fnLbl(11,1," ",15,1)
+	fnLbl(11,1,' ',15,1)
 	! /r
-	fnCmdKey("&Next",1,1)
-	fnCmdKey("I&mport from Hand Held",ck_importHHtoBook=3)
-	fnCmdKey("&Delete",ck_delete=4)
-	fnCmdKey("&Print",ck_print=6)
-	fnCmdKey("&Cancel",cancel,0,1)
+	fnCmdKey('&Load'                 ,1                   ,1)
+	fnCmdKey('I&mport from Hand Held',ck_importHHtoBook=3)
+	fnCmdKey('&Delete'               ,ck_delete=4)
+	fnCmdKey('&Print'                ,ck_print=6)
+	fnCmdKey('&Cancel'               ,cancel              ,0,1)
 	fnAcs(mat resp$,ckey)
-	holdingFile$=""
+	holdingFile$=''
 	ip1$=resp$(1)
 	if ckey=cancel or ip1$='' then
 		goto IH_XIT
@@ -1940,18 +1933,18 @@ fnend
 def fn_writeWork(hWork,x$,mat x; overwriteDupeAccount) ! write to hWork file
 
 	if overwriteDupeAccount then
-		rewrite #hWork,using F_WORK,key=lpad$(trim$(x$),kln(hWork)): trim$(x$),mat x nokey ww_overwriteAdd
+		rewrite #hWork,using Fwork,key=lpad$(trim$(x$),kln(hWork)): trim$(x$),mat x nokey ww_overwriteAdd
 		goto ww_overwriteFinis
 		ww_overwriteAdd: !
-		write #hWork,using F_WORK: trim$(x$),mat x
+		write #hWork,using Fwork: trim$(x$),mat x
 		ww_overwriteFinis: !
 	else
 		ww_writeWorkIncriment: ! write to hWork file
 		rctr=lrec(hWork)+1
-		write #hWork,using F_WORK,rec=rctr: trim$(x$),mat x duprec ww_writeWorkIncriment
-		F_WORK: form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1
+		write #hWork,using Fwork,rec=rctr: trim$(x$),mat x duprec ww_writeWorkIncriment
 	end if
 fnend
+Fwork: form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1
 def fn_meter_change_out
 	mco_return=0
 	do
@@ -2046,7 +2039,7 @@ def fn_meter_change_out
 	open #hWork: "Name="&workFile$,internal,outIn,relative
 	if lrec(hWork)=0 then goto MCO_L9290
 	MCO_WORK_READ: !
-	read #hWork,using F_WORK: x$,mat x eof MCO_L9350
+	read #hWork,using Fwork: x$,mat x eof MCO_L9350
 	MCO_L9290: !
 	if trim$(begx$)="" or trim$(begx$)="[All]" then begx$="" : goto MCO_L9320
 	if trim$(begx$)<>trim$(x$) then goto MCO_WORK_READ
@@ -2065,13 +2058,15 @@ def fn_meter_change_out
 	fn_meter_change_out=mco_return
 fnend
 
-def fn_hh_other_type2(listonly)
+def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 	dim hot_ver$*512,hot_line$*512
 	dim hotImportDataField$(0)*256
 	dim hotImportDataValue$(0)*256
 	hotDataImportAsked=0
-	open #h_readings:=13: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
+	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
+	lineCount=0
 	linput #h_readings: hot_ver$
+	lineCount+=1
 	hot_ver$=trim$(hot_ver$)
 	hot_z_prior$=hot_z$=''
 	if hot_ver$='[ACS Hand Held File Generic Version 2]' then
@@ -2084,33 +2079,34 @@ def fn_hh_other_type2(listonly)
 			do
 				hot_z_prior$=hot_z$
 				linput #h_readings: hot_line$ eof HOT_EOF
+				lineCount+=1
 				if trim$(srep$(hot_line$,'=',''))<>'' and trim$(hot_line$)(1:1)<>'!' then
 					! pr 'before: hotline$='&hot_line$ ! pause
-					fn_hot_parse_line(hot_line$,hot_z$,mat x,mat hotImportDataField$,mat hotImportDataValue$,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
+					fn_hot_parseLine(hot_line$,hot_z$,mat x,mat hotImportDataField$,mat hotImportDataValue$,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 					! pr 'after ' : pause
 			 end if
 			loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-			! if trim$(hot_z_prior$)='100020.03' then
-			! 	debug=1
-			! ! if debug then
-			! 	pr 'after loop'
-			! 	pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
-			! 	pr 'Reading.Water=';x(1);'  Usage=';x(12)
-			! 	! pr 'MeterAddress.LocationID=';hotLocationID
-			! 	! pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
-			! 	! for x=1 to udim(mat hotImportDataField$)
-			! 	! 	pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
-			! 	! nex x
-			! 	pr ''
-			! 	pause
-			! else
-			! 	debug=0
-			! end if
+			! r:	debug				if trim$(hot_z_prior$)='100020.03' then 
+			! 						debug=1
+			! 					! if debug then
+			! 						pr 'after loop'
+			! 						pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
+			! 						pr 'Reading.Water=';x(1);'  Usage=';x(12)
+			! 						! pr 'MeterAddress.LocationID=';hotLocationID
+			! 						! pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
+			! 						! for x=1 to udim(mat hotImportDataField$)
+			! 						! 	pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
+			! 						! nex x
+			! 						pr ''
+			! 						pause
+			! 					else
+			! 						debug=0
+			! /r					end if
 			fn_hot_calcMeterChangeOut(hot_z_prior$,mat x,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 			if listonly=1 then
 				fn_lo_pr_rec(hot_z_prior$,mat x)
 			else
-				fn_hot_write_work(hWork,hot_z_prior$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
+				fn_hot_writeWork(hWork,hot_z_prior$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
 			end if
 			hot_z_prior$=hot_z$
 		loop
@@ -2119,12 +2115,12 @@ def fn_hh_other_type2(listonly)
 		if listonly=1 then
 			fn_lo_pr_rec(hot_z$,mat x)
 		else
-			fn_hot_write_work(hWork,hot_z$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
+			fn_hot_writeWork(hWork,hot_z$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
 		end if
 		if listonly=1 then fncloseprn
 	end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
 fnend
-def fn_hot_parse_line(line$*512,&hot_z$,mat x,mat importDataField$,mat importDataValue$,&hotWaterMeterChangeBefore,&hotWaterMeterChangeAfter)
+def fn_hot_parseLine(line$*512,&hot_z$,mat x,mat importDataField$,mat importDataValue$,&hotWaterMeterChangeBefore,&hotWaterMeterChangeAfter)
 	! sets any one of the following local variables each call:
 	! hot_z$, mat x
 	pos_equal=pos(line$,'=')
@@ -2254,7 +2250,7 @@ def fn_hot_calcMeterChangeOut(hcmcoAccount$,mat x,hotWaterMeterChangeBefore,hotW
 		end if
 	end if
 fnend
-def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
+def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
 	if udim(mat hotImportDataField$)>0 then
 		if ~hotDataImportAsked then ! r: ask if they want to import data (non reading/usage)
 			mat message$(0)

@@ -1,29 +1,32 @@
-! Replace S:\acsPR\newprRpt3
+! formerly S:\acsPR\newprRpt3
 ! User Designed Reports
- 
-	autoLibrary
-	on error goto Ertn
- 
-	dim rt$*78,ch$(2)*132,psc(100)
-	dim inp(20),pp(20),ti(20),rt40$*40
-	dim rptn$*2,cap$*128,resp$(100)*150
-	dim ml$(4)*128
- 
-	fnTop(program$,cap$="Design Reports")
-	fnIndex("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
-	fnStatusClose
-	open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed
+
+autoLibrary
+on error goto Ertn
+
+dim rt$*78
+dim ch$(2)*132
+dim psc(100)
+dim inp(20),pp(20),ti(20)
+dim rt40$*40
+dim rptn$*2
+dim resp$(100)*150
+dim ml$(4)*128
+
+fnTop(program$,"Design Reports")
+fnIndex("[Q]\PRmstr\PRReport.h[cno]","[Q]\PRmstr\PRRptIdx.h[cno]","1 2")
+fnStatusClose
+open #h_prreport:=1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],RecL=1049,KLn=2,KPs=1,Use,Shr",internal,outIn,keyed
 F_PRREPORT: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
-!
- 
-	gosub DATANAMES
-SCR1: !
-ASKREPORT: !
-	fnTos(sn$="Report-ask")
+
+gosub DataNames
+AskReport: ! r:
+do
+	fnTos
 	respc=0
 	fnLbl(1,1,"Report:",11,1)
 	fncombof("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
-	resp$(respc+=1)=""
+	resp$(respc+=1)=reportSelected$
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,0,0,"Modify the selected report")
 	fnCmdKey("Print",4,1,0,"Run the selected report")
@@ -32,35 +35,38 @@ ASKREPORT: !
 	if ckey=5 then goto Xit
 	editrec=addone=0
 	rptn=val(resp$(1)(1:2))
+	dim reportSelected$*128
+	reportSelected$=resp$(1)
 	if ckey=1 then
 		addone=1
 		rptn=0
-		goto CONTINUE_FOR_ADD_AND_EDIT
+		goto ContinueForAddAndEdit
 	else if ckey=2 then
 		editrec=1
-		goto CONTINUE_FOR_ADD_AND_EDIT
+		goto ContinueForAddAndEdit
 	else if ckey=4 then
 		fnprint_designed_report(rptn)
 	end if
-	goto ASKREPORT
-CONTINUE_FOR_ADD_AND_EDIT: !
+loop ! /r
+EditReadNokey: ! r:
+	mat ml$(2)
+	ml$(1)="A record with this number does not exist!"
+	ml$(2)="Select a different numbe if you wish to add a new report."
+	fnmsgbox(mat ml$,resp$,'',48)
+goto AskReport ! /r
+ContinueForAddAndEdit: ! r:
 	rptn$=lpad$(str$(rptn),2)
 	if addone=1 then
 		read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey SCR2
 	else if editrec=1 then
-		read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey EDIT_READ_NOKEY
+		read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey EditReadNokey
 	end if
-	goto L400
-EDIT_READ_NOKEY: ! r:
-	mat ml$(2)
-	ml$(1)="A record with this number does not exist!"
-	ml$(2)="Select a different numbe if you wish to add a new report."
-	fnmsgbox(mat ml$,resp$,cap$,48)
-	goto ASKREPORT ! /r
-L400: !
+	! L400: !
 	holdrn=rn
-!
-SCR2: !
+goto SCR2 ! /r
+
+
+SCR2: ! r:
 	if addone=1 then ! r: initialize variables to 0 or blank
 		rn=0
 		rt$=""
@@ -73,7 +79,7 @@ SCR2: !
 		mat ti=(0)
 		holdrn=0
 	end if  ! /r
-	fnTos(sn$="Report-add")
+	fnTos
 	respc=0: mylen=15: mypos=mylen+3
 	fnLbl(1,1,"Report #:",mylen,1)
 	fnTxt(1,mypos,2,2,0,"30",0,"")
@@ -99,7 +105,7 @@ SCR2: !
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
 	fnAcs(mat resp$,ckey) ! ask report #
 	addone=0
-	if ckey=5 then goto SCR1
+	if ckey=5 then goto AskReport
 	rn=val(resp$(1)(1:2))
 	if holdrn>0 and rn<>holdrn then
 ! r: confirm_key_change
@@ -107,7 +113,7 @@ SCR2: !
 		ml$(1)="You are attempting to change report number"
 		ml$(2)="from "&str$(holdrn)& " to "&str$(rn)&"."
 		ml$(3)="Take OK to continue, else Cancel."
-		fnmsgbox(mat ml$,resp$,cap$,49)
+		fnmsgbox(mat ml$,resp$,'',49)
 		if resp$="OK" then
 			holdrn=rn
 		else
@@ -121,13 +127,13 @@ SCR2: !
 	for j=1 to udim(mat code$)
 		if resp$(5)=code$(j) then ips=j-1 : goto L760
 	next j
-L760: !
+	L760: !
 	if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
 	if ips<0 or ips>126 or (ips>1 and ips<6) then
 		mat ml$(2)
 		ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
 		ml$(2)=" Take OK to select a different item."
-		fnmsgbox(mat ml$,resp$,cap$,48)
+		fnmsgbox(mat ml$,resp$,'',48)
 		goto SCR2
 	end if
 	if sd$="Y" then sd=1 else sd=0
@@ -138,18 +144,18 @@ L760: !
 		mat ml$(2)
 		ml$(1)="You have chosen to delete report # "&rptn$
 		ml$(2)="Take Ok to continue, else Cancel to keep the report."
-		fnmsgbox(mat ml$,resp$,cap$,49)
+		fnmsgbox(mat ml$,resp$,'',49)
 		if resp$="OK" then
 			delete #h_prreport,key=rptn$:
 		else
-			goto SCR1
+			goto AskReport
 		end if
 	end if
-!
-! SCR3: ! r:
-! If RN=0 Then Goto DONE  ! ain't this just redundant?
+goto SCR3 ! /r
+SCR3: ! r:
+	! If RN=0 Then Goto DONE  ! ain't this just redundant?
 	if ips=0 then goto SCR4
-	fnTos(sn$="Report-sel")
+	fnTos
 	respc=0: mylen=15: mypos=mylen+3
 	fnLbl(1,1,"Print Selection Criteria:",30,1)
 	z=0
@@ -163,15 +169,15 @@ L760: !
 	fnCmdKey("&Back",6,0,0,"Back up a screen.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
 	fnAcs(mat resp$,ckey) ! ask matching criteria
-	if ckey=5 then goto SCR1
+	if ckey=5 then goto AskReport
 	for j=1 to 100
 		psc(j)=val(resp$(j))
 	next j
 	if ckey=6 then goto SCR2
 goto SCR4 ! /r
- 
+
 SCR4: ! r:
-	fnTos(sn$="Report-scr4")
+	fnTos
 	respc=0: mylen=15: mypos=mylen+3
 	fnFra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
 	fnLbl(1,1,"Print       Want ",50,1,0,1)
@@ -203,17 +209,17 @@ SCR4: ! r:
 		if rptn=rn then
 			rewrite #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
 		else
-			read #h_prreport,using 'form pos 1,n 2',key=lpad$(str$(rn),2): rn nokey CHANGETHENUMBER
+			read #h_prreport,using 'form pos 1,n 2',key=lpad$(str$(rn),2): rn nokey ChangeTheNumber
 		end if
 	end if
-goto SCR1 ! /r
- 
- 
-CHANGETHENUMBER: ! r:
+goto AskReport ! /r
+
+
+ChangeTheNumber: ! r:
 	write #h_prreport,using F_PRREPORT: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
 	delete #h_prreport,key=rptn$: nokey ignore
-goto SCR1 ! /r
- 
+goto AskReport ! /r
+
 Xit: !
 close #h_prreport: ioerr ignore
 fnXit
@@ -228,64 +234,64 @@ fnXit
 !   goto L400 ! /r
 def fn_add_dn(dn_x_1$*30,dn_x_2$*30,dn_x_3$*30)
 	dn_counter+=1
-	datanames$(dn_counter,1)=dn_x_1$
-	datanames$(dn_counter,2)=dn_x_2$
-	datanames$(dn_counter,3)=dn_x_3$
+	DataNames$(dn_counter,1)=dn_x_1$
+	DataNames$(dn_counter,2)=dn_x_2$
+	DataNames$(dn_counter,3)=dn_x_3$
 fnend
-DATANAMES: ! r:
-	dim datanames$(104,3)*30
+DataNames: ! r:
+	dim DataNames$(104,3)*30
 	dn_counter=0
 	fn_add_dn('Employee Number'        ,'eno'         ,'N 8'   )
-	fn_add_dn('Name'                   ,'EM$(1)'      ,'C 30'  )
-	fn_add_dn('Address'                ,'EM$(2)'      ,'C 30'  )
-	fn_add_dn('City State Zip Code'    ,'EM$(3)'      ,'C 30'  )
-	fn_add_dn('Social Security #'      ,'SS$'         ,'C 11'  )
-	fn_add_dn('Race'                   ,'RS(1)'       ,'N 1'   )
-	fn_add_dn('Sex'                    ,'RS(2)'       ,'N 1'   )
-	fn_add_dn('Marital Status'         ,'EM(1)'       ,'N 2'   )
-	fn_add_dn('Federal Exemptions'     ,'EM(2)'       ,'N 2'   )
-	fn_add_dn('State Exemptions'       ,'EM(3)'       ,'N 2'   )
-	fn_add_dn('Employment Status'      ,'EM(4)'       ,'N 2'   )
-	fn_add_dn('Pay Code'               ,'EM(5)'       ,'N 2'   )
-	fn_add_dn('Fica Code'              ,'EM(6)'       ,'N 2'   )
-	fn_add_dn('Eic Code'               ,'EM(7)'       ,'N 2'   )
-	fn_add_dn('Sick Pay Code'          ,'EM(8)'       ,'PD 3.3')
-	fn_add_dn('Vacation Pay Code'      ,'EM(9)'       ,'PD 3.3')
-	fn_add_dn('Sick Hours Accrued'     ,'EM(10)'      ,'PD 4.2')
-	fn_add_dn('Vacation Hours Accrued' ,'EM(11)'      ,'PD 4.2')
-	fn_add_dn('Standard Federal W/H'   ,'EM(12)'      ,'PD 4.2')
-	fn_add_dn('Federal Tax Add-Om'     ,'EM(13)'      ,'PD 4.2')
-	fn_add_dn('Standard State W/H'     ,'EM(14)'      ,'PD 4.2')
-	fn_add_dn('State Tax Add-On'       ,'EM(15)'      ,'PD 4.2')
-	fn_add_dn('Date Hired'             ,'EM(16)'      ,'N 6'   )
-	fn_add_dn('Last Payroll Date'      ,'EM(17)'      ,'N 6'   )
-	fn_add_dn('Telephone Number'       ,'PH$'         ,'C 12'  )
-	fn_add_dn('Birth Date'             ,'BD'          ,'N 6'   )
-	fn_add_dn('Department Number'      ,'TDN'         ,'N 3'   )
-	fn_add_dn('G/L Account #'          ,'GL$'         ,'C 12'  )
-	fn_add_dn('Last Review Date'       ,'TDT(1)'      ,'N 6'   )
-	fn_add_dn('Next Review Date'       ,'TDT(2)'      ,'N 6'   )
-	fn_add_dn('Last Increase Date'     ,'TDT(3)'      ,'N 6'   )
-	fn_add_dn('Last Payroll Date'      ,'TDT(4)'      ,'N 6'   )
-	fn_add_dn('State Code'             ,'TCD(1)'      ,'N 2'   )
-	fn_add_dn('Worknams Comp Code'     ,'TCD(2)'      ,'N 2'   )
-	fn_add_dn('Union Code'             ,'TCD(3)'      ,'N 2'   )
+	fn_add_dn('Name'                   ,'em$(1)'      ,'C 30'  )
+	fn_add_dn('Address'                ,'em$(2)'      ,'C 30'  )
+	fn_add_dn('City State Zip Code'    ,'em$(3)'      ,'C 30'  )
+	fn_add_dn('Social Security #'      ,'ss$'         ,'C 11'  )
+	fn_add_dn('Race'                   ,'rs(1)'       ,'N 1'   )
+	fn_add_dn('Sex'                    ,'rs(2)'       ,'N 1'   )
+	fn_add_dn('Marital Status'         ,'em(1)'       ,'N 2'   )
+	fn_add_dn('Federal Exemptions'     ,'em(2)'       ,'N 2'   )
+	fn_add_dn('State Exemptions'       ,'em(3)'       ,'N 2'   )
+	fn_add_dn('Employment Status'      ,'em(4)'       ,'N 2'   )
+	fn_add_dn('Pay Code'               ,'em(5)'       ,'N 2'   )
+	fn_add_dn('Fica Code'              ,'em(6)'       ,'N 2'   )
+	fn_add_dn('Eic Code'               ,'em(7)'       ,'N 2'   )
+	fn_add_dn('Sick Pay Code'          ,'em(8)'       ,'PD 3.3')
+	fn_add_dn('Vacation Pay Code'      ,'em(9)'       ,'PD 3.3')
+	fn_add_dn('Sick Hours Accrued'     ,'em(10)'      ,'PD 4.2')
+	fn_add_dn('Vacation Hours Accrued' ,'em(11)'      ,'PD 4.2')
+	fn_add_dn('Standard Federal W/H'   ,'em(12)'      ,'PD 4.2')
+	fn_add_dn('Federal Tax Add-Om'     ,'em(13)'      ,'PD 4.2')
+	fn_add_dn('Standard State W/H'     ,'em(14)'      ,'PD 4.2')
+	fn_add_dn('State Tax Add-On'       ,'em(15)'      ,'PD 4.2')
+	fn_add_dn('Date Hired'             ,'em(16)'      ,'N 6'   )
+	fn_add_dn('Last Payroll Date'      ,'em(17)'      ,'N 6'   )
+	fn_add_dn('Telephone Number'       ,'ph$'         ,'C 12'  )
+	fn_add_dn('Birth Date'             ,'bd'          ,'N 6'   )
+	fn_add_dn('Department Number'      ,'tdn'         ,'N 3'   )
+	fn_add_dn('G/L Account #'          ,'gl$'         ,'C 12'  )
+	fn_add_dn('Last Review Date'       ,'tdt(1)'      ,'N 6'   )
+	fn_add_dn('Next Review Date'       ,'tdt(2)'      ,'N 6'   )
+	fn_add_dn('Last Increase Date'     ,'tdt(3)'      ,'N 6'   )
+	fn_add_dn('Last Payroll Date'      ,'tdt(4)'      ,'N 6'   )
+	fn_add_dn('State Code'             ,'tcd(1)'      ,'N 2'   )
+	fn_add_dn('Worknams Comp Code'     ,'tcd(2)'      ,'N 2'   )
+	fn_add_dn('Union Code'             ,'tcd(3)'      ,'N 2'   )
 	fn_add_dn('Amount of Last Increase','tli'         ,'pd 4.2')
-	fn_add_dn('Salary'                 ,'TDET(1)'     ,'PD 4.2')
-	fn_add_dn('Regular Hourly Rate'    ,'TDET(2)'     ,'PD 4.2')
-	fn_add_dn('Overtime Hourly Rate'   ,'TDET(3)'     ,'PD 4.2')
-	fn_add_dn('Misc - 1'               ,'TDET(4)'     ,'PD 4.2')
-	fn_add_dn('Misc - 2'               ,'TDET(5)'     ,'PD 4.2')
-	fn_add_dn('Misc - 3'               ,'TDET(6)'     ,'PD 4.2')
-	fn_add_dn('Misc - 4'               ,'TDET(7)'     ,'PD 4.2')
-	fn_add_dn('Misc - 5'               ,'TDET(8)'     ,'PD 4.2')
-	fn_add_dn('Misc - 6'               ,'TDET(9)'     ,'PD 4.2')
-	fn_add_dn('Misc - 7'               ,'TDET(10)'    ,'PD 4.2')
-	fn_add_dn('Misc - 8'               ,'TDET(11)'    ,'PD 4.2')
-	fn_add_dn('Misc - 9'               ,'TDET(12)'    ,'PD 4.2')
-	fn_add_dn('Misc - 10'              ,'TDET(13)'    ,'PD 4.2')
-	fn_add_dn('Misc - 11'              ,'TDET(14)'    ,'PD 4.2')
-	fn_add_dn('Misc - 12'              ,'TDET(15)'    ,'PD 4.2')
+	fn_add_dn('Salary'                 ,'tdet(1)'     ,'PD 4.2')
+	fn_add_dn('Regular Hourly Rate'    ,'tdet(2)'     ,'PD 4.2')
+	fn_add_dn('Overtime Hourly Rate'   ,'tdet(3)'     ,'PD 4.2')
+	fn_add_dn('Misc - 1'               ,'tdet(4)'     ,'PD 4.2')
+	fn_add_dn('Misc - 2'               ,'tdet(5)'     ,'PD 4.2')
+	fn_add_dn('Misc - 3'               ,'tdet(6)'     ,'PD 4.2')
+	fn_add_dn('Misc - 4'               ,'tdet(7)'     ,'PD 4.2')
+	fn_add_dn('Misc - 5'               ,'tdet(8)'     ,'PD 4.2')
+	fn_add_dn('Misc - 6'               ,'tdet(9)'     ,'PD 4.2')
+	fn_add_dn('Misc - 7'               ,'tdet(10)'    ,'PD 4.2')
+	fn_add_dn('Misc - 8'               ,'tdet(11)'    ,'PD 4.2')
+	fn_add_dn('Misc - 9'               ,'tdet(12)'    ,'PD 4.2')
+	fn_add_dn('Misc - 10'              ,'tdet(13)'    ,'PD 4.2')
+	fn_add_dn('Misc - 11'              ,'tdet(14)'    ,'PD 4.2')
+	fn_add_dn('Misc - 12'              ,'tdet(15)'    ,'PD 4.2')
 	fn_add_dn('Misc - 13'              ,'tdet(16)'    ,'PD 4.2')
 	fn_add_dn('Misc - 14'              ,'tdet(17)'    ,'PD 4.2')
 	fn_add_dn('Misc - 15'              ,'tdet(18)'    ,'PD 4.2')
@@ -294,7 +300,7 @@ DATANAMES: ! r:
 	fn_add_dn('Misc - 18'              ,'tdet(21)'    ,'PD 4.2')
 	fn_add_dn('Misc - 19'              ,'tdet(22)'    ,'PD 4.2')
 	fn_add_dn('Misc - 20'              ,'tdet(23)'    ,'PD 4.2')
-	fn_add_dn('Department Number'      ,'TDN'         ,'N 3'   )
+	fn_add_dn('Department Number'      ,'tdn'         ,'N 3'   )
 	fn_add_dn('Payroll Date'           ,'prd'         ,'pd 6'  )
 	fn_add_dn('Check Number'           ,'ckno'        ,'N 7'   )
 	fn_add_dn('Regular Hours'          ,'tdc(1)'      ,'PD 3.2')
@@ -339,14 +345,14 @@ DATANAMES: ! r:
 	fn_add_dn('Tips'                   ,'tcp(30)'     ,'pd 5.2')
 	fn_add_dn('Total Wage'             ,'tcp(31)'     ,'pd 5.2')
 	fn_add_dn('Net Pay'                ,'tcp(32)'     ,'pd 5.2')
- 
+
 	dim fullname$(20)*20
 	fnDedNames(mat fullname$)
- 
+
 	dim code$(105)*30
 	code$(1)=""
-	for j=1 to udim(datanames$)
-		code$(j+1)=datanames$(j,1)
+	for j=1 to udim(DataNames$)
+		code$(j+1)=DataNames$(j,1)
 		if j>39 and j<60 and trim$(fullname$(j-39))<>"" then
 			code$(j+1)=trim$(fullname$(j-39))(1:22)
 		else if j>39 and j<60 and trim$(fullname$(j-39))="" then

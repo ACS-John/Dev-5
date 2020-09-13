@@ -10,31 +10,31 @@
  
 	fnTop(program$)
 	dat$=date$("Month DD, CCYY")
-!
+
 	idx$(1)="[Q]\UBmstr\ubIndex.h[cno]"
 	idx$(2)="[Q]\UBmstr\ubIndx2.h[cno]"
 	idx$(3)="[Q]\UBmstr\ubIndx3.h[cno]"
 	idx$(4)="[Q]\UBmstr\ubIndex.h[cno]"
 	idx$(5)="[Q]\UBmstr\ubIndx5.h[cno]"
-!
+
 	item1$(1)="Account"
 	item1$(2)="Customer Name"
 	item1$(3)="Street"
 	item1$(4)="Street - Auto-Reversed"
 	item1$(5)="Grid Selection"
 	item1$(6)="Route Sequence"
-!
+
 	item2$(1)="Active Customers Only"
 	item2$(2)="Inactive Customers Only"
 	item2$(3)="All Customers (Regular Address)"
 	item2$(4)="All using Mailing Address"
 	item2$(5)="Only Alternate Addresses"
 	item2$(6)="Active, But Not Being Billed"
-!
+
 	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,outIn,keyed
 ! /r
 ! MENU1: ! r:
-	fnTos("ubnamlst")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Sequence:",23,1)
 	fncomboa("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")

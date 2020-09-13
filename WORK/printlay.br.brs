@@ -152,7 +152,7 @@ L1450: continue
 HDR: ! r:
 	pr #255,using L970: hex$("2B0205000A1042")
 	pr #255,using L970: hex$("1B471B2D00")
-	pg=pg+1
+	pg+=1
 	pr #255,using L970: hex$("1B5701")
 	pr #255,using L1520: h1$
 	L1520: form pos 3,c 46,skip 2

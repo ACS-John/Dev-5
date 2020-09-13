@@ -47,7 +47,7 @@ Report: ! r: start report
 goto Finis ! /r
 NewPge: pr #255: newpage : gosub PrHeader : continue
 PrHeader: ! r:
-	pg=pg+1
+	pg+=1
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 	pr #255: "\qc  {\f181 \fs18 \b From: "&cnvrt$("PIC(####/##/##)",bd1)&"   Thru: "&cnvrt$("pic(####/##/##)",ed1)&"}"
