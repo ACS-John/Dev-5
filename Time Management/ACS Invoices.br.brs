@@ -383,7 +383,7 @@ def fn_mergeInvoices
 	! clmstr dims
 	dim ca(10),sc(10)
 	fnStatus('Merging Invoices...')
-	open #h_tmwk2:=3: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
+	open #h_tmwk2=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
 	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
 
 	dim cde$(30)*6

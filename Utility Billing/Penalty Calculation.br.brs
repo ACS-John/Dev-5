@@ -152,11 +152,11 @@ def fn_pencal ! penalty calculation
 	else if env$('client')='Colyell' or env$('client')='White Hall' then
 		basepenalty(10)=bal
 		goto GOT_BASEPENALTY
-	else if env$('client')='Lovington' and penaltybase$="Balance" then
-		waterpercent=round(g(1)/(g(1)+g(2)),2) ! sewerpercent=1-waterpercent ! lovington
-		basepenalty(9)=round((bal*waterpercent),2) ! logington
-		basepenalty(10)=bal-basepenalty(9) ! lovington allocate water and sewer penalty in ration of water to sewer
-		goto GOT_BASEPENALTY ! lovington
+	! else if env$('client')='Lovington' and penaltybase$="Balance" then
+	! 	waterpercent=round(g(1)/(g(1)+g(2)),2) ! sewerpercent=1-waterpercent ! lovington
+	! 	basepenalty(9)=round((bal*waterpercent),2) ! logington
+	! 	basepenalty(10)=bal-basepenalty(9) ! lovington allocate water and sewer penalty in ration of water to sewer
+	! 	goto GOT_BASEPENALTY ! lovington
 	end if
 ! if debug_this_account then pause
 	if env$('client')="Franklinton" then fn_franklinton : goto L1370

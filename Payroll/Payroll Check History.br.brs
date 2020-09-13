@@ -482,8 +482,8 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnChk(linecnt+=1,35,name$(46),1,rratype)
 		if hf(46)=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
 		fnCmdKey("&Next",1,1,0,"Begins printing your report.")
-		if addone=0 then let fnCmdKey("&Add",2,0,0,"Allows you to add another report or grid format..")
-		if addone=1 then let fnCmdKey("&Save This Format",4,0,0,"Save this format for later use.")
+		if addone=0 then fnCmdKey("&Add",2,0,0,"Allows you to add another report or grid format..")
+		if addone=1 then fnCmdKey("&Save This Format",4,0,0,"Save this format for later use.")
 		fnCmdKey("&Use This Format",3,0,0,"Use the format as now displayed.")
 		fnCmdKey("&Cancel",5,0,1,"Cancel without saving the format selections.")
 		fnAcs(mat resp$,ckey)
@@ -574,9 +574,9 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			end if
 		next j
 		if enableLongName then
-			let namelen=25
+			namelen=25
 		else
-			let namelen=12
+			namelen=12
 		end if 
 		if trim$(nam$)<>"" and holdnam$<>nam$ then desc$=nam$(1:namelen) : holdnam$=nam$ : nam$=""
 		! if trim$(desc$)="TotalChk" then goto L3360 ! don't pr total check on printout
@@ -890,7 +890,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		end if
 		if trim$(hact$)="[All]" then goto L4380
 		L5120: !
-		if printit=1 then let fncloseprn : goto SCREEN1
+		if printit=1 then fncloseprn : goto SCREEN1
 		FlexGridXit: !
 	return ! /r
 	AddGrid: ! r:

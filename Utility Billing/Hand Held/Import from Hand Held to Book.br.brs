@@ -128,13 +128,22 @@ def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 		fn_import_l_readings_txt(bookFile$)
 	else if deviceSelected$="Psion Workabout" then
 		fn_psion_workabout(bookFile$)
+	else if deviceSelected$(1:14)="READy Kamstrup" then
+		if deviceSelected$="READy Kamstrup Swap" then
+			fn_readyKamstrupSwap(bookFile$,enableMerge$)
+		else if deviceSelected$="READy Kamstrup (Geo)" then
+			fn_readyKamstrupGeo(bookFile$,enableMerge$)
+		else
+			goto UnrecognizedDeviceNotice
+		end if
 	else if deviceSelected$="READy Water" then
 		fn_import_l_readings_txt(bookFile$)
-	else if deviceSelected$="Sensus" then
-		fn_sensus_in(bookFile$)
+	! else if deviceSelected$="Sensus" then
+	! 	fn_sensus_in(bookFile$)
 	else if deviceSelected$="Unisys" then
 		fnCopy(fn_hh_input_filename$,bookFile$)
 	else
+		UnrecognizedDeviceNotice: !
 		mat ml$(1)
 		ml$(1)='Unrecognized device: '&deviceSelected$
 		fnmsgbox(mat ml$)
@@ -153,10 +162,10 @@ def fn_hh_input_filename$*256
 	if lwrc$(hif_return$)='[ask]' then
 		hif_return$=askPath$
 	else if trim$(hif_return$)='' then
-		if deviceSelected$="Sensus" then
-			hif_return$='c:\vol002\amrs\READ.DAT'
-		else if deviceSelected$="EZReader" then
+		if deviceSelected$="EZReader" then
 			hif_return$=askPath$
+		! else if deviceSelected$="Sensus" then
+		! 	hif_return$='c:\vol002\amrs\READ.DAT'
 		else if deviceSelected$="ACS Meter Reader" then
 			hif_return$=askPath$
 		else if deviceSelected$="AMR" then
@@ -211,14 +220,14 @@ def fn_acsmr(bookFile$*256) ! ACS Meter Reader
 fnend
 def fn_CsvByLocationId(bookFile$*512,enableMerge$)
 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then 
-		! aclaraWorkOrderReturn=-1
+		! returnN=-1
 	else
 		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		linput #hIn: line$ eof CblEoF
-		if srch(line$,chr$(9))>0 then cblDelimiter$=chr$(9) else cblDelimiter$=','
+		if srch(line$,tab$)>0 then cblDelimiter$=tab$ else cblDelimiter$=','
 		dim cblItem$(0)*256
 		str2mat(line$,mat cblItem$,cblDelimiter$)
 		cblCsv_LocationId=fn_findFirstMatch(mat cblItem$,'Location ID','LocationID')
@@ -268,9 +277,9 @@ fnend
 			do
 				linput #hIn: line$ eof EO_BadgerBeacon
 				if fn_BadgerBeaconParseLine(line$,mat tmpDataName$,mat tmpDataValue$) then
-					for awoX=1 to udim(mat tmpDataName$)
-						pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
-					nex awoX
+					for rkX=1 to udim(mat tmpDataName$)
+						pr #hOut: tmpDataName$(rkX)&'='&tmpDataValue$(rkX)
+					nex rkX
 					pr #hOut: ''
 					returnN+=1
 				end if
@@ -353,9 +362,9 @@ fnend
 			z$=''
 			linput #hIn: line$ eof EO_Aclara
 			fn_aclaraParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
-			for awoX=1 to udim(mat tmpDataName$)
-				pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
-			nex awoX
+			for rkX=1 to udim(mat tmpDataName$)
+				pr #hOut: tmpDataName$(rkX)&'='&tmpDataValue$(rkX)
+			nex rkX
 			pr #hOut: ''
 			returnN+=1
 		loop
@@ -369,7 +378,7 @@ fnend
 	fnend
 	def fn_aclaraParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
 		reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-		str2mat(line$,mat lineItem$,chr$(9))
+		str2mat(line$,mat lineItem$,tab$)
 		mat tmpDataName$(0)
 		mat tmpDataValue$(0)
 		fn_addTmpData('Customer.Number',lineItem$(2))
@@ -383,9 +392,9 @@ fnend
 		fnaddonec(mat tmpDataValue$,value$)
 	fnend
 	! r: aclara work order
-	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
+	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$; ___,returnN)
 	! 	dataIncludesHeaders=1
-	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
+	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
 	! 	open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 	! 	open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 	! 	pr #hOut: '[ACS Hand Held File Generic Version 2]'
@@ -401,7 +410,7 @@ fnend
 	! 			pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
 	! 		nex awoX
 	! 		pr #hOut: ''
-	! 		aclaraWorkOrderReturn+=1
+	! 		returnN+=1
 	! 	loop
 	! 	EO_AW: !
 	! 	close #hIn:
@@ -409,11 +418,11 @@ fnend
 	! 	if enableMerge$='True' then
 	! 		fn_mergeBooks(mergeFileOrigional$,bookFile$)
 	! 	end if
-	! 	fn_aclaraWorkOrder=aclaraWorkOrderReturn
+	! 	fn_aclaraWorkOrder=returnN
 	! fnend
 	! def fn_awoParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
 	! 		reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-	! 		str2mat(line$,mat lineItem$,chr$(9))
+	! 		str2mat(line$,mat lineItem$,tab$)
 	! 		for x=1 to udim(mat lineItem$) : lineItem$(x)=trim$(lineItem$(x),'"') : next x
 	! 		mat tmpDataName$(0)
 	! 		mat tmpDataValue$(0)
@@ -578,18 +587,18 @@ fnend
 		! in august 2006 meters.opo changed to send back route as meters.out; before that it came back with the route # on the file name  (readings.1, etc)
 		fnCopy(fn_hh_input_filename$,bookFile$)
 	fnend
-	def fn_sensus_in(bookFile$*512)
-	open #h_sensus:=fngethandle: "Name="&fn_hh_input_filename$&",RecL=22",external,input
-	fn_readings_backup(bookFile$)
-	open #h_readings:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
-	do
-		read #h_sensus,using "form pos 1,c 22": line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
-		pr #h_readings,using "form pos 1,c 132": line$
-	loop
-	SENSUS_IN_XIT: !
-	close #h_sensus: ioerr ignore
-	close #h_readings: ioerr ignore
-fnend
+	! def fn_sensus_in(bookFile$*512) r: old and unused
+	! 	open #h_sensus:=fngethandle: "Name="&fn_hh_input_filename$&",RecL=22",external,input
+	! 	fn_readings_backup(bookFile$)
+	! 	open #h_readings:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
+	! 	do
+	! 		read #h_sensus,using "form pos 1,c 22": line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
+	! 		pr #h_readings,using "form pos 1,c 132": line$
+	! 	loop
+	! 	SENSUS_IN_XIT: !
+	! 	close #h_sensus: ioerr ignore
+	! 	close #h_readings: ioerr ignore
+	! fnend /r
 	! r: legacy multi-device hand held type
 		def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
 			fn_readings_backup(bookFile$)
@@ -641,7 +650,7 @@ fnend
 		def fn_ilrt_lineParse_READy_Water(line$*150,&z$,&reading$)
 			ilprwReturn=0
 			z$=reading$=""
-			str2mat(line$,mat ilprwItem$, chr$(9))
+			str2mat(line$,mat ilprwItem$, tab$)
 			! ilprwItem$(1)=account number
 			! ilprwItem$(2)=meter serial number (from 'U4 Meter Location' table     formerly from meter information file)
 			! ilprwItem$(3)=water reading
@@ -655,7 +664,7 @@ fnend
 			dim ilpdItem$(0)*512
 			ilprwReturn=0
 			z$=reading$=""
-			str2mat(line$,mat ilpdItem$, chr$(9))
+			str2mat(line$,mat ilpdItem$, tab$)
 			key$=lpad$(ilpdItem$(item_key),10)
 			reading$=ilpdItem$(item_reading)
 			if item_readingDate then
@@ -675,6 +684,9 @@ fnend
 			fn_ilrt_lineParseFixedWidth=ilpfwReturn
 		fnend
 	! /r
+	def fn_inz(notZeroAmt,what$*512; hOverride) ! ifNotZeroPrHoutEqualsNotZeroAmt
+		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt), hOverride)
+	fnend
 	def fn_prHout(what$*512; hOverride,___,hPrOut)
 		if hOverride>0 then hPrOut=hOverride else hPrOut=hOut
 		pr #hPrOut: what$
@@ -819,9 +831,151 @@ fnend
 			fn_prHout('! customer number '&z$&' has all zero readings.')
 		end if
 	fnend
-	def fn_inz(notZeroAmt,what$*512; hOverride) ! ifNotZeroPrHoutEqualsNotZeroAmt
-		if notZeroAmt<>0 then fn_prHout(what$&'='&str$(notZeroAmt), hOverride)
+	
+	def fn_readyKamstrupGeo(bookFile$*512,enableMerge$; ___,returnN)
+		pr ' not written yet'
+		pause
+		
+		
+		dataIncludesHeaders=1
+		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
+		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		pr #hOut: '[ACS Hand Held File Generic Version 2]'
+		pr #hOut: 'Source File='&fn_hh_input_filename$
+		if dataIncludesHeaders then
+			linput #hIn: line$ eof EO_AW ! just consume the headers
+		end if
+		do
+			z$=''
+			linput #hIn: line$ eof EO_AW
+			! fn_rksParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
+			for rkX=1 to udim(mat tmpDataName$)
+				pr #hOut: tmpDataName$(rkX)&'='&tmpDataValue$(rkX)
+			nex rkX
+			pr #hOut: ''
+			returnN+=1
+		loop
+		EO_AW: !
+		close #hIn:
+		close #hOut:
+		if enableMerge$='True' then
+			fn_mergeBooks(mergeFileOrigional$,bookFile$)
+		end if
+		fn_readyKamstrupGeo=returnN
+
+		
 	fnend
+	! import a tab delimited file with accurate but decomposed account numbers
+	! assuming location ids already exist
+	def fn_readyKamstrupSwap(bookFile$*512,enableMerge$; ___,returnN,z$*10,delim$*1,line$*512,lineCount)
+		! headers required ! dataIncludesHeaders=1
+		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RksEoIn
+		open #hIn=fngethandle: "Name="&fn_hh_input_filename$,display,input
+		open #hOut=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hCustomer=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed 
+		pr #hOut: '[ACS Hand Held File Generic Version 2]'
+		pr #hOut: 'Source File='&fn_hh_input_filename$
+		! r: read headers and check for customer.account column
+		linput #hIn: line$ eof RksEoIn
+		lineCount=1
+		if pos(line$,tab$)>0 then delim$=tab$ else delim$=','
+		dim rksHeader$(0)*128
+		mat rksHeader$(0)
+		! detect account column and handle rejection if missing
+		str2mat(lwrc$(line$),mat rksHeader$, delim$)
+		rksAccount=srch(mat rksHeader$,'customer.number')
+		if rksAccount<=0 then
+			rksAccount=srch(mat rksHeader$,'customer.account')
+		end if
+		if rksAccount<=0 then
+			pr 'no customer.account column found.  please fix column headings.'
+			pause
+			goto RksEoIn
+		end if
+		! /r
+		do
+			z$=''
+			linput #hIn: line$ eof RksEoIn
+			lineCount+=1
+			if line$(1:1)='!' then
+				fnStatus('skipping comment line :'&str$(lineCount))
+				fnStatus(line$)
+				fnStatusPause
+			else 
+				str2mat(line$,mat lineItem$, delim$)
+				z$=lineItem$(rksAccount)
+				! if lineItem$(rksAccount)='' then pause
+				! if trim$(z$)='' then 
+				keyExists=fnKeyExists(hCustomer,z$, 2) ! fixes the account number if possible
+				if keyExists<=0 then
+					pr 'could not locate an account for "'&lineItem$(rksAccount)&'"'
+					pr 'keyExists=';keyExists
+					pr bell
+					pause
+				else if trim$(fnCustomerData$(z$,'final billing code',1))<>'' then
+					fnStatus('SKIPPING LINE '&str$(lineCount)&'- INACTIVE "'&fnCustomerData$(z$,'final billing code',1)&'" CUSTOMER ACCOUNT '&z$)
+					pr bell;
+					fnStatusPause
+				else
+					pr 'keyExists=';keyExists
+					pr #hOut: 'Customer.Number='&z$
+					pr #hOut: 'Meter.LocationID.Water='&fnLocationIdFromAccountAndServ$(z$,'WA', '',1)
+					fn_ice(rskSerial   ,'Meter.Meter Number.Water')
+					fn_ice(rskLongitude,'Meter.Longitude.Water')
+					fn_ice(rskLatitude ,'Meter.Latitude.Water')
+					fn_ice(rskMcBefore ,'MeterChangeOut.ReadingBefore.Water')
+					fn_ice(rskMcAfter  ,'MeterChangeOut.ReadingAfter.Water')
+					fn_ice(rskMcDate   ,'MeterChangeOut.Date')
+					pr #hOut: ''
+					returnN+=1
+				en if
+			en if
+
+		loop
+		RksEoIn: !
+		fnLocationIdFromAccountAndServ$('','', '',0) ! closes internal file handle
+		fnCustomerData$('','') ! close internal file
+		close #hCustomer:
+		close #hIn:
+		close #hOut:
+		if enableMerge$='True' then
+			fn_mergeBooks(mergeFileOrigional$,bookFile$)
+		end if
+		fn_readyKamstrupSwap=returnN
+	fnend
+	def fn_ice(&col,fieldName$*128)  ! fn_ifColExistsThenPrhOut
+		! requires local mat lineItem$, hOut, mat rksHeader$
+		if col=0 then
+			col=srch(mat rksHeader$,lwrc$(fieldName$))
+			if col<=0 then col=-1 ! -1 means it has been searched for and not found
+		end if
+		
+		if col>0 then
+			pr #hOut: fieldName$&'='&lineItem$(col)
+		end if
+	fnend
+	def fn_addNote(z$,amt,note$*256)
+		open #h_notefile=fngethandle: 'Name='&fnNoteDir$&'\'&trim$(z$)&'.txt,Use',display,output
+		pr #h_notefile: '** Other Charge added '&date$('mm/dd/ccyy')&' at '&time$&' **'
+		pr #h_notefile:   '  Account: '&z$&'  '&customer_name$
+		if fn_not_blank(note$) then
+			pr #h_notefile: "     Note: "&note$
+		end if
+		pr #h_notefile: '**'
+		close #h_notefile: 
+	fnend
+	def fn_not_blank(nbTestText$*256)
+		nbReturn=1
+		nbTestText$=srep$(nbTestText$,' ','')
+		if nbTestText$='' then
+			nbReturn=0
+		end if
+		fn_not_blank=nbReturn
+	fnend
+
+
+
 ! /r
 def fn_readings_backup(bookFile$*512)
 	if exists(bookFile$) then

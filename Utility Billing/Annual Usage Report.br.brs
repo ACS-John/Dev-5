@@ -209,7 +209,7 @@ NEWPGE: ! r:
 	gosub HDR
 	continue  ! /r
 HDR: ! r:
-	pg=pg+1
+	pg+=1
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('Program_Caption')&" - "&scr1_resp$(13)&"}"
 	pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"

@@ -1,23 +1,23 @@
  
-	autoLibrary
-	on error goto Ertn
- 
-	dim vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
-	dim ft2(1000)
-	dim ti1$*1
-	dim tr$(5)*35,tr(2)
-	dim pp1yn$*1
-	dim item2$(2)*35
-	dim item1$(2)*15
-	dim tmp$*40
-	dim dp(3)
-	dim dp$*30
- 
-	fnTop(program$)
-	cancel=99
- 
-	gosub ASK_TI1
-	goto ASK_PP1
+autoLibrary
+on error goto Ertn
+
+dim vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
+dim ft2(1000)
+dim ti1$*1
+dim tr$(5)*35,tr(2)
+dim pp1yn$*1
+dim item2$(2)*35
+dim item1$(2)*15
+dim tmp$*40
+dim dp(3)
+dim dp$*30
+
+fnTop(program$)
+cancel=99
+
+gosub ASK_TI1
+goto ASK_PP1
  
 ASK_SORT: !
 	if fund=1 then ty1$="Vendor Sequence" else ty1$="Fund Sequence"
@@ -98,7 +98,7 @@ L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
 	if nofx=0 then gosub HDR
 	! If GL$(3:3)<>"0" Then Pause
 	if pos1=0 and pos2=0 then goto L880
-	if notused =0 and dpt$><gl$(1:3)&cnvrt$("pic(zz)",val(gl$(pos1:pos2))) then gosub TOTAL_DEPARTMENT
+	if notused =0 and dpt$><gl$(1:3)&cnvrt$("pic(zz)",val(gl$(pos1:pos2))) then gosub TotalDepartment
 	L880: !
 	if fund<>2 then goto L930
 	if fund$><gl$(1:3) then gosub TOTAL_FUND : pr #255: newpage : gosub HDR
@@ -252,7 +252,7 @@ SUB_FT2: ! r:
 return ! /r
  
 ASK_TI1: ! r:
-	fnTos(sn$="claims")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Cutoff Date:",38,1)
 	fnTxt(1,40,8,0,1,"1",0,"No invoices past this date will be listed!")
@@ -303,7 +303,7 @@ ASK_TI1: ! r:
 	pos2=val(resp$(10))
 return ! /r
  
-TOTAL_DEPARTMENT: ! r: DPT TOTAL   ! special modifications for monticello and other Ed clients - Must have the departmental file set up under files for this to run
+TotalDepartment: ! r: DPT TOTAL   ! special modifications for Ed Horton clients - Must have the departmental file set up under files for this to run
 	! If GL$(3:3)<>"0" Then Pause
 	if fund<>2 then goto TD_XIT
 	if dp(3)<>0 then

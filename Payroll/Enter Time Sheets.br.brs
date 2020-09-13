@@ -253,13 +253,13 @@ ENTER_TIME: !
 		resp$(rc+=1)=str$(inpX(j+9))
 	next j
 	fnCmdKey("&Next",1,1,0,"Record this time" )
-	if editmode=0 then let fnCmdKey("&Skip Department F2",2,0,0,"Skips this department.")
-	if editmode=0 and semp>=1 then let fnCmdKey("&Prev Department",12,0,0,"Go back to last department.")
-	if editmode=1 then let fnCmdKey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
-	if editmode=0 then let fnCmdKey("&Track Hours",8,0,0,"Track hours other than those entered above.")
+	if editmode=0 then fnCmdKey("&Skip Department F2",2,0,0,"Skips this department.")
+	if editmode=0 and semp>=1 then fnCmdKey("&Prev Department",12,0,0,"Go back to last department.")
+	if editmode=1 then fnCmdKey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
+	if editmode=0 then fnCmdKey("&Track Hours",8,0,0,"Track hours other than those entered above.")
 	fnCmdKey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
-	if editmode=0 then let fnCmdKey("E&Xit",5,0,1,"Returns to menu")
-	if editmode=1 then let fnCmdKey("&Finish",7,0,1,"Finished making corrections")
+	if editmode=0 then fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	if editmode=1 then fnCmdKey("&Finish",7,0,1,"Finished making corrections")
 	fnAcs(mat resp$,ckey) ! ask time
 	if ckey=5 and editmode=0 then goto FINISH
 	for j=1 to 9
@@ -270,7 +270,7 @@ ENTER_TIME: !
 	for j=12 to 31
 		inpX(j-2)=val(resp$(j))
 	next j
-	if ckey=8 then let fnhours(eno) : goto ASK_TIME !  breakdown=1 : goto ASK_TIME
+	if ckey=8 then fnhours(eno) : goto ASK_TIME !  breakdown=1 : goto ASK_TIME
 	if ckey=5 and editmode=1 then goto L2290
 	if ckey=10 and editmode=1 then goto DELETE_IT
 	if ckey=2 then goto L2430

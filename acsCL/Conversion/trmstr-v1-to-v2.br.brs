@@ -11,8 +11,8 @@ def library fntrmstr_v1_to_v2
 		fnStatus(cap$)
  
 		open #trmstr:=fngethandle: "Name=[Q]\CLmstr\TRmstr.h[cno]",internal,outIn,relative
-		if version(trmstr)<>1 and version(trmstr)<>2 then let fnStatus("TRmstr is not version 1.  You must update it to version 1 before running this conversion program") : goto Xit
-		if version(trmstr)=2 then let fnStatus("TRmstr is already version 2") : goto Xit
+		if version(trmstr)<>1 and version(trmstr)<>2 then fnStatus("TRmstr is not version 1.  You must update it to version 1 before running this conversion program") : goto Xit
+		if version(trmstr)=2 then fnStatus("TRmstr is already version 2") : goto Xit
 		version(trmstr,2)
 	goto Xit
  

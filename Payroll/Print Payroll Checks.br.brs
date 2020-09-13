@@ -113,7 +113,9 @@
 	check_number=ckno
 ! if env$('client')="West Rest Haven" then sc1$="C"
 	if env$('client')="Billings" or env$('client')='Diamond' then sc1$="CSS"
-	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then ficam1$="Y"
+	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" then 
+		ficam1$="Y"
+	end if
 	ddcode$="R"
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 	goto MAIN_QUESTIONS ! /r
@@ -819,12 +821,10 @@ def fn_print_check
 		fn_check_dynamic(23,9,9,6,10, 58,72)
 	else if env$('client')="Lamar" then
 		fn_check_lamar
-	else if env$('client')="Lovington" then
-		fn_check_lovington
+	! else if env$('client')="Lovington" then
+	! 	fn_check_lovington
 	else if env$('client')="Merriam Woods" then
 		fn_check_merriam_woods
-	else if env$('client')="Monticello" then
-		fn_check_monticello
 	else if env$('client')="Philo" then
 		fn_check_philo
 	else if env$('client')="Thomasboro" then
@@ -1067,47 +1067,6 @@ def fn_check_lamar
 		pr #255,using "Form Pos 12,C 60": em$(j)
 	next j
 	pr #255,using "form pos 1,c 1,skip 6": ""
-fnend
-def fn_check_lovington
-	pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using "form pos 76,n 8,skip 1": check_number
-	pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255: ''
-	pr #255,using 'Form POS 63,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
-	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-	pr #255: ""
-	pr #255,using "Form Pos 12,C 60": em$(1)
-	pr #255,using "Form Pos 12,C 60": em$(2)
-	pr #255,using "Form Pos 12,C 60": em$(3)
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-fnend
-def fn_check_monticello
-	pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-	pr #255: : pr #255:
-	pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 2,C 18': dat,ca$
-	pr #255: ""
-	for j=1 to 3
-		pr #255,using "Form Pos 12,C 60": em$(j)
-	next j
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
 fnend
 def fn_check_merriam_woods
 	pr #255: ""

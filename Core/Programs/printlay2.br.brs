@@ -126,23 +126,23 @@ L1380: close #2,free:
 Xit: fnXit
  
 HDR: !
-		pg=pg+1
-		pr #255,using L1520: h1$
-L1520: form pos 3,c 46
-		pr #255,using L1540: prg$,dat$,pg,pgo
-L1540: form pos 51,c 40,c 20,"Page ",n 3,"  of ",n 3
-		pr #255,using L1560: str$(rl),rm$(1)
-L1560: form pos 5,"Record Length: ",c 5,pos 30,c 45
-		pr #255,using L1590: rm$(2)
-		pr #255,using L1590: rm$(3)
-L1590: form pos 30,c 45
-		pr #255,using L1610: filetype$,rm$(4)
-L1610: form pos 5,"File Type: ",c 10,pos 30,c 128
-		pr #255,using L1630: filename$,volid$
-L1630: form pos 5,"File Name: ",c 50,"Directory: ",c 10
-		pr #255: ""
-		pr #255: "   Item #   Field Description                           Name                 Length    Decimals    Format    Storage     From      To  "
-		pr #255: "   ______   ________________________________________   __________________    ______    ________   _______    _______    _____    _____"
+	pg+=1
+	pr #255,using L1520: h1$
+	L1520: form pos 3,c 46
+	pr #255,using L1540: prg$,dat$,pg,pgo
+	L1540: form pos 51,c 40,c 20,"Page ",n 3,"  of ",n 3
+	pr #255,using L1560: str$(rl),rm$(1)
+	L1560: form pos 5,"Record Length: ",c 5,pos 30,c 45
+	pr #255,using L1590: rm$(2)
+	pr #255,using L1590: rm$(3)
+	L1590: form pos 30,c 45
+	pr #255,using L1610: filetype$,rm$(4)
+	L1610: form pos 5,"File Type: ",c 10,pos 30,c 128
+	pr #255,using L1630: filename$,volid$
+	L1630: form pos 5,"File Name: ",c 50,"Directory: ",c 10
+	pr #255: ""
+	pr #255: "   Item #   Field Description                           Name                 Length    Decimals    Format    Storage     From      To  "
+	pr #255: "   ______   ________________________________________   __________________    ______    ________   _______    _______    _____    _____"
 return
 fnend
  

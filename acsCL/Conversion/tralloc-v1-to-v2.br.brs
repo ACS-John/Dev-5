@@ -15,7 +15,7 @@ def library fntralloc_v1_to_v2
 		open #tralloc=1: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed
 		close #tralloc:
 		open #tralloc: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed
-		if version(tralloc)=2 then let fnStatus("TrAlloc is already version 2") : goto Xit
+		if version(tralloc)=2 then fnStatus("TrAlloc is already version 2") : goto Xit
 		version(tralloc,2)
 	goto Xit
 

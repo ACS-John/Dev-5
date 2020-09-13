@@ -172,7 +172,7 @@ PrintProofList: ! r:
 goto MENU1 ! /r
 HEADER: ! r:
 	pr #255,using 'pos 1,c 10,cc 51': date$("mm/dd/ccyy"),env$('cnam')
-	pg=pg+1
+	pg+=1
 	pr #255,using L2040: time$,"W-2 Supplemental Information Proof List","Page",pg,date$("Month DD, CCYY")
 	L2040: form pos 1,c 8,cc 52,skip 1,pos 1,c 5,n 3,cc 52,skip 1
 return ! /r

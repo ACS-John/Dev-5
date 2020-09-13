@@ -47,7 +47,6 @@ def library fnub_cnv_ubmstr_vb
 		! If G(5)=9.25 Then g(6)=9.25: gB(6)=GB(5): g(5)=0: gB(5)=0 ! KINCAID ONLY
 		! gB(9)=GB(7): gB(7)=0 ! move sfc for service 7 to service 9
 		! eXTRA(18)=D(7): d(7)=0 ! average sewer usage
-		! If env$('client')="Monticello" AND A(2)>9 Then eXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
 		! a(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate
 		! If A(2)>0 Then eXTRA(14)=D(13) ! make sewer units same as water units if have sewer
 		for j=1 to udim(extra)
