@@ -2287,7 +2287,8 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 					rewrite #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
 				else if hotImportDataField$(hotIdX)='meter.meter number.water' then
 					read #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
-					location$(loc_transmitter)=hotImportDataValue$(hotIdX)
+					location$(loc_meterNumber)=hotImportDataValue$(hotIdX) ! fixed 9/14/2020
+					! location$(loc_transmitter)=hotImportDataValue$(hotIdX)
 					rewrite #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
 				else if hotImportDataField$(hotIdX)='meter.longitude.water' then
 					read #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
