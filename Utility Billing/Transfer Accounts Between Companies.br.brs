@@ -16,7 +16,7 @@
 	ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
 	mstrform$=rtrm$(ubstd$)&rtrm$(ubextra$)
 MENU1: !
-	fnTos(sn$="CoTr-1")
+	fnTos
 	mylen=5 : mypos=mylen+2
 	fnLbl(1,1,"From:",mylen,1)
 	fnTxt(1,mypos+.4,50, 0,0,'',1) ! fncmbcno(1,mypos)
@@ -44,10 +44,10 @@ MENU1: !
 	close #26: ioerr ignore
 	open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused0:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused1:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused2:=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #hUbTranVb:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused0=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused1=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused2=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #hUbTranVb=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
 	close #23: ioerr ignore
 	open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	close #51: ioerr ignore
@@ -58,7 +58,8 @@ MENU1: !
 	gosub HDR
 MENU2: !
 	hcno=cno
-L700: fnTos(sn$="CoTr-2")
+L700: !
+	fnTos
 	fnLbl(1,1,"Customer to Transfer:",28,1)
 	fncmbact(1,30)
 	resp$(1)=""
@@ -68,10 +69,11 @@ L700: fnTos(sn$="CoTr-2")
 	z$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #1,using mstrform$,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ nokey L700
 	z2$=z$
-L820: read #26,using "Form POS 1,C 10",key=z2$: z2$ nokey L960
+L820: !
+	read #26,using "Form POS 1,C 10",key=z2$: z2$ nokey L960
+
 MENU3: !
-	sn$="CoTr-3"
-	fnTos(sn$)
+	fnTos
 	mylen=28
 	mypos=mylen+2
 	fnLbl(3,1,"New Account:",mylen,1)
@@ -84,22 +86,24 @@ MENU3: !
 	z2=val(resp$(1)) conv MENU3
 	if z2=0 then goto MENU2
 	z2$=cnvrt$("N 10.2",z2)
-	goto L820
-!
-L960: restore #2,key>=z$&"         ": nokey L1040
-L970: read #2,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1040
-L980: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	if p$<>z$ then goto L1040
-	write #hUbTranVb,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
-	delete #2:
-	goto L970
-!
-L1040: gosub ALTBILLADDR
+goto L820
+
+L960: !
+	restore #2,key>=z$&"         ": nokey L1040
+	do
+		read #2,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L1040
+		L980: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+		if p$<>z$ then goto L1040
+		write #hUbTranVb,using L980: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+		delete #2:
+	loop
+	L1040: !
+	gosub ALTBILLADDR
 	write #26,using mstrform$: z2$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 	pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
 	delete #1,key=z$:
-	goto MENU2
-!
+goto MENU2
+
 	close #1:
 	close #2:
 	close #3:
@@ -111,15 +115,14 @@ FINIS: ! r:
 	! close #61:
 	! close #32:
 	fncloseprn
-	goto DONE
-! /r
+goto DONE ! /r
 ALTBILLADDR: ! r: alternate billing address
 	read #3,using "Form POS 1,C 10,4*C 30",key=z$: z$,mat ab$ nokey L1440
 	write #23,using "Form POS 1,C 10,4*C 30": z2$,mat ab$
 	L1440: !
 return  ! /r
 ! def fn_moveKeyPartialMatches(hFrom,hTo,MatchPos,MatchLen,matchType$)
-!
+
 ! fnend
 DONE: ! r:
 	close #1: ioerr ignore

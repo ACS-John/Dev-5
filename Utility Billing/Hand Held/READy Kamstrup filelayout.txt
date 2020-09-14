@@ -1,3 +1,4 @@
+Create Hand Held File 
 fields are space and tab delimited
   c 10, Account Number
   c 30, Customer Name
@@ -15,8 +16,18 @@ fields are space and tab delimited
   N 10,Prev Read
   N 10,current Read
   
-purposed Reading file:
+Reading file:
+tab delimited
   c 10,Account Number
   c  8,meter Number 
   N 10,current Read  
   ccyymmdd, current read date 
+  
+Swap file:
+tab delimited
+	column headings required
+	* customer number
+	* 
+	column headings supported
+	* Latitude	
+	* Longitude
