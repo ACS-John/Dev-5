@@ -9,20 +9,20 @@
 	dim prebal$*30
  
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  : _
-	read #21,using "Form POS 41,2*C 40": at$(2),at$(3) : _
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 	close #21:
 	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
-	at$(1)=env$('cnam') : _
-	z=21 : _
-	at$(1)=trim$(at$(1))(1:z) : _
-	x=len(at$(1)) : y=z-x : _
+	at$(1)=env$('cnam')
+	z=21
+	at$(1)=trim$(at$(1))(1:z)
+	x=len(at$(1)) : y=z-x
 	at$(1)=rpt$(" ",int(y/2))&at$(1)
-	z=26 : _
-	for j=2 to udim(at$) : _
-		at$(j)=trim$(at$(j))(1:z) : _
-		x=len(at$(j)) : y=z-x : _
-		at$(j)=rpt$(" ",int(y/2))&at$(j) : _
+	z=26
+	for j=2 to udim(at$)
+		at$(j)=trim$(at$(j))(1:z)
+		x=len(at$(j)) : y=z-x
+		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 	linelength=62
  
@@ -34,57 +34,55 @@
 	prebal$="10:00 AM, xxxxxxx  xx"
 SCREEN1: !
 	a$="" : prtbkno=0
-	fnTos(sn$="UBPrtBl1-1") : _
-	pf=26 : ll=24 : _
+	fnTos
+	pf=26 : ll=24
 	respc=0
 	fnLbl(1,1,"Current Reading Date:",ll,1)
-	fnTxt(1,pf,8,8,1,"1",0,tt$) : _
+	fnTxt(1,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 	fnLbl(2,1,"Previous Reading Date:",ll,1)
-	fnTxt(2,pf,8,8,1,"1",0,tt$) : _
+	fnTxt(2,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 	fnLbl(3,1,"Penalty Due Date:",ll,1)
-	fnTxt(3,pf,8,8,1,"1",0,tt$) : _
+	fnTxt(3,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 	fnLbl(4,1,"Message on Bill:",ll,1)
-	fnTxt(4,pf,60,60) : _
+	fnTxt(4,pf,60,60)
 	resp$(respc+=1)=mg$(1)
-	fnTxt(5,pf,60,60) : _
+	fnTxt(5,pf,60,60)
 	resp$(respc+=1)=mg$(2)
-	fnTxt(6,pf,60,60) : _
+	fnTxt(6,pf,60,60)
 	resp$(respc+=1)=mg$(3)
 	fnLbl(7,1,"Date of Billing:",ll,1)
-	fnTxt(7,pf,8,8,1,"1") : _
+	fnTxt(7,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	fnLbl(8,1,"Starting Account:",ll,1)
-	fncombof("ubm-act-nam",8,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2) : _
+	fncombof("ubm-act-nam",8,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
-	fncmbrt2(9,pf) : _
+	fncmbrt2(9,pf)
 	resp$(respc+=1)="[All]"
-	fnChk(10,pf,"Select Accounts to Print",1) : _
+	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(respc+=1)="False"
-	fnCmdSet(3) : _
+	fnCmdSet(3)
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto ENDSCR
-	d2x= val(resp$(1)) : _
-	d3x= val(resp$(2)) : _
-	d4 = val(resp$(3)) : _
-	mg$(1) = resp$(4) : _
-	mg$(2) = resp$(5) : _
-	mg$(3) = resp$(6) : _
+	d2x= val(resp$(1))
+	d3x= val(resp$(2))
+	d4 = val(resp$(3))
+	mg$(1) = resp$(4)
+	mg$(2) = resp$(5)
+	mg$(3) = resp$(6)
 	d1 = val(resp$(7))
-	if resp$(8)="[All]" then : _
-		a$="" else : _
-		a$ = lpad$(trim$(resp$(8)(1:9)),9)
-	if resp$(9)="[All]" then : _
-		prtbkno=0 else : _
-		prtbkno = val(resp$(9))
+	if resp$(8)="[All]" then a$="" else a$ = lpad$(trim$(resp$(8)(1:9)),9)
+	if resp$(9)="[All]" then prtbkno=0 else prtbkno = val(resp$(9))
 	if resp$(10)="True" then sl1=1: z$="" else sl1=0
-	if trim$(a$)<>"" then read #2,using L540,key=a$: z$,route,sequence nokey SCREEN1 : _
-		holdz$=z$: begin=1 : _
+	if trim$(a$)<>"" then 
+		read #2,using L540,key=a$: z$,route,sequence nokey SCREEN1
+		holdz$=z$: begin=1
 		st1=1
-L540: form pos 1,c 10,pos 1741,n 2,n 7
+	end if
+	L540: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
@@ -105,8 +103,7 @@ L690: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,po
 L720: if f><d1 then goto L630
 L730: e1=0 : mat pe$=("")
 	for j=2 to 4
-		if rtrm$(e$(j))<>"" then : _
-			e1=e1+1 : pe$(e1)=e$(j)
+		if rtrm$(e$(j))<>"" then e1=e1+1 : pe$(e1)=e$(j)
 	next j
 	if st1=0 then goto READALTADR
 ! If ST1$=Z$ Then sT1=0 Else Goto 560
@@ -117,8 +114,7 @@ READALTADR: !
 L820: form pos 11,4*c 30
 	e1=0 : mat pe$=("")
 	for j=1 to 4
-		if rtrm$(ba$(j))<>"" then : _
-			e1=e1+1 : pe$(e1)=ba$(j)
+		if rtrm$(ba$(j))<>"" then e1=e1+1 : pe$(e1)=ba$(j)
 	next j
 	if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
 	if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
@@ -144,19 +140,19 @@ L1030: !
 ! print bill routine
 	gosub VBPRINT
 ! end of pr routine
-	bct(2)=bct(2)+1 : _
-	! accumulate totals
+	bct(2)=bct(2)+1	! accumulate totals
 	goto L630
  
 SCREEN3: !
-	fnTos(sn$:= "UBPrtBl1-2")
+	fnTos
 	fnLbl(1,1,"Account (blank to stop)",31,1)
-	if trim$(z$)<>"" then : _
+	if trim$(z$)<>"" then 
 		fnLbl(3,1,"Last Account entered was "&z$,44,1)
-	fncmbact(1,17) : _
+	end if
+	fncmbact(1,17) 
 	resp$(1)=a$
 	fnCmdSet(3): fnAcs(mat resp$,ckey)
-	a$ = lpad$(trim$(resp$(1)(1:10)),10) : _
+	a$ = lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
 	read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final nokey SCREEN3
@@ -164,13 +160,13 @@ SCREEN3: !
  
 ENDSCR: ! pr totals screen
 	if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
-	fnTos(sn$="Bills-Total") : _
-	mylen=23 : mypos=mylen+2 : _
+	fnTos
+	mylen=23 : mypos=mylen+2
 	respc=0
 	fnLbl(1,1,"Total Bills Printed:",mylen,1)
-	fnTxt(1,mypos,8,0,1,"",1) : _
+	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-	fnCmdSet(52) : _
+	fnCmdSet(52)
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
 
