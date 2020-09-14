@@ -833,30 +833,55 @@ fnend
 	fnend
 	
 	def fn_readyKamstrupGeo(bookFile$*512,enableMerge$; ___,returnN)
-		pr ' not written yet'
-		pause
+		! no header support ! dataIncludesHeaders=0
+		! delim$=tab$ 
 		
+		colAccount=1
+		colReading=3
+		colReadingDate=4
 		
-		dataIncludesHeaders=1
-		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
-		open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-		open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RkgEoIn
+		open #hIn=fngethandle: "Name="&fn_hh_input_filename$,display,input
+		open #hOut=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hCustomer=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed 
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
-		if dataIncludesHeaders then
-			linput #hIn: line$ eof EO_AW ! just consume the headers
-		end if
+		lineCount=1
+
 		do
 			z$=''
-			linput #hIn: line$ eof EO_AW
-			! fn_rksParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
-			for rkX=1 to udim(mat tmpDataName$)
-				pr #hOut: tmpDataName$(rkX)&'='&tmpDataValue$(rkX)
-			nex rkX
-			pr #hOut: ''
-			returnN+=1
+			linput #hIn: line$ eof RkgEoIn
+			lineCount+=1
+			if line$(1:1)='!' then
+				fnStatus('skipping comment line :'&str$(lineCount))
+				fnStatus(line$)
+				fnStatusPause
+			else 
+				fn_ilrt_lineParseDelimited(line$,z$,colAccount,reading$,colReading, readingDate$,colReadingDate)
+				keyExists=fnKeyExists(hCustomer,z$, 2) ! fixes the account number if possible
+				if keyExists<=0 then
+					pr 'could not locate an account for "'&lineItem$(colAccount)&'"'
+					pr 'keyExists=';keyExists
+					pr bell
+					pause
+				else if trim$(fnCustomerData$(z$,'final billing code',1))<>'' then
+					fnStatus('SKIPPING LINE '&str$(lineCount)&'- INACTIVE "'&fnCustomerData$(z$,'final billing code',1)&'" CUSTOMER ACCOUNT '&z$)
+					pr bell;
+					fnStatusPause
+				else
+					pr #hOut: 'Customer.Number='&z$
+					pr #hOut: 'Reading.Water='&reading$
+					pr #hOut: 'Reading.Water.Date='&readingDate$
+					pr #hOut: ''
+					returnN+=1
+				en if
+			en if
+
 		loop
-		EO_AW: !
+		RkgEoIn: !
+		fnLocationIdFromAccountAndServ$('','', '',0) ! closes internal file handle
+		fnCustomerData$('','') ! close internal file
+		close #hCustomer:
 		close #hIn:
 		close #hOut:
 		if enableMerge$='True' then

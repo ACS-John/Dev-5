@@ -355,7 +355,7 @@ def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$; ___,a1count,a2count,inde
 		arrayOneN(index)=a1tmpN(sorted(index))
 		arrayTwo$(index)=a2tmp$(sorted(index))
 	next index
-	fn2arraySort=count
+	fn2arraySortNc=count
 fnend
 def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 	Chr_Count=0
