@@ -29,8 +29,8 @@
 	fnGetServices(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 	delim$=chr$(9)
 !
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-	open #h_alt_bill:=fngethandle: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #h_alt_bill:=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 !
 	fnureg_read('ECP Export Filename',exp_filename$)
 	if exp_filename$='' then exp_filename$=os_filename$(env$('Desktop'))&"\ACS_ECP_Export.txt"
@@ -46,7 +46,7 @@ MENU1: !
 	if ckey=5 then goto Xit
 	exp_filename$=resp$(1)
 !
-	open #h_ecp=fngethandle: "Name=[at]"&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
+	open #h_ecp=fnH: "Name=[at]"&exp_filename$&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 	exp_filename$=os_filename$(file$(h_ecp))
 	fnureg_write('ECP Export Filename',exp_filename$)
 ! restore #h_customer:

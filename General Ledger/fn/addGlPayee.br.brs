@@ -10,7 +10,7 @@ def library fnAddGlPayee
 	dim gldesc$*30,resp$(60)*50
 	! r: setup files
 	if ~exists("[Q]\GLmstr\paymstr.h[cno]") then 
-		open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],RecL=276,kln=8,kps=1,Replace",internal,outIn,keyed 
+		open #paymstr:=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],RecL=276,kln=8,kps=1,Replace",internal,outIn,keyed 
 		close #paymstr: ioerr ignore
 	end if
 	if ~exists("[Q]\GLmstr\PayIdx1.h[cno]") or ~exists("[Q]\GLmstr\PayIdx2.h[cno]") then 
@@ -18,10 +18,10 @@ def library fnAddGlPayee
 		fnIndex('[Q]\GLmstr\paymstr.H[cno]','[Q]\GLmstr\Payidx2.H[cno]','9 38')
 		fnStatusClose
 	end if
-	open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
-	open #paymstr2:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
-	open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
-	open #citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+	open #paymstr:=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
+	open #paymstr2:=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed 
+	open #payeegl:=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+	open #citystzip:=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 	! /r
 	MENU1: ! r:
 		fnTos
@@ -96,7 +96,7 @@ def library fnAddGlPayee
 		loop
 		EO_DELETE_PAYEE: ! 
 		! 
-		open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
+		open #trans:=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 		if trim$(holdvn$)="" then goto EO_DEL_KEY_ON_TRANS
 		restore #trans, key>=holdvn$: nokey EO_DEL_KEY_ON_TRANS
 		L570: !
@@ -234,7 +234,7 @@ def library fnAddGlPayee
 	KEY_CHANGE: ! r: a gosub routine
 		! change the references to this file in the payee transaction file
 		close #trans: ioerr ignore
-		open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
+		open #trans:=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 		restore #trans,key>=holdvn$: nokey EO_CHANGE_KEY_ON_TRANS
 		do    
 			read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -271,7 +271,7 @@ def library fnAddGlPayee
 fnend 
 PAYEE_TRANSACTIONS: ! r:
 	close #trans: ioerr ignore
-	open #trans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
+	open #trans:=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed 
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1

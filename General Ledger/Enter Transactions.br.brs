@@ -77,7 +77,7 @@
 	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
-	open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 !
 	if gltyp<>1 then
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
@@ -183,8 +183,8 @@ F_5: form pos 1,pd 6.2,80*pd 6.2,pd 6.2,pd 6.2,20*n 2
 L1140: ! r:
 	close #6: ioerr ignore
 	open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed
-	open #paymstr:=fngethandle: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #payeegl:=fngethandle: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+	open #paymstr:=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #payeegl:=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 	close #glallocations: ioerr ignore
 	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
 	if jccode then

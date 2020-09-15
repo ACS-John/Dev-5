@@ -9,7 +9,7 @@ def library fnemployee_srch(&x$; fixgrid)
 	dim item$(6)*30
 	dim resp$(30)*80
 
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ioerr ERTN
 
 	restore #hEmployee: 
 	fnTos

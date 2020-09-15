@@ -183,7 +183,7 @@ fnend
 def fn_companyName$*40(cno)
 	dim coc_return$*40
 	coc_return$=''
-	open #h_tmp:=fngethandle: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,input ioerr COC_FINIS
+	open #h_tmp:=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,input ioerr COC_FINIS
 	read #h_tmp,using "Form pos 1,c 40": coc_return$
 	close #h_tmp:
 	COC_FINIS: !
@@ -256,7 +256,7 @@ fnend
 def fn_companyNameSet(cno,cnam$*40)
 	cnam$=rtrm$(cnam$)
 	if cnam$<>'' then
-		open #h_company:=fngethandle: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative
+		open #h_company:=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative
 		rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
 		close #h_company:
 	end if

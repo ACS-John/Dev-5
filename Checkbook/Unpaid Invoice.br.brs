@@ -28,10 +28,10 @@
 	close #20:
 
 	bankcode=val(bc$)
-	open #bankmstr=fngethandle: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal, outin, keyed
+	open #bankmstr=fnH: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal, outin, keyed
 	read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 	close #bankmstr:
-	open #glmstr=fngethandle: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
+	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
 	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed
 	open #paymstr2=14: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed
 	open #payeegl=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
@@ -184,7 +184,7 @@ CODE_FOR_PAYMENT: ! r:
 	lastrec=nextrec=total=0
 	displayattop$="True"
 	close #clearing: ioerr ignore
-	open #clearing=fngethandle: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
+	open #clearing=fnH: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
 	if displayunpaid=1 then
 		type$="Coded for Payment"
 	else if displayunpaid=0 then
@@ -541,14 +541,14 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 	! TEST1: !
 	! pass goes to test2 - fail goes to test_key_fail_on_iv
 		close #ivpaid: ioerr ignore
-		open #ivpaid:=fngethandle: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
+		open #ivpaid:=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
 		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 		read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
 	
 	TEST2: !
 		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-		open #testpaytrans:=fngethandle: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
+		open #testpaytrans:=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
 		read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
 	

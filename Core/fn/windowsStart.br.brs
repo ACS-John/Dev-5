@@ -9,7 +9,7 @@ def library fnWindowsStart(wsFile$*1024)
 	shortTermUniqueNumber$=cnvrt$('pic(####)',shortTermUniqueNumber+=1)
 	hWsCmdFile$=env$('client_temp')&'\acsWinStart_'&session$&'-'&shortTermUniqueNumber$&'.cmd'
 	wsFile$=os_filename$(wsFile$)
-	open #hWsCmd:=fngethandle: 'Name=[at]'&hWsCmdFile$&',RecL=512,Replace',display,output 
+	open #hWsCmd:=fnH: 'Name=[at]'&hWsCmdFile$&',RecL=512,Replace',display,output 
 	pr #hWsCmd: '@echo off'
 	pr #hWsCmd: '@echo Advanced Computer Services LLC'
 	pr #hWsCmd: '@echo Opening: "'&wsFile$&'"'

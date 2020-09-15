@@ -12,7 +12,7 @@
  
 ! r: a screen
 ! /r
-	open #h_out:=fngethandle: "Name=SAVE:text documents (*.txt) |*.txt,RecL=112,EOL=CRLF,Replace",display,output ioerr Xit
+	open #h_out:=fnH: "Name=SAVE:text documents (*.txt) |*.txt,RecL=112,EOL=CRLF,Replace",display,output ioerr Xit
 F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 !  pr file$(h_tmp);" ";lrec(h_tmp)
 !  save_name$=os_filename$(file$(h_tmp))

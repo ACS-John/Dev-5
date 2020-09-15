@@ -59,7 +59,7 @@ else
 	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.H[cno]','69 3')
 end if 
 
-open #hGl:=fnGetHandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
+open #hGl:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 
 MainLoopTop: ! r:
 	dim r$*5

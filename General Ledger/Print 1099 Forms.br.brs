@@ -3,8 +3,8 @@ autoLibrary
 fnTop(program$)
 on error goto Ertn
 if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
-	open #hPayee=fngethandle: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #hTrans=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
+	open #hPayee=fnH: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
+	open #hTrans=fnH: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
 	do
 		dim vn$*8
 		dim nam$*30

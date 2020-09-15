@@ -220,7 +220,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	open #20: "Name="&startRtf_destinationFileName$,display,input
 	! end if
 	lrec20=lrec(20)
-	open #hOut=fngethandle: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
+	open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
 	pr #hOut: "{\rtf1\ansi\deflang1033";
 	pr #hOut: "{\fonttbl";
 	pr #hOut: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
@@ -297,7 +297,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	SpInsertThatFileHere: ! r:
 		close #hOut:
 		execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
-		open #hOut=fngethandle: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",display,output
+		open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",display,output
 	goto SrRead ! /r
 
 	SrEoInput: !
@@ -346,7 +346,7 @@ def library fnWaitForShellCloseStart(whatsRunning$*256)
 	fnWaitForShellCloseStart=fn_waitForWpToCloseStart(whatsRunning$)
 fnend
 def fn_waitForWpToCloseStart(whatsRunning$*256)
-	open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output
+	open #h_win_wait=fnH: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output
 	pr #h_win_wait,fields str$(val(env$('Session_Rows'))/2)&',1,Cc '&env$('Session_Cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
 fnend
 

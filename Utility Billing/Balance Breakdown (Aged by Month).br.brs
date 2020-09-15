@@ -45,7 +45,7 @@ if resp$(5)="True" then skipcr=1
 fnopenprn
 gosub PrHeader
 open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-open #hCustomer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 do ! r: main (customer) loop
 	dim z$*10,e$*30,bal
 	read #hCustomer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2': z$,e$,bal eof Finis

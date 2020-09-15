@@ -159,8 +159,8 @@ def fn_getTrusts(mat trustPath$,mat trustName$; basePath$*512,___,path$*40,tName
 	mat trustName$(0)
 	if ~setup_categ then fn_setup_categ
 	if basePath$='' then basePath$=os_filename$('trustact/common/5')(1:pos(os_filename$('trustact/common/5'),'\COMMON')-1)
-	open #hFinSum:=fnGetHandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
-	! open #hFinSum:=fnGetHandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
+	open #hFinSum:=fngethandle: 'name='&basePath$&'\common\trustact,shr',INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
+	! open #hFinSum:=fngethandle: "name=trustact/common/5,shr",INTERNAL,OUTIN,RELATIVE IOERR Xitfn_getTrusts
 	for trustItem=1 TO lrec(hFinSum)
 		read #hFinSum,using "form pos 1,c 40,c 28",rec=trustItem,release: path$,tName$
 		if exists(path$) and pos(uprc$(path$),"\ACCOUNT")>0 then
@@ -234,7 +234,7 @@ def fn_setup
 
 
 		library 'S:\Core\Library.br': fnXit
-		library 'S:\Core\Library.br': fnGetHandle
+		library 'S:\Core\Library.br': fngethandle
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
 		library 'S:\Core\Library.br': fnTop

@@ -143,7 +143,7 @@ def fn_addTransaction(z$,serviceCode,tDate,amt,newBalance)
 	fnclosefile(hTran,'UB Transaction')
 fnend
 def fn_addNote(z$,amt,note$*256)
-	open #h_notefile=fngethandle: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
+	open #h_notefile=fnH: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
 	pr #h_notefile: '** Other Charge added '&date$('mm/dd/ccyy')&' at '&time$&' **'
 	pr #h_notefile:   '  Account: '&z$&'  '&customer_name$
 	if fn_not_blank(note$) then
@@ -164,7 +164,7 @@ fnend
 def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other,priorBal)
 	service_other=fnservice_other
 	hTran=fn_open('UB Transaction',mat tran$,mat tranN,mat form$)
-	open #hTranRelative:=fngethandle: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
+	open #hTranRelative:=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
 	hCustomer1=fn_open('UB Customer',mat c$,mat cN,mat form$)
 	mat tran$=('')
 	mat tranN=(0)

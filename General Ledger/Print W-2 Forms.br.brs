@@ -18,7 +18,7 @@ read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawag
 close #1:
 ficarate=ficarate/100
 feducrat=feducrat/100
-open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+open #hCompany:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst
 close #hCompany:
 for j=1 to 3 : a$(j)=a$(j)(1:30) : next j
@@ -50,7 +50,7 @@ if exportFormatID then
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[TaxYear]',taxYear$)
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[taxyear]',taxYear$)
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[TAXYEAR]',taxYear$)
-	open #hExport:=fngethandle: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
+	open #hExport:=fnH: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
 end if
 ! /r
  
@@ -58,9 +58,9 @@ end if
 if exportFormatID=0 then
 	fnpa_open('',w2Copy$,'PDF')
 end if
-open #hEmployee:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
+open #hEmployee:=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
 box16=0
-open #hW2Box16:=fngethandle: "Name=[Q]\GLmstr\W2Box16.H[cno],KFName=[Q]\GLmstr\W2INDEX.H[cno],Shr",internal,input,keyed ioerr w2b16openfail
+open #hW2Box16:=fnH: "Name=[Q]\GLmstr\W2Box16.H[cno],KFName=[Q]\GLmstr\W2INDEX.H[cno],Shr",internal,input,keyed ioerr w2b16openfail
 box16=1
 w2b16openfail: !
 cLocality$="NO"

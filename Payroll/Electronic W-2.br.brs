@@ -18,7 +18,7 @@ fnTop(program$)
 	dim tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 	dim w2(9),i1(9),t1(9),ct$*20,st$*2
 	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(40)*256,path$*256
-	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #hCompany:=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #hCompany,using fCompany: mat a$,federal_id$,loccode
 	fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
 	close #hCompany:
@@ -31,8 +31,8 @@ fnTop(program$)
 	med$="Y"
 ! /r
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hChecks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! r: initialize variables
  
 	fnureg_read('electronic w-2 file',path$,os_filename$(env$('Desktop')&'\w2elec-[cno]'))
@@ -248,7 +248,7 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 Company City',ct$)
 	fncreg_write('W-2 Company State',st$)
 	fncreg_write('W-2 Company Zip',zip$)
-	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,outIn
+	open #hCompany:=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,outIn
 	rewrite #hCompany,using 'form pos 1,x 120,c 12,pos 150,x 80,n 2',rec=1: federal_id$,loccode
 	close #hCompany:
 	fncreg_write('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',str$(ins))
@@ -269,7 +269,7 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 FIPS',str$(sr2))
 	!
 ! /r
-	open #hOut:=fngethandle: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output
+	open #hOut:=fnH: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output
 !
 	gosub RecRA
 	gosub RecRE ! kj 22610  was commented
@@ -427,7 +427,7 @@ FILE_SHUFFLE: ! r:
 	close #24: ioerr ignore
 	close #hOut: ioerr ignore
 	open #24: "Name=X,RecL=513,EOL=NONE,REPLACE",external,output
-	open #hOut:=fngethandle: "Name=w2report,RecL=512",display,input
+	open #hOut:=fnH: "Name=w2report,RecL=512",display,input
 	do
 		linput #hOut: a$ eof L3320
 		if a$(512:512)="X" then a$(512:512)=""

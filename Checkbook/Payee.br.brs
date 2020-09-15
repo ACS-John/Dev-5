@@ -18,11 +18,11 @@ def fn_addpayee
 	dim gldesc$*30,resp$(60)*50
 
 	left=0: right=1
-	open #trmstr2:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
-	open #paymstr:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #paymstr2:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
-	open #citystzip:=fngethandle: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
+	open #trmstr2:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #paymstr:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paymstr2:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
+	open #payeegl:=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
+	open #citystzip:=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 
 	MENU1: ! r:
 		fnTos
@@ -87,7 +87,7 @@ def fn_addpayee
 	DELETE_PAYEE: ! r:
 		! check for Linked Unpaid Invoices
 		! if there are any - than tell them, and don't delete.
-		open #paytrans:=fngethandle: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+		open #paytrans:=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 		restore #paytrans,key>=vn$&rpt$(chr$(0),12): nokey L490
 		read #paytrans,using 'Form Pos 1,C 8',release: x$
 		if x$=vn$ then
@@ -108,7 +108,7 @@ def fn_addpayee
 		end if
 		EO_DELETE_PAYEE: !
 
-		open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+		open #trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 		restore #trans, key>=holdvn$&rpt$(chr$(0),kln(trans)-len(holdvn$)): nokey EO_DEL_KEY_ON_TRANS
 		L590: !
 		read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
@@ -278,7 +278,7 @@ def fn_addpayee
 	goto MENU1 ! /r
 	KEY_CHANGE: ! r:
 	! change the references to this file in the Transaction file
-	open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 	restore #trans,key>=holdvn$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 	L1530: !
 	read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -303,7 +303,7 @@ def fn_addpayee
 	EO_CHANGE_KEY_ON_PAYEEGL: !
 
 	! Change references to this file in the linked file PayTrans
-	open #paytrans:=fngethandle: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paytrans:=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 	restore #paytrans,key>=holdvn$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 	L1670: !
 	read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
@@ -315,7 +315,7 @@ def fn_addpayee
 	close #paytrans:
 
 	! Change references to this file in the linked file UnPdAloc
-	open #unpdaloc:=fngethandle: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed
+	open #unpdaloc:=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed
 	restore #unpdaloc,key>=holdvn$&rpt$(chr$(0),kln(unpdaloc)-len(holdvn$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 	read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 	if x$=holdvn$ then
@@ -333,7 +333,7 @@ MSGBOX3: ! r: dupkey
 	fnmsgbox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 CHECK_HISTORY: ! r:
-	open #trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
+	open #trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1

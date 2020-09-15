@@ -27,7 +27,7 @@ emplRegisterFile$=resp$(1)
 fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)
 ! /r
 ! r: Employee File - gather into local variables
-	open #hInEmpl:=fngethandle: 'name='&emplRegisterFile$,d,i
+	open #hInEmpl:=fnH: 'name='&emplRegisterFile$,d,i
 	emplEnumCount=0
 	empl_Date          	=emplEnumCount+=1
 	empl_Check_No      	=emplEnumCount+=1

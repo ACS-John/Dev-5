@@ -44,10 +44,10 @@ MENU1: !
 	close #26: ioerr ignore
 	open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused0=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused1=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused2=fngethandle: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #hUbTranVb=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused0=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused1=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #unused2=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #hUbTranVb=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
 	close #23: ioerr ignore
 	open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	close #51: ioerr ignore

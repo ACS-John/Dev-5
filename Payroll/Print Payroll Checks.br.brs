@@ -280,14 +280,14 @@ L1300: ! /r
 			open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed
 		end if
 		open #praddr:=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input
-		open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-		open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
+		open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+		open #hDepartment:=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 		open #3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 		open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno]",internal,outIn,keyed
 		open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
 		if fnclient_has('GL') and gl_installed=1 then
 			gl_installed=0
-			open #h_gl_glbrec:=fngethandle: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
+			open #h_gl_glbrec:=fnH: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
 			gl_installed=1
 			L1440: !
 		end if
@@ -499,16 +499,16 @@ def fn_open_acscl
 	open #h_cl_bank:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr L4220
 	cl_installed=1
 	! not used - commented out 8/13/19 jb    			open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
-	open #h_cl_payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_payee:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	! open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #h_cl_trans:=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
-	open #h_cl_trans_alloc:=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_trans_alloc:=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
 	!   else
 	!     open #h_cl_trans_alloc:=f: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
 	!   end if
-	open #h_cl_glmstr:=fngethandle: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_glmstr:=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
 	read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey L4200
 	L4200: ckno=ckno+1
 	! dAT=VAL(DATE$(4:5)&DATE$(7:8)&DATE$(1:2))

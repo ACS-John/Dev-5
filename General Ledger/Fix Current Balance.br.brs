@@ -5,7 +5,7 @@
 	on error goto Ertn
 	dim bp(13)
 	dim resp$(128)*256
-	open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #company,using 'Form Pos 150,2*N 1,Pos 384,n 2': use_dept,use_sub,nap
 	close #company:
 	fnGetFundList(mat fund_list)
@@ -18,11 +18,11 @@
 	if ~fn_theScreen then goto Xit
 	! r: setup and open files
 	if enableProcessAccumulatedTrans$='True' then
-		open #hAcTrans:=fngethandle: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',internal,input,keyed
+		open #hAcTrans:=fnH: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',internal,input,keyed
 		startWithBalEndOfPriorYear=1
 	end if
-	open #hGlMstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-	open #hGlTrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative
+	open #hGlMstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+	open #hGlTrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative
 	fTransBoth: form pos 1,c 12,n 6,pd 6.2
 	! /r
 	do ! r: main loop

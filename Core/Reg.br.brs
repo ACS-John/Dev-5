@@ -3,10 +3,10 @@ def fn_sreg_setup(; ___,returnN)
 	autoLibrary
 	returnN=0
 	if env$('ACSDeveloper')='' then
-		open #sreg_h=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
+		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
 		returnN=1
 	else
-		open #sreg_h=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		returnN=2
 	end if
 	fn_sreg_setup=returnN
@@ -109,7 +109,7 @@ def fn_mcregSetup
 		mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
 		mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
 		if ~exists(mcregFileData$) then fnmakesurepathexists(mcregFileData$)
-		open #mcreg_h=fngethandle: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #mcreg_h=fnH: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	end if
 	on error goto Ertn
 fnend
@@ -168,7 +168,7 @@ fnend
 def fn_regSetup
 	autoLibrary
 	fnmakesurepathexists('[Q]\Data\')
-	open #reg_h=fngethandle: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+	open #reg_h=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	fn_regSetup=1
 	on error goto Ertn
 fnend
@@ -228,7 +228,7 @@ def fn_creg_setup
 
 		cregFileData$ =datafolder$&'\reg-'&env$('CurSys')&'.h[cno]'
 		cregFileIndex$=datafolder$&'\reg-'&env$('CurSys')&'-idx.h[cno]'
-		open #creg_h=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #creg_h=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		fn_creg_setup=val(env$('CNo'))
 		creg_setup=val(env$('CNo'))
 	end if

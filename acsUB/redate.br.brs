@@ -24,7 +24,7 @@ MAIN: !
 	date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 	date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
 	rec_low=val(resp$(3))
-	open #h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #h_trans:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
 	do
 		read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
 ! if trans_date=date_bad then pause

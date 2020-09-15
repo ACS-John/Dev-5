@@ -9,8 +9,8 @@ fndat(dat$)
 open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 read #20,using "Form pos 384,N 2",rec=1: nap
 close #20:
-open #hGlmstr:=fngethandle:  "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-open #hAcTrans:=fngethandle: "Name=[Q]\GLmstr\ACTRANS.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,outIn,keyed
+open #hGlmstr:=fnH:  "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+open #hAcTrans:=fnH: "Name=[Q]\GLmstr\ACTRANS.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,outIn,keyed
  
 do ! r: main loop
 	dim resp$(10)*80

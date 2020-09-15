@@ -33,7 +33,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	! dim acshelp$*200
 	! acshelp$="Help\co\error\br\Err"&cnvrt$("Pic(####)",errornumber)&".html"
 	MENU1: ! 
-		open #win:=fngethandle: "SRow=3,SCol=4,Rows=19,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...
+		open #win:=fnH: "SRow=3,SCol=4,Rows=19,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...
 		if errornumber=61 then 
 			pr #win,f "1,1,Cc 69,N": "A record is needed but is locked by another user."
 			pr #win,f "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
@@ -112,7 +112,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			sourceFile$=srep$(os_filename$(callingprogram$),'F:\CLSINC\','C:\ACS\Dev-5\')
 			sourceFile$=srep$(sourceFile$,'COLLECTION-MASTER ADD-ON','Collection-Master Add-On')
 			exe 'dir "'&sourceFile$&'" -l -b >acsErrTmp'&session$&'.txt'
-			open #hTmp:=fngethandle: 'name=acsErrTmp[session].txt',display,input
+			open #hTmp:=fnH: 'name=acsErrTmp[session].txt',display,input
 			linput #hTmp: line$ !  consume "Directory of" line
 			linput #hTmp: line$ !  read line that contains sourceFile$
 			! pr 'line$=';line$ : pause

@@ -7,7 +7,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 		autoLibrary
 		on error goto Ertn
 		
-		open #company=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
+		open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative 
 		read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 		! lmu = Last Accounting Period Closed
 		! nap = Number of Accounting Periods

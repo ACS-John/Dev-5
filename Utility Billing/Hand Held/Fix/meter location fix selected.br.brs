@@ -86,7 +86,7 @@ fnend
 def fn_quickExport(; append$*18)
 	dim location$(0)*256,locationN(0)
 	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,1)
-	open #hOut:=fnGetHandle: 'name='&env$('Desktop')&'\Meter Location'&append$&',replace,recl=2048',d,o
+	open #hOut:=fnH: 'name='&env$('Desktop')&'\Meter Location'&append$&',replace,recl=2048',d,o
 	pr #hOut: 'LocationID ,MeterNumber ,Transmitter         '
 	do
 		read #hLocation,using form$(hLocation): mat location$,mat locationN eof QeEoLocation

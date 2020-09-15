@@ -79,7 +79,7 @@
 10004     dim mprint$*50,word_processor_exe$*256
 10005     if pr then mprint$=" /q /n /mFilePrintDefault /mFileCloseOrExit" else mprint$=""
 10010     library env$("PD")&"Core\fnsnap\RTFLIB_dll.br": fnrtf,fnamt$,fntext$
-10020     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fn_cs,fnCopyc2s,fnCopys2c,fnwaitwin
+10020     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fnH,fndelrow,fndelrow$,fn_cs,fnCopyc2s,fnCopys2c,fnwaitwin
 10030     dim theaders$(1)*50,headers$(1)*50,widths(1),forms$(1)*50,aa$(1)*50,ab$(1)*50,ba$(1)*50,bb$(1)*50,cc$(1)*3000,lastcc$(1)*3000,ccs$(1)*3000,ccst$(1)*3000,ccs$*2000,ccb$*2000,headers$*2000,cc$*20000,dorder(1),sorder(1),exclude(1),outfile$*100,dummy$*2000
 10040     execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 10045     _cs=fn_cs
@@ -189,7 +189,7 @@
           ! ?tart writing RTF text file                                   !:
           ! ?                                                             !:
           ! -------------------------------- !
-10380     open #(textfile:=fngethandle): "name=[Temp]\text"&session$&".txt,recl=5000,replace",display,output 
+10380     open #(textfile:=fnH): "name=[Temp]\text"&session$&".txt,recl=5000,replace",display,output 
 10385     if sort_col>0 then header$(inf:inf)="[RTFLINE] Sorted by "&headers$(sort_col)
 10390     pr #textfile: "H|[SPEC(spec"&session$&".spc)]"&header$&"[BOTLINE]" !:
           pr #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
@@ -347,7 +347,7 @@
 10670     close #textfile: 
 10680     open #textfile: "name="&textfile$,display,input 
 10682     _seq=-1
-10690     _seq+=1: open #(rtfout:=fngethandle): "name=[Temp]\temp"&session$&str$(_seq)&".rtf,eol=none,replace",display,output ioerr 10690
+10690     _seq+=1: open #(rtfout:=fnH): "name=[Temp]\temp"&session$&str$(_seq)&".rtf,eol=none,replace",display,output ioerr 10690
 10700     rtfout$=file$(rtfout)
 10705 ! close #waitwin:! PAUSE
 10710     gosub BUILD_SPEC
@@ -381,7 +381,7 @@
         ! ?uild an RTF specification file in the %TEMP% directory based !:
         ! ?n the number of columns and text of the lIST to print.       !:
         ! -------------------------------- !
-10810   open #(specfile=fngethandle): "name=[Temp]\spec"&session$&".spc,recl=2000,replace",display,output 
+10810   open #(specfile=fnH): "name=[Temp]\spec"&session$&".spc,recl=2000,replace",display,output 
 10820   pr #specfile: ""
 10825 ! -------------------------------- !:
         ! ?et margins                                                   !:
@@ -630,7 +630,7 @@
         ! ?DELAY  if true waits for the enter key before filtering      !:
         ! --------------------------------
 12010   library env$("PD")&"Core\fnsnap\rtflib_dll.br": fnlistcopy
-12020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fnlistspec$,fnwaitwin,fnwaitbar
+12020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fnH,fndelrow,fndelrow$,fnlistspec$,fnwaitwin,fnwaitbar
 12030   dim headers$(1)*50,widths(1),forms$(1)*50,aa$(1)*50,ab$(1)*50,ba$(1)*50,bb$(1)*50,cc$(1)*3000,headers$*2000,cc$*20000,dorder(1),sorder(1),exclude(1)
 12040   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 12050   input #winno, fields spec$&",HEADERS,,nowait ": (mat headers$,mat widths,mat forms$) !:
@@ -774,7 +774,7 @@
         ! ?AVEWIN the window number of the receiving list               !:
         ! ?AVESPEC$ the specification row,col LIST rows/cols of destina !:
         ! -------------------------------- !
-13010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fndelrow,fndelrow$,fnlistspec$
+13010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fndelrow,fndelrow$,fnlistspec$
 13020   dim sh$(1)*50,sw(1),sf$(1)*50,ss$(1)*100,ss$*20000,rdo(1),sdo(1),rso(1),sso(1)
 13030   copy_count=0
 13040   input #readwin, fields readspec$&",HEADERS,,nowait ": (mat sh$,mat sw,mat sf$)
@@ -805,7 +805,7 @@
         ! ?he designated window                                         !:
         ! ?NLISTSAVE = value of _SWIN                                   !:
         ! -------------------------------- !
-14010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fnlistspec$,fnwinrowcol
+14010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fnH,fndelrow,fndelrow$,fnlistspec$,fnwinrowcol
 14020   dim sh$(1)*50,sw(1),sf$(1)*50,ss$(1)*20,ss$*20000,so(1)
 14030   fnlistsave=0
 14040   input #savewin, fields savespec$&",HEADERS,,nowait ": (mat sh$,mat sw,mat sf$)
@@ -840,7 +840,7 @@
         ! ?SPEC$ the list secifier 1,1,LIST 12/15 for example           !:
         ! --------------------------------
 15010 ! LIBRARY env$("PD")&"Core\fnsnap\rtflib_dll.br": FNLISTCOPY
-15020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fnlistspec$,fnwaitwin,fnwaitbar
+15020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fnH,fndelrow,fndelrow$,fnlistspec$,fnwaitwin,fnwaitbar
 15030   dim headers$(1)*50,widths(1),forms$(1)*50,aa$(1)*50,ab$(1)*50,ba$(1)*50,bb$(1)*50,cc$(1)*3000,headers$*2000,cc$*20000,dorder(1),sorder(1),exclude(1)
 15040   dim inwrk$(1)*60,indate$(1)*60
 15050   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
@@ -913,8 +913,8 @@
         ! ?pen a window and allow data entry                            !:
         ! ?                                                             !:
         ! -------------------------------- !
-15260 ! OPEN #(ENTERWIN:=FNGETHANDLE): "srow=5,scol=5,rows="&STR$(UDIM(MAT CC$)+1)&",cols="&STR$(50)&",PARENT=NONE",DISPLAY,outIn
-15261   open #(enterwin:=fngethandle): "srow=5,scol=5,rows="&str$(udim(mat cc$)+1)&",cols="&str$(hlen+wlen+10)&",PARENT=NONE",display,outIn 
+15260 ! OPEN #(ENTERWIN:=fnH): "srow=5,scol=5,rows="&STR$(UDIM(MAT CC$)+1)&",cols="&STR$(50)&",PARENT=NONE",DISPLAY,outIn
+15261   open #(enterwin:=fnH): "srow=5,scol=5,rows="&str$(udim(mat cc$)+1)&",cols="&str$(hlen+wlen+10)&",PARENT=NONE",display,outIn 
 15270   for a=1 to udim(mat headers$)
 15280     pr #enterwin,fields str$(a)&",2,c "&str$(hlen)&",N/W:T": trim$(headers$(a))
 15290     mat inwrk$(a): mat indate(a): mat indate$(a) !:

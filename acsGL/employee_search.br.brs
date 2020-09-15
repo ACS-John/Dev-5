@@ -9,7 +9,7 @@ def library fnemployee_search(&x$;fixgrid)
 
 		dim item$(5)*30
 		dim resp$(30)*80
-	open #file_num:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #file_num:=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed ioerr ERTN
 
 	restore #file_num:
 	fnTos

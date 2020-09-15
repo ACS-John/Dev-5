@@ -3,7 +3,7 @@ if env$('acsdeveloper')<>'' then
 	setenv('CM_Core_Initialized','')  !  forces File IO Layouts to update without restarting
 end if
 fnTop(program$)
-open  #hProc:=fnGetHandle: 'name=fileioproc'&session$&'.$$$,replace',display,output
+open  #hProc:=fnH: 'name=fileioproc'&session$&'.$$$,replace',display,output
 pr #hProc: 'load S:\Core\FileIO\fileio.br'
 pr #hProc: 'cd S:'
 pr #hProc: 'Run'

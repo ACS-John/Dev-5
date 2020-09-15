@@ -26,8 +26,8 @@ if ckey=5 then goto Xit
 date_bad=val(resp$(1))
 date_good=val(resp$(2))
 
-open #h_prmstr=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
-open #h_acprcks=fngethandle: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
+open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
 fnopenprn
 fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390

@@ -4,7 +4,7 @@ fnTop(program$)
 d1=fnPayPeriodEndingDate
 if days(d1,'ccyymmdd')=>days(date)-5 then prd=d1
  
-open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.H[cno]",internal,outIn,keyed ioerr ignore
+open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.H[cno]",internal,outIn,keyed ioerr ignore
 F_rpwork: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
  
 SCREEN_1: !
@@ -115,7 +115,7 @@ SCREEN_1: !
 	! end if
 	if noauto<>2 then em4=0 ! don't allow any employment status code if not selecting to automatically pay salaried
 	if (~exists("[Q]\PRmstr\rpwork[unique_computer_id].h[cno]") and additional=2) or additional<>2 then
-		open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
+		open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 		close #h_rpwork:
 	end if
 	fnIndex("[Q]\PRmstr\rpwork[unique_computer_id].h[cno]","[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]","1,11")
@@ -128,7 +128,7 @@ SCREEN_1: !
 		goto PROOF_TOTALS
 	end if
 ! close #h_rpwork,free: ioerr ignore
-! open #h_rpwork:=fnGethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
+! open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 ! close #h_rpwork:
 ! execute "Index [Q]\PRmstr\rpwork[unique_computer_id].h[cno]"&' '&"[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno] 1,11 replace,DupKeys -N"
 	gosub OpenFiles
@@ -514,7 +514,7 @@ L4840: !
 	goto ASK_TIME
 ! /r
 OpenFiles: ! r:
-	open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+	open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
 	F_employee_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	F_employee_2: form pos 162,n 6,pd 5.2
 	F_employee_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
@@ -677,7 +677,7 @@ ASK_EMPLOYEE: ! r:
 	end if
 ! /r
 	def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp)
-		open #apt_h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,input,keyed ioerr APT_FINIS
+		open #apt_h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,input,keyed ioerr APT_FINIS
 		apt_heno=0 ! temp variable for internal comparison
 		apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
 		apt_count_employees_entered=0 ! total unique employees entered

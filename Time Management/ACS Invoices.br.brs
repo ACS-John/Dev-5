@@ -25,10 +25,10 @@ fnStatus('producing Invoice Archive...')
 fnInvoiceOpen
 	! fn_produceInvoices
 	! r: def fn_produceInvoices
-	open #hClient=fngethandle: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,input,keyed
+	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,input,keyed
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
-	open #h_support=fngethandle: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
+	open #h_support=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
 	F_support: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
 	! dim timesheet$(0)*128
@@ -36,11 +36,11 @@ fnInvoiceOpen
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	! fnIndex('TMSHT[wsid]','TMSHT-IDX[wsid]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
-	open #hTimeSheet=fngethandle: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
+	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
 
 	fnStatus('Printing Invoices...')
 
-	open #h_tmwk2=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
+	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
 	dim cde$(30)*6
 	dim inv_item$(30)*128
 	dim inv_amt(30)
@@ -194,8 +194,8 @@ fnend
 
 def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	dim tce_to_inp(7)
-	open #tce_h_from=fngethandle: 'Name='&file_from$,internal,input
-	open #tce_h_to=fngethandle: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	open #tce_h_from=fnH: 'Name='&file_from$,internal,input
+	open #tce_h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
 		read #tce_h_from,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
@@ -224,7 +224,7 @@ fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
-		open #hSummary=fngethandle: 'Name=PrnSummary[session],RecL=80,replace',display,output ! ioerr SI_ADD
+		open #hSummary=fnH: 'Name=PrnSummary[session],RecL=80,replace',display,output ! ioerr SI_ADD
 		pr #hSummary: '{\fs16'  ! set the RTF Font Size to 8
 		pr #hSummary: 'Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  '
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'
@@ -241,7 +241,7 @@ def fn_summaryRelease
 	! pause
 	close  #hSummary:
 	if exists('PrnSummary[session]') then
-		open #hSummary=fngethandle: 'Name=PrnSummary[session]',display,input ! ioerr SpFinis
+		open #hSummary=fnH: 'Name=PrnSummary[session]',display,input ! ioerr SpFinis
 		fnsavetoasstart('[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\ACS Invoice Summary '&date$(days(invDateMmDdYy,'mmddyy'),'ccyy-mm')&'.rtf')
 
 		fnOpenPrn('Summary')
@@ -383,7 +383,7 @@ def fn_mergeInvoices
 	! clmstr dims
 	dim ca(10),sc(10)
 	fnStatus('Merging Invoices...')
-	open #h_tmwk2=fngethandle: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
+	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
 	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
 
 	dim cde$(30)*6
@@ -392,10 +392,10 @@ def fn_mergeInvoices
 	dim tmwk_sc(30)
 	dim ct(30)
 	dim tmwk2_sc(30)
-	open #h_artrans=fngethandle:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
-	open #h_tmtrans=fngethandle:  'Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr',internal,outIn,relative
-	open #h_clmstr=fngethandle:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
-	open #h_tmtraddr=fngethandle: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',internal,outIn,relative
+	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
+	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr',internal,outIn,relative
+	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
+	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',internal,outIn,relative
 	do  ! r: main loop
 		READ_TMWK: !
 		read #h_tmwk2,using F_TMWK2: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc eof MiFinis

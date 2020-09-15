@@ -40,7 +40,7 @@ L360: form pos 1,c 12,c 50
 END1: close #1: ioerr L410
 L410: close #2: ioerr L420
 L420: open #2: "Name="&dv$&"PAYMSTR.h[cno],SIZE=0,RecL=276,Replace",internal,output
-	open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+	open #payeegl:=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 	open #1: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",internal,input,keyed  ! Ioerr 580
 READ_GL1099: !
 	read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EOF_GL1099

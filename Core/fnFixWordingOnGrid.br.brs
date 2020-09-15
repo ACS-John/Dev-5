@@ -121,8 +121,8 @@ fnend
 
 MoveItToText: ! r:
 	dim miitLine$*87
-	open #hMiitIn :=fnGetHandle: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
-	open #hMiitOut:=fnGetHandle: "Name="&outputfile$&",RecL=87,Replace",display,output 
+	open #hMiitIn :=fnH: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed 
+	open #hMiitOut:=fnH: "Name="&outputfile$&",RecL=87,Replace",display,output 
 	Fmitt: form pos 1,c 87
 	do
 		read #hMiitIn,using Fmitt: miitLine$ eof MittFinis

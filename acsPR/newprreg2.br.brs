@@ -22,14 +22,14 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 
 	fnTop(program$,"Payroll Registers")
 	! r: read ckno
-	open #hPrCode=fngethandle: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr GetCkNoEnd
+	open #hPrCode=fnH: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr GetCkNoEnd
 	read #hPrCode,using 'Form POS 5,N 5': ckno
 	close #hPrCode:
 	GetCkNoEnd: ! /r
 
 	if ~append_reg1 then fnopenprn(' (Departmental Register)')
 
-	open #hDeptName=fngethandle: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr P2DeptOpened
+	open #hDeptName=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr P2DeptOpened
 	founddept=1
 	P2DeptOpened: !
 	if ppdOverride then
@@ -42,7 +42,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 
 	ssr1=fnss_employee*.01
 	ssr2=fnss_employer*.01
-	open #hCompany=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	dim sucrat(10)
 	dim statname$(10)*8
 	read #hCompany,using F_company: a$,ficar2,feducrat,mat statname$,ficar1,mat sucrat
@@ -54,9 +54,9 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	ficarate=ficar1+ficar2
 	fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\CheckIdx2.h[cno]","9/12/1 3/6/8")
 	! execute "Index [Q]\PRmstr\PayrollChecks.h[cno],[Q]\PRmstr\CheckIdx2.h[cno] 9/12/1 3/6/8,replace,DupKeys -n"
-	open #hTrans:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",internal,input,keyed
-	open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-	open #hDepartment=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
+	open #hTrans:=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",internal,input,keyed
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 	! Read #hDepartment,Using 370,Rec=adr: eno, dep1,lpd,tcd(1),mat tdet,mat hc,mcwh,mat cp
 	P2ReadChecks: !
 	read #hTrans,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof EoPayrollChecks

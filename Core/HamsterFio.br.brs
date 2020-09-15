@@ -1,7 +1,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnAddOneC,fnOpenFile,fnAddOneN,fnHamster,fngethandle,fnerror,fnSrepEnv$
+		library 'S:\Core\Library': fnAddOneC,fnOpenFile,fnAddOneN,fnHamster,fnH,fnerror,fnSrepEnv$
 		dim form$(0)*256
 		dim hfLabel$(0)*128
 	end if
@@ -28,7 +28,7 @@ def library fnHamsterFio(fileid$*64)
 fnend
 def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
 	dim line$*1024,hfItem$(0)*1024
-	open #hLay:=fngethandle: 'name='&hfLayoutFilename$,d,i
+	open #hLay:=fnH: 'name='&hfLayoutFilename$,d,i
 	past_header=0
 	hfItem=0
 	mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask(0) : mat hfFieldLen(0) 

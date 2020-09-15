@@ -20,11 +20,11 @@ def library fnglmerge
 	if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 	fnprg(prg$,2)
 	L200: !
-	open #glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed ioerr GLMSTR_OPEN_ERR
-	open #gltrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,outIn,relative
-	open #glwk1:=fngethandle: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outIn
-	open #gl1099:=fngethandle: "Name=[Q]\GLmstr\GL1099.H[cno],KFName=[Q]\GLmstr\gl109idx.H[cno],Shr",internal,outIn,keyed
-	open #gltr1099:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],Shr",internal,outIn,relative
+	open #glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed ioerr GLMSTR_OPEN_ERR
+	open #gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,outIn,relative
+	open #glwk1:=fnH: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outIn
+	open #gl1099:=fnH: "Name=[Q]\GLmstr\GL1099.H[cno],KFName=[Q]\GLmstr\gl109idx.H[cno],Shr",internal,outIn,keyed
+	open #gltr1099:=fnH: "Name=[Q]\GLmstr\GLTR1099.H[cno],Shr",internal,outIn,relative
 	! fnwait
 	READ_GLWK1: !
 	read #glwk1,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8': t$,s,k,mat n,l$,p$,ven$ eof EO_GLWK1

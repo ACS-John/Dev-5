@@ -21,7 +21,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle,fnarray_item_insert$,fnAddOneC,fnsrch_case_insensitive,fnCopy
+		library 'S:\Core\Library': fnH,fnarray_item_insert$,fnAddOneC,fnsrch_case_insensitive,fnCopy
 	end if
 fnend
 def library fnIniOpen(ii_file$*256) ! ,MAT INI_SECTION$, MAT INI_FIELD$, MAT INI_VALUE$)
@@ -35,7 +35,7 @@ def library fnIniOpen(ii_file$*256) ! ,MAT INI_SECTION$, MAT INI_FIELD$, MAT INI
 	ini_field_len_longest=0
 	mat ii_line$(0)
 	mat ini_section$(0) : mat ini_field$(0) : mat ini_value$(0)
-	open #h_ini:=fngethandle: 'Name='&ini_file$,display,input ioerr INI_OPEN_FAIL
+	open #h_ini:=fnH: 'Name='&ini_file$,display,input ioerr INI_OPEN_FAIL
 	do
 		mat ii_line$(udim(mat ii_line$)+1)
 		linput #h_ini: ii_line$(udim(mat ii_line$)) eof INI_OPEN_EOF
@@ -141,7 +141,7 @@ def library fnIniWrite
 	dim inir_field$*256,inir_value$*256
 	dim inir_section$*1024
 	dim inir_temp_file$*1024
-	open #inir_temp_handle:=fngethandle: "Name="&env$("Temp")&"\inir-"&session$&".ini,RecL=2048,Replace",display,output
+	open #inir_temp_handle:=fnH: "Name="&env$("Temp")&"\inir-"&session$&".ini,RecL=2048,Replace",display,output
 	inir_temp_file$=file$(inir_temp_handle)
 	if ini_file$="" then
 		if env$('ACSDeveloper')<>'' then

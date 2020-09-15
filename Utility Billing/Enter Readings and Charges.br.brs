@@ -79,14 +79,14 @@ def fn_setup
 	! /r
 	! Open_Stuff: !
 		fn_setup_service(mat service_enabled)
-		open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-		open #hCustomer1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
+		open #hTrans:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+		open #hCustomer1:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
 	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
-		open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
-		open #hCustomer2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer3:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer4:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer5:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+		open #hWork:=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+		open #hCustomer2:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed
+		open #hCustomer3:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed
+		open #hCustomer4:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
+		open #hCustomer5:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
 		fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
 	end if
 fnend
@@ -561,7 +561,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		goto HH_OTHER
 	end if
 	HH_WORKABOUT: ! r: hand held routines for workabout
-	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
+	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
 	goto L5000
 	L4990: !
 	restore #h_readings:
@@ -592,7 +592,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
+	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
 	HH_BADGER_READ: !
 	linput #h_readings: ln$ eof HH_W_END
 	! pr ln$ : pause
@@ -610,7 +610,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	last_ln$=""
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
+	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
 	HH_BOSON_READ: !
 	if last_ln$="" then
 		linput #h_readings: ln$ eof HH_W_END
@@ -660,7 +660,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	LAPTOP: ! r: readings from a laptop using acs meter reading software
 		if listonly=1 then fnopenprn
 		close #h_readings: ioerr ignore
-		open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
+		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
 		HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
 		mat x=(0)
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_LAPTOP_READ ! Account Key
@@ -686,7 +686,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_OTHER_TYPE1: ! r:
 	if listonly=1 then fnopenprn
 	close #h_readings: ioerr ignore
-	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
+	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
 	HH_OTHER_TYPE1_READ: !
 	linput #h_readings: ln$ eof HH_W_END
 	mat x=(0)
@@ -746,7 +746,7 @@ fnend
 EST1: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
-	open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
+	open #hWork:=fnH: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 	ASK_EST: !
 	fnTos
 	! services=0
@@ -991,9 +991,9 @@ def fn_write_tamper(custno$*10,tval)
 fnend
 ImportTabDelimited: ! r:
 	! r: phase 1 - import from text file into readings.tmp file
-	open #h_tmp:=fngethandle: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
+	open #h_tmp:=fnH: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
 	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
-	open #h_readings_tmp:=fngethandle: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
+	open #h_readings_tmp:=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
 	dim a$*256
 	do
 		IT_TEXT_READ: !
@@ -1340,7 +1340,7 @@ MENU1READWORKEOF: ! /r
 		close #hWork:
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
-		open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+		open #hWork:=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
 	else if fky_importAndLoad and ckey=fky_importAndLoad then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
@@ -1352,7 +1352,7 @@ goto MENU1 ! /r
 
 def fn_holdingFileLoad(; ___,hld9)
 	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
-	open #hld9=fngethandle: "Name="&holdingFile$,internal,input ioerr L7460 ! was =9
+	open #hld9=fnH: "Name="&holdingFile$,internal,input ioerr L7460 ! was =9
 	do
 		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
 		fn_writeWork(hWork,x$,mat x, 1)
@@ -1392,7 +1392,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
 		holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
 		fnIndex(holdingFile$,holdingFileIndex$,'1 10')
-		open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
+		open #hld8:=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 		restore #hWork: ! ,search>="": nokey AppendFinis
 		do
 			read #hWork,using Fwork: x$,mat x eof AppendFinis
@@ -1470,7 +1470,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto IH_XIT
 	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
-			open #hpHoldingFile:=fngethandle: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
+			open #hpHoldingFile:=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 			close #hpHoldingFile:
 		else
@@ -1869,7 +1869,7 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 	if ~setupFlexRead then fn_setupFlexRead
 	z$=trim$(z$)
 	if z$<>'' then
-		open #tmp=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		open #tmp=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 		z$=lpad$(trim$(z$),10)
 		read #tmp,using "Form Pos 143,7*pd 2",key=z$: mat a
 		close #tmp:
@@ -2063,7 +2063,7 @@ def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 	dim hotImportDataField$(0)*256
 	dim hotImportDataValue$(0)*256
 	hotDataImportAsked=0
-	open #h_readings=fngethandle: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
+	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
 	lineCount=0
 	linput #h_readings: hot_ver$
 	lineCount+=1

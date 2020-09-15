@@ -37,7 +37,7 @@
 			! pr 'SN=';sn : pause
 			if dp=1 then dollar$="$" else dollar$=" "
 			gosub PrintHeadings
-			open #hSchedule:=fngethandle: "Name=[Q]\GLmstr\schedule"&str$(sn)&".H[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".H[cno],Shr",internal,outIn,keyed
+			open #hSchedule:=fnH: "Name=[Q]\GLmstr\schedule"&str$(sn)&".H[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".H[cno],Shr",internal,outIn,keyed
 			do
 				read #hSchedule,using "form pos 1,c 12": gl$ eof EoSchedule
 				! pr '"'&gl$&'"' : pause

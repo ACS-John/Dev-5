@@ -5,9 +5,9 @@
 	dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
 	fnTop(program$,cap$="Duplicate Transaction Report")
  
-	open #fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
-	open #h_trans1:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative
-	open #h_trans2:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #h_trans1:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative
+	open #h_trans2:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
 	trans1_lrec=lrec(h_trans1)
 	F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
  
@@ -112,8 +112,8 @@ fnend
 def fn_trans_delete(td_rec)
 	if ~td_setup then
 		td_setup=1
-		open #h_td_trans1:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative
-		open #h_td_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+		open #h_td_trans1:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative
+		open #h_td_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 		dim td_msg$(1)*90
 		dim tdt_tg(11)
 		dim tdc_tg(11)

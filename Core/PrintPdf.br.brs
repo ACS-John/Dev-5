@@ -1,7 +1,7 @@
 def fn_Setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fngethandle,fnPrintFileName$,fnWindowsStart,fnCopy
+		library 'S:\Core\Library': fnH,fnPrintFileName$,fnWindowsStart,fnCopy
 !   exec 'Config Option 68 On' ! Prevent stretching printed fonts. (unfortunately it also turns off all font size respect)
 		esc$=chr$(27)
 		gFontItalic=0
@@ -16,7 +16,7 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128,h)
 	if ~setup then fn_setup
 	dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
 	g_filename_final$=fnPrintFileName$( pdf_sendto_base_name_addition$,'pdf')
-	if h>0 then hPdfOut=h else hPdfOut=fngethandle
+	if h>0 then hPdfOut=h else hPdfOut=fnH
 	open #hPdfOut: 'Name=PDF:,PrintFile=[at]'&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
 	! pr g_filename_final$ : pause
 	! if env$('acsDeveloper')<>'' then pr 'hPdfOut=';hPdfOut : pause
@@ -115,7 +115,7 @@ def fn_print(text$*2048; disable_return)
 	if debug then
 		if ~debugScriptSetup then
 			debugScriptSetup=1
-			open #hDebugScript:=fngethandle: 'name=acsBrPdfScript.txt,recl=2048,replace',d,o
+			open #hDebugScript:=fnH: 'name=acsBrPdfScript.txt,recl=2048,replace',d,o
 		end if
 		text$=srep$(text$,esc$,'\E')
 		if disable_return then
@@ -273,7 +273,7 @@ def fn_debug(debugText$*2048)
 	if debug then
 		if ~debugLogSetup then
 			debugLogSetup=1
-			open #hDebugLog:=fngethandle: 'name=acsBrPdf.txt,recl=2048,replace',d,o
+			open #hDebugLog:=fnH: 'name=acsBrPdf.txt,recl=2048,replace',d,o
 		end if
 		if debugText$(1:2)<>'\E' then 
 			pr #hDebugLog: debugText$&'  ';

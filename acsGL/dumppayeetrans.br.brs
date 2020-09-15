@@ -4,7 +4,7 @@
 fn_setup
 
 fnTop(program$,"Dump Old Payee Transactions")
-open #hTrans:=fngethandle: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
+open #hTrans:=fnH: "Name=[Q]\GLmstr\GLTR1099.H[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
 
 fnTos
 fnLbl(1,1,"Oldest Transaction Date to Retain:",35,right)

@@ -25,7 +25,7 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 	if filterDescription$<>'' then filterDescription$=filterDescription$&' ('&filter$&') '
 	dim filePath$*256
 	fnureg_read('askFileName.'&recallAddOn$,filePath$, os_filename$(env$('Desktop')))
-	open #h_tmp:=fngethandle: 'Name='&purpose$&':'&env$('at')&filterDescription$&'|'&filePath$&'\'&filter$&',RecL=1,Shr',external,input ioerr OP_OP_ERR
+	open #h_tmp:=fnH: 'Name='&purpose$&':'&env$('at')&filterDescription$&'|'&filePath$&'\'&filter$&',RecL=1,Shr',external,input ioerr OP_OP_ERR
 	opFileOpen$=os_filename$(file$(h_tmp))
 	close #h_tmp: 
 	returnN=1

@@ -10,7 +10,7 @@ def library fnjob_srch(&jn$;fixgrid)
 	dim item$(4)*40
 	dim resp$(30)*80
 
-	open #h:=fngethandle: "Name=[Q]\PRmstr\Jcmstr.h[cno],KFName=[Q]\PRmstr\jcIndx.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #h:=fnH: "Name=[Q]\PRmstr\Jcmstr.h[cno],KFName=[Q]\PRmstr\jcIndx.h[cno],Shr",internal,input,keyed ioerr ERTN
 
 	restore #h: 
 	fnTos
