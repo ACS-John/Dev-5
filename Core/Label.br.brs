@@ -16,7 +16,7 @@ def library fnAddLabel(mat in_labeltext$)
 	for j=1 to min(5,udim(in_labeltext$))
 		labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120))
 	next j
-	open #tmp=fngethandle: "Name="&gLabelFileName$&",RecL=600,Use",internal,output
+	open #tmp=fnH: "Name="&gLabelFileName$&",RecL=600,Use",internal,output
 	write #tmp,using "Form POS 1,5*C 120": mat labeltext$
 	close #tmp:
 	mat labeltext$=("")
@@ -246,7 +246,7 @@ def library fnLabel(mat linestyle$)
 	goto LabelDone ! /r
 
 	OepnLabelFile: ! r:
-		open #hLabelTemp=fngethandle: "Name="&gLabelFileName$&",RecL=600,Use",internal,outIn ioerr Xnow
+		open #hLabelTemp=fnH: "Name="&gLabelFileName$&",RecL=600,Use",internal,outIn ioerr Xnow
 	return  ! /r
 
 	LabelXit: ! r:

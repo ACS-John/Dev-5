@@ -1,18 +1,18 @@
 ! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
 	fn_setup ! r:
 	fnTop(program$) ! for now use the settings from Enter Collections for page formatting of reports
-	open #hCustomer1:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-	open #hCustomer2:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed
-	open #hTrans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer1:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer2:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed
+	open #hTrans:=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
 	! r: open BudMstr and BudTrans, also set bud1 (1=budget files opened, 0=not)
 	bud1=0
-	open #h_budmstr:=fngethandle: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BudMstrOpenFail
-	open #h_budTrans:=fngethandle: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #h_budmstr:=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BudMstrOpenFail
+	open #h_budTrans:=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
 	bud1=1
 	BudMstrOpenFail: !
 	! /r
 	! dim tau$(0)*256,tauN(0)
-	open #hTransUnposted:=fngethandle: "Name="&collections_filename$&',RecL=91,Use',internal,outIn,relative
+	open #hTransUnposted:=fnH: "Name="&collections_filename$&',RecL=91,Use',internal,outIn,relative
 	mat x=(0)
 	transType=postingCodeUnused=0
 goto ScreenMenu1
@@ -514,13 +514,13 @@ def fn_printListings
 		! r: Create Sort for UBIPCOLINP
 		close #hTransUnposted: ioerr ignore
 		fnFree('[temp]\acs\collections_sort_address_s[session].int')
-		open #h_control:=fngethandle: "Name=[Temp]\acs\collections_sort_control_s"&session$&".int,RecL=128,Replace", internal,output
+		open #h_control:=fnH: "Name=[Temp]\acs\collections_sort_control_s"&session$&".int,RecL=128,Replace", internal,output
 		write #h_control,using 'Form POS 1,C 128': "File "&collections_filename$&",,,"&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int,,,,,A,N'
 		write #h_control,using 'Form POS 1,C 128': "Mask 1,11,C,A"
 		close #h_control:
 		execute "SORT [Temp]\acs\collections_sort_control_s"&session$&".int -n"
-		open #hTransUnposted:=fngethandle: "Name="&collections_filename$,internal,outIn,relative
-		open #h_addr:=fngethandle: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outIn
+		open #hTransUnposted:=fnH: "Name="&collections_filename$,internal,outIn,relative
+		open #h_addr:=fnH: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outIn
 		! /r
 	end if
 	for xti1=ti1_start to ti1_end
@@ -1094,7 +1094,7 @@ def fn_csv_import
 		fnureg_write('Collections CSV Import Filename',enableSkipDuplicates$)
 		!
 		fn_ei_backup(ecp_filename$)
-		open #h_csv:=fngethandle: "Name=[at]"&ecp_filename$,display,input ioerr EI_SCREEN1
+		open #h_csv:=fnH: "Name=[at]"&ecp_filename$,display,input ioerr EI_SCREEN1
 		ecp_filename$=os_filename$(file$(h_csv))
 		fnureg_write('Collections CSV Import Filename',ecp_filename$)
 		type=fn_csv_type(h_csv)

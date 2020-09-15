@@ -14,10 +14,10 @@ for item=1 to fileCount
 	ProcessThisFile: !
 	if exists(fileName$(item)) then
 		fnStatus(fileName$(item))
-		open #hIn :=fnGetHandle: 'name='&fileName$(item),d,i
+		open #hIn :=fnH: 'name='&fileName$(item),d,i
 		dim tmpFile$*512
 		tmpFile$=env$('temp')&'\acs\tmpSourceFile.br.brs'
-		open #hOut:=fnGetHandle: 'name='&tmpFile$&',RecL=1024,Replace',d,o
+		open #hOut:=fnH: 'name='&tmpFile$&',RecL=1024,Replace',d,o
 		encounteredAutoLibrary=lineCount=enableSkipThisFile=0
 		do
 			dim line$*2048
@@ -130,8 +130,8 @@ def fn_removeLineNumbers(rFile$*1024; ___,returnN,hIn,hOut,rlnFile$*1024,line$*2
 	fn_makeBackup(rFile$,'.beforeRemoveLineNumbers')
 	
 	rlnFile$=env$('temp')&'\acs\tmpSourceFile.br.brs'
-	open #hIn :=fnGetHandle: 'name='&rFile$,d,i
-	open #hOut:=fnGetHandle: 'name='&rlnFile$&',RecL=1024,Replace',d,o
+	open #hIn :=fnH: 'name='&rFile$,d,i
+	open #hOut:=fnH: 'name='&rlnFile$&',RecL=1024,Replace',d,o
 	do
 		linput #hIn: line$ eof R_eoIn
 		line$=rtrm$(line$)

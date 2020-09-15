@@ -1,8 +1,7 @@
 ! formerly S:\acsPR\newprchangedate
 ! this program changes the default date of a payroll.  Can be used if you need to reprint some old registers, etc
 fn_setup
-dim cap$*128
-fnTop(program$,cap$="Change Payroll Date")
+fnTop(program$)
 fn_ChangePayrollDates
 goto Xit 
 def fn_ChangePayrollDates
@@ -74,29 +73,14 @@ def fn_ChangePayrollDates
 	end if
 fnend
 Xit: fnXit
-def fn_setup
-	if ~setup then
-		setup=1
-		library 'S:\Core\Library': fnTop
-		library 'S:\Core\Library': fnXit
-		library 'S:\Core\Library': fnTos
-		library 'S:\Core\Library': fnFra
-		library 'S:\Core\Library': fnChk
-		library 'S:\Core\Library': fnLbl
-		library 'S:\Core\Library': fnTxt
-		library 'S:\Core\Library': fnCmdKey
-		library 'S:\Core\Library': fnAcs
-		library 'S:\Core\Library': fngethandle
-		on error goto Ertn
-	 end if
-fnend
+
 def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 	if ~setup then fn_setup
 	fnGetPayrollDates=fn_getPayrollDates(beg_date,end_date, qtr1,qtr2,qtr3,qtr4)
 fnend
 def fn_getPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 	GpdTop: !
-	open #hDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno]",internal,input,relative ioerr GpdNoRec
+	open #hDates:=fnH: "Name=[Q]\PRmstr\Dates.h[cno]",internal,input,relative ioerr GpdNoRec
 	read #hDates,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec GpdNoRec
 	close #hDates:
 	goto GpdFinis
@@ -107,7 +91,7 @@ def fn_getPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 	GpdFinis: !
 fnend
 def fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4; d1)
-	open #hDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno],use,RecL=76",internal,outIn,relative
+	open #hDates:=fnH: "Name=[Q]\PRmstr\Dates.h[cno],use,RecL=76",internal,outIn,relative
 	PutPayrollDatesReWrite: !
 	if d1 then
 		rewrite #hDates,using "form pos 1,6*n 8,n 8"	,rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1 noRec PutPayrollDatesNoRec
@@ -143,11 +127,11 @@ def library fnPayPeriodEndingDate(; setIt)
 fnend
 def fn_payPeriodEndingDate(; setIt,hPrDates)
 	if setIt then
-		open #hPrDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,outin,relative 
+		open #hPrDates:=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,outin,relative 
 		rewrite #hPrDates,using "form pos 1,x 48,n 8",rec=1: setIt
 		close #hPrDates: 
 	else
-		open #hPrDates:=fngethandle: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,input,relative 
+		open #hPrDates:=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,input,relative 
 		read #hPrDates,using "form pos 1,x 48,n 8",rec=1: setIt
 		close #hPrDates: 
 	end if
@@ -155,11 +139,11 @@ def fn_payPeriodEndingDate(; setIt,hPrDates)
 fnend
 def library fnCompanyPayPeriodEndingDate(cno; ___,returnN)
 	if ~setup then fn_setup
-	open #hPrDates:=fngethandle: 'Name=[Q]\PRmstr\Dates.h'&str$(cno)&',Shr',internal,input,relative ioerr CppedFinis
+	open #hPrDates:=fnH: 'Name=[Q]\PRmstr\Dates.h'&str$(cno)&',Shr',internal,input,relative ioerr CppedFinis
 	read #hPrDates,using "form pos 1,x 48,n 8",rec=1: returnN
 	close #hPrDates: 
 	CppedFinis: !
 	fnCompanyPayPeriodEndingDate=returnN
 fnend
 
-include: Ertn
+include: fn_setup

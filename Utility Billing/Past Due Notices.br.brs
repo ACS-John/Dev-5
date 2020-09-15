@@ -40,7 +40,7 @@ on error goto Ertn
 
 	open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed
-	open #customer1=fngethandle: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed
+	open #customer1=fnH: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBIndex.H[cno],Shr",internal,input,keyed
 	F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 goto Menu1 ! /r
 Menu1: ! r:
@@ -155,13 +155,13 @@ PrintPastDueNotice: ! r:
 goto PRINT_NEXT ! /r
 def fn_open_template
 	if ~h_template then
-		open #h_template=fngethandle: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative
+		open #h_template=fnH: "Name=[Q]\UBmstr\"&flname$&",RecL=1",external,input,relative
 	end if
 	fn_open_template=h_template
 fnend  ! fn_open_template
 def fn_prnt1
 	if ~h_prnt1 then
-		open #h_prnt1=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
+		open #h_prnt1=fnH: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
 	end if
 	fn_bldr1
 	r=0
@@ -357,13 +357,13 @@ def fn_report_close
 fnend 
 def fn_listFile_add(z$)
 	if ~h_lf then
-		open #h_lf:=fngethandle: 'Name=[temp]\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
+		open #h_lf:=fnH: 'Name=[temp]\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
 	end if
 	pr #h_lf,using 'form pos 1,c 10': z$
 fnend
 def fn_report_add
 	if ~h_ra then
-		open #h_ra:=fngethandle: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256,replace',display,output
+		open #h_ra:=fnH: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256,replace',display,output
 		rc_page=0
 	end if  ! ~h_ra
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '

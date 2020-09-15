@@ -25,12 +25,12 @@ mat ctFiles$(0)
 fileNameCount=srch(mat filename$,'')-1
 for fileItem=1 to fileNameCount
 	fnStatus('Processing for '&empname$(fileItem)&' ('&str$(fileItem)&' of '&str$(fileNameCount)&')')
-	open #h_in:=fngethandle: 'Name=[at]'&filename$(fileItem)&',RecL=100,Shr',external,input
+	open #h_in:=fnH: 'Name=[at]'&filename$(fileItem)&',RecL=100,Shr',external,input
 	line_count=0
 	the_date_prior=the_date=0
 	if fileItem=1 then
-		open #h_out:=fngethandle: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
-		open #h_support:=fngethandle: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
+		open #h_out:=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
+		open #h_support:=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
 		fnopenprn
 		FORM_PRN: form pos 1,c 8,x 1,c 18,x 1,n 10.2,n 10,n 10,x 1,c 15,n 7.2,n 8.2
 	else
@@ -111,7 +111,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		hCt=ctHandles(ctWhich)
 	else
 		fnAddOneC(mat ctFiles$,ctFile$)
-		hCt=fngethandle
+		hCt=fnH
 		fnAddOneN(mat ctHandles,hCt)
 		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
 		pr #hCt: 'Employee Name'&tab$;
@@ -194,7 +194,7 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	dim wo_sage_code_prior$*128
 	if ~setup_sawo then
 		setup_sawo=1
-		open #sawo_h_out:=fngethandle: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output
+		open #sawo_h_out:=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output
 	end if
 	if wo_sage_code_prior$='' and wo_sage_code$='' then
 		pr #255: '!!! Sage Code is blank !!!'

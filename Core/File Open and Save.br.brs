@@ -20,14 +20,14 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	if fsa_automatedSaveFileName$<>'' then
 		save_name$=fsa_automatedSaveFileName$
 	else
-		open #h_tmp:=fngethandle: "Name=SAVE:"&fnsave_as_path$&"\*.zip,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
+		open #h_tmp:=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.zip,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
 		save_name$=os_filename$(file$(h_tmp))
 		close #h_tmp,free:
 		fnCopy('S:\drive.sys','[Q]\*.*')
 		fnCopy('S:\brserial.dat','[Q]\*.*')
 	end if
 	fnreg_close
-	open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp:=fnH: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	dim tmp7ZipCommand$*512
 	dim zOmitReportCacheOption$*64
 	if enableBackupReportCache$='True' then
@@ -124,7 +124,7 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 	!  fn_fsa_clean_up
 fnend
 def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_name$*256; statusInsteadOfMsgBox,suppressErrorLog)
-	open #h_compresslog:=fngethandle: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
+	open #h_compresslog:=fnH: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
 	failure=1
 	do
 		linput #h_compresslog: ln$ eof ARC_EO_COMPRESSLOG
@@ -182,14 +182,14 @@ fnend
 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 	dim gflfaTmpFile$*512
 	gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
-	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp:=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
 	pr #h_tmp: env$('path_to_7z_exe')&' l "'&zFileOpen$&'" > "'&gflfaTmpFile$&'"'
 	close #h_tmp:
 	execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
-	open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
+	open #h_tmp:=fnH: 'Name='&gflfaTmpFile$,display,input
 	fileCount=0
 	do
 		linput #h_tmp: ln$ eof ZflaEof
@@ -230,7 +230,7 @@ fnend
 def fn_openPartial
 	dim opFileOpen$*256
 	fnFree(br_filename$(env$('temp')&'\acs\Open_Log.txt'))
-	open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
+	open #h_tmp:=fnH: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
 	opFileOpen$=os_filename$(file$(h_tmp))
 	close #h_tmp:
 	dim fileList$(0)*256,archiveList$(0)*50
@@ -353,7 +353,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	end if
 	foeDestinationFolder$=os_filename$(env$('Q'))
 	foeLogFile$=env$('temp')&'\acs\Open_Log.txt'
-	open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp:=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
@@ -392,7 +392,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	end if
 fnend
 def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDestinationFolder$*256)
-	open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output
+	open #h_tmp:=fnH: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: 'set openFile="'&eafSourceFile$&'"'

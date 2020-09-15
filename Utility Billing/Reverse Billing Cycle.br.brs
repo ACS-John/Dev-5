@@ -46,8 +46,8 @@ def fn_undobilling
 		Ftrans: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
 		fnAutomatedSavePoint('before')
 		! open data files
-		open #h_customer=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
-		open #hTrans=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
+		open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+		open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
 		fnopenprn
 		fn_printHeader
 		do

@@ -599,7 +599,7 @@ ChangeEmployeeNo: ! r:
 		! the old way 1/9/20   ! for wsid_item=1 to 99
 		! the old way 1/9/20   ! 	wsid_item$=cnvrt$('pic(##)',wsid_item)
 		! the old way 1/9/20   ! 	if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
-		! the old way 1/9/20   ! 		open #h_rpwork:=fngethandle: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
+		! the old way 1/9/20   ! 		open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
 		! the old way 1/9/20   ! 		fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 		! the old way 1/9/20   ! 		close #h_rpwork:
 		! the old way 1/9/20   ! 		RPWORK_OPEN_ERR: !
@@ -611,7 +611,7 @@ ChangeEmployeeNo: ! r:
 	for fileItem=1 to udim(mat filename$)
 		if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
 			kfname$=srep$(filename$(fileItem),'.','Idx.')
-			open #h_rpwork:=fngethandle: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',internal,outIn,keyed ioerr RpworkOpenErr
+			open #h_rpwork:=fnH: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',internal,outIn,keyed ioerr RpworkOpenErr
 			fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 			close #h_rpwork:
 		end if
@@ -626,17 +626,17 @@ ChangeEmployeeNo: ! r:
 	CHGENO_XIT: !
 goto Menu1 ! /r
 def fn_openFiles
-	open #hEmployee:=fngethandle: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+	open #hEmployee:=fnH: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
 	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,c 4,x 1,c 12,n 6,4*n 12.2
-	open #hEmployeeIdx2:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
-	open #hCheckIdx1:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
-	open #hCheckIdx3:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
-	open #hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+	open #hEmployeeIdx2:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
+	open #hCheckIdx1:=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
+	open #hCheckIdx3:=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
+	open #hDepartment:=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
 fnend
 def fn_EmployeeDepartments(eno,mat empDept)
 	if ~edc_setup or ~edc_hDepartment then
 		edc_setup=1
-		open #edc_hDepartment:=fngethandle: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed
+		open #edc_hDepartment:=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed
 	end if
 	mat empDept(0)
 	restore #edc_hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey edcFinis
@@ -856,7 +856,7 @@ def fn_dDkey$*10(eno)
 	fn_dDkey$=rpad$(str$(eno),10)
 fnend
 def fn_dDopen
-	open #hDd:=fngethandle: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed
+	open #hDd:=fnH: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed
 	fn_dDopen=hDd
 fnend
 def fn_dDclose

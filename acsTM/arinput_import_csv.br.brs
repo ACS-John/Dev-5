@@ -346,7 +346,7 @@ def fn_get_next_line(&line$)
 	GNL_XIT: !
 fnend  ! fn_get_next_line
 def fn_import_it(file_import$*256)
-	open #h_in:=fngethandle: 'Name='&file_import$&',RecL=100,Shr',external,input
+	open #h_in:=fnH: 'Name='&file_import$&',RecL=100,Shr',external,input
 	fnopenprn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 	FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30

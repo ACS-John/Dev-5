@@ -10,7 +10,7 @@
 ! main routine
 		if fn_getdates then
 			fncno(cno,cnam$)
-			open #(h_prchecks:=fngethandle): "Name=PRmstr\Payrollchecks.h[cno],KFName=PRmstr\checkidx3.h[cno]",internal,outIn,keyed
+			open #(h_prchecks:=fnH): "Name=PRmstr\Payrollchecks.h[cno],KFName=PRmstr\checkidx3.h[cno]",internal,outIn,keyed
 CHECKSFORM: form pos 1,n 8,n 3,pd 6
 			do
 				read #h_prchecks,using CHECKSFORM: eno,tdn,prd eof CHECKSDONE

@@ -4,12 +4,12 @@ if fnAskFileName(filename$,'open','*.txt;*.csv','Tab Delimited',env$('cap'))>0 t
 	! r: read file and make mat col_account$ and mat col_meterNumber$
 	fnOpenPrn
  
-	open #hIn:=fngethandle: 'name='&filename$,d,i
-	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,outin,keyed
-	open #hCustomer2:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr',internal,outin,keyed
-	open #hCustomer3:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr',internal,outin,keyed
-	open #hCustomer4:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr',internal,outin,keyed
-	open #hCustomer5:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,outin,keyed
+	open #hIn:=fnH: 'name='&filename$,d,i
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,outin,keyed
+	open #hCustomer2:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr',internal,outin,keyed
+	open #hCustomer3:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr',internal,outin,keyed
+	open #hCustomer4:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr',internal,outin,keyed
+	open #hCustomer5:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,outin,keyed
 	dim line$*512
 	dim item$(0)*80
 	dim col_account$(0)*80

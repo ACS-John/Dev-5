@@ -54,16 +54,16 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	customerHasEbilling=fnCustomerHasEbilling(actNum$)
 	dim tmpFile$*16
 	tmpFile$='tmp[session].pdf'
-	open #out=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
+	open #out=fnH: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',Display,Output
 	if ~hCollection then
 		dim tmpCollectionFile$*32
 		tmpCollectionFile$='tmpCollection[session].pdf'
-		open #hCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',Display,Output
+		open #hCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',Display,Output
 		collectionPageCount=printCollectionPageCount=0
 
 		dim tmpPrintCollectionFile$*64
 		tmpPrintCollectionFile$='tmpPrintCollection[session].pdf'
-		open #hPrintCollection=fngethandle: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',Display,Output
+		open #hPrintCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',Display,Output
 
 	end if
 

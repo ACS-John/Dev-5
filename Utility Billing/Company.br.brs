@@ -239,7 +239,7 @@ DoLoad: ! r:
 	end if 
 	! /r
 	! r: Service Load - Type Of Service Open
-	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	open #service=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 	F_SERVICE: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
 	read #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
 	goto ServiceLoad_Finis
@@ -291,7 +291,7 @@ DoSave: ! r:
 	end if
 	! /r
 	! r: Service Save
-	open #service=fngethandle: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	open #service=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 	rewrite #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
 	close #service: 
 
@@ -308,7 +308,7 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	! GET_CODES: ! r: get applicable rate codes
 	! search routine must be passed code for service (WA for water) in searchcode$
 	dim rates$(50)*30,rt$*54
-	open #h_rate1:=fngethandle: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
+	open #h_rate1:=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
 	restore #h_rate1: 
 	cr_rate_item=1: mat rates$=("")
 	mat rates$(50)

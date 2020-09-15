@@ -310,8 +310,8 @@ def fn_bud_open
 	BUD1_XIT: !
 fnend
 def fn_deposit_open !
-	open #hDeposit1:=fngethandle: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed
-	open #hDeposit2:=fngethandle: "Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]"&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed
+	open #hDeposit1:=fnH: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed
+	open #hDeposit2:=fnH: "Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]"&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed
 fnend
 def fn_bud2
 	bud2=0

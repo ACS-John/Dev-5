@@ -11,7 +11,7 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 	RESTART: !
 	if ~setupDedNames then
 		setupDedNames=1
-		library 'S:\Core\Library': fngethandle
+		library 'S:\Core\Library': fnH
 		library 'S:\Core\Library': fnArrayWasPassedC
 		library 'S:\Core\Library': fnArrayWasPassedN
 		dim cache_fullname$(20)*20
@@ -36,18 +36,18 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		mat cache_gl$        =('')
 
 		if exists("[Q]\PRmstr\DedNames.h[cno]") then 
-			open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno]",internal,input,relative 
+			open #hdednames:=fnH: "Name=[Q]\PRmstr\DedNames.h[cno]",internal,input,relative 
 			read #hdednames,using fDedNames,rec=1: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 			fDedNames: Form POS 1,20*C 20,20*C 8,120*N 1,20*C 12
 		else
-			open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative 
+			open #hdednames:=fnH: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative 
 			write #hdednames,using fDedNames: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 		end if 
 		close #hdednames:
 	end if
 
 	if doWrite then
-		open #hdednames:=fngethandle: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative
+		open #hdednames:=fnH: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",internal,outIn,relative
 		rewrite #hdednames,using fDedNames,rec=1: mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$
 		close #hdednames:
 		doWrite=0

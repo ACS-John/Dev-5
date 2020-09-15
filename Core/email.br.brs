@@ -77,7 +77,7 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,
 	if len(trim$(attachFile$)) then
 		attachFilePart$=' -a "'&os_filename$(attachFile$)&'"'
 	end if
-	open #hCmd:=fngethandle: 'name=sendEmail_'&session$&'.cmd,recl=2048,replace',d,o
+	open #hCmd:=fnH: 'name=sendEmail_'&session$&'.cmd,recl=2048,replace',d,o
 	pr #hCmd: 'prompt $p$g'
 	pr #hCmd: '@echo Sending Email...'
 	pr #hCmd: '"'&os_filename$('S:\Core\sendEmail.exe')&'"';
@@ -102,7 +102,7 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,
 	execute 'sy -M -s sendEmail_'&session$&'.cmd'
 	fnCopy('EmailLog.'&session$,fnReportCacheFolderCurrent$&'\Emails Sent - '&date$('ccyy-mm-dd')&' '&fnSafeFilename$(time$)&'.txt')
 	! execute 'type EmailLog.'&session$&' >>EmailLog.txt'
-	open #hResult:=fngethandle: "name=EmailLog."&session$&",recl=512",display,input
+	open #hResult:=fnH: "name=EmailLog."&session$&",recl=512",display,input
 	do until file(hResult)
 		linput #hResult: output$ eof ignore
 		if pos(output$,"Email was sent successfully!") then returnN=1

@@ -7,7 +7,7 @@
 	dim acno$*12,bc(13),bp(13),bud(13)
 	dim resp$(10)*80
 	fnTop(program$)
-	open #hCompany:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #hCompany:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 	read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
 	close #hCompany:
 	fnGetFundList(mat fund_list)
@@ -77,16 +77,16 @@ do ! r: the first screen
 		fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 	end if
 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
-open #hGlMstr1:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-open #hGlMstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
+open #hGlMstr1:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+open #hGlMstr2:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 fGlMstr1: form pos 1,c 12,pos 81,41*pd 6.2
-open #hBudgetInfo:=fngethandle: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed
+open #hBudgetInfo:=fnH: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed
 ! r: empty GLmstr\acprcks - file handle (#1) used to conflict hGlMstr1 (also #1) and it didn't close, but it did ioerr ignore, so it probably didn't do anything for years
-open #hAcPrCks:=fngethandle: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",internal,output ioerr ignore
+open #hAcPrCks:=fnH: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",internal,output ioerr ignore
 close #hAcPrCks: ioerr ignore
 ! /r
 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
-open #hPrMstr:=fngethandle: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
+open #hPrMstr:=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
 do
 	read #hPrMstr,using 'Form POS 271,2*N 5': n1,n2 eof L500
 	rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0

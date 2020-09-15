@@ -32,7 +32,7 @@ fncreg_write(cap$&'.deptRegisterFile$',deptRegisterFile$)
 fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)
 ! /r
 ! r: Department File - gather into local variables
-	open #hInDept:=fngethandle: 'name='&deptRegisterFile$,d,i
+	open #hInDept:=fnH: 'name='&deptRegisterFile$,d,i
 	deptEnumCount=0
 	dept_Date                    	=deptEnumCount+=1
 	dept_Dept                    	=deptEnumCount+=1
@@ -62,7 +62,7 @@ fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)
 	close #hInDept:
 ! /r
 ! r: Employee File - gather into local variables
-	open #hInEmpl:=fngethandle: 'name='&emplRegisterFile$,d,i
+	open #hInEmpl:=fnH: 'name='&emplRegisterFile$,d,i
 	emplEnumCount=0
 	empl_Date            =emplEnumCount+=1
 	empl_Check_No        =emplEnumCount+=1

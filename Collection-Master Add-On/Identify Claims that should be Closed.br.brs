@@ -216,7 +216,7 @@ def fn_setup
 
 		library 'S:\Core\Library.br': fnXit
 		library 'S:\Core\Library.br': fnTos,fnAcs,fnLbl,fnTxt,fnCmdSet
-		library 'S:\Core\Library.br': fnGetHandle
+		library 'S:\Core\Library.br': fngethandle
 		library 'S:\Core\Library.br': fnAddOneC
 		library 'S:\Core\Library.br': fnAddOneN
 		library 'S:\Core\Library.br': fnTop

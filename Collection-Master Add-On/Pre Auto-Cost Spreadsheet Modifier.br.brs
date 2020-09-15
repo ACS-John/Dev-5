@@ -5,7 +5,7 @@
 ! W:\OLD_F_DRIVE\CORRESPONDING ATTY COSTS\AUTOPOST\DONE\2019\01-Janurary 2019
 library 'Library\clsUtil.wb': fnErase_buttons
 library 'Library\clsUtil.wb': fnAsk_file1
-library 'S:\Core\Library.br': fnGetHandle
+library 'S:\Core\Library.br': fnH
 library 'S:\Core\Library.br': fnFree
 library 'S:\Core\Library.br': fnCopy
 library 'S:\Core\Library.br': fnXit
@@ -16,8 +16,8 @@ do
 		goto Xit
 	else
 		fnCopy(csvFile$,csvFile$&'.bak')
-		open #hIn:= fnGetHandle: 'name='&csvFile$&'.bak',display,input
-		open #hOut:=fnGetHandle: 'name='&csvFile$&',recl=1024,replace',display,output
+		open #hIn:= fnH: 'name='&csvFile$&'.bak',display,input
+		open #hOut:=fnH: 'name='&csvFile$&',recl=1024,replace',display,output
 		lineCount   =0
 		colComment  =0
 		colCheckDate=0

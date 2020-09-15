@@ -8,7 +8,7 @@ TestSimple: ! r:
 	dim default$*512
 	default$='' ! 'D:\CM\Stern and Stern\Premier Cardiology (AllData)\all files to date-CM_EDI - work copy.xlsx'
 	filename$=''
-	hSelect=1 ! fngethandle
+	hSelect=1 ! fnH
 	ope #hSelect: 'Name=OPEN:'&default$&'All documents (*.*) |*.*,RecL=1,Shr',external,input ! ioerr ignore
 	if file(hSelect)=0 then
 		filename$=os_filename$(file$(hSelect))

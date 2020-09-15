@@ -133,11 +133,11 @@
           ! | parameters                                                    | !:
           ! +----------------------------------------------------------------+!
 01030     dim f$*32000
-01031     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+01031     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 01032     execute "copy "&flnm$&" work"&session$&".tmp -D -N"
-01034     open #(flin:=fngethandle): "name=work"&session$&".tmp",internal,outIn 
+01034     open #(flin:=fnH): "name=work"&session$&".tmp",internal,outIn 
 01036     execute "free "&flnm$&" -N"
-01038     open #(flout:=fngethandle): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
+01038     open #(flout:=fnH): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
 01040     flfrm$=cform$("FORM C "&str$(rln(flin)))
 01042     read #flin,using flfrm$: f$ eof 1050
 01044     write #flout,using flfrm$: f$
@@ -462,10 +462,10 @@
           ! | are taken to the MAIN BR-HELP page of the WIKI              | !:
           !    !
 02902     execute "PROC="&env$("PD")&"Core\fnsnap\tt"
-02905     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fn_cs,fnCopys2c,fnCopyc2s
+02905     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fn_cs,fnCopys2c,fnCopyc2s
 02906     dim helpfil$*100
 02910     if topic$<="" then 
-02915       open #(helpwin:=fngethandle): "srow=10,scol=10,rows=5,cols=40,parent=NONE,name=BRHELP,relative",display,outIn 
+02915       open #(helpwin:=fnH): "srow=10,scol=10,rows=5,cols=40,parent=NONE,name=BRHELP,relative",display,outIn 
 02920       pr #helpwin, fields "2,2,c ": "Key word for search"
 02925       rinput #helpwin,fields "2,25,c 15,[D]": topic$ !:
             af=curfld !:
@@ -476,8 +476,8 @@
 02945     end if 
 02946     _cs=fn_cs
 02950     if _cs then !:
-            open #(helpfil:=fngethandle): "name=@:temp\brhelp.htm,recl=2000,replace",display,output else !:
-            open #(helpfil:=fngethandle): "name="&env$("TEMP")&"\brhelp.htm,recl=2000,replace",display,output 
+            open #(helpfil:=fnH): "name=@:temp\brhelp.htm,recl=2000,replace",display,output else !:
+            open #(helpfil:=fnH): "name="&env$("TEMP")&"\brhelp.htm,recl=2000,replace",display,output 
 02955     pr #helpfil: "<html>"
 02960     pr #helpfil: "<head>"
 02965     pr #helpfil: "<meta http-equiv=""Content-Type"" content=""text/html; charset=windows-1252"">"
@@ -640,7 +640,7 @@
           ! | DEFAULT is the button default if ENTER is pressed           | !:
           ! | BKGRND  is a graphic file to be used as the window background³!:
           !    !
-03810     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnwinrowcol,fncount,fnwinbuttons
+03810     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fnwinrowcol,fncount,fnwinbuttons
 03812     if len(buttons$)>0 then !:
             str2mat(buttons$,mat buttons$,"|") !:
             buttons=1 !:
@@ -674,7 +674,7 @@
             for a=1 to udim(mwrk$) !:
               mwrk$(a)=str$(a)&","&str$(int(sr*maxlen/2))&",0/cc "&str$(maxlen)&",[MSG]" !:
             next a
-03840     open #(waitwin:=fngethandle): "srow="&str$(int(srow-maxrows/2))&",scol="&str$(int(scol))&",rows="&str$(4+int(maxrows))&",cols="&str$(min(70,int(sr*maxlen)))&",parent=NONE,picture="&bkgrnd$&",caption="&title$&",name="&title$&",Font.labels=Swiss:medium,Font.buttons=Swiss:small,NO_TASK_BAR",display,outIn 
+03840     open #(waitwin:=fnH): "srow="&str$(int(srow-maxrows/2))&",scol="&str$(int(scol))&",rows="&str$(4+int(maxrows))&",cols="&str$(min(70,int(sr*maxlen)))&",parent=NONE,picture="&bkgrnd$&",caption="&title$&",name="&title$&",Font.labels=Swiss:medium,Font.buttons=Swiss:small,NO_TASK_BAR",display,outIn 
 03845     if not maxrows then pr #waitwin, fields "2,"&str$(min(70,len(message$))/2)&",cc ,[MSG]": message$ !:
             fnwaitwin=waitwin !:
           else pr #waitwin, fields mat mwrk$: mat message$ !:
@@ -966,7 +966,7 @@
 04752   goto 4748
 04754 ZLTYPE: close #infile: 
 04756 fnend 
-04800 def library fngethandle(;seed,down) !:
+04800 def library fnH(;seed,down) !:
         !    !:
         ! | Returns the next unused file handle increaseing or optionally³!:
         ! | decreasing from an optional starting point                  | !:
@@ -976,7 +976,7 @@
 04811     if down then handle=999 else handle=1
 04812   else handle=seed
 04813   if file(handle)>-1 then handle+=_handle : goto 4813
-04815   fngethandle=handle
+04815   fnH=handle
 04816 end def 
 04820 ! ----------------------------------------------------------
 04900 def library fnawplite$*1000(caption$*100,arows,acols,alen,results$*100,awtext$*1000) !:
@@ -988,10 +988,10 @@
         ! | RESULTS$ file name for the transfer file                    | !:
         ! | AWTEXT$ the text to be spell checked by AWPLite             | !:
         !    !
-04902   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+04902   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 04903   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 04904   fnawplite$=awtext$
-04905   open #(awp:=fngethandle): "name="&env$("PD")&"Core\fnsnap\awp"&session$&".txt,replace",display,output 
+04905   open #(awp:=fnH): "name="&env$("PD")&"Core\fnsnap\awp"&session$&".txt,replace",display,output 
 04910   dim awp$*100,awt$*1000
 04915 !    !:
         ! |  Open the parameters file for AWPlite                       | !:
@@ -1013,7 +1013,7 @@
         ! | Create the transfer file for data to be used by AWPlite     | !:
         ! |                                                             | !:
         !    !
-04985   open #(awt:=fngethandle(awp)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt,recl="&str$(alen)&",replace",display,output 
+04985   open #(awt:=fnH(awp)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt,recl="&str$(alen)&",replace",display,output 
 04990   pr #awt: srep$(awtext$,"\n",crlf$)
 04995   awt$=os_filename$(file$(awt))
 05000   close #awt: 
@@ -1027,7 +1027,7 @@
         ! | indicaetes that spell check has completed or aborted        | !:
         !    !
 05020   if exists(env$("PD")&"Core\fnsnap\awr"&session$)=2 then goto 5025 else let sleep(1) : goto 5020
-05025   open #(awr:=fngethandle(awt)): "name="&env$("PD")&"Core\fnsnap\awr"&session$,display,input 
+05025   open #(awr:=fnH(awt)): "name="&env$("PD")&"Core\fnsnap\awr"&session$,display,input 
 05030   linput #awr: result$
 05035   close #awp: 
 05040   execute "free "&env$("PD")&"Core\fnsnap\awr"&session$
@@ -1036,7 +1036,7 @@
         ! | original, if CANCEL then leave the original                 | !:
         !    !
 05050   if trim$(uprc$(result$))="SAVE" then 
-05055     open #(awt:=fngethandle(awt)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt",display,input 
+05055     open #(awt:=fnH(awt)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt",display,input 
 05056     awx=0
 05060     linput #awt: awtext$ eof 5070 !:
           awx+=1
@@ -1053,14 +1053,14 @@
         ! +----------------------------------------------------------------+!
 05101 ! IF SELECT THEN gREYBAR=0 !:
         ! MACROS are not compatable with NWP
-05102   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngreybar$,fngreybar,fngethandle
+05102   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngreybar$,fngreybar,fnH
 05103   dim gbmacro$*100,printfile$*100
 05105 ! pRINTFILE=5
 05106 ! IF FILE(PRINTFILE)>-1 THEN pRINTFILE+=1 : GOTO 5106
 05110   if not select then !:
-          open #(printfile:=fngethandle): "NAME=//20,recl=2000,PAGEOFLOW=50",display,output  !:
+          open #(printfile:=fnH): "NAME=//20,recl=2000,PAGEOFLOW=50",display,output  !:
         else !:
-          open #(printfile:=fngethandle): "NAME=preview:/select,recl=2000,PAGEOFLOW=50",display,output 
+          open #(printfile:=fnH): "NAME=preview:/select,recl=2000,PAGEOFLOW=50",display,output 
 05111   printfile$=file$(printfile)
 05120   ! pr #PRINTFILE,USING SETPRINT: "[RESET+]" ! normal print
 05130   pr #printfile,using SETPRINT: "[LETTER][CPI=15][TOPLEFT]" ! condensed print
@@ -1294,7 +1294,7 @@
 06452 ! FILNM$ is the beginning of the file name before the sequence number !:
         ! filbatch is the file sequnce number being returned !:
         ! sufx$ is an optional file suffix (not currently implemented)
-06454   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnfil
+06454   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fnfil
 06456   filloc$=trim$(filloc$)
 06458   lf=len(filloc$)
 06460   if not filloc$(lf:lf)="\" then filloc$=filloc$&"\"
@@ -1312,7 +1312,7 @@
         !    !
 06472   if filbatch>0 and sufx$>"" then goto 6492
 06474   execute "dir "&filloc$&"*.* >dirb.txt"
-06476   open #(fil:=fngethandle): "name=dirb.txt",display,input 
+06476   open #(fil:=fnH): "name=dirb.txt",display,input 
 06478   linput #fil: a$ eof 6486
 06480   if not uprc$(a$)(1:len(filnm$))=uprc$(filnm$) then goto 6478
 06482   a=max(a,val(a$(len(filnm$)+1:pos(a$," ")-1))) conv 6478
@@ -1337,8 +1337,8 @@
         ! | FNHIST("mawh",env$("PD")&"efile\ma",env$("PD")&"efile\ma\mawh")| !:
         ! ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ!
 06502   execute "dir "&from$&"\"&mask$&"*.* >hist"&session$&".txt"
-06504   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
-06506   open #(infile:=fngethandle): "name=hist"&session$&".txt",display,input 
+06504   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
+06506   open #(infile:=fnH): "name=hist"&session$&".txt",display,input 
 06508   dim ahist$*100,dhist$(1)*100
 06510   dh=0
 06512 HIST1: linput #infile: ahist$ eof HIST2
@@ -1596,10 +1596,10 @@
         ! | Used for creating single page PDF's for the FORMPRINT routine³!:
         ! |                                                             | !:
         !    !
-08110   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fngetfile$,fnTop$,fnleft$,fnlines$
+08110   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fngetfile$,fnTop$,fnleft$,fnlines$
 08120   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 08130   dim pdffile$*100,macno$(1)*40
-08140   open #(filnum:=fngethandle): "name=PDF:/READER,PrintFile="&destination$&",eol=none,use",display,output  !:
+08140   open #(filnum:=fnH): "name=PDF:/READER,PrintFile="&destination$&",eol=none,use",display,output  !:
         pr #filnum: fnTop$(1)&fnleft$(0)&fnlines$(0)
 08150   pr #filnum: esc$&"pdf='"&str$(page)&","&source$&"'"
 08160   close #filnum: 
@@ -1613,13 +1613,13 @@
         ! |                                                             | !:
         ! |                                                             | !:
         !    !
-08210   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnwaitwin,fnwaitmsg,fngethandle
+08210   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnwaitwin,fnwaitmsg,fnH
 08220   waitwin=fnwaitwin("Changing "&post$&" files to lowercase names.")
 08230   execute "mkdir "&env$("temp")&"" ioerr 8240
 08240   post$=trim$(post$)
 08250   execute "sys -M dir "&os_filename$(post$)&" >"&os_filename$(env$("PD"))&"\temp\dirfile.txt"
 08260   if pos(post$,"\")<1 and post$>"" then post$=post$&"\"
-08270   open #(dirfile:=fngethandle): "name="&env$("temp")&"\dirfile.txt",display,input 
+08270   open #(dirfile:=fnH): "name="&env$("temp")&"\dirfile.txt",display,input 
 08280   dim a$*500,f$*32000
 08290 LWRCSTART: linput #dirfile: a$ eof LWRCEOJ
 08300   pr a$
@@ -1776,10 +1776,10 @@
         ! |                                                             | !:
         !    !
 11020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fntype,fnltype,fnsrchcrit$,fnlistspec$,fnpfkeyline
-11025   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+11025   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 11030 !  pFILE=10
 11040 !  IF FILE(PFILE)>-1 THEN pFILE+=1 : GOTO 11040
-11050   open #(pfile:=fngethandle): "name="&printer$&",eol=NONE",display,output 
+11050   open #(pfile:=fnH): "name="&printer$&",eol=NONE",display,output 
 11060   fntype(filnm$,pfile)
 11070   close #pfile: ioerr 11080
 11080 end def 
@@ -2112,7 +2112,7 @@
         ! | _LFS Font point size vertical height                        | !:
         ! | _TF$ Text file name for text source                         | !:
         !    !
-12610   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintnwp$,fnprintbox$,fndrawbox$,fnlines$,fngethandle
+12610   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintnwp$,fnprintbox$,fndrawbox$,fnlines$,fnH
 12620   execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 12630   dim _a$*2000,_lt$*20000
 12640   v=_v : h=_h !:
@@ -2121,7 +2121,7 @@
         ! | pr the instruction text box                              | !:
         ! |                                                             | !:
         !    !
-12650   open #(in:=fngethandle): "name="&_tf$,display,input 
+12650   open #(in:=fnH): "name="&_tf$,display,input 
 12660   pr #_filnum: fnlines$(0)&"[TOP("&str$(2+_lines)&")][BOXVERTICALS][SETFONT("&_lf$&")]"&esc$&"(s"&str$(_lfs)&"V"
 12670   linput #in: _a$ eof ZLTEXT
 12680   if len(_a$)>_ll-1 then !:
@@ -2150,7 +2150,7 @@
         ! | _LFS Font point size vertical height                        | !:
         ! | _TF$ Text file name for text source                         | !:
         !    !
-12810   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintnwp$,fnprintbox$,fndrawbox$,fnlines$,fngethandle
+12810   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintnwp$,fnprintbox$,fndrawbox$,fnlines$,fnH
 12820   execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 12830   dim _a$*2000,_lt$*20000
 12840   v=_v : h=_h !:
@@ -2159,7 +2159,7 @@
         ! | pr the instruction text box                              | !:
         ! |                                                             | !:
         !    !
-12850   open #(in:=fngethandle): "name="&_tf$,display,input 
+12850   open #(in:=fnH): "name="&_tf$,display,input 
 12860   _lt$=fnlines$(0)&"[TOP("&str$(2+_lines)&")][BOXVERTICALS][SETFONT("&_lf$&")]"&esc$&"(s"&str$(_lfs)&"V"
 12870   linput #in: _a$ eof Z_LTEXT
 12880   if len(_a$)>_ll-1 then !:
@@ -2511,18 +2511,18 @@
         ! |  Displays a progress bar.  FNWAITWIN and FNWAITBAR are a    | !:
         ! |  a better option                                            | !:
         !    !
-31505   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+31505   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 31510   progx=int(min(ptot,pcur)/ptot*10)
 31520   if progx>y then 
 31530     y=progx
 31540     if not progbar then 
 31550 ! 
 31560 ! 
-31570       open #(progwin:=fngethandle): "srow="&str$(prow)&",scol="&str$(pcol)&",rows=12,cols=3,picture="&env$("PD")&"icons\black.bmp",display,outIn 
+31570       open #(progwin:=fnH): "srow="&str$(prow)&",scol="&str$(pcol)&",rows=12,cols=3,picture="&env$("PD")&"icons\black.bmp",display,outIn 
 31580       execute "config attribute [PROG]n/#FFFFFF:T,FONT=ARIAL:SLANT:SMALL"
 31590       for apg=1 to 10 : pr #progwin, fields str$(12-apg)&",1,c 2,[PROG]": str$(apg) : next apg
 31620       srow=2+10-progx !:
-            open #(progbar:=fngethandle): "srow="&str$(srow)&",scol=2,rows="&str$(max(2,progx))&",cols=2,picture="&env$("PD")&"icons\green.bmp",display,outIn 
+            open #(progbar:=fnH): "srow="&str$(srow)&",scol=2,rows="&str$(max(2,progx))&",cols=2,picture="&env$("PD")&"icons\green.bmp",display,outIn 
 31630     end if 
 31640     if progx<6 and progx>=0 then 
 31650       close #progbar: 
@@ -2601,13 +2601,13 @@
         ! | page PRN file for use with FORMPRN.br forms library import. | !:
         !    !
 32010   execute "PROC=*"&env$("PD")&"Core\fnsnap\tt"
-32020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnTop$,fnleft$,fnlines$,fngethandle
+32020   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnTop$,fnleft$,fnlines$,fnH
 32030   dim png$*200
 32040   png$=""
 32050   msgbox("Select an HP6L printer that has had the driver configured for printing to a file."&crlf$&"This will properly format the file for further conversion to PCL5 and storage in the FORMS library.")
-32060   open #(outfile:=fngethandle): "name=WIN:/SELECT,eol=NONE",display,output 
+32060   open #(outfile:=fnH): "name=WIN:/SELECT,eol=NONE",display,output 
 32070   if file(outfile)<0 then goto ZPIC2PRN
-32080   open #(infile:=fngethandle): "name=open:"&env$("PD")&".\*.png,recl=1",external,input 
+32080   open #(infile:=fnH): "name=open:"&env$("PD")&".\*.png,recl=1",external,input 
 32090   if file(infile)<0 then goto ZPIC2PRN
 32100   _rec=lrec(infile)
 32110   png$=file$(infile)
@@ -2717,7 +2717,7 @@
         ! | Sets BR ENV equivalent to either Server or Client ENV from    | !:
         ! | the operating system Pass C for Client S for Server           | !:
         ! +----------------------------------------------------------------+!
-34202   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnCopyc2s,fnCopys2c
+34202   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fnCopyc2s,fnCopys2c
 34204   dim tempenv$*2048, addstr$*3, leftstr$*2048, rightstr$*2048, cs_textfile$*256
 34206   cs_textfile$="cs-"&session$&".txt"
 34207   if uprc$(cs$)="C" or cs$="" then !:
@@ -2727,7 +2727,7 @@
         else !:
           if uprc$(cs$)="S" then execute "*sys -M -S set > "&cs_textfile$ !:
             ! EXECUTE "copy "&CS_TEXTFILE$&" @:"&CS_TEXTFILE$&" -n"
-34209   open #(cs_text:=fngethandle): "NAME="&cs_textfile$,display,input error XIT_FNCS_ENV
+34209   open #(cs_text:=fnH): "NAME="&cs_textfile$,display,input error XIT_FNCS_ENV
 34212 STARTCSLOOP: ! 
 34214   addstr$=uprc$(cs$)&"_"
 34216   do 
@@ -2935,7 +2935,7 @@
         ! | Creates a Windows file dialog using FILEDIALOG.exe to return  | !:
         ! | a filename and path of an existing file.                      | !:
         ! +----------------------------------------------------------------+!
-38802   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+38802   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 38810   fngetfile$=""
 38820   dim getfile$*200,progpath$*100
 38830   progpath$=env$("PD")&"Core\fnsnap\" !:
@@ -2956,7 +2956,7 @@
 38942     if trim$(uprc$(getfile$))="TIMEOUT" then getfile$=""
 38950     fngetfile$=trim$(srep$(getfile$,".*",""))
 38952   else 
-38953     open #(getfile:=fngethandle): "name=open:"&lookin$&lookfor$,display,input ioerr 38955
+38953     open #(getfile:=fnH): "name=open:"&lookin$&lookfor$,display,input ioerr 38955
 38954     fngetfile$=file$(getfile) !:
           close #getfile: !:
           getfile=0 !:
@@ -3178,7 +3178,7 @@
         ! DEFAULT   Option number to default to !:
         ! Title$    Text at the top of the options box    !:
         ! Message$   Text at the bottom of the options box
-40420   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnradnum,fnwinrowcol,fnradiochk$,fngethandle
+40420   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnradnum,fnwinrowcol,fnradiochk$,fnH
 40430   dim owrk$(1)*100,default$*100
 40440   fnwinrowcol(0,rows,cols)
 40450   default=min(max(1,default),udim(mat o$))
@@ -3213,7 +3213,7 @@
         ! DEFAULT   Option number to default to !:
         ! Title$    Text at the top of the options box    !:
         ! Message$   Text at the bottom of the options box
-40504   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnradnum,fnwinrowcol,fnradiochk$,fngethandle
+40504   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnradnum,fnwinrowcol,fnradiochk$,fnH
 40506   dim owrk$(1)*100,default$*100
 40508   fnwinrowcol(0,rows,cols)
 40510   default=min(max(1,default),udim(mat o$))
@@ -3236,7 +3236,7 @@
 40608   end if 
 40610   alen=max(alen,len(o$(a)))
 40612 next a
-40614 owin=fngethandle !:
+40614 owin=fnH !:
       arows=ceil(len(message$)/alen)+t+1
 40616 if file(owin)>-1 then owin+=1 : goto 40616
 40618 al=alen+4 !:
@@ -3657,12 +3657,12 @@
 42730   if infile$<="" then infile$=env$("PD")&"efile\w2*.*"
 42735   outfile$=env$("TEMP")&"\viewext.txt"
 42740   if not inlen then inlen=512
-42750   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnmsexe$
+42750   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fnmsexe$
 42760   if infile$="efile\w2*.*" then !:
-          open #(in:=fngethandle): "name=open:"&infile$&",recl="&str$(inlen),external,input else !:
-          open #(in:=fngethandle): "name="&infile$&",recl="&str$(inlen),external,input 
+          open #(in:=fnH): "name=open:"&infile$&",recl="&str$(inlen),external,input else !:
+          open #(in:=fnH): "name="&infile$&",recl="&str$(inlen),external,input 
 42770   frm_infile$=cform$("FORM C "&str$(inlen))
-42780   open #(save:=fngethandle): "name="&outfile$&",recl="&str$(inlen+2)&",replace",display,output 
+42780   open #(save:=fnH): "name="&outfile$&",recl="&str$(inlen+2)&",replace",display,output 
 42790   outfile$=os_filename$(file$(save))
 42800 READ_IN: read #in,using frm_infile$: in_a$ eof ZVIEW_EXT
 42810   pr #save: in_a$
@@ -4660,10 +4660,10 @@
         ! | lable number increments 1 each time one is printed          | !:
         !    !
 54409   library env$("PD")&"Core\fnsnap\ahold.dll": fngeta,fnputa
-54410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintbox,fngethandle,fnmod
+54410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintbox,fnH,fnmod
 54415   if udim(mat addr$)<5 then mat addr$(5)
 54420   if not lbl then 
-54430     open #(lblno:=fngethandle): "srow=5,scol=10,rows=3,cols=25,parent=0,border=S",display,output 
+54430     open #(lblno:=fnH): "srow=5,scol=10,rows=3,cols=25,parent=0,border=S",display,output 
 54440     pr #lblno, fields "2,2,c 15,N/W:T": "Lable number"
 54442     lbl=fngeta("FNPRT3X10")
 54450     rinput #lblno, fields "2,18,n 3,N/W:W": lbl conv 54450
@@ -4972,9 +4972,9 @@
         ! |                                                             | !:
         ! |                                                             | !:
         !    !
-60710   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
+60710   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 60715   if not esc then execute "PROC="&env$("PD")&"Core\fnsnap\tt"
-60720   open #(errtxt:=fngethandle): "name="&env$("PD")&"Core\fnsnap\errors.txt",display,input 
+60720   open #(errtxt:=fnH): "name="&env$("PD")&"Core\fnsnap\errors.txt",display,input 
 60730   x$="Error code "&cnvrt$("PIC(####)",erno)
 60740   dim er$*2000
 60750   linput #errtxt: er$ eof ZERRTXT
@@ -6143,7 +6143,7 @@
         ! ECOUNT  = NUMBER OF FIELDS PROCESSED BEFOR THE ERROR OCCURED !:
         ! ECURFLD = THE FIELD OCCUPIED BY CURSOR WHEN ERROR OCCURED !:
         ! EMENU$  = MENU TO CHAIN TO IF ERROR CAN NOT BE RESOLVED
-78015   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnemailfile,fnhelptip,fngethandle
+78015   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnemailfile,fnhelptip,fnH
 78020   dim aic$(1)*100,dummy$(2)*50,errfile$*100
 78025   aic$(1)="gtisdale@tisdalecpa.com" !:
         crlf$=chr$(13)&chr$(10)
@@ -6156,7 +6156,7 @@
 78055   fnhelptip(env$("PD")&"Core\fnsnap\","errors.txt",eprog$&" line "&cnvrt$("pic(#####)",eline)&" Count "&str$(ecount),eerr,5,20)
 78060   ecufld=curfld
 78065   count=cnt
-78070   open #(errwin:=fngethandle): "srow=4,scol=4,erow=20,ecol=75,border=S,N=h/rgb:r,caption=PROGRAM_ERROR",display,outIn 
+78070   open #(errwin:=fnH): "srow=4,scol=4,erow=20,ecol=75,border=S,N=h/rgb:r,caption=PROGRAM_ERROR",display,outIn 
 78075   pr #errwin: newpage
 78080   pr #errwin,fields "2,2,c 65": "An error has occured in the program.  Please make a note"
 78085   pr #errwin,fields "3,2,c 65": "of the following information and have it ready when you "
@@ -6173,10 +6173,10 @@
 78140   pr #errwin,fields "8,20,n 10,n,n": eline
 78145   pr #errwin,fields "10,20,n 10,n,n": eerr
 78150   pr #errwin,fields "12,20,n 10,n,n": ecount
-78155   open #(errlog:=fngethandle): "name="&env$("PD")&"errlog.txt,rln=2500,use",display,output 
+78155   open #(errlog:=fnH): "name="&env$("PD")&"errlog.txt,rln=2500,use",display,output 
 78156   pr #errlog: str$(days(date))&chr$(9)&session$&chr$(9)&eprog$&chr$(9)& str$(eline)&chr$(9)&str$(eerr)&chr$(9)&str$(ecount)&chr$(9)&wbversion$&chr$(9)&env$("USER_NAME")&chr$(9)&login_name$
 78157   close #errlog: 
-78160   open #(errfil:=fngethandle): "name=ERRLOG.[WSID],use",display,output 
+78160   open #(errfil:=fnH): "name=ERRLOG.[WSID],use",display,output 
 78165   pr #errfil: " Date         = "&date$("MM/DD/CCYY") !:
         pr #errfil: " Workstation  = "&wsid$
 78170   pr #errfil: " Program      = "&eprog$ !:
@@ -6227,8 +6227,8 @@
         ! |   2 letters of the name followed by the time without ":"    | !:
         !    !
 78405   dim wmlfile$*100
-78410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle
-78435   open #(fileno:=fngethandle): "NAME="&senddir$&"\"&wsid$(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",display,output ioerr 78435
+78410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
+78435   open #(fileno:=fnH): "NAME="&senddir$&"\"&wsid$(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",display,output ioerr 78435
 78440   pr #fileno: "<TO>"
 78445   for a=1 to udim(mat mailto$)
 78450     pr #fileno: trim$(mailto$(a))

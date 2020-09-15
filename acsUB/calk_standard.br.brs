@@ -188,7 +188,7 @@ fnend  ! fn_calk_sewer
 def fn_service_chg_from_history(service_number,history_date,scfh_account$)
 	if ~scfh_setup then
 		scfh_setup=1
-		open #scfh_h_trans:=fngethandle: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+		open #scfh_h_trans:=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 	end if
 	scfh_return=0
 	dim scfh_key$*19,scfh_alloc_amt(10)

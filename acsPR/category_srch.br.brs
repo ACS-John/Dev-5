@@ -9,7 +9,7 @@ def library fncategory_srch(&cn$;fixgrid)
  
 ! cn$=account #     ! to extract the flexgrid information (Cagegory)
 		fncno(cno)
-		open #file_num:=fngethandle: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\Categoryidx.h[cno],Shr",internal,input,keyed ioerr ERTN
+		open #file_num:=fnH: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\Categoryidx.h[cno],Shr",internal,input,keyed ioerr ERTN
  
 		restore #file_num:
 		fnTos(sn$="CategorySrch")

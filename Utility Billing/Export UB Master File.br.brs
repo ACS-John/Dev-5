@@ -25,8 +25,8 @@ MENU1: ! r:
 MainLoop: ! r:
 	dim delim$*1
 	delim$=tab$
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative
-	! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
+	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative
+	! open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
 	fnMakeSurePathExists(dest$)
 	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 	! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1

@@ -15,10 +15,10 @@ dim em$(3)*30 ! (1)=Emp Name, (2)=Emp Addr, (3)=Emp CSZ
 
 fn_readSavedResponses
 fnTop(program$)
-open #hEmployee=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 dim dd$(0)*32, ddN(0)
 dd=fn_open('PR Direct Deposit',mat dd$,mat ddN,mat form$)
-open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #hChecks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 goto Screen1
  
 Screen1: ! r:
@@ -72,7 +72,7 @@ Screen1: ! r:
 ! /r
 ! (logic just falls through here)
 MainLoop: ! r: main loop
-	open #ddout=fngethandle: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output
+	open #ddout=fnH: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output
 	fnopenprn
 	gosub ReportHdr ! pr header
 	gosub FileHeaderRecord

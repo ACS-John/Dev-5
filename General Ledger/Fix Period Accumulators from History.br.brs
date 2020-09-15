@@ -5,7 +5,7 @@
  
   process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
  
-  open #company:=fngethandle: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+  open #company:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
   read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 	! lmu = Last Accounting Period Closed
 	! nap = Number of Accounting Periods
@@ -18,15 +18,15 @@
   fn_report(env$('program_caption'))
   fn_report(date$('mm/dd/ccyy'))
   fn_report('')
-  open #h_actrans:=fngethandle: "Name=[Q]\GLmstr\AcTrans.H[cno],KFName=[Q]\GLmstr\AcTrIdx.H[cno],Shr",internal,outIn,keyed
+  open #h_actrans:=fnH: "Name=[Q]\GLmstr\AcTrans.H[cno],KFName=[Q]\GLmstr\AcTrIdx.H[cno],Shr",internal,outIn,keyed
 	F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
   if process_gltrans then
 	 fnIndex("[Q]\GLmstr\GLTrans.H[cno]",env$('Temp')&"\GLIndex.H[cno]","1 12")
-	 open #h_gltrans:=fngethandle: "Name=[Q]\GLmstr\GLTrans.H[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
+	 open #h_gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
   end if  ! process_gltrans
 	F_GLTRANS: form pos 1,c 12,n 6,pd 6.2,n 2
-  open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-  open #h_glmstr2:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed
+  open #h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
+  open #h_glmstr2:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed
 	F_GLMSTR: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
   do
 		read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR

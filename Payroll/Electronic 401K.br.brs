@@ -15,7 +15,7 @@
 	read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
 	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
-	open #hpraddr:=fngethandle: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
+	open #hpraddr:=fnH: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
 	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output
 	ReadPrAddr1: !
 	read #hpraddr,using 'Form POS 1,PD 3': address eof END1

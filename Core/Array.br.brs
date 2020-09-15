@@ -162,7 +162,7 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
   autoLibrary
   dim ftaLine$*1024
   if ftaDelimiter$='' then ftaDelimiter$='='
-  open #hFta:=fngethandle: 'name='&ftaFile$,d,i
+  open #hFta:=fnH: 'name='&ftaFile$,d,i
   mat ftaArrayLeft$ (0)
   mat ftaArrayRight$(0)
   for ftaSkipFirstLineItem=1 to ftaSkipFirstLine
@@ -189,7 +189,7 @@ def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
   dim r1Line$*256
   dim r1LineItem$(0)*128
   mat r1Return$(0)
-  open #hr1:=fngethandle: 'name='&r1File$,d,input ioerr EoR1
+  open #hr1:=fnH: 'name='&r1File$,d,input ioerr EoR1
   linput #hr1: r1Line$ eof EoR1 ! just consume the headings
   do
     linput #hr1: r1Line$ eof EoR1
@@ -208,7 +208,7 @@ def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumb
   dim r2LineItem$(0)*128
   mat r2Return1$(0)
   mat r2Return2$(0)
-  open #hr2:=fngethandle: 'name='&r2File$,d,input ioerr Eor2
+  open #hr2:=fnH: 'name='&r2File$,d,input ioerr Eor2
   linput #hr2: r2Line$ eof Eor2 ! just consume the headings
   do
     linput #hr2: r2Line$ eof Eor2
@@ -234,7 +234,7 @@ def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*2
   dim r3LineItem$(0)*128
   mat r3Return1$(0)
   mat r3Return2$(0)
-  open #hr3:=fngethandle: 'name='&r3File$,d,input ioerr Eor3
+  open #hr3:=fnH: 'name='&r3File$,d,input ioerr Eor3
   linput #hr3: r3Line$ eof Eor3 ! just consume the headings
   do
     linput #hr3: r3Line$ eof Eor3
@@ -254,7 +254,7 @@ def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Ret
   dim r4LineItem$(0)*128
   mat r4Return1$(0)
   mat r4Return2$(0)
-  open #hr4:=fngethandle: 'name='&r4File$,d,input ioerr Eor4
+  open #hr4:=fnH: 'name='&r4File$,d,input ioerr Eor4
   linput #hr4: r4Line$ eof Eor4 ! just consume the headings
   do
     linput #hr4: r4Line$ eof Eor4
@@ -278,7 +278,7 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   dim r2fLine$*256
   mat r2fReturn1$(0)
   mat r2fReturn2$(0)
-  open #hr2f:=fngethandle: 'name='&r2fFile$,d,input ioerr Eor2f
+  open #hr2f:=fnH: 'name='&r2fFile$,d,input ioerr Eor2f
   do
     linput #hr2f: r2fLine$ eof Eor2f
     fn_addonec(mat r2fReturn1$,r2fLine$(1:r2fColumn1Width))

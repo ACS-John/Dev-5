@@ -5,14 +5,14 @@ fnTop(program$)
 if ~fnprocess=1 then
 	gosub Screen1
 end if
-open #hTrans:=fngethandle: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
+open #hTrans:=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
 fnopenprn
 ! r: main loop
 	gosub PrHdr
 	dim emp$(0)*256
 	dim empN(0)
 	hEmployee=fn_open('PR Employee',mat emp$,mat empN, mat form$, 1)
-	! open #hEmployee:=fngethandle: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	! open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	dim em$*30 ! first column
 	do
 		read #hEmployee,using form$(hEmployee): mat emp$,mat empN eof Finis

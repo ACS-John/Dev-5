@@ -10,7 +10,7 @@ def library fnaccount_search(&x$;fixgrid)
 ! x$=account #     : _
 		! to extract the flexgrid information (master file)
 		fncno(cno)
-		open #file_num:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+		open #file_num:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
  
 		restore #file_num:
 		fnTos(sn$="AccountSrch")

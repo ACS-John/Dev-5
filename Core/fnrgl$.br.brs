@@ -1,7 +1,7 @@
 ! Replace S:\Core\fnRgl$
 ! format the answer to fnQgl -
 def library fnrgl$*60(x$; ReturnMaxLength)
-		library 'S:\Core\Library': fngethandle,fnerror,fnpause
+		library 'S:\Core\Library': fnH,fnerror,fnpause
 		on error goto Ertn
 		if ReturnMaxLength=0 then returnMaxLength=35
 
@@ -21,7 +21,7 @@ def library fnrgl$*60(x$; ReturnMaxLength)
 ! find out if I should use the department number and/or the sub account number
 L180: !
 		if cursys$='GL' or cursys$='CL' then
-			open #company:=fngethandle: "Name=[Q]\"&cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr L260
+			open #company:=fnH: "Name=[Q]\"&cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr L260
 			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 			close #company:
 		else if cursys$="PR" or cursys$="UB" or cursys$="CR" then
@@ -29,7 +29,7 @@ L180: !
 			use_dept=use_sub=1 ! default both to use
 		end if
 		desc$=''
-		open #glmstr:=fngethandle: "Name=[Q]\"&cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&cursys$&"mstr\GLIndex.h[cno],Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
+		open #glmstr:=fnH: "Name=[Q]\"&cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&cursys$&"mstr\GLIndex.h[cno],Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
 		read #glmstr,using "Form Pos 13,C 50",key=x$: desc$ nokey NOKEYGLMSTR ioerr NOKEYGLMSTR
 		close #glmstr:
 		L_ERR_OPEN_FOR_DESC: !

@@ -32,7 +32,7 @@ for j=1 to 10
 next j
 ! /r
 open #h_trans:=2: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',internal,input,keyed
-open #hRate:=fngethandle: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
+open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
 ! r: get default sequence
 	fncreg_read('ubBilJrn.Sort_Option',sequence$)
 	seq=val(sequence$) conv ignore
@@ -74,14 +74,14 @@ MAIN: ! r: Screen 1
 ! /r
 ! r: initialize stuff
 if seq=0 or seq=1 then ! route number
-	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
 else if seq=2 then            ! account
-	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
 else if seq=3 then ! Alpha Sort Sequence
-	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',internal,input,keyed
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',internal,input,keyed
 else if seq=4 then ! Customer Name
 	fnIndex('[Q]\UBmstr\Customer.h[cno]', env$('temp')&'\customer_name'&session$&'.h[cno]','41 30')
-	open #hCustomer:=fngethandle: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
 end if
 if trim$(serviceName$(1))='Water'                               then services+=1 : water=1
 if trim$(serviceName$(3))='Electric' or trim$(service$(3))='LM' then services+=1

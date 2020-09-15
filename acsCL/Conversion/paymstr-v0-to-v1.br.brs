@@ -9,7 +9,7 @@ def library fnpaymstr_v0_to_v1
 		cap$="Checkbook update Payees from v0 to v1"
 
 		fnStatus('updating payee file.')
-		open #paymstr:=fngethandle: "Name=[Q]\CLmstr\Paymstr.h[cno]",internal,outIn,relative
+		open #paymstr:=fnH: "Name=[Q]\CLmstr\Paymstr.h[cno]",internal,outIn,relative
 		if version(paymstr)=1 then
 			msgline$(4)="Paymstr is already version 1"
 			msgline$(5)="press enter to continue" : msgline$(6)=""
@@ -19,11 +19,11 @@ def library fnpaymstr_v0_to_v1
 		close #paymstr:
 		fnCopy("[Q]\CLmstr\Paymstr.h[cno]","[Q]\CLmstr\Paymstr.h[cno]",736)
 		fnIndex("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx2.h[cno]","9 30")
-		open #paymstr1:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
-		open #paymstr2:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]",internal,outIn,keyed
+		open #paymstr1:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
+		open #paymstr2:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]",internal,outIn,keyed
 		version(paymstr1,1)
-		open #payalloc:=fngethandle: "Name=[Q]\CLmstr\PayAlloc.h[cno]",internal,input,relative ioerr EO_PAYALLOC
-		open #payeegl:=fngethandle: "Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+		open #payalloc:=fnH: "Name=[Q]\CLmstr\PayAlloc.h[cno]",internal,input,relative ioerr EO_PAYALLOC
+		open #payeegl:=fnH: "Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 		version(payeegl,1)
 	READ_PAYALLOC: !
 		read #payalloc,using 'Form POS 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC

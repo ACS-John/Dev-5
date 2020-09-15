@@ -54,9 +54,9 @@ MAIN: ! r:
 	c1=val(resp$(4)(1:8)) ! starting check number
 	c2=val(resp$(5)(1:8)) ! ending check number
 	vn$=lpad$(rtrm$(resp$(6)(1:8)),8) ! starting vendor number
-	open #hPaymstr=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed
+	open #hPaymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed
 	dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30
-	open #hTrmstr=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,input,keyed
+	open #hTrmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,input,keyed
 	if prtall=check_range then
 		if wbc=0 or c1=0 then
 			dim message$(0)*256

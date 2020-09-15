@@ -40,7 +40,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	! transaction_type or blank for all
 	if ~ttao_setup then
 		ttao_setup=1
-		open #ttao_h_trans:=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+		open #ttao_h_trans:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 		dim ttao_key$*19
 	end if
 	ttao_return=0
@@ -199,7 +199,7 @@ def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 	dim origTranN(0)
 	mat origTran$(udim(mat tran$))
 	mat origTranN(udim(mat tranN))
-	open #hTranRelative=fngethandle: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
+	open #hTranRelative=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
 	dim c$(0)*256
 	dim cN(0)
 	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
@@ -310,7 +310,7 @@ def fn_lastTBalBeforeRec(hTranRelative,z$,recNum; ___,returnN) ! reqires local m
 	fn_lastTBalBeforeRec=returnN
 fnend
 def fn_TransactionEdit(editrec; ___,transAcct$,tdate,tcode,tamount,serviceItem,s1use,s3use,s4use,lc,mylen,mypos,rc,s1use,s3use,s4use)
-	open #trans=fngethandle: "Name=[Q]\UBmstr\ubtransvb.h[cno],Shr",internal,outIn,relative
+	open #trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],Shr",internal,outIn,relative
 	read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5",rec=editrec: transAcct$,tdate,tcode,tamount,s1use,s3use,s4use
 	fnTos
 	mylen=20 : mypos=mylen+2
@@ -441,7 +441,7 @@ def fn_printTrans ! very local function - lots of inherritance
 		account_balance=val(fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      , 1))
 		nam$           =    fnCustomerData$(lpad$(rtrm$(z$),10),'name'         , 1)
 		metraddr$      =    fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'   )
-		! open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		! open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 		! read #h_customer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 		! close #h_customer: ioerr ignore
 		restore #trans,key>=lpad$(rtrm$(z$),10)&"         ": nokey PT_FINIS
@@ -601,7 +601,7 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 
 	if hTrans=0 then
 		close_hTrans=1
-		open #hTrans:=fngethandle: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+		open #hTrans:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
 	end if
 	hTrans_lrec_len=len(str$(lrec(hTrans)))
 	fn_columnGet(mat colhdr$,mat colmask$,ftShowElecUsed,ftShowGasUsed)

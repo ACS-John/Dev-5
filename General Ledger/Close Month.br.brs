@@ -23,7 +23,7 @@ MainLoop: ! r:
 	close #1:
 	fn_current_to_accumlated_trans
 	OPEN_GLMSTR: !
-	open #h_glmstr:=fngethandle: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",internal,outIn,keyed
+	open #h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",internal,outIn,keyed
 	fnStatus("Closing Month...")
 	do
 		dim bc(13)
@@ -61,8 +61,8 @@ goto Finis ! /r
 
 def fn_current_to_accumlated_trans
 	fnStatus("Transferring Current Transactions to Accumulated Trans...")
-	open #hTransAccumulated:=fngethandle: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
-	open #hTransCurrent:=fngethandle: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
+	open #hTransAccumulated:=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
+	open #hTransCurrent:=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
 	do
 		dim tr(7)
 		dim tr$*12

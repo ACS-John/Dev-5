@@ -30,7 +30,7 @@ on error goto Ertn
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr CHAIN_SELCNO
 	read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20:
 	gosub OPEN_TRANSACTION_FILES
-	open #h_tralloc=fngethandle: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
 ! /r
 SCREEN1: ! r:
 	! select limitations for the menu1's record selection grid
@@ -98,8 +98,8 @@ SCREEN1: ! r:
 	editrec=rec(h_trmstr(1)): goto DO_EDIT
 goto MENU1 ! /r
 OPEN_TRANSACTION_FILES: ! r:
-	open #h_trmstr(1)=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
-	open #h_trmstr(2)=fngethandle: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #h_trmstr(1)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
+	open #h_trmstr(2)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 return  ! /r
 MENU1: ! r:
 	fnTos
@@ -274,11 +274,11 @@ REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
 
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 	if typeofentry=2 then
-		open #payee:=fngethandle: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
-		open #payeegl:=fngethandle: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee:=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
+		open #payeegl:=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	else
-		open #payee:=fngethandle: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
-		open #payeegl:=fngethandle: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+		open #payeegl:=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	end if
 
 	read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL

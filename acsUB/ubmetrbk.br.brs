@@ -288,7 +288,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 	service$="W"
 	fnreg_write(sn$&'.route',resp$(1))
-	open #h_customer:=fngethandle: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 	fnopenprn
 	do
 	CAMPBELL_LOOP_TOP: ! 

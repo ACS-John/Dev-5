@@ -53,7 +53,7 @@
 	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
 ! /r
 REGULAR_ENTRY: ! r:
-	open #hTmpInvoice=fngethandle: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",internal,outIn,relative
+	open #hTmpInvoice=fnH: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",internal,outIn,relative
 	F_TMWK2: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	open #3: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,input,keyed
 	fnopenprn

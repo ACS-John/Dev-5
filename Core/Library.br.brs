@@ -157,9 +157,9 @@ XITPAUSE: fnend
 		library 'S:\Core\Start.br': fnSetQ
 		fnSetQ=fnSetQ(setQ$)
 	fnend
-	def library fngethandle
-		library 'S:\Core\Start.br': fngethandle
-		fngethandle=fngethandle
+	def library fnH
+		library 'S:\Core\Start.br': fnH
+		fnH=fnH
 	fnend
 	def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 		library 'S:\Core\Start.br': fnMapToVirturalDrive

@@ -28,7 +28,7 @@
 	fnTop(program$)
 	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
  
-	open #hCompany:=fngethandle: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #hCompany:=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #hCompany,using fCompany: mat a$,empId$,mat d$,loccode,mat e$
 	fCompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -67,7 +67,7 @@
 		w2laser_output_filename$=srep$(w2laser_output_filename$,'[TaxYear]',taxYear$)
 		w2laser_output_filename$=srep$(w2laser_output_filename$,'[taxyear]',taxYear$)
 		w2laser_output_filename$=srep$(w2laser_output_filename$,'[TAXYEAR]',taxYear$)
-		open #hExport:=fngethandle: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
+		open #hExport:=fnH: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
 	end if
 	! /r
 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
@@ -139,11 +139,11 @@
 	goproc=0
 	open #hEmployee:=1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
-	open #hChecks:=fngethandle: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #hChecks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	! if env$('acsDeveloper')<>'' then pr 'hChecks=';hChecks : pause
-	open #hAddr:=fngethandle: "Name=[Temp]\Addr."&session$&",Replace,RecL=33,NoShr",internal,output
+	open #hAddr:=fnH: "Name=[Temp]\Addr."&session$&",Replace,RecL=33,NoShr",internal,output
 	write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
-	open #hW2Box16:=fngethandle: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr ignore
+	open #hW2Box16:=fnH: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr ignore
 	w2printCount=0
 	! if loccode=0 or cLocality$="YES" or cLocality$="NO" then
 	!   goto READ_EMPLOYEE

@@ -78,7 +78,7 @@ def fn_showresults
 	fnLbl(1,1,"Date Range:",19)
 	fnLbl(1,22,"Avg. Bills Per Cycle:",23)
 	fnLbl(1,47,"Avg. Bill:",12)
-	open #(h_prn:=fngethandle): "Name=[Q]\UBmstr\Sewerstats"&wsid$&".txt,Replace,RecL=5000",display,output 
+	open #(h_prn:=fnH): "Name=[Q]\UBmstr\Sewerstats"&wsid$&".txt,Replace,RecL=5000",display,output 
 	pr #h_prn: 'Call Print.MyOrientation("Portrait")'
 	pr #h_prn: 'Call Print.MyFontSize(14)'
 	pr #h_prn: 'Call Print.MyFontBold(True)'
@@ -105,9 +105,9 @@ def fn_showresults
 	if ckey=2 then execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$('UBmstr\Sewerstats"&wsid$&".txt"') ! "sy -W -C S:\Core\PrAce UBmstr\Sewerstats"&wsid$&".txt"
 fnend 
 def fn_openfiles
-	open #(h_ubmstr:=fngethandle): "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed 
+	open #(h_ubmstr:=fnH): "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed 
 	CUSTFORM: form c 10
-	open #(h_ubtrans:=fngethandle): "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed 
+	open #(h_ubtrans:=fnH): "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed 
 	TRANSFORM: form c 10,n 8,n 1,pos 28,pd 4.2
 fnend 
 def fn_closefiles

@@ -139,7 +139,7 @@ def fn_fkey(scrline,mat fkey$,mat disfk,&em$,es; _
 	totallen-=1
 	if win=0 then goto NO_TEMP_FILE
 	temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
-	open #tfn:=fngethandle: "Name="&temp_file$&",RecL=80,use",internal,outIn ioerr NO_TEMP_FILE
+	open #tfn:=fnH: "Name="&temp_file$&",RecL=80,use",internal,outIn ioerr NO_TEMP_FILE
 	read #tfn,using 'Form POS 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
 	startpos=int((ec-sc-totallen)/2+sc)+1
 	goto L270

@@ -28,7 +28,7 @@ Xit: fnXit
 ! /r
 def fn_setup
 	setup=1
-	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fnTop,fnXit,fngethandle
+	library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fnTop,fnXit,fnH
 	library 'S:\Core\Library': fnclient_has_on_support_list,fnSystemNameFromAbbr$,fnclient_support,fnerror
 	library 'S:\Core\Library': fnFree
 	library 'S:\Core\Library': fnSrepEnv$
@@ -60,19 +60,19 @@ def fn_conectivity_test$*40
 	wud_success=0
 	dim wud_return$*40
 	wud_return$=''
-	open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
+	open #h_script:=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
 	pr #h_script: 'user acs5update'
 	pr #h_script: 'ACSKen!1'
 	pr #h_script: 'Dir ACS-5-Update-CO.exe'
 	pr #h_script: 'quit'
 	close #h_script:
 
-	open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
+	open #h_batch:=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
 	pr #h_batch: 'prompt $p$g'
 	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 	close #h_batch:
 	fn_execute('-m',os_filename$(batch_name$))
-	open #h_return:=fngethandle: 'Name='&return_name$,display,input
+	open #h_return:=fnH: 'Name='&return_name$,display,input
 	do
 		linput #h_return: line$ eof WUD_RETURN_EOF
 		if line$(3:3)='-' then
@@ -101,7 +101,7 @@ def fn_update_license
 	ul_success=0
 	dim ul_return$*40
 	ul_return$=''
-	open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
+	open #h_script:=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
 	pr #h_script: 'user acs5update'
 	pr #h_script: 'ACSKen!1'
 	pr #h_script: 'LCD '&env$('Temp')
@@ -109,12 +109,12 @@ def fn_update_license
 	pr #h_script: 'quit'
 	close #h_script:
 
-	open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
+	open #h_batch:=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
 	pr #h_batch: 'prompt $p$g'
 	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 	close #h_batch:
 	fn_execute('-m',os_filename$(batch_name$))
-	open #h_return:=fngethandle: 'Name='&return_name$,display,input
+	open #h_return:=fnH: 'Name='&return_name$,display,input
 	do
 		linput #h_return: line$ eof ul_RETURN_EOF
 		if line$(3:3)='-' then
@@ -185,7 +185,7 @@ def fn_update
 		fnStatus("Download started at "&time$)
 		fnStatus("Please wait...")
 		!  fn_download_an_update(system_id$*2)
-		open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
+		open #h_script:=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
 		pr #h_script: 'user acs5update'
 		pr #h_script: 'ACSKen!1'
 		pr #h_script: 'LCD '&env$('Temp')
@@ -198,13 +198,13 @@ def fn_update
 		pr #h_script: 'quit'
 		close #h_script:
 		!
-		open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
+		open #h_batch:=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
 		pr #h_batch: 'prompt $p$g'
 		pr #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 		close #h_batch:
 		fn_execute('-m',os_filename$(batch_name$))
 		u_download_success=0
-		open #h_return:=fngethandle: 'Name='&return_name$,display,input
+		open #h_return:=fnH: 'Name='&return_name$,display,input
 		do
 			linput #h_return: line$ eof U_RETURN_EOF
 			if line$(1:4)='226 ' then u_download_success=1
@@ -249,8 +249,8 @@ fnend
 def fn_drive_sys_must_exist
 	if ~exists('S:\Drive.sys') then
 		fnStatus('creating missing Drive.sys')
-		open #h_drive_sys:=fngethandle: 'Name=S:\Drive.sys,RecL=256,New',display,output
-		open #h_brconfig_sys:=fngethandle: 'Name=S:\BRConfig.sys',display,input
+		open #h_drive_sys:=fnH: 'Name=S:\Drive.sys,RecL=256,New',display,output
+		open #h_brconfig_sys:=fnH: 'Name=S:\BRConfig.sys',display,input
 		pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
 		do
 			linput #h_return: line$ eof DSME_BRCONFIG_EOF

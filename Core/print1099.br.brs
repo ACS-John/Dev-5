@@ -17,7 +17,7 @@ def library fnadd1099(mat cinfo$, mat einfo$, mat box)
 	dim oldbox(22)
 
 	! if einfo$(1)='' then fnpause
-	open #dave=fngethandle: 'Name=1099-'&session$&'.dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outIn,keyed
+	open #dave=fnH: 'Name=1099-'&session$&'.dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outIn,keyed
 	read #dave,using 'Form Pos 481,22*N 15.2',key=rpad$(einfo$(1),40),reserve: mat oldbox nokey DAVENOKEY
 	mat box=box+oldbox
 	rewrite #dave,using 'Form Pos 481,22*N 15.2',same: mat box
@@ -53,9 +53,9 @@ def library fn_print1099(; lz1$)
 	if lz1$='' then lz1$='D'
 	
 	on fkey 5 goto EODAVE
-	open #dave=fngethandle: 'Name=1099-'&session$&'.dat',internal,outIn
+	open #dave=fnH: 'Name=1099-'&session$&'.dat',internal,outIn
 	if lz1$='E' then
-		open #exportfile=fngethandle: 'Name=\1099Etc.Wrk\W2Data\1099Dat.Prn,Replace',display,output
+		open #exportfile=fnH: 'Name=\1099Etc.Wrk\W2Data\1099Dat.Prn,Replace',display,output
 	else
 		fnopenprn
 	end if

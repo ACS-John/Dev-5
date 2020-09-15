@@ -646,8 +646,8 @@ def fn_show_release_notes(version_prior$,version_current$; ___,didOpen)
 		exec 'sy -c -m'&os_filename$('ACS_tmp_Release_Note_Report.txt')&'"'
 	end if
 fnend
-def library fngethandle
-	fngethandle=fn_gethandle
+def library fnH
+	fnH=fn_gethandle
 fnend
 def fn_gethandle
 	hMaybe=189

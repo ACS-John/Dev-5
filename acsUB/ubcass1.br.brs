@@ -28,7 +28,7 @@
 ! if ckey=5 then goto Xit
 ! dv$=resp$(1)
 ! /r
-	open #h_out:=fngethandle: "Name=SAVE:ubCass1.dat,RecL=112,EOL=None,Replace",external,output ioerr Xit
+	open #h_out:=fnH: "Name=SAVE:ubCass1.dat,RecL=112,EOL=None,Replace",external,output ioerr Xit
 !  pr file$(h_tmp);" ";lrec(h_tmp)
 !  save_name$=os_filename$(file$(h_tmp))
 !  close #h_tmp,free:

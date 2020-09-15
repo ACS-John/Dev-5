@@ -1,5 +1,5 @@
 autoLibrary
-open #h_filelist:=fngethandle: 'name=filelist.txt',display,input 
+open #h_filelist:=fnH: 'name=filelist.txt',display,input 
 do 
 	dim program_file$*256
 	linput #h_filelist: program_file$ eof FILELIST_EOF
@@ -20,7 +20,7 @@ def fn_replace_in_file(program_file$*256,from$*256,to$*256)
 	dim tmp$*512
 	close #h_file: ioerr ignore
 	open #h_file: 'name='&program_file$,display,input 
-	open #h_out:=fngethandle: 'name=new.brs,recl=1048,replace',display,output 
+	open #h_out:=fnH: 'name=new.brs,recl=1048,replace',display,output 
 	restore #h_file: 
 	do 
 		dim line$*1048
