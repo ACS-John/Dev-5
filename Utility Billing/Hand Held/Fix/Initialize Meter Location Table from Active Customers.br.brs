@@ -59,7 +59,7 @@ do
 		l$(loc_meterType      )=fn_endPointType$(meterNumber$)
 		locKey$=fnBuildKey$('U4 Meter Location',mat l$,mat lN)
 		read #hLocation,using form$(hLocation),key=locKey$: mat l$,mat lN noKey NoKeyGoodContinue
-			fn_reportError(c$(c_account),' !!! Duplicate Key: '&locKey$&' !!!')
+			fn_reportError(c$(c_account),' Fixing Duplicate Key: '&locKey$)
 			dupCount+=1
 			id+=1
 			goto ReDoLocation

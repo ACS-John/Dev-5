@@ -7,7 +7,7 @@ tab$=chr$(9)
 if fnHas(tab$) t
 	if ~settingsSet t
 		settingsSet=1
-		ope #hSettings:=fnGetHandle: 'name='&program$(1:pos(program$,'\',-1))&'Settings.proc',d,i ioerr SettingsFinis
+		ope #hSettings=fnGetHandle: 'name='&program$(1:pos(program$,'\',-1))&'Settings.proc',d,i ioerr SettingsFinis
 		dim settingsLine$*800
 		do
 			lin #hSettings: settingsLine$ eof SettingsEoF

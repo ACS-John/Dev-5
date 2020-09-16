@@ -10,16 +10,16 @@ fields are space and tab delimited
   c 15, Zip
   n  3, Route Number
   n  7, Sequence
-  c  8,meter Number
+  c 12,meter Number
   C 12,meter longitude
   C 12,meter latitude
   N 10,Prev Read
   N 10,current Read
   
-Reading file:
+(Reading) file: READy to ACS.txt
 tab delimited
   c 10,Account Number
-  c  8,meter Number 
+  c 12,meter Number 
   N 10,current Read  
   ccyymmdd, current read date 
   

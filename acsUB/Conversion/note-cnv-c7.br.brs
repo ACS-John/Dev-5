@@ -72,13 +72,13 @@ def library fnub_cnv_note_phase_1
 	! ** Phase 3 **
 	! Note conversion program
 	if exists("[Q]\UBmstr\Customer.h[cno]") then
-		open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
+		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
 	else if exists("[Q]\UBmstr\ubMaster.h[cno]") then
-		open #hCustomer:=fnH: "Name=[Q]\UBmstr\ubMaster.h[cno]",internal,input,relative
+		open #hCustomer=fnH: "Name=[Q]\UBmstr\ubMaster.h[cno]",internal,input,relative
 	end if
 	fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
-	open #note1b:=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
-	open #note2b:=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",internal,outIn,relative
+	open #note1b=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
+	open #note2b=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",internal,outIn,relative
 	L50100: !
 	read #hCustomer,using 'Form POS 1,C 10': z$ eof EO4
 	if z$(8:10)=".00" then goto L50100 ! skip base records

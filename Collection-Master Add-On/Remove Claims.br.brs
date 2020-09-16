@@ -2,8 +2,6 @@ on error goto Ertn
 fn_setup
 fngui_push_on
 
-
-
 print newpage
 goto MAIN_BODY
 

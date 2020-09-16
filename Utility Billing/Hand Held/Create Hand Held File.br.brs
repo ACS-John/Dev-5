@@ -881,7 +881,7 @@ def fn_readyWater ! z$,mat e$,extra$(1-2),route
 	fn_record_addc(15,tmpZip$)                                        ! Zip
 	fn_record_addn(3,route)                                           ! Route Number
 	fn_record_addn(7,sequence)                                        ! Sequence
-	fn_record_addc(8,fn_meterInfo$('Meter Number',z$,'WA'))         ! Meter.Meter Number
+	fn_record_addc(12,fn_meterInfo$('Meter Number',z$,'WA'))         ! Meter.Meter Number
 	fn_record_write(h_out)
 fnend
 def fn_readyKamstrup(h_out,account$*10,srvCode$*2)
@@ -899,7 +899,7 @@ def fn_readyKamstrup(h_out,account$*10,srvCode$*2)
 	fn_record_addc(15,tmpZip$  )                                        ! Zip
 	fn_record_addn( 3,route    )                                        ! Route Number
 	fn_record_addn( 7,sequence )                                        ! Sequence
-	fn_record_addc( 8,fn_meterInfo$('Meter Number',account$,srvCode$))  ! Meter.Meter Number
+	fn_record_addc(12,fn_meterInfo$('Meter Number',account$,srvCode$))  ! Meter.Meter Number
 	fn_record_addC(12,fn_meterInfo$('longitude',account$,srvCode$)    )
 	fn_record_addC(12,fn_meterInfo$('latitude' ,account$,srvCode$)    )
   fn_record_addN(10,fn_serviceDataN('prior','reading',srvCode$)     ) ! Prev Read
