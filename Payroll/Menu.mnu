@@ -37,11 +37,11 @@ Annual
 >Print 1099 Forms                           ^ Payroll\*
 >Electronic 401K                            ^ Payroll\*
 Print
->Designed Reports                           ^ acsPR\newprRpt3
+>User Designed Reports                      ^ Payroll\*
+>User Designed Reports Proof List           ^ acsPR\newprRpt4
 >Employee Review Register                   ^ Payroll\*
 >Workmans Compensation Report               ^ Payroll\*
 >Labels                                     ^ Payroll\Labels
->User Designed Reports Proof List           ^ acsPR\newprRpt4
 >Input Worksheet                            ^ Payroll\*
 >Active Employee List                       ^ Payroll\*
 >Direct Deposit List                        ^ Payroll\*
