@@ -83,7 +83,7 @@ fnInvoiceOpen
 	! /r fnend
 
 
-fnInvoiceClose(invDateMmDdYy)
+fnInvoiceClose(invDateMmDdYy, 'ACS Invoices')
 
 execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
 execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'

@@ -195,6 +195,7 @@ def fn_setupClient ! ** set up for new clients
 		!   fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
 		fn_setupClient_add("Findlay" ,1700,34132)
 		!   fn_setupClient_add("Franklin and Son" ,1870,32454)
+		fn_setupClient_add("Framemasters" ,1864,0)
 		fn_setupClient_add("Franklin Co Hosp" ,1876,33668)
 		!   fn_setupClient_add("Franklinton" ,1876,0) ! Town of
 		fn_setupClient_add("French Settlement" ,1880,33380)

@@ -9,18 +9,22 @@ fnend
 def fn_invoiceOpen
 	! this function does not seem to be necessary, but we'll keep it in place, because i feel like it
 fnend
-def library fnInvoiceClose(invDate)
+def library fnInvoiceClose(invDate; filenameAddOn$*128)
 	if ~setup then fn_setup
-	fnInvoiceClose=fn_invoiceClose(invDate)
+	fnInvoiceClose=fn_invoiceClose(invDate, filenameAddOn$)
 fnend
-def fn_invoiceClose(invDate; ___,invoiceFilenameBase$*64)
+def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	close #hCollection:
 	close #hPrintCollection:
 	hCollection=hPrintCollection=0
 
 	invoiceFilenameBase$='ACS Invoice '
 	invoiceFilenameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
+	if trim$(filenameAddOn$)<>'' then 
+		invoiceFilenameBase$&=' - '&trim$(filenameAddOn$)
+	end if
 	invoiceFilenameBase$&='.pdf'
+	
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\'&invoiceFilenameBase$)
 	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
 	fnCopy(tmpPrintCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
