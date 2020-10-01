@@ -1,4 +1,4 @@
-! Replace S:\acsUB\printbill
+
 fn_setup
 fnTop(program$)
 ! r: Direct clients to the (basic) PrintBill_Basic routine (below) or their custom bill program
@@ -184,6 +184,7 @@ PrintBill_Basic: ! r: set prefrences for clients
 	else if env$('client')='Edison' then 
 		usPostagePermitNumber=1
 		penaltyFlatAmount=5
+		relaceBulkSortCodeWithCustName=1
 	else if env$('client')='Thomasboro' then ! added 7/25/2020
 		poundBeforeAccount$='#' ! only for diff - making sure things match - then take it back out. it's lame
 		usPostagePermitNumber=1
@@ -664,7 +665,16 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	fnpa_fontbold
 	fnpa_txt(at$(2),xmargin+6,lyne*2+1+ymargin-.2)
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
-	fnpa_txt(poundBeforeAccount$&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
+	if relaceBulkSortCodeWithCustName then
+		fnpa_txt(poundBeforeAccount$&trim$(z$),xmargin+4,lyne*5+ymargin)
+		fnpa_fontsize(8)
+		fnpa_txt(pe$(1)(1:20),xmargin+28,lyne*5+ymargin)
+		fnpa_fontsize
+	else 
+		fnpa_txt(poundBeforeAccount$&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
+	end if
+
+	
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
 	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
 	if enableIsDueNowAndPayable>0 then
