@@ -156,7 +156,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,invNum$*12,actNum$,mat bill
 		end if
 	next j1
 	if pbal then
-		pr #out: '[pos(+0,+7)]Previous Balance [pos(+0,+34)][right]'&cnvrt$('pic(zzz,zzz,zz#.##)',pbal)
+		pr #out: '[pos(+0,+7)]Previous Balance [pos(+0,+34)][right]'&cnvrt$('pic(---,---,--#.##)',pbal)
 		totalAmt+=pbal
 	end if
 	pr #out: ''
