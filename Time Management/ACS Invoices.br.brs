@@ -53,8 +53,10 @@ fnInvoiceOpen
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 		client_id=val(client_id$)
 		
-		if client_id=3320 then pr 'omaha' : pause
-		if client_id=3379 then pr 'Kathy Bacon' : pause
+		if client_id=3320 then pr '3320 - omaha' : pause
+		if client_id=3379 then pr '3379 - Kathy Bacon' : pause
+		if client_id=3385 then pr '3385 - Evelyn Pareya' : pause
+		if client_id=3045 then pr '3045 - Moweaqua' : pause
 		
 		dim iv$*12
 		iv$=rpad$(str$(invoice_number),12)
