@@ -60,7 +60,7 @@ fnInvoiceOpen
 		
 		dim iv$*12
 		iv$=rpad$(str$(invoice_number),12)
-		restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): nokey EoSupport
+		restore #hSupport,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
 		do
 			read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
 			cln=val(cln$)
@@ -69,13 +69,16 @@ fnInvoiceOpen
 				needsRenewal=0 ! if it expires this month
 				if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
 
-				if stm$='Mo' and needsRenewal then pr 'monthly bill encountered.  please test code before accepting.' : pause
+				if stm$='Mo' and needsRenewal then 
+					pr 'monthly bill encountered.  please test code before accepting.'
+					pause
+				end if
 
 				if needsRenewal then
 						invTotal+=fn_billForMaintenance(stm$,scode$,scode,client_id,supCost,invTotal,inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$)
 				end if
 			end if
-		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
+		loop while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
 		EoSupport: !
 
 		fn_print_inv
