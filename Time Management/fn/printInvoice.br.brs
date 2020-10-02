@@ -1,5 +1,4 @@
-fn_setup
-fn_printInvoice
+pr 'program not indended to be run directly'
 end
 
 def library fnInvoiceOpen

@@ -10,7 +10,7 @@ File
 >Unbilled Transactions (TMTrans Hamster)          ^ acsTM\TMTrans
 >Support                                          ^ acsTM\*
 >>Update Support Expiration Date                  ^ Time Management\*
->Support2                                         ^ acsTM\Support2
+>Support2                                         ^ acsTM\*
 >Category                                         ^ Time Management\*
 >Service Code                                     ^ acsTM\svmaint
 >Invoice Description                              ^ acsTM\ivdmaint
@@ -46,7 +46,7 @@ Monthly
 ! >Standard Charges                               ^ acsTM\arstdchg
 Print
 ! >AR Transaction Listing                         ^ acsTM\artrlist
->Statements                                       ^ acsTM\arprtbil
+! >Statements                                       ^ acsTM\arprtbil
 ! >AR Aged Trial Balance                          ^ acsTM\artb
 ! >Journals                                       ^ acsTM\arjourn
 >ACS Invoices                                     ^ Time Management\*

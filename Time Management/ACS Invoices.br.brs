@@ -28,8 +28,8 @@ fnInvoiceOpen
 	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,input,keyed
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
-	open #h_support=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
-	F_support: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
+	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
+	Fsupport: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
@@ -52,22 +52,25 @@ fnInvoiceOpen
 	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 		client_id=val(client_id$)
+		
+		if client_id=3320 then pr 'omaha' : pause
+		if client_id=3379 then pr 'Kathy Bacon' : pause
+		
 		dim iv$*12
 		iv$=rpad$(str$(invoice_number),12)
-		restore #h_support: ! ,key>=lpad$(trim$(client_id$),kln(h_support)): nokey EoSupport
+		restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): nokey EoSupport
 		do
-			read #h_support,using F_support: cln$,scode,scode$,stm$,sup_exp_date,supData_cost eof EoSupport
+			read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
 			cln=val(cln$)
 			!     if client_id=918 then pr 'cln=';cln;'client_id=';client_id ! pause
 			if cln=client_id then
-
 				needsRenewal=0 ! if it expires this month
 				if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
 
 				if stm$='Mo' and needsRenewal then pr 'monthly bill encountered.  please test code before accepting.' : pause
 
 				if needsRenewal then
-						invTotal+=fn_billForMaintenance(stm$,scode$,scode,client_id,supData_cost,invTotal,inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$)
+						invTotal+=fn_billForMaintenance(stm$,scode$,scode,client_id,supCost,invTotal,inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$)
 				end if
 			end if
 		loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
@@ -117,12 +120,12 @@ do
 loop
 ! /r
 
-def fn_billForMaintenance(stm$,scode$,scode,client_id,supData_cost,&invTotal,&inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$; ___,returnN)
-	if supData_cost=0 then supData_cost=fn_price(scode$,stm$)
-	if supData_cost=0 then pr 'zero price???' : pause
+def fn_billForMaintenance(stm$,scode$,scode,client_id,supCost,&invTotal,&inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$; ___,returnN)
+	if supCost=0 then supCost=fn_price(scode$,stm$)
+	if supCost=0 then pr 'zero price???' : pause
 
-	if supData_cost>0 then
-		returnN=supData_cost
+	if supCost>0 then
+		returnN=supCost
 		inv_line+=1
 
 		if stm$='An' then
@@ -145,7 +148,7 @@ def fn_billForMaintenance(stm$,scode$,scode,client_id,supData_cost,&invTotal,&in
 				pause
 			end if
 		end if
-		inv_amt(inv_line)=supData_cost
+		inv_amt(inv_line)=supCost
 		inv_category(inv_line)=6
 		inv_service_code(inv_line)=scode
 		inv_gl$(inv_line)='  0  1160  0'
@@ -313,15 +316,15 @@ def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under main
 			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
 
 			if inpX(7)<>2 then
-				read #h_support,using F_support,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supData_cost nokey BfhGo
+				read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supCost nokey BfhGo
 				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
 				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
 			end if
 
 			BfhGo: !
-			supData_cost=inpX(5)
+			supCost=inpX(5)
 
-			invTotal+=supData_cost
+			invTotal+=supCost
 			inv_line+=1
 			! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
 			if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
