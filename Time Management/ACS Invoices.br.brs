@@ -21,24 +21,19 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 ! fnAutomatedSavePoint('before')                            ! these were nice ideas when the data wasnt in core.
 
 ! /r
-fnStatus('producing Invoice Archive...')
-fnInvoiceOpen
-	! fn_produceInvoices
-	! r: def fn_produceInvoices
+! r: main loop (produceInvoices)
+	fnStatus('producing Invoice Archive...')
 	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,input,keyed
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
 	Fsupport: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
-	! dim timesheet$(0)*128
-	! dim timesheetN(0)
-	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	! fnIndex('TMSHT[wsid]','TMSHT-IDX[wsid]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
-	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
 
 	fnStatus('Printing Invoices...')
+	fnInvoiceOpen
 
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
 	dim cde$(30)*6
@@ -53,118 +48,226 @@ fnInvoiceOpen
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 		client_id=val(client_id$)
 		
-		if client_id=3320 then pr '3320 - omaha' : pause
-		if client_id=3379 then pr '3379 - Kathy Bacon' : pause
-		if client_id=3385 then pr '3385 - Evelyn Pareya' : pause
-		if client_id=3045 then pr '3045 - Moweaqua' : pause
+		! if client_id=4132 then pbal+=  3077
+		! if client_id=4260 then pbal+=  2054
+		! if client_id=2070 then pbal+=   254
+		! if client_id=3045 then pbal+=  1134
+		! if client_id=3385 then pbal+=   755
 		
-		dim iv$*12
-		iv$=rpad$(str$(invoice_number),12)
-		restore #hSupport,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
-		do
-			read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
-			cln=val(cln$)
-			!     if client_id=918 then pr 'cln=';cln;'client_id=';client_id ! pause
-			if cln=client_id then
-				needsRenewal=0 ! if it expires this month
-				if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
-
-				if stm$='Mo' and needsRenewal then 
-					pr 'monthly bill encountered.  please test code before accepting.'
-					pause
-				end if
-
-				if needsRenewal then
-						invTotal+=fn_billForMaintenance(stm$,scode$,scode,client_id,supCost,invTotal,inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$)
-				end if
-			end if
-		loop while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
-		EoSupport: !
-
+		
+		! if client_id=3320 then pr '3320 - omaha' : pause
+		! if client_id=3379 then pr '3379 - Kathy Bacon' : pause
+		! if client_id=3385 then pr '3385 - Evelyn Pareya' : pause
+		! if client_id=3045 then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
+		! if client_id=4132 then pr '4132 - Stern' : pause
+		
+		
+		
+		fn_billforMaint(invTotal)
+		fn_billForNonMaint(invTotal)
+		! if invTotal then
+		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
+		! end if
 		fn_print_inv
+
 	loop
 	EoClient: !
-	close #hTimeSheet:
+	! pause
 	close #h_ivnum:
 	close #hClient:
 	close #h_tmwk2:
-	! /r fnend
-
-
-fnInvoiceClose(invDateMmDdYy, 'ACS Invoices')
-
-execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
-execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
-execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
-
-fnStatus('producing Summary...')
-fn_summaryRelease
-
-
-! r: final screen
-do
-	fntos : lc=0
-	fnOpt(lc+=1,41,'Merge Invoices and Email Queued Invoices',1)
-	resp$(1)='True'
-	fnOpt(lc+=1,1,'Merge Invoices only')
-	resp$(2)='False'
-	fnOpt(lc+=1,1,'Stop (neither merge, nor email)')
-	resp$(3)='False'
-	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
-	if ckey=5 or resp$(3)='True' then
-		goto Xit
-	else if resp$(1)='True' then
-		fnEmailQueuedInvoices(str$(invoiceDateCcyymmdd))
-		fnMergeInvoices
-		goto Xit
-	else if resp$(2)='True' then
-		fnMergeInvoices
-		goto Xit
-	end if
-loop
+	fnInvoiceClose(invDateMmDdYy, 'ACS Invoices')
 ! /r
 
-def fn_billForMaintenance(stm$,scode$,scode,client_id,supCost,&invTotal,&inv_line,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$; ___,returnN)
-	if supCost=0 then supCost=fn_price(scode$,stm$)
-	if supCost=0 then pr 'zero price???' : pause
 
-	if supCost>0 then
-		returnN=supCost
-		inv_line+=1
-
-		if stm$='An' then
-			inv_item$(inv_line)='Annual'
-		else if stm$='Qt' then
-			inv_item$(inv_line)='Quarterly'
-		else if stm$='Mo' then
-			inv_item$(inv_line)='Monthly'
-		else
-			inv_item$(inv_line)='(unexpected timeframe)'
-			pr inv_item$(inv_line) : pause
+! r: finalize
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
+	
+	fnStatus('producing Summary...')
+	fn_summaryRelease
+	
+	do
+		fnToS
+		fnOpt(1,41,'Merge Invoices and Email Queued Invoices',1)
+		resp$(1)='True'
+		fnOpt(2,1,'Merge Invoices only')
+		resp$(2)='False'
+		fnOpt(3,1,'Stop (neither merge, nor email)')
+		resp$(3)='False'
+		fnCmdSet(2)
+		fnAcs(mat resp$,ckey)
+		if ckey=5 or resp$(3)='True' then
+			goto Xit
+		else if resp$(1)='True' then
+			fnEmailQueuedInvoices(str$(invoiceDateCcyymmdd))
+			fnMergeInvoices
+			goto Xit
+		else if resp$(2)='True' then
+			fnMergeInvoices
+			goto Xit
 		end if
-		if scode$='U4' then
-			inv_item$(inv_line)=inv_item$(inv_line)&' Maintenance for (UB) Hand Held Add-On'
-		else
-			inv_item$(inv_line)=inv_item$(inv_line)&' Maintenance for '&trim$(fnSystemNameFromId$(scode))
-			if trim$(fnSystemNameFromId$(scode))='' then
-				pr ' sending blank system name  scode='&str$(scode)
-				pr '   client_id=';client_id
+	loop
+! /r
+
+def fn_billForMaint(&invTotal)
+	! loads of locals
+	dim iv$*12
+	iv$=rpad$(str$(invoice_number),12)
+	restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
+	do
+		read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
+		cln=val(cln$)
+
+		if cln=client_id then
+			needsRenewal=0 ! if it expires this month
+			if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
+
+			if stm$='Mo' and needsRenewal then 
+				pr 'monthly bill encountered.  please test code before accepting.'
 				pause
 			end if
+
+
+			if needsRenewal then
+
+				if supCost=0 then supCost=fn_price(scode$,stm$)
+				if supCost=0 then pr 'zero price???' : pause
+			
+				if supCost>0 then
+					returnN=supCost
+					invLine+=1
+			
+					if stm$='An' then
+						inv_item$(invLine)='Annual'
+					else if stm$='Qt' then
+						inv_item$(invLine)='Quarterly'
+					else if stm$='Mo' then
+						inv_item$(invLine)='Monthly'
+					else
+						inv_item$(invLine)='(unexpected timeframe)'
+						pr inv_item$(invLine) : pause
+					end if
+					if scode$='U4' then
+						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for (UB) Hand Held Add-On'
+					else
+						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemNameFromId$(scode))
+						if trim$(fnSystemNameFromId$(scode))='' then
+							pr ' sending blank system name  scode='&str$(scode)
+							pr '   client_id=';client_id
+							pause
+						end if
+					end if
+					inv_amt(invLine)=supCost
+					inv_category(invLine)=6
+					inv_service_code(invLine)=scode
+					inv_gl$(invLine)='  0  1160  0'
+				end if
+
+				invTotal+=supCost
+
+				if debug then pr '   ';client_id;' billForMaint Match encountered ';supCost
+			end if
 		end if
-		inv_amt(inv_line)=supCost
-		inv_category(inv_line)=6
-		inv_service_code(inv_line)=scode
-		inv_gl$(inv_line)='  0  1160  0'
-	end if
-	fn_billForMaintenance=returnN
+	loop ! while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
+	EoSupport: !
 fnend
+
+def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not under maintenance to maintenance invoices
+	! dim timesheet$(0)*128
+	! dim timesheetN(0)
+	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
+	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
+	dim inpX(7)
+	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
+	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
+	if inpX(1)=val(client_id$) then
+		do
+			if b8=0 then b8=19
+			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
+			! fn_billForHours(client_id$)
+			! def fn_billForHours(client_id$) ! ,mat inpX,etc...
+			if invLine=30 then fn_print_inv ! pr invoice if more than 20 entries
+			if invLine>29 then pause
+			spk$=' '&client_id$&cnvrt$('n 2',b8)
+
+			if inpX(7)=2 then goto BfhGo ! always bill modifications
+
+			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
+
+			if inpX(7)<>2 then
+				read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supCost nokey BfhGo
+				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
+				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
+			end if
+
+			BfhGo: !
+			supCost=inpX(5)
+
+			invTotal+=supCost
+			invLine+=1
+			! if val(client_id$)=3828 then pr 'schachtner encountered invLine=';invLine : pause
+			if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
+				!     pause  ! inv_item$(invLine)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inpX(6))
+				inv_item$(invLine)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$('pic(##/##/##)',inpX(6))
+			else if inpX(7)=2 then
+				inv_item$(invLine)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' programming on '&cnvrt$('pic(##/##/##)',inpX(6))
+			else
+				inv_item$(invLine)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' support on '&cnvrt$('pic(##/##/##)',inpX(6))
+			end if
+
+			inv_amt(invLine)=inpX(5)
+			inv_category(invLine)=6
+			inv_service_code(invLine)=b8
+			inv_gl$(invLine)='  0  1160  0'
+			BfhXit: !
+			! fnend
+
+			read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
+		loop while inpX(1)=client_id
+	end if
+	TM_XIT2: !
+	close #hTimeSheet:
+fnend
+def fn_print_inv
+	if debug then pr 'debug print_inv' :  pause
+	if enableMinimumMonthlyBill and invTotal>0 and invTotal<100 then
+		invLine+=1
+		if invLine<30 then
+			inv_item$(invLine)='Minimum Monthly Billing of $100.00'
+			inv_amt(invLine)=100-sum(mat inv_amt)
+			invTotal+=inv_amt(invLine)
+			inv_service_code(invLine)=19
+			inv_gl$(invLine)='  0  1160  0'
+		end if
+	end if
+	if invTotal=>1 then
+		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
+		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
+	end if
+	if invTotal=>1 or pbal=>1 then
+		fn_summaryAccumulate
+		fnStatus('adding an $'&str$(sum(mat inv_amt))&' invoice for '&client_id$&' - '&client_addr$(1))
+		! pr '  adding invoice '&iv$&' for '&client_id$
+		fnInvoiceAdd(client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
+		invoice_number+=1
+	end if
+	mat inv_item$=(' ')
+	mat inv_category=(0)
+	mat inv_service_code=(0)
+	mat inv_gl$=('')
+	mat inv_amt=(0)
+	invLine=invTotal=0
+fnend
+
 
 Xit: fnXit
 dim resp$(30)*128
 def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
-	if ~invDateMmDdYy then invDateMmDdYy=date(fnEndOfMonth(days(date$)-15),'mmddyy')
+	lookbackDays=15
+
+	if ~invDateMmDdYy then invDateMmDdYy=date(fnEndOfMonth(days(date$)-lookbackDays),'mmddyy')
 	fntos : rc=lc=0
 
 	fnlbl(lc+=1, 2,'Invoices for Month:'          ,24,1)
@@ -208,26 +311,18 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 		read #tce_h_from,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		tce_key$=cnvrt$('N 5',inpX(1))&cnvrt$('N 2',b8)&cnvrt$('N 6',inpX(6))
-		!   IF inpX(1)=2040 then pause
-		read #tce_h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey TCE_TO_ADD
+		read #tce_h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey CitAdd
 		inpX(3)+=tce_to_inp(3) ! time
 		inpX(5)+=tce_to_inp(5) ! charge
 		rewrite #tce_h_to,using F_TIME,key=tce_key$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
-		!   if inpX(1)=4568 then rewr_count+=1
-		goto TCE_NEXT
-		TCE_TO_ADD: !
+		goto CitNext
+		CitAdd: !
 		write #tce_h_to,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
-		!   if inpX(1)=4568 then wr_count+=1
-		TCE_NEXT: !
-		! if inpX(1)=4568 then pr '4568 (';b8;') had a time of ';inpX(3);' on ';inpX(6);' charge=';inpX(5)
+		CitNext: !
 	loop
 	TCE_EOF: !
 	close #tce_h_from:
 	close #tce_h_to:
-	! pr 'rewr_count=';rewr_count
-	! pr '  wr_count=';wr_count
-	! pause
-
 fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
@@ -238,7 +333,7 @@ def fn_summaryAccumulate
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'
 	end if
 	! SI_ADD: !
-	if (pbal+invTotal)>1 then 
+	if pbal or invTotal then 
 		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,piv$
 		Fsummary: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=invTotal
@@ -274,85 +369,6 @@ def fn_summaryRelease
 	! pause
 fnend
 
-def fn_print_inv
-	fn_billForNonMaint(hTimeSheet)
-	if enableMinimumMonthlyBill and invTotal>0 and sum(mat inv_amt)<100 then
-		inv_line+=1
-		if inv_line<30 then
-			inv_item$(inv_line)='Minimum Monthly Billing of $100.00'
-			inv_amt(inv_line)=100-sum(mat inv_amt)
-			invTotal+=inv_amt(inv_line)
-			inv_service_code(inv_line)=19
-			inv_gl$(inv_line)='  0  1160  0'
-		end if
-	end if
-	if invTotal=>1 then
-		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
-		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
-	end if
-	if invTotal=>1 or pbal=>1 then
-		fn_summaryAccumulate
-		fnInvoiceAdd(client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
-		invoice_number+=1
-	end if
-	mat inv_item$=(' ')
-	mat inv_category=(0)
-	mat inv_service_code=(0)
-	mat inv_gl$=('')
-	mat inv_amt=(0)
-	inv_line=invTotal=0
-fnend
-def fn_billForNonMaint(hTimeSheet; ___,wo_desc$*30) ! add charges not under maintenance to maintenance invoices
-	dim inpX(7)
-	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
-	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
-	if inpX(1)=val(client_id$) then
-		do
-			if b8=0 then b8=19
-			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
-			! fn_billForHours(client_id$)
-			! def fn_billForHours(client_id$) ! ,mat inpX,etc...
-			if inv_line=30 then fn_print_inv ! pr invoice if more than 20 entries
-			if inv_line>29 then pause
-			spk$=' '&client_id$&cnvrt$('n 2',b8)
-
-			if inpX(7)=2 then goto BfhGo ! always bill modifications
-
-			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
-
-			if inpX(7)<>2 then
-				read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supCost nokey BfhGo
-				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
-				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
-			end if
-
-			BfhGo: !
-			supCost=inpX(5)
-
-			invTotal+=supCost
-			inv_line+=1
-			! if val(client_id$)=3828 then pr 'schachtner encountered inv_line=';inv_line : pause
-			if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
-				!     pause  ! inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inpX(6))
-				inv_item$(inv_line)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$('pic(##/##/##)',inpX(6))
-			else if inpX(7)=2 then
-				inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' programming on '&cnvrt$('pic(##/##/##)',inpX(6))
-			else
-				inv_item$(inv_line)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' support on '&cnvrt$('pic(##/##/##)',inpX(6))
-			end if
-
-			inv_amt(inv_line)=inpX(5)
-			inv_category(inv_line)=6
-			inv_service_code(inv_line)=b8
-			inv_gl$(inv_line)='  0  1160  0'
-			BfhXit: !
-			! fnend
-
-			read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
-		loop while inpX(1)=client_id
-	end if
-	TM_XIT2: !
-fnend
 
 def fn_price(scode$,stm$; ___,h,returnN,which)
 	! retains local setupPrice, mat priceKey$,mat price,priceCount,form$,mat price$,mat priceN
@@ -387,17 +403,18 @@ fnend
 def fn_mergeInvoices
 
 	! fnTop(program$,cap$='Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]')
-	dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,xb(8),sc$*4
+	dim ta(25,2),fb(25),e$*9,xb(8),sc$*4
 	! clmstr dims
 	dim ca(10),sc(10)
 	fnStatus('Merging Invoices...')
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
 	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
 
+	dim k$*5
+	dim iv$*12
 	dim cde$(30)*6
 	dim id$(30)*128
 	dim inv_amt(30)
-	dim tmwk_sc(30)
 	dim ct(30)
 	dim tmwk2_sc(30)
 	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative

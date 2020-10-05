@@ -1682,9 +1682,9 @@ fnend
 		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceOpen
 		fnInvoiceOpen=fnInvoiceOpen
 	fnend
-	def library fnInvoiceAdd(actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
+	def library fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
 		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceAdd
-		fnInvoiceAdd=fnInvoiceAdd(actnum$,mat billto$,inv_num$,inv_date,mat desc$,mat amt,pbal)
+		fnInvoiceAdd=fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
 	fnend
 	def library fnInvoiceClose(inv_date; filenameAddOn$*128)
 		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceClose
