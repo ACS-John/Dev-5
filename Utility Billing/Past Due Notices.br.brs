@@ -150,7 +150,7 @@ PrintPastDueNotice: ! r:
 	else
 		fn_prnt1
 	end if
-	fn_report_add
+	if ~reminder then fn_report_add
 	! fn_listFile_add(z$)
 goto PRINT_NEXT ! /r
 def fn_open_template
