@@ -159,7 +159,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,invNum$*12,actNum$,mat bill
 		totalAmt+=pbal
 	end if
 	pr #out: ''
-	pr #out: '[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]'&cnvrt$('pic($zzz,zzz,zz#.##)',totalAmt)
+	pr #out: '[LEFT][bold][pos(+0,+47)] Total: [/bold][RIGHT][pos(+0,+6)]'&cnvrt$('pic($---,---,--#.##)',totalAmt)
 	pr #out: ''
 	pr #out: '[pos(+0,-2)]'&pdfline$
 
