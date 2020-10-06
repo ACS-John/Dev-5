@@ -334,7 +334,7 @@ def fn_summaryAccumulate
 	end if
 	! SI_ADD: !
 	if pbal or invTotal then 
-		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,piv$
+		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,iv$
 		Fsummary: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=invTotal
 		totalPreviousBalances+=pbal
