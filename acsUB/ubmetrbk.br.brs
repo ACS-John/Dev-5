@@ -175,12 +175,12 @@ LOOP_TOP: ! r: main loop
 	end if 
 	if skipmeter=0 then 
 		if printprior=1 then 
-			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),f$(3),e$(1)(1:20),mat x_service$
 		else if usedcolumn=0 then 
-			pr #255,using L1032: z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+			pr #255,using L1032: z$,e$(2)(1:18),f$(3),e$(1)(1:20),mat x_service$
 			L1032: form pos 1,c 10,x 1,c 18,x 1,c 12,x 1,c 20,x 1,x_service*c 26
 		else if usedcolumn=1 then 
-			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),f$(3),e$(1)(1:20),mat x_service$
 		end if 
 	else if printprior=1 then 
 		pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
