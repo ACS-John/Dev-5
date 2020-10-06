@@ -56,6 +56,11 @@
 	resp$(resp_print_phone:=respc+=1)="False"
 	fnChk(10,29,"Print Cell")
 	resp$(resp_print_cell:=respc+=1)="False"
+
+	fnChk(11,29,"Print Email")
+	resp$(resp_print_email:=respc+=1)="False"
+
+
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
@@ -77,8 +82,9 @@
 	if resp$(4)="True" then ti3=1 else ti3=0
 	if resp$(5)="True" then print_address=1 else print_address=0
 	if resp$(resp_print_balance)="True" then print_balance=1 else print_balance=0
-	if resp$(resp_print_phone)="True" then print_phone=1 else print_phone=0
-	if resp$(resp_print_cell)="True" then print_cell=1 else print_cell=0
+	if resp$(resp_print_phone)  ="True" then print_phone=1 else print_phone=0
+	if resp$(resp_print_cell)   ="True" then print_cell=1 else print_cell=0
+	if resp$(resp_print_email)  ="True" then print_email=1 else print_email=0
 	if resp$(3)=item2$(1) then
 		ti2=1
 	else if resp$(3)=item2$(2) then
@@ -103,7 +109,8 @@ ReportInit: ! r:
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",internal,input,keyed
 		if q0=4 then gosub OPEN_GRID ! OPEN GRID DISPLAY FILE
 	end if
-	F_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30,c 12,pos 1966,c 12
+	dim email$*30
+	F_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30,c 12,pos 1966,c 12,c 30
  
 	fnopenprn
 	gosub HEADER
@@ -121,13 +128,13 @@ LOOP_TOP: ! r:
 	end if
 	read #6,using 'form pos 1,c 10',rec=addr: z$ noRec LOOP_TOP
 	L520: !
-	read #1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,bal,route,sequence,extra$(1),extra$(2),extra$(8) eof DONE nokey LOOP_TOP
+	read #1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,bal,route,sequence,extra$(1),extra$(2),extra$(8),email$ eof DONE nokey LOOP_TOP
 	if ti2=2 and final=0 then goto L490 ! skip active
 	if ti2=4 or ti2=5 then gosub CHECK_ALTERNATE
 	goto L590
  
 	L570: !
-	read #1,using F_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1),extra$(2),extra$(8) eof DONE
+	read #1,using F_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1),extra$(2),extra$(8),email$ eof DONE
 	if ti2=2 and (final=0 or final=3) then ! skip active (including the final code threes who are active but snow birding
 		goto L570
 	end if
@@ -171,6 +178,9 @@ LOOP_TOP: ! r:
 	end if
 	if print_cell=1 and trim$(extra$(8))<>'' then
 		pr #255,using "form pos 21,c 31": '   Cell: '&extra$(8)
+	end if
+	if print_email=1 and trim$(email$)<>'' then
+		pr #255,using "form pos 21,c 40": '   Email: '&email$
 	end if
 goto LOOP_TOP ! /r
  
