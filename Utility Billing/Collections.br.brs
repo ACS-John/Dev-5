@@ -49,7 +49,7 @@ ScreenMenu1: ! r:
 			mat m1_item$(cHdrItem)
 			fnflexadd1(mat m1_item$)
 			L1070: !
-		loop  ! next j
+		loop
 		L1080: !
 		x$=rcpt$=''
 		transAmount=transDate=transType=postingCodeUnused=escrow=0
@@ -59,16 +59,12 @@ ScreenMenu1: ! r:
 		resp_selectedRecordNumber=rc+=1 ! resp$(1) returns the record number of the selected entry
 		fnLbl(1,1,"Total Collections:",22,1)
 		fnLbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1)
-		! fnTxt(1,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCollections)
 		fnLbl(2,1,"Total Credit Memos:",22,1)
 		fnLbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1)
-		! fnTxt(2,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalCreditMemos)
 		fnLbl(3,1,"Total Debit Memos:",22,1)
 		fnLbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1)
-		! fnTxt(3,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalDebitMemos)
 		fnLbl(4,1,"Total Account Numbers:",22,1)
 		fnLbl(4,24,str$(totalacct),15,1)
-		! fnTxt(4,24,15,15,1,"10",1) : resp$(rc+=1)=str$(totalacct)
 		if lrec(hTransUnposted)<1 then
 			fnCmdKey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
 			fnCmdKey("&Close",5,0,1,"Returns to menu.")
@@ -144,15 +140,15 @@ ScreenAdd: ! r:
 	fnLbl(3,1,"Amount:",25,1)
 	fnTxt(3,27,8,0,0,"32")
 	if ~do_not_blank_rcpt then resp$(respc:=1)=str$(x(2))
-	!
+	
 	fnLbl(4,1,"Date (mmddyy):",25,1)
 	fnTxt(4,27,8,0,0,"1001")
 	if ~do_not_blank_rcpt then resp$(respc:=2)=str$(x(3))
-	!
+	
 	fnLbl(5,1,"Receipt Number (CA=Cash):",25,1)
 	fnButton(5,40,"Cash",7,"(F7) Set Receipt Number to CA (for Cash)")
 	fnTxt(5,27,9)
-	!
+	
 	fnLbl(1,1,"Entry Type:",25,1)
 	if ~do_not_blank_rcpt then resp$(respc:=3)=""
 	fncomboa("coll_type_rdc",1,27,mat coll_type_option$)
@@ -162,25 +158,25 @@ ScreenAdd: ! r:
 		next ax
 		if verify=0 then resp$(respc:=4)=coll_type_option$(1)
 	end if
-	!
+	
 	fnLbl(2,1,"Account:",25,1)
 	fnTxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
 	if ~do_not_blank_rcpt then resp$(respc:=5)=z$
-	!
+	
 	col3_pos=50 : col4_pos=76
-	!
+	
 	fnLbl(1,col3_pos,"Name:",25,1)
 	fnTxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
 	if ~do_not_blank_rcpt then resp$(respc:=6)=trim$(nam$)
-	!
+	
 	fnLbl(2,col3_pos,"Balance:",25,1)
 	fnTxt(2,col4_pos,10,10,1,"",1,"Account Balance (Press Cancel to Re-Select)")
 	if ~do_not_blank_rcpt then resp$(respc:=7)=cnvrt$("N 10.2",bal)
-	!
+	
 	fnLbl(3,col3_pos,"Billed:",25,1)
 	fnTxt(3,col4_pos,8,8,1,"1",1)
 	resp$(respc:=8)=str$(db1)
-	!
+	
 	if uprc$(escrow$)="Y" then
 		fnLbl(4,col3_pos,"Escrow Balance:",25,1)
 		fnTxt(4,col4_pos,10,10,1,"10",1)
@@ -194,7 +190,6 @@ ScreenAdd: ! r:
 	fnAcs(mat resp$,ckey,1)
 
 	do_not_blank_rcpt=0
-
 
 	if ckey=2 then ! 2=back
 		goto ScreenSelectAccount
@@ -221,40 +216,40 @@ ScreenAdd: ! r:
 		goto ScreenAdd
 	end if
 	! r: validate
-	! r: transaction date is within the last 7 days else ask confirmation
-	if days(x(3),'mmddyy')>days(date) or days(x(3),'mmddyy')<days(date)-7 then ! warning if collection date greater than to today's date of less that one week ago
-		if holdbaddate<>x(3) then ! had warning on same date, don't ask again
-			mat mesg$(3)
-			mesg$(1)="The collection date of "&resp$(2)&" appears "
-			mesg$(2)="to be wrong!  It is perhaps too old or too new."
-			mesg$(3)="Enter Yes to correct, else No to proceed."
-			fnmsgbox(mat mesg$,resp$,'',52)
-			holdbaddate=x(3)
-			if resp$="Yes" then goto ScreenAdd
+		! r: transaction date is within the last 7 days else ask confirmation
+		if days(x(3),'mmddyy')>days(date) or days(x(3),'mmddyy')<days(date)-7 then ! warning if collection date greater than to today's date of less that one week ago
+			if holdbaddate<>x(3) then ! had warning on same date, don't ask again
+				mat mesg$(3)
+				mesg$(1)="The collection date of "&resp$(2)&" appears "
+				mesg$(2)="to be wrong!  It is perhaps too old or too new."
+				mesg$(3)="Enter Yes to correct, else No to proceed."
+				fnmsgbox(mat mesg$,resp$,'',52)
+				holdbaddate=x(3)
+				if resp$="Yes" then goto ScreenAdd
+			end if
 		end if
-	end if
-	! /r
-	! r: negative numbers
-	if x(2)<=0 then
-		mat mesg$(1)
-		mesg$(1)="Negative amounts are not allowed."
-		fnmsgbox(mat mesg$)
-		goto ScreenAdd
-	end if
-	! /r
-	! r: receipt required?
-	if uprc$(receipt$)="Y" and trim$(rcpt$)="" then
-		mat mesg$(6)
-		mesg$(1)="<<<<<   NO RECEIPT # ENTERED   >>>>>!"
-		mesg$(2)="You have indicated in the company information"
-		mesg$(3)="file that you require receipt numbers. You must"
-		mesg$(4)="either enter a receipt # or change the option to"
-		mesg$(5)="prevent getting this message."
-		mesg$(6)="Take OK to continue."
-		fnmsgbox(mat mesg$)
-		goto ScreenAdd
-	end if
-	! /r
+		! /r
+		! r: negative numbers
+		if x(2)<=0 then
+			mat mesg$(1)
+			mesg$(1)="Negative amounts are not allowed."
+			fnmsgbox(mat mesg$)
+			goto ScreenAdd
+		end if
+		! /r
+		! r: receipt required?
+		if uprc$(receipt$)="Y" and trim$(rcpt$)="" then
+			mat mesg$(6)
+			mesg$(1)="<<<<<   NO RECEIPT # ENTERED   >>>>>!"
+			mesg$(2)="You have indicated in the company information"
+			mesg$(3)="file that you require receipt numbers. You must"
+			mesg$(4)="either enter a receipt # or change the option to"
+			mesg$(5)="prevent getting this message."
+			mesg$(6)="Take OK to continue."
+			fnmsgbox(mat mesg$)
+			goto ScreenAdd
+		end if
+		! /r
 	! /r
 	if ckey=1 then
 		fn_print_receipt(z$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
@@ -273,11 +268,7 @@ ScreenAdd: ! r:
 		gosub Bud1
 	! end if
 	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto ScreenSelectAccount
-	! if env$('acsDeveloper')<>'' then
-	! 	pr 'ckey=';ckey
-	! 	pr 'dev-pause DD'
-	! 	pause
-	! end if
+
 	if ckey=2 then
 		goto ScreenAdd
 	end if
@@ -409,16 +400,17 @@ Bud2: ! r: requires x1$
 	if bud1=0 then goto L5080
 	read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey L5080
 	ta1=badr(1)
-	L4820: !
-	if ta1=0 then goto L4900
-	read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=ta1: z$,mat bt1,nba noRec L4900
-	if bt1(14,1)>0 and bt1(14,1)<>transDate then goto L4890
-	if bt1(14,1)=transDate then bt1(14,1)=bt1(14,2)=0 : rewrite #h_budTrans,using "Form POS 11,2*PD 4,24*PD 5.2,2*PD 4",rec=ta1: mat bt1
-	bd1+=1 ! 7/06/05  KJ
-	if bd1=>5 then goto L4900 ! 7/06/05 kj
-	bd1(bd1)=bt1(1,2) : bd2(bd1)=ta1
-	L4890: !
-	ta1=nba : goto L4820
+	do until ta1=0
+		read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=ta1: z$,mat bt1,nba noRec L4900
+		if bt1(14,1)>0 and bt1(14,1)<>transDate then goto L4890
+		if bt1(14,1)=transDate then bt1(14,1)=bt1(14,2)=0 : rewrite #h_budTrans,using "Form POS 11,2*PD 4,24*PD 5.2,2*PD 4",rec=ta1: mat bt1
+		bd1+=1 ! 7/06/05  KJ
+		if bd1=>5 then goto L4900 ! 7/06/05 kj
+		bd1(bd1)=bt1(1,2)
+		bd2(bd1)=ta1
+		L4890: !
+		ta1=nba
+	loop
 	L4900: !
 	if bd1=0 then goto L5080
 	if bd1(1)>0 and bd1(2)=0 then bd3(1)=bd1(1): goto L5030
