@@ -329,10 +329,10 @@ Screen1: ! r:
 	else 
 		route_filter=val(resp$(respc_route))
 	end if 
-	if resp$(respc_filter_none)="True" then filter_none=1 else filter_none=0
-	if resp$(respc_filter_individuals)="True" then filter_selected_only=1 else filter_selected_only=0
-	if resp$(respc_filter_past_due)="True" then filter_past_due_only=1 else filter_past_due_only=0
-	if resp$(respc_filter_not_past_due)="True" then filter_no_past_due=1 else filter_no_past_due=0
+	if resp$(respc_filter_none        )="True" then filter_none=1          else filter_none=0
+	if resp$(respc_filter_individuals )="True" then filter_selected_only=1 else filter_selected_only=0
+	if resp$(respc_filter_past_due    )="True" then filter_past_due_only=1 else filter_past_due_only=0
+	if resp$(respc_filter_not_past_due)="True" then filter_no_past_due=1   else filter_no_past_due=0
 	for mg1_item=1 to message1_line_count
 		mg$(mg1_item)=resp$(respc_mg1(mg1_item))
 		fncreg_write('bill message '&str$(mg1_item),mg$(mg1_item))
@@ -1402,11 +1402,11 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	activity_credit =fntrans_total_as_of(z$,billing_date_prior,4)
 	activity_debit  =fntrans_total_as_of(z$,billing_date_prior,5)
 	prior_prior_balance=bal ! -g(11)
-	prior_prior_balance=prior_prior_balance-activity_charge
-	prior_prior_balance=prior_prior_balance-activity_penalty
-	prior_prior_balance=prior_prior_balance+activity_payment
-	prior_prior_balance=prior_prior_balance+activity_credit
-	prior_prior_balance=prior_prior_balance-activity_debit
+	prior_prior_balance-=activity_charge
+	prior_prior_balance-=activity_penalty
+	prior_prior_balance+=activity_payment
+	prior_prior_balance+=activity_credit
+	prior_prior_balance-=activity_debit
 	
 	! -- Printer Program for Laser 1-Per Page Utility Bills
 	! gosub PRIOR_USAGES
