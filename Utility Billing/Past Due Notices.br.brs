@@ -363,7 +363,7 @@ def fn_listFile_add(z$)
 fnend
 def fn_report_add
 	if ~h_ra then
-		open #h_ra:=fnH: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256,replace',display,output
+		open #h_ra=fnH: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256,replace',display,output
 		rc_page=0
 	end if  ! ~h_ra
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '

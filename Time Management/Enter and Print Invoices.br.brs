@@ -227,6 +227,7 @@ ScreenFinal: ! r:
 		else if chg=5 then
 			! fnEmailQueuedInvoices(email_date$)  this seems like a good idea to add here, perhaps a question like int S:\Time Management\ACS Invoices.br.brs
 			close #1:
+			close #32:
 			close #hTmpInvoice:
 			fnMergeInvoices
 			goto Xit
