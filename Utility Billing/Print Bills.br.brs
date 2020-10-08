@@ -556,13 +556,17 @@ Finis: ! r:
 	hBulk2=0
 	fn_closeBillPrinter
 	! if sum(billsPrintedCount)=0 then pct=0 else pct=billsPrintedCount(2)/sum(billsPrintedCount)*100
-	fnTos : respc=0
-	mylen=23 : mypos=mylen+2
-	fnLbl(1,1,"Total Bills Printed:",mylen,1)
-	fnTxt(1,mypos,8,0,1,"",1)
-	resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
-	fnCmdSet(52)
-	fnAcs(mat resp$,ckey)
+	if testMode then 
+		fnChain(program$)
+	else 
+		fnTos : respc=0
+		mylen=23 : mypos=mylen+2
+		fnLbl(1,1,"Total Bills Printed:",mylen,1)
+		fnTxt(1,mypos,8,0,1,"",1)
+		resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
+		fnCmdSet(52)
+		fnAcs(mat resp$,ckey)
+	end if
 goto Xit ! /r
 Xit: fnXit
 BUD1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1

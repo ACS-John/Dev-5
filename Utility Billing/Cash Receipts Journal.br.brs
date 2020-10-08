@@ -1,41 +1,43 @@
 ! formerly S:\acsUB\UBColPrn
-!
-	autoLibrary
-!
-	dim scr1$(10)*30
-	dim alloc(10)
-	dim nam$*30
-	dim route(200)
-	dim r(20,4)
-	dim hd1$*255
-	dim serviceName$(10)*20
-	dim tg(11)
-	dim resp$(7)*40
-	dim ml$(3)*90
-!
-	fnTop(program$)
+
+autoLibrary
+fnTop(program$)
+
+dim route(200)
+dim r(20,4)
+dim tg(11)
+dim resp$(7)*40
+dim ml$(3)*90
+
 ! skip_header=1 ! <--  this is really a developer only option.
-	fnGetServices(mat serviceName$)
-	gosub SCREEN1
-	hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
-	for j=1 to 10
-		x2=pos(trim$(serviceName$(j))," ",1)
-		if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
-		if trim$(serviceName$(j))<>"" then
-			scr1$(sz1+=1)=serviceName$(j)
-			hd1$=hd1$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:7)),7)&"}"
-		end if
-	next j
-	hd1$=hd1$&"  {\ul Customer Name               }"
-	mat scr1$(sz1)
-	mat alloc(sz1)
-	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-	open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-!
-	fnopenprn
-	gosub HDR
-!
+dim serviceName$(10)*20
+fnGetServices(mat serviceName$)
+
+gosub SCREEN1
+
+dim hd1$*255
+hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
+for j=1 to 10
+	x2=pos(trim$(serviceName$(j))," ",1)
+	if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
+	if trim$(serviceName$(j))<>"" then
+		scr1$(sz1+=1)=serviceName$(j)
+		hd1$&="  {\ul "&lpad$(rtrm$(serviceName$(j)(1:7)),7)&"}"
+	end if
+next j
+hd1$&="  {\ul Customer Name               }"
+dim scr1$(10)*30
+mat scr1$(sz1)
+dim alloc(10)
+mat alloc(sz1)
+open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+
+fnopenprn
+gosub HDR
+
 MAIN_LOOP_TOP: !
+	dim nam$*30
 	read #h_customer,using 'Form POS 1,C 10,POS 41,C 28,pos 1741,n 2',release: z$,nam$,extra1 eof PRTOTALS
 	restore #h_trans,key>=z$&"         ": nokey MAIN_LOOP_TOP
 READ_TRANS: !
@@ -77,8 +79,8 @@ READ_TRANS: !
 	end if
 	route(extra1)+=tamount
 	if resp$="Cancel" then goto Xit
-	goto READ_TRANS
-!
+goto READ_TRANS
+
 PGOF: ! r:
 	pr #255: newpage
 	gosub HDR
@@ -101,7 +103,7 @@ PRTOTALS: ! r:
 		next j
 	end if
 	fncloseprn
-	goto Xit ! /r
+goto Xit ! /r
 Xit: fnXit
 SCREEN1: ! r:
 	fnTos
