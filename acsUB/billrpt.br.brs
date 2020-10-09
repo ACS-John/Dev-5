@@ -69,5 +69,5 @@ L570: if d1<>0 and d1<>lastbilldate then goto REPORT
 	pr #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PGOF
 	goto REPORT
  
-include: Ertn
+include: ertn
  

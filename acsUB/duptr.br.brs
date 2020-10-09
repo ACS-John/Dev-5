@@ -187,4 +187,4 @@ def fn_filter_get_chk(txt$,tf$)
 	fnreg_write(sn$&'.'&txt$,tf$)
 	fn_filter_get_chk=dgc_return
 fnend  ! fn_filter_get_chk
-include: Ertn
+include: ertn

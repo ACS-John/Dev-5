@@ -267,4 +267,4 @@ L2240: !
 	annualb=val(resp$(4))
 	goto L940
 Xit: fnXit
-include: Ertn
+include: ertn

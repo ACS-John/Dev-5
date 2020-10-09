@@ -26,4 +26,4 @@ ENDORSE_CHECKS: !
 	fncloseprn
 	goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

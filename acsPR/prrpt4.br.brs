@@ -58,5 +58,5 @@ L570: fncloseprn
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

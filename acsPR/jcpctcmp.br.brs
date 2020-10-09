@@ -74,7 +74,7 @@ DONE: !
 	close #2:
 	goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

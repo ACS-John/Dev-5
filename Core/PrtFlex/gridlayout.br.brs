@@ -50,5 +50,5 @@ L170: fnTos(sn$="file_layout") : _
  
 Xit: stop
  
-include: Ertn
+include: ertn
  

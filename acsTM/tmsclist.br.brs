@@ -49,4 +49,4 @@ L520: fncloseprn
 goto XIT
  
 XIT: fnxit
-include: Ertn
+include: ertn

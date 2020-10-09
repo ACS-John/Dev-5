@@ -44,4 +44,4 @@ END1: !
 Xit: fnXit
 def fn_cd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 def fn_cd2(x)=(x-int(x*.0001)*10000)*10000+int(x*.0001) ! /r
-include: Ertn
+include: ertn

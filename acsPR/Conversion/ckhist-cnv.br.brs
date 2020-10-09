@@ -16,7 +16,7 @@ L110: input fields "10,43,N 5,UE,N": cno conv L110
 	execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 	goto L70
  
-include: Ertn
+include: ertn
  
 Xit: stop
  

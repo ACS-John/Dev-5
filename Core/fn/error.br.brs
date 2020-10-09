@@ -196,4 +196,4 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		if file(win)<>-1 then close #win: 
 fnend 
 
-include: Ertn
+include: ertn

@@ -44,4 +44,4 @@ def library fnemployee_srch(&x$; fixgrid)
 	if ckey=5 then x$="        " ! no one selected
 goto Xit
 Xit: close #hEmployee: : fnend 
-include: Ertn
+include: ertn

@@ -91,6 +91,6 @@ return
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  
 	fltyp$(ic+=1)='N'

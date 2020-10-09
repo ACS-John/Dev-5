@@ -63,5 +63,5 @@ def fn_add(lbl$*40,fln; field_type$,storage_length,mask)
 		mask(add_count)=mask
 fnend
  
-include: Ertn
+include: ertn
  

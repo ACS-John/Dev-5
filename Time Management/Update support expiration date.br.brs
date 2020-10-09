@@ -107,4 +107,4 @@ def fn_setup
 	buttonYN=4 : iconQuestion=32 : iconInformation=64 : buttonDefaultTwo=256
 fnend
 Xit: fnXit
-include: Ertn
+include: ertn

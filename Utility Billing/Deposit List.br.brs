@@ -176,4 +176,4 @@ NewPge: ! r:
 	pr #255: newpage
 	gosub Header
 continue  ! /r
-include: Ertn
+include: ertn

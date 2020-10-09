@@ -10,7 +10,7 @@ def library fninch2twip(&x)
 		x=round(x*1440,0)
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnend
  

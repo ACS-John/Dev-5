@@ -130,7 +130,7 @@ L1280: cn$=""
 	continue
  
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

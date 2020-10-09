@@ -41,4 +41,4 @@ FINIS: ! r:
 	fn1099print_close
 	goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

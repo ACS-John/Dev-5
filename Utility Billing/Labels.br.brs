@@ -546,4 +546,4 @@ def fn_setup
 	optFilter$(7)="Active Customers"
 ! /r
 fnend
-include: Ertn
+include: ertn

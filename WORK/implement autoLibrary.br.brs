@@ -210,5 +210,5 @@ def fn_acsToAcs2(&line$; ___,posX,removing$*12,adding$*7)
 		! pause
 	end if
 fnend
-include: Ertn
+include: ertn
 fn_removeLineNumbers

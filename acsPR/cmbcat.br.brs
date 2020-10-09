@@ -17,7 +17,7 @@ def library fncmbcat(myline,mypos; addall,container,indexfile$*200)
 		indexfile$=""
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnend
  

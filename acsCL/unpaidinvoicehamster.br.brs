@@ -140,4 +140,4 @@ BUILD_LAYOUT: ! r:
 	c$(cl,7)="S:\acsCL\PostingCode.idx" : c$(cl,8)=limit_to_list$
 return ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -33,4 +33,4 @@ L330: if r1<lrec(4) then goto L170
 	execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys"
 Xit: stop
  
-include: Ertn
+include: ertn

@@ -30,7 +30,7 @@ L330: next j
 		fnIndex("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx2.h[cno]","1 20")
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnend
  

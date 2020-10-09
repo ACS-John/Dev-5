@@ -24,4 +24,4 @@ goto L200
 L250: !
 close #1: 
 Xit: fnxit
-include: Ertn
+include: ertn

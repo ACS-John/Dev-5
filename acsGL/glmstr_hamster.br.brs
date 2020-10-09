@@ -25,4 +25,4 @@ def fn_close_file
 fnend
 Xit: fnXit
 include: Enum
-include: Ertn
+include: ertn

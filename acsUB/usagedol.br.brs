@@ -100,5 +100,5 @@ PGOF: ! : _
 
 Xit: fnXit
 
-include: Ertn
+include: ertn
 

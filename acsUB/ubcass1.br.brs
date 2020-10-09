@@ -54,4 +54,4 @@ F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 	loop
 ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

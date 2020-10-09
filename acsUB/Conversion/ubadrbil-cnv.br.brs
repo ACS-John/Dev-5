@@ -52,4 +52,4 @@ def library fnub_cnv_adrbil
 		fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10") ! execute "Index [Q]\UBmstr\UBAdrBil.h[cno]"&' '&"[Q]\UBmstr\adrIndex.h[cno] 1,10,Replace,DupKeys -n"
 	return
 Xit: fnend
-include: Ertn
+include: ertn

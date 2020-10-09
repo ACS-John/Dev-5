@@ -91,4 +91,4 @@ ASKFORMAT: ! r:
 	namcde$=resp$(1)(1:1)
 	status=val(resp$(2)(1:2))
 return ! /r
-include: Ertn
+include: ertn

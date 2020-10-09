@@ -164,4 +164,4 @@ ASKTRANSET: ! r:
 	end_date=val(resp$(8))
 	c$=resp$(9)(1:10)
 XIT_ASKTRANSET: return  ! /r
-include: Ertn
+include: ertn

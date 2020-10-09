@@ -289,7 +289,7 @@ fnend
 	!
 	fnpa_finis
 return  ! /r
-include: Ertn
+include: ertn
 def fn_print941_origional
 	fnpa_fontsize(12)
 	fnpa_pic("S:\acsPR\941.bmp",1,1)

@@ -44,4 +44,4 @@ def fn_setup_hamster
 	fnH2AddText("Next Trans Addr",5,'PD',3)
 	fnH2AddComboF(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 fnend
-include: Ertn
+include: ertn

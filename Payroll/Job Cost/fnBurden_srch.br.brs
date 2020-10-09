@@ -44,4 +44,4 @@ ERR_READ: !
 	Xit: !
 	close #file_num: 
 fnend
-include: Ertn
+include: ertn

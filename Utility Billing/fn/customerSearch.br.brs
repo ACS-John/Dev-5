@@ -47,4 +47,4 @@ def library fnCustomerSearch(&x$;fixgrid)
 	Xit: !
 	close #hCustomer: ioerr ignore
 fnend 
-include: Ertn
+include: ertn

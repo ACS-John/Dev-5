@@ -28,5 +28,5 @@ L270: form pos 1,n 1,n 2,n 1,n 5
 close #1:
  
 Xit: stop
-include: Ertn
+include: ertn
  

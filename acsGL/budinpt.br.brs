@@ -129,4 +129,4 @@ L1140: form pos 31,pd 6.2
 	read #1,using L550,key=k$: mat bm,mat revb nokey L1100
 	goto L560
 !
-include: Ertn
+include: ertn

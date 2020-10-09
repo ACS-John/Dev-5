@@ -295,4 +295,4 @@ ASK_MONTHLY: ! ask monthly info or ytd info
 	if resp$(2)="True" then monthly=2
 return
  
-include: Ertn
+include: ertn

@@ -146,7 +146,7 @@ HDR: !
 return
 fnend
  
-include: Ertn
+include: ertn
  
 def fn_file_to_array(fta_file$*256,mat fta_line$)
 		open #1: 'Name='&fta_file$,display,input

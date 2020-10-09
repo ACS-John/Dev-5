@@ -154,5 +154,5 @@ ASK_PERIOD: ! r:
 		if date_bad=0 or date_good=0 then goto ASK_PERIOD
 	end if 
 return  ! /r
-include: Ertn
+include: ertn
 

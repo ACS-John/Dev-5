@@ -30,7 +30,7 @@
 	end if
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn
 READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp
 	ytdp=0
 	wbc=0: wtt=1 ! all banks and only checks

@@ -40,7 +40,7 @@ L280: fnCmdKey("&Add",97,0,0,"Add a new sub-category record." ) : _
 		if ckey=5 then cde$="   " ! no one selected
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnend
  

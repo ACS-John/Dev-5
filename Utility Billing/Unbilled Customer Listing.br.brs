@@ -77,4 +77,4 @@ DONE: ! r:
 	fncloseprn
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -70,4 +70,4 @@ def library fnub_cnv_ubmstr_vb
 	! L640: ! Goto 70
 	Xit: !
 fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnXit
-include: Ertn
+include: ertn

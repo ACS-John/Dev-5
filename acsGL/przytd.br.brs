@@ -44,5 +44,5 @@ open #1: "Name=[Q]\GLmstr\ACPRCKS.h[cno],size=0,RecL=110,Replace",internal,outpu
 close #1:
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn
  

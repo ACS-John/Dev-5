@@ -44,4 +44,4 @@ if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain prg$
 goto XIT
 L440: !
 XIT: fnxit
-include: Ertn
+include: ertn

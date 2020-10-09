@@ -218,6 +218,6 @@ L2080: execute "Copy [Q]\CLmstr\DPTMSTR.h[cno] [Temp]\WORK -D -n"
 	execute "Index [Q]\CLmstr\DPTMSTR.h[cno]"&' '&"[Q]\CLmstr\DPTIDX1.h[cno] 1 5 Replace DupKeys -n"
 	goto L240
  
-include: Ertn
+include: ertn
 Xit: fnXit
  

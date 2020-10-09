@@ -55,5 +55,5 @@ DONE: close #1:
 	goto L270
 Xit: stop
  
-include: Ertn
+include: ertn
  

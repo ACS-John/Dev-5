@@ -165,4 +165,4 @@ PGOF: ! r:
 	gosub HDR2
 continue ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

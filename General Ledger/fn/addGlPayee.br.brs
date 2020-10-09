@@ -429,4 +429,4 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 	end if
 	XitTransactionAdd: !
 return ! /r
-include: Ertn
+include: ertn

@@ -5,6 +5,6 @@ on error goto Ertn
 fnTop(program$,"Breakdown of Hours")
 fnHours(eno)
 Xit: fnXit
-include: Ertn
+include: ertn
 
  

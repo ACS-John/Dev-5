@@ -16,4 +16,4 @@
 	fnCmdSet(41)
 	fnAcs(mat resp$,ckey)
 Xit: fnXit
-include: Ertn
+include: ertn

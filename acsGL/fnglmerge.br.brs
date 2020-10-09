@@ -221,7 +221,7 @@ GLMSTR_OPEN_ERR: !
 	fnmsgbox(mat ml$,ok$,cap$,16)
 	goto Xit
  
-include: Ertn
+include: ertn
  
 ASK_GLCNO: !
 	fnTos

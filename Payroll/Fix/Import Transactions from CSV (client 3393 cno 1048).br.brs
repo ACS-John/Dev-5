@@ -252,4 +252,4 @@ def fn_setup
 fnend
 Xit: fnXit
 include: fn_open
-include: Ertn
+include: ertn

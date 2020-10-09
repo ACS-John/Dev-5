@@ -559,4 +559,4 @@ def fn_setup
 		! /r
 	end if
 fnend
-include: Ertn no
+include: ertn no

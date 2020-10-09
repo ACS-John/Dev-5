@@ -132,5 +132,5 @@ def fn_hdr
 	L1080: form pos 1,c 13,pos 30,c 4,pos 35,c 4,pos 46,c 5,pos 59,c 5,skip 2
 fnend
  
-include: Ertn
+include: ertn
  

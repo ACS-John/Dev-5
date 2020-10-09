@@ -157,7 +157,7 @@ DONE: !
 	goto Xit
  
 ! If ERR=4152 Then Goto 420
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

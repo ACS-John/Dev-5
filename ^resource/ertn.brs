@@ -6,7 +6,7 @@ end
 ! /r doNotInclude
 ! ertn
 Ertn: !
-	autoLibrary
+	library 'S:\Core\library': fnerror
 	dim ertnAct$*256
 
 	fnerror(program$,err,line,ertnAct$,'Xit')

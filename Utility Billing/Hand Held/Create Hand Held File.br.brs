@@ -1870,4 +1870,4 @@ def fn_setup
 fnend
 include: fn_open
 include: enum
-include: Ertn
+include: ertn

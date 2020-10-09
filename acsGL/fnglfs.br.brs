@@ -69,4 +69,4 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 	Xit: ! 
 	fnGlAskFormatPriorCdPeriod=returnN
 fnend 
-include: Ertn
+include: ertn

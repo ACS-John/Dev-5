@@ -680,4 +680,4 @@ L6170: next j
 	if em6=1 then orgw3(1)=orgw3(2)=0 ! NO MEDICARE
 	if em6=2 then orgw2(1)=orgw2(4)=0 ! NO SOC-SEC
 return ! /r
-include: Ertn
+include: ertn

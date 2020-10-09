@@ -43,4 +43,4 @@ def library fnub_cnv_note
 	Xit: !
 fnend
 !
-include: Ertn
+include: ertn

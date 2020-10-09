@@ -60,6 +60,6 @@ L480: close #1:
 	on fkey 5 ignore
 	if fnprocess=1 then goto Xit else goto MENU1
  
-include: Ertn
+include: ertn
 Xit: fnXit
  

@@ -49,4 +49,4 @@ L400: close #2:
 L440: if fnprocess=1 then let fnchain("S:\acsGL\acglAuto")
 Xit: fnXit
  
-include: Ertn
+include: ertn

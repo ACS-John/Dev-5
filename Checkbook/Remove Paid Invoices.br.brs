@@ -32,4 +32,4 @@ fnFree("[Q]\CLmstr\IvPaid.H[cno]")
 fnRename("[Q]\CLmstr\Work.[session]","[Q]\CLmstr\IvPaid.H[cno]")
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

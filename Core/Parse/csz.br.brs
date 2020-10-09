@@ -45,7 +45,7 @@ MESSAGEBOX: !
 L180: ! pr STATE$ ! XXX
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: fnend
  

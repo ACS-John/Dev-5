@@ -197,7 +197,7 @@ return ! /r
 ! goto ADD_EDIT_SCHEDULES ! /r
 Xit: fnXit
 L1580: if err=4152 then goto CreateAcGlSchs else goto ERTN
-include: Ertn
+include: ertn
 SCHEDULE_BREAKDOWN: ! r:
 	! general ledger breakdowns for each schedule
  

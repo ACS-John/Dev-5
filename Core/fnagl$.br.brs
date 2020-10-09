@@ -54,4 +54,4 @@ def library fnagl$*12(&x$)
 		x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3) ! default if gl or cl not installed
 	goto FINIS ! /r
 Xit: fnend
-include: Ertn
+include: ertn

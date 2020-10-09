@@ -78,4 +78,4 @@ L460: !
 	if fnprocess=1 then goto Xit else goto MENU1
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

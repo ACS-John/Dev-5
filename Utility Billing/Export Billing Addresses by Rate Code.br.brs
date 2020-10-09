@@ -79,5 +79,5 @@ Finis: ! r:
 	fnmsgbox(mat ml$,resp$,"ACS",0)
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn
 include: fn_open

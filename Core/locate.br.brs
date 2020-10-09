@@ -105,4 +105,4 @@ MAIN: !
 execute "Proc "&procfile$
  
 Xit: fnXit
-include: Ertn
+include: ertn

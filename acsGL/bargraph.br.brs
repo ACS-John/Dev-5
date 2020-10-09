@@ -179,7 +179,7 @@ L1140: ! zero line starts right here
 !
 Xit: fnXit
 !
-include: Ertn
+include: ertn
 !
 VBOPENPRINT: !
 	if file(20)=-1 then

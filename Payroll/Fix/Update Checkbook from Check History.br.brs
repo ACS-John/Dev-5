@@ -105,4 +105,4 @@ FM_DNAM: form pos 1,20*c 20,20*c 8,120*n 1,20*c 12
 return
 END_HIST: stop
 Xit: stop  ! fnXit
-include: Ertn
+include: ertn

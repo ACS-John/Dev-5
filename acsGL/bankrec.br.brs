@@ -598,7 +598,7 @@ L5240: next r1
 	goto L5080
 L5260: goto DPAMENU
 
-include: Ertn
+include: ertn
 CLEAR_TRANSACTIONS_FROM_LIST: !
 	lastrec=nextrec=total=0 : _
 	displayattop$="True"

@@ -241,7 +241,7 @@ DONE: ! r:
 	fncloseprn
 	goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn
 INVALID_DATES_MSGBOX: ! r:
 	msgline$(1)="You have entered dates in an"
 	msgline$(2)="invalid format.  Use mmddyy format."

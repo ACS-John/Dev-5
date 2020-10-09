@@ -97,5 +97,5 @@ L960: form pos 1,c 42,pos 39,n 11.2,pos 53,n 11.2,n 11.2,n 8.2
 	t4=0
 return
  
-include: Ertn
+include: ertn
  

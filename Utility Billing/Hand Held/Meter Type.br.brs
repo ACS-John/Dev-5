@@ -12,4 +12,4 @@ end if
 fnHamsterFio("U4 Meter Type")
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

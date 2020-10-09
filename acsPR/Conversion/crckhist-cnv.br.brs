@@ -16,5 +16,5 @@ L90: input fields "10,55,N 5,UE,N": cno conv L90
  
 Xit: stop
  
-include: Ertn
+include: ertn
  

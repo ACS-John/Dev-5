@@ -142,4 +142,4 @@ def fn_writeProgramPrintProperty(key$*80,value$*256; prgCapForSettingsOverride$*
 		! pause
 	end if
 fnend
-include: Ertn
+include: ertn

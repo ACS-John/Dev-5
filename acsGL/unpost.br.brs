@@ -119,4 +119,4 @@ def fn_has_dupe(h_trans_dupe,hd_rec,hd_form$)
 	HD_XIT: !
 	fn_has_dupe=hd_return
 fnend  ! fn_has_dupe
-include: Ertn
+include: ertn

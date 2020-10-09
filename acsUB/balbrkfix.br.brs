@@ -115,4 +115,4 @@ SCR1: !
 		goto SCR1
 	end if
 return
-include: Ertn
+include: ertn

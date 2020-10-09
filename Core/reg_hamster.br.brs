@@ -28,7 +28,7 @@ return
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  
 def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 		if field_type$='' then field_type$='C'

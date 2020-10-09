@@ -251,4 +251,4 @@ def fn_setup
 	
 fnend
 include: fn_open
-include: Ertn
+include: ertn

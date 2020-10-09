@@ -24,4 +24,4 @@ def library fntrmstr_v1_to_v2
 		fnIndex("[Q]\CLmstr\TrMstr.H[cno]","[Q]\CLmstr\TrIdx2.H[cno]","28/1 8/11")
 fnend
  
-include: Ertn No
+include: ertn No

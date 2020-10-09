@@ -178,4 +178,4 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 	close #hLay:
 fnend
 include: fn_open
-include: Ertn
+include: ertn

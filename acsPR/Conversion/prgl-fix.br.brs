@@ -94,4 +94,4 @@ L960: read #5,using L860: gl$,ga1 eof Xit
 L980: form pos 1,c 12,pic(zzz,zzz,zzz,zzz.##bcr),skip 1
 	goto L960
 Xit: stop
-include: Ertn
+include: ertn

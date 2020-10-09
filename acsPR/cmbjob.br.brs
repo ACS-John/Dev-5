@@ -18,4 +18,4 @@ def library fncmbjob(myline,mypos; addall,container,indexfile$*200)
 		goto Xit
 
 Xit: fnend
-include: Ertn
+include: ertn

@@ -42,4 +42,4 @@ def library fnGetPp(&input$,&path$,&prog$,&ext$)
 	path$=trim$(path$)
 	if path$(len(path$):len(path$))<>"\" then path$=trim$(path$)&"\"
 fnend 
-include: Ertn
+include: ertn

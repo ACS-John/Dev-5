@@ -238,4 +238,4 @@ L1910: form pos 2,c 30,skip 1
 	if int(bills/3)<>bills/3 then pr #255,using L1910: " "," "           ! space extra if 1st or 2nd bill
 	if int(bills/3)=bills/3 then pr #255: newpage ! BOTTOM OF PAGE
 	return ! /r
-include: Ertn
+include: ertn

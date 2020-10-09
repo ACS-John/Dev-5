@@ -993,4 +993,4 @@ PROOF_LIST_HDR: ! r:
 	pr #255: "   Account #    Date       Amount    TC  Reference #  Payee/Description             Vendor";
 	if jccode=1 then pr #255: "Job #   Cat  S-Cat" else pr #255: " "
 return  ! /r
-include: Ertn
+include: ertn

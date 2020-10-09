@@ -202,5 +202,5 @@ L1990: w1=w1+g(x7)
 L2060: pr #255,using L1390: "   FINAL TOTALS",x1,y1,w1,w1-y1,0," "
 	L2070: !
 return
-include: Ertn
+include: ertn
  

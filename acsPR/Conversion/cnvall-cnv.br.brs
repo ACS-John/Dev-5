@@ -75,7 +75,7 @@ L730: ! Replace S:\acsCL\TRALLOC.CNV
 	execute "Rename X [Q]\CLmstr\TRALLOC.h[cno] -n"
 	goto L630
  
-include: Ertn
+include: ertn
  
 Xit: stop
  

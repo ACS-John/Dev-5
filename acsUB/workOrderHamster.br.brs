@@ -30,5 +30,5 @@ return
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
  
 Xit: fnXit
-include: Ertn
+include: ertn
 include: Enum

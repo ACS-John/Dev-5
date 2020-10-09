@@ -45,4 +45,4 @@ nqp=dcb=w3=0
 if ta>0 then goto L240 else goto L220
 
 Xit: stop 
-include: Ertn
+include: ertn

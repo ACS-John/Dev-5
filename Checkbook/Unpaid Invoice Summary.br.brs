@@ -66,5 +66,5 @@ L600: fncloseprn
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

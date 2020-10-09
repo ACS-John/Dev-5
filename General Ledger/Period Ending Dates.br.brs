@@ -35,4 +35,4 @@ fncch$(resp$(4))
 	
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

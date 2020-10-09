@@ -88,7 +88,7 @@ L20100: ! this section of lines will be replaced during dynamics
 L25010: ! this section of lines will be replaced during dynamics
 L25050: ! this section of lines will be replaced during dynamics
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

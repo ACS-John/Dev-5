@@ -17,4 +17,4 @@ def fn_setup
 	autoLibrary
 	on error goto Ertn
 fnend
-include: Ertn
+include: ertn

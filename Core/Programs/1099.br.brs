@@ -358,4 +358,4 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	end if
 	fnask_1099_info=awiReturn
 fnend
-include: Ertn
+include: ertn

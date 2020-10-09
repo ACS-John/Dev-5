@@ -49,7 +49,7 @@ L330: ! If FIXGRID=99 Then goto Xit ! FIXING NEW GRID FILE without displaying it
 		if ckey=5 then x$="            " ! no one selected
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: close #file_num: : fnend
  

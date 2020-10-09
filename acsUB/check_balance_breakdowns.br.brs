@@ -232,4 +232,4 @@ def fn_applyCreditFromOther(do_apply_credit)
 	ACFO_CUSTOMER_EOF: ! 
 	close #h_customer: 
 fnend 
-include: Ertn
+include: ertn

@@ -62,5 +62,5 @@ L580: close #1:
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

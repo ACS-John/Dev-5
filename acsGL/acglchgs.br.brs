@@ -213,4 +213,4 @@ L2040: total=income
 	goto L980
 Xit: fnXit
  
-include: Ertn
+include: ertn

@@ -71,4 +71,4 @@ def fn_hamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_
 	mat c$(add_rec_item,8)
 	! c$(add_rec_item,7)=str$(disable)
 fnend  ! fn_hamster_field_add
-include: Ertn
+include: ertn

@@ -76,4 +76,4 @@ L750: close #1:
 	close #5: 
 	close #6: 
 XIT: fnxit
-include: Ertn
+include: ertn

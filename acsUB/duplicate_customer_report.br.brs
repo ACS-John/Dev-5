@@ -52,5 +52,5 @@ def fn_header
 		pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul}"
 fnend
  
-include: Ertn
+include: ertn
  

@@ -44,4 +44,4 @@ def library fnpaymstr_v0_to_v1
 	Xit: !
 fnend
 
-include: Ertn No
+include: ertn No

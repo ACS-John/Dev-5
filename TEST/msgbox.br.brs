@@ -17,5 +17,5 @@
 	next mt
 Xit: stop
  
-include: Ertn
+include: ertn
  

@@ -26,7 +26,7 @@
 		pr 'read_count=';read_count
 		pr 'write_count=';write_count : pause
 	Xit: fnXit
-include: Ertn
+include: ertn
 def fn_multiplySequenceByTen(&sequenceNumber)
 	drbtReturn=0
 	if len(str$(sequenceNumber))>999999 then

@@ -28,4 +28,4 @@ DONE: close #1:
 	pr "company number "&str$(cno)&" completed successfully"
 	goto L270
 Xit: stop
-include: Ertn
+include: ertn

@@ -44,4 +44,4 @@ Xit: !
 L370: fnXit
 CHAIN_PRG: fnchain(prg$)
  
-include: Ertn
+include: ertn

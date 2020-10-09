@@ -744,4 +744,4 @@ ASK_OLD_INFO: ! r:
 	box4d$=resp$(16)       ! box 12d code
 	box4=val(resp$(17))    ! box 12d amount
 return ! /r
-include: Ertn
+include: ertn

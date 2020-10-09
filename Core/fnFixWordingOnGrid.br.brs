@@ -134,4 +134,4 @@ MoveItToText: ! r:
 	close #hMiitOut:
 	hMiitOut=0
 return ! /r
-include: Ertn
+include: ertn

@@ -49,4 +49,4 @@ FINIS: ! r: pr totals screen
 	fnCmdSet(52) 
 	fnAcs(mat resp$,ckey) ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

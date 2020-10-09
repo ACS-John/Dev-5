@@ -118,4 +118,4 @@ Xit: fnXit
 L1180: !
 	driv=1 ! drive not ready
 goto L1050
-include: Ertn
+include: ertn

@@ -58,6 +58,6 @@ HAMSTER: !
 return
  
  
-include: Ertn
+include: ertn
  
 Xit: fnXit

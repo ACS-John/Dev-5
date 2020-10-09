@@ -80,4 +80,4 @@ L550: close #1:
 	fncloseprn
 Xit: fnchain("S:\acsGL\acglAuto")
  
-include: Ertn
+include: ertn

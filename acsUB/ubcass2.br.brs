@@ -84,4 +84,4 @@ L580: csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
 L630: rewrite #3,using "Form POS 71,2*C 30",key=z$: sta$,csz$
 L640: return
  
-include: Ertn
+include: ertn

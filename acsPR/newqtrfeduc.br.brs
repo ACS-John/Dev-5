@@ -176,4 +176,4 @@ L510: ! r:
 	ml$(2)="Take OK to enter the year."
 	fnmsgbox(mat ml$,resp$,cap$,0)
 goto MENU1 ! /r
-include: Ertn
+include: ertn

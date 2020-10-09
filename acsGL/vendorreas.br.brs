@@ -476,5 +476,5 @@ L4730: if ln<20 then goto L4250
 L4750: if err=4152 then goto L790
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

@@ -143,4 +143,4 @@ L1570: form skip 1,c 40,pos 45,pic(zzz,zzz,zzz),skip 1
 DONE: close #1: ioerr ignore
 fncloseprn
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -56,4 +56,4 @@ PGOF: ! r:
 	pr #255: newpage
 	gosub HEADER
 continue ! /r
-include: Ertn
+include: ertn

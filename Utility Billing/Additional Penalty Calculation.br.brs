@@ -245,4 +245,4 @@ BUD2: ! r:
 	L1610: ta1=nba : goto L1540
 	EO_BUD2: !
 return  ! /r
-include: Ertn
+include: ertn

@@ -84,4 +84,4 @@ ENDALL: ! r:
 	close #trmstr:
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -784,4 +784,4 @@ def fn_ctfl_add_grid_items(; cagi_type)
 	loop
 	EO_CAGI_CLEARING: !
 fnend
-include: Ertn
+include: ertn

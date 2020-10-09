@@ -24,5 +24,5 @@
 		goto Xit
 	Xit: !
 fnend
-include: Ertn
+include: ertn
 

@@ -927,4 +927,4 @@ def fn_isBlank(text$*128; ___,returnN)
 	end if
 	fn_isBlank=returnN
 fnend
-include: Ertn
+include: ertn

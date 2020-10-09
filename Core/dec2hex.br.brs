@@ -19,5 +19,5 @@ def library fndec2hex(input_dec,&output_hex$)
 		output_hex$=d2h_temp$
 	goto Xit
 Xit: fnend
-include: Ertn
+include: ertn
 

@@ -46,5 +46,5 @@ F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,p
 Xit: !
 	fnXit
 !
-include: Ertn No
+include: ertn No
 !

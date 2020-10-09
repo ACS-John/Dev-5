@@ -105,4 +105,4 @@ AGE2: !
 	L940: p1=j*12+51 : t1(j)+=upa : t1(5)+=upa
 	L950: !
 return
-include: Ertn
+include: ertn

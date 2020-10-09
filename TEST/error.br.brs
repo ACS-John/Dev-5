@@ -20,6 +20,6 @@ Xit: !
 	pr "Exit Successful"
 stop
  
-include: Ertn
+include: ertn
 
  

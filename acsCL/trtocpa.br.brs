@@ -286,4 +286,4 @@ MSGBOX1: ! r:
 	fnmsgbox(mat ml$,resp$,'',16)
 goto MAIN ! /r
  
-include: Ertn
+include: ertn

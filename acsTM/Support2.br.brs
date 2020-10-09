@@ -48,4 +48,4 @@ def fn_setup_hamster
 	!
 	fnH2AddComboF(1,'S:\Core\Data\acsllc\Clmstr.h420',1,5,6,30,'S:\Core\Data\acsllc\CLIndex.h420',1)
 fnend
-include: Ertn
+include: ertn

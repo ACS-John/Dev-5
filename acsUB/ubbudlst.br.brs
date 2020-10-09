@@ -102,5 +102,5 @@ L820: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	if env$('client')="Findlay" then totba=totba-ba(8) ! don't add the penalty
 L860: return
  
-include: Ertn
+include: ertn
  

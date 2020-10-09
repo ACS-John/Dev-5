@@ -33,4 +33,4 @@ def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 	Xit: ! 
 		close #tf1,free: ioerr ignore
 fnend 
-include: Ertn
+include: ertn

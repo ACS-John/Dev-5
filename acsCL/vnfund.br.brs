@@ -95,4 +95,4 @@ END1: gosub PRINTARRAY
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

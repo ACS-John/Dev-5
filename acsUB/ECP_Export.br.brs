@@ -231,4 +231,4 @@ Xit: fnXit
 			fnmsgbox(mat m$, response$, cap$,64)
 		end if
 	fnend
-include: Ertn
+include: ertn

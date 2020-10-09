@@ -18,13 +18,13 @@ MAIN: ! r:
 		fnLbl(lc+=1,1,"Company Name:",mylen,1)
 		fnTxt(lc,mypos,40)
 		resp$(respc+=1)=CompanyNameAndAddr$(1)
-		lc+=1
-		fnLbl(lc+=1,1,"Company Address:",mylen,1)
+		fnLbl(lc+=1,1,"Address:",mylen,1)
 		fnTxt(lc,mypos,40)
 		resp$(respc+=1)=CompanyNameAndAddr$(2)
-		fnLbl(lc+=1,1,"Company City,State and Zip:",mylen,1)
+		fnLbl(lc+=1,1,"City, State and Zip:",mylen,1)
 		fnTxt(lc,mypos,40)
 		resp$(respc+=1)=CompanyNameAndAddr$(3)
+		lc+=1
 		fnLbl(lc+=1,1,"Last Billing Date:",mylen,1)
 		fnTxt(lc,mypos,8,0,1,"1")
 		resp$(resp_lastBillingDate=respc+=1)=str$(lastBillingDate)
@@ -372,4 +372,4 @@ def fn_setup
 		screen_EFT    =1004
 	end if
 fnend
-include: Ertn
+include: ertn

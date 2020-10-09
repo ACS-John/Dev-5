@@ -89,4 +89,4 @@ BUD2: ! r:
 	loop
 	XIT_BUD2: !
 return ! /r
-include: Ertn
+include: ertn

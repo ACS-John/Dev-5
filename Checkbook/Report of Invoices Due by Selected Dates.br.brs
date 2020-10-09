@@ -110,5 +110,5 @@ Ask: ! r:
 	L1050: next j
 	L1060: wd2=1
 return ! /r
-include: Ertn
+include: ertn
 

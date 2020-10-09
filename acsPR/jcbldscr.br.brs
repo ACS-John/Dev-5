@@ -66,6 +66,6 @@ L650: form pos 1,85*c 18
 	close #1:
 	chain "S:\acsPR\rpNames"
  
-include: Ertn
+include: ertn
  
 Xit: chain "Menu"

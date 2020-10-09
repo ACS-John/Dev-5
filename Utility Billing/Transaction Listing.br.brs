@@ -371,4 +371,4 @@ FIX_BALANCE_BREAKDOWN: ! fix balance breakdown so it matches balance when someth
 	! pr MAT GB: Pause
 	! If SUM(GB)<>BAL Then Pause
 return  ! /r
-include: Ertn
+include: ertn

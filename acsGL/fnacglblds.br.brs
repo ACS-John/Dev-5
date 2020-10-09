@@ -95,4 +95,4 @@ L380: open #20: "Name=[Q]\GLmstr\ACGLScr.h[cno],Size=0,RecL=4281",internal,outpu
 goto Xit
 
 Xit: fnend
-include: Ertn
+include: ertn

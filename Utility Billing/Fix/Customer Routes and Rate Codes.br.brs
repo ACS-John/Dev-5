@@ -27,7 +27,7 @@
 		pr 'read_count=';read_count
 		pr 'write_count=';write_count : pause
 	Xit: fnXit
-include: Ertn
+include: ertn
 OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text file
 	dim ln$*128
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed

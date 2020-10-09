@@ -34,7 +34,7 @@ L320: version(paytrans1,2)
 		fnIndex("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UnPdIdx2.h[cno]","31/27/1 2/4/26")
 		goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: !
 fnend

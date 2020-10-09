@@ -53,4 +53,4 @@ L160: sn$="file_layout"
 L400: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
 	goto L160
 Xit: stop
-include: Ertn
+include: ertn

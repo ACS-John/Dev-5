@@ -197,4 +197,4 @@ L1860: priordate=(month*10000)+day*100+prioryear
 	priorpriordate=priordate-1
 return
 Xit: fnXit
-include: Ertn
+include: ertn

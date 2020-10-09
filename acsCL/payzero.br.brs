@@ -16,4 +16,4 @@ L150: read #1,using 'Form POS 129,PD 5.2': ytdp eof Xit
 	goto L150
 Xit: stop
  
-include: Ertn
+include: ertn

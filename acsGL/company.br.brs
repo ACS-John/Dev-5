@@ -295,4 +295,4 @@ def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
 	end if
 	fnLastAccountingPeriodClosed=returnN
 fnend
-include: Ertn
+include: ertn

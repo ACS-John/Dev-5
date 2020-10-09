@@ -239,7 +239,7 @@ def fn_main
 			!   if resp$(2)='True' or resp$(2)='^' then setenv('taxYear','2018') else setenv('taxYear','')
 			! end if
 			if fkey_value=1449 then ! fkey_facebook then ! =1449
-				execute 'sy -M -C Start https://www.facebook.com/pg/advancedcomputerservices/community/'
+				execute 'sy -M -C Start https://www.facebook.com/advancedcomputerservices/'
 				goto Tos
 			end if
 

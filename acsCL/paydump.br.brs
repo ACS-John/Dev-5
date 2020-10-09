@@ -73,5 +73,5 @@ HDR: !
 	pr #255,using 'Form POS 1,Cc 80': dat$
 return
 
-include: Ertn No
+include: ertn No
 

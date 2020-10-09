@@ -46,4 +46,4 @@ def fn_total_ar
 	close #h_customer: 
 	fn_total_ar=totalBal
 fnend 
-include: Ertn
+include: ertn

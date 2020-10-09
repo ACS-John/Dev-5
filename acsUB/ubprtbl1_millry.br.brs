@@ -354,5 +354,5 @@ def fn_vbprint
 		fnpa_newpage
 	end if
 fnend
-include: Ertn
+include: ertn
  

@@ -158,5 +158,5 @@ TOTALS: !
 	mat ft=(0)
 return
  
-include: Ertn
+include: ertn
  

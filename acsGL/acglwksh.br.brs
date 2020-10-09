@@ -110,4 +110,4 @@ PGOF: pr #255: newpage : gosub HDR : continue
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

@@ -101,4 +101,4 @@ def library fnCptCode$*800(code$*5)
 fnend
 
 include: fn_open
-include: Ertn
+include: ertn

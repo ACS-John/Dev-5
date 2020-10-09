@@ -138,4 +138,4 @@ HDR: ! r:
 		pr #255: "\ql "&hd1$
 	end if
 return  ! /r
-include: Ertn
+include: ertn

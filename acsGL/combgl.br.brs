@@ -62,5 +62,5 @@ L470: execute "Index [Q]\GLmstr\GLmstr.H"&str$(dcno)&' '&"[Q]\GLmstr\GLIndex.H"&
 	fnputcno(cno=dcno)
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

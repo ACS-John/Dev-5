@@ -308,4 +308,4 @@ if _edit=1 then rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=edit
 if addone=1 then write #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 goto GL_INFORMATION
  
-include: Ertn
+include: ertn

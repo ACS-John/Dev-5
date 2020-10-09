@@ -287,4 +287,4 @@ ACCUMULATE_DEPT_TOTALS: ! r:
 	tdc5=ttdc(5)
 	ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
 return  ! /r
-include: Ertn
+include: ertn

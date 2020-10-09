@@ -26,4 +26,4 @@ def library fntralloc_v1_to_v2
 		fnCopy("[Q]\CLmstr\TrAlloc.h[cno]","[Q]\CLmstr\TrAlloc.h[cno]",80)
 		fnIndex("[Q]\CLmstr\TrAlloc.H[cno]","[Q]\CLmstr\TrAlloc-Idx.H[cno]","1 11")
 fnend
-include: Ertn No
+include: ertn No

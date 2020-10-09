@@ -196,4 +196,4 @@ L1950: input fields "24,69,N 1,EU,N": j2 conv L1950
 L1990: if ti=3 then goto L1000 else goto L590
 L2000: if err=4152 then goto L510
 Xit: fnXit
-include: Ertn
+include: ertn

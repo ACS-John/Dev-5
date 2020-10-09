@@ -132,4 +132,4 @@ ENDALL: !
 	pr #255: "                                  =========================================="
 	fncloseprn
 Xit: fnXit
-include: Ertn
+include: ertn

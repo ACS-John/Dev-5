@@ -29,5 +29,5 @@ END1: !
 	close #2:
 Xit: stop
  
-include: Ertn
+include: ertn
  

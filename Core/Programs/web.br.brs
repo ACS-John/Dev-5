@@ -13,4 +13,4 @@
 	execute "sy start http://planetacs.net/user/index.htm"
 Xit: fnXit("")
  
-include: Ertn
+include: ertn

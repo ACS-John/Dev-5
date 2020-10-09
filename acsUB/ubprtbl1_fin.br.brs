@@ -443,4 +443,4 @@
 		L3340: ta1=nba : goto L3260
 		EO_BUD2: !
 	return
-include: Ertn
+include: ertn

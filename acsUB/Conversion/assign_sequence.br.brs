@@ -22,4 +22,4 @@ goto READ_CUSTOMER
 DONE: close #1:
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -331,4 +331,4 @@ def fn_setup_on_cursys_change
 	! if ~exists('[Q]\INI\acs'&cursys$) then execute 'mkdir [Q]\INI\acs'&cursys$
 fnend
 
-include: Ertn
+include: ertn

@@ -89,5 +89,5 @@ DONE: fncloseprn
 	close #glbrec:
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

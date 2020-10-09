@@ -165,4 +165,4 @@ L1400: fnCmdKey("&Add",1,0,0,"Add a new transaction." )
 	if ckey=2 then read #3,using L640,rec=editrec: jn$,mat inp: editone=1 : goto TRANSACTION_ENTRY
 	if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 goto CORRECTIONS
-include: Ertn
+include: ertn

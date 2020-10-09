@@ -42,4 +42,4 @@ END1: close #2:
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

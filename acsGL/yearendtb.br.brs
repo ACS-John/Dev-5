@@ -105,5 +105,5 @@ L890: pr #255: newpage
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

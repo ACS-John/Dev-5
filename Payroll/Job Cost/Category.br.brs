@@ -145,4 +145,4 @@ L1200: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

@@ -483,4 +483,4 @@ EXTRACT_STATE: ! r: extract state name
 		holdst$=ltrm$(holdst$)(1:2)
 	if holdst$="TE" then holdst$="TX"
 return ! /r
-include: Ertn
+include: ertn

@@ -45,4 +45,4 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		end if
 	end if
 fnend
-include: Ertn
+include: ertn

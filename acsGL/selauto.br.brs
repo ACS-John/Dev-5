@@ -193,4 +193,4 @@ L1640: execute "drop [Q]\GLmstr\acGLPGMN.h[cno]"
 	close #1: ioerr ignore
 	close #3: ioerr ignore
 Xit: fnXit
-include: Ertn
+include: ertn

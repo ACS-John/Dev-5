@@ -99,5 +99,5 @@ EOF1: close #1,free:
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  
